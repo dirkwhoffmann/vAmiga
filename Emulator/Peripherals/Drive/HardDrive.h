@@ -26,6 +26,9 @@ class HardDrive : public SubComponent {
     
     // Result of the latest inspection
     mutable HardDriveInfo info = {};
+
+    // Hard drive spec
+    HardDriveSpec driveSpec = {};
     
     // Disk geometry
     DiskGeometry geometry;

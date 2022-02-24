@@ -11,6 +11,10 @@
 
 #include "Aliases.h"
 #include "Reflection.h"
+#ifdef __cplusplus
+// #include "Geometry.h"
+#include <vector>
+#endif
 
 //
 // Enumerations
@@ -68,3 +72,47 @@ typedef struct
     struct { isize c; isize h; isize s; } head;
 }
 HardDriveInfo;
+
+#ifdef __cplusplus
+
+typedef struct
+{
+    string name;
+    u32 flags;
+    u32 sizeBlock;
+    u32 heads;
+    u32 sectors;
+    u32 reserved;
+    u32 interleave;
+    u32 lowCyl;
+    u32 highCyl;
+    u32 numBuffers;
+    u32 bufMemType;
+    u32 maxTransfer;
+    u32 mask;
+    u32 bootPri;
+    u32 dosType;
+}
+PartitionSpec;
+    
+typedef struct
+{
+    // Disk geometry
+    isize cylinders;
+    isize heads;
+    isize sectors;
+    isize bsize;
+    
+    // Drive identification
+    string diskVendor;
+    string diskProduct;
+    string diskRevision;
+    string controllerVendor;
+    string controllerProduct;
+    string controllerRevision;
+    
+    // Partition information
+    std::vector <PartitionSpec> partitions;
+}
+HardDriveSpec;
+#endif

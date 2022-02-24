@@ -12,6 +12,16 @@
 
 namespace util {
 
+string createStr(const u8 *buf, isize maxLen)
+{
+    string result;
+    
+    for (isize i = 0; i < maxLen && buf[i] != 0; i++) {
+        result += char(buf[i]);
+    }
+    return result;
+}
+
 bool
 parseHex(const string &s, isize *result)
 {

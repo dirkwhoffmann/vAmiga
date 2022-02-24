@@ -15,6 +15,14 @@
 namespace util {
 
 //
+// Creating
+//
+
+// Creates a string from a buffer
+string createStr(const u8 *buffer, isize maxLength);
+
+
+//
 // Converting
 //
 

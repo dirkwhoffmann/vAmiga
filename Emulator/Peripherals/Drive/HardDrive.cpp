@@ -355,10 +355,13 @@ void
 HardDrive::attach(const HDFFile &hdf)
 {
     auto geometry = hdf.getGeometry();
-    
+ 
     // Throw an exception if the geometry is not supported
     geometry.checkCompatibility();
  
+    // Copy the drive spec
+    driveSpec = hdf.getDriveSpec();
+    
     // Allocate memory
     alloc(geometry);
     

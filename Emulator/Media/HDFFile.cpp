@@ -12,12 +12,14 @@
 #include "Chrono.h"
 #include "HardDrive.h"
 #include "IOUtils.h"
+#include "Memory.h"
+#include "StringUtils.h"
 
 bool
 HDFFile::isCompatible(const string &path)
 {
-    auto suffix = util::uppercased(util::extractSuffix(path));
-    return suffix == "HDF";
+    return util::uppercased(util::extractSuffix(path)) == "HDF";
+//    return suffix == "HDF";
 }
 
 bool
@@ -27,10 +29,19 @@ HDFFile::isCompatible(std::istream &stream)
 }
 
 void
+HDFFile::finalizeRead()
+{
+    deriveGeomentry(); // DEPRECATED
+
+    scanDisk();
+}
+
+void
 HDFFile::init(const string &path)
 {
-    // TODO: Check for oversized HDFs
-
+    // Check size
+    if (isOversized(util::getSizeOfFile(path))) throw VAError(ERROR_HDR_TOO_LARGE);
+    
     AmigaFile::init(path);
 
     // TODO: Check if geometry can be derived
@@ -40,7 +51,8 @@ HDFFile::init(const string &path)
 void
 HDFFile::init(const u8 *buf, isize len)
 {
-    // TODO: Check for oversized HDFs
+    // Check size
+    if (isOversized(len)) throw VAError(ERROR_HDR_TOO_LARGE);
 
     AmigaFile::init(buf, len);
 
@@ -58,7 +70,25 @@ HDFFile::init(HardDrive &drive)
     }
     
     // Overwrite the predicted geometry from the precise one
-    geometry = drive.getGeometry();
+    auto geometry = drive.getGeometry();
+    
+    driveSpec.cylinders = geometry.cylinders;
+    driveSpec.heads = geometry.heads;
+    driveSpec.sectors = geometry.sectors;
+    driveSpec.bsize = geometry.bsize;
+}
+
+const DiskGeometry
+HDFFile::getGeometry() const
+{
+    DiskGeometry geometry;
+    
+    geometry.cylinders = driveSpec.cylinders;
+    geometry.heads = driveSpec.heads;
+    geometry.sectors = driveSpec.sectors;
+    geometry.bsize = driveSpec.bsize;
+    
+    return geometry;
 }
 
 bool
@@ -76,46 +106,37 @@ HDFFile::hasRDB() const
 isize
 HDFFile::numCyls() const
 {
-    assert(size % bsize() == 0);
-    
-    if (hasRDB()) warn("HDF RDB images are not supported");
-
-    return size / bsize() / numSectors() / numSides();
+    return driveSpec.cylinders;
 }
 
 isize
 HDFFile::numSides() const
 {
-    if (hasRDB()) warn("HDF RDB images are not supported");
-    return 1;
+    return driveSpec.heads;
 }
 
 isize
 HDFFile::numSectors() const
 {
-    if (hasRDB()) warn("HDF RDB images are not supported");
-    return 32;
+    return driveSpec.sectors;
 }
 
 isize
 HDFFile::numReserved() const
 {
-    if (hasRDB()) warn("HDF RDB images are not supported");
     return 2;
 }
 
 isize
 HDFFile::numBlocks() const
 {
-    assert((long)size / bsize() == numCyls() * numSides() * numSectors());
     return size / bsize();
 }
 
 isize
 HDFFile::bsize() const
 {
-    if (hasRDB()) warn("HDF RDB images are not supported");
-    return 512;
+    return driveSpec.bsize;
 }
 
 FSDeviceDescriptor
@@ -124,11 +145,14 @@ HDFFile::layout()
     FSDeviceDescriptor result;
     
     // Copy the drive geometry
-    result.geometry = geometry;
+    result.geometry.cylinders = driveSpec.cylinders;
+    result.geometry.heads = driveSpec.heads;
+    result.geometry.sectors = driveSpec.sectors;
+    result.geometry.bsize = driveSpec.bsize;
     result.numBlocks = result.geometry.numBlocks();
     
     // Set the number of reserved blocks
-    result.numReserved = numReserved();
+    result.numReserved = 2; // numReserved();
 
     // Only proceed if the hard drive is formatted
     if (dos(0) == FS_NODOS) return result;
@@ -140,17 +164,17 @@ HDFFile::layout()
     // Add partition
     result.partitions.push_back(FSPartitionDescriptor(dos(0),
                                                       0,
-                                                      geometry.upperCyl(),
+                                                      driveSpec.cylinders - 1,
                                                       (Block)rootKey));
 
     // Seek bitmap blocks
     Block ref = (Block)rootKey;
     isize cnt = 25;
-    isize offset = bsize() - 49 * 4;
+    isize offset = 512 - 49 * 4;
     
     while (ref && ref < (Block)result.numBlocks) {
 
-        const u8 *p = data + (ref * bsize()) + offset;
+        const u8 *p = data + (ref * 512) + offset;
     
         // Collect all references to bitmap blocks stored in this block
         for (isize i = 0; i < cnt; i++, p += 4) {
@@ -164,12 +188,28 @@ HDFFile::layout()
         // Continue collecting in the next extension bitmap block
         if ((ref = FSBlock::read32(p)) != 0) {
             if (ref < result.numBlocks) result.partitions[0].bmExtBlocks.push_back(ref);
-            cnt = (bsize() / 4) - 1;
+            cnt = (512 / 4) - 1;
             offset = 0;
         }
     }
     
     return result;
+}
+
+void
+HDFFile::deriveGeomentry()
+{
+    if (hasRDB()) {
+        
+        msg("RDB detected\n");
+        predictGeometry();
+        // TODO: GET GEOMETRY FROM THE RDB
+        
+    } else {
+            
+        msg("No RDB found. Geometry can only be predicted.\n");
+        predictGeometry();
+    }
 }
 
 void
@@ -186,19 +226,134 @@ HDFFile::predictGeometry()
     }
 
     // Use the first entry as the drive's geometry
-    if (geometries.size()) geometry = geometries.front();
+    if (geometries.size()) {
+        
+        driveSpec.cylinders = geometries.front().cylinders;
+        driveSpec.heads = geometries.front().heads;
+        driveSpec.sectors = geometries.front().sectors;
+        driveSpec.bsize = geometries.front().bsize;
+    }
+}
+
+void
+HDFFile::scanDisk()
+{
+    auto rdb = seekRDB();
+        
+    if (rdb) {
+
+        // Read the information from the rigid disk block
+        
+        driveSpec.cylinders             = R32BE_ALIGNED(rdb + 64);
+        driveSpec.sectors               = R32BE_ALIGNED(rdb + 68);
+        driveSpec.heads                 = R32BE_ALIGNED(rdb + 72);
+        driveSpec.bsize                 = R32BE_ALIGNED(rdb + 16);
+
+        driveSpec.diskVendor            = util::createStr(rdb + 160, 8);
+        driveSpec.diskProduct           = util::createStr(rdb + 168, 16);
+        driveSpec.diskRevision          = util::createStr(rdb + 184, 4);
+        driveSpec.controllerVendor      = util::createStr(rdb + 188, 8);
+        driveSpec.controllerProduct     = util::createStr(rdb + 196, 16);
+        driveSpec.controllerRevision    = util::createStr(rdb + 212, 4);
+        
+        scanPartitions();
+    
+    } else {
+        
+        // Predict the drive geometry by analyzing the file size
+        predictGeometry();
+        
+        // Fill in default values
+        driveSpec.diskVendor = "VAMIGA";
+        driveSpec.diskProduct = "HARD DRIVE";
+        driveSpec.diskRevision = "R1.0";
+        driveSpec.controllerVendor = "VAMIGA";
+        driveSpec.controllerProduct = "HDR CONTROLLER";
+        driveSpec.controllerRevision = "R1.0";
+    }
+}
+
+void
+HDFFile::scanPartitions()
+{
+    for (isize i = 0; i < 16; i++) {
+
+        if (auto part = seekPB(i); part) {
+        
+            PartitionSpec partSpec;
+            
+            partSpec.name           = util::createStr(part + 37, 31);
+            partSpec.flags          = R32BE_ALIGNED(part + 20);
+            partSpec.sizeBlock      = R32BE_ALIGNED(part + 132);
+            partSpec.heads          = R32BE_ALIGNED(part + 140);
+            partSpec.sectors        = R32BE_ALIGNED(part + 148);
+            partSpec.reserved       = R32BE_ALIGNED(part + 152);
+            partSpec.interleave     = R32BE_ALIGNED(part + 160);
+            partSpec.lowCyl         = R32BE_ALIGNED(part + 164);
+            partSpec.highCyl        = R32BE_ALIGNED(part + 168);
+            partSpec.numBuffers     = R32BE_ALIGNED(part + 172);
+            partSpec.bufMemType     = R32BE_ALIGNED(part + 176);
+            partSpec.maxTransfer    = R32BE_ALIGNED(part + 180);
+            partSpec.mask           = R32BE_ALIGNED(part + 184);
+            partSpec.bootPri        = R32BE_ALIGNED(part + 188);
+            partSpec.dosType        = R32BE_ALIGNED(part + 192);
+
+            driveSpec.partitions.push_back(partSpec);
+        }
+    }
+}
+
+u8 *
+HDFFile::seekBlock(isize nr)
+{
+    return nr >= 0 && 512 * (nr + 1) <= size ? data + (512 * nr) : nullptr;
+}
+
+u8 *
+HDFFile::seekRDB()
+{
+    // The rigid disk block must be among the first 16 blocks
+    for (isize i = 0; i < 16; i++) {
+        if (auto p = seekBlock(i); p) {
+            if (strcmp((const char *)p, "RDSK") == 0) return p;
+        }
+    }
+    return nullptr;
+}
+
+u8 *
+HDFFile::seekPB(isize nr)
+{
+    u8 *result = nullptr;
+    
+    // Go to the rigid disk block
+    if (auto rdb = seekRDB(); rdb) {
+        
+        // Go to the first partition block
+        result = seekBlock(R32BE_ALIGNED(rdb + 28));
+        
+        // Traverse the linked list
+        for (isize i = 0; i < nr && result; i++) {
+            result = seekBlock(R32BE_ALIGNED(result + 16));
+        }
+    }
+
+    // Check if the reached block is a partition block
+    if (strcmp((const char *)result, "PART")) return result;
+    
+    return result;
 }
 
 FSVolumeType
 HDFFile::dos(isize blockNr)
 {
-    assert(blockNr < geometry.numBlocks());
-    
-    const char *p = (const char *)data + blockNr * 512;
-    
-    if (strncmp(p, "DOS", 3) || data[3] > 7) {
-        return FS_NODOS;
+    if (auto block = seekBlock(blockNr); block) {
+        
+        if (strncmp((const char *)block, "DOS", 3) || block[3] > 7) {
+            return FS_NODOS;
+        }
+        return (FSVolumeType)block[3];
     }
-
-    return (FSVolumeType)p[3];
+    
+    return FS_NODOS;
 }
