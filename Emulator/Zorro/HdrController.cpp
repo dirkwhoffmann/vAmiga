@@ -28,8 +28,10 @@ HdrController::HdrController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref), driv
     char dosName[] = "hdrv?.device";    dosName[4] = char('0' + nr);
     
     // Patch Rom
+    /*
     util::replace((char *)rom, EXPROM_SIZE, "DH0", devName);
     util::replace((char *)rom, EXPROM_SIZE, "hello.device", dosName);
+    */
 }
 
 const char *
@@ -123,7 +125,25 @@ HdrController::spypeek8(u32 addr) const
 u16
 HdrController::spypeek16(u32 addr) const
 {
-    return HI_LO(spypeek8(addr), spypeek8(addr + 1));
+    isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
+    
+    switch (offset) {
+            
+        case EXPROM_SIZE:
+            
+            // Return the number of partitions
+            return 1;
+            
+        case EXPROM_SIZE + 2:
+            
+            // Number of filesystem drivers to add
+            return 0;
+            
+        default:
+            
+            // Return Rom code
+            return offset < EXPROM_SIZE ? HI_LO(rom[offset], rom[offset + 1]) : 0;
+    }
 }
 
 void
@@ -155,18 +175,13 @@ HdrController::poke16(u32 addr, u16 value)
             
             switch (value) {
                     
-                case 0xfede:
-                    
-                    processCmd();
-                    break;
-                    
-                case 0xfedf:
-                    
-                    processInit();
-                    break;
+                case 0xfede: processCmd(); break;
+                case 0xfedf: processInit(); break;
+                case 0xfee0: processResource(); break;
+                case 0xfee1: processInfoReq(); break;
+                case 0xfee2: processInitSeg(); break;
                     
                 default:
-                    
                     warn("Invalid value: %x\n", value);
                     break;
             }
@@ -177,36 +192,6 @@ HdrController::poke16(u32 addr, u16 value)
             warn("Invalid addr: %x\n", addr);
             break;
     }
-}
-
-void
-HdrController::processInit()
-{
-    trace(HDR_DEBUG, "processInit()\n");
-
-    // Collect hard drive information
-    auto geometry = drive.getGeometry();
-    u32 sizeBlock = (u32)(geometry.bsize / 4);
-    u32 numHeads = (u32)(geometry.heads);
-    u32 blkTrack = (u32)(geometry.sectors);
-    u32 upperCyl = (u32)(geometry.cylinders - 1);
-    
-    constexpr uint16_t devn_sizeBlock = 0x14; // number of longwords in a block
-    constexpr uint16_t devn_numHeads  = 0x1C; // number of surfaces
-    constexpr uint16_t devn_blkTrack  = 0x24; // secs per track
-    constexpr uint16_t devn_upperCyl  = 0x38; // upper cylinder
-    // constexpr uint16_t devn_dName     = 0x44;
-                
-    debug(true, "sizeBlock = %d\n", sizeBlock);
-    debug(true, "numHeads = %d\n", numHeads);
-    debug(true, "blkTrack = %d\n", blkTrack);
-    debug(true, "upperCyl = %d\n", upperCyl);
-
-    auto rom = pointer;
-    mem.patch(rom + devn_sizeBlock, u32(sizeBlock));
-    mem.patch(rom + devn_numHeads, u32(numHeads));
-    mem.patch(rom + devn_blkTrack, u32(blkTrack));
-    mem.patch(rom + devn_upperCyl, u32(upperCyl));
 }
 
 void
@@ -268,4 +253,93 @@ HdrController::processCmd()
             warn("Unsupported command: %lx\n", cmd);
             mem.patch(pointer + IO_ERROR, u8(IOERR_NOCMD));
     }
+}
+
+void
+HdrController::processInit()
+{
+    trace(HDR_DEBUG, "processInit()\n");
+
+    // Keep in check with exprom.asm
+    constexpr u16 devn_dosName      = 0x00;  // APTR  Pointer to DOS file handler name
+    constexpr u16 devn_unit         = 0x08;  // ULONG Unit number
+    constexpr u16 devn_flags        = 0x0C;  // ULONG OpenDevice flags
+    constexpr u16 devn_sizeBlock    = 0x14;  // ULONG # longwords in a block
+    constexpr u16 devn_secOrg       = 0x18;  // ULONG sector origin -- unused
+    constexpr u16 devn_numHeads     = 0x1C;  // ULONG number of surfaces
+    constexpr u16 devn_secsPerBlk   = 0x20;  // ULONG secs per logical block
+    constexpr u16 devn_blkTrack     = 0x24;  // ULONG secs per track
+    constexpr u16 devn_resBlks      = 0x28;  // ULONG reserved blocks -- MUST be at least 1!
+    constexpr u16 devn_interleave   = 0x30;  // ULONG interleave
+    constexpr u16 devn_lowCyl       = 0x34;  // ULONG lower cylinder
+    constexpr u16 devn_upperCyl     = 0x38;  // ULONG upper cylinder
+    constexpr u16 devn_numBuffers   = 0x3C;  // ULONG number of buffers
+    constexpr u16 devn_memBufType   = 0x40;  // ULONG Type of memory for AmigaDOS buffers
+    constexpr u16 devn_transferSize = 0x44;  // LONG  largest transfer size (largest signed #)
+    constexpr u16 devn_addMask      = 0x48;  // ULONG address mask
+    constexpr u16 devn_bootPrio     = 0x4c;  // ULONG boot priority
+    constexpr u16 devn_dName        = 0x50;  // char[4] DOS file handler name
+    constexpr u16 devn_bootflags    = 0x54;  // boot flags (not part of DOS packet)
+    constexpr u16 devn_segList      = 0x58;  // filesystem segment list (not part of DOS packet)
+    
+    u32 unit = mem.spypeek32 <ACCESSOR_CPU> (pointer + devn_unit);
+    debug(HDR_DEBUG, "Initializing partition %d\n", unit);
+    
+    // Collect hard drive information
+    auto geometry = drive.getGeometry();
+    u32 sizeBlock = (u32)(geometry.bsize / 4);
+    u32 numHeads = (u32)(geometry.heads);
+    u32 blkTrack = (u32)(geometry.sectors);
+    u32 upperCyl = (u32)(geometry.cylinders - 1);
+
+    debug(true, "sizeBlock = %d\n", sizeBlock);
+    debug(true, "numHeads = %d\n", numHeads);
+    debug(true, "blkTrack = %d\n", blkTrack);
+    debug(true, "upperCyl = %d\n", upperCyl);
+    
+    char dosName[] = {'D', 'H', '0', 0 };
+    
+    u32 name_ptr = mem.spypeek32 <ACCESSOR_CPU> (pointer + devn_dosName);
+    for (isize i = 0; i < isizeof(dosName); i++) {
+        mem.patch(u32(name_ptr + i), u8(dosName[i]));
+    }
+    
+    mem.patch(pointer + devn_flags,         u32(0));
+    mem.patch(pointer + devn_sizeBlock,     u32(sizeBlock));
+    mem.patch(pointer + devn_secOrg,        u32(0));
+    mem.patch(pointer + devn_numHeads,      u32(numHeads));
+    mem.patch(pointer + devn_secsPerBlk,    u32(1));
+    mem.patch(pointer + devn_blkTrack,      u32(blkTrack));
+    mem.patch(pointer + devn_interleave,    u32(0));
+    mem.patch(pointer + devn_resBlks,       u32(2));
+    mem.patch(pointer + devn_lowCyl,        u32(0)); // CHECK VALUE
+    mem.patch(pointer + devn_upperCyl,      u32(upperCyl));
+    mem.patch(pointer + devn_numBuffers,    u32(1));
+    mem.patch(pointer + devn_memBufType,    u32(0));
+    mem.patch(pointer + devn_transferSize,  u32(0x7FFFFFFF));
+    mem.patch(pointer + devn_addMask,       u32(0xFFFFFFFE));
+    mem.patch(pointer + devn_bootPrio,      u32(0));
+    mem.patch(pointer + devn_dName,         u32(0x444f5300));
+    mem.patch(pointer + devn_bootflags,     u32(1));
+    mem.patch(pointer + devn_segList,       u32(0));
+
+    debug(HDR_DEBUG, "Initialization done\n");
+}
+
+void
+HdrController::processResource()
+{
+    trace(HDR_DEBUG, "processResource()\n");
+}
+
+void
+HdrController::processInfoReq()
+{
+    trace(HDR_DEBUG, "processInfoReq()\n");
+}
+
+void
+HdrController::processInitSeg()
+{
+    trace(HDR_DEBUG, "processInitSeg()\n");
 }

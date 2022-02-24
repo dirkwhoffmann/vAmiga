@@ -111,6 +111,9 @@ public:
         
 private:
     
-    void processInit();
     void processCmd();
+    void processInit();
+    void processResource();
+    void processInfoReq();
+    void processInitSeg();
 };
