@@ -42,7 +42,8 @@ protected:
     isize bsize = 0;
             
     // The partition table
-    std::vector<FSPartitionPtr> partitions;
+    // std::vector<FSPartitionPtr> partitions;
+    FSPartitionPtr partition = nullptr;
     
     // The block storage
     std::vector<BlockPtr> blocks;
@@ -123,9 +124,9 @@ public:
     //
     
     // Returns the DOS version of the current partition
-    FSVolumeType dos() const { return partitions[cp]->dos; }
-    bool isOFS() const { return partitions[cp]->isOFS(); }
-    bool isFFS() const { return partitions[cp]->isFFS(); }
+    FSVolumeType dos() const { return partition->dos; }
+    bool isOFS() const { return partition->isOFS(); }
+    bool isFFS() const { return partition->isFFS(); }
     
     
     //
@@ -135,7 +136,7 @@ public:
 public:
     
     // Returns the number of partitions
-    isize numPartitions() { return (isize)partitions.size(); }
+    isize numPartitions() { return 1; }
     
     // Returns a partition
     FSPartitionPtr getPartition(isize nr);
@@ -144,8 +145,8 @@ public:
     isize partitionForBlock(Block nr);
 
     // Gets or sets the name of the current partition
-    FSName getName() { return partitions[cp]->getName(); }
-    void setName(FSName name) { partitions[cp]->setName(name); }
+    FSName getName() { return partition->getName(); }
+    void setName(FSName name) { partition->setName(name); }
     
     
     //
@@ -154,10 +155,10 @@ public:
     
 public:
     // Installs a boot block
-    void makeBootable(BootBlockId id) { partitions[cp]->makeBootable(id); }
+    void makeBootable(BootBlockId id) { partition->makeBootable(id); }
 
     // Removes a boot block virus from the current partition (if any)
-    void killVirus() { partitions[cp]->killVirus(); }
+    void killVirus() { partition->killVirus(); }
     
     
     //

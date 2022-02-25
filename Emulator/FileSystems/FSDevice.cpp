@@ -38,14 +38,14 @@ FSDevice::init(FSDeviceDescriptor &layout)
     bsize      = layout.geometry.bsize;
     numBlocks  = layout.numBlocks;
         
-    // Create all partition
-    partitions.push_back(new FSPartition(*this, layout));
+    // Create partition
+    partition = new FSPartition(*this, layout);
 
     // Compute checksums for all blocks
     updateChecksums();
     
     // Set the current directory to '/'
-    cd = partitions[0]->rootBlock;
+    cd = partition->rootBlock;
     
     // Do some consistency checking
     for (isize i = 0; i < numBlocks; i++) assert(blocks[i] != nullptr);
@@ -165,7 +165,7 @@ FSDevice::init(FSVolumeType type, const string &path)
 
 FSDevice::~FSDevice()
 {
-    for (auto &p : partitions) delete p;
+    delete partition;
     for (auto &b : blocks) delete b;
 }
 
@@ -187,14 +187,12 @@ FSDevice::_dump(dump::Category category, std::ostream& os) const
 {
     if (category & dump::Summary) {
         
-        for (auto& p : partitions) p->dump(category, os);
+        partition->dump(category, os);
     
     } else {
         
-        // Dump all partitions
-        for (auto &p : partitions) {
-            p->dump();
-        }
+        // Dump partition
+        partition->dump();
         msg("\n");
         
         // Dump all blocks
@@ -213,19 +211,13 @@ FSDevice::_dump(dump::Category category, std::ostream& os) const
 FSPartitionPtr
 FSDevice::getPartition(isize nr)
 {
-    return nr < (isize)partitions.size() ? partitions[nr] : nullptr;
+    return partition;
 }
 
 isize
 FSDevice::partitionForBlock(Block nr)
 {
-    for (isize i = 0; i < (isize)partitions.size(); i++) {
-        if (nr >= partitions[i]->firstBlock && nr <= partitions[i]->lastBlock) {
-            return i;
-        }
-    }
-    
-    fatalError;
+    return 0;
 }
 
 FSBlockType
@@ -351,7 +343,7 @@ FSDevice::currentDirBlock()
     }
     
     // The block reference is invalid. Switch back to the root directory
-    cd = partitions[cp]->rootBlock;
+    cd = partition->rootBlock;
     return blockPtr(cd);
 }
 
@@ -363,7 +355,7 @@ FSDevice::changeDir(const string &name)
     if (name == "/") {
                 
         // Move to top level
-        cd = partitions[cp]->rootBlock;
+        cd = partition->rootBlock;
         return currentDirBlock();
     }
 
@@ -635,7 +627,7 @@ FSDevice::check(bool strict) const
     isize total = 0, min = INT_MAX, max = 0;
     
     // Analyze all partions
-    for (auto &p : partitions) p->check(strict, result);
+    partition->check(strict, result);
 
     // Analyze all blocks
     for (isize i = 0; i < numBlocks; i++) {
@@ -766,11 +758,10 @@ FSDevice::predictBlockType(Block nr, const u8 *buffer)
 {
     assert(buffer != nullptr);
     
-    for (auto &p : partitions) {
-        if (FSBlockType t = p->predictBlockType(nr, buffer); t != FS_UNKNOWN_BLOCK) {
-            return t;
-        }
+    if (FSBlockType t = partition->predictBlockType(nr, buffer); t != FS_UNKNOWN_BLOCK) {
+        return t;
     }
+    
     return FS_UNKNOWN_BLOCK;
 }
 
@@ -788,9 +779,7 @@ FSDevice::importVolume(const u8 *src, isize size)
     if (numBlocks * bsize != size) throw VAError(ERROR_FS_WRONG_CAPACITY);
 
     // Only proceed if all partitions contain a valid file system
-    for (auto &it : partitions) {
-        if (it->dos == FS_NODOS) throw VAError(ERROR_FS_UNSUPPORTED);
-    }
+    if (partition->dos == FS_NODOS) throw VAError(ERROR_FS_UNSUPPORTED);
         
     // Import all blocks
     for (isize i = 0; i < numBlocks; i++) {

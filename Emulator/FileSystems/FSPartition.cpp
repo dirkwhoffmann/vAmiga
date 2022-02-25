@@ -21,6 +21,9 @@ FSPartition::FSPartition(FSDevice &dev, FSDeviceDescriptor &layout) : FSPartitio
     bmBlocks    = layout.bmBlocks;
     bmExtBlocks = layout.bmExtBlocks;
     
+    lowCyl = 0;
+    highCyl = layout.geometry.cylinders - 1;
+    
     firstBlock  = (Block)(lowCyl * dev.numHeads * dev.numSectors);
     lastBlock   = (Block)((highCyl + 1) * dev.numHeads * dev.numSectors - 1);
     
