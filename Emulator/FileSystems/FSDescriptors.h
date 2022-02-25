@@ -17,63 +17,34 @@
 #include "Geometry.h"
 
 /* To create a FSDevice, the layout parameters of the represendet device have
- * to be provided. This is done by passing a structure of type FSDeviceLayout
- * which contains physical properties such as the number of cylinders and heads
- * and logical parameters such as the number of sectors per track. In addition,
- * the structure contains one or more elements of type FSPartitionLayout. They
- * provide the information how the device is partitioned.
+ * to be provided. This is done by passing a FSPartitionDescriptor which
+ * provides information about the physical and logical properties of the device.
  *
  * FSDeviceDescriptors can be obtained in several ways. If a descriptor for
- * diskette is needed, it can be created by specifiying the form factor and
- * density of the disk. Furthermore, a suitabe device constructor can be
+ * a floppy disk is needed, it can be created by specifiying the form factor
+ * and density of the disk. In addition, a suitabe device constructor can be
  * extracted directly from an ADF or HDF.
  */
 
-struct FSPartitionDescriptor : AmigaObject {
+struct FSDeviceDescriptor : AmigaObject {
     
+    // Device geometry
+    DiskGeometry geometry;
+    
+    i64 numBlocks = 0;    // DEPRECATED. MAKE IT A COMPUTED VALUE IN geometry
+    
+    // Number of reserved blocks
+    isize numReserved = 0;
+        
     // File system type
     FSVolumeType dos = FS_NODOS;
-    
-    // Cylinder boundaries
-    isize lowCyl = 0;
-    isize highCyl = 0;
-        
+            
     // Location of the root block
     Block rootBlock = 0;
     
     // References to all bitmap blocks and bitmap extension blocks
     std::vector<Block> bmBlocks;
     std::vector<Block> bmExtBlocks;
-
-    
-    //
-    // Initializing
-    //
-    
-    FSPartitionDescriptor() { };
-    FSPartitionDescriptor(FSVolumeType dos, isize firstCyl, isize lastCyl, Block root);
-
-    const char *getDescription() const override { return "FSPartition"; }
-    void _dump(dump::Category category, std::ostream& os) const override;
-
-    
-    //
-    // Querying partition properties
-    //
-    
-    // Returns the number of cylinders in this partition
-    isize numCyls() { return highCyl - lowCyl + 1; }
-};
-
-struct FSDeviceDescriptor : AmigaObject {
-    
-    DiskGeometry geometry;
-    
-    i64 numBlocks = 0;    // DEPRECATED. MAKE IT A COMPUTED VALUE IN geometry
-    isize numReserved = 0;
-    
-    // Partition parameters
-    FSPartitionDescriptor partition;
     
     
     //

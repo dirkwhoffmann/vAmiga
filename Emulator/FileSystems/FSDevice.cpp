@@ -39,7 +39,7 @@ FSDevice::init(FSDeviceDescriptor &layout)
     numBlocks  = layout.numBlocks;
         
     // Create all partition
-    partitions.push_back(new FSPartition(*this, layout.partition));
+    partitions.push_back(new FSPartition(*this, layout));
 
     // Compute checksums for all blocks
     updateChecksums();
@@ -116,7 +116,7 @@ FSDevice::init(HDFFile &hdf, isize partition)
     printf("Done\n");
 
     // Only proceed if the HDF is formatted
-    if (descriptor.partition.dos == FS_NODOS) throw VAError(ERROR_HDR_UNPARTITIONED);
+    if (descriptor.dos == FS_NODOS) throw VAError(ERROR_HDR_UNPARTITIONED);
     
     // Create the device
     init(descriptor);

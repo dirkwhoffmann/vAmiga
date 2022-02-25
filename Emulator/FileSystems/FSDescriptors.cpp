@@ -77,7 +77,9 @@ FSDeviceDescriptor::init(const DiskGeometry &geometry, FSVolumeType dos)
     Block root = (Block)(numBlocks / 2);
 
     // Add the partition
-    partition = FSPartitionDescriptor(dos, 0, geometry.upperCyl(), root);
+    this->dos = dos;
+    this->rootBlock = root;
+    // partition = FSPartitionDescriptor(dos, 0, geometry.upperCyl(), root);
 
     // Determine number of bitmap blocks
     isize bitsPerBlock = (geometry.bsize - 4) * 8;
@@ -88,7 +90,7 @@ FSDeviceDescriptor::init(const DiskGeometry &geometry, FSVolumeType dos)
     
     // Add all bitmap blocks
     for (isize i = 0; i < neededBlocks; i++) {
-        partition.bmBlocks.push_back(Block(root + 1 + i));
+        bmBlocks.push_back(Block(root + 1 + i));
     }
 }
 
@@ -111,33 +113,6 @@ FSDeviceDescriptor::_dump(dump::Category category, std::ostream& os) const
         os << dec(numBlocks) << std::endl;
         os << tab("Reserved");
         os << dec(numReserved) << std::endl;
-    
-        partition.dump(category, os);
-    }
-}
-
-FSPartitionDescriptor::FSPartitionDescriptor(FSVolumeType dos,
-                                             isize firstCyl, isize lastCyl,
-                                             Block root)
-{
-    this->dos = dos;
-    this->lowCyl = firstCyl;
-    this->highCyl = lastCyl;
-    this->rootBlock = root;
-
-    assert(bmBlocks.size() == 0);
-    assert(bmExtBlocks.size() == 0);
-}
-
-void
-FSPartitionDescriptor::_dump(dump::Category category, std::ostream& os) const
-{
-    using namespace util;
-    
-    if (category & dump::State) {
-        
-        os << tab("Partition");
-        os << dec(lowCyl) << " - " << dec(highCyl) << std::endl;
         os << tab("File system");
         os << FSVolumeTypeEnum::key(dos) << std::endl;
         os << tab("Root block");
@@ -145,6 +120,6 @@ FSPartitionDescriptor::_dump(dump::Category category, std::ostream& os) const
         os << tab("Bitmap blocks");
         for (auto& it : bmBlocks) { os << dec(it) << " "; }; os << std::endl;
         os << tab("Extension blocks");
-        for (auto& it : bmExtBlocks) { os << dec(it) << " "; }; os << std::endl;
+        for (auto& it : bmExtBlocks) { os << dec(it) << " "; }; os << std::endl;        
     }
 }

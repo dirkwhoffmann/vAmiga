@@ -14,11 +14,9 @@
 #include <algorithm>
 #include <vector>
 
-FSPartition::FSPartition(FSDevice &dev, FSPartitionDescriptor &layout) : FSPartition(dev)
+FSPartition::FSPartition(FSDevice &dev, FSDeviceDescriptor &layout) : FSPartition(dev)
 {
     dos         = layout.dos;
-    lowCyl      = layout.lowCyl;
-    highCyl     = layout.highCyl;
     rootBlock   = layout.rootBlock;
     bmBlocks    = layout.bmBlocks;
     bmExtBlocks = layout.bmExtBlocks;

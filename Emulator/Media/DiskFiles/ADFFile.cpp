@@ -193,9 +193,11 @@ ADFFile::layout()
     // Assign a default location if the bitmap block reference is invalid
     if (bitmap == 0 || bitmap >= (Block)numBlocks()) bitmap = root + 1;
     
-    // Add partition
-    result.partition = FSPartitionDescriptor(getDos(), 0, numCyls() - 1, root);
-    result.partition.bmBlocks.push_back(bitmap);
+    // result.partition = FSPartitionDescriptor(getDos(), 0, numCyls() - 1, root);
+    // result.partition.bmBlocks.push_back(bitmap);
+    result.dos = getDos();
+    result.rootBlock = root;
+    result.bmBlocks.push_back(bitmap);
     
     return result;
 }
@@ -249,7 +251,7 @@ ADFFile::formatDisk(FSVolumeType fs, BootBlockId id)
     
     // Get a device descriptor for this ADF
     FSDeviceDescriptor descriptor = layout();
-    descriptor.partition.dos = fs;
+    descriptor.dos = fs;
     
     // Create an empty file system
     FSDevice volume(descriptor);

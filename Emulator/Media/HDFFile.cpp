@@ -224,10 +224,14 @@ HDFFile::layoutOfPartition(isize nr)
     i64 rootKey = (result.numReserved + highKey) / 2;
     
     // Add partition
+    result.dos = dos(first);
+    result.rootBlock = (Block)rootKey;
+    /*
     result.partition = FSPartitionDescriptor(dos(first),
                                              0,
                                              c - 1,
                                              (Block)rootKey);
+    */
 
     // Seek bitmap blocks
     Block ref = (Block)rootKey;
@@ -242,14 +246,14 @@ HDFFile::layoutOfPartition(isize nr)
         for (isize i = 0; i < cnt; i++, p += 4) {
             if (Block bmb = FSBlock::read32(p)) {
                 if (bmb < result.numBlocks) {
-                    result.partition.bmBlocks.push_back(bmb);
+                    result.bmBlocks.push_back(bmb);
                 }
             }
         }
         
         // Continue collecting in the next extension bitmap block
         if ((ref = FSBlock::read32(p)) != 0) {
-            if (ref < result.numBlocks) result.partition.bmExtBlocks.push_back(ref);
+            if (ref < result.numBlocks) result.bmExtBlocks.push_back(ref);
             cnt = (512 / 4) - 1;
             offset = 0;
         }
