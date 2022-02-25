@@ -19,11 +19,7 @@ struct FSPartition : AmigaObject {
     
     // File system format
     FSVolumeType dos = FS_NODOS;
-    
-    // Cylinder boundaries
-    isize lowCyl = 0;
-    isize highCyl = 0;
-    
+        
     // Block boundaries
     Block firstBlock = 0;
     Block lastBlock = 0;
@@ -75,7 +71,7 @@ public:
     isize bsize() const;
 
     // Reports layout information about this partition
-    isize numCyls() const { return highCyl - lowCyl + 1; }
+    isize numCyls() const;
     isize numBlocks() const;
     isize numBytes() const;
     

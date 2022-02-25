@@ -20,12 +20,9 @@ FSPartition::FSPartition(FSDevice &dev, FSDeviceDescriptor &layout) : FSPartitio
     rootBlock   = layout.rootBlock;
     bmBlocks    = layout.bmBlocks;
     bmExtBlocks = layout.bmExtBlocks;
-    
-    lowCyl = 0;
-    highCyl = layout.geometry.cylinders - 1;
-    
-    firstBlock  = (Block)(lowCyl * dev.numHeads * dev.numSectors);
-    lastBlock   = (Block)((highCyl + 1) * dev.numHeads * dev.numSectors - 1);
+        
+    firstBlock  = (Block)0;
+    lastBlock   = (Block)(dev.numCyls * dev.numHeads * dev.numSectors - 1);
     
     // Do some consistency checking
     for (Block i = firstBlock; i <= lastBlock; i++) assert(dev.blocks[i] == nullptr);
@@ -95,10 +92,6 @@ FSPartition::_dump(dump::Category category, std::ostream& os) const
     
     if (category & dump::State) {
         
-        os << tab("First cylinder");
-        os << dec(lowCyl) << std::endl;
-        os << tab("Last cylinder");
-        os << dec(highCyl) << std::endl;
         os << tab("First block");
         os << dec(firstBlock) << std::endl;
         os << tab("Last block");
@@ -173,6 +166,12 @@ isize
 FSPartition::bsize() const
 {
     return dev.bsize;
+}
+
+isize
+FSPartition::numCyls() const
+{
+    return  dev.numCyls;
 }
 
 isize
@@ -397,10 +396,7 @@ bool
 FSPartition::isFree(Block nr) const
 {
     assert(nr >= firstBlock && nr <= lastBlock);
-    
-    // Translate rel to a relative block index
-    nr -= lowCyl;
-    
+        
     // The first two blocks are always allocated and not part of the bitmap
     if (nr < 2) return false;
     
