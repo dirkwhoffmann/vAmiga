@@ -216,6 +216,17 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         os << driveSpec.controllerRevision << std::endl;        
     }
 
+    if (category & dump::Volumes) {
+
+        os << "Type   Size            Used    Free    Full  Name" << std::endl;
+
+        for (isize i = 0; i < isize(driveSpec.partitions.size()); i++) {
+            
+            auto fs = FSDevice(*this, i);
+            fs.dump(dump::Summary, os);
+        }
+    }
+    
     if (category & dump::Partitions) {
         
         for (usize i = 0; i < driveSpec.partitions.size(); i++) {

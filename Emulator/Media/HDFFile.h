@@ -43,11 +43,11 @@ public:
     
     HDFFile(const string &path) throws { init(path); }
     HDFFile(const u8 *buf, isize len) throws { init(buf, len); }
-    HDFFile(class HardDrive &drive) throws { init(drive); }
+    HDFFile(const class HardDrive &drive) throws { init(drive); }
 
     void init(const string &path) throws;
     void init(const u8 *buf, isize len) throws;
-    void init(class HardDrive &drive) throws;
+    void init(const class HardDrive &drive) throws;
 
     const char *getDescription() const override { return "HDF"; }
 
@@ -82,7 +82,9 @@ public:
     isize bsize() const;
 
     struct FSDeviceDescriptor layout();
-
+    struct FSDeviceDescriptor layoutOfPartition(isize nr);
+    u8 *dataForPartition(isize nr);
+    
     // Computes all possible drive geometries
     std::vector<DiskGeometry> driveGeometries(isize fileSize);
     

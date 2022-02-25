@@ -1116,8 +1116,7 @@ RetroShell::exec <Token::dhn, Token::inspect, Token::geometry> (Arguments& argv,
 template <> void
 RetroShell::exec <Token::dhn, Token::inspect, Token::volume> (Arguments& argv, long param)
 {
-    auto fs = FSDevice(*amiga.dh[param]);
-    dump(fs, dump::Summary);
+    dump(*amiga.dh[param], dump::Volumes);
 }
 
 template <> void

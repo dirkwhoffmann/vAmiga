@@ -100,11 +100,19 @@ FSDevice::init(ADFFile &adf)
 void
 FSDevice::init(HDFFile &hdf)
 {
-    printf("Getting layout\n");
+    init(hdf, 0);
+}
+
+void
+FSDevice::init(HDFFile &hdf, isize partition)
+{
+    printf("Getting layout for partition %ld\n", partition);
     
     // Get a device descriptor for the HDF
-    FSDeviceDescriptor descriptor = hdf.layout();
-
+    // FSDeviceDescriptor descriptor = hdf.layout();
+    auto descriptor = hdf.layoutOfPartition(partition);
+    descriptor.dump();
+    
     printf("Done\n");
 
     // Only proceed if the HDF is formatted
@@ -114,7 +122,12 @@ FSDevice::init(HDFFile &hdf)
     init(descriptor);
 
     // Import file system from HDF
-    importVolume(hdf.data, hdf.size);
+    auto *ptr = hdf.dataForPartition(partition);
+    auto diff = ptr - hdf.data;
+    printf("Skipping %ld.%ld blocks\n", diff / 512, diff % 512);
+    
+    // importVolume(hdf.data, hdf.size);
+    importVolume(ptr, descriptor.numBlocks * 512);
 }
 
 void
@@ -125,10 +138,17 @@ FSDevice::init(class Drive &drive)
 }
 
 void
-FSDevice::init(class HardDrive &drive)
+FSDevice::init(const class HardDrive &drive)
 {
     auto hdf = HDFFile(drive);
     init(hdf);
+}
+
+void
+FSDevice::init(const class HardDrive &drive, isize partition)
+{
+    auto hdf = HDFFile(drive);
+    init(hdf, partition);
 }
 
 void
@@ -165,7 +185,6 @@ FSDevice::_dump(dump::Category category, std::ostream& os) const
 {
     if (category & dump::Summary) {
         
-        os << "Type   Size            Used    Free    Full  Name" << std::endl;
         for (auto& p : partitions) p->dump(category, os);
     
     } else {

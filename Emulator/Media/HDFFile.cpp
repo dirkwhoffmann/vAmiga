@@ -61,7 +61,7 @@ HDFFile::init(const u8 *buf, isize len)
 }
 
 void
-HDFFile::init(HardDrive &drive)
+HDFFile::init(const HardDrive &drive)
 {
     // TODO: THIS FUNCTION IS A PERFORMANCE KILLER FOR LARGE BUFFERS
     {   MEASURE_TIME("AmigaFile::init(const u8 *buf, isize len)")
@@ -179,6 +179,81 @@ HDFFile::layout()
     }
     
     return result;
+}
+
+FSDeviceDescriptor
+HDFFile::layoutOfPartition(isize nr)
+{
+    FSDeviceDescriptor result;
+        
+    auto &part = driveSpec.partitions[nr];
+    
+    auto c = part.highCyl - part.lowCyl + 1;
+    auto h = part.heads;
+    auto s = part.sectors;
+    
+    result.geometry.cylinders = c;
+    result.geometry.heads = h;
+    result.geometry.sectors = s;
+    result.geometry.bsize = 512;
+    result.numBlocks = c * h * s;
+    assert(c * h * s == result.geometry.numBlocks());
+
+    // Determine block bounds
+    auto first = part.lowCyl * h * s;
+    auto dptr = data + first * 512;
+
+    // Set the number of reserved blocks
+    result.numReserved = 2;
+
+    // Only proceed if the hard drive is formatted
+    // if (dos(0) == FS_NODOS) return result;
+    assert(dos(first) != FS_NODOS);
+    
+    // Determine the location of the root block
+    i64 highKey = result.numBlocks - 1;
+    i64 rootKey = (result.numReserved + highKey) / 2;
+    
+    // Add partition
+    result.partitions.push_back(FSPartitionDescriptor(dos(first),
+                                                      0,
+                                                      c - 1,
+                                                      (Block)rootKey));
+
+    // Seek bitmap blocks
+    Block ref = (Block)rootKey;
+    isize cnt = 25;
+    isize offset = 512 - 49 * 4;
+    
+    while (ref && ref < (Block)result.numBlocks) {
+
+        const u8 *p = dptr + (ref * 512) + offset;
+    
+        // Collect all references to bitmap blocks stored in this block
+        for (isize i = 0; i < cnt; i++, p += 4) {
+            if (Block bmb = FSBlock::read32(p)) {
+                if (bmb < result.numBlocks) {
+                    result.partitions[0].bmBlocks.push_back(bmb);
+                }
+            }
+        }
+        
+        // Continue collecting in the next extension bitmap block
+        if ((ref = FSBlock::read32(p)) != 0) {
+            if (ref < result.numBlocks) result.partitions[0].bmExtBlocks.push_back(ref);
+            cnt = (512 / 4) - 1;
+            offset = 0;
+        }
+    }
+    
+    return result;
+}
+
+u8 *
+HDFFile::dataForPartition(isize nr)
+{
+    auto &part = driveSpec.partitions[nr];
+    return data + part.lowCyl * part.heads * part.sectors * 512;
 }
 
 void

@@ -65,9 +65,11 @@ public:
     FSDevice(DiskDiameter dia, DiskDensity den) { init(dia, den); }
     FSDevice(DiskDiameter dia, DiskDensity den, const string &path) { init(dia, den, path); }
     FSDevice(class ADFFile &adf) throws { init(adf); }
-    FSDevice(class HDFFile &hdf) throws { init(hdf); }
+    [[deprecated]] FSDevice(class HDFFile &hdf) throws { init(hdf); }
+    FSDevice(class HDFFile &hdf, isize partition) throws { init(hdf, partition); }
     FSDevice(class Drive &drive) throws { init(drive); }
-    FSDevice(class HardDrive &drive) throws { init(drive); }
+    [[deprecated]] FSDevice(const class HardDrive &drive) throws { init(drive); }
+    FSDevice(const class HardDrive &drive, isize partition) throws { init(drive, partition); }
     FSDevice(FSVolumeType type, const string &path) { init(type, path); }
     ~FSDevice();
     
@@ -79,8 +81,10 @@ private:
     void init(DiskDiameter type, DiskDensity density, const string &path);
     void init(class ADFFile &adf) throws;
     void init(class HDFFile &hdf) throws;
+    void init(class HDFFile &hdf, isize partition) throws;
     void init(class Drive &drive) throws;
-    void init(class HardDrive &drive) throws;
+    void init(const class HardDrive &drive) throws;
+    void init(const class HardDrive &drive, isize partition) throws;
     void init(FSVolumeType type, const string &path);
 
     
