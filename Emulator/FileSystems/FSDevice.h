@@ -120,14 +120,20 @@ public:
 
     
     //
-    // Querying properties of the current partition
+    // Querying file system properties
     //
     
-    // Returns the DOS version of the current partition
+    // Returns the DOS version
     FSVolumeType dos() const { return partition->dos; }
     bool isOFS() const { return partition->isOFS(); }
     bool isFFS() const { return partition->isFFS(); }
     
+    // Reports usage information about this partition
+    isize freeBlocks() const;
+    isize usedBlocks() const;
+    isize freeBytes() const;
+    isize usedBytes() const;
+
     
     //
     // Working with partitions
@@ -135,15 +141,6 @@ public:
     
 public:
     
-    // Returns the number of partitions
-    isize numPartitions() { return 1; }
-    
-    // Returns a partition
-    FSPartitionPtr getPartition(isize nr);
-    
-    // Returns the partition a certain block belongs to
-    isize partitionForBlock(Block nr);
-
     // Gets or sets the name of the current partition
     FSName getName() { return partition->getName(); }
     void setName(FSName name) { partition->setName(name); }

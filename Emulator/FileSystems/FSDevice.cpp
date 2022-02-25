@@ -95,14 +95,6 @@ FSDevice::init(ADFFile &adf)
     importVolume(adf.data, adf.size);
 }
 
-/*
-void
-FSDevice::init(HDFFile &hdf)
-{
-    init(hdf, 0);
-}
-*/
-
 void
 FSDevice::init(HDFFile &hdf, isize partition)
 {
@@ -137,15 +129,6 @@ FSDevice::init(class Drive &drive)
     init(adf);
 }
 
-/*
-void
-FSDevice::init(const class HardDrive &drive)
-{
-    auto hdf = HDFFile(drive);
-    init(hdf);
-}
-*/
-
 void
 FSDevice::init(const class HardDrive &drive, isize partition)
 {
@@ -169,6 +152,59 @@ FSDevice::~FSDevice()
     for (auto &b : blocks) delete b;
 }
 
+void
+FSDevice::_dump(dump::Category category, std::ostream& os) const
+{
+    using namespace util;
+
+    if (category & dump::Summary) {
+        
+        auto total = numBlocks;
+        auto used = usedBlocks();
+        auto free = freeBlocks();
+        auto fill = (isize)(100.0 * used / total);
+        
+        os << "DOS" << dec(dos());
+        os << "   ";
+        os << std::setw(6) << std::left << std::setfill(' ') << total;
+        os << " (x ";
+        os << std::setw(3) << std::left << std::setfill(' ') << bsize;
+        os << ")  ";
+        os << std::setw(6) << std::left << std::setfill(' ') << used;
+        os << "  ";
+        os << std::setw(6) << std::left << std::setfill(' ') << free;
+        os << "  ";
+        os << std::setw(3) << std::right << std::setfill(' ') << fill;
+        os << "%  ";
+        os << partition->getName().c_str() << std::endl;
+    }
+    
+    if (category & dump::Partitions) {
+        
+        os << tab("Root block");
+        os << dec(partition->rootBlock) << std::endl;
+        os << tab("Bitmap blocks");
+        for (auto& it : partition->bmBlocks) { os << dec(it) << " "; }
+        os << std::endl;
+        os << util::tab("Extension blocks");
+        for (auto& it : partition->bmExtBlocks) { os << dec(it) << " "; }
+        os << std::endl;
+    }
+
+    if (category & dump::Blocks) {
+                
+        for (isize i = 0; i < numBlocks; i++)  {
+            
+            if (blocks[i]->type == FS_EMPTY_BLOCK) continue;
+            
+            msg("\nBlock %ld (%d):", i, blocks[i]->nr);
+            msg(" %s\n", FSBlockTypeEnum::key(blocks[i]->type));
+            
+            blocks[i]->dump();
+        }
+    }
+}
+
 DiskGeometry
 FSDevice::getGeometry() const
 {
@@ -182,42 +218,34 @@ FSDevice::getGeometry() const
     return result;
 }
 
-void
-FSDevice::_dump(dump::Category category, std::ostream& os) const
+isize
+FSDevice::freeBlocks() const
 {
-    if (category & dump::Summary) {
-        
-        partition->dump(category, os);
+    isize result = 0;
     
-    } else {
-        
-        // Dump partition
-        partition->dump();
-        msg("\n");
-        
-        // Dump all blocks
-        for (isize i = 0; i < numBlocks; i++)  {
-            
-            if (blocks[i]->type == FS_EMPTY_BLOCK) continue;
-            
-            msg("\nBlock %ld (%d):", i, blocks[i]->nr);
-            msg(" %s\n", FSBlockTypeEnum::key(blocks[i]->type));
-            
-            blocks[i]->dump();
-        }
+    for (isize i = 0; i < numBlocks; i++) {
+        if (partition->isFree((Block)i)) result++;
     }
-}
 
-FSPartitionPtr
-FSDevice::getPartition(isize nr)
-{
-    return partition;
+    return result;
 }
 
 isize
-FSDevice::partitionForBlock(Block nr)
+FSDevice::usedBlocks() const
 {
-    return 0;
+    return numBlocks - freeBlocks();
+}
+
+isize
+FSDevice::freeBytes() const
+{
+    return freeBlocks() * bsize;
+}
+
+isize
+FSDevice::usedBytes() const
+{
+    return usedBlocks() * bsize;
 }
 
 FSBlockType

@@ -19,10 +19,7 @@ struct FSPartition : AmigaObject {
     
     // File system format
     FSVolumeType dos = FS_NODOS;
-        
-    // Block boundaries
-    // Block lastBlock = 0;
-    
+            
     // Location of the root block
     Block rootBlock = 0;
     
@@ -67,19 +64,13 @@ public:
     bool isFFS() const { return isFFSVolumeType(dos); }
 
     // Returns the size of a single block in bytes (usually 512)
-    isize bsize() const;
+    [[deprecated]] isize bsize() const;
 
     // Reports layout information about this partition
-    isize numCyls() const;
-    isize numBlocks() const;
-    isize numBytes() const;
-    
-    // Reports usage information about this partition
-    isize freeBlocks() const;
-    isize usedBlocks() const;
-    isize freeBytes() const;
-    isize usedBytes() const;
-    
+    [[deprecated]] isize numCyls() const;
+    [[deprecated]] isize numBlocks() const;
+    [[deprecated]] isize numBytes() const;
+        
     
     //
     // Creating and deleting blocks

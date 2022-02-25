@@ -1623,9 +1623,9 @@ FSBlock::addData(const u8 *buffer, isize size)
             
             debug(FS_DEBUG, "Required data blocks : %ld\n", numDataBlocks);
             debug(FS_DEBUG, "Required list blocks : %ld\n", numListBlocks);
-            debug(FS_DEBUG, "         Free blocks : %ld\n", partition.freeBlocks());
+            debug(FS_DEBUG, "         Free blocks : %ld\n", partition.dev.freeBlocks());
             
-            if (partition.freeBlocks() < numDataBlocks + numListBlocks) {
+            if (partition.dev.freeBlocks() < numDataBlocks + numListBlocks) {
                 warn("Not enough free blocks\n");
                 return 0;
             }
@@ -1691,7 +1691,7 @@ FSBlock::writeData(std::ostream& os)
     // Start here and iterate through all connected file list blocks
     FSBlock *block = this;
     
-    while (block && blocksTotal < partition.numBlocks()) {
+    while (block && blocksTotal < partition.dev.numBlocks) {
         
         blocksTotal++;
         

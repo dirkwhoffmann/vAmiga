@@ -65,28 +65,6 @@ FSPartition::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
 
-    if (category & dump::Summary) {
-
-        auto total = numBlocks();
-        auto used = usedBlocks();
-        auto free = freeBlocks();
-        auto fill = (isize)(100.0 * used / total);
-        
-        os << "DOS" << dec(dos);
-        os << "   ";
-        os << std::setw(6) << std::left << std::setfill(' ') << total;
-        os << " (x ";
-        os << std::setw(3) << std::left << std::setfill(' ') << bsize();
-        os << ")  ";
-        os << std::setw(6) << std::left << std::setfill(' ') << used;
-        os << "  ";
-        os << std::setw(6) << std::left << std::setfill(' ') << free;
-        os << "  ";
-        os << std::setw(3) << std::right << std::setfill(' ') << fill;
-        os << "%  ";
-        os << getName().c_str() << std::endl;
-    }
-    
     if (category & dump::State) {
         
         os << tab("Root block");
@@ -118,7 +96,7 @@ FSPartition::predictBlockType(Block nr, const u8 *buffer) const
 
     // For all other blocks, check the type and subtype fields
     u32 type = FSBlock::read32(buffer);
-    u32 subtype = FSBlock::read32(buffer + bsize() - 4);
+    u32 subtype = FSBlock::read32(buffer + dev.bsize - 4);
 
     if (type == 2  && subtype == 1)       return FS_ROOT_BLOCK;
     if (type == 2  && subtype == 2)       return FS_USERDIR_BLOCK;
@@ -129,7 +107,7 @@ FSPartition::predictBlockType(Block nr, const u8 *buffer) const
     if (isOFS()) {
         if (type == 8) return FS_DATA_BLOCK_OFS;
     } else {
-        for (isize i = 0; i < bsize(); i++) if (buffer[i]) return FS_DATA_BLOCK_FFS;
+        for (isize i = 0; i < dev.bsize; i++) if (buffer[i]) return FS_DATA_BLOCK_FFS;
     }
     
     return FS_EMPTY_BLOCK;
@@ -176,40 +154,10 @@ FSPartition::numBytes() const
 }
 
 isize
-FSPartition::freeBlocks() const
-{
-    isize result = 0;
-    
-    for (isize i = 0; i < dev.numBlocks; i++) {
-        if (isFree((Block)i)) result++;
-    }
-
-    return result;
-}
-
-isize
-FSPartition::usedBlocks() const
-{
-    return numBlocks() - freeBlocks();
-}
-
-isize
-FSPartition::freeBytes() const
-{
-    return freeBlocks() * bsize();
-}
-
-isize
-FSPartition::usedBytes() const
-{
-    return usedBlocks() * bsize();
-}
-
-isize
 FSPartition::requiredDataBlocks(isize fileSize) const
 {
     // Compute the capacity of a single data block
-    isize numBytes = bsize() - (isOFS() ? 24 : 0);
+    isize numBytes = dev.bsize - (isOFS() ? 24 : 0);
 
     // Compute the required number of data blocks
     return (fileSize + numBytes - 1) / numBytes;
@@ -222,7 +170,7 @@ FSPartition::requiredFileListBlocks(isize fileSize) const
     isize numBlocks = requiredDataBlocks(fileSize);
     
     // Compute the number of data block references in a single block
-    isize numRefs = (bsize() / 4) - 56;
+    isize numRefs = (dev.bsize / 4) - 56;
 
     // Small files do not require any file list block
     if (numBlocks <= numRefs) return 0;
@@ -240,7 +188,7 @@ FSPartition::requiredBlocks(isize fileSize) const
     debug(FS_DEBUG, "Required file header blocks : %d\n",  1);
     debug(FS_DEBUG, "       Required data blocks : %ld\n", numDataBlocks);
     debug(FS_DEBUG, "  Required file list blocks : %ld\n", numFileListBlocks);
-    debug(FS_DEBUG, "                Free blocks : %ld\n", freeBlocks());
+    debug(FS_DEBUG, "                Free blocks : %ld\n", dev.freeBlocks());
     
     return 1 + numDataBlocks + numFileListBlocks;
 }
@@ -367,10 +315,10 @@ FSPartition::newFileHeaderBlock(const string &name)
 FSBlock *
 FSPartition::bmBlockForBlock(Block nr)
 {
-    assert(nr >= 2 && (isize)nr < numBlocks());
+    assert(nr >= 2 && (isize)nr < dev.numBlocks);
         
     // Locate the bitmap block
-    isize bitsPerBlock = (bsize() - 4) * 8;
+    isize bitsPerBlock = (dev.bsize - 4) * 8;
     isize bmNr = (nr - 2) / bitsPerBlock;
 
     if (bmNr >= (isize)bmBlocks.size()) {
@@ -417,7 +365,7 @@ FSPartition::locateAllocationBit(Block nr, isize *byte, isize *bit) const
     nr -= 2;
     
     // Locate the bitmap block which stores the allocation bit
-    isize bitsPerBlock = (bsize() - 4) * 8;
+    isize bitsPerBlock = (dev.bsize - 4) * 8;
     isize bmNr = nr / bitsPerBlock;
 
     // Get the bitmap block
@@ -443,7 +391,7 @@ FSPartition::locateAllocationBit(Block nr, isize *byte, isize *bit) const
 
     // Skip the checksum which is located in the first four bytes
     rByte += 4;
-    assert(rByte >= 4 && rByte < bsize());
+    assert(rByte >= 4 && rByte < dev.bsize);
     
     *byte = rByte;
     *bit = nr % 8;
@@ -476,8 +424,8 @@ FSPartition::killVirus()
         dev.blocks[0]->writeBootBlock(id, 0);
         dev.blocks[1]->writeBootBlock(id, 1);
     } else {
-        std::memset(dev.blocks[0]->data + 4, 0, bsize() - 4);
-        std::memset(dev.blocks[1]->data, 0, bsize());
+        std::memset(dev.blocks[0]->data + 4, 0, dev.bsize - 4);
+        std::memset(dev.blocks[1]->data, 0, dev.bsize);
     }
 }
 
