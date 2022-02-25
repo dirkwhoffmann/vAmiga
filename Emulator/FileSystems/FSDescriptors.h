@@ -29,6 +29,42 @@
  * extracted directly from an ADF or HDF.
  */
 
+struct FSPartitionDescriptor : AmigaObject {
+    
+    // File system type
+    FSVolumeType dos = FS_NODOS;
+    
+    // Cylinder boundaries
+    isize lowCyl = 0;
+    isize highCyl = 0;
+        
+    // Location of the root block
+    Block rootBlock = 0;
+    
+    // References to all bitmap blocks and bitmap extension blocks
+    std::vector<Block> bmBlocks;
+    std::vector<Block> bmExtBlocks;
+
+    
+    //
+    // Initializing
+    //
+    
+    FSPartitionDescriptor() { };
+    FSPartitionDescriptor(FSVolumeType dos, isize firstCyl, isize lastCyl, Block root);
+
+    const char *getDescription() const override { return "FSPartition"; }
+    void _dump(dump::Category category, std::ostream& os) const override;
+
+    
+    //
+    // Querying partition properties
+    //
+    
+    // Returns the number of cylinders in this partition
+    isize numCyls() { return highCyl - lowCyl + 1; }
+};
+
 struct FSDeviceDescriptor : AmigaObject {
     
     DiskGeometry geometry;
@@ -37,7 +73,7 @@ struct FSDeviceDescriptor : AmigaObject {
     isize numReserved = 0;
     
     // Partition parameters
-    std::vector<struct FSPartitionDescriptor> partitions;
+    FSPartitionDescriptor partition;
     
     
     //
@@ -62,39 +98,4 @@ private:
     
     const char *getDescription() const override { return "FSLayout"; }
     void _dump(dump::Category category, std::ostream& os) const override;
-};
-
-struct FSPartitionDescriptor : AmigaObject {
-    
-    // File system type
-    FSVolumeType dos = FS_NODOS;
-    
-    // Cylinder boundaries
-    isize lowCyl = 0;
-    isize highCyl = 0;
-        
-    // Location of the root block
-    Block rootBlock = 0;
-    
-    // References to all bitmap blocks and bitmap extension blocks
-    std::vector<Block> bmBlocks;
-    std::vector<Block> bmExtBlocks;
-
-    
-    //
-    // Initializing
-    //
-    
-    FSPartitionDescriptor(FSVolumeType dos, isize firstCyl, isize lastCyl, Block root);
-
-    const char *getDescription() const override { return "FSPartition"; }
-    void _dump(dump::Category category, std::ostream& os) const override;
-
-    
-    //
-    // Querying partition properties
-    //
-    
-    // Returns the number of cylinders in this partition
-    isize numCyls() { return highCyl - lowCyl + 1; }
 };

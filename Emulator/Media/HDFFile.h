@@ -82,7 +82,7 @@ public:
     isize numBlocks() const;
     isize bsize() const;
 
-    struct FSDeviceDescriptor layout();
+    // struct FSDeviceDescriptor layout();
     struct FSDeviceDescriptor layoutOfPartition(isize nr);
     u8 *dataForPartition(isize nr);
     

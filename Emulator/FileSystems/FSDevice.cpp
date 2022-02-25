@@ -38,10 +38,8 @@ FSDevice::init(FSDeviceDescriptor &layout)
     bsize      = layout.geometry.bsize;
     numBlocks  = layout.numBlocks;
         
-    // Create all partitions
-    for (auto& descriptor : layout.partitions) {
-        partitions.push_back(new FSPartition(*this, descriptor));
-    }
+    // Create all partition
+    partitions.push_back(new FSPartition(*this, layout.partition));
 
     // Compute checksums for all blocks
     updateChecksums();
@@ -97,11 +95,13 @@ FSDevice::init(ADFFile &adf)
     importVolume(adf.data, adf.size);
 }
 
+/*
 void
 FSDevice::init(HDFFile &hdf)
 {
     init(hdf, 0);
 }
+*/
 
 void
 FSDevice::init(HDFFile &hdf, isize partition)
@@ -116,7 +116,7 @@ FSDevice::init(HDFFile &hdf, isize partition)
     printf("Done\n");
 
     // Only proceed if the HDF is formatted
-    if (descriptor.partitions.empty()) throw VAError(ERROR_HDR_UNPARTITIONED);
+    if (descriptor.partition.dos == FS_NODOS) throw VAError(ERROR_HDR_UNPARTITIONED);
     
     // Create the device
     init(descriptor);
@@ -137,12 +137,14 @@ FSDevice::init(class Drive &drive)
     init(adf);
 }
 
+/*
 void
 FSDevice::init(const class HardDrive &drive)
 {
     auto hdf = HDFFile(drive);
     init(hdf);
 }
+*/
 
 void
 FSDevice::init(const class HardDrive &drive, isize partition)

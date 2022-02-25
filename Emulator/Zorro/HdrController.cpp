@@ -318,7 +318,7 @@ HdrController::processInit()
     mem.patch(pointer + devn_addMask,       u32(0xFFFFFFFE));
     mem.patch(pointer + devn_bootPrio,      u32(0));
     mem.patch(pointer + devn_dName,         u32(part.dosType));
-    mem.patch(pointer + devn_bootflags,     u32(1));
+    mem.patch(pointer + devn_bootflags,     u32(part.flags));
     mem.patch(pointer + devn_segList,       u32(0));
 
     if (part.dosType != 0x444f5300) {

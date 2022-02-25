@@ -134,6 +134,7 @@ HDFFile::bsize() const
     return driveSpec.geometry.bsize;
 }
 
+/*
 FSDeviceDescriptor
 HDFFile::layout()
 {
@@ -154,10 +155,10 @@ HDFFile::layout()
     i64 rootKey = (result.numReserved + highKey) / 2;
     
     // Add partition
-    result.partitions.push_back(FSPartitionDescriptor(dos(0),
-                                                      0,
-                                                      result.geometry.upperCyl(),
-                                                      (Block)rootKey));
+    result.partition = FSPartitionDescriptor(dos(0),
+                                             0,
+                                             result.geometry.upperCyl(),
+                                             (Block)rootKey);
 
     // Seek bitmap blocks
     Block ref = (Block)rootKey;
@@ -172,14 +173,14 @@ HDFFile::layout()
         for (isize i = 0; i < cnt; i++, p += 4) {
             if (Block bmb = FSBlock::read32(p)) {
                 if (bmb < result.numBlocks) {
-                    result.partitions[0].bmBlocks.push_back(bmb);
+                    result.partition.bmBlocks.push_back(bmb);
                 }
             }
         }
         
         // Continue collecting in the next extension bitmap block
         if ((ref = FSBlock::read32(p)) != 0) {
-            if (ref < result.numBlocks) result.partitions[0].bmExtBlocks.push_back(ref);
+            if (ref < result.numBlocks) result.partition.bmExtBlocks.push_back(ref);
             cnt = (512 / 4) - 1;
             offset = 0;
         }
@@ -187,6 +188,7 @@ HDFFile::layout()
     
     return result;
 }
+*/
 
 FSDeviceDescriptor
 HDFFile::layoutOfPartition(isize nr)
@@ -222,10 +224,10 @@ HDFFile::layoutOfPartition(isize nr)
     i64 rootKey = (result.numReserved + highKey) / 2;
     
     // Add partition
-    result.partitions.push_back(FSPartitionDescriptor(dos(first),
-                                                      0,
-                                                      c - 1,
-                                                      (Block)rootKey));
+    result.partition = FSPartitionDescriptor(dos(first),
+                                             0,
+                                             c - 1,
+                                             (Block)rootKey);
 
     // Seek bitmap blocks
     Block ref = (Block)rootKey;
@@ -240,14 +242,14 @@ HDFFile::layoutOfPartition(isize nr)
         for (isize i = 0; i < cnt; i++, p += 4) {
             if (Block bmb = FSBlock::read32(p)) {
                 if (bmb < result.numBlocks) {
-                    result.partitions[0].bmBlocks.push_back(bmb);
+                    result.partition.bmBlocks.push_back(bmb);
                 }
             }
         }
         
         // Continue collecting in the next extension bitmap block
         if ((ref = FSBlock::read32(p)) != 0) {
-            if (ref < result.numBlocks) result.partitions[0].bmExtBlocks.push_back(ref);
+            if (ref < result.numBlocks) result.partition.bmExtBlocks.push_back(ref);
             cnt = (512 / 4) - 1;
             offset = 0;
         }
@@ -377,7 +379,7 @@ HDFFile::addDefaultPartition()
     auto &geometry = getGeometry();
     
     partSpec.name           = "Default";
-    partSpec.flags          = 0;
+    partSpec.flags          = 1;
     partSpec.sizeBlock      = u32(geometry.bsize / 4);
     partSpec.heads          = u32(geometry.heads);
     partSpec.sectors        = u32(geometry.sectors);

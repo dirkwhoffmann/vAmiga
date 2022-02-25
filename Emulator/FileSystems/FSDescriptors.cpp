@@ -77,7 +77,7 @@ FSDeviceDescriptor::init(const DiskGeometry &geometry, FSVolumeType dos)
     Block root = (Block)(numBlocks / 2);
 
     // Add the partition
-    partitions.push_back(FSPartitionDescriptor(dos, 0, geometry.upperCyl(), root));
+    partition = FSPartitionDescriptor(dos, 0, geometry.upperCyl(), root);
 
     // Determine number of bitmap blocks
     isize bitsPerBlock = (geometry.bsize - 4) * 8;
@@ -88,7 +88,7 @@ FSDeviceDescriptor::init(const DiskGeometry &geometry, FSVolumeType dos)
     
     // Add all bitmap blocks
     for (isize i = 0; i < neededBlocks; i++) {
-        partitions[0].bmBlocks.push_back(Block(root + 1 + i));
+        partition.bmBlocks.push_back(Block(root + 1 + i));
     }
 }
 
@@ -112,7 +112,7 @@ FSDeviceDescriptor::_dump(dump::Category category, std::ostream& os) const
         os << tab("Reserved");
         os << dec(numReserved) << std::endl;
     
-        for (auto& p : partitions) { p.dump(category, os); }
+        partition.dump(category, os);
     }
 }
 

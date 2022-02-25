@@ -158,7 +158,7 @@ public:
     // Performs several partition checks
     bool check(bool strict, FSErrorReport &report) const;
 
-    // Checks if a certain block belongs to his partition
+    // Checks if a certain block belongs to this partition
     bool inRange(Block nr) const { return nr >= firstBlock && nr <= lastBlock; }
 };
 
