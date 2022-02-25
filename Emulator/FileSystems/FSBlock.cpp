@@ -27,7 +27,7 @@ FSBlock::FSBlock(FSPartition &p, Block nr, FSBlockType t) : partition(p)
 
         case FS_BOOT_BLOCK:
             
-            if (nr == p.firstBlock && p.dos != FS_NODOS) {
+            if (nr == 0 && p.dos != FS_NODOS) {
                 data[0] = 'D';
                 data[1] = 'O';
                 data[2] = 'S';
@@ -162,7 +162,7 @@ FSBlock::itemType(isize byte) const
             
         case FS_BOOT_BLOCK:
             
-            if (nr == partition.firstBlock) {
+            if (nr == 0) {
                 
                 if (byte <= 2) return FSI_DOS_HEADER;
                 if (byte == 3) return FSI_DOS_VERSION;
@@ -361,7 +361,7 @@ FSBlock::check(isize byte, u8 *expected, bool strict) const
             isize word = byte / 4;
             u32 value = data[byte];
 
-            if (nr == partition.firstBlock) {
+            if (nr == 0) {
                          
                 if (byte == 0) EXPECT_BYTE('D');
                 if (byte == 1) EXPECT_BYTE('O');
@@ -572,7 +572,7 @@ FSBlock::checksumLocation() const
             
         case FS_BOOT_BLOCK:
 
-            return (nr == partition.firstBlock) ? 1 : -1;
+            return nr == 0 ? 1 : -1;
             
         case FS_BITMAP_BLOCK:
             
@@ -623,7 +623,7 @@ u32
 FSBlock::checksumBootBlock() const
 {
     // Only call this function for the first boot block in a partition
-    assert(nr == partition.firstBlock);
+    assert(nr == 0);
         
     u32 result = get32(0), prec;
 

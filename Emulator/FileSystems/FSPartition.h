@@ -21,7 +21,6 @@ struct FSPartition : AmigaObject {
     FSVolumeType dos = FS_NODOS;
         
     // Block boundaries
-    Block firstBlock = 0;
     Block lastBlock = 0;
     
     // Location of the root block
@@ -155,7 +154,7 @@ public:
     bool check(bool strict, FSErrorReport &report) const;
 
     // Checks if a certain block belongs to this partition
-    bool inRange(Block nr) const { return nr >= firstBlock && nr <= lastBlock; }
+    [[deprecated]] bool inRange(Block nr) const { return true; }
 };
 
 typedef FSPartition* FSPartitionPtr;
