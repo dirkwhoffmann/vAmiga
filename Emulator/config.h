@@ -79,8 +79,9 @@ struct FloatStereo; typedef FloatStereo SampleType;
 //
 
 // Add pathes to HDF files to launch the emulator with preset hard drives
-#define INITIAL_DH0 "/tmp/vamiga.hdf"
-#define INITIAL_DH1 "" // /tmp/other.hdf"
+// #define INITIAL_DH0 "/tmp/rdbtest.hdf"
+#define INITIAL_DH0 "/tmp/kyrios.hdf"
+#define INITIAL_DH1 "" // /tmp/vamiga.hdf"
 #define INITIAL_DH2 ""
 #define INITIAL_DH3 ""
 
@@ -188,7 +189,7 @@ static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
 // Expansion boards
 static const int ZOR_DEBUG       = 0; // Zorro space, autoconfig
 static const int FAS_DEBUG       = 0; // FastRam
-static const int HDR_DEBUG       = 0; // HardDrive
+static const int HDR_DEBUG       = 1; // HardDrive
 
 // Media types
 static const int ADF_DEBUG       = 0; // ADF and extended ADF files

@@ -132,6 +132,8 @@ HdrController::spypeek16(u32 addr) const
         case EXPROM_SIZE:
             
             // Return the number of partitions
+            debug(HDR_DEBUG, "This drive has %ld partitions\n", drive.numPartitions());
+            // return u16(drive.numPartitions());
             return 1;
             
         case EXPROM_SIZE + 2:
@@ -200,20 +202,22 @@ HdrController::processCmd()
     os::IOStdReq stdReq;
     osDebugger.read(pointer, &stdReq);
     
+    auto unit = mem.spypeek32 <ACCESSOR_CPU> (stdReq.io_Unit + 0x2A);
     auto cmd = IoCommand(stdReq.io_Command);
     auto offset = isize(stdReq.io_Offset);
     auto length = isize(stdReq.io_Length);
     auto addr = u32(stdReq.io_Data);
 
-    debug(HDR_DEBUG, "Processing command %s\n", IoCommandEnum::key(cmd));
+    debug(HDR_DEBUG, "Unit: %d Blck: %ld Cmd: %s\n", unit, offset / 512, IoCommandEnum::key(cmd));
 
     switch (cmd) {
             
         case CMD_READ:
-        {
+        {            
             // Perform the operation
-            auto error = drive.read(offset, length, addr);
-                
+            // auto error = drive.read(offset, length, addr);
+            auto error = drive.read(unit, offset / 512, length, addr);
+
             // Check for errors
             if (error) mem.patch(pointer + IO_ERROR, u8(error));
             break;
@@ -222,8 +226,9 @@ HdrController::processCmd()
         case CMD_TD_FORMAT:
         {
             // Perform the operation
-            auto error = drive.write(offset, length, addr);
-                
+            // auto error = drive.write(offset, length, addr);
+            auto error = drive.write(unit, offset / 512, length, addr);
+
             // Check for errors
             if (error) mem.patch(pointer + IO_ERROR, u8(error));
             break;

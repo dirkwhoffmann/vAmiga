@@ -29,10 +29,7 @@ class HardDrive : public SubComponent {
 
     // Hard drive spec
     HardDriveSpec driveSpec = {};
-    
-    // Disk geometry
-    // DiskGeometry geometry;
-    
+        
     // Disk data
     u8 *data = nullptr;
     
@@ -138,6 +135,9 @@ public:
     // Returns the disk geometry
     const DiskGeometry &getGeometry() const { return driveSpec.geometry; }
 
+    // Returns the number of partitions
+    isize numPartitions() { return isize(driveSpec.partitions.size()); }
+    
     // Checks whether this drive is connected to the Amiga
     bool isConnected() const { return config.connected; }
     
@@ -184,12 +184,17 @@ public:
 public:
     
     // Reads a data block from the hard drive and copies it into RAM
+    i8 read(isize partition, isize block, isize length, u32 addr);
     i8 read(isize offset, isize length, u32 addr);
     
     // Reads a data block from RAM and writes it onto the hard drive
+    i8 write(isize partition, isize block, isize length, u32 addr);
     i8 write(isize offset, isize length, u32 addr);
     
 private:
+    
+    // Converts a partition / block pair into an offset
+    isize offset(isize partition, isize block);
     
     // Checks the given argument list for consistency
     i8 verify(isize offset, isize length, u32 addr);

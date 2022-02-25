@@ -102,6 +102,7 @@ private:
     // Collects drive information
     void scanDisk();
     void scanPartitions();
+    void addDefaultPartition();
 
     // Returns a pointer to a certain block if it exists
     u8 *seekBlock(isize nr);

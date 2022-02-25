@@ -252,6 +252,8 @@ HDFFile::scanDisk()
         driveSpec.controllerVendor = "VAMIGA";
         driveSpec.controllerProduct = "HDR CONTROLLER";
         driveSpec.controllerRevision = "R1.0";
+        
+        addDefaultPartition();
     }
 }
 
@@ -283,6 +285,32 @@ HDFFile::scanPartitions()
             driveSpec.partitions.push_back(partSpec);
         }
     }
+}
+
+void
+HDFFile::addDefaultPartition()
+{
+    PartitionSpec partSpec;
+    
+    auto &geometry = getGeometry();
+    
+    partSpec.name           = "Default";
+    partSpec.flags          = 0;
+    partSpec.sizeBlock      = u32(geometry.bsize / 4);
+    partSpec.heads          = u32(geometry.heads);
+    partSpec.sectors        = u32(geometry.sectors);
+    partSpec.reserved       = 2;
+    partSpec.interleave     = 0;
+    partSpec.lowCyl         = 0;
+    partSpec.highCyl        = u32(geometry.cylinders - 1);
+    partSpec.numBuffers     = 1;
+    partSpec.bufMemType     = 0;
+    partSpec.maxTransfer    = 0x7FFFFFFF;
+    partSpec.mask           = 0xFFFFFFFE;
+    partSpec.bootPri        = 0;
+    partSpec.dosType        = 0x444f5300; // DOS0
+
+    driveSpec.partitions.push_back(partSpec);
 }
 
 u8 *
