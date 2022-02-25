@@ -16,10 +16,7 @@ struct FSPartition : AmigaObject {
     
     // The device this partition is part of
     class FSDevice &dev;
-    
-    // File system format
-    FSVolumeType dos = FS_NODOS;
-            
+                
     // Location of the root block
     Block rootBlock = 0;
     
@@ -34,6 +31,7 @@ struct FSPartition : AmigaObject {
     
     FSPartition(FSDevice &ref) : dev(ref) { }
     FSPartition(FSDevice &ref, FSDeviceDescriptor &layout);
+    
     
     //
     // Methods from AmigaObject
@@ -50,19 +48,6 @@ public:
     // Predicts the type of a block by analyzing its number and data
     FSBlockType predictBlockType(Block nr, const u8 *buffer) const;
     
-    // Gets or sets the name of this partition
-    FSName getName() const;
-    void setName(FSName name);
-
-    
-    //
-    // Querying partition properties
-    //
-    
-    // Returns the file system category
-    bool isOFS() const { return isOFSVolumeType(dos); }
-    bool isFFS() const { return isFFSVolumeType(dos); }
-
  
     //
     // Creating and deleting blocks

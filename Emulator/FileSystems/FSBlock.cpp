@@ -27,11 +27,11 @@ FSBlock::FSBlock(FSPartition &p, Block nr, FSBlockType t) : partition(p)
 
         case FS_BOOT_BLOCK:
             
-            if (nr == 0 && p.dos != FS_NODOS) {
+            if (nr == 0 && p.dev.dos != FS_NODOS) {
                 data[0] = 'D';
                 data[1] = 'O';
                 data[2] = 'S';
-                data[3] = (u8)p.dos;
+                data[3] = (u8)p.dev.dos;
             }
             break;
             

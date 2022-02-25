@@ -41,6 +41,9 @@ protected:
     isize numReserved = 0;
     isize bsize = 0;
             
+    // File system version
+    FSVolumeType dos = FS_NODOS;
+
     // The partition table
     // std::vector<FSPartitionPtr> partitions;
     FSPartitionPtr partition = nullptr;
@@ -100,7 +103,7 @@ private:
     
 
     //
-    // Querying file system properties
+    // Querying layout properties
     //
     
 public:
@@ -124,10 +127,10 @@ public:
     //
     
     // Returns the DOS version
-    FSVolumeType dos() const { return partition->dos; }
-    bool isOFS() const { return partition->isOFS(); }
-    bool isFFS() const { return partition->isFFS(); }
-    
+    FSVolumeType getDos() const { return dos; }
+    bool isOFS() const { return isOFSVolumeType(dos); }
+    bool isFFS() const { return isFFSVolumeType(dos); }
+
     // Reports usage information about this partition
     isize freeBlocks() const;
     isize usedBlocks() const;
@@ -136,14 +139,14 @@ public:
 
     
     //
-    // Working with partitions
+    // Working with the root block
     //
     
 public:
     
-    // Gets or sets the name of the current partition
-    FSName getName() { return partition->getName(); }
-    void setName(FSName name) { partition->setName(name); }
+    // Gets or sets the volume name
+    FSName getName() const;
+    void setName(FSName name);
     
     
     //
@@ -175,7 +178,7 @@ public:
 
     // Queries a pointer to a block of a certain type (may return nullptr)
     FSBlock *bootBlockPtr(Block nr);
-    FSBlock *rootBlockPtr(Block nr);
+    FSBlock *rootBlockPtr(Block nr) const;
     FSBlock *bitmapBlockPtr(Block nr);
     FSBlock *bitmapExtBlockPtr(Block nr);
     FSBlock *userDirBlockPtr(Block nr);

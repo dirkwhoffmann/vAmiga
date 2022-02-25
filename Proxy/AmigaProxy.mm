@@ -1447,7 +1447,7 @@ using namespace moira;
 
 - (FSVolumeType)dos
 {
-    return [self fs]->dos();
+    return [self fs]->getDos();
 }
 
 - (NSInteger)numCyls

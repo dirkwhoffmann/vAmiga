@@ -31,13 +31,16 @@ FSDevice::init(FSDeviceDescriptor &layout)
     
     if constexpr (FS_DEBUG) { layout.dump(); }
     
-    // Copy layout parameters from descriptor
+    // Copy layout parameters from the descriptor
     numCyls    = layout.geometry.cylinders;
     numHeads   = layout.geometry.heads;
     numSectors = layout.geometry.sectors;
     bsize      = layout.geometry.bsize;
     numBlocks  = layout.numBlocks;
         
+    // Copy file system parameters from the descriptor
+    dos        = layout.dos;
+    
     // Create partition
     partition = new FSPartition(*this, layout);
 
@@ -164,7 +167,7 @@ FSDevice::_dump(dump::Category category, std::ostream& os) const
         auto free = freeBlocks();
         auto fill = (isize)(100.0 * used / total);
         
-        os << "DOS" << dec(dos());
+        os << "DOS" << dec(dos);
         os << "   ";
         os << std::setw(6) << std::left << std::setfill(' ') << total;
         os << " (x ";
@@ -176,7 +179,7 @@ FSDevice::_dump(dump::Category category, std::ostream& os) const
         os << "  ";
         os << std::setw(3) << std::right << std::setfill(' ') << fill;
         os << "%  ";
-        os << partition->getName().c_str() << std::endl;
+        os << getName().c_str() << std::endl;
     }
     
     if (category & dump::Partitions) {
@@ -248,6 +251,22 @@ FSDevice::usedBytes() const
     return usedBlocks() * bsize;
 }
 
+FSName
+FSDevice::getName() const
+{
+    FSBlock *rb = rootBlockPtr(partition->rootBlock);
+    return rb ? rb->getName() : FSName("");
+}
+
+void
+FSDevice::setName(FSName name)
+{
+    FSBlock *rb = rootBlockPtr(partition->rootBlock);
+    assert(rb != nullptr);
+
+    rb->setName(name);
+}
+
 FSBlockType
 FSDevice::blockType(Block nr)
 {
@@ -276,7 +295,7 @@ FSDevice::bootBlockPtr(Block nr)
 }
 
 FSBlock *
-FSDevice::rootBlockPtr(Block nr)
+FSDevice::rootBlockPtr(Block nr) const
 {
     if (nr < blocks.size() && blocks[nr]->type == FS_ROOT_BLOCK) {
         return blocks[nr];
@@ -818,7 +837,7 @@ FSDevice::importVolume(const u8 *src, isize size)
     if (numBlocks * bsize != size) throw VAError(ERROR_FS_WRONG_CAPACITY);
 
     // Only proceed if all partitions contain a valid file system
-    if (partition->dos == FS_NODOS) throw VAError(ERROR_FS_UNSUPPORTED);
+    if (dos == FS_NODOS) throw VAError(ERROR_FS_UNSUPPORTED);
         
     // Import all blocks
     for (isize i = 0; i < numBlocks; i++) {

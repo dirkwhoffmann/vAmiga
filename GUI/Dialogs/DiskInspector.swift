@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// swiftlint:disable force_try
-
 class DiskInspector: DialogController {
         
     var myDocument: MyDocument { return parent.mydocument! }

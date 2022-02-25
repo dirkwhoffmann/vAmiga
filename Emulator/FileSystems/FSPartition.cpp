@@ -16,7 +16,6 @@
 
 FSPartition::FSPartition(FSDevice &dev, FSDeviceDescriptor &layout) : FSPartition(dev)
 {
-    dos         = layout.dos;
     rootBlock   = layout.rootBlock;
     bmBlocks    = layout.bmBlocks;
     bmExtBlocks = layout.bmExtBlocks;
@@ -104,7 +103,7 @@ FSPartition::predictBlockType(Block nr, const u8 *buffer) const
     if (type == 16 && subtype == (u32)-3) return FS_FILELIST_BLOCK;
 
     // Check if this block is a data block
-    if (isOFS()) {
+    if (dev.isOFS()) {
         if (type == 8) return FS_DATA_BLOCK_OFS;
     } else {
         for (isize i = 0; i < dev.bsize; i++) if (buffer[i]) return FS_DATA_BLOCK_FFS;
@@ -113,27 +112,11 @@ FSPartition::predictBlockType(Block nr, const u8 *buffer) const
     return FS_EMPTY_BLOCK;
 }
 
-FSName
-FSPartition::getName() const
-{
-    FSBlock *rb = dev.rootBlockPtr(rootBlock);
-    return rb ? rb->getName() : FSName("");
-}
-
-void
-FSPartition::setName(FSName name)
-{
-    FSBlock *rb = dev.rootBlockPtr(rootBlock);
-    assert(rb != nullptr);
-
-    rb->setName(name);
-}
-
 isize
 FSPartition::requiredDataBlocks(isize fileSize) const
 {
     // Compute the capacity of a single data block
-    isize numBytes = dev.bsize - (isOFS() ? 24 : 0);
+    isize numBytes = dev.bsize - (dev.isOFS() ? 24 : 0);
 
     // Compute the required number of data blocks
     return (fileSize + numBytes - 1) / numBytes;
@@ -243,7 +226,7 @@ FSPartition::addDataBlock(isize count, Block head, Block prev)
     if (!nr) return 0;
 
     FSBlock *newBlock;
-    if (isOFS()) {
+    if (dev.isOFS()) {
         newBlock = new FSBlock(*this, nr, FS_DATA_BLOCK_OFS);
     } else {
         newBlock = new FSBlock(*this, nr, FS_DATA_BLOCK_FFS);
@@ -256,7 +239,6 @@ FSPartition::addDataBlock(isize count, Block head, Block prev)
     
     return nr;
 }
-
 
 FSBlock *
 FSPartition::newUserDirBlock(const string &name)
@@ -394,7 +376,7 @@ FSPartition::killVirus()
     assert(dev.blocks[0]->type == FS_BOOT_BLOCK);
     assert(dev.blocks[1]->type == FS_BOOT_BLOCK);
 
-    auto id = isOFS() ? BB_AMIGADOS_13 : isFFS() ? BB_AMIGADOS_20 : BB_NONE;
+    auto id = dev.isOFS() ? BB_AMIGADOS_13 : dev.isFFS() ? BB_AMIGADOS_20 : BB_NONE;
 
     if (id != BB_NONE) {
         dev.blocks[0]->writeBootBlock(id, 0);
