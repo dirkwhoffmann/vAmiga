@@ -20,11 +20,9 @@ FSPartition::FSPartition(FSDevice &dev, FSDeviceDescriptor &layout) : FSPartitio
     rootBlock   = layout.rootBlock;
     bmBlocks    = layout.bmBlocks;
     bmExtBlocks = layout.bmExtBlocks;
-        
-    lastBlock   = (Block)(dev.numCyls * dev.numHeads * dev.numSectors - 1);
-    
+            
     // Do some consistency checking
-    for (Block i = 0; i <= lastBlock; i++) assert(dev.blocks[i] == nullptr);
+    for (Block i = 0; i < dev.numBlocks; i++) assert(dev.blocks[i] == nullptr);
     
     // Create boot blocks
     dev.blocks[0] = new FSBlock(*this, 0, FS_BOOT_BLOCK);
@@ -53,7 +51,7 @@ FSPartition::FSPartition(FSDevice &dev, FSDeviceDescriptor &layout) : FSPartitio
     rb->addBitmapBlockRefs(layout.bmBlocks);
     
     // Add free blocks
-    for (Block i = 0; i <= lastBlock; i++) {
+    for (Block i = 0; i < dev.numBlocks; i++) {
         
         if (dev.blocks[i] == nullptr) {
             dev.blocks[i] = new FSBlock(*this, i, FS_EMPTY_BLOCK);
@@ -91,8 +89,6 @@ FSPartition::_dump(dump::Category category, std::ostream& os) const
     
     if (category & dump::State) {
         
-        os << tab("Last block");
-        os << dec(lastBlock) << std::endl;
         os << tab("Root block");
         os << dec(rootBlock) << std::endl;
         os << tab("Bitmap blocks");
@@ -184,7 +180,7 @@ FSPartition::freeBlocks() const
 {
     isize result = 0;
     
-    for (isize i = 0; i <= isize(lastBlock); i++) {
+    for (isize i = 0; i < dev.numBlocks; i++) {
         if (isFree((Block)i)) result++;
     }
 
@@ -261,9 +257,9 @@ FSPartition::allocateBlock()
 Block
 FSPartition::allocateBlockAbove(Block nr)
 {
-    assert(nr >= 0 && nr <= lastBlock);
+    assert(nr >= 0 && nr < dev.numBlocks);
     
-    for (i64 i = (i64)nr + 1; i <= lastBlock; i++) {
+    for (i64 i = (i64)nr + 1; i < dev.numBlocks; i++) {
         if (dev.blocks[i]->type == FS_EMPTY_BLOCK) {
             markAsAllocated((Block)i);
             return (Block)i;
@@ -275,8 +271,8 @@ FSPartition::allocateBlockAbove(Block nr)
 Block
 FSPartition::allocateBlockBelow(Block nr)
 {
-    assert(nr >= 0 && nr <= lastBlock);
-    
+    assert(nr >= 0 && nr < dev.numBlocks);
+
     for (i64 i = (i64)nr - 1; i >= 0; i--) {
         if (dev.blocks[i]->type == FS_EMPTY_BLOCK) {
             markAsAllocated((Block)i);
@@ -289,7 +285,7 @@ FSPartition::allocateBlockBelow(Block nr)
 void
 FSPartition::deallocateBlock(Block nr)
 {
-    assert(nr >= 0 && nr <= lastBlock);
+    assert(nr >= 0 && nr < dev.numBlocks);
     assert(dev.blocks[nr]);
     
     delete dev.blocks[nr];
@@ -388,8 +384,8 @@ FSPartition::bmBlockForBlock(Block nr)
 bool
 FSPartition::isFree(Block nr) const
 {
-    assert(nr >= 0 && nr <= lastBlock);
-        
+    assert(nr >= 0 && nr < dev.numBlocks);
+
     // The first two blocks are always allocated and not part of the bitmap
     if (nr < 2) return false;
     
@@ -414,7 +410,7 @@ FSPartition::setAllocationBit(Block nr, bool value)
 FSBlock *
 FSPartition::locateAllocationBit(Block nr, isize *byte, isize *bit) const
 {
-    assert(nr >= 0 && nr <= lastBlock);
+    assert(nr >= 0 && nr < dev.numBlocks);
 
     // The first two blocks are always allocated and not part of the map
     if (nr < 2) return nullptr;
@@ -488,11 +484,9 @@ FSPartition::killVirus()
 bool
 FSPartition::check(bool strict, FSErrorReport &report) const
 {
-    assert(0 <= lastBlock);
-    
     report.bitmapErrors = 0;
     
-    for (Block i = 0; i <= lastBlock; i++) {
+    for (Block i = 0; i < dev.numBlocks; i++) {
 
         FSBlock *block = dev.blocks[i];
         if (block->type == FS_EMPTY_BLOCK && !isFree((Block)i)) {
