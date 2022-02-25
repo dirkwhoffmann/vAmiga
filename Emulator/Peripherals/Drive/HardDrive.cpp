@@ -433,6 +433,8 @@ HardDrive::attach(const HDFFile &hdf)
 i8
 HardDrive::read(isize partition, isize block, isize length, u32 addr)
 {
+    debug(HDR_DEBUG, "read(%ld, %ld, %ld, %u)\n", partition, block, length, addr);
+
     return read(offset(partition, block), length, addr);
 }
 
@@ -459,6 +461,8 @@ HardDrive::read(isize offset, isize length, u32 addr)
 i8
 HardDrive::write(isize partition, isize block, isize length, u32 addr)
 {
+    debug(HDR_DEBUG, "write(%ld, %ld, %ld, %u)\n", partition, block, length, addr);
+
     return write(offset(partition, block), length, addr);
 }
 
@@ -485,10 +489,7 @@ HardDrive::write(isize offset, isize length, u32 addr)
 isize
 HardDrive::offset(isize partition, isize block)
 {
-    auto &part = driveSpec.partitions[partition];
-    auto start = part.lowCyl * part.heads * part.sectors * part.sizeBlock * 4;
-    
-    return start + block * part.sizeBlock * 4;
+    return 512 * block;
 }
 
 i8

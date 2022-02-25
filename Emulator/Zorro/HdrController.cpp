@@ -133,8 +133,7 @@ HdrController::spypeek16(u32 addr) const
             
             // Return the number of partitions
             debug(HDR_DEBUG, "This drive has %ld partitions\n", drive.numPartitions());
-            // return u16(drive.numPartitions());
-            return 1;
+            return u16(drive.numPartitions());
             
         case EXPROM_SIZE + 2:
             
@@ -291,43 +290,41 @@ HdrController::processInit()
     debug(HDR_DEBUG, "Initializing partition %d\n", unit);
     
     // Collect hard drive information
-    auto geometry = drive.getGeometry();
-    u32 sizeBlock = (u32)(geometry.bsize / 4);
-    u32 numHeads = (u32)(geometry.heads);
-    u32 blkTrack = (u32)(geometry.sectors);
-    u32 upperCyl = (u32)(geometry.cylinders - 1);
-
-    debug(true, "sizeBlock = %d\n", sizeBlock);
-    debug(true, "numHeads = %d\n", numHeads);
-    debug(true, "blkTrack = %d\n", blkTrack);
-    debug(true, "upperCyl = %d\n", upperCyl);
-    
+    auto &specs = drive.driveSpec;
+    auto &geometry = specs.geometry;
+    auto &part = specs.partitions[unit];
+        
     char dosName[] = {'D', 'H', '0', 0 };
+    dosName[2] = char('0' + unit);
     
     u32 name_ptr = mem.spypeek32 <ACCESSOR_CPU> (pointer + devn_dosName);
     for (isize i = 0; i < isizeof(dosName); i++) {
         mem.patch(u32(name_ptr + i), u8(dosName[i]));
     }
     
-    mem.patch(pointer + devn_flags,         u32(0));
-    mem.patch(pointer + devn_sizeBlock,     u32(sizeBlock));
+    mem.patch(pointer + devn_flags,         u32(part.flags));
+    mem.patch(pointer + devn_sizeBlock,     u32(part.sizeBlock));
     mem.patch(pointer + devn_secOrg,        u32(0));
-    mem.patch(pointer + devn_numHeads,      u32(numHeads));
+    mem.patch(pointer + devn_numHeads,      u32(geometry.heads));
     mem.patch(pointer + devn_secsPerBlk,    u32(1));
-    mem.patch(pointer + devn_blkTrack,      u32(blkTrack));
+    mem.patch(pointer + devn_blkTrack,      u32(geometry.sectors));
     mem.patch(pointer + devn_interleave,    u32(0));
-    mem.patch(pointer + devn_resBlks,       u32(2));
-    mem.patch(pointer + devn_lowCyl,        u32(0)); // CHECK VALUE
-    mem.patch(pointer + devn_upperCyl,      u32(upperCyl));
+    mem.patch(pointer + devn_resBlks,       u32(part.reserved));
+    mem.patch(pointer + devn_lowCyl,        u32(part.lowCyl));
+    mem.patch(pointer + devn_upperCyl,      u32(part.highCyl));
     mem.patch(pointer + devn_numBuffers,    u32(1));
     mem.patch(pointer + devn_memBufType,    u32(0));
     mem.patch(pointer + devn_transferSize,  u32(0x7FFFFFFF));
     mem.patch(pointer + devn_addMask,       u32(0xFFFFFFFE));
     mem.patch(pointer + devn_bootPrio,      u32(0));
-    mem.patch(pointer + devn_dName,         u32(0x444f5300));
+    mem.patch(pointer + devn_dName,         u32(part.dosType));
     mem.patch(pointer + devn_bootflags,     u32(1));
     mem.patch(pointer + devn_segList,       u32(0));
 
+    if (part.dosType != 0x444f5300) {
+        warn("Unusual DOS type %x\n", part.dosType);
+    }
+    
     debug(HDR_DEBUG, "Initialization done\n");
 }
 
