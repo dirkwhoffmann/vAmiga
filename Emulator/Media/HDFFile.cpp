@@ -66,29 +66,17 @@ HDFFile::init(HardDrive &drive)
     // TODO: THIS FUNCTION IS A PERFORMANCE KILLER FOR LARGE BUFFERS
     {   MEASURE_TIME("AmigaFile::init(const u8 *buf, isize len)")
         
-        AmigaFile::init(drive.data, drive.geometry.numBytes());
+        AmigaFile::init(drive.data, drive.driveSpec.geometry.numBytes());
     }
     
     // Overwrite the predicted geometry from the precise one
-    auto geometry = drive.getGeometry();
-    
-    driveSpec.cylinders = geometry.cylinders;
-    driveSpec.heads = geometry.heads;
-    driveSpec.sectors = geometry.sectors;
-    driveSpec.bsize = geometry.bsize;
+    driveSpec.geometry = drive.getGeometry();
 }
 
 const DiskGeometry
 HDFFile::getGeometry() const
 {
-    DiskGeometry geometry;
-    
-    geometry.cylinders = driveSpec.cylinders;
-    geometry.heads = driveSpec.heads;
-    geometry.sectors = driveSpec.sectors;
-    geometry.bsize = driveSpec.bsize;
-    
-    return geometry;
+    return driveSpec.geometry;
 }
 
 bool
@@ -106,19 +94,19 @@ HDFFile::hasRDB() const
 isize
 HDFFile::numCyls() const
 {
-    return driveSpec.cylinders;
+    return driveSpec.geometry.cylinders;
 }
 
 isize
 HDFFile::numSides() const
 {
-    return driveSpec.heads;
+    return driveSpec.geometry.heads;
 }
 
 isize
 HDFFile::numSectors() const
 {
-    return driveSpec.sectors;
+    return driveSpec.geometry.sectors;
 }
 
 isize
@@ -136,7 +124,7 @@ HDFFile::numBlocks() const
 isize
 HDFFile::bsize() const
 {
-    return driveSpec.bsize;
+    return driveSpec.geometry.bsize;
 }
 
 FSDeviceDescriptor
@@ -145,10 +133,7 @@ HDFFile::layout()
     FSDeviceDescriptor result;
     
     // Copy the drive geometry
-    result.geometry.cylinders = driveSpec.cylinders;
-    result.geometry.heads = driveSpec.heads;
-    result.geometry.sectors = driveSpec.sectors;
-    result.geometry.bsize = driveSpec.bsize;
+    result.geometry = driveSpec.geometry;
     result.numBlocks = result.geometry.numBlocks();
     
     // Set the number of reserved blocks
@@ -164,7 +149,7 @@ HDFFile::layout()
     // Add partition
     result.partitions.push_back(FSPartitionDescriptor(dos(0),
                                                       0,
-                                                      driveSpec.cylinders - 1,
+                                                      result.geometry.upperCyl(),
                                                       (Block)rootKey));
 
     // Seek bitmap blocks
@@ -228,10 +213,7 @@ HDFFile::predictGeometry()
     // Use the first entry as the drive's geometry
     if (geometries.size()) {
         
-        driveSpec.cylinders = geometries.front().cylinders;
-        driveSpec.heads = geometries.front().heads;
-        driveSpec.sectors = geometries.front().sectors;
-        driveSpec.bsize = geometries.front().bsize;
+        driveSpec.geometry = geometries.front();
     }
 }
 
@@ -244,10 +226,10 @@ HDFFile::scanDisk()
 
         // Read the information from the rigid disk block
         
-        driveSpec.cylinders             = R32BE_ALIGNED(rdb + 64);
-        driveSpec.sectors               = R32BE_ALIGNED(rdb + 68);
-        driveSpec.heads                 = R32BE_ALIGNED(rdb + 72);
-        driveSpec.bsize                 = R32BE_ALIGNED(rdb + 16);
+        driveSpec.geometry.cylinders    = R32BE_ALIGNED(rdb + 64);
+        driveSpec.geometry.sectors      = R32BE_ALIGNED(rdb + 68);
+        driveSpec.geometry.heads        = R32BE_ALIGNED(rdb + 72);
+        driveSpec.geometry.bsize        = R32BE_ALIGNED(rdb + 16);
 
         driveSpec.diskVendor            = util::createStr(rdb + 160, 8);
         driveSpec.diskProduct           = util::createStr(rdb + 168, 16);
@@ -336,10 +318,10 @@ HDFFile::seekPB(isize nr)
         for (isize i = 0; i < nr && result; i++) {
             result = seekBlock(R32BE_ALIGNED(result + 16));
         }
-    }
 
-    // Check if the reached block is a partition block
-    if (strcmp((const char *)result, "PART")) return result;
+        // Make sure the reached block is a partition block
+        if (result && strcmp((const char *)result, "PART")) result = nullptr;
+    }
     
     return result;
 }

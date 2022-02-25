@@ -51,17 +51,20 @@ enum Category : usize {
     Checksums   = (1 << 1),
     Config      = (1 << 2),
     Dma         = (1 << 3),
-    FileSystem  = (1 << 4),
-    Geometry    = (1 << 5),
-    List1       = (1 << 6),
-    List2       = (1 << 7),
-    Properties  = (1 << 8),
-    Registers   = (1 << 9),
-    Segments    = (1 << 10),
-    Signals     = (1 << 11),
-    State       = (1 << 12),
-    Summary     = (1 << 13),
-    Bus         = (1 << 14)
+    Drive       = (1 << 4),
+    FileSystem  = (1 << 5),
+    Geometry    = (1 << 6),
+    List1       = (1 << 7),
+    List2       = (1 << 8),
+    Parameters  = (1 << 9),
+    Partitions  = (1 << 10),
+    Properties  = (1 << 11),
+    Registers   = (1 << 12),
+    Segments    = (1 << 13),
+    Signals     = (1 << 14),
+    State       = (1 << 15),
+    Summary     = (1 << 16),
+    Bus         = (1 << 17)
 };
 }
 

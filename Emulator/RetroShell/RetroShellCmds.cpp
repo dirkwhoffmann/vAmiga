@@ -1121,21 +1121,15 @@ RetroShell::exec <Token::dhn, Token::inspect, Token::volume> (Arguments& argv, l
 }
 
 template <> void
+RetroShell::exec <Token::dhn, Token::inspect, Token::parameters> (Arguments& argv, long param)
+{
+    dump(*amiga.dh[param], dump::Parameters);
+}
+
+template <> void
 RetroShell::exec <Token::dhn, Token::inspect, Token::partition> (Arguments& argv, long param)
 {
-    auto nr = util::parseNum(argv[0]);
-    auto fs = FSDevice(*amiga.dh[param]);
-    
-    if (auto p = fs.getPartition(nr); p != nullptr) {
-
-        dump(*p, dump::State);
-
-    } else {
-
-        auto count = fs.numPartitions();
-        auto range = count == 1 ? "0" : "0 ... " + std::to_string(count);
-        throw VAError(ERROR_OPT_INVARG, range);
-    }
+    dump(*amiga.dh[param], dump::Partitions);
 }
 
 template <> void

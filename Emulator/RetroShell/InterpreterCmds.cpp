@@ -983,9 +983,13 @@ Interpreter::registerInstructions()
                  "command", "Displays summarized volume information",
                  &RetroShell::exec <Token::dhn, Token::inspect, Token::volume>, 0, i);
 
-        root.add({dh, "inspect", "partition"},
-                 "command", "Displays information about a single partition",
-                 &RetroShell::exec <Token::dhn, Token::inspect, Token::partition>, 1, i);
+        root.add({dh, "inspect", "parameters"},
+                 "command", "Displays hard drive parameters",
+                 &RetroShell::exec <Token::dhn, Token::inspect, Token::parameters>, 0, i);
+
+        root.add({dh, "inspect", "partitions"},
+                 "command", "Displays information about all partitions",
+                 &RetroShell::exec <Token::dhn, Token::inspect, Token::partition>, 0, i);
 
         root.add({dh, "inspect", "state"},
                  "command", "Displays the internal state",

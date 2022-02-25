@@ -31,7 +31,7 @@ class HardDrive : public SubComponent {
     HardDriveSpec driveSpec = {};
     
     // Disk geometry
-    DiskGeometry geometry;
+    // DiskGeometry geometry;
     
     // Disk data
     u8 *data = nullptr;
@@ -81,10 +81,10 @@ private:
     {
         worker
         
-        << geometry.cylinders
-        << geometry.heads
-        << geometry.sectors
-        << geometry.bsize
+        << driveSpec.geometry.cylinders
+        << driveSpec.geometry.heads
+        << driveSpec.geometry.sectors
+        << driveSpec.geometry.bsize
         << modified;
     }
 
@@ -136,7 +136,7 @@ public:
     HardDriveInfo getInfo() const { return AmigaComponent::getInfo(info); }
 
     // Returns the disk geometry
-    const DiskGeometry &getGeometry() const { return geometry; }
+    const DiskGeometry &getGeometry() const { return driveSpec.geometry; }
 
     // Checks whether this drive is connected to the Amiga
     bool isConnected() const { return config.connected; }

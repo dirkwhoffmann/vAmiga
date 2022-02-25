@@ -12,7 +12,7 @@
 #include "Aliases.h"
 #include "Reflection.h"
 #ifdef __cplusplus
-// #include "Geometry.h"
+#include "Geometry.h"
 #include <vector>
 #endif
 
@@ -98,10 +98,7 @@ PartitionSpec;
 typedef struct
 {
     // Disk geometry
-    isize cylinders;
-    isize heads;
-    isize sectors;
-    isize bsize;
+    DiskGeometry geometry;
     
     // Drive identification
     string diskVendor;

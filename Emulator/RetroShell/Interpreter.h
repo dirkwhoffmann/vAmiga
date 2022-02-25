@@ -26,14 +26,15 @@ enum class Token
     filename, filesystem, filter, gdb, geometry, help, hide, init, info, insert,
     inspect, interrupts, joystick, jump, keyboard, keyset, layers, left,
     library, libraries, list, load, lock,mechanics, memory, mode, model,
-    monitor, mouse, none, off, on, opacity, open, os, palette, pan, partition,
-    path, paula, pause, poll, port, ports, power, press, process, processes,
-    pullup, raminitpattern, refresh, registers, regreset, regression, reset,
-    resource, resources, revision, right, rom, rshell, rtc, run, sampling,
-    saturation, save, saveroms, screenshot, searchpath, serial, server, set,
-    setup, shakedetector, show, slow, slowramdelay,slowrammirror, source, speed,
-    sprites, start, state, status, step, stop, swapdelay, task, tasks, tod,
-    todbug, unmappingtype, verbose, velocity, volume, wait, wom, zorro
+    monitor, mouse, none, off, on, opacity, open, os, palette, pan, parameters,
+    partition, path, paula, pause, poll, port, ports, power, press, process,
+    processes, pullup, raminitpattern, refresh, registers, regreset, regression,
+    reset, resource, resources, revision, right, rom, rshell, rtc, run,
+    sampling, saturation, save, saveroms, screenshot, searchpath, serial,
+    server, set, setup, shakedetector, show, slow, slowramdelay,slowrammirror,
+    source, speed, sprites, start, state, status, step, stop, swapdelay, task,
+    tasks, tod, todbug, unmappingtype, verbose, velocity, volume, wait, wom,
+    zorro
 };
 
 struct TooFewArgumentsError : public util::ParseError {

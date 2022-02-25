@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "Geometry.h"
+#include "Error.h"
 #include <vector>
 
 bool
