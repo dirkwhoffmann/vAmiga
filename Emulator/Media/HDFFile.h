@@ -74,6 +74,7 @@ public:
     bool hasRDB() const; // DEPRECATED
     
     // Returns the layout parameters of the hard drive
+    isize numPartitions() const;
     isize numCyls() const;
     isize numSides() const;
     isize numSectors() const;

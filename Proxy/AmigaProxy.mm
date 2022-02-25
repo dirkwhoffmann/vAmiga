@@ -1309,6 +1309,11 @@ using namespace moira;
     return [self drive]->getGeometry().numBytes();
 }
 
+- (NSInteger)partitions
+{
+    return [self drive]->numPartitions();
+}
+
 - (NSInteger)cylinders
 {
     return [self drive]->getGeometry().cylinders;
@@ -1425,12 +1430,12 @@ using namespace moira;
     }
 }
 
-+ (instancetype)makeWithHDF:(HDFFileProxy *)proxy exception:(ExceptionWrapper *)ex
++ (instancetype)makeWithHDF:(HDFFileProxy *)proxy partition:(NSInteger)nr exception:(ExceptionWrapper *)ex
 {
     try {
         
         auto hdf = (HDFFile *)(proxy->obj);
-        auto dev = new FSDevice(*hdf);
+        auto dev = new FSDevice(*hdf, nr);
         return [self make:dev];
                 
     }  catch (VAError &error) {
@@ -2085,6 +2090,11 @@ using namespace moira;
 {
     try { return [self make: new HDFFile(*[proxy drive])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
+}
+
+- (NSInteger)numPartitions
+{
+    return [self hdf]->numPartitions();
 }
 
 - (NSInteger)numCyls

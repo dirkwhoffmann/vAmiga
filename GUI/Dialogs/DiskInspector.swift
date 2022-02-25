@@ -20,8 +20,7 @@ class DiskInspector: DialogController {
     @IBOutlet weak var volumeInfo: NSTextField!
     @IBOutlet weak var bootInfo: NSTextField!
     @IBOutlet weak var decontaminationButton: NSButton!
-    @IBOutlet weak var geometryText: NSTextField!
-    @IBOutlet weak var geometryPopup: NSPopUpButton!
+    @IBOutlet weak var partitionPopup: NSPopUpButton!
 
     @IBOutlet weak var previewScrollView: NSScrollView!
     @IBOutlet weak var previewTable: NSTableView!
@@ -73,15 +72,17 @@ class DiskInspector: DialogController {
     var img: IMGFileProxy?
     var ext: EXTFileProxy?
     var vol: FSDeviceProxy?
-
-    // Geometry
+    
+    // Result of the consistency checker
     var errorReport: FSErrorReport?
     
     var selection: Int?
     var selectedRow: Int? { return selection == nil ? nil : selection! / 16 }
     var selectedCol: Int? { return selection == nil ? nil : selection! % 16 }
     var strict: Bool { return strictButton.state == .on }
-                
+
+    var numPartitions: Int { return hdf?.numPartitions ?? 1 }
+
     /*
     var numCyls: Int {
         return adf?.numCyls ?? img?.numCyls ?? ext?.numCyls ?? vol?.numCyls ?? 0
@@ -135,11 +136,9 @@ class DiskInspector: DialogController {
         // Run the DOS decoder
         img = try? IMGFileProxy.make(drive: dfn) as IMGFileProxy
                         
-        // Try to decode the file system from the ADF
-        if adf != nil { vol = try? FSDeviceProxy.make(withADF: adf!) }
-
-        initDriveGeometry()
-        
+        // Try to decide the file system
+        initVolume(partition: 0)
+                
         super.showSheet()
     }
     
@@ -151,19 +150,30 @@ class DiskInspector: DialogController {
 
         // Run the HDF decoder
         hdf = try? HDFFileProxy.make(hdr: dhn) as HDFFileProxy
-                        
-        // Try to decode the file system from the HDF
-        if hdf != nil { vol = try? FSDeviceProxy.make(withHDF: hdf!) }
+                                
+        // Try to decide the file system
+        initVolume(partition: 0)
+
+        super.showSheet()
+    }
+    
+    func initVolume(partition nr: Int) {
+    
+        track("partition = \(nr)")
+        
+        vol = nil
+        if adf != nil { vol = try? FSDeviceProxy.make(withADF: adf!) }
+        if hdf != nil { vol = try? FSDeviceProxy.make(withHDF: hdf!, partition: nr) }
         
         initDriveGeometry()
-        
-        super.showSheet()
     }
     
     func initDriveGeometry() {
         
         // Read CHS geometry (cylinders, heads, sectors)
-        if hdf != nil {
+        if vol != nil {
+            c = vol!.numCyls; h = vol!.numSectors; s = vol!.numSectors
+        } else if hdf != nil {
             c = hdf!.numCyls; h = hdf!.numSectors; s = hdf!.numSectors
             
         } else if adf != nil {
@@ -179,6 +189,13 @@ class DiskInspector: DialogController {
         // Update derived values (tracks, blocks)
         t = c * h
         b = t * s
+        
+        // Keep the current selection in the valid range
+        cylinderNr = cylinderNr.clamped(0, upperCyl)
+        sectorNr = sectorNr.clamped(0, upperSector)
+        headNr = headNr.clamped(0, upperHead)
+        trackNr = trackNr.clamped(0, upperTrack)
+        blockNr = blockNr.clamped(0, upperBlock)
     }
     
     override public func awakeFromNib() {
@@ -190,8 +207,7 @@ class DiskInspector: DialogController {
         previewTable.action = #selector(clickAction(_:))
 
         // Hide some elements
-        geometryText.isHidden = hdf == nil
-        geometryPopup.isHidden = hdf == nil
+        partitionPopup.isHidden = numPartitions == 1
         
         // Configure elements
         sectorStepper.maxValue = .greatestFiniteMagnitude
@@ -205,29 +221,15 @@ class DiskInspector: DialogController {
     
     override func windowDidLoad() {
                  
-        // Initialize the geometry selector
-        geometryPopup.removeAllItems()
-        geometryPopup.addItem(withTitle: "Custom")
-        geometryPopup.item(at: 0)!.tag = 0
-        
-        if hdf != nil {
-            
-            if let geometries = dhn.test() as? [Int] {
+        // Initialize the partition selector
+        partitionPopup.removeAllItems()
                 
-                for (i, geo) in geometries.enumerated() {
+        for i in 1...numPartitions {
                     
-                    let c = (geo >> 32)
-                    let h = (geo >> 16) & 0xFFFF
-                    let s = geo & 0xFFFF
-                    
-                    geometryPopup.addItem(withTitle: "\(c) - \(h) - \(s)")
-                    geometryPopup.item(at: i + 1)!.tag = geo
-                }
-                
-                track()
-                geometryPopup.autoenablesItems = false
-            }
+            partitionPopup.addItem(withTitle: "Partition \(i)")
+            partitionPopup.lastItem!.tag = i - 1
         }
+        partitionPopup.autoenablesItems = false
         
         // Jump to the first corrupted block if an error was found
         if errorReport != nil && errorReport!.corruptedBlocks > 0 {
@@ -543,15 +545,11 @@ class DiskInspector: DialogController {
     // Action methods
     //
 
-    @IBAction func geometryAction(_ sender: NSPopUpButton!) {
+    @IBAction func partitionAction(_ sender: NSPopUpButton!) {
         
         track()
         
-        let tag = sender.selectedTag()
-        c = (tag >> 32)
-        h = (tag >> 16) & 0xFFFF
-        s = tag & 0xFFFF
-            
+        initVolume(partition: sender.selectedTag())
         update()
     }
 

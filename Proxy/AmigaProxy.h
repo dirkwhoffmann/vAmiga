@@ -638,6 +638,7 @@
 @property (readonly) BOOL isConnected;
 @property BOOL modified;
 @property (readonly) NSInteger capacity;
+@property (readonly) NSInteger partitions;
 @property (readonly) NSInteger cylinders;
 @property (readonly) NSInteger heads;
 @property (readonly) NSInteger sectors;
@@ -658,7 +659,7 @@
 @interface FSDeviceProxy : Proxy { }
 
 + (instancetype)makeWithADF:(ADFFileProxy *)adf exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithHDF:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithHDF:(HDFFileProxy *)hdf partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
 
 @property (readonly) FSVolumeType dos;
 @property (readonly) NSInteger numCyls;
@@ -878,11 +879,11 @@
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithHardDrive:(HardDriveProxy *)drive exception:(ExceptionWrapper *)ex;
 
+@property (readonly) NSInteger numPartitions;
 @property (readonly) NSInteger numCyls;
 @property (readonly) NSInteger numHeads;
 @property (readonly) NSInteger numSectors;
 @property (readonly) NSInteger numBlocks;
-// @property (readonly) NSInteger numBytes;
 
 @end
 

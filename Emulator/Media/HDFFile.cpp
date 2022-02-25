@@ -92,6 +92,13 @@ HDFFile::hasRDB() const
 }
 
 isize
+HDFFile::numPartitions() const
+{
+    return isize(driveSpec.partitions.size());
+}
+
+
+isize
 HDFFile::numCyls() const
 {
     return driveSpec.geometry.cylinders;

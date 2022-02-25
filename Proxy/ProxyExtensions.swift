@@ -255,10 +255,10 @@ extension FSDeviceProxy {
         return result!
     }
 
-    static func make(withHDF hdf: HDFFileProxy) throws -> FSDeviceProxy {
+    static func make(withHDF hdf: HDFFileProxy, partition nr: Int) throws -> FSDeviceProxy {
         
         let exception = ExceptionWrapper()
-        let result = FSDeviceProxy.make(withHDF: hdf, exception: exception)
+        let result = FSDeviceProxy.make(withHDF: hdf, partition: nr, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
         
         return result!

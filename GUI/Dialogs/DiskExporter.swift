@@ -81,7 +81,7 @@ class DiskExporter: DialogController {
         hdf = try? HDFFileProxy.make(hdr: dhn) as HDFFileProxy
                         
         // Try to decode the file system from the HDF
-        if hdf != nil { vol = try? FSDeviceProxy.make(withHDF: hdf!) }
+        if hdf != nil { vol = try? FSDeviceProxy.make(withHDF: hdf!, partition: 0) }
         
         super.showSheet()
     }
