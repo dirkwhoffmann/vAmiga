@@ -83,23 +83,6 @@ class DiskInspector: DialogController {
 
     var numPartitions: Int { return hdf?.numPartitions ?? 1 }
 
-    /*
-    var numCyls: Int {
-        return adf?.numCyls ?? img?.numCyls ?? ext?.numCyls ?? vol?.numCyls ?? 0
-    }
-    var numSides: Int {
-        return adf?.numSides ?? img?.numSides ?? ext?.numSides ?? vol?.numHeads ?? 0
-    }
-    var numTracks: Int {
-        return adf?.numTracks ?? img?.numTracks ?? ext?.numTracks ?? vol?.numTracks ?? 0
-    }
-    var numSectors: Int {
-        return adf?.numSectors ?? img?.numSectors ?? ext?.numSectors ?? vol?.numSectors ?? 0
-    }
-    var numBlocks: Int {
-        return adf?.numBlocks ?? img?.numBlocks ?? ext?.numBlocks ?? vol?.numBlocks ?? 0
-    }
-    */
     var isDD: Bool {
         return adf?.isDD ?? img?.isDD ?? ext?.isDD ?? false
     }
@@ -175,13 +158,10 @@ class DiskInspector: DialogController {
             c = vol!.numCyls; h = vol!.numSectors; s = vol!.numSectors
         } else if hdf != nil {
             c = hdf!.numCyls; h = hdf!.numSectors; s = hdf!.numSectors
-            
         } else if adf != nil {
             c = adf!.numCyls; h = adf!.numSectors; s = adf!.numSectors
-            
         } else if img != nil {
             c = img!.numCyls; h = img!.numSectors; s = img!.numSectors
-            
         } else if ext != nil {
             c = ext!.numCyls; h = ext!.numSectors; s = ext!.numSectors
         }
@@ -634,9 +614,6 @@ class DiskInspector: DialogController {
     }
     
     @IBAction override func okAction(_ sender: Any!) {
-        
-        // Update geometry if a hard drive has been analyzed
-        if hdf != nil { try! dhn.changeGeometry(c: c, h: h, s: h) }
         
         track()
         hideSheet()

@@ -130,30 +130,6 @@ FSPartition::setName(FSName name)
 }
 
 isize
-FSPartition::bsize() const
-{
-    return dev.bsize;
-}
-
-isize
-FSPartition::numCyls() const
-{
-    return  dev.numCyls;
-}
-
-isize
-FSPartition::numBlocks() const
-{
-    return numCyls() * dev.numHeads * dev.numSectors;
-}
-
-isize
-FSPartition::numBytes() const
-{
-    return numBlocks() * bsize();
-}
-
-isize
 FSPartition::requiredDataBlocks(isize fileSize) const
 {
     // Compute the capacity of a single data block
@@ -427,25 +403,4 @@ FSPartition::killVirus()
         std::memset(dev.blocks[0]->data + 4, 0, dev.bsize - 4);
         std::memset(dev.blocks[1]->data, 0, dev.bsize);
     }
-}
-
-bool
-FSPartition::check(bool strict, FSErrorReport &report) const
-{
-    report.bitmapErrors = 0;
-    
-    for (Block i = 0; i < dev.numBlocks; i++) {
-
-        FSBlock *block = dev.blocks[i];
-        if (block->type == FS_EMPTY_BLOCK && !isFree((Block)i)) {
-            report.bitmapErrors++;
-            debug(FS_DEBUG, "Empty block %d is marked as allocated\n", i);
-        }
-        if (block->type != FS_EMPTY_BLOCK && isFree((Block)i)) {
-            report.bitmapErrors++;
-            debug(FS_DEBUG, "Non-empty block %d is marked as free\n", i);
-        }
-    }
- 
-    return report.bitmapErrors == 0;
 }

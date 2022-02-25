@@ -63,15 +63,7 @@ public:
     bool isOFS() const { return isOFSVolumeType(dos); }
     bool isFFS() const { return isFFSVolumeType(dos); }
 
-    // Returns the size of a single block in bytes (usually 512)
-    [[deprecated]] isize bsize() const;
-
-    // Reports layout information about this partition
-    [[deprecated]] isize numCyls() const;
-    [[deprecated]] isize numBlocks() const;
-    [[deprecated]] isize numBytes() const;
-        
-    
+ 
     //
     // Creating and deleting blocks
     //
@@ -133,16 +125,6 @@ public:
 
     // Eliminates boot block virus (if any)
     void killVirus();
-    
-    
-    //
-    // Integrity checking
-    //
-
-public:
-    
-    // Performs several partition checks
-    bool check(bool strict, FSErrorReport &report) const;
 };
 
 typedef FSPartition* FSPartitionPtr;
