@@ -94,7 +94,7 @@ public:
 public:
     
     // Returns the type of a certain block
-    FSBlockType blockType(Block nr);
+    FSBlockType blockType(Block nr) const;
 
     // Returns the usage type of a certain byte in a certain block
     FSItemType itemType(Block nr, isize pos) const;
@@ -139,7 +139,44 @@ protected:
 
 public:
     
+    // Checks all blocks in this volume
+    FSErrorReport check(bool strict) const;
+
+    // Checks a single byte in a certain block
+    ErrorCode check(Block nr, isize pos, u8 *expected, bool strict) const;
+
+    // Checks if the block with the given number is part of the volume
     bool isBlockNumber(isize nr) const { return nr >= 0 && nr < numBlocks(); }
+
+    // Checks if the type of a block matches one of the provides types
+    ErrorCode checkBlockType(Block nr, FSBlockType type) const;
+    ErrorCode checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const;
+
+    // Checks if a certain block is corrupted
+    bool isCorrupted(Block nr) { return getCorrupted(nr) != 0; }
+
+    // Returns the position in the corrupted block list (0 = OK)
+    isize getCorrupted(Block nr);
+
+    // Returns a reference to the next or the previous corrupted block
+    Block nextCorrupted(Block nr);
+    Block prevCorrupted(Block nr);
+
+    // Checks if a certain block is the n-th corrupted block
+    bool isCorrupted(Block nr, isize n);
+
+    // Returns a reference to the n-th corrupted block
+    Block seekCorruptedBlock(isize n);
+    
+    
+    //
+    // Importing and exporting
+    //
+    
+public:
+        
+    // Predicts the type of a block by analyzing its number and data
+    FSBlockType predictBlockType(Block nr, const u8 *buffer);
 
     
     // TODO: MOVE ALL NON-WRITE-RELATED FUNCTIONS TO THIS CLASS

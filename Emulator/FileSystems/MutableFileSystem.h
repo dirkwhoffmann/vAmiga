@@ -187,40 +187,7 @@ private:
                                       std::set<Block> &visited) throws;
 
  
-    //
-    // Integrity checking
-    //
 
-public:
-    
-    // Checks all blocks in this volume
-    FSErrorReport check(bool strict) const;
-
-    // Checks a single byte in a certain block
-    ErrorCode check(Block nr, isize pos, u8 *expected, bool strict) const;
-
-    // Checks if the block with the given number is part of the volume
-    // bool isBlockNumber(isize nr) const { return nr >= 0 && nr < numBlocks(); }
-
-    // Checks if the type of a block matches one of the provides types
-    ErrorCode checkBlockType(Block nr, FSBlockType type);
-    ErrorCode checkBlockType(Block nr, FSBlockType type, FSBlockType altType);
-
-    // Checks if a certain block is corrupted
-    bool isCorrupted(Block nr) { return getCorrupted(nr) != 0; }
-
-    // Returns the position in the corrupted block list (0 = OK)
-    isize getCorrupted(Block nr);
-
-    // Returns a reference to the next or the previous corrupted block
-    Block nextCorrupted(Block nr);
-    Block prevCorrupted(Block nr);
-
-    // Checks if a certain block is the n-th corrupted block
-    bool isCorrupted(Block nr, isize n);
-
-    // Returns a reference to the n-th corrupted block
-    Block seekCorruptedBlock(isize n);
     
     
     //
@@ -230,7 +197,7 @@ public:
 public:
         
     // Predicts the type of a block by analyzing its number and data
-    FSBlockType predictBlockType(Block nr, const u8 *buffer);
+    // FSBlockType predictBlockType(Block nr, const u8 *buffer);
 
     // Imports the volume from a buffer compatible with the ADF format
     void importVolume(const u8 *src, isize size) throws;
