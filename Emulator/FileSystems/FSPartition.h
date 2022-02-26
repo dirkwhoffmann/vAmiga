@@ -14,23 +14,11 @@
 
 struct FSPartition : AmigaObject {
     
-    // The device this partition is part of
-    class FSDevice &dev;
-                
-    // Location of the root block
-    Block rootBlock = 0;
-    
-    // Location of the bitmap blocks and extended bitmap blocks
-    std::vector<Block> bmBlocks;
-    std::vector<Block> bmExtBlocks;
-
-    
     //
     // Initializing
     //
     
-    FSPartition(FSDevice &ref) : dev(ref) { }
-    FSPartition(FSDevice &ref, FSDeviceDescriptor &layout);
+//     FSPartition() { }
     
     
     //

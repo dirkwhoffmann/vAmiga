@@ -12,7 +12,7 @@
 #include "FSDevice.h"
 #include "MemUtils.h"
 
-FSBlock::FSBlock(FSPartition &p, Block nr, FSBlockType t) : partition(p)
+FSBlock::FSBlock(FSDevice &ref, Block nr, FSBlockType t) : device(ref)
 {
     assert(t != FS_UNKNOWN_BLOCK);
     
@@ -27,11 +27,11 @@ FSBlock::FSBlock(FSPartition &p, Block nr, FSBlockType t) : partition(p)
 
         case FS_BOOT_BLOCK:
             
-            if (nr == 0 && p.dev.dos != FS_NODOS) {
+            if (nr == 0 && ref.dos != FS_NODOS) {
                 data[0] = 'D';
                 data[1] = 'O';
                 data[2] = 'S';
-                data[3] = (u8)p.dev.dos;
+                data[3] = (u8)ref.dos;
             }
             break;
             
@@ -86,7 +86,7 @@ FSBlock::~FSBlock()
 }
 
 FSBlock *
-FSBlock::make(FSPartition &p, Block nr, FSBlockType type)
+FSBlock::make(FSDevice &ref, Block nr, FSBlockType type)
 {
     switch (type) {
 
@@ -100,7 +100,7 @@ FSBlock::make(FSPartition &p, Block nr, FSBlockType type)
         case FS_FILELIST_BLOCK:
         case FS_DATA_BLOCK_OFS:
         case FS_DATA_BLOCK_FFS:
-            return new FSBlock(p, nr, type);
+            return new FSBlock(ref, nr, type);
             
         default:
             throw VAError(ERROR_FS_INVALID_BLOCK_TYPE);
@@ -132,7 +132,7 @@ FSBlock::getDescription() const
 isize
 FSBlock::bsize() const
 {
-    return partition.dev.bsize;
+    return device.bsize;
 }
 
 isize
@@ -635,7 +635,7 @@ FSBlock::checksumBootBlock() const
     }
 
     // Second boot block
-    u8 *p = partition.dev.blocks[1]->data;
+    u8 *p = device.blocks[1]->data;
     
     for (isize i = 0; i < bsize() / 4; i++) {
         
@@ -802,7 +802,7 @@ FSBlock::exportBlock(const fs::path &path)
 ErrorCode
 FSBlock::exportUserDirBlock(const fs::path &path)
 {
-    auto name = path / partition.dev.getPath(this);
+    auto name = path / device.getPath(this);
     
     if (!util::createDirectory(name.string())) {
         return ERROR_FS_CANNOT_CREATE_DIR;
@@ -814,7 +814,7 @@ FSBlock::exportUserDirBlock(const fs::path &path)
 ErrorCode
 FSBlock::exportFileHeaderBlock(const fs::path &path)
 {
-    auto filename = path / partition.dev.getPath(this);
+    auto filename = path / device.getPath(this);
     
     std::ofstream file(filename.string(), std::ofstream::binary);
     if (!file.is_open()) return ERROR_FS_CANNOT_CREATE_FILE;
@@ -1068,7 +1068,7 @@ FSBlock *
 FSBlock::getParentDirBlock()
 {
     Block nr = getParentDirRef();
-    return nr ? partition.dev.blockPtr(nr) : nullptr;
+    return nr ? device.blockPtr(nr) : nullptr;
 }
 
 Block
@@ -1101,7 +1101,7 @@ FSBlock *
 FSBlock::getFileHeaderBlock()
 {
     Block nr = getFileHeaderRef();
-    return nr ? partition.dev.fileHeaderBlockPtr(nr) : nullptr;
+    return nr ? device.fileHeaderBlockPtr(nr) : nullptr;
 }
 
 Block
@@ -1139,7 +1139,7 @@ FSBlock *
 FSBlock::getNextHashBlock()
 {
     Block nr = getNextHashRef();
-    return nr ? partition.dev.blockPtr(nr) : nullptr;
+    return nr ? device.blockPtr(nr) : nullptr;
 }
 
 Block
@@ -1177,7 +1177,7 @@ FSBlock *
 FSBlock::getNextListBlock()
 {
     Block nr = getNextListBlockRef();
-    return nr ? partition.dev.fileListBlockPtr(nr) : nullptr;
+    return nr ? device.fileListBlockPtr(nr) : nullptr;
 }
 
 Block
@@ -1210,7 +1210,7 @@ FSBlock *
 FSBlock::getNextBmExtBlock()
 {
     Block nr = getNextBmExtBlockRef();
-    return nr ? partition.dev.bitmapExtBlockPtr(nr) : nullptr;
+    return nr ? device.bitmapExtBlockPtr(nr) : nullptr;
 }
 
 Block
@@ -1248,7 +1248,7 @@ FSBlock *
 FSBlock::getFirstDataBlock()
 {
     Block nr = getFirstDataBlockRef();
-    return nr ? partition.dev.dataBlockPtr(nr) : nullptr;
+    return nr ? device.dataBlockPtr(nr) : nullptr;
 }
 
 Block
@@ -1298,7 +1298,7 @@ FSBlock *
 FSBlock::getNextDataBlock()
 {
     Block nr = getNextDataBlockRef();
-    return nr ? partition.dev.dataBlockPtr(nr) : nullptr;
+    return nr ? device.dataBlockPtr(nr) : nullptr;
 }
 
 isize
@@ -1618,14 +1618,14 @@ FSBlock::addData(const u8 *buffer, isize size)
             assert(getFileSize() == 0);
                 
             // Compute the required number of blocks
-            isize numDataBlocks = partition.dev.requiredDataBlocks(size);
-            isize numListBlocks = partition.dev.requiredFileListBlocks(size);
+            isize numDataBlocks = device.requiredDataBlocks(size);
+            isize numListBlocks = device.requiredFileListBlocks(size);
             
             debug(FS_DEBUG, "Required data blocks : %ld\n", numDataBlocks);
             debug(FS_DEBUG, "Required list blocks : %ld\n", numListBlocks);
-            debug(FS_DEBUG, "         Free blocks : %ld\n", partition.dev.freeBlocks());
+            debug(FS_DEBUG, "         Free blocks : %ld\n", device.freeBlocks());
             
-            if (partition.dev.freeBlocks() < numDataBlocks + numListBlocks) {
+            if (device.freeBlocks() < numDataBlocks + numListBlocks) {
                 warn("Not enough free blocks\n");
                 return 0;
             }
@@ -1633,19 +1633,19 @@ FSBlock::addData(const u8 *buffer, isize size)
             for (Block ref = nr, i = 0; i < (Block)numListBlocks; i++) {
 
                 // Add a new file list block
-                ref = partition.dev.addFileListBlock(nr, ref);
+                ref = device.addFileListBlock(nr, ref);
             }
             
             for (Block ref = nr, i = 1; i <= (Block)numDataBlocks; i++) {
 
                 // Add a new data block
-                ref = partition.dev.addDataBlock(i, nr, ref);
+                ref = device.addDataBlock(i, nr, ref);
 
                 // Add references to the new data block
                 addDataBlockRef(ref, ref);
                 
                 // Add data
-                FSBlock *block = partition.dev.blockPtr(ref);
+                FSBlock *block = device.blockPtr(ref);
                 if (block) {
                     isize written = block->addData(buffer, size);
                     setFileSize((u32)(getFileSize() + written));
@@ -1691,7 +1691,7 @@ FSBlock::writeData(std::ostream& os)
     // Start here and iterate through all connected file list blocks
     FSBlock *block = this;
     
-    while (block && blocksTotal < partition.dev.numBlocks) {
+    while (block && blocksTotal < device.numBlocks) {
         
         blocksTotal++;
         
@@ -1700,7 +1700,7 @@ FSBlock::writeData(std::ostream& os)
         for (isize i = 0; i < num; i++) {
             
             Block ref = getDataBlockRef(i);
-            if (FSBlock *dataBlock = partition.dev.dataBlockPtr(getDataBlockRef(i))) {
+            if (FSBlock *dataBlock = device.dataBlockPtr(getDataBlockRef(i))) {
                 
                 isize bytesWritten = dataBlock->writeData(os, bytesRemaining);
                 bytesTotal += bytesWritten;

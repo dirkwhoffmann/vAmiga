@@ -45,12 +45,18 @@ protected:
     FSVolumeType dos = FS_NODOS;
 
     // The partition table
-    // std::vector<FSPartitionPtr> partitions;
     FSPartitionPtr partition = nullptr;
     
-    // The block storage
+    // Block storage
     std::vector<BlockPtr> blocks;
-            
+                
+    // Location of the root block
+    Block rootBlock = 0;
+    
+    // Location of the bitmap blocks and extended bitmap blocks
+    std::vector<Block> bmBlocks;
+    std::vector<Block> bmExtBlocks;
+    
     // The currently selected partition
     isize cp = 0;
     

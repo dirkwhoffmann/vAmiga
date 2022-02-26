@@ -42,15 +42,19 @@ FSDevice::init(FSDeviceDescriptor &layout)
     dos        = layout.dos;
     
     // Create partition
-    partition = new FSPartition(*this, layout);
-
+    // partition = new FSPartition(*this, layout);
+    partition = new FSPartition();
+    rootBlock   = layout.rootBlock;
+    bmBlocks    = layout.bmBlocks;
+    bmExtBlocks = layout.bmExtBlocks;
+    
     initBlocks(layout);
     
     // Compute checksums for all blocks
     updateChecksums();
     
     // Set the current directory to '/'
-    cd = partition->rootBlock;
+    cd = rootBlock;
     
     // Do some consistency checking
     for (isize i = 0; i < numBlocks; i++) assert(blocks[i] != nullptr);
@@ -66,24 +70,24 @@ FSDevice::initBlocks(FSDeviceDescriptor &layout)
     for (Block i = 0; i < numBlocks; i++) assert(blocks[i] == nullptr);
     
     // Create boot blocks
-    blocks[0] = new FSBlock(*partition, 0, FS_BOOT_BLOCK);
-    blocks[1] = new FSBlock(*partition, 1, FS_BOOT_BLOCK);
+    blocks[0] = new FSBlock(*this, 0, FS_BOOT_BLOCK);
+    blocks[1] = new FSBlock(*this, 1, FS_BOOT_BLOCK);
 
     // Create the root block
-    FSBlock *rb = new FSBlock(*partition, partition->rootBlock, FS_ROOT_BLOCK);
+    FSBlock *rb = new FSBlock(*this, rootBlock, FS_ROOT_BLOCK);
     blocks[layout.rootBlock] = rb;
     
     // Create the bitmap blocks
     for (auto& ref : layout.bmBlocks) {
         
-        blocks[ref] = new FSBlock(*partition, ref, FS_BITMAP_BLOCK);
+        blocks[ref] = new FSBlock(*this, ref, FS_BITMAP_BLOCK);
     }
     
     // Add bitmap extension blocks
     FSBlock *pred = rb;
     for (auto& ref : layout.bmExtBlocks) {
         
-        blocks[ref] = new FSBlock(*partition, ref, FS_BITMAP_EXT_BLOCK);
+        blocks[ref] = new FSBlock(*this, ref, FS_BITMAP_EXT_BLOCK);
         pred->setNextBmExtBlockRef(ref);
         pred = blocks[ref];
     }
@@ -95,7 +99,7 @@ FSDevice::initBlocks(FSDeviceDescriptor &layout)
     for (Block i = 0; i < numBlocks; i++) {
         
         if (blocks[i] == nullptr) {
-            blocks[i] = new FSBlock(*partition, i, FS_EMPTY_BLOCK);
+            blocks[i] = new FSBlock(*this, i, FS_EMPTY_BLOCK);
             markAsFree(i);
         }
     }
@@ -229,12 +233,12 @@ FSDevice::_dump(dump::Category category, std::ostream& os) const
     if (category & dump::Partitions) {
         
         os << tab("Root block");
-        os << dec(partition->rootBlock) << std::endl;
+        os << dec(rootBlock) << std::endl;
         os << tab("Bitmap blocks");
-        for (auto& it : partition->bmBlocks) { os << dec(it) << " "; }
+        for (auto& it : bmBlocks) { os << dec(it) << " "; }
         os << std::endl;
         os << util::tab("Extension blocks");
-        for (auto& it : partition->bmExtBlocks) { os << dec(it) << " "; }
+        for (auto& it : bmExtBlocks) { os << dec(it) << " "; }
         os << std::endl;
     }
 
@@ -298,14 +302,14 @@ FSDevice::usedBytes() const
 FSName
 FSDevice::getName() const
 {
-    FSBlock *rb = rootBlockPtr(partition->rootBlock);
+    FSBlock *rb = rootBlockPtr(rootBlock);
     return rb ? rb->getName() : FSName("");
 }
 
 void
 FSDevice::setName(FSName name)
 {
-    FSBlock *rb = rootBlockPtr(partition->rootBlock);
+    FSBlock *rb = rootBlockPtr(rootBlock);
     assert(rb != nullptr);
 
     rb->setName(name);
@@ -484,8 +488,8 @@ FSDevice::requiredBlocks(isize fileSize) const
 Block
 FSDevice::allocateBlock()
 {
-    if (Block nr = allocateBlockAbove(partition->rootBlock)) return nr;
-    if (Block nr = allocateBlockBelow(partition->rootBlock)) return nr;
+    if (Block nr = allocateBlockAbove(rootBlock)) return nr;
+    if (Block nr = allocateBlockBelow(rootBlock)) return nr;
 
     return 0;
 }
@@ -525,7 +529,7 @@ FSDevice::deallocateBlock(Block nr)
     assert(blocks[nr]);
     
     delete blocks[nr];
-    blocks[nr] = new FSBlock(*partition, nr, FS_EMPTY_BLOCK);
+    blocks[nr] = new FSBlock(*this, nr, FS_EMPTY_BLOCK);
     markAsFree(nr);
 }
 
@@ -538,7 +542,7 @@ FSDevice::addFileListBlock(Block head, Block prev)
     Block nr = allocateBlock();
     if (!nr) return 0;
     
-    blocks[nr] = new FSBlock(*partition, nr, FS_FILELIST_BLOCK);
+    blocks[nr] = new FSBlock(*this, nr, FS_FILELIST_BLOCK);
     blocks[nr]->setFileHeaderRef(head);
     prevBlock->setNextListBlockRef(nr);
     
@@ -556,9 +560,9 @@ FSDevice::addDataBlock(isize count, Block head, Block prev)
 
     FSBlock *newBlock;
     if (isOFS()) {
-        newBlock = new FSBlock(*partition, nr, FS_DATA_BLOCK_OFS);
+        newBlock = new FSBlock(*this, nr, FS_DATA_BLOCK_OFS);
     } else {
-        newBlock = new FSBlock(*partition, nr, FS_DATA_BLOCK_FFS);
+        newBlock = new FSBlock(*this, nr, FS_DATA_BLOCK_FFS);
     }
     
     blocks[nr] = newBlock;
@@ -576,7 +580,7 @@ FSDevice::newUserDirBlock(const string &name)
     
     if (Block nr = allocateBlock()) {
     
-        block = new FSBlock(*partition, nr, FS_USERDIR_BLOCK);
+        block = new FSBlock(*this, nr, FS_USERDIR_BLOCK);
         block->setName(FSName(name));
         blocks[nr] = block;
     }
@@ -591,7 +595,7 @@ FSDevice::newFileHeaderBlock(const string &name)
     
     if (Block nr = allocateBlock()) {
 
-        block = new FSBlock(*partition, nr, FS_FILEHEADER_BLOCK);
+        block = new FSBlock(*this, nr, FS_FILEHEADER_BLOCK);
         block->setName(FSName(name));
         blocks[nr] = block;
     }
@@ -616,12 +620,12 @@ FSDevice::bmBlockForBlock(Block nr)
     isize bitsPerBlock = (bsize - 4) * 8;
     isize bmNr = (nr - 2) / bitsPerBlock;
 
-    if (bmNr >= (isize)partition->bmBlocks.size()) {
+    if (bmNr >= (isize)bmBlocks.size()) {
         warn("Allocation bit is located in non-existent bitmap block %ld\n", bmNr);
         return nullptr;
     }
 
-    return bitmapBlockPtr(partition->bmBlocks[bmNr]);
+    return bitmapBlockPtr(bmBlocks[bmNr]);
 }
 
 bool
@@ -665,7 +669,7 @@ FSDevice::locateAllocationBit(Block nr, isize *byte, isize *bit) const
 
     // Get the bitmap block
     FSBlock *bm;
-    bm = (bmNr < (isize)partition->bmBlocks.size()) ? bitmapBlockPtr(partition->bmBlocks[bmNr]) : nullptr;
+    bm = (bmNr < (isize)bmBlocks.size()) ? bitmapBlockPtr(bmBlocks[bmNr]) : nullptr;
     if (bm == nullptr) {
         warn("Failed to lookup allocation bit for block %d\n", nr);
         warn("bmNr = %ld\n", bmNr);
@@ -709,7 +713,7 @@ FSDevice::currentDirBlock()
     }
     
     // The block reference is invalid. Switch back to the root directory
-    cd = partition->rootBlock;
+    cd = rootBlock;
     return blockPtr(cd);
 }
 
@@ -721,7 +725,7 @@ FSDevice::changeDir(const string &name)
     if (name == "/") {
                 
         // Move to top level
-        cd = partition->rootBlock;
+        cd = rootBlock;
         return currentDirBlock();
     }
 
@@ -1139,11 +1143,11 @@ FSDevice::predictBlockType(Block nr, const u8 *buffer)
     if (nr == 0 || nr == 1) return FS_BOOT_BLOCK;
     
     // Is it a bitmap block?
-    if (std::find(partition->bmBlocks.begin(), partition->bmBlocks.end(), nr) != partition->bmBlocks.end())
+    if (std::find(bmBlocks.begin(), bmBlocks.end(), nr) != bmBlocks.end())
         return FS_BITMAP_BLOCK;
     
     // is it a bitmap extension block?
-    if (std::find(partition->bmExtBlocks.begin(), partition->bmExtBlocks.end(), nr) != partition->bmExtBlocks.end())
+    if (std::find(bmExtBlocks.begin(), bmExtBlocks.end(), nr) != bmExtBlocks.end())
         return FS_BITMAP_EXT_BLOCK;
 
     // For all other blocks, check the type and subtype fields
@@ -1187,13 +1191,13 @@ FSDevice::importVolume(const u8 *src, isize size)
         const u8 *data = src + i * bsize;
         
         // Get the partition this block belongs to
-        FSPartition &p = blocks[i]->partition;
+        // FSPartition &p = blocks[i]->partition;
         
         // Determine the type of the new block
         FSBlockType type = predictBlockType((Block)i, data);
         
         // Create new block
-        FSBlock *newBlock = FSBlock::make(p, (Block)i, type);
+        FSBlock *newBlock = FSBlock::make(*this, (Block)i, type);
 
         // Import block data
         newBlock->importBlock(data, bsize);
