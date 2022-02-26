@@ -321,7 +321,7 @@ FileSystem::collectHashedRefs(Block nr,
 
 void
 FileSystem::collectRefsWithSameHashValue(Block nr,
-                                       std::stack<Block> &result, std::set<Block> &visited)
+                                         std::stack<Block> &result, std::set<Block> &visited)
 {
     std::stack<Block> refs;
     
@@ -337,6 +337,52 @@ FileSystem::collectRefsWithSameHashValue(Block nr,
   
     // Push the collected elements onto the result stack
     while (refs.size() > 0) { result.push(refs.top()); refs.pop(); }
+}
+
+FSBlock *
+FileSystem::lastFileListBlockInChain(Block start)
+{
+    FSBlock *block = fileListBlockPtr(start);
+    return block ? lastFileListBlockInChain(block) : nullptr;
+}
+
+FSBlock *
+FileSystem::lastFileListBlockInChain(FSBlock *block)
+{
+    std::set<Block> visited;
+
+    while (block && visited.find(block->nr) == visited.end()) {
+
+        FSBlock *next = block->getNextListBlock();
+        if (next == nullptr) return block;
+
+        visited.insert(block->nr);
+        block = next;
+    }
+    return nullptr;
+}
+
+FSBlock *
+FileSystem::lastHashBlockInChain(Block start)
+{
+    FSBlock *block = hashableBlockPtr(start);
+    return block ? lastHashBlockInChain(block) : nullptr;
+}
+
+FSBlock *
+FileSystem::lastHashBlockInChain(FSBlock *block)
+{
+    std::set<Block> visited;
+
+    while (block && visited.find(block->nr) == visited.end()) {
+
+        FSBlock *next = block->getNextHashBlock();
+        if (next == nullptr) return block;
+
+        visited.insert(block->nr);
+        block =next;
+    }
+    return nullptr;
 }
 
 FSErrorReport

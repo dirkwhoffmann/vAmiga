@@ -611,53 +611,6 @@ MutableFileSystem::printDirectory(bool recursive)
     msg("%zu items\n", items.size());
 }
 
-
-FSBlock *
-MutableFileSystem::lastHashBlockInChain(Block start)
-{
-    FSBlock *block = hashableBlockPtr(start);
-    return block ? lastHashBlockInChain(block) : nullptr;
-}
-
-FSBlock *
-MutableFileSystem::lastHashBlockInChain(FSBlock *block)
-{
-    std::set<Block> visited;
-
-    while (block && visited.find(block->nr) == visited.end()) {
-
-        FSBlock *next = block->getNextHashBlock();
-        if (next == nullptr) return block;
-
-        visited.insert(block->nr);
-        block =next;
-    }
-    return nullptr;
-}
-
-FSBlock *
-MutableFileSystem::lastFileListBlockInChain(Block start)
-{
-    FSBlock *block = fileListBlockPtr(start);
-    return block ? lastFileListBlockInChain(block) : nullptr;
-}
-
-FSBlock *
-MutableFileSystem::lastFileListBlockInChain(FSBlock *block)
-{
-    std::set<Block> visited;
-
-    while (block && visited.find(block->nr) == visited.end()) {
-
-        FSBlock *next = block->getNextListBlock();
-        if (next == nullptr) return block;
-
-        visited.insert(block->nr);
-        block = next;
-    }
-    return nullptr;
-}
-
 void
 MutableFileSystem::importVolume(const u8 *src, isize size)
 {

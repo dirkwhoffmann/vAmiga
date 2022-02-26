@@ -155,20 +155,6 @@ public:
         
     
     //
-    // Traversing linked lists
-    //
-    
-    // Returns the last element in the list of extension blocks
-    FSBlock *lastFileListBlockInChain(Block start);
-    FSBlock *lastFileListBlockInChain(FSBlock *block);
-
-    // Returns the last element in the list of blocks with the same hash
-    FSBlock *lastHashBlockInChain(Block start);
-    FSBlock *lastHashBlockInChain(FSBlock *block);
-
-    
-    
-    //
     // Importing and exporting
     //
     
