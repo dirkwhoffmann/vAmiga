@@ -15,6 +15,96 @@
 #include <set>
 #include <stack>
 
+void
+FileSystem::_dump(dump::Category category, std::ostream& os) const
+{
+    using namespace util;
+
+    if (category & dump::Summary) {
+        
+        auto total = numBlocks();
+        auto used = usedBlocks();
+        auto free = freeBlocks();
+        auto fill = (isize)(100.0 * used / total);
+        
+        os << "DOS" << dec(dos);
+        os << "   ";
+        os << std::setw(6) << std::left << std::setfill(' ') << total;
+        os << " (x ";
+        os << std::setw(3) << std::left << std::setfill(' ') << bsize;
+        os << ")  ";
+        os << std::setw(6) << std::left << std::setfill(' ') << used;
+        os << "  ";
+        os << std::setw(6) << std::left << std::setfill(' ') << free;
+        os << "  ";
+        os << std::setw(3) << std::right << std::setfill(' ') << fill;
+        os << "%  ";
+        os << getName().c_str() << std::endl;
+    }
+    
+    if (category & dump::Partitions) {
+        
+        os << tab("Root block");
+        os << dec(rootBlock) << std::endl;
+        os << tab("Bitmap blocks");
+        for (auto& it : bmBlocks) { os << dec(it) << " "; }
+        os << std::endl;
+        os << util::tab("Extension blocks");
+        for (auto& it : bmExtBlocks) { os << dec(it) << " "; }
+        os << std::endl;
+    }
+
+    if (category & dump::Blocks) {
+                
+        for (isize i = 0; i < numBlocks(); i++)  {
+            
+            if (blocks[i]->type == FS_EMPTY_BLOCK) continue;
+            
+            msg("\nBlock %ld (%d):", i, blocks[i]->nr);
+            msg(" %s\n", FSBlockTypeEnum::key(blocks[i]->type));
+            
+            blocks[i]->dump();
+        }
+    }
+}
+
+isize
+FileSystem::freeBlocks() const
+{
+    isize result = 0;
+    
+    for (isize i = 0; i < numBlocks(); i++) {
+        if (isFree((Block)i)) result++;
+    }
+
+    return result;
+}
+
+isize
+FileSystem::usedBlocks() const
+{
+    return numBlocks() - freeBlocks();
+}
+
+isize
+FileSystem::freeBytes() const
+{
+    return freeBlocks() * bsize;
+}
+
+isize
+FileSystem::usedBytes() const
+{
+    return usedBlocks() * bsize;
+}
+
+FSName
+FileSystem::getName() const
+{
+    FSBlock *rb = rootBlockPtr(rootBlock);
+    return rb ? rb->getName() : FSName("");
+}
+
 FSBlockType
 FileSystem::blockType(Block nr)
 {
@@ -116,6 +206,18 @@ FileSystem::hashableBlockPtr(Block nr) const
         return blocks[nr];
     }
     return nullptr;
+}
+
+u8
+FileSystem::readByte(Block nr, isize offset) const
+{
+    assert(offset < bsize);
+
+    if (isize(nr) < numBlocks()) {
+        return blocks[nr]->data ? blocks[nr]->data[offset] : 0;
+    }
+    
+    return 0;
 }
 
 bool

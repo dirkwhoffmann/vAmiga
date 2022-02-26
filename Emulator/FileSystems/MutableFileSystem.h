@@ -49,52 +49,18 @@ private:
 
     void initBlocks(FSDeviceDescriptor &layout);
 
-    
-    //
-    // Methods from AmigaObject
-    //
-    
-private:
-    
-    // TODO: MOVE TO FILESYSTEM
-    void _dump(dump::Category category, std::ostream& os) const override;
 
-    
     //
-    // Querying layout properties
+    // Modifying the root block
     //
-    
+
 public:
-                
-    // Returns the capacity of this volume
-    // isize numBlocks() const { return isize(blocks.size()); }
-    // isize numBytes() const { return numBlocks() * bsize; }
 
-    // Reports usage information
-    isize freeBlocks() const;
-    isize usedBlocks() const;
-    isize freeBytes() const;
-    isize usedBytes() const;
-
-    
-    //
-    // Querying file system properties
-    //
-    
-public:
-    
-    // Returns the DOS version
-    FSVolumeType getDos() const { return dos; }
-    bool isOFS() const { return isOFSVolumeType(dos); }
-    bool isFFS() const { return isFFSVolumeType(dos); }
-
-    // Gets or sets the volume name
-    FSName getName() const;
     void setName(FSName name);
     
     
     //
-    // Working with boot blocks
+    // Modifying boot blocks
     //
     
 public:
@@ -137,7 +103,7 @@ public:
     
     
     //
-    // Edit the block allocation bitmap
+    // Editing the block allocation bitmap
     //
 
 public:
@@ -263,9 +229,6 @@ public:
     
 public:
         
-    // Reads a single byte from a block
-    u8 readByte(Block nr, isize offset) const;
-
     // Predicts the type of a block by analyzing its number and data
     FSBlockType predictBlockType(Block nr, const u8 *buffer);
 

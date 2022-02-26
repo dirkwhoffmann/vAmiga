@@ -52,7 +52,7 @@ protected:
 protected:
     
     const char *getDescription() const override { return "FileSystem"; }
-    // void _dump(dump::Category category, std::ostream& os) const override;
+    void _dump(dump::Category category, std::ostream& os) const override;
 
     
     //
@@ -64,6 +64,27 @@ public:
     // Returns the capacity of this volume
     isize numBlocks() const { return isize(blocks.size()); }
     isize numBytes() const { return numBlocks() * bsize; }
+    
+    // Reports usage information
+    isize freeBlocks() const;
+    isize usedBlocks() const;
+    isize freeBytes() const;
+    isize usedBytes() const;
+
+    
+    //
+    // Querying file system properties
+    //
+    
+public:
+    
+    // Returns the DOS version
+    FSVolumeType getDos() const { return dos; }
+    bool isOFS() const { return isOFSVolumeType(dos); }
+    bool isFFS() const { return isFFSVolumeType(dos); }
+
+    // Reads the volume name from the root block
+    FSName getName() const;
     
     
     //
@@ -92,6 +113,9 @@ public:
     FSBlock *dataBlockPtr(Block nr) const;
     FSBlock *hashableBlockPtr(Block nr) const;
     
+    // Reads a single byte from a block
+    u8 readByte(Block nr, isize offset) const;
+
     
     //
     // Querying the block allocation bitmap
