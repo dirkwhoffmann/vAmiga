@@ -48,6 +48,8 @@
 		5023519024485BBF00F6C088 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5023518F24485BBF00F6C088 /* Preferences.swift */; };
 		5026EDBF2608DC8E00D90CE1 /* Console.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5026EDBE2608DC8E00D90CE1 /* Console.swift */; };
 		5027418F2297CACF0038E5AF /* Colors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5027418D2297CACF0038E5AF /* Colors.cpp */; };
+		5029C6E127CA2EAB002F6CCC /* DiskInspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5029C6E027CA2EAB002F6CCC /* DiskInspector.xib */; };
+		5029C6E327CA2F66002F6CCC /* DiskInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5029C6E227CA2F66002F6CCC /* DiskInspector.swift */; };
 		502BB09E229C00C800A8DFCD /* CompatibilityConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502BB09D229C00C800A8DFCD /* CompatibilityConf.swift */; };
 		502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD092248EC0200F0E118 /* EventPanel.swift */; };
 		502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD0B2248ECAA00F0E118 /* EventTableView.swift */; };
@@ -351,6 +353,8 @@
 		5026EDBE2608DC8E00D90CE1 /* Console.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Console.swift; sourceTree = "<group>"; };
 		5027418D2297CACF0038E5AF /* Colors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Colors.cpp; sourceTree = "<group>"; };
 		5027418E2297CACF0038E5AF /* Colors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Colors.h; sourceTree = "<group>"; };
+		5029C6E027CA2EAB002F6CCC /* DiskInspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DiskInspector.xib; sourceTree = "<group>"; };
+		5029C6E227CA2F66002F6CCC /* DiskInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskInspector.swift; sourceTree = "<group>"; };
 		502BB09D229C00C800A8DFCD /* CompatibilityConf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityConf.swift; sourceTree = "<group>"; };
 		502C135027C613DB009534BD /* HdrControllerRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HdrControllerRom.h; sourceTree = "<group>"; };
 		502EFD092248EC0200F0E118 /* EventPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPanel.swift; sourceTree = "<group>"; };
@@ -1051,6 +1055,7 @@
 				509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */,
 				508FDFBA21EA1FF10043D0E9 /* ImporterDialog.xib */,
 				501C514527C2AA4A00DF1DD5 /* DiskExporter.xib */,
+				5029C6E027CA2EAB002F6CCC /* DiskInspector.xib */,
 				506B47172562E06A009FEFC3 /* VolumeInspector.xib */,
 				50EB8CC925306E8E0053988A /* VideoExporter.xib */,
 				50D263CB21F6377600FA167F /* A500ANSI.xib */,
@@ -1122,6 +1127,7 @@
 				508FE04721EA22CC0043D0E9 /* DialogController.swift */,
 				508FE04A21EA22CC0043D0E9 /* ImporterDialog.swift */,
 				501C514727C2AD8C00DF1DD5 /* DiskExporter.swift */,
+				5029C6E227CA2F66002F6CCC /* DiskInspector.swift */,
 				506B471C256396BC009FEFC3 /* VolumeInspector.swift */,
 				501C514D27C4259F00DF1DD5 /* FloppyDiskCreator.swift */,
 				5050EC4027BE97E000394F4F /* HardDiskCreator.swift */,
@@ -1774,6 +1780,7 @@
 				50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */,
 				50B14C2021EB8445002E32A6 /* drive_head.aiff in Resources */,
 				50AD904B276E104E0011ECCB /* TextStorage.h in Resources */,
+				5029C6E127CA2EAB002F6CCC /* DiskInspector.xib in Resources */,
 				500A4E9F24470713002A4DE1 /* disk_eject.aiff in Resources */,
 				508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */,
 				501C514C27C4248300DF1DD5 /* FloppyDiskCreator.xib in Resources */,
@@ -1963,6 +1970,7 @@
 				50357BB6239123B2007E7563 /* Renderer.swift in Sources */,
 				5078A5D52529E7FA00FCE384 /* Sampler.cpp in Sources */,
 				508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */,
+				5029C6E327CA2F66002F6CCC /* DiskInspector.swift in Sources */,
 				505C83F927739ED0001F8159 /* RemoteManager.cpp in Sources */,
 				50E79BE9232D123000D296FB /* SubComponent.cpp in Sources */,
 				50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */,

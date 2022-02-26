@@ -756,12 +756,9 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func inspectHdrDiskAction(_ sender: NSMenuItem!) {
         
-        track("TODO")
-        /*
-        let nibName = NSNib.Name("VolumeInspector")
-        let panel = VolumeInspector.make(parent: self, nibName: nibName)
+        let nibName = NSNib.Name("DiskInspector")
+        let panel = DiskInspector.make(parent: self, nibName: nibName)
         panel?.showSheet(hardDrive: sender.tag)
-        */
     }
 
     @IBAction func inspectHdrVolumeAction(_ sender: NSMenuItem!) {
