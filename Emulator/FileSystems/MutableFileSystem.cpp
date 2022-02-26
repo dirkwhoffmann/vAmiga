@@ -461,7 +461,7 @@ MutableFileSystem::createFile(const string &name, const u8 *buf, isize size)
     
     if (block) {
         assert(block->type == FS_FILEHEADER_BLOCK);
-        block->addData(buf, size);
+        addData(*block, buf, size);
     }
     
     return block;
@@ -471,6 +471,78 @@ FSBlock *
 MutableFileSystem::createFile(const string &name, const string &str)
 {
     return createFile(name, (const u8 *)str.c_str(), (isize)str.size());
+}
+
+isize
+MutableFileSystem::addData(FSBlock &block, const u8 *buffer, isize size)
+{
+    auto nr = block.nr;
+    
+    switch (block.type) {
+            
+        case FS_FILEHEADER_BLOCK:
+        {
+            assert(block.getFileSize() == 0);
+                
+            // Compute the required number of blocks
+            isize numDataBlocks = requiredDataBlocks(size);
+            isize numListBlocks = requiredFileListBlocks(size);
+            
+            debug(FS_DEBUG, "Required data blocks : %ld\n", numDataBlocks);
+            debug(FS_DEBUG, "Required list blocks : %ld\n", numListBlocks);
+            debug(FS_DEBUG, "         Free blocks : %ld\n", freeBlocks());
+            
+            if (freeBlocks() < numDataBlocks + numListBlocks) {
+                warn("Not enough free blocks\n");
+                return 0;
+            }
+            
+            for (Block ref = nr, i = 0; i < (Block)numListBlocks; i++) {
+
+                // Add a new file list block
+                ref = addFileListBlock(nr, ref);
+            }
+            
+            for (Block ref = nr, i = 1; i <= (Block)numDataBlocks; i++) {
+
+                // Add a new data block
+                ref = addDataBlock(i, nr, ref);
+
+                // Add references to the new data block
+                block.addDataBlockRef(ref, ref);
+                
+                // Add data
+                FSBlock *ptr = blockPtr(ref);
+                if (ptr) {
+                    isize written = addData(*ptr, buffer, size);
+                    ptr->setFileSize((u32)(ptr->getFileSize() + written));
+                    buffer += written;
+                    size -= written;
+                }
+            }
+
+            return block.getFileSize();
+        }
+        case FS_DATA_BLOCK_OFS:
+        {
+            isize count = std::min(bsize - 24, size);
+
+            std::memcpy(block.data + 24, buffer, count);
+            block.setDataBytesInBlock((u32)count);
+            
+            return count;
+        }
+        case FS_DATA_BLOCK_FFS:
+        {
+            isize count = std::min(bsize, size);
+            
+            std::memcpy(block.data, buffer, count);
+            
+            return count;
+        }
+        default:
+            return 0;
+    }
 }
 
 void

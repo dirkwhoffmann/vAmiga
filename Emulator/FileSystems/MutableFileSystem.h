@@ -132,6 +132,11 @@ public:
     FSBlock *createFile(const string &name, const u8 *buffer, isize size);
     FSBlock *createFile(const string &name, const string &str);
         
+private:
+    
+    // Adds data bytes to a block
+    isize addData(FSBlock &block, const u8 *buffer, isize size);
+    
     
     //
     // Importing and exporting

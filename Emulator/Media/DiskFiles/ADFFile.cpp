@@ -15,6 +15,7 @@
 #include "Drive.h"
 #include "IOUtils.h"
 #include "MemUtils.h"
+#include "MutableFileSystem.h"
 
 bool
 ADFFile::isCompatible(const string &path)

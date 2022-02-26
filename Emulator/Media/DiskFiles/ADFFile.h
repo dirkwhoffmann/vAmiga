@@ -10,7 +10,9 @@
 #pragma once
 
 #include "DiskFile.h"
-#include "MutableFileSystem.h"
+// #include "MutableFileSystem.h"
+
+struct MutableFileSystem;
 
 class ADFFile : public DiskFile {
 

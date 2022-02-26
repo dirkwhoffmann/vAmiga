@@ -12,7 +12,9 @@
 #include "MutableFileSystem.h"
 #include "MemUtils.h"
 
-FSBlock::FSBlock(MutableFileSystem &ref, Block nr, FSBlockType t) : device(ref)
+struct MutableFileSystem;
+
+FSBlock::FSBlock(FileSystem &ref, Block nr, FSBlockType t) : device(ref)
 {
     assert(t != FS_UNKNOWN_BLOCK);
     
@@ -86,7 +88,7 @@ FSBlock::~FSBlock()
 }
 
 FSBlock *
-FSBlock::make(MutableFileSystem &ref, Block nr, FSBlockType type)
+FSBlock::make(FileSystem &ref, Block nr, FSBlockType type)
 {
     switch (type) {
 
@@ -1608,6 +1610,7 @@ FSBlock::setDataBytesInBlock(u32 val)
     }
 }
 
+/*
 isize
 FSBlock::addData(const u8 *buffer, isize size)
 {
@@ -1677,6 +1680,7 @@ FSBlock::addData(const u8 *buffer, isize size)
             return 0;
     }
 }
+*/
 
 isize
 FSBlock::writeData(std::ostream& os)
