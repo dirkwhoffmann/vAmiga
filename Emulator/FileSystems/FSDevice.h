@@ -33,8 +33,6 @@ class FSDevice : public AmigaObject {
 protected:
             
     // Layout parameters
-    isize numSectors = 0;
-    i64 numBlocks = 0;
     isize numReserved = 0;
     isize bsize = 0;
             
@@ -111,11 +109,8 @@ private:
 public:
                 
     // Returns the capacity of this volume
-    isize numBytes() const { return numBlocks * bsize; }
-    // TODO: REPLACE i64 by isize
-    i64 getNumBlocks() const { return numBlocks; }
-
-    [[deprecated]] i64 getCapacity() const { return numBlocks; }
+    isize numBlocks() const { return isize(blocks.size()); }
+    isize numBytes() const { return numBlocks() * bsize; }
 
     
     //
@@ -325,7 +320,7 @@ public:
     ErrorCode check(Block nr, isize pos, u8 *expected, bool strict) const;
 
     // Checks if the block with the given number is part of the volume
-    bool isBlockNumber(isize nr) { return nr < numBlocks; }
+    bool isBlockNumber(isize nr) const { return nr >= 0 && nr < numBlocks(); }
 
     // Checks if the type of a block matches one of the provides types
     ErrorCode checkBlockType(Block nr, FSBlockType type);

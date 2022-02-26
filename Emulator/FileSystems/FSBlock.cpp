@@ -1691,7 +1691,7 @@ FSBlock::writeData(std::ostream& os)
     // Start here and iterate through all connected file list blocks
     FSBlock *block = this;
     
-    while (block && blocksTotal < device.numBlocks) {
+    while (block && blocksTotal < device.numBlocks()) {
         
         blocksTotal++;
         

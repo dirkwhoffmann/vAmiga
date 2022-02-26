@@ -1452,7 +1452,7 @@ using namespace moira;
 
 - (NSInteger)numBlocks
 {
-    return [self fs]->getNumBlocks();
+    return [self fs]->numBlocks();
 }
 
 - (NSInteger)numBytes

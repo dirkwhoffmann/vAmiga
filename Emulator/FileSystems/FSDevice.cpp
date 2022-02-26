@@ -32,9 +32,9 @@ FSDevice::init(FSDeviceDescriptor &layout)
     if constexpr (FS_DEBUG) { layout.dump(); }
     
     // Copy layout parameters from the descriptor
-    numSectors  = layout.geometry.sectors;
+    // numSectors  = layout.geometry.sectors;
     bsize       = layout.geometry.bsize;
-    numBlocks   = layout.numBlocks;
+    // numBlocks   = layout.numBlocks;
         
     // Copy file system parameters from the descriptor
     dos         = layout.dos;
@@ -51,7 +51,7 @@ FSDevice::init(FSDeviceDescriptor &layout)
     cd = rootBlock;
     
     // Do some consistency checking
-    for (isize i = 0; i < numBlocks; i++) assert(blocks[i] != nullptr);
+    for (isize i = 0; i < numBlocks(); i++) assert(blocks[i] != nullptr);
     
     // Print some debug information
     if constexpr (FS_DEBUG) { dump(dump::Summary); }
@@ -61,7 +61,7 @@ void
 FSDevice::initBlocks(FSDeviceDescriptor &layout)
 {
     // Do some consistency checking
-    for (Block i = 0; i < numBlocks; i++) assert(blocks[i] == nullptr);
+    for (Block i = 0; i < numBlocks(); i++) assert(blocks[i] == nullptr);
     
     // Create boot blocks
     blocks[0] = new FSBlock(*this, 0, FS_BOOT_BLOCK);
@@ -90,7 +90,7 @@ FSDevice::initBlocks(FSDeviceDescriptor &layout)
     rb->addBitmapBlockRefs(layout.bmBlocks);
     
     // Add free blocks
-    for (Block i = 0; i < numBlocks; i++) {
+    for (Block i = 0; i < numBlocks(); i++) {
         
         if (blocks[i] == nullptr) {
             blocks[i] = new FSBlock(*this, i, FS_EMPTY_BLOCK);
@@ -203,7 +203,7 @@ FSDevice::_dump(dump::Category category, std::ostream& os) const
 
     if (category & dump::Summary) {
         
-        auto total = numBlocks;
+        auto total = numBlocks();
         auto used = usedBlocks();
         auto free = freeBlocks();
         auto fill = (isize)(100.0 * used / total);
@@ -237,7 +237,7 @@ FSDevice::_dump(dump::Category category, std::ostream& os) const
 
     if (category & dump::Blocks) {
                 
-        for (isize i = 0; i < numBlocks; i++)  {
+        for (isize i = 0; i < numBlocks(); i++)  {
             
             if (blocks[i]->type == FS_EMPTY_BLOCK) continue;
             
@@ -254,7 +254,7 @@ FSDevice::freeBlocks() const
 {
     isize result = 0;
     
-    for (isize i = 0; i < numBlocks; i++) {
+    for (isize i = 0; i < numBlocks(); i++) {
         if (isFree((Block)i)) result++;
     }
 
@@ -264,7 +264,7 @@ FSDevice::freeBlocks() const
 isize
 FSDevice::usedBlocks() const
 {
-    return numBlocks - freeBlocks();
+    return numBlocks() - freeBlocks();
 }
 
 isize
@@ -477,9 +477,9 @@ FSDevice::allocateBlock()
 Block
 FSDevice::allocateBlockAbove(Block nr)
 {
-    assert(nr >= 0 && nr < numBlocks);
+    assert(isBlockNumber(nr));
     
-    for (i64 i = (i64)nr + 1; i < numBlocks; i++) {
+    for (i64 i = (i64)nr + 1; i < numBlocks(); i++) {
         if (blocks[i]->type == FS_EMPTY_BLOCK) {
             markAsAllocated((Block)i);
             return (Block)i;
@@ -491,7 +491,7 @@ FSDevice::allocateBlockAbove(Block nr)
 Block
 FSDevice::allocateBlockBelow(Block nr)
 {
-    assert(nr >= 0 && nr < numBlocks);
+    assert(isBlockNumber(nr));
 
     for (i64 i = (i64)nr - 1; i >= 0; i--) {
         if (blocks[i]->type == FS_EMPTY_BLOCK) {
@@ -505,7 +505,7 @@ FSDevice::allocateBlockBelow(Block nr)
 void
 FSDevice::deallocateBlock(Block nr)
 {
-    assert(nr >= 0 && nr < numBlocks);
+    assert(isBlockNumber(nr));
     assert(blocks[nr]);
     
     delete blocks[nr];
@@ -586,7 +586,7 @@ FSDevice::newFileHeaderBlock(const string &name)
 void
 FSDevice::updateChecksums()
 {
-    for (isize i = 0; i < numBlocks; i++) {
+    for (isize i = 0; i < numBlocks(); i++) {
         blocks[i]->updateChecksum();
     }
 }
@@ -594,7 +594,7 @@ FSDevice::updateChecksums()
 FSBlock *
 FSDevice::bmBlockForBlock(Block nr)
 {
-    assert(nr >= 2 && (isize)nr < numBlocks);
+    assert(isBlockNumber(nr) && nr >= 2);
         
     // Locate the bitmap block
     isize bitsPerBlock = (bsize - 4) * 8;
@@ -611,7 +611,7 @@ FSDevice::bmBlockForBlock(Block nr)
 bool
 FSDevice::isFree(Block nr) const
 {
-    assert(nr >= 0 && nr < numBlocks);
+    assert(isBlockNumber(nr));
 
     // The first two blocks are always allocated and not part of the bitmap
     if (nr < 2) return false;
@@ -637,7 +637,7 @@ FSDevice::setAllocationBit(Block nr, bool value)
 FSBlock *
 FSDevice::locateAllocationBit(Block nr, isize *byte, isize *bit) const
 {
-    assert(nr >= 0 && nr < numBlocks);
+    assert(isBlockNumber(nr));
 
     // The first two blocks are always allocated and not part of the map
     if (nr < 2) return nullptr;
@@ -977,7 +977,7 @@ FSDevice::check(bool strict) const
     isize total = 0, min = INT_MAX, max = 0;
     
     // Analyze the allocation table
-    for (Block i = 0; i < numBlocks; i++) {
+    for (Block i = 0; i < numBlocks(); i++) {
 
         FSBlock *block = blocks[i];
         if (block->type == FS_EMPTY_BLOCK && !isFree((Block)i)) {
@@ -991,7 +991,7 @@ FSDevice::check(bool strict) const
     }
 
     // Analyze all blocks
-    for (isize i = 0; i < numBlocks; i++) {
+    for (isize i = 0; i < numBlocks(); i++) {
 
         if (blocks[i]->check(strict) > 0) {
             min = std::min(min, i);
@@ -1063,7 +1063,7 @@ FSDevice::getCorrupted(Block nr)
 bool
 FSDevice::isCorrupted(Block nr, isize n)
 {
-    for (isize i = 0, cnt = 0; i < numBlocks; i++) {
+    for (isize i = 0, cnt = 0; i < numBlocks(); i++) {
         
         if (isCorrupted((Block)i)) {
             cnt++;
@@ -1077,7 +1077,7 @@ Block
 FSDevice::nextCorrupted(Block nr)
 {
     isize i = (isize)nr;
-    while (++i < numBlocks) { if (isCorrupted((Block)i)) return (Block)i; }
+    while (++i < numBlocks()) { if (isCorrupted((Block)i)) return (Block)i; }
     return nr;
 }
 
@@ -1092,7 +1092,7 @@ FSDevice::prevCorrupted(Block nr)
 Block
 FSDevice::seekCorruptedBlock(isize n)
 {
-    for (isize i = 0, cnt = 0; i < numBlocks; i++) {
+    for (isize i = 0, cnt = 0; i < numBlocks(); i++) {
 
         if (isCorrupted((Block)i)) {
             cnt++;
@@ -1107,7 +1107,7 @@ FSDevice::readByte(Block nr, isize offset) const
 {
     assert(offset < bsize);
 
-    if (nr < (Block)numBlocks) {
+    if (isize(nr) < numBlocks()) {
         return blocks[nr]->data ? blocks[nr]->data[offset] : 0;
     }
     
@@ -1160,13 +1160,13 @@ FSDevice::importVolume(const u8 *src, isize size)
     if (size % bsize != 0) throw VAError(ERROR_FS_WRONG_BSIZE);
 
     // Only proceed if the source buffer contains the right amount of data
-    if (numBlocks * bsize != size) throw VAError(ERROR_FS_WRONG_CAPACITY);
+    if (numBytes() != size) throw VAError(ERROR_FS_WRONG_CAPACITY);
 
     // Only proceed if all partitions contain a valid file system
     if (dos == FS_NODOS) throw VAError(ERROR_FS_UNSUPPORTED);
         
     // Import all blocks
-    for (isize i = 0; i < numBlocks; i++) {
+    for (isize i = 0; i < numBlocks(); i++) {
         
         const u8 *data = src + i * bsize;
         
@@ -1199,13 +1199,13 @@ FSDevice::importVolume(const u8 *src, isize size)
 bool
 FSDevice::exportVolume(u8 *dst, isize size) const
 {
-    return exportBlocks(0, (Block)(numBlocks - 1), dst, size);
+    return exportBlocks(0, (Block)(numBlocks() - 1), dst, size);
 }
 
 bool
 FSDevice::exportVolume(u8 *dst, isize size, ErrorCode *err) const
 {
-    return exportBlocks(0, (Block)(numBlocks - 1), dst, size, err);
+    return exportBlocks(0, (Block)(numBlocks() - 1), dst, size, err);
 }
 
 bool
@@ -1233,7 +1233,7 @@ FSDevice::exportBlocks(Block first, Block last, u8 *dst, isize size) const
 bool
 FSDevice::exportBlocks(Block first, Block last, u8 *dst, isize size, ErrorCode *err) const
 {
-    assert(last < (Block)numBlocks);
+    assert(last < (Block)numBlocks());
     assert(first <= last);
     assert(dst);
     
