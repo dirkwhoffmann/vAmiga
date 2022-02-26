@@ -128,7 +128,7 @@ FSDevice::init(DiskDiameter dia, DiskDensity den, const string &path)
 }
 
 void
-FSDevice::init(ADFFile &adf)
+FSDevice::init(const ADFFile &adf)
 {
     // Get a device descriptor for the ADF
     FSDeviceDescriptor descriptor = adf.layout();
@@ -141,7 +141,7 @@ FSDevice::init(ADFFile &adf)
 }
 
 void
-FSDevice::init(HDFFile &hdf, isize partition)
+FSDevice::init(const HDFFile &hdf, isize partition)
 {
     printf("Getting layout for partition %ld\n", partition);
     
@@ -163,12 +163,11 @@ FSDevice::init(HDFFile &hdf, isize partition)
     auto diff = ptr - hdf.data;
     printf("Skipping %ld.%ld blocks\n", diff / 512, diff % 512);
     
-    // importVolume(hdf.data, hdf.size);
     importVolume(ptr, descriptor.numBlocks * 512);
 }
 
 void
-FSDevice::init(class Drive &drive)
+FSDevice::init(Drive &drive)
 {
     auto adf = ADFFile(drive);
     init(adf);

@@ -173,7 +173,7 @@ ADFFile::numSectors() const
 }
 
 FSDeviceDescriptor
-ADFFile::layout()
+ADFFile::layout() const
 {
     FSDeviceDescriptor result;
     

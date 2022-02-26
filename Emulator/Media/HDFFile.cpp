@@ -191,7 +191,7 @@ HDFFile::layout()
 */
 
 FSDeviceDescriptor
-HDFFile::layoutOfPartition(isize nr)
+HDFFile::layoutOfPartition(isize nr) const
 {
     FSDeviceDescriptor result;
         
@@ -263,7 +263,7 @@ HDFFile::layoutOfPartition(isize nr)
 }
 
 u8 *
-HDFFile::dataForPartition(isize nr)
+HDFFile::dataForPartition(isize nr) const
 {
     auto &part = driveSpec.partitions[nr];
     return data + part.lowCyl * part.heads * part.sectors * 512;
@@ -402,13 +402,13 @@ HDFFile::addDefaultPartition()
 }
 
 u8 *
-HDFFile::seekBlock(isize nr)
+HDFFile::seekBlock(isize nr) const
 {
     return nr >= 0 && 512 * (nr + 1) <= size ? data + (512 * nr) : nullptr;
 }
 
 u8 *
-HDFFile::seekRDB()
+HDFFile::seekRDB() const
 {
     // The rigid disk block must be among the first 16 blocks
     for (isize i = 0; i < 16; i++) {
@@ -420,7 +420,7 @@ HDFFile::seekRDB()
 }
 
 u8 *
-HDFFile::seekPB(isize nr)
+HDFFile::seekPB(isize nr) const
 {
     u8 *result = nullptr;
     
@@ -443,7 +443,7 @@ HDFFile::seekPB(isize nr)
 }
 
 FSVolumeType
-HDFFile::dos(isize blockNr)
+HDFFile::dos(isize blockNr) const
 {
     if (auto block = seekBlock(blockNr); block) {
         

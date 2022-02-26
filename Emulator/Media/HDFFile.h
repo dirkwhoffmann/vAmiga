@@ -19,10 +19,7 @@ class HDFFile : public AmigaFile {
     
     // Collected device information
     HardDriveSpec driveSpec;
-    
-    // Geometry of this hard drive
-    // DiskGeometry geometry;
-        
+            
 public:
     
     static bool isCompatible(const string &path);
@@ -83,8 +80,8 @@ public:
     isize bsize() const;
 
     // struct FSDeviceDescriptor layout();
-    struct FSDeviceDescriptor layoutOfPartition(isize nr);
-    u8 *dataForPartition(isize nr);
+    struct FSDeviceDescriptor layoutOfPartition(isize nr) const;
+    u8 *dataForPartition(isize nr) const;
     
     // Computes all possible drive geometries
     std::vector<DiskGeometry> driveGeometries(isize fileSize);
@@ -108,13 +105,13 @@ private:
     void addDefaultPartition();
 
     // Returns a pointer to a certain block if it exists
-    u8 *seekBlock(isize nr);
+    u8 *seekBlock(isize nr) const;
     
     // Return a pointer to the Rigid Disk Block if it exists
-    u8 *seekRDB();
+    u8 *seekRDB() const;
     
     // Returns a pointer to a certain partition block if it exists
-    u8 *seekPB(isize nr);
+    u8 *seekPB(isize nr) const;
     
     
     //
@@ -124,7 +121,7 @@ private:
 private:
     
     // Extracts the DOS revision number from a certain block
-    FSVolumeType dos(isize blockNr);
+    FSVolumeType dos(isize blockNr) const;
     
     
 };

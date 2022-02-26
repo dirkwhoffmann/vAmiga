@@ -18,6 +18,11 @@
 #include <stack>
 #include <set>
 
+class ADFFile;
+class HDFFile;
+class Drive;
+class HardDrive;
+
 /* This class provides the basic functionality of the Amiga File Systems OFS
  * and FFS. Starting from an empty volume, files can be added or removed,
  * and boot blocks can be installed. Furthermore, functionality is provided to
@@ -31,27 +36,26 @@ class FSDevice : public AmigaObject {
     friend struct FSPartition;
 
 protected:
-            
-    // Layout parameters
-    isize numReserved = 0;
-    isize bsize = 0;
-            
+                        
     // File system version
     FSVolumeType dos = FS_NODOS;
     
     // Block storage
     std::vector<BlockPtr> blocks;
-                
+            
+    // Size of a single block in bytes
+    isize bsize = 0;
+
+    // Number of reserved blocks
+    isize numReserved = 0;
+
     // Location of the root block
     Block rootBlock = 0;
     
     // Location of the bitmap blocks and extended bitmap blocks
     std::vector<Block> bmBlocks;
     std::vector<Block> bmExtBlocks;
-    
-    // The currently selected partition
-    isize cp = 0;
-    
+        
     // The currently selected directory (reference to FSDirBlock)
     Block cd = 0;
     
@@ -66,12 +70,10 @@ public:
     FSDevice(FSDeviceDescriptor &layout) { init(layout); }
     FSDevice(DiskDiameter dia, DiskDensity den) { init(dia, den); }
     FSDevice(DiskDiameter dia, DiskDensity den, const string &path) { init(dia, den, path); }
-    FSDevice(class ADFFile &adf) throws { init(adf); }
-    // [[deprecated]] FSDevice(class HDFFile &hdf) throws { init(hdf); }
-    FSDevice(class HDFFile &hdf, isize partition) throws { init(hdf, partition); }
-    FSDevice(class Drive &drive) throws { init(drive); }
-    // [[deprecated]] FSDevice(const class HardDrive &drive) throws { init(drive); }
-    FSDevice(const class HardDrive &drive, isize partition) throws { init(drive, partition); }
+    FSDevice(const ADFFile &adf) throws { init(adf); }
+    FSDevice(const HDFFile &hdf, isize part) throws { init(hdf, part); }
+    FSDevice(Drive &drive) throws { init(drive); }
+    FSDevice(const HardDrive &drive, isize part) throws { init(drive, part); }
     FSDevice(FSVolumeType type, const string &path) { init(type, path); }
     ~FSDevice();
     
@@ -81,12 +83,10 @@ private:
     void init(FSDeviceDescriptor &layout);
     void init(DiskDiameter type, DiskDensity density);
     void init(DiskDiameter type, DiskDensity density, const string &path);
-    void init(class ADFFile &adf) throws;
-    // void init(class HDFFile &hdf) throws;
-    void init(class HDFFile &hdf, isize partition) throws;
-    void init(class Drive &drive) throws;
-    // void init(const class HardDrive &drive) throws;
-    void init(const class HardDrive &drive, isize partition) throws;
+    void init(const ADFFile &adf) throws;
+    void init(const HDFFile &hdf, isize part) throws;
+    void init(Drive &drive) throws;
+    void init(const HardDrive &drive, isize part) throws;
     void init(FSVolumeType type, const string &path);
 
     void initBlocks(FSDeviceDescriptor &layout);
@@ -98,7 +98,7 @@ private:
     
 private:
     
-    const char *getDescription() const override { return "FSVolume"; }
+    const char *getDescription() const override { return "FSDevice"; }
     void _dump(dump::Category category, std::ostream& os) const override;
     
 
@@ -112,17 +112,7 @@ public:
     isize numBlocks() const { return isize(blocks.size()); }
     isize numBytes() const { return numBlocks() * bsize; }
 
-    
-    //
-    // Querying file system properties
-    //
-    
-    // Returns the DOS version
-    FSVolumeType getDos() const { return dos; }
-    bool isOFS() const { return isOFSVolumeType(dos); }
-    bool isFFS() const { return isFFSVolumeType(dos); }
-
-    // Reports usage information about this partition
+    // Reports usage information
     isize freeBlocks() const;
     isize usedBlocks() const;
     isize freeBytes() const;
@@ -130,11 +120,16 @@ public:
 
     
     //
-    // Working with the root block
+    // Querying file system properties
     //
     
 public:
     
+    // Returns the DOS version
+    FSVolumeType getDos() const { return dos; }
+    bool isOFS() const { return isOFSVolumeType(dos); }
+    bool isFFS() const { return isFFSVolumeType(dos); }
+
     // Gets or sets the volume name
     FSName getName() const;
     void setName(FSName name);
@@ -352,7 +347,7 @@ public:
     // Reads a single byte from a block
     u8 readByte(Block nr, isize offset) const;
 
-    // Predicts the type of a block by analyzing its number and data (DEPRECATED)
+    // Predicts the type of a block by analyzing its number and data
     FSBlockType predictBlockType(Block nr, const u8 *buffer);
 
     // Imports the volume from a buffer compatible with the ADF format

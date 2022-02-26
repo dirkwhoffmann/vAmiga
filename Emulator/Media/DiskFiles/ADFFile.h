@@ -111,7 +111,7 @@ private:
 public:
 
     // Returns the layout of this disk in form of a device descriptor
-    struct FSDeviceDescriptor layout();
+    struct FSDeviceDescriptor layout() const;
     
     
     //
