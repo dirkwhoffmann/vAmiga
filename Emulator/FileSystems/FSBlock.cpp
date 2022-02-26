@@ -1618,8 +1618,8 @@ FSBlock::addData(const u8 *buffer, isize size)
             assert(getFileSize() == 0);
                 
             // Compute the required number of blocks
-            isize numDataBlocks = partition.requiredDataBlocks(size);
-            isize numListBlocks = partition.requiredFileListBlocks(size);
+            isize numDataBlocks = partition.dev.requiredDataBlocks(size);
+            isize numListBlocks = partition.dev.requiredFileListBlocks(size);
             
             debug(FS_DEBUG, "Required data blocks : %ld\n", numDataBlocks);
             debug(FS_DEBUG, "Required list blocks : %ld\n", numListBlocks);
@@ -1633,13 +1633,13 @@ FSBlock::addData(const u8 *buffer, isize size)
             for (Block ref = nr, i = 0; i < (Block)numListBlocks; i++) {
 
                 // Add a new file list block
-                ref = partition.addFileListBlock(nr, ref);
+                ref = partition.dev.addFileListBlock(nr, ref);
             }
             
             for (Block ref = nr, i = 1; i <= (Block)numDataBlocks; i++) {
 
                 // Add a new data block
-                ref = partition.addDataBlock(i, nr, ref);
+                ref = partition.dev.addDataBlock(i, nr, ref);
 
                 // Add references to the new data block
                 addDataBlockRef(ref, ref);

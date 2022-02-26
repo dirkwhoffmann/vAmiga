@@ -397,6 +397,164 @@ FSDevice::hashableBlockPtr(Block nr)
     return nullptr;
 }
 
+isize
+FSDevice::requiredDataBlocks(isize fileSize) const
+{
+    // Compute the capacity of a single data block
+    isize numBytes = bsize - (isOFS() ? 24 : 0);
+
+    // Compute the required number of data blocks
+    return (fileSize + numBytes - 1) / numBytes;
+}
+
+isize
+FSDevice::requiredFileListBlocks(isize fileSize) const
+{
+    // Compute the required number of data blocks
+    isize numBlocks = requiredDataBlocks(fileSize);
+    
+    // Compute the number of data block references in a single block
+    isize numRefs = (bsize / 4) - 56;
+
+    // Small files do not require any file list block
+    if (numBlocks <= numRefs) return 0;
+
+    // Compute the required number of additional file list blocks
+    return (numBlocks - 1) / numRefs;
+}
+
+isize
+FSDevice::requiredBlocks(isize fileSize) const
+{
+    isize numDataBlocks = requiredDataBlocks(fileSize);
+    isize numFileListBlocks = requiredFileListBlocks(fileSize);
+    
+    debug(FS_DEBUG, "Required file header blocks : %d\n",  1);
+    debug(FS_DEBUG, "       Required data blocks : %ld\n", numDataBlocks);
+    debug(FS_DEBUG, "  Required file list blocks : %ld\n", numFileListBlocks);
+    debug(FS_DEBUG, "                Free blocks : %ld\n", freeBlocks());
+    
+    return 1 + numDataBlocks + numFileListBlocks;
+}
+ 
+Block
+FSDevice::allocateBlock()
+{
+    if (Block nr = allocateBlockAbove(partition->rootBlock)) return nr;
+    if (Block nr = allocateBlockBelow(partition->rootBlock)) return nr;
+
+    return 0;
+}
+
+Block
+FSDevice::allocateBlockAbove(Block nr)
+{
+    assert(nr >= 0 && nr < numBlocks);
+    
+    for (i64 i = (i64)nr + 1; i < numBlocks; i++) {
+        if (blocks[i]->type == FS_EMPTY_BLOCK) {
+            partition->markAsAllocated((Block)i);
+            return (Block)i;
+        }
+    }
+    return 0;
+}
+
+Block
+FSDevice::allocateBlockBelow(Block nr)
+{
+    assert(nr >= 0 && nr < numBlocks);
+
+    for (i64 i = (i64)nr - 1; i >= 0; i--) {
+        if (blocks[i]->type == FS_EMPTY_BLOCK) {
+            partition->markAsAllocated((Block)i);
+            return (Block)i;
+        }
+    }
+    return 0;
+}
+
+void
+FSDevice::deallocateBlock(Block nr)
+{
+    assert(nr >= 0 && nr < numBlocks);
+    assert(blocks[nr]);
+    
+    delete blocks[nr];
+    blocks[nr] = new FSBlock(*partition, nr, FS_EMPTY_BLOCK);
+    partition->markAsFree(nr);
+}
+
+Block
+FSDevice::addFileListBlock(Block head, Block prev)
+{
+    FSBlock *prevBlock = blockPtr(prev);
+    if (!prevBlock) return 0;
+    
+    Block nr = allocateBlock();
+    if (!nr) return 0;
+    
+    blocks[nr] = new FSBlock(*partition, nr, FS_FILELIST_BLOCK);
+    blocks[nr]->setFileHeaderRef(head);
+    prevBlock->setNextListBlockRef(nr);
+    
+    return nr;
+}
+
+Block
+FSDevice::addDataBlock(isize count, Block head, Block prev)
+{
+    FSBlock *prevBlock = blockPtr(prev);
+    if (!prevBlock) return 0;
+
+    Block nr = allocateBlock();
+    if (!nr) return 0;
+
+    FSBlock *newBlock;
+    if (isOFS()) {
+        newBlock = new FSBlock(*partition, nr, FS_DATA_BLOCK_OFS);
+    } else {
+        newBlock = new FSBlock(*partition, nr, FS_DATA_BLOCK_FFS);
+    }
+    
+    blocks[nr] = newBlock;
+    newBlock->setDataBlockNr((Block)count);
+    newBlock->setFileHeaderRef(head);
+    prevBlock->setNextDataBlockRef(nr);
+    
+    return nr;
+}
+
+FSBlock *
+FSDevice::newUserDirBlock(const string &name)
+{
+    FSBlock *block = nullptr;
+    
+    if (Block nr = allocateBlock()) {
+    
+        block = new FSBlock(*partition, nr, FS_USERDIR_BLOCK);
+        block->setName(FSName(name));
+        blocks[nr] = block;
+    }
+    
+    return block;
+}
+
+FSBlock *
+FSDevice::newFileHeaderBlock(const string &name)
+{
+    FSBlock *block = nullptr;
+    
+    if (Block nr = allocateBlock()) {
+
+        block = new FSBlock(*partition, nr, FS_FILEHEADER_BLOCK);
+        block->setName(FSName(name));
+        blocks[nr] = block;
+    }
+    
+    return block;
+}
+
 void
 FSDevice::updateChecksums()
 {
@@ -480,7 +638,7 @@ FSBlock *
 FSDevice::createDir(const string &name)
 {
     FSBlock *cdb = currentDirBlock();
-    FSBlock *block = cdb->partition.newUserDirBlock(name);
+    FSBlock *block = newUserDirBlock(name);
     if (block == nullptr) return nullptr;
     
     block->setParentDirRef(cdb->nr);
@@ -493,7 +651,7 @@ FSBlock *
 FSDevice::createFile(const string &name)
 {
     FSBlock *cdb = currentDirBlock();
-    FSBlock *block = cdb->partition.newFileHeaderBlock(name);
+    FSBlock *block = newFileHeaderBlock(name);
     if (block == nullptr) return nullptr;
     
     block->setParentDirRef(cdb->nr);

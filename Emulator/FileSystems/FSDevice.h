@@ -194,6 +194,27 @@ public:
     
 public:
     
+    // Returns the number of required blocks to store a file of certain size
+    isize requiredDataBlocks(isize fileSize) const;
+    isize requiredFileListBlocks(isize fileSize) const;
+    isize requiredBlocks(isize fileSize) const;
+
+    // Seeks a free block and marks it as allocated
+    Block allocateBlock();
+    Block allocateBlockAbove(Block nr);
+    Block allocateBlockBelow(Block nr);
+
+    // Deallocates a block
+    void deallocateBlock(Block nr);
+
+    // Adds a new block of a certain kind
+    Block addFileListBlock(Block head, Block prev);
+    Block addDataBlock(isize count, Block head, Block prev);
+    
+    // Creates a new block of a certain kind
+    FSBlock *newUserDirBlock(const string &name);
+    FSBlock *newFileHeaderBlock(const string &name);
+    
     // Updates the checksums in all blocks
     void updateChecksums();
     
