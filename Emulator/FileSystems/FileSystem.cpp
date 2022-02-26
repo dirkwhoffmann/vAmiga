@@ -283,6 +283,62 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
     return bm;
 }
 
+void
+FileSystem::collect(Block nr, std::vector<Block> &result, bool recursive)
+{
+    std::stack<Block> remainingItems;
+    std::set<Block> visited;
+    
+    // Start with the items in this block
+    collectHashedRefs(nr, remainingItems, visited);
+    
+    // Move the collected items to the result list
+    while (remainingItems.size() > 0) {
+        
+        Block item = remainingItems.top();
+        remainingItems.pop();
+        result.push_back(item);
+
+        // Add subdirectory items to the queue
+        if (userDirBlockPtr(item) && recursive) {
+            collectHashedRefs(item, remainingItems, visited);
+        }
+    }
+}
+
+void
+FileSystem::collectHashedRefs(Block nr,
+                            std::stack<Block> &result, std::set<Block> &visited)
+{
+    if (FSBlock *b = blockPtr(nr)) {
+        
+        // Walk through the hash table in reverse order
+        for (isize i = (isize)b->hashTableSize(); i >= 0; i--) {
+            collectRefsWithSameHashValue(b->getHashRef((u32)i), result, visited);
+        }
+    }
+}
+
+void
+FileSystem::collectRefsWithSameHashValue(Block nr,
+                                       std::stack<Block> &result, std::set<Block> &visited)
+{
+    std::stack<Block> refs;
+    
+    // Walk down the linked list
+    for (FSBlock *b = hashableBlockPtr(nr); b; b = b->getNextHashBlock()) {
+
+        // Only proceed if we haven't seen this block yet
+        if (visited.find(b->nr) != visited.end()) throw VAError(ERROR_FS_HAS_CYCLES);
+
+        visited.insert(b->nr);
+        refs.push(b->nr);
+    }
+  
+    // Push the collected elements onto the result stack
+    while (refs.size() > 0) { result.push(refs.top()); refs.pop(); }
+}
+
 FSErrorReport
 FileSystem::check(bool strict) const
 {

@@ -167,28 +167,6 @@ public:
     FSBlock *lastHashBlockInChain(FSBlock *block);
 
     
-    //
-    // Traversing the file system
-    //
-    
-public:
-    
-    // Returns a collections of nodes for all items in the current directory
-    void collect(Block nr, std::vector<Block> &list, bool recursive = true) throws;
-    
-private:
-    
-    // Collects all references stored in a hash table
-    void collectHashedRefs(Block nr, std::stack<Block> &list,
-                           std::set<Block> &visited) throws;
-    
-    // Collects all references with the same hash value
-    void collectRefsWithSameHashValue(Block nr, std::stack<Block> &list,
-                                      std::set<Block> &visited) throws;
-
- 
-
-    
     
     //
     // Importing and exporting
