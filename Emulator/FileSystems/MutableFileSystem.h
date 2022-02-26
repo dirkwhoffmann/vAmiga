@@ -56,7 +56,7 @@ private:
     
 private:
     
-    // const char *getDescription() const override { return "FSDevice"; }
+    // TODO: MOVE TO FILESYSTEM
     void _dump(dump::Category category, std::ostream& os) const override;
 
     
@@ -67,8 +67,8 @@ private:
 public:
                 
     // Returns the capacity of this volume
-    isize numBlocks() const { return isize(blocks.size()); }
-    isize numBytes() const { return numBlocks() * bsize; }
+    // isize numBlocks() const { return isize(blocks.size()); }
+    // isize numBytes() const { return numBlocks() * bsize; }
 
     // Reports usage information
     isize freeBlocks() const;
@@ -106,33 +106,6 @@ public:
     
     
     //
-    // Accessing blocks
-    //
-    
-public:
-    
-    // Returns the type of a certain block
-    FSBlockType blockType(Block nr);
-
-    // Returns the usage type of a certain byte in a certain block
-    FSItemType itemType(Block nr, isize pos) const;
-    
-    // Queries a pointer from the block storage (may return nullptr)
-    FSBlock *blockPtr(Block nr) const;
-
-    // Queries a pointer to a block of a certain type (may return nullptr)
-    FSBlock *bootBlockPtr(Block nr);
-    FSBlock *rootBlockPtr(Block nr) const;
-    FSBlock *bitmapBlockPtr(Block nr) const;
-    FSBlock *bitmapExtBlockPtr(Block nr);
-    FSBlock *userDirBlockPtr(Block nr);
-    FSBlock *fileHeaderBlockPtr(Block nr);
-    FSBlock *fileListBlockPtr(Block nr);
-    FSBlock *dataBlockPtr(Block nr);
-    FSBlock *hashableBlockPtr(Block nr);
-    
-    
-    //
     // Creating and deleting blocks
     //
     
@@ -164,29 +137,17 @@ public:
     
     
     //
-    // Working with the block allocation bitmap
+    // Edit the block allocation bitmap
     //
 
 public:
-    
-    // Returns the bitmap block storing the allocation bit for a certain block
-    FSBlock *bmBlockForBlock(Block nr);
-
-    // Checks if a block is marked as free in the allocation bitmap
-    bool isFree(Block nr) const;
-    
+        
     // Marks a block as allocated or free
     void markAsAllocated(Block nr) { setAllocationBit(nr, 0); }
     void markAsFree(Block nr) { setAllocationBit(nr, 1); }
     void setAllocationBit(Block nr, bool value);
 
-    
-private:
-    
-    // Locates the allocation bit for a certain block
-    FSBlock *locateAllocationBit(Block nr, isize *byte, isize *bit) const;
-    
-    
+
     //
     // Managing directories and files
     //
@@ -273,7 +234,7 @@ public:
     ErrorCode check(Block nr, isize pos, u8 *expected, bool strict) const;
 
     // Checks if the block with the given number is part of the volume
-    bool isBlockNumber(isize nr) const { return nr >= 0 && nr < numBlocks(); }
+    // bool isBlockNumber(isize nr) const { return nr >= 0 && nr < numBlocks(); }
 
     // Checks if the type of a block matches one of the provides types
     ErrorCode checkBlockType(Block nr, FSBlockType type);
