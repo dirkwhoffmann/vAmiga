@@ -9,9 +9,10 @@
 
 #pragma once
 
-#include "FSObjects.h"
-#include "FSPartition.h"
+#include "FSTypes.h"
 #include "FSBlock.h"
+#include "FSDescriptors.h"
+#include "FSObjects.h"
 #include "ADFFile.h"
 #include "HDFFile.h"
 #include <stack>
@@ -43,9 +44,6 @@ protected:
             
     // File system version
     FSVolumeType dos = FS_NODOS;
-
-    // The partition table
-    FSPartitionPtr partition = nullptr;
     
     // Block storage
     std::vector<BlockPtr> blocks;

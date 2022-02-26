@@ -32,18 +32,14 @@ FSDevice::init(FSDeviceDescriptor &layout)
     if constexpr (FS_DEBUG) { layout.dump(); }
     
     // Copy layout parameters from the descriptor
-    numCyls    = layout.geometry.cylinders;
-    numHeads   = layout.geometry.heads;
-    numSectors = layout.geometry.sectors;
-    bsize      = layout.geometry.bsize;
-    numBlocks  = layout.numBlocks;
+    numCyls     = layout.geometry.cylinders;
+    numHeads    = layout.geometry.heads;
+    numSectors  = layout.geometry.sectors;
+    bsize       = layout.geometry.bsize;
+    numBlocks   = layout.numBlocks;
         
     // Copy file system parameters from the descriptor
-    dos        = layout.dos;
-    
-    // Create partition
-    // partition = new FSPartition(*this, layout);
-    partition = new FSPartition();
+    dos         = layout.dos;
     rootBlock   = layout.rootBlock;
     bmBlocks    = layout.bmBlocks;
     bmExtBlocks = layout.bmExtBlocks;
@@ -199,7 +195,6 @@ FSDevice::init(FSVolumeType type, const string &path)
 
 FSDevice::~FSDevice()
 {
-    delete partition;
     for (auto &b : blocks) delete b;
 }
 
