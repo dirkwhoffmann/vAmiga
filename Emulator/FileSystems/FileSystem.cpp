@@ -283,6 +283,117 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
     return bm;
 }
 
+FSBlock *
+FileSystem::currentDirBlock()
+{
+    FSBlock *cdb = blockPtr(cd);
+    
+    if (cdb) {
+        if (cdb->type == FS_ROOT_BLOCK || cdb->type == FS_USERDIR_BLOCK) {
+            return cdb;
+        }
+    }
+    
+    // The block reference is invalid. Switch back to the root directory
+    cd = rootBlock;
+    return blockPtr(cd);
+}
+
+FSBlock *
+FileSystem::changeDir(const string &name)
+{
+    FSBlock *cdb = currentDirBlock();
+
+    if (name == "/") {
+                
+        // Move to top level
+        cd = rootBlock;
+        return currentDirBlock();
+    }
+
+    if (name == "..") {
+                
+        // Move one level up
+        cd = cdb->getParentDirRef();
+        return currentDirBlock();
+    }
+    
+    FSBlock *subdir = seekDir(name);
+    if (subdir == nullptr) return cdb;
+    
+    // Move one level down
+    cd = subdir->nr;
+    return currentDirBlock();
+}
+
+void
+FileSystem::printDirectory(bool recursive)
+{
+    std::vector<Block> items;
+    collect(cd, items);
+    
+    for (auto const& i : items) {
+        msg("%s\n", getPath(i).c_str());
+    }
+    msg("%zu items\n", items.size());
+}
+
+string
+FileSystem::getPath(FSBlock *block)
+{
+    string result = "";
+    std::set<Block> visited;
+ 
+    while(block) {
+
+        // Break the loop if this block has an invalid type
+        if (!hashableBlockPtr(block->nr)) break;
+
+        // Break the loop if this block was visited before
+        if (visited.find(block->nr) != visited.end()) break;
+        
+        // Add the block to the set of visited blocks
+        visited.insert(block->nr);
+                
+        // Expand the path
+        string name = block->getName().c_str();
+        result = (result == "") ? name : name + "/" + result;
+        
+        // Continue with the parent block
+        block = block->getParentDirBlock();
+    }
+    
+    return result;
+}
+
+Block
+FileSystem::seekRef(FSName name)
+{
+    std::set<Block> visited;
+    
+    // Only proceed if a hash table is present
+    FSBlock *cdb = currentDirBlock();
+    if (!cdb || cdb->hashTableSize() == 0) return 0;
+    
+    // Compute the table position and read the item
+    u32 hash = name.hashValue() % cdb->hashTableSize();
+    u32 ref = cdb->getHashRef(hash);
+    
+    // Traverse the linked list until the item has been found
+    while (ref && visited.find(ref) == visited.end())  {
+        
+        FSBlock *item = hashableBlockPtr(ref);
+        if (item == nullptr) break;
+        
+        if (item->isNamed(name)) return item->nr;
+
+        visited.insert(ref);
+        ref = item->getNextHashRef();
+    }
+
+    return 0;
+}
+
 void
 FileSystem::collect(Block nr, std::vector<Block> &result, bool recursive)
 {

@@ -120,27 +120,6 @@ public:
     
 public:
     
-    // Returns the block representing the current directory
-    FSBlock *currentDirBlock();
-    
-    // Changes the current directory
-    FSBlock *changeDir(const string &name);
-
-    // Prints a directory listing
-    void printDirectory(bool recursive) throws;
-
-    // Returns the path of a file system item
-    string getPath(FSBlock *block);
-    string getPath(Block nr) { return getPath(blockPtr(nr)); }
-    string getPath() { return getPath(currentDirBlock()); }
-
-    // Seeks an item inside the current directory
-    Block seekRef(FSName name);
-    Block seekRef(const string &name) { return seekRef(FSName(name)); }
-    FSBlock *seek(const string &name) { return blockPtr(seekRef(name)); }
-    FSBlock *seekDir(const string &name) { return userDirBlockPtr(seekRef(name)); }
-    FSBlock *seekFile(const string &name) { return fileHeaderBlockPtr(seekRef(name)); }
-
     // Adds a reference to the current directory
     void addHashRef(Block nr);
     void addHashRef(FSBlock *block);
