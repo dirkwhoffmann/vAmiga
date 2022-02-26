@@ -858,8 +858,8 @@
                         </items>
                     </menu>
                 </menuItem>
-                <menuItem title="Dh0" tag="2" id="OYE-xa-ahL">
-                    <menu key="submenu" title="Dh0" id="MOM-vZ-zP1">
+                <menuItem title="Hd0" tag="2" id="OYE-xa-ahL">
+                    <menu key="submenu" title="Hd0" id="MOM-vZ-zP1">
                         <items>
                             <menuItem title="New..." id="bfU-Wh-UO2">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -974,10 +974,16 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="qgs-Zf-fdv"/>
-                            <menuItem title="Inspect..." id="1m9-KG-jpf" userLabel="Export disk">
+                            <menuItem title="Inspect Disk..." id="1m9-KG-jpf" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="inspectHdrAction:" target="-1" id="x0b-KS-HXt"/>
+                                    <action selector="inspectHdrDiskAction:" target="-1" id="AVN-YM-7qs"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Inspect Volumes..." id="TeC-En-Kma" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="inspectHdrVolumeAction:" target="-1" id="VOg-UK-uyN"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Geometry..." id="m49-PT-hWb" userLabel="Export disk">
@@ -989,8 +995,8 @@
                         </items>
                     </menu>
                 </menuItem>
-                <menuItem title="Dh1" tag="2" id="SoY-x2-Dd4" userLabel="Dh1">
-                    <menu key="submenu" title="Dh1" id="S1E-qU-fjf">
+                <menuItem title="Hd1" tag="2" id="SoY-x2-Dd4">
+                    <menu key="submenu" title="Hd1" id="S1E-qU-fjf">
                         <items>
                             <menuItem title="New..." tag="1" id="Ogz-R4-cpt">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -1120,8 +1126,8 @@
                         </items>
                     </menu>
                 </menuItem>
-                <menuItem title="Dh2" tag="2" id="Cna-Xa-SNM" userLabel="Dh2">
-                    <menu key="submenu" title="Dh2" id="Pad-Bd-B3D">
+                <menuItem title="Hd2" tag="2" id="Cna-Xa-SNM">
+                    <menu key="submenu" title="Hd2" id="Pad-Bd-B3D">
                         <items>
                             <menuItem title="New..." tag="2" id="74m-nj-pF7">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -1251,8 +1257,8 @@
                         </items>
                     </menu>
                 </menuItem>
-                <menuItem title="Dh3" tag="2" id="zgt-H4-oPS" userLabel="Dh3">
-                    <menu key="submenu" title="Dh3" id="Asl-av-cEm">
+                <menuItem title="Hd3" tag="2" id="zgt-H4-oPS">
+                    <menu key="submenu" title="Hd3" id="Asl-av-cEm">
                         <items>
                             <menuItem title="New..." tag="3" id="whu-bJ-VAj">
                                 <modifierMask key="keyEquivalentModifierMask"/>

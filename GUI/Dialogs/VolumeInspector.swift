@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class DiskInspector: DialogController {
+class VolumeInspector: DialogController {
         
     var myDocument: MyDocument { return parent.mydocument! }
 
@@ -628,7 +628,7 @@ class DiskInspector: DialogController {
 // Extensions
 //
 
-extension DiskInspector: NSWindowDelegate {
+extension VolumeInspector: NSWindowDelegate {
     
     func windowDidResize(_ notification: Notification) {
         
@@ -646,7 +646,7 @@ extension DiskInspector: NSWindowDelegate {
      }
 }
 
-extension DiskInspector: NSTableViewDataSource {
+extension VolumeInspector: NSTableViewDataSource {
     
     func columnNr(_ column: NSTableColumn?) -> Int? {
         
@@ -680,7 +680,7 @@ extension DiskInspector: NSTableViewDataSource {
     }
 }
 
-extension DiskInspector: NSTableViewDelegate {
+extension VolumeInspector: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
 

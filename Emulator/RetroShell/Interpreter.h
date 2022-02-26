@@ -21,7 +21,7 @@ enum class Token
     bitplanes, blitter, brightness, channel, checksums, chip, cia, clear, close,
     clxsprspr, clxsprplf, clxplfplf, color, config, connect, contrast,
     controlport, copper, cpu, cutout, dc, debug, delay, denise, detach, device,
-    devices, dfn, dhn, disable, disconnect, disk, dma, dmadebugger, dsksync,
+    devices, dfn, hdn, disable, disconnect, disk, dma, dmadebugger, dsksync,
     easteregg, eject, enable, esync, events, execbase, extrom, extstart, fast,
     filename, filesystem, filter, gdb, geometry, help, hide, init, info, insert,
     inspect, interrupts, joystick, jump, keyboard, keyset, layers, left,

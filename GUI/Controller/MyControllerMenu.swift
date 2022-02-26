@@ -617,11 +617,11 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func inspectDiskAction(_ sender: NSMenuItem!) {
         
-        let nibName = NSNib.Name("DiskInspector")
-        let exportPanel = DiskInspector.make(parent: self, nibName: nibName)
+        let nibName = NSNib.Name("VolumeInspector")
+        let exportPanel = VolumeInspector.make(parent: self, nibName: nibName)
         exportPanel?.showSheet(diskDrive: sender.tag)
     }
-    
+
     //
     // Action methods (Hard drive menu)
     //
@@ -754,10 +754,20 @@ extension MyController: NSMenuItemValidation {
         exportPanel?.showSheet(hardDrive: sender.tag)
     }
     
-    @IBAction func inspectHdrAction(_ sender: NSMenuItem!) {
+    @IBAction func inspectHdrDiskAction(_ sender: NSMenuItem!) {
         
-        let nibName = NSNib.Name("DiskInspector")
-        let panel = DiskInspector.make(parent: self, nibName: nibName)
+        track("TODO")
+        /*
+        let nibName = NSNib.Name("VolumeInspector")
+        let panel = VolumeInspector.make(parent: self, nibName: nibName)
+        panel?.showSheet(hardDrive: sender.tag)
+        */
+    }
+
+    @IBAction func inspectHdrVolumeAction(_ sender: NSMenuItem!) {
+        
+        let nibName = NSNib.Name("VolumeInspector")
+        let panel = VolumeInspector.make(parent: self, nibName: nibName)
         panel?.showSheet(hardDrive: sender.tag)
     }
 

@@ -945,59 +945,59 @@ Interpreter::registerInstructions()
     }
 
     //
-    // Dh0, Dh1, Dh2, Dh3
+    // Hd0, Hd1, Hd2, Hd3
     //
     
-    root.add({"dh0"},
+    root.add({"hd0"},
              "component", "Hard drive 0");
 
-    root.add({"dh1"},
+    root.add({"hd1"},
              "component", "Hard drive 1");
 
-    root.add({"dh2"},
+    root.add({"hd2"},
              "component", "Hard drive 2");
 
-    root.add({"dh3"},
+    root.add({"hd3"},
              "component", "Hard drive 3");
 
     /*
-    root.add({"dhn"},
+    root.add({"hdn"},
              "component", "All connected hard drives");
     */
     for (isize i = 0; i < 4; i++) {
         
-        string dh = "dh" + std::to_string(i);
+        string hd = "hd" + std::to_string(i);
 
-        root.add({dh, "config"},
+        root.add({hd, "config"},
                  "command", "Displays the current configuration",
-                 &RetroShell::exec <Token::dhn, Token::config>, 0, i);
+                 &RetroShell::exec <Token::hdn, Token::config>, 0, i);
 
-        root.add({dh, "inspect"},
+        root.add({hd, "inspect"},
                  "command", "Displays the component state");
 
-        root.add({dh, "inspect", "geometry"},
+        root.add({hd, "inspect", "geometry"},
                  "command", "Displays the disk geometry",
-                 &RetroShell::exec <Token::dhn, Token::inspect, Token::geometry>, 0, i);
+                 &RetroShell::exec <Token::hdn, Token::inspect, Token::geometry>, 0, i);
 
-        root.add({dh, "inspect", "volume"},
+        root.add({hd, "inspect", "volume"},
                  "command", "Displays summarized volume information",
-                 &RetroShell::exec <Token::dhn, Token::inspect, Token::volume>, 0, i);
+                 &RetroShell::exec <Token::hdn, Token::inspect, Token::volume>, 0, i);
 
-        root.add({dh, "inspect", "parameters"},
+        root.add({hd, "inspect", "parameters"},
                  "command", "Displays hard drive parameters",
-                 &RetroShell::exec <Token::dhn, Token::inspect, Token::parameters>, 0, i);
+                 &RetroShell::exec <Token::hdn, Token::inspect, Token::parameters>, 0, i);
 
-        root.add({dh, "inspect", "partitions"},
+        root.add({hd, "inspect", "partitions"},
                  "command", "Displays information about all partitions",
-                 &RetroShell::exec <Token::dhn, Token::inspect, Token::partition>, 0, i);
+                 &RetroShell::exec <Token::hdn, Token::inspect, Token::partition>, 0, i);
 
-        root.add({dh, "inspect", "state"},
+        root.add({hd, "inspect", "state"},
                  "command", "Displays the internal state",
-                 &RetroShell::exec <Token::dhn, Token::inspect, Token::state>, 0, i);
+                 &RetroShell::exec <Token::hdn, Token::inspect, Token::state>, 0, i);
 
-        root.add({dh, "geometry"},
+        root.add({hd, "geometry"},
                  "command", "Changes the disk geometry",
-                 &RetroShell::exec <Token::dhn, Token::geometry>, 3, i);
+                 &RetroShell::exec <Token::hdn, Token::geometry>, 3, i);
     }
     
     //
