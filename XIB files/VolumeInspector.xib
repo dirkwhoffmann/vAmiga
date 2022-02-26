@@ -14,13 +14,7 @@
                 <outlet property="bootInfo" destination="eNo-GE-yjO" id="mmT-1q-RKL"/>
                 <outlet property="corruptionStepper" destination="C6j-0G-lEV" id="yJc-nn-CnS"/>
                 <outlet property="corruptionText" destination="wTa-j7-Ngp" id="BHP-TJ-1k7"/>
-                <outlet property="cylinderField" destination="gsN-a1-AKx" id="eZB-JP-LWr"/>
-                <outlet property="cylinderStepper" destination="DXv-Bl-lGI" id="5T4-aw-ra5"/>
-                <outlet property="cylinderText" destination="5Re-Zr-hdG" id="HdR-lw-HQp"/>
                 <outlet property="decontaminationButton" destination="9RQ-0r-XYW" id="jle-q8-bb1"/>
-                <outlet property="headField" destination="F6v-l6-Ohg" id="S9G-ya-cbd"/>
-                <outlet property="headStepper" destination="U2d-d9-kRZ" id="azx-0j-i59"/>
-                <outlet property="headText" destination="Iu6-pw-Luw" id="PXV-AM-k25"/>
                 <outlet property="icon" destination="RFN-KV-keR" id="1Sj-nw-dxP"/>
                 <outlet property="info1" destination="G7d-0d-Bi5" id="DJN-A1-q7h"/>
                 <outlet property="info2" destination="6mo-sI-0VL" id="a6e-Nd-0fV"/>
@@ -28,14 +22,8 @@
                 <outlet property="partitionPopup" destination="bFG-nJ-BJr" id="geh-f6-4tP"/>
                 <outlet property="previewScrollView" destination="mPU-ST-UZK" id="iWY-ED-HYc"/>
                 <outlet property="previewTable" destination="X99-rT-f2a" id="dkD-KZ-3XP"/>
-                <outlet property="sectorField" destination="O0X-QE-8Xw" id="5rK-bo-5h6"/>
-                <outlet property="sectorStepper" destination="kjN-TB-Bh4" id="tle-6f-rav"/>
-                <outlet property="sectorText" destination="5fZ-6V-iLd" id="WNl-87-RUs"/>
                 <outlet property="strictButton" destination="K8I-Vh-3VH" id="tyX-Rt-etG"/>
                 <outlet property="title" destination="tXt-ZO-VKK" id="yKw-Bc-jdJ"/>
-                <outlet property="trackField" destination="5mA-IW-Lcv" id="G8K-4W-vHE"/>
-                <outlet property="trackStepper" destination="JCB-vD-1ff" id="UgQ-pP-NEg"/>
-                <outlet property="trackText" destination="RFN-QD-W4P" id="uBN-e3-BY8"/>
                 <outlet property="virus" destination="PlY-1q-QiH" id="Ous-rl-evW"/>
                 <outlet property="volumeInfo" destination="YZU-OH-0Gm" id="A8d-gQ-dHu"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="88U-4F-aC0"/>
@@ -364,123 +352,6 @@ Gw
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Re-Zr-hdG">
-                        <rect key="frame" x="18" y="290" width="56" height="19"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Cylinder" id="BmI-Xo-0oN">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gsN-a1-AKx">
-                        <rect key="frame" x="76" y="290" width="58" height="22"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="999999" drawsBackground="YES" id="goE-8r-inN">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                        <connections>
-                            <action selector="cylinderAction:" target="-2" id="PVW-sV-W2T"/>
-                            <outlet property="delegate" destination="-2" id="3ab-cZ-82W"/>
-                        </connections>
-                    </textField>
-                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DXv-Bl-lGI">
-                        <rect key="frame" x="133" y="287" width="19" height="27"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <stepperCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="999999" id="wRd-Ab-oL0"/>
-                        <connections>
-                            <action selector="cylinderStepperAction:" target="-2" id="BLC-ew-fke"/>
-                        </connections>
-                    </stepper>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Iu6-pw-Luw">
-                        <rect key="frame" x="153" y="290" width="42" height="19"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Head" id="A00-TT-W7a">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F6v-l6-Ohg">
-                        <rect key="frame" x="198" y="290" width="25" height="22"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="99" drawsBackground="YES" id="Tn8-Bh-Q3b">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                        <connections>
-                            <action selector="headAction:" target="-2" id="LvG-8Y-a28"/>
-                        </connections>
-                    </textField>
-                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U2d-d9-kRZ">
-                        <rect key="frame" x="222" y="287" width="19" height="27"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <stepperCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="999999" id="OiD-St-uOh"/>
-                        <connections>
-                            <action selector="headStepperAction:" target="-2" id="XZn-aI-cbM"/>
-                        </connections>
-                    </stepper>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RFN-QD-W4P">
-                        <rect key="frame" x="247" y="290" width="40" height="19"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Track" id="viv-zs-vvB">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5mA-IW-Lcv">
-                        <rect key="frame" x="290" y="290" width="58" height="22"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="999999" drawsBackground="YES" id="IPB-3P-ySC">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                        <connections>
-                            <action selector="trackAction:" target="-2" id="RQ1-nC-86b"/>
-                        </connections>
-                    </textField>
-                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JCB-vD-1ff">
-                        <rect key="frame" x="347" y="287" width="19" height="27"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <stepperCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="999999" id="fAN-jT-Plv"/>
-                        <connections>
-                            <action selector="trackStepperAction:" target="-2" id="Puj-hs-vzY"/>
-                        </connections>
-                    </stepper>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5fZ-6V-iLd">
-                        <rect key="frame" x="364" y="290" width="54" height="19"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Sector" id="5PY-1E-y09">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O0X-QE-8Xw">
-                        <rect key="frame" x="420" y="290" width="25" height="22"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="99" drawsBackground="YES" id="uBE-qr-zjD">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                        <connections>
-                            <action selector="sectorAction:" target="-2" id="H3h-x0-kgb"/>
-                        </connections>
-                    </textField>
-                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kjN-TB-Bh4">
-                        <rect key="frame" x="444" y="287" width="19" height="27"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <stepperCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="999999" id="lga-wh-URm"/>
-                        <connections>
-                            <action selector="sectorStepperAction:" target="-2" id="fYf-ME-0H2"/>
-                        </connections>
-                    </stepper>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="igt-RI-i5o">
                         <rect key="frame" x="469" y="290" width="41" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -562,7 +433,7 @@ Gw
                         </connections>
                     </button>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bFG-nJ-BJr">
-                        <rect key="frame" x="262" y="16" width="131" height="25"/>
+                        <rect key="frame" x="19" y="285" width="131" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" title="Partition 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Zs5-eb-0tf" id="CGQ-dC-cmU">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -580,7 +451,7 @@ Gw
                         </connections>
                     </popUpButton>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K8I-Vh-3VH">
-                        <rect key="frame" x="139" y="21" width="114" height="18"/>
+                        <rect key="frame" x="155" y="291" width="114" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="check" title="Strict checking" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Bnh-id-ngO">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
