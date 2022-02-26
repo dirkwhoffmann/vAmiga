@@ -55,6 +55,21 @@ protected:
     
     
     //
+    // Initializing
+    //
+    
+public:
+    
+    FileSystem() { };
+    FileSystem(const HDFFile &hdf, isize part) throws { init(hdf, part); }
+
+protected:
+    
+    void init(const HDFFile &hdf, isize part) throws;
+    void init(FileSystemDescriptor layout, u8 *buf, isize len) throws;
+
+    
+    //
     // Methods from AmigaObject
     //
     

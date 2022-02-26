@@ -143,6 +143,9 @@ MutableFileSystem::init(const ADFFile &adf)
 void
 MutableFileSystem::init(const HDFFile &hdf, isize partition)
 {
+    FileSystem::init(hdf, partition);
+    
+    /*
     printf("Getting layout for partition %ld\n", partition);
     
     // Get a device descriptor for the HDF
@@ -164,6 +167,7 @@ MutableFileSystem::init(const HDFFile &hdf, isize partition)
     printf("Skipping %ld.%ld blocks\n", diff / 512, diff % 512);
     
     importVolume(ptr, descriptor.numBlocks * 512);
+    */
 }
 
 void

@@ -190,6 +190,68 @@ HDFFile::layout()
 }
 */
 
+FileSystemDescriptor
+HDFFile::getFileSystemDescriptor(isize nr) const
+{
+    FileSystemDescriptor result;
+        
+    auto &part = driveSpec.partitions[nr];
+    
+    auto c = part.highCyl - part.lowCyl + 1;
+    auto h = part.heads;
+    auto s = part.sectors;
+    
+    result.numBlocks = c * h * s;
+
+    // Determine block bounds
+    auto first = part.lowCyl * h * s;
+    auto dptr = data + first * 512;
+
+    // Set the number of reserved blocks
+    result.numReserved = 2;
+
+    // Set the DOS revision
+    result.dos = dos(first);
+
+    // Only proceed if the hard drive is formatted
+    if (dos(first) == FS_NODOS) return result;
+    
+    // Determine the location of the root block
+    i64 highKey = result.numBlocks - 1;
+    i64 rootKey = (result.numReserved + highKey) / 2;
+    
+    // Add partition
+    result.rootBlock = (Block)rootKey;
+
+    // Seek bitmap blocks
+    Block ref = (Block)rootKey;
+    isize cnt = 25;
+    isize offset = 512 - 49 * 4;
+    
+    while (ref && ref < (Block)result.numBlocks) {
+
+        const u8 *p = dptr + (ref * 512) + offset;
+    
+        // Collect all references to bitmap blocks stored in this block
+        for (isize i = 0; i < cnt; i++, p += 4) {
+            if (Block bmb = FSBlock::read32(p)) {
+                if (bmb < result.numBlocks) {
+                    result.bmBlocks.push_back(bmb);
+                }
+            }
+        }
+        
+        // Continue collecting in the next extension bitmap block
+        if ((ref = FSBlock::read32(p)) != 0) {
+            if (ref < result.numBlocks) result.bmExtBlocks.push_back(ref);
+            cnt = (512 / 4) - 1;
+            offset = 0;
+        }
+    }
+    
+    return result;
+}
+
 FSDeviceDescriptor
 HDFFile::layoutOfPartition(isize nr) const
 {

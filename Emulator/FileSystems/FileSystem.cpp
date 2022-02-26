@@ -16,6 +16,69 @@
 #include <stack>
 
 void
+FileSystem::init(const HDFFile &hdf, isize part)
+{
+    printf("Getting layout for partition %ld\n", part);
+
+    // Get a file system descriptor from the HDF
+    auto descriptor = hdf.getFileSystemDescriptor(part);
+    
+    // descriptor.dump();
+    
+    printf("Done\n");
+
+    // Only proceed if the HDF is formatted
+    if (descriptor.dos == FS_NODOS) throw VAError(ERROR_HDR_UNPARTITIONED);
+    
+    // Create the device
+    // init(descriptor);
+
+    // Import file system from HDF
+    auto *ptr = hdf.dataForPartition(part);
+    auto diff = ptr - hdf.data;
+    printf("Skipping %ld.%ld blocks\n", diff / 512, diff % 512);
+    
+    init(descriptor, ptr, descriptor.numBlocks * 512); }
+
+void
+FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
+{
+    assert(buf);
+
+    debug(FS_DEBUG, "Importing file system...\n");
+
+    // Copy layout parameters
+    dos         = layout.dos;
+    numReserved = layout.numReserved;
+    rootBlock   = layout.rootBlock;
+    bmBlocks    = layout.bmBlocks;
+    bmExtBlocks = layout.bmExtBlocks;
+    
+    // Create all blocks
+    assert(blocks.empty());
+    for (isize i = 0; i < layout.numBlocks; i++) {
+        
+        const u8 *data = buf + i * bsize;
+                
+        // Determine the type of the new block
+        FSBlockType type = predictBlockType((Block)i, data);
+        
+        // Create new block
+        blocks.push_back(FSBlock::make(*this, (Block)i, type));
+
+        // Import block data
+        blocks[i]->importBlock(data, bsize);
+    }
+    
+    // Print some debug information
+    debug(FS_DEBUG, "Success\n");
+    // info();
+    // dump();
+    // util::hexdump(blocks[0]->data, 512);
+    printDirectory(true);
+}
+
+void
 FileSystem::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;

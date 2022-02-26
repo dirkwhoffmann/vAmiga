@@ -79,8 +79,8 @@ public:
     isize numBlocks() const;
     isize bsize() const;
 
-    // struct FSDeviceDescriptor layout();
-    struct FSDeviceDescriptor layoutOfPartition(isize nr) const;
+    struct FileSystemDescriptor getFileSystemDescriptor(isize part) const;
+    struct FSDeviceDescriptor layoutOfPartition(isize nr) const; // DEPRECATED
     u8 *dataForPartition(isize nr) const;
     
     // Computes all possible drive geometries
