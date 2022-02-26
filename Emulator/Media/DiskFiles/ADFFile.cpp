@@ -86,7 +86,7 @@ ADFFile::init(Drive &drive)
 void
 ADFFile::init(FSDevice &volume)
 {
-    switch (volume.getCapacity()) {
+    switch (volume.getNumBlocks()) {
             
         case 2 * 880:
             init(INCH_35, DISK_DD);

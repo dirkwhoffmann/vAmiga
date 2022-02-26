@@ -662,11 +662,8 @@
 + (instancetype)makeWithHDF:(HDFFileProxy *)hdf partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
 
 @property (readonly) FSVolumeType dos;
-@property (readonly) NSInteger numCyls;
-@property (readonly) NSInteger numHeads;
-@property (readonly) NSInteger numTracks;
-@property (readonly) NSInteger numSectors;
 @property (readonly) NSInteger numBlocks;
+@property (readonly) NSInteger numBytes;
 
 - (void)killVirus;
 - (FSBlockType)blockType:(NSInteger)blockNr;

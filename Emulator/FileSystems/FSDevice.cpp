@@ -32,8 +32,6 @@ FSDevice::init(FSDeviceDescriptor &layout)
     if constexpr (FS_DEBUG) { layout.dump(); }
     
     // Copy layout parameters from the descriptor
-    numCyls     = layout.geometry.cylinders;
-    numHeads    = layout.geometry.heads;
     numSectors  = layout.geometry.sectors;
     bsize       = layout.geometry.bsize;
     numBlocks   = layout.numBlocks;
@@ -249,19 +247,6 @@ FSDevice::_dump(dump::Category category, std::ostream& os) const
             blocks[i]->dump();
         }
     }
-}
-
-DiskGeometry
-FSDevice::getGeometry() const
-{
-    DiskGeometry result;
-    
-    result.cylinders = numCyls;
-    result.heads = numHeads;
-    result.sectors = numSectors;
-    result.bsize = bsize;
-    
-    return result;
 }
 
 isize

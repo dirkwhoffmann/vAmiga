@@ -49,10 +49,17 @@ public:
 
     HardDrive(Amiga& ref, isize nr);
     ~HardDrive();
+
+    void dealloc();
+
+    // Creates a hard drive with a certain capacity in bytes
+    void init(isize size);
+    
+    // Creates a hard drive with a certain geometry
+    void init(const DiskGeometry &geometry);
     
     // Creates or deletes the data storage
-    void alloc(const DiskGeometry &geometry);
-    void dealloc();
+    [[deprecated]] void alloc(const DiskGeometry &geometry);
     
     
     //
@@ -153,11 +160,13 @@ public:
 
 public:
 
+    // RENAME TO init()
+    
     // Creates an empty hard drive with a certain capacity
     void attach(isize bytes) throws;
 
     // Creates an empty hard drive with a certain geometry
-    void attach(const DiskGeometry &geometry) throws;
+    // void attach(const DiskGeometry &geometry) throws;
 
     // Creates a disk with the contents of a file system
     void attach(const FSDevice &fs) throws;

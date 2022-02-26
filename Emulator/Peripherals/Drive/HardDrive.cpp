@@ -66,7 +66,7 @@ HardDrive::alloc(const DiskGeometry &geometry)
     if (data) delete [] data;
 
     // Allocate memory
-    data = new u8[driveSpec.geometry.numBytes()];
+    data = new u8[geometry.numBytes()];
 }
 
 void
@@ -78,6 +78,26 @@ HardDrive::dealloc()
 
     // Wipe out geometry information
     driveSpec.geometry = DiskGeometry();
+}
+
+void
+HardDrive::init(isize size)
+{
+    init(DiskGeometry(size));
+}
+
+void
+HardDrive::init(const DiskGeometry &geometry)
+{
+    // Throw an exception if the geometry is not supported
+    geometry.checkCompatibility();
+    
+    // Wipe out the old drive
+    dealloc();
+    
+    // Save the geometry and create the new drive
+    this->driveSpec.geometry = geometry;
+    data = new u8[geometry.numBytes()];
 }
 
 const char *
@@ -301,8 +321,8 @@ HardDrive::didLoadFromBuffer(const u8 *buffer)
 {
     util::SerReader reader(buffer);
 
-    // Allocate memory for storing the disk data
-    alloc(driveSpec.geometry);
+    // Create the drive
+    init(driveSpec.geometry);
     
     // Load disk data
     reader.copy(data, driveSpec.geometry.numBytes());
@@ -382,38 +402,17 @@ HardDrive::attach(isize bytes)
     geometry.sectors = 32;
     geometry.heads = 1;
     
-    attach(geometry);
-}
-
-void
-HardDrive::attach(const DiskGeometry &geometry)
-{
-    debug(HDR_DEBUG, "Attaching new hard drive\n");
-
-    // Throw an exception if the geometry is not supported
-    geometry.checkCompatibility();
-    
-    // Trash the old disk
-    dealloc();
-    
-    // Create new disk
-    alloc(geometry);
-
-    // Remove asap
-    msg("Hard drive attached successfully\n");
-    dump();
+    // Create the drive
+    init(geometry);
 }
 
 void
 HardDrive::attach(const FSDevice &fs)
 {
-    auto geometry = fs.getGeometry();
+    auto geometry = DiskGeometry(fs.numBytes());
     
-    // Throw an exception if the geometry is not supported
-    geometry.checkCompatibility();
-
-    // Allocate memory
-    alloc(geometry);
+    // Create the drive
+    init(geometry);
     
     // Copy all blocks over
     fs.exportVolume(data, geometry.numBytes());
@@ -423,16 +422,13 @@ void
 HardDrive::attach(const HDFFile &hdf)
 {
     auto geometry = hdf.getGeometry();
- 
-    // Throw an exception if the geometry is not supported
-    geometry.checkCompatibility();
- 
+  
+    // Create the drive
+    init(geometry);
+
     // Copy the drive spec
     driveSpec = hdf.getDriveSpec();
-    
-    // Allocate memory
-    alloc(geometry);
-    
+        
     // Copy all blocks over
     hdf.flash(data);
     

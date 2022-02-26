@@ -1353,7 +1353,7 @@ using namespace moira;
     geometry.bsize = b;
     
     try {
-        [self drive]->attach(geometry);
+        [self drive]->init(geometry);
     }  catch (VAError &error) {
         [ex save:error];
     }
@@ -1450,29 +1450,14 @@ using namespace moira;
     return [self fs]->getDos();
 }
 
-- (NSInteger)numCyls
-{
-    return [self fs]->getNumCyls();
-}
-
-- (NSInteger)numHeads
-{
-    return [self fs]->getNumHeads();
-}
-
-- (NSInteger)numTracks
-{
-    return [self fs]->getNumTracks();
-}
-
-- (NSInteger)numSectors
-{
-    return [self fs]->getNumSectors();
-}
-
 - (NSInteger)numBlocks
 {
     return [self fs]->getNumBlocks();
+}
+
+- (NSInteger)numBytes
+{
+    return [self fs]->numBytes();
 }
 
 - (void)killVirus

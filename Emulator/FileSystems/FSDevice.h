@@ -32,11 +32,7 @@ class FSDevice : public AmigaObject {
 
 protected:
             
-    // Physical device parameters
-    isize numCyls = 0;
-    isize numHeads = 0;
-    
-    // Logical device parameters
+    // Layout parameters
     isize numSectors = 0;
     i64 numBlocks = 0;
     isize numReserved = 0;
@@ -113,19 +109,13 @@ private:
     //
     
 public:
-            
-    // Returns the disk geometry
-    DiskGeometry getGeometry() const;
-    
-    // Returns the total device capacity in blocks
-    i64 getCapacity() const { return numBlocks; }
-    
-    // Reports layout information
-    isize getNumCyls() const { return numCyls; }
-    isize getNumHeads() const { return numHeads; }
-    isize getNumTracks() const { return getNumCyls() * getNumHeads(); }
-    isize getNumSectors() const { return numSectors; }
+                
+    // Returns the capacity of this volume
+    isize numBytes() const { return numBlocks * bsize; }
+    // TODO: REPLACE i64 by isize
     i64 getNumBlocks() const { return numBlocks; }
+
+    [[deprecated]] i64 getCapacity() const { return numBlocks; }
 
     
     //

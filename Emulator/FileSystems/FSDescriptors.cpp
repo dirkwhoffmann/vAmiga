@@ -19,6 +19,16 @@ DiskGeometry::DiskGeometry(isize c, isize h, isize s, isize b)
     bsize = b;
 }
 
+DiskGeometry::DiskGeometry(isize size)
+{
+    // Create a default geometry for the provide size
+    bsize = 512;
+    sectors = 32;
+    heads = 1;
+    cylinders = (size / bsize) + (size % bsize) ? 1 : 0;
+    while (cylinders > 1024) { cylinders /= 2; heads *= 2; }
+}
+
 DiskGeometry::DiskGeometry(DiskDiameter type, DiskDensity density)
 {
     if (type == INCH_525 && density == DISK_DD) {
