@@ -267,6 +267,33 @@ FSDevice::setName(FSName name)
     rb->setName(name);
 }
 
+void
+FSDevice::makeBootable(BootBlockId id)
+{
+    assert(blocks[0]->type == FS_BOOT_BLOCK);
+    assert(blocks[1]->type == FS_BOOT_BLOCK);
+
+    blocks[0]->writeBootBlock(id, 0);
+    blocks[1]->writeBootBlock(id, 1);
+}
+
+void
+FSDevice::killVirus()
+{
+    assert(blocks[0]->type == FS_BOOT_BLOCK);
+    assert(blocks[1]->type == FS_BOOT_BLOCK);
+
+    auto id = isOFS() ? BB_AMIGADOS_13 : isFFS() ? BB_AMIGADOS_20 : BB_NONE;
+
+    if (id != BB_NONE) {
+        blocks[0]->writeBootBlock(id, 0);
+        blocks[1]->writeBootBlock(id, 1);
+    } else {
+        std::memset(blocks[0]->data + 4, 0, bsize - 4);
+        std::memset(blocks[1]->data, 0, bsize);
+    }
+}
+
 FSBlockType
 FSDevice::blockType(Block nr)
 {
@@ -816,11 +843,34 @@ FSDevice::predictBlockType(Block nr, const u8 *buffer)
 {
     assert(buffer != nullptr);
     
-    if (FSBlockType t = partition->predictBlockType(nr, buffer); t != FS_UNKNOWN_BLOCK) {
-        return t;
+    // Is it a boot block?
+    if (nr == 0 || nr == 1) return FS_BOOT_BLOCK;
+    
+    // Is it a bitmap block?
+    if (std::find(partition->bmBlocks.begin(), partition->bmBlocks.end(), nr) != partition->bmBlocks.end())
+        return FS_BITMAP_BLOCK;
+    
+    // is it a bitmap extension block?
+    if (std::find(partition->bmExtBlocks.begin(), partition->bmExtBlocks.end(), nr) != partition->bmExtBlocks.end())
+        return FS_BITMAP_EXT_BLOCK;
+
+    // For all other blocks, check the type and subtype fields
+    u32 type = FSBlock::read32(buffer);
+    u32 subtype = FSBlock::read32(buffer + bsize - 4);
+
+    if (type == 2  && subtype == 1)       return FS_ROOT_BLOCK;
+    if (type == 2  && subtype == 2)       return FS_USERDIR_BLOCK;
+    if (type == 2  && subtype == (u32)-3) return FS_FILEHEADER_BLOCK;
+    if (type == 16 && subtype == (u32)-3) return FS_FILELIST_BLOCK;
+
+    // Check if this block is a data block
+    if (isOFS()) {
+        if (type == 8) return FS_DATA_BLOCK_OFS;
+    } else {
+        for (isize i = 0; i < bsize; i++) if (buffer[i]) return FS_DATA_BLOCK_FFS;
     }
     
-    return FS_UNKNOWN_BLOCK;
+    return FS_EMPTY_BLOCK;
 }
 
 void
@@ -848,7 +898,7 @@ FSDevice::importVolume(const u8 *src, isize size)
         FSPartition &p = blocks[i]->partition;
         
         // Determine the type of the new block
-        FSBlockType type = p.predictBlockType((Block)i, data);
+        FSBlockType type = predictBlockType((Block)i, data);
         
         // Create new block
         FSBlock *newBlock = FSBlock::make(p, (Block)i, type);

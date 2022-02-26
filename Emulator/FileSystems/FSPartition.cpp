@@ -59,59 +59,6 @@ FSPartition::FSPartition(FSDevice &dev, FSDeviceDescriptor &layout) : FSPartitio
     }
 }
 
-void
-FSPartition::_dump(dump::Category category, std::ostream& os) const
-{
-    using namespace util;
-
-    if (category & dump::State) {
-        
-        os << tab("Root block");
-        os << dec(rootBlock) << std::endl;
-        os << tab("Bitmap blocks");
-        for (auto& it : bmBlocks) { os << dec(it) << " "; }
-        os << std::endl;
-        os << util::tab("Extension blocks");
-        for (auto& it : bmExtBlocks) { os << dec(it) << " "; }
-        os << std::endl;
-    }
-}
-
-FSBlockType
-FSPartition::predictBlockType(Block nr, const u8 *buffer) const
-{
-    assert(buffer != nullptr);
-    
-    // Is it a boot block?
-    if (nr == 0 || nr == 1) return FS_BOOT_BLOCK;
-    
-    // Is it a bitmap block?
-    if (std::find(bmBlocks.begin(), bmBlocks.end(), nr) != bmBlocks.end())
-        return FS_BITMAP_BLOCK;
-    
-    // is it a bitmap extension block?
-    if (std::find(bmExtBlocks.begin(), bmExtBlocks.end(), nr) != bmExtBlocks.end())
-        return FS_BITMAP_EXT_BLOCK;
-
-    // For all other blocks, check the type and subtype fields
-    u32 type = FSBlock::read32(buffer);
-    u32 subtype = FSBlock::read32(buffer + dev.bsize - 4);
-
-    if (type == 2  && subtype == 1)       return FS_ROOT_BLOCK;
-    if (type == 2  && subtype == 2)       return FS_USERDIR_BLOCK;
-    if (type == 2  && subtype == (u32)-3) return FS_FILEHEADER_BLOCK;
-    if (type == 16 && subtype == (u32)-3) return FS_FILELIST_BLOCK;
-
-    // Check if this block is a data block
-    if (dev.isOFS()) {
-        if (type == 8) return FS_DATA_BLOCK_OFS;
-    } else {
-        for (isize i = 0; i < dev.bsize; i++) if (buffer[i]) return FS_DATA_BLOCK_FFS;
-    }
-    
-    return FS_EMPTY_BLOCK;
-}
-
 isize
 FSPartition::requiredDataBlocks(isize fileSize) const
 {
@@ -358,31 +305,4 @@ FSPartition::locateAllocationBit(Block nr, isize *byte, isize *bit) const
     //       ref, bm->nr, *byte, *bit);
 
     return bm;
-}
-
-void
-FSPartition::makeBootable(BootBlockId id)
-{
-    assert(dev.blocks[0]->type == FS_BOOT_BLOCK);
-    assert(dev.blocks[1]->type == FS_BOOT_BLOCK);
-
-    dev.blocks[0]->writeBootBlock(id, 0);
-    dev.blocks[1]->writeBootBlock(id, 1);
-}
-
-void
-FSPartition::killVirus()
-{
-    assert(dev.blocks[0]->type == FS_BOOT_BLOCK);
-    assert(dev.blocks[1]->type == FS_BOOT_BLOCK);
-
-    auto id = dev.isOFS() ? BB_AMIGADOS_13 : dev.isFFS() ? BB_AMIGADOS_20 : BB_NONE;
-
-    if (id != BB_NONE) {
-        dev.blocks[0]->writeBootBlock(id, 0);
-        dev.blocks[1]->writeBootBlock(id, 1);
-    } else {
-        std::memset(dev.blocks[0]->data + 4, 0, dev.bsize - 4);
-        std::memset(dev.blocks[1]->data, 0, dev.bsize);
-    }
 }

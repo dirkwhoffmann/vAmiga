@@ -155,10 +155,10 @@ public:
     
 public:
     // Installs a boot block
-    void makeBootable(BootBlockId id) { partition->makeBootable(id); }
+    void makeBootable(BootBlockId id);
 
     // Removes a boot block virus from the current partition (if any)
-    void killVirus() { partition->killVirus(); }
+    void killVirus();
     
     
     //

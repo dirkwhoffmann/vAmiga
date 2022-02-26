@@ -40,15 +40,9 @@ struct FSPartition : AmigaObject {
 private:
     
     const char *getDescription() const override { return "FSPartition"; }
-    void _dump(dump::Category category, std::ostream& os) const override;
+    void _dump(dump::Category category, std::ostream& os) const override { };
     
         
-public:
-    
-    // Predicts the type of a block by analyzing its number and data
-    FSBlockType predictBlockType(Block nr, const u8 *buffer) const;
-    
- 
     //
     // Creating and deleting blocks
     //
@@ -97,19 +91,6 @@ private:
     
     // Locates the allocation bit for a certain block
     FSBlock *locateAllocationBit(Block nr, isize *byte, isize *bit) const;
-    
-    
-    //
-    // Working with boot blocks
-    //
-    
-public:
-    
-    // Installs a boot block
-    void makeBootable(BootBlockId id);
-
-    // Eliminates boot block virus (if any)
-    void killVirus();
 };
 
 typedef FSPartition* FSPartitionPtr;
