@@ -47,11 +47,7 @@ class VolumeInspector: DialogController {
     // Results of the different decoders
     var hdf: HDFFileProxy?
     var adf: ADFFileProxy?
-    /*
-    var img: IMGFileProxy?
-    var ext: EXTFileProxy?
-    */
-    var vol: FSDeviceProxy?
+    var vol: FileSystemProxy?
     
     // Result of the consistency checker
     var errorReport: FSErrorReport?
@@ -109,8 +105,8 @@ class VolumeInspector: DialogController {
         track("partition = \(nr)")
         
         vol = nil
-        if adf != nil { vol = try? FSDeviceProxy.make(withADF: adf!) }
-        if hdf != nil { vol = try? FSDeviceProxy.make(withHDF: hdf!, partition: nr) }
+        if adf != nil { vol = try? FileSystemProxy.make(withADF: adf!) }
+        if hdf != nil { vol = try? FileSystemProxy.make(withHDF: hdf!, partition: nr) }
         
         b = vol?.numBlocks ?? 0
         blockNr = blockNr.clamped(0, upperBlock)

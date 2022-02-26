@@ -242,7 +242,7 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
 
         for (isize i = 0; i < isize(driveSpec.partitions.size()); i++) {
             
-            auto fs = FSDevice(*this, i);
+            auto fs = MutableFileSystem(*this, i);
             fs.dump(dump::Summary, os);
         }
     }
@@ -357,7 +357,7 @@ HardDrive::format(FSVolumeType fsType, BootBlockId bb)
         auto layout = FSDeviceDescriptor(driveSpec.geometry, fsType);
         
         // Create a file system
-        auto fs = FSDevice(layout);
+        auto fs = MutableFileSystem(layout);
         
         // Add a boot block
         fs.makeBootable(bb);
@@ -407,7 +407,7 @@ HardDrive::attach(isize bytes)
 }
 
 void
-HardDrive::attach(const FSDevice &fs)
+HardDrive::attach(const MutableFileSystem &fs)
 {
     auto geometry = DiskGeometry(fs.numBytes());
     

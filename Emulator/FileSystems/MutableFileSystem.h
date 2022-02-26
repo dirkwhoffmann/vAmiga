@@ -9,56 +9,14 @@
 
 #pragma once
 
-#include "FSTypes.h"
-#include "FSBlock.h"
-#include "FSDescriptors.h"
-#include "FSObjects.h"
-#include "ADFFile.h"
-#include "HDFFile.h"
-#include <stack>
-#include <set>
+#include "FileSystem.h"
 
-class ADFFile;
-class HDFFile;
-class Drive;
-class HardDrive;
-
-/* This class provides the basic functionality of the Amiga File Systems OFS
- * and FFS. Starting from an empty volume, files can be added or removed,
- * and boot blocks can be installed. Furthermore, functionality is provided to
- * import and export the file system from and to ADF files.
- */
-
-class FSDevice : public AmigaObject {
+class MutableFileSystem : public FileSystem {
     
     friend struct FSBlock;
     friend struct FSHashTable;
     friend struct FSPartition;
 
-protected:
-                        
-    // File system version
-    FSVolumeType dos = FS_NODOS;
-    
-    // Block storage
-    std::vector<BlockPtr> blocks;
-            
-    // Size of a single block in bytes
-    isize bsize = 0;
-
-    // Number of reserved blocks
-    isize numReserved = 0;
-
-    // Location of the root block
-    Block rootBlock = 0;
-    
-    // Location of the bitmap blocks and extended bitmap blocks
-    std::vector<Block> bmBlocks;
-    std::vector<Block> bmExtBlocks;
-        
-    // The currently selected directory (reference to FSDirBlock)
-    Block cd = 0;
-    
     
     //
     // Initializing
@@ -66,16 +24,16 @@ protected:
     
 public:
 
-    FSDevice(isize capacity) { init(capacity); }
-    FSDevice(FSDeviceDescriptor &layout) { init(layout); }
-    FSDevice(DiskDiameter dia, DiskDensity den) { init(dia, den); }
-    FSDevice(DiskDiameter dia, DiskDensity den, const string &path) { init(dia, den, path); }
-    FSDevice(const ADFFile &adf) throws { init(adf); }
-    FSDevice(const HDFFile &hdf, isize part) throws { init(hdf, part); }
-    FSDevice(Drive &drive) throws { init(drive); }
-    FSDevice(const HardDrive &drive, isize part) throws { init(drive, part); }
-    FSDevice(FSVolumeType type, const string &path) { init(type, path); }
-    ~FSDevice();
+    MutableFileSystem(isize capacity) { init(capacity); }
+    MutableFileSystem(FSDeviceDescriptor &layout) { init(layout); }
+    MutableFileSystem(DiskDiameter dia, DiskDensity den) { init(dia, den); }
+    MutableFileSystem(DiskDiameter dia, DiskDensity den, const string &path) { init(dia, den, path); }
+    MutableFileSystem(const ADFFile &adf) throws { init(adf); }
+    MutableFileSystem(const HDFFile &hdf, isize part) throws { init(hdf, part); }
+    MutableFileSystem(Drive &drive) throws { init(drive); }
+    MutableFileSystem(const HardDrive &drive, isize part) throws { init(drive, part); }
+    MutableFileSystem(FSVolumeType type, const string &path) { init(type, path); }
+    ~MutableFileSystem();
     
 private:
     
@@ -98,10 +56,10 @@ private:
     
 private:
     
-    const char *getDescription() const override { return "FSDevice"; }
+    // const char *getDescription() const override { return "FSDevice"; }
     void _dump(dump::Category category, std::ostream& os) const override;
-    
 
+    
     //
     // Querying layout properties
     //

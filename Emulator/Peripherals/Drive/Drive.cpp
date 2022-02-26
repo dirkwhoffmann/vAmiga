@@ -13,7 +13,7 @@
 #include "BootBlockImage.h"
 #include "CIA.h"
 #include "DiskFile.h"
-#include "FSDevice.h"
+#include "MutableFileSystem.h"
 #include "MsgQueue.h"
 
 Drive::Drive(Amiga& ref, isize n) : SubComponent(ref), nr(n)

@@ -9,10 +9,10 @@
 
 #include "config.h"
 #include "FSBlock.h"
-#include "FSDevice.h"
+#include "MutableFileSystem.h"
 #include "MemUtils.h"
 
-FSBlock::FSBlock(FSDevice &ref, Block nr, FSBlockType t) : device(ref)
+FSBlock::FSBlock(MutableFileSystem &ref, Block nr, FSBlockType t) : device(ref)
 {
     assert(t != FS_UNKNOWN_BLOCK);
     
@@ -86,7 +86,7 @@ FSBlock::~FSBlock()
 }
 
 FSBlock *
-FSBlock::make(FSDevice &ref, Block nr, FSBlockType type)
+FSBlock::make(MutableFileSystem &ref, Block nr, FSBlockType type)
 {
     switch (type) {
 

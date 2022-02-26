@@ -10,7 +10,7 @@
 #include "config.h"
 #include "EXEFile.h"
 #include "AmigaFile.h"
-#include "FSDevice.h"
+#include "MutableFileSystem.h"
 #include "IOUtils.h"
 
 bool
@@ -38,7 +38,7 @@ EXEFile::finalizeRead()
     bool hd = size > 853000;
         
     // Create a new file system
-    FSDevice volume(INCH_35, hd ? DISK_HD : DISK_DD);
+    MutableFileSystem volume(INCH_35, hd ? DISK_HD : DISK_DD);
     volume.setName(FSName("Disk"));
     
     // Make the volume bootable

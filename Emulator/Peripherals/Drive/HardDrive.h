@@ -169,7 +169,7 @@ public:
     // void attach(const DiskGeometry &geometry) throws;
 
     // Creates a disk with the contents of a file system
-    void attach(const FSDevice &fs) throws;
+    void attach(const MutableFileSystem &fs) throws;
 
     // Creates a disk with the contents of an HDF
     void attach(const HDFFile &hdf) throws;

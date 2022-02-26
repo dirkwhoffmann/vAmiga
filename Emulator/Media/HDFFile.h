@@ -10,7 +10,7 @@
 #pragma once
 
 #include "AmigaFile.h"
-#include "FSDevice.h"
+#include "MutableFileSystem.h"
 #include "HardDriveTypes.h"
 
 class Disk;

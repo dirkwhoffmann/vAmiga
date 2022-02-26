@@ -50,6 +50,7 @@
 		5027418F2297CACF0038E5AF /* Colors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5027418D2297CACF0038E5AF /* Colors.cpp */; };
 		5029C6E127CA2EAB002F6CCC /* DiskInspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5029C6E027CA2EAB002F6CCC /* DiskInspector.xib */; };
 		5029C6E327CA2F66002F6CCC /* DiskInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5029C6E227CA2F66002F6CCC /* DiskInspector.swift */; };
+		5029C6E627CA6209002F6CCC /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5029C6E427CA6209002F6CCC /* FileSystem.cpp */; };
 		502BB09E229C00C800A8DFCD /* CompatibilityConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502BB09D229C00C800A8DFCD /* CompatibilityConf.swift */; };
 		502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD092248EC0200F0E118 /* EventPanel.swift */; };
 		502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD0B2248ECAA00F0E118 /* EventTableView.swift */; };
@@ -72,7 +73,7 @@
 		5050EC3F27BE876F00394F4F /* HardDiskCreator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */; };
 		5050EC4127BE97E000394F4F /* HardDiskCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5050EC4027BE97E000394F4F /* HardDiskCreator.swift */; };
 		505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505554AA2264C47600CB07E0 /* Mouse.cpp */; };
-		5056506C25440FFB00A79D27 /* FSDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056506A25440FFB00A79D27 /* FSDevice.cpp */; };
+		5056506C25440FFB00A79D27 /* MutableFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056506A25440FFB00A79D27 /* MutableFileSystem.cpp */; };
 		50565072254573E100A79D27 /* FSBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50565070254573E100A79D27 /* FSBlock.cpp */; };
 		5056507C25459C8800A79D27 /* FSObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056507A25459C8800A79D27 /* FSObjects.cpp */; };
 		5057551025EAFF7900280977 /* Checksum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B3C44725EAFB5500651700 /* Checksum.cpp */; };
@@ -355,6 +356,8 @@
 		5027418E2297CACF0038E5AF /* Colors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Colors.h; sourceTree = "<group>"; };
 		5029C6E027CA2EAB002F6CCC /* DiskInspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DiskInspector.xib; sourceTree = "<group>"; };
 		5029C6E227CA2F66002F6CCC /* DiskInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskInspector.swift; sourceTree = "<group>"; };
+		5029C6E427CA6209002F6CCC /* FileSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
+		5029C6E527CA6209002F6CCC /* FileSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		502BB09D229C00C800A8DFCD /* CompatibilityConf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityConf.swift; sourceTree = "<group>"; };
 		502C135027C613DB009534BD /* HdrControllerRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HdrControllerRom.h; sourceTree = "<group>"; };
 		502EFD092248EC0200F0E118 /* EventPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPanel.swift; sourceTree = "<group>"; };
@@ -394,8 +397,8 @@
 		5051922A22B61DAA0012C4BB /* MemoryTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemoryTypes.h; sourceTree = "<group>"; };
 		505554AA2264C47600CB07E0 /* Mouse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mouse.cpp; sourceTree = "<group>"; };
 		505554AB2264C47600CB07E0 /* Mouse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mouse.h; sourceTree = "<group>"; };
-		5056506A25440FFB00A79D27 /* FSDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSDevice.cpp; sourceTree = "<group>"; };
-		5056506B25440FFB00A79D27 /* FSDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSDevice.h; sourceTree = "<group>"; };
+		5056506A25440FFB00A79D27 /* MutableFileSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MutableFileSystem.cpp; sourceTree = "<group>"; };
+		5056506B25440FFB00A79D27 /* MutableFileSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MutableFileSystem.h; sourceTree = "<group>"; };
 		50565070254573E100A79D27 /* FSBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSBlock.cpp; sourceTree = "<group>"; };
 		50565071254573E100A79D27 /* FSBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSBlock.h; sourceTree = "<group>"; };
 		5056507A25459C8800A79D27 /* FSObjects.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSObjects.cpp; sourceTree = "<group>"; };
@@ -909,8 +912,10 @@
 				5083CF572546A22E00A28EF8 /* FSTypes.h */,
 				505C01092577A8C000F9E05C /* FSDescriptors.h */,
 				505C01082577A8C000F9E05C /* FSDescriptors.cpp */,
-				5056506B25440FFB00A79D27 /* FSDevice.h */,
-				5056506A25440FFB00A79D27 /* FSDevice.cpp */,
+				5029C6E527CA6209002F6CCC /* FileSystem.h */,
+				5029C6E427CA6209002F6CCC /* FileSystem.cpp */,
+				5056506B25440FFB00A79D27 /* MutableFileSystem.h */,
+				5056506A25440FFB00A79D27 /* MutableFileSystem.cpp */,
 				5056507B25459C8800A79D27 /* FSObjects.h */,
 				5056507A25459C8800A79D27 /* FSObjects.cpp */,
 				50565071254573E100A79D27 /* FSBlock.h */,
@@ -1949,7 +1954,7 @@
 				50C8C44F260740AC00F4E012 /* SplashScreen.swift in Sources */,
 				50F54B2924B5D31D0078FDC9 /* xdms.c in Sources */,
 				5009B7FC2557051A0037288E /* EXTFile.cpp in Sources */,
-				5056506C25440FFB00A79D27 /* FSDevice.cpp in Sources */,
+				5056506C25440FFB00A79D27 /* MutableFileSystem.cpp in Sources */,
 				50927DAB24865F11008DF3B8 /* MoiraExceptions_cpp.h in Sources */,
 				50F54B2624B5D31D0078FDC9 /* tables.c in Sources */,
 				50DED6B12202EC3100B8195F /* Inspector.swift in Sources */,
@@ -1960,6 +1965,7 @@
 				509C3668260B3ED0004F160A /* RetroShellCmds.cpp in Sources */,
 				50AE6EE724D9B2C7000AA367 /* StateMachineRegs.cpp in Sources */,
 				508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */,
+				5029C6E627CA6209002F6CCC /* FileSystem.cpp in Sources */,
 				50912FFD2525B7AD0049805B /* Recorder.cpp in Sources */,
 				507727EE242F2CE4009D01DA /* iCarousel.m in Sources */,
 				50EB8CCE2530710E0053988A /* VideoExporter.swift in Sources */,

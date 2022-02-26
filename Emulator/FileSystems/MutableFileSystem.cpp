@@ -9,14 +9,14 @@
 
 #include "config.h"
 #include "IOUtils.h"
-#include "FSDevice.h"
+#include "MutableFileSystem.h"
 #include "MemUtils.h"
 #include <climits>
 #include <set>
 #include <stack>
 
 void
-FSDevice::init(isize capacity)
+MutableFileSystem::init(isize capacity)
 {
     assert(blocks.empty());
     
@@ -25,7 +25,7 @@ FSDevice::init(isize capacity)
 }
 
 void
-FSDevice::init(FSDeviceDescriptor &layout)
+MutableFileSystem::init(FSDeviceDescriptor &layout)
 {
     init((isize)layout.numBlocks);
     
@@ -58,7 +58,7 @@ FSDevice::init(FSDeviceDescriptor &layout)
 }
 
 void
-FSDevice::initBlocks(FSDeviceDescriptor &layout)
+MutableFileSystem::initBlocks(FSDeviceDescriptor &layout)
 {
     // Do some consistency checking
     for (Block i = 0; i < numBlocks(); i++) assert(blocks[i] == nullptr);
@@ -100,7 +100,7 @@ FSDevice::initBlocks(FSDeviceDescriptor &layout)
 }
 
 void
-FSDevice::init(DiskDiameter dia, DiskDensity den)
+MutableFileSystem::init(DiskDiameter dia, DiskDensity den)
 {
     // Get a device descriptor
     auto descriptor = FSDeviceDescriptor(dia, den);
@@ -110,7 +110,7 @@ FSDevice::init(DiskDiameter dia, DiskDensity den)
 }
 
 void
-FSDevice::init(DiskDiameter dia, DiskDensity den, const string &path)
+MutableFileSystem::init(DiskDiameter dia, DiskDensity den, const string &path)
 {
     init(dia, den);
     
@@ -128,7 +128,7 @@ FSDevice::init(DiskDiameter dia, DiskDensity den, const string &path)
 }
 
 void
-FSDevice::init(const ADFFile &adf)
+MutableFileSystem::init(const ADFFile &adf)
 {
     // Get a device descriptor for the ADF
     FSDeviceDescriptor descriptor = adf.layout();
@@ -141,7 +141,7 @@ FSDevice::init(const ADFFile &adf)
 }
 
 void
-FSDevice::init(const HDFFile &hdf, isize partition)
+MutableFileSystem::init(const HDFFile &hdf, isize partition)
 {
     printf("Getting layout for partition %ld\n", partition);
     
@@ -167,21 +167,21 @@ FSDevice::init(const HDFFile &hdf, isize partition)
 }
 
 void
-FSDevice::init(Drive &drive)
+MutableFileSystem::init(Drive &drive)
 {
     auto adf = ADFFile(drive);
     init(adf);
 }
 
 void
-FSDevice::init(const class HardDrive &drive, isize partition)
+MutableFileSystem::init(const class HardDrive &drive, isize partition)
 {
     auto hdf = HDFFile(drive);
     init(hdf, partition);
 }
 
 void
-FSDevice::init(FSVolumeType type, const string &path)
+MutableFileSystem::init(FSVolumeType type, const string &path)
 {
     // Try to fit the directory into files system with DD disk capacity
     try { init(INCH_35, DISK_DD, path); return; } catch (...) { };
@@ -190,13 +190,13 @@ FSDevice::init(FSVolumeType type, const string &path)
     init(INCH_35, DISK_HD, path);
 }
 
-FSDevice::~FSDevice()
+MutableFileSystem::~MutableFileSystem()
 {
     for (auto &b : blocks) delete b;
 }
 
 void
-FSDevice::_dump(dump::Category category, std::ostream& os) const
+MutableFileSystem::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
 
@@ -249,7 +249,7 @@ FSDevice::_dump(dump::Category category, std::ostream& os) const
 }
 
 isize
-FSDevice::freeBlocks() const
+MutableFileSystem::freeBlocks() const
 {
     isize result = 0;
     
@@ -261,32 +261,32 @@ FSDevice::freeBlocks() const
 }
 
 isize
-FSDevice::usedBlocks() const
+MutableFileSystem::usedBlocks() const
 {
     return numBlocks() - freeBlocks();
 }
 
 isize
-FSDevice::freeBytes() const
+MutableFileSystem::freeBytes() const
 {
     return freeBlocks() * bsize;
 }
 
 isize
-FSDevice::usedBytes() const
+MutableFileSystem::usedBytes() const
 {
     return usedBlocks() * bsize;
 }
 
 FSName
-FSDevice::getName() const
+MutableFileSystem::getName() const
 {
     FSBlock *rb = rootBlockPtr(rootBlock);
     return rb ? rb->getName() : FSName("");
 }
 
 void
-FSDevice::setName(FSName name)
+MutableFileSystem::setName(FSName name)
 {
     FSBlock *rb = rootBlockPtr(rootBlock);
     assert(rb != nullptr);
@@ -295,7 +295,7 @@ FSDevice::setName(FSName name)
 }
 
 void
-FSDevice::makeBootable(BootBlockId id)
+MutableFileSystem::makeBootable(BootBlockId id)
 {
     assert(blocks[0]->type == FS_BOOT_BLOCK);
     assert(blocks[1]->type == FS_BOOT_BLOCK);
@@ -305,7 +305,7 @@ FSDevice::makeBootable(BootBlockId id)
 }
 
 void
-FSDevice::killVirus()
+MutableFileSystem::killVirus()
 {
     assert(blocks[0]->type == FS_BOOT_BLOCK);
     assert(blocks[1]->type == FS_BOOT_BLOCK);
@@ -322,25 +322,25 @@ FSDevice::killVirus()
 }
 
 FSBlockType
-FSDevice::blockType(Block nr)
+MutableFileSystem::blockType(Block nr)
 {
     return blockPtr(nr) ? blocks[nr]->type : FS_UNKNOWN_BLOCK;
 }
 
 FSItemType
-FSDevice::itemType(Block nr, isize pos) const
+MutableFileSystem::itemType(Block nr, isize pos) const
 {
     return blockPtr(nr) ? blocks[nr]->itemType(pos) : FSI_UNUSED;
 }
 
 FSBlock *
-FSDevice::blockPtr(Block nr) const
+MutableFileSystem::blockPtr(Block nr) const
 {
     return nr < blocks.size() ? blocks[nr] : nullptr;
 }
 
 FSBlock *
-FSDevice::bootBlockPtr(Block nr)
+MutableFileSystem::bootBlockPtr(Block nr)
 {
     if (nr < blocks.size() && blocks[nr]->type == FS_BOOT_BLOCK) {
         return blocks[nr];
@@ -349,7 +349,7 @@ FSDevice::bootBlockPtr(Block nr)
 }
 
 FSBlock *
-FSDevice::rootBlockPtr(Block nr) const
+MutableFileSystem::rootBlockPtr(Block nr) const
 {
     if (nr < blocks.size() && blocks[nr]->type == FS_ROOT_BLOCK) {
         return blocks[nr];
@@ -358,7 +358,7 @@ FSDevice::rootBlockPtr(Block nr) const
 }
 
 FSBlock *
-FSDevice::bitmapBlockPtr(Block nr) const
+MutableFileSystem::bitmapBlockPtr(Block nr) const
 {
     if (nr < blocks.size() && blocks[nr]->type == FS_BITMAP_BLOCK) {
         return blocks[nr];
@@ -367,7 +367,7 @@ FSDevice::bitmapBlockPtr(Block nr) const
 }
 
 FSBlock *
-FSDevice::bitmapExtBlockPtr(Block nr)
+MutableFileSystem::bitmapExtBlockPtr(Block nr)
 {
     if (nr < blocks.size() && blocks[nr]->type == FS_BITMAP_EXT_BLOCK) {
         return blocks[nr];
@@ -376,7 +376,7 @@ FSDevice::bitmapExtBlockPtr(Block nr)
 }
 
 FSBlock *
-FSDevice::userDirBlockPtr(Block nr)
+MutableFileSystem::userDirBlockPtr(Block nr)
 {
     if (nr < blocks.size() && blocks[nr]->type == FS_USERDIR_BLOCK) {
         return blocks[nr];
@@ -385,7 +385,7 @@ FSDevice::userDirBlockPtr(Block nr)
 }
 
 FSBlock *
-FSDevice::fileHeaderBlockPtr(Block nr)
+MutableFileSystem::fileHeaderBlockPtr(Block nr)
 {
     if (nr < blocks.size() && blocks[nr]->type == FS_FILEHEADER_BLOCK) {
         return blocks[nr];
@@ -394,7 +394,7 @@ FSDevice::fileHeaderBlockPtr(Block nr)
 }
 
 FSBlock *
-FSDevice::fileListBlockPtr(Block nr)
+MutableFileSystem::fileListBlockPtr(Block nr)
 {
     if (nr < blocks.size() && blocks[nr]->type == FS_FILELIST_BLOCK) {
         return blocks[nr];
@@ -403,7 +403,7 @@ FSDevice::fileListBlockPtr(Block nr)
 }
 
 FSBlock *
-FSDevice::dataBlockPtr(Block nr)
+MutableFileSystem::dataBlockPtr(Block nr)
 {
     FSBlockType t = nr < blocks.size() ? blocks[nr]->type : FS_UNKNOWN_BLOCK;
 
@@ -414,7 +414,7 @@ FSDevice::dataBlockPtr(Block nr)
 }
 
 FSBlock *
-FSDevice::hashableBlockPtr(Block nr)
+MutableFileSystem::hashableBlockPtr(Block nr)
 {
     FSBlockType t = nr < blocks.size() ? blocks[nr]->type : FS_UNKNOWN_BLOCK;
     
@@ -425,7 +425,7 @@ FSDevice::hashableBlockPtr(Block nr)
 }
 
 isize
-FSDevice::requiredDataBlocks(isize fileSize) const
+MutableFileSystem::requiredDataBlocks(isize fileSize) const
 {
     // Compute the capacity of a single data block
     isize numBytes = bsize - (isOFS() ? 24 : 0);
@@ -435,7 +435,7 @@ FSDevice::requiredDataBlocks(isize fileSize) const
 }
 
 isize
-FSDevice::requiredFileListBlocks(isize fileSize) const
+MutableFileSystem::requiredFileListBlocks(isize fileSize) const
 {
     // Compute the required number of data blocks
     isize numBlocks = requiredDataBlocks(fileSize);
@@ -451,7 +451,7 @@ FSDevice::requiredFileListBlocks(isize fileSize) const
 }
 
 isize
-FSDevice::requiredBlocks(isize fileSize) const
+MutableFileSystem::requiredBlocks(isize fileSize) const
 {
     isize numDataBlocks = requiredDataBlocks(fileSize);
     isize numFileListBlocks = requiredFileListBlocks(fileSize);
@@ -465,7 +465,7 @@ FSDevice::requiredBlocks(isize fileSize) const
 }
  
 Block
-FSDevice::allocateBlock()
+MutableFileSystem::allocateBlock()
 {
     if (Block nr = allocateBlockAbove(rootBlock)) return nr;
     if (Block nr = allocateBlockBelow(rootBlock)) return nr;
@@ -474,7 +474,7 @@ FSDevice::allocateBlock()
 }
 
 Block
-FSDevice::allocateBlockAbove(Block nr)
+MutableFileSystem::allocateBlockAbove(Block nr)
 {
     assert(isBlockNumber(nr));
     
@@ -488,7 +488,7 @@ FSDevice::allocateBlockAbove(Block nr)
 }
 
 Block
-FSDevice::allocateBlockBelow(Block nr)
+MutableFileSystem::allocateBlockBelow(Block nr)
 {
     assert(isBlockNumber(nr));
 
@@ -502,7 +502,7 @@ FSDevice::allocateBlockBelow(Block nr)
 }
 
 void
-FSDevice::deallocateBlock(Block nr)
+MutableFileSystem::deallocateBlock(Block nr)
 {
     assert(isBlockNumber(nr));
     assert(blocks[nr]);
@@ -513,7 +513,7 @@ FSDevice::deallocateBlock(Block nr)
 }
 
 Block
-FSDevice::addFileListBlock(Block head, Block prev)
+MutableFileSystem::addFileListBlock(Block head, Block prev)
 {
     FSBlock *prevBlock = blockPtr(prev);
     if (!prevBlock) return 0;
@@ -529,7 +529,7 @@ FSDevice::addFileListBlock(Block head, Block prev)
 }
 
 Block
-FSDevice::addDataBlock(isize count, Block head, Block prev)
+MutableFileSystem::addDataBlock(isize count, Block head, Block prev)
 {
     FSBlock *prevBlock = blockPtr(prev);
     if (!prevBlock) return 0;
@@ -553,7 +553,7 @@ FSDevice::addDataBlock(isize count, Block head, Block prev)
 }
 
 FSBlock *
-FSDevice::newUserDirBlock(const string &name)
+MutableFileSystem::newUserDirBlock(const string &name)
 {
     FSBlock *block = nullptr;
     
@@ -568,7 +568,7 @@ FSDevice::newUserDirBlock(const string &name)
 }
 
 FSBlock *
-FSDevice::newFileHeaderBlock(const string &name)
+MutableFileSystem::newFileHeaderBlock(const string &name)
 {
     FSBlock *block = nullptr;
     
@@ -583,7 +583,7 @@ FSDevice::newFileHeaderBlock(const string &name)
 }
 
 void
-FSDevice::updateChecksums()
+MutableFileSystem::updateChecksums()
 {
     for (isize i = 0; i < numBlocks(); i++) {
         blocks[i]->updateChecksum();
@@ -591,7 +591,7 @@ FSDevice::updateChecksums()
 }
 
 FSBlock *
-FSDevice::bmBlockForBlock(Block nr)
+MutableFileSystem::bmBlockForBlock(Block nr)
 {
     assert(isBlockNumber(nr) && nr >= 2);
         
@@ -608,7 +608,7 @@ FSDevice::bmBlockForBlock(Block nr)
 }
 
 bool
-FSDevice::isFree(Block nr) const
+MutableFileSystem::isFree(Block nr) const
 {
     assert(isBlockNumber(nr));
 
@@ -624,7 +624,7 @@ FSDevice::isFree(Block nr) const
 }
 
 void
-FSDevice::setAllocationBit(Block nr, bool value)
+MutableFileSystem::setAllocationBit(Block nr, bool value)
 {
     isize byte, bit;
     
@@ -634,7 +634,7 @@ FSDevice::setAllocationBit(Block nr, bool value)
 }
 
 FSBlock *
-FSDevice::locateAllocationBit(Block nr, isize *byte, isize *bit) const
+MutableFileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
 {
     assert(isBlockNumber(nr));
 
@@ -681,7 +681,7 @@ FSDevice::locateAllocationBit(Block nr, isize *byte, isize *bit) const
 }
 
 FSBlock *
-FSDevice::currentDirBlock()
+MutableFileSystem::currentDirBlock()
 {
     FSBlock *cdb = blockPtr(cd);
     
@@ -697,7 +697,7 @@ FSDevice::currentDirBlock()
 }
 
 FSBlock *
-FSDevice::changeDir(const string &name)
+MutableFileSystem::changeDir(const string &name)
 {
     FSBlock *cdb = currentDirBlock();
 
@@ -724,7 +724,7 @@ FSDevice::changeDir(const string &name)
 }
 
 string
-FSDevice::getPath(FSBlock *block)
+MutableFileSystem::getPath(FSBlock *block)
 {
     string result = "";
     std::set<Block> visited;
@@ -752,7 +752,7 @@ FSDevice::getPath(FSBlock *block)
 }
 
 FSBlock *
-FSDevice::createDir(const string &name)
+MutableFileSystem::createDir(const string &name)
 {
     FSBlock *cdb = currentDirBlock();
     FSBlock *block = newUserDirBlock(name);
@@ -765,7 +765,7 @@ FSDevice::createDir(const string &name)
 }
 
 FSBlock *
-FSDevice::createFile(const string &name)
+MutableFileSystem::createFile(const string &name)
 {
     FSBlock *cdb = currentDirBlock();
     FSBlock *block = newFileHeaderBlock(name);
@@ -778,7 +778,7 @@ FSDevice::createFile(const string &name)
 }
 
 FSBlock *
-FSDevice::createFile(const string &name, const u8 *buf, isize size)
+MutableFileSystem::createFile(const string &name, const u8 *buf, isize size)
 {
     assert(buf);
 
@@ -793,13 +793,13 @@ FSDevice::createFile(const string &name, const u8 *buf, isize size)
 }
 
 FSBlock *
-FSDevice::createFile(const string &name, const string &str)
+MutableFileSystem::createFile(const string &name, const string &str)
 {
     return createFile(name, (const u8 *)str.c_str(), (isize)str.size());
 }
 
 Block
-FSDevice::seekRef(FSName name)
+MutableFileSystem::seekRef(FSName name)
 {
     std::set<Block> visited;
     
@@ -827,7 +827,7 @@ FSDevice::seekRef(FSName name)
 }
 
 void
-FSDevice::addHashRef(Block nr)
+MutableFileSystem::addHashRef(Block nr)
 {
     if (FSBlock *block = hashableBlockPtr(nr)) {
         addHashRef(block);
@@ -835,7 +835,7 @@ FSDevice::addHashRef(Block nr)
 }
 
 void
-FSDevice::addHashRef(FSBlock *newBlock)
+MutableFileSystem::addHashRef(FSBlock *newBlock)
 {
     // Only proceed if a hash table is present
     FSBlock *cdb = currentDirBlock();
@@ -854,7 +854,7 @@ FSDevice::addHashRef(FSBlock *newBlock)
 }
 
 void
-FSDevice::printDirectory(bool recursive)
+MutableFileSystem::printDirectory(bool recursive)
 {
     std::vector<Block> items;
     collect(cd, items);
@@ -867,14 +867,14 @@ FSDevice::printDirectory(bool recursive)
 
 
 FSBlock *
-FSDevice::lastHashBlockInChain(Block start)
+MutableFileSystem::lastHashBlockInChain(Block start)
 {
     FSBlock *block = hashableBlockPtr(start);
     return block ? lastHashBlockInChain(block) : nullptr;
 }
 
 FSBlock *
-FSDevice::lastHashBlockInChain(FSBlock *block)
+MutableFileSystem::lastHashBlockInChain(FSBlock *block)
 {
     std::set<Block> visited;
 
@@ -890,14 +890,14 @@ FSDevice::lastHashBlockInChain(FSBlock *block)
 }
 
 FSBlock *
-FSDevice::lastFileListBlockInChain(Block start)
+MutableFileSystem::lastFileListBlockInChain(Block start)
 {
     FSBlock *block = fileListBlockPtr(start);
     return block ? lastFileListBlockInChain(block) : nullptr;
 }
 
 FSBlock *
-FSDevice::lastFileListBlockInChain(FSBlock *block)
+MutableFileSystem::lastFileListBlockInChain(FSBlock *block)
 {
     std::set<Block> visited;
 
@@ -913,7 +913,7 @@ FSDevice::lastFileListBlockInChain(FSBlock *block)
 }
 
 void
-FSDevice::collect(Block nr, std::vector<Block> &result, bool recursive)
+MutableFileSystem::collect(Block nr, std::vector<Block> &result, bool recursive)
 {
     std::stack<Block> remainingItems;
     std::set<Block> visited;
@@ -936,7 +936,7 @@ FSDevice::collect(Block nr, std::vector<Block> &result, bool recursive)
 }
 
 void
-FSDevice::collectHashedRefs(Block nr,
+MutableFileSystem::collectHashedRefs(Block nr,
                             std::stack<Block> &result, std::set<Block> &visited)
 {
     if (FSBlock *b = blockPtr(nr)) {
@@ -949,7 +949,7 @@ FSDevice::collectHashedRefs(Block nr,
 }
 
 void
-FSDevice::collectRefsWithSameHashValue(Block nr,
+MutableFileSystem::collectRefsWithSameHashValue(Block nr,
                                        std::stack<Block> &result, std::set<Block> &visited)
 {
     std::stack<Block> refs;
@@ -969,7 +969,7 @@ FSDevice::collectRefsWithSameHashValue(Block nr,
 }
 
 FSErrorReport
-FSDevice::check(bool strict) const
+MutableFileSystem::check(bool strict) const
 {
     FSErrorReport result = { };
 
@@ -1016,19 +1016,19 @@ FSDevice::check(bool strict) const
 }
 
 ErrorCode
-FSDevice::check(Block nr, isize pos, u8 *expected, bool strict) const
+MutableFileSystem::check(Block nr, isize pos, u8 *expected, bool strict) const
 {
     return blocks[nr]->check(pos, expected, strict);
 }
 
 ErrorCode
-FSDevice::checkBlockType(Block nr, FSBlockType type)
+MutableFileSystem::checkBlockType(Block nr, FSBlockType type)
 {
     return checkBlockType(nr, type, type);
 }
 
 ErrorCode
-FSDevice::checkBlockType(Block nr, FSBlockType type, FSBlockType altType)
+MutableFileSystem::checkBlockType(Block nr, FSBlockType type, FSBlockType altType)
 {
     FSBlockType t = blockType(nr);
     
@@ -1054,13 +1054,13 @@ FSDevice::checkBlockType(Block nr, FSBlockType type, FSBlockType altType)
 }
 
 isize
-FSDevice::getCorrupted(Block nr)
+MutableFileSystem::getCorrupted(Block nr)
 {
     return blockPtr(nr) ? blocks[nr]->corrupted : 0;
 }
 
 bool
-FSDevice::isCorrupted(Block nr, isize n)
+MutableFileSystem::isCorrupted(Block nr, isize n)
 {
     for (isize i = 0, cnt = 0; i < numBlocks(); i++) {
         
@@ -1073,7 +1073,7 @@ FSDevice::isCorrupted(Block nr, isize n)
 }
 
 Block
-FSDevice::nextCorrupted(Block nr)
+MutableFileSystem::nextCorrupted(Block nr)
 {
     isize i = (isize)nr;
     while (++i < numBlocks()) { if (isCorrupted((Block)i)) return (Block)i; }
@@ -1081,7 +1081,7 @@ FSDevice::nextCorrupted(Block nr)
 }
 
 Block
-FSDevice::prevCorrupted(Block nr)
+MutableFileSystem::prevCorrupted(Block nr)
 {
     isize i = (isize)nr - 1;
     while (i-- >= 0) { if (isCorrupted((Block)i)) return (Block)i; }
@@ -1089,7 +1089,7 @@ FSDevice::prevCorrupted(Block nr)
 }
 
 Block
-FSDevice::seekCorruptedBlock(isize n)
+MutableFileSystem::seekCorruptedBlock(isize n)
 {
     for (isize i = 0, cnt = 0; i < numBlocks(); i++) {
 
@@ -1102,7 +1102,7 @@ FSDevice::seekCorruptedBlock(isize n)
 }
 
 u8
-FSDevice::readByte(Block nr, isize offset) const
+MutableFileSystem::readByte(Block nr, isize offset) const
 {
     assert(offset < bsize);
 
@@ -1114,7 +1114,7 @@ FSDevice::readByte(Block nr, isize offset) const
 }
 
 FSBlockType
-FSDevice::predictBlockType(Block nr, const u8 *buffer)
+MutableFileSystem::predictBlockType(Block nr, const u8 *buffer)
 {
     assert(buffer != nullptr);
     
@@ -1149,7 +1149,7 @@ FSDevice::predictBlockType(Block nr, const u8 *buffer)
 }
 
 void
-FSDevice::importVolume(const u8 *src, isize size)
+MutableFileSystem::importVolume(const u8 *src, isize size)
 {
     assert(src != nullptr);
 
@@ -1196,31 +1196,31 @@ FSDevice::importVolume(const u8 *src, isize size)
 }
 
 bool
-FSDevice::exportVolume(u8 *dst, isize size) const
+MutableFileSystem::exportVolume(u8 *dst, isize size) const
 {
     return exportBlocks(0, (Block)(numBlocks() - 1), dst, size);
 }
 
 bool
-FSDevice::exportVolume(u8 *dst, isize size, ErrorCode *err) const
+MutableFileSystem::exportVolume(u8 *dst, isize size, ErrorCode *err) const
 {
     return exportBlocks(0, (Block)(numBlocks() - 1), dst, size, err);
 }
 
 bool
-FSDevice::exportBlock(Block nr, u8 *dst, isize size) const
+MutableFileSystem::exportBlock(Block nr, u8 *dst, isize size) const
 {
     return exportBlocks(nr, nr, dst, size);
 }
 
 bool
-FSDevice::exportBlock(Block nr, u8 *dst, isize size, ErrorCode *error) const
+MutableFileSystem::exportBlock(Block nr, u8 *dst, isize size, ErrorCode *error) const
 {
     return exportBlocks(nr, nr, dst, size, error);
 }
 
 bool
-FSDevice::exportBlocks(Block first, Block last, u8 *dst, isize size) const
+MutableFileSystem::exportBlocks(Block first, Block last, u8 *dst, isize size) const
 {
     ErrorCode error;
     bool result = exportBlocks(first, last, dst, size, &error);
@@ -1230,7 +1230,7 @@ FSDevice::exportBlocks(Block first, Block last, u8 *dst, isize size) const
 }
 
 bool
-FSDevice::exportBlocks(Block first, Block last, u8 *dst, isize size, ErrorCode *err) const
+MutableFileSystem::exportBlocks(Block first, Block last, u8 *dst, isize size, ErrorCode *err) const
 {
     assert(last < (Block)numBlocks());
     assert(first <= last);
@@ -1270,7 +1270,7 @@ FSDevice::exportBlocks(Block first, Block last, u8 *dst, isize size, ErrorCode *
 #include <iostream>
 
 void
-FSDevice::importDirectory(const string &path, bool recursive)
+MutableFileSystem::importDirectory(const string &path, bool recursive)
 {
     fs::directory_entry dir;
     
@@ -1281,7 +1281,7 @@ FSDevice::importDirectory(const string &path, bool recursive)
 }
 
 void
-FSDevice::importDirectory(const fs::directory_entry &dir, bool recursive)
+MutableFileSystem::importDirectory(const fs::directory_entry &dir, bool recursive)
 {
   
     for (const auto& entry : fs::directory_iterator(dir)) {
@@ -1318,7 +1318,7 @@ FSDevice::importDirectory(const fs::directory_entry &dir, bool recursive)
 }
 
 void
-FSDevice::exportDirectory(const string &path, bool createDir)
+MutableFileSystem::exportDirectory(const string &path, bool createDir)
 {
     // Try to create the directory if it doesn't exist
     if (!util::isDirectory(path) && createDir && !util::createDirectory(path)) {

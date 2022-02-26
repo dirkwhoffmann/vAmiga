@@ -653,10 +653,10 @@
 @end
 
 //
-// FSDevice
+// FileSystem
 //
 
-@interface FSDeviceProxy : Proxy { }
+@interface FileSystemProxy : Proxy { }
 
 + (instancetype)makeWithADF:(ADFFileProxy *)adf exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithHDF:(HDFFileProxy *)hdf partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
@@ -739,7 +739,7 @@
 @end
 
 @protocol MakeWithFileSystem
-+ (instancetype)makeWithFileSystem:(FSDeviceProxy *)proxy exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithFileSystem:(FileSystemProxy *)proxy exception:(ExceptionWrapper *)ex;
 @end
 
 //

@@ -11,7 +11,7 @@
 #include "EXTFile.h"
 #include "Disk.h"
 #include "Drive.h"
-#include "FSDevice.h"
+#include "MutableFileSystem.h"
 #include "IOUtils.h"
 
 const std::vector<string> EXTFile::extAdfHeaders =

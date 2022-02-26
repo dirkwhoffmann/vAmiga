@@ -84,7 +84,7 @@ ADFFile::init(Drive &drive)
 }
 
 void
-ADFFile::init(FSDevice &volume)
+ADFFile::init(MutableFileSystem &volume)
 {
     switch (volume.numBlocks()) {
             
@@ -254,7 +254,7 @@ ADFFile::formatDisk(FSVolumeType fs, BootBlockId id)
     descriptor.dos = fs;
     
     // Create an empty file system
-    FSDevice volume(descriptor);
+    MutableFileSystem volume(descriptor);
     volume.setName(FSName("Disk"));
     
     // Write boot code

@@ -16,7 +16,7 @@
 #import "ExtendedRomFile.h"
 #import "EXTFile.h"
 #import "Folder.h"
-#import "FSDevice.h"
+#import "MutableFileSystem.h"
 #import "IMGFile.h"
 #import "RomFile.h"
 #import "Script.h"
@@ -1400,18 +1400,18 @@ using namespace moira;
 // FSDevice proxy
 //
 
-@implementation FSDeviceProxy
+@implementation FileSystemProxy
 
-- (FSDevice *)fs
+- (MutableFileSystem *)fs
 {
-    return (FSDevice *)obj;
+    return (MutableFileSystem *)obj;
 }
 
-+ (instancetype)make:(FSDevice *)volume
++ (instancetype)make:(MutableFileSystem *)volume
 {
     if (volume == nullptr) { return nil; }
     
-    FSDeviceProxy *proxy = [[self alloc] initWith: volume];
+    FileSystemProxy *proxy = [[self alloc] initWith: volume];
     return proxy;
 }
 
@@ -1420,7 +1420,7 @@ using namespace moira;
     try {
         
         auto adf = (ADFFile *)(proxy->obj);
-        auto dev = new FSDevice(*adf);
+        auto dev = new MutableFileSystem(*adf);
         return [self make:dev];
         
     }  catch (VAError &error) {
@@ -1435,7 +1435,7 @@ using namespace moira;
     try {
         
         auto hdf = (HDFFile *)(proxy->obj);
-        auto dev = new FSDevice(*hdf, nr);
+        auto dev = new MutableFileSystem(*hdf, nr);
         return [self make:dev];
                 
     }  catch (VAError &error) {

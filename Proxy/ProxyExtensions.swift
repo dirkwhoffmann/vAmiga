@@ -49,7 +49,7 @@ extension Proxy {
         return obj!
     }
 
-    static func make<T: MakeWithFileSystem>(fs: FSDeviceProxy) throws -> T {
+    static func make<T: MakeWithFileSystem>(fs: FileSystemProxy) throws -> T {
         
         let exc = ExceptionWrapper()
         let obj = T.make(withFileSystem: fs, exception: exc)
@@ -244,21 +244,21 @@ extension ADFFileProxy {
     }
 }
 
-extension FSDeviceProxy {
+extension FileSystemProxy {
             
-    static func make(withADF adf: ADFFileProxy) throws -> FSDeviceProxy {
+    static func make(withADF adf: ADFFileProxy) throws -> FileSystemProxy {
         
         let exception = ExceptionWrapper()
-        let result = FSDeviceProxy.make(withADF: adf, exception: exception)
+        let result = FileSystemProxy.make(withADF: adf, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
         
         return result!
     }
 
-    static func make(withHDF hdf: HDFFileProxy, partition nr: Int) throws -> FSDeviceProxy {
+    static func make(withHDF hdf: HDFFileProxy, partition nr: Int) throws -> FileSystemProxy {
         
         let exception = ExceptionWrapper()
-        let result = FSDeviceProxy.make(withHDF: hdf, partition: nr, exception: exception)
+        let result = FileSystemProxy.make(withHDF: hdf, partition: nr, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
         
         return result!

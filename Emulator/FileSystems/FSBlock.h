@@ -19,7 +19,7 @@
 struct FSBlock : AmigaObject {
         
     // The device this block belongs to
-    struct FSDevice &device;
+    struct MutableFileSystem &device;
 
     // The type of this block
     FSBlockType type = FS_UNKNOWN_BLOCK;
@@ -38,10 +38,10 @@ struct FSBlock : AmigaObject {
     // Constructing
     //
     
-    FSBlock(FSDevice &ref, Block nr, FSBlockType t);
+    FSBlock(MutableFileSystem &ref, Block nr, FSBlockType t);
     ~FSBlock();
 
-    static FSBlock *make(FSDevice &ref, Block nr, FSBlockType type) throws;
+    static FSBlock *make(MutableFileSystem &ref, Block nr, FSBlockType type) throws;
 
     
     //

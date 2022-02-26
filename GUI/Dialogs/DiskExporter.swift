@@ -44,7 +44,7 @@ class DiskExporter: DialogController {
     var adf: ADFFileProxy?
     var ext: EXTFileProxy?
     var img: IMGFileProxy?
-    var vol: FSDeviceProxy?
+    var vol: FileSystemProxy?
 
     // Returns true if a DD or a HD floppy disk is to be exported
     var isDD: Bool { return adf?.isDD ?? img?.isDD ?? ext?.isDD ?? false }
@@ -66,7 +66,7 @@ class DiskExporter: DialogController {
         img = try? IMGFileProxy.make(drive: dfn) as IMGFileProxy
                         
         // Try to decode the file system from the ADF
-        if adf != nil { vol = try? FSDeviceProxy.make(withADF: adf!) }
+        if adf != nil { vol = try? FileSystemProxy.make(withADF: adf!) }
 
         super.showSheet()
     }
@@ -81,7 +81,7 @@ class DiskExporter: DialogController {
         hdf = try? HDFFileProxy.make(hdr: dhn) as HDFFileProxy
                         
         // Try to decode the file system from the HDF
-        if hdf != nil { vol = try? FSDeviceProxy.make(withHDF: hdf!, partition: 0) }
+        if hdf != nil { vol = try? FileSystemProxy.make(withHDF: hdf!, partition: 0) }
         
         super.showSheet()
     }

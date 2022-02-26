@@ -10,7 +10,7 @@
 #pragma once
 
 #include "DiskFile.h"
-#include "FSDevice.h"
+#include "MutableFileSystem.h"
 
 class ADFFile : public DiskFile {
 
@@ -46,12 +46,12 @@ public:
     ADFFile(DiskDiameter dia, DiskDensity den) throws { init(dia, den); }
     ADFFile(class Disk &disk) throws { init(disk); }
     ADFFile(class Drive &drive) throws { init(drive); }
-    ADFFile(FSDevice &volume) throws { init(volume); }
+    ADFFile(MutableFileSystem &volume) throws { init(volume); }
     
     void init(DiskDiameter dia, DiskDensity den) throws;
     void init(Disk &disk) throws;
     void init(Drive &drive) throws;
-    void init(FSDevice &volume) throws;
+    void init(MutableFileSystem &volume) throws;
 
     
     //
