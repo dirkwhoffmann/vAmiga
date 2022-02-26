@@ -42,36 +42,7 @@ private:
     const char *getDescription() const override { return "FSPartition"; }
     void _dump(dump::Category category, std::ostream& os) const override { };
     
-        
-    //
-    // Creating and deleting blocks
-    //
-    
 
-    
-    
-    //
-    // Working with the block allocation bitmap
-    //
-
-public:
-    
-    // Returns the bitmap block storing the allocation bit for a certain block
-    FSBlock *bmBlockForBlock(Block nr);
-
-    // Checks if a block is marked as free in the allocation bitmap
-    bool isFree(Block nr) const;
-    
-    // Marks a block as allocated or free
-    void markAsAllocated(Block nr) { setAllocationBit(nr, 0); }
-    void markAsFree(Block nr) { setAllocationBit(nr, 1); }
-    void setAllocationBit(Block nr, bool value);
-
-    
-private:
-    
-    // Locates the allocation bit for a certain block
-    FSBlock *locateAllocationBit(Block nr, isize *byte, isize *bit) const;
 };
 
 typedef FSPartition* FSPartitionPtr;

@@ -91,6 +91,8 @@ private:
     void init(const class HardDrive &drive, isize partition) throws;
     void init(FSVolumeType type, const string &path);
 
+    void initBlocks(FSDeviceDescriptor &layout);
+
     
     //
     // Methods from AmigaObject
@@ -179,7 +181,7 @@ public:
     // Queries a pointer to a block of a certain type (may return nullptr)
     FSBlock *bootBlockPtr(Block nr);
     FSBlock *rootBlockPtr(Block nr) const;
-    FSBlock *bitmapBlockPtr(Block nr);
+    FSBlock *bitmapBlockPtr(Block nr) const;
     FSBlock *bitmapExtBlockPtr(Block nr);
     FSBlock *userDirBlockPtr(Block nr);
     FSBlock *fileHeaderBlockPtr(Block nr);
@@ -217,6 +219,30 @@ public:
     
     // Updates the checksums in all blocks
     void updateChecksums();
+    
+    
+    //
+    // Working with the block allocation bitmap
+    //
+
+public:
+    
+    // Returns the bitmap block storing the allocation bit for a certain block
+    FSBlock *bmBlockForBlock(Block nr);
+
+    // Checks if a block is marked as free in the allocation bitmap
+    bool isFree(Block nr) const;
+    
+    // Marks a block as allocated or free
+    void markAsAllocated(Block nr) { setAllocationBit(nr, 0); }
+    void markAsFree(Block nr) { setAllocationBit(nr, 1); }
+    void setAllocationBit(Block nr, bool value);
+
+    
+private:
+    
+    // Locates the allocation bit for a certain block
+    FSBlock *locateAllocationBit(Block nr, isize *byte, isize *bit) const;
     
     
     //

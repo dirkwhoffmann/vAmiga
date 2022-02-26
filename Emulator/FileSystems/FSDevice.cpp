@@ -44,6 +44,8 @@ FSDevice::init(FSDeviceDescriptor &layout)
     // Create partition
     partition = new FSPartition(*this, layout);
 
+    initBlocks(layout);
+    
     // Compute checksums for all blocks
     updateChecksums();
     
@@ -55,6 +57,48 @@ FSDevice::init(FSDeviceDescriptor &layout)
     
     // Print some debug information
     if constexpr (FS_DEBUG) { dump(dump::Summary); }
+}
+
+void
+FSDevice::initBlocks(FSDeviceDescriptor &layout)
+{
+    // Do some consistency checking
+    for (Block i = 0; i < numBlocks; i++) assert(blocks[i] == nullptr);
+    
+    // Create boot blocks
+    blocks[0] = new FSBlock(*partition, 0, FS_BOOT_BLOCK);
+    blocks[1] = new FSBlock(*partition, 1, FS_BOOT_BLOCK);
+
+    // Create the root block
+    FSBlock *rb = new FSBlock(*partition, partition->rootBlock, FS_ROOT_BLOCK);
+    blocks[layout.rootBlock] = rb;
+    
+    // Create the bitmap blocks
+    for (auto& ref : layout.bmBlocks) {
+        
+        blocks[ref] = new FSBlock(*partition, ref, FS_BITMAP_BLOCK);
+    }
+    
+    // Add bitmap extension blocks
+    FSBlock *pred = rb;
+    for (auto& ref : layout.bmExtBlocks) {
+        
+        blocks[ref] = new FSBlock(*partition, ref, FS_BITMAP_EXT_BLOCK);
+        pred->setNextBmExtBlockRef(ref);
+        pred = blocks[ref];
+    }
+    
+    // Add all bitmap block references
+    rb->addBitmapBlockRefs(layout.bmBlocks);
+    
+    // Add free blocks
+    for (Block i = 0; i < numBlocks; i++) {
+        
+        if (blocks[i] == nullptr) {
+            blocks[i] = new FSBlock(*partition, i, FS_EMPTY_BLOCK);
+            markAsFree(i);
+        }
+    }
 }
 
 void
@@ -227,7 +271,7 @@ FSDevice::freeBlocks() const
     isize result = 0;
     
     for (isize i = 0; i < numBlocks; i++) {
-        if (partition->isFree((Block)i)) result++;
+        if (isFree((Block)i)) result++;
     }
 
     return result;
@@ -331,7 +375,7 @@ FSDevice::rootBlockPtr(Block nr) const
 }
 
 FSBlock *
-FSDevice::bitmapBlockPtr(Block nr)
+FSDevice::bitmapBlockPtr(Block nr) const
 {
     if (nr < blocks.size() && blocks[nr]->type == FS_BITMAP_BLOCK) {
         return blocks[nr];
@@ -453,7 +497,7 @@ FSDevice::allocateBlockAbove(Block nr)
     
     for (i64 i = (i64)nr + 1; i < numBlocks; i++) {
         if (blocks[i]->type == FS_EMPTY_BLOCK) {
-            partition->markAsAllocated((Block)i);
+            markAsAllocated((Block)i);
             return (Block)i;
         }
     }
@@ -467,7 +511,7 @@ FSDevice::allocateBlockBelow(Block nr)
 
     for (i64 i = (i64)nr - 1; i >= 0; i--) {
         if (blocks[i]->type == FS_EMPTY_BLOCK) {
-            partition->markAsAllocated((Block)i);
+            markAsAllocated((Block)i);
             return (Block)i;
         }
     }
@@ -482,7 +526,7 @@ FSDevice::deallocateBlock(Block nr)
     
     delete blocks[nr];
     blocks[nr] = new FSBlock(*partition, nr, FS_EMPTY_BLOCK);
-    partition->markAsFree(nr);
+    markAsFree(nr);
 }
 
 Block
@@ -561,6 +605,96 @@ FSDevice::updateChecksums()
     for (isize i = 0; i < numBlocks; i++) {
         blocks[i]->updateChecksum();
     }
+}
+
+FSBlock *
+FSDevice::bmBlockForBlock(Block nr)
+{
+    assert(nr >= 2 && (isize)nr < numBlocks);
+        
+    // Locate the bitmap block
+    isize bitsPerBlock = (bsize - 4) * 8;
+    isize bmNr = (nr - 2) / bitsPerBlock;
+
+    if (bmNr >= (isize)partition->bmBlocks.size()) {
+        warn("Allocation bit is located in non-existent bitmap block %ld\n", bmNr);
+        return nullptr;
+    }
+
+    return bitmapBlockPtr(partition->bmBlocks[bmNr]);
+}
+
+bool
+FSDevice::isFree(Block nr) const
+{
+    assert(nr >= 0 && nr < numBlocks);
+
+    // The first two blocks are always allocated and not part of the bitmap
+    if (nr < 2) return false;
+    
+    // Locate the allocation bit in the bitmap block
+    isize byte, bit;
+    FSBlock *bm = locateAllocationBit(nr, &byte, &bit);
+        
+    // Read the bit
+    return bm ? GET_BIT(bm->data[byte], bit) : false;
+}
+
+void
+FSDevice::setAllocationBit(Block nr, bool value)
+{
+    isize byte, bit;
+    
+    if (FSBlock *bm = locateAllocationBit(nr, &byte, &bit)) {
+        REPLACE_BIT(bm->data[byte], bit, value);
+    }
+}
+
+FSBlock *
+FSDevice::locateAllocationBit(Block nr, isize *byte, isize *bit) const
+{
+    assert(nr >= 0 && nr < numBlocks);
+
+    // The first two blocks are always allocated and not part of the map
+    if (nr < 2) return nullptr;
+    nr -= 2;
+    
+    // Locate the bitmap block which stores the allocation bit
+    isize bitsPerBlock = (bsize - 4) * 8;
+    isize bmNr = nr / bitsPerBlock;
+
+    // Get the bitmap block
+    FSBlock *bm;
+    bm = (bmNr < (isize)partition->bmBlocks.size()) ? bitmapBlockPtr(partition->bmBlocks[bmNr]) : nullptr;
+    if (bm == nullptr) {
+        warn("Failed to lookup allocation bit for block %d\n", nr);
+        warn("bmNr = %ld\n", bmNr);
+        return nullptr;
+    }
+    
+    // Locate the byte position (note: the long word ordering will be reversed)
+    nr = nr % bitsPerBlock;
+    isize rByte = nr / 8;
+    
+    // Rectifiy the ordering
+    switch (rByte % 4) {
+        case 0: rByte += 3; break;
+        case 1: rByte += 1; break;
+        case 2: rByte -= 1; break;
+        case 3: rByte -= 3; break;
+    }
+
+    // Skip the checksum which is located in the first four bytes
+    rByte += 4;
+    assert(rByte >= 4 && rByte < bsize);
+    
+    *byte = rByte;
+    *bit = nr % 8;
+    
+    // debug(FS_DEBUG, "Alloc bit for %d: block: %d byte: %d bit: %d\n",
+    //       ref, bm->nr, *byte, *bit);
+
+    return bm;
 }
 
 FSBlock *
@@ -862,11 +996,11 @@ FSDevice::check(bool strict) const
     for (Block i = 0; i < numBlocks; i++) {
 
         FSBlock *block = blocks[i];
-        if (block->type == FS_EMPTY_BLOCK && !partition->isFree((Block)i)) {
+        if (block->type == FS_EMPTY_BLOCK && !isFree((Block)i)) {
             result.bitmapErrors++;
             debug(FS_DEBUG, "Empty block %d is marked as allocated\n", i);
         }
-        if (block->type != FS_EMPTY_BLOCK && partition->isFree((Block)i)) {
+        if (block->type != FS_EMPTY_BLOCK && isFree((Block)i)) {
             result.bitmapErrors++;
             debug(FS_DEBUG, "Non-empty block %d is marked as free\n", i);
         }
