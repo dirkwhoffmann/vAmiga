@@ -23,6 +23,14 @@ class HDFFile;
 class Drive;
 class HardDrive;
 
+/* An object of type FileSystem represents an Amiga file system (OFS or FFS).
+ * It is a logical volume that can be created from an ADF or HDF. In the latter
+ * case, each partition can be converted to a file system individually. The
+ * class provides functions for analyzing the integrity of the volume as well
+ * as functions for reading files and directories.
+ *
+ * See also: MutableFileSystem
+ */
 class FileSystem : public AmigaObject {
     
     friend struct FSBlock;

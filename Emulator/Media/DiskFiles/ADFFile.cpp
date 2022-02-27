@@ -276,7 +276,7 @@ ADFFile::formatDisk(FSVolumeType fs, BootBlockId id)
     if (fs == FS_NODOS) return;
     
     // Get a device descriptor for this ADF
-    FSDeviceDescriptor descriptor = layout();
+    auto descriptor = getFileSystemDescriptor();
     descriptor.dos = fs;
     
     // Create an empty file system

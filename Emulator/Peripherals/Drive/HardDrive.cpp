@@ -355,7 +355,7 @@ HardDrive::format(FSVolumeType fsType, BootBlockId bb)
         
         // Create a device descriptor matching this drive
         auto layout = FSDeviceDescriptor(driveSpec.geometry, fsType);
-        
+
         // Create a file system
         auto fs = MutableFileSystem(layout);
         

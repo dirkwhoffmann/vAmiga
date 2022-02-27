@@ -25,6 +25,38 @@ MutableFileSystem::init(isize capacity)
 }
 
 void
+MutableFileSystem::init(FileSystemDescriptor &layout)
+{
+    init((isize)layout.numBlocks);
+    
+    if constexpr (FS_DEBUG) { layout.dump(); }
+    
+    // Copy layout parameters
+    dos         = layout.dos;
+    bsize       = layout.bsize;
+    numReserved = layout.numReserved;
+    rootBlock   = layout.rootBlock;
+    bmBlocks    = layout.bmBlocks;
+    bmExtBlocks = layout.bmExtBlocks;
+
+    // Initialize all blocks
+    initBlocks();
+    
+    // Compute checksums for all blocks
+    updateChecksums();
+    
+    // Set the current directory to '/'
+    cd = rootBlock;
+    
+    // Do some consistency checking
+    for (isize i = 0; i < numBlocks(); i++) assert(blocks[i] != nullptr);
+    
+    // Print some debug information
+    if constexpr (FS_DEBUG) { dump(dump::Summary); }
+}
+
+
+void
 MutableFileSystem::init(FSDeviceDescriptor &layout)
 {
     init((isize)layout.numBlocks);
@@ -58,6 +90,48 @@ MutableFileSystem::init(FSDeviceDescriptor &layout)
 }
 
 void
+MutableFileSystem::initBlocks()
+{
+    // Do some consistency checking
+    for (Block i = 0; i < numBlocks(); i++) assert(blocks[i] == nullptr);
+    
+    // Create boot blocks
+    blocks[0] = new FSBlock(*this, 0, FS_BOOT_BLOCK);
+    blocks[1] = new FSBlock(*this, 1, FS_BOOT_BLOCK);
+
+    // Create the root block
+    FSBlock *rb = new FSBlock(*this, rootBlock, FS_ROOT_BLOCK);
+    blocks[rootBlock] = rb;
+    
+    // Create bitmap blocks
+    for (auto& ref : bmBlocks) {
+        
+        blocks[ref] = new FSBlock(*this, ref, FS_BITMAP_BLOCK);
+    }
+    
+    // Add bitmap extension blocks
+    FSBlock *pred = rb;
+    for (auto& ref : bmExtBlocks) {
+        
+        blocks[ref] = new FSBlock(*this, ref, FS_BITMAP_EXT_BLOCK);
+        pred->setNextBmExtBlockRef(ref);
+        pred = blocks[ref];
+    }
+    
+    // Add all bitmap block references
+    rb->addBitmapBlockRefs(bmBlocks);
+    
+    // Add free blocks
+    for (Block i = 0; i < numBlocks(); i++) {
+        
+        if (blocks[i] == nullptr) {
+            blocks[i] = new FSBlock(*this, i, FS_EMPTY_BLOCK);
+            markAsFree(i);
+        }
+    }
+}
+
+void
 MutableFileSystem::initBlocks(FSDeviceDescriptor &layout)
 {
     // Do some consistency checking
@@ -71,7 +145,7 @@ MutableFileSystem::initBlocks(FSDeviceDescriptor &layout)
     FSBlock *rb = new FSBlock(*this, rootBlock, FS_ROOT_BLOCK);
     blocks[layout.rootBlock] = rb;
     
-    // Create the bitmap blocks
+    // Create bitmap blocks
     for (auto& ref : layout.bmBlocks) {
         
         blocks[ref] = new FSBlock(*this, ref, FS_BITMAP_BLOCK);

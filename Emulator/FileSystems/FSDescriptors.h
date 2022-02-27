@@ -50,11 +50,15 @@ struct FileSystemDescriptor {
     // Computed values
     isize numBytes() const { return numBlocks * bsize; }
     
+    // Prints debug information
+    void dump() const;
+    void dump(std::ostream& os) const;
+    
     // Throws an exception if the descriptor contains unsupported values
     void checkCompatibility() const;
 };
 
-/* OLD:
+/* DEPRECATED:
  * To create a FSDevice, the layout parameters of the represendet device have
  * to be provided. This is done by passing a FSPartitionDescriptor which
  * provides information about the physical and logical properties of the device.

@@ -11,6 +11,11 @@
 
 #include "FileSystem.h"
 
+/* The MutableFileSystem class extends the FileSystem class with functions for
+ * modifiying the represented data. It provides functions for creating empty
+ * file systems of a certain type as well as functions for creating files and
+ * directories.
+ */
 class MutableFileSystem : public FileSystem {
     
     friend struct FSBlock;
@@ -24,14 +29,20 @@ class MutableFileSystem : public FileSystem {
     
 public:
 
+    using FileSystem::FileSystem;
+    /*
     MutableFileSystem(const ADFFile &adf) throws : FileSystem(adf) { }
     MutableFileSystem(const HDFFile &hdf, isize part) throws : FileSystem(hdf, part) { }
     MutableFileSystem(Drive &dfn) throws : FileSystem(dfn) { }
     MutableFileSystem(const HardDrive &hdn, isize part) throws : FileSystem(hdn, part) { }
-
+    */
+    // Creates an empty file system
     MutableFileSystem(isize capacity) { init(capacity); }
-    MutableFileSystem(FSDeviceDescriptor &layout) { init(layout); }
+    [[deprecated]] MutableFileSystem(FSDeviceDescriptor &layout) { init(layout); }
+    MutableFileSystem(FileSystemDescriptor &layout) { init(layout); }
     MutableFileSystem(DiskDiameter dia, DiskDensity den) { init(dia, den); }
+
+    // Creates a file system from a media file on disk
     MutableFileSystem(DiskDiameter dia, DiskDensity den, const string &path) { init(dia, den, path); }
     MutableFileSystem(FSVolumeType type, const string &path) { init(type, path); }
     ~MutableFileSystem();
@@ -40,11 +51,13 @@ private:
     
     void init(isize capacity);
     void init(FSDeviceDescriptor &layout);
+    void init(FileSystemDescriptor &layout);
     void init(DiskDiameter type, DiskDensity density);
     void init(DiskDiameter type, DiskDensity density, const string &path);
     void init(FSVolumeType type, const string &path);
 
-    void initBlocks(FSDeviceDescriptor &layout);
+    void initBlocks();
+    [[deprecated]] void initBlocks(FSDeviceDescriptor &layout);
 
 
     //

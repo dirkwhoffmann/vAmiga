@@ -12,6 +12,33 @@
 #include "IOUtils.h"
 
 void
+FileSystemDescriptor::dump() const
+{
+    dump(std::cout);
+}
+
+void
+FileSystemDescriptor::dump(std::ostream& os) const
+{
+    using namespace util;
+    
+    os << tab("Blocks");
+    os << dec(numBlocks) << std::endl;
+    os << tab("BSize");
+    os << dec(bsize) << std::endl;
+    os << tab("Reserved");
+    os << dec(numReserved) << std::endl;
+    os << tab("DOS version");
+    os << FSVolumeTypeEnum::key(dos) << std::endl;
+    os << tab("Root block");
+    os << dec(rootBlock) << std::endl;
+    os << tab("Bitmap blocks");
+    for (auto& it : bmBlocks) { os << dec(it) << " "; }; os << std::endl;
+    os << tab("Extension blocks");
+    for (auto& it : bmExtBlocks) { os << dec(it) << " "; }; os << std::endl;
+}
+
+void
 FileSystemDescriptor::checkCompatibility() const
 {
     if (numBytes() > MB(504) || FORCE_FS_WRONG_CAPACITY) {
