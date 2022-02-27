@@ -18,9 +18,10 @@
 void
 MutableFileSystem::init(isize capacity)
 {
-    printf("init(%ld)\n", capacity);
-    
+    // Remove existing blocks (if any)
     for (auto &b : blocks) delete b;
+    
+    // Resize and initialize the block storage
     blocks.reserve(capacity);
     blocks.assign(capacity, nullptr);
 }
@@ -40,13 +41,6 @@ MutableFileSystem::init(FileSystemDescriptor &layout)
     bmBlocks    = layout.bmBlocks;
     bmExtBlocks = layout.bmExtBlocks;
 
-    /*
-    // Initialize all blocks
-    initBlocks();
-    
-    // Compute checksums for all blocks
-    updateChecksums();
-    */
     // Create all blocks
     format(); 
     
@@ -58,48 +52,6 @@ MutableFileSystem::init(FileSystemDescriptor &layout)
     
     // Print some debug information
     if constexpr (FS_DEBUG) { dump(dump::Summary); }
-}
-
-void
-MutableFileSystem::initBlocks()
-{
-    // Do some consistency checking
-    for (Block i = 0; i < numBlocks(); i++) assert(blocks[i] == nullptr);
-    
-    // Create boot blocks
-    blocks[0] = new FSBlock(*this, 0, FS_BOOT_BLOCK);
-    blocks[1] = new FSBlock(*this, 1, FS_BOOT_BLOCK);
-
-    // Create the root block
-    FSBlock *rb = new FSBlock(*this, rootBlock, FS_ROOT_BLOCK);
-    blocks[rootBlock] = rb;
-    
-    // Create bitmap blocks
-    for (auto& ref : bmBlocks) {
-        
-        blocks[ref] = new FSBlock(*this, ref, FS_BITMAP_BLOCK);
-    }
-    
-    // Add bitmap extension blocks
-    FSBlock *pred = rb;
-    for (auto& ref : bmExtBlocks) {
-        
-        blocks[ref] = new FSBlock(*this, ref, FS_BITMAP_EXT_BLOCK);
-        pred->setNextBmExtBlockRef(ref);
-        pred = blocks[ref];
-    }
-    
-    // Add all bitmap block references
-    rb->addBitmapBlockRefs(bmBlocks);
-    
-    // Add free blocks
-    for (Block i = 0; i < numBlocks(); i++) {
-        
-        if (blocks[i] == nullptr) {
-            blocks[i] = new FSBlock(*this, i, FS_EMPTY_BLOCK);
-            markAsFree(i);
-        }
-    }
 }
 
 void
@@ -208,33 +160,6 @@ MutableFileSystem::setName(FSName name)
 
     rb->setName(name);
     rb->updateChecksum();
-}
-
-void
-MutableFileSystem::makeBootable(BootBlockId id)
-{
-    assert(blocks[0]->type == FS_BOOT_BLOCK);
-    assert(blocks[1]->type == FS_BOOT_BLOCK);
-
-    blocks[0]->writeBootBlock(id, 0);
-    blocks[1]->writeBootBlock(id, 1);
-}
-
-void
-MutableFileSystem::killVirus()
-{
-    assert(blocks[0]->type == FS_BOOT_BLOCK);
-    assert(blocks[1]->type == FS_BOOT_BLOCK);
-
-    auto id = isOFS() ? BB_AMIGADOS_13 : isFFS() ? BB_AMIGADOS_20 : BB_NONE;
-
-    if (id != BB_NONE) {
-        blocks[0]->writeBootBlock(id, 0);
-        blocks[1]->writeBootBlock(id, 1);
-    } else {
-        std::memset(blocks[0]->data + 4, 0, bsize - 4);
-        std::memset(blocks[1]->data, 0, bsize);
-    }
 }
 
 isize
@@ -403,24 +328,32 @@ MutableFileSystem::updateChecksums()
     }
 }
 
-/*
-FSBlock *
-MutableFileSystem::bmBlockForBlock(Block nr)
+void
+MutableFileSystem::makeBootable(BootBlockId id)
 {
-    assert(isBlockNumber(nr) && nr >= 2);
-        
-    // Locate the bitmap block
-    isize bitsPerBlock = (bsize - 4) * 8;
-    isize bmNr = (nr - 2) / bitsPerBlock;
+    assert(blocks[0]->type == FS_BOOT_BLOCK);
+    assert(blocks[1]->type == FS_BOOT_BLOCK);
 
-    if (bmNr >= (isize)bmBlocks.size()) {
-        warn("Allocation bit is located in non-existent bitmap block %ld\n", bmNr);
-        return nullptr;
-    }
-
-    return bitmapBlockPtr(bmBlocks[bmNr]);
+    blocks[0]->writeBootBlock(id, 0);
+    blocks[1]->writeBootBlock(id, 1);
 }
-*/
+
+void
+MutableFileSystem::killVirus()
+{
+    assert(blocks[0]->type == FS_BOOT_BLOCK);
+    assert(blocks[1]->type == FS_BOOT_BLOCK);
+
+    auto id = isOFS() ? BB_AMIGADOS_13 : isFFS() ? BB_AMIGADOS_20 : BB_NONE;
+
+    if (id != BB_NONE) {
+        blocks[0]->writeBootBlock(id, 0);
+        blocks[1]->writeBootBlock(id, 1);
+    } else {
+        std::memset(blocks[0]->data + 4, 0, bsize - 4);
+        std::memset(blocks[1]->data, 0, bsize);
+    }
+}
 
 void
 MutableFileSystem::setAllocationBit(Block nr, bool value)
@@ -477,6 +410,33 @@ FSBlock *
 MutableFileSystem::createFile(const string &name, const string &str)
 {
     return createFile(name, (const u8 *)str.c_str(), (isize)str.size());
+}
+
+void
+MutableFileSystem::addHashRef(Block nr)
+{
+    if (FSBlock *block = hashableBlockPtr(nr)) {
+        addHashRef(block);
+    }
+}
+
+void
+MutableFileSystem::addHashRef(FSBlock *newBlock)
+{
+    // Only proceed if a hash table is present
+    FSBlock *cdb = currentDirBlock();
+    if (!cdb || cdb->hashTableSize() == 0) { return; }
+
+    // Read the item at the proper hash table location
+    u32 hash = newBlock->hashValue() % cdb->hashTableSize();
+    u32 ref = cdb->getHashRef(hash);
+
+    // If the slot is empty, put the reference there
+    if (ref == 0) { cdb->setHashRef(hash, newBlock->nr); return; }
+
+    // Otherwise, put it into the last element of the block list chain
+    FSBlock *last = lastHashBlockInChain(ref);
+    if (last) last->setNextHashRef(newBlock->nr);
 }
 
 isize
@@ -552,33 +512,6 @@ MutableFileSystem::addData(FSBlock &block, const u8 *buffer, isize size)
 }
 
 void
-MutableFileSystem::addHashRef(Block nr)
-{
-    if (FSBlock *block = hashableBlockPtr(nr)) {
-        addHashRef(block);
-    }
-}
-
-void
-MutableFileSystem::addHashRef(FSBlock *newBlock)
-{
-    // Only proceed if a hash table is present
-    FSBlock *cdb = currentDirBlock();
-    if (!cdb || cdb->hashTableSize() == 0) { return; }
-
-    // Read the item at the proper hash table location
-    u32 hash = newBlock->hashValue() % cdb->hashTableSize();
-    u32 ref = cdb->getHashRef(hash);
-
-    // If the slot is empty, put the reference there
-    if (ref == 0) { cdb->setHashRef(hash, newBlock->nr); return; }
-
-    // Otherwise, put it into the last element of the block list chain
-    FSBlock *last = lastHashBlockInChain(ref);
-    if (last) last->setNextHashRef(newBlock->nr);
-}
-
-void
 MutableFileSystem::importVolume(const u8 *src, isize size)
 {
     assert(src != nullptr);
@@ -620,6 +553,54 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
     // dump();
     // util::hexdump(blocks[0]->data, 512);
     printDirectory(true);
+}
+
+void
+MutableFileSystem::importDirectory(const string &path, bool recursive)
+{
+    fs::directory_entry dir;
+    
+    try { dir = fs::directory_entry(path); }
+    catch (...) { throw VAError(ERROR_FILE_CANT_READ); }
+    
+    importDirectory(dir, recursive);
+}
+
+void
+MutableFileSystem::importDirectory(const fs::directory_entry &dir, bool recursive)
+{
+  
+    for (const auto& entry : fs::directory_iterator(dir)) {
+        
+        const auto path = entry.path().string();
+        const auto name = entry.path().filename().string();
+
+        // Skip all hidden files
+        if (name[0] == '.') continue;
+
+        debug(FS_DEBUG, "Importing %s\n", path.c_str());
+
+        if (entry.is_directory()) {
+            
+            // Add directory
+            if(createDir(name) && recursive) {
+
+                changeDir(name);
+                importDirectory(entry, recursive);
+            }
+        }
+
+        if (entry.is_regular_file()) {
+            
+            // Add file
+            u8 *buffer; isize size;
+            if (util::loadFile(string(path), &buffer, &size)) {
+                
+                createFile(name, buffer, size);
+                delete [] (buffer);
+            }
+        }
+    }
 }
 
 bool
@@ -692,56 +673,6 @@ MutableFileSystem::exportBlocks(Block first, Block last, u8 *dst, isize size, Er
 
     if (err) *err = ERROR_OK;
     return true;
-}
-
-#include <iostream>
-
-void
-MutableFileSystem::importDirectory(const string &path, bool recursive)
-{
-    fs::directory_entry dir;
-    
-    try { dir = fs::directory_entry(path); }
-    catch (...) { throw VAError(ERROR_FILE_CANT_READ); }
-    
-    importDirectory(dir, recursive);
-}
-
-void
-MutableFileSystem::importDirectory(const fs::directory_entry &dir, bool recursive)
-{
-  
-    for (const auto& entry : fs::directory_iterator(dir)) {
-        
-        const auto path = entry.path().string();
-        const auto name = entry.path().filename().string();
-
-        // Skip all hidden files
-        if (name[0] == '.') continue;
-
-        debug(FS_DEBUG, "Importing %s\n", path.c_str());
-
-        if (entry.is_directory()) {
-            
-            // Add directory
-            if(createDir(name) && recursive) {
-
-                changeDir(name);
-                importDirectory(entry, recursive);
-            }
-        }
-
-        if (entry.is_regular_file()) {
-            
-            // Add file
-            u8 *buffer; isize size;
-            if (util::loadFile(string(path), &buffer, &size)) {
-                
-                createFile(name, buffer, size);
-                delete [] (buffer);
-            }
-        }
-    }
 }
 
 void

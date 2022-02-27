@@ -12,9 +12,9 @@
 #include "FileSystem.h"
 
 /* The MutableFileSystem class extends the FileSystem class with functions for
- * modifiying the represented data. It provides functions for creating empty
- * file systems of a certain type as well as functions for creating files and
- * directories.
+ * modifiying the contents of the file system. It provides functions for
+ * creating empty file systems of a certain type as well as functions for
+ * creating files and directories.
  */
 class MutableFileSystem : public FileSystem {
     
@@ -36,9 +36,7 @@ public:
     MutableFileSystem(Diameter dia, Density den, FSVolumeType dos) { init(dia, den, dos); }
     MutableFileSystem(Diameter dia, Density den, const string &path) { init(dia, den, path); }
     MutableFileSystem(FSVolumeType type, const string &path) { init(type, path); }
-    
-    // ~MutableFileSystem();
-    
+        
 private:
     
     void init(isize capacity);
@@ -46,8 +44,6 @@ private:
     void init(Diameter dia, Density den, FSVolumeType dos);
     void init(Diameter dia, Density den, const string &path);
     void init(FSVolumeType type, const string &path);
-
-    [[deprecated]] void initBlocks();
 
 
     //
@@ -60,20 +56,8 @@ public:
     void format(FSVolumeType dos, string name = "");
     void format(string name = "");
     
-    // Writes the volume name
+    // Assigns the volume name
     void setName(FSName name);
-    
-    
-    //
-    // Modifying boot blocks
-    //
-    
-public:
-    // Installs a boot block
-    void makeBootable(BootBlockId id);
-
-    // Removes a boot block virus from the current partition (if any)
-    void killVirus();
     
     
     //
@@ -108,6 +92,18 @@ public:
     
     
     //
+    // Modifying boot blocks
+    //
+    
+public:
+    // Installs a boot block
+    void makeBootable(BootBlockId id);
+
+    // Removes a boot block virus from the current partition (if any)
+    void killVirus();
+
+    
+    //
     // Editing the block allocation bitmap
     //
 
@@ -124,11 +120,7 @@ public:
     //
     
 public:
-    
-    // Adds a reference to the current directory
-    void addHashRef(Block nr);
-    void addHashRef(FSBlock *block);
-    
+        
     // Creates a new directory
     FSBlock *createDir(const string &name);
 
@@ -139,12 +131,16 @@ public:
         
 private:
     
+    // Adds a reference to the current directory
+    void addHashRef(Block nr);
+    void addHashRef(FSBlock *block);
+
     // Adds data bytes to a block
     isize addData(FSBlock &block, const u8 *buffer, isize size);
     
     
     //
-    // Importing and exporting
+    // Importing and exporting the volume
     //
     
 public:
