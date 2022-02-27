@@ -12,7 +12,7 @@
 #include "FSTypes.h"
 #include "AmigaFile.h"
 #include "BootBlockImage.h"
-#include "Disk.h"
+#include "FloppyDisk.h"
 
 // Base class of all file types encoding a disk
 class DiskFile : public AmigaFile {
@@ -44,11 +44,11 @@ public:
 public:
         
     // Returns the layout parameters for this disk
-    virtual DiskDiameter getDiskDiameter() const = 0;
-    virtual DiskDensity getDiskDensity() const = 0;
-    bool isSD() { return getDiskDensity() == DISK_SD; }
-    bool isDD() { return getDiskDensity() == DISK_DD; }
-    bool isHD() { return getDiskDensity() == DISK_HD; }
+    virtual Diameter getDiameter() const = 0;
+    virtual Density getDensity() const = 0;
+    bool isSD() { return getDensity() == DENSITY_SD; }
+    bool isDD() { return getDensity() == DENSITY_DD; }
+    bool isHD() { return getDensity() == DENSITY_HD; }
     virtual isize numSides() const = 0;
     virtual isize numCyls() const = 0;
     virtual isize numSectors() const = 0;
@@ -93,6 +93,6 @@ public:
  
 public:
     
-    virtual void encodeDisk(class Disk &disk) const throws { fatalError; }
-    virtual void decodeDisk(class Disk &disk) throws { fatalError; }
+    virtual void encodeDisk(class FloppyDisk &disk) const throws { fatalError; }
+    virtual void decodeDisk(class FloppyDisk &disk) throws { fatalError; }
 };

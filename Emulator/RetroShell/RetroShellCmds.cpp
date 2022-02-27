@@ -1035,7 +1035,7 @@ RetroShell::exec <Token::dfn, Token::insert> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::dfn, Token::set, Token::model> (Arguments& argv, long param)
 {
-    long num = util::parseEnum <DriveTypeEnum> (argv.front());
+    long num = util::parseEnum <FloppyDriveTypeEnum> (argv.front());
     
     if (param >= 0 && param <= 3) {
         amiga.configure(OPT_DRIVE_TYPE, param, num);

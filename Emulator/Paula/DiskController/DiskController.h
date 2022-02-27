@@ -12,7 +12,7 @@
 #include "DiskControllerTypes.h"
 #include "SubComponent.h"
 #include "Reflection.h"
-#include "Disk.h"
+#include "FloppyDisk.h"
 
 class DiskController : public SubComponent
 {
@@ -180,7 +180,7 @@ public:
     isize getSelected() const { return selected; }
 
     // Returns the currently selected (nullptr if none is selected)
-    class Drive *getSelectedDrive();
+    class FloppyDrive *getSelectedDrive();
 
     // Indicates if the motor of the specified drive is switched on
     bool spinning(isize driveNr) const;
@@ -331,11 +331,11 @@ public:
   
     // Performs DMA in standard mode
     void performDMA();
-    void performDMARead(Drive *drive, u32 count);
-    void performDMAWrite(Drive *drive, u32 count);
+    void performDMARead(FloppyDrive *drive, u32 count);
+    void performDMAWrite(FloppyDrive *drive, u32 count);
      
     // Performs DMA in turbo mode
-    void performTurboDMA(Drive *d);
-    void performTurboRead(Drive *drive);
-    void performTurboWrite(Drive *drive);
+    void performTurboDMA(FloppyDrive *d);
+    void performTurboRead(FloppyDrive *drive);
+    void performTurboWrite(FloppyDrive *drive);
 };

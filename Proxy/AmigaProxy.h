@@ -606,7 +606,7 @@
 
 @interface DriveProxy : AmigaComponentProxy { }
 
-@property (readonly) DriveInfo info;
+@property (readonly) FloppyDriveInfo info;
 
 @property (readonly) NSInteger nr;
 @property (readonly) BOOL hasDisk;
@@ -615,7 +615,7 @@
 - (BOOL)hasWriteProtectedDisk;
 - (void)setWriteProtection:(BOOL)value;
 - (void)toggleWriteProtection;
-- (BOOL)isInsertable:(DiskDiameter)type density:(DiskDensity)density;
+- (BOOL)isInsertable:(Diameter)type density:(Density)density;
 - (void)eject;
 - (void)swap:(DiskFileProxy *)fileProxy exception:(ExceptionWrapper *)ex;
 - (void)insertNew:(FSVolumeType)fs bootBlock:(BootBlockId)bb exception:(ExceptionWrapper *)ex;
@@ -824,8 +824,8 @@
 }
 
 @property (readonly) FSVolumeType dos;
-@property (readonly) DiskDiameter diskType;
-@property (readonly) DiskDensity diskDensity;
+@property (readonly) Diameter diskType;
+@property (readonly) Density diskDensity;
 @property (readonly) BOOL isSD;
 @property (readonly) BOOL isDD;
 @property (readonly) BOOL isHD;
@@ -855,7 +855,7 @@
 @interface ADFFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer, MakeWithDrive> {
 }
 
-+ (instancetype)makeWithDiameter:(DiskDiameter)type density:(DiskDensity)density exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithDiameter:(Diameter)type density:(Density)density exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithDrive:(DriveProxy *)drive exception:(ExceptionWrapper *)ex;

@@ -104,7 +104,7 @@ Amiga::Amiga()
         msg("       ControlPort : %zu bytes\n", sizeof(ControlPort));
         msg("               CPU : %zu bytes\n", sizeof(CPU));
         msg("            Denise : %zu bytes\n", sizeof(Denise));
-        msg("             Drive : %zu bytes\n", sizeof(Drive));
+        msg("             Drive : %zu bytes\n", sizeof(FloppyDrive));
         msg("          Keyboard : %zu bytes\n", sizeof(Keyboard));
         msg("            Memory : %zu bytes\n", sizeof(Memory));
         msg("moira::Breakpoints : %zu bytes\n", sizeof(moira::Breakpoints));

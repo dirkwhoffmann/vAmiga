@@ -8,20 +8,20 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Disk.h"
+#include "FloppyDisk.h"
 #include "DiskFile.h"
 
 void
-Disk::init(DiskDiameter dia, DiskDensity den)
+FloppyDisk::init(Diameter dia, Density den)
 {
     diameter = dia;
     density = den;
     
     u32 trackLength = 0;
     
-    if (dia == INCH_35  && den == DISK_DD) trackLength = 12668;
-    if (dia == INCH_35  && den == DISK_HD) trackLength = 24636;
-    if (dia == INCH_525 && den == DISK_DD) trackLength = 12668;
+    if (dia == INCH_35  && den == DENSITY_DD) trackLength = 12668;
+    if (dia == INCH_35  && den == DENSITY_HD) trackLength = 24636;
+    if (dia == INCH_525 && den == DENSITY_DD) trackLength = 12668;
     
     if (trackLength == 0 || FORCE_DISK_INVALID_LAYOUT) {
         throw VAError(ERROR_DISK_INVALID_LAYOUT);
@@ -32,35 +32,35 @@ Disk::init(DiskDiameter dia, DiskDensity den)
 }
 
 void
-Disk::init(const class DiskFile &file)
+FloppyDisk::init(const class DiskFile &file)
 {
-    init(file.getDiskDiameter(), file.getDiskDensity());
+    init(file.getDiameter(), file.getDensity());
     encodeDisk(file);
 }
 
 void
-Disk::init(util::SerReader &reader, DiskDiameter dia, DiskDensity den)
+FloppyDisk::init(util::SerReader &reader, Diameter dia, Density den)
 {
     init(dia, den);
     applyToPersistentItems(reader);
 }
 
-Disk::~Disk()
+FloppyDisk::~FloppyDisk()
 {
     debug(OBJ_DEBUG, "Deleting disk\n");
 }
 
 void
-Disk::_dump(dump::Category category, std::ostream& os) const
+FloppyDisk::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
     
     if (category & dump::State) {
         
         os << tab("Type");
-        os << DiskDiameterEnum::key(diameter) << std::endl;
+        os << DiameterEnum::key(diameter) << std::endl;
         os << tab("Density");
-        os << DiskDensityEnum::key(density) << std::endl;
+        os << DensityEnum::key(density) << std::endl;
         os << tab("numCyls()");
         os << dec(numCyls()) << std::endl;
         os << tab("numSides()");
@@ -79,7 +79,7 @@ Disk::_dump(dump::Category category, std::ostream& os) const
 }
 
 u8
-Disk::readByte(Track t, isize offset) const
+FloppyDisk::readByte(Track t, isize offset) const
 {
     assert(t < numTracks());
     assert(offset < length.track[t]);
@@ -88,7 +88,7 @@ Disk::readByte(Track t, isize offset) const
 }
 
 u8
-Disk::readByte(Cylinder c, Side s, isize offset) const
+FloppyDisk::readByte(Cylinder c, Side s, isize offset) const
 {
     assert(c < numCyls());
     assert(s < numSides());
@@ -98,7 +98,7 @@ Disk::readByte(Cylinder c, Side s, isize offset) const
 }
 
 void
-Disk::writeByte(u8 value, Track t, isize offset)
+FloppyDisk::writeByte(u8 value, Track t, isize offset)
 {
     assert(t < numTracks());
     assert(offset < length.track[t]);
@@ -108,7 +108,7 @@ Disk::writeByte(u8 value, Track t, isize offset)
 }
 
 void
-Disk::writeByte(u8 value, Cylinder c, Side s, isize offset)
+FloppyDisk::writeByte(u8 value, Cylinder c, Side s, isize offset)
 {
     assert(c < numCyls());
     assert(s < numSides());
@@ -119,7 +119,7 @@ Disk::writeByte(u8 value, Cylinder c, Side s, isize offset)
 }
 
 void
-Disk::clearDisk()
+FloppyDisk::clearDisk()
 {
     fnv = 0;
     modified = FORCE_DISK_MODIFIED ? true : false;
@@ -133,7 +133,7 @@ Disk::clearDisk()
     /* In order to make some copy protected game titles work, we smuggle in
      * some magic values. E.g., Crunch factory expects 0x44A2 on cylinder 80.
      */
-    if (diameter == INCH_35 && density == DISK_DD) {
+    if (diameter == INCH_35 && density == DENSITY_DD) {
         
         for (isize t = 0; t < numTracks(); t++) {
             data.track[t][0] = 0x44;
@@ -143,7 +143,7 @@ Disk::clearDisk()
 }
 
 void
-Disk::clearTrack(Track t)
+FloppyDisk::clearTrack(Track t)
 {
     assert(t < numTracks());
 
@@ -154,7 +154,7 @@ Disk::clearTrack(Track t)
 }
 
 void
-Disk::clearTrack(Track t, u8 value)
+FloppyDisk::clearTrack(Track t, u8 value)
 {
     assert(t < numTracks());
 
@@ -164,7 +164,7 @@ Disk::clearTrack(Track t, u8 value)
 }
 
 void
-Disk::clearTrack(Track t, u8 value1, u8 value2)
+FloppyDisk::clearTrack(Track t, u8 value1, u8 value2)
 {
     assert(t < numTracks());
 
@@ -174,9 +174,9 @@ Disk::clearTrack(Track t, u8 value1, u8 value2)
 }
 
 void
-Disk::encodeDisk(const DiskFile &file)
+FloppyDisk::encodeDisk(const DiskFile &file)
 {
-    assert(file.getDiskDiameter() == getDiameter());
+    assert(file.getDiameter() == getDiameter());
 
     // Start with an unformatted disk
     clearDisk();
@@ -186,7 +186,7 @@ Disk::encodeDisk(const DiskFile &file)
 }
 
 void
-Disk::encodeMFM(u8 *dst, u8 *src, isize count)
+FloppyDisk::encodeMFM(u8 *dst, u8 *src, isize count)
 {
     for(isize i = 0; i < count; i++) {
         
@@ -206,7 +206,7 @@ Disk::encodeMFM(u8 *dst, u8 *src, isize count)
 }
 
 void
-Disk::decodeMFM(u8 *dst, u8 *src, isize count)
+FloppyDisk::decodeMFM(u8 *dst, u8 *src, isize count)
 {
     for(isize i = 0; i < count; i++) {
         
@@ -227,7 +227,7 @@ Disk::decodeMFM(u8 *dst, u8 *src, isize count)
 }
 
 void
-Disk::encodeOddEven(u8 *dst, u8 *src, isize count)
+FloppyDisk::encodeOddEven(u8 *dst, u8 *src, isize count)
 {
     // Encode odd bits
     for(isize i = 0; i < count; i++)
@@ -239,7 +239,7 @@ Disk::encodeOddEven(u8 *dst, u8 *src, isize count)
 }
 
 void
-Disk::decodeOddEven(u8 *dst, u8 *src, isize count)
+FloppyDisk::decodeOddEven(u8 *dst, u8 *src, isize count)
 {
     // Decode odd bits
     for(isize i = 0; i < count; i++)
@@ -251,7 +251,7 @@ Disk::decodeOddEven(u8 *dst, u8 *src, isize count)
 }
 
 void
-Disk::addClockBits(u8 *dst, isize count)
+FloppyDisk::addClockBits(u8 *dst, isize count)
 {
     for (isize i = 0; i < count; i++) {
         dst[i] = addClockBits(dst[i], dst[i-1]);
@@ -259,7 +259,7 @@ Disk::addClockBits(u8 *dst, isize count)
 }
 
 u8
-Disk::addClockBits(u8 value, u8 previous)
+FloppyDisk::addClockBits(u8 value, u8 previous)
 {
     // Clear all previously set clock bits
     value &= 0x55;
@@ -277,7 +277,7 @@ Disk::addClockBits(u8 value, u8 previous)
 }
 
 void
-Disk::repeatTracks()
+FloppyDisk::repeatTracks()
 {
     for (Track t = 0; t < 168; t++) {
         

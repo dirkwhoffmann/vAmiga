@@ -13,7 +13,7 @@
 #include "MutableFileSystem.h"
 #include "HardDriveTypes.h"
 
-class Disk;
+class FloppyDisk;
 
 class HDFFile : public AmigaFile {
     

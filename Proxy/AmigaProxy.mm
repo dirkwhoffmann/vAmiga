@@ -1166,12 +1166,12 @@ using namespace moira;
 
 @implementation DriveProxy
 
-- (Drive *)drive
+- (FloppyDrive *)drive
 {
-    return (Drive *)obj;
+    return (FloppyDrive *)obj;
 }
 
-- (DriveInfo)info
+- (FloppyDriveInfo)info
 {
     return [self drive]->getInfo();
 }
@@ -1211,7 +1211,7 @@ using namespace moira;
     [self drive]->toggleWriteProtection();
 }
 
-- (BOOL)isInsertable:(DiskDiameter)type density:(DiskDensity)density
+- (BOOL)isInsertable:(Diameter)type density:(Density)density
 {
     return [self drive]->isInsertable(type, density);
 }
@@ -1906,14 +1906,14 @@ using namespace moira;
     return [self file]->getDos();
 }
 
-- (DiskDiameter)diskType
+- (Diameter)diskType
 {
-    return [self file]->getDiskDiameter();
+    return [self file]->getDiameter();
 }
 
-- (DiskDensity)diskDensity
+- (Density)diskDensity
 {
-    return [self file]->getDiskDensity();
+    return [self file]->getDensity();
 }
 
 - (BOOL)isSD
@@ -2029,7 +2029,7 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-+ (instancetype)makeWithDiameter:(DiskDiameter)dia density:(DiskDensity)den exception:(ExceptionWrapper *)ex
++ (instancetype)makeWithDiameter:(Diameter)dia density:(Density)den exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new ADFFile(dia, den)]; }
     catch (VAError &error) { [ex save:error]; return nil; }

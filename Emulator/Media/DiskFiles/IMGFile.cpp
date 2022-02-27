@@ -10,7 +10,7 @@
 #include "config.h"
 #include "IMGFile.h"
 #include "Checksum.h"
-#include "Disk.h"
+#include "FloppyDisk.h"
 #include "IOUtils.h"
 
 bool
@@ -30,10 +30,10 @@ IMGFile::isCompatible(std::istream &stream)
 }
 
 void
-IMGFile::init(DiskDiameter dia, DiskDensity den)
+IMGFile::init(Diameter dia, Density den)
 {
     // We only support 3.5"DD disks at the moment
-    if (dia == INCH_35 && den == DISK_DD) {
+    if (dia == INCH_35 && den == DENSITY_DD) {
 
         size = 9 * 160 * 512;
         data = new u8[size]();
@@ -45,9 +45,9 @@ IMGFile::init(DiskDiameter dia, DiskDensity den)
 }
 
 void
-IMGFile::init(Disk &disk)
+IMGFile::init(FloppyDisk &disk)
 {
-    init(INCH_35, DISK_DD);
+    init(INCH_35, DENSITY_DD);
     decodeDisk(disk);
 }
 
@@ -70,12 +70,12 @@ IMGFile::numSectors() const
 }
 
 void
-IMGFile::encodeDisk(Disk &disk) const
+IMGFile::encodeDisk(FloppyDisk &disk) const
 {
-    if (disk.getDiameter() != getDiskDiameter()) {
+    if (disk.getDiameter() != getDiameter()) {
         throw VAError(ERROR_DISK_INVALID_DIAMETER);
     }
-    if (disk.getDensity() != getDiskDensity()) {
+    if (disk.getDensity() != getDensity()) {
         throw VAError(ERROR_DISK_INVALID_DENSITY);
     }
 
@@ -95,7 +95,7 @@ IMGFile::encodeDisk(Disk &disk) const
 }
 
 void
-IMGFile::encodeTrack(Disk &disk, Track t) const
+IMGFile::encodeTrack(FloppyDisk &disk, Track t) const
 {
     isize sectors = numSectors();
     debug(IMG_DEBUG, "Encoding DOS track %ld with %ld sectors\n", t, sectors);
@@ -125,7 +125,7 @@ IMGFile::encodeTrack(Disk &disk, Track t) const
 }
 
 void
-IMGFile::encodeSector(Disk &disk, Track t, Sector s) const
+IMGFile::encodeSector(FloppyDisk &disk, Track t, Sector s) const
 {
     u8 buf[60 + 512 + 2 + 109]; // Header + Data + CRC + Gap
         
@@ -178,8 +178,8 @@ IMGFile::encodeSector(Disk &disk, Track t, Sector s) const
     u8 *p = disk.data.track[t] + 194 + s * 1300;
 
     // Create the MFM data stream
-    Disk::encodeMFM(p, buf, sizeof(buf));
-    Disk::addClockBits(p, 2 * sizeof(buf));
+    FloppyDisk::encodeMFM(p, buf, sizeof(buf));
+    FloppyDisk::addClockBits(p, 2 * sizeof(buf));
     
     // Remove certain clock bits in IDAM block
     p[2*12+1] &= 0xDF;
@@ -193,16 +193,16 @@ IMGFile::encodeSector(Disk &disk, Track t, Sector s) const
 }
 
 void
-IMGFile::decodeDisk(Disk &disk)
+IMGFile::decodeDisk(FloppyDisk &disk)
 {
     long tracks = numTracks();
     
     debug(IMG_DEBUG, "Decoding DOS disk (%ld tracks)\n", tracks);
     
-    if (disk.getDiameter() != getDiskDiameter()) {
+    if (disk.getDiameter() != getDiameter()) {
         throw VAError(ERROR_DISK_INVALID_DIAMETER);
     }
-    if (disk.getDensity() != getDiskDensity()) {
+    if (disk.getDensity() != getDensity()) {
         throw VAError(ERROR_DISK_INVALID_DENSITY);
     }
     
@@ -214,7 +214,7 @@ IMGFile::decodeDisk(Disk &disk)
 }
 
 void
-IMGFile::decodeTrack(Disk &disk, Track t)
+IMGFile::decodeTrack(FloppyDisk &disk, Track t)
 {
     assert(t < disk.numTracks());
         
@@ -244,7 +244,7 @@ IMGFile::decodeTrack(Disk &disk, Track t)
 
         // Decode CHRN block
         struct { u8 c; u8 h; u8 r; u8 n; } chrn;
-        Disk::decodeMFM((u8 *)&chrn, &src[i], 4);
+        FloppyDisk::decodeMFM((u8 *)&chrn, &src[i], 4);
         debug(IMG_DEBUG, "c: %d h: %d r: %d n: %d\n", chrn.c, chrn.h, chrn.r, chrn.n);
         
         if (chrn.r >= 1 && chrn.r <= numSectors) {
@@ -279,5 +279,5 @@ IMGFile::decodeTrack(Disk &disk, Track t)
 void
 IMGFile::decodeSector(u8 *dst, u8 *src)
 {
-    Disk::decodeMFM(dst, src, 512);
+    FloppyDisk::decodeMFM(dst, src, 512);
 }

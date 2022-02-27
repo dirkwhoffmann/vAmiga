@@ -36,7 +36,7 @@ FileSystem::init(const HDFFile &hdf, isize part)
 }
 
 void
-FileSystem::init(Drive &dfn)
+FileSystem::init(FloppyDrive &dfn)
 {
     // Convert the floppy drive into an ADF
     auto adf = ADFFile(dfn);

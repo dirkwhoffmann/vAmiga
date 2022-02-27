@@ -11,12 +11,12 @@
 
 #include "DriveTypes.h"
 #include "SubComponent.h"
-#include "Disk.h"
+#include "FloppyDisk.h"
 #include "DiskController.h"
 #include "SchedulerTypes.h"
 #include "Thread.h"
 
-class Drive : public SubComponent {
+class FloppyDrive : public SubComponent {
     
     friend class DiskController;
         
@@ -24,10 +24,10 @@ class Drive : public SubComponent {
     const isize nr;
 
     // Current configuration
-    DriveConfig config = {};
+    FloppyDriveConfig config = {};
 
     // Result of the latest inspection
-    mutable DriveInfo info = {};
+    mutable FloppyDriveInfo info = {};
 
     // The current head location
     DriveHead head;
@@ -73,12 +73,12 @@ class Drive : public SubComponent {
 public:
     
     // The currently inserted disk (if any)
-    std::unique_ptr<Disk> disk;
+    std::unique_ptr<FloppyDisk> disk;
 
 private:
 
     // A disk waiting to be inserted (if any)
-    std::unique_ptr<Disk> diskToInsert;
+    std::unique_ptr<FloppyDisk> diskToInsert;
     
     // Search path for disk files, one for each drive
     string searchPath;
@@ -90,7 +90,7 @@ private:
 
 public:
 
-    Drive(Amiga& ref, isize nr);
+    FloppyDrive(Amiga& ref, isize nr);
     
     
     //
@@ -158,8 +158,8 @@ private:
     
 public:
     
-    static DriveConfig getDefaultConfig(isize nr);
-    const DriveConfig &getConfig() const { return config; }
+    static FloppyDriveConfig getDefaultConfig(isize nr);
+    const FloppyDriveConfig &getConfig() const { return config; }
     void resetConfig() override;
     
     i64 getConfigItem(Option option) const;
@@ -176,7 +176,7 @@ public:
 public:
     
     isize getNr() { return nr; }
-    DriveInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    FloppyDriveInfo getInfo() const { return AmigaComponent::getInfo(info); }
  
 
     //
@@ -272,8 +272,8 @@ public:
 public:
     
     bool hasDisk() const { return disk != nullptr; }
-    bool hasDDDisk() const { return disk ? disk->density == DISK_DD : false; }
-    bool hasHDDisk() const { return disk ? disk->density == DISK_HD : false; }
+    bool hasDDDisk() const { return disk ? disk->density == DENSITY_DD : false; }
+    bool hasHDDisk() const { return disk ? disk->density == DENSITY_HD : false; }
     bool hasModifiedDisk() const { return disk ? disk->isModified() : false; }
     void setModifiedDisk(bool value) { if (disk) disk->setModified(value); }
     
@@ -284,18 +284,18 @@ public:
     
     u64 fnv() const;
 
-    bool isInsertable(DiskDiameter t, DiskDensity d) const;
+    bool isInsertable(Diameter t, Density d) const;
     bool isInsertable(const DiskFile &file) const;
-    bool isInsertable(const Disk &disk) const;
+    bool isInsertable(const FloppyDisk &disk) const;
 
     // Ejects the current disk with an optional delay
     void ejectDisk(Cycle delay = 0);
     
     // Inserts a new disk with an optional delay
-    void insertDisk(std::unique_ptr<Disk> disk, Cycle delay = 0) throws;
+    void insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay = 0) throws;
     
     // Replaces the current disk (recommended way to insert disks)
-    void swapDisk(std::unique_ptr<Disk> disk) throws;
+    void swapDisk(std::unique_ptr<FloppyDisk> disk) throws;
     void swapDisk(class DiskFile &file) throws;
     void swapDisk(const string &name) throws;
 
@@ -305,7 +305,7 @@ public:
 private:
     
     template <EventSlot s> void ejectDisk(Cycle delay);
-    template <EventSlot s> void insertDisk(std::unique_ptr<Disk> disk, Cycle delay) throws;
+    template <EventSlot s> void insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay) throws;
 
     
     //

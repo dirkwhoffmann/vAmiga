@@ -45,7 +45,7 @@ class FloppyDiskCreator: DialogController {
         
         let type = amiga.getConfig(.DRIVE_TYPE, drive: nr)
         
-        switch DriveType.init(rawValue: type) {
+        switch FloppyDriveType.init(rawValue: type) {
             
         case .DD_35:    capacity.lastItem?.title = "3.5\" DD"
         case .HD_35:    capacity.lastItem?.title = "3.5\" HD"

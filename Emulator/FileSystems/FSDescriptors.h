@@ -10,12 +10,11 @@
 #pragma once
 
 #include "FSTypes.h"
-// #include "AmigaObject.h"
-#include "Disk.h"
+#include "FloppyDisk.h"
 #include "Error.h"
 #include "FSObjects.h"
 #include "FSBlock.h"
-#include "Geometry.h"
+#include "DriveDescriptors.h"
 
 /* To create a FileSystem, several layout parameters need to to be provided.
  * This is done by passing a FileSystemDescriptor which contains the necessary
@@ -95,12 +94,12 @@ struct FSDeviceDescriptor : AmigaObject {
     //
     
     FSDeviceDescriptor() { };
-    FSDeviceDescriptor(DiskDiameter type, DiskDensity density, FSVolumeType dos = FS_OFS);
+    FSDeviceDescriptor(Diameter type, Density density, FSVolumeType dos = FS_OFS);
     FSDeviceDescriptor(const DiskGeometry &geometry, FSVolumeType dos = FS_OFS);
 
 private:
     
-    void init(DiskDiameter type, DiskDensity density, FSVolumeType dos);
+    void init(Diameter type, Density density, FSVolumeType dos);
     void init(const DiskGeometry &geometry, FSVolumeType dos);
     
     

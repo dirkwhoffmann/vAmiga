@@ -24,17 +24,17 @@ enum_long(DRIVE_TYPE)
     DRIVE_HD_35,
     DRIVE_DD_525
 };
-typedef DRIVE_TYPE DriveType;
+typedef DRIVE_TYPE FloppyDriveType;
 
 #ifdef __cplusplus
-struct DriveTypeEnum : util::Reflection<DriveTypeEnum, DriveType>
+struct FloppyDriveTypeEnum : util::Reflection<FloppyDriveTypeEnum, FloppyDriveType>
 {
     static long minVal() { return 0; }
     static long maxVal() { return DRIVE_DD_525; }
     static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
     
     static const char *prefix() { return "DRIVE"; }
-    static const char *key(DriveType value)
+    static const char *key(FloppyDriveType value)
     {
         switch (value) {
                 
@@ -61,7 +61,7 @@ DriveHead;
 
 typedef struct
 {
-    DriveType type;
+    FloppyDriveType type;
     
     // Indicates whether mechanical delays should be emulated
     bool mechanicalDelays;
@@ -86,7 +86,7 @@ typedef struct
     u8 insertVolume;
     u8 ejectVolume;    
 }
-DriveConfig;
+FloppyDriveConfig;
 
 typedef struct
 {
@@ -94,4 +94,4 @@ typedef struct
     bool hasDisk;
     bool motor;
 }
-DriveInfo;
+FloppyDriveInfo;

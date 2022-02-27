@@ -864,7 +864,7 @@ extension Keys {
 struct PeripheralsDefaults {
         
     var driveConnect: [Bool]
-    var driveType: [DriveType]
+    var driveType: [FloppyDriveType]
 
     var hardDriveConnect: [Bool]
     var hardDriveType: [HardDriveType]

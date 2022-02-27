@@ -51,7 +51,7 @@ struct DiskGeometry {
     DiskGeometry() { };
     DiskGeometry(isize size);
     DiskGeometry(isize c, isize h, isize s, isize b);
-    DiskGeometry(DiskDiameter type, DiskDensity density);
+    DiskGeometry(Diameter type, Density density);
 
     bool operator == (const DiskGeometry &rhs) const;
     bool operator != (const DiskGeometry &rhs) const;

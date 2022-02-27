@@ -7,6 +7,5 @@ IMGFile.cpp
 DMSFile.cpp
 EXEFile.cpp
 Folder.cpp
-BootBlockImage.cpp
 
 )

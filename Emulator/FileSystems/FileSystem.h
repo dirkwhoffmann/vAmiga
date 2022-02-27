@@ -20,7 +20,7 @@
 
 class ADFFile;
 class HDFFile;
-class Drive;
+class FloppyDrive;
 class HardDrive;
 
 /* An object of type FileSystem represents an Amiga file system (OFS or FFS).
@@ -71,7 +71,7 @@ public:
     FileSystem() { };
     FileSystem(const ADFFile &adf) throws { init(adf); }
     FileSystem(const HDFFile &hdn, isize part) throws { init(hdn, part); }
-    FileSystem(Drive &dfn) throws { init(dfn); }
+    FileSystem(FloppyDrive &dfn) throws { init(dfn); }
     FileSystem(const HardDrive &hdn, isize part) throws { init(hdn, part); }
 
     
@@ -79,7 +79,7 @@ protected:
     
     void init(const ADFFile &adf) throws;
     void init(const HDFFile &hdn, isize part) throws;
-    void init(Drive &dfn) throws;
+    void init(FloppyDrive &dfn) throws;
     void init(const HardDrive &hdn, isize part) throws;
 
     void init(FileSystemDescriptor layout, u8 *buf, isize len) throws;

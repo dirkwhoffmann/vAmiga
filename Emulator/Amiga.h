@@ -15,7 +15,7 @@
 #include "CIA.h"
 #include "CPU.h"
 #include "Denise.h"
-#include "Drive.h"
+#include "FloppyDrive.h"
 #include "GdbServer.h"
 #include "HardDrive.h"
 #include "Keyboard.h"
@@ -74,10 +74,10 @@ public:
     SerialPort serialPort = SerialPort(*this);
 
     // Floppy drives
-    Drive df0 = Drive(*this, 0);
-    Drive df1 = Drive(*this, 1);
-    Drive df2 = Drive(*this, 2);
-    Drive df3 = Drive(*this, 3);
+    FloppyDrive df0 = FloppyDrive(*this, 0);
+    FloppyDrive df1 = FloppyDrive(*this, 1);
+    FloppyDrive df2 = FloppyDrive(*this, 2);
+    FloppyDrive df3 = FloppyDrive(*this, 3);
 
     // Hard drives
     HardDrive dh0 = HardDrive(*this, 0);
@@ -95,7 +95,7 @@ public:
     Keyboard keyboard = Keyboard(*this);
     
     // Shortcuts to all drives
-    Drive *df[4] = { &df0, &df1, &df2, &df3 };
+    FloppyDrive *df[4] = { &df0, &df1, &df2, &df3 };
     HardDrive *dh[4] = { &dh0, &dh1, &dh2, &dh3 };
     
     // Gateway to the GUI

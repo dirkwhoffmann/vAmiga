@@ -59,8 +59,8 @@ public:
     
     FSVolumeType getDos() const override { return adf->getDos(); }
     void setDos(FSVolumeType dos) override { adf->setDos(dos); }
-    DiskDiameter getDiskDiameter() const override { return adf->getDiskDiameter(); }
-    DiskDensity getDiskDensity() const override { return adf->getDiskDensity(); }
+    Diameter getDiameter() const override { return adf->getDiameter(); }
+    Density getDensity() const override { return adf->getDensity(); }
     isize numSides() const override { return adf->numSides(); }
     isize numCyls() const override { return adf->numCyls(); }
     isize numSectors() const override { return adf->numSectors(); }
@@ -69,5 +69,5 @@ public:
     void killVirus() override { adf->killVirus(); }
     void readSector(u8 *target, isize s) const override { return adf->readSector(target, s); }
     void readSector(u8 *target, isize t, isize s) const override { return adf->readSector(target, t, s); }
-    void encodeDisk(class Disk &disk) const throws override { adf->encodeDisk(disk); }
+    void encodeDisk(class FloppyDisk &disk) const throws override { adf->encodeDisk(disk); }
 };

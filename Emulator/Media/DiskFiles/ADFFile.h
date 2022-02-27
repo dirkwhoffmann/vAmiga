@@ -31,7 +31,7 @@ public:
 private:
     
     // Returns the size of an ADF file of a given disk type in bytes
-    static isize fileSize(DiskDiameter diameter, DiskDensity density) throws;
+    static isize fileSize(Diameter diameter, Density density) throws;
 
     
     //
@@ -45,14 +45,14 @@ public:
     ADFFile(const string &path, std::istream &stream) throws { AmigaFile::init(path, stream); }
     ADFFile(const u8 *buf, isize len) throws { AmigaFile::init(buf, len); }
     ADFFile(FILE *file) throws { AmigaFile::init(file); }
-    ADFFile(DiskDiameter dia, DiskDensity den) throws { init(dia, den); }
-    ADFFile(class Disk &disk) throws { init(disk); }
-    ADFFile(class Drive &drive) throws { init(drive); }
+    ADFFile(Diameter dia, Density den) throws { init(dia, den); }
+    ADFFile(class FloppyDisk &disk) throws { init(disk); }
+    ADFFile(class FloppyDrive &drive) throws { init(drive); }
     ADFFile(MutableFileSystem &volume) throws { init(volume); }
     
-    void init(DiskDiameter dia, DiskDensity den) throws;
-    void init(Disk &disk) throws;
-    void init(Drive &drive) throws;
+    void init(Diameter dia, Density den) throws;
+    void init(FloppyDisk &disk) throws;
+    void init(FloppyDrive &drive) throws;
     void init(MutableFileSystem &volume) throws;
 
     
@@ -84,8 +84,8 @@ public:
     
     FSVolumeType getDos() const override; 
     void setDos(FSVolumeType dos) override;
-    DiskDiameter getDiskDiameter() const override;
-    DiskDensity getDiskDensity() const override;
+    Diameter getDiameter() const override;
+    Density getDensity() const override;
     isize numSides() const override;
     isize numCyls() const override;
     isize numSectors() const override;
@@ -94,15 +94,15 @@ public:
     
     void killVirus() override;
 
-    void encodeDisk(class Disk &disk) const throws override;
-    void decodeDisk(class Disk &disk) throws override;
+    void encodeDisk(class FloppyDisk &disk) const throws override;
+    void decodeDisk(class FloppyDisk &disk) throws override;
 
 private:
     
-    void encodeTrack(class Disk &disk, Track t) const throws;
-    void encodeSector(class Disk &disk, Track t, Sector s) const throws;
+    void encodeTrack(class FloppyDisk &disk, Track t) const throws;
+    void encodeSector(class FloppyDisk &disk, Track t, Sector s) const throws;
 
-    void decodeTrack(class Disk &disk, Track t) throws;
+    void decodeTrack(class FloppyDisk &disk, Track t) throws;
     void decodeSector(u8 *dst, u8 *src) throws;
 
     

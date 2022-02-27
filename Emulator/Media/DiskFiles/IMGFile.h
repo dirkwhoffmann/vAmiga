@@ -30,13 +30,13 @@ public:
     IMGFile(const string &path) throws { AmigaFile::init(path); }
     IMGFile(const string &path, std::istream &stream) throws { AmigaFile::init(path, stream); }
     IMGFile(const u8 *buf, isize len) throws { AmigaFile::init(buf, len); }
-    IMGFile(DiskDiameter dia, DiskDensity den) throws { init(dia, den); }
-    IMGFile(class Disk &disk) throws { init(disk); }
+    IMGFile(Diameter dia, Density den) throws { init(dia, den); }
+    IMGFile(class FloppyDisk &disk) throws { init(disk); }
 
 private:
     
-    void init(DiskDiameter dia, DiskDensity den) throws;
-    void init(class Disk &disk) throws;
+    void init(Diameter dia, Density den) throws;
+    void init(class FloppyDisk &disk) throws;
 
     
     //
@@ -63,19 +63,19 @@ public:
       
     FSVolumeType getDos() const override { return FS_NODOS; }
     void setDos(FSVolumeType dos) override { };
-    DiskDiameter getDiskDiameter() const override { return INCH_35; }
-    DiskDensity getDiskDensity() const override { return DISK_DD; }
+    Diameter getDiameter() const override { return INCH_35; }
+    Density getDensity() const override { return DENSITY_DD; }
     isize numSides() const override;
     isize numCyls() const override;
     isize numSectors() const override;
-    void encodeDisk(class Disk &disk) const throws override;
-    void decodeDisk(class Disk &disk) throws override;
+    void encodeDisk(class FloppyDisk &disk) const throws override;
+    void decodeDisk(class FloppyDisk &disk) throws override;
 
 private:
     
-    void encodeTrack(class Disk &disk, Track t) const throws;
-    void encodeSector(class Disk &disk, Track t, Sector s) const throws;
+    void encodeTrack(class FloppyDisk &disk, Track t) const throws;
+    void encodeSector(class FloppyDisk &disk, Track t, Sector s) const throws;
 
-    void decodeTrack(class Disk &disk, Track t) throws;
+    void decodeTrack(class FloppyDisk &disk, Track t) throws;
     void decodeSector(u8 *dst, u8 *src);
 };

@@ -9,8 +9,8 @@
 
 #include "config.h"
 #include "EXTFile.h"
-#include "Disk.h"
-#include "Drive.h"
+#include "FloppyDisk.h"
+#include "FloppyDrive.h"
 #include "MutableFileSystem.h"
 #include "IOUtils.h"
 
@@ -42,7 +42,7 @@ EXTFile::isCompatible(std::istream &stream)
 }
 
 void
-EXTFile::init(Disk &disk)
+EXTFile::init(FloppyDisk &disk)
 {
     auto numTracks = disk.numTracks();
     
@@ -59,7 +59,7 @@ EXTFile::init(Disk &disk)
 }
 
 void
-EXTFile::init(Drive &drive)
+EXTFile::init(FloppyDrive &drive)
 {
     if (drive.disk == nullptr) throw VAError(ERROR_DISK_MISSING);
     init(*drive.disk);
@@ -115,7 +115,7 @@ EXTFile::finalizeRead()
     try {
                 
         // Convert the extended ADF to a disk
-        auto disk = Disk(*this);
+        auto disk = FloppyDisk(*this);
 
         // Convert the disk to a standard ADF
         adf = new ADFFile(disk);
@@ -129,14 +129,14 @@ EXTFile::getDos() const
     return adf ? adf->getDos() : FS_NODOS;
 }
 
-DiskDiameter
-EXTFile::getDiskDiameter() const
+Diameter
+EXTFile::getDiameter() const
 {
     return INCH_35;
 }
 
-DiskDensity
-EXTFile::getDiskDensity() const
+Density
+EXTFile::getDensity() const
 {
     isize bitsInLargestTrack = 0;
     
@@ -144,7 +144,7 @@ EXTFile::getDiskDensity() const
         bitsInLargestTrack = std::max(bitsInLargestTrack, usedBitsForTrack(i));
     }
     
-    return bitsInLargestTrack < 16000 * 8 ? DISK_DD : DISK_HD;
+    return bitsInLargestTrack < 16000 * 8 ? DENSITY_DD : DENSITY_HD;
 }
 
 isize
@@ -172,7 +172,7 @@ EXTFile::numSectors() const
 }
 
 void
-EXTFile::encodeDisk(class Disk &disk) const
+EXTFile::encodeDisk(class FloppyDisk &disk) const
 {
     assert(size);
     assert(data);
@@ -188,7 +188,7 @@ EXTFile::encodeDisk(class Disk &disk) const
 }
 
 void
-EXTFile::encodeTrack(class Disk &disk, Track t) const
+EXTFile::encodeTrack(class FloppyDisk &disk, Track t) const
 {
     auto numTracks = storedTracks();
     
@@ -205,7 +205,7 @@ EXTFile::encodeTrack(class Disk &disk, Track t) const
 }
 
 void
-EXTFile::decodeDisk(Disk &disk)
+EXTFile::decodeDisk(FloppyDisk &disk)
 {
     assert(size);
     assert(data);

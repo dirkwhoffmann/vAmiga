@@ -174,7 +174,7 @@ MutableFileSystem::initBlocks(FSDeviceDescriptor &layout)
 }
 
 void
-MutableFileSystem::init(DiskDiameter dia, DiskDensity den)
+MutableFileSystem::init(Diameter dia, Density den)
 {
     // Get a device descriptor
     auto descriptor = FSDeviceDescriptor(dia, den);
@@ -184,7 +184,7 @@ MutableFileSystem::init(DiskDiameter dia, DiskDensity den)
 }
 
 void
-MutableFileSystem::init(DiskDiameter dia, DiskDensity den, const string &path)
+MutableFileSystem::init(Diameter dia, Density den, const string &path)
 {
     init(dia, den);
     
@@ -205,10 +205,10 @@ void
 MutableFileSystem::init(FSVolumeType type, const string &path)
 {
     // Try to fit the directory into files system with DD disk capacity
-    try { init(INCH_35, DISK_DD, path); return; } catch (...) { };
+    try { init(INCH_35, DENSITY_DD, path); return; } catch (...) { };
 
     // Try to fit the directory into files system with HD disk capacity
-    init(INCH_35, DISK_HD, path);
+    init(INCH_35, DENSITY_HD, path);
 }
 
 MutableFileSystem::~MutableFileSystem()

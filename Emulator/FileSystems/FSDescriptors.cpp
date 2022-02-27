@@ -70,9 +70,9 @@ DiskGeometry::DiskGeometry(isize size)
     while (cylinders > 1024) { cylinders /= 2; heads *= 2; }
 }
 
-DiskGeometry::DiskGeometry(DiskDiameter type, DiskDensity density)
+DiskGeometry::DiskGeometry(Diameter type, Density density)
 {
-    if (type == INCH_525 && density == DISK_DD) {
+    if (type == INCH_525 && density == DENSITY_DD) {
         
         cylinders = 40;
         heads = 2;
@@ -80,7 +80,7 @@ DiskGeometry::DiskGeometry(DiskDiameter type, DiskDensity density)
         bsize = 512;
         return;
     }
-    if (type == INCH_35 && density == DISK_DD) {
+    if (type == INCH_35 && density == DENSITY_DD) {
         
         cylinders = 80;
         heads = 2;
@@ -88,7 +88,7 @@ DiskGeometry::DiskGeometry(DiskDiameter type, DiskDensity density)
         bsize = 512;
         return;
     }
-    if (type == INCH_35 && density == DISK_HD) {
+    if (type == INCH_35 && density == DENSITY_HD) {
         
         cylinders = 80;
         heads = 2;
@@ -100,7 +100,7 @@ DiskGeometry::DiskGeometry(DiskDiameter type, DiskDensity density)
     fatalError;
 }
 
-FSDeviceDescriptor::FSDeviceDescriptor(DiskDiameter type, DiskDensity density, FSVolumeType dos)
+FSDeviceDescriptor::FSDeviceDescriptor(Diameter type, Density density, FSVolumeType dos)
 {
     init(type, density, dos);
 }
@@ -111,7 +111,7 @@ FSDeviceDescriptor::FSDeviceDescriptor(const DiskGeometry &geometry, FSVolumeTyp
 }
 
 void
-FSDeviceDescriptor::init(DiskDiameter type, DiskDensity density, FSVolumeType dos)
+FSDeviceDescriptor::init(Diameter type, Density density, FSVolumeType dos)
 {
     init(DiskGeometry(type, density), dos);
 }

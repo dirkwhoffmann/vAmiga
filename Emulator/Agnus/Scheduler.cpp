@@ -15,7 +15,7 @@
 #include "Agnus.h"
 #include "Paula.h"
 #include "Keyboard.h"
-#include "Drive.h"
+#include "FloppyDrive.h"
 #include "IOUtils.h"
 #include "RemoteManager.h"
 #include <iomanip>

@@ -1,9 +1,10 @@
 target_sources(vAmigaCore PRIVATE
 
 FSDescriptors.cpp
-FSDevice.cpp
-FSPartition.cpp
+FileSystem.cpp
+MutableFileSystem.cpp
 FSObjects.cpp
 FSBlock.cpp
+BootBlockImage.cpp
 
 )

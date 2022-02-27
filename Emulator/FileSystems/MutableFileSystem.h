@@ -40,10 +40,10 @@ public:
     MutableFileSystem(isize capacity) { init(capacity); }
     [[deprecated]] MutableFileSystem(FSDeviceDescriptor &layout) { init(layout); }
     MutableFileSystem(FileSystemDescriptor &layout) { init(layout); }
-    MutableFileSystem(DiskDiameter dia, DiskDensity den) { init(dia, den); }
+    MutableFileSystem(Diameter dia, Density den) { init(dia, den); }
 
     // Creates a file system from a media file on disk
-    MutableFileSystem(DiskDiameter dia, DiskDensity den, const string &path) { init(dia, den, path); }
+    MutableFileSystem(Diameter dia, Density den, const string &path) { init(dia, den, path); }
     MutableFileSystem(FSVolumeType type, const string &path) { init(type, path); }
     ~MutableFileSystem();
     
@@ -52,8 +52,8 @@ private:
     void init(isize capacity);
     void init(FSDeviceDescriptor &layout);
     void init(FileSystemDescriptor &layout);
-    void init(DiskDiameter type, DiskDensity density);
-    void init(DiskDiameter type, DiskDensity density, const string &path);
+    void init(Diameter type, Density density);
+    void init(Diameter type, Density density, const string &path);
     void init(FSVolumeType type, const string &path);
 
     void initBlocks();

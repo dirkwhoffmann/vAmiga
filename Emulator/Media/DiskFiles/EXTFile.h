@@ -58,12 +58,12 @@ public:
 
     EXTFile(const string &path) throws { AmigaFile::init(path); }
     EXTFile(const u8 *buf, isize len) throws { AmigaFile::init(buf, len); }
-    EXTFile(class Disk &disk) throws { init(disk); }
-    EXTFile(class Drive &drive) throws { init(drive); }
+    EXTFile(class FloppyDisk &disk) throws { init(disk); }
+    EXTFile(class FloppyDrive &drive) throws { init(drive); }
     ~EXTFile();
     
-    void init(Disk &disk) throws;
-    void init(Drive &drive) throws;
+    void init(FloppyDisk &disk) throws;
+    void init(FloppyDrive &drive) throws;
 
     
     //
@@ -93,8 +93,8 @@ public:
     
     FSVolumeType getDos() const override;
     void setDos(FSVolumeType dos) override { };
-    DiskDiameter getDiskDiameter() const override;
-    DiskDensity getDiskDensity() const override;
+    Diameter getDiameter() const override;
+    Density getDensity() const override;
     isize numSides() const override;
     isize numCyls() const override;
     isize numTracks() const override; 
@@ -107,12 +107,12 @@ public:
     void readSectorHex(char *dst, isize b, isize count) const override { }
     void readSectorHex(char *dst, isize t, isize s, isize count) const override { }
     
-    void encodeDisk(class Disk &disk) const throws override;
-    void decodeDisk(class Disk &disk) throws override;
+    void encodeDisk(class FloppyDisk &disk) const throws override;
+    void decodeDisk(class FloppyDisk &disk) throws override;
     
 private:
     
-    void encodeTrack(class Disk &disk, Track t) const throws;
+    void encodeTrack(class FloppyDisk &disk, Track t) const throws;
 
 
     // Scanning the raw data

@@ -16,22 +16,22 @@
 // Enumerations
 //
 
-enum_long(DISK_DIAMETER)
+enum_long(DIAMETER)
 {
     INCH_35,
     INCH_525
 };
-typedef DISK_DIAMETER DiskDiameter;
+typedef DIAMETER Diameter;
 
 #ifdef __cplusplus
-struct DiskDiameterEnum : util::Reflection<DiskDiameterEnum, DiskDiameter>
+struct DiameterEnum : util::Reflection<DiameterEnum, Diameter>
 {
     static long minVal() { return 0; }
     static long maxVal() { return INCH_525; }
     static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
     
     static const char *prefix() { return ""; }
-    static const char *key(DiskDiameter value)
+    static const char *key(Diameter value)
     {
         switch (value) {
                 
@@ -43,29 +43,29 @@ struct DiskDiameterEnum : util::Reflection<DiskDiameterEnum, DiskDiameter>
 };
 #endif
 
-enum_long(DISK_DENSITY)
+enum_long(DENSITY)
 {
-    DISK_SD,
-    DISK_DD,
-    DISK_HD
+    DENSITY_SD,
+    DENSITY_DD,
+    DENSITY_HD
 };
-typedef DISK_DENSITY DiskDensity;
+typedef DENSITY Density;
 
 #ifdef __cplusplus
-struct DiskDensityEnum : util::Reflection<DiskDensityEnum, DiskDensity>
+struct DensityEnum : util::Reflection<DensityEnum, Density>
 {
     static long minVal() { return 0; }
-    static long maxVal() { return DISK_HD; }
+    static long maxVal() { return DENSITY_HD; }
     static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
     
-    static const char *prefix() { return "DISK"; }
-    static const char *key(DiskDensity value)
+    static const char *prefix() { return "DENSITY"; }
+    static const char *key(Density value)
     {
         switch (value) {
                 
-            case DISK_SD:     return "SD";
-            case DISK_DD:     return "DD";
-            case DISK_HD:     return "HD";
+            case DENSITY_SD:     return "SD";
+            case DENSITY_DD:     return "DD";
+            case DENSITY_HD:     return "HD";
         }
         return "???";
     }

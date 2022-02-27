@@ -23,7 +23,7 @@ class Copper;
 class Denise;
 class DiskController;
 class DmaDebugger;
-class Drive;
+class FloppyDrive;
 class HardDrive;
 class HdrController;
 class GdbServer;
@@ -63,10 +63,10 @@ protected:
     Denise &denise;
     DiskController &diskController;
     DmaDebugger &dmaDebugger;
-    Drive &df0;
-    Drive &df1;
-    Drive &df2;
-    Drive &df3;
+    FloppyDrive &df0;
+    FloppyDrive &df1;
+    FloppyDrive &df2;
+    FloppyDrive &df3;
     HardDrive &dh0;
     HardDrive &dh1;
     HardDrive &dh2;
@@ -89,7 +89,7 @@ protected:
     UART &uart;
     ZorroManager &zorro;
 
-    Drive *df[4] = { &df0, &df1, &df2, &df3 };
+    FloppyDrive *df[4] = { &df0, &df1, &df2, &df3 };
 
 public:
 

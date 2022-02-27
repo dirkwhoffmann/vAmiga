@@ -47,9 +47,9 @@
  *    - a disk usually occupies 84 * 2 * 12.664 =  2.127.552 MFM bytes
  */
 
-class Disk : public AmigaObject {
+class FloppyDisk : public AmigaObject {
     
-    friend class Drive;
+    friend class FloppyDrive;
     friend class ADFFile;
     friend class EXTFile;
     friend class IMGFile;
@@ -57,10 +57,10 @@ class Disk : public AmigaObject {
 public:
     
     // The form factor of this disk
-    DiskDiameter diameter;
+    Diameter diameter;
     
     // The density of this disk
-    DiskDensity density;
+    Density density;
         
 private:
     
@@ -94,18 +94,18 @@ private:
     
 public:
     
-    Disk() = default;
-    Disk(DiskDiameter dia, DiskDensity den) throws { init(dia, den); }
-    Disk(const class DiskFile &file) throws { init(file); }
-    Disk(util::SerReader &reader, DiskDiameter dia, DiskDensity den) throws {
+    FloppyDisk() = default;
+    FloppyDisk(Diameter dia, Density den) throws { init(dia, den); }
+    FloppyDisk(const class DiskFile &file) throws { init(file); }
+    FloppyDisk(util::SerReader &reader, Diameter dia, Density den) throws {
         init(reader, dia, den); }
-    ~Disk();
+    ~FloppyDisk();
 
 private:
     
-    void init(DiskDiameter dia, DiskDensity den) throws;
+    void init(Diameter dia, Density den) throws;
     void init(const class DiskFile &file) throws;
-    void init(util::SerReader &reader, DiskDiameter dia, DiskDensity den) throws;
+    void init(util::SerReader &reader, Diameter dia, Density den) throws;
 
     
     //
@@ -144,8 +144,8 @@ private:
 
 public:
 
-    DiskDiameter getDiameter() const { return diameter; }
-    DiskDensity getDensity() const { return density; }
+    Diameter getDiameter() const { return diameter; }
+    Density getDensity() const { return density; }
 
     isize numCyls() const { return diameter == INCH_525 ? 42 : 84; }
     isize numSides() const { return 2; }
