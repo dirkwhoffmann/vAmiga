@@ -16,37 +16,58 @@
 #include <stack>
 
 void
+FileSystem::init(const ADFFile &adf)
+{
+    // Get a file system descriptor
+    auto descriptor = adf.getFileSystemDescriptor();
+            
+    // Import the file system
+    init(descriptor, adf.data, descriptor.numBlocks * 512);
+}
+
+void
 FileSystem::init(const HDFFile &hdf, isize part)
 {
-    printf("Getting layout for partition %ld\n", part);
-
-    // Get a file system descriptor from the HDF
+    // Get a file system descriptor
     auto descriptor = hdf.getFileSystemDescriptor(part);
-    
-    // descriptor.dump();
-    
-    printf("Done\n");
 
-    // Only proceed if the HDF is formatted
-    if (descriptor.dos == FS_NODOS) throw VAError(ERROR_HDR_UNPARTITIONED);
-    
-    // Create the device
-    // init(descriptor);
+    // Import the file system
+    init(descriptor, hdf.dataForPartition(part), descriptor.numBlocks * 512);
+}
 
-    // Import file system from HDF
-    auto *ptr = hdf.dataForPartition(part);
-    auto diff = ptr - hdf.data;
-    printf("Skipping %ld.%ld blocks\n", diff / 512, diff % 512);
-    
-    init(descriptor, ptr, descriptor.numBlocks * 512); }
+void
+FileSystem::init(Drive &dfn)
+{
+    // Convert the floppy drive into an ADF
+    auto adf = ADFFile(dfn);
+
+    // Initialize with the ADF
+    init(adf);
+}
+
+void
+FileSystem::init(const HardDrive &hdn, isize part)
+{
+    // Convert the hard drive into an HDF
+    auto hdf = HDFFile(hdn);
+
+    // Initialize with the HDF
+    init(hdf, part);
+}
 
 void
 FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
 {
     assert(buf);
 
-    debug(FS_DEBUG, "Importing file system...\n");
+    debug(FS_DEBUG, "Importing %ld blocks from buffer...\n", layout.numBlocks);
 
+    // Check the cosistency of the file system descriptor
+    layout.checkCompatibility();
+    
+    // Only proceed if the volume is formatted
+    if (layout.dos == FS_NODOS) throw VAError(ERROR_HDR_UNPARTITIONED);
+        
     // Copy layout parameters
     dos         = layout.dos;
     numReserved = layout.numReserved;
@@ -72,10 +93,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     
     // Print some debug information
     debug(FS_DEBUG, "Success\n");
-    // info();
-    // dump();
-    // util::hexdump(blocks[0]->data, 512);
-    printDirectory(true);
+    if constexpr (FS_DEBUG) printDirectory(true);
 }
 
 void

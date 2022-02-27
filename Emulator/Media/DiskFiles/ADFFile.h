@@ -111,9 +111,10 @@ private:
     //
     
 public:
-
-    // Returns the layout of this disk in form of a device descriptor
-    struct FSDeviceDescriptor layout() const;
+    
+    // Returns a file system descriptor for this volume
+    struct FileSystemDescriptor getFileSystemDescriptor() const;
+    [[deprecated]] struct FSDeviceDescriptor layout() const;
     
     
     //

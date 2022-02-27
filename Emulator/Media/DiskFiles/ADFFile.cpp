@@ -173,6 +173,31 @@ ADFFile::numSectors() const
     }
 }
 
+FileSystemDescriptor
+ADFFile::getFileSystemDescriptor() const
+{
+    FileSystemDescriptor result;
+    
+    // Determine the root block location
+    Block root = size < ADFSIZE_35_HD ? 880 : 1760;
+
+    // Determine the bitmap block location
+    Block bitmap = FSBlock::read32(data + root * 512 + 316);
+    
+    // Assign a default location if the bitmap block reference is invalid
+    if (bitmap == 0 || bitmap >= (Block)numBlocks()) bitmap = root + 1;
+
+    // Setup the descriptor
+    result.numBlocks = numCyls() * numSides() * numSectors();
+    result.bsize = 512;
+    result.numReserved = 2;
+    result.dos = getDos();
+    result.rootBlock = root;
+    result.bmBlocks.push_back(bitmap);
+    
+    return result;
+}
+
 FSDeviceDescriptor
 ADFFile::layout() const
 {

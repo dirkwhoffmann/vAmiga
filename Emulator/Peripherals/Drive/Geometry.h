@@ -67,5 +67,4 @@ struct DiskGeometry {
 
     // Throws an exception if the geometry contains unsupported values
     void checkCompatibility() const;
-    
 };

@@ -24,14 +24,15 @@ class MutableFileSystem : public FileSystem {
     
 public:
 
+    MutableFileSystem(const ADFFile &adf) throws : FileSystem(adf) { }
+    MutableFileSystem(const HDFFile &hdf, isize part) throws : FileSystem(hdf, part) { }
+    MutableFileSystem(Drive &dfn) throws : FileSystem(dfn) { }
+    MutableFileSystem(const HardDrive &hdn, isize part) throws : FileSystem(hdn, part) { }
+
     MutableFileSystem(isize capacity) { init(capacity); }
     MutableFileSystem(FSDeviceDescriptor &layout) { init(layout); }
     MutableFileSystem(DiskDiameter dia, DiskDensity den) { init(dia, den); }
     MutableFileSystem(DiskDiameter dia, DiskDensity den, const string &path) { init(dia, den, path); }
-    MutableFileSystem(const ADFFile &adf) throws { init(adf); }
-    MutableFileSystem(const HDFFile &hdf, isize part) throws { init(hdf, part); }
-    MutableFileSystem(Drive &drive) throws { init(drive); }
-    MutableFileSystem(const HardDrive &drive, isize part) throws { init(drive, part); }
     MutableFileSystem(FSVolumeType type, const string &path) { init(type, path); }
     ~MutableFileSystem();
     
@@ -41,10 +42,6 @@ private:
     void init(FSDeviceDescriptor &layout);
     void init(DiskDiameter type, DiskDensity density);
     void init(DiskDiameter type, DiskDensity density, const string &path);
-    void init(const ADFFile &adf) throws;
-    void init(const HDFFile &hdf, isize part) throws;
-    void init(Drive &drive) throws;
-    void init(const HardDrive &drive, isize part) throws;
     void init(FSVolumeType type, const string &path);
 
     void initBlocks(FSDeviceDescriptor &layout);

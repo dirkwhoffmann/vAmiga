@@ -128,63 +128,6 @@ MutableFileSystem::init(DiskDiameter dia, DiskDensity den, const string &path)
 }
 
 void
-MutableFileSystem::init(const ADFFile &adf)
-{
-    // Get a device descriptor for the ADF
-    FSDeviceDescriptor descriptor = adf.layout();
-        
-    // Create the device
-    init(descriptor);
-
-    // Import file system from ADF
-    importVolume(adf.data, adf.size);
-}
-
-void
-MutableFileSystem::init(const HDFFile &hdf, isize partition)
-{
-    FileSystem::init(hdf, partition);
-    
-    /*
-    printf("Getting layout for partition %ld\n", partition);
-    
-    // Get a device descriptor for the HDF
-    // FSDeviceDescriptor descriptor = hdf.layout();
-    auto descriptor = hdf.layoutOfPartition(partition);
-    descriptor.dump();
-    
-    printf("Done\n");
-
-    // Only proceed if the HDF is formatted
-    if (descriptor.dos == FS_NODOS) throw VAError(ERROR_HDR_UNPARTITIONED);
-    
-    // Create the device
-    init(descriptor);
-
-    // Import file system from HDF
-    auto *ptr = hdf.dataForPartition(partition);
-    auto diff = ptr - hdf.data;
-    printf("Skipping %ld.%ld blocks\n", diff / 512, diff % 512);
-    
-    importVolume(ptr, descriptor.numBlocks * 512);
-    */
-}
-
-void
-MutableFileSystem::init(Drive &drive)
-{
-    auto adf = ADFFile(drive);
-    init(adf);
-}
-
-void
-MutableFileSystem::init(const class HardDrive &drive, isize partition)
-{
-    auto hdf = HDFFile(drive);
-    init(hdf, partition);
-}
-
-void
 MutableFileSystem::init(FSVolumeType type, const string &path)
 {
     // Try to fit the directory into files system with DD disk capacity

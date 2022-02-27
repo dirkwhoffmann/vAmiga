@@ -61,11 +61,19 @@ protected:
 public:
     
     FileSystem() { };
-    FileSystem(const HDFFile &hdf, isize part) throws { init(hdf, part); }
+    FileSystem(const ADFFile &adf) throws { init(adf); }
+    FileSystem(const HDFFile &hdn, isize part) throws { init(hdn, part); }
+    FileSystem(Drive &dfn) throws { init(dfn); }
+    FileSystem(const HardDrive &hdn, isize part) throws { init(hdn, part); }
 
+    
 protected:
     
-    void init(const HDFFile &hdf, isize part) throws;
+    void init(const ADFFile &adf) throws;
+    void init(const HDFFile &hdn, isize part) throws;
+    void init(Drive &dfn) throws;
+    void init(const HardDrive &hdn, isize part) throws;
+
     void init(FileSystemDescriptor layout, u8 *buf, isize len) throws;
 
     

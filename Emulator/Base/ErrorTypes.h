@@ -112,6 +112,7 @@ enum_long(ERROR_CODE)
     ERROR_FS_UNSUPPORTED,
     ERROR_FS_WRONG_BSIZE,
     ERROR_FS_WRONG_CAPACITY,
+    ERROR_FS_WRONG_DOS_TYPE,
     ERROR_FS_HAS_CYCLES,
     ERROR_FS_CORRUPTED,
 
@@ -241,6 +242,7 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_FS_UNSUPPORTED:              return "FS_UNSUPPORTED";
             case ERROR_FS_WRONG_BSIZE:              return "FS_WRONG_BSIZE";
             case ERROR_FS_WRONG_CAPACITY:           return "FS_WRONG_CAPACITY";
+            case ERROR_FS_WRONG_DOS_TYPE:           return "FS_WRONG_DOS_TYPE";
             case ERROR_FS_HAS_CYCLES:               return "FS_HAS_CYCLES";
             case ERROR_FS_CORRUPTED:                return "FS_CORRUPTED";
 

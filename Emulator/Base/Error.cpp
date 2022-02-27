@@ -209,6 +209,10 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "Invalid block size.";
             break;
 
+        case ERROR_FS_WRONG_DOS_TYPE:
+            description = "Wrong DOS type.";
+            break;
+
         case ERROR_FS_WRONG_CAPACITY:
             description = "Wrong file system capacity.";
             break;

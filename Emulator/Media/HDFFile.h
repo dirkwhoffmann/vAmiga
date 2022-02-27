@@ -40,11 +40,11 @@ public:
     
     HDFFile(const string &path) throws { init(path); }
     HDFFile(const u8 *buf, isize len) throws { init(buf, len); }
-    HDFFile(const class HardDrive &drive) throws { init(drive); }
+    HDFFile(const class HardDrive &hdn) throws { init(hdn); }
 
     void init(const string &path) throws;
     void init(const u8 *buf, isize len) throws;
-    void init(const class HardDrive &drive) throws;
+    void init(const class HardDrive &hdn) throws;
 
     const char *getDescription() const override { return "HDF"; }
 
@@ -79,8 +79,9 @@ public:
     isize numBlocks() const;
     isize bsize() const;
 
+    // Returns a file system descriptor for this volume
     struct FileSystemDescriptor getFileSystemDescriptor(isize part) const;
-    struct FSDeviceDescriptor layoutOfPartition(isize nr) const; // DEPRECATED
+    [[deprecated]] struct FSDeviceDescriptor layoutOfPartition(isize nr) const; // DEPRECATED
     u8 *dataForPartition(isize nr) const;
     
     // Computes all possible drive geometries

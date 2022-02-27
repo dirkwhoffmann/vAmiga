@@ -10,8 +10,9 @@
 #pragma once
 
 #include "FSTypes.h"
+// #include "AmigaObject.h"
 #include "Disk.h"
-#include "AmigaObject.h"
+#include "Error.h"
 #include "FSObjects.h"
 #include "FSBlock.h"
 #include "Geometry.h"
@@ -27,8 +28,11 @@
  */
 struct FileSystemDescriptor {
 
-    // The capacity of this file system in blocks
+    // Capacity of the file system in blocks
     isize numBlocks = 0;
+    
+    // Size of a block in bytes
+    isize bsize = 512;
     
     // Number of reserved blocks
     isize numReserved = 0;
@@ -42,6 +46,12 @@ struct FileSystemDescriptor {
     // References to all bitmap blocks and bitmap extension blocks
     std::vector<Block> bmBlocks;
     std::vector<Block> bmExtBlocks;
+    
+    // Computed values
+    isize numBytes() const { return numBlocks * bsize; }
+    
+    // Throws an exception if the descriptor contains unsupported values
+    void checkCompatibility() const;
 };
 
 /* OLD:
