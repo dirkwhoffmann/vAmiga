@@ -749,3 +749,52 @@ FileSystem::predictBlockType(Block nr, const u8 *buffer)
     
     return FS_EMPTY_BLOCK;
 }
+
+FSBlockType
+FileSystem::getDisplayType(isize column)
+{
+    static constexpr isize width = 1760;
+    
+    assert(column >= 0 && column < width);
+    
+    static FSBlockType cache[width] = { };
+
+    // Cache values when the type of the first column is requested
+    if (column == 0) {
+    
+        // Start from scratch
+        for (isize i = 0; i < width; i++) cache[i] = FS_UNKNOWN_BLOCK;
+        
+        // Setup block priorities
+        i8 pri[12];
+        pri[FS_UNKNOWN_BLOCK]      = 0;
+        pri[FS_EMPTY_BLOCK]        = 1;
+        pri[FS_BOOT_BLOCK]         = 8;
+        pri[FS_ROOT_BLOCK]         = 9;
+        pri[FS_BITMAP_BLOCK]       = 7;
+        pri[FS_BITMAP_EXT_BLOCK]   = 6;
+        pri[FS_USERDIR_BLOCK]      = 5;
+        pri[FS_FILEHEADER_BLOCK]   = 4;
+        pri[FS_FILELIST_BLOCK]     = 3;
+        pri[FS_DATA_BLOCK_OFS]     = 2;
+        pri[FS_DATA_BLOCK_FFS]     = 2;
+        
+        for (isize i = 0; i < numBlocks(); i++) {
+                        
+            auto pos = i * width / (numBlocks() - 1);
+            if (pri[cache[pos]] < pri[blocks[i]->type]) {
+                cache[pos] = blocks[i]->type;
+            }
+        }
+        
+        // Fill gaps
+        for (isize pos = 1; pos < width; pos++) {
+            
+            if (cache[pos] == FS_UNKNOWN_BLOCK) {
+                cache[pos] = cache[pos - 1];
+            }
+        }
+    }
+    
+    return cache[column];
+}

@@ -282,6 +282,11 @@ public:
     // Predicts the type of a block by analyzing its number and data
     FSBlockType predictBlockType(Block nr, const u8 *buffer);
 
+
+    //
+    // GUI helper functions
+    //
     
-    // TODO: MOVE ALL NON-WRITE-RELATED FUNCTIONS TO THIS CLASS
+    // Returns the block type to be displayed in the GUI layout image
+    FSBlockType getDisplayType(isize column);
 };

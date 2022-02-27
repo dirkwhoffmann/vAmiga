@@ -1524,6 +1524,11 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; }
 }
 
+- (FSBlockType)getDisplayType:(NSInteger)column
+{
+    return [self fs]->getDisplayType(column);
+}
+
 @end
 
 //

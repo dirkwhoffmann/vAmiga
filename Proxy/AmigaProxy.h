@@ -678,6 +678,8 @@
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
 - (void)export:(NSString *)path exception:(ExceptionWrapper *)ex;
 
+- (FSBlockType)getDisplayType:(NSInteger)column;
+
 @end
 
 

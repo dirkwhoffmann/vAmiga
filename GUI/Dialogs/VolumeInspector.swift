@@ -11,12 +11,23 @@ class VolumeInspector: DialogController {
         
     var myDocument: MyDocument { return parent.mydocument! }
 
-    @IBOutlet weak var icon: NSImageView!
+    @IBOutlet weak var layoutButton: NSButton!
+    @IBOutlet weak var layoutSlider: NSSlider!
+    @IBOutlet weak var bootBlockButton: NSButton!
+    @IBOutlet weak var rootBlockButton: NSButton!
+    @IBOutlet weak var bmBlockButton: NSButton!
+    @IBOutlet weak var bmExtBlockButton: NSButton!
+    @IBOutlet weak var fileHeaderBlockButton: NSButton!
+    @IBOutlet weak var fileListBlockButton: NSButton!
+    @IBOutlet weak var userDirBlockButton: NSButton!
+    @IBOutlet weak var dataBlockButton: NSButton!
+
+    // @IBOutlet weak var icon: NSImageView!
     @IBOutlet weak var virus: NSImageView!
-    @IBOutlet weak var title: NSTextField!
-    @IBOutlet weak var layoutInfo: NSTextField!
-    @IBOutlet weak var volumeInfo: NSTextField!
-    @IBOutlet weak var bootInfo: NSTextField!
+    // @IBOutlet weak var title: NSTextField!
+    // @IBOutlet weak var layoutInfo: NSTextField!
+    // @IBOutlet weak var volumeInfo: NSTextField!
+    // @IBOutlet weak var bootInfo: NSTextField!
     @IBOutlet weak var decontaminationButton: NSButton!
     @IBOutlet weak var partitionPopup: NSPopUpButton!
 
@@ -65,6 +76,57 @@ class VolumeInspector: DialogController {
 
     // Block preview
     var blockNr = 0
+    
+    let colors: [FSBlockType: NSColor] = [
+        
+        .UNKNOWN_BLOCK: NSColor.white,
+        .EMPTY_BLOCK: NSColor.gray,
+        .BOOT_BLOCK: NSColor(r: 0xFF, g: 0xCC, b: 0x99, a: 0xFF),
+        .ROOT_BLOCK: NSColor(r: 0xFF, g: 0x99, b: 0x99, a: 0xFF),
+        .BITMAP_BLOCK: NSColor(r: 0xCC, g: 0x99, b: 0xFF, a: 0xFF),
+        .BITMAP_EXT_BLOCK: NSColor(r: 0xE5, g: 0xCC, b: 0xFF, a: 0xFF),
+        .USERDIR_BLOCK: NSColor(r: 0x99, g: 0xCC, b: 0xFF, a: 0xFF),
+        .FILEHEADER_BLOCK: NSColor(r: 0xFF, g: 0xFF, b: 0x99, a: 0xFF),
+        .FILELIST_BLOCK: NSColor(r: 0xFF, g: 0xFF, b: 0xCC, a: 0xFF),
+        .DATA_BLOCK_OFS: NSColor(r: 0x99, g: 0xFF, b: 0x99, a: 0xFF),
+        .DATA_BLOCK_FFS: NSColor(r: 0x99, g: 0xFF, b: 0x99, a: 0xFF)
+    ]
+
+    var layoutImage: NSImage? {
+        
+        // Create image representation in memory
+        let width = 1760
+        let height = 16
+        let size = CGSize(width: width, height: height)
+        let cap = Int(size.width) * Int(size.height)
+        let mask = calloc(cap, MemoryLayout<UInt32>.size)!
+        let ptr = mask.bindMemory(to: UInt32.self, capacity: cap)
+
+        // Create image data
+        for x in 0..<width {
+
+            let color = colors[vol?.getDisplayType(x) ?? .UNKNOWN_BLOCK]!
+            let ciColor = CIColor(color: color)!
+            
+            for y in 0...height-1 {
+                
+                var r, g, b, a: Int
+                
+                r = Int(ciColor.red * CGFloat(255 - 2*y))
+                g = Int(ciColor.green * CGFloat(255 - 2*y))
+                b = Int(ciColor.blue * CGFloat(255 - 2*y))
+                a = Int(ciColor.alpha)
+                
+                let abgr = UInt32(r | g << 8 | b << 16 | a << 24)
+                ptr[y*width + x] = abgr
+            }
+        }
+
+        // Create image
+        let image = NSImage.make(data: mask, rect: size)
+        let resizedImage = image?.resizeSharp(width: CGFloat(width), height: CGFloat(height))
+        return resizedImage
+    }
     
     //
     // Starting up
@@ -144,6 +206,9 @@ class VolumeInspector: DialogController {
         }
         partitionPopup.autoenablesItems = false
         
+        // Update the block allocation map
+        updateLayoutImage()
+        
         // Jump to the first corrupted block if an error was found
         if errorReport != nil && errorReport!.corruptedBlocks > 0 {
             setCorruptedBlock(1)
@@ -202,35 +267,59 @@ class VolumeInspector: DialogController {
         previewTable.reloadData()
     }
     
+    func updateLayoutImage() {
+             
+        // Update the layout image
+        layoutButton.image = layoutImage
+
+        // Update color images
+        let size = NSSize(width: 16, height: 16)
+        bootBlockButton.image = NSImage(color: colors[.BOOT_BLOCK]!, size: size)
+        rootBlockButton.image = NSImage(color: colors[.ROOT_BLOCK]!, size: size)
+        bmBlockButton.image = NSImage(color: colors[.BITMAP_BLOCK]!, size: size)
+        bmExtBlockButton.image = NSImage(color: colors[.BITMAP_EXT_BLOCK]!, size: size)
+        fileListBlockButton.image = NSImage(color: colors[.FILELIST_BLOCK]!, size: size)
+        fileHeaderBlockButton.image = NSImage(color: colors[.FILEHEADER_BLOCK]!, size: size)
+        userDirBlockButton.image = NSImage(color: colors[.USERDIR_BLOCK]!, size: size)
+        dataBlockButton.image = NSImage(color: colors[.DATA_BLOCK_OFS]!, size: size)
+    }
+    
     func updateDiskIcon() {
 
+        /*
         let name = ""
     
         icon.image = NSImage(named: name != "" ? name : "biohazard")
         virus.isHidden = !hasVirus
         decontaminationButton.isHidden = !hasVirus
+        */
     }
     
     func updateTitleText() {
         
+        /*
         let text = "Amiga File System"
         let color = NSColor.textColor
                 
         title.stringValue = text
         title.textColor = color
+        */
     }
 
     func updateTrackAndSectorInfo() {
         
+        /*
         let text = "Lorem ipsum"
         let color = NSColor.warningColor
         
         layoutInfo.stringValue = text
         layoutInfo.textColor = color
+        */
     }
     
     func updateVolumeInfo() {
         
+        /*
         var text = "No compatible file system"
         var color = NSColor.warningColor
         
@@ -249,10 +338,12 @@ class VolumeInspector: DialogController {
         
         volumeInfo.stringValue = text
         volumeInfo.textColor = color
+        */
     }
     
     func updateBootInfo() {
-                
+               
+        /*
         if adf == nil {
             bootInfo.stringValue = ""
             return
@@ -260,6 +351,7 @@ class VolumeInspector: DialogController {
         
         bootInfo.stringValue = adf!.bootInfo
         bootInfo.textColor = adf!.hasVirus ? .warningColor : .secondaryLabelColor
+        */
     }
     
     func updateBlockInfo() {
@@ -341,6 +433,7 @@ class VolumeInspector: DialogController {
         
         initVolume(partition: sender.selectedTag())
         update()
+        updateLayoutImage()
     }
 
     @IBAction func decontaminationAction(_ sender: NSButton!) {
