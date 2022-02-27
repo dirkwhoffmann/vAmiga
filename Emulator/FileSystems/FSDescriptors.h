@@ -71,7 +71,7 @@ struct FileSystemDescriptor {
 struct FSDeviceDescriptor : AmigaObject {
     
     // Device geometry
-    DiskGeometry geometry;
+    Geometry geometry;
     
     i64 numBlocks = 0;    // DEPRECATED. MAKE IT A COMPUTED VALUE IN geometry
     
@@ -95,12 +95,12 @@ struct FSDeviceDescriptor : AmigaObject {
     
     FSDeviceDescriptor() { };
     FSDeviceDescriptor(Diameter type, Density density, FSVolumeType dos = FS_OFS);
-    FSDeviceDescriptor(const DiskGeometry &geometry, FSVolumeType dos = FS_OFS);
+    FSDeviceDescriptor(const Geometry &geometry, FSVolumeType dos = FS_OFS);
 
 private:
     
     void init(Diameter type, Density density, FSVolumeType dos);
-    void init(const DiskGeometry &geometry, FSVolumeType dos);
+    void init(const Geometry &geometry, FSVolumeType dos);
     
     
     //

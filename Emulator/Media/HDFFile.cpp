@@ -73,7 +73,7 @@ HDFFile::init(const HardDrive &drive)
     driveSpec.geometry = drive.getGeometry();
 }
 
-const DiskGeometry
+const Geometry
 HDFFile::getGeometry() const
 {
     return driveSpec.geometry;
@@ -353,7 +353,7 @@ HDFFile::predictGeometry()
     debug(true, "predictGeometry()\n");
     
     // Get all possible geometries
-    auto geometries = DiskGeometry::driveGeometries(size);
+    auto geometries = Geometry::driveGeometries(size);
     
     // REMOVE ASAP
     for (const auto &g : geometries) {

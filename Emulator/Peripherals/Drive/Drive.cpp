@@ -7,23 +7,10 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#pragma once
+#include "config.h"
+#include "Drive.h"
 
-#include "Aliases.h"
-#include "Reflection.h"
-#ifdef __cplusplus
-#include "DriveDescriptors.h"
-#include <vector>
-#endif
-
-//
-// Enumerations
-//
-
-
-
-
-//
-// Structures
-//
-
+Drive::Drive(Amiga& ref, isize n) : SubComponent(ref), nr(n)
+{
+    assert(usize(nr) < 4);
+}

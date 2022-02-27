@@ -1346,7 +1346,7 @@ using namespace moira;
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b
         exception:(ExceptionWrapper *)ex
 {
-    DiskGeometry geometry;
+    Geometry geometry;
     geometry.cylinders = c;
     geometry.heads = h;
     geometry.sectors = s;
@@ -1382,7 +1382,7 @@ using namespace moira;
     NSMutableArray *data = [[NSMutableArray alloc] init];
     
     auto geometry = [self drive]->getGeometry();
-    auto geometries = DiskGeometry::driveGeometries(geometry.numBytes());
+    auto geometries = Geometry::driveGeometries(geometry.numBytes());
         
     for (auto &g : geometries) {
         

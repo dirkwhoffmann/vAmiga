@@ -45,6 +45,7 @@
 		502023ED27B6BE7200820DB6 /* RamExpansion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502023EB27B6BE7200820DB6 /* RamExpansion.cpp */; };
 		5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17B21EF121E00B9E80E /* Agnus.cpp */; };
 		5020B18021EF136100B9E80E /* Denise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17E21EF136100B9E80E /* Denise.cpp */; };
+		50210B2027CB6A41001193AA /* Drive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50210B1E27CB6A41001193AA /* Drive.cpp */; };
 		5023519024485BBF00F6C088 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5023518F24485BBF00F6C088 /* Preferences.swift */; };
 		5026EDBF2608DC8E00D90CE1 /* Console.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5026EDBE2608DC8E00D90CE1 /* Console.swift */; };
 		5027418F2297CACF0038E5AF /* Colors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5027418D2297CACF0038E5AF /* Colors.cpp */; };
@@ -350,6 +351,8 @@
 		5020B17C21EF121E00B9E80E /* Agnus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Agnus.h; sourceTree = "<group>"; };
 		5020B17E21EF136100B9E80E /* Denise.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Denise.cpp; sourceTree = "<group>"; };
 		5020B17F21EF136100B9E80E /* Denise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Denise.h; sourceTree = "<group>"; };
+		50210B1E27CB6A41001193AA /* Drive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Drive.cpp; sourceTree = "<group>"; };
+		50210B1F27CB6A41001193AA /* Drive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Drive.h; sourceTree = "<group>"; };
 		5023518F24485BBF00F6C088 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		5026EDBE2608DC8E00D90CE1 /* Console.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Console.swift; sourceTree = "<group>"; };
 		5027418D2297CACF0038E5AF /* Colors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Colors.cpp; sourceTree = "<group>"; };
@@ -1300,15 +1303,17 @@
 				50CF46462620432300BB3B95 /* CMakeLists.txt */,
 				501C514127C0CE6600DF1DD5 /* DriveDescriptors.h */,
 				501C514027C0CE6600DF1DD5 /* DriveDescriptors.cpp */,
-				50D52442227878E900F8959D /* DiskTypes.h */,
-				50F6EEB721F4F5C60091155D /* FloppyDisk.h */,
-				50F6EEB621F4F5C60091155D /* FloppyDisk.cpp */,
 				500770C1227C9FF3003A5F76 /* DriveTypes.h */,
+				50210B1F27CB6A41001193AA /* Drive.h */,
+				50210B1E27CB6A41001193AA /* Drive.cpp */,
 				50F6EEBD21F4F61F0091155D /* FloppyDrive.h */,
 				50F6EEBC21F4F61F0091155D /* FloppyDrive.cpp */,
 				5004C3A727BD519400A9161A /* HardDriveTypes.h */,
 				5004C3A627BD516E00A9161A /* HardDrive.h */,
 				5004C3A527BD516E00A9161A /* HardDrive.cpp */,
+				50D52442227878E900F8959D /* DiskTypes.h */,
+				50F6EEB721F4F5C60091155D /* FloppyDisk.h */,
+				50F6EEB621F4F5C60091155D /* FloppyDisk.cpp */,
 			);
 			path = Drive;
 			sourceTree = "<group>";
@@ -2003,6 +2008,7 @@
 				5041C6282791AF0800D3C494 /* SequencerRegs.cpp in Sources */,
 				508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */,
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,
+				50210B2027CB6A41001193AA /* Drive.cpp in Sources */,
 				508FE01D21EA227B0043D0E9 /* Defaults.swift in Sources */,
 				50BE4B7424E815CA008F39C9 /* CIAEvents.cpp in Sources */,
 				507C9C4626076EF7006779B5 /* RessourceManager.swift in Sources */,

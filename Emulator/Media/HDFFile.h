@@ -11,7 +11,7 @@
 
 #include "AmigaFile.h"
 #include "MutableFileSystem.h"
-#include "HardDriveTypes.h"
+#include "DriveTypes.h"
 
 class FloppyDisk;
 
@@ -64,7 +64,7 @@ public:
 public:
     
     // Returns the (predicted) geometry for this disk
-    const DiskGeometry getGeometry() const;
+    const Geometry getGeometry() const;
     const HardDriveSpec getDriveSpec() const { return driveSpec; }
     
     // Returns true if this image contains a rigid disk block
@@ -85,7 +85,7 @@ public:
     u8 *dataForPartition(isize nr) const;
     
     // Computes all possible drive geometries
-    std::vector<DiskGeometry> driveGeometries(isize fileSize);
+    std::vector<Geometry> driveGeometries(isize fileSize);
     
 private:
 

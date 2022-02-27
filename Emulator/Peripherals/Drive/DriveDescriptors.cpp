@@ -10,10 +10,11 @@
 #include "config.h"
 #include "DriveDescriptors.h"
 #include "Error.h"
+#include "IOUtils.h"
 #include <vector>
 
 bool
-DiskGeometry::operator == (const DiskGeometry &rhs) const
+Geometry::operator == (const Geometry &rhs) const
 {
     return
     this->cylinders == rhs.cylinders &&
@@ -23,21 +24,21 @@ DiskGeometry::operator == (const DiskGeometry &rhs) const
 }
 
 bool
-DiskGeometry::operator != (const DiskGeometry &rhs) const
+Geometry::operator != (const Geometry &rhs) const
 {
     return !(*this == rhs);
 }
 
 bool
-DiskGeometry::operator < (const DiskGeometry &rhs) const
+Geometry::operator < (const Geometry &rhs) const
 {
     return cylinders < rhs.cylinders;
 }
 
-std::vector<DiskGeometry>
-DiskGeometry::driveGeometries(isize capacity)
+std::vector<Geometry>
+Geometry::driveGeometries(isize capacity)
 {
-    std::vector<DiskGeometry> result;
+    std::vector<Geometry> result;
     
     // Typical number of sectors per track
     // https://www.win.tue.nl/~aeb/linux/hdtypes/hdtypes-4.html
@@ -50,7 +51,7 @@ DiskGeometry::driveGeometries(isize capacity)
     };
     
     // Compute all geometries compatible with the file size
-    for (isize h = DiskGeometry::hMin; h <= DiskGeometry::hMax; h++) {
+    for (isize h = Geometry::hMin; h <= Geometry::hMax; h++) {
         for (isize i = 0; i < isizeof(sizes); i++) {
                   
             auto s = isize(sizes[i]);
@@ -60,10 +61,10 @@ DiskGeometry::driveGeometries(isize capacity)
                 
                 auto c = capacity / cylSize;
 
-                if (c > DiskGeometry::cMax) continue;
-                if (c < DiskGeometry::cMin && h > 1) continue;
+                if (c > Geometry::cMax) continue;
+                if (c < Geometry::cMin && h > 1) continue;
                 
-                result.push_back(DiskGeometry(c, h, s, 512));
+                result.push_back(Geometry(c, h, s, 512));
             }
         }
     }
@@ -75,13 +76,30 @@ DiskGeometry::driveGeometries(isize capacity)
 }
 
 bool
-DiskGeometry::unique() const
+Geometry::unique() const
 {
     return driveGeometries(numBytes()).size() == 1;
 }
 
 void
-DiskGeometry::checkCompatibility() const
+Geometry::dump() const
+{
+    dump(std::cout);
+}
+
+void
+Geometry::dump(std::ostream& os) const
+{
+    using namespace util;
+    
+    os << tab("Geometry");
+    os << dec(cylinders) << " - ";
+    os << dec(heads) << " - ";
+    os << dec(sectors) << std::endl;
+}
+
+void
+Geometry::checkCompatibility() const
 {
     if (numBytes() > MB(504) || FORCE_HDR_TOO_LARGE) {
         throw VAError(ERROR_HDR_TOO_LARGE);

@@ -14,6 +14,11 @@
 #include "FSTypes.h"
 #include "Reflection.h"
 
+#ifdef __cplusplus
+#include "DriveDescriptors.h"
+#include <vector>
+#endif
+
 //
 // Enumerations
 //
@@ -46,6 +51,32 @@ struct FloppyDriveTypeEnum : util::Reflection<FloppyDriveTypeEnum, FloppyDriveTy
     }
 };
 #endif
+
+enum_long(HDR_TYPE)
+{
+    HDR_GENERIC
+};
+typedef HDR_TYPE HardDriveType;
+
+#ifdef __cplusplus
+struct HardDriveTypeEnum : util::Reflection<HardDriveTypeEnum, HardDriveType>
+{
+    static long minVal() { return 0; }
+    static long maxVal() { return HDR_GENERIC; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    
+    static const char *prefix() { return "HDR"; }
+    static const char *key(HardDriveType value)
+    {
+        switch (value) {
+                
+            case HDR_GENERIC:   return "GENERIC";
+        }
+        return "???";
+    }
+};
+#endif
+
 
 //
 // Structures
@@ -95,3 +126,66 @@ typedef struct
     bool motor;
 }
 FloppyDriveInfo;
+
+typedef struct
+{
+    Side side;
+    Cylinder cylinder;
+    Sector sector;
+}
+HardDriveHead;
+
+typedef struct
+{
+    HardDriveType type;
+    bool connected;
+}
+HardDriveConfig;
+
+typedef struct
+{
+    // bool attached;
+    bool modified;
+    struct { isize c; isize h; isize s; } head;
+}
+HardDriveInfo;
+
+#ifdef __cplusplus
+typedef struct
+{
+    string name;
+    u32 flags;
+    u32 sizeBlock;
+    u32 heads;
+    u32 sectors;
+    u32 reserved;
+    u32 interleave;
+    u32 lowCyl;
+    u32 highCyl;
+    u32 numBuffers;
+    u32 bufMemType;
+    u32 maxTransfer;
+    u32 mask;
+    u32 bootPri;
+    u32 dosType;
+}
+PartitionSpec;
+    
+typedef struct
+{
+    // Disk geometry
+    Geometry geometry;
+    
+    // Drive identification
+    string diskVendor;
+    string diskProduct;
+    string diskRevision;
+    string controllerVendor;
+    string controllerProduct;
+    string controllerRevision;
+    
+    // Partition information
+    std::vector <PartitionSpec> partitions;
+}
+HardDriveSpec;
+#endif

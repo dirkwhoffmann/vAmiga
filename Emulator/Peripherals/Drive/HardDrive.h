@@ -9,18 +9,18 @@
 
 #pragma once
 
-#include "HardDriveTypes.h"
+#include "DriveTypes.h"
 #include "DiskTypes.h"
+#include "Drive.h"
 #include "HDFFile.h"
-#include "SubComponent.h"
 
-class HardDrive : public SubComponent {
+class HardDrive : public Drive {
     
     friend class HDFFile;
     friend class HdrController;
     
     // Number of the emulated drive (dh<nr>)
-    const isize nr;
+    // const isize nr;
 
     // Current configuration
     HardDriveConfig config = {};
@@ -56,10 +56,10 @@ public:
     void init(isize size);
     
     // Creates a hard drive with a certain geometry
-    void init(const DiskGeometry &geometry);
+    void init(const Geometry &geometry);
     
     // Creates or deletes the data storage
-    [[deprecated]] void alloc(const DiskGeometry &geometry);
+    [[deprecated]] void alloc(const Geometry &geometry);
     
     
     //
@@ -141,7 +141,7 @@ public:
     HardDriveInfo getInfo() const { return AmigaComponent::getInfo(info); }
 
     // Returns the disk geometry
-    const DiskGeometry &getGeometry() const { return driveSpec.geometry; }
+    const Geometry &getGeometry() const { return driveSpec.geometry; }
 
     // Returns the number of partitions
     isize numPartitions() { return isize(driveSpec.partitions.size()); }
@@ -184,7 +184,7 @@ public:
 
     // Change the drive geometry
     void changeGeometry(isize c, isize h, isize s, isize b = 512) throws;
-    void changeGeometry(const DiskGeometry &geometry) throws;
+    void changeGeometry(const Geometry &geometry) throws;
     
     
     //

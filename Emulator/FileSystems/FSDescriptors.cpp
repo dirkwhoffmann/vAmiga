@@ -52,7 +52,7 @@ FileSystemDescriptor::checkCompatibility() const
     }
 }
 
-DiskGeometry::DiskGeometry(isize c, isize h, isize s, isize b)
+Geometry::Geometry(isize c, isize h, isize s, isize b)
 {
     cylinders = c;
     heads = h;
@@ -60,7 +60,7 @@ DiskGeometry::DiskGeometry(isize c, isize h, isize s, isize b)
     bsize = b;
 }
 
-DiskGeometry::DiskGeometry(isize size)
+Geometry::Geometry(isize size)
 {
     // Create a default geometry for the provide size
     bsize = 512;
@@ -70,7 +70,7 @@ DiskGeometry::DiskGeometry(isize size)
     while (cylinders > 1024) { cylinders /= 2; heads *= 2; }
 }
 
-DiskGeometry::DiskGeometry(Diameter type, Density density)
+Geometry::Geometry(Diameter type, Density density)
 {
     if (type == INCH_525 && density == DENSITY_DD) {
         
@@ -105,7 +105,7 @@ FSDeviceDescriptor::FSDeviceDescriptor(Diameter type, Density density, FSVolumeT
     init(type, density, dos);
 }
 
-FSDeviceDescriptor::FSDeviceDescriptor(const DiskGeometry &geometry, FSVolumeType dos)
+FSDeviceDescriptor::FSDeviceDescriptor(const Geometry &geometry, FSVolumeType dos)
 {
     init(geometry, dos);
 }
@@ -113,11 +113,11 @@ FSDeviceDescriptor::FSDeviceDescriptor(const DiskGeometry &geometry, FSVolumeTyp
 void
 FSDeviceDescriptor::init(Diameter type, Density density, FSVolumeType dos)
 {
-    init(DiskGeometry(type, density), dos);
+    init(Geometry(type, density), dos);
 }
 
 void
-FSDeviceDescriptor::init(const DiskGeometry &geometry, FSVolumeType dos)
+FSDeviceDescriptor::init(const Geometry &geometry, FSVolumeType dos)
 {
     this->geometry = geometry;
 

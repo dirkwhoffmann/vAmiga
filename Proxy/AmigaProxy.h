@@ -27,7 +27,6 @@
 #import "DriveTypes.h"
 #import "ErrorTypes.h"
 #import "FSTypes.h"
-#import "HardDriveTypes.h"
 #import "JoystickTypes.h"
 #import "KeyboardTypes.h"
 #import "MemoryTypes.h"

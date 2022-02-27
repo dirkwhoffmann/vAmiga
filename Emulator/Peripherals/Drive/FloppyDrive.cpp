@@ -16,9 +16,9 @@
 #include "MutableFileSystem.h"
 #include "MsgQueue.h"
 
-FloppyDrive::FloppyDrive(Amiga& ref, isize n) : SubComponent(ref), nr(n)
+FloppyDrive::FloppyDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 {
-    assert(usize(nr) < 4);
+
 }
 
 const char *

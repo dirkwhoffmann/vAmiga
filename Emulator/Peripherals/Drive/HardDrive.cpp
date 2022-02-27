@@ -14,7 +14,7 @@
 #include "Memory.h"
 #include "MsgQueue.h"
 
-HardDrive::HardDrive(Amiga& ref, isize n) : SubComponent(ref), nr(n)
+HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 {
     string path;
     
@@ -57,7 +57,7 @@ HardDrive::~HardDrive()
 }
 
 void
-HardDrive::alloc(const DiskGeometry &geometry)
+HardDrive::alloc(const Geometry &geometry)
 {
     // Save disk geometry
     this->driveSpec.geometry = geometry;
@@ -77,17 +77,17 @@ HardDrive::dealloc()
     data = nullptr;
 
     // Wipe out geometry information
-    driveSpec.geometry = DiskGeometry();
+    driveSpec.geometry = Geometry();
 }
 
 void
 HardDrive::init(isize size)
 {
-    init(DiskGeometry(size));
+    init(Geometry(size));
 }
 
 void
-HardDrive::init(const DiskGeometry &geometry)
+HardDrive::init(const Geometry &geometry)
 {
     // Throw an exception if the geometry is not supported
     geometry.checkCompatibility();
@@ -374,12 +374,12 @@ HardDrive::format(FSVolumeType fsType, BootBlockId bb)
 void
 HardDrive::changeGeometry(isize c, isize h, isize s, isize b)
 {
-    auto geometry = DiskGeometry(c, h, s, b);
+    auto geometry = Geometry(c, h, s, b);
     changeGeometry(geometry);
 }
 
 void
-HardDrive::changeGeometry(const DiskGeometry &geometry)
+HardDrive::changeGeometry(const Geometry &geometry)
 {
     geometry.checkCompatibility();
         
@@ -396,7 +396,7 @@ HardDrive::changeGeometry(const DiskGeometry &geometry)
 void
 HardDrive::attach(isize bytes)
 {
-    DiskGeometry geometry;
+    Geometry geometry;
     
     geometry.cylinders = (bytes + KB(16) - 1) / KB(16);
     geometry.sectors = 32;
@@ -409,7 +409,7 @@ HardDrive::attach(isize bytes)
 void
 HardDrive::attach(const MutableFileSystem &fs)
 {
-    auto geometry = DiskGeometry(fs.numBytes());
+    auto geometry = Geometry(fs.numBytes());
     
     // Create the drive
     init(geometry);

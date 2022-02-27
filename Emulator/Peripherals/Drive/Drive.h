@@ -9,21 +9,23 @@
 
 #pragma once
 
-#include "Aliases.h"
-#include "Reflection.h"
-#ifdef __cplusplus
-#include "DriveDescriptors.h"
-#include <vector>
-#endif
+#include "Drive.h"
+#include "SubComponent.h"
 
-//
-// Enumerations
-//
+class Drive : public SubComponent {
 
+protected:
+    
+    // Number of the emulated drive (0 = df0 or hd0, 1 = df1 or hd1, etc.)
+    const isize nr;
+    
+    
+    //
+    // Initializing
+    //
 
+public:
 
-
-//
-// Structures
-//
-
+    Drive(Amiga& ref, isize nr);
+    
+};

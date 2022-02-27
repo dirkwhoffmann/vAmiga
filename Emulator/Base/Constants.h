@@ -83,7 +83,7 @@
 
 
 //
-// Hard drive geometries
+// Hard drive geometry limits
 //
 
 #define HDR_C_MIN 256

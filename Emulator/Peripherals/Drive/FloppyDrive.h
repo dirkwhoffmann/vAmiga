@@ -10,18 +10,18 @@
 #pragma once
 
 #include "DriveTypes.h"
-#include "SubComponent.h"
+#include "Drive.h"
 #include "FloppyDisk.h"
 #include "DiskController.h"
 #include "SchedulerTypes.h"
 #include "Thread.h"
 
-class FloppyDrive : public SubComponent {
+class FloppyDrive : public Drive {
     
     friend class DiskController;
         
     // Number of the emulated drive (0 = df0, 1 = df1, etc.)
-    const isize nr;
+    // const isize nr;
 
     // Current configuration
     FloppyDriveConfig config = {};

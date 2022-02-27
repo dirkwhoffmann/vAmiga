@@ -13,7 +13,7 @@
 #include "Constants.h"
 #include "DiskTypes.h"
 
-struct DiskGeometry {
+struct Geometry {
   
     // Constants
     static constexpr isize cMin = HDR_C_MIN;
@@ -23,12 +23,12 @@ struct DiskGeometry {
     static constexpr isize sMin = HDR_S_MIN;
     static constexpr isize sMax = HDR_S_MAX;
     
-    // Physical layout parameters
+    // Disk geometry (CHS)
     isize cylinders = 0;
     isize heads = 0;
-    
-    // Logical layout parameters
     isize sectors = 0;
+
+    // Size of a sector in bytes
     isize bsize = 512;
     
     template <class W>
@@ -43,27 +43,32 @@ struct DiskGeometry {
     }
     
     // Returns a vector with compatible geometries for a given byte count
-    static std::vector<DiskGeometry> driveGeometries(isize capacity);
+    static std::vector<Geometry> driveGeometries(isize capacity);
     
     // Checks whether the geometry is unique
     bool unique() const;
     
-    DiskGeometry() { };
-    DiskGeometry(isize size);
-    DiskGeometry(isize c, isize h, isize s, isize b);
-    DiskGeometry(Diameter type, Density density);
+    Geometry() { };
+    Geometry(isize size);
+    Geometry(isize c, isize h, isize s, isize b);
+    Geometry(Diameter type, Density density);
 
-    bool operator == (const DiskGeometry &rhs) const;
-    bool operator != (const DiskGeometry &rhs) const;
-    bool operator < (const DiskGeometry &rhs) const;
+    // Operators
+    bool operator == (const Geometry &rhs) const;
+    bool operator != (const Geometry &rhs) const;
+    bool operator < (const Geometry &rhs) const;
         
+    // Computed values
     isize numTracks() const { return cylinders * heads; }
     isize numBlocks() const { return cylinders * heads * sectors; }
     isize numBytes() const { return cylinders * heads * sectors * bsize; }
-    
     isize upperCyl() const { return cylinders ? cylinders - 1 : 0; }
     isize upperHead() const { return heads ? heads - 1 : 0; }
     isize upperTrack() const { return numTracks() ? numTracks() - 1 : 0; }
+
+    // Prints debug information
+    void dump() const;
+    void dump(std::ostream& os) const;
 
     // Throws an exception if the geometry contains unsupported values
     void checkCompatibility() const;

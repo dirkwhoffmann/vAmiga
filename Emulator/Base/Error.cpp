@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "Error.h"
-#include "HardDriveTypes.h"
+// #include "HardDriveTypes.h"
 
 VAError::VAError(ErrorCode code, const string &s)
 {
