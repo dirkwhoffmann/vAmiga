@@ -18,10 +18,11 @@
 void
 MutableFileSystem::init(isize capacity)
 {
-    assert(blocks.empty());
+    printf("init(%ld)\n", capacity);
     
+    for (auto &b : blocks) delete b;
     blocks.reserve(capacity);
-    blocks.assign(capacity, 0);
+    blocks.assign(capacity, nullptr);
 }
 
 void
@@ -39,45 +40,15 @@ MutableFileSystem::init(FileSystemDescriptor &layout)
     bmBlocks    = layout.bmBlocks;
     bmExtBlocks = layout.bmExtBlocks;
 
+    /*
     // Initialize all blocks
     initBlocks();
     
     // Compute checksums for all blocks
     updateChecksums();
-    
-    // Set the current directory to '/'
-    cd = rootBlock;
-    
-    // Do some consistency checking
-    for (isize i = 0; i < numBlocks(); i++) assert(blocks[i] != nullptr);
-    
-    // Print some debug information
-    if constexpr (FS_DEBUG) { dump(dump::Summary); }
-}
-
-
-void
-MutableFileSystem::init(FSDeviceDescriptor &layout)
-{
-    init((isize)layout.numBlocks);
-    
-    if constexpr (FS_DEBUG) { layout.dump(); }
-    
-    // Copy layout parameters from the descriptor
-    // numSectors  = layout.geometry.sectors;
-    bsize       = layout.geometry.bsize;
-    // numBlocks   = layout.numBlocks;
-        
-    // Copy file system parameters from the descriptor
-    dos         = layout.dos;
-    rootBlock   = layout.rootBlock;
-    bmBlocks    = layout.bmBlocks;
-    bmExtBlocks = layout.bmExtBlocks;
-    
-    initBlocks(layout);
-    
-    // Compute checksums for all blocks
-    updateChecksums();
+    */
+    // Create all blocks
+    format(); 
     
     // Set the current directory to '/'
     cd = rootBlock;
@@ -132,52 +103,10 @@ MutableFileSystem::initBlocks()
 }
 
 void
-MutableFileSystem::initBlocks(FSDeviceDescriptor &layout)
-{
-    // Do some consistency checking
-    for (Block i = 0; i < numBlocks(); i++) assert(blocks[i] == nullptr);
-    
-    // Create boot blocks
-    blocks[0] = new FSBlock(*this, 0, FS_BOOT_BLOCK);
-    blocks[1] = new FSBlock(*this, 1, FS_BOOT_BLOCK);
-
-    // Create the root block
-    FSBlock *rb = new FSBlock(*this, rootBlock, FS_ROOT_BLOCK);
-    blocks[layout.rootBlock] = rb;
-    
-    // Create bitmap blocks
-    for (auto& ref : layout.bmBlocks) {
-        
-        blocks[ref] = new FSBlock(*this, ref, FS_BITMAP_BLOCK);
-    }
-    
-    // Add bitmap extension blocks
-    FSBlock *pred = rb;
-    for (auto& ref : layout.bmExtBlocks) {
-        
-        blocks[ref] = new FSBlock(*this, ref, FS_BITMAP_EXT_BLOCK);
-        pred->setNextBmExtBlockRef(ref);
-        pred = blocks[ref];
-    }
-    
-    // Add all bitmap block references
-    rb->addBitmapBlockRefs(layout.bmBlocks);
-    
-    // Add free blocks
-    for (Block i = 0; i < numBlocks(); i++) {
-        
-        if (blocks[i] == nullptr) {
-            blocks[i] = new FSBlock(*this, i, FS_EMPTY_BLOCK);
-            markAsFree(i);
-        }
-    }
-}
-
-void
-MutableFileSystem::init(Diameter dia, Density den)
+MutableFileSystem::init(Diameter dia, Density den, FSVolumeType dos)
 {
     // Get a device descriptor
-    auto descriptor = FSDeviceDescriptor(dia, den);
+    auto descriptor = FileSystemDescriptor(dia, den, dos);
         
     // Create the device
     init(descriptor);
@@ -186,7 +115,7 @@ MutableFileSystem::init(Diameter dia, Density den)
 void
 MutableFileSystem::init(Diameter dia, Density den, const string &path)
 {
-    init(dia, den);
+    init(dia, den, FS_OFS);
     
     // Try to import directory
     importDirectory(path);
@@ -211,9 +140,64 @@ MutableFileSystem::init(FSVolumeType type, const string &path)
     init(INCH_35, DENSITY_HD, path);
 }
 
-MutableFileSystem::~MutableFileSystem()
+void
+MutableFileSystem::format(FSVolumeType dos, string name)
 {
-    for (auto &b : blocks) delete b;
+    this->dos = dos;
+    format(name);
+}
+
+void
+MutableFileSystem::format(string name)
+{
+    // Start from scratch
+    init(blocks.size());
+
+    // Do some consistency checking
+    assert(numBlocks() > 2);
+    for (Block i = 0; i < numBlocks(); i++) assert(blocks[i] == nullptr);
+
+    // Create boot blocks
+    blocks[0] = new FSBlock(*this, 0, FS_BOOT_BLOCK);
+    blocks[1] = new FSBlock(*this, 1, FS_BOOT_BLOCK);
+
+    // Create the root block
+    assert(rootBlock != 0);
+    FSBlock *rb = new FSBlock(*this, rootBlock, FS_ROOT_BLOCK);
+    blocks[rootBlock] = rb;
+    
+    // Create bitmap blocks
+    for (auto& ref : bmBlocks) {
+        
+        blocks[ref] = new FSBlock(*this, ref, FS_BITMAP_BLOCK);
+    }
+    
+    // Add bitmap extension blocks
+    FSBlock *pred = rb;
+    for (auto& ref : bmExtBlocks) {
+        
+        blocks[ref] = new FSBlock(*this, ref, FS_BITMAP_EXT_BLOCK);
+        pred->setNextBmExtBlockRef(ref);
+        pred = blocks[ref];
+    }
+    
+    // Add all bitmap block references
+    rb->addBitmapBlockRefs(bmBlocks);
+    
+    // Add free blocks
+    for (Block i = 0; i < numBlocks(); i++) {
+        
+        if (blocks[i] == nullptr) {
+            blocks[i] = new FSBlock(*this, i, FS_EMPTY_BLOCK);
+            markAsFree(i);
+        }
+    }
+    
+    // Set the volume name
+    if (name != "") setName(name);
+    
+    // Compute checksums for all blocks
+    updateChecksums();
 }
 
 void
@@ -223,6 +207,7 @@ MutableFileSystem::setName(FSName name)
     assert(rb != nullptr);
 
     rb->setName(name);
+    rb->updateChecksum();
 }
 
 void

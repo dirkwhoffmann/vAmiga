@@ -191,7 +191,7 @@ public:
     // Return the identification pattern of this drive
     u32 getDriveId() const;
 
-    // Operation
+    // Returns the currently addressed cylinder
     isize getCylinder() const { return head.cylinder; }
     
     

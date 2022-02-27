@@ -28,4 +28,10 @@ public:
 
     Drive(Amiga& ref, isize nr);
     
+    
+    //
+    // Querying device properties
+    //
+    
+    
 };

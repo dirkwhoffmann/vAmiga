@@ -11,6 +11,62 @@
 #include "FSDescriptors.h"
 #include "IOUtils.h"
 
+FileSystemDescriptor::FileSystemDescriptor(isize numBlocks, FSVolumeType dos)
+{
+    init(numBlocks, dos);
+}
+
+FileSystemDescriptor::FileSystemDescriptor(Diameter dia, Density den, FSVolumeType dos)
+{
+    init(dia, den, dos);
+}
+
+FileSystemDescriptor::FileSystemDescriptor(const Geometry &geometry, FSVolumeType dos)
+{
+    init(geometry, dos);
+}
+
+
+void
+FileSystemDescriptor::init(isize numBlocks, FSVolumeType dos)
+{
+    // Copy parameters
+    this->numBlocks = numBlocks;
+    this->numReserved = 2;
+    this->dos = dos;
+
+    // Determine the location of the root block
+    auto highKey = numBlocks - 1;
+    auto rootKey = (numReserved + highKey) / 2;
+    assert(rootKey == numBlocks / 2);
+    rootBlock = Block(rootKey);
+
+    // Determine the number of required bitmap blocks
+    isize bitsPerBlock = (bsize - 4) * 8;
+    isize neededBlocks = (numBlocks + bitsPerBlock - 1) / bitsPerBlock;
+    
+    // TODO: CREATE BITMAP EXTENSION BLOCKS IF THE NUMBER EXCEEDS 25
+    assert(neededBlocks <= 25);
+    
+    // Add all bitmap blocks
+    for (isize i = 0; i < neededBlocks; i++) {
+        bmBlocks.push_back(Block(rootKey + 1 + i));
+    }
+}
+
+void
+FileSystemDescriptor::init(const Geometry &geometry, FSVolumeType dos)
+{
+    init(geometry.numBlocks(), dos);
+}
+
+void
+FileSystemDescriptor::init(Diameter dia, Density den, FSVolumeType dos)
+{
+    init(Geometry(dia, den), dos);
+}
+
+
 void
 FileSystemDescriptor::dump() const
 {

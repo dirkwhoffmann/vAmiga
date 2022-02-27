@@ -74,6 +74,7 @@ public:
     FileSystem(FloppyDrive &dfn) throws { init(dfn); }
     FileSystem(const HardDrive &hdn, isize part) throws { init(hdn, part); }
 
+    virtual ~FileSystem();
     
 protected:
     

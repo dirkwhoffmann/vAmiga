@@ -15,6 +15,11 @@
 #include <set>
 #include <stack>
 
+FileSystem::~FileSystem()
+{
+    for (auto &b : blocks) delete b;
+}
+
 void
 FileSystem::init(const ADFFile &adf)
 {

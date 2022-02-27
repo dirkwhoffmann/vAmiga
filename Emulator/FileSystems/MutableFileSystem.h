@@ -30,42 +30,37 @@ class MutableFileSystem : public FileSystem {
 public:
 
     using FileSystem::FileSystem;
-    /*
-    MutableFileSystem(const ADFFile &adf) throws : FileSystem(adf) { }
-    MutableFileSystem(const HDFFile &hdf, isize part) throws : FileSystem(hdf, part) { }
-    MutableFileSystem(Drive &dfn) throws : FileSystem(dfn) { }
-    MutableFileSystem(const HardDrive &hdn, isize part) throws : FileSystem(hdn, part) { }
-    */
-    // Creates an empty file system
-    MutableFileSystem(isize capacity) { init(capacity); }
-    [[deprecated]] MutableFileSystem(FSDeviceDescriptor &layout) { init(layout); }
-    MutableFileSystem(FileSystemDescriptor &layout) { init(layout); }
-    MutableFileSystem(Diameter dia, Density den) { init(dia, den); }
 
-    // Creates a file system from a media file on disk
+    MutableFileSystem(isize capacity) { init(capacity); }
+    MutableFileSystem(FileSystemDescriptor &layout) { init(layout); }
+    MutableFileSystem(Diameter dia, Density den, FSVolumeType dos) { init(dia, den, dos); }
     MutableFileSystem(Diameter dia, Density den, const string &path) { init(dia, den, path); }
     MutableFileSystem(FSVolumeType type, const string &path) { init(type, path); }
-    ~MutableFileSystem();
+    
+    // ~MutableFileSystem();
     
 private:
     
     void init(isize capacity);
-    void init(FSDeviceDescriptor &layout);
     void init(FileSystemDescriptor &layout);
-    void init(Diameter type, Density density);
-    void init(Diameter type, Density density, const string &path);
+    void init(Diameter dia, Density den, FSVolumeType dos);
+    void init(Diameter dia, Density den, const string &path);
     void init(FSVolumeType type, const string &path);
 
-    void initBlocks();
-    [[deprecated]] void initBlocks(FSDeviceDescriptor &layout);
+    [[deprecated]] void initBlocks();
 
 
     //
-    // Modifying the root block
+    // Formatting
     //
 
 public:
 
+    // Formats the volume
+    void format(FSVolumeType dos, string name = "");
+    void format(string name = "");
+    
+    // Writes the volume name
     void setName(FSName name);
     
     
@@ -154,9 +149,6 @@ private:
     
 public:
         
-    // Predicts the type of a block by analyzing its number and data
-    // FSBlockType predictBlockType(Block nr, const u8 *buffer);
-
     // Imports the volume from a buffer compatible with the ADF format
     void importVolume(const u8 *src, isize size) throws;
 
