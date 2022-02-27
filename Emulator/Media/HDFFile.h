@@ -81,7 +81,6 @@ public:
 
     // Returns a file system descriptor for this volume
     struct FileSystemDescriptor getFileSystemDescriptor(isize part) const;
-    [[deprecated]] struct FSDeviceDescriptor layoutOfPartition(isize nr) const; // DEPRECATED
     u8 *dataForPartition(isize nr) const;
     
     // Computes all possible drive geometries

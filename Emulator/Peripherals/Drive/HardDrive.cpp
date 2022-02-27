@@ -354,7 +354,6 @@ HardDrive::format(FSVolumeType fsType, BootBlockId bb)
     if (fsType != FS_NODOS) {
         
         // Create a device descriptor matching this drive
-        // auto layout = FSDeviceDescriptor(driveSpec.geometry, fsType);
         auto layout = FileSystemDescriptor(driveSpec.geometry, fsType);
 
         // Create a file system
@@ -364,7 +363,7 @@ HardDrive::format(FSVolumeType fsType, BootBlockId bb)
         fs.makeBootable(bb);
         
         // REMOVE ASAP
-        msg("File system\n");
+        msg("File system:\n");
         fs.dump();
         
         // Copy all blocks over

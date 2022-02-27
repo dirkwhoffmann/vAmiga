@@ -198,36 +198,6 @@ ADFFile::getFileSystemDescriptor() const
     return result;
 }
 
-FSDeviceDescriptor
-ADFFile::layout() const
-{
-    FSDeviceDescriptor result;
-    
-    result.geometry.cylinders = numCyls();
-    result.geometry.heads = numSides();
-    result.geometry.sectors = numSectors();
-    result.geometry.bsize = 512;
-    result.numBlocks = numCyls() * numSides() * numSectors();
-    result.numReserved = 2;
-
-    // Determine the root block location
-    Block root = size < ADFSIZE_35_HD ? 880 : 1760;
-
-    // Determine the bitmap block location
-    Block bitmap = FSBlock::read32(data + root * 512 + 316);
-    
-    // Assign a default location if the bitmap block reference is invalid
-    if (bitmap == 0 || bitmap >= (Block)numBlocks()) bitmap = root + 1;
-    
-    // result.partition = FSPartitionDescriptor(getDos(), 0, numCyls() - 1, root);
-    // result.partition.bmBlocks.push_back(bitmap);
-    result.dos = getDos();
-    result.rootBlock = root;
-    result.bmBlocks.push_back(bitmap);
-    
-    return result;
-}
-
 BootBlockType
 ADFFile::bootBlockType() const
 {
