@@ -34,6 +34,7 @@ public:
     const char *name = "Custom boot block";
     
     // Constructors
+    BootBlockImage(const u8 *buf1, const u8 *buf2);
     BootBlockImage(const u8 *buffer);
     BootBlockImage(const string &name);
     BootBlockImage(BootBlockId id);

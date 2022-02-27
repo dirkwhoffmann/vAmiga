@@ -22,14 +22,19 @@ class VolumeInspector: DialogController {
     @IBOutlet weak var userDirBlockButton: NSButton!
     @IBOutlet weak var dataBlockButton: NSButton!
 
-    // @IBOutlet weak var icon: NSImageView!
+    @IBOutlet weak var icon: NSImageView!
     @IBOutlet weak var virus: NSImageView!
-    // @IBOutlet weak var title: NSTextField!
-    // @IBOutlet weak var layoutInfo: NSTextField!
-    // @IBOutlet weak var volumeInfo: NSTextField!
-    // @IBOutlet weak var bootInfo: NSTextField!
+    @IBOutlet weak var title: NSTextField!
+    @IBOutlet weak var capacityInfo: NSTextField!
+    @IBOutlet weak var numBlocksInfo: NSTextField!
+    @IBOutlet weak var bsizeInfo: NSTextField!
+    @IBOutlet weak var usageInfo: NSTextField!
+    @IBOutlet weak var nameInfo: NSTextField!
+    @IBOutlet weak var creationInfo: NSTextField!
+    @IBOutlet weak var modificationInfo: NSTextField!
+    @IBOutlet weak var bootblockInfo: NSTextField!
+
     @IBOutlet weak var decontaminationButton: NSButton!
-    @IBOutlet weak var partitionPopup: NSPopUpButton!
 
     @IBOutlet weak var previewScrollView: NSScrollView!
     @IBOutlet weak var previewTable: NSTableView!
@@ -38,11 +43,10 @@ class VolumeInspector: DialogController {
     @IBOutlet weak var blockStepper: NSStepper!
     @IBOutlet weak var corruptionText: NSTextField!
     @IBOutlet weak var corruptionStepper: NSStepper!
+    @IBOutlet weak var strictButton: NSButton!
 
     @IBOutlet weak var info1: NSTextField!
     @IBOutlet weak var info2: NSTextField!
-
-    @IBOutlet weak var strictButton: NSButton!
     
     var nr = -1
     
@@ -181,9 +185,6 @@ class VolumeInspector: DialogController {
         
         // Register to receive mouse click events
         previewTable.action = #selector(clickAction(_:))
-
-        // Hide some elements
-        partitionPopup.isHidden = numPartitions == 1
         
         // Configure elements
         blockStepper.maxValue = .greatestFiniteMagnitude
@@ -195,7 +196,8 @@ class VolumeInspector: DialogController {
     }
     
     override func windowDidLoad() {
-                 
+
+        /*
         // Initialize the partition selector
         partitionPopup.removeAllItems()
                 
@@ -205,6 +207,7 @@ class VolumeInspector: DialogController {
             partitionPopup.lastItem!.tag = i - 1
         }
         partitionPopup.autoenablesItems = false
+        */
         
         // Update the block allocation map
         updateLayoutImage()

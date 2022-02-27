@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "StringUtils.h"
+#include "Aliases.h"
 #include <sstream>
 
 namespace util {
@@ -135,5 +136,33 @@ template string hexstr <8> (isize number);
 template string hexstr <16> (isize number);
 template string hexstr <32> (isize number);
 template string hexstr <64> (isize number);
+
+string byteCountAsString(isize size)
+{
+    auto kb = size / 1024;
+    auto mb = size / (1024 * 1024);
+    auto gb = size / (1024 * 1024 * 1024);
+    auto kbfrac = (size * 100 / 1024) % 100;
+    auto mbfrac = (size * 100 / (1024 * 1024)) % 100;
+    auto gbfrac = (size * 100 / (1024 * 1024 * 1024)) % 100;
+
+    if (size < KB(1)) {
+
+        return std::to_string(size) + " Bytes";
+    }
+    if (size < MB(1)) {
+
+        auto frac = kbfrac == 0 ? "" : ("." + std::to_string(kbfrac));
+        return std::to_string(kb) + frac + " KB";
+    }
+    if (size < GB(1)) {
+        
+        auto frac = mbfrac == 0 ? "" : ("." + std::to_string(mbfrac));
+        return std::to_string(mb) + frac + " MB";
+    }
+    
+    auto frac = gbfrac == 0 ? "" : ("." + std::to_string(gbfrac));
+    return std::to_string(gb) + frac + " GB";
+}
 
 }

@@ -979,9 +979,9 @@ Interpreter::registerInstructions()
                  "command", "Displays the disk geometry",
                  &RetroShell::exec <Token::hdn, Token::inspect, Token::geometry>, 0, i);
 
-        root.add({hd, "inspect", "volume"},
+        root.add({hd, "inspect", "volumes"},
                  "command", "Displays summarized volume information",
-                 &RetroShell::exec <Token::hdn, Token::inspect, Token::volume>, 0, i);
+                 &RetroShell::exec <Token::hdn, Token::inspect, Token::volumes>, 0, i);
 
         root.add({hd, "inspect", "parameters"},
                  "command", "Displays hard drive parameters",

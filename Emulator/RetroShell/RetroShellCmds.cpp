@@ -1114,7 +1114,7 @@ RetroShell::exec <Token::hdn, Token::inspect, Token::geometry> (Arguments& argv,
 }
 
 template <> void
-RetroShell::exec <Token::hdn, Token::inspect, Token::volume> (Arguments& argv, long param)
+RetroShell::exec <Token::hdn, Token::inspect, Token::volumes> (Arguments& argv, long param)
 {
     dump(*amiga.dh[param], dump::Volumes);
 }

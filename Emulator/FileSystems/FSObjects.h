@@ -26,7 +26,8 @@ struct FSString {
     FSString(const u8 *bcplString, isize limit);
 
     const char *c_str() { return str; }
-
+    string cpp_str() { return string(str); }
+    
     bool operator== (FSString &rhs) const;
     u32 hashValue() const;
     

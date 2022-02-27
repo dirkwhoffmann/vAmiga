@@ -1113,10 +1113,11 @@ const BBRecord bbRecord[] = {
           77,60,274,0,536,0,987,110,997,109,1010,109,1019,48)
 };
 
-
-BootBlockImage::BootBlockImage(const u8 *buffer)
+BootBlockImage::BootBlockImage(const u8 *buf1, const u8 *buf2)
 {
-    std::memcpy(data, buffer, 1024);
+    std::memcpy(data, buf1, 512);
+    std::memcpy(data + 512, buf2, 512);
+    
     isize i,j;
     
     // Try to find a match in the data base
@@ -1125,7 +1126,7 @@ BootBlockImage::BootBlockImage(const u8 *buffer)
         if (bbRecord[i].type == BB_STANDARD && bbRecord[i].image) {
             
             // For standard boot blocks, we require a perfect match
-            if (std::memcmp(buffer, bbRecord[i].image, bbRecord[i].size) == 0) {
+            if (std::memcmp(data, bbRecord[i].image, bbRecord[i].size) == 0) {
                 
                 type = bbRecord[i].type;
                 name = bbRecord[i].name;
@@ -1150,6 +1151,11 @@ BootBlockImage::BootBlockImage(const u8 *buffer)
             }
         }
     }
+}
+
+BootBlockImage::BootBlockImage(const u8 *buffer) : BootBlockImage(buffer, buffer + 512)
+{
+    
 }
 
 BootBlockImage::BootBlockImage(const string &name)

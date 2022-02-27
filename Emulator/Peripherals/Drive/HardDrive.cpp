@@ -245,6 +245,15 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
             auto fs = MutableFileSystem(*this, i);
             fs.dump(dump::Summary, os);
         }
+        
+        for (isize i = 0; i < isize(driveSpec.partitions.size()); i++) {
+
+            os << std::endl;
+            os << tab("Partition");
+            os << dec(i) << std::endl;
+            auto fs = MutableFileSystem(*this, i);
+            fs.dump(dump::Properties, os);
+        }
     }
     
     if (category & dump::Partitions) {

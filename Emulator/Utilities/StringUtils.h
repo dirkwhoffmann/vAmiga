@@ -60,4 +60,12 @@ string rtrim(const string &s, const string &characters);
 std::vector<string> split(const string &s, char delimiter);
 string concat(std::vector<string> &s, string delimiter);
 
+
+//
+// Pretty printing
+//
+
+// Returns a textual description for a byte count
+string byteCountAsString(isize bytes);
+
 }

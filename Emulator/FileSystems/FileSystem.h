@@ -97,9 +97,9 @@ protected:
 
     
     //
-    // Querying layout properties
+    // Querying file system properties
     //
-    
+
 public:
                 
     // Returns the capacity of this volume
@@ -111,21 +111,22 @@ public:
     isize usedBlocks() const;
     isize freeBytes() const;
     isize usedBytes() const;
-
-    
-    //
-    // Querying file system properties
-    //
-    
-public:
+    double fillLevel() const { return double(usedBlocks()) / numBlocks(); }
     
     // Returns the DOS version
     FSVolumeType getDos() const { return dos; }
     bool isOFS() const { return isOFSVolumeType(dos); }
     bool isFFS() const { return isFFSVolumeType(dos); }
 
-    // Reads the volume name from the root block
+    // Reads information from the root block
     FSName getName() const;
+    string getCreationDate() const;
+    string getModificationDate() const;
+    
+    // Analyzes the boot block
+    string getBootBlockName() const;
+    BootBlockType bootBlockType() const;
+    bool hasVirus() const { return bootBlockType() == BB_VIRUS; }
     
     
     //

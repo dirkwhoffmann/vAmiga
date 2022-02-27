@@ -128,8 +128,25 @@ FileSystem::_dump(dump::Category category, std::ostream& os) const
         os << getName().c_str() << std::endl;
     }
     
-    if (category & dump::Partitions) {
-        
+    if (category & dump::Properties) {
+
+        os << tab("Name");
+        os << getName().cpp_str() << std::endl;
+        os << tab("Created");
+        os << getCreationDate() << std::endl;
+        os << tab("Modified");
+        os << getModificationDate() << std::endl;
+        os << tab("Boot block");
+        os << getBootBlockName() << std::endl;
+        os << tab("Capacity");
+        os << util::byteCountAsString(numBytes()) << std::endl;
+        os << tab("Block size");
+        os << dec(bsize) << " Bytes" << std::endl;
+        os << tab("Blocks");
+        os << dec(numBlocks()) << std::endl;
+        os << tab("Used");
+        os << dec(usedBlocks());
+        os << " (" <<  std::fixed << std::setprecision(2) << fillLevel() << "%)" << std::endl;
         os << tab("Root block");
         os << dec(rootBlock) << std::endl;
         os << tab("Bitmap blocks");
@@ -189,6 +206,32 @@ FileSystem::getName() const
 {
     FSBlock *rb = rootBlockPtr(rootBlock);
     return rb ? rb->getName() : FSName("");
+}
+
+string
+FileSystem::getCreationDate() const
+{
+    FSBlock *rb = rootBlockPtr(rootBlock);
+    return rb ? rb->getCreationDate().str() : "";
+}
+
+string
+FileSystem::getModificationDate() const
+{
+    FSBlock *rb = rootBlockPtr(rootBlock);
+    return rb ? rb->getModificationDate().str() : "";
+}
+
+string
+FileSystem::getBootBlockName() const
+{
+    return BootBlockImage(blocks[0]->data, blocks[1]->data).name;
+}
+
+BootBlockType
+FileSystem::bootBlockType() const
+{
+    return BootBlockImage(blocks[0]->data, blocks[1]->data).type;
 }
 
 FSBlockType
