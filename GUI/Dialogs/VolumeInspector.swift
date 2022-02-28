@@ -221,9 +221,10 @@ class VolumeInspector: DialogController {
     }
     
     func showSheet(fs: FileSystemProxy) {
-        
+     
+        track()
         vol = fs
-        super.showSheet()
+        super.showWindow(self)
     }
     
     override public func awakeFromNib() {

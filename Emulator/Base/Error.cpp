@@ -204,7 +204,11 @@ VAError::VAError(ErrorCode code, const string &s)
         case ERROR_FS_UNSUPPORTED:
             description = "Unsupported file system.";
             break;
-            
+
+        case ERROR_FS_UNFORMATTED:
+            description = "Unformatted device.";
+            break;
+
         case ERROR_FS_WRONG_BSIZE:
             description = "Invalid block size.";
             break;

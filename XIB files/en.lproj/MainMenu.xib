@@ -441,10 +441,16 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="HJA-xL-xe2"/>
-                            <menuItem title="Inspect..." id="XTb-fA-6qj">
+                            <menuItem title="Inspect Disk..." id="XTb-fA-6qj">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="inspectDiskAction:" target="-1" id="TVA-Cv-ejH"/>
+                                    <action selector="inspectFloppyDiskAction:" target="-1" id="Aix-JY-aGG"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Inspect File System..." id="IDW-d2-3zo">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="inspectDfnVolumeAction:" target="-1" id="dsZ-hU-nj2"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -577,10 +583,16 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="DUv-gR-CL6"/>
-                            <menuItem title="Inspect..." tag="1" id="spZ-Jo-VzX">
+                            <menuItem title="Inspect Disk..." tag="1" id="spZ-Jo-VzX">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="inspectDiskAction:" target="-1" id="KSy-8D-2ES"/>
+                                    <action selector="inspectFloppyDiskAction:" target="-1" id="WAG-BP-bGQ"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Inspect File System..." tag="1" id="V5K-J9-aFA">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="inspectDfnVolumeAction:" target="-1" id="z3g-Is-AfC"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -713,10 +725,16 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="3ka-fe-IUs"/>
-                            <menuItem title="Inspect..." tag="2" id="WR6-M4-nqD">
+                            <menuItem title="Inspect Disk..." tag="2" id="WR6-M4-nqD">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="inspectDiskAction:" target="-1" id="YYZ-Jx-N0K"/>
+                                    <action selector="inspectFloppyDiskAction:" target="-1" id="QtV-Vz-IeD"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Inspect File System..." tag="2" id="nvt-r8-RWb">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="inspectDfnVolumeAction:" target="-1" id="i9V-5S-evM"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -849,10 +867,16 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="Syk-m4-IU0"/>
-                            <menuItem title="Inspect..." tag="3" id="xBw-K3-SqT">
+                            <menuItem title="Inspect Disk..." tag="3" id="xBw-K3-SqT">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="inspectDiskAction:" target="-1" id="y84-g6-xAr"/>
+                                    <action selector="inspectFloppyDiskAction:" target="-1" id="FL0-7q-nqb"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Inspect File System..." tag="3" id="BBY-R1-DX7">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="inspectDfnVolumeAction:" target="-1" id="cgL-kc-AP3"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -1430,5 +1454,17 @@
             <modifierMask key="keyEquivalentModifierMask"/>
         </menuItem>
         <menuItem isSeparatorItem="YES" id="GUM-Ys-uP8"/>
+        <menuItem title="Inspect..." id="R2o-he-i46">
+            <modifierMask key="keyEquivalentModifierMask"/>
+            <connections>
+                <action selector="inspectDiskAction:" target="-1" id="Kb0-1S-5CK"/>
+            </connections>
+        </menuItem>
+        <menuItem title="Inspect Disk..." tag="2" id="RMP-E9-ph4">
+            <modifierMask key="keyEquivalentModifierMask"/>
+            <connections>
+                <action selector="inspectDiskAction:" target="-1" id="Cwr-H3-1cp"/>
+            </connections>
+        </menuItem>
     </objects>
 </document>

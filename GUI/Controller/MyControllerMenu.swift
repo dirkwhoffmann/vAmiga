@@ -75,8 +75,8 @@ extension MyController: NSMenuItemValidation {
             return validateURLlist(myAppDelegate.recentlyInsertedDiskURLs, image: smallDisk)
             
         case  #selector(MyController.ejectDiskAction(_:)),
-            #selector(MyController.exportDiskAction(_:)),
-            #selector(MyController.inspectDiskAction(_:)):
+            #selector(MyController.exportFloppyDiskAction(_:)),
+            #selector(MyController.inspectFloppyDiskAction(_:)):
             return dfn.hasDisk
             
         case #selector(MyController.exportRecentDiskDummyAction0(_:)):
@@ -608,14 +608,21 @@ extension MyController: NSMenuItemValidation {
         }
     }
     
-    @IBAction func exportDiskAction(_ sender: NSMenuItem!) {
+    @IBAction func exportFloppyDiskAction(_ sender: NSMenuItem!) {
         
         let nibName = NSNib.Name("DiskExporter")
         let exportPanel = DiskExporter.make(parent: self, nibName: nibName)
         exportPanel?.showSheet(diskDrive: sender.tag)
     }
     
-    @IBAction func inspectDiskAction(_ sender: NSMenuItem!) {
+    @IBAction func inspectFloppyDiskAction(_ sender: NSMenuItem!) {
+        
+        let nibName = NSNib.Name("DiskInspector")
+        let panel = DiskInspector.make(parent: self, nibName: nibName)
+        panel?.showSheet(diskDrive: sender.tag)
+    }
+
+    @IBAction func inspectDfnVolumeAction(_ sender: NSMenuItem!) {
         
         let nibName = NSNib.Name("VolumeInspector")
         let exportPanel = VolumeInspector.make(parent: self, nibName: nibName)

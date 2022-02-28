@@ -71,7 +71,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     layout.checkCompatibility();
     
     // Only proceed if the volume is formatted
-    if (layout.dos == FS_NODOS) throw VAError(ERROR_HDR_UNPARTITIONED);
+    if (layout.dos == FS_NODOS) throw VAError(ERROR_FS_UNFORMATTED);
         
     // Copy layout parameters
     dos         = layout.dos;
@@ -824,7 +824,7 @@ FileSystem::getDisplayType(isize column)
         
         for (isize i = 0; i < numBlocks(); i++) {
                         
-            auto pos = i * width / (numBlocks() - 1);
+            auto pos = i * (width - 1) / (numBlocks() - 1);
             if (pri[cache[pos]] < pri[blocks[i]->type]) {
                 cache[pos] = blocks[i]->type;
             }
