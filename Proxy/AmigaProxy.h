@@ -642,7 +642,9 @@
 @property (readonly) NSInteger heads;
 @property (readonly) NSInteger sectors;
 @property (readonly) BOOL uniqueGeometry;
-
+- (NSString *)nameOfPartition:(NSInteger)nr;
+- (NSInteger)lowerCylOfPartition:(NSInteger)nr;
+- (NSInteger)upperCylOfPartition:(NSInteger)nr;
 - (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex;
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
 - (void)format:(FSVolumeType)fs bb:(BootBlockId)bb exception:(ExceptionWrapper *)ex;
@@ -660,10 +662,20 @@
 + (instancetype)makeWithADF:(ADFFileProxy *)adf exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithHDF:(HDFFileProxy *)hdf partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
 
+@property (readonly) NSString *name;
+@property (readonly) NSString *creationDate;
+@property (readonly) NSString *modificationDate;
+@property (readonly) NSString *bootBlockName;
+@property (readonly) NSString *capacityString;
 @property (readonly) FSVolumeType dos;
+@property (readonly) BOOL isOFS;
+@property (readonly) BOOL isFFS;
+@property (readonly) NSInteger blockSize;
 @property (readonly) NSInteger numBlocks;
 @property (readonly) NSInteger numBytes;
-
+@property (readonly) NSInteger usedBlocks;
+@property (readonly) double fillLevel;
+@property (readonly) BOOL hasVirus;
 - (void)killVirus;
 - (FSBlockType)blockType:(NSInteger)blockNr;
 - (FSItemType)itemType:(NSInteger)blockNr pos:(NSInteger)pos;
@@ -674,11 +686,10 @@
 - (NSInteger)nextCorrupted:(NSInteger)blockNr;
 - (NSInteger)prevCorrupted:(NSInteger)blockNr;
 - (void)printDirectory:(BOOL) recursive;
-
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
 - (void)export:(NSString *)path exception:(ExceptionWrapper *)ex;
-
 - (FSBlockType)getDisplayType:(NSInteger)column;
+- (NSInteger)nextBlockOfType:(FSBlockType)type after:(NSInteger)after;
 
 @end
 

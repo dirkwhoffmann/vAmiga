@@ -84,11 +84,16 @@ class DialogController: NSWindowController, DialogControllerDelegate {
         if awake { sheetWillShow() }
         
         parent.window?.beginSheet(window!, completionHandler: { result in
+
+            handler?()
+            self.cleanup()
+            /*
             if result == NSApplication.ModalResponse.OK {
                 
                 handler?()
                 self.cleanup()
             }
+            */
         })
 
         sheetDidShow()

@@ -89,9 +89,9 @@ public:
     isize numSides() const override;
     isize numCyls() const override;
     isize numSectors() const override;
-    [[deprecated]] BootBlockType bootBlockType() const override;
-    [[deprecated]] const char *bootBlockName() const override;
-    [[deprecated]] void killVirus() override;
+    BootBlockType bootBlockType() const override;
+    const char *bootBlockName() const override;
+    void killVirus() override;
 
     void encodeDisk(class FloppyDisk &disk) const throws override;
     void decodeDisk(class FloppyDisk &disk) throws override;

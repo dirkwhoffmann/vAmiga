@@ -841,3 +841,20 @@ FileSystem::getDisplayType(isize column)
     
     return cache[column];
 }
+
+isize
+FileSystem::nextBlockOfType(FSBlockType type, isize after)
+{
+    debug(true, "Searching next %s after %ld\n", FSBlockTypeEnum::key(type), after);
+    assert(after >= 0 && after < numBlocks());
+    
+    isize result = after;
+    
+    do {
+        result = (result + 1) % numBlocks();
+        if (blocks[result]->type == type) return result;
+        
+    } while (result != after);
+    
+    return -1;
+}

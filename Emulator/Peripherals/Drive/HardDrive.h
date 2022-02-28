@@ -19,9 +19,6 @@ class HardDrive : public Drive {
     friend class HDFFile;
     friend class HdrController;
     
-    // Number of the emulated drive (dh<nr>)
-    // const isize nr;
-
     // Current configuration
     HardDriveConfig config = {};
     
@@ -59,7 +56,7 @@ public:
     void init(const Geometry &geometry);
     
     // Creates or deletes the data storage
-    [[deprecated]] void alloc(const Geometry &geometry);
+    // [[deprecated]] void alloc(const Geometry &geometry);
     
     
     //
@@ -137,9 +134,10 @@ public:
     // Returns the device number
     isize getNr() const { return nr; }
 
-    // Returns information about the current state
+    // Returns information about the disk or one of its partitions
     HardDriveInfo getInfo() const { return AmigaComponent::getInfo(info); }
-
+    const PartitionSpec &getPartitionInfo(isize nr);
+    
     // Returns the disk geometry
     const Geometry &getGeometry() const { return driveSpec.geometry; }
 

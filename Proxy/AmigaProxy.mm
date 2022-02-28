@@ -1334,6 +1334,24 @@ using namespace moira;
     return [self drive]->getGeometry().unique();
 }
 
+- (NSString *)nameOfPartition:(NSInteger)nr
+{
+    auto &info = [self drive]->getPartitionInfo(nr);
+    return @(info.name.c_str());
+}
+
+- (NSInteger)lowerCylOfPartition:(NSInteger)nr
+{
+    auto &info = [self drive]->getPartitionInfo(nr);
+    return info.lowCyl;
+}
+
+- (NSInteger)upperCylOfPartition:(NSInteger)nr
+{
+    auto &info = [self drive]->getPartitionInfo(nr);
+    return info.highCyl;
+}
+
 - (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex
 {
     try {
@@ -1445,9 +1463,54 @@ using namespace moira;
     }
 }
 
+- (NSString *)name
+{
+    auto str = [self fs]->getName();
+    return @(str.c_str());
+}
+
+- (NSString *)creationDate
+{
+    auto str = [self fs]->getCreationDate();
+    return @(str.c_str());
+}
+
+- (NSString *)modificationDate
+{
+    auto str = [self fs]->getModificationDate();
+    return @(str.c_str());
+}
+
+- (NSString *)bootBlockName
+{
+    auto str = [self fs]->getBootBlockName();
+    return @(str.c_str());
+}
+
+- (NSString *)capacityString
+{
+    auto str = util::byteCountAsString([self fs]->numBytes());
+    return @(str.c_str());
+}
+
 - (FSVolumeType)dos
 {
     return [self fs]->getDos();
+}
+
+- (BOOL)isOFS
+{
+    return [self fs]->isOFS();
+}
+
+- (BOOL)isFFS
+{
+    return [self fs]->isFFS();
+}
+
+- (NSInteger)blockSize
+{
+    return [self fs]->blockSize();
 }
 
 - (NSInteger)numBlocks
@@ -1458,6 +1521,21 @@ using namespace moira;
 - (NSInteger)numBytes
 {
     return [self fs]->numBytes();
+}
+
+- (NSInteger)usedBlocks
+{
+    return [self fs]->usedBlocks();
+}
+
+- (double)fillLevel
+{
+    return [self fs]->fillLevel();
+}
+
+- (BOOL)hasVirus
+{
+    return [self fs]->hasVirus();
 }
 
 - (void)killVirus
@@ -1527,6 +1605,11 @@ using namespace moira;
 - (FSBlockType)getDisplayType:(NSInteger)column
 {
     return [self fs]->getDisplayType(column);
+}
+
+- (NSInteger)nextBlockOfType:(FSBlockType)type after:(NSInteger)after
+{
+    return [self fs]->nextBlockOfType(type, after);
 }
 
 @end

@@ -102,16 +102,17 @@ protected:
 
 public:
                 
-    // Returns the capacity of this volume
+    // Returns capacity information
     isize numBlocks() const { return isize(blocks.size()); }
     isize numBytes() const { return numBlocks() * bsize; }
-    
+    isize blockSize() const { return bsize; }
+
     // Reports usage information
     isize freeBlocks() const;
     isize usedBlocks() const;
     isize freeBytes() const;
     isize usedBytes() const;
-    double fillLevel() const { return double(usedBlocks()) / numBlocks(); }
+    double fillLevel() const { return double(100) * usedBlocks() / numBlocks(); }
     
     // Returns the DOS version
     FSVolumeType getDos() const { return dos; }
@@ -127,7 +128,7 @@ public:
     string getBootBlockName() const;
     BootBlockType bootBlockType() const;
     bool hasVirus() const { return bootBlockType() == BB_VIRUS; }
-    
+        
     
     //
     // Accessing blocks
@@ -290,4 +291,7 @@ public:
     
     // Returns the block type to be displayed in the GUI layout image
     FSBlockType getDisplayType(isize column);
+    
+    // Searches the block list for a block of a specific type
+    isize nextBlockOfType(FSBlockType type, isize after);
 };

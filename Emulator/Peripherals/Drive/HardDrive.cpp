@@ -56,6 +56,7 @@ HardDrive::~HardDrive()
     dealloc();
 }
 
+/*
 void
 HardDrive::alloc(const Geometry &geometry)
 {
@@ -68,6 +69,7 @@ HardDrive::alloc(const Geometry &geometry)
     // Allocate memory
     data = new u8[geometry.numBytes()];
 }
+*/
 
 void
 HardDrive::dealloc()
@@ -175,6 +177,13 @@ HardDrive::setConfigItem(Option option, i64 value)
         default:
             fatalError;
     }
+}
+
+const PartitionSpec &
+HardDrive::getPartitionInfo(isize nr)
+{
+    assert(nr >= 0 && nr < numPartitions());
+    return driveSpec.partitions[nr];
 }
 
 void

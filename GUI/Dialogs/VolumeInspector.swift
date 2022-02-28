@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+import Darwin
+
 class VolumeInspector: DialogController {
         
     var myDocument: MyDocument { return parent.mydocument! }
@@ -25,16 +27,14 @@ class VolumeInspector: DialogController {
     @IBOutlet weak var icon: NSImageView!
     @IBOutlet weak var virus: NSImageView!
     @IBOutlet weak var title: NSTextField!
-    @IBOutlet weak var capacityInfo: NSTextField!
-    @IBOutlet weak var numBlocksInfo: NSTextField!
-    @IBOutlet weak var bsizeInfo: NSTextField!
-    @IBOutlet weak var usageInfo: NSTextField!
     @IBOutlet weak var nameInfo: NSTextField!
+    @IBOutlet weak var dosInfo: NSTextField!
     @IBOutlet weak var creationInfo: NSTextField!
     @IBOutlet weak var modificationInfo: NSTextField!
+    @IBOutlet weak var capacityInfo: NSTextField!
+    @IBOutlet weak var blocksInfo: NSTextField!
+    @IBOutlet weak var usageInfo: NSTextField!
     @IBOutlet weak var bootblockInfo: NSTextField!
-
-    @IBOutlet weak var decontaminationButton: NSButton!
 
     @IBOutlet weak var previewScrollView: NSScrollView!
     @IBOutlet weak var previewTable: NSTableView!
@@ -48,21 +48,14 @@ class VolumeInspector: DialogController {
     @IBOutlet weak var info1: NSTextField!
     @IBOutlet weak var info2: NSTextField!
     
-    var nr = -1
+    var nr = 0
     
     // Returns the inspected floppy or hard drive
     var dfn: DriveProxy { return amiga.df(nr)! }
     var dhn: HardDriveProxy { return amiga.dh(nr)! }
     
-    // Number of blocks in this volume (DEPRECATED)
-    var b = 0
-    
-    var upperBlock: Int { return b > 0 ? b - 1 : 0 }
-
-    // Results of the different decoders
-    var hdf: HDFFileProxy?
-    var adf: ADFFileProxy?
-    var vol: FileSystemProxy?
+    // The analyzed file system
+    var vol: FileSystemProxy!
     
     // Result of the consistency checker
     var errorReport: FSErrorReport?
@@ -71,12 +64,6 @@ class VolumeInspector: DialogController {
     var selectedRow: Int? { return selection == nil ? nil : selection! / 16 }
     var selectedCol: Int? { return selection == nil ? nil : selection! % 16 }
     var strict: Bool { return strictButton.state == .on }
-
-    var numPartitions: Int { return hdf?.numPartitions ?? 1 }
-
-    var hasVirus: Bool {
-        return adf?.hasVirus ?? false
-    }
 
     // Block preview
     var blockNr = 0
@@ -109,7 +96,7 @@ class VolumeInspector: DialogController {
         // Create image data
         for x in 0..<width {
 
-            let color = colors[vol?.getDisplayType(x) ?? .UNKNOWN_BLOCK]!
+            let color = colors[vol.getDisplayType(x)]!
             let ciColor = CIColor(color: color)!
             
             for y in 0...height-1 {
@@ -142,42 +129,65 @@ class VolumeInspector: DialogController {
         
         self.nr = nr
 
-        // Run the ADF decoder
-        adf = try? ADFFileProxy.make(drive: dfn) as ADFFileProxy
-                        
-        // Try to extract the file system
-        initVolume(partition: 0)
-                
-        super.showSheet()
+        do {
+            let dfn = amiga.df(nr)!
+            let adf = try ADFFileProxy.make(drive: dfn) as ADFFileProxy
+            vol = try FileSystemProxy.make(withADF: adf)
+            showSheet(fs: vol)
+            
+        } catch {
+            
+            (error as? VAError)?.warning("Unable to decode the file system.")
+        }
     }
     
     func showSheet(hardDrive nr: Int) {
         
         track()
-        
         self.nr = nr
 
-        // Run the HDF decoder
-        hdf = try? HDFFileProxy.make(hdr: dhn) as HDFFileProxy
-                                
-        // Try to decide the file system
-        initVolume(partition: 0)
+        if dhn.partitions == 1 {
+            
+            // Analyze the first partition
+            showSheet(hardDrive: nr, partition: 0)
+            
+        } else {
+            
+            // Ask the user to select a partition
+            let nibName = NSNib.Name("PartitionSelector")
+            let panel = PartitionSelector.make(parent: parent, nibName: nibName)
+            panel?.showSheet(hardDrive: nr, completionHandler: {
 
+                track("Completion handler")
+                if let part = panel?.userSelection {
+                    track("Selected partition = \(part)")
+                    self.showSheet(hardDrive: nr, partition: part)
+                }
+            })
+        }
+    }
+    
+    func showSheet(hardDrive nr: Int, partition: Int) {
+                
+        do {
+        
+            let hdn = amiga.dh(nr)!
+            let hdf = try HDFFileProxy.make(hdr: hdn) as HDFFileProxy
+            vol = try FileSystemProxy.make(withHDF: hdf, partition: partition)
+            showSheet(fs: vol)
+            
+        } catch {
+            
+            (error as? VAError)?.warning("Unable to decode the file system.")
+        }
+    }
+    
+    func showSheet(fs: FileSystemProxy) {
+        
+        vol = fs
         super.showSheet()
     }
     
-    func initVolume(partition nr: Int) {
-    
-        track("partition = \(nr)")
-        
-        vol = nil
-        if adf != nil { vol = try? FileSystemProxy.make(withADF: adf!) }
-        if hdf != nil { vol = try? FileSystemProxy.make(withHDF: hdf!, partition: nr) }
-        
-        b = vol?.numBlocks ?? 0
-        blockNr = blockNr.clamped(0, upperBlock)
-    }
-        
     override public func awakeFromNib() {
         
         track()
@@ -190,24 +200,12 @@ class VolumeInspector: DialogController {
         blockStepper.maxValue = .greatestFiniteMagnitude
         
         // Run a file system check
-        errorReport = vol?.check(strict)
+        errorReport = vol.check(strict)
         
         update()
     }
     
     override func windowDidLoad() {
-
-        /*
-        // Initialize the partition selector
-        partitionPopup.removeAllItems()
-                
-        for i in 1...numPartitions {
-                    
-            partitionPopup.addItem(withTitle: "Partition \(i)")
-            partitionPopup.lastItem!.tag = i - 1
-        }
-        partitionPopup.autoenablesItems = false
-        */
         
         // Update the block allocation map
         updateLayoutImage()
@@ -231,41 +229,23 @@ class VolumeInspector: DialogController {
     func update() {
           
         // Update icons
-        updateDiskIcon()
+        virus.isHidden = !vol.hasVirus
 
         // Update disk description
-        updateTitleText()
-        updateTrackAndSectorInfo()
         updateVolumeInfo()
-        updateBootInfo()
                 
         // Hide some elements
         strictButton.isHidden = vol == nil
         
-        // Update all elements
+        // Update elements
         blockField.stringValue         = String(format: "%d", blockNr)
         blockStepper.integerValue      = blockNr
         corruptionStepper.integerValue = blockNr
         
-        if let total = errorReport?.corruptedBlocks, total > 0 {
-                     
-            if let corr = vol?.getCorrupted(blockNr), corr > 0 {
-                track("total = \(total) corr = \(corr)")
-                corruptionText.stringValue = "Corrupted block \(corr) out of \(total)"
-            } else {
-                let blocks = total == 1 ? "block" : "blocks"
-                corruptionText.stringValue = "\(total) corrupted \(blocks)"
-            }
-            
-            corruptionText.textColor = .labelColor
-            corruptionText.textColor = .warningColor
-            corruptionStepper.isHidden = false
+        // Inform about corrupted blocks
+        updateCorruptionInfo()
         
-        } else {
-            corruptionText.stringValue = ""
-            corruptionStepper.isHidden = true
-        }
-        
+        // Update the block view table
         updateBlockInfo()
         previewTable.reloadData()
     }
@@ -286,41 +266,18 @@ class VolumeInspector: DialogController {
         userDirBlockButton.image = NSImage(color: colors[.USERDIR_BLOCK]!, size: size)
         dataBlockButton.image = NSImage(color: colors[.DATA_BLOCK_OFS]!, size: size)
     }
-    
-    func updateDiskIcon() {
-
-        /*
-        let name = ""
-    
-        icon.image = NSImage(named: name != "" ? name : "biohazard")
-        virus.isHidden = !hasVirus
-        decontaminationButton.isHidden = !hasVirus
-        */
-    }
-    
-    func updateTitleText() {
         
-        /*
-        let text = "Amiga File System"
-        let color = NSColor.textColor
-                
-        title.stringValue = text
-        title.textColor = color
-        */
-    }
-
-    func updateTrackAndSectorInfo() {
-        
-        /*
-        let text = "Lorem ipsum"
-        let color = NSColor.warningColor
-        
-        layoutInfo.stringValue = text
-        layoutInfo.textColor = color
-        */
-    }
-    
     func updateVolumeInfo() {
+                
+        title.stringValue = vol.dos.description
+        nameInfo.stringValue = vol.name
+        dosInfo.stringValue = "???"
+        creationInfo.stringValue = vol.creationDate
+        modificationInfo.stringValue = vol.modificationDate
+        capacityInfo.stringValue = vol.capacityString
+        blocksInfo.integerValue = vol.numBlocks
+        usageInfo.stringValue = String(format: "%d (%.2f%%)", vol.usedBlocks, vol.fillLevel)
+        bootblockInfo.stringValue = vol.bootBlockName
         
         /*
         var text = "No compatible file system"
@@ -328,7 +285,7 @@ class VolumeInspector: DialogController {
         
         if vol != nil {
             
-            text = vol!.dos.description
+            text = vol.dos.description
             color = .secondaryLabelColor
             
             if let errors = errorReport?.corruptedBlocks, errors > 0 {
@@ -344,6 +301,27 @@ class VolumeInspector: DialogController {
         */
     }
     
+    func updateCorruptionInfo() {
+     
+        var label = ""
+        let total = errorReport?.corruptedBlocks ?? 0
+        
+        if total > 0 {
+                  
+            let nr = vol.getCorrupted(blockNr)
+            
+            if nr > 0 {
+                label = "Corrupted block \(nr) out of \(total)"
+            } else {
+                // let blocks = total == 1 ? "block" : "blocks"
+                label = "\(total) corrupted block" + (total == 1 ? "s" : "")
+            }
+        }
+        
+        corruptionText.stringValue = label
+        corruptionStepper.isHidden = total == 0
+    }
+
     func updateBootInfo() {
                
         /*
@@ -358,13 +336,7 @@ class VolumeInspector: DialogController {
     }
     
     func updateBlockInfo() {
-        
-        if vol == nil {
-            info1.stringValue = ""
-            info2.stringValue = ""
-            return
-        }
-        
+                
         if selection == nil {
             updateBlockInfoUnselected()
             updateErrorInfoUnselected()
@@ -376,13 +348,13 @@ class VolumeInspector: DialogController {
     
     func updateBlockInfoUnselected() {
         
-        let type = vol!.blockType(blockNr)
+        let type = vol.blockType(blockNr)
         info1.stringValue = type.description
     }
     
     func updateBlockInfoSelected() {
         
-        let usage = vol!.itemType(blockNr, pos: selection!)
+        let usage = vol.itemType(blockNr, pos: selection!)
         info1.stringValue = usage.description
     }
 
@@ -394,7 +366,7 @@ class VolumeInspector: DialogController {
     func updateErrorInfoSelected() {
         
         var exp = UInt8(0)
-        let error = vol!.check(blockNr, pos: selection!, expected: &exp, strict: strict)
+        let error = vol.check(blockNr, pos: selection!, expected: &exp, strict: strict)
         info2.stringValue = error.description(expected: Int(exp))
     }
       
@@ -406,7 +378,7 @@ class VolumeInspector: DialogController {
         
         if newValue != blockNr {
                         
-            blockNr = newValue.clamped(0, upperBlock)
+            blockNr = newValue.clamped(0, vol.numBlocks - 1)
             selection = nil
             update()
         }
@@ -417,9 +389,9 @@ class VolumeInspector: DialogController {
         var jump: Int
          
         if newValue > blockNr {
-            jump = vol!.nextCorrupted(blockNr)
+            jump = vol.nextCorrupted(blockNr)
         } else {
-            jump = vol!.prevCorrupted(blockNr)
+            jump = vol.prevCorrupted(blockNr)
         }
 
         corruptionStepper.integerValue = jump
@@ -430,23 +402,6 @@ class VolumeInspector: DialogController {
     // Action methods
     //
 
-    @IBAction func partitionAction(_ sender: NSPopUpButton!) {
-        
-        track()
-        
-        initVolume(partition: sender.selectedTag())
-        update()
-        updateLayoutImage()
-    }
-
-    @IBAction func decontaminationAction(_ sender: NSButton!) {
-        
-        track()
-        adf?.killVirus()
-        vol?.killVirus()
-        update()
-    }
-
     @IBAction func clickAction(_ sender: NSTableView!) {
         
         if sender.clickedColumn >= 1 && sender.clickedRow >= 0 {
@@ -456,7 +411,20 @@ class VolumeInspector: DialogController {
             update()
         }
     }
-    
+
+    @IBAction func blockTypeAction(_ sender: NSButton!) {
+        
+        var type = FSBlockType(rawValue: sender.tag)!
+
+        // Make sure we search the correct data block type
+        if type == .DATA_BLOCK_OFS && vol.isFFS { type = .DATA_BLOCK_FFS }
+        if type == .DATA_BLOCK_FFS && vol.isOFS { type = .DATA_BLOCK_OFS }
+
+        // Goto the next block of the requested type
+        let nextBlock = vol.nextBlock(of: type, after: blockNr)
+        if nextBlock != -1 { setBlock(nextBlock) }
+    }
+
     @IBAction func blockAction(_ sender: NSTextField!) {
         
         setBlock(sender.integerValue)
@@ -475,7 +443,7 @@ class VolumeInspector: DialogController {
     @IBAction func strictAction(_ sender: NSButton!) {
         
         track()
-        errorReport = vol?.check(strict)
+        errorReport = vol.check(strict)
         update()
     }
 }
@@ -519,15 +487,13 @@ extension VolumeInspector: NSTableViewDataSource {
         
         if let col = columnNr(tableColumn) {
 
-            if let byte = vol?.readByte(blockNr, offset: 16 * row + col) {
-                return String(format: "%02X", byte)
-            }
+            let byte = vol.readByte(blockNr, offset: 16 * row + col)
+            return String(format: "%02X", byte)
 
         } else {
+            
             return String(format: "%X", row)
         }
-        
-        return ""
     }
 }
 
@@ -541,7 +507,7 @@ extension VolumeInspector: NSTableViewDelegate {
         if let col = columnNr(tableColumn) {
             
             let offset = 16 * row + col
-            let error = vol?.check(blockNr, pos: offset, expected: &exp, strict: strict) ?? .OK
+            let error = vol.check(blockNr, pos: offset, expected: &exp, strict: strict)
             
             if row == selectedRow && col == selectedCol {
                 cell?.textColor = .white

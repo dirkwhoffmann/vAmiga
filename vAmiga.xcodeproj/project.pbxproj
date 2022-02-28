@@ -233,6 +233,8 @@
 		50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CD21F6378000FA167F /* A1000ISO.xib */; };
 		50D2B85226D292B7008040E5 /* DeniseDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D2B85026D292B7008040E5 /* DeniseDebugger.cpp */; };
 		50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D375DD222C7C6B0040987C /* Blitter.cpp */; };
+		50D715A127CCA5AA0085C1AA /* PartitionSelector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D715A027CCA5AA0085C1AA /* PartitionSelector.xib */; };
+		50D715A327CCA84F0085C1AA /* PartitionSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D715A227CCA84F0085C1AA /* PartitionSelector.swift */; };
 		50D7CDC42286E968002689F0 /* Joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D7CDC22286E968002689F0 /* Joystick.cpp */; };
 		50DD1EE22525E3E1000180F6 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DD1EE12525E3E1000180F6 /* Preferences.xib */; };
 		50DD33CC2756113300AE18B4 /* pfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 50DD33CB27560EE600AE18B4 /* pfile.c */; };
@@ -675,6 +677,8 @@
 		50D52442227878E900F8959D /* DiskTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskTypes.h; sourceTree = "<group>"; };
 		50D5244322787D3C00F8959D /* MsgQueueTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MsgQueueTypes.h; sourceTree = "<group>"; };
 		50D661862282BE1800D67D88 /* AmigaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaTypes.h; sourceTree = "<group>"; };
+		50D715A027CCA5AA0085C1AA /* PartitionSelector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PartitionSelector.xib; sourceTree = "<group>"; };
+		50D715A227CCA84F0085C1AA /* PartitionSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartitionSelector.swift; sourceTree = "<group>"; };
 		50D7CDC22286E968002689F0 /* Joystick.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Joystick.cpp; sourceTree = "<group>"; };
 		50D7CDC32286E968002689F0 /* Joystick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Joystick.h; sourceTree = "<group>"; };
 		50DD1EE12525E3E1000180F6 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
@@ -1073,6 +1077,7 @@
 				501C514B27C4248300DF1DD5 /* FloppyDiskCreator.xib */,
 				5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */,
 				501C513A27C0084200DF1DD5 /* HardDiskConfigurator.xib */,
+				50D715A027CCA5AA0085C1AA /* PartitionSelector.xib */,
 			);
 			path = "XIB files";
 			sourceTree = "<group>";
@@ -1140,6 +1145,7 @@
 				501C514D27C4259F00DF1DD5 /* FloppyDiskCreator.swift */,
 				5050EC4027BE97E000394F4F /* HardDiskCreator.swift */,
 				501C513E27C0C63A00DF1DD5 /* HardDiskConfigurator.swift */,
+				50D715A227CCA84F0085C1AA /* PartitionSelector.swift */,
 				50EB8CCD2530710E0053988A /* VideoExporter.swift */,
 				501C514927C38FE500DF1DD5 /* DragImageView.swift */,
 				50B9354A243481AB000C78B8 /* SnapshotDialog.swift */,
@@ -1775,6 +1781,7 @@
 				50BBE08B21F5EB9B0099BBBB /* A1000ANSI.xib in Resources */,
 				5050EC3F27BE876F00394F4F /* HardDiskCreator.xib in Resources */,
 				50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */,
+				50D715A127CCA5AA0085C1AA /* PartitionSelector.xib in Resources */,
 				50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */,
 				5019605B231257270051B669 /* Monitor.xib in Resources */,
 				500A4EA824472B4F002A4DE1 /* door_open.aiff in Resources */,
@@ -1911,6 +1918,7 @@
 				50AE6EDD24D93DC4000AA367 /* CopperRegs.cpp in Sources */,
 				50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */,
 				5026EDBF2608DC8E00D90CE1 /* Console.swift in Sources */,
+				50D715A327CCA84F0085C1AA /* PartitionSelector.swift in Sources */,
 				509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */,
 				508FDFD921EA20510043D0E9 /* MetalViewEvents.swift in Sources */,
 				50E1D2C626CCF942001FE199 /* FontExtensions.swift in Sources */,
