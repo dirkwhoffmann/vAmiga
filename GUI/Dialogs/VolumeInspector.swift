@@ -11,10 +11,37 @@ import Darwin
 
 class VolumeInspector: DialogController {
         
+    struct Palette {
+        
+        static let white = NSColor.white
+        static let gray = NSColor.gray
+        static let black = NSColor.black
+        static let red = NSColor(r: 0xff, g: 0x66, b: 0x66, a: 0xff)
+        static let orange = NSColor(r: 0xff, g: 0xb2, b: 0x66, a: 0xff)
+        static let yellow = NSColor(r: 0xff, g: 0xff, b: 0x66, a: 0xff)
+        static let green = NSColor(r: 0x66, g: 0xff, b: 0x66, a: 0xff)
+        static let cyan = NSColor(r: 0x66, g: 0xff, b: 0xff, a: 0xff)
+        static let blue = NSColor(r: 0x66, g: 0xb2, b: 0xff, a: 0xff)
+        static let purple = NSColor(r: 0xb2, g: 0x66, b: 0xff, a: 0xff)
+        static let pink = NSColor(r: 0xff, g: 0x66, b: 0xff, a: 0xff)
+    }
+    
     var myDocument: MyDocument { return parent.mydocument! }
 
-    @IBOutlet weak var layoutButton: NSButton!
-    @IBOutlet weak var layoutSlider: NSSlider!
+    @IBOutlet weak var icon: NSImageView!
+    @IBOutlet weak var virus: NSImageView!
+    @IBOutlet weak var title: NSTextField!
+    @IBOutlet weak var nameInfo: NSTextField!
+    @IBOutlet weak var creationInfo: NSTextField!
+    @IBOutlet weak var modificationInfo: NSTextField!
+    @IBOutlet weak var bootblockInfo: NSTextField!
+    @IBOutlet weak var capacityInfo: NSTextField!
+    @IBOutlet weak var blocksInfo: NSTextField!
+    @IBOutlet weak var usageInfo: NSTextField!
+    @IBOutlet weak var virusInfo: NSTextField!
+
+    @IBOutlet weak var blockImageButton: NSButton!
+    @IBOutlet weak var blockSlider: NSSlider!
     @IBOutlet weak var bootBlockButton: NSButton!
     @IBOutlet weak var rootBlockButton: NSButton!
     @IBOutlet weak var bmBlockButton: NSButton!
@@ -24,35 +51,28 @@ class VolumeInspector: DialogController {
     @IBOutlet weak var userDirBlockButton: NSButton!
     @IBOutlet weak var dataBlockButton: NSButton!
 
-    @IBOutlet weak var icon: NSImageView!
-    @IBOutlet weak var virus: NSImageView!
-    @IBOutlet weak var title: NSTextField!
-    @IBOutlet weak var nameInfo: NSTextField!
-    @IBOutlet weak var dosInfo: NSTextField!
-    @IBOutlet weak var creationInfo: NSTextField!
-    @IBOutlet weak var modificationInfo: NSTextField!
-    @IBOutlet weak var capacityInfo: NSTextField!
-    @IBOutlet weak var blocksInfo: NSTextField!
-    @IBOutlet weak var usageInfo: NSTextField!
-    @IBOutlet weak var bootblockInfo: NSTextField!
+    @IBOutlet weak var diagnoseImageButton: NSButton!
+    @IBOutlet weak var diagnoseSlider: NSSlider!
+    @IBOutlet weak var diagnoseInfo: NSTextField!
+    @IBOutlet weak var diagnosePassButton: NSButton!
+    @IBOutlet weak var diagnoseFailButton: NSButton!
+    @IBOutlet weak var diagnoseNextButton: NSButton!
+    @IBOutlet weak var diagnoseNextInfo: NSTextField!
 
     @IBOutlet weak var previewScrollView: NSScrollView!
     @IBOutlet weak var previewTable: NSTableView!
     @IBOutlet weak var blockText: NSTextField!
     @IBOutlet weak var blockField: NSTextField!
     @IBOutlet weak var blockStepper: NSStepper!
-    @IBOutlet weak var corruptionText: NSTextField!
-    @IBOutlet weak var corruptionStepper: NSStepper!
     @IBOutlet weak var strictButton: NSButton!
-
     @IBOutlet weak var info1: NSTextField!
     @IBOutlet weak var info2: NSTextField!
     
     var nr = 0
     
     // Returns the inspected floppy or hard drive
-    var dfn: DriveProxy { return amiga.df(nr)! }
-    var dhn: HardDriveProxy { return amiga.dh(nr)! }
+    // var dfn: DriveProxy { return amiga.df(nr)! }
+    // var dhn: HardDriveProxy { return amiga.dh(nr)! }
     
     // The analyzed file system
     var vol: FileSystemProxy!
@@ -68,22 +88,54 @@ class VolumeInspector: DialogController {
     // Block preview
     var blockNr = 0
     
-    let colors: [FSBlockType: NSColor] = [
+    let palette: [FSBlockType: NSColor] = [
         
         .UNKNOWN_BLOCK: NSColor.white,
         .EMPTY_BLOCK: NSColor.gray,
-        .BOOT_BLOCK: NSColor(r: 0xFF, g: 0xCC, b: 0x99, a: 0xFF),
-        .ROOT_BLOCK: NSColor(r: 0xFF, g: 0x99, b: 0x99, a: 0xFF),
-        .BITMAP_BLOCK: NSColor(r: 0xCC, g: 0x99, b: 0xFF, a: 0xFF),
-        .BITMAP_EXT_BLOCK: NSColor(r: 0xE5, g: 0xCC, b: 0xFF, a: 0xFF),
-        .USERDIR_BLOCK: NSColor(r: 0x99, g: 0xCC, b: 0xFF, a: 0xFF),
-        .FILEHEADER_BLOCK: NSColor(r: 0xFF, g: 0xFF, b: 0x99, a: 0xFF),
-        .FILELIST_BLOCK: NSColor(r: 0xFF, g: 0xFF, b: 0xCC, a: 0xFF),
-        .DATA_BLOCK_OFS: NSColor(r: 0x99, g: 0xFF, b: 0x99, a: 0xFF),
-        .DATA_BLOCK_FFS: NSColor(r: 0x99, g: 0xFF, b: 0x99, a: 0xFF)
+        .BOOT_BLOCK: Palette.orange,
+        .ROOT_BLOCK: Palette.red,
+        .BITMAP_BLOCK: Palette.purple,
+        .BITMAP_EXT_BLOCK: Palette.pink,
+        .USERDIR_BLOCK: Palette.yellow,
+        .FILEHEADER_BLOCK: Palette.blue,
+        .FILELIST_BLOCK: Palette.cyan,
+        .DATA_BLOCK_OFS: Palette.green,
+        .DATA_BLOCK_FFS: Palette.green
     ]
 
     var layoutImage: NSImage? {
+        
+        return createImage(colorize: { (x: Int) -> NSColor in
+            switch vol.getDisplayType(x) {
+            case .UNKNOWN_BLOCK: return Palette.white
+            case .EMPTY_BLOCK: return NSColor.gray
+            case .BOOT_BLOCK: return Palette.orange
+            case .ROOT_BLOCK: return Palette.red
+            case .BITMAP_BLOCK: return Palette.purple
+            case .BITMAP_EXT_BLOCK: return Palette.pink
+            case .USERDIR_BLOCK: return Palette.yellow
+            case .FILEHEADER_BLOCK: return Palette.blue
+            case .FILELIST_BLOCK: return Palette.cyan
+            case .DATA_BLOCK_OFS: return Palette.green
+            case .DATA_BLOCK_FFS: return Palette.green
+            default: fatalError()
+            }
+        })
+    }
+
+    var diagnoseImage: NSImage? {
+        
+        return createImage(colorize: { (x: Int) -> NSColor in
+            switch vol.diagnoseImageSlice(x) {
+            case 0: return Palette.gray
+            case 1: return Palette.green
+            case 2: return Palette.red
+            default: fatalError()
+            }
+        })
+    }
+    
+    func createImage(colorize: (Int) -> NSColor) -> NSImage? {
         
         // Create image representation in memory
         let width = 1760
@@ -96,7 +148,8 @@ class VolumeInspector: DialogController {
         // Create image data
         for x in 0..<width {
 
-            let color = colors[vol.getDisplayType(x)]!
+            // let color = colors[vol.getDisplayType(x)]!
+            let color = colorize(x)
             let ciColor = CIColor(color: color)!
             
             for y in 0...height-1 {
@@ -146,7 +199,7 @@ class VolumeInspector: DialogController {
         track()
         self.nr = nr
 
-        if dhn.partitions == 1 {
+        if amiga.dh(nr)!.partitions == 1 {
             
             // Analyze the first partition
             showSheet(hardDrive: nr, partition: 0)
@@ -202,20 +255,15 @@ class VolumeInspector: DialogController {
         // Run a file system check
         errorReport = vol.check(strict)
         
+        // Compute images
+        updateLayoutImage()
+        updateDiagnoseImage()
+        
         update()
     }
     
     override func windowDidLoad() {
-        
-        // Update the block allocation map
-        updateLayoutImage()
-        
-        // Jump to the first corrupted block if an error was found
-        if errorReport != nil && errorReport!.corruptedBlocks > 0 {
-            setCorruptedBlock(1)
-        } else {
-            update()
-        }
+                
     }
     
     override func sheetDidShow() {
@@ -228,23 +276,14 @@ class VolumeInspector: DialogController {
 
     func update() {
           
-        // Update icons
-        virus.isHidden = !vol.hasVirus
-
-        // Update disk description
+        updateVirusInfo()
         updateVolumeInfo()
-                
-        // Hide some elements
-        strictButton.isHidden = vol == nil
+        updateDiagnoseInfo()
         
         // Update elements
         blockField.stringValue         = String(format: "%d", blockNr)
         blockStepper.integerValue      = blockNr
-        corruptionStepper.integerValue = blockNr
-        
-        // Inform about corrupted blocks
-        updateCorruptionInfo()
-        
+                
         // Update the block view table
         updateBlockInfo()
         previewTable.reloadData()
@@ -252,33 +291,37 @@ class VolumeInspector: DialogController {
     
     func updateLayoutImage() {
              
-        // Update the layout image
-        layoutButton.image = layoutImage
-
-        // Update color images
         let size = NSSize(width: 16, height: 16)
-        bootBlockButton.image = NSImage(color: colors[.BOOT_BLOCK]!, size: size)
-        rootBlockButton.image = NSImage(color: colors[.ROOT_BLOCK]!, size: size)
-        bmBlockButton.image = NSImage(color: colors[.BITMAP_BLOCK]!, size: size)
-        bmExtBlockButton.image = NSImage(color: colors[.BITMAP_EXT_BLOCK]!, size: size)
-        fileListBlockButton.image = NSImage(color: colors[.FILELIST_BLOCK]!, size: size)
-        fileHeaderBlockButton.image = NSImage(color: colors[.FILEHEADER_BLOCK]!, size: size)
-        userDirBlockButton.image = NSImage(color: colors[.USERDIR_BLOCK]!, size: size)
-        dataBlockButton.image = NSImage(color: colors[.DATA_BLOCK_OFS]!, size: size)
+        bootBlockButton.image = NSImage(color: palette[.BOOT_BLOCK]!, size: size)
+        rootBlockButton.image = NSImage(color: palette[.ROOT_BLOCK]!, size: size)
+        bmBlockButton.image = NSImage(color: palette[.BITMAP_BLOCK]!, size: size)
+        bmExtBlockButton.image = NSImage(color: palette[.BITMAP_EXT_BLOCK]!, size: size)
+        fileListBlockButton.image = NSImage(color: palette[.FILELIST_BLOCK]!, size: size)
+        fileHeaderBlockButton.image = NSImage(color: palette[.FILEHEADER_BLOCK]!, size: size)
+        userDirBlockButton.image = NSImage(color: palette[.USERDIR_BLOCK]!, size: size)
+        dataBlockButton.image = NSImage(color: palette[.DATA_BLOCK_OFS]!, size: size)
+        blockImageButton.image = layoutImage
     }
         
+    func updateDiagnoseImage() {
+            
+        let size = NSSize(width: 16, height: 16)
+        diagnosePassButton.image = NSImage(color: Palette.green, size: size)
+        diagnoseFailButton.image = NSImage(color: Palette.red, size: size)
+        diagnoseImageButton.image = diagnoseImage
+    }
+    
     func updateVolumeInfo() {
                 
         title.stringValue = vol.dos.description
         nameInfo.stringValue = vol.name
-        dosInfo.stringValue = "???"
+        bootblockInfo.stringValue = vol.bootBlockName
         creationInfo.stringValue = vol.creationDate
         modificationInfo.stringValue = vol.modificationDate
         capacityInfo.stringValue = vol.capacityString
         blocksInfo.integerValue = vol.numBlocks
         usageInfo.stringValue = String(format: "%d (%.2f%%)", vol.usedBlocks, vol.fillLevel)
-        bootblockInfo.stringValue = vol.bootBlockName
-        
+
         /*
         var text = "No compatible file system"
         var color = NSColor.warningColor
@@ -301,40 +344,37 @@ class VolumeInspector: DialogController {
         */
     }
     
-    func updateCorruptionInfo() {
+    func updateVirusInfo() {
+        
+        if vol.hasVirus {
+            
+            virus.isHidden = false
+            virusInfo.stringValue = "Boot block virus detected"
+            virusInfo.textColor = .warningColor
+        
+        } else {
+
+            virus.isHidden = true
+            virusInfo.stringValue = "Passed"
+            virusInfo.textColor = .secondaryLabelColor
+        }
+    }
+    
+    func updateDiagnoseInfo() {
      
-        var label = ""
         let total = errorReport?.corruptedBlocks ?? 0
         
         if total > 0 {
-                  
-            let nr = vol.getCorrupted(blockNr)
             
-            if nr > 0 {
-                label = "Corrupted block \(nr) out of \(total)"
-            } else {
-                // let blocks = total == 1 ? "block" : "blocks"
-                label = "\(total) corrupted block" + (total == 1 ? "s" : "")
-            }
+            let blocks = total == 1 ? "block" : "blocks"
+            diagnoseInfo.stringValue = "\(total) corrupted \(blocks) found"
         }
-        
-        corruptionText.stringValue = label
-        corruptionStepper.isHidden = total == 0
-    }
 
-    func updateBootInfo() {
-               
-        /*
-        if adf == nil {
-            bootInfo.stringValue = ""
-            return
-        }
-        
-        bootInfo.stringValue = adf!.bootInfo
-        bootInfo.textColor = adf!.hasVirus ? .warningColor : .secondaryLabelColor
-        */
+        diagnoseInfo.isHidden = total == 0
+        diagnoseNextInfo.isHidden = total == 0
+        diagnoseNextButton.isHidden = total == 0
     }
-    
+   
     func updateBlockInfo() {
                 
         if selection == nil {
@@ -373,7 +413,7 @@ class VolumeInspector: DialogController {
     //
     // Helper methods
     //
-    
+        
     func setBlock(_ newValue: Int) {
         
         if newValue != blockNr {
@@ -383,35 +423,16 @@ class VolumeInspector: DialogController {
             update()
         }
     }
-
-    func setCorruptedBlock(_ newValue: Int) {
-        
-        var jump: Int
-         
-        if newValue > blockNr {
-            jump = vol.nextCorrupted(blockNr)
-        } else {
-            jump = vol.prevCorrupted(blockNr)
-        }
-
-        corruptionStepper.integerValue = jump
-        setBlock(jump)
-    }
     
     //
     // Action methods
     //
 
-    @IBAction func clickAction(_ sender: NSTableView!) {
-        
-        if sender.clickedColumn >= 1 && sender.clickedRow >= 0 {
-            
-            let newValue = 16 * sender.clickedRow + sender.clickedColumn - 1
-            selection = selection != newValue ? newValue : nil
-            update()
-        }
-    }
+    @IBAction func blockSliderAction(_ sender: NSSlider!) {
 
+        track("\(sender.integerValue)")
+    }
+    
     @IBAction func blockTypeAction(_ sender: NSButton!) {
         
         var type = FSBlockType(rawValue: sender.tag)!
@@ -435,16 +456,35 @@ class VolumeInspector: DialogController {
         setBlock(sender.integerValue)
     }
         
-    @IBAction func corruptedBlockStepperAction(_ sender: NSStepper!) {
-    
-        setCorruptedBlock(sender.integerValue)
+    @IBAction func diagnoseSliderAction(_ sender: NSSlider!) {
+
+        track("\(sender.integerValue)")
+    }
+
+    @IBAction func gotoNextCorruptedBlockAction(_ sender: NSButton!) {
+
+        track()
+
+        let nextBlock = vol.nextCorruptedBlock(blockNr)
+        if nextBlock != -1 { setBlock(nextBlock) }
     }
 
     @IBAction func strictAction(_ sender: NSButton!) {
         
         track()
         errorReport = vol.check(strict)
+        updateDiagnoseImage()
         update()
+    }
+    
+    @IBAction func clickAction(_ sender: NSTableView!) {
+        
+        if sender.clickedColumn >= 1 && sender.clickedRow >= 0 {
+            
+            let newValue = 16 * sender.clickedRow + sender.clickedColumn - 1
+            selection = selection != newValue ? newValue : nil
+            update()
+        }
     }
 }
 

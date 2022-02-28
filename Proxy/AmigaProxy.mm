@@ -1607,9 +1607,19 @@ using namespace moira;
     return [self fs]->getDisplayType(column);
 }
 
+- (NSInteger)diagnoseImageSlice:(NSInteger)column
+{
+    return [self fs]->diagnoseImageSlice(column);
+}
+
 - (NSInteger)nextBlockOfType:(FSBlockType)type after:(NSInteger)after
 {
     return [self fs]->nextBlockOfType(type, after);
+}
+
+- (NSInteger)nextCorruptedBlock:(NSInteger)after
+{
+    return [self fs]->nextCorruptedBlock(after);
 }
 
 @end

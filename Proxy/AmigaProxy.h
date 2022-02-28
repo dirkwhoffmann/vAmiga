@@ -689,7 +689,9 @@
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
 - (void)export:(NSString *)path exception:(ExceptionWrapper *)ex;
 - (FSBlockType)getDisplayType:(NSInteger)column;
+- (NSInteger)diagnoseImageSlice:(NSInteger)column;
 - (NSInteger)nextBlockOfType:(FSBlockType)type after:(NSInteger)after;
+- (NSInteger)nextCorruptedBlock:(NSInteger)after;
 
 @end
 

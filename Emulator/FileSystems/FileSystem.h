@@ -289,9 +289,15 @@ public:
     // GUI helper functions
     //
     
-    // Returns the block type to be displayed in the GUI layout image
+    // Determines how the layout image should look like in a certain column
     FSBlockType getDisplayType(isize column);
-    
+
+    // Determines how the layout image should look like in a certain column
+    isize diagnoseImageSlice(isize column);
+
     // Searches the block list for a block of a specific type
     isize nextBlockOfType(FSBlockType type, isize after);
+
+    // Searches the block list for a corrupted block
+    isize nextCorruptedBlock(isize after);
 };

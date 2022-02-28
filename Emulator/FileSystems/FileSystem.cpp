@@ -842,17 +842,76 @@ FileSystem::getDisplayType(isize column)
     return cache[column];
 }
 
+FSBlockType
+FileSystem::diagnoseImageSlice(isize column)
+{
+    static constexpr isize width = 1760;
+    
+    assert(column >= 0 && column < width);
+    
+    static i8 cache[width] = { };
+
+    // Cache values when the type of the first column is requested
+    if (column == 0) {
+    
+        // Start from scratch
+        for (isize i = 0; i < width; i++) cache[i] = -1;
+                
+        // Compute values
+        for (isize i = 0; i < numBlocks(); i++) {
+
+            auto pos = i * width / (numBlocks() - 1);
+            if (blocks[i]->corrupted) {
+                cache[pos] = 2;
+            } else if (blocks[i]->type == FS_UNKNOWN_BLOCK) {
+                cache[pos] = 0;
+            } else if (blocks[i]->type == FS_EMPTY_BLOCK) {
+                cache[pos] = 0;
+            } else {
+                cache[pos] = 1;
+            }
+        }
+        
+        // Fill gaps
+        for (isize pos = 1; pos < width; pos++) {
+            
+            if (cache[pos] == -1) {
+                cache[pos] = cache[pos - 1];
+            }
+        }
+    }
+    
+    return cache[column];
+}
+
 isize
 FileSystem::nextBlockOfType(FSBlockType type, isize after)
 {
     debug(true, "Searching next %s after %ld\n", FSBlockTypeEnum::key(type), after);
-    assert(after >= 0 && after < numBlocks());
-    
+    assert(isBlockNumber(after));
+
     isize result = after;
     
     do {
         result = (result + 1) % numBlocks();
         if (blocks[result]->type == type) return result;
+        
+    } while (result != after);
+    
+    return -1;
+}
+
+isize
+FileSystem::nextCorruptedBlock(isize after)
+{
+    debug(true, "Searching next corrupted block after %ld\n", after);
+    assert(isBlockNumber(after));
+    
+    isize result = after;
+    
+    do {
+        result = (result + 1) % numBlocks();
+        if (blocks[result]->corrupted) return result;
         
     } while (result != after);
     
