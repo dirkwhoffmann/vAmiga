@@ -887,7 +887,6 @@ FileSystem::diagnoseImageSlice(isize column)
 isize
 FileSystem::nextBlockOfType(FSBlockType type, isize after)
 {
-    debug(true, "Searching next %s after %ld\n", FSBlockTypeEnum::key(type), after);
     assert(isBlockNumber(after));
 
     isize result = after;
@@ -904,7 +903,6 @@ FileSystem::nextBlockOfType(FSBlockType type, isize after)
 isize
 FileSystem::nextCorruptedBlock(isize after)
 {
-    debug(true, "Searching next corrupted block after %ld\n", after);
     assert(isBlockNumber(after));
     
     isize result = after;

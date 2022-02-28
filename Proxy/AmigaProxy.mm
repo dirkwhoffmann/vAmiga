@@ -1493,6 +1493,12 @@ using namespace moira;
     return @(str.c_str());
 }
 
+- (NSString *)fillLevelString
+{
+    auto str = util::fillLevelAsString([self fs]->fillLevel());
+    return @(str.c_str());
+}
+
 - (FSVolumeType)dos
 {
     return [self fs]->getDos();

@@ -165,4 +165,13 @@ string byteCountAsString(isize size)
     return std::to_string(gb) + frac + " GB";
 }
 
+string fillLevelAsString(double percentage)
+{
+    if (percentage < 1.0) {
+        return "0." + std::to_string(int(percentage * 100)) + "%";
+    } else {
+        return std::to_string(int(percentage)) + "%";
+    }
+}
+
 }

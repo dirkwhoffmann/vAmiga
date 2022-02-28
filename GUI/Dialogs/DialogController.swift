@@ -9,7 +9,7 @@
 
 class DialogWindow: NSWindow {
 
-    // Delegation method for ESC and Cmd+.
+    // Delegation method for ESC and Cmd+
     override func cancelOperation(_ sender: Any?) {
               
         track()
@@ -20,11 +20,10 @@ class DialogWindow: NSWindow {
     }
 }
 
-/* Base class for all auxiliary windows.
- * The class extends NSWindowController by a reference to the controller
- * of the connected emulator window (parent) and a reference to the parents
- * proxy object. It also provides some wrappers around showing and hiding the
- * window.
+/* Base class for all auxiliary windows. The class extends NSWindowController
+ * by a reference to the controller of the connected emulator window (parent)
+ * and a reference to the parents proxy object. It also provides some wrappers
+ * around showing and hiding the window.
  */
 protocol DialogControllerDelegate: AnyObject {
     
@@ -87,13 +86,6 @@ class DialogController: NSWindowController, DialogControllerDelegate {
 
             handler?()
             self.cleanup()
-            /*
-            if result == NSApplication.ModalResponse.OK {
-                
-                handler?()
-                self.cleanup()
-            }
-            */
         })
 
         sheetDidShow()
@@ -103,22 +95,17 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     
         if let win = window {
             
-            // win.orderOut(self)
             parent.window?.endSheet(win, returnCode: .cancel)
         }
     }
     
-    // Default action method for the OK button
     @IBAction func okAction(_ sender: Any!) {
         
-        track()
         hideSheet()
     }
     
-    // Default action method for the Cancel button
     @IBAction func cancelAction(_ sender: Any!) {
         
-        track()
         hideSheet()
     }
 }

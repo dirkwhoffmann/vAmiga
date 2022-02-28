@@ -704,11 +704,11 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hbP-ug-wft">
-                                            <rect key="frame" x="13" y="55" width="643" height="24"/>
+                                            <rect key="frame" x="14" y="55" width="646" height="24"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <sliderCell key="cell" refusesFirstResponder="YES" state="on" alignment="left" maxValue="255" doubleValue="50" tickMarkPosition="above" numberOfTickMarks="128" sliderType="linear" id="aQE-JT-DKR"/>
                                             <connections>
-                                                <action selector="blockSliderAction:" target="-2" id="g9I-fu-229"/>
+                                                <action selector="sliderAction:" target="-2" id="FKp-Zz-Xr3"/>
                                             </connections>
                                         </slider>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jVs-fp-kA4">
@@ -776,11 +776,11 @@ DQ
                                             </buttonCell>
                                         </button>
                                         <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lmd-hH-45x">
-                                            <rect key="frame" x="13" y="55" width="643" height="24"/>
+                                            <rect key="frame" x="14" y="55" width="646" height="24"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <sliderCell key="cell" refusesFirstResponder="YES" state="on" alignment="left" maxValue="255" doubleValue="50" tickMarkPosition="above" numberOfTickMarks="128" sliderType="linear" id="OYd-4z-CU2"/>
                                             <connections>
-                                                <action selector="diagnoseSliderAction:" target="-2" id="IAJ-wN-s05"/>
+                                                <action selector="sliderAction:" target="-2" id="dnp-jR-KK1"/>
                                             </connections>
                                         </slider>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K8I-Vh-3VH">
@@ -827,6 +827,9 @@ DQ
                                 </view>
                             </tabViewItem>
                         </tabViewItems>
+                        <connections>
+                            <outlet property="delegate" destination="-2" id="Oft-lR-o5F"/>
+                        </connections>
                     </tabView>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aA7-0x-kKA">
                         <rect key="frame" x="490" y="460" width="142" height="14"/>

@@ -68,4 +68,7 @@ string concat(std::vector<string> &s, string delimiter);
 // Returns a textual description for a byte count
 string byteCountAsString(isize bytes);
 
+// Returns a textual description for a fill level
+string fillLevelAsString(double percentage);
+
 }

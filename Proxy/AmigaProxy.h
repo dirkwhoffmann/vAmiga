@@ -667,6 +667,7 @@
 @property (readonly) NSString *modificationDate;
 @property (readonly) NSString *bootBlockName;
 @property (readonly) NSString *capacityString;
+@property (readonly) NSString *fillLevelString;
 @property (readonly) FSVolumeType dos;
 @property (readonly) BOOL isOFS;
 @property (readonly) BOOL isFFS;

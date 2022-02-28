@@ -67,13 +67,7 @@ class VolumeInspector: DialogController {
     @IBOutlet weak var strictButton: NSButton!
     @IBOutlet weak var info1: NSTextField!
     @IBOutlet weak var info2: NSTextField!
-    
-    var nr = 0
-    
-    // Returns the inspected floppy or hard drive
-    // var dfn: DriveProxy { return amiga.df(nr)! }
-    // var dhn: HardDriveProxy { return amiga.dh(nr)! }
-    
+            
     // The analyzed file system
     var vol: FileSystemProxy!
     
@@ -177,12 +171,9 @@ class VolumeInspector: DialogController {
     //
     
     func showSheet(diskDrive nr: Int) {
-        
-        track()
-        
-        self.nr = nr
-
+                
         do {
+            
             let dfn = amiga.df(nr)!
             let adf = try ADFFileProxy.make(drive: dfn) as ADFFileProxy
             vol = try FileSystemProxy.make(withADF: adf)
@@ -196,9 +187,6 @@ class VolumeInspector: DialogController {
     
     func showSheet(hardDrive nr: Int) {
         
-        track()
-        self.nr = nr
-
         if amiga.dh(nr)!.partitions == 1 {
             
             // Analyze the first partition
@@ -210,10 +198,7 @@ class VolumeInspector: DialogController {
             let nibName = NSNib.Name("PartitionSelector")
             let panel = PartitionSelector.make(parent: parent, nibName: nibName)
             panel?.showSheet(hardDrive: nr, completionHandler: {
-
-                track("Completion handler")
                 if let part = panel?.userSelection {
-                    track("Selected partition = \(part)")
                     self.showSheet(hardDrive: nr, partition: part)
                 }
             })
@@ -251,7 +236,11 @@ class VolumeInspector: DialogController {
         
         // Configure elements
         blockStepper.maxValue = .greatestFiniteMagnitude
-        
+        blockSlider.minValue = 0
+        blockSlider.maxValue = Double(vol.numBlocks - 1)
+        diagnoseSlider.minValue = 0
+        diagnoseSlider.maxValue = Double(vol.numBlocks - 1)
+
         // Run a file system check
         errorReport = vol.check(strict)
         
@@ -283,7 +272,9 @@ class VolumeInspector: DialogController {
         // Update elements
         blockField.stringValue         = String(format: "%d", blockNr)
         blockStepper.integerValue      = blockNr
-                
+        blockSlider.integerValue       = blockNr
+        diagnoseSlider.integerValue    = blockNr
+        
         // Update the block view table
         updateBlockInfo()
         previewTable.reloadData()
@@ -320,28 +311,7 @@ class VolumeInspector: DialogController {
         modificationInfo.stringValue = vol.modificationDate
         capacityInfo.stringValue = vol.capacityString
         blocksInfo.integerValue = vol.numBlocks
-        usageInfo.stringValue = String(format: "%d (%.2f%%)", vol.usedBlocks, vol.fillLevel)
-
-        /*
-        var text = "No compatible file system"
-        var color = NSColor.warningColor
-        
-        if vol != nil {
-            
-            text = vol.dos.description
-            color = .secondaryLabelColor
-            
-            if let errors = errorReport?.corruptedBlocks, errors > 0 {
-                
-                let blocks = errors == 1 ? "block" : "blocks"
-                text += " with \(errors) corrupted \(blocks)"
-                color = .warningColor
-            }
-        }
-        
-        volumeInfo.stringValue = text
-        volumeInfo.textColor = color
-        */
+        usageInfo.stringValue = "\(vol.usedBlocks) (" + vol.fillLevelString + ")"
     }
     
     func updateVirusInfo() {
@@ -428,9 +398,9 @@ class VolumeInspector: DialogController {
     // Action methods
     //
 
-    @IBAction func blockSliderAction(_ sender: NSSlider!) {
+    @IBAction func sliderAction(_ sender: NSSlider!) {
 
-        track("\(sender.integerValue)")
+        setBlock(sender.integerValue)
     }
     
     @IBAction func blockTypeAction(_ sender: NSButton!) {
@@ -455,15 +425,8 @@ class VolumeInspector: DialogController {
         
         setBlock(sender.integerValue)
     }
-        
-    @IBAction func diagnoseSliderAction(_ sender: NSSlider!) {
-
-        track("\(sender.integerValue)")
-    }
-
+            
     @IBAction func gotoNextCorruptedBlockAction(_ sender: NSButton!) {
-
-        track()
 
         let nextBlock = vol.nextCorruptedBlock(blockNr)
         if nextBlock != -1 { setBlock(nextBlock) }
@@ -563,5 +526,13 @@ extension VolumeInspector: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
         return false
+    }
+}
+
+extension VolumeInspector: NSTabViewDelegate {
+    
+    func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
+        
+        update()
     }
 }
