@@ -35,36 +35,3 @@ FloppyFile::make(const string &path)
     }
     throw VAError(ERROR_FILE_TYPE_MISMATCH);
 }
-
-u8
-FloppyFile::readByte(isize t, isize s, isize offset) const
-{
-    return readByte(t * numSectors() + s, offset);
-}
-
-u8
-FloppyFile::readByte(isize b, isize offset) const
-{
-    assert(offset < 512);
-    return data[b * 512 + offset];
-}
-
-void
-FloppyFile::readSector(u8 *dst, isize t, isize s) const
-{
-    readSector(dst, t * numSectors() + s);
-}
-
-void
-FloppyFile::readSector(u8 *dst, isize s) const
-{
-    isize sectorSize = 512;
-    isize offset = s * sectorSize;
-
-    assert(dst != nullptr);
-    assert(offset + sectorSize <= size);
-
-    for (isize i = 0; i < sectorSize; i++) {
-        dst[i] = data[offset + i];
-    }
-}

@@ -352,9 +352,7 @@ extension FloppyFileProxy {
     
     func icon(protected: Bool) -> NSImage {
         
-        let density = diskDensity
-
-        let name = (density == .HD ? "hd" : "dd") +
+        let name = (diskDensity == .HD ? "hd" : "dd") +
         (type == .IMG ? "_dos" : dos == .NODOS ? "_other" : "_adf") +
         (protected ? "_protected" : "")
 

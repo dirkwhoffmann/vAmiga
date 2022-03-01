@@ -10,6 +10,39 @@
 #include "config.h"
 #include "DiskFile.h"
 
+u8
+DiskFile::readByte(isize t, isize s, isize offset) const
+{
+    return readByte(t * numSectors() + s, offset);
+}
+
+u8
+DiskFile::readByte(isize b, isize offset) const
+{
+    assert(offset < 512);
+    return data[b * 512 + offset];
+}
+
+void
+DiskFile::readSector(u8 *dst, isize t, isize s) const
+{
+    readSector(dst, t * numSectors() + s);
+}
+
+void
+DiskFile::readSector(u8 *dst, isize s) const
+{
+    isize sectorSize = 512;
+    isize offset = s * sectorSize;
+
+    assert(dst != nullptr);
+    assert(offset + sectorSize <= size);
+
+    for (isize i = 0; i < sectorSize; i++) {
+        dst[i] = data[offset + i];
+    }
+}
+
 string
 DiskFile::describeGeometry()
 {
@@ -54,10 +87,10 @@ string
 DiskFile::asciidump(isize b, isize offset, isize len) const
 {
     string result;
-    auto p = data + b * bsize();
+    auto p = data + b * bsize() + offset;
 
     for (isize i = 0; i < len; i++) {
-        result += isprint(int(p[i])) ? (char)p[i] : ' ';
+        result += isprint(int(p[i])) ? char(p[i]) : '.';
     }
     
     return result;

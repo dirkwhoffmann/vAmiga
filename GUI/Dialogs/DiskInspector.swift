@@ -37,17 +37,14 @@ class DiskInspector: DialogController {
     @IBOutlet weak var sectorStepper: NSStepper!
     @IBOutlet weak var blockField: NSTextField!
     @IBOutlet weak var blockStepper: NSStepper!
-    
-    var nr = -1 // DEPRECATED
+
+    // Title and icon of the info section
     var titleString = ""
+    var image: NSImage?
     
     // The floppy drive to get MFM data from
     var drive: DriveProxy?
-    
-    // Returns the inspected floppy or hard drive
-    var dfn: DriveProxy { return amiga.df(nr)! } // DEPRECATED
-    var dhn: HardDriveProxy { return amiga.dh(nr)! } // DEPRECATED
-    
+        
     // The drive geometry (cylinders, heads, sectors, tracks, blocks)
     var c = 0
     var h = 0
@@ -67,6 +64,9 @@ class DiskInspector: DialogController {
     var img: IMGFileProxy?
     var ext: EXTFileProxy?
         
+    // The decoder to get the displayed information from
+    var decoder: DiskFileProxy?
+    
     var selection: Int?
     var selectedRow: Int? { return selection == nil ? nil : selection! / 16 }
     var selectedCol: Int? { return selection == nil ? nil : selection! % 16 }
@@ -93,18 +93,29 @@ class DiskInspector: DialogController {
         
         track()
         
-        titleString = "Disk Drive Df\(nr)"
-        self.nr = nr
+        let dfn = amiga.df(nr)!
+        let protected = dfn.hasWriteProtectedDisk()
+        
+        titleString = "DF\(nr) - Amiga Floppy Drive"
 
         // Run the ADF decoder
         adf = try? ADFFileProxy.make(drive: amiga.df(nr)!) as ADFFileProxy
+        decoder = adf
+        
+        if decoder == nil {
 
-        // Run the extended ADF decoder
-        ext = try? EXTFileProxy.make(drive: amiga.df(nr)!) as EXTFileProxy
+            // Run the DOS decoder
+            img = try? IMGFileProxy.make(drive: amiga.df(nr)!) as IMGFileProxy
+            decoder = img
+        }
+        if decoder == nil {
+            
+            // Run the extended ADF decoder
+            ext = try? EXTFileProxy.make(drive: amiga.df(nr)!) as EXTFileProxy
+            decoder = ext
+        }
 
-        // Run the DOS decoder
-        img = try? IMGFileProxy.make(drive: amiga.df(nr)!) as IMGFileProxy
-                            
+        image = (decoder as? FloppyFileProxy)?.icon(protected: protected)
         initDriveGeometry()
         showWindow()
     }
@@ -113,12 +124,13 @@ class DiskInspector: DialogController {
         
         track()
         
-        titleString = "Hard Drive Hd\(nr)"
-        self.nr = nr
+        titleString = "HD\(nr) - Amiga Hard Drive"
 
         // Run the HDF decoder
         hdf = try? HDFFileProxy.make(hdr: amiga.dh(nr)!) as HDFFileProxy
-                                
+        decoder = hdf
+        
+        image = NSImage(named: "hdf")!
         initDriveGeometry()
         showWindow()
     }
@@ -126,26 +138,13 @@ class DiskInspector: DialogController {
     func initDriveGeometry() {
         
         // Read CHS geometry (cylinders, heads, sectors)
-        if hdf != nil {
-            c = hdf!.numCyls; h = hdf!.numSectors; s = hdf!.numSectors
-        } else if adf != nil {
-            c = adf!.numCyls; h = adf!.numSectors; s = adf!.numSectors
-        } else if img != nil {
-            c = img!.numCyls; h = img!.numSectors; s = img!.numSectors
-        } else if ext != nil {
-            c = ext!.numCyls; h = ext!.numSectors; s = ext!.numSectors
-        }
+        c = decoder!.numCyls
+        h = decoder!.numHeads
+        s = decoder!.numSectors
         
         // Update derived values (tracks, blocks)
         t = c * h
         b = t * s
-        
-        // Keep the current selection in the valid range
-        cylinderNr = cylinderNr.clamped(0, upperCyl)
-        sectorNr = sectorNr.clamped(0, upperSector)
-        headNr = headNr.clamped(0, upperHead)
-        trackNr = trackNr.clamped(0, upperTrack)
-        blockNr = blockNr.clamped(0, upperBlock)
     }
     
     override public func awakeFromNib() {
@@ -165,7 +164,6 @@ class DiskInspector: DialogController {
     
     override func windowDidLoad() {
                  
-        // update()
     }
     
     override func sheetDidShow() {
@@ -178,7 +176,6 @@ class DiskInspector: DialogController {
 
     func update() {
           
-        updateIcon()
         updateInfo()
                                 
         // Update all elements
@@ -195,87 +192,20 @@ class DiskInspector: DialogController {
                 
         previewTable.reloadData()
     }
-    
-    func updateIcon() {
-
-        if hdf != nil {
-            
-            icon.image = NSImage(named: "hdf")!
-            return
-        }
-            
-        var name = ""
-            
-        if ext != nil { name = isHD ? "hd_other" : "dd_other" }
-        if adf != nil { name = isHD ? "hd_adf" : "dd_adf" }
-        if img != nil { name = "dd_dos" }
-        
-        if name != "" && dfn.hasWriteProtectedDisk() { name += "_protected" }
-        
-        icon.image = NSImage(named: name != "" ? name : "biohazard")
-    }
 
     func updateInfo() {
         
+        icon.image = image
         title.stringValue = titleString
 
-        if hdf != nil {
+        switch decoder {
             
-            let num = hdf!.numPartitions
-            let rdb = hdf!.hasRDB
+        case is HDFFileProxy: subTitle1.stringValue = "Standard Hard Drive"
+        case is ADFFileProxy: subTitle1.stringValue = "Amiga Floppy Disk"
+        case is IMGFileProxy: subTitle1.stringValue = "PC Disk"
+        case is EXTFileProxy: subTitle1.stringValue = "Amiga Floppy Disk (Ext)"
             
-            subTitle1.stringValue = "Standard Hard Drive"
-            subTitle2.stringValue = "\(num) Partition" + (num != 1 ? "s" : "")
-            if rdb {
-                subTitle3.stringValue = "Rigid Disk Block found"
-            } else {
-                subTitle3.stringValue = "No Rigid Disk Block"
-            }
-            cylindersInfo.integerValue = hdf!.numCyls
-            headsInfo.integerValue = hdf!.numHeads
-            sectorsInfo.integerValue = hdf!.numSectors
-            blocksInfo.integerValue = hdf!.numBlocks
-            bsizeInfo.integerValue = 512
-            capacityInfo.stringValue = ""
-        
-        } else if adf != nil {
-            
-            subTitle1.stringValue = "Amiga Floppy Disk"
-            subTitle2.stringValue = adf!.typeInfo + " " + adf!.layoutInfo
-            subTitle3.stringValue = ""
-            cylindersInfo.integerValue = adf!.numCyls
-            headsInfo.integerValue = adf!.numHeads
-            sectorsInfo.integerValue = adf!.numSectors
-            capacityInfo.stringValue = adf!.capacityString
-            blocksInfo.integerValue = adf!.numBlocks
-            bsizeInfo.integerValue = 512
-
-        } else if img != nil {
-            
-            subTitle1.stringValue = img!.typeInfo + " PC Disk"
-            subTitle2.stringValue = img!.typeInfo
-            subTitle3.stringValue = img!.capacityString
-            cylindersInfo.integerValue = img!.numCyls
-            headsInfo.integerValue = img!.numHeads
-            sectorsInfo.integerValue = img!.numSectors
-            capacityInfo.stringValue = ""
-            blocksInfo.integerValue = img!.numBlocks
-            bsizeInfo.integerValue = 512
-            
-        } else if ext != nil {
-            
-            subTitle1.stringValue = "Amiga Floppy Disk (Ext)"
-            subTitle2.stringValue = ext!.typeInfo
-            subTitle3.stringValue = ext!.capacityString
-            cylindersInfo.integerValue = ext!.numCyls
-            headsInfo.integerValue = ext!.numHeads
-            sectorsInfo.integerValue = ext!.numSectors
-            capacityInfo.stringValue = ""
-            blocksInfo.integerValue = ext!.numBlocks
-            bsizeInfo.integerValue = 512
-
-        } else {
-            
+        default:
             subTitle1.stringValue = "Raw MFM stream"
             subTitle2.stringValue = ""
             subTitle3.stringValue = ""
@@ -285,6 +215,27 @@ class DiskInspector: DialogController {
             capacityInfo.stringValue = ""
             blocksInfo.stringValue = "-"
             bsizeInfo.stringValue = "-"
+            return
+        }
+        
+        if let hdf = decoder as? HDFFileProxy {
+                        
+            let num = hdf.numPartitions
+            let rdb = hdf.hasRDB
+            subTitle2.stringValue = "\(num) Partition" + (num != 1 ? "s" : "")
+            subTitle3.stringValue = (rdb ? "" : "No ") + "Rigid Disk Block found"
+        }
+        
+        if let floppy = decoder as? FloppyFileProxy {
+            
+            subTitle2.stringValue = floppy.typeInfo + " " + floppy.layoutInfo
+            subTitle3.stringValue = ""
+            cylindersInfo.integerValue = floppy.numCyls
+            headsInfo.integerValue = floppy.numHeads
+            sectorsInfo.integerValue = floppy.numSectors
+            blocksInfo.integerValue = floppy.numBlocks
+            bsizeInfo.integerValue = floppy.bsize
+            capacityInfo.stringValue = floppy.describeCapacity
         }
     }
              
@@ -461,7 +412,7 @@ extension DiskInspector: NSTableViewDataSource {
             return String(format: "%X", row)
             
         case "Ascii":
-            return "TODO TODO TODO"
+            return decoder?.asciidump(blockNr, offset: row * 16, len: 16) ?? ""
             
         default:
             if let col = columnNr(tableColumn) {

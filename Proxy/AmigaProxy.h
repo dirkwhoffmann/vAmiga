@@ -843,9 +843,17 @@
 @property (readonly) NSInteger numCyls;
 @property (readonly) NSInteger numHeads;
 @property (readonly) NSInteger numTracks;
+@property (readonly) NSInteger bsize;
 @property (readonly) NSInteger numSectors;
 @property (readonly) NSInteger numBlocks;
-@property (readonly) NSString * capacityString;
+@property (readonly) NSString *describeGeometry;
+@property (readonly) NSString *describeCapacity;
+
+- (NSInteger)readByte:(NSInteger)b offset:(NSInteger)offset;
+- (void)readSector:(NSInteger)b destination:(unsigned char *)buf;
+
+- (NSString *)hexdump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len;
+- (NSString *)asciidump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len;
 
 @end
 
@@ -869,9 +877,6 @@
 @property (readonly) BOOL hasVirus;
 
 - (void)killVirus;
-
-- (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
-- (void)readSector:(unsigned char *)dst block:(NSInteger)block;
 
 @end
 

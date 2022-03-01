@@ -2015,6 +2015,11 @@ using namespace moira;
     return [self file]->numHeads();
 }
 
+- (NSInteger)bsize
+{
+    return [self file]->bsize();
+}
+
 - (NSInteger)numTracks
 {
     return [self file]->numTracks();
@@ -2030,9 +2035,34 @@ using namespace moira;
     return [self file]->numBlocks();
 }
 
-- (NSString *) capacityString
+- (NSInteger)readByte:(NSInteger)b offset:(NSInteger)offset
+{
+    return [self file]->readByte(b, offset);
+}
+
+- (void)readSector:(NSInteger)b destination:(unsigned char *)buf
+{
+    [self file]->readSector(buf, b);
+}
+
+- (NSString *) describeGeometry
+{
+    return @([self file]->describeGeometry().c_str());
+}
+
+- (NSString *) describeCapacity
 {
     return @([self file]->describeCapacity().c_str());
+}
+
+- (NSString *)hexdump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len
+{
+    return @([self file]->hexdump(b, offset, len).c_str());
+}
+
+- (NSString *)asciidump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len
+{
+    return @([self file]->asciidump(b, offset, len).c_str());
 }
 
 @end
@@ -2103,16 +2133,6 @@ using namespace moira;
 - (void)killVirus
 {
     [self file]->killVirus();
-}
-
-- (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset
-{
-    return [self file]->readByte(block, offset);
-}
-
-- (void)readSector:(unsigned char *)dst block:(NSInteger)nr
-{
-    [self file]->readSector(dst, nr);
 }
 
 @end

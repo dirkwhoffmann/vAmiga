@@ -55,21 +55,6 @@ public:
 
     
     //
-    // Reading data
-    //
-    
-public:
-
-    // Reads a single data byte
-    virtual u8 readByte(isize b, isize offset) const;
-    virtual u8 readByte(isize t, isize s, isize offset) const;
-
-    // Fills a buffer with the data of a single sector
-    virtual void readSector(u8 *dst, isize b) const;
-    virtual void readSector(u8 *dst, isize t, isize s) const;
-
-    
-    //
     // Repairing
     //
 
