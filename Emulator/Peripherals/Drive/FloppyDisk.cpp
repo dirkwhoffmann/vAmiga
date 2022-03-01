@@ -287,3 +287,26 @@ FloppyDisk::repeatTracks()
         }
     }
 }
+
+string
+FloppyDisk::trackBits(Track t) const
+{
+    assert(t < numTracks());
+
+    string result;
+    result.reserve(length.track[t]);
+
+    for (isize i = 0; i < length.track[t]; i++) {
+        for (isize j = 7; j > 0; j--) {
+            result += GET_BIT(data.track[t][i], j) ? '1' : '0';
+        }
+    }
+    
+    return result;
+}
+
+string
+FloppyDisk::trackBits(Cylinder c, Side s) const
+{
+    return trackBits(2 * c + s);
+}

@@ -165,12 +165,12 @@ public:
     //
     
     // Reads a byte from disk
-    u8 readByte(Track track, isize offset) const;
-    u8 readByte(Cylinder cylinder, Side side, isize offset) const;
+    u8 readByte(Track t, isize offset) const;
+    u8 readByte(Cylinder c, Side s, isize offset) const;
 
     // Writes a byte to disk
-    void writeByte(u8 value, Track track, isize offset);
-    void writeByte(u8 value, Cylinder cylinder, Side side, isize offset);
+    void writeByte(u8 value, Track t, isize offset);
+    void writeByte(u8 value, Cylinder c, Side s, isize offset);
         
     
     //
@@ -214,5 +214,9 @@ public:
     static u8 addClockBits(u8 value, u8 previous);
 
     // Repeats the MFM data inside the track buffer to ease decoding
-    void repeatTracks(); 
+    void repeatTracks();
+    
+    // Returns a textual representation of all bits of a track
+    string trackBits(Track t) const;
+    string trackBits(Cylinder c, Side s) const;
 };
