@@ -617,16 +617,28 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func inspectFloppyDiskAction(_ sender: NSMenuItem!) {
         
+        if volumeInspector == nil {
+            volumeInspector = VolumeInspector.make(parent: self, nibName: "VolumeInspector")
+        }
+        volumeInspector?.showSheet(diskDrive: sender.tag)
+        /*
         let nibName = NSNib.Name("DiskInspector")
         let panel = DiskInspector.make(parent: self, nibName: nibName)
         panel?.showSheet(diskDrive: sender.tag)
+        */
     }
 
     @IBAction func inspectDfnVolumeAction(_ sender: NSMenuItem!) {
         
-        let nibName = NSNib.Name("VolumeInspector")
-        let exportPanel = VolumeInspector.make(parent: self, nibName: nibName)
-        exportPanel?.showSheet(diskDrive: sender.tag)
+        if volumeInspector == nil {
+            volumeInspector = VolumeInspector.make(parent: self, nibName: "VolumeInspector")
+        }
+        volumeInspector?.showSheet(diskDrive: sender.tag)
+
+        /*
+        let panel = VolumeInspector.make(parent: self, nibName: "VolumeInspector")
+        panel?.showSheet(diskDrive: sender.tag)
+        */
     }
 
     //

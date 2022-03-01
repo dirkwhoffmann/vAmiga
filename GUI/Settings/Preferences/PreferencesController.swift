@@ -219,10 +219,11 @@ extension PreferencesController: NSTabViewDelegate {
     }
 }
 
-extension PreferencesController: NSWindowDelegate {
+extension PreferencesController {
     
-    func windowWillClose(_ notification: Notification) {
-         
+    override func windowWillClose(_ notification: Notification) {
+
+        super.windowWillClose(notification)
         cleanup()
     }
     

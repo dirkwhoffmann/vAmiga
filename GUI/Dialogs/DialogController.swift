@@ -42,6 +42,9 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     var parent: MyController!
     var amiga: AmigaProxy!
 
+    // List of open windows (to make ARC happy)
+    // static var active: [DialogController] = []
+    
     // Remembers whether awakeFromNib has been called
     var awake = false
     
@@ -50,7 +53,6 @@ class DialogController: NSWindowController, DialogControllerDelegate {
         let controller = Self.init(windowNibName: nibName)
         controller.parent = parent
         controller.amiga = parent.amiga
-
         return controller
     }
 
@@ -78,6 +80,13 @@ class DialogController: NSWindowController, DialogControllerDelegate {
         
     }
     
+    func showWindow(completionHandler handler:(() -> Void)? = nil) {
+
+        if awake { sheetWillShow() }
+        
+        showWindow(self)
+    }
+
     func showSheet(completionHandler handler:(() -> Void)? = nil) {
 
         if awake { sheetWillShow() }
@@ -107,5 +116,17 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     @IBAction func cancelAction(_ sender: Any!) {
         
         hideSheet()
+    }
+}
+
+extension DialogController: NSWindowDelegate {
+
+    func windowWillClose(_ notification: Notification) {
+
+        track()
+        /*
+        DialogController.active = DialogController.active.filter {$0 != self}
+        track("Active: \(DialogController.active)")
+        */
     }
 }

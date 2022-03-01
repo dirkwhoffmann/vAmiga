@@ -306,11 +306,3 @@ class Monitor: DialogController {
         refresh()
     }
 }
-
-extension Monitor: NSWindowDelegate {
-
-    func windowWillClose(_ notification: Notification) {
-
-        track("Closing monitor")
-    }
-}

@@ -33,7 +33,7 @@ class VirtualKeyboardWindow: DialogWindow {
  
 }
 
-class VirtualKeyboardController: DialogController, NSWindowDelegate {
+class VirtualKeyboardController: DialogController {
 
     // Array holding a reference to the view of each key
     var keyView = Array(repeating: nil as NSButton?, count: 128)
@@ -104,12 +104,7 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
         track()
         refresh()
     }
-    
-    func windowWillClose(_ notification: Notification) {
-
-        track()
-    }
-    
+        
     func windowDidBecomeMain(_ notification: Notification) {
         
         refresh()

@@ -224,7 +224,8 @@ class VolumeInspector: DialogController {
      
         track()
         vol = fs
-        super.showWindow(self)
+        showWindow()
+        // super.showWindow(self)
     }
     
     override public func awakeFromNib() {
@@ -450,28 +451,6 @@ class VolumeInspector: DialogController {
             update()
         }
     }
-}
-
-//
-// Extensions
-//
-
-extension VolumeInspector: NSWindowDelegate {
-    
-    func windowDidResize(_ notification: Notification) {
-        
-        track()
-    }
-    
-    func windowWillStartLiveResize(_ notification: Notification) {
-         
-         track()
-     }
-     
-     func windowDidEndLiveResize(_ notification: Notification) {
-        
-        track()
-     }
 }
 
 extension VolumeInspector: NSTableViewDataSource {

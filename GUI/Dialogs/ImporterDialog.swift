@@ -209,24 +209,6 @@ class ImporterDialog: DialogController {
      }
 }
 
-extension ImporterDialog: NSWindowDelegate {
-    
-    func windowDidResize(_ notification: Notification) {
-        
-        track()
-    }
-    
-    func windowWillStartLiveResize(_ notification: Notification) {
-         
-         track()
-     }
-     
-     func windowDidEndLiveResize(_ notification: Notification) {
-        
-        track()
-     }
-}
-
 //
 // iCarousel data source and delegate
 //

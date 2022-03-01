@@ -35,7 +35,13 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Monitor panel of this emulator instance
     var monitor: Monitor?
-    
+
+    // Disk analyzer panel of this emulator instance
+    var diskInspector: DiskInspector?
+
+    // File system analyzer panel of this emulator instance
+    var volumeInspector: VolumeInspector?
+
     // Configuration panel of this emulator instance
     var configurator: ConfigurationController?
     
