@@ -24,3 +24,53 @@ DiskFile::describeCapacity()
 {
     return util::byteCountAsString(numBytes());
 }
+
+string
+DiskFile::hexdump(isize b, isize offset, isize len) const
+{
+    string result;
+    auto p = data + b * bsize();
+    
+    for (isize i = 0; i < len; i++) {
+        result += (i == 0 ? "" : " ") + util::hexstr<2>(p[i]);
+    }
+
+    return result;
+}
+
+string
+DiskFile::hexdump(isize t, isize s, isize offset, isize len) const
+{
+    return hexdump(t * numSectors() + s, offset, len);
+}
+
+string
+DiskFile::hexdump(isize c, isize h, isize s, isize offset, isize len) const
+{
+    return hexdump(c * numHeads() + h, s, offset, len);
+}
+
+string
+DiskFile::asciidump(isize b, isize offset, isize len) const
+{
+    string result;
+    auto p = data + b * bsize();
+
+    for (isize i = 0; i < len; i++) {
+        result += isprint(int(p[i])) ? (char)p[i] : ' ';
+    }
+    
+    return result;
+}
+
+string
+DiskFile::asciidump(isize t, isize s, isize offset, isize len) const
+{
+    return asciidump(t * numSectors() + s, offset, len);
+}
+
+string
+DiskFile::asciidump(isize c, isize h, isize s, isize offset, isize len) const
+{
+    return asciidump(c * numHeads() + h, s, offset, len);
+}

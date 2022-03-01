@@ -109,8 +109,6 @@ public:
     u8 readByte(isize t, isize s, isize offset) const override { return 0; }
     void readSector(u8 *dst, isize b) const override { }
     void readSector(u8 *dst, isize t, isize s) const override { }
-    void readSectorHex(char *dst, isize b, isize count) const override { }
-    void readSectorHex(char *dst, isize t, isize s, isize count) const override { }
     
     void encodeDisk(class FloppyDisk &disk) const throws override;
     void decodeDisk(class FloppyDisk &disk) throws override;

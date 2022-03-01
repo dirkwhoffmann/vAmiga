@@ -68,22 +68,3 @@ FloppyFile::readSector(u8 *dst, isize s) const
         dst[i] = data[offset + i];
     }
 }
-
-void
-FloppyFile::readSectorHex(char *dst, isize t, isize s, isize count) const
-{
-    readSectorHex(dst, t * numSectors() + s, count);
-}
-
-void
-FloppyFile::readSectorHex(char *dst, isize s, isize count) const
-{
-    isize sectorSize = 512;
-    isize offset = s * sectorSize;
-
-    assert(dst != nullptr);
-
-    for (isize i = 0; i < count; i++) {
-        snprintf(dst + 3*i, 4, "%02X ", data[offset + i]);
-    }
-}

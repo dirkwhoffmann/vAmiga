@@ -872,7 +872,6 @@
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
 - (void)readSector:(unsigned char *)dst block:(NSInteger)block;
-- (void)readSectorHex:(char *)dst block:(NSInteger)block count:(NSInteger)count;
 
 @end
 
@@ -898,7 +897,7 @@
 // HDFFile
 //
 
-@interface HDFFileProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer, MakeWithHardDrive> {
+@interface HDFFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer, MakeWithHardDrive> {
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
@@ -907,10 +906,6 @@
 
 @property (readonly) BOOL hasRDB;
 @property (readonly) NSInteger numPartitions;
-@property (readonly) NSInteger numCyls;
-@property (readonly) NSInteger numHeads;
-@property (readonly) NSInteger numSectors;
-@property (readonly) NSInteger numBlocks;
 
 @end
 

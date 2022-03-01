@@ -2115,11 +2115,6 @@ using namespace moira;
     [self file]->readSector(dst, nr);
 }
 
-- (void)readSectorHex:(char *)dst block:(NSInteger)block count:(NSInteger)count
-{
-    [self file]->readSectorHex(dst, block, count);
-}
-
 @end
 
 
@@ -2213,26 +2208,6 @@ using namespace moira;
 - (NSInteger)numPartitions
 {
     return [self hdf]->numPartitions();
-}
-
-- (NSInteger)numCyls
-{
-    return [self hdf]->numCyls();
-}
-
-- (NSInteger)numHeads
-{
-    return [self hdf]->numHeads();
-}
-
-- (NSInteger)numSectors
-{
-    return [self hdf]->numSectors();
-}
-
-- (NSInteger)numBlocks
-{
-    return [self hdf]->numBlocks();
 }
 
 @end

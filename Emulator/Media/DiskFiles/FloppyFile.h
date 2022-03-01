@@ -41,17 +41,12 @@ public:
     
 public:
         
-    // Returns the layout parameters for this disk
+    // Informs about the disk type
     virtual Diameter getDiameter() const = 0;
     virtual Density getDensity() const = 0;
     bool isSD() { return getDensity() == DENSITY_SD; }
     bool isDD() { return getDensity() == DENSITY_DD; }
     bool isHD() { return getDensity() == DENSITY_HD; }
-    // virtual isize numSides() const = 0;
-    // virtual isize numCyls() const = 0;
-    // virtual isize numSectors() const = 0;
-    // virtual isize numTracks() const { return numSides() * numCyls(); }
-    // virtual i64 numBlocks() const { return numTracks() * numSectors(); }
     
     // Analyzes the boot block
     virtual BootBlockType bootBlockType() const { return BB_STANDARD; }
@@ -72,10 +67,6 @@ public:
     // Fills a buffer with the data of a single sector
     virtual void readSector(u8 *dst, isize b) const;
     virtual void readSector(u8 *dst, isize t, isize s) const;
-
-    // Writes a string representation into the provided buffer
-    virtual void readSectorHex(char *dst, isize b, isize count) const;
-    virtual void readSectorHex(char *dst, isize t, isize s, isize count) const;
 
     
     //

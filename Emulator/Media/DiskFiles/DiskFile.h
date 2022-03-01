@@ -35,6 +35,17 @@ public:
     
 public:
     
+    // Returns a textual description for certain disk properties
     string describeGeometry();
     string describeCapacity();
+    
+    // Generates a hex dump for some sector data
+    string hexdump(isize b, isize offset, isize len) const;
+    string hexdump(isize t, isize s, isize offset, isize len) const;
+    string hexdump(isize c, isize h, isize s, isize offset, isize len) const;
+
+    // Generates an ASCII dump for some sector data
+    string asciidump(isize b, isize offset, isize len) const;
+    string asciidump(isize t, isize s, isize offset, isize len) const;
+    string asciidump(isize c, isize h, isize s, isize offset, isize len) const;
 };
