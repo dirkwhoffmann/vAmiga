@@ -47,12 +47,11 @@ public:
     bool isSD() { return getDensity() == DENSITY_SD; }
     bool isDD() { return getDensity() == DENSITY_DD; }
     bool isHD() { return getDensity() == DENSITY_HD; }
-    virtual isize numSides() const = 0;
-    virtual isize numCyls() const = 0;
-    virtual isize numSectors() const = 0;
-    virtual isize numTracks() const { return numSides() * numCyls(); }
-    virtual i64 numBlocks() const { return numTracks() * numSectors(); }
-    string capacityString();
+    // virtual isize numSides() const = 0;
+    // virtual isize numCyls() const = 0;
+    // virtual isize numSectors() const = 0;
+    // virtual isize numTracks() const { return numSides() * numCyls(); }
+    // virtual i64 numBlocks() const { return numTracks() * numSectors(); }
     
     // Analyzes the boot block
     virtual BootBlockType bootBlockType() const { return BB_STANDARD; }

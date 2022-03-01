@@ -36,12 +36,6 @@ FloppyFile::make(const string &path)
     throw VAError(ERROR_FILE_TYPE_MISMATCH);
 }
 
-string
-FloppyFile::capacityString()
-{
-    return util::byteCountAsString(numBlocks() * 512);
-}
-
 u8
 FloppyFile::readByte(isize t, isize s, isize offset) const
 {

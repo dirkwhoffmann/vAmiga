@@ -65,6 +65,24 @@ EXTFile::init(FloppyDrive &drive)
     init(*drive.disk);
 }
 
+isize
+EXTFile::numCyls() const
+{
+   return (storedTracks() + 1) / 2;
+}
+
+isize
+EXTFile::numHeads() const
+{
+    return 2;
+}
+
+isize
+EXTFile::numSectors() const
+{
+    return adf ? adf->numSectors() : 0;
+}
+
 void
 EXTFile::finalizeRead()
 {
@@ -145,30 +163,6 @@ EXTFile::getDensity() const
     }
     
     return bitsInLargestTrack < 16000 * 8 ? DENSITY_DD : DENSITY_HD;
-}
-
-isize
-EXTFile::numSides() const
-{
-    return 2;
-}
-
-isize
-EXTFile::numCyls() const
-{
-   return (storedTracks() + 1) / 2;
-}
-
-isize
-EXTFile::numTracks() const
-{
-    return storedTracks();
-}
-
-isize
-EXTFile::numSectors() const
-{
-    return adf ? adf->numSectors() : 0;
 }
 
 void

@@ -9,3 +9,18 @@
 
 #include "config.h"
 #include "DiskFile.h"
+
+string
+DiskFile::describeGeometry()
+{
+    return
+    std::to_string(numCyls()) + " - " +
+    std::to_string(numHeads()) + " - " +
+    std::to_string(numSectors());
+}
+
+string
+DiskFile::describeCapacity()
+{
+    return util::byteCountAsString(numBytes());
+}

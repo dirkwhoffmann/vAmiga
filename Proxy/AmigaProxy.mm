@@ -2000,6 +2000,41 @@ using namespace moira;
 
 @implementation DiskFileProxy
 
+- (DiskFile *)file
+{
+    return (DiskFile *)obj;
+}
+
+- (NSInteger)numCyls
+{
+    return [self file]->numCyls();
+}
+
+- (NSInteger)numHeads
+{
+    return [self file]->numHeads();
+}
+
+- (NSInteger)numTracks
+{
+    return [self file]->numTracks();
+}
+
+- (NSInteger)numSectors
+{
+    return [self file]->numSectors();
+}
+
+- (NSInteger)numBlocks
+{
+    return [self file]->numBlocks();
+}
+
+- (NSString *) capacityString
+{
+    return @([self file]->describeCapacity().c_str());
+}
+
 @end
 
 
@@ -2047,36 +2082,6 @@ using namespace moira;
 - (BOOL)isHD
 {
     return [self file]->isHD();
-}
-
-- (NSInteger)numCyls
-{
-    return [self file]->numCyls();
-}
-
-- (NSInteger)numSides
-{
-    return [self file]->numSides();
-}
-
-- (NSInteger)numTracks
-{
-    return [self file]->numTracks();
-}
-
-- (NSInteger)numSectors
-{
-    return [self file]->numSectors();
-}
-
-- (NSInteger)numBlocks
-{
-    return [self file]->numBlocks();
-}
-
-- (NSString *) capacityString
-{
-    return @([self file]->capacityString().c_str());
 }
 
 - (BootBlockType)bootBlockType
@@ -2217,7 +2222,7 @@ using namespace moira;
 
 - (NSInteger)numHeads
 {
-    return [self hdf]->numSides();
+    return [self hdf]->numHeads();
 }
 
 - (NSInteger)numSectors

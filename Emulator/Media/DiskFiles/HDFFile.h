@@ -9,13 +9,13 @@
 
 #pragma once
 
-#include "AmigaFile.h"
+#include "DiskFile.h"
 #include "MutableFileSystem.h"
 #include "DriveTypes.h"
 
 class FloppyDisk;
 
-class HDFFile : public AmigaFile {
+class HDFFile : public DiskFile {
     
     // Collected device information
     HardDriveSpec driveSpec;
@@ -57,6 +57,16 @@ public:
     
     FileType type() const override { return FILETYPE_HDF; }
     
+
+    //
+    // Methods from DiskFile
+    //
+
+    isize numCyls() const override;
+    isize numHeads() const override;
+    isize numSectors() const override;
+    
+    
     //
     // Querying volume information
     //
@@ -68,16 +78,16 @@ public:
     const HardDriveSpec getDriveSpec() const { return driveSpec; }
     
     // Returns true if this image contains a rigid disk block
-    bool hasRDB() const; // DEPRECATED
+    bool hasRDB() const;
     
     // Returns the layout parameters of the hard drive
     isize numPartitions() const;
-    isize numCyls() const;
-    isize numSides() const;
-    isize numSectors() const;
-    // isize numReserved() const;
-    isize numBlocks() const;
-    isize bsize() const;
+    // isize numCyls() const;
+    // isize numSides() const;
+    // isize numSectors() const;
+    isize numReserved() const;
+    // isize numBlocks() const;
+    // isize bsize() const;
 
     // Returns a file system descriptor for this volume
     struct FileSystemDescriptor getFileSystemDescriptor(isize part) const;

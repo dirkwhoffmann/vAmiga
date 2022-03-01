@@ -840,6 +840,13 @@
 @interface DiskFileProxy : AmigaFileProxy {
 }
 
+@property (readonly) NSInteger numCyls;
+@property (readonly) NSInteger numHeads;
+@property (readonly) NSInteger numTracks;
+@property (readonly) NSInteger numSectors;
+@property (readonly) NSInteger numBlocks;
+@property (readonly) NSString * capacityString;
+
 @end
 
 
@@ -856,12 +863,6 @@
 @property (readonly) BOOL isSD;
 @property (readonly) BOOL isDD;
 @property (readonly) BOOL isHD;
-@property (readonly) NSInteger numCyls;
-@property (readonly) NSInteger numSides;
-@property (readonly) NSInteger numTracks;
-@property (readonly) NSInteger numSectors;
-@property (readonly) NSInteger numBlocks;
-@property (readonly) NSString * capacityString;
 
 @property (readonly) BootBlockType bootBlockType;
 @property (readonly) NSString *bootBlockName;

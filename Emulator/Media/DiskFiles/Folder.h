@@ -52,6 +52,15 @@ public:
     
     
     //
+    // Methods from DiskFile
+    //
+
+    isize numCyls() const override { return adf->numCyls(); }
+    isize numHeads() const override { return adf->numHeads(); }
+    isize numSectors() const override { return adf->numSectors(); }
+
+    
+    //
     // Methods from FloppyFile
     //
     
@@ -61,9 +70,6 @@ public:
     void setDos(FSVolumeType dos) override { adf->setDos(dos); }
     Diameter getDiameter() const override { return adf->getDiameter(); }
     Density getDensity() const override { return adf->getDensity(); }
-    isize numSides() const override { return adf->numSides(); }
-    isize numCyls() const override { return adf->numCyls(); }
-    isize numSectors() const override { return adf->numSectors(); }
     BootBlockType bootBlockType() const override { return adf->bootBlockType(); }
     const char *bootBlockName() const override { return adf->bootBlockName(); }
     void killVirus() override { adf->killVirus(); }

@@ -244,7 +244,7 @@ class DiskInspector: DialogController {
             subTitle2.stringValue = adf!.typeInfo + " " + adf!.layoutInfo
             subTitle3.stringValue = ""
             cylindersInfo.integerValue = adf!.numCyls
-            headsInfo.integerValue = adf!.numSides
+            headsInfo.integerValue = adf!.numHeads
             sectorsInfo.integerValue = adf!.numSectors
             capacityInfo.stringValue = adf!.capacityString
             blocksInfo.integerValue = adf!.numBlocks
@@ -256,7 +256,7 @@ class DiskInspector: DialogController {
             subTitle2.stringValue = img!.typeInfo
             subTitle3.stringValue = img!.capacityString
             cylindersInfo.integerValue = img!.numCyls
-            headsInfo.integerValue = img!.numSides
+            headsInfo.integerValue = img!.numHeads
             sectorsInfo.integerValue = img!.numSectors
             capacityInfo.stringValue = ""
             blocksInfo.integerValue = img!.numBlocks
@@ -268,7 +268,7 @@ class DiskInspector: DialogController {
             subTitle2.stringValue = ext!.typeInfo
             subTitle3.stringValue = ext!.capacityString
             cylindersInfo.integerValue = ext!.numCyls
-            headsInfo.integerValue = ext!.numSides
+            headsInfo.integerValue = ext!.numHeads
             sectorsInfo.integerValue = ext!.numSectors
             capacityInfo.stringValue = ""
             blocksInfo.integerValue = ext!.numBlocks

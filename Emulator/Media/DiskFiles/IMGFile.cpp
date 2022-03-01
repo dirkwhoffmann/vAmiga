@@ -52,15 +52,15 @@ IMGFile::init(FloppyDisk &disk)
 }
 
 isize
-IMGFile::numSides() const
-{
-    return 2;
-}
-
-isize
 IMGFile::numCyls() const
 {
     return 80;
+}
+
+isize
+IMGFile::numHeads() const
+{
+    return 2;
 }
 
 isize

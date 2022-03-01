@@ -58,6 +58,15 @@ public:
     
     
     //
+    // Methods from DiskFile
+    //
+
+    isize numCyls() const override;
+    isize numHeads() const override;
+    isize numSectors() const override;
+    
+    
+    //
     // Methods from FloppyFile
     //
       
@@ -65,9 +74,6 @@ public:
     void setDos(FSVolumeType dos) override { };
     Diameter getDiameter() const override { return INCH_35; }
     Density getDensity() const override { return DENSITY_DD; }
-    isize numSides() const override;
-    isize numCyls() const override;
-    isize numSectors() const override;
     void encodeDisk(class FloppyDisk &disk) const throws override;
     void decodeDisk(class FloppyDisk &disk) throws override;
 

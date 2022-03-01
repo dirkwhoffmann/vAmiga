@@ -77,6 +77,15 @@ public:
     
     
     //
+    // Methods from DiskFile
+    //
+
+    isize numCyls() const override;
+    isize numHeads() const override;
+    isize numSectors() const override;
+
+    
+    //
     // Methods from FloppyFile
     //
     
@@ -86,9 +95,6 @@ public:
     void setDos(FSVolumeType dos) override;
     Diameter getDiameter() const override;
     Density getDensity() const override;
-    isize numSides() const override;
-    isize numCyls() const override;
-    isize numSectors() const override;
     BootBlockType bootBlockType() const override;
     const char *bootBlockName() const override;
     void killVirus() override;

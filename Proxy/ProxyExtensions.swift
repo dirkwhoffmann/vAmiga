@@ -375,8 +375,8 @@ extension FloppyFileProxy {
                 
         var result = ""
 
-        if numSides == 1 { result += "Single sided, " }
-        if numSides == 2 { result += "Double sided, " }
+        if numHeads == 1 { result += "Single sided, " }
+        if numHeads == 2 { result += "Double sided, " }
         if diskDensity == .SD { result += "single density" }
         if diskDensity == .DD { result += "double density" }
         if diskDensity == .HD { result += "high density" }
@@ -387,7 +387,7 @@ extension FloppyFileProxy {
     /*
     var layoutInfo: String {
                 
-        var result = numSides == 1 ? "Single sided" : "Double sided"
+        var result = numHeads == 1 ? "Single sided" : "Double sided"
 
         if diskDensity == .SD { result += ", single density" }
         if diskDensity == .DD { result += ", double density" }

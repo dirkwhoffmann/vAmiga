@@ -104,6 +104,42 @@ ADFFile::init(MutableFileSystem &volume)
     volume.exportVolume(data, size);
 }
 
+isize
+ADFFile::numCyls() const
+{
+    switch(size & ~1) {
+            
+        case ADFSIZE_35_DD:    return 80;
+        case ADFSIZE_35_DD_81: return 81;
+        case ADFSIZE_35_DD_82: return 82;
+        case ADFSIZE_35_DD_83: return 83;
+        case ADFSIZE_35_DD_84: return 84;
+        case ADFSIZE_35_HD:    return 80;
+            
+        default:
+            fatalError;
+    }
+}
+
+isize
+ADFFile::numHeads() const
+{
+    return 2;
+}
+
+isize
+ADFFile::numSectors() const
+{
+    switch (getDensity()) {
+            
+        case DENSITY_DD: return 11;
+        case DENSITY_HD: return 22;
+            
+        default:
+            fatalError;
+    }
+}
+
 FSVolumeType
 ADFFile::getDos() const
 {
@@ -137,42 +173,6 @@ ADFFile::getDensity() const
     return (size & ~1) == ADFSIZE_35_HD ? DENSITY_HD : DENSITY_DD;
 }
 
-isize
-ADFFile::numSides() const
-{
-    return 2;
-}
-
-isize
-ADFFile::numCyls() const
-{
-    switch(size & ~1) {
-            
-        case ADFSIZE_35_DD:    return 80;
-        case ADFSIZE_35_DD_81: return 81;
-        case ADFSIZE_35_DD_82: return 82;
-        case ADFSIZE_35_DD_83: return 83;
-        case ADFSIZE_35_DD_84: return 84;
-        case ADFSIZE_35_HD:    return 80;
-            
-        default:
-            fatalError;
-    }
-}
-
-isize
-ADFFile::numSectors() const
-{
-    switch (getDensity()) {
-            
-        case DENSITY_DD: return 11;
-        case DENSITY_HD: return 22;
-            
-        default:
-            fatalError;
-    }
-}
-
 FileSystemDescriptor
 ADFFile::getFileSystemDescriptor() const
 {
@@ -188,7 +188,8 @@ ADFFile::getFileSystemDescriptor() const
     if (bitmap == 0 || bitmap >= (Block)numBlocks()) bitmap = root + 1;
 
     // Setup the descriptor
-    result.numBlocks = numCyls() * numSides() * numSectors();
+    result.numBlocks = numCyls() * numHeads() * numSectors(); // TODO: REPLACE BY numBlocks()
+    assert(result.numBlocks == numBlocks());
     result.bsize = 512;
     result.numReserved = 2;
     result.dos = getDos();
@@ -240,7 +241,7 @@ ADFFile::formatDisk(FSVolumeType fs, BootBlockId id)
     assert_enum(FSVolumeType, fs);
 
     debug(ADF_DEBUG,
-          "Formatting disk (%lld, %s)\n", numBlocks(), FSVolumeTypeEnum::key(fs));
+          "Formatting disk (%ld, %s)\n", numBlocks(), FSVolumeTypeEnum::key(fs));
 
     // Only proceed if a file system is given
     if (fs == FS_NODOS) return;

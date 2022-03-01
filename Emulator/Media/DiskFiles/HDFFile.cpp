@@ -73,6 +73,24 @@ HDFFile::init(const HardDrive &drive)
     driveSpec.geometry = drive.getGeometry();
 }
 
+isize
+HDFFile::numCyls() const
+{
+    return driveSpec.geometry.cylinders;
+}
+
+isize
+HDFFile::numHeads() const
+{
+    return driveSpec.geometry.heads;
+}
+
+isize
+HDFFile::numSectors() const
+{
+    return driveSpec.geometry.sectors;
+}
+
 const Geometry
 HDFFile::getGeometry() const
 {
@@ -98,24 +116,6 @@ HDFFile::numPartitions() const
 }
 
 
-isize
-HDFFile::numCyls() const
-{
-    return driveSpec.geometry.cylinders;
-}
-
-isize
-HDFFile::numSides() const
-{
-    return driveSpec.geometry.heads;
-}
-
-isize
-HDFFile::numSectors() const
-{
-    return driveSpec.geometry.sectors;
-}
-
 /*
 isize
 HDFFile::numReserved() const
@@ -124,17 +124,20 @@ HDFFile::numReserved() const
 }
 */
 
+/*
 isize
 HDFFile::numBlocks() const
 {
     return size / bsize();
 }
-
+*/
+/*
 isize
 HDFFile::bsize() const
 {
     return driveSpec.geometry.bsize;
 }
+*/
 
 FileSystemDescriptor
 HDFFile::getFileSystemDescriptor(isize nr) const
