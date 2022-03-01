@@ -360,7 +360,20 @@ extension DiskFileProxy {
 
         return NSImage(named: name)!
     }
-    
+
+    var typeInfo: String {
+                
+        var result = ""
+
+        if diskType == .INCH_35 { result += "3.5\" " }
+        if diskType == .INCH_525 { result += "5.25\" " }
+        if diskDensity == .SD { result += "Single Density Disk" }
+        if diskDensity == .DD { result += "Double Density Disk" }
+        if diskDensity == .HD { result += "High Density Disk" }
+        
+        return result
+    }
+
     var layoutInfo: String {
                 
         var result = numSides == 1 ? "Single sided" : "Double sided"

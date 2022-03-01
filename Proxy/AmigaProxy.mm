@@ -2186,6 +2186,11 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
+- (BOOL)hasRDB
+{
+    return [self hdf]->hasRDB();
+}
+
 - (NSInteger)numPartitions
 {
     return [self hdf]->numPartitions();

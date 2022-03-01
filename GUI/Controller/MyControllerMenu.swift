@@ -617,10 +617,10 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func inspectFloppyDiskAction(_ sender: NSMenuItem!) {
         
-        if volumeInspector == nil {
-            volumeInspector = VolumeInspector.make(parent: self, nibName: "VolumeInspector")
+        if diskInspector == nil {
+            diskInspector = DiskInspector.make(parent: self, nibName: "DiskInspector")
         }
-        volumeInspector?.showSheet(diskDrive: sender.tag)
+        diskInspector?.show(diskDrive: sender.tag)
         /*
         let nibName = NSNib.Name("DiskInspector")
         let panel = DiskInspector.make(parent: self, nibName: nibName)
@@ -775,9 +775,10 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func inspectHdrDiskAction(_ sender: NSMenuItem!) {
         
-        let nibName = NSNib.Name("DiskInspector")
-        let panel = DiskInspector.make(parent: self, nibName: nibName)
-        panel?.showSheet(hardDrive: sender.tag)
+        if diskInspector == nil {
+            diskInspector = DiskInspector.make(parent: self, nibName: "DiskInspector")
+        }
+        diskInspector?.show(hardDrive: sender.tag)
     }
 
     @IBAction func inspectHdrVolumeAction(_ sender: NSMenuItem!) {

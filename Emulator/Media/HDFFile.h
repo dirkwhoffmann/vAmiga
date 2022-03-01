@@ -75,7 +75,7 @@ public:
     isize numCyls() const;
     isize numSides() const;
     isize numSectors() const;
-    isize numReserved() const;
+    // isize numReserved() const;
     isize numBlocks() const;
     isize bsize() const;
 

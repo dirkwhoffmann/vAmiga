@@ -13,33 +13,40 @@ class DiskInspector: DialogController {
 
     @IBOutlet weak var icon: NSImageView!
     @IBOutlet weak var title: NSTextField!
-    @IBOutlet weak var info1: NSTextField!
-    @IBOutlet weak var info2: NSTextField!
-    @IBOutlet weak var info3: NSTextField!
+    @IBOutlet weak var typeInfo: NSTextField!
+    @IBOutlet weak var capacityInfo: NSTextField!
+    @IBOutlet weak var blocksInfo: NSTextField!
+    @IBOutlet weak var cylindersInfo: NSTextField!
+    @IBOutlet weak var headsInfo: NSTextField!
+    @IBOutlet weak var sectorsInfo: NSTextField!
+    @IBOutlet weak var rdbLabel: NSTextField!
+    @IBOutlet weak var rdbInfo: NSTextField!
+    @IBOutlet weak var partitionsLabel: NSTextField!
+    @IBOutlet weak var partitionsInfo: NSTextField!
+
+    @IBOutlet weak var tabView: NSTabView!
 
     @IBOutlet weak var previewScrollView: NSScrollView!
     @IBOutlet weak var previewTable: NSTableView!
-    @IBOutlet weak var cylinderText: NSTextField!
     @IBOutlet weak var cylinderField: NSTextField!
     @IBOutlet weak var cylinderStepper: NSStepper!
-    @IBOutlet weak var headText: NSTextField!
     @IBOutlet weak var headField: NSTextField!
     @IBOutlet weak var headStepper: NSStepper!
-    @IBOutlet weak var trackText: NSTextField!
     @IBOutlet weak var trackField: NSTextField!
     @IBOutlet weak var trackStepper: NSStepper!
-    @IBOutlet weak var sectorText: NSTextField!
     @IBOutlet weak var sectorField: NSTextField!
     @IBOutlet weak var sectorStepper: NSStepper!
-    @IBOutlet weak var blockText: NSTextField!
     @IBOutlet weak var blockField: NSTextField!
     @IBOutlet weak var blockStepper: NSStepper!
     
-    var nr = -1
+    var nr = -1 // DEPRECATED
+    
+    // The floppy drive to get MFM data from
+    var drive: DriveProxy?
     
     // Returns the inspected floppy or hard drive
-    var dfn: DriveProxy { return amiga.df(nr)! }
-    var dhn: HardDriveProxy { return amiga.dh(nr)! }
+    var dfn: DriveProxy { return amiga.df(nr)! } // DEPRECATED
+    var dhn: HardDriveProxy { return amiga.dh(nr)! } // DEPRECATED
     
     // The drive geometry (cylinders, heads, sectors, tracks, blocks)
     var c = 0
@@ -70,7 +77,7 @@ class DiskInspector: DialogController {
     var isHD: Bool {
         return adf?.isHD ?? img?.isHD ?? ext?.isHD ?? false
     }
-
+ 
     // Block preview
     var cylinderNr = 0
     var headNr = 0
@@ -81,37 +88,37 @@ class DiskInspector: DialogController {
     //
     // Starting up
     //
-    
-    func showSheet(diskDrive nr: Int) {
+        
+    func show(diskDrive nr: Int) {
         
         track()
         
         self.nr = nr
 
         // Run the ADF decoder
-        adf = try? ADFFileProxy.make(drive: dfn) as ADFFileProxy
+        adf = try? ADFFileProxy.make(drive: amiga.df(nr)!) as ADFFileProxy
 
         // Run the extended ADF decoder
-        ext = try? EXTFileProxy.make(drive: dfn) as EXTFileProxy
+        ext = try? EXTFileProxy.make(drive: amiga.df(nr)!) as EXTFileProxy
 
         // Run the DOS decoder
-        img = try? IMGFileProxy.make(drive: dfn) as IMGFileProxy
+        img = try? IMGFileProxy.make(drive: amiga.df(nr)!) as IMGFileProxy
                             
         initDriveGeometry()
-        super.showSheet()
+        showWindow()
     }
     
-    func showSheet(hardDrive nr: Int) {
+    func show(hardDrive nr: Int) {
         
         track()
         
         self.nr = nr
 
         // Run the HDF decoder
-        hdf = try? HDFFileProxy.make(hdr: dhn) as HDFFileProxy
+        hdf = try? HDFFileProxy.make(hdr: amiga.dh(nr)!) as HDFFileProxy
                                 
         initDriveGeometry()
-        super.showSheet()
+        showWindow()
     }
         
     func initDriveGeometry() {
@@ -169,15 +176,9 @@ class DiskInspector: DialogController {
 
     func update() {
           
-        // Update icons
-        updateDiskIcon()
-
-        // Update disk description
-        updateTitleText()
-        updateTrackAndSectorInfo()
-        updateVolumeInfo()
-        updateBootInfo()
-                        
+        updateIcon()
+        updateInfo()
+                                
         // Update all elements
         cylinderField.stringValue      = String(format: "%d", cylinderNr)
         cylinderStepper.integerValue   = cylinderNr
@@ -193,7 +194,7 @@ class DiskInspector: DialogController {
         previewTable.reloadData()
     }
     
-    func updateDiskIcon() {
+    func updateIcon() {
 
         if hdf != nil {
             
@@ -211,71 +212,68 @@ class DiskInspector: DialogController {
         
         icon.image = NSImage(named: name != "" ? name : "biohazard")
     }
-    
-    func updateTitleText() {
+
+    func updateInfo() {
         
-        var text = "Raw MFM stream"
-        var color = NSColor.textColor
-        
+        rdbInfo.isHidden = hdf == nil
+        rdbLabel.isHidden = hdf == nil
+        partitionsInfo.isHidden = hdf == nil
+        partitionsLabel.isHidden = hdf == nil
+
         if hdf != nil {
             
-            text = "Amiga Hard Drive"
-            color = .textColor
-            
+            title.stringValue = "Amiga Hard Disk"
+            typeInfo.stringValue = "Standard"
+            capacityInfo.stringValue = "TODO"
+            blocksInfo.integerValue = hdf!.numBlocks
+            cylindersInfo.integerValue = hdf!.numCyls
+            headsInfo.integerValue = hdf!.numHeads
+            sectorsInfo.integerValue = hdf!.numSectors
+            rdbInfo.stringValue = hdf!.hasRDB ? "Yes" : "No"
+            partitionsInfo.integerValue = hdf!.numPartitions
+        
         } else if adf != nil {
             
-            text = "Amiga Disk"
-            color = .textColor
-                
+            title.stringValue = "Amiga Floppy Disk"
+            typeInfo.stringValue = adf!.typeInfo
+            capacityInfo.stringValue = "TODO"
+            blocksInfo.integerValue = adf!.numBlocks
+            cylindersInfo.integerValue = adf!.numCyls
+            headsInfo.integerValue = adf!.numSides
+            sectorsInfo.integerValue = adf!.numSectors
+
         } else if img != nil {
-                
-            text = "PC Disk"
-            color = .textColor
-        }
-        
-        title.stringValue = text
-        title.textColor = color
-    }
+            
+            title.stringValue = "PC Disk"
+            typeInfo.stringValue = img!.typeInfo
+            capacityInfo.stringValue = "TODO"
+            blocksInfo.integerValue = img!.numBlocks
+            cylindersInfo.integerValue = img!.numCyls
+            headsInfo.integerValue = img!.numSides
+            sectorsInfo.integerValue = img!.numSectors
 
-    func updateTrackAndSectorInfo() { // TODO: RENAME
-        
-        var text = "Unknown track and sector format"
-        var color = NSColor.warningColor
-        
-        if hdf != nil {
+        } else if ext != nil {
             
-            let blocks = hdf!.numBlocks
-            let capacity = blocks / 2000
-            text = "\(capacity) MB (\(blocks) sectors)"
-            color = NSColor.secondaryLabelColor
-            
-        } else if adf != nil {
-            
-            text = adf!.layoutInfo
-            color = NSColor.secondaryLabelColor
-            
-        } else if adf != nil {
-            
-            text = img!.layoutInfo
-            color = NSColor.secondaryLabelColor
-        }
+            title.stringValue = "Amiga Floppy Disk (Ext)"
+            typeInfo.stringValue = ext!.typeInfo
+            capacityInfo.stringValue = "TODO"
+            blocksInfo.integerValue = ext!.numBlocks
+            cylindersInfo.integerValue = ext!.numCyls
+            headsInfo.integerValue = ext!.numSides
+            sectorsInfo.integerValue = ext!.numSectors
 
-        info1.stringValue = text
-        info1.textColor = color
+        } else {
+            
+            title.stringValue = "Raw MFM stream"
+            typeInfo.stringValue = "Unknown"
+            capacityInfo.stringValue = "TODO"
+            blocksInfo.stringValue = "TODO"
+            cylindersInfo.stringValue = "TODO"
+            headsInfo.stringValue = "TODO"
+            sectorsInfo.stringValue = "-"
+        }
     }
-    
-    func updateVolumeInfo() { // TODO: RENAME
-                
-        info2.stringValue = "Lorem ipsum"
-        info2.textColor = .secondaryLabelColor
-    }
-    
-    func updateBootInfo() { // TODO: RENAME
-                        
-        info3.stringValue = "Lorem ipsum"
-        info3.textColor = .secondaryLabelColor
-    }
-          
+             
     //
     // Helper methods
     //

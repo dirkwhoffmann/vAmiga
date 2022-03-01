@@ -892,6 +892,7 @@
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithHardDrive:(HardDriveProxy *)drive exception:(ExceptionWrapper *)ex;
 
+@property (readonly) BOOL hasRDB;
 @property (readonly) NSInteger numPartitions;
 @property (readonly) NSInteger numCyls;
 @property (readonly) NSInteger numHeads;

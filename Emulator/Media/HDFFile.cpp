@@ -116,11 +116,13 @@ HDFFile::numSectors() const
     return driveSpec.geometry.sectors;
 }
 
+/*
 isize
 HDFFile::numReserved() const
 {
     return 2;
 }
+*/
 
 isize
 HDFFile::numBlocks() const
