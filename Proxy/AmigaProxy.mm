@@ -1995,6 +1995,15 @@ using namespace moira;
 
 
 //
+// DiskFileProxy
+//
+
+@implementation DiskFileProxy
+
+@end
+
+
+//
 // FloppyFileProxy
 //
 

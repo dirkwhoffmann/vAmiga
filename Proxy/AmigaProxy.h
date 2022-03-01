@@ -62,12 +62,13 @@
 @class CPUProxy;
 @class DeniseProxy;
 @class DiskControllerProxy;
-@class FloppyFileProxy;
+@class DiskFileProxy;
 @class DMSFileProxy;
 @class DmaDebuggerProxy;
 @class DriveProxy;
 @class EXEFileProxy;
 @class ExtendedRomFileProxy;
+@class FloppyFileProxy;
 @class FolderProxy;
 @class GuardsProxy;
 @class HardDriveProxy;
@@ -833,10 +834,20 @@
 
 
 //
+// DiskFileProxy
+//
+
+@interface DiskFileProxy : AmigaFileProxy {
+}
+
+@end
+
+
+//
 // FloppyFileProxy
 //
 
-@interface FloppyFileProxy : AmigaFileProxy {
+@interface FloppyFileProxy : DiskFileProxy {
 }
 
 @property (readonly) FSVolumeType dos;

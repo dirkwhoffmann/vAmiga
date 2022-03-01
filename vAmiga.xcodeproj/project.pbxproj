@@ -244,6 +244,7 @@
 		50E19059277F695C00B8DBE2 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 50E19058277F695C00B8DBE2 /* CMakeLists.txt */; };
 		50E1905C277F69B300B8DBE2 /* FFmpeg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1905A277F69B300B8DBE2 /* FFmpeg.cpp */; };
 		50E1905F277F69CA00B8DBE2 /* NamedPipe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1905D277F69CA00B8DBE2 /* NamedPipe.cpp */; };
+		50E1B0A627CE7164005E41DA /* DiskFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1B0A427CE7164005E41DA /* DiskFile.cpp */; };
 		50E1D2C226CCF830001FE199 /* DatatypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D2C126CCF830001FE199 /* DatatypeExtensions.swift */; };
 		50E1D2C426CCF8C9001FE199 /* FileExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D2C326CCF8C9001FE199 /* FileExtensions.swift */; };
 		50E1D2C626CCF942001FE199 /* FontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D2C526CCF942001FE199 /* FontExtensions.swift */; };
@@ -692,6 +693,8 @@
 		50E1905B277F69B300B8DBE2 /* FFmpeg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFmpeg.h; sourceTree = "<group>"; };
 		50E1905D277F69CA00B8DBE2 /* NamedPipe.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NamedPipe.cpp; sourceTree = "<group>"; };
 		50E1905E277F69CA00B8DBE2 /* NamedPipe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NamedPipe.h; sourceTree = "<group>"; };
+		50E1B0A427CE7164005E41DA /* DiskFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskFile.cpp; sourceTree = "<group>"; };
+		50E1B0A527CE7164005E41DA /* DiskFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskFile.h; sourceTree = "<group>"; };
 		50E1D2C126CCF830001FE199 /* DatatypeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatatypeExtensions.swift; sourceTree = "<group>"; };
 		50E1D2C326CCF8C9001FE199 /* FileExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExtensions.swift; sourceTree = "<group>"; };
 		50E1D2C526CCF942001FE199 /* FontExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtensions.swift; sourceTree = "<group>"; };
@@ -818,8 +821,12 @@
 			isa = PBXGroup;
 			children = (
 				50CF464F2620433F00BB3B95 /* CMakeLists.txt */,
+				50E1B0A527CE7164005E41DA /* DiskFile.h */,
+				50E1B0A427CE7164005E41DA /* DiskFile.cpp */,
 				50FAC77425160BBF00E47421 /* FloppyFile.h */,
 				50FAC77325160BBF00E47421 /* FloppyFile.cpp */,
+				50EAD99B256E76820053F9AC /* HDFFile.h */,
+				50EAD99F256E76A40053F9AC /* HDFFile.cpp */,
 				508833ED21F0D21B009890EA /* ADFFile.h */,
 				508833EC21F0D21B009890EA /* ADFFile.cpp */,
 				5009B7FB2557051A0037288E /* EXTFile.h */,
@@ -1205,8 +1212,6 @@
 				50384C8421FC6B66006E7748 /* Snapshot.cpp */,
 				50FCCA7B262AAAEA00398342 /* Script.h */,
 				50FCCA7A262AAAEA00398342 /* Script.cpp */,
-				50EAD99B256E76820053F9AC /* HDFFile.h */,
-				50EAD99F256E76A40053F9AC /* HDFFile.cpp */,
 				5009B7F5255702C00037288E /* RomFiles */,
 				5009B7F7255702D40037288E /* DiskFiles */,
 			);
@@ -2070,6 +2075,7 @@
 				50AFEBBA278EF5FD00F422D5 /* Sequencer.cpp in Sources */,
 				50AEBED124D3D61A0037082D /* PaulaEvents.cpp in Sources */,
 				50B81E0824E6BCCA004384C9 /* DiskControllerRegs.cpp in Sources */,
+				50E1B0A627CE7164005E41DA /* DiskFile.cpp in Sources */,
 				507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */,
 				5030C2E0252A2E8400107E00 /* AudioStream.cpp in Sources */,
 				500C0A562259402D000121CD /* DiskController.cpp in Sources */,

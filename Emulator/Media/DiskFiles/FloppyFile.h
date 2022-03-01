@@ -9,12 +9,11 @@
 
 #pragma once
 
-#include "FSTypes.h"
-#include "AmigaFile.h"
+#include "DiskFile.h"
 #include "BootBlockImage.h"
 #include "FloppyDisk.h"
 
-class FloppyFile : public AmigaFile {
+class FloppyFile : public DiskFile {
 
     //
     // Creating
