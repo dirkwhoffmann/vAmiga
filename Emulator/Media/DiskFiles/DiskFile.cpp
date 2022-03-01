@@ -14,6 +14,7 @@
 #include "DMSFile.h"
 #include "EXEFile.h"
 #include "Folder.h"
+#include "StringUtils.h"
 
 DiskFile *
 DiskFile::make(const string &path)
@@ -33,6 +34,12 @@ DiskFile::make(const string &path)
             break;
     }
     throw VAError(ERROR_FILE_TYPE_MISMATCH);
+}
+
+string
+DiskFile::capacityString()
+{
+    return util::byteCountAsString(numBlocks() * 512);
 }
 
 u8

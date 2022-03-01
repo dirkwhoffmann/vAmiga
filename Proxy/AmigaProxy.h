@@ -850,6 +850,7 @@
 @property (readonly) NSInteger numTracks;
 @property (readonly) NSInteger numSectors;
 @property (readonly) NSInteger numBlocks;
+@property (readonly) NSString * capacityString;
 
 @property (readonly) BootBlockType bootBlockType;
 @property (readonly) NSString *bootBlockName;

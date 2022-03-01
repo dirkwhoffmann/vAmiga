@@ -10,8 +10,9 @@
             <connections>
                 <outlet property="blockField" destination="S6n-vB-zJw" id="uh7-gy-ju6"/>
                 <outlet property="blockStepper" destination="Nuw-AO-oZc" id="qr2-yi-1L9"/>
-                <outlet property="blocksInfo" destination="tnQ-l6-rVa" id="Cri-XI-AIt"/>
-                <outlet property="capacityInfo" destination="uh6-zw-Y0e" id="ew2-oj-cYe"/>
+                <outlet property="blocksInfo" destination="vEc-J9-kkX" id="2H3-TP-4kH"/>
+                <outlet property="bsizeInfo" destination="ntA-gD-GXI" id="egn-gS-WSf"/>
+                <outlet property="capacityInfo" destination="Wh7-7Y-dqs" id="8d3-mW-jK5"/>
                 <outlet property="cylinderField" destination="vRp-lB-nQH" id="xX9-Un-SyJ"/>
                 <outlet property="cylinderStepper" destination="Ubc-Xf-MEm" id="p4W-UT-6cK"/>
                 <outlet property="cylindersInfo" destination="vbt-L8-RE8" id="cHb-ap-HjC"/>
@@ -19,15 +20,15 @@
                 <outlet property="headStepper" destination="Euj-if-Pil" id="CBv-YM-Ic4"/>
                 <outlet property="headsInfo" destination="gAQ-wv-FJk" id="XIa-jl-SAS"/>
                 <outlet property="icon" destination="knd-xu-4Rx" id="cie-8q-UfD"/>
-                <outlet property="partitionsInfo" destination="j9Z-9o-EAM" id="HST-Fa-XGp"/>
-                <outlet property="partitionsLabel" destination="ymP-qV-o1Q" id="5Ym-Dy-Hf6"/>
                 <outlet property="previewScrollView" destination="uaq-ca-uHV" id="RMk-wK-oJ1"/>
                 <outlet property="previewTable" destination="j3K-JX-nvn" id="7eD-Lt-5nl"/>
                 <outlet property="rdbInfo" destination="cs9-CH-MtT" id="pJ6-iv-s00"/>
-                <outlet property="rdbLabel" destination="Bgz-nM-4Tu" id="vPe-wt-TIz"/>
                 <outlet property="sectorField" destination="yOu-TA-cpc" id="FF6-Oy-YAP"/>
                 <outlet property="sectorStepper" destination="BBY-c7-8C7" id="Skx-Jh-TRt"/>
                 <outlet property="sectorsInfo" destination="3ei-XR-rcs" id="NLn-w5-ZwB"/>
+                <outlet property="subTitle1" destination="zcV-PE-RGP" id="Mtx-hr-slJ"/>
+                <outlet property="subTitle2" destination="cs9-CH-MtT" id="bpd-Dh-AYD"/>
+                <outlet property="subTitle3" destination="UtB-of-Yis" id="6cB-Ov-mZP"/>
                 <outlet property="tabView" destination="pb8-Q2-wc2" id="P9v-Di-4id"/>
                 <outlet property="title" destination="jPo-ue-bb8" id="6mE-3R-URd"/>
                 <outlet property="trackField" destination="CbC-UF-8aD" id="VSZ-E1-zr7"/>
@@ -47,95 +48,14 @@
                 <rect key="frame" x="0.0" y="0.0" width="751" height="554"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="17G-ws-1YM">
-                        <rect key="frame" x="166" y="487" width="60" height="14"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Type:" id="KH6-3F-XsH">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zcV-PE-RGP">
-                        <rect key="frame" x="229" y="487" width="152" height="14"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="3.5&quot; Double Density Disk" id="QH1-fb-Fjy">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tnQ-l6-rVa">
-                        <rect key="frame" x="229" y="447" width="152" height="14"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="1760 Blocks" id="nPl-J6-Atp">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EY1-af-xdq">
-                        <rect key="frame" x="408" y="487" width="67" height="14"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Cylinders:" id="2ss-kh-K0Z">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vbt-L8-RE8">
-                        <rect key="frame" x="471" y="487" width="45" height="14"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="80" id="riY-Ez-INd">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YGn-z6-qX5">
-                        <rect key="frame" x="408" y="466" width="67" height="14"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Heads:" id="8qq-8l-JgL">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3f7-Rt-lCx">
-                        <rect key="frame" x="408" y="447" width="67" height="14"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Sectors:" id="noS-9e-1WZ">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gAQ-wv-FJk">
-                        <rect key="frame" x="471" y="467" width="45" height="14"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="80" id="f0E-0X-oKV">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3ei-XR-rcs">
-                        <rect key="frame" x="471" y="447" width="45" height="14"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="80" id="RUe-9C-23C">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="KX4-do-3Pg">
-                        <rect key="frame" x="168" y="508" width="561" height="5"/>
+                        <rect key="frame" x="156" y="508" width="573" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </box>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jPo-ue-bb8">
-                        <rect key="frame" x="166" y="517" width="334" height="16"/>
+                        <rect key="frame" x="154" y="517" width="334" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Lorem ipsum" id="ZrA-Ee-NuQ">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Floppy Drive DF0" id="ZrA-Ee-NuQ">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -370,6 +290,10 @@
                                                                 <tableColumnResizingMask key="resizingMask" userResizable="YES"/>
                                                             </tableColumn>
                                                         </tableColumns>
+                                                        <connections>
+                                                            <outlet property="dataSource" destination="-2" id="EMI-h0-33I"/>
+                                                            <outlet property="delegate" destination="-2" id="Nbt-gd-JtW"/>
+                                                        </connections>
                                                     </tableView>
                                                 </subviews>
                                             </clipView>
@@ -542,55 +466,136 @@
                             </tabViewItem>
                         </tabViewItems>
                     </tabView>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bgz-nM-4Tu">
-                        <rect key="frame" x="574" y="487" width="98" height="14"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Rigid Disk Block:" id="BIa-TG-YbH">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cs9-CH-MtT">
-                        <rect key="frame" x="673" y="488" width="29" height="14"/>
+                        <rect key="frame" x="154" y="467" width="230" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Yes" id="mzv-PO-vWo">
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="3,5&quot; Double Sided, Double Density" id="mzv-PO-vWo">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ymP-qV-o1Q">
-                        <rect key="frame" x="574" y="467" width="60" height="14"/>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EY1-af-xdq">
+                        <rect key="frame" x="421" y="487" width="67" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Partitions:" id="LPo-Gf-Ff0">
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Cylinders:" id="2ss-kh-K0Z">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j9Z-9o-EAM">
-                        <rect key="frame" x="673" y="467" width="29" height="14"/>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vbt-L8-RE8">
+                        <rect key="frame" x="480" y="487" width="45" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="1" id="xks-q6-IsK">
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="80" id="riY-Ez-INd">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iAJ-0g-HM4">
-                        <rect key="frame" x="165" y="467" width="60" height="14"/>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YGn-z6-qX5">
+                        <rect key="frame" x="421" y="467" width="67" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Capacity:" id="s24-ug-V7t">
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Heads:" id="8qq-8l-JgL">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uh6-zw-Y0e">
-                        <rect key="frame" x="229" y="467" width="152" height="14"/>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3f7-Rt-lCx">
+                        <rect key="frame" x="421" y="447" width="67" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="880 KB" id="TKv-H7-qpk">
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Sectors:" id="noS-9e-1WZ">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gAQ-wv-FJk">
+                        <rect key="frame" x="480" y="467" width="45" height="14"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="80" id="f0E-0X-oKV">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3ei-XR-rcs">
+                        <rect key="frame" x="480" y="447" width="45" height="14"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="80" id="RUe-9C-23C">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pxy-7e-JNQ">
+                        <rect key="frame" x="553" y="487" width="67" height="14"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Blocks:" id="4my-by-G7x">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vEc-J9-kkX">
+                        <rect key="frame" x="616" y="487" width="45" height="14"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="80" id="jgw-1D-JU3">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="anS-hg-0Ib">
+                        <rect key="frame" x="553" y="467" width="67" height="14"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Block size:" id="eAx-V4-V50">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r7F-eJ-NmE">
+                        <rect key="frame" x="553" y="447" width="67" height="14"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Capacity:" id="5yi-7a-oOI">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ntA-gD-GXI">
+                        <rect key="frame" x="616" y="467" width="45" height="14"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="512" id="pXb-ZD-YIh">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wh7-7Y-dqs">
+                        <rect key="frame" x="616" y="447" width="45" height="14"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="880 KB" id="b24-6v-PMK">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UtB-of-Yis">
+                        <rect key="frame" x="154" y="447" width="231" height="14"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Lorem ipsum" id="TOe-pT-jSR">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zcV-PE-RGP">
+                        <rect key="frame" x="154" y="487" width="229" height="14"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Amiga Floppy Disk" id="QH1-fb-Fjy">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

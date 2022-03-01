@@ -13,16 +13,15 @@ class DiskInspector: DialogController {
 
     @IBOutlet weak var icon: NSImageView!
     @IBOutlet weak var title: NSTextField!
-    @IBOutlet weak var typeInfo: NSTextField!
-    @IBOutlet weak var capacityInfo: NSTextField!
-    @IBOutlet weak var blocksInfo: NSTextField!
+    @IBOutlet weak var subTitle1: NSTextField!
+    @IBOutlet weak var subTitle2: NSTextField!
+    @IBOutlet weak var subTitle3: NSTextField!
     @IBOutlet weak var cylindersInfo: NSTextField!
     @IBOutlet weak var headsInfo: NSTextField!
     @IBOutlet weak var sectorsInfo: NSTextField!
-    @IBOutlet weak var rdbLabel: NSTextField!
-    @IBOutlet weak var rdbInfo: NSTextField!
-    @IBOutlet weak var partitionsLabel: NSTextField!
-    @IBOutlet weak var partitionsInfo: NSTextField!
+    @IBOutlet weak var blocksInfo: NSTextField!
+    @IBOutlet weak var bsizeInfo: NSTextField!
+    @IBOutlet weak var capacityInfo: NSTextField!
 
     @IBOutlet weak var tabView: NSTabView!
 
@@ -40,6 +39,7 @@ class DiskInspector: DialogController {
     @IBOutlet weak var blockStepper: NSStepper!
     
     var nr = -1 // DEPRECATED
+    var titleString = ""
     
     // The floppy drive to get MFM data from
     var drive: DriveProxy?
@@ -93,6 +93,7 @@ class DiskInspector: DialogController {
         
         track()
         
+        titleString = "Disk Drive Df\(nr)"
         self.nr = nr
 
         // Run the ADF decoder
@@ -112,6 +113,7 @@ class DiskInspector: DialogController {
         
         track()
         
+        titleString = "Hard Drive Hd\(nr)"
         self.nr = nr
 
         // Run the HDF decoder
@@ -215,62 +217,74 @@ class DiskInspector: DialogController {
 
     func updateInfo() {
         
-        rdbInfo.isHidden = hdf == nil
-        rdbLabel.isHidden = hdf == nil
-        partitionsInfo.isHidden = hdf == nil
-        partitionsLabel.isHidden = hdf == nil
+        title.stringValue = titleString
 
         if hdf != nil {
             
-            title.stringValue = "Amiga Hard Disk"
-            typeInfo.stringValue = "Standard"
-            capacityInfo.stringValue = "TODO"
-            blocksInfo.integerValue = hdf!.numBlocks
+            let num = hdf!.numPartitions
+            let rdb = hdf!.hasRDB
+            
+            subTitle1.stringValue = "Standard Hard Drive"
+            subTitle2.stringValue = "\(num) Partition" + (num != 1 ? "s" : "")
+            if rdb {
+                subTitle3.stringValue = "Rigid Disk Block found"
+            } else {
+                subTitle3.stringValue = "No Rigid Disk Block"
+            }
             cylindersInfo.integerValue = hdf!.numCyls
             headsInfo.integerValue = hdf!.numHeads
             sectorsInfo.integerValue = hdf!.numSectors
-            rdbInfo.stringValue = hdf!.hasRDB ? "Yes" : "No"
-            partitionsInfo.integerValue = hdf!.numPartitions
+            blocksInfo.integerValue = hdf!.numBlocks
+            bsizeInfo.integerValue = 512
+            capacityInfo.stringValue = ""
         
         } else if adf != nil {
             
-            title.stringValue = "Amiga Floppy Disk"
-            typeInfo.stringValue = adf!.typeInfo
-            capacityInfo.stringValue = "TODO"
-            blocksInfo.integerValue = adf!.numBlocks
+            subTitle1.stringValue = "Amiga Floppy Disk"
+            subTitle2.stringValue = adf!.typeInfo + " " + adf!.layoutInfo
+            subTitle3.stringValue = ""
             cylindersInfo.integerValue = adf!.numCyls
             headsInfo.integerValue = adf!.numSides
             sectorsInfo.integerValue = adf!.numSectors
+            capacityInfo.stringValue = adf!.capacityString
+            blocksInfo.integerValue = adf!.numBlocks
+            bsizeInfo.integerValue = 512
 
         } else if img != nil {
             
-            title.stringValue = "PC Disk"
-            typeInfo.stringValue = img!.typeInfo
-            capacityInfo.stringValue = "TODO"
-            blocksInfo.integerValue = img!.numBlocks
+            subTitle1.stringValue = img!.typeInfo + " PC Disk"
+            subTitle2.stringValue = img!.typeInfo
+            subTitle3.stringValue = img!.capacityString
             cylindersInfo.integerValue = img!.numCyls
             headsInfo.integerValue = img!.numSides
             sectorsInfo.integerValue = img!.numSectors
-
+            capacityInfo.stringValue = ""
+            blocksInfo.integerValue = img!.numBlocks
+            bsizeInfo.integerValue = 512
+            
         } else if ext != nil {
             
-            title.stringValue = "Amiga Floppy Disk (Ext)"
-            typeInfo.stringValue = ext!.typeInfo
-            capacityInfo.stringValue = "TODO"
-            blocksInfo.integerValue = ext!.numBlocks
+            subTitle1.stringValue = "Amiga Floppy Disk (Ext)"
+            subTitle2.stringValue = ext!.typeInfo
+            subTitle3.stringValue = ext!.capacityString
             cylindersInfo.integerValue = ext!.numCyls
             headsInfo.integerValue = ext!.numSides
             sectorsInfo.integerValue = ext!.numSectors
+            capacityInfo.stringValue = ""
+            blocksInfo.integerValue = ext!.numBlocks
+            bsizeInfo.integerValue = 512
 
         } else {
             
-            title.stringValue = "Raw MFM stream"
-            typeInfo.stringValue = "Unknown"
-            capacityInfo.stringValue = "TODO"
-            blocksInfo.stringValue = "TODO"
-            cylindersInfo.stringValue = "TODO"
-            headsInfo.stringValue = "TODO"
+            subTitle1.stringValue = "Raw MFM stream"
+            subTitle2.stringValue = ""
+            subTitle3.stringValue = ""
+            cylindersInfo.stringValue = "-"
+            headsInfo.stringValue = "-"
             sectorsInfo.stringValue = "-"
+            capacityInfo.stringValue = ""
+            blocksInfo.stringValue = "-"
+            bsizeInfo.stringValue = "-"
         }
     }
              
@@ -440,27 +454,27 @@ extension DiskInspector: NSTableViewDataSource {
     
     func tableView(_ tableView: NSTableView,
                    objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
-        
-        if let col = columnNr(tableColumn) {
 
-            /*
-            if let byte = hdf?.readByte(blockNr, offset: 16 * row + col) {
-                return String(format: "%02X", byte)
-            }
-            */
-            if hdf != nil { return 0x42; }
-            
-            if let byte = adf?.readByte(blockNr, offset: 16 * row + col) {
-                return String(format: "%02X", byte)
-            }
-            if let byte = img?.readByte(blockNr, offset: 16 * row + col) {
-                return String(format: "%02X", byte)
-            }
-        } else {
+        switch tableColumn?.identifier.rawValue {
+
+        case "Offset":
             return String(format: "%X", row)
+            
+        case "Ascii":
+            return "TODO TODO TODO"
+            
+        default:
+            if let col = columnNr(tableColumn) {
+                
+                if let byte = adf?.readByte(blockNr, offset: 16 * row + col) {
+                    return String(format: "%02X", byte)
+                }
+                if let byte = img?.readByte(blockNr, offset: 16 * row + col) {
+                    return String(format: "%02X", byte)
+                }
+            }
+            fatalError()
         }
-        
-        return ""
     }
 }
 

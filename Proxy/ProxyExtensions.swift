@@ -362,18 +362,29 @@ extension DiskFileProxy {
     }
 
     var typeInfo: String {
+
+        var result = ""
+
+        if diskType == .INCH_35 { result += "3.5\"" }
+        if diskType == .INCH_525 { result += "5.25\"" }
+        
+        return result
+    }
+    
+    var layoutInfo: String {
                 
         var result = ""
 
-        if diskType == .INCH_35 { result += "3.5\" " }
-        if diskType == .INCH_525 { result += "5.25\" " }
-        if diskDensity == .SD { result += "Single Density Disk" }
-        if diskDensity == .DD { result += "Double Density Disk" }
-        if diskDensity == .HD { result += "High Density Disk" }
+        if numSides == 1 { result += "Single sided, " }
+        if numSides == 2 { result += "Double sided, " }
+        if diskDensity == .SD { result += "single density" }
+        if diskDensity == .DD { result += "double density" }
+        if diskDensity == .HD { result += "high density" }
         
         return result
     }
 
+    /*
     var layoutInfo: String {
                 
         var result = numSides == 1 ? "Single sided" : "Double sided"
@@ -387,7 +398,8 @@ extension DiskFileProxy {
         
         return result
     }
-    
+    */
+        
     var bootInfo: String {
         
         let name = bootBlockName!

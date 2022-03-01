@@ -2065,6 +2065,11 @@ using namespace moira;
     return [self file]->numBlocks();
 }
 
+- (NSString *) capacityString
+{
+    return @([self file]->capacityString().c_str());
+}
+
 - (BootBlockType)bootBlockType
 {
     return [self file]->bootBlockType();
