@@ -20,6 +20,7 @@
                 <outlet property="headStepper" destination="Euj-if-Pil" id="CBv-YM-Ic4"/>
                 <outlet property="headsInfo" destination="gAQ-wv-FJk" id="XIa-jl-SAS"/>
                 <outlet property="icon" destination="knd-xu-4Rx" id="cie-8q-UfD"/>
+                <outlet property="mfmView" destination="W9c-Rp-0o2" id="8ns-D0-6Cw"/>
                 <outlet property="previewScrollView" destination="uaq-ca-uHV" id="RMk-wK-oJ1"/>
                 <outlet property="previewTable" destination="j3K-JX-nvn" id="7eD-Lt-5nl"/>
                 <outlet property="sectorField" destination="yOu-TA-cpc" id="FF6-Oy-YAP"/>
@@ -32,7 +33,6 @@
                 <outlet property="title" destination="jPo-ue-bb8" id="6mE-3R-URd"/>
                 <outlet property="trackField" destination="CbC-UF-8aD" id="VSZ-E1-zr7"/>
                 <outlet property="trackStepper" destination="oIp-kv-Gor" id="KOf-c1-8RJ"/>
-                <outlet property="typeInfo" destination="zcV-PE-RGP" id="ucI-dN-pS3"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="JHJ-u1-kwv"/>
             </connections>
         </customObject>
@@ -45,7 +45,7 @@
             <rect key="screenRect" x="0.0" y="0.0" width="1536" height="935"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="751" height="554"/>
-                <autoresizingMask key="autoresizingMask"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="KX4-do-3Pg">
                         <rect key="frame" x="156" y="508" width="573" height="5"/>
@@ -54,7 +54,7 @@
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jPo-ue-bb8">
                         <rect key="frame" x="154" y="517" width="334" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Floppy Drive DF0" id="ZrA-Ee-NuQ">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Lorem ipsum" id="ZrA-Ee-NuQ">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -461,6 +461,35 @@
                                 <view key="view" id="2aW-GK-l42">
                                     <rect key="frame" x="10" y="33" width="705" height="360"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <scrollView fixedFrame="YES" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W9c-Rp-0o2">
+                                            <rect key="frame" x="8" y="5" width="690" height="352"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <clipView key="contentView" drawsBackground="NO" id="zRx-Jz-o53">
+                                                <rect key="frame" x="0.0" y="0.0" width="690" height="352"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="DSh-0v-hxM">
+                                                        <rect key="frame" x="0.0" y="0.0" width="690" height="352"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        <size key="minSize" width="690" height="352"/>
+                                                        <size key="maxSize" width="700" height="10000000"/>
+                                                        <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                    </textView>
+                                                </subviews>
+                                            </clipView>
+                                            <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="3KJ-eF-Bup">
+                                                <rect key="frame" x="-100" y="-100" width="240" height="16"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                            </scroller>
+                                            <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Jr9-kJ-meB">
+                                                <rect key="frame" x="674" y="0.0" width="16" height="352"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                            </scroller>
+                                        </scrollView>
+                                    </subviews>
                                 </view>
                             </tabViewItem>
                         </tabViewItems>
@@ -468,7 +497,7 @@
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cs9-CH-MtT">
                         <rect key="frame" x="154" y="467" width="230" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="3,5&quot; Double Sided, Double Density" id="mzv-PO-vWo">
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Lorem ipsum" id="mzv-PO-vWo">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -594,7 +623,7 @@
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zcV-PE-RGP">
                         <rect key="frame" x="154" y="487" width="229" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Amiga Floppy Disk" id="QH1-fb-Fjy">
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Lorem ipsum" id="QH1-fb-Fjy">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

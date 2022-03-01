@@ -217,6 +217,6 @@ public:
     void repeatTracks();
     
     // Returns a textual representation of all bits of a track
-    string trackBits(Track t) const;
-    string trackBits(Cylinder c, Side s) const;
+    string readTrackBits(Track t) const;
+    string readTrackBits(Cylinder c, Side s) const;
 };

@@ -289,7 +289,7 @@ FloppyDisk::repeatTracks()
 }
 
 string
-FloppyDisk::trackBits(Track t) const
+FloppyDisk::readTrackBits(Track t) const
 {
     assert(t < numTracks());
 
@@ -306,7 +306,7 @@ FloppyDisk::trackBits(Track t) const
 }
 
 string
-FloppyDisk::trackBits(Cylinder c, Side s) const
+FloppyDisk::readTrackBits(Cylinder c, Side s) const
 {
-    return trackBits(2 * c + s);
+    return readTrackBits(2 * c + s);
 }

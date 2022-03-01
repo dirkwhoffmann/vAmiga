@@ -623,6 +623,7 @@
 @property (readonly) BOOL motor;
 @property (readonly) NSInteger cylinder;
 @property (readonly) u64 fnv;
+- (NSString *)readTrackBits:(NSInteger)track;
 
 @end
 

@@ -38,6 +38,8 @@ class DiskInspector: DialogController {
     @IBOutlet weak var blockField: NSTextField!
     @IBOutlet weak var blockStepper: NSStepper!
 
+    @IBOutlet weak var mfmView: NSScrollView!
+
     // Title and icon of the info section
     var titleString = ""
     var image: NSImage?
@@ -93,25 +95,25 @@ class DiskInspector: DialogController {
         
         track()
         
-        let dfn = amiga.df(nr)!
-        let protected = dfn.hasWriteProtectedDisk()
+        drive = amiga.df(nr)
+        let protected = drive!.hasWriteProtectedDisk()
         
         titleString = "DF\(nr) - Amiga Floppy Drive"
 
         // Run the ADF decoder
-        adf = try? ADFFileProxy.make(drive: amiga.df(nr)!) as ADFFileProxy
+        adf = try? ADFFileProxy.make(drive: drive!) as ADFFileProxy
         decoder = adf
         
         if decoder == nil {
 
             // Run the DOS decoder
-            img = try? IMGFileProxy.make(drive: amiga.df(nr)!) as IMGFileProxy
+            img = try? IMGFileProxy.make(drive: drive!) as IMGFileProxy
             decoder = img
         }
         if decoder == nil {
             
             // Run the extended ADF decoder
-            ext = try? EXTFileProxy.make(drive: amiga.df(nr)!) as EXTFileProxy
+            ext = try? EXTFileProxy.make(drive: drive!) as EXTFileProxy
             decoder = ext
         }
 
@@ -191,6 +193,12 @@ class DiskInspector: DialogController {
         blockStepper.integerValue      = blockNr
                 
         previewTable.reloadData()
+        
+        let textView = mfmView.documentView as? NSTextView
+        // let storage = textView?.textStorage
+
+        let textStorage = NSTextStorage(string: drive?.readTrackBits(trackNr) ?? "???")
+        textView?.layoutManager?.replaceTextStorage(textStorage)
     }
 
     func updateInfo() {

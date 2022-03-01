@@ -1266,6 +1266,12 @@ using namespace moira;
     return [self drive]->fnv();
 }
 
+- (NSString *)readTrackBits:(NSInteger)track
+{
+    if (![self drive]->hasDisk()) return @("");
+    return @([self drive]->disk->readTrackBits(track).c_str());
+}
+
 @end
 
 //
