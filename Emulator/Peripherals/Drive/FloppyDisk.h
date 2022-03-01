@@ -96,7 +96,7 @@ public:
     
     FloppyDisk() = default;
     FloppyDisk(Diameter dia, Density den) throws { init(dia, den); }
-    FloppyDisk(const class DiskFile &file) throws { init(file); }
+    FloppyDisk(const class FloppyFile &file) throws { init(file); }
     FloppyDisk(util::SerReader &reader, Diameter dia, Density den) throws {
         init(reader, dia, den); }
     ~FloppyDisk();
@@ -104,7 +104,7 @@ public:
 private:
     
     void init(Diameter dia, Density den) throws;
-    void init(const class DiskFile &file) throws;
+    void init(const class FloppyFile &file) throws;
     void init(util::SerReader &reader, Diameter dia, Density den) throws;
 
     
@@ -195,7 +195,7 @@ public:
 public:
     
     // Encodes a disk
-    void encodeDisk(const class DiskFile &file);
+    void encodeDisk(const class FloppyFile &file);
     
     
     //

@@ -12,7 +12,7 @@
 #include "Agnus.h"
 #include "BootBlockImage.h"
 #include "CIA.h"
-#include "DiskFile.h"
+#include "FloppyFile.h"
 #include "MutableFileSystem.h"
 #include "MsgQueue.h"
 
@@ -715,7 +715,7 @@ FloppyDrive::isInsertable(Diameter t, Density d) const
 }
 
 bool
-FloppyDrive::isInsertable(const DiskFile &file) const
+FloppyDrive::isInsertable(const FloppyFile &file) const
 {
     return isInsertable(file.getDiameter(), file.getDensity());
 }
@@ -838,7 +838,7 @@ FloppyDrive::swapDisk(std::unique_ptr<FloppyDisk> disk)
 }
 
 void
-FloppyDrive::swapDisk(class DiskFile &file)
+FloppyDrive::swapDisk(class FloppyFile &file)
 {
     swapDisk(std::make_unique<FloppyDisk>(file));
 }
@@ -849,7 +849,7 @@ FloppyDrive::swapDisk(const string &name)
     bool append = !util::isAbsolutePath(name) && searchPath != "";
     string path = append ? searchPath + "/" + name : name;
     
-    std::unique_ptr<DiskFile> file(DiskFile::make(path));
+    std::unique_ptr<FloppyFile> file(FloppyFile::make(path));
     swapDisk(*file);
 }
 

@@ -183,7 +183,7 @@ class MyDocument: NSDocument {
     
     func mountAttachment(drive: Int) throws {
 
-        if let proxy = attachment as? DiskFileProxy {
+        if let proxy = attachment as? FloppyFileProxy {
             
             do {
                 try amiga.df(drive)!.swap(file: proxy)
@@ -258,7 +258,7 @@ class MyDocument: NSDocument {
     
     func export(drive nr: Int, to url: URL) throws {
                         
-        var df: DiskFileProxy?
+        var df: FloppyFileProxy?
         switch url.pathExtension.uppercased() {
         case "ADF":
             df = try Proxy.make(drive: amiga.df(nr)!) as ADFFileProxy

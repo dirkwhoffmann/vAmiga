@@ -281,7 +281,7 @@ DiskController::insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay)
 }
 
 void
-DiskController::insertDisk(class DiskFile &file, isize nr, Cycle delay)
+DiskController::insertDisk(class FloppyFile &file, isize nr, Cycle delay)
 {
     assert(nr >= 0 && nr <= 3);
     

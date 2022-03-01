@@ -11,7 +11,7 @@
 
 #include "ADFFile.h"
 
-class Folder : public DiskFile {
+class Folder : public FloppyFile {
         
 public:
 
@@ -52,7 +52,7 @@ public:
     
     
     //
-    // Methods from DiskFile
+    // Methods from FloppyFile
     //
     
 public:

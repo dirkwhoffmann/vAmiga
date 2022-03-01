@@ -11,7 +11,7 @@
 
 #include "ADFFile.h"
 
-class DMSFile : public DiskFile {
+class DMSFile : public FloppyFile {
         
 public:
 
@@ -47,7 +47,7 @@ public:
 
     
     //
-    // Methods from DiskFile
+    // Methods from FloppyFile
     //
     
     FSVolumeType getDos() const override { return adf->getDos(); }

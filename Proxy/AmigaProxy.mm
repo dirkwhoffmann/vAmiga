@@ -1221,9 +1221,9 @@ using namespace moira;
     [self drive]->ejectDisk();
 }
 
-- (void)swap:(DiskFileProxy *)fileProxy exception:(ExceptionWrapper *)ex
+- (void)swap:(FloppyFileProxy *)fileProxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self drive]->swapDisk(*(DiskFile *)fileProxy->obj); }
+    try { return [self drive]->swapDisk(*(FloppyFile *)fileProxy->obj); }
     catch (VAError &error) { [ex save:error]; }
 }
 
@@ -1995,17 +1995,17 @@ using namespace moira;
 
 
 //
-// DiskFileProxy
+// FloppyFileProxy
 //
 
-@implementation DiskFileProxy
+@implementation FloppyFileProxy
 
-- (DiskFile *)file
+- (FloppyFile *)file
 {
-    return (DiskFile *)obj;
+    return (FloppyFile *)obj;
 }
 
-+ (instancetype)make:(DiskFile *)file
++ (instancetype)make:(FloppyFile *)file
 {
     return file ? [[self alloc] initWith:file] : nil;
 }

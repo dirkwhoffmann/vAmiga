@@ -163,7 +163,7 @@ extension MemProxy {
 
 extension DriveProxy {
 
-    func swap(file: DiskFileProxy) throws {
+    func swap(file: FloppyFileProxy) throws {
         
         let exception = ExceptionWrapper()
         swap(file, exception: exception)
@@ -348,7 +348,7 @@ public extension DriveProxy {
     }
 }
 
-extension DiskFileProxy {
+extension FloppyFileProxy {
     
     func icon(protected: Bool) -> NSImage {
         

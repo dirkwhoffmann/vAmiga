@@ -9,12 +9,12 @@
 
 #pragma once
 
-#include "DiskFile.h"
+#include "FloppyFile.h"
 // #include "MutableFileSystem.h"
 
 struct MutableFileSystem;
 
-class ADFFile : public DiskFile {
+class ADFFile : public FloppyFile {
 
 public:
 
@@ -77,7 +77,7 @@ public:
     
     
     //
-    // Methods from DiskFile
+    // Methods from FloppyFile
     //
     
 public:

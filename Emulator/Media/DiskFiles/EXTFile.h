@@ -36,7 +36,7 @@
  * and won't be.
  */
 
-class EXTFile : public DiskFile {
+class EXTFile : public FloppyFile {
         
     // Accepted header signatures
     static const std::vector<string> extAdfHeaders;
@@ -88,7 +88,7 @@ public:
     
     
     //
-    // Methods from DiskFile
+    // Methods from FloppyFile
     //
     
     FSVolumeType getDos() const override;

@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include "DiskFile.h"
+#include "FloppyFile.h"
 
-class IMGFile : public DiskFile {
+class IMGFile : public FloppyFile {
     
 public:
         
@@ -58,7 +58,7 @@ public:
     
     
     //
-    // Methods from DiskFile
+    // Methods from FloppyFile
     //
       
     FSVolumeType getDos() const override { return FS_NODOS; }

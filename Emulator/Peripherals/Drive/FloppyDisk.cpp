@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "FloppyDisk.h"
-#include "DiskFile.h"
+#include "FloppyFile.h"
 
 void
 FloppyDisk::init(Diameter dia, Density den)
@@ -32,7 +32,7 @@ FloppyDisk::init(Diameter dia, Density den)
 }
 
 void
-FloppyDisk::init(const class DiskFile &file)
+FloppyDisk::init(const class FloppyFile &file)
 {
     init(file.getDiameter(), file.getDensity());
     encodeDisk(file);
@@ -174,7 +174,7 @@ FloppyDisk::clearTrack(Track t, u8 value1, u8 value2)
 }
 
 void
-FloppyDisk::encodeDisk(const DiskFile &file)
+FloppyDisk::encodeDisk(const FloppyFile &file)
 {
     assert(file.getDiameter() == getDiameter());
 

@@ -14,8 +14,7 @@
 #include "BootBlockImage.h"
 #include "FloppyDisk.h"
 
-// Base class of all file types encoding a disk
-class DiskFile : public AmigaFile {
+class FloppyFile : public AmigaFile {
 
     //
     // Creating
@@ -23,7 +22,7 @@ class DiskFile : public AmigaFile {
     
 public:
     
-    static DiskFile *make(const string &path) throws;
+    static FloppyFile *make(const string &path) throws;
     
     
     //

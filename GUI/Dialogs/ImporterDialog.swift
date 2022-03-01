@@ -23,7 +23,7 @@ class ImporterDialog: DialogController {
     @IBOutlet weak var df3Button: NSButton!
     @IBOutlet weak var carousel: iCarousel!
     
-    var disk: DiskFileProxy?
+    var disk: FloppyFileProxy?
     var type: FileType?
     var writeProtect = false
     var screenshots: [Screenshot] = []

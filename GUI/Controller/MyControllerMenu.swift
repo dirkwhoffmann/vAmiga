@@ -526,7 +526,7 @@ extension MyController: NSMenuItemValidation {
             // Ask the user if an unsafed disk should be replaced
             if !proceedWithUnexportedDisk(drive: drive) { return }
             
-            if let file = mydocument.attachment as? DiskFileProxy {
+            if let file = mydocument.attachment as? FloppyFileProxy {
                 
                 do {
                     

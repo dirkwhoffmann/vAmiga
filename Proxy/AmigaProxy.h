@@ -62,7 +62,7 @@
 @class CPUProxy;
 @class DeniseProxy;
 @class DiskControllerProxy;
-@class DiskFileProxy;
+@class FloppyFileProxy;
 @class DMSFileProxy;
 @class DmaDebuggerProxy;
 @class DriveProxy;
@@ -616,7 +616,7 @@
 - (void)toggleWriteProtection;
 - (BOOL)isInsertable:(Diameter)type density:(Density)density;
 - (void)eject;
-- (void)swap:(DiskFileProxy *)fileProxy exception:(ExceptionWrapper *)ex;
+- (void)swap:(FloppyFileProxy *)fileProxy exception:(ExceptionWrapper *)ex;
 - (void)insertNew:(FSVolumeType)fs bootBlock:(BootBlockId)bb exception:(ExceptionWrapper *)ex;
 @property BOOL modified;
 @property (readonly) BOOL motor;
@@ -833,10 +833,10 @@
 
 
 //
-// DiskFileProxy
+// FloppyFileProxy
 //
 
-@interface DiskFileProxy : AmigaFileProxy {
+@interface FloppyFileProxy : AmigaFileProxy {
 }
 
 @property (readonly) FSVolumeType dos;
@@ -869,7 +869,7 @@
 // ADFFileProxy
 //
 
-@interface ADFFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer, MakeWithDrive> {
+@interface ADFFileProxy : FloppyFileProxy <MakeWithFile, MakeWithBuffer, MakeWithDrive> {
 }
 
 + (instancetype)makeWithDiameter:(Diameter)type density:(Density)density exception:(ExceptionWrapper *)ex;
@@ -907,7 +907,7 @@
 // EXTFileProxy
 //
 
-@interface EXTFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer, MakeWithDrive> {
+@interface EXTFileProxy : FloppyFileProxy <MakeWithFile, MakeWithBuffer, MakeWithDrive> {
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
@@ -921,7 +921,7 @@
 // IMGFileProxy
 //
 
-@interface IMGFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer, MakeWithDrive> {
+@interface IMGFileProxy : FloppyFileProxy <MakeWithFile, MakeWithBuffer, MakeWithDrive> {
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
@@ -935,7 +935,7 @@
 // DMSFileProxy
 //
 
-@interface DMSFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer> {
+@interface DMSFileProxy : FloppyFileProxy <MakeWithFile, MakeWithBuffer> {
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
@@ -950,7 +950,7 @@
 // EXEFileProxy
 //
 
-@interface EXEFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer> {
+@interface EXEFileProxy : FloppyFileProxy <MakeWithFile, MakeWithBuffer> {
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
@@ -965,7 +965,7 @@
 // Folder
 //
 
-@interface FolderProxy : DiskFileProxy <MakeWithFile> {
+@interface FolderProxy : FloppyFileProxy <MakeWithFile> {
 }
 
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;

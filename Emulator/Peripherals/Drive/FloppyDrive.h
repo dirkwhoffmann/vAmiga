@@ -285,7 +285,7 @@ public:
     u64 fnv() const;
 
     bool isInsertable(Diameter t, Density d) const;
-    bool isInsertable(const DiskFile &file) const;
+    bool isInsertable(const FloppyFile &file) const;
     bool isInsertable(const FloppyDisk &disk) const;
 
     // Ejects the current disk with an optional delay
@@ -296,7 +296,7 @@ public:
     
     // Replaces the current disk (recommended way to insert disks)
     void swapDisk(std::unique_ptr<FloppyDisk> disk) throws;
-    void swapDisk(class DiskFile &file) throws;
+    void swapDisk(class FloppyFile &file) throws;
     void swapDisk(const string &name) throws;
 
     // Replaces the current disk with a factory-fresh disk
