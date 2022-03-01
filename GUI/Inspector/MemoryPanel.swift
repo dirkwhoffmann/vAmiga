@@ -7,25 +7,25 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-struct MemColors {
-
-    static let unmapped = NSColor.gray
-
-    static let chip = NSColor(r: 0x80, g: 0xFF, b: 0x00, a: 0xFF)
-    static let slow = NSColor(r: 0x66, g: 0xCC, b: 0x00, a: 0xFF)
-    static let fast = NSColor(r: 0x4C, g: 0x99, b: 0x00, a: 0xFF)
-
-    static let rom = NSColor(r: 0xFF, g: 0x00, b: 0x00, a: 0xFF)
-    static let wom = NSColor(r: 0xCC, g: 0x00, b: 0x00, a: 0xFF)
-    static let ext = NSColor(r: 0x99, g: 0x00, b: 0x00, a: 0xFF)
-
-    static let cia = NSColor(r: 0x66, g: 0xB2, b: 0xFF, a: 0xFF)
-    static let rtc = NSColor(r: 0xB2, g: 0x66, b: 0xFF, a: 0xFF)
-    static let cust = NSColor(r: 0xFF, g: 0xFF, b: 0x66, a: 0xFF)
-    static let auto = NSColor(r: 0xFF, g: 0x66, b: 0xB2, a: 0xFF)
-}
-
 extension Inspector {
+    
+    struct MemColors {
+        
+        static let unmapped = NSColor.gray
+        
+        static let chip = NSColor(r: 0x80, g: 0xFF, b: 0x00, a: 0xFF)
+        static let slow = NSColor(r: 0x66, g: 0xCC, b: 0x00, a: 0xFF)
+        static let fast = NSColor(r: 0x4C, g: 0x99, b: 0x00, a: 0xFF)
+        
+        static let rom = NSColor(r: 0xFF, g: 0x00, b: 0x00, a: 0xFF)
+        static let wom = NSColor(r: 0xCC, g: 0x00, b: 0x00, a: 0xFF)
+        static let ext = NSColor(r: 0x99, g: 0x00, b: 0x00, a: 0xFF)
+        
+        static let cia = NSColor(r: 0x66, g: 0xB2, b: 0xFF, a: 0xFF)
+        static let rtc = NSColor(r: 0xB2, g: 0x66, b: 0xFF, a: 0xFF)
+        static let cust = NSColor(r: 0xFF, g: 0xFF, b: 0x66, a: 0xFF)
+        static let auto = NSColor(r: 0xFF, g: 0x66, b: 0xB2, a: 0xFF)
+    }
 
     var accessor: Accessor {
         return memBankMap.selectedTag() == 0 ? .CPU : .AGNUS

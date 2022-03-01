@@ -1602,6 +1602,11 @@ using namespace moira;
     return [self fs]->readByte((u32)block, offset);
 }
 
+- (NSString *)ascii:(NSInteger)block offset:(NSInteger)offset length:(NSInteger)len
+{
+    return @([self fs]->ascii(Block(block), offset, len).c_str());
+}
+
 - (void)export:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self fs]->exportDirectory(string([path fileSystemRepresentation])); }

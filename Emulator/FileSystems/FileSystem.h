@@ -156,9 +156,13 @@ public:
     FSBlock *dataBlockPtr(Block nr) const;
     FSBlock *hashableBlockPtr(Block nr) const;
     
+    
     // Reads a single byte from a block
     u8 readByte(Block nr, isize offset) const;
 
+    // Returns a portion of the block as an ASCII dump
+    string ascii(Block nr, isize offset, isize len) const;
+    
     
     //
     // Querying the block allocation bitmap

@@ -45,6 +45,19 @@ void replace(char *p, isize size, const char *sequence, const char *substitute)
     assert(false);
 }
 
+void readAscii(const u8 *buf, isize len, char *result, char pad)
+{
+    assert(buf);
+    assert(result);
+    
+    for (isize i = 0; i < len; i++) {
+        
+        result[i] = isprint(int(buf[i])) ? char(buf[i]) : pad;
+    }
+    result[len] = 0;
+}
+
+
 void hexdump(u8 *p, isize size, isize cols, isize pad)
 {
     while (size) {

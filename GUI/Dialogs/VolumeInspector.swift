@@ -467,16 +467,23 @@ extension VolumeInspector: NSTableViewDataSource {
     
     func tableView(_ tableView: NSTableView,
                    objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
-        
-        if let col = columnNr(tableColumn) {
+                
+        switch tableColumn?.identifier.rawValue {
 
-            let byte = vol.readByte(blockNr, offset: 16 * row + col)
-            return String(format: "%02X", byte)
-
-        } else {
-            
+        case "Offset":
             return String(format: "%X", row)
+            
+        case "Ascii":
+            return vol.ascii(blockNr, offset: 16 * row, length: 16)
+            
+        default:
+            if let col = columnNr(tableColumn) {
+                
+                let byte = vol.readByte(blockNr, offset: 16 * row + col)
+                return String(format: "%02X", byte)
+            }
         }
+        fatalError()
     }
 }
 

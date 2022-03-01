@@ -688,6 +688,7 @@
 - (NSInteger)prevCorrupted:(NSInteger)blockNr;
 - (void)printDirectory:(BOOL) recursive;
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
+- (NSString *)ascii:(NSInteger)block offset:(NSInteger)offset length:(NSInteger)len;
 - (void)export:(NSString *)path exception:(ExceptionWrapper *)ex;
 - (FSBlockType)getDisplayType:(NSInteger)column;
 - (NSInteger)diagnoseImageSlice:(NSInteger)column;

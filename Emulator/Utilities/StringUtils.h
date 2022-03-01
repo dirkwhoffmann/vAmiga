@@ -19,7 +19,8 @@ namespace util {
 //
 
 // Creates a string from a buffer
-string createStr(const u8 *buffer, isize maxLength);
+string createStr(const u8 *buf, isize maxLen);
+string createAscii(const u8 *buf, isize len, char fill = '.');
 
 
 //

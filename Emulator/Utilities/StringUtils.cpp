@@ -23,6 +23,16 @@ string createStr(const u8 *buf, isize maxLen)
     return result;
 }
 
+string createAscii(const u8 *buf, isize len, char fill)
+{
+    string result;
+    
+    for (isize i = 0; i < len; i++) {
+        result += isprint(int(buf[i])) ? char(buf[i]) : fill;
+    }
+    return result;
+}
+
 bool
 parseHex(const string &s, isize *result)
 {

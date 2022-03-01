@@ -349,6 +349,15 @@ FileSystem::readByte(Block nr, isize offset) const
     return 0;
 }
 
+string
+FileSystem::ascii(Block nr, isize offset, isize len) const
+{
+    assert(isBlockNumber(nr));
+    assert(offset + len <= bsize);
+    
+    return util::createAscii(blocks[nr]->data + offset, len);
+}
+
 bool
 FileSystem::isFree(Block nr) const
 {

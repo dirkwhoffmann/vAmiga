@@ -737,10 +737,10 @@ extension Inspector {
     
     override func windowWillClose(_ notification: Notification) {
 
-        track("Closing inspector")
         super.windowWillClose(notification)
 
         // Leave debug mode
+        track("Leaving debug mode")
         amiga?.debugMode = false
         amiga?.removeInspectionTarget()
     }
