@@ -39,6 +39,7 @@ class DiskInspector: DialogController {
     @IBOutlet weak var blockStepper: NSStepper!
 
     @IBOutlet weak var mfmView: NSScrollView!
+    @IBOutlet weak var syncColorButton: NSButton!
 
     // Title and icon of the info section
     var titleString = ""
@@ -86,6 +87,15 @@ class DiskInspector: DialogController {
     var trackNr = 0
     var sectorNr = 0
     var blockNr = 0
+    
+    // Font for the MFM view
+    var mfmFont: NSFont {
+        if #available(OSX 10.15, *) {
+            return NSFont.monospacedSystemFont(ofSize: 10.0, weight: .semibold)
+        } else {
+            return NSFont.monospacedDigitSystemFont(ofSize: 10.0, weight: .semibold)
+        }
+    }
     
     //
     // Starting up
@@ -193,12 +203,7 @@ class DiskInspector: DialogController {
         blockStepper.integerValue      = blockNr
                 
         previewTable.reloadData()
-        
-        let textView = mfmView.documentView as? NSTextView
-        // let storage = textView?.textStorage
-
-        let textStorage = NSTextStorage(string: drive?.readTrackBits(trackNr) ?? "???")
-        textView?.layoutManager?.replaceTextStorage(textStorage)
+        updateMfm()
     }
 
     func updateInfo() {
@@ -246,7 +251,40 @@ class DiskInspector: DialogController {
             capacityInfo.stringValue = floppy.describeCapacity
         }
     }
-             
+     
+    func updateMfm() {
+                
+        let size = NSSize(width: 16, height: 16)
+        syncColorButton.image = NSImage(color: .warningColor, size: size)
+
+        // Read a whole MFM encoded track
+        let mfm = drive?.readTrackBits(trackNr) ?? "No MFM data available"
+
+        // Search all SYNC sequences (0x4489 + 0x4489)
+        let sync = "0100010010001001"
+        let indices = mfm.indicesOf(string: sync + sync)
+                        
+        // Create a text storage
+        let storage = NSTextStorage(string: mfm)
+        storage.font = mfmFont
+        storage.foregroundColor = .labelColor
+
+        // Colorize all SYNC sequences
+        for index in indices {
+            
+            storage.addAttribute(.backgroundColor,
+                                 value: NSColor.red,
+                                 range: NSRange(location: index, length: 32))
+            storage.addAttribute(.foregroundColor,
+                                 value: NSColor.white,
+                                 range: NSRange(location: index, length: 32))
+        }
+
+        // Assign the text storage to the MFM view
+        let textView = mfmView.documentView as? NSTextView
+        textView!.layoutManager!.replaceTextStorage(storage)
+    }
+    
     //
     // Helper methods
     //

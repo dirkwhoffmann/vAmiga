@@ -297,7 +297,7 @@ FloppyDisk::readTrackBits(Track t) const
     result.reserve(length.track[t]);
 
     for (isize i = 0; i < length.track[t]; i++) {
-        for (isize j = 7; j > 0; j--) {
+        for (isize j = 7; j >= 0; j--) {
             result += GET_BIT(data.track[t][i], j) ? '1' : '0';
         }
     }
