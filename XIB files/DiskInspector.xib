@@ -9,7 +9,9 @@
         <customObject id="-2" userLabel="File's Owner" customClass="DiskInspector" customModule="vAmiga" customModuleProvider="target">
             <connections>
                 <outlet property="blockField" destination="S6n-vB-zJw" id="uh7-gy-ju6"/>
+                <outlet property="blockScrollView" destination="uaq-ca-uHV" id="RMk-wK-oJ1"/>
                 <outlet property="blockStepper" destination="Nuw-AO-oZc" id="qr2-yi-1L9"/>
+                <outlet property="blockView" destination="j3K-JX-nvn" id="7eD-Lt-5nl"/>
                 <outlet property="blocksInfo" destination="vEc-J9-kkX" id="2H3-TP-4kH"/>
                 <outlet property="bsizeInfo" destination="ntA-gD-GXI" id="egn-gS-WSf"/>
                 <outlet property="capacityInfo" destination="Wh7-7Y-dqs" id="8d3-mW-jK5"/>
@@ -21,8 +23,6 @@
                 <outlet property="headsInfo" destination="gAQ-wv-FJk" id="XIa-jl-SAS"/>
                 <outlet property="icon" destination="knd-xu-4Rx" id="cie-8q-UfD"/>
                 <outlet property="mfmView" destination="W9c-Rp-0o2" id="8ns-D0-6Cw"/>
-                <outlet property="previewScrollView" destination="uaq-ca-uHV" id="RMk-wK-oJ1"/>
-                <outlet property="previewTable" destination="j3K-JX-nvn" id="7eD-Lt-5nl"/>
                 <outlet property="sectorField" destination="yOu-TA-cpc" id="FF6-Oy-YAP"/>
                 <outlet property="sectorStepper" destination="BBY-c7-8C7" id="Skx-Jh-TRt"/>
                 <outlet property="sectorsInfo" destination="3ei-XR-rcs" id="NLn-w5-ZwB"/>
@@ -96,7 +96,7 @@
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                 </tableHeaderCell>
                                                                 <textFieldCell key="dataCell" lineBreakMode="truncatingTail" continuous="YES" refusesFirstResponder="YES" alignment="center" identifier="Offset" title="Text Cell" drawsBackground="YES" id="HlD-Dd-VkZ">
-                                                                    <font key="font" size="12" name="Menlo-Bold"/>
+                                                                    <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -107,7 +107,7 @@
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                 </tableHeaderCell>
                                                                 <textFieldCell key="dataCell" lineBreakMode="truncatingTail" continuous="YES" refusesFirstResponder="YES" alignment="center" title="Text Cell" drawsBackground="YES" id="zqo-Xb-rga">
-                                                                    <font key="font" size="12" name="Menlo-Bold"/>
+                                                                    <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -118,7 +118,7 @@
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
                                                                 <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="center" title="Text Cell" drawsBackground="YES" id="kcI-5J-ZOX">
-                                                                    <font key="font" size="12" name="Menlo-Bold"/>
+                                                                    <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -129,7 +129,7 @@
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
                                                                 <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="center" title="Text Cell" drawsBackground="YES" id="SRe-uE-taf">
-                                                                    <font key="font" size="12" name="Menlo-Bold"/>
+                                                                    <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -140,7 +140,7 @@
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
                                                                 <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="center" title="Text Cell" drawsBackground="YES" id="Kur-e3-1sU">
-                                                                    <font key="font" size="12" name="Menlo-Bold"/>
+                                                                    <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -151,7 +151,7 @@
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
                                                                 <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="center" title="Text Cell" drawsBackground="YES" id="e1d-HT-A9n">
-                                                                    <font key="font" size="12" name="Menlo-Bold"/>
+                                                                    <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -162,7 +162,7 @@
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
                                                                 <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="center" title="Text Cell" drawsBackground="YES" id="mDJ-1S-UYe">
-                                                                    <font key="font" size="12" name="Menlo-Bold"/>
+                                                                    <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -173,7 +173,7 @@
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
                                                                 <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="center" title="Text Cell" drawsBackground="YES" id="oLP-3N-Nnw">
-                                                                    <font key="font" size="12" name="Menlo-Bold"/>
+                                                                    <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -184,7 +184,7 @@
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
                                                                 <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="center" title="Text Cell" drawsBackground="YES" id="YSj-cv-qo9">
-                                                                    <font key="font" size="12" name="Menlo-Bold"/>
+                                                                    <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -195,7 +195,7 @@
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
                                                                 <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="center" title="Text Cell" drawsBackground="YES" id="Du0-nv-ON3">
-                                                                    <font key="font" size="12" name="Menlo-Bold"/>
+                                                                    <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -206,7 +206,7 @@
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
                                                                 <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="center" title="Text Cell" drawsBackground="YES" id="CeK-fS-pSB">
-                                                                    <font key="font" size="12" name="Menlo-Bold"/>
+                                                                    <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -217,7 +217,7 @@
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
                                                                 <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="center" title="Text Cell" drawsBackground="YES" id="yF8-jd-Yqt">
-                                                                    <font key="font" size="12" name="Menlo-Bold"/>
+                                                                    <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -228,7 +228,7 @@
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
                                                                 <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="center" title="Text Cell" drawsBackground="YES" id="VDg-KD-L1F">
-                                                                    <font key="font" size="12" name="Menlo-Bold"/>
+                                                                    <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -239,7 +239,7 @@
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
                                                                 <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="center" title="Text Cell" drawsBackground="YES" id="Wjw-Ui-zwi">
-                                                                    <font key="font" size="12" name="Menlo-Bold"/>
+                                                                    <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -250,7 +250,7 @@
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
                                                                 <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="center" title="Text Cell" drawsBackground="YES" id="jJY-fR-UvH">
-                                                                    <font key="font" size="12" name="Menlo-Bold"/>
+                                                                    <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -261,7 +261,7 @@
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
                                                                 <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="center" title="Text Cell" drawsBackground="YES" id="Gqq-lp-BOZ">
-                                                                    <font key="font" size="12" name="Menlo-Bold"/>
+                                                                    <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -272,7 +272,7 @@
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
                                                                 <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="center" title="Text Cell" drawsBackground="YES" id="gUN-gc-rZe">
-                                                                    <font key="font" size="12" name="Menlo-Bold"/>
+                                                                    <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
@@ -283,7 +283,7 @@
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
                                                                 <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" alignment="left" id="ky9-W7-AKB">
-                                                                    <font key="font" size="12" name="Menlo-Bold"/>
+                                                                    <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>

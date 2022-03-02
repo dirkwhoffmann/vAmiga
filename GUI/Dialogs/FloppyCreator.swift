@@ -9,7 +9,7 @@
 
 import Darwin
 
-class FloppyDiskCreator: DialogController {
+class FloppyCreator: DialogController {
         
     @IBOutlet weak var diskIcon: NSImageView!
     @IBOutlet weak var virusIcon: NSImageView!
@@ -17,14 +17,17 @@ class FloppyDiskCreator: DialogController {
     @IBOutlet weak var capacity: NSPopUpButton!
     @IBOutlet weak var fileSystem: NSPopUpButton!
     @IBOutlet weak var bootBlock: NSPopUpButton!
-    @IBOutlet weak var bootBlockText: NSTextField!
+    @IBOutlet weak var bootBlockLabel: NSTextField!
+
+    @IBOutlet weak var cylinderField: NSTextField!
+    @IBOutlet weak var headField: NSTextField!
+    @IBOutlet weak var sectorField: NSTextField!
 
     var nr = 0
-        
+    var diskType: String!
+
     var drive: DriveProxy? { amiga.df(nr) }
     var hasVirus: Bool { return bootBlock.selectedTag() >= 3 }
-    
-    var diskType: String!
     
     //
     // Starting up
@@ -44,12 +47,28 @@ class FloppyDiskCreator: DialogController {
         super.awakeFromNib()
         
         let type = amiga.getConfig(.DRIVE_TYPE, drive: nr)
-        
-        switch FloppyDriveType.init(rawValue: type) {
+        switch FloppyDriveType(rawValue: type) {
             
-        case .DD_35:    capacity.lastItem?.title = "3.5\" DD"
-        case .HD_35:    capacity.lastItem?.title = "3.5\" HD"
-        case .DD_525:   capacity.lastItem?.title = "5.25\" DD"
+        case .DD_35:
+
+            capacity.lastItem?.title = "3.5\" DD"
+            cylinderField.integerValue = 80
+            headField.integerValue = 2
+            sectorField.integerValue = 11
+            
+        case .HD_35:
+            
+            capacity.lastItem?.title = "3.5\" HD"
+            cylinderField.integerValue = 80
+            headField.integerValue = 2
+            sectorField.integerValue = 22
+
+        case .DD_525:
+            
+            capacity.lastItem?.title = "5.25\" DD"
+            cylinderField.integerValue = 80
+            headField.integerValue = 2
+            sectorField.integerValue = 11
 
         default:
             fatalError()
@@ -74,28 +93,14 @@ class FloppyDiskCreator: DialogController {
     
     func update() {
                   
+        let formatted = fileSystem.selectedTag() != 0
+        
         // Update icons
         virusIcon.isHidden = !hasVirus
                 
-        // Disable some controls
-        let controls: [NSControl: Bool] = [
-            
-            bootBlock: fileSystem.selectedTag() != 0
-        ]
-        
-        for (control, enabled) in controls {
-            control.isEnabled = enabled
-        }
-
-        // Recolor some labels
-        let labels: [NSTextField: Bool] = [
-            
-            bootBlockText: fileSystem.selectedTag() != 0
-        ]
-        
-        for (label, enabled) in labels {
-            label.textColor = enabled ? .labelColor : .secondaryLabelColor
-        }
+        // Update boot block selector
+        bootBlock.isEnabled = formatted
+        bootBlockLabel.textColor = formatted ? .labelColor : .secondaryLabelColor
     }
         
     //
@@ -123,15 +128,16 @@ class FloppyDiskCreator: DialogController {
     @IBAction func insertAction(_ sender: Any!) {
         
         let fs: FSVolumeType =
-        fileSystem.selectedTag() == 0 ? .NODOS :
-        fileSystem.selectedTag() == 1 ? .OFS : .FFS
+        fileSystem.selectedTag() == 1 ? .OFS :
+        fileSystem.selectedTag() == 2 ? .FFS : .NODOS
         
         let bb: BootBlockId =
-        bootBlock.selectedTag() == 0 ? .NONE :
         bootBlock.selectedTag() == 1 ? .AMIGADOS_13 :
         bootBlock.selectedTag() == 2 ? .AMIGADOS_20 :
-        bootBlock.selectedTag() == 3 ? .SCA : .BYTE_BANDIT
+        bootBlock.selectedTag() == 3 ? .SCA :
+        bootBlock.selectedTag() == 4 ? .BYTE_BANDIT : .NONE
         
+        track("Dos = \(fs) Boot = \(bb)")
         do {
             try drive?.insertNew(fileSystem: fs, bootBlock: bb)
             myAppDelegate.clearRecentlyExportedDiskURLs(drive: nr)

@@ -36,8 +36,8 @@
 		501C514627C2AA4A00DF1DD5 /* DiskExporter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501C514527C2AA4A00DF1DD5 /* DiskExporter.xib */; };
 		501C514827C2AD8C00DF1DD5 /* DiskExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C514727C2AD8C00DF1DD5 /* DiskExporter.swift */; };
 		501C514A27C38FE500DF1DD5 /* DragImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C514927C38FE500DF1DD5 /* DragImageView.swift */; };
-		501C514C27C4248300DF1DD5 /* FloppyDiskCreator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501C514B27C4248300DF1DD5 /* FloppyDiskCreator.xib */; };
-		501C514E27C4259F00DF1DD5 /* FloppyDiskCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C514D27C4259F00DF1DD5 /* FloppyDiskCreator.swift */; };
+		501C514C27C4248300DF1DD5 /* FloppyCreator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501C514B27C4248300DF1DD5 /* FloppyCreator.xib */; };
+		501C514E27C4259F00DF1DD5 /* FloppyCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C514D27C4259F00DF1DD5 /* FloppyCreator.swift */; };
 		501FB312275E460100D0A57B /* OSDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB310275E460100D0A57B /* OSDebugger.cpp */; };
 		501FB3172762008C00D0A57B /* OSDebuggerRead.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB3162762008C00D0A57B /* OSDebuggerRead.cpp */; };
 		501FB319276200A000D0A57B /* OSDebuggerDump.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB318276200A000D0A57B /* OSDebuggerDump.cpp */; };
@@ -336,8 +336,8 @@
 		501C514527C2AA4A00DF1DD5 /* DiskExporter.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DiskExporter.xib; sourceTree = "<group>"; };
 		501C514727C2AD8C00DF1DD5 /* DiskExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskExporter.swift; sourceTree = "<group>"; };
 		501C514927C38FE500DF1DD5 /* DragImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragImageView.swift; sourceTree = "<group>"; };
-		501C514B27C4248300DF1DD5 /* FloppyDiskCreator.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FloppyDiskCreator.xib; sourceTree = "<group>"; };
-		501C514D27C4259F00DF1DD5 /* FloppyDiskCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloppyDiskCreator.swift; sourceTree = "<group>"; };
+		501C514B27C4248300DF1DD5 /* FloppyCreator.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FloppyCreator.xib; sourceTree = "<group>"; };
+		501C514D27C4259F00DF1DD5 /* FloppyCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloppyCreator.swift; sourceTree = "<group>"; };
 		501E715022671FC20070B17D /* DeniseTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeniseTypes.h; sourceTree = "<group>"; };
 		501FB310275E460100D0A57B /* OSDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OSDebugger.cpp; sourceTree = "<group>"; };
 		501FB311275E460100D0A57B /* OSDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSDebugger.h; sourceTree = "<group>"; };
@@ -1081,7 +1081,7 @@
 				508FDFB821EA1FF10043D0E9 /* A500ISO.xib */,
 				50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */,
 				50D263CD21F6378000FA167F /* A1000ISO.xib */,
-				501C514B27C4248300DF1DD5 /* FloppyDiskCreator.xib */,
+				501C514B27C4248300DF1DD5 /* FloppyCreator.xib */,
 				5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */,
 				501C513A27C0084200DF1DD5 /* HardDiskConfigurator.xib */,
 				50D715A027CCA5AA0085C1AA /* PartitionSelector.xib */,
@@ -1149,7 +1149,7 @@
 				501C514727C2AD8C00DF1DD5 /* DiskExporter.swift */,
 				5029C6E227CA2F66002F6CCC /* DiskInspector.swift */,
 				506B471C256396BC009FEFC3 /* VolumeInspector.swift */,
-				501C514D27C4259F00DF1DD5 /* FloppyDiskCreator.swift */,
+				501C514D27C4259F00DF1DD5 /* FloppyCreator.swift */,
 				5050EC4027BE97E000394F4F /* HardDiskCreator.swift */,
 				501C513E27C0C63A00DF1DD5 /* HardDiskConfigurator.swift */,
 				50D715A227CCA84F0085C1AA /* PartitionSelector.swift */,
@@ -1805,7 +1805,7 @@
 				5029C6E127CA2EAB002F6CCC /* DiskInspector.xib in Resources */,
 				500A4E9F24470713002A4DE1 /* disk_eject.aiff in Resources */,
 				508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */,
-				501C514C27C4248300DF1DD5 /* FloppyDiskCreator.xib in Resources */,
+				501C514C27C4248300DF1DD5 /* FloppyCreator.xib in Resources */,
 				50B14C2221EB8445002E32A6 /* drive_snatch_uae.aiff in Resources */,
 				501C513B27C0084200DF1DD5 /* HardDiskConfigurator.xib in Resources */,
 				500A4EAA24472B55002A4DE1 /* door_close.aiff in Resources */,
@@ -2048,7 +2048,7 @@
 				508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */,
 				50A5969824F7F9ED008632C0 /* PeripheralsConf.swift in Sources */,
 				508FE02221EA227B0043D0E9 /* MacKey.swift in Sources */,
-				501C514E27C4259F00DF1DD5 /* FloppyDiskCreator.swift in Sources */,
+				501C514E27C4259F00DF1DD5 /* FloppyCreator.swift in Sources */,
 				50F54B2E24B5D31D0078FDC9 /* u_rle.c in Sources */,
 				50F6EEBE21F4F61F0091155D /* FloppyDrive.cpp in Sources */,
 				5056507C25459C8800A79D27 /* FSObjects.cpp in Sources */,

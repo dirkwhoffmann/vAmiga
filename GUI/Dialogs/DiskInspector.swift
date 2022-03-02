@@ -21,10 +21,6 @@ class DiskInspector: DialogController {
     @IBOutlet weak var bsizeInfo: NSTextField!
     @IBOutlet weak var capacityInfo: NSTextField!
 
-    @IBOutlet weak var tabView: NSTabView!
-
-    @IBOutlet weak var previewScrollView: NSScrollView!
-    @IBOutlet weak var previewTable: NSTableView!
     @IBOutlet weak var cylinderField: NSTextField!
     @IBOutlet weak var cylinderStepper: NSStepper!
     @IBOutlet weak var headField: NSTextField!
@@ -36,6 +32,9 @@ class DiskInspector: DialogController {
     @IBOutlet weak var blockField: NSTextField!
     @IBOutlet weak var blockStepper: NSStepper!
 
+    @IBOutlet weak var tabView: NSTabView!
+    @IBOutlet weak var blockScrollView: NSScrollView!
+    @IBOutlet weak var blockView: NSTableView!
     @IBOutlet weak var mfmView: NSScrollView!
     @IBOutlet weak var syncColorButton: NSButton!
 
@@ -45,19 +44,19 @@ class DiskInspector: DialogController {
     var titleString = ""
     var image: NSImage?
     
-    // The MFM data provider
-    var drive: DriveProxy?
-
-    // The decoder to get the displayed information from
+    // Block data provider
     var decoder: DiskFileProxy?
 
-    // The drive geometry
+    // MFM data provider
+    var drive: DriveProxy?
+
+    // Drive geometry
     var numCyls: Int { return decoder?.numCyls ?? 0 }
     var numHeads: Int { return decoder?.numHeads ?? 0 }
     var numSectors: Int { return decoder?.numSectors ?? 0 }
     var numTracks: Int { return decoder?.numTracks ?? 0 }
     var numBlocks: Int { return decoder?.numBlocks ?? 0 }
-    
+
     var upperCyl: Int { return max(numCyls - 1, 0) }
     var upperHead: Int { return max(numHeads - 1, 0) }
     var upperSector: Int { return max(numSectors - 1, 0) }
@@ -70,16 +69,7 @@ class DiskInspector: DialogController {
     var currentTrack = 0
     var currentSector = 0
     var currentBlock = 0
-    
-    // Font for the MFM view
-    var mfmFont: NSFont {
-        if #available(OSX 10.15, *) {
-            return NSFont.monospacedSystemFont(ofSize: 10.0, weight: .semibold)
-        } else {
-            return NSFont.monospacedDigitSystemFont(ofSize: 10.0, weight: .semibold)
-        }
-    }
-    
+        
     //
     // Starting up
     //
@@ -89,9 +79,8 @@ class DiskInspector: DialogController {
         track()
         
         drive = amiga.df(nr)
-        let protected = drive!.hasWriteProtectedDisk()
         
-        titleString = "DF\(nr) - Amiga Floppy Drive"
+        titleString = "Floppy Drive DF\(nr)"
 
         // Run the ADF decoder
         decoder = try? ADFFileProxy.make(drive: drive!) as ADFFileProxy
@@ -107,6 +96,7 @@ class DiskInspector: DialogController {
             decoder = try? EXTFileProxy.make(drive: drive!) as EXTFileProxy
         }
 
+        let protected = drive!.hasWriteProtectedDisk()
         image = (decoder as? FloppyFileProxy)?.icon(protected: protected)
         showWindow()
     }
@@ -115,7 +105,7 @@ class DiskInspector: DialogController {
         
         track()
         
-        titleString = "HD\(nr) - Amiga Hard Drive"
+        titleString = "Hard Drive HD\(nr)"
 
         // Run the HDF decoder
         decoder = try? HDFFileProxy.make(hdr: amiga.dh(nr)!) as HDFFileProxy
@@ -124,10 +114,9 @@ class DiskInspector: DialogController {
         showWindow()
     }
             
-    override public func awakeFromNib() {
-        
+    override func sheetWillShow() {
+            
         track()
-        super.awakeFromNib()
                 
         cylinderStepper.maxValue = .greatestFiniteMagnitude
         headStepper.maxValue = .greatestFiniteMagnitude
@@ -137,15 +126,7 @@ class DiskInspector: DialogController {
                 
         update()
     }
-    
-    override func windowDidLoad() {
-                 
-    }
-    
-    override func sheetDidShow() {
-        
-    }
-     
+         
     //
     // Updating the displayed information
     //
@@ -153,21 +134,9 @@ class DiskInspector: DialogController {
     func update() {
           
         updateInfo()
-                                
-        // Update all elements
-        cylinderField.stringValue      = String(format: "%d", currentCyl)
-        cylinderStepper.integerValue   = currentCyl
-        headField.stringValue          = String(format: "%d", currentHead)
-        headStepper.integerValue       = currentHead
-        trackField.stringValue         = String(format: "%d", currentTrack)
-        trackStepper.integerValue      = currentTrack
-        sectorField.stringValue        = String(format: "%d", currentSector)
-        sectorStepper.integerValue     = currentSector
-        blockField.stringValue         = String(format: "%d", currentBlock)
-        blockStepper.integerValue      = currentBlock
-                
-        previewTable.reloadData()
+        updateSelection()
         updateMfm()
+        blockView.reloadData()
     }
 
     func updateInfo() {
@@ -216,6 +185,20 @@ class DiskInspector: DialogController {
         }
     }
      
+    func updateSelection() {
+        
+        cylinderField.stringValue      = String(format: "%d", currentCyl)
+        cylinderStepper.integerValue   = currentCyl
+        headField.stringValue          = String(format: "%d", currentHead)
+        headStepper.integerValue       = currentHead
+        trackField.stringValue         = String(format: "%d", currentTrack)
+        trackStepper.integerValue      = currentTrack
+        sectorField.stringValue        = String(format: "%d", currentSector)
+        sectorStepper.integerValue     = currentSector
+        blockField.stringValue         = String(format: "%d", currentBlock)
+        blockStepper.integerValue      = currentBlock
+    }
+    
     func updateMfm() {
                 
         let size = NSSize(width: 32, height: 32)
@@ -230,7 +213,7 @@ class DiskInspector: DialogController {
                         
         // Create a text storage
         let storage = NSTextStorage(string: mfm)
-        storage.font = mfmFont
+        storage.font = NSFont.monospaced(ofSize: 10.0, weight: .semibold)
         storage.foregroundColor = .labelColor
 
         // Colorize all SYNC sequences

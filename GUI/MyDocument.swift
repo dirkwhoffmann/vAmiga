@@ -54,8 +54,7 @@ class MyDocument: NSDocument {
                 
         track()
         
-        let nibName = NSNib.Name("MyDocument")
-        let controller = MyController(windowNibName: nibName)
+        let controller = MyController(windowNibName: "MyDocument")
         controller.amiga = amiga
         self.addWindowController(controller)
     }
@@ -154,26 +153,9 @@ class MyDocument: NSDocument {
         }
         
         if let proxy = attachment as? HDFFileProxy {
+            
+            // TODO: CLEAN THIS CASE UP
             track("HDF with \(proxy.numBlocks) blocks")
-            parent.warning("This file is a hard drive image (HDF)",
-                           "Hard drive emulation is not supported yet.",
-                           icon: "hdf")
-                    
-            // Experimental code: The current version of vAmiga does not
-            // support hard drives. If a HDF file is dragged in, we open the
-            // disk export dialog for debugging purposes. It enables us to
-            // examine the contents of the HDF and to check for file system
-            // errors.
-            /*
-             if let vol = FSDeviceProxy.make(withHDF: attachment as? HDFFileProxy) {
-             
-             vol.dump()
-             
-             let nibName = NSNib.Name("ExporterDialog")
-             let exportPanel = ExporterDialog.make(parent: parent, nibName: nibName)
-             exportPanel?.showSheet(forVolume: vol)
-             }
-             */
             return
         }
         

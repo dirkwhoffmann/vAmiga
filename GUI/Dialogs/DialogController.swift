@@ -42,8 +42,8 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     var parent: MyController!
     var amiga: AmigaProxy!
 
-    // List of open windows (to make ARC happy)
-    // static var active: [DialogController] = []
+    // List of open windows or sheets (to make ARC happy)
+    static var active: [DialogController] = []
     
     // Remembers whether awakeFromNib has been called
     var awake = false
@@ -53,9 +53,22 @@ class DialogController: NSWindowController, DialogControllerDelegate {
         let controller = Self.init(windowNibName: nibName)
         controller.parent = parent
         controller.amiga = parent.amiga
+        
         return controller
     }
 
+    func register() {
+        
+        DialogController.active.append(self)
+        track("Register: \(DialogController.active)")
+    }
+    
+    func unregister() {
+        
+        DialogController.active = DialogController.active.filter {$0 != self}
+        track("Unregister: \(DialogController.active)")
+    }
+    
     override func windowWillLoad() {
     }
     
@@ -65,6 +78,7 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     override func awakeFromNib() {
     
         awake = true
+        window?.delegate = self
         sheetWillShow()
     }
     
@@ -82,6 +96,7 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     
     func showWindow(completionHandler handler:(() -> Void)? = nil) {
 
+        register()
         if awake { sheetWillShow() }
         
         showWindow(self)
@@ -89,6 +104,7 @@ class DialogController: NSWindowController, DialogControllerDelegate {
 
     func showSheet(completionHandler handler:(() -> Void)? = nil) {
 
+        register()
         if awake { sheetWillShow() }
         
         parent.window?.beginSheet(window!, completionHandler: { result in
@@ -103,9 +119,9 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     func hideSheet() {
     
         if let win = window {
-            
             parent.window?.endSheet(win, returnCode: .cancel)
         }
+        unregister()
     }
     
     @IBAction func okAction(_ sender: Any!) {
@@ -124,9 +140,6 @@ extension DialogController: NSWindowDelegate {
     func windowWillClose(_ notification: Notification) {
 
         track()
-        /*
-        DialogController.active = DialogController.active.filter {$0 != self}
-        track("Active: \(DialogController.active)")
-        */
+        unregister()
     }
 }

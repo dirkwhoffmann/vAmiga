@@ -170,14 +170,15 @@ class VolumeInspector: DialogController {
     // Starting up
     //
     
-    func showSheet(diskDrive nr: Int) {
+    func show(diskDrive nr: Int) {
                 
         do {
             
             let dfn = amiga.df(nr)!
             let adf = try ADFFileProxy.make(drive: dfn) as ADFFileProxy
             vol = try FileSystemProxy.make(withADF: adf)
-            showSheet(fs: vol)
+
+            showWindow()
             
         } catch {
             
@@ -185,35 +186,35 @@ class VolumeInspector: DialogController {
         }
     }
     
-    func showSheet(hardDrive nr: Int) {
+    func show(hardDrive nr: Int) {
         
         if amiga.dh(nr)!.partitions == 1 {
             
             // Analyze the first partition
-            showSheet(hardDrive: nr, partition: 0)
+            show(hardDrive: nr, partition: 0)
             
         } else {
             
             // Ask the user to select a partition
-            let nibName = NSNib.Name("PartitionSelector")
-            let panel = PartitionSelector.make(parent: parent, nibName: nibName)
+            let panel = PartitionSelector.make(parent: parent, nibName: "PartitionSelector")
             panel?.showSheet(hardDrive: nr, completionHandler: {
                 if let part = panel?.userSelection {
-                    self.showSheet(hardDrive: nr, partition: part)
+                    self.show(hardDrive: nr, partition: part)
                 }
             })
         }
     }
     
-    func showSheet(hardDrive nr: Int, partition: Int) {
+    func show(hardDrive nr: Int, partition: Int) {
                 
         do {
         
             let hdn = amiga.dh(nr)!
             let hdf = try HDFFileProxy.make(hdr: hdn) as HDFFileProxy
             vol = try FileSystemProxy.make(withHDF: hdf, partition: partition)
-            showSheet(fs: vol)
             
+            showWindow()
+
         } catch {
             
             (error as? VAError)?.warning("Unable to decode the file system.")
@@ -222,16 +223,17 @@ class VolumeInspector: DialogController {
     
     func showSheet(fs: FileSystemProxy) {
      
-        track()
         vol = fs
         showWindow()
-        // super.showWindow(self)
     }
-    
-    override public func awakeFromNib() {
         
+    override func windowDidLoad() {
+                
+    }
+
+    override func sheetWillShow() {
+     
         track()
-        super.awakeFromNib()
         
         // Register to receive mouse click events
         previewTable.action = #selector(clickAction(_:))
@@ -252,11 +254,7 @@ class VolumeInspector: DialogController {
         
         update()
     }
-    
-    override func windowDidLoad() {
-                
-    }
-    
+
     override func sheetDidShow() {
         
     }

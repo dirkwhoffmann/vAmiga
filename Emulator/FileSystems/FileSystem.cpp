@@ -355,7 +355,11 @@ FileSystem::ascii(Block nr, isize offset, isize len) const
     assert(isBlockNumber(nr));
     assert(offset + len <= bsize);
     
-    return util::createAscii(blocks[nr]->data + offset, len);
+    if (blocks[nr]->data) {
+        return util::createAscii(blocks[nr]->data + offset, len);
+    } else {
+        return string(len, '.');
+    }
 }
 
 bool
