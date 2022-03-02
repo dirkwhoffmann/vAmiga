@@ -633,7 +633,7 @@ extension MyController: NSMenuItemValidation {
         if !askToPowerOff() { return }
         
         let panel = HardDiskCreator.make(parent: self, nibName: "HardDiskCreator")
-        panel?.showSheet(forDrive: drive.nr)
+        panel?.show(forDrive: drive.nr)
     }
     
     @IBAction func attachHdrAction(_ sender: NSMenuItem!) {

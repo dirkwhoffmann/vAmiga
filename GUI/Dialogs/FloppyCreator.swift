@@ -74,6 +74,9 @@ class FloppyCreator: DialogController {
             fatalError()
         }
 
+        // Preselect OFS as default file system
+        fileSystem.selectItem(withTag: 1)
+        
         update()
     }
     

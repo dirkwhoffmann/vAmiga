@@ -10,12 +10,9 @@
 class HardDiskCreator: DialogController {
         
     @IBOutlet weak var diskIcon: NSImageView!
-    @IBOutlet weak var virusIcon: NSImageView!
     @IBOutlet weak var capacity: NSPopUpButton!
     @IBOutlet weak var fileSystem: NSPopUpButton!
-    @IBOutlet weak var bootBlock: NSPopUpButton!
 
-    @IBOutlet weak var bootBlockText: NSTextField!
     @IBOutlet weak var cylinderText: NSTextField!
     @IBOutlet weak var headText: NSTextField!
     @IBOutlet weak var sectorText: NSTextField!
@@ -36,7 +33,6 @@ class HardDiskCreator: DialogController {
     var bsize = 0
         
     var drive: HardDriveProxy? { amiga.dh(nr) }
-    var hasVirus: Bool { return bootBlock.selectedTag() >= 3 }
     
     //
     // Selecting a block
@@ -73,7 +69,7 @@ class HardDiskCreator: DialogController {
     // Starting up
     //
     
-    func showSheet(forDrive nr: Int) {
+    func show(forDrive nr: Int) {
         
         track()
         
@@ -126,10 +122,7 @@ class HardDiskCreator: DialogController {
     func update() {
           
         let custom = capacity.selectedTag() == 0
-        
-        // Update icons
-        virusIcon.isHidden = !hasVirus
-        
+                
         // Update text fields and steppers
         cylinderField.stringValue      = String(format: "%d", cylinders)
         cylinderStepper.integerValue   = cylinders
@@ -141,7 +134,6 @@ class HardDiskCreator: DialogController {
         // Disable some controls
         let controls: [NSControl: Bool] = [
             
-            bootBlock: fileSystem.selectedTag() != 0,
             cylinderField: custom,
             cylinderStepper: custom,
             headField: custom,
@@ -157,7 +149,6 @@ class HardDiskCreator: DialogController {
         // Recolor some labels
         let labels: [NSTextField: Bool] = [
             
-            bootBlockText: fileSystem.selectedTag() != 0,
             cylinderText: custom,
             headText: custom,
             sectorText: custom
@@ -179,12 +170,6 @@ class HardDiskCreator: DialogController {
     }
 
     @IBAction func fileSystemAction(_ sender: NSPopUpButton!) {
-        
-        track()
-        update()
-    }
-
-    @IBAction func bootBlockAction(_ sender: NSPopUpButton!) {
         
         track()
         update()
@@ -225,17 +210,11 @@ class HardDiskCreator: DialogController {
         let fs: FSVolumeType =
         fileSystem.selectedTag() == 0 ? .NODOS :
         fileSystem.selectedTag() == 1 ? .OFS : .FFS
-        
-        let bb: BootBlockId =
-        bootBlock.selectedTag() == 0 ? .NONE :
-        bootBlock.selectedTag() == 1 ? .AMIGADOS_13 :
-        bootBlock.selectedTag() == 2 ? .AMIGADOS_20 :
-        bootBlock.selectedTag() == 3 ? .SCA : .BYTE_BANDIT
-        
+                
         do {
             
             try drive?.attach(c: cylinders, h: heads, s: sectors, b: bsize)
-            try drive?.format(fs: fs, bb: bb)
+            try drive?.format(fs: fs, bb: .NONE)
             hideSheet()
             
         } catch let error as VAError {

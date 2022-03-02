@@ -8,8 +8,6 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HardDiskCreator" customModule="vAmiga" customModuleProvider="target">
             <connections>
-                <outlet property="bootBlock" destination="zwF-UQ-hRz" id="BvA-yP-bfz"/>
-                <outlet property="bootBlockText" destination="foR-SP-0y6" id="naV-ZK-Tcz"/>
                 <outlet property="capacity" destination="CJv-9c-LZE" id="C91-Gk-EHK"/>
                 <outlet property="cylinderField" destination="Nfw-BW-veO" id="KoI-uj-nFY"/>
                 <outlet property="cylinderStepper" destination="JXs-kr-ze5" id="YX1-ax-K1m"/>
@@ -146,15 +144,6 @@ DQ
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="foR-SP-0y6">
-                        <rect key="frame" x="165" y="117" width="73" height="16"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Boot block:" id="3Pr-tk-Sdd">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QeQ-vP-kgc">
                         <rect key="frame" x="241" y="140" width="133" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -202,28 +191,6 @@ DQ
                         </popUpButtonCell>
                         <connections>
                             <action selector="capacityAction:" target="-2" id="CEF-1s-mGs"/>
-                        </connections>
-                    </popUpButton>
-                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zwF-UQ-hRz">
-                        <rect key="frame" x="241" y="110" width="133" height="25"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="pPR-wB-cvx" id="HTK-lt-PBR">
-                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu"/>
-                            <menu key="menu" id="p9p-e9-8Mq">
-                                <items>
-                                    <menuItem title="None" state="on" id="pPR-wB-cvx"/>
-                                    <menuItem isSeparatorItem="YES" id="fBB-r8-2tC"/>
-                                    <menuItem title="Kick 1.3 OFS" tag="1" id="1y4-ku-s8I"/>
-                                    <menuItem title="Kick 2.0 FFS" tag="2" id="8TW-eO-8CP"/>
-                                    <menuItem isSeparatorItem="YES" id="Lck-4J-wpy"/>
-                                    <menuItem title="SCA" tag="3" id="LSQ-FY-eZD"/>
-                                    <menuItem title="Byte Bandit" tag="4" id="hs9-SL-dO1"/>
-                                </items>
-                            </menu>
-                        </popUpButtonCell>
-                        <connections>
-                            <action selector="bootBlockAction:" target="-2" id="NX1-00-gqB"/>
                         </connections>
                     </popUpButton>
                     <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="1V2-w3-Bmj">

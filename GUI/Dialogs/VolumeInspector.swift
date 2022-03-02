@@ -265,8 +265,8 @@ class VolumeInspector: DialogController {
 
     func update() {
           
-        updateVirusInfo()
         updateVolumeInfo()
+        updateVirusInfo()
         updateDiagnoseInfo()
         
         // Update elements
@@ -319,14 +319,16 @@ class VolumeInspector: DialogController {
         if vol.hasVirus {
             
             virus.isHidden = false
-            virusInfo.stringValue = "Boot block virus detected"
+            virusInfo.stringValue = "Positive"
             virusInfo.textColor = .warningColor
-        
+            bootblockInfo.textColor = .warningColor
+
         } else {
 
             virus.isHidden = true
-            virusInfo.stringValue = "Passed"
+            virusInfo.stringValue = "Negative"
             virusInfo.textColor = .secondaryLabelColor
+            bootblockInfo.textColor = .secondaryLabelColor
         }
     }
     

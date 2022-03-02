@@ -894,6 +894,7 @@ FileSystem::diagnoseImageSlice(isize column)
         }
     }
     
+    assert(cache[column] >= 0 && cache[column] <= 2);
     return cache[column];
 }
 
