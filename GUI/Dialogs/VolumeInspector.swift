@@ -11,23 +11,6 @@ import Darwin
 
 class VolumeInspector: DialogController {
         
-    struct Palette {
-        
-        static let white = NSColor.white
-        static let gray = NSColor.gray
-        static let black = NSColor.black
-        static let red = NSColor(r: 0xff, g: 0x66, b: 0x66, a: 0xff)
-        static let orange = NSColor(r: 0xff, g: 0xb2, b: 0x66, a: 0xff)
-        static let yellow = NSColor(r: 0xff, g: 0xff, b: 0x66, a: 0xff)
-        static let green = NSColor(r: 0x66, g: 0xff, b: 0x66, a: 0xff)
-        static let cyan = NSColor(r: 0x66, g: 0xff, b: 0xff, a: 0xff)
-        static let blue = NSColor(r: 0x66, g: 0xb2, b: 0xff, a: 0xff)
-        static let purple = NSColor(r: 0xb2, g: 0x66, b: 0xff, a: 0xff)
-        static let pink = NSColor(r: 0xff, g: 0x66, b: 0xff, a: 0xff)
-    }
-    
-    var myDocument: MyDocument { return parent.mydocument! }
-
     @IBOutlet weak var icon: NSImageView!
     @IBOutlet weak var virus: NSImageView!
     @IBOutlet weak var title: NSTextField!
@@ -68,6 +51,23 @@ class VolumeInspector: DialogController {
     @IBOutlet weak var info1: NSTextField!
     @IBOutlet weak var info2: NSTextField!
             
+    struct Palette {
+        
+        static let white = NSColor.white
+        static let gray = NSColor.gray
+        static let black = NSColor.black
+        static let red = NSColor(r: 0xff, g: 0x66, b: 0x66, a: 0xff)
+        static let orange = NSColor(r: 0xff, g: 0xb2, b: 0x66, a: 0xff)
+        static let yellow = NSColor(r: 0xff, g: 0xff, b: 0x66, a: 0xff)
+        static let green = NSColor(r: 0x66, g: 0xff, b: 0x66, a: 0xff)
+        static let cyan = NSColor(r: 0x66, g: 0xff, b: 0xff, a: 0xff)
+        static let blue = NSColor(r: 0x66, g: 0xb2, b: 0xff, a: 0xff)
+        static let purple = NSColor(r: 0xb2, g: 0x66, b: 0xff, a: 0xff)
+        static let pink = NSColor(r: 0xff, g: 0x66, b: 0xff, a: 0xff)
+    }
+
+    var myDocument: MyDocument { return parent.mydocument! }
+
     // The analyzed file system
     var vol: FileSystemProxy!
     

@@ -9,8 +9,6 @@
 
 class DiskInspector: DialogController {
         
-    var myDocument: MyDocument { return parent.mydocument! }
-
     @IBOutlet weak var icon: NSImageView!
     @IBOutlet weak var title: NSTextField!
     @IBOutlet weak var subTitle1: NSTextField!
@@ -41,52 +39,37 @@ class DiskInspector: DialogController {
     @IBOutlet weak var mfmView: NSScrollView!
     @IBOutlet weak var syncColorButton: NSButton!
 
+    var myDocument: MyDocument { return parent.mydocument! }
+
     // Title and icon of the info section
     var titleString = ""
     var image: NSImage?
     
-    // The floppy drive to get MFM data from
+    // The MFM data provider
     var drive: DriveProxy?
-        
-    // The drive geometry (cylinders, heads, sectors, tracks, blocks)
-    var c = 0
-    var h = 0
-    var s = 0
-    var t = 0
-    var b = 0
-    
-    var upperCyl: Int { return c > 0 ? c - 1 : 0 }
-    var upperHead: Int { return h > 0 ? h - 1 : 0 }
-    var upperSector: Int { return s > 0 ? s - 1 : 0 }
-    var upperTrack: Int { return t > 0 ? t - 1 : 0 }
-    var upperBlock: Int { return b > 0 ? b - 1 : 0 }
 
-    // Results of the different decoders
-    var hdf: HDFFileProxy?
-    var adf: ADFFileProxy?
-    var img: IMGFileProxy?
-    var ext: EXTFileProxy?
-        
     // The decoder to get the displayed information from
     var decoder: DiskFileProxy?
-    
-    var selection: Int?
-    var selectedRow: Int? { return selection == nil ? nil : selection! / 16 }
-    var selectedCol: Int? { return selection == nil ? nil : selection! % 16 }
 
-    var isDD: Bool {
-        return adf?.isDD ?? img?.isDD ?? ext?.isDD ?? false
-    }
-    var isHD: Bool {
-        return adf?.isHD ?? img?.isHD ?? ext?.isHD ?? false
-    }
- 
-    // Block preview
-    var cylinderNr = 0
-    var headNr = 0
-    var trackNr = 0
-    var sectorNr = 0
-    var blockNr = 0
+    // The drive geometry
+    var numCyls: Int { return decoder?.numCyls ?? 0 }
+    var numHeads: Int { return decoder?.numHeads ?? 0 }
+    var numSectors: Int { return decoder?.numSectors ?? 0 }
+    var numTracks: Int { return decoder?.numTracks ?? 0 }
+    var numBlocks: Int { return decoder?.numBlocks ?? 0 }
+    
+    var upperCyl: Int { return max(numCyls - 1, 0) }
+    var upperHead: Int { return max(numHeads - 1, 0) }
+    var upperSector: Int { return max(numSectors - 1, 0) }
+    var upperTrack: Int { return max(numTracks - 1, 0) }
+    var upperBlock: Int { return max(numBlocks - 1, 0) }
+        
+    // Current selection
+    var currentCyl = 0
+    var currentHead = 0
+    var currentTrack = 0
+    var currentSector = 0
+    var currentBlock = 0
     
     // Font for the MFM view
     var mfmFont: NSFont {
@@ -111,24 +94,20 @@ class DiskInspector: DialogController {
         titleString = "DF\(nr) - Amiga Floppy Drive"
 
         // Run the ADF decoder
-        adf = try? ADFFileProxy.make(drive: drive!) as ADFFileProxy
-        decoder = adf
+        decoder = try? ADFFileProxy.make(drive: drive!) as ADFFileProxy
         
         if decoder == nil {
 
             // Run the DOS decoder
-            img = try? IMGFileProxy.make(drive: drive!) as IMGFileProxy
-            decoder = img
+            decoder = try? IMGFileProxy.make(drive: drive!) as IMGFileProxy
         }
         if decoder == nil {
             
             // Run the extended ADF decoder
-            ext = try? EXTFileProxy.make(drive: drive!) as EXTFileProxy
-            decoder = ext
+            decoder = try? EXTFileProxy.make(drive: drive!) as EXTFileProxy
         }
 
         image = (decoder as? FloppyFileProxy)?.icon(protected: protected)
-        initDriveGeometry()
         showWindow()
     }
     
@@ -139,35 +118,20 @@ class DiskInspector: DialogController {
         titleString = "HD\(nr) - Amiga Hard Drive"
 
         // Run the HDF decoder
-        hdf = try? HDFFileProxy.make(hdr: amiga.dh(nr)!) as HDFFileProxy
-        decoder = hdf
+        decoder = try? HDFFileProxy.make(hdr: amiga.dh(nr)!) as HDFFileProxy
         
         image = NSImage(named: "hdf")!
-        initDriveGeometry()
         showWindow()
     }
-        
-    func initDriveGeometry() {
-        
-        // Read CHS geometry (cylinders, heads, sectors)
-        c = decoder!.numCyls
-        h = decoder!.numHeads
-        s = decoder!.numSectors
-        
-        // Update derived values (tracks, blocks)
-        t = c * h
-        b = t * s
-    }
-    
+            
     override public func awakeFromNib() {
         
         track()
         super.awakeFromNib()
-        
-        // Register to receive mouse click events
-        previewTable.action = #selector(clickAction(_:))
-        
-        // Configure elements
+                
+        cylinderStepper.maxValue = .greatestFiniteMagnitude
+        headStepper.maxValue = .greatestFiniteMagnitude
+        trackStepper.maxValue = .greatestFiniteMagnitude
         sectorStepper.maxValue = .greatestFiniteMagnitude
         blockStepper.maxValue = .greatestFiniteMagnitude
                 
@@ -191,16 +155,16 @@ class DiskInspector: DialogController {
         updateInfo()
                                 
         // Update all elements
-        cylinderField.stringValue      = String(format: "%d", cylinderNr)
-        cylinderStepper.integerValue   = cylinderNr
-        headField.stringValue          = String(format: "%d", headNr)
-        headStepper.integerValue       = headNr
-        trackField.stringValue         = String(format: "%d", trackNr)
-        trackStepper.integerValue      = trackNr
-        sectorField.stringValue        = String(format: "%d", sectorNr)
-        sectorStepper.integerValue     = sectorNr
-        blockField.stringValue         = String(format: "%d", blockNr)
-        blockStepper.integerValue      = blockNr
+        cylinderField.stringValue      = String(format: "%d", currentCyl)
+        cylinderStepper.integerValue   = currentCyl
+        headField.stringValue          = String(format: "%d", currentHead)
+        headStepper.integerValue       = currentHead
+        trackField.stringValue         = String(format: "%d", currentTrack)
+        trackStepper.integerValue      = currentTrack
+        sectorField.stringValue        = String(format: "%d", currentSector)
+        sectorStepper.integerValue     = currentSector
+        blockField.stringValue         = String(format: "%d", currentBlock)
+        blockStepper.integerValue      = currentBlock
                 
         previewTable.reloadData()
         updateMfm()
@@ -254,11 +218,11 @@ class DiskInspector: DialogController {
      
     func updateMfm() {
                 
-        let size = NSSize(width: 16, height: 16)
+        let size = NSSize(width: 32, height: 32)
         syncColorButton.image = NSImage(color: .warningColor, size: size)
 
         // Read a whole MFM encoded track
-        let mfm = drive?.readTrackBits(trackNr) ?? "No MFM data available"
+        let mfm = drive?.readTrackBits(currentTrack) ?? "No MFM data available"
 
         // Search all SYNC sequences (0x4489 + 0x4489)
         let sync = "0100010010001001"
@@ -291,77 +255,72 @@ class DiskInspector: DialogController {
     
     func setCylinder(_ newValue: Int) {
         
-        if newValue != cylinderNr {
+        if newValue != currentCyl {
 
             let value = newValue.clamped(0, upperCyl)
 
-            cylinderNr = value
-            trackNr    = cylinderNr * 2 + headNr
-            blockNr    = trackNr * s + sectorNr
+            currentCyl      = value
+            currentTrack    = currentCyl * 2 + currentHead
+            currentBlock    = currentTrack * numSectors + currentSector
             
-            selection = nil
             update()
         }
     }
     
     func setHead(_ newValue: Int) {
         
-        if newValue != headNr {
+        if newValue != currentHead {
                         
             let value = newValue.clamped(0, upperHead)
 
-            headNr     = value
-            trackNr    = cylinderNr * 2 + headNr
-            blockNr    = trackNr * s + sectorNr
+            currentHead     = value
+            currentTrack    = currentCyl * 2 + currentHead
+            currentBlock    = currentTrack * numSectors + currentSector
             
-            selection = nil
             update()
         }
     }
     
     func setTrack(_ newValue: Int) {
         
-        if newValue != trackNr {
+        if newValue != currentTrack {
                    
             let value = newValue.clamped(0, upperTrack)
             
-            trackNr    = value
-            cylinderNr = trackNr / 2
-            headNr     = trackNr % 2
-            blockNr    = trackNr * s + sectorNr
-
-            selection = nil
+            currentTrack    = value
+            currentCyl      = currentTrack / 2
+            currentHead     = currentTrack % 2
+            currentBlock    = currentTrack * numSectors + currentSector
+            
             update()
         }
     }
 
     func setSector(_ newValue: Int) {
         
-        if newValue != sectorNr {
+        if newValue != currentSector {
                   
             let value = newValue.clamped(0, upperSector)
             
-            sectorNr   = value
-            blockNr    = trackNr * s + sectorNr
+            currentSector   = value
+            currentBlock    = currentTrack * numSectors + currentSector
             
-            selection = nil
             update()
         }
     }
 
     func setBlock(_ newValue: Int) {
         
-        if newValue != blockNr {
+        if newValue != currentBlock {
                         
             let value = newValue.clamped(0, upperBlock)
 
-            blockNr    = value
-            trackNr    = blockNr / s
-            sectorNr   = blockNr % s
-            cylinderNr = trackNr / 2
-            headNr     = trackNr % 2
+            currentBlock    = value
+            currentTrack    = currentBlock / numSectors
+            currentSector   = currentBlock % numSectors
+            currentCyl      = currentTrack / 2
+            currentHead     = currentTrack % 2
             
-            selection = nil
             update()
         }
     }
@@ -369,18 +328,6 @@ class DiskInspector: DialogController {
     //
     // Action methods
     //
-
-    @IBAction func clickAction(_ sender: NSTableView!) {
-
-        track()
-        
-        if sender.clickedColumn >= 1 && sender.clickedRow >= 0 {
-            
-            let newValue = 16 * sender.clickedRow + sender.clickedColumn - 1
-            selection = selection != newValue ? newValue : nil
-            update()
-        }
-    }
 
     @IBAction func cylinderAction(_ sender: NSTextField!) {
         
@@ -451,55 +398,24 @@ extension DiskInspector: NSTableViewDataSource {
     
     func tableView(_ tableView: NSTableView,
                    objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
-
+        
         switch tableColumn?.identifier.rawValue {
-
+            
         case "Offset":
             return String(format: "%X", row)
             
         case "Ascii":
-            return decoder?.asciidump(blockNr, offset: row * 16, len: 16) ?? ""
+            return decoder?.asciidump(currentBlock, offset: row * 16, len: 16) ?? ""
             
         default:
-            if let col = columnNr(tableColumn) {
-                
-                if let byte = adf?.readByte(blockNr, offset: 16 * row + col) {
-                    return String(format: "%02X", byte)
-                }
-                if let byte = img?.readByte(blockNr, offset: 16 * row + col) {
-                    return String(format: "%02X", byte)
-                }
-            }
-            fatalError()
+            let col = columnNr(tableColumn)!
+            let byte = decoder!.readByte(currentBlock, offset: 16 * row + col)
+            return String(format: "%02X", byte)
         }
     }
 }
 
 extension DiskInspector: NSTableViewDelegate {
-    
-    /*
-    func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
-
-        var exp = UInt8(0)
-        let cell = cell as? NSTextFieldCell
-
-        if let col = columnNr(tableColumn) {
-            
-            let offset = 16 * row + col
-            let error = vol?.check(blockNr, pos: offset, expected: &exp, strict: strict) ?? .OK
-            
-            if row == selectedRow && col == selectedCol {
-                cell?.textColor = .white
-                cell?.backgroundColor = error == .OK ? .selectedContentBackgroundColor : .warningColor
-            } else {
-                cell?.textColor = error == .OK ? .textColor : .warningColor
-                cell?.backgroundColor = NSColor.alternatingContentBackgroundColors[row % 2]
-            }
-        } else {
-            cell?.backgroundColor = .windowBackgroundColor
-        }
-    }
-    */
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
         return false
