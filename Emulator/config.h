@@ -60,12 +60,6 @@ struct FloatStereo; typedef FloatStereo SampleType;
  { OPT_DRIVE_SPEED,      -1             }  }
 */
 
-// Uncomment to launch the emulator with a pre-saved snapshot
-// #define INITIAL_SNAPSHOT "/tmp/snap.vamiga"
-
-// Uncomment to set a breakpoint on startup
-// #define INITIAL_BREAKPOINT 0xFC1354
-
 // Uncomment to colorize a certain row or column
 // #define LINE_DEBUG (agnus.pos.v == 260 || agnus.pos.v == 300)
 // #define COLUMN_DEBUG 114
@@ -86,6 +80,12 @@ struct FloatStereo; typedef FloatStereo SampleType;
 #define INITIAL_HD1 ""
 #define INITIAL_HD2 ""
 #define INITIAL_HD3 ""
+
+// Add a path to a snapshot file to launch the emulator in a preset state
+#define INITIAL_SNAPSHOT ""
+
+// Add addresses to launch the emulator with preset breakpoints
+#define INITIAL_BREAKPOINTS { }
 
 
 //

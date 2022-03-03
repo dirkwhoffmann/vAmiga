@@ -58,7 +58,7 @@ public:
     void init();
     
     // Creates a hard drive with a certain geometry
-    void init(const Geometry &geometry);
+    void init(const GeometryDescriptor &geometry);
 
     // Creates a hard drive with a certain capacity in bytes
     void init(isize size);
@@ -150,7 +150,7 @@ public:
     const PartitionDescriptor &getPartitionInfo(isize nr);
     
     // Returns the disk geometry
-    const Geometry &getGeometry() const { return desc.geometry; }
+    const GeometryDescriptor &getGeometry() const { return desc.geometry; }
 
     // Returns the number of partitions
     isize numPartitions() const { return isize(ptable.size()); }
@@ -172,7 +172,7 @@ public:
 
     // Change the drive geometry
     void changeGeometry(isize c, isize h, isize s, isize b = 512) throws;
-    void changeGeometry(const Geometry &geometry) throws;
+    void changeGeometry(const GeometryDescriptor &geometry) throws;
     
     
     //

@@ -790,29 +790,19 @@ Amiga::_powerOn()
     // Perform a reset
     hardReset();
 
-#ifdef INITIAL_SNAPSHOT
-    Snapshot snapshot(INITIAL_SNAPSHOT);
-    loadSnapshot(snapshot);
-#endif
-    
-#ifdef DF0_DISK
-    ADFFile df0file(DF0_DISK);
-    df0.ejectDisk();
-    df0.insertDisk(std::make_unique<Disk>(df0file));
-    df0.setWriteProtection(false);
-#endif
-    
-#ifdef DF1_DISK
-    ADFFile df1file(DF1_DISK);
-    df1.ejectDisk();
-    df1.insertDisk(std::make_unique<Disk>(df1file));
-    df1.setWriteProtection(false);
-#endif
-    
-#ifdef INITIAL_BREAKPOINT
-    debugMode = true;
-    cpu.debugger.breakpoints.addAt(INITIAL_BREAKPOINT);
-#endif
+    // Start from a snapshot if requested
+    if (string(INITIAL_SNAPSHOT) != "") {
+
+        Snapshot snapshot(INITIAL_SNAPSHOT);
+        loadSnapshot(snapshot);
+    }
+            
+    // Set initial breakpoints
+    for (auto &bp : std::vector <u32> (INITIAL_BREAKPOINTS)) {
+        
+        cpu.debugger.breakpoints.addAt(bp);
+        debugMode = true;
+    }
     
     // Update the recorded debug information
     inspect();

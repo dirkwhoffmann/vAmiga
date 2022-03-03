@@ -49,11 +49,11 @@ struct FileSystemDescriptor {
     // Initializing
     FileSystemDescriptor() { };
     FileSystemDescriptor(isize numBlocks, FSVolumeType dos);
-    FileSystemDescriptor(const Geometry &geometry, FSVolumeType dos);
+    FileSystemDescriptor(const GeometryDescriptor &geometry, FSVolumeType dos);
     FileSystemDescriptor(Diameter dia, Density den, FSVolumeType dos);
     
     void init(isize numBlocks, FSVolumeType dos);
-    void init(const Geometry &geometry, FSVolumeType dos);
+    void init(const GeometryDescriptor &geometry, FSVolumeType dos);
     void init(Diameter type, Density density, FSVolumeType dos);
         
     // Computed values

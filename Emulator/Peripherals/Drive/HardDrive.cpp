@@ -64,7 +64,7 @@ HardDrive::init()
 }
 
 void
-HardDrive::init(const Geometry &geometry)
+HardDrive::init(const GeometryDescriptor &geometry)
 {
     // Throw an exception if the geometry is not supported
     geometry.checkCompatibility();
@@ -83,13 +83,13 @@ HardDrive::init(const Geometry &geometry)
 void
 HardDrive::init(isize size)
 {
-    init(Geometry(size));
+    init(GeometryDescriptor(size));
 }
 
 void
 HardDrive::init(const MutableFileSystem &fs)
 {
-    auto geometry = Geometry(fs.numBytes());
+    auto geometry = GeometryDescriptor(fs.numBytes());
     
     // Create the drive
     init(geometry);
@@ -383,12 +383,12 @@ HardDrive::format(FSVolumeType fsType, BootBlockId bb, string name)
 void
 HardDrive::changeGeometry(isize c, isize h, isize s, isize b)
 {
-    auto geometry = Geometry(c, h, s, b);
+    auto geometry = GeometryDescriptor(c, h, s, b);
     changeGeometry(geometry);
 }
 
 void
-HardDrive::changeGeometry(const Geometry &geometry)
+HardDrive::changeGeometry(const GeometryDescriptor &geometry)
 {
     geometry.checkCompatibility();
         

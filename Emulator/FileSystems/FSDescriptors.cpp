@@ -21,7 +21,7 @@ FileSystemDescriptor::FileSystemDescriptor(Diameter dia, Density den, FSVolumeTy
     init(dia, den, dos);
 }
 
-FileSystemDescriptor::FileSystemDescriptor(const Geometry &geometry, FSVolumeType dos)
+FileSystemDescriptor::FileSystemDescriptor(const GeometryDescriptor &geometry, FSVolumeType dos)
 {
     init(geometry, dos);
 }
@@ -55,7 +55,7 @@ FileSystemDescriptor::init(isize numBlocks, FSVolumeType dos)
 }
 
 void
-FileSystemDescriptor::init(const Geometry &geometry, FSVolumeType dos)
+FileSystemDescriptor::init(const GeometryDescriptor &geometry, FSVolumeType dos)
 {
     init(geometry.numBlocks(), dos);
 }
@@ -63,7 +63,7 @@ FileSystemDescriptor::init(const Geometry &geometry, FSVolumeType dos)
 void
 FileSystemDescriptor::init(Diameter dia, Density den, FSVolumeType dos)
 {
-    init(Geometry(dia, den), dos);
+    init(GeometryDescriptor(dia, den), dos);
 }
 
 
@@ -108,7 +108,7 @@ FileSystemDescriptor::checkCompatibility() const
     }
 }
 
-Geometry::Geometry(isize c, isize h, isize s, isize b)
+GeometryDescriptor::GeometryDescriptor(isize c, isize h, isize s, isize b)
 {
     cylinders = c;
     heads = h;
@@ -116,7 +116,7 @@ Geometry::Geometry(isize c, isize h, isize s, isize b)
     bsize = b;
 }
 
-Geometry::Geometry(isize size)
+GeometryDescriptor::GeometryDescriptor(isize size)
 {
     // Create a default geometry for the provide size
     bsize = 512;
@@ -126,7 +126,7 @@ Geometry::Geometry(isize size)
     while (cylinders > 1024) { cylinders /= 2; heads *= 2; }
 }
 
-Geometry::Geometry(Diameter type, Density density)
+GeometryDescriptor::GeometryDescriptor(Diameter type, Density density)
 {
     if (type == INCH_525 && density == DENSITY_DD) {
         

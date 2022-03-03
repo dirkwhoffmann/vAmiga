@@ -18,7 +18,7 @@
 //
 
 bool
-Geometry::operator == (const Geometry &rhs) const
+GeometryDescriptor::operator == (const GeometryDescriptor &rhs) const
 {
     return
     this->cylinders == rhs.cylinders &&
@@ -28,21 +28,21 @@ Geometry::operator == (const Geometry &rhs) const
 }
 
 bool
-Geometry::operator != (const Geometry &rhs) const
+GeometryDescriptor::operator != (const GeometryDescriptor &rhs) const
 {
     return !(*this == rhs);
 }
 
 bool
-Geometry::operator < (const Geometry &rhs) const
+GeometryDescriptor::operator < (const GeometryDescriptor &rhs) const
 {
     return cylinders < rhs.cylinders;
 }
 
-std::vector<Geometry>
-Geometry::driveGeometries(isize capacity)
+std::vector<GeometryDescriptor>
+GeometryDescriptor::driveGeometries(isize capacity)
 {
-    std::vector<Geometry> result;
+    std::vector<GeometryDescriptor> result;
     
     // Typical number of sectors per track
     // https://www.win.tue.nl/~aeb/linux/hdtypes/hdtypes-4.html
@@ -55,7 +55,7 @@ Geometry::driveGeometries(isize capacity)
     };
     
     // Compute all geometries compatible with the file size
-    for (isize h = Geometry::hMin; h <= Geometry::hMax; h++) {
+    for (isize h = GeometryDescriptor::hMin; h <= GeometryDescriptor::hMax; h++) {
         for (isize i = 0; i < isizeof(sizes); i++) {
                   
             auto s = isize(sizes[i]);
@@ -65,10 +65,10 @@ Geometry::driveGeometries(isize capacity)
                 
                 auto c = capacity / cylSize;
 
-                if (c > Geometry::cMax) continue;
-                if (c < Geometry::cMin && h > 1) continue;
+                if (c > GeometryDescriptor::cMax) continue;
+                if (c < GeometryDescriptor::cMin && h > 1) continue;
                 
-                result.push_back(Geometry(c, h, s, 512));
+                result.push_back(GeometryDescriptor(c, h, s, 512));
             }
         }
     }
@@ -80,19 +80,19 @@ Geometry::driveGeometries(isize capacity)
 }
 
 bool
-Geometry::unique() const
+GeometryDescriptor::unique() const
 {
     return driveGeometries(numBytes()).size() == 1;
 }
 
 void
-Geometry::dump() const
+GeometryDescriptor::dump() const
 {
     dump(std::cout);
 }
 
 void
-Geometry::dump(std::ostream& os) const
+GeometryDescriptor::dump(std::ostream& os) const
 {
     using namespace util;
     
@@ -103,7 +103,7 @@ Geometry::dump(std::ostream& os) const
 }
 
 void
-Geometry::checkCompatibility() const
+GeometryDescriptor::checkCompatibility() const
 {
     if (numBytes() > MB(504) || FORCE_HDR_TOO_LARGE) {
         throw VAError(ERROR_HDR_TOO_LARGE);
@@ -129,7 +129,7 @@ Geometry::checkCompatibility() const
 // PartitionDescriptor
 //
 
-PartitionDescriptor::PartitionDescriptor(const Geometry &geo) // : PartitionDescriptor()
+PartitionDescriptor::PartitionDescriptor(const GeometryDescriptor &geo) // : PartitionDescriptor()
 {
     sizeBlock   = u32(geo.bsize / 4);
     heads       = u32(geo.heads);
@@ -193,7 +193,7 @@ void PartitionDescriptor::checkCompatibility() const
 // HdrvDescriptor
 //
 
-HdrvDescriptor::HdrvDescriptor(const Geometry &geo)
+HdrvDescriptor::HdrvDescriptor(const GeometryDescriptor &geo)
 {
     geometry = geo;
 }

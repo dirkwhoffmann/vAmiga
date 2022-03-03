@@ -13,8 +13,7 @@
 #include "Constants.h"
 #include "DiskTypes.h"
 
-// TODO: Rename to GeometryDescriptor
-struct Geometry {
+struct GeometryDescriptor {
   
     // Constants
     static constexpr isize cMin = HDR_C_MIN;
@@ -44,21 +43,21 @@ struct Geometry {
     }
     
     // Returns a vector with compatible geometries for a given byte count
-    static std::vector<Geometry> driveGeometries(isize capacity);
+    static std::vector<GeometryDescriptor> driveGeometries(isize capacity);
     
     // Checks whether the geometry is unique
     bool unique() const;
     
     // Initializers
-    Geometry() { };
-    Geometry(isize size);
-    Geometry(isize c, isize h, isize s, isize b);
-    Geometry(Diameter type, Density density);
+    GeometryDescriptor() { };
+    GeometryDescriptor(isize size);
+    GeometryDescriptor(isize c, isize h, isize s, isize b);
+    GeometryDescriptor(Diameter type, Density density);
 
     // Operators
-    bool operator == (const Geometry &rhs) const;
-    bool operator != (const Geometry &rhs) const;
-    bool operator < (const Geometry &rhs) const;
+    bool operator == (const GeometryDescriptor &rhs) const;
+    bool operator != (const GeometryDescriptor &rhs) const;
+    bool operator < (const GeometryDescriptor &rhs) const;
         
     // Computed values
     isize numTracks() const { return cylinders * heads; }
@@ -118,7 +117,7 @@ struct PartitionDescriptor {
     
     // Initializers
     PartitionDescriptor() { };
-    PartitionDescriptor(const Geometry &geo);
+    PartitionDescriptor(const GeometryDescriptor &geo);
         
     // Prints debug information
     void dump() const;
@@ -131,7 +130,7 @@ struct PartitionDescriptor {
 struct HdrvDescriptor {
 
     // Disk geometry
-    Geometry geometry;
+    GeometryDescriptor geometry;
     
     // Product information
     string dskVendor    = "VAMIGA";
@@ -157,7 +156,7 @@ struct HdrvDescriptor {
     
     // Initializers
     HdrvDescriptor() { };
-    HdrvDescriptor(const Geometry &geo);
+    HdrvDescriptor(const GeometryDescriptor &geo);
         
     // Prints debug information
     void dump() const;

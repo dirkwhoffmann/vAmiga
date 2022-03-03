@@ -89,10 +89,10 @@ HDFFile::numSectors() const
     return hdrv.geometry.sectors;
 }
 
-Geometry
+GeometryDescriptor
 HDFFile::getGeometryDescriptor() const
 {
-    Geometry result;
+    GeometryDescriptor result;
 
     if (auto rdb = seekRDB(); rdb) {
 
@@ -105,7 +105,7 @@ HDFFile::getGeometryDescriptor() const
     } else {
         
         // Guess the drive geometry based on the file size
-        auto geometries = Geometry::driveGeometries(size);
+        auto geometries = GeometryDescriptor::driveGeometries(size);
         if (geometries.size()) {
             result = geometries.front();
         } else {
@@ -253,7 +253,7 @@ HDFFile::getFileSystemDescriptor(isize nr) const
     return result;
 }
 
-const Geometry
+const GeometryDescriptor
 HDFFile::getGeometry() const
 {
     return hdrv.geometry;

@@ -74,7 +74,7 @@ public:
     // Providing suitable descriptors
     //
     
-    struct Geometry getGeometryDescriptor() const;
+    struct GeometryDescriptor getGeometryDescriptor() const;
     struct HdrvDescriptor getHdrvDescriptor() const;
     struct PartitionDescriptor getPartitionDescriptor(isize part = 0) const;
     std::vector<PartitionDescriptor> getPartitionDescriptors() const;
@@ -88,7 +88,7 @@ public:
 public:
     
     // Returns the (predicted) geometry for this disk
-    const Geometry getGeometry() const;
+    const GeometryDescriptor getGeometry() const;
     
     // Returns true if this image contains a rigid disk block
     bool hasRDB() const;
@@ -101,7 +101,7 @@ public:
     u8 *dataForPartition(isize nr) const;
     
     // Computes all possible drive geometries
-    std::vector<Geometry> driveGeometries(isize fileSize);
+    std::vector<GeometryDescriptor> driveGeometries(isize fileSize);
     
     
     //
