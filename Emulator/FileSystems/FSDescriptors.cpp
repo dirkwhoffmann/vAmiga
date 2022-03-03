@@ -119,11 +119,19 @@ GeometryDescriptor::GeometryDescriptor(isize c, isize h, isize s, isize b)
 GeometryDescriptor::GeometryDescriptor(isize size)
 {
     // Create a default geometry for the provide size
+
     bsize = 512;
     sectors = 32;
     heads = 1;
-    cylinders = (size / bsize) + (size % bsize) ? 1 : 0;
-    while (cylinders > 1024) { cylinders /= 2; heads *= 2; }
+    
+    auto tsize = bsize * sectors;
+    cylinders = (size / tsize) + (size % tsize ? 1 : 0);
+    
+    while (cylinders > 1024) {
+        
+        cylinders = (cylinders + 1) / 2;
+        heads = heads * 2;
+    }
 }
 
 GeometryDescriptor::GeometryDescriptor(Diameter type, Density density)

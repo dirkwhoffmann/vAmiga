@@ -11,7 +11,7 @@
 #pragma once
 
 #include "Constants.h"
-#include "DiskTypes.h"
+#include "FloppyDiskTypes.h"
 
 struct GeometryDescriptor {
   
@@ -78,7 +78,7 @@ struct GeometryDescriptor {
 struct PartitionDescriptor {
 
     string name;
-    u32 flags = 1;
+    u32 flags = 0;
     u32 sizeBlock = 128;
     u32 heads = 0;
     u32 sectors = 0;

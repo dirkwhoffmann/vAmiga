@@ -226,14 +226,13 @@ class HardDiskCreator: DialogController {
         fileSystem.selectedTag() == 1 ? .OFS : .FFS
                
         let name = nameField.stringValue
-        track("Dos = \(fs) Name = \(name)")
         
         do {
             
             track("\(nameField.stringValue)")
             
             try drive?.attach(c: cylinders, h: heads, s: sectors, b: bsize)
-            try drive?.format(fs: fs, bb: .NONE, name: name)
+            try drive?.format(fs: fs, name: name)
             hideSheet()
             
         } catch let error as VAError {

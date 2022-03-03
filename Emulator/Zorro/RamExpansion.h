@@ -70,12 +70,15 @@ private:
         
     virtual bool pluggedIn() const override;
     virtual isize pages() const override;
-    virtual u8 type() const override            { return ERT_ZORROII | ERTF_MEMLIST; }
-    virtual u8 product() const override         { return 0x67; }
-    virtual u8 flags() const override           { return 0x80; }
-    virtual u16 manufacturer() const override   { return 0x07B9; }
-    virtual u32 serialNumber() const override   { return 2718281; }
-    virtual u16 initDiagVec() const override    { return 0x0; }
-    
+    virtual u8 type() const override             { return ERT_ZORROII | ERTF_MEMLIST; }
+    virtual u8 product() const override          { return 0x67; }
+    virtual u8 flags() const override            { return 0x80; }
+    virtual u16 manufacturer() const override    { return 0x07B9; }
+    virtual u32 serialNumber() const override    { return 2718281; }
+    virtual u16 initDiagVec() const override     { return 0x0; }
+    virtual string vendorName() const override   { return "VAMIGA"; }
+    virtual string productName() const override  { return "RAM Expansion board"; }
+    virtual string revisionName() const override { return "1.0"; }
+
     void updateMemSrcTables() override;
 };

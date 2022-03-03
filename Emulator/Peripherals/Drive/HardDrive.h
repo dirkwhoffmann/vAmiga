@@ -10,8 +10,8 @@
 #pragma once
 
 #include "DriveTypes.h"
-#include "DiskTypes.h"
 #include "Drive.h"
+#include "FloppyDiskTypes.h"
 #include "HDFFile.h"
 
 class HardDrive : public Drive {
@@ -167,8 +167,12 @@ public:
     // Formatting
     //
     
+    // Returns a default disk name
+    string defaultName();
+    
     // Formats the disk
-    void format(FSVolumeType fs, BootBlockId bb, string name) throws;
+    void format(FSVolumeType fs, string name) throws;
+    void format(FSVolumeType fs) { format(fs, defaultName()); } throws;
 
     // Change the drive geometry
     void changeGeometry(isize c, isize h, isize s, isize b = 512) throws;

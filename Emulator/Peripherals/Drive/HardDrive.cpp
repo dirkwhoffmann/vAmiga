@@ -189,6 +189,18 @@ HardDrive::setConfigItem(Option option, i64 value)
             }
 
             config.connected = bool(value);
+            
+            // Attach a default disk when the drive gets connected
+            if (value) {
+                
+                init(MB(10));
+                format(FS_OFS);
+                
+            } else {
+                
+                init();
+            }
+            
             msgQueue.put(value ? MSG_HDR_CONNECT : MSG_HDR_DISCONNECT, nr);
             return;
 
@@ -346,13 +358,19 @@ HardDrive::didSaveToBuffer(u8 *buffer)
     return (isize)(writer.ptr - buffer);
 }
 
+string
+HardDrive::defaultName()
+{
+    return "DH" + std::to_string(nr);
+}
+
 void
-HardDrive::format(FSVolumeType fsType, BootBlockId bb, string name)
+HardDrive::format(FSVolumeType fsType, string name)
 {
     if constexpr (HDR_DEBUG) {
 
-        msg("Formatting with : %s\n", FSVolumeTypeEnum::key(fsType));
-        msg("     Boot block : %s\n", BootBlockIdEnum::key(bb));
+        msg("Formatting hard drive\n");
+        msg("    File system : %s\n", FSVolumeTypeEnum::key(fsType));
         msg("           Name : %s\n", name.c_str());
     }
     
@@ -369,7 +387,6 @@ HardDrive::format(FSVolumeType fsType, BootBlockId bb, string name)
 
         // Add name and bootblock
         fs.setName(name);
-        fs.makeBootable(bb);
         
         // REMOVE ASAP
         msg("File system:\n");

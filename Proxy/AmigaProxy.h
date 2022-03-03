@@ -21,11 +21,11 @@
 #import "CPUTypes.h"
 #import "CIATypes.h"
 #import "DeniseTypes.h"
-#import "DiskTypes.h"
 #import "DiskControllerTypes.h"
 #import "DmaDebuggerTypes.h"
 #import "DriveTypes.h"
 #import "ErrorTypes.h"
+#import "FloppyDiskTypes.h"
 #import "FSTypes.h"
 #import "JoystickTypes.h"
 #import "KeyboardTypes.h"
@@ -649,7 +649,7 @@
 - (NSInteger)upperCylOfPartition:(NSInteger)nr;
 - (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex;
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
-- (void)format:(FSVolumeType)fs bb:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex;
+- (void)format:(FSVolumeType)fs name:(NSString *)name exception:(ExceptionWrapper *)ex;
 - (void)changeGeometry:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
 - (NSArray *) test;
 

@@ -194,10 +194,10 @@ extension HardDriveProxy {
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 
-    func format(fs: FSVolumeType, bb: BootBlockId, name: String) throws {
+    func format(fs: FSVolumeType, name: String) throws {
         
         let exception = ExceptionWrapper()
-        format(fs, bb: bb, name: name, exception: exception)
+        format(fs, name: name, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 

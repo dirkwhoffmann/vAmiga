@@ -1383,12 +1383,12 @@ using namespace moira;
     }
 }
 
-- (void)format:(FSVolumeType)fs bb:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex
+- (void)format:(FSVolumeType)fs name:(NSString *)name exception:(ExceptionWrapper *)ex
 {
     auto str = string([name UTF8String]);
     
     try {
-        [self drive]->format(fs, bb, str);
+        [self drive]->format(fs, str);
     }  catch (VAError &error) {
         [ex save:error];
     }

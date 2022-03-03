@@ -675,7 +675,7 @@
 		50D2B85126D292B7008040E5 /* DeniseDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeniseDebugger.h; sourceTree = "<group>"; };
 		50D375DD222C7C6B0040987C /* Blitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Blitter.cpp; sourceTree = "<group>"; };
 		50D375DE222C7C6B0040987C /* Blitter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Blitter.h; sourceTree = "<group>"; };
-		50D52442227878E900F8959D /* DiskTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskTypes.h; sourceTree = "<group>"; };
+		50D52442227878E900F8959D /* FloppyDiskTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloppyDiskTypes.h; sourceTree = "<group>"; };
 		50D5244322787D3C00F8959D /* MsgQueueTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MsgQueueTypes.h; sourceTree = "<group>"; };
 		50D661862282BE1800D67D88 /* AmigaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaTypes.h; sourceTree = "<group>"; };
 		50D715A027CCA5AA0085C1AA /* PartitionSelector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PartitionSelector.xib; sourceTree = "<group>"; };
@@ -1322,7 +1322,7 @@
 				5004C3A727BD519400A9161A /* HardDriveTypes.h */,
 				5004C3A627BD516E00A9161A /* HardDrive.h */,
 				5004C3A527BD516E00A9161A /* HardDrive.cpp */,
-				50D52442227878E900F8959D /* DiskTypes.h */,
+				50D52442227878E900F8959D /* FloppyDiskTypes.h */,
 				50F6EEB721F4F5C60091155D /* FloppyDisk.h */,
 				50F6EEB621F4F5C60091155D /* FloppyDisk.cpp */,
 			);

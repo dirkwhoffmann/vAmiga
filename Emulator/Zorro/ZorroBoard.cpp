@@ -19,18 +19,22 @@ ZorroBoard::_dump(dump::Category category, std::ostream& os) const
             
     if (category & dump::Properties) {
     
-        os << tab("Device");
-        os << string(getDescription()) << std::endl;
-        os << tab("Type");
-        os << hex(type()) << std::endl;
         os << tab("Product");
-        os << hex(product())<< std::endl;
-        os << tab("Flags");
-        os << hex(flags())<< std::endl;
-        os << tab("Manufacturer");
+        os << productName() << std::endl;
+        os << tab("Vendor");
+        os << vendorName() << std::endl;
+        os << tab("Revision");
+        os << revisionName() << std::endl;
+        os << tab("Product code");
+        os << hex(product()) << std::endl;
+        os << tab("Manufacturer code");
         os << hex(manufacturer()) << std::endl;
         os << tab("Serial number");
         os << hex(serialNumber()) << std::endl;
+        os << tab("Type");
+        os << hex(type()) << std::endl;
+        os << tab("Flags");
+        os << hex(flags())<< std::endl;
     }
 
     if (category & dump::State) {

@@ -18,14 +18,14 @@ class ZorroManager : public SubComponent {
 public:
 
     // Number of emulated Zorro slots
-    static constexpr isize slotCount = 6;
+    static constexpr isize slotCount = 5;
     
     // A FastRam expansion board
     RamExpansion ramExpansion = RamExpansion(amiga);
 
 private:
     
-    ZorroBoard *slots[slotCount] = {
+    ZorroBoard *slots[slotCount + 1] = {
         
         &ramExpansion,
         &hd0con,

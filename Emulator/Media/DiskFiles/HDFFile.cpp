@@ -168,6 +168,9 @@ HDFFile::getPartitionDescriptor(isize part) const
         // Add a default partition spanning the whole disk
         auto geo = getGeometryDescriptor();
         result = PartitionDescriptor(geo);
+        
+        // Make the first partition bootable
+        result.flags |= 1;
     }
     
     return result;

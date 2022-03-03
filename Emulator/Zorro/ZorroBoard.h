@@ -52,7 +52,7 @@ public:
     // Checks whether the board is plugged in
     virtual bool pluggedIn() const = 0;
     
-    // Returns basic board properties
+    // Returns product information
     virtual isize pages() const = 0;
     virtual u8 type() const = 0;
     virtual u8 product() const = 0;
@@ -60,8 +60,11 @@ public:
     virtual u16 manufacturer() const = 0;
     virtual u32 serialNumber() const = 0;
     virtual u16 initDiagVec() const = 0;
-        
-
+    virtual string vendorName() const = 0;
+    virtual string productName() const = 0;
+    virtual string revisionName() const = 0;
+    
+    
     //
     // Configuring (AutoConfig)
     //

@@ -203,7 +203,7 @@ public:
     
 
     //
-    // Operating the drive
+    // Operating the drive motor
     //
         
 public:
@@ -222,6 +222,11 @@ public:
     bool motorAtFullSpeed() const;
     bool motorSlowingDown() const;
     bool motorStopped() const;
+
+    
+    //
+    // Accessing data
+    //
 
     // Selects the active drive head (0 = lower, 1 = upper)
     void selectSide(Side side);

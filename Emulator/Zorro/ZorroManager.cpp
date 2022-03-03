@@ -32,7 +32,7 @@ ZorroManager::_dump(dump::Category category, std::ostream& os) const
             os << tab("Slot " + std::to_string(i));
             
             if (auto board = getBoard(i); board != nullptr) {
-                os << string(slots[i]->getDescription()) << std::endl;
+                os << slots[i]->productName() << std::endl;
             } else {
                 os << "Empty"<< std::endl;
             }
