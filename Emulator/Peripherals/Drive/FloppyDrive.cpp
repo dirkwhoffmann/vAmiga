@@ -18,7 +18,25 @@
 
 FloppyDrive::FloppyDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 {
-
+    string path;
+    
+    if (nr == 0) path = INITIAL_DF0;
+    if (nr == 1) path = INITIAL_DF1;
+    if (nr == 2) path = INITIAL_DF2;
+    if (nr == 3) path = INITIAL_DF3;
+    
+    if (path != "") {
+        
+        try {
+            
+            auto adf = ADFFile(path);
+            disk = std::make_unique<FloppyDisk>(adf);
+            
+        } catch (...) {
+            
+            warn("Cannot open ADF file %s\n", path.c_str());
+        }
+    }
 }
 
 const char *

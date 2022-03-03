@@ -63,9 +63,6 @@ struct FloatStereo; typedef FloatStereo SampleType;
 // Uncomment to launch the emulator with a pre-saved snapshot
 // #define INITIAL_SNAPSHOT "/tmp/snap.vamiga"
 
-// Uncomment to lauch the emulator with a disk in df0
-// #define DF0_DISK "/Users/hoff/Desktop/Testing/DCD-BBS.adf"
-
 // Uncomment to set a breakpoint on startup
 // #define INITIAL_BREAKPOINT 0xFC1354
 
@@ -78,11 +75,15 @@ struct FloatStereo; typedef FloatStereo SampleType;
 // Launch settings
 //
 
+// Add pathes to ADF files to launch the emulator with preset floppy disks
+#define INITIAL_DF0 ""
+#define INITIAL_DF1 ""
+#define INITIAL_DF2 ""
+#define INITIAL_DF3 ""
+
 // Add pathes to HDF files to launch the emulator with preset hard drives
-#define INITIAL_DH0 "/tmp/rdb2.hdf"
-// #define INITIAL_DH0 "/tmp/rdbtest.hdf"
-// #define INITIAL_DH0 "/tmp/kyrios.hdf"
-#define INITIAL_DH1 "" // /tmp/vamiga.hdf"
+#define INITIAL_DH0 "" // /tmp/rdb2.hdf"
+#define INITIAL_DH1 ""
 #define INITIAL_DH2 ""
 #define INITIAL_DH3 ""
 

@@ -15,32 +15,22 @@
 #include "Memory.h"
 #include "MsgQueue.h"
 
-HardDrive::HardDrive(Amiga& ref, isize nr)
-: Drive(ref, nr)
+HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 {
     string path;
     
-    switch (nr) {
-    
-        case 0: path = INITIAL_DH0; break;
-        case 1: path = INITIAL_DH1; break;
-        case 2: path = INITIAL_DH2; break;
-        case 3: path = INITIAL_DH3; break;
-
-        default:
-            fatalError;
-    }
+    if (nr == 0) path = INITIAL_DH0;
+    if (nr == 1) path = INITIAL_DH1;
+    if (nr == 2) path = INITIAL_DH2;
+    if (nr == 3) path = INITIAL_DH3;
     
     if (path != "") {
             
-        // Preload the specified HDF file
         try {
             
             auto hdf = HDFFile(path);
             init(hdf);
-            
-            msg("HDF file %s loaded successfully\n", path.c_str());
-            
+                        
         } catch (...) {
             
             warn("Cannot open HDF file %s\n", path.c_str());
@@ -49,6 +39,7 @@ HardDrive::HardDrive(Amiga& ref, isize nr)
     } else {
 
         // Atach a default disk
+        // TODO: DON'T INITIALZE UNUSED DRIVES
         init(MB(10));
     }
 }
