@@ -17,13 +17,12 @@ class FloppyDisk;
 
 class HDFFile : public DiskFile {
     
-    // Derived descriptors
+    // Derived hard drive descriptor
     HdrvDescriptor hdrv;
+
+    // Derived partition table
     std::vector<PartitionDescriptor> ptable;
-    
-    // Collected device information (DEPRECATED)
-    HardDriveSpec driveSpec;
-            
+                
 public:
     
     static bool isCompatible(const string &path);
@@ -90,7 +89,6 @@ public:
     
     // Returns the (predicted) geometry for this disk
     const Geometry getGeometry() const;
-    const HardDriveSpec getDriveSpec() const { return driveSpec; }
     
     // Returns true if this image contains a rigid disk block
     bool hasRDB() const;
@@ -105,12 +103,6 @@ public:
     // Computes all possible drive geometries
     std::vector<Geometry> driveGeometries(isize fileSize);
     
-private:
-
-    // Determines the drive geometry
-    void deriveGeomentry();
-    void predictGeometry();
-    
     
     //
     // Scanning raw disk data
@@ -118,11 +110,6 @@ private:
 
 private:
     
-    // Collects drive information
-    void scanDisk();
-    void scanPartitions();
-    void addDefaultPartition();
-
     // Returns a pointer to a certain block if it exists
     u8 *seekBlock(isize nr) const;
     
@@ -141,6 +128,4 @@ private:
     
     // Extracts the DOS revision number from a certain block
     FSVolumeType dos(isize blockNr) const;
-    
-    
 };

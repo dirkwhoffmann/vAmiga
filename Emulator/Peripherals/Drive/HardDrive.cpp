@@ -128,9 +128,8 @@ HardDrive::init(const HDFFile &hdf)
     ptable = hdf.getPartitionDescriptors();
     
     // Copy the drive spec
-    driveSpec = hdf.getDriveSpec();
     driveSpec.hdrv.geometry = hdf.getGeometry();
-    // driveSpec.partitions = hdf.getPartitionDescriptors();
+    driveSpec.partitions = hdf.getPartitionDescriptors();
     
     // Copy over all blocks
     hdf.flash(data);

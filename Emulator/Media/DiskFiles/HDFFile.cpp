@@ -32,9 +32,6 @@ HDFFile::finalizeRead()
 {
     hdrv = getHdrvDescriptor();
     ptable = getPartitionDescriptors();
-    
-    deriveGeomentry(); // DEPRECATED
-    scanDisk(); // DEPRECATED
 }
 
 void
@@ -71,7 +68,7 @@ HDFFile::init(const HardDrive &drive)
     }
     
     // Overwrite the predicted geometry from the precise one
-    driveSpec.hdrv.geometry = drive.getGeometry();
+    hdrv.geometry = drive.getGeometry();
 }
 
 isize
@@ -199,7 +196,8 @@ HDFFile::getFileSystemDescriptor(isize nr) const
 {
     FileSystemDescriptor result;
         
-    auto &part = driveSpec.partitions[nr];
+    // auto &part = driveSpec.partitions[nr];
+    auto &part = ptable[nr];
     
     auto c = part.highCyl - part.lowCyl + 1;
     auto h = part.heads;
@@ -259,7 +257,8 @@ HDFFile::getFileSystemDescriptor(isize nr) const
 const Geometry
 HDFFile::getGeometry() const
 {
-    return driveSpec.hdrv.geometry;
+    // return driveSpec.hdrv.geometry;
+    return hdrv.geometry;
 }
 
 bool
@@ -285,138 +284,6 @@ HDFFile::dataForPartition(isize nr) const
 {
     auto &part = ptable[nr];
     return data + part.lowCyl * part.heads * part.sectors * 512;
-}
-
-void
-HDFFile::deriveGeomentry()
-{
-    if (hasRDB()) {
-        
-        msg("RDB detected\n");
-        predictGeometry();
-        // TODO: GET GEOMETRY FROM THE RDB
-        
-    } else {
-            
-        msg("No RDB found. Geometry can only be predicted.\n");
-        predictGeometry();
-    }
-}
-
-void
-HDFFile::predictGeometry()
-{
-    debug(true, "predictGeometry()\n");
-    
-    // Get all possible geometries
-    auto geometries = Geometry::driveGeometries(size);
-    
-    // REMOVE ASAP
-    for (const auto &g : geometries) {
-        debug(true, "c: %ld h: %ld s: %ld\n", g.cylinders, g.heads, g.sectors);
-    }
-
-    // Use the first entry as the drive's geometry
-    if (geometries.size()) {
-        
-        driveSpec.hdrv.geometry = geometries.front();
-    }
-}
-
-void
-HDFFile::scanDisk()
-{
-    auto rdb = seekRDB();
-        
-    if (rdb) {
-
-        // Read the information from the rigid disk block
-        
-        driveSpec.hdrv.geometry.cylinders    = R32BE_ALIGNED(rdb + 64);
-        driveSpec.hdrv.geometry.sectors      = R32BE_ALIGNED(rdb + 68);
-        driveSpec.hdrv.geometry.heads        = R32BE_ALIGNED(rdb + 72);
-        driveSpec.hdrv.geometry.bsize        = R32BE_ALIGNED(rdb + 16);
-
-        driveSpec.hdrv.dskVendor            = util::createStr(rdb + 160, 8);
-        driveSpec.hdrv.dskProduct           = util::createStr(rdb + 168, 16);
-        driveSpec.hdrv.dskRevision          = util::createStr(rdb + 184, 4);
-        driveSpec.hdrv.conVendor            = util::createStr(rdb + 188, 8);
-        driveSpec.hdrv.conProduct           = util::createStr(rdb + 196, 16);
-        driveSpec.hdrv.conRevision          = util::createStr(rdb + 212, 4);
-        
-        scanPartitions();
-    
-    } else {
-        
-        // Predict the drive geometry by analyzing the file size
-        predictGeometry();
-        
-        // Fill in default values
-        driveSpec.hdrv.dskVendor = "VAMIGA";
-        driveSpec.hdrv.dskProduct = "HARD DRIVE";
-        driveSpec.hdrv.dskRevision = "R1.0";
-        driveSpec.hdrv.conVendor = "VAMIGA";
-        driveSpec.hdrv.conProduct = "HDR CONTROLLER";
-        driveSpec.hdrv.conRevision = "R1.0";
-        
-        addDefaultPartition();
-    }
-}
-
-void
-HDFFile::scanPartitions()
-{
-    for (isize i = 0; i < 16; i++) {
-
-        if (auto part = seekPB(i); part) {
-        
-            PartitionDescriptor partSpec;
-            
-            partSpec.name           = util::createStr(part + 37, 31);
-            partSpec.flags          = R32BE_ALIGNED(part + 20);
-            partSpec.sizeBlock      = R32BE_ALIGNED(part + 132);
-            partSpec.heads          = R32BE_ALIGNED(part + 140);
-            partSpec.sectors        = R32BE_ALIGNED(part + 148);
-            partSpec.reserved       = R32BE_ALIGNED(part + 152);
-            partSpec.interleave     = R32BE_ALIGNED(part + 160);
-            partSpec.lowCyl         = R32BE_ALIGNED(part + 164);
-            partSpec.highCyl        = R32BE_ALIGNED(part + 168);
-            partSpec.numBuffers     = R32BE_ALIGNED(part + 172);
-            partSpec.bufMemType     = R32BE_ALIGNED(part + 176);
-            partSpec.maxTransfer    = R32BE_ALIGNED(part + 180);
-            partSpec.mask           = R32BE_ALIGNED(part + 184);
-            partSpec.bootPri        = R32BE_ALIGNED(part + 188);
-            partSpec.dosType        = R32BE_ALIGNED(part + 192);
-
-            driveSpec.partitions.push_back(partSpec);
-        }
-    }
-}
-
-void
-HDFFile::addDefaultPartition()
-{
-    PartitionDescriptor partSpec;
-    
-    auto &geometry = getGeometry();
-    
-    partSpec.name           = "Default";
-    partSpec.flags          = 1;
-    partSpec.sizeBlock      = u32(geometry.bsize / 4);
-    partSpec.heads          = u32(geometry.heads);
-    partSpec.sectors        = u32(geometry.sectors);
-    partSpec.reserved       = 2;
-    partSpec.interleave     = 0;
-    partSpec.lowCyl         = 0;
-    partSpec.highCyl        = u32(geometry.cylinders - 1);
-    partSpec.numBuffers     = 1;
-    partSpec.bufMemType     = 0;
-    partSpec.maxTransfer    = 0x7FFFFFFF;
-    partSpec.mask           = 0xFFFFFFFE;
-    partSpec.bootPri        = 0;
-    partSpec.dosType        = 0x444f5300; // DOS0
-
-    driveSpec.partitions.push_back(partSpec);
 }
 
 u8 *
