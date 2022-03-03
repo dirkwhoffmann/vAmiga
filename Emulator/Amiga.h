@@ -94,10 +94,11 @@ public:
     // Other Peripherals
     Keyboard keyboard = Keyboard(*this);
     
-    // Shortcuts to all drives
+    // Shortcuts
     FloppyDrive *df[4] = { &df0, &df1, &df2, &df3 };
     HardDrive *dh[4] = { &dh0, &dh1, &dh2, &dh3 };
-    
+    HdrController *hdcon[4] = { &hdrController0, &hdrController1, &hdrController2, &hdrController3 };
+
     // Gateway to the GUI
     MsgQueue msgQueue = MsgQueue(*this);
 

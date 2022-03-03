@@ -1361,7 +1361,7 @@ using namespace moira;
 - (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex
 {
     try {
-        [self drive]->attach(*(HDFFile *)hdf->obj);
+        [self drive]->init(*(HDFFile *)hdf->obj);
     }  catch (VAError &error) {
         [ex save:error];
     }

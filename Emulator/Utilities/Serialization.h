@@ -52,7 +52,14 @@ inline double readDouble(const u8 *& buf)
     for (isize i = 0; i < 8; i++) ((u8 *)&result)[i] = read8(buf);
     return result;
 }
- 
+
+inline string readString(const u8 *& buf)
+{
+    string result = string((const char *)buf);
+    buf += result.length() + 1;
+    return result;
+}
+
 inline void write8(u8 *& buf, u8 value)
 {
     W8BE(buf, value);
@@ -82,6 +89,12 @@ inline void writeDouble(u8 *& buf, double value)
     for (isize i = 0; i < 8; i++) write8(buf, ((u8 *)&value)[i]);
 }
 
+inline void writeString(u8 *& buf, string value)
+{
+    auto len = value.length() + 1;
+    value.copy((char *)buf, len);
+    buf += len;
+}
 
 //
 // Counter (determines the state size)
@@ -122,6 +135,12 @@ public:
     COUNTD(const float)
     COUNTD(const double)
        
+    auto& operator<<(string &v)
+    {
+        count += v.length() + 1;
+        return *this;
+    }
+    
     template <class T, isize N>
     SerCounter& operator<<(T (&v)[N])
     {
@@ -183,6 +202,14 @@ public:
     CHECK(const float)
     CHECK(const double)
        
+    auto& operator<<(string &v)
+    {
+        for (usize i = 0; i < v.length(); i++) {
+            hash += util::fnv_1a_it64(hash, v[i]);
+        }
+        return *this;
+    }
+    
     template <class T, isize N>
     SerChecker& operator<<(T (&v)[N])
     {
@@ -250,7 +277,8 @@ public:
     DESERIALIZE64(unsigned long long)
     DESERIALIZED(float)
     DESERIALIZED(double)
-        
+    DESERIALIZE(string,readString)
+    
     template <class T, isize N>
     SerReader& operator<<(T (&v)[N])
     {
@@ -324,7 +352,13 @@ public:
     SERIALIZE64(const unsigned long long)
     SERIALIZED(const float)
     SERIALIZED(const double)
-        
+
+    auto& operator<<(const string &v)
+    {
+        writeString(ptr, v);
+        return *this;
+    }
+    
     template <class T, isize N>
     SerWriter& operator<<(T (&v)[N])
     {
@@ -393,6 +427,12 @@ public:
     RESET(float)
     RESET(double)
 
+    auto& operator<<(string &v)
+    {
+        v = "";
+        return *this;
+    }
+    
     template <class T, isize N>
     SerResetter& operator<<(T (&v)[N])
     {

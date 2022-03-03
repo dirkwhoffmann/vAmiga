@@ -25,7 +25,7 @@ class HardDrive : public Drive {
     // Result of the latest inspection
     mutable HardDriveInfo info = {};
 
-    // Hard drive spec
+    // Hard drive spec (DEPRECATED)
     HardDriveSpec driveSpec = {};
         
     // Disk data
@@ -49,15 +49,18 @@ public:
 
     void dealloc();
 
-    // Creates a hard drive with a certain capacity in bytes
-    void init(isize size);
-    
     // Creates a hard drive with a certain geometry
     void init(const Geometry &geometry);
-    
-    // Creates or deletes the data storage
-    // [[deprecated]] void alloc(const Geometry &geometry);
-    
+
+    // Creates a hard drive with a certain capacity in bytes
+    void init(isize size);
+
+    // Creates a hard drive with the contents of a file system
+    void init(const MutableFileSystem &fs) throws;
+
+    // Creates a hard drive with the contents of an HDF
+    void init(const HDFFile &hdf) throws;
+
     
     //
     // Methods from AmigaObject
@@ -151,28 +154,7 @@ public:
     bool isModified() const { return modified; }
     void setModified(bool value) { modified = value; }
         
-    
-    //
-    // Attaching
-    //
 
-public:
-
-    // RENAME TO init()
-    
-    // Creates an empty hard drive with a certain capacity
-    void attach(isize bytes) throws;
-
-    // Creates an empty hard drive with a certain geometry
-    // void attach(const DiskGeometry &geometry) throws;
-
-    // Creates a disk with the contents of a file system
-    void attach(const MutableFileSystem &fs) throws;
-
-    // Creates a disk with the contents of an HDF
-    void attach(const HDFFile &hdf) throws;
-
-    
     //
     // Formatting
     //

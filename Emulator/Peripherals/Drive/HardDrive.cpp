@@ -9,12 +9,14 @@
 
 #include "config.h"
 #include "HardDrive.h"
+#include "Amiga.h"
 #include "HdrControllerTypes.h"
 #include "IOUtils.h"
 #include "Memory.h"
 #include "MsgQueue.h"
 
-HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
+HardDrive::HardDrive(Amiga& ref, isize nr)
+: Drive(ref, nr)
 {
     string path;
     
@@ -35,7 +37,7 @@ HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
         try {
             
             auto hdf = HDFFile(path);
-            attach(hdf);
+            init(hdf);
             
             msg("HDF file %s loaded successfully\n", path.c_str());
             
@@ -47,7 +49,7 @@ HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
     } else {
 
         // Atach a default disk
-        attach(MB(10));
+        init(MB(10));
     }
 }
 
@@ -56,36 +58,15 @@ HardDrive::~HardDrive()
     dealloc();
 }
 
-/*
-void
-HardDrive::alloc(const Geometry &geometry)
-{
-    // Save disk geometry
-    this->driveSpec.geometry = geometry;
-    
-    // Delete previously allocated memory (if any)
-    if (data) delete [] data;
-
-    // Allocate memory
-    data = new u8[geometry.numBytes()];
-}
-*/
-
 void
 HardDrive::dealloc()
 {
-    // Wipe out disk data
     if (data) delete [] data;
+
+    driveSpec = HardDriveSpec();
     data = nullptr;
-
-    // Wipe out geometry information
-    driveSpec.geometry = Geometry();
-}
-
-void
-HardDrive::init(isize size)
-{
-    init(Geometry(size));
+    head = {};
+    modified = false;
 }
 
 void
@@ -97,16 +78,61 @@ HardDrive::init(const Geometry &geometry)
     // Wipe out the old drive
     dealloc();
     
+    // Set product descriptions
+    driveSpec.controllerVendor = "VAMIGA";
+    driveSpec.controllerProduct = "HRDDRVCON";
+    driveSpec.controllerRevision = "1.0";
+    driveSpec.diskVendor = "VAMIGA";
+    driveSpec.diskProduct = "HRDDRV";
+    driveSpec.diskRevision = "1.0";
+
     // Save the geometry and create the new drive
     this->driveSpec.geometry = geometry;
     data = new u8[geometry.numBytes()];
+}
+
+void
+HardDrive::init(isize size)
+{
+    init(Geometry(size));
+}
+
+void
+HardDrive::init(const MutableFileSystem &fs)
+{
+    auto geometry = Geometry(fs.numBytes());
+    
+    // Create the drive
+    init(geometry);
+    
+    // Copy over all blocks
+    fs.exportVolume(data, geometry.numBytes());
+}
+
+void
+HardDrive::init(const HDFFile &hdf)
+{
+    auto geometry = hdf.getGeometry();
+  
+    // Create the drive
+    init(geometry);
+
+    // Copy the drive spec
+    driveSpec = hdf.getDriveSpec();
+        
+    // Copy over all blocks
+    hdf.flash(data);
+    
+    // REMOVE ASAP
+    dump(dump::Drive);
+    dump(dump::Partitions);
 }
 
 const char *
 HardDrive::getDescription() const
 {
     assert(usize(nr) < 4);
-    return nr == 0 ? "Dh0" : nr == 1 ? "Dh1" : nr == 2 ? "Dh2" : "Dh3";
+    return nr == 0 ? "Hd0" : nr == 1 ? "Hd1" : nr == 2 ? "Hd2" : "Hd3";
 }
 
 void
@@ -409,50 +435,6 @@ HardDrive::changeGeometry(const Geometry &geometry)
         
         throw VAError(ERROR_HDR_UNMATCHED_GEOMETRY);
     }
-}
-
-void
-HardDrive::attach(isize bytes)
-{
-    Geometry geometry;
-    
-    geometry.cylinders = (bytes + KB(16) - 1) / KB(16);
-    geometry.sectors = 32;
-    geometry.heads = 1;
-    
-    // Create the drive
-    init(geometry);
-}
-
-void
-HardDrive::attach(const MutableFileSystem &fs)
-{
-    auto geometry = Geometry(fs.numBytes());
-    
-    // Create the drive
-    init(geometry);
-    
-    // Copy all blocks over
-    fs.exportVolume(data, geometry.numBytes());
-}
-
-void
-HardDrive::attach(const HDFFile &hdf)
-{
-    auto geometry = hdf.getGeometry();
-  
-    // Create the drive
-    init(geometry);
-
-    // Copy the drive spec
-    driveSpec = hdf.getDriveSpec();
-        
-    // Copy all blocks over
-    hdf.flash(data);
-    
-    // REMOVE ASAP
-    dump(dump::Drive);
-    dump(dump::Partitions);
 }
 
 i8

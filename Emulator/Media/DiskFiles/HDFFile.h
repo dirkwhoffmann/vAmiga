@@ -68,6 +68,17 @@ public:
     
     
     //
+    // Providing suitable descriptors
+    //
+    
+    struct Geometry getGeometryDescriptor() const;
+    struct HdrvDescriptor getHdrvDescriptor() const;
+    struct PartitionDescriptor getPartitionDescriptor(isize part = 0) const;
+    std::vector<PartitionDescriptor> getPartitionDescriptors() const;
+    struct FileSystemDescriptor getFileSystemDescriptor(isize part = 0) const;
+
+        
+    //
     // Querying volume information
     //
 
@@ -82,15 +93,9 @@ public:
     
     // Returns the layout parameters of the hard drive
     isize numPartitions() const;
-    // isize numCyls() const;
-    // isize numSides() const;
-    // isize numSectors() const;
     isize numReserved() const;
-    // isize numBlocks() const;
-    // isize bsize() const;
 
     // Returns a file system descriptor for this volume
-    struct FileSystemDescriptor getFileSystemDescriptor(isize part) const;
     u8 *dataForPartition(isize nr) const;
     
     // Computes all possible drive geometries

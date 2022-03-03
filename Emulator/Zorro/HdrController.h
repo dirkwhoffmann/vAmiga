@@ -84,6 +84,8 @@ private:
     // Methods from ZorroBoard
     //
     
+private:
+    
     virtual bool pluggedIn() const override;
     virtual isize pages() const override        { return 1; }
     virtual u8 type() const override            { return ERT_ZORROII | ERTF_DIAGVALID; }
@@ -95,7 +97,7 @@ private:
         
     void updateMemSrcTables() override;
     
-    
+
     //
     // Accessing the board
     //

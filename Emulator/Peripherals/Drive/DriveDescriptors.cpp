@@ -13,6 +13,10 @@
 #include "IOUtils.h"
 #include <vector>
 
+//
+// GeometryDescriptor
+//
+
 bool
 Geometry::operator == (const Geometry &rhs) const
 {
@@ -121,3 +125,108 @@ Geometry::checkCompatibility() const
     }
 }
 
+//
+// PartitionDescriptor
+//
+
+PartitionDescriptor::PartitionDescriptor(const Geometry &geo) // : PartitionDescriptor()
+{
+    sizeBlock   = u32(geo.bsize / 4);
+    heads       = u32(geo.heads);
+    sectors     = u32(geo.sectors);
+    lowCyl      = 0;
+    highCyl     = u32(geo.upperCyl());
+}
+
+void
+PartitionDescriptor::dump() const
+{
+    dump(std::cout);
+}
+
+void
+PartitionDescriptor::dump(std::ostream& os) const
+{
+    using namespace util;
+    
+    os << tab("Name");
+    os << name << std::endl;
+    os << tab("Flags");
+    os << dec(flags) << std::endl;
+    os << tab("SizeBlock");
+    os << dec(sizeBlock) << std::endl;
+    os << tab("Heads");
+    os << dec(heads) << std::endl;
+    os << tab("Sectors");
+    os << dec(sectors) << std::endl;
+    os << tab("Reserved");
+    os << dec(reserved) << std::endl;
+    os << tab("Interleave");
+    os << dec(interleave) << std::endl;
+    os << tab("LowCyl");
+    os << dec(lowCyl) << std::endl;
+    os << tab("HighCyl");
+    os << dec(highCyl) << std::endl;
+    os << tab("NumBuffers");
+    os << dec(numBuffers) << std::endl;
+    os << tab("BufMemType");
+    os << dec(bufMemType) << std::endl;
+    os << tab("MaxTransfer");
+    os << dec(maxTransfer) << std::endl;
+    os << tab("Mask");
+    os << dec(mask) << std::endl;
+    os << tab("BootPrio");
+    os << dec(bootPri) << std::endl;
+    os << tab("DosType");
+    os << dec(dosType) << std::endl;
+}
+
+void PartitionDescriptor::checkCompatibility() const
+{
+    if (4 * sizeBlock != 512 || FORCE_HDR_INVALID_BSIZE) {
+        throw VAError(ERROR_HDR_INVALID_BSIZE);
+    }
+}
+
+
+//
+// HdrvDescriptor
+//
+
+HdrvDescriptor::HdrvDescriptor(const Geometry &geo)
+{
+    dump(std::cout);
+}
+
+void
+HdrvDescriptor::dump() const
+{
+    
+}
+
+void
+HdrvDescriptor::dump(std::ostream& os) const
+{
+    using namespace util;
+    
+    geometry.dump(os);
+    
+    os << tab("Disk vendor");
+    os << dskVendor << std::endl;
+    os << tab("Disk Product");
+    os << dskProduct << std::endl;
+    os << tab("Disk Revision");
+    os << dskRevision << std::endl;
+    os << tab("Controller vendor");
+    os << conVendor << std::endl;
+    os << tab("Controller Product");
+    os << conProduct << std::endl;
+    os << tab("Controller Revision");
+    os << conRevision << std::endl;
+}
+
+void
+HdrvDescriptor::checkCompatibility() const
+{
+    geometry.checkCompatibility();
+}

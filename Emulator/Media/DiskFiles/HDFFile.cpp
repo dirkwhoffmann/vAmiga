@@ -91,53 +91,107 @@ HDFFile::numSectors() const
     return driveSpec.geometry.sectors;
 }
 
-const Geometry
-HDFFile::getGeometry() const
+Geometry
+HDFFile::getGeometryDescriptor() const
 {
-    return driveSpec.geometry;
-}
+    Geometry result;
 
-bool
-HDFFile::hasRDB() const
-{
-    // The rigid disk block must be among the first 16 blocks
-    if (size >= 16 * 512) {
-        for (isize i = 0; i < 16; i++) {
-            if (strcmp((const char *)data + i * 512, "RDSK") == 0) return true;
+    if (auto rdb = seekRDB(); rdb) {
+
+        // Read the information from the rigid disk block
+        result.cylinders    = R32BE_ALIGNED(rdb + 64);
+        result.sectors      = R32BE_ALIGNED(rdb + 68);
+        result.heads        = R32BE_ALIGNED(rdb + 72);
+        result.bsize        = R32BE_ALIGNED(rdb + 16);
+
+    } else {
+        
+        // Guess the drive geometry based on the file size
+        auto geometries = Geometry::driveGeometries(size);
+        if (geometries.size()) {
+            result = geometries.front();
+        } else {
+            // TODO: Throw exception
         }
     }
-    return false;
+        
+    return result;
 }
 
-isize
-HDFFile::numPartitions() const
+HdrvDescriptor
+HDFFile::getHdrvDescriptor() const
 {
-    return isize(driveSpec.partitions.size());
+    HdrvDescriptor result;
+            
+    if (auto rdb = seekRDB(); rdb) {
+
+        // Read the information from the rigid disk block
+        result.dskVendor    = util::createStr(rdb + 160, 8);
+        result.dskProduct   = util::createStr(rdb + 168, 16);
+        result.dskRevision  = util::createStr(rdb + 184, 4);
+        result.conVendor    = util::createStr(rdb + 188, 8);
+        result.conProduct   = util::createStr(rdb + 196, 16);
+        result.conRevision  = util::createStr(rdb + 212, 4);
+    }
+    
+    result.geometry = getGeometryDescriptor();
+    
+    return result;
 }
 
+PartitionDescriptor
+HDFFile::getPartitionDescriptor(isize part) const
+{
+    PartitionDescriptor result;
+    
+    if (auto pb = seekPB(part); pb) {
+        
+        // Read the information from the partition block
+        result.name           = util::createStr(pb + 37, 31);
+        result.flags          = R32BE_ALIGNED(pb + 20);
+        result.sizeBlock      = R32BE_ALIGNED(pb + 132);
+        result.heads          = R32BE_ALIGNED(pb + 140);
+        result.sectors        = R32BE_ALIGNED(pb + 148);
+        result.reserved       = R32BE_ALIGNED(pb + 152);
+        result.interleave     = R32BE_ALIGNED(pb + 160);
+        result.lowCyl         = R32BE_ALIGNED(pb + 164);
+        result.highCyl        = R32BE_ALIGNED(pb + 168);
+        result.numBuffers     = R32BE_ALIGNED(pb + 172);
+        result.bufMemType     = R32BE_ALIGNED(pb + 176);
+        result.maxTransfer    = R32BE_ALIGNED(pb + 180);
+        result.mask           = R32BE_ALIGNED(pb + 184);
+        result.bootPri        = R32BE_ALIGNED(pb + 188);
+        result.dosType        = R32BE_ALIGNED(pb + 192);
+        
+    } else {
+        
+        assert(part == 0);
+        
+        // Add a default partition spanning the whole disk
+        auto geo = getGeometryDescriptor();
+        result = PartitionDescriptor(geo);
+    }
+    
+    return result;
+}
 
-/*
-isize
-HDFFile::numReserved() const
+std::vector<PartitionDescriptor>
+HDFFile::getPartitionDescriptors() const
 {
-    return 2;
+    std::vector<PartitionDescriptor> result;
+    
+    // Add the first partition (which always exists)
+    result.push_back(getPartitionDescriptor(0));
+    
+    // Add other partitions (if any)
+    for (isize i = 1; i < 16; i++) {
+        if (auto pb = seekPB(i); pb) {
+            result.push_back(getPartitionDescriptor(i));
+        }
+    }
+    
+    return result;
 }
-*/
-
-/*
-isize
-HDFFile::numBlocks() const
-{
-    return size / bsize();
-}
-*/
-/*
-isize
-HDFFile::bsize() const
-{
-    return driveSpec.geometry.bsize;
-}
-*/
 
 FileSystemDescriptor
 HDFFile::getFileSystemDescriptor(isize nr) const
@@ -199,6 +253,30 @@ HDFFile::getFileSystemDescriptor(isize nr) const
     }
     
     return result;
+}
+
+const Geometry
+HDFFile::getGeometry() const
+{
+    return driveSpec.geometry;
+}
+
+bool
+HDFFile::hasRDB() const
+{
+    // The rigid disk block must be among the first 16 blocks
+    if (size >= 16 * 512) {
+        for (isize i = 0; i < 16; i++) {
+            if (strcmp((const char *)data + i * 512, "RDSK") == 0) return true;
+        }
+    }
+    return false;
+}
+
+isize
+HDFFile::numPartitions() const
+{
+    return isize(driveSpec.partitions.size());
 }
 
 u8 *

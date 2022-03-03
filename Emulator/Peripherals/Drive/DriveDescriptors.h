@@ -13,6 +13,7 @@
 #include "Constants.h"
 #include "DiskTypes.h"
 
+// TODO: Rename to GeometryDescriptor
 struct Geometry {
   
     // Constants
@@ -48,6 +49,7 @@ struct Geometry {
     // Checks whether the geometry is unique
     bool unique() const;
     
+    // Initializers
     Geometry() { };
     Geometry(isize size);
     Geometry(isize c, isize h, isize s, isize b);
@@ -70,6 +72,98 @@ struct Geometry {
     void dump() const;
     void dump(std::ostream& os) const;
 
-    // Throws an exception if the geometry contains unsupported values
+    // Throws an exception if inconsistent or unsupported values are present
     void checkCompatibility() const;
 };
+
+struct PartitionDescriptor {
+
+    string name;
+    u32 flags = 1;
+    u32 sizeBlock = 128;
+    u32 heads = 0;
+    u32 sectors = 0;
+    u32 reserved = 2;
+    u32 interleave = 0;
+    u32 lowCyl = 0;
+    u32 highCyl = 0;
+    u32 numBuffers = 1;
+    u32 bufMemType = 0;
+    u32 maxTransfer = 0x7FFFFFFF;
+    u32 mask = 0xFFFFFFFE;
+    u32 bootPri = 0;
+    u32 dosType = 0x444f5300;
+    
+    template <class W>
+    void operator<<(W& worker)
+    {
+        worker
+        
+        << name
+        << flags
+        << sizeBlock
+        << heads
+        << sectors
+        << reserved
+        << interleave
+        << lowCyl
+        << highCyl
+        << numBuffers
+        << bufMemType
+        << maxTransfer
+        << mask
+        << bootPri
+        << dosType;
+    }
+    
+    // Initializers
+    PartitionDescriptor() { };
+    PartitionDescriptor(const Geometry &geo);
+        
+    // Prints debug information
+    void dump() const;
+    void dump(std::ostream& os) const;
+
+    // Throws an exception if inconsistent or unsupported values are present
+    void checkCompatibility() const;
+};
+
+struct HdrvDescriptor {
+
+    // Disk geometry
+    Geometry geometry;
+    
+    // Product information
+    string dskVendor    = "VAMIGA";
+    string dskProduct   = "HDRV";
+    string dskRevision  = "1.0";
+    string conVendor    = "VAMIGA";
+    string conProduct   = "HDRVCON";
+    string conRevision  = "1.0";
+    
+    template <class W>
+    void operator<<(W& worker)
+    {
+        worker
+        
+        >> geometry
+        << dskVendor
+        << dskProduct
+        << dskRevision
+        << conVendor
+        << conProduct
+        << conRevision;
+    }
+    
+    // Initializers
+    HdrvDescriptor() { };
+    HdrvDescriptor(const Geometry &geo);
+        
+    // Prints debug information
+    void dump() const;
+    void dump(std::ostream& os) const;
+
+    // Throws an exception if inconsistent or unsupported values are present
+    void checkCompatibility() const;
+};
+

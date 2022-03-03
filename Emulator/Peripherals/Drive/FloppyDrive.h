@@ -20,9 +20,6 @@ class FloppyDrive : public Drive {
     
     friend class DiskController;
         
-    // Number of the emulated drive (0 = df0, 1 = df1, etc.)
-    // const isize nr;
-
     // Current configuration
     FloppyDriveConfig config = {};
 
