@@ -63,6 +63,9 @@ HardDrive::dealloc()
 {
     if (data) delete [] data;
 
+    desc = HdrvDescriptor();
+    ptable.clear();
+    
     driveSpec = HardDriveSpec();
     data = nullptr;
     head = {};
@@ -77,6 +80,10 @@ HardDrive::init(const Geometry &geometry)
     
     // Wipe out the old drive
     dealloc();
+    
+    // Create the drive description
+    desc = HdrvDescriptor(geometry);
+    ptable.push_back(PartitionDescriptor(geometry));
     
     // Set product descriptions
     driveSpec.controllerVendor = "VAMIGA";
@@ -117,6 +124,9 @@ HardDrive::init(const HDFFile &hdf)
     // Create the drive
     init(geometry);
 
+    // Copy the partition table
+    ptable = hdf.getPartitionDescriptors();
+    
     // Copy the drive spec
     driveSpec = hdf.getDriveSpec();
         

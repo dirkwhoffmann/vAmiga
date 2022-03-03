@@ -25,6 +25,12 @@ class HardDrive : public Drive {
     // Result of the latest inspection
     mutable HardDriveInfo info = {};
 
+    // Hard drive description
+    HdrvDescriptor desc;
+    
+    // Partition table
+    std::vector<PartitionDescriptor> ptable;
+    
     // Hard drive spec (DEPRECATED)
     HardDriveSpec driveSpec = {};
         
