@@ -194,7 +194,7 @@ HardDrive::setConfigItem(Option option, i64 value)
             if (value) {
                 
                 init(MB(10));
-                format(FS_OFS);
+                format(FS_OFS, defaultName());
                 
             } else {
                 
@@ -359,9 +359,13 @@ HardDrive::didSaveToBuffer(u8 *buffer)
 }
 
 string
-HardDrive::defaultName()
+HardDrive::defaultName(isize partition)
 {
-    return "DH" + std::to_string(nr);
+    if (nr >= 1) partition += amiga.hd0.numPartitions();
+    if (nr >= 2) partition += amiga.hd1.numPartitions();
+    if (nr >= 3) partition += amiga.hd2.numPartitions();
+
+    return "DH" + std::to_string(partition);
 }
 
 void

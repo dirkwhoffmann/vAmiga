@@ -167,12 +167,12 @@ public:
     // Formatting
     //
     
-    // Returns a default disk name
-    string defaultName();
-    
+    // Returns a default volume name
+    string defaultName(isize partition = 0);
+
     // Formats the disk
     void format(FSVolumeType fs, string name) throws;
-    void format(FSVolumeType fs) { format(fs, defaultName()); } throws;
+    // void format(FSVolumeType fs) { format(fs, defaultName()); } throws;
 
     // Change the drive geometry
     void changeGeometry(isize c, isize h, isize s, isize b = 512) throws;

@@ -23,15 +23,9 @@ HdController::HdController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref), drive(
     rom = new u8[EXPROM_SIZE];
     std::memcpy((u8 *)rom, exprom, EXPROM_SIZE);
     
-    // Setup the device and dos name for this device
-    char devName[] = "DH?";             devName[2] = char('0' + nr);
-    char dosName[] = "hdrv?.device";    dosName[4] = char('0' + nr);
-    
-    // Patch Rom
-    /*
-    util::replace((char *)rom, EXPROM_SIZE, "DH0", devName);
-    util::replace((char *)rom, EXPROM_SIZE, "hello.device", dosName);
-    */
+    // Make the device name unique
+    char dosName[] = "hrddrive?.device"; dosName[8] = char('0' + nr);
+    util::replace((char *)rom, EXPROM_SIZE, "virtualhd.device", dosName);
 }
 
 const char *
@@ -318,7 +312,7 @@ HdController::processInit()
         mem.patch(pointer + devn_addMask,       u32(0xFFFFFFFE));
         mem.patch(pointer + devn_bootPrio,      u32(0));
         mem.patch(pointer + devn_dName,         u32(part.dosType));
-        mem.patch(pointer + devn_bootflags,     u32(part.flags));
+        mem.patch(pointer + devn_bootflags,     u32(part.flags & 1));
         mem.patch(pointer + devn_segList,       u32(0));
         
         if (part.dosType != 0x444f5300) {
