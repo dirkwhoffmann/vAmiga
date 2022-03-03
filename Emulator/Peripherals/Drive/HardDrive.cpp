@@ -55,17 +55,17 @@ HardDrive::HardDrive(Amiga& ref, isize nr)
 
 HardDrive::~HardDrive()
 {
-    dealloc();
+    if (data) delete [] data;
 }
 
 void
-HardDrive::dealloc()
+HardDrive::init()
 {
     if (data) delete [] data;
+    data = nullptr;
 
     desc = HdrvDescriptor();
-    ptable.clear();    
-    data = nullptr;
+    ptable.clear();
     head = {};
     modified = false;
 }
@@ -77,7 +77,7 @@ HardDrive::init(const Geometry &geometry)
     geometry.checkCompatibility();
     
     // Wipe out the old drive
-    dealloc();
+    init();
     
     // Create the drive description
     desc = HdrvDescriptor(geometry);
@@ -239,35 +239,18 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         os << bol(config.connected) << std::endl;
     }
     
-    if (category & dump::Parameters) {
+    if (category & dump::Drive) {
 
         auto &geometry = desc.geometry;
         
         auto cap1 = geometry.numBytes() / MB(1);
         auto cap2 = ((100 * geometry.numBytes()) / MB(1)) % 100;
         
-        os << tab("Nr");
+        os << tab("Hard drive");
         os << dec(nr) << std::endl;
         os << tab("Capacity");
         os << dec(cap1) << "." << dec(cap2) << " MB" << std::endl;
-        os << tab("Geometry");
-        os << dec(geometry.cylinders) << " - ";
-        os << dec(geometry.heads) << " - ";
-        os << dec(geometry.sectors) << std::endl;
-        os << tab("Block size");
-        os << dec(geometry.bsize) << std::endl;
-        os << tab("Disk vendor");
-        os << desc.dskVendor << std::endl;
-        os << tab("Disk product");
-        os << desc.dskProduct << std::endl;
-        os << tab("Disk revision");
-        os << desc.dskRevision << std::endl;
-        os << tab("Controller vendor");
-        os << desc.conVendor << std::endl;
-        os << tab("Controller product");
-        os << desc.conProduct << std::endl;
-        os << tab("Controller revision");
-        os << desc.conRevision << std::endl;
+        desc.dump(os);
     }
 
     if (category & dump::Volumes) {
@@ -299,37 +282,7 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
             if (i != 0) os << std::endl;
             os << tab("Partition");
             os << dec(i) << std::endl;
-            
-            os << tab("Name");
-            os << part.name << std::endl;
-            os << tab("Flags");
-            os << dec(part.flags) << std::endl;
-            os << tab("SizeBlock");
-            os << dec(part.sizeBlock) << std::endl;
-            os << tab("Heads");
-            os << dec(part.heads) << std::endl;
-            os << tab("Sectors");
-            os << dec(part.sectors) << std::endl;
-            os << tab("Reserved");
-            os << dec(part.reserved) << std::endl;
-            os << tab("Interleave");
-            os << dec(part.interleave) << std::endl;
-            os << tab("LowCyl");
-            os << dec(part.lowCyl) << std::endl;
-            os << tab("HighCyl");
-            os << dec(part.highCyl) << std::endl;
-            os << tab("NumBuffers");
-            os << dec(part.numBuffers) << std::endl;
-            os << tab("BufMemType");
-            os << dec(part.bufMemType) << std::endl;
-            os << tab("MaxTransfer");
-            os << dec(part.maxTransfer) << std::endl;
-            os << tab("Mask");
-            os << dec(part.mask) << std::endl;
-            os << tab("BootPrio");
-            os << dec(part.bootPri) << std::endl;
-            os << tab("DosType");
-            os << dec(part.dosType) << std::endl;
+            part.dump(os);
         }
     }
 

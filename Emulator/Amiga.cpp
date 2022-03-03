@@ -73,14 +73,14 @@ Amiga::Amiga()
         &df1,
         &df2,
         &df3,
-        &dh0,
-        &dh1,
-        &dh2,
-        &dh3,
-        &hdrController0,
-        &hdrController1,
-        &hdrController2,
-        &hdrController3,
+        &hd0,
+        &hd1,
+        &hd2,
+        &hd3,
+        &hd0con,
+        &hd1con,
+        &hd2con,
+        &hd3con,
         &ciaA,
         &ciaB,
         &mem,
@@ -311,7 +311,7 @@ Amiga::getConfigItem(Option option, long id) const
         case OPT_HDR_TYPE:
         case OPT_HDR_CONNECT:
             
-            return dh[id]->getConfigItem(option);
+            return hd[id]->getConfigItem(option);
             
         case OPT_PULLUP_RESISTORS:
         case OPT_MOUSE_VELOCITY:
@@ -445,10 +445,10 @@ Amiga::configure(Option option, i64 value)
         case OPT_HDR_TYPE:
         case OPT_HDR_CONNECT:
 
-            dh[0]->setConfigItem(option, value);
-            dh[1]->setConfigItem(option, value);
-            dh[2]->setConfigItem(option, value);
-            dh[3]->setConfigItem(option, value);
+            hd[0]->setConfigItem(option, value);
+            hd[1]->setConfigItem(option, value);
+            hd[2]->setConfigItem(option, value);
+            hd[3]->setConfigItem(option, value);
             break;
      
         case OPT_SAMPLING_METHOD:
@@ -591,7 +591,7 @@ Amiga::configure(Option option, long id, i64 value)
         case OPT_HDR_TYPE:
         case OPT_HDR_CONNECT:
             
-            dh[id]->setConfigItem(option, value);
+            hd[id]->setConfigItem(option, value);
             break;
 
         case OPT_PULLUP_RESISTORS:

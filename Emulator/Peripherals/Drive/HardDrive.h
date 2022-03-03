@@ -50,8 +50,9 @@ public:
     HardDrive(Amiga& ref, isize nr);
     ~HardDrive();
 
-    void dealloc();
-
+    // Starts from scratch
+    void init();
+    
     // Creates a hard drive with a certain geometry
     void init(const Geometry &geometry);
 

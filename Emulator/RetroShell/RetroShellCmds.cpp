@@ -1104,37 +1104,31 @@ RetroShell::exec <Token::dfn, Token::inspect> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::hdn, Token::config> (Arguments& argv, long param)
 {
-    dump(*amiga.dh[param], dump::Config);
+    dump(*amiga.hd[param], dump::Config);
 }
 
 template <> void
-RetroShell::exec <Token::hdn, Token::inspect, Token::geometry> (Arguments& argv, long param)
+RetroShell::exec <Token::hdn, Token::inspect, Token::drive> (Arguments& argv, long param)
 {
-    dump(*amiga.dh[param], dump::Geometry);
+    dump(*amiga.hd[param], dump::Drive);
 }
 
 template <> void
 RetroShell::exec <Token::hdn, Token::inspect, Token::volumes> (Arguments& argv, long param)
 {
-    dump(*amiga.dh[param], dump::Volumes);
-}
-
-template <> void
-RetroShell::exec <Token::hdn, Token::inspect, Token::parameters> (Arguments& argv, long param)
-{
-    dump(*amiga.dh[param], dump::Parameters);
+    dump(*amiga.hd[param], dump::Volumes);
 }
 
 template <> void
 RetroShell::exec <Token::hdn, Token::inspect, Token::partition> (Arguments& argv, long param)
 {
-    dump(*amiga.dh[param], dump::Partitions);
+    dump(*amiga.hd[param], dump::Partitions);
 }
 
 template <> void
 RetroShell::exec <Token::hdn, Token::inspect, Token::state> (Arguments& argv, long param)
 {
-    dump(*amiga.dh[param], dump::State);
+    dump(*amiga.hd[param], dump::State);
 }
 
 template <> void
@@ -1144,7 +1138,7 @@ RetroShell::exec <Token::hdn, Token::geometry> (Arguments& argv, long param)
     auto h = util::parseNum(argv[1]);
     auto s = util::parseNum(argv[2]);
 
-    amiga.dh[param]->changeGeometry(c, h, s);
+    amiga.hd[param]->changeGeometry(c, h, s);
 }
 
 //

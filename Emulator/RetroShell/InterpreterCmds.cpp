@@ -975,17 +975,13 @@ Interpreter::registerInstructions()
         root.add({hd, "inspect"},
                  "command", "Displays the component state");
 
-        root.add({hd, "inspect", "geometry"},
-                 "command", "Displays the disk geometry",
-                 &RetroShell::exec <Token::hdn, Token::inspect, Token::geometry>, 0, i);
+        root.add({hd, "inspect", "drive"},
+                 "command", "Displays hard drive parameters",
+                 &RetroShell::exec <Token::hdn, Token::inspect, Token::drive>, 0, i);
 
         root.add({hd, "inspect", "volumes"},
                  "command", "Displays summarized volume information",
                  &RetroShell::exec <Token::hdn, Token::inspect, Token::volumes>, 0, i);
-
-        root.add({hd, "inspect", "parameters"},
-                 "command", "Displays hard drive parameters",
-                 &RetroShell::exec <Token::hdn, Token::inspect, Token::parameters>, 0, i);
 
         root.add({hd, "inspect", "partitions"},
                  "command", "Displays information about all partitions",

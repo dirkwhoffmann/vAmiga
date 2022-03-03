@@ -195,13 +195,13 @@ void PartitionDescriptor::checkCompatibility() const
 
 HdrvDescriptor::HdrvDescriptor(const Geometry &geo)
 {
-    dump(std::cout);
+    geometry = geo;
 }
 
 void
 HdrvDescriptor::dump() const
 {
-    
+    dump(std::cout);
 }
 
 void
