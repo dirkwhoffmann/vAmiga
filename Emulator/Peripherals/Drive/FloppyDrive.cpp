@@ -787,9 +787,11 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
 }
 
 void
-FloppyDrive::insertNew(FSVolumeType fs, BootBlockId bb)
+FloppyDrive::insertNew(FSVolumeType fs, BootBlockId bb, string name)
 {
-    debug(true, "insertNew(%s,%s)\n", FSVolumeTypeEnum::key(fs), BootBlockIdEnum::key(bb));
+    debug(DSK_DEBUG,
+          "insertNew(%s,%s, %s)\n",
+          FSVolumeTypeEnum::key(fs), BootBlockIdEnum::key(bb), name.c_str());
     
     ADFFile adf;
     
@@ -802,7 +804,7 @@ FloppyDrive::insertNew(FSVolumeType fs, BootBlockId bb)
     }
     
     // Add a file system
-    adf.formatDisk(fs, bb);
+    adf.formatDisk(fs, bb, name);
     
     // Replace the current disk with the new one
     swapDisk(adf);

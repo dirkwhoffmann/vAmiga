@@ -236,7 +236,7 @@ ADFFile::killVirus()
 }
 
 void
-ADFFile::formatDisk(FSVolumeType fs, BootBlockId id)
+ADFFile::formatDisk(FSVolumeType fs, BootBlockId id, string name)
 {
     assert_enum(FSVolumeType, fs);
 
@@ -252,7 +252,7 @@ ADFFile::formatDisk(FSVolumeType fs, BootBlockId id)
     
     // Create an empty file system
     MutableFileSystem volume(descriptor);
-    volume.setName(FSName("Disk"));
+    volume.setName(FSName(name));
     
     // Write boot code
     volume.makeBootable(id);

@@ -12,7 +12,9 @@ class HardDiskCreator: DialogController {
     @IBOutlet weak var diskIcon: NSImageView!
     @IBOutlet weak var capacity: NSPopUpButton!
     @IBOutlet weak var fileSystem: NSPopUpButton!
-
+    @IBOutlet weak var nameLabel: NSTextField!
+    @IBOutlet weak var nameField: NSTextField!
+    
     @IBOutlet weak var cylinderText: NSTextField!
     @IBOutlet weak var headText: NSTextField!
     @IBOutlet weak var sectorText: NSTextField!
@@ -122,7 +124,8 @@ class HardDiskCreator: DialogController {
     func update() {
           
         let custom = capacity.selectedTag() == 0
-                
+        let nodos = fileSystem.selectedTag() == 0
+        
         // Update text fields and steppers
         cylinderField.stringValue      = String(format: "%d", cylinders)
         cylinderStepper.integerValue   = cylinders
@@ -132,7 +135,7 @@ class HardDiskCreator: DialogController {
         sectorStepper.integerValue     = sectors
         
         // Disable some controls
-        let controls: [NSControl: Bool] = [
+        let controls1: [NSControl: Bool] = [
             
             cylinderField: custom,
             cylinderStepper: custom,
@@ -142,8 +145,19 @@ class HardDiskCreator: DialogController {
             sectorStepper: custom
         ]
         
-        for (control, enabled) in controls {
+        for (control, enabled) in controls1 {
             control.isEnabled = enabled
+        }
+
+        // Hide some controls
+        let controls2: [NSControl: Bool] = [
+            
+            nameLabel: nodos,
+            nameField: nodos
+        ]
+
+        for (control, hidden) in controls2 {
+            control.isHidden = hidden
         }
 
         // Recolor some labels
@@ -210,11 +224,16 @@ class HardDiskCreator: DialogController {
         let fs: FSVolumeType =
         fileSystem.selectedTag() == 0 ? .NODOS :
         fileSystem.selectedTag() == 1 ? .OFS : .FFS
-                
+               
+        let name = nameField.stringValue
+        track("Dos = \(fs) Name = \(name)")
+        
         do {
             
+            track("\(nameField.stringValue)")
+            
             try drive?.attach(c: cylinders, h: heads, s: sectors, b: bsize)
-            try drive?.format(fs: fs, bb: .NONE)
+            try drive?.format(fs: fs, bb: .NONE, name: name)
             hideSheet()
             
         } catch let error as VAError {

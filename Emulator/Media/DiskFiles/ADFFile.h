@@ -127,7 +127,7 @@ public:
  
 public:
     
-    void formatDisk(FSVolumeType fs, BootBlockId id) throws;
+    void formatDisk(FSVolumeType fs, BootBlockId id, string name) throws;
 
     
     //

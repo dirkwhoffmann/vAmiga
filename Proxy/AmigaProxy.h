@@ -618,7 +618,7 @@
 - (BOOL)isInsertable:(Diameter)type density:(Density)density;
 - (void)eject;
 - (void)swap:(FloppyFileProxy *)fileProxy exception:(ExceptionWrapper *)ex;
-- (void)insertNew:(FSVolumeType)fs bootBlock:(BootBlockId)bb exception:(ExceptionWrapper *)ex;
+- (void)insertNew:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex;
 @property BOOL modified;
 @property (readonly) BOOL motor;
 @property (readonly) NSInteger cylinder;
@@ -649,7 +649,7 @@
 - (NSInteger)upperCylOfPartition:(NSInteger)nr;
 - (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex;
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
-- (void)format:(FSVolumeType)fs bb:(BootBlockId)bb exception:(ExceptionWrapper *)ex;
+- (void)format:(FSVolumeType)fs bb:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex;
 - (void)changeGeometry:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
 - (NSArray *) test;
 
@@ -894,7 +894,7 @@
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithDrive:(DriveProxy *)drive exception:(ExceptionWrapper *)ex;
 
-- (void)formatDisk:(FSVolumeType)fs bootBlock:(NSInteger)bootBlockID;
+- (void)format:(FSVolumeType)fs bootBlock:(NSInteger)bb name:(NSString *)name;
 
 @end
 

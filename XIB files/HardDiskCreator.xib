@@ -17,6 +17,8 @@
                 <outlet property="headField" destination="KXF-BB-3Nd" id="PNx-18-VGL"/>
                 <outlet property="headStepper" destination="xLp-1E-mnR" id="65w-zm-Obr"/>
                 <outlet property="headText" destination="6pJ-Qw-X8g" id="FsO-8u-xiQ"/>
+                <outlet property="nameField" destination="MW4-l3-4FR" id="4C1-1g-1Hn"/>
+                <outlet property="nameLabel" destination="FNm-IU-SiD" id="2SD-02-SLw"/>
                 <outlet property="sectorField" destination="hMj-3y-0RH" id="uGb-Xx-Ops"/>
                 <outlet property="sectorStepper" destination="sn6-hL-EcP" id="yK5-OY-3hZ"/>
                 <outlet property="sectorText" destination="Eyk-zI-gmB" id="Pk2-2C-EPi"/>
@@ -49,7 +51,7 @@ DQ
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="akG-kN-dgL">
-                        <rect key="frame" x="394" y="176" width="65" height="16"/>
+                        <rect key="frame" x="394" y="175" width="65" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Cylinders:" id="v4m-BM-h5U">
                             <font key="font" metaFont="system"/>
@@ -58,7 +60,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nfw-BW-veO">
-                        <rect key="frame" x="467" y="173" width="59" height="21"/>
+                        <rect key="frame" x="467" y="174" width="59" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="jNC-1k-QaY">
                             <font key="font" metaFont="system"/>
@@ -70,7 +72,7 @@ DQ
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6pJ-Qw-X8g">
-                        <rect key="frame" x="394" y="147" width="65" height="16"/>
+                        <rect key="frame" x="394" y="146" width="65" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Heads:" id="RbT-kH-rl3">
                             <font key="font" metaFont="system"/>
@@ -107,7 +109,7 @@ DQ
                         </connections>
                     </stepper>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Eyk-zI-gmB">
-                        <rect key="frame" x="394" y="117" width="65" height="16"/>
+                        <rect key="frame" x="394" y="116" width="65" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Sectors:" id="8bd-GZ-p60">
                             <font key="font" metaFont="system"/>
@@ -216,6 +218,24 @@ Gw
                             <action selector="cancelAction:" target="-2" id="rOT-mL-u1J"/>
                         </connections>
                     </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FNm-IU-SiD">
+                        <rect key="frame" x="193" y="116" width="44" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Name:" id="RXH-Ml-IyA">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MW4-l3-4FR">
+                        <rect key="frame" x="244" y="113" width="126" height="21"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="Hdrv" drawsBackground="YES" id="FMv-tX-SCc">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
             <point key="canvasLocation" x="23.5" y="132"/>

@@ -170,10 +170,10 @@ extension DriveProxy {
         if exception.errorCode != .OK { throw VAError(exception) }
     }
     
-    func insertNew(fileSystem: FSVolumeType, bootBlock: BootBlockId) throws {
+    func insertNew(fileSystem: FSVolumeType, bootBlock: BootBlockId, name: String) throws {
         
         let exception = ExceptionWrapper()
-        insertNew(fileSystem, bootBlock: bootBlock, exception: exception)
+        insertNew(fileSystem, bootBlock: bootBlock, name: name, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 }
@@ -194,10 +194,10 @@ extension HardDriveProxy {
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 
-    func format(fs: FSVolumeType, bb: BootBlockId) throws {
+    func format(fs: FSVolumeType, bb: BootBlockId, name: String) throws {
         
         let exception = ExceptionWrapper()
-        format(fs, bb: bb, exception: exception)
+        format(fs, bb: bb, name: name, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 

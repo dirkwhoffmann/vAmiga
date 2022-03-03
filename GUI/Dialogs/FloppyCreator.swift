@@ -18,6 +18,8 @@ class FloppyCreator: DialogController {
     @IBOutlet weak var fileSystem: NSPopUpButton!
     @IBOutlet weak var bootBlock: NSPopUpButton!
     @IBOutlet weak var bootBlockLabel: NSTextField!
+    @IBOutlet weak var nameLabel: NSTextField!
+    @IBOutlet weak var nameField: NSTextField!
 
     @IBOutlet weak var cylinderField: NSTextField!
     @IBOutlet weak var headField: NSTextField!
@@ -96,14 +98,21 @@ class FloppyCreator: DialogController {
     
     func update() {
                   
-        let formatted = fileSystem.selectedTag() != 0
+        let nodos = fileSystem.selectedTag() == 0
+
+        // Hide some controls
+        let controls: [NSControl: Bool] = [
+            
+            virusIcon: !hasVirus,
+            bootBlock: nodos,
+            bootBlockLabel: nodos,
+            nameField: nodos,
+            nameLabel: nodos
+        ]
         
-        // Update icons
-        virusIcon.isHidden = !hasVirus
-                
-        // Update boot block selector
-        bootBlock.isEnabled = formatted
-        bootBlockLabel.textColor = formatted ? .labelColor : .secondaryLabelColor
+        for (control, hidden) in controls {
+            control.isHidden = hidden
+        }
     }
         
     //
@@ -140,9 +149,12 @@ class FloppyCreator: DialogController {
         bootBlock.selectedTag() == 3 ? .SCA :
         bootBlock.selectedTag() == 4 ? .BYTE_BANDIT : .NONE
         
-        track("Dos = \(fs) Boot = \(bb)")
+        let name = nameField.stringValue
+        track("Dos = \(fs) Boot = \(bb) Name = \(name)")
+        
         do {
-            try drive?.insertNew(fileSystem: fs, bootBlock: bb)
+            try drive?.insertNew(fileSystem: fs, bootBlock: bb, name: name)
+            
             myAppDelegate.clearRecentlyExportedDiskURLs(drive: nr)
             hideSheet()
             

@@ -1235,9 +1235,9 @@ using namespace moira;
 }
 */
 
-- (void)insertNew:(FSVolumeType)fs bootBlock:(BootBlockId)bb exception:(ExceptionWrapper *)ex
+- (void)insertNew:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex
 {
-    try { return [self drive]->insertNew(fs, bb); }
+    try { return [self drive]->insertNew(fs, bb, [name UTF8String]); }
     catch (VAError &error) { [ex save:error]; }
 }
 
@@ -1383,10 +1383,12 @@ using namespace moira;
     }
 }
 
-- (void)format:(FSVolumeType)fs bb:(BootBlockId)bb exception:(ExceptionWrapper *)ex
+- (void)format:(FSVolumeType)fs bb:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex
 {
+    auto str = string([name UTF8String]);
+    
     try {
-        [self drive]->format(fs, bb);
+        [self drive]->format(fs, bb, str);
     }  catch (VAError &error) {
         [ex save:error];
     }
@@ -2184,9 +2186,10 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-- (void)formatDisk:(FSVolumeType)fs bootBlock:(NSInteger)bootBlockID
+- (void)format:(FSVolumeType)fs bootBlock:(NSInteger)bb name:(NSString *)name
 {
-    [self adf]->formatDisk(fs, bootBlockID);
+    auto str = string([name UTF8String]);
+    [self adf]->formatDisk(fs, bb, str);
 }
 
 @end

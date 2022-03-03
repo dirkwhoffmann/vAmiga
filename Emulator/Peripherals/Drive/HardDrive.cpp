@@ -338,7 +338,7 @@ HardDrive::didSaveToBuffer(u8 *buffer) const
 }
 
 void
-HardDrive::format(FSVolumeType fsType, BootBlockId bb)
+HardDrive::format(FSVolumeType fsType, BootBlockId bb, string name)
 {
     debug(HDR_DEBUG, "Formatting drive\n");
     debug(HDR_DEBUG, "    File system: %s\n", FSVolumeTypeEnum::key(fsType));
@@ -354,8 +354,9 @@ HardDrive::format(FSVolumeType fsType, BootBlockId bb)
 
         // Create a file system
         auto fs = MutableFileSystem(layout);
-        
-        // Add a boot block
+
+        // Add name and bootblock
+        fs.setName(name);
         fs.makeBootable(bb);
         
         // REMOVE ASAP

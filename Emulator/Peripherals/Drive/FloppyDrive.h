@@ -297,7 +297,7 @@ public:
     void swapDisk(const string &name) throws;
 
     // Replaces the current disk with a factory-fresh disk
-    void insertNew(FSVolumeType fs, BootBlockId bb) throws;
+    void insertNew(FSVolumeType fs, BootBlockId bb, string name) throws;
 
 private:
     
