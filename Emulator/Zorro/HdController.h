@@ -9,11 +9,11 @@
 
 #pragma once
 
-#include "HdrControllerTypes.h"
+#include "HdControllerTypes.h"
 #include "ZorroBoard.h"
 #include "HDFFile.h"
 
-class HdrController : public ZorroBoard {
+class HdController : public ZorroBoard {
     
     // Number of this controller
     isize nr;
@@ -34,7 +34,7 @@ class HdrController : public ZorroBoard {
     
 public:
     
-    HdrController(Amiga& ref, HardDrive& hdr);
+    HdController(Amiga& ref, HardDrive& hdr);
 
 
     //

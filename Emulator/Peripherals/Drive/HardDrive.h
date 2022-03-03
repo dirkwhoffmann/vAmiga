@@ -17,7 +17,7 @@
 class HardDrive : public Drive {
     
     friend class HDFFile;
-    friend class HdrController;
+    friend class HdController;
     
     // Current configuration
     HardDriveConfig config = {};

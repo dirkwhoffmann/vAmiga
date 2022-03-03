@@ -287,10 +287,10 @@ public extension AmigaProxy {
         
         switch nr {
             
-        case 0: return dh0
-        case 1: return dh1
-        case 2: return dh2
-        case 3: return dh3
+        case 0: return hd0
+        case 1: return hd1
+        case 2: return hd2
+        case 3: return hd3
 
         default:
             return nil

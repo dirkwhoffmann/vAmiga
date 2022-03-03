@@ -8,14 +8,14 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "HdrController.h"
-#include "HdrControllerRom.h"
+#include "HdController.h"
+#include "HdControllerRom.h"
 #include "HardDrive.h"
 #include "HDFFile.h"
 #include "Memory.h"
 #include "OSDebugger.h"
 
-HdrController::HdrController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref), drive(hdr)
+HdController::HdController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref), drive(hdr)
 {
     nr = drive.getNr();
     
@@ -35,14 +35,14 @@ HdrController::HdrController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref), driv
 }
 
 const char *
-HdrController::getDescription() const
+HdController::getDescription() const
 {
     switch (nr) {
             
-        case 0: return "HdrController0";
-        case 1: return "HdrController1";
-        case 2: return "HdrController2";
-        case 3: return "HdrController3";
+        case 0: return "Hd0Con";
+        case 1: return "Hd1Con";
+        case 2: return "Hd2Con";
+        case 3: return "Hd3Con";
 
         default:
             fatalError;
@@ -50,7 +50,7 @@ HdrController::getDescription() const
 }
 
 void
-HdrController::_dump(dump::Category category, std::ostream& os) const
+HdController::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
         
@@ -62,33 +62,31 @@ HdrController::_dump(dump::Category category, std::ostream& os) const
 }
 
 void
-HdrController::_reset(bool hard)
+HdController::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
-
+    
     if (hard) {
-
+        
         if (pluggedIn())  {
-
+            
             state = STATE_AUTOCONF;
-            debug(true, "Hard drive emulation enabled.\n");
-
+            
         } else {
             
             state = STATE_SHUTUP;
-            debug(true, "Hard drive emulation disabled. No HDF.\n");
         }
     }
 }
 
 bool
-HdrController::pluggedIn() const
+HdController::pluggedIn() const
 {
-    return drive.isConnected();
+    return drive.isConnected() && drive.data;
 }
 
 void
-HdrController::updateMemSrcTables()
+HdController::updateMemSrcTables()
 {
     // Only proceed if this board has been configured
     if (baseAddr == 0) return;
@@ -98,7 +96,7 @@ HdrController::updateMemSrcTables()
 }
 
 u8
-HdrController::peek8(u32 addr)
+HdController::peek8(u32 addr)
 {
     auto result = spypeek8(addr);
 
@@ -107,7 +105,7 @@ HdrController::peek8(u32 addr)
 }
 
 u16
-HdrController::peek16(u32 addr)
+HdController::peek16(u32 addr)
 {
     auto result = spypeek16(addr);
 
@@ -116,14 +114,14 @@ HdrController::peek16(u32 addr)
 }
 
 u8
-HdrController::spypeek8(u32 addr) const
+HdController::spypeek8(u32 addr) const
 {
     isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
     return offset < EXPROM_SIZE ? rom[offset] : 0;
 }
 
 u16
-HdrController::spypeek16(u32 addr) const
+HdController::spypeek16(u32 addr) const
 {
     isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
     
@@ -148,13 +146,13 @@ HdrController::spypeek16(u32 addr) const
 }
 
 void
-HdrController::poke8(u32 addr, u8 value)
+HdController::poke8(u32 addr, u8 value)
 {
     trace(ZOR_DEBUG, "poke8(%06x,%02x)\n", addr, value);
 }
 
 void
-HdrController::poke16(u32 addr, u16 value)
+HdController::poke16(u32 addr, u16 value)
 {
     trace(ZOR_DEBUG, "poke16(%06x,%04x)\n", addr, value);
     
@@ -196,7 +194,7 @@ HdrController::poke16(u32 addr, u16 value)
 }
 
 void
-HdrController::processCmd()
+HdController::processCmd()
 {
     os::IOStdReq stdReq;
     osDebugger.read(pointer, &stdReq);
@@ -260,7 +258,7 @@ HdrController::processCmd()
 }
 
 void
-HdrController::processInit()
+HdController::processInit()
 {
     trace(HDR_DEBUG, "processInit()\n");
 
@@ -287,60 +285,66 @@ HdrController::processInit()
     constexpr u16 devn_segList      = 0x58;  // filesystem segment list (not part of DOS packet)
     
     u32 unit = mem.spypeek32 <ACCESSOR_CPU> (pointer + devn_unit);
-    debug(HDR_DEBUG, "Initializing partition %d\n", unit);
     
-    // Collect hard drive information
-    auto &geometry = drive.desc.geometry;
-    auto &part = drive.ptable[unit];
-        
-    char dosName[] = {'D', 'H', '0', 0 };
-    dosName[2] = char('0' + unit);
-    
-    u32 name_ptr = mem.spypeek32 <ACCESSOR_CPU> (pointer + devn_dosName);
-    for (isize i = 0; i < isizeof(dosName); i++) {
-        mem.patch(u32(name_ptr + i), u8(dosName[i]));
-    }
-    
-    mem.patch(pointer + devn_flags,         u32(part.flags));
-    mem.patch(pointer + devn_sizeBlock,     u32(part.sizeBlock));
-    mem.patch(pointer + devn_secOrg,        u32(0));
-    mem.patch(pointer + devn_numHeads,      u32(geometry.heads));
-    mem.patch(pointer + devn_secsPerBlk,    u32(1));
-    mem.patch(pointer + devn_blkTrack,      u32(geometry.sectors));
-    mem.patch(pointer + devn_interleave,    u32(0));
-    mem.patch(pointer + devn_resBlks,       u32(part.reserved));
-    mem.patch(pointer + devn_lowCyl,        u32(part.lowCyl));
-    mem.patch(pointer + devn_upperCyl,      u32(part.highCyl));
-    mem.patch(pointer + devn_numBuffers,    u32(1));
-    mem.patch(pointer + devn_memBufType,    u32(0));
-    mem.patch(pointer + devn_transferSize,  u32(0x7FFFFFFF));
-    mem.patch(pointer + devn_addMask,       u32(0xFFFFFFFE));
-    mem.patch(pointer + devn_bootPrio,      u32(0));
-    mem.patch(pointer + devn_dName,         u32(part.dosType));
-    mem.patch(pointer + devn_bootflags,     u32(part.flags));
-    mem.patch(pointer + devn_segList,       u32(0));
+    if (unit < drive.ptable.size()) {
 
-    if (part.dosType != 0x444f5300) {
-        warn("Unusual DOS type %x\n", part.dosType);
+        debug(HDR_DEBUG, "Initializing partition %d\n", unit);
+
+        // Collect hard drive information
+        auto &geometry = drive.desc.geometry;
+        auto &part = drive.ptable[unit];
+        
+        char dosName[] = {'D', 'H', '0', 0 };
+        dosName[2] = char('0' + unit);
+        
+        u32 name_ptr = mem.spypeek32 <ACCESSOR_CPU> (pointer + devn_dosName);
+        for (isize i = 0; i < isizeof(dosName); i++) {
+            mem.patch(u32(name_ptr + i), u8(dosName[i]));
+        }
+        
+        mem.patch(pointer + devn_flags,         u32(part.flags));
+        mem.patch(pointer + devn_sizeBlock,     u32(part.sizeBlock));
+        mem.patch(pointer + devn_secOrg,        u32(0));
+        mem.patch(pointer + devn_numHeads,      u32(geometry.heads));
+        mem.patch(pointer + devn_secsPerBlk,    u32(1));
+        mem.patch(pointer + devn_blkTrack,      u32(geometry.sectors));
+        mem.patch(pointer + devn_interleave,    u32(0));
+        mem.patch(pointer + devn_resBlks,       u32(part.reserved));
+        mem.patch(pointer + devn_lowCyl,        u32(part.lowCyl));
+        mem.patch(pointer + devn_upperCyl,      u32(part.highCyl));
+        mem.patch(pointer + devn_numBuffers,    u32(1));
+        mem.patch(pointer + devn_memBufType,    u32(0));
+        mem.patch(pointer + devn_transferSize,  u32(0x7FFFFFFF));
+        mem.patch(pointer + devn_addMask,       u32(0xFFFFFFFE));
+        mem.patch(pointer + devn_bootPrio,      u32(0));
+        mem.patch(pointer + devn_dName,         u32(part.dosType));
+        mem.patch(pointer + devn_bootflags,     u32(part.flags));
+        mem.patch(pointer + devn_segList,       u32(0));
+        
+        if (part.dosType != 0x444f5300) {
+            warn("Unusual DOS type %x\n", part.dosType);
+        }
+
+    } else {
+
+        debug(XFILES, "Partition %d does not exist\n", unit);
     }
-    
-    debug(HDR_DEBUG, "Initialization done\n");
 }
 
 void
-HdrController::processResource()
+HdController::processResource()
 {
     trace(HDR_DEBUG, "processResource()\n");
 }
 
 void
-HdrController::processInfoReq()
+HdController::processInfoReq()
 {
     trace(HDR_DEBUG, "processInfoReq()\n");
 }
 
 void
-HdrController::processInitSeg()
+HdController::processInitSeg()
 {
     trace(HDR_DEBUG, "processInitSeg()\n");
 }

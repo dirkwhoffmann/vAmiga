@@ -3,6 +3,6 @@ target_sources(vAmigaCore PRIVATE
 ZorroManager.cpp
 ZorroBoard.cpp
 RamExpansion.cpp
-HdrController.cpp
+HdController.cpp
 
 )

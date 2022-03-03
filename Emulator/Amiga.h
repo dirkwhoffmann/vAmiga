@@ -86,10 +86,10 @@ public:
     HardDrive hd3 = HardDrive(*this, 3);
 
     // Hard drive controllers
-    HdrController hd0con = HdrController(*this, hd0);
-    HdrController hd1con = HdrController(*this, hd1);
-    HdrController hd2con = HdrController(*this, hd2);
-    HdrController hd3con = HdrController(*this, hd3);
+    HdController hd0con = HdController(*this, hd0);
+    HdController hd1con = HdController(*this, hd1);
+    HdController hd2con = HdController(*this, hd2);
+    HdController hd3con = HdController(*this, hd3);
 
     // Other Peripherals
     Keyboard keyboard = Keyboard(*this);
@@ -97,7 +97,7 @@ public:
     // Shortcuts
     FloppyDrive *df[4] = { &df0, &df1, &df2, &df3 };
     HardDrive *hd[4] = { &hd0, &hd1, &hd2, &hd3 };
-    HdrController *hdcon[4] = { &hd0con, &hd1con, &hd2con, &hd3con };
+    HdController *hdcon[4] = { &hd0con, &hd1con, &hd2con, &hd3con };
 
     // Gateway to the GUI
     MsgQueue msgQueue = MsgQueue(*this);

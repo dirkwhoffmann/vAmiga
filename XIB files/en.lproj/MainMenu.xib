@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
     </dependencies>
     <objects>
@@ -18,10 +17,10 @@
                 <outlet property="df1Menu" destination="fYA-pX-q72" id="GdQ-P8-yMU"/>
                 <outlet property="df2Menu" destination="gYR-sU-A3s" id="vfb-ge-033"/>
                 <outlet property="df3Menu" destination="2h1-jT-0o6" id="dfO-xV-ieM"/>
-                <outlet property="dh0Menu" destination="OYE-xa-ahL" id="ehz-vZ-bPG"/>
-                <outlet property="dh1Menu" destination="SoY-x2-Dd4" id="exs-xD-zqz"/>
-                <outlet property="dh2Menu" destination="Cna-Xa-SNM" id="jSm-kb-ROd"/>
-                <outlet property="dh3Menu" destination="zgt-H4-oPS" id="AIW-bD-wSR"/>
+                <outlet property="hd0Menu" destination="OYE-xa-ahL" id="ehz-vZ-bPG"/>
+                <outlet property="hd1Menu" destination="SoY-x2-Dd4" id="exs-xD-zqz"/>
+                <outlet property="hd2Menu" destination="Cna-Xa-SNM" id="jSm-kb-ROd"/>
+                <outlet property="hd3Menu" destination="zgt-H4-oPS" id="AIW-bD-wSR"/>
             </connections>
         </customObject>
         <menu title="MainMenu" systemMenu="main" id="29" userLabel="MainMenu">

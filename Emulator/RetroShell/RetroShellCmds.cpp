@@ -1098,7 +1098,7 @@ RetroShell::exec <Token::dfn, Token::inspect> (Arguments& argv, long param)
 }
 
 //
-// Dh0, Dh1, Dh2, Dh3
+// Hd0, Hd1, Hd2, Hd3
 //
 
 template <> void

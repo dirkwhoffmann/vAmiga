@@ -844,14 +844,14 @@ extension Keys {
         static let df3Type            = "VAMIGA_PER_DF3Type"
 
         // Hard Drives
-        static let dh0Connect         = "VAMIGA_PER_DH0Connect"
-        static let dh1Connect         = "VAMIGA_PER_DH1Connect"
-        static let dh2Connect         = "VAMIGA_PER_DH2Connect"
-        static let dh3Connect         = "VAMIGA_PER_DH3Connect"
-        static let dh0Type            = "VAMIGA_PER_DH0Type"
-        static let dh1Type            = "VAMIGA_PER_DH1Type"
-        static let dh2Type            = "VAMIGA_PER_DH2Type"
-        static let dh3Type            = "VAMIGA_PER_DH3Type"
+        static let hd0Connect         = "VAMIGA_PER_HD0Connect"
+        static let hd1Connect         = "VAMIGA_PER_HD1Connect"
+        static let hd2Connect         = "VAMIGA_PER_HD2Connect"
+        static let hd3Connect         = "VAMIGA_PER_HD3Connect"
+        static let hd0Type            = "VAMIGA_PER_HD0Type"
+        static let hd1Type            = "VAMIGA_PER_HD1Type"
+        static let hd2Type            = "VAMIGA_PER_HD2Type"
+        static let hd3Type            = "VAMIGA_PER_HD3Type"
 
         // Ports
         static let gameDevice1        = "VAMIGA_PER_GameDevice1"
@@ -907,14 +907,14 @@ extension UserDefaults {
             Keys.Per.df2Type: defaults.driveType[2].rawValue,
             Keys.Per.df3Type: defaults.driveType[3].rawValue,
 
-            Keys.Per.dh0Connect: defaults.driveConnect[0],
-            Keys.Per.dh1Connect: defaults.driveConnect[1],
-            Keys.Per.dh2Connect: defaults.driveConnect[2],
-            Keys.Per.dh3Connect: defaults.driveConnect[3],
-            Keys.Per.dh0Type: defaults.driveType[0].rawValue,
-            Keys.Per.dh1Type: defaults.driveType[1].rawValue,
-            Keys.Per.dh2Type: defaults.driveType[2].rawValue,
-            Keys.Per.dh3Type: defaults.driveType[3].rawValue,
+            Keys.Per.hd0Connect: defaults.driveConnect[0],
+            Keys.Per.hd1Connect: defaults.driveConnect[1],
+            Keys.Per.hd2Connect: defaults.driveConnect[2],
+            Keys.Per.hd3Connect: defaults.driveConnect[3],
+            Keys.Per.hd0Type: defaults.driveType[0].rawValue,
+            Keys.Per.hd1Type: defaults.driveType[1].rawValue,
+            Keys.Per.hd2Type: defaults.driveType[2].rawValue,
+            Keys.Per.hd3Type: defaults.driveType[3].rawValue,
 
             Keys.Per.gameDevice1: defaults.gameDevice1,
             Keys.Per.gameDevice2: defaults.gameDevice2,
@@ -939,14 +939,14 @@ extension UserDefaults {
                      Keys.Per.df2Type,
                      Keys.Per.df3Type,
                      
-                     Keys.Per.dh0Connect,
-                     Keys.Per.dh1Connect,
-                     Keys.Per.dh2Connect,
-                     Keys.Per.dh3Connect,
-                     Keys.Per.dh0Type,
-                     Keys.Per.dh1Type,
-                     Keys.Per.dh2Type,
-                     Keys.Per.dh3Type,
+                     Keys.Per.hd0Connect,
+                     Keys.Per.hd1Connect,
+                     Keys.Per.hd2Connect,
+                     Keys.Per.hd3Connect,
+                     Keys.Per.hd0Type,
+                     Keys.Per.hd1Type,
+                     Keys.Per.hd2Type,
+                     Keys.Per.hd3Type,
                      
                      Keys.Per.gameDevice1,
                      Keys.Per.gameDevice2,

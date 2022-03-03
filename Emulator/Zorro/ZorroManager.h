@@ -11,7 +11,7 @@
 
 #include "SubComponent.h"
 #include "RamExpansion.h"
-#include "HdrController.h"
+#include "HdController.h"
 
 class ZorroManager : public SubComponent {
     
@@ -28,10 +28,10 @@ private:
     ZorroBoard *slots[slotCount] = {
         
         &ramExpansion,
-        &hdrController0,
-        &hdrController1,
-        &hdrController2,
-        &hdrController3,
+        &hd0con,
+        &hd1con,
+        &hd2con,
+        &hd3con,
         nullptr
     };
     

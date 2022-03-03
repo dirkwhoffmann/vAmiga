@@ -104,19 +104,19 @@ class Configuration {
         precondition(0 <= n && n <= 3)
         amiga.configure(.DRIVE_TYPE, drive: n, value: type)
     }
-    func dhnConnected(_ n: Int) -> Bool {
+    func hdnConnected(_ n: Int) -> Bool {
         precondition(0 <= n && n <= 3)
         return amiga.getConfig(.HDR_CONNECT, drive: n) != 0
     }
-    func setDhnConnected(_ n: Int, connect: Bool) {
+    func setHdnConnected(_ n: Int, connect: Bool) {
         precondition(0 <= n && n <= 3)
         amiga.configure(.HDR_CONNECT, drive: n, enable: connect)
     }
-    func dhnType(_ n: Int) -> Int {
+    func hdnType(_ n: Int) -> Int {
         precondition(0 <= n && n <= 3)
         return amiga.getConfig(.HDR_TYPE, drive: n)
     }
-    func setDhnType(_ n: Int, type: Int) {
+    func setHdnType(_ n: Int, type: Int) {
         precondition(0 <= n && n <= 3)
         amiga.configure(.HDR_TYPE, drive: n, value: type)
     }
@@ -153,37 +153,37 @@ class Configuration {
         get { return dfnType(3) }
         set { setDfnType(3, type: newValue) }
     }
-    var dh0Connected: Bool {
-        get { return dhnConnected(0) }
-        set { setDhnConnected(0, connect: newValue) }
+    var hd0Connected: Bool {
+        get { return hdnConnected(0) }
+        set { setHdnConnected(0, connect: newValue) }
     }
-    var dh0Type: Int {
-        get { return dhnType(0) }
-        set { setDhnType(0, type: newValue) }
+    var hd0Type: Int {
+        get { return hdnType(0) }
+        set { setHdnType(0, type: newValue) }
     }
-    var dh1Connected: Bool {
-        get { return dhnConnected(1) }
-        set { setDhnConnected(1, connect: newValue) }
+    var hd1Connected: Bool {
+        get { return hdnConnected(1) }
+        set { setHdnConnected(1, connect: newValue) }
     }
-    var dh1Type: Int {
-        get { return dhnType(1) }
-        set { setDhnType(1, type: newValue) }
+    var hd1Type: Int {
+        get { return hdnType(1) }
+        set { setHdnType(1, type: newValue) }
     }
-    var dh2Connected: Bool {
-        get { return dhnConnected(2) }
-        set { setDhnConnected(2, connect: newValue) }
+    var hd2Connected: Bool {
+        get { return hdnConnected(2) }
+        set { setHdnConnected(2, connect: newValue) }
     }
-    var dh2Type: Int {
-        get { return dhnType(2) }
-        set { setDhnType(2, type: newValue) }
+    var hd2Type: Int {
+        get { return hdnType(2) }
+        set { setHdnType(2, type: newValue) }
     }
-    var dh3Connected: Bool {
-        get { return dhnConnected(3) }
-        set { setDhnConnected(3, connect: newValue) }
+    var hd3Connected: Bool {
+        get { return hdnConnected(3) }
+        set { setHdnConnected(3, connect: newValue) }
     }
-    var dh3Type: Int {
-        get { return dhnType(3) }
-        set { setDhnType(3, type: newValue) }
+    var hd3Type: Int {
+        get { return hdnType(3) }
+        set { setHdnType(3, type: newValue) }
     }
 
     var gameDevice1 = PeripheralsDefaults.std.gameDevice1 {
@@ -659,14 +659,14 @@ class Configuration {
         df2Type = defaults.driveType[2].rawValue
         df3Type = defaults.driveType[3].rawValue
  
-        dh0Connected = defaults.hardDriveConnect[0]
-        dh1Connected = defaults.hardDriveConnect[1]
-        dh2Connected = defaults.hardDriveConnect[2]
-        dh3Connected = defaults.hardDriveConnect[3]
-        dh0Type = defaults.hardDriveType[0].rawValue
-        dh1Type = defaults.hardDriveType[1].rawValue
-        dh2Type = defaults.hardDriveType[2].rawValue
-        dh3Type = defaults.hardDriveType[3].rawValue
+        hd0Connected = defaults.hardDriveConnect[0]
+        hd1Connected = defaults.hardDriveConnect[1]
+        hd2Connected = defaults.hardDriveConnect[2]
+        hd3Connected = defaults.hardDriveConnect[3]
+        hd0Type = defaults.hardDriveType[0].rawValue
+        hd1Type = defaults.hardDriveType[1].rawValue
+        hd2Type = defaults.hardDriveType[2].rawValue
+        hd3Type = defaults.hardDriveType[3].rawValue
         
         gameDevice1 = defaults.gameDevice1
         gameDevice2 = defaults.gameDevice2
@@ -691,14 +691,14 @@ class Configuration {
         df2Type = defaults.integer(forKey: Keys.Per.df2Type)
         df3Type = defaults.integer(forKey: Keys.Per.df3Type)
 
-        dh0Connected = defaults.bool(forKey: Keys.Per.dh0Connect)
-        dh1Connected = defaults.bool(forKey: Keys.Per.dh1Connect)
-        dh2Connected = defaults.bool(forKey: Keys.Per.dh2Connect)
-        dh3Connected = defaults.bool(forKey: Keys.Per.dh3Connect)
-        dh0Type = defaults.integer(forKey: Keys.Per.dh0Type)
-        dh1Type = defaults.integer(forKey: Keys.Per.dh1Type)
-        dh2Type = defaults.integer(forKey: Keys.Per.dh2Type)
-        dh3Type = defaults.integer(forKey: Keys.Per.dh3Type)
+        hd0Connected = defaults.bool(forKey: Keys.Per.hd0Connect)
+        hd1Connected = defaults.bool(forKey: Keys.Per.hd1Connect)
+        hd2Connected = defaults.bool(forKey: Keys.Per.hd2Connect)
+        hd3Connected = defaults.bool(forKey: Keys.Per.hd3Connect)
+        hd0Type = defaults.integer(forKey: Keys.Per.hd0Type)
+        hd1Type = defaults.integer(forKey: Keys.Per.hd1Type)
+        hd2Type = defaults.integer(forKey: Keys.Per.hd2Type)
+        hd3Type = defaults.integer(forKey: Keys.Per.hd3Type)
 
         gameDevice1 = defaults.integer(forKey: Keys.Per.gameDevice1)
         gameDevice2 = defaults.integer(forKey: Keys.Per.gameDevice2)
@@ -722,14 +722,14 @@ class Configuration {
         defaults.set(df2Type, forKey: Keys.Per.df2Type)
         defaults.set(df3Type, forKey: Keys.Per.df3Type)
 
-        defaults.set(dh0Connected, forKey: Keys.Per.dh0Connect)
-        defaults.set(dh1Connected, forKey: Keys.Per.dh1Connect)
-        defaults.set(dh2Connected, forKey: Keys.Per.dh2Connect)
-        defaults.set(dh3Connected, forKey: Keys.Per.dh3Connect)
-        defaults.set(dh0Type, forKey: Keys.Per.dh0Type)
-        defaults.set(dh1Type, forKey: Keys.Per.dh1Type)
-        defaults.set(dh2Type, forKey: Keys.Per.dh2Type)
-        defaults.set(dh3Type, forKey: Keys.Per.dh3Type)
+        defaults.set(hd0Connected, forKey: Keys.Per.hd0Connect)
+        defaults.set(hd1Connected, forKey: Keys.Per.hd1Connect)
+        defaults.set(hd2Connected, forKey: Keys.Per.hd2Connect)
+        defaults.set(hd3Connected, forKey: Keys.Per.hd3Connect)
+        defaults.set(hd0Type, forKey: Keys.Per.hd0Type)
+        defaults.set(hd1Type, forKey: Keys.Per.hd1Type)
+        defaults.set(hd2Type, forKey: Keys.Per.hd2Type)
+        defaults.set(hd3Type, forKey: Keys.Per.hd3Type)
 
         defaults.set(gameDevice1, forKey: Keys.Per.gameDevice1)
         defaults.set(gameDevice2, forKey: Keys.Per.gameDevice2)

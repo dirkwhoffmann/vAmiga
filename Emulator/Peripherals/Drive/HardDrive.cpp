@@ -10,7 +10,7 @@
 #include "config.h"
 #include "HardDrive.h"
 #include "Amiga.h"
-#include "HdrControllerTypes.h"
+#include "HdControllerTypes.h"
 #include "IOUtils.h"
 #include "Memory.h"
 #include "MsgQueue.h"
@@ -19,10 +19,10 @@ HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 {
     string path;
     
-    if (nr == 0) path = INITIAL_DH0;
-    if (nr == 1) path = INITIAL_DH1;
-    if (nr == 2) path = INITIAL_DH2;
-    if (nr == 3) path = INITIAL_DH3;
+    if (nr == 0) path = INITIAL_HD0;
+    if (nr == 1) path = INITIAL_HD1;
+    if (nr == 2) path = INITIAL_HD2;
+    if (nr == 3) path = INITIAL_HD3;
     
     if (path != "") {
             
@@ -35,12 +35,6 @@ HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
             
             warn("Cannot open HDF file %s\n", path.c_str());
         }
-
-    } else {
-
-        // Atach a default disk
-        // TODO: DON'T INITIALZE UNUSED DRIVES
-        init(MB(10));
     }
 }
 

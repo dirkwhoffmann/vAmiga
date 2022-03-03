@@ -104,17 +104,17 @@
                 <outlet property="perDf2Type" destination="V0u-IE-VRg" id="mZW-XU-dfg"/>
                 <outlet property="perDf3Connect" destination="5dd-PL-lVh" id="Bju-KA-Dlj"/>
                 <outlet property="perDf3Type" destination="S32-51-0lU" id="4bb-KR-fH7"/>
-                <outlet property="perDh0Connect" destination="iSz-Lh-AKp" id="jBR-gQ-2rb"/>
-                <outlet property="perDh0Type" destination="pIU-aX-Hcd" id="h4k-QH-D9x"/>
-                <outlet property="perDh1Connect" destination="Mej-Fl-HiP" id="04u-rZ-xwP"/>
-                <outlet property="perDh1Type" destination="l00-2q-mSl" id="Z7m-tZ-58J"/>
-                <outlet property="perDh2Connect" destination="3fY-Lr-qE1" id="6IC-4M-6Yf"/>
-                <outlet property="perDh2Type" destination="kyk-3L-mrA" id="2Xq-hR-ifI"/>
-                <outlet property="perDh3Connect" destination="BJQ-gQ-ZtN" id="aIc-qx-TKn"/>
-                <outlet property="perDh3Type" destination="wqb-7F-ILE" id="ObP-hf-qk7"/>
                 <outlet property="perFactorySettingsPopup" destination="G0k-PK-03W" id="4OD-Nf-i9i"/>
                 <outlet property="perGameDevice1" destination="O2O-2C-ZMa" id="VTz-nM-x7G"/>
                 <outlet property="perGameDevice2" destination="TAX-DK-yR4" id="h3h-zN-6fs"/>
+                <outlet property="perHd0Connect" destination="iSz-Lh-AKp" id="jBR-gQ-2rb"/>
+                <outlet property="perHd0Type" destination="pIU-aX-Hcd" id="h4k-QH-D9x"/>
+                <outlet property="perHd1Connect" destination="Mej-Fl-HiP" id="04u-rZ-xwP"/>
+                <outlet property="perHd1Type" destination="l00-2q-mSl" id="Z7m-tZ-58J"/>
+                <outlet property="perHd2Connect" destination="3fY-Lr-qE1" id="6IC-4M-6Yf"/>
+                <outlet property="perHd2Type" destination="kyk-3L-mrA" id="2Xq-hR-ifI"/>
+                <outlet property="perHd3Connect" destination="BJQ-gQ-ZtN" id="aIc-qx-TKn"/>
+                <outlet property="perHd3Type" destination="wqb-7F-ILE" id="ObP-hf-qk7"/>
                 <outlet property="perLockImage" destination="LZ7-mX-j0K" id="tqF-uY-xcZ"/>
                 <outlet property="perLockInfo1" destination="ZbG-Fe-OlM" id="ZfS-zP-d3R"/>
                 <outlet property="perLockInfo2" destination="Vfm-xf-Jrq" id="dGN-Me-dsp"/>
@@ -1444,7 +1444,7 @@ DQ
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iSz-Lh-AKp">
                                             <rect key="frame" x="58" y="207" width="57" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="DH0:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="nDO-1v-68O">
+                                            <buttonCell key="cell" type="check" title="HD0:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="nDO-1v-68O">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -1470,7 +1470,7 @@ DQ
                                         <button fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="Mej-Fl-HiP">
                                             <rect key="frame" x="58" y="178" width="55" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="DH1:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="ZyW-KJ-JJl">
+                                            <buttonCell key="cell" type="check" title="HD1:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="ZyW-KJ-JJl">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -1496,7 +1496,7 @@ DQ
                                         <button fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="3fY-Lr-qE1">
                                             <rect key="frame" x="58" y="150" width="57" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="DH2:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="TMw-MW-0cl">
+                                            <buttonCell key="cell" type="check" title="HD2:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="TMw-MW-0cl">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -1522,7 +1522,7 @@ DQ
                                         <button fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="BJQ-gQ-ZtN">
                                             <rect key="frame" x="58" y="121" width="57" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="DH3:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="AgR-DI-GRJ">
+                                            <buttonCell key="cell" type="check" title="HD3:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="AgR-DI-GRJ">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>

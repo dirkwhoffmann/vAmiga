@@ -143,14 +143,14 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var perDf3Type: NSPopUpButton!
 
     // Hard drives
-    @IBOutlet weak var perDh0Connect: NSButton!
-    @IBOutlet weak var perDh0Type: NSPopUpButton!
-    @IBOutlet weak var perDh1Connect: NSButton!
-    @IBOutlet weak var perDh1Type: NSPopUpButton!
-    @IBOutlet weak var perDh2Connect: NSButton!
-    @IBOutlet weak var perDh2Type: NSPopUpButton!
-    @IBOutlet weak var perDh3Connect: NSButton!
-    @IBOutlet weak var perDh3Type: NSPopUpButton!
+    @IBOutlet weak var perHd0Connect: NSButton!
+    @IBOutlet weak var perHd0Type: NSPopUpButton!
+    @IBOutlet weak var perHd1Connect: NSButton!
+    @IBOutlet weak var perHd1Type: NSPopUpButton!
+    @IBOutlet weak var perHd2Connect: NSButton!
+    @IBOutlet weak var perHd2Type: NSPopUpButton!
+    @IBOutlet weak var perHd3Connect: NSButton!
+    @IBOutlet weak var perHd3Type: NSPopUpButton!
 
     // Ports
     @IBOutlet weak var perGameDevice1: NSPopUpButton!

@@ -23,14 +23,14 @@ extension ConfigurationController {
         perDf3Type.selectItem(withTag: config.df3Type)
 
         // Hard drives
-        perDh0Connect.state = config.dh0Connected ? .on : .off
-        perDh1Connect.state = config.dh1Connected ? .on : .off
-        perDh2Connect.state = config.dh2Connected ? .on : .off
-        perDh3Connect.state = config.dh3Connected ? .on : .off
-        perDh0Type.selectItem(withTag: config.dh0Type)
-        perDh1Type.selectItem(withTag: config.dh1Type)
-        perDh2Type.selectItem(withTag: config.dh2Type)
-        perDh3Type.selectItem(withTag: config.dh3Type)
+        perHd0Connect.state = config.hd0Connected ? .on : .off
+        perHd1Connect.state = config.hd1Connected ? .on : .off
+        perHd2Connect.state = config.hd2Connected ? .on : .off
+        perHd3Connect.state = config.hd3Connected ? .on : .off
+        perHd0Type.selectItem(withTag: config.hd0Type)
+        perHd1Type.selectItem(withTag: config.hd1Type)
+        perHd2Type.selectItem(withTag: config.hd2Type)
+        perHd3Type.selectItem(withTag: config.hd3Type)
 
         // Ports
         let nullmodem = SerialPortDevice.NULLMODEM.rawValue
@@ -51,14 +51,14 @@ extension ConfigurationController {
         perDf1Type.isEnabled = poweredOff && config.df1Connected
         perDf2Type.isEnabled = poweredOff && config.df2Connected
         perDf3Type.isEnabled = poweredOff && config.df3Connected
-        perDh0Connect.isEnabled = poweredOff
-        perDh1Connect.isEnabled = poweredOff && perDh0Connect.state == .on
-        perDh2Connect.isEnabled = poweredOff && perDh1Connect.state == .on
-        perDh3Connect.isEnabled = poweredOff && perDh2Connect.state == .on
-        perDh0Type.isEnabled = poweredOff
-        perDh1Type.isEnabled = poweredOff && config.dh1Connected
-        perDh2Type.isEnabled = poweredOff && config.dh2Connected
-        perDh3Type.isEnabled = poweredOff && config.dh3Connected
+        perHd0Connect.isEnabled = poweredOff
+        perHd1Connect.isEnabled = poweredOff && perHd0Connect.state == .on
+        perHd2Connect.isEnabled = poweredOff && perHd1Connect.state == .on
+        perHd3Connect.isEnabled = poweredOff && perHd2Connect.state == .on
+        perHd0Type.isEnabled = poweredOff
+        perHd1Type.isEnabled = poweredOff && config.hd1Connected
+        perHd2Type.isEnabled = poweredOff && config.hd2Connected
+        perHd3Type.isEnabled = poweredOff && config.hd3Connected
         perFactorySettingsPopup.isEnabled = poweredOff
 
         // Lock symbol and explanation
@@ -102,17 +102,17 @@ extension ConfigurationController {
     @IBAction func perHdrConnectAction(_ sender: NSButton!) {
         
         switch sender.tag {
-        case 0: config.dh0Connected = sender.state == .on
-        case 1: config.dh1Connected = sender.state == .on
-        case 2: config.dh2Connected = sender.state == .on
-        case 3: config.dh3Connected = sender.state == .on
+        case 0: config.hd0Connected = sender.state == .on
+        case 1: config.hd1Connected = sender.state == .on
+        case 2: config.hd2Connected = sender.state == .on
+        case 3: config.hd3Connected = sender.state == .on
         default: fatalError()
         }
         
         // Disconnect dh(n+1) if dfn is disconnected
-        if !config.dh0Connected { config.dh1Connected = false }
-        if !config.dh1Connected { config.dh2Connected = false }
-        if !config.dh2Connected { config.dh3Connected = false }
+        if !config.hd0Connected { config.hd1Connected = false }
+        if !config.hd1Connected { config.hd2Connected = false }
+        if !config.hd2Connected { config.hd3Connected = false }
 
         refresh()
     }

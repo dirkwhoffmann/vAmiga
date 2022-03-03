@@ -19,10 +19,10 @@ var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     @IBOutlet weak var df2Menu: NSMenuItem!
     @IBOutlet weak var df3Menu: NSMenuItem!
     
-    @IBOutlet weak var dh0Menu: NSMenuItem!
-    @IBOutlet weak var dh1Menu: NSMenuItem!
-    @IBOutlet weak var dh2Menu: NSMenuItem!
-    @IBOutlet weak var dh3Menu: NSMenuItem!
+    @IBOutlet weak var hd0Menu: NSMenuItem!
+    @IBOutlet weak var hd1Menu: NSMenuItem!
+    @IBOutlet weak var hd2Menu: NSMenuItem!
+    @IBOutlet weak var hd3Menu: NSMenuItem!
 
     // Replace the old document controller by instantiating a custom controller
     let myDocumentController = MyDocumentController()

@@ -105,17 +105,7 @@ extension MyDocument {
     func proceedWithUnexportedHdr(drive nr: Int) -> Bool {
         
         return proceedWithUnexportedHdr(drive: amiga.dh(nr)!)
-    }
-    
-    /*
-    func proceedWithUnexportedHdr() -> Bool {
-        
-        return proceedWithUnexportedHdr(drives: [ amiga.dh0,
-                                                  amiga.dh1,
-                                                  amiga.dh2,
-                                                  amiga.dh3 ])
-    }
-    */
+    }    
 }
 
 extension MyController {
