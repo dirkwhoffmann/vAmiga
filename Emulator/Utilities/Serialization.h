@@ -55,8 +55,9 @@ inline double readDouble(const u8 *& buf)
 
 inline string readString(const u8 *& buf)
 {
-    string result = string((const char *)buf);
-    buf += result.length() + 1;
+    u8 len = read8(buf);
+    string result = string((const char *)buf, len);
+    buf += len;
     return result;
 }
 
@@ -91,7 +92,9 @@ inline void writeDouble(u8 *& buf, double value)
 
 inline void writeString(u8 *& buf, string value)
 {
-    auto len = value.length() + 1;
+    auto len = value.length();
+    assert(len < 256);
+    write8(buf, u8(len));
     value.copy((char *)buf, len);
     buf += len;
 }
@@ -137,10 +140,21 @@ public:
        
     auto& operator<<(string &v)
     {
-        count += v.length() + 1;
+        auto len = v.length();
+        assert(len < 256);
+        count += 1 + len;
         return *this;
     }
-    
+
+    template <class T>
+    auto& operator>>(std::vector <T> &v)
+    {
+        auto len = v.size();
+        for(usize i = 0; i < len; i++) *this >> v[i];
+        count += 8;
+        return *this;
+    }
+
     template <class T, isize N>
     SerCounter& operator<<(T (&v)[N])
     {
@@ -204,12 +218,23 @@ public:
        
     auto& operator<<(string &v)
     {
-        for (usize i = 0; i < v.length(); i++) {
+        auto len = v.length();
+        for (usize i = 0; i < len; i++) {
             hash += util::fnv_1a_it64(hash, v[i]);
         }
         return *this;
     }
     
+    template <class T>
+    auto& operator>>(std::vector <T> &v)
+    {
+        isize len = isize(v.size());
+        for (isize i = 0; i < len; i++) {
+            *this >> v[i];
+        }
+        return *this;
+    }
+
     template <class T, isize N>
     SerChecker& operator<<(T (&v)[N])
     {
@@ -277,7 +302,26 @@ public:
     DESERIALIZE64(unsigned long long)
     DESERIALIZED(float)
     DESERIALIZED(double)
-    DESERIALIZE(string,readString)
+    
+    auto& operator<<(string &v)
+    {
+        v = readString(ptr);
+        return *this;
+    }
+
+    template <class T>
+    auto& operator>>(std::vector <T> &v)
+    {
+        i64 len;
+        *this << len;
+        v.clear();
+        v.reserve(len);
+        for (isize i = 0; i < len; i++) {
+            v.push_back(T());
+            *this >> v.back();
+        }
+        return *this;
+    }
     
     template <class T, isize N>
     SerReader& operator<<(T (&v)[N])
@@ -356,6 +400,17 @@ public:
     auto& operator<<(const string &v)
     {
         writeString(ptr, v);
+        return *this;
+    }
+    
+    template <class T>
+    auto& operator>>(std::vector <T> &v)
+    {
+        auto len = v.size();
+        *this << i64(len);
+        for (usize i = 0; i < len; i++) {
+            *this >> v[i];
+        }
         return *this;
     }
     

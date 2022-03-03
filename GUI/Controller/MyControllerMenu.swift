@@ -76,7 +76,8 @@ extension MyController: NSMenuItemValidation {
             
         case  #selector(MyController.ejectDiskAction(_:)),
             #selector(MyController.exportFloppyDiskAction(_:)),
-            #selector(MyController.inspectFloppyDiskAction(_:)):
+            #selector(MyController.inspectFloppyDiskAction(_:)),
+            #selector(MyController.inspectDfnVolumeAction(_:)):
             return dfn.hasDisk
             
         case #selector(MyController.exportRecentDiskDummyAction0(_:)):

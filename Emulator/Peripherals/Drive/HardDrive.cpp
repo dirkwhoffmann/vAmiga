@@ -53,16 +53,24 @@ HardDrive::HardDrive(Amiga& ref, isize nr)
     }
 }
 
-HardDrive::~HardDrive()
+void
+HardDrive::alloc(isize size)
+{
+    dealloc();
+    if (size) data = new u8[size];
+}
+
+void
+HardDrive::dealloc()
 {
     if (data) delete [] data;
+    data = nullptr;
 }
 
 void
 HardDrive::init()
 {
-    if (data) delete [] data;
-    data = nullptr;
+    dealloc();
 
     desc = HdrvDescriptor();
     ptable.clear();
@@ -303,12 +311,13 @@ HardDrive::_size()
 {
     util::SerCounter counter;
 
+    // Determine size information
+    auto dataSize = i64(desc.geometry.numBytes()) + 8;
+
     applyToPersistentItems(counter);
     applyToResetItems(counter);
     
-    // Add the disk size
-    counter.count += desc.geometry.numBytes();
-    
+    counter.count += dataSize;
     return counter.count;
 }
 
@@ -316,34 +325,52 @@ isize
 HardDrive::didLoadFromBuffer(const u8 *buffer)
 {
     util::SerReader reader(buffer);
+    i64 dataSize;
 
-    // Create the drive
-    init(desc.geometry);
-    
-    // Load disk data
-    reader.copy(data, desc.geometry.numBytes());
+    // Load size information
+    reader << dataSize;
+
+    // Allocate memory
+    if (dataSize > MB(504)) throw VAError(ERROR_SNAP_CORRUPTED);
+    alloc(dataSize);
+
+    // Load data
+    debug(true, "data = %p size = %lld\n", (void *)data, dataSize);
+    debug(true, "numBytes = %ld\n", desc.geometry.numBytes());
+    assert(dataSize == desc.geometry.numBytes());
+    reader.copy(data, dataSize);
 
     return (isize)(reader.ptr - buffer);
 }
 
 isize
-HardDrive::didSaveToBuffer(u8 *buffer) const
+HardDrive::didSaveToBuffer(u8 *buffer)
 {
     util::SerWriter writer(buffer);
 
-    // Save memory contents
-    writer.copy(data, desc.geometry.numBytes());
-        
+    // Determine size information
+    i64 dataSize = desc.geometry.numBytes();
+
+    // Save size information
+    printf("Saving dataSize = %lld\n", dataSize);
+    writer << dataSize;
+ 
+    // Write data
+    writer.copy(data, dataSize);
+
     return (isize)(writer.ptr - buffer);
 }
 
 void
 HardDrive::format(FSVolumeType fsType, BootBlockId bb, string name)
 {
-    debug(HDR_DEBUG, "Formatting drive\n");
-    debug(HDR_DEBUG, "    File system: %s\n", FSVolumeTypeEnum::key(fsType));
-    debug(HDR_DEBUG, "     Boot block: %s\n", BootBlockIdEnum::key(bb));
+    if constexpr (HDR_DEBUG) {
 
+        msg("Formatting with : %s\n", FSVolumeTypeEnum::key(fsType));
+        msg("     Boot block : %s\n", BootBlockIdEnum::key(bb));
+        msg("           Name : %s\n", name.c_str());
+    }
+    
     // Only proceed if a disk is present
     if (!data) return;
 

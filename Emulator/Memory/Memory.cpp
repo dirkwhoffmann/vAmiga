@@ -391,7 +391,7 @@ Memory::didLoadFromBuffer(const u8 *buffer)
 }
 
 isize
-Memory::didSaveToBuffer(u8 *buffer) const
+Memory::didSaveToBuffer(u8 *buffer)
 {
     util::SerWriter writer(buffer);
 
