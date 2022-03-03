@@ -19,7 +19,6 @@ bool
 HDFFile::isCompatible(const string &path)
 {
     return util::uppercased(util::extractSuffix(path)) == "HDF";
-//    return suffix == "HDF";
 }
 
 bool
@@ -31,9 +30,11 @@ HDFFile::isCompatible(std::istream &stream)
 void
 HDFFile::finalizeRead()
 {
+    hdrv = getHdrvDescriptor();
+    ptable = getPartitionDescriptors();
+    
     deriveGeomentry(); // DEPRECATED
-
-    scanDisk();
+    scanDisk(); // DEPRECATED
 }
 
 void
@@ -76,19 +77,19 @@ HDFFile::init(const HardDrive &drive)
 isize
 HDFFile::numCyls() const
 {
-    return driveSpec.geometry.cylinders;
+    return hdrv.geometry.cylinders;
 }
 
 isize
 HDFFile::numHeads() const
 {
-    return driveSpec.geometry.heads;
+    return hdrv.geometry.heads;
 }
 
 isize
 HDFFile::numSectors() const
 {
-    return driveSpec.geometry.sectors;
+    return hdrv.geometry.sectors;
 }
 
 Geometry
@@ -276,13 +277,13 @@ HDFFile::hasRDB() const
 isize
 HDFFile::numPartitions() const
 {
-    return isize(driveSpec.partitions.size());
+    return isize(ptable.size());
 }
 
 u8 *
 HDFFile::dataForPartition(isize nr) const
 {
-    auto &part = driveSpec.partitions[nr];
+    auto &part = ptable[nr];
     return data + part.lowCyl * part.heads * part.sectors * 512;
 }
 

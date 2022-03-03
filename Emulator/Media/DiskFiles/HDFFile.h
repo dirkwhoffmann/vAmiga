@@ -17,7 +17,11 @@ class FloppyDisk;
 
 class HDFFile : public DiskFile {
     
-    // Collected device information
+    // Derived descriptors
+    HdrvDescriptor hdrv;
+    std::vector<PartitionDescriptor> ptable;
+    
+    // Collected device information (DEPRECATED)
     HardDriveSpec driveSpec;
             
 public:
