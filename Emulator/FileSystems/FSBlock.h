@@ -16,12 +16,10 @@
 #include "BootBlockImage.h"
 #include <vector>
 
-struct MutableFileSystem; // TODO: REMOVE FWD DECLARATION
-
 struct FSBlock : AmigaObject {
         
     // The device this block belongs to
-    struct FileSystem &device;
+    class FileSystem &device;
 
     // The type of this block
     FSBlockType type = FS_UNKNOWN_BLOCK;

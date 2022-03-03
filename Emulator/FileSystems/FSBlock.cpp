@@ -12,8 +12,6 @@
 #include "MutableFileSystem.h"
 #include "MemUtils.h"
 
-struct MutableFileSystem;
-
 FSBlock::FSBlock(FileSystem &ref, Block nr, FSBlockType t) : device(ref)
 {
     assert(t != FS_UNKNOWN_BLOCK);

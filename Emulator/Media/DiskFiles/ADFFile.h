@@ -10,9 +10,8 @@
 #pragma once
 
 #include "FloppyFile.h"
-// #include "MutableFileSystem.h"
 
-struct MutableFileSystem;
+class MutableFileSystem;
 
 class ADFFile : public FloppyFile {
 
