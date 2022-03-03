@@ -149,14 +149,3 @@ typedef struct
     struct { isize c; isize h; isize s; } head;
 }
 HardDriveInfo;
-
-#ifdef __cplusplus
-typedef struct
-{
-    HdrvDescriptor hdrv;
-    
-    // Partition information
-    std::vector <PartitionDescriptor> partitions;
-}
-HardDriveSpec;
-#endif

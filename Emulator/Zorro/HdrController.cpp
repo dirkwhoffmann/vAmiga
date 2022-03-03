@@ -290,9 +290,8 @@ HdrController::processInit()
     debug(HDR_DEBUG, "Initializing partition %d\n", unit);
     
     // Collect hard drive information
-    auto &specs = drive.driveSpec;
-    auto &geometry = specs.hdrv.geometry;
-    auto &part = specs.partitions[unit];
+    auto &geometry = drive.desc.geometry;
+    auto &part = drive.ptable[unit];
         
     char dosName[] = {'D', 'H', '0', 0 };
     dosName[2] = char('0' + unit);

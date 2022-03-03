@@ -64,7 +64,7 @@ HDFFile::init(const HardDrive &drive)
     // TODO: THIS FUNCTION IS A PERFORMANCE KILLER FOR LARGE BUFFERS
     {   MEASURE_TIME("AmigaFile::init(const u8 *buf, isize len)")
         
-        AmigaFile::init(drive.data, drive.driveSpec.hdrv.geometry.numBytes());
+        AmigaFile::init(drive.data, drive.desc.geometry.numBytes());
     }
     
     // Overwrite the predicted geometry from the precise one
@@ -196,7 +196,6 @@ HDFFile::getFileSystemDescriptor(isize nr) const
 {
     FileSystemDescriptor result;
         
-    // auto &part = driveSpec.partitions[nr];
     auto &part = ptable[nr];
     
     auto c = part.highCyl - part.lowCyl + 1;
@@ -257,7 +256,6 @@ HDFFile::getFileSystemDescriptor(isize nr) const
 const Geometry
 HDFFile::getGeometry() const
 {
-    // return driveSpec.hdrv.geometry;
     return hdrv.geometry;
 }
 

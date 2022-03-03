@@ -30,10 +30,7 @@ class HardDrive : public Drive {
     
     // Partition table
     std::vector<PartitionDescriptor> ptable;
-    
-    // Hard drive spec (DEPRECATED)
-    HardDriveSpec driveSpec = {};
-        
+            
     // Disk data
     u8 *data = nullptr;
     
@@ -92,10 +89,10 @@ private:
     {
         worker
         
-        << driveSpec.hdrv.geometry.cylinders
-        << driveSpec.hdrv.geometry.heads
-        << driveSpec.hdrv.geometry.sectors
-        << driveSpec.hdrv.geometry.bsize
+        << desc.geometry.cylinders
+        << desc.geometry.heads
+        << desc.geometry.sectors
+        << desc.geometry.bsize
         << modified;
     }
 
@@ -148,10 +145,10 @@ public:
     const PartitionDescriptor &getPartitionInfo(isize nr);
     
     // Returns the disk geometry
-    const Geometry &getGeometry() const { return driveSpec.hdrv.geometry; }
+    const Geometry &getGeometry() const { return desc.geometry; }
 
     // Returns the number of partitions
-    isize numPartitions() { return isize(driveSpec.partitions.size()); }
+    isize numPartitions() { return isize(ptable.size()); }
     
     // Checks whether this drive is connected to the Amiga
     bool isConnected() const { return config.connected; }
