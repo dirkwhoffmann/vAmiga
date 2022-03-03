@@ -67,11 +67,11 @@ HDFFile::init(const HardDrive &drive)
     // TODO: THIS FUNCTION IS A PERFORMANCE KILLER FOR LARGE BUFFERS
     {   MEASURE_TIME("AmigaFile::init(const u8 *buf, isize len)")
         
-        AmigaFile::init(drive.data, drive.driveSpec.geometry.numBytes());
+        AmigaFile::init(drive.data, drive.driveSpec.hdrv.geometry.numBytes());
     }
     
     // Overwrite the predicted geometry from the precise one
-    driveSpec.geometry = drive.getGeometry();
+    driveSpec.hdrv.geometry = drive.getGeometry();
 }
 
 isize
@@ -259,7 +259,7 @@ HDFFile::getFileSystemDescriptor(isize nr) const
 const Geometry
 HDFFile::getGeometry() const
 {
-    return driveSpec.geometry;
+    return driveSpec.hdrv.geometry;
 }
 
 bool
@@ -319,7 +319,7 @@ HDFFile::predictGeometry()
     // Use the first entry as the drive's geometry
     if (geometries.size()) {
         
-        driveSpec.geometry = geometries.front();
+        driveSpec.hdrv.geometry = geometries.front();
     }
 }
 
@@ -332,17 +332,17 @@ HDFFile::scanDisk()
 
         // Read the information from the rigid disk block
         
-        driveSpec.geometry.cylinders    = R32BE_ALIGNED(rdb + 64);
-        driveSpec.geometry.sectors      = R32BE_ALIGNED(rdb + 68);
-        driveSpec.geometry.heads        = R32BE_ALIGNED(rdb + 72);
-        driveSpec.geometry.bsize        = R32BE_ALIGNED(rdb + 16);
+        driveSpec.hdrv.geometry.cylinders    = R32BE_ALIGNED(rdb + 64);
+        driveSpec.hdrv.geometry.sectors      = R32BE_ALIGNED(rdb + 68);
+        driveSpec.hdrv.geometry.heads        = R32BE_ALIGNED(rdb + 72);
+        driveSpec.hdrv.geometry.bsize        = R32BE_ALIGNED(rdb + 16);
 
-        driveSpec.diskVendor            = util::createStr(rdb + 160, 8);
-        driveSpec.diskProduct           = util::createStr(rdb + 168, 16);
-        driveSpec.diskRevision          = util::createStr(rdb + 184, 4);
-        driveSpec.controllerVendor      = util::createStr(rdb + 188, 8);
-        driveSpec.controllerProduct     = util::createStr(rdb + 196, 16);
-        driveSpec.controllerRevision    = util::createStr(rdb + 212, 4);
+        driveSpec.hdrv.dskVendor            = util::createStr(rdb + 160, 8);
+        driveSpec.hdrv.dskProduct           = util::createStr(rdb + 168, 16);
+        driveSpec.hdrv.dskRevision          = util::createStr(rdb + 184, 4);
+        driveSpec.hdrv.conVendor            = util::createStr(rdb + 188, 8);
+        driveSpec.hdrv.conProduct           = util::createStr(rdb + 196, 16);
+        driveSpec.hdrv.conRevision          = util::createStr(rdb + 212, 4);
         
         scanPartitions();
     
@@ -352,12 +352,12 @@ HDFFile::scanDisk()
         predictGeometry();
         
         // Fill in default values
-        driveSpec.diskVendor = "VAMIGA";
-        driveSpec.diskProduct = "HARD DRIVE";
-        driveSpec.diskRevision = "R1.0";
-        driveSpec.controllerVendor = "VAMIGA";
-        driveSpec.controllerProduct = "HDR CONTROLLER";
-        driveSpec.controllerRevision = "R1.0";
+        driveSpec.hdrv.dskVendor = "VAMIGA";
+        driveSpec.hdrv.dskProduct = "HARD DRIVE";
+        driveSpec.hdrv.dskRevision = "R1.0";
+        driveSpec.hdrv.conVendor = "VAMIGA";
+        driveSpec.hdrv.conProduct = "HDR CONTROLLER";
+        driveSpec.hdrv.conRevision = "R1.0";
         
         addDefaultPartition();
     }
@@ -370,7 +370,7 @@ HDFFile::scanPartitions()
 
         if (auto part = seekPB(i); part) {
         
-            PartitionSpec partSpec;
+            PartitionDescriptor partSpec;
             
             partSpec.name           = util::createStr(part + 37, 31);
             partSpec.flags          = R32BE_ALIGNED(part + 20);
@@ -396,7 +396,7 @@ HDFFile::scanPartitions()
 void
 HDFFile::addDefaultPartition()
 {
-    PartitionSpec partSpec;
+    PartitionDescriptor partSpec;
     
     auto &geometry = getGeometry();
     

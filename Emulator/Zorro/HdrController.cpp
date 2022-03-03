@@ -291,7 +291,7 @@ HdrController::processInit()
     
     // Collect hard drive information
     auto &specs = drive.driveSpec;
-    auto &geometry = specs.geometry;
+    auto &geometry = specs.hdrv.geometry;
     auto &part = specs.partitions[unit];
         
     char dosName[] = {'D', 'H', '0', 0 };

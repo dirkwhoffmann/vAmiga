@@ -153,39 +153,10 @@ HardDriveInfo;
 #ifdef __cplusplus
 typedef struct
 {
-    string name;
-    u32 flags;
-    u32 sizeBlock;
-    u32 heads;
-    u32 sectors;
-    u32 reserved;
-    u32 interleave;
-    u32 lowCyl;
-    u32 highCyl;
-    u32 numBuffers;
-    u32 bufMemType;
-    u32 maxTransfer;
-    u32 mask;
-    u32 bootPri;
-    u32 dosType;
-}
-PartitionSpec;
-    
-typedef struct
-{
-    // Disk geometry
-    Geometry geometry;
-    
-    // Drive identification
-    string diskVendor;
-    string diskProduct;
-    string diskRevision;
-    string controllerVendor;
-    string controllerProduct;
-    string controllerRevision;
+    HdrvDescriptor hdrv;
     
     // Partition information
-    std::vector <PartitionSpec> partitions;
+    std::vector <PartitionDescriptor> partitions;
 }
 HardDriveSpec;
 #endif

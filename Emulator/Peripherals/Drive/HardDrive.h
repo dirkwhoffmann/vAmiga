@@ -92,10 +92,10 @@ private:
     {
         worker
         
-        << driveSpec.geometry.cylinders
-        << driveSpec.geometry.heads
-        << driveSpec.geometry.sectors
-        << driveSpec.geometry.bsize
+        << driveSpec.hdrv.geometry.cylinders
+        << driveSpec.hdrv.geometry.heads
+        << driveSpec.hdrv.geometry.sectors
+        << driveSpec.hdrv.geometry.bsize
         << modified;
     }
 
@@ -145,10 +145,10 @@ public:
 
     // Returns information about the disk or one of its partitions
     HardDriveInfo getInfo() const { return AmigaComponent::getInfo(info); }
-    const PartitionSpec &getPartitionInfo(isize nr);
+    const PartitionDescriptor &getPartitionInfo(isize nr);
     
     // Returns the disk geometry
-    const Geometry &getGeometry() const { return driveSpec.geometry; }
+    const Geometry &getGeometry() const { return driveSpec.hdrv.geometry; }
 
     // Returns the number of partitions
     isize numPartitions() { return isize(driveSpec.partitions.size()); }

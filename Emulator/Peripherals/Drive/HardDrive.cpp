@@ -86,15 +86,15 @@ HardDrive::init(const Geometry &geometry)
     ptable.push_back(PartitionDescriptor(geometry));
     
     // Set product descriptions
-    driveSpec.controllerVendor = "VAMIGA";
-    driveSpec.controllerProduct = "HRDDRVCON";
-    driveSpec.controllerRevision = "1.0";
-    driveSpec.diskVendor = "VAMIGA";
-    driveSpec.diskProduct = "HRDDRV";
-    driveSpec.diskRevision = "1.0";
+    driveSpec.hdrv.conVendor = "VAMIGA";
+    driveSpec.hdrv.conProduct = "HRDDRVCON";
+    driveSpec.hdrv.conRevision = "1.0";
+    driveSpec.hdrv.dskVendor = "VAMIGA";
+    driveSpec.hdrv.dskProduct = "HRDDRV";
+    driveSpec.hdrv.dskRevision = "1.0";
 
     // Save the geometry and create the new drive
-    this->driveSpec.geometry = geometry;
+    this->driveSpec.hdrv.geometry = geometry;
     data = new u8[geometry.numBytes()];
 }
 
@@ -129,7 +129,9 @@ HardDrive::init(const HDFFile &hdf)
     
     // Copy the drive spec
     driveSpec = hdf.getDriveSpec();
-        
+    driveSpec.hdrv.geometry = hdf.getGeometry();
+    // driveSpec.partitions = hdf.getPartitionDescriptors();
+    
     // Copy over all blocks
     hdf.flash(data);
     
@@ -215,7 +217,7 @@ HardDrive::setConfigItem(Option option, i64 value)
     }
 }
 
-const PartitionSpec &
+const PartitionDescriptor &
 HardDrive::getPartitionInfo(isize nr)
 {
     assert(nr >= 0 && nr < numPartitions());
@@ -252,7 +254,7 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
     
     if (category & dump::Parameters) {
 
-        auto &geometry = driveSpec.geometry;
+        auto &geometry = driveSpec.hdrv.geometry;
         
         auto cap1 = geometry.numBytes() / MB(1);
         auto cap2 = ((100 * geometry.numBytes()) / MB(1)) % 100;
@@ -268,17 +270,17 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         os << tab("Block size");
         os << dec(geometry.bsize) << std::endl;
         os << tab("Disk vendor");
-        os << driveSpec.diskVendor << std::endl;
+        os << driveSpec.hdrv.dskVendor << std::endl;
         os << tab("Disk product");
-        os << driveSpec.diskProduct << std::endl;
+        os << driveSpec.hdrv.dskProduct << std::endl;
         os << tab("Disk revision");
-        os << driveSpec.diskRevision << std::endl;
+        os << driveSpec.hdrv.dskRevision << std::endl;
         os << tab("Controller vendor");
-        os << driveSpec.controllerVendor << std::endl;
+        os << driveSpec.hdrv.conVendor << std::endl;
         os << tab("Controller product");
-        os << driveSpec.controllerProduct << std::endl;
+        os << driveSpec.hdrv.conProduct << std::endl;
         os << tab("Controller revision");
-        os << driveSpec.controllerRevision << std::endl;        
+        os << driveSpec.hdrv.conRevision << std::endl;
     }
 
     if (category & dump::Volumes) {
@@ -365,7 +367,7 @@ HardDrive::_size()
     applyToResetItems(counter);
     
     // Add the disk size
-    counter.count += driveSpec.geometry.numBytes();
+    counter.count += driveSpec.hdrv.geometry.numBytes();
     
     return counter.count;
 }
@@ -376,10 +378,10 @@ HardDrive::didLoadFromBuffer(const u8 *buffer)
     util::SerReader reader(buffer);
 
     // Create the drive
-    init(driveSpec.geometry);
+    init(driveSpec.hdrv.geometry);
     
     // Load disk data
-    reader.copy(data, driveSpec.geometry.numBytes());
+    reader.copy(data, driveSpec.hdrv.geometry.numBytes());
 
     return (isize)(reader.ptr - buffer);
 }
@@ -390,7 +392,7 @@ HardDrive::didSaveToBuffer(u8 *buffer) const
     util::SerWriter writer(buffer);
 
     // Save memory contents
-    writer.copy(data, driveSpec.geometry.numBytes());
+    writer.copy(data, driveSpec.hdrv.geometry.numBytes());
         
     return (isize)(writer.ptr - buffer);
 }
@@ -408,7 +410,7 @@ HardDrive::format(FSVolumeType fsType, BootBlockId bb)
     if (fsType != FS_NODOS) {
         
         // Create a device descriptor matching this drive
-        auto layout = FileSystemDescriptor(driveSpec.geometry, fsType);
+        auto layout = FileSystemDescriptor(driveSpec.hdrv.geometry, fsType);
 
         // Create a file system
         auto fs = MutableFileSystem(layout);
@@ -421,7 +423,7 @@ HardDrive::format(FSVolumeType fsType, BootBlockId bb)
         fs.dump();
         
         // Copy all blocks over
-        fs.exportVolume(data, driveSpec.geometry.numBytes());
+        fs.exportVolume(data, driveSpec.hdrv.geometry.numBytes());
     }
 }
 
@@ -437,9 +439,9 @@ HardDrive::changeGeometry(const Geometry &geometry)
 {
     geometry.checkCompatibility();
         
-    if (this->driveSpec.geometry.numBytes() == driveSpec.geometry.numBytes()) {
+    if (this->driveSpec.hdrv.geometry.numBytes() == driveSpec.hdrv.geometry.numBytes()) {
         
-        this->driveSpec.geometry = geometry;
+        this->driveSpec.hdrv.geometry = geometry;
     
     } else {
         
@@ -466,7 +468,7 @@ HardDrive::read(isize offset, isize length, u32 addr)
     if (!error) {
         
         // Move the drive head to the specified location
-        moveHead(offset / driveSpec.geometry.bsize);
+        moveHead(offset / driveSpec.hdrv.geometry.bsize);
 
         // Perform the read operation
         mem.patch(addr, data + offset, length);
@@ -494,7 +496,7 @@ HardDrive::write(isize offset, isize length, u32 addr)
     if (!error) {
     
         // Move the drive head to the specified location
-        moveHead(offset / driveSpec.geometry.bsize);
+        moveHead(offset / driveSpec.hdrv.geometry.bsize);
 
         // Perform the read operation
         mem.spypeek <ACCESSOR_CPU> (addr, length, data + offset);
@@ -526,7 +528,7 @@ HardDrive::verify(isize offset, isize length, u32 addr)
         return IOERR_BADADDRESS;
     }
 
-    if (offset + length > driveSpec.geometry.numBytes()) {
+    if (offset + length > driveSpec.hdrv.geometry.numBytes()) {
         
         debug(HDR_DEBUG, "Invalid block location");
         return IOERR_BADADDRESS;
@@ -544,9 +546,9 @@ HardDrive::verify(isize offset, isize length, u32 addr)
 void
 HardDrive::moveHead(isize lba)
 {
-    isize c = lba / (driveSpec.geometry.heads * driveSpec.geometry.sectors);
-    isize h = (lba / driveSpec.geometry.sectors) % driveSpec.geometry.heads;
-    isize s = lba % driveSpec.geometry.sectors;
+    isize c = lba / (driveSpec.hdrv.geometry.heads * driveSpec.hdrv.geometry.sectors);
+    isize h = (lba / driveSpec.hdrv.geometry.sectors) % driveSpec.hdrv.geometry.heads;
+    isize s = lba % driveSpec.hdrv.geometry.sectors;
 
     moveHead(c, h, s);
 }
