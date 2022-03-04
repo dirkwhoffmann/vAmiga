@@ -652,7 +652,7 @@
 
 @property (readonly) HardDriveInfo info;
 
-// @property (readonly) BOOL isConnected;
+@property (readonly) BOOL isConnected;
 @property (readonly) NSInteger capacity;
 @property (readonly) NSInteger partitions;
 @property (readonly) NSInteger cylinders;

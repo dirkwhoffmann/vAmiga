@@ -173,6 +173,11 @@ class MyDocument: NSDocument {
                 (error as? VAError)?.cantInsert()
             }
         }
+        
+        if let proxy = attachment as? HDFFileProxy {
+            
+            track("TODO: Attach hard drive")
+        }
     }
     
     func runImportDialog() {

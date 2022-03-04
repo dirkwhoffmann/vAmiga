@@ -1305,12 +1305,10 @@ using namespace moira;
     return [self drive]->getInfo();
 }
 
-/*
-- (BOOL)isAttached
+- (BOOL)isConnected
 {
     return [self drive]->isConnected();
 }
-*/
 
 - (NSInteger)capacity
 {

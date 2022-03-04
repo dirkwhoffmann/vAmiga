@@ -10,7 +10,14 @@
 import Foundation
 
 class DropZone: Layer {
- 
+    
+    class func createImage(_ name: String, label: String) -> NSImage {
+        
+        let img = NSImage(named: name)!.copy() as! NSImage
+        img.imprint(text: label, x: 235, y: 330, fontSize: 100, tint: "light")
+        return img
+    }
+    
     let controller: MyController
     
     var window: NSWindow { return controller.window! }
@@ -33,8 +40,58 @@ class DropZone: Layer {
     var targetAlpha = [unselected, unselected, unselected, unselected]
     var maxAlpha = [0.0, 0.0, 0.0, 0.0]
         
+    var type: FileType?
     var error: VAError?
     var errorUrl: URL?
+    
+    // Image pool
+    var dfDisabled: [NSImage] =
+    [ createImage("dropZoneDisabled", label: "DF0"),
+      createImage("dropZoneDisabled", label: "DF1"),
+      createImage("dropZoneDisabled", label: "DF2"),
+      createImage("dropZoneDisabled", label: "DF3") ]
+    
+    var dfEmpty: [NSImage] =
+    [ createImage("dropZoneEmpty", label: "DF0"),
+      createImage("dropZoneEmpty", label: "DF1"),
+      createImage("dropZoneEmpty", label: "DF2"),
+      createImage("dropZoneEmpty", label: "DF3") ]
+
+    var dfInUse: [NSImage] =
+    [ createImage("dropZoneFloppy1", label: "DF0"),
+      createImage("dropZoneFloppy1", label: "DF1"),
+      createImage("dropZoneFloppy1", label: "DF2"),
+      createImage("dropZoneFloppy1", label: "DF3") ]
+
+    var dfSelected: [NSImage] =
+    [ createImage("dropZoneFloppy2", label: "DF0"),
+      createImage("dropZoneFloppy2", label: "DF1"),
+      createImage("dropZoneFloppy2", label: "DF2"),
+      createImage("dropZoneFloppy2", label: "DF3") ]
+
+    var hdDisabled: [NSImage] =
+    [ createImage("dropZoneDisabled", label: "HD0"),
+      createImage("dropZoneDisabled", label: "HD1"),
+      createImage("dropZoneDisabled", label: "HD2"),
+      createImage("dropZoneDisabled", label: "HD3") ]
+        
+    var hdEmpty: [NSImage] =
+    [ createImage("dropZoneEmpty", label: "HD0"),
+      createImage("dropZoneEmpty", label: "HD1"),
+      createImage("dropZoneEmpty", label: "HD2"),
+      createImage("dropZoneEmpty", label: "HD3") ]
+
+    var hdInUse: [NSImage] =
+    [ createImage("dropZoneHdr1", label: "HD0"),
+      createImage("dropZoneHdr1", label: "HD1"),
+      createImage("dropZoneHdr1", label: "HD2"),
+      createImage("dropZoneHdr1", label: "DD3") ]
+
+    var hdSelected: [NSImage] =
+    [ createImage("dropZoneHdr2", label: "HD0"),
+      createImage("dropZoneHdr2", label: "HD1"),
+      createImage("dropZoneHdr2", label: "HD2"),
+      createImage("dropZoneHdr2", label: "DD3") ]
 
     //
     // Initializing
@@ -52,39 +109,47 @@ class DropZone: Layer {
     private func image(zone: Int) -> NSImage {
 
         if !enabled[zone] {
-            return NSImage(named: "dropZoneDf\(zone)Disabled")!
+            return type == .HDF ? hdDisabled[zone] : dfDisabled[zone]
         } else if amiga.df(zone)!.hasDisk {
-            return NSImage(named: "dropZoneDf\(zone)InUse")!
+            return type == .HDF ? hdInUse[zone] : dfInUse[zone]
         } else {
-            return NSImage(named: "dropZoneDf\(zone)Empty")!
+            return type == .HDF ? hdEmpty[zone] : dfEmpty[zone]
         }
     }
     
-    private func setType(_ type: FileType) {
-    
-        let connected = amiga.diskController.getConfig().connected
+    func open(type: FileType, delay: Double) {
+
+        self.type = type
         
         switch type {
         
         case .ADF, .EXT, .IMG, .DMS, .EXE, .DIR:
-            enabled = [connected.0, connected.1, connected.2, connected.3]
+
+            let connected = amiga.diskController.getConfig().connected
+            enabled = [
+                connected.0,
+                connected.1,
+                connected.2,
+                connected.3 ]
+                        
+        case .HDF:
+            
+            enabled = [
+                amiga.hd0.isConnected,
+                amiga.hd1.isConnected,
+                amiga.hd2.isConnected,
+                amiga.hd3.isConnected ]
             
         default:
             enabled = [false, false, false, false]
         }
-        
-        for i in 0...3 {
-            
-            zones[i].image = image(zone: i)
-        }
+                
+        // Assign zone images
+        for i in 0...3 { zones[i].image = image(zone: i) }
         
         // Hide all drop zones if none is enabled
         hideAll = !enabled[0] && !enabled[1] && !enabled[2] && !enabled[3]
-    }
-
-    func open(type: FileType, delay: Double) {
-
-        setType(type)
+        
         open(delay: delay)
         resize()
     }
@@ -124,7 +189,7 @@ class DropZone: Layer {
             if isIn && !inside[i] {
                 
                 inside[i] = true
-                zones[i].image = NSImage(named: "dropZoneDf\(i)Selected")
+                zones[i].image = type == .HDF ? hdSelected[i] : dfSelected[i]
                 targetAlpha[i] = DropZone.selected
             }
 

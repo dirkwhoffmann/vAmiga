@@ -121,7 +121,7 @@ public extension MetalView {
             
             // Check if the file is a snapshot or a script
             do {
-                let types: [FileType] = [ .SNAPSHOT, .SCRIPT, .HDF ]
+                let types: [FileType] = [ .SNAPSHOT, .SCRIPT ]
                 try myDocument.createAttachment(from: url, allowedTypes: types)
                 try myDocument.mountAttachment()
                 return true
@@ -137,7 +137,7 @@ public extension MetalView {
             for i in 0...3 {
                 if renderer.dropZone.isInside(sender, zone: i) {
                     
-                    let types: [FileType] = [ .ADF, .EXT, .IMG, .DMS, .EXE, .DIR ]
+                    let types: [FileType] = [ .HDF, .ADF, .EXT, .IMG, .DMS, .EXE, .DIR ]
                     try myDocument.createAttachment(from: url, allowedTypes: types)
                     try myDocument.mountAttachment(drive: i)
                     return true

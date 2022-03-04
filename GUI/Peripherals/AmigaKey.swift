@@ -280,12 +280,10 @@ extension AmigaKey: Equatable, Hashable {
 //
 
 extension NSImage {
-    
+
     func imprint(text: String,
-                 x: CGFloat, y: CGFloat, fontSize: CGFloat, tint: String) {
-        
-        let font = NSFont.systemFont(ofSize: fontSize)
-        let color: NSColor = tint == "dark" ? .keyCapColor2 : .keyCapColor
+                 x: CGFloat, y: CGFloat, font: NSFont, color: NSColor) {
+                
         let w = size.width
         let h = size.height
         
@@ -297,6 +295,15 @@ extension NSImage {
         lockFocus()
         text.draw(in: textRect, withAttributes: attributes)
         unlockFocus()
+    }
+    
+    func imprint(text: String,
+                 x: CGFloat, y: CGFloat, fontSize: CGFloat, tint: String) {
+        
+        let font = NSFont.systemFont(ofSize: fontSize)
+        let color: NSColor = tint == "dark" ? .keyCapColor2 : .keyCapColor
+
+        imprint(text: text, x: x, y: y, font: font, color: color)
     }
     
     func imprint(character c: Character,
