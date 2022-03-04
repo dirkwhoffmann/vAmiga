@@ -289,7 +289,7 @@ public extension AmigaProxy {
     func hd(_ nr: Int) -> HardDriveProxy? {
         
         switch nr {
-            
+
         case 0: return hd0
         case 1: return hd1
         case 2: return hd2

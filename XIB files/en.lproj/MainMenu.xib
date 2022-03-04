@@ -1153,13 +1153,13 @@
                             <menuItem title="Inspect Disk..." tag="1" id="ibt-uo-ppQ" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="inspectHdrAction:" target="-1" id="ejU-Us-PpT"/>
+                                    <action selector="inspectHdrDiskAction:" target="-1" id="Uzm-x1-eQh"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Inspect File System..." tag="1" id="y1v-r5-qiP" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="inspectHdrAction:" target="-1" id="8rO-eX-Nj0"/>
+                                    <action selector="inspectHdrVolumeAction:" target="-1" id="vbj-E2-1Q8"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="ax9-2h-7hk"/>
@@ -1298,13 +1298,13 @@
                             <menuItem title="Inspect Disk..." tag="2" id="0E6-C2-ryM" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="inspectHdrAction:" target="-1" id="9Oy-jj-V30"/>
+                                    <action selector="inspectHdrDiskAction:" target="-1" id="oTJ-KH-poQ"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Inspect File System..." tag="2" id="unW-JQ-lBo" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="configureHdrAction:" target="-1" id="Cx8-Sh-zqz"/>
+                                    <action selector="inspectHdrVolumeAction:" target="-1" id="XFg-QU-xoZ"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="1BH-ag-PTI"/>
@@ -1443,13 +1443,13 @@
                             <menuItem title="Inspect Disk..." tag="3" id="pFD-5y-I16" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="inspectHdrAction:" target="-1" id="ZEM-EJ-Rxv"/>
+                                    <action selector="inspectHdrDiskAction:" target="-1" id="7YU-lu-vRG"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Inspect File System..." tag="3" id="15h-z1-NXW" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="inspectHdrAction:" target="-1" id="Qoo-Nd-jD0"/>
+                                    <action selector="inspectHdrVolumeAction:" target="-1" id="GWC-eA-bxI"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="Jyn-ik-ww2"/>

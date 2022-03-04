@@ -28,11 +28,17 @@ class HardDiskConfigurator: DialogController {
 
     var nr = 0
 
-    // Geometry
-    var cylinders = 0
+    // Original geometry
+    var origCyls = 0
+    var origHeads = 0
+    var origSectors = 0
+    var origBsize = 0
+
+    // Selected geometry
+    var cyls = 0
     var heads = 0
     var sectors = 0
-    let bsize = 512
+    var bsize = 0
     
     var drive: HardDriveProxy { amiga.hd(nr)! }
     
@@ -42,9 +48,9 @@ class HardDiskConfigurator: DialogController {
     
     func setCylinder(_ newValue: Int) {
         
-        if newValue != cylinders {
+        if newValue != cyls {
 
-            cylinders = newValue.clamped(1, 65536)
+            cyls = newValue.clamped(1, 65536)
             update()
         }
     }
@@ -71,17 +77,25 @@ class HardDiskConfigurator: DialogController {
     // Starting up
     //
     
-    func showSheet(forDrive nr: Int) {
-        
-        track()
-        
+    func show(forDrive nr: Int) {
+                
         self.nr = nr
+        
+        origCyls = drive.cylinders
+        origHeads = drive.heads
+        origSectors = drive.sectors
+        origBsize = drive.bsize
+
+        cyls = origCyls
+        heads = origHeads
+        sectors = origSectors
+        bsize = origBsize
+
         super.showSheet()
     }
             
     override public func awakeFromNib() {
         
-        track()
         super.awakeFromNib()
                 
         cylinderStepper.maxValue = .greatestFiniteMagnitude
@@ -89,18 +103,11 @@ class HardDiskConfigurator: DialogController {
         sectorStepper.maxValue = .greatestFiniteMagnitude
         warningText.textColor = .warningColor
 
-        update()
-    }
-    
-    override func windowDidLoad() {
-
-        track()
-
         geometryPopup.removeAllItems()
         geometryPopup.addItem(withTitle: "Custom")
         geometryPopup.item(at: 0)!.tag = 0
         
-        if let geometries = drive.test() as? [Int] {
+        if let geometries = drive.geometries() as? [Int] {
             
             for (i, geo) in geometries.enumerated() {
                 
@@ -112,14 +119,18 @@ class HardDiskConfigurator: DialogController {
                 geometryPopup.item(at: i + 1)!.tag = geo
             }
             
-            track()
             geometryPopup.autoenablesItems = false
         }
+        
+        update()
+    }
+    
+    override func windowDidLoad() {
+
     }
     
     override func sheetDidShow() {
         
-        track()
     }
     
     //
@@ -127,12 +138,12 @@ class HardDiskConfigurator: DialogController {
     //
     
     func update() {
-          
+                  
         let custom = geometryPopup.selectedTag() == 0
-                
+        
         // Update text fields and steppers
-        cylinderField.stringValue      = String(format: "%d", cylinders)
-        cylinderStepper.integerValue   = cylinders
+        cylinderField.stringValue      = String(format: "%d", cyls)
+        cylinderStepper.integerValue   = cyls
         headField.stringValue          = String(format: "%d", heads)
         headStepper.integerValue       = heads
         sectorField.stringValue        = String(format: "%d", sectors)
@@ -166,7 +177,7 @@ class HardDiskConfigurator: DialogController {
         }
         
         // Check if the geometry is consistent with the HDF
-        let matching = cylinders * heads * sectors * bsize == drive.capacity
+        let matching = cyls * heads * sectors * bsize == drive.capacity
         warningText.isHidden = matching
         okButton.isEnabled = matching
     }
@@ -176,18 +187,22 @@ class HardDiskConfigurator: DialogController {
     //
 
     @IBAction func geometryAction(_ sender: NSPopUpButton!) {
-        
-        track()
-        
+                
         let tag = sender.selectedTag()
-        let c = (tag >> 32)
-        let h = (tag >> 16) & 0xFFFF
-        let s = tag & 0xFFFF
         
-        cylinders = c
-        heads = h
-        sectors = s
-    
+        if tag == 0 {
+            
+            cyls = origCyls
+            heads = origHeads
+            sectors = origSectors
+            
+        } else {
+
+            cyls = (tag >> 32)
+            heads = (tag >> 16) & 0xFFFF
+            sectors = tag & 0xFFFF
+        }
+        
         update()
     }
 
@@ -225,7 +240,7 @@ class HardDiskConfigurator: DialogController {
         
         do {
 
-            try drive.changeGeometry(c: cylinders, h: heads, s: sectors)
+            try drive.changeGeometry(c: cyls, h: heads, s: sectors)
             track("Drive geometry changed successfully")
             hideSheet()
             

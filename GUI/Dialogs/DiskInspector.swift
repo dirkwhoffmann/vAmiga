@@ -109,7 +109,7 @@ class DiskInspector: DialogController {
 
         // Run the HDF decoder
         decoder = try? HDFFileProxy.make(hdr: amiga.hd(nr)!) as HDFFileProxy
-        
+
         image = NSImage(named: "hdf")!
         showWindow()
     }
@@ -124,6 +124,11 @@ class DiskInspector: DialogController {
         sectorStepper.maxValue = .greatestFiniteMagnitude
         blockStepper.maxValue = .greatestFiniteMagnitude
                 
+        // Remove the MFM tab if a hard drive is analyzed
+        if decoder is HDFFileProxy {
+            tabView.removeTabViewItem(tabView.tabViewItem(at: 1))
+        }
+        
         update()
     }
          
@@ -167,22 +172,25 @@ class DiskInspector: DialogController {
         if let hdf = decoder as? HDFFileProxy {
                         
             let num = hdf.numPartitions
-            let rdb = hdf.hasRDB
             subTitle2.stringValue = "\(num) Partition" + (num != 1 ? "s" : "")
-            subTitle3.stringValue = (rdb ? "" : "No ") + "Rigid Disk Block found"
+            if hdf.hasRDB {
+                subTitle3.stringValue = "Rigid Disk Block found"
+            } else {
+                subTitle3.stringValue = "No Rigid Disk Block"
+            }
         }
-        
         if let floppy = decoder as? FloppyFileProxy {
             
             subTitle2.stringValue = floppy.typeInfo + " " + floppy.layoutInfo
             subTitle3.stringValue = ""
-            cylindersInfo.integerValue = floppy.numCyls
-            headsInfo.integerValue = floppy.numHeads
-            sectorsInfo.integerValue = floppy.numSectors
-            blocksInfo.integerValue = floppy.numBlocks
-            bsizeInfo.integerValue = floppy.bsize
-            capacityInfo.stringValue = floppy.describeCapacity
         }
+        
+        cylindersInfo.integerValue = decoder!.numCyls
+        headsInfo.integerValue = decoder!.numHeads
+        sectorsInfo.integerValue = decoder!.numSectors
+        blocksInfo.integerValue = decoder!.numBlocks
+        bsizeInfo.stringValue = "\(decoder!.bsize) Bytes"
+        capacityInfo.stringValue = decoder!.describeCapacity
     }
      
     func updateSelection() {
@@ -201,11 +209,14 @@ class DiskInspector: DialogController {
     
     func updateMfm() {
                 
+        // Only proceed if the MFM view is present
+        if tabView.numberOfTabViewItems == 1 { return }
+        
         let size = NSSize(width: 32, height: 32)
         syncColorButton.image = NSImage(color: .warningColor, size: size)
 
         // Read a whole MFM encoded track
-        let mfm = drive?.readTrackBits(currentTrack) ?? "No MFM data available"
+        let mfm = drive?.readTrackBits(currentTrack) ?? ""
 
         // Search all SYNC sequences (0x4489 + 0x4489)
         let sync = "0100010010001001"

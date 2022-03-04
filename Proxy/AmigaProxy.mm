@@ -1360,6 +1360,11 @@ using namespace moira;
     return [self drive]->getGeometry().sectors;
 }
 
+- (NSInteger)bsize
+{
+    return [self drive]->getGeometry().bsize;
+}
+
 - (BOOL)uniqueGeometry
 {
     return [self drive]->getGeometry().unique();
@@ -1428,7 +1433,7 @@ using namespace moira;
     }
 }
 
-- (NSMutableArray *) test
+- (NSMutableArray *)geometries
 {
     NSMutableArray *data = [[NSMutableArray alloc] init];
     
@@ -1438,7 +1443,6 @@ using namespace moira;
     for (auto &g : geometries) {
         
         NSInteger encoded = g.cylinders << 32 | g.heads << 16 | g.sectors;
-        NSLog(@"encoded = %ld", (long)encoded);
         [data addObject: [NSNumber numberWithInteger:encoded]];
     }
     

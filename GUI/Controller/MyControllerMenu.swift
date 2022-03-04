@@ -135,11 +135,6 @@ extension MyController: NSMenuItemValidation {
             default: fatalError()
             }
 
-        /*
-        case #selector(MyController.inspectHdrAction(_:)):
-            return true
-        */
-
         case #selector(MyController.writeProtectHdrAction(_:)):
             item.state = dhn.hasProtectedDisk ? .on : .off
             return dhn.hasDisk
@@ -771,7 +766,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func configureHdrAction(_ sender: NSMenuItem!) {
         
         let panel = HardDiskConfigurator.make(parent: self, nibName: "HardDiskConfigurator")
-        panel?.showSheet(forDrive: sender.tag)
+        panel?.show(forDrive: sender.tag)
     }
     
     @IBAction func writeProtectHdrAction(_ sender: NSMenuItem!) {

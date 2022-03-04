@@ -326,7 +326,7 @@ class VolumeInspector: DialogController {
         } else {
 
             virus.isHidden = true
-            virusInfo.stringValue = "Negative"
+            virusInfo.stringValue = "Passed - No findings"
             virusInfo.textColor = .secondaryLabelColor
             bootblockInfo.textColor = .secondaryLabelColor
         }

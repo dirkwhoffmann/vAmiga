@@ -661,6 +661,7 @@
 @property (readonly) NSInteger cylinders;
 @property (readonly) NSInteger heads;
 @property (readonly) NSInteger sectors;
+@property (readonly) NSInteger bsize;
 @property (readonly) BOOL uniqueGeometry;
 - (NSString *)nameOfPartition:(NSInteger)nr;
 - (NSInteger)lowerCylOfPartition:(NSInteger)nr;
@@ -669,7 +670,7 @@
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
 - (void)format:(FSVolumeType)fs name:(NSString *)name exception:(ExceptionWrapper *)ex;
 - (void)changeGeometry:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
-- (NSArray *) test;
+- (NSArray *) geometries;
 
 @end
 
