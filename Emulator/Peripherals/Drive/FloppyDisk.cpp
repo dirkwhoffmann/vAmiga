@@ -63,8 +63,8 @@ FloppyDisk::_dump(dump::Category category, std::ostream& os) const
         os << DensityEnum::key(density) << std::endl;
         os << tab("numCyls()");
         os << dec(numCyls()) << std::endl;
-        os << tab("numSides()");
-        os << dec(numSides()) << std::endl;
+        os << tab("numHeads()");
+        os << dec(numHeads()) << std::endl;
         os << tab("numTracks()");
         os << dec(numTracks()) << std::endl;
         os << tab("Track 0 length");
@@ -88,13 +88,13 @@ FloppyDisk::readByte(Track t, isize offset) const
 }
 
 u8
-FloppyDisk::readByte(Cylinder c, Side s, isize offset) const
+FloppyDisk::readByte(Cylinder c, Head h, isize offset) const
 {
     assert(c < numCyls());
-    assert(s < numSides());
-    assert(offset < length.cylinder[c][s]);
+    assert(h < numHeads());
+    assert(offset < length.cylinder[c][h]);
 
-    return data.cylinder[c][s][offset];
+    return data.cylinder[c][h][offset];
 }
 
 void
@@ -108,13 +108,13 @@ FloppyDisk::writeByte(u8 value, Track t, isize offset)
 }
 
 void
-FloppyDisk::writeByte(u8 value, Cylinder c, Side s, isize offset)
+FloppyDisk::writeByte(u8 value, Cylinder c, Head h, isize offset)
 {
     assert(c < numCyls());
-    assert(s < numSides());
-    assert(offset < length.cylinder[c][s]);
+    assert(h < numHeads());
+    assert(offset < length.cylinder[c][h]);
 
-    data.cylinder[c][s][offset] = value;
+    data.cylinder[c][h][offset] = value;
     modified = true;
 }
 
@@ -306,7 +306,7 @@ FloppyDisk::readTrackBits(Track t) const
 }
 
 string
-FloppyDisk::readTrackBits(Cylinder c, Side s) const
+FloppyDisk::readTrackBits(Cylinder c, Head h) const
 {
-    return readTrackBits(2 * c + s);
+    return readTrackBits(2 * c + h);
 }

@@ -9,9 +9,8 @@
 
 #pragma once
 
-#include "DriveTypes.h"
+#include "HardDriveTypes.h"
 #include "Drive.h"
-#include "FloppyDiskTypes.h"
 #include "HDFFile.h"
 
 class HardDrive : public Drive {
@@ -35,7 +34,8 @@ class HardDrive : public Drive {
     u8 *data = nullptr;
     
     // Current position of the read/write head
-    struct { isize c; isize h; isize s; } head = { };
+    DriveHead head;
+    // struct { isize c; isize h; isize s; } head = { };
     
     // Disk state flags
     bool modified = false;
@@ -110,9 +110,9 @@ private:
             
             worker
             
-            << head.c
-            << head.h
-            << head.s;
+            << head.cylinder
+            << head.head
+            << head.offset;
         }
     }
 
@@ -158,9 +158,6 @@ public:
 
 public:
 
-    // Returns the device number
-    isize getNr() const { return nr; }
-
     // Returns information about the disk or one of its partitions
     HardDriveInfo getInfo() const { return AmigaComponent::getInfo(info); }
     const PartitionDescriptor &getPartitionInfo(isize nr);
@@ -188,7 +185,6 @@ public:
 
     // Formats the disk
     void format(FSVolumeType fs, string name) throws;
-    // void format(FSVolumeType fs) { format(fs, defaultName()); } throws;
 
     // Change the drive geometry
     void changeGeometry(isize c, isize h, isize s, isize b = 512) throws;

@@ -258,12 +258,8 @@ FloppyDrive::_dump(dump::Category category, std::ostream& os) const
         os << dec(dsklen) << std::endl;
         os << tab("prb");
         os << hex(prb) << std::endl;
-        os << tab("Side");
-        os << dec(head.side) << std::endl;
-        os << tab("Cylinder");
-        os << dec(head.cylinder) << std::endl;
-        os << tab("Offset");
-        os << dec(head.offset) << std::endl;
+        os << tab("Drive head");
+        os << dec(head.cylinder) << ":" << dec(head.head) << ":" << dec(head.offset);
         os << tab("cylinderHistory");
         os << hex(cylinderHistory) << std::endl;
         os << tab("Disk");
@@ -456,7 +452,6 @@ FloppyDrive::driveStatusFlags() const
         }
         
         // PA4: /DSKTRACK0
-        // debug("Head is at cylinder %d\n", head.cylinder);
         if (head.cylinder == 0) { result &= 0b11101111; }
         
         // PA3: /DSKPROT
@@ -539,10 +534,10 @@ FloppyDrive::motorStopped() const
 }
 
 void
-FloppyDrive::selectSide(Side side)
+FloppyDrive::selectSide(Head h)
 {
-    assert(side < 2);
-    head.side = side;
+    assert(h == 0 || h == 1);
+    head.head = h;
 }
 
 u8
@@ -559,7 +554,7 @@ FloppyDrive::readByte() const
     }
     
     // Case 3: Normal operation
-    return disk->readByte(head.cylinder, head.side, head.offset);
+    return disk->readByte(head.cylinder, head.head, head.offset);
 }
 
 u8
@@ -583,7 +578,7 @@ void
 FloppyDrive::writeByte(u8 value)
 {
     if (disk) {
-        disk->writeByte(value, head.cylinder, head.side, head.offset);
+        disk->writeByte(value, head.cylinder, head.head, head.offset);
     }
 }
 
@@ -604,7 +599,7 @@ FloppyDrive::writeWordAndRotate(u16 value)
 void
 FloppyDrive::rotate()
 {
-    long last = disk ? disk->length.cylinder[head.cylinder][head.side] : 12668;
+    long last = disk ? disk->length.cylinder[head.cylinder][head.head] : 12668;
     if (++head.offset >= last) {
         
         // Start over at the beginning of the current cylinder
@@ -620,7 +615,7 @@ FloppyDrive::rotate()
 void
 FloppyDrive::findSyncMark()
 {
-    long length = disk->length.cylinder[head.cylinder][head.side];
+    long length = disk->length.cylinder[head.cylinder][head.head];
     for (isize i = 0; i < length; i++) {
         
         if (readByteAndRotate() != 0x44) continue;

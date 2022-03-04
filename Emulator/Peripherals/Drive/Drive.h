@@ -27,6 +27,13 @@ protected:
 public:
 
     Drive(Amiga& ref, isize nr);
+        
+    
+    //
+    // Analyzing
+    //
+
+    isize getNr() { return nr; }
     
 
     //

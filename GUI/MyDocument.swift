@@ -270,13 +270,11 @@ class MyDocument: NSDocument {
         }
         
         try export(fileProxy: dh!, to: url)
-        track("Hard Drive exported successfully")
 
-        // Mark disk as "not modified"
-        amiga.hd(nr)!.modified = false
-        
-        // Remember export URL
+        amiga.hd(nr)!.markDiskAsUnmodified()
         myAppDelegate.noteNewRecentlyExportedHdrURL(url, drive: nr)
+
+        track("Hard Drive exported successfully")
     }
     
     func export(fileProxy: AmigaFileProxy, to url: URL) throws {

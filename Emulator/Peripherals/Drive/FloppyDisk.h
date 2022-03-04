@@ -148,7 +148,7 @@ public:
     Density getDensity() const { return density; }
 
     isize numCyls() const { return diameter == INCH_525 ? 42 : 84; }
-    isize numSides() const { return 2; }
+    isize numHeads() const { return 2; }
     isize numTracks() const { return diameter == INCH_525 ? 84 : 168; }
 
     bool isWriteProtected() const { return writeProtected; }
@@ -166,11 +166,11 @@ public:
     
     // Reads a byte from disk
     u8 readByte(Track t, isize offset) const;
-    u8 readByte(Cylinder c, Side s, isize offset) const;
+    u8 readByte(Cylinder c, Head h, isize offset) const;
 
     // Writes a byte to disk
     void writeByte(u8 value, Track t, isize offset);
-    void writeByte(u8 value, Cylinder c, Side s, isize offset);
+    void writeByte(u8 value, Cylinder c, Head h, isize offset);
         
     
     //
@@ -218,5 +218,5 @@ public:
     
     // Returns a textual representation of all bits of a track
     string readTrackBits(Track t) const;
-    string readTrackBits(Cylinder c, Side s) const;
+    string readTrackBits(Cylinder c, Head h) const;
 };

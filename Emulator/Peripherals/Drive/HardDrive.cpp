@@ -114,10 +114,6 @@ HardDrive::init(const HDFFile &hdf)
 
     // Copy over all blocks
     hdf.flash(data);
-    
-    // REMOVE ASAP
-    dump(dump::Drive);
-    dump(dump::Partitions);
 }
 
 const char *
@@ -221,11 +217,8 @@ HardDrive::_inspect() const
 {
     {   SYNCHRONIZED
         
-        // info.attached = isAttached();
         info.modified = isModified();
-        info.head.c = head.c;
-        info.head.h = head.h;
-        info.head.s = head.s;
+        info.head = head;
     }
 }
 
@@ -295,8 +288,8 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         
         os << tab("Nr");
         os << dec(nr) << std::endl;
-        os << tab("Head position");
-        os << dec(head.c) << ":" << dec(head.h) << ":" << dec(head.s);
+        os << tab("Drive head");
+        os << dec(head.cylinder) << ":" << dec(head.head) << ":" << dec(head.offset);
         os << std::endl;
         os << tab("Modified");
         os << bol(modified) << std::endl;
@@ -428,11 +421,7 @@ HardDrive::format(FSVolumeType fsType, string name)
 
         // Add name and bootblock
         fs.setName(name);
-        
-        // REMOVE ASAP
-        msg("File system:\n");
-        fs.dump();
-        
+                
         // Copy all blocks over
         fs.exportVolume(data, desc.geometry.numBytes());
     }
@@ -569,11 +558,11 @@ HardDrive::moveHead(isize lba)
 void
 HardDrive::moveHead(isize c, isize h, isize s)
 {
-    bool step = head.c != c;
+    bool step = head.cylinder != c;
     
-    head.c = c;
-    head.h = h;
-    head.s = s;
+    head.cylinder = c;
+    head.head = h;
+    head.offset = desc.geometry.bsize * s;
     
     if (step) msgQueue.put(MSG_HDR_STEP, c);
 }

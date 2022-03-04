@@ -9,7 +9,9 @@
 
 #pragma once
 
-#include "DriveTypes.h"
+#include "FloppyDriveTypes.h"
+#include "BootBlockImageTypes.h"
+#include "FSTypes.h"
 #include "Drive.h"
 #include "FloppyDisk.h"
 #include "DiskController.h"
@@ -127,8 +129,8 @@ private:
             
             worker
             
-            << head.side
             << head.cylinder
+            << head.head
             << head.offset
             << motor
             << switchCycle
@@ -186,7 +188,6 @@ public:
 
 public:
     
-    isize getNr() { return nr; }
     FloppyDriveInfo getInfo() const { return AmigaComponent::getInfo(info); }
  
 
@@ -243,7 +244,7 @@ public:
     //
 
     // Selects the active drive head (0 = lower, 1 = upper)
-    void selectSide(Side side);
+    void selectSide(Head h);
 
     // Reads a value from the drive head and optionally rotates the disk
     u8 readByte() const;
@@ -286,10 +287,7 @@ public:
     //
 
 public:
-    
-    bool hasDDDisk() const { return disk ? disk->density == DENSITY_DD : false; }
-    bool hasHDDisk() const { return disk ? disk->density == DENSITY_HD : false; }
-        
+            
     bool isInsertable(Diameter t, Density d) const;
     bool isInsertable(const FloppyFile &file) const;
     bool isInsertable(const FloppyDisk &disk) const;

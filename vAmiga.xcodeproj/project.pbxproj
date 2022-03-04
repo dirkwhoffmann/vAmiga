@@ -409,6 +409,7 @@
 		50565071254573E100A79D27 /* FSBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSBlock.h; sourceTree = "<group>"; };
 		5056507A25459C8800A79D27 /* FSObjects.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSObjects.cpp; sourceTree = "<group>"; };
 		5056507B25459C8800A79D27 /* FSObjects.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSObjects.h; sourceTree = "<group>"; };
+		5056719327D2377900ECAC0C /* FloppyDriveTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloppyDriveTypes.h; sourceTree = "<group>"; };
 		5057E4C4243DF10A004005EB /* Primitives.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Primitives.swift; sourceTree = "<group>"; };
 		505A214E22869FF10016EA21 /* AudioFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFilter.cpp; sourceTree = "<group>"; };
 		505A214F22869FF10016EA21 /* AudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilter.h; sourceTree = "<group>"; };
@@ -1317,11 +1318,12 @@
 				500770C1227C9FF3003A5F76 /* DriveTypes.h */,
 				50210B1F27CB6A41001193AA /* Drive.h */,
 				50210B1E27CB6A41001193AA /* Drive.cpp */,
-				50F6EEBD21F4F61F0091155D /* FloppyDrive.h */,
-				50F6EEBC21F4F61F0091155D /* FloppyDrive.cpp */,
 				5004C3A727BD519400A9161A /* HardDriveTypes.h */,
 				5004C3A627BD516E00A9161A /* HardDrive.h */,
 				5004C3A527BD516E00A9161A /* HardDrive.cpp */,
+				5056719327D2377900ECAC0C /* FloppyDriveTypes.h */,
+				50F6EEBD21F4F61F0091155D /* FloppyDrive.h */,
+				50F6EEBC21F4F61F0091155D /* FloppyDrive.cpp */,
 				50D52442227878E900F8959D /* FloppyDiskTypes.h */,
 				50F6EEB721F4F5C60091155D /* FloppyDisk.h */,
 				50F6EEB621F4F5C60091155D /* FloppyDisk.cpp */,

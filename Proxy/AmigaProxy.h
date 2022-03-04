@@ -23,10 +23,11 @@
 #import "DeniseTypes.h"
 #import "DiskControllerTypes.h"
 #import "DmaDebuggerTypes.h"
-#import "DriveTypes.h"
 #import "ErrorTypes.h"
 #import "FloppyDiskTypes.h"
+#import "FloppyDriveTypes.h"
 #import "FSTypes.h"
+#import "HardDriveTypes.h"
 #import "JoystickTypes.h"
 #import "KeyboardTypes.h"
 #import "MemoryTypes.h"
@@ -606,6 +607,7 @@
 
 @interface DriveProxy : AmigaComponentProxy { }
 
+@property (readonly) NSInteger nr;
 @property (readonly) u64 fnv;
 
 @property (readonly) BOOL hasDisk;
@@ -631,9 +633,6 @@
 
 @property (readonly) FloppyDriveInfo info;
 
-@property (readonly) NSInteger nr;
-@property (readonly) BOOL hasDDDisk;
-@property (readonly) BOOL hasHDDisk;
 - (BOOL)isInsertable:(Diameter)type density:(Density)density;
 - (void)eject;
 - (void)swap:(FloppyFileProxy *)fileProxy exception:(ExceptionWrapper *)ex;
@@ -653,9 +652,7 @@
 
 @property (readonly) HardDriveInfo info;
 
-@property (readonly) NSInteger nr;
-@property (readonly) BOOL isConnected;
-@property BOOL modified;
+// @property (readonly) BOOL isConnected;
 @property (readonly) NSInteger capacity;
 @property (readonly) NSInteger partitions;
 @property (readonly) NSInteger cylinders;

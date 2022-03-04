@@ -1171,6 +1171,11 @@ using namespace moira;
     return (Drive *)obj;
 }
 
+- (NSInteger)nr
+{
+    return [self drive]->getNr();
+}
+
 - (u64)fnv
 {
     return [self drive]->fnv();
@@ -1244,21 +1249,6 @@ using namespace moira;
     return [self drive]->getInfo();
 }
 
-- (NSInteger)nr
-{
-    return [self drive]->getNr();
-}
-
-- (BOOL)hasDDDisk
-{
-    return [self drive]->hasDDDisk();
-}
-
-- (BOOL)hasHDDisk
-{
-    return [self drive]->hasHDDisk();
-}
-
 - (BOOL)isInsertable:(Diameter)type density:(Density)density
 {
     return [self drive]->isInsertable(type, density);
@@ -1315,25 +1305,12 @@ using namespace moira;
     return [self drive]->getInfo();
 }
 
-- (NSInteger)nr
-{
-    return [self drive]->getNr();
-}
-
+/*
 - (BOOL)isAttached
 {
     return [self drive]->isConnected();
 }
-
-- (BOOL)modified
-{
-    return [self drive]->isModified();
-}
-
-- (void)setModified:(BOOL)value
-{
-    [self drive]->setModified(value);
-}
+*/
 
 - (NSInteger)capacity
 {
