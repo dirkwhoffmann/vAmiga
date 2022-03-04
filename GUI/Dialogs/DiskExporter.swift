@@ -36,8 +36,8 @@ class DiskExporter: DialogController {
     var openPanel: NSOpenPanel!
 
     var nr = -1
-    var dfn: DriveProxy { return amiga.df(nr)! }
-    var dhn: HardDriveProxy { return amiga.dh(nr)! }
+    var dfn: FloppyDriveProxy { return amiga.df(nr)! }
+    var dhn: HardDriveProxy { return amiga.hd(nr)! }
 
     // Results of the different decoders
     var hdf: HDFFileProxy?
@@ -158,7 +158,7 @@ class DiskExporter: DialogController {
             if adf != nil { name = isHD ? "hd_adf" : "dd_adf" }
             if img != nil { name = "dd_dos" }
                 
-            if name != "" && dfn.hasProtectedDisk() { name += "_protected" }
+            if name != "" && dfn.hasProtectedDisk { name += "_protected" }
 
         case Format.vol:
             
@@ -336,12 +336,12 @@ class DiskExporter: DialogController {
 
             if hdf != nil {
 
-                dhn.modified = false
+                dhn.markDiskAsUnmodified()
                 myAppDelegate.noteNewRecentlyExportedHdrURL(url, drive: nr)
 
             } else {
 
-                dfn.modified = false
+                dfn.markDiskAsUnmodified()
                 myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: nr)
             }
             hideSheet()

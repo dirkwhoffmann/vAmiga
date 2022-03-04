@@ -16,8 +16,8 @@ extension MyController: NSMenuItemValidation {
         let paused = amiga.paused
         let recording = amiga.recorder.recording
         
-        var dfn: DriveProxy { return amiga.df(item.tag)! }
-        var dhn: HardDriveProxy { return amiga.dh(item.tag)! }
+        var dfn: FloppyDriveProxy { return amiga.df(item.tag)! }
+        var dhn: HardDriveProxy { return amiga.hd(item.tag)! }
 
         func validateURLlist(_ list: [URL], image: NSImage) -> Bool {
             
@@ -102,7 +102,7 @@ extension MyController: NSMenuItemValidation {
             }
             
         case #selector(MyController.writeProtectAction(_:)):
-            item.state = dfn.hasProtectedDisk() ? .on : .off
+            item.state = dfn.hasProtectedDisk ? .on : .off
             return dfn.hasDisk
             
         // Dh<n> menu
@@ -139,6 +139,10 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.inspectHdrAction(_:)):
             return true
         */
+
+        case #selector(MyController.writeProtectHdrAction(_:)):
+            item.state = dhn.hasProtectedDisk ? .on : .off
+            return dhn.hasDisk
 
         default:
             return true
@@ -628,7 +632,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func newHdrAction(_ sender: NSMenuItem!) {
 
-        let drive = amiga.dh(sender.tag)!
+        let drive = amiga.hd(sender.tag)!
         
         // Power off the emulator if the user doesn't object
         if !askToPowerOff() { return }
@@ -639,7 +643,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func attachHdrAction(_ sender: NSMenuItem!) {
         
-        let drive = amiga.dh(sender.tag)!
+        let drive = amiga.hd(sender.tag)!
         
         // Power off the emulator if the user doesn't object
         if !askToPowerOff() { return }
@@ -664,7 +668,7 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func attachRecentHdrAction(_ sender: NSMenuItem!) {
         
-        let drive = amiga.dh(sender.tag / 10)!
+        let drive = amiga.hd(sender.tag / 10)!
         let slot  = sender.tag % 10
                     
         // Power off the emulator if the user doesn't object
@@ -680,7 +684,7 @@ extension MyController: NSMenuItemValidation {
         track("attachHdrAction \(url)")
         
         let types: [FileType] = [ .HDF ]
-        let drive = amiga.dh(nr)!
+        let drive = amiga.hd(nr)!
         
         do {
             // Try to create a file proxy
@@ -772,8 +776,8 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func writeProtectHdrAction(_ sender: NSMenuItem!) {
         
-        track()
-        // amiga.hd(sender)!.toggleWriteProtection()
+        track("\(sender.tag)")
+        amiga.hd(sender)!.toggleWriteProtection()
     }
 
 }

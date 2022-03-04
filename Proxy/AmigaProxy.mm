@@ -1166,6 +1166,74 @@ using namespace moira;
 
 @implementation DriveProxy
 
+- (Drive *)drive
+{
+    return (Drive *)obj;
+}
+
+- (u64)fnv
+{
+    return [self drive]->fnv();
+}
+
+- (BOOL)hasDisk
+{
+    return [self drive]->hasDisk();
+}
+
+- (BOOL)modified
+{
+    return [self drive]->hasModifiedDisk();
+}
+
+- (BOOL)hasProtectedDisk
+{
+    return [self drive]->hasProtectedDisk();
+}
+
+- (BOOL)hasUnmodifiedDisk
+{
+    return [self drive]->hasUnmodifiedDisk();
+}
+
+- (BOOL)hasUnprotectedDisk
+{
+    return [self drive]->hasUnprotectedDisk();
+}
+
+- (void)setModificationFlag:(BOOL)value
+{
+    [self drive]->setModificationFlag(value);
+}
+
+- (void)setProtectionFlag:(BOOL)value
+{
+    [self drive]->setProtectionFlag(value);
+}
+
+- (void)markDiskAsModified
+{
+    [self drive]->markDiskAsModified();
+}
+
+- (void)markDiskAsUnmodified
+{
+    [self drive]->markDiskAsUnmodified();
+}
+- (void)toggleWriteProtection
+{
+    [self drive]->toggleWriteProtection();
+}
+
+@end
+
+
+//
+// FloppyDrive proxy
+//
+
+@implementation FloppyDriveProxy
+
 - (FloppyDrive *)drive
 {
     return (FloppyDrive *)obj;
@@ -1181,11 +1249,6 @@ using namespace moira;
     return [self drive]->getNr();
 }
 
-- (BOOL)hasDisk
-{
-    return [self drive]->hasDisk();
-}
-
 - (BOOL)hasDDDisk
 {
     return [self drive]->hasDDDisk();
@@ -1194,21 +1257,6 @@ using namespace moira;
 - (BOOL)hasHDDisk
 {
     return [self drive]->hasHDDisk();
-}
-
-- (BOOL)hasProtectedDisk
-{
-    return [self drive]->hasProtectedDisk();
-}
-
-- (void)setProtectionFlag:(BOOL)value
-{
-    [self drive]->setProtectionFlag(value);
-}
-
-- (void)toggleWriteProtection
-{
-    [self drive]->toggleWriteProtection();
 }
 
 - (BOOL)isInsertable:(Diameter)type density:(Density)density
@@ -1233,16 +1281,6 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; }
 }
 
-- (BOOL)modified
-{
-    return [self drive]->hasModifiedDisk();
-}
-
-- (void)setModified:(BOOL)value
-{
-    [self drive]->setModificationFlag(value);
-}
-
 - (BOOL)motor
 {
     return [self drive]->getMotor();
@@ -1251,11 +1289,6 @@ using namespace moira;
 - (NSInteger)cylinder
 {
     return [self drive]->getCylinder();
-}
-
-- (u64)fnv
-{
-    return [self drive]->fnv();
 }
 
 - (NSString *)readTrackBits:(NSInteger)track
@@ -2166,7 +2199,7 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-+ (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)ex
++ (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new ADFFile(*[proxy drive])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
@@ -2262,7 +2295,7 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-+ (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)ex
++ (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new EXTFile(*[proxy drive])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
@@ -2299,7 +2332,7 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-+ (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)ex
++ (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new IMGFile(*[proxy drive]->disk)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
@@ -2466,10 +2499,10 @@ using namespace moira;
     copper = [[CopperProxy alloc] initWith:&amiga->agnus.copper];
     cpu = [[CPUProxy alloc] initWith:&amiga->cpu];
     denise = [[DeniseProxy alloc] initWith:&amiga->denise];
-    df0 = [[DriveProxy alloc] initWith:&amiga->df0];
-    df1 = [[DriveProxy alloc] initWith:&amiga->df1];
-    df2 = [[DriveProxy alloc] initWith:&amiga->df2];
-    df3 = [[DriveProxy alloc] initWith:&amiga->df3];
+    df0 = [[FloppyDriveProxy alloc] initWith:&amiga->df0];
+    df1 = [[FloppyDriveProxy alloc] initWith:&amiga->df1];
+    df2 = [[FloppyDriveProxy alloc] initWith:&amiga->df2];
+    df3 = [[FloppyDriveProxy alloc] initWith:&amiga->df3];
     hd0 = [[HardDriveProxy alloc] initWith:&amiga->hd0];
     hd1 = [[HardDriveProxy alloc] initWith:&amiga->hd1];
     hd2 = [[HardDriveProxy alloc] initWith:&amiga->hd2];

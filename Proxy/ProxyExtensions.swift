@@ -33,7 +33,7 @@ extension Proxy {
         return obj!
     }
 
-    static func make<T: MakeWithDrive>(drive: DriveProxy) throws -> T {
+    static func make<T: MakeWithDrive>(drive: FloppyDriveProxy) throws -> T {
         
         let exc = ExceptionWrapper()
         let obj = T.make(withDrive: drive, exception: exc)
@@ -161,7 +161,7 @@ extension MemProxy {
     }
 }
 
-extension DriveProxy {
+extension FloppyDriveProxy {
 
     func swap(file: FloppyFileProxy) throws {
         
@@ -269,7 +269,7 @@ extension FileSystemProxy {
 
 public extension AmigaProxy {
     
-    func df(_ nr: Int) -> DriveProxy? {
+    func df(_ nr: Int) -> FloppyDriveProxy? {
         
         switch nr {
             
@@ -283,7 +283,10 @@ public extension AmigaProxy {
         }
     }
 
-    func dh(_ nr: Int) -> HardDriveProxy? {
+    func df(_ item: NSButton!) -> FloppyDriveProxy? { return df(item.tag) }
+    func df(_ item: NSMenuItem!) -> FloppyDriveProxy? { return df(item.tag) }
+
+    func hd(_ nr: Int) -> HardDriveProxy? {
         
         switch nr {
             
@@ -297,15 +300,8 @@ public extension AmigaProxy {
         }
     }
 
-    func df(_ item: NSButton!) -> DriveProxy? {
-        
-        return df(item.tag)
-    }
-    
-    func df(_ item: NSMenuItem!) -> DriveProxy? {
-        
-        return df(item.tag)
-    }
+    func hd(_ item: NSButton!) -> HardDriveProxy? { return hd(item.tag) }
+    func hd(_ item: NSMenuItem!) -> HardDriveProxy? { return hd(item.tag) }
     
     func image(data: UnsafeMutablePointer<UInt8>?, size: NSSize) -> NSImage {
         
@@ -332,16 +328,16 @@ public extension AmigaProxy {
     }
 }
 
-public extension DriveProxy {
+public extension FloppyDriveProxy {
     
     var icon: NSImage {
 
         var name: String
 
-        if hasProtectedDisk() {
-            name = modified ? "diskUPTemplate" : "diskPTemplate"
+        if hasProtectedDisk {
+            name = hasModifiedDisk ? "diskUPTemplate" : "diskPTemplate"
         } else {
-            name = modified ? "diskUTemplate" : "diskTemplate"
+            name = hasModifiedDisk ? "diskUTemplate" : "diskTemplate"
         }
 
         return NSImage(named: name)!

@@ -28,7 +28,7 @@ class FloppyCreator: DialogController {
     var nr = 0
     var diskType: String!
 
-    var drive: DriveProxy? { amiga.df(nr) }
+    var drive: FloppyDriveProxy? { amiga.df(nr) }
     var hasVirus: Bool { return bootBlock.selectedTag() >= 3 }
     
     //

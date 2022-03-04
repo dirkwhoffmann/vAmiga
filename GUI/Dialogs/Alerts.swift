@@ -36,9 +36,9 @@ extension MyDocument {
         return alert.runModal()
     }
 
-    func proceedWithUnexportedDisk(drives: [DriveProxy]) -> Bool {
+    func proceedWithUnexportedDisk(drives: [FloppyDriveProxy]) -> Bool {
         
-        let modified = drives.filter { $0.modified }
+        let modified = drives.filter { $0.hasModifiedDisk }
         
         if modified.isEmpty || parent.pref.ejectWithoutAsking {
             return true
@@ -50,7 +50,7 @@ extension MyDocument {
         return showDiskIsUnexportedAlert(messageText: text) == .alertFirstButtonReturn
     }
     
-    func proceedWithUnexportedDisk(drive: DriveProxy) -> Bool {
+    func proceedWithUnexportedDisk(drive: FloppyDriveProxy) -> Bool {
         
         return proceedWithUnexportedDisk(drives: [drive])
     }
@@ -104,7 +104,7 @@ extension MyDocument {
         
     func proceedWithUnexportedHdr(drive nr: Int) -> Bool {
         
-        return proceedWithUnexportedHdr(drive: amiga.dh(nr)!)
+        return proceedWithUnexportedHdr(drive: amiga.hd(nr)!)
     }    
 }
 
@@ -131,7 +131,7 @@ extension MyController {
         alert.runModal()
     }
     
-    func proceedWithUnexportedDisk(drive: DriveProxy) -> Bool {
+    func proceedWithUnexportedDisk(drive: FloppyDriveProxy) -> Bool {
         return mydocument.proceedWithUnexportedDisk(drive: drive)
     }
     

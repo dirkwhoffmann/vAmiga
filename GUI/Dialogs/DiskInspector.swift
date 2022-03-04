@@ -48,7 +48,7 @@ class DiskInspector: DialogController {
     var decoder: DiskFileProxy?
 
     // MFM data provider
-    var drive: DriveProxy?
+    var drive: FloppyDriveProxy?
 
     // Drive geometry
     var numCyls: Int { return decoder?.numCyls ?? 0 }
@@ -96,7 +96,7 @@ class DiskInspector: DialogController {
             decoder = try? EXTFileProxy.make(drive: drive!) as EXTFileProxy
         }
 
-        let protected = drive!.hasProtectedDisk()
+        let protected = drive!.hasProtectedDisk
         image = (decoder as? FloppyFileProxy)?.icon(protected: protected)
         showWindow()
     }
@@ -108,7 +108,7 @@ class DiskInspector: DialogController {
         titleString = "Hard Drive HD\(nr)"
 
         // Run the HDF decoder
-        decoder = try? HDFFileProxy.make(hdr: amiga.dh(nr)!) as HDFFileProxy
+        decoder = try? HDFFileProxy.make(hdr: amiga.hd(nr)!) as HDFFileProxy
         
         image = NSImage(named: "hdf")!
         showWindow()

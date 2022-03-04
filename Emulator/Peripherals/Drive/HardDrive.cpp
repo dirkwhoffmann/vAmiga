@@ -300,6 +300,8 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         os << std::endl;
         os << tab("Modified");
         os << bol(modified) << std::endl;
+        os << tab("Write protected");
+        os << bol(writeProtected) << std::endl;
     }
 }
 

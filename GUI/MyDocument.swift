@@ -136,7 +136,7 @@ class MyDocument: NSDocument {
                       "The type of this file is not known to the emulator.")
     }
             
-    func mountAttachment(destination: DriveProxy? = nil) throws {
+    func mountAttachment(destination: FloppyDriveProxy? = nil) throws {
         
         // Only proceed if an attachment is present
         if attachment == nil { return }
@@ -252,13 +252,10 @@ class MyDocument: NSDocument {
         }
         
         try export(fileProxy: df!, to: url)
-        track("Disk exported successfully")
-
-        // Mark disk as "not modified"
-        amiga.df(nr)!.modified = false
-        
-        // Remember export URL
+        amiga.df(nr)!.markDiskAsUnmodified()
         myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: nr)
+        
+        track("Disk exported successfully")
     }
 
     func export(hardDrive nr: Int, to url: URL) throws {
@@ -266,7 +263,7 @@ class MyDocument: NSDocument {
         var dh: HDFFileProxy?
         switch url.pathExtension.uppercased() {
         case "HDF":
-            dh = try Proxy.make(hdr: amiga.dh(nr)!) as HDFFileProxy
+            dh = try Proxy.make(hdr: amiga.hd(nr)!) as HDFFileProxy
         default:
             track("Invalid path extension")
             return
@@ -276,7 +273,7 @@ class MyDocument: NSDocument {
         track("Hard Drive exported successfully")
 
         // Mark disk as "not modified"
-        amiga.dh(nr)!.modified = false
+        amiga.hd(nr)!.modified = false
         
         // Remember export URL
         myAppDelegate.noteNewRecentlyExportedHdrURL(url, drive: nr)

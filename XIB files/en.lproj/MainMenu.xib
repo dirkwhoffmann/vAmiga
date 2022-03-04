@@ -1397,7 +1397,7 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" tag="-1" id="rW0-La-yaZ"/>
-                                        <menuItem title="Clear Menu" tag="1" id="CQa-an-QWA">
+                                        <menuItem title="Clear Menu" tag="3" id="CQa-an-QWA">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="clearRecentlyAttachedHdrsAction:" target="-1" id="zoy-fj-XXv"/>
@@ -1410,7 +1410,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="Qo8-fz-s1e"/>
-                            <menuItem title="Export..." tag="1" id="iMt-Ho-atI" userLabel="Export disk">
+                            <menuItem title="Export..." tag="3" id="iMt-Ho-atI" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="exportHdrAction:" target="-1" id="QyI-5M-elT"/>
@@ -1433,27 +1433,27 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="iU8-hM-UzT"/>
-                            <menuItem title="Properties..." tag="1" id="3xW-dg-y8g" userLabel="Export disk">
+                            <menuItem title="Properties..." tag="3" id="3xW-dg-y8g" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="configureHdrAction:" target="-1" id="iyi-4K-1V5"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="tzT-rv-xwa"/>
-                            <menuItem title="Inspect Disk..." tag="1" id="pFD-5y-I16" userLabel="Export disk">
+                            <menuItem title="Inspect Disk..." tag="3" id="pFD-5y-I16" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="inspectHdrAction:" target="-1" id="ZEM-EJ-Rxv"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Inspect File System..." tag="1" id="15h-z1-NXW" userLabel="Export disk">
+                            <menuItem title="Inspect File System..." tag="3" id="15h-z1-NXW" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="inspectHdrAction:" target="-1" id="Qoo-Nd-jD0"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="Jyn-ik-ww2"/>
-                            <menuItem title="Write Protected" tag="1" id="Xmj-KC-ZiU" userLabel="Export disk">
+                            <menuItem title="Write Protected" tag="3" id="Xmj-KC-ZiU" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="writeProtectHdrAction:" target="-1" id="0rF-yo-ck2"/>

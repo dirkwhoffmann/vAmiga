@@ -34,7 +34,7 @@ class HardDiskConfigurator: DialogController {
     var sectors = 0
     let bsize = 512
     
-    var drive: HardDriveProxy { amiga.dh(nr)! }
+    var drive: HardDriveProxy { amiga.hd(nr)! }
     
     //
     // Selecting a block

@@ -65,7 +65,7 @@
 @class DiskFileProxy;
 @class DMSFileProxy;
 @class DmaDebuggerProxy;
-@class DriveProxy;
+@class FloppyDriveProxy;
 @class EXEFileProxy;
 @class ExtendedRomFileProxy;
 @class FloppyFileProxy;
@@ -136,10 +136,10 @@
     DeniseProxy *denise;
     DiskControllerProxy *diskController;
     DmaDebuggerProxy *dmaDebugger;
-    DriveProxy *df0;
-    DriveProxy *df1;
-    DriveProxy *df2;
-    DriveProxy *df3;
+    FloppyDriveProxy *df0;
+    FloppyDriveProxy *df1;
+    FloppyDriveProxy *df2;
+    FloppyDriveProxy *df3;
     GuardsProxy *breakpoints;
     GuardsProxy *watchpoints;
     HardDriveProxy *hd0;
@@ -168,10 +168,10 @@
 @property (readonly, strong) DeniseProxy *denise;
 @property (readonly, strong) DiskControllerProxy *diskController;
 @property (readonly, strong) DmaDebuggerProxy *dmaDebugger;
-@property (readonly, strong) DriveProxy *df0;
-@property (readonly, strong) DriveProxy *df1;
-@property (readonly, strong) DriveProxy *df2;
-@property (readonly, strong) DriveProxy *df3;
+@property (readonly, strong) FloppyDriveProxy *df0;
+@property (readonly, strong) FloppyDriveProxy *df1;
+@property (readonly, strong) FloppyDriveProxy *df2;
+@property (readonly, strong) FloppyDriveProxy *df3;
 @property (readonly, strong) GuardsProxy *breakpoints;
 @property (readonly, strong) GuardsProxy *watchpoints;
 @property (readonly, strong) HardDriveProxy *hd0;
@@ -601,28 +601,46 @@
 
 
 //
-// Drive
+// DriveProxy
 //
 
 @interface DriveProxy : AmigaComponentProxy { }
 
+@property (readonly) u64 fnv;
+
+@property (readonly) BOOL hasDisk;
+@property (readonly) BOOL hasModifiedDisk;
+@property (readonly) BOOL hasProtectedDisk;
+@property (readonly) BOOL hasUnmodifiedDisk;
+@property (readonly) BOOL hasUnprotectedDisk;
+
+- (void)setModificationFlag:(BOOL)value;
+- (void)setProtectionFlag:(BOOL)value;
+- (void)markDiskAsModified;
+- (void)markDiskAsUnmodified;
+- (void)toggleWriteProtection;
+
+@end
+
+
+//
+// FloppyDriveProxy
+//
+
+@interface FloppyDriveProxy : DriveProxy { }
+
 @property (readonly) FloppyDriveInfo info;
 
 @property (readonly) NSInteger nr;
-@property (readonly) BOOL hasDisk;
 @property (readonly) BOOL hasDDDisk;
 @property (readonly) BOOL hasHDDisk;
-- (BOOL)hasProtectedDisk;
-- (void)setProtectionFlag:(BOOL)value;
-- (void)toggleWriteProtection;
 - (BOOL)isInsertable:(Diameter)type density:(Density)density;
 - (void)eject;
 - (void)swap:(FloppyFileProxy *)fileProxy exception:(ExceptionWrapper *)ex;
 - (void)insertNew:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex;
-@property BOOL modified;
 @property (readonly) BOOL motor;
 @property (readonly) NSInteger cylinder;
-@property (readonly) u64 fnv;
+
 - (NSString *)readTrackBits:(NSInteger)track;
 
 @end
@@ -631,7 +649,7 @@
 // HardDrive
 //
 
-@interface HardDriveProxy : AmigaComponentProxy { }
+@interface HardDriveProxy : DriveProxy { }
 
 @property (readonly) HardDriveInfo info;
 
@@ -749,7 +767,7 @@
 @end
 
 @protocol MakeWithDrive
-+ (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex;
 @end
 
 @protocol MakeWithHardDrive
@@ -892,7 +910,7 @@
 + (instancetype)makeWithDiameter:(Diameter)type density:(Density)density exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithDrive:(DriveProxy *)drive exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithDrive:(FloppyDriveProxy *)drive exception:(ExceptionWrapper *)ex;
 
 - (void)format:(FSVolumeType)fs bootBlock:(NSInteger)bb name:(NSString *)name;
 
@@ -925,7 +943,7 @@
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithDrive:(DriveProxy *)drive exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithDrive:(FloppyDriveProxy *)drive exception:(ExceptionWrapper *)ex;
 
 @end
 
@@ -939,7 +957,7 @@
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithDrive:(DriveProxy *)proxy exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex;
 
 @end
 

@@ -28,12 +28,7 @@ public:
 
     Drive(Amiga& ref, isize nr);
     
-    
-    //
-    // Querying device properties
-    //
-    
-    
+
     //
     // Managing disk properties
     //
