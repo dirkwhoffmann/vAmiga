@@ -191,8 +191,8 @@ extension MyController {
         let alert = NSAlert()
         alert.alertStyle = .informational
         alert.icon = NSImage(named: "powerSwitch")
-        alert.messageText = "Your Amiga must be restarted to perform this operation."
-        alert.informativeText = "All changes will be lost if you proceed."
+        alert.messageText = "The Amiga must be restarted to perform this operation."
+        alert.informativeText = "Your changes will be lost if you proceed."
         alert.addButton(withTitle: "Proceed")
         alert.addButton(withTitle: "Cancel")
         return alert.runModal()

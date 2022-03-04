@@ -179,6 +179,7 @@ class MyDocument: NSDocument {
             if parent.askToReboot() {
             
                 amiga.powerOff()
+                amiga.configure(.HDR_CONNECT, drive: drive, enable: true)
                 try? amiga.hd(drive)?.attach(hdf: proxy)
                 amiga.powerOn()
                 try? amiga.run()

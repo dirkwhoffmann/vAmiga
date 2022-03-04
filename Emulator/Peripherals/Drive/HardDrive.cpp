@@ -183,21 +183,24 @@ HardDrive::setConfigItem(Option option, i64 value)
             if (!isPoweredOff()) {
                 throw VAError(ERROR_OPT_LOCKED);
             }
+            
+            if (value != config.connected) {
+                
+                config.connected = bool(value);
+                
+                if (value) {
 
-            config.connected = bool(value);
-            
-            // Attach a default disk when the drive gets connected
-            if (value) {
+                    // Attach a default disk when the drive gets connected
+                    init(MB(10));
+                    format(FS_OFS, defaultName());
+                    
+                } else {
+                    
+                    init();
+                }
                 
-                init(MB(10));
-                format(FS_OFS, defaultName());
-                
-            } else {
-                
-                init();
+                msgQueue.put(value ? MSG_HDR_CONNECT : MSG_HDR_DISCONNECT, nr);
             }
-            
-            msgQueue.put(value ? MSG_HDR_CONNECT : MSG_HDR_DISCONNECT, nr);
             return;
 
         default:

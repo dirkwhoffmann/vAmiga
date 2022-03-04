@@ -85,13 +85,13 @@ class DropZone: Layer {
     [ createImage("dropZoneHdr1", label: "HD0"),
       createImage("dropZoneHdr1", label: "HD1"),
       createImage("dropZoneHdr1", label: "HD2"),
-      createImage("dropZoneHdr1", label: "DD3") ]
+      createImage("dropZoneHdr1", label: "HD3") ]
 
     var hdSelected: [NSImage] =
     [ createImage("dropZoneHdr2", label: "HD0"),
       createImage("dropZoneHdr2", label: "HD1"),
       createImage("dropZoneHdr2", label: "HD2"),
-      createImage("dropZoneHdr2", label: "DD3") ]
+      createImage("dropZoneHdr2", label: "HD3") ]
 
     //
     // Initializing
@@ -124,21 +124,11 @@ class DropZone: Layer {
         switch type {
         
         case .ADF, .EXT, .IMG, .DMS, .EXE, .DIR:
-
             let connected = amiga.diskController.getConfig().connected
-            enabled = [
-                connected.0,
-                connected.1,
-                connected.2,
-                connected.3 ]
+            enabled = [ connected.0, connected.1, connected.2, connected.3 ]
                         
         case .HDF:
-            
-            enabled = [
-                amiga.hd0.isConnected,
-                amiga.hd1.isConnected,
-                amiga.hd2.isConnected,
-                amiga.hd3.isConnected ]
+            enabled = [ true, true, true, true ]
             
         default:
             enabled = [false, false, false, false]

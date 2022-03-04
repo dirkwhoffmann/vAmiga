@@ -52,13 +52,13 @@ extension ConfigurationController {
         perDf2Type.isEnabled = poweredOff && config.df2Connected
         perDf3Type.isEnabled = poweredOff && config.df3Connected
         perHd0Connect.isEnabled = poweredOff
-        perHd1Connect.isEnabled = poweredOff && perHd0Connect.state == .on
-        perHd2Connect.isEnabled = poweredOff && perHd1Connect.state == .on
-        perHd3Connect.isEnabled = poweredOff && perHd2Connect.state == .on
+        perHd1Connect.isEnabled = poweredOff // && perHd0Connect.state == .on
+        perHd2Connect.isEnabled = poweredOff // && perHd1Connect.state == .on
+        perHd3Connect.isEnabled = poweredOff // && perHd2Connect.state == .on
         perHd0Type.isEnabled = poweredOff
-        perHd1Type.isEnabled = poweredOff && config.hd1Connected
-        perHd2Type.isEnabled = poweredOff && config.hd2Connected
-        perHd3Type.isEnabled = poweredOff && config.hd3Connected
+        perHd1Type.isEnabled = poweredOff // && config.hd1Connected
+        perHd2Type.isEnabled = poweredOff // && config.hd2Connected
+        perHd3Type.isEnabled = poweredOff // && config.hd3Connected
         perFactorySettingsPopup.isEnabled = poweredOff
 
         // Lock symbol and explanation
@@ -109,11 +109,6 @@ extension ConfigurationController {
         default: fatalError()
         }
         
-        // Disconnect dh(n+1) if dfn is disconnected
-        if !config.hd0Connected { config.hd1Connected = false }
-        if !config.hd1Connected { config.hd2Connected = false }
-        if !config.hd2Connected { config.hd3Connected = false }
-
         refresh()
     }
     
