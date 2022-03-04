@@ -37,9 +37,10 @@ class HardDrive : public Drive {
     // Current position of the read/write head
     struct { isize c; isize h; isize s; } head = { };
     
-    // Indicates if a write operation has been performed
+    // Disk state flags
     bool modified = false;
-    
+    bool writeProtected = false;
+
     
     //
     // Initializing
@@ -98,7 +99,8 @@ private:
         << config.connected
         >> desc
         >> ptable
-        << modified;
+        << modified
+        << writeProtected;
     }
 
     template <class T>
@@ -121,6 +123,20 @@ private:
     isize didLoadFromBuffer(const u8 *buffer) override;
     isize didSaveToBuffer(u8 *buffer) override;
 
+    
+    //
+    // Methods from Drive
+    //
+    
+public:
+    
+    u64 fnv() const override;
+    bool hasDisk() const override;
+    bool hasModifiedDisk() const override;
+    bool hasProtectedDisk() const override;
+    void setModificationFlag(bool value) override;
+    void setProtectionFlag(bool value) override;
+    
     
     //
     // Configuring

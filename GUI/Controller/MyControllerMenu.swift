@@ -102,7 +102,7 @@ extension MyController: NSMenuItemValidation {
             }
             
         case #selector(MyController.writeProtectAction(_:)):
-            item.state = dfn.hasWriteProtectedDisk() ? .on : .off
+            item.state = dfn.hasProtectedDisk() ? .on : .off
             return dfn.hasDisk
             
         // Dh<n> menu
@@ -456,7 +456,7 @@ extension MyController: NSMenuItemValidation {
     }
     
     //
-    // Action methods (Disk menu)
+    // Action methods (Floppy disk menus)
     //
     
     @IBAction func newDiskAction(_ sender: NSMenuItem!) {
@@ -623,7 +623,7 @@ extension MyController: NSMenuItemValidation {
     }
 
     //
-    // Action methods (Hard drive menu)
+    // Action methods (Hard drive menus)
     //
     
     @IBAction func newHdrAction(_ sender: NSMenuItem!) {
@@ -769,4 +769,11 @@ extension MyController: NSMenuItemValidation {
         let panel = HardDiskConfigurator.make(parent: self, nibName: "HardDiskConfigurator")
         panel?.showSheet(forDrive: sender.tag)
     }
+    
+    @IBAction func writeProtectHdrAction(_ sender: NSMenuItem!) {
+        
+        track()
+        // amiga.hd(sender)!.toggleWriteProtection()
+    }
+
 }

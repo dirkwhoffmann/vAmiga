@@ -338,7 +338,7 @@ public extension DriveProxy {
 
         var name: String
 
-        if hasWriteProtectedDisk() {
+        if hasProtectedDisk() {
             name = modified ? "diskUPTemplate" : "diskPTemplate"
         } else {
             name = modified ? "diskUTemplate" : "diskTemplate"

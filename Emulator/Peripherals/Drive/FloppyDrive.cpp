@@ -349,6 +349,59 @@ FloppyDrive::_save(u8 *buffer)
     return result;
 }
 
+u64
+FloppyDrive::fnv() const
+{
+    return disk ? disk->getFnv() : 0;
+}
+
+bool
+FloppyDrive::hasDisk() const
+{
+    return disk != nullptr;
+}
+
+bool
+FloppyDrive::hasModifiedDisk() const
+{
+    return disk ? disk->isModified() : false;
+}
+
+bool
+FloppyDrive::hasProtectedDisk() const
+{
+    return hasDisk() ? disk->isWriteProtected() : false;
+}
+
+void
+FloppyDrive::setModificationFlag(bool value)
+{
+    if (disk) disk->setModified(value);
+}
+
+void
+FloppyDrive::setProtectionFlag(bool value)
+{
+    if (disk) {
+        
+        if (value && !disk->isWriteProtected()) {
+            
+            disk->setWriteProtection(true);
+            msgQueue.put(MSG_DISK_PROTECT);
+        }
+        if (!value && disk->isWriteProtected()) {
+            
+            disk->setWriteProtection(false);
+            msgQueue.put(MSG_DISK_UNPROTECT);
+        }
+    }
+}
+
+
+
+
+
+
 bool
 FloppyDrive::idMode() const
 {
@@ -407,7 +460,7 @@ FloppyDrive::driveStatusFlags() const
         if (head.cylinder == 0) { result &= 0b11101111; }
         
         // PA3: /DSKPROT
-        if (!hasWriteEnabledDisk()) { result &= 0b11110111; }
+        if (!hasUnprotectedDisk()) { result &= 0b11110111; }
         
         /* PA2: /DSKCHANGE
          * "Disk has been removed from the drive. The signal goes low whenever
@@ -672,43 +725,15 @@ FloppyDrive::pollsForDisk() const
     return false;
 }
 
-bool
-FloppyDrive::hasWriteEnabledDisk() const
-{
-    return hasDisk() ? !disk->isWriteProtected() : false;
-}
-
-bool
-FloppyDrive::hasWriteProtectedDisk() const
-{
-    return hasDisk() ? disk->isWriteProtected() : false;
-}
-
-void
-FloppyDrive::setWriteProtection(bool value)
-{
-    if (disk) {
-        
-        if (value && !disk->isWriteProtected()) {
-            
-            disk->setWriteProtection(true);
-            msgQueue.put(MSG_DISK_PROTECT);
-        }
-        if (!value && disk->isWriteProtected()) {
-            
-            disk->setWriteProtection(false);
-            msgQueue.put(MSG_DISK_UNPROTECT);
-        }
-    }
-}
-
+/*
 void
 FloppyDrive::toggleWriteProtection()
 {
     if (hasDisk()) {
-        disk->setWriteProtection(!disk->isWriteProtected());
+        disk->setProtectionFlag(!disk->isWriteProtected());
     }
 }
+*/
 
 bool
 FloppyDrive::isInsertable(Diameter t, Density d) const
@@ -871,12 +896,6 @@ FloppyDrive::swapDisk(const string &name)
     
     std::unique_ptr<FloppyFile> file(FloppyFile::make(path));
     swapDisk(*file);
-}
-
-u64
-FloppyDrive::fnv() const
-{
-    return disk ? disk->getFnv() : 0;
 }
 
 template <EventSlot s> void

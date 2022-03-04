@@ -1196,14 +1196,14 @@ using namespace moira;
     return [self drive]->hasHDDisk();
 }
 
-- (BOOL)hasWriteProtectedDisk
+- (BOOL)hasProtectedDisk
 {
-    return [self drive]->hasWriteProtectedDisk();
+    return [self drive]->hasProtectedDisk();
 }
 
-- (void)setWriteProtection:(BOOL)value
+- (void)setProtectionFlag:(BOOL)value
 {
-    [self drive]->setWriteProtection(value);
+    [self drive]->setProtectionFlag(value);
 }
 
 - (void)toggleWriteProtection
@@ -1227,14 +1227,6 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; }
 }
 
-/*
-- (void)insertNew:(ExceptionWrapper *)ex
-{
-    try { return [self drive]->insertNew(); }
-    catch (VAError &error) { [ex save:error]; }
-}
-*/
-
 - (void)insertNew:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex
 {
     try { return [self drive]->insertNew(fs, bb, [name UTF8String]); }
@@ -1248,7 +1240,7 @@ using namespace moira;
 
 - (void)setModified:(BOOL)value
 {
-    [self drive]->setModifiedDisk(value);
+    [self drive]->setModificationFlag(value);
 }
 
 - (BOOL)motor

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
     </dependencies>
     <objects>
@@ -403,20 +404,6 @@
                                 </menu>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="wq6-oh-IIt"/>
-                            <menuItem title="Write Protected" id="vbD-qh-Fhq">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="writeProtectAction:" target="-1" id="a7T-Ky-RJO"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="mCe-2p-6gR"/>
-                            <menuItem title="Eject" id="mVY-LA-phJ">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="ejectDiskAction:" target="-1" id="6hq-cd-dhx"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="8fO-nY-y8g"/>
                             <menuItem title="Export..." id="inq-yB-iPf" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -439,6 +426,13 @@
                                     <action selector="exportRecentDiskDummyAction0:" target="-1" id="RxO-Cz-99m"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="8fO-nY-y8g"/>
+                            <menuItem title="Eject" id="mVY-LA-phJ">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="ejectDiskAction:" target="-1" id="6hq-cd-dhx"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="HJA-xL-xe2"/>
                             <menuItem title="Inspect Disk..." id="XTb-fA-6qj">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -450,6 +444,13 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="inspectDfnVolumeAction:" target="-1" id="dsZ-hU-nj2"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="mCe-2p-6gR"/>
+                            <menuItem title="Write Protected" id="vbD-qh-Fhq">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="writeProtectAction:" target="-1" id="a7T-Ky-RJO"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -545,20 +546,6 @@
                                 </menu>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="s4e-XF-Kpr"/>
-                            <menuItem title="Write Protected" tag="1" id="s7Y-nU-Hng">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="writeProtectAction:" target="-1" id="cem-c5-ObV"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="7xn-Rq-hTf"/>
-                            <menuItem title="Eject" tag="1" id="lHK-n7-8Hz">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="ejectDiskAction:" target="-1" id="pZE-Kc-IOE"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="jyn-pH-Tv0"/>
                             <menuItem title="Export..." tag="1" id="Qpf-ys-Bkr" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -582,6 +569,13 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="DUv-gR-CL6"/>
+                            <menuItem title="Eject" tag="1" id="lHK-n7-8Hz">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="ejectDiskAction:" target="-1" id="pZE-Kc-IOE"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="jyn-pH-Tv0"/>
                             <menuItem title="Inspect Disk..." tag="1" id="spZ-Jo-VzX">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -592,6 +586,13 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="inspectDfnVolumeAction:" target="-1" id="z3g-Is-AfC"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="7xn-Rq-hTf"/>
+                            <menuItem title="Write Protected" tag="1" id="s7Y-nU-Hng">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="writeProtectAction:" target="-1" id="cem-c5-ObV"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -687,20 +688,6 @@
                                 </menu>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="X6d-pV-1XU"/>
-                            <menuItem title="Write Protected" tag="2" id="NqN-iv-Qgb">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="writeProtectAction:" target="-1" id="Kyu-Ky-kWh"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="Ag6-jY-nP8"/>
-                            <menuItem title="Eject" tag="2" id="E2J-Rc-2L4">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="ejectDiskAction:" target="-1" id="Mty-vo-k95"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="0QR-VA-UY0"/>
                             <menuItem title="Export..." tag="2" id="h74-u0-iEw" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -723,7 +710,14 @@
                                     <action selector="exportRecentDiskDummyAction2:" target="-1" id="oqa-vc-gc7"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="3ka-fe-IUs"/>
+                            <menuItem isSeparatorItem="YES" id="Ag6-jY-nP8"/>
+                            <menuItem title="Eject" tag="2" id="E2J-Rc-2L4">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="ejectDiskAction:" target="-1" id="Mty-vo-k95"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="0QR-VA-UY0"/>
                             <menuItem title="Inspect Disk..." tag="2" id="WR6-M4-nqD">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -734,6 +728,13 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="inspectDfnVolumeAction:" target="-1" id="i9V-5S-evM"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="3ka-fe-IUs"/>
+                            <menuItem title="Write Protected" tag="2" id="NqN-iv-Qgb">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="writeProtectAction:" target="-1" id="Kyu-Ky-kWh"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -829,20 +830,6 @@
                                 </menu>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="AQ0-WP-BCt"/>
-                            <menuItem title="Write Protected" tag="3" id="l5M-Sz-mYQ">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="writeProtectAction:" target="-1" id="m1q-sc-qto"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="0Fr-u9-cul"/>
-                            <menuItem title="Eject" tag="3" id="O68-v0-Wo8">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="ejectDiskAction:" target="-1" id="c81-hp-qN3"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="HcB-7e-MEa"/>
                             <menuItem title="Export..." tag="3" id="hhZ-v4-oPp" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -865,7 +852,14 @@
                                     <action selector="exportRecentDiskDummyAction3:" target="-1" id="iZ0-eO-ecB"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="Syk-m4-IU0"/>
+                            <menuItem isSeparatorItem="YES" id="HcB-7e-MEa"/>
+                            <menuItem title="Eject" tag="3" id="O68-v0-Wo8">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="ejectDiskAction:" target="-1" id="c81-hp-qN3"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="0Fr-u9-cul"/>
                             <menuItem title="Inspect Disk..." tag="3" id="xBw-K3-SqT">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -876,6 +870,13 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="inspectDfnVolumeAction:" target="-1" id="cgL-kc-AP3"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="Syk-m4-IU0"/>
+                            <menuItem title="Write Protected" tag="3" id="l5M-Sz-mYQ">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="writeProtectAction:" target="-1" id="m1q-sc-qto"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -997,22 +998,30 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="qgs-Zf-fdv"/>
+                            <menuItem title="Properties..." id="m49-PT-hWb" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="configureHdrAction:" target="-1" id="VKh-PG-FFo"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="ieg-NM-Vj2"/>
                             <menuItem title="Inspect Disk..." id="1m9-KG-jpf" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="inspectHdrDiskAction:" target="-1" id="AVN-YM-7qs"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Inspect Volumes..." id="TeC-En-Kma" userLabel="Export disk">
+                            <menuItem title="Inspect File System..." id="TeC-En-Kma" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="inspectHdrVolumeAction:" target="-1" id="VOg-UK-uyN"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Geometry..." id="m49-PT-hWb" userLabel="Export disk">
+                            <menuItem isSeparatorItem="YES" id="iOD-qI-pth"/>
+                            <menuItem title="Write Protected" id="73e-Wr-cMm">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="configureHdrAction:" target="-1" id="VKh-PG-FFo"/>
+                                    <action selector="writeProtectHdrAction:" target="-1" id="WYa-48-cOr"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -1134,16 +1143,30 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="1Vv-nd-7qq"/>
-                            <menuItem title="Inspect..." tag="1" id="ibt-uo-ppQ" userLabel="Export disk">
+                            <menuItem title="Properties..." tag="1" id="Uz9-Vd-7b2" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="configureHdrAction:" target="-1" id="Kxo-vh-smF"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="8e1-0R-Xgb"/>
+                            <menuItem title="Inspect Disk..." tag="1" id="ibt-uo-ppQ" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="inspectHdrAction:" target="-1" id="ejU-Us-PpT"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Geometry..." tag="1" id="Uz9-Vd-7b2" userLabel="Export disk">
+                            <menuItem title="Inspect File System..." tag="1" id="y1v-r5-qiP" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="configureHdrAction:" target="-1" id="Kxo-vh-smF"/>
+                                    <action selector="inspectHdrAction:" target="-1" id="8rO-eX-Nj0"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="ax9-2h-7hk"/>
+                            <menuItem title="Write Protected" tag="1" id="LFK-jK-NPP" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="writeProtectHdrAction:" target="-1" id="2qL-bl-h0G"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -1265,16 +1288,30 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="Qt6-t9-9qM"/>
-                            <menuItem title="Inspect..." tag="2" id="0E6-C2-ryM" userLabel="Export disk">
+                            <menuItem title="Properties..." tag="2" id="aIO-hr-fx9" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="configureHdrAction:" target="-1" id="3xX-hv-d6s"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="BA5-MK-XXw"/>
+                            <menuItem title="Inspect Disk..." tag="2" id="0E6-C2-ryM" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="inspectHdrAction:" target="-1" id="9Oy-jj-V30"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Geometry..." tag="2" id="unW-JQ-lBo" userLabel="Export disk">
+                            <menuItem title="Inspect File System..." tag="2" id="unW-JQ-lBo" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="configureHdrAction:" target="-1" id="Cx8-Sh-zqz"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="1BH-ag-PTI"/>
+                            <menuItem title="Write Protected" tag="2" id="KcH-ih-oZX" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="writeProtectHdrAction:" target="-1" id="t5d-Ig-pZJ"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -1395,17 +1432,31 @@
                                     <action selector="exportRecentHdrDummyAction:" target="-1" id="i9n-lF-Aka"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="iU8-hM-UzT"/>
+                            <menuItem title="Properties..." tag="1" id="3xW-dg-y8g" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="configureHdrAction:" target="-1" id="iyi-4K-1V5"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="tzT-rv-xwa"/>
-                            <menuItem title="Inspect..." tag="1" id="pFD-5y-I16" userLabel="Export disk">
+                            <menuItem title="Inspect Disk..." tag="1" id="pFD-5y-I16" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="inspectHdrAction:" target="-1" id="ZEM-EJ-Rxv"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Configure..." tag="1" id="3xW-dg-y8g" userLabel="Export disk">
+                            <menuItem title="Inspect File System..." tag="1" id="15h-z1-NXW" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="configureHdrAction:" target="-1" id="iyi-4K-1V5"/>
+                                    <action selector="inspectHdrAction:" target="-1" id="Qoo-Nd-jD0"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="Jyn-ik-ww2"/>
+                            <menuItem title="Write Protected" tag="1" id="Xmj-KC-ZiU" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="writeProtectHdrAction:" target="-1" id="0rF-yo-ck2"/>
                                 </connections>
                             </menuItem>
                         </items>

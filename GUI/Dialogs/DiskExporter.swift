@@ -158,7 +158,7 @@ class DiskExporter: DialogController {
             if adf != nil { name = isHD ? "hd_adf" : "dd_adf" }
             if img != nil { name = "dd_dos" }
                 
-            if name != "" && dfn.hasWriteProtectedDisk() { name += "_protected" }
+            if name != "" && dfn.hasProtectedDisk() { name += "_protected" }
 
         case Format.vol:
             

@@ -358,6 +358,41 @@ HardDrive::didSaveToBuffer(u8 *buffer)
     return (isize)(writer.ptr - buffer);
 }
 
+u64
+HardDrive::fnv() const
+{
+    return hasDisk() ? util::fnv_1a_64(data, desc.geometry.numBytes()) : 0;
+}
+
+bool
+HardDrive::hasDisk() const
+{
+    return data != nullptr;
+}
+
+bool
+HardDrive::hasModifiedDisk() const
+{
+    return hasDisk() && modified;
+}
+
+bool
+HardDrive::hasProtectedDisk() const
+{
+    return hasDisk() && writeProtected;
+}
+
+void
+HardDrive::setModificationFlag(bool value)
+{
+    if (hasDisk()) modified = value;
+}
+void
+HardDrive::setProtectionFlag(bool value)
+{
+    if (hasDisk()) writeProtected = value;
+}
+
 string
 HardDrive::defaultName(isize partition)
 {
@@ -472,8 +507,10 @@ HardDrive::write(isize offset, isize length, u32 addr)
         // Move the drive head to the specified location
         moveHead(offset / desc.geometry.bsize);
 
-        // Perform the read operation
-        mem.spypeek <ACCESSOR_CPU> (addr, length, data + offset);
+        // Perform the write operation
+        if (!writeProtected) {
+            mem.spypeek <ACCESSOR_CPU> (addr, length, data + offset);
+        }
     }
     
     return error;

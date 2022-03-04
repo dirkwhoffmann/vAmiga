@@ -150,6 +150,20 @@ private:
 
     
     //
+    // Methods from Drive
+    //
+    
+public:
+    
+    u64 fnv() const override;
+    bool hasDisk() const override;
+    bool hasModifiedDisk() const override;
+    bool hasProtectedDisk() const override;
+    void setModificationFlag(bool value) override;
+    void setProtectionFlag(bool value) override;
+    
+        
+    //
     // Configuring
     //
     
@@ -273,19 +287,9 @@ public:
 
 public:
     
-    bool hasDisk() const { return disk != nullptr; }
     bool hasDDDisk() const { return disk ? disk->density == DENSITY_DD : false; }
     bool hasHDDisk() const { return disk ? disk->density == DENSITY_HD : false; }
-    bool hasModifiedDisk() const { return disk ? disk->isModified() : false; }
-    void setModifiedDisk(bool value) { if (disk) disk->setModified(value); }
-    
-    bool hasWriteEnabledDisk() const;
-    bool hasWriteProtectedDisk() const;
-    void setWriteProtection(bool value); 
-    void toggleWriteProtection();
-    
-    u64 fnv() const;
-
+        
     bool isInsertable(Diameter t, Density d) const;
     bool isInsertable(const FloppyFile &file) const;
     bool isInsertable(const FloppyDisk &disk) const;

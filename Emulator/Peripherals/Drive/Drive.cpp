@@ -14,3 +14,13 @@ Drive::Drive(Amiga& ref, isize n) : SubComponent(ref), nr(n)
 {
     assert(usize(nr) < 4);
 }
+
+void
+Drive::toggleWriteProtection()
+{
+    // Only proceed if a disk is present
+    if (!hasDisk()) return;
+    
+    // Toggle the protection flag
+    setProtectionFlag(hasUnprotectedDisk());
+}

@@ -612,8 +612,8 @@
 @property (readonly) BOOL hasDisk;
 @property (readonly) BOOL hasDDDisk;
 @property (readonly) BOOL hasHDDisk;
-- (BOOL)hasWriteProtectedDisk;
-- (void)setWriteProtection:(BOOL)value;
+- (BOOL)hasProtectedDisk;
+- (void)setProtectionFlag:(BOOL)value;
 - (void)toggleWriteProtection;
 - (BOOL)isInsertable:(Diameter)type density:(Density)density;
 - (void)eject;

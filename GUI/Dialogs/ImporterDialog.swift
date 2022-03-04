@@ -193,7 +193,7 @@ class ImporterDialog: DialogController {
         do {
             
             try drive.swap(file: disk!)
-            drive.setWriteProtection(writeProtect)
+            drive.setProtectionFlag(writeProtect)
             hideSheet()
             
         } catch {

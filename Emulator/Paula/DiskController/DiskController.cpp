@@ -318,7 +318,7 @@ void
 DiskController::setWriteProtection(isize nr, bool value)
 {
     assert(nr >= 0 && nr <= 3);
-    df[nr]->setWriteProtection(value);
+    df[nr]->setProtectionFlag(value);
 }
 
 void

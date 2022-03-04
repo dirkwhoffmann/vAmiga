@@ -96,7 +96,7 @@ class DiskInspector: DialogController {
             decoder = try? EXTFileProxy.make(drive: drive!) as EXTFileProxy
         }
 
-        let protected = drive!.hasWriteProtectedDisk()
+        let protected = drive!.hasProtectedDisk()
         image = (decoder as? FloppyFileProxy)?.icon(protected: protected)
         showWindow()
     }
