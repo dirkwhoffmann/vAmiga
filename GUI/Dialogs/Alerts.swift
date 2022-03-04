@@ -185,6 +185,24 @@ extension MyController {
         return true
     }
     
+    @discardableResult
+    func askToRebootAlert() -> NSApplication.ModalResponse {
+       
+        let alert = NSAlert()
+        alert.alertStyle = .informational
+        alert.icon = NSImage(named: "powerSwitch")
+        alert.messageText = "Your Amiga must be restarted to perform this operation."
+        alert.informativeText = "All changes will be lost if you proceed."
+        alert.addButton(withTitle: "Proceed")
+        alert.addButton(withTitle: "Cancel")
+        return alert.runModal()
+    }
+
+    func askToReboot() -> Bool {
+            
+        return amiga.poweredOff || askToRebootAlert() == .alertFirstButtonReturn
+    }
+    
     func showMissingFFmpegAlert() {
 
         let alert = NSAlert()

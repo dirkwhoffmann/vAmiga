@@ -176,7 +176,13 @@ class MyDocument: NSDocument {
         
         if let proxy = attachment as? HDFFileProxy {
             
-            track("TODO: Attach hard drive")
+            if parent.askToReboot() {
+            
+                amiga.powerOff()
+                try? amiga.hd(drive)?.attach(hdf: proxy)
+                amiga.powerOn()
+                try? amiga.run()
+            }
         }
     }
     
