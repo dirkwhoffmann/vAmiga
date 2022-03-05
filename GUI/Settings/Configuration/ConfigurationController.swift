@@ -222,14 +222,18 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var audSamplingMethod: NSPopUpButton!
 
     // Drive volumes
-    @IBOutlet weak var audDf0Pan: NSSlider!
-    @IBOutlet weak var audDf1Pan: NSSlider!
-    @IBOutlet weak var audDf2Pan: NSSlider!
-    @IBOutlet weak var audDf3Pan: NSSlider!
     @IBOutlet weak var audStepVolume: NSSlider!
     @IBOutlet weak var audPollVolume: NSSlider!
     @IBOutlet weak var audEjectVolume: NSSlider!
     @IBOutlet weak var audInsertVolume: NSSlider!
+    @IBOutlet weak var audDf0Pan: NSSlider!
+    @IBOutlet weak var audDf1Pan: NSSlider!
+    @IBOutlet weak var audDf2Pan: NSSlider!
+    @IBOutlet weak var audDf3Pan: NSSlider!
+    @IBOutlet weak var audHd0Pan: NSSlider!
+    @IBOutlet weak var audHd1Pan: NSSlider!
+    @IBOutlet weak var audHd2Pan: NSSlider!
+    @IBOutlet weak var audHd3Pan: NSSlider!
 
     // Filter
     @IBOutlet weak var audFilterType: NSPopUpButton!

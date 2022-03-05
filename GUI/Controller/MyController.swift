@@ -512,14 +512,12 @@ extension MyController {
 
         case .HDR_STEP:
             
-            // EXPERIMENTAL
-            // TODO: FIND SUITABLE HARD DRIVE STEP SOUND
-            macAudio.playSound(name: "hdr_click", volume: word3, pan: word1)
-            /*
+            macAudio.playSound(name: "hdr_click", volume: word3, pan: word2)
+            
             track("Cylinder: \(word1)")
             track("Pan: \(word2)")
             track("Volume: \(word3)")
-            */
+            
             refreshStatusBar()
             
         case .CTRL_AMIGA_AMIGA:

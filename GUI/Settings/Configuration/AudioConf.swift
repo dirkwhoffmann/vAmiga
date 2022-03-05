@@ -10,9 +10,7 @@
 extension ConfigurationController {
     
     func refreshAudioTab() {
-        
-        // let config = amiga.config.audio
-        
+                
         // In
         audVol0.integerValue = config.vol0
         audVol1.integerValue = config.vol1
@@ -29,15 +27,19 @@ extension ConfigurationController {
         audSamplingMethod.selectItem(withTag: config.samplingMethod)
 
         // Drives
-        audDf0Pan.integerValue = config.df0Pan
-        audDf1Pan.integerValue = config.df1Pan
-        audDf2Pan.integerValue = config.df2Pan
-        audDf3Pan.integerValue = config.df3Pan
         audStepVolume.integerValue = config.stepVolume
         audPollVolume.integerValue = config.pollVolume
         audInsertVolume.integerValue = config.insertVolume
         audEjectVolume.integerValue = config.ejectVolume
-        
+        audDf0Pan.integerValue = config.df0Pan
+        audDf1Pan.integerValue = config.df1Pan
+        audDf2Pan.integerValue = config.df2Pan
+        audDf3Pan.integerValue = config.df3Pan
+        audHd0Pan.integerValue = config.hd0Pan
+        audHd1Pan.integerValue = config.hd1Pan
+        audHd2Pan.integerValue = config.hd2Pan
+        audHd3Pan.integerValue = config.hd3Pan
+
         // Audio filter
         audFilterType.selectItem(withTag: config.filterType)
         audFilterAlwaysOn.state = config.filterAlwaysOn ? .on : .off
@@ -120,6 +122,18 @@ extension ConfigurationController {
         case 1: config.df1Pan = sender.integerValue
         case 2: config.df2Pan = sender.integerValue
         case 3: config.df3Pan = sender.integerValue
+        default: fatalError()
+        }
+        refresh()
+    }
+
+    @IBAction func audHdPanAction(_ sender: NSSlider!) {
+                                
+        switch sender.tag {
+        case 0: config.hd0Pan = sender.integerValue
+        case 1: config.hd1Pan = sender.integerValue
+        case 2: config.hd2Pan = sender.integerValue
+        case 3: config.hd3Pan = sender.integerValue
         default: fatalError()
         }
         refresh()
