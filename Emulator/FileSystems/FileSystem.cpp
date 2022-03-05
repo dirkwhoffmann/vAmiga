@@ -37,7 +37,8 @@ FileSystem::init(const HDFFile &hdf, isize part)
     auto descriptor = hdf.getFileSystemDescriptor(part);
 
     // Import the file system
-    init(descriptor, hdf.partitionData(part), descriptor.numBlocks * 512);
+    assert(hdf.partitionSize(part) == descriptor.numBlocks * 512);
+    init(descriptor, hdf.partitionData(part), hdf.partitionSize(part));
 }
 
 void

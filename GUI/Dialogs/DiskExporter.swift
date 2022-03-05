@@ -94,6 +94,9 @@ class DiskExporter: DialogController {
     
     func select(partition nr: Int?) {
 
+        if nr != nil { track("Selecting partition \(nr!)") }
+        partition = nr
+        
         if hdf != nil && nr != nil {
 
             // Try to decode the file system from the HDF
@@ -106,7 +109,7 @@ class DiskExporter: DialogController {
 
         } else {
                
-            // Exporting to a folder is not offered
+            // Exporting to a folder is not possible
             vol = nil
         }
     }
@@ -122,18 +125,13 @@ class DiskExporter: DialogController {
         partitionPopup.autoenablesItems = false
         partitionPopup.removeAllItems()
 
-        if hdf != nil {
+        addItem("Entire disk", tag: -1)
 
-            if numPartitions > 1 {
-                addItem("All partitions", tag: -1)
-            }
+        if hdf?.hasRDB == true {
+
             for i in 1...numPartitions {
                 addItem("Partition \(i)", tag: i - 1)
             }
-        }
-        if adf != nil {
-
-            addItem("Entire disk", tag: -1)
         }
     }
     
@@ -179,14 +177,11 @@ class DiskExporter: DialogController {
 
         // Update disk description
         updateTitleText()
-        updateDiskInfo()
-        updateFileSystemInfo()
+        updateInfo()
     }
     
     func updateIcon() {
-            
-        track("formatPopup.selectedTag() = \(formatPopup.selectedTag())")
-        
+                    
         switch formatPopup.selectedTag() {
 
         case Format.hdf:
@@ -225,44 +220,52 @@ class DiskExporter: DialogController {
         img != nil ? "PC Disk" : "Unrecognized device"
     }
 
-    func updateDiskInfo() {
-        
-        var text = "Unknown track and sector format"
-        var color = NSColor.warningColor
+    func updateInfo() {
         
         if hdf != nil {
-            
-            text = hdf!.layoutInfo
-            color = NSColor.secondaryLabelColor
-            
-        } else if adf != nil {
-            
-            text = adf!.layoutInfo
-            color = NSColor.secondaryLabelColor
-            
-        } else if img != nil {
-            
-            text = img!.layoutInfo
-            color = NSColor.secondaryLabelColor
+            updateHardDiskInfo()
+        } else {
+            updateFloppyDiskInfo()
         }
-
-        info1.stringValue = text
-        info1.textColor = color
     }
     
-    func updateFileSystemInfo() {
+    func updateHardDiskInfo() {
+    
+        let num = hdf!.numPartitions
+        let s = num == 1 ? "" : "s"
         
-        var text = "No compatible file system"
-        var color = NSColor.warningColor
-        
-        if vol != nil {
+        if partition == nil {
             
-            text = vol!.dos.description
-            color = .secondaryLabelColor
+            if hdf!.hasRDB {
+                info1.stringValue = "RDB hard drive with \(num) partition\(s)"
+            } else {
+                info1.stringValue = "Standard hard drive"
+            }
+            info2.stringValue = ""
+
+        } else {
+                
+            info1.stringValue = "Partition \(partition! + 1) out of \(num)"
+            if vol == nil {
+                info2.stringValue = "No compatible file system"
+            } else {
+                info2.stringValue = vol!.dos.description
+            }
         }
+    }
         
-        info2.stringValue = text
-        info2.textColor = color
+    func updateFloppyDiskInfo() {
+            
+        if adf != nil {
+            info1.stringValue = adf!.typeInfo + ", " + adf!.layoutInfo
+        } else {
+            info1.stringValue = ""
+        }
+        if vol != nil {
+            info2.stringValue = vol!.dos.description
+        } else {
+            info2.stringValue = "No compatible file system"
+        }
     }
 
     //
@@ -276,7 +279,10 @@ class DiskExporter: DialogController {
 
     @IBAction func partitionAction(_ sender: NSButton!) {
 
-        track("Partition: \(partitionPopup.selectedTag())")
+        let nr = partitionPopup.selectedTag()
+        select(partition: nr >= 0 ? nr : nil)
+        updateFormatPopup()
+        update()
     }
     
     @IBAction func exportAction(_ sender: NSButton!) {
@@ -394,8 +400,16 @@ class DiskExporter: DialogController {
 
         do {
             
-            track("Exporting HDF")
-            try parent.mydocument.export(fileProxy: hdf!, to: url)
+            if let nr = partition {
+
+                track("Exporting partiton \(nr)")
+                try hdf?.writeToFile(url: url, partition: nr)
+
+            } else {
+
+                track("Exporting entire HDF")
+                try hdf?.writeToFile(url: url)
+            }
             
             dhn!.markDiskAsUnmodified()
             myAppDelegate.noteNewRecentlyExportedHdrURL(url, drive: dhn!.nr)

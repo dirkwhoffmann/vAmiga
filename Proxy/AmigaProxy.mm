@@ -2243,6 +2243,12 @@ using namespace moira;
     return [self hdf]->numPartitions();
 }
 
+- (NSInteger)writeToFile:(NSString *)path partition:(NSInteger)nr exception:(ExceptionWrapper *)ex
+{
+    try { return [self hdf]->writePartitionToFile([path fileSystemRepresentation], nr); }
+    catch (VAError &error) { [ex save:error]; return 0; }
+}
+
 @end
 
 

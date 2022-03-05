@@ -287,11 +287,17 @@ HDFFile::partitionSize(isize nr) const
     return (part.highCyl - part.lowCyl + 1) * part.heads * part.sectors * 512;
 }
 
+isize
+HDFFile::partitionOffset(isize nr) const
+{
+    auto &part = ptable[nr];
+    return part.lowCyl * part.heads * part.sectors * 512;
+}
+
 u8 *
 HDFFile::partitionData(isize nr) const
 {
-    auto &part = ptable[nr];
-    return data + part.lowCyl * part.heads * part.sectors * 512;
+    return data + partitionOffset(nr);
 }
 
 u8 *
@@ -347,4 +353,13 @@ HDFFile::dos(isize blockNr) const
     }
     
     return FS_NODOS;
+}
+
+isize
+HDFFile::writePartitionToFile(const string &path, isize nr)
+{
+    auto offset = partitionOffset(nr);
+    auto size = partitionSize(nr);
+    
+    return writeToFile(path, offset, size);
 }

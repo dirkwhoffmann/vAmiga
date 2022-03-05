@@ -929,6 +929,8 @@
 @property (readonly) BOOL hasRDB;
 @property (readonly) NSInteger numPartitions;
 
+- (NSInteger)writeToFile:(NSString *)path partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
+
 @end
 
 

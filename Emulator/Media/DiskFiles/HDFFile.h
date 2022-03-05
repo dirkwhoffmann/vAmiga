@@ -97,10 +97,9 @@ public:
     isize numPartitions() const;
     isize numReserved() const;
 
-    // Returns the size of a partition in bytes
+    // Returns the byte count and the location of a certain partition
     isize partitionSize(isize nr) const;
-    
-    // Returns a pointer to the data area of a certain partition
+    isize partitionOffset(isize nr) const;
     u8 *partitionData(isize nr) const;
     
     // Computes all possible drive geometries
@@ -124,4 +123,13 @@ private:
     
     // Extracts the DOS revision number from a certain block
     FSVolumeType dos(isize nr) const;
+    
+    
+    //
+    // Serializing
+    //
+    
+public:
+    
+    isize writePartitionToFile(const string &path, isize nr);
 };

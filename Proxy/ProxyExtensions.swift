@@ -226,6 +226,19 @@ extension ADFFileProxy {
     }
 }
 
+extension HDFFileProxy {
+    
+    @discardableResult
+    func writeToFile(url: URL, partition nr: Int) throws -> Int {
+        
+        let exception = ExceptionWrapper()
+        let result = write(toFile: url.path, partition: nr, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+        
+        return result
+    }
+}
+
 extension FileSystemProxy {
             
     static func make(withADF adf: ADFFileProxy) throws -> FileSystemProxy {
@@ -362,9 +375,9 @@ extension FloppyFileProxy {
 
         if numHeads == 1 { result += "Single sided, " }
         if numHeads == 2 { result += "Double sided, " }
-        if diskDensity == .SD { result += "single density" }
-        if diskDensity == .DD { result += "double density" }
-        if diskDensity == .HD { result += "high density" }
+        if diskDensity == .SD { result += "Single density" }
+        if diskDensity == .DD { result += "Double density" }
+        if diskDensity == .HD { result += "High density" }
         
         return result
     }
