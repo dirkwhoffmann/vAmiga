@@ -214,7 +214,7 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
 typedef struct
 {
     MsgType type;
-    long data;
+    i64 data;
 }
 Message;
 

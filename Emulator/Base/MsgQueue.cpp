@@ -28,16 +28,36 @@ MsgQueue::setListener(const void *listener, Callback *callback)
 }
 
 void
-MsgQueue::put(MsgType type, long data)
+MsgQueue::put(MsgType type, i64 val)
 {
-    synchronized {
+    {   SYNCHRONIZED
         
-        debug(QUEUE_DEBUG, "%s [%ld]\n", MsgTypeEnum::key(type), data);
+        debug(QUEUE_DEBUG, "%s [%lld]\n", MsgTypeEnum::key(type), val);
         
         // Send the message immediately if a lister has been registered
-        if (listener) { callback(listener, type, data); return; }
+        if (listener) { callback(listener, type, val); return; }
         
         // Otherwise, store it in the ring buffer
-        Message msg = { type, data }; queue.write(msg);
+        Message msg = { type, val }; queue.write(msg);
     }
+}
+
+void
+MsgQueue::put(MsgType type, i32 val1, i32 val2)
+{
+    u64 u1 = (u32)(val1);
+    u64 u2 = (u32)(val2);
+    
+    put(type, (i64)(u1 << 48 | u2 << 32));
+}
+
+void
+MsgQueue::put(MsgType type, i16 val1, i16 val2, i16 val3, i16 val4)
+{
+    u64 u1 = (u16)(val1);
+    u64 u2 = (u16)(val2);
+    u64 u3 = (u16)(val3);
+    u64 u4 = (u16)(val4);
+    
+    put(type, (i64)(u1 << 48 | u2 << 32 | u3 << 16 | u4));
 }

@@ -1108,6 +1108,30 @@ RetroShell::exec <Token::hdn, Token::config> (Arguments& argv, long param)
 }
 
 template <> void
+RetroShell::exec <Token::hdn, Token::set, Token::pan> (Arguments& argv, long param)
+{
+    long num = util::parseNum(argv.front());
+    
+    if (param >= 0 && param <= 3) {
+        amiga.configure(OPT_HDR_PAN, param, num);
+    } else {
+        amiga.configure(OPT_HDR_PAN, num);
+    }
+}
+
+template <> void
+RetroShell::exec <Token::hdn, Token::audiate, Token::step> (Arguments& argv, long param)
+{
+    long num = util::parseNum(argv.front());
+    
+    if (param >= 0 && param <= 3) {
+        amiga.configure(OPT_HDR_STEP_VOLUME, param, num);
+    } else {
+        amiga.configure(OPT_HDR_STEP_VOLUME, num);
+    }
+}
+
+template <> void
 RetroShell::exec <Token::hdn, Token::inspect, Token::drive> (Arguments& argv, long param)
 {
     dump(*amiga.hd[param], dump::Drive);

@@ -349,6 +349,22 @@ class Configuration {
         get { return amiga.getConfig(.DRIVE_PAN, drive: 3) }
         set { amiga.configure(.DRIVE_PAN, id: 3, value: newValue) }
     }
+    var hd0Pan: Int {
+        get { return amiga.getConfig(.HDR_PAN, drive: 0) }
+        set { amiga.configure(.HDR_PAN, id: 0, value: newValue) }
+    }
+    var hd1Pan: Int {
+        get { return amiga.getConfig(.HDR_PAN, drive: 1) }
+        set { amiga.configure(.HDR_PAN, id: 1, value: newValue) }
+    }
+    var hd2Pan: Int {
+        get { return amiga.getConfig(.HDR_PAN, drive: 2) }
+        set { amiga.configure(.HDR_PAN, id: 2, value: newValue) }
+    }
+    var hd3Pan: Int {
+        get { return amiga.getConfig(.HDR_PAN, drive: 3) }
+        set { amiga.configure(.HDR_PAN, id: 3, value: newValue) }
+    }
     var stepVolume: Int {
         get { return amiga.getConfig(.STEP_VOLUME, drive: 0) }
         set { amiga.configure(.STEP_VOLUME, value: newValue) }
@@ -365,7 +381,11 @@ class Configuration {
         get { return amiga.getConfig(.EJECT_VOLUME, drive: 0) }
         set { amiga.configure(.EJECT_VOLUME, value: newValue) }
     }
-    
+    var hdStepVolume: Int {
+        get { return amiga.getConfig(.HDR_STEP_VOLUME, drive: 0) }
+        set { amiga.configure(.HDR_STEP_VOLUME, value: newValue) }
+    }
+
     //
     // Video settings
     //
@@ -840,6 +860,10 @@ class Configuration {
         df1Pan = defaults.drivePan[1]
         df2Pan = defaults.drivePan[2]
         df3Pan = defaults.drivePan[3]
+        hd0Pan = defaults.hdPan[0]
+        hd1Pan = defaults.hdPan[1]
+        hd2Pan = defaults.hdPan[2]
+        hd3Pan = defaults.hdPan[3]
         stepVolume = defaults.stepVolume
         pollVolume = defaults.pollVolume
         insertVolume = defaults.insertVolume
@@ -874,11 +898,16 @@ class Configuration {
         df1Pan = defaults.integer(forKey: Keys.Aud.df1Pan)
         df2Pan = defaults.integer(forKey: Keys.Aud.df2Pan)
         df3Pan = defaults.integer(forKey: Keys.Aud.df3Pan)
+        hd0Pan = defaults.integer(forKey: Keys.Aud.hd0Pan)
+        hd1Pan = defaults.integer(forKey: Keys.Aud.hd1Pan)
+        hd2Pan = defaults.integer(forKey: Keys.Aud.hd2Pan)
+        hd3Pan = defaults.integer(forKey: Keys.Aud.hd3Pan)
         stepVolume = defaults.integer(forKey: Keys.Aud.stepVolume)
         pollVolume = defaults.integer(forKey: Keys.Aud.pollVolume)
         insertVolume = defaults.integer(forKey: Keys.Aud.insertVolume)
         ejectVolume = defaults.integer(forKey: Keys.Aud.ejectVolume)
-        
+        hdStepVolume = defaults.integer(forKey: Keys.Aud.hdStepVolume)
+
         filterType = defaults.integer(forKey: Keys.Aud.filterType)
         filterAlwaysOn = defaults.bool(forKey: Keys.Aud.filterAlwaysOn)
 
@@ -908,11 +937,16 @@ class Configuration {
         defaults.set(df1Pan, forKey: Keys.Aud.df1Pan)
         defaults.set(df2Pan, forKey: Keys.Aud.df2Pan)
         defaults.set(df3Pan, forKey: Keys.Aud.df3Pan)
+        defaults.set(hd0Pan, forKey: Keys.Aud.hd0Pan)
+        defaults.set(hd1Pan, forKey: Keys.Aud.hd1Pan)
+        defaults.set(hd2Pan, forKey: Keys.Aud.hd2Pan)
+        defaults.set(hd3Pan, forKey: Keys.Aud.hd3Pan)
         defaults.set(stepVolume, forKey: Keys.Aud.stepVolume)
         defaults.set(pollVolume, forKey: Keys.Aud.pollVolume)
         defaults.set(insertVolume, forKey: Keys.Aud.insertVolume)
         defaults.set(ejectVolume, forKey: Keys.Aud.ejectVolume)
-        
+        defaults.set(hdStepVolume, forKey: Keys.Aud.stepVolume)
+
         defaults.set(filterType, forKey: Keys.Aud.filterType)
         defaults.set(filterAlwaysOn, forKey: Keys.Aud.filterAlwaysOn)
     }

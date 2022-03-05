@@ -927,7 +927,7 @@ Interpreter::registerInstructions()
                  &RetroShell::exec <Token::dfn, Token::audiate, Token::eject>, 1, i);
         
         root.add({df, "audiate", "step"},
-                 "command", "Makes disk ejections audible",
+                 "command", "Makes head steps audible",
                  &RetroShell::exec <Token::dfn, Token::audiate, Token::step>, 1, i);
         
         root.add({df, "audiate", "poll"},
@@ -960,10 +960,9 @@ Interpreter::registerInstructions()
     root.add({"hd3"},
              "component", "Hard drive 3");
 
-    /*
     root.add({"hdn"},
              "component", "All connected hard drives");
-    */
+
     for (isize i = 0; i < 4; i++) {
         
         string hd = "hd" + std::to_string(i);
@@ -971,7 +970,31 @@ Interpreter::registerInstructions()
         root.add({hd, "config"},
                  "command", "Displays the current configuration",
                  &RetroShell::exec <Token::hdn, Token::config>, 0, i);
+    }
+    
+    for (isize i = 0; i < 5; i++) {
 
+        string hd = i < 4 ? "hd" + std::to_string(i) : "hdn";
+                
+        root.add({hd, "set"},
+                 "command", "Configures the component");
+        
+        root.add({hd, "set", "pan"},
+                 "key", "Sets the pan for drive sounds",
+                 &RetroShell::exec <Token::hdn, Token::set, Token::pan>, 1, i);
+        
+        root.add({hd, "audiate"},
+                 "command", "Sets the volume of drive sounds");
+                
+        root.add({hd, "audiate", "step"},
+                 "command", "Makes head steps audible",
+                 &RetroShell::exec <Token::hdn, Token::audiate, Token::step>, 1, i);
+    }
+    
+    for (isize i = 0; i < 4; i++) {
+            
+        string hd = "hd" + std::to_string(i);
+        
         root.add({hd, "inspect"},
                  "command", "Displays the component state");
 

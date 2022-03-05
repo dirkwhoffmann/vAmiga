@@ -310,6 +310,8 @@ Amiga::getConfigItem(Option option, long id) const
             
         case OPT_HDR_TYPE:
         case OPT_HDR_CONNECT:
+        case OPT_HDR_PAN:
+        case OPT_HDR_STEP_VOLUME:
             
             return hd[id]->getConfigItem(option);
             
@@ -357,6 +359,8 @@ Amiga::configure(Option option, i64 value)
         OPT_POLL_VOLUME,
         OPT_INSERT_VOLUME,
         OPT_EJECT_VOLUME,
+        OPT_HDR_PAN,
+        OPT_HDR_STEP_VOLUME,
         OPT_AUDVOLL,
         OPT_AUDVOLR,
         OPT_AUDPAN,
@@ -444,7 +448,9 @@ Amiga::configure(Option option, i64 value)
             
         case OPT_HDR_TYPE:
         case OPT_HDR_CONNECT:
-
+        case OPT_HDR_PAN:
+        case OPT_HDR_STEP_VOLUME:
+            
             hd[0]->setConfigItem(option, value);
             hd[1]->setConfigItem(option, value);
             hd[2]->setConfigItem(option, value);
@@ -547,6 +553,8 @@ Amiga::configure(Option option, long id, i64 value)
         OPT_POLL_VOLUME,
         OPT_INSERT_VOLUME,
         OPT_EJECT_VOLUME,
+        OPT_HDR_PAN,
+        OPT_HDR_STEP_VOLUME,
         OPT_AUDVOLL,
         OPT_AUDVOLR,
         OPT_AUDPAN,
@@ -590,6 +598,8 @@ Amiga::configure(Option option, long id, i64 value)
 
         case OPT_HDR_TYPE:
         case OPT_HDR_CONNECT:
+        case OPT_HDR_PAN:
+        case OPT_HDR_STEP_VOLUME:
             
             hd[id]->setConfigItem(option, value);
             break;

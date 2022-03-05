@@ -76,6 +76,8 @@ enum_long(OPT)
     // Hard Drives
     OPT_HDR_TYPE,
     OPT_HDR_CONNECT,
+    OPT_HDR_PAN,
+    OPT_HDR_STEP_VOLUME,
     
     // Ports
     OPT_SERIAL_DEVICE,
@@ -187,7 +189,9 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
                 
             case OPT_HDR_TYPE:              return "HDR_TYPE";
             case OPT_HDR_CONNECT:           return "HDR_CONNECT";
-                
+            case OPT_HDR_PAN:               return "HDR_PAN";
+            case OPT_HDR_STEP_VOLUME:       return "HDR_STEP_VOLUME";
+
             case OPT_SERIAL_DEVICE:         return "SERIAL_DEVICE";
 
             case OPT_HIDDEN_BITPLANES:      return "HIDDEN_BITPLANES";

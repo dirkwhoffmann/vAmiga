@@ -249,7 +249,7 @@ extension MyController {
             // Process message in the main thread
             DispatchQueue.main.async {
                 let mType = MsgType(rawValue: type)
-                myself.processMessage(Message(type: mType!, data: data))
+                myself.processMessage(Message(type: mType!, data: i64(data)))
             }
         }
     }
@@ -350,9 +350,13 @@ extension MyController {
     
     func processMessage(_ msg: Message) {
         
-        var driveNr: Int { return msg.data & 0xFF }
-        var driveCyl: Int { return (msg.data >> 8) & 0xFF; }
-        
+        var driveNr: Int { return Int(msg.data) & 0xFF }
+        var driveCyl: Int { return (Int(msg.data) >> 8) & 0xFF }
+        var word1: Int { return (Int(msg.data) >> 48) & 0xFFFF }
+        var word2: Int { return (Int(msg.data) >> 32) & 0xFFFF }
+        var word3: Int { return (Int(msg.data) >> 16) & 0xFFFF }
+        var word4: Int { return Int(msg.data) & 0xFFFF }
+                                                         
         // Only proceed if the proxy object is still alive
         if amiga == nil { return }
         
@@ -443,10 +447,10 @@ extension MyController {
             inspector?.scrollToPC()
             
         case .BREAKPOINT_REACHED:
-            inspector?.signalBreakPoint(pc: msg.data)
+            inspector?.signalBreakPoint(pc: Int(msg.data))
             
         case .WATCHPOINT_REACHED:
-            inspector?.signalWatchPoint(pc: msg.data)
+            inspector?.signalWatchPoint(pc: Int(msg.data))
             
         case .CPU_HALT:
             refreshStatusBar()
@@ -507,16 +511,20 @@ extension MyController {
             refreshStatusBar()
 
         case .HDR_STEP:
+            track("Cylinder: \(word1)")
+            track("Pan: \(word2)")
+            track("Volume: \(word3)")
+            // TODO: Play step sound
             refreshStatusBar()
             
         case .CTRL_AMIGA_AMIGA:
             resetAction(self)
             
         case .SER_IN:
-            serialIn += String(UnicodeScalar(msg.data & 0xFF)!)
+            serialIn += String(UnicodeScalar(Int(msg.data) & 0xFF)!)
             
         case .SER_OUT:
-            serialOut += String(UnicodeScalar(msg.data & 0xFF)!)
+            serialOut += String(UnicodeScalar(Int(msg.data) & 0xFF)!)
             
         case .AUTO_SNAPSHOT_TAKEN:
             mydocument.snapshots.append(amiga.latestAutoSnapshot)

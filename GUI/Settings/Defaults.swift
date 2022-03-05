@@ -1164,11 +1164,16 @@ extension Keys {
         static let df1Pan             = "VAMIGA_AUD_DF1Pan"
         static let df2Pan             = "VAMIGA_AUD_DF2Pan"
         static let df3Pan             = "VAMIGA_AUD_DF3Pan"
+        static let hd0Pan             = "VAMIGA_AUD_HD0Pan"
+        static let hd1Pan             = "VAMIGA_AUD_HD1Pan"
+        static let hd2Pan             = "VAMIGA_AUD_HD2Pan"
+        static let hd3Pan             = "VAMIGA_AUD_HD3Pan"
         static let stepVolume         = "VAMIGA_AUD_StepVolume"
         static let pollVolume         = "VAMIGA_AUD_PollVolume"
         static let insertVolume       = "VAMIGA_AUD_InsertVolume"
         static let ejectVolume        = "VAMIGA_AUD_EjectVolume"
-        
+        static let hdStepVolume       = "VAMIGA_AUD_HdStepVolume"
+
         // Filter
         static let filterType         = "VAMIGA_AUD_FilterType"
         static let filterAlwaysOn     = "VAMIGA_AUD_FilterAlwaysOn"
@@ -1194,11 +1199,13 @@ struct AudioDefaults {
 
     // Drive
     var drivePan: [Int]
+    var hdPan: [Int]
     var stepVolume: Int
     var pollVolume: Int
     var insertVolume: Int
     var ejectVolume: Int
-    
+    var hdStepVolume: Int
+
     // Filter
     let filterType: FilterType
     let filterAlwaysOn: Bool
@@ -1223,10 +1230,12 @@ struct AudioDefaults {
         samplingMethod: .NONE,
         
         drivePan: [100, 300, 100, 300],
+        hdPan: [100, 300, 100, 300],
         stepVolume: 50,
         pollVolume: 0,
         insertVolume: 50,
         ejectVolume: 50,
+        hdStepVolume: 50,
         
         filterType: .BUTTERWORTH,
         filterAlwaysOn: false
@@ -1248,10 +1257,12 @@ struct AudioDefaults {
         samplingMethod: .NONE,
         
         drivePan: [100, 300, 100, 300],
+        hdPan: [100, 300, 100, 300],
         stepVolume: 50,
         pollVolume: 0,
         insertVolume: 50,
         ejectVolume: 50,
+        hdStepVolume: 50,
         
         filterType: .BUTTERWORTH,
         filterAlwaysOn: false
@@ -1273,10 +1284,12 @@ struct AudioDefaults {
         samplingMethod: .NONE,
         
         drivePan: [100, 300, 100, 300],
+        hdPan: [100, 300, 100, 300],
         stepVolume: 50,
         pollVolume: 0,
         insertVolume: 50,
         ejectVolume: 50,
+        hdStepVolume: 50,
         
         filterType: .BUTTERWORTH,
         filterAlwaysOn: false
@@ -1307,11 +1320,16 @@ extension UserDefaults {
             Keys.Aud.df1Pan: defaults.drivePan[1],
             Keys.Aud.df2Pan: defaults.drivePan[2],
             Keys.Aud.df3Pan: defaults.drivePan[3],
+            Keys.Aud.hd0Pan: defaults.hdPan[0],
+            Keys.Aud.hd1Pan: defaults.hdPan[1],
+            Keys.Aud.hd2Pan: defaults.hdPan[2],
+            Keys.Aud.hd3Pan: defaults.hdPan[3],
             Keys.Aud.stepVolume: defaults.stepVolume,
             Keys.Aud.pollVolume: defaults.pollVolume,
             Keys.Aud.insertVolume: defaults.insertVolume,
             Keys.Aud.ejectVolume: defaults.ejectVolume,
-            
+            Keys.Aud.hdStepVolume: defaults.hdStepVolume,
+
             Keys.Aud.filterType: defaults.filterType.rawValue,
             Keys.Aud.filterAlwaysOn: defaults.filterAlwaysOn
         ]
@@ -1341,11 +1359,16 @@ extension UserDefaults {
                      Keys.Aud.df1Pan,
                      Keys.Aud.df2Pan,
                      Keys.Aud.df3Pan,
+                     Keys.Aud.hd0Pan,
+                     Keys.Aud.hd1Pan,
+                     Keys.Aud.hd2Pan,
+                     Keys.Aud.hd3Pan,
                      Keys.Aud.stepVolume,
                      Keys.Aud.pollVolume,
                      Keys.Aud.insertVolume,
                      Keys.Aud.ejectVolume,
-        
+                     Keys.Aud.hdStepVolume,
+
                      Keys.Aud.filterType,
                      Keys.Aud.filterAlwaysOn ]
 

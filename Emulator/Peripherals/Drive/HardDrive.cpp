@@ -137,8 +137,10 @@ HardDrive::getDefaultConfig(isize nr)
     HardDriveConfig defaults;
     
     defaults.type = HDR_GENERIC;
-    defaults.connected = nr == 0;
-    
+    defaults.connected = false;
+    defaults.pan = IS_EVEN(nr) ? 100 : -100;
+    defaults.stepVolume = 128;
+
     return defaults;
 }
 
@@ -149,6 +151,8 @@ HardDrive::resetConfig()
     
     setConfigItem(OPT_HDR_TYPE, defaults.type);
     setConfigItem(OPT_HDR_CONNECT, defaults.connected);
+    setConfigItem(OPT_HDR_PAN, defaults.pan);
+    setConfigItem(OPT_HDR_STEP_VOLUME, defaults.stepVolume);
 }
 
 i64
@@ -156,8 +160,10 @@ HardDrive::getConfigItem(Option option) const
 {
     switch (option) {
             
-        case OPT_HDR_TYPE:      return (long)config.type;
-        case OPT_HDR_CONNECT:   return (long)config.connected;
+        case OPT_HDR_TYPE:          return (long)config.type;
+        case OPT_HDR_CONNECT:       return (long)config.connected;
+        case OPT_HDR_PAN:           return (long)config.pan;
+        case OPT_HDR_STEP_VOLUME:   return (long)config.stepVolume;
 
         default:
             fatalError;
@@ -203,6 +209,18 @@ HardDrive::setConfigItem(Option option, i64 value)
             }
             return;
 
+        case OPT_HDR_PAN:
+
+            config.pan = (i16)value;
+            printf("New pan = %d\n", config.pan);
+            return;
+
+        case OPT_HDR_STEP_VOLUME:
+
+            config.stepVolume = (u8)value;
+            printf("New stepVolume = %d\n", config.stepVolume);
+            return;
+
         default:
             fatalError;
     }
@@ -238,6 +256,10 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         os << HardDriveTypeEnum::key(config.type) << std::endl;
         os << tab("Connected");
         os << bol(config.connected) << std::endl;
+        os << tab("Step volume");
+        os << dec(config.stepVolume) << std::endl;
+        os << tab("Pan");
+        os << dec(config.pan) << std::endl;
     }
     
     if (category & dump::Drive) {
@@ -573,5 +595,11 @@ HardDrive::moveHead(isize c, isize h, isize s)
     head.head = h;
     head.offset = desc.geometry.bsize * s;
     
-    if (step) msgQueue.put(MSG_HDR_STEP, c);
+    if (step) {
+
+        auto pan = config.pan;
+        auto vol = config.stepVolume;
+        
+        msgQueue.put(MSG_HDR_STEP, i16(c), i16(pan), i16(vol), 0);
+    }
 }

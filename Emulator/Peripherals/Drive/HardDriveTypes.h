@@ -62,6 +62,10 @@ typedef struct
 {
     HardDriveType type;
     bool connected;
+    
+    // Noise settings
+    i16 pan;
+    u8 stepVolume;
 }
 HardDriveConfig;
 
