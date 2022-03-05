@@ -130,6 +130,8 @@ private:
     
 public:
     
+    bool isConnected() const override;
+    
     u64 fnv() const override;
     bool hasDisk() const override;
     bool hasModifiedDisk() const override;
@@ -167,10 +169,7 @@ public:
 
     // Returns the number of partitions
     isize numPartitions() const { return isize(ptable.size()); }
-    
-    // Checks whether this drive is connected to the Amiga
-    bool isConnected() const { return config.connected; }
-    
+        
     // Gets or sets the 'modification' flag
     bool isModified() const { return modified; }
     void setModified(bool value) { modified = value; }

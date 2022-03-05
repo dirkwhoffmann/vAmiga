@@ -12,6 +12,7 @@
 #include "Agnus.h"
 #include "BootBlockImage.h"
 #include "CIA.h"
+#include "DiskController.h"
 #include "FloppyFile.h"
 #include "MutableFileSystem.h"
 #include "MsgQueue.h"
@@ -343,6 +344,12 @@ FloppyDrive::_save(u8 *buffer)
     result = (isize)(writer.ptr - buffer);
     trace(SNP_DEBUG, "Serialized to %ld bytes\n", result);
     return result;
+}
+
+bool
+FloppyDrive::isConnected() const
+{
+    return diskController.getConfigItem(OPT_DRIVE_CONNECT, nr);
 }
 
 u64

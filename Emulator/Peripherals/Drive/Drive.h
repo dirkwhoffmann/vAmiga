@@ -35,7 +35,10 @@ public:
 
     isize getNr() { return nr; }
     
+    // Returns the connection status
+    virtual bool isConnected() const = 0;
 
+    
     //
     // Managing disk properties
     //

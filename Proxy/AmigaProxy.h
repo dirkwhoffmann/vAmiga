@@ -608,6 +608,7 @@
 @interface DriveProxy : AmigaComponentProxy { }
 
 @property (readonly) NSInteger nr;
+@property (readonly) BOOL isConnected;
 @property (readonly) u64 fnv;
 
 @property (readonly) BOOL hasDisk;
@@ -651,8 +652,6 @@
 @interface HardDriveProxy : DriveProxy { }
 
 @property (readonly) HardDriveInfo info;
-
-@property (readonly) BOOL isConnected;
 @property (readonly) NSInteger capacity;
 @property (readonly) NSInteger partitions;
 @property (readonly) NSInteger cylinders;

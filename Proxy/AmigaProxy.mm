@@ -1176,6 +1176,11 @@ using namespace moira;
     return [self drive]->getNr();
 }
 
+- (BOOL)isConnected
+{
+    return [self drive]->isConnected();
+}
+
 - (u64)fnv
 {
     return [self drive]->fnv();
@@ -1303,11 +1308,6 @@ using namespace moira;
 - (HardDriveInfo)info
 {
     return [self drive]->getInfo();
-}
-
-- (BOOL)isConnected
-{
-    return [self drive]->isConnected();
 }
 
 - (NSInteger)capacity

@@ -316,7 +316,6 @@ class DiskExporter: DialogController {
         savePanel.beginSheetModal(for: window!, completionHandler: { result in
             if result == .OK {
                 if let url = self.savePanel.url {
-                    // self.savePanel.close()
                     self.export(url: url)
                 }
             }
@@ -446,13 +445,12 @@ extension DiskExporter: NSFilePromiseProviderDelegate {
         default: fatalError()
         }
         
-        track("NSFilePromiseProviderDelegate: name = \(name)")
         return name
     }
     
     func filePromiseProvider(_ filePromiseProvider: NSFilePromiseProvider, writePromiseTo url: URL, completionHandler: @escaping (Error?) -> Void) {
         
-        track("NSFilePromiseProviderDelegate: url = \(url)")
         export(url: url)
+        completionHandler(nil)
     }
 }

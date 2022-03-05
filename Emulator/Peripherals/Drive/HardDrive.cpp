@@ -356,6 +356,12 @@ HardDrive::didSaveToBuffer(u8 *buffer)
     return (isize)(writer.ptr - buffer);
 }
 
+bool
+HardDrive::isConnected() const
+{
+    return config.connected;
+}
+
 u64
 HardDrive::fnv() const
 {

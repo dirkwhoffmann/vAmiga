@@ -157,6 +157,8 @@ private:
     
 public:
     
+    bool isConnected() const override;
+
     u64 fnv() const override;
     bool hasDisk() const override;
     bool hasModifiedDisk() const override;
