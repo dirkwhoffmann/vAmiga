@@ -23,9 +23,9 @@ class DiskExporter: DialogController {
 
     @IBOutlet weak var icon: NSImageView!
     @IBOutlet weak var title: NSTextField!
-    @IBOutlet weak var layoutInfo: NSTextField!
-    @IBOutlet weak var volumeInfo: NSTextField!
-    @IBOutlet weak var bootInfo: NSTextField!
+    @IBOutlet weak var info1: NSTextField!
+    @IBOutlet weak var info2: NSTextField!
+    @IBOutlet weak var partitionPopup: NSPopUpButton!
     @IBOutlet weak var formatPopup: NSPopUpButton!
     @IBOutlet weak var exportButton: NSButton!
     
@@ -35,10 +35,16 @@ class DiskExporter: DialogController {
     // Panel for exporting directories
     var openPanel: NSOpenPanel!
 
-    var nr = -1
-    var dfn: FloppyDriveProxy { return amiga.df(nr)! }
-    var dhn: HardDriveProxy { return amiga.hd(nr)! }
+    // Reference to the export drive
+    var dfn: FloppyDriveProxy?
+    var dhn: HardDriveProxy?
 
+    // The partition to export
+    var partition: Int?
+
+    // Number of available partitions
+    var numPartitions: Int { return hdf?.numPartitions ?? 1 }
+    
     // Results of the different decoders
     var hdf: HDFFileProxy?
     var adf: ADFFileProxy?
@@ -54,20 +60,20 @@ class DiskExporter: DialogController {
         
         track()
         
-        self.nr = nr
+        dfn = amiga.df(nr)
 
         // Run the ADF decoder
-        adf = try? ADFFileProxy.make(drive: dfn) as ADFFileProxy
+        adf = try? ADFFileProxy.make(drive: dfn!) as ADFFileProxy
 
         // Run the extended ADF decoder
-        ext = try? EXTFileProxy.make(drive: dfn) as EXTFileProxy
+        ext = try? EXTFileProxy.make(drive: dfn!) as EXTFileProxy
 
         // Run the DOS decoder
-        img = try? IMGFileProxy.make(drive: dfn) as IMGFileProxy
+        img = try? IMGFileProxy.make(drive: dfn!) as IMGFileProxy
                         
-        // Try to decode the file system from the ADF
-        if adf != nil { vol = try? FileSystemProxy.make(withADF: adf!) }
-
+        // Select the export partition
+        select(partition: 0)
+        
         super.showSheet()
     }
 
@@ -75,48 +81,86 @@ class DiskExporter: DialogController {
         
         track()
         
-        self.nr = nr
+        dhn = amiga.hd(nr)
 
         // Run the HDF decoder
-        hdf = try? HDFFileProxy.make(hdr: dhn) as HDFFileProxy
-                        
-        // Try to decode the file system from the HDF
-        if hdf != nil { vol = try? FileSystemProxy.make(withHDF: hdf!, partition: 0) }
+        hdf = try? HDFFileProxy.make(hdr: dhn!) as HDFFileProxy
+                                
+        // Select the export partition
+        select(partition: numPartitions == 1 ? 0 : nil)
         
         super.showSheet()
     }
     
-    override public func awakeFromNib() {
+    func select(partition nr: Int?) {
+
+        if hdf != nil && nr != nil {
+
+            // Try to decode the file system from the HDF
+            vol = try? FileSystemProxy.make(withHDF: hdf!, partition: nr!)
+        
+        } else if adf != nil {
+
+            // Try to decode the file system from the ADF
+            vol = try? FileSystemProxy.make(withADF: adf!)
+
+        } else {
+               
+            // Exporting to a folder is not offered
+            vol = nil
+        }
+    }
+    
+    func updatePartitionPopup() {
+        
+        func addItem(_ title: String, tag: Int) {
+            
+            partitionPopup.addItem(withTitle: title)
+            partitionPopup.lastItem?.tag = tag
+        }
+
+        partitionPopup.autoenablesItems = false
+        partitionPopup.removeAllItems()
+
+        if hdf != nil {
+
+            if numPartitions > 1 {
+                addItem("All partitions", tag: -1)
+            }
+            for i in 1...numPartitions {
+                addItem("Partition \(i)", tag: i - 1)
+            }
+        }
+        if adf != nil {
+
+            addItem("Entire disk", tag: -1)
+        }
+    }
+    
+    func updateFormatPopup() {
         
         func addItem(_ title: String, tag: Int) {
             
             formatPopup.addItem(withTitle: title)
             formatPopup.lastItem?.tag = tag
         }
-
-        track()
-        super.awakeFromNib()
-                
+        
         formatPopup.autoenablesItems = false
         formatPopup.removeAllItems()
-
         if adf != nil { addItem("ADF", tag: Format.adf) }
         if hdf != nil { addItem("HDF", tag: Format.hdf) }
         if ext != nil { addItem("ADF", tag: Format.ext) }
         if img != nil { addItem("IMG", tag: Format.img) }
         if img != nil { addItem("IMA", tag: Format.ima) }
-        if vol != nil { addItem("Files", tag: Format.vol) }
+        if vol != nil { addItem("Folder", tag: Format.vol) }
+    }
+        
+    override public func awakeFromNib() {
 
-        if formatPopup.numberOfItems > 0 {
-
-            exportButton.isEnabled = true
-            formatPopup.selectItem(at: 0)
-
-        } else {
-                
-            exportButton.isEnabled = false
-        }
-    
+        track()
+        super.awakeFromNib()
+        updatePartitionPopup()
+        updateFormatPopup()
         update()
     }
 
@@ -135,53 +179,53 @@ class DiskExporter: DialogController {
 
         // Update disk description
         updateTitleText()
-        updateTrackAndSectorInfo()
-        updateVolumeInfo()
-        updateBootInfo()
+        updateDiskInfo()
+        updateFileSystemInfo()
     }
     
     func updateIcon() {
             
-        var name = ""
-
         track("formatPopup.selectedTag() = \(formatPopup.selectedTag())")
         
         switch formatPopup.selectedTag() {
 
         case Format.hdf:
             
-            name = "hdf"
+            icon.image = hdf!.icon()
             
         case Format.adf, Format.ext, Format.img, Format.ima:
             
-            if ext != nil { name = isHD ? "hd_other" : "dd_other" }
-            if adf != nil { name = isHD ? "hd_adf" : "dd_adf" }
-            if img != nil { name = "dd_dos" }
-                
-            if name != "" && dfn.hasProtectedDisk { name += "_protected" }
+            let wp = dfn!.hasProtectedDisk
+            
+            icon.image =
+            adf?.icon(protected: wp) ??
+            img?.icon(protected: wp) ??
+            ext?.icon(protected: wp) ?? nil
 
         case Format.vol:
             
-            name = "NSFolder"
-            
+            icon.image = NSImage(named: "NSFolder")
+                        
         default:
             
-            name = ""
+            icon.image = nil
         }
-                
-        icon.image = NSImage(named: name != "" ? name : "biohazard")
+            
+        if icon.image == nil {
+            icon.image = NSImage(named: "biohazard")
+        }
     }
     
     func updateTitleText() {
                 
         title.stringValue =
         hdf != nil ? "Amiga Hard Drive" :
-        adf != nil ? "Amiga Disk" :
+        adf != nil ? "Amiga Floppy Disk" :
         ext != nil ? "Extended Amiga Disk" :
         img != nil ? "PC Disk" : "Unrecognized device"
     }
 
-    func updateTrackAndSectorInfo() {
+    func updateDiskInfo() {
         
         var text = "Unknown track and sector format"
         var color = NSColor.warningColor
@@ -202,11 +246,11 @@ class DiskExporter: DialogController {
             color = NSColor.secondaryLabelColor
         }
 
-        layoutInfo.stringValue = text
-        layoutInfo.textColor = color
+        info1.stringValue = text
+        info1.textColor = color
     }
     
-    func updateVolumeInfo() {
+    func updateFileSystemInfo() {
         
         var text = "No compatible file system"
         var color = NSColor.warningColor
@@ -217,19 +261,8 @@ class DiskExporter: DialogController {
             color = .secondaryLabelColor
         }
         
-        volumeInfo.stringValue = text
-        volumeInfo.textColor = color
-    }
-    
-    func updateBootInfo() {
-                
-        if adf == nil {
-            bootInfo.stringValue = ""
-            return
-        }
-        
-        bootInfo.stringValue = adf!.bootInfo
-        bootInfo.textColor = adf!.hasVirus ? .warningColor : .secondaryLabelColor
+        info2.stringValue = text
+        info2.textColor = color
     }
 
     //
@@ -239,6 +272,11 @@ class DiskExporter: DialogController {
     @IBAction func formatAction(_ sender: NSPopUpButton!) {
         
         update()
+    }
+
+    @IBAction func partitionAction(_ sender: NSButton!) {
+
+        track("Partition: \(partitionPopup.selectedTag())")
     }
     
     @IBAction func exportAction(_ sender: NSButton!) {
@@ -291,7 +329,6 @@ class DiskExporter: DialogController {
         openPanel.beginSheetModal(for: window!, completionHandler: { result in
             if result == .OK {
                 if let url = self.openPanel.url {
-                    // self.openPanel.close()
                     self.export(url: url)
                 }
             }
@@ -300,8 +337,17 @@ class DiskExporter: DialogController {
     
     func export(url: URL) {
 
+        if hdf != nil {
+            exportHardDisk(url: url)
+        } else {
+            exportFloppyDisk(url: url)
+        }
+    }
+    
+    func exportFloppyDisk(url: URL) {
+
         track("url = \(url)")
-        
+
         do {
             
             switch formatPopup.selectedTag() {
@@ -309,10 +355,6 @@ class DiskExporter: DialogController {
             case Format.adf:
                 track("Exporting ADF")
                 try parent.mydocument.export(fileProxy: adf!, to: url)
-
-            case Format.hdf:
-                track("Exporting HDF")
-                try parent.mydocument.export(fileProxy: hdf!, to: url)
 
             case Format.ext:
                 track("Exporting Extended ADF")
@@ -333,21 +375,35 @@ class DiskExporter: DialogController {
             default:
                 fatalError()
             }
-
-            if hdf != nil {
-
-                dhn.markDiskAsUnmodified()
-                myAppDelegate.noteNewRecentlyExportedHdrURL(url, drive: nr)
-
-            } else {
-
-                dfn.markDiskAsUnmodified()
-                myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: nr)
-            }
+            
+            dfn!.markDiskAsUnmodified()
+            myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: dfn!.nr)
+            
             hideSheet()
 
         } catch let error as VAError {
-            error.warning("Cannot export disk")
+            error.warning("Cannot export floppy disk")
+        } catch {
+            fatalError()
+        }
+    }
+    
+    func exportHardDisk(url: URL) {
+        
+        track("url = \(url)")
+
+        do {
+            
+            track("Exporting HDF")
+            try parent.mydocument.export(fileProxy: hdf!, to: url)
+            
+            dhn!.markDiskAsUnmodified()
+            myAppDelegate.noteNewRecentlyExportedHdrURL(url, drive: dhn!.nr)
+            
+            hideSheet()
+            
+        } catch let error as VAError {
+            error.warning("Cannot export hard disk")
         } catch {
             fatalError()
         }

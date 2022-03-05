@@ -97,8 +97,11 @@ public:
     isize numPartitions() const;
     isize numReserved() const;
 
-    // Returns a file system descriptor for this volume
-    u8 *dataForPartition(isize nr) const;
+    // Returns the size of a partition in bytes
+    isize partitionSize(isize nr) const;
+    
+    // Returns a pointer to the data area of a certain partition
+    u8 *partitionData(isize nr) const;
     
     // Computes all possible drive geometries
     std::vector<GeometryDescriptor> driveGeometries(isize fileSize);
@@ -119,13 +122,6 @@ private:
     // Returns a pointer to a certain partition block if it exists
     u8 *seekPB(isize nr) const;
     
-    
-    //
-    // Querying partition information
-    //
-
-private:
-    
     // Extracts the DOS revision number from a certain block
-    FSVolumeType dos(isize blockNr) const;
+    FSVolumeType dos(isize nr) const;
 };

@@ -37,7 +37,7 @@ FileSystem::init(const HDFFile &hdf, isize part)
     auto descriptor = hdf.getFileSystemDescriptor(part);
 
     // Import the file system
-    init(descriptor, hdf.dataForPartition(part), descriptor.numBlocks * 512);
+    init(descriptor, hdf.partitionData(part), descriptor.numBlocks * 512);
 }
 
 void
@@ -95,6 +95,9 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
         // Import block data
         blocks[i]->importBlock(data, bsize);
     }
+    
+    // Set the current directory to '/'
+    cd = rootBlock;
     
     // Print some debug information
     debug(FS_DEBUG, "Success\n");

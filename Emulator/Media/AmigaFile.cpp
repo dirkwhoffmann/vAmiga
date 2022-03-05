@@ -173,16 +173,19 @@ AmigaFile::readFromBuffer(const u8 *buf, isize len)
 }
 
 isize
-AmigaFile::writeToStream(std::ostream &stream)
+AmigaFile::writeToStream(std::ostream &stream, isize offset, isize len)
 {
-    stream.write((char *)data, size);
+    assert(offset >= 0 && offset < size);
+    assert(len >= 0 && offset + len <= size);
+
+    stream.write((char *)data + offset, len);
     finalizeWrite();
     
     return size;
 }
 
 isize
-AmigaFile::writeToFile(const string &path)
+AmigaFile::writeToFile(const string &path, isize offset, isize len)
 {
     std::ofstream stream(path, std::ofstream::binary);
 
@@ -190,19 +193,39 @@ AmigaFile::writeToFile(const string &path)
         throw VAError(ERROR_FILE_CANT_WRITE, path);
     }
     
-    isize result = writeToStream(stream);
+    isize result = writeToStream(stream, offset, len);
     assert(result == size);
     
     return result;
 }
 
 isize
-AmigaFile::writeToBuffer(u8 *buf)
+AmigaFile::writeToBuffer(u8 *buf, isize offset, isize len)
 {
     assert(buf);
+    assert(offset >= 0 && offset < size);
+    assert(len >= 0 && offset + len <= size);
 
-    std::memcpy(buf, (char *)data, size);
+    std::memcpy(buf, (char *)data + offset, len);
     finalizeWrite();
 
     return size;
+}
+
+isize
+AmigaFile::writeToStream(std::ostream &stream)
+{
+    return writeToStream(stream, 0, size);
+}
+
+isize
+AmigaFile::writeToFile(const string &path)
+{
+    return writeToFile(path, 0, size);
+}
+
+isize
+AmigaFile::writeToBuffer(u8 *buf)
+{
+    return writeToBuffer(buf, 0, size);
 }

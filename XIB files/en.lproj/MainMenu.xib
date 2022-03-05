@@ -407,7 +407,7 @@
                             <menuItem title="Export..." id="inq-yB-iPf" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="exportDiskAction:" target="-1" id="rL4-3t-mjC"/>
+                                    <action selector="exportFloppyDiskAction:" target="-1" id="8wy-3G-W4c"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Export To" id="Hkb-4l-9Ts">
@@ -549,7 +549,7 @@
                             <menuItem title="Export..." tag="1" id="Qpf-ys-Bkr" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="exportDiskAction:" target="-1" id="D9T-K0-SqX"/>
+                                    <action selector="exportFloppyDiskAction:" target="-1" id="Uir-XO-shx"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Export To" tag="1" id="ZTR-D1-rJ5">
@@ -691,7 +691,7 @@
                             <menuItem title="Export..." tag="2" id="h74-u0-iEw" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="exportDiskAction:" target="-1" id="a63-IX-ymF"/>
+                                    <action selector="exportFloppyDiskAction:" target="-1" id="TTb-Kw-YEB"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Export To" tag="2" id="R9H-6V-FXf">
@@ -833,7 +833,7 @@
                             <menuItem title="Export..." tag="3" id="hhZ-v4-oPp" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="exportDiskAction:" target="-1" id="NW7-vA-1aH"/>
+                                    <action selector="exportFloppyDiskAction:" target="-1" id="o0Q-Id-OGQ"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Export To" tag="3" id="Non-0K-biL">

@@ -280,8 +280,15 @@ HDFFile::numPartitions() const
     return isize(ptable.size());
 }
 
+isize
+HDFFile::partitionSize(isize nr) const
+{
+    auto &part = ptable[nr];
+    return (part.highCyl - part.lowCyl + 1) * part.heads * part.sectors * 512;
+}
+
 u8 *
-HDFFile::dataForPartition(isize nr) const
+HDFFile::partitionData(isize nr) const
 {
     auto &part = ptable[nr];
     return data + part.lowCyl * part.heads * part.sectors * 512;

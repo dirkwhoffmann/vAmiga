@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="DiskExporter" customModule="vAmiga" customModuleProvider="target">
             <connections>
-                <outlet property="bootInfo" destination="ePb-dQ-IGU" id="6My-15-3dy"/>
                 <outlet property="exportButton" destination="xMx-XS-Whv" id="nb5-Nf-9dO"/>
                 <outlet property="formatPopup" destination="Bc1-Mt-tg7" id="t0u-xT-4hd"/>
                 <outlet property="icon" destination="zVz-5r-D8T" id="SmP-xc-gRk"/>
-                <outlet property="layoutInfo" destination="GXH-Xr-wp9" id="VAh-bz-p17"/>
+                <outlet property="info1" destination="Dne-cb-Sgc" id="BZ8-QM-20X"/>
+                <outlet property="info2" destination="GXH-Xr-wp9" id="X9K-bK-gmL"/>
+                <outlet property="partitionPopup" destination="nqv-A1-b9h" id="k3G-fT-UMP"/>
                 <outlet property="title" destination="aq9-ug-tBY" id="uU4-UO-38e"/>
-                <outlet property="volumeInfo" destination="Dne-cb-Sgc" id="aIg-di-fp4"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="9qh-as-u05"/>
             </connections>
         </customObject>
@@ -29,7 +30,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aq9-ug-tBY">
-                        <rect key="frame" x="151" y="175" width="346" height="19"/>
+                        <rect key="frame" x="151" y="173" width="346" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Amiga Hard Disk" id="4mz-ST-7HU">
                             <font key="font" metaFont="system"/>
@@ -38,7 +39,7 @@
                         </textFieldCell>
                     </textField>
                     <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="cEQ-lL-0Uo">
-                        <rect key="frame" x="153" y="172" width="365" height="5"/>
+                        <rect key="frame" x="153" y="170" width="365" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </box>
                     <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="I2j-fA-nrL">
@@ -46,7 +47,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     </box>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dne-cb-Sgc">
-                        <rect key="frame" x="151" y="152" width="371" height="14"/>
+                        <rect key="frame" x="151" y="151" width="371" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr" id="S3B-YX-gVf">
                             <font key="font" metaFont="label" size="11"/>
@@ -55,18 +56,9 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GXH-Xr-wp9">
-                        <rect key="frame" x="151" y="135" width="371" height="14"/>
+                        <rect key="frame" x="151" y="134" width="371" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr" id="wGk-85-7fJ">
-                            <font key="font" metaFont="label" size="11"/>
-                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ePb-dQ-IGU">
-                        <rect key="frame" x="151" y="118" width="371" height="14"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr" id="aNf-D7-JAB">
                             <font key="font" metaFont="label" size="11"/>
                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -118,8 +110,33 @@ Gw
                             <action selector="cancelAction:" target="-2" id="ibZ-zd-d2g"/>
                         </connections>
                     </button>
+                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nqv-A1-b9h">
+                        <rect key="frame" x="200" y="82" width="128" height="26"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <popUpButtonCell key="cell" type="push" title="All Partitions" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="mIV-8T-H9L" id="uFQ-9c-b8H">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="menu"/>
+                            <menu key="menu" id="0Dr-Za-mTr">
+                                <items>
+                                    <menuItem title="All Partitions" state="on" id="mIV-8T-H9L" userLabel="P00 Format"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <action selector="formatAction:" target="-2" id="o9G-Gk-6EK"/>
+                        </connections>
+                    </popUpButton>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7BI-jh-3dl">
+                        <rect key="frame" x="151" y="88" width="48" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Export:" id="yhJ-ZA-PDl">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bc1-Mt-tg7">
-                        <rect key="frame" x="205" y="77" width="135" height="26"/>
+                        <rect key="frame" x="394" y="80" width="128" height="26"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <popUpButtonCell key="cell" type="push" title="Lorem ipsum" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="bTZ-R5-MRE" id="jFS-Bv-IuA">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -135,9 +152,9 @@ Gw
                         </connections>
                     </popUpButton>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pdc-Xs-L4S">
-                        <rect key="frame" x="151" y="82" width="52" height="17"/>
+                        <rect key="frame" x="341" y="86" width="52" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Format:" id="V6F-oa-kJj">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Format:" id="V6F-oa-kJj">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

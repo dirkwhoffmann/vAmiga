@@ -135,10 +135,14 @@ protected:
 
 public:
     
+    isize writeToStream(std::ostream &stream, isize offset, isize len) throws;
+    isize writeToFile(const string &path, isize offset, isize len) throws;
+    isize writeToBuffer(u8 *buf, isize offset, isize len) throws;
+
     isize writeToStream(std::ostream &stream) throws;
     isize writeToFile(const string &path) throws;
     isize writeToBuffer(u8 *buf) throws;
-    
+
 private:
     
     // Delegation methods

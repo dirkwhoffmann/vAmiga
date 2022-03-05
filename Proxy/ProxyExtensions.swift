@@ -70,15 +70,6 @@ extension AmigaProxy {
         isReady(exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
-
-    /*
-    func powerOn() throws {
-        
-        let exception = ExceptionWrapper()
-        power(on: exception)
-        if exception.errorCode != .OK { throw VAError(exception) }
-    }
-    */
     
     func run() throws {
         
