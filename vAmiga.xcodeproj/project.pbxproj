@@ -287,6 +287,7 @@
 		50FC08AF27819E2400F0C567 /* CopperInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08AE27819E2400F0C567 /* CopperInfo.cpp */; };
 		50FC08B127819E4100F0C567 /* BlitterInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08B027819E4100F0C567 /* BlitterInfo.cpp */; };
 		50FCCA7C262AAAEA00398342 /* Script.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FCCA7A262AAAEA00398342 /* Script.cpp */; };
+		50FF747327D3BBFE00B6EA01 /* hdr_click.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50FF747227D3BBFE00B6EA01 /* hdr_click.aiff */; };
 		50FFA7D02440CB0300BEBA6B /* ActivityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */; };
 /* End PBXBuildFile section */
 
@@ -785,6 +786,7 @@
 		50FC08B027819E4100F0C567 /* BlitterInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlitterInfo.cpp; sourceTree = "<group>"; };
 		50FCCA7A262AAAEA00398342 /* Script.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Script.cpp; sourceTree = "<group>"; };
 		50FCCA7B262AAAEA00398342 /* Script.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Script.h; sourceTree = "<group>"; };
+		50FF747227D3BBFE00B6EA01 /* hdr_click.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = hdr_click.aiff; sourceTree = "<group>"; };
 		50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityMonitor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1514,6 +1516,7 @@
 				500A4E9E24470713002A4DE1 /* disk_insert.aiff */,
 				50B14C1721EB8445002E32A6 /* drive_click.aiff */,
 				50B14C1821EB8445002E32A6 /* drive_head.aiff */,
+				50FF747227D3BBFE00B6EA01 /* hdr_click.aiff */,
 				50B14C1A21EB8445002E32A6 /* drive_snatch_uae.aiff */,
 			);
 			path = sounds;
@@ -1792,6 +1795,7 @@
 				50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */,
 				5019605B231257270051B669 /* Monitor.xib in Resources */,
 				500A4EA824472B4F002A4DE1 /* door_open.aiff in Resources */,
+				50FF747327D3BBFE00B6EA01 /* hdr_click.aiff in Resources */,
 				506B47182562E06A009FEFC3 /* VolumeInspector.xib in Resources */,
 				50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */,
 				508FDFC721EA1FF10043D0E9 /* ImporterDialog.xib in Resources */,
