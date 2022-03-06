@@ -63,6 +63,9 @@ Denise::setDIWSTRT(u16 value)
     }
     
     hstrt = newDiwHstrt;
+
+    // Let the debugger know about the register change
+    debugger.updateDIW(diwstrt, diwstop);
 }
 
 void
@@ -100,6 +103,9 @@ Denise::setDIWSTOP(u16 value)
     }
     
     hstop = newDiwHstop;
+    
+    // Let the debugger know about the register change
+    debugger.updateDIW(diwstrt, diwstop);
 }
 
 u16

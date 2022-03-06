@@ -25,10 +25,10 @@ Denise::_inspect() const
         
         info.diwstrt = diwstrt;
         info.diwstop = diwstop;
-        info.hstrt = hstrt;
-        info.hstop = hstop;
-        info.vstrt = agnus.sequencer.vstrt;
-        info.vstop = agnus.sequencer.vstop;
+        info.viewport.hstrt = hstrt;
+        info.viewport.hstop = hstop;
+        info.viewport.vstrt = agnus.sequencer.vstrt;
+        info.viewport.vstop = agnus.sequencer.vstop;
         
         info.joydat[0] = controlPort1.joydat();
         info.joydat[1] = controlPort2.joydat();
@@ -53,6 +53,8 @@ Denise::_dump(dump::Category category, std::ostream& os) const
         
         os << tab("Chip revision");
         os << DeniseRevisionEnum::key(config.revision) << std::endl;
+        os << tab("Viewport tracking");
+        os << hex(config.hiddenBitplanes) << std::endl;
         os << tab("Hidden bitplanes");
         os << hex(config.hiddenBitplanes) << std::endl;
         os << tab("Hidden sprites");

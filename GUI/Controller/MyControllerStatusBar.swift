@@ -160,9 +160,7 @@ extension MyController {
         for device in 0...7 {
             
             if let nr = drv[device] {
-                
-                track("Setting up references for device \(nr)")
-                
+                                
                 drvLED[device] = ledSlot[nr]
                 drvCyl[device] = cylSlot[nr]
                 drvIcon[device] = iconSlot[nr]

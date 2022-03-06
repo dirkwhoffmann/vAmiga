@@ -10,8 +10,6 @@
 #include "config.h"
 #include "DeniseDebugger.h"
 #include "Amiga.h"
-// #include "Agnus.h"
-// #include "Denise.h"
 
 void
 DeniseDebugger::_initialize()
@@ -60,6 +58,35 @@ DeniseDebugger::recordSprite(isize nr)
     spriteInfo[nr].height = (line + 1) % VPOS_CNT;
 }
 
+void
+DeniseDebugger::recordDIW(u16 diwstrt, u16 diwstop)
+{
+    if (denise.config.viewportTracking) {
+        
+        maxViewPort.hstrt = LO_BYTE(diwstrt) > 2 ? LO_BYTE(diwstrt) : 2;
+        maxViewPort.vstrt = HI_BYTE(diwstrt);
+        maxViewPort.hstop = LO_BYTE(diwstop) | 0x100;
+        maxViewPort.vstop = HI_BYTE(diwstop) | ((diwstop & 0x8000) ? 0 : 0x100);
+     }
+}
+
+void
+DeniseDebugger::updateDIW(u16 diwstrt, u16 diwstop)
+{
+    if (denise.config.viewportTracking) {
+        
+        isize hstrt = LO_BYTE(diwstrt) > 2 ? LO_BYTE(diwstrt) : 2;
+        isize vstrt = HI_BYTE(diwstrt);
+        isize hstop = LO_BYTE(diwstop) | 0x100;
+        isize vstop = HI_BYTE(diwstop) | ((diwstop & 0x8000) ? 0 : 0x100);
+                
+        maxViewPort.hstrt = std::min(maxViewPort.hstrt, hstrt);
+        maxViewPort.vstrt = std::min(maxViewPort.vstrt, vstrt);
+        maxViewPort.hstop = std::max(maxViewPort.hstop, hstop);
+        maxViewPort.vstop = std::max(maxViewPort.vstop, vstop);
+    }
+}
+
 SpriteInfo
 DeniseDebugger::getSpriteInfo(isize nr)
 {
@@ -70,22 +97,73 @@ DeniseDebugger::getSpriteInfo(isize nr)
 void
 DeniseDebugger::vsyncHandler()
 {
-    // Only proceed if the emulator runs in debug mode
-    if (!amiga.inDebugMode()) return;
+    //
+    // Viewport tracking
+    //
     
-    // Latch recorded data
-    for (isize i = 0; i < 8; i++) {
+    if (denise.config.viewportTracking) {
         
-        latchedSpriteInfo[i] = spriteInfo[i];
-        spriteInfo[i] = { };
-        /*
-        spriteInfo[i].height = 0;
-        spriteInfo[i].vstrt = 0;
-        spriteInfo[i].vstop = 0;
-        spriteInfo[i].hstrt = 0;
-        spriteInfo[i].attach = false;
-        */
+        // Compare the recorded viewport with the previous one
+        auto equal =
+        latchedMaxViewPort.hstrt == maxViewPort.hstrt &&
+        latchedMaxViewPort.hstop == maxViewPort.hstop &&
+        latchedMaxViewPort.vstrt == maxViewPort.vstrt &&
+        latchedMaxViewPort.vstop == maxViewPort.vstop;
+        
+        // Take action if the viewport has changed
+        if (!equal) {
+            
+            /*
+            msg("Old viewport: (%ld,%ld) - (%ld,%ld)\n",
+                  latchedMaxViewPort.hstrt,
+                  latchedMaxViewPort.vstrt,
+                  latchedMaxViewPort.hstop,
+                  latchedMaxViewPort.vstop);
+            msg("New viewport: (%ld,%ld) - (%ld,%ld)\n",
+                  maxViewPort.hstrt,
+                  maxViewPort.vstrt,
+                  maxViewPort.hstop,
+                  maxViewPort.vstop);
+            */
+            
+            latchedMaxViewPort = maxViewPort;
+            
+            // Notify the GUI if the trigger cycle has been reached
+            if (viewPortTrigger && agnus.clock > viewPortTrigger) {
+                
+                // Notify the GUI that the viewport has changed
+                msgQueue.put(MSG_VIEWPORT,
+                             i16(latchedMaxViewPort.hstrt),
+                             i16(latchedMaxViewPort.vstrt),
+                             i16(latchedMaxViewPort.hstop),
+                             i16(latchedMaxViewPort.vstop));
+                
+                viewPortTrigger = 0;
+                
+            } else {
+                
+                // Set a trigger in the near future
+                viewPortTrigger = std::min(viewPortTrigger, agnus.clock + MSEC(200));
+            }
+        }
+        
+        // Start over with the current viewport
+        recordDIW(denise.diwstrt, denise.diwstop);
     }
     
-    std::memcpy(latchedSpriteData, spriteData, sizeof(spriteData));
+    //
+    // Sprite tracking
+    //
+    
+    if (amiga.inDebugMode()) {
+        
+        // Latch recorded sprite data
+        for (isize i = 0; i < 8; i++) {
+            
+            latchedSpriteInfo[i] = spriteInfo[i];
+            spriteInfo[i] = { };
+        }
+        
+        std::memcpy(latchedSpriteData, spriteData, sizeof(spriteData));
+    }
 }

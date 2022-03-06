@@ -406,7 +406,11 @@ Interpreter::registerInstructions()
     root.add({"denise", "set", "revision"},
              "key", "Selects the emulated chip model",
              &RetroShell::exec <Token::denise, Token::set, Token::revision>, 1);
-    
+
+    root.add({"denise", "set", "tracking"},
+             "key", "Enables or disables viewport tracking",
+             &RetroShell::exec <Token::denise, Token::set, Token::tracking>, 1);
+
     root.add({"denise", "set", "clxsprspr"},
              "key", "Enables or disables sprite-sprite collision detection",
              &RetroShell::exec <Token::denise, Token::set, Token::clxsprspr>, 1);

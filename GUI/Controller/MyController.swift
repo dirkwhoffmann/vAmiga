@@ -364,9 +364,6 @@ extension MyController {
         var cyl: Int { return word2 }
         var volume: Int { return word3 }
         var pan: Int { return word4 }
-
-        // var driveNr: Int { return Int(msg.data) & 0xFF }
-        // var driveCyl: Int { return (Int(msg.data) >> 8) & 0xFF }
                                                         
         // Only proceed if the proxy object is still alive
         if amiga == nil { return }
@@ -465,6 +462,10 @@ extension MyController {
             
         case .CPU_HALT:
             refreshStatusBar()
+            
+        case .VIEWPORT:
+            // track("(\(word1), \(word2)) - (\(word3), \(word4))")
+            break
             
         case .MEM_LAYOUT:
             inspector?.fullRefresh()

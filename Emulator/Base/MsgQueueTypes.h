@@ -52,6 +52,9 @@ enum_long(MSG_TYPE)
     MSG_WATCHPOINT_REACHED,
     MSG_CPU_HALT,
 
+    // Denise
+    MSG_VIEWPORT,
+    
     // Memory
     MSG_MEM_LAYOUT,
         
@@ -158,6 +161,8 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
             case MSG_WATCHPOINT_REACHED:    return "WATCHPOINT_REACHED";
             case MSG_CPU_HALT:              return "CPU_HALT";
 
+            case MSG_VIEWPORT:              return "VIEWPORT";
+                
             case MSG_MEM_LAYOUT:            return "LAYOUT";
                     
             case MSG_DRIVE_CONNECT:         return "DRIVE_CONNECT";

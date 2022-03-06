@@ -501,6 +501,12 @@ RetroShell::exec <Token::denise, Token::set, Token::revision> (Arguments &argv, 
 }
 
 template <> void
+RetroShell::exec <Token::denise, Token::set, Token::tracking> (Arguments &argv, long param)
+{
+    amiga.configure(OPT_VIEWPORT_TRACKING, util::parseBool(argv.front()));
+}
+
+template <> void
 RetroShell::exec <Token::denise, Token::set, Token::clxsprspr> (Arguments &argv, long param)
 {
     amiga.configure(OPT_CLX_SPR_SPR, util::parseBool(argv.front()));

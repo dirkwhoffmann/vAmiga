@@ -212,13 +212,11 @@ HardDrive::setConfigItem(Option option, i64 value)
         case OPT_HDR_PAN:
 
             config.pan = (i16)value;
-            printf("New pan = %d\n", config.pan);
             return;
 
         case OPT_HDR_STEP_VOLUME:
 
             config.stepVolume = (u8)value;
-            printf("New stepVolume = %d\n", config.stepVolume);
             return;
 
         default:

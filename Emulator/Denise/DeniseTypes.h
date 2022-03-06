@@ -51,25 +51,12 @@ struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision>
 
 typedef struct
 {
-    // Number of lines the sprite was armed
-    isize height;
-
-    // Extracted information from SPRxPOS and SPRxCTL
-    isize hstrt;
-    isize vstrt;
-    isize vstop;
-    bool attach;
-    
-    // Upper 16 color registers (at the time the observed sprite starts)
-    u16 colors[16];
-}
-SpriteInfo;
-
-typedef struct
-{
     // Emulated chip model
     DeniseRevision revision;
-    
+
+    // Informs the GUI about viewport changes
+    bool viewportTracking;
+
     // Hides certain bitplanes
     u8 hiddenBitplanes;
 
@@ -95,6 +82,32 @@ DeniseConfig;
 
 typedef struct
 {
+    // Number of lines the sprite was armed
+    isize height;
+
+    // Extracted information from SPRxPOS and SPRxCTL
+    isize hstrt;
+    isize vstrt;
+    isize vstop;
+    bool attach;
+    
+    // Upper 16 color registers (at the time the observed sprite starts)
+    u16 colors[16];
+}
+SpriteInfo;
+
+typedef struct
+{
+    // Extracted information from DIWSTRT and DIWSTOP
+    isize hstrt;
+    isize hstop;
+    isize vstrt;
+    isize vstop;
+}
+ViewPortInfo;
+
+typedef struct
+{
     u16 bplcon0;
     u16 bplcon1;
     u16 bplcon2;
@@ -103,11 +116,8 @@ typedef struct
 
     u16 diwstrt;
     u16 diwstop;
-    isize hstrt;
-    isize hstop;
-    isize vstrt;
-    isize vstop;
-
+    ViewPortInfo viewport;
+ 
     u16 joydat[2];
     u16 clxdat;
 

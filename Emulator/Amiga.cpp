@@ -195,6 +195,7 @@ Amiga::getConfigItem(Option option) const
             return agnus.getConfigItem(option);
             
         case OPT_DENISE_REVISION:
+        case OPT_VIEWPORT_TRACKING:
         case OPT_HIDDEN_BITPLANES:
         case OPT_HIDDEN_SPRITES:
         case OPT_HIDDEN_LAYERS:
@@ -379,6 +380,7 @@ Amiga::configure(Option option, i64 value)
             break;
             
         case OPT_DENISE_REVISION:
+        case OPT_VIEWPORT_TRACKING:
         case OPT_HIDDEN_BITPLANES:
         case OPT_HIDDEN_SPRITES:
         case OPT_HIDDEN_LAYERS:
