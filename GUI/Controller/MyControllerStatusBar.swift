@@ -25,24 +25,34 @@ extension MyController {
     
     func refreshStatusBar() {
         
-        let config = amiga.diskController.getConfig()
+        // let config = amiga.diskController.getConfig()
+        /*
         let connected0 = config.connected.0
         let connected1 = config.connected.1
         let connected2 = config.connected.2
         let connected3 = config.connected.3
-
+        */
+        
         let motor0 = amiga.df0.motor
         let motor1 = amiga.df1.motor
         let motor2 = amiga.df2.motor
         let motor3 = amiga.df3.motor
+        /*
         let hasDisk0 = amiga.df0.hasDisk
         let hasDisk1 = amiga.df1.hasDisk
         let hasDisk2 = amiga.df2.hasDisk
         let hasDisk3 = amiga.df3.hasDisk
-
+        */
+        
         let running = amiga.running
         let halted = amiga.cpu.halted
         let warp = amiga.warpMode
+        
+        // Drive LEDs
+        refreshStatusBar(drive: 0, led: motor0)
+        refreshStatusBar(drive: 1, led: motor1)
+        refreshStatusBar(drive: 2, led: motor2)
+        refreshStatusBar(drive: 3, led: motor3)
 
         // Cylinders
         refreshStatusBar(drive: 0, cylinder: amiga.df0.cylinder)
@@ -52,16 +62,18 @@ extension MyController {
         refreshStatusBar(writing: nil)
         
         // Animation
-        refreshStatusBar(drive: 0, motor: motor0)
-        refreshStatusBar(drive: 1, motor: motor1)
-        refreshStatusBar(drive: 2, motor: motor2)
-        refreshStatusBar(drive: 3, motor: motor3)
+        refreshStatusBar(drive: 0, busy: motor0)
+        refreshStatusBar(drive: 1, busy: motor1)
+        refreshStatusBar(drive: 2, busy: motor2)
+        refreshStatusBar(drive: 3, busy: motor3)
 
         // Drive icons
-        drvIcon0.image = amiga.df0.icon
-        drvIcon1.image = amiga.df1.icon
-        drvIcon2.image = amiga.df2.icon
-        drvIcon3.image = amiga.df3.icon
+        /*
+        iconSlot0.image = amiga.df0.icon
+        iconSlot1.image = amiga.df1.icon
+        iconSlot2.image = amiga.df2.icon
+        iconSlot3.image = amiga.df3.icon
+         */
         
         // Remote server icon
         debugIcon.image = amiga.remoteManager.icon
@@ -74,22 +86,22 @@ extension MyController {
             
             powerLED: true,
             
-            drvLED0: connected0,
-            drvLED1: connected1,
-            drvLED2: connected2,
-            drvLED3: connected3,
-            drvIcon0: connected0 && hasDisk0,
-            drvIcon1: connected1 && hasDisk1,
-            drvIcon2: connected2 && hasDisk2,
-            drvIcon3: connected3 && hasDisk3,
-            drvCyl0: connected0,
-            drvCyl1: connected1,
-            drvCyl2: connected2,
-            drvCyl3: connected3,
-            drvBusy0: motor0,
-            drvBusy1: motor1,
-            drvBusy2: motor2,
-            drvBusy3: motor3,
+            ledSlot0: true,
+            ledSlot1: true,
+            letSlot2: true,
+            ledSlot3: true,
+            iconSlot0: true,
+            iconSlot1: true,
+            iconSlot2: true,
+            iconSlot3: true,
+            cylSlot0: true,
+            cylSlot1: true,
+            cylSlot2: true,
+            cylSlot3: true,
+            busySlot0: true,
+            busySlot1: true,
+            busySlot2: true,
+            busySlot3: true,
 
             haltIcon: halted,
             cmdLock: myAppDelegate.mapCommandKeys,
@@ -107,54 +119,102 @@ extension MyController {
         }
     }
     
-    fileprivate func refreshStatusBar(drive: Int, led: Bool) {
+    fileprivate func refreshStatusBar(drive n: Int, led: Bool) {
         
-        let image = NSImage(named: led ? "driveLedOn" : "driveLedOff")
-        
-        switch drive {
-        case 0: drvLED0.image = image
-        case 1: drvLED1.image = image
-        case 2: drvLED2.image = image
-        case 3: drvLED3.image = image
-        default: fatalError()
+        if let widget = drvLED[n] {
+
+            let image = NSImage(named: led ? "driveLedOn" : "driveLedOff")
+            widget.image = image
         }
     }
     
-    func refreshStatusBar(drive: Int, cylinder: Int) {
-        
-        switch drive {
-        case 0: drvCyl0.integerValue = cylinder
-        case 1: drvCyl1.integerValue = cylinder
-        case 2: drvCyl2.integerValue = cylinder
-        case 3: drvCyl3.integerValue = cylinder
-        default: fatalError()
+    func refreshStatusBar(drive n: Int, cylinder: Int) {
+    
+        if let widget = drvCyl[n] {
+            
+            track("Setting cylidner for slot \(n)")
+            widget.integerValue = cylinder
         }
     }
-         
+
+    func refreshStatusBar(drive n: Int, icon: Bool) {
+    
+        if let widget = drvIcon[n] {
+        
+            widget.image = amiga.df(n)!.icon
+        }
+    }
+
+    fileprivate func refreshStatusBar(drive n: Int, busy: Bool) {
+
+        if let widget = drvBusy[n] {
+            
+            let spin = amiga.running && busy
+            spin ? widget.startAnimation(self) : widget.stopAnimation(self)
+        }
+    }
+
     func refreshStatusBar(writing: Bool?) {
         
+        // TODO
+        /*
         let sel = amiga.diskController.selectedDrive
         let w = writing ?? (amiga.diskController.state == .WRITE)
-        
-        drvCyl0.textColor = w && (sel == 0) ? .warningColor : .secondaryLabelColor
-        drvCyl1.textColor = w && (sel == 1) ? .warningColor : .secondaryLabelColor
-        drvCyl2.textColor = w && (sel == 2) ? .warningColor : .secondaryLabelColor
-        drvCyl3.textColor = w && (sel == 3) ? .warningColor : .secondaryLabelColor
+
+        cylSlot0.textColor = w && (sel == 0) ? .warningColor : .secondaryLabelColor
+        cylSlot1.textColor = w && (sel == 1) ? .warningColor : .secondaryLabelColor
+        cylSlot2.textColor = w && (sel == 2) ? .warningColor : .secondaryLabelColor
+        cylSlot3.textColor = w && (sel == 3) ? .warningColor : .secondaryLabelColor
+        */
     }
+            
+    func assignSlots() {
+    
+        let config = amiga.diskController.getConfig()
+        var nr = 0
+
+        func isConnected(drive: Int) -> Bool {
+            
+            switch drive {
+            case 0: return config.connected.0
+            case 1: return config.connected.1
+            case 2: return config.connected.2
+            case 3: return config.connected.3
+            default: return false
+            }
+        }
         
-    fileprivate func refreshStatusBar(drive: Int, motor: Bool) {
+        for drive in 0...7 {
+            
+            if isConnected(drive: drive) {
+                
+                drvLED[drive] = ledSlot[nr]
+                drvCyl[drive] = cylSlot[nr]
+                drvIcon[drive] = iconSlot[nr]
+                drvBusy[drive] = busySlot[nr]
+                
+                nr += 1
+            
+            } else {
+                
+                drvLED[drive] = nil
+                drvCyl[drive] = nil
+                drvIcon[drive] = nil
+                drvBusy[drive] = nil
+            }
+        }
         
-        let spin = amiga.running && motor
-        
-        switch drive {
-        case 0: spin ? drvBusy0.startAnimation(self) : drvBusy0.stopAnimation(self)
-        case 1: spin ? drvBusy1.startAnimation(self) : drvBusy1.stopAnimation(self)
-        case 2: spin ? drvBusy2.startAnimation(self) : drvBusy2.stopAnimation(self)
-        case 3: spin ? drvBusy3.startAnimation(self) : drvBusy3.stopAnimation(self)
-        default: fatalError()
+        for slot in nr ..< 4 {
+
+            track("Hiding slot \(slot)")
+            
+            ledSlot[slot].image = nil
+            cylSlot[slot].stringValue = ""
+            iconSlot[slot].image = nil
+            busySlot[slot].stopAnimation(self)
         }
     }
-         
+    
     func showStatusBar(_ value: Bool) {
         
         if statusBar != value {

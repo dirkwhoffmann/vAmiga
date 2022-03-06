@@ -11,25 +11,25 @@
                 <outlet property="activityBar" destination="212" id="Enu-fB-P92"/>
                 <outlet property="activityInfo" destination="oNV-mZ-JGc" id="HDY-Cq-tSN"/>
                 <outlet property="activityType" destination="0go-7K-IPf" id="caX-Zm-vUc"/>
+                <outlet property="busySlot0" destination="xzf-hU-AKK" id="oNt-cd-Fkh"/>
+                <outlet property="busySlot1" destination="X4r-q5-8Lh" id="hGx-A9-Th8"/>
+                <outlet property="busySlot2" destination="Lc0-yC-JdI" id="e2q-Wa-C7Y"/>
+                <outlet property="busySlot3" destination="Qp9-H4-2Q7" id="OfX-DH-845"/>
                 <outlet property="cmdLock" destination="Qzo-AS-059" id="L1Y-30-MFU"/>
+                <outlet property="cylSlot0" destination="f19-16-42W" id="qi6-Qi-Wnz"/>
+                <outlet property="cylSlot1" destination="f7g-mT-LE7" id="L3Z-kO-mNv"/>
+                <outlet property="cylSlot2" destination="P62-wC-T1P" id="CiL-FT-qxc"/>
+                <outlet property="cylSlot3" destination="8yk-0g-1sA" id="TYh-w7-4ZU"/>
                 <outlet property="debugIcon" destination="cdG-NT-T3J" id="Oxi-mf-eZE"/>
-                <outlet property="drvBusy0" destination="xzf-hU-AKK" id="oNt-cd-Fkh"/>
-                <outlet property="drvBusy1" destination="X4r-q5-8Lh" id="hGx-A9-Th8"/>
-                <outlet property="drvBusy2" destination="Lc0-yC-JdI" id="e2q-Wa-C7Y"/>
-                <outlet property="drvBusy3" destination="Qp9-H4-2Q7" id="OfX-DH-845"/>
-                <outlet property="drvCyl0" destination="f19-16-42W" id="qi6-Qi-Wnz"/>
-                <outlet property="drvCyl1" destination="f7g-mT-LE7" id="L3Z-kO-mNv"/>
-                <outlet property="drvCyl2" destination="P62-wC-T1P" id="CiL-FT-qxc"/>
-                <outlet property="drvCyl3" destination="8yk-0g-1sA" id="TYh-w7-4ZU"/>
-                <outlet property="drvIcon0" destination="D1i-Ep-fTN" id="ltM-hh-lzG"/>
-                <outlet property="drvIcon1" destination="gkQ-Nr-aDz" id="vRa-jh-S2U"/>
-                <outlet property="drvIcon2" destination="BLY-CO-Zam" id="nXb-Q0-GPM"/>
-                <outlet property="drvIcon3" destination="Cg3-r8-KR5" id="66V-MN-kd5"/>
-                <outlet property="drvLED0" destination="iKN-RM-vsV" id="Qa7-gd-iRi"/>
-                <outlet property="drvLED1" destination="K68-Xr-JJH" id="Cif-l6-Km5"/>
-                <outlet property="drvLED2" destination="Pjc-SJ-rsn" id="TXZ-da-aer"/>
-                <outlet property="drvLED3" destination="wnl-Bi-Ego" id="1Bn-5L-EfU"/>
                 <outlet property="haltIcon" destination="46l-A8-v8C" id="IN7-Hf-03C"/>
+                <outlet property="iconSlot0" destination="D1i-Ep-fTN" id="ltM-hh-lzG"/>
+                <outlet property="iconSlot1" destination="gkQ-Nr-aDz" id="vRa-jh-S2U"/>
+                <outlet property="iconSlot2" destination="BLY-CO-Zam" id="nXb-Q0-GPM"/>
+                <outlet property="iconSlot3" destination="Cg3-r8-KR5" id="66V-MN-kd5"/>
+                <outlet property="ledSlot0" destination="iKN-RM-vsV" id="Qa7-gd-iRi"/>
+                <outlet property="ledSlot1" destination="K68-Xr-JJH" id="Cif-l6-Km5"/>
+                <outlet property="ledSlot3" destination="wnl-Bi-Ego" id="1Bn-5L-EfU"/>
+                <outlet property="letSlot2" destination="Pjc-SJ-rsn" id="TXZ-da-aer"/>
                 <outlet property="metal" destination="DD4-5B-w9h" id="rGV-rL-MLo"/>
                 <outlet property="muteIcon" destination="iho-fa-H5O" id="k5F-Wk-R5B"/>
                 <outlet property="powerLED" destination="1208" id="hey-Hi-zTq"/>

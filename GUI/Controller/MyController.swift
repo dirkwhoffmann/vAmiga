@@ -36,12 +36,6 @@ class MyController: NSWindowController, MessageReceiver {
     // Monitor panel of this emulator instance
     var monitor: Monitor?
 
-    // Disk analyzer panel of this emulator instance
-    // var diskInspector: DiskInspector?
-
-    // File system analyzer panel of this emulator instance
-    // var volumeInspector: VolumeInspector?
-
     // Configuration panel of this emulator instance
     var configurator: ConfigurationController?
     
@@ -103,22 +97,22 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Status bar
     @IBOutlet weak var powerLED: NSButton!
-    @IBOutlet weak var drvLED0: NSButton!
-    @IBOutlet weak var drvLED1: NSButton!
-    @IBOutlet weak var drvLED2: NSButton!
-    @IBOutlet weak var drvLED3: NSButton!
-    @IBOutlet weak var drvCyl0: NSTextField!
-    @IBOutlet weak var drvCyl1: NSTextField!
-    @IBOutlet weak var drvCyl2: NSTextField!
-    @IBOutlet weak var drvCyl3: NSTextField!
-    @IBOutlet weak var drvIcon0: NSButton!
-    @IBOutlet weak var drvIcon1: NSButton!
-    @IBOutlet weak var drvIcon2: NSButton!
-    @IBOutlet weak var drvIcon3: NSButton!
-    @IBOutlet weak var drvBusy0: NSProgressIndicator!
-    @IBOutlet weak var drvBusy1: NSProgressIndicator!
-    @IBOutlet weak var drvBusy2: NSProgressIndicator!
-    @IBOutlet weak var drvBusy3: NSProgressIndicator!
+    @IBOutlet weak var ledSlot0: NSButton!
+    @IBOutlet weak var ledSlot1: NSButton!
+    @IBOutlet weak var letSlot2: NSButton!
+    @IBOutlet weak var ledSlot3: NSButton!
+    @IBOutlet weak var cylSlot0: NSTextField!
+    @IBOutlet weak var cylSlot1: NSTextField!
+    @IBOutlet weak var cylSlot2: NSTextField!
+    @IBOutlet weak var cylSlot3: NSTextField!
+    @IBOutlet weak var iconSlot0: NSButton!
+    @IBOutlet weak var iconSlot1: NSButton!
+    @IBOutlet weak var iconSlot2: NSButton!
+    @IBOutlet weak var iconSlot3: NSButton!
+    @IBOutlet weak var busySlot0: NSProgressIndicator!
+    @IBOutlet weak var busySlot1: NSProgressIndicator!
+    @IBOutlet weak var busySlot2: NSProgressIndicator!
+    @IBOutlet weak var busySlot3: NSProgressIndicator!
     
     @IBOutlet weak var haltIcon: NSButton!
     @IBOutlet weak var cmdLock: NSButton!
@@ -132,6 +126,18 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Toolbar
     @IBOutlet weak var toolbar: MyToolbar!
+    
+    // Quick-access references
+    var ledSlot: [NSButton]!
+    var cylSlot: [NSTextField]!
+    var iconSlot: [NSButton]!
+    var busySlot: [NSProgressIndicator]!
+
+    // Slot assignments
+    var drvLED: [NSButton?] = Array(repeating: nil, count: 8)
+    var drvCyl: [NSTextField?] = Array(repeating: nil, count: 8)
+    var drvIcon: [NSButton?] = Array(repeating: nil, count: 8)
+    var drvBusy: [NSProgressIndicator?] = Array(repeating: nil, count: 8)
 }
 
 extension MyController {
@@ -162,6 +168,11 @@ extension MyController {
         mydocument = document as? MyDocument
         config = Configuration(with: self)
         macAudio = MacAudio(with: self)
+        
+        ledSlot = [ ledSlot0, ledSlot1, letSlot2, ledSlot3 ]
+        cylSlot = [ cylSlot0, cylSlot1, cylSlot2, cylSlot3 ]
+        iconSlot = [ iconSlot0, iconSlot1, iconSlot2, iconSlot3 ]
+        busySlot = [ busySlot0, busySlot1, busySlot2, busySlot3 ]
     }
     
     override open func windowDidLoad() {
@@ -460,10 +471,12 @@ extension MyController {
             
         case .DRIVE_CONNECT:
             hideOrShowDriveMenus()
+            assignSlots()
             refreshStatusBar()
             
         case .DRIVE_DISCONNECT:
             hideOrShowDriveMenus()
+            assignSlots()
             refreshStatusBar()
             
         case .DRIVE_SELECT:
@@ -504,10 +517,12 @@ extension MyController {
 
         case .HDR_CONNECT:
             hideOrShowDriveMenus()
+            assignSlots()
             refreshStatusBar()
             
         case .HDR_DISCONNECT:
             hideOrShowDriveMenus()
+            assignSlots()
             refreshStatusBar()
 
         case .HDR_STEP:
@@ -538,8 +553,9 @@ extension MyController {
             
         case .SNAPSHOT_RESTORED:
             renderer.rotateRight()
-            refreshStatusBar()
             hideOrShowDriveMenus()
+            assignSlots()
+            refreshStatusBar()
             
         case .RECORDING_STARTED:
             window?.backgroundColor = .warningColor
