@@ -103,22 +103,22 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Status bar
     @IBOutlet weak var powerLED: NSButton!
-    @IBOutlet weak var df0LED: NSButton!
-    @IBOutlet weak var df1LED: NSButton!
-    @IBOutlet weak var df2LED: NSButton!
-    @IBOutlet weak var df3LED: NSButton!
-    @IBOutlet weak var df0Cylinder: NSTextField!
-    @IBOutlet weak var df1Cylinder: NSTextField!
-    @IBOutlet weak var df2Cylinder: NSTextField!
-    @IBOutlet weak var df3Cylinder: NSTextField!
-    @IBOutlet weak var df0Disk: NSButton!
-    @IBOutlet weak var df1Disk: NSButton!
-    @IBOutlet weak var df2Disk: NSButton!
-    @IBOutlet weak var df3Disk: NSButton!
-    @IBOutlet weak var df0DMA: NSProgressIndicator!
-    @IBOutlet weak var df1DMA: NSProgressIndicator!
-    @IBOutlet weak var df2DMA: NSProgressIndicator!
-    @IBOutlet weak var df3DMA: NSProgressIndicator!
+    @IBOutlet weak var drvLED0: NSButton!
+    @IBOutlet weak var drvLED1: NSButton!
+    @IBOutlet weak var drvLED2: NSButton!
+    @IBOutlet weak var drvLED3: NSButton!
+    @IBOutlet weak var drvCyl0: NSTextField!
+    @IBOutlet weak var drvCyl1: NSTextField!
+    @IBOutlet weak var drvCyl2: NSTextField!
+    @IBOutlet weak var drvCyl3: NSTextField!
+    @IBOutlet weak var drvIcon0: NSButton!
+    @IBOutlet weak var drvIcon1: NSButton!
+    @IBOutlet weak var drvIcon2: NSButton!
+    @IBOutlet weak var drvIcon3: NSButton!
+    @IBOutlet weak var drvBusy0: NSProgressIndicator!
+    @IBOutlet weak var drvBusy1: NSProgressIndicator!
+    @IBOutlet weak var drvBusy2: NSProgressIndicator!
+    @IBOutlet weak var drvBusy3: NSProgressIndicator!
     
     @IBOutlet weak var haltIcon: NSButton!
     @IBOutlet weak var cmdLock: NSButton!

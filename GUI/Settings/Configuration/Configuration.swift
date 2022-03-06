@@ -367,7 +367,9 @@ class Configuration {
     }
     var stepVolume: Int {
         get { return amiga.getConfig(.STEP_VOLUME, drive: 0) }
-        set { amiga.configure(.STEP_VOLUME, value: newValue) }
+        set { amiga.configure(.STEP_VOLUME, value: newValue)
+            amiga.configure(.HDR_STEP_VOLUME, value: newValue)
+        }
     }
     var pollVolume: Int {
         get { return amiga.getConfig(.POLL_VOLUME, drive: 0) }
@@ -380,10 +382,6 @@ class Configuration {
     var ejectVolume: Int {
         get { return amiga.getConfig(.EJECT_VOLUME, drive: 0) }
         set { amiga.configure(.EJECT_VOLUME, value: newValue) }
-    }
-    var hdStepVolume: Int {
-        get { return amiga.getConfig(.HDR_STEP_VOLUME, drive: 0) }
-        set { amiga.configure(.HDR_STEP_VOLUME, value: newValue) }
     }
 
     //
@@ -906,7 +904,6 @@ class Configuration {
         pollVolume = defaults.integer(forKey: Keys.Aud.pollVolume)
         insertVolume = defaults.integer(forKey: Keys.Aud.insertVolume)
         ejectVolume = defaults.integer(forKey: Keys.Aud.ejectVolume)
-        hdStepVolume = defaults.integer(forKey: Keys.Aud.hdStepVolume)
 
         filterType = defaults.integer(forKey: Keys.Aud.filterType)
         filterAlwaysOn = defaults.bool(forKey: Keys.Aud.filterAlwaysOn)
@@ -945,7 +942,6 @@ class Configuration {
         defaults.set(pollVolume, forKey: Keys.Aud.pollVolume)
         defaults.set(insertVolume, forKey: Keys.Aud.insertVolume)
         defaults.set(ejectVolume, forKey: Keys.Aud.ejectVolume)
-        defaults.set(hdStepVolume, forKey: Keys.Aud.stepVolume)
 
         defaults.set(filterType, forKey: Keys.Aud.filterType)
         defaults.set(filterAlwaysOn, forKey: Keys.Aud.filterAlwaysOn)

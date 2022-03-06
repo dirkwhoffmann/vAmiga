@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -13,22 +13,22 @@
                 <outlet property="activityType" destination="0go-7K-IPf" id="caX-Zm-vUc"/>
                 <outlet property="cmdLock" destination="Qzo-AS-059" id="L1Y-30-MFU"/>
                 <outlet property="debugIcon" destination="cdG-NT-T3J" id="Oxi-mf-eZE"/>
-                <outlet property="df0Cylinder" destination="f19-16-42W" id="qi6-Qi-Wnz"/>
-                <outlet property="df0DMA" destination="xzf-hU-AKK" id="oNt-cd-Fkh"/>
-                <outlet property="df0Disk" destination="D1i-Ep-fTN" id="ltM-hh-lzG"/>
-                <outlet property="df0LED" destination="iKN-RM-vsV" id="Qa7-gd-iRi"/>
-                <outlet property="df1Cylinder" destination="f7g-mT-LE7" id="L3Z-kO-mNv"/>
-                <outlet property="df1DMA" destination="X4r-q5-8Lh" id="hGx-A9-Th8"/>
-                <outlet property="df1Disk" destination="gkQ-Nr-aDz" id="vRa-jh-S2U"/>
-                <outlet property="df1LED" destination="K68-Xr-JJH" id="Cif-l6-Km5"/>
-                <outlet property="df2Cylinder" destination="P62-wC-T1P" id="CiL-FT-qxc"/>
-                <outlet property="df2DMA" destination="Lc0-yC-JdI" id="e2q-Wa-C7Y"/>
-                <outlet property="df2Disk" destination="BLY-CO-Zam" id="nXb-Q0-GPM"/>
-                <outlet property="df2LED" destination="Pjc-SJ-rsn" id="TXZ-da-aer"/>
-                <outlet property="df3Cylinder" destination="8yk-0g-1sA" id="TYh-w7-4ZU"/>
-                <outlet property="df3DMA" destination="Qp9-H4-2Q7" id="OfX-DH-845"/>
-                <outlet property="df3Disk" destination="Cg3-r8-KR5" id="66V-MN-kd5"/>
-                <outlet property="df3LED" destination="wnl-Bi-Ego" id="1Bn-5L-EfU"/>
+                <outlet property="drvBusy0" destination="xzf-hU-AKK" id="oNt-cd-Fkh"/>
+                <outlet property="drvBusy1" destination="X4r-q5-8Lh" id="hGx-A9-Th8"/>
+                <outlet property="drvBusy2" destination="Lc0-yC-JdI" id="e2q-Wa-C7Y"/>
+                <outlet property="drvBusy3" destination="Qp9-H4-2Q7" id="OfX-DH-845"/>
+                <outlet property="drvCyl0" destination="f19-16-42W" id="qi6-Qi-Wnz"/>
+                <outlet property="drvCyl1" destination="f7g-mT-LE7" id="L3Z-kO-mNv"/>
+                <outlet property="drvCyl2" destination="P62-wC-T1P" id="CiL-FT-qxc"/>
+                <outlet property="drvCyl3" destination="8yk-0g-1sA" id="TYh-w7-4ZU"/>
+                <outlet property="drvIcon0" destination="D1i-Ep-fTN" id="ltM-hh-lzG"/>
+                <outlet property="drvIcon1" destination="gkQ-Nr-aDz" id="vRa-jh-S2U"/>
+                <outlet property="drvIcon2" destination="BLY-CO-Zam" id="nXb-Q0-GPM"/>
+                <outlet property="drvIcon3" destination="Cg3-r8-KR5" id="66V-MN-kd5"/>
+                <outlet property="drvLED0" destination="iKN-RM-vsV" id="Qa7-gd-iRi"/>
+                <outlet property="drvLED1" destination="K68-Xr-JJH" id="Cif-l6-Km5"/>
+                <outlet property="drvLED2" destination="Pjc-SJ-rsn" id="TXZ-da-aer"/>
+                <outlet property="drvLED3" destination="wnl-Bi-Ego" id="1Bn-5L-EfU"/>
                 <outlet property="haltIcon" destination="46l-A8-v8C" id="IN7-Hf-03C"/>
                 <outlet property="metal" destination="DD4-5B-w9h" id="rGV-rL-MLo"/>
                 <outlet property="muteIcon" destination="iho-fa-H5O" id="k5F-Wk-R5B"/>
@@ -410,7 +410,7 @@
                     <toolbarItem implicitItemIdentifier="F19B641C-3162-47E1-8228-6B75CA6F1A5A" label="Port 1" paletteLabel="Port 1" tag="10" image="devNoneTemplate" title="None" sizingBehavior="auto" id="kR6-IR-lNs">
                         <nil key="toolTip"/>
                         <popUpButton key="view" tag="10" id="L2b-nG-yBo" userLabel="Port 1">
-                            <rect key="frame" x="0.0" y="14" width="41" height="20"/>
+                            <rect key="frame" x="0.0" y="14" width="45" height="24"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -438,7 +438,7 @@
                     <toolbarItem implicitItemIdentifier="B42FBC61-316F-46F4-B1B7-C136C71316EC" label="Port 2" paletteLabel="Port 2" tag="11" image="devNoneTemplate" title="None" sizingBehavior="auto" id="Klt-YL-0mv" userLabel="Port 2">
                         <nil key="toolTip"/>
                         <popUpButton key="view" tag="11" id="4MP-rV-xX2" userLabel="Port 2">
-                            <rect key="frame" x="0.0" y="14" width="41" height="20"/>
+                            <rect key="frame" x="0.0" y="14" width="45" height="24"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -463,7 +463,6 @@
                             </connections>
                         </popUpButton>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="NSToolbarSeparatorItem" id="1848"/>
                     <toolbarItem implicitItemIdentifier="173C7588-F1F5-45F4-9A0F-C42BA4D023EB" label="Keyboard" paletteLabel="Keyboard" image="keyboardTemplate" sizingBehavior="auto" id="Ckl-d3-vFW">
                         <nil key="toolTip"/>
                         <button key="view" verticalHuggingPriority="750" id="rao-xk-L5n">
@@ -555,7 +554,7 @@
         <image name="devKeys1Template" width="20" height="20"/>
         <image name="devKeys2Template" width="20" height="20"/>
         <image name="devMouseTemplate" width="20" height="20"/>
-        <image name="devNoneTemplate" width="20" height="20"/>
+        <image name="devNoneTemplate" width="24" height="24"/>
         <image name="diskTemplate" width="217" height="217"/>
         <image name="driveLedOff" width="100" height="50"/>
         <image name="galleryTemplate" width="36" height="36"/>

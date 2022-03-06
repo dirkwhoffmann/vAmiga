@@ -1172,7 +1172,6 @@ extension Keys {
         static let pollVolume         = "VAMIGA_AUD_PollVolume"
         static let insertVolume       = "VAMIGA_AUD_InsertVolume"
         static let ejectVolume        = "VAMIGA_AUD_EjectVolume"
-        static let hdStepVolume       = "VAMIGA_AUD_HdStepVolume"
 
         // Filter
         static let filterType         = "VAMIGA_AUD_FilterType"
@@ -1204,7 +1203,6 @@ struct AudioDefaults {
     var pollVolume: Int
     var insertVolume: Int
     var ejectVolume: Int
-    var hdStepVolume: Int
 
     // Filter
     let filterType: FilterType
@@ -1235,7 +1233,6 @@ struct AudioDefaults {
         pollVolume: 0,
         insertVolume: 50,
         ejectVolume: 50,
-        hdStepVolume: 50,
         
         filterType: .BUTTERWORTH,
         filterAlwaysOn: false
@@ -1262,7 +1259,6 @@ struct AudioDefaults {
         pollVolume: 0,
         insertVolume: 50,
         ejectVolume: 50,
-        hdStepVolume: 50,
         
         filterType: .BUTTERWORTH,
         filterAlwaysOn: false
@@ -1289,7 +1285,6 @@ struct AudioDefaults {
         pollVolume: 0,
         insertVolume: 50,
         ejectVolume: 50,
-        hdStepVolume: 50,
         
         filterType: .BUTTERWORTH,
         filterAlwaysOn: false
@@ -1328,7 +1323,6 @@ extension UserDefaults {
             Keys.Aud.pollVolume: defaults.pollVolume,
             Keys.Aud.insertVolume: defaults.insertVolume,
             Keys.Aud.ejectVolume: defaults.ejectVolume,
-            Keys.Aud.hdStepVolume: defaults.hdStepVolume,
 
             Keys.Aud.filterType: defaults.filterType.rawValue,
             Keys.Aud.filterAlwaysOn: defaults.filterAlwaysOn
@@ -1367,7 +1361,6 @@ extension UserDefaults {
                      Keys.Aud.pollVolume,
                      Keys.Aud.insertVolume,
                      Keys.Aud.ejectVolume,
-                     Keys.Aud.hdStepVolume,
 
                      Keys.Aud.filterType,
                      Keys.Aud.filterAlwaysOn ]
