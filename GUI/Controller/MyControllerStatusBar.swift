@@ -25,56 +25,32 @@ extension MyController {
     
     func refreshStatusBar() {
         
-        // let config = amiga.diskController.getConfig()
-        /*
-        let connected0 = config.connected.0
-        let connected1 = config.connected.1
-        let connected2 = config.connected.2
-        let connected3 = config.connected.3
-        */
-        
-        let motor0 = amiga.df0.motor
-        let motor1 = amiga.df1.motor
-        let motor2 = amiga.df2.motor
-        let motor3 = amiga.df3.motor
-        /*
-        let hasDisk0 = amiga.df0.hasDisk
-        let hasDisk1 = amiga.df1.hasDisk
-        let hasDisk2 = amiga.df2.hasDisk
-        let hasDisk3 = amiga.df3.hasDisk
-        */
-        
         let running = amiga.running
         let halted = amiga.cpu.halted
         let warp = amiga.warpMode
-        
-        // Drive LEDs
-        refreshStatusBar(drive: 0, led: motor0)
-        refreshStatusBar(drive: 1, led: motor1)
-        refreshStatusBar(drive: 2, led: motor2)
-        refreshStatusBar(drive: 3, led: motor3)
 
-        // Cylinders
-        refreshStatusBar(drive: 0, cylinder: amiga.df0.cylinder)
-        refreshStatusBar(drive: 1, cylinder: amiga.df1.cylinder)
-        refreshStatusBar(drive: 2, cylinder: amiga.df2.cylinder)
-        refreshStatusBar(drive: 3, cylinder: amiga.df3.cylinder)
-        refreshStatusBar(writing: nil)
+        // Df0 - Df3
+        for n in 0...3 where drv[n] != nil {
+            
+            let dfn = amiga.df(n)!
+            
+            refreshStatusBar(drive: n, led: dfn.motor)
+            refreshStatusBar(drive: n, cylinder: dfn.cylinder)
+            refreshStatusBar(drive: n, icon: dfn.icon)
+            refreshStatusBar(drive: n, busy: dfn.motor)
+        }
         
-        // Animation
-        refreshStatusBar(drive: 0, busy: motor0)
-        refreshStatusBar(drive: 1, busy: motor1)
-        refreshStatusBar(drive: 2, busy: motor2)
-        refreshStatusBar(drive: 3, busy: motor3)
-
-        // Drive icons
-        /*
-        iconSlot0.image = amiga.df0.icon
-        iconSlot1.image = amiga.df1.icon
-        iconSlot2.image = amiga.df2.icon
-        iconSlot3.image = amiga.df3.icon
-         */
-        
+        // Hd0 - Hd3
+        for n in 4...7 where drv[n] != nil {
+            
+            // let hdn = amiga.hd(n - 4)!
+            
+            refreshStatusBar(drive: n, led: true) // TODO
+            refreshStatusBar(drive: n, cylinder: 42) // TODO
+            refreshStatusBar(drive: n, icon: NSImage(named: "hdf")) // TODO
+            refreshStatusBar(drive: n, busy: true) // TODO
+        }
+                        
         // Remote server icon
         debugIcon.image = amiga.remoteManager.icon
         
@@ -127,21 +103,29 @@ extension MyController {
             widget.image = image
         }
     }
-    
+
+    fileprivate func refreshStatusBar(hd n: Int, led: Bool) {
+        
+        if let widget = drvLED[n + 4] {
+
+            let image = NSImage(named: led ? "driveLedOn" : "driveLedOff")
+            widget.image = image
+        }
+    }
+
     func refreshStatusBar(drive n: Int, cylinder: Int) {
-    
+        
         if let widget = drvCyl[n] {
             
-            track("Setting cylidner for slot \(n)")
             widget.integerValue = cylinder
         }
     }
 
-    func refreshStatusBar(drive n: Int, icon: Bool) {
+    func refreshStatusBar(drive n: Int, icon: NSImage?) {
     
         if let widget = drvIcon[n] {
         
-            widget.image = amiga.df(n)!.icon
+            widget.image = icon
         }
     }
 
@@ -170,43 +154,45 @@ extension MyController {
             
     func assignSlots() {
     
-        let config = amiga.diskController.getConfig()
+        // Wipe out the slot assignment table
+        drv = Array(repeating: nil, count: 8)
         var nr = 0
 
-        func isConnected(drive: Int) -> Bool {
-            
-            switch drive {
-            case 0: return config.connected.0
-            case 1: return config.connected.1
-            case 2: return config.connected.2
-            case 3: return config.connected.3
-            default: return false
-            }
-        }
+        // Update slot assignments for Df0 - Df3
+        if amiga.df0.isConnected { drv[0] = nr; nr += 1 }
+        if amiga.df1.isConnected { drv[1] = nr; nr += 1 }
+        if amiga.df2.isConnected { drv[2] = nr; nr += 1 }
+        if amiga.df3.isConnected { drv[3] = nr; nr += 1 }
+
+        // Update slot assignments for Hd0 - Hd3
+        if amiga.hd0.isConnected, nr < 4 { drv[4] = nr; nr += 1 }
+        if amiga.hd1.isConnected, nr < 4 { drv[5] = nr; nr += 1 }
+        if amiga.hd2.isConnected, nr < 4 { drv[6] = nr; nr += 1 }
+        if amiga.hd3.isConnected, nr < 4 { drv[7] = nr; nr += 1 }
         
-        for drive in 0...7 {
+        // Update reference tables
+        for device in 0...7 {
             
-            if isConnected(drive: drive) {
+            if let nr = drv[device] {
                 
-                drvLED[drive] = ledSlot[nr]
-                drvCyl[drive] = cylSlot[nr]
-                drvIcon[drive] = iconSlot[nr]
-                drvBusy[drive] = busySlot[nr]
+                track("Setting up references for device \(nr)")
                 
-                nr += 1
-            
+                drvLED[device] = ledSlot[nr]
+                drvCyl[device] = cylSlot[nr]
+                drvIcon[device] = iconSlot[nr]
+                drvBusy[device] = busySlot[nr]
+                            
             } else {
                 
-                drvLED[drive] = nil
-                drvCyl[drive] = nil
-                drvIcon[drive] = nil
-                drvBusy[drive] = nil
+                drvLED[device] = nil
+                drvCyl[device] = nil
+                drvIcon[device] = nil
+                drvBusy[device] = nil
             }
         }
         
+        // Clean up unused slots
         for slot in nr ..< 4 {
-
-            track("Hiding slot \(slot)")
             
             ledSlot[slot].image = nil
             cylSlot[slot].stringValue = ""

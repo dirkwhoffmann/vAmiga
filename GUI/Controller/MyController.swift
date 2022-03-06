@@ -134,6 +134,7 @@ class MyController: NSWindowController, MessageReceiver {
     var busySlot: [NSProgressIndicator]!
 
     // Slot assignments
+    var drv: [Int?] = Array(repeating: nil, count: 8)
     var drvLED: [NSButton?] = Array(repeating: nil, count: 8)
     var drvCyl: [NSTextField?] = Array(repeating: nil, count: 8)
     var drvIcon: [NSButton?] = Array(repeating: nil, count: 8)

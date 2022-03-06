@@ -334,16 +334,18 @@ public extension AmigaProxy {
 
 public extension FloppyDriveProxy {
     
-    var icon: NSImage {
+    var icon: NSImage? {
 
         var name: String
-
+        
+        if !hasDisk { return nil }
+        
         if hasProtectedDisk {
             name = hasModifiedDisk ? "diskUPTemplate" : "diskPTemplate"
         } else {
             name = hasModifiedDisk ? "diskUTemplate" : "diskTemplate"
         }
-
+        
         return NSImage(named: name)!
     }
 }
