@@ -14,6 +14,7 @@
 #include "CPU.h"
 #include "Agnus.h"
 #include "Paula.h"
+#include "HardDrive.h"
 #include "Keyboard.h"
 #include "FloppyDrive.h"
 #include "IOUtils.h"
@@ -362,6 +363,16 @@ Scheduler::eventName(EventSlot slot, EventID id)
             }
             break;
             
+        case SLOT_HDR:
+
+            switch (id) {
+
+                case EVENT_NONE:    return "none";
+                case HDR_IDLE:      return "HDR_IDLE";
+                default:            return "*** INVALID ***";
+            }
+            break;
+
         case SLOT_MSE1:
         case SLOT_MSE2:
             
@@ -661,6 +672,9 @@ Scheduler::executeUntil(Cycle cycle) {
             }
             if (isDue<SLOT_DC3>(cycle)) {
                 df3.serviceDiskChangeEvent <SLOT_DC3> ();
+            }
+            if (isDue<SLOT_HDR>(cycle)) {
+                hd0.serviceHdrEvent <SLOT_HDR> ();
             }
             if (isDue<SLOT_MSE1>(cycle)) {
                 controlPort1.mouse.serviceMouseEvent <SLOT_MSE1> ();

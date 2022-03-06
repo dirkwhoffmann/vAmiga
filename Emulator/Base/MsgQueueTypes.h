@@ -78,6 +78,9 @@ enum_long(MSG_TYPE)
     MSG_HDR_CONNECT,
     MSG_HDR_DISCONNECT,
     MSG_HDR_STEP,
+    MSG_HDR_READ,
+    MSG_HDR_WRITE,
+    MSG_HDR_IDLE,
     
     // Keyboard
     MSG_CTRL_AMIGA_AMIGA,
@@ -178,7 +181,10 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
             case MSG_HDR_CONNECT:           return "HDR_CONNECT";
             case MSG_HDR_DISCONNECT:        return "HDR_DISCONNECT";
             case MSG_HDR_STEP:              return "HDR_STEP";
-
+            case MSG_HDR_READ:              return "HDR_READ";
+            case MSG_HDR_WRITE:             return "HDR_WRITE";
+            case MSG_HDR_IDLE:              return "HDR_IDLE";
+                
             case MSG_CTRL_AMIGA_AMIGA:      return "CTRL_AMIGA_AMIGA";
 
             case MSG_SHAKING:               return "SHAKING";

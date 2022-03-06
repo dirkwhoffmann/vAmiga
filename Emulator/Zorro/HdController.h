@@ -94,7 +94,7 @@ private:
     virtual u16 manufacturer() const override    { return 0x0539; }
     virtual u32 serialNumber() const override    { return 3141592 + u32(nr); }
     virtual u16 initDiagVec() const override     { return 0x40; }
-    virtual string vendorName() const override   { return "VAMIGA"; }
+    virtual string vendorName() const override   { return "MRAS"; }
     virtual string productName() const override  { return "Hard drive controller"; }
     virtual string revisionName() const override { return "1.0"; }
 

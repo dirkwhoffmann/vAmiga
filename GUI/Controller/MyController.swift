@@ -535,6 +535,10 @@ extension MyController {
             track("Volume: \(word3)")
             
             refreshStatusBar()
+
+        case .HDR_IDLE, .HDR_READ, .HDR_WRITE:
+            
+            refreshStatusBar()
             
         case .CTRL_AMIGA_AMIGA:
             resetAction(self)

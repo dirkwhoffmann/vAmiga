@@ -34,7 +34,7 @@ extension MyController {
             
             let dfn = amiga.df(n)!
             
-            refreshStatusBar(drive: n, led: dfn.motor)
+            refreshStatusBar(drive: n, led: dfn.ledIcon)
             refreshStatusBar(drive: n, cylinder: dfn.cylinder)
             refreshStatusBar(drive: n, icon: dfn.templateIcon)
             refreshStatusBar(drive: n, busy: dfn.motor)
@@ -45,7 +45,7 @@ extension MyController {
             
             let hdn = amiga.hd(n - 4)!
             
-            refreshStatusBar(drive: n, led: true) // TODO
+            refreshStatusBar(drive: n, led: hdn.ledIcon)
             refreshStatusBar(drive: n, cylinder: 42) // TODO
             refreshStatusBar(drive: n, icon: hdn.templateIcon)
             refreshStatusBar(drive: n, busy: true) // TODO
@@ -95,12 +95,11 @@ extension MyController {
         }
     }
     
-    fileprivate func refreshStatusBar(drive n: Int, led: Bool) {
+    fileprivate func refreshStatusBar(drive n: Int, led: NSImage?) {
         
         if let widget = drvLED[n] {
 
-            let image = NSImage(named: led ? "driveLedOn" : "driveLedOff")
-            widget.image = image
+            widget.image = led
         }
     }
 

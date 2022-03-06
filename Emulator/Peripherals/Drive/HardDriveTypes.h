@@ -15,14 +15,6 @@
 #include "DriveDescriptors.h"
 #include <vector>
 #endif
-/*
-#include "Aliases.h"
-#include "Reflection.h"
-#ifdef __cplusplus
-#include "DriveDescriptors.h"
-#include <vector>
-#endif
-*/
 
 //
 // Enumerations
@@ -47,6 +39,35 @@ struct HardDriveTypeEnum : util::Reflection<HardDriveTypeEnum, HardDriveType>
         switch (value) {
                 
             case HDR_GENERIC:   return "GENERIC";
+        }
+        return "???";
+    }
+};
+#endif
+
+enum_long(HDR_STATE)
+{
+    HDR_STATE_IDLE,
+    HDR_STATE_READING,
+    HDR_STATE_WRITING
+};
+typedef HDR_STATE HardDriveState;
+
+#ifdef __cplusplus
+struct HardDriveStateEnum : util::Reflection<HardDriveStateEnum, HardDriveState>
+{
+    static long minVal() { return 0; }
+    static long maxVal() { return HDR_STATE_WRITING; }
+    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    
+    static const char *prefix() { return "HDR_STATE"; }
+    static const char *key(HardDriveType value)
+    {
+        switch (value) {
+                
+            case HDR_STATE_IDLE:      return "IDLE";
+            case HDR_STATE_READING:   return "READING";
+            case HDR_STATE_WRITING:   return "WRITING";
         }
         return "???";
     }

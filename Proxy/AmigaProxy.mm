@@ -1363,6 +1363,11 @@ using namespace moira;
     return info.highCyl;
 }
 
+- (HardDriveState)state
+{
+    return [self drive]->getState();
+}
+
 - (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex
 {
     try {

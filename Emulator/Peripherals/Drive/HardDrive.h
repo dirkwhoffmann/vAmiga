@@ -12,6 +12,7 @@
 #include "HardDriveTypes.h"
 #include "Drive.h"
 #include "HDFFile.h"
+#include "SchedulerTypes.h"
 
 class HardDrive : public Drive {
     
@@ -35,7 +36,9 @@ class HardDrive : public Drive {
     
     // Current position of the read/write head
     DriveHead head;
-    // struct { isize c; isize h; isize s; } head = { };
+
+    // Current drive state
+    HardDriveState state = HDR_IDLE;
     
     // Disk state flags
     bool modified = false;
@@ -112,7 +115,8 @@ private:
             
             << head.cylinder
             << head.head
-            << head.offset;
+            << head.offset
+            << state;
         }
     }
 
@@ -170,6 +174,9 @@ public:
     // Returns the number of partitions
     isize numPartitions() const { return isize(ptable.size()); }
         
+    // Returns the current drive state
+    HardDriveState getState() const { return state; }
+    
     // Gets or sets the 'modification' flag
     bool isModified() const { return modified; }
     void setModified(bool value) { modified = value; }
@@ -215,4 +222,15 @@ private:
     // Moves the drive head to the specified block
     void moveHead(isize lba);
     void moveHead(isize c, isize h, isize s);
+    
+    
+    //
+    // Serving events
+    //
+    
+public:
+    
+    // Services an event in the disk change slot
+    template <EventSlot s> void serviceHdrEvent();
+    
 };

@@ -662,6 +662,7 @@
 - (NSString *)nameOfPartition:(NSInteger)nr;
 - (NSInteger)lowerCylOfPartition:(NSInteger)nr;
 - (NSInteger)upperCylOfPartition:(NSInteger)nr;
+@property (readonly) HardDriveState state;
 - (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex;
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
 - (void)format:(FSVolumeType)fs name:(NSString *)name exception:(ExceptionWrapper *)ex;

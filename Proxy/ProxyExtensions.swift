@@ -348,6 +348,17 @@ extension FloppyDriveProxy {
         
         return NSImage(named: name)!
     }
+    
+    var ledIcon: NSImage? {
+        
+        if !isConnected { return nil }
+        
+        if motor {
+            return NSImage(named: "driveLedOn")
+        } else {
+            return NSImage(named: "driveLedOff")
+        }
+    }
 }
 
 extension HardDriveProxy {
@@ -355,6 +366,20 @@ extension HardDriveProxy {
     var templateIcon: NSImage? {
         
         return NSImage(named: "hdrTemplate")!
+    }
+    
+    var ledIcon: NSImage? {
+        
+        if !isConnected { return nil }
+        
+        switch state {
+            
+        case .IDLE: return NSImage(named: "powerLedOff")   // RENAME to ledGrey
+        case .READING: return NSImage(named: "powerLedOn")   // RENAME to ledGreen
+        case .WRITING: return NSImage(named: "driveLedOn")   // RENAME to ledRed
+            
+        default: fatalError()
+        }
     }
 }
 

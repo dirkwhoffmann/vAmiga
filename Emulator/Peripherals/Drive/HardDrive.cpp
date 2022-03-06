@@ -497,12 +497,20 @@ HardDrive::read(isize offset, isize length, u32 addr)
     auto error = verify(offset, length, addr);
     
     if (!error) {
-        
+
+        state = HDR_STATE_READING;
+
         // Move the drive head to the specified location
         moveHead(offset / desc.geometry.bsize);
 
         // Perform the read operation
         mem.patch(addr, data + offset, length);
+                
+        // Inform the GUI
+        msgQueue.put(MSG_HDR_READ);
+        
+        // Go back to IDLE state after some time
+        agnus.scheduleRel <SLOT_HDR> (MSEC(200), HDR_IDLE);
     }
     
     return error;
@@ -526,6 +534,8 @@ HardDrive::write(isize offset, isize length, u32 addr)
     
     if (!error) {
     
+        state = HDR_STATE_WRITING;
+
         // Move the drive head to the specified location
         moveHead(offset / desc.geometry.bsize);
 
@@ -533,6 +543,12 @@ HardDrive::write(isize offset, isize length, u32 addr)
         if (!writeProtected) {
             mem.spypeek <ACCESSOR_CPU> (addr, length, data + offset);
         }
+        
+        // Inform the GUI
+        msgQueue.put(MSG_HDR_WRITE);
+        
+        // Go back to IDLE state after some time
+        agnus.scheduleRel <SLOT_HDR> (MSEC(200), HDR_IDLE);
     }
     
     return error;
@@ -603,3 +619,13 @@ HardDrive::moveHead(isize c, isize h, isize s)
         msgQueue.put(MSG_HDR_STEP, i16(c), i16(pan), i16(vol), 0);
     }
 }
+
+template <EventSlot s> void
+HardDrive::serviceHdrEvent()
+{
+    scheduler.cancel <SLOT_HDR> ();
+    state = HDR_STATE_IDLE;
+    msgQueue.put(MSG_HDR_IDLE);
+}
+
+template void HardDrive::serviceHdrEvent <SLOT_HDR> ();
