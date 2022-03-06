@@ -229,12 +229,15 @@ private:
     
     
     //
-    // Serving events
+    // Scheduling and serving events
     //
     
 public:
     
-    // Services an event in the disk change slot
+    // Schedules an event to revert to idle state
+    void scheduleIdleEvent();
+    
+    // Services a hard drive event
     template <EventSlot s> void serviceHdrEvent();
     
 };

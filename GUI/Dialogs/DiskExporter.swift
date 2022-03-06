@@ -37,7 +37,7 @@ class DiskExporter: DialogController {
 
     // Reference to the export drive
     var dfn: FloppyDriveProxy?
-    var dhn: HardDriveProxy?
+    var hdn: HardDriveProxy?
 
     // The partition to export
     var partition: Int?
@@ -51,10 +51,6 @@ class DiskExporter: DialogController {
     var ext: EXTFileProxy?
     var img: IMGFileProxy?
     var vol: FileSystemProxy?
-
-    // Returns true if a DD or a HD floppy disk is to be exported
-    var isDD: Bool { return adf?.isDD ?? img?.isDD ?? ext?.isDD ?? false }
-    var isHD: Bool { return adf?.isHD ?? img?.isHD ?? ext?.isHD ?? false }
     
     func showSheet(diskDrive nr: Int) {
         
@@ -81,10 +77,10 @@ class DiskExporter: DialogController {
         
         track()
         
-        dhn = amiga.hd(nr)
+        hdn = amiga.hd(nr)
 
         // Run the HDF decoder
-        hdf = try? HDFFileProxy.make(hdr: dhn!) as HDFFileProxy
+        hdf = try? HDFFileProxy.make(hdr: hdn!) as HDFFileProxy
                                 
         // Select the export partition
         select(partition: numPartitions == 1 ? 0 : nil)
@@ -410,8 +406,8 @@ class DiskExporter: DialogController {
                 try hdf?.writeToFile(url: url)
             }
             
-            dhn!.markDiskAsUnmodified()
-            myAppDelegate.noteNewRecentlyExportedHdrURL(url, drive: dhn!.nr)
+            hdn!.markDiskAsUnmodified()
+            myAppDelegate.noteNewRecentlyExportedHdrURL(url, drive: hdn!.nr)
             
             hideSheet()
             

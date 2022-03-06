@@ -17,17 +17,20 @@ extension MyController: NSMenuItemValidation {
         let recording = amiga.recorder.recording
         
         var dfn: FloppyDriveProxy { return amiga.df(item.tag)! }
-        var dhn: HardDriveProxy { return amiga.hd(item.tag)! }
+        var hdn: HardDriveProxy { return amiga.hd(item.tag)! }
 
         func validateURLlist(_ list: [URL], image: NSImage) -> Bool {
             
             let slot = item.tag % 10
             
             if let url = myAppDelegate.getRecentlyUsedURL(slot, from: list) {
+                
                 item.title = url.lastPathComponent
                 item.isHidden = false
                 item.image = image
+                
             } else {
+                
                 item.title = ""
                 item.isHidden = true
                 item.image = nil
@@ -79,19 +82,11 @@ extension MyController: NSMenuItemValidation {
             #selector(MyController.inspectFloppyDiskAction(_:)),
             #selector(MyController.inspectDfnVolumeAction(_:)):
             return dfn.hasDisk
-            
-        case #selector(MyController.exportRecentDiskDummyAction0(_:)):
-            return amiga.df0.hasDisk
-            
-        case #selector(MyController.exportRecentDiskDummyAction1(_:)):
-            return amiga.df1.hasDisk
-            
-        case #selector(MyController.exportRecentDiskDummyAction2(_:)):
-            return amiga.df2.hasDisk
-            
-        case #selector(MyController.exportRecentDiskDummyAction3(_:)):
-            return amiga.df3.hasDisk
-            
+                        
+        case #selector(MyController.exportRecentDiskDummyAction(_:)):
+            track("\(item.tag)")
+            return amiga.df(item)!.hasDisk
+                        
         case #selector(MyController.exportRecentDiskAction(_:)):
             switch item.tag {
             case 0: return validateURLlist(myAppDelegate.recentlyExportedDisk0URLs, image: smallDisk)
@@ -105,39 +100,26 @@ extension MyController: NSMenuItemValidation {
             item.state = dfn.hasProtectedDisk ? .on : .off
             return dfn.hasDisk
             
-        // Dh<n> menu
-        /*
-        case #selector(MyController.newHdrAction(_:)):
-            return amiga.poweredOff
-
-        case #selector(MyController.attachHdrAction(_:)):
-            return amiga.poweredOff
-            
-        case #selector(MyController.attachRecentHdrDummyAction(_:)):
-            return amiga.poweredOff
-
+        // Hd<n> menu
         case #selector(MyController.attachRecentHdrAction(_:)):
             return validateURLlist(myAppDelegate.recentlyAttachedHdrURLs, image: smallHdr)
-            
-        case #selector(MyController.exportHdrAction(_:)):
-            return true
-            
-        case #selector(MyController.exportRecentHdrDummyAction(_:)):
-            return true
-        */
-            
+
+        case #selector(MyController.exportRecentHdDummyAction(_:)):
+            track("\(item.tag)")
+            return amiga.hd(item)!.hasDisk
+
         case #selector(MyController.exportRecentHdrAction(_:)):
             switch item.tag {
-            case 0: return validateURLlist(myAppDelegate.recentlyExportedHdr0URLs, image: smallDisk)
-            case 10: return validateURLlist(myAppDelegate.recentlyExportedHdr1URLs, image: smallDisk)
-            case 20: return validateURLlist(myAppDelegate.recentlyExportedHdr2URLs, image: smallDisk)
-            case 30: return validateURLlist(myAppDelegate.recentlyExportedHdr3URLs, image: smallDisk)
+            case 0: return validateURLlist(myAppDelegate.recentlyExportedHdr0URLs, image: smallHdr)
+            case 10: return validateURLlist(myAppDelegate.recentlyExportedHdr1URLs, image: smallHdr)
+            case 20: return validateURLlist(myAppDelegate.recentlyExportedHdr2URLs, image: smallHdr)
+            case 30: return validateURLlist(myAppDelegate.recentlyExportedHdr3URLs, image: smallHdr)
             default: fatalError()
             }
 
         case #selector(MyController.writeProtectHdrAction(_:)):
-            item.state = dhn.hasProtectedDisk ? .on : .off
-            return dhn.hasDisk
+            item.state = hdn.hasProtectedDisk ? .on : .off
+            return hdn.hasDisk
 
         default:
             return true
@@ -550,29 +532,23 @@ extension MyController: NSMenuItemValidation {
         amiga.resume()
     }
     
-    @IBAction func exportRecentDiskDummyAction0(_ sender: NSMenuItem!) {}
-    @IBAction func exportRecentDiskDummyAction1(_ sender: NSMenuItem!) {}
-    @IBAction func exportRecentDiskDummyAction2(_ sender: NSMenuItem!) {}
-    @IBAction func exportRecentDiskDummyAction3(_ sender: NSMenuItem!) {}
-    
+    @IBAction func exportRecentDiskDummyAction(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentDiskAction(_ sender: NSMenuItem!) {
-        
-        track()
-        
-        let drive = sender.tag / 10
-        let slot  = sender.tag % 10
                 
-        exportRecentDiskAction(drive: drive, slot: slot)
+        let n = sender.tag / 10
+        let slot = sender.tag % 10
+                
+        exportRecentAction(df: n, slot: slot)
     }
     
-    func exportRecentDiskAction(drive nr: Int, slot: Int) {
+    func exportRecentAction(df n: Int, slot: Int) {
         
-        track("df\(nr) slot: \(slot)")
+        track("df\(n) slot: \(slot)")
         
-        if let url = myAppDelegate.getRecentlyExportedDiskURL(slot, drive: nr) {
+        if let url = myAppDelegate.getRecentlyExportedDiskURL(slot, drive: n) {
             
             do {
-                try mydocument.export(drive: nr, to: url)
+                try mydocument.export(drive: n, to: url)
                 
             } catch let error as VAError {
                 error.warning("Cannot export disk to file \"\(url.path)\"")
@@ -707,25 +683,25 @@ extension MyController: NSMenuItemValidation {
         }
     }
     
-    @IBAction func exportRecentHdrDummyAction(_ sender: NSMenuItem!) {}
+    @IBAction func exportRecentHdDummyAction(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentHdrAction(_ sender: NSMenuItem!) {
         
         track()
         
-        let drive = sender.tag / 10
-        let slot  = sender.tag % 10
+        let n = sender.tag / 10
+        let slot = sender.tag % 10
                 
-        exportRecentDiskAction(drive: drive, slot: slot)
+        exportRecentAction(hd: n, slot: slot)
     }
 
-    func exportRecentHdrAction(drive nr: Int, slot: Int) {
+    func exportRecentAction(hd n: Int, slot: Int) {
         
-        track("dh\(nr) slot: \(slot)")
+        track("hd\(n) slot: \(slot)")
 
-        if let url = myAppDelegate.getRecentlyExportedHdrURL(slot, drive: nr) {
+        if let url = myAppDelegate.getRecentlyExportedHdrURL(slot, drive: n) {
             
              do {
-                 try mydocument.export(hardDrive: nr, to: url)
+                 try mydocument.export(hardDrive: n, to: url)
                  
              } catch let error as VAError {
                  error.warning("Cannot export hard drive to file \"\(url.path)\"")

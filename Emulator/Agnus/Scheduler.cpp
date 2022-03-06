@@ -363,7 +363,10 @@ Scheduler::eventName(EventSlot slot, EventID id)
             }
             break;
             
-        case SLOT_HDR:
+        case SLOT_HD0:
+        case SLOT_HD1:
+        case SLOT_HD2:
+        case SLOT_HD3:
 
             switch (id) {
 
@@ -673,8 +676,17 @@ Scheduler::executeUntil(Cycle cycle) {
             if (isDue<SLOT_DC3>(cycle)) {
                 df3.serviceDiskChangeEvent <SLOT_DC3> ();
             }
-            if (isDue<SLOT_HDR>(cycle)) {
-                hd0.serviceHdrEvent <SLOT_HDR> ();
+            if (isDue<SLOT_HD0>(cycle)) {
+                hd0.serviceHdrEvent <SLOT_HD0> ();
+            }
+            if (isDue<SLOT_HD1>(cycle)) {
+                hd1.serviceHdrEvent <SLOT_HD1> ();
+            }
+            if (isDue<SLOT_HD2>(cycle)) {
+                hd2.serviceHdrEvent <SLOT_HD2> ();
+            }
+            if (isDue<SLOT_HD3>(cycle)) {
+                hd3.serviceHdrEvent <SLOT_HD3> ();
             }
             if (isDue<SLOT_MSE1>(cycle)) {
                 controlPort1.mouse.serviceMouseEvent <SLOT_MSE1> ();

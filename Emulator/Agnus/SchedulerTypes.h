@@ -58,7 +58,10 @@ enum_long(SLOT)
     SLOT_DC1,                       // Disk change (Df1)
     SLOT_DC2,                       // Disk change (Df2)
     SLOT_DC3,                       // Disk change (Df3)
-    SLOT_HDR,                       // Hard drive
+    SLOT_HD0,                       // Hard drive Hd0
+    SLOT_HD1,                       // Hard drive Hd1
+    SLOT_HD2,                       // Hard drive Hd2
+    SLOT_HD3,                       // Hard drive Hd3
     SLOT_MSE1,                      // Port 1 mouse
     SLOT_MSE2,                      // Port 2 mouse
     SLOT_KEY,                       // Auto-typing
@@ -110,7 +113,10 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
             case SLOT_DC1:   return "DC1";
             case SLOT_DC2:   return "DC2";
             case SLOT_DC3:   return "DC3";
-            case SLOT_HDR:   return "HDR";
+            case SLOT_HD0:   return "HD0";
+            case SLOT_HD1:   return "HD1";
+            case SLOT_HD2:   return "HD2";
+            case SLOT_HD3:   return "HD3";
             case SLOT_MSE1:  return "MSE1";
             case SLOT_MSE2:  return "MSE2";
             case SLOT_KEY:   return "KEY";

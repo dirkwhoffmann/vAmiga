@@ -316,6 +316,8 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         os << tab("Drive head");
         os << dec(head.cylinder) << ":" << dec(head.head) << ":" << dec(head.offset);
         os << std::endl;
+        os << tab("State");
+        os << HardDriveStateEnum::key(state) << std::endl;
         os << tab("Modified");
         os << bol(modified) << std::endl;
         os << tab("Write protected");
@@ -510,7 +512,7 @@ HardDrive::read(isize offset, isize length, u32 addr)
         msgQueue.put(MSG_HDR_READ);
         
         // Go back to IDLE state after some time
-        agnus.scheduleRel <SLOT_HDR> (MSEC(200), HDR_IDLE);
+        scheduleIdleEvent();
     }
     
     return error;
@@ -548,7 +550,7 @@ HardDrive::write(isize offset, isize length, u32 addr)
         msgQueue.put(MSG_HDR_WRITE);
         
         // Go back to IDLE state after some time
-        agnus.scheduleRel <SLOT_HDR> (MSEC(200), HDR_IDLE);
+        scheduleIdleEvent();
     }
     
     return error;
@@ -616,12 +618,31 @@ HardDrive::moveHead(isize c, isize h, isize s)
     }
 }
 
+void
+HardDrive::scheduleIdleEvent()
+{
+    auto delay = MSEC(100);
+    
+    switch (nr) {
+            
+        case 0: agnus.scheduleRel <SLOT_HD0> (delay, HDR_IDLE); break;
+        case 1: agnus.scheduleRel <SLOT_HD1> (delay, HDR_IDLE); break;
+        case 2: agnus.scheduleRel <SLOT_HD2> (delay, HDR_IDLE); break;
+        case 3: agnus.scheduleRel <SLOT_HD3> (delay, HDR_IDLE); break;
+
+        default: fatalError;
+    }
+}
+
 template <EventSlot s> void
 HardDrive::serviceHdrEvent()
 {
-    scheduler.cancel <SLOT_HDR> ();
+    scheduler.cancel <s> ();
     state = HDR_STATE_IDLE;
-    msgQueue.put(MSG_HDR_IDLE);
+    msgQueue.put(MSG_HDR_IDLE, nr);
 }
 
-template void HardDrive::serviceHdrEvent <SLOT_HDR> ();
+template void HardDrive::serviceHdrEvent <SLOT_HD0> ();
+template void HardDrive::serviceHdrEvent <SLOT_HD1> ();
+template void HardDrive::serviceHdrEvent <SLOT_HD2> ();
+template void HardDrive::serviceHdrEvent <SLOT_HD3> ();

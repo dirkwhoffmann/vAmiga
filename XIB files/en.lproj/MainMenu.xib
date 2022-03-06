@@ -423,7 +423,7 @@
                                     </items>
                                 </menu>
                                 <connections>
-                                    <action selector="exportRecentDiskDummyAction0:" target="-1" id="RxO-Cz-99m"/>
+                                    <action selector="exportRecentDiskDummyAction:" target="-1" id="gkZ-nj-POS"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="8fO-nY-y8g"/>
@@ -565,7 +565,7 @@
                                     </items>
                                 </menu>
                                 <connections>
-                                    <action selector="exportRecentDiskDummyAction1:" target="-1" id="EbG-PI-ueq"/>
+                                    <action selector="exportRecentDiskDummyAction:" target="-1" id="teB-Fm-xmM"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="DUv-gR-CL6"/>
@@ -707,7 +707,7 @@
                                     </items>
                                 </menu>
                                 <connections>
-                                    <action selector="exportRecentDiskDummyAction2:" target="-1" id="oqa-vc-gc7"/>
+                                    <action selector="exportRecentDiskDummyAction:" target="-1" id="SJd-oK-ENN"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="Ag6-jY-nP8"/>
@@ -849,7 +849,7 @@
                                     </items>
                                 </menu>
                                 <connections>
-                                    <action selector="exportRecentDiskDummyAction3:" target="-1" id="iZ0-eO-ecB"/>
+                                    <action selector="exportRecentDiskDummyAction:" target="-1" id="Z5e-Ri-ZqE"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="HcB-7e-MEa"/>
@@ -988,13 +988,13 @@
                                         <menuItem title="0" id="WNd-hP-llG">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="exportRecentDiskAction:" target="-1" id="cot-vz-WRJ"/>
+                                                <action selector="exportRecentHdrAction:" target="-1" id="fEu-sM-Yxq"/>
                                             </connections>
                                         </menuItem>
                                     </items>
                                 </menu>
                                 <connections>
-                                    <action selector="exportRecentHdrDummyAction:" target="-1" id="jF0-hM-pu9"/>
+                                    <action selector="exportRecentHdDummyAction:" target="-1" id="q2u-0n-IZc"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="qgs-Zf-fdv"/>
@@ -1126,20 +1126,20 @@
                                     <action selector="exportHdrAction:" target="-1" id="ndo-7w-DZ7"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Export To" id="7Wg-3m-VRk">
+                            <menuItem title="Export To" tag="1" id="7Wg-3m-VRk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Export To" id="0Bi-fu-lwA">
                                     <items>
                                         <menuItem title="0" tag="10" id="S2W-WE-NFQ">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="exportRecentDiskAction:" target="-1" id="Fv4-0K-pDX"/>
+                                                <action selector="exportRecentHdrAction:" target="-1" id="fqm-Ap-L2A"/>
                                             </connections>
                                         </menuItem>
                                     </items>
                                 </menu>
                                 <connections>
-                                    <action selector="exportRecentHdrDummyAction:" target="-1" id="yHa-z9-apM"/>
+                                    <action selector="exportRecentHdDummyAction:" target="-1" id="3Fh-cI-TsX"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="1Vv-nd-7qq"/>
@@ -1271,20 +1271,20 @@
                                     <action selector="exportHdrAction:" target="-1" id="h3b-L1-uJi"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Export To" id="Wjq-Ug-rnk">
+                            <menuItem title="Export To" tag="2" id="Wjq-Ug-rnk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Export To" id="R8W-LO-NPB">
                                     <items>
                                         <menuItem title="0" tag="20" id="odC-fj-ecO">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="exportRecentDiskAction:" target="-1" id="a19-bL-jCS"/>
+                                                <action selector="exportRecentHdrAction:" target="-1" id="48Z-fo-kXb"/>
                                             </connections>
                                         </menuItem>
                                     </items>
                                 </menu>
                                 <connections>
-                                    <action selector="exportRecentHdrDummyAction:" target="-1" id="QSi-pU-NWB"/>
+                                    <action selector="exportRecentHdDummyAction:" target="-1" id="RDC-Ub-6Ys"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="Qt6-t9-9qM"/>
@@ -1416,20 +1416,20 @@
                                     <action selector="exportHdrAction:" target="-1" id="QyI-5M-elT"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Export To" id="yIE-F0-g9J">
+                            <menuItem title="Export To" tag="3" id="yIE-F0-g9J">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Export To" id="r6T-Vb-Sf8">
                                     <items>
                                         <menuItem title="0" tag="10" id="8Lv-OZ-CXc">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="exportRecentDiskAction:" target="-1" id="jm7-xR-56u"/>
+                                                <action selector="exportRecentHdrAction:" target="-1" id="NvM-3d-ZcE"/>
                                             </connections>
                                         </menuItem>
                                     </items>
                                 </menu>
                                 <connections>
-                                    <action selector="exportRecentHdrDummyAction:" target="-1" id="i9n-lF-Aka"/>
+                                    <action selector="exportRecentHdDummyAction:" target="-1" id="lMV-0X-vDj"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="iU8-hM-UzT"/>
