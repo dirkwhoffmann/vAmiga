@@ -332,9 +332,9 @@ public extension AmigaProxy {
     }
 }
 
-public extension FloppyDriveProxy {
+extension FloppyDriveProxy {
     
-    var icon: NSImage? {
+    var templateIcon: NSImage? {
 
         var name: String
         
@@ -347,6 +347,14 @@ public extension FloppyDriveProxy {
         }
         
         return NSImage(named: name)!
+    }
+}
+
+extension HardDriveProxy {
+    
+    var templateIcon: NSImage? {
+        
+        return NSImage(named: "hdrTemplate")!
     }
 }
 

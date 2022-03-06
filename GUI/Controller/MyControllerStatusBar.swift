@@ -36,18 +36,18 @@ extension MyController {
             
             refreshStatusBar(drive: n, led: dfn.motor)
             refreshStatusBar(drive: n, cylinder: dfn.cylinder)
-            refreshStatusBar(drive: n, icon: dfn.icon)
+            refreshStatusBar(drive: n, icon: dfn.templateIcon)
             refreshStatusBar(drive: n, busy: dfn.motor)
         }
         
         // Hd0 - Hd3
         for n in 4...7 where drv[n] != nil {
             
-            // let hdn = amiga.hd(n - 4)!
+            let hdn = amiga.hd(n - 4)!
             
             refreshStatusBar(drive: n, led: true) // TODO
             refreshStatusBar(drive: n, cylinder: 42) // TODO
-            refreshStatusBar(drive: n, icon: NSImage(named: "hdf")) // TODO
+            refreshStatusBar(drive: n, icon: hdn.templateIcon)
             refreshStatusBar(drive: n, busy: true) // TODO
         }
                         
