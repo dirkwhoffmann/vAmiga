@@ -352,9 +352,13 @@ extension FloppyDriveProxy {
     var ledIcon: NSImage? {
         
         if !isConnected { return nil }
-        
+
         if motor {
-            return NSImage(named: "driveLedOn")
+            if writing {
+                return NSImage(named: "driveLedOn")
+            } else {
+                return NSImage(named: "powerLedOn")
+            }
         } else {
             return NSImage(named: "driveLedOff")
         }

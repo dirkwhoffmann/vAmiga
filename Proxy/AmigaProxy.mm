@@ -1181,6 +1181,21 @@ using namespace moira;
     return [self drive]->isConnected();
 }
 
+- (NSInteger)currentCyl
+{
+    return [self drive]->currentCyl();
+}
+
+- (NSInteger)currentHead
+{
+    return [self drive]->currentHead();
+}
+
+- (NSInteger)currentOffset
+{
+    return [self drive]->currentOffset();
+}
+
 - (u64)fnv
 {
     return [self drive]->fnv();
@@ -1281,9 +1296,14 @@ using namespace moira;
     return [self drive]->getMotor();
 }
 
-- (NSInteger)cylinder
+- (BOOL)selected
 {
-    return [self drive]->getCylinder();
+    return [self drive]->isSelected();
+}
+
+- (BOOL)writing
+{
+    return [self drive]->isWriting();
 }
 
 - (NSString *)readTrackBits:(NSInteger)track

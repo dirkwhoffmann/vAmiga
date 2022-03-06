@@ -400,17 +400,6 @@ FloppyDrive::setProtectionFlag(bool value)
     }
 }
 
-
-
-
-
-
-bool
-FloppyDrive::idMode() const
-{
-    return motorStopped() || motorSpeedingUp();
-}
-
 u32
 FloppyDrive::getDriveId() const
 {
@@ -442,6 +431,18 @@ FloppyDrive::getDriveId() const
     
     // The internal floppy drive identifies itself as 0x00000000
     return 0x00000000;
+}
+
+bool
+FloppyDrive::idMode() const
+{
+    return motorStopped() || motorSpeedingUp();
+}
+
+bool
+FloppyDrive::isWriting() const
+{
+    return motor && isSelected() && diskController.getState() == DRIVE_DMA_WRITE;
 }
 
 u8

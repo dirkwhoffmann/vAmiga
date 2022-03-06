@@ -609,6 +609,9 @@
 
 @property (readonly) NSInteger nr;
 @property (readonly) BOOL isConnected;
+@property (readonly) NSInteger currentCyl;
+@property (readonly) NSInteger currentHead;
+@property (readonly) NSInteger currentOffset;
 @property (readonly) u64 fnv;
 
 @property (readonly) BOOL hasDisk;
@@ -639,7 +642,8 @@
 - (void)swap:(FloppyFileProxy *)fileProxy exception:(ExceptionWrapper *)ex;
 - (void)insertNew:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex;
 @property (readonly) BOOL motor;
-@property (readonly) NSInteger cylinder;
+@property (readonly) BOOL selected;
+@property (readonly) BOOL writing;
 
 - (NSString *)readTrackBits:(NSInteger)track;
 

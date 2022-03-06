@@ -35,9 +35,8 @@ extension MyController {
             let dfn = amiga.df(n)!
             
             refreshStatusBar(drive: n, led: dfn.ledIcon)
-            refreshStatusBar(drive: n, cylinder: dfn.cylinder)
+            refreshStatusBar(drive: n, cylinder: dfn.currentCyl)
             refreshStatusBar(drive: n, icon: dfn.templateIcon)
-            refreshStatusBar(drive: n, busy: dfn.motor)
         }
         
         // Hd0 - Hd3
@@ -46,9 +45,8 @@ extension MyController {
             let hdn = amiga.hd(n - 4)!
             
             refreshStatusBar(drive: n, led: hdn.ledIcon)
-            refreshStatusBar(drive: n, cylinder: 42) // TODO
+            refreshStatusBar(drive: n, cylinder: hdn.currentCyl)
             refreshStatusBar(drive: n, icon: hdn.templateIcon)
-            refreshStatusBar(drive: n, busy: true) // TODO
         }
                         
         // Remote server icon
@@ -74,10 +72,6 @@ extension MyController {
             cylSlot1: true,
             cylSlot2: true,
             cylSlot3: true,
-            busySlot0: true,
-            busySlot1: true,
-            busySlot2: true,
-            busySlot3: true,
 
             haltIcon: halted,
             cmdLock: myAppDelegate.mapCommandKeys,
@@ -128,15 +122,6 @@ extension MyController {
         }
     }
 
-    fileprivate func refreshStatusBar(drive n: Int, busy: Bool) {
-
-        if let widget = drvBusy[n] {
-            
-            let spin = amiga.running && busy
-            spin ? widget.startAnimation(self) : widget.stopAnimation(self)
-        }
-    }
-
     func refreshStatusBar(writing: Bool?) {
         
         // TODO
@@ -179,14 +164,12 @@ extension MyController {
                 drvLED[device] = ledSlot[nr]
                 drvCyl[device] = cylSlot[nr]
                 drvIcon[device] = iconSlot[nr]
-                drvBusy[device] = busySlot[nr]
                             
             } else {
                 
                 drvLED[device] = nil
                 drvCyl[device] = nil
                 drvIcon[device] = nil
-                drvBusy[device] = nil
             }
         }
         
@@ -196,7 +179,6 @@ extension MyController {
             ledSlot[slot].image = nil
             cylSlot[slot].stringValue = ""
             iconSlot[slot].image = nil
-            busySlot[slot].stopAnimation(self)
         }
     }
     

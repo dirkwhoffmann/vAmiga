@@ -158,6 +158,10 @@ private:
 public:
     
     bool isConnected() const override;
+    
+    Cylinder currentCyl() const override { return head.cylinder; }
+    Head currentHead() const override { return head.head; }
+    isize currentOffset() const override { return head.offset; }
 
     u64 fnv() const override;
     bool hasDisk() const override;
@@ -190,23 +194,20 @@ public:
 
 public:
     
+    // Returns the result of the latest inspection
     FloppyDriveInfo getInfo() const { return AmigaComponent::getInfo(info); }
  
-
-    //
-    // Accessing
-    //
-
-public:
-
-    // Returns true iff the drive is in identification mode
-    bool idMode() const;
-    
     // Return the identification pattern of this drive
     u32 getDriveId() const;
 
+    // Checks whether the drive is in identification mode
+    bool idMode() const;
+
     // Returns the currently addressed cylinder
-    isize getCylinder() const { return head.cylinder; }
+    // isize getCylinder() const { return head.cylinder; }
+
+    // Checks whether a write operation is in progress
+    bool isWriting() const;
     
     
     //

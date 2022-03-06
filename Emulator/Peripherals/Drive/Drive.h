@@ -38,9 +38,14 @@ public:
     // Returns the connection status
     virtual bool isConnected() const = 0;
 
+    // Returns the current read/write position
+    virtual Cylinder currentCyl() const = 0;
+    virtual Head currentHead() const = 0;
+    virtual isize currentOffset() const = 0;
+
     
     //
-    // Managing disk properties
+    // Managing disks
     //
     
     // Returns a fingerprint for the current disk or 0 if there is none

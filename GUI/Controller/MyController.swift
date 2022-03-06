@@ -109,10 +109,6 @@ class MyController: NSWindowController, MessageReceiver {
     @IBOutlet weak var iconSlot1: NSButton!
     @IBOutlet weak var iconSlot2: NSButton!
     @IBOutlet weak var iconSlot3: NSButton!
-    @IBOutlet weak var busySlot0: NSProgressIndicator!
-    @IBOutlet weak var busySlot1: NSProgressIndicator!
-    @IBOutlet weak var busySlot2: NSProgressIndicator!
-    @IBOutlet weak var busySlot3: NSProgressIndicator!
     
     @IBOutlet weak var haltIcon: NSButton!
     @IBOutlet weak var cmdLock: NSButton!
@@ -131,14 +127,12 @@ class MyController: NSWindowController, MessageReceiver {
     var ledSlot: [NSButton]!
     var cylSlot: [NSTextField]!
     var iconSlot: [NSButton]!
-    var busySlot: [NSProgressIndicator]!
 
     // Slot assignments
     var drv: [Int?] = Array(repeating: nil, count: 8)
     var drvLED: [NSButton?] = Array(repeating: nil, count: 8)
     var drvCyl: [NSTextField?] = Array(repeating: nil, count: 8)
     var drvIcon: [NSButton?] = Array(repeating: nil, count: 8)
-    var drvBusy: [NSProgressIndicator?] = Array(repeating: nil, count: 8)
 }
 
 extension MyController {
@@ -173,7 +167,6 @@ extension MyController {
         ledSlot = [ ledSlot0, ledSlot1, letSlot2, ledSlot3 ]
         cylSlot = [ cylSlot0, cylSlot1, cylSlot2, cylSlot3 ]
         iconSlot = [ iconSlot0, iconSlot1, iconSlot2, iconSlot3 ]
-        busySlot = [ busySlot0, busySlot1, busySlot2, busySlot3 ]
     }
     
     override open func windowDidLoad() {
