@@ -155,7 +155,7 @@ class FloppyCreator: DialogController {
         do {
             try drive?.insertNew(fileSystem: fs, bootBlock: bb, name: name)
             
-            myAppDelegate.clearRecentlyExportedDiskURLs(drive: nr)
+            myAppDelegate.clearRecentlyExportedDiskURLs(df: nr)
             hideSheet()
             
         } catch {

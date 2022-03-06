@@ -75,7 +75,7 @@ extension MyController: NSMenuItemValidation {
             
         // Df<n> menu
         case #selector(MyController.insertRecentDiskAction(_:)):
-            return validateURLlist(myAppDelegate.recentlyInsertedDiskURLs, image: smallDisk)
+            return validateURLlist(myAppDelegate.insertedFloppyDisks, image: smallDisk)
             
         case  #selector(MyController.ejectDiskAction(_:)),
             #selector(MyController.exportFloppyDiskAction(_:)),
@@ -88,13 +88,8 @@ extension MyController: NSMenuItemValidation {
             return amiga.df(item)!.hasDisk
                         
         case #selector(MyController.exportRecentDiskAction(_:)):
-            switch item.tag {
-            case 0: return validateURLlist(myAppDelegate.recentlyExportedDisk0URLs, image: smallDisk)
-            case 10: return validateURLlist(myAppDelegate.recentlyExportedDisk1URLs, image: smallDisk)
-            case 20: return validateURLlist(myAppDelegate.recentlyExportedDisk2URLs, image: smallDisk)
-            case 30: return validateURLlist(myAppDelegate.recentlyExportedDisk3URLs, image: smallDisk)
-            default: fatalError()
-            }
+            return validateURLlist(myAppDelegate.exportedFloppyDisks[item.tag],
+                                   image: smallDisk)
             
         case #selector(MyController.writeProtectAction(_:)):
             item.state = dfn.hasProtectedDisk ? .on : .off
@@ -102,20 +97,15 @@ extension MyController: NSMenuItemValidation {
             
         // Hd<n> menu
         case #selector(MyController.attachRecentHdrAction(_:)):
-            return validateURLlist(myAppDelegate.recentlyAttachedHdrURLs, image: smallHdr)
+            return validateURLlist(myAppDelegate.attachedHardDrives, image: smallHdr)
 
         case #selector(MyController.exportRecentHdDummyAction(_:)):
             track("\(item.tag)")
             return amiga.hd(item)!.hasDisk
 
         case #selector(MyController.exportRecentHdrAction(_:)):
-            switch item.tag {
-            case 0: return validateURLlist(myAppDelegate.recentlyExportedHdr0URLs, image: smallHdr)
-            case 10: return validateURLlist(myAppDelegate.recentlyExportedHdr1URLs, image: smallHdr)
-            case 20: return validateURLlist(myAppDelegate.recentlyExportedHdr2URLs, image: smallHdr)
-            case 30: return validateURLlist(myAppDelegate.recentlyExportedHdr3URLs, image: smallHdr)
-            default: fatalError()
-            }
+            return validateURLlist(myAppDelegate.exportedFloppyDisks[item.tag],
+                                   image: smallHdr)
 
         case #selector(MyController.writeProtectHdrAction(_:)):
             item.state = hdn.hasProtectedDisk ? .on : .off
@@ -545,7 +535,7 @@ extension MyController: NSMenuItemValidation {
         
         track("df\(n) slot: \(slot)")
         
-        if let url = myAppDelegate.getRecentlyExportedDiskURL(slot, drive: n) {
+        if let url = myAppDelegate.getRecentlyExportedDiskURL(slot, df: n) {
             
             do {
                 try mydocument.export(drive: n, to: url)
@@ -565,7 +555,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func clearRecentlyExportedDisksAction(_ sender: NSMenuItem!) {
         
-        myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
+        myAppDelegate.clearRecentlyExportedDiskURLs(df: sender.tag)
     }
     
     @IBAction func ejectDiskAction(_ sender: NSMenuItem!) {
@@ -575,7 +565,7 @@ extension MyController: NSMenuItemValidation {
         if proceedWithUnexportedDisk(drive: drive) {
             
             drive.eject()
-            myAppDelegate.clearRecentlyExportedDiskURLs(drive: drive.nr)
+            myAppDelegate.clearRecentlyExportedDiskURLs(df: drive.nr)
         }
     }
     
@@ -698,7 +688,7 @@ extension MyController: NSMenuItemValidation {
         
         track("hd\(n) slot: \(slot)")
 
-        if let url = myAppDelegate.getRecentlyExportedHdrURL(slot, drive: n) {
+        if let url = myAppDelegate.getRecentlyExportedHdrURL(slot, hd: n) {
             
              do {
                  try mydocument.export(hardDrive: n, to: url)
@@ -718,7 +708,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func clearRecentlyExportedHdrsAction(_ sender: NSMenuItem!) {
         
-        myAppDelegate.clearRecentlyExportedHdrURLs(drive: sender.tag)
+        myAppDelegate.clearRecentlyExportedHdrURLs(hd: sender.tag)
     }
     
     @IBAction func exportHdrAction(_ sender: NSMenuItem!) {

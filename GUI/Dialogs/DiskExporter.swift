@@ -378,7 +378,7 @@ class DiskExporter: DialogController {
             }
             
             dfn!.markDiskAsUnmodified()
-            myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: dfn!.nr)
+            myAppDelegate.noteNewRecentlyExportedDiskURL(url, df: dfn!.nr)
             
             hideSheet()
 
@@ -407,7 +407,7 @@ class DiskExporter: DialogController {
             }
             
             hdn!.markDiskAsUnmodified()
-            myAppDelegate.noteNewRecentlyExportedHdrURL(url, drive: hdn!.nr)
+            myAppDelegate.noteNewRecentlyExportedHdrURL(url, hd: hdn!.nr)
             
             hideSheet()
             

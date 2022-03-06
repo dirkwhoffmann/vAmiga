@@ -265,7 +265,7 @@ class MyDocument: NSDocument {
         
         try export(fileProxy: df!, to: url)
         amiga.df(nr)!.markDiskAsUnmodified()
-        myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: nr)
+        myAppDelegate.noteNewRecentlyExportedDiskURL(url, df: nr)
         
         track("Disk exported successfully")
     }
@@ -284,7 +284,7 @@ class MyDocument: NSDocument {
         try export(fileProxy: dh!, to: url)
 
         amiga.hd(nr)!.markDiskAsUnmodified()
-        myAppDelegate.noteNewRecentlyExportedHdrURL(url, drive: nr)
+        myAppDelegate.noteNewRecentlyExportedHdrURL(url, hd: nr)
 
         track("Hard Drive exported successfully")
     }
