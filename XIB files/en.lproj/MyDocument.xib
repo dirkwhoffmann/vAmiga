@@ -48,7 +48,7 @@
                     <button toolTip="Connect / Disconnect drive" tag="1" id="1208">
                         <rect key="frame" x="8" y="4" width="24" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="powerLedOff" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="1709">
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="ledGrey" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="1709">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -59,7 +59,7 @@
                     <button toolTip="Drive LED" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="iKN-RM-vsV">
                         <rect key="frame" x="40" y="4" width="24" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="driveLedOff" imagePosition="only" alignment="right" imageScaling="proportionallyDown" id="v9S-no-L5h">
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="ledGrey" imagePosition="only" alignment="right" imageScaling="proportionallyDown" id="v9S-no-L5h">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -82,7 +82,7 @@
                     <button toolTip="Drive LED" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="K68-Xr-JJH">
                         <rect key="frame" x="140" y="4" width="24" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="driveLedOff" imagePosition="only" alignment="right" imageScaling="proportionallyDown" id="Ws2-m0-rhM">
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="ledGrey" imagePosition="only" alignment="right" imageScaling="proportionallyDown" id="Ws2-m0-rhM">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -98,7 +98,7 @@
                     <button toolTip="Drive LED" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="Pjc-SJ-rsn">
                         <rect key="frame" x="240" y="4" width="24" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="driveLedOff" imagePosition="only" alignment="right" imageScaling="proportionallyDown" id="zmo-Ej-rmg">
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="ledGrey" imagePosition="only" alignment="right" imageScaling="proportionallyDown" id="zmo-Ej-rmg">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -114,7 +114,7 @@
                     <button toolTip="Drive LED" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="wnl-Bi-Ego">
                         <rect key="frame" x="340" y="4" width="24" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="driveLedOff" imagePosition="only" alignment="right" imageScaling="proportionallyDown" id="bNe-ek-PzN">
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="ledGrey" imagePosition="only" alignment="right" imageScaling="proportionallyDown" id="bNe-ek-PzN">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -453,17 +453,16 @@
         <image name="devMouseTemplate" width="20" height="20"/>
         <image name="devNoneTemplate" width="24" height="24"/>
         <image name="diskTemplate" width="217" height="217"/>
-        <image name="driveLedOff" width="100" height="50"/>
         <image name="galleryTemplate" width="36" height="36"/>
         <image name="haltTemplate" width="240" height="241"/>
         <image name="hourglass1Template" width="240" height="241"/>
         <image name="inspectTemplate" width="36" height="36"/>
         <image name="keyboardTemplate" width="36" height="36"/>
+        <image name="ledGrey" width="100" height="50"/>
         <image name="monitorTemplate" width="36" height="36"/>
         <image name="muteTemplate" width="240" height="241"/>
         <image name="pauseTemplate" width="36" height="36"/>
         <image name="popTemplate" width="36" height="36"/>
-        <image name="powerLedOff" width="100" height="50"/>
         <image name="powerTemplate" width="36" height="36"/>
         <image name="prefTemplate" width="36" height="36"/>
         <image name="pushTemplate" width="36" height="36"/>

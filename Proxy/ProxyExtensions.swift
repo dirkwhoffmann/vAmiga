@@ -355,9 +355,9 @@ extension FloppyDriveProxy {
 
         if motor {
             if writing {
-                return NSImage(named: "driveLedOn")
+                return NSImage(named: "ledRed")
             } else {
-                return NSImage(named: "powerLedOn")
+                return NSImage(named: "ledGreen")
             }
         } else {
             return NSImage(named: "driveLedOff")
@@ -378,9 +378,9 @@ extension HardDriveProxy {
         
         switch state {
             
-        case .IDLE: return NSImage(named: "powerLedOff")   // RENAME to ledGrey
-        case .READING: return NSImage(named: "powerLedOn")   // RENAME to ledGreen
-        case .WRITING: return NSImage(named: "driveLedOn")   // RENAME to ledRed
+        case .IDLE: return NSImage(named: "ledGrey")
+        case .READING: return NSImage(named: "ledGreen")
+        case .WRITING: return NSImage(named: "ledRed")
             
         default: fatalError()
         }

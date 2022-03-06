@@ -1433,12 +1433,12 @@ DQ
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pIU-aX-Hcd">
                                             <rect key="frame" x="114" y="202" width="162" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Zorro II controller" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="jPb-OL-wmt" id="SUm-MT-1g3">
+                                            <popUpButtonCell key="cell" type="push" title="Zorro board" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="jPb-OL-wmt" id="SUm-MT-1g3">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" id="ho4-A0-gpZ">
                                                     <items>
-                                                        <menuItem title="Zorro II controller" state="on" id="jPb-OL-wmt">
+                                                        <menuItem title="Zorro board" state="on" id="jPb-OL-wmt">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -1459,12 +1459,12 @@ DQ
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="l00-2q-mSl">
                                             <rect key="frame" x="114" y="173" width="162" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Zorro II controller" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="spG-S1-nLS" id="9XM-JK-C2q">
+                                            <popUpButtonCell key="cell" type="push" title="Zorro board" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="spG-S1-nLS" id="9XM-JK-C2q">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" id="VLL-Xp-x5x">
                                                     <items>
-                                                        <menuItem title="Zorro II controller" state="on" id="spG-S1-nLS">
+                                                        <menuItem title="Zorro board" state="on" id="spG-S1-nLS">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -1485,12 +1485,12 @@ DQ
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="kyk-3L-mrA">
                                             <rect key="frame" x="114" y="145" width="162" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Zorro II controller" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="gp4-6Z-pek" id="R0Q-bF-OE3">
+                                            <popUpButtonCell key="cell" type="push" title="Zorro board" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="gp4-6Z-pek" id="R0Q-bF-OE3">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" id="kQe-Qi-lSr">
                                                     <items>
-                                                        <menuItem title="Zorro II controller" state="on" id="gp4-6Z-pek">
+                                                        <menuItem title="Zorro board" state="on" id="gp4-6Z-pek">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -1511,12 +1511,12 @@ DQ
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="wqb-7F-ILE">
                                             <rect key="frame" x="114" y="116" width="162" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Zorro II controller" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="M8p-fi-xc8" id="a6z-bk-NGQ">
+                                            <popUpButtonCell key="cell" type="push" title="Zorro board" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="M8p-fi-xc8" id="a6z-bk-NGQ">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" id="qzS-GM-yPV">
                                                     <items>
-                                                        <menuItem title="Zorro II controller" state="on" id="M8p-fi-xc8">
+                                                        <menuItem title="Zorro board" state="on" id="M8p-fi-xc8">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>

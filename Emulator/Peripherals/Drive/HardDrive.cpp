@@ -612,11 +612,7 @@ HardDrive::moveHead(isize c, isize h, isize s)
     head.offset = desc.geometry.bsize * s;
     
     if (step) {
-
-        auto pan = config.pan;
-        auto vol = config.stepVolume;
-        
-        msgQueue.put(MSG_HDR_STEP, i16(c), i16(pan), i16(vol), 0);
+        msgQueue.put(MSG_HDR_STEP, i16(nr), i16(c), config.stepVolume, config.pan);
     }
 }
 

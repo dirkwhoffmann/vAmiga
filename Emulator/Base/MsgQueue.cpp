@@ -43,15 +43,6 @@ MsgQueue::put(MsgType type, i64 val)
 }
 
 void
-MsgQueue::put(MsgType type, i32 val1, i32 val2)
-{
-    u64 u1 = (u32)(val1);
-    u64 u2 = (u32)(val2);
-    
-    put(type, (i64)(u1 << 48 | u2 << 32));
-}
-
-void
 MsgQueue::put(MsgType type, i16 val1, i16 val2, i16 val3, i16 val4)
 {
     u64 u1 = (u16)(val1);
@@ -59,5 +50,5 @@ MsgQueue::put(MsgType type, i16 val1, i16 val2, i16 val3, i16 val4)
     u64 u3 = (u16)(val3);
     u64 u4 = (u16)(val4);
     
-    put(type, (i64)(u1 << 48 | u2 << 32 | u3 << 16 | u4));
+    put(type, (i64)(u4 << 48 | u3 << 32 | u2 << 16 | u1));
 }

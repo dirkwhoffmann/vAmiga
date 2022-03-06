@@ -354,14 +354,20 @@ extension MyController {
     }
     
     func processMessage(_ msg: Message) {
+
+        var word1: Int { return Int(msg.data) & 0xFFFF }
+        var word2: Int { return (Int(msg.data) >> 16) & 0xFFFF }
+        var word3: Int { return (Int(msg.data) >> 32) & 0xFFFF }
+        var word4: Int { return (Int(msg.data) >> 48) & 0xFFFF }
         
-        var driveNr: Int { return Int(msg.data) & 0xFF }
-        var driveCyl: Int { return (Int(msg.data) >> 8) & 0xFF }
-        var word1: Int { return (Int(msg.data) >> 48) & 0xFFFF }
-        var word2: Int { return (Int(msg.data) >> 32) & 0xFFFF }
-        var word3: Int { return (Int(msg.data) >> 16) & 0xFFFF }
-        var word4: Int { return Int(msg.data) & 0xFFFF }
-                                                         
+        var nr: Int { return word1 }
+        var cyl: Int { return word2 }
+        var volume: Int { return word3 }
+        var pan: Int { return word4 }
+
+        // var driveNr: Int { return Int(msg.data) & 0xFF }
+        // var driveCyl: Int { return (Int(msg.data) >> 8) & 0xFF }
+                                                        
         // Only proceed if the proxy object is still alive
         if amiga == nil { return }
         
@@ -433,13 +439,13 @@ extension MyController {
             refreshStatusBar()
             
         case .POWER_LED_ON:
-            powerLED.image = NSImage(named: "powerLedOn")
+            powerLED.image = NSImage(named: "ledRed")
             
         case .POWER_LED_DIM:
-            powerLED.image = NSImage(named: "powerLedDim")
+            powerLED.image = NSImage(named: "ledBlack")
             
         case .POWER_LED_OFF:
-            powerLED.image = NSImage(named: "powerLedOff")
+            powerLED.image = NSImage(named: "ledGrey")
                         
         case .DMA_DEBUG_ON:
             renderer.zoomTextureOut()
@@ -490,20 +496,20 @@ extension MyController {
             updateWarp()
             
         case .DRIVE_STEP:
-            macAudio.playStepSound(drive: driveNr)
-            refreshStatusBar(drive: driveNr, cylinder: driveCyl)
+            macAudio.playSound(MacAudio.Sounds.step, volume: volume, pan: pan)
+            refreshStatusBar(drive: nr, cylinder: cyl)
             
         case .DRIVE_POLL:
-            macAudio.playPollSound(drive: driveNr)
-            refreshStatusBar(drive: driveNr, cylinder: driveCyl)
+            macAudio.playSound(MacAudio.Sounds.step, volume: volume, pan: pan)
+            refreshStatusBar(drive: nr, cylinder: cyl)
             
         case .DISK_INSERT:
-            if driveNr == 0 { mydocument.setBootDiskID(amiga.df0.fnv) }
-            macAudio.playInsertSound(drive: driveNr)
+            if nr == 0 { mydocument.setBootDiskID(amiga.df0.fnv) }
+            macAudio.playSound(MacAudio.Sounds.insert, volume: volume, pan: pan)
             refreshStatusBar()
             
         case .DISK_EJECT:
-            macAudio.playEjectSound(drive: driveNr)
+            macAudio.playSound(MacAudio.Sounds.eject, volume: volume, pan: pan)
             refreshStatusBar()
             
         case .DISK_UNSAVED, .DISK_SAVED, .DISK_PROTECT, .DISK_UNPROTECT:
@@ -521,12 +527,7 @@ extension MyController {
 
         case .HDR_STEP:
             
-            macAudio.playSound(name: "hdr_click", volume: word3, pan: word2)
-            
-            track("Cylinder: \(word1)")
-            track("Pan: \(word2)")
-            track("Volume: \(word3)")
-            
+            macAudio.playSound(MacAudio.Sounds.move, volume: volume, pan: pan)
             refreshStatusBar()
 
         case .HDR_IDLE, .HDR_READ, .HDR_WRITE:

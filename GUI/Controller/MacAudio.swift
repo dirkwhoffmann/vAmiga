@@ -10,7 +10,15 @@
 import AVFoundation
 
 public class MacAudio: NSObject {
-
+    
+    struct Sounds {
+        
+        static let step = "drive_head"
+        static let insert = "insert"
+        static let eject = "eject"
+        static let move = "hdr_click"
+    }
+    
     var parent: MyController!
     var audiounit: AUAudioUnit!
     var paula: PaulaProxy!
@@ -151,6 +159,7 @@ public class MacAudio: NSObject {
     }
     
     // Plays a sound file
+    /*
     func playStepSound(drive id: Int) {
         
         playSound(name: "drive_head",
@@ -178,16 +187,17 @@ public class MacAudio: NSObject {
                   volume: parent.amiga.getConfig(.EJECT_VOLUME, drive: id),
                   pan: parent.amiga.getConfig(.DRIVE_PAN, drive: id))
     }
+    */
     
-    func playSound(name: String, volume: Int, pan: Int) {
+    func playSound(_ name: String, volume: Int, pan: Int) {
         
         let scaledVolume = Float(volume) / 100.0
         let p = 0.5 * (sin(Double(pan) * Double.pi / 200.0) + 1)
         
-        playSound(name: name, volume: scaledVolume, pan: Float(p))
+        playSound(name, volume: scaledVolume, pan: Float(p))
     }
     
-    func playSound(name: String, volume: Float = 1.0, pan: Float = 0.0) {
+    func playSound(_ name: String, volume: Float = 1.0, pan: Float = 0.0) {
         
         // Only proceed if the volume is greater 0
         if volume == 0.0 { return }

@@ -97,15 +97,17 @@ extension MyController {
         }
     }
 
+    /*
     fileprivate func refreshStatusBar(hd n: Int, led: Bool) {
         
         if let widget = drvLED[n + 4] {
 
-            let image = NSImage(named: led ? "driveLedOn" : "driveLedOff")
+            let image = NSImage(named: led ? "ledRed" : "")
             widget.image = image
         }
     }
-
+    */
+    
     func refreshStatusBar(drive n: Int, cylinder: Int) {
         
         if let widget = drvCyl[n] {
