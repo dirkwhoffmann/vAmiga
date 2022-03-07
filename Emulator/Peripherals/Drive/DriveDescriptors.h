@@ -12,6 +12,7 @@
 
 #include "Constants.h"
 #include "FloppyDiskTypes.h"
+#include <vector>
 
 struct GeometryDescriptor {
   

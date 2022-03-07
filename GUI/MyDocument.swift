@@ -176,13 +176,19 @@ class MyDocument: NSDocument {
         
         if let proxy = attachment as? HDFFileProxy {
             
-            if parent.askToReboot() {
-            
-                amiga.powerOff()
-                amiga.configure(.HDR_CONNECT, drive: drive, enable: true)
-                try? amiga.hd(drive)?.attach(hdf: proxy)
-                amiga.powerOn()
-                try? amiga.run()
+            do {
+                
+                if parent.askToReboot() {
+                    
+                    amiga.powerOff()
+                    amiga.configure(.HDR_CONNECT, drive: drive, enable: true)
+                    try amiga.hd(drive)?.attach(hdf: proxy)
+                    amiga.powerOn()
+                    try amiga.run()
+                }
+                
+            } catch {
+                (error as? VAError)?.cantAttach()
             }
         }
     }

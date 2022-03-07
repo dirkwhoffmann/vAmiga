@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "StringUtils.h"
 #include "Aliases.h"
 #include <sstream>

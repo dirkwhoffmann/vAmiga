@@ -11,6 +11,7 @@
 
 #include "Macros.h"
 #include "Checksum.h"
+#include <vector>
 
 namespace util {
 

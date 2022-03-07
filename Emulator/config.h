@@ -173,7 +173,7 @@ static const int MFM_DEBUG       = 0; // Disk encoder / decoder
 static const int FS_DEBUG        = 0; // File System Classes (OFS / FFS)
 
 // Hard Drives
-static const int HDR_ACCEPT_ALL  = 1; // Disables hard drive layout checks
+static const int HDR_ACCEPT_ALL  = 0; // Disables hard drive layout checks
 
 // Audio
 static const int AUDREG_DEBUG    = 0; // Audio registers
