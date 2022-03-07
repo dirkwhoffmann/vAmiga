@@ -650,16 +650,16 @@ FileSystem::check(bool strict) const
     isize total = 0, min = INT_MAX, max = 0;
     
     // Analyze the allocation table
-    for (Block i = 0; i < numBlocks(); i++) {
+    for (isize i = 0; i < numBlocks(); i++) {
 
         FSBlock *block = blocks[i];
-        if (block->type == FS_EMPTY_BLOCK && !isFree((Block)i)) {
+        if (block->type == FS_EMPTY_BLOCK && !isFree(Block(i))) {
             result.bitmapErrors++;
-            debug(FS_DEBUG, "Empty block %d is marked as allocated\n", i);
+            debug(FS_DEBUG, "Empty block %ld is marked as allocated\n", i);
         }
-        if (block->type != FS_EMPTY_BLOCK && isFree((Block)i)) {
+        if (block->type != FS_EMPTY_BLOCK && isFree(Block(i))) {
             result.bitmapErrors++;
-            debug(FS_DEBUG, "Non-empty block %d is marked as free\n", i);
+            debug(FS_DEBUG, "Non-empty block %ld is marked as free\n", i);
         }
     }
 

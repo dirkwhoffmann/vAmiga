@@ -103,11 +103,11 @@ void
 MutableFileSystem::format(string name)
 {
     // Start from scratch
-    init(blocks.size());
+    init(isize(blocks.size()));
 
     // Do some consistency checking
     assert(numBlocks() > 2);
-    for (Block i = 0; i < numBlocks(); i++) assert(blocks[i] == nullptr);
+    for (isize i = 0; i < numBlocks(); i++) assert(blocks[i] == nullptr);
 
     // Create boot blocks
     blocks[0] = new FSBlock(*this, 0, FS_BOOT_BLOCK);
@@ -137,11 +137,11 @@ MutableFileSystem::format(string name)
     rb->addBitmapBlockRefs(bmBlocks);
     
     // Add free blocks
-    for (Block i = 0; i < numBlocks(); i++) {
+    for (isize i = 0; i < numBlocks(); i++) {
         
         if (blocks[i] == nullptr) {
-            blocks[i] = new FSBlock(*this, i, FS_EMPTY_BLOCK);
-            markAsFree(i);
+            blocks[i] = new FSBlock(*this, Block(i), FS_EMPTY_BLOCK);
+            markAsFree(Block(i));
         }
     }
     

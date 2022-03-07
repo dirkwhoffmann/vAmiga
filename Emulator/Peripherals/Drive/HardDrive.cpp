@@ -190,7 +190,7 @@ HardDrive::setConfigItem(Option option, i64 value)
                 throw VAError(ERROR_OPT_LOCKED);
             }
             
-            if (value != config.connected) {
+            if (bool(value) != config.connected) {
                 
                 config.connected = bool(value);
                 
@@ -329,7 +329,7 @@ HardDrive::_size()
     util::SerCounter counter;
 
     // Determine size information
-    auto dataSize = i64(desc.geometry.numBytes()) + 8;
+    auto dataSize = desc.geometry.numBytes() + 8;
 
     applyToPersistentItems(counter);
     applyToResetItems(counter);
@@ -342,18 +342,18 @@ isize
 HardDrive::didLoadFromBuffer(const u8 *buffer)
 {
     util::SerReader reader(buffer);
-    i64 dataSize;
+    isize dataSize;
 
     // Load size information
     reader << dataSize;
 
     // Allocate memory
     if (dataSize > MB(504)) throw VAError(ERROR_SNAP_CORRUPTED);
-    alloc(dataSize);
+    alloc(isize(dataSize));
 
     // Load data
-    debug(true, "data = %p size = %lld\n", (void *)data, dataSize);
-    debug(true, "numBytes = %ld\n", desc.geometry.numBytes());
+    // debug(true, "data = %p size = %ld\n", (void *)data, dataSize);
+    // debug(true, "numBytes = %ld\n", desc.geometry.numBytes());
     assert(dataSize == desc.geometry.numBytes());
     reader.copy(data, dataSize);
 
@@ -366,10 +366,9 @@ HardDrive::didSaveToBuffer(u8 *buffer)
     util::SerWriter writer(buffer);
 
     // Determine size information
-    i64 dataSize = desc.geometry.numBytes();
+    isize dataSize = desc.geometry.numBytes();
 
     // Save size information
-    printf("Saving dataSize = %lld\n", dataSize);
     writer << dataSize;
  
     // Write data

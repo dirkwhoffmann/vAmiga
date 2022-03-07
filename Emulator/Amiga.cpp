@@ -29,8 +29,8 @@ Amiga::version()
     string result;
     
     result = std::to_string(VER_MAJOR) + "." + std::to_string(VER_MINOR);
-    if (VER_SUBMINOR > 0) result += "." + std::to_string(VER_SUBMINOR);
-    if (VER_BETA > 0) result += 'b' + std::to_string(VER_BETA);
+    if constexpr (VER_SUBMINOR > 0) result += "." + std::to_string(VER_SUBMINOR);
+    if constexpr (VER_BETA > 0) result += 'b' + std::to_string(VER_BETA);
 
     return result;
 }
@@ -1095,8 +1095,8 @@ Amiga::loadSnapshot(const Snapshot &snapshot)
     if (snapshot.isTooNew() || FORCE_SNAP_TOO_NEW) {
         throw VAError(ERROR_SNAP_TOO_NEW);
     }
-    if ((!betaRelease && snapshot.isBeta()) || FORCE_SNAP_IS_BETA) {
-        throw VAError(ERROR_SNAP_IS_BETA);
+    if (snapshot.isBeta() || FORCE_SNAP_IS_BETA) {
+        if constexpr (!betaRelease) throw VAError(ERROR_SNAP_IS_BETA);
     }
 
     {   SUSPENDED

@@ -234,4 +234,4 @@ Message;
 // Signatures
 //
 
-typedef void Callback(const void *, long, long);
+typedef void Callback(const void *, long, i64);

@@ -143,7 +143,7 @@ public:
     {
         auto len = v.length();
         assert(len < 256);
-        count += 1 + len;
+        count += 1 + isize(len);
         return *this;
     }
 

@@ -33,13 +33,13 @@ void replace(char *p, isize size, const char *sequence, const char *substitute)
     assert(substitute);
     assert(strlen(sequence) == strlen(substitute));
 
-    isize len = isize(strlen(sequence));
+    auto len = strlen(sequence);
         
-    for (isize i = 0; i < size - len; i++) {
-        
+    for (isize i = 0; i < size - isize(len); i++) {
+
         if (strncmp(p + i, sequence, len) == 0) {
             
-            strncpy(p + i, substitute, len);
+            memcpy((void *)(p + i), (void *)substitute, len);
             return;
         }
     }

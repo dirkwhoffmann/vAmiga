@@ -228,7 +228,7 @@ HDFFile::getFileSystemDescriptor(isize nr) const
     result.rootBlock = (Block)rootKey;
 
     // Seek bitmap blocks
-    Block ref = (Block)rootKey;
+    Block ref = Block(rootKey);
     isize cnt = 25;
     isize offset = 512 - 49 * 4;
     
@@ -239,7 +239,7 @@ HDFFile::getFileSystemDescriptor(isize nr) const
         // Collect all references to bitmap blocks stored in this block
         for (isize i = 0; i < cnt; i++, p += 4) {
             if (Block bmb = FSBlock::read32(p)) {
-                if (bmb < result.numBlocks) {
+                if (isize(bmb) < result.numBlocks) {
                     result.bmBlocks.push_back(bmb);
                 }
             }
@@ -247,7 +247,7 @@ HDFFile::getFileSystemDescriptor(isize nr) const
         
         // Continue collecting in the next extension bitmap block
         if ((ref = FSBlock::read32(p)) != 0) {
-            if (ref < result.numBlocks) result.bmExtBlocks.push_back(ref);
+            if (isize(ref) < result.numBlocks) result.bmExtBlocks.push_back(ref);
             cnt = (512 / 4) - 1;
             offset = 0;
         }
