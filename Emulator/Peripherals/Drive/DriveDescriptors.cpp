@@ -111,20 +111,17 @@ GeometryDescriptor::checkCompatibility() const
     if (numBytes() > MB(504) || FORCE_HDR_TOO_LARGE) {
         throw VAError(ERROR_HDR_TOO_LARGE);
     }
-    if (bsize != 512 || FORCE_HDR_INVALID_BSIZE) {
-        throw VAError(ERROR_HDR_INVALID_BSIZE);
+    if ((cylinders < cMin && heads > 1) || cylinders > cMax || FORCE_HDR_UNSUPPORTED_C) {
+        throw VAError(ERROR_HDR_UNSUPPORTED_CYL_COUNT, std::to_string(cylinders));
     }
-    if (cylinders > cMax || FORCE_HDR_INVALID_GEOMETRY) {
-        throw VAError(ERROR_HDR_INVALID_GEOMETRY);
+    if (heads < hMin || heads > hMax || FORCE_HDR_UNSUPPORTED_H) {
+        throw VAError(ERROR_HDR_UNSUPPORTED_HEAD_COUNT, std::to_string(heads));
     }
-    if (cylinders < cMin && heads > 1) {
-        throw VAError(ERROR_HDR_INVALID_GEOMETRY);
+    if (sectors < sMin || sectors > sMax || FORCE_HDR_UNSUPPORTED_S) {
+        throw VAError(ERROR_HDR_UNSUPPORTED_SEC_COUNT, std::to_string(sectors));
     }
-    if (heads < hMin || heads > hMax) {
-        throw VAError(ERROR_HDR_INVALID_GEOMETRY);
-    }
-    if (sectors < sMin || sectors > sMax) {
-        throw VAError(ERROR_HDR_INVALID_GEOMETRY);
+    if (bsize != 512 || FORCE_HDR_UNSUPPORTED_B) {
+        throw VAError(ERROR_HDR_UNSUPPORTED_BSIZE);
     }
 }
 
@@ -186,8 +183,10 @@ PartitionDescriptor::dump(std::ostream& os) const
 
 void PartitionDescriptor::checkCompatibility() const
 {
-    if (4 * sizeBlock != 512 || FORCE_HDR_INVALID_BSIZE) {
-        throw VAError(ERROR_HDR_INVALID_BSIZE);
+    auto bsize = 4 * sizeBlock;
+    
+    if (bsize != 512) {
+        throw VAError(ERROR_HDR_UNSUPPORTED_BSIZE, std::to_string(bsize));
     }
 }
 

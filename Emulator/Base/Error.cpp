@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "Error.h"
-// #include "HardDriveTypes.h"
+#include "Constants.h"
 
 VAError::VAError(ErrorCode code, const string &s)
 {
@@ -127,15 +127,37 @@ VAError::VAError(ErrorCode code, const string &s)
             description += "504 MB.";
             break;
 
-        case ERROR_HDR_INVALID_BSIZE:
-            description = "vAmiga does not support hard drives with a block size ";
-            description += "other than 512 bytes.";
+        case ERROR_HDR_UNSUPPORTED_CYL_COUNT:
+            description = "The geometry of this drive is not supported. ";
+            description += "vAmiga supports hard drives with ";
+            description += "at least " + std::to_string(HDR_C_MIN) + " and ";
+            description += "at most " + std::to_string(HDR_C_MAX) + " cylinders. ";
+            description += "This drive has " + s + " cylinders.";
+            break;
+            
+        case ERROR_HDR_UNSUPPORTED_HEAD_COUNT:
+            description = "The geometry of this drive is not supported. ";
+            description += "vAmiga supports hard drives with ";
+            description += "at least " + std::to_string(HDR_H_MIN) + " and ";
+            description += "at most " + std::to_string(HDR_H_MAX) + " heads. ";
+            description += "The drive has " + s + " heads.";
             break;
 
-        case ERROR_HDR_INVALID_GEOMETRY:
-            description = "Unsupported drive geometry.";
+        case ERROR_HDR_UNSUPPORTED_SEC_COUNT:
+            description = "The geometry of this drive is not supported. ";
+            description += "vAmiga only supports hard drives with ";
+            description += "at least " + std::to_string(HDR_S_MIN) + " and ";
+            description += "at most " + std::to_string(HDR_S_MAX) + " sectors. ";
+            description += "The drive stores " + s + " sectors per track.";
             break;
 
+        case ERROR_HDR_UNSUPPORTED_BSIZE:
+            description = "The geometry of this drive is not supported. ";
+            description += "vAmiga only supports hard drives with a ";
+            description += "block size of 512 bytes. ";
+            description += "The drive stores " + s + " bytes per block.";
+            break;
+            
         case ERROR_HDR_UNMATCHED_GEOMETRY:
             description = "The drive geometry doesn't match the hard drive capacity.";
             break;

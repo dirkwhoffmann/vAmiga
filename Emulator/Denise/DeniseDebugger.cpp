@@ -143,7 +143,11 @@ DeniseDebugger::vsyncHandler()
             } else {
                 
                 // Set a trigger in the near future
-                viewPortTrigger = std::min(viewPortTrigger, agnus.clock + MSEC(200));
+                if (viewPortTrigger) {
+                    viewPortTrigger = std::min(viewPortTrigger, agnus.clock + MSEC(200));
+                } else {
+                    viewPortTrigger = agnus.clock + MSEC(200);
+                }
             }
         }
         
