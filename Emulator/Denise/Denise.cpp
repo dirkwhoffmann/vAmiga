@@ -105,6 +105,7 @@ Denise::setConfigItem(Option option, i64 value)
         case OPT_VIEWPORT_TRACKING:
             
             config.viewportTracking = (bool)value;
+            debugger.resetDIWTracker();
             return;
 
         case OPT_HIDDEN_BITPLANES:

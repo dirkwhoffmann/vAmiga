@@ -59,6 +59,14 @@ DeniseDebugger::recordSprite(isize nr)
 }
 
 void
+DeniseDebugger::resetDIWTracker()
+{
+    recordDIW(denise.diwstrt, denise.diwstop);
+    vpChanged = true;
+    vpMsgSent = 0;
+}
+
+void
 DeniseDebugger::recordDIW(u16 diwstrt, u16 diwstop)
 {
     if (denise.config.viewportTracking) {
@@ -104,14 +112,14 @@ DeniseDebugger::vsyncHandler()
     if (denise.config.viewportTracking) {
         
         // Compare the recorded viewport with the previous one
-        auto equal =
-        latchedMaxViewPort.hstrt == maxViewPort.hstrt &&
-        latchedMaxViewPort.hstop == maxViewPort.hstop &&
-        latchedMaxViewPort.vstrt == maxViewPort.vstrt &&
-        latchedMaxViewPort.vstop == maxViewPort.vstop;
+        vpChanged |=
+        latchedMaxViewPort.hstrt != maxViewPort.hstrt ||
+        latchedMaxViewPort.hstop != maxViewPort.hstop ||
+        latchedMaxViewPort.vstrt != maxViewPort.vstrt ||
+        latchedMaxViewPort.vstop != maxViewPort.vstop;
         
         // Take action if the viewport has changed
-        if (!equal) {
+        if (vpChanged) {
             
             /*
             msg("Old viewport: (%ld,%ld) - (%ld,%ld)\n",
@@ -128,26 +136,17 @@ DeniseDebugger::vsyncHandler()
             
             latchedMaxViewPort = maxViewPort;
             
-            // Notify the GUI if the trigger cycle has been reached
-            if (viewPortTrigger && agnus.clock > viewPortTrigger) {
+            // Notify the GUI if the last message was sent a while ago
+            if (abs(agnus.clock - vpMsgSent) > MSEC(200)) {
                 
-                // Notify the GUI that the viewport has changed
                 msgQueue.put(MSG_VIEWPORT,
                              i16(latchedMaxViewPort.hstrt),
                              i16(latchedMaxViewPort.vstrt),
                              i16(latchedMaxViewPort.hstop),
                              i16(latchedMaxViewPort.vstop));
                 
-                viewPortTrigger = 0;
-                
-            } else {
-                
-                // Set a trigger in the near future
-                if (viewPortTrigger) {
-                    viewPortTrigger = std::min(viewPortTrigger, agnus.clock + MSEC(200));
-                } else {
-                    viewPortTrigger = agnus.clock + MSEC(200);
-                }
+                vpMsgSent = agnus.clock;
+                vpChanged = false;
             }
         }
         

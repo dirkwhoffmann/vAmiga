@@ -14,15 +14,18 @@
 #include "DeniseTypes.h"
 
 class DeniseDebugger: public SubComponent {
-    
+        
     // Largest viewport seen in the current frame (constantly changing)
     ViewPortInfo maxViewPort = { };
 
     // Largest viewport seen in the previous frame (stable)
     ViewPortInfo latchedMaxViewPort = { };
     
-    // Trigger cycle for notifying the GUI about a changed viewport
-    Cycle viewPortTrigger = 0;
+    // Indicates if the viewport has been changed recently
+    bool vpChanged = false;
+    
+    // Remembers when the latest viewport change message was sent
+    Cycle vpMsgSent = 0;
     
     // Sprite information recorded in the current frame (constantly changing)
     SpriteInfo spriteInfo[8] = { };
@@ -80,6 +83,7 @@ public:
     // Tracking viewport changes
     //
     
+    void resetDIWTracker();
     void recordDIW(u16 diwstrt, u16 diwstop);
     void updateDIW(u16 diwstrt, u16 diwstop);
 
@@ -97,7 +101,7 @@ public:
 
     
     //
-    //
+    // Handling periodic events
     //
     
     void vsyncHandler();
