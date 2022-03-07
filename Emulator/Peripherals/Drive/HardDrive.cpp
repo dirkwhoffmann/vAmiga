@@ -481,14 +481,6 @@ HardDrive::changeGeometry(const GeometryDescriptor &geometry)
 }
 
 i8
-HardDrive::read(isize partition, isize block, isize length, u32 addr)
-{
-    debug(HDR_DEBUG, "read(%ld, %ld, %ld, %u)\n", partition, block, length, addr);
-
-    return read(offset(partition, block), length, addr);
-}
-
-i8
 HardDrive::read(isize offset, isize length, u32 addr)
 {
     debug(HDR_DEBUG, "read(%ld, %ld, %u)\n", offset, length, addr);
@@ -514,14 +506,6 @@ HardDrive::read(isize offset, isize length, u32 addr)
     }
     
     return error;
-}
-
-i8
-HardDrive::write(isize partition, isize block, isize length, u32 addr)
-{
-    debug(HDR_DEBUG, "write(%ld, %ld, %ld, %u)\n", partition, block, length, addr);
-
-    return write(offset(partition, block), length, addr);
 }
 
 i8
@@ -552,12 +536,6 @@ HardDrive::write(isize offset, isize length, u32 addr)
     }
     
     return error;
-}
-
-isize
-HardDrive::offset(isize partition, isize block)
-{
-    return 512 * block;
 }
 
 i8

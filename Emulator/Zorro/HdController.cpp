@@ -190,40 +190,38 @@ HdController::poke16(u32 addr, u16 value)
 void
 HdController::processCmd()
 {
+    u8 error = 0;
+    
+    // Read the IOStdReq referenced by 'pointer'
     os::IOStdReq stdReq;
     osDebugger.read(pointer, &stdReq);
     
-    auto unit = mem.spypeek32 <ACCESSOR_CPU> (stdReq.io_Unit + 0x2A);
+    // Extract information
     auto cmd = IoCommand(stdReq.io_Command);
     auto offset = isize(stdReq.io_Offset);
     auto length = isize(stdReq.io_Length);
     auto addr = u32(stdReq.io_Data);
+    
+    if constexpr (HDR_DEBUG) {
 
-    debug(HDR_DEBUG, "Unit: %d Blck: %ld Cmd: %s\n", unit, offset / 512, IoCommandEnum::key(cmd));
-
+        auto unit = mem.spypeek32 <ACCESSOR_CPU> (stdReq.io_Unit + 0x2A);
+        auto blck = offset / 512;
+        
+        debug(true, "%d.%ld: %s\n", unit, blck, IoCommandEnum::key(cmd));
+    }
+    
     switch (cmd) {
             
         case CMD_READ:
-        {            
-            // Perform the operation
-            // auto error = drive.read(offset, length, addr);
-            auto error = drive.read(unit, offset / 512, length, addr);
 
-            // Check for errors
-            if (error) mem.patch(pointer + IO_ERROR, u8(error));
+            error = drive.read(offset, length, addr);
             break;
-        }
+
         case CMD_WRITE:
         case CMD_TD_FORMAT:
-        {
-            // Perform the operation
-            // auto error = drive.write(offset, length, addr);
-            auto error = drive.write(unit, offset / 512, length, addr);
 
-            // Check for errors
-            if (error) mem.patch(pointer + IO_ERROR, u8(error));
+            error = drive.write(offset, length, addr);
             break;
-        }
   
         case CMD_RESET:
         case CMD_UPDATE:
@@ -241,14 +239,15 @@ HdController::processCmd()
         case CMD_TD_REMCHANGEINT:
             
             mem.patch(pointer + IO_ACTUAL, u32(0));
-            mem.patch(pointer + IO_ERROR, u8(0));
             break;
             
         default:
             
-            warn("Unsupported command: %lx\n", cmd);
-            mem.patch(pointer + IO_ERROR, u8(IOERR_NOCMD));
+            warn("Unsupported cmd: %ld (%s)\n", cmd, IoCommandEnum::key(cmd));
+            error = u8(IOERR_NOCMD);
     }
+    
+    mem.patch(pointer + IO_ERROR, error);
 }
 
 void
