@@ -164,13 +164,16 @@ static const int CIASER_DEBUG    = 0; // CIA serial register
 static const int CIA_DEBUG       = 0; // CIA execution
 static const int TOD_DEBUG       = 0; // TODs (CIA 24-bit counters)
 
-// Drive
+// Floppy Drives
 static const int ALIGN_HEAD      = 0; // Make head movement deterministic
 static const int DSK_CHECKSUM    = 0; // Compute disk checksums
 static const int DSKREG_DEBUG    = 0; // Disk controller registers
 static const int DSK_DEBUG       = 0; // Disk controller execution
 static const int MFM_DEBUG       = 0; // Disk encoder / decoder
-static const int FS_DEBUG        = 1; // File System Classes (OFS / FFS)
+static const int FS_DEBUG        = 0; // File System Classes (OFS / FFS)
+
+// Hard Drives
+static const int HDR_ACCEPT_ALL  = 1; // Disables hard drive layout checks
 
 // Audio
 static const int AUDREG_DEBUG    = 0; // Audio registers

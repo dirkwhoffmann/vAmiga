@@ -105,6 +105,9 @@ GeometryDescriptor::dump(std::ostream& os) const
 void
 GeometryDescriptor::checkCompatibility() const
 {
+    if constexpr (HDR_ACCEPT_ALL) {
+        return;
+    }
     if (numBytes() > MB(504) || FORCE_HDR_TOO_LARGE) {
         throw VAError(ERROR_HDR_TOO_LARGE);
     }
