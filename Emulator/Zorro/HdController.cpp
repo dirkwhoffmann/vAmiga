@@ -191,6 +191,7 @@ void
 HdController::processCmd()
 {
     u8 error = 0;
+    u32 actual = 0;
     
     // Read the IOStdReq referenced by 'pointer'
     os::IOStdReq stdReq;
@@ -215,12 +216,14 @@ HdController::processCmd()
         case CMD_READ:
 
             error = drive.read(offset, length, addr);
+            actual = u32(length);
             break;
 
         case CMD_WRITE:
         case CMD_TD_FORMAT:
 
             error = drive.write(offset, length, addr);
+            actual = u32(length);
             break;
   
         case CMD_RESET:
@@ -238,7 +241,6 @@ HdController::processCmd()
         case CMD_TD_ADDCHANGEINT:
         case CMD_TD_REMCHANGEINT:
             
-            mem.patch(pointer + IO_ACTUAL, u32(0));
             break;
             
         default:
@@ -248,6 +250,7 @@ HdController::processCmd()
     }
     
     mem.patch(pointer + IO_ERROR, error);
+    mem.patch(pointer + IO_ACTUAL, actual);
 }
 
 void
