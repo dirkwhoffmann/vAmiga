@@ -249,8 +249,11 @@ HdController::processCmd()
             error = u8(IOERR_NOCMD);
     }
     
+    // Write back the return code
     mem.patch(pointer + IO_ERROR, error);
-    mem.patch(pointer + IO_ACTUAL, actual);
+    
+    // On success, report the number of processed bytes
+    if (!error) mem.patch(pointer + IO_ACTUAL, actual);
 }
 
 void
