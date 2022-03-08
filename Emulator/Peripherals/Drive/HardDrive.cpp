@@ -114,8 +114,22 @@ HardDrive::init(const HDFFile &hdf)
     // Copy the partition table
     ptable = hdf.getPartitionDescriptors();
 
+    // Check the drive geometry against the file size
+    auto numBytes = hdf.size;
+    
+    if (geometry.numBytes() < numBytes) {
+        
+        debug(XFILES, "HDF is too large. Ignoring excess bytes.\n");
+        numBytes = geometry.numBytes();
+    }
+    if (geometry.numBytes() > hdf.size) {
+        
+        debug(XFILES, "HDF is too small. Padding with zeroes.");
+        std::memset(data + hdf.size, 0, geometry.numBytes() - hdf.size);
+    }
+    
     // Copy over all blocks
-    hdf.flash(data);
+    hdf.flash(data, 0, numBytes);
 }
 
 const char *

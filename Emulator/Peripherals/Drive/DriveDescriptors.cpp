@@ -188,6 +188,9 @@ void PartitionDescriptor::checkCompatibility() const
     if (bsize != 512) {
         throw VAError(ERROR_HDR_UNSUPPORTED_BSIZE, std::to_string(bsize));
     }
+    if (lowCyl > highCyl) {
+        throw VAError(ERROR_HDR_CORRUPTED_PTABLE);
+    }
 }
 
 

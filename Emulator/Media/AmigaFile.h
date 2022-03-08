@@ -116,9 +116,11 @@ public:
     // Flashing
     //
             
-    // Copies the file contents into a buffer starting at the provided offset
-    virtual void flash(u8 *buf, isize offset = 0) const;
-    
+    // Copies the file contents into a buffer
+    virtual void flash(u8 *buf, isize offset, isize len) const;
+    virtual void flash(u8 *buf, isize offset) const;
+    virtual void flash(u8 *buf) const;
+
     
     //
     // Serializing

@@ -32,6 +32,18 @@ HDFFile::finalizeRead()
 {
     hdrv = getHdrvDescriptor();
     ptable = getPartitionDescriptors();
+
+    // Check the hard drive descriptor for consistency
+    hdrv.checkCompatibility();
+
+    // Check the partition table for consistency
+    for (auto &p :  ptable) {
+        
+        p.checkCompatibility();
+        if (p.highCyl > hdrv.geometry.cylinders) {
+            throw(ERROR_HDR_CORRUPTED_PTABLE);
+        }
+    }
 }
 
 void
@@ -108,8 +120,6 @@ HDFFile::getGeometryDescriptor() const
         auto geometries = GeometryDescriptor::driveGeometries(size);
         if (geometries.size()) {
             result = geometries.front();
-        } else {
-            // TODO: Throw exception
         }
     }
         

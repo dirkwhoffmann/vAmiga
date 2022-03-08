@@ -86,7 +86,7 @@
 // Hard drive geometry limits
 //
 
-#define HDR_C_MIN 256
+#define HDR_C_MIN 16
 #define HDR_C_MAX 1024
 #define HDR_H_MIN 1
 #define HDR_H_MAX 16

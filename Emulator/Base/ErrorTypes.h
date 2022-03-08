@@ -65,6 +65,7 @@ enum_long(ERROR_CODE)
     ERROR_HDR_UNSUPPORTED_BSIZE,
     ERROR_HDR_UNMATCHED_GEOMETRY,
     ERROR_HDR_UNPARTITIONED,
+    ERROR_HDR_CORRUPTED_PTABLE,
     ERROR_HDR_UNSUPPORTED,
 
     // Snapshots
@@ -74,10 +75,10 @@ enum_long(ERROR_CODE)
     ERROR_SNAP_CORRUPTED,
     
     // Media files
+    ERROR_DMS_CANT_CREATE,
     ERROR_EXT_FACTOR5,
     ERROR_EXT_INCOMPATIBLE,
     ERROR_EXT_CORRUPTED,
-    ERROR_DMS_CANT_CREATE,
     
     // Encrypted Roms
     ERROR_MISSING_ROM_KEY,
@@ -205,17 +206,17 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_HDR_UNSUPPORTED_BSIZE:       return "HDR_UNSUPPORTED_BSIZE";
             case ERROR_HDR_UNMATCHED_GEOMETRY:      return "HDR_UNMATCHED_GEOMETRY";
             case ERROR_HDR_UNPARTITIONED:           return "HDR_UNPARTITIONED";
+            case ERROR_HDR_CORRUPTED_PTABLE:        return "HDR_CORRUPTED_PTABLE";
             case ERROR_HDR_UNSUPPORTED:             return "HDR_UNSUPPORTED";
                 
             case ERROR_SNAP_TOO_OLD:                return "SNAP_TOO_OLD";
             case ERROR_SNAP_TOO_NEW:                return "SNAP_TOO_NEW";
             case ERROR_SNAP_IS_BETA:                return "SNAP_IS_BETA";
 
+            case ERROR_DMS_CANT_CREATE:             return "DMS_CANT_CREATE";
             case ERROR_EXT_FACTOR5:                 return "EXT_UNSUPPORTED";
             case ERROR_EXT_INCOMPATIBLE:            return "EXT_INCOMPATIBLE";
             case ERROR_EXT_CORRUPTED:               return "EXT_CORRUPTED";
-                
-            case ERROR_DMS_CANT_CREATE:             return "DMS_CANT_CREATE";
                 
             case ERROR_MISSING_ROM_KEY:             return "MISSING_ROM_KEY";
             case ERROR_INVALID_ROM_KEY:             return "INVALID_ROM_KEY";

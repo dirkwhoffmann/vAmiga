@@ -166,6 +166,10 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "The hard drive has no partitions.";
             break;
 
+        case ERROR_HDR_CORRUPTED_PTABLE:
+            description = "Can't parse the partition table.";
+            break;
+            
         case ERROR_HDR_UNSUPPORTED:
             description = "The hard drive is encoded in an unknown or unsupported format.";
             break;
@@ -190,6 +194,10 @@ VAError::VAError(ErrorCode code, const string &s)
             description += " emulator into an inconsistent state.";
             break;
 
+        case ERROR_DMS_CANT_CREATE:
+            description = "Failed to extract the DMS archive.";
+            break;
+
         case ERROR_EXT_FACTOR5:
             description = "The file is encoded in an outdated format that was";
             description += " introduced by Factor 5 to distribute Turrican images.";
@@ -205,10 +213,6 @@ VAError::VAError(ErrorCode code, const string &s)
         case ERROR_EXT_CORRUPTED:
             description = "The disk encoder failed to extract the disk due to ";
             description += " corrupted or inconsistend file data.";
-            break;
-
-        case ERROR_DMS_CANT_CREATE:
-            description = "Failed to extract the DMS archive.";
             break;
             
         case ERROR_MISSING_ROM_KEY:

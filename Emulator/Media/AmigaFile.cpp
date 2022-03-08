@@ -67,11 +67,25 @@ AmigaFile::~AmigaFile()
     if (data) delete[] data;
 }
 
+
+
 void
-AmigaFile::flash(u8 *buffer, isize offset) const
+AmigaFile::flash(u8 *buf, isize offset, isize len) const
 {
-    assert(buffer != nullptr);
-    std::memcpy(buffer + offset, data, size);
+    assert(buf);
+    std::memcpy(buf + offset, data, len);
+}
+
+void
+AmigaFile::flash(u8 *buf, isize offset) const
+{
+    flash (buf, offset, size);
+}
+
+void
+AmigaFile::flash(u8 *buf) const
+{
+    flash(buf, 0);
 }
 
 FileType
