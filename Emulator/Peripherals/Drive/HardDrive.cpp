@@ -83,8 +83,6 @@ HardDrive::init(const GeometryDescriptor &geometry)
     ptable.push_back(PartitionDescriptor(geometry));
         
     // Create the new drive
-    geometry.dump();
-    printf("Allocating %ld bytes\n", geometry.numBytes());
     data = new u8[geometry.numBytes()];
 }
 

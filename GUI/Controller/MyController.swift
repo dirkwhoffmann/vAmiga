@@ -246,7 +246,7 @@ extension MyController {
         // Convert 'self' to a void pointer
         let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
         
-        amiga.setListener(myself) { (ptr, type, data) in
+        amiga.setListener(myself) { (ptr, type, data1, data2) in
             
             // Convert void pointer back to 'self'
             let myself = Unmanaged<MyController>.fromOpaque(ptr!).takeUnretainedValue()
@@ -254,7 +254,7 @@ extension MyController {
             // Process message in the main thread
             DispatchQueue.main.async {
                 let mType = MsgType(rawValue: type)
-                myself.processMessage(Message(type: mType!, data: i64(data)))
+                myself.processMessage(Message(type: mType!, data1: data1, data2: data2))
             }
         }
     }
@@ -355,10 +355,10 @@ extension MyController {
     
     func processMessage(_ msg: Message) {
 
-        var word1: Int { return Int(msg.data) & 0xFFFF }
-        var word2: Int { return (Int(msg.data) >> 16) & 0xFFFF }
-        var word3: Int { return (Int(msg.data) >> 32) & 0xFFFF }
-        var word4: Int { return (Int(msg.data) >> 48) & 0xFFFF }
+        var word1: Int { return (Int(msg.data1) >> 16) & 0xFFFF }
+        var word2: Int { return Int(msg.data1) & 0xFFFF }
+        var word3: Int { return (Int(msg.data2) >> 16) & 0xFFFF }
+        var word4: Int { return Int(msg.data2) & 0xFFFF }
         
         var nr: Int { return word1 }
         var cyl: Int { return word2 }
@@ -455,10 +455,10 @@ extension MyController {
             inspector?.scrollToPC()
             
         case .BREAKPOINT_REACHED:
-            inspector?.signalBreakPoint(pc: Int(msg.data))
+            inspector?.signalBreakPoint(pc: Int(msg.data1))
             
         case .WATCHPOINT_REACHED:
-            inspector?.signalWatchPoint(pc: Int(msg.data))
+            inspector?.signalWatchPoint(pc: Int(msg.data1))
             
         case .CPU_HALT:
             refreshStatusBar()
@@ -539,10 +539,10 @@ extension MyController {
             resetAction(self)
             
         case .SER_IN:
-            serialIn += String(UnicodeScalar(Int(msg.data) & 0xFF)!)
+            serialIn += String(UnicodeScalar(Int(msg.data1) & 0xFF)!)
             
         case .SER_OUT:
-            serialOut += String(UnicodeScalar(Int(msg.data) & 0xFF)!)
+            serialOut += String(UnicodeScalar(Int(msg.data1) & 0xFF)!)
             
         case .AUTO_SNAPSHOT_TAKEN:
             mydocument.snapshots.append(amiga.latestAutoSnapshot)
