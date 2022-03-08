@@ -25,6 +25,14 @@ class HardDrive : public Drive {
     // Result of the latest inspection
     mutable HardDriveInfo info = {};
 
+    // Product information
+    string diskVendor;
+    string diskProduct;
+    string diskRevision;
+    string controllerVendor;
+    string controllerProduct;
+    string controllerRevision;
+
     // Hard drive description
     HdrvDescriptor desc;
     
@@ -100,6 +108,14 @@ private:
         
         << config.type
         << config.connected
+        << config.pan
+        << config.stepVolume
+        << diskVendor
+        << diskProduct
+        << diskRevision
+        << controllerVendor
+        << controllerProduct
+        << controllerRevision
         >> desc
         >> ptable
         << modified
@@ -134,6 +150,13 @@ private:
     
 public:
     
+    string getDiskVendor() const override { return diskVendor; }
+    string getDiskProduct() const override { return diskProduct; }
+    string getDiskRevision() const override { return diskRevision; }
+    string getControllerVendor() const override { return controllerVendor; }
+    string getControllerProduct() const override { return controllerProduct; }
+    string getControllerRevision() const override { return controllerRevision; }
+
     bool isConnected() const override;
     
     Cylinder currentCyl() const override { return head.cylinder; }

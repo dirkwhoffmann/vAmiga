@@ -28,12 +28,24 @@ public:
 
     Drive(Amiga& ref, isize nr);
         
+    isize getNr() { return nr; }
+
     
+    //
+    // Querying product information
+    //
+    
+    virtual string getDiskVendor() const { return ""; }
+    virtual string getDiskProduct() const { return ""; }
+    virtual string getDiskRevision() const { return ""; }
+    virtual string getControllerVendor() const { return ""; }
+    virtual string getControllerProduct() const { return ""; }
+    virtual string getControllerRevision() const { return ""; }
+    
+ 
     //
     // Analyzing
     //
-
-    isize getNr() { return nr; }
     
     // Returns the connection status
     virtual bool isConnected() const = 0;
@@ -55,15 +67,13 @@ public:
     virtual bool hasDisk() const = 0;
     virtual bool hasModifiedDisk() const = 0;
     virtual bool hasProtectedDisk() const = 0;
+    bool hasUnmodifiedDisk() const { return hasDisk() && !hasModifiedDisk(); }
+    bool hasUnprotectedDisk() const { return hasDisk() && !hasProtectedDisk(); }
+    void toggleWriteProtection();
 
     // Changes the modification state
     virtual void setModificationFlag(bool value) = 0;
     virtual void setProtectionFlag(bool value) = 0;
-    
-    // Convenience wrappers
-    bool hasUnmodifiedDisk() const { return hasDisk() && !hasModifiedDisk(); }
-    bool hasUnprotectedDisk() const { return hasDisk() && !hasProtectedDisk(); }
     void markDiskAsModified() { setModificationFlag(true); }
     void markDiskAsUnmodified() { setModificationFlag(false); }
-    void toggleWriteProtection();
 };

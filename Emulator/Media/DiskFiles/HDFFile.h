@@ -71,7 +71,7 @@ public:
     
     
     //
-    // Providing suitable descriptors
+    // Providing descriptors
     //
     
     struct GeometryDescriptor getGeometryDescriptor() const;
@@ -81,6 +81,20 @@ public:
     struct FileSystemDescriptor getFileSystemDescriptor(isize part = 0) const;
 
         
+    //
+    // Querying product information
+    //
+ 
+public:
+    
+    std::optional<string> getDiskVendor() const { return rdbString(160, 8); }
+    std::optional<string> getDiskProduct() const { return rdbString(168, 16); }
+    std::optional<string> getDiskRevision() const { return rdbString(184, 4); }
+    std::optional<string> getControllerVendor() const { return rdbString(188, 8); }
+    std::optional<string> getControllerProduct() const { return rdbString(196, 16); }
+    std::optional<string> getControllerRevision() const { return rdbString(212, 4); }
+     
+            
     //
     // Querying volume information
     //
@@ -121,6 +135,9 @@ private:
     // Returns a pointer to a certain partition block if it exists
     u8 *seekPB(isize nr) const;
     
+    // Returns a string from the Rigid Disk Block if it exists
+    std::optional<string> rdbString(isize offset, isize len) const;
+
     // Extracts the DOS revision number from a certain block
     FSVolumeType dos(isize nr) const;
     

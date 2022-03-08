@@ -134,25 +134,29 @@ struct HdrvDescriptor {
     GeometryDescriptor geometry;
     
     // Product information
+    /*
     string dskVendor    = "VAMIGA";
     string dskProduct   = "HDRV";
     string dskRevision  = "1.0";
     string conVendor    = "VAMIGA";
     string conProduct   = "HDRVCON";
     string conRevision  = "1.0";
+    */
     
     template <class W>
     void operator<<(W& worker)
     {
         worker
         
-        >> geometry
+        >> geometry;
+        /*
         << dskVendor
         << dskProduct
         << dskRevision
         << conVendor
         << conProduct
         << conRevision;
+        */
     }
     
     // Initializers

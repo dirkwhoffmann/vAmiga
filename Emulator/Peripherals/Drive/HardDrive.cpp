@@ -57,6 +57,12 @@ HardDrive::init()
 {
     dealloc();
 
+    diskVendor = "VAMIGA";
+    diskProduct = "VDRIVE";
+    diskRevision = "1.0";
+    controllerVendor = amiga.hdcon[nr]->vendorName();
+    controllerProduct = amiga.hdcon[nr]->productName();
+    controllerRevision = amiga.hdcon[nr]->revisionName();
     desc = HdrvDescriptor();
     ptable.clear();
     head = {};
@@ -108,7 +114,15 @@ HardDrive::init(const HDFFile &hdf)
     // Create the drive
     init(geometry);
 
-    // Copy the drive properties
+    // Copy the product description (if provided by the HDF)
+    if (auto value = hdf.getDiskProduct(); value) diskProduct = *value;
+    if (auto value = hdf.getDiskVendor(); value) diskVendor = *value;
+    if (auto value = hdf.getDiskRevision(); value) diskRevision = *value;
+    if (auto value = hdf.getControllerProduct(); value) controllerProduct = *value;
+    if (auto value = hdf.getControllerVendor(); value) controllerVendor = *value;
+    if (auto value = hdf.getControllerRevision(); value) controllerRevision = *value;
+    
+    // Copy geometry
     desc = hdf.getHdrvDescriptor();
     
     // Copy the partition table
@@ -288,6 +302,18 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         os << tab("Capacity");
         os << dec(cap1) << "." << dec(cap2) << " MB" << std::endl;
         desc.dump(os);
+        os << tab("Disk vendor");
+        os << diskVendor << std::endl;
+        os << tab("Disk Product");
+        os << diskProduct << std::endl;
+        os << tab("Disk Revision");
+        os << diskRevision << std::endl;
+        os << tab("Controller vendor");
+        os << controllerVendor << std::endl;
+        os << tab("Controller Product");
+        os << controllerProduct << std::endl;
+        os << tab("Controller Revision");
+        os << controllerRevision << std::endl;
     }
 
     if (category & dump::Volumes) {

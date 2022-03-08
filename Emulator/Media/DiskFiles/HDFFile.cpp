@@ -134,12 +134,14 @@ HDFFile::getHdrvDescriptor() const
     if (auto rdb = seekRDB(); rdb) {
 
         // Read the information from the rigid disk block
+        /*
         result.dskVendor    = util::createStr(rdb + 160, 8);
         result.dskProduct   = util::createStr(rdb + 168, 16);
         result.dskRevision  = util::createStr(rdb + 184, 4);
         result.conVendor    = util::createStr(rdb + 188, 8);
         result.conProduct   = util::createStr(rdb + 196, 16);
         result.conRevision  = util::createStr(rdb + 212, 4);
+        */
     }
     
     result.geometry = getGeometryDescriptor();
@@ -349,6 +351,16 @@ HDFFile::seekPB(isize nr) const
     }
     
     return result;
+}
+
+std::optional<string>
+HDFFile::rdbString(isize offset, isize len) const
+{
+    if (auto rdb = seekRDB(); rdb) {
+        return util::createStr(rdb + offset, len);
+    }
+    
+    return { };
 }
 
 FSVolumeType
