@@ -17,8 +17,8 @@ class FloppyDisk;
 
 class HDFFile : public DiskFile {
     
-    // Derived hard drive descriptor
-    HdrvDescriptor hdrv;
+    // Derived drive geometry
+    GeometryDescriptor geometry;
 
     // Derived partition table
     std::vector<PartitionDescriptor> ptable;
@@ -75,7 +75,6 @@ public:
     //
     
     struct GeometryDescriptor getGeometryDescriptor() const;
-    struct HdrvDescriptor getHdrvDescriptor() const;
     struct PartitionDescriptor getPartitionDescriptor(isize part = 0) const;
     std::vector<PartitionDescriptor> getPartitionDescriptors() const;
     struct FileSystemDescriptor getFileSystemDescriptor(isize part = 0) const;
@@ -102,7 +101,7 @@ public:
 public:
     
     // Returns the (predicted) geometry for this disk
-    const GeometryDescriptor getGeometry() const;
+    const GeometryDescriptor getGeometry() const { return geometry; }
     
     // Returns true if this image contains a rigid disk block
     bool hasRDB() const;

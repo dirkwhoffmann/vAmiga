@@ -30,17 +30,17 @@ HDFFile::isCompatible(std::istream &stream)
 void
 HDFFile::finalizeRead()
 {
-    hdrv = getHdrvDescriptor();
+    geometry = getGeometryDescriptor();
     ptable = getPartitionDescriptors();
 
     // Check the hard drive descriptor for consistency
-    hdrv.checkCompatibility();
+    geometry.checkCompatibility();
 
     // Check the partition table for consistency
     for (auto &p :  ptable) {
         
         p.checkCompatibility();
-        if (isize(p.highCyl) > hdrv.geometry.cylinders) {
+        if (isize(p.highCyl) > geometry.cylinders) {
             throw(ERROR_HDR_CORRUPTED_PTABLE);
         }
     }
@@ -76,29 +76,29 @@ HDFFile::init(const HardDrive &drive)
     // TODO: THIS FUNCTION IS A PERFORMANCE KILLER FOR LARGE BUFFERS
     {   MEASURE_TIME("AmigaFile::init(const u8 *buf, isize len)")
         
-        AmigaFile::init(drive.data, drive.desc.geometry.numBytes());
+        AmigaFile::init(drive.data, drive.geometry.numBytes());
     }
     
     // Overwrite the predicted geometry from the precise one
-    hdrv.geometry = drive.getGeometry();
+    geometry = drive.getGeometry();
 }
 
 isize
 HDFFile::numCyls() const
 {
-    return hdrv.geometry.cylinders;
+    return geometry.cylinders;
 }
 
 isize
 HDFFile::numHeads() const
 {
-    return hdrv.geometry.heads;
+    return geometry.heads;
 }
 
 isize
 HDFFile::numSectors() const
 {
-    return hdrv.geometry.sectors;
+    return geometry.sectors;
 }
 
 GeometryDescriptor
@@ -123,29 +123,6 @@ HDFFile::getGeometryDescriptor() const
         }
     }
         
-    return result;
-}
-
-HdrvDescriptor
-HDFFile::getHdrvDescriptor() const
-{
-    HdrvDescriptor result;
-            
-    if (auto rdb = seekRDB(); rdb) {
-
-        // Read the information from the rigid disk block
-        /*
-        result.dskVendor    = util::createStr(rdb + 160, 8);
-        result.dskProduct   = util::createStr(rdb + 168, 16);
-        result.dskRevision  = util::createStr(rdb + 184, 4);
-        result.conVendor    = util::createStr(rdb + 188, 8);
-        result.conProduct   = util::createStr(rdb + 196, 16);
-        result.conRevision  = util::createStr(rdb + 212, 4);
-        */
-    }
-    
-    result.geometry = getGeometryDescriptor();
-    
     return result;
 }
 
@@ -266,12 +243,6 @@ HDFFile::getFileSystemDescriptor(isize nr) const
     }
     
     return result;
-}
-
-const GeometryDescriptor
-HDFFile::getGeometry() const
-{
-    return hdrv.geometry;
 }
 
 bool

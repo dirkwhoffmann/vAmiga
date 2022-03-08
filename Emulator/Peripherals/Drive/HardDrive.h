@@ -33,8 +33,8 @@ class HardDrive : public Drive {
     string controllerProduct;
     string controllerRevision;
 
-    // Hard drive description
-    HdrvDescriptor desc;
+    // Hard disk geometry
+    GeometryDescriptor geometry;
     
     // Partition table
     std::vector<PartitionDescriptor> ptable;
@@ -116,7 +116,7 @@ private:
         << controllerVendor
         << controllerProduct
         << controllerRevision
-        >> desc
+        >> geometry
         >> ptable
         << modified
         << writeProtected;
@@ -196,7 +196,7 @@ public:
     const PartitionDescriptor &getPartitionInfo(isize nr);
     
     // Returns the disk geometry
-    const GeometryDescriptor &getGeometry() const { return desc.geometry; }
+    const GeometryDescriptor &getGeometry() const { return geometry; }
 
     // Returns the number of partitions
     isize numPartitions() const { return isize(ptable.size()); }
