@@ -121,7 +121,7 @@ IMGFile::encodeTrack(FloppyDisk &disk, Track t) const
     
     // Compute a checksum for debugging
     debug(IMG_DEBUG, "Track %ld checksum = %x\n",
-          t, util::fnv_1a_32(disk.data.track[t], disk.length.track[t]));
+          t, util::fnv32(disk.data.track[t], disk.length.track[t]));
 }
 
 void

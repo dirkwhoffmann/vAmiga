@@ -149,8 +149,8 @@ void Blitter::doFastCopyBlit()
                 mem.poke16 <ACCESSOR_AGNUS> (dpt, dhold);
 
                 if (BLT_CHECKSUM) {
-                    check1 = util::fnv_1a_it32(check1, dhold);
-                    check2 = util::fnv_1a_it32(check2, dpt & agnus.ptrMask);
+                    check1 = util::fnvIt32(check1, dhold);
+                    check2 = util::fnvIt32(check2, dpt & agnus.ptrMask);
                 }
                 trace(BLT_DEBUG, "    D = %X -> %X\n", dhold, dpt);
                 
@@ -291,8 +291,8 @@ Blitter::doFastLineBlit()
             mem.poke16 <ACCESSOR_AGNUS> (bltdpt, dhold);
             
             if (BLT_CHECKSUM) {
-                check1 = util::fnv_1a_it32(check1, dhold);
-                check2 = util::fnv_1a_it32(check2, bltdpt & agnus.ptrMask);
+                check1 = util::fnvIt32(check1, dhold);
+                check2 = util::fnvIt32(check2, bltdpt & agnus.ptrMask);
             }
         }
         
@@ -405,8 +405,8 @@ Blitter::doLegacyFastLineBlit()
             mem.poke16 <ACCESSOR_AGNUS> (bltdpt_local, bltddat_local);
 
             if (BLT_CHECKSUM) {
-                check1 = util::fnv_1a_it32(check1, bltddat_local);
-                check2 = util::fnv_1a_it32(check2, bltdpt_local & agnus.ptrMask);
+                check1 = util::fnvIt32(check1, bltddat_local);
+                check2 = util::fnvIt32(check2, bltdpt_local & agnus.ptrMask);
             }
         }
         

@@ -109,7 +109,7 @@ public:
     virtual string sizeAsString();
     
     // Returns a fingerprint (hash value) for this file
-    virtual u64 fnv() const { return util::fnv_1a_64(data, size); }
+    virtual u64 fnv() const { return util::fnv64(data, size); }
         
     
     //

@@ -482,8 +482,8 @@ DiskController::performDMARead(FloppyDrive *drive, u32 remaining)
         if constexpr (DSK_CHECKSUM) {
             
             checkcnt++;
-            check1 = util::fnv_1a_it32(check1, word);
-            check2 = util::fnv_1a_it32(check2, agnus.dskpt & agnus.ptrMask);
+            check1 = util::fnvIt32(check1, word);
+            check2 = util::fnvIt32(check2, agnus.dskpt & agnus.ptrMask);
         }
         agnus.doDiskDmaWrite(word);
         
@@ -521,12 +521,12 @@ DiskController::performDMAWrite(FloppyDrive *drive, u32 remaining)
         // Read next word from memory
         if constexpr (DSK_CHECKSUM) {
             checkcnt++;
-            check2 = util::fnv_1a_it32(check2, agnus.dskpt & agnus.ptrMask);
+            check2 = util::fnvIt32(check2, agnus.dskpt & agnus.ptrMask);
         }
         u16 word = agnus.doDiskDmaRead();
         
         if constexpr (DSK_CHECKSUM) {
-            check1 = util::fnv_1a_it32(check1, word);
+            check1 = util::fnvIt32(check1, word);
         }
         
         // Write word into FIFO buffer
@@ -623,8 +623,8 @@ DiskController::performTurboRead(FloppyDrive *drive)
         if constexpr (DSK_CHECKSUM) {
             
             checkcnt++;
-            check1 = util::fnv_1a_it32(check1, word);
-            check2 = util::fnv_1a_it32(check2, agnus.dskpt & agnus.ptrMask);
+            check1 = util::fnvIt32(check1, word);
+            check2 = util::fnvIt32(check2, agnus.dskpt & agnus.ptrMask);
         }
         mem.poke16 <ACCESSOR_AGNUS> (agnus.dskpt, word);
         agnus.dskpt += 2;
@@ -651,8 +651,8 @@ DiskController::performTurboWrite(FloppyDrive *drive)
         if constexpr (DSK_CHECKSUM) {
             
             checkcnt++;
-            check1 = util::fnv_1a_it32(check1, word);
-            check2 = util::fnv_1a_it32(check2, agnus.dskpt & agnus.ptrMask);
+            check1 = util::fnvIt32(check1, word);
+            check2 = util::fnvIt32(check2, agnus.dskpt & agnus.ptrMask);
         }
         
         agnus.dskpt += 2;

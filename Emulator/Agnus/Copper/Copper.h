@@ -85,7 +85,7 @@ public:
 private:
 
     u64 checkcnt = 0;
-    u32 checksum = util::fnv_1a_init32();
+    u32 checksum = util::fnvInit32();
 
 
     //

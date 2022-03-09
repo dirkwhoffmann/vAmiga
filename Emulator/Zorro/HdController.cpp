@@ -76,7 +76,7 @@ HdController::_reset(bool hard)
 bool
 HdController::pluggedIn() const
 {
-    return drive.isConnected() && drive.data;
+    return drive.isConnected() && !drive.data.empty();
 }
 
 void

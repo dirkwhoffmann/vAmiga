@@ -52,7 +52,7 @@ AmigaComponent::checksum()
     
     // Compute checksums for all subcomponents
     for (AmigaComponent *c : subComponents) {
-        result = util::fnv_1a_it64(result, c->checksum());
+        result = util::fnvIt64(result, c->checksum());
     }
     
     return result;

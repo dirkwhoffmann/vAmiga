@@ -10,7 +10,7 @@
 #pragma once
 
 #include "Macros.h"
-#include "Checksum.h"
+#include "MemUtils.h"
 #include <vector>
 
 namespace util {
@@ -139,6 +139,12 @@ public:
     COUNTD(const float)
     COUNTD(const double)
        
+    auto& operator<<(Allocator &a)
+    {
+        count += 8 + a.size;
+        return *this;
+    }
+
     auto& operator<<(string &v)
     {
         auto len = v.length();
@@ -164,7 +170,7 @@ public:
         }
         return *this;
     }
-    
+        
     template <class T>
     SerCounter& operator>>(T &v)
     {
@@ -190,7 +196,7 @@ public:
 #define CHECK(type) \
 auto& operator<<(type& v) \
 { \
-hash += util::fnv_1a_it64(hash, (u64)v); \
+hash = util::fnvIt64(hash, (u64)v); \
 return *this; \
 }
 
@@ -200,7 +206,7 @@ public:
 
     u64 hash;
 
-    SerChecker() { hash = fnv_1a_init64(); }
+    SerChecker() { hash = fnvInit64(); }
 
     CHECK(const bool)
     CHECK(const char)
@@ -217,11 +223,17 @@ public:
     CHECK(const float)
     CHECK(const double)
        
+    auto& operator<<(Allocator &a)
+    {
+        hash = util::fnvIt64(hash, a.fnv64());
+        return *this;
+    }
+    
     auto& operator<<(string &v)
     {
         auto len = v.length();
         for (usize i = 0; i < len; i++) {
-            hash += util::fnv_1a_it64(hash, v[i]);
+            hash = util::fnvIt64(hash, v[i]);
         }
         return *this;
     }
@@ -303,7 +315,16 @@ public:
     DESERIALIZE64(unsigned long long)
     DESERIALIZED(float)
     DESERIALIZED(double)
-    
+
+    auto& operator<<(Allocator &a)
+    {
+        i64 len;
+        *this << len;
+        a.read(ptr, len);
+        ptr += len;
+        return *this;
+    }
+
     auto& operator<<(string &v)
     {
         v = readString(ptr);
@@ -398,6 +419,14 @@ public:
     SERIALIZED(const float)
     SERIALIZED(const double)
 
+    auto& operator<<(Allocator &a)
+    {
+        *this << i64(a.size);
+        a.write(ptr);
+        ptr += a.size;
+        return *this;
+    }
+
     auto& operator<<(const string &v)
     {
         writeString(ptr, v);
@@ -482,6 +511,12 @@ public:
     RESET(unsigned long long)
     RESET(float)
     RESET(double)
+
+    auto& operator<<(Allocator &a)
+    {
+        a.clear();
+        return *this;
+    }
 
     auto& operator<<(string &v)
     {

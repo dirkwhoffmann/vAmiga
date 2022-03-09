@@ -13,6 +13,124 @@
 
 namespace util {
 
+Allocator::Allocator(u8 *&ptr) : ptr(ptr)
+{
+    ptr = nullptr;
+    size = 0;
+}
+
+Allocator::~Allocator()
+{
+    dealloc();
+}
+
+void
+Allocator::alloc(isize bytes)
+{
+    printf("Allocator::alloc(%ld)\n", bytes);
+
+    assert(usize(bytes) <= maxCapacity);
+    assert((size == 0) == (ptr == nullptr));
+
+    if (size != bytes) try {
+        
+        dealloc();
+        
+        size = bytes;
+        ptr = new u8[size];
+        
+    } catch (...) {
+        
+        size = 0;
+        ptr = nullptr;
+    }
+}
+
+void
+Allocator::dealloc()
+{
+    printf("Allocator::dealloc()\n");
+    
+    assert((size == 0) == (ptr == nullptr));
+
+    if (ptr) {
+        
+        delete [] ptr;
+        ptr = nullptr;
+        size = 0;
+    }
+}
+
+void
+Allocator::clear(u8 value)
+{
+    if (ptr) memset((void *)ptr, value, size);
+}
+
+void
+Allocator::resize(isize bytes)
+{
+    printf("Allocator::resize(%ld)\n", bytes);
+
+    assert((size == 0) == (ptr == nullptr));
+
+    if (size != bytes) {
+        
+        if (bytes == 0) {
+            
+            dealloc();
+            
+        } else try {
+            
+            auto newPtr = new u8[bytes];
+            memcpy(newPtr, ptr, std::min(size, bytes));
+            dealloc();
+            ptr = (u8 *)newPtr;
+            size = bytes;
+            
+        } catch (...) {
+            
+            size = 0;
+            ptr = nullptr;
+        }
+    }
+}
+
+void
+Allocator::resize(isize bytes, u8 value)
+{
+    assert((size == 0) == (ptr == nullptr));
+
+    auto gap = bytes > size ? bytes - size : 0;
+    
+    resize(bytes);
+    if (ptr) memset((void *)(ptr + size - gap), value, gap);
+}
+
+void
+Allocator::read(const u8 *buf, isize len)
+{
+    printf("Allocator::alloc(%p,%ld)\n", (void *)buf, len);
+
+    assert((size == 0) == (ptr == nullptr));
+    assert(buf);
+    
+    resize(len);
+    if (ptr) memcpy((void *)ptr, (const void *)buf, len);
+}
+
+void
+Allocator::write(u8 *buf, isize offset, isize len) const
+{
+    printf("Allocator::alloc(%p,%ld,%ld)\n", (void *)buf, offset, len);
+
+    assert(buf);
+    assert((size == 0) == (ptr == nullptr));
+    assert(offset + len <= size);
+    
+    if (ptr) memcpy((void *)buf, (void *)(ptr + offset), len);
+}
+
 bool isZero(const u8 *ptr, usize size)
 {
     for (usize i = 0; i < size; i++) {

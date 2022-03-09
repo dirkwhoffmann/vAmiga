@@ -12,6 +12,7 @@
 #include "HardDriveTypes.h"
 #include "Drive.h"
 #include "HDFFile.h"
+#include "MemUtils.h"
 #include "SchedulerTypes.h"
 
 class HardDrive : public Drive {
@@ -32,7 +33,8 @@ class HardDrive : public Drive {
     std::vector<PartitionDescriptor> ptable;
             
     // Disk data
-    u8 *data = nullptr;
+    // u8 *data = nullptr;
+    util::Buffer data;
     
     // Current position of the read/write head
     DriveHead head;

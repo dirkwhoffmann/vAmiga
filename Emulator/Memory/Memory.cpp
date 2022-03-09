@@ -80,17 +80,17 @@ Memory::_dump(dump::Category category, std::ostream& os) const
     if (category & dump::Checksums) {
 
         os << util::tab("Rom checksum");
-        os << util::hex(util::fnv_1a_32(rom, config.romSize)) << std::endl;
+        os << util::hex(util::fnv32(rom, config.romSize)) << std::endl;
         os << util::tab("Wom checksum");
-        os << util::hex(util::fnv_1a_32(wom, config.womSize)) << std::endl;
+        os << util::hex(util::fnv32(wom, config.womSize)) << std::endl;
         os << util::tab("Extended Rom checksum");
-        os << util::hex(util::fnv_1a_32(ext, config.extSize)) << std::endl;
+        os << util::hex(util::fnv32(ext, config.extSize)) << std::endl;
         os << util::tab("Chip Ram checksum");
-        os << util::hex(util::fnv_1a_32(chip, config.chipSize)) << std::endl;
+        os << util::hex(util::fnv32(chip, config.chipSize)) << std::endl;
         os << util::tab("Slow Ram checksum");
-        os << util::hex(util::fnv_1a_32(slow, config.slowSize)) << std::endl;
+        os << util::hex(util::fnv32(slow, config.slowSize)) << std::endl;
         os << util::tab("Fast Ram checksum");
-        os << util::hex(util::fnv_1a_32(fast, config.fastSize)) << std::endl;
+        os << util::hex(util::fnv32(fast, config.fastSize)) << std::endl;
     }
     
     if (category & dump::BankMap) {
