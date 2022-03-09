@@ -170,7 +170,7 @@ private:
 public:
     
     // Optional storage for recording memory locations if BLT_GUARD is enabled
-    u8 *memguard = nullptr;
+    util::Buffer memguard;
     
  
     //
@@ -180,7 +180,6 @@ public:
 public:
     
     Blitter(Amiga& ref);
-    ~Blitter();
     
 private:
     
@@ -206,6 +205,7 @@ private:
     
     void _initialize() override;
     void _reset(bool hard) override;
+    void _run() override;
     void _inspect() const override;
 
     template <class T>

@@ -27,7 +27,7 @@ Allocator::~Allocator()
 void
 Allocator::alloc(isize bytes)
 {
-    printf("Allocator::alloc(%ld)\n", bytes);
+    // printf("Allocator::alloc(%ld)\n", bytes);
 
     assert(usize(bytes) <= maxCapacity);
     assert((size == 0) == (ptr == nullptr));
@@ -49,7 +49,7 @@ Allocator::alloc(isize bytes)
 void
 Allocator::dealloc()
 {
-    printf("Allocator::dealloc()\n");
+    // printf("Allocator::dealloc()\n");
     
     assert((size == 0) == (ptr == nullptr));
 
@@ -71,7 +71,7 @@ Allocator::clear(u8 value, isize offset)
 void
 Allocator::resize(isize bytes)
 {
-    printf("Allocator::resize(%ld)\n", bytes);
+    // printf("Allocator::resize(%ld)\n", bytes);
 
     assert((size == 0) == (ptr == nullptr));
 
@@ -111,7 +111,7 @@ Allocator::resize(isize bytes, u8 value)
 void
 Allocator::read(const u8 *buf, isize len)
 {
-    printf("Allocator::alloc(%p,%ld)\n", (void *)buf, len);
+    // printf("Allocator::alloc(%p,%ld)\n", (void *)buf, len);
 
     assert((size == 0) == (ptr == nullptr));
     assert(buf);
@@ -123,7 +123,7 @@ Allocator::read(const u8 *buf, isize len)
 void
 Allocator::write(u8 *buf, isize offset, isize len) const
 {
-    printf("Allocator::alloc(%p,%ld,%ld)\n", (void *)buf, offset, len);
+    // printf("Allocator::alloc(%p,%ld,%ld)\n", (void *)buf, offset, len);
 
     assert(buf);
     assert((size == 0) == (ptr == nullptr));
