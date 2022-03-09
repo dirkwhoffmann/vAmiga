@@ -38,21 +38,6 @@ HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
     }
 }
 
-/*
-void
-HardDrive::alloc(isize size)
-{
-    // dealloc();
-    data.resize(size);
-}
-
-void
-HardDrive::dealloc()
-{
-    data.dealloc();
-}
-*/
-
 void
 HardDrive::init()
 {
@@ -115,15 +100,15 @@ HardDrive::init(const HDFFile &hdf)
     // Check the drive geometry against the file size
     auto numBytes = hdf.size;
     
-    if (geometry.numBytes() < numBytes) {
+    if (data.size() < numBytes) {
         
         debug(XFILES, "HDF is too large. Ignoring excess bytes.\n");
-        numBytes = geometry.numBytes();
+        numBytes = data.size();
     }
-    if (geometry.numBytes() > hdf.size) {
+    if (data.size() > hdf.size) {
         
         debug(XFILES, "HDF is too small. Padding with zeroes.");
-        std::memset(data.ptr + hdf.size, 0, geometry.numBytes() - hdf.size);
+        data.clear(0, hdf.size);
     }
     
     // Copy over all blocks

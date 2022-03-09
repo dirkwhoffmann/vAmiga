@@ -62,9 +62,10 @@ Allocator::dealloc()
 }
 
 void
-Allocator::clear(u8 value)
+Allocator::clear(u8 value, isize offset)
 {
-    if (ptr) memset((void *)ptr, value, size);
+    assert(offset >= 0 && offset <= size);
+    if (ptr) memset((void *)(ptr + offset), value, size - offset);
 }
 
 void

@@ -49,8 +49,8 @@ struct Allocator {
     void dealloc();
 
     // Initilizes the buffer with a default value
-    void clear(u8 value = 0);
-    
+    void clear(u8 value = 0, isize offset = 0);
+
     // Resizes an existing buffer
     void resize(isize bytes);
     void resize(isize bytes, u8 value);
@@ -76,7 +76,7 @@ struct Buffer {
     void alloc(isize bytes) { allocator.alloc(bytes); }
     void alloc(isize bytes, u8 value) { allocator.alloc(bytes, value); }
     void dealloc() { allocator.dealloc(); }
-    void clear(u8 value = 0) { allocator.clear(value); }
+    void clear(u8 value = 0, isize offset = 0) { allocator.clear(value, offset); }
     void resize(isize bytes) { allocator.resize(bytes); }
     void resize(isize bytes, u8 value) { allocator.resize(bytes, value); }
     void read(const u8 *buf, isize len) { allocator.read(buf, len); }
@@ -86,6 +86,8 @@ struct Buffer {
     u64 fnv64() const { return allocator.fnv64(); }
     u16 crc16() const { return allocator.crc16(); }
     u32 crc32() const { return allocator.crc32(); }
+    
+    isize size() const { return allocator.size; }
     
     u8 operator [] (isize i) const { return ptr[i]; }
     u8 &operator [] (isize i) { return ptr[i]; }
