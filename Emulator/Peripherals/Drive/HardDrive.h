@@ -33,7 +33,6 @@ class HardDrive : public Drive {
     std::vector<PartitionDescriptor> ptable;
             
     // Disk data
-    // u8 *data = nullptr;
     util::Buffer data;
     
     // Current position of the read/write head
@@ -54,15 +53,11 @@ class HardDrive : public Drive {
 public:
 
     HardDrive(Amiga& ref, isize nr);
-    ~HardDrive() { dealloc(); }
 
     // Allocates or deallocates drive memory
-    void alloc(isize size);
-    void dealloc();
-    
-    // Starts from scratch
-    void init();
-    
+    // void alloc(isize size) { data.resize(size); }
+    // void dealloc();
+        
     // Creates a hard drive with a certain geometry
     void init(const GeometryDescriptor &geometry);
 
@@ -74,6 +69,11 @@ public:
 
     // Creates a hard drive with the contents of an HDF
     void init(const HDFFile &hdf) throws;
+
+private:
+
+    // Restors the initial state
+    void init();
 
     
     //
@@ -104,6 +104,7 @@ private:
         << config.connected
         >> desc
         >> ptable
+        << data
         << modified
         << writeProtected;
     }
@@ -122,12 +123,10 @@ private:
         }
     }
 
-    isize _size() override;
+    isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-    isize didLoadFromBuffer(const u8 *buffer) override;
-    isize didSaveToBuffer(u8 *buffer) override;
 
     
     //

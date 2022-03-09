@@ -38,29 +38,25 @@ HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
     }
 }
 
+/*
 void
 HardDrive::alloc(isize size)
 {
-    dealloc();
-    // if (size) data = new u8[size];
-    data.alloc(size);
+    // dealloc();
+    data.resize(size);
 }
 
 void
 HardDrive::dealloc()
 {
     data.dealloc();
-    /*
-    if (data) delete [] data;
-    data = nullptr;
-    */
 }
+*/
 
 void
 HardDrive::init()
 {
-    dealloc();
-
+    data.dealloc();
     desc = HdrvDescriptor();
     ptable.clear();
     head = {};
@@ -81,8 +77,7 @@ HardDrive::init(const GeometryDescriptor &geometry)
     ptable.push_back(PartitionDescriptor(geometry));
         
     // Create the new drive
-    // data = new u8[geometry.numBytes()];
-    data.alloc(geometry.numBytes());
+    data.resize(geometry.numBytes());
 }
 
 void
@@ -340,60 +335,6 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         os << tab("Write protected");
         os << bol(writeProtected) << std::endl;
     }
-}
-
-isize
-HardDrive::_size()
-{
-    util::SerCounter counter;
-
-    // Determine size information
-    auto dataSize = desc.geometry.numBytes() + 8;
-
-    applyToPersistentItems(counter);
-    applyToResetItems(counter);
-    
-    counter.count += dataSize;
-    return counter.count;
-}
-
-isize
-HardDrive::didLoadFromBuffer(const u8 *buffer)
-{
-    util::SerReader reader(buffer);
-    isize dataSize;
-
-    // Load size information
-    reader << dataSize;
-
-    // Allocate memory
-    if (dataSize > MB(504)) throw VAError(ERROR_SNAP_CORRUPTED);
-    alloc(isize(dataSize));
-
-    // Load data
-    // debug(true, "data = %p size = %ld\n", (void *)data, dataSize);
-    // debug(true, "numBytes = %ld\n", desc.geometry.numBytes());
-    assert(dataSize == desc.geometry.numBytes());
-    reader.copy(data.ptr, dataSize);
-
-    return (isize)(reader.ptr - buffer);
-}
-
-isize
-HardDrive::didSaveToBuffer(u8 *buffer)
-{
-    util::SerWriter writer(buffer);
-
-    // Determine size information
-    isize dataSize = desc.geometry.numBytes();
-
-    // Save size information
-    writer << dataSize;
- 
-    // Write data
-    writer.copy(data.ptr, dataSize);
-
-    return (isize)(writer.ptr - buffer);
 }
 
 bool
