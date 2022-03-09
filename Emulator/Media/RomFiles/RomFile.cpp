@@ -10,6 +10,7 @@
 #include "config.h"
 #include "RomFile.h"
 #include "IOUtils.h"
+#include "MemUtils.h"
 
 //
 // Boot Roms
@@ -596,7 +597,6 @@ RomFile::decrypt()
     for (isize i = 0; i < size - headerSize; i++) {
         decryptedData[i] = encryptedData[i] ^ romKeyData[i % romKeySize];
     }
-    delete [] romKeyData;
 
     // Replace the old data by the decrypted data
     delete [] data;

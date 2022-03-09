@@ -59,7 +59,11 @@ struct Allocator {
     void read(const u8 *buf, isize len);
     void write(u8 *buf, isize offset, isize len) const;
     void write(u8 *buf) const { write(buf, 0, size); }
-
+        
+    // TODO: Rename to init and move up
+    bool import(const string &path);
+    bool import(const string &path, const string &name);
+    
     // Replaces a byte or character sequence by another one
     void replace(const u8 *seq, const u8 *subst);
     void replace(const char *seq, const char *subst);
@@ -86,6 +90,9 @@ struct Buffer {
     void read(const u8 *buf, isize len) { allocator.read(buf, len); }
     void write(u8 *buf, isize offset, isize len) const { allocator.write(buf, offset, len); }
     void write(u8 *buf) { allocator.write(buf); } const
+    // TODO: Throw exception instead of returning bool 
+    bool import(const string &path) { return allocator.import(path); }
+    bool import(const string &path, const string &name) { return allocator.import(path, name); }
     void replace(const u8 *seq, const u8 *subst) { allocator.replace(seq, subst); }
     void replace(const char *seq, const char *subst) { allocator.replace(seq, subst); }
     u32 fnv32() const { return allocator.fnv32(); }

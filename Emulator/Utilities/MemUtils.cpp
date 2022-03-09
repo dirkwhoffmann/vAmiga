@@ -10,6 +10,8 @@
 #include "config.h"
 #include "MemUtils.h"
 #include "string.h"
+#include "IOUtils.h"
+#include <fstream>
 
 namespace util {
 
@@ -130,6 +132,25 @@ Allocator::write(u8 *buf, isize offset, isize len) const
     assert(offset + len <= size);
     
     if (ptr) memcpy((void *)buf, (void *)(ptr + offset), len);
+}
+
+bool
+Allocator::import(const string &path)
+{
+    std::ifstream stream(path, std::ifstream::binary);
+    if (!stream.is_open()) return false;
+ 
+    auto length = streamLength(stream);
+    alloc(length);
+    stream.read((char *)ptr, size);
+    
+    return true;
+}
+
+bool
+Allocator::import(const string &path, const string &name)
+{
+    return import(path + "/" + name);
 }
 
 void
