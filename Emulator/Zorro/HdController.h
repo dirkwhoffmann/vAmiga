@@ -21,8 +21,8 @@ class HdController : public ZorroBoard {
     // The hard drive this controller is connected to
     HardDrive &drive;
     
-    // Controller Rom code
-    u8 *rom = nullptr;
+    // Rom code
+    util::Buffer rom;
     
     // Transmitted pointer
     u32 pointer = 0;
@@ -58,7 +58,7 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-
+        // worker << rom;
     }
 
     template <class T>
@@ -68,8 +68,8 @@ private:
             
             worker
             
-            << state
             << baseAddr
+            << state
             << pointer;
         }
     }

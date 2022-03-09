@@ -132,6 +132,18 @@ Allocator::write(u8 *buf, isize offset, isize len) const
     if (ptr) memcpy((void *)buf, (void *)(ptr + offset), len);
 }
 
+void
+Allocator::replace(const u8 *seq, const u8 *subst)
+{
+    if (ptr) util::replace(ptr, size, seq, subst);
+}
+
+void
+Allocator::replace(const char *seq, const char *subst)
+{
+    if (ptr) util::replace((char *)ptr, size, seq, subst);
+}
+
 bool isZero(const u8 *ptr, usize size)
 {
     for (usize i = 0; i < size; i++) {

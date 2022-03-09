@@ -60,6 +60,10 @@ struct Allocator {
     void write(u8 *buf, isize offset, isize len) const;
     void write(u8 *buf) const { write(buf, 0, size); }
 
+    // Replaces a byte or character sequence by another one
+    void replace(const u8 *seq, const u8 *subst);
+    void replace(const char *seq, const char *subst);
+
     // Computes a checksum of a certain kind
     u32 fnv32() const { return ptr ? util::fnv32(ptr, size) : 0; }
     u64 fnv64() const { return ptr ? util::fnv64(ptr, size) : 0; }
@@ -82,6 +86,8 @@ struct Buffer {
     void read(const u8 *buf, isize len) { allocator.read(buf, len); }
     void write(u8 *buf, isize offset, isize len) const { allocator.write(buf, offset, len); }
     void write(u8 *buf) { allocator.write(buf); } const
+    void replace(const u8 *seq, const u8 *subst) { allocator.replace(seq, subst); }
+    void replace(const char *seq, const char *subst) { allocator.replace(seq, subst); }
     u32 fnv32() const { return allocator.fnv32(); }
     u64 fnv64() const { return allocator.fnv64(); }
     u16 crc16() const { return allocator.crc16(); }

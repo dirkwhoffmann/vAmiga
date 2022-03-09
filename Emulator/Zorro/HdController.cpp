@@ -18,14 +18,6 @@
 HdController::HdController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref), drive(hdr)
 {
     nr = drive.getNr();
-    
-    // Copy Rom code
-    rom = new u8[EXPROM_SIZE];
-    std::memcpy((u8 *)rom, exprom, EXPROM_SIZE);
-    
-    // Make the device name unique
-    char dosName[] = "hrddrive?.device"; dosName[8] = char('0' + nr);
-    util::replace((char *)rom, EXPROM_SIZE, "virtualhd.device", dosName);
 }
 
 const char *
@@ -62,14 +54,15 @@ HdController::_reset(bool hard)
     
     if (hard) {
         
-        if (pluggedIn())  {
-            
-            state = STATE_AUTOCONF;
-            
-        } else {
-            
-            state = STATE_SHUTUP;
-        }
+        // Burn Rom
+        rom.read(exprom, EXPROM_SIZE);
+        
+        // Make the device name unique
+        char dosName[] = "hrddrive?.device"; dosName[8] = char('0' + nr);
+        rom.replace("virtualhd.device", dosName);
+
+        // Set initial state
+        state = pluggedIn() ? STATE_AUTOCONF : STATE_SHUTUP;
     }
 }
 
@@ -111,7 +104,7 @@ u8
 HdController::spypeek8(u32 addr) const
 {
     isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
-    return offset < EXPROM_SIZE ? rom[offset] : 0;
+    return offset < rom.size() ? rom[offset] : 0;
 }
 
 u16
@@ -135,7 +128,7 @@ HdController::spypeek16(u32 addr) const
         default:
             
             // Return Rom code
-            return offset < EXPROM_SIZE ? HI_LO(rom[offset], rom[offset + 1]) : 0;
+            return offset < rom.size() ? HI_LO(rom[offset], rom[offset + 1]) : 0;
     }
 }
 
