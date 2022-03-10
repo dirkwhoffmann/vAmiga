@@ -55,11 +55,11 @@ HdController::_reset(bool hard)
     if (hard) {
         
         // Burn Rom
-        rom.read(exprom, EXPROM_SIZE);
+        rom.init(exprom, EXPROM_SIZE);
         
         // Make the device name unique
         char dosName[] = "hrddrive?.device"; dosName[8] = char('0' + nr);
-        rom.replace("virtualhd.device", dosName);
+        rom.patch("virtualhd.device", dosName);
 
         // Set initial state
         state = pluggedIn() ? STATE_AUTOCONF : STATE_SHUTUP;

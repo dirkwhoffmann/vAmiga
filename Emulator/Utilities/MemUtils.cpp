@@ -21,15 +21,25 @@ Allocator::Allocator(u8 *&ptr) : ptr(ptr)
     size = 0;
 }
 
-Allocator::~Allocator()
+void
+Allocator::dealloc()
 {
-    dealloc();
+    // printf("Allocator::dealloc()\n");
+    
+    assert((size == 0) == (ptr == nullptr));
+
+    if (ptr) {
+        
+        delete [] ptr;
+        ptr = nullptr;
+        size = 0;
+    }
 }
 
 void
-Allocator::alloc(isize bytes)
+Allocator::init(isize bytes)
 {
-    // printf("Allocator::alloc(%ld)\n", bytes);
+    // printf("Allocator::init(%ld)\n", bytes);
 
     assert(usize(bytes) <= maxCapacity);
     assert((size == 0) == (ptr == nullptr));
@@ -49,18 +59,51 @@ Allocator::alloc(isize bytes)
 }
 
 void
-Allocator::dealloc()
+Allocator::init(const u8 *buf, isize len)
 {
-    // printf("Allocator::dealloc()\n");
+    assert(buf);
     
-    assert((size == 0) == (ptr == nullptr));
+    init(len);
+    if (ptr) memcpy((void *)ptr, (const void *)buf, len);
+}
 
-    if (ptr) {
-        
-        delete [] ptr;
-        ptr = nullptr;
-        size = 0;
+void
+Allocator::init(const Allocator &other)
+{
+    init(other.ptr, other.size);
+}
+
+void
+Allocator::init(const string &path)
+{
+    // Only proceed if the file exists
+    if (!util::fileExists(path)) {
+        dealloc(); return; // TODO: Throw exception
     }
+    
+    // Open stream in binary mode
+    std::ifstream stream(path, std::ifstream::binary);
+    
+    if (!stream) {
+        dealloc(); return; // TODO: Throw exception
+    }
+    
+    // Assign the buffer the proper size
+    auto length = streamLength(stream);
+    init(length);
+
+    // Read data from stream
+    stream.read((char *)ptr, size);
+
+    if (!stream) {
+        dealloc(); return; // TODO: Throw exception
+    }
+}
+
+void
+Allocator::init(const string &path, const string &name)
+{
+    init(path + "/" + name);
 }
 
 void
@@ -110,10 +153,11 @@ Allocator::resize(isize bytes, u8 value)
     if (ptr) memset((void *)(ptr + size - gap), value, gap);
 }
 
+/*
 void
 Allocator::read(const u8 *buf, isize len)
 {
-    // printf("Allocator::alloc(%p,%ld)\n", (void *)buf, len);
+    // printf("Allocator::init(%p,%ld)\n", (void *)buf, len);
 
     assert((size == 0) == (ptr == nullptr));
     assert(buf);
@@ -121,11 +165,12 @@ Allocator::read(const u8 *buf, isize len)
     resize(len);
     if (ptr) memcpy((void *)ptr, (const void *)buf, len);
 }
+*/
 
 void
-Allocator::write(u8 *buf, isize offset, isize len) const
+Allocator::copy(u8 *buf, isize offset, isize len) const
 {
-    // printf("Allocator::alloc(%p,%ld,%ld)\n", (void *)buf, offset, len);
+    // printf("Allocator::init(%p,%ld,%ld)\n", (void *)buf, offset, len);
 
     assert(buf);
     assert((size == 0) == (ptr == nullptr));
@@ -134,33 +179,14 @@ Allocator::write(u8 *buf, isize offset, isize len) const
     if (ptr) memcpy((void *)buf, (void *)(ptr + offset), len);
 }
 
-bool
-Allocator::import(const string &path)
-{
-    std::ifstream stream(path, std::ifstream::binary);
-    if (!stream.is_open()) return false;
- 
-    auto length = streamLength(stream);
-    alloc(length);
-    stream.read((char *)ptr, size);
-    
-    return true;
-}
-
-bool
-Allocator::import(const string &path, const string &name)
-{
-    return import(path + "/" + name);
-}
-
 void
-Allocator::replace(const u8 *seq, const u8 *subst)
+Allocator::patch(const u8 *seq, const u8 *subst)
 {
     if (ptr) util::replace(ptr, size, seq, subst);
 }
 
 void
-Allocator::replace(const char *seq, const char *subst)
+Allocator::patch(const char *seq, const char *subst)
 {
     if (ptr) util::replace((char *)ptr, size, seq, subst);
 }

@@ -55,7 +55,7 @@ public:
     HardDrive(Amiga& ref, isize nr);
 
     // Allocates or deallocates drive memory
-    // void alloc(isize size) { data.resize(size); }
+    // void init(isize size) { data.resize(size); }
     // void dealloc();
         
     // Creates a hard drive with a certain geometry

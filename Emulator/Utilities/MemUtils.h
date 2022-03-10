@@ -38,35 +38,34 @@ struct Allocator {
     isize size;
     
     Allocator(u8 *&ptr);
-    ~Allocator();
+    ~Allocator() { dealloc(); }
 
-    // Queries the buffer state
-    bool empty() const { return size == 0; }
-    
-    // Allocates or releases memory
-    void alloc(isize bytes);
-    void alloc(isize bytes, u8 value) { alloc(bytes); clear(value); }
     void dealloc();
-
-    // Initilizes the buffer with a default value
-    void clear(u8 value = 0, isize offset = 0);
+            
+    // Allocates or releases memory
+    void init(isize bytes);
+    void init(const u8 *buf, isize len);
+    void init(const Allocator &other);
+    void init(const string &path);
+    void init(const string &path, const string &name);
 
     // Resizes an existing buffer
     void resize(isize bytes);
     void resize(isize bytes, u8 value);
+
+    // Queries the buffer state
+    bool empty() const { return size == 0; }
+
+    // Overwrites all elements with a default value
+    void clear(u8 value = 0, isize offset = 0);
     
     // Imports or exports the buffer contents
-    void read(const u8 *buf, isize len);
-    void write(u8 *buf, isize offset, isize len) const;
-    void write(u8 *buf) const { write(buf, 0, size); }
-        
-    // TODO: Rename to init and move up
-    bool import(const string &path);
-    bool import(const string &path, const string &name);
-    
+    void copy(u8 *buf, isize offset, isize len) const;
+    void copy(u8 *buf) const { copy(buf, 0, size); }
+
     // Replaces a byte or character sequence by another one
-    void replace(const u8 *seq, const u8 *subst);
-    void replace(const char *seq, const char *subst);
+    void patch(const u8 *seq, const u8 *subst);
+    void patch(const char *seq, const char *subst);
 
     // Computes a checksum of a certain kind
     u32 fnv32() const { return ptr ? util::fnv32(ptr, size) : 0; }
@@ -80,21 +79,21 @@ struct Buffer {
     u8 *ptr;
     Allocator allocator = Allocator(ptr);
 
-    bool empty() const { return allocator.empty(); }
-    void alloc(isize bytes) { allocator.alloc(bytes); }
-    void alloc(isize bytes, u8 value) { allocator.alloc(bytes, value); }
     void dealloc() { allocator.dealloc(); }
-    void clear(u8 value = 0, isize offset = 0) { allocator.clear(value, offset); }
+    void init(isize bytes) { allocator.init(bytes); }
+    void init(const u8 *buf, isize len) { allocator.init(buf, len); }
+    void init(const Allocator &other) { allocator.init(other); }
+    void init(const string &path) { allocator.init(path); }
+    void init(const string &path, const string &name) { allocator.init(path, name); }
     void resize(isize bytes) { allocator.resize(bytes); }
     void resize(isize bytes, u8 value) { allocator.resize(bytes, value); }
-    void read(const u8 *buf, isize len) { allocator.read(buf, len); }
-    void write(u8 *buf, isize offset, isize len) const { allocator.write(buf, offset, len); }
-    void write(u8 *buf) { allocator.write(buf); } const
-    // TODO: Throw exception instead of returning bool 
-    bool import(const string &path) { return allocator.import(path); }
-    bool import(const string &path, const string &name) { return allocator.import(path, name); }
-    void replace(const u8 *seq, const u8 *subst) { allocator.replace(seq, subst); }
-    void replace(const char *seq, const char *subst) { allocator.replace(seq, subst); }
+    bool empty() const { return allocator.empty(); }
+    void clear(u8 value = 0, isize offset = 0) { allocator.clear(value, offset); }
+    void copy(u8 *buf, isize offset, isize len) const { allocator.copy(buf, offset, len); }
+    void copy(u8 *buf) { allocator.copy(buf); } const
+    void patch(const u8 *seq, const u8 *subst) { allocator.patch(seq, subst); }
+    void patch(const char *seq, const char *subst) { allocator.patch(seq, subst); }
+    
     u32 fnv32() const { return allocator.fnv32(); }
     u64 fnv64() const { return allocator.fnv64(); }
     u16 crc16() const { return allocator.crc16(); }

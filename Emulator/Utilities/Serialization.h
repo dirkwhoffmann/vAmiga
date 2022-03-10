@@ -332,7 +332,7 @@ public:
     {
         i64 len;
         *this << len;
-        a.read(ptr, len);
+        a.init(ptr, len);
         ptr += len;
         return *this;
     }
@@ -440,7 +440,7 @@ public:
     auto& operator<<(Allocator &a)
     {
         *this << i64(a.size);
-        a.write(ptr);
+        a.copy(ptr);
         ptr += a.size;
         return *this;
     }
