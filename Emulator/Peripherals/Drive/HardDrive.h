@@ -26,8 +26,16 @@ class HardDrive : public Drive {
     // Result of the latest inspection
     mutable HardDriveInfo info = {};
 
-    // Hard drive description
-    HdrvDescriptor desc;
+    // Product information
+    string diskVendor;
+    string diskProduct;
+    string diskRevision;
+    string controllerVendor;
+    string controllerProduct;
+    string controllerRevision;
+
+    // Hard disk geometry
+    GeometryDescriptor geometry;
     
     // Partition table
     std::vector<PartitionDescriptor> ptable;
@@ -102,7 +110,15 @@ private:
         
         << config.type
         << config.connected
-        >> desc
+        << config.pan
+        << config.stepVolume
+        << diskVendor
+        << diskProduct
+        << diskRevision
+        << controllerVendor
+        << controllerProduct
+        << controllerRevision
+        >> geometry
         >> ptable
         << data
         << modified
@@ -135,6 +151,13 @@ private:
     
 public:
     
+    string getDiskVendor() const override { return diskVendor; }
+    string getDiskProduct() const override { return diskProduct; }
+    string getDiskRevision() const override { return diskRevision; }
+    string getControllerVendor() const override { return controllerVendor; }
+    string getControllerProduct() const override { return controllerProduct; }
+    string getControllerRevision() const override { return controllerRevision; }
+
     bool isConnected() const override;
     
     Cylinder currentCyl() const override { return head.cylinder; }
@@ -174,7 +197,7 @@ public:
     const PartitionDescriptor &getPartitionInfo(isize nr);
     
     // Returns the disk geometry
-    const GeometryDescriptor &getGeometry() const { return desc.geometry; }
+    const GeometryDescriptor &getGeometry() const { return geometry; }
 
     // Returns the number of partitions
     isize numPartitions() const { return isize(ptable.size()); }

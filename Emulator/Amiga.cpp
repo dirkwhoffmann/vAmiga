@@ -954,7 +954,7 @@ Amiga::execute()
             if (flags & RL::BREAKPOINT_REACHED) {
                 clearFlag(RL::BREAKPOINT_REACHED);
                 inspect();
-                msgQueue.put(MSG_BREAKPOINT_REACHED, (long)cpu.debugger.breakpointPC);
+                msgQueue.put(MSG_BREAKPOINT_REACHED, isize(cpu.debugger.breakpointPC));
                 newState = EXEC_PAUSED;
                 break;
             }
@@ -963,7 +963,7 @@ Amiga::execute()
             if (flags & RL::WATCHPOINT_REACHED) {
                 clearFlag(RL::WATCHPOINT_REACHED);
                 inspect();
-                msgQueue.put(MSG_WATCHPOINT_REACHED, (long)cpu.debugger.watchpointPC);
+                msgQueue.put(MSG_WATCHPOINT_REACHED, isize(cpu.debugger.watchpointPC));
                 newState = EXEC_PAUSED;
                 break;
             }

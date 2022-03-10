@@ -242,8 +242,11 @@ HdController::processCmd()
             error = u8(IOERR_NOCMD);
     }
     
+    // Write back the return code
     mem.patch(pointer + IO_ERROR, error);
-    mem.patch(pointer + IO_ACTUAL, actual);
+    
+    // On success, report the number of processed bytes
+    if (!error) mem.patch(pointer + IO_ACTUAL, actual);
 }
 
 void
@@ -280,7 +283,7 @@ HdController::processInit()
         debug(HDR_DEBUG, "Initializing partition %d\n", unit);
 
         // Collect hard drive information
-        auto &geometry = drive.desc.geometry;
+        auto &geometry = drive.geometry;
         auto &part = drive.ptable[unit];
         
         char dosName[] = {'D', 'H', '0', 0 };

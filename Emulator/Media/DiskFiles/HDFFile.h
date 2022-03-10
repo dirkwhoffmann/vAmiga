@@ -17,8 +17,8 @@ class FloppyDisk;
 
 class HDFFile : public DiskFile {
     
-    // Derived hard drive descriptor
-    HdrvDescriptor hdrv;
+    // Derived drive geometry
+    GeometryDescriptor geometry;
 
     // Derived partition table
     std::vector<PartitionDescriptor> ptable;
@@ -71,16 +71,29 @@ public:
     
     
     //
-    // Providing suitable descriptors
+    // Providing descriptors
     //
     
     struct GeometryDescriptor getGeometryDescriptor() const;
-    struct HdrvDescriptor getHdrvDescriptor() const;
     struct PartitionDescriptor getPartitionDescriptor(isize part = 0) const;
     std::vector<PartitionDescriptor> getPartitionDescriptors() const;
     struct FileSystemDescriptor getFileSystemDescriptor(isize part = 0) const;
 
         
+    //
+    // Querying product information
+    //
+ 
+public:
+    
+    std::optional<string> getDiskVendor() const { return rdbString(160, 8); }
+    std::optional<string> getDiskProduct() const { return rdbString(168, 16); }
+    std::optional<string> getDiskRevision() const { return rdbString(184, 4); }
+    std::optional<string> getControllerVendor() const { return rdbString(188, 8); }
+    std::optional<string> getControllerProduct() const { return rdbString(196, 16); }
+    std::optional<string> getControllerRevision() const { return rdbString(212, 4); }
+     
+            
     //
     // Querying volume information
     //
@@ -88,7 +101,7 @@ public:
 public:
     
     // Returns the (predicted) geometry for this disk
-    const GeometryDescriptor getGeometry() const;
+    const GeometryDescriptor getGeometry() const { return geometry; }
     
     // Returns true if this image contains a rigid disk block
     bool hasRDB() const;
@@ -121,6 +134,9 @@ private:
     // Returns a pointer to a certain partition block if it exists
     u8 *seekPB(isize nr) const;
     
+    // Returns a string from the Rigid Disk Block if it exists
+    std::optional<string> rdbString(isize offset, isize len) const;
+
     // Extracts the DOS revision number from a certain block
     FSVolumeType dos(isize nr) const;
     

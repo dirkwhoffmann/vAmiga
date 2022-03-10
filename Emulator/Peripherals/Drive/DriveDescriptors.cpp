@@ -112,13 +112,13 @@ GeometryDescriptor::checkCompatibility() const
         throw VAError(ERROR_HDR_TOO_LARGE);
     }
     if ((cylinders < cMin && heads > 1) || cylinders > cMax || FORCE_HDR_UNSUPPORTED_C) {
-        throw VAError(ERROR_HDR_UNSUPPORTED_CYL_COUNT, std::to_string(cylinders));
+        throw VAError(ERROR_HDR_UNSUPPORTED_CYL_COUNT, cylinders);
     }
     if (heads < hMin || heads > hMax || FORCE_HDR_UNSUPPORTED_H) {
-        throw VAError(ERROR_HDR_UNSUPPORTED_HEAD_COUNT, std::to_string(heads));
+        throw VAError(ERROR_HDR_UNSUPPORTED_HEAD_COUNT, heads);
     }
     if (sectors < sMin || sectors > sMax || FORCE_HDR_UNSUPPORTED_S) {
-        throw VAError(ERROR_HDR_UNSUPPORTED_SEC_COUNT, std::to_string(sectors));
+        throw VAError(ERROR_HDR_UNSUPPORTED_SEC_COUNT, sectors);
     }
     if (bsize != 512 || FORCE_HDR_UNSUPPORTED_B) {
         throw VAError(ERROR_HDR_UNSUPPORTED_BSIZE);
@@ -191,47 +191,4 @@ void PartitionDescriptor::checkCompatibility() const
     if (lowCyl > highCyl) {
         throw VAError(ERROR_HDR_CORRUPTED_PTABLE);
     }
-}
-
-
-//
-// HdrvDescriptor
-//
-
-HdrvDescriptor::HdrvDescriptor(const GeometryDescriptor &geo)
-{
-    geometry = geo;
-}
-
-void
-HdrvDescriptor::dump() const
-{
-    dump(std::cout);
-}
-
-void
-HdrvDescriptor::dump(std::ostream& os) const
-{
-    using namespace util;
-    
-    geometry.dump(os);
-    
-    os << tab("Disk vendor");
-    os << dskVendor << std::endl;
-    os << tab("Disk Product");
-    os << dskProduct << std::endl;
-    os << tab("Disk Revision");
-    os << dskRevision << std::endl;
-    os << tab("Controller vendor");
-    os << conVendor << std::endl;
-    os << tab("Controller Product");
-    os << conProduct << std::endl;
-    os << tab("Controller Revision");
-    os << conRevision << std::endl;
-}
-
-void
-HdrvDescriptor::checkCompatibility() const
-{
-    geometry.checkCompatibility();
 }

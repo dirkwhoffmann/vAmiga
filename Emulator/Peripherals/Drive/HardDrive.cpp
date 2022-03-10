@@ -42,7 +42,14 @@ void
 HardDrive::init()
 {
     data.dealloc();
-    desc = HdrvDescriptor();
+
+    diskVendor = "VAMIGA";
+    diskProduct = "VDRIVE";
+    diskRevision = "1.0";
+    controllerVendor = amiga.hdcon[nr]->vendorName();
+    controllerProduct = amiga.hdcon[nr]->productName();
+    controllerRevision = amiga.hdcon[nr]->revisionName();
+    geometry = GeometryDescriptor();
     ptable.clear();
     head = {};
     modified = false;
@@ -58,7 +65,7 @@ HardDrive::init(const GeometryDescriptor &geometry)
     init();
     
     // Create the drive description
-    desc = HdrvDescriptor(geometry);
+    this->geometry = geometry;
     ptable.push_back(PartitionDescriptor(geometry));
         
     // Create the new drive
@@ -91,8 +98,16 @@ HardDrive::init(const HDFFile &hdf)
     // Create the drive
     init(geometry);
 
-    // Copy the drive properties
-    desc = hdf.getHdrvDescriptor();
+    // Copy the product description (if provided by the HDF)
+    if (auto value = hdf.getDiskProduct(); value) diskProduct = *value;
+    if (auto value = hdf.getDiskVendor(); value) diskVendor = *value;
+    if (auto value = hdf.getDiskRevision(); value) diskRevision = *value;
+    if (auto value = hdf.getControllerProduct(); value) controllerProduct = *value;
+    if (auto value = hdf.getControllerVendor(); value) controllerVendor = *value;
+    if (auto value = hdf.getControllerRevision(); value) controllerRevision = *value;
+    
+    // Copy geometry
+    geometry = hdf.getGeometryDescriptor();
     
     // Copy the partition table
     ptable = hdf.getPartitionDescriptors();
@@ -260,8 +275,6 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
     }
     
     if (category & dump::Drive) {
-
-        auto &geometry = desc.geometry;
         
         auto cap1 = geometry.numBytes() / MB(1);
         auto cap2 = ((100 * geometry.numBytes()) / MB(1)) % 100;
@@ -270,7 +283,19 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         os << dec(nr) << std::endl;
         os << tab("Capacity");
         os << dec(cap1) << "." << dec(cap2) << " MB" << std::endl;
-        desc.dump(os);
+        geometry.dump(os);
+        os << tab("Disk vendor");
+        os << diskVendor << std::endl;
+        os << tab("Disk Product");
+        os << diskProduct << std::endl;
+        os << tab("Disk Revision");
+        os << diskRevision << std::endl;
+        os << tab("Controller vendor");
+        os << controllerVendor << std::endl;
+        os << tab("Controller Product");
+        os << controllerProduct << std::endl;
+        os << tab("Controller Revision");
+        os << controllerRevision << std::endl;
     }
 
     if (category & dump::Volumes) {
@@ -320,6 +345,60 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         os << tab("Write protected");
         os << bol(writeProtected) << std::endl;
     }
+}
+
+isize
+HardDrive::_size()
+{
+    util::SerCounter counter;
+
+    // Determine size information
+    auto dataSize = geometry.numBytes() + 8;
+
+    applyToPersistentItems(counter);
+    applyToResetItems(counter);
+    
+    counter.count += dataSize;
+    return counter.count;
+}
+
+isize
+HardDrive::didLoadFromBuffer(const u8 *buffer)
+{
+    util::SerReader reader(buffer);
+    isize dataSize;
+
+    // Load size information
+    reader << dataSize;
+
+    // Allocate memory
+    if (dataSize > MB(504)) throw VAError(ERROR_SNAP_CORRUPTED);
+    alloc(isize(dataSize));
+
+    // Load data
+    // debug(true, "data = %p size = %ld\n", (void *)data, dataSize);
+    // debug(true, "numBytes = %ld\n", desc.geometry.numBytes());
+    assert(dataSize == geometry.numBytes());
+    reader.copy(data, dataSize);
+
+    return (isize)(reader.ptr - buffer);
+}
+
+isize
+HardDrive::didSaveToBuffer(u8 *buffer)
+{
+    util::SerWriter writer(buffer);
+
+    // Determine size information
+    isize dataSize = geometry.numBytes();
+
+    // Save size information
+    writer << dataSize;
+ 
+    // Write data
+    writer.copy(data, dataSize);
+
+    return (isize)(writer.ptr - buffer);
 }
 
 bool
@@ -389,7 +468,7 @@ HardDrive::format(FSVolumeType fsType, string name)
     if (fsType != FS_NODOS) {
         
         // Create a device descriptor matching this drive
-        auto layout = FileSystemDescriptor(desc.geometry, fsType);
+        auto layout = FileSystemDescriptor(geometry, fsType);
 
         // Create a file system
         auto fs = MutableFileSystem(layout);
@@ -398,7 +477,7 @@ HardDrive::format(FSVolumeType fsType, string name)
         fs.setName(name);
                 
         // Copy all blocks over
-        fs.exportVolume(data.ptr, desc.geometry.numBytes());
+        fs.exportVolume(data.ptr, geometry.numBytes());
     }
 }
 
@@ -414,9 +493,9 @@ HardDrive::changeGeometry(const GeometryDescriptor &geometry)
 {
     geometry.checkCompatibility();
         
-    if (this->desc.geometry.numBytes() == desc.geometry.numBytes()) {
+    if (this->geometry.numBytes() == geometry.numBytes()) {
         
-        this->desc.geometry = geometry;
+        this->geometry = geometry;
     
     } else {
         
@@ -437,7 +516,7 @@ HardDrive::read(isize offset, isize length, u32 addr)
         state = HDR_STATE_READING;
 
         // Move the drive head to the specified location
-        moveHead(offset / desc.geometry.bsize);
+        moveHead(offset / geometry.bsize);
 
         // Perform the read operation
         mem.patch(addr, data.ptr + offset, length);
@@ -465,7 +544,7 @@ HardDrive::write(isize offset, isize length, u32 addr)
         state = HDR_STATE_WRITING;
 
         // Move the drive head to the specified location
-        moveHead(offset / desc.geometry.bsize);
+        moveHead(offset / geometry.bsize);
 
         // Perform the write operation
         if (!writeProtected) {
@@ -499,7 +578,7 @@ HardDrive::verify(isize offset, isize length, u32 addr)
         return IOERR_BADADDRESS;
     }
 
-    if (offset + length > desc.geometry.numBytes()) {
+    if (offset + length > geometry.numBytes()) {
         
         debug(HDR_DEBUG, "Invalid block location");
         return IOERR_BADADDRESS;
@@ -517,9 +596,9 @@ HardDrive::verify(isize offset, isize length, u32 addr)
 void
 HardDrive::moveHead(isize lba)
 {
-    isize c = lba / (desc.geometry.heads * desc.geometry.sectors);
-    isize h = (lba / desc.geometry.sectors) % desc.geometry.heads;
-    isize s = lba % desc.geometry.sectors;
+    isize c = lba / (geometry.heads * geometry.sectors);
+    isize h = (lba / geometry.sectors) % geometry.heads;
+    isize s = lba % geometry.sectors;
 
     moveHead(c, h, s);
 }
@@ -531,7 +610,7 @@ HardDrive::moveHead(isize c, isize h, isize s)
     
     head.cylinder = c;
     head.head = h;
-    head.offset = desc.geometry.bsize * s;
+    head.offset = geometry.bsize * s;
     
     if (step) {
         msgQueue.put(MSG_HDR_STEP, i16(nr), i16(c), config.stepVolume, config.pan);

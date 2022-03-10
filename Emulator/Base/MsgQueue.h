@@ -67,6 +67,6 @@ public:
     void setListener(const void *listener, Callback *func);
             
     // Sends a message
-    void put(MsgType type, i64 data = 0);
-    void put(MsgType type, i16 v1, i16 v2, i16 v3 = 0, i16 v4 = 0);
+    void put(MsgType type, isize data1 = 0, isize data2 = 0);
+    void put(MsgType type, u16 v1, u16 v2, u16 v3, u16 v4);
 };

@@ -605,8 +605,9 @@ FSBlock::checksumStandard() const
     
     // Compute the new checksum
     u32 result = 0;
-    for (isize i = 0; i < bsize() / 4; i++) result += get32(i);
-    result = ~result + 1;
+    for (isize i = 0; i < bsize() / 4; i++) U32_INC(result, get32(i));
+    result = ~result;
+    U32_INC(result, 1);
     
     // Undo the modification
     set32(pos, old);
