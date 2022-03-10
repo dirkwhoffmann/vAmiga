@@ -13,7 +13,7 @@
 #include "AmigaObject.h"
 #include "Checksum.h"
 #include "IOUtils.h"
-#include "MemUtils.h"
+#include "Buffer.h"
 #include "Reflection.h"
 #include <sstream>
 #include <fstream>

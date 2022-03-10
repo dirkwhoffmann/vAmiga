@@ -283,6 +283,7 @@
 		50F6EEBE21F4F61F0091155D /* FloppyDrive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEBC21F4F61F0091155D /* FloppyDrive.cpp */; };
 		50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC76E2515EBED00E47421 /* IMGFile.cpp */; };
 		50FAC77525160BBF00E47421 /* FloppyFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC77325160BBF00E47421 /* FloppyFile.cpp */; };
+		50FC046827DA02FD00C3E566 /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC046627DA02FD00C3E566 /* Buffer.cpp */; };
 		50FC08AD27819CD100F0C567 /* AgnusInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08AC27819CD100F0C567 /* AgnusInfo.cpp */; };
 		50FC08AF27819E2400F0C567 /* CopperInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08AE27819E2400F0C567 /* CopperInfo.cpp */; };
 		50FC08B127819E4100F0C567 /* BlitterInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08B027819E4100F0C567 /* BlitterInfo.cpp */; };
@@ -781,6 +782,8 @@
 		50FAC76F2515EBED00E47421 /* IMGFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMGFile.h; sourceTree = "<group>"; };
 		50FAC77325160BBF00E47421 /* FloppyFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FloppyFile.cpp; sourceTree = "<group>"; };
 		50FAC77425160BBF00E47421 /* FloppyFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloppyFile.h; sourceTree = "<group>"; };
+		50FC046627DA02FD00C3E566 /* Buffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Buffer.cpp; sourceTree = "<group>"; };
+		50FC046727DA02FD00C3E566 /* Buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
 		50FC08AC27819CD100F0C567 /* AgnusInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusInfo.cpp; sourceTree = "<group>"; };
 		50FC08AE27819E2400F0C567 /* CopperInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperInfo.cpp; sourceTree = "<group>"; };
 		50FC08B027819E4100F0C567 /* BlitterInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlitterInfo.cpp; sourceTree = "<group>"; };
@@ -1482,6 +1485,8 @@
 				50C8C42C2605D51A00F4E012 /* Types.h */,
 				50104E8525ECD0EF0047A9AA /* Macros.h */,
 				50CA602E260E02B700C4A22C /* Reflection.h */,
+				50FC046727DA02FD00C3E566 /* Buffer.h */,
+				50FC046627DA02FD00C3E566 /* Buffer.cpp */,
 				507215A525EA9DD900787591 /* RingBuffer.h */,
 				50EFC7DF22E840870036A3DF /* Serialization.h */,
 				507215A025EA9AE600787591 /* Chrono.h */,
@@ -2031,6 +2036,7 @@
 				508FE01D21EA227B0043D0E9 /* Defaults.swift in Sources */,
 				50BE4B7424E815CA008F39C9 /* CIAEvents.cpp in Sources */,
 				507C9C4626076EF7006779B5 /* RessourceManager.swift in Sources */,
+				50FC046827DA02FD00C3E566 /* Buffer.cpp in Sources */,
 				50B9354B243481AB000C78B8 /* SnapshotDialog.swift in Sources */,
 				501C514227C0CE6600DF1DD5 /* DriveDescriptors.cpp in Sources */,
 				509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */,

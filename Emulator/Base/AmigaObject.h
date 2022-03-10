@@ -72,11 +72,9 @@ enum Category : usize {
 
 class AmigaObject {
 
-public:
+protected:
     
-    // Indicates if debug output should be generated (set to false to silence)
-    bool verbose = true;
-    
+    static bool verbose;
     
     //
     // Initializing

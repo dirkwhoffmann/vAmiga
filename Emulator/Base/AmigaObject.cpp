@@ -11,6 +11,9 @@
 #include "AmigaObject.h"
 #include <iostream>
 
+bool
+AmigaObject::verbose = true;
+
 void
 AmigaObject::prefix() const
 {

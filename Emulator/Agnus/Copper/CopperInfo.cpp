@@ -10,7 +10,6 @@
 #include "config.h"
 #include "Agnus.h"
 #include "IOUtils.h"
-// #include <iomanip>
 
 void
 Copper::_dump(dump::Category category, std::ostream& os) const

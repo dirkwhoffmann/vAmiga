@@ -12,8 +12,8 @@
 #include "AmigaObject.h"
 #include "FSTypes.h"
 #include "FSObjects.h"
+#include "Buffer.h"
 #include "IOUtils.h"
-#include "MemUtils.h"
 #include "BootBlockImage.h"
 #include <vector>
 

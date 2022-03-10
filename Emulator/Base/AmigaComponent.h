@@ -42,6 +42,9 @@ class AmigaComponent : public AmigaObject, NoCopy, NoAssign {
         
 protected:
     
+    // Set to false to silence all debug messages for this component
+    bool verbose = true;
+
     // Sub components
     std::vector<AmigaComponent *> subComponents;
                     
