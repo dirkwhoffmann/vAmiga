@@ -82,7 +82,7 @@ struct Buffer {
     void dealloc() { allocator.dealloc(); }
     void init(isize bytes) { allocator.init(bytes); }
     void init(const u8 *buf, isize len) { allocator.init(buf, len); }
-    void init(const Allocator &other) { allocator.init(other); }
+    void init(const Buffer &other) { allocator.init(other.allocator); }
     void init(const string &path) { allocator.init(path); }
     void init(const string &path, const string &name) { allocator.init(path, name); }
     void resize(isize bytes) { allocator.resize(bytes); }
