@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 {
     try {
         
-        Main().main(argc, argv);
+        Headless().main(argc, argv);
         
     } catch (SyntaxError &e) {
         
@@ -55,11 +55,11 @@ int main(int argc, char *argv[])
 void
 process(const void *listener, long type, u32 data1, u32 data2)
 {
-    ((Main *)listener)->process(type, data1, data2);
+    ((Headless *)listener)->process(type, data1, data2);
 }
 
 void
-Main::main(int argc, char *argv[])
+Headless::main(int argc, char *argv[])
 {
     map<string,string> keys;
     string option;
@@ -75,7 +75,7 @@ Main::main(int argc, char *argv[])
 }
 
 void
-Main::process(long type, u32 data1, u32 data2)
+Headless::process(long type, u32 data1, u32 data2)
 {
     if (verbose) {
         
@@ -85,7 +85,7 @@ Main::process(long type, u32 data1, u32 data2)
 }
 
 void
-Main::run(map<string,string> &keys)
+Headless::run(map<string,string> &keys)
 {
     // Parse command line arguments
     verbose = keys.find("verbose") != keys.end();
@@ -103,7 +103,7 @@ Main::run(map<string,string> &keys)
 }
 
 void
-Main::parseArguments(int argc, char *argv[], map<string,string> &keys)
+Headless::parseArguments(int argc, char *argv[], map<string,string> &keys)
 {
     static struct option long_options[] = {
         
@@ -148,7 +148,7 @@ Main::parseArguments(int argc, char *argv[], map<string,string> &keys)
 }
 
 void
-Main::checkArguments(map<string,string> &keys)
+Headless::checkArguments(map<string,string> &keys)
 {
     // The user needs to specify a single input file
     if (inputs.size() < 1) throw SyntaxError("No script file is given");

@@ -21,7 +21,7 @@ struct SyntaxError : public std::runtime_error {
 
 void process(const void *listener, long type, u32 data1, u32 data2);
 
-class Main {
+class Headless {
 
     // Command line options
     vector <string> inputs;
