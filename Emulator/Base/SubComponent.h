@@ -35,6 +35,7 @@ class MsgQueue;
 class OSDebugger;
 class Paula;
 class PixelEngine;
+class RamExpansion;
 class RemoteManager;
 class RetroShell;
 class RshServer;
@@ -81,6 +82,7 @@ protected:
     OSDebugger &osDebugger;
     Paula &paula;
     PixelEngine &pixelEngine;
+    RamExpansion &ramExpansion;
     RemoteManager &remoteManager;
     RetroShell &retroShell;
     RTC &rtc;

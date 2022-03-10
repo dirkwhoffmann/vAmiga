@@ -99,6 +99,9 @@ private:
     
 public:
     
+    // Returns the base address
+    u32 getBaseAddr() const { return baseAddr; }
+    
     // Returns the first or the last page this device is mapped to
     isize firstPage() const { return baseAddr / 0x10000; }
     isize lastPage() const { return firstPage() + pages() - 1; }

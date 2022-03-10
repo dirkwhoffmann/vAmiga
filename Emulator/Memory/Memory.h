@@ -14,8 +14,7 @@
 #include "RomFileTypes.h"
 #include "MemUtils.h"
 
-// DEPRECATED. TODO: GET VALUE FROM ZORRO CARD MANANGER
-const u32 FAST_RAM_STRT = 0x200000;
+#define FAST_RAM_STRT ramExpansion.getBaseAddr()
 
 // Verifies address ranges
 #define ASSERT_CHIP_ADDR(x) \
