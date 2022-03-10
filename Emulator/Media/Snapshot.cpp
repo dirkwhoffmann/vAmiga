@@ -57,10 +57,6 @@ Snapshot::Snapshot(isize capacity)
     u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
     
     data.init(capacity + sizeof(SnapshotHeader));
-    /*
-    size = capacity + sizeof(SnapshotHeader);
-    data = new u8[size];
-    */
     
     SnapshotHeader *header = (SnapshotHeader *)data.ptr;
     

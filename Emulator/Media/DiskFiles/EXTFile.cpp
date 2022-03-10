@@ -56,8 +56,6 @@ EXTFile::init(FloppyDisk &disk)
     }
     
     data.init(length);
-    // data = new u8[size]();
-        
     decodeDisk(disk);
 }
 

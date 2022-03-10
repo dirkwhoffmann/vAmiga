@@ -36,11 +36,7 @@ IMGFile::init(Diameter dia, Density den)
     if (dia == INCH_35 && den == DENSITY_DD) {
 
         data.init(9 * 160 * 512);
-        /*
-        size = 9 * 160 * 512;
-        data = new u8[size]();
-        */
-
+ 
     } else {
 
         throw VAError(ERROR_DISK_INVALID_LAYOUT);

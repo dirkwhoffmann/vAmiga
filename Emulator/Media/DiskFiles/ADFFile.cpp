@@ -63,10 +63,6 @@ ADFFile::init(Diameter diameter, Density density)
     assert(data.empty());
     
     data.init(fileSize(diameter, density));
-    /*
-    size = fileSize(diameter, density);
-    data = new u8[size]();
-    */
 }
 
 void
