@@ -566,7 +566,7 @@ RomFile::isRomFile(const string &path)
 bool
 RomFile::isEncrypted()
 {
-    return util::matchingBufferHeader(data, encrRomHeaders[0], sizeof(encrRomHeaders[0]));
+    return util::matchingBufferHeader(data.ptr, encrRomHeaders[0], sizeof(encrRomHeaders[0]));
 }
 
 void
@@ -590,21 +590,24 @@ RomFile::decrypt()
     }
 
     // Create a buffer for the decrypted data
-    encryptedData = data + headerSize;
-    decryptedData = new u8[size - headerSize];
+    encryptedData = data.ptr + headerSize;
+    decryptedData = new u8[data.size() - headerSize];
 
     // Decrypt
-    for (isize i = 0; i < size - headerSize; i++) {
+    for (isize i = 0; i < data.size() - headerSize; i++) {
         decryptedData[i] = encryptedData[i] ^ romKeyData[i % romKeySize];
     }
 
     // Replace the old data by the decrypted data
+    data.init(decryptedData, data.size() - headerSize);
+    /*
     delete [] data;
     data = decryptedData;
     size -= headerSize;
-
+    */
+    
     // Check if we've got a valid ROM
-    if (!isRomBuffer(data, size)) {
+    if (!isRomBuffer(data.ptr, data.size())) {
         throw VAError(ERROR_INVALID_ROM_KEY);
     }
 }

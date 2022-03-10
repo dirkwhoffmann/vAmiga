@@ -36,7 +36,7 @@ DiskFile::readSector(u8 *dst, isize s) const
     isize offset = s * sectorSize;
 
     assert(dst != nullptr);
-    assert(offset + sectorSize <= size);
+    assert(offset + sectorSize <= data.size());
 
     for (isize i = 0; i < sectorSize; i++) {
         dst[i] = data[offset + i];
@@ -62,7 +62,7 @@ string
 DiskFile::hexdump(isize b, isize offset, isize len) const
 {
     string result;
-    auto p = data + b * bsize();
+    auto p = data.ptr + b * bsize();
     
     for (isize i = 0; i < len; i++) {
         result += (i == 0 ? "" : " ") + util::hexstr<2>(p[i]);
@@ -87,7 +87,7 @@ string
 DiskFile::asciidump(isize b, isize offset, isize len) const
 {
     string result;
-    auto p = data + b * bsize() + offset;
+    auto p = data.ptr + b * bsize() + offset;
 
     for (isize i = 0; i < len; i++) {
         result += isprint(int(p[i])) ? char(p[i]) : '.';

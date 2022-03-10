@@ -30,6 +30,6 @@ Script::isCompatible(std::istream &stream)
 void
 Script::execute(class Amiga &amiga)
 {
-    string s((char *)data, size);
+    string s((char *)data.ptr, data.size());
     try { amiga.retroShell.execScript(s); } catch (util::Exception &) { }
 }

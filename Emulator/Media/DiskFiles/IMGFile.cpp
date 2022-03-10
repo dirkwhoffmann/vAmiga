@@ -35,8 +35,11 @@ IMGFile::init(Diameter dia, Density den)
     // We only support 3.5"DD disks at the moment
     if (dia == INCH_35 && den == DENSITY_DD) {
 
+        data.init(9 * 160 * 512);
+        /*
         size = 9 * 160 * 512;
         data = new u8[size]();
+        */
 
     } else {
 
@@ -220,7 +223,7 @@ IMGFile::decodeTrack(FloppyDisk &disk, Track t)
         
     long numSectors = 9;
     u8 *src = disk.data.track[t];
-    u8 *dst = data + t * numSectors * 512;
+    u8 *dst = data.ptr + t * numSectors * 512;
     
     debug(IMG_DEBUG, "Decoding DOS track %ld\n", t);
 

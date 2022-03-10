@@ -678,7 +678,7 @@ Memory::loadRom(RomFile &file)
     file.decrypt();
 
     // Allocate memory
-    allocRom((i32)file.size);
+    allocRom((i32)file.data.size());
 
     // Load Rom
     file.flash(rom);
@@ -708,7 +708,7 @@ void
 Memory::loadExt(ExtendedRomFile &file)
 {
     // Allocate memory
-    allocExt((i32)file.size);
+    allocExt((i32)file.data.size());
     
     // Load Rom
     file.flash(ext);

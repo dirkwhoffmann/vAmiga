@@ -56,10 +56,13 @@ Snapshot::Snapshot(isize capacity)
 {
     u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
     
+    data.init(capacity + sizeof(SnapshotHeader));
+    /*
     size = capacity + sizeof(SnapshotHeader);
     data = new u8[size];
+    */
     
-    SnapshotHeader *header = (SnapshotHeader *)data;
+    SnapshotHeader *header = (SnapshotHeader *)data.ptr;
     
     for (isize i = 0; i < isizeof(signature); i++)
         header->magic[i] = signature[i];
@@ -112,5 +115,5 @@ Snapshot::isBeta() const
 void
 Snapshot::takeScreenshot(Amiga &amiga)
 {
-    ((SnapshotHeader *)data)->screenshot.take(amiga);
+    ((SnapshotHeader *)data.ptr)->screenshot.take(amiga);
 }

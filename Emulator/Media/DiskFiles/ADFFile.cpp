@@ -60,10 +60,13 @@ void
 ADFFile::init(Diameter diameter, Density density)
 {
     assert_enum(Diameter, diameter);
-    assert(size == 0 && data == nullptr);
+    assert(data.empty());
     
+    data.init(fileSize(diameter, density));
+    /*
     size = fileSize(diameter, density);
     data = new u8[size]();
+    */
 }
 
 void
@@ -101,13 +104,13 @@ ADFFile::init(MutableFileSystem &volume)
             throw VAError(ERROR_FS_WRONG_CAPACITY);
     }
 
-    volume.exportVolume(data, size);
+    volume.exportVolume(data.ptr, data.size());
 }
 
 isize
 ADFFile::numCyls() const
 {
-    switch(size & ~1) {
+    switch(data.size() & ~1) {
             
         case ADFSIZE_35_DD:    return 80;
         case ADFSIZE_35_DD_81: return 81;
@@ -143,7 +146,7 @@ ADFFile::numSectors() const
 FSVolumeType
 ADFFile::getDos() const
 {
-    if (strncmp((const char *)data, "DOS", 3) || data[3] > 7) {
+    if (strncmp((const char *)data.ptr, "DOS", 3) || data[3] > 7) {
         return FS_NODOS;
     }
 
@@ -154,9 +157,9 @@ void
 ADFFile::setDos(FSVolumeType dos)
 {
     if (dos == FS_NODOS) {
-        std::memset(data, 0, 4);
+        std::memset(data.ptr, 0, 4);
     } else {
-        std::memcpy(data, "DOS", 3);
+        std::memcpy(data.ptr, "DOS", 3);
         data[3] = (u8)dos;
     }
 }
@@ -170,7 +173,7 @@ ADFFile::getDiameter() const
 Density
 ADFFile::getDensity() const
 {
-    return (size & ~1) == ADFSIZE_35_HD ? DENSITY_HD : DENSITY_DD;
+    return (data.size() & ~1) == ADFSIZE_35_HD ? DENSITY_HD : DENSITY_DD;
 }
 
 FileSystemDescriptor
@@ -179,10 +182,10 @@ ADFFile::getFileSystemDescriptor() const
     FileSystemDescriptor result;
     
     // Determine the root block location
-    Block root = size < ADFSIZE_35_HD ? 880 : 1760;
+    Block root = data.size() < ADFSIZE_35_HD ? 880 : 1760;
 
     // Determine the bitmap block location
-    Block bitmap = FSBlock::read32(data + root * 512 + 316);
+    Block bitmap = FSBlock::read32(data.ptr + root * 512 + 316);
     
     // Assign a default location if the bitmap block reference is invalid
     if (bitmap == 0 || bitmap >= (Block)numBlocks()) bitmap = root + 1;
@@ -202,13 +205,13 @@ ADFFile::getFileSystemDescriptor() const
 BootBlockType
 ADFFile::bootBlockType() const
 {
-    return BootBlockImage(data).type;
+    return BootBlockImage(data.ptr).type;
 }
 
 const char *
 ADFFile::bootBlockName() const
 {
-    return BootBlockImage(data).name;
+    return BootBlockImage(data.ptr).name;
 }
 
 void
@@ -220,18 +223,18 @@ ADFFile::killVirus()
 
         plain(ADF_DEBUG, "a standard OFS bootblock\n");
         BootBlockImage bb = BootBlockImage(BB_AMIGADOS_13);
-        bb.write(data + 4, 4, 1023);
+        bb.write(data.ptr + 4, 4, 1023);
 
     } else if (isFFSVolumeType(getDos())) {
 
         plain(ADF_DEBUG, "a standard FFS bootblock\n");
         BootBlockImage bb = BootBlockImage(BB_AMIGADOS_20);
-        bb.write(data + 4, 4, 1023);
+        bb.write(data.ptr + 4, 4, 1023);
 
     } else {
 
         plain(ADF_DEBUG, "zeroes\n");
-        std::memset(data + 4, 0, 1020);
+        std::memset(data.ptr + 4, 0, 1020);
     }
 }
 
@@ -258,7 +261,7 @@ ADFFile::formatDisk(FSVolumeType fs, BootBlockId id, string name)
     volume.makeBootable(id);
     
     // Export the file system to the ADF
-    if (!volume.exportVolume(data, size)) throw VAError(ERROR_FS_UNKNOWN);
+    if (!volume.exportVolume(data.ptr, data.size())) throw VAError(ERROR_FS_UNKNOWN);
 }
 
 void
@@ -386,7 +389,7 @@ ADFFile::encodeSector(FloppyDisk &disk, Track t, Sector s) const
 void
 ADFFile::dumpSector(Sector s) const
 {
-    util::hexdump(data + 512 * s, 512);
+    util::hexdump(data.ptr + 512 * s, 512);
 }
 
 void
@@ -418,7 +421,7 @@ ADFFile::decodeTrack(FloppyDisk &disk, Track t)
     debug(ADF_DEBUG, "Decoding track %ld\n", t);
     
     u8 *src = disk.data.track[t];
-    u8 *dst = data + t * sectors * 512;
+    u8 *dst = data.ptr + t * sectors * 512;
     
     // Seek all sync marks
     std::vector<isize> sectorStart(sectors);

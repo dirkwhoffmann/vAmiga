@@ -27,7 +27,7 @@ FileSystem::init(const ADFFile &adf)
     auto descriptor = adf.getFileSystemDescriptor();
             
     // Import the file system
-    init(descriptor, adf.data, descriptor.numBlocks * 512);
+    init(descriptor, adf.data.ptr, descriptor.numBlocks * 512);
 }
 
 void

@@ -13,6 +13,7 @@
 #include "AmigaObject.h"
 #include "Checksum.h"
 #include "IOUtils.h"
+#include "MemUtils.h"
 #include "Reflection.h"
 #include <sstream>
 #include <fstream>
@@ -63,10 +64,11 @@ public:
     string path;
     
     // The raw data of this file
-    u8 *data = nullptr;
+    util::Buffer data;
+    // u8 *data = nullptr;
     
     // The size of this file in bytes
-    isize size = 0;
+    // isize size = 0;
     
 
     //
@@ -109,7 +111,7 @@ public:
     virtual string sizeAsString();
     
     // Returns a fingerprint (hash value) for this file
-    virtual u64 fnv() const { return util::fnv64(data, size); }
+    virtual u64 fnv() const { return data.fnv64(); }
         
     
     //
