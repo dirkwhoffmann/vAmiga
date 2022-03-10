@@ -31,6 +31,7 @@ RamExpansion::_reset(bool hard)
     if (hard) {
 
         // Enter autoconfig state, if FastRam should be emulated
+        printf("Fast Ram size %ld\n", mem.fastRamSize());
         state = mem.fastRamSize() ? STATE_AUTOCONF : STATE_SHUTUP;
     }
 }

@@ -82,6 +82,29 @@ Headless::process(long type, u32 data1, u32 data2)
         std::cout << MsgTypeEnum::key(type) << ": ";
         std::cout << data1 << ", " << data2 << std::endl;
     }
+    
+    // TODO: THIS NEEDS TO BE EXECUTED INSIDE THE 'HEADLESS' THREAD
+    // TODO: USE FUTURE / PROMISE
+    
+    switch (type) {
+            
+        case MSG_SCRIPT_WAKEUP:
+            
+            amiga.retroShell.continueScript();
+            break;
+            
+        case MSG_SCRIPT_DONE:
+        case MSG_SCRIPT_ABORT:
+            
+            amiga.halt();
+
+            std::cout << "Bye" << std::endl;
+            exit(0);
+            break;
+
+        default:
+            break;
+    }
 }
 
 void
@@ -102,8 +125,8 @@ Headless::run(map<string,string> &keys)
     // Execute script
     script.execute(amiga);
 
-    sleep(10);
-    std::cout << "Done" << std::endl;
+    // Wait for MSG_SCRIPT_DONE to terminate the app
+    pause();
 }
 
 void
