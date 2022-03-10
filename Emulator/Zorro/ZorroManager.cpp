@@ -14,10 +14,7 @@
 
 ZorroManager::ZorroManager(Amiga& ref) : SubComponent(ref)
 {
-    subComponents = std::vector<AmigaComponent *> {
-        
-        &ramExpansion,
-    };
+
 }
 
 void

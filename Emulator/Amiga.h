@@ -85,11 +85,12 @@ public:
     HardDrive hd2 = HardDrive(*this, 2);
     HardDrive hd3 = HardDrive(*this, 3);
 
-    // Hard drive controllers
+    // Zorro boards
     HdController hd0con = HdController(*this, hd0);
     HdController hd1con = HdController(*this, hd1);
     HdController hd2con = HdController(*this, hd2);
     HdController hd3con = HdController(*this, hd3);
+    RamExpansion ramExpansion = RamExpansion(*this);
 
     // Other Peripherals
     Keyboard keyboard = Keyboard(*this);

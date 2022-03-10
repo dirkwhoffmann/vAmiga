@@ -20,9 +20,6 @@ public:
     // Number of emulated Zorro slots
     static constexpr isize slotCount = 5;
     
-    // A FastRam expansion board
-    RamExpansion ramExpansion = RamExpansion(amiga);
-
 private:
     
     ZorroBoard *slots[slotCount + 1] = {
