@@ -121,7 +121,10 @@ public:
     RetroShell &operator<<(int value);
     RetroShell &operator<<(long value);
     RetroShell &operator<<(std::stringstream &stream);
-                
+    
+    // Assigns an additional output stream
+    void setStream(std::ostream &os);
+       
 private:
     
     // Marks the text storage as dirty

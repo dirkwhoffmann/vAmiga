@@ -63,7 +63,8 @@ TextStorage::operator<<(char c)
             
         case '\n':
             
-            append("");
+            if (ostream) *ostream << storage.back() << std::endl;
+            append("");            
             break;
             
         case '\r':

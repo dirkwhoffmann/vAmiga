@@ -96,10 +96,14 @@ Headless::run(map<string,string> &keys)
     // Register message receiver
     amiga.msgQueue.setListener(this, ::process);
     
+    // Redirect shell output to the console
+    amiga.retroShell.setStream(std::cout);
+    
     // Execute script
-    std::cout << "TODO: Execute script " << inputs[0] << std::endl;
-    // script.execute(amiga);
-    // std::cout << "Done" << std::endl;
+    script.execute(amiga);
+
+    sleep(10);
+    std::cout << "Done" << std::endl;
 }
 
 void

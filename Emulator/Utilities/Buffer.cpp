@@ -48,8 +48,11 @@ Allocator::init(isize bytes)
         
         dealloc();
         
-        size = bytes;
-        ptr = new u8[size];
+        if (bytes) {
+
+            size = bytes;
+            ptr = new u8[size];
+        }
         
     } catch (...) {
         

@@ -95,6 +95,12 @@ RetroShell::tab(isize pos)
 }
 
 void
+RetroShell::setStream(std::ostream &os)
+{
+    storage.ostream = &os;
+}
+
+void
 RetroShell::needsDisplay()
 {
     msgQueue.put(MSG_UPDATE_CONSOLE);

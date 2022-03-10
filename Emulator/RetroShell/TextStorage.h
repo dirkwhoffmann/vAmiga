@@ -22,6 +22,11 @@ class TextStorage {
     // The stored lines
     std::vector<string> storage;
         
+public:
+    
+    // Optional output stream for debugging
+    std::ostream *ostream = nullptr;
+
     
     //
     // Reading
