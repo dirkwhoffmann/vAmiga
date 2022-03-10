@@ -34,19 +34,19 @@ int main(int argc, char *argv[])
 
     } catch (VAError &e) {
 
-        std::cout << "Error" << std::endl;
+        std::cout << "VAError: " << std::endl;
         std::cout << e.what() << std::endl;
         return 1;
         
     } catch (std::exception &e) {
 
-        std::cout << "Error" << std::endl;
+        std::cout << "Error: " << std::endl;
         std::cout << e.what() << std::endl;
         return 1;
     
     } catch (...) {
     
-        std::cout << "Error ..." << std::endl;
+        std::cout << "Error" << std::endl;
     }
     
     return 0;
@@ -146,7 +146,7 @@ Headless::parseArguments(int argc, char *argv[], map<string,string> &keys)
     // Parse all options
     while (1) {
         
-        int arg = getopt_long(argc, argv, ":v:o:", long_options, NULL);
+        int arg = getopt_long(argc, argv, ":v", long_options, NULL);
         if (arg == -1) break;
 
         switch (arg) {
@@ -177,8 +177,12 @@ void
 Headless::checkArguments(map<string,string> &keys)
 {
     // The user needs to specify a single input file
-    if (inputs.size() < 1) throw SyntaxError("No script file is given");
-    if (inputs.size() > 1) throw SyntaxError("More than one script file is given");
+    if (inputs.size() < 1) {
+        throw SyntaxError("No script file is given");
+    }
+    if (inputs.size() > 1) {
+        throw SyntaxError("More than one script file is given");
+    }
     
     // The input file must exist
     if (!util::fileExists(inputs[0])) {

@@ -128,7 +128,7 @@ Amiga::Amiga()
 Amiga::~Amiga()
 {
     debug(RUN_DEBUG, "Destroying Amiga\n");
-    // if (thread.joinable()) { halt(); }
+    if (thread.joinable()) { halt(); }
 }
 
 void
