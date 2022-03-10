@@ -69,18 +69,17 @@ Headless::process(long type, u32 data1, u32 data2)
         
     switch (type) {
             
+        case MSG_SCRIPT_DONE:
+        case MSG_SCRIPT_ABORT:
+
+            halt = true;
+            [[fallthrough]];
+            
         case MSG_SCRIPT_WAKEUP:
 
             barrier.unlock();
             break;
-            
-        case MSG_SCRIPT_DONE:
-        case MSG_SCRIPT_ABORT:
-            
-            amiga.halt();
-            std::cout << "Bye" << std::endl;
-            exit(0);
-
+ 
         default:
             break;
     }
@@ -121,7 +120,7 @@ Headless::run(map<string,string> &keys)
     barrier.lock();
     script.execute(amiga);
 
-    while (1) {
+    while (!halt) {
         
         barrier.lock();
         amiga.retroShell.continueScript();

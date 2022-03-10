@@ -35,6 +35,8 @@ class Headless {
     // Barrier for syncing the script execution
     util::Mutex barrier;
 
+    // Exit flag
+    bool halt = false;
 
 public:
         

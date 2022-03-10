@@ -365,7 +365,6 @@ RetroShell::continueScript()
         scriptLine++;
     }
     
-    printf("Sending MSG_SCRIPT_DONE\n");
     msgQueue.put(MSG_SCRIPT_DONE, scriptLine);
 }
 
