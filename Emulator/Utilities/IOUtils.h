@@ -40,8 +40,9 @@ string stripSuffix(const string &path);
 // Concatenates two path segments
 string appendPath(const string &path, const string &path2);
 
-// Checks if a string starts with '/'
+// Checks or creates an absolute path
 bool isAbsolutePath(const string &path);
+string makeAbsolutePath(const string &path);
 
 
 //

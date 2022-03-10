@@ -163,7 +163,7 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
 
             case MSG_VIEWPORT:              return "VIEWPORT";
                 
-            case MSG_MEM_LAYOUT:            return "LAYOUT";
+            case MSG_MEM_LAYOUT:            return "MEM_LAYOUT";
                     
             case MSG_DRIVE_CONNECT:         return "DRIVE_CONNECT";
             case MSG_DRIVE_DISCONNECT:      return "DRIVE_DISCONNECT";
