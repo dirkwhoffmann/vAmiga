@@ -59,6 +59,34 @@ process(const void *listener, long type, u32 data1, u32 data2)
 }
 
 void
+Headless::process(long type, u32 data1, u32 data2)
+{
+    if (verbose) {
+        
+        std::cout << MsgTypeEnum::key(type);
+        std::cout << "(" << data1 << ", " << data2 << ")" << std::endl;
+    }
+        
+    switch (type) {
+            
+        case MSG_SCRIPT_WAKEUP:
+
+            barrier.unlock();
+            break;
+            
+        case MSG_SCRIPT_DONE:
+        case MSG_SCRIPT_ABORT:
+            
+            amiga.halt();
+            std::cout << "Bye" << std::endl;
+            exit(0);
+
+        default:
+            break;
+    }
+}
+
+void
 Headless::main(int argc, char *argv[])
 {
     map<string,string> keys;
@@ -75,39 +103,6 @@ Headless::main(int argc, char *argv[])
 }
 
 void
-Headless::process(long type, u32 data1, u32 data2)
-{
-    if (verbose) {
-        
-        std::cout << MsgTypeEnum::key(type) << ": ";
-        std::cout << data1 << ", " << data2 << std::endl;
-    }
-    
-    // TODO: THIS NEEDS TO BE EXECUTED INSIDE THE 'HEADLESS' THREAD
-    // TODO: USE FUTURE / PROMISE
-    
-    switch (type) {
-            
-        case MSG_SCRIPT_WAKEUP:
-            
-            amiga.retroShell.continueScript();
-            break;
-            
-        case MSG_SCRIPT_DONE:
-        case MSG_SCRIPT_ABORT:
-            
-            amiga.halt();
-
-            std::cout << "Bye" << std::endl;
-            exit(0);
-            break;
-
-        default:
-            break;
-    }
-}
-
-void
 Headless::run(map<string,string> &keys)
 {
     // Parse command line arguments
@@ -115,18 +110,22 @@ Headless::run(map<string,string> &keys)
 
     // Read script file
     Script script(inputs[0]);
+
+    // Redirect shell output to the console
+    amiga.retroShell.setStream(std::cout);
     
     // Register message receiver
     amiga.msgQueue.setListener(this, ::process);
     
-    // Redirect shell output to the console
-    amiga.retroShell.setStream(std::cout);
-    
     // Execute script
+    barrier.lock();
     script.execute(amiga);
 
-    // Wait for MSG_SCRIPT_DONE to terminate the app
-    pause();
+    while (1) {
+        
+        barrier.lock();
+        amiga.retroShell.continueScript();
+    }
 }
 
 void

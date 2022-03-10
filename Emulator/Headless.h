@@ -32,13 +32,17 @@ class Headless {
     // The emulator instance
     Amiga amiga;
 
+    // Barrier for syncing the script execution
+    util::Mutex barrier;
+
+
 public:
         
-    // Main entry point
-    void main(int argc, char *argv[]);
-
     // Processes an incoming message
     void process(long type, u32 data1, u32 data2);
+
+    // Main entry point
+    void main(int argc, char *argv[]);
 
 private:
     
