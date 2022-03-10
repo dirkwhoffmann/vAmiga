@@ -28,7 +28,7 @@ Allocator::dealloc()
 
     if (ptr) {
  
-        printf("Freeing %ld bytes at %p\n", size, (void *)ptr);
+        // printf("Freeing %ld bytes at %p\n", size, (void *)ptr);
 
         delete [] ptr;
         ptr = nullptr;
