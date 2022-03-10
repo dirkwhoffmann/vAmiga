@@ -22,22 +22,6 @@
 #include "RTC.h"
 #include "ZorroManager.h"
 
-Memory::~Memory()
-{
-    dealloc();
-}
-
-void
-Memory::dealloc()
-{
-    if (rom) { delete[] rom; rom = nullptr; }
-    if (wom) { delete[] wom; wom = nullptr; }
-    if (ext) { delete[] ext; ext = nullptr; }
-    if (chip) { delete[] chip; chip = nullptr; }
-    if (slow) { delete[] slow; slow = nullptr; }
-    if (fast) { delete[] fast; fast = nullptr; }
-}
-
 void
 Memory::_dump(dump::Category category, std::ostream& os) const
 {
@@ -477,6 +461,7 @@ Memory::updateStats()
     stats.kickWrites.raw = 0;
 }
 
+/*
 void
 Memory::alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask, bool update)
 {
@@ -506,41 +491,61 @@ Memory::alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask, bool update)
     // Update the memory source tables if requested
     if (update) updateMemSrcTables();
 }
+*/
+
+void
+Memory::alloc(util::Allocator &allocator, isize bytes, i32 &size, u32 &mask, bool update)
+{
+    // Only proceed if memory layout will change
+    if (bytes == allocator.size) return;
+
+    // Allocate memory
+    allocator.init(bytes);
+    size = u32(bytes);
+    mask = size ? size - 1 : 0;
+    
+    if (uintptr_t(allocator.ptr) & 1) {
+        fatal("Memory at %p is not aligned\n", (void *)allocator.ptr);
+    }
+    
+    // Update the memory source tables if requested
+    if (update) updateMemSrcTables();
+}
 
 void
 Memory::allocChip(i32 bytes, bool update)
 {
-    alloc(bytes, chip, config.chipSize, chipMask, update);
+    alloc(chipAllocator, bytes, config.chipSize, chipMask, update);
 }
 
 void
 Memory::allocSlow(i32 bytes, bool update)
 {
-    alloc(bytes, slow, config.slowSize, slowMask, update);
+    alloc(slowAllocator, bytes, config.slowSize, slowMask, update);
 }
 
 void
 Memory::allocFast(i32 bytes, bool update)
 {
-    alloc(bytes, fast, config.fastSize, fastMask, update);
+    alloc(fastAllocator, bytes, config.fastSize, fastMask, update);
 }
             
 void
 Memory::allocRom(i32 bytes, bool update)
 {
-    alloc(bytes, rom, config.romSize, romMask, update);
+    alloc(romAllocator, bytes, config.romSize, romMask, update);
 }
 
 void
 Memory::allocWom(i32 bytes, bool update)
 {
-    alloc(bytes, wom, config.womSize, womMask, update);
+    alloc(womAllocator, bytes, config.womSize, womMask, update);
 }
 
 void
 Memory::allocExt(i32 bytes, bool update)
 {
-    alloc(bytes, ext, config.extSize, extMask, update);
+    alloc(extAllocator, bytes, config.extSize, extMask, update);
 }
 
 void

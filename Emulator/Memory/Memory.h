@@ -159,12 +159,19 @@ public:
      *    pointer != nullptr <=> mask == config.size - 1
      *
      */
-    u8 *rom = nullptr;
-    u8 *wom = nullptr;
-    u8 *ext = nullptr;
-    u8 *chip = nullptr;
-    u8 *slow = nullptr;
-    u8 *fast = nullptr;
+    u8 *rom;
+    u8 *wom;
+    u8 *ext;
+    u8 *chip;
+    u8 *slow;
+    u8 *fast;
+
+    util::Allocator romAllocator = util::Allocator(rom);
+    util::Allocator womAllocator = util::Allocator(wom);
+    util::Allocator extAllocator = util::Allocator(ext);
+    util::Allocator chipAllocator = util::Allocator(chip);
+    util::Allocator slowAllocator = util::Allocator(slow);
+    util::Allocator fastAllocator = util::Allocator(fast);
 
     u32 romMask = 0;
     u32 womMask = 0;
@@ -202,10 +209,8 @@ public:
 public:
     
     using SubComponent::SubComponent;
-    ~Memory();
-    void dealloc();
+ 
 
-    
     //
     // Methods from AmigaObject
     //
@@ -296,7 +301,8 @@ private:
     
 private:
     
-    void alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask, bool update);
+    // [[deprecated]] void alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask, bool update);
+    void alloc(util::Allocator &allocator, isize bytes, i32 &size, u32 &mask, bool update);
 
 public:
 

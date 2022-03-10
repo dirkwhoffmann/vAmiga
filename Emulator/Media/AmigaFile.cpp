@@ -143,11 +143,6 @@ AmigaFile::readFromStream(std::istream &stream)
     // Allocate memory
     data.init(fsize);
     data.clear();
-    /*
-    assert(data == nullptr);
-    data = new u8[fsize]();
-    size = (isize)fsize;
-    */
     
     // Read from stream
     stream.read((char *)data.ptr, data.size());
@@ -180,11 +175,6 @@ AmigaFile::readFromBuffer(const u8 *buf, isize len)
 
     // Allocate memory
     data.init(len);
-    /*
-    size = len;
-    assert(data == nullptr);
-    data = new u8[size];
-    */
 
     // Copy data
     std::memcpy(data.ptr, buf, data.size());

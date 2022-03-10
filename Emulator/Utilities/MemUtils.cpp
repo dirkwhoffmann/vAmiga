@@ -24,12 +24,12 @@ Allocator::Allocator(u8 *&ptr) : ptr(ptr)
 void
 Allocator::dealloc()
 {
-    // printf("Allocator::dealloc()\n");
-    
     assert((size == 0) == (ptr == nullptr));
 
     if (ptr) {
-        
+ 
+        printf("Freeing %ld bytes at %p\n", size, (void *)ptr);
+
         delete [] ptr;
         ptr = nullptr;
         size = 0;
