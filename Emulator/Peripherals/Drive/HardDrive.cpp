@@ -347,60 +347,6 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
     }
 }
 
-isize
-HardDrive::_size()
-{
-    util::SerCounter counter;
-
-    // Determine size information
-    auto dataSize = geometry.numBytes() + 8;
-
-    applyToPersistentItems(counter);
-    applyToResetItems(counter);
-    
-    counter.count += dataSize;
-    return counter.count;
-}
-
-isize
-HardDrive::didLoadFromBuffer(const u8 *buffer)
-{
-    util::SerReader reader(buffer);
-    isize dataSize;
-
-    // Load size information
-    reader << dataSize;
-
-    // Allocate memory
-    if (dataSize > MB(504)) throw VAError(ERROR_SNAP_CORRUPTED);
-    alloc(isize(dataSize));
-
-    // Load data
-    // debug(true, "data = %p size = %ld\n", (void *)data, dataSize);
-    // debug(true, "numBytes = %ld\n", desc.geometry.numBytes());
-    assert(dataSize == geometry.numBytes());
-    reader.copy(data, dataSize);
-
-    return (isize)(reader.ptr - buffer);
-}
-
-isize
-HardDrive::didSaveToBuffer(u8 *buffer)
-{
-    util::SerWriter writer(buffer);
-
-    // Determine size information
-    isize dataSize = geometry.numBytes();
-
-    // Save size information
-    writer << dataSize;
- 
-    // Write data
-    writer.copy(data, dataSize);
-
-    return (isize)(writer.ptr - buffer);
-}
-
 bool
 HardDrive::isConnected() const
 {
@@ -410,7 +356,7 @@ HardDrive::isConnected() const
 u64
 HardDrive::fnv() const
 {
-    return hasDisk() ? util::fnv64(data.ptr, desc.geometry.numBytes()) : 0;
+    return hasDisk() ? util::fnv64(data.ptr, geometry.numBytes()) : 0;
 }
 
 bool
