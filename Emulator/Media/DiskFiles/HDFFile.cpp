@@ -40,7 +40,7 @@ HDFFile::finalizeRead()
     for (auto &p :  ptable) {
         
         p.checkCompatibility();
-        if (p.highCyl > hdrv.geometry.cylinders) {
+        if (isize(p.highCyl) > hdrv.geometry.cylinders) {
             throw(ERROR_HDR_CORRUPTED_PTABLE);
         }
     }

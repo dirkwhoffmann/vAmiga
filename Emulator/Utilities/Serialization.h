@@ -10,7 +10,6 @@
 #pragma once
 
 #include "Macros.h"
-//#include "MemUtils.h"
 #include "Buffer.h"
 #include <vector>
 
@@ -333,7 +332,7 @@ public:
     {
         i64 len;
         *this << len;
-        a.init(ptr, len);
+        a.init(ptr, isize(len));
         ptr += len;
         return *this;
     }

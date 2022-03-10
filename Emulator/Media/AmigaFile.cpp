@@ -141,7 +141,7 @@ AmigaFile::readFromStream(std::istream &stream)
     stream.seekg(0, std::ios::beg);
 
     // Allocate memory
-    data.init(fsize);
+    data.init(isize(fsize));
     data.clear();
     
     // Read from stream
