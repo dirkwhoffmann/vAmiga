@@ -284,6 +284,143 @@
 		50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC76E2515EBED00E47421 /* IMGFile.cpp */; };
 		50FAC77525160BBF00E47421 /* FloppyFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC77325160BBF00E47421 /* FloppyFile.cpp */; };
 		50FC046827DA02FD00C3E566 /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC046627DA02FD00C3E566 /* Buffer.cpp */; };
+		50FC047627DA10AD00C3E566 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC047427DA108500C3E566 /* main.cpp */; };
+		50FC047727DA129800C3E566 /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC046627DA02FD00C3E566 /* Buffer.cpp */; };
+		50FC047827DA129B00C3E566 /* Chrono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5072159F25EA9AE600787591 /* Chrono.cpp */; };
+		50FC047927DA129F00C3E566 /* Concurrency.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C716E255EE2AC00DDEEB2 /* Concurrency.cpp */; };
+		50FC047A27DA12AB00C3E566 /* MemUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500A0A28262305BE0019F013 /* MemUtils.cpp */; };
+		50FC047B27DA12AB00C3E566 /* SSEUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A3A3821F4996400132020 /* SSEUtils.cpp */; };
+		50FC047C27DA12AB00C3E566 /* Checksum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B3C44725EAFB5500651700 /* Checksum.cpp */; };
+		50FC047D27DA12AB00C3E566 /* StringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506D6AB0276C7B2D002C9711 /* StringUtils.cpp */; };
+		50FC047E27DA12AB00C3E566 /* IOUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C0B78025EC367000CDE1F2 /* IOUtils.cpp */; };
+		50FC047F27DA12AB00C3E566 /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A61461260DB7F900A01428 /* Parser.cpp */; };
+		50FC048027DA190400C3E566 /* AmigaComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0B21EB3708002E32A6 /* AmigaComponent.cpp */; };
+		50FC048127DA190400C3E566 /* SubComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79BE7232D123000D296FB /* SubComponent.cpp */; };
+		50FC048227DA190400C3E566 /* MsgQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF521EA1FBC0043D0E9 /* MsgQueue.cpp */; };
+		50FC048327DA190400C3E566 /* AmigaObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0521EB218E002E32A6 /* AmigaObject.cpp */; };
+		50FC048427DA190400C3E566 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5042F2DB26BE57E600126C05 /* Thread.cpp */; };
+		50FC048527DA190400C3E566 /* Error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6F8425D71FBE0004AFBC /* Error.cpp */; };
+		50FC048627DA194200C3E566 /* MoiraDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */; };
+		50FC048727DA194200C3E566 /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508E7F932206CDBD00F7D88C /* CPU.cpp */; };
+		50FC048827DA194200C3E566 /* Moira.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE37240D41EE00155AE4 /* Moira.cpp */; };
+		50FC048927DA195600C3E566 /* TOD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5921EA1FBC0043D0E9 /* TOD.cpp */; };
+		50FC048A27DA195600C3E566 /* CIARegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B81E0924E6BEA5004384C9 /* CIARegs.cpp */; };
+		50FC048B27DA195600C3E566 /* CIAEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */; };
+		50FC048C27DA195600C3E566 /* CIA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5C21EA1FBC0043D0E9 /* CIA.cpp */; };
+		50FC048D27DA195D00C3E566 /* Paula.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5030890F21EFA74600FEAD12 /* Paula.cpp */; };
+		50FC048E27DA195D00C3E566 /* PaulaRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE224D9B08C000AA367 /* PaulaRegs.cpp */; };
+		50FC048F27DA195D00C3E566 /* PaulaEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBED024D3D61A0037082D /* PaulaEvents.cpp */; };
+		50FC049027DA196500C3E566 /* Denise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17E21EF136100B9E80E /* Denise.cpp */; };
+		50FC049127DA196500C3E566 /* DeniseInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE8B1B27833D2500991F89 /* DeniseInfo.cpp */; };
+		50FC049227DA196500C3E566 /* DeniseRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE424D9B210000AA367 /* DeniseRegs.cpp */; };
+		50FC049327DA196500C3E566 /* Colors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5027418D2297CACF0038E5AF /* Colors.cpp */; };
+		50FC049427DA196500C3E566 /* PixelEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502F7DD22221E52200AEEC65 /* PixelEngine.cpp */; };
+		50FC049527DA196C00C3E566 /* FFmpeg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1905A277F69B300B8DBE2 /* FFmpeg.cpp */; };
+		50FC049627DA196C00C3E566 /* DeniseDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D2B85026D292B7008040E5 /* DeniseDebugger.cpp */; };
+		50FC049727DA196C00C3E566 /* NamedPipe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1905D277F69CA00B8DBE2 /* NamedPipe.cpp */; };
+		50FC049827DA196C00C3E566 /* Recorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50912FFB2525B7AD0049805B /* Recorder.cpp */; };
+		50FC049927DA197500C3E566 /* AgnusEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEDD24D3D8700037082D /* AgnusEvents.cpp */; };
+		50FC049A27DA197500C3E566 /* Scheduler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AA4CE126DA11010050B871 /* Scheduler.cpp */; };
+		50FC049B27DA197500C3E566 /* AgnusInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08AC27819CD100F0C567 /* AgnusInfo.cpp */; };
+		50FC049C27DA197500C3E566 /* Agnus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17B21EF121E00B9E80E /* Agnus.cpp */; };
+		50FC049D27DA197500C3E566 /* AgnusRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EDE24D93EDD000AA367 /* AgnusRegs.cpp */; };
+		50FC049E27DA197500C3E566 /* AgnusDma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504C48B324143AB4008ADAB3 /* AgnusDma.cpp */; };
+		50FC049F27DA197A00C3E566 /* SequencerBpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506ACE45279AC76700BA7877 /* SequencerBpl.cpp */; };
+		50FC04A027DA197A00C3E566 /* Sequencer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AFEBB8278EF5FD00F422D5 /* Sequencer.cpp */; };
+		50FC04A127DA197A00C3E566 /* SequencerInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AFEBBD278EF6CB00F422D5 /* SequencerInfo.cpp */; };
+		50FC04A227DA197A00C3E566 /* SequencerDas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506ACE43279AC75100BA7877 /* SequencerDas.cpp */; };
+		50FC04A327DA197A00C3E566 /* SequencerRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5041C6272791AF0800D3C494 /* SequencerRegs.cpp */; };
+		50FC04A427DA198100C3E566 /* Copper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502F7DCD2221706000AEEC65 /* Copper.cpp */; };
+		50FC04A527DA198100C3E566 /* CopperInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08AE27819E2400F0C567 /* CopperInfo.cpp */; };
+		50FC04A627DA198100C3E566 /* CopperEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBECB24D3D4540037082D /* CopperEvents.cpp */; };
+		50FC04A727DA198100C3E566 /* CopperDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5071B7852621F88800D6FB54 /* CopperDebugger.cpp */; };
+		50FC04A827DA198100C3E566 /* CopperRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EDC24D93DC4000AA367 /* CopperRegs.cpp */; };
+		50FC04A927DA198E00C3E566 /* FastBlitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1E5D12242B9DA008EF4B0 /* FastBlitter.cpp */; };
+		50FC04AA27DA198E00C3E566 /* SlowBlitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509047B5230575E6009CEC1C /* SlowBlitter.cpp */; };
+		50FC04AB27DA198E00C3E566 /* Blitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D375DD222C7C6B0040987C /* Blitter.cpp */; };
+		50FC04AC27DA198E00C3E566 /* BlitterEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEC624D3D39D0037082D /* BlitterEvents.cpp */; };
+		50FC04AD27DA198E00C3E566 /* BlitterInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08B027819E4100F0C567 /* BlitterInfo.cpp */; };
+		50FC04AE27DA198E00C3E566 /* BlitterRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE024D9407F000AA367 /* BlitterRegs.cpp */; };
+		50FC04AF27DA199200C3E566 /* DmaDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E204E82295A3F20082B63D /* DmaDebugger.cpp */; };
+		50FC04B027DA199600C3E566 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
+		50FC04B127DA199C00C3E566 /* RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B821B2262FFB200042871 /* RTC.cpp */; };
+		50FC04B227DA199C00C3E566 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
+		50FC04B327DA199C00C3E566 /* SerialPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B35B6022B2382E001A9C17 /* SerialPort.cpp */; };
+		50FC04B427DA19A900C3E566 /* ZorroManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50950ED622881B7A0073F755 /* ZorroManager.cpp */; };
+		50FC04B527DA19A900C3E566 /* HdController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508AC36727B7F6FC006AD2E7 /* HdController.cpp */; };
+		50FC04B627DA19A900C3E566 /* RamExpansion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502023EB27B6BE7200820DB6 /* RamExpansion.cpp */; };
+		50FC04B727DA19A900C3E566 /* ZorroBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502023E827B6BDEA00820DB6 /* ZorroBoard.cpp */; };
+		50FC04B827DA19B200C3E566 /* FloppyDrive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEBC21F4F61F0091155D /* FloppyDrive.cpp */; };
+		50FC04B927DA19B200C3E566 /* Drive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50210B1E27CB6A41001193AA /* Drive.cpp */; };
+		50FC04BA27DA19B200C3E566 /* FloppyDisk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB621F4F5C60091155D /* FloppyDisk.cpp */; };
+		50FC04BB27DA19B200C3E566 /* HardDrive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5004C3A527BD516E00A9161A /* HardDrive.cpp */; };
+		50FC04BC27DA19B200C3E566 /* DriveDescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501C514027C0CE6600DF1DD5 /* DriveDescriptors.cpp */; };
+		50FC04BD27DA19C200C3E566 /* Mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505554AA2264C47600CB07E0 /* Mouse.cpp */; };
+		50FC04BE27DA19C900C3E566 /* Joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D7CDC22286E968002689F0 /* Joystick.cpp */; };
+		50FC04BF27DA19CE00C3E566 /* KeyboardEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEDF24D3D9080037082D /* KeyboardEvents.cpp */; };
+		50FC04C027DA19CE00C3E566 /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
+		50FC04C127DA19DA00C3E566 /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* Snapshot.cpp */; };
+		50FC04C227DA19DA00C3E566 /* Script.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FCCA7A262AAAEA00398342 /* Script.cpp */; };
+		50FC04C327DA19DA00C3E566 /* AmigaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AmigaFile.cpp */; };
+		50FC04C427DA19DE00C3E566 /* ExtendedRomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */; };
+		50FC04C527DA19DE00C3E566 /* RomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* RomFile.cpp */; };
+		50FC04C627DA19E900C3E566 /* Folder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C66772551577D0028D497 /* Folder.cpp */; };
+		50FC04C727DA19E900C3E566 /* EXEFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5019B1EE254B292D00A7AB95 /* EXEFile.cpp */; };
+		50FC04C827DA19E900C3E566 /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
+		50FC04C927DA19E900C3E566 /* EXTFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5009B7FA2557051A0037288E /* EXTFile.cpp */; };
+		50FC04CA27DA19E900C3E566 /* DiskFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1B0A427CE7164005E41DA /* DiskFile.cpp */; };
+		50FC04CB27DA19E900C3E566 /* FloppyFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC77325160BBF00E47421 /* FloppyFile.cpp */; };
+		50FC04CC27DA19E900C3E566 /* DMSFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B3124B5DDAF0078FDC9 /* DMSFile.cpp */; };
+		50FC04CD27DA19E900C3E566 /* HDFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99F256E76A40053F9AC /* HDFFile.cpp */; };
+		50FC04CE27DA19E900C3E566 /* IMGFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC76E2515EBED00E47421 /* IMGFile.cpp */; };
+		50FC04CF27DA19F600C3E566 /* FSDescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C01082577A8C000F9E05C /* FSDescriptors.cpp */; };
+		50FC04D027DA19F600C3E566 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5029C6E427CA6209002F6CCC /* FileSystem.cpp */; };
+		50FC04D127DA19F600C3E566 /* MutableFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056506A25440FFB00A79D27 /* MutableFileSystem.cpp */; };
+		50FC04D227DA19F600C3E566 /* BootBlockImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A64B95257A63A600442964 /* BootBlockImage.cpp */; };
+		50FC04D327DA19F600C3E566 /* FSObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056507A25459C8800A79D27 /* FSObjects.cpp */; };
+		50FC04D427DA19F600C3E566 /* FSBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50565070254573E100A79D27 /* FSBlock.cpp */; };
+		50FC04D527DA1A0000C3E566 /* InterpreterCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3662260B1D95004F160A /* InterpreterCmds.cpp */; };
+		50FC04D627DA1A0000C3E566 /* Command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3658260B1766004F160A /* Command.cpp */; };
+		50FC04D727DA1A0000C3E566 /* RetroShellCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3667260B3ED0004F160A /* RetroShellCmds.cpp */; };
+		50FC04D827DA1A0000C3E566 /* RetroShell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B9C426260942D000A86C31 /* RetroShell.cpp */; };
+		50FC04D927DA1A0000C3E566 /* TextStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AD904C276E10660011ECCB /* TextStorage.cpp */; };
+		50FC04DA27DA1A0000C3E566 /* Interpreter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C365C260B177E004F160A /* Interpreter.cpp */; };
+		50FC04DC27DA1A1400C3E566 /* getbits.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B2124B5D31D0078FDC9 /* getbits.c */; };
+		50FC04DD27DA1A1400C3E566 /* tables.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B0D24B5D31D0078FDC9 /* tables.c */; };
+		50FC04DE27DA1A1400C3E566 /* u_medium.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B0F24B5D31D0078FDC9 /* u_medium.c */; };
+		50FC04DF27DA1A1400C3E566 /* maketbl.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B1424B5D31D0078FDC9 /* maketbl.c */; };
+		50FC04E027DA1A1400C3E566 /* xdms.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B1124B5D31D0078FDC9 /* xdms.c */; };
+		50FC04E127DA1A1400C3E566 /* u_rle.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B1E24B5D31D0078FDC9 /* u_rle.c */; };
+		50FC04E227DA1A1400C3E566 /* u_heavy.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B0C24B5D31D0078FDC9 /* u_heavy.c */; };
+		50FC04E327DA1A1400C3E566 /* crc_csum.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B1624B5D31D0078FDC9 /* crc_csum.c */; };
+		50FC04E427DA1A1400C3E566 /* u_quick.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B2324B5D31D0078FDC9 /* u_quick.c */; };
+		50FC04E527DA1A1400C3E566 /* u_init.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B1324B5D31D0078FDC9 /* u_init.c */; };
+		50FC04E627DA1A1400C3E566 /* pfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 50DD33CB27560EE600AE18B4 /* pfile.c */; };
+		50FC04E727DA1A1400C3E566 /* u_deep.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B0E24B5D31D0078FDC9 /* u_deep.c */; };
+		50FC04E827DA1A3500C3E566 /* OSDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB310275E460100D0A57B /* OSDebugger.cpp */; };
+		50FC04E927DA1A3700C3E566 /* OSDebuggerRead.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB3162762008C00D0A57B /* OSDebuggerRead.cpp */; };
+		50FC04EA27DA1A3900C3E566 /* OSDebuggerDump.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB318276200A000D0A57B /* OSDebuggerDump.cpp */; };
+		50FC04EB27DA1A4500C3E566 /* RshServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AD90582771B2770011ECCB /* RshServer.cpp */; };
+		50FC04EC27DA1A4500C3E566 /* SerServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C83FB2773C9BA001F8159 /* SerServer.cpp */; };
+		50FC04ED27DA1A4500C3E566 /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E98B4F275A124900AA0CB9 /* Socket.cpp */; };
+		50FC04EE27DA1A4500C3E566 /* GdbServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF1CC6276D174200386540 /* GdbServer.cpp */; };
+		50FC04EF27DA1A4500C3E566 /* RemoteManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C83F727739ED0001F8159 /* RemoteManager.cpp */; };
+		50FC04F027DA1A4500C3E566 /* RemoteServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E98B53275A127F00AA0CB9 /* RemoteServer.cpp */; };
+		50FC04F127DA1A4500C3E566 /* GdbServerCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF1CCD276DC7BB00386540 /* GdbServerCmds.cpp */; };
+		50FC04F227DA1A4A00C3E566 /* RegressionTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50984B63263A9B5100E37184 /* RegressionTester.cpp */; };
+		50FC04F327DA1A8F00C3E566 /* AudioFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A214E22869FF10016EA21 /* AudioFilter.cpp */; };
+		50FC04F427DA1A8F00C3E566 /* AudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5030C2DE252A2E8400107E00 /* AudioStream.cpp */; };
+		50FC04F527DA1A8F00C3E566 /* Sampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5078A5D32529E7FA00FCE384 /* Sampler.cpp */; };
+		50FC04F627DA1A8F00C3E566 /* Muxer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B70CAB252CE0BF006B5191 /* Muxer.cpp */; };
+		50FC04F727DA1A8F00C3E566 /* StateMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507D7767228BE3EF001E97A9 /* StateMachine.cpp */; };
+		50FC04F827DA1A8F00C3E566 /* StateMachineEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBED224D3D6D10037082D /* StateMachineEvents.cpp */; };
+		50FC04F927DA1A8F00C3E566 /* StateMachineRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE624D9B2C7000AA367 /* StateMachineRegs.cpp */; };
+		50FC04FA27DA1AA200C3E566 /* DiskControllerEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBED924D3D78F0037082D /* DiskControllerEvents.cpp */; };
+		50FC04FB27DA1AA200C3E566 /* DiskControllerRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B81E0724E6BCCA004384C9 /* DiskControllerRegs.cpp */; };
+		50FC04FC27DA1AA200C3E566 /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C0A542259402D000121CD /* DiskController.cpp */; };
+		50FC04FD27DA1AAB00C3E566 /* UARTEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEDB24D3D8170037082D /* UARTEvents.cpp */; };
+		50FC04FE27DA1AAB00C3E566 /* UART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F0BD2422AF883C001F4616 /* UART.cpp */; };
+		50FC04FF27DA1AB800C3E566 /* Amiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0E21EB410B002E32A6 /* Amiga.cpp */; };
 		50FC08AD27819CD100F0C567 /* AgnusInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08AC27819CD100F0C567 /* AgnusInfo.cpp */; };
 		50FC08AF27819E2400F0C567 /* CopperInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08AE27819E2400F0C567 /* CopperInfo.cpp */; };
 		50FC08B127819E4100F0C567 /* BlitterInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08B027819E4100F0C567 /* BlitterInfo.cpp */; };
@@ -291,6 +428,18 @@
 		50FF747327D3BBFE00B6EA01 /* hdr_click.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50FF747227D3BBFE00B6EA01 /* hdr_click.aiff */; };
 		50FFA7D02440CB0300BEBA6B /* ActivityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		50FC046B27DA0FA500C3E566 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		50001C642593230200D1FC91 /* DeviceDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDatabase.swift; sourceTree = "<group>"; };
@@ -784,6 +933,8 @@
 		50FAC77425160BBF00E47421 /* FloppyFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloppyFile.h; sourceTree = "<group>"; };
 		50FC046627DA02FD00C3E566 /* Buffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Buffer.cpp; sourceTree = "<group>"; };
 		50FC046727DA02FD00C3E566 /* Buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
+		50FC046D27DA0FA500C3E566 /* vAmigaCore */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = vAmigaCore; sourceTree = BUILT_PRODUCTS_DIR; };
+		50FC047427DA108500C3E566 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		50FC08AC27819CD100F0C567 /* AgnusInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusInfo.cpp; sourceTree = "<group>"; };
 		50FC08AE27819E2400F0C567 /* CopperInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperInfo.cpp; sourceTree = "<group>"; };
 		50FC08B027819E4100F0C567 /* BlitterInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlitterInfo.cpp; sourceTree = "<group>"; };
@@ -804,6 +955,13 @@
 				508FDFE321EA21550043D0E9 /* Cocoa.framework in Frameworks */,
 				508FDFE021EA214A0043D0E9 /* MetalKit.framework in Frameworks */,
 				508FDFE121EA214A0043D0E9 /* Metal.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		50FC046A27DA0FA500C3E566 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1035,6 +1193,7 @@
 			isa = PBXGroup;
 			children = (
 				508FDE6421EA1FA40043D0E9 /* vAmiga.app */,
+				50FC046D27DA0FA500C3E566 /* vAmigaCore */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1187,6 +1346,7 @@
 				50D661862282BE1800D67D88 /* AmigaTypes.h */,
 				50B14C0F21EB410B002E32A6 /* Amiga.h */,
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
+				50FC047427DA108500C3E566 /* main.cpp */,
 				50B14C0421EB212E002E32A6 /* Utilities */,
 				50104E8825ECDAA30047A9AA /* Base */,
 				508E7F962206CDC600F7D88C /* CPU */,
@@ -1752,6 +1912,23 @@
 			productReference = 508FDE6421EA1FA40043D0E9 /* vAmiga.app */;
 			productType = "com.apple.product-type.application";
 		};
+		50FC046C27DA0FA500C3E566 /* vAmigaCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 50FC047127DA0FA500C3E566 /* Build configuration list for PBXNativeTarget "vAmigaCore" */;
+			buildPhases = (
+				50FC046927DA0FA500C3E566 /* Sources */,
+				50FC046A27DA0FA500C3E566 /* Frameworks */,
+				50FC046B27DA0FA500C3E566 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = vAmigaCore;
+			productName = vAmigaCore;
+			productReference = 50FC046D27DA0FA500C3E566 /* vAmigaCore */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1765,6 +1942,9 @@
 					508FDE6321EA1FA40043D0E9 = {
 						CreatedOnToolsVersion = 10.1;
 						LastSwiftMigration = 1020;
+					};
+					50FC046C27DA0FA500C3E566 = {
+						CreatedOnToolsVersion = 13.2.1;
 					};
 				};
 			};
@@ -1782,6 +1962,7 @@
 			projectRoot = "";
 			targets = (
 				508FDE6321EA1FA40043D0E9 /* vAmiga */,
+				50FC046C27DA0FA500C3E566 /* vAmigaCore */,
 			);
 		};
 /* End PBXProject section */
@@ -2102,6 +2283,150 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		50FC046927DA0FA500C3E566 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				50FC048B27DA195600C3E566 /* CIAEvents.cpp in Sources */,
+				50FC04D127DA19F600C3E566 /* MutableFileSystem.cpp in Sources */,
+				50FC04BB27DA19B200C3E566 /* HardDrive.cpp in Sources */,
+				50FC049A27DA197500C3E566 /* Scheduler.cpp in Sources */,
+				50FC049B27DA197500C3E566 /* AgnusInfo.cpp in Sources */,
+				50FC04DC27DA1A1400C3E566 /* getbits.c in Sources */,
+				50FC048327DA190400C3E566 /* AmigaObject.cpp in Sources */,
+				50FC04C027DA19CE00C3E566 /* Keyboard.cpp in Sources */,
+				50FC048A27DA195600C3E566 /* CIARegs.cpp in Sources */,
+				50FC049D27DA197500C3E566 /* AgnusRegs.cpp in Sources */,
+				50FC04FB27DA1AA200C3E566 /* DiskControllerRegs.cpp in Sources */,
+				50FC04BE27DA19C900C3E566 /* Joystick.cpp in Sources */,
+				50FC04F627DA1A8F00C3E566 /* Muxer.cpp in Sources */,
+				50FC04DA27DA1A0000C3E566 /* Interpreter.cpp in Sources */,
+				50FC04C927DA19E900C3E566 /* EXTFile.cpp in Sources */,
+				50FC04DF27DA1A1400C3E566 /* maketbl.c in Sources */,
+				50FC049327DA196500C3E566 /* Colors.cpp in Sources */,
+				50FC04E327DA1A1400C3E566 /* crc_csum.c in Sources */,
+				50FC047E27DA12AB00C3E566 /* IOUtils.cpp in Sources */,
+				50FC047D27DA12AB00C3E566 /* StringUtils.cpp in Sources */,
+				50FC04A227DA197A00C3E566 /* SequencerDas.cpp in Sources */,
+				50FC048927DA195600C3E566 /* TOD.cpp in Sources */,
+				50FC04FA27DA1AA200C3E566 /* DiskControllerEvents.cpp in Sources */,
+				50FC04A727DA198100C3E566 /* CopperDebugger.cpp in Sources */,
+				50FC04A027DA197A00C3E566 /* Sequencer.cpp in Sources */,
+				50FC048F27DA195D00C3E566 /* PaulaEvents.cpp in Sources */,
+				50FC049827DA196C00C3E566 /* Recorder.cpp in Sources */,
+				50FC04CF27DA19F600C3E566 /* FSDescriptors.cpp in Sources */,
+				50FC04BF27DA19CE00C3E566 /* KeyboardEvents.cpp in Sources */,
+				50FC04B727DA19A900C3E566 /* ZorroBoard.cpp in Sources */,
+				50FC04DE27DA1A1400C3E566 /* u_medium.c in Sources */,
+				50FC04C727DA19E900C3E566 /* EXEFile.cpp in Sources */,
+				50FC04C627DA19E900C3E566 /* Folder.cpp in Sources */,
+				50FC04DD27DA1A1400C3E566 /* tables.c in Sources */,
+				50FC049F27DA197A00C3E566 /* SequencerBpl.cpp in Sources */,
+				50FC04BA27DA19B200C3E566 /* FloppyDisk.cpp in Sources */,
+				50FC04A927DA198E00C3E566 /* FastBlitter.cpp in Sources */,
+				50FC04B527DA19A900C3E566 /* HdController.cpp in Sources */,
+				50FC04E427DA1A1400C3E566 /* u_quick.c in Sources */,
+				50FC04F927DA1A8F00C3E566 /* StateMachineRegs.cpp in Sources */,
+				50FC04BC27DA19B200C3E566 /* DriveDescriptors.cpp in Sources */,
+				50FC049627DA196C00C3E566 /* DeniseDebugger.cpp in Sources */,
+				50FC04E727DA1A1400C3E566 /* u_deep.c in Sources */,
+				50FC04C527DA19DE00C3E566 /* RomFile.cpp in Sources */,
+				50FC04EA27DA1A3900C3E566 /* OSDebuggerDump.cpp in Sources */,
+				50FC048C27DA195600C3E566 /* CIA.cpp in Sources */,
+				50FC049927DA197500C3E566 /* AgnusEvents.cpp in Sources */,
+				50FC048627DA194200C3E566 /* MoiraDebugger.cpp in Sources */,
+				50FC04D227DA19F600C3E566 /* BootBlockImage.cpp in Sources */,
+				50FC04EC27DA1A4500C3E566 /* SerServer.cpp in Sources */,
+				50FC04E027DA1A1400C3E566 /* xdms.c in Sources */,
+				50FC047A27DA12AB00C3E566 /* MemUtils.cpp in Sources */,
+				50FC04BD27DA19C200C3E566 /* Mouse.cpp in Sources */,
+				50FC04F227DA1A4A00C3E566 /* RegressionTester.cpp in Sources */,
+				50FC04B927DA19B200C3E566 /* Drive.cpp in Sources */,
+				50FC04EE27DA1A4500C3E566 /* GdbServer.cpp in Sources */,
+				50FC04C227DA19DA00C3E566 /* Script.cpp in Sources */,
+				50FC04CB27DA19E900C3E566 /* FloppyFile.cpp in Sources */,
+				50FC04B627DA19A900C3E566 /* RamExpansion.cpp in Sources */,
+				50FC04A327DA197A00C3E566 /* SequencerRegs.cpp in Sources */,
+				50FC04B227DA199C00C3E566 /* ControlPort.cpp in Sources */,
+				50FC04FE27DA1AAB00C3E566 /* UART.cpp in Sources */,
+				50FC048E27DA195D00C3E566 /* PaulaRegs.cpp in Sources */,
+				50FC048527DA190400C3E566 /* Error.cpp in Sources */,
+				50FC048727DA194200C3E566 /* CPU.cpp in Sources */,
+				50FC04D327DA19F600C3E566 /* FSObjects.cpp in Sources */,
+				50FC04AD27DA198E00C3E566 /* BlitterInfo.cpp in Sources */,
+				50FC04D627DA1A0000C3E566 /* Command.cpp in Sources */,
+				50FC04E227DA1A1400C3E566 /* u_heavy.c in Sources */,
+				50FC04FD27DA1AAB00C3E566 /* UARTEvents.cpp in Sources */,
+				50FC048027DA190400C3E566 /* AmigaComponent.cpp in Sources */,
+				50FC04CD27DA19E900C3E566 /* HDFFile.cpp in Sources */,
+				50FC04EF27DA1A4500C3E566 /* RemoteManager.cpp in Sources */,
+				50FC049027DA196500C3E566 /* Denise.cpp in Sources */,
+				50FC04FC27DA1AA200C3E566 /* DiskController.cpp in Sources */,
+				50FC049527DA196C00C3E566 /* FFmpeg.cpp in Sources */,
+				50FC04FF27DA1AB800C3E566 /* Amiga.cpp in Sources */,
+				50FC04A127DA197A00C3E566 /* SequencerInfo.cpp in Sources */,
+				50FC04B827DA19B200C3E566 /* FloppyDrive.cpp in Sources */,
+				50FC04D727DA1A0000C3E566 /* RetroShellCmds.cpp in Sources */,
+				50FC049127DA196500C3E566 /* DeniseInfo.cpp in Sources */,
+				50FC04D927DA1A0000C3E566 /* TextStorage.cpp in Sources */,
+				50FC047827DA129B00C3E566 /* Chrono.cpp in Sources */,
+				50FC04C827DA19E900C3E566 /* ADFFile.cpp in Sources */,
+				50FC04F127DA1A4500C3E566 /* GdbServerCmds.cpp in Sources */,
+				50FC04E927DA1A3700C3E566 /* OSDebuggerRead.cpp in Sources */,
+				50FC04AC27DA198E00C3E566 /* BlitterEvents.cpp in Sources */,
+				50FC04AB27DA198E00C3E566 /* Blitter.cpp in Sources */,
+				50FC049C27DA197500C3E566 /* Agnus.cpp in Sources */,
+				50FC04A827DA198100C3E566 /* CopperRegs.cpp in Sources */,
+				50FC04CE27DA19E900C3E566 /* IMGFile.cpp in Sources */,
+				50FC04F827DA1A8F00C3E566 /* StateMachineEvents.cpp in Sources */,
+				50FC047627DA10AD00C3E566 /* main.cpp in Sources */,
+				50FC049227DA196500C3E566 /* DeniseRegs.cpp in Sources */,
+				50FC04F727DA1A8F00C3E566 /* StateMachine.cpp in Sources */,
+				50FC04F527DA1A8F00C3E566 /* Sampler.cpp in Sources */,
+				50FC04AE27DA198E00C3E566 /* BlitterRegs.cpp in Sources */,
+				50FC04A427DA198100C3E566 /* Copper.cpp in Sources */,
+				50FC04A627DA198100C3E566 /* CopperEvents.cpp in Sources */,
+				50FC04C427DA19DE00C3E566 /* ExtendedRomFile.cpp in Sources */,
+				50FC04D027DA19F600C3E566 /* FileSystem.cpp in Sources */,
+				50FC047727DA129800C3E566 /* Buffer.cpp in Sources */,
+				50FC049727DA196C00C3E566 /* NamedPipe.cpp in Sources */,
+				50FC04D827DA1A0000C3E566 /* RetroShell.cpp in Sources */,
+				50FC04A527DA198100C3E566 /* CopperInfo.cpp in Sources */,
+				50FC04F327DA1A8F00C3E566 /* AudioFilter.cpp in Sources */,
+				50FC04E627DA1A1400C3E566 /* pfile.c in Sources */,
+				50FC04AF27DA199200C3E566 /* DmaDebugger.cpp in Sources */,
+				50FC04ED27DA1A4500C3E566 /* Socket.cpp in Sources */,
+				50FC048827DA194200C3E566 /* Moira.cpp in Sources */,
+				50FC048427DA190400C3E566 /* Thread.cpp in Sources */,
+				50FC04E127DA1A1400C3E566 /* u_rle.c in Sources */,
+				50FC047927DA129F00C3E566 /* Concurrency.cpp in Sources */,
+				50FC047B27DA12AB00C3E566 /* SSEUtils.cpp in Sources */,
+				50FC04AA27DA198E00C3E566 /* SlowBlitter.cpp in Sources */,
+				50FC04B327DA199C00C3E566 /* SerialPort.cpp in Sources */,
+				50FC049E27DA197500C3E566 /* AgnusDma.cpp in Sources */,
+				50FC047F27DA12AB00C3E566 /* Parser.cpp in Sources */,
+				50FC04E527DA1A1400C3E566 /* u_init.c in Sources */,
+				50FC049427DA196500C3E566 /* PixelEngine.cpp in Sources */,
+				50FC04CC27DA19E900C3E566 /* DMSFile.cpp in Sources */,
+				50FC04C327DA19DA00C3E566 /* AmigaFile.cpp in Sources */,
+				50FC048127DA190400C3E566 /* SubComponent.cpp in Sources */,
+				50FC04CA27DA19E900C3E566 /* DiskFile.cpp in Sources */,
+				50FC048D27DA195D00C3E566 /* Paula.cpp in Sources */,
+				50FC047C27DA12AB00C3E566 /* Checksum.cpp in Sources */,
+				50FC04B127DA199C00C3E566 /* RTC.cpp in Sources */,
+				50FC048227DA190400C3E566 /* MsgQueue.cpp in Sources */,
+				50FC04F027DA1A4500C3E566 /* RemoteServer.cpp in Sources */,
+				50FC04D427DA19F600C3E566 /* FSBlock.cpp in Sources */,
+				50FC04C127DA19DA00C3E566 /* Snapshot.cpp in Sources */,
+				50FC04EB27DA1A4500C3E566 /* RshServer.cpp in Sources */,
+				50FC04E827DA1A3500C3E566 /* OSDebugger.cpp in Sources */,
+				50FC04F427DA1A8F00C3E566 /* AudioStream.cpp in Sources */,
+				50FC04B427DA19A900C3E566 /* ZorroManager.cpp in Sources */,
+				50FC04B027DA199600C3E566 /* Memory.cpp in Sources */,
+				50FC04D527DA1A0000C3E566 /* InterpreterCmds.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
@@ -2356,6 +2681,32 @@
 			};
 			name = Release;
 		};
+		50FC047227DA0FA500C3E566 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3NG65ZLYW7;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		50FC047327DA0FA500C3E566 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3NG65ZLYW7;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2373,6 +2724,15 @@
 			buildConfigurations = (
 				508FDE8D21EA1FA50043D0E9 /* Debug */,
 				508FDE8E21EA1FA50043D0E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		50FC047127DA0FA500C3E566 /* Build configuration list for PBXNativeTarget "vAmigaCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				50FC047227DA0FA500C3E566 /* Debug */,
+				50FC047327DA0FA500C3E566 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
