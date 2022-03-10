@@ -20,7 +20,7 @@ FSBlock::FSBlock(FileSystem &ref, Block nr, FSBlockType t) : device(ref)
     this->type = t;
     
     // Allocate memory if this block is not empty
-    if (type != FS_EMPTY_BLOCK) data = new u8[bsize()]();
+    if (type != FS_EMPTY_BLOCK) data.init(bsize());
     
     // Initialize
     switch (type) {
@@ -78,11 +78,6 @@ FSBlock::FSBlock(FileSystem &ref, Block nr, FSBlockType t) : device(ref)
         default:
             break;
     }
-}
-
-FSBlock::~FSBlock()
-{
-    if (data) delete [] data;
 }
 
 FSBlock *
@@ -547,7 +542,7 @@ FSBlock::check(isize byte, u8 *expected, bool strict) const
 u8 *
 FSBlock::addr32(isize nr) const
 {
-    return (data + 4 * nr) + (nr < 0 ? bsize() : 0);
+    return (data.ptr + 4 * nr) + (nr < 0 ? bsize() : 0);
 }
 
 u32
@@ -635,7 +630,7 @@ FSBlock::checksumBootBlock() const
     }
 
     // Second boot block
-    u8 *p = device.blocks[1]->data;
+    u8 *p = device.blocks[1]->data.ptr;
     
     for (isize i = 0; i < bsize() / 4; i++) {
         
@@ -757,7 +752,7 @@ FSBlock::dump() const
 void
 FSBlock::dumpData() const
 {
-    if (data) util::hexdumpLongwords(data, 512);
+    if (!data.empty()) util::hexdumpLongwords(data.ptr, 512);
 }
 
 void
@@ -766,7 +761,7 @@ FSBlock::importBlock(const u8 *src, isize size)
     assert(src);
     assert(size == bsize());
 
-    if (data) std::memcpy(data, src, size);
+    if (!data.empty()) std::memcpy(data.ptr, src, size);
 }
 
 void
@@ -779,10 +774,10 @@ FSBlock::exportBlock(u8 *dst, isize size)
     updateChecksum();
 
     // Export the block
-    if (data) {
-        std::memcpy(dst, data, size);
-    } else {
+    if (data.empty()) {
         std::memset(dst, 0, size);
+    } else {
+        std::memcpy(dst, data.ptr, size);
     }
 }
 
@@ -1348,7 +1343,7 @@ FSBlock::dumpHashTable() const
 {
     for (isize i = 0; i < hashTableSize(); i++) {
         
-        u32 value = read32(data + 24 + 4 * i);
+        u32 value = read32(data.ptr + 24 + 4 * i);
         if (value) {
             msg("%ld: %d ", i, value);
         }
@@ -1369,9 +1364,9 @@ FSBlock::writeBootBlock(BootBlockId id, isize page)
         auto image = BootBlockImage(id);
         
         if (page == 0) {
-            image.write(data + 4, 4, 511); // Write 508 bytes (skip header)
+            image.write(data.ptr + 4, 4, 511); // Write 508 bytes (skip header)
         } else {
-            image.write(data, 512, 1023);  // Write 512 bytes
+            image.write(data.ptr, 512, 1023);  // Write 512 bytes
         }
     }
 }
@@ -1734,12 +1729,12 @@ FSBlock::writeData(std::ostream& os, isize size)
             
         case FS_DATA_BLOCK_OFS:
             
-            os.write((char *)(data + 24), count);
+            os.write((char *)(data.ptr + 24), count);
             return count;
             
         case FS_DATA_BLOCK_FFS:
             
-            os.write((char *)data, count);
+            os.write((char *)data.ptr, count);
             return count;
             
         default:
