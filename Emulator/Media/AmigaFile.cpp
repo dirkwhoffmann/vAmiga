@@ -190,6 +190,12 @@ AmigaFile::readFromBuffer(const u8 *buf, isize len)
 }
 
 isize
+AmigaFile::readFromBuffer(const util::Buffer &buffer)
+{
+    return readFromBuffer(buffer.ptr, buffer.size());
+}
+
+isize
 AmigaFile::writeToStream(std::ostream &stream, isize offset, isize len)
 {
     assert(offset >= 0 && offset < data.size());
@@ -230,6 +236,13 @@ AmigaFile::writeToBuffer(u8 *buf, isize offset, isize len)
 }
 
 isize
+AmigaFile::writeToBuffer(util::Buffer &buffer, isize offset, isize len)
+{
+    buffer.init(len);
+    return writeToBuffer(buffer.ptr, offset, len);
+}
+
+isize
 AmigaFile::writeToStream(std::ostream &stream)
 {
     return writeToStream(stream, 0, data.size());
@@ -245,4 +258,10 @@ isize
 AmigaFile::writeToBuffer(u8 *buf)
 {
     return writeToBuffer(buf, 0, data.size());
+}
+
+isize
+AmigaFile::writeToBuffer(util::Buffer &buffer)
+{
+    return writeToBuffer(buffer, 0, data.size());
 }

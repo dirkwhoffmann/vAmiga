@@ -68,10 +68,9 @@ HDFFile::init(const u8 *buf, isize len)
 void
 HDFFile::init(const HardDrive &drive)
 {
-    // TODO: THIS FUNCTION IS A PERFORMANCE KILLER FOR LARGE BUFFERS
-    {   MEASURE_TIME("AmigaFile::init(const u8 *buf, isize len)")
+    {   MEASURE_TIME("AmigaFile::readFromBuffer(drive.data)")
         
-        AmigaFile::init(drive.data);
+        AmigaFile::readFromBuffer(drive.data);
     }
     
     // Overwrite the predicted geometry from the precise one

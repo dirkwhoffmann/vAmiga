@@ -133,16 +133,19 @@ protected:
     isize readFromStream(std::istream &stream) throws;
     isize readFromFile(const string &path) throws;
     isize readFromBuffer(const u8 *buf, isize len) throws;
+    isize readFromBuffer(const util::Buffer &buffer) throws;
 
 public:
     
     isize writeToStream(std::ostream &stream, isize offset, isize len) throws;
     isize writeToFile(const string &path, isize offset, isize len) throws;
     isize writeToBuffer(u8 *buf, isize offset, isize len) throws;
+    isize writeToBuffer(util::Buffer &buffer, isize offset, isize len) throws;
 
     isize writeToStream(std::ostream &stream) throws;
     isize writeToFile(const string &path) throws;
     isize writeToBuffer(u8 *buf) throws;
+    isize writeToBuffer(util::Buffer &buffer) throws;
 
 private:
     
