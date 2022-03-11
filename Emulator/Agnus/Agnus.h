@@ -39,6 +39,8 @@ class Agnus : public SubComponent {
 
     // Result of the latest inspection
     mutable AgnusInfo info = {};
+    mutable EventInfo eventInfo = {};
+    mutable EventSlotInfo slotInfo[SLOT_COUNT];
 
     // Current workload
     AgnusStats stats = {};

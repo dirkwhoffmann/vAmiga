@@ -607,7 +607,7 @@ using namespace moira;
 
 - (EventInfo)info
 {
-    return [self scheduler]->getInfo();
+    return [self scheduler]->getEventInfo();
 }
 
 - (EventSlotInfo)getEventSlotInfo:(NSInteger)slot

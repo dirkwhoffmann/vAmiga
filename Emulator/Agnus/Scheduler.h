@@ -81,7 +81,7 @@
 class Scheduler : public SubComponent {
 
     // Result of the latest inspection
-    mutable EventInfo info = {};
+    mutable EventInfo eventInfo = {};
     mutable EventSlotInfo slotInfo[SLOT_COUNT];
 
 public:
@@ -164,7 +164,7 @@ private:
     
 public:
     
-    EventInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    EventInfo getEventInfo() const { return AmigaComponent::getInfo(eventInfo); }
     EventSlotInfo getSlotInfo(isize nr) const;
 
 private:

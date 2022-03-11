@@ -519,14 +519,14 @@ Scheduler::_inspect() const
 {
     {   SYNCHRONIZED
         
-        info.cpuClock = cpu.getMasterClock();
-        info.cpuCycles = cpu.getCpuClock();
-        info.dmaClock = agnus.clock;
-        info.ciaAClock = ciaa.getClock();
-        info.ciaBClock  = ciab.getClock();
-        info.frame = agnus.frame.nr;
-        info.vpos = agnus.pos.v;
-        info.hpos = agnus.pos.h;
+        eventInfo.cpuClock = cpu.getMasterClock();
+        eventInfo.cpuCycles = cpu.getCpuClock();
+        eventInfo.dmaClock = agnus.clock;
+        eventInfo.ciaAClock = ciaa.getClock();
+        eventInfo.ciaBClock  = ciab.getClock();
+        eventInfo.frame = agnus.frame.nr;
+        eventInfo.vpos = agnus.pos.v;
+        eventInfo.hpos = agnus.pos.h;
         
         for (EventSlot i = 0; i < SLOT_COUNT; i++) {
             inspectSlot(i);
