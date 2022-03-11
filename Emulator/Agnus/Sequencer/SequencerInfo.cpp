@@ -62,10 +62,10 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
             string cycle = std::to_string(i) + ":";
             os << std::left << std::setw(5) << cycle;
 
-            string bpl = Scheduler::eventName(SLOT_BPL, bplEvent[i]);
+            string bpl = Agnus::eventName(SLOT_BPL, bplEvent[i]);
             os << std::left << std::setw(12) << bpl;
             os << " + ";
-            string das = Scheduler::eventName(SLOT_DAS, dasEvent[i]);
+            string das = Agnus::eventName(SLOT_DAS, dasEvent[i]);
             os << std::left << std::setw(12) << das;
             
             string next = "-> ";

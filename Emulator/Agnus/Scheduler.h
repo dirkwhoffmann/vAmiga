@@ -12,71 +12,7 @@
 #include "AgnusTypes.h"
 #include "SubComponent.h"
 
-/* About the event scheduler
- *
- * vAmiga is an event triggered emulator. If an action has to be performed at
- * a specific DMA cycle (e.g., activating the Copper at a certain beam
- * position), the action is scheduled via the event handling API and executed
- * when the trigger cycle has been reached.
- * Scheduled events are stored in so called event slots. Each slot is either
- * empty or contains a single event and is bound to a specific component. E.g.,
- * there is slot for Copper events, a slot for the Blitter events, a slot
- * for UART event, and so forth.
- * From a theoretical point of view, each event slot represents a state machine
- * running in parallel to the ones in the other slots. Keep in mind that the
- * state machines interact with each other in various ways (e.g., by blocking
- * the DMA bus). As a result, the slot ordering is important: If two events
- * trigger at the same cycle, the the slot with a smaller number is served
- * first.
- * To optimize speed, the event slots are categorized into primary, secondary,
- * and tertiary slots. Primary slots manage frequently occurring events (CIA
- * execution, DMA operations, etc.). Secondary slots manage events that
- * occurr occasionally (iterrupts, disk activity etc.). Tertiary slots manage
- * very rare events (inserting a disk, inspecting a component, etc.).
- * Accordingly, we call an event primary, secondary, or tertiary if it is
- * scheduled in a primary, secondary, or tertiary slot, respectively.
- * By default, the event handler only checks the primary event slots. To make
- * the event handler check the secondary slots, too, a special event has to be
- * scheduled in the SEC_SLOT (which is a primary slot and therefore
- * always checked). Triggering this event works like a wakeup call by telling
- * the event handler to check for secondary events as well. Hence, whenever an
- * event is schedules in a secondary slot, it has to be ensured that SEC_SLOT
- * contains a wakeup with a trigger cycle matching the smallest trigger cycle
- * of all secondary events.
- * Scheduling the wakeup event in SEC_SLOT is transparant for the callee. When
- * an event is scheduled, the event handler automatically checks if the
- * selected slot is primary or secondary and schedules the SEC_SLOT
- * automatically in the latter case. The same holds for tertiary events. When
- * such an event is scheduled, the event scheduler automatically schedules a
- * wakup event in the TER_SLOT.
- *
- * To schedule an event, an event slot, a trigger cycle, and an event id
- * need to be provided. The trigger cycle is measured in master cycles. It can
- * be specified in multiple ways:
- *
- *   Absolute (Abs):
- *   The trigger cycle is specified as an absolute value.
- *
- *   Immediate (Imm):
- *   The trigger cycle is the next DMA cycle.
- *
- *   Incremental (Inc):
- *   The trigger cycle is specified relative to the current slot value.
- *
- *   Relative (Rel): (Implemented by Agnus)
- *   The trigger cycle is specified relative to the current DMA clock.
- *
- *   Positional (Pos): (Implemented by Agnus)
- *   The trigger cycle is specified in form of a beam position.
- *
- * Events can also be rescheduled or canceled:
- *
- *   Rescheduling means that the event ID in the selected event slot
- *   remains unchanged.
- *
- *   Canceling means that the slot is emptied by deleting the setting the
- *   event ID and the event data to zero and the trigger cycle to NEVER.
- */
+
 
 class Scheduler : public SubComponent {
 
@@ -97,11 +33,6 @@ public:
     Cycle nextTrigger = NEVER;
     
     
-    //
-    // Class methods
-    //
-    
-    static const char *eventName(EventSlot slot, EventID id);
     
     
     //

@@ -176,7 +176,7 @@ public:
     // The current DMA states of all 8 sprites
     SprDMAState sprDmaState[8];
 
-
+    
     //
     // Initializing
     //
@@ -185,6 +185,13 @@ public:
     
     Agnus(Amiga& ref);
     
+    
+    //
+    // Class methods
+    //
+    
+    static const char *eventName(EventSlot slot, EventID id);
+
     
     //
     // Methods from AmigaObject

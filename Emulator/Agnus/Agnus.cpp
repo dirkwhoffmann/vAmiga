@@ -26,6 +26,8 @@ Agnus::Agnus(Amiga& ref) : SubComponent(ref)
 void
 Agnus::_reset(bool hard)
 {
+    auto insEvent = scheduler.id[SLOT_INS];
+
     RESET_SNAPSHOT_ITEMS(hard)
     
     // Start with a long frame
@@ -34,18 +36,29 @@ Agnus::_reset(bool hard)
     // Initialize statistical counters
     clearStats();
             
+    // Initialize all event slots
+    for (isize i = 0; i < SLOT_COUNT; i++) {
+        
+        scheduler.trigger[i] = NEVER;
+        scheduler.id[i] = (EventID)0;
+        scheduler.data[i] = 0;
+    }
+    
+    assert(clock == 0);
+    
     // Schedule initial events
-    scheduleRel<SLOT_SEC>(NEVER, SEC_TRIGGER);
-    scheduleRel<SLOT_TER>(NEVER, TER_TRIGGER);
-    scheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
-    scheduleRel<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
-    scheduleRel<SLOT_CIAB>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
+    scheduler.scheduleAbs<SLOT_SEC>(NEVER, SEC_TRIGGER);
+    scheduler.scheduleAbs<SLOT_TER>(NEVER, TER_TRIGGER);
+    scheduler.scheduleAbs<SLOT_RAS>(DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
+    scheduler.scheduleAbs<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
+    scheduler.scheduleAbs<SLOT_CIAB>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
     scheduleStrobe0Event();
-    scheduleRel<SLOT_IRQ>(NEVER, IRQ_CHECK);
+    scheduler.scheduleAbs<SLOT_IRQ>(NEVER, IRQ_CHECK);
     diskController.scheduleFirstDiskEvent();
     scheduleFirstBplEvent();
     scheduleFirstDasEvent();
-    scheduleRel<SLOT_SRV>(SEC(0.5), SRV_LAUNCH_DAEMON);
+    scheduler.scheduleAbs<SLOT_SRV>(SEC(0.5), SRV_LAUNCH_DAEMON);
+    if (insEvent) scheduler.scheduleAbs <SLOT_INS> (0, insEvent);
 }
 
 AgnusConfig
