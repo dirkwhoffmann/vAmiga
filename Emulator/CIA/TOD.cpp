@@ -39,7 +39,7 @@ TOD::_reset(bool hard)
 void
 TOD::_inspect() const
 {
-    synchronized {
+    {   SYNCHRONIZED
         
         info.value = tod.value;
         info.latch = latch.value;

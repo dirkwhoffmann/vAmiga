@@ -49,7 +49,7 @@ StateMachine<nr>::_reset(bool hard)
 template <isize nr> void
 StateMachine<nr>::_inspect() const
 {
-    synchronized {
+    {   SYNCHRONIZED
         
         info.state = state;
         info.dma = AUDxON();

@@ -296,7 +296,7 @@ CPU::_inspect() const
 void
 CPU::_inspect(u32 dasmStart) const
 {
-    synchronized {
+    {   SYNCHRONIZED
         
         info.pc0 = getPC0() & 0xFFFFFF;
         

@@ -28,7 +28,7 @@ ControlPort::getDescription() const
 void
 ControlPort::_inspect() const
 {
-    synchronized {
+    {   SYNCHRONIZED
         
         info.joydat = joydat();
         
@@ -68,7 +68,7 @@ ControlPort::_dump(dump::Category category, std::ostream& os) const
 void
 ControlPort::updateMouseXY(i64 x, i64 y)
 {
-    synchronized {
+    {   SYNCHRONIZED
         
         // Compute the delta movement
         i64 dx = x - mouseX;
@@ -103,7 +103,7 @@ ControlPort::joydat() const
 void
 ControlPort::pokeJOYTEST(u16 value)
 {
-    synchronized {
+    {   SYNCHRONIZED
         
         mouseCounterY &= 0b00000011;
         mouseCounterY |= HI_BYTE(value) & 0b11111100;

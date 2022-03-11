@@ -50,187 +50,173 @@ Recorder::getDuration() const
 
 bool
 Recorder::startRecording(int x1, int y1, int x2, int y2,
-                               long bitRate,
-                               long aspectX,
-                               long aspectY)
+                         long bitRate, long aspectX, long aspectY)
 {
-    synchronized {
-                
-        debug(REC_DEBUG, "startRecording(%d,%d,%d,%d,%ld,%ld,%ld)\n",
-              x1, y1, x2, y2, bitRate, aspectX, aspectY);
-
-        if (isRecording()) return false;
-
-        // Create pipes
-        debug(REC_DEBUG, "Creating pipes...\n");
+    SYNCHRONIZED
+    
+    debug(REC_DEBUG, "startRecording(%d,%d,%d,%d,%ld,%ld,%ld)\n",
+          x1, y1, x2, y2, bitRate, aspectX, aspectY);
+    
+    if (isRecording()) return false;
+    
+    // Create pipes
+    debug(REC_DEBUG, "Creating pipes...\n");
+    
+    if (!videoPipe.create(videoPipePath())) {
         
-        if (!videoPipe.create(videoPipePath())) {
-            
-            warn("Failed to create the video encoder pipe.\n");
-            return false;
-        }
-        if (!audioPipe.create(audioPipePath())) {
-         
-            warn("Failed to create the video encoder pipe.\n");
-            return false;
-        }
-                
-        debug(REC_DEBUG, "Pipes created\n");
-        dump();
-        
-        debug(REC_DEBUG, "startRecording(%d,%d,%d,%d,%ld,%ld,%ld)\n",
-              x1, y1, x2, y2, bitRate, aspectX, aspectY);
-        
-        if (isRecording()) return false;
-        
-        // Make sure the screen dimensions are even
-        if ((x2 - x1) % 2) x2--;
-        if ((y2 - y1) % 2) y2--;
-        
-        // Remember the cutout
-        cutout.x1 = x1;
-        cutout.x2 = x2;
-        cutout.y1 = y1;
-        cutout.y2 = y2;
-        debug(REC_DEBUG, "Recorded area: (%d,%d) - (%d,%d)\n", x1, y1, x2, y2);
-        
-        // Set the bit rate, frame rate, and sample rate
-        this->bitRate = bitRate;
-        frameRate = 50;
-        sampleRate = 44100;
-        samplesPerFrame = sampleRate / frameRate;
-        
-        // Create temporary buffers
-        debug(REC_DEBUG, "Creating buffers...\n");
-
-        if (videoData) delete [] videoData;
-        if (audioData) delete [] audioData;
-        videoData = new u32[(x2 - x1) * (y2 - y1)];
-        audioData = new float[2 * samplesPerFrame];
-        
-        // Create pipes
-        /*
-        debug(REC_DEBUG, "Creating pipes...\n");
-        
-        unlink(videoPipePath().c_str());
-        unlink(audioPipePath().c_str());
-        if (mkfifo(videoPipePath().c_str(), 0666) == -1) return false;
-        if (mkfifo(audioPipePath().c_str(), 0666) == -1) return false;
-        */
-
-        //
-        // Assemble the command line arguments for the video encoder
-        //
-        
-        debug(REC_DEBUG, "Assembling command line arguments\n");
-        
-        // Console interactions
-        string cmd1 = " -nostdin";
-        
-        // Verbosity
-        cmd1 += " -loglevel " + loglevel();
-        
-        // Input stream format
-        cmd1 += " -f:v rawvideo -pixel_format rgba";
-        
-        // Frame rate
-        cmd1 += " -r " + std::to_string(frameRate);
-        
-        // Frame size (width x height)
-        cmd1 += " -s:v " + std::to_string(x2 - x1) + "x" + std::to_string(y2 - y1);
-        
-        // Input source (named pipe)
-        cmd1 += " -i " + videoPipePath();
-        
-        // Output stream format
-        cmd1 += " -f mp4 -pix_fmt yuv420p";
-        
-        // Bit rate
-        cmd1 += " -b:v " + std::to_string(bitRate) + "k";
-        
-        // Aspect ratio
-        cmd1 += " -bsf:v ";
-        cmd1 += "\"h264_metadata=sample_aspect_ratio=";
-        cmd1 += std::to_string(aspectX) + "/" + std::to_string(2*aspectY) + "\"";
-        
-        // Output file
-        cmd1 += " -y " + videoStreamPath();
-        
-        
-        //
-        // Assemble the command line arguments for the audio encoder
-        //
-        
-        // Console interactions
-        string cmd2 = " -nostdin";
-        
-        // Verbosity
-        cmd2 += " -loglevel " + loglevel();
-        
-        // Audio format and number of channels
-        cmd2 += " -f:a f32le -ac 2";
-        
-        // Sampling rate
-        cmd2 += " -sample_rate " + std::to_string(sampleRate);
-        
-        // Input source (named pipe)
-        cmd2 += " -i " + audioPipePath();
-        
-        // Output stream format
-        cmd2 += " -f mp4";
-        
-        // Output file
-        cmd2 += " -y " + audioStreamPath();
-        
-        //
-        // Launch FFmpeg instances
-        //
-        
-        assert(!videoFFmpeg.isRunning());
-        assert(!audioFFmpeg.isRunning());
-        
-        // Launch the video encoder
-        debug(REC_DEBUG, "\nLaunching video encoder with options:\n");
-        debug(REC_DEBUG, "%s\n", cmd1.c_str());
-
-        if (!videoFFmpeg.launch(cmd1)) {
-            
-            warn("Failed to launch the FFmpeg video encoder.\n");
-            return false;
-        }
-
-        // Launch the audio encoder
-        debug(REC_DEBUG, "\nLaunching audio encoder with options:\n");
-        debug(REC_DEBUG, "%s\n", cmd2.c_str());
-        
-        if (!audioFFmpeg.launch(cmd2)) {
-            
-            warn("Failed to launch the FFmpeg audio encoder.\n");
-            return false;
-        }
-
-        // Open the video pipe
-        debug(REC_DEBUG, "Opening video pipe\n");
-        
-        if (!videoPipe.open()) {
-
-            warn("Failed to launch the video pipe\n");
-            return false;
-        }
-        
-        // Open the audio pipe
-        debug(REC_DEBUG, "Opening audio pipe\n");
-
-        if (!audioPipe.open()) {
-            
-            warn("Failed to launch the audio pipe\n");
-            return false;
-        }
-        
-        debug(REC_DEBUG, "Success\n");
-        state = State::prepare;
+        warn("Failed to create the video encoder pipe.\n");
+        return false;
     }
-
+    if (!audioPipe.create(audioPipePath())) {
+        
+        warn("Failed to create the video encoder pipe.\n");
+        return false;
+    }
+    
+    debug(REC_DEBUG, "Pipes created\n");
+    dump();
+    
+    debug(REC_DEBUG, "startRecording(%d,%d,%d,%d,%ld,%ld,%ld)\n",
+          x1, y1, x2, y2, bitRate, aspectX, aspectY);
+    
+    if (isRecording()) return false;
+    
+    // Make sure the screen dimensions are even
+    if ((x2 - x1) % 2) x2--;
+    if ((y2 - y1) % 2) y2--;
+    
+    // Remember the cutout
+    cutout.x1 = x1;
+    cutout.x2 = x2;
+    cutout.y1 = y1;
+    cutout.y2 = y2;
+    debug(REC_DEBUG, "Recorded area: (%d,%d) - (%d,%d)\n", x1, y1, x2, y2);
+    
+    // Set the bit rate, frame rate, and sample rate
+    this->bitRate = bitRate;
+    frameRate = 50;
+    sampleRate = 44100;
+    samplesPerFrame = sampleRate / frameRate;
+    
+    // Create temporary buffers
+    debug(REC_DEBUG, "Creating buffers...\n");
+    
+    if (videoData) delete [] videoData;
+    if (audioData) delete [] audioData;
+    videoData = new u32[(x2 - x1) * (y2 - y1)];
+    audioData = new float[2 * samplesPerFrame];
+    
+    //
+    // Assemble the command line arguments for the video encoder
+    //
+    
+    debug(REC_DEBUG, "Assembling command line arguments\n");
+    
+    // Console interactions
+    string cmd1 = " -nostdin";
+    
+    // Verbosity
+    cmd1 += " -loglevel " + loglevel();
+    
+    // Input stream format
+    cmd1 += " -f:v rawvideo -pixel_format rgba";
+    
+    // Frame rate
+    cmd1 += " -r " + std::to_string(frameRate);
+    
+    // Frame size (width x height)
+    cmd1 += " -s:v " + std::to_string(x2 - x1) + "x" + std::to_string(y2 - y1);
+    
+    // Input source (named pipe)
+    cmd1 += " -i " + videoPipePath();
+    
+    // Output stream format
+    cmd1 += " -f mp4 -pix_fmt yuv420p";
+    
+    // Bit rate
+    cmd1 += " -b:v " + std::to_string(bitRate) + "k";
+    
+    // Aspect ratio
+    cmd1 += " -bsf:v ";
+    cmd1 += "\"h264_metadata=sample_aspect_ratio=";
+    cmd1 += std::to_string(aspectX) + "/" + std::to_string(2*aspectY) + "\"";
+    
+    // Output file
+    cmd1 += " -y " + videoStreamPath();
+    
+    //
+    // Assemble the command line arguments for the audio encoder
+    //
+    
+    // Console interactions
+    string cmd2 = " -nostdin";
+    
+    // Verbosity
+    cmd2 += " -loglevel " + loglevel();
+    
+    // Audio format and number of channels
+    cmd2 += " -f:a f32le -ac 2";
+    
+    // Sampling rate
+    cmd2 += " -sample_rate " + std::to_string(sampleRate);
+    
+    // Input source (named pipe)
+    cmd2 += " -i " + audioPipePath();
+    
+    // Output stream format
+    cmd2 += " -f mp4";
+    
+    // Output file
+    cmd2 += " -y " + audioStreamPath();
+    
+    //
+    // Launch FFmpeg instances
+    //
+    
+    assert(!videoFFmpeg.isRunning());
+    assert(!audioFFmpeg.isRunning());
+    
+    // Launch the video encoder
+    debug(REC_DEBUG, "\nLaunching video encoder with options:\n");
+    debug(REC_DEBUG, "%s\n", cmd1.c_str());
+    
+    if (!videoFFmpeg.launch(cmd1)) {
+        
+        warn("Failed to launch the FFmpeg video encoder.\n");
+        return false;
+    }
+    
+    // Launch the audio encoder
+    debug(REC_DEBUG, "\nLaunching audio encoder with options:\n");
+    debug(REC_DEBUG, "%s\n", cmd2.c_str());
+    
+    if (!audioFFmpeg.launch(cmd2)) {
+        
+        warn("Failed to launch the FFmpeg audio encoder.\n");
+        return false;
+    }
+    
+    // Open the video pipe
+    debug(REC_DEBUG, "Opening video pipe\n");
+    
+    if (!videoPipe.open()) {
+        
+        warn("Failed to launch the video pipe\n");
+        return false;
+    }
+    
+    // Open the audio pipe
+    debug(REC_DEBUG, "Opening audio pipe\n");
+    
+    if (!audioPipe.open()) {
+        
+        warn("Failed to launch the audio pipe\n");
+        return false;
+    }
+    
+    debug(REC_DEBUG, "Success\n");
+    state = State::prepare;
+    
     return true;
 }
 
@@ -239,7 +225,7 @@ Recorder::stopRecording()
 {
     debug(REC_DEBUG, "stopRecording()\n");
 
-    synchronized {
+    {   SYNCHRONIZED
         
         if (isRecording()) {
             state = State::finalize;
@@ -291,7 +277,7 @@ Recorder::vsyncHandler(Cycle target)
     // Quick-exit if the recorder is not active
     if (state == State::wait) return;
     
-    synchronized {
+    {   SYNCHRONIZED
         
         switch (state) {
                 

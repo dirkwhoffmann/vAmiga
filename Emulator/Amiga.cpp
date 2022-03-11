@@ -754,7 +754,7 @@ Amiga::setInspectionTarget(InspectionTarget target, Cycle trigger)
 void
 Amiga::_inspect() const
 {
-    synchronized {
+    {   SYNCHRONIZED
         
         info.cpuClock = cpu.getMasterClock();
         info.dmaClock = agnus.clock;
@@ -1000,13 +1000,13 @@ Amiga::execute()
 void
 Amiga::setFlag(u32 flag)
 {
-    synchronized { flags |= flag; }
+    SYNCHRONIZED flags |= flag;
 }
 
 void
 Amiga::clearFlag(u32 flag)
 {
-    synchronized { flags &= ~flag; }
+    SYNCHRONIZED flags &= ~flag;
 }
 
 void

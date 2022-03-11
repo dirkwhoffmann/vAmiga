@@ -18,13 +18,9 @@
 /* The following macro can be utilized to prevent multiple threads to enter the
  * same code block. It mimics the behaviour of the well known Java construct
  * 'synchronized(this) { }'. To secure a code-block, use the following syntax:
- * { SYNCHRONIZED <commands }
+ * { SYNCHRONIZED <commands> }
  */
 #define SYNCHRONIZED util::AutoMutex _am(mutex);
-
-// Old-styple sychronized macro (DEPRECATED)
-#define synchronized \
-for (util::AutoMutex _am(mutex); _am.active; _am.active = false)
 
 struct NoCopy
 {

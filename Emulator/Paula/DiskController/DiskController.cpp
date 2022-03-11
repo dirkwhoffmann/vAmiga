@@ -141,8 +141,8 @@ DiskController::setConfigItem(Option option, long id, i64 value)
 void
 DiskController::_inspect() const
 {
-    synchronized
-    {
+    {   SYNCHRONIZED
+
         info.selectedDrive = selected;
         info.state = state;
         info.fifoCount = fifoCount;

@@ -517,7 +517,7 @@ Scheduler::_dump(dump::Category category, std::ostream& os) const
 void
 Scheduler::_inspect() const
 {
-    synchronized {
+    {   SYNCHRONIZED
         
         info.cpuClock = cpu.getMasterClock();
         info.cpuCycles = cpu.getCpuClock();

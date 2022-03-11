@@ -13,7 +13,7 @@
 void
 MsgQueue::setListener(const void *listener, Callback *callback)
 {
-    synchronized {
+    {   SYNCHRONIZED
         
         this->listener = listener;
         this->callback = callback;

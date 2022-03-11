@@ -94,7 +94,7 @@ Paula::_warpOff()
 void
 Paula::_inspect() const
 {
-    synchronized {
+    {   SYNCHRONIZED
         
         info.intreq = intreq;
         info.intena = intena;

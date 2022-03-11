@@ -70,7 +70,7 @@ SerialPort::setConfigItem(Option option, i64 value)
 void
 SerialPort::_inspect() const
 {
-    synchronized {
+    {   SYNCHRONIZED
         
         info.port = port;
         info.txd = getTXD();
