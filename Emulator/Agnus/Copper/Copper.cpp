@@ -333,7 +333,7 @@ Copper::scheduleWaitWakeup(bool bfd)
             
         } else {
             
-            scheduler.scheduleAbs<SLOT_COP>(NEVER, COP_REQ_DMA);
+            agnus.scheduleAbs<SLOT_COP>(NEVER, COP_REQ_DMA);
         }
         
     } else {
@@ -357,7 +357,7 @@ Copper::scheduleWaitWakeup(bool bfd)
             
         } else {
             
-            scheduler.scheduleAbs<SLOT_COP>(NEVER, COP_REQ_DMA);
+            agnus.scheduleAbs<SLOT_COP>(NEVER, COP_REQ_DMA);
         }
     }
 }
@@ -513,7 +513,7 @@ Copper::vsyncHandler()
 void
 Copper::blitterDidTerminate()
 {
-    if (scheduler.hasEvent<SLOT_COP>(COP_WAIT_BLIT)) {
+    if (agnus.hasEvent<SLOT_COP>(COP_WAIT_BLIT)) {
 
         // Wake up the Copper in the next even cycle
         if (IS_EVEN(agnus.pos.h)) {

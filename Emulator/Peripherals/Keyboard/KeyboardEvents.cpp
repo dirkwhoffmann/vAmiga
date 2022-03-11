@@ -15,7 +15,7 @@
 void
 Keyboard::serviceKeyboardEvent(EventID id)
 {
-    u64 nr = scheduler.data[SLOT_KBD];
+    u64 nr = agnus.data[SLOT_KBD];
 
     switch(id) {
             
@@ -100,9 +100,9 @@ Keyboard::serviceKeyboardEvent(EventID id)
 void
 Keyboard::serviceKeyEvent()
 {
-    auto id = scheduler.id[SLOT_KEY];
-    auto code = (KeyCode)(scheduler.data[SLOT_KEY]);
-    auto duration = (Cycle)(scheduler.data[SLOT_KEY] >> 8);
+    auto id = agnus.id[SLOT_KEY];
+    auto code = (KeyCode)(agnus.data[SLOT_KEY]);
+    auto duration = (Cycle)(agnus.data[SLOT_KEY] >> 8);
 
     switch(id) {
             
@@ -115,7 +115,7 @@ Keyboard::serviceKeyEvent()
         case KEY_RELEASE:
             
             releaseKey(code);
-            scheduler.cancel <SLOT_KEY> ();
+            agnus.cancel <SLOT_KEY> ();
             break;
             
         default:

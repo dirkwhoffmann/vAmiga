@@ -302,12 +302,10 @@ Agnus::setVPOS(u16 value)
     trace(XFILES, "XFILES (VPOS): Making a %s frame\n", newlof ? "long" : "short");
     frame.lof = newlof;
     
-    // if (!newlof) amiga.signalStop();
-    
     /* Reschedule a pending VBL event with a trigger cycle that is consistent
      * with the new value of the LOF bit.
      */
-    switch (scheduler.id[SLOT_VBL]) {
+    switch (id[SLOT_VBL]) {
 
         case VBL_STROBE0: scheduleStrobe0Event(); break;
         case VBL_STROBE1: scheduleStrobe1Event(); break;

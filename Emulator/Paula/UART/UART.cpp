@@ -163,7 +163,7 @@ void
 UART::rxdHasChanged(bool value)
 {
     // Schedule the first reception event if transmission has not yet started
-    if (value == 0 && !scheduler.hasEvent<SLOT_RXD>()) {
+    if (value == 0 && !agnus.hasEvent<SLOT_RXD>()) {
 
         // Reset the bit counter
         recCnt = 0;

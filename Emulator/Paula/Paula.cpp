@@ -121,7 +121,7 @@ Paula::scheduleIrqAbs(IrqSource src, Cycle trigger)
 {
     assert_enum(IrqSource, src);
     assert(trigger != 0);
-    assert(scheduler.id[SLOT_IRQ] == IRQ_CHECK);
+    assert(agnus.id[SLOT_IRQ] == IRQ_CHECK);
 
     trace(INT_DEBUG, "scheduleIrq(%ld, %lld)\n", src, trigger);
 
@@ -130,8 +130,8 @@ Paula::scheduleIrqAbs(IrqSource src, Cycle trigger)
         setIntreq[src] = trigger;
 
     // Schedule the interrupt
-    if (trigger < scheduler.trigger[SLOT_IRQ])
-        scheduler.scheduleAbs<SLOT_IRQ>(trigger, IRQ_CHECK);
+    if (trigger < agnus.trigger[SLOT_IRQ])
+        agnus.scheduleAbs<SLOT_IRQ>(trigger, IRQ_CHECK);
 }
 
 void

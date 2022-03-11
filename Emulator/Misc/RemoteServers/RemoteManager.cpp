@@ -10,7 +10,7 @@
 #include "config.h"
 #include "RemoteManager.h"
 #include "IOUtils.h"
-#include "Scheduler.h"
+#include "Agnus.h"
 #include "SerialPort.h"
 
 RemoteManager::RemoteManager(Amiga& ref) : SubComponent(ref)
@@ -115,7 +115,7 @@ RemoteManager::numErroneous() const
 void
 RemoteManager::serviceServerEvent()
 {
-    assert(scheduler.id[SLOT_SRV] == SRV_LAUNCH_DAEMON);
+    assert(agnus.id[SLOT_SRV] == SRV_LAUNCH_DAEMON);
         
     // Run the launch daemon
     if (serServer.config.autoRun) {
@@ -129,5 +129,5 @@ RemoteManager::serviceServerEvent()
     }
 
     // Schedule next event
-    scheduler.scheduleInc <SLOT_SRV> (SEC(0.5), SRV_LAUNCH_DAEMON);
+    agnus.scheduleInc <SLOT_SRV> (SEC(0.5), SRV_LAUNCH_DAEMON);
 }

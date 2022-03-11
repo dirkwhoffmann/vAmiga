@@ -582,7 +582,7 @@ HardDrive::scheduleIdleEvent()
 template <EventSlot s> void
 HardDrive::serviceHdrEvent()
 {
-    scheduler.cancel <s> ();
+    agnus.cancel <s> ();
     state = HDR_STATE_IDLE;
     msgQueue.put(MSG_HDR_IDLE, nr);
 }

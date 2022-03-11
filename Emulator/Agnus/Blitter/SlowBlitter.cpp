@@ -998,7 +998,7 @@ Blitter::beginSlowCopyBlit()
         BusOwner owner = agnus.busOwner[agnus.pos.h];
         agnus.setBLS(false);
         
-        while (scheduler.hasEvent<SLOT_BLT>()) {
+        while (agnus.hasEvent<SLOT_BLT>()) {
             agnus.busOwner[agnus.pos.h] = BUS_NONE;
             serviceEvent();
         }
@@ -1055,7 +1055,7 @@ Blitter::beginSlowLineBlit()
         BusOwner owner = agnus.busOwner[agnus.pos.h];
         agnus.setBLS(false);
         
-        while (scheduler.hasEvent<SLOT_BLT>()) {
+        while (agnus.hasEvent<SLOT_BLT>()) {
             agnus.busOwner[agnus.pos.h] = BUS_NONE;
             serviceEvent();
         }

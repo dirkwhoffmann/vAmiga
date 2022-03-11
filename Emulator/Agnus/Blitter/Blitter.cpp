@@ -612,7 +612,7 @@ Blitter::endBlit()
     if constexpr (BLT_GUARD) memguard.clear();
     
     // Clear the Blitter slot
-    scheduler.cancel<SLOT_BLT>();
+    agnus.cancel<SLOT_BLT>();
     
     // Dump checksums if requested
     debug(BLT_CHECKSUM,

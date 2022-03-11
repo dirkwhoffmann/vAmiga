@@ -629,21 +629,21 @@ Agnus::inspectSlot(EventSlot nr) const
     assert_enum(EventSlot, nr);
     
     auto &info = slotInfo[nr];
-    auto trigger = scheduler.trigger[nr];
+    auto cycle = trigger[nr];
     
     info.slot = nr;
-    info.eventId = scheduler.id[nr];
-    info.trigger = trigger;
-    info.triggerRel = trigger - agnus.clock;
+    info.eventId = id[nr];
+    info.trigger = cycle;
+    info.triggerRel = cycle - agnus.clock;
     
-    if (agnus.belongsToCurrentFrame(trigger)) {
+    if (agnus.belongsToCurrentFrame(cycle)) {
         
-        Beam beam = agnus.cycleToBeam(trigger);
+        Beam beam = agnus.cycleToBeam(cycle);
         info.vpos = beam.v;
         info.hpos = beam.h;
         info.frameRel = 0;
         
-    } else if (agnus.belongsToNextFrame(trigger)) {
+    } else if (agnus.belongsToNextFrame(cycle)) {
         
         info.vpos = 0;
         info.hpos = 0;
@@ -651,13 +651,13 @@ Agnus::inspectSlot(EventSlot nr) const
         
     } else {
         
-        assert(agnus.belongsToPreviousFrame(trigger));
+        assert(agnus.belongsToPreviousFrame(cycle));
         info.vpos = 0;
         info.hpos = 0;
         info.frameRel = -1;
     }
     
-    info.eventName = agnus.eventName((EventSlot)nr, scheduler.id[nr]);
+    info.eventName = agnus.eventName((EventSlot)nr, id[nr]);
 }
 
 EventSlotInfo

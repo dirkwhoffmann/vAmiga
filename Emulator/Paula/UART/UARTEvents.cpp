@@ -44,7 +44,7 @@ UART::serviceTxdEvent(EventID id)
 
                     // Abort the transmission
                     trace(SER_DEBUG, "End of transmission\n");
-                    scheduler.cancel<SLOT_TXD>();
+                    agnus.cancel<SLOT_TXD>();
                     break;
                 }
             }
@@ -78,7 +78,7 @@ UART::serviceRxdEvent(EventID id)
 
         // Stop receiving if the last bit was a stop bit
         if (rxd) {
-            scheduler.cancel<SLOT_RXD>();
+            agnus.cancel<SLOT_RXD>();
             return;
         } else {
             // Prepare for the next packet

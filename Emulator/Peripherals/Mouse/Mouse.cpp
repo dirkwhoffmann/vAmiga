@@ -371,8 +371,8 @@ Mouse::pressAndReleaseRight(Cycle duration, Cycle delay)
 template <EventSlot s> void
 Mouse::serviceMouseEvent()
 {
-    auto id = scheduler.id[s];
-    auto duration = scheduler.data[s];
+    auto id = agnus.id[s];
+    auto duration = agnus.data[s];
     
     switch (id) {
 
@@ -385,7 +385,7 @@ Mouse::serviceMouseEvent()
         case MSE_RELEASE_LEFT:
             
             setLeftButton(false);
-            scheduler.cancel <s> ();
+            agnus.cancel <s> ();
             break;
 
         case MSE_PUSH_RIGHT:
@@ -397,7 +397,7 @@ Mouse::serviceMouseEvent()
         case MSE_RELEASE_RIGHT:
             
             setRightButton(false);
-            scheduler.cancel <s> ();
+            agnus.cancel <s> ();
             break;
 
         default:

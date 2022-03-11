@@ -908,7 +908,7 @@ template <EventSlot s> void
 FloppyDrive::serviceDiskChangeEvent()
 {
     // Check if we need to eject the current disk
-    if (scheduler.id[s] == DCH_EJECT || scheduler.id[s] == DCH_INSERT) {
+    if (agnus.id[s] == DCH_EJECT || agnus.id[s] == DCH_INSERT) {
         
         if (disk) {
             
@@ -925,7 +925,7 @@ FloppyDrive::serviceDiskChangeEvent()
     }
     
     // Check if we need to insert a new disk
-    if (scheduler.id[s] == DCH_INSERT) {
+    if (agnus.id[s] == DCH_INSERT) {
         
         if (diskToInsert) {
             
@@ -942,7 +942,7 @@ FloppyDrive::serviceDiskChangeEvent()
     }
 
     // Remove the event
-    scheduler.cancel <s> ();
+    agnus.cancel <s> ();
 }
 
 void

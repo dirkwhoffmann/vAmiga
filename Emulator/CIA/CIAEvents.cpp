@@ -35,9 +35,9 @@ void
 CIA::scheduleNextExecution()
 {
     if (isCIAA()) {
-        scheduler.scheduleAbs<SLOT_CIAA>(clock + CIA_CYCLES(1), CIA_EXECUTE);
+        agnus.scheduleAbs<SLOT_CIAA>(clock + CIA_CYCLES(1), CIA_EXECUTE);
     } else {
-        scheduler.scheduleAbs<SLOT_CIAB>(clock + CIA_CYCLES(1), CIA_EXECUTE);
+        agnus.scheduleAbs<SLOT_CIAB>(clock + CIA_CYCLES(1), CIA_EXECUTE);
     }
 }
 
@@ -45,8 +45,8 @@ void
 CIA::scheduleWakeUp()
 {
     if (isCIAA()) {
-        scheduler.scheduleAbs<SLOT_CIAA>(wakeUpCycle, CIA_WAKEUP);
+        agnus.scheduleAbs<SLOT_CIAA>(wakeUpCycle, CIA_WAKEUP);
     } else {
-        scheduler.scheduleAbs<SLOT_CIAB>(wakeUpCycle, CIA_WAKEUP);
+        agnus.scheduleAbs<SLOT_CIAB>(wakeUpCycle, CIA_WAKEUP);
     }
 }

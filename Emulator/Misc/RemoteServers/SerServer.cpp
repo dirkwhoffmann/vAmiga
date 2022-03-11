@@ -122,8 +122,8 @@ SerServer::didConnect()
     lostBytes = 0;
         
     // Start scheduling messages
-    assert(scheduler.id[SLOT_SER] == EVENT_NONE);
-    scheduler.scheduleImm <SLOT_SER> (SER_RECEIVE);
+    assert(agnus.id[SLOT_SER] == EVENT_NONE);
+    agnus.scheduleImm <SLOT_SER> (SER_RECEIVE);
 }
 
 void
@@ -132,13 +132,13 @@ SerServer::didDisconnect()
     SUSPENDED
 
     // Stop scheduling messages
-    scheduler.cancel <SLOT_SER> ();
+    agnus.cancel <SLOT_SER> ();
 }
 
 void
 SerServer::serviceSerEvent()
 {
-    assert(scheduler.id[SLOT_SER] == SER_RECEIVE);
+    assert(agnus.id[SLOT_SER] == SER_RECEIVE);
     
     if (buffer.isEmpty()) {
         
@@ -165,7 +165,7 @@ SerServer::serviceSerEvent()
 void
 SerServer::scheduleNextEvent()
 {
-    assert(scheduler.id[SLOT_SER] == SER_RECEIVE);
+    assert(agnus.id[SLOT_SER] == SER_RECEIVE);
     
     // Otherwise, emulate proper timing based on the current baud rate
     auto pulseWidth = uart.pulseWidth();

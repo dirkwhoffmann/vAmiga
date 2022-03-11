@@ -14,7 +14,7 @@
 void
 Blitter::serviceEvent()
 {
-    serviceEvent(scheduler.id[SLOT_BLT]);
+    serviceEvent(agnus.id[SLOT_BLT]);
 }
 
 void
@@ -29,7 +29,7 @@ Blitter::serviceEvent(EventID id)
 
             // Postpone the operation if Blitter DMA is disabled
             if (!agnus.bltdma()) {
-                scheduler.rescheduleAbs<SLOT_BLT>(NEVER);
+                agnus.rescheduleAbs<SLOT_BLT>(NEVER);
                 break;
             }
 

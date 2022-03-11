@@ -15,7 +15,7 @@
 void
 Paula::serviceIrqEvent()
 {
-    assert(scheduler.id[SLOT_IRQ] == IRQ_CHECK);
+    assert(agnus.id[SLOT_IRQ] == IRQ_CHECK);
 
     Cycle clock = agnus.clock;
     Cycle next = NEVER;
@@ -33,13 +33,13 @@ Paula::serviceIrqEvent()
     }
 
     // Schedule next event
-    scheduler.scheduleAbs<SLOT_IRQ>(next, IRQ_CHECK);
+    agnus.scheduleAbs<SLOT_IRQ>(next, IRQ_CHECK);
 }
 
 void
 Paula::serviceIplEvent()
 {
-    assert(scheduler.id[SLOT_IPL] == IPL_CHANGE);    
+    assert(agnus.id[SLOT_IPL] == IPL_CHANGE);    
 
     // Update the value on the CPU's IPL pin
     cpu.setIPL((iplPipe >> 24) & 0xFF);
@@ -48,11 +48,11 @@ Paula::serviceIplEvent()
     iplPipe = (iplPipe & 0x00FF'FFFF'FFFF'FFFF) << 8 | (iplPipe & 0xFF);
     
     // Reschedule the event until the pipe has been shifted through entirely
-    i64 repeat = scheduler.data[SLOT_IPL];
+    i64 repeat = agnus.data[SLOT_IPL];
     if (repeat) {
         agnus.scheduleRel<SLOT_IPL>(DMA_CYCLES(1), IPL_CHANGE, repeat - 1);
     } else {
-        scheduler.cancel<SLOT_IPL>();
+        agnus.cancel<SLOT_IPL>();
     }
 }
 
@@ -70,7 +70,7 @@ Paula::servicePotEvent(EventID id)
 
         case POT_DISCHARGE:
         {
-            if (--scheduler.data[SLOT_POT]) {
+            if (--agnus.data[SLOT_POT]) {
 
                 // Discharge capacitors
                 if (!outly) chargeY0 = 0.0;
@@ -115,7 +115,7 @@ Paula::servicePotEvent(EventID id)
             if (cont) {
                 agnus.scheduleRel<SLOT_POT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
             } else {
-                scheduler.cancel<SLOT_POT>();
+                agnus.cancel<SLOT_POT>();
             }
             break;
         }

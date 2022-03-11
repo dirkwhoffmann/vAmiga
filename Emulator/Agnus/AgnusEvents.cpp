@@ -106,7 +106,7 @@ Agnus::scheduleNextBplEvent(isize hpos)
     if (u8 next = sequencer.nextBplEvent[hpos]) {
         scheduleRel<SLOT_BPL>(DMA_CYCLES(next - pos.h), sequencer.bplEvent[next]);
     }
-    assert(scheduler.hasEvent<SLOT_BPL>());
+    assert(hasEvent<SLOT_BPL>());
 }
 
 void
@@ -120,7 +120,7 @@ Agnus::scheduleBplEventForCycle(isize hpos)
         scheduleNextBplEvent(hpos);
     }
 
-    assert(scheduler.hasEvent<SLOT_BPL>());
+    assert(hasEvent<SLOT_BPL>());
 }
 
 void
@@ -145,9 +145,9 @@ Agnus::scheduleNextDasEvent(isize hpos)
 
     if (u8 next = sequencer.nextDasEvent[hpos]) {
         scheduleRel<SLOT_DAS>(DMA_CYCLES(next - pos.h), sequencer.dasEvent[next]);
-        assert(scheduler.hasEvent<SLOT_DAS>());
+        assert(hasEvent<SLOT_DAS>());
     } else {
-        scheduler.cancel<SLOT_DAS>();
+        cancel<SLOT_DAS>();
     }
 }
 
@@ -170,7 +170,7 @@ Agnus::scheduleNextREGEvent()
     Cycle nextTrigger = changeRecorder.trigger();
 
     // Schedule a register change event for that cycle
-    scheduler.scheduleAbs<SLOT_REG>(nextTrigger, REG_CHANGE);
+    scheduleAbs<SLOT_REG>(nextTrigger, REG_CHANGE);
 }
 
 void
@@ -286,7 +286,7 @@ Agnus::serviceREGEvent(Cycle until)
 void
 Agnus::serviceRASEvent()
 {
-    assert(scheduler.id[SLOT_RAS] == RAS_HSYNC);
+    assert(id[SLOT_RAS] == RAS_HSYNC);
     
     // Let the hsync handler be called at the beginning of the next DMA cycle
     agnus.recordRegisterChange(0, SET_STRHOR, 1);

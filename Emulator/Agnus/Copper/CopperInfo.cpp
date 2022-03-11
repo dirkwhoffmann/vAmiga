@@ -58,7 +58,7 @@ Copper::_inspect() const
     info.copList1End = debugger.endOfCopperList(1);
     info.copList2Start = debugger.startOfCopperList(2);
     info.copList2End = debugger.endOfCopperList(2);
-    info.active = scheduler.isPending<SLOT_COP>();
+    info.active = agnus.isPending<SLOT_COP>();
     info.cdang = cdang;
     info.coppc0 = coppc0 & agnus.ptrMask;
     info.cop1lc = cop1lc & agnus.ptrMask;
