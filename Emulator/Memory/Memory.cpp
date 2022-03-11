@@ -511,9 +511,6 @@ Memory::alloc(util::Allocator &allocator, isize bytes, u32 &mask, bool update)
 
     // Allocate memory
     allocator.init(bytes);
-    if (uintptr_t(allocator.ptr) & 1) {
-        fatal("Memory at %p is not aligned\n", (void *)allocator.ptr);
-    }
     
     // Set the memory mask
     mask = bytes ? u32(bytes - 1) : 0;

@@ -237,12 +237,7 @@ private:
         << config.bankMap
         << config.ramInitPattern
         << config.unmappingType
-        << config.extStart;
-        
-        // << chipAllocator
-        // << slowAllocator
-        // << fastAllocator
-        ;
+        << config.extStart;        
     }
 
     template <class T>
