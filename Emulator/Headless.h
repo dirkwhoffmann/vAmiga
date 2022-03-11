@@ -23,8 +23,8 @@ void process(const void *listener, long type, u32 data1, u32 data2);
 
 class Headless {
 
-    // Command line options
-    vector <string> inputs;
+    // Parsed command line arguments
+    map<string,string> keys;
     
     // Indicates if additional output should be generated
     bool verbose = false;
@@ -38,20 +38,31 @@ class Headless {
     // Exit flag
     bool halt = false;
 
+    
+    //
+    // Launching
+    //
+    
 public:
-        
-    // Processes an incoming message
-    void process(long type, u32 data1, u32 data2);
 
     // Main entry point
     void main(int argc, char *argv[]);
 
 private:
+
+    // Parses the command line arguments
+    void parseArguments(int argc, char *argv[]);
+
+    // Checks all command line arguments for conistency
+    void checkArguments() throws;
+
     
-    // Main exection function
-    void run(map<string,string> &keys);
+    //
+    // Running
+    //
+
+public:
     
-    // Helper methods for parsing command line arguments
-    void parseArguments(int argc, char *argv[], map<string,string> &keys);
-    void checkArguments(map<string,string> &keys);
+    // Processes an incoming message
+    void process(long type, u32 data1, u32 data2);
 };
