@@ -11,9 +11,9 @@
 
 #include "HardDriveTypes.h"
 #include "Drive.h"
+#include "AgnusTypes.h"
 #include "HDFFile.h"
 #include "MemUtils.h"
-#include "SchedulerTypes.h"
 
 class HardDrive : public Drive {
     

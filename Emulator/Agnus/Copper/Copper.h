@@ -11,11 +11,11 @@
 
 #include "CopperTypes.h"
 #include "SubComponent.h"
+#include "AgnusTypes.h"
 #include "Beam.h"
 #include "Checksum.h"
 #include "CopperDebugger.h"
 #include "Memory.h"
-#include "SchedulerTypes.h"
 
 class Copper : public SubComponent
 {

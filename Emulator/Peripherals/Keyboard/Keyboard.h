@@ -10,9 +10,9 @@
 #pragma once
 
 #include "KeyboardTypes.h"
+#include "AgnusTypes.h"
 #include "SubComponent.h"
 #include "RingBuffer.h"
-#include "SchedulerTypes.h"
 
 class Keyboard : public SubComponent {
 

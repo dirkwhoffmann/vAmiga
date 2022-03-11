@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "SchedulerTypes.h"
+#include "AgnusTypes.h"
 #include "SubComponent.h"
 
 /* About the event scheduler

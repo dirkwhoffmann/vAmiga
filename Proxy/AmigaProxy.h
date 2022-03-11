@@ -40,7 +40,6 @@
 #import "RetroShellTypes.h"
 #import "RomFileTypes.h"
 #import "RTCTypes.h"
-#import "SchedulerTypes.h"
 #import "SerialPortTypes.h"
 #import "StateMachineTypes.h"
 #import "UARTTypes.h"

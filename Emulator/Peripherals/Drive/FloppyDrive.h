@@ -10,12 +10,12 @@
 #pragma once
 
 #include "FloppyDriveTypes.h"
+#include "AgnusTypes.h"
 #include "BootBlockImageTypes.h"
 #include "FSTypes.h"
 #include "Drive.h"
 #include "FloppyDisk.h"
 #include "DiskController.h"
-#include "SchedulerTypes.h"
 #include "Thread.h"
 
 class FloppyDrive : public Drive {

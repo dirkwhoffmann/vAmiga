@@ -11,7 +11,7 @@
 
 #include "BlitterTypes.h"
 #include "Memory.h"
-#include "SchedulerTypes.h"
+#include "AgnusTypes.h"
 #include "SubComponent.h"
 
 /* The Blitter supports three accuracy levels:

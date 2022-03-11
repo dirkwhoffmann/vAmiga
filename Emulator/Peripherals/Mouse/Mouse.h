@@ -10,7 +10,7 @@
 #pragma once
 
 #include "MouseTypes.h"
-#include "SchedulerTypes.h"
+#include "AgnusTypes.h"
 #include "Joystick.h"
 #include "SubComponent.h"
 #include "Chrono.h"

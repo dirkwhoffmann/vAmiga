@@ -11,7 +11,7 @@
 
 #include "CIATypes.h"
 #include "SubComponent.h"
-#include "SchedulerTypes.h"
+#include "AgnusTypes.h"
 #include "TOD.h"
 
 constexpr u64 CIACountA0 =   (1ULL << 0); // Decrements timer A

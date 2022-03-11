@@ -12,7 +12,7 @@
 #include "UARTTypes.h"
 #include "Constants.h"
 #include "SubComponent.h"
-#include "SchedulerTypes.h"
+#include "AgnusTypes.h"
 
 class UART : public SubComponent {
     
