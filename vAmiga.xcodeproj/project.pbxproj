@@ -114,7 +114,6 @@
 		508FDFBE21EA1FF10043D0E9 /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFAF21EA1FF10043D0E9 /* MyDocument.xib */; };
 		508FDFBF21EA1FF10043D0E9 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFB121EA1FF10043D0E9 /* MainMenu.xib */; };
 		508FDFC521EA1FF10043D0E9 /* A500ISO.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFB821EA1FF10043D0E9 /* A500ISO.xib */; };
-		508FDFC721EA1FF10043D0E9 /* ImporterDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFBA21EA1FF10043D0E9 /* ImporterDialog.xib */; };
 		508FDFD521EA20510043D0E9 /* Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFCD21EA20510043D0E9 /* Animation.swift */; };
 		508FDFD621EA20510043D0E9 /* DragAndDrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFCE21EA20510043D0E9 /* DragAndDrop.swift */; };
 		508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFCF21EA20510043D0E9 /* MetalView.swift */; };
@@ -157,7 +156,6 @@
 		508FE05621EA22CC0043D0E9 /* PreferencesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04321EA22CC0043D0E9 /* PreferencesController.swift */; };
 		508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */; };
 		508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04721EA22CC0043D0E9 /* DialogController.swift */; };
-		508FE05C21EA22CC0043D0E9 /* ImporterDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04A21EA22CC0043D0E9 /* ImporterDialog.swift */; };
 		508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AmigaFile.cpp */; };
 		509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509047B5230575E6009CEC1C /* SlowBlitter.cpp */; };
 		50912FFD2525B7AD0049805B /* Recorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50912FFB2525B7AD0049805B /* Recorder.cpp */; };
@@ -629,7 +627,6 @@
 		508FDF5921EA1FBC0043D0E9 /* TOD.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TOD.cpp; sourceTree = "<group>"; };
 		508FDF5C21EA1FBC0043D0E9 /* CIA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CIA.cpp; sourceTree = "<group>"; };
 		508FDFB821EA1FF10043D0E9 /* A500ISO.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A500ISO.xib; sourceTree = "<group>"; };
-		508FDFBA21EA1FF10043D0E9 /* ImporterDialog.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImporterDialog.xib; sourceTree = "<group>"; };
 		508FDFCD21EA20510043D0E9 /* Animation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animation.swift; sourceTree = "<group>"; };
 		508FDFCE21EA20510043D0E9 /* DragAndDrop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DragAndDrop.swift; sourceTree = "<group>"; };
 		508FDFCF21EA20510043D0E9 /* MetalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
@@ -673,7 +670,6 @@
 		508FE04321EA22CC0043D0E9 /* PreferencesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesController.swift; sourceTree = "<group>"; };
 		508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualKeyboardController.swift; sourceTree = "<group>"; };
 		508FE04721EA22CC0043D0E9 /* DialogController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogController.swift; sourceTree = "<group>"; };
-		508FE04A21EA22CC0043D0E9 /* ImporterDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImporterDialog.swift; sourceTree = "<group>"; };
 		508FE06321EA318D0043D0E9 /* AmigaFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaFile.cpp; sourceTree = "<group>"; };
 		508FE06421EA318D0043D0E9 /* AmigaFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmigaFile.h; sourceTree = "<group>"; };
 		509047B5230575E6009CEC1C /* SlowBlitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SlowBlitter.cpp; sourceTree = "<group>"; };
@@ -1238,7 +1234,6 @@
 				5019605A231257270051B669 /* Monitor.xib */,
 				50B9354824347EF9000C78B8 /* SnapshotDialog.xib */,
 				509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */,
-				508FDFBA21EA1FF10043D0E9 /* ImporterDialog.xib */,
 				501C514527C2AA4A00DF1DD5 /* DiskExporter.xib */,
 				5029C6E027CA2EAB002F6CCC /* DiskInspector.xib */,
 				506B47172562E06A009FEFC3 /* VolumeInspector.xib */,
@@ -1311,7 +1306,6 @@
 			children = (
 				508FE00D21EA227B0043D0E9 /* Alerts.swift */,
 				508FE04721EA22CC0043D0E9 /* DialogController.swift */,
-				508FE04A21EA22CC0043D0E9 /* ImporterDialog.swift */,
 				501C514727C2AD8C00DF1DD5 /* DiskExporter.swift */,
 				5029C6E227CA2F66002F6CCC /* DiskInspector.swift */,
 				506B471C256396BC009FEFC3 /* VolumeInspector.swift */,
@@ -1986,7 +1980,6 @@
 				50FF747327D3BBFE00B6EA01 /* hdr_click.aiff in Resources */,
 				506B47182562E06A009FEFC3 /* VolumeInspector.xib in Resources */,
 				50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */,
-				508FDFC721EA1FF10043D0E9 /* ImporterDialog.xib in Resources */,
 				500A4EA024470713002A4DE1 /* disk_insert.aiff in Resources */,
 				509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */,
 				501C514627C2AA4A00DF1DD5 /* DiskExporter.xib in Resources */,
@@ -2277,7 +2270,6 @@
 				5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */,
 				5010A78222B50B690041388B /* PortPanel.swift in Sources */,
 				509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */,
-				508FE05C21EA22CC0043D0E9 /* ImporterDialog.swift in Sources */,
 				50F580662431D1A000E7D84D /* Screenshot.swift in Sources */,
 				50AEBEC724D3D39D0037082D /* BlitterEvents.cpp in Sources */,
 				501C513F27C0C63A00DF1DD5 /* HardDiskConfigurator.swift in Sources */,

@@ -144,12 +144,7 @@ public extension MetalView {
                 }
             }
             
-            // Create attachment
-            try myDocument.createAttachment(from: url)
-            
-            // Run the import dialog
-            myDocument.runImportDialog()
-            return true
+            return false
             
         } catch {
             

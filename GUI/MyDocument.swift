@@ -193,13 +193,6 @@ class MyDocument: NSDocument {
         }
     }
     
-    func runImportDialog() {
-        
-        let name = NSNib.Name("ImporterDialog")
-        let controller = ImporterDialog.make(parent: parent, nibName: name)
-        controller?.showSheet()
-    }
-
     //
     // Loading
     //
