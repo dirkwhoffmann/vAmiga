@@ -461,91 +461,65 @@ Memory::updateStats()
     stats.kickWrites.raw = 0;
 }
 
-/*
 void
-Memory::alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask, bool update)
+Memory::allocChip(i32 bytes, bool update)
 {
-    // Check invariants
-    assert((ptr == nullptr) == (size == 0));
-    assert((ptr == nullptr) == (mask == 0));
-    assert((ptr == nullptr) || (mask == (u32)size - 1));
-
-    // Only proceed if memory layout will change
-    if (bytes == size) return;
-    
-    // Delete previous allocation
-    if (ptr) { delete[] ptr; ptr = nullptr; size = 0; mask = 0; }
-    
-    // Allocate memory
-    if (bytes) {
-                
-        ptr = new u8[bytes];
-        size = (u32)bytes;
-        mask = size - 1;
-        
-        if ((uintptr_t)ptr & 1) {
-            fatal("Memory at %p (%d bytes) is not aligned\n", (void *)ptr, bytes);
-        }
-    }
-    
-    // Update the memory source tables if requested
-    if (update) updateMemSrcTables();
+    config.chipSize = bytes;
+    alloc(chipAllocator, bytes, chipMask, update);
 }
-*/
 
 void
-Memory::alloc(util::Allocator &allocator, isize bytes, i32 &size, u32 &mask, bool update)
+Memory::allocSlow(i32 bytes, bool update)
+{
+    config.slowSize = bytes;
+    alloc(slowAllocator, bytes, slowMask, update);
+}
+
+void
+Memory::allocFast(i32 bytes, bool update)
+{
+    config.fastSize = bytes;
+    alloc(fastAllocator, bytes, fastMask, update);
+}
+            
+void
+Memory::allocRom(i32 bytes, bool update)
+{
+    config.romSize = bytes;
+    alloc(romAllocator, bytes, romMask, update);
+}
+
+void
+Memory::allocWom(i32 bytes, bool update)
+{
+    config.womSize = bytes;
+    alloc(womAllocator, bytes, womMask, update);
+}
+
+void
+Memory::allocExt(i32 bytes, bool update)
+{
+    config.extSize = bytes;
+    alloc(extAllocator, bytes, extMask, update);
+}
+
+void
+Memory::alloc(util::Allocator &allocator, isize bytes, u32 &mask, bool update)
 {
     // Only proceed if memory layout will change
     if (bytes == allocator.size) return;
 
     // Allocate memory
     allocator.init(bytes);
-    size = u32(bytes);
-    mask = size ? size - 1 : 0;
-    
     if (uintptr_t(allocator.ptr) & 1) {
         fatal("Memory at %p is not aligned\n", (void *)allocator.ptr);
     }
     
+    // Set the memory mask
+    mask = bytes ? u32(bytes - 1) : 0;
+
     // Update the memory source tables if requested
     if (update) updateMemSrcTables();
-}
-
-void
-Memory::allocChip(i32 bytes, bool update)
-{
-    alloc(chipAllocator, bytes, config.chipSize, chipMask, update);
-}
-
-void
-Memory::allocSlow(i32 bytes, bool update)
-{
-    alloc(slowAllocator, bytes, config.slowSize, slowMask, update);
-}
-
-void
-Memory::allocFast(i32 bytes, bool update)
-{
-    alloc(fastAllocator, bytes, config.fastSize, fastMask, update);
-}
-            
-void
-Memory::allocRom(i32 bytes, bool update)
-{
-    alloc(romAllocator, bytes, config.romSize, romMask, update);
-}
-
-void
-Memory::allocWom(i32 bytes, bool update)
-{
-    alloc(womAllocator, bytes, config.womSize, womMask, update);
-}
-
-void
-Memory::allocExt(i32 bytes, bool update)
-{
-    alloc(extAllocator, bytes, config.extSize, extMask, update);
 }
 
 void

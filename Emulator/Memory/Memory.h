@@ -238,6 +238,11 @@ private:
         << config.ramInitPattern
         << config.unmappingType
         << config.extStart;
+        
+        // << chipAllocator
+        // << slowAllocator
+        // << fastAllocator
+        ;
     }
 
     template <class T>
@@ -298,11 +303,6 @@ private:
     // Allocating memory
     //
     
-private:
-    
-    // [[deprecated]] void alloc(i32 bytes, u8 *&ptr, i32 &size, u32 &mask, bool update);
-    void alloc(util::Allocator &allocator, isize bytes, i32 &size, u32 &mask, bool update);
-
 public:
 
     void allocChip(i32 bytes, bool update = true);
@@ -320,6 +320,10 @@ public:
     void deleteRom() { allocRom(0); }
     void deleteWom() { allocWom(0); }
     void deleteExt() { allocExt(0); }
+
+private:
+    
+    void alloc(util::Allocator &allocator, isize bytes, u32 &mask, bool update);
 
 
     //
