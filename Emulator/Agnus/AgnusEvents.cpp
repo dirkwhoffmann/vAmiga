@@ -626,7 +626,7 @@ Agnus::serviceINSEvent(EventID id)
             
         case INS_EVENTS:
             
-            scheduler.inspect();
+            agnus.inspect();
             break;
                         
         default:

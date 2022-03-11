@@ -81,8 +81,6 @@
 class Scheduler : public SubComponent {
 
     // Result of the latest inspection
-    mutable EventInfo eventInfo = {};
-    mutable EventSlotInfo slotInfo[SLOT_COUNT];
 
 public:
     
@@ -122,7 +120,7 @@ public:
 private:
     
     const char *getDescription() const override { return "Scheduler"; }
-    void _dump(dump::Category category, std::ostream& os) const override;
+    void _dump(dump::Category category, std::ostream& os) const override { };
     
     
     //
@@ -133,7 +131,6 @@ private:
     
     void _initialize() override;
     void _reset(bool hard) override;
-    void _inspect() const override;
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -162,15 +159,7 @@ private:
     // Analyzing
     //
     
-public:
-    
-    EventInfo getEventInfo() const { return AmigaComponent::getInfo(eventInfo); }
-    EventSlotInfo getSlotInfo(isize nr) const;
-
-private:
-    
-    void inspectSlot(EventSlot nr) const;
-    
+   
     
     //
     // Checking events

@@ -10,6 +10,8 @@
 #include "config.h"
 #include "Agnus.h"
 #include "IOUtils.h"
+#include "CIA.h"
+#include "CPU.h"
 
 void
 Agnus::_dump(dump::Category category, std::ostream& os) const
@@ -100,6 +102,44 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         os << std::endl;
     }
     
+    if (category & dump::Events) {
+                
+        os << std::left << std::setw(10) << "Slot";
+        os << std::left << std::setw(14) << "Event";
+        os << std::left << std::setw(18) << "Trigger position";
+        os << std::left << std::setw(16) << "Trigger cycle" << std::endl;
+        
+        for (isize i = 0; i < 23; i++) {
+            
+            EventSlotInfo &info = slotInfo[i];
+                        
+            os << std::left << std::setw(10) << EventSlotEnum::key(info.slot);
+            os << std::left << std::setw(14) << info.eventName;
+            
+            if (info.trigger != NEVER) {
+                
+                if (info.frameRel == -1) {
+                    os << std::left << std::setw(18) << "previous frame";
+                } else if (info.frameRel > 0) {
+                    os << std::left << std::setw(18) << "other frame";
+                } else {
+                    string vpos = std::to_string(info.vpos);
+                    string hpos = std::to_string(info.hpos);
+                    string pos = "(" + vpos + "," + hpos + ")";
+                    os << std::left << std::setw(18) << pos;
+                }
+                
+                if (info.triggerRel == 0) {
+                    os << std::left << std::setw(16) << "due immediately";
+                } else {
+                    string cycle = std::to_string(info.triggerRel / 8);
+                    os << std::left << std::setw(16) << "due in " + cycle + " DMA cycles";
+                }
+            }
+            os << std::endl;
+        }
+    }
+    
     if (category & dump::Dma) {
         
         sequencer.dump(dump::Dma, os);
@@ -145,7 +185,70 @@ Agnus::_inspect() const
     for (isize i = 0; i < 4; i++) info.audpt[i] = audpt[i] & ptrMask;
     for (isize i = 0; i < 4; i++) info.audlc[i] = audlc[i] & ptrMask;
     for (isize i = 0; i < 8; i++) info.sprpt[i] = sprpt[i] & ptrMask;
+    
+    eventInfo.cpuClock = cpu.getMasterClock();
+    eventInfo.cpuCycles = cpu.getCpuClock();
+    eventInfo.dmaClock = agnus.clock;
+    eventInfo.ciaAClock = ciaa.getClock();
+    eventInfo.ciaBClock  = ciab.getClock();
+    eventInfo.frame = agnus.frame.nr;
+    eventInfo.vpos = agnus.pos.v;
+    eventInfo.hpos = agnus.pos.h;
+    
+    for (EventSlot i = 0; i < SLOT_COUNT; i++) {
+        inspectSlot(i);
+    }
 }
+
+void
+Agnus::inspectSlot(EventSlot nr) const
+{
+    assert_enum(EventSlot, nr);
+    
+    auto &info = slotInfo[nr];
+    auto trigger = scheduler.trigger[nr];
+    
+    info.slot = nr;
+    info.eventId = scheduler.id[nr];
+    info.trigger = trigger;
+    info.triggerRel = trigger - agnus.clock;
+    
+    if (agnus.belongsToCurrentFrame(trigger)) {
+        
+        Beam beam = agnus.cycleToBeam(trigger);
+        info.vpos = beam.v;
+        info.hpos = beam.h;
+        info.frameRel = 0;
+        
+    } else if (agnus.belongsToNextFrame(trigger)) {
+        
+        info.vpos = 0;
+        info.hpos = 0;
+        info.frameRel = 1;
+        
+    } else {
+        
+        assert(agnus.belongsToPreviousFrame(trigger));
+        info.vpos = 0;
+        info.hpos = 0;
+        info.frameRel = -1;
+    }
+    
+    info.eventName = scheduler.eventName((EventSlot)nr, scheduler.id[nr]);
+}
+
+EventSlotInfo
+Agnus::getSlotInfo(isize nr) const
+{
+    assert_enum(EventSlot, nr);
+    
+    {   SYNCHRONIZED
+        
+        if (!isRunning()) inspectSlot(nr);
+        return slotInfo[nr];
+    }
+}
+
 
 void
 Agnus::clearStats()

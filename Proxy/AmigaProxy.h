@@ -84,7 +84,6 @@
 @class RomFileProxy;
 @class RtcProxy;
 @class RecorderProxy;
-@class SchedulerProxy;
 @class ScriptProxy;
 @class SerialPortProxy;
 @class SnapshotProxy;
@@ -153,7 +152,6 @@
     RetroShellProxy *retroShell;
     RtcProxy *rtc;
     RecorderProxy *recorder;
-    SchedulerProxy *scheduler;
     SerialPortProxy *serialPort;
 }
 
@@ -185,7 +183,6 @@
 @property (readonly, strong) RetroShellProxy *retroShell;
 @property (readonly, strong) RtcProxy *rtc;
 @property (readonly, strong) RecorderProxy *recorder;
-@property (readonly, strong) SchedulerProxy *scheduler;
 @property (readonly, strong) SerialPortProxy *serialPort;
 
 - (void)dealloc;
@@ -372,21 +369,11 @@
 
 @property (readonly) NSInteger chipRamLimit;
 @property (readonly) AgnusInfo info;
+@property (readonly) EventInfo eventInfo;
+- (EventSlotInfo)getEventSlotInfo:(NSInteger)slot;
 @property (readonly) BOOL isOCS;
 @property (readonly) BOOL isECS;
 - (AgnusStats)getStats;
-
-@end
-
-
-//
-// Scheduler
-//
-
-@interface SchedulerProxy : AmigaComponentProxy { }
-
-@property (readonly) EventInfo info;
-- (EventSlotInfo)getEventSlotInfo:(NSInteger)slot;
 
 @end
 

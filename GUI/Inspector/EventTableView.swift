@@ -24,7 +24,7 @@ class EventTableView: NSTableView {
 
     private func cache() {
         for row in 0 ..< EventSlot.COUNT.rawValue {
-            slotInfo[row] = amiga.scheduler.getEventSlotInfo(row)
+            slotInfo[row] = amiga.agnus.getEventSlotInfo(row)
         }
     }
 
@@ -101,7 +101,7 @@ extension EventTableView: NSTableViewDelegate {
         
         if let cell = cell as? NSTextFieldCell {
             if tableColumn?.identifier.rawValue != "slot" {
-                if amiga.scheduler.getEventSlotInfo(row).trigger == INT64_MAX {
+                if amiga.agnus.getEventSlotInfo(row).trigger == INT64_MAX {
                     cell.textColor = .secondaryLabelColor
                     return
                 }

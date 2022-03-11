@@ -311,10 +311,13 @@ public:
 public:
     
     AgnusInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    EventInfo getEventInfo() const { return AmigaComponent::getInfo(eventInfo); }
+    EventSlotInfo getSlotInfo(isize nr) const; 
     const AgnusStats &getStats() { return stats; }
     
 private:
     
+    void inspectSlot(EventSlot nr) const;
     void clearStats();
     void updateStats();
     

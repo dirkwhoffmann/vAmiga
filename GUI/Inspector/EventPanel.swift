@@ -11,7 +11,7 @@ extension Inspector {
 
     private func cacheEvents() {
 
-        eventInfo = amiga.scheduler.info
+        eventInfo = amiga.agnus.eventInfo
     }
 
     func refreshEvents(count: Int = 0, full: Bool = false) {
