@@ -16,7 +16,6 @@
 #include "ChangeRecorder.h"
 #include "Copper.h"
 #include "DmaDebugger.h"
-#include "Scheduler.h"
 #include "Sequencer.h"
 #include "Frame.h"
 #include "Memory.h"
@@ -52,7 +51,6 @@ class Agnus : public SubComponent {
     
 public:
 
-    Scheduler scheduler = Scheduler(amiga);
     Sequencer sequencer = Sequencer(amiga);
     Copper copper = Copper(amiga);
     Blitter blitter = Blitter(amiga);

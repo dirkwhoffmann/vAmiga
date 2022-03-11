@@ -422,7 +422,7 @@ RetroShell::exec <Token::agnus, Token::inspect, Token::dma> (Arguments &argv, lo
 template <> void
 RetroShell::exec <Token::agnus, Token::inspect, Token::events> (Arguments &argv, long param)
 {
-    dump(amiga.agnus.scheduler, dump::State);
+    dump(amiga.agnus, dump::Events);
 }
 
 

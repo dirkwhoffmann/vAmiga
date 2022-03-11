@@ -13,7 +13,6 @@
 #include "Constants.h"
 #include "ChangeRecorder.h"
 #include "SubComponent.h"
-#include "Scheduler.h"
 #include "MemoryTypes.h"
 
 /* A central element in the emulation of the Amiga is the accurate modeling of

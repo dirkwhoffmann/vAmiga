@@ -12,7 +12,6 @@
 #include "Agnus.h"
 #include "IOUtils.h"
 #include "RetroShell.h"
-#include "Scheduler.h"
 #include "SerialPort.h"
 #include "Thread.h"
 #include "UART.h"
