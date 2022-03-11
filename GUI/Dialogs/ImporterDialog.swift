@@ -21,19 +21,12 @@ class ImporterDialog: DialogController {
     @IBOutlet weak var df1Button: NSButton!
     @IBOutlet weak var df2Button: NSButton!
     @IBOutlet weak var df3Button: NSButton!
-    @IBOutlet weak var carousel: iCarousel!
     
     var disk: FloppyFileProxy?
     var type: FileType?
     var writeProtect = false
-    var screenshots: [Screenshot] = []
     
     var myDocument: MyDocument { return parent.mydocument! }
-    var numItems: Int { return carousel.numberOfItems }
-    var currentItem: Int { return carousel.currentItemIndex }
-    var centerItem: Int { return numItems / 2 }
-    var lastItem: Int { return numItems - 1 }
-    var empty: Bool { return numItems == 0 }
         
     var titleText: String {
         
@@ -82,14 +75,7 @@ class ImporterDialog: DialogController {
         }
 
         if disk != nil {
-            
-            // Load screenshots (if any)
-            for url in Screenshot.collectFiles(forDisk: disk!.fnv) {
-                if let screenshot = Screenshot(fromUrl: url) {
-                    screenshots.append(screenshot)
-                }
-            }
-            
+                        
             super.showSheet(completionHandler: handler)
         }
     }
@@ -98,26 +84,12 @@ class ImporterDialog: DialogController {
         
         track()
         super.awakeFromNib()
-        window?.makeFirstResponder(carousel)
-        
         update()
-        updateCarousel(goto: centerItem, animated: false)
     }
     
     override func windowDidLoad() {
         
-        if empty {
-
-            setHeight(222)
-            
-        } else {
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.carousel.type = iCarouselType.coverFlow
-                self.carousel.isHidden = false
-                self.carousel.scrollToItem(at: self.centerItem, animated: false)
-            }
-        }
+        setHeight(222)
     }
     
     func setHeight(_ newHeight: CGFloat) {
@@ -161,15 +133,6 @@ class ImporterDialog: DialogController {
         warning.isHidden = df0 || df1 || df2 || df3
     }
     
-    func updateCarousel(goto item: Int = -1, animated: Bool = false) {
-        
-        carousel.reloadData()
-        if item != -1 {
-            self.carousel.scrollToItem(at: item, animated: animated)
-        }
-        carousel.layOutItemViews()
-    }
-
     //
     // Action methods
     //
@@ -207,28 +170,4 @@ class ImporterDialog: DialogController {
          track()
          hideSheet()
      }
-}
-
-//
-// iCarousel data source and delegate
-//
-
-extension ImporterDialog: iCarouselDataSource, iCarouselDelegate {
-    
-    func numberOfItems(in carousel: iCarousel) -> Int {
-        
-        return screenshots.count
-    }
-    
-    func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: NSView?) -> NSView {
-        
-        let h = carousel.frame.height - 10
-        let w = h * 4 / 3
-        let itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: w, height: h))
-        
-        itemView.image =
-            screenshots[index].screen?.roundCorners()
-        
-        return itemView
-    }
 }

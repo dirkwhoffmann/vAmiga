@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ImporterDialog" customModule="vAmiga" customModuleProvider="target">
             <connections>
                 <outlet property="bootInfo" destination="ow1-dH-aQ9" id="38O-Qs-GNK"/>
-                <outlet property="carousel" destination="RBx-ga-ubq" id="DRT-Xb-reu"/>
                 <outlet property="decontaminationButton" destination="CO4-fT-4Oq" id="BFV-G1-yst"/>
                 <outlet property="df0Button" destination="f8k-FI-c5U" id="Ia7-cB-vyd"/>
                 <outlet property="df1Button" destination="lq1-wH-n8V" id="dsL-Pl-gq7"/>
@@ -122,14 +121,6 @@ DQ
                             <action selector="insertDiskAction:" target="-2" id="MFH-gP-oy0"/>
                         </connections>
                     </button>
-                    <customView hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RBx-ga-ubq" customClass="iCarousel">
-                        <rect key="frame" x="20" y="80" width="566" height="205"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                        <connections>
-                            <outlet property="dataSource" destination="-2" id="akM-rF-hxq"/>
-                            <outlet property="delegate" destination="-2" id="1QM-8r-SC8"/>
-                        </connections>
-                    </customView>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7dM-VO-IuM">
                         <rect key="frame" x="14" y="13" width="92" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
