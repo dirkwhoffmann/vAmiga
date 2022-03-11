@@ -40,7 +40,7 @@ Denise::getDefaultConfig()
     DeniseConfig defaults;
 
     defaults.revision = DENISE_OCS;
-    defaults.viewportTracking = true; // TODO: Change to false
+    defaults.viewportTracking = false;
     defaults.hiddenBitplanes = 0;
     defaults.hiddenSprites = 0;
     defaults.hiddenLayers = 0;

@@ -13,8 +13,12 @@ if(NOT CMAKE_BUILD_TYPE)
 #  set(CMAKE_BUILD_TYPE Release)
 endif()
 
-# Define the emulator executable
-add_executable(vAmigaCore Amiga.cpp Headless.cpp)
+# Define the emulator library
+add_library(vAmigaCore Amiga.cpp)
+
+# Define the console app (headless vAmiga)
+add_executable(vAmigaConsole Headless.cpp)
+target_link_libraries(vAmigaConsole vAmigaCore)
 
 # Specify compile options
 target_compile_definitions(vAmigaCore PRIVATE _USE_MATH_DEFINES)

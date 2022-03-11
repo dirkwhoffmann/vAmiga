@@ -53,7 +53,7 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "/tmp/script.ini"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "/tmp/erroneous.ini"

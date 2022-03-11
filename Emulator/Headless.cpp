@@ -171,6 +171,7 @@ Headless::process(long type, u32 data1, u32 data2)
             
         case MSG_SCRIPT_DONE:
         case MSG_SCRIPT_ABORT:
+        case MSG_ABORT:
 
             halt = true;
             [[fallthrough]];

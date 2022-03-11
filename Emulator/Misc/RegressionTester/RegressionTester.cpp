@@ -80,8 +80,8 @@ RegressionTester::dumpTexture(Amiga &amiga, const string &filename)
         warn("Error executing %s\n", cmd.c_str());
     }
     
-    // Exit the emulator
-    exit(retValue);
+    // Ask the GUI to quit
+    msgQueue.put(MSG_ABORT, retValue);
 }
 
 void

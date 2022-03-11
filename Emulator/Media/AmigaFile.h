@@ -65,12 +65,8 @@ public:
     
     // The raw data of this file
     util::Buffer data;
-    // u8 *data = nullptr;
     
-    // The size of this file in bytes
-    // isize size = 0;
     
-
     //
     // Initializing
     //
@@ -82,6 +78,7 @@ public:
     void init(std::istream &stream) throws;
     void init(const string &path, std::istream &stream) throws;
     void init(const u8 *buf, isize len) throws;
+    void init(const util::Buffer &buffer) throws;
     void init(const string &path) throws;
     void init(FILE *file) throws;
     

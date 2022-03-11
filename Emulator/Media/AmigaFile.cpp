@@ -52,7 +52,13 @@ AmigaFile::init(const u8 *buf, isize len)
     stream.write((const char *)buf, len);
     init(stream);
 }
-    
+
+void
+AmigaFile::init(const util::Buffer &buffer)
+{
+    init(buffer.ptr, buffer.size());
+}
+
 void
 AmigaFile::init(FILE *file)
 {

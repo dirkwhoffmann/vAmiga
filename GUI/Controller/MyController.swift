@@ -424,6 +424,10 @@ extension MyController {
         case .HALT:
             shutDown()
             
+        case .ABORT:
+            track("Aborting with exit code \(msg.data1)")
+            exit(Int32(msg.data1))
+            
         case .MUTE_ON:
             muted = true
             refreshStatusBar()

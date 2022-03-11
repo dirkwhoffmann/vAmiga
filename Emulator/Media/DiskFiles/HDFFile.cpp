@@ -54,9 +54,6 @@ HDFFile::init(const string &path)
     if (isOversized(util::getSizeOfFile(path))) throw VAError(ERROR_HDR_TOO_LARGE);
     
     AmigaFile::init(path);
-
-    // TODO: Check if geometry can be derived
-    // TODO: Check if this disk contains an RDB which is not supported yet
 }
 
 void
@@ -66,9 +63,6 @@ HDFFile::init(const u8 *buf, isize len)
     if (isOversized(len)) throw VAError(ERROR_HDR_TOO_LARGE);
 
     AmigaFile::init(buf, len);
-
-    // TODO: Check if geometry can be derived
-    // TODO: Check if this disk contains an RDB which is not supported yet
 }
 
 void
@@ -77,8 +71,7 @@ HDFFile::init(const HardDrive &drive)
     // TODO: THIS FUNCTION IS A PERFORMANCE KILLER FOR LARGE BUFFERS
     {   MEASURE_TIME("AmigaFile::init(const u8 *buf, isize len)")
         
-        // TODO: IMPLEMENT suitable AmigaFile::init method for Buffer
-        AmigaFile::init(drive.data.ptr, drive.geometry.numBytes());
+        AmigaFile::init(drive.data);
     }
     
     // Overwrite the predicted geometry from the precise one

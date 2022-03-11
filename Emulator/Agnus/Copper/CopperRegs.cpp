@@ -30,7 +30,6 @@ Copper::pokeCOPJMP1()
 
     if constexpr (s == ACCESSOR_AGNUS) {
 
-        // TODO: REMOVE TEMPLATE PARAMETER
         fatalError;
 
     }
@@ -50,7 +49,6 @@ Copper::pokeCOPJMP2()
 
     if constexpr (s == ACCESSOR_AGNUS) {
 
-        // TODO: REMOVE TEMPLATE PARAMETER
         fatalError;
 
     }
