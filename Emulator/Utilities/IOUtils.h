@@ -73,10 +73,6 @@ bool matchingStreamHeader(std::istream &stream, const u8 *header, isize len, isi
 bool matchingBufferHeader(const u8 *buffer, const u8 *header, isize len, isize offset = 0);
 bool matchingStreamHeader(std::istream &is, const string &header, isize offset = 0);
 
-// Loads a file from disk
-[[deprecated]] bool loadFile(const string &path, u8 **bufptr, isize *size);
-[[deprecated]] bool loadFile(const string &path, const string &name, u8 **bufptr, isize *size);
-
 
 //
 // Handling streams

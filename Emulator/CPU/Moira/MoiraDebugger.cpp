@@ -34,6 +34,12 @@ Guard::eval(u32 addr, Size S)
 // Guards
 //
 
+Guards::~Guards()
+{
+    assert(guards);
+    delete [] guards;
+}
+
 Guard *
 Guards::guardWithNr(long nr)
 {

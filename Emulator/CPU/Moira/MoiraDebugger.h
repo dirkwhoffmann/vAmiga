@@ -37,10 +37,6 @@ public:
 class Guards {
 
     friend class Debugger;
-
-public:
-    
-    virtual ~Guards() { };
     
 protected:
 
@@ -67,7 +63,9 @@ protected:
 public:
 
     Guards(Moira& ref) : moira(ref) { }
-
+    virtual ~Guards();
+    
+    
     //
     // Inspecting the guard list
     //
