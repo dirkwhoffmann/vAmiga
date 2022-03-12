@@ -597,13 +597,8 @@ MutableFileSystem::importDirectory(const fs::directory_entry &dir, bool recursiv
         if (entry.is_regular_file()) {
             
             // Add file
-            // Buffer buffer(string(path));
-            u8 *buffer; isize size;
-            if (util::loadFile(string(path), &buffer, &size)) {
-                
-                createFile(name, buffer, size);
-                delete [] (buffer);
-            }
+            util::Buffer buffer(path);
+            if (buffer) createFile(name, buffer.ptr, buffer.size);
         }
     }
 }

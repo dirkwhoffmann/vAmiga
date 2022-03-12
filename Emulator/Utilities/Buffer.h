@@ -57,6 +57,9 @@ struct Allocator {
     u64 fnv64() const { return ptr ? util::fnv64(ptr, size) : 0; }
     u16 crc16() const { return ptr ? util::crc16(ptr, size) : 0; }
     u32 crc32() const { return ptr ? util::crc32(ptr, size) : 0; }
+    
+    // Operator overloads
+    explicit operator bool() const { return ptr != nullptr; }
 };
 
 struct Buffer : public Allocator {
@@ -64,32 +67,12 @@ struct Buffer : public Allocator {
     u8 *ptr = nullptr;
     
     Buffer() : Allocator(ptr) { };
-    // Allocator allocator = Allocator(ptr);
-
-    /*
-    void dealloc() { allocator.dealloc(); }
-    void init(isize bytes) { allocator.init(bytes); }
-    void init(isize bytes, u8 value) { allocator.init(bytes, value); }
-    void init(const u8 *buf, isize len) { allocator.init(buf, len); }
-    void init(const Buffer &other) { allocator.init(other.allocator); }
-    void init(const string &path) { allocator.init(path); }
-    void init(const string &path, const string &name) { allocator.init(path, name); }
-    void resize(isize bytes) { allocator.resize(bytes); }
-    void resize(isize bytes, u8 value) { allocator.resize(bytes, value); }
-    bool empty() const { return allocator.empty(); }
-    void clear(u8 value = 0, isize offset = 0) { allocator.clear(value, offset); }
-    void copy(u8 *buf, isize offset, isize len) const { allocator.copy(buf, offset, len); }
-    void copy(u8 *buf) { allocator.copy(buf); } const
-    void patch(const u8 *seq, const u8 *subst) { allocator.patch(seq, subst); }
-    void patch(const char *seq, const char *subst) { allocator.patch(seq, subst); }
     
-    u32 fnv32() const { return allocator.fnv32(); }
-    u64 fnv64() const { return allocator.fnv64(); }
-    u16 crc16() const { return allocator.crc16(); }
-    u32 crc32() const { return allocator.crc32(); }
-    
-    isize size() const { return allocator.size; }
-    */
+    Buffer(isize bytes) : Allocator(ptr) { init(bytes); }
+    Buffer(isize bytes, u8 value) : Allocator(ptr) { init(bytes, value); }
+    Buffer(const u8 *buf, isize len) : Allocator(ptr) { init(buf, len); }
+    Buffer(const string &path) : Allocator(ptr) { init(path); }
+    Buffer(const string &path, const string &name) : Allocator(ptr) { init(path, name); }
     
     u8 operator [] (isize i) const { return ptr[i]; }
     u8 &operator [] (isize i) { return ptr[i]; }

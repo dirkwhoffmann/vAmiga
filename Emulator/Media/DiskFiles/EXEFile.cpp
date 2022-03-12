@@ -34,7 +34,7 @@ EXEFile::isCompatible(std::istream &stream)
 void
 EXEFile::finalizeRead()
 {
-    // Check if this file requires an HD disk
+    // Check if this file requires a high-density disk
     bool hd = data.size > 853000;
         
     // Create a new file system
