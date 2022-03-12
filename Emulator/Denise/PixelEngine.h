@@ -207,7 +207,7 @@ private:
 public:
 
     // Returns the stable frame buffer
-    ScreenBuffer getStableBuffer();
+    const ScreenBuffer &getStableBuffer();
 
     // Locks or unlocks the stable buffer
     void lockStableBuffer() { bufferMutex.lock(); }

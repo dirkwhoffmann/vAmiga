@@ -295,7 +295,7 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
     b = u8(newB);
 }
 
-ScreenBuffer
+const ScreenBuffer &
 PixelEngine::getStableBuffer()
 {
     if (frameBuffer == emuTexture[0].data) {

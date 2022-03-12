@@ -82,6 +82,8 @@ public:
     void init(const string &path) throws;
     void init(FILE *file) throws;
     
+    explicit operator bool() const { return data.ptr != nullptr; }
+
     
     //
     // Methods from AmigaObject
