@@ -65,7 +65,7 @@ PixelEngine::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
     
-    frameBuffer = & emuTexture[0];
+    frameBuffer = emuTexture[0].data;
     updateRGBA();
 }
 
@@ -298,7 +298,7 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
 ScreenBuffer
 PixelEngine::getStableBuffer()
 {
-    if (frameBuffer == &emuTexture[0]) {
+    if (frameBuffer == emuTexture[0].data) {
         return emuTexture[1];
     } else {
         return emuTexture[0];
@@ -308,12 +308,25 @@ PixelEngine::getStableBuffer()
 void
 PixelEngine::swapBuffers()
 {
-    // Only proceed if the GUI is not using the stable buffer right now
     lockStableBuffer();
     
+    if (frameBuffer == emuTexture[0].data) {
+
+        frameBuffer = emuTexture[1].data;
+        emuTexture[1].longFrame = agnus.frame.lof;
+        
+    } else {
+
+        frameBuffer = emuTexture[0].data;
+        emuTexture[0].longFrame = agnus.frame.lof;
+
+    }
+
+    /*
     frameBuffer = (frameBuffer == &emuTexture[0]) ? &emuTexture[1] : &emuTexture[0];
     frameBuffer->longFrame = agnus.frame.lof;
-
+    */
+    
     unlockStableBuffer();
 }
 
@@ -334,7 +347,7 @@ PixelEngine::pixelAddr(isize pixel) const
     assert(pixel < HPIXELS);
     assert(offset < PIXELS);
 
-    return frameBuffer->data + offset;
+    return frameBuffer + offset;
 }
 
 void
@@ -380,7 +393,7 @@ void
 PixelEngine::colorize(isize line)
 {
     // Jump to the first pixel in the specified line in the active frame buffer
-    u32 *dst = frameBuffer->data + line * HPIXELS;
+    u32 *dst = frameBuffer + line * HPIXELS;
     Pixel pixel = 0;
 
     // Initialize the HAM mode hold register with the current background color
@@ -479,7 +492,7 @@ PixelEngine::colorizeHAM(u32 *dst, Pixel from, Pixel to, u16& ham)
 void
 PixelEngine::hide(isize line, u16 layers, u8 alpha)
 {
-    u32 *p = frameBuffer->data + line * HPIXELS;
+    u32 *p = frameBuffer + line * HPIXELS;
 
     for (Pixel i = 0; i < HPIXELS; i++) {
 
