@@ -975,8 +975,6 @@
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 
-@property (readonly) ADFFileProxy *adf;
-
 @end
 
 

@@ -76,5 +76,5 @@ EXEFile::finalizeRead()
     }
         
     // Convert the volume into an ADF
-    adf = new ADFFile(volume);
+    adf.init(volume);
 }

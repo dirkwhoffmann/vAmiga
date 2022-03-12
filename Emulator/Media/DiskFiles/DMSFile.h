@@ -12,10 +12,10 @@
 #include "ADFFile.h"
 
 class DMSFile : public FloppyFile {
-        
-public:
 
     ADFFile adf;
+
+public:
     
     static bool isCompatible(const string &path);
     static bool isCompatible(std::istream &stream);

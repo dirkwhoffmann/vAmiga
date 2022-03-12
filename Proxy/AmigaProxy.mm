@@ -2396,11 +2396,6 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
-- (ADFFileProxy *)adf
-{
-    return [ADFFileProxy make:[self exe]->adf];
-}
-
 @end
 
 
