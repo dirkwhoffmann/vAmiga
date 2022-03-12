@@ -928,14 +928,12 @@ Amiga::execute()
             // Are we requested to take a snapshot?
             if (flags & RL::AUTO_SNAPSHOT) {
                 clearFlag(RL::AUTO_SNAPSHOT);
-                autoSnapshot = new Snapshot(*this);
-                msgQueue.put(MSG_AUTO_SNAPSHOT_TAKEN);
+                takeAutoSnapshot();
             }
             
             if (flags & RL::USER_SNAPSHOT) {
                 clearFlag(RL::USER_SNAPSHOT);
-                userSnapshot = new Snapshot(*this);
-                msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
+                takeUserSnapshot();
             }
 
             // Are we requested to update the debugger info structs?
@@ -1045,8 +1043,7 @@ Amiga::requestAutoSnapshot()
     if (!isRunning()) {
 
         // Take snapshot immediately
-        autoSnapshot = new Snapshot(*this);
-        msgQueue.put(MSG_AUTO_SNAPSHOT_TAKEN);
+        takeAutoSnapshot();
         
     } else {
 
@@ -1061,8 +1058,7 @@ Amiga::requestUserSnapshot()
     if (!isRunning()) {
         
         // Take snapshot immediately
-        userSnapshot = new Snapshot(*this);
-        msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
+        takeUserSnapshot();
         
     } else {
         
@@ -1126,4 +1122,30 @@ Amiga::loadSnapshot(const Snapshot &snapshot)
     
     // Inform the GUI
     msgQueue.put(MSG_SNAPSHOT_RESTORED);
+}
+
+void
+Amiga::takeAutoSnapshot()
+{
+    if (autoSnapshot) {
+
+        warn("Old auto-snapshot still present. Ignoring request.\n");
+        return;
+    }
+    
+    autoSnapshot = new Snapshot(*this);
+    msgQueue.put(MSG_AUTO_SNAPSHOT_TAKEN);
+}
+
+void
+Amiga::takeUserSnapshot()
+{
+    if (userSnapshot) {
+
+        warn("Old user-snapshot still present. Ignoring request.\n");
+        return;
+    }
+    
+    userSnapshot = new Snapshot(*this);
+    msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
 }

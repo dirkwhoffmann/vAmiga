@@ -319,7 +319,7 @@ public:
      */
     void requestAutoSnapshot();
     void requestUserSnapshot();
-     
+         
     /* Returns the most recent snapshot or nullptr if none was taken. If a
      * snapshot was taken, the function hands over the ownership to the caller
      * and deletes the internal pointer.
@@ -329,4 +329,10 @@ public:
 
     // Loads the current state from a snapshot file
     void loadSnapshot(const Snapshot &snapshot) throws;
+    
+private:
+    
+    // Takes a snapshot of a certain kind
+    void takeAutoSnapshot();
+    void takeUserSnapshot();
 };
