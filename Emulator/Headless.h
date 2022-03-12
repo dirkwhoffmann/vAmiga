@@ -25,10 +25,7 @@ class Headless {
 
     // Parsed command line arguments
     map<string,string> keys;
-    
-    // Indicates if additional output should be generated
-    bool verbose = false;
-    
+        
     // The emulator instance
     Amiga amiga;
 
