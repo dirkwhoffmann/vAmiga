@@ -28,6 +28,7 @@ struct Allocator {
             
     // Allocates or releases memory
     void init(isize bytes);
+    void init(isize bytes, u8 value);
     void init(const u8 *buf, isize len);
     void init(const Allocator &other);
     void init(const string &path);
@@ -65,6 +66,7 @@ struct Buffer {
 
     void dealloc() { allocator.dealloc(); }
     void init(isize bytes) { allocator.init(bytes); }
+    void init(isize bytes, u8 value) { allocator.init(bytes, value); }
     void init(const u8 *buf, isize len) { allocator.init(buf, len); }
     void init(const Buffer &other) { allocator.init(other.allocator); }
     void init(const string &path) { allocator.init(path); }

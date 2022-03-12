@@ -20,7 +20,7 @@ FSBlock::FSBlock(FileSystem &ref, Block nr, FSBlockType t) : device(ref)
     this->type = t;
     
     // Allocate memory if this block is not empty
-    if (type != FS_EMPTY_BLOCK) data.init(bsize());
+    if (type != FS_EMPTY_BLOCK) data.init(bsize(), 0);
     
     // Initialize
     switch (type) {

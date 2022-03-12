@@ -216,10 +216,12 @@ MutableFileSystem::allocateBlockAbove(Block nr)
 {
     assert(isBlockNumber(nr));
     
-    for (i64 i = (i64)nr + 1; i < numBlocks(); i++) {
+    for (isize i = nr + 1; i < numBlocks(); i++) {
+        
         if (blocks[i]->type == FS_EMPTY_BLOCK) {
-            markAsAllocated((Block)i);
-            return (Block)i;
+            
+            markAsAllocated(Block(i));
+            return (Block(i));
         }
     }
     return 0;
@@ -231,9 +233,11 @@ MutableFileSystem::allocateBlockBelow(Block nr)
     assert(isBlockNumber(nr));
 
     for (i64 i = (i64)nr - 1; i >= 0; i--) {
+        
         if (blocks[i]->type == FS_EMPTY_BLOCK) {
-            markAsAllocated((Block)i);
-            return (Block)i;
+            
+            markAsAllocated(Block(i));
+            return (Block(i));
         }
     }
     return 0;
@@ -593,6 +597,7 @@ MutableFileSystem::importDirectory(const fs::directory_entry &dir, bool recursiv
         if (entry.is_regular_file()) {
             
             // Add file
+            // Buffer buffer(string(path));
             u8 *buffer; isize size;
             if (util::loadFile(string(path), &buffer, &size)) {
                 

@@ -62,6 +62,13 @@ Allocator::init(isize bytes)
 }
 
 void
+Allocator::init(isize bytes, u8 value)
+{
+    init(bytes);
+    if (ptr) memset(ptr, value, size); 
+}
+
+void
 Allocator::init(const u8 *buf, isize len)
 {
     assert(buf);
@@ -79,28 +86,20 @@ Allocator::init(const Allocator &other)
 void
 Allocator::init(const string &path)
 {
-    // Only proceed if the file exists
-    if (!util::fileExists(path)) {
-        dealloc(); return; // TODO: Throw exception
-    }
-    
     // Open stream in binary mode
     std::ifstream stream(path, std::ifstream::binary);
     
-    if (!stream) {
-        dealloc(); return; // TODO: Throw exception
+    if (stream) {
+        
+        // Assign the buffer the proper size
+        init(streamLength(stream));
+        
+        // Read data from stream
+        stream.read((char *)ptr, size);
+        return;
     }
     
-    // Assign the buffer the proper size
-    auto length = streamLength(stream);
-    init(length);
-
-    // Read data from stream
-    stream.read((char *)ptr, size);
-
-    if (!stream) {
-        dealloc(); return; // TODO: Throw exception
-    }
+    dealloc();
 }
 
 void
