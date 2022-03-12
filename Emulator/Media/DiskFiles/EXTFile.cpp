@@ -20,11 +20,6 @@ const std::vector<string> EXTFile::extAdfHeaders =
     "UAE-1ADF"
 };
 
-EXTFile::~EXTFile()
-{
-    if (adf) delete adf;
-}
-
 bool
 EXTFile::isCompatible(const string &path)
 {
@@ -81,7 +76,7 @@ EXTFile::numHeads() const
 isize
 EXTFile::numSectors() const
 {
-    return adf ? adf->numSectors() : 0;
+    return adf ? adf.numSectors() : 0;
 }
 
 void
@@ -137,7 +132,7 @@ EXTFile::finalizeRead()
         auto disk = FloppyDisk(*this);
 
         // Convert the disk to a standard ADF
-        adf = new ADFFile(disk);
+        adf.init(disk);
         
     } catch (...) { }    
 }
@@ -145,7 +140,7 @@ EXTFile::finalizeRead()
 FSVolumeType
 EXTFile::getDos() const
 {
-    return adf ? adf->getDos() : FS_NODOS;
+    return adf ? adf.getDos() : FS_NODOS;
 }
 
 Diameter

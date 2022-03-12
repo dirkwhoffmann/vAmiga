@@ -41,8 +41,8 @@ class EXTFile : public FloppyFile {
     // Accepted header signatures
     static const std::vector<string> extAdfHeaders;
     
-    // The same file as a standard ADF (nullptr if no conversion is possible)
-    ADFFile *adf = nullptr;
+    // The same file as a standard ADF (if a conversion is possible)
+    ADFFile adf;
     
 public:
             
@@ -56,12 +56,13 @@ public:
 
 public:
 
-    EXTFile(const string &path) throws { AmigaFile::init(path); }
-    EXTFile(const u8 *buf, isize len) throws { AmigaFile::init(buf, len); }
+    using AmigaFile::init;
+    
+    EXTFile(const string &path) throws { init(path); }
+    EXTFile(const u8 *buf, isize len) throws { init(buf, len); }
     EXTFile(class FloppyDisk &disk) throws { init(disk); }
     EXTFile(class FloppyDrive &drive) throws { init(drive); }
-    ~EXTFile();
-    
+ 
     void init(FloppyDisk &disk) throws;
     void init(FloppyDrive &drive) throws;
 

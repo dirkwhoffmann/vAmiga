@@ -27,9 +27,11 @@ public:
     
 public:
     
-    IMGFile(const string &path) throws { AmigaFile::init(path); }
-    IMGFile(const string &path, std::istream &stream) throws { AmigaFile::init(path, stream); }
-    IMGFile(const u8 *buf, isize len) throws { AmigaFile::init(buf, len); }
+    using AmigaFile::init;
+    
+    IMGFile(const string &path) throws { init(path); }
+    IMGFile(const string &path, std::istream &stream) throws { init(path, stream); }
+    IMGFile(const u8 *buf, isize len) throws { init(buf, len); }
     IMGFile(Diameter dia, Density den) throws { init(dia, den); }
     IMGFile(class FloppyDisk &disk) throws { init(disk); }
 
