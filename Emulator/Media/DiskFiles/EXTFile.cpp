@@ -101,7 +101,7 @@ EXTFile::finalizeRead()
         throw VAError(ERROR_EXT_CORRUPTED);
     }
 
-    if (data.size() < proposedHeaderSize() || data.size() != proposedFileSize()) {
+    if (data.size < proposedHeaderSize() || data.size != proposedFileSize()) {
         
         warn("File size mismatch\n");
         throw VAError(ERROR_EXT_CORRUPTED);

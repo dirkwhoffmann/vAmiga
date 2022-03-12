@@ -588,16 +588,16 @@ RomFile::decrypt()
     if (romKey.empty()) throw VAError(ERROR_MISSING_ROM_KEY);
     
     // Decrypt
-    decrypted.init(data.size() - headerSize);
-    for (isize i = 0, j = headerSize; j < data.size(); i++, j++) {
-        decrypted[i] = data[j] ^ romKey[i % romKey.size()];
+    decrypted.init(data.size - headerSize);
+    for (isize i = 0, j = headerSize; j < data.size; i++, j++) {
+        decrypted[i] = data[j] ^ romKey[i % romKey.size];
     }
     
     // Replace the old data by the decrypted data
     data.init(decrypted);
     
     // Check if we've got a valid ROM
-    if (!isRomBuffer(data.ptr, data.size())) {
+    if (!isRomBuffer(data.ptr, data.size)) {
         throw VAError(ERROR_INVALID_ROM_KEY);
     }
 }

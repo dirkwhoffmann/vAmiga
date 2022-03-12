@@ -42,7 +42,7 @@ DMSFile::finalizeRead()
     u8* adfData;
     size_t adfSize;
     
-    if (extractDMS(data.ptr, (size_t)data.size(), &adfData, &adfSize, DMS_DEBUG) == 0) {
+    if (extractDMS(data.ptr, (size_t)data.size, &adfData, &adfSize, DMS_DEBUG) == 0) {
 
         if constexpr (!FORCE_DMS_CANT_CREATE) {
             adf = new ADFFile(adfData, (isize)adfSize);

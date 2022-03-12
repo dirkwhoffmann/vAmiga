@@ -145,11 +145,13 @@ public:
         return *this;
     }
 
+    /*
     auto& operator<<(Buffer &b)
     {
         *this << b.allocator;
         return *this;
     }
+    */
     
     auto& operator<<(string &v)
     {
@@ -235,12 +237,14 @@ public:
         return *this;
     }
     
+    /*
     auto& operator<<(Buffer &b)
     {
         *this << b.allocator;
         return *this;
     }
-
+    */
+    
     auto& operator<<(string &v)
     {
         auto len = v.length();
@@ -337,12 +341,14 @@ public:
         return *this;
     }
 
+    /*
     auto& operator<<(Buffer &b)
     {
         *this << b.allocator;
         return *this;
     }
-
+    */
+    
     auto& operator<<(string &v)
     {
         v = readString(ptr);
@@ -445,12 +451,14 @@ public:
         return *this;
     }
 
+    /*
     auto& operator<<(Buffer &b)
     {
         *this << b.allocator;
         return *this;
     }
-
+    */
+    
     auto& operator<<(const string &v)
     {
         writeString(ptr, v);
@@ -542,12 +550,14 @@ public:
         return *this;
     }
 
+    /*
     auto& operator<<(Buffer &b)
     {
         *this << b.allocator;
         return *this;
     }
-
+    */
+    
     auto& operator<<(string &v)
     {
         v = "";

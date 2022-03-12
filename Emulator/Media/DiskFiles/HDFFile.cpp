@@ -111,7 +111,7 @@ HDFFile::getGeometryDescriptor() const
     } else {
         
         // Guess the drive geometry based on the file size
-        auto geometries = GeometryDescriptor::driveGeometries(data.size());
+        auto geometries = GeometryDescriptor::driveGeometries(data.size);
         if (geometries.size()) {
             result = geometries.front();
         }
@@ -243,7 +243,7 @@ bool
 HDFFile::hasRDB() const
 {
     // The rigid disk block must be among the first 16 blocks
-    if (data.size() >= 16 * 512) {
+    if (data.size >= 16 * 512) {
         for (isize i = 0; i < 16; i++) {
             if (strcmp((const char *)data.ptr + i * 512, "RDSK") == 0) return true;
         }
@@ -280,7 +280,7 @@ HDFFile::partitionData(isize nr) const
 u8 *
 HDFFile::seekBlock(isize nr) const
 {
-    return nr >= 0 && 512 * (nr + 1) <= data.size() ? data.ptr + (512 * nr) : nullptr;
+    return nr >= 0 && 512 * (nr + 1) <= data.size ? data.ptr + (512 * nr) : nullptr;
 }
 
 u8 *

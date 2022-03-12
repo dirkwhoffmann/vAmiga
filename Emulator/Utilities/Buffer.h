@@ -59,11 +59,14 @@ struct Allocator {
     u32 crc32() const { return ptr ? util::crc32(ptr, size) : 0; }
 };
 
-struct Buffer {
+struct Buffer : public Allocator {
     
-    u8 *ptr;
-    Allocator allocator = Allocator(ptr);
+    u8 *ptr = nullptr;
+    
+    Buffer() : Allocator(ptr) { };
+    // Allocator allocator = Allocator(ptr);
 
+    /*
     void dealloc() { allocator.dealloc(); }
     void init(isize bytes) { allocator.init(bytes); }
     void init(isize bytes, u8 value) { allocator.init(bytes, value); }
@@ -86,6 +89,7 @@ struct Buffer {
     u32 crc32() const { return allocator.crc32(); }
     
     isize size() const { return allocator.size; }
+    */
     
     u8 operator [] (isize i) const { return ptr[i]; }
     u8 &operator [] (isize i) { return ptr[i]; }

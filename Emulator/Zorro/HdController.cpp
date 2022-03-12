@@ -104,7 +104,7 @@ u8
 HdController::spypeek8(u32 addr) const
 {
     isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
-    return offset < rom.size() ? rom[offset] : 0;
+    return offset < rom.size ? rom[offset] : 0;
 }
 
 u16
@@ -128,7 +128,7 @@ HdController::spypeek16(u32 addr) const
         default:
             
             // Return Rom code
-            return offset < rom.size() ? HI_LO(rom[offset], rom[offset + 1]) : 0;
+            return offset < rom.size ? HI_LO(rom[offset], rom[offset + 1]) : 0;
     }
 }
 

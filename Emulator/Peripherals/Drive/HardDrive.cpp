@@ -113,17 +113,17 @@ HardDrive::init(const HDFFile &hdf)
     ptable = hdf.getPartitionDescriptors();
 
     // Check the drive geometry against the file size
-    auto numBytes = hdf.data.size();
+    auto numBytes = hdf.data.size;
     
-    if (data.size() < numBytes) {
+    if (data.size < numBytes) {
         
         debug(XFILES, "HDF is too large. Ignoring excess bytes.\n");
-        numBytes = data.size();
+        numBytes = data.size;
     }
-    if (data.size() > hdf.data.size()) {
+    if (data.size > hdf.data.size) {
         
         debug(XFILES, "HDF is too small. Padding with zeroes.");
-        data.clear(0, hdf.data.size());
+        data.clear(0, hdf.data.size);
     }
     
     // Copy over all blocks

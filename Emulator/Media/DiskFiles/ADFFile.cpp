@@ -100,13 +100,13 @@ ADFFile::init(MutableFileSystem &volume)
             throw VAError(ERROR_FS_WRONG_CAPACITY);
     }
 
-    volume.exportVolume(data.ptr, data.size());
+    volume.exportVolume(data.ptr, data.size);
 }
 
 isize
 ADFFile::numCyls() const
 {
-    switch(data.size() & ~1) {
+    switch(data.size & ~1) {
             
         case ADFSIZE_35_DD:    return 80;
         case ADFSIZE_35_DD_81: return 81;
@@ -169,7 +169,7 @@ ADFFile::getDiameter() const
 Density
 ADFFile::getDensity() const
 {
-    return (data.size() & ~1) == ADFSIZE_35_HD ? DENSITY_HD : DENSITY_DD;
+    return (data.size & ~1) == ADFSIZE_35_HD ? DENSITY_HD : DENSITY_DD;
 }
 
 FileSystemDescriptor
@@ -178,7 +178,7 @@ ADFFile::getFileSystemDescriptor() const
     FileSystemDescriptor result;
     
     // Determine the root block location
-    Block root = data.size() < ADFSIZE_35_HD ? 880 : 1760;
+    Block root = data.size < ADFSIZE_35_HD ? 880 : 1760;
 
     // Determine the bitmap block location
     Block bitmap = FSBlock::read32(data.ptr + root * 512 + 316);
@@ -257,7 +257,7 @@ ADFFile::formatDisk(FSVolumeType fs, BootBlockId id, string name)
     volume.makeBootable(id);
     
     // Export the file system to the ADF
-    if (!volume.exportVolume(data.ptr, data.size())) throw VAError(ERROR_FS_UNKNOWN);
+    if (!volume.exportVolume(data.ptr, data.size)) throw VAError(ERROR_FS_UNKNOWN);
 }
 
 void
