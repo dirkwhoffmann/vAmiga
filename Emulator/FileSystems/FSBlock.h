@@ -34,7 +34,7 @@ struct FSBlock : AmigaObject {
     isize corrupted = 0;
         
     // Block data
-    Buffer data;
+    Buffer<u8> data;
 
     
     //

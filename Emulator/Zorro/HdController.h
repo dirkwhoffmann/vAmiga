@@ -22,7 +22,7 @@ class HdController : public ZorroBoard {
     HardDrive &drive;
     
     // Rom code
-    Buffer rom;
+    Buffer<u8> rom;
     
     // Transmitted pointer
     u32 pointer = 0;

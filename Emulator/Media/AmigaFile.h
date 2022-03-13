@@ -66,7 +66,7 @@ public:
     string path;
     
     // The raw data of this file
-    Buffer data;
+    Buffer<u8> data;
     
     
     //
@@ -80,7 +80,7 @@ public:
     void init(std::istream &stream) throws;
     void init(const string &path, std::istream &stream) throws;
     void init(const u8 *buf, isize len) throws;
-    void init(const Buffer &buffer) throws;
+    void init(const Buffer<u8> &buffer) throws;
     void init(const string &path) throws;
     void init(FILE *file) throws;
     
@@ -137,19 +137,19 @@ protected:
     isize readFromStream(std::istream &stream) throws;
     isize readFromFile(const string &path) throws;
     isize readFromBuffer(const u8 *buf, isize len) throws;
-    isize readFromBuffer(const Buffer &buffer) throws;
+    isize readFromBuffer(const Buffer<u8> &buffer) throws;
 
 public:
     
     isize writeToStream(std::ostream &stream, isize offset, isize len) throws;
     isize writeToFile(const string &path, isize offset, isize len) throws;
     isize writeToBuffer(u8 *buf, isize offset, isize len) throws;
-    isize writeToBuffer(Buffer &buffer, isize offset, isize len) throws;
+    isize writeToBuffer(Buffer<u8> &buffer, isize offset, isize len) throws;
 
     isize writeToStream(std::ostream &stream) throws;
     isize writeToFile(const string &path) throws;
     isize writeToBuffer(u8 *buf) throws;
-    isize writeToBuffer(Buffer &buffer) throws;
+    isize writeToBuffer(Buffer<u8> &buffer) throws;
 
 private:
     

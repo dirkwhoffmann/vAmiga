@@ -61,17 +61,22 @@ template <class T> struct Allocator {
     u32 crc32() const { return ptr ? util::crc32((u8 *)ptr, bytesize()) : 0; }
 };
 
-struct Buffer : public Allocator <u8> {
+template <class T> struct Buffer : public Allocator <T> {
     
     u8 *ptr = nullptr;
     
-    Buffer() : Allocator(ptr) { };
-    
-    Buffer(isize bytes) : Allocator(ptr) { init(bytes); }
-    Buffer(isize bytes, u8 value) : Allocator(ptr) { init(bytes, value); }
-    Buffer(const u8 *buf, isize len) : Allocator(ptr) { init(buf, len); }
-    Buffer(const string &path) : Allocator(ptr) { init(path); }
-    Buffer(const string &path, const string &name) : Allocator(ptr) { init(path, name); }
+    Buffer()
+    : Allocator<T>(ptr) { };
+    Buffer(isize bytes)
+    : Allocator<T>(ptr) { this->init(bytes); }
+    Buffer(isize bytes, T value)
+    : Allocator<T>(ptr) { this->init(bytes, value); }
+    Buffer(const T *buf, isize len)
+    : Allocator<T>(ptr) { this->init(buf, len); }
+    Buffer(const string &path)
+    : Allocator<T>(ptr) { this->init(path); }
+    Buffer(const string &path, const string &name)
+    : Allocator<T>(ptr) { this->init(path, name); }
     
     u8 operator [] (isize i) const { return ptr[i]; }
     u8 &operator [] (isize i) { return ptr[i]; }

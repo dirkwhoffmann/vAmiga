@@ -170,7 +170,7 @@ private:
 public:
     
     // Optional storage for recording memory locations if BLT_GUARD is enabled
-    Buffer memguard;
+    Buffer<u8> memguard;
     
  
     //

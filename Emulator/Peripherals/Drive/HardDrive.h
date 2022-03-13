@@ -41,7 +41,7 @@ class HardDrive : public Drive {
     std::vector<PartitionDescriptor> ptable;
             
     // Disk data
-    Buffer data;
+    Buffer<u8> data;
     
     // Current position of the read/write head
     DriveHead head;
