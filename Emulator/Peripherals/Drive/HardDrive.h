@@ -41,7 +41,7 @@ class HardDrive : public Drive {
     std::vector<PartitionDescriptor> ptable;
             
     // Disk data
-    util::Buffer data;
+    Buffer data;
     
     // Current position of the read/write head
     DriveHead head;
@@ -61,10 +61,6 @@ class HardDrive : public Drive {
 public:
 
     HardDrive(Amiga& ref, isize nr);
-
-    // Allocates or deallocates drive memory
-    // void init(isize size) { data.resize(size); }
-    // void dealloc();
         
     // Creates a hard drive with a certain geometry
     void init(const GeometryDescriptor &geometry);

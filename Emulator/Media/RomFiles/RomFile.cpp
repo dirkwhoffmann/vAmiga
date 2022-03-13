@@ -574,8 +574,8 @@ RomFile::decrypt()
 {
     const isize headerSize = 11;
 
-    util::Buffer romKey;
-    util::Buffer decrypted;
+    Buffer romKey;
+    Buffer decrypted;
     
     // Only proceed if the file is encrypted
     if (!isEncrypted()) return;

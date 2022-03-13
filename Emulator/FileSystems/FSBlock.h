@@ -17,6 +17,8 @@
 #include "BootBlockImage.h"
 #include <vector>
 
+using util::Buffer;
+
 struct FSBlock : AmigaObject {
         
     // The device this block belongs to
@@ -32,7 +34,7 @@ struct FSBlock : AmigaObject {
     isize corrupted = 0;
         
     // Block data
-    util::Buffer data;
+    Buffer data;
 
     
     //

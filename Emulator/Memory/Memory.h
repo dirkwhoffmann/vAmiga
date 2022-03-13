@@ -14,6 +14,9 @@
 #include "RomFileTypes.h"
 #include "MemUtils.h"
 
+using util::Allocator;
+using util::Buffer;
+
 #define FAST_RAM_STRT ramExpansion.getBaseAddr()
 
 // Verifies address ranges
@@ -165,12 +168,12 @@ public:
     u8 *slow;
     u8 *fast;
 
-    util::Allocator romAllocator = util::Allocator(rom);
-    util::Allocator womAllocator = util::Allocator(wom);
-    util::Allocator extAllocator = util::Allocator(ext);
-    util::Allocator chipAllocator = util::Allocator(chip);
-    util::Allocator slowAllocator = util::Allocator(slow);
-    util::Allocator fastAllocator = util::Allocator(fast);
+    Allocator<u8> romAllocator = Allocator(rom);
+    Allocator<u8> womAllocator = Allocator(wom);
+    Allocator<u8> extAllocator = Allocator(ext);
+    Allocator<u8> chipAllocator = Allocator(chip);
+    Allocator<u8> slowAllocator = Allocator(slow);
+    Allocator<u8> fastAllocator = Allocator(fast);
 
     u32 romMask = 0;
     u32 womMask = 0;
@@ -318,7 +321,7 @@ public:
 
 private:
     
-    void alloc(util::Allocator &allocator, isize bytes, u32 &mask, bool update);
+    void alloc(Allocator<u8> &allocator, isize bytes, u32 &mask, bool update);
 
 
     //

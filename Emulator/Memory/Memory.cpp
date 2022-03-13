@@ -504,7 +504,7 @@ Memory::allocExt(i32 bytes, bool update)
 }
 
 void
-Memory::alloc(util::Allocator &allocator, isize bytes, u32 &mask, bool update)
+Memory::alloc(Allocator<u8> &allocator, isize bytes, u32 &mask, bool update)
 {
     // Only proceed if memory layout will change
     if (bytes == allocator.size) return;

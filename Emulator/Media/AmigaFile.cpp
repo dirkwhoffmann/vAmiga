@@ -54,7 +54,7 @@ AmigaFile::init(const u8 *buf, isize len)
 }
 
 void
-AmigaFile::init(const util::Buffer &buffer)
+AmigaFile::init(const Buffer &buffer)
 {
     init(buffer.ptr, buffer.size);
 }
@@ -190,7 +190,7 @@ AmigaFile::readFromBuffer(const u8 *buf, isize len)
 }
 
 isize
-AmigaFile::readFromBuffer(const util::Buffer &buffer)
+AmigaFile::readFromBuffer(const Buffer &buffer)
 {
     return readFromBuffer(buffer.ptr, buffer.size);
 }
@@ -236,7 +236,7 @@ AmigaFile::writeToBuffer(u8 *buf, isize offset, isize len)
 }
 
 isize
-AmigaFile::writeToBuffer(util::Buffer &buffer, isize offset, isize len)
+AmigaFile::writeToBuffer(Buffer &buffer, isize offset, isize len)
 {
     buffer.init(len);
     return writeToBuffer(buffer.ptr, offset, len);
@@ -261,7 +261,7 @@ AmigaFile::writeToBuffer(u8 *buf)
 }
 
 isize
-AmigaFile::writeToBuffer(util::Buffer &buffer)
+AmigaFile::writeToBuffer(Buffer &buffer)
 {
     return writeToBuffer(buffer, 0, data.size);
 }

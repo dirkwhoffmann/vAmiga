@@ -14,55 +14,54 @@
 
 namespace util {
 
-struct Allocator {
+template <class T> struct Allocator {
 
     static constexpr isize maxCapacity = 512 * 1024 * 1024;
     
-    u8 *&ptr;
+    T *&ptr;
     isize size;
     
-    Allocator(u8 *&ptr);
+    Allocator(T *&ptr) : ptr(ptr), size(0) { ptr = nullptr; }
     ~Allocator() { dealloc(); }
-
     void dealloc();
             
-    // Allocates or releases memory
-    void init(isize bytes);
-    void init(isize bytes, u8 value);
-    void init(const u8 *buf, isize len);
-    void init(const Allocator &other);
+    // Queries the buffer state
+    isize bytesize() const { return size * sizeof(T); }
+    bool empty() const { return size == 0; }
+    explicit operator bool() const { return empty(); }
+
+    // Initializers
+    void init(isize elements);
+    void init(isize elements, T value);
+    void init(const T *buf, isize elements);
+    void init(const Allocator<T> &other);
     void init(const string &path);
     void init(const string &path, const string &name);
 
     // Resizes an existing buffer
-    void resize(isize bytes);
-    void resize(isize bytes, u8 value);
+    void resize(isize elements);
+    void resize(isize elements, T pad);
 
-    // Queries the buffer state
-    bool empty() const { return size == 0; }
-
-    // Overwrites all elements with a default value
-    void clear(u8 value = 0, isize offset = 0);
+    // Overwrites elements with a default value
+    void clear(T value, isize offset, isize len);
+    void clear(T value = 0, isize offset = 0) { clear(value, offset, size - offset); }
     
     // Imports or exports the buffer contents
-    void copy(u8 *buf, isize offset, isize len) const;
-    void copy(u8 *buf) const { copy(buf, 0, size); }
+    void copy(T *buf, isize offset, isize len) const;
+    void copy(T *buf) const { copy(buf, 0, size); }
 
     // Replaces a byte or character sequence by another one
     void patch(const u8 *seq, const u8 *subst);
     void patch(const char *seq, const char *subst);
 
     // Computes a checksum of a certain kind
-    u32 fnv32() const { return ptr ? util::fnv32(ptr, size) : 0; }
-    u64 fnv64() const { return ptr ? util::fnv64(ptr, size) : 0; }
-    u16 crc16() const { return ptr ? util::crc16(ptr, size) : 0; }
-    u32 crc32() const { return ptr ? util::crc32(ptr, size) : 0; }
-    
-    // Operator overloads
-    explicit operator bool() const { return ptr != nullptr; }
+    u32 fnv32() const { return ptr ? util::fnv32((u8 *)ptr, bytesize()) : 0; }
+    u64 fnv64() const { return ptr ? util::fnv64((u8 *)ptr, bytesize()) : 0; }
+    u16 crc16() const { return ptr ? util::crc16((u8 *)ptr, bytesize()) : 0; }
+    u32 crc32() const { return ptr ? util::crc32((u8 *)ptr, bytesize()) : 0; }
 };
 
-struct Buffer : public Allocator {
+struct Buffer : public Allocator <u8> {
     
     u8 *ptr = nullptr;
     

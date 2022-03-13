@@ -139,19 +139,12 @@ public:
     COUNTD(const float)
     COUNTD(const double)
        
-    auto& operator<<(Allocator &a)
+    template <class T>
+    auto& operator<<(Allocator<T> &a)
     {
         count += 8 + a.size;
         return *this;
     }
-
-    /*
-    auto& operator<<(Buffer &b)
-    {
-        *this << b.allocator;
-        return *this;
-    }
-    */
     
     auto& operator<<(string &v)
     {
@@ -231,20 +224,13 @@ public:
     CHECK(const float)
     CHECK(const double)
        
-    auto& operator<<(Allocator &a)
+    template <class T>
+    auto& operator<<(Allocator<T> &a)
     {
         hash = util::fnvIt64(hash, a.fnv64());
         return *this;
     }
-    
-    /*
-    auto& operator<<(Buffer &b)
-    {
-        *this << b.allocator;
-        return *this;
-    }
-    */
-    
+        
     auto& operator<<(string &v)
     {
         auto len = v.length();
@@ -332,7 +318,8 @@ public:
     DESERIALIZED(float)
     DESERIALIZED(double)
 
-    auto& operator<<(Allocator &a)
+    template <class T>
+    auto& operator<<(Allocator<T> &a)
     {
         i64 len;
         *this << len;
@@ -341,14 +328,6 @@ public:
         return *this;
     }
 
-    /*
-    auto& operator<<(Buffer &b)
-    {
-        *this << b.allocator;
-        return *this;
-    }
-    */
-    
     auto& operator<<(string &v)
     {
         v = readString(ptr);
@@ -443,7 +422,8 @@ public:
     SERIALIZED(const float)
     SERIALIZED(const double)
 
-    auto& operator<<(Allocator &a)
+    template <class T>
+    auto& operator<<(Allocator<T> &a)
     {
         *this << i64(a.size);
         a.copy(ptr);
@@ -451,14 +431,6 @@ public:
         return *this;
     }
 
-    /*
-    auto& operator<<(Buffer &b)
-    {
-        *this << b.allocator;
-        return *this;
-    }
-    */
-    
     auto& operator<<(const string &v)
     {
         writeString(ptr, v);
@@ -544,20 +516,13 @@ public:
     RESET(float)
     RESET(double)
 
-    auto& operator<<(Allocator &a)
+    template <class T>
+    auto& operator<<(Allocator<T> &a)
     {
         a.clear();
         return *this;
     }
 
-    /*
-    auto& operator<<(Buffer &b)
-    {
-        *this << b.allocator;
-        return *this;
-    }
-    */
-    
     auto& operator<<(string &v)
     {
         v = "";

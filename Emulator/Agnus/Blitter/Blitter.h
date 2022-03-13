@@ -170,7 +170,7 @@ private:
 public:
     
     // Optional storage for recording memory locations if BLT_GUARD is enabled
-    util::Buffer memguard;
+    Buffer memguard;
     
  
     //

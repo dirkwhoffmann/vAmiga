@@ -15,43 +15,33 @@
 
 namespace util {
 
-Allocator::Allocator(u8 *&ptr) : ptr(ptr)
-{
-    ptr = nullptr;
-    size = 0;
-}
-
-void
-Allocator::dealloc()
+template <class T> void
+Allocator<T>::dealloc()
 {
     assert((size == 0) == (ptr == nullptr));
 
     if (ptr) {
  
-        // printf("Freeing %ld bytes at %p\n", size, (void *)ptr);
-
         delete [] ptr;
         ptr = nullptr;
         size = 0;
     }
 }
 
-void
-Allocator::init(isize bytes)
+template <class T> void
+Allocator<T>::init(isize elements)
 {
-    // printf("Allocator::init(%ld)\n", bytes);
-
-    assert(usize(bytes) <= maxCapacity);
+    assert(usize(elements) <= maxCapacity);
     assert((size == 0) == (ptr == nullptr));
 
-    if (size != bytes) try {
+    if (size != elements) try {
         
         dealloc();
         
-        if (bytes) {
+        if (elements) {
 
-            size = bytes;
-            ptr = new u8[size];
+            size = elements;
+            ptr = new T[size];
         }
         
     } catch (...) {
@@ -61,80 +51,83 @@ Allocator::init(isize bytes)
     }
 }
 
-void
-Allocator::init(isize bytes, u8 value)
+template <class T> void
+Allocator<T>::init(isize elements, T value)
 {
-    init(bytes);
-    if (ptr) memset(ptr, value, size); 
+    init(elements);
+    
+    if (ptr) {
+        
+        for (isize i = 0; i < size; i++) {
+            ptr[i] = value;
+        }
+    }
 }
 
-void
-Allocator::init(const u8 *buf, isize len)
+template <class T> void
+Allocator<T>::init(const T *buf, isize elements)
 {
     assert(buf);
     
-    init(len);
-    if (ptr) memcpy((void *)ptr, (const void *)buf, len);
+    init(elements);
+    
+    if (ptr) {
+        
+        for (isize i = 0; i < size; i++) {
+            ptr[i] = buf[i];
+        }
+    }
 }
 
-void
-Allocator::init(const Allocator &other)
+template <class T> void
+Allocator<T>::init(const Allocator<T> &other)
 {
     init(other.ptr, other.size);
 }
 
-void
-Allocator::init(const string &path)
+template <class T> void
+Allocator<T>::init(const string &path)
 {
     // Open stream in binary mode
     std::ifstream stream(path, std::ifstream::binary);
     
-    if (stream) {
+    // Return an empty buffer if the stream could not be opened
+    if (!stream) { dealloc(); return; }
         
-        // Assign the buffer the proper size
-        init(streamLength(stream));
-        
-        // Read data from stream
-        stream.read((char *)ptr, size);
-        return;
-    }
+    // Get the stream length in bytes
+    auto length = streamLength(stream);
     
-    dealloc();
+    // Create a buffer of proper size
+    init(length / sizeof(T) + (length % sizeof(T) ? 1 : 0));
+    
+    // Read from stream
+    stream.read((char *)ptr, length);
 }
 
-void
-Allocator::init(const string &path, const string &name)
+template <class T> void
+Allocator<T>::init(const string &path, const string &name)
 {
     init(path + "/" + name);
 }
 
-void
-Allocator::clear(u8 value, isize offset)
+template <class T> void
+Allocator<T>::resize(isize elements)
 {
-    assert(offset >= 0 && offset <= size);
-    if (ptr) memset((void *)(ptr + offset), value, size - offset);
-}
-
-void
-Allocator::resize(isize bytes)
-{
-    // printf("Allocator::resize(%ld)\n", bytes);
-
     assert((size == 0) == (ptr == nullptr));
 
-    if (size != bytes) {
+    if (size != elements) {
         
-        if (bytes == 0) {
+        if (elements == 0) {
             
             dealloc();
             
         } else try {
             
-            auto newPtr = new u8[bytes];
-            memcpy(newPtr, ptr, std::min(size, bytes));
+            auto newPtr = new T[elements];
+            copy(newPtr, 0, std::min(size, elements));
             dealloc();
             ptr = (u8 *)newPtr;
-            size = bytes;
+            size = elements;
             
         } catch (...) {
             
@@ -144,53 +137,70 @@ Allocator::resize(isize bytes)
     }
 }
 
-void
-Allocator::resize(isize bytes, u8 value)
+template <class T> void
+Allocator<T>::resize(isize elements, T pad)
 {
-    assert((size == 0) == (ptr == nullptr));
-
-    auto gap = bytes > size ? bytes - size : 0;
+    auto gap = elements > size ? elements - size : 0;
     
-    resize(bytes);
-    if (ptr) memset((void *)(ptr + size - gap), value, gap);
+    resize(elements);
+    clear(pad, elements - gap, gap);
 }
 
-/*
-void
-Allocator::read(const u8 *buf, isize len)
+template <class T> void
+Allocator<T>::clear(T value, isize offset, isize len)
 {
-    // printf("Allocator::init(%p,%ld)\n", (void *)buf, len);
-
     assert((size == 0) == (ptr == nullptr));
-    assert(buf);
+    assert(offset >= 0 && len >= 0 && offset + len <= size);
     
-    resize(len);
-    if (ptr) memcpy((void *)ptr, (const void *)buf, len);
+    if (ptr) {
+        
+        for (isize i = 0; i < len; i++) {
+            ptr[i + offset] = value;
+        }
+    }
 }
-*/
 
-void
-Allocator::copy(u8 *buf, isize offset, isize len) const
+template <class T> void
+Allocator<T>::copy(T *buf, isize offset, isize len) const
 {
-    // printf("Allocator::init(%p,%ld,%ld)\n", (void *)buf, offset, len);
-
     assert(buf);
     assert((size == 0) == (ptr == nullptr));
-    assert(offset + len <= size);
+    assert(offset >= 0 && len >= 0 && offset + len <= size);
     
-    if (ptr) memcpy((void *)buf, (void *)(ptr + offset), len);
+    if (ptr) {
+        
+        for (isize i = 0; i < len; i++) {
+            buf[i] = ptr[i + offset];
+        }
+    }
 }
 
-void
-Allocator::patch(const u8 *seq, const u8 *subst)
+template <class T> void
+Allocator<T>::patch(const u8 *seq, const u8 *subst)
 {
-    if (ptr) util::replace(ptr, size, seq, subst);
+    if (ptr) util::replace(ptr, bytesize(), seq, subst);
 }
 
-void
-Allocator::patch(const char *seq, const char *subst)
+template <class T> void
+Allocator<T>::patch(const char *seq, const char *subst)
 {
-    if (ptr) util::replace((char *)ptr, size, seq, subst);
+    if (ptr) util::replace((char *)ptr, bytesize(), seq, subst);
 }
 
+//
+// Template instantiations
+//
+
+template void Allocator<u8>::init(isize bytes);
+template void Allocator<u8>::init(isize bytes, u8 value);
+template void Allocator<u8>::init(const u8 *buf, isize len);
+template void Allocator<u8>::init(const Allocator<u8> &other);
+template void Allocator<u8>::init(const string &path);
+template void Allocator<u8>::init(const string &path, const string &name);
+template void Allocator<u8>::resize(isize elements);
+template void Allocator<u8>::resize(isize elements, u8 value);
+template void Allocator<u8>::clear(u8 value, isize offset);
+template void Allocator<u8>::copy(u8 *buf, isize offset, isize len) const;
+template void Allocator<u8>::patch(const u8 *seq, const u8 *subst);
+template void Allocator<u8>::patch(const char *seq, const char *subst);
 }
