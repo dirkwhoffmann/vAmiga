@@ -63,7 +63,7 @@ template <class T> struct Allocator {
 
 template <class T> struct Buffer : public Allocator <T> {
     
-    u8 *ptr = nullptr;
+    T *ptr = nullptr;
     
     Buffer()
     : Allocator<T>(ptr) { };
@@ -78,8 +78,8 @@ template <class T> struct Buffer : public Allocator <T> {
     Buffer(const string &path, const string &name)
     : Allocator<T>(ptr) { this->init(path, name); }
     
-    u8 operator [] (isize i) const { return ptr[i]; }
-    u8 &operator [] (isize i) { return ptr[i]; }
+    T operator [] (isize i) const { return ptr[i]; }
+    T &operator [] (isize i) { return ptr[i]; }
 };
 
 }

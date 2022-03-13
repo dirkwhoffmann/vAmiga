@@ -130,7 +130,7 @@ Allocator<T>::resize(isize elements)
             auto newPtr = new T[elements];
             copy(newPtr, 0, std::min(size, elements));
             dealloc();
-            ptr = (u8 *)newPtr;
+            ptr = (T *)newPtr;
             size = elements;
             
         } catch (...) {
@@ -182,7 +182,7 @@ Allocator<T>::copy(T *buf, isize offset, isize len) const
 template <class T> void
 Allocator<T>::patch(const u8 *seq, const u8 *subst)
 {
-    if (ptr) util::replace(ptr, bytesize(), seq, subst);
+    if (ptr) util::replace((u8 *)ptr, bytesize(), seq, subst);
 }
 
 template <class T> void
@@ -195,17 +195,21 @@ Allocator<T>::patch(const char *seq, const char *subst)
 // Template instantiations
 //
 
-template void Allocator<u8>::alloc(isize bytes);
-template void Allocator<u8>::dealloc();
-template void Allocator<u8>::init(isize bytes, u8 value);
-template void Allocator<u8>::init(const u8 *buf, isize len);
-template void Allocator<u8>::init(const Allocator<u8> &other);
-template void Allocator<u8>::init(const string &path);
-template void Allocator<u8>::init(const string &path, const string &name);
-template void Allocator<u8>::resize(isize elements);
-template void Allocator<u8>::resize(isize elements, u8 value);
-template void Allocator<u8>::clear(u8 value, isize offset);
-template void Allocator<u8>::copy(u8 *buf, isize offset, isize len) const;
-template void Allocator<u8>::patch(const u8 *seq, const u8 *subst);
-template void Allocator<u8>::patch(const char *seq, const char *subst);
+#define INSTANTIATE_ALLOCATOR(T) \
+template void Allocator<T>::alloc(isize bytes); \
+template void Allocator<T>::dealloc(); \
+template void Allocator<T>::init(isize bytes, T value); \
+template void Allocator<T>::init(const T *buf, isize len); \
+template void Allocator<T>::init(const Allocator<T> &other); \
+template void Allocator<T>::init(const string &path); \
+template void Allocator<T>::init(const string &path, const string &name); \
+template void Allocator<T>::resize(isize elements); \
+template void Allocator<T>::resize(isize elements, T value); \
+template void Allocator<T>::clear(T value, isize offset); \
+template void Allocator<T>::copy(T *buf, isize offset, isize len) const; \
+template void Allocator<T>::patch(const u8 *seq, const u8 *subst); \
+template void Allocator<T>::patch(const char *seq, const char *subst);
+
+INSTANTIATE_ALLOCATOR(u8)
+INSTANTIATE_ALLOCATOR(u32)
 }

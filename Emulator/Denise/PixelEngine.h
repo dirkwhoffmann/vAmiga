@@ -14,6 +14,8 @@
 #include "ChangeRecorder.h"
 #include "Constants.h"
 
+using util::Buffer;
+
 class PixelEngine : public SubComponent {
 
     friend class DmaDebugger;
@@ -39,6 +41,7 @@ private:
      * buffer and the GPU reads from the stable buffer. Once a frame has
      * been completed, the working buffer and the stable buffer are swapped.
      */
+    Buffer<u32> texture[2];
     ScreenBuffer emuTexture[2];
 
     // Pointer to the texture data in the working buffer
@@ -48,7 +51,7 @@ private:
     util::Mutex bufferMutex;
         
     // Buffer with background noise (random black and white pixels)
-    u32 *noise = nullptr;
+    Buffer<u32> noise;
 
     
     //
@@ -92,8 +95,8 @@ public:
 public:
     
     PixelEngine(Amiga& ref);
-    ~PixelEngine();
-
+ 
+    
     //
     // Methods from AmigaObject
     //

@@ -19,32 +19,22 @@
 PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
 {
     // Allocate frame buffers
-    emuTexture[0].data = new u32[PIXELS];
-    emuTexture[1].data = new u32[PIXELS];
+    texture[0].alloc(PIXELS);
+    texture[1].alloc(PIXELS);
+    emuTexture[0].data = texture[0].ptr;
+    emuTexture[1].data = texture[1].ptr;
     
     // Create random background noise pattern
-    const isize noiseSize = 2 * VPIXELS * HPIXELS;
-    noise = new u32[noiseSize];
-    for (isize i = 0; i < noiseSize; i++) {
+    noise.alloc(2 * VPIXELS * HPIXELS);
+    for (isize i = 0; i < noise.size; i++) {
         noise[i] = rand() % 2 ? 0xFF000000 : 0xFFFFFFFF;
     }
-}
-
-PixelEngine::~PixelEngine()
-{
-    delete[] emuTexture[0].data;
-    delete[] emuTexture[1].data;
-    delete[] noise;
 }
 
 void
 PixelEngine::_initialize()
 {
     resetConfig();
-
-    // Start with a long frame
-    emuTexture[0].longFrame = true;
-    emuTexture[1].longFrame = true;
     
     // Setup ECS BRDRBLNK color
     indexedRgba[64] = GpuColor(0x00, 0x00, 0x00).rawValue;
@@ -64,6 +54,12 @@ void
 PixelEngine::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
+    
+    if (hard) {
+        
+        emuTexture[0].longFrame = true;
+        emuTexture[1].longFrame = true;
+    }
     
     frameBuffer = emuTexture[0].data;
     updateRGBA();
@@ -336,7 +332,7 @@ PixelEngine::getNoise() const
     static u32 offset = 0;
     
     offset = (offset + 100) % PIXELS;
-    return noise + offset;
+    return noise.ptr + offset;
 }
 
 u32 *
