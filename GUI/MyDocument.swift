@@ -17,8 +17,8 @@ class MyDocument: NSDocument {
 
     /* An optional media object attached to this document. This variable is
      * checked in mountAttachment() which is called in windowDidLoad(). If an
-     * attachment is present, e.g., a D64 archive, it is automatically attached
-     * to the emulator.
+     * attachment is present, e.g., an ADF, it is automatically attached to the
+     * emulator.
      */
     var attachment: AmigaFileProxy?
     
@@ -198,13 +198,13 @@ class MyDocument: NSDocument {
     //
     
     override open func read(from url: URL, ofType typeName: String) throws {
-        
+                
         do {
             try createAttachment(from: url)
             
         } catch let error as VAError {
             
-            error.cantOpen(url: url)
+            throw NSError(error: error)
         }
     }
     
@@ -218,7 +218,7 @@ class MyDocument: NSDocument {
             
         } catch let error as VAError {
             
-            error.cantOpen(url: url)
+            throw NSError(error: error)
         }
     }
     
@@ -235,11 +235,12 @@ class MyDocument: NSDocument {
             // Take snapshot
             if let snapshot = SnapshotProxy.make(withAmiga: amiga) {
 
-                // Write to data buffer
                 do {
-                    _ = try snapshot.writeToFile(url: url)
-                } catch {
-                    throw NSError(domain: NSOSStatusErrorDomain, code: unimpErr, userInfo: nil)
+                    try snapshot.writeToFile(url: url)
+                    
+                } catch let error as VAError {
+                    
+                    throw NSError(error: error)
                 }
             }
         }

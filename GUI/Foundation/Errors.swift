@@ -115,3 +115,13 @@ class VAError: Error {
                 async: async, icon: "mp4")
     }
 }
+
+extension NSError {
+    
+    convenience init(error: VAError) {
+        
+        self.init(domain: "vAmiga",
+                  code: error.errorCode.rawValue,
+                  userInfo: [NSLocalizedRecoverySuggestionErrorKey: error.what])
+    }
+}
