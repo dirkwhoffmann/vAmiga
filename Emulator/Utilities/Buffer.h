@@ -23,7 +23,6 @@ template <class T> struct Allocator {
     
     Allocator(T *&ptr) : ptr(ptr), size(0) { ptr = nullptr; }
     ~Allocator() { dealloc(); }
-    void dealloc();
             
     // Queries the buffer state
     isize bytesize() const { return size * sizeof(T); }
@@ -31,8 +30,9 @@ template <class T> struct Allocator {
     explicit operator bool() const { return empty(); }
 
     // Initializers
-    void init(isize elements);
-    void init(isize elements, T value);
+    void alloc(isize elements);
+    void dealloc();
+    void init(isize elements, T value = 0);
     void init(const T *buf, isize elements);
     void init(const Allocator<T> &other);
     void init(const string &path);

@@ -588,7 +588,7 @@ RomFile::decrypt()
     if (romKey.empty()) throw VAError(ERROR_MISSING_ROM_KEY);
     
     // Decrypt
-    decrypted.init(data.size - headerSize);
+    decrypted.alloc(data.size - headerSize);
     for (isize i = 0, j = headerSize; j < data.size; i++, j++) {
         decrypted[i] = data[j] ^ romKey[i % romKey.size];
     }

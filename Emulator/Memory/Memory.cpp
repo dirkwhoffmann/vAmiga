@@ -510,7 +510,7 @@ Memory::alloc(Allocator<u8> &allocator, isize bytes, u32 &mask, bool update)
     if (bytes == allocator.size) return;
 
     // Allocate memory
-    allocator.init(bytes);
+    allocator.alloc(bytes);
     
     // Set the memory mask
     mask = bytes ? u32(bytes - 1) : 0;

@@ -16,20 +16,7 @@
 namespace util {
 
 template <class T> void
-Allocator<T>::dealloc()
-{
-    assert((size == 0) == (ptr == nullptr));
-
-    if (ptr) {
- 
-        delete [] ptr;
-        ptr = nullptr;
-        size = 0;
-    }
-}
-
-template <class T> void
-Allocator<T>::init(isize elements)
+Allocator<T>::alloc(isize elements)
 {
     assert(usize(elements) <= maxCapacity);
     assert((size == 0) == (ptr == nullptr));
@@ -52,9 +39,22 @@ Allocator<T>::init(isize elements)
 }
 
 template <class T> void
+Allocator<T>::dealloc()
+{
+    assert((size == 0) == (ptr == nullptr));
+
+    if (ptr) {
+ 
+        delete [] ptr;
+        ptr = nullptr;
+        size = 0;
+    }
+}
+
+template <class T> void
 Allocator<T>::init(isize elements, T value)
 {
-    init(elements);
+    alloc(elements);
     
     if (ptr) {
         
@@ -69,7 +69,7 @@ Allocator<T>::init(const T *buf, isize elements)
 {
     assert(buf);
     
-    init(elements);
+    alloc(elements);
     
     if (ptr) {
         
@@ -98,7 +98,11 @@ Allocator<T>::init(const string &path)
     auto length = streamLength(stream);
     
     // Create a buffer of proper size
-    init(length / sizeof(T) + (length % sizeof(T) ? 1 : 0));
+    if (length % sizeof(T)) {
+        init(length / sizeof(T) + 1);
+    } else {
+        alloc(length / sizeof(T));
+    }
     
     // Read from stream
     stream.read((char *)ptr, length);
@@ -191,7 +195,8 @@ Allocator<T>::patch(const char *seq, const char *subst)
 // Template instantiations
 //
 
-template void Allocator<u8>::init(isize bytes);
+template void Allocator<u8>::alloc(isize bytes);
+template void Allocator<u8>::dealloc();
 template void Allocator<u8>::init(isize bytes, u8 value);
 template void Allocator<u8>::init(const u8 *buf, isize len);
 template void Allocator<u8>::init(const Allocator<u8> &other);
