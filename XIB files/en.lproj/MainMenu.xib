@@ -155,8 +155,7 @@
                                     <action selector="monitorAction:" target="-1" id="hps-FK-7Yl"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Console..." id="x3U-7k-jeR" userLabel="Monitor...">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Console..." keyEquivalent="^" id="x3U-7k-jeR" userLabel="Monitor...">
                                 <connections>
                                     <action selector="consoleAction:" target="-1" id="Nx9-Xz-OIt"/>
                                 </connections>
@@ -174,8 +173,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="5uV-Cr-Apb"/>
-                            <menuItem title="Take Screenshot" id="fOc-QP-hyG" userLabel="Take Screenshot">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Take Screenshot" keyEquivalent="3" id="fOc-QP-hyG" userLabel="Take Screenshot">
                                 <connections>
                                     <action selector="takeScreenshotAction:" target="-1" id="bdx-QR-vOK"/>
                                 </connections>
