@@ -163,6 +163,7 @@ Thread::main()
                 
                 AmigaComponent::halt();
                 state = EXEC_HALTED;
+                return;
 
             } else {
                 
@@ -279,7 +280,10 @@ Thread::pause(bool blocking)
 void
 Thread::halt(bool blocking)
 {
+    assert(!isEmulatorThread());
+    
     changeStateTo(EXEC_HALTED, blocking);
+    join();
 }
 
 void

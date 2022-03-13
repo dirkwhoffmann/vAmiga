@@ -192,15 +192,15 @@ extension MyController {
         
         // Enable message processing
         registerAsListener()
-        
-        // Process attachment (if any)
-        try? mydocument.mountAttachment(destination: amiga.df0)
-        
+                
         do {
             // Switch the Amiga on
             amiga.powerOn()
-            
-            // Start the emulation
+        
+            // Process attachment (if any)
+            try? mydocument.mountAttachment(destination: amiga.df0)
+
+            // Start emulation
             try amiga.run()
             
         } catch {
@@ -422,6 +422,7 @@ extension MyController {
             amiga.continueScript()
             
         case .HALT:
+            track("Received the HALT message")
             shutDown()
             
         case .ABORT:

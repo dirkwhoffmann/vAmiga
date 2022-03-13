@@ -40,37 +40,38 @@ extension MyController: NSWindowDelegate {
     
     public func windowWillClose(_ notification: Notification) {
         
-        track()
-        
-        // Stop renderer
+        track("Stopping renderer...")
         renderer.halt()
         
-        // Stop timers
+        track("Stopping timers...")
         snapshotTimer?.invalidate()
         snapshotTimer = nil
 
-        // Disconnect and close auxiliary windows
+        track("Closing auxiliary windows...")
         inspector?.amiga = nil
         inspector?.close()
         monitor?.amiga = nil
         monitor?.close()
         
-        // Disconnect the audio engine
+        track("Shutting down the audio backend...")
         macAudio.shutDown()
 
-        // Disconnect all game pads
+        track("Disconnecting gaming devices...")
         gamePadManager.shutDown()
         
-        // Shut down the emulator
+        track("Shutting down the emulator...")
         amiga.halt()
+        track("Shut down")
     }
     
     func shutDown() {
                 
-        track("Shutting down the emulator")
+        track("Removing proxy...")
         
         amiga.kill()
         amiga = nil
+        
+        track("Removed")
     }
     
     public func windowWillEnterFullScreen(_ notification: Notification) {
