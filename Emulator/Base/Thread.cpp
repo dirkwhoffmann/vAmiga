@@ -118,19 +118,17 @@ Thread::main()
         }
         
         // Are we requested to enter or exit warp mode?
-        while (newWarpMode != warpMode) {
+        if (newWarpMode != warpMode) {
             
             AmigaComponent::warpOnOff(newWarpMode);
             warpMode = newWarpMode;
-            break;
         }
 
         // Are we requested to enter or exit warp mode?
-        while (newDebugMode != debugMode) {
+        if (newDebugMode != debugMode) {
             
             AmigaComponent::debugOnOff(newDebugMode);
             debugMode = newDebugMode;
-            break;
         }
 
         // Are we requested to change state?
@@ -140,49 +138,37 @@ Thread::main()
                 
                 AmigaComponent::powerOn();
                 state = EXEC_PAUSED;
-                break;
-            }
 
-            if (state == EXEC_PAUSED && newState == EXEC_OFF) {
+            } else if (state == EXEC_PAUSED && newState == EXEC_OFF) {
                 
                 AmigaComponent::powerOff();
                 state = EXEC_OFF;
-                break;
-            }
-
-            if (state == EXEC_PAUSED && newState == EXEC_RUNNING) {
+            
+            } else if (state == EXEC_PAUSED && newState == EXEC_RUNNING) {
                 
                 AmigaComponent::run();
                 state = EXEC_RUNNING;
-                break;
-            }
-
-            if (state == EXEC_RUNNING && newState == EXEC_OFF) {
-                
-                AmigaComponent::pause();
-                state = EXEC_PAUSED;
-                AmigaComponent::powerOff();
-                state = EXEC_OFF;
-                break;
-            }
-
-            if (state == EXEC_RUNNING && newState == EXEC_PAUSED) {
-                
-                AmigaComponent::pause();
-                state = EXEC_PAUSED;
-                break;
-            }
             
-            if (newState == EXEC_HALTED) {
+            } else if (state == EXEC_RUNNING && newState == EXEC_OFF) {
+                
+                AmigaComponent::pause();
+                state = EXEC_PAUSED;
+            
+            } else if (state == EXEC_RUNNING && newState == EXEC_PAUSED) {
+                
+                AmigaComponent::pause();
+                state = EXEC_PAUSED;
+            
+            } else if (newState == EXEC_HALTED) {
                 
                 AmigaComponent::halt();
                 state = EXEC_HALTED;
-                return;
+
+            } else {
+                
+                // Invalid state transition
+                fatalError;
             }
-            
-            // Invalid state transition
-            fatalError;
-            break;
         }
         
         // Compute the CPU load once in a while
