@@ -15,6 +15,8 @@
 #include "Muxer.h"
 #include "NamedPipe.h"
 
+using util::Buffer;
+
 class Recorder : public SubComponent {
 
     //
@@ -88,8 +90,8 @@ class Recorder : public SubComponent {
     util::Time recStop;
     
     // Temporary storage for audio and video data
-    u32 *videoData = nullptr;
-    float *audioData = nullptr;
+    Buffer<u32> videoData;
+    Buffer<float> audioData;
     
     
     //

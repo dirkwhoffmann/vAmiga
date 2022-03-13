@@ -101,10 +101,8 @@ Recorder::startRecording(int x1, int y1, int x2, int y2,
     // Create temporary buffers
     debug(REC_DEBUG, "Creating buffers...\n");
     
-    if (videoData) delete [] videoData;
-    if (audioData) delete [] audioData;
-    videoData = new u32[(x2 - x1) * (y2 - y1)];
-    audioData = new float[2 * samplesPerFrame];
+    videoData.alloc((x2 - x1) * (y2 - y1));
+    audioData.alloc(2 * samplesPerFrame);
     
     //
     // Assemble the command line arguments for the video encoder
@@ -320,7 +318,7 @@ Recorder::recordVideo(Cycle target)
     isize height = cutout.y2 - cutout.y1;
     isize offset = cutout.y1 * HPIXELS + cutout.x1 + HBLANK_MIN * 4;
     u8 *src = (u8 *)(buffer + offset);
-    u8 *dst = (u8 *)videoData;
+    u8 *dst = (u8 *)videoData.ptr;
     
     for (isize y = 0; y < height; y++, src += 4 * HPIXELS, dst += width) {
         std::memcpy(dst, src, width);
@@ -329,7 +327,7 @@ Recorder::recordVideo(Cycle target)
     // Feed the video pipe
     assert(videoPipe.isOpen());
     isize length = width * height;
-    isize written = videoPipe.write((u8 *)videoData, length);
+    isize written = videoPipe.write((u8 *)videoData.ptr, length);
     
     if (written != length || FORCE_RECORDING_ERROR) {
         state = State::abort;
@@ -356,12 +354,12 @@ Recorder::recordAudio(Cycle target)
     audioClock = target;
     
     // Copy samples to buffer
-    muxer.copy(audioData, samplesPerFrame);
+    muxer.copy(audioData.ptr, samplesPerFrame);
     
     // Feed the audio pipe
     assert(audioPipe.isOpen());
     isize length = 2 * sizeof(float) * samplesPerFrame;
-    isize written = audioPipe.write((u8 *)audioData, length);
+    isize written = audioPipe.write((u8 *)audioData.ptr, length);
  
     if (written != length || FORCE_RECORDING_ERROR) {
         state = State::abort;

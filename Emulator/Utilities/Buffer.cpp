@@ -212,4 +212,6 @@ template void Allocator<T>::patch(const char *seq, const char *subst);
 
 INSTANTIATE_ALLOCATOR(u8)
 INSTANTIATE_ALLOCATOR(u32)
+INSTANTIATE_ALLOCATOR(float)
+
 }
