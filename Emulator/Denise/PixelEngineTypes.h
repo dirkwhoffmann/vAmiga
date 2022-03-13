@@ -57,13 +57,6 @@ struct PaletteEnum : util::Reflection<PaletteEnum, Palette>
 
 typedef struct
 {
-    u32 *data;
-    bool longFrame;
-}
-ScreenBuffer;
-
-typedef struct
-{
     Palette palette;
     isize brightness;
     isize contrast;

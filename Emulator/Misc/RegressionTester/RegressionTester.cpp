@@ -95,7 +95,7 @@ RegressionTester::dumpTexture(Amiga &amiga, std::ostream& os)
             
             for (isize x = x1; x < x2; x++) {
                 
-                char *cptr = (char *)(buffer.data + y * HPIXELS + x);
+                char *cptr = (char *)(buffer.ptr + y * HPIXELS + x);
                 os.write(cptr + 0, 1);
                 os.write(cptr + 1, 1);
                 os.write(cptr + 2, 1);

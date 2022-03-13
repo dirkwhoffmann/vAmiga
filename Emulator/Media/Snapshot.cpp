@@ -15,7 +15,7 @@
 void
 Thumbnail::take(Amiga &amiga, isize dx, isize dy)
 {
-    u32 *source = (u32 *)amiga.denise.pixelEngine.getStableBuffer().data;
+    u32 *source = (u32 *)amiga.denise.pixelEngine.getStableBuffer().ptr;
     u32 *target = screen;
     
     isize xStart = 4 * HBLANK_MAX + 1, xEnd = HPIXELS + 4 * HBLANK_MIN;

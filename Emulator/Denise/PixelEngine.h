@@ -13,8 +13,16 @@
 #include "SubComponent.h"
 #include "ChangeRecorder.h"
 #include "Constants.h"
+#include "Buffer.h"
 
 using util::Buffer;
+
+struct ScreenBuffer : public Buffer<u32> {
+    
+    bool longFrame;
+    
+    ScreenBuffer(); 
+};
 
 class PixelEngine : public SubComponent {
 
@@ -41,11 +49,10 @@ private:
      * buffer and the GPU reads from the stable buffer. Once a frame has
      * been completed, the working buffer and the stable buffer are swapped.
      */
-    Buffer<u32> texture[2];
     ScreenBuffer emuTexture[2];
 
     // Pointer to the texture data in the working buffer
-    u32 *frameBuffer = emuTexture[0].data;
+    u32 *frameBuffer = emuTexture[0].ptr;
 
     // Mutex for synchronizing access to the stable buffer
     util::Mutex bufferMutex;
