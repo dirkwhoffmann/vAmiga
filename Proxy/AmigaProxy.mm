@@ -724,9 +724,14 @@ using namespace moira;
     [self denise]->pixelEngine.unlockStableBuffer();
 }
 
-- (ScreenBuffer)stableBuffer
+- (BOOL)longFrame
 {
-    return [self denise]->pixelEngine.getStableBuffer();
+    return [self denise]->pixelEngine.getStableBuffer().longFrame;
+}
+
+- (u32 *)stableBuffer
+{
+    return [self denise]->pixelEngine.getStableBuffer().data;
 }
 
 - (u32 *)noise

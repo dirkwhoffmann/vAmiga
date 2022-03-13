@@ -23,8 +23,8 @@ class Canvas: Layer {
     var prevLOF = true
 
     // Used to determine if the GPU texture needs to be updated
-    var prevBuffer: ScreenBuffer?
-
+    var prevBuffer: UnsafeMutablePointer<u32>?
+    
     // Variable used to emulate interlace flickering
     var flickerCnt = 0
 
@@ -239,27 +239,26 @@ class Canvas: Layer {
         amiga.denise.lockStableBuffer()
 
         // Get the texture
-        let buffer = amiga.denise.stableBuffer
-        precondition(buffer.data != nil)
+        let buffer = amiga.denise.stableBuffer!
         
-        if prevBuffer?.data != buffer.data {
+        if prevBuffer != buffer {
             
             prevBuffer = buffer
             
             // Determine if the new texture is a long frame or a short frame
             prevLOF = currLOF
-            currLOF = buffer.longFrame
+            currLOF = amiga.denise.longFrame
             
             // Update the GPU texture
             let offset = Int(HBLANK_MIN) * 4
             if currLOF {
                 longFrameTexture.replace(w: Int(HPIXELS),
                                          h: Int(VPIXELS),
-                                         buffer: buffer.data + offset)
+                                         buffer: buffer + offset)
             } else {
                 shortFrameTexture.replace(w: Int(HPIXELS),
                                           h: Int(VPIXELS),
-                                          buffer: buffer.data + offset)
+                                          buffer: buffer + offset)
             }
         }
         

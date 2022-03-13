@@ -429,7 +429,8 @@
 
 - (void)lockStableBuffer;
 - (void)unlockStableBuffer;
-@property (readonly) ScreenBuffer stableBuffer;
+@property (readonly) BOOL longFrame;
+@property (readonly) u32 *stableBuffer;
 @property (readonly) u32 *noise;
 
 @end
