@@ -84,7 +84,6 @@ extension MyController: NSMenuItemValidation {
             return dfn.hasDisk
                         
         case #selector(MyController.exportRecentDiskDummyAction(_:)):
-            track("\(item.tag)")
             return amiga.df(item)!.hasDisk
                         
         case #selector(MyController.exportRecentDiskAction(_:)):
@@ -100,7 +99,6 @@ extension MyController: NSMenuItemValidation {
             return validateURLlist(myAppDelegate.attachedHardDrives, image: smallHdr)
 
         case #selector(MyController.exportRecentHdDummyAction(_:)):
-            track("\(item.tag)")
             return amiga.hd(item)!.hasDisk
 
         case #selector(MyController.exportRecentHdrAction(_:)):
@@ -145,7 +143,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func resetConfigAction(_ sender: Any!) {
         
-        track()
+        log()
         
         UserDefaults.resetRomUserDefaults()
         UserDefaults.resetChipsetUserDefaults()
@@ -231,15 +229,14 @@ extension MyController: NSMenuItemValidation {
     }
     
     @IBAction func takeScreenshotAction(_ sender: Any!) {
-        
-        track()
-        
+                
         // Determine screenshot format
         let format = ScreenshotSource(rawValue: pref.screenshotSource)!
         
         // Take screenshot
         guard let screen = renderer.canvas.screenshot(source: format) else {
-            track("Failed to create screenshot")
+            
+            log(warning: "Failed to create screenshot")
             return
         }
 
@@ -260,9 +257,7 @@ extension MyController: NSMenuItemValidation {
     }
     
     @IBAction func captureScreenAction(_ sender: Any!) {
-        
-        track("Recording = \(amiga.recorder.recording)")
-        
+                
         if amiga.recorder.recording {
             
             amiga.recorder.stopRecording()
@@ -292,11 +287,8 @@ extension MyController: NSMenuItemValidation {
     }
     
     @IBAction func exportVideoAction(_ sender: Any!) {
-        
-        track()
-        
+                
         let exporter = VideoExporter.make(parent: self, nibName: "VideoExporter")
-        
         exporter?.showSheet()
     }
     
@@ -305,12 +297,11 @@ extension MyController: NSMenuItemValidation {
     //
     
     @IBAction func paste(_ sender: Any!) {
-        
-        track()
-        
+                
         let pasteBoard = NSPasteboard.general
         guard let text = pasteBoard.string(forType: .string) else {
-            track("Cannot paste. No text in pasteboard")
+            
+            log(warning: "Cannot paste. No text in pasteboard")
             return
         }
         
@@ -336,7 +327,6 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func resetAction(_ sender: Any!) {
         
-        track()
         amiga.hardReset()
         try? amiga.run()
     }
@@ -385,9 +375,9 @@ extension MyController: NSMenuItemValidation {
             virtualKeyboard = VirtualKeyboardController.make(parent: self)
         }
         if virtualKeyboard?.window?.isVisible == true {
-            track("Virtual keyboard already open")
+            log("Virtual keyboard already open")
         } else {
-            track("Opeining virtual keyboard as a window")
+            log("Opeining virtual keyboard as a window")
         }
         virtualKeyboard?.showWindow()
     }
@@ -405,13 +395,11 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func delKeyAction(_ sender: Any!) {
         
-        track()
         type(keyCode: AmigaKeycode.delete)
     }
 
     @IBAction func helpKeyAction(_ sender: Any!) {
         
-        track()
         type(keyCode: AmigaKeycode.help)
     }
     
@@ -481,7 +469,7 @@ extension MyController: NSMenuItemValidation {
     
     func insertDiskAction(from url: URL, drive: Int) {
         
-        track("insertDiskAction \(url) drive \(drive)")
+        log("insertDiskAction \(url) drive \(drive)")
         
         let drive = amiga.df(drive)!
         let types: [FileType] = [ .ADF, .EXT, .DMS, .EXE, .DIR ]
@@ -533,7 +521,7 @@ extension MyController: NSMenuItemValidation {
     
     func exportRecentAction(df n: Int, slot: Int) {
         
-        track("df\(n) slot: \(slot)")
+        log("df\(n) slot: \(slot)")
         
         if let url = myAppDelegate.getRecentlyExportedDiskURL(slot, df: n) {
             
@@ -641,9 +629,7 @@ extension MyController: NSMenuItemValidation {
     }
     
     private func attachHdrAction(from url: URL, drive nr: Int) {
-        
-        track("attachHdrAction \(url)")
-        
+                
         let types: [FileType] = [ .HDF ]
         let drive = amiga.hd(nr)!
         
@@ -675,9 +661,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func exportRecentHdDummyAction(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentHdrAction(_ sender: NSMenuItem!) {
-        
-        track()
-        
+                
         let n = sender.tag / 10
         let slot = sender.tag % 10
                 
@@ -686,7 +670,7 @@ extension MyController: NSMenuItemValidation {
 
     func exportRecentAction(hd n: Int, slot: Int) {
         
-        track("hd\(n) slot: \(slot)")
+        log("hd\(n) slot: \(slot)")
 
         if let url = myAppDelegate.getRecentlyExportedHdrURL(slot, hd: n) {
             
@@ -737,7 +721,6 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func writeProtectHdrAction(_ sender: NSMenuItem!) {
         
-        track("\(sender.tag)")
         amiga.hd(sender)!.toggleWriteProtection()
     }
 

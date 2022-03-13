@@ -41,7 +41,7 @@
 // Type alias for the datatype used by the host machine's audio backend
 // struct U16Mono; typedef U16Mono SampleType;
 // struct U16Stereo; typedef U16Stereo SampleType;
-struct FloatStereo; typedef FloatStereo SampleType;
+struct FloatStereo; typedef struct FloatStereo SampleType;
 
 
 //
@@ -106,7 +106,7 @@ static const int OBJ_DEBUG       = 0; // Object life-times
 static const int MIMIC_UAE       = 0; // Enable to compare debug logs with UAE
 
 // Runloop
-static const int RUN_DEBUG       = 1; // Run loop, component states
+static const int RUN_DEBUG       = 0; // Run loop, component states
 static const int WARP_DEBUG      = 0; // Warp mode
 static const int QUEUE_DEBUG     = 0; // Message queue
 static const int SNP_DEBUG       = 0; // Serialization (snapshots)
@@ -258,4 +258,4 @@ static const bool betaRelease = 0;
 static const bool betaRelease = 1;
 #endif
 
-#include <cassert>
+#include "assert.h"

@@ -40,69 +40,72 @@ extension MyController: NSWindowDelegate {
     
     public func windowWillClose(_ notification: Notification) {
         
-        track("Stopping renderer...")
+        log()
+        
+        log("Stopping renderer...", level: 2)
         renderer.halt()
         
-        track("Stopping timers...")
+        log("Stopping timers...", level: 2)
         snapshotTimer?.invalidate()
         snapshotTimer = nil
 
-        track("Closing auxiliary windows...")
+        log("Closing auxiliary windows...", level: 2)
         inspector?.amiga = nil
         inspector?.close()
         monitor?.amiga = nil
         monitor?.close()
         
-        track("Shutting down the audio backend...")
+        log("Shutting down the audio backend...", level: 2)
         macAudio.shutDown()
 
-        track("Disconnecting gaming devices...")
+        log("Disconnecting gaming devices...", level: 2)
         gamePadManager.shutDown()
         
-        track("Shutting down the emulator...")
+        log("Shutting down the emulator...", level: 2)
         amiga.halt()
-        track("Shut down")
+
+        log("Exiting", level: 2)
     }
     
     func shutDown() {
                 
-        track("Removing proxy...")
+        log("Removing proxy...", level: 2)
         
         amiga.kill()
         amiga = nil
         
-        track("Removed")
+        log("Exiting", level: 2)
     }
     
     public func windowWillEnterFullScreen(_ notification: Notification) {
 
-        track()
+        log()
         renderer.fullscreen = true
         showStatusBar(false)
     }
     
     public func windowDidEnterFullScreen(_ notification: Notification) {
 
-        track()
+        log()
         renderer.monitors.updateMonitorPositions()
     }
     
     public func windowWillExitFullScreen(_ notification: Notification) {
 
-        track()
+        log()
         renderer.fullscreen = false
         showStatusBar(true)
     }
     
     public func windowDidExitFullScreen(_ notification: Notification) {
 
-        track()
+        log()
         renderer.monitors.updateMonitorPositions()
     }
     
     public func window(_ window: NSWindow, willUseFullScreenPresentationOptions proposedOptions: NSApplication.PresentationOptions = []) -> NSApplication.PresentationOptions {
         
-        track()
+        log()
         let autoHideToolbar = NSApplication.PresentationOptions.autoHideToolbar
         var options = NSApplication.PresentationOptions(rawValue: autoHideToolbar.rawValue)
         options.insert(proposedOptions)

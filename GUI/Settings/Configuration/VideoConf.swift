@@ -236,28 +236,28 @@ extension ConfigurationController {
     @IBAction func vidHCenterAction(_ sender: NSSlider!) {
 
         config.hCenter = sender.floatValue / 1000
-        track("hcenter = \(config.hCenter)")
+        log("hcenter = \(config.hCenter)", level: 2)
         refresh()
     }
     
     @IBAction func vidVCenterAction(_ sender: NSSlider!) {
         
         config.vCenter = sender.floatValue / 1000
-        track("vcenter = \(config.vCenter)")
+        log("vcenter = \(config.vCenter)", level: 2)
         refresh()
     }
     
     @IBAction func vidHZoomAction(_ sender: NSSlider!) {
         
         config.hZoom = sender.floatValue / 1000
-        track("hzoom = \(config.hZoom)")
+        log("hzoom = \(config.hZoom)", level: 2)
         refresh()
     }
 
     @IBAction func vidVZoomAction(_ sender: NSSlider!) {
         
         config.vZoom = sender.floatValue / 1000
-        track("vzoom = \(config.vZoom)")
+        log("vzoom = \(config.vZoom)", level: 2)
         refresh()
     }
     
@@ -266,9 +266,7 @@ extension ConfigurationController {
     //
     
     @IBAction func vidPresetAction(_ sender: NSMenuItem!) {
-        
-        track("\(sender.tag)")
-        
+                
         switch sender.tag {
             
         case 0: // Recommended settings (Centered TFT)

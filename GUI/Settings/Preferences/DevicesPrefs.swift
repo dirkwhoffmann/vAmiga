@@ -101,7 +101,6 @@ extension PreferencesController {
     
     func selectDevicesTab() {
         
-        track()
         devActivity.stringValue = ""
         devActivity2.stringValue = ""
         refreshDevicesTab()
@@ -157,7 +156,6 @@ extension PreferencesController {
         
     @IBAction func devPresetAction(_ sender: NSPopUpButton!) {
         
-        track()
         assert(sender.selectedTag() == 0)
         
         if let device = selectedDev {

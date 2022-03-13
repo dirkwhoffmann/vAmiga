@@ -55,7 +55,7 @@ class VirtualKeyboardController: DialogController {
         let style = kbStyle(parent)
         let layout = kbLayout(parent)
 
-        track("Virtual keyboard (style: \(style) layout: \(layout))")
+        log("Virtual keyboard (style: \(style) layout: \(layout))")
 
         var xibName = ""
         let ansi = (layout == .us)
@@ -86,9 +86,7 @@ class VirtualKeyboardController: DialogController {
     }
     
     override func windowDidLoad() {
-        
-        track()
-        
+                
         // Setup key references
         for tag in 0 ... 127 {
             keyView[tag] = window!.contentView!.viewWithTag(tag) as? NSButton
@@ -101,7 +99,6 @@ class VirtualKeyboardController: DialogController {
     
     override func sheetDidShow() {
         
-        track()
         refresh()
     }
         
@@ -178,8 +175,6 @@ class VirtualKeyboardController: DialogController {
     
     override func mouseDown(with event: NSEvent) {
                 
-        track()
-
         // If opened as a sheet, close if the user clicked inside unsued area
         if autoClose { cancelAction(self) }
     }

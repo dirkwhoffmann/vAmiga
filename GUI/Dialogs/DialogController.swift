@@ -11,9 +11,7 @@ class DialogWindow: NSWindow {
 
     // Delegation method for ESC and Cmd+
     override func cancelOperation(_ sender: Any?) {
-              
-        track()
-        
+                      
         if let controller = delegate as? DialogController {
             controller.cancelAction(sender)
         }
@@ -60,13 +58,13 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     func register() {
         
         DialogController.active.append(self)
-        track("Register: \(DialogController.active)")
+        log("Register: \(DialogController.active)", level: 2)
     }
     
     func unregister() {
         
         DialogController.active = DialogController.active.filter {$0 != self}
-        track("Unregister: \(DialogController.active)")
+        log("Unregister: \(DialogController.active)", level: 2)
     }
     
     override func windowWillLoad() {
@@ -139,7 +137,7 @@ extension DialogController: NSWindowDelegate {
 
     func windowWillClose(_ notification: Notification) {
 
-        track()
+        log()
         unregister()
     }
 }

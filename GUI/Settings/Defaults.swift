@@ -29,7 +29,7 @@ extension UserDefaults {
         if let encoded = try? PropertyListEncoder().encode(item) {
             set(encoded, forKey: key)
         } else {
-            track("Failed to encode \(key)")
+            log(warning: "Failed to encode \(key)")
         }
     }
     
@@ -40,7 +40,7 @@ extension UserDefaults {
             if let decoded = try? PropertyListDecoder().decode(T.self, from: data) {
                 item = decoded
             } else {
-                track("Failed to decode \(key)")
+                log(warning: "Failed to decode \(key)")
             }
         }
     }
@@ -54,6 +54,8 @@ extension UserDefaults {
     
     static func registerUserDefaults() {
                 
+        log(level: 2)
+        
         registerGeneralUserDefaults()
         registerControlsUserDefaults()
         registerDevicesUserDefaults()
@@ -72,6 +74,7 @@ extension MyController {
     
     func loadUserDefaults() {
                 
+        log(level: 2)
         amiga.suspend()
         
         pref.loadGeneralUserDefaults()
@@ -92,6 +95,8 @@ extension MyController {
     
     func loadUserDefaults(url: URL, prefixes: [String]) {
         
+        log(level: 2)
+        
         if let fileContents = NSDictionary(contentsOf: url) {
             
             if let dict = fileContents as? [String: Any] {
@@ -108,8 +113,8 @@ extension MyController {
     
     func saveUserDefaults(url: URL, prefixes: [String]) {
         
-        track()
-        
+        log(level: 2)
+
         let dict = UserDefaults.standard.dictionaryRepresentation()
         let filteredDict = dict.filter { prefixes.contains(where: $0.0.hasPrefix) }
         let nsDict = NSDictionary(dictionary: filteredDict)
@@ -569,17 +574,14 @@ extension UserDefaults {
         let fm = FileManager.default
         
         if let url = womUrl {
-            track("Deleting Wom")
             try? fm.removeItem(at: url)
         }
         
         if let url = romUrl {
-            track("Deleting Rom")
             try? fm.removeItem(at: url)
         }
         
         if let url = extUrl {
-            track("Deleting Ext")
             try? fm.removeItem(at: url)
         }
     }

@@ -433,7 +433,7 @@ extension AmigaKey {
         
         let image = NSImage(named: "shape" + shape)?.copy() as? NSImage
         if image == nil {
-            track("MISSING \(shape)")
+            log(warning: "Missing shape \(shape)")
         }
         
         if tint == "dark" { image?.darken() }

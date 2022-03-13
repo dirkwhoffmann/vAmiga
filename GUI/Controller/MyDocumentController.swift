@@ -12,7 +12,7 @@ class MyDocumentController: NSDocumentController {
     override func makeDocument(withContentsOf url: URL,
                                ofType typeName: String) throws -> NSDocument {
         
-        track()
+        log()
         
         // For media files, attach the file to a new untitled document
         if typeName.uppercased() != "VAMIGA" {

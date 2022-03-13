@@ -133,8 +133,6 @@ extension Renderer {
 
     func zoomTextureIn(steps: Int = 30) {
 
-        track("Zooming texture in...")
-
         let target = canvas.visibleNormalized
         
         cutoutX1.target = Float(target.minX)
@@ -151,8 +149,6 @@ extension Renderer {
     }
 
     func zoomTextureOut(steps: Int = 30) {
-
-        track("Zooming texture out...")
         
         let current = canvas.textureRect
         let target = canvas.entireNormalized
@@ -181,8 +177,6 @@ extension Renderer {
 
     func zoomIn(steps: Int = 60) {
 
-        track("Zooming in...")
-
         shiftZ.current = 6.0
         shiftZ.target = 0.0
         angleX.target = 0.0
@@ -199,8 +193,6 @@ extension Renderer {
 
     func zoomOut(steps: Int = 40) {
 
-        track("Zooming out...")
-
         shiftZ.target = 6.0
         angleX.target = 0.0
         angleY.target = 0.0
@@ -215,8 +207,6 @@ extension Renderer {
     }
 
     func rotate(x: Float = 0.0, y: Float = 0.0, z: Float = 0.0) {
-
-        track("Rotating x: \(x) y: \(y) z: \(z)...")
 
         angleX.target = x
         angleY.target = y
@@ -237,8 +227,6 @@ extension Renderer {
 
     func scroll(steps: Int = 120) {
 
-        track("Scrolling...")
-
         shiftY.current = -1.5
         shiftY.target = 0
         angleX.target = 0.0
@@ -255,8 +243,6 @@ extension Renderer {
 
     func snapToFront() {
 
-        track("Snapping to front...")
-
         shiftZ.current = -0.05
         shiftZ.target = 0
         shiftZ.steps = 10
@@ -269,9 +255,7 @@ extension Renderer {
     //
     
     func flash() {
-        
-        track("Flashing...")
-        
+                
         white.current = 1.0
         white.target = 0.0
         white.steps = 20

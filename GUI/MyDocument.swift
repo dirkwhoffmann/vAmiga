@@ -52,7 +52,7 @@ class MyDocument: NSDocument {
  
     override open func makeWindowControllers() {
                 
-        track()
+        log()
         
         let controller = MyController(windowNibName: "MyDocument")
         controller.amiga = amiga
@@ -72,17 +72,17 @@ class MyDocument: NSDocument {
     }
     
     func createAttachment(from url: URL, allowedTypes: [FileType]) throws {
-                
+                        
         try attachment = createFileProxy(from: url, allowedTypes: allowedTypes)
         myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
         
-        track("Attachment created successfully")
+        log("Attachment created successfully")
     }
     
     fileprivate
     func createFileProxy(from url: URL, allowedTypes: [FileType]) throws -> AmigaFileProxy? {
             
-        track("Creating proxy object from URL: \(url.lastPathComponent)")
+        log("Creating proxy object from URL: \(url.lastPathComponent)")
         
         // If the provided URL points to compressed file, decompress it first
         let newUrl = url.unpacked(maxSize: 2048 * 1024)
@@ -155,7 +155,7 @@ class MyDocument: NSDocument {
         if let proxy = attachment as? HDFFileProxy {
             
             // TODO: CLEAN THIS CASE UP
-            track("HDF with \(proxy.numBlocks) blocks")
+            log("HDF with \(proxy.numBlocks) blocks")
             return
         }
         
@@ -210,7 +210,7 @@ class MyDocument: NSDocument {
     
     override open func revert(toContentsOf url: URL, ofType typeName: String) throws {
         
-        track()
+        log()
         
         do {
             try createAttachment(from: url)
@@ -228,7 +228,7 @@ class MyDocument: NSDocument {
     
     override func write(to url: URL, ofType typeName: String) throws {
             
-        track()
+        log()
         
         if typeName == "vAmiga" {
             
@@ -259,7 +259,7 @@ class MyDocument: NSDocument {
         case "IMG", "IMA":
             df = try Proxy.make(drive: amiga.df(nr)!) as IMGFileProxy
         default:
-            track("Invalid path extension")
+            log(warning: "Invalid path extension")
             return
         }
         
@@ -267,7 +267,7 @@ class MyDocument: NSDocument {
         amiga.df(nr)!.markDiskAsUnmodified()
         myAppDelegate.noteNewRecentlyExportedDiskURL(url, df: nr)
         
-        track("Disk exported successfully")
+        log("Disk exported successfully")
     }
 
     func export(hardDrive nr: Int, to url: URL) throws {
@@ -277,7 +277,7 @@ class MyDocument: NSDocument {
         case "HDF":
             dh = try Proxy.make(hdr: amiga.hd(nr)!) as HDFFileProxy
         default:
-            track("Invalid path extension")
+            log(warning: "Invalid path extension")
             return
         }
         
@@ -286,12 +286,12 @@ class MyDocument: NSDocument {
         amiga.hd(nr)!.markDiskAsUnmodified()
         myAppDelegate.noteNewRecentlyExportedHdrURL(url, hd: nr)
 
-        track("Hard Drive exported successfully")
+        log("Hard Drive exported successfully")
     }
     
     func export(fileProxy: AmigaFileProxy, to url: URL) throws {
         
-        track("Exporting to \(url)")
+        log("Exporting to \(url)")
         try fileProxy.writeToFile(url: url)        
     }
         

@@ -583,15 +583,13 @@ class Inspector: DialogController {
 
     override func showWindow(_ sender: Any?) {
 
-        track()
-
         super.showWindow(self)
         amiga.debugMode = true
         updateInspectionTarget()
     }
 
     deinit {
-        track()
+        log()
     }
     
     // Assigns a number formatter to a control
@@ -713,7 +711,6 @@ class Inspector: DialogController {
     
     @IBAction func refreshAction(_ sender: Any!) {
         
-        track()
         fullRefresh()
     }
     
@@ -740,7 +737,6 @@ extension Inspector {
         super.windowWillClose(notification)
 
         // Leave debug mode
-        track("Leaving debug mode")
         amiga?.debugMode = false
         amiga?.removeInspectionTarget()
     }

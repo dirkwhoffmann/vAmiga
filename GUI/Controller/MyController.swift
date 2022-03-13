@@ -371,7 +371,7 @@ extension MyController {
         switch msg.type {
             
         case .REGISTER:
-            track("Successfully connected to message queue")
+            log("Successfully connected to message queue")
             
         case .CONFIG:
             inspector?.fullRefresh()
@@ -422,11 +422,11 @@ extension MyController {
             amiga.continueScript()
             
         case .HALT:
-            track("Received the HALT message")
+            log("Received MSG_HALT", level: 2)
             shutDown()
             
         case .ABORT:
-            track("Aborting with exit code \(msg.data1)")
+            log("Aborting with exit code \(msg.data1)")
             exit(Int32(msg.data1))
             
         case .MUTE_ON:
@@ -587,7 +587,7 @@ extension MyController {
             break
             
         default:
-            track("Unknown message: \(msg)")
+            log(warning: "Unknown message: \(msg)")
             fatalError()
         }
     }

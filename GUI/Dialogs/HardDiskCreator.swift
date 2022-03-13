@@ -72,16 +72,13 @@ class HardDiskCreator: DialogController {
     //
     
     func show(forDrive nr: Int) {
-        
-        track()
-        
+                
         self.nr = nr
         super.showSheet()
     }
             
     override public func awakeFromNib() {
         
-        track()
         super.awakeFromNib()
                 
         // Configure elements
@@ -95,12 +92,10 @@ class HardDiskCreator: DialogController {
     
     override func windowDidLoad() {
 
-        track()
     }
     
     override func sheetDidShow() {
      
-        track()
     }
     
     func setCapacity(mb: Int) {
@@ -185,7 +180,6 @@ class HardDiskCreator: DialogController {
 
     @IBAction func fileSystemAction(_ sender: NSPopUpButton!) {
         
-        track()
         update()
     }
 
@@ -228,16 +222,16 @@ class HardDiskCreator: DialogController {
         let name = nameField.stringValue
         
         do {
-            
-            track("\(nameField.stringValue)")
-            
             try drive?.attach(c: cylinders, h: heads, s: sectors, b: bsize)
             try drive?.format(fs: fs, name: name)
             hideSheet()
             
         } catch let error as VAError {
+            
             error.warning("Unable to attach hard drive.")
+        
         } catch {
+            
             fatalError()
         }
     }

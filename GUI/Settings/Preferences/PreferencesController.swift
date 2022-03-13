@@ -188,9 +188,7 @@ class PreferencesController: DialogController {
 
     @discardableResult
     func keyDown(with key: MacKey) -> Bool {
-        
-        track()
-        
+                
         if let id = tabView.selectedTabViewItem?.identifier as? String {
             
             switch id {
@@ -236,9 +234,7 @@ extension PreferencesController {
 extension PreferencesController: NSTextFieldDelegate {
     
     func controlTextDidChange(_ obj: Notification) {
-        
-        track()
-        
+                
         if let view = obj.object as? NSTextField {
             
             let formatter = view.formatter as? NumberFormatter

@@ -36,16 +36,13 @@ class FloppyCreator: DialogController {
     //
     
     func showSheet(forDrive nr: Int) {
-        
-        track()
-        
+                
         self.nr = nr
         super.showSheet()
     }
             
     override public func awakeFromNib() {
         
-        track()
         super.awakeFromNib()
         
         let type = amiga.getConfig(.DRIVE_TYPE, drive: nr)
@@ -84,12 +81,10 @@ class FloppyCreator: DialogController {
     
     override func windowDidLoad() {
 
-        track()
     }
     
     override func sheetDidShow() {
      
-        track()
     }
     
     //
@@ -121,19 +116,16 @@ class FloppyCreator: DialogController {
 
     @IBAction func capacityAction(_ sender: NSPopUpButton!) {
         
-        track()
         update()
     }
 
     @IBAction func fileSystemAction(_ sender: NSPopUpButton!) {
         
-        track()
         update()
     }
 
     @IBAction func bootBlockAction(_ sender: NSPopUpButton!) {
         
-        track()
         update()
     }
     
@@ -150,7 +142,7 @@ class FloppyCreator: DialogController {
         bootBlock.selectedTag() == 4 ? .BYTE_BANDIT : .NONE
         
         let name = nameField.stringValue
-        track("Dos = \(fs) Boot = \(bb) Name = \(name)")
+        log("Dos = \(fs) Boot = \(bb) Name = \(name)")
         
         do {
             try drive?.insertNew(fileSystem: fs, bootBlock: bb, name: name)

@@ -496,6 +496,7 @@ class Configuration {
     
     func loadRomUserDefaults() {
 
+        log(level: 2)
         let defaults = UserDefaults.standard
 
         amiga.suspend()
@@ -517,6 +518,8 @@ class Configuration {
     
     func saveRomUserDefaults() {
                 
+        log(level: 2)
+        
         let fm = FileManager.default
         let defaults = UserDefaults.standard
         var url: URL?
@@ -526,30 +529,30 @@ class Configuration {
         defaults.set(extStart, forKey: Keys.Rom.extStart)
         
         do {
-            track("Saving Wom")
             url = UserDefaults.womUrl
             if url == nil { throw VAError(.FILE_CANT_WRITE) }
             try? fm.removeItem(at: url!)
             try amiga.mem.saveWom(url!)
             
-            track("Saving Rom")
             url = UserDefaults.romUrl
             if url == nil { throw VAError(.FILE_CANT_WRITE) }
             try? fm.removeItem(at: url!)
             try amiga.mem.saveRom(url!)
 
-            track("Saving Ext")
             url = UserDefaults.extUrl
             if url == nil { throw VAError(.FILE_CANT_WRITE) }
             try? fm.removeItem(at: url!)
             try amiga.mem.saveExt(url!)
             
         } catch {
+            
             if error is VAError && url != nil {
+                
                 VAError.warning("Failed to save Roms",
                                 "Can't write to file \(url!.path)")
             }
             if error is VAError && url == nil {
+                
                 VAError.warning("Failed to save Roms",
                                 "Unable to access the application defaults folder")
             }
@@ -564,6 +567,7 @@ class Configuration {
     
     func loadChipsetDefaults(_ defaults: HardwareDefaults) {
         
+        log(level: 2)
         amiga.suspend()
         
         agnusRev = defaults.agnusRev.rawValue
@@ -576,6 +580,7 @@ class Configuration {
     
     func loadChipsetUserDefaults() {
         
+        log(level: 2)
         let defaults = UserDefaults.standard
         
         amiga.suspend()
@@ -590,8 +595,7 @@ class Configuration {
     
     func saveChipsetUserDefaults() {
         
-        track()
-        
+        log(level: 2)
         let defaults = UserDefaults.standard
 
         defaults.set(agnusRev, forKey: Keys.Hrw.agnusRev)
@@ -606,6 +610,7 @@ class Configuration {
     
     func loadMemoryDefaults(_ defaults: MemoryDefaults) {
         
+        log(level: 2)
         amiga.suspend()
         
         chipRam = defaults.chipRam
@@ -624,6 +629,7 @@ class Configuration {
     
     func loadMemoryUserDefaults() {
         
+        log(level: 2)
         let defaults = UserDefaults.standard
         
         amiga.suspend()
@@ -644,8 +650,7 @@ class Configuration {
     
     func saveMemoryUserDefaults() {
         
-        track()
-        
+        log(level: 2)
         let defaults = UserDefaults.standard
 
         defaults.set(chipRam, forKey: Keys.Mem.chipRam)
@@ -666,6 +671,7 @@ class Configuration {
     
     func loadPeripheralsDefaults(_ defaults: PeripheralsDefaults) {
         
+        log(level: 2)
         amiga.suspend()
         
         df0Connected = defaults.driveConnect[0]
@@ -696,6 +702,7 @@ class Configuration {
     
     func loadPeripheralsUserDefaults() {
         
+        log(level: 2)
         let defaults = UserDefaults.standard
         
         amiga.suspend()
@@ -727,8 +734,7 @@ class Configuration {
     
     func savePeripheralsUserDefaults() {
         
-        track()
-        
+        log(level: 2)
         let defaults = UserDefaults.standard
         
         defaults.set(df0Connected, forKey: Keys.Per.df0Connect)
@@ -761,6 +767,7 @@ class Configuration {
     
     func loadCompatibilityDefaults(_ defaults: CompatibilityDefaults) {
          
+        log(level: 2)
         amiga.suspend()
         
         blitterAccuracy = defaults.blitterAccuracy
@@ -785,6 +792,7 @@ class Configuration {
     
     func loadCompatibilityUserDefaults() {
         
+        log(level: 2)
         let defaults = UserDefaults.standard
         
         amiga.suspend()
@@ -811,8 +819,7 @@ class Configuration {
     
     func saveCompatibilityUserDefaults() {
         
-        track()
-        
+        log(level: 2)
         let defaults = UserDefaults.standard
         
         defaults.set(blitterAccuracy, forKey: Keys.Com.blitterAccuracy)
@@ -839,6 +846,7 @@ class Configuration {
     
     func loadAudioDefaults(_ defaults: AudioDefaults) {
         
+        log(level: 2)
         amiga.suspend()
         
         vol0 = defaults.vol0
@@ -875,6 +883,7 @@ class Configuration {
     
     func loadAudioUserDefaults() {
         
+        log(level: 2)
         let defaults = UserDefaults.standard
         
         amiga.suspend()
@@ -913,8 +922,7 @@ class Configuration {
     
     func saveAudioUserDefaults() {
         
-        track()
-        
+        log(level: 2)
         let defaults = UserDefaults.standard
         
         defaults.set(vol0, forKey: Keys.Aud.vol0)
@@ -953,6 +961,7 @@ class Configuration {
 
     func loadColorDefaults(_ defaults: VideoDefaults) {
         
+        log(level: 2)
         amiga.suspend()
         
         palette = defaults.palette.rawValue
@@ -974,6 +983,8 @@ class Configuration {
     }
     
     func loadShaderDefaults(_ defaults: VideoDefaults) {
+        
+        log(level: 2)
         
         enhancer = defaults.enhancer
         upscaler = defaults.upscaler
@@ -999,6 +1010,7 @@ class Configuration {
     
     func loadVideoUserDefaults() {
         
+        log(level: 2)
         let defaults = UserDefaults.standard
         
         amiga.suspend()
@@ -1031,6 +1043,7 @@ class Configuration {
 
     func loadGeometryUserDefaults() {
         
+        log(level: 2)
         let defaults = UserDefaults.standard
         
         amiga.suspend()
@@ -1047,8 +1060,7 @@ class Configuration {
     
     func saveVideoUserDefaults() {
         
-        track()
-        
+        log(level: 2)
         let defaults = UserDefaults.standard
         
         defaults.set(palette, forKey: Keys.Vid.palette)
@@ -1077,8 +1089,7 @@ class Configuration {
     
     func saveGeometryUserDefaults() {
         
-        track()
-        
+        log(level: 2)
         let defaults = UserDefaults.standard
         
         defaults.set(hCenter, forKey: Keys.Vid.hCenter)

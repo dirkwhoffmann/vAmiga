@@ -149,7 +149,7 @@ class CopperTableView: NSTableView {
         
         if let addr = addrInRow[row] {
             
-            track("Clicked in row \(row) addr = \(addr)")
+            log("Clicked in row \(row) addr = \(addr)")
             /*
             if !breakpoints.isSet(at: addr) {
                 breakpoints.add(at: addr)
@@ -176,7 +176,7 @@ class CopperTableView: NSTableView {
         
         if let addr = addrInRow[row] {
             
-            track("Double-clicked in row \(row) addr = \(addr)")
+            log("Double-clicked in row \(row) addr = \(addr)")
             /*
             if breakpoints.isSet(at: addr) {
                 breakpoints.remove(at: addr)

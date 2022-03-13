@@ -176,9 +176,7 @@ extension ConfigurationController {
     }
 
     @IBAction func audPresetAction(_ sender: NSPopUpButton!) {
-        
-        track()
-        
+                
         switch sender.selectedTag() {
         case 0: config.loadAudioDefaults(AudioDefaults.std)
         case 1: config.loadAudioDefaults(AudioDefaults.stereo)
@@ -190,7 +188,6 @@ extension ConfigurationController {
     
     @IBAction func audDefaultsAction(_ sender: NSButton!) {
         
-        track()
         config.saveAudioUserDefaults()
     }
 }

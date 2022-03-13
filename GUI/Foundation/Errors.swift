@@ -11,16 +11,27 @@
 // Logging / Debugging
 //
 
-public func track(_ message: String = "",
-                  path: String = #file, function: String = #function, line: Int = #line ) {
+let logLevel = releaseBuild ? 0 : 1
+
+public func log(_ msg: String = "", level: Int = 1,
+                path: String = #file, function: String = #function, line: Int = #line) {
     
-    if let file = URL(string: path)?.deletingPathExtension().lastPathComponent {
-        if message == "" {
-            print("\(file).\(line)::\(function)")
-        } else {
-            print("\(file).\(line)::\(function): \(message)")
+    if level <= logLevel {
+        
+        if let file = URL(string: path)?.deletingPathExtension().lastPathComponent {
+            if msg == "" {
+                print("\(file).\(line)::\(function)")
+            } else {
+                print("\(file).\(line)::\(function): \(msg)")
+            }
         }
     }
+}
+
+public func log(warning: String,
+                path: String = #file, function: String = #function, line: Int = #line) {
+    
+    log(warning, level: logLevel, path: path, function: function, line: line)
 }
 
 class VAError: Error {

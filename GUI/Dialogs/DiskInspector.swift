@@ -75,9 +75,7 @@ class DiskInspector: DialogController {
     //
         
     func show(diskDrive nr: Int) {
-        
-        track()
-        
+                
         drive = amiga.df(nr)
         
         titleString = "Floppy Drive DF\(nr)"
@@ -102,9 +100,7 @@ class DiskInspector: DialogController {
     }
     
     func show(hardDrive nr: Int) {
-        
-        track()
-        
+                
         titleString = "Hard Drive HD\(nr)"
 
         // Run the HDF decoder
@@ -115,9 +111,7 @@ class DiskInspector: DialogController {
     }
             
     override func sheetWillShow() {
-            
-        track()
-                
+                            
         cylinderStepper.maxValue = .greatestFiniteMagnitude
         headStepper.maxValue = .greatestFiniteMagnitude
         trackStepper.maxValue = .greatestFiniteMagnitude

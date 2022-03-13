@@ -61,7 +61,7 @@ var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     
     public func applicationDidFinishLaunching(_ aNotification: Notification) {
                         
-        track()
+        log()
         
         // Make touch bar customizable
         if #available(OSX 10.12.2, *) {
@@ -71,7 +71,7 @@ var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     
     public func applicationWillTerminate(_ aNotification: Notification) {
 
-        track()
+        log()
     }
     
     //
@@ -212,14 +212,14 @@ extension MyAppDelegate {
         set {
             if newValue == false && eventTap != nil {
                 
-                track("Reenabling keyboard shortcuts...")
+                log("Reenabling keyboard shortcuts...")
                 CGEvent.tapEnable(tap: eventTap!, enable: false)
                 eventTap = nil
             }
             
             if newValue == true && eventTap == nil {
                 
-                track("Trying to disable keyboard shortcuts...")
+                log("Trying to disable keyboard shortcuts...")
                 
                 /* To disable keyboard shortcuts, we are going to filter out the
                  * Command flag from all keyUp and keyDown CGEvents by installing
@@ -236,7 +236,7 @@ extension MyAppDelegate {
                 
                 if !AXIsProcessTrustedWithOptions(privOptions) {
                     
-                    track("Aborting. Access denied")
+                    log(warning: "Aborting. Access denied")
                     return
                 }
                 
@@ -256,7 +256,7 @@ extension MyAppDelegate {
                 
                 if eventTap == nil {
                     
-                    track("Aborting. Failed to create the event tap.")
+                    log(warning: "Aborting. Failed to create the event tap.")
                     return
                 }
                 
@@ -264,7 +264,7 @@ extension MyAppDelegate {
                 let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
                 CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
                 CGEvent.tapEnable(tap: eventTap!, enable: true)
-                track("Success")
+                log("Success")
             }
         }
     }

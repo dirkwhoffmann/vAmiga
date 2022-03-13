@@ -236,9 +236,7 @@ extension MyController {
     //
     
     @IBAction func warpAction(_ sender: Any!) {
-        
-        track()
-        
+                
         switch pref.warpMode {
         case .auto: pref.warpMode = .off
         case .off: pref.warpMode = .on
@@ -249,8 +247,6 @@ extension MyController {
     }
 
     @IBAction func activityTypeAction(_ sender: NSPopUpButton!) {
-
-        track()
         
         var min, max, warn, crit: Double
         

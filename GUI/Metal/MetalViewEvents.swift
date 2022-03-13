@@ -70,7 +70,7 @@ public extension MetalView {
             if DispatchTime.diffMilliSec(lastShake) > UInt64(500) {
                 retainMouse()
             } else {
-                track("Last shake too recent")
+                log("Last shake too recent", level: 2)
             }
         }
     }
@@ -168,7 +168,6 @@ public extension MetalView {
             case 0 where event.modifierFlags.contains([.option, .command]),
                  1 where event.modifierFlags.contains([.option, .control]):
                 
-                track()
                 retainMouse()
                 return true
                 
@@ -182,7 +181,6 @@ public extension MetalView {
             case 0 where event.modifierFlags.contains([.option, .command]),
                  1 where event.modifierFlags.contains([.option, .control]):
                 
-                track()
                 releaseMouse()
                 return true
                 

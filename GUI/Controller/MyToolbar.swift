@@ -83,9 +83,7 @@ class MyToolbar: NSToolbar {
     }
     
     @IBAction func screenshotAction(_ sender: NSSegmentedControl) {
-        
-        track()
-        
+                
         switch sender.selectedSegment {
             
         case 0: parent.takeScreenshotAction(self)

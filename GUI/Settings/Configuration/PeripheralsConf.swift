@@ -118,8 +118,6 @@ extension ConfigurationController {
     }
     
     @IBAction func perGameDeviceAction(_ sender: NSPopUpButton!) {
-
-        track("port: \(sender.tag) device: \(sender.selectedTag())")
         
         switch sender.tag {
         case 1: config.gameDevice1 = sender.selectedTag()

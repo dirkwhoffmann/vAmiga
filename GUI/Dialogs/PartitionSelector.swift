@@ -54,7 +54,6 @@ class PartitionSelector: DialogController {
     
     override func sheetDidShow() {
         
-        track()
     }
     
     //
@@ -79,7 +78,6 @@ class PartitionSelector: DialogController {
 
     @IBAction override func okAction(_ sender: Any!) {
         
-        track()
         userSelection = partition
         super.okAction(sender)
     }

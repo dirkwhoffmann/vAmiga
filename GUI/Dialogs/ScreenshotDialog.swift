@@ -39,7 +39,7 @@ class ScreenshotDialog: DialogController {
 
     func loadScreenshots() {
 
-        track("Seeking screenshots for disk with id \(checksum)")
+        log("Seeking screenshots for disk with id \(checksum)", level: 2)
         
         for url in Screenshot.collectFiles(forDisk: checksum) {
             if let screenshot = Screenshot(fromUrl: url) {
@@ -47,19 +47,19 @@ class ScreenshotDialog: DialogController {
             }
         }
         
-        track("\(screenshots.count) screenshots loaded")
+        log("\(screenshots.count) screenshots loaded", level: 2)
     }
     
     func saveScreenshots() throws {
         
-        track("Saving screenshots to disk (\(checksum))")
+        log("Saving screenshots to disk (\(checksum))", level: 2)
                 
         Screenshot.deleteFolder(forDisk: checksum)
         for n in 0 ..< screenshots.count {
             try? screenshots[n].save(id: checksum)
         }
 
-        track("All screenshots saved")
+        log("All screenshots saved", level: 2)
     }
     
     override func sheetWillShow() {
@@ -68,9 +68,7 @@ class ScreenshotDialog: DialogController {
     }
     
     override func sheetDidShow() {
-  
-        track()
-        
+          
         now = Date()
         
         updateLabels()
@@ -81,9 +79,7 @@ class ScreenshotDialog: DialogController {
     }
     
     func updateLabels() {
-        
-        track("count = \(screenshots.count) currentItem = \(currentItem)")
-        
+                
         carousel.isHidden = false
         itemLabel.isHidden = empty
         text1.isHidden = false
@@ -168,9 +164,7 @@ class ScreenshotDialog: DialogController {
     }
     
     @IBAction override func cancelAction(_ sender: Any!) {
-        
-        track()
-                        
+                                
         hideSheet()
                 
         carousel.isHidden = true
@@ -210,7 +204,6 @@ extension ScreenshotDialog: iCarouselDataSource, iCarouselDelegate {
     
     func carouselCurrentItemIndexDidChange(_ carousel: iCarousel) {
         
-        track()
         updateLabels()
     }
 }

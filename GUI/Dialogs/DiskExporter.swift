@@ -53,9 +53,7 @@ class DiskExporter: DialogController {
     var vol: FileSystemProxy?
     
     func showSheet(diskDrive nr: Int) {
-        
-        track()
-        
+                
         dfn = amiga.df(nr)
 
         // Run the ADF decoder
@@ -74,9 +72,7 @@ class DiskExporter: DialogController {
     }
 
     func showSheet(hardDrive nr: Int) {
-        
-        track()
-        
+                
         hdn = amiga.hd(nr)
 
         // Run the HDF decoder
@@ -90,7 +86,6 @@ class DiskExporter: DialogController {
     
     func select(partition nr: Int?) {
 
-        if nr != nil { track("Selecting partition \(nr!)") }
         partition = nr
         
         if hdf != nil && nr != nil {
@@ -151,7 +146,6 @@ class DiskExporter: DialogController {
         
     override public func awakeFromNib() {
 
-        track()
         super.awakeFromNib()
         updatePartitionPopup()
         updateFormatPopup()
@@ -347,30 +341,33 @@ class DiskExporter: DialogController {
     
     func exportFloppyDisk(url: URL) {
 
-        track("url = \(url)")
-
         do {
             
             switch formatPopup.selectedTag() {
 
             case Format.adf:
-                track("Exporting ADF")
+                
+                log("Exporting ADF")
                 try parent.mydocument.export(fileProxy: adf!, to: url)
 
             case Format.ext:
-                track("Exporting Extended ADF")
+                
+                log("Exporting Extended ADF")
                 try parent.mydocument.export(fileProxy: ext!, to: url)
 
             case Format.img:
-                track("Exporting IMG")
+                
+                log("Exporting IMG")
                 try parent.mydocument.export(fileProxy: img!, to: url)
 
             case Format.ima:
-                track("Exporting IMA")
+                
+                log("Exporting IMA")
                 try parent.mydocument.export(fileProxy: img!, to: url)
 
             case Format.vol:
-                track("Exporting file system")
+                
+                log("Exporting file system")
                 try vol!.export(url: url)
                 
             default:
@@ -391,18 +388,16 @@ class DiskExporter: DialogController {
     
     func exportHardDisk(url: URL) {
         
-        track("url = \(url)")
-
         do {
             
             if let nr = partition {
 
-                track("Exporting partiton \(nr)")
+                log("Exporting partiton \(nr)")
                 try hdf?.writeToFile(url: url, partition: nr)
 
             } else {
 
-                track("Exporting entire HDF")
+                log("Exporting entire HDF")
                 try hdf?.writeToFile(url: url)
             }
             

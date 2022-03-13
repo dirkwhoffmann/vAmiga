@@ -241,7 +241,6 @@ class HardDiskConfigurator: DialogController {
         do {
 
             try drive.changeGeometry(c: cyls, h: heads, s: sectors)
-            track("Drive geometry changed successfully")
             hideSheet()
             
         } catch let error as VAError {

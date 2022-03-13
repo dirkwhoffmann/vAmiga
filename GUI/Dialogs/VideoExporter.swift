@@ -26,7 +26,6 @@ class VideoExporter: DialogController {
     
     override func showSheet(completionHandler handler: (() -> Void)? = nil) {
             
-        track()
         super.showSheet()
 
         duration.stringValue = ""
@@ -63,8 +62,6 @@ class VideoExporter: DialogController {
     }
     
     @IBAction func exportAction(_ sender: NSButton!) {
-
-        track()
         
         // Create save panel
         panel = NSSavePanel()
@@ -72,12 +69,10 @@ class VideoExporter: DialogController {
         
         // Run panel as sheet
         if let win = window {
-            track()
+
             panel.beginSheetModal(for: win, completionHandler: { result in
                 if result == .OK {
-                    track()
                     if let url = self.panel.url {
-                        track("url = \(url)")
                         let source = URL(fileURLWithPath: self.path)
                         FileManager.copy(from: source, to: url)
                     }
@@ -96,8 +91,6 @@ extension VideoExporter: NSFilePromiseProviderDelegate {
     
     func filePromiseProvider(_ filePromiseProvider: NSFilePromiseProvider, writePromiseTo url: URL, completionHandler: @escaping (Error?) -> Void) {
         
-        track("\(url)")
-
         let source = URL(fileURLWithPath: "/tmp/vAmiga.mp4")
         
         do {

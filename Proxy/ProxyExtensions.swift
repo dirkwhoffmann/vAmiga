@@ -16,9 +16,7 @@ import Darwin
 extension Proxy {
     
     static func make<T: MakeWithBuffer>(buffer: UnsafeRawPointer, length: Int) throws -> T {
-        
-        track()
-        
+                
         let exc = ExceptionWrapper()
         let obj = T.make(withBuffer: buffer, length: length, exception: exc)
         if exc.errorCode != ErrorCode.OK { throw VAError(exc) }

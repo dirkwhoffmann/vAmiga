@@ -232,9 +232,7 @@ class VolumeInspector: DialogController {
     }
 
     override func sheetWillShow() {
-     
-        track()
-        
+             
         // Register to receive mouse click events
         previewTable.action = #selector(clickAction(_:))
         
@@ -436,7 +434,6 @@ class VolumeInspector: DialogController {
 
     @IBAction func strictAction(_ sender: NSButton!) {
         
-        track()
         errorReport = vol.check(strict)
         updateDiagnoseImage()
         update()

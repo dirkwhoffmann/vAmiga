@@ -10,6 +10,7 @@
 #pragma once
 
 #import "Constants.h"
+#import "config.h"
 #import "AgnusTypes.h"
 #import "AmigaComponentTypes.h"
 #import "AmigaTypes.h"

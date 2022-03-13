@@ -76,7 +76,7 @@ class Screenshot: CustomStringConvertible {
 
     func save(url: URL) throws {
         
-        track("url: \(url)")
+        log("url: \(url)")
         
         // Convert to target format
         let data = screen?.representation(using: format)
@@ -127,7 +127,7 @@ class Screenshot: CustomStringConvertible {
                 
         if folder == nil { return nil }
         
-        track("Determining next free URL in \(folder!)")
+        log("Determining next free URL in \(folder!)", level: 2)
 
         // Get a list of all filenames without extensions
         let files = collectFiles(in: folder)
@@ -142,7 +142,7 @@ class Screenshot: CustomStringConvertible {
                 let url = folder!.appendingPathComponent(name)
                 return url.byAddingExtension(for: format)
             } else {
-                track("\(name) already exists")
+                log("\(name) already exists", level: 2)
             }
         }
         

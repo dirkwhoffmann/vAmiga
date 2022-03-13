@@ -107,8 +107,6 @@ class GamePadManager {
     }
     
     func shutDown() {
-
-        track()
         
         // Terminate communication with all connected HID devices
         for (_, pad) in gamePads { pad.device?.close() }
@@ -122,7 +120,7 @@ class GamePadManager {
 
     deinit {
 
-        track()
+        log()
     }
         
     //
@@ -142,7 +140,7 @@ class GamePadManager {
         // We support up to 5 devices
         if nr < 5 { return nr }
         
-        track("Maximum number of devices reached.")
+        log(warning: "Maximum number of devices reached.")
         return nil
     }
     
@@ -194,7 +192,6 @@ class GamePadManager {
         parent.toolbar.validateVisibleItems()
         myAppDelegate.deviceAdded()
         
-        track()
         listDevices()
     }
     
@@ -215,9 +212,7 @@ class GamePadManager {
             
             // Create a GamePad object
             gamePads[slot] = GamePad(manager: self, device: device, type: .JOYSTICK)
-            
-            track()
-            
+                        
             // Register input value callback
             let hidContext = unsafeBitCast(gamePads[slot], to: UnsafeMutableRawPointer.self)
             IOHIDDeviceRegisterInputValueCallback(device,
@@ -233,7 +228,7 @@ class GamePadManager {
         
         lock.lock(); defer { lock.unlock() }
         
-        track()
+        log()
             
         // Search for a matching locationID and remove device
         for (slot, pad) in gamePads where pad.locationID == device.locationID {
