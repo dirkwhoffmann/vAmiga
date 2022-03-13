@@ -96,17 +96,6 @@ extension MyController {
             widget.image = led
         }
     }
-
-    /*
-    fileprivate func refreshStatusBar(hd n: Int, led: Bool) {
-        
-        if let widget = drvLED[n + 4] {
-
-            let image = NSImage(named: led ? "ledRed" : "")
-            widget.image = image
-        }
-    }
-    */
     
     func refreshStatusBar(drive n: Int, cylinder: Int) {
         
@@ -188,14 +177,16 @@ extension MyController {
             
             if value {
                 
-                metal.shrink()
-                window?.setContentBorderThickness(26, for: .minY)
+                metal.adjustHeight(-26.0)
+                window?.setContentBorderThickness(26.0, for: .minY)
+                adjustWindowSize(26.0)
                 adjustWindowSize()
                 
             } else {
                 
-                metal.expand()
-                window?.setContentBorderThickness(0, for: .minY)
+                metal.adjustHeight(26.0)
+                window?.setContentBorderThickness(0.0, for: .minY)
+                adjustWindowSize(-26.0)
                 adjustWindowSize()
             }
             

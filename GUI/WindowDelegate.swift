@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+import CoreGraphics
+
 extension MyController: NSWindowDelegate {
         
     public func windowDidBecomeMain(_ notification: Notification) {
@@ -167,7 +169,7 @@ extension MyController: NSWindowDelegate {
 
 extension MyController {
     
-    func adjustWindowSize() {
+    func adjustWindowSize(_ dv: CGFloat = 0.0) {
                 
         // Only proceed in window mode
         if renderer?.fullscreen == true { return }
@@ -175,13 +177,18 @@ extension MyController {
         // Get window frame
         guard var frame = window?.frame else { return }
         
-        // Compute size correction
+        // Modify the frame height
+        frame.origin.y -= dv
+        frame.size.height += dv
+
+        // Compute the size correction
         let newsize = windowWillResize(window!, to: frame.size)
         let correction = newsize.height - frame.size.height
         
         // Adjust frame
         frame.origin.y -= correction
         frame.size = newsize
+        
         window!.setFrame(frame, display: true)        
     }
 }
