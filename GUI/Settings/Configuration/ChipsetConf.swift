@@ -101,25 +101,21 @@ extension ConfigurationController {
             csRtcInfo1.stringValue = ""
             csRtcInfo2.stringValue = ""
             csRtcInfo3.stringValue = ""
-            csRtcIcon.isHidden = true
 
         case .OKI:
             csRtcInfo1.stringValue = "MSM6242B"
             csRtcInfo2.stringValue = "Real-time clock"
             csRtcInfo3.stringValue = "A2000"
-            csRtcIcon.isHidden = false
 
         case .RICOH:
             csRtcInfo1.stringValue = "RF5C01A"
             csRtcInfo2.stringValue = "Real-time clock"
             csRtcInfo3.stringValue = "A3000, A4000"
-            csRtcIcon.isHidden = false
 
         default:
             csRtcInfo1.stringValue = "Invalid"
             csRtcInfo2.stringValue = ""
             csRtcInfo3.stringValue = ""
-            csRtcIcon.isHidden = false
         }
         
         // Disable some controls if emulator is powered on

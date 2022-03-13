@@ -82,7 +82,6 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var csCiaInfo3: NSTextField!
 
     // RT clock
-    @IBOutlet weak var csRtcIcon: NSButton!
     @IBOutlet weak var csRtcRevision: NSPopUpButton!
     @IBOutlet weak var csRtcInfo1: NSTextField!
     @IBOutlet weak var csRtcInfo2: NSTextField!

@@ -17,7 +17,7 @@ endif()
 add_library(vAmigaCore Amiga.cpp)
 
 # Add the console app (vAmiga Headless)
-if(NOT MSVC)
+if(NOT WIN32)
 add_executable(vAmigaConsole Headless.cpp)
 target_link_libraries(vAmigaConsole vAmigaCore)
 endif()
