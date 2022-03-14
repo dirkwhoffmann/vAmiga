@@ -40,7 +40,7 @@
  * query information from Paula, you need to invoke a public method on
  * amiga.paula.
  */
-class Amiga : public SuspendableThread {
+class Amiga : public Thread {
 
     /* Result of the latest inspection. In order to update the GUI inspector
      * panels, the emulator schedules events in the inspector slot (SLOT_INS in

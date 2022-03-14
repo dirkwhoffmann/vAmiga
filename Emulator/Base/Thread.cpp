@@ -354,7 +354,7 @@ Thread::wakeUp()
 }
 
 void
-SuspendableThread::suspend()
+Thread::suspend()
 {
     debug(RUN_DEBUG, "Suspending (%ld)...\n", suspendCounter);
     
@@ -364,17 +364,10 @@ SuspendableThread::suspend()
         assert(state == EXEC_RUNNING || state == EXEC_SUSPENDED);
         changeStateTo(EXEC_SUSPENDED, true);
     }
-    
-    /*
-    if (suspendCounter || isRunning()) {
-        pause();
-        suspendCounter++;
-    }
-    */
 }
 
 void
-SuspendableThread::resume()
+Thread::resume()
 {
     debug(RUN_DEBUG, "Resuming (%ld)...\n", suspendCounter);
 
@@ -384,9 +377,4 @@ SuspendableThread::resume()
         changeStateTo(EXEC_RUNNING, true);
         run();
     }
-    /*
-    if (suspendCounter && --suspendCounter == 0) {
-        run();
-    }
-    */
 }

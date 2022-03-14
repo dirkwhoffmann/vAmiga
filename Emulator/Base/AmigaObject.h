@@ -19,9 +19,9 @@
  * | AmigaComponent |
  * ------------------
  *         |
- *         |   ------------------   ---------------------   ----------------
- *         |-->|     Thread     |-->| SuspendableThread |-->|    Amiga     |
- *         |   ------------------   ---------------------   ----------------
+ *         |   ------------------   ----------------
+ *         |-->|     Thread     |-->|    Amiga     |
+ *         |   ------------------   ----------------
  *         |   ------------------
  *         |-->|  SubComponent  |
  *             ------------------
@@ -37,9 +37,7 @@
  * execution of certain code components.
  *
  * Thread adds the ability to run the component asynchroneously. It implements
- * the emulator's state model (off, paused, running). SuspendableThread extends
- * the Thread class with the suspend/resume mechanism which can be utilized to
- * pause the emulator temporarily.
+ * the emulator's state model (off, paused, running).
  */
 
 #include "Error.h"

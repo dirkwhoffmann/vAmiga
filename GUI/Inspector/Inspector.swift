@@ -588,6 +588,12 @@ class Inspector: DialogController {
         updateInspectionTarget()
     }
 
+    override func awakeFromNib() {
+
+        super.awakeFromNib()
+        message.stringValue = ""
+    }
+    
     deinit {
         log()
     }
