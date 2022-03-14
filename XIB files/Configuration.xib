@@ -3391,7 +3391,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ONC-cx-bUt">
-                                            <rect key="frame" x="421" y="365" width="55" height="12"/>
+                                            <rect key="frame" x="421" y="366" width="55" height="11"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="CONTRAST" id="Db5-G0-5qw">
                                                 <font key="font" metaFont="menu" size="9"/>

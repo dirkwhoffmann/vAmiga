@@ -24,9 +24,6 @@ class MyDocument: NSDocument {
     
     // Snapshots
     private(set) var snapshots = ManagedArray<SnapshotProxy>(capacity: 32)
-
-    // Fingerprint of the first disk inserted into df0 after reset
-    var bootDiskID = UInt64(0)
         
     //
     // Initializing
@@ -293,25 +290,5 @@ class MyDocument: NSDocument {
         
         log("Exporting to \(url)")
         try fileProxy.writeToFile(url: url)        
-    }
-        
-    //
-    // Screenshots
-    //
-    
-    func deleteBootDiskID() {
-     
-        bootDiskID = 0
-    }
-
-    @discardableResult
-    func setBootDiskID(_ id: UInt64) -> Bool {
-        
-        // Only proceed if no disk has been inserted, yet
-        if bootDiskID != 0 { return false }
-        
-        // Remember the disk ID
-        bootDiskID = id
-        return true
-    }
+    }        
 }

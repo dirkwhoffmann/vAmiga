@@ -52,6 +52,29 @@ class Screenshot: CustomStringConvertible {
         return screen != nil ? "\(width) x \(height)" : ""
     }
     
+    static var folder: URL? {
+        do {
+            return try URL.appSupportFolder("Screenshots")
+        } catch {
+            return nil
+        }
+    }
+    
+    static var allFiles: [URL] {
+        
+        var result = [URL]()
+        
+        for i in 0...999 {
+            
+            if let url = Screenshot.url(forItem: i) {
+                result.append(url)
+            } else {
+                break
+            }
+        }
+        return result
+    }
+    
     init(screen: NSImage, format: NSBitmapImageRep.FileType) {
         
         self.screen = screen
@@ -67,9 +90,9 @@ class Screenshot: CustomStringConvertible {
         self.init(screen: image, format: format)
     }
     
-    func save(id: UInt64) throws {
+    func save() throws {
                 
-        if let url = Screenshot.newUrl(diskID: id, using: format) {
+        if let url = Screenshot.newUrl(format: format) {
             try? save(url: url)
         }
     }
@@ -84,24 +107,14 @@ class Screenshot: CustomStringConvertible {
         // Save to file
         try data?.write(to: url, options: .atomic)
     }
-    
-    static func folder(forDisk diskID: UInt64) -> URL? {
-        
-        let subdir = String(format: "%08X", diskID)
-        do {
-            return try URL.appSupportFolder("Screenshots/\(subdir)")
-        } catch {
-            return nil
-        }
-    }
-        
+            
     static func fileExists(name: URL, type: NSBitmapImageRep.FileType) -> URL? {
         
         let url = name.byAddingExtension(for: type)
         return FileManager.default.fileExists(atPath: url.path) ? url : nil
     }
     
-    static func url(forItem item: Int, in folder: URL?) -> URL? {
+    static func url(forItem item: Int) -> URL? {
         
         if folder == nil { return nil }
 
@@ -115,23 +128,14 @@ class Screenshot: CustomStringConvertible {
         return nil
     }
     
-    static func newUrl(diskID: UInt64,
-                       using format: NSBitmapImageRep.FileType = .jpeg) -> URL? {
-
-        let folder = Screenshot.folder(forDisk: diskID)
-        return Screenshot.newUrl(in: folder, using: format)
-    }
-
-    static func newUrl(in folder: URL?,
-                       using format: NSBitmapImageRep.FileType = .jpeg) -> URL? {
+    static func newUrl(format: NSBitmapImageRep.FileType = .jpeg) -> URL? {
                 
         if folder == nil { return nil }
         
         log("Determining next free URL in \(folder!)", level: 2)
 
         // Get a list of all filenames without extensions
-        let files = collectFiles(in: folder)
-        let names = files.map({ (url) -> String in
+        let names = allFiles.map({ (url) -> String in
             return url.deletingPathExtension().lastPathComponent
         })
         
@@ -149,36 +153,10 @@ class Screenshot: CustomStringConvertible {
         return nil
     }
     
-    static func collectFiles(in folder: URL?) -> [URL] {
+    static func deleteFolder() {
         
-        var result = [URL]()
-        
-        for i in 0...999 {
-            
-            if let url = Screenshot.url(forItem: i, in: folder) {
-                result.append(url)
-            } else {
-                break
-            }
-        }
-        return result
-    }
-
-    static func collectFiles(forDisk diskID: UInt64) -> [URL] {
-        
-        return collectFiles(in: folder(forDisk: diskID))
-    }
-    
-    static func deleteFolder(withUrl url: URL?) {
-        
-        let files = Screenshot.collectFiles(in: url)
-        for file in files {
+        for file in allFiles {
             try? FileManager.default.removeItem(at: file)
         }
-    }
-
-    static func deleteFolder(forDisk diskID: UInt64) {
-        
-        deleteFolder(withUrl: folder(forDisk: diskID))
     }
 }

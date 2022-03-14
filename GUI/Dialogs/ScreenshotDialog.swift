@@ -41,7 +41,7 @@ class ScreenshotDialog: DialogController {
 
         log("Seeking screenshots for disk with id \(checksum)", level: 2)
         
-        for url in Screenshot.collectFiles(forDisk: checksum) {
+        for url in Screenshot.allFiles {
             if let screenshot = Screenshot(fromUrl: url) {
                 screenshots.append(screenshot)
             }
@@ -54,9 +54,9 @@ class ScreenshotDialog: DialogController {
         
         log("Saving screenshots to disk (\(checksum))", level: 2)
                 
-        Screenshot.deleteFolder(forDisk: checksum)
+        Screenshot.deleteFolder()
         for n in 0 ..< screenshots.count {
-            try? screenshots[n].save(id: checksum)
+            try? screenshots[n].save()
         }
 
         log("All screenshots saved", level: 2)
@@ -157,7 +157,7 @@ class ScreenshotDialog: DialogController {
 
     @IBAction func finderAction(_ sender: NSButton!) {
         
-        if let url = Screenshot.folder(forDisk: checksum) {
+        if let url = Screenshot.folder {
             
             NSWorkspace.shared.open(url)
         }

@@ -244,7 +244,7 @@ extension MyController: NSMenuItemValidation {
         let screenshot = Screenshot(screen: screen, format: pref.screenshotTarget)
 
         // Save to disk
-        try? screenshot.save(id: mydocument.bootDiskID)
+        try? screenshot.save()
     }
     
     @IBAction func browseScreenshotsAction(_ sender: Any!) {

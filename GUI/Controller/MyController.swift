@@ -404,8 +404,6 @@ extension MyController {
             inspector?.step()
             
         case .RESET:
-            mydocument.deleteBootDiskID()
-            mydocument.setBootDiskID(amiga.df0.fnv)
             inspector?.reset()
             updateWarp()
             
@@ -510,7 +508,6 @@ extension MyController {
             refreshStatusBar(drive: nr, cylinder: cyl)
             
         case .DISK_INSERT:
-            if nr == 0 { mydocument.setBootDiskID(amiga.df0.fnv) }
             macAudio.playSound(MacAudio.Sounds.insert, volume: volume, pan: pan)
             refreshStatusBar()
             
