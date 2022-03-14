@@ -18,9 +18,6 @@
 u16
 DiskController::peekDSKDATR() const
 {
-    // TODO: Add Accessor as template parameter.
-    // TODO: Use this method to read from the FIFO buffer if Accessor == AGNUS.
-
     // DSKDAT is a strobe register that cannot be accessed by the CPU
     return 0;
 }
@@ -103,9 +100,6 @@ void
 DiskController::pokeDSKDAT(u16 value)
 {
     debug(DSKREG_DEBUG, "pokeDSKDAT\n");
-
-    // TODO: Add Accessor as template parameter.
-    // TODO: Use this method to fill the FIFO buffer if Accessor == AGNUS.
 }
 
 u16

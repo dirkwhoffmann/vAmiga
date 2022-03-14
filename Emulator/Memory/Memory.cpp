@@ -2084,8 +2084,44 @@ Memory::spypeekCustom16(u32 addr) const
 {
     assert(IS_EVEN(addr));
     
-    // TODO: ADD IMPLEMENTATION
-    return 42;
+    switch ((addr >> 1) & 0xFF) {
+
+        case 0x002 >> 1: // DMACONR
+            return 42; // TODO
+        case 0x004 >> 1: // VPOSR
+            return 42; // TODO
+        case 0x006 >> 1: // VHPOSR
+            return 42; // TODO
+        case 0x008 >> 1: // DSKDATR
+            return 42; // TODO
+        case 0x00A >> 1: // JOY0DAT
+            return 42; // TODO
+        case 0x00C >> 1: // JOY1DAT
+            return 42; // TODO
+        case 0x00E >> 1: // CLXDAT
+            return 42; // TODO
+        case 0x010 >> 1: // ADKCONR
+            return 42; // TODO
+        case 0x012 >> 1: // POT0DAT
+            return 42; // TODO
+        case 0x014 >> 1: // POT1DAT
+            return 42; // TODO
+        case 0x016 >> 1: // POTGOR
+            return 42; // TODO
+        case 0x018 >> 1: // SERDATR
+            return 42; // TODO
+        case 0x01A >> 1: // DSKBYTR
+            return 42; // TODO
+        case 0x01C >> 1: // INTENAR
+            return 42; // TODO
+        case 0x01E >> 1: // INTREQR
+            return 42; // TODO
+        case 0x07C >> 1: // DENISEID
+            return 42; // TODO
+
+        default:
+            return 0;
+    }
 }
 
 template <Accessor s> void
