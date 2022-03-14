@@ -36,7 +36,7 @@
  *   isPoweredOff          isPaused             isRunning        isSuspended
  *  |-------------||---------------------||--------------------||------------|
  *                 |---------------------------------------------------------|
- *                                     isPoweredOn()
+ *                                       isPoweredOn
  *
  * State changes are triggered by the following functions:
  *

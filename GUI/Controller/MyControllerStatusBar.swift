@@ -115,16 +115,11 @@ extension MyController {
 
     func refreshStatusBar(writing: Bool?) {
         
-        // TODO
-        /*
-        let sel = amiga.diskController.selectedDrive
-        let w = writing ?? (amiga.diskController.state == .WRITE)
-
-        cylSlot0.textColor = w && (sel == 0) ? .warningColor : .secondaryLabelColor
-        cylSlot1.textColor = w && (sel == 1) ? .warningColor : .secondaryLabelColor
-        cylSlot2.textColor = w && (sel == 2) ? .warningColor : .secondaryLabelColor
-        cylSlot3.textColor = w && (sel == 3) ? .warningColor : .secondaryLabelColor
-        */
+        for n in 0...3 where drv[n] != nil {
+            
+            let dfn = amiga.df(n)!
+            refreshStatusBar(drive: n, led: dfn.ledIcon)
+        }            
     }
             
     func assignSlots() {

@@ -246,10 +246,6 @@ GdbServer::readMemory(isize addr)
 void
 GdbServer::breakpointReached()
 {
-    // This function is called too often. I.e., it is called when an
-    // suspended block is executed.
-    // TODO: Think about adding a SUSPENDED emulator state
-    
     debug(GDB_DEBUG, "breakpointReached()\n");
     process <'?'> ("");
 }
