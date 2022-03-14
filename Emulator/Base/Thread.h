@@ -85,6 +85,8 @@
 
 class Thread : public AmigaComponent, util::Wakeable {
     
+protected:
+    
     friend class Amiga;
     
     // The thread object
@@ -183,8 +185,10 @@ public:
     
     bool isPoweredOn() const override { return state != EXEC_OFF; }
     bool isPoweredOff() const override { return state == EXEC_OFF; }
-    bool isRunning() const override { return state == EXEC_RUNNING; }
     bool isPaused() const override { return state == EXEC_PAUSED; }
+    bool isRunning() const override { return state == EXEC_RUNNING; }
+    bool isSuspended() const override { return state == EXEC_SUSPENDED; }
+    bool isHalted() const override { return state == EXEC_HALTED; }
 
     void powerOn(bool blocking = true);
     void powerOff(bool blocking = true);
@@ -200,7 +204,7 @@ public:
     void debugOn(isize source = 0);
     void debugOff(isize source = 0);
 
-private:
+protected:
 
     void changeStateTo(ExecutionState requestedState, bool blocking);
     void changeWarpTo(u8 value, bool blocking = true);

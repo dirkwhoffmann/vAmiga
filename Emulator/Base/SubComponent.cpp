@@ -77,6 +77,18 @@ SubComponent::isRunning() const
     return amiga.isRunning();
 }
 
+bool
+SubComponent::isSuspended() const
+{
+    return amiga.isSuspended();
+}
+
+bool
+SubComponent::isHalted() const
+{
+    return amiga.isHalted();
+}
+
 void
 SubComponent::suspend()
 {

@@ -21,6 +21,7 @@ enum_long(EXEC_STATE)
     EXEC_OFF,
     EXEC_PAUSED,
     EXEC_RUNNING,
+    EXEC_SUSPENDED,
     EXEC_HALTED
 };
 typedef EXEC_STATE ExecutionState;
@@ -37,10 +38,11 @@ struct ExecutionStateEnum : util::Reflection<ExecutionStateEnum, ExecutionState>
     {
         switch (value) {
                 
-            case EXEC_OFF:         return "OFF";
-            case EXEC_PAUSED:      return "PAUSED";
-            case EXEC_RUNNING:     return "RUNNING";
-            case EXEC_HALTED:      return "HALTED";
+            case EXEC_OFF:          return "OFF";
+            case EXEC_PAUSED:       return "PAUSED";
+            case EXEC_RUNNING:      return "RUNNING";
+            case EXEC_SUSPENDED:    return "SUSPENDED";
+            case EXEC_HALTED:       return "HALTED";
         }
         return "???";
     }

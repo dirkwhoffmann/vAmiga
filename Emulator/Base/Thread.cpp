@@ -108,9 +108,9 @@ Thread::main()
                 case SyncMode::Pulsed: execute<SyncMode::Pulsed>(); break;
             }
         }
-        
-        if (!warpMode || isPaused()) {
-
+                
+        if (!warpMode || !isRunning()) {
+            
             switch (mode) {
                 case SyncMode::Periodic: sleep<SyncMode::Periodic>(); break;
                 case SyncMode::Pulsed: sleep<SyncMode::Pulsed>(); break;
@@ -158,7 +158,15 @@ Thread::main()
                 
                 AmigaComponent::pause();
                 state = EXEC_PAUSED;
-            
+
+            } else if (state == EXEC_RUNNING && newState == EXEC_SUSPENDED) {
+                
+                state = EXEC_SUSPENDED;
+
+            } else if (state == EXEC_SUSPENDED && newState == EXEC_RUNNING) {
+                
+                state = EXEC_RUNNING;
+
             } else if (newState == EXEC_HALTED) {
                 
                 AmigaComponent::halt();
@@ -170,6 +178,8 @@ Thread::main()
                 // Invalid state transition
                 fatalError;
             }
+            
+            debug(RUN_DEBUG, "Changed state to %s\n", ExecutionStateEnum::key(state));
         }
         
         // Compute the CPU load once in a while
@@ -349,17 +359,34 @@ SuspendableThread::suspend()
     debug(RUN_DEBUG, "Suspending (%ld)...\n", suspendCounter);
     
     if (suspendCounter || isRunning()) {
+
+        suspendCounter++;
+        assert(state == EXEC_RUNNING || state == EXEC_SUSPENDED);
+        changeStateTo(EXEC_SUSPENDED, true);
+    }
+    
+    /*
+    if (suspendCounter || isRunning()) {
         pause();
         suspendCounter++;
     }
+    */
 }
 
 void
 SuspendableThread::resume()
 {
     debug(RUN_DEBUG, "Resuming (%ld)...\n", suspendCounter);
-    
+
+    if (suspendCounter && --suspendCounter == 0) {
+        
+        assert(state == EXEC_SUSPENDED);
+        changeStateTo(EXEC_RUNNING, true);
+        run();
+    }
+    /*
     if (suspendCounter && --suspendCounter == 0) {
         run();
     }
+    */
 }

@@ -88,7 +88,9 @@ public:
     virtual bool isPoweredOn() const = 0;
     virtual bool isPaused() const = 0;
     virtual bool isRunning() const = 0;
-    
+    virtual bool isSuspended() const = 0;
+    virtual bool isHalted() const = 0;
+
     virtual void suspend() = 0;
     virtual void resume() = 0;
 
