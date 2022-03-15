@@ -4,11 +4,11 @@
         <title>vAmiga</title>
         <item>
             <title>2.0b1</title>
-            <pubDate>Tue, 15 Mar 2022 14:57:36 +0100</pubDate>
-            <sparkle:version>2.0</sparkle:version>
+            <pubDate>Tue, 15 Mar 2022 16:00:42 +0100</pubDate>
+            <sparkle:version>220315</sparkle:version>
             <sparkle:shortVersionString>2.0b1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
-            <enclosure url="vAmiga2.0b1.zip" length="16257394" type="application/octet-stream"/>
+            <enclosure url="https://dirkwhoffmann.github.io/vAmiga/releases/vAmiga2.0b1.zip" length="16257396" type="application/octet-stream" sparkle:edSignature="mQFWKXme1fKSWidyE48Ppltg1o5zCKjsI+tVwQyqy6dFa09uvwZLDuLK8vP1tBXDm4aOLsv53JVF+W6wXOwUCQ=="/>
         </item>
     </channel>
 </rss>
