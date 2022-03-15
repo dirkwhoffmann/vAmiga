@@ -24,8 +24,30 @@
 		#player_container {
 			background-color: gray;
 			border-radius: 10px;
-			box-shadow: inset 0 0 0.1em black, 0 2em 2em #2a2a2a;
+			box-shadow: inset 0 0 0.1em black, 1em 1em 2em #2a2a2a;
+			animation: player_launch 10s ease-in;
 		}
+		@keyframes player_launch {
+			0% {
+				box-shadow: inset 0 0 0.1em black, 0 0 0.2em gray;
+			}
+			20% {
+				box-shadow: inset 0 0 0.1em black, 0 0 2em  #cccccc;
+			}
+			80% {
+				box-shadow: inset 0 0 0.1em black, 0 0 2em  #cccccc;
+			}
+			100% {
+				box-shadow: inset 0 0 0.1em black, 1em 1em 2em #222222;
+			}
+		}
+        .teaser_img {
+			width: 100%;
+			aspect-ratio: 320 / 232;			
+			border-radius: 10px;
+        }
+
+
 		#player_container div:last-child {
 			margin-left: 5px;
 			margin-right: 5px;
@@ -316,15 +338,14 @@
 											warpto:2000,
 											navbar:false,
 											wide:true,
-											border:1.0,
-											dark:false,
+											display:'standard',
 											url:'https://vamigaweb.github.io/doc/media/Rink_a_Dink-REDUX_by_Lemon-Point_(final).adf'
 										}; 
 										vAmigaWeb_player.load(this,encodeURIComponent(JSON.stringify(config)));
 										return false;"
 										style="border-bottom: none"
 										>		
-										<img src="images/rinkadink.png" width="100%" style="border-radius:10px;height:230px">
+										<img src="images/rinkadink.png" class="teaser_img">
 										</a>
 									</div>
 								<br>
