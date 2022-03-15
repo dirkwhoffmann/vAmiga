@@ -112,7 +112,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>2.0b1</string>
 	<key>CFBundleVersion</key>
-	<string>2.0b1</string>
+	<string>220315</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.entertainment</string>
 	<key>LSMinimumSystemVersion</key>
@@ -123,6 +123,12 @@
 	<string>Copyright © 2022 Dirk Hoffmann. All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
+	<key>CFBundleDisplayName</key>
+	<string></string>
+	<key>SUPublicEDKey</key>
+	<string>hGLJIdOXqJpzzO72cH5QlA4I6d3RxC2kC/Fea2ZVucg=</string>
+	<key>SUFeedURL</key>
+	<string>https://dirkwhoffmann.github.io/vAmiga/releases/appcast.xml</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>

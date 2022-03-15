@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -210,6 +210,7 @@
 		50B2BC8925EC3D590032EEFE /* IOUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C0B78025EC367000CDE1F2 /* IOUtils.cpp */; };
 		50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B35B6022B2382E001A9C17 /* SerialPort.cpp */; };
 		50B36395277760320030A50C /* BlitterPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B36394277760320030A50C /* BlitterPanel.swift */; };
+		50B3E62327E0CB3E00E4C3ED /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 50B3E62227E0CB3E00E4C3ED /* Sparkle */; };
 		50B70CAD252CE0BF006B5191 /* Muxer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B70CAB252CE0BF006B5191 /* Muxer.cpp */; };
 		50B81E0824E6BCCA004384C9 /* DiskControllerRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B81E0724E6BCCA004384C9 /* DiskControllerRegs.cpp */; };
 		50B81E0A24E6BEA5004384C9 /* CIARegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B81E0924E6BEA5004384C9 /* CIARegs.cpp */; };
@@ -941,6 +942,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50B3E62327E0CB3E00E4C3ED /* Sparkle in Frameworks */,
 				508FDFE921EA21C80043D0E9 /* AppKit.framework in Frameworks */,
 				508FDFE721EA21780043D0E9 /* CoreAudio.framework in Frameworks */,
 				508FDFE521EA21630043D0E9 /* IOKit.framework in Frameworks */,
@@ -1896,6 +1898,9 @@
 			dependencies = (
 			);
 			name = vAmiga;
+			packageProductDependencies = (
+				50B3E62227E0CB3E00E4C3ED /* Sparkle */,
+			);
 			productName = vAmiga;
 			productReference = 508FDE6421EA1FA40043D0E9 /* vAmiga.app */;
 			productType = "com.apple.product-type.application";
@@ -1945,6 +1950,9 @@
 				Base,
 			);
 			mainGroup = 508FDE5B21EA1FA40043D0E9;
+			packageReferences = (
+				50B3E62127E0CB3E00E4C3ED /* XCRemoteSwiftPackageReference "Sparkle" */,
+			);
 			productRefGroup = 508FDE6521EA1FA40043D0E9 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -2611,9 +2619,10 @@
 				CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER = YES;
 				CLANG_UNDEFINED_BEHAVIOR_SANITIZER_NULLABILITY = YES;
 				CODE_SIGN_ENTITLEMENTS = Resources/vAmiga.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 3NG65ZLYW7;
 				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -2644,9 +2653,10 @@
 				CLANG_UNDEFINED_BEHAVIOR_SANITIZER_INTEGER = YES;
 				CLANG_UNDEFINED_BEHAVIOR_SANITIZER_NULLABILITY = YES;
 				CODE_SIGN_ENTITLEMENTS = Resources/vAmiga.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 3NG65ZLYW7;
 				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -2726,6 +2736,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		50B3E62127E0CB3E00E4C3ED /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		50B3E62227E0CB3E00E4C3ED /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 50B3E62127E0CB3E00E4C3ED /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 508FDE5C21EA1FA40043D0E9 /* Project object */;
 }
