@@ -205,7 +205,7 @@ template void Allocator<T>::init(const string &path); \
 template void Allocator<T>::init(const string &path, const string &name); \
 template void Allocator<T>::resize(isize elements); \
 template void Allocator<T>::resize(isize elements, T value); \
-template void Allocator<T>::clear(T value, isize offset); \
+template void Allocator<T>::clear(T value, isize offset, isize len); \
 template void Allocator<T>::copy(T *buf, isize offset, isize len) const; \
 template void Allocator<T>::patch(const u8 *seq, const u8 *subst); \
 template void Allocator<T>::patch(const char *seq, const char *subst);

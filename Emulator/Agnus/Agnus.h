@@ -310,19 +310,19 @@ public:
     bool isECS() const;
     
     // Returns the chip identification bits of this Agnus (show up in VPOSR)
-    u16 idBits();
+    u16 idBits() const;
     
     // Returns the maximum amout of Chip Ram in KB this Agnus can handle
-    isize chipRamLimit();
+    isize chipRamLimit() const;
         
     // Returns the line in which the VERTB interrupt is triggered
-    isize vStrobeLine() { return config.revision == AGNUS_OCS_OLD ? 1 : 0; }
+    isize vStrobeLine() const { return config.revision == AGNUS_OCS_OLD ? 1 : 0; }
     
     // Returns a bitmask indicating the used bits in DDFSTRT / DDFSTOP
-    u16 ddfMask() { return isOCS() ? 0xFC : 0xFE; }
+    u16 ddfMask() const { return isOCS() ? 0xFC : 0xFE; }
     
     // Checks whether Agnus is able to access Slow Ram
-    bool slowRamIsMirroredIn();
+    bool slowRamIsMirroredIn() const;
         
     
     //
@@ -528,7 +528,7 @@ public:
     
 public:
 
-    u16 peekDMACONR();
+    u16 peekDMACONR() const;
     template <Accessor s> void pokeDMACON(u16 value);
     void setDMACON(u16 oldValue, u16 newValue);
     void setBPLEN(bool value);
@@ -541,11 +541,11 @@ public:
     void setAUD2EN(bool value);
     void setAUD3EN(bool value);
 
-    u16 peekVHPOSR();
+    u16 peekVHPOSR() const;
     void pokeVHPOS(u16 value);
     void setVHPOS(u16 value);
 
-    u16 peekVPOSR();
+    u16 peekVPOSR() const;
     void pokeVPOS(u16 value);
     void setVPOS(u16 value);
 

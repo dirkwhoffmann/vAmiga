@@ -114,7 +114,8 @@ public:
     
     // Serial port data and status read
     u16 peekSERDATR();
-    
+    u16 spypeekSERDATR() const;
+
     // Serial port data and stop bits write
     void pokeSERDAT(u16 value);
 

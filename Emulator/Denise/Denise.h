@@ -551,11 +551,12 @@ public:
     void setDIWSTRT(u16 value);
     void setDIWSTOP(u16 value);
 
-    u16 peekJOY0DATR();
-    u16 peekJOY1DATR();
+    u16 peekJOY0DATR() const;
+    u16 peekJOY1DATR() const;
     void pokeJOYTEST(u16 value);
 
     u16 peekDENISEID();
+    u16 spypeekDENISEID() const;
 
     template <Accessor s> void pokeBPLCON0(u16 value);
     void setBPLCON0(u16 oldValue, u16 newValue);
@@ -570,7 +571,7 @@ public:
     void setBPLCON3(u16 value);
 
     u16 peekCLXDAT();
-    
+    u16 spypeekCLXDAT() const;
     void pokeCLXCON(u16 value);
     
     template <isize x, Accessor s> void pokeBPLxDAT(u16 value);

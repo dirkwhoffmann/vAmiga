@@ -143,7 +143,7 @@ Agnus::isECS() const
 }
 
 u16
-Agnus::idBits()
+Agnus::idBits() const
 {
     switch (config.revision) {
             
@@ -154,7 +154,7 @@ Agnus::idBits()
 }
 
 isize
-Agnus::chipRamLimit()
+Agnus::chipRamLimit() const
 {
     switch (config.revision) {
 
@@ -165,7 +165,7 @@ Agnus::chipRamLimit()
 }
 
 bool
-Agnus::slowRamIsMirroredIn()
+Agnus::slowRamIsMirroredIn() const
 {
 
     /* The ECS revision of Agnus has a special feature that makes Slow Ram

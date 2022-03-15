@@ -51,6 +51,14 @@ UART::peekSERDATR()
     // Clear the overrun bit if the interrupt has been acknowledged
     if (!rbf) ovrun = false;
 
+    u16 result = spypeekSERDATR();
+    trace(SER_DEBUG, "peekSERDATR() = %x\n", result);
+    return result;
+}
+
+u16
+UART::spypeekSERDATR() const
+{
     /* 15      OVRUN      Serial port receiver overun
      * 14      RBF        Serial port receive buffer full
      * 13      TBE        Serial port transmit buffer empty
@@ -62,13 +70,12 @@ UART::peekSERDATR()
      * 07..00  DB7 - DB0  Data bits
      */
     u16 result = receiveBuffer & 0x3FF;
+    
     REPLACE_BIT(result, 15, ovrun);
-    REPLACE_BIT(result, 14, rbf);
+    REPLACE_BIT(result, 14, GET_BIT(paula.intreq, 11));
     REPLACE_BIT(result, 13, transmitBuffer == 0);
     REPLACE_BIT(result, 12, transmitShiftReg == 0);
     REPLACE_BIT(result, 11, serialPort.getRXD());
-
-    trace(SER_DEBUG, "peekSERDATR() = %x\n", result);
 
     return result;
 }

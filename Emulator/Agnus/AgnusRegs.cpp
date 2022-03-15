@@ -15,7 +15,7 @@
 #include "Amiga.h"
 
 u16
-Agnus::peekDMACONR()
+Agnus::peekDMACONR() const
 {
     u16 result = dmacon;
     
@@ -177,7 +177,7 @@ Agnus::setAUD3EN(bool value)
 }
 
 u16
-Agnus::peekVHPOSR()
+Agnus::peekVHPOSR() const
 {
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
@@ -228,7 +228,7 @@ Agnus::setVHPOS(u16 value)
 }
 
 u16
-Agnus::peekVPOSR()
+Agnus::peekVPOSR() const
 {
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // LF I6 I5 I4 I3 I2 I1 I0 -- -- -- -- -- -- -- V8

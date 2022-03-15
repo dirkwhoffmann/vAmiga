@@ -109,7 +109,7 @@ Denise::setDIWSTOP(u16 value)
 }
 
 u16
-Denise::peekJOY0DATR()
+Denise::peekJOY0DATR() const
 {
     u16 result = controlPort1.joydat();
     trace(JOYREG_DEBUG, "peekJOY0DATR() = $%04X (%d)\n", result, result);
@@ -118,7 +118,7 @@ Denise::peekJOY0DATR()
 }
 
 u16
-Denise::peekJOY1DATR()
+Denise::peekJOY1DATR() const
 {
     u16 result = controlPort2.joydat();
     trace(JOYREG_DEBUG, "peekJOY1DATR() = $%04X (%d)\n", result, result);
@@ -148,6 +148,12 @@ Denise::peekDENISEID()
 
     trace(ECSREG_DEBUG, "peekDENISEID() = $%04X (%d)\n", result, result);
     return result;
+}
+
+u16
+Denise::spypeekDENISEID() const
+{
+    return config.revision == DENISE_ECS ? 0xFFFC : 0;
 }
 
 template <Accessor s> void
@@ -257,6 +263,12 @@ Denise::peekCLXDAT()
     
     trace(CLXREG_DEBUG, "peekCLXDAT() = %x\n", result);
     return result;
+}
+
+u16
+Denise::spypeekCLXDAT() const
+{
+    return clxdat | 0x8000;
 }
 
 void
