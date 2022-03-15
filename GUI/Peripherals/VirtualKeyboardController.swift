@@ -164,7 +164,7 @@ class VirtualKeyboardController: DialogController {
         
         guard let keyboard = amiga.keyboard else { return }
         
-        keyboard.pressKey(keyCode)
+        keyboard.toggleKey(keyCode)
         refresh()
     }
         

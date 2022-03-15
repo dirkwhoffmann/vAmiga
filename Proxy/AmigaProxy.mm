@@ -1104,6 +1104,11 @@ using namespace moira;
     [self kb]->releaseKey((KeyCode)keycode);
 }
 
+- (void)toggleKey:(NSInteger)keycode
+{
+    [self kb]->toggleKey((KeyCode)keycode);
+}
+
 - (void)releaseAllKeys
 {
     [self kb]->releaseAllKeys();

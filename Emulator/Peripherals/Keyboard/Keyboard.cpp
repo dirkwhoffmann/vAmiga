@@ -148,6 +148,12 @@ Keyboard::releaseKey(KeyCode keycode)
 }
 
 void
+Keyboard::toggleKey(KeyCode keycode)
+{
+    keyIsPressed(keycode) ? releaseKey(keycode) : pressKey(keycode);
+}
+
+void
 Keyboard::releaseAllKeys()
 {
     for (KeyCode i = 0; i < 0x80; i++) {
