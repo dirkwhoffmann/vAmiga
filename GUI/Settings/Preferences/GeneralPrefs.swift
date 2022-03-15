@@ -162,6 +162,7 @@ extension PreferencesController {
     @IBAction func genWarpModeAction(_ sender: NSPopUpButton!) {
         
         pref.warpMode = WarpMode(rawValue: sender.selectedTag())!
+        parent.refreshStatusBar()
         refresh()
     }
     

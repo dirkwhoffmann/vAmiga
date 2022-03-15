@@ -569,6 +569,7 @@
 - (BOOL)keyIsPressed:(NSInteger)keycode;
 - (void)pressKey:(NSInteger)keycode;
 - (void)releaseKey:(NSInteger)keycode;
+- (void)toggleKey:(NSInteger)keycode;
 - (void)releaseAllKeys;
 
 @end
