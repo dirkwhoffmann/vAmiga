@@ -37,7 +37,7 @@ extension Canvas {
         let x1 = Int(HBLANK_CNT) * 4
         let x2 = Int(HPOS_CNT) * 4
         let y1 = Int(VBLANK_CNT)
-        let y2 = Int(VPOS_CNT) - 1
+        let y2 = Int(VPOS_CNT) - 2
         
         return CGRect(x: x1, y: y1, width: x2 - x1, height: y2 - y1)
     }
@@ -67,56 +67,41 @@ extension Canvas {
          *      aw/ah - dw/dh = largest posible texture cutout
          *      bw/bh - cw/ch = currently used texture cutout
          */
-
-        /*
-        log("config.hZoom: \(renderer.config.hZoom)")
-        log("config.vZoom: \(renderer.config.vZoom)")
-        log("config.hCenter: \(renderer.config.hCenter)")
-        log("config.vCenter: \(renderer.config.vCenter)")
-        */
         
-        let max = largestVisible
+        let largest = largestVisible
         
         let hscale = CGFloat(1.0 - 0.2 * renderer.config.hZoom)
         let vscale = CGFloat(1.0 - 0.2 * renderer.config.vZoom)
-        let width = hscale * max.width
-        let height = vscale * max.height
+        let width = hscale * largest.width
+        let height = vscale * largest.height
 
         var bw: CGFloat
         var bh: CGFloat
         
-        if x1 != nil && x2 != nil {
+        if renderer.parent.config.hAutoCenter {
             
-            let diww = x2! - x1!
-            bw = x1! - 0.5 * (width - diww)
-            if bw < max.minX { bw = max.minX }
-            // log("Adaptive viewport: x = \(diww)")
-            
-        } else {
-            
-            bw = max.minX + CGFloat(renderer.config.hCenter) * (max.width - width)
-        }
-        
-        if y1 != nil && y2 != nil {
-            
-            let diwh = y2! - y1!
-            bh = y1! - 0.5 * (height - diwh)
-            
-            if bh < max.minY { bh = max.minY }
-            // log("Adaptive viewport: y = \(diwh)")
+            bw = x1 - 0.5 * (width - (x2 - x1))
+            bw = max(bw, largest.minX)
+            bw = min(bw, largest.maxX - width)
+            // log("AutoShift x: \(bw)")
             
         } else {
             
-            bh = max.minY + CGFloat(renderer.config.vCenter) * (max.height - height)
+            bw = largest.minX + CGFloat(renderer.config.hCenter) * (largest.width - width)
         }
         
-        /*
-         log("width: \(width)")
-         log("bw: \(bw)")
-         log("height: \(height)")
-         log("bh: \(bh)")
-         */
-        
+        if renderer.parent.config.vAutoCenter {
+            
+            bh = y1 - 0.5 * (height - (y2 - y1))
+            bh = max(bh, largest.minY)
+            bh = min(bh, largest.maxY - height)
+            // log("AutoShift y: \(bh)")
+            
+        } else {
+            
+            bh = largest.minY + CGFloat(renderer.config.vCenter) * (largest.height - height)
+        }
+                
         return CGRect(x: bw, y: bh, width: width, height: height)
     }
     
@@ -132,7 +117,7 @@ extension Canvas {
 
     func updateTextureRect(hstrt: Int, vstrt: Int, hstop: Int, vstop: Int) {
 
-        log("updateTextureRect")
+        log("updateTextureRect \(hstrt) \(vstrt) \(hstop) \(vstop)")
 
         // Convert to pixel coordinates
         x1 = 2 * CGFloat(hstrt)
@@ -142,16 +127,17 @@ extension Canvas {
 
         // Crop
         let max = largestVisible
-        if x1! < max.minX { x1 = max.minX }
-        if y1! < max.minY { y1 = max.minY }
-        if x2! > max.maxX { x2 = max.maxX }
-        if y2! > max.maxY { y2 = max.maxY }
+        log("max.maxY = \(max.maxY)")
+        if x1 < max.minX { x1 = max.minX }
+        if y1 < max.minY { y1 = max.minY }
+        if x2 > max.maxX { x2 = max.maxX }
+        if y2 > max.maxY { y2 = max.maxY }
 
-        log("(\(x1!),\(y1!)) - \(x2!),\(y2!))")
+        log("(\(x1),\(y1)) - \(x2),\(y2))")
 
         // Compensate the texture shift
-        x1! -= CGFloat(HBLANK_MIN) * 4
-        x2! -= CGFloat(HBLANK_MIN) * 4
+        x1 -= CGFloat(HBLANK_MIN) * 4
+        x2 -= CGFloat(HBLANK_MIN) * 4
         
         updateTextureRect()
     }

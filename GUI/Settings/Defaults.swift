@@ -1386,6 +1386,8 @@ extension Keys {
         static let saturation         = "VAMIGA_VID_Saturation"
         
         // Geometry
+        static let hAutoCenter        = "VAMIGA_VID_HAutoCenter"
+        static let vAutoCenter        = "VAMIGA_VID_VAutoCenter"
         static let hCenter            = "VAMIGA_VID_HCenter"
         static let vCenter            = "VAMIGA_VID_VCenter"
         static let hZoom              = "VAMIGA_VID_HZoom"
@@ -1510,6 +1512,8 @@ struct VideoDefaults {
 
 struct GeometryDefaults {
         
+    let hAutoCenter: Bool
+    let vAutoCenter: Bool
     let hCenter: Float
     let vCenter: Float
     let hZoom: Float
@@ -1517,6 +1521,8 @@ struct GeometryDefaults {
     
     static let narrow = GeometryDefaults(
         
+        hAutoCenter: true,
+        vAutoCenter: true,
         hCenter: 0.6,
         vCenter: 0.47,
         hZoom: 1.0,
@@ -1525,6 +1531,8 @@ struct GeometryDefaults {
 
     static let wide = GeometryDefaults(
         
+        hAutoCenter: true,
+        vAutoCenter: true,
         hCenter: 0.622,
         vCenter: 0.143,
         hZoom: 0.747,
@@ -1533,6 +1541,8 @@ struct GeometryDefaults {
 
     static let overscan = GeometryDefaults(
         
+        hAutoCenter: true,
+        vAutoCenter: true,
         hCenter: 0.409,
         vCenter: 0.143,
         hZoom: 0.747,
@@ -1541,6 +1551,8 @@ struct GeometryDefaults {
 
     static let extreme = GeometryDefaults(
         
+        hAutoCenter: true,
+        vAutoCenter: true,
         hCenter: 0,
         vCenter: 0,
         hZoom: 0,
@@ -1590,6 +1602,8 @@ extension UserDefaults {
         let defaults = GeometryDefaults.wide
         let dictionary: [String: Any] = [
             
+            Keys.Vid.hAutoCenter: defaults.hAutoCenter,
+            Keys.Vid.vAutoCenter: defaults.vAutoCenter,
             Keys.Vid.hCenter: defaults.hCenter,
             Keys.Vid.vCenter: defaults.vCenter,
             Keys.Vid.hZoom: defaults.hZoom,
@@ -1637,7 +1651,9 @@ extension UserDefaults {
         
         let defaults = UserDefaults.standard
 
-        let keys = [ Keys.Vid.hCenter,
+        let keys = [ Keys.Vid.hAutoCenter,
+                     Keys.Vid.vAutoCenter,
+                     Keys.Vid.hCenter,
                      Keys.Vid.vCenter,
                      Keys.Vid.hZoom,
                      Keys.Vid.vZoom

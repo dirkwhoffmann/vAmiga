@@ -29,7 +29,10 @@ class Canvas: Layer {
     var flickerCnt = 0
 
     // Tracked display window (adaptive viewport feature)
-    var x1, x2, y1, y2: CGFloat?
+    var x1 = CGFloat(0)
+    var y1 = CGFloat(0)
+    var x2 = CGFloat(0)
+    var y2 = CGFloat(0)
 
     //
     // Textures
