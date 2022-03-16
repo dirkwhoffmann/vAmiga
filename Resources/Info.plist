@@ -112,7 +112,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>2.0b1</string>
 	<key>CFBundleVersion</key>
-	<string>220315</string>
+	<string>220316</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.entertainment</string>
 	<key>LSMinimumSystemVersion</key>

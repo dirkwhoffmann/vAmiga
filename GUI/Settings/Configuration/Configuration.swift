@@ -404,9 +404,11 @@ class Configuration {
         get { return amiga.getConfig(.SATURATION) }
         set { amiga.configure(.SATURATION, value: newValue) }
     }
+    var hAutoCenter = false
     var hCenter = GeometryDefaults.wide.hCenter {
         didSet { renderer.canvas.updateTextureRect() }
     }
+    var vAutoCenter = false
     var vCenter = GeometryDefaults.wide.vCenter {
         didSet { renderer.canvas.updateTextureRect() }
     }
@@ -974,6 +976,8 @@ class Configuration {
     
     func loadGeometryDefaults(_ defaults: GeometryDefaults) {
         
+        hAutoCenter = defaults.hAutoCenter
+        vAutoCenter = defaults.vAutoCenter
         hCenter = defaults.hCenter
         vCenter = defaults.vCenter
         hZoom = defaults.hZoom
@@ -1048,6 +1052,8 @@ class Configuration {
         
         amiga.suspend()
         
+        hAutoCenter = defaults.bool(forKey: Keys.Vid.hAutoCenter)
+        vAutoCenter = defaults.bool(forKey: Keys.Vid.vAutoCenter)
         hCenter = defaults.float(forKey: Keys.Vid.hCenter)
         vCenter = defaults.float(forKey: Keys.Vid.vCenter)
         hZoom = defaults.float(forKey: Keys.Vid.hZoom)
@@ -1092,6 +1098,8 @@ class Configuration {
         log(level: 2)
         let defaults = UserDefaults.standard
         
+        defaults.set(hAutoCenter, forKey: Keys.Vid.hAutoCenter)
+        defaults.set(vAutoCenter, forKey: Keys.Vid.vAutoCenter)
         defaults.set(hCenter, forKey: Keys.Vid.hCenter)
         defaults.set(vCenter, forKey: Keys.Vid.vCenter)
         defaults.set(hZoom, forKey: Keys.Vid.hZoom)

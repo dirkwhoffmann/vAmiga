@@ -28,6 +28,12 @@ class Canvas: Layer {
     // Variable used to emulate interlace flickering
     var flickerCnt = 0
 
+    // Tracked display window (adaptive viewport feature)
+    var x1 = CGFloat(0)
+    var y1 = CGFloat(0)
+    var x2 = CGFloat(0)
+    var y2 = CGFloat(0)
+
     //
     // Textures
     //

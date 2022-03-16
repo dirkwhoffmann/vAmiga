@@ -278,6 +278,8 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var vidMisalignmentYSlider: NSSlider!
     
     // Geometry
+    @IBOutlet weak var vidHAutoCenter: NSButton!
+    @IBOutlet weak var vidVAutoCenter: NSButton!
     @IBOutlet weak var vidHCenter: NSSlider!
     @IBOutlet weak var vidVCenter: NSSlider!
     @IBOutlet weak var vidHZoom: NSSlider!

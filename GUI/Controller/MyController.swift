@@ -467,8 +467,10 @@ extension MyController {
             refreshStatusBar()
             
         case .VIEWPORT:
-            // track("(\(word1), \(word2)) - (\(word3), \(word4))")
-            break
+            renderer.canvas.updateTextureRect(hstrt: word1,
+                                              vstrt: word2,
+                                              hstop: word3,
+                                              vstop: word4)
             
         case .MEM_LAYOUT:
             inspector?.fullRefresh()

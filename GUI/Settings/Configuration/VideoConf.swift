@@ -35,6 +35,16 @@ extension ConfigurationController {
 
         let renderer = parent.renderer!
 
+        // Geometry
+        vidHAutoCenter.state = config.hAutoCenter ? .off : .on
+        vidVAutoCenter.state = config.vAutoCenter ? .off : .on
+        vidHCenter.isEnabled = !config.hAutoCenter
+        vidVCenter.isEnabled = !config.vAutoCenter
+        vidHCenter.floatValue = config.hCenter * 1000
+        vidVCenter.floatValue = config.vCenter * 1000
+        vidHZoom.floatValue = config.hZoom * 1000
+        vidVZoom.floatValue = config.vZoom * 1000
+
         // Video
         vidEnhancerPopUp.selectItem(withTag: config.enhancer)
         vidUpscalerPopUp.selectItem(withTag: config.upscaler)
@@ -78,12 +88,6 @@ extension ConfigurationController {
         vidMisalignmentXSlider.isEnabled = config.disalignment > 0
         vidMisalignmentYSlider.floatValue = config.disalignmentV
         vidMisalignmentYSlider.isEnabled = config.disalignment > 0
-
-        // Geometry
-        vidHCenter.floatValue = config.hCenter * 1000
-        vidVCenter.floatValue = config.vCenter * 1000
-        vidHZoom.floatValue = config.hZoom * 1000
-        vidVZoom.floatValue = config.vZoom * 1000
   
         // Buttons
         vidPowerButton.isHidden = !bootable
@@ -232,7 +236,21 @@ extension ConfigurationController {
     //
     // Action methods (Geometry)
     //
-        
+
+    @IBAction func vidHAutoCenterAction(_ sender: NSButton) {
+
+        config.hAutoCenter = sender.state == .off
+        parent.renderer.canvas.updateTextureRect()
+        refresh()
+    }
+
+    @IBAction func vidVAutoCenterAction(_ sender: NSButton) {
+
+        config.vAutoCenter = sender.state == .off
+        parent.renderer.canvas.updateTextureRect()
+        refresh()
+    }
+
     @IBAction func vidHCenterAction(_ sender: NSSlider!) {
 
         config.hCenter = sender.floatValue / 1000
@@ -276,14 +294,11 @@ extension ConfigurationController {
 
         case 1: // Narrow Geometry
             config.loadGeometryDefaults(GeometryDefaults.narrow)
-            
+
         case 2: // Wide Geometry
             config.loadGeometryDefaults(GeometryDefaults.wide)
 
-        case 3: // Overscan Geometry
-            config.loadGeometryDefaults(GeometryDefaults.overscan)
-
-        case 4: // Extreme Geometry
+        case 3: // Extreme Geometry
             config.loadGeometryDefaults(GeometryDefaults.extreme)
 
         case 6: // TFT Appearance
