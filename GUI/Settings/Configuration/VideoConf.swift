@@ -294,14 +294,11 @@ extension ConfigurationController {
 
         case 1: // Narrow Geometry
             config.loadGeometryDefaults(GeometryDefaults.narrow)
-            
+
         case 2: // Wide Geometry
             config.loadGeometryDefaults(GeometryDefaults.wide)
 
-        case 3: // Overscan Geometry
-            config.loadGeometryDefaults(GeometryDefaults.overscan)
-
-        case 4: // Extreme Geometry
+        case 3: // Extreme Geometry
             config.loadGeometryDefaults(GeometryDefaults.extreme)
 
         case 6: // TFT Appearance

@@ -3289,13 +3289,7 @@ DQ
                                                                             <action selector="vidPresetAction:" target="-1" id="Eom-Xa-vNZ"/>
                                                                         </connections>
                                                                     </menuItem>
-                                                                    <menuItem title="Overscan" tag="3" id="2qj-ee-vyx">
-                                                                        <attributedString key="attributedTitle"/>
-                                                                        <connections>
-                                                                            <action selector="vidPresetAction:" target="-1" id="BDZ-GN-lN1"/>
-                                                                        </connections>
-                                                                    </menuItem>
-                                                                    <menuItem title="Extreme" tag="4" id="sbm-Uq-NzD">
+                                                                    <menuItem title="Extreme" tag="3" id="sbm-Uq-NzD">
                                                                         <attributedString key="attributedTitle"/>
                                                                         <connections>
                                                                             <action selector="vidPresetAction:" target="-1" id="EXc-5h-E4d"/>

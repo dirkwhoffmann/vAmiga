@@ -1533,16 +1533,6 @@ struct GeometryDefaults {
         
         hAutoCenter: true,
         vAutoCenter: true,
-        hCenter: 0.622,
-        vCenter: 0.143,
-        hZoom: 0.747,
-        vZoom: 0.032
-    )
-
-    static let overscan = GeometryDefaults(
-        
-        hAutoCenter: true,
-        vAutoCenter: true,
         hCenter: 0.409,
         vCenter: 0.143,
         hZoom: 0.747,
@@ -1551,8 +1541,8 @@ struct GeometryDefaults {
 
     static let extreme = GeometryDefaults(
         
-        hAutoCenter: true,
-        vAutoCenter: true,
+        hAutoCenter: false,
+        vAutoCenter: false,
         hCenter: 0,
         vCenter: 0,
         hZoom: 0,
