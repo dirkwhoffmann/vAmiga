@@ -133,7 +133,7 @@ extension Canvas {
         if x2 > max.maxX { x2 = max.maxX }
         if y2 > max.maxY { y2 = max.maxY }
 
-        log("(\(x1),\(y1)) - \(x2),\(y2))")
+        // log("(\(x1),\(y1)) - \(x2),\(y2))")
 
         // Compensate the texture shift
         x1 -= CGFloat(HBLANK_MIN) * 4
