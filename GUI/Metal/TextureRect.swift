@@ -67,16 +67,55 @@ extension Canvas {
          *      aw/ah - dw/dh = largest posible texture cutout
          *      bw/bh - cw/ch = currently used texture cutout
          */
+
+        /*
+        log("config.hZoom: \(renderer.config.hZoom)")
+        log("config.vZoom: \(renderer.config.vZoom)")
+        log("config.hCenter: \(renderer.config.hCenter)")
+        log("config.vCenter: \(renderer.config.vCenter)")
+        */
         
         let max = largestVisible
         
         let hscale = CGFloat(1.0 - 0.2 * renderer.config.hZoom)
         let vscale = CGFloat(1.0 - 0.2 * renderer.config.vZoom)
-        
         let width = hscale * max.width
-        let bw = max.minX + CGFloat(renderer.config.hCenter) * (max.width - width)
         let height = vscale * max.height
-        let bh = max.minY + CGFloat(renderer.config.vCenter) * (max.height - height)
+
+        var bw: CGFloat
+        var bh: CGFloat
+        
+        if x1 != nil && x2 != nil {
+            
+            let diww = x2! - x1!
+            bw = x1! - 0.5 * (width - diww)
+            if bw < max.minX { bw = max.minX }
+            // log("Adaptive viewport: x = \(diww)")
+            
+        } else {
+            
+            bw = max.minX + CGFloat(renderer.config.hCenter) * (max.width - width)
+        }
+        
+        if y1 != nil && y2 != nil {
+            
+            let diwh = y2! - y1!
+            bh = y1! - 0.5 * (height - diwh)
+            
+            if bh < max.minY { bh = max.minY }
+            // log("Adaptive viewport: y = \(diwh)")
+            
+        } else {
+            
+            bh = max.minY + CGFloat(renderer.config.vCenter) * (max.height - height)
+        }
+        
+        /*
+         log("width: \(width)")
+         log("bw: \(bw)")
+         log("height: \(height)")
+         log("bh: \(bh)")
+         */
         
         return CGRect(x: bw, y: bh, width: width, height: height)
     }
@@ -89,6 +128,32 @@ extension Canvas {
     func updateTextureRect() {
         
         textureRect = visibleNormalized
+    }
+
+    func updateTextureRect(hstrt: Int, vstrt: Int, hstop: Int, vstop: Int) {
+
+        log("updateTextureRect")
+
+        // Convert to pixel coordinates
+        x1 = 2 * CGFloat(hstrt)
+        x2 = 2 * CGFloat(hstop)
+        y1 = CGFloat(vstrt)
+        y2 = CGFloat(vstop)
+
+        // Crop
+        let max = largestVisible
+        if x1! < max.minX { x1 = max.minX }
+        if y1! < max.minY { y1 = max.minY }
+        if x2! > max.maxX { x2 = max.maxX }
+        if y2! > max.maxY { y2 = max.maxY }
+
+        log("(\(x1!),\(y1!)) - \(x2!),\(y2!))")
+
+        // Compensate the texture shift
+        x1! -= CGFloat(HBLANK_MIN) * 4
+        x2! -= CGFloat(HBLANK_MIN) * 4
+        
+        updateTextureRect()
     }
     
     var textureRectAbs: CGRect {
