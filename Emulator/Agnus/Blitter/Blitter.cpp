@@ -42,6 +42,8 @@ Blitter::Blitter(Amiga& ref) : SubComponent(ref)
 void
 Blitter::_initialize()
 {
+    AmigaComponent::_initialize();
+    
     initFastBlitter();
     initSlowBlitter();    
 }
