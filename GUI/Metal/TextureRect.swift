@@ -117,7 +117,7 @@ extension Canvas {
 
     func updateTextureRect(hstrt: Int, vstrt: Int, hstop: Int, vstop: Int) {
 
-        log("updateTextureRect \(hstrt) \(vstrt) \(hstop) \(vstop)")
+        // log("updateTextureRect \(hstrt) \(vstrt) \(hstop) \(vstop)")
 
         // Convert to pixel coordinates
         x1 = 2 * CGFloat(hstrt)
@@ -127,7 +127,6 @@ extension Canvas {
 
         // Crop
         let max = largestVisible
-        log("max.maxY = \(max.maxY)")
         if x1 < max.minX { x1 = max.minX }
         if y1 < max.minY { y1 = max.minY }
         if x2 > max.maxX { x2 = max.maxX }
