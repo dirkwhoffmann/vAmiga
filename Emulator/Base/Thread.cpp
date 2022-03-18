@@ -330,7 +330,7 @@ void
 Thread::changeStateTo(ExecutionState requestedState, bool blocking)
 {
     newState = requestedState;
-    if (blocking) while (state != newState) { };
+    if (blocking) while (state != requestedState) { };
 }
 
 void
