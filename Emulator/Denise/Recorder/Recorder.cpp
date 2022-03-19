@@ -9,10 +9,7 @@
 
 #include "config.h"
 #include "Recorder.h"
-#include "IOUtils.h"
-#include "Denise.h"
-#include "MsgQueue.h"
-#include "Paula.h"
+#include "Amiga.h"
 
 Recorder::Recorder(Amiga& ref) : SubComponent(ref)
 {
@@ -42,6 +39,30 @@ Recorder::_dump(dump::Category category, std::ostream& os) const
     os << tab("Recording") << bol(isRecording()) << std::endl;
 }
     
+string
+Recorder::videoPipePath()
+{
+    return amiga.tmp("videoPipe").string();
+}
+
+string
+Recorder::audioPipePath()
+{
+    return amiga.tmp("audioPipe").string();
+}
+
+string
+Recorder::videoStreamPath()
+{
+    return amiga.tmp("video.mp4").string();
+}
+
+string
+Recorder::audioStreamPath()
+{
+    return amiga.tmp("audio.mp4").string();
+}
+
 util::Time
 Recorder::getDuration() const
 {

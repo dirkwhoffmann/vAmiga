@@ -79,6 +79,7 @@ RetroShell::exec <Token::regression, Token::setup> (Arguments &argv, long param)
     auto kickrom = argv[1];
     
     amiga.regressionTester.prepare(scheme, kickrom);
+    
 }
 
 template <> void

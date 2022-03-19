@@ -22,6 +22,9 @@
  */
 #define SYNCHRONIZED util::AutoMutex _am(mutex);
 
+// Variant for static methods
+#define STATIC_SYNCHRONIZED static std::mutex m; std::lock_guard<std::mutex> lock(m);
+
 struct NoCopy
 {
     NoCopy() { };

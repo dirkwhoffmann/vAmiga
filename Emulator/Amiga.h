@@ -335,4 +335,17 @@ private:
     // Takes a snapshot of a certain kind
     void takeAutoSnapshot();
     void takeUserSnapshot();
+    
+    
+    //
+    // Miscellaneous
+    //
+    
+public:
+    
+    // Returns a path to a temporary folder
+    static fs::path tmp() throws;
+    
+    // Assembles a path to a temporary file
+    static fs::path tmp(const string &name, bool unique = false) throws;
 };

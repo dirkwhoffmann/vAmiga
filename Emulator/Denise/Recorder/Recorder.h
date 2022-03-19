@@ -18,23 +18,7 @@
 using util::Buffer;
 
 class Recorder : public SubComponent {
-
-    //
-    // Constants
-    //
-    
-    // Path to the two named input pipes
-    static string videoPipePath() { return "/tmp/videoPipe"; }
-    static string audioPipePath() { return "/tmp/audioPipe"; }
-
-    // Path to the two temporary output files
-    static string videoStreamPath() { return "/tmp/video.mp4"; }
-    static string audioStreamPath() { return "/tmp/audio.mp4"; }
-
-    // Log level passed to FFmpef
-    static const string loglevel() { return REC_DEBUG ? "verbose" : "warning"; }
-    
-    
+        
     //
     // Sub components
     //
@@ -137,6 +121,22 @@ private:
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+
+    
+    //
+    // Querying locations and flags
+    //
+    
+    // Returns the paths to the two named input pipes
+    string videoPipePath();
+    string audioPipePath();
+
+    // Return the paths to the two temporary output files
+    string videoStreamPath();
+    string audioStreamPath();
+
+    //Returns the log level passed to FFmpef
+    const string loglevel() { return REC_DEBUG ? "verbose" : "warning"; }
 
     
     //

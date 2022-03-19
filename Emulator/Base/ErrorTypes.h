@@ -32,7 +32,9 @@ enum_long(ERROR_CODE)
 
     // General
     ERROR_DIR_NOT_FOUND,
+    ERROR_DIR_ACCESS_DENIED,
     ERROR_FILE_NOT_FOUND,
+    ERROR_FILE_ACCESS_DENIED,
     ERROR_FILE_TYPE_MISMATCH,
     ERROR_FILE_TYPE_UNSUPPORTED,
     ERROR_FILE_CANT_READ,
@@ -177,13 +179,15 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_OUT_OF_MEMORY:               return "OUT_OF_MEMORY";
 
             case ERROR_DIR_NOT_FOUND:               return "DIR_NOT_FOUND";
+            case ERROR_DIR_ACCESS_DENIED:           return "DIR_ACCESS_DENIED";
             case ERROR_FILE_NOT_FOUND:              return "FILE_NOT_FOUND";
+            case ERROR_FILE_ACCESS_DENIED:          return "FILE_ACCESS_DENIED";
             case ERROR_FILE_TYPE_MISMATCH:          return "FILE_TYPE_MISMATCH";
             case ERROR_FILE_TYPE_UNSUPPORTED:       return "FILE_TYPE_UNSUPPORTED";
             case ERROR_FILE_CANT_READ:              return "FILE_CANT_READ";
             case ERROR_FILE_CANT_WRITE:             return "FILE_CANT_WRITE";
             case ERROR_FILE_CANT_CREATE:            return "FILE_CANT_CREATE";
-
+                
             case ERROR_CHIP_RAM_MISSING:            return "CHIP_RAM_MISSING";
             case ERROR_CHIP_RAM_LIMIT:              return "CHIP_RAM_LIMIT";
             case ERROR_AROS_RAM_LIMIT:              return "AROS_RAM_LIMIT";
