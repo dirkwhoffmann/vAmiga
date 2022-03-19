@@ -69,7 +69,7 @@ Recorder::getDuration() const
     return (isRecording() ? util::Time::now() : recStop) - recStart;
 }
 
-bool
+void
 Recorder::startRecording(int x1, int y1, int x2, int y2,
                          long bitRate, long aspectX, long aspectY)
 {
@@ -78,20 +78,18 @@ Recorder::startRecording(int x1, int y1, int x2, int y2,
     debug(REC_DEBUG, "startRecording(%d,%d,%d,%d,%ld,%ld,%ld)\n",
           x1, y1, x2, y2, bitRate, aspectX, aspectY);
     
-    if (isRecording()) return false;
+    if (isRecording()) {
+        throw VAError(ERROR_REC_LAUNCH, "Recording in progress.");
+    }
     
     // Create pipes
     debug(REC_DEBUG, "Creating pipes...\n");
     
     if (!videoPipe.create(videoPipePath())) {
-        
-        warn("Failed to create the video encoder pipe.\n");
-        return false;
+        throw VAError(ERROR_REC_LAUNCH, "Failed to create the video encoder pipe.");
     }
     if (!audioPipe.create(audioPipePath())) {
-        
-        warn("Failed to create the video encoder pipe.\n");
-        return false;
+        throw VAError(ERROR_REC_LAUNCH, "Failed to create the video encoder pipe.");
     }
     
     debug(REC_DEBUG, "Pipes created\n");
@@ -99,9 +97,7 @@ Recorder::startRecording(int x1, int y1, int x2, int y2,
     
     debug(REC_DEBUG, "startRecording(%d,%d,%d,%d,%ld,%ld,%ld)\n",
           x1, y1, x2, y2, bitRate, aspectX, aspectY);
-    
-    if (isRecording()) return false;
-    
+        
     // Make sure the screen dimensions are even
     if ((x2 - x1) % 2) x2--;
     if ((y2 - y1) % 2) y2--;
@@ -200,9 +196,7 @@ Recorder::startRecording(int x1, int y1, int x2, int y2,
     debug(REC_DEBUG, "%s\n", cmd1.c_str());
     
     if (!videoFFmpeg.launch(cmd1)) {
-        
-        warn("Failed to launch the FFmpeg video encoder.\n");
-        return false;
+        throw VAError(ERROR_REC_LAUNCH, "Unable to launch the FFmpeg video encoder.");
     }
     
     // Launch the audio encoder
@@ -210,33 +204,25 @@ Recorder::startRecording(int x1, int y1, int x2, int y2,
     debug(REC_DEBUG, "%s\n", cmd2.c_str());
     
     if (!audioFFmpeg.launch(cmd2)) {
-        
-        warn("Failed to launch the FFmpeg audio encoder.\n");
-        return false;
+        throw VAError(ERROR_REC_LAUNCH, "Unable to launch the FFmpeg audio encoder.");
     }
     
     // Open the video pipe
     debug(REC_DEBUG, "Opening video pipe\n");
     
     if (!videoPipe.open()) {
-        
-        warn("Failed to launch the video pipe\n");
-        return false;
+        throw VAError(ERROR_REC_LAUNCH, "Unable to open the video pipe.");
     }
     
     // Open the audio pipe
     debug(REC_DEBUG, "Opening audio pipe\n");
     
     if (!audioPipe.open()) {
-        
-        warn("Failed to launch the audio pipe\n");
-        return false;
+        throw VAError(ERROR_REC_LAUNCH, "Unable to launch the audio pipe.");
     }
     
     debug(REC_DEBUG, "Success\n");
-    state = State::prepare;
-    
-    return true;
+    state = State::prepare;    
 }
 
 void

@@ -23,6 +23,7 @@ FFmpeg::init()
         }
     };
         
+    add("/Applications/ffmpeg");
     add("/usr/bin/ffmpeg");
     add("/usr/local/bin/ffmpeg");
     add("/opt/bin/ffmpeg");

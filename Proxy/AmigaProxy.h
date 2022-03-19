@@ -452,10 +452,11 @@
 @property (readonly) NSInteger bitRate;
 @property (readonly) NSInteger sampleRate;
 
-- (BOOL)startRecording:(NSRect)rect
+- (void)startRecording:(NSRect)rect
                bitRate:(NSInteger)rate
                aspectX:(NSInteger)aspectX
-               aspectY:(NSInteger)aspectY;
+               aspectY:(NSInteger)aspectY
+             exception:(ExceptionWrapper *)ex;
 - (void)stopRecording;
 - (BOOL)exportAs:(NSString *)path;
 

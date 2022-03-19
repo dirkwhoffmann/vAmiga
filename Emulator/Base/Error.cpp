@@ -230,7 +230,11 @@ VAError::VAError(ErrorCode code, const string &s)
         case ERROR_INVALID_ROM_KEY:
             description = "Invalid Rom key.";
             break;
-            
+
+        case ERROR_REC_LAUNCH:
+            description = s;
+            break;
+
         case ERROR_OSDB:
             description = "OS Debugger: " + s;
             break;

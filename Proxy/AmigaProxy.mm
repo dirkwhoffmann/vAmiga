@@ -807,20 +807,19 @@ using namespace moira;
     return [self recorder]->getSampleRate();
 }
 
-- (BOOL)startRecording:(NSRect)rect
+- (void)startRecording:(NSRect)rect
                bitRate:(NSInteger)rate
                aspectX:(NSInteger)aspectX
                aspectY:(NSInteger)aspectY
+             exception:(ExceptionWrapper *)ex
 {
     int x1 = (int)rect.origin.x;
     int y1 = (int)rect.origin.y;
     int x2 = x1 + (int)rect.size.width;
     int y2 = y1 + (int)rect.size.height;
     
-    return [self recorder]->startRecording(x1, y1, x2, y2,
-                                           rate,
-                                           aspectX,
-                                           aspectY);
+    try { return [self recorder]->startRecording(x1, y1, x2, y2, rate, aspectX, aspectY); }
+    catch (VAError &error) { [ex save:error]; }
 }
 
 - (void)stopRecording

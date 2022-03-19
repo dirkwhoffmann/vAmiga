@@ -86,6 +86,9 @@ enum_long(ERROR_CODE)
     ERROR_MISSING_ROM_KEY,
     ERROR_INVALID_ROM_KEY,
     
+    // Screen recorder
+    ERROR_REC_LAUNCH,
+
     // OS Debugger
     ERROR_OSDB,
     
@@ -225,6 +228,8 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_MISSING_ROM_KEY:             return "MISSING_ROM_KEY";
             case ERROR_INVALID_ROM_KEY:             return "INVALID_ROM_KEY";
                 
+            case ERROR_REC_LAUNCH:                  return "REC_LAUNCH";
+
             case ERROR_OSDB:                        return "OSDB";
                 
             case ERROR_SOCK_CANT_CREATE:            return "SOCK_CANT_CREATE";

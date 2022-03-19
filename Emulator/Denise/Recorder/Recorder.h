@@ -161,10 +161,8 @@ public:
     bool isRecording() const { return state != State::wait; }
         
     // Starts the screen recorder
-    bool startRecording(int x1, int y1, int x2, int y2,
-                        long bitRate,
-                        long aspectX,
-                        long aspectY);
+    void startRecording(int x1, int y1, int x2, int y2,
+                        long bitRate, long aspectX, long aspectY) throws;
     
     // Stops the screen recorder
     void stopRecording();
