@@ -790,6 +790,78 @@ Interpreter::registerInstructions()
 
     
     //
+    // Joystick
+    //
+
+    root.add({"joystick1"},
+             "component", "Port 1 joystick");
+
+    root.add({"joystick2"},
+             "component", "Port 2 joystick");
+
+    for (isize i = 0; i < 2; i++) {
+
+        string joystick = (i == 0) ? "joystick1" : "joystick2";
+        
+        root.add({joystick, "config"},
+                 "command", "Displays the current configuration",
+                 &RetroShell::exec <Token::joystick, Token::config>, 0, i);
+        
+        root.add({joystick, "set"},
+                 "command", "Configures the component");
+        
+        root.add({joystick, "set", "autofire"},
+                 "key", "Enables or disables auto-fire mode",
+                 &RetroShell::exec <Token::joystick, Token::set, Token::autofire>, 1, i);
+        
+        root.add({joystick, "set", "bullets"},
+                 "key", "Sets the number of bullets per auto-fire shot",
+                 &RetroShell::exec <Token::joystick, Token::set, Token::bullets>, 1, i);
+        
+        root.add({joystick, "set", "velocity"},
+                 "key", "Configures the auto-fire delay",
+                 &RetroShell::exec <Token::joystick, Token::set, Token::delay>, 1, i);
+        
+        root.add({joystick, "inspect"},
+                 "command", "Displays the internal state",
+                 &RetroShell::exec <Token::joystick, Token::inspect>, 0, i);
+
+        root.add({joystick, ""},
+                 "command", "Presses the Pulls the joystick");
+
+        root.add({joystick, "pull"},
+                 "command", "Pulls the joystick");
+
+        root.add({joystick, "pull", "left"},
+                 "command", "Pulls the joystick left",
+                 &RetroShell::exec <Token::joystick, Token::pull, Token::left>, 0, i);
+        
+        root.add({joystick, "pull", "right"},
+                 "command", "Pulls the joystick right",
+                 &RetroShell::exec <Token::joystick, Token::pull, Token::right>, 0, i);
+
+        root.add({joystick, "pull", "up"},
+                 "command", "Pulls the joystick up",
+                 &RetroShell::exec <Token::joystick, Token::pull, Token::up>, 0, i);
+
+        root.add({joystick, "pull", "down"},
+                 "command", "Pulls the joystick down",
+                 &RetroShell::exec <Token::joystick, Token::pull, Token::down>, 0, i);
+
+        root.add({joystick, "release"},
+                 "command", "Release a joystick axis");
+
+        root.add({joystick, "release", "x"},
+                 "command", "Releases the x-axis",
+                 &RetroShell::exec <Token::joystick, Token::release, Token::xaxis>, 0, i);
+
+        root.add({joystick, "release", "y"},
+                 "command", "Releases the y-axis",
+                 &RetroShell::exec <Token::joystick, Token::release, Token::yaxis>, 0, i);
+    }
+    
+    
+    //
     // Serial port
     //
     
