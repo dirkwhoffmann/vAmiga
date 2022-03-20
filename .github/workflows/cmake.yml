@@ -1,6 +1,12 @@
 name: CMake
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - *
+  pull_request:
+    branches:
+      - *
 
 env:
   BUILD_TYPE: Release
