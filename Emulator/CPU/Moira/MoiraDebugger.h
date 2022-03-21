@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <optional>
+
 namespace moira {
 
 // Base structure for a single breakpoint or watchpoint
@@ -52,10 +54,12 @@ protected:
     // Number of currently stored guards
     long count = 0;
 
-    // Indicates if guard checking is necessary
-    virtual void setNeedsCheck(bool value) = 0;
+public:
+    
+    // A copy of the latest match
+    std::optional <Guard> hit;
 
-
+    
     //
     // Constructing
     //
@@ -70,17 +74,18 @@ public:
     // Inspecting the guard list
     //
 
-    long elements() { return count; }
-    Guard *guardWithNr(long nr);
-    Guard *guardAtAddr(u32 addr);
+    long elements() const { return count; }
+    Guard *guardWithNr(long nr) const;
+    Guard *guardAtAddr(u32 addr) const;
 
-    u32 guardAddr(long nr) { return nr < count ? guards[nr].addr : 0; }
+    u32 guardAddr(long nr) const { return nr < count ? guards[nr].addr : 0; }
 
-    bool isSetAt(u32 addr);
-    bool isSetAndEnabledAt(u32 addr);
-    bool isSetAndDisabledAt(u32 addr);
-    bool isSetAndConditionalAt(u32 addr);
+    bool isSetAt(u32 addr) const;
+    bool isSetAndEnabledAt(u32 addr) const;
+    bool isSetAndDisabledAt(u32 addr) const;
+    bool isSetAndConditionalAt(u32 addr) const;
 
+    
     //
     // Adding or removing guards
     //
@@ -93,12 +98,13 @@ public:
 
     void replace(long nr, u32 addr);
 
+    
     //
     // Enabling or disabling guards
     //
 
-    bool isEnabled(long nr);
-    bool isDisabled(long nr) { return !isEnabled(nr); }
+    bool isEnabled(long nr) const;
+    bool isDisabled(long nr) const { return !isEnabled(nr); }
 
     void setEnable(long nr, bool val);
     void enable(long nr) { setEnable(nr, true); }
@@ -108,12 +114,17 @@ public:
     void enableAt(u32 addr) { setEnableAt(addr, true); }
     void disableAt(u32 addr) { setEnableAt(addr, false); }
 
+    
     //
-    // Checking a guard
+    // Checking guards
     //
+
+    // Indicates if guard checking is necessary
+    virtual void setNeedsCheck(bool value) = 0;
 
 private:
 
+    // Evaluates all guards
     bool eval(u32 addr, Size S = Byte);
 };
 
