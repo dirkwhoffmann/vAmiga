@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication"/>
@@ -12,7 +12,6 @@
                 <outlet property="delegate" destination="9vR-C0-Vqf" id="r0s-NL-ZMs"/>
             </connections>
         </customObject>
-        <customObject id="wLf-Gv-t4W" customClass="SPUStandardUpdaterController"/>
         <customObject id="9vR-C0-Vqf" customClass="MyAppDelegate" customModule="vAmiga" customModuleProvider="target">
             <connections>
                 <outlet property="df0Menu" destination="XQm-ka-Db5" id="ZQg-YN-3io"/>
@@ -36,11 +35,7 @@
                                     <action selector="orderFrontStandardAboutPanel:" target="-2" id="142"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Check for Updates..." keyEquivalent="u" id="412">
-                                <connections>
-                                    <action selector="checkForUpdates:" target="wLf-Gv-t4W" id="RJ9-fe-kgh"/>
-                                </connections>
-                            </menuItem>
+                            <menuItem title="Check for Updates..." hidden="YES" keyEquivalent="u" id="412"/>
                             <menuItem isSeparatorItem="YES" id="202">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>

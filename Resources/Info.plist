@@ -112,7 +112,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>2.0b1</string>
 	<key>CFBundleVersion</key>
-	<string>220316</string>
+	<string>220321</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.entertainment</string>
 	<key>LSMinimumSystemVersion</key>
@@ -125,10 +125,6 @@
 	<string>MainMenu</string>
 	<key>CFBundleDisplayName</key>
 	<string></string>
-	<key>SUPublicEDKey</key>
-	<string>hGLJIdOXqJpzzO72cH5QlA4I6d3RxC2kC/Fea2ZVucg=</string>
-	<key>SUFeedURL</key>
-	<string>https://dirkwhoffmann.github.io/vAmiga/releases/appcast.xml</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>
