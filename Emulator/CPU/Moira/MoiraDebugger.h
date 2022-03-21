@@ -22,12 +22,9 @@ struct Guard {
     // Disabled guards never trigger
     bool enabled;
 
-    // Counts the number of hits
-    long hits;
-
-    // Number of skipped hits before a match is signalled
-    long skip;
-
+    // Ignore counter
+    long ignore;
+    
 public:
 
     // Returns true if the guard hits
@@ -83,7 +80,6 @@ public:
     bool isSetAt(u32 addr) const;
     bool isSetAndEnabledAt(u32 addr) const;
     bool isSetAndDisabledAt(u32 addr) const;
-    bool isSetAndConditionalAt(u32 addr) const;
 
     
     //
@@ -204,7 +200,7 @@ public:
     // Returns true if a watchpoint hits at the provides address
     bool watchpointMatches(u32 addr, Size S);
 
-    // Saved program counters
+    // Saved program counters (DEPRECATED)
     i64 breakpointPC = -1;
     i64 watchpointPC = -1;
 
