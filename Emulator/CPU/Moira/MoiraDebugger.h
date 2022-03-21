@@ -17,13 +17,13 @@ namespace moira {
 struct Guard {
 
     // The observed address
-    u32 addr;
+    u32 addr = 0;
 
     // Disabled guards never trigger
-    bool enabled;
+    bool enabled = true;
 
     // Ignore counter
-    long ignore;
+    long ignore = 0;
     
 public:
 
@@ -86,7 +86,7 @@ public:
     // Adding or removing guards
     //
 
-    void addAt(u32 addr, long skip = 0);
+    void addAt(u32 addr);
     void removeAt(u32 addr);
 
     void remove(long nr);
