@@ -49,14 +49,12 @@ extension URL {
     static func appSupportFolder() throws -> URL {
         
         let fm = FileManager.default
+        
         let path = FileManager.SearchPathDirectory.applicationSupportDirectory
         let mask = FileManager.SearchPathDomainMask.userDomainMask
         
-        if let url = fm.urls(for: path, in: mask).first {
-            return url.appendingPathComponent("vAmiga")
-        } else {
-            throw FolderError.noAppSupportFolder
-        }
+        let url = try fm.url(for: path, in: mask, appropriateFor: nil, create: true)
+        return url.appendingPathComponent("vAmiga")
     }
     
     // Returns the URL of a subdirectory inside the application support folder

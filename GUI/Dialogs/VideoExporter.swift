@@ -22,7 +22,9 @@ class VideoExporter: DialogController {
 
     var panel: NSSavePanel!
 
-    let path = "/tmp/vAmiga.mp4"
+    var name: String { return "vAmiga.mp4" }
+    var tmp: URL { return URL(fileURLWithPath: NSTemporaryDirectory()) }
+    var path: URL { return tmp.appendingPathComponent(name); }
     
     override func showSheet(completionHandler handler: (() -> Void)? = nil) {
             
@@ -39,12 +41,13 @@ class VideoExporter: DialogController {
             self.text.isHidden = false
         }
 
-        if amiga.recorder.export(as: path) {
+        log("Export to \(path)")
+        if amiga.recorder.export(as: path.absoluteString) {
                         
             text.stringValue = "MPEG-4 Video Stream"
             icon.isHidden = false
             exportButton.isHidden = false
-            sizeOnDisk.stringValue = URL(fileURLWithPath: path).fileSizeString
+            sizeOnDisk.stringValue = path.fileSizeString
             duration.stringValue = String(format: "%.1f sec", amiga.recorder.duration)
             frameRate.stringValue = "\(amiga.recorder.frameRate) Hz"
             bitRate.stringValue = "\(amiga.recorder.bitRate) kHz"
@@ -73,8 +76,7 @@ class VideoExporter: DialogController {
             panel.beginSheetModal(for: win, completionHandler: { result in
                 if result == .OK {
                     if let url = self.panel.url {
-                        let source = URL(fileURLWithPath: self.path)
-                        FileManager.copy(from: source, to: url)
+                        FileManager.copy(from: self.path, to: url)
                     }
                 }
             })
@@ -86,22 +88,20 @@ extension VideoExporter: NSFilePromiseProviderDelegate {
    
     func filePromiseProvider(_ filePromiseProvider: NSFilePromiseProvider, fileNameForType fileType: String) -> String {
         
-        return "vAmiga.mp4"
+        return name
     }
     
     func filePromiseProvider(_ filePromiseProvider: NSFilePromiseProvider, writePromiseTo url: URL, completionHandler: @escaping (Error?) -> Void) {
-        
-        let source = URL(fileURLWithPath: "/tmp/vAmiga.mp4")
-        
+                
         do {
             if FileManager.default.fileExists(atPath: url.path) {
                 try FileManager.default.removeItem(at: url)
             }
-            try FileManager.default.copyItem(at: source, to: url)
+            try FileManager.default.copyItem(at: path, to: url)
             completionHandler(nil)
             
         } catch let error {
-            print("Failed to copy \(source) to \(url): \(error)")
+            print("Failed to copy \(path) to \(url): \(error)")
             completionHandler(error)
         }
     }

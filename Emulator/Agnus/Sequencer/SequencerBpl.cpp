@@ -157,6 +157,13 @@ Sequencer::computeBplEventsSlow(const SigRecorder &sr, DDFState &state)
 
         cycle = trigger;
     }
+    
+    // EXPERIMENTAL
+    /*
+    bplEvent[0] |= (EventID)3;
+    static int cnt = 0;
+    if (cnt++ % 20 == 0) dump(dump::Dma);
+    */
 }
 
 template <bool ecs> void

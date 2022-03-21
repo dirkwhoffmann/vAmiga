@@ -22,8 +22,9 @@ struct AnimatedFloat {
     var delta = Float(0.0)
     var steps = 1 { didSet { delta = (target - current) / Float(steps) } }
     var target: Float { didSet { delta = (target - current) / Float(steps) } }
+    var animates: Bool { return current != target }
     var clamped: Float { return current < 0.0 ? 0.0 : current > 1.0 ? 1.0 : current }
-
+    
     init(current: Float = 0.0, target: Float = 0.0) {
 
         self.current = current
@@ -48,11 +49,6 @@ struct AnimatedFloat {
         self.steps = steps
     }
     
-    func animates() -> Bool {
-
-        return current != target
-    }
-
     mutating func move() {
 
         if abs(current - target) < abs(delta) {
@@ -73,12 +69,12 @@ extension Renderer {
             angleX.move()
             angleY.move()
             angleZ.move()
-            var cont = angleX.animates() || angleY.animates() || angleZ.animates()
+            var cont = angleX.animates || angleY.animates || angleZ.animates
                     
             shiftX.move()
             shiftY.move()
             shiftZ.move()
-            cont = cont || shiftX.animates() || shiftY.animates() || shiftZ.animates()
+            cont = cont || shiftX.animates || shiftY.animates || shiftZ.animates
             
             // Check if animation has terminated
             if !cont {
@@ -96,7 +92,7 @@ extension Renderer {
 
             white.move()
          
-            let cont = white.animates()
+            let cont = white.animates
          
             if !cont {
                 animates -= AnimationType.color
@@ -111,7 +107,7 @@ extension Renderer {
             cutoutX2.move()
             cutoutY2.move()
             
-            let cont = cutoutX1.animates() || cutoutY1.animates() || cutoutX2.animates() || cutoutY2.animates()
+            let cont = cutoutX1.animates || cutoutY1.animates || cutoutX2.animates || cutoutY2.animates
             
             let x = CGFloat(cutoutX1.current)
             let y = CGFloat(cutoutY1.current)

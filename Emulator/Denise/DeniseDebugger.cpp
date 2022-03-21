@@ -14,6 +14,8 @@
 void
 DeniseDebugger::_initialize()
 {
+    AmigaComponent::_initialize();
+    
     std::memset(spriteInfo, 0, sizeof(spriteInfo));
     std::memset(latchedSpriteInfo, 0, sizeof(latchedSpriteInfo));
 }

@@ -98,6 +98,22 @@ string makeAbsolutePath(const string &path)
     }
 }
 
+string
+makeUniquePath(const string &path)
+{
+    // if (!fileExists(path)) return path;
+    
+    auto prefix = stripSuffix(path);
+    auto suffix = "." + extractSuffix(path);
+    
+    string index = "";
+    for (isize nr = 2; util::fileExists(prefix + index + suffix); nr++) {
+        index = std::to_string(nr);
+    }
+
+    return prefix + index + suffix;
+}
+
 bool
 fileExists(const string &path)
 {

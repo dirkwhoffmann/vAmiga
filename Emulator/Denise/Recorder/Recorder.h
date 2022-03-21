@@ -18,23 +18,7 @@
 using util::Buffer;
 
 class Recorder : public SubComponent {
-
-    //
-    // Constants
-    //
-    
-    // Path to the two named input pipes
-    static string videoPipePath() { return "/tmp/videoPipe"; }
-    static string audioPipePath() { return "/tmp/audioPipe"; }
-
-    // Path to the two temporary output files
-    static string videoStreamPath() { return "/tmp/video.mp4"; }
-    static string audioStreamPath() { return "/tmp/audio.mp4"; }
-
-    // Log level passed to FFmpef
-    static const string loglevel() { return REC_DEBUG ? "verbose" : "warning"; }
-    
-    
+        
     //
     // Sub components
     //
@@ -140,6 +124,22 @@ private:
 
     
     //
+    // Querying locations and flags
+    //
+    
+    // Returns the paths to the two named input pipes
+    string videoPipePath();
+    string audioPipePath();
+
+    // Return the paths to the two temporary output files
+    string videoStreamPath();
+    string audioStreamPath();
+
+    //Returns the log level passed to FFmpef
+    const string loglevel() { return REC_DEBUG ? "verbose" : "warning"; }
+
+    
+    //
     // Querying recording parameters
     //
 
@@ -161,10 +161,8 @@ public:
     bool isRecording() const { return state != State::wait; }
         
     // Starts the screen recorder
-    bool startRecording(int x1, int y1, int x2, int y2,
-                        long bitRate,
-                        long aspectX,
-                        long aspectY);
+    void startRecording(int x1, int y1, int x2, int y2,
+                        long bitRate, long aspectX, long aspectY) throws;
     
     // Stops the screen recorder
     void stopRecording();

@@ -119,12 +119,26 @@ class VAError: Error {
         informational("Configuration error", async: async, icon: "pref_transparent")
     }
     
+    func cantRecord(async: Bool = false) {
+        warning("Failed to launch the screen recorder.", async: async, icon: "FFmpegIcon")
+    }
+
     static func recordingAborted(async: Bool = false) {
         
         warning("Screen recording has been aborted.",
                 "Failed to write to the FFmpeg pipes.",
                 async: async, icon: "mp4")
     }
+
+    static func recorderSanboxed(name: String, async: Bool = false) {
+        
+        warning("The selected screen recorder is unavailable.",
+                "vAmiga is running as a sandboxed application and has no " +
+                "permission to access file \(name). " +
+                "Please copy the file to the Applications folder.",
+                async: async, icon: "FFmpegIcon")
+    }
+
 }
 
 extension NSError {
