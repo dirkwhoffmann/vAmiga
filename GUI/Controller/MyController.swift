@@ -210,7 +210,9 @@ extension MyController {
             
             // Open the Rom dialog after a small delay
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                
                 self.openConfigurator(tab: "Roms")
+                self.configurator!.installAros()
             }
         }
         

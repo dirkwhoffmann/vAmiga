@@ -954,7 +954,8 @@ Amiga::execute()
             if (flags & RL::BREAKPOINT_REACHED) {
                 clearFlag(RL::BREAKPOINT_REACHED);
                 inspect();
-                msgQueue.put(MSG_BREAKPOINT_REACHED, isize(cpu.debugger.breakpointPC));
+                auto addr = isize(cpu.debugger.breakpoints.hit->addr);
+                msgQueue.put(MSG_BREAKPOINT_REACHED, addr);
                 newState = EXEC_PAUSED;
                 break;
             }
@@ -963,7 +964,8 @@ Amiga::execute()
             if (flags & RL::WATCHPOINT_REACHED) {
                 clearFlag(RL::WATCHPOINT_REACHED);
                 inspect();
-                msgQueue.put(MSG_WATCHPOINT_REACHED, isize(cpu.debugger.watchpointPC));
+                auto addr = isize(cpu.debugger.watchpoints.hit->addr);
+                msgQueue.put(MSG_WATCHPOINT_REACHED, addr);
                 newState = EXEC_PAUSED;
                 break;
             }
@@ -1137,4 +1139,52 @@ Amiga::takeUserSnapshot()
     
     userSnapshot = new Snapshot(*this);
     msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
+}
+
+fs::path
+Amiga::tmp()
+{
+    STATIC_SYNCHRONIZED
+    
+    static fs::path base;
+            
+    if (base.empty()) {
+
+        // Use /tmp as default folder for temporary files
+        base = "/tmp";
+
+        // Open a file to see if we have write permissions
+        std::ofstream logfile(base / "vAmiga.log");
+
+        // If /tmp is not accessible, use a different directory
+        if (!logfile.is_open()) {
+            
+            base = fs::temp_directory_path();
+            logfile.open(base / "vAmiga.log");
+
+            if (!logfile.is_open()) {
+                
+                throw VAError(ERROR_DIR_NOT_FOUND);
+            }
+        }
+        
+        logfile.close();
+        fs::remove(base / "vAmiga.log");
+    }
+    
+    return base;
+}
+
+fs::path
+Amiga::tmp(const string &name, bool unique)
+{
+    STATIC_SYNCHRONIZED
+    
+    auto base = tmp();
+    auto result = base / name;
+    
+    // Make the file name unique if requested
+    if (unique) result = fs::path(util::makeUniquePath(result.string()));
+    
+    return result;
 }

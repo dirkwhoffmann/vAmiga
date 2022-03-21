@@ -49,10 +49,18 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "Folder \"" + s + "\" not found.";
             break;
 
+        case ERROR_DIR_ACCESS_DENIED:
+            description = "Unable to access folder \"" + s + "\". Permission denied.";
+            break;
+
         case ERROR_FILE_NOT_FOUND:
             description = "File \"" + s + "\" not found.";
             break;
             
+        case ERROR_FILE_ACCESS_DENIED:
+            description = "Unable to access file \"" + s + "\". Permission denied.";
+            break;
+
         case ERROR_FILE_TYPE_MISMATCH:
             description = "The file content and the file type do not match.";
             break;
@@ -68,7 +76,7 @@ VAError::VAError(ErrorCode code, const string &s)
         case ERROR_FILE_CANT_CREATE:
             description = "Failed to create file \"" + s + "\".";
             break;
-
+            
         case ERROR_OUT_OF_MEMORY:
             description = "Out of memory.";
             break;
@@ -222,7 +230,11 @@ VAError::VAError(ErrorCode code, const string &s)
         case ERROR_INVALID_ROM_KEY:
             description = "Invalid Rom key.";
             break;
-            
+
+        case ERROR_REC_LAUNCH:
+            description = s;
+            break;
+
         case ERROR_OSDB:
             description = "OS Debugger: " + s;
             break;

@@ -26,7 +26,7 @@ CIA::CIA(int n, Amiga& ref) : SubComponent(ref), nr(n)
 void
 CIA::_initialize()
 {
-    resetConfig();
+    AmigaComponent::_initialize();
 
     pa = 0xFF;
     pb = 0xFF;

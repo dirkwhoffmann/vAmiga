@@ -224,6 +224,7 @@ extension MyController {
         alert.runModal()
     }
 
+    /*
     func showFailedToLaunchFFmpegAlert() {
 
         let alert = NSAlert()
@@ -234,7 +235,8 @@ extension MyController {
         alert.addButton(withTitle: "OK")
         alert.runModal()
     }
-
+    */
+    
     /*
     func showScreenRecorderAlert(url: URL) {
 

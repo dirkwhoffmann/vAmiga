@@ -79,6 +79,7 @@ RetroShell::exec <Token::regression, Token::setup> (Arguments &argv, long param)
     auto kickrom = argv[1];
     
     amiga.regressionTester.prepare(scheme, kickrom);
+    
 }
 
 template <> void
@@ -892,6 +893,88 @@ RetroShell::exec <Token::mouse, Token::press, Token::right> (Arguments& argv, lo
 {
     auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
     port.mouse.pressAndReleaseRight();
+}
+
+
+//
+// Joystick
+//
+
+template <> void
+RetroShell::exec <Token::joystick, Token::config> (Arguments& argv, long param)
+{
+    auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
+    dump(port.joystick, dump::Config);
+}
+
+template <> void
+RetroShell::exec <Token::joystick, Token::set, Token::autofire> (Arguments &argv, long param)
+{
+    auto port = (param == 0) ? PORT_1 : PORT_2;
+    amiga.configure(OPT_AUTOFIRE, port, util::parseBool(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::joystick, Token::set, Token::bullets> (Arguments &argv, long param)
+{
+    auto port = (param == 0) ? PORT_1 : PORT_2;
+    amiga.configure(OPT_AUTOFIRE_BULLETS, port, util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::joystick, Token::set, Token::delay> (Arguments &argv, long param)
+{
+    auto port = (param == 0) ? PORT_1 : PORT_2;
+    amiga.configure(OPT_AUTOFIRE_DELAY, port, util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::joystick, Token::inspect> (Arguments& argv, long param)
+{
+    auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
+    dump(port.joystick, dump::State);
+}
+
+template <> void
+RetroShell::exec <Token::joystick, Token::pull, Token::left> (Arguments& argv, long param)
+{
+    auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
+    port.joystick.trigger(PULL_LEFT);
+}
+
+template <> void
+RetroShell::exec <Token::joystick, Token::pull, Token::right> (Arguments& argv, long param)
+{
+    auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
+    port.joystick.trigger(PULL_RIGHT);
+}
+
+template <> void
+RetroShell::exec <Token::joystick, Token::pull, Token::up> (Arguments& argv, long param)
+{
+    auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
+    port.joystick.trigger(PULL_UP);
+}
+
+template <> void
+RetroShell::exec <Token::joystick, Token::pull, Token::down> (Arguments& argv, long param)
+{
+    auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
+    port.joystick.trigger(PULL_DOWN);
+}
+
+template <> void
+RetroShell::exec <Token::joystick, Token::release, Token::xaxis> (Arguments& argv, long param)
+{
+    auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
+    port.joystick.trigger(RELEASE_X);
+}
+
+template <> void
+RetroShell::exec <Token::joystick, Token::release, Token::yaxis> (Arguments& argv, long param)
+{
+    auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
+    port.joystick.trigger(RELEASE_Y);
 }
 
 

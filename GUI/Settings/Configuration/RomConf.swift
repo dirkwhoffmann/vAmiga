@@ -117,6 +117,16 @@ extension ConfigurationController {
 
     @IBAction func installArosAction(_ sender: NSButton!) {
 
+        installAros()
+    }
+    
+    @IBAction func romDefaultsAction(_ sender: NSButton!) {
+        
+        config.saveRomUserDefaults()
+    }
+
+    func installAros() {
+        
         let arosRom = NSDataAsset(name: "aros-amiga-m68k-rom")!.data
         let arosExt = NSDataAsset(name: "aros-amiga-m68k-ext")!.data
 
@@ -132,10 +142,5 @@ extension ConfigurationController {
         if chip + slow + fast < 1024*1024 { config.slowRam = 512 }
         
         refresh()
-    }
-    
-    @IBAction func romDefaultsAction(_ sender: NSButton!) {
-        
-        config.saveRomUserDefaults()
     }
 }

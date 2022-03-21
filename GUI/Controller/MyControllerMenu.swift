@@ -277,12 +277,14 @@ extension MyController: NSMenuItemValidation {
             rect = renderer.canvas.entire
         }
         
-        let success = amiga.recorder.startRecording(rect,
-                                                    bitRate: pref.bitRate,
-                                                    aspectX: pref.aspectX,
-                                                    aspectY: pref.aspectY)
-        if !success {
-            showFailedToLaunchFFmpegAlert()
+        do {
+            try amiga.recorder.startRecording(rect: rect,
+                                              rate: pref.bitRate,
+                                              ax: pref.aspectX,
+                                              ay: pref.aspectY)
+        } catch {
+            
+            (error as? VAError)?.cantRecord()            
         }
     }
     

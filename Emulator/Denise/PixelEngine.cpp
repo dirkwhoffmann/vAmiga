@@ -33,7 +33,7 @@ PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
 void
 PixelEngine::_initialize()
 {
-    resetConfig();
+    AmigaComponent::_initialize();
     
     // Setup ECS BRDRBLNK color
     indexedRgba[64] = GpuColor(0x00, 0x00, 0x00).rawValue;

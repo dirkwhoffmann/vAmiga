@@ -108,6 +108,14 @@ extension PreferencesController {
 
         pref.ffmpegPath = sender.stringValue
         refresh()
+        
+        // Display a warning if the recorder is inaccessible
+        let fm = FileManager.default
+        if fm.fileExists(atPath: sender.stringValue),
+           !fm.isExecutableFile(atPath: sender.stringValue) {
+
+            VAError.recorderSanboxed(name: sender.stringValue)
+        }
     }
         
     @IBAction func capSourceAction(_ sender: NSPopUpButton!) {

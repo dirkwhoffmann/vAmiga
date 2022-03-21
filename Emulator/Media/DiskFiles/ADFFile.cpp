@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "ADFFile.h"
+#include "Amiga.h"
 #include "BootBlockImage.h"
 #include "Checksum.h"
 #include "FloppyDisk.h"
@@ -282,9 +283,10 @@ ADFFile::encodeDisk(FloppyDisk &disk) const
     // In debug mode, also run the decoder
     if constexpr (ADF_DEBUG) {
         
-        ADFFile tmp(disk);
-        debug(ADF_DEBUG, "Saving image to /tmp/debug.adf for debugging\n");
-        tmp.writeToFile("/tmp/tmp.adf");
+        ADFFile adf(disk);
+        auto tmp = Amiga::tmp("debug.adf").string();
+        debug(ADF_DEBUG, "Saving image to %s for debugging\n", tmp.c_str());
+        adf.writeToFile(tmp);
     }
 }
 
