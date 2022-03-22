@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include <optional>
+#include "MoiraConfig.h"
+#include "MoiraTypes.h"
 
 namespace moira {
 
@@ -203,6 +204,7 @@ public:
     void stepOver();
 
     // Returns true if a breakpoint, watchpoint, or catchpoints hits in
+    bool softstopMatches(u32 addr);
     bool breakpointMatches(u32 addr);
     bool watchpointMatches(u32 addr, Size S);
     bool catchpointMatches(u32 vectorNr);

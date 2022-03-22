@@ -298,6 +298,7 @@ protected:
     void addressErrorHandler();
     
     // Called when a debug point is reached
+    void softstopReached(u32 addr);
     void breakpointReached(u32 addr);
     void watchpointReached(u32 addr);
     void catchpointReached(u8 vector);

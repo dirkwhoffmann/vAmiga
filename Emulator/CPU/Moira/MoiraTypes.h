@@ -10,6 +10,8 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
+#include <optional>
 
 namespace moira {
 

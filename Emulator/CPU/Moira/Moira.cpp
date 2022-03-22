@@ -160,7 +160,10 @@ done:
         // Don't break if the instruction won't be executed due to tracing
         if (flags & CPU_TRACE_EXCEPTION) return;
         
-        // Compare breakpoint addresses with instruction address
+        // Check if a softstop has been reached
+        if (debugger.softstopMatches(reg.pc0)) softstopReached(reg.pc0);
+            
+        // Check if a breakpoint has been reached
         if (debugger.breakpointMatches(reg.pc0)) breakpointReached(reg.pc0);
     }
 }
