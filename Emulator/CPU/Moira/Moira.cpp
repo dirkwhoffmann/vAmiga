@@ -429,7 +429,6 @@ Moira::getInfo(u16 op)
     return info[op];    
 }
 
-// Make sure the compiler generates certain instances of template functions
 template u32 Moira::readD <Long> (int n) const;
 template u32 Moira::readA <Long> (int n) const;
 template void Moira::writeD <Long> (int n, u32 v);

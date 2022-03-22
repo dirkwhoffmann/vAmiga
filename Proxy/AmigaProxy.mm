@@ -97,27 +97,23 @@ using namespace moira;
 
 - (NSInteger)addr:(NSInteger)nr
 {
-    return [self guards]->guardAddr(nr);
+    auto addr = [self guards]->guardAddr(nr);
+    return addr ? *addr : 0;
 }
 
-- (BOOL)isEnabled:(NSInteger)nr
+- (BOOL)isSet:(NSInteger)nr
 {
-    return [self guards]->isEnabled(nr);
+    return [self guards]->isSet(nr);
 }
 
-- (BOOL)isDisabled:(NSInteger)nr
+- (BOOL)isSetAt:(NSInteger)addr
 {
-    return [self guards]->isDisabled(nr);
+    return [self guards]->isSetAt(u32(addr));
 }
 
-- (void)enable:(NSInteger)nr
+- (void)setAt:(NSInteger)addr
 {
-    [self guards]->enable(nr);
-}
-
-- (void)disable:(NSInteger)nr
-{
-    [self guards]->disable(nr);
+    [self guards]->setAt((u32)addr);
 }
 
 - (void)remove:(NSInteger)nr
@@ -125,24 +121,44 @@ using namespace moira;
     return [self guards]->remove(nr);
 }
 
+- (void)removeAt:(NSInteger)addr
+{
+    [self guards]->removeAt((u32)addr);
+}
+
+- (void)removeAll
+{
+    return [self guards]->removeAll();
+}
+
 - (void)replace:(NSInteger)nr addr:(NSInteger)addr
 {
     [self guards]->replace(nr, (u32)addr);
 }
 
-- (BOOL)isSetAt:(NSInteger)addr
+- (BOOL)isEnabled:(NSInteger)nr
 {
-    return [self guards]->isSetAt((u32)addr);
+    return [self guards]->isEnabled(nr);
 }
 
-- (BOOL)isSetAndEnabledAt:(NSInteger)addr
+- (BOOL)isEnabledAt:(NSInteger)addr
 {
-    return [self guards]->isSetAndEnabledAt((u32)addr);
+    return [self guards]->isEnabledAt(u32(addr));
 }
 
-- (BOOL)isSetAndDisabledAt:(NSInteger)addr
+- (BOOL)isDisabled:(NSInteger)nr
 {
-    return [self guards]->isSetAndDisabledAt((u32)addr);
+    return [self guards]->isDisabled(nr);
+}
+
+- (BOOL)isDisabledAt:(NSInteger)addr
+{
+    return [self guards]->isDisabledAt(u32(addr));
+}
+
+- (void)enable:(NSInteger)nr
+{
+    [self guards]->enable(nr);
 }
 
 - (void)enableAt:(NSInteger)addr
@@ -150,19 +166,14 @@ using namespace moira;
     [self guards]->enableAt((u32)addr);
 }
 
+- (void)disable:(NSInteger)nr
+{
+    [self guards]->disable(nr);
+}
+
 - (void)disableAt:(NSInteger)addr
 {
     [self guards]->disableAt((u32)addr);
-}
-
-- (void)addAt:(NSInteger)addr
-{
-    [self guards]->addAt((u32)addr);
-}
-
-- (void)removeAt:(NSInteger)addr
-{
-    [self guards]->removeAt((u32)addr);
 }
 
 @end
@@ -249,6 +260,12 @@ using namespace moira;
 {
     const char *str = [self cpu]->disassembleAddr((u32)addr);
     return str ? @(str) : nullptr;
+}
+
+- (NSString *)vectorName:(NSInteger)nr
+{
+    auto name = [self cpu]->debugger.vectorName(u8(nr));
+    return @(name.c_str());
 }
 
 @end

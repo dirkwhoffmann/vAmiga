@@ -83,7 +83,7 @@ public:
 private:
     
     const char *getDescription() const override { return "RetroShell"; }
-    void _dump(dump::Category category, std::ostream& os) const override { }
+    void _dump(Category category, std::ostream& os) const override { }
     
     
     //
@@ -204,7 +204,7 @@ public:
     template <Token t1, Token t2, Token t3> void exec(Arguments& argv, long param) throws;
     template <Token t1, Token t2, Token t3, Token t4> void exec(Arguments& argv, long param) throws;
 
-    void dump(AmigaObject &component, dump::Category category);
+    void dump(AmigaObject &component, Category category);
 
     
     //

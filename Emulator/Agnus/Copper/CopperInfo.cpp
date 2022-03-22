@@ -12,19 +12,19 @@
 #include "IOUtils.h"
 
 void
-Copper::_dump(dump::Category category, std::ostream& os) const
+Copper::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category & dump::State) {
+    if (category == Category::State) {
         
         os << tab("Active Copper list");
         os << dec(copList) << std::endl;
         os << tab("Skip flag");
         os << bol(skip) << std::endl;
     }
-    
-    if (category & dump::Registers) {
+            
+    if (category == Category::Registers) {
         
         auto deltaPC = coppc - coppc0;
         
@@ -42,7 +42,7 @@ Copper::_dump(dump::Category category, std::ostream& os) const
         os << bol(cdang) << std::endl;
     }
     
-    if ((category & dump::List1) || (category & dump::List2)) {
+    if (category == Category::List1 || category == Category::List2) {
         
         debugger.dump(category, os);
     }

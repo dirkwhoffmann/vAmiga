@@ -239,6 +239,95 @@ Interpreter::registerInstructions()
              "command", "Displays the current register values",
              &RetroShell::exec <Token::cpu, Token::inspect, Token::registers>, 0);
 
+    root.add({"cpu", "break"},
+             "command", "Manages breakpoints");
+
+    root.add({"cpu", "break", "info"},
+             "command", "Lists all breakpoints",
+             &RetroShell::exec <Token::cpu, Token::bp, Token::info>, 0);
+
+    root.add({"cpu", "break", "at"},
+             "command", "Sets a breakpoint at the specified address",
+             &RetroShell::exec <Token::cpu, Token::bp, Token::at>, 1);
+
+    root.add({"cpu", "break", "delete"},
+             "command", "Deletes a breakpoint",
+             &RetroShell::exec <Token::cpu, Token::bp, Token::del>, 1);
+
+    root.add({"cpu", "break", "enable"},
+             "command", "Enables a breakpoint",
+             &RetroShell::exec <Token::cpu, Token::bp, Token::enable>, 1);
+
+    root.add({"cpu", "break", "disable"},
+             "command", "Disables a breakpoint",
+             &RetroShell::exec <Token::cpu, Token::bp, Token::disable>, 1);
+
+    root.add({"cpu", "break", "ignore"},
+             "command", "Ignores a breakpoint a certain number of times",
+             &RetroShell::exec <Token::cpu, Token::bp, Token::ignore>, 2);
+
+    root.add({"cpu", "watch"},
+             "command", "Manages watchpoints");
+
+    root.add({"cpu", "watch", "info"},
+             "command", "Lists all watchpoints",
+             &RetroShell::exec <Token::cpu, Token::wp, Token::info>, 0);
+
+    root.add({"cpu", "watch", "at"},
+             "command", "Sets a watchpoint at the specified address",
+             &RetroShell::exec <Token::cpu, Token::wp, Token::at>, 1);
+
+    root.add({"cpu", "watch", "delete"},
+             "command", "Deletes a watchpoint",
+             &RetroShell::exec <Token::cpu, Token::wp, Token::del>, 1);
+
+    root.add({"cpu", "watch", "enable"},
+             "command", "Enables a watchpoint",
+             &RetroShell::exec <Token::cpu, Token::wp, Token::enable>, 1);
+
+    root.add({"cpu", "watch", "disable"},
+             "command", "Disables a watchpoint",
+             &RetroShell::exec <Token::cpu, Token::wp, Token::disable>, 1);
+
+    root.add({"cpu", "watch", "ignore"},
+             "command", "Ignores a watchpoint a certain number of times",
+             &RetroShell::exec <Token::cpu, Token::wp, Token::ignore>, 2);
+    
+    root.add({"cpu", "catch"},
+             "command", "Manages catchpoints");
+
+    root.add({"cpu", "catch", "info"},
+             "command", "Lists all catchpoints",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::info>, 0);
+
+    root.add({"cpu", "catch", "vector"},
+             "command", "Catches an exception vector",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::vector>, 1);
+
+    root.add({"cpu", "catch", "interrupt"},
+             "command", "Catches an interrupt",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::interrupt>, 1);
+
+    root.add({"cpu", "catch", "trap"},
+             "command", "Catches a trap instruction",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::trap>, 1);
+
+    root.add({"cpu", "catch", "delete"},
+             "command", "Deletes a catchpoint",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::del>, 1);
+
+    root.add({"cpu", "catch", "enable"},
+             "command", "Enables a catchpoint",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::enable>, 1);
+
+    root.add({"cpu", "catch", "disable"},
+             "command", "Disables a catchpoint",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::disable>, 1);
+
+    root.add({"cpu", "catch", "ignore"},
+             "command", "Ignores a catchpoint a certain number of times",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::ignore>, 2);
+
     root.add({"cpu", "jump"},
              "command", "Jumps to the specified address",
              &RetroShell::exec <Token::cpu, Token::jump>, 1);

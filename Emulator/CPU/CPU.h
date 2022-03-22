@@ -38,7 +38,7 @@ public:
 private:
     
     const char *getDescription() const override { return "CPU"; }
-    void _dump(dump::Category category, std::ostream& os) const override;
+    void _dump(Category category, std::ostream& os) const override;
 
     
     //
@@ -167,4 +167,30 @@ public:
     
     // Continues program execution at the specified address
     void jump(u32 addr);
+    
+    
+    //
+    // Debugging
+    //
+    
+    // Manages the breakpoint list
+    void setBreakpoint(u32 addr) throws;
+    void deleteBreakpoint(isize nr) throws;
+    void enableBreakpoint(isize nr) throws;
+    void disableBreakpoint(isize nr) throws;
+    void ignoreBreakpoint(isize nr, isize count) throws;
+
+    // Manages the watchpoint list
+    void setWatchpoint(u32 addr) throws;
+    void deleteWatchpoint(isize nr) throws;
+    void enableWatchpoint(isize nr) throws;
+    void disableWatchpoint(isize nr) throws;
+    void ignoreWatchpoint(isize nr, isize count) throws;
+
+    // Manages the catchpoint list
+    void setCatchpoint(u8 vector) throws;
+    void deleteCatchpoint(isize nr) throws;
+    void enableCatchpoint(isize nr) throws;
+    void disableCatchpoint(isize nr) throws;
+    void ignoreCatchpoint(isize nr, isize count) throws;
 };

@@ -51,7 +51,7 @@ MutableFileSystem::init(FileSystemDescriptor &layout)
     for (isize i = 0; i < numBlocks(); i++) assert(blocks[i] != nullptr);
     
     // Print some debug information
-    if constexpr (FS_DEBUG) { dump(dump::Summary); }
+    if constexpr (FS_DEBUG) { dump(Category::Summary); }
 }
 
 void

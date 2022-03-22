@@ -42,32 +42,13 @@
 
 #include "Error.h"
 
-namespace dump {
-enum Category : usize {
-    
-    BankMap     = (1 << 0),
-    Blocks      = (1 << 1),
-    Bus         = (1 << 2),
-    Checksums   = (1 << 3),
-    Config      = (1 << 4),
-    Dma         = (1 << 5),
-    Drive       = (1 << 6),
-    Events      = (1 << 7),
-    FileSystem  = (1 << 8),
-    Geometry    = (1 << 9),
-    List1       = (1 << 10),
-    List2       = (1 << 11),
-    Parameters  = (1 << 12),
-    Partitions  = (1 << 13),
-    Properties  = (1 << 14),
-    Registers   = (1 << 15),
-    Segments    = (1 << 16),
-    Signals     = (1 << 17),
-    State       = (1 << 18),
-    Summary     = (1 << 19),
-    Volumes     = (1 << 20)
+enum class Category
+{    
+    BankMap, Blocks, Breakpoints, Bus, Catchpoints, Checksums, Config, Dma,
+    Drive, Events, FileSystem, Geometry, List1, List2, Parameters, Partitions,
+    Properties, Registers, Segments, Signals, State, Summary, Tod, Volumes,
+    Watchpoints
 };
-}
 
 class AmigaObject {
 
@@ -95,11 +76,11 @@ public:
     virtual void prefix() const;
     
     // Prints debug information about this component
-    void dump(dump::Category category, std::ostream& ss) const;
-    void dump(dump::Category category) const;
+    void dump(Category category, std::ostream& ss) const;
+    void dump(Category category) const;
     void dump(std::ostream& ss) const;
     void dump() const;
-    virtual void _dump(dump::Category category, std::ostream& ss) const = 0;
+    virtual void _dump(Category category, std::ostream& ss) const = 0;
 };
 
 /* This file provides several macros for printing messages:

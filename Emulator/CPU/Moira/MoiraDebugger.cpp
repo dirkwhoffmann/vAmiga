@@ -22,9 +22,9 @@ bool
 Guard::eval(u32 addr, Size S)
 {
     if (this->addr >= addr && this->addr < addr + S && this->enabled) {
-        if (++hits > skip) {
-            return true;
-        }
+        
+        if (!ignore) return true;
+        ignore--;
     }
     return false;
 }
@@ -41,13 +41,13 @@ Guards::~Guards()
 }
 
 Guard *
-Guards::guardWithNr(long nr)const
+Guards::guardNr(long nr)const
 {
     return nr < count ? &guards[nr] : nullptr;
 }
 
 Guard *
-Guards::guardAtAddr(u32 addr) const
+Guards::guardAt(u32 addr) const
 {
     for (int i = 0; i < count; i++) {
         if (guards[i].addr == addr) return &guards[i];
@@ -56,40 +56,15 @@ Guards::guardAtAddr(u32 addr) const
     return nullptr;
 }
 
-bool
-Guards::isSetAt(u32 addr) const
+std::optional<u32>
+Guards::guardAddr(long nr) const
 {
-    Guard *guard = guardAtAddr(addr);
-
-    return guard != nullptr;
-}
-
-bool
-Guards::isSetAndEnabledAt(u32 addr) const
-{
-    Guard *guard = guardAtAddr(addr);
-
-    return guard != nullptr && guard->enabled;
-}
-
-bool
-Guards::isSetAndDisabledAt(u32 addr) const
-{
-    Guard *guard = guardAtAddr(addr);
-
-    return guard != nullptr && !guard->enabled;
-}
-
-bool
-Guards::isSetAndConditionalAt(u32 addr) const
-{
-    Guard *guard = guardAtAddr(addr);
-
-    return guard != nullptr && guard->skip != 0;
+    if (nr < count) return guards[nr].addr;
+    return { };
 }
 
 void
-Guards::addAt(u32 addr, long skip)
+Guards::setAt(u32 addr)
 {
     if (isSetAt(addr)) return;
 
@@ -102,11 +77,7 @@ Guards::addAt(u32 addr, long skip)
         capacity *= 2;
     }
 
-    guards[count].addr = addr;
-    guards[count].enabled = true;
-    guards[count].hits = 0;
-    guards[count].skip = skip;
-    count++;
+    guards[count++].addr = addr;
     setNeedsCheck(true);
 }
 
@@ -137,26 +108,55 @@ Guards::replace(long nr, u32 addr)
     if (nr >= count || isSetAt(addr)) return;
     
     guards[nr].addr = addr;
-    guards[nr].hits = 0;
 }
 
 bool
 Guards::isEnabled(long nr) const
 {
-    return nr < count ? guards[nr].enabled : false;
+    Guard *guard = guardNr(nr);
+    return guard != nullptr && guard->enabled;
+}
+
+bool
+Guards::isEnabledAt(u32 addr) const
+{
+    Guard *guard = guardAt(addr);
+    return guard != nullptr && guard->enabled;
+}
+
+bool
+Guards::isDisabled(long nr) const
+{
+    Guard *guard = guardNr(nr);
+    return guard != nullptr && !guard->enabled;
+}
+
+bool
+Guards::isDisabledAt(u32 addr) const
+{
+    Guard *guard = guardAt(addr);
+    return guard != nullptr && !guard->enabled;
 }
 
 void
 Guards::setEnable(long nr, bool val)
 {
-    if (nr < count) guards[nr].enabled = val;
+    Guard *guard = guardNr(nr);
+    if (guard) guard->enabled = val;
 }
 
 void
-Guards::setEnableAt(u32 addr, bool value)
+Guards::setEnableAt(u32 addr, bool val)
 {
-    Guard *guard = guardAtAddr(addr);
-    if (guard) guard->enabled = value;
+    Guard *guard = guardAt(addr);
+    if (guard) guard->enabled = val;
+}
+
+void
+Guards::ignore(long nr, long count)
+{
+    Guard *guard = guardNr(nr);
+    if (guard) guard->ignore = count;
 }
 
 bool
@@ -190,6 +190,16 @@ Watchpoints::setNeedsCheck(bool value)
         moira.flags |= Moira::CPU_CHECK_WP;
     } else {
         moira.flags &= ~Moira::CPU_CHECK_WP;
+    }
+}
+
+void
+Catchpoints::setNeedsCheck(bool value)
+{
+    if (value) {
+        moira.flags |= Moira::CPU_CHECK_CP;
+    } else {
+        moira.flags &= ~Moira::CPU_CHECK_CP;
     }
 }
 
@@ -244,6 +254,13 @@ Debugger::watchpointMatches(u32 addr, Size S)
     return true;
 }
 
+bool
+Debugger::catchpointMatches(u32 vectorNr)
+{
+    if (!catchpoints.eval(vectorNr)) return false;
+    return true;
+}
+
 void
 Debugger::enableLogging()
 {
@@ -281,6 +298,49 @@ Debugger::logEntryAbs(int n)
 {
     assert(n < loggedInstructions());
     return logEntryRel(loggedInstructions() - n - 1);
+}
+
+string
+Debugger::vectorName(u8 vectorNr)
+{
+    if (vectorNr >= 12 && vectorNr <= 14) {
+        return "Reserved";
+    }
+    if (vectorNr >= 16 && vectorNr <= 23) {
+        return "Reserved";
+    }
+    if (vectorNr >= 48 && vectorNr <= 63) {
+        return "Reserved";
+    }
+    if (vectorNr >= 25 && vectorNr <= 31) {
+        return "Level " + std::to_string(vectorNr - 24) + " interrupt";
+    }
+    if (vectorNr >= 32 && vectorNr <= 47) {
+        return "Trap #" + std::to_string(vectorNr - 32);
+    }
+    if (vectorNr >= 64 && vectorNr <= 255) {
+        return "User interrupt vector";
+    }
+    switch (vectorNr) {
+    
+        case 0:     return "Reset SP";
+        case 1:     return "Reset PC";
+        case 2:     return "Bus error";
+        case 3:     return "Address error";
+        case 4:     return "Illegal instruction";
+        case 5:     return "Division by zero";
+        case 6:     return "CHK instruction";
+        case 7:     return "TRAPV instruction";
+        case 8:     return "Privilege violation";
+        case 9:     return "Trace";
+        case 10:    return "Line A instruction";
+        case 11:    return "Line F instruction";
+        case 15:    return "Uninitialized IRQ vector";
+        case 24:    return "Spurious interrupt";
+
+        default:
+            fatalError;
+    }
 }
 
 void

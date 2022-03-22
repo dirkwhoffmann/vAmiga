@@ -94,7 +94,7 @@ Mouse::setConfigItem(Option option, i64 value)
         case OPT_MOUSE_VELOCITY:
             
             if (value < 0 || value > 255) {
-                throw VAError(ERROR_OPT_INVARG, "0 ... 255");
+                throw VAError(ERROR_OPT_INVARG, "0...255");
             }
             config.velocity = (isize)value;
             updateScalingFactors();
@@ -113,12 +113,12 @@ Mouse::updateScalingFactors()
 }
 
 void
-Mouse::_dump(dump::Category category, std::ostream& os) const
+Mouse::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category & dump::Config) {
-
+    if (category == Category::Config) {
+        
         os << tab("Pull-up resistors");
         os << bol(config.pullUpResistors) << std::endl;
         os << tab("Shake detection");
@@ -127,7 +127,7 @@ Mouse::_dump(dump::Category category, std::ostream& os) const
         os << dec(config.velocity) << std::endl;
     }
     
-    if (category & dump::State) {
+    if (category == Category::State) {
         
         os << tab("leftButton");
         os << bol(leftButton) << std::endl;

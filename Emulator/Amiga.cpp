@@ -767,23 +767,11 @@ Amiga::_inspect() const
 }
 
 void
-Amiga::_dump(dump::Category category, std::ostream& os) const
+Amiga::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category & dump::Config) {
-    
-        if constexpr (CNF_DEBUG) {
-            
-            df0.dump(dump::Config);
-            paula.dump(dump::Config);
-            paula.muxer.dump(dump::Config);
-            ciaA.dump(dump::Config);
-            denise.dump(dump::Config);
-        }
-    }
-    
-    if (category & dump::State) {
+    if (category == Category::State) {
         
         os << tab("Power");
         os << bol(isPoweredOn()) << std::endl;
@@ -814,7 +802,7 @@ Amiga::_powerOn()
     // Set initial breakpoints
     for (auto &bp : std::vector <u32> (INITIAL_BREAKPOINTS)) {
         
-        cpu.debugger.breakpoints.addAt(bp);
+        cpu.debugger.breakpoints.setAt(bp);
         debugMode = true;
     }
     
@@ -966,6 +954,16 @@ Amiga::execute()
                 inspect();
                 auto addr = isize(cpu.debugger.watchpoints.hit->addr);
                 msgQueue.put(MSG_WATCHPOINT_REACHED, addr);
+                newState = EXEC_PAUSED;
+                break;
+            }
+
+            // Did we reach a catchpoint?
+            if (flags & RL::CATCHPOINT_REACHED) {
+                clearFlag(RL::CATCHPOINT_REACHED);
+                inspect();
+                auto vector = u8(cpu.debugger.catchpoints.hit->addr);
+                msgQueue.put(MSG_CATCHPOINT_REACHED, vector);
                 newState = EXEC_PAUSED;
                 break;
             }

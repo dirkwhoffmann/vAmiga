@@ -48,20 +48,23 @@ TOD::_inspect() const
 }
 
 void 
-TOD::_dump(dump::Category category, std::ostream& os) const
+TOD::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    os << tab("Counter");
-    os << hex(tod.hi) << ":" << hex(tod.mid) << ":" << hex(tod.lo) << std::endl;
-    os << tab("Alarm");
-    os << hex(alarm.hi) << ":" << hex(alarm.mid) << ":" << hex(alarm.lo) << std::endl;
-    os << tab("Latch");
-    os << hex(latch.hi) << ":" << hex(latch.mid) << ":" << hex(latch.lo) << std::endl;
-    os << tab("Frozen");
-    os << bol(frozen) << std::endl;
-    os << tab("Stopped");
-    os << bol(stopped) << std::endl;
+    if (category == Category::State) {
+        
+        os << tab("Counter");
+        os << hex(tod.hi) << ":" << hex(tod.mid) << ":" << hex(tod.lo) << std::endl;
+        os << tab("Alarm");
+        os << hex(alarm.hi) << ":" << hex(alarm.mid) << ":" << hex(alarm.lo) << std::endl;
+        os << tab("Latch");
+        os << hex(latch.hi) << ":" << hex(latch.mid) << ":" << hex(latch.lo) << std::endl;
+        os << tab("Frozen");
+        os << bol(frozen) << std::endl;
+        os << tab("Stopped");
+        os << bol(stopped) << std::endl;
+    }
 }
 
 u8

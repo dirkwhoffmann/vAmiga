@@ -10,6 +10,7 @@
 #include "config.h"
 #include "UART.h"
 #include "Agnus.h"
+#include "IOUtils.h"
 #include "MsgQueue.h"
 #include "Paula.h"
 #include "RemoteManager.h"
@@ -37,9 +38,15 @@ UART::_inspect() const
 }
 
 void
-UART::_dump(dump::Category category, std::ostream& os) const
+UART::_dump(Category category, std::ostream& os) const
 {
-    os << "serper: %X\n" << (int)serper;
+    using namespace util;
+    
+    if (category == Category::State) {
+        
+        os << tab("Serper");
+        os << hex(serper) << std::endl;
+    }
 }
 
 u16

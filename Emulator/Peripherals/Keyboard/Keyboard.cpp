@@ -70,17 +70,17 @@ Keyboard::setConfigItem(Option option, i64 value)
 }
 
 void
-Keyboard::_dump(dump::Category category, std::ostream& os) const
+Keyboard::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category & dump::Config) {
+    if (category == Category::Config) {
         
         os << tab("Accurate emulation");
         os << bol(config.accurate) << std::endl;
     }
     
-    if (category & dump::State) {
+    if (category == Category::State) {
         
         os << tab("State");
         os << KeyboardStateEnum::key(state) << std::endl;
@@ -90,14 +90,14 @@ Keyboard::_dump(dump::Category category, std::ostream& os) const
         os << dec(spLow) << std::endl;
         os << tab("SP HI cycle");
         os << dec(spHigh) << std::endl;
-
+        
         os << tab("Type ahead buffer");
         os << "[ ";
         for (isize i = queue.begin(); i != queue.end(); i = queue.next(i)) {
             os << hex(queue.elements[i]) << " ";
         }
         os << " ]" << std::endl;
-
+        
         isize count = 0;
         for (isize i = 0; i < 128; i++) count += (isize)keyDown[i];
         os << tab("Down");
