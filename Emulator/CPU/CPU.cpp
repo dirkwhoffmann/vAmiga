@@ -621,15 +621,11 @@ CPU::ignoreWatchpoint(isize nr, isize count)
 }
 
 void
-CPU::setCatchpoint(u32 addr)
+CPU::setCatchpoint(u8 vector)
 {
-    if (addr > 255) {
-        throw VAError(ERROR_OPT_INVARG, "0 .. 255");
-    }
-    if (debugger.catchpoints.isSetAt(addr)) {
-        throw VAError(ERROR_CP_ALREADY_SET, addr);
-    }
-    debugger.catchpoints.setAt(addr);
+    if (debugger.catchpoints.isSetAt(vector)) throw VAError(ERROR_CP_ALREADY_SET, vector);
+
+    debugger.catchpoints.setAt(vector);
     msgQueue.put(MSG_CATCHPOINT_UPDATED);
 }
 

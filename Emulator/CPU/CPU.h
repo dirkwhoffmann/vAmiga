@@ -188,7 +188,7 @@ public:
     void ignoreWatchpoint(isize nr, isize count) throws;
 
     // Manages the catchpoint list
-    void setCatchpoint(u32 addr) throws;
+    void setCatchpoint(u8 vector) throws;
     void deleteCatchpoint(isize nr) throws;
     void enableCatchpoint(isize nr) throws;
     void disableCatchpoint(isize nr) throws;

@@ -25,8 +25,8 @@ enum class Token
     disconnect, disk, dma, dmadebugger, drive, dsksync, easteregg, eject,
     enable, esync, events, execbase, extrom, extstart, fast, filename,
     filesystem, filter, gdb, geometry, help, hide, ignore, init, info, insert,
-    inspect, interrupts, joystick, jump, keyboard, keyset, layers, left,
-    library, libraries, list, load, lock, mechanics, memory, mode, model,
+    inspect, interrupt, interrupts, joystick, jump, keyboard, keyset, layers,
+    left, library, libraries, list, load, lock, mechanics, memory, mode, model,
     monitor, mouse, none, off, on, opacity, open, os, palette, pan, partition,
     path, paula, pause, poll, port, ports, power, press, process, processes,
     pull, pullup, raminitpattern, refresh, registers, regreset, regression,
@@ -34,8 +34,9 @@ enum class Token
     run, sampling, saturation, save, saveroms, screenshot, searchpath, serial,
     server, set, setup, shakedetector, show, slow, slowramdelay, slowrammirror,
     source, speed, sprites, start, state, status, step, stop, swapdelay, task,
-    tasks, tod, todbug, tracking, unmappingtype, up, vector, verbose, velocity,
-    volume, volumes, wait, watch, watchpoint, wom, wp, xaxis, yaxis, zorro
+    tasks, tod, todbug, tracking, trap, unmappingtype, up, vector, verbose,
+    velocity, volume, volumes, wait, watch, watchpoint, wom, wp, xaxis, yaxis,
+    zorro
 };
 
 struct TooFewArgumentsError : public util::ParseError {

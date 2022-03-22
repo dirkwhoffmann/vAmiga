@@ -57,7 +57,7 @@ protected:
 
 public:
 
-    // Breakpoints, watchpoints, instruction tracing
+    // Breakpoints, watchpoints, catchpoints, instruction tracing
     Debugger debugger = Debugger(*this);
 
 protected:

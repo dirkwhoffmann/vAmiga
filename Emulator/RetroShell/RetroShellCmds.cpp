@@ -387,7 +387,25 @@ RetroShell::exec <Token::cpu, Token::cp, Token::info> (Arguments& argv, long par
 template <> void
 RetroShell::exec <Token::cpu, Token::cp, Token::vector> (Arguments& argv, long param)
 {
-    amiga.cpu.setCatchpoint(u32(util::parseNum(argv.front())));
+    auto nr = util::parseNum(argv.front());
+    if (nr < 0 || nr > 255) throw VAError(ERROR_OPT_INVARG, "0...255");
+    amiga.cpu.setCatchpoint(u8(nr));
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::cp, Token::interrupt> (Arguments& argv, long param)
+{
+    auto nr = util::parseNum(argv.front());
+    if (nr < 1 || nr > 7) throw VAError(ERROR_OPT_INVARG, "1...7");
+    amiga.cpu.setCatchpoint(u8(nr + 24));
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::cp, Token::trap> (Arguments& argv, long param)
+{
+    auto nr = util::parseNum(argv.front());
+    if (nr < 0 || nr > 15) throw VAError(ERROR_OPT_INVARG, "0...15");
+    amiga.cpu.setCatchpoint(u8(nr + 32));
 }
 
 template <> void

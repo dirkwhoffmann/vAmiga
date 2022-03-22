@@ -304,6 +304,14 @@ Interpreter::registerInstructions()
              "command", "Catches an exception vector",
              &RetroShell::exec <Token::cpu, Token::cp, Token::vector>, 1);
 
+    root.add({"cpu", "catch", "interrupt"},
+             "command", "Catches an interrupt",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::interrupt>, 1);
+
+    root.add({"cpu", "catch", "trap"},
+             "command", "Catches a trap instruction",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::trap>, 1);
+
     root.add({"cpu", "catch", "delete"},
              "command", "Deletes a catchpoint",
              &RetroShell::exec <Token::cpu, Token::cp, Token::del>, 1);
