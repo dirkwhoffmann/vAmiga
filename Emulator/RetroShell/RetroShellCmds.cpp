@@ -307,21 +307,75 @@ RetroShell::exec <Token::cpu, Token::inspect, Token::registers> (Arguments& argv
 }
 
 template <> void
-RetroShell::exec <Token::cpu, Token::inspect, Token::breakpoints> (Arguments& argv, long param)
+RetroShell::exec <Token::cpu, Token::bp, Token::info> (Arguments& argv, long param)
 {
     dump(amiga.cpu, Category::Breakpoints);
 }
 
 template <> void
-RetroShell::exec <Token::cpu, Token::inspect, Token::watchpoints> (Arguments& argv, long param)
+RetroShell::exec <Token::cpu, Token::bp, Token::at> (Arguments& argv, long param)
+{
+    amiga.cpu.setBreakpoint(u32(util::parseNum(argv.front())));
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::bp, Token::del> (Arguments& argv, long param)
+{
+    amiga.cpu.deleteBreakpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::bp, Token::enable> (Arguments& argv, long param)
+{
+    amiga.cpu.enableBreakpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::bp, Token::disable> (Arguments& argv, long param)
+{
+    amiga.cpu.disableBreakpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::bp, Token::ignore> (Arguments& argv, long param)
+{
+    amiga.cpu.ignoreBreakpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::wp, Token::info> (Arguments& argv, long param)
 {
     dump(amiga.cpu, Category::Watchpoints);
 }
 
 template <> void
-RetroShell::exec <Token::cpu, Token::inspect, Token::catchpoints> (Arguments& argv, long param)
+RetroShell::exec <Token::cpu, Token::wp, Token::at> (Arguments& argv, long param)
 {
-    dump(amiga.cpu, Category::Catchpoints);
+    amiga.cpu.setWatchpoint(u32(util::parseNum(argv.front())));
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::wp, Token::del> (Arguments& argv, long param)
+{
+    amiga.cpu.deleteWatchpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::wp, Token::enable> (Arguments& argv, long param)
+{
+    amiga.cpu.enableWatchpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::wp, Token::disable> (Arguments& argv, long param)
+{
+    amiga.cpu.disableWatchpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::wp, Token::ignore> (Arguments& argv, long param)
+{
+    amiga.cpu.ignoreWatchpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
 }
 
 template <> void

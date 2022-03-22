@@ -110,6 +110,8 @@ public:
     void setEnable(long nr, bool val);
     void setEnableAt(u32 addr, bool val);
 
+    void ignore(long nr, long count);
+    
     
     //
     // Checking guards

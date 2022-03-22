@@ -239,18 +239,60 @@ Interpreter::registerInstructions()
              "command", "Displays the current register values",
              &RetroShell::exec <Token::cpu, Token::inspect, Token::registers>, 0);
 
-    root.add({"cpu", "inspect", "breakpoints"},
+    root.add({"cpu", "break"},
+             "command", "Manages breakpoints");
+
+    root.add({"cpu", "break", "info"},
              "command", "Lists all breakpoints",
-             &RetroShell::exec <Token::cpu, Token::inspect, Token::breakpoints>, 0);
+             &RetroShell::exec <Token::cpu, Token::bp, Token::info>, 0);
 
-    root.add({"cpu", "inspect", "watchpoints"},
+    root.add({"cpu", "break", "at"},
+             "command", "Sets a breakpoint at the specified address",
+             &RetroShell::exec <Token::cpu, Token::bp, Token::at>, 1);
+
+    root.add({"cpu", "break", "delete"},
+             "command", "Deletes a breakpoint",
+             &RetroShell::exec <Token::cpu, Token::bp, Token::del>, 1);
+
+    root.add({"cpu", "break", "enable"},
+             "command", "Enables a breakpoint",
+             &RetroShell::exec <Token::cpu, Token::bp, Token::enable>, 1);
+
+    root.add({"cpu", "break", "disable"},
+             "command", "Disables a breakpoint",
+             &RetroShell::exec <Token::cpu, Token::bp, Token::disable>, 1);
+
+    root.add({"cpu", "break", "ignore"},
+             "command", "Ignores a breakpoint a certain number of times",
+             &RetroShell::exec <Token::cpu, Token::bp, Token::ignore>, 2);
+
+    root.add({"cpu", "watch"},
+             "command", "Manages watchpoints");
+
+    root.add({"cpu", "watch", "info"},
              "command", "Lists all watchpoints",
-             &RetroShell::exec <Token::cpu, Token::inspect, Token::watchpoints>, 0);
+             &RetroShell::exec <Token::cpu, Token::wp, Token::info>, 0);
 
-    root.add({"cpu", "inspect", "catchpoints"},
-             "command", "Lists all catchpoints",
-             &RetroShell::exec <Token::cpu, Token::inspect, Token::catchpoints>, 0);
+    root.add({"cpu", "watch", "at"},
+             "command", "Sets a watchpoint at the specified address",
+             &RetroShell::exec <Token::cpu, Token::wp, Token::at>, 1);
 
+    root.add({"cpu", "watch", "delete"},
+             "command", "Deletes a watchpoint",
+             &RetroShell::exec <Token::cpu, Token::wp, Token::del>, 1);
+
+    root.add({"cpu", "watch", "enable"},
+             "command", "Enables a watchpoint",
+             &RetroShell::exec <Token::cpu, Token::wp, Token::enable>, 1);
+
+    root.add({"cpu", "watch", "disable"},
+             "command", "Disables a watchpoint",
+             &RetroShell::exec <Token::cpu, Token::wp, Token::disable>, 1);
+
+    root.add({"cpu", "watch", "ignore"},
+             "command", "Ignores a watchpoint a certain number of times",
+             &RetroShell::exec <Token::cpu, Token::wp, Token::ignore>, 2);
+    
     root.add({"cpu", "jump"},
              "command", "Jumps to the specified address",
              &RetroShell::exec <Token::cpu, Token::jump>, 1);

@@ -45,6 +45,30 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "This option is locked because the Amiga is powered on.";
             break;
 
+        case ERROR_BP_NOT_FOUND:
+            description = "Breakpoint " + s + " not found";
+            break;
+            
+        case ERROR_BP_ALREADY_SET:
+            description = "A breakpoint at " + s + " is already set";
+            break;
+            
+        case ERROR_WP_NOT_FOUND:
+            description = "Watchpoint " + s + " not found";
+            break;
+
+        case ERROR_WP_ALREADY_SET:
+            description = "A watchpoint at " + s + " is already set";
+            break;
+
+        case ERROR_CP_NOT_FOUND:
+            description = "Catchpoint " + s + " not found";
+            break;
+
+        case ERROR_CP_ALREADY_SET:
+            description = "This catchpoint is already set";
+            break;
+                     
         case ERROR_DIR_NOT_FOUND:
             description = "Folder \"" + s + "\" not found.";
             break;

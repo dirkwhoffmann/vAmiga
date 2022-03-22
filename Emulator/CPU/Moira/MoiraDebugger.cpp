@@ -152,6 +152,13 @@ Guards::setEnableAt(u32 addr, bool val)
     if (guard) guard->enabled = val;
 }
 
+void
+Guards::ignore(long nr, long count)
+{
+    Guard *guard = guardNr(nr);
+    if (guard) guard->ignore = count;
+}
+
 bool
 Guards::eval(u32 addr, Size S)
 {

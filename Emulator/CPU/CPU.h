@@ -167,4 +167,23 @@ public:
     
     // Continues program execution at the specified address
     void jump(u32 addr);
+    
+    
+    //
+    // Debugging
+    //
+    
+    // Manages the breakpoint list
+    void setBreakpoint(u32 addr) throws;
+    void deleteBreakpoint(isize nr) throws;
+    void enableBreakpoint(isize nr) throws;
+    void disableBreakpoint(isize nr) throws;
+    void ignoreBreakpoint(isize nr, isize count) throws;
+
+    // Manages the watchpoint list
+    void setWatchpoint(u32 addr) throws;
+    void deleteWatchpoint(isize nr) throws;
+    void enableWatchpoint(isize nr) throws;
+    void disableWatchpoint(isize nr) throws;
+    void ignoreWatchpoint(isize nr, isize count) throws;
 };
