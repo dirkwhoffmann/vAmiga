@@ -250,20 +250,25 @@
     
 @property (readonly) NSInteger count;
 - (NSInteger)addr:(NSInteger)nr;
-- (BOOL)isEnabled:(NSInteger)nr;
-- (BOOL)isDisabled:(NSInteger)nr;
-- (void)enable:(NSInteger)nr;
-- (void)disable:(NSInteger)nr;
+
+- (BOOL)isSet:(NSInteger)nr;
+- (BOOL)isSetAt:(NSInteger)addr;
+- (void)addAt:(NSInteger)addr;
 - (void)remove:(NSInteger)nr;
+- (void)removeAt:(NSInteger)addr;
+- (void)removeAll;
+
 - (void)replace:(NSInteger)nr addr:(NSInteger)addr;
 
-- (BOOL)isSetAt:(NSInteger)addr;
-- (BOOL)isSetAndEnabledAt:(NSInteger)addr;
-- (BOOL)isSetAndDisabledAt:(NSInteger)addr;
+- (BOOL)isEnabled:(NSInteger)nr;
+- (BOOL)isEnabledAt:(NSInteger)addr;
+- (BOOL)isDisabled:(NSInteger)nr;
+- (BOOL)isDisabledAt:(NSInteger)addr;
+
+- (void)enable:(NSInteger)nr;
 - (void)enableAt:(NSInteger)addr;
+- (void)disable:(NSInteger)nr;
 - (void)disableAt:(NSInteger)addr;
-- (void)addAt:(NSInteger)addr;
-- (void)removeAt:(NSInteger)addr;
 
 @end
 

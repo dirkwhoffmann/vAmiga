@@ -56,28 +56,11 @@ Guards::guardAtAddr(u32 addr) const
     return nullptr;
 }
 
-bool
-Guards::isSetAt(u32 addr) const
+std::optional<u32>
+Guards::guardAddr(long nr) const
 {
-    Guard *guard = guardAtAddr(addr);
-
-    return guard != nullptr;
-}
-
-bool
-Guards::isSetAndEnabledAt(u32 addr) const
-{
-    Guard *guard = guardAtAddr(addr);
-
-    return guard != nullptr && guard->enabled;
-}
-
-bool
-Guards::isSetAndDisabledAt(u32 addr) const
-{
-    Guard *guard = guardAtAddr(addr);
-
-    return guard != nullptr && !guard->enabled;
+    if (nr < count) return guards[nr].addr;
+    return { };
 }
 
 void
@@ -130,20 +113,43 @@ Guards::replace(long nr, u32 addr)
 bool
 Guards::isEnabled(long nr) const
 {
-    return nr < count ? guards[nr].enabled : false;
+    Guard *guard = guardWithNr(nr);
+    return guard != nullptr && guard->enabled;
+}
+
+bool
+Guards::isEnabledAt(u32 addr) const
+{
+    Guard *guard = guardAtAddr(addr);
+    return guard != nullptr && guard->enabled;
+}
+
+bool
+Guards::isDisabled(long nr) const
+{
+    Guard *guard = guardWithNr(nr);
+    return guard != nullptr && !guard->enabled;
+}
+
+bool
+Guards::isDisabledAt(u32 addr) const
+{
+    Guard *guard = guardAtAddr(addr);
+    return guard != nullptr && !guard->enabled;
 }
 
 void
 Guards::setEnable(long nr, bool val)
 {
-    if (nr < count) guards[nr].enabled = val;
+    Guard *guard = guardWithNr(nr);
+    if (guard) guard->enabled = val;
 }
 
 void
-Guards::setEnableAt(u32 addr, bool value)
+Guards::setEnableAt(u32 addr, bool val)
 {
     Guard *guard = guardAtAddr(addr);
-    if (guard) guard->enabled = value;
+    if (guard) guard->enabled = val;
 }
 
 bool

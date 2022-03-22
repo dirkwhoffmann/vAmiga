@@ -75,21 +75,20 @@ public:
     Guard *guardWithNr(long nr) const;
     Guard *guardAtAddr(u32 addr) const;
 
-    u32 guardAddr(long nr) const { return nr < count ? guards[nr].addr : 0; }
-
-    bool isSetAt(u32 addr) const;
-    bool isSetAndEnabledAt(u32 addr) const;
-    bool isSetAndDisabledAt(u32 addr) const;
+    std::optional<u32> guardAddr(long nr) const;
 
     
     //
     // Adding or removing guards
     //
 
+    bool isSet(long nr) const { return guardWithNr(nr) != nullptr; }
+    bool isSetAt(u32 addr) const { return guardAtAddr(addr) != nullptr; }
+
     void addAt(u32 addr);
-    void removeAt(u32 addr);
 
     void remove(long nr);
+    void removeAt(u32 addr);
     void removeAll() { count = 0; setNeedsCheck(false); }
 
     void replace(long nr, u32 addr);
@@ -100,15 +99,16 @@ public:
     //
 
     bool isEnabled(long nr) const;
-    bool isDisabled(long nr) const { return !isEnabled(nr); }
+    bool isEnabledAt(u32 addr) const;
+    bool isDisabled(long nr) const;
+    bool isDisabledAt(u32 addr) const;
 
-    void setEnable(long nr, bool val);
     void enable(long nr) { setEnable(nr, true); }
-    void disable(long nr) { setEnable(nr, false); }
-
-    void setEnableAt(u32 addr, bool val);
     void enableAt(u32 addr) { setEnableAt(addr, true); }
+    void disable(long nr) { setEnable(nr, false); }
     void disableAt(u32 addr) { setEnableAt(addr, false); }
+    void setEnable(long nr, bool val);
+    void setEnableAt(u32 addr, bool val);
 
     
     //
