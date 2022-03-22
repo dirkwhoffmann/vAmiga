@@ -152,7 +152,7 @@ class CopperTableView: NSTableView {
             log("Clicked in row \(row) addr = \(addr)")
             /*
             if !breakpoints.isSet(at: addr) {
-                breakpoints.add(at: addr)
+                breakpoints.setAt(addr)
             } else if breakpoints.isSetAndDisabled(at: addr) {
                 breakpoints.enable(at: addr)
             } else if breakpoints.isSetAndEnabled(at: addr) {
@@ -181,7 +181,7 @@ class CopperTableView: NSTableView {
             if breakpoints.isSet(at: addr) {
                 breakpoints.remove(at: addr)
             } else {
-                breakpoints.add(at: addr)
+                breakpoints.setAt(addr)
             }
             
             inspector.fullRefresh()

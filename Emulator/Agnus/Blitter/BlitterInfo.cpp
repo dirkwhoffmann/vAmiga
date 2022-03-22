@@ -12,17 +12,17 @@
 #include "IOUtils.h"
 
 void
-Blitter::_dump(dump::Category category, std::ostream& os) const
+Blitter::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category & dump::Config) {
-    
+    if (category == Category::Config) {
+        
         os << tab("Accuracy level") << config.accuracy << std::endl;
     }
     
-    if (category & dump::State) {
-
+    if (category == Category::State) {
+        
         os << tab("Iteration") << dec(iteration) << std::endl;
         os << tab("Micro instruction PC") << dec(bltpc) << std::endl;
         os << tab("X counter") << dec(xCounter) << std::endl;
@@ -44,10 +44,9 @@ Blitter::_dump(dump::Category category, std::ostream& os) const
         os << tab("SHIFT") << hex(ashift) << std::endl;
         os << tab("BBUSY") << bol(bbusy) << std::endl;
         os << tab("BZERO") << bol(bzero) << std::endl;
-
     }
     
-    if (category & dump::Registers) {
+    if (category == Category::Registers) {
         
         os << tab("BLTCON0") << hex(bltcon0) << std::endl;
         os << tab("ASH") << hex(bltconASH()) << std::endl;

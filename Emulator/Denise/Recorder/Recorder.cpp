@@ -30,13 +30,19 @@ Recorder::_reset(bool hard)
 }
 
 void
-Recorder::_dump(dump::Category category, std::ostream& os) const
+Recorder::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    os << tab("FFmpeg path") << FFmpeg::getExecPath() << std::endl;
-    os << tab("Installed") << bol(FFmpeg::available()) << std::endl;
-    os << tab("Recording") << bol(isRecording()) << std::endl;
+    if (category == Category::State) {
+        
+        os << tab("FFmpeg path");
+        os << FFmpeg::getExecPath() << std::endl;
+        os << tab("Installed");
+        os << bol(FFmpeg::available()) << std::endl;
+        os << tab("Recording");
+        os << bol(isRecording()) << std::endl;
+    }
 }
     
 string

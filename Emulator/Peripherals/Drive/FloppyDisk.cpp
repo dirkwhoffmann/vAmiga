@@ -51,11 +51,11 @@ FloppyDisk::~FloppyDisk()
 }
 
 void
-FloppyDisk::_dump(dump::Category category, std::ostream& os) const
+FloppyDisk::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category & dump::State) {
+    if (category == Category::State) {
         
         os << tab("Type");
         os << DiameterEnum::key(diameter) << std::endl;

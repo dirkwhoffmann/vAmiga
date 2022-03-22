@@ -194,7 +194,7 @@ private:
 private:
     
     const char *getDescription() const override { return "Blitter"; }
-    void _dump(dump::Category category, std::ostream& os) const override;
+    void _dump(Category category, std::ostream& os) const override;
 
     
     //

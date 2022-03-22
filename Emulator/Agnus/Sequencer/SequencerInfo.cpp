@@ -13,12 +13,12 @@
 #include "IOUtils.h"
 
 void
-Sequencer::_dump(dump::Category category, std::ostream& os) const
+Sequencer::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category & dump::State) {
-
+    if (category == Category::State) {
+        
         os << tab("BPV");
         os << bol(ddf.bpv) << " (" << bol(ddfInitial.bpv) << ")" << std::endl;
         os << tab("BMAPEN");
@@ -34,14 +34,14 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
         os << tab("BPRRUN");
         os << bol(ddf.bprun) << " (" << bol(ddfInitial.bprun) << ")" << std::endl;
         os << tab("LASTFU");
-        os << bol(ddf.lastFu) << " (" << bol(ddfInitial.lastFu) << ")" << std::endl;        
+        os << bol(ddf.lastFu) << " (" << bol(ddfInitial.lastFu) << ")" << std::endl;
         os << tab("BMCTL");
         os << hex(ddf.bmctl) << " (" << hex(ddfInitial.bmctl) << ")" << std::endl;
         os << tab("CNT");
         os << dec(ddf.cnt) << " (" << dec(ddfInitial.cnt) << ")" << std::endl;
     }
-        
-    if (category & dump::Registers) {
+     
+    if (category == Category::Registers) {
         
         os << tab("DDFSTRT");
         os << hex(ddfstrt) << std::endl;
@@ -52,16 +52,16 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
         os << tab("DIWSTOP");
         os << hex(diwstop) << std::endl;
     }
+    
+    if (category == Category::Dma) {
         
-    if (category & dump::Dma) {
-
         for (isize row = 0; row < HPOS_CNT; row++) {
             
             isize i = (row / 2) + ((row % 2) ? ((HPOS_CNT + 1) / 2) : 0);
             
             string cycle = std::to_string(i) + ":";
             os << std::left << std::setw(5) << cycle;
-
+            
             string bpl = Agnus::eventName(SLOT_BPL, bplEvent[i]);
             os << std::left << std::setw(12) << bpl;
             os << " + ";
@@ -72,22 +72,22 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
             next += std::to_string(nextBplEvent[i]) + ",";
             next += std::to_string(nextDasEvent[i]);
             os << std::left << std::setw(14) << next;
-
+            
             if (row % 2) { os << std::endl; } else { os << "  "; }
         }
-        os << std::endl; 
+        os << std::endl;
     }
     
-    if (category & dump::Signals) {
-              
-        auto name = [](u16 signal) -> string {
+    if (category == Category::Signals) {
         
+        auto name = [](u16 signal) -> string {
+            
             string result;
             
             if (signal & 0x10) {
-               
+                
                 switch (signal & 0x1f) {
-
+                        
                     case SIG_CON_L0:        result += "CON_L0 "; break;
                     case SIG_CON_L1:        result += "CON_L1 "; break;
                     case SIG_CON_L2:        result += "CON_L2 "; break;
@@ -116,7 +116,7 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
             if (signal & SIG_SHW)           result += "SHW ";
             if (signal & SIG_RHW)           result += "RHW ";
             if (signal & SIG_DONE)          result += "DONE ";
-
+            
             return result != "" ? result : "NONE";
         };
         
@@ -126,7 +126,7 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
             
             auto trigger = util::hexstr<2>((isize)sigRecorder.keys[i]);
             auto signal = name(sigRecorder.elements[i]);
-     
+            
             os << tab("Event at $" + trigger) << signal << std::endl;
         }
     }

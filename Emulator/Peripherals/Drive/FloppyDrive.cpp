@@ -199,12 +199,12 @@ FloppyDrive::_inspect() const
 }
 
 void
-FloppyDrive::_dump(dump::Category category, std::ostream& os) const
+FloppyDrive::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category & dump::Config) {
-
+    if (category == Category::Config) {
+        
         os << tab("Nr");
         os << dec(nr) << std::endl;
         os << tab("Type");
@@ -233,7 +233,7 @@ FloppyDrive::_dump(dump::Category category, std::ostream& os) const
         os << "\"" << searchPath << "\"" << std::endl;
     }
     
-    if (category & dump::State) {
+    if (category == Category::State) {
         
         os << tab("Nr");
         os << dec(nr) << std::endl;

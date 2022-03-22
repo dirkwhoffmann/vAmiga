@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include <optional>
+#include "MoiraConfig.h"
+#include "MoiraTypes.h"
 
 namespace moira {
 
@@ -17,17 +18,14 @@ namespace moira {
 struct Guard {
 
     // The observed address
-    u32 addr;
+    u32 addr = 0;
 
     // Disabled guards never trigger
-    bool enabled;
+    bool enabled = true;
 
-    // Counts the number of hits
-    long hits;
-
-    // Number of skipped hits before a match is signalled
-    long skip;
-
+    // Ignore counter
+    long ignore = 0;
+    
 public:
 
     // Returns true if the guard hits
@@ -75,25 +73,23 @@ public:
     //
 
     long elements() const { return count; }
-    Guard *guardWithNr(long nr) const;
-    Guard *guardAtAddr(u32 addr) const;
+    Guard *guardNr(long nr) const;
+    Guard *guardAt(u32 addr) const;
 
-    u32 guardAddr(long nr) const { return nr < count ? guards[nr].addr : 0; }
-
-    bool isSetAt(u32 addr) const;
-    bool isSetAndEnabledAt(u32 addr) const;
-    bool isSetAndDisabledAt(u32 addr) const;
-    bool isSetAndConditionalAt(u32 addr) const;
+    std::optional<u32> guardAddr(long nr) const;
 
     
     //
     // Adding or removing guards
     //
 
-    void addAt(u32 addr, long skip = 0);
-    void removeAt(u32 addr);
+    bool isSet(long nr) const { return guardNr(nr) != nullptr; }
+    bool isSetAt(u32 addr) const { return guardAt(addr) != nullptr; }
+
+    void setAt(u32 addr);
 
     void remove(long nr);
+    void removeAt(u32 addr);
     void removeAll() { count = 0; setNeedsCheck(false); }
 
     void replace(long nr, u32 addr);
@@ -104,16 +100,19 @@ public:
     //
 
     bool isEnabled(long nr) const;
-    bool isDisabled(long nr) const { return !isEnabled(nr); }
+    bool isEnabledAt(u32 addr) const;
+    bool isDisabled(long nr) const;
+    bool isDisabledAt(u32 addr) const;
 
-    void setEnable(long nr, bool val);
     void enable(long nr) { setEnable(nr, true); }
-    void disable(long nr) { setEnable(nr, false); }
-
-    void setEnableAt(u32 addr, bool val);
     void enableAt(u32 addr) { setEnableAt(addr, true); }
+    void disable(long nr) { setEnable(nr, false); }
     void disableAt(u32 addr) { setEnableAt(addr, false); }
+    void setEnable(long nr, bool val);
+    void setEnableAt(u32 addr, bool val);
 
+    void ignore(long nr, long count);
+    
     
     //
     // Checking guards
@@ -144,6 +143,14 @@ public:
     void setNeedsCheck(bool value) override;
 };
 
+class Catchpoints : public Guards {
+
+public:
+
+    Catchpoints(Moira& ref) : Guards(ref) { }
+    void setNeedsCheck(bool value) override;
+};
+
 class Debugger {
 
 public:
@@ -151,21 +158,19 @@ public:
     // Reference to the connected CPU
     class Moira &moira;
 
-    // Breakpoint storage
+    // Guard storage
     Breakpoints breakpoints = Breakpoints(moira);
-
-    // Watchpoint storage
     Watchpoints watchpoints = Watchpoints(moira);
-
+    Catchpoints catchpoints = Catchpoints(moira);
+    
 private:
 
-    /* Soft breakpoint for implementing single-stepping.
-     * In contrast to a standard (hard) breakpoint, a soft breakpoint is
-     * deleted when reached. The CPU halts if softStop matches the CPU's
-     * program counter (used to implement "step over") or if softStop equals
-     * UINT64_MAX (used to implement "step into"). To disable soft stopping,
-     * simply set softStop to an unreachable memory location such as
-     * UINT64_MAX - 1.
+    /* Soft breakpoint for implementing single-stepping. In contrast to a
+     * standard (hard) breakpoint, a soft breakpoint is deleted when reached.
+     * The CPU halts if softStop matches the CPU's program counter (used to
+     * implement "step over") or if softStop equals UINT64_MAX (used to
+     * implement "step into"). To disable soft stopping, simply set softStop
+     * to an unreachable memory location such as UINT64_MAX - 1.
      */
     u64 softStop = UINT64_MAX - 1;
 
@@ -187,9 +192,9 @@ public:
 
     void reset();
 
-    
+
     //
-    // Working with breakpoints and watchpoints
+    // Working with breakpoints, watchpoints, and catchpoints
     //
 
     // Sets a soft breakpoint that will trigger immediately
@@ -198,13 +203,13 @@ public:
     // Sets a soft breakpoint to the next instruction
     void stepOver();
 
-    // Returns true if a breakpoint hits at the provides address
+    // Returns true if a breakpoint, watchpoint, or catchpoints hits in
+    bool softstopMatches(u32 addr);
     bool breakpointMatches(u32 addr);
-
-    // Returns true if a watchpoint hits at the provides address
     bool watchpointMatches(u32 addr, Size S);
+    bool catchpointMatches(u32 vectorNr);
 
-    // Saved program counters
+    // Saved program counters (DEPRECATED)
     i64 breakpointPC = -1;
     i64 watchpointPC = -1;
 
@@ -233,6 +238,14 @@ public:
 
     // Clears the log buffer
     void clearLog() { logCnt = 0; }
+    
+    
+    //
+    // Providing textual representations
+    //
+    
+    // Returns a human-readable name for an exception vector
+    static std::string vectorName(u8 vector);
     
     
     //

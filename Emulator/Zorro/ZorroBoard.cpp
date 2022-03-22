@@ -13,12 +13,12 @@
 #include "Memory.h"
 
 void
-ZorroBoard::_dump(dump::Category category, std::ostream& os) const
+ZorroBoard::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
-            
-    if (category & dump::Properties) {
     
+    if (category == Category::Properties) {
+        
         os << tab("Product");
         os << productName() << std::endl;
         os << tab("Vendor");
@@ -36,9 +36,9 @@ ZorroBoard::_dump(dump::Category category, std::ostream& os) const
         os << tab("Flags");
         os << hex(flags())<< std::endl;
     }
-
-    if (category & dump::State) {
-            
+    
+    if (category == Category::State) {
+        
         auto first = u8(firstPage());
         auto last = u8(lastPage());
         

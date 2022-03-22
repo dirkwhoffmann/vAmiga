@@ -19,7 +19,7 @@ RshServer::RshServer(Amiga& ref) : RemoteServer(ref)
 }
 
 void
-RshServer::_dump(dump::Category category, std::ostream& os) const
+RshServer::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     

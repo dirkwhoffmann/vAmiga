@@ -19,11 +19,11 @@ StateMachine<nr>::StateMachine(Amiga& ref) : SubComponent(ref)
 }
 
 template <isize nr> void
-StateMachine<nr>::_dump(dump::Category category, std::ostream& os) const
+StateMachine<nr>::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category & dump::State) {
+    if (category == Category::State) {
         
         os << tab("State") << dec(state) << std::endl;
         os << tab("AUDxIP") << bol(AUDxIP()) << std::endl;

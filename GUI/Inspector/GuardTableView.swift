@@ -180,7 +180,7 @@ class BreakTableView: GuardTableView {
         amiga.suspend()
         
         if row == numRows {
-            breakpoints.add(at: bpAddr)
+            breakpoints.setAt(bpAddr)
         } else {
             assert(row < numRows)
             breakpoints.replace(row, addr: bpAddr)
@@ -233,7 +233,7 @@ class WatchTableView: GuardTableView {
         amiga.suspend()
         
         if row == numRows {
-            watchpoints.add(at: addr)
+            watchpoints.setAt(addr)
         } else {
             assert(row < numRows)
             watchpoints.replace(row, addr: addr)

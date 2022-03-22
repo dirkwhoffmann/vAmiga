@@ -48,9 +48,12 @@ enum_long(MSG_TYPE)
     MSG_SCRIPT_WAKEUP,
         
     // CPU
-    MSG_BREAKPOINT_CONFIG,
+    MSG_BREAKPOINT_UPDATED,
     MSG_BREAKPOINT_REACHED,
+    MSG_WATCHPOINT_UPDATED,
     MSG_WATCHPOINT_REACHED,
+    MSG_CATCHPOINT_UPDATED,
+    MSG_CATCHPOINT_REACHED,
     MSG_CPU_HALT,
 
     // Denise
@@ -158,9 +161,12 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
             case MSG_SCRIPT_ABORT:          return "SCRIPT_ABORT";
             case MSG_SCRIPT_WAKEUP:         return "MSG_SCRIPT_WAKEUP";
                     
-            case MSG_BREAKPOINT_CONFIG:     return "BREAKPOINT_CONFIG";
+            case MSG_BREAKPOINT_UPDATED:    return "BREAKPOINT_UPDATED";
             case MSG_BREAKPOINT_REACHED:    return "BREAKPOINT_REACHED";
+            case MSG_WATCHPOINT_UPDATED:    return "WATCHPOINT_UPDATED";
             case MSG_WATCHPOINT_REACHED:    return "WATCHPOINT_REACHED";
+            case MSG_CATCHPOINT_UPDATED:    return "CATCHPOINT_UPDATED";
+            case MSG_CATCHPOINT_REACHED:    return "CATCHPOINT_REACHED";
             case MSG_CPU_HALT:              return "CPU_HALT";
 
             case MSG_VIEWPORT:              return "VIEWPORT";

@@ -160,7 +160,10 @@ done:
         // Don't break if the instruction won't be executed due to tracing
         if (flags & CPU_TRACE_EXCEPTION) return;
         
-        // Compare breakpoint addresses with instruction address
+        // Check if a softstop has been reached
+        if (debugger.softstopMatches(reg.pc0)) softstopReached(reg.pc0);
+            
+        // Check if a breakpoint has been reached
         if (debugger.breakpointMatches(reg.pc0)) breakpointReached(reg.pc0);
     }
 }
@@ -429,7 +432,6 @@ Moira::getInfo(u16 op)
     return info[op];    
 }
 
-// Make sure the compiler generates certain instances of template functions
 template u32 Moira::readD <Long> (int n) const;
 template u32 Moira::readA <Long> (int n) const;
 template void Moira::writeD <Long> (int n, u32 v);

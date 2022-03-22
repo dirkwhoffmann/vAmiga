@@ -65,7 +65,7 @@ class InstrTableView: NSTableView {
             instrInRow[i] = cpu.disassembleInstr(addr, length: &bytes)
             dataInRow[i] = cpu.disassembleWords(addr, length: bytes / 2)
                         
-            if breakpoints.isSetAndDisabled(at: addr) {
+            if breakpoints.isDisabled(at: addr) {
                 bpInRow[i] = BreakpointType.disabled
             } else if breakpoints.isSet(at: addr) {
                 bpInRow[i] = BreakpointType.enabled
@@ -137,10 +137,10 @@ class InstrTableView: NSTableView {
         if let addr = addrInRow[row] {
 
             if !breakpoints.isSet(at: addr) {
-                breakpoints.add(at: addr)
-            } else if breakpoints.isSetAndDisabled(at: addr) {
+                breakpoints.setAt(addr)
+            } else if breakpoints.isDisabled(at: addr) {
                 breakpoints.enable(at: addr)
-            } else if breakpoints.isSetAndEnabled(at: addr) {
+            } else if breakpoints.isEnabled(at: addr) {
                 breakpoints.disable(at: addr)
             }
 
@@ -163,7 +163,7 @@ class InstrTableView: NSTableView {
             if breakpoints.isSet(at: addr) {
                 breakpoints.remove(at: addr)
             } else {
-                breakpoints.add(at: addr)
+                breakpoints.setAt(addr)
             }
 
             inspector.fullRefresh()

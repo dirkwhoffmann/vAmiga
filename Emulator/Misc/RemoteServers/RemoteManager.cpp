@@ -24,22 +24,25 @@ RemoteManager::RemoteManager(Amiga& ref) : SubComponent(ref)
 }
 
 void
-RemoteManager::_dump(dump::Category category, std::ostream& os) const
+RemoteManager::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    for (auto server : servers) {
+    if (category == Category::State) {
         
-        auto name = server->getDescription();
-        auto port = server->config.port;
-        
-        os << tab(string(name));
-        
-        if (server->isOff()) {
-            os << "Off" << std::endl;
-        } else {
-            os << "Port " << dec(port);
-            os << " (" << SrvStateEnum::key(server->state) << ")" << std::endl;
+        for (auto server : servers) {
+            
+            auto name = server->getDescription();
+            auto port = server->config.port;
+            
+            os << tab(string(name));
+            
+            if (server->isOff()) {
+                os << "Off" << std::endl;
+            } else {
+                os << "Port " << dec(port);
+                os << " (" << SrvStateEnum::key(server->state) << ")" << std::endl;
+            }
         }
     }
 }

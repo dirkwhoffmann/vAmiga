@@ -90,17 +90,17 @@ RTC::resetConfig()
 }
 
 void
-RTC::_dump(dump::Category category, std::ostream& os) const
+RTC::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category & dump::Config) {
+    if (category == Category::Config) {
         
         os << tab("Chip Model");
         os << RTCRevisionEnum::key(config.model) << std::endl;
     }
     
-    if (category & dump::Registers) {
+    if (category == Category::Registers) {
         
         for (isize i = 0; i < 16; i++) {
             os << "    " << hex((u8)i) << " : ";

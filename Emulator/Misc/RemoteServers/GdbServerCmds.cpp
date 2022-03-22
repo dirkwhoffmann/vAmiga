@@ -369,7 +369,7 @@ GdbServer::process <'Z'> (string cmd)
                 
         if (type == 0) {
          
-            cpu.debugger.breakpoints.addAt((u32)addr);
+            cpu.debugger.breakpoints.setAt((u32)addr);
         }
         
         reply("OK");

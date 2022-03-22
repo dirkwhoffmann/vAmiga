@@ -31,6 +31,7 @@ class Moira : public SubComponent {
     friend class Debugger;
     friend class Breakpoints;
     friend class Watchpoints;
+    friend class Catchpoints;
 
 protected:
 
@@ -56,7 +57,7 @@ protected:
 
 public:
 
-    // Breakpoints, watchpoints, instruction tracing
+    // Breakpoints, watchpoints, catchpoints, instruction tracing
     Debugger debugger = Debugger(*this);
 
 protected:
@@ -102,6 +103,7 @@ protected:
     static const int CPU_TRACE_FLAG        = (1 << 13);
     static const int CPU_CHECK_BP          = (1 << 14);
     static const int CPU_CHECK_WP          = (1 << 15);
+    static const int CPU_CHECK_CP          = (1 << 16);
 
     // Number of elapsed cycles since powerup
     i64 clock;
@@ -200,7 +202,7 @@ public:
     // Return an info struct for a certain opcode
     InstrInfo getInfo(u16 op); 
 
-    
+        
     //
     // Interfacing with other components
     //
@@ -295,12 +297,12 @@ protected:
     // Exception delegates
     void addressErrorHandler();
     
-    // Called when a breakpoint is reached
+    // Called when a debug point is reached
+    void softstopReached(u32 addr);
     void breakpointReached(u32 addr);
-
-    // Called when a breakpoint is reached
     void watchpointReached(u32 addr);
-    
+    void catchpointReached(u8 vector);
+
     // Called at the beginning of each instruction handler (see EXEC_DEBUG)
     void execDebug(const char *cmd);
  
