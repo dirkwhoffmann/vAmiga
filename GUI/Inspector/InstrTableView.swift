@@ -137,7 +137,7 @@ class InstrTableView: NSTableView {
         if let addr = addrInRow[row] {
 
             if !breakpoints.isSet(at: addr) {
-                breakpoints.add(at: addr)
+                breakpoints.setAt(addr)
             } else if breakpoints.isDisabled(at: addr) {
                 breakpoints.enable(at: addr)
             } else if breakpoints.isEnabled(at: addr) {
@@ -163,7 +163,7 @@ class InstrTableView: NSTableView {
             if breakpoints.isSet(at: addr) {
                 breakpoints.remove(at: addr)
             } else {
-                breakpoints.add(at: addr)
+                breakpoints.setAt(addr)
             }
 
             inspector.fullRefresh()

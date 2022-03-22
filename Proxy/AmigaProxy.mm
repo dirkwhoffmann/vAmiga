@@ -111,9 +111,9 @@ using namespace moira;
     return [self guards]->isSetAt(u32(addr));
 }
 
-- (void)addAt:(NSInteger)addr
+- (void)setAt:(NSInteger)addr
 {
-    [self guards]->addAt((u32)addr);
+    [self guards]->setAt((u32)addr);
 }
 
 - (void)remove:(NSInteger)nr

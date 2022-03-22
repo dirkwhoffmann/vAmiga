@@ -814,7 +814,7 @@ Amiga::_powerOn()
     // Set initial breakpoints
     for (auto &bp : std::vector <u32> (INITIAL_BREAKPOINTS)) {
         
-        cpu.debugger.breakpoints.addAt(bp);
+        cpu.debugger.breakpoints.setAt(bp);
         debugMode = true;
     }
     

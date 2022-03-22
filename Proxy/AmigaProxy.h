@@ -253,7 +253,7 @@
 
 - (BOOL)isSet:(NSInteger)nr;
 - (BOOL)isSetAt:(NSInteger)addr;
-- (void)addAt:(NSInteger)addr;
+- (void)setAt:(NSInteger)addr;
 - (void)remove:(NSInteger)nr;
 - (void)removeAt:(NSInteger)addr;
 - (void)removeAll;

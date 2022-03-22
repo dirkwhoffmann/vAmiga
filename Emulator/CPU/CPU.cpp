@@ -369,6 +369,21 @@ CPU::_dump(dump::Category category, std::ostream& os) const
         os << (reg.sr.v ? 'V' : 'v');
         os << (reg.sr.c ? 'C' : 'c') << std::endl;
     }
+    
+    if (category & dump::Breakpoints) {
+        
+        for (int i = 0; i < debugger.breakpoints.elements(); i++) {
+            
+            auto bp = debugger.breakpoints.guardNr(i);
+            auto nr = std::to_string(i);
+            
+            os << util::tab(nr);
+            os << util::hex(bp->addr);
+            os << (bp->enabled ? "    " : " (D)");
+            if (bp->ignore) os << " Ignore: " << bp->ignore;
+            os << std::endl;
+        }
+    }
 }
 
 void

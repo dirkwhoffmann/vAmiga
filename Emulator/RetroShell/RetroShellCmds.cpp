@@ -307,6 +307,24 @@ RetroShell::exec <Token::cpu, Token::inspect, Token::registers> (Arguments& argv
 }
 
 template <> void
+RetroShell::exec <Token::cpu, Token::inspect, Token::breakpoints> (Arguments& argv, long param)
+{
+    dump(amiga.cpu, dump::Breakpoints);
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::inspect, Token::watchpoints> (Arguments& argv, long param)
+{
+    dump(amiga.cpu, dump::Watchpoints);
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::inspect, Token::catchpoints> (Arguments& argv, long param)
+{
+    dump(amiga.cpu, dump::Catchpoints);
+}
+
+template <> void
 RetroShell::exec <Token::cpu, Token::jump> (Arguments &argv, long param)
 {
     auto value = util::parseNum(argv.front());

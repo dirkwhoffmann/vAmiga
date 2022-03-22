@@ -72,8 +72,8 @@ public:
     //
 
     long elements() const { return count; }
-    Guard *guardWithNr(long nr) const;
-    Guard *guardAtAddr(u32 addr) const;
+    Guard *guardNr(long nr) const;
+    Guard *guardAt(u32 addr) const;
 
     std::optional<u32> guardAddr(long nr) const;
 
@@ -82,10 +82,10 @@ public:
     // Adding or removing guards
     //
 
-    bool isSet(long nr) const { return guardWithNr(nr) != nullptr; }
-    bool isSetAt(u32 addr) const { return guardAtAddr(addr) != nullptr; }
+    bool isSet(long nr) const { return guardNr(nr) != nullptr; }
+    bool isSetAt(u32 addr) const { return guardAt(addr) != nullptr; }
 
-    void addAt(u32 addr);
+    void setAt(u32 addr);
 
     void remove(long nr);
     void removeAt(u32 addr);
