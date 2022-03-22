@@ -226,19 +226,21 @@ Debugger::stepOver()
 }
 
 bool
+Debugger::softstopMatches(u32 addr)
+{
+    if (addr != softStop && softStop != UINT64_MAX) return false;
+    
+    // Soft breakpoints are deleted when reached
+    softStop = UINT64_MAX - 1;
+    breakpoints.setNeedsCheck(breakpoints.elements() != 0);
+    breakpointPC = -1;
+    
+    return true;
+}
+
+bool
 Debugger::breakpointMatches(u32 addr)
 {
-    // Check if a soft breakpoint has been reached
-    if (addr == softStop || softStop == UINT64_MAX) {
-
-        // Soft breakpoints are deleted when reached
-        softStop = UINT64_MAX - 1;
-        breakpoints.setNeedsCheck(breakpoints.elements() != 0);
-        breakpointPC = -1;
-        
-        return true;
-    }
-
     if (!breakpoints.eval(addr)) return false;
         
     breakpointPC = moira.reg.pc;

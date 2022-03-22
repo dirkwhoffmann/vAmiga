@@ -179,13 +179,15 @@ Moira::addressErrorHandler()
 }
 
 void
+Moira::softstopReached(u32 addr)
+{
+    amiga.setFlag(RL::SOFTSTOP_REACHED);
+}
+
+void
 Moira::breakpointReached(u32 addr)
 {
-    if (debugger.breakpointPC == -1) {
-        amiga.setFlag(RL::SOFTSTOP_REACHED);
-    } else {
-        amiga.setFlag(RL::BREAKPOINT_REACHED);
-    }
+    amiga.setFlag(RL::BREAKPOINT_REACHED);
 }
 
 void
