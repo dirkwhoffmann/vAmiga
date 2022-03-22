@@ -31,7 +31,7 @@ Muxer::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category & dump::Config) {
+    if (category == dump::Config) {
         
         os << tab("Sampling method");
         os << SamplingMethodEnum::key(config.samplingMethod) << std::endl;

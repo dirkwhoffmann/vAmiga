@@ -27,7 +27,7 @@ SerServer::_dump(dump::Category category, std::ostream& os) const
         
     RemoteServer::_dump(category, os);
     
-    if (category & dump::State) {
+    if (category == dump::State) {
         
         os << tab("Received bytes");
         os << dec(receivedBytes) << std::endl;

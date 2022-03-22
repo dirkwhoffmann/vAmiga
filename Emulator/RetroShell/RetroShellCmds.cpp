@@ -391,9 +391,9 @@ template <> void
 RetroShell::exec <Token::cia, Token::inspect, Token::tod> (Arguments& argv, long param)
 {
     if (param == 0) {
-        dump(amiga.ciaA.tod, dump::State);
+        dump(amiga.ciaA, dump::Tod);
     } else {
-        dump(amiga.ciaB.tod, dump::State);
+        dump(amiga.ciaB, dump::Tod);
     }
 }
 

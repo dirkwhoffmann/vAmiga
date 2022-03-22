@@ -16,9 +16,9 @@ void
 ZorroBoard::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
-            
-    if (category & dump::Properties) {
     
+    if (category == dump::Properties) {
+        
         os << tab("Product");
         os << productName() << std::endl;
         os << tab("Vendor");
@@ -36,9 +36,9 @@ ZorroBoard::_dump(dump::Category category, std::ostream& os) const
         os << tab("Flags");
         os << hex(flags())<< std::endl;
     }
-
-    if (category & dump::State) {
-            
+    
+    if (category == dump::State) {
+        
         auto first = u8(firstPage());
         auto last = u8(lastPage());
         

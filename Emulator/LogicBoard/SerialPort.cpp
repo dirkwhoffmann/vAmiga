@@ -88,17 +88,17 @@ SerialPort::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category & dump::Config) {
+    if (category == dump::Config) {
         
         os << tab("device");
         os << SerialPortDeviceEnum::key(config.device) << std::endl;
     }
     
-    if (category & dump::State) {
-    
+    if (category == dump::State) {
+        
         os << tab("port");
         os << hex(port);
-    }
+    }    
 }
 
 bool

@@ -169,7 +169,7 @@ CIA::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category & dump::Config) {
+    if (category == dump::Config) {
         
         os << tab("Revision");
         os << CIARevisionEnum::key(config.revision) << std::endl;
@@ -179,7 +179,7 @@ CIA::_dump(dump::Category category, std::ostream& os) const
         os << bol(config.eClockSyncing) << std::endl;
     }
     
-    if (category & dump::State) {
+    if (category == dump::State) {
         
         os << tab("Clock") << dec(clock) << std::endl;
         os << tab("Sleeping") << bol(sleeping) << std::endl;
@@ -188,10 +188,9 @@ CIA::_dump(dump::Category category, std::ostream& os) const
         os << tab("Wakeup cycle") << dec(wakeUpCycle) << std::endl;
         os << tab("CNT") << bol(cnt) << std::endl;
         os << tab("INT") << bol(irq) << std::endl;
-
     }
     
-    if (category & dump::Registers) {
+    if (category == dump::Registers) {
         
         os << std::endl;
         os << tab("Counter A") << hex(counterA) << std::endl;
@@ -215,6 +214,11 @@ CIA::_dump(dump::Category category, std::ostream& os) const
         os << tab("SSR") << hex(ssr) << std::endl;
         os << tab("serCounter") << dec(serCounter) << std::endl;
         os << std::endl;
+    }
+    
+    if (category == dump::Tod) {
+        
+        tod.dump(dump::State, os);
     }
 }
 

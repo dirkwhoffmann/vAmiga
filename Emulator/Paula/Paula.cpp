@@ -32,8 +32,8 @@ Paula::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category & dump::State) {
-    
+    if (category == dump::State) {
+        
         os << tab("potCntX0") << dec(potCntX0) << std::endl;
         os << tab("potCntY0") << dec(potCntY0) << std::endl;
         os << tab("potCntX1") << dec(potCntX1) << std::endl;
@@ -44,7 +44,7 @@ Paula::_dump(dump::Category category, std::ostream& os) const
         os << tab("chargeY1") << chargeY1 << std::endl;
     }
     
-    if (category & dump::Registers) {
+    if (category == dump::Registers) {
         
         os << tab("INTENA") << hex(intena) << std::endl;
         os << tab("INTREQ") << hex(intreq) << std::endl;

@@ -40,11 +40,7 @@ HdController::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
         
-    ZorroBoard::_dump(category, os);
-    
-    if (category & dump::State) {
-    
-    }
+    ZorroBoard::_dump(category, os);    
 }
 
 void

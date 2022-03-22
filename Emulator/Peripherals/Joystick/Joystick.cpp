@@ -109,7 +109,7 @@ Joystick::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category & dump::State) {
+    if (category == dump::State) {
         
         os << tab("Button pressed") << bol(button) << std::endl;
         os << tab("X axis") << dec(axisX) << std::endl;

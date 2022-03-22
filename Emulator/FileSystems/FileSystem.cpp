@@ -109,8 +109,8 @@ void
 FileSystem::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
-
-    if (category & dump::Summary) {
+    
+    if (category == dump::Summary) {
         
         auto total = numBlocks();
         auto used = usedBlocks();
@@ -132,8 +132,8 @@ FileSystem::_dump(dump::Category category, std::ostream& os) const
         os << getName().c_str() << std::endl;
     }
     
-    if (category & dump::Properties) {
-
+    if (category == dump::Properties) {
+        
         os << tab("Name");
         os << getName().cpp_str() << std::endl;
         os << tab("Created");
@@ -160,9 +160,9 @@ FileSystem::_dump(dump::Category category, std::ostream& os) const
         for (auto& it : bmExtBlocks) { os << dec(it) << " "; }
         os << std::endl;
     }
-
-    if (category & dump::Blocks) {
-                
+    
+    if (category == dump::Blocks) {
+        
         for (isize i = 0; i < numBlocks(); i++)  {
             
             if (blocks[i]->type == FS_EMPTY_BLOCK) continue;

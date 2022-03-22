@@ -441,15 +441,15 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category & dump::Config) {
-    
+    if (category == dump::Config) {
+        
         os << tab("Chip Revison");
         os << AgnusRevisionEnum::key(config.revision) << std::endl;
         os << tab("Slow Ram mirror");
         os << bol(config.slowRamMirror) << std::endl;
     }
-
-    if (category & dump::State) {
+    
+    if (category == dump::State) {
         
         os << tab("Clock");
         os << dec(clock) << std::endl;
@@ -472,43 +472,43 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         
         sequencer.dump(dump::State, os);
     }
-
-    if (category & dump::Registers) {
+    
+    if (category == dump::Registers) {
         
         sequencer.dump(dump::Registers, os);
         
         os << tab("DMACON");
         os << hex(dmacon) << std::endl;
-                
+        
         os << tab("BPLCON0, BPLCON1");
         os << hex(bplcon0) << ' ' << hex(bplcon1) << ' ' << std::endl;
-
+        
         os << tab("BPL1MOD, BPL2MOD");
         os << dec(bpl1mod) << ' ' << dec(bpl2mod) << ' ' << std::endl;
-    
+        
         os << tab("BPL0PT - BPL2PT");
         os << hex(bplpt[0]) << ' ' << hex(bplpt[1]) << ' ';
         os << hex(bplpt[2]) << ' ' << ' ' << std::endl;
         os << tab("BPL3PT - BPL5PT");
         os << hex(bplpt[3]) << ' ' << hex(bplpt[4]) << ' ';
         os << hex(bplpt[5]) << std::endl;
-
+        
         os << tab("SPR0PT - SPR3PT");
         os << hex(sprpt[0]) << ' ' << hex(sprpt[1]) << ' ';
         os << hex(sprpt[2]) << ' ' << hex(sprpt[3]) << ' ' << std::endl;
         os << tab("SPR4PT - SPR7PT");
         os << hex(sprpt[4]) << ' ' << hex(sprpt[5]) << ' ';
         os << hex(sprpt[5]) << ' ' << hex(sprpt[7]) << ' ' << std::endl;
-
+        
         os << tab("AUD0PT - AUD3PT");
         os << hex(audpt[0]) << ' ' << hex(audpt[1]) << ' ';
         os << hex(audpt[2]) << ' ' << hex(audpt[3]) << ' ' << std::endl;
-
+        
         os << tab("DSKPT");
         os << hex(dskpt) << std::endl;
     }
     
-    if (category & dump::Bus) {
+    if (category == dump::Bus) {
         
         for (isize i = 0; i < HPOS_CNT; i++) {
             
@@ -516,7 +516,7 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
             
             string key = std::to_string(cycle) + ":";
             os << std::left << std::setw(5) << key;
-
+            
             string value = BusOwnerEnum::key(busOwner[cycle]);
             os << std::left << std::setw(8) << value;
             
@@ -525,8 +525,8 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         os << std::endl;
     }
     
-    if (category & dump::Events) {
-                
+    if (category == dump::Events) {
+        
         os << std::left << std::setw(10) << "Slot";
         os << std::left << std::setw(14) << "Event";
         os << std::left << std::setw(18) << "Trigger position";
@@ -535,7 +535,7 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         for (isize i = 0; i < 23; i++) {
             
             EventSlotInfo &info = slotInfo[i];
-                        
+            
             os << std::left << std::setw(10) << EventSlotEnum::key(info.slot);
             os << std::left << std::setw(14) << info.eventName;
             
@@ -563,12 +563,12 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         }
     }
     
-    if (category & dump::Dma) {
+    if (category == dump::Dma) {
         
         sequencer.dump(dump::Dma, os);
     }
-
-    if (category & dump::Signals) {
+    
+    if (category == dump::Signals) {
         
         sequencer.dump(dump::Signals, os);
     }

@@ -259,8 +259,8 @@ void
 HardDrive::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
-
-    if (category & dump::Config) {
+    
+    if (category == dump::Config) {
         
         os << tab("Nr");
         os << dec(nr) << std::endl;
@@ -274,7 +274,7 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         os << dec(config.pan) << std::endl;
     }
     
-    if (category & dump::Drive) {
+    if (category == dump::Drive) {
         
         auto cap1 = geometry.numBytes() / MB(1);
         auto cap2 = ((100 * geometry.numBytes()) / MB(1)) % 100;
@@ -297,11 +297,11 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         os << tab("Controller Revision");
         os << controllerRevision << std::endl;
     }
-
-    if (category & dump::Volumes) {
-
+    
+    if (category == dump::Volumes) {
+        
         os << "Type   Size            Used    Free    Full  Name" << std::endl;
-
+        
         for (isize i = 0; i < isize(ptable.size()); i++) {
             
             auto fs = MutableFileSystem(*this, i);
@@ -309,7 +309,7 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         }
         
         for (isize i = 0; i < isize(ptable.size()); i++) {
-
+            
             os << std::endl;
             os << tab("Partition");
             os << dec(i) << std::endl;
@@ -318,7 +318,7 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         }
     }
     
-    if (category & dump::Partitions) {
+    if (category == dump::Partitions) {
         
         for (usize i = 0; i < ptable.size(); i++) {
             
@@ -330,8 +330,8 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
             part.dump(os);
         }
     }
-
-    if (category & dump::State) {
+    
+    if (category == dump::State) {
         
         os << tab("Nr");
         os << dec(nr) << std::endl;

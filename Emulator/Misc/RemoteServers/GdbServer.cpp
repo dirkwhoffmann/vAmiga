@@ -30,7 +30,7 @@ GdbServer::_dump(dump::Category category, std::ostream& os) const
      
     RemoteServer::_dump(category, os);
 
-    if (category & dump::Segments) {
+    if (category == dump::Segments) {
         
         os << tab("Code segment") << hex(codeSeg()) << std::endl;
         os << tab("Data segment") << hex(dataSeg()) << std::endl;

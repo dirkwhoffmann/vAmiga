@@ -21,11 +21,11 @@ void
 ZorroManager::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
-            
-    if (category & dump::State) {
     
+    if (category == dump::State) {
+        
         for (isize i = 0; i < slotCount; i++) {
-
+            
             os << tab("Slot " + std::to_string(i));
             
             if (auto board = getBoard(i); board != nullptr) {

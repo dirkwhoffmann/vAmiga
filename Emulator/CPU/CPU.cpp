@@ -313,13 +313,13 @@ CPU::_inspect(u32 dasmStart) const
 void
 CPU::_dump(dump::Category category, std::ostream& os) const
 {
-    if (category & dump::Config) {
+    if (category == dump::Config) {
         
         os << util::tab("Register reset value");
         os << util::hex(config.regResetVal) << std::endl;
     }
-     
-    if (category & dump::State) {
+    
+    if (category == dump::State) {
         
         os << util::tab("Clock");
         os << util::dec(clock) << std::endl;
@@ -328,9 +328,9 @@ CPU::_dump(dump::Category category, std::ostream& os) const
         os << util::tab("Last exception");
         os << util::dec(exception);
     }
-    
-    if (category & dump::Registers) {
 
+    if (category == dump::Registers) {
+        
         os << util::tab("PC");
         os << util::hex(reg.pc0) << std::endl;
         os << std::endl;
@@ -369,8 +369,8 @@ CPU::_dump(dump::Category category, std::ostream& os) const
         os << (reg.sr.v ? 'V' : 'v');
         os << (reg.sr.c ? 'C' : 'c') << std::endl;
     }
-    
-    if (category & dump::Breakpoints) {
+
+    if (category == dump::Breakpoints) {
         
         for (int i = 0; i < debugger.breakpoints.elements(); i++) {
             
@@ -383,6 +383,26 @@ CPU::_dump(dump::Category category, std::ostream& os) const
             if (bp->ignore) os << " Ignore: " << bp->ignore;
             os << std::endl;
         }
+    }
+    
+    if (category == dump::Watchpoints) {
+        
+        for (int i = 0; i < debugger.watchpoints.elements(); i++) {
+            
+            auto bp = debugger.watchpoints.guardNr(i);
+            auto nr = std::to_string(i);
+            
+            os << util::tab(nr);
+            os << util::hex(bp->addr);
+            os << (bp->enabled ? "    " : " (D)");
+            if (bp->ignore) os << " Ignore: " << bp->ignore;
+            os << std::endl;
+        }
+    }
+    
+    if (category == dump::Catchpoints) {
+        
+        // TODO
     }
 }
 

@@ -43,32 +43,12 @@
 #include "Error.h"
 
 namespace dump {
-enum Category : usize {
+enum Category {
     
-    BankMap     = (1 << 0),
-    Blocks      = (1 << 1),
-    Breakpoints = (1 << 2),
-    Bus         = (1 << 3),
-    Catchpoints = (1 << 4),
-    Checksums   = (1 << 5),
-    Config      = (1 << 6),
-    Dma         = (1 << 7),
-    Drive       = (1 << 8),
-    Events      = (1 << 9),
-    FileSystem  = (1 << 10),
-    Geometry    = (1 << 11),
-    List1       = (1 << 12),
-    List2       = (1 << 13),
-    Parameters  = (1 << 14),
-    Partitions  = (1 << 15),
-    Properties  = (1 << 16),
-    Registers   = (1 << 17),
-    Segments    = (1 << 18),
-    Signals     = (1 << 19),
-    State       = (1 << 20),
-    Summary     = (1 << 21),
-    Volumes     = (1 << 22),
-    Watchpoints = (1 << 23)
+    BankMap, Blocks, Breakpoints, Bus, Catchpoints, Checksums, Config, Dma,
+    Drive, Events, FileSystem, Geometry, List1, List2, Parameters, Partitions,
+    Properties, Registers, Segments, Signals, State, Summary, Tod, Volumes,
+    Watchpoints
 };
 }
 

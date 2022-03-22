@@ -49,7 +49,7 @@ Denise::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category & dump::Config) {
+    if (category == dump::Config) {
         
         os << tab("Chip revision");
         os << DeniseRevisionEnum::key(config.revision) << std::endl;
@@ -71,7 +71,7 @@ Denise::_dump(dump::Category category, std::ostream& os) const
         os << bol(config.clxSprSpr) << std::endl;
     }
     
-    if (category & dump::Registers) {
+    if (category == dump::Registers) {
         
         os << tab("BPLCON0");
         os << hex(bplcon0) << std::endl;
@@ -81,7 +81,6 @@ Denise::_dump(dump::Category category, std::ostream& os) const
         os << hex(bplcon2) << std::endl;
         os << tab("BPLCON3");
         os << hex(bplcon3) << std::endl;
-    
         os << tab("SPRxDATA");
         for (isize i = 0; i < 8; i++) os << hex(sprdata[i]) << ' ';
         os << std::endl;

@@ -94,13 +94,13 @@ RTC::_dump(dump::Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category & dump::Config) {
+    if (category == dump::Config) {
         
         os << tab("Chip Model");
         os << RTCRevisionEnum::key(config.model) << std::endl;
     }
     
-    if (category & dump::Registers) {
+    if (category == dump::Registers) {
         
         for (isize i = 0; i < 16; i++) {
             os << "    " << hex((u8)i) << " : ";
