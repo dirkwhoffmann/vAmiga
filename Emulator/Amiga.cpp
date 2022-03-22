@@ -958,6 +958,16 @@ Amiga::execute()
                 break;
             }
 
+            // Did we reach a catchpoint?
+            if (flags & RL::CATCHPOINT_REACHED) {
+                clearFlag(RL::CATCHPOINT_REACHED);
+                inspect();
+                auto vector = u8(cpu.debugger.catchpoints.hit->addr);
+                msgQueue.put(MSG_CATCHPOINT_REACHED, vector);
+                newState = EXEC_PAUSED;
+                break;
+            }
+
             // Are we requested to terminate the run loop?
             if (flags & RL::STOP) {
                 clearFlag(RL::STOP);

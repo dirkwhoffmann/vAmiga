@@ -293,6 +293,33 @@ Interpreter::registerInstructions()
              "command", "Ignores a watchpoint a certain number of times",
              &RetroShell::exec <Token::cpu, Token::wp, Token::ignore>, 2);
     
+    root.add({"cpu", "catch"},
+             "command", "Manages catchpoints");
+
+    root.add({"cpu", "catch", "info"},
+             "command", "Lists all catchpoints",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::info>, 0);
+
+    root.add({"cpu", "catch", "vector"},
+             "command", "Catches an exception vector",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::vector>, 1);
+
+    root.add({"cpu", "catch", "delete"},
+             "command", "Deletes a catchpoint",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::del>, 1);
+
+    root.add({"cpu", "catch", "enable"},
+             "command", "Enables a catchpoint",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::enable>, 1);
+
+    root.add({"cpu", "catch", "disable"},
+             "command", "Disables a catchpoint",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::disable>, 1);
+
+    root.add({"cpu", "catch", "ignore"},
+             "command", "Ignores a catchpoint a certain number of times",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::ignore>, 2);
+
     root.add({"cpu", "jump"},
              "command", "Jumps to the specified address",
              &RetroShell::exec <Token::cpu, Token::jump>, 1);

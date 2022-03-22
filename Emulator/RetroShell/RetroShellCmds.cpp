@@ -379,6 +379,42 @@ RetroShell::exec <Token::cpu, Token::wp, Token::ignore> (Arguments& argv, long p
 }
 
 template <> void
+RetroShell::exec <Token::cpu, Token::cp, Token::info> (Arguments& argv, long param)
+{
+    dump(amiga.cpu, Category::Catchpoints);
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::cp, Token::vector> (Arguments& argv, long param)
+{
+    amiga.cpu.setCatchpoint(u32(util::parseNum(argv.front())));
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::cp, Token::del> (Arguments& argv, long param)
+{
+    amiga.cpu.deleteCatchpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::cp, Token::enable> (Arguments& argv, long param)
+{
+    amiga.cpu.enableCatchpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::cp, Token::disable> (Arguments& argv, long param)
+{
+    amiga.cpu.disableCatchpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::cp, Token::ignore> (Arguments& argv, long param)
+{
+    amiga.cpu.ignoreCatchpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
+}
+
+template <> void
 RetroShell::exec <Token::cpu, Token::jump> (Arguments &argv, long param)
 {
     auto value = util::parseNum(argv.front());

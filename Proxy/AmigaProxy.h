@@ -243,7 +243,7 @@
 
 
 //
-// Guards (Breakpoints, Watchpoints)
+// Guards (Breakpoints, Watchpoints, Catchpoints)
 //
 
 @interface GuardsProxy : Proxy { }
@@ -294,6 +294,8 @@
 - (NSString *)disassembleInstr:(NSInteger)addr length:(NSInteger *)len;
 - (NSString *)disassembleWords:(NSInteger)addr length:(NSInteger)len;
 - (NSString *)disassembleAddr:(NSInteger)addr;
+
+- (NSString *)vectorName:(NSInteger)nr;
 
 @end
 

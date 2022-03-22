@@ -262,6 +262,12 @@ using namespace moira;
     return str ? @(str) : nullptr;
 }
 
+- (NSString *)vectorName:(NSInteger)nr
+{
+    auto name = [self cpu]->debugger.vectorName(u8(nr));
+    return @(name.c_str());
+}
+
 @end
 
 

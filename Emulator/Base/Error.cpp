@@ -68,7 +68,11 @@ VAError::VAError(ErrorCode code, const string &s)
         case ERROR_CP_ALREADY_SET:
             description = "This catchpoint is already set";
             break;
-                     
+
+        case ERROR_CP_CANT_CATCH:
+            description = "Exception vector " + s + " cannot be catched";
+            break;
+            
         case ERROR_DIR_NOT_FOUND:
             description = "Folder \"" + s + "\" not found.";
             break;

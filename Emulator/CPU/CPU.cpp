@@ -195,6 +195,12 @@ Moira::watchpointReached(u32 addr)
 }
 
 void
+Moira::catchpointReached(u8 vector)
+{
+    amiga.setFlag(RL::CATCHPOINT_REACHED);
+}
+
+void
 Moira::execDebug(const char *cmd)
 {
     if (agnus.pos.v == 76 || agnus.pos.v == 77) {
@@ -403,7 +409,18 @@ CPU::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Catchpoints) {
         
-        // TODO
+        for (int i = 0; i < debugger.catchpoints.elements(); i++) {
+            
+            auto wp = debugger.catchpoints.guardNr(i);
+            auto nr = "Catchpoint " + std::to_string(i);
+
+            os << util::tab(nr);
+            os << "Vector " << util::dec(wp->addr);
+            os << " (" << cpu.debugger.vectorName(u8(wp->addr)) << ")";
+            if (!wp->enabled) os << " (Disabled)";
+            else if (wp->ignore) os << " (Disabled for " << wp->ignore << " hits)";
+            os << std::endl;
+        }
     }
 }
 
@@ -602,3 +619,53 @@ CPU::ignoreWatchpoint(isize nr, isize count)
     debugger.watchpoints.ignore(nr, count);
     msgQueue.put(MSG_WATCHPOINT_UPDATED);
 }
+
+void
+CPU::setCatchpoint(u32 addr)
+{
+    if (addr > 255) {
+        throw VAError(ERROR_OPT_INVARG, "0 .. 255");
+    }
+    if (debugger.catchpoints.isSetAt(addr)) {
+        throw VAError(ERROR_CP_ALREADY_SET, addr);
+    }
+    debugger.catchpoints.setAt(addr);
+    msgQueue.put(MSG_CATCHPOINT_UPDATED);
+}
+
+void
+CPU::deleteCatchpoint(isize nr)
+{
+    if (!debugger.catchpoints.isSet(nr)) throw VAError(ERROR_CP_NOT_FOUND, nr);
+
+    debugger.catchpoints.remove(nr);
+    msgQueue.put(MSG_CATCHPOINT_UPDATED);
+}
+
+void
+CPU::enableCatchpoint(isize nr)
+{
+    if (!debugger.catchpoints.isSet(nr)) throw VAError(ERROR_CP_NOT_FOUND, nr);
+
+    debugger.catchpoints.enable(nr);
+    msgQueue.put(MSG_CATCHPOINT_UPDATED);
+}
+
+void
+CPU::disableCatchpoint(isize nr)
+{
+    if (!debugger.catchpoints.isSet(nr)) throw VAError(ERROR_CP_NOT_FOUND, nr);
+
+    debugger.catchpoints.disable(nr);
+    msgQueue.put(MSG_CATCHPOINT_UPDATED);
+}
+
+void
+CPU::ignoreCatchpoint(isize nr, isize count)
+{
+    if (!debugger.catchpoints.isSet(nr)) throw VAError(ERROR_CP_NOT_FOUND, nr);
+
+    debugger.catchpoints.ignore(nr, count);
+    msgQueue.put(MSG_CATCHPOINT_UPDATED);
+}
+

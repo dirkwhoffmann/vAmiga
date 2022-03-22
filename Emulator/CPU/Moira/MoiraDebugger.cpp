@@ -194,6 +194,16 @@ Watchpoints::setNeedsCheck(bool value)
 }
 
 void
+Catchpoints::setNeedsCheck(bool value)
+{
+    if (value) {
+        moira.flags |= Moira::CPU_CHECK_CP;
+    } else {
+        moira.flags &= ~Moira::CPU_CHECK_CP;
+    }
+}
+
+void
 Debugger::reset()
 {
     breakpoints.setNeedsCheck(breakpoints.elements() != 0);
@@ -244,6 +254,13 @@ Debugger::watchpointMatches(u32 addr, Size S)
     return true;
 }
 
+bool
+Debugger::catchpointMatches(u32 vectorNr)
+{
+    if (!catchpoints.eval(vectorNr)) return false;
+    return true;
+}
+
 void
 Debugger::enableLogging()
 {
@@ -281,6 +298,49 @@ Debugger::logEntryAbs(int n)
 {
     assert(n < loggedInstructions());
     return logEntryRel(loggedInstructions() - n - 1);
+}
+
+string
+Debugger::vectorName(u8 vectorNr)
+{
+    if (vectorNr >= 12 && vectorNr <= 14) {
+        return "Reserved";
+    }
+    if (vectorNr >= 16 && vectorNr <= 23) {
+        return "Reserved";
+    }
+    if (vectorNr >= 48 && vectorNr <= 63) {
+        return "Reserved";
+    }
+    if (vectorNr >= 25 && vectorNr <= 31) {
+        return "Level " + std::to_string(vectorNr - 24) + " interrupt";
+    }
+    if (vectorNr >= 32 && vectorNr <= 47) {
+        return "Trap #" + std::to_string(vectorNr - 32);
+    }
+    if (vectorNr >= 64 && vectorNr <= 255) {
+        return "User interrupt vector";
+    }
+    switch (vectorNr) {
+    
+        case 0:     return "Reset SP";
+        case 1:     return "Reset PC";
+        case 2:     return "Bus error";
+        case 3:     return "Address error";
+        case 4:     return "Illegal instruction";
+        case 5:     return "Division by zero";
+        case 6:     return "CHK instruction";
+        case 7:     return "TRAPV instruction";
+        case 8:     return "Privilege violation";
+        case 9:     return "Trace";
+        case 10:    return "Line A instruction";
+        case 11:    return "Line F instruction";
+        case 15:    return "Uninitialized IRQ vector";
+        case 24:    return "Spurious interrupt";
+
+        default:
+            fatalError;
+    }
 }
 
 void

@@ -142,6 +142,14 @@ public:
     void setNeedsCheck(bool value) override;
 };
 
+class Catchpoints : public Guards {
+
+public:
+
+    Catchpoints(Moira& ref) : Guards(ref) { }
+    void setNeedsCheck(bool value) override;
+};
+
 class Debugger {
 
 public:
@@ -149,12 +157,11 @@ public:
     // Reference to the connected CPU
     class Moira &moira;
 
-    // Breakpoint storage
+    // Guard storage
     Breakpoints breakpoints = Breakpoints(moira);
-
-    // Watchpoint storage
     Watchpoints watchpoints = Watchpoints(moira);
-
+    Catchpoints catchpoints = Catchpoints(moira);
+    
 private:
 
     /* Soft breakpoint for implementing single-stepping.
@@ -185,9 +192,9 @@ public:
 
     void reset();
 
-    
+
     //
-    // Working with breakpoints and watchpoints
+    // Working with breakpoints, watchpoints, and catchpoints
     //
 
     // Sets a soft breakpoint that will trigger immediately
@@ -196,11 +203,10 @@ public:
     // Sets a soft breakpoint to the next instruction
     void stepOver();
 
-    // Returns true if a breakpoint hits at the provides address
+    // Returns true if a breakpoint, watchpoint, or catchpoints hits in
     bool breakpointMatches(u32 addr);
-
-    // Returns true if a watchpoint hits at the provides address
     bool watchpointMatches(u32 addr, Size S);
+    bool catchpointMatches(u32 vectorNr);
 
     // Saved program counters (DEPRECATED)
     i64 breakpointPC = -1;
@@ -231,6 +237,14 @@ public:
 
     // Clears the log buffer
     void clearLog() { logCnt = 0; }
+    
+    
+    //
+    // Providing textual representations
+    //
+    
+    // Returns a human-readable name for an exception vector
+    static std::string vectorName(u8 vector);
     
     
     //

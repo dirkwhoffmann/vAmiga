@@ -455,7 +455,7 @@ extension MyController {
         case .DMA_DEBUG_OFF:
             renderer.zoomTextureIn()
             
-        case .BREAKPOINT_UPDATED, .WATCHPOINT_UPDATED:
+        case .BREAKPOINT_UPDATED, .WATCHPOINT_UPDATED, .CATCHPOINT_UPDATED:
             inspector?.fullRefresh()
             
         case .BREAKPOINT_REACHED:
@@ -464,9 +464,9 @@ extension MyController {
         case .WATCHPOINT_REACHED:
             inspector?.signalWatchPoint(pc: Int(msg.data1))
 
-        case .CATCHPOINT_UPDATED, .CATCHPOINT_REACHED:
-            break
-
+        case .CATCHPOINT_REACHED:
+            inspector?.signalCatchPoint(vector: Int(msg.data1))
+            
         case .CPU_HALT:
             refreshStatusBar()
             

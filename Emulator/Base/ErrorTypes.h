@@ -34,6 +34,7 @@ enum_long(ERROR_CODE)
     ERROR_WP_ALREADY_SET,
     ERROR_CP_NOT_FOUND,
     ERROR_CP_ALREADY_SET,
+    ERROR_CP_CANT_CATCH,
 
     // Memory
     ERROR_OUT_OF_MEMORY,
@@ -193,7 +194,8 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_WP_ALREADY_SET:              return "WP_ALREADY_SET";
             case ERROR_CP_NOT_FOUND:                return "CP_NOT_FOUND";
             case ERROR_CP_ALREADY_SET:              return "CP_ALREADY_SET";
-                
+            case ERROR_CP_CANT_CATCH:               return "CP_CANT_CATCH";
+
             case ERROR_OUT_OF_MEMORY:               return "OUT_OF_MEMORY";
 
             case ERROR_DIR_NOT_FOUND:               return "DIR_NOT_FOUND";

@@ -482,9 +482,9 @@ Moira::readExt()
 template<Flags F> void
 Moira::jumpToVector(int nr)
 {
-    exception = nr;
-    
     u32 vectorAddr = 4 * nr;
+
+    exception = nr;
     
     // Update the program counter
     reg.pc = readMS <MEM_DATA, Long> (vectorAddr);
@@ -504,5 +504,8 @@ Moira::jumpToVector(int nr)
     sync(2);
     prefetch<POLLIPL>();
     
+    // Stop emulation if the exception should be catched
+    if (debugger.catchpointMatches(nr)) catchpointReached(u8(nr));
+
     signalJumpToVector(nr, reg.pc);
 }
