@@ -30,11 +30,11 @@ Recorder::_reset(bool hard)
 }
 
 void
-Recorder::_dump(dump::Category category, std::ostream& os) const
+Recorder::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == dump::State) {
+    if (category == Category::State) {
         
         os << tab("FFmpeg path");
         os << FFmpeg::getExecPath() << std::endl;

@@ -38,11 +38,11 @@ UART::_inspect() const
 }
 
 void
-UART::_dump(dump::Category category, std::ostream& os) const
+UART::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == dump::State) {
+    if (category == Category::State) {
         
         os << tab("Serper");
         os << hex(serper) << std::endl;

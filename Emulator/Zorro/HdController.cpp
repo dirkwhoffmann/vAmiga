@@ -36,7 +36,7 @@ HdController::getDescription() const
 }
 
 void
-HdController::_dump(dump::Category category, std::ostream& os) const
+HdController::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
         

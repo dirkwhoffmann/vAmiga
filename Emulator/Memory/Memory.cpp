@@ -23,9 +23,9 @@
 #include "ZorroManager.h"
 
 void
-Memory::_dump(dump::Category category, std::ostream& os) const
+Memory::_dump(Category category, std::ostream& os) const
 {
-    if (category == dump::Config) {
+    if (category == Category::Config) {
         
         os << util::tab("Chip Ram");
         os << util::dec(config.chipSize / 1024) << " KB" << std::endl;
@@ -53,7 +53,7 @@ Memory::_dump(dump::Category category, std::ostream& os) const
         os << UnmappedMemoryEnum::key(config.unmappingType) << std::endl;
     }
     
-    if (category == dump::State) {
+    if (category == Category::State) {
         
         os << util::tab("Data bus");
         os << util::hex(dataBus) << std::endl;
@@ -61,7 +61,7 @@ Memory::_dump(dump::Category category, std::ostream& os) const
         os << util::bol(womIsLocked) << std::endl;
     }
     
-    if (category == dump::Checksums) {
+    if (category == Category::Checksums) {
         
         os << util::tab("Rom checksum");
         os << util::hex(util::fnv32(rom, config.romSize)) << std::endl;
@@ -77,7 +77,7 @@ Memory::_dump(dump::Category category, std::ostream& os) const
         os << util::hex(util::fnv32(fast, config.fastSize)) << std::endl;
     }
     
-    if (category == dump::BankMap) {
+    if (category == Category::BankMap) {
         
         MemorySource oldsrc = cpuMemSrc[0];
         isize oldi = 0;

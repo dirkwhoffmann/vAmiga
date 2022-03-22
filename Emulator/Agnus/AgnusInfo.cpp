@@ -437,11 +437,11 @@ Agnus::eventName(EventSlot slot, EventID id)
 }
 
 void
-Agnus::_dump(dump::Category category, std::ostream& os) const
+Agnus::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == dump::Config) {
+    if (category == Category::Config) {
         
         os << tab("Chip Revison");
         os << AgnusRevisionEnum::key(config.revision) << std::endl;
@@ -449,7 +449,7 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         os << bol(config.slowRamMirror) << std::endl;
     }
     
-    if (category == dump::State) {
+    if (category == Category::State) {
         
         os << tab("Clock");
         os << dec(clock) << std::endl;
@@ -470,12 +470,12 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         os << tab("BLS signal");
         os << bol(bls) << std::endl;
         
-        sequencer.dump(dump::State, os);
+        sequencer.dump(Category::State, os);
     }
     
-    if (category == dump::Registers) {
+    if (category == Category::Registers) {
         
-        sequencer.dump(dump::Registers, os);
+        sequencer.dump(Category::Registers, os);
         
         os << tab("DMACON");
         os << hex(dmacon) << std::endl;
@@ -508,7 +508,7 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         os << hex(dskpt) << std::endl;
     }
     
-    if (category == dump::Bus) {
+    if (category == Category::Bus) {
         
         for (isize i = 0; i < HPOS_CNT; i++) {
             
@@ -525,7 +525,7 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         os << std::endl;
     }
     
-    if (category == dump::Events) {
+    if (category == Category::Events) {
         
         os << std::left << std::setw(10) << "Slot";
         os << std::left << std::setw(14) << "Event";
@@ -563,14 +563,14 @@ Agnus::_dump(dump::Category category, std::ostream& os) const
         }
     }
     
-    if (category == dump::Dma) {
+    if (category == Category::Dma) {
         
-        sequencer.dump(dump::Dma, os);
+        sequencer.dump(Category::Dma, os);
     }
     
-    if (category == dump::Signals) {
+    if (category == Category::Signals) {
         
-        sequencer.dump(dump::Signals, os);
+        sequencer.dump(Category::Signals, os);
     }
 }
 

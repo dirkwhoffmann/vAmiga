@@ -256,11 +256,11 @@ HardDrive::_inspect() const
 }
 
 void
-HardDrive::_dump(dump::Category category, std::ostream& os) const
+HardDrive::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == dump::Config) {
+    if (category == Category::Config) {
         
         os << tab("Nr");
         os << dec(nr) << std::endl;
@@ -274,7 +274,7 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         os << dec(config.pan) << std::endl;
     }
     
-    if (category == dump::Drive) {
+    if (category == Category::Drive) {
         
         auto cap1 = geometry.numBytes() / MB(1);
         auto cap2 = ((100 * geometry.numBytes()) / MB(1)) % 100;
@@ -298,14 +298,14 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         os << controllerRevision << std::endl;
     }
     
-    if (category == dump::Volumes) {
+    if (category == Category::Volumes) {
         
         os << "Type   Size            Used    Free    Full  Name" << std::endl;
         
         for (isize i = 0; i < isize(ptable.size()); i++) {
             
             auto fs = MutableFileSystem(*this, i);
-            fs.dump(dump::Summary, os);
+            fs.dump(Category::Summary, os);
         }
         
         for (isize i = 0; i < isize(ptable.size()); i++) {
@@ -314,11 +314,11 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
             os << tab("Partition");
             os << dec(i) << std::endl;
             auto fs = MutableFileSystem(*this, i);
-            fs.dump(dump::Properties, os);
+            fs.dump(Category::Properties, os);
         }
     }
     
-    if (category == dump::Partitions) {
+    if (category == Category::Partitions) {
         
         for (usize i = 0; i < ptable.size(); i++) {
             
@@ -331,7 +331,7 @@ HardDrive::_dump(dump::Category category, std::ostream& os) const
         }
     }
     
-    if (category == dump::State) {
+    if (category == Category::State) {
         
         os << tab("Nr");
         os << dec(nr) << std::endl;

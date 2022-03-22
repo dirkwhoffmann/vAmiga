@@ -13,11 +13,11 @@
 #include "IOUtils.h"
 
 void
-Sequencer::_dump(dump::Category category, std::ostream& os) const
+Sequencer::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == dump::State) {
+    if (category == Category::State) {
         
         os << tab("BPV");
         os << bol(ddf.bpv) << " (" << bol(ddfInitial.bpv) << ")" << std::endl;
@@ -41,7 +41,7 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
         os << dec(ddf.cnt) << " (" << dec(ddfInitial.cnt) << ")" << std::endl;
     }
      
-    if (category == dump::Registers) {
+    if (category == Category::Registers) {
         
         os << tab("DDFSTRT");
         os << hex(ddfstrt) << std::endl;
@@ -53,7 +53,7 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
         os << hex(diwstop) << std::endl;
     }
     
-    if (category == dump::Dma) {
+    if (category == Category::Dma) {
         
         for (isize row = 0; row < HPOS_CNT; row++) {
             
@@ -78,7 +78,7 @@ Sequencer::_dump(dump::Category category, std::ostream& os) const
         os << std::endl;
     }
     
-    if (category == dump::Signals) {
+    if (category == Category::Signals) {
         
         auto name = [](u16 signal) -> string {
             

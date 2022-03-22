@@ -311,15 +311,15 @@ CPU::_inspect(u32 dasmStart) const
 }
 
 void
-CPU::_dump(dump::Category category, std::ostream& os) const
+CPU::_dump(Category category, std::ostream& os) const
 {
-    if (category == dump::Config) {
+    if (category == Category::Config) {
         
         os << util::tab("Register reset value");
         os << util::hex(config.regResetVal) << std::endl;
     }
     
-    if (category == dump::State) {
+    if (category == Category::State) {
         
         os << util::tab("Clock");
         os << util::dec(clock) << std::endl;
@@ -329,7 +329,7 @@ CPU::_dump(dump::Category category, std::ostream& os) const
         os << util::dec(exception);
     }
 
-    if (category == dump::Registers) {
+    if (category == Category::Registers) {
         
         os << util::tab("PC");
         os << util::hex(reg.pc0) << std::endl;
@@ -370,7 +370,7 @@ CPU::_dump(dump::Category category, std::ostream& os) const
         os << (reg.sr.c ? 'C' : 'c') << std::endl;
     }
 
-    if (category == dump::Breakpoints) {
+    if (category == Category::Breakpoints) {
         
         for (int i = 0; i < debugger.breakpoints.elements(); i++) {
             
@@ -385,7 +385,7 @@ CPU::_dump(dump::Category category, std::ostream& os) const
         }
     }
     
-    if (category == dump::Watchpoints) {
+    if (category == Category::Watchpoints) {
         
         for (int i = 0; i < debugger.watchpoints.elements(); i++) {
             
@@ -400,7 +400,7 @@ CPU::_dump(dump::Category category, std::ostream& os) const
         }
     }
     
-    if (category == dump::Catchpoints) {
+    if (category == Category::Catchpoints) {
         
         // TODO
     }

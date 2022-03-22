@@ -22,7 +22,7 @@ CopperDebugger::_reset(bool hard)
 }
 
 void
-CopperDebugger::_dump(dump::Category category, std::ostream& os) const
+CopperDebugger::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
 
@@ -32,7 +32,7 @@ CopperDebugger::_dump(dump::Category category, std::ostream& os) const
         return;
     }
     
-    if (category == dump::List1 && current1) {
+    if (category == Category::List1 && current1) {
 
         isize count = (current1->end - current1->start) / 4;
         for (isize i = 0; i < count && i < 100; i++) {
@@ -40,7 +40,7 @@ CopperDebugger::_dump(dump::Category category, std::ostream& os) const
         }
     }
     
-    if (category == dump::List2 && current2) {
+    if (category == Category::List2 && current2) {
 
         isize count = (current2->end - current2->start) / 4;
         for (isize i = 0; i < count && i < 100; i++) {

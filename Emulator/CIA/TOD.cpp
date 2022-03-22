@@ -48,11 +48,11 @@ TOD::_inspect() const
 }
 
 void 
-TOD::_dump(dump::Category category, std::ostream& os) const
+TOD::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == dump::State) {
+    if (category == Category::State) {
         
         os << tab("Counter");
         os << hex(tod.hi) << ":" << hex(tod.mid) << ":" << hex(tod.lo) << std::endl;

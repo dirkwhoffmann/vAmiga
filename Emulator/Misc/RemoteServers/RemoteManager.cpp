@@ -24,11 +24,11 @@ RemoteManager::RemoteManager(Amiga& ref) : SubComponent(ref)
 }
 
 void
-RemoteManager::_dump(dump::Category category, std::ostream& os) const
+RemoteManager::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == dump::State) {
+    if (category == Category::State) {
         
         for (auto server : servers) {
             
