@@ -164,7 +164,7 @@ Keyboard::releaseAllKeys()
 void
 Keyboard::autoType(KeyCode keycode, Cycle duration, Cycle delay)
 {
-    agnus.scheduleRel<SLOT_KEY>(delay, KEY_PRESS, keycode);
+    agnus.scheduleRel<SLOT_KEY>(delay, KEY_PRESS, duration << 8 | keycode);
 }
 
 void
