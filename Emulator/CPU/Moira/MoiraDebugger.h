@@ -121,8 +121,6 @@ public:
     // Indicates if guard checking is necessary
     virtual void setNeedsCheck(bool value) = 0;
 
-private:
-
     // Evaluates all guards
     bool eval(u32 addr, Size S = Byte);
 };

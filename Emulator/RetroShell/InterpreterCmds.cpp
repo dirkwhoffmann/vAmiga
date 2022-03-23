@@ -477,6 +477,33 @@ Interpreter::registerInstructions()
              "command", "Disassembles a Copper list",
              &RetroShell::exec <Token::copper, Token::list>, 1);
 
+    root.add({"copper", "break"},
+             "command", "Manages breakpoints");
+
+    root.add({"copper", "break", "info"},
+             "command", "Lists all breakpoints",
+             &RetroShell::exec <Token::copper, Token::bp, Token::info>, 0);
+
+    root.add({"copper", "break", "at"},
+             "command", "Sets a breakpoint at the specified address",
+             &RetroShell::exec <Token::copper, Token::bp, Token::at>, 1);
+
+    root.add({"copper", "break", "delete"},
+             "command", "Deletes a breakpoint",
+             &RetroShell::exec <Token::copper, Token::bp, Token::del>, 1);
+
+    root.add({"copper", "break", "enable"},
+             "command", "Enables a breakpoint",
+             &RetroShell::exec <Token::copper, Token::bp, Token::enable>, 1);
+
+    root.add({"copper", "break", "disable"},
+             "command", "Disables a breakpoint",
+             &RetroShell::exec <Token::copper, Token::bp, Token::disable>, 1);
+
+    root.add({"copper", "break", "ignore"},
+             "command", "Ignores a breakpoint a certain number of times",
+             &RetroShell::exec <Token::copper, Token::bp, Token::ignore>, 2);
+    
     
     //
     // Denise

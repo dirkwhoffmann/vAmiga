@@ -55,7 +55,7 @@ enum_long(MSG_TYPE)
     MSG_CATCHPOINT_UPDATED,
     MSG_CATCHPOINT_REACHED,
     MSG_CPU_HALT,
-
+    
     // Denise
     MSG_VIEWPORT,
     

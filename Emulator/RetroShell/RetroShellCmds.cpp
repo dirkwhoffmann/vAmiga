@@ -610,6 +610,42 @@ RetroShell::exec <Token::copper, Token::list> (Arguments& argv, long param)
     }
 }
 
+template <> void
+RetroShell::exec <Token::copper, Token::bp, Token::info> (Arguments& argv, long param)
+{
+    dump(copper.debugger, Category::Breakpoints);
+}
+
+template <> void
+RetroShell::exec <Token::copper, Token::bp, Token::at> (Arguments& argv, long param)
+{
+    copper.debugger.setBreakpoint(u32(util::parseNum(argv.front())));
+}
+
+template <> void
+RetroShell::exec <Token::copper, Token::bp, Token::del> (Arguments& argv, long param)
+{
+    copper.debugger.deleteBreakpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::copper, Token::bp, Token::enable> (Arguments& argv, long param)
+{
+    copper.debugger.enableBreakpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::copper, Token::bp, Token::disable> (Arguments& argv, long param)
+{
+    copper.debugger.disableBreakpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::copper, Token::bp, Token::ignore> (Arguments& argv, long param)
+{
+    copper.debugger.ignoreBreakpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
+}
+
 
 //
 // Denise

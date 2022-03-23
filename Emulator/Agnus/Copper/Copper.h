@@ -21,6 +21,7 @@ class Copper : public SubComponent
 {
     friend class Agnus;
     friend class CopperDebugger;
+    friend class CopperBreakpoints;
     
 public:
 
@@ -42,19 +43,11 @@ private:
     bool skip = false;
      
     // The Copper list location pointers
-    u32 cop1lc;
-    u32 cop2lc;
-
-    /* Address of the first and last executed instruction in each Copper list
-     * These values are needed by the debugger to determine the end of the
-     * Copper lists. Note that these values cannot be computed directly. They
-     * are computed by observing the program counter.
-     */
-    // u32 cop1end;
-    // u32 cop2end;
+    u32 cop1lc = 0;
+    u32 cop2lc = 0;
 
     // The Copper Danger bit (CDANG)
-    bool cdang;
+    bool cdang = false;
         
     // The Copper instruction registers
     u16 cop1ins = 0;
@@ -70,8 +63,12 @@ private:
      * sync. The value of this variable is used to determine if a write to the
      * location registers will be pushed through the Copper's program counter.
      */
-    bool activeInThisFrame;
+    bool activeInThisFrame = false;
    
+    // Indicates if breakpoint checking is needed
+    bool checkForBreakpoints = false;
+
+    
 public:
 
     // Indicates if Copper is currently servicing an event (for debugging only)

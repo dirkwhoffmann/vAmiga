@@ -10,6 +10,8 @@
 #pragma once
 
 #include "SubComponent.h"
+#include "MoiraDebugger.h"
+#include "CPU.h" // REMOVE AFTER REMOVING Moira from constructor
 #include <map>
 
 struct CopperList {
@@ -18,8 +20,20 @@ struct CopperList {
     u32 end;
 };
 
+class CopperBreakpoints : public moira::Guards {
+    
+public:
+    
+    class Copper &copper;
+    CopperBreakpoints(moira::Moira& cpu, Copper& ref) : moira::Guards(cpu), copper(ref) { }
+    void setNeedsCheck(bool value) override;
+};
+
 class CopperDebugger: public SubComponent {
-                
+               
+    friend class Amiga;
+    friend class Copper;
+    
     // Cached Copper lists
     std::map<u32, CopperList> cache;
         
@@ -28,7 +42,10 @@ class CopperDebugger: public SubComponent {
 
     // The most recently used Copper list 2
     CopperList *current2 = nullptr;
-
+    
+    // The breakpoint list
+    CopperBreakpoints breakpoints = CopperBreakpoints(cpu, copper);
+    
     
     //
     // Initializing
@@ -87,4 +104,15 @@ public:
     // Disassembles a single Copper command
     string disassemble(isize list, isize offset, bool symbolic) const;
     string disassemble(u32 addr, bool symbolic) const;
+    
+
+    //
+    // Manages the breakpoint list
+    //
+
+    void setBreakpoint(u32 addr) throws;
+    void deleteBreakpoint(isize nr) throws;
+    void enableBreakpoint(isize nr) throws;
+    void disableBreakpoint(isize nr) throws;
+    void ignoreBreakpoint(isize nr, isize count) throws;
 };
