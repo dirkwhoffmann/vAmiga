@@ -72,7 +72,7 @@ EXEFile::finalizeRead()
     FSErrorReport report = volume.check(true);
     if (report.corruptedBlocks > 0) {
         warn("Found %ld corrupted blocks\n", report.corruptedBlocks);
-        if constexpr (FS_DEBUG) volume.dump();
+        if constexpr (FS_DEBUG) volume.dump(Category::Blocks);
     }
         
     // Convert the volume into an ADF

@@ -1113,10 +1113,7 @@ Amiga::loadSnapshot(const Snapshot &snapshot)
              */
             hardReset();
             throw error;
-        }
-        
-        // Print some debug info if requested
-        if constexpr (SNP_DEBUG) dump();
+        }        
     }
     
     // Inform the GUI

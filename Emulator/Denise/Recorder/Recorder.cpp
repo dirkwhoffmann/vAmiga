@@ -99,7 +99,7 @@ Recorder::startRecording(int x1, int y1, int x2, int y2,
     }
     
     debug(REC_DEBUG, "Pipes created\n");
-    dump();
+    dump(Category::State);
     
     debug(REC_DEBUG, "startRecording(%d,%d,%d,%d,%ld,%ld,%ld)\n",
           x1, y1, x2, y2, bitRate, aspectX, aspectY);

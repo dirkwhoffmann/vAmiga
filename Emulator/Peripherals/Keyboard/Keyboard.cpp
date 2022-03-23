@@ -116,11 +116,13 @@ void
 Keyboard::pressKey(KeyCode keycode)
 {
     assert(keycode < 0x80);
-
+    
+    SYNCHRONIZED
+    
     if (!keyDown[keycode] && !queue.isFull()) {
-
+        
         trace(KBD_DEBUG, "Pressing Amiga key %02X\n", keycode);
-
+        
         keyDown[keycode] = true;
         queue.write(keycode);
         wakeUp();
@@ -136,11 +138,13 @@ void
 Keyboard::releaseKey(KeyCode keycode)
 {
     assert(keycode < 0x80);
-
+    
+    SYNCHRONIZED
+    
     if (keyDown[keycode] && !queue.isFull()) {
-
+        
         trace(KBD_DEBUG, "Releasing Amiga key %02X\n", keycode);
-
+        
         keyDown[keycode] = false;
         queue.write(keycode | 0x80);
         wakeUp();
@@ -238,6 +242,8 @@ Keyboard::processHandshake()
 void
 Keyboard::execute()
 {
+    SYNCHRONIZED
+    
     switch(state) {
             
         case KB_SELFTEST:
@@ -271,9 +277,9 @@ Keyboard::execute()
             break;
             
         case KB_SEND:
-            
+
             trace(KBD_DEBUG, "KB_SEND\n");
-            
+
             // Send a key code if the buffer is filled
             if (!queue.isEmpty()) {
                 sendKeyCode(queue.read());
@@ -281,7 +287,7 @@ Keyboard::execute()
                 agnus.cancel<SLOT_KBD>();
             }
             break;
-            
+
         default:
             fatalError;
     }
