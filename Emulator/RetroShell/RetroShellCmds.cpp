@@ -1000,7 +1000,8 @@ RetroShell::exec <Token::keyboard, Token::inspect> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::keyboard, Token::press> (Arguments& argv, long param)
 {
-    keyboard.autoType((KeyCode)param);
+    auto keycode = util::parseNum(argv.front());
+    keyboard.autoType(KeyCode(keycode));
 }
 
 
