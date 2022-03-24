@@ -503,6 +503,33 @@ Interpreter::registerInstructions()
     root.add({"copper", "break", "ignore"},
              "command", "Ignores a breakpoint a certain number of times",
              &RetroShell::exec <Token::copper, Token::bp, Token::ignore>, 2);
+ 
+    root.add({"copper", "watch"},
+             "command", "Manages watchpoints");
+
+    root.add({"copper", "watch", "info"},
+             "command", "Lists all watchpoints",
+             &RetroShell::exec <Token::copper, Token::wp, Token::info>, 0);
+
+    root.add({"copper", "watch", "at"},
+             "command", "Sets a watchpoint at the specified address",
+             &RetroShell::exec <Token::copper, Token::wp, Token::at>, 1);
+
+    root.add({"copper", "watch", "delete"},
+             "command", "Deletes a watchpoint",
+             &RetroShell::exec <Token::copper, Token::wp, Token::del>, 1);
+
+    root.add({"copper", "watch", "enable"},
+             "command", "Enables a watchpoint",
+             &RetroShell::exec <Token::copper, Token::wp, Token::enable>, 1);
+
+    root.add({"copper", "watch", "disable"},
+             "command", "Disables a watchpoint",
+             &RetroShell::exec <Token::copper, Token::wp, Token::disable>, 1);
+
+    root.add({"copper", "watch", "ignore"},
+             "command", "Ignores a watchpoint a certain number of times",
+             &RetroShell::exec <Token::copper, Token::wp, Token::ignore>, 2);
     
     
     //

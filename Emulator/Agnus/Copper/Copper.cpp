@@ -42,12 +42,7 @@ void
 Copper::advancePC()
 {
     coppc += 2;
-    
-    // Check if we have reached a breakpoint
-    if (checkForBreakpoints) {
-        if (debugger.breakpoints.eval(coppc)) amiga.signalStop();
-    }
-    
+        
     // Notify the debugger
     if (amiga.inDebugMode()) { debugger.advanced(); }
 }

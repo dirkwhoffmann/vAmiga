@@ -969,15 +969,25 @@ Amiga::execute()
             }
 
             // Did we reach a Copper breakpoint?
-            if (flags & RL::COPPER_BP_REACHED) {
-                clearFlag(RL::COPPER_BP_REACHED);
+            if (flags & RL::COPPERBP_REACHED) {
+                clearFlag(RL::COPPERBP_REACHED);
                 inspect();
                 auto vector = u8(agnus.copper.debugger.breakpoints.hit->addr);
                 msgQueue.put(MSG_BREAKPOINT_REACHED, vector);
                 newState = EXEC_PAUSED;
                 break;
             }
-            
+
+            // Did we reach a Copper watchpoint?
+            if (flags & RL::COPPERWP_REACHED) {
+                clearFlag(RL::COPPERWP_REACHED);
+                inspect();
+                auto vector = u8(agnus.copper.debugger.watchpoints.hit->addr);
+                msgQueue.put(MSG_WATCHPOINT_REACHED, vector);
+                newState = EXEC_PAUSED;
+                break;
+            }
+
             // Are we requested to terminate the run loop?
             if (flags & RL::STOP) {
                 clearFlag(RL::STOP);

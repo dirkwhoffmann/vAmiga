@@ -11,7 +11,6 @@
 
 #include "SubComponent.h"
 #include "MoiraDebugger.h"
-#include "CPU.h" // REMOVE AFTER REMOVING Moira from constructor
 #include <map>
 
 struct CopperList {
@@ -21,11 +20,22 @@ struct CopperList {
 };
 
 class CopperBreakpoints : public moira::Guards {
-    
+
+    class Copper &copper;
+
 public:
     
+    CopperBreakpoints(Copper& ref) : copper(ref) { }
+    void setNeedsCheck(bool value) override;
+};
+
+class CopperWatchpoints : public moira::Guards {
+
     class Copper &copper;
-    CopperBreakpoints(moira::Moira& cpu, Copper& ref) : moira::Guards(cpu), copper(ref) { }
+
+public:
+    
+    CopperWatchpoints(Copper& ref) : copper(ref) { }
     void setNeedsCheck(bool value) override;
 };
 
@@ -43,9 +53,10 @@ class CopperDebugger: public SubComponent {
     // The most recently used Copper list 2
     CopperList *current2 = nullptr;
     
-    // The breakpoint list
-    CopperBreakpoints breakpoints = CopperBreakpoints(cpu, copper);
-    
+    // Breakpoint and watchpoints
+    CopperBreakpoints breakpoints = CopperBreakpoints(copper);
+    CopperWatchpoints watchpoints = CopperWatchpoints(copper);
+
     
     //
     // Initializing
@@ -107,7 +118,7 @@ public:
     
 
     //
-    // Manages the breakpoint list
+    // Manages the breakpoint and watchpoint lists
     //
 
     void setBreakpoint(u32 addr) throws;
@@ -115,4 +126,10 @@ public:
     void enableBreakpoint(isize nr) throws;
     void disableBreakpoint(isize nr) throws;
     void ignoreBreakpoint(isize nr, isize count) throws;
+
+    void setWatchpoint(u32 addr) throws;
+    void deleteWatchpoint(isize nr) throws;
+    void enableWatchpoint(isize nr) throws;
+    void disableWatchpoint(isize nr) throws;
+    void ignoreWatchpoint(isize nr, isize count) throws;
 };

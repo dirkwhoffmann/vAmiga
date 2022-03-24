@@ -21,7 +21,6 @@ class Copper : public SubComponent
 {
     friend class Agnus;
     friend class CopperDebugger;
-    friend class CopperBreakpoints;
     
 public:
 
@@ -64,12 +63,12 @@ private:
      * location registers will be pushed through the Copper's program counter.
      */
     bool activeInThisFrame = false;
-   
-    // Indicates if breakpoint checking is needed
-    bool checkForBreakpoints = false;
 
-    
 public:
+
+    // Indicates if breakpoint or watchpoint checking is needed
+    bool checkForBreakpoints = false;
+    bool checkForWatchpoints = false;
 
     // Indicates if Copper is currently servicing an event (for debugging only)
     bool servicing = false;

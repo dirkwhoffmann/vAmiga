@@ -646,6 +646,42 @@ RetroShell::exec <Token::copper, Token::bp, Token::ignore> (Arguments& argv, lon
     copper.debugger.ignoreBreakpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
 }
 
+template <> void
+RetroShell::exec <Token::copper, Token::wp, Token::info> (Arguments& argv, long param)
+{
+    dump(copper.debugger, Category::Watchpoints);
+}
+
+template <> void
+RetroShell::exec <Token::copper, Token::wp, Token::at> (Arguments& argv, long param)
+{
+    copper.debugger.setWatchpoint(u32(util::parseNum(argv.front())));
+}
+
+template <> void
+RetroShell::exec <Token::copper, Token::wp, Token::del> (Arguments& argv, long param)
+{
+    copper.debugger.deleteWatchpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::copper, Token::wp, Token::enable> (Arguments& argv, long param)
+{
+    copper.debugger.enableWatchpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::copper, Token::wp, Token::disable> (Arguments& argv, long param)
+{
+    copper.debugger.disableWatchpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::copper, Token::wp, Token::ignore> (Arguments& argv, long param)
+{
+    copper.debugger.ignoreWatchpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
+}
+
 
 //
 // Denise
