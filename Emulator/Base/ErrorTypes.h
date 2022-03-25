@@ -100,7 +100,11 @@ enum_long(ERROR_CODE)
 
     // OS Debugger
     ERROR_OSDB,
-    
+    ERROR_HUNK_BAD_COOKIE,
+    ERROR_HUNK_NO_SECTIONS,
+    ERROR_HUNK_UNSUPPORTED,
+    ERROR_HUNK_CORRUPTED,
+
     // Remote servers
     ERROR_SOCK_CANT_CREATE,
     ERROR_SOCK_CANT_CONNECT,
@@ -248,7 +252,11 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_REC_LAUNCH:                  return "REC_LAUNCH";
 
             case ERROR_OSDB:                        return "OSDB";
-                
+            case ERROR_HUNK_BAD_COOKIE:             return "HUNK_BAD_COOKIE";
+            case ERROR_HUNK_NO_SECTIONS:            return "HUNK_NO_SECTIONS";
+            case ERROR_HUNK_UNSUPPORTED:            return "HUNK_UNSUPPORTED";
+            case ERROR_HUNK_CORRUPTED:              return "HUNK_CORRUPTED";
+
             case ERROR_SOCK_CANT_CREATE:            return "SOCK_CANT_CREATE";
             case ERROR_SOCK_CANT_CONNECT:           return "SOCK_CANT_CONNECT";
             case ERROR_SOCK_CANT_BIND:              return "SOCK_CANT_BIND";

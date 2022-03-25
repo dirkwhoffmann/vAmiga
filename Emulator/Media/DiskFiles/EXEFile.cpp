@@ -12,6 +12,7 @@
 #include "AmigaFile.h"
 #include "MutableFileSystem.h"
 #include "IOUtils.h"
+#include "OSDescriptors.h"
 
 bool
 EXEFile::isCompatible(const string &path)
@@ -34,6 +35,10 @@ EXEFile::isCompatible(std::istream &stream)
 void
 EXEFile::finalizeRead()
 {
+    // REMOVE ASAP
+    ExeDescriptor descr(data.ptr, data.size);
+    descr.dump();
+    
     // Check if this file requires a high-density disk
     bool hd = data.size > 853000;
         
