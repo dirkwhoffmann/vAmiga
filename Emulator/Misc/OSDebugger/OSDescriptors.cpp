@@ -63,6 +63,16 @@ MemFlagsEnum::key(u32 value) {
     return result;
 };
 
+std::optional <isize>
+HunkDescriptor::seek(u32 type)
+{
+    for (auto &section : sections) {
+        
+        if (section.type == type) return isize(section.offset);
+    }
+    return { };
+}
+
 void
 HunkDescriptor::dump(Category category) const
 {
@@ -112,11 +122,11 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
     // Skip strings
     for (auto count = read(); count != 0; count = read()) {
                         
-        for (isize i = 0; i < count; i++) (void)read();
+        for (usize i = 0; i < count; i++) (void)read();
     }
 
     // Read block count
-    auto numHunks = read();
+    auto numHunks = isize(read());
     if (numHunks == 0) throw VAError(ERROR_HUNK_NO_SECTIONS);
     
     // Read hunk range
@@ -138,18 +148,12 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
 
         hunks.push_back( HunkDescriptor { .memSize = memSize, .memFlags = memFlags } );
     }
-    
-    printf("numHunks = %d\n", numHunks);
-    
+        
     // Scan sections (s) of all hunks (h)
     for (isize h = 0, s = 0; h < numHunks; s++) {
-
-        printf("Reading type... offset = %ld of %ld\n", offset, len);
         
         // Read type
         auto type = read() & 0x3FFFFFFF;
-
-        printf("type = %d (%s)\n", type, HunkTypeEnum::key(type).c_str());
 
         // Continue with the next hunk if an END block is found
         // if (type == HUNK_END) { h++; continue; }
@@ -229,7 +233,16 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
                 throw VAError(ERROR_HUNK_UNSUPPORTED, HunkTypeEnum::key(type));
         }
     }
-    printf("DONE\n");
+}
+
+std::optional <isize>
+ProgramUnitDescriptor::seek(u32 type)
+{
+    for (auto &hunk : hunks) {
+        
+        if (auto result = hunk.seek(type); result) return *result;
+    }
+    return { };
 }
 
 void

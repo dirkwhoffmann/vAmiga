@@ -73,9 +73,13 @@ struct HunkDescriptor {
     // Querying information
     //
     
+    // Returns the number of sections
     isize numSections() const { return isize(sections.size()); }
     
-    
+    // Returns the offset to the first section of a certain type
+    std::optional <isize> seek(u32 type);
+
+        
     //
     // Printing debug information
     //
@@ -102,7 +106,11 @@ struct ProgramUnitDescriptor {
     // Querying information
     //
     
+    // Returns the number of hunks
     isize numHunks() const { return isize(hunks.size()); }
+    
+    // Returns the offset to the first section of a certain type
+    std::optional <isize> seek(u32 type);
     
     
     //

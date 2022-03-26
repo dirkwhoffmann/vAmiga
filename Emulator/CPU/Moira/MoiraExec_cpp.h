@@ -1935,6 +1935,12 @@ Moira::execTrap(u16 opcode)
 
     int nr = ____________xxxx(opcode);
 
+    // printf("TRAP %d\n", nr);
+    if (debugger.substitute[nr]) {
+        printf("SUBSTITUTION OPCODE: %x\n", *debugger.substitute[nr]);
+        // TODO: Replace current opcode and jump one instruction back
+    }
+    
     sync(4);
     execTrapException(32 + nr);
 }

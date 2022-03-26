@@ -164,6 +164,13 @@ public:
     Watchpoints watchpoints = Watchpoints(moira);
     Catchpoints catchpoints = Catchpoints(moira);
     
+    /* Substitution opcodes for the TRAP instruction. If a catchpoint is hit
+     * that was set on a TRAP instruction, the CPU checks if an substitution
+     * opcode is present. If yes, the TRAP instruction is not executed.
+     * Instead, it is replaced by the susbtitute.
+     */
+    std::optional <u16> substitute[16];
+
 private:
 
     /* Soft breakpoint for implementing single-stepping. In contrast to a
@@ -174,7 +181,7 @@ private:
      * to an unreachable memory location such as UINT64_MAX - 1.
      */
     u64 softStop = UINT64_MAX - 1;
-
+    
     // Buffer storing logged instructions
     static const int logBufferCapacity = 256;
     Registers logBuffer[logBufferCapacity];
