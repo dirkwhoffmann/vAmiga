@@ -235,6 +235,12 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
     }
 }
 
+void
+ProgramUnitDescriptor::init(const Buffer<u8> &buf)
+{
+    init(buf.ptr, buf.size);
+}
+
 std::optional <isize>
 ProgramUnitDescriptor::seek(u32 type)
 {

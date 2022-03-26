@@ -9,13 +9,15 @@
 
 #include "config.h"
 #include "FloppyDrive.h"
-#include "Agnus.h"
+#include "Amiga.h"
 #include "BootBlockImage.h"
-#include "CIA.h"
+// #include "CIA.h"
+// #include "CPU.h"
 #include "DiskController.h"
 #include "FloppyFile.h"
 #include "MutableFileSystem.h"
 #include "MsgQueue.h"
+#include "OSDescriptors.h"
 
 FloppyDrive::FloppyDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 {
@@ -822,6 +824,59 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
         // If there is no delay, service the event immediately
         if (delay == 0) serviceDiskChangeEvent <s> ();
     }
+}
+
+void
+FloppyDrive::catchFile(const string &path)
+{
+    printf("Extracting file system...\n");
+
+    // Extract the file system
+    auto fs = MutableFileSystem(*this);
+
+    printf("Seeking %s...\n", path.c_str());
+
+    // Seek file
+    auto file = fs.seekFile(path);
+    if (file == nullptr) throw VAError(ERROR_FILE_NOT_FOUND);
+    
+    printf("Exporting to buffer...\n");
+
+    // Extract file
+    Buffer<u8> buffer;
+    file->writeData(buffer);
+
+    printf("File has %ld bytes\n", buffer.size);
+
+    // Parse hunks
+    auto descr = ProgramUnitDescriptor(buffer);
+    
+    printf("File has %ld hunks\n", descr.numHunks());
+
+    // Seek the code section
+    auto offset = descr.seek(HUNK_CODE);
+    if (!offset) throw VAError(ERROR_HUNK_CORRUPTED);
+    
+    printf("Code section starts at index %ld\n", *offset);
+
+    // Replace the first instruction by TRAP #8 (0x4E48)
+    u16 oldInstr = HI_LO(buffer[*offset + 8], buffer[*offset + 9]);
+    buffer[*offset + 8] = 0x4E;
+    buffer[*offset + 9] = 0x48;
+    file->overwriteData(buffer);
+    
+    // Read the file back (REMOVE)
+    Buffer<u8> buffer2;
+    file->writeData(buffer2);
+    printf("Should be 0x4E: %x\n", buffer2[*offset + 8]);
+    printf("Should be 0x48: %x\n", buffer2[*offset + 9]);
+
+    // Convert the file system back to a disk
+    auto adf = ADFFile(fs);
+    swapDisk(std::make_unique<FloppyDisk>(adf));
+        
+    // Set a catchpoint for TRAP #8
+    cpu.debugger.catchpoints.setAt(40);
 }
 
 void

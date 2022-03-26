@@ -295,9 +295,6 @@ public:
     u32 getDataBytesInBlock() const;
     void setDataBytesInBlock(u32 val);
 
-    // Adds data bytes to this block
-    // isize addData(const u8 *buffer, isize size);
-    
     
     //
     // Exporting
@@ -305,6 +302,16 @@ public:
     
     isize writeData(std::ostream& os);
     isize writeData(std::ostream& os, isize size);
+    isize writeData(Buffer<u8> &buf);
+    isize writeData(Buffer<u8> &buf, isize offset, isize count);
+
+    
+    //
+    // Importing
+    //
+    
+    isize overwriteData(Buffer<u8> &buf);
+    isize overwriteData(Buffer<u8> &buf, isize offset, isize count);
 };
 
 typedef FSBlock* BlockPtr;

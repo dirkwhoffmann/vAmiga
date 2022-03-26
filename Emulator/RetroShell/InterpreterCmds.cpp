@@ -1161,6 +1161,10 @@ Interpreter::registerInstructions()
         root.add({df, "inspect"},
                  "command", "Displays the component state",
                  &RetroShell::exec <Token::dfn, Token::inspect>, 0);
+
+        root.add({df, "catch"},
+                 "command", "Creates a catchpoint for the specfied file",
+                 &RetroShell::exec <Token::dfn, Token::cp>, 1);
     }
 
     //

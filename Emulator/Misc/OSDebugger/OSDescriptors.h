@@ -9,9 +9,11 @@
 
 #pragma once
 
-// #include "Exception.h"
 #include "AmigaObject.h"
+#include "Buffer.h"
 #include <vector>
+
+using util::Buffer;
 
 #define HUNK_UNIT       999
 #define HUNK_NAME       1000
@@ -99,8 +101,11 @@ struct ProgramUnitDescriptor {
     //
     
     ProgramUnitDescriptor(const u8 *buf, isize len) throws { init(buf, len); }
+    ProgramUnitDescriptor(const Buffer<u8> &buf) throws { init(buf); }
+
     void init(const u8 *buf, isize len) throws;
-    
+    void init(const Buffer<u8> &buf) throws;
+
     
     //
     // Querying information

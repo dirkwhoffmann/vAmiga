@@ -203,9 +203,6 @@ public:
     // Checks whether the drive is in identification mode
     bool idMode() const;
 
-    // Returns the currently addressed cylinder
-    // isize getCylinder() const { return head.cylinder; }
-
     // Checks whether a write operation is in progress
     bool isWriting() const;
     
@@ -314,6 +311,16 @@ private:
     template <EventSlot s> void ejectDisk(Cycle delay);
     template <EventSlot s> void insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay) throws;
 
+    
+    //
+    // Handling files
+    //
+
+public:
+    
+    // Sets a catchpoint on the specified file
+    void catchFile(const string &path) throws;
+    
     
     //
     // Serving events

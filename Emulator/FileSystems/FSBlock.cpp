@@ -1604,81 +1604,12 @@ FSBlock::setDataBytesInBlock(u32 val)
     }
 }
 
-/*
-isize
-FSBlock::addData(const u8 *buffer, isize size)
-{
-    switch (type) {
-            
-        case FS_FILEHEADER_BLOCK:
-        {
-            assert(getFileSize() == 0);
-                
-            // Compute the required number of blocks
-            isize numDataBlocks = device.requiredDataBlocks(size);
-            isize numListBlocks = device.requiredFileListBlocks(size);
-            
-            debug(FS_DEBUG, "Required data blocks : %ld\n", numDataBlocks);
-            debug(FS_DEBUG, "Required list blocks : %ld\n", numListBlocks);
-            debug(FS_DEBUG, "         Free blocks : %ld\n", device.freeBlocks());
-            
-            if (device.freeBlocks() < numDataBlocks + numListBlocks) {
-                warn("Not enough free blocks\n");
-                return 0;
-            }
-            
-            for (Block ref = nr, i = 0; i < (Block)numListBlocks; i++) {
-
-                // Add a new file list block
-                ref = device.addFileListBlock(nr, ref);
-            }
-            
-            for (Block ref = nr, i = 1; i <= (Block)numDataBlocks; i++) {
-
-                // Add a new data block
-                ref = device.addDataBlock(i, nr, ref);
-
-                // Add references to the new data block
-                addDataBlockRef(ref, ref);
-                
-                // Add data
-                FSBlock *block = device.blockPtr(ref);
-                if (block) {
-                    isize written = block->addData(buffer, size);
-                    setFileSize((u32)(getFileSize() + written));
-                    buffer += written;
-                    size -= written;
-                }
-            }
-
-            return getFileSize();
-        }            
-        case FS_DATA_BLOCK_OFS:
-        {
-            isize count = std::min(bsize() - 24, size);
-
-            std::memcpy(data + 24, buffer, count);
-            setDataBytesInBlock((u32)count);
-            
-            return count;
-        }
-        case FS_DATA_BLOCK_FFS:
-        {
-            isize count = std::min(bsize(), size);
-            
-            std::memcpy(data, buffer, count);
-            
-            return count;
-        }
-        default:
-            return 0;
-    }
-}
-*/
-
 isize
 FSBlock::writeData(std::ostream& os)
 {
+    // TODO: REMOVE CODE DUPLICATION
+    // TODO: CALL writeData(Buffer<u8> &) and write Buffer to the stream
+    
     // Only call this function for file header blocks
     assert(type == FS_FILEHEADER_BLOCK);
     
@@ -1736,6 +1667,144 @@ FSBlock::writeData(std::ostream& os, isize size)
         case FS_DATA_BLOCK_FFS:
             
             os.write((char *)data.ptr, count);
+            return count;
+            
+        default:
+            fatalError;
+    }
+}
+
+isize
+FSBlock::writeData(Buffer<u8> &buf)
+{
+    // Only call this function for file header blocks
+    assert(type == FS_FILEHEADER_BLOCK);
+    
+    isize bytesRemaining = getFileSize();
+    isize bytesTotal = 0;
+    isize blocksTotal = 0;
+    
+    buf.init(bytesRemaining);
+    
+    // Start here and iterate through all connected file list blocks
+    FSBlock *block = this;
+    
+    while (block && blocksTotal < device.numBlocks()) {
+        
+        blocksTotal++;
+        
+        // Iterate through all data blocks references in this block
+        isize num = std::min(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());
+        for (isize i = 0; i < num; i++) {
+            
+            Block ref = getDataBlockRef(i);
+            if (FSBlock *dataBlock = device.dataBlockPtr(getDataBlockRef(i))) {
+                
+                isize bytesWritten = dataBlock->writeData(buf, bytesTotal, bytesRemaining);
+                bytesTotal += bytesWritten;
+                bytesRemaining -= bytesWritten;
+                
+            } else {
+                
+                warn("Ignoring block %d (no data block)\n", ref);
+            }
+        }
+        
+        // Continue with the next list block
+        block = block->getNextListBlock();
+    }
+    
+    if (bytesRemaining != 0) {
+        warn("%ld remaining bytes. Expected 0.\n", bytesRemaining);
+    }
+    
+    return bytesTotal;
+}
+
+isize
+FSBlock::writeData(Buffer<u8> &buf, isize offset, isize count)
+{
+    count = std::min(dsize(), count);
+    
+    switch (type) {
+            
+        case FS_DATA_BLOCK_OFS:
+            
+            std::memcpy((void *)(buf.ptr + offset), (void *)(data.ptr + 24), count);
+            return count;
+            
+        case FS_DATA_BLOCK_FFS:
+
+            std::memcpy((void *)(buf.ptr + offset), (void *)(data.ptr), count);
+            return count;
+            
+        default:
+            fatalError;
+    }
+}
+
+isize
+FSBlock::overwriteData(Buffer<u8> &buf)
+{
+    // Only call this function for file header blocks
+    assert(type == FS_FILEHEADER_BLOCK);
+    
+    isize bytesRemaining = getFileSize();
+    isize bytesTotal = 0;
+    isize blocksTotal = 0;
+    
+    assert(buf.size == bytesRemaining);
+    
+    // Start here and iterate through all connected file list blocks
+    FSBlock *block = this;
+    
+    while (block && blocksTotal < device.numBlocks()) {
+        
+        blocksTotal++;
+        
+        // Iterate through all data blocks references in this block
+        isize num = std::min(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());
+        for (isize i = 0; i < num; i++) {
+            
+            Block ref = getDataBlockRef(i);
+            if (FSBlock *dataBlock = device.dataBlockPtr(getDataBlockRef(i))) {
+                
+                isize bytesWritten = dataBlock->overwriteData(buf, bytesTotal, bytesRemaining);
+                bytesTotal += bytesWritten;
+                bytesRemaining -= bytesWritten;
+                
+            } else {
+                
+                warn("Ignoring block %d (no data block)\n", ref);
+            }
+        }
+        
+        // Continue with the next list block
+        block = block->getNextListBlock();
+    }
+    
+    if (bytesRemaining != 0) {
+        warn("%ld remaining bytes. Expected 0.\n", bytesRemaining);
+    }
+    
+    return bytesTotal;
+}
+
+isize
+FSBlock::overwriteData(Buffer<u8> &buf, isize offset, isize count)
+{
+    count = std::min(dsize(), count);
+    
+    switch (type) {
+            
+        case FS_DATA_BLOCK_OFS:
+            
+            std::memcpy((void *)(data.ptr + 24), (void *)(buf.ptr + offset), count);
+            return count;
+            
+        case FS_DATA_BLOCK_FFS:
+
+            std::memcpy((void *)(data.ptr), (void *)(buf.ptr + offset), count);
             return count;
             
         default:
