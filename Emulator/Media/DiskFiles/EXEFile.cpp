@@ -36,9 +36,9 @@ void
 EXEFile::finalizeRead()
 {
     // REMOVE ASAP
-    ExeDescriptor descr(data.ptr, data.size);
-    descr.dump();
-    
+    ProgramUnitDescriptor descr(data.ptr, data.size);
+    descr.dump(Category::Sections);
+
     // Check if this file requires a high-density disk
     bool hd = data.size > 853000;
         

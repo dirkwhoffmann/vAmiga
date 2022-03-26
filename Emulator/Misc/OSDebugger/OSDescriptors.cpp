@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "OSDescriptors.h"
+#include "AmigaObject.h"
 #include "MemUtils.h"
 #include "IOUtils.h"
 #include "Error.h"
@@ -63,26 +64,33 @@ MemFlagsEnum::key(u32 value) {
 };
 
 void
-HunkDescriptor::dump() const
+HunkDescriptor::dump(Category category) const
 {
-    dump(std::cout);
+    dump(category, std::cout);
 }
 
 void
-HunkDescriptor::dump(std::ostream& os) const
+HunkDescriptor::dump(Category category, std::ostream& os) const
 {
     using namespace util;
+    
+    if (category == Category::Sections) {
+        
+        for (usize s = 0; s < sections.size(); s++) {
+            
+            // auto offset = "Offset " + std::to_string(sections[s].offset);
+            auto offset = "+" + std::to_string(sections[s].offset);
+            auto type = HunkTypeEnum::key(sections[s].type);
 
-    os << std::setw(10) << std::left << std::setfill(' ') << HunkTypeEnum::key(type);
-    os << std::setw(10) << std::left << offset;
-    os << std::setw(10) << std::left << size;
-    os << std::setw(10) << std::left << memSize;
-    os << std::setw(10) << std::left << std::setfill(' ') << MemFlagsEnum::key(memFlags);
-    os << std::endl;
+            os << tab("Section " + std::to_string(s));
+            os << std::setw(13) << std::left << std::setfill(' ') << type;
+            os << "  " << offset << std::endl;
+        }
+    }
 }
 
 void
-ExeDescriptor::init(const u8 *buf, isize len)
+ProgramUnitDescriptor::init(const u8 *buf, isize len)
 {
     assert(buf);
 
@@ -108,17 +116,17 @@ ExeDescriptor::init(const u8 *buf, isize len)
     }
 
     // Read block count
-    auto sections = read();
-    if (sections == 0) throw VAError(ERROR_HUNK_NO_SECTIONS);
+    auto numHunks = read();
+    if (numHunks == 0) throw VAError(ERROR_HUNK_NO_SECTIONS);
     
     // Read hunk range
     auto first = read();
     if (first != 0) throw VAError(ERROR_HUNK_UNSUPPORTED);
     auto last = read();
-    if (last != sections - 1) throw VAError(ERROR_HUNK_UNSUPPORTED);
+    if (last != numHunks - 1) throw VAError(ERROR_HUNK_UNSUPPORTED);
 
     // Read hunk sizes
-    for (isize i = 0; i < sections; i++) {
+    for (isize i = 0; i < numHunks; i++) {
 
         auto value = read();
         auto memSize = (value & 0x3FFFFFFF) << 2;
@@ -131,29 +139,40 @@ ExeDescriptor::init(const u8 *buf, isize len)
         hunks.push_back( HunkDescriptor { .memSize = memSize, .memFlags = memFlags } );
     }
     
-    // Scan hunks
-    for (isize i = 0; i < sections; i++) {
+    printf("numHunks = %d\n", numHunks);
+    
+    // Scan sections (s) of all hunks (h)
+    for (isize h = 0, s = 0; h < numHunks; s++) {
 
-        // Store offset and read type
-        hunks[i].offset = u32(offset);
-        hunks[i].type = read() & 0x3FFFFFFF;
+        printf("Reading type... offset = %ld of %ld\n", offset, len);
         
-        printf("type = %d\n", hunks[i].type);
+        // Read type
+        auto type = read() & 0x3FFFFFFF;
+
+        printf("type = %d (%s)\n", type, HunkTypeEnum::key(type).c_str());
+
+        // Continue with the next hunk if an END block is found
+        // if (type == HUNK_END) { h++; continue; }
         
-        switch (hunks[i].type) {
+        // Add a new section
+        hunks[h].sections.push_back(SectionDescriptor());
+        auto &section = hunks[h].sections.back();
+        section.type = type;
+        section.offset = u32(offset) - 4;
+        
+        switch (type) {
                 
             case HUNK_NAME:
             case HUNK_CODE:
             case HUNK_DATA:
                 
-                hunks[i].size = 4 * read();
-                offset += hunks[i].size;
+                section.size = 4 * read();
+                offset += section.size;
                 break;
 
             case HUNK_BSS:
                 
-                hunks[i].size = 4 * read();
-                offset += 4;
+                section.size = 4 * read();
                 break;
                 
             case HUNK_RELOC32:
@@ -161,11 +180,9 @@ ExeDescriptor::init(const u8 *buf, isize len)
                 for (auto count = read(); count; count = read()) {
 
                     (void)read();
-                    printf("count = %d\n", count);
-                    hunks[i].size += 4 * count;
+                    section.size += 4 * count;
                     offset += 4 * count;
                 }
-                printf("RELOC32 size = %d\n", hunks[i].size);
                 break;
                 
             case HUNK_EXT:
@@ -173,21 +190,22 @@ ExeDescriptor::init(const u8 *buf, isize len)
 
                 for (auto count = read(); count; count = read()) {
                     
-                    hunks[i].size += 4 * count;
+                    section.size += 4 * count;
                     offset += 4 * count + 4;
                 }
                 break;
                 
             case HUNK_DEBUG:
                 
-                hunks[i].size = 4 * read();
-                offset += hunks[i].size;
+                section.size = 4 * read();
+                offset += section.size;
                 break;
                 
             case HUNK_END:
 
-                hunks[i].size = 0;
-                break;
+                section.size = 0;
+                h++; continue;
+                // break;
                 
             case HUNK_HEADER:
                 
@@ -197,38 +215,50 @@ ExeDescriptor::init(const u8 *buf, isize len)
                 
             case HUNK_OVERLAY:
 
-                hunks[i].size = 4 * read();
-                offset += hunks[i].size;
+                section.size = 4 * read();
+                offset += section.size;
                 break;
 
             case HUNK_BREAK:
 
-                hunks[i].size = 0;
+                section.size = 0;
                 break;
 
             default:
                 
-                throw VAError(ERROR_HUNK_UNSUPPORTED, HunkTypeEnum::key(hunks[i].type));
+                throw VAError(ERROR_HUNK_UNSUPPORTED, HunkTypeEnum::key(type));
         }
     }
+    printf("DONE\n");
 }
 
 void
-ExeDescriptor::dump() const
+ProgramUnitDescriptor::dump(Category category) const
 {
-    dump(std::cout);
+    dump(category, std::cout);
 }
 
 void
-ExeDescriptor::dump(std::ostream& os) const
+ProgramUnitDescriptor::dump(Category category, std::ostream& os) const
 {
     using namespace util;
 
-    os << "Nr  Type      Offset    Length    Mem size  Mem flags" << std::endl;
-
-    for (usize i = 0; i < hunks.size(); i++) {
-
-        os << std::setw(2) << std::right << std::setfill('0') << i << "  ";
-        hunks[i].dump(os);
+    if (category == Category::Hunks || category == Category::Sections) {
+        
+        for (usize h = 0; h < hunks.size(); h++) {
+            
+            auto bytes = std::to_string(hunks[h].memSize) + " Bytes";
+            
+            os << tab("Hunk " + std::to_string(h));
+            os << std::setw(13) << std::left << std::setfill(' ') << bytes;
+            os << "  " << MemFlagsEnum::key(hunks[h].memFlags) << std::endl;
+            
+            if (category == Category::Sections) {
+                
+                os << std::endl;
+                hunks[h].dump(Category::Sections);
+                os << std::endl;
+            }
+        }
     }
 }

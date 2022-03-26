@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include "Exception.h"
+// #include "Exception.h"
+#include "AmigaObject.h"
 #include <vector>
 
 #define HUNK_UNIT       999
@@ -44,7 +45,7 @@
 struct HunkTypeEnum { static string key(u32 value); };
 struct MemFlagsEnum { static string key(u32 value); };
 
-struct HunkDescriptor {
+struct SectionDescriptor {
   
     // Hunk type
     u32 type = 0;
@@ -54,36 +55,51 @@ struct HunkDescriptor {
     
     // Hunk size in bytes
     u32 size = 0;
-    
+};
+
+struct HunkDescriptor {
+
+    // A hunk consists of several sections
+    std::vector <SectionDescriptor> sections;
+
     // Memory size in bytes
     u32 memSize = 0;
     
     // Memory flags
     u32 memFlags = 0;
+
+    
+    //
+    // Querying information
+    //
+    
+    isize numSections() const { return isize(sections.size()); }
     
     
     //
     // Printing debug information
     //
     
-    void dump() const;
-    void dump(std::ostream& os) const;
+    void dump(Category category) const;
+    void dump(Category category, std::ostream& os) const;
 };
 
-struct ExeDescriptor {
+struct ProgramUnitDescriptor {
 
-    // The hunk list
+    // A program unit consists of several hunks
     std::vector <HunkDescriptor> hunks;
+    
     
     //
     // Initializing
     //
     
-    ExeDescriptor(const u8 *buf, isize len) throws { init(buf, len); }
+    ProgramUnitDescriptor(const u8 *buf, isize len) throws { init(buf, len); }
     void init(const u8 *buf, isize len) throws;
     
+    
     //
-    // Querying hunk information
+    // Querying information
     //
     
     isize numHunks() const { return isize(hunks.size()); }
@@ -93,7 +109,6 @@ struct ExeDescriptor {
     // Printing debug information
     //
     
-    void dump() const;
-    void dump(std::ostream& os) const;
-    
+    void dump(Category category) const;
+    void dump(Category category, std::ostream& os) const;
 };
