@@ -67,6 +67,16 @@ inline uint64_t bigEndian(uint64_t x)
 // Memory content
 //
 
+// Reads a value in big-endian format
+#define R8BE_ALIGNED(a)     (*(u8 *)(a))
+#define R16BE_ALIGNED(a)    (util::bigEndian(*(u16 *)(a)))
+#define R32BE_ALIGNED(a)    (util::bigEndian(*(u32 *)(a)))
+
+// Writes a value in big-endian format
+#define W8BE_ALIGNED(a,v)   { *(u8 *)(a) = (u8)(v); }
+#define W16BE_ALIGNED(a,v)  { *(u16 *)(a) = util::bigEndian((u16)v); }
+#define W32BE_ALIGNED(a,v)  { *(u32 *)(a) = util::bigEndian((u32)v); }
+
 // Checks if a certain memory area is all zero
 bool isZero(const u8 *ptr, usize size);
 

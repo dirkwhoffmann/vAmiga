@@ -42,7 +42,7 @@ void
 Copper::advancePC()
 {
     coppc += 2;
-    
+        
     // Notify the debugger
     if (amiga.inDebugMode()) { debugger.advanced(); }
 }
@@ -73,8 +73,6 @@ Copper::findMatchOld(Beam &match) const
 
         // Check if the vertical components are equal
         if ((beam & mask & ~0xFF) == (comp & mask & ~0xFF)) {
-
-            // trace(true, "Matching vertically: beam = %X comp = %X mask = %X\n", beam, comp, mask);
 
             // Try to match the horizontal coordinate as well
             if (findHorizontalMatchOld(beam, comp, mask)) {
@@ -118,8 +116,6 @@ Copper::findMatch(Beam &match) const
 
         // Check if the vertical components are equal
         if ((beam & mask & ~0xFF) == (comp & mask & ~0xFF)) {
-
-            // trace(true, "Matching vertically: beam = %X comp = %X mask = %X\n", beam, comp, mask);
 
             // Try to match the horizontal coordinate as well
             if (findHorizontalMatch(beam, comp, mask)) {
@@ -222,47 +218,6 @@ Copper::move(u32 addr, u16 value)
     // Write the value
     agnus.doCopperDmaWrite(addr, value);
 }
-
-/*
-bool
-Copper::comparator(Beam beam, u16 waitpos, u16 mask) const
-{
-    // Get comparison bits for the vertical beam position
-    u8 vBeam = beam.v & 0xFF;
-    u8 vWaitpos = HI_BYTE(waitpos);
-    u8 vMask = HI_BYTE(mask) | 0x80;
-
-    // Compare vertical positions
-    if ((vBeam & vMask) < (vWaitpos & vMask)) {
-        // debug("beam %d waitpos %d mask 0x%x FALSE\n", beam, waitpos, mask);
-        return false;
-    }
-    if ((vBeam & vMask) > (vWaitpos & vMask)) {
-        // debug("beam %d waitpos %d mask 0x%x TRUE\n", beam, waitpos, mask);
-        return true;
-    }
-
-    // Get comparison bits for horizontal position
-    u8 hBeam = beam.h & 0xFE;
-    u8 hWaitpos = LO_BYTE(waitpos) & 0xFE;
-    u8 hMask = LO_BYTE(mask) & 0xFE;
-
-    // Compare horizontal positions
-    return (hBeam & hMask) >= (hWaitpos & hMask);
-}
-
-bool
-Copper::comparator(Beam beam) const
-{
-    return comparator(beam, getVPHP(), getVMHM());
-}
-
-bool
-Copper::comparator() const
-{
-    return comparator(agnus.pos);
-}
-*/
 
 bool
 Copper::runComparator() const

@@ -45,9 +45,9 @@
 enum class Category
 {    
     BankMap, Blocks, Breakpoints, Bus, Catchpoints, Checksums, Config, Dma,
-    Drive, Events, FileSystem, Geometry, List1, List2, Parameters, Partitions,
-    Properties, Registers, Segments, Signals, State, Summary, Tod, Volumes,
-    Watchpoints
+    Drive, Events, FileSystem, Geometry, Hunks, List1, List2, Parameters,
+    Partitions, Properties, Registers, Sections, Segments, Signals, State,
+    Summary, Tod, Volumes, Watchpoints
 };
 
 class AmigaObject {
@@ -78,8 +78,6 @@ public:
     // Prints debug information about this component
     void dump(Category category, std::ostream& ss) const;
     void dump(Category category) const;
-    void dump(std::ostream& ss) const;
-    void dump() const;
     virtual void _dump(Category category, std::ostream& ss) const = 0;
 };
 

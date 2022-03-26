@@ -267,6 +267,22 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "OS Debugger: " + s;
             break;
             
+        case ERROR_HUNK_BAD_COOKIE:
+            description = "Invalid magic cookie.";
+            break;
+            
+        case ERROR_HUNK_NO_SECTIONS:
+            description = "No hunks found.";
+            break;
+
+        case ERROR_HUNK_UNSUPPORTED:
+            description = "Unsupported hunk: " + s;
+            break;
+
+        case ERROR_HUNK_CORRUPTED:
+            description = "Corrupted hunk structure.";
+            break;
+
         case ERROR_FS_UNSUPPORTED:
             description = "Unsupported file system.";
             break;

@@ -226,6 +226,8 @@
 		50C8C44F260740AC00F4E012 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C44E260740AC00F4E012 /* SplashScreen.swift */; };
 		50C8C452260747EA00F4E012 /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C451260747EA00F4E012 /* Canvas.swift */; };
 		50C8C4552607524400F4E012 /* Monitors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C4542607524400F4E012 /* Monitors.swift */; };
+		50CC209727ECCD6D00AEA010 /* OSDescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50CC209527ECCD6D00AEA010 /* OSDescriptors.cpp */; };
+		50CC209827ECCD6D00AEA010 /* OSDescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50CC209527ECCD6D00AEA010 /* OSDescriptors.cpp */; };
 		50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CB21F6377600FA167F /* A500ANSI.xib */; };
 		50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CD21F6378000FA167F /* A1000ISO.xib */; };
 		50D2B85226D292B7008040E5 /* DeniseDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D2B85026D292B7008040E5 /* DeniseDebugger.cpp */; };
@@ -790,6 +792,8 @@
 		50C8C451260747EA00F4E012 /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
 		50C8C4542607524400F4E012 /* Monitors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monitors.swift; sourceTree = "<group>"; };
 		50CA602E260E02B700C4A22C /* Reflection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reflection.h; sourceTree = "<group>"; };
+		50CC209527ECCD6D00AEA010 /* OSDescriptors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OSDescriptors.cpp; sourceTree = "<group>"; };
+		50CC209627ECCD6D00AEA010 /* OSDescriptors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSDescriptors.h; sourceTree = "<group>"; };
 		50CF461C2620420500BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50CF461F2620423300BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50CF46222620427600BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -1501,6 +1505,8 @@
 			children = (
 				50AD90562770CF5D0011ECCB /* CMakeLists.txt */,
 				501FB313275E461B00D0A57B /* OSDebuggerTypes.h */,
+				50CC209627ECCD6D00AEA010 /* OSDescriptors.h */,
+				50CC209527ECCD6D00AEA010 /* OSDescriptors.cpp */,
 				501FB311275E460100D0A57B /* OSDebugger.h */,
 				501FB310275E460100D0A57B /* OSDebugger.cpp */,
 				501FB3162762008C00D0A57B /* OSDebuggerRead.cpp */,
@@ -2031,6 +2037,7 @@
 			files = (
 				508FDFD821EA20510043D0E9 /* Shaders.metal in Sources */,
 				50D7CDC42286E968002689F0 /* Joystick.cpp in Sources */,
+				50CC209727ECCD6D00AEA010 /* OSDescriptors.cpp in Sources */,
 				506ACE44279AC75100BA7877 /* SequencerDas.cpp in Sources */,
 				501C514A27C38FE500DF1DD5 /* DragImageView.swift in Sources */,
 				509C365E260B177E004F160A /* Interpreter.cpp in Sources */,
@@ -2336,6 +2343,7 @@
 				50FC04B627DA19A900C3E566 /* RamExpansion.cpp in Sources */,
 				50FC04A327DA197A00C3E566 /* SequencerRegs.cpp in Sources */,
 				50FC04B227DA199C00C3E566 /* ControlPort.cpp in Sources */,
+				50CC209827ECCD6D00AEA010 /* OSDescriptors.cpp in Sources */,
 				50FC04FE27DA1AAB00C3E566 /* UART.cpp in Sources */,
 				50FC048E27DA195D00C3E566 /* PaulaRegs.cpp in Sources */,
 				50FC048527DA190400C3E566 /* Error.cpp in Sources */,
@@ -2483,9 +2491,11 @@
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -2572,9 +2582,11 @@
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;

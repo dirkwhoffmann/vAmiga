@@ -31,15 +31,3 @@ AmigaObject::dump(Category category) const
 {
     dump(category, std::cout);
 }
-
-void
-AmigaObject::dump(std::ostream& ss) const
-{
-    dump((Category)(-1), ss);
-}
-
-void
-AmigaObject::dump() const
-{
-    dump((Category)(-1));
-}

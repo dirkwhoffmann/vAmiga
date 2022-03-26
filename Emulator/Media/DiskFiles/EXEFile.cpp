@@ -12,6 +12,7 @@
 #include "AmigaFile.h"
 #include "MutableFileSystem.h"
 #include "IOUtils.h"
+#include "OSDescriptors.h"
 
 bool
 EXEFile::isCompatible(const string &path)
@@ -34,6 +35,10 @@ EXEFile::isCompatible(std::istream &stream)
 void
 EXEFile::finalizeRead()
 {
+    // REMOVE ASAP
+    ProgramUnitDescriptor descr(data.ptr, data.size);
+    descr.dump(Category::Sections);
+
     // Check if this file requires a high-density disk
     bool hd = data.size > 853000;
         
@@ -72,7 +77,7 @@ EXEFile::finalizeRead()
     FSErrorReport report = volume.check(true);
     if (report.corruptedBlocks > 0) {
         warn("Found %ld corrupted blocks\n", report.corruptedBlocks);
-        if constexpr (FS_DEBUG) volume.dump();
+        if constexpr (FS_DEBUG) volume.dump(Category::Blocks);
     }
         
     // Convert the volume into an ADF

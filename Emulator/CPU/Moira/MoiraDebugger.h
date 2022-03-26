@@ -40,9 +40,6 @@ class Guards {
     
 protected:
 
-    // Reference to the connected CPU
-    class Moira &moira;
-
     // Capacity of the guards array
     long capacity = 1;
 
@@ -64,7 +61,7 @@ public:
 
 public:
 
-    Guards(Moira& ref) : moira(ref) { }
+    // Guards(Moira& ref) : moira(ref) { }
     virtual ~Guards();
     
     
@@ -121,33 +118,37 @@ public:
     // Indicates if guard checking is necessary
     virtual void setNeedsCheck(bool value) = 0;
 
-private:
-
     // Evaluates all guards
     bool eval(u32 addr, Size S = Byte);
 };
 
 class Breakpoints : public Guards {
 
+    class Moira &moira;
+
 public:
 
-    Breakpoints(Moira& ref) : Guards(ref) { }
+    Breakpoints(Moira& ref) : moira(ref) { }
     void setNeedsCheck(bool value) override;
 };
 
 class Watchpoints : public Guards {
 
+    class Moira &moira;
+    
 public:
 
-    Watchpoints(Moira& ref) : Guards(ref) { }
+    Watchpoints(Moira& ref) : moira(ref) { }
     void setNeedsCheck(bool value) override;
 };
 
 class Catchpoints : public Guards {
 
+    class Moira &moira;
+    
 public:
 
-    Catchpoints(Moira& ref) : Guards(ref) { }
+    Catchpoints(Moira& ref) : moira(ref) { }
     void setNeedsCheck(bool value) override;
 };
 
