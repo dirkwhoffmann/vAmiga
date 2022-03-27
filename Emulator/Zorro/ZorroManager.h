@@ -12,13 +12,14 @@
 #include "SubComponent.h"
 #include "RamExpansion.h"
 #include "HdController.h"
+#include "DiagBoard.h"
 
 class ZorroManager : public SubComponent {
     
 public:
 
     // Number of emulated Zorro slots
-    static constexpr isize slotCount = 5;
+    static constexpr isize slotCount = 6;
     
 private:
     
@@ -29,6 +30,7 @@ private:
         &hd1con,
         &hd2con,
         &hd3con,
+        &diagBoard,
         nullptr
     };
     

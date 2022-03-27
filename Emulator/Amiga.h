@@ -91,7 +91,8 @@ public:
     HdController hd2con = HdController(*this, hd2);
     HdController hd3con = HdController(*this, hd3);
     RamExpansion ramExpansion = RamExpansion(*this);
-
+    DiagBoard diagBoard= DiagBoard(*this);
+    
     // Other Peripherals
     Keyboard keyboard = Keyboard(*this);
     

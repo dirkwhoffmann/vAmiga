@@ -9,24 +9,14 @@
 
 #pragma once
 
-#include "HdControllerTypes.h"
 #include "ZorroBoard.h"
-#include "HDFFile.h"
+#include "Memory.h"
 
-class HdController : public ZorroBoard {
-    
-    // Number of this controller
-    isize nr;
-
-    // The hard drive this controller is connected to
-    HardDrive &drive;
-    
+class DiagBoard : public ZorroBoard {
+        
     // Rom code
     Buffer<u8> rom;
-    
-    // Transmitted pointer
-    u32 pointer = 0;
-    
+        
     
     //
     // Initializing
@@ -34,7 +24,7 @@ class HdController : public ZorroBoard {
     
 public:
     
-    HdController(Amiga& ref, HardDrive& hdr);
+    DiagBoard(Amiga& ref);
 
 
     //
@@ -43,7 +33,7 @@ public:
     
 private:
     
-    const char *getDescription() const override;
+    const char *getDescription() const override { return "DiagBoard"; }
     void _dump(Category category, std::ostream& os) const override;
 
     
@@ -66,11 +56,6 @@ private:
     {
         if (hard) {
             
-            worker
-            
-            << baseAddr
-            << state
-            << pointer;
         }
     }
     
@@ -89,14 +74,14 @@ public:
     virtual bool pluggedIn() const override;
     virtual isize pages() const override         { return 1; }
     virtual u8 type() const override             { return ERT_ZORROII | ERTF_DIAGVALID; }
-    virtual u8 product() const override          { return 0x88; }
+    virtual u8 product() const override          { return 0x77; }
     virtual u8 flags() const override            { return 0x00; }
     virtual u16 manufacturer() const override    { return 0x0539; }
-    virtual u32 serialNumber() const override    { return 3141592 + u32(nr); }
+    virtual u32 serialNumber() const override    { return 3141591; }
     virtual u16 initDiagVec() const override     { return 0x40; }
     virtual string vendorName() const override   { return "RASTEC"; }
-    virtual string productName() const override  { return "HD controller"; }
-    virtual string revisionName() const override { return "0.3"; }
+    virtual string productName() const override  { return "Diag Board"; }
+    virtual string revisionName() const override { return "0.1"; }
 
 private:
     
@@ -118,9 +103,5 @@ public:
         
 private:
     
-    void processCmd();
-    void processInit();
-    void processResource();
-    void processInfoReq();
-    void processInitSeg();
+    void process();
 };

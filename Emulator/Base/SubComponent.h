@@ -21,6 +21,7 @@ class CIAB;
 class ControlPort;
 class Copper;
 class Denise;
+class DiagBoard;
 class DiskController;
 class DmaDebugger;
 class FloppyDrive;
@@ -62,6 +63,7 @@ protected:
     Copper &copper;
     CPU &cpu;
     Denise &denise;
+    DiagBoard &diagBoard;
     DiskController &diskController;
     DmaDebugger &dmaDebugger;
     FloppyDrive &df0;

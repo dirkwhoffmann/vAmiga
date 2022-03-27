@@ -102,6 +102,7 @@
 		507957AC244AD25B007B8B8D /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507957AB244AD25B007B8B8D /* Configuration.swift */; };
 		507C9C4626076EF7006779B5 /* RessourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507C9C4526076EF7006779B5 /* RessourceManager.swift */; };
 		507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507D7767228BE3EF001E97A9 /* StateMachine.cpp */; };
+		50826F7827F0B2AD005FBF3B /* DiagBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50826F7627F0B2AD005FBF3B /* DiagBoard.cpp */; };
 		5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5821FB6856009753EF /* ProxyExtensions.swift */; };
 		508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
 		50894D822593CF4400C0499D /* HIDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50894D812593CF4400C0499D /* HIDExtensions.swift */; };
@@ -603,6 +604,9 @@
 		507C9C4526076EF7006779B5 /* RessourceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RessourceManager.swift; sourceTree = "<group>"; };
 		507D7767228BE3EF001E97A9 /* StateMachine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachine.cpp; sourceTree = "<group>"; };
 		507D7768228BE3EF001E97A9 /* StateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachine.h; sourceTree = "<group>"; };
+		50826F7627F0B2AD005FBF3B /* DiagBoard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiagBoard.cpp; sourceTree = "<group>"; };
+		50826F7727F0B2AD005FBF3B /* DiagBoard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiagBoard.h; sourceTree = "<group>"; };
+		50826F7927F0B2C5005FBF3B /* DiagBoardRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiagBoardRom.h; sourceTree = "<group>"; };
 		5082D83A21EF891200CF7692 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		5083CF572546A22E00A28EF8 /* FSTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSTypes.h; sourceTree = "<group>"; };
 		5085FE5821FB6856009753EF /* ProxyExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyExtensions.swift; sourceTree = "<group>"; };
@@ -1152,6 +1156,9 @@
 				502C135027C613DB009534BD /* HdControllerRom.h */,
 				508AC36827B7F6FC006AD2E7 /* HdController.h */,
 				508AC36727B7F6FC006AD2E7 /* HdController.cpp */,
+				50826F7927F0B2C5005FBF3B /* DiagBoardRom.h */,
+				50826F7727F0B2AD005FBF3B /* DiagBoard.h */,
+				50826F7627F0B2AD005FBF3B /* DiagBoard.cpp */,
 			);
 			path = Zorro;
 			sourceTree = "<group>";
@@ -2192,6 +2199,7 @@
 				50FC08AD27819CD100F0C567 /* AgnusInfo.cpp in Sources */,
 				50AE6F8525D71FBE0004AFBC /* Error.cpp in Sources */,
 				5057E4C5243DF10A004005EB /* Primitives.swift in Sources */,
+				50826F7827F0B2AD005FBF3B /* DiagBoard.cpp in Sources */,
 				507957AC244AD25B007B8B8D /* Configuration.swift in Sources */,
 				50F54B3024B5D31D0078FDC9 /* u_quick.c in Sources */,
 				50DD33CC2756113300AE18B4 /* pfile.c in Sources */,

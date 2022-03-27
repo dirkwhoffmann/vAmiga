@@ -82,6 +82,7 @@ Amiga::Amiga()
         &hd2con,
         &hd3con,
         &ramExpansion,
+        &diagBoard,
         &ciaA,
         &ciaB,
         &mem,
