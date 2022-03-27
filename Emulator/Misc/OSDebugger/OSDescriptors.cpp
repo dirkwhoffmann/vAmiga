@@ -125,14 +125,12 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
         for (usize i = 0; i < count; i++) (void)read();
     }
 
-    // Read block count
+    // Read block count and range
     auto numHunks = isize(read());
     if (numHunks == 0) throw VAError(ERROR_HUNK_NO_SECTIONS);
-    
-    // Read hunk range
-    auto first = read();
+    auto first = isize(read());
     if (first != 0) throw VAError(ERROR_HUNK_UNSUPPORTED);
-    auto last = read();
+    auto last = isize(read());
     if (last != numHunks - 1) throw VAError(ERROR_HUNK_UNSUPPORTED);
 
     // Read hunk sizes

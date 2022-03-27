@@ -1765,9 +1765,9 @@ FSBlock::overwriteData(Buffer<u8> &buf)
         // Iterate through all data blocks references in this block
         isize num = std::min(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());
         for (isize i = 0; i < num; i++) {
-            
-            Block ref = getDataBlockRef(i);
-            if (FSBlock *dataBlock = device.dataBlockPtr(getDataBlockRef(i))) {
+
+            Block ref = block->getDataBlockRef(i);
+            if (FSBlock *dataBlock = device.dataBlockPtr(ref)) {
                 
                 isize bytesWritten = dataBlock->overwriteData(buf, bytesTotal, bytesRemaining);
                 bytesTotal += bytesWritten;
