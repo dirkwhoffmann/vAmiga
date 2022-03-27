@@ -982,7 +982,7 @@ Amiga::execute()
                 clearFlag(RL::COPPERBP_REACHED);
                 inspect();
                 auto vector = u8(agnus.copper.debugger.breakpoints.hit->addr);
-                msgQueue.put(MSG_BREAKPOINT_REACHED, vector);
+                msgQueue.put(MSG_COPPERBP_REACHED, vector);
                 newState = EXEC_PAUSED;
                 break;
             }
@@ -992,7 +992,7 @@ Amiga::execute()
                 clearFlag(RL::COPPERWP_REACHED);
                 inspect();
                 auto vector = u8(agnus.copper.debugger.watchpoints.hit->addr);
-                msgQueue.put(MSG_WATCHPOINT_REACHED, vector);
+                msgQueue.put(MSG_COPPERWP_REACHED, vector);
                 newState = EXEC_PAUSED;
                 break;
             }
