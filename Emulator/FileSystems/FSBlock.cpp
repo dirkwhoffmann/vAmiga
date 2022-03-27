@@ -1628,9 +1628,9 @@ FSBlock::writeData(std::ostream& os)
         isize num = std::min(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());
         for (isize i = 0; i < num; i++) {
             
-            Block ref = getDataBlockRef(i);
-            if (FSBlock *dataBlock = device.dataBlockPtr(getDataBlockRef(i))) {
-                
+            Block ref = block->getDataBlockRef(i);
+            if (FSBlock *dataBlock = device.dataBlockPtr(ref)) {
+
                 isize bytesWritten = dataBlock->writeData(os, bytesRemaining);
                 bytesTotal += bytesWritten;
                 bytesRemaining -= bytesWritten;
@@ -1697,9 +1697,9 @@ FSBlock::writeData(Buffer<u8> &buf)
         isize num = std::min(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());
         for (isize i = 0; i < num; i++) {
             
-            Block ref = getDataBlockRef(i);
-            if (FSBlock *dataBlock = device.dataBlockPtr(getDataBlockRef(i))) {
-                
+            Block ref = block->getDataBlockRef(i);
+            if (FSBlock *dataBlock = device.dataBlockPtr(ref)) {
+                                
                 isize bytesWritten = dataBlock->writeData(buf, bytesTotal, bytesRemaining);
                 bytesTotal += bytesWritten;
                 bytesRemaining -= bytesWritten;

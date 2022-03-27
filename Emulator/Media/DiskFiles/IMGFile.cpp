@@ -256,13 +256,11 @@ IMGFile::decodeTrack(FloppyDisk &disk, Track t)
             cnt++;
 
         } else {
-            warn("Invalid sector number %d. Aborting.\n", chrn.r);
             throw VAError(ERROR_DISK_INVALID_SECTOR_NUMBER);
         }
     }
 
     if (cnt != numSectors) {
-        warn("Found %ld sectors, expected %ld. Aborting.\n", cnt, numSectors);
         throw VAError(ERROR_DISK_WRONG_SECTOR_COUNT);
     }
         
