@@ -53,6 +53,8 @@ class CopperDebugger: public SubComponent {
     // The most recently used Copper list 2
     CopperList *current2 = nullptr;
     
+public:
+    
     // Breakpoint and watchpoints
     CopperBreakpoints breakpoints = CopperBreakpoints(copper);
     CopperWatchpoints watchpoints = CopperWatchpoints(copper);

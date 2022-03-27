@@ -250,6 +250,8 @@ class Inspector: DialogController {
     @IBOutlet weak var copPC: NSTextField!
     @IBOutlet weak var copCDANG: NSButton!
 
+    @IBOutlet weak var copBreakView: CopperBreakTableView!
+
     // Blitter panel
     @IBOutlet weak var bltBLTCON0a: NSTextField!
     @IBOutlet weak var bltBLTCON0b: NSTextField!
@@ -726,6 +728,16 @@ class Inspector: DialogController {
     
         message.stringValue = "Software trap reached"
         scrollToPC()
+    }
+
+    func signalCopperBreakpoint() {
+    
+        message.stringValue = "Copper breakpoint reached"
+    }
+
+    func signalCopperWatchpoint() {
+    
+        message.stringValue = "Copper watchpoint reached"
     }
 
     @IBAction func refreshAction(_ sender: Any!) {

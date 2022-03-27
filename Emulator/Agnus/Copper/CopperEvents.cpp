@@ -105,7 +105,7 @@ Copper::serviceEvent(EventID id)
             
             // Check if a breakpoint has been reached
             if (checkForBreakpoints && debugger.breakpoints.eval(coppc)) {
-                amiga.setFlag(RL::COPPERWP_REACHED);
+                amiga.setFlag(RL::COPPERBP_REACHED);
             }
             
             // Load the first instruction word

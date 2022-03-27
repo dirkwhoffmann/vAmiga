@@ -217,7 +217,7 @@ CopperDebugger::setBreakpoint(u32 addr)
     if (breakpoints.isSetAt(addr)) throw VAError(ERROR_BP_ALREADY_SET, addr);
 
     breakpoints.setAt(addr);
-    msgQueue.put(MSG_BREAKPOINT_UPDATED);
+    msgQueue.put(MSG_COPPERBP_UPDATED);
 }
 
 void
@@ -226,7 +226,7 @@ CopperDebugger::deleteBreakpoint(isize nr)
     if (!breakpoints.isSet(nr)) throw VAError(ERROR_BP_NOT_FOUND, nr);
 
     breakpoints.remove(nr);
-    msgQueue.put(MSG_BREAKPOINT_UPDATED);
+    msgQueue.put(MSG_COPPERBP_UPDATED);
 }
 
 void
@@ -235,7 +235,7 @@ CopperDebugger::enableBreakpoint(isize nr)
     if (!breakpoints.isSet(nr)) throw VAError(ERROR_BP_NOT_FOUND, nr);
 
     breakpoints.enable(nr);
-    msgQueue.put(MSG_BREAKPOINT_UPDATED);
+    msgQueue.put(MSG_COPPERBP_UPDATED);
 }
 
 void
@@ -244,7 +244,7 @@ CopperDebugger::disableBreakpoint(isize nr)
     if (!breakpoints.isSet(nr)) throw VAError(ERROR_BP_NOT_FOUND, nr);
 
     breakpoints.disable(nr);
-    msgQueue.put(MSG_BREAKPOINT_UPDATED);
+    msgQueue.put(MSG_COPPERBP_UPDATED);
 }
 
 void
@@ -253,7 +253,7 @@ CopperDebugger::ignoreBreakpoint(isize nr, isize count)
     if (!breakpoints.isSet(nr)) throw VAError(ERROR_BP_NOT_FOUND, nr);
 
     breakpoints.ignore(nr, count);
-    msgQueue.put(MSG_BREAKPOINT_UPDATED);
+    msgQueue.put(MSG_COPPERBP_UPDATED);
 }
 
 void
@@ -262,7 +262,7 @@ CopperDebugger::setWatchpoint(u32 addr)
     if (watchpoints.isSetAt(addr)) throw VAError(ERROR_WP_ALREADY_SET, addr);
 
     watchpoints.setAt(addr);
-    msgQueue.put(MSG_WATCHPOINT_UPDATED);
+    msgQueue.put(MSG_COPPERWP_UPDATED);
 }
 
 void
@@ -271,7 +271,7 @@ CopperDebugger::deleteWatchpoint(isize nr)
     if (!watchpoints.isSet(nr)) throw VAError(ERROR_WP_NOT_FOUND, nr);
 
     watchpoints.remove(nr);
-    msgQueue.put(MSG_WATCHPOINT_UPDATED);
+    msgQueue.put(MSG_COPPERWP_UPDATED);
 }
 
 void
@@ -280,7 +280,7 @@ CopperDebugger::enableWatchpoint(isize nr)
     if (!watchpoints.isSet(nr)) throw VAError(ERROR_WP_NOT_FOUND, nr);
 
     watchpoints.enable(nr);
-    msgQueue.put(MSG_WATCHPOINT_UPDATED);
+    msgQueue.put(MSG_COPPERWP_UPDATED);
 }
 
 void
@@ -289,7 +289,7 @@ CopperDebugger::disableWatchpoint(isize nr)
     if (!watchpoints.isSet(nr)) throw VAError(ERROR_WP_NOT_FOUND, nr);
 
     watchpoints.disable(nr);
-    msgQueue.put(MSG_WATCHPOINT_UPDATED);
+    msgQueue.put(MSG_COPPERWP_UPDATED);
 }
 
 void
@@ -298,5 +298,5 @@ CopperDebugger::ignoreWatchpoint(isize nr, isize count)
     if (!watchpoints.isSet(nr)) throw VAError(ERROR_WP_NOT_FOUND, nr);
 
     watchpoints.ignore(nr, count);
-    msgQueue.put(MSG_WATCHPOINT_UPDATED);
+    msgQueue.put(MSG_COPPERWP_UPDATED);
 }

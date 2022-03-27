@@ -173,6 +173,7 @@
 @property (readonly, strong) FloppyDriveProxy *df3;
 @property (readonly, strong) GuardsProxy *breakpoints;
 @property (readonly, strong) GuardsProxy *watchpoints;
+@property (readonly, strong) GuardsProxy *copperBreakpoints;
 @property (readonly, strong) HardDriveProxy *hd0;
 @property (readonly, strong) HardDriveProxy *hd1;
 @property (readonly, strong) HardDriveProxy *hd2;

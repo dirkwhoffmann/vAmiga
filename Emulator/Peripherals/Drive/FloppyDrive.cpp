@@ -818,7 +818,7 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
         // Get ownership of the disk
         diskToInsert = std::move(disk);
 
-        // Schedule an ejection event
+        // Schedule an insertion event
         agnus.scheduleRel <s> (delay, DCH_INSERT);
 
         // If there is no delay, service the event immediately
@@ -829,54 +829,41 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
 void
 FloppyDrive::catchFile(const string &path)
 {
-    printf("Extracting file system...\n");
-
-    // Extract the file system
-    auto fs = MutableFileSystem(*this);
-
-    printf("Seeking %s...\n", path.c_str());
-
-    // Seek file
-    auto file = fs.seekFile(path);
-    if (file == nullptr) throw VAError(ERROR_FILE_NOT_FOUND);
-    
-    printf("Exporting to buffer...\n");
-
-    // Extract file
-    Buffer<u8> buffer;
-    file->writeData(buffer);
-
-    printf("File has %ld bytes\n", buffer.size);
-
-    // Parse hunks
-    auto descr = ProgramUnitDescriptor(buffer);
-    
-    printf("File has %ld hunks\n", descr.numHunks());
-
-    // Seek the code section and read the first instruction word
-    auto offset = descr.seek(HUNK_CODE);
-    if (!offset) throw VAError(ERROR_HUNK_CORRUPTED);
-    u16 instr = HI_LO(buffer[*offset + 8], buffer[*offset + 9]);
-
-    printf("Code section starts at index %ld\n", *offset);
-
-    // Replace the first instruction word by a software trap
-    auto trap = cpu.debugger.swTraps.create(instr);
-    buffer[*offset + 8] = HI_BYTE(trap);
-    buffer[*offset + 9] = LO_BYTE(trap);
-
-    // Write the modification back to the file system
-    file->overwriteData(buffer);
-    
-    // Read the file back (REMOVE ASAP)
-    Buffer<u8> buffer2;
-    file->writeData(buffer2);
-    printf("Should be 0x4E: %x\n", buffer2[*offset + 8]);
-    printf("Should be 0x48: %x\n", buffer2[*offset + 9]);
-
-    // Convert the modified file system back to a disk
-    auto adf = ADFFile(fs);
-    swapDisk(std::make_unique<FloppyDisk>(adf));
+    {   SUSPENDED
+        
+        // Extract the file system
+        auto fs = MutableFileSystem(*this);
+        
+        // Seek file
+        auto file = fs.seekFile(path);
+        if (file == nullptr) throw VAError(ERROR_FILE_NOT_FOUND);
+        
+        // Extract file
+        Buffer<u8> buffer;
+        file->writeData(buffer);
+        
+        // Parse hunks
+        auto descr = ProgramUnitDescriptor(buffer);
+        
+        // Seek the code section and read the first instruction word
+        auto offset = descr.seek(HUNK_CODE);
+        if (!offset) throw VAError(ERROR_HUNK_CORRUPTED);
+        u16 instr = HI_LO(buffer[*offset + 8], buffer[*offset + 9]);
+        
+        // Replace the first instruction word by a software trap
+        auto trap = cpu.debugger.swTraps.create(instr);
+        buffer[*offset + 8] = HI_BYTE(trap);
+        buffer[*offset + 9] = LO_BYTE(trap);
+        
+        // Write the modification back to the file system
+        file->overwriteData(buffer);
+        
+        // Convert the modified file system back to a disk
+        auto adf = ADFFile(fs);
+        
+        // Replace the old disk
+        swapDisk(std::make_unique<FloppyDisk>(adf));
+    }
 }
 
 void

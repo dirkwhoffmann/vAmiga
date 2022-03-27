@@ -455,7 +455,8 @@ extension MyController {
         case .DMA_DEBUG_OFF:
             renderer.zoomTextureIn()
             
-        case .BREAKPOINT_UPDATED, .WATCHPOINT_UPDATED, .CATCHPOINT_UPDATED:
+        case .BREAKPOINT_UPDATED, .WATCHPOINT_UPDATED, .CATCHPOINT_UPDATED,
+                .COPPERBP_UPDATED, .COPPERWP_UPDATED:
             inspector?.fullRefresh()
             
         case .BREAKPOINT_REACHED:
@@ -469,6 +470,12 @@ extension MyController {
 
         case .SWTRAP_REACHED:
             inspector?.signalSoftwareTrap()
+
+        case .COPPERBP_REACHED:
+            inspector?.signalCopperBreakpoint()
+
+        case .COPPERWP_REACHED:
+            inspector?.signalCopperWatchpoint()
 
         case .CPU_HALT:
             refreshStatusBar()

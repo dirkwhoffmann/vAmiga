@@ -41,6 +41,7 @@ extension Inspector {
 
         copList1.refresh(count: count, full: full, list: 1, symbolic: symbolic1)
         copList2.refresh(count: count, full: full, list: 2, symbolic: symbolic2)
+        copBreakView.refresh(count: count, full: full)
     }
 
     @IBAction func copList1FormatAction(_ sender: Any!) {

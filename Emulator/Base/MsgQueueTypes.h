@@ -57,6 +57,12 @@ enum_long(MSG_TYPE)
     MSG_SWTRAP_REACHED,
     MSG_CPU_HALT,
     
+    // Copper
+    MSG_COPPERBP_REACHED,
+    MSG_COPPERBP_UPDATED,
+    MSG_COPPERWP_REACHED,
+    MSG_COPPERWP_UPDATED,
+
     // Denise
     MSG_VIEWPORT,
     
@@ -171,6 +177,11 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
             case MSG_SWTRAP_REACHED:        return "SWTRAP_REACHED";
             case MSG_CPU_HALT:              return "CPU_HALT";
 
+            case MSG_COPPERBP_REACHED:      return "COPPERBP_REACHED";
+            case MSG_COPPERBP_UPDATED:      return "COPPERBP_UPDATED";
+            case MSG_COPPERWP_REACHED:      return "COPPERWP_REACHED";
+            case MSG_COPPERWP_UPDATED:      return "COPPERWP_UPDATED";
+                
             case MSG_VIEWPORT:              return "VIEWPORT";
                 
             case MSG_MEM_LAYOUT:            return "MEM_LAYOUT";

@@ -11,8 +11,6 @@ class GuardTableView: NSTableView {
 
     @IBOutlet weak var inspector: Inspector!
     var amiga: AmigaProxy { return inspector.parent.amiga }
-    var breakpoints: GuardsProxy { return amiga.breakpoints }
-    var watchpoints: GuardsProxy { return amiga.watchpoints }
 
     // Data caches
     var disabledCache: [Int: Bool] = [:]
@@ -124,6 +122,8 @@ extension GuardTableView: NSTableViewDelegate {
 
 class BreakTableView: GuardTableView {
 
+    var breakpoints: GuardsProxy { return amiga.breakpoints }
+
     override func cache() {
 
         numRows = breakpoints.count
@@ -140,7 +140,7 @@ class BreakTableView: GuardTableView {
         
         if col == 0 {
             
-            // Enable / Disable
+            // Toggle enable status
             if breakpoints.isDisabled(row) {
                 breakpoints.enable(row)
             } else {
@@ -194,6 +194,8 @@ class BreakTableView: GuardTableView {
 
 class WatchTableView: GuardTableView {
 
+    var watchpoints: GuardsProxy { return amiga.watchpoints }
+    
     override func cache() {
 
         numRows = watchpoints.count
@@ -205,6 +207,8 @@ class WatchTableView: GuardTableView {
     }
 
     override func click(row: Int, col: Int) {
+        
+        amiga.suspend()
         
         if col == 0 {
             
@@ -223,9 +227,13 @@ class WatchTableView: GuardTableView {
             watchpoints.remove(row)
             inspector.fullRefresh()
         }
+        
+        amiga.resume()
     }
     
     override func edit(row: Int, addr: Int) {
+        
+        log()
         
         // Abort if a watchpoint is already set
         if watchpoints.isSet(at: addr) { NSSound.beep(); return }
@@ -238,6 +246,82 @@ class WatchTableView: GuardTableView {
             assert(row < numRows)
             watchpoints.replace(row, addr: addr)
         }
+        
+        amiga.resume()
+    }
+}
+
+class CopperBreakTableView: GuardTableView {
+    
+    var breakpoints: GuardsProxy { return amiga.copperBreakpoints }
+    
+    override func cache() {
+        
+        numRows = breakpoints.count
+        
+        for i in 0 ..< numRows {
+            disabledCache[i] = breakpoints.isDisabled(i)
+            addrCache[i] = breakpoints.addr(i)
+        }
+    }
+    
+    override func click(row: Int, col: Int) {
+        
+        amiga.suspend()
+        
+        log()
+        
+        if col == 0 {
+            
+            // Toggle enable status
+            if breakpoints.isDisabled(row) {
+                breakpoints.enable(row)
+            } else {
+                breakpoints.disable(row)
+            }
+            inspector.fullRefresh()
+        }
+        
+        if col == 0 || col == 1 {
+            
+            // Jump to breakpoint address
+            let addr = breakpoints.addr(row)
+            if addr <= 0xFFFFFF {
+                inspector.fullRefresh()
+                inspector.cpuInstrView.jumpTo(addr: addr)
+            }
+        }
+        
+        if col == 2 {
+            
+            // Delete
+            breakpoints.remove(row)
+            inspector.fullRefresh()
+        }
+        
+        amiga.resume()
+    }
+    
+    override func edit(row: Int, addr: Int) {
+        
+        log()
+        
+        // Breakpoint addresses must be even
+        let bpAddr = addr & ~1
+        
+        // Abort if a breakpoint is already set
+        if breakpoints.isSet(at: bpAddr) { NSSound.beep(); return }
+        
+        amiga.suspend()
+        
+        if row == numRows {
+            breakpoints.setAt(bpAddr)
+        } else {
+            assert(row < numRows)
+            breakpoints.replace(row, addr: bpAddr)
+        }
+        
+        // inspector.cpuInstrView.jumpTo(addr: bpAddr)
         
         amiga.resume()
     }
