@@ -16,14 +16,12 @@
 void
 CopperBreakpoints::setNeedsCheck(bool value)
 {
-    printf("checkForBreakpoints = %d\n", copper.checkForBreakpoints);
     copper.checkForBreakpoints = value;
 }
 
 void
 CopperWatchpoints::setNeedsCheck(bool value)
 {
-    printf("checkForWatchpoints = %d\n", copper.checkForWatchpoints);
     copper.checkForWatchpoints = value;
 }
 

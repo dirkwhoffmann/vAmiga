@@ -733,16 +733,6 @@ FloppyDrive::pollsForDisk() const
     return false;
 }
 
-/*
-void
-FloppyDrive::toggleWriteProtection()
-{
-    if (hasDisk()) {
-        disk->setProtectionFlag(!disk->isWriteProtected());
-    }
-}
-*/
-
 bool
 FloppyDrive::isInsertable(Diameter t, Density d) const
 {

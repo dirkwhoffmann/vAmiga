@@ -20,7 +20,8 @@ class CopperTableView: NSTableView {
     
     var amiga: AmigaProxy { return inspector.amiga }
     var copper: CopperProxy { return amiga.copper }
-                
+    var breakpoints: GuardsProxy { return amiga.copperBreakpoints }
+    
     // Length of the Copper list as proposed by the Copper debugger
     var nativeLength = 0
 
@@ -46,14 +47,6 @@ class CopperTableView: NSTableView {
         doubleAction = #selector(doubleClickAction(_:))
         action = #selector(clickAction(_:))
     }
-
-    /*
-    private func cache(addrInFirstRow addr: Int) {
-
-        addrInFirstRow = addr
-        cache()
-    }
-    */
     
     private func cache(list nr: Int, symbolic: Bool) {
 
@@ -81,6 +74,15 @@ class CopperTableView: NSTableView {
 
             instrInRow[i] = copper.disassemble(addr, symbolic: symbolic)
             illegalInRow[i] = copper.isIllegalInstr(addr)
+
+            if breakpoints.isDisabled(at: addr) {
+                bpInRow[i] = BreakpointType.disabled
+            } else if breakpoints.isSet(at: addr) {
+                bpInRow[i] = BreakpointType.enabled
+            } else {
+                bpInRow[i] = BreakpointType.none
+            }
+
             addrInRow[i] = addr
             rowForAddr[addr] = i
             addr += 4
@@ -148,18 +150,15 @@ class CopperTableView: NSTableView {
     func clickAction(row: Int) {
         
         if let addr = addrInRow[row] {
-            
-            log("Clicked in row \(row) addr = \(addr)")
-            /*
+                        
             if !breakpoints.isSet(at: addr) {
                 breakpoints.setAt(addr)
-            } else if breakpoints.isSetAndDisabled(at: addr) {
+            } else if breakpoints.isDisabled(at: addr) {
                 breakpoints.enable(at: addr)
-            } else if breakpoints.isSetAndEnabled(at: addr) {
+            } else if breakpoints.isEnabled(at: addr) {
                 breakpoints.disable(at: addr)
             }
-            */
-            
+
             inspector.fullRefresh()
         }
     }
@@ -177,7 +176,7 @@ class CopperTableView: NSTableView {
         if let addr = addrInRow[row] {
             
             log("Double-clicked in row \(row) addr = \(addr)")
-            /*
+            
             if breakpoints.isSet(at: addr) {
                 breakpoints.remove(at: addr)
             } else {
@@ -185,7 +184,6 @@ class CopperTableView: NSTableView {
             }
             
             inspector.fullRefresh()
-            */
         }
     }
 }
@@ -198,17 +196,19 @@ extension CopperTableView: NSTableViewDataSource {
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
-
+        
         switch tableColumn?.identifier.rawValue {
 
-        case "break":
-            return ""
+        case "break" where bpInRow[row] == .enabled:
+            return "\u{26D4}" // "⛔"
+        case "break" where bpInRow[row] == .disabled:
+            return "\u{26AA}" // "⚪"
         case "addr":
             return addrInRow[row]
         case "instr":
             return instrInRow[row]
-
-        default: fatalError()
+        default:
+            return ""
         }
     }
 }

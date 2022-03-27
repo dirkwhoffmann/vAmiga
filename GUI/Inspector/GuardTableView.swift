@@ -232,9 +232,7 @@ class WatchTableView: GuardTableView {
     }
     
     override func edit(row: Int, addr: Int) {
-        
-        log()
-        
+                
         // Abort if a watchpoint is already set
         if watchpoints.isSet(at: addr) { NSSound.beep(); return }
         
@@ -268,9 +266,7 @@ class CopperBreakTableView: GuardTableView {
     override func click(row: Int, col: Int) {
         
         amiga.suspend()
-        
-        log()
-        
+                
         if col == 0 {
             
             // Toggle enable status
@@ -303,9 +299,7 @@ class CopperBreakTableView: GuardTableView {
     }
     
     override func edit(row: Int, addr: Int) {
-        
-        log()
-        
+                
         // Breakpoint addresses must be even
         let bpAddr = addr & ~1
         

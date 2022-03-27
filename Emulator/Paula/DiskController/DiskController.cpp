@@ -256,64 +256,6 @@ DiskController::setState(DriveState oldState, DriveState newState)
     }
 }
 
-/*
-void
-DiskController::ejectDisk(isize nr, Cycle delay)
-{
-    assert(nr >= 0 && nr <= 3);
-
-    warn("DiskController::ejectDisk(...) has been deprecated.\n");
-    warn("Use Drive::ejectDisk() instead.\n");
-
-    df[nr]->ejectDisk(delay);
-}
-
-void
-DiskController::insertDisk(std::unique_ptr<Disk> disk, isize nr, Cycle delay)
-{
-    assert(disk != nullptr);
-    assert(nr >= 0 && nr <= 3);
-
-    warn("DiskController::insertDisk(...) has been deprecated.\n");
-    warn("Use Drive::insertDisk(...) instead.\n");
-
-    df[nr]->insertDisk(std::move(disk), delay);
-}
-
-void
-DiskController::insertDisk(class FloppyFile &file, isize nr, Cycle delay)
-{
-    assert(nr >= 0 && nr <= 3);
-    
-    warn("DiskController::insertDisk(...) has been deprecated.\n");
-    warn("Use Drive::swapDisk(...) instead.\n");
-
-    df[nr]->swapDisk(file);
-}
-
-void
-DiskController::insertDisk(const string &name, isize nr, Cycle delay)
-{
-    assert(nr >= 0 && nr <= 3);
-    
-    warn("DiskController::insertDisk(...) has been deprecated.\n");
-    warn("Use Drive::swapDisk(...) instead.\n");
-
-    df[nr]->swapDisk(name);
-}
-
-void
-DiskController::insertNew(isize nr, Cycle delay)
-{
-    assert(nr >= 0 && nr <= 3);
-    
-    warn("DiskController::insertNew(...) has been deprecated.\n");
-    warn("Use Drive::swapDisk(...) instead.\n");
-    
-    df[nr]->insertNew();
-}
-*/
-
 void
 DiskController::setWriteProtection(isize nr, bool value)
 {
