@@ -328,6 +328,10 @@ Interpreter::registerInstructions()
              "command", "Ignores a catchpoint a certain number of times",
              &RetroShell::exec <Token::cpu, Token::cp, Token::ignore>, 2);
 
+    root.add({"cpu", "swtraps"},
+             "command", "Lists all software traps",
+             &RetroShell::exec <Token::cpu, Token::swtraps>, 0);
+
     root.add({"cpu", "jump"},
              "command", "Jumps to the specified address",
              &RetroShell::exec <Token::cpu, Token::jump>, 1);

@@ -722,6 +722,12 @@ class Inspector: DialogController {
         scrollToPC()
     }
 
+    func signalSoftwareTrap() {
+    
+        message.stringValue = "Software trap reached"
+        scrollToPC()
+    }
+
     @IBAction func refreshAction(_ sender: Any!) {
         
         fullRefresh()

@@ -153,13 +153,6 @@ void
 Moira::signalInterrupt(u8 level)
 {
     debug(INT_DEBUG, "Executing level %d IRQ\n", level);
-    
-    /*
-    if (agnus.frame.nr > 2180) {
-        trace(true, "Executing level %d IRQ\n", level);
-        amiga.signalStop();
-    }
-    */
 }
 
 void
@@ -170,6 +163,16 @@ Moira::signalJumpToVector(int nr, u32 addr)
     if (isIrqException) {
         trace(INT_DEBUG, "Exception %d: Changing PC to %x\n", nr, addr);
     }
+}
+
+void
+Moira::signalSoftwareTrap(u16 instr, SoftwareTrap trap)
+{
+    // Remove the trap by restoring the original instruction
+    mem.patch(reg.pc0, trap.instruction);
+
+    // Force the CPU to continue with the restored instruction
+    debugger.jump(reg.pc0);
 }
 
 void
@@ -200,6 +203,12 @@ void
 Moira::catchpointReached(u8 vector)
 {
     amiga.setFlag(RL::CATCHPOINT_REACHED);
+}
+
+void
+Moira::swTrapReached(u32 addr)
+{
+    amiga.setFlag(RL::SWTRAP_REACHED);
 }
 
 void
@@ -421,6 +430,16 @@ CPU::_dump(Category category, std::ostream& os) const
             os << " (" << cpu.debugger.vectorName(u8(wp->addr)) << ")";
             if (!wp->enabled) os << " (Disabled)";
             else if (wp->ignore) os << " (Disabled for " << wp->ignore << " hits)";
+            os << std::endl;
+        }
+    }
+
+    if (category == Category::SwTraps) {
+                
+        for (auto &trap : debugger.swTraps.traps) {
+
+            os << util::tab("0x" + util::hexstr <4> (trap.first));
+            os << "Replaced by 0x" << util::hexstr <4> (trap.second.instruction);
             os << std::endl;
         }
     }

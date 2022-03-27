@@ -105,6 +105,14 @@ Moira::execLineA(u16 opcode)
 {
     EXEC_DEBUG
 
+    // Check if a software trap is set for this instruction
+    if (debugger.swTraps.traps.contains(opcode)) {
+
+        signalSoftwareTrap(opcode, debugger.swTraps.traps[opcode]);
+        swTrapReached(reg.pc0);
+        return;
+    }
+    
     signalLineAException(opcode);
     execUnimplemented(10);
 }

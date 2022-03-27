@@ -968,6 +968,15 @@ Amiga::execute()
                 break;
             }
 
+            // Did we reach a software trap?
+            if (flags & RL::SWTRAP_REACHED) {
+                clearFlag(RL::SWTRAP_REACHED);
+                inspect();
+                msgQueue.put(MSG_SWTRAP_REACHED);
+                newState = EXEC_PAUSED;
+                break;
+            }
+
             // Did we reach a Copper breakpoint?
             if (flags & RL::COPPERBP_REACHED) {
                 clearFlag(RL::COPPERBP_REACHED);

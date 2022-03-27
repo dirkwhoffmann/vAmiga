@@ -11,10 +11,14 @@
 
 #include "MoiraConfig.h"
 #include "MoiraTypes.h"
+#include <map>
 
 namespace moira {
 
-// Base structure for a single breakpoint or watchpoint
+//
+// A single breakpoint, watchpoint, or catchpoint
+//
+
 struct Guard {
 
     // The observed address
@@ -33,7 +37,11 @@ public:
 
 };
 
-// Base class for a collection of guards
+
+//
+// A collection of breakpoint, watchpoint, or catchpoint
+//
+
 class Guards {
 
     friend class Debugger;
@@ -152,6 +160,26 @@ public:
     void setNeedsCheck(bool value) override;
 };
 
+
+//
+// Software traps
+//
+
+struct SoftwareTrap {
+  
+    // The original instruction that has been replaced by this trap
+    u16 instruction;
+};
+
+struct SoftwareTraps {
+    
+    std::map <u16,SoftwareTrap> traps;
+    
+    // Creates a new software trap for a given instruction
+    u16 create(u16 instr);
+    u16 create(u16 key, u16 instr);
+};
+
 class Debugger {
 
 public:
@@ -159,18 +187,14 @@ public:
     // Reference to the connected CPU
     class Moira &moira;
 
-    // Guard storage
+    // Breakpoints, watchpoints, and catchpoints
     Breakpoints breakpoints = Breakpoints(moira);
     Watchpoints watchpoints = Watchpoints(moira);
     Catchpoints catchpoints = Catchpoints(moira);
     
-    /* Substitution opcodes for the TRAP instruction. If a catchpoint is hit
-     * that was set on a TRAP instruction, the CPU checks if an substitution
-     * opcode is present. If yes, the TRAP instruction is not executed.
-     * Instead, it is replaced by the susbtitute.
-     */
-    std::optional <u16> substitute[16];
-
+    // Software traps
+    SoftwareTraps swTraps;
+    
 private:
 
     /* Soft breakpoint for implementing single-stepping. In contrast to a
@@ -200,6 +224,14 @@ public:
 
     void reset();
 
+    
+    //
+    // Providing textual descriptions
+    //
+    
+    // Returns a human-readable name for an exception vector
+    static std::string vectorName(u8 vector);
+    
 
     //
     // Working with breakpoints, watchpoints, and catchpoints
@@ -211,7 +243,7 @@ public:
     // Sets a soft breakpoint to the next instruction
     void stepOver();
 
-    // Returns true if a breakpoint, watchpoint, or catchpoints hits in
+    // Checks whether a debug events should be triggered
     bool softstopMatches(u32 addr);
     bool breakpointMatches(u32 addr);
     bool watchpointMatches(u32 addr, Size S);
@@ -246,14 +278,6 @@ public:
 
     // Clears the log buffer
     void clearLog() { logCnt = 0; }
-    
-    
-    //
-    // Providing textual representations
-    //
-    
-    // Returns a human-readable name for an exception vector
-    static std::string vectorName(u8 vector);
     
     
     //

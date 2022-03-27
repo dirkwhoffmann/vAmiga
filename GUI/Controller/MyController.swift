@@ -466,7 +466,10 @@ extension MyController {
 
         case .CATCHPOINT_REACHED:
             inspector?.signalCatchPoint(vector: Int(msg.data1))
-            
+
+        case .SWTRAP_REACHED:
+            inspector?.signalSoftwareTrap()
+
         case .CPU_HALT:
             refreshStatusBar()
             

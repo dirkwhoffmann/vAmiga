@@ -203,6 +203,26 @@ Catchpoints::setNeedsCheck(bool value)
     }
 }
 
+u16
+SoftwareTraps::create(u16 instr)
+{
+    // Seek an unsed LINE-A instruction
+    u16 key = 0xA000;
+    while (traps.contains(key)) key++;
+    
+    return create(key, instr);
+}
+
+u16
+SoftwareTraps::create(u16 key, u16 instr)
+{
+    assert(traps.size() < 512);
+    assert(!traps.contains(key));
+    
+    traps[key] = SoftwareTrap { .instruction = instr };
+    return key;
+}
+
 void
 Debugger::reset()
 {

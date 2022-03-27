@@ -433,6 +433,18 @@ RetroShell::exec <Token::cpu, Token::cp, Token::ignore> (Arguments& argv, long p
 }
 
 template <> void
+RetroShell::exec <Token::cpu, Token::cp> (Arguments& argv, long param)
+{
+    amiga.cpu.ignoreCatchpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::swtraps> (Arguments &argv, long param)
+{
+    dump(amiga.cpu, Category::SwTraps);
+}
+
+template <> void
 RetroShell::exec <Token::cpu, Token::jump> (Arguments &argv, long param)
 {
     auto value = util::parseNum(argv.front());

@@ -245,6 +245,7 @@ protected:
     virtual void signalPrivilegeViolation() { };
     virtual void signalInterrupt(u8 level) { };
     virtual void signalJumpToVector(int nr, u32 addr) { };
+    virtual void signalSoftwareTrap(u16 instr, SoftwareTrap trap) { };
 
     // Exception delegates
     virtual void addressErrorHandler() { };
@@ -293,7 +294,8 @@ protected:
     void signalPrivilegeViolation();
     void signalInterrupt(u8 level);
     void signalJumpToVector(int nr, u32 addr);
-
+    void signalSoftwareTrap(u16 instr, SoftwareTrap trap);
+    
     // Exception delegates
     void addressErrorHandler();
     
@@ -302,7 +304,8 @@ protected:
     void breakpointReached(u32 addr);
     void watchpointReached(u32 addr);
     void catchpointReached(u8 vector);
-
+    void swTrapReached(u32 addr);
+    
     // Called at the beginning of each instruction handler (see EXEC_DEBUG)
     void execDebug(const char *cmd);
  

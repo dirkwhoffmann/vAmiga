@@ -853,30 +853,30 @@ FloppyDrive::catchFile(const string &path)
     
     printf("File has %ld hunks\n", descr.numHunks());
 
-    // Seek the code section
+    // Seek the code section and read the first instruction word
     auto offset = descr.seek(HUNK_CODE);
     if (!offset) throw VAError(ERROR_HUNK_CORRUPTED);
-    
+    u16 instr = HI_LO(buffer[*offset + 8], buffer[*offset + 9]);
+
     printf("Code section starts at index %ld\n", *offset);
 
-    // Replace the first instruction by TRAP #8 (0x4E48)
-    u16 oldInstr = HI_LO(buffer[*offset + 8], buffer[*offset + 9]);
-    buffer[*offset + 8] = 0x4E;
-    buffer[*offset + 9] = 0x48;
+    // Replace the first instruction word by a software trap
+    auto trap = cpu.debugger.swTraps.create(instr);
+    buffer[*offset + 8] = HI_BYTE(trap);
+    buffer[*offset + 9] = LO_BYTE(trap);
+
+    // Write the modification back to the file system
     file->overwriteData(buffer);
     
-    // Read the file back (REMOVE)
+    // Read the file back (REMOVE ASAP)
     Buffer<u8> buffer2;
     file->writeData(buffer2);
     printf("Should be 0x4E: %x\n", buffer2[*offset + 8]);
     printf("Should be 0x48: %x\n", buffer2[*offset + 9]);
 
-    // Convert the file system back to a disk
+    // Convert the modified file system back to a disk
     auto adf = ADFFile(fs);
     swapDisk(std::make_unique<FloppyDisk>(adf));
-        
-    // Set a catchpoint for TRAP #8
-    cpu.debugger.catchpoints.setAt(40);
 }
 
 void

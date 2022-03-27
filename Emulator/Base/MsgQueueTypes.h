@@ -54,6 +54,7 @@ enum_long(MSG_TYPE)
     MSG_WATCHPOINT_REACHED,
     MSG_CATCHPOINT_UPDATED,
     MSG_CATCHPOINT_REACHED,
+    MSG_SWTRAP_REACHED,
     MSG_CPU_HALT,
     
     // Denise
@@ -167,6 +168,7 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
             case MSG_WATCHPOINT_REACHED:    return "WATCHPOINT_REACHED";
             case MSG_CATCHPOINT_UPDATED:    return "CATCHPOINT_UPDATED";
             case MSG_CATCHPOINT_REACHED:    return "CATCHPOINT_REACHED";
+            case MSG_SWTRAP_REACHED:        return "SWTRAP_REACHED";
             case MSG_CPU_HALT:              return "CPU_HALT";
 
             case MSG_VIEWPORT:              return "VIEWPORT";
