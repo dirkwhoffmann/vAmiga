@@ -108,6 +108,14 @@ Moira::execLineA(u16 opcode)
     // Check if a software trap is set for this instruction
     if (debugger.swTraps.traps.contains(opcode)) {
 
+        auto &trap = debugger.swTraps.traps[opcode];
+        
+        // Smuggle the original instruction back into the CPU
+        reg.pc = reg.pc0;
+        queue.irc = trap.instruction;
+        prefetch();
+        
+        // Call the delegates
         signalSoftwareTrap(opcode, debugger.swTraps.traps[opcode]);
         swTrapReached(reg.pc0);
         return;

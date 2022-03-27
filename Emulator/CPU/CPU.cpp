@@ -168,11 +168,7 @@ Moira::signalJumpToVector(int nr, u32 addr)
 void
 Moira::signalSoftwareTrap(u16 instr, SoftwareTrap trap)
 {
-    // Remove the trap by restoring the original instruction
-    mem.patch(reg.pc0, trap.instruction);
-
-    // Force the CPU to continue with the restored instruction
-    debugger.jump(reg.pc0);
+ 
 }
 
 void
