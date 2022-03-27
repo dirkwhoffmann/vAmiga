@@ -4,5 +4,6 @@ ZorroManager.cpp
 ZorroBoard.cpp
 RamExpansion.cpp
 HdController.cpp
+DiagBoard.cpp
 
 )
