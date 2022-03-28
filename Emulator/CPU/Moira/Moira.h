@@ -229,7 +229,10 @@ protected:
     // Instrution delegates
     virtual void signalResetInstr() { };
     virtual void signalStopInstr(u16 op) { };
-    virtual void signalTASInstr() { };
+    virtual void signalTasInstr() { };
+    virtual void signalJsrInstr() { };
+    virtual void signalBsrInstr() { };
+    virtual void signalRtsInstr() { };
 
     // State delegates
     virtual void signalHardReset() { };
@@ -280,6 +283,9 @@ protected:
     void signalResetInstr();
     void signalStopInstr(u16 op);
     void signalTasInstr();
+    virtual void signalJsrInstr() { };
+    virtual void signalBsrInstr() { };
+    virtual void signalRtsInstr() { };
 
     // State delegates
     void signalHalt();

@@ -548,6 +548,45 @@ CPU::jump(u32 addr)
 }
 
 void
+CPU::signalJsrInstr()
+{
+    trace(CST_DEBUG, "signalJsrInstr: %ld\n", callstack.count());
+    
+    if (callstack.isFull()) {
+        
+        debug(CST_DEBUG, "JSR: Large stack\n");
+        (void)callstack.read();
+    }
+    callstack.write(reg);
+}
+
+void
+CPU::signalBsrInstr()
+{
+    trace(CST_DEBUG, "signalBsrInstr: %ld\n", callstack.count());
+
+    if (callstack.isFull()) {
+        
+        debug(CST_DEBUG, "BSR: Large stack\n");
+        (void)callstack.read();
+    }
+    callstack.write(reg);
+}
+
+void
+CPU::signalRtsInstr()
+{
+    trace(CST_DEBUG, "signalRtsInstr: %ld\n", callstack.count());
+
+    if (callstack.isEmpty()) {
+        
+        trace(CST_DEBUG, "RTS: Empty stack\n");
+        return;
+    }
+    (void)callstack.read();
+}
+
+void
 CPU::setBreakpoint(u32 addr)
 {
     if (debugger.breakpoints.isSetAt(addr)) throw VAError(ERROR_BP_ALREADY_SET, addr);

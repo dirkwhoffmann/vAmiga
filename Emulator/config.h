@@ -115,6 +115,7 @@ static const int SNP_DEBUG       = 0; // Serialization (snapshots)
 
 // CPU
 static const int CPU_DEBUG       = 0; // CPU
+static const int CST_DEBUG       = 0; // Call stack recording
 
 // Memory access
 static const int OCSREG_DEBUG    = 0; // General OCS register debugging

@@ -532,6 +532,8 @@ Moira::execBsr(u16 opcode)
 {
     EXEC_DEBUG
 
+    signalBsrInstr();
+    
     i16 offset = S == Word ? (i16)queue.irc : (i8)opcode;
      
     u32 newpc = U32_ADD(reg.pc, offset);
@@ -832,6 +834,8 @@ template<Instr I, Mode M, Size S> void
 Moira::execJsr(u16 opcode)
 {
     EXEC_DEBUG
+
+    signalJsrInstr();
 
     int src = _____________xxx(opcode);
     u32 ea  = computeEA<M, Long, SKIP_LAST_READ>(src);
@@ -1736,6 +1740,7 @@ Moira::execReset(u16 opcode)
     EXEC_DEBUG
 
     SUPERVISOR_MODE_ONLY
+    
     signalResetInstr();
     
     sync(128);
@@ -1798,6 +1803,8 @@ Moira::execRts(u16 opcode)
 {
     EXEC_DEBUG
 
+    signalRtsInstr();
+    
     bool error;
     u32 newpc = readM<M, Long>(reg.sp, error);
     if (error) return;

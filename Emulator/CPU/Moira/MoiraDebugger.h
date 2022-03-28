@@ -39,7 +39,7 @@ public:
 
 
 //
-// A collection of breakpoint, watchpoint, or catchpoint
+// A collection of breakpoints, watchpoints, or catchpoints
 //
 
 class Guards {

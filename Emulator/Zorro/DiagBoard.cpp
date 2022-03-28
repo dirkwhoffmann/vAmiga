@@ -62,8 +62,7 @@ DiagBoard::peek8(u32 addr)
 {
     auto result = spypeek8(addr);
 
-    // trace(ZOR_DEBUG, "peek8(%06x) = %02x\n", addr, result);
-    trace(true, "peek8(%06x) = %02x\n", addr, result);
+    trace(ZOR_DEBUG, "peek8(%06x) = %02x\n", addr, result);
     return result;
 }
 
@@ -72,8 +71,7 @@ DiagBoard::peek16(u32 addr)
 {
     auto result = spypeek16(addr);
 
-    // trace(ZOR_DEBUG, "peek16(%06x) = %04x\n", addr, result);
-    trace(true, "peek16(%06x) = %04x\n", addr, result);
+    trace(ZOR_DEBUG, "peek16(%06x) = %04x\n", addr, result);
     return result;
 }
 
@@ -89,6 +87,7 @@ DiagBoard::spypeek16(u32 addr) const
 {
     isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
     
+    /*
     switch (offset) {
             
         default:
@@ -96,6 +95,9 @@ DiagBoard::spypeek16(u32 addr) const
             // Return Rom code
             return offset < rom.size ? HI_LO(rom[offset], rom[offset + 1]) : 0;
     }
+    */
+    
+    return offset < rom.size ? HI_LO(rom[offset], rom[offset + 1]) : 0;
 }
 
 void
@@ -113,6 +115,7 @@ DiagBoard::poke16(u32 addr, u16 value)
 
     isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
 
+    /*
     switch (offset) {
             
         default:
@@ -120,6 +123,7 @@ DiagBoard::poke16(u32 addr, u16 value)
             warn("Invalid addr: %x\n", addr);
             break;
     }
+    */
 }
 
 void

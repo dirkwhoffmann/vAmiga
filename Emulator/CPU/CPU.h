@@ -11,6 +11,7 @@
 
 #include "CPUTypes.h"
 #include "SubComponent.h"
+#include "RingBuffer.h"
 #include "Moira.h"
 
 class CPU : public moira::Moira {
@@ -21,6 +22,9 @@ class CPU : public moira::Moira {
     // Result of the latest inspection
     mutable CPUInfo info = {};
 
+    // Recorded call stack
+    util::RingBuffer<moira::Registers, 128> callstack;
+    
     
     //
     // Initializing
@@ -168,6 +172,15 @@ public:
     // Continues program execution at the specified address
     void jump(u32 addr);
     
+    
+    //
+    // Instruction delegates
+    //
+    
+    virtual void signalJsrInstr() override;
+    virtual void signalBsrInstr() override;
+    virtual void signalRtsInstr() override;
+
     
     //
     // Debugging
