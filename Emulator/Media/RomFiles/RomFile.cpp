@@ -489,10 +489,10 @@ RomFile::model(RomIdentifier rev) {
         case ROM_AROS_1ED13DE6E3:       return "All Models";
         case ROM_AROS_1ED13DE6E3_EXT:   return "All Models";
 
-        case ROM_DIAG11:                return "???";
-        case ROM_DIAG12:                return "???";
-        case ROM_DIAG121:               return "???";
-        case ROM_LOGICA20:              return "???";
+        case ROM_DIAG11:                return "";
+        case ROM_DIAG12:                return "";
+        case ROM_DIAG121:               return "";
+        case ROM_LOGICA20:              return "";
 
         default:                        return "";
     }

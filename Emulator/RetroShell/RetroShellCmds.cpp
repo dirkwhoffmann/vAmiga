@@ -1623,6 +1623,12 @@ RetroShell::exec <Token::os, Token::cp> (Arguments& argv, long param)
     *this << "Waiting for task '" << argv.back() << "' to start...\n";
 }
 
+template <> void
+RetroShell::exec <Token::os, Token::set, Token::diagboard> (Arguments& argv, long param)
+{
+    diagBoard.setConfigItem(OPT_DIAG_BOARD, util::parseBool(argv.front()));
+}
+
 
 //
 // Remote servers

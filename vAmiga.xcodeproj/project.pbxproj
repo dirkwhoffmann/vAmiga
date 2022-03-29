@@ -839,6 +839,7 @@
 		50DED6B02202EC3100B8195F /* Inspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inspector.swift; sourceTree = "<group>"; };
 		50DF2C9E2268CFC000795256 /* AgnusTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgnusTypes.h; sourceTree = "<group>"; };
 		50DF2C9F2269135800795256 /* SpriteTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteTableView.swift; sourceTree = "<group>"; };
+		50DFA84027F350680009C216 /* DiagBoardTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiagBoardTypes.h; sourceTree = "<group>"; };
 		50E19058277F695C00B8DBE2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50E1905A277F69B300B8DBE2 /* FFmpeg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FFmpeg.cpp; sourceTree = "<group>"; };
 		50E1905B277F69B300B8DBE2 /* FFmpeg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFmpeg.h; sourceTree = "<group>"; };
@@ -1156,6 +1157,7 @@
 				502C135027C613DB009534BD /* HdControllerRom.h */,
 				508AC36827B7F6FC006AD2E7 /* HdController.h */,
 				508AC36727B7F6FC006AD2E7 /* HdController.cpp */,
+				50DFA84027F350680009C216 /* DiagBoardTypes.h */,
 				50826F7927F0B2C5005FBF3B /* DiagBoardRom.h */,
 				50826F7727F0B2AD005FBF3B /* DiagBoard.h */,
 				50826F7627F0B2AD005FBF3B /* DiagBoard.cpp */,

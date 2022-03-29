@@ -1304,6 +1304,14 @@ Interpreter::registerInstructions()
              "command", "Pauses emulation on task launch",
              &RetroShell::exec <Token::os, Token::cp>, 1);
 
+    root.add({"os", "set"},
+             "command", "Configures the component");
+        
+    root.add({"os", "set", "diagboard" },
+             "command", "Attaches or detaches the debug expansion board",
+             &RetroShell::exec <Token::os, Token::set, Token::diagboard>, 1);
+
+    
     //
     // Remote server
     //

@@ -122,6 +122,9 @@ enum_long(OPT)
     OPT_AUDVOLL,
     OPT_AUDVOLR,
     
+    // Expansion boards
+    OPT_DIAG_BOARD,
+    
     // Remote servers
     OPT_SRV_PORT,
     OPT_SRV_PROTOCOL,
@@ -227,6 +230,8 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_AUDVOL:                return "AUDVOL";
             case OPT_AUDVOLL:               return "AUDVOLL";
             case OPT_AUDVOLR:               return "AUDVOLR";
+
+            case OPT_DIAG_BOARD:            return "DIAG_BOARD";
 
             case OPT_SRV_PORT:              return "SRV_PORT";
             case OPT_SRV_PROTOCOL:          return "SRV_PROTOCOL";

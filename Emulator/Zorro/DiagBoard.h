@@ -9,11 +9,15 @@
 
 #pragma once
 
+#include "DiagBoardTypes.h"
 #include "ZorroBoard.h"
 #include "Memory.h"
 
 class DiagBoard : public ZorroBoard {
         
+    // Current configuration
+    DiagBoardConfig config = {};
+    
     // Rom code
     Buffer<u8> rom;
         
@@ -74,6 +78,20 @@ private:
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
+    
+    //
+    // Configuring
+    //
+
+public:
+    
+    static DiagBoardConfig getDefaultConfig();
+    const DiagBoardConfig &getConfig() const { return config; }
+    void resetConfig() override;
+    
+    i64 getConfigItem(Option option) const;
+    void setConfigItem(Option option, i64 value);
+    
     
     //
     // Methods from ZorroBoard

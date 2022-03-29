@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "DiagBoardTypes.h"
 #include "DiagBoard.h"
 #include "DiagBoardRom.h"
 #include "Amiga.h"
@@ -40,10 +41,58 @@ DiagBoard::_reset(bool hard)
     }
 }
 
+DiagBoardConfig
+DiagBoard::getDefaultConfig()
+{
+    DiagBoardConfig defaults;
+    
+    defaults.enabled = bool(DIAG_BOARD);
+
+    return defaults;
+}
+
+void
+DiagBoard::resetConfig()
+{
+    auto defaults = getDefaultConfig();
+    
+    setConfigItem(OPT_DIAG_BOARD, defaults.enabled);
+}
+
+i64
+DiagBoard::getConfigItem(Option option) const
+{
+    switch (option) {
+            
+        case OPT_DIAG_BOARD: return config.enabled;
+        
+        default:
+            fatalError;
+    }
+}
+
+void
+DiagBoard::setConfigItem(Option option, i64 value)
+{
+    switch (option) {
+            
+        case OPT_DIAG_BOARD:
+                        
+            if (!isPoweredOff()) {
+                throw VAError(ERROR_OPT_LOCKED);
+            }
+            config.enabled = value;
+            return;
+            
+        default:
+            fatalError;
+    }
+}
+
 bool
 DiagBoard::pluggedIn() const
 {
-    return bool(DIAG_BOARD);
+    return config.enabled;
 }
 
 void
