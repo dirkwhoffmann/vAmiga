@@ -79,6 +79,7 @@ private:
 public:
     
     bool isRamPtr(u32 addr) const;
+    bool isRamOrRomPtr(u32 addr) const;
     bool isValidPtr(u32 addr) const;
 
     

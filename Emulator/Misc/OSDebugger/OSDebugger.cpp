@@ -159,6 +159,17 @@ OSDebugger::isRamPtr(u32 addr) const
 
     return addr && mem.inRam(addr);
 }
+
+bool
+OSDebugger::isRamOrRomPtr(u32 addr) const
+{
+    if (!mem.inRam(addr) && !mem.inRom(addr)) {
+        warn("Pointer outside RAM and ROM: %x\n", addr);
+    }
+    
+    return addr && (mem.inRam(addr) || mem.inRom(addr));
+}
+
 bool
 OSDebugger::isValidPtr(u32 addr) const
 {

@@ -17,6 +17,13 @@ class DiagBoard : public ZorroBoard {
     // Rom code
     Buffer<u8> rom;
         
+    // Transmitted pointers
+    u32 pointer1 = 0;
+    u32 pointer2 = 0;
+
+    // List of detected tasks
+    std::vector<u32> tasks;
+    
     
     //
     // Initializing
@@ -77,7 +84,7 @@ public:
     virtual u8 product() const override          { return 0x77; }
     virtual u8 flags() const override            { return 0x00; }
     virtual u16 manufacturer() const override    { return 0x0539; }
-    virtual u32 serialNumber() const override    { return 3141591; }
+    virtual u32 serialNumber() const override    { return 1; }
     virtual u16 initDiagVec() const override     { return 0x40; }
     virtual string vendorName() const override   { return "RASTEC"; }
     virtual string productName() const override  { return "Diag Board"; }
@@ -103,5 +110,8 @@ public:
         
 private:
     
-    void process();
+    void processInit(u32 ptr1);
+    void processAddTask(u32 ptr1);
+    void processRemTask(u32 ptr1);
+    void processLoadSeg(u32 ptr1,u32 ptr2);
 };
