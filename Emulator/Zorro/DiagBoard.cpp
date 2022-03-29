@@ -10,8 +10,7 @@
 #include "config.h"
 #include "DiagBoard.h"
 #include "DiagBoardRom.h"
-#include "Memory.h"
-#include "OSDebugger.h"
+#include "Amiga.h"
 
 DiagBoard::DiagBoard(Amiga& ref) : ZorroBoard(ref)
 {
@@ -173,14 +172,6 @@ DiagBoard::processAddTask(u32 ptr1)
         os::Task task;
         osDebugger.read(ptr1, &task);
 
-        // Check if the task has already been added
-        auto it = std::find(tasks.begin(), tasks.end(), ptr1);
-        if (it != tasks.end()) {
-            
-            warn("AddTask: Already added: %x\n", ptr1);
-            return;
-        }
-
         // Read task name
         string name;
         osDebugger.read(task.tc_Node.ln_Name, name);
@@ -192,13 +183,20 @@ DiagBoard::processAddTask(u32 ptr1)
             warn("AddTask %x (%s): Wrong type: %d\n", ptr1, name.c_str(), type);
             return;
         }
-        const char* typeName = (type == os::NT_TASK) ? "Task" : "Process";
+
+        // Check if the task has already been added
+        auto it = std::find(tasks.begin(), tasks.end(), ptr1);
+        if (it != tasks.end()) {
+            
+            warn("AddTask: %s '%s' already added\n",
+                 type == os::NT_TASK ? "task" : "process", name.c_str());
+            return;
+        }
 
         // Add task
         tasks.push_back(ptr1);
-        debug(true, "Added %s '%s'\n", typeName, name.c_str());
-
-        // if (type == NT_PROCESS) check_wait_process(task_ptr, task_name);
+        debug(true, "Added %s '%s'\n",
+              type == os::NT_TASK ? "task" : "process", name.c_str());
     
     } catch (...) {
 
@@ -252,8 +250,31 @@ DiagBoard::processLoadSeg(u32 ptr1, u32 ptr2)
  
         debug(true, "LoadSeg: '%s' (%x)\n", name.c_str(), ptr2);
         
+        auto it = std::find(targets.begin(), targets.end(), name);
+        if (it != targets.end()) {
+
+            targets.erase(it);
+            auto addr = 4 * (ptr2 + 1);
+            cpu.debugger.breakpoints.setAt(addr);
+            debug(true, "Setting breakpoint at %x\n", addr);
+        }
+            
     } catch (...) {
         
         warn("processLoadSeg failed\n");
+    }
+}
+
+void
+DiagBoard::catchTask(const string &name)
+{
+    {   SUSPENDED
+        
+        if (!diagBoard.pluggedIn()) {
+            throw VAError(ERROR_OSDB, "Diagnose board is not plugged in.");
+        }
+        if (std::find(targets.begin(), targets.end(), name) == targets.end()) {
+            targets.push_back(name);
+        }
     }
 }

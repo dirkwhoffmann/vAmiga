@@ -1300,6 +1300,10 @@ Interpreter::registerInstructions()
              "command", "Lists all processes",
              &RetroShell::exec <Token::os, Token::processes>, {0, 1});
 
+    root.add({"os", "catch"},
+             "command", "Pauses emulation on task launch",
+             &RetroShell::exec <Token::os, Token::cp>, 1);
+
     //
     // Remote server
     //

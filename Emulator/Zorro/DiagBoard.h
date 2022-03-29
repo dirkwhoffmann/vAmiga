@@ -21,8 +21,11 @@ class DiagBoard : public ZorroBoard {
     u32 pointer1 = 0;
     u32 pointer2 = 0;
 
-    // List of detected tasks
-    std::vector<u32> tasks;
+    // List of tracked tasks
+    std::vector <u32> tasks;
+    
+    // Names of tasks to catch
+    std::vector <string> targets;
     
     
     //
@@ -114,4 +117,14 @@ private:
     void processAddTask(u32 ptr1);
     void processRemTask(u32 ptr1);
     void processLoadSeg(u32 ptr1,u32 ptr2);
+    
+    
+    //
+    // Using the board
+    //
+    
+public:
+    
+    // Pauses emulation when the specified task launches
+    void catchTask(const string &name);
 };
