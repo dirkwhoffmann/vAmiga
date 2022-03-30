@@ -13,44 +13,72 @@ import Darwin
 // Factory extensions
 //
 
-extension Proxy {
+extension MakeWithBuffer {
     
-    static func make<T: MakeWithBuffer>(buffer: UnsafeRawPointer, length: Int) throws -> T {
+    static func makeWith(buffer: UnsafeRawPointer, length: Int) throws -> Self {
                 
         let exc = ExceptionWrapper()
-        let obj = T.make(withBuffer: buffer, length: length, exception: exc)
+        let obj = make(withBuffer: buffer, length: length, exception: exc)
         if exc.errorCode != ErrorCode.OK { throw VAError(exc) }
         return obj!
     }
+
+    static func make(with data: Data) throws -> Self {
+        
+        let exception = ExceptionWrapper()
+        let obj = make(with: data, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+        return obj!
+    }
+
+    private static func make(with data: Data, exception: ExceptionWrapper) -> Self? {
+        
+        return data.withUnsafeBytes { uwbp -> Self? in
+            
+            return make(withBuffer: uwbp.baseAddress!, length: uwbp.count, exception: exception)
+        }
+    }
+}
+
+extension MakeWithFile {
     
-    static func make<T: MakeWithFile>(url: URL) throws -> T {
+    static func make(with url: URL) throws -> Self {
         
         let exc = ExceptionWrapper()
-        let obj = T.make(withFile: url.path, exception: exc)
+        let obj = make(withFile: url.path, exception: exc)
         if exc.errorCode != ErrorCode.OK { throw VAError(exc) }
         return obj!
     }
+}
 
-    static func make<T: MakeWithDrive>(drive: FloppyDriveProxy) throws -> T {
+extension MakeWithDrive {
+    
+    static func make(with drive: FloppyDriveProxy) throws -> Self {
         
         let exc = ExceptionWrapper()
-        let obj = T.make(withDrive: drive, exception: exc)
+        let obj = make(withDrive: drive, exception: exc)
         if exc.errorCode != ErrorCode.OK { throw VAError(exc) }
         return obj!
     }
+}
 
-    static func make<T: MakeWithHardDrive>(hdr: HardDriveProxy) throws -> T {
+extension MakeWithHardDrive {
+    
+    static func make(with hdr: HardDriveProxy) throws -> Self {
         
         let exc = ExceptionWrapper()
-        let obj = T.make(withHardDrive: hdr, exception: exc)
+        let obj = make(withHardDrive: hdr, exception: exc)
         if exc.errorCode != ErrorCode.OK { throw VAError(exc) }
         return obj!
     }
+}
 
-    static func make<T: MakeWithFileSystem>(fs: FileSystemProxy) throws -> T {
+extension MakeWithFileSystem {
+    
+    static func make(with fs: FileSystemProxy) throws -> Self {
         
         let exc = ExceptionWrapper()
-        let obj = T.make(withFileSystem: fs, exception: exc)
+        let obj = make(withFileSystem: fs, exception: exc)
         if exc.errorCode != ErrorCode.OK { throw VAError(exc) }
         return obj!
     }

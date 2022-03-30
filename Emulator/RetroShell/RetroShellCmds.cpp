@@ -1721,7 +1721,7 @@ RetroShell::exec <Token::server, Token::gdb, Token::set, Token::port> (Arguments
 template <> void
 RetroShell::exec <Token::server, Token::gdb, Token::set, Token::verbose> (Arguments& argv, long param)
 {
-    remoteManager.gdbServer.setConfigItem(OPT_SRV_PORT, util::parseBool(argv.front()));
+    remoteManager.gdbServer.setConfigItem(OPT_SRV_VERBOSE, util::parseBool(argv.front()));
 }
 
 template <> void

@@ -91,31 +91,31 @@ class MyDocument: NSDocument {
                 switch type {
                 
                 case .SNAPSHOT:
-                    return try Proxy.make(url: newUrl) as SnapshotProxy
+                    return try SnapshotProxy.make(with: newUrl)
                     
                 case .SCRIPT:
-                    return try Proxy.make(url: newUrl) as ScriptProxy
+                    return try ScriptProxy.make(with: newUrl)
                     
                 case .ADF:
-                    return try Proxy.make(url: newUrl) as ADFFileProxy
+                    return try ADFFileProxy.make(with: newUrl)
                     
                 case .EXT:
-                    return try Proxy.make(url: newUrl) as EXTFileProxy
+                    return try EXTFileProxy.make(with: newUrl)
                     
                 case .IMG:
-                    return try Proxy.make(url: newUrl) as IMGFileProxy
+                    return try IMGFileProxy.make(with: newUrl)
                     
                 case .DMS:
-                    return try Proxy.make(url: newUrl) as DMSFileProxy
+                    return try DMSFileProxy.make(with: newUrl)
                     
                 case .EXE:
-                    return try Proxy.make(url: newUrl) as EXEFileProxy
+                    return try EXEFileProxy.make(with: newUrl)
                     
                 case .DIR:
-                    return try Proxy.make(url: newUrl) as FolderProxy
+                    return try FolderProxy.make(with: newUrl)
                     
                 case .HDF:
-                    return try Proxy.make(url: newUrl) as HDFFileProxy
+                    return try HDFFileProxy.make(with: newUrl)
                     
                 default:
                     fatalError()
@@ -252,9 +252,9 @@ class MyDocument: NSDocument {
         var df: FloppyFileProxy?
         switch url.pathExtension.uppercased() {
         case "ADF":
-            df = try Proxy.make(drive: amiga.df(nr)!) as ADFFileProxy
+            df = try ADFFileProxy.make(with: amiga.df(nr)!)
         case "IMG", "IMA":
-            df = try Proxy.make(drive: amiga.df(nr)!) as IMGFileProxy
+            df = try IMGFileProxy.make(with: amiga.df(nr)!)
         default:
             log(warning: "Invalid path extension")
             return
@@ -272,7 +272,7 @@ class MyDocument: NSDocument {
         var dh: HDFFileProxy?
         switch url.pathExtension.uppercased() {
         case "HDF":
-            dh = try Proxy.make(hdr: amiga.hd(nr)!) as HDFFileProxy
+            dh = try HDFFileProxy.make(with: amiga.hd(nr)!)
         default:
             log(warning: "Invalid path extension")
             return

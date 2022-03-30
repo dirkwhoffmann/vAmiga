@@ -81,7 +81,7 @@ class RomDropView: DropView {
         guard let url = sender.url?.unpacked else { return false }
         
         do {
-            let rom = try Proxy.make(url: url) as RomFileProxy
+            let rom = try RomFileProxy.make(with: url)
             try amiga.mem.loadRom(rom)
             return true
         } catch {
@@ -108,7 +108,7 @@ class ExtRomDropView: DropView {
         guard let url = sender.url?.unpacked else { return false }
         
         do {
-            let ext = try Proxy.make(url: url) as ExtendedRomFileProxy
+            let ext = try ExtendedRomFileProxy.make(with: url)
             try amiga.mem.loadExt(ext)
             return true
         } catch {

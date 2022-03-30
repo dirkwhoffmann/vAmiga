@@ -175,7 +175,7 @@ class VolumeInspector: DialogController {
         do {
             
             let dfn = amiga.df(nr)!
-            let adf = try ADFFileProxy.make(drive: dfn) as ADFFileProxy
+            let adf = try ADFFileProxy.make(with: dfn)
             vol = try FileSystemProxy.make(withADF: adf)
 
             showWindow()
@@ -210,7 +210,7 @@ class VolumeInspector: DialogController {
         do {
         
             let hdn = amiga.hd(nr)!
-            let hdf = try HDFFileProxy.make(hdr: hdn) as HDFFileProxy
+            let hdf = try HDFFileProxy.make(with: hdn)
             vol = try FileSystemProxy.make(withHDF: hdf, partition: partition)
             
             showWindow()
