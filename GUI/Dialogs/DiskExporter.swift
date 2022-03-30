@@ -57,13 +57,13 @@ class DiskExporter: DialogController {
         dfn = amiga.df(nr)
 
         // Run the ADF decoder
-        adf = try? ADFFileProxy.make(drive: dfn!) as ADFFileProxy
+        adf = try? ADFFileProxy.make(with: dfn!)
 
         // Run the extended ADF decoder
-        ext = try? EXTFileProxy.make(drive: dfn!) as EXTFileProxy
+        ext = try? EXTFileProxy.make(with: dfn!)
 
         // Run the DOS decoder
-        img = try? IMGFileProxy.make(drive: dfn!) as IMGFileProxy
+        img = try? IMGFileProxy.make(with: dfn!)
                         
         // Select the export partition
         select(partition: 0)
@@ -76,7 +76,7 @@ class DiskExporter: DialogController {
         hdn = amiga.hd(nr)
 
         // Run the HDF decoder
-        hdf = try? HDFFileProxy.make(hdr: hdn!) as HDFFileProxy
+        hdf = try? HDFFileProxy.make(with: hdn!)
                                 
         // Select the export partition
         select(partition: numPartitions == 1 ? 0 : nil)

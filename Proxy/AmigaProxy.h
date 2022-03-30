@@ -757,23 +757,23 @@
 // F I L E   T Y P E   P R O X I E S
 //
 
-@protocol MakeWithFile
+@protocol MakeWithFile <NSObject>
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 @end
 
-@protocol MakeWithBuffer
+@protocol MakeWithBuffer <NSObject>
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
 @end
 
-@protocol MakeWithDrive
+@protocol MakeWithDrive <NSObject>
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex;
 @end
 
-@protocol MakeWithHardDrive
+@protocol MakeWithHardDrive <NSObject>
 + (instancetype)makeWithHardDrive:(HardDriveProxy *)proxy exception:(ExceptionWrapper *)ex;
 @end
 
-@protocol MakeWithFileSystem
+@protocol MakeWithFileSystem <NSObject>
 + (instancetype)makeWithFileSystem:(FileSystemProxy *)proxy exception:(ExceptionWrapper *)ex;
 @end
 

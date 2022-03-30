@@ -81,17 +81,17 @@ class DiskInspector: DialogController {
         titleString = "Floppy Drive DF\(nr)"
 
         // Run the ADF decoder
-        decoder = try? ADFFileProxy.make(drive: drive!) as ADFFileProxy
+        decoder = try? ADFFileProxy.make(with: drive!)
         
         if decoder == nil {
 
             // Run the DOS decoder
-            decoder = try? IMGFileProxy.make(drive: drive!) as IMGFileProxy
+            decoder = try? IMGFileProxy.make(with: drive!)
         }
         if decoder == nil {
             
             // Run the extended ADF decoder
-            decoder = try? EXTFileProxy.make(drive: drive!) as EXTFileProxy
+            decoder = try? EXTFileProxy.make(with: drive!)
         }
 
         let protected = drive!.hasProtectedDisk
@@ -104,7 +104,7 @@ class DiskInspector: DialogController {
         titleString = "Hard Drive HD\(nr)"
 
         // Run the HDF decoder
-        decoder = try? HDFFileProxy.make(hdr: amiga.hd(nr)!) as HDFFileProxy
+        decoder = try? HDFFileProxy.make(with: amiga.hd(nr)!)
 
         image = NSImage(named: "hdf")!
         showWindow()
