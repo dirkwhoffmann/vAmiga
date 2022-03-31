@@ -736,6 +736,45 @@ Memory::saveExt(const string &path)
     file.writeToFile(path);
 }
 
+void
+Memory::patchExpansionLib()
+{
+    /* In Kickstart 1.2, function 'ConfigBoard' is broken. A patch needs to
+     * be applied to make the hard drive controller and the debugger board
+     * compatible with this Rom.
+     */
+    switch (romIdentifier()) {
+
+        case ROM_KICK12_33_166:
+        case ROM_KICK12_33_180:
+        case ROM_KICK121_34_004:
+        case ROM_KICK12_33_180_G11R:
+        {
+            for (isize i = 0; i < KB(512) - 22; i += 2) {
+                
+                if (R16BE(rom + i)      == 0x2c6e &&
+                    R16BE(rom + i + 2)  == 0x0024 &&
+                    R16BE(rom + i + 4)  == 0x4eae &&
+                    R16BE(rom + i + 6)  == 0xff3a &&
+                    R16BE(rom + i + 20) == 0x202f &&
+                    R16BE(rom + i + 22) == 0x0002) {
+                    
+                    msg("Patching Kickstart 1.2 at %lx\n", i);
+            
+                    W32BE(rom + i, 0x426f0004);
+                    W16BE(rom + i + 22, 0x0000);
+                    return;
+                }
+            }
+            warn("Can't find patch location\n");
+            break;
+        }
+
+        default:
+            break;
+    }
+}
+
 template <> MemorySource
 Memory::getMemSrc <ACCESSOR_CPU> (u32 addr)
 {

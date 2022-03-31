@@ -378,17 +378,19 @@ public:
     void loadRom(const string &path) throws;
     void loadRom(const u8 *buf, isize len) throws;
     
+    // Installs a Kickstart expansion Rom
     void loadExt(class ExtendedRomFile &rom) throws;
     void loadExt(const string &path) throws;
     void loadExt(const u8 *buf, isize len) throws;
         
-public:
-    
     // Saves a Rom to disk
     void saveRom(const string &path) throws;
     void saveWom(const string &path) throws;
     void saveExt(const string &path) throws;
 
+    // Fixes two bugs in Kickstart 1.2 expansion.library
+    void patchExpansionLib();
+    
     
     //
     // Maintaining the memory source table

@@ -50,12 +50,15 @@ HdController::_reset(bool hard)
     
     if (hard) {
         
-        // Burn Rom
+        // Burn Expansion Rom
         rom.init(exprom, EXPROM_SIZE);
         
         // Make the device name unique
         char dosName[] = "hrddrive?.device"; dosName[8] = char('0' + nr);
         rom.patch("virtualhd.device", dosName);
+
+        // Patch Kickstart Rom (1.2 only)
+        mem.patchExpansionLib();
 
         // Set initial state
         state = pluggedIn() ? STATE_AUTOCONF : STATE_SHUTUP;

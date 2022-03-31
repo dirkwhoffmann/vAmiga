@@ -574,7 +574,10 @@ CPU::signalJsrBsrInstr(u16 opcode, u32 oldPC, u32 newPC)
             (void)callstack.read();
         }
         
-        auto entry = CallStackEntry { .opcode = opcode, .oldPC = oldPC, newPC = newPC };
+        CallStackEntry entry;
+        entry.opcode = opcode;
+        entry.oldPC = oldPC;
+        entry.newPC = newPC;
         for (isize i = 0; i < 8; i++) entry.d[i] = reg.d[i];
         for (isize i = 0; i < 8; i++) entry.a[i] = reg.a[i];
         

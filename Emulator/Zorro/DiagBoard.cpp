@@ -33,9 +33,12 @@ DiagBoard::_reset(bool hard)
     
     if (hard) {
         
-        // Burn Rom
+        // Burn Expansion Rom
         rom.init(debug_exprom, DEBUG_EXPROM_SIZE);
         
+        // Patch Kickstart Rom (1.2 only)
+        mem.patchExpansionLib();
+
         // Set initial state
         state = pluggedIn() ? STATE_AUTOCONF : STATE_SHUTUP;
     }
