@@ -179,7 +179,8 @@ DiagBoard::poke16(u32 addr, u16 value)
                 case 1: processInit(pointer1); break;
                 case 2: processAddTask(pointer1); break;
                 case 3: processRemTask(pointer1); break;
-                case 4: processLoadSeg(pointer1, pointer2); break;
+                case 4: processLoadSeg(pointer1, pointer2, false); break;
+                case 5: processLoadSeg(pointer1, pointer2, true); break;
                     
                 default:
                     warn("Invalid value: %x\n", value);
@@ -287,7 +288,7 @@ DiagBoard::processRemTask(u32 ptr1)
 }
 
 void
-DiagBoard::processLoadSeg(u32 ptr1, u32 ptr2)
+DiagBoard::processLoadSeg(u32 ptr1, u32 ptr2, bool bstr)
 {
     try {
         
@@ -295,8 +296,13 @@ DiagBoard::processLoadSeg(u32 ptr1, u32 ptr2)
                 
         // Read task name
         string name;
-        osDebugger.read(ptr1, name);
- 
+        if (bstr) {
+            auto length = (isize)mem.spypeek8 <ACCESSOR_CPU> (4 * ptr1);
+            debug(true, "Length = %ld\n", length);
+            osDebugger.read(4 * ptr1 + 1, name, length);
+        } else {
+            osDebugger.read(ptr1, name);
+        }
         debug(true, "LoadSeg: '%s' (%x)\n", name.c_str(), ptr2);
         
         auto it = std::find(targets.begin(), targets.end(), name);

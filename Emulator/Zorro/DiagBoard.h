@@ -134,8 +134,8 @@ private:
     void processInit(u32 ptr1);
     void processAddTask(u32 ptr1);
     void processRemTask(u32 ptr1);
-    void processLoadSeg(u32 ptr1,u32 ptr2);
-    
+    void processLoadSeg(u32 ptr1, u32 ptr2, bool bstr);
+
     
     //
     // Using the board
