@@ -194,6 +194,8 @@ RomFile::isCommodoreRom(RomIdentifier rev)
         case ROM_KICK13_34_005_A500:
         case ROM_KICK13_34_005_A3000:
 
+        case ROM_KICK12_33_180_MRAS:
+
         case ROM_KICK20_36_028:
         case ROM_KICK202_36_207_A3000:
         case ROM_KICK204_37_175_A500:
@@ -240,7 +242,6 @@ RomFile::isPatchedRom(RomIdentifier rev)
 {
     switch (rev) {
 
-        case ROM_KICK12_33_180_MRAS:
         case ROM_KICK12_33_180_G11R:
         case ROM_KICK13_34_005_G12R: return true;
 
@@ -333,7 +334,7 @@ RomFile::version(RomIdentifier rev)
         case ROM_KICK13_34_005_A500:
         case ROM_KICK13_34_005_A3000:   return "Rev 34.005";
 
-        case ROM_KICK12_33_180_MRAS:    return "Rev 33.180 (MRAS patch)";
+        case ROM_KICK12_33_180_MRAS:    return "Rev 33.180";
 
         case ROM_KICK12_33_180_G11R:    return "Rev 33.180 (Guardian patch)";
         case ROM_KICK13_34_005_G12R:    return "Rev 34.005 (Guardian patch)";
@@ -462,7 +463,7 @@ RomFile::model(RomIdentifier rev) {
         case ROM_KICK13_34_005_A500:    return "A500, A1000, A2000, CDTV";
         case ROM_KICK13_34_005_A3000:   return "A3000";
 
-        case ROM_KICK12_33_180_MRAS:    return "";
+        case ROM_KICK12_33_180_MRAS:    return "MRAS patch";
 
         case ROM_KICK12_33_180_G11R:    return "";
         case ROM_KICK13_34_005_G12R:    return "";
