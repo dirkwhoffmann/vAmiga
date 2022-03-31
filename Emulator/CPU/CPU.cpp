@@ -446,7 +446,7 @@ CPU::_dump(Category category, std::ostream& os) const
         for (isize i = callstack.begin(); i != callstack.end(); i = callstack.next(i)) {
 
             auto &entry = callstack.elements[i];
-            string instr = HI_WORD(entry.opcode) == 0b01100001 ? "BSR " : "JSR ";
+            string instr = HI_BYTE(entry.opcode) == 0b01100001 ? "BSR " : "JSR ";
             
             os << util::tab("#" + std::to_string(nr++));
             os << util::hex(entry.oldPC) << ": " << instr << util::hex(entry.newPC);
