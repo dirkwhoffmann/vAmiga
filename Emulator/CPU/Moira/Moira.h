@@ -230,8 +230,7 @@ protected:
     virtual void signalResetInstr() { };
     virtual void signalStopInstr(u16 op) { };
     virtual void signalTasInstr() { };
-    virtual void signalJsrInstr() { };
-    virtual void signalBsrInstr() { };
+    virtual void signalJsrBsrInstr(u16 opcode, u32 oldPC, u32 newPC) { };
     virtual void signalRtsInstr() { };
 
     // State delegates
@@ -283,8 +282,7 @@ protected:
     void signalResetInstr();
     void signalStopInstr(u16 op);
     void signalTasInstr();
-    virtual void signalJsrInstr() { };
-    virtual void signalBsrInstr() { };
+    virtual void signalJsrBsrInstr(u16 opcode, u32 oldPC, u32 newPC) { };
     virtual void signalRtsInstr() { };
 
     // State delegates

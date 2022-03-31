@@ -20,6 +20,7 @@ enum_long(ERROR_CODE)
     // Emulator state
     ERROR_POWERED_OFF,
     ERROR_POWERED_ON,
+    ERROR_DEBUG_OFF,
     ERROR_RUNNING,
 
     // Configuration
@@ -186,6 +187,7 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
                 
             case ERROR_POWERED_OFF:                 return "POWERED_OFF";
             case ERROR_POWERED_ON:                  return "POWERED_ON";
+            case ERROR_DEBUG_OFF:                   return "DEBUG_OFF";
             case ERROR_RUNNING:                     return "RUNNING";
 
             case ERROR_OPT_UNSUPPORTED:             return "OPT_UNSUPPORTED";

@@ -29,6 +29,10 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "The emulator is powered on.";
             break;
 
+        case ERROR_DEBUG_OFF:
+            description = "Debug mode is switched off.";
+            break;
+
         case ERROR_RUNNING:
             description = "The emulator is running.";
             break;

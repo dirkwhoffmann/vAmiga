@@ -307,6 +307,13 @@ RetroShell::exec <Token::cpu, Token::inspect, Token::registers> (Arguments& argv
 }
 
 template <> void
+RetroShell::exec <Token::cpu, Token::callstack> (Arguments &argv, long param)
+{
+    if (!amiga.inDebugMode()) throw VAError(ERROR_DEBUG_OFF);
+    dump(amiga.cpu, Category::Callstack);
+}
+
+template <> void
 RetroShell::exec <Token::cpu, Token::bp, Token::info> (Arguments& argv, long param)
 {
     dump(amiga.cpu, Category::Breakpoints);

@@ -23,7 +23,7 @@ class CPU : public moira::Moira {
     mutable CPUInfo info = {};
 
     // Recorded call stack
-    util::RingBuffer<moira::Registers, 128> callstack;
+    CallstackRecorder callstack;
     
     
     //
@@ -95,7 +95,9 @@ private:
             
             << ipl
             << fcl
-            << exception;
+            << exception
+            
+            >> callstack;
         }
     }
 
@@ -177,8 +179,7 @@ public:
     // Instruction delegates
     //
     
-    virtual void signalJsrInstr() override;
-    virtual void signalBsrInstr() override;
+    virtual void signalJsrBsrInstr(u16 opcode, u32 oldPC, u32 newPC) override;
     virtual void signalRtsInstr() override;
 
     

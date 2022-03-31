@@ -439,6 +439,20 @@ CPU::_dump(Category category, std::ostream& os) const
             os << std::endl;
         }
     }
+
+    if (category == Category::Callstack) {
+               
+        isize nr = 0;
+        for (isize i = callstack.begin(); i != callstack.end(); i = callstack.next(i)) {
+
+            auto &entry = callstack.elements[i];
+            string instr = HI_WORD(entry.opcode) == 0b01100001 ? "BSR " : "JSR ";
+            
+            os << util::tab("#" + std::to_string(nr++));
+            os << util::hex(entry.oldPC) << ": " << instr << util::hex(entry.newPC);
+            os << std::endl;
+        }
+    }
 }
 
 void
@@ -548,42 +562,41 @@ CPU::jump(u32 addr)
 }
 
 void
-CPU::signalJsrInstr()
+CPU::signalJsrBsrInstr(u16 opcode, u32 oldPC, u32 newPC)
 {
-    trace(CST_DEBUG, "signalJsrInstr: %ld\n", callstack.count());
-    
-    if (callstack.isFull()) {
+    if (amiga.inDebugMode()) {
         
-        debug(CST_DEBUG, "JSR: Large stack\n");
-        (void)callstack.read();
-    }
-    callstack.write(reg);
-}
-
-void
-CPU::signalBsrInstr()
-{
-    trace(CST_DEBUG, "signalBsrInstr: %ld\n", callstack.count());
-
-    if (callstack.isFull()) {
+        trace(CST_DEBUG, "JSR/BSR: %x -> %x [%ld]\n", oldPC, newPC, callstack.count());
         
-        debug(CST_DEBUG, "BSR: Large stack\n");
-        (void)callstack.read();
+        if (callstack.isFull()) {
+            
+            debug(CST_DEBUG, "JSR/BSR: Large stack\n");
+            (void)callstack.read();
+        }
+        
+        auto entry = CallStackEntry { .opcode = opcode, .oldPC = oldPC, newPC = newPC };
+        for (isize i = 0; i < 8; i++) entry.d[i] = reg.d[i];
+        for (isize i = 0; i < 8; i++) entry.a[i] = reg.a[i];
+        
+        callstack.write(entry);
     }
-    callstack.write(reg);
 }
 
 void
 CPU::signalRtsInstr()
 {
-    trace(CST_DEBUG, "signalRtsInstr: %ld\n", callstack.count());
-
-    if (callstack.isEmpty()) {
+    if (amiga.inDebugMode()) {
         
-        trace(CST_DEBUG, "RTS: Empty stack\n");
-        return;
+        trace(CST_DEBUG, "RTS [%ld]\n", callstack.count());
+        
+        if (callstack.isEmpty()) {
+            
+            trace(CST_DEBUG, "RTS: Empty stack\n");
+            return;
+        }
+        
+        (void)callstack.read();
     }
-    (void)callstack.read();
 }
 
 void
@@ -720,4 +733,3 @@ CPU::ignoreCatchpoint(isize nr, isize count)
     debugger.catchpoints.ignore(nr, count);
     msgQueue.put(MSG_CATCHPOINT_UPDATED);
 }
-

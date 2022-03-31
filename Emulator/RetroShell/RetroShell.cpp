@@ -432,7 +432,7 @@ RetroShell::dump(AmigaObject &component, Category category)
 {
     std::stringstream ss; string line;
     
-    { SUSPENDED
+    {   SUSPENDED
         
         component.dump(category, ss);
     }

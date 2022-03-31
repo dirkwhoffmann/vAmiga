@@ -238,7 +238,11 @@ Interpreter::registerInstructions()
     root.add({"cpu", "inspect", "registers"},
              "command", "Displays the current register values",
              &RetroShell::exec <Token::cpu, Token::inspect, Token::registers>, 0);
-
+    
+    root.add({"cpu", "callstack" },
+             "command", "Prints recorded subroutine calls",
+             &RetroShell::exec <Token::cpu, Token::callstack>, 0);
+    
     root.add({"cpu", "break"},
              "command", "Manages breakpoints");
 

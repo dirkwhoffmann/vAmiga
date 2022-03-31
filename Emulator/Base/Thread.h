@@ -115,8 +115,8 @@
  * Similar to warp mode, the emulator may be put into debug mode. This mode is
  * enabled when the GUI debugger is opend and disabled when the debugger is
  * closed. In debug mode, several time-consuming tasks are performed that are
- * usually left out. E.g., the CPU checks for breakpoints and records the
- * executed instruction in a trace buffer.
+ * usually left out. E.g., the CPU records the callstack and tracks all
+ * executed instructions in a trace buffer.
  */
 
 class Thread : public AmigaComponent, util::Wakeable {

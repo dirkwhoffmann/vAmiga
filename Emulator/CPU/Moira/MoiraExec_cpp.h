@@ -531,8 +531,6 @@ template<Instr I, Mode M, Size S> void
 Moira::execBsr(u16 opcode)
 {
     EXEC_DEBUG
-
-    signalBsrInstr();
     
     i16 offset = S == Word ? (i16)queue.irc : (i8)opcode;
      
@@ -552,9 +550,12 @@ Moira::execBsr(u16 opcode)
     if (error) return;
     
     // Jump to new address
+    auto oldpc = reg.pc;
     reg.pc = newpc;
 
     fullPrefetch<POLLIPL>();
+    
+    signalJsrBsrInstr(opcode, oldpc, reg.pc);
 }
 
 template<Instr I, Mode M, Size S> void
@@ -835,8 +836,6 @@ Moira::execJsr(u16 opcode)
 {
     EXEC_DEBUG
 
-    signalJsrInstr();
-
     int src = _____________xxx(opcode);
     u32 ea  = computeEA<M, Long, SKIP_LAST_READ>(src);
     
@@ -864,10 +863,13 @@ Moira::execJsr(u16 opcode)
     if (error) return;
 
     // Jump to new address
+    auto oldpc = reg.pc;
     reg.pc = ea;
 
     queue.irc = (u16)readMS <MEM_PROG, Word> (ea);
     prefetch<POLLIPL>();
+
+    signalJsrBsrInstr(opcode, oldpc, reg.pc);
 }
 
 template<Instr I, Mode M, Size S> void
