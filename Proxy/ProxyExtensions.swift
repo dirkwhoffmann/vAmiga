@@ -224,6 +224,13 @@ extension HardDriveProxy {
         changeGeometry(c, h: h, s: s, b: b, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
+    
+    func writeToFile(_ url: URL) throws {
+
+        let exception = ExceptionWrapper()
+        write(toFile: url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
 }
 
 extension AmigaFileProxy {

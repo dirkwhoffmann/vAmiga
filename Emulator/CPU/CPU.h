@@ -95,9 +95,7 @@ private:
             
             << ipl
             << fcl
-            << exception
-            
-            >> callstack;
+            << exception;
         }
     }
 

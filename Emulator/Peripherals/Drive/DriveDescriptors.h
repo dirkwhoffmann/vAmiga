@@ -43,9 +43,9 @@ struct GeometryDescriptor {
         << bsize;
     }
     
-    // Returns a vector with compatible geometries for a given byte count
-    static std::vector<GeometryDescriptor> driveGeometries(isize capacity);
-    
+    // Returns a vector with compatible geometries for a given block count
+    static std::vector<GeometryDescriptor> driveGeometries(isize numBlocks, isize bsize = 512);
+
     // Checks whether the geometry is unique
     bool unique() const;
     

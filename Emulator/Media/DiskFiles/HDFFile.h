@@ -108,16 +108,15 @@ public:
     
     // Returns the layout parameters of the hard drive
     isize numPartitions() const;
-    isize numReserved() const;
 
     // Returns the byte count and the location of a certain partition
     isize partitionSize(isize nr) const;
     isize partitionOffset(isize nr) const;
     u8 *partitionData(isize nr) const;
     
-    // Computes all possible drive geometries
-    std::vector<GeometryDescriptor> driveGeometries(isize fileSize);
-    
+    // Predicts the number of blocks of this hard drive
+    isize predictNumBlocks() const;
+        
     
     //
     // Scanning raw disk data
@@ -127,7 +126,10 @@ private:
     
     // Returns a pointer to a certain block if it exists
     u8 *seekBlock(isize nr) const;
-    
+
+    // Return a pointer to the Root Block if it exists
+    u8 *seekRB() const;
+
     // Return a pointer to the Rigid Disk Block if it exists
     u8 *seekRDB() const;
     

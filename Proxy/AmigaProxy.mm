@@ -1450,7 +1450,7 @@ using namespace moira;
     NSMutableArray *data = [[NSMutableArray alloc] init];
     
     auto geometry = [self drive]->getGeometry();
-    auto geometries = GeometryDescriptor::driveGeometries(geometry.numBytes());
+    auto geometries = GeometryDescriptor::driveGeometries(geometry.numBlocks());
         
     for (auto &g : geometries) {
         
@@ -1459,6 +1459,12 @@ using namespace moira;
     }
     
     return data;
+}
+
+- (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex
+{
+    try { return [self drive]->writeToFile([url fileSystemRepresentation]); }
+    catch (VAError &error) { [ex save:error]; }
 }
 
 @end

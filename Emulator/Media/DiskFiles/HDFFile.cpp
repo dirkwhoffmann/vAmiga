@@ -24,12 +24,13 @@ HDFFile::isCompatible(const string &path)
 bool
 HDFFile::isCompatible(std::istream &stream)
 {
-    return util::streamLength(stream) % 512 == 0;
+    return true; // util::streamLength(stream) % 512 == 0;
 }
 
 void
 HDFFile::finalizeRead()
-{
+{        
+    // Retrieve geometry and partition information
     geometry = getGeometryDescriptor();
     ptable = getPartitionDescriptors();
 
@@ -37,7 +38,7 @@ HDFFile::finalizeRead()
     geometry.checkCompatibility();
 
     // Check the partition table for consistency
-    for (auto &p :  ptable) {
+    for (auto &p : ptable) {
         
         p.checkCompatibility();
         
@@ -110,11 +111,14 @@ HDFFile::getGeometryDescriptor() const
 
     } else {
         
-        // Guess the drive geometry based on the file size
-        auto geometries = GeometryDescriptor::driveGeometries(data.size);
-        if (geometries.size()) {
-            result = geometries.front();
-        }
+        // Predict the number of blocks
+        auto numBlocks = predictNumBlocks();
+        
+        // Predict the drive geometry
+        auto geometries = GeometryDescriptor::driveGeometries(numBlocks);
+        
+        // Use the first match by default
+        if (geometries.size()) result = geometries.front();
     }
         
     return result;
@@ -277,10 +281,59 @@ HDFFile::partitionData(isize nr) const
     return data.ptr + partitionOffset(nr);
 }
 
+isize
+HDFFile::predictNumBlocks() const
+{
+    isize rootKey = 0;
+    isize highKey = 0;
+    isize numReserved = 2;
+    
+    auto match = [&]() {
+        return (numReserved + highKey) / 2 == rootKey;
+    };
+        
+    if (auto root = seekRB(); root) {
+        
+        rootKey = isize(root - data.ptr) / bsize();
+        
+        // Predict block count by analyzing the file size
+        highKey = data.size / bsize() - 1;
+        if (match()) return highKey + 1;
+        
+        // Predict block count by assuming a 32 sector standard geometry
+        highKey = 32 * (data.size / (32 * bsize())) - 1;
+        if (match()) return highKey + 1;
+
+        // Predict by faking the numbers to fit
+        highKey = 2 * rootKey - numReserved;
+        if (match()) return highKey + 1;
+
+        fatalError;
+    }
+    
+    return data.size / bsize();
+}
+
 u8 *
 HDFFile::seekBlock(isize nr) const
 {
     return nr >= 0 && 512 * (nr + 1) <= data.size ? data.ptr + (512 * nr) : nullptr;
+}
+
+u8 *
+HDFFile::seekRB() const
+{
+    auto max = data.size - 512;
+    
+    for (isize i = 0; i <= max; i += 512) {
+        
+        if (R32BE(data.ptr + i) != 2) continue;
+        if (R32BE(data.ptr + i + bsize() - 4) != 1) continue;
+
+        return data.ptr + i;
+    }
+
+    return nullptr;
 }
 
 u8 *

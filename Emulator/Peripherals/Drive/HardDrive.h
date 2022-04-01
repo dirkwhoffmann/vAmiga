@@ -244,6 +244,16 @@ private:
     
     
     //
+    // Exporting
+    //
+    
+public:
+    
+    // Exports the disk in HDF format
+    void writeToFile(const string &path) throws;
+
+    
+    //
     // Scheduling and serving events
     //
     

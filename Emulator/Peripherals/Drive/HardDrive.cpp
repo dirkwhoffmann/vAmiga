@@ -564,6 +564,13 @@ HardDrive::moveHead(isize c, isize h, isize s)
 }
 
 void
+HardDrive::writeToFile(const string &path) throws
+{
+    auto hdf = HDFFile(*this);
+    hdf.writeToFile(path);
+}
+
+void
 HardDrive::scheduleIdleEvent()
 {
     auto delay = MSEC(100);

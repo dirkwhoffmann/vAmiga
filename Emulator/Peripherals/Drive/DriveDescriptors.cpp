@@ -40,7 +40,7 @@ GeometryDescriptor::operator < (const GeometryDescriptor &rhs) const
 }
 
 std::vector<GeometryDescriptor>
-GeometryDescriptor::driveGeometries(isize capacity)
+GeometryDescriptor::driveGeometries(isize numBlocks, isize bsize)
 {
     std::vector<GeometryDescriptor> result;
     
@@ -54,28 +54,28 @@ GeometryDescriptor::driveGeometries(isize capacity)
         56, 59, 60, 61, 62, 63
     };
     
-    // Compute all geometries compatible with the file size
+    // Compute all geometries compatible with the given block count
     for (isize h = GeometryDescriptor::hMin; h <= GeometryDescriptor::hMax; h++) {
         for (isize i = 0; i < isizeof(sizes); i++) {
                   
             auto s = isize(sizes[i]);
-            auto cylSize = h * s * 512;
+            auto blocksPerCyl = h * s;
             
-            if (capacity % cylSize == 0) {
+            if (numBlocks % blocksPerCyl == 0) {
                 
-                auto c = capacity / cylSize;
+                auto c = numBlocks / blocksPerCyl;
 
                 if (c > GeometryDescriptor::cMax) continue;
                 if (c < GeometryDescriptor::cMin && h > 1) continue;
                 
-                result.push_back(GeometryDescriptor(c, h, s, 512));
+                result.push_back(GeometryDescriptor(c, h, s, bsize));
             }
         }
     }
 
     // Sort all entries
     std::sort(result.begin(), result.end());
-    
+        
     return result;
 }
 
