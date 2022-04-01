@@ -93,7 +93,7 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.writeProtectAction(_:)):
             item.state = dfn.hasProtectedDisk ? .on : .off
             return dfn.hasDisk
-            
+             
         // Hd<n> menu
         case #selector(MyController.attachRecentHdrAction(_:)):
             return validateURLlist(myAppDelegate.attachedHardDrives, image: smallHdr)
@@ -109,6 +109,10 @@ extension MyController: NSMenuItemValidation {
             item.state = hdn.hasProtectedDisk ? .on : .off
             return hdn.hasDisk
 
+        case #selector(MyController.persistHdnAction(_:)):
+            item.state = config.hdPersist[item.tag] ? .on : .off
+            return true
+            
         default:
             return true
         }
@@ -511,7 +515,7 @@ extension MyController: NSMenuItemValidation {
         amiga.df(sender)!.toggleWriteProtection()
         amiga.resume()
     }
-    
+        
     @IBAction func exportRecentDiskDummyAction(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentDiskAction(_ sender: NSMenuItem!) {
                 
@@ -726,4 +730,9 @@ extension MyController: NSMenuItemValidation {
         amiga.hd(sender)!.toggleWriteProtection()
     }
 
+    @IBAction func persistHdnAction(_ sender: NSMenuItem!) {
+        
+        config.hdPersist[sender.tag] = !config.hdPersist[sender.tag]
+        try? config.persistHd(sender.tag)
+    }
 }

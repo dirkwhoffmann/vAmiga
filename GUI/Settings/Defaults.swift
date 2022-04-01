@@ -895,6 +895,22 @@ struct PeripheralsDefaults {
 
 extension UserDefaults {
 
+    static func mediaUrl(name: String) -> URL? {
+        
+        let folder = try? URL.appSupportFolder("Media")
+        return folder?.appendingPathComponent(name)
+    }
+
+    static func dfnUrl(_ nr: Int) -> URL? {
+        
+        return mediaUrl(name: "df\(nr).hdf")
+    }
+
+    static func hdnUrl(_ nr: Int) -> URL? {
+        
+        return mediaUrl(name: "hd\(nr).hdf")
+    }
+
     static func registerPeripheralsUserDefaults() {
 
         let defaults = PeripheralsDefaults.std

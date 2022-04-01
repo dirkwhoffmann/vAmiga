@@ -197,6 +197,13 @@ extension FloppyDriveProxy {
 
 extension HardDriveProxy {
 
+    func attach(url: URL) throws {
+        
+        let exception = ExceptionWrapper()
+        attachFile(url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
     func attach(hdf: HDFFileProxy) throws {
         
         let exception = ExceptionWrapper()

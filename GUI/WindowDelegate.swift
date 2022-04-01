@@ -44,6 +44,9 @@ extension MyController: NSWindowDelegate {
         
         log()
         
+        log("Persist hard drives...", level: 2)
+        try? config.persistHardDrives()
+        
         log("Stopping renderer...", level: 2)
         renderer.halt()
         

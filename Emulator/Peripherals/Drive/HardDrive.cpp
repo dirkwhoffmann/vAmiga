@@ -130,6 +130,15 @@ HardDrive::init(const HDFFile &hdf)
     hdf.flash(data.ptr, 0, numBytes);
 }
 
+void
+HardDrive::init(const string &path) throws
+{
+    printf("Path = %s\n", path.c_str());
+    HDFFile hdf(path);
+    printf("HDF created\n");
+    init(hdf);
+}
+
 const char *
 HardDrive::getDescription() const
 {

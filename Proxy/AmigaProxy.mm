@@ -1400,6 +1400,15 @@ using namespace moira;
     return [self drive]->getState();
 }
 
+- (void)attachFile:(NSURL *)url exception:(ExceptionWrapper *)ex
+{
+    try {
+        [self drive]->init([url fileSystemRepresentation]);
+    }  catch (VAError &error) {
+        [ex save:error];
+    }
+}
+
 - (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex
 {
     try {

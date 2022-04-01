@@ -185,6 +185,7 @@ class Configuration {
         get { return hdnType(3) }
         set { setHdnType(3, type: newValue) }
     }
+    var hdPersist = [ false, false, false, false ]
 
     var gameDevice1 = PeripheralsDefaults.std.gameDevice1 {
         didSet {
@@ -698,7 +699,7 @@ class Configuration {
         gameDevice2 = defaults.gameDevice2
         serialDevice = defaults.serialDevice.rawValue
         serialDevicePort = defaults.serialDevicePort
-        
+                
         amiga.resume()
     }
     
@@ -731,6 +732,9 @@ class Configuration {
         gameDevice2 = defaults.integer(forKey: Keys.Per.gameDevice2)
         serialDevice = defaults.integer(forKey: Keys.Per.serialDevice)
         serialDevicePort = defaults.integer(forKey: Keys.Per.serialDevicePort)
+
+        restoreHardDrives()
+
         amiga.resume()
     }
     
@@ -761,6 +765,61 @@ class Configuration {
         defaults.set(gameDevice2, forKey: Keys.Per.gameDevice2)
         defaults.set(serialDevice, forKey: Keys.Per.serialDevice)
         defaults.set(serialDevicePort, forKey: Keys.Per.serialDevicePort)
+    }
+
+    func persistHardDrives() throws {
+
+        for n in 0...3 { try persistHd(n) }
+    }
+
+    func persistHd(_ n: Int) throws {
+
+        var url: URL?
+        
+        do {
+            // Get URL for the backup file
+            url = UserDefaults.hdnUrl(n)
+            if url == nil { throw VAError(.FILE_CANT_WRITE) }
+            
+            // Remove the old file (if any)
+            let fm = FileManager.default
+            try? fm.removeItem(at: url!)
+
+            // Save hard drive image
+            if hdPersist[n] { try amiga.hd(n)?.writeToFile(url!) }
+            
+        } catch {
+            
+            if error is VAError && url != nil {
+                
+                VAError.warning("Failed to save hard drive HD\(n)",
+                                "Can't write to file \(url!.path)")
+            }
+            if error is VAError && url == nil {
+                
+                VAError.warning("Failed to save hard drive HD\(n)",
+                                "Unable to access the application defaults folder")
+            }
+        }
+    }
+    
+    func restoreHardDrives() {
+
+        for n in 0...3 { restoreHd(n) }
+    }
+    
+    func restoreHd(_ n: Int) {
+        
+        if let url = UserDefaults.hdnUrl(n) {
+            do {
+                try amiga.hd(n)!.attach(url: url)
+                log("Restoring HD\(n) from \(url)")
+                hdPersist[n] = true
+            } catch {
+                log("No restoration image for HD\(n) found")
+                hdPersist[n] = false
+            }
+        }
     }
     
     //

@@ -73,6 +73,7 @@ public:
 
     // Creates a hard drive with the contents of an HDF
     void init(const HDFFile &hdf) throws;
+    void init(const string &path) throws;
 
 private:
 
