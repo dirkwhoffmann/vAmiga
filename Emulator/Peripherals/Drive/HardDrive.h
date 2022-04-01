@@ -19,7 +19,10 @@ class HardDrive : public Drive {
     
     friend class HDFFile;
     friend class HdController;
-    
+
+    // Optional paths to a storage file (persistent disk feature)
+    string backup;
+
     // Current configuration
     HardDriveConfig config = {};
     
@@ -182,6 +185,9 @@ public:
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
 
+    string getBackupPath() { return backup; }
+    void setBackupPath(const string &path) { backup = path; }
+    
     
     //
     // Analyzing
@@ -245,11 +251,17 @@ private:
     
     
     //
-    // Exporting
+    // Importing and exporting
     //
     
 public:
     
+    // Persists a disk (called on disconnect)
+    bool persistDisk() throws;
+
+    // Restores a disk (called on connect)
+    bool restoreDisk() throws;
+
     // Exports the disk in HDF format
     void writeToFile(const string &path) throws;
 

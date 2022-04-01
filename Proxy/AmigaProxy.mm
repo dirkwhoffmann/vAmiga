@@ -1377,6 +1377,21 @@ using namespace moira;
     return [self drive]->getGeometry().unique();
 }
 
+- (NSString *)backupPath
+{
+    auto path = [self drive]->getBackupPath();
+    return @(path.c_str());
+}
+
+- (void)setBackupPath:(NSString *)path
+{
+    if ([path length] == 0) {
+        [self drive]->setBackupPath("");
+    } else {
+        [self drive]->setBackupPath(string([path fileSystemRepresentation]));
+    }
+}
+
 - (NSString *)nameOfPartition:(NSInteger)nr
 {
     auto &info = [self drive]->getPartitionInfo(nr);

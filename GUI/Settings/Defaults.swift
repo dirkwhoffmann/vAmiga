@@ -901,11 +901,6 @@ extension UserDefaults {
         return folder?.appendingPathComponent(name)
     }
 
-    static func dfnUrl(_ nr: Int) -> URL? {
-        
-        return mediaUrl(name: "df\(nr).hdf")
-    }
-
     static func hdnUrl(_ nr: Int) -> URL? {
         
         return mediaUrl(name: "hd\(nr).hdf")

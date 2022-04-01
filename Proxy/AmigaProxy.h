@@ -661,6 +661,7 @@
 @property (readonly) NSInteger sectors;
 @property (readonly) NSInteger bsize;
 @property (readonly) BOOL uniqueGeometry;
+@property NSString *backupPath;
 - (NSString *)nameOfPartition:(NSInteger)nr;
 - (NSInteger)lowerCylOfPartition:(NSInteger)nr;
 - (NSInteger)upperCylOfPartition:(NSInteger)nr;

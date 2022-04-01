@@ -17,6 +17,7 @@
 
 HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 {
+    /*
     string path;
     
     if (nr == 0) path = INITIAL_HD0;
@@ -36,6 +37,7 @@ HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
             warn("Cannot open HDF file %s\n", path.c_str());
         }
     }
+    */
 }
 
 void
@@ -133,9 +135,7 @@ HardDrive::init(const HDFFile &hdf)
 void
 HardDrive::init(const string &path) throws
 {
-    printf("Path = %s\n", path.c_str());
     HDFFile hdf(path);
-    printf("HDF created\n");
     init(hdf);
 }
 
@@ -215,20 +215,27 @@ HardDrive::setConfigItem(Option option, i64 value)
             
             if (bool(value) != config.connected) {
                 
-                config.connected = bool(value);
-                
-                if (value) {
-
-                    // Attach a default disk when the drive gets connected
-                    init(MB(10));
-                    format(FS_OFS, defaultName());
+                if (bool(value)) {
+                    
+                    config.connected = true;
+                    
+                    if (!restoreDisk()) {
+                        
+                        // Attach a small default disk
+                        init(MB(10));
+                        format(FS_OFS, defaultName());
+                    }
+                    
+                    msgQueue.put(MSG_HDR_CONNECT, nr);
                     
                 } else {
                     
+                    config.connected = false;
+                    persistDisk();
                     init();
+                    
+                    msgQueue.put(MSG_HDR_DISCONNECT, nr);
                 }
-                
-                msgQueue.put(value ? MSG_HDR_CONNECT : MSG_HDR_DISCONNECT, nr);
             }
             return;
 
@@ -572,11 +579,58 @@ HardDrive::moveHead(isize c, isize h, isize s)
     }
 }
 
+bool
+HardDrive::persistDisk() throws
+{
+    if (!backup.empty()) try {
+        
+        auto hdf = HDFFile(*this);
+        hdf.writeToFile(backup);
+        msg("HD%ld persisted at %s\n", nr, backup.c_str());
+        
+    } catch (...) {
+        
+        warn("Failed to persist HD%ld at %s\n", nr, backup.c_str());
+        return false;
+    }
+    
+    return true;
+}
+
+bool
+HardDrive::restoreDisk() throws
+{
+    string path;
+            
+    if (nr == 0) path = INITIAL_HD0;
+    if (nr == 1) path = INITIAL_HD1;
+    if (nr == 2) path = INITIAL_HD2;
+    if (nr == 3) path = INITIAL_HD3;
+    if (path == "") path = backup;
+    
+    if (path != "") try {
+        
+        auto hdf = HDFFile(path);
+        init(hdf);
+        msg("HD%ld restored from %s\n", nr, backup.c_str());
+        
+    } catch (...) {
+        
+        warn("Failed to restore HD%ld from %s\n", nr, backup.c_str());
+        return false;
+    }
+    
+    return true;
+}
+
 void
 HardDrive::writeToFile(const string &path) throws
 {
-    auto hdf = HDFFile(*this);
-    hdf.writeToFile(path);
+    if (!path.empty()) {
+
+        auto hdf = HDFFile(*this);
+        hdf.writeToFile(path);
+    }
 }
 
 void

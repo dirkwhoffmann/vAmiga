@@ -675,8 +675,9 @@ class Configuration {
     func loadPeripheralsDefaults(_ defaults: PeripheralsDefaults) {
         
         log(level: 2)
-        amiga.suspend()
         
+        amiga.suspend()
+                
         df0Connected = defaults.driveConnect[0]
         df1Connected = defaults.driveConnect[1]
         df2Connected = defaults.driveConnect[2]
@@ -710,6 +711,11 @@ class Configuration {
         
         amiga.suspend()
         
+        amiga.hd0.backupPath = UserDefaults.hdnUrl(0)!.path
+        amiga.hd1.backupPath = UserDefaults.hdnUrl(1)!.path
+        amiga.hd2.backupPath = UserDefaults.hdnUrl(2)!.path
+        amiga.hd3.backupPath = UserDefaults.hdnUrl(3)!.path
+
         df0Connected = defaults.bool(forKey: Keys.Per.df0Connect)
         df1Connected = defaults.bool(forKey: Keys.Per.df1Connect)
         df2Connected = defaults.bool(forKey: Keys.Per.df2Connect)
@@ -732,9 +738,21 @@ class Configuration {
         gameDevice2 = defaults.integer(forKey: Keys.Per.gameDevice2)
         serialDevice = defaults.integer(forKey: Keys.Per.serialDevice)
         serialDevicePort = defaults.integer(forKey: Keys.Per.serialDevicePort)
-
-        restoreHardDrives()
-
+        
+        for n in 0...3 {
+            
+            if let url = UserDefaults.hdnUrl(n) {
+                
+                if FileManager.default.fileExists(atPath: url.path) {
+                    log("File \(url) found")
+                    hdPersist[n] = true
+                } else {
+                    log("File \(url) not found")
+                    hdPersist[n] = false
+                }
+            }
+        }
+        
         amiga.resume()
     }
     
@@ -799,25 +817,6 @@ class Configuration {
                 
                 VAError.warning("Failed to save hard drive HD\(n)",
                                 "Unable to access the application defaults folder")
-            }
-        }
-    }
-    
-    func restoreHardDrives() {
-
-        for n in 0...3 { restoreHd(n) }
-    }
-    
-    func restoreHd(_ n: Int) {
-        
-        if let url = UserDefaults.hdnUrl(n) {
-            do {
-                try amiga.hd(n)!.attach(url: url)
-                log("Restoring HD\(n) from \(url)")
-                hdPersist[n] = true
-            } catch {
-                log("No restoration image for HD\(n) found")
-                hdPersist[n] = false
             }
         }
     }
