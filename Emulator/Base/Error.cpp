@@ -140,8 +140,8 @@ VAError::VAError(ErrorCode code, const string &s)
 
         case ERROR_WT_BLOCKED:
             description = "The storage file for the selected hard drive is";
-            description += " already in use. It cannot be shared among";
-            description += " multiple emulator instances.";
+            description += " being used by another emulator instance. It cannot ";
+            description += " be shared among multiple emulator instances.";
             break;
 
         case ERROR_WT:

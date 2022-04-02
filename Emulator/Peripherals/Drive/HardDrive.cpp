@@ -584,9 +584,16 @@ HardDrive::write(isize offset, isize length, u32 addr)
         // Move the drive head to the specified location
         moveHead(offset / geometry.bsize);
 
-        // Perform the write operation
         if (!writeProtected) {
+
+            // Perform the write operation
             mem.spypeek <ACCESSOR_CPU> (addr, length, data.ptr + offset);
+            
+            // Handle write-through mode
+            if (wt) {
+                wtStream[nr].seekp(offset);
+                wtStream[nr].write((char *)(data.ptr + offset), length);
+            }
         }
         
         // Inform the GUI
