@@ -682,8 +682,6 @@ class Inspector: DialogController {
         
         message.stringValue = ""
         cpuInstrView.alertAddr = nil
-        cpuInstrView.breakpointPC = -1
-        cpuInstrView.watchpointPC = -1
         fullRefresh()
     }
     
@@ -696,8 +694,6 @@ class Inspector: DialogController {
                 
         message.stringValue = ""
         cpuInstrView.alertAddr = nil
-        cpuInstrView.breakpointPC = -1
-        cpuInstrView.watchpointPC = -1
         fullRefresh()
         scrollToPC()
     }
@@ -706,8 +702,6 @@ class Inspector: DialogController {
         
         message.stringValue = ""
         cpuInstrView.alertAddr = nil
-        cpuInstrView.breakpointPC = -1
-        cpuInstrView.watchpointPC = -1
         fullRefresh()
     }
     
@@ -715,7 +709,6 @@ class Inspector: DialogController {
             
         message.stringValue = "Breakpoint reached"
         cpuInstrView.alertAddr = nil
-        cpuInstrView.breakpointPC = pc
         scrollToPC(pc: pc)
     }
 
@@ -723,7 +716,6 @@ class Inspector: DialogController {
     
         message.stringValue = "Watchpoint reached"
         cpuInstrView.alertAddr = pc
-        cpuInstrView.watchpointPC = pc
         scrollToPC(pc: pc)
     }
 

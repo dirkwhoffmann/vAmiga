@@ -35,9 +35,6 @@ class InstrTableView: NSTableView {
         
     // Optional address to be highlighted by an alert symbol
     var alertAddr: Int?
-
-    var breakpointPC = -1 // DEPRECATED
-    var watchpointPC = -1 // DEPRECATED
     
     override func awakeFromNib() {
         
