@@ -46,6 +46,16 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     // Remembers whether awakeFromNib has been called
     var awake = false
     
+    convenience init?(with controller: MyController, nibName: NSNib.Name) {
+    
+        self.init(windowNibName: nibName)
+        
+        parent = controller
+        amiga = parent.amiga
+    }
+    
+    // DEPRECATED: USE CONVENIENCE CONSTRUCTOR INSTEAD
+    @available(*, deprecated, message: "Use convenience constructor")
     static func make(parent: MyController, nibName: NSNib.Name) -> Self? {
 
         let controller = Self.init(windowNibName: nibName)
@@ -54,7 +64,7 @@ class DialogController: NSWindowController, DialogControllerDelegate {
         
         return controller
     }
-
+    
     func register() {
         
         DialogController.active.append(self)

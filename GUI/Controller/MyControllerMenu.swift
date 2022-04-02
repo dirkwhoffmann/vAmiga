@@ -142,8 +142,7 @@ extension MyController: NSMenuItemValidation {
         
         if myAppDelegate.prefController == nil {
             myAppDelegate.prefController =
-                PreferencesController.make(parent: self,
-                                           nibName: NSNib.Name("Preferences"))
+            PreferencesController(with: self, nibName: "Preferences")
         }
         myAppDelegate.prefController!.showWindow(self)
         myAppDelegate.prefController!.refresh()
@@ -179,7 +178,7 @@ extension MyController: NSMenuItemValidation {
     func openConfigurator(tab: String = "") {
         
         if configurator == nil {
-            configurator = ConfigurationController.make(parent: self, nibName: "Configuration")
+            configurator = ConfigurationController(with: self, nibName: "Configuration")
         }
         configurator?.showSheet(tab: tab)
     }
@@ -192,7 +191,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func inspectorAction(_ sender: Any!) {
         
         if inspector == nil {
-            inspector = Inspector.make(parent: self, nibName: "Inspector")
+            inspector = Inspector(with: self, nibName: "Inspector")
         }
         inspector?.showWindow(self)
     }
@@ -200,7 +199,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func monitorAction(_ sender: Any!) {
         
         if monitor == nil {
-            monitor = Monitor.make(parent: self, nibName: "Monitor")
+            monitor = Monitor(with: self, nibName: "Monitor")
         }
         monitor?.showWindow(self)
     }
@@ -231,7 +230,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func browseSnapshotsAction(_ sender: Any!) {
         
         if snapshotBrowser == nil {
-            snapshotBrowser = SnapshotDialog.make(parent: self, nibName: "SnapshotDialog")
+            snapshotBrowser = SnapshotDialog(with: self, nibName: "SnapshotDialog")
         }
         snapshotBrowser?.showSheet()
     }
@@ -258,7 +257,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func browseScreenshotsAction(_ sender: Any!) {
         
         if screenshotBrowser == nil {
-            screenshotBrowser = ScreenshotDialog.make(parent: self, nibName: "ScreenshotDialog")
+            screenshotBrowser = ScreenshotDialog(with: self, nibName: "ScreenshotDialog")
         }
         screenshotBrowser?.checksum = amiga.df0.fnv
         screenshotBrowser?.showSheet()
@@ -298,7 +297,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func exportVideoAction(_ sender: Any!) {
                 
-        let exporter = VideoExporter.make(parent: self, nibName: "VideoExporter")
+        let exporter = VideoExporter(with: self, nibName: "VideoExporter")
         exporter?.showSheet()
     }
     
@@ -435,7 +434,7 @@ extension MyController: NSMenuItemValidation {
         // Ask the user if a modified hard drive should be detached
         if !proceedWithUnexportedDisk(drive: drive) { return }
 
-        let panel = FloppyCreator.make(parent: self, nibName: "FloppyCreator")
+        let panel = FloppyCreator(with: self, nibName: "FloppyCreator")
         panel?.showSheet(forDrive: sender.tag)
     }
 
@@ -569,19 +568,19 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func exportFloppyDiskAction(_ sender: NSMenuItem!) {
         
-        let exportPanel = DiskExporter.make(parent: self, nibName: "DiskExporter")
+        let exportPanel = DiskExporter(with: self, nibName: "DiskExporter")
         exportPanel?.showSheet(diskDrive: sender.tag)
     }
     
     @IBAction func inspectFloppyDiskAction(_ sender: NSMenuItem!) {
         
-        let panel = DiskInspector.make(parent: self, nibName: "DiskInspector")
+        let panel = DiskInspector(with: self, nibName: "DiskInspector")
         panel?.show(diskDrive: sender.tag)
     }
 
     @IBAction func inspectDfnVolumeAction(_ sender: NSMenuItem!) {
                 
-        let panel = VolumeInspector.make(parent: self, nibName: "VolumeInspector")
+        let panel = VolumeInspector(with: self, nibName: "VolumeInspector")
         panel?.show(diskDrive: sender.tag)
     }
 
@@ -596,7 +595,7 @@ extension MyController: NSMenuItemValidation {
         // Power off the emulator if the user doesn't object
         if !askToPowerOff() { return }
         
-        let panel = HardDiskCreator.make(parent: self, nibName: "HardDiskCreator")
+        let panel = HardDiskCreator(with: self, nibName: "HardDiskCreator")
         panel?.show(forDrive: drive.nr)
     }
     
@@ -707,25 +706,25 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func exportHdrAction(_ sender: NSMenuItem!) {
         
-        let exportPanel = DiskExporter.make(parent: self, nibName: "DiskExporter")
+        let exportPanel = DiskExporter(with: self, nibName: "DiskExporter")
         exportPanel?.showSheet(hardDrive: sender.tag)
     }
     
     @IBAction func inspectHdrDiskAction(_ sender: NSMenuItem!) {
 
-        let panel = DiskInspector.make(parent: self, nibName: "DiskInspector")
+        let panel = DiskInspector(with: self, nibName: "DiskInspector")
         panel?.show(hardDrive: sender.tag)
     }
 
     @IBAction func inspectHdrVolumeAction(_ sender: NSMenuItem!) {
         
-        let panel = VolumeInspector.make(parent: self, nibName: "VolumeInspector")
+        let panel = VolumeInspector(with: self, nibName: "VolumeInspector")
         panel?.show(hardDrive: sender.tag)
     }
 
     @IBAction func configureHdrAction(_ sender: NSMenuItem!) {
         
-        let panel = HardDiskConfigurator.make(parent: self, nibName: "HardDiskConfigurator")
+        let panel = HardDiskConfigurator(with: self, nibName: "HardDiskConfigurator")
         panel?.show(forDrive: sender.tag)
     }
     

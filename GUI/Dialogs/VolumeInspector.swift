@@ -196,7 +196,7 @@ class VolumeInspector: DialogController {
         } else {
             
             // Ask the user to select a partition
-            let panel = PartitionSelector.make(parent: parent, nibName: "PartitionSelector")
+            let panel = PartitionSelector(with: parent, nibName: "PartitionSelector")
             panel?.showSheet(hardDrive: nr, completionHandler: {
                 if let part = panel?.userSelection {
                     self.show(hardDrive: nr, partition: part)
