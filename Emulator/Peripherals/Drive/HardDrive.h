@@ -20,9 +20,10 @@ class HardDrive : public Drive {
     friend class HDFFile;
     friend class HdController;
 
-    // Optional paths to a storage file (persistent disk feature)
-    string backup;
-
+    // Write-through storage file names and associated file handles
+    static fs::path wtPath[4];
+    static std::fstream wtStream[4];
+    
     // Current configuration
     HardDriveConfig config = {};
     
@@ -56,6 +57,9 @@ class HardDrive : public Drive {
     bool modified = false;
     bool writeProtected = false;
 
+    // Indicates if write-through mode is enabled
+    bool wt = false;
+    
     
     //
     // Initializing
@@ -172,10 +176,7 @@ public:
     bool hasProtectedDisk() const override;
     void setModificationFlag(bool value) override;
     void setProtectionFlag(bool value) override;
-    
-    void enableWriteThrough(const fs::path &path) override;
-    void disableWriteThrough() override;
-    
+        
     
     //
     // Configuring
@@ -189,10 +190,15 @@ public:
     
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
-
-    string getBackupPath() { return backup; }
-    void setBackupPath(const string &path) { backup = path; }
     
+    static string getWriteThroughPath(isize nr) { return wtPath[nr]; }
+    static void setWriteThroughPath(isize nr, const string &path) { wtPath[nr] = path; }
+    
+private:
+    
+    void connect();
+    void disconnect();
+
     
     //
     // Analyzing
@@ -216,8 +222,8 @@ public:
     // Gets or sets the 'modification' flag
     bool isModified() const { return modified; }
     void setModified(bool value) { modified = value; }
-        
-
+       
+    
     //
     // Formatting
     //
@@ -262,13 +268,22 @@ private:
 public:
     
     // Persists a disk (called on disconnect)
-    bool persistDisk() throws;
+    // bool persistDisk() throws;
 
     // Restores a disk (called on connect)
     bool restoreDisk() throws;
 
     // Exports the disk in HDF format
     void writeToFile(const string &path) throws;
+
+    
+    //
+    // Managing write-through mode
+    //
+    
+    bool writeThroughEnabled() const { return wt; }
+    void enableWriteThrough() throws;
+    void disableWriteThrough();
 
     
     //

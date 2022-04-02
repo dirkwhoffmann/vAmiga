@@ -239,10 +239,10 @@ extension HardDriveProxy {
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 
-    func enableWriteThrough(_ url: URL) throws {
+    func enableWriteThrough() throws {
 
         let exception = ExceptionWrapper()
-        enableWriteThrough(url, exception: exception)
+        enableWriteThrough(exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 }

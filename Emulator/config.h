@@ -76,10 +76,12 @@ struct FloatStereo; typedef struct FloatStereo SampleType;
 #define INITIAL_DF3 ""
 
 // Add pathes to HDF files to launch the emulator with preset hard drives
+/*
 #define INITIAL_HD0 "" // /tmp/rdb2.hdf"
 #define INITIAL_HD1 ""
 #define INITIAL_HD2 ""
 #define INITIAL_HD3 ""
+*/
 
 // Add a path to a snapshot file to launch the emulator in a preset state
 #define INITIAL_SNAPSHOT ""
@@ -177,6 +179,7 @@ static const int FS_DEBUG        = 0; // File System Classes (OFS / FFS)
 
 // Hard Drives
 static const int HDR_ACCEPT_ALL  = 0; // Disables hard drive layout checks
+static const int WT_DEBUG        = 1; // Write-through mode
 
 // Audio
 static const int AUDREG_DEBUG    = 0; // Audio registers

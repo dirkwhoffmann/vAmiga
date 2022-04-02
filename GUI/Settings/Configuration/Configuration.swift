@@ -711,10 +711,10 @@ class Configuration {
         
         amiga.suspend()
         
-        amiga.hd0.backupPath = UserDefaults.hdnUrl(0)!.path
-        amiga.hd1.backupPath = UserDefaults.hdnUrl(1)!.path
-        amiga.hd2.backupPath = UserDefaults.hdnUrl(2)!.path
-        amiga.hd3.backupPath = UserDefaults.hdnUrl(3)!.path
+        amiga.hd0.setBackupPath(0, path: UserDefaults.hdnUrl(0)!)
+        amiga.hd1.setBackupPath(1, path: UserDefaults.hdnUrl(0)!)
+        amiga.hd2.setBackupPath(2, path: UserDefaults.hdnUrl(0)!)
+        amiga.hd3.setBackupPath(3, path: UserDefaults.hdnUrl(0)!)
 
         df0Connected = defaults.bool(forKey: Keys.Per.df0Connect)
         df1Connected = defaults.bool(forKey: Keys.Per.df1Connect)
@@ -738,34 +738,6 @@ class Configuration {
         gameDevice2 = defaults.integer(forKey: Keys.Per.gameDevice2)
         serialDevice = defaults.integer(forKey: Keys.Per.serialDevice)
         serialDevicePort = defaults.integer(forKey: Keys.Per.serialDevicePort)
-        
-        // Try to enable write-through mode if storage files are present
-        for n in 0...3 {
-            
-            if let url = UserDefaults.hdnUrl(n) {
-                
-                if FileManager.default.fileExists(atPath: url.path) {
-                    
-                    log("Storage file \(url) found")
-                    
-                    do {
-                        // Try to recreate the drive from the storage file
-                        try amiga.hd(n)!.attach(url: url)
-                        
-                        // Try to delete the file (fails if already in use)
-                        try FileManager.default.removeItem(at: url)
-                        
-                        // Try to enable write-through mode
-                        try amiga.hd(n)!.enableWriteThrough(url)
-                        
-                    } catch let error as VAError {
-                        log("VAError: \(error.what)")
-                    } catch {
-                        log("Error: \(error)")
-                    }
-                }
-            }
-        }
         
         amiga.resume()
     }

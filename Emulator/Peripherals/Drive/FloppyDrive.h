@@ -169,9 +169,6 @@ public:
     bool hasProtectedDisk() const override;
     void setModificationFlag(bool value) override;
     void setProtectionFlag(bool value) override;
-    
-    void enableWriteThrough(const fs::path &path) override;
-    void disableWriteThrough() override;
 
     
     //

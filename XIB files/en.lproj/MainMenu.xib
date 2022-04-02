@@ -1022,6 +1022,7 @@
                                     <action selector="writeProtectHdrAction:" target="-1" id="WYa-48-cOr"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="tjd-yW-J9l"/>
                             <menuItem title="Write Through" id="fcn-Pn-aEn">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -1179,6 +1180,7 @@
                                     <action selector="writeProtectHdrAction:" target="-1" id="2qL-bl-h0G"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="oOU-Dd-6zb"/>
                             <menuItem title="Write Through" tag="1" id="DZD-X3-Lp5" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -1336,6 +1338,7 @@
                                     <action selector="writeProtectHdrAction:" target="-1" id="t5d-Ig-pZJ"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="ERW-ae-eYN"/>
                             <menuItem title="Write Through" tag="2" id="lHY-c2-JvI" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -1493,6 +1496,7 @@
                                     <action selector="writeProtectHdrAction:" target="-1" id="0rF-yo-ck2"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="jjz-cV-gcb"/>
                             <menuItem title="Write Through" tag="3" id="uKN-3t-shd" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>

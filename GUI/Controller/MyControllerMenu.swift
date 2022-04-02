@@ -738,21 +738,17 @@ extension MyController: NSMenuItemValidation {
         
         if sender.state == .on {
 
-            log("Disabling write-through for HD\(sender.tag)")
             amiga.hd(sender)!.disableWriteThrough()
             sender.state = .off
-            return
-        }
-        
-        if let url = UserDefaults.hdnUrl(sender.tag) {
+
+            try? FileManager.default.removeItem(at: UserDefaults.hdnUrl(sender.tag)!)
             
-            log("Trying to enable write-through for HD\(sender.tag)")
+        } else {
+            
             do {
-                try amiga.hd(sender)!.enableWriteThrough(url)
-                log("WT enabled")
+                try amiga.hd(sender)!.enableWriteThrough()
                 sender.state = .on
             } catch {
-                log("WT can't be enabled")
                 sender.state = .off
                 (error as? VAError)?.warning("Write-through mode can't be enabled.")
             }

@@ -15,6 +15,9 @@
 #include "Memory.h"
 #include "MsgQueue.h"
 
+fs::path HardDrive::wtPath[4];
+std::fstream HardDrive::wtStream[4];
+
 HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 {
     /*
@@ -203,7 +206,6 @@ HardDrive::setConfigItem(Option option, i64 value)
             if (!HardDriveTypeEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVARG, HardDriveTypeEnum::keyList());
             }
-            
             config.type = (HardDriveType)value;
             return;
 
@@ -212,31 +214,7 @@ HardDrive::setConfigItem(Option option, i64 value)
             if (!isPoweredOff()) {
                 throw VAError(ERROR_OPT_LOCKED);
             }
-            
-            if (bool(value) != config.connected) {
-                
-                if (bool(value)) {
-                    
-                    config.connected = true;
-                    
-                    if (!restoreDisk()) {
-                        
-                        // Attach a small default disk
-                        init(MB(10));
-                        format(FS_OFS, defaultName());
-                    }
-                    
-                    msgQueue.put(MSG_HDR_CONNECT, nr);
-                    
-                } else {
-                    
-                    config.connected = false;
-                    persistDisk();
-                    init();
-                    
-                    msgQueue.put(MSG_HDR_DISCONNECT, nr);
-                }
-            }
+            bool(value) ? connect() : disconnect();
             return;
 
         case OPT_HDR_PAN:
@@ -252,6 +230,55 @@ HardDrive::setConfigItem(Option option, i64 value)
         default:
             fatalError;
     }
+}
+
+void
+HardDrive::connect()
+{
+    if (config.connected) return;
+    
+    config.connected = true;
+    
+    if (wtPath[nr] != "") {
+        
+        try {
+            
+            debug(WT_DEBUG, "Reading disk from %s...\n", wtPath[nr].c_str());
+            auto hdf = HDFFile(wtPath[nr]);
+            init(hdf);
+
+            debug(WT_DEBUG, "Trying to enable write-through mode...\n");
+            enableWriteThrough();
+
+            debug(WT_DEBUG, "Success\n");
+
+        } catch (VAError &e) {
+    
+            warn("Error: %s\n", e.what());
+        }
+    }
+    
+    // Attach a small default disk
+    if (!hasDisk()) {
+        
+        debug(WT_DEBUG, "Creating default disk...\n");
+        init(MB(10));
+        format(FS_OFS, defaultName());
+    }
+    
+    msgQueue.put(MSG_HDR_CONNECT, nr);
+}
+
+void
+HardDrive::disconnect()
+{
+    if (!config.connected) return;
+    
+    config.connected = false;
+    disableWriteThrough();
+    init();
+    
+    msgQueue.put(MSG_HDR_DISCONNECT, nr);
 }
 
 const PartitionDescriptor &
@@ -405,57 +432,52 @@ HardDrive::setProtectionFlag(bool value)
 }
 
 void
-HardDrive::enableWriteThrough(const fs::path &path)
+HardDrive::enableWriteThrough()
 {
-    // Only proceed if write-through is not yet enabled
-    if (wtPath != "") {
-        throw VAError(ERROR_WT, "Path is already set");
-    }
-    if (wtStream.is_open()) {
-        throw VAError(ERROR_WT, "Stream is already open");
-    }
-
-    // Only proceed if the storage file does not yet exist
-    if (util::fileExists(path)) {
-        throw VAError(ERROR_WT_BLOCKED);
-    }
+    debug(WT_DEBUG, "enableWriteThrough()\n");
     
-    // Create file
-    writeToFile(path);
-    if (!util::fileExists(path)) {
-        throw VAError(ERROR_WT, "Can't create storage file");
+    if (!wt) {
+        
+        // Only proceed if a storage file is given
+        if (wtPath[nr].empty()) {
+            throw VAError(ERROR_WT, "No storage path specified");
+        }
+        
+        // Only proceed if no other emulator instance is using the storage file
+        if (wtStream[nr].is_open()) {
+            throw VAError(ERROR_WT_BLOCKED);
+        }
+        
+        // Delete the old storage file
+        fs::remove(wtPath[nr]);
+        
+        // Recreate the storage file with the contents of this disk
+        writeToFile(wtPath[nr]);
+        if (!util::fileExists(wtPath[nr])) {
+            throw VAError(ERROR_WT, "Can't create storage file");
+        }
+        // Open file
+        wtStream[nr].open(wtPath[nr], std::ios::binary | std::ios::in | std::ios::out);
+        if (!wtStream[nr].is_open()) {
+            throw VAError(ERROR_WT, "Can't open storage file");
+        }
+        
+        debug(WT_DEBUG, "Write-through mode enabled\n");
+        wt = true;
     }
-
-    // Open file
-    wtStream.open(path, std::ios::binary | std::ios::in | std::ios::out);
-    if (!wtStream.is_open()) {
-        throw VAError(ERROR_WT, "Can't open storage file");
-    }
-
-    // Success
-    wtPath = path;
 }
 
 void
 HardDrive::disableWriteThrough()
 {
-    // Close file
-    if (wtStream.is_open()) {
-        msg("Closing %s\n", wtPath.c_str());
-        wtStream.close();
-    } else {
-        warn("'%s' not open\n", wtPath.c_str());
+    if (wt) {
+        
+        // Close file
+        wtStream[nr].close();
+        
+        debug(WT_DEBUG, "Write-through mode disabled\n");
+        wt = false;
     }
-    
-    // Delete file
-    try {
-        msg("Deleting %s\n", wtPath.c_str());
-        fs::remove(wtPath);
-    } catch (...) {
-        warn("Can't delete '%s'\n", wtPath.c_str());
-    }
-    
-    wtPath = "";
 }
 
 string
@@ -633,6 +655,7 @@ HardDrive::moveHead(isize c, isize h, isize s)
     }
 }
 
+/*
 bool
 HardDrive::persistDisk() throws
 {
@@ -650,32 +673,7 @@ HardDrive::persistDisk() throws
     
     return true;
 }
-
-bool
-HardDrive::restoreDisk() throws
-{
-    string path;
-            
-    if (nr == 0) path = INITIAL_HD0;
-    if (nr == 1) path = INITIAL_HD1;
-    if (nr == 2) path = INITIAL_HD2;
-    if (nr == 3) path = INITIAL_HD3;
-    if (path == "") path = backup;
-    
-    if (path != "") try {
-        
-        auto hdf = HDFFile(path);
-        init(hdf);
-        msg("HD%ld restored from %s\n", nr, backup.c_str());
-        
-    } catch (...) {
-        
-        warn("Failed to restore HD%ld from %s\n", nr, backup.c_str());
-        return false;
-    }
-    
-    return true;
-}
+*/
 
 void
 HardDrive::writeToFile(const string &path) throws

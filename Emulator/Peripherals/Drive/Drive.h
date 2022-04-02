@@ -19,13 +19,7 @@ protected:
     
     // Drive number (0 = df0 or hd0, 1 = df1 or hd1, etc.)
     const isize nr;
-    
-    // Path to the storage file used in write-through mode
-    fs::path wtPath;
-    
-    // File stream used to access to write-through storage file
-    std::fstream wtStream;
-    
+        
     
     //
     // Initializing
@@ -83,13 +77,4 @@ public:
     virtual void setProtectionFlag(bool value) = 0;
     void markDiskAsModified() { setModificationFlag(true); }
     void markDiskAsUnmodified() { setModificationFlag(false); }
-    
-    
-    //
-    // Managing write-through mode
-    //
-    
-    bool writeThroughEnabled() const { return !wtPath.empty(); }
-    virtual void enableWriteThrough(const fs::path &path) = 0 throws;
-    virtual void disableWriteThrough() = 0;
 };

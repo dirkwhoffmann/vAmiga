@@ -1384,21 +1384,6 @@ using namespace moira;
     return [self drive]->writeThroughEnabled();
 }
 
-- (NSString *)backupPath
-{
-    auto path = [self drive]->getBackupPath();
-    return @(path.c_str());
-}
-
-- (void)setBackupPath:(NSString *)path
-{
-    if ([path length] == 0) {
-        [self drive]->setBackupPath("");
-    } else {
-        [self drive]->setBackupPath(string([path fileSystemRepresentation]));
-    }
-}
-
 - (NSString *)nameOfPartition:(NSInteger)nr
 {
     auto &info = [self drive]->getPartitionInfo(nr);
@@ -1492,15 +1477,26 @@ using namespace moira;
     return data;
 }
 
+- (NSURL *)backupPath:(NSInteger)nr
+{
+    auto path = [self drive]->getWriteThroughPath(nr);
+    return [NSURL URLWithString: @(path.c_str())];
+}
+
+- (void)setBackupPath:(NSInteger)nr path:(NSURL *)path
+{
+    [self drive]->setWriteThroughPath(nr, string([path fileSystemRepresentation]));
+}
+
 - (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self drive]->writeToFile([url fileSystemRepresentation]); }
     catch (VAError &error) { [ex save:error]; }
 }
 
-- (void)enableWriteThrough:(NSURL *)url exception:(ExceptionWrapper *)ex
+- (void)enableWriteThrough:(ExceptionWrapper *)ex
 {
-    try { return [self drive]->enableWriteThrough([url fileSystemRepresentation]); }
+    try { return [self drive]->enableWriteThrough(); }
     catch (VAError &error) { [ex save:error]; }
 }
 
