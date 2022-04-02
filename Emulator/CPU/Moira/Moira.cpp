@@ -332,7 +332,7 @@ Moira::getIrqVector(u8 level) const {
 int
 Moira::disassemble(u32 addr, char *str)
 {
-    if (ENABLE_DASM == false) {
+    if constexpr (!ENABLE_DASM) {
 
         printf("This feature requires ENABLE_DASM = true\n");
         assert(false);

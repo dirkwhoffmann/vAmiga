@@ -216,11 +216,18 @@ SoftwareTraps::create(u16 instr)
 u16
 SoftwareTraps::create(u16 key, u16 instr)
 {
+    assert(Debugger::isLineAInstr(key));
     assert(traps.size() < 512);
     assert(!traps.contains(key));
     
     traps[key] = SoftwareTrap { .instruction = instr };
     return key;
+}
+
+u16
+SoftwareTraps::resolve(u16 instr)
+{
+    return traps.contains(instr) ? traps[instr].instruction : instr;
 }
 
 void

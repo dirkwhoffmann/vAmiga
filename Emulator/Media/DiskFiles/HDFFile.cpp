@@ -69,10 +69,7 @@ HDFFile::init(const u8 *buf, isize len)
 void
 HDFFile::init(const HardDrive &drive)
 {
-    {   MEASURE_TIME("AmigaFile::readFromBuffer(drive.data)")
-        
-        AmigaFile::readFromBuffer(drive.data);
-    }
+    AmigaFile::readFromBuffer(drive.data);
     
     // Overwrite the predicted geometry from the precise one
     geometry = drive.getGeometry();

@@ -46,7 +46,12 @@ Moira::read16(u32 addr)
 u16
 Moira::read16Dasm(u32 addr)
 {
-    return mem.spypeek16 <ACCESSOR_CPU> (addr);
+    auto result = mem.spypeek16 <ACCESSOR_CPU> (addr);
+    
+    // For LINE-A instructions, check if the opcode is a software trap
+    if (Debugger::isLineAInstr(result)) result = debugger.swTraps.resolve(result);
+
+    return result;
 }
 
 u16

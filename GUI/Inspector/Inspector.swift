@@ -658,9 +658,14 @@ class Inspector: DialogController {
     
     func scrollToPC() {
 
-        cpuInstrView.jumpTo(addr: Int(cpuInfo.pc0))
+        scrollToPC(pc: Int(cpuInfo.pc0))
     }
-    
+
+    func scrollToPC(pc: Int) {
+
+        cpuInstrView.jumpTo(addr: pc)
+    }
+
     func powerOn() {
     
         message.stringValue = ""
@@ -676,6 +681,7 @@ class Inspector: DialogController {
     func run() {
         
         message.stringValue = ""
+        cpuInstrView.alertAddr = nil
         cpuInstrView.breakpointPC = -1
         cpuInstrView.watchpointPC = -1
         fullRefresh()
@@ -689,6 +695,7 @@ class Inspector: DialogController {
     func step() {
                 
         message.stringValue = ""
+        cpuInstrView.alertAddr = nil
         cpuInstrView.breakpointPC = -1
         cpuInstrView.watchpointPC = -1
         fullRefresh()
@@ -698,6 +705,7 @@ class Inspector: DialogController {
     func reset() {
         
         message.stringValue = ""
+        cpuInstrView.alertAddr = nil
         cpuInstrView.breakpointPC = -1
         cpuInstrView.watchpointPC = -1
         fullRefresh()
@@ -706,28 +714,32 @@ class Inspector: DialogController {
     func signalBreakPoint(pc: Int) {
             
         message.stringValue = "Breakpoint reached"
+        cpuInstrView.alertAddr = nil
         cpuInstrView.breakpointPC = pc
-        scrollToPC()
+        scrollToPC(pc: pc)
     }
 
     func signalWatchPoint(pc: Int) {
     
         message.stringValue = "Watchpoint reached"
+        cpuInstrView.alertAddr = pc
         cpuInstrView.watchpointPC = pc
-        scrollToPC()
+        scrollToPC(pc: pc)
     }
 
-    func signalCatchPoint(vector: Int) {
+    func signalCatchPoint(pc: Int, vector: Int) {
     
         let name = amiga.cpu.vectorName(vector)!
         message.stringValue = "Catched exception vector \(vector) (\(name))"
-        scrollToPC()
+        cpuInstrView.alertAddr = pc
+        scrollToPC(pc: pc)
     }
 
-    func signalSoftwareTrap() {
+    func signalSoftwareTrap(pc: Int) {
     
         message.stringValue = "Software trap reached"
-        scrollToPC()
+        cpuInstrView.alertAddr = pc
+        scrollToPC(pc: pc)
     }
 
     func signalCopperBreakpoint() {

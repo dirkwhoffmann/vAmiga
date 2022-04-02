@@ -466,10 +466,10 @@ extension MyController {
             inspector?.signalWatchPoint(pc: Int(msg.data1))
 
         case .CATCHPOINT_REACHED:
-            inspector?.signalCatchPoint(vector: Int(msg.data1))
+            inspector?.signalCatchPoint(pc: Int(msg.data1), vector: Int(msg.data2))
 
         case .SWTRAP_REACHED:
-            inspector?.signalSoftwareTrap()
+            inspector?.signalSoftwareTrap(pc: Int(msg.data1))
 
         case .COPPERBP_REACHED:
             inspector?.signalCopperBreakpoint()

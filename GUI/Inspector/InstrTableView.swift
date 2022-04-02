@@ -33,9 +33,11 @@ class InstrTableView: NSTableView {
     var instrInRow: [Int: String] = [:]
     var rowForAddr: [Int: Int] = [:]
         
-    // Saved program counters
-    var breakpointPC = -1
-    var watchpointPC = -1
+    // Optional address to be highlighted by an alert symbol
+    var alertAddr: Int?
+
+    var breakpointPC = -1 // DEPRECATED
+    var watchpointPC = -1 // DEPRECATED
     
     override func awakeFromNib() {
         
@@ -182,7 +184,7 @@ extension InstrTableView: NSTableViewDataSource {
         
         switch tableColumn?.identifier.rawValue {
             
-        case "break" where addrInRow[row] == watchpointPC:
+        case "break" where addrInRow[row] == alertAddr:
             return "⚠️"
         case "break" where bpInRow[row] == .enabled:
             return "\u{26D4}" // "⛔" ("\u{1F534}" // "🔴")

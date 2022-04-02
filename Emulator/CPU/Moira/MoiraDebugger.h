@@ -178,6 +178,9 @@ struct SoftwareTraps {
     // Creates a new software trap for a given instruction
     u16 create(u16 instr);
     u16 create(u16 key, u16 instr);
+    
+    // Replaces a software trap by its original opcode
+    u16 resolve(u16 instr);
 };
 
 class Debugger {
@@ -223,6 +226,14 @@ public:
     Debugger(Moira& ref) : moira(ref) { }
 
     void reset();
+
+    
+    //
+    // Analyzing instructions
+    //
+    
+    static bool isLineAInstr(u16 opcode) { return (opcode & 0xF000) == 0xA000; }
+    static bool isLineFInstr(u16 opcode) { return (opcode & 0xF000) == 0xF000; }
 
     
     //

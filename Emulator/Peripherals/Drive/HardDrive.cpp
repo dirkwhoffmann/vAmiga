@@ -247,7 +247,7 @@ HardDrive::connect()
         try {
             
             debug(WT_DEBUG, "Reading disk from %s...\n", wtPath[nr].c_str());
-            auto hdf = HDFFile(wtPath[nr]);
+            auto hdf = HDFFile(wtPath[nr].string());
             init(hdf);
 
             debug(WT_DEBUG, "Trying to enable write-through mode...\n");
@@ -462,8 +462,8 @@ HardDrive::enableWriteThrough()
         fs::remove(wtPath[nr]);
         
         // Recreate the storage file with the contents of this disk
-        writeToFile(wtPath[nr]);
-        if (!util::fileExists(wtPath[nr])) {
+        writeToFile(wtPath[nr].string());
+        if (!util::fileExists(wtPath[nr].string())) {
             throw VAError(ERROR_WT, "Can't create storage file");
         }
         // Open file

@@ -247,7 +247,7 @@ protected:
     virtual void signalPrivilegeViolation() { };
     virtual void signalInterrupt(u8 level) { };
     virtual void signalJumpToVector(int nr, u32 addr) { };
-    virtual void signalSoftwareTrap(u16 instr, SoftwareTrap trap) { };
+    virtual void signalSoftwareTrap(u16 opcode, SoftwareTrap trap) { };
 
     // Exception delegates
     virtual void addressErrorHandler() { };
