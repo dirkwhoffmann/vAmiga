@@ -757,9 +757,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func writeThroughFinderAction(_ sender: NSMenuItem!) {
         
-        if let url = UserDefaults.mediaUrl(name: "") {
-            
-            log("Opening Finder for \(url)")
+        if let url = UserDefaults.mediaUrl(name: "") {            
             NSWorkspace.shared.open(url)
         }
     }

@@ -68,7 +68,8 @@ class HardDrive : public Drive {
 public:
 
     HardDrive(Amiga& ref, isize nr);
-        
+    ~HardDrive();
+    
     // Creates a hard drive with a certain geometry
     void init(const GeometryDescriptor &geometry);
 
@@ -149,7 +150,7 @@ private:
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-
+    isize didLoadFromBuffer(const u8 *buffer) override;
     
     //
     // Methods from Drive
@@ -191,7 +192,7 @@ public:
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
     
-    static string getWriteThroughPath(isize nr) { return wtPath[nr]; }
+    static string getWriteThroughPath(isize nr) { return wtPath[nr].string(); }
     static void setWriteThroughPath(isize nr, const string &path) { wtPath[nr] = path; }
     
 private:

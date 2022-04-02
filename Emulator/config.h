@@ -76,12 +76,10 @@ struct FloatStereo; typedef struct FloatStereo SampleType;
 #define INITIAL_DF3 ""
 
 // Add pathes to HDF files to launch the emulator with preset hard drives
-/*
 #define INITIAL_HD0 "" // /tmp/rdb2.hdf"
 #define INITIAL_HD1 ""
 #define INITIAL_HD2 ""
 #define INITIAL_HD3 ""
-*/
 
 // Add a path to a snapshot file to launch the emulator in a preset state
 #define INITIAL_SNAPSHOT ""

@@ -20,7 +20,6 @@ std::fstream HardDrive::wtStream[4];
 
 HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 {
-    /*
     string path;
     
     if (nr == 0) path = INITIAL_HD0;
@@ -40,7 +39,11 @@ HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
             warn("Cannot open HDF file %s\n", path.c_str());
         }
     }
-    */
+}
+
+HardDrive::~HardDrive()
+{
+    disableWriteThrough();
 }
 
 void
@@ -296,6 +299,13 @@ HardDrive::_inspect() const
         info.modified = isModified();
         info.head = head;
     }
+}
+
+isize
+HardDrive::didLoadFromBuffer(const u8 *buffer)
+{
+    disableWriteThrough();
+    return 0;
 }
 
 void
