@@ -933,13 +933,7 @@ Amiga::execute()
                 clearFlag(RL::USER_SNAPSHOT);
                 takeUserSnapshot();
             }
-
-            // Are we requested to update the debugger info structs?
-            if (flags & RL::INSPECT) {
-                clearFlag(RL::INSPECT);
-                inspect();
-            }
-
+            
             // Did we reach a soft breakpoint?
             if (flags & RL::SOFTSTOP_REACHED) {
                 clearFlag(RL::SOFTSTOP_REACHED);
