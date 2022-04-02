@@ -185,7 +185,7 @@ class Configuration {
         get { return hdnType(3) }
         set { setHdnType(3, type: newValue) }
     }
-    var hdPersist = [ false, false, false, false ]
+    // var hdPersist = [ false, false, false, false ]
 
     var gameDevice1 = PeripheralsDefaults.std.gameDevice1 {
         didSet {
@@ -739,16 +739,30 @@ class Configuration {
         serialDevice = defaults.integer(forKey: Keys.Per.serialDevice)
         serialDevicePort = defaults.integer(forKey: Keys.Per.serialDevicePort)
         
+        // Try to enable write-through mode if storage files are present
         for n in 0...3 {
             
             if let url = UserDefaults.hdnUrl(n) {
                 
                 if FileManager.default.fileExists(atPath: url.path) {
-                    log("File \(url) found")
-                    hdPersist[n] = true
-                } else {
-                    log("File \(url) not found")
-                    hdPersist[n] = false
+                    
+                    log("Storage file \(url) found")
+                    
+                    do {
+                        // Try to recreate the drive from the storage file
+                        try amiga.hd(n)!.attach(url: url)
+                        
+                        // Try to delete the file (fails if already in use)
+                        try FileManager.default.removeItem(at: url)
+                        
+                        // Try to enable write-through mode
+                        try amiga.hd(n)!.enableWriteThrough(url)
+                        
+                    } catch let error as VAError {
+                        log("VAError: \(error.what)")
+                    } catch {
+                        log("Error: \(error)")
+                    }
                 }
             }
         }
@@ -785,6 +799,7 @@ class Configuration {
         defaults.set(serialDevicePort, forKey: Keys.Per.serialDevicePort)
     }
 
+    /*
     func persistHardDrives() throws {
 
         for n in 0...3 { try persistHd(n) }
@@ -820,6 +835,7 @@ class Configuration {
             }
         }
     }
+    */
     
     //
     // Compatibility

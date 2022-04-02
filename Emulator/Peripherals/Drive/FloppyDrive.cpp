@@ -400,6 +400,20 @@ FloppyDrive::setProtectionFlag(bool value)
     }
 }
 
+void
+FloppyDrive::enableWriteThrough(const fs::path &path)
+{
+    warn("Write-through mode is not supported for floppy drives, yet\n");
+    fatalError;
+}
+
+void
+FloppyDrive::disableWriteThrough()
+{
+    warn("Write-through mode is not supported for floppy drives, yet\n");
+    fatalError;
+}
+
 u32
 FloppyDrive::getDriveId() const
 {

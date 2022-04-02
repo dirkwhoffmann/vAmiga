@@ -76,6 +76,8 @@ public:
 
     // Creates a hard drive with the contents of an HDF
     void init(const HDFFile &hdf) throws;
+
+    // Creates a hard drive with the contents of an HDF file
     void init(const string &path) throws;
 
 private:
@@ -170,6 +172,9 @@ public:
     bool hasProtectedDisk() const override;
     void setModificationFlag(bool value) override;
     void setProtectionFlag(bool value) override;
+    
+    void enableWriteThrough(const fs::path &path) override;
+    void disableWriteThrough() override;
     
     
     //

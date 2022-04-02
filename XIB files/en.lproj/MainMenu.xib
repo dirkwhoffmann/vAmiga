@@ -1022,10 +1022,16 @@
                                     <action selector="writeProtectHdrAction:" target="-1" id="WYa-48-cOr"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Sticky" id="fcn-Pn-aEn">
+                            <menuItem title="Write Through" id="fcn-Pn-aEn">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="persistHdnAction:" target="-1" id="pH3-49-bBC"/>
+                                    <action selector="writeThroughHdrAction:" target="-1" id="yTr-9k-G1K"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Show in Finder..." id="x2f-a3-hQv">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="writeThroughFinderAction:" target="-1" id="rCz-gC-p2d"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -1173,10 +1179,16 @@
                                     <action selector="writeProtectHdrAction:" target="-1" id="2qL-bl-h0G"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Sticky" tag="1" id="DZD-X3-Lp5" userLabel="Export disk">
+                            <menuItem title="Write Through" tag="1" id="DZD-X3-Lp5" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="persistHdnAction:" target="-1" id="4eI-rd-oR7"/>
+                                    <action selector="writeThroughHdrAction:" target="-1" id="aQf-JU-prw"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Show in Finder..." tag="1" id="Z4C-rw-oo1">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="writeThroughFinderAction:" target="-1" id="UpR-WG-tNN"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -1324,10 +1336,16 @@
                                     <action selector="writeProtectHdrAction:" target="-1" id="t5d-Ig-pZJ"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Sticky" tag="2" id="lHY-c2-JvI" userLabel="Export disk">
+                            <menuItem title="Write Through" tag="2" id="lHY-c2-JvI" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="persistHdnAction:" target="-1" id="ZK8-Ch-QEO"/>
+                                    <action selector="writeThroughHdrAction:" target="-1" id="KEi-cn-Nb0"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Show in Finder..." tag="2" id="prk-7S-jOc">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="writeThroughFinderAction:" target="-1" id="WN4-i2-zvG"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -1475,10 +1493,16 @@
                                     <action selector="writeProtectHdrAction:" target="-1" id="0rF-yo-ck2"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Sticky" tag="3" id="uKN-3t-shd" userLabel="Export disk">
+                            <menuItem title="Write Through" tag="3" id="uKN-3t-shd" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="persistHdnAction:" target="-1" id="1l8-XT-JqN"/>
+                                    <action selector="writeThroughHdrAction:" target="-1" id="X7V-kG-RwG"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Show in Finder..." tag="3" id="aO1-Rh-Avm">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="writeThroughFinderAction:" target="-1" id="SNW-4g-Ocf"/>
                                 </connections>
                             </menuItem>
                         </items>

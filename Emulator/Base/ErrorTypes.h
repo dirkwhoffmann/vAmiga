@@ -44,6 +44,7 @@ enum_long(ERROR_CODE)
     ERROR_DIR_NOT_FOUND,
     ERROR_DIR_ACCESS_DENIED,
     ERROR_FILE_NOT_FOUND,
+    ERROR_FILE_EXISTS,
     ERROR_FILE_ACCESS_DENIED,
     ERROR_FILE_TYPE_MISMATCH,
     ERROR_FILE_TYPE_UNSUPPORTED,
@@ -59,6 +60,10 @@ enum_long(ERROR_CODE)
     // Rom
     ERROR_ROM_MISSING,
     ERROR_AROS_NO_EXTROM,
+    
+    // Drives
+    ERROR_WT_BLOCKED,
+    ERROR_WT,
     
     // Floppy disks
     ERROR_DISK_MISSING,
@@ -207,6 +212,7 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_DIR_NOT_FOUND:               return "DIR_NOT_FOUND";
             case ERROR_DIR_ACCESS_DENIED:           return "DIR_ACCESS_DENIED";
             case ERROR_FILE_NOT_FOUND:              return "FILE_NOT_FOUND";
+            case ERROR_FILE_EXISTS:                 return "FILE_EXISTS";
             case ERROR_FILE_ACCESS_DENIED:          return "FILE_ACCESS_DENIED";
             case ERROR_FILE_TYPE_MISMATCH:          return "FILE_TYPE_MISMATCH";
             case ERROR_FILE_TYPE_UNSUPPORTED:       return "FILE_TYPE_UNSUPPORTED";
@@ -220,6 +226,9 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
 
             case ERROR_ROM_MISSING:                 return "ROM_MISSING";
             case ERROR_AROS_NO_EXTROM:              return "AROS_NO_EXTROM";
+
+            case ERROR_WT_BLOCKED:                  return "WT_BLOCKED";
+            case ERROR_WT:                          return "WT";
 
             case ERROR_DISK_MISSING:                return "DISK_MISSING";
             case ERROR_DISK_INCOMPATIBLE:           return "DISK_INCOMPATIBLE";

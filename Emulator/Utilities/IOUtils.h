@@ -14,6 +14,7 @@
 
 #include <fcntl.h>
 #include <filesystem>
+#include <fstream>
 #include <istream>
 #include <iostream>
 #include <sys/stat.h>

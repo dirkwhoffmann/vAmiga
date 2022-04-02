@@ -404,6 +404,60 @@ HardDrive::setProtectionFlag(bool value)
     if (hasDisk()) writeProtected = value;
 }
 
+void
+HardDrive::enableWriteThrough(const fs::path &path)
+{
+    // Only proceed if write-through is not yet enabled
+    if (wtPath != "") {
+        throw VAError(ERROR_WT, "Path is already set");
+    }
+    if (wtStream.is_open()) {
+        throw VAError(ERROR_WT, "Stream is already open");
+    }
+
+    // Only proceed if the storage file does not yet exist
+    if (util::fileExists(path)) {
+        throw VAError(ERROR_WT_BLOCKED);
+    }
+    
+    // Create file
+    writeToFile(path);
+    if (!util::fileExists(path)) {
+        throw VAError(ERROR_WT, "Can't create storage file");
+    }
+
+    // Open file
+    wtStream.open(path, std::ios::binary | std::ios::in | std::ios::out);
+    if (!wtStream.is_open()) {
+        throw VAError(ERROR_WT, "Can't open storage file");
+    }
+
+    // Success
+    wtPath = path;
+}
+
+void
+HardDrive::disableWriteThrough()
+{
+    // Close file
+    if (wtStream.is_open()) {
+        msg("Closing %s\n", wtPath.c_str());
+        wtStream.close();
+    } else {
+        warn("'%s' not open\n", wtPath.c_str());
+    }
+    
+    // Delete file
+    try {
+        msg("Deleting %s\n", wtPath.c_str());
+        fs::remove(wtPath);
+    } catch (...) {
+        warn("Can't delete '%s'\n", wtPath.c_str());
+    }
+    
+    wtPath = "";
+}
+
 string
 HardDrive::defaultName(isize partition)
 {

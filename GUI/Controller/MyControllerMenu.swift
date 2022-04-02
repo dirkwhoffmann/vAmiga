@@ -109,10 +109,14 @@ extension MyController: NSMenuItemValidation {
             item.state = hdn.hasProtectedDisk ? .on : .off
             return hdn.hasDisk
 
-        case #selector(MyController.persistHdnAction(_:)):
-            item.state = config.hdPersist[item.tag] ? .on : .off
+        case #selector(MyController.writeThroughHdrAction(_:)):
+            item.state = hdn.writeThroughEnabled ? .on : .off
             return true
-            
+
+        case #selector(MyController.writeThroughFinderAction(_:)):
+            item.isHidden = !hdn.writeThroughEnabled
+            return true
+
         default:
             return true
         }
@@ -730,9 +734,37 @@ extension MyController: NSMenuItemValidation {
         amiga.hd(sender)!.toggleWriteProtection()
     }
 
-    @IBAction func persistHdnAction(_ sender: NSMenuItem!) {
+    @IBAction func writeThroughHdrAction(_ sender: NSMenuItem!) {
         
-        config.hdPersist[sender.tag] = !config.hdPersist[sender.tag]
-        try? config.persistHd(sender.tag)
+        if sender.state == .on {
+
+            log("Disabling write-through for HD\(sender.tag)")
+            amiga.hd(sender)!.disableWriteThrough()
+            sender.state = .off
+            return
+        }
+        
+        if let url = UserDefaults.hdnUrl(sender.tag) {
+            
+            log("Trying to enable write-through for HD\(sender.tag)")
+            do {
+                try amiga.hd(sender)!.enableWriteThrough(url)
+                log("WT enabled")
+                sender.state = .on
+            } catch {
+                log("WT can't be enabled")
+                sender.state = .off
+                (error as? VAError)?.warning("Write-through mode can't be enabled.")
+            }
+        }
+    }
+    
+    @IBAction func writeThroughFinderAction(_ sender: NSMenuItem!) {
+        
+        if let url = UserDefaults.mediaUrl(name: "") {
+            
+            log("Opening Finder for \(url)")
+            NSWorkspace.shared.open(url)
+        }
     }
 }

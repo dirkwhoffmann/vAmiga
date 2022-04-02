@@ -660,7 +660,8 @@
 @property (readonly) NSInteger heads;
 @property (readonly) NSInteger sectors;
 @property (readonly) NSInteger bsize;
-@property (readonly) BOOL uniqueGeometry;
+// @property (readonly) BOOL uniqueGeometry;
+@property (readonly) BOOL writeThroughEnabled;
 @property NSString *backupPath;
 - (NSString *)nameOfPartition:(NSInteger)nr;
 - (NSInteger)lowerCylOfPartition:(NSInteger)nr;
@@ -673,6 +674,8 @@
 - (void)changeGeometry:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
 - (NSArray *) geometries;
 - (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
+- (void)enableWriteThrough:(NSURL *)url exception:(ExceptionWrapper *)ex;
+- (void)disableWriteThrough;
 
 @end
 

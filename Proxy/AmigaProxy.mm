@@ -1372,9 +1372,16 @@ using namespace moira;
     return [self drive]->getGeometry().bsize;
 }
 
+/*
 - (BOOL)uniqueGeometry
 {
     return [self drive]->getGeometry().unique();
+}
+*/
+
+- (BOOL)writeThroughEnabled
+{
+    return [self drive]->writeThroughEnabled();
 }
 
 - (NSString *)backupPath
@@ -1489,6 +1496,17 @@ using namespace moira;
 {
     try { return [self drive]->writeToFile([url fileSystemRepresentation]); }
     catch (VAError &error) { [ex save:error]; }
+}
+
+- (void)enableWriteThrough:(NSURL *)url exception:(ExceptionWrapper *)ex
+{
+    try { return [self drive]->enableWriteThrough([url fileSystemRepresentation]); }
+    catch (VAError &error) { [ex save:error]; }
+}
+
+- (void)disableWriteThrough
+{
+    [self drive]->disableWriteThrough();
 }
 
 @end

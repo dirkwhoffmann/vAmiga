@@ -238,6 +238,13 @@ extension HardDriveProxy {
         write(toFile: url, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
+
+    func enableWriteThrough(_ url: URL) throws {
+
+        let exception = ExceptionWrapper()
+        enableWriteThrough(url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
 }
 
 extension AmigaFileProxy {
