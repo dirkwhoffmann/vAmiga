@@ -88,8 +88,6 @@ Agnus::scheduleFirstBplEvent()
 {
     assert(pos.h == 0 || pos.h == HPOS_MAX);
     
-    // u8 dmacycle = sequencer.nextBplEvent[0];
-    // assert(dmacycle != 0);
     u8 dmacycle = sequencer.bplEvent[0] ? 0 : sequencer.nextBplEvent[0];
         
     if (pos.h == 0) {

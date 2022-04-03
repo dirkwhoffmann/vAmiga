@@ -43,21 +43,21 @@ Agnus::_reset(bool hard)
         data[i] = 0;
     }
     
-    assert(clock == 0);
+    if (hard) assert(clock == 0);
     
     // Schedule initial events
-    scheduleAbs<SLOT_SEC>(NEVER, SEC_TRIGGER);
-    scheduleAbs<SLOT_TER>(NEVER, TER_TRIGGER);
-    scheduleAbs<SLOT_RAS>(DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
-    scheduleAbs<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
-    scheduleAbs<SLOT_CIAB>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
+    scheduleRel<SLOT_SEC>(NEVER, SEC_TRIGGER);
+    scheduleRel<SLOT_TER>(NEVER, TER_TRIGGER);
+    scheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
+    scheduleRel<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
+    scheduleRel<SLOT_CIAB>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
     scheduleStrobe0Event();
-    scheduleAbs<SLOT_IRQ>(NEVER, IRQ_CHECK);
+    scheduleRel<SLOT_IRQ>(NEVER, IRQ_CHECK);
     diskController.scheduleFirstDiskEvent();
     scheduleFirstBplEvent();
     scheduleFirstDasEvent();
-    scheduleAbs<SLOT_SRV>(SEC(0.5), SRV_LAUNCH_DAEMON);
-    if (insEvent) scheduleAbs <SLOT_INS> (0, insEvent);
+    scheduleRel<SLOT_SRV>(SEC(0.5), SRV_LAUNCH_DAEMON);
+    if (insEvent) scheduleRel <SLOT_INS> (0, insEvent);
 }
 
 AgnusConfig
