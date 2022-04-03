@@ -161,11 +161,11 @@ extension MyController {
     override open func awakeFromNib() {
         
         mydocument = document as? MyDocument
+        
         config = Configuration(with: self)
         macAudio = MacAudio(with: self)
         inspector = Inspector(with: self, nibName: "Inspector")
-        // inspector = Inspector.make(parent: self, nibName: "Inspector")
-
+        
         ledSlot = [ ledSlot0, ledSlot1, letSlot2, ledSlot3 ]
         cylSlot = [ cylSlot0, cylSlot1, cylSlot2, cylSlot3 ]
         iconSlot = [ iconSlot0, iconSlot1, iconSlot2, iconSlot3 ]

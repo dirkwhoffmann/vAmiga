@@ -141,9 +141,9 @@ Denise::peekDENISEID()
     u16 result;
 
     if (config.revision == DENISE_ECS) {
-        result = 0xFFFC;                           // ECS
+        result = 0xFFFC;
     } else {
-        result = mem.peekCustomFaulty16(0xDFF07C); // OCS
+        result = 0xFFFF; // mem.peekCustomFaulty16(0xDFF07C);
     }
 
     trace(ECSREG_DEBUG, "peekDENISEID() = $%04X (%d)\n", result, result);
@@ -153,7 +153,7 @@ Denise::peekDENISEID()
 u16
 Denise::spypeekDENISEID() const
 {
-    return config.revision == DENISE_ECS ? 0xFFFC : 0;
+    return config.revision == DENISE_ECS ? 0xFFFC : 0xFFF;
 }
 
 template <Accessor s> void
