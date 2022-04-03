@@ -135,32 +135,10 @@ extension MyController {
         return mydocument.proceedWithUnexportedDisk(drive: drive)
     }
     
-    /*
-    func proceedWithUnexportedDisk(drive nr: Int) -> Bool {
-        return mydocument.proceedWithUnexportedDisk(drive: nr)
-    }
-    */
-    /*
-    func proceedWithUnexportedDisk() -> Bool {
-        return mydocument.proceedWithUnexportedDisk()
-    }
-    */
-    
     func proceedWithUnexportedHdr(drive: HardDriveProxy) -> Bool {
         return mydocument.proceedWithUnexportedHdr(drive: drive)
     }
     
-    /*
-    func proceedWithUnexportedHdr(drive nr: Int) -> Bool {
-        return mydocument.proceedWithUnexportedHdr(drive: nr)
-    }
-    */
-    /*
-    func proceedWithUnexportedHdr() -> Bool {
-        return mydocument.proceedWithUnexportedHdr()
-    }
-    */
-
     @discardableResult
     func askToPowerOffAlert() -> NSApplication.ModalResponse {
        

@@ -138,14 +138,7 @@ Denise::pokeJOYTEST(u16 value)
 u16
 Denise::peekDENISEID()
 {
-    u16 result;
-
-    if (config.revision == DENISE_ECS) {
-        result = 0xFFFC;
-    } else {
-        result = 0xFFFF; // mem.peekCustomFaulty16(0xDFF07C);
-    }
-
+    u16 result = config.revision == DENISE_ECS ? 0xFFFC : 0xFFFF;
     trace(ECSREG_DEBUG, "peekDENISEID() = $%04X (%d)\n", result, result);
     return result;
 }
@@ -153,7 +146,7 @@ Denise::peekDENISEID()
 u16
 Denise::spypeekDENISEID() const
 {
-    return config.revision == DENISE_ECS ? 0xFFFC : 0xFFF;
+    return config.revision == DENISE_ECS ? 0xFFFC : 0xFFFF;
 }
 
 template <Accessor s> void

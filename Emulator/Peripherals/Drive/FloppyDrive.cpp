@@ -260,11 +260,15 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         os << tab("prb");
         os << hex(prb) << std::endl;
         os << tab("Drive head");
-        os << dec(head.cylinder) << ":" << dec(head.head) << ":" << dec(head.offset);
+        os << dec(head.cylinder) << ":";
+        os << dec(head.head) << ":";
+        os << dec(head.offset) << std::endl;
         os << tab("cylinderHistory");
         os << hex(cylinderHistory) << std::endl;
         os << tab("Disk");
         os << bol(disk != nullptr) << std::endl;
+        os << tab("Modified");
+        os << bol(hasModifiedDisk()) << std::endl;
     }
 }
 

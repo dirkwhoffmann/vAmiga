@@ -1218,7 +1218,7 @@ using namespace moira;
     return [self drive]->hasDisk();
 }
 
-- (BOOL)modified
+- (BOOL)hasModifiedDisk
 {
     return [self drive]->hasModifiedDisk();
 }
