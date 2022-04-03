@@ -30,11 +30,11 @@ RegressionTester::prepare(ConfigScheme scheme, string kickstart)
     // Load Kickstart Rom
     amiga.mem.loadRom(kickstart.c_str());
     
-    // Run as fast as possible
-    amiga.warpOn();
+    // Choose a warp source that prevents the GUI from disabling warp mode
+    constexpr isize warpSource = 1;
     
-    // Prevent the GUI from disabling warp mode
-    amiga.setWarpLock(true);
+    // Run as fast as possible
+    amiga.warpOn(warpSource);    
 }
 
 void

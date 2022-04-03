@@ -144,10 +144,6 @@ protected:
     volatile u8 debugMode = 0;
     volatile u8 newDebugMode = 0;
 
-    // Indicates if warp mode or debug mode is locked (DEPRECATED)
-    bool warpLock = false;
-    bool debugLock = false;
-    
     // Counters
     isize loopCounter = 0;
     isize suspendCounter = 0;
@@ -203,8 +199,6 @@ public:
     
     void setSyncDelay(util::Time newDelay);
     void setMode(SyncMode newMode);
-    void setWarpLock(bool value);
-    void setDebugLock(bool value);
 
     
     //
