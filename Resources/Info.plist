@@ -9,6 +9,24 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>HDF</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>HDFIcon</string>
+			<key>CFBundleTypeName</key>
+			<string>HDF</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>NSDocumentClass</key>
+			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>vAmiga</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
@@ -83,6 +101,8 @@
 			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
 		</dict>
 		<dict>
+			<key>LSTypeIsPackage</key>
+			<false/>
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>INI</string>
