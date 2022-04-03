@@ -36,7 +36,7 @@ extension MyDocument {
         return alert.runModal()
     }
 
-    func proceedWithUnexportedDisk(drives: [FloppyDriveProxy]) -> Bool {
+    func proceedWithUnsavedFloppyDisk(drives: [FloppyDriveProxy]) -> Bool {
         
         let modified = drives.filter { $0.hasModifiedDisk }
         
@@ -44,32 +44,24 @@ extension MyDocument {
             return true
         }
         
-        let names = drives.map({ "df" + String($0.nr) }).joined(separator: ", ")
-        let text = "Drive \(names) contains an unexported disk."
+        let names = modified.map({ "df" + String($0.nr) }).joined(separator: ", ")
+        let text = modified.count == 1 ?
+        "Drive \(names) contains an unsaved disk." :
+        "Drives \(names) contain unsaved disks."
 
         return showDiskIsUnexportedAlert(messageText: text) == .alertFirstButtonReturn
     }
     
-    func proceedWithUnexportedDisk(drive: FloppyDriveProxy) -> Bool {
+    func proceedWithUnsavedFloppyDisk(drive: FloppyDriveProxy) -> Bool {
         
-        return proceedWithUnexportedDisk(drives: [drive])
+        return proceedWithUnsavedFloppyDisk(drives: [drive])
     }
         
-    func proceedWithUnexportedDisk(drive nr: Int) -> Bool {
+    func proceedWithUnsavedFloppyDisk(drive nr: Int) -> Bool {
         
-        return proceedWithUnexportedDisk(drive: amiga.df(nr)!)
+        return proceedWithUnsavedFloppyDisk(drive: amiga.df(nr)!)
     }
-    
-    /*
-    func proceedWithUnexportedDisk() -> Bool {
-    
-        return proceedWithUnexportedDisk(drives: [ amiga.df0,
-                                                   amiga.df1,
-                                                   amiga.df2,
-                                                   amiga.df3 ])
-    }
-    */
-    
+        
     @discardableResult
     func showHdrIsUnexportedAlert(messageText: String) -> NSApplication.ModalResponse {
        
@@ -83,28 +75,30 @@ extension MyDocument {
         return alert.runModal()
     }
 
-    func proceedWithUnexportedHdr(drives: [HardDriveProxy]) -> Bool {
+    func proceedWithUnsavedHardDrive(drives: [HardDriveProxy]) -> Bool {
         
         let modified = drives.filter { $0.hasModifiedDisk }
         
-        if modified.isEmpty || parent.pref.ejectWithoutAsking {
+        if modified.isEmpty || parent.pref.detachWithoutAsking {
             return true
         }
         
-        let names = drives.map({ "dh" + String($0.nr) }).joined(separator: ", ")
-        let text = "Hard drive \(names) contains an unexported disk."
+        let names = modified.map({ "hd" + String($0.nr) }).joined(separator: ", ")
+        let text = modified.count == 1 ?
+        "Hard drive \(names) contains an unsaved disk." :
+        "Hard drives \(names) contain unsaved disks."
 
         return showHdrIsUnexportedAlert(messageText: text) == .alertFirstButtonReturn
     }
     
-    func proceedWithUnexportedHdr(drive: HardDriveProxy) -> Bool {
+    func proceedWithUnsavedHardDrive(drive: HardDriveProxy) -> Bool {
         
-        return proceedWithUnexportedHdr(drives: [drive])
+        return proceedWithUnsavedHardDrive(drives: [drive])
     }
         
-    func proceedWithUnexportedHdr(drive nr: Int) -> Bool {
+    func proceedWithUnsavedHardDrive(drive nr: Int) -> Bool {
         
-        return proceedWithUnexportedHdr(drive: amiga.hd(nr)!)
+        return proceedWithUnsavedHardDrive(drive: amiga.hd(nr)!)
     }    
 }
 
@@ -131,14 +125,24 @@ extension MyController {
         alert.runModal()
     }
     
-    func proceedWithUnexportedDisk(drive: FloppyDriveProxy) -> Bool {
-        return mydocument.proceedWithUnexportedDisk(drive: drive)
+    func proceedWithUnsavedFloppyDisk(drive: FloppyDriveProxy) -> Bool {
+        return mydocument.proceedWithUnsavedFloppyDisk(drive: drive)
     }
-    
-    func proceedWithUnexportedHdr(drive: HardDriveProxy) -> Bool {
-        return mydocument.proceedWithUnexportedHdr(drive: drive)
+
+    func proceedWithUnsavedFloppyDisk() -> Bool {
+        let drives = [amiga.df0!, amiga.df1!, amiga.df2!, amiga.df3!]
+        return mydocument.proceedWithUnsavedFloppyDisk(drives: drives)
     }
-    
+
+    func proceedWithUnsavedHdr(drive: HardDriveProxy) -> Bool {
+        return mydocument.proceedWithUnsavedHardDrive(drive: drive)
+    }
+
+    func proceedWithUnsavedHdr() -> Bool {
+        let drives = [amiga.hd0!, amiga.hd1!, amiga.hd2!, amiga.hd3!]
+        return mydocument.proceedWithUnsavedHardDrive(drives: drives)
+    }
+
     @discardableResult
     func askToPowerOffAlert() -> NSApplication.ModalResponse {
        

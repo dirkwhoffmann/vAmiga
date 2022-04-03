@@ -38,7 +38,6 @@ extension PreferencesController {
         let hasFFmpeg = amiga.recorder.hasFFmpeg
         genFFmpegPath.stringValue = amiga.recorder.path
         genFFmpegPath.textColor = hasFFmpeg ? .textColor : .warningColor
-        genFFmpegIcon.isHidden = !hasFFmpeg
         genSource.selectItem(withTag: pref.captureSource)
         genBitRate.stringValue = "\(pref.bitRate)"
         genAspectX.integerValue = pref.aspectX
@@ -57,8 +56,9 @@ extension PreferencesController {
 
         // Miscellaneous
         genEjectWithoutAskingButton.state = pref.ejectWithoutAsking ? .on : .off
-        genPauseInBackground.state = pref.pauseInBackground ? .on : .off
+        genDetachWithoutAskingButton.state = pref.detachWithoutAsking ? .on : .off
         genCloseWithoutAskingButton.state = pref.closeWithoutAsking ? .on : .off
+        genPauseInBackground.state = pref.pauseInBackground ? .on : .off
     }
 
     func selectGeneralTab() {
@@ -183,10 +183,10 @@ extension PreferencesController {
         pref.ejectWithoutAsking = (sender.state == .on)
         refresh()
     }
-    
-    @IBAction func genPauseInBackgroundAction(_ sender: NSButton!) {
+
+    @IBAction func genDetachWithoutAskingAction(_ sender: NSButton!) {
         
-        pref.pauseInBackground = (sender.state == .on)
+        pref.detachWithoutAsking = (sender.state == .on)
         refresh()
     }
     
@@ -198,7 +198,13 @@ extension PreferencesController {
         }
         refresh()
     }
-    
+
+    @IBAction func genPauseInBackgroundAction(_ sender: NSButton!) {
+        
+        pref.pauseInBackground = (sender.state == .on)
+        refresh()
+    }
+
     //
     // Action methods (Misc)
     //

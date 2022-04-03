@@ -432,7 +432,7 @@ extension MyController: NSMenuItemValidation {
         let drive = amiga.df(sender.tag)!
         
         // Ask the user if a modified hard drive should be detached
-        if !proceedWithUnexportedDisk(drive: drive) { return }
+        if !proceedWithUnsavedFloppyDisk(drive: drive) { return }
 
         let panel = FloppyCreator(with: self, nibName: "FloppyCreator")
         panel?.showSheet(forDrive: sender.tag)
@@ -443,7 +443,7 @@ extension MyController: NSMenuItemValidation {
         let drive = amiga.df(sender.tag)!
         
         // Ask the user if an unsafed disk should be replaced
-        if !proceedWithUnexportedDisk(drive: drive) { return }
+        if !proceedWithUnsavedFloppyDisk(drive: drive) { return }
         
         // Show the OpenPanel
         let openPanel = NSOpenPanel()
@@ -488,7 +488,7 @@ extension MyController: NSMenuItemValidation {
             try mydocument.createAttachment(from: url, allowedTypes: types)
 
             // Ask the user if an unsafed disk should be replaced
-            if !proceedWithUnexportedDisk(drive: drive) { return }
+            if !proceedWithUnsavedFloppyDisk(drive: drive) { return }
             
             if let file = mydocument.attachment as? FloppyFileProxy {
                 
@@ -559,7 +559,7 @@ extension MyController: NSMenuItemValidation {
         
         let drive = amiga.df(sender.tag)!
         
-        if proceedWithUnexportedDisk(drive: drive) {
+        if proceedWithUnsavedFloppyDisk(drive: drive) {
             
             drive.eject()
             myAppDelegate.clearRecentlyExportedDiskURLs(df: drive.nr)

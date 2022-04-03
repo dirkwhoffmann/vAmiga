@@ -79,6 +79,7 @@ class Preferences {
     
     // Misc
     var ejectWithoutAsking = GeneralDefaults.std.ejectWithoutAsking
+    var detachWithoutAsking = GeneralDefaults.std.detachWithoutAsking
     var closeWithoutAsking = GeneralDefaults.std.closeWithoutAsking
     var pauseInBackground = GeneralDefaults.std.pauseInBackground
 
@@ -157,8 +158,9 @@ class Preferences {
 
         // Misc
         ejectWithoutAsking = defaults.bool(forKey: Keys.Gen.ejectWithoutAsking)
-        pauseInBackground = defaults.bool(forKey: Keys.Gen.pauseInBackground)
+        detachWithoutAsking = defaults.bool(forKey: Keys.Gen.detachWithoutAsking)
         closeWithoutAsking = defaults.bool(forKey: Keys.Gen.closeWithoutAsking)
+        pauseInBackground = defaults.bool(forKey: Keys.Gen.pauseInBackground)
     }
     
     func saveGeneralUserDefaults() {
@@ -189,8 +191,9 @@ class Preferences {
 
         // Misc
         defaults.set(ejectWithoutAsking, forKey: Keys.Gen.ejectWithoutAsking)
-        defaults.set(pauseInBackground, forKey: Keys.Gen.pauseInBackground)
+        defaults.set(detachWithoutAsking, forKey: Keys.Gen.detachWithoutAsking)
         defaults.set(closeWithoutAsking, forKey: Keys.Gen.closeWithoutAsking)
+        defaults.set(pauseInBackground, forKey: Keys.Gen.pauseInBackground)
     }
     
     //

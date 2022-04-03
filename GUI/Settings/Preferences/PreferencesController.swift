@@ -28,7 +28,6 @@ class PreferencesController: DialogController {
     @IBOutlet weak var genScreenshotTargetPopup: NSPopUpButton!
 
     // Screen captures
-    @IBOutlet weak var genFFmpegIcon: NSButton!
     @IBOutlet weak var genFFmpegPath: NSComboBox!
     @IBOutlet weak var genSource: NSPopUpButton!
     @IBOutlet weak var genAspectX: NSTextField!
@@ -44,8 +43,9 @@ class PreferencesController: DialogController {
 
     // Misc
     @IBOutlet weak var genEjectWithoutAskingButton: NSButton!
-    @IBOutlet weak var genPauseInBackground: NSButton!
+    @IBOutlet weak var genDetachWithoutAskingButton: NSButton!
     @IBOutlet weak var genCloseWithoutAskingButton: NSButton!
+    @IBOutlet weak var genPauseInBackground: NSButton!
 
     //
     // Controls

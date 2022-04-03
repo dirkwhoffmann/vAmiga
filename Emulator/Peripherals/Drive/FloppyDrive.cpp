@@ -371,7 +371,7 @@ FloppyDrive::hasDisk() const
 bool
 FloppyDrive::hasModifiedDisk() const
 {
-    return disk ? disk->isModified() : false;
+    return hasDisk() ? disk->isModified() : false;
 }
 
 bool

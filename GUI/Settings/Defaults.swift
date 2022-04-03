@@ -154,8 +154,9 @@ struct Keys {
         
         // Miscellaneous
         static let ejectWithoutAsking     = "VAMIGA_GEN_EjectWithoutAsking"
-        static let pauseInBackground      = "VAMIGA_GEN_PauseInBackground"
+        static let detachWithoutAsking    = "VAMIGA_GEN_DetachWithoutAsking"
         static let closeWithoutAsking     = "VAMIGA_GEN_CloseWithoutAsking"
+        static let pauseInBackground      = "VAMIGA_GEN_PauseInBackground"
     }
 }
 
@@ -187,8 +188,9 @@ struct GeneralDefaults {
 
     // Miscellaneous
     let ejectWithoutAsking: Bool
-    let pauseInBackground: Bool
+    let detachWithoutAsking: Bool
     let closeWithoutAsking: Bool
+    let pauseInBackground: Bool
 
     //
     // Schemes
@@ -216,8 +218,9 @@ struct GeneralDefaults {
         warpMode: .off,
 
         ejectWithoutAsking: false,
-        pauseInBackground: false,
-        closeWithoutAsking: false
+        detachWithoutAsking: false,
+        closeWithoutAsking: false,
+        pauseInBackground: false
     )
 }
 
@@ -246,6 +249,7 @@ extension UserDefaults {
             Keys.Gen.warpMode: Int(defaults.warpMode.rawValue),
 
             Keys.Gen.ejectWithoutAsking: defaults.ejectWithoutAsking,
+            Keys.Gen.detachWithoutAsking: defaults.detachWithoutAsking,
             Keys.Gen.pauseInBackground: defaults.pauseInBackground,
             Keys.Gen.closeWithoutAsking: defaults.closeWithoutAsking
         ]
@@ -277,8 +281,9 @@ extension UserDefaults {
                      Keys.Gen.warpMode,
                      
                      Keys.Gen.ejectWithoutAsking,
-                     Keys.Gen.pauseInBackground,
-                     Keys.Gen.closeWithoutAsking
+                     Keys.Gen.detachWithoutAsking,
+                     Keys.Gen.closeWithoutAsking,
+                     Keys.Gen.pauseInBackground
         ]
 
         for key in keys { defaults.removeObject(forKey: key) }

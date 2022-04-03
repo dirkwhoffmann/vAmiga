@@ -40,13 +40,19 @@ extension MyController: NSWindowDelegate {
         }
     }
     
+    public func windowShouldClose(_ sender: NSWindow) -> Bool {
+        
+        log()
+        if proceedWithUnsavedFloppyDisk() {
+            return true
+        } else {
+            return false
+        }
+    }
     public func windowWillClose(_ notification: Notification) {
         
         log()
-        
-        // log("Persist hard drives...", level: 2)
-        // try? config.persistHardDrives()
-        
+                
         log("Stopping renderer...", level: 2)
         renderer.halt()
         

@@ -60,7 +60,7 @@ HardDrive::init()
     geometry = GeometryDescriptor();
     ptable.clear();
     head = {};
-    modified = false;
+    modified = bool(FORCE_HDR_MODIFIED);
 }
 
 void
@@ -421,7 +421,7 @@ HardDrive::hasDisk() const
 bool
 HardDrive::hasModifiedDisk() const
 {
-    return hasDisk() && modified;
+    return hasDisk() ? modified : false;
 }
 
 bool
