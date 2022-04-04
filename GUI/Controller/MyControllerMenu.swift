@@ -592,6 +592,9 @@ extension MyController: NSMenuItemValidation {
 
         let drive = amiga.hd(sender.tag)!
         
+        // Ask the user if an unsafed disk should be discarded
+        if !proceedWithUnsavedHardDrive(drive: drive) { return }
+        
         // Power off the emulator if the user doesn't object
         if !askToPowerOff() { return }
         
@@ -603,6 +606,9 @@ extension MyController: NSMenuItemValidation {
         
         let drive = amiga.hd(sender.tag)!
         
+        // Ask the user if an unsafed disk should be discarded
+        if !proceedWithUnsavedHardDrive(drive: drive) { return }
+
         // Power off the emulator if the user doesn't object
         if !askToPowerOff() { return }
 
@@ -629,6 +635,9 @@ extension MyController: NSMenuItemValidation {
         let drive = amiga.hd(sender.tag / 10)!
         let slot  = sender.tag % 10
                     
+        // Ask the user if an unsafed disk should be discarded
+        if !proceedWithUnsavedHardDrive(drive: drive) { return }
+
         // Power off the emulator if the user doesn't object
         if !askToPowerOff() { return }
 

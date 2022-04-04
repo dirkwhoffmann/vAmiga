@@ -149,10 +149,10 @@ class MyDocument: NSDocument {
             return
         }
         
-        if let proxy = attachment as? HDFFileProxy {
+        if attachment is HDFFileProxy {
             
-            // TODO: CLEAN THIS CASE UP
-            log("HDF with \(proxy.numBlocks) blocks")
+            amiga.powerOff()
+            try mountAttachment(drive: 0)
             return
         }
         

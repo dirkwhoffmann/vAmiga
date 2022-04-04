@@ -134,11 +134,11 @@ extension MyController {
         return mydocument.proceedWithUnsavedFloppyDisk(drives: drives)
     }
 
-    func proceedWithUnsavedHdr(drive: HardDriveProxy) -> Bool {
+    func proceedWithUnsavedHardDrive(drive: HardDriveProxy) -> Bool {
         return mydocument.proceedWithUnsavedHardDrive(drive: drive)
     }
 
-    func proceedWithUnsavedHdr() -> Bool {
+    func proceedWithUnsavedHardDrive() -> Bool {
         let drives = [amiga.hd0!, amiga.hd1!, amiga.hd2!, amiga.hd3!]
         return mydocument.proceedWithUnsavedHardDrive(drives: drives)
     }

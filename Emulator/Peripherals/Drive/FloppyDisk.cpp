@@ -122,7 +122,7 @@ void
 FloppyDisk::clearDisk()
 {
     fnv = 0;
-    modified = FORCE_DISK_MODIFIED ? true : false;
+    modified = bool(FORCE_DISK_MODIFIED);
     
     // Initialize with random data
     srand(0);
