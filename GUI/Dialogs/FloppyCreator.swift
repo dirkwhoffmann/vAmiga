@@ -145,13 +145,14 @@ class FloppyCreator: DialogController {
         log("Dos = \(fs) Boot = \(bb) Name = \(name)")
         
         do {
+
             try drive?.insertNew(fileSystem: fs, bootBlock: bb, name: name)
-            
             myAppDelegate.clearRecentlyExportedDiskURLs(df: nr)
             hideSheet()
             
         } catch {
-            (error as? VAError)?.cantInsert()
+            
+            parent.showAlert(.cantInsert, error: error, window: window)
         }
     }
 }

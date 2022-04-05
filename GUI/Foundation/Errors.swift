@@ -72,8 +72,14 @@ extension NSError {
 
 enum Failure {
 
-    case noMetalSupport
+    case cantAttach
+    case cantInsert
     case cantOpen(url: URL)
+    case cantRecord
+    case cantRun
+    case noMetalSupport
+    case recorderAborted
+    case recorderSandboxed(exec: String)
     case unknown
 
     var alertStyle: NSAlert.Style {
@@ -81,7 +87,7 @@ enum Failure {
         switch self {
             
         case .noMetalSupport: return .critical
-            
+
         default: return .warning
         }
     }
@@ -90,8 +96,12 @@ enum Failure {
         
         switch self {
             
+        case .cantRecord: return NSImage(named: "FFmpegIcon")!
+        case .cantRun: return NSImage(named: "pref_transparent")!
         case .noMetalSupport: return NSImage(named: "metal")!
-            
+        case .recorderAborted: return NSImage(named: "mp4")!
+        case .recorderSandboxed: return NSImage(named: "FFmpegIcon")!
+
         default: return nil
         }
     }
@@ -110,12 +120,30 @@ enum Failure {
         
         switch self {
             
-        case .noMetalSupport:
-            return "No suitable GPU hardware found"
-            
+        case .cantAttach:
+            return "Failed to attach hard drive."
+
+        case .cantInsert:
+            return "Failed to insert disk."
+
         case let .cantOpen(url):
             return "\"\(url.lastPathComponent)\" can't be opened."
+
+        case .cantRecord:
+            return "Failed to launch the screen recorder."
+
+        case .cantRun:
+            return "Configuration error"
+                                                
+        case .noMetalSupport:
+            return "No suitable GPU hardware found."
             
+        case .recorderAborted:
+            return "Screen recording has been aborted."
+            
+        case .recorderSandboxed:
+            return "The selected screen recorder is unavailable."
+
         default:
             return ""
         }
@@ -129,10 +157,17 @@ enum Failure {
             "vAmiga can only run on machines supporting the Metal graphics " +
             "technology (2012 models and above)."
             
+        case .recorderAborted: return
+            "Failed to write to the FFmpeg pipes."
+        
+        case let .recorderSandboxed(exec): return
+            "vAmiga is running as a sandboxed application and has no " +
+            "permission to access file \"\(exec)\"" +
+            "Please copy the file to the Applications folder."
+            
         default:
             return ""
         }
-        
     }
 }
 
@@ -160,42 +195,50 @@ extension NSAlert {
 
 extension MyDocument {
 
-    func showAlert(_ failure: Failure, _ explanation: String? = nil, async: Bool = false) {
+    func showAlert(_ failure: Failure, what: String? = nil,
+                   async: Bool = false, window: NSWindow? = nil) {
  
         let alert = NSAlert()
         alert.alertStyle = failure.alertStyle
         alert.icon = failure.icon
         alert.messageText = failure.description
-        alert.informativeText = explanation ?? failure.explanation
+        alert.informativeText = what ?? failure.explanation
         alert.addButton(withTitle: failure.buttonTitle)
         
-        if let window = windowForSheet {
+        if let window = window {
+            alert.runSheet(for: window, async: async)
+        } else if let window = windowForSheet {
             alert.runSheet(for: window, async: async)
         } else {
             alert.runModal()
         }
     }
 
-    func showAlert(_ failure: Failure, _ error: Error, async: Bool = false) {
+    func showAlert(_ failure: Failure, error: Error,
+                   async: Bool = false, window: NSWindow? = nil) {
     
         if let error = error as? VAError {
-            showAlert(failure, error.what, async: async)
+            showAlert(failure, what: error.what, async:
+                        async, window: window)
         } else {
-            showAlert(failure, error.localizedDescription, async: async)
+            showAlert(failure, what: error.localizedDescription,
+                      async: async, window: window)
         }
     }
 }
 
 extension MyController {
 
-    func showAlert(_ failure: Failure, _ explanation: String? = nil, async: Bool = false) {
+    func showAlert(_ failure: Failure, what: String? = nil,
+                   async: Bool = false, window: NSWindow? = nil) {
         
-        mydocument.showAlert(failure, explanation, async: async)
+        mydocument.showAlert(failure, what: what, async: async, window: window)
     }
 
-    func showAlert(_ failure: Failure, _ error: Error, async: Bool = false) {
+    func showAlert(_ failure: Failure, error: Error,
+                   async: Bool = false, window: NSWindow? = nil) {
     
-        mydocument.showAlert(failure, error, async: async)
+        mydocument.showAlert(failure, error: error, async: async, window: window)
     }
 }
 
@@ -250,47 +293,4 @@ extension VAError {
     func critical(_ msg: String, async: Bool = false, icon: String? = nil) {
         VAError.critical(msg, what, async: async, icon: icon)
     }
-    
-    //
-    // Customized alerts
-    //
-
-    /*
-    func cantOpen(url: URL) {
-        warning("\"\(url.lastPathComponent)\" can't be opened.")
-    }
-    */
-    
-    func cantInsert(async: Bool = false) {
-        warning("Failed to insert disk.", async: async)
-    }
-
-    func cantAttach(async: Bool = false) {
-        warning("Failed to attach hard drive.", async: async)
-    }
-
-    func notReady(async: Bool = false) {
-        informational("Configuration error", async: async, icon: "pref_transparent")
-    }
-    
-    func cantRecord(async: Bool = false) {
-        warning("Failed to launch the screen recorder.", async: async, icon: "FFmpegIcon")
-    }
-
-    static func recordingAborted(async: Bool = false) {
-        
-        warning("Screen recording has been aborted.",
-                "Failed to write to the FFmpeg pipes.",
-                async: async, icon: "mp4")
-    }
-
-    static func recorderSanboxed(name: String, async: Bool = false) {
-        
-        warning("The selected screen recorder is unavailable.",
-                "vAmiga is running as a sandboxed application and has no " +
-                "permission to access file \(name). " +
-                "Please copy the file to the Applications folder.",
-                async: async, icon: "FFmpegIcon")
-    }
-
 }

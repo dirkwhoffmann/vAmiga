@@ -167,7 +167,7 @@ class MyDocument: NSDocument {
             do {
                 try amiga.df(drive)!.swap(file: proxy)
             } catch {
-                (error as? VAError)?.cantInsert()
+                parent.showAlert(.cantInsert, error: error)
             }
         }
         
@@ -185,7 +185,8 @@ class MyDocument: NSDocument {
                 }
                 
             } catch {
-                (error as? VAError)?.cantAttach()
+                parent.showAlert(.cantAttach, error: error)
+                // (error as? VAError)?.cantAttach()
             }
         }
     }

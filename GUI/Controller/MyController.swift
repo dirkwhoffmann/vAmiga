@@ -584,10 +584,10 @@ extension MyController {
         case .RECORDING_STOPPED:
             window?.backgroundColor = .windowBackgroundColor
             refreshStatusBar()
-            
+
         case .RECORDING_ABORTED:
             refreshStatusBar()
-            VAError.recordingAborted()
+            showAlert(.recorderAborted)
             
         case .SHAKING:
             metal.lastShake = DispatchTime(uptimeNanoseconds: 0)

@@ -106,15 +106,15 @@ extension PreferencesController {
     
     @IBAction func genPathAction(_ sender: NSComboBox!) {
 
-        pref.ffmpegPath = sender.stringValue
+        let path = sender.stringValue
+        pref.ffmpegPath = path
         refresh()
         
         // Display a warning if the recorder is inaccessible
         let fm = FileManager.default
-        if fm.fileExists(atPath: sender.stringValue),
-           !fm.isExecutableFile(atPath: sender.stringValue) {
+        if fm.fileExists(atPath: path), !fm.isExecutableFile(atPath: path) {
 
-            VAError.recorderSanboxed(name: sender.stringValue)
+            parent.showAlert(.recorderSandboxed(exec: path), window: window)
         }
     }
         

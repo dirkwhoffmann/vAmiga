@@ -291,7 +291,7 @@ extension MyController: NSMenuItemValidation {
                                               ay: pref.aspectY)
         } catch {
             
-            (error as? VAError)?.cantRecord()            
+            showAlert(.cantRecord, error: error)
         }
     }
     
@@ -352,11 +352,16 @@ extension MyController: NSMenuItemValidation {
             
             do {
                 try amiga.run()
+            } catch {
+                showAlert(.cantRun, error: error)
+            }
+            /*
             } catch let error as VAError {
-                error.notReady()
+                error.cantRun()
             } catch {
                 fatalError()
             }
+            */
         }
     }
 
@@ -489,7 +494,7 @@ extension MyController: NSMenuItemValidation {
 
             // Ask the user if an unsafed disk should be replaced
             if !proceedWithUnsavedFloppyDisk(drive: drive) { return }
-            
+                        
             if let file = mydocument.attachment as? FloppyFileProxy {
                 
                 do {
@@ -502,13 +507,13 @@ extension MyController: NSMenuItemValidation {
                 
                 } catch {
                     
-                    (error as? VAError)?.cantInsert()
+                    showAlert(.cantInsert, error: error, async: true)
                 }
             }
             
         } catch {
             
-            showAlert(.cantOpen(url: url), error, async: true)
+            showAlert(.cantOpen(url: url), error: error, async: true)
         }
     }
     
@@ -667,13 +672,13 @@ extension MyController: NSMenuItemValidation {
                     
                 } catch {
                     
-                    (error as? VAError)?.cantAttach()
+                    showAlert(.cantAttach, error: error, async: true)
                 }
             }
             
         } catch {
             
-            showAlert(.cantOpen(url: url), error, async: true)
+            showAlert(.cantOpen(url: url), error: error, async: true)
         }
     }
     

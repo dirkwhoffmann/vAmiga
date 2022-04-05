@@ -148,7 +148,7 @@ public extension MetalView {
             
         } catch {
             
-            parent.showAlert(.cantOpen(url: url), error, async: true)
+            parent.showAlert(.cantOpen(url: url), error: error, async: true)
             return false
         }
     }
