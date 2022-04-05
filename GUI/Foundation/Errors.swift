@@ -77,6 +77,8 @@ enum Failure {
     case cantOpen(url: URL)
     case cantRecord
     case cantRun
+    case noFFmpegFound(exec: String)
+    case noFFmpegInstalled
     case noMetalSupport
     case recorderAborted
     case recorderSandboxed(exec: String)
@@ -98,6 +100,8 @@ enum Failure {
             
         case .cantRecord: return NSImage(named: "FFmpegIcon")!
         case .cantRun: return NSImage(named: "pref_transparent")!
+        case .noFFmpegFound: return NSImage(named: "FFmpegIcon")!
+        case .noFFmpegInstalled: return NSImage(named: "FFmpegIcon")!
         case .noMetalSupport: return NSImage(named: "metal")!
         case .recorderAborted: return NSImage(named: "mp4")!
         case .recorderSandboxed: return NSImage(named: "FFmpegIcon")!
@@ -134,7 +138,13 @@ enum Failure {
 
         case .cantRun:
             return "Configuration error"
-                                                
+            
+        case .noFFmpegFound:
+            return "Unable to locate FFmpeg."
+            
+        case .noFFmpegInstalled:
+            return "Screen recording requires FFmpeg to be installed."
+
         case .noMetalSupport:
             return "No suitable GPU hardware found."
             
@@ -152,6 +162,12 @@ enum Failure {
     var explanation: String {
         
         switch self {
+            
+        case let .noFFmpegFound(exec): return
+            "\"\(exec)\" not found."
+
+        case .noFFmpegInstalled: return
+            "Visit FFmpeg.org for installation instructions."
             
         case .noMetalSupport: return
             "vAmiga can only run on machines supporting the Metal graphics " +
@@ -239,6 +255,35 @@ extension MyController {
                    async: Bool = false, window: NSWindow? = nil) {
     
         mydocument.showAlert(failure, error: error, async: async, window: window)
+    }
+}
+
+//
+// Alert dialogs
+//
+
+extension MyController {
+    
+    func askToPowerOff() -> Bool {
+        
+        if amiga.poweredOn {
+            
+            let alert = NSAlert()
+            
+            alert.alertStyle = .informational
+            alert.icon = NSImage(named: "powerSwitch")
+            alert.messageText = "The emulator must be powered off to perform this operation."
+            alert.informativeText = "Your changes will be lost if you proceed."
+            alert.addButton(withTitle: "Proceed")
+            alert.addButton(withTitle: "Cancel")
+            
+            if alert.runSheet(for: window!) == .alertFirstButtonReturn {
+                amiga.powerOff()
+            } else {
+                return false
+            }
+        }
+        return true
     }
 }
 

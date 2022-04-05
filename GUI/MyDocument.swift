@@ -175,7 +175,7 @@ class MyDocument: NSDocument {
             
             do {
                 
-                if parent.askToReboot() {
+                if parent.askToPowerOff() {
                     
                     amiga.powerOff()
                     amiga.configure(.HDR_CONNECT, drive: drive, enable: true)

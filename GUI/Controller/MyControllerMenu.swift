@@ -273,7 +273,12 @@ extension MyController: NSMenuItemValidation {
         }
         
         if !amiga.recorder.hasFFmpeg {
-            showMissingFFmpegAlert()
+
+            if pref.ffmpegPath != "" {
+                showAlert(.noFFmpegFound(exec: pref.ffmpegPath))
+            } else {
+                showAlert(.noFFmpegInstalled)
+            }
             return
         }
         
