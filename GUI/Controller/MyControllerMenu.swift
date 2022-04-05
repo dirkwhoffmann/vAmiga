@@ -508,7 +508,7 @@ extension MyController: NSMenuItemValidation {
             
         } catch {
             
-            (error as? VAError)?.cantOpen(url: url)
+            showAlert(.cantOpen(url: url), error, async: true)
         }
     }
     
@@ -651,7 +651,7 @@ extension MyController: NSMenuItemValidation {
         let types: [FileType] = [ .HDF ]
         let drive = amiga.hd(nr)!
         
-        do {
+        do {            
             // Try to create a file proxy
             try mydocument.createAttachment(from: url, allowedTypes: types)
                         
@@ -673,7 +673,7 @@ extension MyController: NSMenuItemValidation {
             
         } catch {
             
-            (error as? VAError)?.cantOpen(url: url)
+            showAlert(.cantOpen(url: url), error, async: true)
         }
     }
     

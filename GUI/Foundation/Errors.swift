@@ -34,6 +34,10 @@ public func log(warning: String,
     log(warning, level: logLevel, path: path, function: function, line: line)
 }
 
+//
+// Errors
+//
+
 class VAError: Error {
     
     var errorCode: ErrorCode
@@ -50,7 +54,155 @@ class VAError: Error {
         self.errorCode = errorCode
         self.what = what
     }
+}
 
+extension NSError {
+    
+    convenience init(error: VAError) {
+        
+        self.init(domain: "vAmiga",
+                  code: error.errorCode.rawValue,
+                  userInfo: [NSLocalizedRecoverySuggestionErrorKey: error.what])
+    }
+}
+
+//
+// Failures
+//
+
+enum Failure {
+
+    case noMetalSupport
+    case cantOpen(url: URL)
+    case unknown
+
+    var alertStyle: NSAlert.Style {
+        
+        switch self {
+            
+        case .noMetalSupport: return .critical
+            
+        default: return .warning
+        }
+    }
+    
+    var icon: NSImage? {
+        
+        switch self {
+            
+        case .noMetalSupport: return NSImage(named: "metal")!
+            
+        default: return nil
+        }
+    }
+
+    var buttonTitle: String {
+        
+        switch self {
+            
+        case .noMetalSupport: return "Exit"
+            
+        default: return "OK"
+        }
+    }
+    
+    var description: String {
+        
+        switch self {
+            
+        case .noMetalSupport:
+            return "No suitable GPU hardware found"
+            
+        case let .cantOpen(url):
+            return "\"\(url.lastPathComponent)\" can't be opened."
+            
+        default:
+            return ""
+        }
+    }
+    
+    var explanation: String {
+        
+        switch self {
+            
+        case .noMetalSupport: return
+            "vAmiga can only run on machines supporting the Metal graphics " +
+            "technology (2012 models and above)."
+            
+        default:
+            return ""
+        }
+        
+    }
+}
+
+//
+// Alerts
+//
+
+extension NSAlert {
+    
+    @discardableResult
+    func runSheet(for window: NSWindow, async: Bool = false) -> NSApplication.ModalResponse {
+        
+        if async {
+            
+            beginSheetModal(for: window)
+            return .OK
+            
+        } else {
+            
+            beginSheetModal(for: window, completionHandler: NSApp.stopModal(withCode:))
+            return NSApp.runModal(for: window)
+        }
+    }
+}
+
+extension MyDocument {
+
+    func showAlert(_ failure: Failure, _ explanation: String? = nil, async: Bool = false) {
+ 
+        let alert = NSAlert()
+        alert.alertStyle = failure.alertStyle
+        alert.icon = failure.icon
+        alert.messageText = failure.description
+        alert.informativeText = explanation ?? failure.explanation
+        alert.addButton(withTitle: failure.buttonTitle)
+        
+        if let window = windowForSheet {
+            alert.runSheet(for: window, async: async)
+        } else {
+            alert.runModal()
+        }
+    }
+
+    func showAlert(_ failure: Failure, _ error: Error, async: Bool = false) {
+    
+        if let error = error as? VAError {
+            showAlert(failure, error.what, async: async)
+        } else {
+            showAlert(failure, error.localizedDescription, async: async)
+        }
+    }
+}
+
+extension MyController {
+
+    func showAlert(_ failure: Failure, _ explanation: String? = nil, async: Bool = false) {
+        
+        mydocument.showAlert(failure, explanation, async: async)
+    }
+
+    func showAlert(_ failure: Failure, _ error: Error, async: Bool = false) {
+    
+        mydocument.showAlert(failure, error, async: async)
+    }
+}
+
+// DEPRECATED (MOVE TO ALERT SECTION)
+
+extension VAError {
+    
     static func alert(_ msg1: String, _ msg2: String, style: NSAlert.Style,
                       async: Bool = false, icon: String?) {
         
@@ -103,10 +255,12 @@ class VAError: Error {
     // Customized alerts
     //
 
-    func cantOpen(url: URL, async: Bool = false) {
-        warning("\"\(url.lastPathComponent)\" can't be opened.", async: async)
+    /*
+    func cantOpen(url: URL) {
+        warning("\"\(url.lastPathComponent)\" can't be opened.")
     }
-
+    */
+    
     func cantInsert(async: Bool = false) {
         warning("Failed to insert disk.", async: async)
     }
@@ -139,14 +293,4 @@ class VAError: Error {
                 async: async, icon: "FFmpegIcon")
     }
 
-}
-
-extension NSError {
-    
-    convenience init(error: VAError) {
-        
-        self.init(domain: "vAmiga",
-                  code: error.errorCode.rawValue,
-                  userInfo: [NSLocalizedRecoverySuggestionErrorKey: error.what])
-    }
 }

@@ -35,7 +35,7 @@ class MyDocument: NSDocument {
 
         // Check for Metal support
         if MTLCreateSystemDefaultDevice() == nil {
-            showNoMetalSupportAlert()
+            showAlert(.noMetalSupport)
             NSApp.terminate(self)
             return
         }

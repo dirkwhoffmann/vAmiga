@@ -8,20 +8,9 @@
 // -----------------------------------------------------------------------------
 
 // DEPRECATED
-// TODO: MOVE TO VAError as static functions
+// TODO: MOVE TO Error.swift
 
 extension MyDocument {
-    
-    func showNoMetalSupportAlert() {
-        
-        let alert = NSAlert()
-        alert.alertStyle = .critical
-        alert.icon = NSImage(named: "metal")
-        alert.messageText = "No suitable GPU hardware found"
-        alert.informativeText = "vAmiga can only run on machines supporting the Metal graphics technology (2012 models and above)."
-        alert.addButton(withTitle: "Exit")
-        alert.runModal()
-    }
     
     @discardableResult
     func showDiskIsUnexportedAlert(messageText: String) -> NSApplication.ModalResponse {
@@ -153,7 +142,8 @@ extension MyController {
         alert.informativeText = "Your changes will be lost if you proceed."
         alert.addButton(withTitle: "Proceed")
         alert.addButton(withTitle: "Cancel")
-        return alert.runModal()
+
+        return alert.runSheet(for: window!)
     }
 
     func askToPowerOff() -> Bool {
@@ -205,31 +195,4 @@ extension MyController {
         alert.addButton(withTitle: "OK")
         alert.runModal()
     }
-
-    /*
-    func showFailedToLaunchFFmpegAlert() {
-
-        let alert = NSAlert()
-        alert.alertStyle = .warning
-        alert.icon = NSImage(named: "FFmpegIcon")
-        alert.messageText = "Failed to launch the screen recorder."
-        alert.informativeText = "No content will be recorded."
-        alert.addButton(withTitle: "OK")
-        alert.runModal()
-    }
-    */
-    
-    /*
-    func showScreenRecorderAlert(url: URL) {
-
-        let alert = NSAlert()
-        alert.alertStyle = .critical
-        alert.icon = NSImage(named: "FFmpegIcon")
-        alert.messageText = "\"\(url.lastPathComponent)\" cannot be opened."
-        alert.informativeText = "The screen recorder failed to open this file for output."
-        alert.addButton(withTitle: "OK")
-        
-        alert.beginSheetModal(for: self.window!) { (_: NSApplication.ModalResponse) -> Void in }
-    }
-    */
 }

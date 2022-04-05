@@ -148,9 +148,7 @@ public extension MetalView {
             
         } catch {
             
-            // Make the drop layer display an error message after closing
-            parent.renderer.dropZone.error = error as? VAError
-            parent.renderer.dropZone.errorUrl = url
+            parent.showAlert(.cantOpen(url: url), error, async: true)
             return false
         }
     }

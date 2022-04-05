@@ -41,8 +41,6 @@ class DropZone: Layer {
     var maxAlpha = [0.0, 0.0, 0.0, 0.0]
         
     var type: FileType?
-    var error: VAError?
-    var errorUrl: URL?
     
     // Image pool
     var dfDisabled: [NSImage] =
@@ -213,12 +211,6 @@ class DropZone: Layer {
     
     override func animationHasStopped() {
         
-        if !isVisible {
-            
-            // The drop zone has closed. If an error is pending, display it
-            error?.cantOpen(url: errorUrl!)
-            error = nil
-        }
     }
     
     func updateAlpha() {
