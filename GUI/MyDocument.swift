@@ -31,6 +31,8 @@ class MyDocument: NSDocument {
     
     override init() {
         
+        log()
+        
         super.init()
 
         // Check for Metal support
@@ -39,9 +41,6 @@ class MyDocument: NSDocument {
             NSApp.terminate(self)
             return
         }
-
-        // Register standard user defaults
-        UserDefaults.registerUserDefaults()
         
         // Create an emulator instance
         amiga = AmigaProxy()
@@ -186,7 +185,6 @@ class MyDocument: NSDocument {
                 
             } catch {
                 parent.showAlert(.cantAttach, error: error)
-                // (error as? VAError)?.cantAttach()
             }
         }
     }
@@ -196,7 +194,9 @@ class MyDocument: NSDocument {
     //
     
     override open func read(from url: URL, ofType typeName: String) throws {
-                
+             
+        log()
+        
         do {
             try createAttachment(from: url)
             

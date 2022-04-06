@@ -16,7 +16,7 @@
 			<key>CFBundleTypeName</key>
 			<string>HDF</string>
 			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
 			<key>LSTypeIsPackage</key>

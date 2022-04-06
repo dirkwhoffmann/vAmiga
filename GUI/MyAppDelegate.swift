@@ -64,9 +64,14 @@ var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
         log()
         
         // Make touch bar customizable
+        /*
         if #available(OSX 10.12.2, *) {
             NSApplication.shared.isAutomaticCustomizeTouchBarMenuItemEnabled = true
         }
+        */
+        
+        // Register standard user defaults
+        UserDefaults.registerUserDefaults()
     }
     
     public func applicationWillTerminate(_ aNotification: Notification) {

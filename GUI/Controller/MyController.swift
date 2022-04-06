@@ -160,6 +160,8 @@ extension MyController {
     
     override open func awakeFromNib() {
         
+        log()
+        
         mydocument = document as? MyDocument
         
         config = Configuration(with: self)
@@ -172,6 +174,8 @@ extension MyController {
     }
     
     override open func windowDidLoad() {
+        
+        log()
         
         // Create keyboard controller
         keyboard = KeyboardController(parent: self)

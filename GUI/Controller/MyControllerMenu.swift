@@ -360,13 +360,6 @@ extension MyController: NSMenuItemValidation {
             } catch {
                 showAlert(.cantRun, error: error)
             }
-            /*
-            } catch let error as VAError {
-                error.cantRun()
-            } catch {
-                fatalError()
-            }
-            */
         }
     }
 
