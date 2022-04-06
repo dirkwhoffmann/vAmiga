@@ -239,14 +239,11 @@ class HardDiskConfigurator: DialogController {
     @IBAction override func okAction(_ sender: Any!) {
         
         do {
-
             try drive.changeGeometry(c: cyls, h: heads, s: sectors)
             hideSheet()
             
-        } catch let error as VAError {
-            error.warning("Failed to change the drive geometry.")
         } catch {
-            fatalError()
+            parent.showAlert(.cantChangeGeometry, error: error, window: window)
         }
     }
 }

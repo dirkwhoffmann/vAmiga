@@ -540,10 +540,8 @@ extension MyController: NSMenuItemValidation {
             do {
                 try mydocument.export(drive: n, to: url)
                 
-            } catch let error as VAError {
-                error.warning("Cannot export disk to file \"\(url.path)\"")
             } catch {
-                fatalError()
+                showAlert(.cantExport(url: url), error: error)
             }
         }
     }
@@ -596,7 +594,7 @@ extension MyController: NSMenuItemValidation {
         let drive = amiga.hd(sender.tag)!
         
         // Ask the user if an unsafed disk should be discarded
-        if !proceedWithUnsavedHardDrive(drive: drive) { return }
+        if !proceedWithUnsavedHardDisk(drive: drive) { return }
         
         // Power off the emulator if the user doesn't object
         if !askToPowerOff() { return }
@@ -610,7 +608,7 @@ extension MyController: NSMenuItemValidation {
         let drive = amiga.hd(sender.tag)!
         
         // Ask the user if an unsafed disk should be discarded
-        if !proceedWithUnsavedHardDrive(drive: drive) { return }
+        if !proceedWithUnsavedHardDisk(drive: drive) { return }
 
         // Power off the emulator if the user doesn't object
         if !askToPowerOff() { return }
@@ -639,7 +637,7 @@ extension MyController: NSMenuItemValidation {
         let slot  = sender.tag % 10
                     
         // Ask the user if an unsafed disk should be discarded
-        if !proceedWithUnsavedHardDrive(drive: drive) { return }
+        if !proceedWithUnsavedHardDisk(drive: drive) { return }
 
         // Power off the emulator if the user doesn't object
         if !askToPowerOff() { return }
@@ -698,10 +696,8 @@ extension MyController: NSMenuItemValidation {
              do {
                  try mydocument.export(hardDrive: n, to: url)
                  
-             } catch let error as VAError {
-                 error.warning("Cannot export hard drive to file \"\(url.path)\"")
              } catch {
-                 fatalError()
+                 showAlert(.cantExport(url: url), error: error)
              }
         }
     }
@@ -761,7 +757,7 @@ extension MyController: NSMenuItemValidation {
                 sender.state = .on
             } catch {
                 sender.state = .off
-                (error as? VAError)?.warning("Write-through mode can't be enabled.")
+                showAlert(.cantWriteThrough, error: error)
             }
         }
     }

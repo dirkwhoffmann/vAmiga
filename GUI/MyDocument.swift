@@ -184,6 +184,7 @@ class MyDocument: NSDocument {
                 }
                 
             } catch {
+                
                 parent.showAlert(.cantAttach, error: error)
             }
         }

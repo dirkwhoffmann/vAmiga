@@ -73,10 +73,13 @@ extension NSError {
 enum Failure {
 
     case cantAttach
+    case cantChangeGeometry
+    case cantExport(url: URL)
     case cantInsert
     case cantOpen(url: URL)
     case cantRecord
     case cantRun
+    case cantWriteThrough
     case noFFmpegFound(exec: String)
     case noFFmpegInstalled
     case noMetalSupport
@@ -127,6 +130,12 @@ enum Failure {
         case .cantAttach:
             return "Failed to attach hard drive."
 
+        case .cantChangeGeometry:
+            return "Failed to change the drive geometry."
+            
+        case let .cantExport(url: url):
+            return "Cannot export disk to file \"\(url.path)\"."
+            
         case .cantInsert:
             return "Failed to insert disk."
 
@@ -138,6 +147,9 @@ enum Failure {
 
         case .cantRun:
             return "Configuration error"
+            
+        case .cantWriteThrough:
+            return "Unable to enable write-through mode."
             
         case .noFFmpegFound:
             return "Unable to locate FFmpeg."
@@ -241,61 +253,6 @@ extension MyDocument {
                       async: async, window: window)
         }
     }
-    
-    func showIsUnsavedAlert(msg: String, icon: String) -> NSApplication.ModalResponse {
-       
-        let alert = NSAlert()
-        alert.alertStyle = .warning
-        alert.icon = NSImage(named: icon)
-        alert.messageText = msg
-        alert.informativeText = "Your changes will be lost if you proceed."
-        alert.addButton(withTitle: "Proceed")
-        alert.addButton(withTitle: "Cancel")
-        
-        return alert.runSheet(for: windowForSheet!)
-    }
-
-    func proceedWithUnsavedFloppyDisk(drives: [FloppyDriveProxy]) -> Bool {
-        
-        let modified = drives.filter { $0.hasModifiedDisk }
-        
-        if modified.isEmpty || parent.pref.ejectWithoutAsking {
-            return true
-        }
-        
-        let names = modified.map({ "df" + String($0.nr) }).joined(separator: ", ")
-        let text = modified.count == 1 ?
-        "Drive \(names) contains an unsaved disk." :
-        "Drives \(names) contain unsaved disks."
-
-        return showIsUnsavedAlert(msg: text, icon: "adf") == .alertFirstButtonReturn
-    }
-    
-    func proceedWithUnsavedFloppyDisk(drive: FloppyDriveProxy) -> Bool {
-        
-        return proceedWithUnsavedFloppyDisk(drives: [drive])
-    }
-
-    func proceedWithUnsavedHardDrive(drives: [HardDriveProxy]) -> Bool {
-        
-        let modified = drives.filter { $0.hasModifiedDisk }
-        
-        if modified.isEmpty || parent.pref.detachWithoutAsking {
-            return true
-        }
-        
-        let names = modified.map({ "hd" + String($0.nr) }).joined(separator: ", ")
-        let text = modified.count == 1 ?
-        "Hard drive \(names) contains an unsaved disk." :
-        "Hard drives \(names) contain unsaved disks."
-
-        return showIsUnsavedAlert(msg: text, icon: "hdf") == .alertFirstButtonReturn
-    }
-    
-    func proceedWithUnsavedHardDrive(drive: HardDriveProxy) -> Bool {
-        
-        return proceedWithUnsavedHardDrive(drives: [drive])
-    }
 }
 
 extension MyController {
@@ -311,35 +268,99 @@ extension MyController {
     
         mydocument.showAlert(failure, error: error, async: async, window: window)
     }
-    
-    func proceedWithUnsavedFloppyDisk(drive: FloppyDriveProxy) -> Bool {
-        
-        return mydocument.proceedWithUnsavedFloppyDisk(drive: drive)
-    }
-
-    func proceedWithUnsavedFloppyDisk() -> Bool {
-        
-        let drives = [amiga.df0!, amiga.df1!, amiga.df2!, amiga.df3!]
-        return mydocument.proceedWithUnsavedFloppyDisk(drives: drives)
-    }
-
-    func proceedWithUnsavedHardDrive(drive: HardDriveProxy) -> Bool {
-        
-        return mydocument.proceedWithUnsavedHardDrive(drive: drive)
-    }
-
-    func proceedWithUnsavedHardDrive() -> Bool {
-        
-        let drives = [amiga.hd0!, amiga.hd1!, amiga.hd2!, amiga.hd3!]
-        return mydocument.proceedWithUnsavedHardDrive(drives: drives)
-    }
 }
 
 //
 // Alert dialogs
 //
 
+extension MyDocument {
+    
+    func showIsUnsavedAlert(msg: String, icon: String) -> NSApplication.ModalResponse {
+        
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.icon = NSImage(named: icon)
+        alert.messageText = msg
+        alert.informativeText = "Your changes will be lost if you proceed."
+        alert.addButton(withTitle: "Proceed")
+        alert.addButton(withTitle: "Cancel")
+        
+        return alert.runSheet(for: windowForSheet!)
+    }
+    
+    func proceedWithUnsavedFloppyDisks(drives: [FloppyDriveProxy]) -> Bool {
+        
+        let modified = drives.filter { $0.hasModifiedDisk }
+        
+        if modified.isEmpty || parent.pref.ejectWithoutAsking {
+            return true
+        }
+        
+        let names = modified.map({ "df" + String($0.nr) }).joined(separator: ", ")
+        let text = modified.count == 1 ?
+        "Drive \(names) contains an unsaved disk." :
+        "Drives \(names) contain unsaved disks."
+        
+        return showIsUnsavedAlert(msg: text, icon: "adf") == .alertFirstButtonReturn
+    }
+    
+    func proceedWithUnsavedFloppyDisk(drive: FloppyDriveProxy) -> Bool {
+        
+        return proceedWithUnsavedFloppyDisks(drives: [drive])
+    }
+            
+    func proceedWithUnsavedFloppyDisks() -> Bool {
+        
+        let drives = [amiga.df0!, amiga.df1!, amiga.df2!, amiga.df3!]
+        return proceedWithUnsavedFloppyDisks(drives: drives)
+    }
+
+    func proceedWithUnsavedHardDisks(drives: [HardDriveProxy]) -> Bool {
+        
+        let modified = drives.filter { $0.hasModifiedDisk }
+        
+        if modified.isEmpty || parent.pref.detachWithoutAsking {
+            return true
+        }
+        
+        let names = modified.map({ "hd" + String($0.nr) }).joined(separator: ", ")
+        let text = modified.count == 1 ?
+        "Hard drive \(names) contains an unsaved disk." :
+        "Hard drives \(names) contain unsaved disks."
+        
+        return showIsUnsavedAlert(msg: text, icon: "hdf") == .alertFirstButtonReturn
+    }
+    
+    func proceedWithUnsavedHardDisk(drive: HardDriveProxy) -> Bool {
+        
+        return proceedWithUnsavedHardDisks(drives: [drive])
+    }
+    
+    func proceedWithUnsavedHardDisks() -> Bool {
+        
+        let drives = [amiga.hd0!, amiga.hd1!, amiga.hd2!, amiga.hd3!]
+        return proceedWithUnsavedHardDisks(drives: drives)
+    }
+}
+
 extension MyController {
+    
+    func proceedWithUnsavedFloppyDisk(drive: FloppyDriveProxy) -> Bool {
+        return mydocument.proceedWithUnsavedFloppyDisk(drive: drive)
+    }
+
+    func proceedWithUnsavedFloppyDisks() -> Bool {
+        return mydocument.proceedWithUnsavedFloppyDisks()
+    }
+
+    func proceedWithUnsavedHardDisk(drive: HardDriveProxy) -> Bool {
+        return mydocument.proceedWithUnsavedHardDisk(drive: drive)
+    }
+
+    func proceedWithUnsavedHardDisks() -> Bool {
+        return mydocument.proceedWithUnsavedHardDisks()
+    }
     
     func askToPowerOff() -> Bool {
         
@@ -389,29 +410,35 @@ extension VAError {
         }
     }
     
+    @available(*,deprecated)
     static func informational(_ msg1: String, _ msg2: String,
                               async: Bool = false, icon: String? = nil) {
         alert(msg1, msg2, style: .informational, async: async, icon: icon)
     }
     
+    @available(*,deprecated)
     static func warning(_ msg1: String, _ msg2: String,
                         async: Bool = false, icon: String? = nil) {
         alert(msg1, msg2, style: .warning, async: async, icon: icon)
     }
     
+    @available(*, deprecated)
     static func critical(_ msg1: String, _ msg2: String,
                          async: Bool = false, icon: String? = nil) {
         alert(msg1, msg2, style: .critical, async: async, icon: icon)
     }
 
+    @available(*,deprecated)
     func informational(_ msg: String, async: Bool = false, icon: String? = nil) {
         VAError.informational(msg, what, async: async, icon: icon)
     }
 
+    @available(*,deprecated)
     func warning(_ msg: String, async: Bool = false, icon: String? = nil) {
         VAError.warning(msg, what, async: async, icon: icon)
     }
 
+    @available(*, deprecated)
     func critical(_ msg: String, async: Bool = false, icon: String? = nil) {
         VAError.critical(msg, what, async: async, icon: icon)
     }

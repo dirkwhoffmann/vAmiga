@@ -226,13 +226,9 @@ class HardDiskCreator: DialogController {
             try drive?.format(fs: fs, name: name)
             hideSheet()
             
-        } catch let error as VAError {
-            
-            error.warning("Unable to attach hard drive.")
-        
         } catch {
             
-            fatalError()
+            parent.showAlert(.cantAttach, error: error)
         }
     }
 }

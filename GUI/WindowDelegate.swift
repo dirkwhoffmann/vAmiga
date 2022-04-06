@@ -43,7 +43,7 @@ extension MyController: NSWindowDelegate {
     public func windowShouldClose(_ sender: NSWindow) -> Bool {
         
         log()
-        if proceedWithUnsavedFloppyDisk() {
+        if proceedWithUnsavedFloppyDisks() {
             return true
         } else {
             return false

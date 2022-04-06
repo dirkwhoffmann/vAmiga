@@ -379,10 +379,8 @@ class DiskExporter: DialogController {
             
             hideSheet()
 
-        } catch let error as VAError {
-            error.warning("Cannot export floppy disk")
         } catch {
-            fatalError()
+            parent.showAlert(.cantExport(url: url), error: error, async: true, window: window)
         }
     }
     
@@ -406,10 +404,8 @@ class DiskExporter: DialogController {
             
             hideSheet()
             
-        } catch let error as VAError {
-            error.warning("Cannot export hard disk")
         } catch {
-            fatalError()
+            parent.showAlert(.cantExport(url: url), error: error, async: true, window: window)
         }
     }
 }
