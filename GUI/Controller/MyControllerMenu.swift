@@ -580,9 +580,17 @@ extension MyController: NSMenuItemValidation {
     }
 
     @IBAction func inspectDfnVolumeAction(_ sender: NSMenuItem!) {
-                
+
         let panel = VolumeInspector(with: self, nibName: "VolumeInspector")
-        panel?.show(diskDrive: sender.tag)
+
+        do {
+            
+            try panel?.show(diskDrive: sender.tag)
+            
+        } catch {
+            
+            showAlert(.cantDecode, error: error, window: window)
+        }
     }
 
     //
@@ -727,7 +735,15 @@ extension MyController: NSMenuItemValidation {
     @IBAction func inspectHdrVolumeAction(_ sender: NSMenuItem!) {
         
         let panel = VolumeInspector(with: self, nibName: "VolumeInspector")
-        panel?.show(hardDrive: sender.tag)
+
+        do {
+            
+            try panel?.show(hardDrive: sender.tag)
+
+        } catch {
+            
+            showAlert(.cantDecode, error: error, window: window)
+        }
     }
 
     @IBAction func configureHdrAction(_ sender: NSMenuItem!) {

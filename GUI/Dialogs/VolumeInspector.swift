@@ -170,55 +170,45 @@ class VolumeInspector: DialogController {
     // Starting up
     //
     
-    func show(diskDrive nr: Int) {
-                
-        do {
-            
-            let dfn = amiga.df(nr)!
-            let adf = try ADFFileProxy.make(with: dfn)
-            vol = try FileSystemProxy.make(withADF: adf)
-
-            showWindow()
-            
-        } catch {
-            
-            (error as? VAError)?.warning("Unable to decode the file system.")
-        }
+    func show(diskDrive nr: Int) throws {
+        
+        let dfn = amiga.df(nr)!
+        let adf = try ADFFileProxy.make(with: dfn)
+        vol = try FileSystemProxy.make(withADF: adf)
+        
+        showWindow()
     }
     
-    func show(hardDrive nr: Int) {
+    func show(hardDrive nr: Int) throws {
+        
+        var partition: Int?
         
         if amiga.hd(nr)!.partitions == 1 {
-            
+        
             // Analyze the first partition
-            show(hardDrive: nr, partition: 0)
+            partition = 0
             
         } else {
             
             // Ask the user to select a partition
             let panel = PartitionSelector(with: parent, nibName: "PartitionSelector")
             panel?.showSheet(hardDrive: nr, completionHandler: {
-                if let part = panel?.userSelection {
-                    self.show(hardDrive: nr, partition: part)
-                }
+                partition = panel?.userSelection
             })
+        }
+        
+        if partition != nil {
+            try show(hardDrive: nr, partition: partition!)
         }
     }
     
-    func show(hardDrive nr: Int, partition: Int) {
-                
-        do {
+    func show(hardDrive nr: Int, partition: Int) throws {
         
-            let hdn = amiga.hd(nr)!
-            let hdf = try HDFFileProxy.make(with: hdn)
-            vol = try FileSystemProxy.make(withHDF: hdf, partition: partition)
-            
-            showWindow()
-
-        } catch {
-            
-            (error as? VAError)?.warning("Unable to decode the file system.")
-        }
+        let hdn = amiga.hd(nr)!
+        let hdf = try HDFFileProxy.make(with: hdn)
+        vol = try FileSystemProxy.make(withHDF: hdf, partition: partition)
+        
+        showWindow()
     }
     
     func showSheet(fs: FileSystemProxy) {

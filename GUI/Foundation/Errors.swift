@@ -74,11 +74,13 @@ enum Failure {
 
     case cantAttach
     case cantChangeGeometry
+    case cantDecode
     case cantExport(url: URL)
     case cantInsert
     case cantOpen(url: URL)
     case cantRecord
     case cantRun
+    case cantSaveRoms
     case cantWriteThrough
     case noFFmpegFound(exec: String)
     case noFFmpegInstalled
@@ -133,6 +135,9 @@ enum Failure {
         case .cantChangeGeometry:
             return "Failed to change the drive geometry."
             
+        case .cantDecode:
+            return "Unable to decode the file system."
+            
         case let .cantExport(url: url):
             return "Cannot export disk to file \"\(url.path)\"."
             
@@ -147,6 +152,9 @@ enum Failure {
 
         case .cantRun:
             return "Configuration error"
+            
+        case .cantSaveRoms:
+            return "Failed to save Roms."
             
         case .cantWriteThrough:
             return "Unable to enable write-through mode."
@@ -410,13 +418,13 @@ extension VAError {
         }
     }
     
-    @available(*,deprecated)
+    @available(*, deprecated)
     static func informational(_ msg1: String, _ msg2: String,
                               async: Bool = false, icon: String? = nil) {
         alert(msg1, msg2, style: .informational, async: async, icon: icon)
     }
     
-    @available(*,deprecated)
+    @available(*, deprecated)
     static func warning(_ msg1: String, _ msg2: String,
                         async: Bool = false, icon: String? = nil) {
         alert(msg1, msg2, style: .warning, async: async, icon: icon)
@@ -428,12 +436,12 @@ extension VAError {
         alert(msg1, msg2, style: .critical, async: async, icon: icon)
     }
 
-    @available(*,deprecated)
+    @available(*, deprecated)
     func informational(_ msg: String, async: Bool = false, icon: String? = nil) {
         VAError.informational(msg, what, async: async, icon: icon)
     }
 
-    @available(*,deprecated)
+    @available(*, deprecated)
     func warning(_ msg: String, async: Bool = false, icon: String? = nil) {
         VAError.warning(msg, what, async: async, icon: icon)
     }

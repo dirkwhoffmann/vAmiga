@@ -122,7 +122,14 @@ extension ConfigurationController {
     
     @IBAction func romDefaultsAction(_ sender: NSButton!) {
         
-        config.saveRomUserDefaults()
+        do {
+        
+            try config.saveRomUserDefaults()
+            
+        } catch {
+            
+            parent.showAlert(.cantSaveRoms, error: error, window: window)
+        }
     }
 
     func installAros() {

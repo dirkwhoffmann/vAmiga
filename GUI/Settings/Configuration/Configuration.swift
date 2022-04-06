@@ -519,7 +519,7 @@ class Configuration {
         amiga.resume()
     }
     
-    func saveRomUserDefaults() {
+    func saveRomUserDefaults() throws {
                 
         log(level: 2)
         
@@ -532,6 +532,7 @@ class Configuration {
         defaults.set(extStart, forKey: Keys.Rom.extStart)
         
         do {
+            
             url = UserDefaults.womUrl
             if url == nil { throw VAError(.FILE_CANT_WRITE) }
             try? fm.removeItem(at: url!)
@@ -548,17 +549,9 @@ class Configuration {
             try amiga.mem.saveExt(url!)
             
         } catch {
-            
-            if error is VAError && url != nil {
-                
-                VAError.warning("Failed to save Roms",
-                                "Can't write to file \(url!.path)")
-            }
-            if error is VAError && url == nil {
-                
-                VAError.warning("Failed to save Roms",
-                                "Unable to access the application defaults folder")
-            }
+
+            amiga.resume()
+            throw error
         }
         
         amiga.resume()
