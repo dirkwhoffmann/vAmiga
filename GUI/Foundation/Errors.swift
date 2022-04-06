@@ -79,6 +79,7 @@ enum Failure {
     case cantInsert
     case cantOpen(url: URL)
     case cantRecord
+    case cantRestore
     case cantRun
     case cantSaveRoms
     case cantWriteThrough
@@ -150,6 +151,9 @@ enum Failure {
         case .cantRecord:
             return "Failed to launch the screen recorder."
 
+        case .cantRestore:
+            return "Failed to restore snapshot."
+            
         case .cantRun:
             return "Configuration error"
             

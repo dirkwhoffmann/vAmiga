@@ -59,6 +59,7 @@ class MyDocument: NSDocument {
     // Creating attachments
     //
         
+    @available(*, deprecated)
     func createAttachment(from url: URL) throws {
         
         let types: [FileType] =
@@ -66,7 +67,8 @@ class MyDocument: NSDocument {
         
         try createAttachment(from: url, allowedTypes: types)
     }
-    
+
+    @available(*, deprecated)
     func createAttachment(from url: URL, allowedTypes: [FileType]) throws {
                         
         try attachment = createFileProxy(from: url, allowedTypes: allowedTypes)
@@ -132,6 +134,7 @@ class MyDocument: NSDocument {
                       "The type of this file is not known to the emulator.")
     }
             
+    @available(*, deprecated)
     func mountAttachment(destination: FloppyDriveProxy? = nil) throws {
         
         // Only proceed if an attachment is present
@@ -159,6 +162,7 @@ class MyDocument: NSDocument {
         try mountAttachment(drive: 0)
     }
     
+    @available(*, deprecated)
     func mountAttachment(drive: Int) throws {
 
         if let proxy = attachment as? FloppyFileProxy {
@@ -212,8 +216,10 @@ class MyDocument: NSDocument {
         log()
         
         do {
-            try createAttachment(from: url)
-            try mountAttachment()
+            let proxy = try createFileProxy(from: url, allowedTypes: [.SNAPSHOT])
+            if let snapshot = proxy as? SnapshotProxy {
+                try processSnapshotFile(snapshot)
+            }
             
         } catch let error as VAError {
             
@@ -245,6 +251,73 @@ class MyDocument: NSDocument {
         }
     }
 
+    //
+    // Processing media files
+    //
+    
+    func processAmigaFile(_ proxy: AmigaFileProxy,
+                          df: Int = 0, hd: Int = 0, force: Bool = false) {
+                
+        var dfn: FloppyDriveProxy { return amiga.df(df)! }
+        var hdn: HardDriveProxy { return amiga.hd(hd)! }
+
+        if let proxy = proxy as? SnapshotProxy {
+            
+            do {
+            
+                try processSnapshotFile(proxy)
+                return
+
+            } catch {
+                    
+                showAlert(.cantRestore, error: error)
+            }
+        }
+        
+        if let proxy = proxy as? ScriptProxy {
+            
+            parent.renderer.console.runScript(script: proxy)
+            return
+        }
+        
+        if let proxy = proxy as? HDFFileProxy {
+            
+            do {
+                
+                if force || parent.askToPowerOff() {
+                    
+                    amiga.powerOff()
+                    amiga.configure(.HDR_CONNECT, drive: hd, enable: true)
+                    try hdn.attach(hdf: proxy)
+                    amiga.powerOn()
+                    try amiga.run()
+                }
+                
+            } catch {
+                
+                parent.showAlert(.cantAttach, error: error)
+            }
+        }
+        
+        if let proxy = attachment as? FloppyFileProxy {
+            
+            do {
+                
+                try dfn.swap(file: proxy)
+                
+            } catch {
+                
+                parent.showAlert(.cantInsert, error: error)
+            }
+        }
+    }
+    
+    func processSnapshotFile(_ proxy: SnapshotProxy, force: Bool = false) throws {
+        
+        try amiga.loadSnapshot(proxy)
+        snapshots.append(proxy)
+    }
+    
     //
     // Exporting disks
     //
