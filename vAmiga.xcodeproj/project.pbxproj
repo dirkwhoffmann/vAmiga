@@ -145,7 +145,6 @@
 		508FE02921EA227B0043D0E9 /* MyControllerTouchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00721EA227A0043D0E9 /* MyControllerTouchBar.swift */; };
 		508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00921EA227B0043D0E9 /* WindowDelegate.swift */; };
 		508FE02D21EA227B0043D0E9 /* MyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00C21EA227B0043D0E9 /* MyAppDelegate.swift */; };
-		508FE02E21EA227B0043D0E9 /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00D21EA227B0043D0E9 /* Alerts.swift */; };
 		508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00E21EA227B0043D0E9 /* MacAudio.swift */; };
 		508FE04E21EA22CC0043D0E9 /* RomConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03B21EA22CC0043D0E9 /* RomConf.swift */; };
 		508FE04F21EA22CC0043D0E9 /* GeneralPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03C21EA22CC0043D0E9 /* GeneralPrefs.swift */; };
@@ -661,7 +660,6 @@
 		508FE00721EA227A0043D0E9 /* MyControllerTouchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyControllerTouchBar.swift; sourceTree = "<group>"; };
 		508FE00921EA227B0043D0E9 /* WindowDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowDelegate.swift; sourceTree = "<group>"; };
 		508FE00C21EA227B0043D0E9 /* MyAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAppDelegate.swift; sourceTree = "<group>"; };
-		508FE00D21EA227B0043D0E9 /* Alerts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
 		508FE00E21EA227B0043D0E9 /* MacAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacAudio.swift; sourceTree = "<group>"; };
 		508FE03B21EA22CC0043D0E9 /* RomConf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RomConf.swift; sourceTree = "<group>"; };
 		508FE03C21EA22CC0043D0E9 /* GeneralPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralPrefs.swift; sourceTree = "<group>"; };
@@ -1309,7 +1307,6 @@
 		508FE03921EA22CC0043D0E9 /* Dialogs */ = {
 			isa = PBXGroup;
 			children = (
-				508FE00D21EA227B0043D0E9 /* Alerts.swift */,
 				508FE04721EA22CC0043D0E9 /* DialogController.swift */,
 				501C514727C2AD8C00DF1DD5 /* DiskExporter.swift */,
 				5029C6E227CA2F66002F6CCC /* DiskInspector.swift */,
@@ -2142,7 +2139,6 @@
 				5071B7872621F88800D6FB54 /* CopperDebugger.cpp in Sources */,
 				508FE02D21EA227B0043D0E9 /* MyAppDelegate.swift in Sources */,
 				50F54B2F24B5D31D0078FDC9 /* getbits.c in Sources */,
-				508FE02E21EA227B0043D0E9 /* Alerts.swift in Sources */,
 				508FE02921EA227B0043D0E9 /* MyControllerTouchBar.swift in Sources */,
 				508FE01121EA227B0043D0E9 /* MyControllerToolbar.swift in Sources */,
 				50AD905A2771B2770011ECCB /* RshServer.cpp in Sources */,

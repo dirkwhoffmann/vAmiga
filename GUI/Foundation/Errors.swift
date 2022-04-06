@@ -241,6 +241,61 @@ extension MyDocument {
                       async: async, window: window)
         }
     }
+    
+    func showIsUnsavedAlert(msg: String, icon: String) -> NSApplication.ModalResponse {
+       
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.icon = NSImage(named: icon)
+        alert.messageText = msg
+        alert.informativeText = "Your changes will be lost if you proceed."
+        alert.addButton(withTitle: "Proceed")
+        alert.addButton(withTitle: "Cancel")
+        
+        return alert.runSheet(for: windowForSheet!)
+    }
+
+    func proceedWithUnsavedFloppyDisk(drives: [FloppyDriveProxy]) -> Bool {
+        
+        let modified = drives.filter { $0.hasModifiedDisk }
+        
+        if modified.isEmpty || parent.pref.ejectWithoutAsking {
+            return true
+        }
+        
+        let names = modified.map({ "df" + String($0.nr) }).joined(separator: ", ")
+        let text = modified.count == 1 ?
+        "Drive \(names) contains an unsaved disk." :
+        "Drives \(names) contain unsaved disks."
+
+        return showIsUnsavedAlert(msg: text, icon: "adf") == .alertFirstButtonReturn
+    }
+    
+    func proceedWithUnsavedFloppyDisk(drive: FloppyDriveProxy) -> Bool {
+        
+        return proceedWithUnsavedFloppyDisk(drives: [drive])
+    }
+
+    func proceedWithUnsavedHardDrive(drives: [HardDriveProxy]) -> Bool {
+        
+        let modified = drives.filter { $0.hasModifiedDisk }
+        
+        if modified.isEmpty || parent.pref.detachWithoutAsking {
+            return true
+        }
+        
+        let names = modified.map({ "hd" + String($0.nr) }).joined(separator: ", ")
+        let text = modified.count == 1 ?
+        "Hard drive \(names) contains an unsaved disk." :
+        "Hard drives \(names) contain unsaved disks."
+
+        return showIsUnsavedAlert(msg: text, icon: "hdf") == .alertFirstButtonReturn
+    }
+    
+    func proceedWithUnsavedHardDrive(drive: HardDriveProxy) -> Bool {
+        
+        return proceedWithUnsavedHardDrive(drives: [drive])
+    }
 }
 
 extension MyController {
@@ -255,6 +310,28 @@ extension MyController {
                    async: Bool = false, window: NSWindow? = nil) {
     
         mydocument.showAlert(failure, error: error, async: async, window: window)
+    }
+    
+    func proceedWithUnsavedFloppyDisk(drive: FloppyDriveProxy) -> Bool {
+        
+        return mydocument.proceedWithUnsavedFloppyDisk(drive: drive)
+    }
+
+    func proceedWithUnsavedFloppyDisk() -> Bool {
+        
+        let drives = [amiga.df0!, amiga.df1!, amiga.df2!, amiga.df3!]
+        return mydocument.proceedWithUnsavedFloppyDisk(drives: drives)
+    }
+
+    func proceedWithUnsavedHardDrive(drive: HardDriveProxy) -> Bool {
+        
+        return mydocument.proceedWithUnsavedHardDrive(drive: drive)
+    }
+
+    func proceedWithUnsavedHardDrive() -> Bool {
+        
+        let drives = [amiga.hd0!, amiga.hd1!, amiga.hd2!, amiga.hd3!]
+        return mydocument.proceedWithUnsavedHardDrive(drives: drives)
     }
 }
 
