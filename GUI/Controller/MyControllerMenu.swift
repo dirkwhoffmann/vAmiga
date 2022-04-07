@@ -483,36 +483,8 @@ extension MyController: NSMenuItemValidation {
         
         log("insertDiskAction \(url) drive \(drive)")
         
-        let drive = amiga.df(drive)!
         let types: [FileType] = [ .ADF, .EXT, .DMS, .EXE, .DIR ]
-        
-        do {
-            // Try to create a file proxy
-            try mydocument.createAttachment(from: url, allowedTypes: types)
-
-            // Ask the user if an unsafed disk should be replaced
-            if !proceedWithUnsavedFloppyDisk(drive: drive) { return }
-                        
-            if let file = mydocument.attachment as? FloppyFileProxy {
-                
-                do {
-                    
-                    // Insert the disk
-                    try drive.swap(file: file)
-
-                    // Remember the URL
-                    myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
-                
-                } catch {
-                    
-                    showAlert(.cantInsert, error: error, async: true)
-                }
-            }
-            
-        } catch {
-            
-            showAlert(.cantOpen(url: url), error: error, async: true)
-        }
+        mydocument.processAmigaFile(url, allowedTypes: types, df: drive)
     }
     
     @IBAction func writeProtectAction(_ sender: NSMenuItem!) {

@@ -77,7 +77,6 @@ class MyDocument: NSDocument {
         log("Attachment created successfully")
     }
     
-    fileprivate
     func createFileProxy(from url: URL, allowedTypes: [FileType]) throws -> AmigaFileProxy? {
             
         log("Creating proxy object from URL: \(url.lastPathComponent)")
@@ -254,9 +253,37 @@ class MyDocument: NSDocument {
     //
     // Processing media files
     //
-    
+
+    func processAmigaFile(_ url: URL,
+                          allowedTypes types: [FileType],
+                          df: Int = 0,
+                          hd: Int = 0,
+                          force: Bool = false,
+                          remember: Bool = true) {
+        
+        do {
+            
+            let proxy = try createFileProxy(from: url, allowedTypes: types)
+
+            if remember && proxy is FloppyFileProxy {
+                myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
+            }
+            if remember && proxy is HDFFileProxy {
+                myAppDelegate.noteNewRecentlyAttachedHdrURL(url)
+            }
+            
+            processAmigaFile(proxy!, df: df, hd: hd, force: force)
+
+        } catch {
+            
+            showAlert(.cantOpen(url: url), error: error)
+        }
+    }
+
     func processAmigaFile(_ proxy: AmigaFileProxy,
-                          df: Int = 0, hd: Int = 0, force: Bool = false) {
+                          df: Int = 0,
+                          hd: Int = 0,
+                          force: Bool = false) {
                 
         var dfn: FloppyDriveProxy { return amiga.df(df)! }
         var hdn: HardDriveProxy { return amiga.hd(hd)! }
@@ -299,12 +326,15 @@ class MyDocument: NSDocument {
             }
         }
         
-        if let proxy = attachment as? FloppyFileProxy {
+        if let proxy = proxy as? FloppyFileProxy {
             
+            // Ask the user if an unsaved disk should be replaced
+            if !proceedWithUnsavedFloppyDisk(drive: dfn) { return }
+
             do {
                 
                 try dfn.swap(file: proxy)
-                
+
             } catch {
                 
                 parent.showAlert(.cantInsert, error: error)
