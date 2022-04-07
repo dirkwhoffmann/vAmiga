@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+import Foundation
+
 // import AppKit
 
 extension NSPasteboard.PasteboardType {
@@ -122,8 +124,7 @@ public extension MetalView {
             // Check if the file is a snapshot or a script
             do {
                 let types: [FileType] = [ .SNAPSHOT, .SCRIPT ]
-                try myDocument.createAttachment(from: url, allowedTypes: types)
-                try myDocument.mountAttachment()
+                try myDocument.processAmigaFile(url: url, allowedTypes: types)
                 return true
                 
             } catch let error as VAError {
@@ -138,8 +139,7 @@ public extension MetalView {
                 if renderer.dropZone.isInside(sender, zone: i) {
                     
                     let types: [FileType] = [ .HDF, .ADF, .EXT, .IMG, .DMS, .EXE, .DIR ]
-                    try myDocument.createAttachment(from: url, allowedTypes: types)
-                    try myDocument.mountAttachment(drive: i)
+                    try myDocument.processAmigaFile(url: url, allowedTypes: types)
                     return true
                 }
             }

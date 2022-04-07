@@ -459,7 +459,17 @@ extension MyController: NSMenuItemValidation {
         openPanel.beginSheetModal(for: window!, completionHandler: { result in
 
             if result == .OK, let url = openPanel.url {
-                self.insertDiskAction(from: url, drive: sender.tag)
+                
+                do {
+                    let types: [FileType] = [ .ADF, .EXT, .DMS, .EXE, .DIR ]
+                    try self.mydocument.processAmigaFile(url: url,
+                                                         allowedTypes: types,
+                                                         df: sender.tag)
+                } catch {
+                    self.showAlert(.cantInsert, error: error, async: true)
+                }
+                
+                // self.insertDiskAction(from: url, drive: sender.tag)
             }
         })
     }
@@ -475,18 +485,18 @@ extension MyController: NSMenuItemValidation {
     func insertRecentDiskAction(drive: Int, slot: Int) {
         
         if let url = myAppDelegate.getRecentlyInsertedDiskURL(slot) {
-            insertDiskAction(from: url, drive: drive)
+            
+            do {
+                let types: [FileType] = [ .ADF, .EXT, .DMS, .EXE, .DIR ]
+                try self.mydocument.processAmigaFile(url: url,
+                                                     allowedTypes: types,
+                                                     df: slot)
+            } catch {
+                self.showAlert(.cantInsert, error: error)
+            }
         }
     }
-    
-    func insertDiskAction(from url: URL, drive: Int) {
-        
-        log("insertDiskAction \(url) drive \(drive)")
-        
-        let types: [FileType] = [ .ADF, .EXT, .DMS, .EXE, .DIR ]
-        mydocument.processAmigaFile(url, allowedTypes: types, df: drive)
-    }
-    
+
     @IBAction func writeProtectAction(_ sender: NSMenuItem!) {
         
         amiga.suspend()

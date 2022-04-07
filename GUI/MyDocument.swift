@@ -251,93 +251,63 @@ class MyDocument: NSDocument {
     }
 
     //
-    // Processing media files
+    // Handling media files
     //
 
-    func processAmigaFile(_ url: URL,
+    func processAmigaFile(url: URL,
                           allowedTypes types: [FileType],
                           df: Int = 0,
                           hd: Int = 0,
                           force: Bool = false,
-                          remember: Bool = true) {
+                          remember: Bool = true) throws {
         
-        do {
-            
-            let proxy = try createFileProxy(from: url, allowedTypes: types)
-
-            if remember && proxy is FloppyFileProxy {
-                myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
-            }
-            if remember && proxy is HDFFileProxy {
-                myAppDelegate.noteNewRecentlyAttachedHdrURL(url)
-            }
-            
-            processAmigaFile(proxy!, df: df, hd: hd, force: force)
-
-        } catch {
-            
-            showAlert(.cantOpen(url: url), error: error)
+        let proxy = try createFileProxy(from: url, allowedTypes: types)
+        
+        if remember && proxy is FloppyFileProxy {
+            myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
         }
+        if remember && proxy is HDFFileProxy {
+            myAppDelegate.noteNewRecentlyAttachedHdrURL(url)
+        }
+        
+        try processAmigaFile(proxy: proxy!, df: df, hd: hd, force: force)
     }
 
-    func processAmigaFile(_ proxy: AmigaFileProxy,
+    func processAmigaFile(proxy: AmigaFileProxy,
                           df: Int = 0,
                           hd: Int = 0,
-                          force: Bool = false) {
+                          force: Bool = false) throws {
                 
         var dfn: FloppyDriveProxy { return amiga.df(df)! }
         var hdn: HardDriveProxy { return amiga.hd(hd)! }
 
         if let proxy = proxy as? SnapshotProxy {
             
-            do {
-            
-                try processSnapshotFile(proxy)
-                return
-
-            } catch {
-                    
-                showAlert(.cantRestore, error: error)
-            }
+            try processSnapshotFile(proxy)
         }
         
         if let proxy = proxy as? ScriptProxy {
             
             parent.renderer.console.runScript(script: proxy)
-            return
         }
         
         if let proxy = proxy as? HDFFileProxy {
             
-            do {
+            if force || parent.askToPowerOff() {
                 
-                if force || parent.askToPowerOff() {
-                    
-                    amiga.powerOff()
-                    amiga.configure(.HDR_CONNECT, drive: hd, enable: true)
-                    try hdn.attach(hdf: proxy)
-                    amiga.powerOn()
-                    try amiga.run()
-                }
-                
-            } catch {
-                
-                parent.showAlert(.cantAttach, error: error)
+                amiga.powerOff()
+                amiga.configure(.HDR_CONNECT, drive: hd, enable: true)
+                try hdn.attach(hdf: proxy)
+                amiga.powerOn()
+                try amiga.run()
             }
         }
         
         if let proxy = proxy as? FloppyFileProxy {
             
-            // Ask the user if an unsaved disk should be replaced
-            if !proceedWithUnsavedFloppyDisk(drive: dfn) { return }
-
-            do {
-                
+            if force || proceedWithUnsavedFloppyDisk(drive: dfn) {
+            
                 try dfn.swap(file: proxy)
-
-            } catch {
-                
-                parent.showAlert(.cantInsert, error: error)
             }
         }
     }
