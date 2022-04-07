@@ -204,7 +204,7 @@ extension MyController {
             amiga.powerOn()
         
             // Process attachment (if any)
-            try? mydocument.mountAttachment(destination: amiga.df0)
+            // try? mydocument.mountAttachment(destination: amiga.df0)
 
             // Start emulation
             try amiga.run()

@@ -462,9 +462,9 @@ extension MyController: NSMenuItemValidation {
                 
                 do {
                     let types: [FileType] = [ .ADF, .EXT, .DMS, .EXE, .DIR ]
-                    try self.mydocument.processAmigaFile(url: url,
-                                                         allowedTypes: types,
-                                                         df: sender.tag)
+                    try self.mydocument.addMedia(url: url,
+                                                 allowedTypes: types,
+                                                 df: sender.tag)
                 } catch {
                     self.showAlert(.cantInsert, error: error, async: true)
                 }
@@ -488,9 +488,9 @@ extension MyController: NSMenuItemValidation {
             
             do {
                 let types: [FileType] = [ .ADF, .EXT, .DMS, .EXE, .DIR ]
-                try self.mydocument.processAmigaFile(url: url,
-                                                     allowedTypes: types,
-                                                     df: slot)
+                try self.mydocument.addMedia(url: url,
+                                             allowedTypes: types,
+                                             df: slot)
             } catch {
                 self.showAlert(.cantInsert, error: error)
             }
@@ -614,7 +614,17 @@ extension MyController: NSMenuItemValidation {
         openPanel.beginSheetModal(for: window!, completionHandler: { result in
             
             if result == .OK, let url = openPanel.url {
-                self.attachHdrAction(from: url, drive: drive.nr)
+                
+                do {
+                    let types: [FileType] = [ .HDF ]
+                    try self.mydocument.addMedia(url: url,
+                                                 allowedTypes: types,
+                                                 hd: sender.tag)
+                } catch {
+                    self.showAlert(.cantAttach, error: error, async: true)
+                }
+                
+                // self.attachHdrAction(from: url, drive: drive.nr)
             }
         })
     }
@@ -633,10 +643,21 @@ extension MyController: NSMenuItemValidation {
         if !askToPowerOff() { return }
 
         if let url = myAppDelegate.getRecentlyAttachedHdrURL(slot) {
-            attachHdrAction(from: url, drive: drive.nr)
+            
+            do {
+                let types: [FileType] = [ .ADF, .EXT, .DMS, .EXE, .DIR ]
+                try self.mydocument.addMedia(url: url,
+                                             allowedTypes: types,
+                                             hd: slot)
+            } catch {
+                self.showAlert(.cantAttach, error: error)
+            }
+            
+            // attachHdrAction(from: url, drive: drive.nr)
         }
     }
     
+    /*
     private func attachHdrAction(from url: URL, drive nr: Int) {
                 
         let types: [FileType] = [ .HDF ]
@@ -667,6 +688,7 @@ extension MyController: NSMenuItemValidation {
             showAlert(.cantOpen(url: url), error: error, async: true)
         }
     }
+    */
     
     @IBAction func exportRecentHdDummyAction(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentHdrAction(_ sender: NSMenuItem!) {

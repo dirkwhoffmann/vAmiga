@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+import Foundation
+
 class MyDocumentController: NSDocumentController {
     
     override func makeDocument(withContentsOf url: URL,
@@ -19,7 +21,8 @@ class MyDocumentController: NSDocumentController {
 
             let doc = try super.makeUntitledDocument(ofType: typeName)
             if let mydoc = doc as? MyDocument {
-                try? mydoc.createAttachment(from: url)
+                // try? mydoc.createAttachment(from: url)
+                try? mydoc.addMedia(url: url, allowedTypes: FileType.all)
                 return mydoc
             }
         }

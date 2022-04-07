@@ -59,6 +59,13 @@ extension EventSlot: CustomStringConvertible {
     }
 }
 
+extension FileType {
+    
+    static var all: [FileType] {
+        return [ .SNAPSHOT, .SCRIPT, .ADF, .HDF, .EXT, .IMG, .DMS, .EXE, .DIR ]
+    }
+}
+
 extension FSVolumeType: CustomStringConvertible {
 
     public var description: String {

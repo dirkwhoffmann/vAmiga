@@ -124,7 +124,7 @@ public extension MetalView {
             // Check if the file is a snapshot or a script
             do {
                 let types: [FileType] = [ .SNAPSHOT, .SCRIPT ]
-                try myDocument.processAmigaFile(url: url, allowedTypes: types)
+                try myDocument.addMedia(url: url, allowedTypes: types)
                 return true
                 
             } catch let error as VAError {
@@ -139,7 +139,7 @@ public extension MetalView {
                 if renderer.dropZone.isInside(sender, zone: i) {
                     
                     let types: [FileType] = [ .HDF, .ADF, .EXT, .IMG, .DMS, .EXE, .DIR ]
-                    try myDocument.processAmigaFile(url: url, allowedTypes: types)
+                    try myDocument.addMedia(url: url, allowedTypes: types)
                     return true
                 }
             }

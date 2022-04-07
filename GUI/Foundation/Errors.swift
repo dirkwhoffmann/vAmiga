@@ -354,6 +354,28 @@ extension MyDocument {
         let drives = [amiga.hd0!, amiga.hd1!, amiga.hd2!, amiga.hd3!]
         return proceedWithUnsavedHardDisks(drives: drives)
     }
+    
+    func askToPowerOff() -> Bool {
+        
+        if amiga.poweredOn {
+            
+            let alert = NSAlert()
+            
+            alert.alertStyle = .informational
+            alert.icon = NSImage(named: "powerSwitch")
+            alert.messageText = "The emulator must be powered off to perform this operation."
+            alert.informativeText = "Your changes will be lost if you proceed."
+            alert.addButton(withTitle: "Proceed")
+            alert.addButton(withTitle: "Cancel")
+            
+            if alert.runSheet(for: windowForSheet!) == .alertFirstButtonReturn {
+                amiga.powerOff()
+            } else {
+                return false
+            }
+        }
+        return true
+    }
 }
 
 extension MyController {
@@ -375,7 +397,8 @@ extension MyController {
     }
     
     func askToPowerOff() -> Bool {
-        
+        return mydocument.askToPowerOff()
+        /*
         if amiga.poweredOn {
             
             let alert = NSAlert()
@@ -394,5 +417,6 @@ extension MyController {
             }
         }
         return true
+        */
     }
 }
