@@ -245,8 +245,8 @@ HdController::processCmd()
     
     if constexpr (HDR_DEBUG) {
 
-        auto unit = mem.spypeek32 <ACCESSOR_CPU> (stdReq.io_Unit + 0x2A);
-        auto blck = offset / 512;
+        [[maybe_unused]] auto unit = mem.spypeek32 <ACCESSOR_CPU> (stdReq.io_Unit + 0x2A);
+        [[maybe_unused]] auto blck = offset / 512;
         
         debug(true, "%d.%ld: %s\n", unit, blck, IoCommandEnum::key(cmd));
     }
