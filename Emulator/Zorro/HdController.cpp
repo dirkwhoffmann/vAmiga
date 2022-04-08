@@ -12,6 +12,7 @@
 #include "HdControllerRom.h"
 #include "HardDrive.h"
 #include "HDFFile.h"
+#include "FloppyDrive.h"
 #include "Memory.h"
 #include "OSDebugger.h"
 
@@ -170,7 +171,14 @@ HdController::spypeek16(u32 addr) const
         case EXPROM_SIZE + 2:
             
             // Number of filesystem drivers to add
+            debug(HDR_DEBUG, "%d filesystem drivers to add\n", 0);
             return 0;
+            
+        case EXPROM_SIZE + 4:
+            
+            // Should auto boot be disabled? (Kick 1.2)
+            debug(HDR_DEBUG, "Auto boot: %s\n", df0.hasDisk() ? "yes" : "no");
+            return df0.hasDisk();
             
         default:
             
