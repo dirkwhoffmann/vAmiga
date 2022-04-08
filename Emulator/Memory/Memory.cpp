@@ -735,8 +735,7 @@ void
 Memory::patchExpansionLib()
 {
     /* In Kickstart 1.2, function 'ConfigBoard' is broken. A patch needs to
-     * be applied to make the hard drive controller and the debugger board
-     * compatible with this Rom.
+     * be applied to make the debugger board compatible with this Rom.
      */
     switch (romIdentifier()) {
 

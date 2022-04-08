@@ -67,7 +67,7 @@ HdController::_reset(bool hard)
         rom.patch("virtualhd.device", dosName);
 
         // Patch Kickstart Rom (1.2 only)
-        mem.patchExpansionLib();
+        // mem.patchExpansionLib();
 
         // Set initial state
         state = pluggedIn() ? STATE_AUTOCONF : STATE_SHUTUP;
