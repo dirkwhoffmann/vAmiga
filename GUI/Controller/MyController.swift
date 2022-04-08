@@ -579,6 +579,7 @@ extension MyController {
             renderer.rotateRight()
             hideOrShowDriveMenus()
             assignSlots()
+            updateWarp()
             refreshStatusBar()
             
         case .RECORDING_STARTED:
