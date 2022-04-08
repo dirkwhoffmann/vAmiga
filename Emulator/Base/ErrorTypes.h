@@ -45,6 +45,7 @@ enum_long(ERROR_CODE)
     ERROR_DIR_ACCESS_DENIED,
     ERROR_FILE_NOT_FOUND,
     ERROR_FILE_EXISTS,
+    ERROR_FILE_IS_DIRECTORY,
     ERROR_FILE_ACCESS_DENIED,
     ERROR_FILE_TYPE_MISMATCH,
     ERROR_FILE_TYPE_UNSUPPORTED,
@@ -213,6 +214,7 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_DIR_ACCESS_DENIED:           return "DIR_ACCESS_DENIED";
             case ERROR_FILE_NOT_FOUND:              return "FILE_NOT_FOUND";
             case ERROR_FILE_EXISTS:                 return "FILE_EXISTS";
+            case ERROR_FILE_IS_DIRECTORY:           return "FILE_IS_DIRECtORY";
             case ERROR_FILE_ACCESS_DENIED:          return "FILE_ACCESS_DENIED";
             case ERROR_FILE_TYPE_MISMATCH:          return "FILE_TYPE_MISMATCH";
             case ERROR_FILE_TYPE_UNSUPPORTED:       return "FILE_TYPE_UNSUPPORTED";

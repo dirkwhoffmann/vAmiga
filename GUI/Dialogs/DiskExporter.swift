@@ -295,12 +295,12 @@ class DiskExporter: DialogController {
     //
         
     func openExportToFilePanel(allowedTypes: [String]) {
-     
-        // TODO: allowedTypes is not used
+             
         savePanel = NSSavePanel()
         savePanel.prompt = "Export"
         savePanel.title = "Export"
         savePanel.nameFieldLabel = "Export As:"
+        savePanel.nameFieldStringValue = "Untitled." + allowedTypes.first!
         savePanel.canCreateDirectories = true
 
         savePanel.beginSheetModal(for: window!, completionHandler: { result in
@@ -391,12 +391,12 @@ class DiskExporter: DialogController {
             
             if let nr = partition {
 
-                log("Exporting partiton \(nr)")
+                log("Exporting partiton \(nr) to \(url)")
                 try hdf?.writeToFile(url: url, partition: nr)
 
             } else {
 
-                log("Exporting entire HDF")
+                log("Exporting entire HDF to \(url)")
                 try hdf?.writeToFile(url: url)
             }
             

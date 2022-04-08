@@ -93,6 +93,14 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "File \"" + s + "\" already exists.";
             break;
 
+        case ERROR_FILE_IS_DIRECTORY:
+            if (s.empty()) {
+                description = "The selected file is a directory.";
+            } else {
+                description = "File \"" + s + "\" is a directory.";
+            }
+            break;
+
         case ERROR_FILE_ACCESS_DENIED:
             description = "Unable to access file \"" + s + "\". Permission denied.";
             break;
