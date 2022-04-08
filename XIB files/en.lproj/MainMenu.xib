@@ -401,6 +401,12 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Eject" id="mVY-LA-phJ">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="ejectDiskAction:" target="-1" id="6hq-cd-dhx"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="wq6-oh-IIt"/>
                             <menuItem title="Export..." id="inq-yB-iPf" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -425,13 +431,6 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="8fO-nY-y8g"/>
-                            <menuItem title="Eject" id="mVY-LA-phJ">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="ejectDiskAction:" target="-1" id="6hq-cd-dhx"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="HJA-xL-xe2"/>
                             <menuItem title="Inspect Disk..." id="XTb-fA-6qj">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -543,6 +542,12 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Eject" tag="1" id="lHK-n7-8Hz">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="ejectDiskAction:" target="-1" id="pZE-Kc-IOE"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="s4e-XF-Kpr"/>
                             <menuItem title="Export..." tag="1" id="Qpf-ys-Bkr" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -564,13 +569,6 @@
                                 </menu>
                                 <connections>
                                     <action selector="exportRecentDiskDummyAction:" target="-1" id="teB-Fm-xmM"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="DUv-gR-CL6"/>
-                            <menuItem title="Eject" tag="1" id="lHK-n7-8Hz">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="ejectDiskAction:" target="-1" id="pZE-Kc-IOE"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="jyn-pH-Tv0"/>
@@ -685,6 +683,12 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Eject" tag="2" id="E2J-Rc-2L4">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="ejectDiskAction:" target="-1" id="Mty-vo-k95"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="X6d-pV-1XU"/>
                             <menuItem title="Export..." tag="2" id="h74-u0-iEw" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -706,13 +710,6 @@
                                 </menu>
                                 <connections>
                                     <action selector="exportRecentDiskDummyAction:" target="-1" id="SJd-oK-ENN"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="Ag6-jY-nP8"/>
-                            <menuItem title="Eject" tag="2" id="E2J-Rc-2L4">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="ejectDiskAction:" target="-1" id="Mty-vo-k95"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="0QR-VA-UY0"/>
@@ -827,6 +824,12 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Eject" tag="3" id="O68-v0-Wo8">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="ejectDiskAction:" target="-1" id="c81-hp-qN3"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="AQ0-WP-BCt"/>
                             <menuItem title="Export..." tag="3" id="hhZ-v4-oPp" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -851,13 +854,6 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="HcB-7e-MEa"/>
-                            <menuItem title="Eject" tag="3" id="O68-v0-Wo8">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="ejectDiskAction:" target="-1" id="c81-hp-qN3"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="0Fr-u9-cul"/>
                             <menuItem title="Inspect Disk..." tag="3" id="xBw-K3-SqT">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -970,6 +966,12 @@
                                 </menu>
                                 <connections>
                                     <action selector="attachRecentHdrDummyAction:" target="-1" id="0hy-un-XtJ"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Detach" id="Ghe-lv-eQW">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="detachHdrAction:" target="-1" id="zn5-Du-eYl"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="EYo-Hq-7ZZ"/>
@@ -1130,6 +1132,12 @@
                                     <action selector="attachRecentHdrDummyAction:" target="-1" id="p6v-1N-hrT"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Detach" tag="1" id="OvU-wa-0sU">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="detachHdrAction:" target="-1" id="acZ-9y-MZX"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="7Qn-79-6BU"/>
                             <menuItem title="Export..." tag="1" id="Izd-yu-jY3" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -1288,6 +1296,12 @@
                                     <action selector="attachRecentHdrDummyAction:" target="-1" id="QQA-0r-ffJ"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Detach" tag="2" id="z3R-XT-dP9">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="detachHdrAction:" target="-1" id="TZo-e0-Vac"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="Scb-0j-ECp"/>
                             <menuItem title="Export..." tag="2" id="eRp-Jo-xsU" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -1444,6 +1458,12 @@
                                 </menu>
                                 <connections>
                                     <action selector="attachRecentHdrDummyAction:" target="-1" id="9bY-2s-dOJ"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Detach" tag="3" id="XId-AG-47L">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="detachHdrAction:" target="-1" id="IhF-od-mCM"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="Qo8-fz-s1e"/>

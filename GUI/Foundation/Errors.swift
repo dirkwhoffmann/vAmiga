@@ -75,6 +75,7 @@ enum Failure {
     case cantAttach
     case cantChangeGeometry
     case cantDecode
+    case cantDetach
     case cantExport(url: URL)
     case cantInsert
     case cantOpen(url: URL)
@@ -138,7 +139,10 @@ enum Failure {
             
         case .cantDecode:
             return "Unable to decode the file system."
-            
+
+        case .cantDetach:
+            return "Failed to detach hard drive."
+
         case let .cantExport(url: url):
             return "Cannot export disk to file \"\(url.path)\"."
             
@@ -390,6 +394,10 @@ extension MyController {
 
     func proceedWithUnsavedHardDisk(drive: HardDriveProxy) -> Bool {
         return mydocument.proceedWithUnsavedHardDisk(drive: drive)
+    }
+
+    func proceedWithUnsavedHardDisk(drive: Int) -> Bool {
+        return mydocument.proceedWithUnsavedHardDisk(drive: amiga.hd(drive)!)
     }
 
     func proceedWithUnsavedHardDisks() -> Bool {

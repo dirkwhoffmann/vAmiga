@@ -212,23 +212,29 @@ class MyDocument: NSDocument {
         
         if let proxy = proxy as? HDFFileProxy {
             
+            try attach(hd: hd, hdf: proxy, force: force)
+            /*
             func attach() throws {
 
                 amiga.configure(.HDR_CONNECT, drive: hd, enable: true)
                 try hdn.attach(hdf: proxy)
             }
             
-            if amiga.poweredOff {
-
-                try attach()
-
-            } else if force || askToPowerOff() {
+            if force || proceedWithUnsavedHardDisk(drive: hdn) {
                 
-                amiga.powerOff()
-                try attach()
-                amiga.powerOn()
-                try amiga.run()
+                if amiga.poweredOff {
+                    
+                    try attach()
+                    
+                } else if force || askToPowerOff() {
+                    
+                    amiga.powerOff()
+                    try attach()
+                    amiga.powerOn()
+                    try amiga.run()
+                }
             }
+            */
         }
         
         if let proxy = proxy as? FloppyFileProxy {

@@ -468,8 +468,6 @@ extension MyController: NSMenuItemValidation {
                 } catch {
                     self.showAlert(.cantInsert, error: error, async: true)
                 }
-                
-                // self.insertDiskAction(from: url, drive: sender.tag)
             }
         })
     }
@@ -514,8 +512,6 @@ extension MyController: NSMenuItemValidation {
     }
     
     func exportRecentAction(df n: Int, slot: Int) {
-        
-        log("df\(n) slot: \(slot)")
         
         if let url = myAppDelegate.getRecentlyExportedDiskURL(slot, df: n) {
             
@@ -623,8 +619,6 @@ extension MyController: NSMenuItemValidation {
                 } catch {
                     self.showAlert(.cantAttach, error: error, async: true)
                 }
-                
-                // self.attachHdrAction(from: url, drive: drive.nr)
             }
         })
     }
@@ -633,63 +627,34 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func attachRecentHdrAction(_ sender: NSMenuItem!) {
         
-        let drive = amiga.hd(sender.tag / 10)!
+        let drive = sender.tag / 10
         let slot  = sender.tag % 10
                     
-        // Ask the user if an unsafed disk should be discarded
-        if !proceedWithUnsavedHardDisk(drive: drive) { return }
-
-        // Power off the emulator if the user doesn't object
-        if !askToPowerOff() { return }
-
         if let url = myAppDelegate.getRecentlyAttachedHdrURL(slot) {
             
             do {
                 let types: [FileType] = [ .ADF, .EXT, .DMS, .EXE, .DIR ]
                 try self.mydocument.addMedia(url: url,
                                              allowedTypes: types,
-                                             hd: slot)
+                                             hd: drive)
             } catch {
                 self.showAlert(.cantAttach, error: error)
             }
-            
-            // attachHdrAction(from: url, drive: drive.nr)
         }
     }
-    
-    /*
-    private func attachHdrAction(from url: URL, drive nr: Int) {
-                
-        let types: [FileType] = [ .HDF ]
-        let drive = amiga.hd(nr)!
+
+    @IBAction func detachHdrAction(_ sender: NSMenuItem!) {
         
-        do {            
-            // Try to create a file proxy
-            try mydocument.createAttachment(from: url, allowedTypes: types)
-                        
-            if let file = mydocument.attachment as? HDFFileProxy {
-                
-                do {
-                    
-                    // Attach the drive
-                    try drive.attach(hdf: file)
-                    
-                    // Remember the URL
-                    myAppDelegate.noteNewRecentlyAttachedHdrURL(url)
-                    
-                } catch {
-                    
-                    showAlert(.cantAttach, error: error, async: true)
-                }
-            }
+        do {
+
+            try mydocument.detach(hd: sender.tag)
             
         } catch {
             
-            showAlert(.cantOpen(url: url), error: error, async: true)
+            showAlert(.cantDetach, error: error)
         }
     }
-    */
-    
+        
     @IBAction func exportRecentHdDummyAction(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentHdrAction(_ sender: NSMenuItem!) {
                 
