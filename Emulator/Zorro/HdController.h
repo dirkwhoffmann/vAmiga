@@ -21,6 +21,9 @@ class HdController : public ZorroBoard {
     // The hard drive this controller is connected to
     HardDrive &drive;
     
+    // Usage profile
+    HdControllerStats stats = {};
+    
     // Rom code
     Buffer<u8> rom;
     
@@ -101,6 +104,17 @@ public:
 private:
     
     void updateMemSrcTables() override;
+    
+    
+    //
+    // Analyzing
+    //
+    
+public:
+    
+    const HdControllerStats &getStats() { return stats; }
+    
+    void clearStats() { stats = { }; }
     
 
     //

@@ -40,7 +40,16 @@ HdController::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
         
-    ZorroBoard::_dump(category, os);    
+    ZorroBoard::_dump(category, os);
+    
+    if (category == Category::Stats) {
+        
+        for (isize i = 0; IoCommandEnum::isValid(i); i++) {
+            
+            os << tab(IoCommandEnum::key(i));
+            os << stats.cmdCount[i] << std::endl;
+        }
+    }
 }
 
 void
@@ -62,6 +71,9 @@ HdController::_reset(bool hard)
 
         // Set initial state
         state = pluggedIn() ? STATE_AUTOCONF : STATE_SHUTUP;
+        
+        // Wipe out usage information
+        clearStats();
     }
 }
 
@@ -197,11 +209,14 @@ HdController::processCmd()
     
     if constexpr (HDR_DEBUG) {
 
-        [[maybe_unused]] auto unit = mem.spypeek32 <ACCESSOR_CPU> (stdReq.io_Unit + 0x2A);
-        [[maybe_unused]] auto blck = offset / 512;
+        auto unit = mem.spypeek32 <ACCESSOR_CPU> (stdReq.io_Unit + 0x2A);
+        auto blck = offset / 512;
         
         debug(true, "%d.%ld: %s\n", unit, blck, IoCommandEnum::key(cmd));
     }
+    
+    // Update the usage profile
+    if (IoCommandEnum::isValid(cmd)) stats.cmdCount[cmd]++;
     
     switch (cmd) {
             

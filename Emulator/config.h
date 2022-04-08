@@ -108,7 +108,7 @@ static const int OBJ_DEBUG       = 0; // Object life-times
 static const int MIMIC_UAE       = 0; // Enable to compare debug logs with UAE
 
 // Runloop
-static const int RUN_DEBUG       = 1; // Run loop, component states
+static const int RUN_DEBUG       = 0; // Run loop, component states
 static const int WARP_DEBUG      = 0; // Warp mode
 static const int QUEUE_DEBUG     = 0; // Message queue
 static const int SNP_DEBUG       = 0; // Serialization (snapshots)
@@ -198,7 +198,7 @@ static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
 // Expansion boards
 static const int ZOR_DEBUG       = 0; // Zorro space, autoconfig
 static const int FAS_DEBUG       = 0; // FastRam
-static const int HDR_DEBUG       = 0; // HardDrive
+static const int HDR_DEBUG       = 1; // HardDrive
 
 // Media types
 static const int ADF_DEBUG       = 0; // ADF and extended ADF files

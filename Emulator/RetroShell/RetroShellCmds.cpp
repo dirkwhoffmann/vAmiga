@@ -1502,8 +1502,8 @@ RetroShell::exec <Token::zorro, Token::inspect> (Arguments& argv, long param)
     if (auto board = zorro.getBoard(value); board != nullptr) {
 
         dump(*board, Category::Properties);
-        *this << "\n";
         dump(*board, Category::State);
+        dump(*board, Category::Stats);
     }
 }
 

@@ -74,9 +74,10 @@ typedef IO_CMD IoCommand;
 #ifdef __cplusplus
 struct IoCommandEnum : util::Reflection<IoCommandEnum, IoCommand>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return CMD_TD_LASTCOMM; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = CMD_TD_LASTCOMM;
+    
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "CMD"; }
     static const char *key(IoCommand value)
@@ -114,3 +115,10 @@ struct IoCommandEnum : util::Reflection<IoCommandEnum, IoCommand>
     }
 };
 #endif
+
+typedef struct
+{
+    // Tracks the number of executed commands
+    isize cmdCount[IoCommandEnum::maxVal + 1];
+}
+HdControllerStats;

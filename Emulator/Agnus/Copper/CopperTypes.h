@@ -29,7 +29,5 @@ typedef struct
     u32   cop2lc;
     u16   cop1ins;
     u16   cop2ins;
-    // isize length1;
-    // isize length2;
 }
 CopperInfo;
