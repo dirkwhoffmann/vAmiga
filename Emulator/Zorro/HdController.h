@@ -12,6 +12,7 @@
 #include "HdControllerTypes.h"
 #include "ZorroBoard.h"
 #include "HDFFile.h"
+#include "RomFileTypes.h"
 
 class HdController : public ZorroBoard {
     
@@ -113,10 +114,13 @@ private:
 public:
     
     const HdControllerStats &getStats() { return stats; }
-    
     void clearStats() { stats = { }; }
     
+    // Informs whether the controller is compatible with a certain Kickstart
+    bool isCompatible(RomIdentifier id);
+    bool isCompatible();
 
+    
     //
     // Accessing the board
     //

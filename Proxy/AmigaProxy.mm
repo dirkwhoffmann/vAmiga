@@ -1372,12 +1372,10 @@ using namespace moira;
     return [self drive]->getGeometry().bsize;
 }
 
-/*
-- (BOOL)uniqueGeometry
+- (BOOL)isCompatible
 {
-    return [self drive]->getGeometry().unique();
+    return [self drive]->isCompatible();
 }
-*/
 
 - (BOOL)writeThroughEnabled
 {

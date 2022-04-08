@@ -406,6 +406,11 @@ extension FloppyDriveProxy {
         return NSImage(named: name)!
     }
     
+    var toolTip: String? {
+        
+        return nil
+    }
+    
     var ledIcon: NSImage? {
         
         if !isConnected { return nil }
@@ -426,7 +431,23 @@ extension HardDriveProxy {
     
     var templateIcon: NSImage? {
         
-        return NSImage(named: "hdrTemplate")!
+        var name: String
+                
+        if isCompatible {
+            name = hasModifiedDisk ? "hdrUTemplate" : "hdrTemplate"
+        } else {
+            name = "hdrError"
+        }
+        
+        return NSImage(named: name)!
+    }
+    
+    var toolTip: String? {
+        
+        return isCompatible ? nil :
+        "The installed Kickstart Rom is incompatible with the built-in " +
+        "hard disk controller. To ensure proper operation, " +
+        "please use Kickstart 1.3 or higher."
     }
     
     var ledIcon: NSImage? {

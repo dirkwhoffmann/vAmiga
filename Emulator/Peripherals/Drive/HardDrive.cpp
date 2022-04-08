@@ -291,6 +291,12 @@ HardDrive::getPartitionInfo(isize nr)
     return ptable[nr];
 }
 
+bool
+HardDrive::isCompatible()
+{
+    return amiga.hdcon[nr]->isCompatible();
+}
+
 void
 HardDrive::_inspect() const
 {

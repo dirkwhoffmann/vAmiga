@@ -36,7 +36,7 @@ extension MyController {
             
             refreshStatusBar(drive: n, led: dfn.ledIcon)
             refreshStatusBar(drive: n, cylinder: dfn.currentCyl)
-            refreshStatusBar(drive: n, icon: dfn.templateIcon)
+            refreshStatusBar(drive: n, icon: dfn.templateIcon, toolTip: dfn.toolTip)
         }
         
         // Hd0 - Hd3
@@ -46,7 +46,7 @@ extension MyController {
             
             refreshStatusBar(drive: n, led: hdn.ledIcon)
             refreshStatusBar(drive: n, cylinder: hdn.currentCyl)
-            refreshStatusBar(drive: n, icon: hdn.templateIcon)
+            refreshStatusBar(drive: n, icon: hdn.templateIcon, toolTip: hdn.toolTip)
         }
                         
         // Remote server icon
@@ -105,11 +105,12 @@ extension MyController {
         }
     }
 
-    func refreshStatusBar(drive n: Int, icon: NSImage?) {
+    func refreshStatusBar(drive n: Int, icon: NSImage?, toolTip: String?) {
     
         if let widget = drvIcon[n] {
         
             widget.image = icon
+            widget.toolTip = toolTip
         }
     }
 

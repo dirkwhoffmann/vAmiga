@@ -224,6 +224,9 @@ public:
     bool isModified() const { return modified; }
     void setModified(bool value) { modified = value; }
        
+    // Checks whether the drive will work with the currently installed Rom
+    bool isCompatible();
+    
     
     //
     // Formatting
@@ -268,9 +271,6 @@ private:
     
 public:
     
-    // Persists a disk (called on disconnect)
-    // bool persistDisk() throws;
-
     // Restores a disk (called on connect)
     bool restoreDisk() throws;
 

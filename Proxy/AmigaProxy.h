@@ -660,6 +660,7 @@
 @property (readonly) NSInteger heads;
 @property (readonly) NSInteger sectors;
 @property (readonly) NSInteger bsize;
+@property (readonly) BOOL isCompatible;
 @property (readonly) BOOL writeThroughEnabled;
 - (NSString *)nameOfPartition:(NSInteger)nr;
 - (NSInteger)lowerCylOfPartition:(NSInteger)nr;
