@@ -240,7 +240,7 @@ Debugger::reset()
 void
 Debugger::stepInto()
 {
-    softStop = UINT64_MAX;
+    softStop = -1;
     breakpoints.setNeedsCheck(true);
 }
 
@@ -255,39 +255,32 @@ Debugger::stepOver()
 bool
 Debugger::softstopMatches(u32 addr)
 {
-    if (addr != softStop && softStop != UINT64_MAX) return false;
-    
-    // Soft breakpoints are deleted when reached
-    softStop = UINT64_MAX - 1;
-    breakpoints.setNeedsCheck(breakpoints.elements() != 0);
-    breakpointPC = -1;
-    
-    return true;
+    if (softStop && (*softStop < 0 || *softStop == addr)) {
+        
+        // Soft breakpoints are deleted when reached
+        softStop = { };
+        breakpoints.setNeedsCheck(breakpoints.elements() != 0);
+        return true;
+    }
+    return false;
 }
 
 bool
 Debugger::breakpointMatches(u32 addr)
 {
-    if (!breakpoints.eval(addr)) return false;
-        
-    breakpointPC = moira.reg.pc;
-    return true;
+    return breakpoints.eval(addr);
 }
 
 bool
 Debugger::watchpointMatches(u32 addr, Size S)
 {
-    if (!watchpoints.eval(addr, S)) return false;
-    
-    watchpointPC = moira.reg.pc0;
-    return true;
+    return watchpoints.eval(addr, S);
 }
 
 bool
 Debugger::catchpointMatches(u32 vectorNr)
 {
-    if (!catchpoints.eval(vectorNr)) return false;
-    return true;
+    return catchpoints.eval(vectorNr);
 }
 
 void

@@ -202,12 +202,11 @@ private:
 
     /* Soft breakpoint for implementing single-stepping. In contrast to a
      * standard (hard) breakpoint, a soft breakpoint is deleted when reached.
-     * The CPU halts if softStop matches the CPU's program counter (used to
-     * implement "step over") or if softStop equals UINT64_MAX (used to
-     * implement "step into"). To disable soft stopping, simply set softStop
-     * to an unreachable memory location such as UINT64_MAX - 1.
+     * If a softStop is set, the CPU halts if it matches the program counter
+     * (used to implement "step over") or if it contains a negative value (used
+     * to implement "step into").
      */
-    u64 softStop = UINT64_MAX - 1;
+    std::optional <i64> softStop;
     
     // Buffer storing logged instructions
     static const int logBufferCapacity = 256;
@@ -259,10 +258,6 @@ public:
     bool breakpointMatches(u32 addr);
     bool watchpointMatches(u32 addr, Size S);
     bool catchpointMatches(u32 vectorNr);
-
-    // Saved program counters (DEPRECATED)
-    i64 breakpointPC = -1;
-    i64 watchpointPC = -1;
 
     
     //

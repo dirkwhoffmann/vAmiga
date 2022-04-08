@@ -197,52 +197,24 @@ class MyDocument: NSDocument {
                   hd: Int = 0,
                   force: Bool = false) throws {
         
-        var dfn: FloppyDriveProxy { return amiga.df(df)! }
-        var hdn: HardDriveProxy { return amiga.hd(hd)! }
+        // var dfn: FloppyDriveProxy { return amiga.df(df)! }
+        // var hdn: HardDriveProxy { return amiga.hd(hd)! }
 
         if let proxy = proxy as? SnapshotProxy {
             
             try processSnapshotFile(proxy)
         }
-        
         if let proxy = proxy as? ScriptProxy {
             
             parent.renderer.console.runScript(script: proxy)
         }
-        
         if let proxy = proxy as? HDFFileProxy {
             
-            try attach(hd: hd, hdf: proxy, force: force)
-            /*
-            func attach() throws {
-
-                amiga.configure(.HDR_CONNECT, drive: hd, enable: true)
-                try hdn.attach(hdf: proxy)
-            }
-            
-            if force || proceedWithUnsavedHardDisk(drive: hdn) {
-                
-                if amiga.poweredOff {
-                    
-                    try attach()
-                    
-                } else if force || askToPowerOff() {
-                    
-                    amiga.powerOff()
-                    try attach()
-                    amiga.powerOn()
-                    try amiga.run()
-                }
-            }
-            */
+            try attach(hd: hd, file: proxy, force: force)
         }
-        
         if let proxy = proxy as? FloppyFileProxy {
             
-            if force || proceedWithUnsavedFloppyDisk(drive: dfn) {
-            
-                try dfn.swap(file: proxy)
-            }
+            try insert(df: df, file: proxy, force: force)
         }
     }
     

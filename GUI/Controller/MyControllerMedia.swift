@@ -9,14 +9,24 @@
 
 extension MyDocument {
     
-    func attach(hd n: Int, hdf: HDFFileProxy? = nil, force: Bool = false) throws {
+    func insert(df n: Int, file: FloppyFileProxy, force: Bool = false) throws {
+        
+        var dfn: FloppyDriveProxy { return amiga.df(n)! }
+        
+        if force || proceedWithUnsavedFloppyDisk(drive: dfn) {
+        
+            try dfn.swap(file: file)
+        }
+    }
+
+    func attach(hd n: Int, file: HDFFileProxy? = nil, force: Bool = false) throws {
         
         var hdn: HardDriveProxy { return amiga.hd(n)! }
 
         func attach() throws {
                       
             amiga.configure(.HDR_CONNECT, drive: n, enable: true)
-            if let proxy = hdf { try hdn.attach(hdf: proxy) }
+            if let proxy = file { try hdn.attach(hdf: proxy) }
         }
         
         if force || proceedWithUnsavedHardDisk(drive: hdn) {

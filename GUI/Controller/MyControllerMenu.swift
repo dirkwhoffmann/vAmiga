@@ -596,9 +596,6 @@ extension MyController: NSMenuItemValidation {
         // Ask the user if an unsafed disk should be discarded
         if !proceedWithUnsavedHardDisk(drive: drive) { return }
 
-        // Power off the emulator if the user doesn't object
-        if !askToPowerOff() { return }
-
         // Show the OpenPanel
         let openPanel = NSOpenPanel()
         openPanel.allowsMultipleSelection = false
@@ -611,13 +608,15 @@ extension MyController: NSMenuItemValidation {
             
             if result == .OK, let url = openPanel.url {
                 
-                do {
-                    let types: [FileType] = [ .HDF ]
-                    try self.mydocument.addMedia(url: url,
-                                                 allowedTypes: types,
-                                                 hd: sender.tag)
-                } catch {
-                    self.showAlert(.cantAttach, error: error, async: true)
+                DispatchQueue.main.async {
+                    
+                    do {
+                        try self.mydocument.addMedia(url: url,
+                                                     allowedTypes: [ .HDF ],
+                                                     hd: sender.tag)
+                    } catch {
+                        self.showAlert(.cantAttach, error: error, async: true)
+                    }
                 }
             }
         })
