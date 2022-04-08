@@ -610,6 +610,8 @@ HardDrive::write(isize offset, isize length, u32 addr)
                 wtStream[nr].seekp(offset);
                 wtStream[nr].write((char *)(data.ptr + offset), length);
             }
+            
+            modified = true;
         }
         
         // Inform the GUI

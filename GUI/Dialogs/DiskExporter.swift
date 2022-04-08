@@ -337,6 +337,7 @@ class DiskExporter: DialogController {
         } else {
             exportFloppyDisk(url: url)
         }
+        parent.refreshStatusBar()
     }
     
     func exportFloppyDisk(url: URL) {
