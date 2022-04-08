@@ -17,13 +17,13 @@
 #define VER_MAJOR 2
 #define VER_MINOR 0
 #define VER_SUBMINOR 0
-#define VER_BETA 1
+#define VER_BETA 2
 
 // Snapshot version number
 #define SNP_MAJOR 2
 #define SNP_MINOR 0
 #define SNP_SUBMINOR 0
-#define SNP_BETA 1
+#define SNP_BETA 2
 
 // Uncomment this setting in a release build
 // #define RELEASEBUILD
@@ -198,7 +198,7 @@ static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
 // Expansion boards
 static const int ZOR_DEBUG       = 0; // Zorro space, autoconfig
 static const int FAS_DEBUG       = 0; // FastRam
-static const int HDR_DEBUG       = 1; // HardDrive
+static const int HDR_DEBUG       = 0; // HardDrive
 
 // Media types
 static const int ADF_DEBUG       = 0; // ADF and extended ADF files

@@ -607,6 +607,7 @@ Amiga::configure(Option option, long id, i64 value)
         case OPT_INSERT_VOLUME:
         case OPT_EJECT_VOLUME:
             
+            assert(id >= 0 || id <= 4);
             df[id]->setConfigItem(option, value);
             break;
 
@@ -615,12 +616,23 @@ Amiga::configure(Option option, long id, i64 value)
         case OPT_HDR_PAN:
         case OPT_HDR_STEP_VOLUME:
             
+            assert(id >= 0 || id <= 4);
             hd[id]->setConfigItem(option, value);
             break;
 
+        case OPT_CIA_REVISION:
+        case OPT_TODBUG:
+        case OPT_ECLOCK_SYNCING:
+            
+            assert(id == 0 || id == 1);
+            if (id == 0) ciaA.setConfigItem(option, value);
+            if (id == 1) ciaB.setConfigItem(option, value);
+            break;
+            
         case OPT_PULLUP_RESISTORS:
         case OPT_MOUSE_VELOCITY:
             
+            assert(id == PORT_1 || id == PORT_2);
             if (id == PORT_1) controlPort1.mouse.setConfigItem(option, value);
             if (id == PORT_2) controlPort2.mouse.setConfigItem(option, value);
             break;
