@@ -29,6 +29,7 @@
 #import "FloppyDriveTypes.h"
 #import "FSTypes.h"
 #import "HardDriveTypes.h"
+#import "HdControllerTypes.h"
 #import "JoystickTypes.h"
 #import "KeyboardTypes.h"
 #import "MemoryTypes.h"
@@ -660,6 +661,7 @@
 @property (readonly) NSInteger heads;
 @property (readonly) NSInteger sectors;
 @property (readonly) NSInteger bsize;
+@property (readonly) HdControllerState initState;
 @property (readonly) BOOL isCompatible;
 @property (readonly) BOOL writeThroughEnabled;
 - (NSString *)nameOfPartition:(NSInteger)nr;

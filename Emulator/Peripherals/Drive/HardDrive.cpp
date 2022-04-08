@@ -291,6 +291,12 @@ HardDrive::getPartitionInfo(isize nr)
     return ptable[nr];
 }
 
+HdControllerState
+HardDrive::getInitState()
+{
+    return amiga.hdcon[nr]->getInitState();
+}
+
 bool
 HardDrive::isCompatible()
 {

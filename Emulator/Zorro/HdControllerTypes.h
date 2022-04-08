@@ -16,6 +16,8 @@
 // Constants
 //
 
+#ifdef __cplusplus
+
 // Constants from exec/errors.h
 constexpr int8_t    IOERR_OPENFAIL      = -1;
 constexpr int8_t    IOERR_ABORTED       = -2;
@@ -33,6 +35,7 @@ constexpr uint32_t  IO_LENGTH           = 0x24;
 constexpr uint32_t  IO_DATA             = 0x28;
 constexpr uint32_t  IO_OFFSET           = 0x2C;
 
+#endif
 
 //
 // Enumerations
@@ -116,9 +119,39 @@ struct IoCommandEnum : util::Reflection<IoCommandEnum, IoCommand>
 };
 #endif
 
+enum_long(HDCON_STATE)
+{
+    HDCON_RESET,
+    HDCON_INITIALIZING,
+    HDCON_READY
+};
+typedef HDCON_STATE HdControllerState;
+
+#ifdef __cplusplus
+struct HdControllerStateEnum : util::Reflection<HdControllerStateEnum, HdControllerState>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = HDCON_READY;
+    
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
+    
+    static const char *prefix() { return "HDCON"; }
+    static const char *key(IoCommand value)
+    {
+        switch (value) {
+
+            case HDCON_RESET:           return "RESET";
+            case HDCON_INITIALIZING:    return "INITIALIZING";
+            case HDCON_READY:           return "READY";
+        }
+        return "???";
+    }
+};
+#endif
+
 typedef struct
 {
     // Tracks the number of executed commands
-    isize cmdCount[IoCommandEnum::maxVal + 1];
+    isize cmdCount[25];
 }
 HdControllerStats;

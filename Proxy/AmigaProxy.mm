@@ -1372,6 +1372,11 @@ using namespace moira;
     return [self drive]->getGeometry().bsize;
 }
 
+- (HdControllerState)initState
+{
+    return [self drive]->getInitState();
+}
+
 - (BOOL)isCompatible
 {
     return [self drive]->isCompatible();

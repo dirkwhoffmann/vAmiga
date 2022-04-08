@@ -214,6 +214,8 @@ HdController::poke16(u32 addr, u16 value)
 
         case EXPROM_SIZE + 4:
             
+            initState = HDCON_INITIALIZING;
+            
             switch (value) {
                     
                 case 0xfede: processCmd(); break;
@@ -266,6 +268,8 @@ HdController::processCmd()
             
         case CMD_READ:
 
+            if (offset) initState = HDCON_READY;
+            
             error = drive.read(offset, length, addr);
             actual = u32(length);
             break;

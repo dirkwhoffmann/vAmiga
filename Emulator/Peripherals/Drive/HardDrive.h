@@ -12,6 +12,7 @@
 #include "HardDriveTypes.h"
 #include "Drive.h"
 #include "AgnusTypes.h"
+#include "HdControllerTypes.h"
 #include "HDFFile.h"
 #include "MemUtils.h"
 
@@ -224,6 +225,9 @@ public:
     bool isModified() const { return modified; }
     void setModified(bool value) { modified = value; }
        
+    // Returns the current initialization state
+    HdControllerState getInitState();
+
     // Checks whether the drive will work with the currently installed Rom
     bool isCompatible();
     

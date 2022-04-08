@@ -25,6 +25,9 @@ class HdController : public ZorroBoard {
     // Usage profile
     HdControllerStats stats = {};
     
+    // Initialization state
+    HdControllerState initState = HDCON_RESET;
+    
     // Rom code
     Buffer<u8> rom;
     
@@ -74,6 +77,7 @@ private:
             
             << baseAddr
             << state
+            << initState
             << pointer;
         }
     }
@@ -115,6 +119,9 @@ public:
     
     const HdControllerStats &getStats() { return stats; }
     void clearStats() { stats = { }; }
+    
+    // Returns the current initialization state
+    HdControllerState getInitState() { return initState; }
     
     // Informs whether the controller is compatible with a certain Kickstart
     bool isCompatible(RomIdentifier id);

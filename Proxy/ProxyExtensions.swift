@@ -433,10 +433,13 @@ extension HardDriveProxy {
         
         var name: String
                 
-        if isCompatible {
+        switch initState {
+            
+        case .RESET, .INITIALIZING:
+            name = "hdrETemplate"
+            
+        default:
             name = hasModifiedDisk ? "hdrUTemplate" : "hdrTemplate"
-        } else {
-            name = "hdrError"
         }
         
         return NSImage(named: name)!
@@ -444,10 +447,19 @@ extension HardDriveProxy {
     
     var toolTip: String? {
         
-        return isCompatible ? nil :
-        "The installed Kickstart Rom is incompatible with the built-in " +
-        "hard disk controller. To ensure proper operation, " +
-        "please use Kickstart 1.3 or higher."
+        switch initState {
+            
+        case .RESET:
+            return "The hard drive is waiting to be initialized by the OS."
+            
+        case .INITIALIZING:
+            return "The OS has started to initialize the hard drive. If the " +
+            "condition persists the hard drive is not valid or incompatible " +
+            "with the chosen setup."
+            
+        default:
+            return nil
+        }
     }
     
     var ledIcon: NSImage? {
