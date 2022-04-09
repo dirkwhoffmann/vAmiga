@@ -197,9 +197,6 @@ class MyDocument: NSDocument {
                   hd: Int = 0,
                   force: Bool = false) throws {
         
-        // var dfn: FloppyDriveProxy { return amiga.df(df)! }
-        // var hdn: HardDriveProxy { return amiga.hd(hd)! }
-
         if let proxy = proxy as? SnapshotProxy {
             
             try processSnapshotFile(proxy)

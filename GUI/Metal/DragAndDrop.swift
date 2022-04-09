@@ -48,10 +48,10 @@ public extension MetalView {
             if let url = NSURL.init(from: pasteBoard) as URL? {
             
                 // Unpack the file if it is compressed
-                draggedUrl = url.unpacked(maxSize: 2048 * 1024)
+                dropUrl = url.unpacked(maxSize: 2048 * 1024)
 
                 // Analyze the file type
-                let type = AmigaFileProxy.type(of: draggedUrl)
+                let type = AmigaFileProxy.type(of: dropUrl)
                 
                 // Open the drop zone layer
                 parent.renderer.dropZone.open(type: type, delay: 0.25)
@@ -117,8 +117,9 @@ public extension MetalView {
 
     func performUrlDrag(_ sender: NSDraggingInfo) -> Bool {
                 
-        guard let url = draggedUrl else { return false }
-            
+        dropZone = nil
+        guard let url = dropUrl else { return false }
+        
         do {
             
             // Check if the file is a snapshot or a script
@@ -138,8 +139,8 @@ public extension MetalView {
             for i in 0...3 {
                 if renderer.dropZone.isInside(sender, zone: i) {
                     
-                    let types: [FileType] = [ .HDF, .ADF, .EXT, .IMG, .DMS, .EXE, .DIR ]
-                    try myDocument.addMedia(url: url, allowedTypes: types)
+                    // Remember the zone (picked up when the drop layer closes)
+                    dropZone = i
                     return true
                 }
             }
@@ -154,5 +155,6 @@ public extension MetalView {
     }
             
     override func concludeDragOperation(_ sender: NSDraggingInfo?) {
+
     }
 }

@@ -22,7 +22,8 @@ class DropZone: Layer {
     
     var window: NSWindow { return controller.window! }
     var contentView: NSView { return window.contentView! }
-        
+    var metal: MetalView { return controller.metal! }
+    
     var zones = [NSImageView(), NSImageView(), NSImageView(), NSImageView()]
     var ul = [NSPoint(x: 0, y: 0), NSPoint(x: 0, y: 0),
               NSPoint(x: 0, y: 0), NSPoint(x: 0, y: 0)]
@@ -210,7 +211,22 @@ class DropZone: Layer {
     }
     
     override func animationHasStopped() {
-        
+     
+        if let n = metal.dropZone, let url = metal.dropUrl {
+            
+            metal.dropZone = nil
+            metal.dropUrl = nil
+
+            do {
+
+                let types: [FileType] = [ .HDF, .ADF, .EXT, .IMG, .DMS, .EXE, .DIR ]
+                try controller.mydocument.addMedia(url: url, allowedTypes: types, df: n, hd: n)
+                
+            } catch {
+                
+                controller.showAlert(.cantOpen(url: url), error: error, async: true)
+            }
+        }
     }
     
     func updateAlpha() {

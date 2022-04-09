@@ -37,9 +37,10 @@ public class MetalView: MTKView {
     // Time stamp needed to detect a shaking mouse
     var lastShake = DispatchTime(uptimeNanoseconds: 0)
     
-    // When a file is dragged in, it's URL is stored in this variable
-    var draggedUrl: URL?
-
+    // When a file is dragged in, its URL and the selected zone are stored here
+    var dropUrl: URL?
+    var dropZone: Int?
+    
     required public init(coder: NSCoder) {
     
         super.init(coder: coder)
