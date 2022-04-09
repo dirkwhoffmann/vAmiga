@@ -252,9 +252,7 @@ HardDrive::connect()
         debug(WT_DEBUG, "Creating default disk...\n");
         init(MB(10));
         format(FS_OFS, defaultName());
-    }
-    
-    msgQueue.put(MSG_HDC_CONNECT, nr);
+    }    
 }
 
 void
@@ -262,8 +260,6 @@ HardDrive::disconnect()
 {
     disableWriteThrough();
     init();
-    
-    msgQueue.put(MSG_HDR_DISCONNECT, nr);
 }
 
 const PartitionDescriptor &
@@ -273,10 +269,10 @@ HardDrive::getPartitionInfo(isize nr)
     return ptable[nr];
 }
 
-HdControllerState
-HardDrive::getInitState()
+HdcState
+HardDrive::getHdcState()
 {
-    return amiga.hdcon[nr]->getInitState();
+    return amiga.hdcon[nr]->getHdcState();
 }
 
 bool
@@ -395,7 +391,7 @@ HardDrive::_dump(Category category, std::ostream& os) const
 bool
 HardDrive::isConnected() const
 {
-    return amiga.hdcon[nr]->getConfigItem(OPT_HDC_CONNECT);    
+    return amiga.hdcon[nr]->getConfigItem(OPT_HDC_CONNECT);
 }
 
 u64

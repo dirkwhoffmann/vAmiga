@@ -28,8 +28,8 @@ class HdController : public ZorroBoard {
     // Usage profile
     HdcStats stats = {};
     
-    // Initialization state
-    HdControllerState initState = HDCON_RESET;
+    // The current controller state
+    HdcState hdcState = HDC_UNDETECTED;
     
     // Rom code
     Buffer<u8> rom;
@@ -82,7 +82,7 @@ private:
             
             << baseAddr
             << state
-            << initState
+            << hdcState
             << pointer;
         }
     }
@@ -139,12 +139,17 @@ public:
     const HdcStats &getStats() { return stats; }
     void clearStats() { stats = { }; }
     
-    // Returns the current initialization state
-    HdControllerState getInitState() { return initState; }
+    // Returns the current controller state
+    HdcState getHdcState() { return hdcState; }
     
     // Informs whether the controller is compatible with a certain Kickstart
     bool isCompatible(RomIdentifier id);
     bool isCompatible();
+
+private:
+    
+    void resetHdcState();
+    void changeHdcState(HdcState newState);
 
     
     //

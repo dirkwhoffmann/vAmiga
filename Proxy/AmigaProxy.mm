@@ -1372,9 +1372,9 @@ using namespace moira;
     return [self drive]->getGeometry().bsize;
 }
 
-- (HdControllerState)initState
+- (HdcState)hdcState
 {
-    return [self drive]->getInitState();
+    return [self drive]->getHdcState();
 }
 
 - (BOOL)isCompatible

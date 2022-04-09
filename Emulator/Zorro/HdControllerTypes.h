@@ -119,30 +119,30 @@ struct IoCommandEnum : util::Reflection<IoCommandEnum, IoCommand>
 };
 #endif
 
-enum_long(HDCON_STATE)
+enum_long(HDC_STATE)
 {
-    HDCON_RESET,
-    HDCON_INITIALIZING,
-    HDCON_READY
+    HDC_UNDETECTED,     // The controller waits to be detected by the OS
+    HDC_INITIALIZING,   // The controller has been detected
+    HDC_READY           // The controller is fully operational
 };
-typedef HDCON_STATE HdControllerState;
+typedef HDC_STATE HdcState;
 
 #ifdef __cplusplus
-struct HdcStateEnum : util::Reflection<HdcStateEnum, HdControllerState>
+struct HdcStateEnum : util::Reflection<HdcStateEnum, HdcState>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = HDCON_READY;
+    static constexpr long maxVal = HDC_READY;
     
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
-    static const char *prefix() { return "HDCON"; }
+    static const char *prefix() { return "HDC"; }
     static const char *key(IoCommand value)
     {
         switch (value) {
 
-            case HDCON_RESET:           return "RESET";
-            case HDCON_INITIALIZING:    return "INITIALIZING";
-            case HDCON_READY:           return "READY";
+            case HDC_UNDETECTED:    return "UNDETECTED";
+            case HDC_INITIALIZING:  return "INITIALIZING";
+            case HDC_READY:         return "READY";
         }
         return "???";
     }

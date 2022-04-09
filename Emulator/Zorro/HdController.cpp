@@ -14,6 +14,7 @@
 #include "HDFFile.h"
 #include "FloppyDrive.h"
 #include "Memory.h"
+#include "MsgQueue.h"
 #include "OSDebugger.h"
 
 HdController::HdController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref), drive(hdr)
@@ -78,8 +79,9 @@ HdController::_reset(bool hard)
 
         // Set initial state
         state = pluggedIn() ? STATE_AUTOCONF : STATE_SHUTUP;
+        resetHdcState();
         
-        // Wipe out usage information
+        // Wipe out previously recorded usage information
         clearStats();
     }
 }
@@ -128,9 +130,19 @@ HdController::setConfigItem(Option option, i64 value)
             if (bool(value) == config.connected) {
                 break;
             }
-            
-            config.connected = bool(value);
-            bool(value) ? drive.connect() : drive.disconnect();
+                        
+            if (value) {
+                
+                config.connected = true;
+                drive.connect();
+                msgQueue.put(MSG_HDC_CONNECT, nr);
+
+            } else {
+                
+                config.connected = false;
+                drive.disconnect();
+                msgQueue.put(MSG_HDC_DISCONNECT, nr);
+            }
             return;
 
         default:
@@ -188,6 +200,25 @@ bool
 HdController::isCompatible()
 {
     return isCompatible(mem.romIdentifier());
+}
+
+void
+HdController::resetHdcState()
+{
+    hdcState = HDC_UNDETECTED;
+    msgQueue.put(MSG_HDC_STATE, nr, hdcState);
+}
+
+void
+HdController::changeHdcState(HdcState newState)
+{
+    if (hdcState != newState) {
+        
+        debug(HDR_DEBUG, "Changing state to %s\n", HdcStateEnum::key(newState));
+        
+        hdcState = newState;
+        msgQueue.put(MSG_HDC_STATE, nr, hdcState);
+    }
 }
 
 u8
@@ -273,9 +304,7 @@ HdController::poke16(u32 addr, u16 value)
             break;
 
         case EXPROM_SIZE + 4:
-            
-            initState = HDCON_INITIALIZING;
-            
+                        
             switch (value) {
                     
                 case 0xfede: processCmd(); break;
@@ -328,7 +357,7 @@ HdController::processCmd()
             
         case CMD_READ:
 
-            if (offset) initState = HDCON_READY;
+            if (offset) changeHdcState(HDC_READY);
             
             error = drive.read(offset, length, addr);
             actual = u32(length);
@@ -403,6 +432,7 @@ HdController::processInit()
     if (unit < drive.ptable.size()) {
 
         debug(HDR_DEBUG, "Initializing partition %d\n", unit);
+        changeHdcState(HDC_INITIALIZING);
 
         // Collect hard drive information
         auto &geometry = drive.geometry;

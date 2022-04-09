@@ -90,9 +90,10 @@ enum_long(MSG_TYPE)
 
     // Hard drive controllers
     MSG_HDC_CONNECT,
-
+    MSG_HDC_DISCONNECT,
+    MSG_HDC_STATE,
+    
     // Hard drives
-    MSG_HDR_DISCONNECT,
     MSG_HDR_STEP,
     MSG_HDR_READ,
     MSG_HDR_WRITE,
@@ -207,8 +208,9 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
             case MSG_DISK_UNPROTECT:        return "DISK_UNPROTECT";
 
             case MSG_HDC_CONNECT:           return "HDC_CONNECT";
+            case MSG_HDC_DISCONNECT:        return "HDC_DISCONNECT";
+            case MSG_HDC_STATE:             return "HDC_STATE";
                 
-            case MSG_HDR_DISCONNECT:        return "HDR_DISCONNECT";
             case MSG_HDR_STEP:              return "HDR_STEP";
             case MSG_HDR_READ:              return "HDR_READ";
             case MSG_HDR_WRITE:             return "HDR_WRITE";

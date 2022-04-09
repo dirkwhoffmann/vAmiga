@@ -661,7 +661,7 @@
 @property (readonly) NSInteger heads;
 @property (readonly) NSInteger sectors;
 @property (readonly) NSInteger bsize;
-@property (readonly) HdControllerState initState;
+@property (readonly) HdcState hdcState;
 @property (readonly) BOOL isCompatible;
 @property (readonly) BOOL writeThroughEnabled;
 - (NSString *)nameOfPartition:(NSInteger)nr;

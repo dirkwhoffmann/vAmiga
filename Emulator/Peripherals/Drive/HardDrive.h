@@ -224,8 +224,8 @@ public:
     bool isModified() const { return modified; }
     void setModified(bool value) { modified = value; }
        
-    // Returns the current initialization state
-    HdControllerState getInitState();
+    // Returns the current controller state
+    HdcState getHdcState();
 
     // Checks whether the drive will work with the currently installed Rom
     bool isCompatible();

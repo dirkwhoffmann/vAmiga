@@ -545,18 +545,20 @@ extension MyController {
             assignSlots()
             refreshStatusBar()
             
-        case .HDR_DISCONNECT:
+        case .HDC_DISCONNECT:
             hideOrShowDriveMenus()
             assignSlots()
             refreshStatusBar()
 
+        case .HDC_STATE:
+            log("HDC_STATE")
+            refreshStatusBar()
+
         case .HDR_STEP:
-            
             macAudio.playSound(MacAudio.Sounds.move, volume: volume, pan: pan)
             refreshStatusBar()
 
         case .HDR_IDLE, .HDR_READ, .HDR_WRITE:
-            
             refreshStatusBar()
             
         case .CTRL_AMIGA_AMIGA:
