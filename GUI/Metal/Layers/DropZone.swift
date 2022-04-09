@@ -23,6 +23,7 @@ class DropZone: Layer {
     var window: NSWindow { return controller.window! }
     var contentView: NSView { return window.contentView! }
     var metal: MetalView { return controller.metal! }
+    var mydocument: MyDocument { return controller.mydocument! }
     
     var zones = [NSImageView(), NSImageView(), NSImageView(), NSImageView()]
     var ul = [NSPoint(x: 0, y: 0), NSPoint(x: 0, y: 0),
@@ -210,22 +211,43 @@ class DropZone: Layer {
         resize()
     }
     
-    override func animationHasStopped() {
-     
-        if let n = metal.dropZone, let url = metal.dropUrl {
+    override func layerDidClose() {
+        
+        guard let url = metal.dropUrl else { return }
+        metal.dropUrl = nil
+        
+        do {
             
-            metal.dropZone = nil
-            metal.dropUrl = nil
-
+            // Check if the file is a snapshot or a script
             do {
-
-                let types: [FileType] = [ .HDF, .ADF, .EXT, .IMG, .DMS, .EXE, .DIR ]
-                try controller.mydocument.addMedia(url: url, allowedTypes: types, df: n, hd: n)
+                let types: [FileType] = [ .SNAPSHOT, .SCRIPT ]
+                try mydocument.addMedia(url: url, allowedTypes: types)
+                return
                 
-            } catch {
+            } catch let error as VAError {
                 
-                controller.showAlert(.cantOpen(url: url), error: error, async: true)
+                if error.errorCode != .FILE_TYPE_MISMATCH {
+                    throw error
+                }
             }
+            
+            // Check if the file had been dragged into a drop zone
+            if let n = metal.dropZone {
+                
+                do {
+                    
+                    metal.dropZone = nil
+                    let types: [FileType] = [ .HDF, .ADF, .EXT, .IMG, .DMS, .EXE, .DIR ]
+                    try controller.mydocument.addMedia(url: url,
+                                                       allowedTypes: types,
+                                                       df: n, hd: n)
+                } catch {
+                    controller.showAlert(.cantOpen(url: url), error: error, async: true)
+                }
+            }
+            
+        } catch {
+            controller.showAlert(.cantOpen(url: url), error: error, async: true)
         }
     }
     

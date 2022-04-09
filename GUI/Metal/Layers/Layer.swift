@@ -62,11 +62,12 @@ class Layer: NSObject {
             alphaDidChange()
             
             if !alpha.animates {
-                animationHasStopped()
+                isVisible ? layerDidOpen() : layerDidClose()
             }
         }
     }
     
     func alphaDidChange() { }
-    func animationHasStopped() { }
+    func layerDidOpen() { }
+    func layerDidClose() { }
 }

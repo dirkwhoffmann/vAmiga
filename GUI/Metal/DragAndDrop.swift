@@ -117,41 +117,17 @@ public extension MetalView {
 
     func performUrlDrag(_ sender: NSDraggingInfo) -> Bool {
                 
-        dropZone = nil
-        guard let url = dropUrl else { return false }
+        if dropUrl == nil { return false }
         
-        do {
-            
-            // Check if the file is a snapshot or a script
-            do {
-                let types: [FileType] = [ .SNAPSHOT, .SCRIPT ]
-                try myDocument.addMedia(url: url, allowedTypes: types)
-                return true
-                
-            } catch let error as VAError {
-                
-                if error.errorCode != .FILE_TYPE_MISMATCH {
-                    throw error
-                }
+        // Check drop zones
+        dropZone = nil
+        for i in 0...3 {
+            if renderer.dropZone.isInside(sender, zone: i) {
+                dropZone = i
             }
-            
-            // Check drop zones
-            for i in 0...3 {
-                if renderer.dropZone.isInside(sender, zone: i) {
-                    
-                    // Remember the zone (picked up when the drop layer closes)
-                    dropZone = i
-                    return true
-                }
-            }
-            
-            return false
-            
-        } catch {
-            
-            parent.showAlert(.cantOpen(url: url), error: error, async: true)
-            return false
         }
+
+        return true
     }
             
     override func concludeDragOperation(_ sender: NSDraggingInfo?) {
