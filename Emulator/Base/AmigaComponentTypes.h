@@ -74,9 +74,11 @@ enum_long(OPT)
     OPT_INSERT_VOLUME,
     OPT_EJECT_VOLUME,
     
-    // Hard Drives
+    // Hard drive controllers
+    OPT_HDC_CONNECT,
+
+    // Hard drives
     OPT_HDR_TYPE,
-    OPT_HDR_CONNECT,
     OPT_HDR_PAN,
     OPT_HDR_STEP_VOLUME,
     
@@ -192,8 +194,9 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_INSERT_VOLUME:         return "INSERT_VOLUME";
             case OPT_EJECT_VOLUME:          return "EJECT_VOLUME";
                 
+            case OPT_HDC_CONNECT:           return "HDC_CONNECT";
+
             case OPT_HDR_TYPE:              return "HDR_TYPE";
-            case OPT_HDR_CONNECT:           return "HDR_CONNECT";
             case OPT_HDR_PAN:               return "HDR_PAN";
             case OPT_HDR_STEP_VOLUME:       return "HDR_STEP_VOLUME";
 

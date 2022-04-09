@@ -43,6 +43,12 @@ HdController::_dump(Category category, std::ostream& os) const
         
     ZorroBoard::_dump(category, os);
     
+    if (category == Category::Config) {
+        
+        os << tab("Connected");
+        os << bol(config.connected) << std::endl;
+    }
+    
     if (category == Category::Stats) {
         
         for (isize i = 0; IoCommandEnum::isValid(i); i++) {
@@ -75,6 +81,60 @@ HdController::_reset(bool hard)
         
         // Wipe out usage information
         clearStats();
+    }
+}
+
+HdcConfig
+HdController::getDefaultConfig(isize nr)
+{
+    HdcConfig defaults;
+    
+    defaults.connected = false;
+
+    return defaults;
+}
+
+void
+HdController::resetConfig()
+{
+    auto defaults = getDefaultConfig(nr);
+    
+    setConfigItem(OPT_HDC_CONNECT, defaults.connected);
+}
+
+i64
+HdController::getConfigItem(Option option) const
+{
+    switch (option) {
+            
+        case OPT_HDC_CONNECT:       return (long)config.connected;
+
+        default:
+            fatalError;
+    }
+}
+
+void
+HdController::setConfigItem(Option option, i64 value)
+{
+    switch (option) {
+         
+        case OPT_HDC_CONNECT:
+            
+            if (!isPoweredOff()) {
+                throw VAError(ERROR_OPT_LOCKED);
+            }
+            
+            if (bool(value) == config.connected) {
+                break;
+            }
+            
+            config.connected = bool(value);
+            bool(value) ? drive.connect() : drive.disconnect();
+            return;
+
+        default:
+            fatalError;
     }
 }
 

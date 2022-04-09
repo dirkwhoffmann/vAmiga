@@ -21,9 +21,12 @@ class HdController : public ZorroBoard {
 
     // The hard drive this controller is connected to
     HardDrive &drive;
+
+    // Current configuration
+    HdcConfig config = {};
     
     // Usage profile
-    HdControllerStats stats = {};
+    HdcStats stats = {};
     
     // Initialization state
     HdControllerState initState = HDCON_RESET;
@@ -65,7 +68,9 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-
+        worker
+        
+        << config.connected;
     }
 
     template <class T>
@@ -112,12 +117,26 @@ private:
     
     
     //
+    // Configuring
+    //
+    
+public:
+    
+    static HdcConfig getDefaultConfig(isize nr);
+    const HdcConfig &getConfig() const { return config; }
+    void resetConfig() override;
+    
+    i64 getConfigItem(Option option) const;
+    void setConfigItem(Option option, i64 value);
+
+    
+    //
     // Analyzing
     //
     
 public:
     
-    const HdControllerStats &getStats() { return stats; }
+    const HdcStats &getStats() { return stats; }
     void clearStats() { stats = { }; }
     
     // Returns the current initialization state

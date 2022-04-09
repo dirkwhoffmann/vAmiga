@@ -540,7 +540,7 @@ extension MyController {
         case .DISK_UNSAVED, .DISK_SAVED, .DISK_PROTECT, .DISK_UNPROTECT:
             refreshStatusBar()
 
-        case .HDR_CONNECT:
+        case .HDC_CONNECT:
             hideOrShowDriveMenus()
             assignSlots()
             refreshStatusBar()

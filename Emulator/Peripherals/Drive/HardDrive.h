@@ -117,7 +117,6 @@ private:
         worker
         
         << config.type
-        << config.connected
         << config.pan
         << config.stepVolume
         << diskVendor

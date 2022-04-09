@@ -128,7 +128,7 @@ enum_long(HDCON_STATE)
 typedef HDCON_STATE HdControllerState;
 
 #ifdef __cplusplus
-struct HdControllerStateEnum : util::Reflection<HdControllerStateEnum, HdControllerState>
+struct HdcStateEnum : util::Reflection<HdcStateEnum, HdControllerState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = HDCON_READY;
@@ -149,9 +149,20 @@ struct HdControllerStateEnum : util::Reflection<HdControllerStateEnum, HdControl
 };
 #endif
 
+
+//
+// Structures
+//
+
+typedef struct
+{
+    bool connected;
+}
+HdcConfig;
+
 typedef struct
 {
     // Tracks the number of executed commands
     isize cmdCount[25];
 }
-HdControllerStats;
+HdcStats;

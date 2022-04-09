@@ -316,8 +316,11 @@ Amiga::getConfigItem(Option option, long id) const
             
             return df[id]->getConfigItem(option);
             
+        case OPT_HDC_CONNECT:
+            
+            return hdcon[id]->getConfigItem(option);
+            
         case OPT_HDR_TYPE:
-        case OPT_HDR_CONNECT:
         case OPT_HDR_PAN:
         case OPT_HDR_STEP_VOLUME:
             
@@ -454,9 +457,16 @@ Amiga::configure(Option option, i64 value)
             df[2]->setConfigItem(option, value);
             df[3]->setConfigItem(option, value);
             break;
-            
+
+        case OPT_HDC_CONNECT:
+
+            hdcon[0]->setConfigItem(option, value);
+            hdcon[1]->setConfigItem(option, value);
+            hdcon[2]->setConfigItem(option, value);
+            hdcon[3]->setConfigItem(option, value);
+            break;
+
         case OPT_HDR_TYPE:
-        case OPT_HDR_CONNECT:
         case OPT_HDR_PAN:
         case OPT_HDR_STEP_VOLUME:
             
@@ -611,8 +621,13 @@ Amiga::configure(Option option, long id, i64 value)
             df[id]->setConfigItem(option, value);
             break;
 
+        case OPT_HDC_CONNECT:
+
+            assert(id >= 0 || id <= 4);
+            hdcon[id]->setConfigItem(option, value);
+            break;
+
         case OPT_HDR_TYPE:
-        case OPT_HDR_CONNECT:
         case OPT_HDR_PAN:
         case OPT_HDR_STEP_VOLUME:
             

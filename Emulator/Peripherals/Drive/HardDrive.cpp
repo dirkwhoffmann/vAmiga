@@ -166,7 +166,6 @@ HardDrive::getDefaultConfig(isize nr)
     HardDriveConfig defaults;
     
     defaults.type = HDR_GENERIC;
-    defaults.connected = false;
     defaults.pan = IS_EVEN(nr) ? 100 : -100;
     defaults.stepVolume = 128;
 
@@ -179,7 +178,6 @@ HardDrive::resetConfig()
     auto defaults = getDefaultConfig(nr);
     
     setConfigItem(OPT_HDR_TYPE, defaults.type);
-    setConfigItem(OPT_HDR_CONNECT, defaults.connected);
     setConfigItem(OPT_HDR_PAN, defaults.pan);
     setConfigItem(OPT_HDR_STEP_VOLUME, defaults.stepVolume);
 }
@@ -190,7 +188,6 @@ HardDrive::getConfigItem(Option option) const
     switch (option) {
             
         case OPT_HDR_TYPE:          return (long)config.type;
-        case OPT_HDR_CONNECT:       return (long)config.connected;
         case OPT_HDR_PAN:           return (long)config.pan;
         case OPT_HDR_STEP_VOLUME:   return (long)config.stepVolume;
 
@@ -212,14 +209,6 @@ HardDrive::setConfigItem(Option option, i64 value)
             config.type = (HardDriveType)value;
             return;
 
-        case OPT_HDR_CONNECT:
-            
-            if (!isPoweredOff()) {
-                throw VAError(ERROR_OPT_LOCKED);
-            }
-            bool(value) ? connect() : disconnect();
-            return;
-
         case OPT_HDR_PAN:
 
             config.pan = (i16)value;
@@ -238,10 +227,6 @@ HardDrive::setConfigItem(Option option, i64 value)
 void
 HardDrive::connect()
 {
-    if (config.connected) return;
-    
-    config.connected = true;
-    
     if (wtPath[nr] != "") {
         
         try {
@@ -269,15 +254,12 @@ HardDrive::connect()
         format(FS_OFS, defaultName());
     }
     
-    msgQueue.put(MSG_HDR_CONNECT, nr);
+    msgQueue.put(MSG_HDC_CONNECT, nr);
 }
 
 void
 HardDrive::disconnect()
 {
-    if (!config.connected) return;
-    
-    config.connected = false;
     disableWriteThrough();
     init();
     
@@ -331,8 +313,6 @@ HardDrive::_dump(Category category, std::ostream& os) const
         os << dec(nr) << std::endl;
         os << tab("Type");
         os << HardDriveTypeEnum::key(config.type) << std::endl;
-        os << tab("Connected");
-        os << bol(config.connected) << std::endl;
         os << tab("Step volume");
         os << dec(config.stepVolume) << std::endl;
         os << tab("Pan");
@@ -415,7 +395,7 @@ HardDrive::_dump(Category category, std::ostream& os) const
 bool
 HardDrive::isConnected() const
 {
-    return config.connected;
+    return amiga.hdcon[nr]->getConfigItem(OPT_HDC_CONNECT);    
 }
 
 u64
