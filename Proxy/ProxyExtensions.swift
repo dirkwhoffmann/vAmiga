@@ -422,7 +422,7 @@ extension FloppyDriveProxy {
                 return NSImage(named: "ledGreen")
             }
         } else {
-            return NSImage(named: "driveLedOff")
+            return NSImage(named: "ledGrey")
         }
     }
 }
