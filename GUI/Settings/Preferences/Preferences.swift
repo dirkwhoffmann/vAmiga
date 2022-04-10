@@ -110,6 +110,7 @@ class Preferences {
     }
     var autofireFrequency = ControlsDefaults.std.autofireFrequency {
         didSet {
+            autofireFrequency = autofireFrequency.clamped(1, 4)
             let autofireDelay = Int(50.0 / autofireFrequency)
             for amiga in myAppDelegate.proxies {
                 amiga.configure(.AUTOFIRE_DELAY, value: autofireDelay)
