@@ -214,39 +214,26 @@ class DropZone: Layer {
     override func layerDidClose() {
         
         guard let url = metal.dropUrl else { return }
-        metal.dropUrl = nil
-        
+        guard let type = metal.dropType else { return }
+        let n = metal.dropZone
+
         do {
-            
-            // Check if the file is a snapshot or a script
-            do {
-                let types: [FileType] = [ .SNAPSHOT, .SCRIPT ]
-                try mydocument.addMedia(url: url, allowedTypes: types)
-                return
+                        
+            switch type {
                 
-            } catch let error as VAError {
+            case .SNAPSHOT, .SCRIPT:
+                try mydocument.addMedia(url: url,
+                                        allowedTypes: [type])
                 
-                if error.errorCode != .FILE_TYPE_MISMATCH {
-                    throw error
-                }
-            }
-            
-            // Check if the file had been dragged into a drop zone
-            if let n = metal.dropZone {
-                
-                do {
-                    
-                    metal.dropZone = nil
-                    let types: [FileType] = [ .HDF, .ADF, .EXT, .IMG, .DMS, .EXE, .DIR ]
-                    try controller.mydocument.addMedia(url: url,
-                                                       allowedTypes: types,
-                                                       df: n, hd: n)
-                } catch {
-                    controller.showAlert(.cantOpen(url: url), error: error, async: true)
-                }
+            case .ADF, .HDF, .EXT, .IMG, .DMS, .EXE, .DIR:
+                try mydocument.addMedia(url: url,
+                                        allowedTypes: [type], df: n!, hd: n!)
+            default:
+                fatalError()
             }
             
         } catch {
+            
             controller.showAlert(.cantOpen(url: url), error: error, async: true)
         }
     }

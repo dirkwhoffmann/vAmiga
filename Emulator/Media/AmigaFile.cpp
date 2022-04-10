@@ -103,7 +103,10 @@ AmigaFile::type(const string &path)
         
         if (Snapshot::isCompatible(path) &&
             Snapshot::isCompatible(stream)) return FILETYPE_SNAPSHOT;
-        
+
+        if (Script::isCompatible(path) &&
+            Script::isCompatible(stream)) return FILETYPE_SCRIPT;
+
         if (ADFFile::isCompatible(path) &&
             ADFFile::isCompatible(stream)) return FILETYPE_ADF;
         

@@ -54,7 +54,7 @@ class MyDocument: NSDocument {
 
     func createFileProxy(from url: URL, allowedTypes: [FileType]) throws -> AmigaFileProxy? {
             
-        log("Creating proxy object from URL: \(url.lastPathComponent)")
+        log("Reading file \(url.lastPathComponent)")
         
         // If the provided URL points to compressed file, decompress it first
         let newUrl = url.unpacked(maxSize: 2048 * 1024)

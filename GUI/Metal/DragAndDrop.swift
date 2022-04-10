@@ -31,6 +31,10 @@ public extension MetalView {
 
     override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
         
+        dropZone = nil
+        dropUrl = nil
+        dropType = nil
+        
         let pasteBoard = sender.draggingPasteboard
         guard let type = pasteBoard.availableType(from: acceptedTypes()) else {
             return NSDragOperation()
@@ -120,13 +124,27 @@ public extension MetalView {
         if dropUrl == nil { return false }
         
         // Check drop zones
-        dropZone = nil
+        var zone: Int?
         for i in 0...3 {
-            if renderer.dropZone.isInside(sender, zone: i) {
-                dropZone = i
-            }
+            if renderer.dropZone.isInside(sender, zone: i) { zone = i }
         }
 
+        // Check file types
+        let type = FileType(url: dropUrl)
+        switch type {
+            
+        case .SNAPSHOT, .SCRIPT:
+            break
+            
+        case .ADF, .HDF, .EXT, .IMG, .DMS, .EXE, .DIR:
+            if zone == nil { return false }
+            
+        default:
+            return false
+        }
+
+        dropZone = zone
+        dropType = type
         return true
     }
             

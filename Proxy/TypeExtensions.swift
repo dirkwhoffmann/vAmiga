@@ -61,6 +61,10 @@ extension EventSlot: CustomStringConvertible {
 
 extension FileType {
     
+    init?(url: URL?) {
+        self = url == nil ? .UNKNOWN : AmigaFileProxy.type(of: url)
+    }
+
     static var all: [FileType] {
         return [ .SNAPSHOT, .SCRIPT, .ADF, .HDF, .EXT, .IMG, .DMS, .EXE, .DIR ]
     }
