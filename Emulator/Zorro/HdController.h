@@ -34,10 +34,13 @@ class HdController : public ZorroBoard {
     // Rom code
     Buffer<u8> rom;
     
+    // Number of initialized partitions
+    isize numPartitions = 0;
+
     // Transmitted pointer
     u32 pointer = 0;
-    
-    
+        
+
     //
     // Initializing
     //
@@ -83,6 +86,7 @@ private:
             << baseAddr
             << state
             << hdcState
+            << numPartitions
             << pointer;
         }
     }

@@ -405,6 +405,22 @@ HdController::processInit()
 {
     trace(HDR_DEBUG, "processInit()\n");
 
+    auto assignDosName = [&](char *name) {
+        
+        // Determine the number of already initialized partitions
+        auto nr = 
+        hd0con.numPartitions +
+        hd1con.numPartitions +
+        hd2con.numPartitions +
+        hd3con.numPartitions;
+
+        name[0] = 'H';
+        name[1] = 'D';
+        name[2] = nr < 10 ? '0' + char(nr) : '0' + char(nr / 10);
+        name[3] = nr < 10 ? 0 : '0' + char(nr % 10);
+        name[4] = 0;
+    };
+
     // Keep in check with exprom.asm
     constexpr u16 devn_dosName      = 0x00;  // APTR  Pointer to DOS file handler name
     constexpr u16 devn_unit         = 0x08;  // ULONG Unit number
@@ -433,14 +449,13 @@ HdController::processInit()
 
         debug(HDR_DEBUG, "Initializing partition %d\n", unit);
         changeHdcState(HDC_INITIALIZING);
-
+        
         // Collect hard drive information
         auto &geometry = drive.geometry;
         auto &part = drive.ptable[unit];
-        
-        char dosName[] = {'D', 'H', '0', 0 };
-        dosName[2] = char('0' + unit);
-        
+        char dosName[5];
+        assignDosName(dosName);
+
         u32 name_ptr = mem.spypeek32 <ACCESSOR_CPU> (pointer + devn_dosName);
         for (isize i = 0; i < isizeof(dosName); i++) {
             mem.patch(u32(name_ptr + i), u8(dosName[i]));
@@ -468,6 +483,8 @@ HdController::processInit()
         if (part.dosType != 0x444f5300) {
             warn("Unusual DOS type %x\n", part.dosType);
         }
+        
+        numPartitions++;
 
     } else {
 
