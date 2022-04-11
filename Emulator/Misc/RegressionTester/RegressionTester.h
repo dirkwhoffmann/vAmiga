@@ -77,7 +77,7 @@ private:
 public:
 
     // Reverts everything to factory settings
-    void prepare(ConfigScheme scheme, string kickstart);
+    void prepare(ConfigScheme scheme, string rom, string ext = "");
     
     // Runs a test case
     void run(string adf);

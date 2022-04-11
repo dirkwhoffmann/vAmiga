@@ -76,9 +76,10 @@ template <> void
 RetroShell::exec <Token::regression, Token::setup> (Arguments &argv, long param)
 {
     auto scheme = util::parseEnum <ConfigSchemeEnum> (argv[0]);
-    auto kickrom = argv[1];
+    auto rom = argv[1];
+    auto ext = argv.size() > 2 ? argv[2] : "";
     
-    amiga.regressionTester.prepare(scheme, kickrom);
+    amiga.regressionTester.prepare(scheme, rom, ext);
     
 }
 

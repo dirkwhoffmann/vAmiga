@@ -57,7 +57,7 @@ Interpreter::registerInstructions()
 
     root.add({"regression", "setup"},
              "command", "Initializes the test environment",
-             &RetroShell::exec <Token::regression, Token::setup>, 2);
+             &RetroShell::exec <Token::regression, Token::setup>, {2, 3});
 
     root.add({"regression", "run"},
              "command", "Launches a regression test",

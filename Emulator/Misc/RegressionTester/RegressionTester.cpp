@@ -15,7 +15,7 @@
 #include <fstream>
 
 void
-RegressionTester::prepare(ConfigScheme scheme, string kickstart)
+RegressionTester::prepare(ConfigScheme scheme, string rom, string ext)
 {
     // Only proceed if the /tmp folder exisits
     if (!util::fileExists("/tmp")) throw VAError(ERROR_DIR_NOT_FOUND, "/tmp");
@@ -28,7 +28,10 @@ RegressionTester::prepare(ConfigScheme scheme, string kickstart)
     amiga.configure(scheme);
 
     // Load Kickstart Rom
-    amiga.mem.loadRom(kickstart.c_str());
+    amiga.mem.loadRom(rom.c_str());
+    
+    // Load Extension Rom (if provided)
+    if (ext != "") amiga.mem.loadExt(ext.c_str());
     
     // Choose a warp source that prevents the GUI from disabling warp mode
     constexpr isize warpSource = 1;
