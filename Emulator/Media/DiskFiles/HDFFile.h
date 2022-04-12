@@ -21,7 +21,10 @@ class HDFFile : public DiskFile {
     GeometryDescriptor geometry;
 
     // Derived partition table
-    std::vector<PartitionDescriptor> ptable;
+    std::vector <PartitionDescriptor> ptable;
+    
+    // Included device drivers
+    std::vector <DriverDescriptor> drivers;
                 
 public:
     
@@ -74,10 +77,12 @@ public:
     // Providing descriptors
     //
     
-    struct GeometryDescriptor getGeometryDescriptor() const;
-    struct PartitionDescriptor getPartitionDescriptor(isize part = 0) const;
+    GeometryDescriptor getGeometryDescriptor() const;
+    PartitionDescriptor getPartitionDescriptor(isize part = 0) const;
     std::vector<PartitionDescriptor> getPartitionDescriptors() const;
-    struct FileSystemDescriptor getFileSystemDescriptor(isize part = 0) const;
+    DriverDescriptor getDriverDescriptor(isize driver = 0) const;
+    std::vector<DriverDescriptor> getDriverDescriptors() const;
+    FileSystemDescriptor getFileSystemDescriptor(isize part = 0) const;
 
         
     //
@@ -135,13 +140,19 @@ private:
     
     // Returns a pointer to a certain partition block if it exists
     u8 *seekPB(isize nr) const;
-    
+
+    // Returns a pointer to a certain filesystem header block if it exists
+    u8 *seekFSH(isize nr) const;
+
     // Returns a string from the Rigid Disk Block if it exists
     std::optional<string> rdbString(isize offset, isize len) const;
 
     // Extracts the DOS revision number from a certain block
     FSVolumeType dos(isize nr) const;
     
+    // Returns a loadable device drive
+    void readDriver(isize nr, Buffer<u8> &driver);
+
     
     //
     // Serializing

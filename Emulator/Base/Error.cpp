@@ -229,9 +229,13 @@ VAError::VAError(ErrorCode code, const string &s)
             break;
 
         case ERROR_HDR_CORRUPTED_PTABLE:
-            description = "Can't parse the partition table.";
+            description = "Invalid partition table.";
             break;
-            
+
+        case ERROR_HDR_CORRUPTED_FSH:
+            description = "Invalid file system header block.";
+            break;
+
         case ERROR_HDR_UNSUPPORTED:
             description = "The hard drive is encoded in an unknown or unsupported format.";
             break;

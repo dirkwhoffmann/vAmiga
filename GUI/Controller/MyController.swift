@@ -551,7 +551,6 @@ extension MyController {
             refreshStatusBar()
 
         case .HDC_STATE:
-            log("HDC_STATE")
             refreshStatusBar()
 
         case .HDR_STEP:

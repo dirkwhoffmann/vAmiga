@@ -84,6 +84,8 @@ enum_long(ERROR_CODE)
     ERROR_HDR_UNMATCHED_GEOMETRY,
     ERROR_HDR_UNPARTITIONED,
     ERROR_HDR_CORRUPTED_PTABLE,
+    ERROR_HDR_CORRUPTED_FSH,
+    ERROR_HDR_CORRUPTED_LSEG,
     ERROR_HDR_UNSUPPORTED,
 
     // Snapshots
@@ -248,6 +250,8 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_HDR_UNMATCHED_GEOMETRY:      return "HDR_UNMATCHED_GEOMETRY";
             case ERROR_HDR_UNPARTITIONED:           return "HDR_UNPARTITIONED";
             case ERROR_HDR_CORRUPTED_PTABLE:        return "HDR_CORRUPTED_PTABLE";
+            case ERROR_HDR_CORRUPTED_FSH:           return "HDR_CORRUPTED_FSH";
+            case ERROR_HDR_CORRUPTED_LSEG:          return "HDR_CORRUPTED_LSEG";
             case ERROR_HDR_UNSUPPORTED:             return "HDR_UNSUPPORTED";
                 
             case ERROR_SNAP_TOO_OLD:                return "SNAP_TOO_OLD";

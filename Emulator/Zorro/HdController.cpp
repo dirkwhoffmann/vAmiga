@@ -481,7 +481,7 @@ HdController::processInit()
         mem.patch(pointer + devn_segList,       u32(0));
         
         if (part.dosType != 0x444f5300) {
-            warn("Unusual DOS type %x\n", part.dosType);
+            debug(HDR_DEBUG, "Unusual DOS type %x\n", part.dosType);
         }
         
         numPartitions++;

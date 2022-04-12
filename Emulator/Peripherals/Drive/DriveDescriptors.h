@@ -125,5 +125,34 @@ struct PartitionDescriptor {
     void dump(std::ostream& os) const;
 
     // Throws an exception if inconsistent or unsupported values are present
+    void checkCompatibility(const GeometryDescriptor &geo) const;
+};
+
+struct DriverDescriptor {
+
+    u32 dosType = 0;
+    u32 dosVersion = 0;
+    u32 patchFlags = 0;
+    std::vector<u32> segList;
+    
+    template <class W>
+    void operator<<(W& worker)
+    {
+        worker
+        
+        << dosType
+        << dosVersion
+        << patchFlags
+        << segList;
+    }
+    
+    // Initializers
+    DriverDescriptor() { };
+        
+    // Prints debug information
+    void dump() const;
+    void dump(std::ostream& os) const;
+    
+    // Throws an exception if inconsistent or unsupported values are present
     void checkCompatibility() const;
 };
