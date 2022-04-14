@@ -28,6 +28,10 @@ enum_long(ERROR_CODE)
     ERROR_OPT_INVARG,
     ERROR_OPT_LOCKED,               // DEPRECATED: Replace by ERROR_POWERED_ON
 
+    // Property storage
+    ERROR_INVALID_KEY,
+    ERROR_SYNTAX,
+
     // CPU
     ERROR_BP_NOT_FOUND,
     ERROR_BP_ALREADY_SET,
@@ -201,6 +205,9 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_OPT_UNSUPPORTED:             return "OPT_UNSUPPORTED";
             case ERROR_OPT_INVARG:                  return "OPT_INVARG";
             case ERROR_OPT_LOCKED:                  return "OPT_LOCKED";
+                
+            case ERROR_INVALID_KEY:                 return "INVALID_KEY";
+            case ERROR_SYNTAX:                      return "SYNTAX";
                 
             case ERROR_BP_NOT_FOUND:                return "BP_NOT_FOUND";
             case ERROR_BP_ALREADY_SET:              return "BP_ALREADY_SET";

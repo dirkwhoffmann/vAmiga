@@ -129,9 +129,16 @@ Interpreter::registerInstructions()
              &RetroShell::exec <Token::amiga, Token::reset>, 0);
     
     root.add({"amiga", "inspect"},
-             "command", "Displays the component state",
-             &RetroShell::exec <Token::amiga, Token::inspect>, 0);
+             "command", "Displays the component state");
 
+    root.add({"amiga", "inspect", "state"},
+             "command", "Displays the current state",
+             &RetroShell::exec <Token::amiga, Token::inspect, Token::state>, 0);
+
+    root.add({"amiga", "inspect", "defaults"},
+             "command", "Displays the user default storage",
+             &RetroShell::exec <Token::amiga, Token::inspect, Token::defaults>, 0);
+    
     
     //
     // Memory

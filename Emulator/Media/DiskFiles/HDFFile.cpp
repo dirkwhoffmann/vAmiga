@@ -487,7 +487,7 @@ HDFFile::readDriver(isize nr, Buffer<u8> &driver)
     auto &segList = drivers[nr].segList;
     auto bytesPerBlock = bsize() - 20;
 
-    driver.init(segList.size() * bytesPerBlock);
+    driver.init(isize(segList.size()) * bytesPerBlock);
     
     isize offset = 0;
     for (auto &seg : segList) {

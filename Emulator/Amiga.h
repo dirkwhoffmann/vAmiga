@@ -23,6 +23,7 @@
 #include "MsgQueue.h"
 #include "OSDebugger.h"
 #include "Paula.h"
+#include "Properties.h"
 #include "RegressionTester.h"
 #include "RemoteManager.h"
 #include "RetroShell.h"
@@ -42,6 +43,9 @@
  */
 class Amiga : public Thread {
 
+    // User settings
+    static Properties properties;
+    
     /* Result of the latest inspection. In order to update the GUI inspector
      * panels, the emulator schedules events in the inspector slot (SLOT_INS in
      * the secondary table) on a periodic basis. Inside the event handler, the

@@ -49,6 +49,14 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "This option is locked because the Amiga is powered on.";
             break;
 
+        case ERROR_INVALID_KEY:
+            description = "Invalid key: " + s;
+            break;
+            
+        case ERROR_SYNTAX:
+            description = "Syntax error in line " + s;
+            break;
+
         case ERROR_BP_NOT_FOUND:
             description = "Breakpoint " + s + " not found";
             break;

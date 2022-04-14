@@ -96,6 +96,12 @@ rtrim(const string &s, const string &characters)
     return (pos == string::npos) ? "" : s.substr(0, pos + 1);
 }
 
+string
+trim(const string &s, const string &characters)
+{
+    return ltrim(rtrim(s, characters), characters);
+}
+
 std::vector<string>
 split(const string &s, char delimiter)
 {
