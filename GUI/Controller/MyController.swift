@@ -193,8 +193,12 @@ extension MyController {
         // Setup window
         configureWindow()
                 
+        // Register user default keys
+        registerUserDefaults()
+        
         // Load user defaults
-        loadUserDefaults()
+        // TODO: CALL amiga.properties.load(...))
+        loadUserDefaults() // DEPRECATED
 
         // Tell the emulator where to find certain assets
         amiga.mem.setRomPath(UserDefaults.romUrl)

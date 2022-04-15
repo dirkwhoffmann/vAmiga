@@ -308,33 +308,6 @@ Properties::getFallback(const string &key)
     return fallbacks[key];
 }
 
-/*
-i64
-Properties::getFallback(Option key)
-{
-    auto name = string(OptionEnum::key(key));
-    auto value = getString(name);
-    
-    return std::stol(value);
-}
-
-i64
-Properties::getFallback(Option option, isize nr)
-{
-    auto key = string(OptionEnum::key(option));
-    auto fullkey = key + std::to_string(nr);
-    string value;
-    
-    try {
-        value = getFallback(fullkey);
-    } catch (...) {
-        value = getString(key);
-    }
-    
-    return std::stol(value);
-}
-*/
-
 void
 Properties::setString(const string &key, const string &value)
 {

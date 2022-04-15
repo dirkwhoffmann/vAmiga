@@ -168,6 +168,22 @@ extension PropertiesProxy {
         }
     }
 
+    func register(_ key: String, _ value: String) {
+        register(key, value: value)
+    }
+
+    func register(_ key: String, _ value: Bool) {
+        register(key, value: value ? "1" : "0")
+    }
+
+    func register(_ key: String, _ value: Int) {
+        register(key, value: "\(value)")
+    }
+
+    func register(_ key: String, _ value: UInt) {
+        register(key, value: "\(value)")
+    }
+
     func set(_ option: Option, value: Bool) {
         set(option, value: value ? 1 : 0)
     }

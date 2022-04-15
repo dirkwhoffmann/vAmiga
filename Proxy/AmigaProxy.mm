@@ -102,6 +102,11 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; }
 }
 
+- (void)register:(NSString *)key value:(NSString *)value
+{
+    [self props]->setFallback(string([key UTF8String]), string([value UTF8String]));
+}
+
 - (NSString *)getKey:(NSString *)key
 {
     auto result = [self props]->getString([key UTF8String]);

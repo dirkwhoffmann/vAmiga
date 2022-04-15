@@ -256,6 +256,8 @@
 - (void)load:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)save:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
+- (void)register:(NSString *)key value:(NSString *)value;
+
 - (NSString *)getKey:(NSString *)key;
 - (NSInteger)get:(Option)option;
 - (NSInteger)get:(Option)option nr:(NSInteger)nr;

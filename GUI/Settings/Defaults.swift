@@ -67,6 +67,19 @@ extension UserDefaults {
 
 extension MyController {
     
+    func registerUserDefaults() {
+                
+        log(level: 2)
+        
+        registerGeneralUserDefaults()
+        /*
+        registerControlsUserDefaults()
+        registerDevicesUserDefaults()
+        registerVideoUserDefaults()
+        registerGeometryUserDefaults()
+        */
+    }
+    
     func loadUserDefaults() {
         
         log(level: 2)
@@ -186,8 +199,70 @@ struct GeneralDefaults {
     )
 }
 
+extension MyController {
+
+    func registerGeneralUserDefaults() {
+        
+        let defaults = amiga.properties!
+        let std = GeneralDefaults.std
+        
+        defaults.register(Keys.Gen.autoSnapshots, std.autoSnapshots)
+        defaults.register(Keys.Gen.autoSnapshotInterval, std.autoSnapshotInterval)
+        
+        defaults.register(Keys.Gen.screenshotSource, std.screenshotSource)
+        defaults.register(Keys.Gen.screenshotTarget, std.screenshotTarget.rawValue)
+        defaults.register(Keys.Gen.ffmpegPath, std.ffmpegPath)
+        
+        defaults.register(Keys.Gen.captureSource, std.captureSource)
+        defaults.register(Keys.Gen.bitRate, std.bitRate)
+        defaults.register(Keys.Gen.aspectX, std.aspectX)
+        defaults.register(Keys.Gen.aspectY, std.aspectY)
+        
+        defaults.register(Keys.Gen.keepAspectRatio, std.keepAspectRatio)
+        defaults.register(Keys.Gen.exitOnEsc, std.exitOnEsc)
+        
+        defaults.register(Keys.Gen.warpMode, std.warpMode.rawValue)
+        
+        defaults.register(Keys.Gen.ejectWithoutAsking, std.ejectWithoutAsking)
+        defaults.register(Keys.Gen.detachWithoutAsking, std.detachWithoutAsking)
+        defaults.register(Keys.Gen.closeWithoutAsking, std.closeWithoutAsking)
+        defaults.register(Keys.Gen.pauseInBackground, std.pauseInBackground)
+    }
+    
+    func resetGeneralUserDefaults() {
+        
+        let defaults = amiga.properties!
+        
+        let keys = [ Keys.Gen.autoSnapshots,
+                     Keys.Gen.autoSnapshotInterval,
+                     
+                     Keys.Gen.screenshotSource,
+                     Keys.Gen.screenshotTarget,
+                     
+                     Keys.Gen.ffmpegPath,
+                     Keys.Gen.captureSource,
+                     Keys.Gen.bitRate,
+                     Keys.Gen.aspectX,
+                     Keys.Gen.aspectY,
+            
+                     Keys.Gen.keepAspectRatio,
+                     Keys.Gen.exitOnEsc,
+                     
+                     Keys.Gen.warpMode,
+                     
+                     Keys.Gen.ejectWithoutAsking,
+                     Keys.Gen.detachWithoutAsking,
+                     Keys.Gen.closeWithoutAsking,
+                     Keys.Gen.pauseInBackground
+        ]
+
+        for key in keys { defaults.removeKey(key) }
+    }
+}
+
 extension UserDefaults {
     
+    @available(*, deprecated)
     static func registerGeneralUserDefaults() {
     
         let defaults = GeneralDefaults.std
@@ -221,6 +296,7 @@ extension UserDefaults {
         userDefaults.register(defaults: dictionary)
     }
     
+    @available(*, deprecated)
     static func resetGeneralUserDefaults() {
         
         let defaults = UserDefaults.standard

@@ -133,6 +133,8 @@ class Preferences {
         
     func loadGeneralUserDefaults() {
         
+        // TODO: Make Properties accessible as static variable in AmigaProxy
+        
         let defaults = UserDefaults.standard
            
         // Snapshots
