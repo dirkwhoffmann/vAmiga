@@ -131,11 +131,15 @@ Properties::_dump(Category category, std::ostream& os) const
     for (const auto &it: defaults) {
         
         const string key = it.first;
-        os << util::tab(key);
 
         if (values.contains(key)) {
+
+            os << util::tab(key);
             os << values.at(key) << std::endl;
+            
         } else {
+            
+            os << util::tab(key);
             os << defaults.at(key) << " (Default)" << std::endl;
         }
     }
@@ -284,7 +288,7 @@ Properties::get(Option option, isize nr)
     auto key = string(OptionEnum::key(option));
     auto fullkey = key + std::to_string(nr);
     string value;
-    
+        
     try {
         value = get(fullkey);
     } catch (...) {
@@ -429,4 +433,10 @@ void
 Properties::remove(Option option, isize nr)
 {
     remove(string(OptionEnum::key(option)) + std::to_string(nr));
+}
+
+void
+Properties::remove(Option option, std::vector <isize> nrs)
+{
+    for (auto &nr : nrs) remove(option, nr);
 }

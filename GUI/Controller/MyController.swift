@@ -196,10 +196,14 @@ extension MyController {
         // Load user defaults
         loadUserDefaults()
 
-        // Setup the Rom search paths
+        // Tell the emulator where to find certain assets
         amiga.mem.setRomPath(UserDefaults.romUrl)
         amiga.mem.setExtPath(UserDefaults.extUrl)
-
+        amiga.hd0.setPath(0, path: UserDefaults.hdnUrl(0)!)
+        amiga.hd1.setPath(1, path: UserDefaults.hdnUrl(1)!)
+        amiga.hd2.setPath(2, path: UserDefaults.hdnUrl(2)!)
+        amiga.hd3.setPath(3, path: UserDefaults.hdnUrl(3)!)
+        
         // Enable message processing
         registerAsListener()
                 

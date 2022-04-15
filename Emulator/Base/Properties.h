@@ -93,4 +93,5 @@ public:
     void remove(const string &key) throws;
     void remove(Option option) throws;
     void remove(Option option, isize nr) throws;
+    void remove(Option option, std::vector <isize> nrs) throws;
 };

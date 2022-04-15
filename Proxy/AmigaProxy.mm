@@ -102,39 +102,55 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; }
 }
 
-- (void) setKey:(NSString *)key value:(NSString *)value
+- (NSString *)getKey:(NSString *)key
+{
+    auto result = [self props]->get([key UTF8String]);
+    return @(result.c_str());
+}
+
+- (NSInteger)get:(Option)option
+{
+    return [self props]->get(option);
+}
+
+- (NSInteger)get:(Option)option nr:(NSInteger)nr
+{
+    return [self props]->get(option, nr);
+}
+
+- (void)setKey:(NSString *)key value:(NSString *)value
 {
     [self props]->set(string([key UTF8String]), string([value UTF8String]));
 }
 
-- (void) set:(Option)option value:(NSInteger)value
+- (void)set:(Option)option value:(NSInteger)value
 {
     [self props]->set(option, value);
 }
 
-- (void) set:(Option)option nr:(NSInteger)nr value:(NSInteger)value
+- (void)set:(Option)option nr:(NSInteger)nr value:(NSInteger)value
 {
     [self props]->set(option, nr, value);
 }
 
-- (void) removeAll
+- (void)removeAll
 {
     [self props]->remove();
 }
 
-- (void) removeKey:(NSString *)key
+- (void)removeKey:(NSString *)key
 {
     [self props]->remove(string([key UTF8String]));
 }
 
-- (void) remove:(Option)option
+- (void)remove:(Option)option
 {
     [self props]->remove(option);
 }
 
-- (void) remove:(Option) option nr:(NSInteger)nr
+- (void)remove:(Option) option nr:(NSInteger)nr
 {
-    [self props]->set(option, nr);
+    [self props]->remove(option, nr);
 }
 
 @end
@@ -1556,7 +1572,7 @@ using namespace moira;
     return [NSURL URLWithString: @(path.c_str())];
 }
 
-- (void)setBackupPath:(NSInteger)nr path:(NSURL *)path
+- (void)setPath:(NSInteger)nr path:(NSURL *)path
 {
     [self drive]->setWriteThroughPath(nr, string([path fileSystemRepresentation]));
 }

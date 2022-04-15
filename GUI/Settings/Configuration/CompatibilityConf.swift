@@ -109,14 +109,38 @@ extension ConfigurationController {
     }
 
     @IBAction func compPresetAction(_ sender: NSPopUpButton!) {
-         
-         switch sender.selectedTag() {
-         case 0: config.loadCompatibilityDefaults(CompatibilityDefaults.std)
-         case 1: config.loadCompatibilityDefaults(CompatibilityDefaults.accurate)
-         case 2: config.loadCompatibilityDefaults(CompatibilityDefaults.accelerated)
-         default: fatalError()
-         }
-         refresh()
+        
+        var defaults: CompatibilityDefaults
+        
+        switch sender.selectedTag() {
+        case 0: defaults = CompatibilityDefaults.std
+        case 1: defaults = CompatibilityDefaults.accurate
+        case 2: defaults = CompatibilityDefaults.accelerated
+        default: fatalError()
+        }
+        
+        amiga.suspend()
+        
+        config.blitterAccuracy = defaults.blitterAccuracy
+        
+        config.todBug = defaults.todBug
+        
+        config.eClockSyncing = defaults.eClockSyncing
+        
+        config.clxSprSpr = defaults.clxSprSpr
+        config.clxSprPlf = defaults.clxSprPlf
+        config.clxPlfPlf = defaults.clxPlfPlf
+        
+        config.driveSpeed = defaults.driveSpeed
+        config.mechanicalDelays = defaults.mechanicalDelays
+        config.lockDskSync = defaults.lockDskSync
+        config.autoDskSync = defaults.autoDskSync
+        
+        config.accurateKeyboard = defaults.accurateKeyboard
+        
+        amiga.resume()
+        
+        refresh()
      }
 
      @IBAction func compDefaultsAction(_ sender: NSButton!) {

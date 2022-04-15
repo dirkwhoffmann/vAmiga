@@ -171,7 +171,11 @@ extension PropertiesProxy {
     func set(_ option: Option, value: Bool) {
         set(option, value: value ? 0 : 1)
     }
-    
+
+    func set(_ option: Option, nr: Int, value: Bool) {
+        set(option, nr: nr, value: value ? 0 : 1)
+    }
+
     func set(_ option: Option, nr: [NSInteger], value: NSInteger) {
         for n in nr { set(option, nr: n, value: value) }
     }

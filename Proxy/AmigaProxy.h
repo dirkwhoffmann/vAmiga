@@ -256,14 +256,18 @@
 - (void)load:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)save:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
-- (void) setKey:(NSString *)key value:(NSString *)value;
-- (void) set:(Option)option value:(NSInteger)value;
-- (void) set:(Option)option nr:(NSInteger)nr value:(NSInteger)value;
+- (NSString *)getKey:(NSString *)key;
+- (NSInteger)get:(Option)option;
+- (NSInteger)get:(Option)option nr:(NSInteger)nr;
 
-- (void) removeAll;
-- (void) removeKey:(NSString *)key;
-- (void) remove:(Option)option;
-- (void) remove:(Option) option nr:(NSInteger)nr;
+- (void)setKey:(NSString *)key value:(NSString *)value;
+- (void)set:(Option)option value:(NSInteger)value;
+- (void)set:(Option)option nr:(NSInteger)nr value:(NSInteger)value;
+
+- (void)removeAll;
+- (void)removeKey:(NSString *)key;
+- (void)remove:(Option)option;
+- (void)remove:(Option) option nr:(NSInteger)nr;
 
 @end
 
@@ -702,7 +706,7 @@
 - (void)changeGeometry:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
 - (NSArray *) geometries;
 - (NSURL *)backupPath:(NSInteger)nr;
-- (void)setBackupPath:(NSInteger)nr path:(NSURL *)path;
+- (void)setPath:(NSInteger)nr path:(NSURL *)path;
 - (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)enableWriteThrough:(ExceptionWrapper *)ex;
 - (void)disableWriteThrough;

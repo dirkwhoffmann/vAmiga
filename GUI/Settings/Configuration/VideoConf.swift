@@ -284,14 +284,25 @@ extension ConfigurationController {
     //
     
     @IBAction func vidPresetAction(_ sender: NSMenuItem!) {
+              
+        let defaults = amiga.properties!
+        
+        func presetColor() {
                 
+            defaults.set(.PALETTE, value: Palette.COLOR.rawValue)
+            defaults.set(.BRIGHTNESS, value: 50)
+            defaults.set(.CONTRAST, value: 100)
+            defaults.set(.SATURATION, value: 50)
+        }
+        
         switch sender.tag {
             
         case 0: // Recommended settings (Centered TFT)
             config.loadGeometryDefaults(GeometryDefaults.wide)
-            config.loadColorDefaults(VideoDefaults.tft)
+            // config.loadColorDefaults(VideoDefaults.tft)
             config.loadShaderDefaults(VideoDefaults.tft)
-
+            presetColor()
+            
         case 1: // Narrow Geometry
             config.loadGeometryDefaults(GeometryDefaults.narrow)
 
@@ -302,12 +313,14 @@ extension ConfigurationController {
             config.loadGeometryDefaults(GeometryDefaults.extreme)
 
         case 6: // TFT Appearance
-            config.loadColorDefaults(VideoDefaults.tft)
+            // config.loadColorDefaults(VideoDefaults.tft)
             config.loadShaderDefaults(VideoDefaults.tft)
+            presetColor()
             
         case 7: // CRT Appearance
-            config.loadColorDefaults(VideoDefaults.crt)
+            // config.loadColorDefaults(VideoDefaults.crt)
             config.loadShaderDefaults(VideoDefaults.crt)
+            presetColor()
             
         default:
             fatalError()

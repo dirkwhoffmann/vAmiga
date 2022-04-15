@@ -558,312 +558,223 @@ class Configuration {
     //
     // Chipset
     //
-    
-    func loadChipsetDefaults(_ defaults: HardwareDefaults) {
-        
-        log(level: 2)
-        amiga.suspend()
-        
-        agnusRev = defaults.agnusRev.rawValue
-        deniseRev = defaults.deniseRev.rawValue
-        ciaRev = defaults.ciaRev.rawValue
-        rtClock = defaults.realTimeClock.rawValue
-        
-        amiga.resume()
-    }
-    
-    func loadChipsetUserDefaults() {
-        
-        log(level: 2)
-        let defaults = UserDefaults.standard
-        
-        amiga.suspend()
-        
-        agnusRev = defaults.integer(forKey: Keys.Hrw.agnusRev)
-        deniseRev = defaults.integer(forKey: Keys.Hrw.deniseRev)
-        ciaRev = defaults.integer(forKey: Keys.Hrw.ciaRev)
-        rtClock = defaults.integer(forKey: Keys.Hrw.realTimeClock)
 
-        amiga.resume()
-    }
-    
     func saveChipsetUserDefaults() {
         
         log(level: 2)
-        let defaults = UserDefaults.standard
+        let defaults = amiga.properties!
 
-        defaults.set(agnusRev, forKey: Keys.Hrw.agnusRev)
-        defaults.set(deniseRev, forKey: Keys.Hrw.deniseRev)
-        defaults.set(ciaRev, forKey: Keys.Hrw.ciaRev)
-        defaults.set(rtClock, forKey: Keys.Hrw.realTimeClock)
+        amiga.suspend()
+
+        defaults.set(.AGNUS_REVISION, value: agnusRev)
+        defaults.set(.DENISE_REVISION, value: deniseRev)
+        defaults.set(.CIA_REVISION, value: ciaRev)
+        defaults.set(.RTC_MODEL, value: rtClock)
+        defaults.save()
+
+        amiga.resume()
     }
 
+    func removeChipsetUserDefaults() {
+        
+        log(level: 2)
+        let defaults = amiga.properties!
+
+        amiga.suspend()
+
+        defaults.remove(.AGNUS_REVISION)
+        defaults.remove(.DENISE_REVISION)
+        defaults.remove(.CIA_REVISION)
+        defaults.remove(.RTC_MODEL)
+
+        amiga.resume()
+    }
+
+    func updateChipsetUserDefaults() {
+        
+        log(level: 2)
+        let defaults = amiga.properties!
+
+        amiga.suspend()
+
+        agnusRev = defaults.get(.AGNUS_REVISION)
+        deniseRev = defaults.get(.DENISE_REVISION)
+        ciaRev = defaults.get(.CIA_REVISION)
+        rtClock = defaults.get(.RTC_MODEL)
+        
+        amiga.resume()
+    }
+            
     //
     // Memory
     //
     
-    func loadMemoryDefaults(_ defaults: MemoryDefaults) {
-        
-        log(level: 2)
-        amiga.suspend()
-        
-        chipRam = defaults.chipRam
-        slowRam = defaults.slowRam
-        fastRam = defaults.fastRam
-        ramInitPattern = defaults.ramInitPattern.rawValue
-
-        bankMap = defaults.bankMap.rawValue
-        unmappingType = defaults.unmappingType.rawValue
-        
-        slowRamDelay = defaults.slowRamDelay
-        slowRamMirror = defaults.slowRamMirror
-
-        amiga.resume()
-    }
-    
-    func loadMemoryUserDefaults() {
-        
-        log(level: 2)
-        let defaults = UserDefaults.standard
-        
-        amiga.suspend()
-        
-        chipRam = defaults.integer(forKey: Keys.Mem.chipRam)
-        slowRam = defaults.integer(forKey: Keys.Mem.slowRam)
-        fastRam = defaults.integer(forKey: Keys.Mem.fastRam)
-        ramInitPattern = defaults.integer(forKey: Keys.Mem.ramInitPattern)
-
-        bankMap = defaults.integer(forKey: Keys.Mem.bankMap)
-        unmappingType = defaults.integer(forKey: Keys.Mem.unmappingType)
-
-        slowRamDelay = defaults.bool(forKey: Keys.Mem.slowRamDelay)
-        slowRamMirror = defaults.bool(forKey: Keys.Mem.slowRamMirror)
-        
-        amiga.resume()
-    }
-    
     func saveMemoryUserDefaults() {
         
         log(level: 2)
-        let defaults = UserDefaults.standard
-
-        defaults.set(chipRam, forKey: Keys.Mem.chipRam)
-        defaults.set(slowRam, forKey: Keys.Mem.slowRam)
-        defaults.set(fastRam, forKey: Keys.Mem.fastRam)
-        defaults.set(ramInitPattern, forKey: Keys.Mem.ramInitPattern)
-
-        defaults.set(bankMap, forKey: Keys.Mem.bankMap)
-        defaults.set(unmappingType, forKey: Keys.Mem.unmappingType)
+        let defaults = amiga.properties!
         
-        defaults.set(slowRamDelay, forKey: Keys.Mem.slowRamDelay)
-        defaults.set(slowRamMirror, forKey: Keys.Mem.slowRamMirror)
+        amiga.suspend()
+        
+        defaults.set(.CHIP_RAM, value: chipRam)
+        defaults.set(.SLOW_RAM, value: slowRam)
+        defaults.set(.FAST_RAM, value: fastRam)
+        defaults.set(.RAM_INIT_PATTERN, value: ramInitPattern)
+        defaults.set(.BANKMAP, value: bankMap)
+        defaults.set(.UNMAPPING_TYPE, value: unmappingType)
+        defaults.set(.SLOW_RAM_DELAY, value: slowRamDelay)
+        defaults.set(.SLOW_RAM_MIRROR, value: slowRamMirror)
+        defaults.save()
+        
+        amiga.resume()
+    }
+    
+    func removeMemoryUserDefaults() {
+        
+        log(level: 2)
+        let defaults = amiga.properties!
+
+        amiga.suspend()
+
+        defaults.remove(.CHIP_RAM)
+        defaults.remove(.SLOW_RAM)
+        defaults.remove(.FAST_RAM)
+        defaults.remove(.RAM_INIT_PATTERN)
+        defaults.remove(.BANKMAP)
+        defaults.remove(.UNMAPPING_TYPE)
+        defaults.remove(.SLOW_RAM_DELAY)
+        defaults.remove(.SLOW_RAM_MIRROR)
+
+        amiga.resume()
+    }
+
+    func updateMemoryUserDefaults() {
+        
+        log(level: 2)
+        let defaults = amiga.properties!
+
+        amiga.suspend()
+
+        chipRam = defaults.get(.CHIP_RAM)
+        slowRam = defaults.get(.SLOW_RAM)
+        fastRam = defaults.get(.FAST_RAM)
+        ramInitPattern = defaults.get(.RAM_INIT_PATTERN)
+        bankMap = defaults.get(.BANKMAP)
+        unmappingType = defaults.get(.UNMAPPING_TYPE)
+        slowRamDelay = defaults.get(.SLOW_RAM_DELAY) != 0
+        slowRamMirror = defaults.get(.SLOW_RAM_MIRROR) != 0
+        
+        amiga.resume()
     }
     
     //
     // Peripherals
     //
-    
-    func loadPeripheralsDefaults(_ defaults: PeripheralsDefaults) {
-        
-        log(level: 2)
-        
-        amiga.suspend()
-                
-        df0Connected = defaults.driveConnect[0]
-        df1Connected = defaults.driveConnect[1]
-        df2Connected = defaults.driveConnect[2]
-        df3Connected = defaults.driveConnect[3]
-        df0Type = defaults.driveType[0].rawValue
-        df1Type = defaults.driveType[1].rawValue
-        df2Type = defaults.driveType[2].rawValue
-        df3Type = defaults.driveType[3].rawValue
- 
-        hd0Connected = defaults.hardDriveConnect[0]
-        hd1Connected = defaults.hardDriveConnect[1]
-        hd2Connected = defaults.hardDriveConnect[2]
-        hd3Connected = defaults.hardDriveConnect[3]
-        hd0Type = defaults.hardDriveType[0].rawValue
-        hd1Type = defaults.hardDriveType[1].rawValue
-        hd2Type = defaults.hardDriveType[2].rawValue
-        hd3Type = defaults.hardDriveType[3].rawValue
-        
-        gameDevice1 = defaults.gameDevice1
-        gameDevice2 = defaults.gameDevice2
-        serialDevice = defaults.serialDevice.rawValue
-        serialDevicePort = defaults.serialDevicePort
-                
-        amiga.resume()
-    }
-    
-    func loadPeripheralsUserDefaults() {
-        
-        log(level: 2)
-        let defaults = UserDefaults.standard
-        
-        amiga.suspend()
-        
-        amiga.hd0.setBackupPath(0, path: UserDefaults.hdnUrl(0)!)
-        amiga.hd1.setBackupPath(1, path: UserDefaults.hdnUrl(0)!)
-        amiga.hd2.setBackupPath(2, path: UserDefaults.hdnUrl(0)!)
-        amiga.hd3.setBackupPath(3, path: UserDefaults.hdnUrl(0)!)
 
-        df0Connected = defaults.bool(forKey: Keys.Per.df0Connect)
-        df1Connected = defaults.bool(forKey: Keys.Per.df1Connect)
-        df2Connected = defaults.bool(forKey: Keys.Per.df2Connect)
-        df3Connected = defaults.bool(forKey: Keys.Per.df3Connect)
-        df0Type = defaults.integer(forKey: Keys.Per.df0Type)
-        df1Type = defaults.integer(forKey: Keys.Per.df1Type)
-        df2Type = defaults.integer(forKey: Keys.Per.df2Type)
-        df3Type = defaults.integer(forKey: Keys.Per.df3Type)
-
-        hd0Connected = defaults.bool(forKey: Keys.Per.hd0Connect)
-        hd1Connected = defaults.bool(forKey: Keys.Per.hd1Connect)
-        hd2Connected = defaults.bool(forKey: Keys.Per.hd2Connect)
-        hd3Connected = defaults.bool(forKey: Keys.Per.hd3Connect)
-        hd0Type = defaults.integer(forKey: Keys.Per.hd0Type)
-        hd1Type = defaults.integer(forKey: Keys.Per.hd1Type)
-        hd2Type = defaults.integer(forKey: Keys.Per.hd2Type)
-        hd3Type = defaults.integer(forKey: Keys.Per.hd3Type)
-
-        gameDevice1 = defaults.integer(forKey: Keys.Per.gameDevice1)
-        gameDevice2 = defaults.integer(forKey: Keys.Per.gameDevice2)
-        serialDevice = defaults.integer(forKey: Keys.Per.serialDevice)
-        serialDevicePort = defaults.integer(forKey: Keys.Per.serialDevicePort)
-        
-        amiga.resume()
-    }
-    
     func savePeripheralsUserDefaults() {
         
         log(level: 2)
-        let defaults = UserDefaults.standard
+        let defaults = amiga.properties!
+
+        amiga.suspend()
         
-        defaults.set(df0Connected, forKey: Keys.Per.df0Connect)
-        defaults.set(df1Connected, forKey: Keys.Per.df1Connect)
-        defaults.set(df2Connected, forKey: Keys.Per.df2Connect)
-        defaults.set(df3Connected, forKey: Keys.Per.df3Connect)
-        defaults.set(df0Type, forKey: Keys.Per.df0Type)
-        defaults.set(df1Type, forKey: Keys.Per.df1Type)
-        defaults.set(df2Type, forKey: Keys.Per.df2Type)
-        defaults.set(df3Type, forKey: Keys.Per.df3Type)
+        defaults.set(.DRIVE_CONNECT, nr: 0, value: df0Connected)
+        defaults.set(.DRIVE_CONNECT, nr: 1, value: df1Connected)
+        defaults.set(.DRIVE_CONNECT, nr: 2, value: df2Connected)
+        defaults.set(.DRIVE_CONNECT, nr: 3, value: df3Connected)
+        
+        defaults.set(.DRIVE_TYPE, nr: 0, value: df0Type)
+        defaults.set(.DRIVE_TYPE, nr: 1, value: df1Type)
+        defaults.set(.DRIVE_TYPE, nr: 2, value: df2Type)
+        defaults.set(.DRIVE_TYPE, nr: 3, value: df3Type)
 
-        defaults.set(hd0Connected, forKey: Keys.Per.hd0Connect)
-        defaults.set(hd1Connected, forKey: Keys.Per.hd1Connect)
-        defaults.set(hd2Connected, forKey: Keys.Per.hd2Connect)
-        defaults.set(hd3Connected, forKey: Keys.Per.hd3Connect)
-        defaults.set(hd0Type, forKey: Keys.Per.hd0Type)
-        defaults.set(hd1Type, forKey: Keys.Per.hd1Type)
-        defaults.set(hd2Type, forKey: Keys.Per.hd2Type)
-        defaults.set(hd3Type, forKey: Keys.Per.hd3Type)
+        defaults.set(.HDC_CONNECT, nr: 0, value: hd0Connected)
+        defaults.set(.HDC_CONNECT, nr: 1, value: hd1Connected)
+        defaults.set(.HDC_CONNECT, nr: 2, value: hd2Connected)
+        defaults.set(.HDC_CONNECT, nr: 3, value: hd3Connected)
 
-        defaults.set(gameDevice1, forKey: Keys.Per.gameDevice1)
-        defaults.set(gameDevice2, forKey: Keys.Per.gameDevice2)
-        defaults.set(serialDevice, forKey: Keys.Per.serialDevice)
-        defaults.set(serialDevicePort, forKey: Keys.Per.serialDevicePort)
+        defaults.set(.HDR_TYPE, nr: 0, value: hd0Type)
+        defaults.set(.HDR_TYPE, nr: 1, value: hd1Type)
+        defaults.set(.HDR_TYPE, nr: 2, value: hd2Type)
+        defaults.set(.HDR_TYPE, nr: 3, value: hd3Type)
+
+        defaults.set(.SERIAL_DEVICE, value: serialDevice)
+        defaults.set(.SRV_PORT, value: serialDevicePort)
+
+        defaults.save()
+                
+        // DEPRECATED
+        UserDefaults.standard.set(gameDevice1, forKey: Keys.Per.gameDevice1)
+        UserDefaults.standard.set(gameDevice2, forKey: Keys.Per.gameDevice2)
+
+        amiga.resume()
     }
 
-    /*
-    func persistHardDrives() throws {
-
-        for n in 0...3 { try persistHd(n) }
-    }
-
-    func persistHd(_ n: Int) throws {
-
-        var url: URL?
+    func removePeripheralsUserDefaults() {
         
-        do {
-            // Get URL for the backup file
-            url = UserDefaults.hdnUrl(n)
-            if url == nil { throw VAError(.FILE_CANT_WRITE) }
-            
-            // Remove the old file (if any)
-            let fm = FileManager.default
-            try? fm.removeItem(at: url!)
+        log(level: 2)
+        let defaults = amiga.properties!
 
-            // Save hard drive image
-            if hdPersist[n] { try amiga.hd(n)?.writeToFile(url!) }
+        amiga.suspend()
+
+        for i in 0 ... 3 {
             
-        } catch {
-            
-            if error is VAError && url != nil {
-                
-                VAError.warning("Failed to save hard drive HD\(n)",
-                                "Can't write to file \(url!.path)")
-            }
-            if error is VAError && url == nil {
-                
-                VAError.warning("Failed to save hard drive HD\(n)",
-                                "Unable to access the application defaults folder")
-            }
+            defaults.remove(.DRIVE_CONNECT, nr: i)
+            defaults.remove(.DRIVE_TYPE, nr: i)
+            defaults.remove(.HDC_CONNECT, nr: i)
+            defaults.remove(.HDR_TYPE, nr: i)
         }
+        
+        defaults.remove(.SERIAL_DEVICE)
+        defaults.remove(.SRV_PORT)
+
+        amiga.resume()
     }
-    */
+
+    func updatePeripheralsUserDefaults() {
+        
+        log(level: 2)
+        let defaults = amiga.properties!
+
+        amiga.suspend()
+
+        df0Connected = defaults.get(.DRIVE_CONNECT, nr: 0) != 0
+        df1Connected = defaults.get(.DRIVE_CONNECT, nr: 1) != 0
+        df2Connected = defaults.get(.DRIVE_CONNECT, nr: 2) != 0
+        df3Connected = defaults.get(.DRIVE_CONNECT, nr: 3) != 0
+
+        df0Type = defaults.get(.DRIVE_TYPE, nr: 0)
+        df1Type = defaults.get(.DRIVE_TYPE, nr: 1)
+        df2Type = defaults.get(.DRIVE_TYPE, nr: 2)
+        df3Type = defaults.get(.DRIVE_TYPE, nr: 3)
+
+        hd0Connected = defaults.get(.HDC_CONNECT, nr: 0) != 0
+        hd1Connected = defaults.get(.HDC_CONNECT, nr: 1) != 0
+        hd2Connected = defaults.get(.HDC_CONNECT, nr: 2) != 0
+        hd3Connected = defaults.get(.HDC_CONNECT, nr: 3) != 0
+
+        hd0Type = defaults.get(.HDR_TYPE, nr: 0)
+        hd1Type = defaults.get(.HDR_TYPE, nr: 1)
+        hd2Type = defaults.get(.HDR_TYPE, nr: 2)
+        hd3Type = defaults.get(.HDR_TYPE, nr: 3)
+
+        serialDevice = defaults.get(.SERIAL_DEVICE)
+        serialDevicePort = defaults.get(.SRV_PORT, nr: ServerType.SER.rawValue)
+
+        amiga.resume()
+    }
     
     //
     // Compatibility
     //
     
-    func loadCompatibilityDefaults(_ defaults: CompatibilityDefaults) {
-         
-        log(level: 2)
-        amiga.suspend()
-        
-        blitterAccuracy = defaults.blitterAccuracy
-
-        todBug = defaults.todBug
-
-        eClockSyncing = defaults.eClockSyncing
-
-        clxSprSpr = defaults.clxSprSpr
-        clxSprPlf = defaults.clxSprPlf
-        clxPlfPlf = defaults.clxPlfPlf
-                        
-        driveSpeed = defaults.driveSpeed
-        mechanicalDelays = defaults.mechanicalDelays
-        lockDskSync = defaults.lockDskSync
-        autoDskSync = defaults.autoDskSync
-        
-        accurateKeyboard = defaults.accurateKeyboard
-
-        amiga.resume()
-     }
-    
-    func loadCompatibilityUserDefaults() {
-        
-        /*
-        log(level: 2)
-        let defaults = UserDefaults.standard
-        
-        amiga.suspend()
-        
-        blitterAccuracy = defaults.integer(forKey: Keys.Com.blitterAccuracy)
-
-        todBug = defaults.bool(forKey: Keys.Com.todBug)
-
-        eClockSyncing = defaults.bool(forKey: Keys.Com.eClockSyncing)
-
-        clxSprSpr = defaults.bool(forKey: Keys.Com.clxSprSpr)
-        clxSprPlf = defaults.bool(forKey: Keys.Com.clxSprPlf)
-        clxPlfPlf = defaults.bool(forKey: Keys.Com.clxPlfPlf)
-                
-        driveSpeed = defaults.integer(forKey: Keys.Com.driveSpeed)
-        mechanicalDelays = defaults.bool(forKey: Keys.Com.mechanicalDelays)
-        lockDskSync = defaults.bool(forKey: Keys.Com.lockDskSync)
-        autoDskSync = defaults.bool(forKey: Keys.Com.autoDskSync)
-
-        accurateKeyboard = defaults.bool(forKey: Keys.Com.accurateKeyboard)
-
-        amiga.resume()
-        */
-     }
-    
     func saveCompatibilityUserDefaults() {
         
         log(level: 2)
-        
         let defaults = amiga.properties!
 
+        amiga.suspend()
+        
         defaults.set(.BLITTER_ACCURACY, value: blitterAccuracy)
         defaults.set(.TODBUG, value: todBug)
         defaults.set(.ECLOCK_SYNCING, value: eClockSyncing)
@@ -876,149 +787,168 @@ class Configuration {
         defaults.set(.AUTO_DSKSYNC, value: autoDskSync)
         defaults.set(.ACCURATE_KEYBOARD, value: accurateKeyboard)
         defaults.save()
-
-        // DEPRECATED
-        /*
-        let std = UserDefaults.standard
         
-        std.set(blitterAccuracy, forKey: Keys.Com.blitterAccuracy)
-
-        std.set(todBug, forKey: Keys.Com.todBug)
-
-        std.set(eClockSyncing, forKey: Keys.Com.eClockSyncing)
-
-        std.set(clxSprSpr, forKey: Keys.Com.clxSprSpr)
-        std.set(clxSprPlf, forKey: Keys.Com.clxSprPlf)
-        std.set(clxPlfPlf, forKey: Keys.Com.clxPlfPlf)
-                
-        std.set(driveSpeed, forKey: Keys.Com.driveSpeed)
-        std.set(mechanicalDelays, forKey: Keys.Com.mechanicalDelays)
-        std.set(lockDskSync, forKey: Keys.Com.lockDskSync)
-        std.set(autoDskSync, forKey: Keys.Com.autoDskSync)
+        amiga.resume()
+    }
+    
+    func removeCompatibilityUserDefaults() {
         
-        std.set(accurateKeyboard, forKey: Keys.Com.accurateKeyboard)
-        */
+        log(level: 2)
+        let defaults = amiga.properties!
+
+        amiga.suspend()
+
+        defaults.remove(.BLITTER_ACCURACY)
+        defaults.remove(.TODBUG)
+        defaults.remove(.ECLOCK_SYNCING)
+        defaults.remove(.CLX_SPR_SPR)
+        defaults.remove(.CLX_SPR_PLF)
+        defaults.remove(.CLX_PLF_PLF)
+        defaults.remove(.DRIVE_SPEED)
+        defaults.remove(.EMULATE_MECHANICS)
+        defaults.remove(.LOCK_DSKSYNC)
+        defaults.remove(.AUTO_DSKSYNC)
+        defaults.remove(.ACCURATE_KEYBOARD)
+        
+        amiga.resume()
+    }
+
+    func updateCompatibilityUserDefaults() {
+        
+        log(level: 2)
+        let defaults = amiga.properties!
+
+        amiga.suspend()
+
+        blitterAccuracy = defaults.get(.BLITTER_ACCURACY)
+        todBug = defaults.get(.TODBUG) != 0
+        eClockSyncing = defaults.get(.ECLOCK_SYNCING) != 0
+        clxSprSpr = defaults.get(.CLX_SPR_SPR) != 0
+        clxSprPlf = defaults.get(.CLX_SPR_PLF) != 0
+        clxPlfPlf = defaults.get(.CLX_PLF_PLF) != 0
+        driveSpeed = defaults.get(.DRIVE_SPEED)
+        mechanicalDelays = defaults.get(.EMULATE_MECHANICS) != 0
+        lockDskSync = defaults.get(.LOCK_DSKSYNC) != 0
+        autoDskSync = defaults.get(.AUTO_DSKSYNC) != 0
+        accurateKeyboard = defaults.get(.ACCURATE_KEYBOARD) != 0
+
+        amiga.resume()
     }
     
     //
     // Audio
     //
     
-    func loadAudioDefaults(_ defaults: AudioDefaults) {
-        
-        log(level: 2)
-        amiga.suspend()
-        
-        vol0 = defaults.vol0
-        vol1 = defaults.vol1
-        vol2 = defaults.vol2
-        vol3 = defaults.vol3
-        pan0 = defaults.pan0
-        pan1 = defaults.pan1
-        pan2 = defaults.pan2
-        pan3 = defaults.pan3
-        
-        volL = defaults.volL
-        volR = defaults.volR
-        samplingMethod = defaults.samplingMethod.rawValue
-        
-        df0Pan = defaults.drivePan[0]
-        df1Pan = defaults.drivePan[1]
-        df2Pan = defaults.drivePan[2]
-        df3Pan = defaults.drivePan[3]
-        hd0Pan = defaults.hdPan[0]
-        hd1Pan = defaults.hdPan[1]
-        hd2Pan = defaults.hdPan[2]
-        hd3Pan = defaults.hdPan[3]
-        stepVolume = defaults.stepVolume
-        pollVolume = defaults.pollVolume
-        insertVolume = defaults.insertVolume
-        ejectVolume = defaults.ejectVolume
-        
-        filterType = defaults.filterType.rawValue
-        filterAlwaysOn = defaults.filterAlwaysOn
-
-        amiga.resume()
-    }
-    
-    func loadAudioUserDefaults() {
-        
-        log(level: 2)
-        let defaults = UserDefaults.standard
-        
-        amiga.suspend()
-        
-        vol0 = defaults.integer(forKey: Keys.Aud.vol0)
-        vol1 = defaults.integer(forKey: Keys.Aud.vol1)
-        vol2 = defaults.integer(forKey: Keys.Aud.vol2)
-        vol3 = defaults.integer(forKey: Keys.Aud.vol3)
-        pan0 = defaults.integer(forKey: Keys.Aud.pan0)
-        pan1 = defaults.integer(forKey: Keys.Aud.pan1)
-        pan2 = defaults.integer(forKey: Keys.Aud.pan2)
-        pan3 = defaults.integer(forKey: Keys.Aud.pan3)
-        
-        volL = defaults.integer(forKey: Keys.Aud.volL)
-        volR = defaults.integer(forKey: Keys.Aud.volR)
-        samplingMethod = defaults.integer(forKey: Keys.Aud.samplingMethod)
-        
-        df0Pan = defaults.integer(forKey: Keys.Aud.df0Pan)
-        df1Pan = defaults.integer(forKey: Keys.Aud.df1Pan)
-        df2Pan = defaults.integer(forKey: Keys.Aud.df2Pan)
-        df3Pan = defaults.integer(forKey: Keys.Aud.df3Pan)
-        hd0Pan = defaults.integer(forKey: Keys.Aud.hd0Pan)
-        hd1Pan = defaults.integer(forKey: Keys.Aud.hd1Pan)
-        hd2Pan = defaults.integer(forKey: Keys.Aud.hd2Pan)
-        hd3Pan = defaults.integer(forKey: Keys.Aud.hd3Pan)
-        stepVolume = defaults.integer(forKey: Keys.Aud.stepVolume)
-        pollVolume = defaults.integer(forKey: Keys.Aud.pollVolume)
-        insertVolume = defaults.integer(forKey: Keys.Aud.insertVolume)
-        ejectVolume = defaults.integer(forKey: Keys.Aud.ejectVolume)
-
-        filterType = defaults.integer(forKey: Keys.Aud.filterType)
-        filterAlwaysOn = defaults.bool(forKey: Keys.Aud.filterAlwaysOn)
-
-        amiga.resume()
-    }
-    
     func saveAudioUserDefaults() {
         
         log(level: 2)
-        let defaults = UserDefaults.standard
-        
-        defaults.set(vol0, forKey: Keys.Aud.vol0)
-        defaults.set(vol1, forKey: Keys.Aud.vol1)
-        defaults.set(vol2, forKey: Keys.Aud.vol2)
-        defaults.set(vol3, forKey: Keys.Aud.vol3)
-        defaults.set(pan0, forKey: Keys.Aud.pan0)
-        defaults.set(pan1, forKey: Keys.Aud.pan1)
-        defaults.set(pan2, forKey: Keys.Aud.pan2)
-        defaults.set(pan3, forKey: Keys.Aud.pan3)
-        
-        defaults.set(volL, forKey: Keys.Aud.volL)
-        defaults.set(volR, forKey: Keys.Aud.volR)
-        defaults.set(samplingMethod, forKey: Keys.Aud.samplingMethod)
-        
-        defaults.set(df0Pan, forKey: Keys.Aud.df0Pan)
-        defaults.set(df1Pan, forKey: Keys.Aud.df1Pan)
-        defaults.set(df2Pan, forKey: Keys.Aud.df2Pan)
-        defaults.set(df3Pan, forKey: Keys.Aud.df3Pan)
-        defaults.set(hd0Pan, forKey: Keys.Aud.hd0Pan)
-        defaults.set(hd1Pan, forKey: Keys.Aud.hd1Pan)
-        defaults.set(hd2Pan, forKey: Keys.Aud.hd2Pan)
-        defaults.set(hd3Pan, forKey: Keys.Aud.hd3Pan)
-        defaults.set(stepVolume, forKey: Keys.Aud.stepVolume)
-        defaults.set(pollVolume, forKey: Keys.Aud.pollVolume)
-        defaults.set(insertVolume, forKey: Keys.Aud.insertVolume)
-        defaults.set(ejectVolume, forKey: Keys.Aud.ejectVolume)
+        let defaults = amiga.properties!
 
-        defaults.set(filterType, forKey: Keys.Aud.filterType)
-        defaults.set(filterAlwaysOn, forKey: Keys.Aud.filterAlwaysOn)
+        amiga.suspend()
+        
+        defaults.set(.AUDVOL, nr: 0, value: vol0)
+        defaults.set(.AUDVOL, nr: 1, value: vol1)
+        defaults.set(.AUDVOL, nr: 2, value: vol2)
+        defaults.set(.AUDVOL, nr: 3, value: vol3)
+        defaults.set(.AUDPAN, nr: 0, value: pan0)
+        defaults.set(.AUDPAN, nr: 1, value: pan1)
+        defaults.set(.AUDPAN, nr: 2, value: pan2)
+        defaults.set(.AUDPAN, nr: 3, value: pan3)
+        defaults.set(.AUDVOLL, value: volL)
+        defaults.set(.AUDVOLR, value: volR)
+        defaults.set(.SAMPLING_METHOD, value: samplingMethod)
+        defaults.set(.DRIVE_PAN, nr: 0, value: df0Pan)
+        defaults.set(.DRIVE_PAN, nr: 1, value: df1Pan)
+        defaults.set(.DRIVE_PAN, nr: 2, value: df2Pan)
+        defaults.set(.DRIVE_PAN, nr: 3, value: df3Pan)
+        defaults.set(.HDR_PAN, nr: 0, value: hd0Pan)
+        defaults.set(.HDR_PAN, nr: 1, value: hd1Pan)
+        defaults.set(.HDR_PAN, nr: 2, value: hd2Pan)
+        defaults.set(.HDR_PAN, nr: 3, value: hd3Pan)
+        defaults.set(.STEP_VOLUME, value: stepVolume)
+        defaults.set(.POLL_VOLUME, value: pollVolume)
+        defaults.set(.INSERT_VOLUME, value: insertVolume)
+        defaults.set(.EJECT_VOLUME, value: ejectVolume)
+        defaults.set(.FILTER_TYPE, value: filterType)
+        defaults.set(.FILTER_ALWAYS_ON, value: filterAlwaysOn)
+        defaults.save()
+        
+        amiga.resume()
+    }
+    
+    func removeAudioUserDefaults() {
+        
+        log(level: 2)
+        let defaults = amiga.properties!
+
+        amiga.suspend()
+
+        for i in 0 ... 3 {
+            
+            defaults.remove(.AUDVOL, nr: i)
+            defaults.remove(.AUDPAN, nr: i)
+            defaults.remove(.DRIVE_PAN, nr: i)
+            defaults.remove(.HDR_PAN, nr: i)
+        }
+        
+        defaults.remove(.AUDVOLL)
+        defaults.remove(.AUDVOLR)
+        defaults.remove(.SAMPLING_METHOD)
+        defaults.remove(.STEP_VOLUME)
+        defaults.remove(.POLL_VOLUME)
+        defaults.remove(.INSERT_VOLUME)
+        defaults.remove(.EJECT_VOLUME)
+        defaults.remove(.FILTER_TYPE)
+        defaults.remove(.FILTER_ALWAYS_ON)
+
+        amiga.resume()
+    }
+
+    func updateAudioUserDefaults() {
+        
+        log(level: 2)
+        let defaults = amiga.properties!
+
+        amiga.suspend()
+
+        vol0 = defaults.get(.AUDVOL, nr: 0)
+        vol1 = defaults.get(.AUDVOL, nr: 1)
+        vol2 = defaults.get(.AUDVOL, nr: 2)
+        vol3 = defaults.get(.AUDVOL, nr: 3)
+
+        pan0 = defaults.get(.AUDPAN, nr: 0)
+        pan1 = defaults.get(.AUDPAN, nr: 1)
+        pan2 = defaults.get(.AUDPAN, nr: 2)
+        pan3 = defaults.get(.AUDPAN, nr: 3)
+
+        df0Pan = defaults.get(.DRIVE_PAN, nr: 0)
+        df1Pan = defaults.get(.DRIVE_PAN, nr: 1)
+        df2Pan = defaults.get(.DRIVE_PAN, nr: 2)
+        df3Pan = defaults.get(.DRIVE_PAN, nr: 3)
+
+        hd0Pan = defaults.get(.HDR_PAN, nr: 0)
+        hd1Pan = defaults.get(.HDR_PAN, nr: 1)
+        hd2Pan = defaults.get(.HDR_PAN, nr: 2)
+        hd3Pan = defaults.get(.HDR_PAN, nr: 3)
+
+        volL = defaults.get(.AUDVOLL)
+        volR = defaults.get(.AUDVOLR)
+        samplingMethod = defaults.get(.SAMPLING_METHOD)
+        stepVolume = defaults.get(.STEP_VOLUME)
+        pollVolume = defaults.get(.POLL_VOLUME)
+        insertVolume = defaults.get(.INSERT_VOLUME)
+        ejectVolume = defaults.get(.EJECT_VOLUME)
+        filterType = defaults.get(.FILTER_TYPE)
+        filterAlwaysOn = defaults.get(.FILTER_ALWAYS_ON) != 0
+
+        amiga.resume()
     }
     
     //
     // Video
     //
 
+    /*
     func loadColorDefaults(_ defaults: VideoDefaults) {
         
         log(level: 2)
@@ -1031,6 +961,7 @@ class Configuration {
         
         amiga.resume()
     }
+    */
     
     func loadGeometryDefaults(_ defaults: GeometryDefaults) {
         
@@ -1077,11 +1008,13 @@ class Configuration {
         
         amiga.suspend()
         
+        /*
         palette = defaults.integer(forKey: Keys.Vid.palette)
         brightness = defaults.integer(forKey: Keys.Vid.brightness)
         contrast = defaults.integer(forKey: Keys.Vid.contrast)
         saturation = defaults.integer(forKey: Keys.Vid.saturation)
-
+        */
+        
         enhancer = defaults.integer(forKey: Keys.Vid.enhancer)
         upscaler = defaults.integer(forKey: Keys.Vid.upscaler)
         
@@ -1125,30 +1058,43 @@ class Configuration {
     func saveVideoUserDefaults() {
         
         log(level: 2)
-        let defaults = UserDefaults.standard
+                
+        amiga.suspend()
         
-        defaults.set(palette, forKey: Keys.Vid.palette)
-        defaults.set(brightness, forKey: Keys.Vid.brightness)
-        defaults.set(contrast, forKey: Keys.Vid.contrast)
-        defaults.set(saturation, forKey: Keys.Vid.saturation)
+        let defaults = amiga.properties!
 
-        defaults.set(enhancer, forKey: Keys.Vid.enhancer)
-        defaults.set(upscaler, forKey: Keys.Vid.upscaler)
+        defaults.set(.PALETTE, value: palette)
+        defaults.set(.BRIGHTNESS, value: brightness)
+        defaults.set(.CONTRAST, value: contrast)
+        defaults.set(.SATURATION, value: saturation)
         
-        defaults.set(bloom, forKey: Keys.Vid.bloom)
-        defaults.set(bloomRadius, forKey: Keys.Vid.bloomRadius)
-        defaults.set(bloomBrightness, forKey: Keys.Vid.bloomBrightness)
-        defaults.set(bloomWeight, forKey: Keys.Vid.bloomWeight)
-        defaults.set(flicker, forKey: Keys.Vid.flicker)
-        defaults.set(flickerWeight, forKey: Keys.Vid.flickerWeight)
-        defaults.set(dotMask, forKey: Keys.Vid.dotMask)
-        defaults.set(dotMaskBrightness, forKey: Keys.Vid.dotMaskBrightness)
-        defaults.set(scanlines, forKey: Keys.Vid.scanlines)
-        defaults.set(scanlineBrightness, forKey: Keys.Vid.scanlineBrightness)
-        defaults.set(scanlineWeight, forKey: Keys.Vid.scanlineWeight)
-        defaults.set(disalignment, forKey: Keys.Vid.disalignment)
-        defaults.set(disalignmentH, forKey: Keys.Vid.disalignmentH)
-        defaults.set(disalignmentV, forKey: Keys.Vid.disalignmentV)
+        /*
+        std.set(palette, forKey: Keys.Vid.palette)
+        std.set(brightness, forKey: Keys.Vid.brightness)
+        std.set(contrast, forKey: Keys.Vid.contrast)
+        std.set(saturation, forKey: Keys.Vid.saturation)
+        */
+
+        let std = UserDefaults.standard
+
+        // DEPRECATED
+        std.set(enhancer, forKey: Keys.Vid.enhancer)
+        std.set(upscaler, forKey: Keys.Vid.upscaler)
+        
+        std.set(bloom, forKey: Keys.Vid.bloom)
+        std.set(bloomRadius, forKey: Keys.Vid.bloomRadius)
+        std.set(bloomBrightness, forKey: Keys.Vid.bloomBrightness)
+        std.set(bloomWeight, forKey: Keys.Vid.bloomWeight)
+        std.set(flicker, forKey: Keys.Vid.flicker)
+        std.set(flickerWeight, forKey: Keys.Vid.flickerWeight)
+        std.set(dotMask, forKey: Keys.Vid.dotMask)
+        std.set(dotMaskBrightness, forKey: Keys.Vid.dotMaskBrightness)
+        std.set(scanlines, forKey: Keys.Vid.scanlines)
+        std.set(scanlineBrightness, forKey: Keys.Vid.scanlineBrightness)
+        std.set(scanlineWeight, forKey: Keys.Vid.scanlineWeight)
+        std.set(disalignment, forKey: Keys.Vid.disalignment)
+        std.set(disalignmentH, forKey: Keys.Vid.disalignmentH)
+        std.set(disalignmentV, forKey: Keys.Vid.disalignmentV)
     }
     
     func saveGeometryUserDefaults() {

@@ -60,11 +60,13 @@ extension UserDefaults {
         registerControlsUserDefaults()
         registerDevicesUserDefaults()
         
+        /*
         registerRomUserDefaults()
         registerChipsetUserDefaults()
         registerPeripheralsUserDefaults()
         registerCompatibilityUserDefaults()
         registerAudioUserDefaults()
+        */
         registerVideoUserDefaults()
         registerGeometryUserDefaults()
     }
@@ -82,12 +84,6 @@ extension MyController {
         pref.loadControlsUserDefaults()
         pref.loadDevicesUserDefaults()
 
-        // config.loadRomUserDefaults()
-        config.loadChipsetUserDefaults()
-        config.loadMemoryUserDefaults()
-        config.loadPeripheralsUserDefaults()
-        config.loadCompatibilityUserDefaults()
-        config.loadAudioUserDefaults()
         config.loadVideoUserDefaults()
         config.loadGeometryUserDefaults()
         
@@ -498,6 +494,7 @@ extension UserDefaults {
 // User defaults (Roms)
 //
 
+/*
 extension Keys {
 
     struct Rom {
@@ -505,6 +502,7 @@ extension Keys {
         static let extStart          = "VAMIGA_ROM_ExtStart"
     }
 }
+*/
 
 struct RomDefaults {
     
@@ -527,6 +525,7 @@ extension UserDefaults {
     static var romUrl: URL? { return romUrl(name: "rom.bin") }
     static var extUrl: URL? { return romUrl(name: "ext.bin") }
 
+    /*
     static func registerRomUserDefaults() {
         
         let defaults = RomDefaults.std
@@ -558,12 +557,14 @@ extension UserDefaults {
             try? fm.removeItem(at: url)
         }
     }
+    */
 }
 
 //
 // User defaults (Chipset)
 //
 
+/*
 extension Keys {
     
     struct Hrw {
@@ -576,6 +577,7 @@ extension Keys {
         
     }
 }
+*/
 
 struct HardwareDefaults {
     
@@ -647,6 +649,7 @@ struct HardwareDefaults {
 
 extension UserDefaults {
     
+    /*
     static func registerChipsetUserDefaults() {
         
         let defaults = HardwareDefaults.A500
@@ -673,6 +676,7 @@ extension UserDefaults {
 
         for key in keys { defaults.removeObject(forKey: key) }
     }
+    */
 }
 
 //
