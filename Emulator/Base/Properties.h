@@ -30,8 +30,8 @@ class Properties : public AmigaObject {
 public:
     
     Properties();
-    // Properties(Properties const&) = delete;
-    // void operator=(Properties const&) = delete;
+    Properties(Properties const&) = delete;
+    void operator=(Properties const&) = delete;
     
     
     //

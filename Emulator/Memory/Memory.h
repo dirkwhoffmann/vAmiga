@@ -100,6 +100,10 @@ assert((x) >= 0xE80000 && (x) <= 0xE8FFFF);
 
 class Memory : public SubComponent {
 
+    // Optional startup Roms
+    string romPath;
+    string extPath;
+    
     // Current configuration
     MemoryConfig config = {};
 
@@ -258,12 +262,14 @@ private:
     
 public:
     
-    // static MemoryConfig getDefaultConfig();
     const MemoryConfig &getConfig() const { return config; }
     void resetConfig() override;
     
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
+
+    void setRomPath(const string &path) { romPath = path; }
+    void setExtPath(const string &path) { extPath = path; }
 
     
     //

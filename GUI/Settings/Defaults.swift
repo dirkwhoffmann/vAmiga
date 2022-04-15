@@ -82,7 +82,7 @@ extension MyController {
         pref.loadControlsUserDefaults()
         pref.loadDevicesUserDefaults()
 
-        config.loadRomUserDefaults()
+        // config.loadRomUserDefaults()
         config.loadChipsetUserDefaults()
         config.loadMemoryUserDefaults()
         config.loadPeripheralsUserDefaults()
@@ -524,7 +524,6 @@ extension UserDefaults {
         return folder?.appendingPathComponent(name)        
     }
     
-    static var womUrl: URL? { return romUrl(name: "wom.bin") }
     static var romUrl: URL? { return romUrl(name: "rom.bin") }
     static var extUrl: URL? { return romUrl(name: "ext.bin") }
 
@@ -550,10 +549,6 @@ extension UserDefaults {
         
         // Delete previously saved Rom files
         let fm = FileManager.default
-        
-        if let url = womUrl {
-            try? fm.removeItem(at: url)
-        }
         
         if let url = romUrl {
             try? fm.removeItem(at: url)

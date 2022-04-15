@@ -497,6 +497,7 @@ class Configuration {
     // Roms
     //
     
+    /*
     func loadRomUserDefaults() {
 
         log(level: 2)
@@ -518,26 +519,23 @@ class Configuration {
         
         amiga.resume()
     }
-    
+    */
+
     func saveRomUserDefaults() throws {
                 
         log(level: 2)
         
         let fm = FileManager.default
-        let defaults = UserDefaults.standard
         var url: URL?
 
         amiga.suspend()
-                
-        defaults.set(extStart, forKey: Keys.Rom.extStart)
+
+        let defaults = amiga.properties!
+        defaults.set(.EXT_START, value: extStart)
+        defaults.save()
         
         do {
-            
-            url = UserDefaults.womUrl
-            if url == nil { throw VAError(.FILE_CANT_WRITE) }
-            try? fm.removeItem(at: url!)
-            try amiga.mem.saveWom(url!)
-            
+                        
             url = UserDefaults.romUrl
             if url == nil { throw VAError(.FILE_CANT_WRITE) }
             try? fm.removeItem(at: url!)

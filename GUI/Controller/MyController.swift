@@ -192,10 +192,14 @@ extension MyController {
         
         // Setup window
         configureWindow()
-        
+                
         // Load user defaults
         loadUserDefaults()
-        
+
+        // Setup the Rom search paths
+        amiga.mem.setRomPath(UserDefaults.romUrl)
+        amiga.mem.setExtPath(UserDefaults.extUrl)
+
         // Enable message processing
         registerAsListener()
                 

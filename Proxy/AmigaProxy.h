@@ -344,6 +344,9 @@
 @interface MemProxy : AmigaComponentProxy { }
 
 @property (readonly) MemoryConfig config;
+- (void)setRomPath:(NSURL *)url;
+- (void)setExtPath:(NSURL *)url;
+
 - (MemoryStats) getStats;
 
 - (BOOL) isBootRom:(RomIdentifier)rev;
