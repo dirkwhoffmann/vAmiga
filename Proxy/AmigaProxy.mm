@@ -2623,7 +2623,7 @@ using namespace moira;
 @synthesize keyboard;
 @synthesize mem;
 @synthesize paula;
-@synthesize properties;
+// @synthesize properties;
 @synthesize remoteManager;
 @synthesize retroShell;
 @synthesize rtc;
@@ -2664,7 +2664,7 @@ using namespace moira;
     keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];
     mem = [[MemProxy alloc] initWith:&amiga->mem];
     paula = [[PaulaProxy alloc] initWith:&amiga->paula];
-    properties = [[PropertiesProxy alloc] initWith:&amiga->properties];
+    // properties = [[PropertiesProxy alloc] initWith:&amiga->properties];
     retroShell = [[RetroShellProxy alloc] initWith:&amiga->retroShell];
     rtc = [[RtcProxy alloc] initWith:&amiga->rtc];
     recorder = [[RecorderProxy alloc] initWith:&amiga->denise.screenRecorder];
@@ -2678,6 +2678,11 @@ using namespace moira;
 - (Amiga *)amiga
 {
     return (Amiga *)obj;
+}
+
++ (PropertiesProxy *) defaults
+{
+    return [[PropertiesProxy alloc] initWith:&Amiga::properties];
 }
 
 - (void)dealloc

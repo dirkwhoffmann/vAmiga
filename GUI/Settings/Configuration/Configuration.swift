@@ -525,12 +525,12 @@ class Configuration {
                 
         log(level: 2)
         
+        let defaults = AmigaProxy.defaults!
         let fm = FileManager.default
         var url: URL?
 
         amiga.suspend()
-
-        let defaults = amiga.properties!
+        
         defaults.set(.EXT_START, value: extStart)
         defaults.save()
         
@@ -562,7 +562,7 @@ class Configuration {
     func saveChipsetUserDefaults() {
         
         log(level: 2)
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
 
@@ -578,7 +578,7 @@ class Configuration {
     func removeChipsetUserDefaults() {
         
         log(level: 2)
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
 
@@ -593,7 +593,7 @@ class Configuration {
     func updateChipsetUserDefaults() {
         
         log(level: 2)
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
 
@@ -612,7 +612,7 @@ class Configuration {
     func saveMemoryUserDefaults() {
         
         log(level: 2)
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
         
         amiga.suspend()
         
@@ -632,7 +632,7 @@ class Configuration {
     func removeMemoryUserDefaults() {
         
         log(level: 2)
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
 
@@ -651,7 +651,7 @@ class Configuration {
     func updateMemoryUserDefaults() {
         
         log(level: 2)
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
 
@@ -674,7 +674,7 @@ class Configuration {
     func savePeripheralsUserDefaults() {
         
         log(level: 2)
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
         
@@ -713,7 +713,7 @@ class Configuration {
     func removePeripheralsUserDefaults() {
         
         log(level: 2)
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
 
@@ -734,7 +734,7 @@ class Configuration {
     func updatePeripheralsUserDefaults() {
         
         log(level: 2)
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
 
@@ -771,7 +771,7 @@ class Configuration {
     func saveCompatibilityUserDefaults() {
         
         log(level: 2)
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
         
@@ -794,7 +794,7 @@ class Configuration {
     func removeCompatibilityUserDefaults() {
         
         log(level: 2)
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
 
@@ -816,7 +816,7 @@ class Configuration {
     func updateCompatibilityUserDefaults() {
         
         log(level: 2)
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
 
@@ -842,7 +842,7 @@ class Configuration {
     func saveAudioUserDefaults() {
         
         log(level: 2)
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
         
@@ -879,7 +879,7 @@ class Configuration {
     func removeAudioUserDefaults() {
         
         log(level: 2)
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
 
@@ -907,7 +907,7 @@ class Configuration {
     func updateAudioUserDefaults() {
         
         log(level: 2)
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
 
@@ -1061,7 +1061,7 @@ class Configuration {
                 
         amiga.suspend()
         
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
 
         defaults.set(.PALETTE, value: palette)
         defaults.set(.BRIGHTNESS, value: brightness)

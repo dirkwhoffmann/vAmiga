@@ -203,7 +203,7 @@ extension MyController {
 
     func registerGeneralUserDefaults() {
         
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
         let std = GeneralDefaults.std
         
         defaults.register(Keys.Gen.autoSnapshots, std.autoSnapshots)
@@ -231,7 +231,7 @@ extension MyController {
     
     func resetGeneralUserDefaults() {
         
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
         
         let keys = [ Keys.Gen.autoSnapshots,
                      Keys.Gen.autoSnapshotInterval,

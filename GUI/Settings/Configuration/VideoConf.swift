@@ -285,7 +285,7 @@ extension ConfigurationController {
     
     @IBAction func vidPresetAction(_ sender: NSMenuItem!) {
               
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
         
         func presetColor() {
                 

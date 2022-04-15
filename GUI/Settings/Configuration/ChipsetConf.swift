@@ -166,7 +166,7 @@ extension ConfigurationController {
     
     @IBAction func csPresetAction(_ sender: NSPopUpButton!) {
         
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
         
         // Revert to standard settings
         config.removeChipsetUserDefaults() 

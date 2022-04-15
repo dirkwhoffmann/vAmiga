@@ -152,8 +152,10 @@ extension MyController: NSMenuItemValidation {
         
         log()
 
-        amiga.properties.removeAll()
-        amiga.properties.save()
+        let defaults = AmigaProxy.defaults!
+        
+        defaults.removeAll()
+        defaults.save()
         
         // TODO: POWER OFF THE AMIGA FIRST
         // amiga.resetConfig()

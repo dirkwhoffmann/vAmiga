@@ -110,7 +110,7 @@ extension ConfigurationController {
 
     @IBAction func compPresetAction(_ sender: NSPopUpButton!) {
         
-        let defaults = amiga.properties!
+        let defaults = AmigaProxy.defaults!
         
         amiga.suspend()
         
