@@ -60,9 +60,9 @@ typedef DMA_CHANNEL DmaChannel;
 #ifdef __cplusplus
 struct DmaChannelEnum : util::Reflection<DmaChannelEnum, DmaChannel>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return DMA_CHANNEL_COUNT - 1; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = DMA_CHANNEL_COUNT - 1;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "DMA_CHANNEL"; }
     static const char *key(DmaDisplayMode value)

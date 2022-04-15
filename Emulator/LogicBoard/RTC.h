@@ -102,7 +102,7 @@ private:
     
 public:
     
-    static RTCConfig getDefaultConfig();
+    // static RTCConfig getDefaultConfig();
     const RTCConfig &getConfig() const { return config; }
     void resetConfig() override;
     

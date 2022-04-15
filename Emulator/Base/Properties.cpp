@@ -28,91 +28,101 @@
 
 Properties::Properties()
 {
-    setDefaultValue(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
-    setDefaultValue(OPT_SLOW_RAM_MIRROR, true);
-    setDefaultValue(OPT_DENISE_REVISION, DENISE_OCS);
-    setDefaultValue(OPT_VIEWPORT_TRACKING, true);
-    setDefaultValue(OPT_PALETTE, PALETTE_COLOR);
-    setDefaultValue(OPT_BRIGHTNESS, 50);
-    setDefaultValue(OPT_CONTRAST, 100);
-    setDefaultValue(OPT_SATURATION, 50);
-    setDefaultValue(OPT_DMA_DEBUG_ENABLE, false);
-    setDefaultValue(OPT_DMA_DEBUG_MODE, DMA_DISPLAY_MODE_FG_LAYER);
-    setDefaultValue(OPT_DMA_DEBUG_OPACITY, 50);
-    setDefaultValue(OPT_REG_RESET_VAL, 0);
-    setDefaultValue(OPT_RTC_MODEL, RTC_OKI);
-    setDefaultValue(OPT_CHIP_RAM, 512);
-    setDefaultValue(OPT_SLOW_RAM, 512);
-    setDefaultValue(OPT_FAST_RAM, 0);
-    setDefaultValue(OPT_EXT_START, 0xE0);
-    setDefaultValue(OPT_SAVE_ROMS, true);
-    setDefaultValue(OPT_SLOW_RAM_DELAY, true);
-    setDefaultValue(OPT_BANKMAP, BANK_MAP_A500);
-    setDefaultValue(OPT_UNMAPPING_TYPE, RAM_INIT_ALL_ZEROES);
-    setDefaultValue(OPT_RAM_INIT_PATTERN, UNMAPPED_FLOATING);
-    setDefaultValue(OPT_DRIVE_CONNECT, 0, true);
-    setDefaultValue(OPT_DRIVE_CONNECT, { 1, 2, 3 }, false);
-    setDefaultValue(OPT_DRIVE_SPEED, 1);
-    setDefaultValue(OPT_LOCK_DSKSYNC, false);
-    setDefaultValue(OPT_AUTO_DSKSYNC, false);
-    setDefaultValue(OPT_DRIVE_TYPE, { 0, 1, 2, 3 }, DRIVE_DD_35);
-    setDefaultValue(OPT_EMULATE_MECHANICS, { 0, 1, 2, 3 }, true);
-    setDefaultValue(OPT_START_DELAY, { 0, 1, 2, 3 }, MSEC(380));
-    setDefaultValue(OPT_STOP_DELAY, { 0, 1, 2, 3 }, MSEC(80));
-    setDefaultValue(OPT_STEP_DELAY, { 0, 1, 2, 3 }, USEC(8000));
-    setDefaultValue(OPT_DISK_SWAP_DELAY, { 0, 1, 2, 3 }, SEC(1.8));
-    setDefaultValue(OPT_DRIVE_PAN, { 0, 1 }, 100);
-    setDefaultValue(OPT_DRIVE_PAN, { 2, 3 }, -100);
-    setDefaultValue(OPT_STEP_VOLUME, { 0, 1, 2, 3 }, 128);
-    setDefaultValue(OPT_POLL_VOLUME, { 0, 1, 2, 3 }, 128);
-    setDefaultValue(OPT_INSERT_VOLUME, { 0, 1, 2, 3 }, 128);
-    setDefaultValue(OPT_EJECT_VOLUME, { 0, 1, 2, 3 }, 128);
-    setDefaultValue(OPT_HDC_CONNECT, 0, true);
-    setDefaultValue(OPT_HDC_CONNECT, { 1, 2, 3 }, true);
-    setDefaultValue(OPT_HDR_TYPE, HDR_GENERIC);
-    setDefaultValue(OPT_HDR_PAN, { 0, 1 }, 100);
-    setDefaultValue(OPT_HDR_PAN, { 2, 3 }, -100);
-    setDefaultValue(OPT_HDR_STEP_VOLUME, { 0, 1, 2, 3 }, 128);
-    setDefaultValue(OPT_SERIAL_DEVICE, SPD_NONE);
-    setDefaultValue(OPT_HIDDEN_BITPLANES, 0);
-    setDefaultValue(OPT_HIDDEN_SPRITES, 0);
-    setDefaultValue(OPT_HIDDEN_LAYERS, 0);
-    setDefaultValue(OPT_HIDDEN_LAYER_ALPHA, 128);
-    setDefaultValue(OPT_CLX_SPR_SPR, true);
-    setDefaultValue(OPT_CLX_SPR_PLF, true);
-    setDefaultValue(OPT_CLX_PLF_PLF, true);
-    setDefaultValue(OPT_BLITTER_ACCURACY, 2);
-    setDefaultValue(OPT_CIA_REVISION, CIA_MOS_8520_DIP);
-    setDefaultValue(OPT_TODBUG, true);
-    setDefaultValue(OPT_ECLOCK_SYNCING, true);
-    setDefaultValue(OPT_ACCURATE_KEYBOARD, true);
-    setDefaultValue(OPT_PULLUP_RESISTORS, true);
-    setDefaultValue(OPT_SHAKE_DETECTION, true);
-    setDefaultValue(OPT_MOUSE_VELOCITY, 100);
-    setDefaultValue(OPT_AUTOFIRE, false);
-    setDefaultValue(OPT_AUTOFIRE_BULLETS, -3);
-    setDefaultValue(OPT_AUTOFIRE_DELAY, 125);
-    setDefaultValue(OPT_SAMPLING_METHOD, SMP_NONE);
-    setDefaultValue(OPT_FILTER_TYPE, FILTER_BUTTERWORTH);
-    setDefaultValue(OPT_FILTER_ALWAYS_ON, false);
-    setDefaultValue(OPT_AUDPAN, { 0, 3 }, 50);
-    setDefaultValue(OPT_AUDPAN, { 1, 2 }, 350);
-    setDefaultValue(OPT_AUDVOL, { 0, 1, 2, 3 }, 100);
-    setDefaultValue(OPT_AUDVOLL, 50);
-    setDefaultValue(OPT_AUDVOLR, 50);
-    setDefaultValue(OPT_DIAG_BOARD, false);
-    setDefaultValue(OPT_SRV_PORT, SERVER_SER, 8080);
-    setDefaultValue(OPT_SRV_PROTOCOL, SERVER_SER, SRVPROT_DEFAULT);
-    setDefaultValue(OPT_SRV_AUTORUN, SERVER_SER, true);
-    setDefaultValue(OPT_SRV_VERBOSE, SERVER_SER, true);
-    setDefaultValue(OPT_SRV_PORT, SERVER_RSH, 8081);
-    setDefaultValue(OPT_SRV_PROTOCOL, SERVER_RSH, SRVPROT_DEFAULT);
-    setDefaultValue(OPT_SRV_AUTORUN, SERVER_RSH, false);
-    setDefaultValue(OPT_SRV_VERBOSE, SERVER_RSH, true);
-    setDefaultValue(OPT_SRV_PORT, SERVER_GDB, 8082);
-    setDefaultValue(OPT_SRV_PROTOCOL, SERVER_GDB, SRVPROT_DEFAULT);
-    setDefaultValue(OPT_SRV_AUTORUN, SERVER_GDB, true);
-    setDefaultValue(OPT_SRV_VERBOSE, SERVER_GDB, true);
+    setFallback(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
+    setFallback(OPT_SLOW_RAM_MIRROR, true);
+    setFallback(OPT_DENISE_REVISION, DENISE_OCS);
+    setFallback(OPT_VIEWPORT_TRACKING, true);
+    setFallback(OPT_PALETTE, PALETTE_COLOR);
+    setFallback(OPT_BRIGHTNESS, 50);
+    setFallback(OPT_CONTRAST, 100);
+    setFallback(OPT_SATURATION, 50);
+    setFallback(OPT_DMA_DEBUG_ENABLE, false);
+    setFallback(OPT_DMA_DEBUG_MODE, DMA_DISPLAY_MODE_FG_LAYER);
+    setFallback(OPT_DMA_DEBUG_OPACITY, 50);
+    setFallback(OPT_DMA_DEBUG_CHANNEL, true);
+    setFallback(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_CPU, false);
+    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_CPU, 0xFFFFFF00);
+    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_REFRESH, 0xFF000000);
+    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_DISK, 0x00FF0000);
+    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_AUDIO, 0xFF00FF00);
+    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_BITPLANE, 0x00FFFF00);
+    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_SPRITE, 0x0088FF00);
+    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_COPPER, 0xFFFF0000);
+    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_BLITTER, 0xFFCC0000);
+    setFallback(OPT_REG_RESET_VAL, 0);
+    setFallback(OPT_RTC_MODEL, RTC_OKI);
+    setFallback(OPT_CHIP_RAM, 512);
+    setFallback(OPT_SLOW_RAM, 512);
+    setFallback(OPT_FAST_RAM, 0);
+    setFallback(OPT_EXT_START, 0xE0);
+    setFallback(OPT_SAVE_ROMS, true);
+    setFallback(OPT_SLOW_RAM_DELAY, true);
+    setFallback(OPT_BANKMAP, BANK_MAP_A500);
+    setFallback(OPT_UNMAPPING_TYPE, RAM_INIT_ALL_ZEROES);
+    setFallback(OPT_RAM_INIT_PATTERN, UNMAPPED_FLOATING);
+    setFallback(OPT_DRIVE_CONNECT, 0, true);
+    setFallback(OPT_DRIVE_CONNECT, false);
+    setFallback(OPT_DRIVE_SPEED, 1);
+    setFallback(OPT_LOCK_DSKSYNC, false);
+    setFallback(OPT_AUTO_DSKSYNC, false);
+    setFallback(OPT_DRIVE_TYPE, DRIVE_DD_35);
+    setFallback(OPT_EMULATE_MECHANICS, true);
+    setFallback(OPT_START_DELAY, MSEC(380));
+    setFallback(OPT_STOP_DELAY, MSEC(80));
+    setFallback(OPT_STEP_DELAY, USEC(8000));
+    setFallback(OPT_DISK_SWAP_DELAY, SEC(1.8));
+    setFallback(OPT_DRIVE_PAN, { 0, 1 }, 100);
+    setFallback(OPT_DRIVE_PAN, { 2, 3 }, -100);
+    setFallback(OPT_STEP_VOLUME, 128);
+    setFallback(OPT_POLL_VOLUME, 128);
+    setFallback(OPT_INSERT_VOLUME, 128);
+    setFallback(OPT_EJECT_VOLUME, 128);
+    setFallback(OPT_HDC_CONNECT, 0, true);
+    setFallback(OPT_HDC_CONNECT, false);
+    setFallback(OPT_HDR_TYPE, HDR_GENERIC);
+    setFallback(OPT_HDR_PAN, { 0, 1 }, 100);
+    setFallback(OPT_HDR_PAN, { 2, 3 }, -100);
+    setFallback(OPT_HDR_STEP_VOLUME, 128);
+    setFallback(OPT_SERIAL_DEVICE, SPD_NONE);
+    setFallback(OPT_HIDDEN_BITPLANES, 0);
+    setFallback(OPT_HIDDEN_SPRITES, 0);
+    setFallback(OPT_HIDDEN_LAYERS, 0);
+    setFallback(OPT_HIDDEN_LAYER_ALPHA, 128);
+    setFallback(OPT_CLX_SPR_SPR, true);
+    setFallback(OPT_CLX_SPR_PLF, true);
+    setFallback(OPT_CLX_PLF_PLF, true);
+    setFallback(OPT_BLITTER_ACCURACY, 2);
+    setFallback(OPT_CIA_REVISION, CIA_MOS_8520_DIP);
+    setFallback(OPT_TODBUG, true);
+    setFallback(OPT_ECLOCK_SYNCING, true);
+    setFallback(OPT_ACCURATE_KEYBOARD, true);
+    setFallback(OPT_PULLUP_RESISTORS, true);
+    setFallback(OPT_SHAKE_DETECTION, true);
+    setFallback(OPT_MOUSE_VELOCITY, 100);
+    setFallback(OPT_AUTOFIRE, false);
+    setFallback(OPT_AUTOFIRE_BULLETS, -3);
+    setFallback(OPT_AUTOFIRE_DELAY, 125);
+    setFallback(OPT_SAMPLING_METHOD, SMP_NONE);
+    setFallback(OPT_FILTER_TYPE, FILTER_BUTTERWORTH);
+    setFallback(OPT_FILTER_ALWAYS_ON, false);
+    setFallback(OPT_AUDPAN, { 0, 3 }, 50);
+    setFallback(OPT_AUDPAN, { 1, 2 }, 350);
+    setFallback(OPT_AUDVOL, 100);
+    setFallback(OPT_AUDVOLL, 50);
+    setFallback(OPT_AUDVOLR, 50);
+    setFallback(OPT_DIAG_BOARD, false);
+    setFallback(OPT_SRV_PORT, SERVER_SER, 8080);
+    setFallback(OPT_SRV_PROTOCOL, SERVER_SER, SRVPROT_DEFAULT);
+    setFallback(OPT_SRV_AUTORUN, SERVER_SER, true);
+    setFallback(OPT_SRV_VERBOSE, SERVER_SER, true);
+    setFallback(OPT_SRV_PORT, SERVER_RSH, 8081);
+    setFallback(OPT_SRV_PROTOCOL, SERVER_RSH, SRVPROT_DEFAULT);
+    setFallback(OPT_SRV_AUTORUN, SERVER_RSH, false);
+    setFallback(OPT_SRV_VERBOSE, SERVER_RSH, true);
+    setFallback(OPT_SRV_PORT, SERVER_GDB, 8082);
+    setFallback(OPT_SRV_PROTOCOL, SERVER_GDB, SRVPROT_DEFAULT);
+    setFallback(OPT_SRV_AUTORUN, SERVER_GDB, true);
+    setFallback(OPT_SRV_VERBOSE, SERVER_GDB, true);
 }
 
 void
@@ -246,20 +256,20 @@ Properties::save(std::stringstream &stream)
 }
 
 string
-Properties::getValue(const string &key)
+Properties::get(const string &key)
 {
     if (values.contains(key)) {
         return values[key];
     } else {
-        return getDefaultValue(key);
+        return getFallback(key);
     }
 }
 
 i64
-Properties::getValue(Option key)
+Properties::get(Option key)
 {
     auto name = string(OptionEnum::key(key));
-    auto value = getValue(name);
+    auto value = get(name);
     
     try { return std::stol(value); } catch (...) {
 
@@ -269,55 +279,65 @@ Properties::getValue(Option key)
 }
 
 i64
-Properties::getValue(Option key, isize nr)
+Properties::get(Option option, isize nr)
 {
-    auto name = string(OptionEnum::key(key)) + std::to_string(nr);
-    auto value = getValue(name);
+    auto key = string(OptionEnum::key(option));
+    auto fullkey = key + std::to_string(nr);
+    string value;
     
-    try { return std::stol(value); } catch (...) {
-
-        warn("Can't parse value %s\n", name.c_str());
-        return 0;
+    try {
+        value = get(fullkey);
+    } catch (...) {
+        value = get(key);
     }
+
+    return std::stol(value);
 }
 
 string
-Properties::getDefaultValue(const string &key)
+Properties::getFallback(const string &key)
 {
     if (!defaults.contains(key)) {
-        throw VAError(ERROR_INVALID_KEY);
+        throw VAError(ERROR_INVALID_KEY, key);
     }
     
     return defaults[key];
 }
 
 i64
-Properties::getDefaultValue(Option key)
+Properties::getFallback(Option key)
 {
     auto name = string(OptionEnum::key(key));
-    auto value = getValue(name);
+    auto value = get(name);
     
     return std::stol(value);
 }
 
 i64
-Properties::getDefaultValue(Option key, isize nr)
+Properties::getFallback(Option option, isize nr)
 {
-    auto name = string(OptionEnum::key(key)) + std::to_string(nr);
-    auto value = getValue(name);
+    auto key = string(OptionEnum::key(option));
+    auto fullkey = key + std::to_string(nr);
+    string value;
+    
+    try {
+        value = getFallback(fullkey);
+    } catch (...) {
+        value = get(key);
+    }
     
     return std::stol(value);
 }
 
 void
-Properties::setValue(const string &key, const string &value)
+Properties::set(const string &key, const string &value)
 {
     {   SYNCHRONIZED
         
         debug(DEF_DEBUG, "%s = %s\n", key.c_str(), value.c_str());
 
         if (!defaults.contains(key)) {
-            throw VAError(ERROR_INVALID_KEY);
+            throw VAError(ERROR_INVALID_KEY, key);
         }
         
         values[key] = value;
@@ -325,31 +345,31 @@ Properties::setValue(const string &key, const string &value)
 }
 
 void
-Properties::setValue(Option option, i64 value)
+Properties::set(Option option, i64 value)
 {
     auto key = string(OptionEnum::key(option));
     auto val = std::to_string(value);
     
-    setValue(key, val);
+    set(key, val);
 }
 
 void
-Properties::setValue(Option option, isize nr, i64 value)
+Properties::set(Option option, isize nr, i64 value)
 {
     auto key = string(OptionEnum::key(option)) + std::to_string(nr);
     auto val = std::to_string(value);
 
-    setValue(key, val);
+    set(key, val);
 }
 
 void
-Properties::setValue(Option option, std::vector <isize> nrs, i64 value)
+Properties::set(Option option, std::vector <isize> nrs, i64 value)
 {
-    for (auto &nr : nrs) setValue(option, nr, value);
+    for (auto &nr : nrs) set(option, nr, value);
 }
 
 void
-Properties::setDefaultValue(const string &key, const string &value)
+Properties::setFallback(const string &key, const string &value)
 {
     {   SYNCHRONIZED
         
@@ -358,27 +378,27 @@ Properties::setDefaultValue(const string &key, const string &value)
 }
 
 void
-Properties::setDefaultValue(Option option, i64 value)
+Properties::setFallback(Option option, i64 value)
 {
     auto key = string(OptionEnum::key(option));
     auto val = std::to_string(value);
     
-    setDefaultValue(key, val);
+    setFallback(key, val);
 }
 
 void
-Properties::setDefaultValue(Option option, isize nr, i64 value)
+Properties::setFallback(Option option, isize nr, i64 value)
 {
     auto key = string(OptionEnum::key(option)) + std::to_string(nr);
     auto val = std::to_string(value);
 
-    setDefaultValue(key, val);
+    setFallback(key, val);
 }
 
 void
-Properties::setDefaultValue(Option option, std::vector <isize> nrs, i64 value)
+Properties::setFallback(Option option, std::vector <isize> nrs, i64 value)
 {
-    for (auto &nr : nrs) setDefaultValue(option, nr, value);
+    for (auto &nr : nrs) setFallback(option, nr, value);
 }
 
 void
@@ -391,7 +411,7 @@ Properties::remove()
 }
 
 void
-Properties::removeValue(const string &key)
+Properties::remove(const string &key)
 {
     {   SYNCHRONIZED
         
@@ -400,13 +420,13 @@ Properties::removeValue(const string &key)
 }
 
 void
-Properties::removeValue(Option option)
+Properties::remove(Option option)
 {
-    removeValue(string(OptionEnum::key(option)));
+    remove(string(OptionEnum::key(option)));
     }
 
 void
-Properties::removeValue(Option option, isize nr)
+Properties::remove(Option option, isize nr)
 {
-    removeValue(string(OptionEnum::key(option)) + std::to_string(nr));
+    remove(string(OptionEnum::key(option)) + std::to_string(nr));
 }

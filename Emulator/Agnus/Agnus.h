@@ -294,7 +294,7 @@ private:
     
 public:
     
-    static AgnusConfig getDefaultConfig();
+    // static AgnusConfig getDefaultConfig();
     const AgnusConfig &getConfig() const { return config; }
     void resetConfig() override;
     

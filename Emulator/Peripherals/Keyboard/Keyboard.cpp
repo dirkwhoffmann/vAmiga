@@ -9,10 +9,10 @@
 
 #include "config.h"
 #include "Keyboard.h"
-#include "Agnus.h"
-#include "CIA.h"
+#include "Amiga.h"
+// #include "CIA.h"
 #include "IOUtils.h"
-#include "MsgQueue.h"
+// #include "MsgQueue.h"
 
 void
 Keyboard::_reset(bool hard)
@@ -24,6 +24,7 @@ Keyboard::_reset(bool hard)
     execute();
 }
 
+/*
 KeyboardConfig
 Keyboard::getDefaultConfig()
 {
@@ -33,13 +34,28 @@ Keyboard::getDefaultConfig()
     
     return defaults;
 }
+*/
 
 void
 Keyboard::resetConfig()
 {
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_ACCURATE_KEYBOARD
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
+
+    /*
     auto defaults = getDefaultConfig();
     
     setConfigItem(OPT_ACCURATE_KEYBOARD, defaults.accurate);
+    */
 }
 
 i64

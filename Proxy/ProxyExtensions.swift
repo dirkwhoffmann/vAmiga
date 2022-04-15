@@ -121,11 +121,63 @@ extension PropertiesProxy {
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 
+    func load() {
+        
+        log(level: 2)
+        
+        do {
+            let folder = try URL.appSupportFolder()
+            let path = folder.appendingPathComponent("vAmiga.ini")
+            
+            do {
+                try load(url: path)
+                log("Successfully loaded user defaults from file \(path)")
+            } catch {
+                log("Failed to load user defaults from file \(path)")
+            }
+            
+        } catch {
+            log("Failed to access application support folder")
+        }
+    }
+    
     func save(url: URL) throws {
         
         let exception = ExceptionWrapper()
         save(url, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
+    }
+    
+    func save() {
+        
+        log(level: 2)
+        
+        do {
+            let folder = try URL.appSupportFolder()
+            let path = folder.appendingPathComponent("vAmiga.ini")
+            
+            do {
+                try save(url: path)
+                log("Successfully saved user defaults to file \(path)")
+            } catch {
+                log("Failed to save user defaults file \(path)")
+            }
+            
+        } catch {
+            log("Failed to access application support folder")
+        }
+    }
+
+    func set(_ option: Option, value: Bool) {
+        set(option, value: value ? 0 : 1)
+    }
+    
+    func set(_ option: Option, nr: [NSInteger], value: NSInteger) {
+        for n in nr { set(option, nr: n, value: value) }
+    }
+        
+    func set(_ option: Option, nr: [NSInteger], value: Bool) {
+        for n in nr { set(option, nr: n, value: value ? 1 : 0) }
     }
 }
 

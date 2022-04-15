@@ -290,7 +290,7 @@ Amiga::getConfigItem(Option option, long id) const
 {
     switch (option) {
             
-        case OPT_DMA_DEBUG_ENABLE:
+        case OPT_DMA_DEBUG_CHANNEL:
         case OPT_DMA_DEBUG_COLOR:
             
             return agnus.dmaDebugger.getConfigItem(option, id);
@@ -590,7 +590,7 @@ Amiga::configure(Option option, long id, i64 value)
     
     switch (option) {
             
-        case OPT_DMA_DEBUG_ENABLE:
+        case OPT_DMA_DEBUG_CHANNEL:
         case OPT_DMA_DEBUG_COLOR:
             
             agnus.dmaDebugger.setConfigItem(option, id, value);

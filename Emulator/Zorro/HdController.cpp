@@ -10,11 +10,11 @@
 #include "config.h"
 #include "HdController.h"
 #include "HdControllerRom.h"
-#include "HardDrive.h"
+#include "Amiga.h"
 #include "HDFFile.h"
 #include "FloppyDrive.h"
-#include "Memory.h"
-#include "MsgQueue.h"
+// #include "Memory.h"
+// #include "MsgQueue.h"
 #include "OSDebugger.h"
 
 HdController::HdController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref), drive(hdr)
@@ -86,6 +86,7 @@ HdController::_reset(bool hard)
     }
 }
 
+/*
 HdcConfig
 HdController::getDefaultConfig(isize nr)
 {
@@ -95,13 +96,28 @@ HdController::getDefaultConfig(isize nr)
 
     return defaults;
 }
+*/
 
 void
 HdController::resetConfig()
 {
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_HDC_CONNECT
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
+    
+    /*
     auto defaults = getDefaultConfig(nr);
     
     setConfigItem(OPT_HDC_CONNECT, defaults.connected);
+    */
 }
 
 i64

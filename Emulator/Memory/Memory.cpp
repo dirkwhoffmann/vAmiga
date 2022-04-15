@@ -119,6 +119,7 @@ Memory::_reset(bool hard)
     clearStats();
 }
 
+/*
 MemoryConfig
 Memory::getDefaultConfig()
 {
@@ -141,10 +142,32 @@ Memory::getDefaultConfig()
     
     return defaults;
 }
+*/
 
 void
 Memory::resetConfig()
 {
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_CHIP_RAM,
+        OPT_SLOW_RAM,
+        OPT_FAST_RAM,
+        OPT_EXT_START,
+        OPT_SAVE_ROMS,
+        OPT_SLOW_RAM_DELAY,
+        OPT_BANKMAP,
+        OPT_UNMAPPING_TYPE,
+        OPT_RAM_INIT_PATTERN
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
+    
+    /*
     auto defaults = getDefaultConfig();
     
     setConfigItem(OPT_CHIP_RAM, defaults.chipSize);
@@ -156,6 +179,7 @@ Memory::resetConfig()
     setConfigItem(OPT_BANKMAP, defaults.bankMap);
     setConfigItem(OPT_UNMAPPING_TYPE, defaults.unmappingType);
     setConfigItem(OPT_RAM_INIT_PATTERN, defaults.ramInitPattern);
+    */
 }
 
 i64

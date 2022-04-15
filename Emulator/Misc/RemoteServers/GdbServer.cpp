@@ -38,6 +38,25 @@ GdbServer::_dump(Category category, std::ostream& os) const
     }
 }
 
+void
+GdbServer::resetConfig()
+{
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_SRV_PORT,
+        OPT_SRV_PROTOCOL,
+        OPT_SRV_AUTORUN,
+        OPT_SRV_VERBOSE
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option, SERVER_GDB));
+    }
+}
+
 bool
 GdbServer::shouldRun()
 {
@@ -50,6 +69,7 @@ GdbServer::shouldRun()
     return !segList.empty();
 }
 
+/*
 ServerConfig
 GdbServer::getDefaultConfig()
 {
@@ -62,6 +82,7 @@ GdbServer::getDefaultConfig()
 
     return defaults;
 }
+*/
 
 string
 GdbServer::doReceive()

@@ -97,9 +97,9 @@ private:
     
 public:
         
-    virtual ServerConfig getDefaultConfig() = 0;
+    // virtual ServerConfig getDefaultConfig() = 0;
     const ServerConfig &getConfig() const { return config; }
-    void resetConfig() override;
+    // void resetConfig() override;
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
         

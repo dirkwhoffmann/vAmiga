@@ -112,7 +112,6 @@ private:
     
 public:
     
-    static CPUConfig getDefaultConfig();
     const CPUConfig &getConfig() const { return config; }
     void resetConfig() override;
     

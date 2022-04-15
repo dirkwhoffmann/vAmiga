@@ -350,7 +350,7 @@ private:
     
 public:
     
-    static CIAConfig getDefaultConfig();
+    // static CIAConfig getDefaultConfig();
     
     void resetConfig() override;
     const CIAConfig &getConfig() const { return config; }

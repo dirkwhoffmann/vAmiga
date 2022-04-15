@@ -71,26 +71,26 @@ public:
 
 public:
     
-    string getValue(const string &key) throws;
-    i64 getValue(Option option) throws;
-    i64 getValue(Option option, isize nr) throws;
+    string get(const string &key) throws;
+    i64 get(Option option) throws;
+    i64 get(Option option, isize nr) throws;
     
-    string getDefaultValue(const string &key) throws;
-    i64 getDefaultValue(Option option) throws;
-    i64 getDefaultValue(Option option, isize nr) throws;
+    string getFallback(const string &key) throws;
+    i64 getFallback(Option option) throws;
+    i64 getFallback(Option option, isize nr) throws;
 
-    void setValue(const string &key, const string &value);
-    void setValue(Option option, i64 value);
-    void setValue(Option option, isize nr, i64 value);
-    void setValue(Option option, std::vector <isize> nrs, i64 value);
+    void set(const string &key, const string &value);
+    void set(Option option, i64 value);
+    void set(Option option, isize nr, i64 value);
+    void set(Option option, std::vector <isize> nrs, i64 value);
 
-    void setDefaultValue(const string &key, const string &value);
-    void setDefaultValue(Option option, i64 value);
-    void setDefaultValue(Option option, isize nr, i64 value);
-    void setDefaultValue(Option option, std::vector <isize> nrs, i64 value);
+    void setFallback(const string &key, const string &value);
+    void setFallback(Option option, i64 value);
+    void setFallback(Option option, isize nr, i64 value);
+    void setFallback(Option option, std::vector <isize> nrs, i64 value);
 
     void remove();
-    void removeValue(const string &key) throws;
-    void removeValue(Option option) throws;
-    void removeValue(Option option, isize nr) throws;
+    void remove(const string &key) throws;
+    void remove(Option option) throws;
+    void remove(Option option, isize nr) throws;
 };

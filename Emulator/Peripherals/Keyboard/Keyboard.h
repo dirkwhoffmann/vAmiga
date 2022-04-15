@@ -95,7 +95,7 @@ private:
     
 public:
     
-    static KeyboardConfig getDefaultConfig();
+    // static KeyboardConfig getDefaultConfig();
     const KeyboardConfig &getConfig() const { return config; }
     void resetConfig() override;
 

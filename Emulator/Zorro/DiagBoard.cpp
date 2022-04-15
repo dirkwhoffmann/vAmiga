@@ -44,6 +44,7 @@ DiagBoard::_reset(bool hard)
     }
 }
 
+/*
 DiagBoardConfig
 DiagBoard::getDefaultConfig()
 {
@@ -53,13 +54,28 @@ DiagBoard::getDefaultConfig()
 
     return defaults;
 }
+*/
 
 void
 DiagBoard::resetConfig()
 {
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_DIAG_BOARD
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
+    
+    /*
     auto defaults = getDefaultConfig();
     
     setConfigItem(OPT_DIAG_BOARD, defaults.enabled);
+    */
 }
 
 i64

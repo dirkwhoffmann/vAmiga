@@ -258,7 +258,7 @@ private:
     
 public:
     
-    static MemoryConfig getDefaultConfig();
+    // static MemoryConfig getDefaultConfig();
     const MemoryConfig &getConfig() const { return config; }
     void resetConfig() override;
     

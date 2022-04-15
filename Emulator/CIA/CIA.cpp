@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "CIA.h"
+#include "Amiga.h"
 #include "Agnus.h"
 #include "ControlPort.h"
 #include "DiskController.h"
@@ -57,6 +58,7 @@ CIA::_reset(bool hard)
     mem.updateMemSrcTables();
 }
 
+/*
 CIAConfig
 CIA::getDefaultConfig()
 {
@@ -68,15 +70,32 @@ CIA::getDefaultConfig()
 
     return defaults;
 }
-
+*/
+ 
 void
 CIA::resetConfig()
 {
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_CIA_REVISION,
+        OPT_TODBUG,
+        OPT_ECLOCK_SYNCING
+    };
+    
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
+
+    /*
     auto defaults = getDefaultConfig();
     
     setConfigItem(OPT_CIA_REVISION, defaults.revision);
     setConfigItem(OPT_TODBUG, defaults.todBug);
     setConfigItem(OPT_ECLOCK_SYNCING, defaults.eClockSyncing);
+    */
 }
 
 i64

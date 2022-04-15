@@ -833,6 +833,7 @@ class Configuration {
     
     func loadCompatibilityUserDefaults() {
         
+        /*
         log(level: 2)
         let defaults = UserDefaults.standard
         
@@ -856,29 +857,49 @@ class Configuration {
         accurateKeyboard = defaults.bool(forKey: Keys.Com.accurateKeyboard)
 
         amiga.resume()
+        */
      }
     
     func saveCompatibilityUserDefaults() {
         
         log(level: 2)
-        let defaults = UserDefaults.standard
         
-        defaults.set(blitterAccuracy, forKey: Keys.Com.blitterAccuracy)
+        let defaults = amiga.properties!
 
-        defaults.set(todBug, forKey: Keys.Com.todBug)
+        defaults.set(.BLITTER_ACCURACY, value: blitterAccuracy)
+        defaults.set(.TODBUG, value: todBug)
+        defaults.set(.ECLOCK_SYNCING, value: eClockSyncing)
+        defaults.set(.CLX_SPR_SPR, value: clxSprSpr)
+        defaults.set(.CLX_SPR_PLF, value: clxSprPlf)
+        defaults.set(.CLX_PLF_PLF, value: clxPlfPlf)
+        defaults.set(.DRIVE_SPEED, value: driveSpeed)
+        defaults.set(.EMULATE_MECHANICS, value: mechanicalDelays)
+        defaults.set(.LOCK_DSKSYNC, value: lockDskSync)
+        defaults.set(.AUTO_DSKSYNC, value: autoDskSync)
+        defaults.set(.ACCURATE_KEYBOARD, value: accurateKeyboard)
+        defaults.save()
 
-        defaults.set(eClockSyncing, forKey: Keys.Com.eClockSyncing)
+        // DEPRECATED
+        /*
+        let std = UserDefaults.standard
+        
+        std.set(blitterAccuracy, forKey: Keys.Com.blitterAccuracy)
 
-        defaults.set(clxSprSpr, forKey: Keys.Com.clxSprSpr)
-        defaults.set(clxSprPlf, forKey: Keys.Com.clxSprPlf)
-        defaults.set(clxPlfPlf, forKey: Keys.Com.clxPlfPlf)
+        std.set(todBug, forKey: Keys.Com.todBug)
+
+        std.set(eClockSyncing, forKey: Keys.Com.eClockSyncing)
+
+        std.set(clxSprSpr, forKey: Keys.Com.clxSprSpr)
+        std.set(clxSprPlf, forKey: Keys.Com.clxSprPlf)
+        std.set(clxPlfPlf, forKey: Keys.Com.clxPlfPlf)
                 
-        defaults.set(driveSpeed, forKey: Keys.Com.driveSpeed)
-        defaults.set(mechanicalDelays, forKey: Keys.Com.mechanicalDelays)
-        defaults.set(lockDskSync, forKey: Keys.Com.lockDskSync)
-        defaults.set(autoDskSync, forKey: Keys.Com.autoDskSync)
+        std.set(driveSpeed, forKey: Keys.Com.driveSpeed)
+        std.set(mechanicalDelays, forKey: Keys.Com.mechanicalDelays)
+        std.set(lockDskSync, forKey: Keys.Com.lockDskSync)
+        std.set(autoDskSync, forKey: Keys.Com.autoDskSync)
         
-        defaults.set(accurateKeyboard, forKey: Keys.Com.accurateKeyboard)
+        std.set(accurateKeyboard, forKey: Keys.Com.accurateKeyboard)
+        */
     }
     
     //

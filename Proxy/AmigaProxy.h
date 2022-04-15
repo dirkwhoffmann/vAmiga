@@ -256,6 +256,15 @@
 - (void)load:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)save:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
+- (void) setKey:(NSString *)key value:(NSString *)value;
+- (void) set:(Option)option value:(NSInteger)value;
+- (void) set:(Option)option nr:(NSInteger)nr value:(NSInteger)value;
+
+- (void) removeAll;
+- (void) removeKey:(NSString *)key;
+- (void) remove:(Option)option;
+- (void) remove:(Option) option nr:(NSInteger)nr;
+
 @end
 
 

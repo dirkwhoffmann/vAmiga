@@ -12,12 +12,7 @@
 #include "IOUtils.h"
 #include "Amiga.h"
 
-void
-SerialPort::_didLoad()
-{
-    printf("SerialPort::_didLoad()\n");
-}
-
+/*
 SerialPortConfig
 SerialPort::getDefaultConfig()
 {
@@ -27,13 +22,28 @@ SerialPort::getDefaultConfig()
     
     return defaults;
 }
+*/
 
 void
 SerialPort::resetConfig()
 {
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_SERIAL_DEVICE
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
+    
+    /*
     auto defaults = getDefaultConfig();
     
     setConfigItem(OPT_SERIAL_DEVICE, defaults.device);
+    */
 }
 
 i64

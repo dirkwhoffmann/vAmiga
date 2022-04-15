@@ -151,7 +151,13 @@ extension MyController: NSMenuItemValidation {
     @IBAction func resetConfigAction(_ sender: Any!) {
         
         log()
+
+        amiga.properties.removeAll()
+        amiga.properties.save()
         
+        // TODO: POWER OFF THE AMIGA FIRST
+        // amiga.resetConfig()
+                
         UserDefaults.resetRomUserDefaults()
         UserDefaults.resetChipsetUserDefaults()
         UserDefaults.resetPeripheralsUserDefaults()

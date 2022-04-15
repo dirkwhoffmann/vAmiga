@@ -35,8 +35,9 @@ enum_long(OPT)
     // DMA Debugger
     OPT_DMA_DEBUG_ENABLE,
     OPT_DMA_DEBUG_MODE,
-    OPT_DMA_DEBUG_COLOR,
     OPT_DMA_DEBUG_OPACITY,
+    OPT_DMA_DEBUG_CHANNEL,
+    OPT_DMA_DEBUG_COLOR,
     
     // CPU
     OPT_REG_RESET_VAL,
@@ -160,8 +161,9 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
 
             case OPT_DMA_DEBUG_ENABLE:      return "DMA_DEBUG_ENABLE";
             case OPT_DMA_DEBUG_MODE:        return "DMA_DEBUG_MODE";
-            case OPT_DMA_DEBUG_COLOR:       return "DMA_DEBUG_COLOR";
             case OPT_DMA_DEBUG_OPACITY:     return "DMA_DEBUG_OPACITY";
+            case OPT_DMA_DEBUG_CHANNEL:     return "DMA_DEBUG_CHANNEL";
+            case OPT_DMA_DEBUG_COLOR:       return "DMA_DEBUG_COLOR";
 
             case OPT_REG_RESET_VAL:         return "REG_RESET_VAL";
                 

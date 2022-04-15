@@ -85,7 +85,7 @@ private:
 
 public:
     
-    static DiagBoardConfig getDefaultConfig();
+    // static DiagBoardConfig getDefaultConfig();
     const DiagBoardConfig &getConfig() const { return config; }
     void resetConfig() override;
     

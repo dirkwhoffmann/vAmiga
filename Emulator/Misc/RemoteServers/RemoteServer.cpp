@@ -70,6 +70,7 @@ RemoteServer::_didLoad()
     stop();
 }
 
+/*
 void
 RemoteServer::resetConfig()
 {
@@ -80,6 +81,7 @@ RemoteServer::resetConfig()
     setConfigItem(OPT_SRV_AUTORUN, defaults.autoRun);
     setConfigItem(OPT_SRV_VERBOSE, defaults.verbose);
 }
+*/
 
 i64
 RemoteServer::getConfigItem(Option option) const

@@ -185,7 +185,7 @@ public:
     
 public:
     
-    static HardDriveConfig getDefaultConfig(isize nr);
+    // static HardDriveConfig getDefaultConfig(isize nr);
     const HardDriveConfig &getConfig() const { return config; }
     void resetConfig() override;
     

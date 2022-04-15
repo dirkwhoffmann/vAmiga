@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "Muxer.h"
+#include "Amiga.h"
 #include "CIA.h"
 #include "IOUtils.h"
 #include "MsgQueue.h"
@@ -89,6 +90,7 @@ Muxer::clear()
     filterR.clear();
 }
 
+/*
 MuxerConfig
 Muxer::getDefaultConfig()
 {
@@ -110,10 +112,40 @@ Muxer::getDefaultConfig()
 
     return defaults;
 }
+*/
 
 void
 Muxer::resetConfig()
 {
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_SAMPLING_METHOD,
+        OPT_FILTER_TYPE,
+        OPT_FILTER_ALWAYS_ON,
+        OPT_AUDVOLL,
+        OPT_AUDVOLR
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
+    
+    std::vector <Option> moreOptions = {
+        
+        OPT_AUDVOL,
+        OPT_AUDPAN,
+    };
+
+    for (auto &option : moreOptions) {
+        for (isize i = 0; i < 4; i++) {
+            setConfigItem(option, i, defaults.get(option, i));
+        }
+    }
+
+    /*
     MuxerConfig defaults = getDefaultConfig();
     
     setConfigItem(OPT_SAMPLING_METHOD, defaults.samplingMethod);
@@ -127,6 +159,7 @@ Muxer::resetConfig()
         setConfigItem(OPT_AUDVOL, i, defaults.vol[i]);
         setConfigItem(OPT_AUDPAN, i, defaults.pan[i]);
     }
+    */
 }
 
 i64

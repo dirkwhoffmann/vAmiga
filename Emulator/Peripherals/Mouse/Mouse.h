@@ -135,7 +135,7 @@ private:
     
 public:
     
-    static MouseConfig getDefaultConfig();
+    // static MouseConfig getDefaultConfig();
     const MouseConfig &getConfig() const { return config; }
     void resetConfig() override;
 

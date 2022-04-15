@@ -102,6 +102,41 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; }
 }
 
+- (void) setKey:(NSString *)key value:(NSString *)value
+{
+    [self props]->set(string([key UTF8String]), string([value UTF8String]));
+}
+
+- (void) set:(Option)option value:(NSInteger)value
+{
+    [self props]->set(option, value);
+}
+
+- (void) set:(Option)option nr:(NSInteger)nr value:(NSInteger)value
+{
+    [self props]->set(option, nr, value);
+}
+
+- (void) removeAll
+{
+    [self props]->remove();
+}
+
+- (void) removeKey:(NSString *)key
+{
+    [self props]->remove(string([key UTF8String]));
+}
+
+- (void) remove:(Option)option
+{
+    [self props]->remove(option);
+}
+
+- (void) remove:(Option) option nr:(NSInteger)nr
+{
+    [self props]->set(option, nr);
+}
+
 @end
 
 //

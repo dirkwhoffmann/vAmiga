@@ -285,7 +285,7 @@ private:
 
 public:
     
-    static BlitterConfig getDefaultConfig();
+    // static BlitterConfig getDefaultConfig();
     const BlitterConfig &getConfig() const { return config; }
     void resetConfig() override;
     
