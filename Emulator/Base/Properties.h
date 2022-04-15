@@ -19,8 +19,8 @@ class Properties : public AmigaObject {
     // Key-value storage
     std::map <string, string> values;
 
-    // Default values (used if no value is set)
-    std::map <string, string> defaults;
+    // Fallback values (used if no value is set)
+    std::map <string, string> fallbacks;
 
     
     //
@@ -37,10 +37,6 @@ public:
     //
     // Methods from AmigaObject
     //
-    
-public:
-
-    // void prefix() const override;
 
 private:
     
@@ -71,15 +67,16 @@ public:
 
 public:
     
-    string get(const string &key) throws;
+    string getString(const string &key) throws;
+    i64 getInt(const string &key) throws;
     i64 get(Option option) throws;
     i64 get(Option option, isize nr) throws;
     
     string getFallback(const string &key) throws;
-    i64 getFallback(Option option) throws;
-    i64 getFallback(Option option, isize nr) throws;
+    // i64 getFallback(Option option) throws;
+    // i64 getFallback(Option option, isize nr) throws;
 
-    void set(const string &key, const string &value);
+    void setString(const string &key, const string &value);
     void set(Option option, i64 value);
     void set(Option option, isize nr, i64 value);
     void set(Option option, std::vector <isize> nrs, i64 value);

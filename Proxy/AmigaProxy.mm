@@ -104,7 +104,7 @@ using namespace moira;
 
 - (NSString *)getKey:(NSString *)key
 {
-    auto result = [self props]->get([key UTF8String]);
+    auto result = [self props]->getString([key UTF8String]);
     return @(result.c_str());
 }
 
@@ -120,7 +120,7 @@ using namespace moira;
 
 - (void)setKey:(NSString *)key value:(NSString *)value
 {
-    [self props]->set(string([key UTF8String]), string([value UTF8String]));
+    [self props]->setString(string([key UTF8String]), string([value UTF8String]));
 }
 
 - (void)set:(Option)option value:(NSInteger)value

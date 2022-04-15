@@ -39,16 +39,22 @@ Properties::Properties()
     setFallback(OPT_DMA_DEBUG_ENABLE, false);
     setFallback(OPT_DMA_DEBUG_MODE, DMA_DISPLAY_MODE_FG_LAYER);
     setFallback(OPT_DMA_DEBUG_OPACITY, 50);
-    setFallback(OPT_DMA_DEBUG_CHANNEL, true);
+    setFallback(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_COPPER, true);
+    setFallback(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_BLITTER, true);
+    setFallback(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_DISK, true);
+    setFallback(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_AUDIO, true);
+    setFallback(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_SPRITE, true);
+    setFallback(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_BITPLANE, true);
     setFallback(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_CPU, false);
-    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_CPU, 0xFFFFFF00);
-    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_REFRESH, 0xFF000000);
-    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_DISK, 0x00FF0000);
-    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_AUDIO, 0xFF00FF00);
-    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_BITPLANE, 0x00FFFF00);
-    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_SPRITE, 0x0088FF00);
+    setFallback(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_REFRESH, true);
     setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_COPPER, 0xFFFF0000);
     setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_BLITTER, 0xFFCC0000);
+    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_DISK, 0x00FF0000);
+    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_AUDIO, 0xFF00FF00);
+    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_SPRITE, 0x0088FF00);
+    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_BITPLANE, 0x00FFFF00);
+    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_CPU, 0xFFFFFF00);
+    setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_REFRESH, 0xFF000000);
     setFallback(OPT_REG_RESET_VAL, 0);
     setFallback(OPT_RTC_MODEL, RTC_OKI);
     setFallback(OPT_CHIP_RAM, 512);
@@ -61,28 +67,28 @@ Properties::Properties()
     setFallback(OPT_UNMAPPING_TYPE, RAM_INIT_ALL_ZEROES);
     setFallback(OPT_RAM_INIT_PATTERN, UNMAPPED_FLOATING);
     setFallback(OPT_DRIVE_CONNECT, 0, true);
-    setFallback(OPT_DRIVE_CONNECT, false);
+    setFallback(OPT_DRIVE_CONNECT, { 1, 2, 3 }, false);
     setFallback(OPT_DRIVE_SPEED, 1);
     setFallback(OPT_LOCK_DSKSYNC, false);
     setFallback(OPT_AUTO_DSKSYNC, false);
-    setFallback(OPT_DRIVE_TYPE, DRIVE_DD_35);
-    setFallback(OPT_EMULATE_MECHANICS, true);
-    setFallback(OPT_START_DELAY, MSEC(380));
-    setFallback(OPT_STOP_DELAY, MSEC(80));
-    setFallback(OPT_STEP_DELAY, USEC(8000));
-    setFallback(OPT_DISK_SWAP_DELAY, SEC(1.8));
+    setFallback(OPT_DRIVE_TYPE, { 0, 1, 2, 3 }, DRIVE_DD_35);
+    setFallback(OPT_EMULATE_MECHANICS, { 0, 1, 2, 3 }, true);
+    setFallback(OPT_START_DELAY, { 0, 1, 2, 3 }, MSEC(380));
+    setFallback(OPT_STOP_DELAY, { 0, 1, 2, 3 }, MSEC(80));
+    setFallback(OPT_STEP_DELAY, { 0, 1, 2, 3 }, USEC(8000));
+    setFallback(OPT_DISK_SWAP_DELAY, { 0, 1, 2, 3 }, SEC(1.8));
     setFallback(OPT_DRIVE_PAN, { 0, 1 }, 100);
     setFallback(OPT_DRIVE_PAN, { 2, 3 }, -100);
-    setFallback(OPT_STEP_VOLUME, 128);
-    setFallback(OPT_POLL_VOLUME, 128);
-    setFallback(OPT_INSERT_VOLUME, 128);
-    setFallback(OPT_EJECT_VOLUME, 128);
+    setFallback(OPT_STEP_VOLUME, { 0, 1, 2, 3 }, 128);
+    setFallback(OPT_POLL_VOLUME, { 0, 1, 2, 3 }, 128);
+    setFallback(OPT_INSERT_VOLUME, { 0, 1, 2, 3 }, 128);
+    setFallback(OPT_EJECT_VOLUME, { 0, 1, 2, 3 }, 128);
     setFallback(OPT_HDC_CONNECT, 0, true);
     setFallback(OPT_HDC_CONNECT, false);
-    setFallback(OPT_HDR_TYPE, HDR_GENERIC);
+    setFallback(OPT_HDR_TYPE, { 0, 1, 2, 3 }, HDR_GENERIC);
     setFallback(OPT_HDR_PAN, { 0, 1 }, 100);
     setFallback(OPT_HDR_PAN, { 2, 3 }, -100);
-    setFallback(OPT_HDR_STEP_VOLUME, 128);
+    setFallback(OPT_HDR_STEP_VOLUME, { 0, 1, 2, 3 }, 128);
     setFallback(OPT_SERIAL_DEVICE, SPD_NONE);
     setFallback(OPT_HIDDEN_BITPLANES, 0);
     setFallback(OPT_HIDDEN_SPRITES, 0);
@@ -107,7 +113,7 @@ Properties::Properties()
     setFallback(OPT_FILTER_ALWAYS_ON, false);
     setFallback(OPT_AUDPAN, { 0, 3 }, 50);
     setFallback(OPT_AUDPAN, { 1, 2 }, 350);
-    setFallback(OPT_AUDVOL, 100);
+    setFallback(OPT_AUDVOL, { 0, 1, 2, 3 }, 100);
     setFallback(OPT_AUDVOLL, 50);
     setFallback(OPT_AUDVOLR, 50);
     setFallback(OPT_DIAG_BOARD, false);
@@ -128,7 +134,7 @@ Properties::Properties()
 void
 Properties::_dump(Category category, std::ostream& os) const
 {
-    for (const auto &it: defaults) {
+    for (const auto &it: fallbacks) {
         
         const string key = it.first;
 
@@ -140,7 +146,7 @@ Properties::_dump(Category category, std::ostream& os) const
         } else {
             
             os << util::tab(key);
-            os << defaults.at(key) << " (Default)" << std::endl;
+            os << fallbacks.at(key) << " (Default)" << std::endl;
         }
     }
 }
@@ -260,59 +266,54 @@ Properties::save(std::stringstream &stream)
 }
 
 string
-Properties::get(const string &key)
+Properties::getString(const string &key)
 {
-    if (values.contains(key)) {
-        return values[key];
-    } else {
-        return getFallback(key);
-    }
+    if (values.contains(key)) return values[key];
+    if (fallbacks.contains(key)) return fallbacks[key];
+
+    throw VAError(ERROR_INVALID_KEY, key);
 }
 
 i64
-Properties::get(Option key)
+Properties::getInt(const string &key)
 {
-    auto name = string(OptionEnum::key(key));
-    auto value = get(name);
-    
+    auto value = getString(key);
+
     try { return std::stol(value); } catch (...) {
 
-        warn("Can't parse value %s\n", name.c_str());
+        warn("Can't parse value %s\n", key.c_str());
         return 0;
     }
 }
 
 i64
+Properties::get(Option option)
+{
+    return getInt(string(OptionEnum::key(option)));
+}
+
+i64
 Properties::get(Option option, isize nr)
 {
-    auto key = string(OptionEnum::key(option));
-    auto fullkey = key + std::to_string(nr);
-    string value;
-        
-    try {
-        value = get(fullkey);
-    } catch (...) {
-        value = get(key);
-    }
-
-    return std::stol(value);
+    return getInt(string(OptionEnum::key(option)) + std::to_string(nr));
 }
 
 string
 Properties::getFallback(const string &key)
 {
-    if (!defaults.contains(key)) {
+    if (!fallbacks.contains(key)) {
         throw VAError(ERROR_INVALID_KEY, key);
     }
     
-    return defaults[key];
+    return fallbacks[key];
 }
 
+/*
 i64
 Properties::getFallback(Option key)
 {
     auto name = string(OptionEnum::key(key));
-    auto value = get(name);
+    auto value = getString(name);
     
     return std::stol(value);
 }
@@ -327,20 +328,21 @@ Properties::getFallback(Option option, isize nr)
     try {
         value = getFallback(fullkey);
     } catch (...) {
-        value = get(key);
+        value = getString(key);
     }
     
     return std::stol(value);
 }
+*/
 
 void
-Properties::set(const string &key, const string &value)
+Properties::setString(const string &key, const string &value)
 {
     {   SYNCHRONIZED
         
         debug(DEF_DEBUG, "%s = %s\n", key.c_str(), value.c_str());
 
-        if (!defaults.contains(key)) {
+        if (!fallbacks.contains(key)) {
             throw VAError(ERROR_INVALID_KEY, key);
         }
         
@@ -354,7 +356,7 @@ Properties::set(Option option, i64 value)
     auto key = string(OptionEnum::key(option));
     auto val = std::to_string(value);
     
-    set(key, val);
+    setString(key, val);
 }
 
 void
@@ -363,7 +365,7 @@ Properties::set(Option option, isize nr, i64 value)
     auto key = string(OptionEnum::key(option)) + std::to_string(nr);
     auto val = std::to_string(value);
 
-    set(key, val);
+    setString(key, val);
 }
 
 void
@@ -377,7 +379,7 @@ Properties::setFallback(const string &key, const string &value)
 {
     {   SYNCHRONIZED
         
-        defaults[key] = value;
+        fallbacks[key] = value;
     }
 }
 
