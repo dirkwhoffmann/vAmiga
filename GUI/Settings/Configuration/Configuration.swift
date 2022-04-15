@@ -187,7 +187,7 @@ class Configuration {
     }
     // var hdPersist = [ false, false, false, false ]
 
-    var gameDevice1 = PeripheralsDefaults.std.gameDevice1 {
+    var gameDevice1 = 0 {
         didSet {
                          
             // Try to connect the device (may disconnect the other device)
@@ -201,7 +201,7 @@ class Configuration {
             parent.toolbar.validateVisibleItems()
         }
     }
-    var gameDevice2 = PeripheralsDefaults.std.gameDevice2 {
+    var gameDevice2 = -1 {
         didSet {
  
             // Try to connect the device (may disconnect the other device)
@@ -831,7 +831,7 @@ class Configuration {
         lockDskSync = defaults.get(.LOCK_DSKSYNC) != 0
         autoDskSync = defaults.get(.AUTO_DSKSYNC) != 0
         accurateKeyboard = defaults.get(.ACCURATE_KEYBOARD) != 0
-
+        
         amiga.resume()
     }
     

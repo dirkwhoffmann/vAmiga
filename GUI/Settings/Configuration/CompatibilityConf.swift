@@ -110,41 +110,50 @@ extension ConfigurationController {
 
     @IBAction func compPresetAction(_ sender: NSPopUpButton!) {
         
-        var defaults: CompatibilityDefaults
-        
-        switch sender.selectedTag() {
-        case 0: defaults = CompatibilityDefaults.std
-        case 1: defaults = CompatibilityDefaults.accurate
-        case 2: defaults = CompatibilityDefaults.accelerated
-        default: fatalError()
-        }
+        let defaults = amiga.properties!
         
         amiga.suspend()
         
-        config.blitterAccuracy = defaults.blitterAccuracy
+        // Revert to standard settings
+        config.removeCompatibilityUserDefaults()
+                
+        // Override some options
+        switch sender.selectedTag() {
+            
+        case 0:
+            
+            // Standard
+            break
+            
+        case 1:
+            
+            // Accurate
+            defaults.set(.CLX_SPR_SPR, value: true)
+            defaults.set(.CLX_SPR_PLF, value: true)
+            defaults.set(.CLX_PLF_PLF, value: true)
+            
+        case 2:
+            
+            // Accelerated
+            defaults.set(.BLITTER_ACCURACY, value: 0)
+            defaults.set(.DRIVE_SPEED, value: -1)
+            defaults.set(.EMULATE_MECHANICS, value: false)
+            defaults.set(.ACCURATE_KEYBOARD, value: false)
+            defaults.set(.ECLOCK_SYNCING, value: false)
+            
+        default:
+            fatalError()
+        }
         
-        config.todBug = defaults.todBug
-        
-        config.eClockSyncing = defaults.eClockSyncing
-        
-        config.clxSprSpr = defaults.clxSprSpr
-        config.clxSprPlf = defaults.clxSprPlf
-        config.clxPlfPlf = defaults.clxPlfPlf
-        
-        config.driveSpeed = defaults.driveSpeed
-        config.mechanicalDelays = defaults.mechanicalDelays
-        config.lockDskSync = defaults.lockDskSync
-        config.autoDskSync = defaults.autoDskSync
-        
-        config.accurateKeyboard = defaults.accurateKeyboard
+        // Update the configutation
+        config.updateCompatibilityUserDefaults()
         
         amiga.resume()
-        
         refresh()
-     }
-
-     @IBAction func compDefaultsAction(_ sender: NSButton!) {
-         
-         config.saveCompatibilityUserDefaults()
-     }
+    }
+    
+    @IBAction func compDefaultsAction(_ sender: NSButton!) {
+        
+        config.saveCompatibilityUserDefaults()
+    }
 }

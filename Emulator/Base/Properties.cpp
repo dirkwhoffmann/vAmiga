@@ -88,9 +88,9 @@ Properties::Properties()
     setFallback(OPT_HIDDEN_SPRITES, 0);
     setFallback(OPT_HIDDEN_LAYERS, 0);
     setFallback(OPT_HIDDEN_LAYER_ALPHA, 128);
-    setFallback(OPT_CLX_SPR_SPR, true);
-    setFallback(OPT_CLX_SPR_PLF, true);
-    setFallback(OPT_CLX_PLF_PLF, true);
+    setFallback(OPT_CLX_SPR_SPR, false);
+    setFallback(OPT_CLX_SPR_PLF, false);
+    setFallback(OPT_CLX_PLF_PLF, false);
     setFallback(OPT_BLITTER_ACCURACY, 2);
     setFallback(OPT_CIA_REVISION, CIA_MOS_8520_DIP);
     setFallback(OPT_TODBUG, true);
