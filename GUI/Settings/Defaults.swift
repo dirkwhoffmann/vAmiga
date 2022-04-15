@@ -73,8 +73,26 @@ extension UserDefaults {
 extension MyController {
     
     func loadUserDefaults() {
-                
+        
         log(level: 2)
+        precondition(amiga.poweredOff)
+
+        do {
+            let folder = try URL.appSupportFolder()
+            let path = folder.appendingPathComponent("vAmiga.ini")
+            
+            do {
+                try amiga.properties.load(url: path)
+                log("Successfully read user defaults file \(path)")
+            } catch {
+                log("Failed to read user defaults file \(path)")
+            }
+            
+        } catch {
+            log("Failed to access application support folder")
+        }
+        
+        // DEPRECATED
         amiga.suspend()
         
         pref.loadGeneralUserDefaults()
@@ -93,6 +111,7 @@ extension MyController {
         amiga.resume()
     }
     
+    /*
     func loadUserDefaults(url: URL, prefixes: [String]) {
         
         log(level: 2)
@@ -120,6 +139,7 @@ extension MyController {
         let nsDict = NSDictionary(dictionary: filteredDict)
         nsDict.write(to: url, atomically: true)
     }
+    */
 }
 
 //

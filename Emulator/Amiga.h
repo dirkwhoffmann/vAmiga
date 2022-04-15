@@ -42,9 +42,6 @@
  * amiga.paula.
  */
 class Amiga : public Thread {
-
-    // User settings
-    static Properties properties;
     
     /* Result of the latest inspection. In order to update the GUI inspector
      * panels, the emulator schedules events in the inspector slot (SLOT_INS in
@@ -60,7 +57,10 @@ class Amiga : public Thread {
     //
     
 public:
-    
+
+    // User settings
+    static Properties properties;
+
     // Core components
     CPU cpu = CPU(*this);
     CIAA ciaA = CIAA(*this);

@@ -14,6 +14,8 @@
 
 class Properties : public AmigaObject {
 
+    mutable util::ReentrantMutex mutex;
+    
     // Key-value storage
     std::map <string, string> values;
 
@@ -28,8 +30,8 @@ class Properties : public AmigaObject {
 public:
     
     Properties();
-    Properties(Properties const&) = delete;
-    void operator=(Properties const&) = delete;
+    // Properties(Properties const&) = delete;
+    // void operator=(Properties const&) = delete;
     
     
     //
@@ -50,6 +52,8 @@ private:
     // Loading and saving
     //
     
+public:
+    
     // Loads a properties file from disk
     void load(const fs::path &path) throws;
     void load(std::ifstream &stream) throws;
@@ -65,26 +69,28 @@ private:
     // Working with key-value pairs
     //
 
-    // Reads a value
+public:
+    
     string getValue(const string &key) throws;
-    i64 getValue(Option key) throws;
-    i64 getValue(Option key, isize nr) throws;
+    i64 getValue(Option option) throws;
+    i64 getValue(Option option, isize nr) throws;
+    
     string getDefaultValue(const string &key) throws;
-    i64 getDefaultValue(Option key) throws;
-    i64 getDefaultValue(Option key, isize nr) throws;
+    i64 getDefaultValue(Option option) throws;
+    i64 getDefaultValue(Option option, isize nr) throws;
 
-    // Writes a value
     void setValue(const string &key, const string &value);
-    void setValue(Option key, i64 value);
-    void setValue(Option key, isize nr, i64 value);
-    void setDefaultValue(const string &key, const string &value);
-    void setDefaultValue(Option key, i64 value);
-    void setDefaultValue(Option key, isize nr, i64 value);
-    void setDefaultValue(Option key, std::vector <isize> nrs, i64 value);
+    void setValue(Option option, i64 value);
+    void setValue(Option option, isize nr, i64 value);
+    void setValue(Option option, std::vector <isize> nrs, i64 value);
 
-    // Removes a value
+    void setDefaultValue(const string &key, const string &value);
+    void setDefaultValue(Option option, i64 value);
+    void setDefaultValue(Option option, isize nr, i64 value);
+    void setDefaultValue(Option option, std::vector <isize> nrs, i64 value);
+
+    void remove();
     void removeValue(const string &key) throws;
-    void removeValue(Option key) throws;
-    void removeValue(Option key, isize nr) throws;
-    void removeAll();
+    void removeValue(Option option) throws;
+    void removeValue(Option option, isize nr) throws;
 };

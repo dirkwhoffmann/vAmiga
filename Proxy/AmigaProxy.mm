@@ -80,6 +80,31 @@ using namespace moira;
 @end
 
 //
+// Properties
+//
+
+@implementation PropertiesProxy
+
+- (Properties *)props
+{
+    return (Properties *)obj;
+}
+
+- (void)load:(NSURL *)url exception:(ExceptionWrapper *)ex
+{
+    try { return [self props]->load([url fileSystemRepresentation]); }
+    catch (VAError &error) { [ex save:error]; }
+}
+
+- (void)save:(NSURL *)url exception:(ExceptionWrapper *)ex
+{
+    try { return [self props]->save([url fileSystemRepresentation]); }
+    catch (VAError &error) { [ex save:error]; }
+}
+
+@end
+
+//
 // Guards (Breakpoints, Watchpoints)
 //
 
@@ -2532,6 +2557,7 @@ using namespace moira;
 @synthesize keyboard;
 @synthesize mem;
 @synthesize paula;
+@synthesize properties;
 @synthesize remoteManager;
 @synthesize retroShell;
 @synthesize rtc;
@@ -2572,6 +2598,7 @@ using namespace moira;
     keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];
     mem = [[MemProxy alloc] initWith:&amiga->mem];
     paula = [[PaulaProxy alloc] initWith:&amiga->paula];
+    properties = [[PropertiesProxy alloc] initWith:&amiga->properties];
     retroShell = [[RetroShellProxy alloc] initWith:&amiga->retroShell];
     rtc = [[RtcProxy alloc] initWith:&amiga->rtc];
     recorder = [[RecorderProxy alloc] initWith:&amiga->denise.screenRecorder];

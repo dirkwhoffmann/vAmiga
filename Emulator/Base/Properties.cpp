@@ -139,7 +139,7 @@ Properties::load(const fs::path &path)
     if (!fs.is_open()) {
         throw VAError(ERROR_FILE_NOT_FOUND);
     }
- 
+    
     load(fs);
 }
 
@@ -159,49 +159,54 @@ Properties::load(std::stringstream &stream)
     string input;
     string section;
     
-    while(std::getline(stream, input)) {
-
-        line++;
+    {   SYNCHRONIZED
         
-        // Remove white spaces
-        util::trim(input);
-                
-        // Ignore empty lines
-        if (input == "") continue;
+        debug(DEF_DEBUG, "Loading user defaults...\n");
         
-        // Ignore comments
-        if (input.substr(0,1) == "#") continue;
-                
-        // Check if this line contains a section marker
-        if (input.front() == '[' && input.back() == ']') {
-        
-            // Extract the section name
-            section = input.substr(1, input.size() - 2);
+        while(std::getline(stream, input)) {
             
-            // Convert to lower case
-            section = util::lowercased(section);
-            continue;
-        }
-        
-        // Check if this line is a key-value pair
-        if (auto pos = input.find("="); pos != std::string::npos) {
-            
-            auto key = input.substr(0, pos);
-            auto value = input.substr(pos + 1, std::string::npos);
+            line++;
             
             // Remove white spaces
-            util::trim(key);
-            util::trim(value);
+            util::trim(input);
             
-            // Convert to lower case
-            key = util::lowercased(key);
+            // Ignore empty lines
+            if (input == "") continue;
             
-            // Add the key-value pair
-            values[section.empty() ? key : section + "." + key] = value;
-            continue;
+            // Ignore comments
+            if (input.substr(0,1) == "#") continue;
+            
+            // Check if this line contains a section marker
+            if (input.front() == '[' && input.back() == ']') {
+                
+                // Extract the section name
+                section = input.substr(1, input.size() - 2);
+                
+                // Convert to lower case
+                section = util::lowercased(section);
+                continue;
+            }
+            
+            // Check if this line is a key-value pair
+            if (auto pos = input.find("="); pos != std::string::npos) {
+                
+                auto key = input.substr(0, pos);
+                auto value = input.substr(pos + 1, std::string::npos);
+                
+                // Remove white spaces
+                util::trim(key);
+                util::trim(value);
+                
+                // Convert to lower case
+                key = util::lowercased(key);
+                
+                // Add the key-value pair
+                values[section.empty() ? key : section + "." + key] = value;
+                continue;
+            }
+            
+            throw VAError(ERROR_SYNTAX, line);
         }
-        
-        throw VAError(ERROR_SYNTAX, line);
     }
 }
 
@@ -213,7 +218,7 @@ Properties::save(const fs::path &path)
     if (!fs.is_open()) {
         throw VAError(ERROR_FILE_CANT_WRITE);
     }
- 
+    
     save(fs);
 }
 
@@ -229,9 +234,14 @@ Properties::save(std::ofstream &stream)
 void
 Properties::save(std::stringstream &stream)
 {
-    for (const auto &[key, value]: values) {
+    {   SYNCHRONIZED
         
-        stream << key << "=" << value << std::endl;
+        debug(DEF_DEBUG, "Saving user defaults...\n");
+
+        for (const auto &[key, value]: values) {
+            
+            stream << key << "=" << value << std::endl;
+        }
     }
 }
 
@@ -302,76 +312,101 @@ Properties::getDefaultValue(Option key, isize nr)
 void
 Properties::setValue(const string &key, const string &value)
 {
-    if (!defaults.contains(key)) {
-        throw VAError(ERROR_INVALID_KEY);
+    {   SYNCHRONIZED
+        
+        debug(DEF_DEBUG, "%s = %s\n", key.c_str(), value.c_str());
+
+        if (!defaults.contains(key)) {
+            throw VAError(ERROR_INVALID_KEY);
+        }
+        
+        values[key] = value;
     }
+}
+
+void
+Properties::setValue(Option option, i64 value)
+{
+    auto key = string(OptionEnum::key(option));
+    auto val = std::to_string(value);
     
-    values[key] = value;
+    setValue(key, val);
 }
 
 void
-Properties::setValue(Option key, i64 value)
+Properties::setValue(Option option, isize nr, i64 value)
 {
-    auto name = string(OptionEnum::key(key));
-    values[name] = std::to_string(value);
+    auto key = string(OptionEnum::key(option)) + std::to_string(nr);
+    auto val = std::to_string(value);
+
+    setValue(key, val);
 }
 
 void
-Properties::setValue(Option key, isize nr, i64 value)
+Properties::setValue(Option option, std::vector <isize> nrs, i64 value)
 {
-    auto name = string(OptionEnum::key(key)) + std::to_string(nr);
-    values[name] = std::to_string(value);
-
+    for (auto &nr : nrs) setValue(option, nr, value);
 }
 
 void
 Properties::setDefaultValue(const string &key, const string &value)
 {
-    defaults[key] = value;
+    {   SYNCHRONIZED
+        
+        defaults[key] = value;
+    }
 }
 
 void
-Properties::setDefaultValue(Option key, i64 value)
+Properties::setDefaultValue(Option option, i64 value)
 {
-    auto name = string(OptionEnum::key(key));
-    setDefaultValue(name, std::to_string(value));
+    auto key = string(OptionEnum::key(option));
+    auto val = std::to_string(value);
+    
+    setDefaultValue(key, val);
 }
 
 void
-Properties::setDefaultValue(Option key, isize nr, i64 value)
+Properties::setDefaultValue(Option option, isize nr, i64 value)
 {
-    auto name = string(OptionEnum::key(key)) + std::to_string(nr);
-    setDefaultValue(name, std::to_string(value));
+    auto key = string(OptionEnum::key(option)) + std::to_string(nr);
+    auto val = std::to_string(value);
+
+    setDefaultValue(key, val);
 }
 
 void
-Properties::setDefaultValue(Option key, std::vector <isize> nrs, i64 value)
+Properties::setDefaultValue(Option option, std::vector <isize> nrs, i64 value)
 {
-    for (auto &nr : nrs) setDefaultValue(key, nr, value);
+    for (auto &nr : nrs) setDefaultValue(option, nr, value);
+}
+
+void
+Properties::remove()
+{
+    {   SYNCHRONIZED
+        
+        values.clear();
+    }
 }
 
 void
 Properties::removeValue(const string &key)
 {
-    if (values.contains(key)) values.erase(key);
+    {   SYNCHRONIZED
+        
+        if (values.contains(key)) values.erase(key);
+    }
 }
 
 void
-Properties::removeValue(Option key)
+Properties::removeValue(Option option)
 {
-    auto name = string(OptionEnum::key(key));
-    removeValue(name);
-}
+    removeValue(string(OptionEnum::key(option)));
+    }
 
 void
-Properties::removeValue(Option key, isize nr)
+Properties::removeValue(Option option, isize nr)
 {
-    auto name = string(OptionEnum::key(key)) + std::to_string(nr);
-    removeValue(name);
-}
-
-void
-Properties::removeAll()
-{
-    values.clear();
+    removeValue(string(OptionEnum::key(option)) + std::to_string(nr));
 }

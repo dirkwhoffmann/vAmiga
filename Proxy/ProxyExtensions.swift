@@ -112,6 +112,23 @@ extension AmigaProxy {
     }
 }
 
+extension PropertiesProxy {
+
+    func load(url: URL) throws {
+        
+        let exception = ExceptionWrapper()
+        load(url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
+    func save(url: URL) throws {
+        
+        let exception = ExceptionWrapper()
+        save(url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+}
+
 extension MemProxy {
  
     func loadRom(_ proxy: RomFileProxy) throws {

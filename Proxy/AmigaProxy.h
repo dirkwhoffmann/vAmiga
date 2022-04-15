@@ -81,6 +81,7 @@
 @class MemProxy;
 @class MouseProxy;
 @class PaulaProxy;
+@class PropertiesProxy;
 @class RemoteManagerProxy;
 @class RetroShellProxy;
 @class RomFileProxy;
@@ -150,6 +151,7 @@
     KeyboardProxy *keyboard;
     MemProxy *mem;
     PaulaProxy *paula;
+    PropertiesProxy *properties;
     RemoteManagerProxy *remoteManager;
     RetroShellProxy *retroShell;
     RtcProxy *rtc;
@@ -182,6 +184,7 @@
 @property (readonly, strong) KeyboardProxy *keyboard;
 @property (readonly, strong) MemProxy *mem;
 @property (readonly, strong) PaulaProxy *paula;
+@property (readonly, strong) PropertiesProxy *properties;
 @property (readonly, strong) RemoteManagerProxy *remoteManager;
 @property (readonly, strong) RetroShellProxy *retroShell;
 @property (readonly, strong) RtcProxy *rtc;
@@ -240,6 +243,18 @@
 - (BOOL)configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val;
 
 - (void)setListener:(const void *)sender function:(Callback *)func;
+
+@end
+
+
+//
+// Properties
+//
+
+@interface PropertiesProxy : Proxy { }
+    
+- (void)load:(NSURL *)url exception:(ExceptionWrapper *)ex;
+- (void)save:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
 @end
 
