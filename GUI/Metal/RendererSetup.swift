@@ -63,20 +63,20 @@ extension Renderer {
         
         shaderOptions = ShaderOptions(
             
-            blur: config.blur,
+            blur: Int32(config.blur),
             blurRadius: config.blurRadius,
             bloom: Int32(config.bloom),
             bloomRadius: config.bloomRadius,
             bloomBrightness: config.bloomBrightness,
             bloomWeight: config.bloomWeight,
-            flicker: config.flicker,
+            flicker: Int32(config.flicker),
             flickerWeight: config.flickerWeight,
             dotMask: Int32(config.dotMask),
             dotMaskBrightness: config.dotMaskBrightness,
             scanlines: Int32(config.scanlines),
             scanlineBrightness: config.scanlineBrightness,
             scanlineWeight: config.scanlineWeight,
-            disalignment: config.disalignment,
+            disalignment: Int32(config.disalignment),
             disalignmentH: config.disalignmentH,
             disalignmentV: config.disalignmentV
         )

@@ -72,7 +72,7 @@ extension PropertiesProxy {
     func register(_ key: String, _ val: String) { register(key, value: val) }
     func register(_ key: String, _ val: Bool) { register(key, value: val ? "1" : "0") }
     func register(_ key: String, _ val: Int) { register(key, value: "\(val)") }
-    func register(_ key: String, _ val: Int32) { register(key, value: "\(val)") }
+    // func register(_ key: String, _ val: Int32) { register(key, value: "\(val)") }
     func register(_ key: String, _ val: UInt) { register(key, value: "\(val)") }
     func register(_ key: String, _ val: Float) { register(key, value: "\(val)") }
     func register(_ key: String, _ val: Double) { register(key, value: "\(val)") }
@@ -80,13 +80,13 @@ extension PropertiesProxy {
     func set(_ key: String, _ val: String) { setKey(key, value: val) }
     func set(_ key: String, _ val: Bool) { setKey(key, value: val ? "1" : "0") }
     func set(_ key: String, _ val: Int) { setKey(key, value: "\(val)") }
-    func set(_ key: String, _ val: Int32) { setKey(key, value: "\(val)") }
+    // func set(_ key: String, _ val: Int32) { setKey(key, value: "\(val)") }
     func set(_ key: String, _ val: UInt) { setKey(key, value: "\(val)") }
     func set(_ key: String, _ val: Float) { setKey(key, value: "\(val)") }
     func set(_ key: String, _ val: Double) { setKey(key, value: "\(val)") }
 
     func getBool(_ key: String) -> Bool { return getInt(key) != 0 }
-    func getInt32(_ key: String) -> Int32 { return Int32(getInt(key)) }
+    // func getInt32(_ key: String) -> Int32 { return Int32(getInt(key)) }
     func getFloat(_ key: String) -> Float { return (getString(key) as NSString).floatValue }
     func getDouble(_ key: String) -> Double { return (getString(key) as NSString).doubleValue }
 
@@ -393,24 +393,24 @@ extension Keys {
     struct Con {
         
         // Emulation keys
-        static let mouseKeyMap           = "VAMIGA_CON_MouseKeyMap"
-        static let joyKeyMap1            = "VAMIGA_CON_JoyKeyMap1"
-        static let joyKeyMap2            = "VAMIGA_CON_JoyKeyMap2"
-        static let disconnectJoyKeys     = "VAMIGA_CON_DisconnectKeys"
+        static let mouseKeyMap           = "ConMouseKeyMap"
+        static let joyKeyMap1            = "ConJoyKeyMap1"
+        static let joyKeyMap2            = "ConJoyKeyMap2"
+        static let disconnectJoyKeys     = "ConDisconnectKeys"
         
         // Joysticks
-        static let autofire              = "VAMIGA_CON_Autofire"
-        static let autofireBullets       = "VAMIGA_CON_AutofireBullets"
-        static let autofireFrequency     = "VAMIGA_CON_AutofireFrequency"
+        static let autofire              = "ConAutofire"
+        static let autofireBullets       = "ConAutofireBullets"
+        static let autofireFrequency     = "ConAutofireFrequency"
         
         // Mouse
-        static let retainMouseKeyComb    = "VAMIGA_CON_RetainMouseKeyComb"
-        static let retainMouseWithKeys   = "VAMIGA_CON_RetainMouseWithKeys"
-        static let retainMouseByClick    = "VAMIGA_CON_RetainMouseByClick"
-        static let retainMouseByEntering = "VAMIGA_CON_RetainMouseByEntering"
-        static let releaseMouseKeyComb   = "VAMIGA_CON_ReleaseMouseKeyComb"
-        static let releaseMouseWithKeys  = "VAMIGA_CON_ReleaseMouseWithKeys"
-        static let releaseMouseByShaking = "VAMIGA_CON_ReleaseMouseByShaking"
+        static let retainMouseKeyComb    = "ConRetainMouseKeyComb"
+        static let retainMouseWithKeys   = "ConRetainMouseWithKeys"
+        static let retainMouseByClick    = "ConRetainMouseByClick"
+        static let retainMouseByEntering = "ConRetainMouseByEntering"
+        static let releaseMouseKeyComb   = "ConReleaseMouseKeyComb"
+        static let releaseMouseWithKeys  = "ConReleaseMouseWithKeys"
+        static let releaseMouseByShaking = "ConReleaseMouseByShaking"
     }
 }
 
@@ -547,17 +547,17 @@ extension Keys {
     
     struct Dev {
 
-        static let schemes            = "VAMIGA_DEV_Schemes"
+        static let schemes            = "DevSchemes"
 
         // Mapping schemes (DEPRECATED)
         /*
-        static let leftStickScheme1   = "VAMIGA_DEV_LeftStickScheme1"
-        static let rightStickScheme1  = "VAMIGA_DEV_RightStickScheme1"
-        static let hatSwitchScheme1   = "VAMIGA_DEV_HatSwitchScheme1"
+        static let leftStickScheme1   = "DevLeftStickScheme1"
+        static let rightStickScheme1  = "DevRightStickScheme1"
+        static let hatSwitchScheme1   = "DevHatSwitchScheme1"
 
-        static let leftStickScheme2   = "VAMIGA_DEV_LeftStickScheme2"
-        static let rightStickScheme2  = "VAMIGA_DEV_RightStickScheme2"
-        static let hatSwitchScheme2   = "VAMIGA_DEV_HatSwitchScheme2"
+        static let leftStickScheme2   = "DevLeftStickScheme2"
+        static let rightStickScheme2  = "DevRightStickScheme2"
+        static let hatSwitchScheme2   = "DevHatSwitchScheme2"
         */
     }
 }
@@ -753,8 +753,8 @@ extension Keys {
     struct Per {
 
         // Ports
-        static let gameDevice1        = "VAMIGA_PER_GameDevice1"
-        static let gameDevice2        = "VAMIGA_PER_GameDevice2"
+        static let gameDevice1        = "PerGameDevice1"
+        static let gameDevice2        = "PerGameDevice2"
     }
 }
 
@@ -1070,32 +1070,32 @@ extension Keys {
     struct Vid {
 
         // Geometry
-        static let hAutoCenter        = "VAMIGA_VID_HAutoCenter"
-        static let vAutoCenter        = "VAMIGA_VID_VAutoCenter"
-        static let hCenter            = "VAMIGA_VID_HCenter"
-        static let vCenter            = "VAMIGA_VID_VCenter"
-        static let hZoom              = "VAMIGA_VID_HZoom"
-        static let vZoom              = "VAMIGA_VID_VZoom"
+        static let hAutoCenter        = "VidHAutoCenter"
+        static let vAutoCenter        = "VidVAutoCenter"
+        static let hCenter            = "VidHCenter"
+        static let vCenter            = "VidVCenter"
+        static let hZoom              = "VidHZoom"
+        static let vZoom              = "VidVZoom"
         
-        // Monitor
-        static let enhancer           = "VVAMIG_VID_Enhancer"
-        static let upscaler           = "VAMIGA_VID_Upscaler"
-        static let blur               = "VAMIGA_VID_Blur"
-        static let blurRadius         = "VAMIGA_VID_BlurRadius"
-        static let bloom              = "VAMIGA_VID_Bloom"
-        static let bloomRadius        = "VAMIGA_VID_BloonRadius"
-        static let bloomBrightness    = "VAMIGA_VID_BloomBrightness"
-        static let bloomWeight        = "VAMIGA_VID_BloomWeight"
-        static let flicker            = "VAMIGA_VID_Flicker"
-        static let flickerWeight      = "VAMIGA_VID_FlickerWeight"
-        static let dotMask            = "VAMIGA_VID_DotMask"
-        static let dotMaskBrightness  = "VAMIGA_VID_DotMaskBrightness"
-        static let scanlines          = "VAMIGA_VID_Scanlines"
-        static let scanlineBrightness = "VAMIGA_VID_ScanlineBrightness"
-        static let scanlineWeight     = "VAMIGA_VID_ScanlineWeight"
-        static let disalignment       = "VAMIGA_VID_Disalignment"
-        static let disalignmentH      = "VAMIGA_VID_DisalignmentH"
-        static let disalignmentV      = "VAMIGA_VID_DisalignmentV"
+        // Shader
+        static let enhancer           = "VidEnhancer"
+        static let upscaler           = "VidUpscaler"
+        static let blur               = "VidBlur"
+        static let blurRadius         = "VidBlurRadius"
+        static let bloom              = "VidBloom"
+        static let bloomRadius        = "VidBloonRadius"
+        static let bloomBrightness    = "VidBloomBrightness"
+        static let bloomWeight        = "VidBloomWeight"
+        static let flicker            = "VidFlicker"
+        static let flickerWeight      = "VidFlickerWeight"
+        static let dotMask            = "VidDotMask"
+        static let dotMaskBrightness  = "VidDotMaskBrightness"
+        static let scanlines          = "VidScanlines"
+        static let scanlineBrightness = "VidScanlineBrightness"
+        static let scanlineWeight     = "VidScanlineWeight"
+        static let disalignment       = "VidDisalignment"
+        static let disalignmentH      = "VidDisalignmentH"
+        static let disalignmentV      = "VidDisalignmentV"
     }
 }
 
@@ -1344,20 +1344,20 @@ extension Configuration {
                         
         enhancer = defaults.getInt(Keys.Vid.enhancer)
         upscaler = defaults.getInt(Keys.Vid.upscaler)
-        blur = defaults.getInt32(Keys.Vid.blur)
+        blur = defaults.getInt(Keys.Vid.blur)
         blurRadius = defaults.getFloat(Keys.Vid.blurRadius)
         bloom = defaults.getInt(Keys.Vid.bloom)
         bloomRadius = defaults.getFloat(Keys.Vid.bloomRadius)
         bloomBrightness = defaults.getFloat(Keys.Vid.bloomBrightness)
         bloomWeight = defaults.getFloat(Keys.Vid.bloomWeight)
-        flicker = defaults.getInt32(Keys.Vid.flicker)
+        flicker = defaults.getInt(Keys.Vid.flicker)
         flickerWeight = defaults.getFloat(Keys.Vid.flickerWeight)
         dotMask = defaults.getInt(Keys.Vid.dotMask)
         dotMaskBrightness = defaults.getFloat(Keys.Vid.dotMaskBrightness)
         scanlines = defaults.getInt(Keys.Vid.scanlines)
         scanlineBrightness = defaults.getFloat(Keys.Vid.scanlineBrightness)
         scanlineWeight = defaults.getFloat(Keys.Vid.scanlineWeight)
-        disalignment = defaults.getInt32(Keys.Vid.disalignment)
+        disalignment = defaults.getInt(Keys.Vid.disalignment)
         disalignmentH = defaults.getFloat(Keys.Vid.disalignmentH)
         disalignmentV = defaults.getFloat(Keys.Vid.disalignmentV)
         

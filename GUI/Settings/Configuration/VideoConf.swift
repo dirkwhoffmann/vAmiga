@@ -139,7 +139,7 @@ extension ConfigurationController {
     
     @IBAction func vidBlurAction(_ sender: NSPopUpButton!) {
         
-        config.blur = Int32(sender.selectedTag())
+        config.blur = sender.selectedTag()
         refresh()
     }
     
@@ -175,7 +175,7 @@ extension ConfigurationController {
 
     @IBAction func vidFlickerAction(_ sender: NSPopUpButton!) {
 
-        config.flicker = Int32(sender.selectedTag())
+        config.flicker = sender.selectedTag()
         refresh()
     }
 
@@ -217,7 +217,7 @@ extension ConfigurationController {
     
     @IBAction func vidDisalignmentAction(_ sender: NSPopUpButton!) {
         
-        config.disalignment = Int32(sender.selectedTag())
+        config.disalignment = sender.selectedTag()
         refresh()
     }
 

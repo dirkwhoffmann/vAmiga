@@ -429,8 +429,8 @@ class Configuration {
             if !ressourceManager.selectUpscaler(upscaler) { upscaler = oldValue }
         }
     }
-    var blur: Int32 = 0 {
-        didSet { renderer.shaderOptions.blur = blur }
+    var blur: Int = 0 {
+        didSet { renderer.shaderOptions.blur = Int32(blur) }
     }
     var blurRadius: Float = 0 {
         didSet { renderer.shaderOptions.blurRadius = blurRadius }
@@ -450,8 +450,8 @@ class Configuration {
     var bloomWeight: Float = 0 {
         didSet { renderer.shaderOptions.bloomWeight = bloomWeight }
     }
-    var flicker: Int32 = 0 {
-        didSet { renderer.shaderOptions.flicker = flicker }
+    var flicker: Int = 0 {
+        didSet { renderer.shaderOptions.flicker = Int32(flicker) }
     }
     var flickerWeight: Float = 0 {
         didSet { renderer.shaderOptions.flickerWeight = flickerWeight }
@@ -481,8 +481,8 @@ class Configuration {
     var scanlineWeight: Float = 0 {
         didSet { renderer.shaderOptions.scanlineWeight = scanlineWeight }
     }
-    var disalignment: Int32 = 0 {
-        didSet { renderer.shaderOptions.disalignment = disalignment }
+    var disalignment: Int = 0 {
+        didSet { renderer.shaderOptions.disalignment = Int32(disalignment) }
     }
     var disalignmentH: Float = 0 {
         didSet { renderer.shaderOptions.disalignmentH = disalignmentH }
