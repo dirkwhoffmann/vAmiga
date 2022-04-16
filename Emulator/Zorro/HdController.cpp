@@ -86,18 +86,6 @@ HdController::_reset(bool hard)
     }
 }
 
-/*
-HdcConfig
-HdController::getDefaultConfig(isize nr)
-{
-    HdcConfig defaults;
-    
-    defaults.connected = false;
-
-    return defaults;
-}
-*/
-
 void
 HdController::resetConfig()
 {
@@ -112,12 +100,6 @@ HdController::resetConfig()
     for (auto &option : options) {
         setConfigItem(option, defaults.get(option, nr));
     }
-    
-    /*
-    auto defaults = getDefaultConfig(nr);
-    
-    setConfigItem(OPT_HDC_CONNECT, defaults.connected);
-    */
 }
 
 i64

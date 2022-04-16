@@ -40,20 +40,6 @@ void Mouse::_reset(bool hard)
     targetY = 0;
 }
 
-/*
-MouseConfig
-Mouse::getDefaultConfig()
-{
-    MouseConfig defaults;
-
-    defaults.pullUpResistors = true;
-    defaults.shakeDetection = true;
-    defaults.velocity = 100;
-    
-    return defaults;
-}
-*/
-
 void
 Mouse::resetConfig()
 {
@@ -70,14 +56,6 @@ Mouse::resetConfig()
     for (auto &option : options) {
         setConfigItem(option, defaults.get(option));
     }
-    
-    /*
-    auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_PULLUP_RESISTORS, defaults.pullUpResistors);
-    setConfigItem(OPT_SHAKE_DETECTION, defaults.shakeDetection);
-    setConfigItem(OPT_MOUSE_VELOCITY, defaults.velocity);
-    */
 }
 
 i64

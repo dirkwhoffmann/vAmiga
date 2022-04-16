@@ -10,45 +10,10 @@
 #include "config.h"
 #include "DmaDebugger.h"
 #include "Amiga.h"
-// #include "Denise.h"
-// #include "MsgQueue.h"
-// #include "PixelEngine.h"
 
 DmaDebugger::DmaDebugger(Amiga &ref) : SubComponent(ref)
 {
 }
-
-/*
-DmaDebuggerConfig
-DmaDebugger::getDefaultConfig()
-{
-    DmaDebuggerConfig defaults;
-
-    defaults.enabled = false;
-    defaults.displayMode = DMA_DISPLAY_MODE_FG_LAYER;
-    defaults.opacity = 50;
-
-    defaults.visualize[DMA_CHANNEL_CPU] = false;
-    defaults.visualize[DMA_CHANNEL_REFRESH] = true;
-    defaults.visualize[DMA_CHANNEL_DISK] = true;
-    defaults.visualize[DMA_CHANNEL_AUDIO] = true;
-    defaults.visualize[DMA_CHANNEL_BITPLANE] = true;
-    defaults.visualize[DMA_CHANNEL_SPRITE] = true;
-    defaults.visualize[DMA_CHANNEL_COPPER] = true;
-    defaults.visualize[DMA_CHANNEL_BLITTER] = true;
-
-    defaults.debugColor[DMA_CHANNEL_CPU] = 0xFFFFFF00;
-    defaults.debugColor[DMA_CHANNEL_REFRESH] = 0xFF000000;
-    defaults.debugColor[DMA_CHANNEL_DISK] = 0x00FF0000;
-    defaults.debugColor[DMA_CHANNEL_AUDIO] = 0xFF00FF00;
-    defaults.debugColor[DMA_CHANNEL_BITPLANE] = 0x00FFFF00;
-    defaults.debugColor[DMA_CHANNEL_SPRITE] = 0x0088FF00;
-    defaults.debugColor[DMA_CHANNEL_COPPER] = 0xFFFF0000;
-    defaults.debugColor[DMA_CHANNEL_BLITTER] = 0xFFCC0000;
-    
-    return defaults;
-}
-*/
 
 void
 DmaDebugger::resetConfig()

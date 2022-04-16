@@ -69,18 +69,6 @@ Blitter::_run()
     }
 }
 
-/*
-BlitterConfig
-Blitter::getDefaultConfig()
-{
-    BlitterConfig defaults;
-    
-    defaults.accuracy = 2;
-
-    return defaults;
-}
-*/
-
 void
 Blitter::resetConfig()
 {
@@ -95,12 +83,6 @@ Blitter::resetConfig()
     for (auto &option : options) {
         setConfigItem(option, defaults.get(option));
     }
-    
-    /*
-    auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_BLITTER_ACCURACY, defaults.accuracy);
-    */
 }
 
 i64

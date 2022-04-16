@@ -71,18 +71,6 @@ RTC::_reset(bool hard)
     }
 }
 
-/*
-RTCConfig
-RTC::getDefaultConfig()
-{
-    RTCConfig defaults;
-
-    defaults.model = RTC_OKI;
-    
-    return defaults;
-}
-*/
-
 void
 RTC::resetConfig()
 {
@@ -97,12 +85,6 @@ RTC::resetConfig()
     for (auto &option : options) {
         setConfigItem(option, defaults.get(option));
     }
-    
-    /*
-    RTCConfig defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_RTC_MODEL, defaults.model);
-    */
 }
 
 void

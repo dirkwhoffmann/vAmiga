@@ -89,7 +89,6 @@ private:
     
 public:
 
-    // static SerialPortConfig getDefaultConfig();
     const SerialPortConfig &getConfig() const { return config; }
     void resetConfig() override;
 

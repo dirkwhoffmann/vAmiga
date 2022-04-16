@@ -35,20 +35,6 @@ Joystick::_reset(bool hard)
     axisY = 0;
 }
 
-/*
-JoystickConfig
-Joystick::getDefaultConfig()
-{
-    JoystickConfig defaults;
-
-    defaults.autofire = false;
-    defaults.autofireBullets = -3;
-    defaults.autofireDelay = 125;
-    
-    return defaults;
-}
-*/
-
 void
 Joystick::resetConfig()
 {
@@ -65,14 +51,6 @@ Joystick::resetConfig()
     for (auto &option : options) {
         setConfigItem(option, defaults.get(option));
     }
-
-    /*
-     auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_AUTOFIRE, defaults.autofire);
-    setConfigItem(OPT_AUTOFIRE_BULLETS, defaults.autofireBullets);
-    setConfigItem(OPT_AUTOFIRE_DELAY, defaults.autofireDelay);
-    */
 }
 
 i64

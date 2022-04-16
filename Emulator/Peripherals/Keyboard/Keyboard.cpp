@@ -10,9 +10,7 @@
 #include "config.h"
 #include "Keyboard.h"
 #include "Amiga.h"
-// #include "CIA.h"
 #include "IOUtils.h"
-// #include "MsgQueue.h"
 
 void
 Keyboard::_reset(bool hard)
@@ -23,18 +21,6 @@ Keyboard::_reset(bool hard)
     state = KB_SELFTEST;
     execute();
 }
-
-/*
-KeyboardConfig
-Keyboard::getDefaultConfig()
-{
-    KeyboardConfig defaults;
-
-    defaults.accurate = true;
-    
-    return defaults;
-}
-*/
 
 void
 Keyboard::resetConfig()
@@ -50,12 +36,6 @@ Keyboard::resetConfig()
     for (auto &option : options) {
         setConfigItem(option, defaults.get(option));
     }
-
-    /*
-    auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_ACCURATE_KEYBOARD, defaults.accurate);
-    */
 }
 
 i64

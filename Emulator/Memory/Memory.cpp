@@ -123,31 +123,6 @@ Memory::_reset(bool hard)
     clearStats();
 }
 
-/*
-MemoryConfig
-Memory::getDefaultConfig()
-{
-    MemoryConfig defaults;
-    
-    defaults.chipSize = 512;
-    defaults.slowSize = 0;
-    defaults.fastSize = 0;
-
-    defaults.romSize = 0;
-    defaults.womSize = 0;
-    defaults.extSize = 0;
-    
-    defaults.saveRoms = true;
-    defaults.slowRamDelay = true;
-    defaults.bankMap = BANK_MAP_A500;
-    defaults.ramInitPattern = RAM_INIT_ALL_ZEROES;
-    defaults.unmappingType = UNMAPPED_FLOATING;
-    defaults.extStart = 0xE0;
-    
-    return defaults;
-}
-*/
-
 void
 Memory::resetConfig()
 {
@@ -170,20 +145,6 @@ Memory::resetConfig()
     for (auto &option : options) {
         setConfigItem(option, defaults.get(option));
     }
-    
-    /*
-    auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_CHIP_RAM, defaults.chipSize);
-    setConfigItem(OPT_SLOW_RAM, defaults.slowSize);
-    setConfigItem(OPT_FAST_RAM, defaults.fastSize);
-    setConfigItem(OPT_EXT_START, defaults.extStart);
-    setConfigItem(OPT_SAVE_ROMS, defaults.saveRoms);
-    setConfigItem(OPT_SLOW_RAM_DELAY, defaults.slowRamDelay);
-    setConfigItem(OPT_BANKMAP, defaults.bankMap);
-    setConfigItem(OPT_UNMAPPING_TYPE, defaults.unmappingType);
-    setConfigItem(OPT_RAM_INIT_PATTERN, defaults.ramInitPattern);
-    */
 }
 
 i64

@@ -29,24 +29,6 @@ DiskController::_reset(bool hard)
     dsksync = 0x4489;    
 }
 
-/*
-DiskControllerConfig
-DiskController::getDefaultConfig()
-{
-    DiskControllerConfig defaults;
-    
-    defaults.connected[0] = true;
-    defaults.connected[1] = false;
-    defaults.connected[2] = false;
-    defaults.connected[3] = false;
-    defaults.speed = 1;
-    defaults.lockDskSync = false;
-    defaults.autoDskSync = false;
-    
-    return defaults;
-}
-*/
-
 void
 DiskController::resetConfig()
 {
@@ -74,17 +56,6 @@ DiskController::resetConfig()
             setConfigItem(option, i, defaults.get(option, i));
         }
     }
-    
-    /*
-    auto defaults = getDefaultConfig();
-    
-    for (isize i = 0; i < 4; i++) {
-        setConfigItem(OPT_DRIVE_CONNECT, i, defaults.connected[i]);
-    }
-    setConfigItem(OPT_DRIVE_SPEED, defaults.speed);
-    setConfigItem(OPT_AUTO_DSKSYNC, defaults.lockDskSync);
-    setConfigItem(OPT_LOCK_DSKSYNC, defaults.autoDskSync);
-    */
 }
 
 i64

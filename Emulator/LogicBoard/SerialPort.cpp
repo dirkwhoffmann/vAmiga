@@ -12,18 +12,6 @@
 #include "IOUtils.h"
 #include "Amiga.h"
 
-/*
-SerialPortConfig
-SerialPort::getDefaultConfig()
-{
-    SerialPortConfig defaults;
-    
-    defaults.device = SPD_NONE;
-    
-    return defaults;
-}
-*/
-
 void
 SerialPort::resetConfig()
 {
@@ -38,12 +26,6 @@ SerialPort::resetConfig()
     for (auto &option : options) {
         setConfigItem(option, defaults.get(option));
     }
-    
-    /*
-    auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_SERIAL_DEVICE, defaults.device);
-    */
 }
 
 i64

@@ -44,18 +44,6 @@ DiagBoard::_reset(bool hard)
     }
 }
 
-/*
-DiagBoardConfig
-DiagBoard::getDefaultConfig()
-{
-    DiagBoardConfig defaults;
-    
-    defaults.enabled = bool(DIAG_BOARD);
-
-    return defaults;
-}
-*/
-
 void
 DiagBoard::resetConfig()
 {
@@ -70,12 +58,6 @@ DiagBoard::resetConfig()
     for (auto &option : options) {
         setConfigItem(option, defaults.get(option));
     }
-    
-    /*
-    auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_DIAG_BOARD, defaults.enabled);
-    */
 }
 
 i64

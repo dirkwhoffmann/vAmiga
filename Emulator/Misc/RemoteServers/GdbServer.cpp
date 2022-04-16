@@ -69,21 +69,6 @@ GdbServer::shouldRun()
     return !segList.empty();
 }
 
-/*
-ServerConfig
-GdbServer::getDefaultConfig()
-{
-    ServerConfig defaults;
-    
-    defaults.port = 8082;
-    defaults.autoRun = true;
-    defaults.protocol = SRVPROT_DEFAULT;
-    defaults.verbose = true;
-
-    return defaults;
-}
-*/
-
 string
 GdbServer::doReceive()
 {

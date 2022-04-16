@@ -78,7 +78,6 @@ private:
     
 public:
     
-    // ServerConfig getDefaultConfig() override;
     bool shouldRun() override;
     string doReceive() override throws;
     void doSend(const string &payload) override throws;

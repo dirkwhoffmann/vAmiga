@@ -88,7 +88,6 @@ private:
     
 public:
 
-    static JoystickConfig getDefaultConfig();
     const JoystickConfig &getConfig() const { return config; }
     void resetConfig() override;
 

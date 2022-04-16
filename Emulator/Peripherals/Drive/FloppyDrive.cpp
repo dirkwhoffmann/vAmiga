@@ -55,28 +55,6 @@ FloppyDrive::_reset(bool hard)
     if (hard) assert(diskToInsert == nullptr);
 }
 
-/*
-FloppyDriveConfig
-FloppyDrive::getDefaultConfig(isize nr)
-{
-    FloppyDriveConfig defaults;
-    
-    defaults.type = DRIVE_DD_35;
-    defaults.mechanicalDelays = true;
-    defaults.startDelay = MSEC(380);
-    defaults.stopDelay = MSEC(80);
-    defaults.stepDelay = USEC(8000);
-    defaults.diskSwapDelay = SEC(1.8);
-    defaults.pan = IS_EVEN(nr) ? 100 : -100;
-    defaults.stepVolume = 128;
-    defaults.pollVolume = 128;
-    defaults.insertVolume = 128;
-    defaults.ejectVolume = 128;
-
-    return defaults;
-}
-*/
-
 void
 FloppyDrive::resetConfig()
 {
@@ -101,22 +79,6 @@ FloppyDrive::resetConfig()
     for (auto &option : options) {
         setConfigItem(option, defaults.get(option, nr));
     }
-    
-    /*
-    auto defaults = getDefaultConfig(nr);
-    
-    setConfigItem(OPT_DRIVE_TYPE, defaults.type);
-    setConfigItem(OPT_EMULATE_MECHANICS, defaults.mechanicalDelays);
-    setConfigItem(OPT_START_DELAY, defaults.startDelay);
-    setConfigItem(OPT_STOP_DELAY, defaults.stopDelay);
-    setConfigItem(OPT_STEP_DELAY, defaults.stepDelay);
-    setConfigItem(OPT_DISK_SWAP_DELAY, defaults.diskSwapDelay);
-    setConfigItem(OPT_DRIVE_PAN, defaults.pan);
-    setConfigItem(OPT_STEP_VOLUME, defaults.stepVolume);
-    setConfigItem(OPT_POLL_VOLUME, defaults.pollVolume);
-    setConfigItem(OPT_INSERT_VOLUME, defaults.insertVolume);
-    setConfigItem(OPT_EJECT_VOLUME, defaults.ejectVolume);
-    */
 }
 
 i64

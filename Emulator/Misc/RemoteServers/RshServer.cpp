@@ -45,21 +45,6 @@ RshServer::resetConfig()
     }
 }
 
-/*
-ServerConfig
-RshServer::getDefaultConfig()
-{
-    ServerConfig defaults;
-    
-    defaults.port = 8081;
-    defaults.autoRun = false;
-    defaults.protocol = SRVPROT_DEFAULT;
-    defaults.verbose = true;
-
-    return defaults;
-}
-*/
-
 void
 RshServer::didStart()
 {

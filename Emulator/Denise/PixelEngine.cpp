@@ -86,21 +86,6 @@ PixelEngine::_powerOn()
     }
 }
 
-/*
-PixelEngineConfig
-PixelEngine::getDefaultConfig()
-{
-    PixelEngineConfig defaults;
-
-    defaults.palette = PALETTE_COLOR;
-    defaults.brightness = 50;
-    defaults.contrast = 100;
-    defaults.saturation = 50;
-    
-    return defaults;
-}
-*/
-
 void
 PixelEngine::resetConfig()
 {
@@ -118,15 +103,6 @@ PixelEngine::resetConfig()
     for (auto &option : options) {
         setConfigItem(option, defaults.get(option));
     }
-    
-    /*
-    auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_PALETTE, defaults.palette);
-    setConfigItem(OPT_BRIGHTNESS, defaults.brightness);
-    setConfigItem(OPT_CONTRAST, defaults.contrast);
-    setConfigItem(OPT_SATURATION, defaults.saturation);
-    */
 }
 
 i64

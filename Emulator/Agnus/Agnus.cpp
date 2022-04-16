@@ -60,19 +60,6 @@ Agnus::_reset(bool hard)
     if (insEvent) scheduleRel <SLOT_INS> (0, insEvent);
 }
 
-/*
-AgnusConfig
-Agnus::getDefaultConfig()
-{
-    AgnusConfig defaults;
-
-    defaults.revision = AGNUS_ECS_1MB;
-    defaults.slowRamMirror = true;
-        
-    return defaults;
-}
-*/
-
 void
 Agnus::resetConfig()
 {
@@ -88,13 +75,6 @@ Agnus::resetConfig()
     for (auto &option : options) {
         setConfigItem(option, defaults.get(option));
     }
-    
-    /*
-    auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_AGNUS_REVISION, defaults.revision);
-    setConfigItem(OPT_SLOW_RAM_MIRROR, defaults.slowRamMirror);
-    */
 }
 
 i64

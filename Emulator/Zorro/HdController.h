@@ -125,8 +125,7 @@ private:
     //
     
 public:
-    
-    // static HdcConfig getDefaultConfig(isize nr);
+
     const HdcConfig &getConfig() const { return config; }
     void resetConfig() override;
     

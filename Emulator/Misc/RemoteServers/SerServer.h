@@ -65,7 +65,6 @@ protected:
     
 public:
     
-    // ServerConfig getDefaultConfig() override;
     bool shouldRun() override;
     string doReceive() override;
     void doSend(const string &packet) override;

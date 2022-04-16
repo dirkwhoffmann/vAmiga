@@ -160,20 +160,6 @@ HardDrive::_reset(bool hard)
     if constexpr (FORCE_HDR_MODIFIED) { modified = true; }
 }
 
-/*
-HardDriveConfig
-HardDrive::getDefaultConfig(isize nr)
-{
-    HardDriveConfig defaults;
-    
-    defaults.type = HDR_GENERIC;
-    defaults.pan = IS_EVEN(nr) ? 100 : -100;
-    defaults.stepVolume = 128;
-
-    return defaults;
-}
-*/
-
 void
 HardDrive::resetConfig()
 {
@@ -190,14 +176,6 @@ HardDrive::resetConfig()
     for (auto &option : options) {
         setConfigItem(option, defaults.get(option, nr));
     }
-    
-    /*
-    auto defaults = getDefaultConfig(nr);
-    
-    setConfigItem(OPT_HDR_TYPE, defaults.type);
-    setConfigItem(OPT_HDR_PAN, defaults.pan);
-    setConfigItem(OPT_HDR_STEP_VOLUME, defaults.stepVolume);
-    */
 }
 
 i64

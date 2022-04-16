@@ -67,21 +67,6 @@ SerServer::shouldRun()
     return serialPort.getConfigItem(OPT_SERIAL_DEVICE) == SPD_NULLMODEM;
 }
 
-/*
-ServerConfig
-SerServer::getDefaultConfig()
-{
-    ServerConfig defaults;
-    
-    defaults.port = 8080;
-    defaults.autoRun = true;
-    defaults.protocol = SRVPROT_DEFAULT;
-    defaults.verbose = true;
-
-    return defaults;
-}
-*/
-
 string
 SerServer::doReceive()
 {
