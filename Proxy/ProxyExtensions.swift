@@ -123,7 +123,7 @@ extension PropertiesProxy {
 
     func load() {
         
-        log(level: 2)
+        log("Loading user defaults")
         
         do {
             let folder = try URL.appSupportFolder()
@@ -180,6 +180,38 @@ extension PropertiesProxy {
         register(key, value: "\(value)")
     }
 
+    func register(_ key: String, _ value: Double) {
+        register(key, value: "\(value)")
+    }
+
+    func set(_ key: String, _ value: String) {
+        setKey(key, value: value)
+    }
+
+    func set(_ key: String, _ value: Bool) {
+        setKey(key, value: value ? "1" : "0")
+    }
+
+    func set(_ key: String, _ value: Int) {
+        setKey(key, value: "\(value)")
+    }
+
+    func set(_ key: String, _ value: UInt) {
+        setKey(key, value: "\(value)")
+    }
+
+    func set(_ key: String, _ value: Double) {
+        setKey(key, value: "\(value)")
+    }
+
+    func getBool(_ key: String) -> Bool {
+        return getInt(key) != 0
+    }
+
+    func getDouble(_ key: String) -> Double {
+        return (getString(key) as NSString).doubleValue
+    }
+
     func register(_ key: String, _ value: UInt) {
         register(key, value: "\(value)")
     }
@@ -198,6 +230,38 @@ extension PropertiesProxy {
         
     func set(_ option: Option, nr: [NSInteger], value: Bool) {
         for n in nr { set(option, nr: n, value: value ? 1 : 0) }
+    }
+    
+    func register<T: Encodable>(_ key: String, encodable item: T) {
+        
+        let jsonData = try? JSONEncoder().encode(item)
+        let jsonString = jsonData?.base64EncodedString() ?? ""
+        register(key, jsonString)
+    }
+
+    func set<T: Encodable>(_ key: String, encodable item: T) {
+        
+        let jsonData = try? JSONEncoder().encode(item)
+        let jsonString = jsonData?.base64EncodedString() ?? ""
+        set(key, jsonString)
+    }
+
+    func decode<T: Decodable>(_ key: String, encodable item: inout T) {
+        
+        if let jsonString = getString(key) {
+
+            log("Decoding jsonString '\(jsonString)'")
+            if let data = Data(base64Encoded: jsonString) {
+
+                if let decoded = try? JSONDecoder().decode(T.self, from: data) {
+                    item = decoded
+                } else {
+                    log(warning: "Failed to decode \(jsonString)")
+                }
+                return
+            }
+        }
+        log("Failed to decode jsonString")
     }
 }
 

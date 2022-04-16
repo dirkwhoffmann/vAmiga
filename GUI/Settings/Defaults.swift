@@ -56,44 +56,12 @@ extension UserDefaults {
                 
         log(level: 2)
         
-        registerGeneralUserDefaults()
-        registerControlsUserDefaults()
+        // registerGeneralUserDefaults()
+        // registerControlsUserDefaults()
         registerDevicesUserDefaults()
         
         registerVideoUserDefaults()
         registerGeometryUserDefaults()
-    }
-}
-
-extension MyController {
-    
-    func registerUserDefaults() {
-                
-        log(level: 2)
-        
-        registerGeneralUserDefaults()
-        /*
-        registerControlsUserDefaults()
-        registerDevicesUserDefaults()
-        registerVideoUserDefaults()
-        registerGeometryUserDefaults()
-        */
-    }
-    
-    func loadUserDefaults() {
-        
-        log(level: 2)
- 
-        amiga.suspend()
-        
-        pref.loadGeneralUserDefaults()
-        pref.loadControlsUserDefaults()
-        pref.loadDevicesUserDefaults()
-
-        config.loadVideoUserDefaults()
-        config.loadGeometryUserDefaults()
-        
-        amiga.resume()
     }
 }
 
@@ -135,199 +103,6 @@ struct Keys {
     }
 }
 
-struct GeneralDefaults {
-            
-    // Snapshots
-    let autoSnapshots: Bool
-    let autoSnapshotInterval: Int
-
-    // Screenshots
-    let autoScreenshots: Bool
-    let autoScreenshotInterval: Int
-    let screenshotSource: Int
-    let screenshotTarget: NSBitmapImageRep.FileType
-    
-    // Captures
-    let ffmpegPath: String
-    let captureSource: Int
-    let bitRate: Int
-    let aspectX: Int
-    let aspectY: Int
-    
-    // Fullscreen
-    let keepAspectRatio: Bool
-    let exitOnEsc: Bool
-    
-    // Warp mode
-    let warpMode: WarpMode
-
-    // Miscellaneous
-    let ejectWithoutAsking: Bool
-    let detachWithoutAsking: Bool
-    let closeWithoutAsking: Bool
-    let pauseInBackground: Bool
-
-    //
-    // Schemes
-    //
-    
-    static let std = GeneralDefaults(
-                      
-        autoSnapshots: false,
-        autoSnapshotInterval: 20,
-
-        autoScreenshots: false,
-        autoScreenshotInterval: 10,
-        screenshotSource: 0,
-        screenshotTarget: .png,
-
-        ffmpegPath: "",
-        captureSource: 0,
-        bitRate: 2048,
-        aspectX: 768,
-        aspectY: 702,
-        
-        keepAspectRatio: false,
-        exitOnEsc: true,
-        
-        warpMode: .off,
-
-        ejectWithoutAsking: false,
-        detachWithoutAsking: false,
-        closeWithoutAsking: false,
-        pauseInBackground: false
-    )
-}
-
-extension MyController {
-
-    func registerGeneralUserDefaults() {
-        
-        let defaults = AmigaProxy.defaults!
-        let std = GeneralDefaults.std
-        
-        defaults.register(Keys.Gen.autoSnapshots, std.autoSnapshots)
-        defaults.register(Keys.Gen.autoSnapshotInterval, std.autoSnapshotInterval)
-        
-        defaults.register(Keys.Gen.screenshotSource, std.screenshotSource)
-        defaults.register(Keys.Gen.screenshotTarget, std.screenshotTarget.rawValue)
-        defaults.register(Keys.Gen.ffmpegPath, std.ffmpegPath)
-        
-        defaults.register(Keys.Gen.captureSource, std.captureSource)
-        defaults.register(Keys.Gen.bitRate, std.bitRate)
-        defaults.register(Keys.Gen.aspectX, std.aspectX)
-        defaults.register(Keys.Gen.aspectY, std.aspectY)
-        
-        defaults.register(Keys.Gen.keepAspectRatio, std.keepAspectRatio)
-        defaults.register(Keys.Gen.exitOnEsc, std.exitOnEsc)
-        
-        defaults.register(Keys.Gen.warpMode, std.warpMode.rawValue)
-        
-        defaults.register(Keys.Gen.ejectWithoutAsking, std.ejectWithoutAsking)
-        defaults.register(Keys.Gen.detachWithoutAsking, std.detachWithoutAsking)
-        defaults.register(Keys.Gen.closeWithoutAsking, std.closeWithoutAsking)
-        defaults.register(Keys.Gen.pauseInBackground, std.pauseInBackground)
-    }
-    
-    func resetGeneralUserDefaults() {
-        
-        let defaults = AmigaProxy.defaults!
-        
-        let keys = [ Keys.Gen.autoSnapshots,
-                     Keys.Gen.autoSnapshotInterval,
-                     
-                     Keys.Gen.screenshotSource,
-                     Keys.Gen.screenshotTarget,
-                     
-                     Keys.Gen.ffmpegPath,
-                     Keys.Gen.captureSource,
-                     Keys.Gen.bitRate,
-                     Keys.Gen.aspectX,
-                     Keys.Gen.aspectY,
-            
-                     Keys.Gen.keepAspectRatio,
-                     Keys.Gen.exitOnEsc,
-                     
-                     Keys.Gen.warpMode,
-                     
-                     Keys.Gen.ejectWithoutAsking,
-                     Keys.Gen.detachWithoutAsking,
-                     Keys.Gen.closeWithoutAsking,
-                     Keys.Gen.pauseInBackground
-        ]
-
-        for key in keys { defaults.removeKey(key) }
-    }
-}
-
-extension UserDefaults {
-    
-    @available(*, deprecated)
-    static func registerGeneralUserDefaults() {
-    
-        let defaults = GeneralDefaults.std
-        let dictionary: [String: Any] = [
-            
-            Keys.Gen.autoSnapshots: defaults.autoSnapshots,
-            Keys.Gen.autoSnapshotInterval: defaults.autoSnapshotInterval,
-
-            Keys.Gen.screenshotSource: defaults.screenshotSource,
-            Keys.Gen.screenshotTarget: Int(defaults.screenshotTarget.rawValue),
-
-            Keys.Gen.ffmpegPath: defaults.ffmpegPath,
-            Keys.Gen.captureSource: defaults.captureSource,
-            Keys.Gen.bitRate: defaults.bitRate,
-            Keys.Gen.aspectX: defaults.aspectX,
-            Keys.Gen.aspectY: defaults.aspectY,
-            
-            Keys.Gen.keepAspectRatio: defaults.keepAspectRatio,
-            Keys.Gen.exitOnEsc: defaults.exitOnEsc,
-            
-            Keys.Gen.warpMode: Int(defaults.warpMode.rawValue),
-
-            Keys.Gen.ejectWithoutAsking: defaults.ejectWithoutAsking,
-            Keys.Gen.detachWithoutAsking: defaults.detachWithoutAsking,
-            Keys.Gen.pauseInBackground: defaults.pauseInBackground,
-            Keys.Gen.closeWithoutAsking: defaults.closeWithoutAsking
-        ]
-        
-        let userDefaults = UserDefaults.standard
-        
-        userDefaults.register(defaults: dictionary)
-    }
-    
-    @available(*, deprecated)
-    static func resetGeneralUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        
-        let keys = [ Keys.Gen.autoSnapshots,
-                     Keys.Gen.autoSnapshotInterval,
-                     
-                     Keys.Gen.screenshotSource,
-                     Keys.Gen.screenshotTarget,
-                     
-                     Keys.Gen.ffmpegPath,
-                     Keys.Gen.captureSource,
-                     Keys.Gen.bitRate,
-                     Keys.Gen.aspectX,
-                     Keys.Gen.aspectY,
-            
-                     Keys.Gen.keepAspectRatio,
-                     Keys.Gen.exitOnEsc,
-                     
-                     Keys.Gen.warpMode,
-                     
-                     Keys.Gen.ejectWithoutAsking,
-                     Keys.Gen.detachWithoutAsking,
-                     Keys.Gen.closeWithoutAsking,
-                     Keys.Gen.pauseInBackground
-        ]
-
-        for key in keys { defaults.removeObject(forKey: key) }
-    }
-}
-
 //
 // User defaults (Controls)
 //
@@ -358,6 +133,7 @@ extension Keys {
     }
 }
 
+/*
 struct ControlsDefaults {
     
     // Emulation keys
@@ -421,7 +197,8 @@ struct ControlsDefaults {
         releaseMouseByShaking: true
     )
 }
-
+*/
+/*
 extension UserDefaults {
     
     static func registerControlsUserDefaults() {
@@ -477,6 +254,7 @@ extension UserDefaults {
         for key in keys { defaults.removeObject(forKey: key) }
     }
 }
+*/
 
 //
 // User defaults (Devices)

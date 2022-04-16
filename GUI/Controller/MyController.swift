@@ -192,14 +192,10 @@ extension MyController {
         
         // Setup window
         configureWindow()
-                
-        // Register user default keys
-        registerUserDefaults()
+                        
+        // Apply all GUI related user defaults
+        pref.applyUserDefaults()
         
-        // Load user defaults
-        // TODO: CALL amiga.properties.load(...))
-        loadUserDefaults() // DEPRECATED
-
         // Tell the emulator where to find certain assets
         amiga.mem.setRomPath(UserDefaults.romUrl)
         amiga.mem.setExtPath(UserDefaults.extUrl)

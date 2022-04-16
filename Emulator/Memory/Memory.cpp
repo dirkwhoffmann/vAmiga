@@ -104,9 +104,7 @@ Memory::_reset(bool hard)
     if (hard) {
         
         // Try to load Roms
-        printf("Trying to load %s\n", romPath.c_str());
         try { loadRom(romPath); } catch(...) { }
-        printf("Trying to load %s\n", extPath.c_str());
         try { loadExt(extPath); } catch(...) { }
         
         // Erase WOM (if any)

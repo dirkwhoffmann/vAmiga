@@ -64,12 +64,16 @@ class RessourceManager {
     
     init(view: MTKView, device: MTLDevice, renderer: Renderer) {
         
+        log()
+        
         self.device = device
         self.renderer = renderer
         
         buildSamplers()
         buildDotMasks()
         buildKernels()
+        
+        selectDotMask(0)
     }
     
     func buildDepthBuffer() {
@@ -219,6 +223,7 @@ class RessourceManager {
     // Selecting dot masks
     //
     
+    @discardableResult
     func selectDotMask(_ nr: Int) -> Bool {
         
         if nr >= 0 && nr < dotMaskGallery.count && dotMaskGallery[nr] != nil {

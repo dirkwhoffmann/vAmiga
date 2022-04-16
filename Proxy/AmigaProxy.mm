@@ -107,10 +107,15 @@ using namespace moira;
     [self props]->setFallback(string([key UTF8String]), string([value UTF8String]));
 }
 
-- (NSString *)getKey:(NSString *)key
+- (NSString *)getString:(NSString *)key
 {
     auto result = [self props]->getString([key UTF8String]);
     return @(result.c_str());
+}
+
+- (NSInteger)getInt:(NSString *)key
+{
+    return [self props]->getInt([key UTF8String]);
 }
 
 - (NSInteger)get:(Option)option

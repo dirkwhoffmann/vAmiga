@@ -110,10 +110,9 @@ extension ConfigurationController {
 
     @IBAction func compPresetAction(_ sender: NSPopUpButton!) {
         
+        assert(amiga.poweredOff)
         let defaults = AmigaProxy.defaults!
-        
-        amiga.suspend()
-        
+                
         // Revert to standard settings
         config.removeCompatibilityUserDefaults()
                 
@@ -147,8 +146,6 @@ extension ConfigurationController {
         
         // Update the configutation
         config.updateCompatibilityUserDefaults()
-        
-        amiga.resume()
         refresh()
     }
     

@@ -260,7 +260,8 @@
 
 - (void)register:(NSString *)key value:(NSString *)value;
 
-- (NSString *)getKey:(NSString *)key;
+- (NSString *)getString:(NSString *)key;
+- (NSInteger)getInt:(NSString *)key;
 - (NSInteger)get:(Option)option;
 - (NSInteger)get:(Option)option nr:(NSInteger)nr;
 

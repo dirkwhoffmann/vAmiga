@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+import Carbon.HIToolbox
+
 /* This class stores all emulator settings that belong to the application level.
  * There is a single object of this class stored in the application delegate.
  * The object is shared among all emulator instances.
@@ -21,7 +23,7 @@ class Preferences {
     //
        
     // Snapshots
-    var autoSnapshots = GeneralDefaults.std.autoSnapshots {
+    var autoSnapshots = false {
         didSet { for c in myAppDelegate.controllers { c.validateSnapshotTimer() } }
     }
     var snapshotInterval = 0 {
@@ -29,8 +31,8 @@ class Preferences {
     }
 
     // Screenshots
-    var screenshotSource = GeneralDefaults.std.screenshotSource
-    var screenshotTarget = GeneralDefaults.std.screenshotTarget
+    var screenshotSource = 0
+    var screenshotTarget = NSBitmapImageRep.FileType.png
     var screenshotTargetIntValue: Int {
         get { return Int(screenshotTarget.rawValue) }
         set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
@@ -44,7 +46,7 @@ class Preferences {
             }
         }
     }
-    var captureSource = GeneralDefaults.std.captureSource
+    var captureSource = 0
     var bitRate = 512 {
         didSet {
             if bitRate < 64 { bitRate = 64 }
@@ -65,11 +67,11 @@ class Preferences {
     }
         
     // Fullscreen
-    var keepAspectRatio = GeneralDefaults.std.keepAspectRatio
-    var exitOnEsc = GeneralDefaults.std.exitOnEsc
+    var keepAspectRatio = false
+    var exitOnEsc = false
             
     // Warp mode
-    var warpMode = GeneralDefaults.std.warpMode {
+    var warpMode = WarpMode.off {
         didSet { for c in myAppDelegate.controllers { c.updateWarp() } }
     }
     var warpModeIntValue: Int {
@@ -78,37 +80,40 @@ class Preferences {
     }
     
     // Misc
-    var ejectWithoutAsking = GeneralDefaults.std.ejectWithoutAsking
-    var detachWithoutAsking = GeneralDefaults.std.detachWithoutAsking
-    var closeWithoutAsking = GeneralDefaults.std.closeWithoutAsking
-    var pauseInBackground = GeneralDefaults.std.pauseInBackground
+    var ejectWithoutAsking = false
+    var detachWithoutAsking = false
+    var closeWithoutAsking = false
+    var pauseInBackground = false
 
     //
     // Controls
     //
     
     // Emulation keys
-    var keyMaps = [ ControlsDefaults.std.mouseKeyMap,
+    var keyMaps: [[MacKey: Int]] = [ [:], [:], [:] ]
+    /*
+            ControlsDefaults.std.mouseKeyMap,
                     ControlsDefaults.std.joyKeyMap1,
                     ControlsDefaults.std.joyKeyMap2 ]
+    */
     
     // Joystick
-    var disconnectJoyKeys = ControlsDefaults.std.disconnectJoyKeys
-    var autofire = ControlsDefaults.std.autofire {
+    var disconnectJoyKeys: Bool!
+    var autofire: Bool! {
         didSet {
             for amiga in myAppDelegate.proxies {
                 amiga.configure(.AUTOFIRE, enable: autofire)
             }
         }
     }
-    var autofireBullets = ControlsDefaults.std.autofireBullets {
+    var autofireBullets: Int! {
         didSet {
             for amiga in myAppDelegate.proxies {
                 amiga.configure(.AUTOFIRE_BULLETS, value: autofireBullets)
             }
         }
     }
-    var autofireFrequency = ControlsDefaults.std.autofireFrequency {
+    var autofireFrequency: Double! {
         didSet {
             autofireFrequency = autofireFrequency.clamped(1, 4)
             let autofireDelay = Int(50.0 / autofireFrequency)
@@ -119,90 +124,285 @@ class Preferences {
     }
 
     // Mouse
-    var retainMouseKeyComb = ControlsDefaults.std.retainMouseKeyComb
-    var retainMouseWithKeys = ControlsDefaults.std.retainMouseWithKeys
-    var retainMouseByClick = ControlsDefaults.std.retainMouseByClick
-    var retainMouseByEntering = ControlsDefaults.std.retainMouseByEntering
-    var releaseMouseKeyComb = ControlsDefaults.std.retainMouseKeyComb
-    var releaseMouseWithKeys = ControlsDefaults.std.releaseMouseWithKeys
-    var releaseMouseByShaking = ControlsDefaults.std.releaseMouseByShaking
+    var retainMouseKeyComb: Int!
+    var retainMouseWithKeys: Bool!
+    var retainMouseByClick: Bool!
+    var retainMouseByEntering: Bool!
+    var releaseMouseKeyComb: Int!
+    var releaseMouseWithKeys: Bool!
+    var releaseMouseByShaking: Bool!
      
+    //
+    // All
+    //
+    
+    func registerUserDefaults() {
+        
+        log()
+        registerGeneralUserDefaults()
+        registerControlsUserDefaults()
+        log()
+    }
+    
+    func applyUserDefaults() {
+
+        log()
+        applyGeneralUserDefaults()
+        applyControlsUserDefaults()
+        log()
+    }
+    
     //
     // General
     //
         
-    func loadGeneralUserDefaults() {
+    func registerGeneralUserDefaults() {
         
-        // TODO: Make Properties accessible as static variable in AmigaProxy
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
         
-        let defaults = UserDefaults.standard
-           
         // Snapshots
-        autoSnapshots = defaults.bool(forKey: Keys.Gen.autoSnapshots)
-        snapshotInterval = defaults.integer(forKey: Keys.Gen.autoSnapshotInterval)
-
+        defaults.register(Keys.Gen.autoSnapshots, false)
+        defaults.register(Keys.Gen.autoSnapshotInterval, 20)
+        
         // Screenshots
-        screenshotSource = defaults.integer(forKey: Keys.Gen.screenshotSource)
-        screenshotTargetIntValue = defaults.integer(forKey: Keys.Gen.screenshotTarget)
+        defaults.register(Keys.Gen.screenshotSource, 0)
+        defaults.register(Keys.Gen.screenshotTarget, NSBitmapImageRep.FileType.png.rawValue)
 
         // Captures
-        ffmpegPath = defaults.string(forKey: Keys.Gen.ffmpegPath) ?? ""
-        captureSource = defaults.integer(forKey: Keys.Gen.captureSource)
-        bitRate = defaults.integer(forKey: Keys.Gen.bitRate)
-        aspectX = defaults.integer(forKey: Keys.Gen.aspectX)
-        aspectY = defaults.integer(forKey: Keys.Gen.aspectY)
+        defaults.register(Keys.Gen.ffmpegPath, "")
+        defaults.register(Keys.Gen.captureSource, 0)
+        defaults.register(Keys.Gen.bitRate, 2048)
+        defaults.register(Keys.Gen.aspectX, 768)
+        defaults.register(Keys.Gen.aspectY, 702)
         
         // Fullscreen
-        keepAspectRatio = defaults.bool(forKey: Keys.Gen.keepAspectRatio)
-        exitOnEsc = defaults.bool(forKey: Keys.Gen.exitOnEsc)
-    
+        defaults.register(Keys.Gen.keepAspectRatio, false)
+        defaults.register(Keys.Gen.exitOnEsc, true)
+        
         // Warp mode
-        warpModeIntValue = defaults.integer(forKey: Keys.Gen.warpMode)
-
+        defaults.register(Keys.Gen.warpMode, WarpMode.off.rawValue)
+        
         // Misc
-        ejectWithoutAsking = defaults.bool(forKey: Keys.Gen.ejectWithoutAsking)
-        detachWithoutAsking = defaults.bool(forKey: Keys.Gen.detachWithoutAsking)
-        closeWithoutAsking = defaults.bool(forKey: Keys.Gen.closeWithoutAsking)
-        pauseInBackground = defaults.bool(forKey: Keys.Gen.pauseInBackground)
+        defaults.register(Keys.Gen.ejectWithoutAsking, false)
+        defaults.register(Keys.Gen.detachWithoutAsking, false)
+        defaults.register(Keys.Gen.closeWithoutAsking, false)
+        defaults.register(Keys.Gen.pauseInBackground, false)
+    }
+    
+    func removeGeneralUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        let keys = [ Keys.Gen.autoSnapshots,
+                     Keys.Gen.autoSnapshotInterval,
+                     
+                     Keys.Gen.screenshotSource,
+                     Keys.Gen.screenshotTarget,
+                     
+                     Keys.Gen.ffmpegPath,
+                     Keys.Gen.captureSource,
+                     Keys.Gen.bitRate,
+                     Keys.Gen.aspectX,
+                     Keys.Gen.aspectY,
+            
+                     Keys.Gen.keepAspectRatio,
+                     Keys.Gen.exitOnEsc,
+                     
+                     Keys.Gen.warpMode,
+                     
+                     Keys.Gen.ejectWithoutAsking,
+                     Keys.Gen.detachWithoutAsking,
+                     Keys.Gen.closeWithoutAsking,
+                     Keys.Gen.pauseInBackground
+        ]
+
+        for key in keys { defaults.removeKey(key) }
     }
     
     func saveGeneralUserDefaults() {
-        
-        let defaults = UserDefaults.standard
+    
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
                 
-        // Snapshots
-        defaults.set(autoSnapshots, forKey: Keys.Gen.autoSnapshots)
-        defaults.set(snapshotInterval, forKey: Keys.Gen.autoSnapshotInterval)
+        defaults.set(Keys.Gen.autoSnapshots, autoSnapshots)
+        defaults.set(Keys.Gen.autoSnapshotInterval, snapshotInterval)
 
-        // Screenshots
-        defaults.set(screenshotSource, forKey: Keys.Gen.screenshotSource)
-        defaults.set(screenshotTargetIntValue, forKey: Keys.Gen.screenshotTarget)
+        defaults.set(Keys.Gen.screenshotSource, screenshotSource)
+        defaults.set(Keys.Gen.screenshotTarget, screenshotTargetIntValue)
 
-        // Captures
-        defaults.set(ffmpegPath, forKey: Keys.Gen.ffmpegPath)
-        defaults.set(captureSource, forKey: Keys.Gen.captureSource)
-        defaults.set(bitRate, forKey: Keys.Gen.bitRate)
-        defaults.set(aspectX, forKey: Keys.Gen.aspectX)
-        defaults.set(aspectY, forKey: Keys.Gen.aspectY)
+        defaults.set(Keys.Gen.ffmpegPath, ffmpegPath)
+        defaults.set(Keys.Gen.captureSource, captureSource)
+        defaults.set(Keys.Gen.bitRate, bitRate)
+        defaults.set(Keys.Gen.aspectX, aspectX)
+        defaults.set(Keys.Gen.aspectY, aspectY)
         
-        // Fullscreen
-        defaults.set(keepAspectRatio, forKey: Keys.Gen.keepAspectRatio)
-        defaults.set(exitOnEsc, forKey: Keys.Gen.exitOnEsc)
+        defaults.set(Keys.Gen.keepAspectRatio, keepAspectRatio)
+        defaults.set(Keys.Gen.exitOnEsc, exitOnEsc)
         
-        // Warp mode
-        defaults.set(warpModeIntValue, forKey: Keys.Gen.warpMode)
+        defaults.set(Keys.Gen.warpMode, warpModeIntValue)
 
-        // Misc
-        defaults.set(ejectWithoutAsking, forKey: Keys.Gen.ejectWithoutAsking)
-        defaults.set(detachWithoutAsking, forKey: Keys.Gen.detachWithoutAsking)
-        defaults.set(closeWithoutAsking, forKey: Keys.Gen.closeWithoutAsking)
-        defaults.set(pauseInBackground, forKey: Keys.Gen.pauseInBackground)
+        defaults.set(Keys.Gen.ejectWithoutAsking, ejectWithoutAsking)
+        defaults.set(Keys.Gen.detachWithoutAsking, detachWithoutAsking)
+        defaults.set(Keys.Gen.closeWithoutAsking, closeWithoutAsking)
+        defaults.set(Keys.Gen.pauseInBackground, pauseInBackground)
+        
+        defaults.save()
+    }
+    
+    func applyGeneralUserDefaults() {
+           
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+                   
+        autoSnapshots = defaults.getBool(Keys.Gen.autoSnapshots)
+        snapshotInterval = defaults.getInt(Keys.Gen.autoSnapshotInterval)
+
+        screenshotSource = defaults.getInt(Keys.Gen.screenshotSource)
+        screenshotTargetIntValue = defaults.getInt(Keys.Gen.screenshotTarget)
+
+        ffmpegPath = defaults.getString(Keys.Gen.ffmpegPath) ?? ""
+        captureSource = defaults.getInt(Keys.Gen.captureSource)
+        bitRate = defaults.getInt(Keys.Gen.bitRate)
+        aspectX = defaults.getInt(Keys.Gen.aspectX)
+        aspectY = defaults.getInt(Keys.Gen.aspectY)
+        
+        keepAspectRatio = defaults.getBool(Keys.Gen.keepAspectRatio)
+        exitOnEsc = defaults.getBool(Keys.Gen.exitOnEsc)
+    
+        warpModeIntValue = defaults.getInt(Keys.Gen.warpMode)
+
+        ejectWithoutAsking = defaults.getBool(Keys.Gen.ejectWithoutAsking)
+        detachWithoutAsking = defaults.getBool(Keys.Gen.detachWithoutAsking)
+        closeWithoutAsking = defaults.getBool(Keys.Gen.closeWithoutAsking)
+        pauseInBackground = defaults.getBool(Keys.Gen.pauseInBackground)
     }
     
     //
     // Controls
     //
 
+    func registerControlsUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        let emptyMap: [MacKey: Int] = [:]
+
+        let stdKeyMap1: [MacKey: Int] = [
+            
+            MacKey(keyCode: kVK_LeftArrow): GamePadAction.PULL_LEFT.rawValue,
+            MacKey(keyCode: kVK_RightArrow): GamePadAction.PULL_RIGHT.rawValue,
+            MacKey(keyCode: kVK_UpArrow): GamePadAction.PULL_UP.rawValue,
+            MacKey(keyCode: kVK_DownArrow): GamePadAction.PULL_DOWN.rawValue,
+            MacKey(keyCode: kVK_Space): GamePadAction.PRESS_FIRE.rawValue
+        ]
+        
+        let stdKeyMap2 = [
+            
+            MacKey(keyCode: kVK_ANSI_S): GamePadAction.PULL_LEFT.rawValue,
+            MacKey(keyCode: kVK_ANSI_D): GamePadAction.PULL_RIGHT.rawValue,
+            MacKey(keyCode: kVK_ANSI_E): GamePadAction.PULL_UP.rawValue,
+            MacKey(keyCode: kVK_ANSI_X): GamePadAction.PULL_DOWN.rawValue,
+            MacKey(keyCode: kVK_ANSI_C): GamePadAction.PRESS_FIRE.rawValue
+        ]
+        
+        // Emulation keys
+        defaults.register(Keys.Con.mouseKeyMap, encodable: emptyMap)
+        defaults.register(Keys.Con.joyKeyMap1, encodable: stdKeyMap1)
+        defaults.register(Keys.Con.joyKeyMap2, encodable: stdKeyMap2)
+        defaults.register(Keys.Con.disconnectJoyKeys, true)
+        
+        // Joysticks
+        defaults.register(Keys.Con.autofire, false)
+        defaults.register(Keys.Con.autofireBullets, -3)
+        defaults.register(Keys.Con.autofireFrequency, 2.5)
+
+        // Mouse
+        defaults.register(Keys.Con.retainMouseKeyComb, 0)
+        defaults.register(Keys.Con.retainMouseWithKeys, true)
+        defaults.register(Keys.Con.retainMouseByClick, true)
+        defaults.register(Keys.Con.retainMouseByEntering, false)
+        defaults.register(Keys.Con.releaseMouseKeyComb, 0)
+        defaults.register(Keys.Con.releaseMouseWithKeys, true)
+        defaults.register(Keys.Con.releaseMouseByShaking, true)
+    }
+    
+    func removeControlsUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        let keys = [ Keys.Con.mouseKeyMap,
+                     Keys.Con.joyKeyMap1,
+                     Keys.Con.joyKeyMap2,
+                     Keys.Con.disconnectJoyKeys,
+                     
+                     Keys.Con.autofire,
+                     Keys.Con.autofireBullets,
+                     Keys.Con.autofireFrequency,
+                     
+                     Keys.Con.retainMouseKeyComb,
+                     Keys.Con.retainMouseWithKeys,
+                     Keys.Con.retainMouseByClick,
+                     Keys.Con.retainMouseByEntering,
+                     Keys.Con.releaseMouseKeyComb,
+                     Keys.Con.releaseMouseWithKeys,
+                     Keys.Con.releaseMouseByShaking ]
+
+        for key in keys { defaults.removeKey(key) }
+    }
+
+    func saveControlsUserDefaults() {
+    
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+                
+        defaults.set(Keys.Con.mouseKeyMap, encodable: keyMaps[0])
+        defaults.set(Keys.Con.joyKeyMap1, encodable: keyMaps[1])
+        defaults.set(Keys.Con.joyKeyMap2, encodable: keyMaps[2])
+        defaults.set(Keys.Con.disconnectJoyKeys, disconnectJoyKeys)
+
+        defaults.set(Keys.Con.autofire, autofire)
+        defaults.set(Keys.Con.autofireBullets, autofireBullets)
+        defaults.set(Keys.Con.autofireFrequency, autofireFrequency)
+
+        defaults.set(Keys.Con.retainMouseKeyComb, retainMouseKeyComb)
+        defaults.set(Keys.Con.retainMouseWithKeys, retainMouseWithKeys)
+        defaults.set(Keys.Con.retainMouseByClick, retainMouseByClick)
+        defaults.set(Keys.Con.retainMouseByEntering, retainMouseByEntering)
+        defaults.set(Keys.Con.releaseMouseKeyComb, releaseMouseKeyComb)
+        defaults.set(Keys.Con.releaseMouseWithKeys, releaseMouseWithKeys)
+        defaults.set(Keys.Con.releaseMouseByShaking, releaseMouseByShaking)
+        
+        defaults.save()
+    }
+    
+    func applyControlsUserDefaults() {
+           
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        defaults.decode(Keys.Con.mouseKeyMap, encodable: &keyMaps[0])
+        defaults.decode(Keys.Con.joyKeyMap1, encodable: &keyMaps[1])
+        defaults.decode(Keys.Con.joyKeyMap2, encodable: &keyMaps[2])
+        disconnectJoyKeys = defaults.getBool(Keys.Con.disconnectJoyKeys)
+        
+        autofire = defaults.getBool(Keys.Con.autofire)
+        autofireBullets = defaults.getInt(Keys.Con.autofireBullets)
+        autofireFrequency = defaults.getDouble(Keys.Con.autofireFrequency)
+        
+        retainMouseKeyComb = defaults.getInt(Keys.Con.retainMouseKeyComb)
+        retainMouseWithKeys = defaults.getBool(Keys.Con.retainMouseWithKeys)
+        retainMouseByClick = defaults.getBool(Keys.Con.retainMouseByClick)
+        retainMouseByEntering = defaults.getBool(Keys.Con.retainMouseByEntering)
+        releaseMouseKeyComb = defaults.getInt(Keys.Con.releaseMouseKeyComb)
+        releaseMouseWithKeys = defaults.getBool(Keys.Con.releaseMouseWithKeys)
+        releaseMouseByShaking = defaults.getBool(Keys.Con.releaseMouseByShaking)
+    }
+    
+    /*
     func loadControlsUserDefaults() {
         
         let defaults = UserDefaults.standard
@@ -252,7 +452,8 @@ class Preferences {
         defaults.set(releaseMouseWithKeys, forKey: Keys.Con.releaseMouseWithKeys)
         defaults.set(releaseMouseByShaking, forKey: Keys.Con.releaseMouseByShaking)
     }
-
+    */
+    
     //
     // Devices
     //

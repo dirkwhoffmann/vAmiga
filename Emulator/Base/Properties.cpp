@@ -160,6 +160,7 @@ Properties::load(const fs::path &path)
         throw VAError(ERROR_FILE_NOT_FOUND);
     }
     
+    debug(DEF_DEBUG, "Loading user defaults from %s...\n", path.c_str());
     load(fs);
 }
 
@@ -176,12 +177,14 @@ void
 Properties::load(std::stringstream &stream)
 {
     isize line = 0;
+    isize accepted = 0;
+    isize skipped = 0;
     string input;
     string section;
     
     {   SYNCHRONIZED
         
-        debug(DEF_DEBUG, "Loading user defaults...\n");
+        debug(DEF_DEBUG, "Loading user defaults from string stream...\n");
         
         while(std::getline(stream, input)) {
             
@@ -201,9 +204,6 @@ Properties::load(std::stringstream &stream)
                 
                 // Extract the section name
                 section = input.substr(1, input.size() - 2);
-                
-                // Convert to lower case
-                section = util::lowercased(section);
                 continue;
             }
             
@@ -216,17 +216,29 @@ Properties::load(std::stringstream &stream)
                 // Remove white spaces
                 util::trim(key);
                 util::trim(value);
+
+                // Assemble the key
+                auto delimiter = section.empty() ? "" : ".";
+                key = section + delimiter + key;
                 
-                // Convert to lower case
-                key = util::lowercased(key);
+                // Check if the key is a known key
+                if (!fallbacks.contains(key)) {
+
+                    warn("Ignoring invalid key %s\n", key.c_str());
+                    skipped++;
+                    continue;
+                }
                 
                 // Add the key-value pair
-                values[section.empty() ? key : section + "." + key] = value;
+                values[key] = value;
+                accepted++;
                 continue;
             }
             
             throw VAError(ERROR_SYNTAX, line);
         }
+
+        debug(DEF_DEBUG, "%ld keys accepted, %ld ignored\n", accepted, skipped);
     }
 }
 
