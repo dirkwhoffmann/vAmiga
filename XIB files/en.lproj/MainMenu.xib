@@ -137,7 +137,7 @@
                                         <menuItem title="Restore Factory Settings" id="TX7-U7-EG7">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="resetConfigAction:" target="-1" id="DKu-TY-Qdq"/>
+                                                <action selector="factorySettingsAction:" target="-1" id="eUA-v2-Mow"/>
                                             </connections>
                                         </menuItem>
                                     </items>
