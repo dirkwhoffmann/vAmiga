@@ -10,55 +10,210 @@
 import Carbon.HIToolbox
 
 //
-// Convenience extensions to UserDefaults
+// Proxy extensions
+//
+
+extension PropertiesProxy {
+
+    func load(url: URL) throws {
+        
+        let exception = ExceptionWrapper()
+        load(url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
+    func load() {
+        
+        log("Loading user defaults")
+        
+        do {
+            let folder = try URL.appSupportFolder()
+            let path = folder.appendingPathComponent("vAmiga.ini")
+            
+            do {
+                try load(url: path)
+                log("Successfully loaded user defaults from file \(path)")
+            } catch {
+                log("Failed to load user defaults from file \(path)")
+            }
+            
+        } catch {
+            log("Failed to access application support folder")
+        }
+    }
+    
+    func save(url: URL) throws {
+        
+        let exception = ExceptionWrapper()
+        save(url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+    
+    func save() {
+        
+        log("Saving user defaults")
+        
+        do {
+            let folder = try URL.appSupportFolder()
+            let path = folder.appendingPathComponent("vAmiga.ini")
+            
+            do {
+                try save(url: path)
+                log("Successfully saved user defaults to file \(path)")
+            } catch {
+                log("Failed to save user defaults file \(path)")
+            }
+            
+        } catch {
+            log("Failed to access application support folder")
+        }
+    }
+
+    func register(_ key: String, _ val: String) { register(key, value: val) }
+    func register(_ key: String, _ val: Bool) { register(key, value: val ? "1" : "0") }
+    func register(_ key: String, _ val: Int) { register(key, value: "\(val)") }
+    func register(_ key: String, _ val: Int32) { register(key, value: "\(val)") }
+    func register(_ key: String, _ val: UInt) { register(key, value: "\(val)") }
+    func register(_ key: String, _ val: Float) { register(key, value: "\(val)") }
+    func register(_ key: String, _ val: Double) { register(key, value: "\(val)") }
+
+    func set(_ key: String, _ val: String) { setKey(key, value: val) }
+    func set(_ key: String, _ val: Bool) { setKey(key, value: val ? "1" : "0") }
+    func set(_ key: String, _ val: Int) { setKey(key, value: "\(val)") }
+    func set(_ key: String, _ val: Int32) { setKey(key, value: "\(val)") }
+    func set(_ key: String, _ val: UInt) { setKey(key, value: "\(val)") }
+    func set(_ key: String, _ val: Float) { setKey(key, value: "\(val)") }
+    func set(_ key: String, _ val: Double) { setKey(key, value: "\(val)") }
+
+    func getBool(_ key: String) -> Bool { return getInt(key) != 0 }
+    func getInt32(_ key: String) -> Int32 { return Int32(getInt(key)) }
+    func getFloat(_ key: String) -> Float { return (getString(key) as NSString).floatValue }
+    func getDouble(_ key: String) -> Double { return (getString(key) as NSString).doubleValue }
+
+    func set(_ option: Option, value: Bool) {
+        set(option, value: value ? 1 : 0)
+    }
+    func set(_ option: Option, nr: Int, value: Bool) {
+        set(option, nr: nr, value: value ? 1 : 0)
+    }
+    func set(_ option: Option, nr: [NSInteger], value: NSInteger) {
+        for n in nr { set(option, nr: n, value: value) }
+    }
+    func set(_ option: Option, nr: [NSInteger], value: Bool) {
+        for n in nr { set(option, nr: n, value: value ? 1 : 0) }
+    }
+    
+    func register<T: Encodable>(_ key: String, encodable item: T) {
+        
+        let jsonData = try? JSONEncoder().encode(item)
+        let jsonString = jsonData?.base64EncodedString() ?? ""
+        register(key, jsonString)
+    }
+
+    func set<T: Encodable>(_ key: String, encodable item: T) {
+        
+        let jsonData = try? JSONEncoder().encode(item)
+        let jsonString = jsonData?.base64EncodedString() ?? ""
+        set(key, jsonString)
+    }
+
+    func decode<T: Decodable>(_ key: String, encodable item: inout T) {
+        
+        if let jsonString = getString(key) {
+
+            log("Decoding jsonString '\(jsonString)'")
+            if let data = Data(base64Encoded: jsonString) {
+
+                if let decoded = try? JSONDecoder().decode(T.self, from: data) {
+                    item = decoded
+                } else {
+                    log(warning: "Failed to decode \(jsonString)")
+                }
+                return
+            }
+        }
+        log("Failed to decode jsonString")
+    }
+}
+
+//
+// Paths
 //
 
 extension UserDefaults {
     
-    // Registers an item of generic type 'Encodable'
-    func register<T: Encodable>(encodableItem item: T, forKey key: String) {
+    static func romUrl(name: String) -> URL? {
         
-        if let data = try? PropertyListEncoder().encode(item) {
-            register(defaults: [key: data])
-        }
-    }
-
-    // Encodes an item of generic type 'Encodable'
-    func encode<T: Encodable>(_ item: T, forKey key: String) {
-        
-        if let encoded = try? PropertyListEncoder().encode(item) {
-            set(encoded, forKey: key)
-        } else {
-            log(warning: "Failed to encode \(key)")
-        }
+        let folder = try? URL.appSupportFolder("Roms")
+        return folder?.appendingPathComponent(name)
     }
     
-    // Decodes an item of generic type 'Decodable'
-    func decode<T: Decodable>(_ item: inout T, forKey key: String) {
+    static func mediaUrl(name: String) -> URL? {
         
-        if let data = data(forKey: key) {
-            if let decoded = try? PropertyListDecoder().decode(T.self, from: data) {
-                item = decoded
-            } else {
-                log(warning: "Failed to decode \(key)")
-            }
-        }
+        let folder = try? URL.appSupportFolder("Media")
+        return folder?.appendingPathComponent(name)
     }
+
+    static func hdUrl(_ n: Int) -> URL? {
+        
+        return mediaUrl(name: "hd\(n).hdf")
+    }
+
+    static var romUrl: URL? { return romUrl(name: "rom.bin") }
+    static var extUrl: URL? { return romUrl(name: "ext.bin") }
+    static var hd0Url: URL? { return hdUrl(0) }
+    static var hd1Url: URL? { return hdUrl(1) }
+    static var hd2Url: URL? { return hdUrl(2) }
+    static var hd3Url: URL? { return hdUrl(3) }
 }
 
 //
 // User defaults (all)
 //
 
-extension UserDefaults {
+extension PropertiesProxy {
     
-    static func registerUserDefaults() {
-                
+    func registerUserDefaults() {
+        
         log(level: 2)
         
-        // TODO: GET RID OF THOSE
+        registerGeneralUserDefaults()
+        registerControlsUserDefaults()
+        registerDevicesUserDefaults()
+
+        registerChipsetUserDefaults()
+        registerMemoryUserDefaults()
+        registerPeripheralsUserDefaults()
+        registerCompatibilityUserDefaults()
+        registerAudioUserDefaults()
         registerVideoUserDefaults()
-        registerGeometryUserDefaults()
+    }
+}
+
+extension Preferences {
+
+    func applyUserDefaults() {
+        
+        log(level: 2)
+        
+        applyGeneralUserDefaults()
+        applyControlsUserDefaults()
+        applyDevicesUserDefaults()
+    }
+}
+
+extension Configuration {
+        
+    func applyUserDefaults() {
+    
+        log(level: 2)
+        
+        applyChipsetUserDefaults()
+        applyMemoryUserDefaults()
+        applyPeripheralsUserDefaults()
+        applyCompatibilityUserDefaults()
+        applyAudioUserDefaults()
+        applyVideoUserDefaults()
     }
 }
 
@@ -71,32 +226,161 @@ struct Keys {
     struct Gen {
                 
         // Snapshots
-        static let autoSnapshots          = "VAMIGA_GEN_AutoSnapshots"
-        static let autoSnapshotInterval   = "VAMIGA_GEN_ScreenshotInterval"
+        static let autoSnapshots          = "GenAutoSnapshots"
+        static let autoSnapshotInterval   = "GenScreenshotInterval"
 
         // Screenshots
-        static let screenshotSource       = "VAMIGA_GEN_ScreenshotSource"
-        static let screenshotTarget       = "VAMIGA_GEN_ScreenshotTarget"
+        static let screenshotSource       = "GenScreenshotSource"
+        static let screenshotTarget       = "GenScreenshotTarget"
                 
         // Screen captures
-        static let ffmpegPath             = "VAMIGA_GEN_ffmpegPath"
-        static let captureSource          = "VAMIGA_GEN_Source"
-        static let bitRate                = "VAMIGA_GEN_BitRate"
-        static let aspectX                = "VAMIGA_GEN_AspectX"
-        static let aspectY                = "VAMIGA_GEN_AspectY"
+        static let ffmpegPath             = "GenffmpegPath"
+        static let captureSource          = "GenSource"
+        static let bitRate                = "GenBitRate"
+        static let aspectX                = "GenAspectX"
+        static let aspectY                = "GenAspectY"
         
         // Fullscreen
-        static let keepAspectRatio        = "VAMIGA_GEN_FullscreenKeepAspectRatio"
-        static let exitOnEsc              = "VAMIGA_GEN_FullscreenExitOnEsc"
+        static let keepAspectRatio        = "GenFullscreenKeepAspectRatio"
+        static let exitOnEsc              = "GenFullscreenExitOnEsc"
         
         // Warp mode
-        static let warpMode               = "VAMIGA_GEN_WarpMode"
+        static let warpMode               = "GenWarpMode"
         
         // Miscellaneous
-        static let ejectWithoutAsking     = "VAMIGA_GEN_EjectWithoutAsking"
-        static let detachWithoutAsking    = "VAMIGA_GEN_DetachWithoutAsking"
-        static let closeWithoutAsking     = "VAMIGA_GEN_CloseWithoutAsking"
-        static let pauseInBackground      = "VAMIGA_GEN_PauseInBackground"
+        static let ejectWithoutAsking     = "GenEjectWithoutAsking"
+        static let detachWithoutAsking    = "GenDetachWithoutAsking"
+        static let closeWithoutAsking     = "GenCloseWithoutAsking"
+        static let pauseInBackground      = "GenPauseInBackground"
+    }
+}
+
+extension PropertiesProxy {
+    
+    func registerGeneralUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        // Snapshots
+        defaults.register(Keys.Gen.autoSnapshots, false)
+        defaults.register(Keys.Gen.autoSnapshotInterval, 20)
+        
+        // Screenshots
+        defaults.register(Keys.Gen.screenshotSource, 0)
+        defaults.register(Keys.Gen.screenshotTarget, NSBitmapImageRep.FileType.png.rawValue)
+        
+        // Captures
+        defaults.register(Keys.Gen.ffmpegPath, "")
+        defaults.register(Keys.Gen.captureSource, 0)
+        defaults.register(Keys.Gen.bitRate, 2048)
+        defaults.register(Keys.Gen.aspectX, 768)
+        defaults.register(Keys.Gen.aspectY, 702)
+        
+        // Fullscreen
+        defaults.register(Keys.Gen.keepAspectRatio, false)
+        defaults.register(Keys.Gen.exitOnEsc, true)
+        
+        // Warp mode
+        defaults.register(Keys.Gen.warpMode, WarpMode.off.rawValue)
+        
+        // Misc
+        defaults.register(Keys.Gen.ejectWithoutAsking, false)
+        defaults.register(Keys.Gen.detachWithoutAsking, false)
+        defaults.register(Keys.Gen.closeWithoutAsking, false)
+        defaults.register(Keys.Gen.pauseInBackground, false)
+    }
+    
+    func removeGeneralUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        let keys = [ Keys.Gen.autoSnapshots,
+                     Keys.Gen.autoSnapshotInterval,
+                     
+                     Keys.Gen.screenshotSource,
+                     Keys.Gen.screenshotTarget,
+                     
+                     Keys.Gen.ffmpegPath,
+                     Keys.Gen.captureSource,
+                     Keys.Gen.bitRate,
+                     Keys.Gen.aspectX,
+                     Keys.Gen.aspectY,
+                     
+                     Keys.Gen.keepAspectRatio,
+                     Keys.Gen.exitOnEsc,
+                     
+                     Keys.Gen.warpMode,
+                     
+                     Keys.Gen.ejectWithoutAsking,
+                     Keys.Gen.detachWithoutAsking,
+                     Keys.Gen.closeWithoutAsking,
+                     Keys.Gen.pauseInBackground
+        ]
+        
+        for key in keys { defaults.removeKey(key) }
+    }
+}
+
+extension Preferences {
+
+    func saveGeneralUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        defaults.set(Keys.Gen.autoSnapshots, autoSnapshots)
+        defaults.set(Keys.Gen.autoSnapshotInterval, snapshotInterval)
+        
+        defaults.set(Keys.Gen.screenshotSource, screenshotSource)
+        defaults.set(Keys.Gen.screenshotTarget, screenshotTargetIntValue)
+        
+        defaults.set(Keys.Gen.ffmpegPath, ffmpegPath)
+        defaults.set(Keys.Gen.captureSource, captureSource)
+        defaults.set(Keys.Gen.bitRate, bitRate)
+        defaults.set(Keys.Gen.aspectX, aspectX)
+        defaults.set(Keys.Gen.aspectY, aspectY)
+        
+        defaults.set(Keys.Gen.keepAspectRatio, keepAspectRatio)
+        defaults.set(Keys.Gen.exitOnEsc, exitOnEsc)
+        
+        defaults.set(Keys.Gen.warpMode, warpModeIntValue)
+        
+        defaults.set(Keys.Gen.ejectWithoutAsking, ejectWithoutAsking)
+        defaults.set(Keys.Gen.detachWithoutAsking, detachWithoutAsking)
+        defaults.set(Keys.Gen.closeWithoutAsking, closeWithoutAsking)
+        defaults.set(Keys.Gen.pauseInBackground, pauseInBackground)
+        
+        defaults.save()
+    }
+    
+    func applyGeneralUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        autoSnapshots = defaults.getBool(Keys.Gen.autoSnapshots)
+        snapshotInterval = defaults.getInt(Keys.Gen.autoSnapshotInterval)
+        
+        screenshotSource = defaults.getInt(Keys.Gen.screenshotSource)
+        screenshotTargetIntValue = defaults.getInt(Keys.Gen.screenshotTarget)
+        
+        ffmpegPath = defaults.getString(Keys.Gen.ffmpegPath) ?? ""
+        captureSource = defaults.getInt(Keys.Gen.captureSource)
+        bitRate = defaults.getInt(Keys.Gen.bitRate)
+        aspectX = defaults.getInt(Keys.Gen.aspectX)
+        aspectY = defaults.getInt(Keys.Gen.aspectY)
+        
+        keepAspectRatio = defaults.getBool(Keys.Gen.keepAspectRatio)
+        exitOnEsc = defaults.getBool(Keys.Gen.exitOnEsc)
+        
+        warpModeIntValue = defaults.getInt(Keys.Gen.warpMode)
+        
+        ejectWithoutAsking = defaults.getBool(Keys.Gen.ejectWithoutAsking)
+        detachWithoutAsking = defaults.getBool(Keys.Gen.detachWithoutAsking)
+        closeWithoutAsking = defaults.getBool(Keys.Gen.closeWithoutAsking)
+        pauseInBackground = defaults.getBool(Keys.Gen.pauseInBackground)
     }
 }
 
@@ -130,6 +414,131 @@ extension Keys {
     }
 }
 
+extension PropertiesProxy {
+    
+    func registerControlsUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        let emptyMap: [MacKey: Int] = [:]
+
+        let stdKeyMap1: [MacKey: Int] = [
+            
+            MacKey(keyCode: kVK_LeftArrow): GamePadAction.PULL_LEFT.rawValue,
+            MacKey(keyCode: kVK_RightArrow): GamePadAction.PULL_RIGHT.rawValue,
+            MacKey(keyCode: kVK_UpArrow): GamePadAction.PULL_UP.rawValue,
+            MacKey(keyCode: kVK_DownArrow): GamePadAction.PULL_DOWN.rawValue,
+            MacKey(keyCode: kVK_Space): GamePadAction.PRESS_FIRE.rawValue
+        ]
+        
+        let stdKeyMap2 = [
+            
+            MacKey(keyCode: kVK_ANSI_S): GamePadAction.PULL_LEFT.rawValue,
+            MacKey(keyCode: kVK_ANSI_D): GamePadAction.PULL_RIGHT.rawValue,
+            MacKey(keyCode: kVK_ANSI_E): GamePadAction.PULL_UP.rawValue,
+            MacKey(keyCode: kVK_ANSI_X): GamePadAction.PULL_DOWN.rawValue,
+            MacKey(keyCode: kVK_ANSI_C): GamePadAction.PRESS_FIRE.rawValue
+        ]
+        
+        // Emulation keys
+        defaults.register(Keys.Con.mouseKeyMap, encodable: emptyMap)
+        defaults.register(Keys.Con.joyKeyMap1, encodable: stdKeyMap1)
+        defaults.register(Keys.Con.joyKeyMap2, encodable: stdKeyMap2)
+        defaults.register(Keys.Con.disconnectJoyKeys, true)
+        
+        // Joysticks
+        defaults.register(Keys.Con.autofire, false)
+        defaults.register(Keys.Con.autofireBullets, -3)
+        defaults.register(Keys.Con.autofireFrequency, 2.5)
+
+        // Mouse
+        defaults.register(Keys.Con.retainMouseKeyComb, 0)
+        defaults.register(Keys.Con.retainMouseWithKeys, true)
+        defaults.register(Keys.Con.retainMouseByClick, true)
+        defaults.register(Keys.Con.retainMouseByEntering, false)
+        defaults.register(Keys.Con.releaseMouseKeyComb, 0)
+        defaults.register(Keys.Con.releaseMouseWithKeys, true)
+        defaults.register(Keys.Con.releaseMouseByShaking, true)
+    }
+    
+    func removeControlsUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        let keys = [ Keys.Con.mouseKeyMap,
+                     Keys.Con.joyKeyMap1,
+                     Keys.Con.joyKeyMap2,
+                     Keys.Con.disconnectJoyKeys,
+                     
+                     Keys.Con.autofire,
+                     Keys.Con.autofireBullets,
+                     Keys.Con.autofireFrequency,
+                     
+                     Keys.Con.retainMouseKeyComb,
+                     Keys.Con.retainMouseWithKeys,
+                     Keys.Con.retainMouseByClick,
+                     Keys.Con.retainMouseByEntering,
+                     Keys.Con.releaseMouseKeyComb,
+                     Keys.Con.releaseMouseWithKeys,
+                     Keys.Con.releaseMouseByShaking ]
+
+        for key in keys { defaults.removeKey(key) }
+    }
+}
+
+extension Preferences {
+
+    func saveControlsUserDefaults() {
+    
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+                
+        defaults.set(Keys.Con.mouseKeyMap, encodable: keyMaps[0])
+        defaults.set(Keys.Con.joyKeyMap1, encodable: keyMaps[1])
+        defaults.set(Keys.Con.joyKeyMap2, encodable: keyMaps[2])
+        defaults.set(Keys.Con.disconnectJoyKeys, disconnectJoyKeys)
+
+        defaults.set(Keys.Con.autofire, autofire)
+        defaults.set(Keys.Con.autofireBullets, autofireBullets)
+        defaults.set(Keys.Con.autofireFrequency, autofireFrequency)
+
+        defaults.set(Keys.Con.retainMouseKeyComb, retainMouseKeyComb)
+        defaults.set(Keys.Con.retainMouseWithKeys, retainMouseWithKeys)
+        defaults.set(Keys.Con.retainMouseByClick, retainMouseByClick)
+        defaults.set(Keys.Con.retainMouseByEntering, retainMouseByEntering)
+        defaults.set(Keys.Con.releaseMouseKeyComb, releaseMouseKeyComb)
+        defaults.set(Keys.Con.releaseMouseWithKeys, releaseMouseWithKeys)
+        defaults.set(Keys.Con.releaseMouseByShaking, releaseMouseByShaking)
+        
+        defaults.save()
+    }
+    
+    func applyControlsUserDefaults() {
+           
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        defaults.decode(Keys.Con.mouseKeyMap, encodable: &keyMaps[0])
+        defaults.decode(Keys.Con.joyKeyMap1, encodable: &keyMaps[1])
+        defaults.decode(Keys.Con.joyKeyMap2, encodable: &keyMaps[2])
+        disconnectJoyKeys = defaults.getBool(Keys.Con.disconnectJoyKeys)
+        
+        autofire = defaults.getBool(Keys.Con.autofire)
+        autofireBullets = defaults.getInt(Keys.Con.autofireBullets)
+        autofireFrequency = defaults.getDouble(Keys.Con.autofireFrequency)
+        
+        retainMouseKeyComb = defaults.getInt(Keys.Con.retainMouseKeyComb)
+        retainMouseWithKeys = defaults.getBool(Keys.Con.retainMouseWithKeys)
+        retainMouseByClick = defaults.getBool(Keys.Con.retainMouseByClick)
+        retainMouseByEntering = defaults.getBool(Keys.Con.retainMouseByEntering)
+        releaseMouseKeyComb = defaults.getInt(Keys.Con.releaseMouseKeyComb)
+        releaseMouseWithKeys = defaults.getBool(Keys.Con.releaseMouseWithKeys)
+        releaseMouseByShaking = defaults.getBool(Keys.Con.releaseMouseByShaking)
+    }
+}
+
 //
 // User defaults (Devices)
 //
@@ -141,6 +550,7 @@ extension Keys {
         static let schemes            = "VAMIGA_DEV_Schemes"
 
         // Mapping schemes (DEPRECATED)
+        /*
         static let leftStickScheme1   = "VAMIGA_DEV_LeftStickScheme1"
         static let rightStickScheme1  = "VAMIGA_DEV_RightStickScheme1"
         static let hatSwitchScheme1   = "VAMIGA_DEV_HatSwitchScheme1"
@@ -148,48 +558,190 @@ extension Keys {
         static let leftStickScheme2   = "VAMIGA_DEV_LeftStickScheme2"
         static let rightStickScheme2  = "VAMIGA_DEV_RightStickScheme2"
         static let hatSwitchScheme2   = "VAMIGA_DEV_HatSwitchScheme2"
+        */
     }
 }
 
-/*
-struct DevicesDefaults {
+extension PropertiesProxy {
     
-    // Mapping schemes
-    let leftStickScheme1: Int
-    let rightStickScheme1: Int
-    let hatSwitchScheme1: Int
-
-    let leftStickScheme2: Int
-    let rightStickScheme2: Int
-    let hatSwitchScheme2: Int
-
-    static let std = DevicesDefaults(
+    func registerDevicesUserDefaults() {
         
-        leftStickScheme1: 0,
-        rightStickScheme1: 0,
-        hatSwitchScheme1: 0,
+        /*
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        // Mapping schemes
+        defaults.register(Keys.Dev.leftStickScheme1, 0)
+        defaults.register(Keys.Dev.rightStickScheme1, 0)
+        defaults.register(Keys.Dev.hatSwitchScheme1, 0)
+
+        defaults.register(Keys.Dev.leftStickScheme2, 0)
+        defaults.register(Keys.Dev.rightStickScheme2, 0)
+        defaults.register(Keys.Dev.hatSwitchScheme2, 0)
+        */
+    }
+    
+    func removeDevicesUserDefaults() {
         
-        leftStickScheme2: 0,
-        rightStickScheme2: 0,
-        hatSwitchScheme2: 0
-    )
+        /*
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        let keys = [ Keys.Dev.leftStickScheme1,
+                     Keys.Dev.rightStickScheme1,
+                     Keys.Dev.hatSwitchScheme1,
+                     
+                     Keys.Dev.leftStickScheme2,
+                     Keys.Dev.rightStickScheme2,
+                     Keys.Dev.hatSwitchScheme2 ]
+
+        for key in keys { defaults.removeKey(key) }
+        */
+    }
 }
-*/
+
+extension Preferences {
+
+    func saveDevicesUserDefaults() {
+    
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+                        
+        defaults.save()
+    }
+    
+    func applyDevicesUserDefaults() {
+           
+        log(level: 2)
+    }
+}
 
 //
 // User defaults (Roms)
 //
 
-extension UserDefaults {
+//
+// User defaults (Chipset)
+//
+
+extension PropertiesProxy {
     
-    static func romUrl(name: String) -> URL? {
+    func registerChipsetUserDefaults() {
+    
+    }
+
+    func removeChipsetUserDefaults() {
+
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+                     
+        defaults.remove(.AGNUS_REVISION)
+        defaults.remove(.DENISE_REVISION)
+        defaults.remove(.CIA_REVISION)
+        defaults.remove(.RTC_MODEL)
+    }
+}
+
+extension Configuration {
+
+    func applyChipsetUserDefaults() {
         
-        let folder = try? URL.appSupportFolder("Roms")
-        return folder?.appendingPathComponent(name)        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        amiga.suspend()
+
+        agnusRev = defaults.get(.AGNUS_REVISION)
+        deniseRev = defaults.get(.DENISE_REVISION)
+        ciaRev = defaults.get(.CIA_REVISION)
+        rtClock = defaults.get(.RTC_MODEL)
+        
+        amiga.resume()
+    }
+
+    func saveChipsetUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        amiga.suspend()
+
+        defaults.set(.AGNUS_REVISION, value: agnusRev)
+        defaults.set(.DENISE_REVISION, value: deniseRev)
+        defaults.set(.CIA_REVISION, value: ciaRev)
+        defaults.set(.RTC_MODEL, value: rtClock)
+        defaults.save()
+
+        amiga.resume()
+    }
+}
+
+//
+// User defaults (Memory)
+//
+
+extension PropertiesProxy {
+    
+    func registerMemoryUserDefaults() {
+    
     }
     
-    static var romUrl: URL? { return romUrl(name: "rom.bin") }
-    static var extUrl: URL? { return romUrl(name: "ext.bin") }
+    func removeMemoryUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        defaults.remove(.CHIP_RAM)
+        defaults.remove(.SLOW_RAM)
+        defaults.remove(.FAST_RAM)
+        defaults.remove(.RAM_INIT_PATTERN)
+        defaults.remove(.BANKMAP)
+        defaults.remove(.UNMAPPING_TYPE)
+        defaults.remove(.SLOW_RAM_DELAY)
+        defaults.remove(.SLOW_RAM_MIRROR)
+    }
+}
+
+extension Configuration {
+
+    func saveMemoryUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        amiga.suspend()
+        
+        defaults.set(.CHIP_RAM, value: chipRam)
+        defaults.set(.SLOW_RAM, value: slowRam)
+        defaults.set(.FAST_RAM, value: fastRam)
+        defaults.set(.RAM_INIT_PATTERN, value: ramInitPattern)
+        defaults.set(.BANKMAP, value: bankMap)
+        defaults.set(.UNMAPPING_TYPE, value: unmappingType)
+        defaults.set(.SLOW_RAM_DELAY, value: slowRamDelay)
+        defaults.set(.SLOW_RAM_MIRROR, value: slowRamMirror)
+        defaults.save()
+        
+        amiga.resume()
+    }
+    
+    func applyMemoryUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        amiga.suspend()
+
+        chipRam = defaults.get(.CHIP_RAM)
+        slowRam = defaults.get(.SLOW_RAM)
+        fastRam = defaults.get(.FAST_RAM)
+        ramInitPattern = defaults.get(.RAM_INIT_PATTERN)
+        bankMap = defaults.get(.BANKMAP)
+        unmappingType = defaults.get(.UNMAPPING_TYPE)
+        slowRamDelay = defaults.get(.SLOW_RAM_DELAY) != 0
+        slowRamMirror = defaults.get(.SLOW_RAM_MIRROR) != 0
+        
+        amiga.resume()
+    }
 }
 
 //
@@ -206,17 +758,306 @@ extension Keys {
     }
 }
 
-extension UserDefaults {
+extension PropertiesProxy {
+    
+    func registerPeripheralsUserDefaults() {
 
-    static func mediaUrl(name: String) -> URL? {
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
         
-        let folder = try? URL.appSupportFolder("Media")
-        return folder?.appendingPathComponent(name)
+        // Port assignments
+        defaults.register(Keys.Per.gameDevice1, 0)
+        defaults.register(Keys.Per.gameDevice2, -1)
     }
 
-    static func hdnUrl(_ nr: Int) -> URL? {
+    func removePeripheralsUserDefaults() {
         
-        return mediaUrl(name: "hd\(nr).hdf")
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        for i in 0 ... 3 {
+            
+            defaults.remove(.DRIVE_CONNECT, nr: i)
+            defaults.remove(.DRIVE_TYPE, nr: i)
+            defaults.remove(.HDC_CONNECT, nr: i)
+            defaults.remove(.HDR_TYPE, nr: i)
+        }
+        
+        defaults.remove(.SERIAL_DEVICE)
+        defaults.remove(.SRV_PORT)
+        defaults.removeKey(Keys.Per.gameDevice1)
+        defaults.removeKey(Keys.Per.gameDevice2)
+    }
+}
+ 
+extension Configuration {
+
+    func savePeripheralsUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        amiga.suspend()
+        
+        defaults.set(.DRIVE_CONNECT, nr: 0, value: df0Connected)
+        defaults.set(.DRIVE_CONNECT, nr: 1, value: df1Connected)
+        defaults.set(.DRIVE_CONNECT, nr: 2, value: df2Connected)
+        defaults.set(.DRIVE_CONNECT, nr: 3, value: df3Connected)
+        
+        defaults.set(.DRIVE_TYPE, nr: 0, value: df0Type)
+        defaults.set(.DRIVE_TYPE, nr: 1, value: df1Type)
+        defaults.set(.DRIVE_TYPE, nr: 2, value: df2Type)
+        defaults.set(.DRIVE_TYPE, nr: 3, value: df3Type)
+
+        defaults.set(.HDC_CONNECT, nr: 0, value: hd0Connected)
+        defaults.set(.HDC_CONNECT, nr: 1, value: hd1Connected)
+        defaults.set(.HDC_CONNECT, nr: 2, value: hd2Connected)
+        defaults.set(.HDC_CONNECT, nr: 3, value: hd3Connected)
+
+        defaults.set(.HDR_TYPE, nr: 0, value: hd0Type)
+        defaults.set(.HDR_TYPE, nr: 1, value: hd1Type)
+        defaults.set(.HDR_TYPE, nr: 2, value: hd2Type)
+        defaults.set(.HDR_TYPE, nr: 3, value: hd3Type)
+
+        defaults.set(.SERIAL_DEVICE, value: serialDevice)
+        defaults.set(.SRV_PORT, value: serialDevicePort)
+
+        defaults.set(Keys.Per.gameDevice1, gameDevice1)
+        defaults.set(Keys.Per.gameDevice2, gameDevice2)
+        
+        defaults.save()
+        
+        amiga.resume()
+    }
+
+    func applyPeripheralsUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        amiga.suspend()
+
+        df0Connected = defaults.get(.DRIVE_CONNECT, nr: 0) != 0
+        df1Connected = defaults.get(.DRIVE_CONNECT, nr: 1) != 0
+        df2Connected = defaults.get(.DRIVE_CONNECT, nr: 2) != 0
+        df3Connected = defaults.get(.DRIVE_CONNECT, nr: 3) != 0
+
+        df0Type = defaults.get(.DRIVE_TYPE, nr: 0)
+        df1Type = defaults.get(.DRIVE_TYPE, nr: 1)
+        df2Type = defaults.get(.DRIVE_TYPE, nr: 2)
+        df3Type = defaults.get(.DRIVE_TYPE, nr: 3)
+
+        hd0Connected = defaults.get(.HDC_CONNECT, nr: 0) != 0
+        hd1Connected = defaults.get(.HDC_CONNECT, nr: 1) != 0
+        hd2Connected = defaults.get(.HDC_CONNECT, nr: 2) != 0
+        hd3Connected = defaults.get(.HDC_CONNECT, nr: 3) != 0
+
+        hd0Type = defaults.get(.HDR_TYPE, nr: 0)
+        hd1Type = defaults.get(.HDR_TYPE, nr: 1)
+        hd2Type = defaults.get(.HDR_TYPE, nr: 2)
+        hd3Type = defaults.get(.HDR_TYPE, nr: 3)
+
+        serialDevice = defaults.get(.SERIAL_DEVICE)
+        serialDevicePort = defaults.get(.SRV_PORT, nr: ServerType.SER.rawValue)
+
+        gameDevice1 = defaults.getInt(Keys.Per.gameDevice1)
+        gameDevice2 = defaults.getInt(Keys.Per.gameDevice2)
+
+        amiga.resume()
+    }
+}
+
+//
+// User defaults (Compatibility)
+//
+
+extension PropertiesProxy {
+    
+    func registerCompatibilityUserDefaults() {
+
+        log(level: 2)
+    }
+    
+    func removeCompatibilityUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        defaults.remove(.BLITTER_ACCURACY)
+        defaults.remove(.TODBUG)
+        defaults.remove(.ECLOCK_SYNCING)
+        defaults.remove(.CLX_SPR_SPR)
+        defaults.remove(.CLX_SPR_PLF)
+        defaults.remove(.CLX_PLF_PLF)
+        defaults.remove(.DRIVE_SPEED)
+        defaults.remove(.EMULATE_MECHANICS)
+        defaults.remove(.LOCK_DSKSYNC)
+        defaults.remove(.AUTO_DSKSYNC)
+        defaults.remove(.ACCURATE_KEYBOARD)
+    }
+}
+
+extension Configuration {
+
+    func saveCompatibilityUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        amiga.suspend()
+        
+        defaults.set(.BLITTER_ACCURACY, value: blitterAccuracy)
+        defaults.set(.TODBUG, value: todBug)
+        defaults.set(.ECLOCK_SYNCING, value: eClockSyncing)
+        defaults.set(.CLX_SPR_SPR, value: clxSprSpr)
+        defaults.set(.CLX_SPR_PLF, value: clxSprPlf)
+        defaults.set(.CLX_PLF_PLF, value: clxPlfPlf)
+        defaults.set(.DRIVE_SPEED, value: driveSpeed)
+        defaults.set(.EMULATE_MECHANICS, value: mechanicalDelays)
+        defaults.set(.LOCK_DSKSYNC, value: lockDskSync)
+        defaults.set(.AUTO_DSKSYNC, value: autoDskSync)
+        defaults.set(.ACCURATE_KEYBOARD, value: accurateKeyboard)
+        defaults.save()
+        
+        amiga.resume()
+    }
+
+    func applyCompatibilityUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        amiga.suspend()
+        
+        blitterAccuracy = defaults.get(.BLITTER_ACCURACY)
+        todBug = defaults.get(.TODBUG) != 0
+        eClockSyncing = defaults.get(.ECLOCK_SYNCING) != 0
+        clxSprSpr = defaults.get(.CLX_SPR_SPR) != 0
+        clxSprPlf = defaults.get(.CLX_SPR_PLF) != 0
+        clxPlfPlf = defaults.get(.CLX_PLF_PLF) != 0
+        driveSpeed = defaults.get(.DRIVE_SPEED)
+        mechanicalDelays = defaults.get(.EMULATE_MECHANICS, nr: 0) != 0
+        lockDskSync = defaults.get(.LOCK_DSKSYNC) != 0
+        autoDskSync = defaults.get(.AUTO_DSKSYNC) != 0
+        accurateKeyboard = defaults.get(.ACCURATE_KEYBOARD) != 0
+        
+        amiga.resume()
+    }
+}
+
+//
+// User defaults (Audio)
+//
+
+extension PropertiesProxy {
+    
+    func registerAudioUserDefaults() {
+
+        log(level: 2)
+    }
+    
+    func removeAudioUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        for i in 0 ... 3 {
+            
+            defaults.remove(.AUDVOL, nr: i)
+            defaults.remove(.AUDPAN, nr: i)
+            defaults.remove(.DRIVE_PAN, nr: i)
+            defaults.remove(.HDR_PAN, nr: i)
+        }
+        
+        defaults.remove(.AUDVOLL)
+        defaults.remove(.AUDVOLR)
+        defaults.remove(.SAMPLING_METHOD)
+        defaults.remove(.STEP_VOLUME)
+        defaults.remove(.POLL_VOLUME)
+        defaults.remove(.INSERT_VOLUME)
+        defaults.remove(.EJECT_VOLUME)
+        defaults.remove(.FILTER_TYPE)
+        defaults.remove(.FILTER_ALWAYS_ON)
+    }
+}
+
+extension Configuration {
+    
+    func saveAudioUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        amiga.suspend()
+        
+        defaults.set(.AUDVOL, nr: 0, value: vol0)
+        defaults.set(.AUDVOL, nr: 1, value: vol1)
+        defaults.set(.AUDVOL, nr: 2, value: vol2)
+        defaults.set(.AUDVOL, nr: 3, value: vol3)
+        defaults.set(.AUDPAN, nr: 0, value: pan0)
+        defaults.set(.AUDPAN, nr: 1, value: pan1)
+        defaults.set(.AUDPAN, nr: 2, value: pan2)
+        defaults.set(.AUDPAN, nr: 3, value: pan3)
+        defaults.set(.AUDVOLL, value: volL)
+        defaults.set(.AUDVOLR, value: volR)
+        defaults.set(.SAMPLING_METHOD, value: samplingMethod)
+        defaults.set(.DRIVE_PAN, nr: 0, value: df0Pan)
+        defaults.set(.DRIVE_PAN, nr: 1, value: df1Pan)
+        defaults.set(.DRIVE_PAN, nr: 2, value: df2Pan)
+        defaults.set(.DRIVE_PAN, nr: 3, value: df3Pan)
+        defaults.set(.HDR_PAN, nr: 0, value: hd0Pan)
+        defaults.set(.HDR_PAN, nr: 1, value: hd1Pan)
+        defaults.set(.HDR_PAN, nr: 2, value: hd2Pan)
+        defaults.set(.HDR_PAN, nr: 3, value: hd3Pan)
+        defaults.set(.STEP_VOLUME, value: stepVolume)
+        defaults.set(.POLL_VOLUME, value: pollVolume)
+        defaults.set(.INSERT_VOLUME, value: insertVolume)
+        defaults.set(.EJECT_VOLUME, value: ejectVolume)
+        defaults.set(.FILTER_TYPE, value: filterType)
+        defaults.set(.FILTER_ALWAYS_ON, value: filterAlwaysOn)
+        defaults.save()
+        
+        amiga.resume()
+    }
+    
+    func applyAudioUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        amiga.suspend()
+
+        vol0 = defaults.get(.AUDVOL, nr: 0)
+        vol1 = defaults.get(.AUDVOL, nr: 1)
+        vol2 = defaults.get(.AUDVOL, nr: 2)
+        vol3 = defaults.get(.AUDVOL, nr: 3)
+
+        pan0 = defaults.get(.AUDPAN, nr: 0)
+        pan1 = defaults.get(.AUDPAN, nr: 1)
+        pan2 = defaults.get(.AUDPAN, nr: 2)
+        pan3 = defaults.get(.AUDPAN, nr: 3)
+
+        df0Pan = defaults.get(.DRIVE_PAN, nr: 0)
+        df1Pan = defaults.get(.DRIVE_PAN, nr: 1)
+        df2Pan = defaults.get(.DRIVE_PAN, nr: 2)
+        df3Pan = defaults.get(.DRIVE_PAN, nr: 3)
+
+        hd0Pan = defaults.get(.HDR_PAN, nr: 0)
+        hd1Pan = defaults.get(.HDR_PAN, nr: 1)
+        hd2Pan = defaults.get(.HDR_PAN, nr: 2)
+        hd3Pan = defaults.get(.HDR_PAN, nr: 3)
+
+        volL = defaults.get(.AUDVOLL)
+        volR = defaults.get(.AUDVOLR)
+        samplingMethod = defaults.get(.SAMPLING_METHOD)
+        stepVolume = defaults.get(.STEP_VOLUME, nr: 0)
+        pollVolume = defaults.get(.POLL_VOLUME, nr: 0)
+        insertVolume = defaults.get(.INSERT_VOLUME, nr: 0)
+        ejectVolume = defaults.get(.EJECT_VOLUME, nr: 0)
+        filterType = defaults.get(.FILTER_TYPE)
+        filterAlwaysOn = defaults.get(.FILTER_ALWAYS_ON) != 0
+
+        amiga.resume()
     }
 }
 
@@ -227,13 +1068,7 @@ extension UserDefaults {
 extension Keys {
     
     struct Vid {
-        
-        // Colors
-        static let palette            = "VAMIGA_VID_Palette"
-        static let brightness         = "VAMIGA_VID_Brightness"
-        static let contrast           = "VAMIGA_VID_Contrast"
-        static let saturation         = "VAMIGA_VID_Saturation"
-        
+
         // Geometry
         static let hAutoCenter        = "VAMIGA_VID_HAutoCenter"
         static let vAutoCenter        = "VAMIGA_VID_VAutoCenter"
@@ -242,11 +1077,9 @@ extension Keys {
         static let hZoom              = "VAMIGA_VID_HZoom"
         static let vZoom              = "VAMIGA_VID_VZoom"
         
-        // Upscalers
+        // Monitor
         static let enhancer           = "VVAMIG_VID_Enhancer"
         static let upscaler           = "VAMIGA_VID_Upscaler"
-        
-        // Shader options
         static let blur               = "VAMIGA_VID_Blur"
         static let blurRadius         = "VAMIGA_VID_BlurRadius"
         static let bloom              = "VAMIGA_VID_Bloom"
@@ -266,205 +1099,102 @@ extension Keys {
     }
 }
 
-struct VideoDefaults {
+extension PropertiesProxy {
     
-    // Colors
-    let palette: Palette
-    let brightness: Int
-    let contrast: Int
-    let saturation: Int
-        
-    // Upscalers
-    let enhancer: Int
-    let upscaler: Int
-    
-    // Shader options
-    let blur: Int32
-    let blurRadius: Float
-    let bloom: Int
-    let bloomRadius: Float
-    let bloomBrightness: Float
-    let bloomWeight: Float
-    let flicker: Int32
-    let flickerWeight: Float
-    let dotMask: Int
-    let dotMaskBrightness: Float
-    let scanlines: Int
-    let scanlineBrightness: Float
-    let scanlineWeight: Float
-    let disalignment: Int32
-    let disalignmentH: Float
-    let disalignmentV: Float
-    
-    //
-    // Schemes
-    //
-    
-    // TFT monitor
-    static let tft = VideoDefaults(
-        
-        palette: Palette.COLOR,
-        brightness: 50,
-        contrast: 100,
-        saturation: 50,
-        
-        enhancer: 0,
-        upscaler: 0,
-        
-        blur: 1,
-        blurRadius: 0,
-        bloom: 0,
-        bloomRadius: 1.0,
-        bloomBrightness: 0.4,
-        bloomWeight: 1.21,
-        flicker: 1,
-        flickerWeight: 0.25,
-        dotMask: 0,
-        dotMaskBrightness: 0.7,
-        scanlines: 0,
-        scanlineBrightness: 0.55,
-        scanlineWeight: 0.11,
-        disalignment: 0,
-        disalignmentH: 0.001,
-        disalignmentV: 0.001
-    )
-    
-    // CRT monitor
-    static let crt = VideoDefaults(
-        
-        palette: Palette.COLOR,
-        brightness: 50,
-        contrast: 100,
-        saturation: 50,
-        
-        enhancer: 0,
-        upscaler: 0,
-        
-        blur: 1,
-        blurRadius: 1.5,
-        bloom: 1,
-        bloomRadius: 1.0,
-        bloomBrightness: 0.4,
-        bloomWeight: 1.21,
-        flicker: 1,
-        flickerWeight: 0.25,
-        dotMask: 1,
-        dotMaskBrightness: 0.5,
-        scanlines: 2,
-        scanlineBrightness: 0.55,
-        scanlineWeight: 0.11,
-        disalignment: 0,
-        disalignmentH: 0.001,
-        disalignmentV: 0.001
-    )
-}
+    func registerVideoUserDefaults() {
 
-struct GeometryDefaults {
+        log(level: 2)
         
-    let hAutoCenter: Bool
-    let vAutoCenter: Bool
-    let hCenter: Float
-    let vCenter: Float
-    let hZoom: Float
-    let vZoom: Float
-    
-    static let narrow = GeometryDefaults(
-        
-        hAutoCenter: true,
-        vAutoCenter: true,
-        hCenter: 0.6,
-        vCenter: 0.47,
-        hZoom: 1.0,
-        vZoom: 0.27
-    )
-
-    static let wide = GeometryDefaults(
-        
-        hAutoCenter: true,
-        vAutoCenter: true,
-        hCenter: 0.409,
-        vCenter: 0.143,
-        hZoom: 0.747,
-        vZoom: 0.032
-    )
-
-    static let extreme = GeometryDefaults(
-        
-        hAutoCenter: false,
-        vAutoCenter: false,
-        hCenter: 0,
-        vCenter: 0,
-        hZoom: 0,
-        vZoom: 0
-    )
-}
-
-extension UserDefaults {
-    
-    static func registerVideoUserDefaults() {
-        
-        let defaults = VideoDefaults.tft
-        let dictionary: [String: Any] = [
-            
-            Keys.Vid.palette: Int(defaults.palette.rawValue),
-            Keys.Vid.brightness: defaults.brightness,
-            Keys.Vid.contrast: defaults.contrast,
-            Keys.Vid.saturation: defaults.saturation,
-
-            Keys.Vid.enhancer: defaults.enhancer,
-            Keys.Vid.upscaler: defaults.upscaler,
-            
-            Keys.Vid.blur: defaults.blur,
-            Keys.Vid.blurRadius: defaults.blurRadius,
-            Keys.Vid.bloom: defaults.bloom,
-            Keys.Vid.bloomRadius: defaults.bloomRadius,
-            Keys.Vid.bloomBrightness: defaults.bloomBrightness,
-            Keys.Vid.bloomWeight: defaults.bloomWeight,
-            Keys.Vid.flicker: defaults.flicker,
-            Keys.Vid.flickerWeight: defaults.flickerWeight,
-            Keys.Vid.dotMask: defaults.dotMask,
-            Keys.Vid.dotMaskBrightness: defaults.dotMaskBrightness,
-            Keys.Vid.scanlines: defaults.scanlines,
-            Keys.Vid.scanlineBrightness: defaults.scanlineBrightness,
-            Keys.Vid.scanlineWeight: defaults.scanlineWeight,
-            Keys.Vid.disalignment: defaults.disalignment,
-            Keys.Vid.disalignmentH: defaults.disalignmentH,
-            Keys.Vid.disalignmentV: defaults.disalignmentV
-        ]
-        
-        let userDefaults = UserDefaults.standard
-        userDefaults.register(defaults: dictionary)
+        registerColorUserDefaults()
+        registerGeometryUserDefaults()
+        registerShaderUserDefaults()
     }
 
-    static func registerGeometryUserDefaults() {
+    func registerColorUserDefaults() {
         
-        let defaults = GeometryDefaults.wide
-        let dictionary: [String: Any] = [
-            
-            Keys.Vid.hAutoCenter: defaults.hAutoCenter,
-            Keys.Vid.vAutoCenter: defaults.vAutoCenter,
-            Keys.Vid.hCenter: defaults.hCenter,
-            Keys.Vid.vCenter: defaults.vCenter,
-            Keys.Vid.hZoom: defaults.hZoom,
-            Keys.Vid.vZoom: defaults.vZoom
-        ]
-        
-        let userDefaults = UserDefaults.standard
-        userDefaults.register(defaults: dictionary)
+        // No GUI related keys in this category
+    }
+
+    func registerGeometryUserDefaults() {
+
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        defaults.register(Keys.Vid.hAutoCenter, true)
+        defaults.register(Keys.Vid.vAutoCenter, true)
+        defaults.register(Keys.Vid.hCenter, 0.6)
+        defaults.register(Keys.Vid.vCenter, 0.47)
+        defaults.register(Keys.Vid.hZoom, 1.0)
+        defaults.register(Keys.Vid.vZoom, 0.27)
     }
     
-    static func resetVideoUserDefaults() {
-        
-        let defaults = UserDefaults.standard
+    func registerShaderUserDefaults() {
 
-        let keys = [ Keys.Vid.palette,
-                     Keys.Vid.brightness,
-                     Keys.Vid.contrast,
-                     Keys.Vid.saturation,
-                     
-                     Keys.Vid.enhancer,
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        defaults.register(Keys.Vid.enhancer, 0)
+        defaults.register(Keys.Vid.upscaler, 0)
+        defaults.register(Keys.Vid.blur, 1)
+        defaults.register(Keys.Vid.blurRadius, 0)
+        defaults.register(Keys.Vid.bloom, 0)
+        defaults.register(Keys.Vid.bloomRadius, 1.0)
+        defaults.register(Keys.Vid.bloomBrightness, 0.4)
+        defaults.register(Keys.Vid.bloomWeight, 1.21)
+        defaults.register(Keys.Vid.flicker, 1)
+        defaults.register(Keys.Vid.flickerWeight, 0.25)
+        defaults.register(Keys.Vid.dotMask, 0)
+        defaults.register(Keys.Vid.dotMaskBrightness, 0.55)
+        defaults.register(Keys.Vid.scanlines, 0)
+        defaults.register(Keys.Vid.scanlineBrightness, 0.55)
+        defaults.register(Keys.Vid.scanlineWeight, 0.11)
+        defaults.register(Keys.Vid.disalignment, 0)
+        defaults.register(Keys.Vid.disalignmentH, 0.001)
+        defaults.register(Keys.Vid.disalignmentV, 0.001)
+    }
+    
+    func removeVideoUserDefaults() {
+
+        log(level: 2)
+        
+        removeColorUserDefaults()
+        removeGeometryUserDefaults()
+        removeShaderUserDefaults()
+    }
+    
+    func removeColorUserDefaults() {
+
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        defaults.remove(.PALETTE)
+        defaults.remove(.BRIGHTNESS)
+        defaults.remove(.CONTRAST)
+        defaults.remove(.SATURATION)
+    }
+
+    func removeGeometryUserDefaults() {
+
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        let keys = [ Keys.Vid.hAutoCenter,
+                     Keys.Vid.vAutoCenter,
+                     Keys.Vid.hCenter,
+                     Keys.Vid.vCenter,
+                     Keys.Vid.hZoom,
+                     Keys.Vid.vZoom ]
+
+        for key in keys { defaults.removeKey(key) }
+    }
+    
+    func removeShaderUserDefaults() {
+
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        let keys = [ Keys.Vid.enhancer,
                      Keys.Vid.upscaler,
-
                      Keys.Vid.blur,
                      Keys.Vid.blurRadius,
                      Keys.Vid.bloom,
@@ -480,24 +1210,157 @@ extension UserDefaults {
                      Keys.Vid.scanlineWeight,
                      Keys.Vid.disalignment,
                      Keys.Vid.disalignmentH,
-                     Keys.Vid.disalignmentV
-        ]
+                     Keys.Vid.disalignmentV ]
+        
+        for key in keys { defaults.removeKey(key) }
+    }
+}
 
-        for key in keys { defaults.removeObject(forKey: key) }
+extension Configuration {
+
+    func saveVideoUserDefaults() {
+        
+        log(level: 2)
+        
+        saveColorUserDefaults()
+        saveGeometryUserDefaults()
+        saveShaderUserDefaults()
+    }
+         
+    func saveColorUserDefaults() {
+
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        amiga.suspend()
+        
+        defaults.set(.PALETTE, value: palette)
+        defaults.set(.BRIGHTNESS, value: brightness)
+        defaults.set(.CONTRAST, value: contrast)
+        defaults.set(.SATURATION, value: saturation)
+        
+        defaults.save()
+        
+        amiga.resume()
     }
     
-    static func resetGeometryUserDefaults() {
+    func saveGeometryUserDefaults() {
+
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
         
-        let defaults = UserDefaults.standard
+        amiga.suspend()
+                
+        defaults.set(Keys.Vid.hAutoCenter, hAutoCenter)
+        defaults.set(Keys.Vid.vAutoCenter, vAutoCenter)
+        defaults.set(Keys.Vid.hCenter, hCenter)
+        defaults.set(Keys.Vid.vCenter, vCenter)
+        defaults.set(Keys.Vid.hZoom, hZoom)
+        defaults.set(Keys.Vid.vZoom, vZoom)
+        
+        defaults.save()
+        
+        amiga.resume()
+    }
+  
+    func saveShaderUserDefaults() {
 
-        let keys = [ Keys.Vid.hAutoCenter,
-                     Keys.Vid.vAutoCenter,
-                     Keys.Vid.hCenter,
-                     Keys.Vid.vCenter,
-                     Keys.Vid.hZoom,
-                     Keys.Vid.vZoom
-        ]
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        amiga.suspend()
+                        
+        defaults.set(Keys.Vid.enhancer, enhancer)
+        defaults.set(Keys.Vid.upscaler, upscaler)
+        defaults.set(Keys.Vid.blur, blur)
+        defaults.set(Keys.Vid.blurRadius, blurRadius)
+        defaults.set(Keys.Vid.bloom, bloom)
+        defaults.set(Keys.Vid.bloomRadius, bloomRadius)
+        defaults.set(Keys.Vid.bloomBrightness, bloomBrightness)
+        defaults.set(Keys.Vid.bloomWeight, bloomWeight)
+        defaults.set(Keys.Vid.flicker, flicker)
+        defaults.set(Keys.Vid.flickerWeight, flickerWeight)
+        defaults.set(Keys.Vid.dotMask, dotMask)
+        defaults.set(Keys.Vid.dotMaskBrightness, dotMaskBrightness)
+        defaults.set(Keys.Vid.scanlines, scanlines)
+        defaults.set(Keys.Vid.scanlineBrightness, scanlineBrightness)
+        defaults.set(Keys.Vid.scanlineWeight, scanlineWeight)
+        defaults.set(Keys.Vid.disalignment, disalignment)
+        defaults.set(Keys.Vid.disalignmentH, disalignmentH)
+        defaults.set(Keys.Vid.disalignmentV, disalignmentV)
+        
+        defaults.save()
+        
+        amiga.resume()
+    }
+    
+    func applyVideoUserDefaults() {
+        
+        log(level: 2)
+        
+        applyColorUserDefaults()
+        applyGeometryUserDefaults()
+        applyShaderUserDefaults()
+    }
+    
+    func applyColorUserDefaults() {
+    
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        amiga.suspend()
+        
+        palette = defaults.get(.PALETTE)
+        brightness = defaults.get(.BRIGHTNESS)
+        contrast = defaults.get(.CONTRAST)
+        saturation = defaults.get(.SATURATION)
+        
+        amiga.resume()
+    }
 
-        for key in keys { defaults.removeObject(forKey: key) }
+    func applyGeometryUserDefaults() {
+    
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        amiga.suspend()
+          
+        hAutoCenter = defaults.getBool(Keys.Vid.hAutoCenter)
+        vAutoCenter = defaults.getBool(Keys.Vid.vAutoCenter)
+        hCenter = defaults.getFloat(Keys.Vid.hCenter)
+        hCenter = defaults.getFloat(Keys.Vid.vCenter)
+        hZoom = defaults.getFloat(Keys.Vid.hZoom)
+        vZoom = defaults.getFloat(Keys.Vid.vZoom)
+                
+        amiga.resume()
+    }
+
+    func applyShaderUserDefaults() {
+    
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+        
+        amiga.suspend()
+                        
+        enhancer = defaults.getInt(Keys.Vid.enhancer)
+        upscaler = defaults.getInt(Keys.Vid.upscaler)
+        blur = defaults.getInt32(Keys.Vid.blur)
+        blurRadius = defaults.getFloat(Keys.Vid.blurRadius)
+        bloom = defaults.getInt(Keys.Vid.bloom)
+        bloomRadius = defaults.getFloat(Keys.Vid.bloomRadius)
+        bloomBrightness = defaults.getFloat(Keys.Vid.bloomBrightness)
+        bloomWeight = defaults.getFloat(Keys.Vid.bloomWeight)
+        flicker = defaults.getInt32(Keys.Vid.flicker)
+        flickerWeight = defaults.getFloat(Keys.Vid.flickerWeight)
+        dotMask = defaults.getInt(Keys.Vid.dotMask)
+        dotMaskBrightness = defaults.getFloat(Keys.Vid.dotMaskBrightness)
+        scanlines = defaults.getInt(Keys.Vid.scanlines)
+        scanlineBrightness = defaults.getFloat(Keys.Vid.scanlineBrightness)
+        scanlineWeight = defaults.getFloat(Keys.Vid.scanlineWeight)
+        disalignment = defaults.getInt32(Keys.Vid.disalignment)
+        disalignmentH = defaults.getFloat(Keys.Vid.disalignmentH)
+        disalignmentV = defaults.getFloat(Keys.Vid.disalignmentV)
+        
+        amiga.resume()
     }
 }

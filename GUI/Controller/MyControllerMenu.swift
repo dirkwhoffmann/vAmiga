@@ -165,8 +165,8 @@ extension MyController: NSMenuItemValidation {
         // UserDefaults.resetPeripheralsUserDefaults()
         // UserDefaults.resetCompatibilityUserDefaults()
         // UserDefaults.resetAudioUserDefaults()
-        UserDefaults.resetVideoUserDefaults()
-        UserDefaults.resetGeometryUserDefaults()
+        // UserDefaults.resetVideoUserDefaults()
+        // UserDefaults.resetGeometryUserDefaults()
         
         amiga.suspend()
         // config.loadRomUserDefaults()
@@ -174,8 +174,8 @@ extension MyController: NSMenuItemValidation {
         // config.loadPeripheralsUserDefaults()
         // config.loadCompatibilityUserDefaults()
         // config.loadAudioUserDefaults()
-        config.loadVideoUserDefaults()
-        config.loadGeometryUserDefaults()
+        // config.loadVideoUserDefaults()
+        // config.loadGeometryUserDefaults()
         amiga.resume()
     }
     
@@ -740,7 +740,7 @@ extension MyController: NSMenuItemValidation {
             amiga.hd(sender)!.disableWriteThrough()
             sender.state = .off
 
-            try? FileManager.default.removeItem(at: UserDefaults.hdnUrl(sender.tag)!)
+            try? FileManager.default.removeItem(at: UserDefaults.hdUrl(sender.tag)!)
             
         } else {
             

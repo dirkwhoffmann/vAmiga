@@ -114,7 +114,7 @@ extension ConfigurationController {
         let defaults = AmigaProxy.defaults!
                 
         // Revert to standard settings
-        config.removeCompatibilityUserDefaults()
+        AmigaProxy.defaults.removeCompatibilityUserDefaults()
                 
         // Override some options
         switch sender.selectedTag() {
@@ -145,7 +145,7 @@ extension ConfigurationController {
         }
         
         // Update the configutation
-        config.updateCompatibilityUserDefaults()
+        config.applyCompatibilityUserDefaults()
         refresh()
     }
     

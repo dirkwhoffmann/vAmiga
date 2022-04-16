@@ -214,7 +214,7 @@ extension PreferencesController {
         assert(sender.selectedTag() == 0)
                         
         // Revert to standard settings
-        pref.removeControlsUserDefaults()
+        AmigaProxy.defaults.removeControlsUserDefaults()
                         
         // Apply the new settings
         pref.applyControlsUserDefaults()

@@ -169,7 +169,7 @@ extension ConfigurationController {
         let defaults = AmigaProxy.defaults!
         
         // Revert to standard settings
-        config.removeChipsetUserDefaults() 
+        AmigaProxy.defaults.removeChipsetUserDefaults() 
         
         // Modify some settings
         switch sender.selectedTag() {
@@ -197,7 +197,7 @@ extension ConfigurationController {
         }
         
         // Update the configuration
-        config.updateChipsetUserDefaults()
+        config.applyChipsetUserDefaults()
 
         refresh()
     }

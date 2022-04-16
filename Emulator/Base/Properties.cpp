@@ -84,7 +84,7 @@ Properties::Properties()
     setFallback(OPT_INSERT_VOLUME, { 0, 1, 2, 3 }, 128);
     setFallback(OPT_EJECT_VOLUME, { 0, 1, 2, 3 }, 128);
     setFallback(OPT_HDC_CONNECT, 0, true);
-    setFallback(OPT_HDC_CONNECT, false);
+    setFallback(OPT_HDC_CONNECT, { 1, 2, 3 }, false);
     setFallback(OPT_HDR_TYPE, { 0, 1, 2, 3 }, HDR_GENERIC);
     setFallback(OPT_HDR_PAN, { 0, 1 }, 100);
     setFallback(OPT_HDR_PAN, { 2, 3 }, -100);
@@ -283,6 +283,7 @@ Properties::getString(const string &key)
     if (values.contains(key)) return values[key];
     if (fallbacks.contains(key)) return fallbacks[key];
 
+    assert(false);
     throw VAError(ERROR_INVALID_KEY, key);
 }
 
@@ -314,6 +315,7 @@ string
 Properties::getFallback(const string &key)
 {
     if (!fallbacks.contains(key)) {
+        assert(false);
         throw VAError(ERROR_INVALID_KEY, key);
     }
     
@@ -328,6 +330,7 @@ Properties::setString(const string &key, const string &value)
         debug(DEF_DEBUG, "%s = %s\n", key.c_str(), value.c_str());
 
         if (!fallbacks.contains(key)) {
+            assert(false);
             throw VAError(ERROR_INVALID_KEY, key);
         }
         

@@ -190,19 +190,20 @@ extension MyController {
                             device: MTLCreateSystemDefaultDevice()!,
                             controller: self)
         
-        // Setup window
-        configureWindow()
-                        
         // Apply all GUI related user defaults
         pref.applyUserDefaults()
-        
+        config.applyUserDefaults()
+
+        // Setup window
+        configureWindow()
+                                
         // Tell the emulator where to find certain assets
         amiga.mem.setRomPath(UserDefaults.romUrl)
         amiga.mem.setExtPath(UserDefaults.extUrl)
-        amiga.hd0.setPath(0, path: UserDefaults.hdnUrl(0)!)
-        amiga.hd1.setPath(1, path: UserDefaults.hdnUrl(1)!)
-        amiga.hd2.setPath(2, path: UserDefaults.hdnUrl(2)!)
-        amiga.hd3.setPath(3, path: UserDefaults.hdnUrl(3)!)
+        amiga.hd0.setPath(0, path: UserDefaults.hd0Url)
+        amiga.hd1.setPath(1, path: UserDefaults.hd1Url)
+        amiga.hd2.setPath(2, path: UserDefaults.hd2Url)
+        amiga.hd3.setPath(3, path: UserDefaults.hd3Url)
         
         // Enable message processing
         registerAsListener()

@@ -61,10 +61,7 @@ var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     
     public func applicationDidFinishLaunching(_ aNotification: Notification) {
                         
-        log()
-                
-        // Register standard user defaults
-        UserDefaults.registerUserDefaults() // DEPRECATED
+        log()                
     }
     
     public func applicationWillTerminate(_ aNotification: Notification) {

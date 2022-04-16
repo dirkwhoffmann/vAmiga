@@ -146,10 +146,10 @@ extension ConfigurationController {
         amiga.suspend()
         
         // Revert to standard settings
-        config.removePeripheralsUserDefaults()
+        AmigaProxy.defaults.removePeripheralsUserDefaults()
         
         // Update the configuration
-        config.updatePeripheralsUserDefaults()
+        config.applyPeripheralsUserDefaults()
 
         amiga.resume()
         refresh()

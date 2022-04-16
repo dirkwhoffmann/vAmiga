@@ -214,10 +214,11 @@ extension PreferencesController {
         assert(sender.selectedTag() == 0)
                         
         // Revert to standard settings
-        pref.removeGeneralUserDefaults()
+        AmigaProxy.defaults.removeGeneralUserDefaults()
                         
         // Apply the new settings
         pref.applyGeneralUserDefaults()
+        
         refresh()
     }
 }

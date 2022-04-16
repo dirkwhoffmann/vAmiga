@@ -109,7 +109,7 @@ extension ConfigurationController {
         amiga.suspend()
         
         // Revert to standard settings
-        config.removeMemoryUserDefaults()
+        AmigaProxy.defaults.removeMemoryUserDefaults()
         
         // Adjust some settings
         switch sender.selectedTag() {
@@ -140,7 +140,7 @@ extension ConfigurationController {
         }
         
         // Update the configutation
-        config.updateMemoryUserDefaults()
+        config.applyMemoryUserDefaults()
 
         amiga.resume()
         refresh()

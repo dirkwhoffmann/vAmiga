@@ -110,7 +110,7 @@ HdController::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option));
+        setConfigItem(option, defaults.get(option, nr));
     }
     
     /*

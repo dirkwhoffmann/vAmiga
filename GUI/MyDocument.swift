@@ -42,7 +42,7 @@ class MyDocument: NSDocument {
         amiga = AmigaProxy()
         
         // Register GUI related user defaults
-        pref.registerUserDefaults()
+        AmigaProxy.defaults.registerUserDefaults()
         
         // Load the user default settings
         AmigaProxy.defaults.load()
