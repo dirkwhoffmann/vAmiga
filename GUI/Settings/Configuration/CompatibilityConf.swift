@@ -110,7 +110,6 @@ extension ConfigurationController {
 
     @IBAction func compPresetAction(_ sender: NSPopUpButton!) {
         
-        assert(amiga.poweredOff)
         let defaults = AmigaProxy.defaults!
                 
         // Revert to standard settings
@@ -136,7 +135,7 @@ extension ConfigurationController {
             // Accelerated
             defaults.set(.BLITTER_ACCURACY, value: 0)
             defaults.set(.DRIVE_SPEED, value: -1)
-            defaults.set(.EMULATE_MECHANICS, value: false)
+            defaults.set(.EMULATE_MECHANICS, nr: [0, 1, 2, 3], value: false)
             defaults.set(.ACCURATE_KEYBOARD, value: false)
             defaults.set(.ECLOCK_SYNCING, value: false)
             

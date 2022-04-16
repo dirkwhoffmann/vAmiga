@@ -409,7 +409,13 @@ Properties::remove(const string &key)
 {
     {   SYNCHRONIZED
         
-        if (values.contains(key)) values.erase(key);
+        if (!fallbacks.contains(key)) {
+            assert(false);
+            throw VAError(ERROR_INVALID_KEY, key);
+        }
+        if (values.contains(key)) {
+            values.erase(key);
+        }
     }
 }
 
