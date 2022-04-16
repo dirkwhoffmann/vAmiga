@@ -138,18 +138,16 @@ class Preferences {
     
     func registerUserDefaults() {
         
-        log()
         registerGeneralUserDefaults()
         registerControlsUserDefaults()
-        log()
+        registerDevicesUserDefaults()
     }
     
     func applyUserDefaults() {
 
-        log()
         applyGeneralUserDefaults()
         applyControlsUserDefaults()
-        log()
+        applyDevicesUserDefaults()
     }
     
     //
@@ -402,67 +400,51 @@ class Preferences {
         releaseMouseByShaking = defaults.getBool(Keys.Con.releaseMouseByShaking)
     }
     
-    /*
-    func loadControlsUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        
-        // Emulation keys
-        defaults.decode(&keyMaps[0], forKey: Keys.Con.mouseKeyMap)
-        defaults.decode(&keyMaps[1], forKey: Keys.Con.joyKeyMap1)
-        defaults.decode(&keyMaps[2], forKey: Keys.Con.joyKeyMap2)
-        disconnectJoyKeys = defaults.bool(forKey: Keys.Con.disconnectJoyKeys)
-        
-        // Joysticks
-        autofire = defaults.bool(forKey: Keys.Con.autofire)
-        autofireBullets = defaults.integer(forKey: Keys.Con.autofireBullets)
-        autofireFrequency = defaults.double(forKey: Keys.Con.autofireFrequency)
-        
-        // Mouse
-        retainMouseKeyComb = defaults.integer(forKey: Keys.Con.retainMouseKeyComb)
-        retainMouseWithKeys = defaults.bool(forKey: Keys.Con.retainMouseWithKeys)
-        retainMouseByClick = defaults.bool(forKey: Keys.Con.retainMouseByClick)
-        retainMouseByEntering = defaults.bool(forKey: Keys.Con.retainMouseByEntering)
-        releaseMouseKeyComb = defaults.integer(forKey: Keys.Con.releaseMouseKeyComb)
-        releaseMouseWithKeys = defaults.bool(forKey: Keys.Con.releaseMouseWithKeys)
-        releaseMouseByShaking = defaults.bool(forKey: Keys.Con.releaseMouseByShaking)
-    }
-    
-    func saveControlsUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        
-        // Emulation keys
-        defaults.encode(keyMaps[0], forKey: Keys.Con.mouseKeyMap)
-        defaults.encode(keyMaps[1], forKey: Keys.Con.joyKeyMap1)
-        defaults.encode(keyMaps[2], forKey: Keys.Con.joyKeyMap2)
-        defaults.set(disconnectJoyKeys, forKey: Keys.Con.disconnectJoyKeys)
-        
-        // Joysticks
-        defaults.set(autofire, forKey: Keys.Con.autofire)
-        defaults.set(autofireBullets, forKey: Keys.Con.autofireBullets)
-        defaults.set(autofireFrequency, forKey: Keys.Con.autofireFrequency)
-        
-        // Mouse
-        defaults.set(retainMouseKeyComb, forKey: Keys.Con.retainMouseKeyComb)
-        defaults.set(retainMouseWithKeys, forKey: Keys.Con.retainMouseWithKeys)
-        defaults.set(retainMouseByClick, forKey: Keys.Con.retainMouseByClick)
-        defaults.set(retainMouseByEntering, forKey: Keys.Con.retainMouseByEntering)
-        defaults.set(releaseMouseKeyComb, forKey: Keys.Con.releaseMouseKeyComb)
-        defaults.set(releaseMouseWithKeys, forKey: Keys.Con.releaseMouseWithKeys)
-        defaults.set(releaseMouseByShaking, forKey: Keys.Con.releaseMouseByShaking)
-    }
-    */
-    
     //
     // Devices
     //
         
-    func loadDevicesUserDefaults() {
+    func registerDevicesUserDefaults() {
         
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        // Mapping schemes
+        defaults.register(Keys.Dev.leftStickScheme1, 0)
+        defaults.register(Keys.Dev.rightStickScheme1, 0)
+        defaults.register(Keys.Dev.hatSwitchScheme1, 0)
+
+        defaults.register(Keys.Dev.leftStickScheme2, 0)
+        defaults.register(Keys.Dev.rightStickScheme2, 0)
+        defaults.register(Keys.Dev.hatSwitchScheme2, 0)
+    }
+    
+    func removeDevicesUserDefaults() {
+        
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+
+        let keys = [ Keys.Dev.leftStickScheme1,
+                     Keys.Dev.rightStickScheme1,
+                     Keys.Dev.hatSwitchScheme1,
+                     
+                     Keys.Dev.leftStickScheme2,
+                     Keys.Dev.rightStickScheme2,
+                     Keys.Dev.hatSwitchScheme2 ]
+
+        for key in keys { defaults.removeKey(key) }
     }
     
     func saveDevicesUserDefaults() {
-        
+    
+        log(level: 2)
+        let defaults = AmigaProxy.defaults!
+                        
+        defaults.save()
+    }
+    
+    func applyDevicesUserDefaults() {
+           
+        log(level: 2)
     }
 }

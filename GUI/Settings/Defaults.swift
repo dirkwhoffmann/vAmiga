@@ -56,10 +56,7 @@ extension UserDefaults {
                 
         log(level: 2)
         
-        // registerGeneralUserDefaults()
-        // registerControlsUserDefaults()
-        registerDevicesUserDefaults()
-        
+        // TODO: GET RID OF THOSE
         registerVideoUserDefaults()
         registerGeometryUserDefaults()
     }
@@ -133,129 +130,6 @@ extension Keys {
     }
 }
 
-/*
-struct ControlsDefaults {
-    
-    // Emulation keys
-    let mouseKeyMap: [MacKey: Int]
-    let joyKeyMap1: [MacKey: Int]
-    let joyKeyMap2: [MacKey: Int]
-    let disconnectJoyKeys: Bool
-    
-    // Joysticks
-    let autofire: Bool
-    let autofireBullets: Int
-    let autofireFrequency: Double
-    
-    // Mouse
-    let retainMouseKeyComb: Int
-    let retainMouseWithKeys: Bool
-    let retainMouseByClick: Bool
-    let retainMouseByEntering: Bool
-    let releaseMouseKeyComb: Int
-    let releaseMouseWithKeys: Bool
-    let releaseMouseByShaking: Bool
-    
-    //
-    // Schemes
-    //
-    
-    static let stdKeyMap1 = [
-        
-        MacKey(keyCode: kVK_LeftArrow): GamePadAction.PULL_LEFT.rawValue,
-        MacKey(keyCode: kVK_RightArrow): GamePadAction.PULL_RIGHT.rawValue,
-        MacKey(keyCode: kVK_UpArrow): GamePadAction.PULL_UP.rawValue,
-        MacKey(keyCode: kVK_DownArrow): GamePadAction.PULL_DOWN.rawValue,
-        MacKey(keyCode: kVK_Space): GamePadAction.PRESS_FIRE.rawValue
-    ]
-    static let stdKeyMap2 = [
-        
-        MacKey(keyCode: kVK_ANSI_S): GamePadAction.PULL_LEFT.rawValue,
-        MacKey(keyCode: kVK_ANSI_D): GamePadAction.PULL_RIGHT.rawValue,
-        MacKey(keyCode: kVK_ANSI_E): GamePadAction.PULL_UP.rawValue,
-        MacKey(keyCode: kVK_ANSI_X): GamePadAction.PULL_DOWN.rawValue,
-        MacKey(keyCode: kVK_ANSI_C): GamePadAction.PRESS_FIRE.rawValue
-    ]
-    
-    static let std = ControlsDefaults(
-        
-        mouseKeyMap: [:],
-        joyKeyMap1: stdKeyMap1,
-        joyKeyMap2: stdKeyMap2,
-        disconnectJoyKeys: true,
-        
-        autofire: false,
-        autofireBullets: -3,
-        autofireFrequency: 2.5,
-        
-        retainMouseKeyComb: 0,
-        retainMouseWithKeys: true,
-        retainMouseByClick: true,
-        retainMouseByEntering: false,
-        releaseMouseKeyComb: 0,
-        releaseMouseWithKeys: true,
-        releaseMouseByShaking: true
-    )
-}
-*/
-/*
-extension UserDefaults {
-    
-    static func registerControlsUserDefaults() {
-        
-        let defaults = ControlsDefaults.std
-        let dictionary: [String: Any] = [
-
-            // Emulation keys
-            Keys.Con.disconnectJoyKeys: defaults.disconnectJoyKeys,
-
-            // Joysticks
-            Keys.Con.autofire: defaults.autofire,
-            Keys.Con.autofireBullets: defaults.autofireBullets,
-            Keys.Con.autofireFrequency: defaults.autofireFrequency,
-            
-            // Mouse
-            Keys.Con.retainMouseKeyComb: defaults.retainMouseKeyComb,
-            Keys.Con.retainMouseWithKeys: defaults.retainMouseWithKeys,
-            Keys.Con.retainMouseByClick: defaults.retainMouseByClick,
-            Keys.Con.retainMouseByEntering: defaults.retainMouseByEntering,
-            Keys.Con.releaseMouseKeyComb: defaults.releaseMouseKeyComb,
-            Keys.Con.releaseMouseWithKeys: defaults.releaseMouseWithKeys,
-            Keys.Con.releaseMouseByShaking: defaults.releaseMouseByShaking
-        ]
-        
-        let userDefaults = UserDefaults.standard
-        userDefaults.register(encodableItem: defaults.joyKeyMap2, forKey: Keys.Con.joyKeyMap2)
-        userDefaults.register(defaults: dictionary)
-        userDefaults.register(encodableItem: defaults.joyKeyMap1, forKey: Keys.Con.joyKeyMap1)
-    }
-    
-    static func resetControlsUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-
-        let keys = [ Keys.Con.mouseKeyMap,
-                     Keys.Con.joyKeyMap1,
-                     Keys.Con.joyKeyMap2,
-                     Keys.Con.disconnectJoyKeys,
-                     
-                     Keys.Con.autofire,
-                     Keys.Con.autofireBullets,
-                     Keys.Con.autofireFrequency,
-                     
-                     Keys.Con.retainMouseKeyComb,
-                     Keys.Con.retainMouseWithKeys,
-                     Keys.Con.retainMouseByClick,
-                     Keys.Con.retainMouseByEntering,
-                     Keys.Con.releaseMouseKeyComb,
-                     Keys.Con.releaseMouseWithKeys,
-                     Keys.Con.releaseMouseByShaking ]
-
-        for key in keys { defaults.removeObject(forKey: key) }
-    }
-}
-*/
-
 //
 // User defaults (Devices)
 //
@@ -277,6 +151,7 @@ extension Keys {
     }
 }
 
+/*
 struct DevicesDefaults {
     
     // Mapping schemes
@@ -299,60 +174,11 @@ struct DevicesDefaults {
         hatSwitchScheme2: 0
     )
 }
-
-extension UserDefaults {
-    
-    static func registerDevicesUserDefaults() {
-        
-        let defaults = DevicesDefaults.std
-        let dictionary: [String: Any] = [
-
-            // Mapping schemes
-            Keys.Dev.leftStickScheme1: defaults.leftStickScheme1,
-            Keys.Dev.rightStickScheme1: defaults.rightStickScheme1,
-            Keys.Dev.hatSwitchScheme1: defaults.hatSwitchScheme1,
-
-            Keys.Dev.leftStickScheme2: defaults.leftStickScheme2,
-            Keys.Dev.rightStickScheme2: defaults.rightStickScheme2,
-            Keys.Dev.hatSwitchScheme2: defaults.hatSwitchScheme2
-        ]
-        
-        let userDefaults = UserDefaults.standard
-        userDefaults.register(defaults: dictionary)
-    }
-    
-    static func resetDevicesUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-
-        let keys = [ Keys.Dev.leftStickScheme1,
-                     Keys.Dev.rightStickScheme1,
-                     Keys.Dev.hatSwitchScheme1,
-                     
-                     Keys.Dev.leftStickScheme2,
-                     Keys.Dev.rightStickScheme2,
-                     Keys.Dev.hatSwitchScheme2 ]
-
-        for key in keys { defaults.removeObject(forKey: key) }
-    }
-}
+*/
 
 //
 // User defaults (Roms)
 //
-
-/*
-
-struct RomDefaults {
-    
-    let extStart: Int
-    
-    static let std = RomDefaults(
-        
-        extStart: 0xE0
-    )
-}
-*/
 
 extension UserDefaults {
     
