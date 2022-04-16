@@ -69,38 +69,86 @@ extension PropertiesProxy {
         }
     }
 
-    func register(_ key: String, _ val: String) { register(key, value: val) }
-    func register(_ key: String, _ val: Bool) { register(key, value: val ? "1" : "0") }
-    func register(_ key: String, _ val: Int) { register(key, value: "\(val)") }
-    func register(_ key: String, _ val: UInt) { register(key, value: "\(val)") }
-    func register(_ key: String, _ val: Float) { register(key, value: "\(val)") }
-    func register(_ key: String, _ val: Double) { register(key, value: "\(val)") }
-
-    func set(_ key: String, _ val: String) { setKey(key, value: val) }
-    func set(_ key: String, _ val: Bool) { setKey(key, value: val ? "1" : "0") }
-    func set(_ key: String, _ val: Int) { setKey(key, value: "\(val)") }
-    func set(_ key: String, _ val: UInt) { setKey(key, value: "\(val)") }
-    func set(_ key: String, _ val: Float) { setKey(key, value: "\(val)") }
-    func set(_ key: String, _ val: Double) { setKey(key, value: "\(val)") }
-
-    func getBool(_ key: String) -> Bool { return getInt(key) != 0 }
-    func getFloat(_ key: String) -> Float { return (getString(key) as NSString).floatValue }
-    func getDouble(_ key: String) -> Double { return (getString(key) as NSString).doubleValue }
-
-    func set(_ option: Option, value: Bool) {
-        set(option, value: value ? 1 : 0)
+    func register(_ key: String, _ val: String) {
+        register(key, value: val)
     }
-    func set(_ option: Option, nr: Int, value: Bool) {
-        set(option, nr: nr, value: value ? 1 : 0)
+    func register(_ key: String, _ val: Bool) {
+        register(key, value: val ? "1" : "0")
     }
-    func set(_ option: Option, nr: [Int], value: Int) {
-        for n in nr { set(option, nr: n, value: value) }
+    func register(_ key: String, _ val: Int) {
+        register(key, value: "\(val)")
     }
-    func set(_ option: Option, nr: [Int], value: Bool) {
-        for n in nr { set(option, nr: n, value: value ? 1 : 0) }
+    func register(_ key: String, _ val: UInt) {
+        register(key, value: "\(val)")
     }
-    func remove(_ option: Option, nr: [Int]) {
+    func register(_ key: String, _ val: Float) {
+        register(key, value: "\(val)")
+    }
+    func register(_ key: String, _ val: Double) {
+        register(key, value: "\(val)")
+    }
+    func remove(_ option: Option, _ nr: Int) {
+        remove(option, nr: nr)
+    }
+    func remove(_ option: Option, _ nr: [Int]) {
         for n in nr { remove(option, nr: n) }
+    }
+    func set(_ key: String, _ val: String) {
+        setKey(key, value: val)
+    }
+    func set(_ key: String, _ val: Bool) {
+        setKey(key, value: val ? "1" : "0")
+    }
+    func set(_ key: String, _ val: Int) {
+        setKey(key, value: "\(val)")
+    }
+    func set(_ key: String, _ val: UInt) {
+        setKey(key, value: "\(val)")
+    }
+    func set(_ key: String, _ val: Float) {
+        setKey(key, value: "\(val)")
+    }
+    func set(_ key: String, _ val: Double) {
+        setKey(key, value: "\(val)")
+    }
+    func set(_ option: Option, _ val: Int) {
+        setOpt(option, value: val)
+    }
+    func set(_ option: Option, _ val: Bool) {
+        setOpt(option, value: val ? 1 : 0)
+    }
+    func set(_ option: Option, _ nr: Int, _ val: Int) {
+        setOpt(option, nr: nr, value: val)
+    }
+    func set(_ option: Option, _ nr: Int, _ val: Bool) {
+        setOpt(option, nr: nr, value: val ? 1 : 0)
+    }
+    func set(_ option: Option, _ nr: [Int], _ val: Int) {
+        for n in nr { setOpt(option, nr: n, value: val) }
+    }
+    func set(_ option: Option, _ nr: [Int], _ val: Bool) {
+        for n in nr { setOpt(option, nr: n, value: val ? 1 : 0) }
+    }
+    func get(_ option: Option) -> Int {
+        return getOpt(option)
+    }
+    func get(_ option: Option, _ nr: Int) -> Int {
+        return getOpt(option, nr: nr)
+    }
+    func string(_ key: String) -> String {
+        return getString(key) ?? ""
+    }
+    func bool(_ key: String) -> Bool {
+        return getInt(key) != 0
+    }
+    func int(_ key: String) -> Int {
+        return getInt(key)
+    }
+    func float(_ key: String) -> Float {
+        return (getString(key) as NSString).floatValue
+    }
+    func double(_ key: String) -> Double {
+        return (getString(key) as NSString).doubleValue
     }
 
     func register<T: Encodable>(_ key: String, encodable item: T) {
@@ -110,14 +158,14 @@ extension PropertiesProxy {
         register(key, jsonString)
     }
 
-    func set<T: Encodable>(_ key: String, encodable item: T) {
+    func encode<T: Encodable>(_ key: String, _ item: T) {
         
         let jsonData = try? JSONEncoder().encode(item)
         let jsonString = jsonData?.base64EncodedString() ?? ""
         set(key, jsonString)
     }
 
-    func decode<T: Decodable>(_ key: String, encodable item: inout T) {
+    func decode<T: Decodable>(_ key: String, _ item: inout T) {
         
         if let jsonString = getString(key) {
 
@@ -358,27 +406,27 @@ extension Preferences {
         log(level: 2)
         let defaults = AmigaProxy.defaults!
         
-        autoSnapshots = defaults.getBool(Keys.Gen.autoSnapshots)
-        snapshotInterval = defaults.getInt(Keys.Gen.autoSnapshotInterval)
+        autoSnapshots = defaults.bool(Keys.Gen.autoSnapshots)
+        snapshotInterval = defaults.int(Keys.Gen.autoSnapshotInterval)
         
-        screenshotSource = defaults.getInt(Keys.Gen.screenshotSource)
-        screenshotTargetIntValue = defaults.getInt(Keys.Gen.screenshotTarget)
+        screenshotSource = defaults.int(Keys.Gen.screenshotSource)
+        screenshotTargetIntValue = defaults.int(Keys.Gen.screenshotTarget)
         
-        ffmpegPath = defaults.getString(Keys.Gen.ffmpegPath) ?? ""
-        captureSource = defaults.getInt(Keys.Gen.captureSource)
-        bitRate = defaults.getInt(Keys.Gen.bitRate)
-        aspectX = defaults.getInt(Keys.Gen.aspectX)
-        aspectY = defaults.getInt(Keys.Gen.aspectY)
+        ffmpegPath = defaults.string(Keys.Gen.ffmpegPath)
+        captureSource = defaults.int(Keys.Gen.captureSource)
+        bitRate = defaults.int(Keys.Gen.bitRate)
+        aspectX = defaults.int(Keys.Gen.aspectX)
+        aspectY = defaults.int(Keys.Gen.aspectY)
         
-        keepAspectRatio = defaults.getBool(Keys.Gen.keepAspectRatio)
-        exitOnEsc = defaults.getBool(Keys.Gen.exitOnEsc)
+        keepAspectRatio = defaults.bool(Keys.Gen.keepAspectRatio)
+        exitOnEsc = defaults.bool(Keys.Gen.exitOnEsc)
         
-        warpModeIntValue = defaults.getInt(Keys.Gen.warpMode)
+        warpModeIntValue = defaults.int(Keys.Gen.warpMode)
         
-        ejectWithoutAsking = defaults.getBool(Keys.Gen.ejectWithoutAsking)
-        detachWithoutAsking = defaults.getBool(Keys.Gen.detachWithoutAsking)
-        closeWithoutAsking = defaults.getBool(Keys.Gen.closeWithoutAsking)
-        pauseInBackground = defaults.getBool(Keys.Gen.pauseInBackground)
+        ejectWithoutAsking = defaults.bool(Keys.Gen.ejectWithoutAsking)
+        detachWithoutAsking = defaults.bool(Keys.Gen.detachWithoutAsking)
+        closeWithoutAsking = defaults.bool(Keys.Gen.closeWithoutAsking)
+        pauseInBackground = defaults.bool(Keys.Gen.pauseInBackground)
     }
 }
 
@@ -491,9 +539,9 @@ extension Preferences {
         log(level: 2)
         let defaults = AmigaProxy.defaults!
                 
-        defaults.set(Keys.Con.mouseKeyMap, encodable: keyMaps[0])
-        defaults.set(Keys.Con.joyKeyMap1, encodable: keyMaps[1])
-        defaults.set(Keys.Con.joyKeyMap2, encodable: keyMaps[2])
+        defaults.encode(Keys.Con.mouseKeyMap, keyMaps[0])
+        defaults.encode(Keys.Con.joyKeyMap1, keyMaps[1])
+        defaults.encode(Keys.Con.joyKeyMap2, keyMaps[2])
         defaults.set(Keys.Con.disconnectJoyKeys, disconnectJoyKeys)
 
         defaults.set(Keys.Con.autofire, autofire)
@@ -516,22 +564,22 @@ extension Preferences {
         log(level: 2)
         let defaults = AmigaProxy.defaults!
         
-        defaults.decode(Keys.Con.mouseKeyMap, encodable: &keyMaps[0])
-        defaults.decode(Keys.Con.joyKeyMap1, encodable: &keyMaps[1])
-        defaults.decode(Keys.Con.joyKeyMap2, encodable: &keyMaps[2])
-        disconnectJoyKeys = defaults.getBool(Keys.Con.disconnectJoyKeys)
+        defaults.decode(Keys.Con.mouseKeyMap, &keyMaps[0])
+        defaults.decode(Keys.Con.joyKeyMap1, &keyMaps[1])
+        defaults.decode(Keys.Con.joyKeyMap2, &keyMaps[2])
+        disconnectJoyKeys = defaults.bool(Keys.Con.disconnectJoyKeys)
         
-        autofire = defaults.getBool(Keys.Con.autofire)
-        autofireBullets = defaults.getInt(Keys.Con.autofireBullets)
-        autofireFrequency = defaults.getDouble(Keys.Con.autofireFrequency)
+        autofire = defaults.bool(Keys.Con.autofire)
+        autofireBullets = defaults.int(Keys.Con.autofireBullets)
+        autofireFrequency = defaults.double(Keys.Con.autofireFrequency)
         
-        retainMouseKeyComb = defaults.getInt(Keys.Con.retainMouseKeyComb)
-        retainMouseWithKeys = defaults.getBool(Keys.Con.retainMouseWithKeys)
-        retainMouseByClick = defaults.getBool(Keys.Con.retainMouseByClick)
-        retainMouseByEntering = defaults.getBool(Keys.Con.retainMouseByEntering)
-        releaseMouseKeyComb = defaults.getInt(Keys.Con.releaseMouseKeyComb)
-        releaseMouseWithKeys = defaults.getBool(Keys.Con.releaseMouseWithKeys)
-        releaseMouseByShaking = defaults.getBool(Keys.Con.releaseMouseByShaking)
+        retainMouseKeyComb = defaults.int(Keys.Con.retainMouseKeyComb)
+        retainMouseWithKeys = defaults.bool(Keys.Con.retainMouseWithKeys)
+        retainMouseByClick = defaults.bool(Keys.Con.retainMouseByClick)
+        retainMouseByEntering = defaults.bool(Keys.Con.retainMouseByEntering)
+        releaseMouseKeyComb = defaults.int(Keys.Con.releaseMouseKeyComb)
+        releaseMouseWithKeys = defaults.bool(Keys.Con.releaseMouseWithKeys)
+        releaseMouseByShaking = defaults.bool(Keys.Con.releaseMouseByShaking)
     }
 }
 
@@ -663,10 +711,10 @@ extension Configuration {
 
         amiga.suspend()
 
-        defaults.set(.AGNUS_REVISION, value: agnusRev)
-        defaults.set(.DENISE_REVISION, value: deniseRev)
-        defaults.set(.CIA_REVISION, value: ciaRev)
-        defaults.set(.RTC_MODEL, value: rtClock)
+        defaults.set(.AGNUS_REVISION, agnusRev)
+        defaults.set(.DENISE_REVISION, deniseRev)
+        defaults.set(.CIA_REVISION, ciaRev)
+        defaults.set(.RTC_MODEL, rtClock)
         defaults.save()
 
         amiga.resume()
@@ -709,14 +757,14 @@ extension Configuration {
         
         amiga.suspend()
         
-        defaults.set(.CHIP_RAM, value: chipRam)
-        defaults.set(.SLOW_RAM, value: slowRam)
-        defaults.set(.FAST_RAM, value: fastRam)
-        defaults.set(.RAM_INIT_PATTERN, value: ramInitPattern)
-        defaults.set(.BANKMAP, value: bankMap)
-        defaults.set(.UNMAPPING_TYPE, value: unmappingType)
-        defaults.set(.SLOW_RAM_DELAY, value: slowRamDelay)
-        defaults.set(.SLOW_RAM_MIRROR, value: slowRamMirror)
+        defaults.set(.CHIP_RAM, chipRam)
+        defaults.set(.SLOW_RAM, slowRam)
+        defaults.set(.FAST_RAM, fastRam)
+        defaults.set(.RAM_INIT_PATTERN, ramInitPattern)
+        defaults.set(.BANKMAP, bankMap)
+        defaults.set(.UNMAPPING_TYPE, unmappingType)
+        defaults.set(.SLOW_RAM_DELAY, slowRamDelay)
+        defaults.set(.SLOW_RAM_MIRROR, slowRamMirror)
         defaults.save()
         
         amiga.resume()
@@ -771,10 +819,10 @@ extension PropertiesProxy {
         
         log(level: 2)
         
-        remove(.DRIVE_CONNECT, nr: [0, 1, 2, 3])
-        remove(.DRIVE_TYPE, nr: [0, 1, 2, 3])
-        remove(.HDC_CONNECT, nr: [0, 1, 2, 3])
-        remove(.HDR_TYPE, nr: [0, 1, 2, 3])
+        remove(.DRIVE_CONNECT, [0, 1, 2, 3])
+        remove(.DRIVE_TYPE, [0, 1, 2, 3])
+        remove(.HDC_CONNECT, [0, 1, 2, 3])
+        remove(.HDR_TYPE, [0, 1, 2, 3])
         remove(.SERIAL_DEVICE)
         remove(.SRV_PORT, nr: ServerType.SER.rawValue)
         removeKey(Keys.Per.gameDevice1)
@@ -791,28 +839,28 @@ extension Configuration {
 
         amiga.suspend()
         
-        defaults.set(.DRIVE_CONNECT, nr: 0, value: df0Connected)
-        defaults.set(.DRIVE_CONNECT, nr: 1, value: df1Connected)
-        defaults.set(.DRIVE_CONNECT, nr: 2, value: df2Connected)
-        defaults.set(.DRIVE_CONNECT, nr: 3, value: df3Connected)
+        defaults.set(.DRIVE_CONNECT, 0, df0Connected)
+        defaults.set(.DRIVE_CONNECT, 1, df1Connected)
+        defaults.set(.DRIVE_CONNECT, 2, df2Connected)
+        defaults.set(.DRIVE_CONNECT, 3, df3Connected)
         
-        defaults.set(.DRIVE_TYPE, nr: 0, value: df0Type)
-        defaults.set(.DRIVE_TYPE, nr: 1, value: df1Type)
-        defaults.set(.DRIVE_TYPE, nr: 2, value: df2Type)
-        defaults.set(.DRIVE_TYPE, nr: 3, value: df3Type)
+        defaults.set(.DRIVE_TYPE, 0, df0Type)
+        defaults.set(.DRIVE_TYPE, 1, df1Type)
+        defaults.set(.DRIVE_TYPE, 2, df2Type)
+        defaults.set(.DRIVE_TYPE, 3, df3Type)
 
-        defaults.set(.HDC_CONNECT, nr: 0, value: hd0Connected)
-        defaults.set(.HDC_CONNECT, nr: 1, value: hd1Connected)
-        defaults.set(.HDC_CONNECT, nr: 2, value: hd2Connected)
-        defaults.set(.HDC_CONNECT, nr: 3, value: hd3Connected)
+        defaults.set(.HDC_CONNECT, 0, hd0Connected)
+        defaults.set(.HDC_CONNECT, 1, hd1Connected)
+        defaults.set(.HDC_CONNECT, 2, hd2Connected)
+        defaults.set(.HDC_CONNECT, 3, hd3Connected)
 
-        defaults.set(.HDR_TYPE, nr: 0, value: hd0Type)
-        defaults.set(.HDR_TYPE, nr: 1, value: hd1Type)
-        defaults.set(.HDR_TYPE, nr: 2, value: hd2Type)
-        defaults.set(.HDR_TYPE, nr: 3, value: hd3Type)
+        defaults.set(.HDR_TYPE, 0, hd0Type)
+        defaults.set(.HDR_TYPE, 1, hd1Type)
+        defaults.set(.HDR_TYPE, 2, hd2Type)
+        defaults.set(.HDR_TYPE, 3, hd3Type)
 
-        defaults.set(.SERIAL_DEVICE, value: serialDevice)
-        defaults.set(.SRV_PORT, nr: ServerType.SER.rawValue, value: serialDevicePort)
+        defaults.set(.SERIAL_DEVICE, serialDevice)
+        defaults.set(.SRV_PORT, ServerType.SER.rawValue, serialDevicePort)
 
         defaults.set(Keys.Per.gameDevice1, gameDevice1)
         defaults.set(Keys.Per.gameDevice2, gameDevice2)
@@ -829,31 +877,31 @@ extension Configuration {
 
         amiga.suspend()
 
-        df0Connected = defaults.get(.DRIVE_CONNECT, nr: 0) != 0
-        df1Connected = defaults.get(.DRIVE_CONNECT, nr: 1) != 0
-        df2Connected = defaults.get(.DRIVE_CONNECT, nr: 2) != 0
-        df3Connected = defaults.get(.DRIVE_CONNECT, nr: 3) != 0
+        df0Connected = defaults.get(.DRIVE_CONNECT, 0) != 0
+        df1Connected = defaults.get(.DRIVE_CONNECT, 1) != 0
+        df2Connected = defaults.get(.DRIVE_CONNECT, 2) != 0
+        df3Connected = defaults.get(.DRIVE_CONNECT, 3) != 0
 
-        df0Type = defaults.get(.DRIVE_TYPE, nr: 0)
-        df1Type = defaults.get(.DRIVE_TYPE, nr: 1)
-        df2Type = defaults.get(.DRIVE_TYPE, nr: 2)
-        df3Type = defaults.get(.DRIVE_TYPE, nr: 3)
+        df0Type = defaults.get(.DRIVE_TYPE, 0)
+        df1Type = defaults.get(.DRIVE_TYPE, 1)
+        df2Type = defaults.get(.DRIVE_TYPE, 2)
+        df3Type = defaults.get(.DRIVE_TYPE, 3)
 
-        hd0Connected = defaults.get(.HDC_CONNECT, nr: 0) != 0
-        hd1Connected = defaults.get(.HDC_CONNECT, nr: 1) != 0
-        hd2Connected = defaults.get(.HDC_CONNECT, nr: 2) != 0
-        hd3Connected = defaults.get(.HDC_CONNECT, nr: 3) != 0
+        hd0Connected = defaults.get(.HDC_CONNECT, 0) != 0
+        hd1Connected = defaults.get(.HDC_CONNECT, 1) != 0
+        hd2Connected = defaults.get(.HDC_CONNECT, 2) != 0
+        hd3Connected = defaults.get(.HDC_CONNECT, 3) != 0
 
-        hd0Type = defaults.get(.HDR_TYPE, nr: 0)
-        hd1Type = defaults.get(.HDR_TYPE, nr: 1)
-        hd2Type = defaults.get(.HDR_TYPE, nr: 2)
-        hd3Type = defaults.get(.HDR_TYPE, nr: 3)
+        hd0Type = defaults.get(.HDR_TYPE, 0)
+        hd1Type = defaults.get(.HDR_TYPE, 1)
+        hd2Type = defaults.get(.HDR_TYPE, 2)
+        hd3Type = defaults.get(.HDR_TYPE, 3)
 
         serialDevice = defaults.get(.SERIAL_DEVICE)
-        serialDevicePort = defaults.get(.SRV_PORT, nr: ServerType.SER.rawValue)
+        serialDevicePort = defaults.get(.SRV_PORT, ServerType.SER.rawValue)
 
-        gameDevice1 = defaults.getInt(Keys.Per.gameDevice1)
-        gameDevice2 = defaults.getInt(Keys.Per.gameDevice2)
+        gameDevice1 = defaults.int(Keys.Per.gameDevice1)
+        gameDevice2 = defaults.int(Keys.Per.gameDevice2)
 
         amiga.resume()
     }
@@ -882,7 +930,7 @@ extension PropertiesProxy {
         remove(.CLX_SPR_PLF)
         remove(.CLX_PLF_PLF)
         remove(.DRIVE_SPEED)
-        remove(.EMULATE_MECHANICS, nr: [ 0, 1, 2, 3])
+        remove(.EMULATE_MECHANICS, [ 0, 1, 2, 3])
         remove(.LOCK_DSKSYNC)
         remove(.AUTO_DSKSYNC)
         remove(.ACCURATE_KEYBOARD)
@@ -898,17 +946,17 @@ extension Configuration {
         
         amiga.suspend()
         
-        defaults.set(.BLITTER_ACCURACY, value: blitterAccuracy)
-        defaults.set(.TODBUG, value: todBug)
-        defaults.set(.ECLOCK_SYNCING, value: eClockSyncing)
-        defaults.set(.CLX_SPR_SPR, value: clxSprSpr)
-        defaults.set(.CLX_SPR_PLF, value: clxSprPlf)
-        defaults.set(.CLX_PLF_PLF, value: clxPlfPlf)
-        defaults.set(.DRIVE_SPEED, value: driveSpeed)
-        defaults.set(.EMULATE_MECHANICS, value: mechanicalDelays)
-        defaults.set(.LOCK_DSKSYNC, value: lockDskSync)
-        defaults.set(.AUTO_DSKSYNC, value: autoDskSync)
-        defaults.set(.ACCURATE_KEYBOARD, value: accurateKeyboard)
+        defaults.set(.BLITTER_ACCURACY, blitterAccuracy)
+        defaults.set(.TODBUG, todBug)
+        defaults.set(.ECLOCK_SYNCING, eClockSyncing)
+        defaults.set(.CLX_SPR_SPR, clxSprSpr)
+        defaults.set(.CLX_SPR_PLF, clxSprPlf)
+        defaults.set(.CLX_PLF_PLF, clxPlfPlf)
+        defaults.set(.DRIVE_SPEED, driveSpeed)
+        defaults.set(.EMULATE_MECHANICS, [0, 1, 2, 3], mechanicalDelays)
+        defaults.set(.LOCK_DSKSYNC, lockDskSync)
+        defaults.set(.AUTO_DSKSYNC, autoDskSync)
+        defaults.set(.ACCURATE_KEYBOARD, accurateKeyboard)
         defaults.save()
         
         amiga.resume()
@@ -928,7 +976,7 @@ extension Configuration {
         clxSprPlf = defaults.get(.CLX_SPR_PLF) != 0
         clxPlfPlf = defaults.get(.CLX_PLF_PLF) != 0
         driveSpeed = defaults.get(.DRIVE_SPEED)
-        mechanicalDelays = defaults.get(.EMULATE_MECHANICS, nr: 0) != 0
+        mechanicalDelays = defaults.get(.EMULATE_MECHANICS, 0) != 0
         lockDskSync = defaults.get(.LOCK_DSKSYNC) != 0
         autoDskSync = defaults.get(.AUTO_DSKSYNC) != 0
         accurateKeyboard = defaults.get(.ACCURATE_KEYBOARD) != 0
@@ -953,10 +1001,10 @@ extension PropertiesProxy {
         
         log(level: 2)
             
-        remove(.AUDVOL, nr: [0, 1, 2, 3])
-        remove(.AUDPAN, nr: [0, 1, 2, 3])
-        remove(.DRIVE_PAN, nr: [0, 1, 2, 3])
-        remove(.HDR_PAN, nr: [0, 1, 2, 3])
+        remove(.AUDVOL, [0, 1, 2, 3])
+        remove(.AUDPAN, [0, 1, 2, 3])
+        remove(.DRIVE_PAN, [0, 1, 2, 3])
+        remove(.HDR_PAN, [0, 1, 2, 3])
         remove(.AUDVOLL)
         remove(.AUDVOLR)
         remove(.SAMPLING_METHOD)
@@ -978,31 +1026,31 @@ extension Configuration {
 
         amiga.suspend()
         
-        defaults.set(.AUDVOL, nr: 0, value: vol0)
-        defaults.set(.AUDVOL, nr: 1, value: vol1)
-        defaults.set(.AUDVOL, nr: 2, value: vol2)
-        defaults.set(.AUDVOL, nr: 3, value: vol3)
-        defaults.set(.AUDPAN, nr: 0, value: pan0)
-        defaults.set(.AUDPAN, nr: 1, value: pan1)
-        defaults.set(.AUDPAN, nr: 2, value: pan2)
-        defaults.set(.AUDPAN, nr: 3, value: pan3)
-        defaults.set(.AUDVOLL, value: volL)
-        defaults.set(.AUDVOLR, value: volR)
-        defaults.set(.SAMPLING_METHOD, value: samplingMethod)
-        defaults.set(.DRIVE_PAN, nr: 0, value: df0Pan)
-        defaults.set(.DRIVE_PAN, nr: 1, value: df1Pan)
-        defaults.set(.DRIVE_PAN, nr: 2, value: df2Pan)
-        defaults.set(.DRIVE_PAN, nr: 3, value: df3Pan)
-        defaults.set(.HDR_PAN, nr: 0, value: hd0Pan)
-        defaults.set(.HDR_PAN, nr: 1, value: hd1Pan)
-        defaults.set(.HDR_PAN, nr: 2, value: hd2Pan)
-        defaults.set(.HDR_PAN, nr: 3, value: hd3Pan)
-        defaults.set(.STEP_VOLUME, value: stepVolume)
-        defaults.set(.POLL_VOLUME, value: pollVolume)
-        defaults.set(.INSERT_VOLUME, value: insertVolume)
-        defaults.set(.EJECT_VOLUME, value: ejectVolume)
-        defaults.set(.FILTER_TYPE, value: filterType)
-        defaults.set(.FILTER_ALWAYS_ON, value: filterAlwaysOn)
+        defaults.set(.AUDVOL, 0, vol0)
+        defaults.set(.AUDVOL, 1, vol1)
+        defaults.set(.AUDVOL, 2, vol2)
+        defaults.set(.AUDVOL, 3, vol3)
+        defaults.set(.AUDPAN, 0, pan0)
+        defaults.set(.AUDPAN, 1, pan1)
+        defaults.set(.AUDPAN, 2, pan2)
+        defaults.set(.AUDPAN, 3, pan3)
+        defaults.set(.AUDVOLL, volL)
+        defaults.set(.AUDVOLR, volR)
+        defaults.set(.SAMPLING_METHOD, samplingMethod)
+        defaults.set(.DRIVE_PAN, 0, df0Pan)
+        defaults.set(.DRIVE_PAN, 1, df1Pan)
+        defaults.set(.DRIVE_PAN, 2, df2Pan)
+        defaults.set(.DRIVE_PAN, 3, df3Pan)
+        defaults.set(.HDR_PAN, 0, hd0Pan)
+        defaults.set(.HDR_PAN, 1, hd1Pan)
+        defaults.set(.HDR_PAN, 2, hd2Pan)
+        defaults.set(.HDR_PAN, 3, hd3Pan)
+        defaults.set(.STEP_VOLUME, [0, 1, 2, 3], stepVolume)
+        defaults.set(.POLL_VOLUME, [0, 1, 2, 3], pollVolume)
+        defaults.set(.INSERT_VOLUME, [0, 1, 2, 3], insertVolume)
+        defaults.set(.EJECT_VOLUME, [0, 1, 2, 3], ejectVolume)
+        defaults.set(.FILTER_TYPE, filterType)
+        defaults.set(.FILTER_ALWAYS_ON, filterAlwaysOn)
         defaults.save()
         
         amiga.resume()
@@ -1015,33 +1063,33 @@ extension Configuration {
 
         amiga.suspend()
 
-        vol0 = defaults.get(.AUDVOL, nr: 0)
-        vol1 = defaults.get(.AUDVOL, nr: 1)
-        vol2 = defaults.get(.AUDVOL, nr: 2)
-        vol3 = defaults.get(.AUDVOL, nr: 3)
+        vol0 = defaults.get(.AUDVOL, 0)
+        vol1 = defaults.get(.AUDVOL, 1)
+        vol2 = defaults.get(.AUDVOL, 2)
+        vol3 = defaults.get(.AUDVOL, 3)
 
-        pan0 = defaults.get(.AUDPAN, nr: 0)
-        pan1 = defaults.get(.AUDPAN, nr: 1)
-        pan2 = defaults.get(.AUDPAN, nr: 2)
-        pan3 = defaults.get(.AUDPAN, nr: 3)
+        pan0 = defaults.get(.AUDPAN, 0)
+        pan1 = defaults.get(.AUDPAN, 1)
+        pan2 = defaults.get(.AUDPAN, 2)
+        pan3 = defaults.get(.AUDPAN, 3)
 
-        df0Pan = defaults.get(.DRIVE_PAN, nr: 0)
-        df1Pan = defaults.get(.DRIVE_PAN, nr: 1)
-        df2Pan = defaults.get(.DRIVE_PAN, nr: 2)
-        df3Pan = defaults.get(.DRIVE_PAN, nr: 3)
+        df0Pan = defaults.get(.DRIVE_PAN, 0)
+        df1Pan = defaults.get(.DRIVE_PAN, 1)
+        df2Pan = defaults.get(.DRIVE_PAN, 2)
+        df3Pan = defaults.get(.DRIVE_PAN, 3)
 
-        hd0Pan = defaults.get(.HDR_PAN, nr: 0)
-        hd1Pan = defaults.get(.HDR_PAN, nr: 1)
-        hd2Pan = defaults.get(.HDR_PAN, nr: 2)
-        hd3Pan = defaults.get(.HDR_PAN, nr: 3)
+        hd0Pan = defaults.get(.HDR_PAN, 0)
+        hd1Pan = defaults.get(.HDR_PAN, 1)
+        hd2Pan = defaults.get(.HDR_PAN, 2)
+        hd3Pan = defaults.get(.HDR_PAN, 3)
 
         volL = defaults.get(.AUDVOLL)
         volR = defaults.get(.AUDVOLR)
         samplingMethod = defaults.get(.SAMPLING_METHOD)
-        stepVolume = defaults.get(.STEP_VOLUME, nr: 0)
-        pollVolume = defaults.get(.POLL_VOLUME, nr: 0)
-        insertVolume = defaults.get(.INSERT_VOLUME, nr: 0)
-        ejectVolume = defaults.get(.EJECT_VOLUME, nr: 0)
+        stepVolume = defaults.get(.STEP_VOLUME, 0)
+        pollVolume = defaults.get(.POLL_VOLUME, 0)
+        insertVolume = defaults.get(.INSERT_VOLUME, 0)
+        ejectVolume = defaults.get(.EJECT_VOLUME, 0)
         filterType = defaults.get(.FILTER_TYPE)
         filterAlwaysOn = defaults.get(.FILTER_ALWAYS_ON) != 0
 
@@ -1218,10 +1266,10 @@ extension Configuration {
         
         amiga.suspend()
         
-        defaults.set(.PALETTE, value: palette)
-        defaults.set(.BRIGHTNESS, value: brightness)
-        defaults.set(.CONTRAST, value: contrast)
-        defaults.set(.SATURATION, value: saturation)
+        defaults.set(.PALETTE, palette)
+        defaults.set(.BRIGHTNESS, brightness)
+        defaults.set(.CONTRAST, contrast)
+        defaults.set(.SATURATION, saturation)
         
         defaults.save()
         
@@ -1309,12 +1357,12 @@ extension Configuration {
         
         amiga.suspend()
           
-        hAutoCenter = defaults.getBool(Keys.Vid.hAutoCenter)
-        vAutoCenter = defaults.getBool(Keys.Vid.vAutoCenter)
-        hCenter = defaults.getFloat(Keys.Vid.hCenter)
-        hCenter = defaults.getFloat(Keys.Vid.vCenter)
-        hZoom = defaults.getFloat(Keys.Vid.hZoom)
-        vZoom = defaults.getFloat(Keys.Vid.vZoom)
+        hAutoCenter = defaults.bool(Keys.Vid.hAutoCenter)
+        vAutoCenter = defaults.bool(Keys.Vid.vAutoCenter)
+        hCenter = defaults.float(Keys.Vid.hCenter)
+        hCenter = defaults.float(Keys.Vid.vCenter)
+        hZoom = defaults.float(Keys.Vid.hZoom)
+        vZoom = defaults.float(Keys.Vid.vZoom)
                 
         amiga.resume()
     }
@@ -1326,24 +1374,24 @@ extension Configuration {
         
         amiga.suspend()
                         
-        enhancer = defaults.getInt(Keys.Vid.enhancer)
-        upscaler = defaults.getInt(Keys.Vid.upscaler)
-        blur = defaults.getInt(Keys.Vid.blur)
-        blurRadius = defaults.getFloat(Keys.Vid.blurRadius)
-        bloom = defaults.getInt(Keys.Vid.bloom)
-        bloomRadius = defaults.getFloat(Keys.Vid.bloomRadius)
-        bloomBrightness = defaults.getFloat(Keys.Vid.bloomBrightness)
-        bloomWeight = defaults.getFloat(Keys.Vid.bloomWeight)
-        flicker = defaults.getInt(Keys.Vid.flicker)
-        flickerWeight = defaults.getFloat(Keys.Vid.flickerWeight)
-        dotMask = defaults.getInt(Keys.Vid.dotMask)
-        dotMaskBrightness = defaults.getFloat(Keys.Vid.dotMaskBrightness)
-        scanlines = defaults.getInt(Keys.Vid.scanlines)
-        scanlineBrightness = defaults.getFloat(Keys.Vid.scanlineBrightness)
-        scanlineWeight = defaults.getFloat(Keys.Vid.scanlineWeight)
-        disalignment = defaults.getInt(Keys.Vid.disalignment)
-        disalignmentH = defaults.getFloat(Keys.Vid.disalignmentH)
-        disalignmentV = defaults.getFloat(Keys.Vid.disalignmentV)
+        enhancer = defaults.int(Keys.Vid.enhancer)
+        upscaler = defaults.int(Keys.Vid.upscaler)
+        blur = defaults.int(Keys.Vid.blur)
+        blurRadius = defaults.float(Keys.Vid.blurRadius)
+        bloom = defaults.int(Keys.Vid.bloom)
+        bloomRadius = defaults.float(Keys.Vid.bloomRadius)
+        bloomBrightness = defaults.float(Keys.Vid.bloomBrightness)
+        bloomWeight = defaults.float(Keys.Vid.bloomWeight)
+        flicker = defaults.int(Keys.Vid.flicker)
+        flickerWeight = defaults.float(Keys.Vid.flickerWeight)
+        dotMask = defaults.int(Keys.Vid.dotMask)
+        dotMaskBrightness = defaults.float(Keys.Vid.dotMaskBrightness)
+        scanlines = defaults.int(Keys.Vid.scanlines)
+        scanlineBrightness = defaults.float(Keys.Vid.scanlineBrightness)
+        scanlineWeight = defaults.float(Keys.Vid.scanlineWeight)
+        disalignment = defaults.int(Keys.Vid.disalignment)
+        disalignmentH = defaults.float(Keys.Vid.disalignmentH)
+        disalignmentV = defaults.float(Keys.Vid.disalignmentV)
         
         amiga.resume()
     }

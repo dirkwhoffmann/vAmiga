@@ -262,12 +262,12 @@
 
 - (NSString *)getString:(NSString *)key;
 - (NSInteger)getInt:(NSString *)key;
-- (NSInteger)get:(Option)option;
-- (NSInteger)get:(Option)option nr:(NSInteger)nr;
+- (NSInteger)getOpt:(Option)option;
+- (NSInteger)getOpt:(Option)option nr:(NSInteger)nr;
 
 - (void)setKey:(NSString *)key value:(NSString *)value;
-- (void)set:(Option)option value:(NSInteger)value;
-- (void)set:(Option)option nr:(NSInteger)nr value:(NSInteger)value;
+- (void)setOpt:(Option)option value:(NSInteger)value;
+- (void)setOpt:(Option)option nr:(NSInteger)nr value:(NSInteger)value;
 
 - (void)removeAll;
 - (void)removeKey:(NSString *)key;

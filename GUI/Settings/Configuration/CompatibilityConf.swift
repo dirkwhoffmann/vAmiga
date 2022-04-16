@@ -126,18 +126,18 @@ extension ConfigurationController {
         case 1:
             
             // Accurate
-            defaults.set(.CLX_SPR_SPR, value: true)
-            defaults.set(.CLX_SPR_PLF, value: true)
-            defaults.set(.CLX_PLF_PLF, value: true)
+            defaults.set(.CLX_SPR_SPR, true)
+            defaults.set(.CLX_SPR_PLF, true)
+            defaults.set(.CLX_PLF_PLF, true)
             
         case 2:
             
             // Accelerated
-            defaults.set(.BLITTER_ACCURACY, value: 0)
-            defaults.set(.DRIVE_SPEED, value: -1)
-            defaults.set(.EMULATE_MECHANICS, nr: [0, 1, 2, 3], value: false)
-            defaults.set(.ACCURATE_KEYBOARD, value: false)
-            defaults.set(.ECLOCK_SYNCING, value: false)
+            defaults.set(.BLITTER_ACCURACY, 0)
+            defaults.set(.DRIVE_SPEED, -1)
+            defaults.set(.EMULATE_MECHANICS, [0, 1, 2, 3], false)
+            defaults.set(.ACCURATE_KEYBOARD, false)
+            defaults.set(.ECLOCK_SYNCING, false)
             
         default:
             fatalError()

@@ -507,7 +507,7 @@ class Configuration {
 
         amiga.suspend()
         
-        defaults.set(.EXT_START, value: extStart)
+        defaults.set(.EXT_START, extStart)
         defaults.save()
         
         do {

@@ -177,20 +177,20 @@ extension ConfigurationController {
         case 0:
             
             // Amiga 500
-            defaults.set(.AGNUS_REVISION, value: AgnusRevision.ECS_1MB.rawValue)
-            defaults.set(.RTC_MODEL, value: RTCRevision.NONE.rawValue)
+            defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_1MB.rawValue)
+            defaults.set(.RTC_MODEL, RTCRevision.NONE.rawValue)
 
         case 1:
             
             // Amiga 1000
-            defaults.set(.AGNUS_REVISION, value: AgnusRevision.OCS_OLD.rawValue)
-            defaults.set(.RTC_MODEL, value: RTCRevision.NONE.rawValue)
+            defaults.set(.AGNUS_REVISION, AgnusRevision.OCS_OLD.rawValue)
+            defaults.set(.RTC_MODEL, RTCRevision.NONE.rawValue)
 
         case 2:
             
             // Amiga 2000
-            defaults.set(.AGNUS_REVISION, value: AgnusRevision.ECS_2MB.rawValue)
-            defaults.set(.RTC_MODEL, value: RTCRevision.OKI.rawValue)
+            defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_2MB.rawValue)
+            defaults.set(.RTC_MODEL, RTCRevision.OKI.rawValue)
 
         default:
             fatalError()

@@ -118,12 +118,12 @@ using namespace moira;
     return [self props]->getInt([key UTF8String]);
 }
 
-- (NSInteger)get:(Option)option
+- (NSInteger)getOpt:(Option)option
 {
     return [self props]->get(option);
 }
 
-- (NSInteger)get:(Option)option nr:(NSInteger)nr
+- (NSInteger)getOpt:(Option)option nr:(NSInteger)nr
 {
     return [self props]->get(option, nr);
 }
@@ -133,12 +133,12 @@ using namespace moira;
     [self props]->setString(string([key UTF8String]), string([value UTF8String]));
 }
 
-- (void)set:(Option)option value:(NSInteger)value
+- (void)setOpt:(Option)option value:(NSInteger)value
 {
     [self props]->set(option, value);
 }
 
-- (void)set:(Option)option nr:(NSInteger)nr value:(NSInteger)value
+- (void)setOpt:(Option)option nr:(NSInteger)nr value:(NSInteger)value
 {
     [self props]->set(option, nr, value);
 }

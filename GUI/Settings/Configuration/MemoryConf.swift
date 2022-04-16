@@ -117,23 +117,23 @@ extension ConfigurationController {
         case 0:
             
             // Amiga 500
-            defaults.set(.CHIP_RAM, value: 512)
-            defaults.set(.SLOW_RAM, value: 512)
-            defaults.set(.BANKMAP, value: BankMap.A500.rawValue)
+            defaults.set(.CHIP_RAM, 512)
+            defaults.set(.SLOW_RAM, 512)
+            defaults.set(.BANKMAP, BankMap.A500.rawValue)
 
         case 1:
             
             // Amiga 1000
-            defaults.set(.CHIP_RAM, value: 256)
-            defaults.set(.SLOW_RAM, value: 0)
-            defaults.set(.BANKMAP, value: BankMap.A1000.rawValue)
+            defaults.set(.CHIP_RAM, 256)
+            defaults.set(.SLOW_RAM, 0)
+            defaults.set(.BANKMAP, BankMap.A1000.rawValue)
 
         case 2:
             
             // Amiga 2000
-            defaults.set(.CHIP_RAM, value: 1024)
-            defaults.set(.SLOW_RAM, value: 0)
-            defaults.set(.BANKMAP, value: BankMap.A2000B.rawValue)
+            defaults.set(.CHIP_RAM, 1024)
+            defaults.set(.SLOW_RAM, 0)
+            defaults.set(.BANKMAP, BankMap.A2000B.rawValue)
 
         default:
             fatalError()
