@@ -254,14 +254,14 @@ HdController::spypeek16(u32 addr) const
         case EXPROM_SIZE:
             
             // Return the number of partitions
-            debug(HDR_DEBUG, "This drive has %ld partitions\n", drive.numPartitions());
+            debug(HDR_DEBUG, "Partitions: %ld\n", drive.numPartitions());
             return u16(drive.numPartitions());
             
         case EXPROM_SIZE + 2:
             
             // Number of filesystem drivers to add
-            debug(HDR_DEBUG, "%d filesystem drivers to add\n", 0);
-            return 0;
+            debug(HDR_DEBUG, "Filesystem drivers: %ld\n", drive.numDrivers());
+            return u16(drive.numDrivers());
             
         case EXPROM_SIZE + 4:
             

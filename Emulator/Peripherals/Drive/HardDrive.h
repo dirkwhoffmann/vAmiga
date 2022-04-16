@@ -43,8 +43,11 @@ class HardDrive : public Drive {
     GeometryDescriptor geometry;
     
     // Partition table
-    std::vector<PartitionDescriptor> ptable;
+    std::vector <PartitionDescriptor> ptable;
             
+    // Loadable file system drivers
+    std::vector <DriverDescriptor> drivers;
+    
     // Disk data
     Buffer<u8> data;
     
@@ -215,7 +218,10 @@ public:
 
     // Returns the number of partitions
     isize numPartitions() const { return isize(ptable.size()); }
-        
+
+    // Returns the number of loadable file system drivers
+    isize numDrivers() const { return isize(drivers.size()); }
+
     // Returns the current drive state
     HardDriveState getState() const { return state; }
     

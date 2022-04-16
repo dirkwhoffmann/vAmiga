@@ -17,6 +17,8 @@ class FloppyDisk;
 
 class HDFFile : public DiskFile {
     
+public:
+    
     // Derived drive geometry
     GeometryDescriptor geometry;
 
@@ -26,8 +28,6 @@ class HDFFile : public DiskFile {
     // Included device drivers
     std::vector <DriverDescriptor> drivers;
                 
-public:
-    
     static bool isCompatible(const string &path);
     static bool isCompatible(std::istream &stream);
     static bool isOversized(isize size) { return size > MB(504); }

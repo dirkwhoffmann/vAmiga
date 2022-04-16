@@ -59,6 +59,7 @@ HardDrive::init()
     controllerRevision = amiga.hdcon[nr]->revisionName();
     geometry = GeometryDescriptor();
     ptable.clear();
+    drivers.clear();
     head = {};
     modified = bool(FORCE_HDR_MODIFIED);
 }
@@ -115,11 +116,14 @@ HardDrive::init(const HDFFile &hdf)
     if (auto value = hdf.getControllerRevision(); value) controllerRevision = *value;
     
     // Copy geometry
-    geometry = hdf.getGeometryDescriptor();
+    geometry = hdf.getGeometryDescriptor(); // TODO: Replace by " = hdf.geometry" (?!)
     
     // Copy the partition table
-    ptable = hdf.getPartitionDescriptors();
+    ptable = hdf.getPartitionDescriptors();  // TODO: Replace by " = hdf.ptable" (?!)
 
+    // Copy the driver information
+    drivers = hdf.drivers;
+    
     // Check the drive geometry against the file size
     auto numBytes = hdf.data.size;
     
