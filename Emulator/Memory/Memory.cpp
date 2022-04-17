@@ -99,13 +99,26 @@ Memory::_dump(Category category, std::ostream& os) const
 }
 
 void
+Memory::_initialize()
+{
+    AmigaComponent::_initialize();
+    
+    auto romPath = Amiga::properties.getString("ROM_PATH");
+    auto extPath = Amiga::properties.getString("EXT_PATH");
+
+    msg("Trying to load Roms...\n")
+    try { loadRom(romPath); } catch(...) { }
+    try { loadExt(extPath); } catch(...) { }
+}
+
+void
 Memory::_reset(bool hard)
 {
     if (hard) {
         
         // Try to load Roms
-        try { loadRom(romPath); } catch(...) { }
-        try { loadExt(extPath); } catch(...) { }
+//        try { loadRom(romPath); } catch(...) { }
+//        try { loadExt(extPath); } catch(...) { }
         
         // Erase WOM (if any)
         if (hasWom()) eraseWom();

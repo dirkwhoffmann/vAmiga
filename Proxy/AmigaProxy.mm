@@ -392,6 +392,7 @@ using namespace moira;
     return [self mem]->getConfig();
 }
 
+/*
 - (void)setRomPath:(NSURL *)url
 {
     [self mem]->setRomPath([url fileSystemRepresentation]);
@@ -401,6 +402,7 @@ using namespace moira;
 {
     [self mem]->setExtPath([url fileSystemRepresentation]);
 }
+*/
 
 - (MemoryStats)getStats
 {

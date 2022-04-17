@@ -353,8 +353,8 @@
 @interface MemProxy : AmigaComponentProxy { }
 
 @property (readonly) MemoryConfig config;
-- (void)setRomPath:(NSURL *)url;
-- (void)setExtPath:(NSURL *)url;
+// - (void)setRomPath:(NSURL *)url;
+// - (void)setExtPath:(NSURL *)url;
 
 - (MemoryStats) getStats;
 

@@ -130,6 +130,13 @@ Properties::Properties()
     setFallback(OPT_SRV_PROTOCOL, SERVER_GDB, SRVPROT_DEFAULT);
     setFallback(OPT_SRV_AUTORUN, SERVER_GDB, true);
     setFallback(OPT_SRV_VERBOSE, SERVER_GDB, true);
+
+    setFallback("ROM_PATH", "");
+    setFallback("EXT_PATH", "");
+    setFallback("HD0_PATH", "");
+    setFallback("HD1_PATH", "");
+    setFallback("HD2_PATH", "");
+    setFallback("HD3_PATH", "");
 }
 
 void

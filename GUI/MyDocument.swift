@@ -37,15 +37,16 @@ class MyDocument: NSDocument {
             NSApp.terminate(self)
             return
         }
-        
-        // Create an emulator instance
-        amiga = AmigaProxy()
-        
+                
         // Register GUI related user defaults
         AmigaProxy.defaults.registerUserDefaults()
         
         // Load the user default settings
         AmigaProxy.defaults.load()
+        
+        // Create an emulator instance
+        amiga = AmigaProxy()
+
     }
  
     override open func makeWindowControllers() {

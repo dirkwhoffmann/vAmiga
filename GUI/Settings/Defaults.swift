@@ -223,8 +223,11 @@ extension PropertiesProxy {
     
     func registerUserDefaults() {
         
-        log(level: 2)
+        log("Registering user defaults")
         
+        register("ROM_PATH", UserDefaults.romUrl!.path)
+        register("EXT_PATH", UserDefaults.extUrl!.path)
+
         registerGeneralUserDefaults()
         registerControlsUserDefaults()
         registerDevicesUserDefaults()
