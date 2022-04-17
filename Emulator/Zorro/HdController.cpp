@@ -503,14 +503,29 @@ HdController::processResource(u32 ptr)
     std::vector <os::FileSysEntry> entries;
     osDebugger.read(fsResource.fsr_FileSysEntries.lh_Head, entries);
 
+    auto &drivers = drive.drivers;
+    
     for (const auto &fse : entries) {
-     
-        auto type = OSDebugger::dosTypeStr(fse.fse_DosType);
-        auto version = OSDebugger::dosVersionStr(fse.fse_Version);
         
-        debug(HDR_DEBUG, "Providing file system %s %s\n", type.c_str(), version.c_str());
-
-        // TODO: Mark any loadable file system as unneeded if already provided
+        debug(HDR_DEBUG, "Providing %s %s\n",
+              OSDebugger::dosTypeStr(fse.fse_DosType).c_str(),
+              OSDebugger::dosVersionStr(fse.fse_Version).c_str());
+        
+        for (auto it = drivers.begin(); it != drivers.end(); ) {
+                        
+            if (fse.fse_DosType == it->dosType && fse.fse_Version >= it->dosVersion) {
+                
+                debug(HDR_DEBUG, "Not needed: %s %s\n",
+                      OSDebugger::dosTypeStr(it->dosType).c_str(),
+                      OSDebugger::dosVersionStr(it->dosVersion).c_str());
+                
+                it = drivers.erase(it);
+            
+            } else {
+                
+                it++;
+            }
+        }
     }
 }
 

@@ -130,6 +130,7 @@ private:
         << controllerRevision
         >> geometry
         >> ptable
+        >> drivers
         << data
         << modified
         << writeProtected;
