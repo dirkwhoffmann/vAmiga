@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "Properties.h"
+#include "Amiga.h"
 #include "StringUtils.h"
 #include "AgnusTypes.h"
 #include "AmigaTypes.h"
@@ -270,9 +271,43 @@ Properties::save(std::stringstream &stream)
         
         debug(DEF_DEBUG, "Saving user defaults...\n");
 
-        for (const auto &[key, value]: values) {
+        std::map <string, std::map <string, string>> groups;
+
+        // Write header
+        stream << "# vAmiga " << Amiga::build() << std::endl;
+        stream << "# dirkwhoffmann.github.io/vAmiga" << std::endl;
+        stream << std::endl;
+        
+        // Iterate through all known keys
+        for (const auto &it: fallbacks) {
+
+            auto key = it.first;
+            auto value = getString(key);
+
+            // Check if the key belongs to a group
+            if (auto pos = key.find('.'); pos == std::string::npos) {
+
+                // Write ungrouped keys immediately
+                stream << key << "=" << value << std::endl;
+                
+            } else {
+                
+                // Save the key temporarily
+                auto prefix = key.substr(0, pos);
+                auto suffix = key.substr(pos + 1, string::npos);
+                groups[prefix][suffix] = value;
+            }
+        }
+
+        // Write all groups
+        for (const auto &[group, values]: groups) {
+
+            stream << std::endl << "[" << group << "]" << std::endl;
+
+            for (const auto &[key, value]: values) {
             
-            stream << key << "=" << value << std::endl;
+                stream << key << "=" << value << std::endl;
+            }
         }
     }
 }

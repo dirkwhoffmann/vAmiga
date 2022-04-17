@@ -16,6 +16,30 @@
 using namespace os;
 
 string
+OSDebugger::dosTypeStr(u32 type)
+{
+    char typeStr[] = {
+
+        char(BYTE3(type)),
+        char(BYTE2(type)),
+        char(BYTE1(type)),
+        char(BYTE0(type) + '0'),
+        0
+    };
+    
+    return string(typeStr);
+}
+
+string
+OSDebugger::dosVersionStr(u32 version)
+{
+    auto major = std::to_string(HI_WORD(version));
+    auto minor = std::to_string(LO_WORD(version));
+
+    return major + "." + minor;
+}
+
+string
 OSDebugger::toString(os::LnType value) const
 {
     const char *result = "???";

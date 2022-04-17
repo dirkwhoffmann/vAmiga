@@ -274,32 +274,32 @@ struct Keys {
     struct Gen {
                 
         // Snapshots
-        static let autoSnapshots          = "GenAutoSnapshots"
-        static let autoSnapshotInterval   = "GenScreenshotInterval"
+        static let autoSnapshots          = "General.AutoSnapshots"
+        static let autoSnapshotInterval   = "General.ScreenshotInterval"
 
         // Screenshots
-        static let screenshotSource       = "GenScreenshotSource"
-        static let screenshotTarget       = "GenScreenshotTarget"
+        static let screenshotSource       = "General.ScreenshotSource"
+        static let screenshotTarget       = "General.ScreenshotTarget"
                 
         // Screen captures
-        static let ffmpegPath             = "GenffmpegPath"
-        static let captureSource          = "GenSource"
-        static let bitRate                = "GenBitRate"
-        static let aspectX                = "GenAspectX"
-        static let aspectY                = "GenAspectY"
+        static let ffmpegPath             = "General.ffmpegPath"
+        static let captureSource          = "General.Source"
+        static let bitRate                = "General.BitRate"
+        static let aspectX                = "General.AspectX"
+        static let aspectY                = "General.AspectY"
         
         // Fullscreen
-        static let keepAspectRatio        = "GenFullscreenKeepAspectRatio"
-        static let exitOnEsc              = "GenFullscreenExitOnEsc"
+        static let keepAspectRatio        = "General.FullscreenKeepAspectRatio"
+        static let exitOnEsc              = "General.FullscreenExitOnEsc"
         
         // Warp mode
-        static let warpMode               = "GenWarpMode"
+        static let warpMode               = "General.WarpMode"
         
         // Miscellaneous
-        static let ejectWithoutAsking     = "GenEjectWithoutAsking"
-        static let detachWithoutAsking    = "GenDetachWithoutAsking"
-        static let closeWithoutAsking     = "GenCloseWithoutAsking"
-        static let pauseInBackground      = "GenPauseInBackground"
+        static let ejectWithoutAsking     = "General.EjectWithoutAsking"
+        static let detachWithoutAsking    = "General.DetachWithoutAsking"
+        static let closeWithoutAsking     = "General.CloseWithoutAsking"
+        static let pauseInBackground      = "General.PauseInBackground"
     }
 }
 
@@ -439,24 +439,24 @@ extension Keys {
     struct Con {
         
         // Emulation keys
-        static let mouseKeyMap           = "ConMouseKeyMap"
-        static let joyKeyMap1            = "ConJoyKeyMap1"
-        static let joyKeyMap2            = "ConJoyKeyMap2"
-        static let disconnectJoyKeys     = "ConDisconnectKeys"
+        static let mouseKeyMap           = "Controls.MouseKeyMap"
+        static let joyKeyMap1            = "Controls.JoyKeyMap1"
+        static let joyKeyMap2            = "Controls.JoyKeyMap2"
+        static let disconnectJoyKeys     = "Controls.DisconnectKeys"
         
         // Joysticks
-        static let autofire              = "ConAutofire"
-        static let autofireBullets       = "ConAutofireBullets"
-        static let autofireFrequency     = "ConAutofireFrequency"
+        static let autofire              = "Controls.Autofire"
+        static let autofireBullets       = "Controls.AutofireBullets"
+        static let autofireFrequency     = "Controls.AutofireFrequency"
         
         // Mouse
-        static let retainMouseKeyComb    = "ConRetainMouseKeyComb"
-        static let retainMouseWithKeys   = "ConRetainMouseWithKeys"
-        static let retainMouseByClick    = "ConRetainMouseByClick"
-        static let retainMouseByEntering = "ConRetainMouseByEntering"
-        static let releaseMouseKeyComb   = "ConReleaseMouseKeyComb"
-        static let releaseMouseWithKeys  = "ConReleaseMouseWithKeys"
-        static let releaseMouseByShaking = "ConReleaseMouseByShaking"
+        static let retainMouseKeyComb    = "Controls.RetainMouseKeyComb"
+        static let retainMouseWithKeys   = "Controls.RetainMouseWithKeys"
+        static let retainMouseByClick    = "Controls.RetainMouseByClick"
+        static let retainMouseByEntering = "Controls.RetainMouseByEntering"
+        static let releaseMouseKeyComb   = "Controls.ReleaseMouseKeyComb"
+        static let releaseMouseWithKeys  = "Controls.ReleaseMouseWithKeys"
+        static let releaseMouseByShaking = "Controls.ReleaseMouseByShaking"
     }
 }
 
@@ -799,8 +799,8 @@ extension Keys {
     struct Per {
 
         // Ports
-        static let gameDevice1        = "PerGameDevice1"
-        static let gameDevice2        = "PerGameDevice2"
+        static let gameDevice1        = "Peripherals.GameDevice1"
+        static let gameDevice2        = "Peripherals.GameDevice2"
     }
 }
 
@@ -1106,32 +1106,32 @@ extension Keys {
     struct Vid {
 
         // Geometry
-        static let hAutoCenter        = "VidHAutoCenter"
-        static let vAutoCenter        = "VidVAutoCenter"
-        static let hCenter            = "VidHCenter"
-        static let vCenter            = "VidVCenter"
-        static let hZoom              = "VidHZoom"
-        static let vZoom              = "VidVZoom"
+        static let hAutoCenter        = "Geometry.HAutoCenter"
+        static let vAutoCenter        = "Geometry.VAutoCenter"
+        static let hCenter            = "Geometry.HCenter"
+        static let vCenter            = "Geometry.VCenter"
+        static let hZoom              = "Geometry.HZoom"
+        static let vZoom              = "Geometry.VZoom"
         
-        // Shader
-        static let enhancer           = "VidEnhancer"
-        static let upscaler           = "VidUpscaler"
-        static let blur               = "VidBlur"
-        static let blurRadius         = "VidBlurRadius"
-        static let bloom              = "VidBloom"
-        static let bloomRadius        = "VidBloonRadius"
-        static let bloomBrightness    = "VidBloomBrightness"
-        static let bloomWeight        = "VidBloomWeight"
-        static let flicker            = "VidFlicker"
-        static let flickerWeight      = "VidFlickerWeight"
-        static let dotMask            = "VidDotMask"
-        static let dotMaskBrightness  = "VidDotMaskBrightness"
-        static let scanlines          = "VidScanlines"
-        static let scanlineBrightness = "VidScanlineBrightness"
-        static let scanlineWeight     = "VidScanlineWeight"
-        static let disalignment       = "VidDisalignment"
-        static let disalignmentH      = "VidDisalignmentH"
-        static let disalignmentV      = "VidDisalignmentV"
+        // Shaders
+        static let enhancer           = "Shaders.Enhancer"
+        static let upscaler           = "Shaders.Upscaler"
+        static let blur               = "Shaders.Blur"
+        static let blurRadius         = "Shaders.BlurRadius"
+        static let bloom              = "Shaders.Bloom"
+        static let bloomRadius        = "Shaders.BloonRadius"
+        static let bloomBrightness    = "Shaders.BloomBrightness"
+        static let bloomWeight        = "Shaders.BloomWeight"
+        static let flicker            = "Shaders.Flicker"
+        static let flickerWeight      = "Shaders.FlickerWeight"
+        static let dotMask            = "Shaders.DotMask"
+        static let dotMaskBrightness  = "Shaders.DotMaskBrightness"
+        static let scanlines          = "Shaders.Scanlines"
+        static let scanlineBrightness = "Shaders.ScanlineBrightness"
+        static let scanlineWeight     = "Shaders.ScanlineWeight"
+        static let disalignment       = "Shaders.Disalignment"
+        static let disalignmentH      = "Shaders.DisalignmentH"
+        static let disalignmentV      = "Shaders.DisalignmentV"
     }
 }
 

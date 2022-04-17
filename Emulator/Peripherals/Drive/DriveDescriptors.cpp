@@ -12,6 +12,7 @@
 #include "Error.h"
 #include "FSTypes.h"
 #include "IOUtils.h"
+#include "OSDebugger.h"
 #include <vector>
 
 //
@@ -209,12 +210,11 @@ DriverDescriptor::dump(std::ostream& os) const
     using namespace util;
         
     os << tab("DOS type");
-    os << hex(dosType) << " (";
-    os << char(BYTE3(dosType)) << char(BYTE2(dosType));
-    os << char(BYTE1(dosType)) << dec(BYTE0(dosType));
-    os << ")" << std::endl;
+    os << hex(dosType);
+    os << " (" << OSDebugger::dosTypeStr(dosType) << ")" << std::endl;
     os << tab("DOS version");
-    os << dec(HI_WORD(dosVersion)) << "." << dec(LO_WORD(dosVersion)) << std::endl;
+    os << hex(dosVersion);
+    os << " (" << OSDebugger::dosVersionStr(dosVersion) << ")" << std::endl;
     os << tab("Patch flags");
     os << hex(patchFlags) << std::endl;
     os << tab("Seglist");
