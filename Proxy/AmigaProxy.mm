@@ -1566,17 +1566,6 @@ using namespace moira;
     return data;
 }
 
-- (NSURL *)backupPath:(NSInteger)nr
-{
-    auto path = [self drive]->getWriteThroughPath(nr);
-    return [NSURL URLWithString: @(path.c_str())];
-}
-
-- (void)setPath:(NSInteger)nr path:(NSURL *)path
-{
-    [self drive]->setWriteThroughPath(nr, string([path fileSystemRepresentation]));
-}
-
 - (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self drive]->writeToFile([url fileSystemRepresentation]); }

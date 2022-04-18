@@ -21,8 +21,7 @@ class HardDrive : public Drive {
     friend class HDFFile;
     friend class HdController;
 
-    // Write-through storage file names and associated file handles
-    static fs::path wtPath[4];
+    // Write-through storage files
     static std::fstream wtStream[4];
     
     // Current configuration
@@ -195,9 +194,6 @@ public:
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
     
-    static string getWriteThroughPath(isize nr) { return wtPath[nr].string(); }
-    static void setWriteThroughPath(isize nr, const string &path) { wtPath[nr] = path; }
-    
 private:
     
     void connect();
@@ -298,6 +294,11 @@ public:
     void enableWriteThrough() throws;
     void disableWriteThrough();
 
+private:
+    
+    // Return the path to the write-through storage file
+    string writeThroughPath();
+    
     
     //
     // Scheduling and serving events

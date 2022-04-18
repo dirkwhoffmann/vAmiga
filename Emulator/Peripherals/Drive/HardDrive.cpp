@@ -15,7 +15,6 @@
 #include "Memory.h"
 #include "MsgQueue.h"
 
-fs::path HardDrive::wtPath[4];
 std::fstream HardDrive::wtStream[4];
 
 HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
@@ -228,12 +227,14 @@ HardDrive::setConfigItem(Option option, i64 value)
 void
 HardDrive::connect()
 {
-    if (wtPath[nr] != "") {
+    auto path = writeThroughPath();
+    
+    if (!path.empty()) {
         
         try {
             
-            debug(WT_DEBUG, "Reading disk from %s...\n", wtPath[nr].c_str());
-            auto hdf = HDFFile(wtPath[nr].string());
+            debug(WT_DEBUG, "Reading disk from %s...\n", path.c_str());
+            auto hdf = HDFFile(path);
             init(hdf);
 
             debug(WT_DEBUG, "Trying to enable write-through mode...\n");
@@ -436,9 +437,11 @@ HardDrive::enableWriteThrough()
     debug(WT_DEBUG, "enableWriteThrough()\n");
     
     if (!wt) {
+    
+        auto path = writeThroughPath();
         
         // Only proceed if a storage file is given
-        if (wtPath[nr].empty()) {
+        if (path.empty()) {
             throw VAError(ERROR_WT, "No storage path specified");
         }
         
@@ -448,15 +451,15 @@ HardDrive::enableWriteThrough()
         }
         
         // Delete the old storage file
-        fs::remove(wtPath[nr]);
+        fs::remove(path);
         
         // Recreate the storage file with the contents of this disk
-        writeToFile(wtPath[nr].string());
-        if (!util::fileExists(wtPath[nr].string())) {
+        writeToFile(path);
+        if (!util::fileExists(path)) {
             throw VAError(ERROR_WT, "Can't create storage file");
         }
         // Open file
-        wtStream[nr].open(wtPath[nr], std::ios::binary | std::ios::in | std::ios::out);
+        wtStream[nr].open(path, std::ios::binary | std::ios::in | std::ios::out);
         if (!wtStream[nr].is_open()) {
             throw VAError(ERROR_WT, "Can't open storage file");
         }
@@ -477,6 +480,12 @@ HardDrive::disableWriteThrough()
         debug(WT_DEBUG, "Write-through mode disabled\n");
         wt = false;
     }
+}
+
+string
+HardDrive::writeThroughPath()
+{
+    return Amiga::properties.getString("HD" + std::to_string(nr) + "_PATH");
 }
 
 string

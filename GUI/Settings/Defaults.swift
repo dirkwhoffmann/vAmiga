@@ -20,6 +20,13 @@ extension PropertiesProxy {
         let exception = ExceptionWrapper()
         load(url, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
+        
+        set("ROM_PATH", UserDefaults.romUrl!.path)
+        set("EXT_PATH", UserDefaults.extUrl!.path)
+        set("HD0_PATH", UserDefaults.hd0Url!.path)
+        set("HD1_PATH", UserDefaults.hd1Url!.path)
+        set("HD2_PATH", UserDefaults.hd2Url!.path)
+        set("HD3_PATH", UserDefaults.hd3Url!.path)
     }
 
     func load() {
@@ -225,9 +232,6 @@ extension PropertiesProxy {
         
         log("Registering user defaults")
         
-        register("ROM_PATH", UserDefaults.romUrl!.path)
-        register("EXT_PATH", UserDefaults.extUrl!.path)
-
         registerGeneralUserDefaults()
         registerControlsUserDefaults()
         registerDevicesUserDefaults()

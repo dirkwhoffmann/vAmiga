@@ -708,8 +708,6 @@
 - (void)format:(FSVolumeType)fs name:(NSString *)name exception:(ExceptionWrapper *)ex;
 - (void)changeGeometry:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
 - (NSArray *) geometries;
-- (NSURL *)backupPath:(NSInteger)nr;
-- (void)setPath:(NSInteger)nr path:(NSURL *)path;
 - (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)enableWriteThrough:(ExceptionWrapper *)ex;
 - (void)disableWriteThrough;
