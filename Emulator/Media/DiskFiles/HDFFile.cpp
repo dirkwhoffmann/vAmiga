@@ -44,31 +44,6 @@ HDFFile::finalizeRead()
 
     // Check the device driver descriptors for consistency
     for (auto &it : drivers) { it.checkCompatibility(); }
-
-    // REMOVE ASAP
-    debug(true, "The HDF contains %lu loadable file systems\n", drivers.size());
-
-    /*
-    for (usize i = 0; i < drivers.size(); i++) {
-        
-        drivers[i].dump();
-        Buffer<u8> driver;
-        readDriver(i, driver);
-        
-        debug(true, "Driver %lu has %ld bytes\n", i, driver.size);
-        
-        try {
-            
-            ProgramUnitDescriptor descr(driver);
-            descr.dump(Category::Sections);
-            
-        } catch (VAError &e) {
-
-            std::cout << "VAError: " << std::endl;
-            std::cout << e.what() << std::endl;
-        }
-    }
-    */
 }
 
 void
@@ -342,18 +317,15 @@ HDFFile::partitionData(isize nr) const
 isize
 HDFFile::predictNumBlocks() const
 {
-    isize rootKey = 0;
-    isize highKey = 0;
     isize numReserved = 2;
+    isize highKey = 0;
     
     auto match = [&]() {
-        return (numReserved + highKey) / 2 == rootKey;
+        return isRB(seekBlock((numReserved + highKey) / 2));
     };
-        
+    
     if (auto root = seekRB(); root) {
-        
-        rootKey = isize(root - data.ptr) / bsize();
-        
+                        
         // Predict block count by analyzing the file size
         highKey = data.size / bsize() - 1;
         if (match()) return highKey + 1;
@@ -363,12 +335,13 @@ HDFFile::predictNumBlocks() const
         if (match()) return highKey + 1;
 
         // Predict by faking the numbers to fit
-        highKey = 2 * rootKey - numReserved;
+        highKey = 2 * isize(root - data.ptr) / bsize() - numReserved;
         if (match()) return highKey + 1;
 
         fatalError;
     }
     
+    // No root
     return data.size / bsize();
 }
 
@@ -378,17 +351,19 @@ HDFFile::seekBlock(isize nr) const
     return nr >= 0 && 512 * (nr + 1) <= data.size ? data.ptr + (512 * nr) : nullptr;
 }
 
+bool
+HDFFile::isRB(u8 *ptr) const
+{
+    return ptr && R32BE(ptr) == 2 && R32BE(ptr + bsize() - 4) == 1;
+}
+
 u8 *
 HDFFile::seekRB() const
 {
     auto max = data.size - 512;
     
     for (isize i = 0; i <= max; i += 512) {
-        
-        if (R32BE(data.ptr + i) != 2) continue;
-        if (R32BE(data.ptr + i + bsize() - 4) != 1) continue;
-
-        return data.ptr + i;
+        if (isRB(data.ptr + i)) return data.ptr + i;
     }
 
     return nullptr;

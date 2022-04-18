@@ -129,16 +129,17 @@ HardDrive::init(const HDFFile &hdf)
     
     if (data.size < numBytes) {
         
-        debug(XFILES, "HDF is too large. Ignoring excess bytes.\n");
+        debug(HDR_DEBUG, "HDF is too large. Ignoring excess bytes.\n");
         numBytes = data.size;
     }
     if (data.size > hdf.data.size) {
         
-        debug(XFILES, "HDF is too small. Padding with zeroes.");
+        debug(HDR_DEBUG, "HDF is too small. Padding with zeroes.");
         data.clear(0, hdf.data.size);
     }
     
     // Copy over all blocks
+    printf("Copying %ld bytes\n", numBytes);
     hdf.flash(data.ptr, 0, numBytes);
 }
 

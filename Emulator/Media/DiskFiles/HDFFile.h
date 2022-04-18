@@ -131,10 +131,13 @@ public:
     //
 
 private:
-    
+
     // Returns a pointer to a certain block if it exists
     u8 *seekBlock(isize nr) const;
 
+    // Checks whether the provided pointer points to a Root Block
+    bool isRB(u8 *ptr) const;
+    
     // Return a pointer to the Root Block if it exists
     u8 *seekRB() const;
 
