@@ -260,7 +260,8 @@ HdController::spypeek16(u32 addr) const
             
             // Number of filesystem drivers to add
             debug(HDR_DEBUG, "Filesystem drivers: %ld\n", drive.numDrivers());
-            return u16(drive.numDrivers());
+            // return u16(drive.numDrivers());
+            return 0;
             
         case EXPROM_SIZE + 4:
             
