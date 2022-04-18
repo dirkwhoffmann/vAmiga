@@ -393,7 +393,6 @@ private:
 
 public:
     
-    static DeniseConfig getDefaultConfig();
     const DeniseConfig &getConfig() const { return config; }
     void resetConfig() override;
 

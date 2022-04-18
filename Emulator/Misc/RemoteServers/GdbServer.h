@@ -66,12 +66,18 @@ private:
     
     
     //
+    // Methods from AmigaComponent
+    //
+
+    void resetConfig() override;
+    
+    
+    //
     // Methods from RemoteServer
     //
     
 public:
     
-    ServerConfig getDefaultConfig() override;
     bool shouldRun() override;
     string doReceive() override throws;
     void doSend(const string &payload) override throws;

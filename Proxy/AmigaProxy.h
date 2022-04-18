@@ -81,6 +81,7 @@
 @class MemProxy;
 @class MouseProxy;
 @class PaulaProxy;
+@class PropertiesProxy;
 @class RemoteManagerProxy;
 @class RetroShellProxy;
 @class RomFileProxy;
@@ -150,6 +151,7 @@
     KeyboardProxy *keyboard;
     MemProxy *mem;
     PaulaProxy *paula;
+    PropertiesProxy *properties;
     RemoteManagerProxy *remoteManager;
     RetroShellProxy *retroShell;
     RtcProxy *rtc;
@@ -182,11 +184,14 @@
 @property (readonly, strong) KeyboardProxy *keyboard;
 @property (readonly, strong) MemProxy *mem;
 @property (readonly, strong) PaulaProxy *paula;
+// @property (readonly, strong) PropertiesProxy *properties;
 @property (readonly, strong) RemoteManagerProxy *remoteManager;
 @property (readonly, strong) RetroShellProxy *retroShell;
 @property (readonly, strong) RtcProxy *rtc;
 @property (readonly, strong) RecorderProxy *recorder;
 @property (readonly, strong) SerialPortProxy *serialPort;
+
+@property (class, readonly, strong) PropertiesProxy *defaults;
 
 - (void)dealloc;
 - (void)kill;
@@ -240,6 +245,34 @@
 - (BOOL)configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val;
 
 - (void)setListener:(const void *)sender function:(Callback *)func;
+
+@end
+
+
+//
+// Properties
+//
+
+@interface PropertiesProxy : Proxy { }
+    
+- (void)load:(NSURL *)url exception:(ExceptionWrapper *)ex;
+- (void)save:(NSURL *)url exception:(ExceptionWrapper *)ex;
+
+- (void)register:(NSString *)key value:(NSString *)value;
+
+- (NSString *)getString:(NSString *)key;
+- (NSInteger)getInt:(NSString *)key;
+- (NSInteger)getOpt:(Option)option;
+- (NSInteger)getOpt:(Option)option nr:(NSInteger)nr;
+
+- (void)setKey:(NSString *)key value:(NSString *)value;
+- (void)setOpt:(Option)option value:(NSInteger)value;
+- (void)setOpt:(Option)option nr:(NSInteger)nr value:(NSInteger)value;
+
+- (void)removeAll;
+- (void)removeKey:(NSString *)key;
+- (void)remove:(Option)option;
+- (void)remove:(Option) option nr:(NSInteger)nr;
 
 @end
 
@@ -320,6 +353,7 @@
 @interface MemProxy : AmigaComponentProxy { }
 
 @property (readonly) MemoryConfig config;
+
 - (MemoryStats) getStats;
 
 - (BOOL) isBootRom:(RomIdentifier)rev;
@@ -674,8 +708,6 @@
 - (void)format:(FSVolumeType)fs name:(NSString *)name exception:(ExceptionWrapper *)ex;
 - (void)changeGeometry:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
 - (NSArray *) geometries;
-- (NSURL *)backupPath:(NSInteger)nr;
-- (void)setBackupPath:(NSInteger)nr path:(NSURL *)path;
 - (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)enableWriteThrough:(ExceptionWrapper *)ex;
 - (void)disableWriteThrough;
@@ -939,6 +971,7 @@
 
 @property (readonly) BOOL hasRDB;
 @property (readonly) NSInteger numPartitions;
+@property (readonly) NSInteger numDrivers;
 
 - (NSInteger)writeToFile:(NSString *)path partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
 

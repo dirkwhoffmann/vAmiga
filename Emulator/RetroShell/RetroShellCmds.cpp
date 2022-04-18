@@ -175,9 +175,15 @@ RetroShell::exec <Token::amiga, Token::reset> (Arguments &argv, long param)
 }
 
 template <> void
-RetroShell::exec <Token::amiga, Token::inspect> (Arguments &argv, long param)
+RetroShell::exec <Token::amiga, Token::inspect, Token::state> (Arguments &argv, long param)
 {
     dump(amiga, Category::State);
+}
+
+template <> void
+RetroShell::exec <Token::amiga, Token::inspect, Token::defaults> (Arguments &argv, long param)
+{
+    dump(amiga, Category::Defaults);
 }
 
 

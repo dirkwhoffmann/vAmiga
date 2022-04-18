@@ -148,7 +148,6 @@ private:
     
 public:
     
-    static DiskControllerConfig getDefaultConfig();
     const DiskControllerConfig &getConfig() const { return config; }
     void resetConfig() override;
     

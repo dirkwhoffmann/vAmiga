@@ -190,12 +190,13 @@ extension MyController {
                             device: MTLCreateSystemDefaultDevice()!,
                             controller: self)
         
+        // Apply all GUI related user defaults
+        pref.applyUserDefaults()
+        config.applyUserDefaults()
+
         // Setup window
         configureWindow()
-        
-        // Load user defaults
-        loadUserDefaults()
-        
+                                
         // Enable message processing
         registerAsListener()
                 
@@ -203,9 +204,6 @@ extension MyController {
             // Switch the Amiga on
             amiga.powerOn()
         
-            // Process attachment (if any)
-            // try? mydocument.mountAttachment(destination: amiga.df0)
-
             // Start emulation
             try amiga.run()
             
@@ -551,7 +549,6 @@ extension MyController {
             refreshStatusBar()
 
         case .HDC_STATE:
-            log("HDC_STATE")
             refreshStatusBar()
 
         case .HDR_STEP:

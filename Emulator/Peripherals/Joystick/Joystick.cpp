@@ -9,8 +9,8 @@
 
 #include "config.h"
 #include "Joystick.h"
-#include "Agnus.h"
-#include "ControlPort.h"
+#include "Amiga.h"
+// #include "ControlPort.h"
 #include "IOUtils.h"
 
 Joystick::Joystick(Amiga& ref, ControlPort& pref) : SubComponent(ref), port(pref)
@@ -35,26 +35,22 @@ Joystick::_reset(bool hard)
     axisY = 0;
 }
 
-JoystickConfig
-Joystick::getDefaultConfig()
-{
-    JoystickConfig defaults;
-
-    defaults.autofire = false;
-    defaults.autofireBullets = -3;
-    defaults.autofireDelay = 125;
-    
-    return defaults;
-}
-
 void
 Joystick::resetConfig()
 {
-    auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_AUTOFIRE, defaults.autofire);
-    setConfigItem(OPT_AUTOFIRE_BULLETS, defaults.autofireBullets);
-    setConfigItem(OPT_AUTOFIRE_DELAY, defaults.autofireDelay);
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_AUTOFIRE,
+        OPT_AUTOFIRE_BULLETS,
+        OPT_AUTOFIRE_DELAY
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
 }
 
 i64

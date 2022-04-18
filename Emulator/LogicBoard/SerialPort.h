@@ -80,7 +80,6 @@ private:
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    void _didLoad() override;
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     
@@ -90,7 +89,6 @@ private:
     
 public:
 
-    static SerialPortConfig getDefaultConfig();
     const SerialPortConfig &getConfig() const { return config; }
     void resetConfig() override;
 

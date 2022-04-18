@@ -176,13 +176,57 @@ extension ConfigurationController {
     }
 
     @IBAction func audPresetAction(_ sender: NSPopUpButton!) {
+        
+        amiga.suspend()
+                
+        config.vol0 = 100
+        config.vol1 = 100
+        config.vol2 = 100
+        config.vol3 = 100
+        config.volL = 50
+        config.volR = 50
+        config.samplingMethod = SamplingMethod.NONE.rawValue
+        config.df0Pan = 100
+        config.df1Pan = 300
+        config.df2Pan = 100
+        config.df3Pan = 300
+        config.hd0Pan = 100
+        config.hd1Pan = 300
+        config.hd2Pan = 100
+        config.hd3Pan = 300
+        config.stepVolume = 50
+        config.pollVolume = 0
+        config.insertVolume = 50
+        config.ejectVolume = 50
+        config.filterType = FilterType.BUTTERWORTH.rawValue
+        config.filterAlwaysOn = false
                 
         switch sender.selectedTag() {
-        case 0: config.loadAudioDefaults(AudioDefaults.std)
-        case 1: config.loadAudioDefaults(AudioDefaults.stereo)
-        case 2: config.loadAudioDefaults(AudioDefaults.mono)
-        default: fatalError()
+
+        case 0: // Standard
+            config.pan0 = 50
+            config.pan1 = 350
+            config.pan2 = 350
+            config.pan3 = 50
+
+        case 1: // Stereo
+            config.pan0 = 100
+            config.pan1 = 300
+            config.pan2 = 300
+            config.pan3 = 100
+
+        case 2: // Mono
+            config.pan0 = 0
+            config.pan1 = 0
+            config.pan2 = 0
+            config.pan3 = 0
+
+        default:
+            fatalError()
         }
+        
+        amiga.resume()
+        
         refresh()
     }
     

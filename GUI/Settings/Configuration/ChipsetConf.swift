@@ -166,12 +166,39 @@ extension ConfigurationController {
     
     @IBAction func csPresetAction(_ sender: NSPopUpButton!) {
         
+        let defaults = AmigaProxy.defaults!
+        
+        // Revert to standard settings
+        AmigaProxy.defaults.removeChipsetUserDefaults() 
+        
+        // Modify some settings
         switch sender.selectedTag() {
-        case 0: config.loadChipsetDefaults(HardwareDefaults.A500)
-        case 1: config.loadChipsetDefaults(HardwareDefaults.A1000)
-        case 2: config.loadChipsetDefaults(HardwareDefaults.A2000)
-        default: fatalError()
+
+        case 0:
+            
+            // Amiga 500
+            defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_1MB.rawValue)
+            defaults.set(.RTC_MODEL, RTCRevision.NONE.rawValue)
+
+        case 1:
+            
+            // Amiga 1000
+            defaults.set(.AGNUS_REVISION, AgnusRevision.OCS_OLD.rawValue)
+            defaults.set(.RTC_MODEL, RTCRevision.NONE.rawValue)
+
+        case 2:
+            
+            // Amiga 2000
+            defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_2MB.rawValue)
+            defaults.set(.RTC_MODEL, RTCRevision.OKI.rawValue)
+
+        default:
+            fatalError()
         }
+        
+        // Update the configuration
+        config.applyChipsetUserDefaults()
+
         refresh()
     }
 

@@ -21,8 +21,7 @@ class HardDrive : public Drive {
     friend class HDFFile;
     friend class HdController;
 
-    // Write-through storage file names and associated file handles
-    static fs::path wtPath[4];
+    // Write-through storage files
     static std::fstream wtStream[4];
     
     // Current configuration
@@ -43,8 +42,11 @@ class HardDrive : public Drive {
     GeometryDescriptor geometry;
     
     // Partition table
-    std::vector<PartitionDescriptor> ptable;
+    std::vector <PartitionDescriptor> ptable;
             
+    // Loadable file system drivers
+    std::vector <DriverDescriptor> drivers;
+    
     // Disk data
     Buffer<u8> data;
     
@@ -59,7 +61,7 @@ class HardDrive : public Drive {
     bool writeProtected = false;
 
     // Indicates if write-through mode is enabled
-    bool wt = false;
+    bool writeThrough = false;
     
     
     //
@@ -127,6 +129,7 @@ private:
         << controllerRevision
         >> geometry
         >> ptable
+        >> drivers
         << data
         << modified
         << writeProtected;
@@ -185,15 +188,11 @@ public:
     
 public:
     
-    static HardDriveConfig getDefaultConfig(isize nr);
     const HardDriveConfig &getConfig() const { return config; }
     void resetConfig() override;
     
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
-    
-    static string getWriteThroughPath(isize nr) { return wtPath[nr].string(); }
-    static void setWriteThroughPath(isize nr, const string &path) { wtPath[nr] = path; }
     
 private:
     
@@ -216,7 +215,10 @@ public:
 
     // Returns the number of partitions
     isize numPartitions() const { return isize(ptable.size()); }
-        
+
+    // Returns the number of loadable file system drivers
+    isize numDrivers() const { return isize(drivers.size()); }
+
     // Returns the current drive state
     HardDriveState getState() const { return state; }
     
@@ -258,6 +260,9 @@ public:
     // Reads a data block from RAM and writes it onto the hard drive
     i8 write(isize offset, isize length, u32 addr);
     
+    // Reads a loadable file system
+    void readDriver(isize nr, Buffer<u8> &driver);
+    
 private:
         
     // Checks the given argument list for consistency
@@ -285,10 +290,18 @@ public:
     // Managing write-through mode
     //
     
-    bool writeThroughEnabled() const { return wt; }
+    bool writeThroughEnabled() const { return writeThrough; }
     void enableWriteThrough() throws;
     void disableWriteThrough();
 
+private:
+    
+    // Return the path to the write-through storage file
+    string writeThroughPath();
+    
+    // Creates or updates the write-through storage file
+    void saveWriteThroughImage() throws;
+    
     
     //
     // Scheduling and serving events

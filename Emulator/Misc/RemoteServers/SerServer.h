@@ -53,12 +53,18 @@ protected:
 
     
     //
+    // Methods from AmigaComponent
+    //
+
+    void resetConfig() override;
+
+    
+    //
     // Methods from RemoteServer
     //
     
 public:
     
-    ServerConfig getDefaultConfig() override;
     bool shouldRun() override;
     string doReceive() override;
     void doSend(const string &packet) override;

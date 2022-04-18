@@ -99,9 +99,26 @@ Memory::_dump(Category category, std::ostream& os) const
 }
 
 void
+Memory::_initialize()
+{
+    AmigaComponent::_initialize();
+    
+    auto romPath = Amiga::properties.getString("ROM_PATH");
+    auto extPath = Amiga::properties.getString("EXT_PATH");
+
+    msg("Trying to load Roms...\n")
+    try { loadRom(romPath); } catch(...) { }
+    try { loadExt(extPath); } catch(...) { }
+}
+
+void
 Memory::_reset(bool hard)
 {
     if (hard) {
+        
+        // Try to load Roms
+//        try { loadRom(romPath); } catch(...) { }
+//        try { loadExt(extPath); } catch(...) { }
         
         // Erase WOM (if any)
         if (hasWom()) eraseWom();
@@ -119,43 +136,28 @@ Memory::_reset(bool hard)
     clearStats();
 }
 
-MemoryConfig
-Memory::getDefaultConfig()
-{
-    MemoryConfig defaults;
-    
-    defaults.chipSize = 512;
-    defaults.slowSize = 0;
-    defaults.fastSize = 0;
-
-    defaults.romSize = 0;
-    defaults.womSize = 0;
-    defaults.extSize = 0;
-    
-    defaults.saveRoms = true;
-    defaults.slowRamDelay = true;
-    defaults.bankMap = BANK_MAP_A500;
-    defaults.ramInitPattern = RAM_INIT_ALL_ZEROES;
-    defaults.unmappingType = UNMAPPED_FLOATING;
-    defaults.extStart = 0xE0;
-    
-    return defaults;
-}
-
 void
 Memory::resetConfig()
 {
-    auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_CHIP_RAM, defaults.chipSize);
-    setConfigItem(OPT_SLOW_RAM, defaults.slowSize);
-    setConfigItem(OPT_FAST_RAM, defaults.fastSize);
-    setConfigItem(OPT_EXT_START, defaults.extStart);
-    setConfigItem(OPT_SAVE_ROMS, defaults.saveRoms);
-    setConfigItem(OPT_SLOW_RAM_DELAY, defaults.slowRamDelay);
-    setConfigItem(OPT_BANKMAP, defaults.bankMap);
-    setConfigItem(OPT_UNMAPPING_TYPE, defaults.unmappingType);
-    setConfigItem(OPT_RAM_INIT_PATTERN, defaults.ramInitPattern);
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_CHIP_RAM,
+        OPT_SLOW_RAM,
+        OPT_FAST_RAM,
+        OPT_EXT_START,
+        OPT_SAVE_ROMS,
+        OPT_SLOW_RAM_DELAY,
+        OPT_BANKMAP,
+        OPT_UNMAPPING_TYPE,
+        OPT_RAM_INIT_PATTERN
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
 }
 
 i64

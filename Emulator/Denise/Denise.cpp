@@ -34,38 +34,28 @@ Denise::_reset(bool hard)
     std::memset(zBuffer, 0, sizeof(zBuffer));
 }
 
-DeniseConfig
-Denise::getDefaultConfig()
-{
-    DeniseConfig defaults;
-
-    defaults.revision = DENISE_OCS;
-    defaults.viewportTracking = true;
-    defaults.hiddenBitplanes = 0;
-    defaults.hiddenSprites = 0;
-    defaults.hiddenLayers = 0;
-    defaults.hiddenLayerAlpha = 128;
-    defaults.clxSprSpr = true;
-    defaults.clxSprPlf = true;
-    defaults.clxPlfPlf = true;
-
-    return defaults;
-}
-
 void
 Denise::resetConfig()
 {
-    auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_DENISE_REVISION, defaults.revision);
-    setConfigItem(OPT_VIEWPORT_TRACKING, defaults.viewportTracking);
-    setConfigItem(OPT_HIDDEN_BITPLANES, defaults.hiddenBitplanes);
-    setConfigItem(OPT_HIDDEN_SPRITES, defaults.hiddenSprites);
-    setConfigItem(OPT_HIDDEN_LAYERS, defaults.hiddenLayers);
-    setConfigItem(OPT_HIDDEN_LAYER_ALPHA, defaults.hiddenLayerAlpha);
-    setConfigItem(OPT_CLX_SPR_SPR, defaults.clxSprSpr);
-    setConfigItem(OPT_CLX_SPR_PLF, defaults.clxSprPlf);
-    setConfigItem(OPT_CLX_PLF_PLF, defaults.clxPlfPlf);
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_DENISE_REVISION,
+        OPT_VIEWPORT_TRACKING,
+        OPT_HIDDEN_BITPLANES,
+        OPT_HIDDEN_SPRITES,
+        OPT_HIDDEN_LAYERS,
+        OPT_HIDDEN_LAYER_ALPHA,
+        OPT_CLX_SPR_SPR,
+        OPT_CLX_SPR_PLF,
+        OPT_CLX_PLF_PLF
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
 }
 
 i64

@@ -10,7 +10,9 @@
 #include "config.h"
 #include "DriveDescriptors.h"
 #include "Error.h"
+#include "FSTypes.h"
 #include "IOUtils.h"
+#include "OSDebugger.h"
 #include <vector>
 
 //
@@ -129,7 +131,7 @@ GeometryDescriptor::checkCompatibility() const
 // PartitionDescriptor
 //
 
-PartitionDescriptor::PartitionDescriptor(const GeometryDescriptor &geo) // : PartitionDescriptor()
+PartitionDescriptor::PartitionDescriptor(const GeometryDescriptor &geo)
 {
     sizeBlock   = u32(geo.bsize / 4);
     heads       = u32(geo.heads);
@@ -181,7 +183,7 @@ PartitionDescriptor::dump(std::ostream& os) const
     os << dec(dosType) << std::endl;
 }
 
-void PartitionDescriptor::checkCompatibility() const
+void PartitionDescriptor::checkCompatibility(const GeometryDescriptor &geo) const
 {
     auto bsize = 4 * sizeBlock;
     
@@ -191,4 +193,42 @@ void PartitionDescriptor::checkCompatibility() const
     if (lowCyl > highCyl) {
         throw VAError(ERROR_HDR_CORRUPTED_PTABLE);
     }
+    if (isize(highCyl) >= geo.cylinders) {
+        throw VAError(ERROR_HDR_CORRUPTED_PTABLE);
+    }
+}
+
+void
+DriverDescriptor::dump() const
+{
+    dump(std::cout);
+}
+
+void
+DriverDescriptor::dump(std::ostream& os) const
+{
+    using namespace util;
+        
+    os << tab("DOS type");
+    os << hex(dosType);
+    os << " (" << OSDebugger::dosTypeStr(dosType) << ")" << std::endl;
+    os << tab("DOS version");
+    os << hex(dosVersion);
+    os << " (" << OSDebugger::dosVersionStr(dosVersion) << ")" << std::endl;
+    os << tab("Patch flags");
+    os << hex(patchFlags) << std::endl;
+    os << tab("Seglist");
+    os << dec(segList.size()) << " Blocks" << std::endl;
+
+    os << tab("Blocks");
+    for (usize i = 0; i < segList.size(); i++) {
+        os << (i ? ", " : "") << segList[i];
+    }
+    os << std::endl;
+}
+
+void
+DriverDescriptor::checkCompatibility() const
+{
+
 }

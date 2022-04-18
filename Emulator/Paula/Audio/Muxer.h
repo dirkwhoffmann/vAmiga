@@ -161,7 +161,6 @@ private:
     
 public:
     
-    static MuxerConfig getDefaultConfig();
     const MuxerConfig &getConfig() const { return config; }
     void resetConfig() override;
     

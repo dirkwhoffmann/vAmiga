@@ -13,27 +13,19 @@
 #include "Amiga.h"
 
 void
-SerialPort::_didLoad()
-{
-    printf("SerialPort::_didLoad()\n");
-}
-
-SerialPortConfig
-SerialPort::getDefaultConfig()
-{
-    SerialPortConfig defaults;
-    
-    defaults.device = SPD_NONE;
-    
-    return defaults;
-}
-
-void
 SerialPort::resetConfig()
 {
-    auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_SERIAL_DEVICE, defaults.device);
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_SERIAL_DEVICE
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
 }
 
 i64

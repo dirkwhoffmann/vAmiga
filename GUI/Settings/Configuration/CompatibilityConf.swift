@@ -109,18 +109,47 @@ extension ConfigurationController {
     }
 
     @IBAction func compPresetAction(_ sender: NSPopUpButton!) {
-         
-         switch sender.selectedTag() {
-         case 0: config.loadCompatibilityDefaults(CompatibilityDefaults.std)
-         case 1: config.loadCompatibilityDefaults(CompatibilityDefaults.accurate)
-         case 2: config.loadCompatibilityDefaults(CompatibilityDefaults.accelerated)
-         default: fatalError()
-         }
-         refresh()
-     }
-
-     @IBAction func compDefaultsAction(_ sender: NSButton!) {
-         
-         config.saveCompatibilityUserDefaults()
-     }
+        
+        let defaults = AmigaProxy.defaults!
+                
+        // Revert to standard settings
+        AmigaProxy.defaults.removeCompatibilityUserDefaults()
+                
+        // Override some options
+        switch sender.selectedTag() {
+            
+        case 0:
+            
+            // Standard
+            break
+            
+        case 1:
+            
+            // Accurate
+            defaults.set(.CLX_SPR_SPR, true)
+            defaults.set(.CLX_SPR_PLF, true)
+            defaults.set(.CLX_PLF_PLF, true)
+            
+        case 2:
+            
+            // Accelerated
+            defaults.set(.BLITTER_ACCURACY, 0)
+            defaults.set(.DRIVE_SPEED, -1)
+            defaults.set(.EMULATE_MECHANICS, [0, 1, 2, 3], false)
+            defaults.set(.ACCURATE_KEYBOARD, false)
+            defaults.set(.ECLOCK_SYNCING, false)
+            
+        default:
+            fatalError()
+        }
+        
+        // Update the configutation
+        config.applyCompatibilityUserDefaults()
+        refresh()
+    }
+    
+    @IBAction func compDefaultsAction(_ sender: NSButton!) {
+        
+        config.saveCompatibilityUserDefaults()
+    }
 }

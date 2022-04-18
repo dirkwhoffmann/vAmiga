@@ -130,7 +130,6 @@ private:
 
 public:
     
-    static PixelEngineConfig getDefaultConfig();
     const PixelEngineConfig &getConfig() const { return config; }
     void resetConfig() override;
 

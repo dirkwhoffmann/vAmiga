@@ -104,12 +104,45 @@ extension ConfigurationController {
 
     @IBAction func memPresetAction(_ sender: NSPopUpButton!) {
         
+        let defaults = AmigaProxy.defaults!
+                
+        amiga.suspend()
+        
+        // Revert to standard settings
+        AmigaProxy.defaults.removeMemoryUserDefaults()
+        
+        // Adjust some settings
         switch sender.selectedTag() {
-        case 0: config.loadMemoryDefaults(MemoryDefaults.A500)
-        case 1: config.loadMemoryDefaults(MemoryDefaults.A1000)
-        case 2: config.loadMemoryDefaults(MemoryDefaults.A2000)
-        default: fatalError()
+
+        case 0:
+            
+            // Amiga 500
+            defaults.set(.CHIP_RAM, 512)
+            defaults.set(.SLOW_RAM, 512)
+            defaults.set(.BANKMAP, BankMap.A500.rawValue)
+
+        case 1:
+            
+            // Amiga 1000
+            defaults.set(.CHIP_RAM, 256)
+            defaults.set(.SLOW_RAM, 0)
+            defaults.set(.BANKMAP, BankMap.A1000.rawValue)
+
+        case 2:
+            
+            // Amiga 2000
+            defaults.set(.CHIP_RAM, 1024)
+            defaults.set(.SLOW_RAM, 0)
+            defaults.set(.BANKMAP, BankMap.A2000B.rawValue)
+
+        default:
+            fatalError()
         }
+        
+        // Update the configutation
+        config.applyMemoryUserDefaults()
+
+        amiga.resume()
         refresh()
     }
 

@@ -139,7 +139,7 @@ extension ConfigurationController {
     
     @IBAction func vidBlurAction(_ sender: NSPopUpButton!) {
         
-        config.blur = Int32(sender.selectedTag())
+        config.blur = sender.selectedTag()
         refresh()
     }
     
@@ -175,7 +175,7 @@ extension ConfigurationController {
 
     @IBAction func vidFlickerAction(_ sender: NSPopUpButton!) {
 
-        config.flicker = Int32(sender.selectedTag())
+        config.flicker = sender.selectedTag()
         refresh()
     }
 
@@ -217,7 +217,7 @@ extension ConfigurationController {
     
     @IBAction func vidDisalignmentAction(_ sender: NSPopUpButton!) {
         
-        config.disalignment = Int32(sender.selectedTag())
+        config.disalignment = sender.selectedTag()
         refresh()
     }
 
@@ -254,28 +254,24 @@ extension ConfigurationController {
     @IBAction func vidHCenterAction(_ sender: NSSlider!) {
 
         config.hCenter = sender.floatValue / 1000
-        log("hcenter = \(config.hCenter)", level: 2)
         refresh()
     }
     
     @IBAction func vidVCenterAction(_ sender: NSSlider!) {
         
         config.vCenter = sender.floatValue / 1000
-        log("vcenter = \(config.vCenter)", level: 2)
         refresh()
     }
     
     @IBAction func vidHZoomAction(_ sender: NSSlider!) {
         
         config.hZoom = sender.floatValue / 1000
-        log("hzoom = \(config.hZoom)", level: 2)
         refresh()
     }
 
     @IBAction func vidVZoomAction(_ sender: NSSlider!) {
         
         config.vZoom = sender.floatValue / 1000
-        log("vzoom = \(config.vZoom)", level: 2)
         refresh()
     }
     
@@ -284,40 +280,75 @@ extension ConfigurationController {
     //
     
     @IBAction func vidPresetAction(_ sender: NSMenuItem!) {
-                
+              
+        let defaults = AmigaProxy.defaults!
+
         switch sender.tag {
             
-        case 0: // Recommended settings (Centered TFT)
-            config.loadGeometryDefaults(GeometryDefaults.wide)
-            config.loadColorDefaults(VideoDefaults.tft)
-            config.loadShaderDefaults(VideoDefaults.tft)
-
+        case 0: // Recommended settings
+            
+            log()
+            AmigaProxy.defaults.removeVideoUserDefaults()
+                        
         case 1: // Narrow Geometry
-            config.loadGeometryDefaults(GeometryDefaults.narrow)
-
+            
+            log()
+            AmigaProxy.defaults.removeGeometryUserDefaults()
+            defaults.set(Keys.Vid.hAutoCenter, true)
+            defaults.set(Keys.Vid.vAutoCenter, true)
+            defaults.set(Keys.Vid.hCenter, 0.6)
+            defaults.set(Keys.Vid.vCenter, 0.47)
+            defaults.set(Keys.Vid.hZoom, 1.0)
+            defaults.set(Keys.Vid.vZoom, 0.27)
+            
         case 2: // Wide Geometry
-            config.loadGeometryDefaults(GeometryDefaults.wide)
+            
+            log()
+            AmigaProxy.defaults.removeGeometryUserDefaults()
+            defaults.set(Keys.Vid.hAutoCenter, true)
+            defaults.set(Keys.Vid.vAutoCenter, true)
+            defaults.set(Keys.Vid.hCenter, 0.409)
+            defaults.set(Keys.Vid.vCenter, 0.143)
+            defaults.set(Keys.Vid.hZoom, 0.747)
+            defaults.set(Keys.Vid.vZoom, 0.032)
 
         case 3: // Extreme Geometry
-            config.loadGeometryDefaults(GeometryDefaults.extreme)
-
-        case 6: // TFT Appearance
-            config.loadColorDefaults(VideoDefaults.tft)
-            config.loadShaderDefaults(VideoDefaults.tft)
             
+            log()
+            AmigaProxy.defaults.removeGeometryUserDefaults()
+            defaults.set(Keys.Vid.hAutoCenter, false)
+            defaults.set(Keys.Vid.vAutoCenter, false)
+            defaults.set(Keys.Vid.hCenter, 0)
+            defaults.set(Keys.Vid.vCenter, 0)
+            defaults.set(Keys.Vid.hZoom, 0)
+            defaults.set(Keys.Vid.vZoom, 0)
+            
+        case 6: // TFT Appearance
+            
+            log()
+            AmigaProxy.defaults.removeColorUserDefaults()
+            AmigaProxy.defaults.removeShaderUserDefaults()
+
         case 7: // CRT Appearance
-            config.loadColorDefaults(VideoDefaults.crt)
-            config.loadShaderDefaults(VideoDefaults.crt)
+            
+            log()
+            AmigaProxy.defaults.removeColorUserDefaults()
+            AmigaProxy.defaults.removeShaderUserDefaults()
+            defaults.set(Keys.Vid.blurRadius, 1.5)
+            defaults.set(Keys.Vid.bloom, 1)
+            defaults.set(Keys.Vid.dotMask, 1)
+            defaults.set(Keys.Vid.scanlines, 2)
             
         default:
             fatalError()
         }
+        
+        config.applyVideoUserDefaults()
         refresh()
     }
     
     @IBAction func vidDefaultsAction(_ sender: NSButton!) {
         
         config.saveVideoUserDefaults()
-        config.saveGeometryUserDefaults()
     }
 }

@@ -17,14 +17,17 @@ class FloppyDisk;
 
 class HDFFile : public DiskFile {
     
+public:
+    
     // Derived drive geometry
     GeometryDescriptor geometry;
 
     // Derived partition table
-    std::vector<PartitionDescriptor> ptable;
-                
-public:
+    std::vector <PartitionDescriptor> ptable;
     
+    // Included device drivers
+    std::vector <DriverDescriptor> drivers;
+                
     static bool isCompatible(const string &path);
     static bool isCompatible(std::istream &stream);
     static bool isOversized(isize size) { return size > MB(504); }
@@ -74,10 +77,12 @@ public:
     // Providing descriptors
     //
     
-    struct GeometryDescriptor getGeometryDescriptor() const;
-    struct PartitionDescriptor getPartitionDescriptor(isize part = 0) const;
+    GeometryDescriptor getGeometryDescriptor() const;
+    PartitionDescriptor getPartitionDescriptor(isize part = 0) const;
     std::vector<PartitionDescriptor> getPartitionDescriptors() const;
-    struct FileSystemDescriptor getFileSystemDescriptor(isize part = 0) const;
+    DriverDescriptor getDriverDescriptor(isize driver = 0) const;
+    std::vector<DriverDescriptor> getDriverDescriptors() const;
+    FileSystemDescriptor getFileSystemDescriptor(isize part = 0) const;
 
         
     //
@@ -105,9 +110,12 @@ public:
     
     // Returns true if this image contains a rigid disk block
     bool hasRDB() const;
+
+    // Returns the number of loadable file system drivers
+    isize numDrivers() const { return isize(drivers.size()); }
     
-    // Returns the layout parameters of the hard drive
-    isize numPartitions() const;
+    // Returns the number of partitions
+    isize numPartitions() const { return isize(ptable.size()); }
 
     // Returns the byte count and the location of a certain partition
     isize partitionSize(isize nr) const;
@@ -123,10 +131,13 @@ public:
     //
 
 private:
-    
+
     // Returns a pointer to a certain block if it exists
     u8 *seekBlock(isize nr) const;
 
+    // Checks whether the provided pointer points to a Root Block
+    bool isRB(u8 *ptr) const;
+    
     // Return a pointer to the Root Block if it exists
     u8 *seekRB() const;
 
@@ -135,13 +146,19 @@ private:
     
     // Returns a pointer to a certain partition block if it exists
     u8 *seekPB(isize nr) const;
-    
+
+    // Returns a pointer to a certain filesystem header block if it exists
+    u8 *seekFSH(isize nr) const;
+
     // Returns a string from the Rigid Disk Block if it exists
     std::optional<string> rdbString(isize offset, isize len) const;
 
     // Extracts the DOS revision number from a certain block
     FSVolumeType dos(isize nr) const;
     
+    // Returns a loadable device drive
+    [[deprecated]] void readDriver(isize nr, Buffer<u8> &driver);
+
     
     //
     // Serializing

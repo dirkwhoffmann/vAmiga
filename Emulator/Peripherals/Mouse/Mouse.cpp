@@ -9,11 +9,11 @@
 
 #include "config.h"
 #include "Mouse.h"
-#include "Agnus.h"
+#include "Amiga.h"
 #include "Chrono.h"
-#include "ControlPort.h"
+// #include "ControlPort.h"
 #include "IOUtils.h"
-#include "MsgQueue.h"
+// #include "MsgQueue.h"
 
 Mouse::Mouse(Amiga& ref, ControlPort& pref) : SubComponent(ref), port(pref)
 {
@@ -40,26 +40,22 @@ void Mouse::_reset(bool hard)
     targetY = 0;
 }
 
-MouseConfig
-Mouse::getDefaultConfig()
-{
-    MouseConfig defaults;
-
-    defaults.pullUpResistors = true;
-    defaults.shakeDetection = true;
-    defaults.velocity = 100;
-    
-    return defaults;
-}
-
 void
 Mouse::resetConfig()
 {
-    auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_PULLUP_RESISTORS, defaults.pullUpResistors);
-    setConfigItem(OPT_SHAKE_DETECTION, defaults.shakeDetection);
-    setConfigItem(OPT_MOUSE_VELOCITY, defaults.velocity);
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_PULLUP_RESISTORS,
+        OPT_SHAKE_DETECTION,
+        OPT_MOUSE_VELOCITY
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
 }
 
 i64

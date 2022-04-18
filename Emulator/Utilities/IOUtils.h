@@ -17,6 +17,7 @@
 #include <fstream>
 #include <istream>
 #include <iostream>
+#include <sstream>
 #include <sys/stat.h>
 #include <vector>
 

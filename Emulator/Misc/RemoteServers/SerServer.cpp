@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "SerServer.h"
-#include "Agnus.h"
+#include "Amiga.h"
 #include "IOUtils.h"
 #include "RetroShell.h"
 #include "SerialPort.h"
@@ -42,23 +42,29 @@ SerServer::_dump(Category category, std::ostream& os) const
     }
 }
 
+void
+SerServer::resetConfig()
+{
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_SRV_PORT,
+        OPT_SRV_PROTOCOL,
+        OPT_SRV_AUTORUN,
+        OPT_SRV_VERBOSE
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option, SERVER_SER));
+    }
+}
+
 bool
 SerServer::shouldRun()
 {
     return serialPort.getConfigItem(OPT_SERIAL_DEVICE) == SPD_NULLMODEM;
-}
-
-ServerConfig
-SerServer::getDefaultConfig()
-{
-    ServerConfig defaults;
-    
-    defaults.port = 8080;
-    defaults.autoRun = true;
-    defaults.protocol = SRVPROT_DEFAULT;
-    defaults.verbose = true;
-
-    return defaults;
 }
 
 string

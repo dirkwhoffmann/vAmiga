@@ -349,9 +349,7 @@ private:
     //
     
 public:
-    
-    static CIAConfig getDefaultConfig();
-    
+        
     void resetConfig() override;
     const CIAConfig &getConfig() const { return config; }
     i64 getConfigItem(Option option) const;

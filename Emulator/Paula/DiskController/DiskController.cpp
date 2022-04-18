@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "DiskController.h"
+#include "Amiga.h"
 #include "Agnus.h"
 #include "ADFFile.h"
 #include "FloppyDrive.h"
@@ -28,33 +29,33 @@ DiskController::_reset(bool hard)
     dsksync = 0x4489;    
 }
 
-DiskControllerConfig
-DiskController::getDefaultConfig()
-{
-    DiskControllerConfig defaults;
-    
-    defaults.connected[0] = true;
-    defaults.connected[1] = false;
-    defaults.connected[2] = false;
-    defaults.connected[3] = false;
-    defaults.speed = 1;
-    defaults.lockDskSync = false;
-    defaults.autoDskSync = false;
-    
-    return defaults;
-}
-
 void
 DiskController::resetConfig()
 {
-    auto defaults = getDefaultConfig();
-    
-    for (isize i = 0; i < 4; i++) {
-        setConfigItem(OPT_DRIVE_CONNECT, i, defaults.connected[i]);
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_DRIVE_SPEED,
+        OPT_AUTO_DSKSYNC,
+        OPT_LOCK_DSKSYNC
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
     }
-    setConfigItem(OPT_DRIVE_SPEED, defaults.speed);
-    setConfigItem(OPT_AUTO_DSKSYNC, defaults.lockDskSync);
-    setConfigItem(OPT_LOCK_DSKSYNC, defaults.autoDskSync);
+    
+    std::vector <Option> moreOptions = {
+        
+        OPT_DRIVE_CONNECT
+    };
+
+    for (auto &option : moreOptions) {
+        for (isize i = 0; i < 4; i++) {
+            setConfigItem(option, i, defaults.get(option, i));
+        }
+    }
 }
 
 i64

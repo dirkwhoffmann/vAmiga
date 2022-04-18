@@ -143,11 +143,16 @@ extension ConfigurationController {
 
     @IBAction func perPresetAction(_ sender: NSPopUpButton!) {
          
-         switch sender.selectedTag() {
-         case 0: config.loadPeripheralsDefaults(PeripheralsDefaults.std)
-         default: fatalError()
-         }
-         refresh()
+        amiga.suspend()
+        
+        // Revert to standard settings
+        AmigaProxy.defaults.removePeripheralsUserDefaults()
+        
+        // Update the configuration
+        config.applyPeripheralsUserDefaults()
+
+        amiga.resume()
+        refresh()
      }
 
      @IBAction func perDefaultsAction(_ sender: NSButton!) {

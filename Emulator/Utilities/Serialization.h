@@ -155,6 +155,15 @@ public:
     }
 
     template <class T>
+    auto& operator<<(std::vector <T> &v)
+    {
+        auto len = v.size();
+        for(usize i = 0; i < len; i++) *this << v[i];
+        count += 8;
+        return *this;
+    }
+
+    template <class T>
     auto& operator>>(std::vector <T> &v)
     {
         auto len = v.size();
@@ -239,7 +248,17 @@ public:
         }
         return *this;
     }
-    
+
+    template <class T>
+    auto& operator<<(std::vector <T> &v)
+    {
+        isize len = isize(v.size());
+        for (isize i = 0; i < len; i++) {
+            *this << v[i];
+        }
+        return *this;
+    }
+
     template <class T>
     auto& operator>>(std::vector <T> &v)
     {
@@ -334,6 +353,20 @@ public:
         return *this;
     }
 
+    template <class T>
+    auto& operator<<(std::vector <T> &v)
+    {
+        i64 len;
+        *this << len;
+        v.clear();
+        v.reserve(len);
+        for (isize i = 0; i < len; i++) {
+            v.push_back(T());
+            *this << v.back();
+        }
+        return *this;
+    }
+    
     template <class T>
     auto& operator>>(std::vector <T> &v)
     {
@@ -436,7 +469,18 @@ public:
         writeString(ptr, v);
         return *this;
     }
-    
+
+    template <class T>
+    auto& operator<<(std::vector <T> &v)
+    {
+        auto len = v.size();
+        *this << i64(len);
+        for (usize i = 0; i < len; i++) {
+            *this << v[i];
+        }
+        return *this;
+    }
+
     template <class T>
     auto& operator>>(std::vector <T> &v)
     {

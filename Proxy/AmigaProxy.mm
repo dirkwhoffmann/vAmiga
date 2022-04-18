@@ -80,6 +80,92 @@ using namespace moira;
 @end
 
 //
+// Properties
+//
+
+@implementation PropertiesProxy
+
+- (Properties *)props
+{
+    return (Properties *)obj;
+}
+
+- (void)load:(NSURL *)url exception:(ExceptionWrapper *)ex
+{
+    try { return [self props]->load([url fileSystemRepresentation]); }
+    catch (VAError &error) { [ex save:error]; }
+}
+
+- (void)save:(NSURL *)url exception:(ExceptionWrapper *)ex
+{
+    try { return [self props]->save([url fileSystemRepresentation]); }
+    catch (VAError &error) { [ex save:error]; }
+}
+
+- (void)register:(NSString *)key value:(NSString *)value
+{
+    [self props]->setFallback(string([key UTF8String]), string([value UTF8String]));
+}
+
+- (NSString *)getString:(NSString *)key
+{
+    auto result = [self props]->getString([key UTF8String]);
+    return @(result.c_str());
+}
+
+- (NSInteger)getInt:(NSString *)key
+{
+    return [self props]->getInt([key UTF8String]);
+}
+
+- (NSInteger)getOpt:(Option)option
+{
+    return [self props]->get(option);
+}
+
+- (NSInteger)getOpt:(Option)option nr:(NSInteger)nr
+{
+    return [self props]->get(option, nr);
+}
+
+- (void)setKey:(NSString *)key value:(NSString *)value
+{
+    [self props]->setString(string([key UTF8String]), string([value UTF8String]));
+}
+
+- (void)setOpt:(Option)option value:(NSInteger)value
+{
+    [self props]->set(option, value);
+}
+
+- (void)setOpt:(Option)option nr:(NSInteger)nr value:(NSInteger)value
+{
+    [self props]->set(option, nr, value);
+}
+
+- (void)removeAll
+{
+    [self props]->remove();
+}
+
+- (void)removeKey:(NSString *)key
+{
+    [self props]->remove(string([key UTF8String]));
+}
+
+- (void)remove:(Option)option
+{
+    [self props]->remove(option);
+}
+
+- (void)remove:(Option) option nr:(NSInteger)nr
+{
+    [self props]->remove(option, nr);
+}
+
+@end
+
+//
 // Guards (Breakpoints, Watchpoints)
 //
 
@@ -1480,17 +1566,6 @@ using namespace moira;
     return data;
 }
 
-- (NSURL *)backupPath:(NSInteger)nr
-{
-    auto path = [self drive]->getWriteThroughPath(nr);
-    return [NSURL URLWithString: @(path.c_str())];
-}
-
-- (void)setBackupPath:(NSInteger)nr path:(NSURL *)path
-{
-    [self drive]->setWriteThroughPath(nr, string([path fileSystemRepresentation]));
-}
-
 - (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self drive]->writeToFile([url fileSystemRepresentation]); }
@@ -2327,6 +2402,11 @@ using namespace moira;
     return [self hdf]->numPartitions();
 }
 
+- (NSInteger)numDrivers
+{
+    return [self hdf]->numDrivers();
+}
+
 - (NSInteger)writeToFile:(NSString *)path partition:(NSInteger)nr exception:(ExceptionWrapper *)ex
 {
     try { return [self hdf]->writePartitionToFile([path fileSystemRepresentation], nr); }
@@ -2532,6 +2612,7 @@ using namespace moira;
 @synthesize keyboard;
 @synthesize mem;
 @synthesize paula;
+// @synthesize properties;
 @synthesize remoteManager;
 @synthesize retroShell;
 @synthesize rtc;
@@ -2572,6 +2653,7 @@ using namespace moira;
     keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];
     mem = [[MemProxy alloc] initWith:&amiga->mem];
     paula = [[PaulaProxy alloc] initWith:&amiga->paula];
+    // properties = [[PropertiesProxy alloc] initWith:&amiga->properties];
     retroShell = [[RetroShellProxy alloc] initWith:&amiga->retroShell];
     rtc = [[RtcProxy alloc] initWith:&amiga->rtc];
     recorder = [[RecorderProxy alloc] initWith:&amiga->denise.screenRecorder];
@@ -2585,6 +2667,11 @@ using namespace moira;
 - (Amiga *)amiga
 {
     return (Amiga *)obj;
+}
+
++ (PropertiesProxy *) defaults
+{
+    return [[PropertiesProxy alloc] initWith:&Amiga::properties];
 }
 
 - (void)dealloc

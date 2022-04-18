@@ -10,9 +10,9 @@
 #include "config.h"
 #include "RTC.h"
 #include "Chrono.h"
-#include "CPU.h"
+#include "Amiga.h"
 #include "IOUtils.h"
-#include "Memory.h"
+// #include "Memory.h"
 
 i64
 RTC::getConfigItem(Option option) const
@@ -71,22 +71,20 @@ RTC::_reset(bool hard)
     }
 }
 
-RTCConfig
-RTC::getDefaultConfig()
-{
-    RTCConfig defaults;
-
-    defaults.model = RTC_OKI;
-    
-    return defaults;
-}
-
 void
 RTC::resetConfig()
 {
-    RTCConfig defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_RTC_MODEL, defaults.model);
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_RTC_MODEL
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
 }
 
 void

@@ -125,8 +125,7 @@ private:
     //
     
 public:
-    
-    static HdcConfig getDefaultConfig(isize nr);
+
     const HdcConfig &getConfig() const { return config; }
     void resetConfig() override;
     
@@ -171,9 +170,9 @@ public:
         
 private:
     
-    void processCmd();
-    void processInit();
-    void processResource();
-    void processInfoReq();
-    void processInitSeg();
+    void processCmd(u32 ptr);
+    void processInit(u32 ptr);
+    void processResource(u32 ptr);
+    void processInfoReq(u32 ptr);
+    void processInitSeg(u32 ptr);
 };

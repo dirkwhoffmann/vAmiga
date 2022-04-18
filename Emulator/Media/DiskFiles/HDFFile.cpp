@@ -13,6 +13,7 @@
 #include "HardDrive.h"
 #include "IOUtils.h"
 #include "Memory.h"
+#include "OSDescriptors.h"
 #include "StringUtils.h"
 
 bool
@@ -33,19 +34,16 @@ HDFFile::finalizeRead()
     // Retrieve geometry and partition information
     geometry = getGeometryDescriptor();
     ptable = getPartitionDescriptors();
-
+    drivers = getDriverDescriptors();
+    
     // Check the hard drive descriptor for consistency
     geometry.checkCompatibility();
 
     // Check the partition table for consistency
-    for (auto &p : ptable) {
-        
-        p.checkCompatibility();
-        
-        if (isize(p.highCyl) >= geometry.cylinders) {
-            throw(ERROR_HDR_CORRUPTED_PTABLE);
-        }
-    }
+    for (auto &it : ptable) { it.checkCompatibility(geometry); }
+
+    // Check the device driver descriptors for consistency
+    for (auto &it : drivers) { it.checkCompatibility(); }
 }
 
 void
@@ -128,7 +126,7 @@ HDFFile::getPartitionDescriptor(isize part) const
     
     if (auto pb = seekPB(part); pb) {
         
-        // Read the information from the partition block
+        // Extract information from the partition block
         result.name           = util::createStr(pb + 37, 31);
         result.flags          = R32BE_ALIGNED(pb + 20);
         result.sizeBlock      = R32BE_ALIGNED(pb + 132);
@@ -169,10 +167,54 @@ HDFFile::getPartitionDescriptors() const
     result.push_back(getPartitionDescriptor(0));
     
     // Add other partitions (if any)
-    for (isize i = 1; i < 16; i++) {
-        if (auto pb = seekPB(i); pb) {
-            result.push_back(getPartitionDescriptor(i));
+    for (isize i = 1; i < 16 && seekPB(i); i++) {
+        result.push_back(getPartitionDescriptor(i));
+    }
+    
+    return result;
+}
+
+DriverDescriptor
+HDFFile::getDriverDescriptor(isize driver) const
+{
+    DriverDescriptor result;
+    
+    if (auto fsh = seekFSH(driver); fsh) {
+        
+        // Extract information from the file system header block
+        result.dosType      = R32BE_ALIGNED(fsh + 32);
+        result.dosVersion   = R32BE_ALIGNED(fsh + 36);
+        result.patchFlags   = R32BE_ALIGNED(fsh + 40);
+
+        // Traverse the seglist
+        auto lsegRef = R32BE_ALIGNED(fsh + 72);
+        
+        for (isize i = 0; lsegRef != u32(-1); i++) {
+
+            auto lsegBlock = seekBlock(lsegRef);
+            
+            if (!lsegBlock || strcmp((const char *)lsegBlock, "LSEG")) {
+                throw VAError(ERROR_HDR_CORRUPTED_LSEG);
+            }
+            if (i >= 1024) {
+                throw VAError(ERROR_HDR_CORRUPTED_LSEG);
+            }
+            
+            result.segList.push_back(lsegRef);
+            lsegRef = R32BE_ALIGNED(lsegBlock + 16);
         }
+    }
+
+    return result;
+}
+
+std::vector<DriverDescriptor>
+HDFFile::getDriverDescriptors() const
+{
+    std::vector<DriverDescriptor> result;
+        
+    for (isize i = 0; i < 16 && seekFSH(i); i++) {
+        result.push_back(getDriverDescriptor(i));
     }
     
     return result;
@@ -253,12 +295,6 @@ HDFFile::hasRDB() const
 }
 
 isize
-HDFFile::numPartitions() const
-{
-    return isize(ptable.size());
-}
-
-isize
 HDFFile::partitionSize(isize nr) const
 {
     auto &part = ptable[nr];
@@ -281,18 +317,15 @@ HDFFile::partitionData(isize nr) const
 isize
 HDFFile::predictNumBlocks() const
 {
-    isize rootKey = 0;
-    isize highKey = 0;
     isize numReserved = 2;
+    isize highKey = 0;
     
     auto match = [&]() {
-        return (numReserved + highKey) / 2 == rootKey;
+        return isRB(seekBlock((numReserved + highKey) / 2));
     };
-        
+    
     if (auto root = seekRB(); root) {
-        
-        rootKey = isize(root - data.ptr) / bsize();
-        
+                        
         // Predict block count by analyzing the file size
         highKey = data.size / bsize() - 1;
         if (match()) return highKey + 1;
@@ -302,12 +335,13 @@ HDFFile::predictNumBlocks() const
         if (match()) return highKey + 1;
 
         // Predict by faking the numbers to fit
-        highKey = 2 * rootKey - numReserved;
+        highKey = 2 * isize(root - data.ptr) / bsize() - numReserved;
         if (match()) return highKey + 1;
 
         fatalError;
     }
     
+    // No root
     return data.size / bsize();
 }
 
@@ -317,17 +351,19 @@ HDFFile::seekBlock(isize nr) const
     return nr >= 0 && 512 * (nr + 1) <= data.size ? data.ptr + (512 * nr) : nullptr;
 }
 
+bool
+HDFFile::isRB(u8 *ptr) const
+{
+    return ptr && R32BE(ptr) == 2 && R32BE(ptr + bsize() - 4) == 1;
+}
+
 u8 *
 HDFFile::seekRB() const
 {
     auto max = data.size - 512;
     
     for (isize i = 0; i <= max; i += 512) {
-        
-        if (R32BE(data.ptr + i) != 2) continue;
-        if (R32BE(data.ptr + i + bsize() - 4) != 1) continue;
-
-        return data.ptr + i;
+        if (isRB(data.ptr + i)) return data.ptr + i;
     }
 
     return nullptr;
@@ -368,6 +404,29 @@ HDFFile::seekPB(isize nr) const
     return result;
 }
 
+u8 *
+HDFFile::seekFSH(isize nr) const
+{
+    u8 *result = nullptr;
+    
+    // Go to the rigid disk block
+    if (auto rdb = seekRDB(); rdb) {
+        
+        // Go to the first file system header block
+        result = seekBlock(R32BE_ALIGNED(rdb + 32));
+        
+        // Traverse the linked list
+        for (isize i = 0; i < nr && result; i++) {
+            result = seekBlock(R32BE_ALIGNED(result + 16));
+        }
+
+        // Make sure the reached block is a partition block
+        if (result && strcmp((const char *)result, "FSHD")) result = nullptr;
+    }
+    
+    return result;
+}
+
 std::optional<string>
 HDFFile::rdbString(isize offset, isize len) const
 {
@@ -390,6 +449,25 @@ HDFFile::dos(isize blockNr) const
     }
     
     return FS_NODOS;
+}
+
+void
+HDFFile::readDriver(isize nr, Buffer<u8> &driver)
+{
+    assert(usize(nr) < drivers.size());
+    
+    auto &segList = drivers[nr].segList;
+    auto bytesPerBlock = bsize() - 20;
+
+    driver.init(isize(segList.size()) * bytesPerBlock);
+    
+    isize offset = 0;
+    for (auto &seg : segList) {
+
+        assert(seekBlock(seg));
+        memcpy(driver.ptr + offset, seekBlock(seg) + 20, bytesPerBlock);
+        offset += bytesPerBlock;
+    }
 }
 
 isize

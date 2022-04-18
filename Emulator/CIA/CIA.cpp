@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "CIA.h"
+#include "Amiga.h"
 #include "Agnus.h"
 #include "ControlPort.h"
 #include "DiskController.h"
@@ -56,27 +57,23 @@ CIA::_reset(bool hard)
     // Update the memory layout because the OVL bit may have changed
     mem.updateMemSrcTables();
 }
-
-CIAConfig
-CIA::getDefaultConfig()
-{
-    CIAConfig defaults;
-    
-    defaults.revision = CIA_MOS_8520_DIP;
-    defaults.todBug = true;
-    defaults.eClockSyncing = true;
-
-    return defaults;
-}
-
+ 
 void
 CIA::resetConfig()
 {
-    auto defaults = getDefaultConfig();
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_CIA_REVISION,
+        OPT_TODBUG,
+        OPT_ECLOCK_SYNCING
+    };
     
-    setConfigItem(OPT_CIA_REVISION, defaults.revision);
-    setConfigItem(OPT_TODBUG, defaults.todBug);
-    setConfigItem(OPT_ECLOCK_SYNCING, defaults.eClockSyncing);
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
 }
 
 i64

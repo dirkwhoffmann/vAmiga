@@ -176,6 +176,42 @@ OSDebugger::read(u32 addr, os::ExecBase *result) const
 }
 
 void
+OSDebugger::read(u32 addr, os::FileSysResource *result) const
+{
+    if (isValidPtr(addr)) {
+        
+        result->addr = addr;
+        
+        read(addr + 0,  &result->fsr_Node);
+        read(addr + 14,  &result->fsr_Creator);
+        read(addr + 18,  &result->fsr_FileSysEntries);
+    }
+}
+
+void
+OSDebugger::read(u32 addr, os::FileSysEntry *result) const
+{
+    if (isValidPtr(addr)) {
+        
+        result->addr = addr;
+        
+        read(addr + 0,  &result->fse_Node);
+        read(addr + 14, &result->fse_DosType);
+        read(addr + 18, &result->fse_Version);
+        read(addr + 22, &result->fse_PatchFlags);
+        read(addr + 26, &result->fse_Type);
+        read(addr + 30, &result->fse_Task);
+        read(addr + 34, &result->fse_Lock);
+        read(addr + 38, &result->fse_Handler);
+        read(addr + 42, &result->fse_StackSize);
+        read(addr + 46, &result->fse_Priority);
+        read(addr + 50, &result->fse_Startup);
+        read(addr + 54, &result->fse_SegList);
+        read(addr + 58, &result->fse_GlobalVec);
+    }
+}
+
+void
 OSDebugger::read(u32 addr, os::Interrupt *result) const
 {
     if (isValidPtr(addr)) {
@@ -395,6 +431,19 @@ OSDebugger::read(u32 addr, os::Task *result) const
 //
 //
 //
+
+void
+OSDebugger::read(u32 addr, std::vector <os::FileSysEntry> &result) const
+{
+    for (isize i = 0; isValidPtr(addr) && i < 128; i++) {
+               
+        os::FileSysEntry fse;
+        read(addr, &fse);
+                
+        addr = fse.fse_Node.ln_Succ;
+        if (addr) result.push_back(fse);
+    }
+}
 
 void
 OSDebugger::read(std::vector <os::Task> &result) const

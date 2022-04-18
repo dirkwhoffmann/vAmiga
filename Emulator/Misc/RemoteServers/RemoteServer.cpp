@@ -70,17 +70,6 @@ RemoteServer::_didLoad()
     stop();
 }
 
-void
-RemoteServer::resetConfig()
-{
-    auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_SRV_PORT, defaults.port);
-    setConfigItem(OPT_SRV_PROTOCOL, defaults.protocol);
-    setConfigItem(OPT_SRV_AUTORUN, defaults.autoRun);
-    setConfigItem(OPT_SRV_VERBOSE, defaults.verbose);
-}
-
 i64
 RemoteServer::getConfigItem(Option option) const
 {

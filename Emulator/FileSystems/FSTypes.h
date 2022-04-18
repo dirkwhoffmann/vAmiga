@@ -30,9 +30,9 @@ typedef FS_VOLUME_TYPE FSVolumeType;
 #ifdef __cplusplus
 struct FSVolumeTypeEnum : util::Reflection<FSVolumeTypeEnum, FSVolumeType>
 {
-    static long minVal() { return FS_NODOS; }
-    static long maxVal() { return FS_FFS_LNFS; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = FS_NODOS;
+    static constexpr long maxVal = FS_FFS_LNFS;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "FS"; }
     static const char *key(FSVolumeType value)

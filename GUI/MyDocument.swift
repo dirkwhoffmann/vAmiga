@@ -9,6 +9,8 @@
 
 class MyDocument: NSDocument {
 
+    var pref: Preferences { return myAppDelegate.pref }
+    
     // The window controller for this document
     var parent: MyController { return windowControllers.first as! MyController }
     
@@ -30,13 +32,21 @@ class MyDocument: NSDocument {
 
         // Check for Metal support
         if MTLCreateSystemDefaultDevice() == nil {
+
             showAlert(.noMetalSupport)
             NSApp.terminate(self)
             return
         }
+                
+        // Register GUI related user defaults
+        AmigaProxy.defaults.registerUserDefaults()
+        
+        // Load the user default settings
+        AmigaProxy.defaults.load()
         
         // Create an emulator instance
         amiga = AmigaProxy()
+
     }
  
     override open func makeWindowControllers() {

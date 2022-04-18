@@ -23,6 +23,8 @@ static_assert(sizeof(u16) == 2, "u16 size mismatch");
 static_assert(sizeof(u32) == 4, "u32 size mismatch");
 static_assert(sizeof(u64) == 8, "u64 size mismatch");
 
+Properties Amiga::properties;
+
 string
 Amiga::version()
 {
@@ -288,7 +290,7 @@ Amiga::getConfigItem(Option option, long id) const
 {
     switch (option) {
             
-        case OPT_DMA_DEBUG_ENABLE:
+        case OPT_DMA_DEBUG_CHANNEL:
         case OPT_DMA_DEBUG_COLOR:
             
             return agnus.dmaDebugger.getConfigItem(option, id);
@@ -588,7 +590,7 @@ Amiga::configure(Option option, long id, i64 value)
     
     switch (option) {
             
-        case OPT_DMA_DEBUG_ENABLE:
+        case OPT_DMA_DEBUG_CHANNEL:
         case OPT_DMA_DEBUG_COLOR:
             
             agnus.dmaDebugger.setConfigItem(option, id, value);
@@ -818,6 +820,11 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << bol(inWarpMode()) << std::endl;
         os << tab("Debug mode");
         os << bol(inDebugMode()) << std::endl;
+    }
+    
+    if (category == Category::Defaults) {
+        
+        properties.dump(category, os);
     }
 }
 

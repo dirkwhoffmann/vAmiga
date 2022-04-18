@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "RshServer.h"
-#include "MsgQueue.h"
+#include "Amiga.h"
 #include "RetroShell.h"
 #include "StringUtils.h"
 
@@ -26,17 +26,23 @@ RshServer::_dump(Category category, std::ostream& os) const
     RemoteServer::_dump(category, os);
 }
 
-ServerConfig
-RshServer::getDefaultConfig()
+void
+RshServer::resetConfig()
 {
-    ServerConfig defaults;
-    
-    defaults.port = 8081;
-    defaults.autoRun = false;
-    defaults.protocol = SRVPROT_DEFAULT;
-    defaults.verbose = true;
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
 
-    return defaults;
+    std::vector <Option> options = {
+        
+        OPT_SRV_PORT,
+        OPT_SRV_PROTOCOL,
+        OPT_SRV_AUTORUN,
+        OPT_SRV_VERBOSE
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option, SERVER_RSH));
+    }
 }
 
 void

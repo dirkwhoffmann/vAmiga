@@ -9,58 +9,39 @@
 
 #include "config.h"
 #include "DmaDebugger.h"
-#include "Agnus.h"
-#include "Denise.h"
-#include "MsgQueue.h"
-#include "PixelEngine.h"
+#include "Amiga.h"
 
 DmaDebugger::DmaDebugger(Amiga &ref) : SubComponent(ref)
 {
 }
 
-DmaDebuggerConfig
-DmaDebugger::getDefaultConfig()
-{
-    DmaDebuggerConfig defaults;
-
-    defaults.enabled = false;
-    defaults.displayMode = DMA_DISPLAY_MODE_FG_LAYER;
-    defaults.opacity = 50;
-
-    defaults.visualize[DMA_CHANNEL_CPU] = false;
-    defaults.visualize[DMA_CHANNEL_REFRESH] = true;
-    defaults.visualize[DMA_CHANNEL_DISK] = true;
-    defaults.visualize[DMA_CHANNEL_AUDIO] = true;
-    defaults.visualize[DMA_CHANNEL_BITPLANE] = true;
-    defaults.visualize[DMA_CHANNEL_SPRITE] = true;
-    defaults.visualize[DMA_CHANNEL_COPPER] = true;
-    defaults.visualize[DMA_CHANNEL_BLITTER] = true;
-
-    defaults.debugColor[DMA_CHANNEL_CPU] = 0xFFFFFF00;
-    defaults.debugColor[DMA_CHANNEL_REFRESH] = 0xFF000000;
-    defaults.debugColor[DMA_CHANNEL_DISK] = 0x00FF0000;
-    defaults.debugColor[DMA_CHANNEL_AUDIO] = 0xFF00FF00;
-    defaults.debugColor[DMA_CHANNEL_BITPLANE] = 0x00FFFF00;
-    defaults.debugColor[DMA_CHANNEL_SPRITE] = 0x0088FF00;
-    defaults.debugColor[DMA_CHANNEL_COPPER] = 0xFFFF0000;
-    defaults.debugColor[DMA_CHANNEL_BLITTER] = 0xFFCC0000;
-    
-    return defaults;
-}
-
 void
 DmaDebugger::resetConfig()
 {
-    auto defaults = getDefaultConfig();
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_DMA_DEBUG_ENABLE,
+        OPT_DMA_DEBUG_MODE,
+        OPT_DMA_DEBUG_OPACITY
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
     
-    setConfigItem(OPT_DMA_DEBUG_ENABLE, defaults.enabled);
-    setConfigItem(OPT_DMA_DEBUG_MODE, defaults.displayMode);
-    setConfigItem(OPT_DMA_DEBUG_OPACITY, defaults.opacity);
+    std::vector <Option> moreOptions = {
+        
+        OPT_DMA_DEBUG_CHANNEL,
+        OPT_DMA_DEBUG_COLOR
+    };
 
-    for (isize i = 0; DmaChannelEnum::isValid(i); i++) {
-
-        setConfigItem(OPT_DMA_DEBUG_ENABLE, i, defaults.visualize[i]);
-        setConfigItem(OPT_DMA_DEBUG_COLOR, i, defaults.debugColor[i]);
+    for (auto &option : moreOptions) {
+        for (isize i = 0; DmaChannelEnum::isValid(i); i++) {
+            setConfigItem(option, i, defaults.get(option, i));
+        }
     }
 }
 
@@ -85,8 +66,8 @@ DmaDebugger::getConfigItem(Option option, long id) const
     
     switch (option) {
             
-        case OPT_DMA_DEBUG_ENABLE: return config.visualize[id];
-        case OPT_DMA_DEBUG_COLOR:  return config.debugColor[id];
+        case OPT_DMA_DEBUG_CHANNEL: return config.visualize[id];
+        case OPT_DMA_DEBUG_COLOR:   return config.debugColor[id];
                         
         default:
             fatalError;
@@ -132,7 +113,7 @@ DmaDebugger::setConfigItem(Option option, long id, i64 value)
     
     switch (option) {
                                     
-        case OPT_DMA_DEBUG_ENABLE:
+        case OPT_DMA_DEBUG_CHANNEL:
             
             config.visualize[channel] = value;
 

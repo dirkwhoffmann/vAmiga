@@ -212,9 +212,12 @@ extension PreferencesController {
     @IBAction func conPresetAction(_ sender: NSPopUpButton!) {
         
         assert(sender.selectedTag() == 0)
-        
-        UserDefaults.resetControlsUserDefaults()
-        pref.loadControlsUserDefaults()
+                        
+        // Revert to standard settings
+        AmigaProxy.defaults.removeControlsUserDefaults()
+                        
+        // Apply the new settings
+        pref.applyControlsUserDefaults()
         refresh()
     }
 }

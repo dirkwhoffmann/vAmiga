@@ -50,8 +50,9 @@ string makePrintable(const string& s);
 // Stripping off characters
 //
 
-string ltrim(const string &s, const string &characters);
-string rtrim(const string &s, const string &characters);
+string ltrim(const string &s, const string &characters = " ");
+string rtrim(const string &s, const string &characters = " ");
+string trim(const string &s, const string &characters = " ");
 
 
 //

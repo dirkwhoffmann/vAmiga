@@ -42,9 +42,6 @@ extension MyController: NSMenuItemValidation {
         switch item.action {
             
         // Machine menu
-        case #selector(MyController.resetConfigAction(_:)):
-            return !powered
-
         case #selector(MyController.captureScreenAction(_:)):
             item.title = recording ? "Stop Recording" : "Record Screen"
             return true
@@ -148,27 +145,24 @@ extension MyController: NSMenuItemValidation {
         myAppDelegate.prefController!.refresh()
     }
     
-    @IBAction func resetConfigAction(_ sender: Any!) {
+    @IBAction func factorySettingsAction(_ sender: Any!) {
         
-        log()
+        let defaults = AmigaProxy.defaults!
+
+        // Power off the emulator if the user doesn't object
+        if !askToPowerOff() { return }
         
-        UserDefaults.resetRomUserDefaults()
-        UserDefaults.resetChipsetUserDefaults()
-        UserDefaults.resetPeripheralsUserDefaults()
-        UserDefaults.resetCompatibilityUserDefaults()
-        UserDefaults.resetAudioUserDefaults()
-        UserDefaults.resetVideoUserDefaults()
-        UserDefaults.resetGeometryUserDefaults()
+        // Wipe out all settings
+        defaults.removeAll()
+        defaults.save()
         
-        amiga.suspend()
-        config.loadRomUserDefaults()
-        config.loadChipsetUserDefaults()
-        config.loadPeripheralsUserDefaults()
-        config.loadCompatibilityUserDefaults()
-        config.loadAudioUserDefaults()
-        config.loadVideoUserDefaults()
-        config.loadGeometryUserDefaults()
-        amiga.resume()
+        // Apply new settings
+        config.applyUserDefaults()
+        pref.applyUserDefaults()
+        
+        // Power on
+        amiga.powerOn()
+        try? amiga.run()
     }
     
     //
@@ -732,7 +726,7 @@ extension MyController: NSMenuItemValidation {
             amiga.hd(sender)!.disableWriteThrough()
             sender.state = .off
 
-            try? FileManager.default.removeItem(at: UserDefaults.hdnUrl(sender.tag)!)
+            try? FileManager.default.removeItem(at: UserDefaults.hdUrl(sender.tag)!)
             
         } else {
             

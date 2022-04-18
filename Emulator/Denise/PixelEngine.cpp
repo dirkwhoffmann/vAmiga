@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "PixelEngine.h"
-#include "Agnus.h"
+#include "Amiga.h"
 #include "Colors.h"
 #include "Denise.h"
 #include "DmaDebugger.h"
@@ -86,29 +86,23 @@ PixelEngine::_powerOn()
     }
 }
 
-PixelEngineConfig
-PixelEngine::getDefaultConfig()
-{
-    PixelEngineConfig defaults;
-
-    defaults.palette = PALETTE_COLOR;
-    defaults.brightness = 50;
-    defaults.contrast = 100;
-    defaults.saturation = 50;
-    
-    return defaults;
-}
-
 void
 PixelEngine::resetConfig()
 {
-    
-    auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_PALETTE, defaults.palette);
-    setConfigItem(OPT_BRIGHTNESS, defaults.brightness);
-    setConfigItem(OPT_CONTRAST, defaults.contrast);
-    setConfigItem(OPT_SATURATION, defaults.saturation);
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_PALETTE,
+        OPT_BRIGHTNESS,
+        OPT_CONTRAST,
+        OPT_SATURATION
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
 }
 
 i64

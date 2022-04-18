@@ -258,22 +258,20 @@ CPU::setConfigItem(Option option, i64 value)
     }
 }
 
-CPUConfig
-CPU::getDefaultConfig()
-{
-    CPUConfig defaults;
-
-    defaults.regResetVal = 0x00000000;
-    
-    return defaults;
-}
-
 void
 CPU::resetConfig()
 {
-    auto defaults = getDefaultConfig();
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
 
-    setConfigItem(OPT_REG_RESET_VAL, defaults.regResetVal);
+    std::vector <Option> options = {
+        
+        OPT_REG_RESET_VAL
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
 }
 
 void

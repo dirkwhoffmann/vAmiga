@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "Blitter.h"
-#include "Agnus.h"
+#include "Amiga.h"
 #include "Checksum.h"
 #include "IOUtils.h"
 #include "Thread.h"
@@ -69,22 +69,20 @@ Blitter::_run()
     }
 }
 
-BlitterConfig
-Blitter::getDefaultConfig()
-{
-    BlitterConfig defaults;
-    
-    defaults.accuracy = 2;
-
-    return defaults;
-}
-
 void
 Blitter::resetConfig()
 {
-    auto defaults = getDefaultConfig();
-    
-    setConfigItem(OPT_BLITTER_ACCURACY, defaults.accuracy);
+    assert(isPoweredOff());
+    auto &defaults = amiga.properties;
+
+    std::vector <Option> options = {
+        
+        OPT_BLITTER_ACCURACY
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
 }
 
 i64

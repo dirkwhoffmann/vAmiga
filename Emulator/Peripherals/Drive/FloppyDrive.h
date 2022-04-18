@@ -177,7 +177,6 @@ public:
     
 public:
     
-    static FloppyDriveConfig getDefaultConfig(isize nr);
     const FloppyDriveConfig &getConfig() const { return config; }
     void resetConfig() override;
     

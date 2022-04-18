@@ -28,10 +28,16 @@ protected:
 
     
     //
+    // Methods from AmigaComponent
+    //
+
+    void resetConfig() override;
+    
+    
+    //
     // Methods from RemoteServer
     //
     
-    ServerConfig getDefaultConfig() override;
     string doReceive() override throws;
     void doProcess(const string &packet) override throws;
     void doSend(const string &packet) override throws;
