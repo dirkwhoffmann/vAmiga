@@ -105,7 +105,7 @@ static const int DIAG_BOARD      = 0; // Plug in the diagnose board
 static const int XFILES          = 0; // Report paranormal activity
 static const int CNF_DEBUG       = 0; // Configuration options
 static const int OBJ_DEBUG       = 0; // Object life-times
-static const int DEF_DEBUG       = 1; // User defaults
+static const int DEF_DEBUG       = 0; // User defaults
 static const int MIMIC_UAE       = 0; // Enable to compare debug logs with UAE
 
 // Runloop
@@ -199,7 +199,7 @@ static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
 // Expansion boards
 static const int ZOR_DEBUG       = 0; // Zorro space, autoconfig
 static const int FAS_DEBUG       = 0; // FastRam
-static const int HDR_DEBUG       = 1; // HardDrive
+static const int HDR_DEBUG       = 0; // HardDrive
 
 // Media types
 static const int ADF_DEBUG       = 0; // ADF and extended ADF files

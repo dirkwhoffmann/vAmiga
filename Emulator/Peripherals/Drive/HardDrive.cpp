@@ -140,6 +140,16 @@ HardDrive::init(const HDFFile &hdf)
     // Copy over all blocks
     printf("Copying %ld bytes\n", numBytes);
     hdf.flash(data.ptr, 0, numBytes);
+    
+    // Replace the write-through image on disk
+    if (writeThrough) {
+        
+        // Delete the existing image
+        disableWriteThrough();
+        
+        // Recreate the image with the new disk
+        enableWriteThrough();
+    }
 }
 
 void
@@ -436,49 +446,25 @@ HardDrive::enableWriteThrough()
 {
     debug(WT_DEBUG, "enableWriteThrough()\n");
     
-    if (!wt) {
+    if (!writeThrough) {
     
-        auto path = writeThroughPath();
-        
-        // Only proceed if a storage file is given
-        if (path.empty()) {
-            throw VAError(ERROR_WT, "No storage path specified");
-        }
-        
-        // Only proceed if no other emulator instance is using the storage file
-        if (wtStream[nr].is_open()) {
-            throw VAError(ERROR_WT_BLOCKED);
-        }
-        
-        // Delete the old storage file
-        fs::remove(path);
-        
-        // Recreate the storage file with the contents of this disk
-        writeToFile(path);
-        if (!util::fileExists(path)) {
-            throw VAError(ERROR_WT, "Can't create storage file");
-        }
-        // Open file
-        wtStream[nr].open(path, std::ios::binary | std::ios::in | std::ios::out);
-        if (!wtStream[nr].is_open()) {
-            throw VAError(ERROR_WT, "Can't open storage file");
-        }
-        
+        saveWriteThroughImage();
+      
         debug(WT_DEBUG, "Write-through mode enabled\n");
-        wt = true;
+        writeThrough = true;
     }
 }
 
 void
 HardDrive::disableWriteThrough()
 {
-    if (wt) {
+    if (writeThrough) {
         
         // Close file
         wtStream[nr].close();
         
         debug(WT_DEBUG, "Write-through mode disabled\n");
-        wt = false;
+        writeThrough = false;
     }
 }
 
@@ -486,6 +472,36 @@ string
 HardDrive::writeThroughPath()
 {
     return Amiga::properties.getString("HD" + std::to_string(nr) + "_PATH");
+}
+
+void
+HardDrive::saveWriteThroughImage()
+{
+    auto path = writeThroughPath();
+    
+    // Only proceed if a storage file is given
+    if (path.empty()) {
+        throw VAError(ERROR_WT, "No storage path specified");
+    }
+    
+    // Only proceed if no other emulator instance is using the storage file
+    if (wtStream[nr].is_open()) {
+        throw VAError(ERROR_WT_BLOCKED);
+    }
+    
+    // Delete the old storage file
+    fs::remove(path);
+    
+    // Recreate the storage file with the contents of this disk
+    writeToFile(path);
+    if (!util::fileExists(path)) {
+        throw VAError(ERROR_WT, "Can't create storage file");
+    }
+    // Open file
+    wtStream[nr].open(path, std::ios::binary | std::ios::in | std::ios::out);
+    if (!wtStream[nr].is_open()) {
+        throw VAError(ERROR_WT, "Can't open storage file");
+    }
 }
 
 string
@@ -598,7 +614,7 @@ HardDrive::write(isize offset, isize length, u32 addr)
             mem.spypeek <ACCESSOR_CPU> (addr, length, data.ptr + offset);
             
             // Handle write-through mode
-            if (wt) {
+            if (writeThrough) {
                 wtStream[nr].seekp(offset);
                 wtStream[nr].write((char *)(data.ptr + offset), length);
             }

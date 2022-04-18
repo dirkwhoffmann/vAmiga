@@ -61,7 +61,7 @@ class HardDrive : public Drive {
     bool writeProtected = false;
 
     // Indicates if write-through mode is enabled
-    bool wt = false;
+    bool writeThrough = false;
     
     
     //
@@ -290,7 +290,7 @@ public:
     // Managing write-through mode
     //
     
-    bool writeThroughEnabled() const { return wt; }
+    bool writeThroughEnabled() const { return writeThrough; }
     void enableWriteThrough() throws;
     void disableWriteThrough();
 
@@ -298,6 +298,9 @@ private:
     
     // Return the path to the write-through storage file
     string writeThroughPath();
+    
+    // Creates or updates the write-through storage file
+    void saveWriteThroughImage() throws;
     
     
     //
