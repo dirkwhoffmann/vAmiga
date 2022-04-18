@@ -353,8 +353,6 @@
 @interface MemProxy : AmigaComponentProxy { }
 
 @property (readonly) MemoryConfig config;
-// - (void)setRomPath:(NSURL *)url;
-// - (void)setExtPath:(NSURL *)url;
 
 - (MemoryStats) getStats;
 
@@ -975,6 +973,7 @@
 
 @property (readonly) BOOL hasRDB;
 @property (readonly) NSInteger numPartitions;
+@property (readonly) NSInteger numDrivers;
 
 - (NSInteger)writeToFile:(NSString *)path partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
 

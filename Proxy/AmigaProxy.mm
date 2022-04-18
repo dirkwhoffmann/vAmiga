@@ -392,18 +392,6 @@ using namespace moira;
     return [self mem]->getConfig();
 }
 
-/*
-- (void)setRomPath:(NSURL *)url
-{
-    [self mem]->setRomPath([url fileSystemRepresentation]);
-}
-
-- (void)setExtPath:(NSURL *)url
-{
-    [self mem]->setExtPath([url fileSystemRepresentation]);
-}
-*/
-
 - (MemoryStats)getStats
 {
     return [self mem]->getStats();
@@ -2423,6 +2411,11 @@ using namespace moira;
 - (NSInteger)numPartitions
 {
     return [self hdf]->numPartitions();
+}
+
+- (NSInteger)numDrivers
+{
+    return [self hdf]->numDrivers();
 }
 
 - (NSInteger)writeToFile:(NSString *)path partition:(NSInteger)nr exception:(ExceptionWrapper *)ex

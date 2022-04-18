@@ -264,6 +264,9 @@ public:
     // Reads a data block from RAM and writes it onto the hard drive
     i8 write(isize offset, isize length, u32 addr);
     
+    // Reads a loadable file system
+    void readDriver(isize nr, Buffer<u8> &driver);
+    
 private:
         
     // Checks the given argument list for consistency

@@ -606,6 +606,29 @@ HardDrive::write(isize offset, isize length, u32 addr)
     return error;
 }
 
+void
+HardDrive::readDriver(isize nr, Buffer<u8> &driver)
+{
+    assert(usize(nr) < drivers.size());
+    
+    auto &segList = drivers[nr].segList;
+    auto bytesPerBlock = geometry.bsize - 20;
+
+    driver.init(isize(segList.size()) * bytesPerBlock);
+    
+    isize bytesRead = 0;
+    for (auto &seg : segList) {
+
+        auto offset = seg * geometry.bsize + 20;
+        
+        assert(offset >= 0);
+        assert(offset + bytesPerBlock <= data.size);
+        
+        memcpy(driver.ptr + bytesRead, data.ptr + offset, bytesPerBlock);
+        bytesRead += bytesPerBlock;
+    }
+}
+
 i8
 HardDrive::verify(isize offset, isize length, u32 addr)
 {

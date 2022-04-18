@@ -13,9 +13,8 @@
 #include "Amiga.h"
 #include "HDFFile.h"
 #include "FloppyDrive.h"
-// #include "Memory.h"
-// #include "MsgQueue.h"
 #include "OSDebugger.h"
+#include "OSDescriptors.h"
 
 HdController::HdController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref), drive(hdr)
 {
@@ -533,10 +532,60 @@ void
 HdController::processInfoReq(u32 ptr)
 {
     debug(HDR_DEBUG, "processInfoReq()\n");
+    
+    // Keep in sync with exprom.asm
+    static constexpr u16 fsinfo_num = 0x00;
+    static constexpr u16 fsinfo_dosType = 0x02;
+    static constexpr u16 fsinfo_version = 0x06;
+    static constexpr u16 fsinfo_numHunks = 0x0a;
+    static constexpr u16 fsinfo_hunk = 0x0e;
+
+    u16 num = mem.spypeek16 <ACCESSOR_CPU> (ptr + fsinfo_num);
+    debug(HDR_DEBUG, "Requested info for driver %d\n", num);
+    
+    if (num >= drive.drivers.size()) {
+        
+        warn("Driver %d does not exist\n", num);
+        return;
+    }
+    
+    auto &driver = drive.drivers[num];
+    
+    try {
+
+        // Read device driver
+        Buffer<u8> code;
+        drive.readDriver(num, code);
+        
+        // Parse hunk structure
+        ProgramUnitDescriptor descr(code);
+        descr.dump(Category::Sections);
+        
+        // We expect up to three hunks
+        auto numHunks = descr.numHunks();
+        if (numHunks == 0 || numHunks > 3) {
+            throw VAError(ERROR_HUNK_CORRUPTED);
+        }
+        
+        // Pass the hunk information back to the driver
+        mem.patch(ptr + fsinfo_dosType, u32(driver.dosType));
+        mem.patch(ptr + fsinfo_version, u32(driver.dosVersion));
+        mem.patch(ptr + fsinfo_numHunks, u32(numHunks));
+        for (isize i = 0; i < numHunks; i++) {
+            mem.patch(u32(ptr + fsinfo_hunk + 4 * i), descr.hunks[i].memFlags);
+        }
+                
+    } catch (VAError &e) {
+
+        warn("processInfoReq: %s\n", e.what());
+    }
 }
 
 void
 HdController::processInitSeg(u32 ptr)
 {
     debug(HDR_DEBUG, "processInitSeg()\n");
+    
+    // TODO: Port handle_fs_initseg() from AmiEmu
+    warn("Implementation missing\n");
 }

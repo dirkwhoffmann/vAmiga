@@ -47,6 +47,8 @@ HDFFile::finalizeRead()
 
     // REMOVE ASAP
     debug(true, "The HDF contains %lu loadable file systems\n", drivers.size());
+
+    /*
     for (usize i = 0; i < drivers.size(); i++) {
         
         drivers[i].dump();
@@ -66,6 +68,7 @@ HDFFile::finalizeRead()
             std::cout << e.what() << std::endl;
         }
     }
+    */
 }
 
 void
@@ -314,12 +317,6 @@ HDFFile::hasRDB() const
         }
     }
     return false;
-}
-
-isize
-HDFFile::numPartitions() const
-{
-    return isize(ptable.size());
 }
 
 isize

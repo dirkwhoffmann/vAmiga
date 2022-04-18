@@ -110,9 +110,12 @@ public:
     
     // Returns true if this image contains a rigid disk block
     bool hasRDB() const;
+
+    // Returns the number of loadable file system drivers
+    isize numDrivers() const { return isize(drivers.size()); }
     
-    // Returns the layout parameters of the hard drive
-    isize numPartitions() const;
+    // Returns the number of partitions
+    isize numPartitions() const { return isize(ptable.size()); }
 
     // Returns the byte count and the location of a certain partition
     isize partitionSize(isize nr) const;
@@ -151,7 +154,7 @@ private:
     FSVolumeType dos(isize nr) const;
     
     // Returns a loadable device drive
-    void readDriver(isize nr, Buffer<u8> &driver);
+    [[deprecated]] void readDriver(isize nr, Buffer<u8> &driver);
 
     
     //
