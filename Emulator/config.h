@@ -178,7 +178,7 @@ static const int FS_DEBUG        = 0; // File System Classes (OFS / FFS)
 
 // Hard Drives
 static const int HDR_ACCEPT_ALL  = 0; // Disables hard drive layout checks
-static const int NO_LOADABLE_FS  = 0; // Ignore loadable file systems
+static const int HDR_FS_LOAD_ALL = 0; // Don't filter out unneeded file systems
 static const int WT_DEBUG        = 0; // Write-through mode
 
 // Audio

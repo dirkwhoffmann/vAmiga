@@ -120,8 +120,20 @@ HardDrive::init(const HDFFile &hdf)
     // Copy partition table
     ptable = hdf.getPartitionDescriptors();  // TODO: Replace by " = hdf.ptable" (?!)
 
-    // Copy driver information
-    if constexpr (!NO_LOADABLE_FS) { drivers = hdf.drivers; }
+    // Copy over all needed file system drivers
+    for (const auto &driver : hdf.drivers) {
+
+        bool needed = HDR_FS_LOAD_ALL;
+
+        for (const auto &part : ptable) {
+            if (driver.dosType == part.dosType) {
+
+                needed = true;
+                break;
+            }
+        }
+        if (needed) { drivers.push_back(driver); }
+    }
     
     // Check the drive geometry against the file size
     auto numBytes = hdf.data.size;
@@ -138,7 +150,6 @@ HardDrive::init(const HDFFile &hdf)
     }
     
     // Copy over all blocks
-    printf("Copying %ld bytes\n", numBytes);
     hdf.flash(data.ptr, 0, numBytes);
     
     // Replace the write-through image on disk
@@ -151,9 +162,13 @@ HardDrive::init(const HDFFile &hdf)
         enableWriteThrough();
     }
     
-    // REMOVE ASAP
-    for (auto &driver : drivers) {
-        driver.dump();
+    // Print some debug information
+    if constexpr (HDR_DEBUG) {
+
+        debug(true, "%lu (needed) file system drivers\n", drivers.size());
+        for (auto &driver : drivers) {
+            driver.dump();
+        }
     }
 }
 
@@ -642,7 +657,7 @@ HardDrive::readDriver(isize nr, Buffer<u8> &driver)
 {
     assert(usize(nr) < drivers.size());
     
-    auto &segList = drivers[nr].segList;
+    auto &segList = drivers[nr].blocks;
     auto bytesPerBlock = geometry.bsize - 20;
 
     driver.init(isize(segList.size()) * bytesPerBlock);

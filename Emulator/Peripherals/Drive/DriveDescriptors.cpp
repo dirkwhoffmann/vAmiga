@@ -217,12 +217,9 @@ DriverDescriptor::dump(std::ostream& os) const
     os << " (" << OSDebugger::dosVersionStr(dosVersion) << ")" << std::endl;
     os << tab("Patch flags");
     os << hex(patchFlags) << std::endl;
-    os << tab("Seglist");
-    os << dec(segList.size()) << " Blocks" << std::endl;
-
-    os << tab("Blocks");
-    for (usize i = 0; i < segList.size(); i++) {
-        os << (i ? ", " : "") << segList[i];
+    os << tab("Code blocks");
+    for (usize i = 0; i < blocks.size(); i++) {
+        os << (i ? ", " : "") << dec(blocks[i]);
     }
     os << std::endl;
 }

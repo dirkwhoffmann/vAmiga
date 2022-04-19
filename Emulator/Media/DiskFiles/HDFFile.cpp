@@ -200,7 +200,7 @@ HDFFile::getDriverDescriptor(isize driver) const
                 throw VAError(ERROR_HDR_CORRUPTED_LSEG);
             }
             
-            result.segList.push_back(lsegRef);
+            result.blocks.push_back(lsegRef);
             lsegRef = R32BE_ALIGNED(lsegBlock + 16);
         }
     }
@@ -456,7 +456,7 @@ HDFFile::readDriver(isize nr, Buffer<u8> &driver)
 {
     assert(usize(nr) < drivers.size());
     
-    auto &segList = drivers[nr].segList;
+    auto &segList = drivers[nr].blocks;
     auto bytesPerBlock = bsize() - 20;
 
     driver.init(isize(segList.size()) * bytesPerBlock);

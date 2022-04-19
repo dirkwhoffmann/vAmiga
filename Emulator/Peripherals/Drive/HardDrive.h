@@ -46,7 +46,7 @@ class HardDrive : public Drive {
             
     // Loadable file system drivers
     std::vector <DriverDescriptor> drivers;
-    
+        
     // Disk data
     Buffer<u8> data;
     

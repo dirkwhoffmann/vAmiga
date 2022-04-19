@@ -462,7 +462,7 @@ HdController::processInit(u32 ptr)
         u32 segList = 0;
         for (auto &driver : drive.drivers) {
             if (driver.dosType == part.dosType) {
-                segList = driver.segListPtr;
+                segList = driver.segList;
                 debug(HDR_DEBUG, "Using seglist at BPTR %x\n", segList);
             }
         }
@@ -520,13 +520,19 @@ HdController::processResource(u32 ptr)
               OSDebugger::dosVersionStr(fse.fse_Version).c_str());
         
         for (auto it = drivers.begin(); it != drivers.end(); ) {
-                        
+        
+            if constexpr (HDR_FS_LOAD_ALL) {
+
+                it++;
+                continue;
+            }
+
             if (fse.fse_DosType == it->dosType && fse.fse_Version >= it->dosVersion) {
                 
                 debug(HDR_DEBUG, "Not needed: %s %s\n",
                       OSDebugger::dosTypeStr(it->dosType).c_str(),
                       OSDebugger::dosVersionStr(it->dosVersion).c_str());
-                
+        
                 it = drivers.erase(it);
             
             } else {
@@ -535,6 +541,8 @@ HdController::processResource(u32 ptr)
             }
         }
     }
+    
+    debug(HDR_DEBUG, "Remaining drivers: %lu\n", drivers.size()); 
 }
 
 void
@@ -673,7 +681,7 @@ HdController::processInitSeg(u32 ptr)
         }
         
         // Remember a BPTR to the seglist
-        drive.drivers[num].segListPtr = (segPtrs[0] + 4) >> 2;
+        drive.drivers[num].segList = (segPtrs[0] + 4) >> 2;
         
     } catch (VAError &e) {
 
