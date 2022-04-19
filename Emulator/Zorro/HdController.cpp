@@ -412,8 +412,8 @@ HdController::processInit(u32 ptr)
         hd2con.numPartitions +
         hd3con.numPartitions;
 
-        name[0] = 'H';
-        name[1] = 'D';
+        name[0] = 'D';
+        name[1] = 'H';
         name[2] = nr < 10 ? '0' + char(nr) : '0' + char(nr / 10);
         name[3] = nr < 10 ? 0 : '0' + char(nr % 10);
         name[4] = 0;
@@ -458,6 +458,14 @@ HdController::processInit(u32 ptr)
         for (isize i = 0; i < isizeof(dosName); i++) {
             mem.patch(u32(name_ptr + i), u8(dosName[i]));
         }
+
+        u32 segList = 0;
+        for (auto &driver : drive.drivers) {
+            if (driver.dosType == part.dosType) {
+                segList = driver.segListPtr;
+                debug(HDR_DEBUG, "Using seglist at BPTR %x\n", segList);
+            }
+        }
         
         mem.patch(ptr + devn_flags,         u32(part.flags));
         mem.patch(ptr + devn_sizeBlock,     u32(part.sizeBlock));
@@ -476,7 +484,7 @@ HdController::processInit(u32 ptr)
         mem.patch(ptr + devn_bootPrio,      u32(0));
         mem.patch(ptr + devn_dName,         u32(part.dosType));
         mem.patch(ptr + devn_bootflags,     u32(part.flags & 1));
-        mem.patch(ptr + devn_segList,       u32(0));
+        mem.patch(ptr + devn_segList,       u32(segList));
         
         if (part.dosType != 0x444f5300) {
             debug(HDR_DEBUG, "Unusual DOS type %x\n", part.dosType);
@@ -663,6 +671,9 @@ HdController::processInitSeg(u32 ptr)
                 }
             }
         }
+        
+        // Remember a BPTR to the seglist
+        drive.drivers[num].segListPtr = (segPtrs[0] + 4) >> 2;
         
     } catch (VAError &e) {
 

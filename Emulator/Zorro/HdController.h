@@ -39,7 +39,7 @@ class HdController : public ZorroBoard {
 
     // Transmitted pointer
     u32 pointer = 0;
-        
+
 
     //
     // Initializing

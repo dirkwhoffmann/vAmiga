@@ -117,11 +117,11 @@ HardDrive::init(const HDFFile &hdf)
     // Copy geometry
     geometry = hdf.getGeometryDescriptor(); // TODO: Replace by " = hdf.geometry" (?!)
     
-    // Copy the partition table
+    // Copy partition table
     ptable = hdf.getPartitionDescriptors();  // TODO: Replace by " = hdf.ptable" (?!)
 
-    // Copy the driver information
-    drivers = hdf.drivers;
+    // Copy driver information
+    if constexpr (!NO_LOADABLE_FS) { drivers = hdf.drivers; }
     
     // Check the drive geometry against the file size
     auto numBytes = hdf.data.size;

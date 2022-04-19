@@ -134,6 +134,7 @@ struct DriverDescriptor {
     u32 dosVersion = 0;
     u32 patchFlags = 0;
     std::vector<u32> segList;
+    u32 segListPtr = 0;
     
     template <class W>
     void operator<<(W& worker)
@@ -143,7 +144,8 @@ struct DriverDescriptor {
         << dosType
         << dosVersion
         << patchFlags
-        << segList;
+        << segList
+        << segListPtr;
     }
     
     // Initializers
