@@ -248,6 +248,10 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "The hard drive is encoded in an unknown or unsupported format.";
             break;
 
+        case ERROR_HDC_INIT:
+            description = "Failed to initialize hard drive: " + s;
+            break;
+
         case ERROR_SNAP_TOO_OLD:
             description = "The snapshot was created with an older version of vAmiga";
             description += " and is incompatible with this release.";

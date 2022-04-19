@@ -49,14 +49,20 @@ struct MemFlagsEnum { static string key(u32 value); };
 
 struct SectionDescriptor {
   
-    // Hunk type
+    // Section type
     u32 type = 0;
     
-    // First byte belonging to this hunk
+    // First byte belonging to this section
     u32 offset = 0;
     
-    // Hunk size in bytes
+    // Size of this section in bytes
     u32 size = 0;
+    
+    // Relocation target
+    isize target = 0;
+    
+    // Relocation symbols
+    std::vector<u32> relocations;
 };
 
 struct HunkDescriptor {

@@ -79,7 +79,7 @@ enum_long(ERROR_CODE)
     ERROR_DISK_WRONG_SECTOR_COUNT,
     ERROR_DISK_INVALID_SECTOR_NUMBER,
     
-    // Hard drives
+    // Hard disks
     ERROR_HDR_TOO_LARGE,
     ERROR_HDR_UNSUPPORTED_CYL_COUNT,
     ERROR_HDR_UNSUPPORTED_HEAD_COUNT,
@@ -91,6 +91,9 @@ enum_long(ERROR_CODE)
     ERROR_HDR_CORRUPTED_FSH,
     ERROR_HDR_CORRUPTED_LSEG,
     ERROR_HDR_UNSUPPORTED,
+
+    // Hard drive controller
+    ERROR_HDC_INIT,
 
     // Snapshots
     ERROR_SNAP_TOO_OLD,
@@ -261,6 +264,8 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_HDR_CORRUPTED_LSEG:          return "HDR_CORRUPTED_LSEG";
             case ERROR_HDR_UNSUPPORTED:             return "HDR_UNSUPPORTED";
                 
+            case ERROR_HDC_INIT:                    return "HDC_INIT";
+
             case ERROR_SNAP_TOO_OLD:                return "SNAP_TOO_OLD";
             case ERROR_SNAP_TOO_NEW:                return "SNAP_TOO_NEW";
             case ERROR_SNAP_IS_BETA:                return "SNAP_IS_BETA";

@@ -260,8 +260,8 @@ HdController::spypeek16(u32 addr) const
             
             // Number of filesystem drivers to add
             debug(HDR_DEBUG, "Filesystem drivers: %ld\n", drive.numDrivers());
-            // return u16(drive.numDrivers());
-            return 0;
+            return u16(drive.numDrivers());
+            // return 0;
             
         case EXPROM_SIZE + 4:
             
@@ -401,7 +401,7 @@ HdController::processCmd(u32 ptr)
 void
 HdController::processInit(u32 ptr)
 {
-    debug(HDR_DEBUG, "processInit()\n");
+    debug(HDR_DEBUG, "processInit(%x)\n", ptr);
 
     auto assignDosName = [&](char *name) {
         
@@ -493,7 +493,7 @@ HdController::processInit(u32 ptr)
 void
 HdController::processResource(u32 ptr)
 {
-    debug(HDR_DEBUG, "processResource()\n");
+    debug(HDR_DEBUG, "processResource(%x)\n", ptr);
 
     // Read the file system resource
     os::FileSysResource fsResource;
@@ -532,7 +532,7 @@ HdController::processResource(u32 ptr)
 void
 HdController::processInfoReq(u32 ptr)
 {
-    debug(HDR_DEBUG, "processInfoReq()\n");
+    debug(HDR_DEBUG, "processInfoReq(%x)\n", ptr);
     
     // Keep in sync with exprom.asm
     static constexpr u16 fsinfo_num = 0x00;
@@ -541,28 +541,24 @@ HdController::processInfoReq(u32 ptr)
     static constexpr u16 fsinfo_numHunks = 0x0a;
     static constexpr u16 fsinfo_hunk = 0x0e;
 
-    u16 num = mem.spypeek16 <ACCESSOR_CPU> (ptr + fsinfo_num);
-    debug(HDR_DEBUG, "Requested info for driver %d\n", num);
-    
-    if (num >= drive.drivers.size()) {
-        
-        warn("Driver %d does not exist\n", num);
-        return;
-    }
-    
-    auto &driver = drive.drivers[num];
-    
     try {
 
-        // Read device driver
+        // Read driver number
+        u16 num = mem.spypeek16 <ACCESSOR_CPU> (ptr + fsinfo_num);
+        debug(HDR_DEBUG, "Requested info for driver %d\n", num);
+
+        if (num >= drive.drivers.size()) {
+            throw VAError(ERROR_HDC_INIT, "Invalid driver number: " + std::to_string(num));
+        }
+        auto &driver = drive.drivers[num];
+    
+        // Read driver
         Buffer<u8> code;
         drive.readDriver(num, code);
-        
-        // Parse hunk structure
         ProgramUnitDescriptor descr(code);
         descr.dump(Category::Sections);
         
-        // We expect up to three hunks
+        // We accept up to three hunks
         auto numHunks = descr.numHunks();
         if (numHunks == 0 || numHunks > 3) {
             throw VAError(ERROR_HUNK_CORRUPTED);
@@ -585,7 +581,81 @@ HdController::processInfoReq(u32 ptr)
 void
 HdController::processInitSeg(u32 ptr)
 {
-    debug(HDR_DEBUG, "processInitSeg()\n");
+    debug(HDR_DEBUG, "processInitSeg(%x)\n", ptr);
+    
+    static constexpr u16 fsinitseg_hunk = 0x00;
+    static constexpr u16 fsinitseg_num = 0x0c;
+    
+    try {
+        
+        // Read driver number
+        u32 num = mem.spypeek32 <ACCESSOR_CPU> (ptr + fsinitseg_num);
+        debug(HDR_DEBUG, "Processing driver %d\n", num);
+
+        if (num >= drive.drivers.size()) {
+            throw VAError(ERROR_HDC_INIT, "Invalid driver number: " + std::to_string(num));
+        }
+  
+        // Read driver
+        Buffer<u8> code;
+        drive.readDriver(num, code);
+        ProgramUnitDescriptor descr(code);
+    
+        // We accept up to three hunks
+        auto numHunks = descr.numHunks();
+        if (numHunks == 0 || numHunks > 3) {
+            throw VAError(ERROR_HUNK_CORRUPTED);
+        }
+        
+        // Extract pointers to the allocated memory
+        std::vector<u32> segPtrs;
+        for (isize i = 0; i < numHunks; i++) {
+            
+            auto segPtrAddr = u32(ptr + fsinitseg_hunk + 4 * i);
+            auto segPtr = mem.spypeek32 <ACCESSOR_CPU> (segPtrAddr);
+            
+            if (segPtr == 0) {
+                throw VAError(ERROR_HDC_INIT, "Memory allocation failed inside AmigaOS");
+            }
+            debug(HDR_DEBUG, "Allocated memory at %x\n", segPtr);
+            segPtrs.push_back(segPtr);
+        }
+        
+        // Build seglist
+        for (isize i = 0; i < numHunks; i++) {
+            
+            bool last = (i == numHunks - 1);
+            
+            // Write hunk size
+            mem.patch(segPtrs[i], u32(descr.hunks[i].memSize + 8));
+
+            // Add a BPTR to the next hunk in the list
+            mem.patch(segPtrs[i] + 4, last ? 0 : (segPtrs[i + 1] + 4) >> 2);
+            
+            // Copy all hunk sections
+            u32 start = segPtrs[i] + 8;
+            for (auto &section : descr.hunks[i].sections) {
+    
+                debug(HDR_DEBUG, "Copying %d bytes from %d\n", section.size, section.offset);
+                mem.patch(start, code.ptr + section.offset, section.size);
+                start += section.size;
+            }
+            
+            // Apply relocations
+            /* TODO: Port this
+             for (const auto& hr : fs.hunks[i].relocs) {
+             const uint32_t dst_start = segptr[hr.dst_hunk] + 8;
+             for (const auto ofs : hr.offsets) {
+             mem_.write_u32(start + ofs, mem_.read_u32(start + ofs) + dst_start);
+             }
+             }
+             */
+        }
+        
+    } catch (VAError &e) {
+
+        warn("processInitSeg: %s\n", e.what());
+    }
     
     // TODO: Port handle_fs_initseg() from AmiEmu
     warn("Implementation missing\n");
