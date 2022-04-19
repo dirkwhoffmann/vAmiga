@@ -569,7 +569,7 @@ HdController::processInfoReq(u32 ptr)
         mem.patch(ptr + fsinfo_version, u32(driver.dosVersion));
         mem.patch(ptr + fsinfo_numHunks, u32(numHunks));
         for (isize i = 0; i < numHunks; i++) {
-            mem.patch(u32(ptr + fsinfo_hunk + 4 * i), descr.hunks[i].memFlags);
+            mem.patch(u32(ptr + fsinfo_hunk + 4 * i), descr.hunks[i].memRaw);
         }
                 
     } catch (VAError &e) {
@@ -623,33 +623,45 @@ HdController::processInitSeg(u32 ptr)
         
         // Build seglist
         for (isize i = 0; i < numHunks; i++) {
-            
-            bool last = (i == numHunks - 1);
-            
-            // Write hunk size
-            mem.patch(segPtrs[i], u32(descr.hunks[i].memSize + 8));
 
-            // Add a BPTR to the next hunk in the list
-            mem.patch(segPtrs[i] + 4, last ? 0 : (segPtrs[i + 1] + 4) >> 2);
+            bool last = (i == numHunks - 1);
+
+            for (auto &s : descr.hunks[i].sections) {
+                
+                if (s.type == HUNK_CODE || s.type == HUNK_DATA) {
+                    
+                    // Write hunk size
+                    mem.patch(segPtrs[i], u32(descr.hunks[i].memSize + 8));
+
+                    // Add a BPTR to the next hunk in the list
+                    mem.patch(segPtrs[i] + 4, last ? 0 : (segPtrs[i + 1] + 4) >> 2);
             
-            // Copy all hunk sections
-            u32 start = segPtrs[i] + 8;
-            for (auto &section : descr.hunks[i].sections) {
-    
-                debug(HDR_DEBUG, "Copying %d bytes from %d\n", section.size, section.offset);
-                mem.patch(start, code.ptr + section.offset, section.size);
-                start += section.size;
+                    // Copy data
+                    debug(HDR_DEBUG, "Copying %d bytes from %d\n", s.size, s.offset + 8);
+                    mem.patch(segPtrs[i] + 8, code.ptr + s.offset + 8, s.size);
+                }
             }
             
             // Apply relocations
-            /* TODO: Port this
-             for (const auto& hr : fs.hunks[i].relocs) {
-             const uint32_t dst_start = segptr[hr.dst_hunk] + 8;
-             for (const auto ofs : hr.offsets) {
-             mem_.write_u32(start + ofs, mem_.read_u32(start + ofs) + dst_start);
-             }
-             }
-             */
+            for (auto &s : descr.hunks[i].sections) {
+                
+                if (s.type == HUNK_RELOC32) {
+                    
+                    if (s.target >= numHunks) {
+                        throw VAError(ERROR_HDC_INIT, "Invalid relocation target");
+                    }
+                    debug(HDR_DEBUG, "Relocation target: %ld\n", s.target);
+                    
+                    for (auto &offset : s.relocations) {
+                        
+                        auto addr = segPtrs[i] + 8 + offset;
+                        auto value = mem.spypeek32 <ACCESSOR_CPU> (addr);
+                        debug(HDR_DEBUG, "%x: %x -> %x\n",
+                              addr, value, value + segPtrs[s.target] + 8)
+                        mem.patch(addr, value + segPtrs[s.target] + 8);
+                    }
+                }
+            }
         }
         
     } catch (VAError &e) {
@@ -657,6 +669,5 @@ HdController::processInitSeg(u32 ptr)
         warn("processInitSeg: %s\n", e.what());
     }
     
-    // TODO: Port handle_fs_initseg() from AmiEmu
-    warn("Implementation missing\n");
+    debug(HDR_DEBUG, "processInitSeg completed\n");
 }

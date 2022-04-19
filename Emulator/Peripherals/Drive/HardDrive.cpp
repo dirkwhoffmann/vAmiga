@@ -150,6 +150,11 @@ HardDrive::init(const HDFFile &hdf)
         // Recreate the image with the new disk
         enableWriteThrough();
     }
+    
+    // REMOVE ASAP
+    for (auto &driver : drivers) {
+        driver.dump();
+    }
 }
 
 void

@@ -82,9 +82,6 @@ struct HardDriveStateEnum : util::Reflection<HardDriveStateEnum, HardDriveState>
 typedef struct
 {
     HardDriveType type;
-    // bool connected;
-    
-    // Noise settings
     i16 pan;
     u8 stepVolume;
 }

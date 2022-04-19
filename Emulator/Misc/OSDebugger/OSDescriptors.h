@@ -70,10 +70,13 @@ struct HunkDescriptor {
     // A hunk consists of several sections
     std::vector <SectionDescriptor> sections;
 
-    // Memory size in bytes
+    // Memory size and flags (packed format)
+    u32 memRaw = 0;
+    
+    // Memory size in bytes (extracted from memRaw)
     u32 memSize = 0;
     
-    // Memory flags
+    // Memory flags (extracted from memRaw)
     u32 memFlags = 0;
 
     

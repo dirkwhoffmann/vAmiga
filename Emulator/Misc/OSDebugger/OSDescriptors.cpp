@@ -144,14 +144,15 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
     for (isize i = 0; i < numHunks; i++) {
 
         auto value = read();
-        auto memSize = (value & 0x3FFFFFFF) << 2;
-        auto memFlags = (value & 0xC0000000) >> 29;
-        if (memFlags == (MEMF_CHIP | MEMF_FAST)) {
-            memFlags = read() & ~(1 << 30);
+        auto size = (value & 0x3FFFFFFF) << 2;
+        auto flags = (value & 0xC0000000) >> 29;
+        if (flags == (MEMF_CHIP | MEMF_FAST)) {
+            flags = read() & ~(1 << 30);
         }
-        memFlags = memFlags | MEMF_PUBLIC;
-
-        hunks.push_back( HunkDescriptor { .memSize = memSize, .memFlags = memFlags } );
+        flags = flags | MEMF_PUBLIC;
+        
+        auto descr = HunkDescriptor { .memRaw = value, .memSize = size, .memFlags = flags };
+        hunks.push_back(descr);
     }
         
     // Scan sections (s) of all hunks (h)
@@ -196,7 +197,7 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
                     section.size += 4 * count;
                     section.target = read();
                                         
-                    for (isize i = 0; i < count; i++) {
+                    while (count--) {
                         section.relocations.push_back(read());
                     }
                 }
