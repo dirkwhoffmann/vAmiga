@@ -1,4 +1,4 @@
-name: CMake-MSVC
+name: CMake-MSVC-Debug
 
 on:
   push:
