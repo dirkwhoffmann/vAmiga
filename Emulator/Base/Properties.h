@@ -73,8 +73,6 @@ public:
     i64 get(Option option, isize nr) throws;
     
     string getFallback(const string &key) throws;
-    // i64 getFallback(Option option) throws;
-    // i64 getFallback(Option option, isize nr) throws;
 
     void setString(const string &key, const string &value);
     void set(Option option, i64 value);
@@ -82,8 +80,11 @@ public:
     void set(Option option, std::vector <isize> nrs, i64 value);
 
     void setFallback(const string &key, const string &value);
+    void setFallback(Option option, const string &value);
     void setFallback(Option option, i64 value);
+    void setFallback(Option option, isize nr, const string &value);
     void setFallback(Option option, isize nr, i64 value);
+    void setFallback(Option option, std::vector <isize> nrs, const string &value);
     void setFallback(Option option, std::vector <isize> nrs, i64 value);
 
     void remove();

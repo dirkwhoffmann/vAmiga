@@ -69,7 +69,7 @@ HDFFile::init(const HardDrive &drive)
 {
     AmigaFile::readFromBuffer(drive.data);
     
-    // Overwrite the predicted geometry from the precise one
+    // Overwrite the predicted geometry with the precise one
     geometry = drive.getGeometry();
 }
 

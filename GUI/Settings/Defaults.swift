@@ -16,17 +16,17 @@ import Carbon.HIToolbox
 extension PropertiesProxy {
 
     func load(url: URL) throws {
-        
-        let exception = ExceptionWrapper()
-        load(url, exception: exception)
-        if exception.errorCode != .OK { throw VAError(exception) }
-        
+
         set("ROM_PATH", UserDefaults.romUrl!.path)
         set("EXT_PATH", UserDefaults.extUrl!.path)
         set("HD0_PATH", UserDefaults.hd0Url!.path)
         set("HD1_PATH", UserDefaults.hd1Url!.path)
         set("HD2_PATH", UserDefaults.hd2Url!.path)
         set("HD3_PATH", UserDefaults.hd3Url!.path)
+
+        let exception = ExceptionWrapper()
+        load(url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }        
     }
 
     func load() {

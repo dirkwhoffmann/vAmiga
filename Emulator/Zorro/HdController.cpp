@@ -403,20 +403,33 @@ HdController::processInit(u32 ptr)
 {
     debug(HDR_DEBUG, "processInit(%x)\n", ptr);
 
-    auto assignDosName = [&](char *name) {
+    auto assignDosName = [&](isize partition, char *name) {
         
         // Determine the number of already initialized partitions
-        auto nr = 
+        /*
+        auto nr =
         hd0con.numPartitions +
         hd1con.numPartitions +
         hd2con.numPartitions +
         hd3con.numPartitions;
-
+        */
+        
         name[0] = 'D';
         name[1] = 'H';
-        name[2] = nr < 10 ? '0' + char(nr) : '0' + char(nr / 10);
-        name[3] = nr < 10 ? 0 : '0' + char(nr % 10);
-        name[4] = 0;
+
+        if (nr == 0) {
+            
+            name[2] = '0' + char(partition);
+            name[3] = 0;
+            name[4] = 0;
+
+        } else {
+
+            name[2] = '0' + char(nr);
+            name[3] = '0' + char(partition);
+            name[4] = 0;
+
+        }
     };
 
     // Keep in check with exprom.asm
@@ -452,7 +465,7 @@ HdController::processInit(u32 ptr)
         auto &geometry = drive.geometry;
         auto &part = drive.ptable[unit];
         char dosName[5];
-        assignDosName(dosName);
+        assignDosName(unit, dosName);
 
         u32 name_ptr = mem.spypeek32 <ACCESSOR_CPU> (ptr + devn_dosName);
         for (isize i = 0; i < isizeof(dosName); i++) {
@@ -486,15 +499,15 @@ HdController::processInit(u32 ptr)
         mem.patch(ptr + devn_bootflags,     u32(part.flags & 1));
         mem.patch(ptr + devn_segList,       u32(segList));
         
-        if (part.dosType != 0x444f5300) {
+        if ((part.dosType & 0xFFFFFFF0) != 0x444f5300) {
             debug(HDR_DEBUG, "Unusual DOS type %x\n", part.dosType);
         }
         
-        numPartitions++;
+        numPartitions = std::max(isize(unit), numPartitions);
 
     } else {
 
-        debug(XFILES, "Partition %d does not exist\n", unit);
+        debug(HDR_DEBUG, "Partition %d does not exist\n", unit);
     }
 }
 

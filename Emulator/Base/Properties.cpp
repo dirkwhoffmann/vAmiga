@@ -334,7 +334,7 @@ Properties::getInt(const string &key)
 {
     auto value = getString(key);
 
-    try { return std::stol(value); } catch (...) {
+    try { return isize(std::stoll(value)); } catch (...) {
 
         warn("Can't parse value %s\n", key.c_str());
         return 0;
@@ -407,43 +407,49 @@ Properties::set(Option option, std::vector <isize> nrs, i64 value)
 void
 Properties::setFallback(const string &key, const string &value)
 {
-    {   SYNCHRONIZED
-        
-        fallbacks[key] = value;
-    }
+    SYNCHRONIZED fallbacks[key] = value;
+}
+
+void
+Properties::setFallback(Option option, const string &value)
+{
+    setFallback(string(OptionEnum::key(option)), value);
 }
 
 void
 Properties::setFallback(Option option, i64 value)
 {
-    auto key = string(OptionEnum::key(option));
-    auto val = std::to_string(value);
-    
-    setFallback(key, val);
+    setFallback(option, std::to_string(value));
+}
+
+void
+Properties::setFallback(Option option, isize nr, const string &value)
+{
+    setFallback(string(OptionEnum::key(option)) + std::to_string(nr), value);
 }
 
 void
 Properties::setFallback(Option option, isize nr, i64 value)
 {
-    auto key = string(OptionEnum::key(option)) + std::to_string(nr);
-    auto val = std::to_string(value);
-
-    setFallback(key, val);
+    setFallback(option, nr, std::to_string(value));
 }
 
 void
-Properties::setFallback(Option option, std::vector <isize> nrs, i64 value)
+Properties::setFallback(Option option, std::vector <isize> nrs, const string &value)
 {
     for (auto &nr : nrs) setFallback(option, nr, value);
 }
 
 void
+Properties::setFallback(Option option, std::vector <isize> nrs, i64 value)
+{
+    setFallback(option, nrs, std::to_string(value));
+}
+
+void
 Properties::remove()
 {
-    {   SYNCHRONIZED
-        
-        values.clear();
-    }
+    SYNCHRONIZED values.clear();
 }
 
 void

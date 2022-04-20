@@ -115,11 +115,7 @@ void
 Memory::_reset(bool hard)
 {
     if (hard) {
-        
-        // Try to load Roms
-//        try { loadRom(romPath); } catch(...) { }
-//        try { loadExt(extPath); } catch(...) { }
-        
+
         // Erase WOM (if any)
         if (hasWom()) eraseWom();
 

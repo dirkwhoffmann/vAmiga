@@ -39,7 +39,7 @@ parseHex(const string &s, isize *result)
 {
     try {
         size_t pos = 0;
-        auto num = std::stol(s, &pos, 16);
+        auto num = std::stoll(s, &pos, 16);
 
         if (pos == s.size()) {
 
