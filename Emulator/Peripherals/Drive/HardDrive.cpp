@@ -163,12 +163,9 @@ HardDrive::init(const HDFFile &hdf)
     }
     
     // Print some debug information
+    debug(HDR_DEBUG, "%lu (needed) file system drivers\n", drivers.size());
     if constexpr (HDR_DEBUG) {
-
-        debug(true, "%lu (needed) file system drivers\n", drivers.size());
-        for (auto &driver : drivers) {
-            driver.dump();
-        }
+        for (auto &driver : drivers) driver.dump();
     }
 }
 

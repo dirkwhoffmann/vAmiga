@@ -1415,11 +1415,7 @@ template <> void
 RetroShell::exec <Token::dfn, Token::cp> (Arguments& argv, long param)
 {
     assert(param >= 0 && param <= 3);
-
-    auto path = argv.front();
-
-    printf("df%ld catch %s\n", param, path.c_str());
-    df[param]->catchFile(path);
+    df[param]->catchFile(argv.front());
 }
 
 

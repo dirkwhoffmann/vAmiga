@@ -122,29 +122,12 @@ DeniseDebugger::vsyncHandler()
         
         // Take action if the viewport has changed
         if (vpChanged) {
-            
-            /*
-            msg("Old viewport: (%ld,%ld) - (%ld,%ld)\n",
-                  latchedMaxViewPort.hstrt,
-                  latchedMaxViewPort.vstrt,
-                  latchedMaxViewPort.hstop,
-                  latchedMaxViewPort.vstop);
-            msg("New viewport: (%ld,%ld) - (%ld,%ld)\n",
-                  maxViewPort.hstrt,
-                  maxViewPort.vstrt,
-                  maxViewPort.hstop,
-                  maxViewPort.vstop);
-            */
-            
+                        
             latchedMaxViewPort = maxViewPort;
             
             // Notify the GUI if the last message was sent a while ago
             if (abs(agnus.clock - vpMsgSent) > MSEC(200)) {
-                
-                /*
-                printf("(%ld,%ld) - (%ld,%ld)\n", latchedMaxViewPort.hstrt,latchedMaxViewPort.vstrt,latchedMaxViewPort.hstop,latchedMaxViewPort.vstop);
-                */
-                
+
                 msgQueue.put(MSG_VIEWPORT,
                              i16(latchedMaxViewPort.hstrt),
                              i16(latchedMaxViewPort.vstrt),

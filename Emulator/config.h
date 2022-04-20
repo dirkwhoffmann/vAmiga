@@ -200,7 +200,8 @@ static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
 // Expansion boards
 static const int ZOR_DEBUG       = 0; // Zorro space, autoconfig
 static const int FAS_DEBUG       = 0; // FastRam
-static const int HDR_DEBUG       = 1; // HardDrive
+static const int HDR_DEBUG       = 0; // HardDrive
+static const int DBD_DEBUG       = 0; // DebugBoard
 
 // Media types
 static const int ADF_DEBUG       = 0; // ADF and extended ADF files
