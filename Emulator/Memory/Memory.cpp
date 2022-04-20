@@ -103,12 +103,23 @@ Memory::_initialize()
 {
     AmigaComponent::_initialize();
     
-    auto romPath = Amiga::properties.getString("ROM_PATH");
-    auto extPath = Amiga::properties.getString("EXT_PATH");
+    if (auto romPath = Amiga::properties.getString("ROM_PATH"); romPath != "") {
 
-    msg("Trying to load Roms...\n")
-    try { loadRom(romPath); } catch(...) { }
-    try { loadExt(extPath); } catch(...) { }
+        msg("Trying to load Rom from %s...\n", romPath.c_str());
+        
+        try { loadRom(romPath); } catch (std::exception& e) {
+            warn("Error: %s\n", e.what());
+        }
+    }
+    
+    if (auto extPath = Amiga::properties.getString("EXT_PATH"); extPath != "") {
+
+        msg("Trying to load extension Rom from %s...\n", extPath.c_str());
+        
+        try { loadExt(extPath); } catch (std::exception& e) {
+            warn("Error: %s\n", e.what());
+        }
+    }
 }
 
 void
