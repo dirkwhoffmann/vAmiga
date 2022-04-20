@@ -333,12 +333,19 @@ i64
 Properties::getInt(const string &key)
 {
     auto value = getString(key);
+    i64 result = 0;
 
-    try { return isize(std::stoll(value)); } catch (...) {
+    try {
+        
+        result = i64(std::stoll(value));
+        debug(DEF_DEBUG, "get(%s) = %lld\n", key.c_str(), result);
+        
+    } catch (...) {
 
         warn("Can't parse value %s\n", key.c_str());
-        return 0;
     }
+
+    return result;
 }
 
 i64
@@ -407,7 +414,12 @@ Properties::set(Option option, std::vector <isize> nrs, i64 value)
 void
 Properties::setFallback(const string &key, const string &value)
 {
-    SYNCHRONIZED fallbacks[key] = value;
+    {   SYNCHRONIZED
+        
+        debug(DEF_DEBUG, "Fallback: %s = %s\n", key.c_str(), value.c_str());
+        
+        fallbacks[key] = value;
+    }
 }
 
 void
