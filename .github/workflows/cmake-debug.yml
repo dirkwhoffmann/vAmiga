@@ -1,0 +1,36 @@
+name: CMake-Debug
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+      - v2.0
+  pull_request:
+    branches:
+      - master
+      - dev
+      - v2.0
+
+env:
+  BUILD_TYPE: Debug
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Configure CMake
+      working-directory: ./Emulator
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+    - name: Build
+      working-directory: ./Emulator
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+    - name: Test
+      working-directory: ./Emulator
+      run: ctest -C ${{env.BUILD_TYPE}}
+      
