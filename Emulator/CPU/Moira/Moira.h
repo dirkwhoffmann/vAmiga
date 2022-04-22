@@ -252,12 +252,13 @@ protected:
     // Exception delegates
     virtual void addressErrorHandler() { };
     
-    // Called when a breakpoint is reached
-    virtual void breakpointReached(u32 addr) { };
-
-    // Called when a breakpoint is reached
-    virtual void watchpointReached(u32 addr) { };
-
+    // Called when a debug point is reached
+    virtual void softstopReached(u32 addr);
+    virtual void breakpointReached(u32 addr);
+    virtual void watchpointReached(u32 addr);
+    virtual void catchpointReached(u8 vector);
+    virtual void swTrapReached(u32 addr);
+    
     // Called at the beginning of each instruction handler (see EXEC_DEBUG)
     virtual void execDebug(const char *cmd) { };
     

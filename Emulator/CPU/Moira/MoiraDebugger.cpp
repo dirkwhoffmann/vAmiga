@@ -340,7 +340,7 @@ Debugger::vectorName(u8 vectorNr)
     if (vectorNr >= 32 && vectorNr <= 47) {
         return "Trap #" + std::to_string(vectorNr - 32);
     }
-    if (vectorNr >= 64 && vectorNr <= 255) {
+    if (vectorNr >= 64) {
         return "User interrupt vector";
     }
     switch (vectorNr) {
