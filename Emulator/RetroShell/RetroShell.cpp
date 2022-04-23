@@ -14,6 +14,12 @@
 
 RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
 {    
+ 
+}
+
+void
+RetroShell::_initialize()
+{
     // Initialize the text storage
     clear();
 

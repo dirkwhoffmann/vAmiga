@@ -1825,13 +1825,6 @@ using namespace moira;
     return proxy;
 }
 
-/*
--(NSInteger)cpos
-{
-    return [self shell]->cposAbs();
-}
-*/
-
 -(NSInteger)cursorRel
 {
     return [self shell]->cursorRel();

@@ -99,6 +99,12 @@ Amiga::Amiga()
     initialize();
     hardReset();
         
+    // Initialize the sync timer
+    targetTime = util::Time::now();
+    
+    // Start the thread and enter the main function
+    thread = std::thread(&Thread::main, this);
+    
     // Print some debug information
     if constexpr (SNP_DEBUG) {
         

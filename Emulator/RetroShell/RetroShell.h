@@ -92,6 +92,7 @@ private:
     
 private:
     
+    void _initialize() override;
     void _reset(bool hard) override { }
     
     isize _size() override { return 0; }
@@ -199,10 +200,14 @@ private:
     
 public:
     
-    template <Token t1> void exec(Arguments& argv, long param) throws;
-    template <Token t1, Token t2> void exec(Arguments& argv, long param) throws;
-    template <Token t1, Token t2, Token t3> void exec(Arguments& argv, long param) throws;
-    template <Token t1, Token t2, Token t3, Token t4> void exec(Arguments& argv, long param) throws;
+    template <Token t1>
+    void exec(Arguments& argv, long param) throws;
+    template <Token t1, Token t2>
+    void exec(Arguments& argv, long param) throws;
+    template <Token t1, Token t2, Token t3>
+    void exec(Arguments& argv, long param) throws;
+    template <Token t1, Token t2, Token t3, Token t4>
+    void exec(Arguments& argv, long param) throws;
 
     void dump(AmigaObject &component, Category category);
 
