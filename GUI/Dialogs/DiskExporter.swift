@@ -138,7 +138,7 @@ class DiskExporter: DialogController {
         formatPopup.removeAllItems()
         if adf != nil { addItem("ADF", tag: Format.adf) }
         if hdf != nil { addItem("HDF", tag: Format.hdf) }
-        if ext != nil { addItem("ADF", tag: Format.ext) }
+        if ext != nil { addItem("Extended ADF", tag: Format.ext) }
         if img != nil { addItem("IMG", tag: Format.img) }
         if img != nil { addItem("IMA", tag: Format.ima) }
         if vol != nil { addItem("Folder", tag: Format.vol) }
