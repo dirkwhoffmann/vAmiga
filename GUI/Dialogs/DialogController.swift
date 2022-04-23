@@ -136,7 +136,6 @@ extension DialogController: NSWindowDelegate {
 
     func windowWillClose(_ notification: Notification) {
 
-        log()
         unregister()
     }
 }
