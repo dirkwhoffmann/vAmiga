@@ -188,9 +188,9 @@ typedef ERROR_CODE ErrorCode;
 #ifdef __cplusplus
 struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return ERROR_FS_INVALID_HASHTABLE_SIZE; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = ERROR_FS_INVALID_HASHTABLE_SIZE;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "ERROR"; }
     static const char *key(ErrorCode value)

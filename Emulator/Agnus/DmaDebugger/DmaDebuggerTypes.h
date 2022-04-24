@@ -24,9 +24,9 @@ typedef DMA_DISPLAY_MODE DmaDisplayMode;
 #ifdef __cplusplus
 struct DmaDisplayModeEnum : util::Reflection<DmaDisplayModeEnum, DmaDisplayMode>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return DMA_DISPLAY_MODE_ODD_EVEN_LAYERS; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = DMA_DISPLAY_MODE_ODD_EVEN_LAYERS;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "DMA_DISPLAY_MODE"; }
     static const char *key(DmaDisplayMode value)

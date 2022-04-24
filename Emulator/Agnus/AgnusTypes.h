@@ -48,9 +48,9 @@ typedef AGNUS_REVISION AgnusRevision;
 #ifdef __cplusplus
 struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return AGNUS_ECS_2MB; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = AGNUS_ECS_2MB;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "AGNUS"; }
     static const char *key(AgnusRevision value)
@@ -118,9 +118,9 @@ typedef SLOT EventSlot;
 #ifdef __cplusplus
 struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return SLOT_COUNT - 1; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = SLOT_COUNT - 1;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "SLOT"; }
     static const char *key(EventSlot value)
@@ -414,9 +414,9 @@ typedef SPR_DMA_STATE SprDMAState;
 #ifdef __cplusplus
 struct SprDmaStateEnum : util::Reflection<SprDmaStateEnum, SprDMAState>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return SPR_DMA_ACTIVE; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = SPR_DMA_ACTIVE;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "SPR_DMA"; }
     static const char *key(SprDMAState value)

@@ -27,9 +27,9 @@ typedef DIAMETER Diameter;
 #ifdef __cplusplus
 struct DiameterEnum : util::Reflection<DiameterEnum, Diameter>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return INCH_525; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = INCH_525;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return ""; }
     static const char *key(Diameter value)
@@ -55,9 +55,9 @@ typedef DENSITY Density;
 #ifdef __cplusplus
 struct DensityEnum : util::Reflection<DensityEnum, Density>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return DENSITY_HD; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = DENSITY_HD;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "DENSITY"; }
     static const char *key(Density value)

@@ -29,9 +29,9 @@ typedef EXEC_STATE ExecutionState;
 #ifdef __cplusplus
 struct ExecutionStateEnum : util::Reflection<ExecutionStateEnum, ExecutionState>
 {    
-    static long minVal() { return 0; }
-    static long maxVal() { return EXEC_HALTED; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = EXEC_HALTED;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "EXEC"; }
     static const char *key(ExecutionState value)

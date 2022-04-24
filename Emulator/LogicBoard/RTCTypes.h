@@ -27,9 +27,9 @@ typedef RTC_REVISION RTCRevision;
 #ifdef __cplusplus
 struct RTCRevisionEnum : util::Reflection<RTCRevisionEnum, RTCRevision>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return RTC_RICOH; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = RTC_RICOH;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "RTC"; }
     static const char *key(RTCRevision value)

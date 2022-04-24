@@ -27,9 +27,9 @@ typedef SERVER_TYPE ServerType;
 #ifdef __cplusplus
 struct ServerTypeEnum : util::Reflection<ServerTypeEnum, ServerType>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return SERVER_GDB; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = SERVER_GDB;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "SERVER"; }
     static const char *key(ServerType value)

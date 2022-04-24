@@ -29,9 +29,9 @@ typedef HDR_TYPE HardDriveType;
 #ifdef __cplusplus
 struct HardDriveTypeEnum : util::Reflection<HardDriveTypeEnum, HardDriveType>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return HDR_GENERIC; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = HDR_GENERIC;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "HDR"; }
     static const char *key(HardDriveType value)
@@ -56,9 +56,9 @@ typedef HDR_STATE HardDriveState;
 #ifdef __cplusplus
 struct HardDriveStateEnum : util::Reflection<HardDriveStateEnum, HardDriveState>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return HDR_STATE_WRITING; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = HDR_STATE_WRITING;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "HDR_STATE"; }
     static const char *key(HardDriveType value)

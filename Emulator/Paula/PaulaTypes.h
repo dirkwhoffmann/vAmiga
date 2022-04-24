@@ -38,9 +38,9 @@ typedef INT_SOURCE IrqSource;
 #ifdef __cplusplus
 struct IrqSourceEnum : util::Reflection<IrqSourceEnum, IrqSource>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return INT_EXTER; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = INT_EXTER;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "INT"; }
     static const char *key(IrqSource value)

@@ -27,9 +27,9 @@ typedef SPD SerialPortDevice;
 #ifdef __cplusplus
 struct SerialPortDeviceEnum : util::Reflection<SerialPortDeviceEnum, SerialPortDevice>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return SPD_LOOPBACK; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = SPD_LOOPBACK;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "SPD"; }
     static const char *key(SerialPortDevice value)

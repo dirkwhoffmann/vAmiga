@@ -46,9 +46,9 @@ typedef BOARD_STATE BoardState;
 #ifdef __cplusplus
 struct BoardStateEnum : util::Reflection<BoardStateEnum, BoardState>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return STATE_SHUTUP; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = STATE_SHUTUP;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "STATE"; }
     static const char *key(BoardState value)

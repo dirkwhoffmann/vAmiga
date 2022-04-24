@@ -27,9 +27,9 @@ typedef DENISE_REV DeniseRevision;
 #ifdef __cplusplus
 struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision>
 {    
-    static long minVal() { return 0; }
-    static long maxVal() { return DENISE_ECS; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = DENISE_ECS;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "DENISE"; }
     static const char *key(DeniseRevision value)

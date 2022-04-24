@@ -30,9 +30,9 @@ typedef SRV_STATE SrvState;
 #ifdef __cplusplus
 struct SrvStateEnum : util::Reflection<SrvStateEnum, SrvState>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return SRV_STATE_ERROR; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = SRV_STATE_ERROR;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "SRV"; }
     static const char *key(SrvState value)
@@ -60,9 +60,9 @@ typedef SRVPROT ServerProtocol;
 #ifdef __cplusplus
 struct ServerProtocolEnum : util::Reflection<ServerProtocolEnum, ServerProtocol>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return SRVPROT_DEFAULT; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = SRVPROT_DEFAULT;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "SRVPROT"; }
     static const char *key(SrvState value)

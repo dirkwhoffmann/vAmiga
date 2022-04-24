@@ -26,9 +26,9 @@ typedef FILTER_TYPE FilterType;
 #ifdef __cplusplus
 struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return FILTER_BUTTERWORTH; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = FILTER_BUTTERWORTH;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "FILTER"; }
     static const char *key(FilterType value)

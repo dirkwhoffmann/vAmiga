@@ -26,9 +26,9 @@ typedef DRIVE_TYPE FloppyDriveType;
 #ifdef __cplusplus
 struct FloppyDriveTypeEnum : util::Reflection<FloppyDriveTypeEnum, FloppyDriveType>
 {
-    static long minVal() { return 0; }
-    static long maxVal() { return DRIVE_DD_525; }
-    static bool isValid(auto val) { return val >= minVal() && val <= maxVal(); }
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = DRIVE_DD_525;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "DRIVE"; }
     static const char *key(FloppyDriveType value)
