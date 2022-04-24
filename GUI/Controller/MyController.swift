@@ -252,15 +252,15 @@ extension MyController {
         // Convert 'self' to a void pointer
         let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
         
-        amiga.setListener(myself) { (ptr, type, data1, data2) in
+        amiga.setListener(myself) { (ptr, type, d1, d2, d3, d4) in
             
             // Convert void pointer back to 'self'
             let myself = Unmanaged<MyController>.fromOpaque(ptr!).takeUnretainedValue()
             
             // Process message in the main thread
             DispatchQueue.main.async {
-                let mType = MsgType(rawValue: type)
-                myself.processMessage(Message(type: mType!, data1: data1, data2: data2))
+                myself.processMessage(Message(type: MsgType(rawValue: type)!,
+                                              data1: d1, data2: d2, data3: d3, data4: d4))
             }
         }
     }
@@ -361,16 +361,18 @@ extension MyController {
     
     func processMessage(_ msg: Message) {
 
-        var word1: Int { return (Int(msg.data1) >> 16) & 0xFFFF }
-        var word2: Int { return Int(msg.data1) & 0xFFFF }
-        var word3: Int { return (Int(msg.data2) >> 16) & 0xFFFF }
-        var word4: Int { return Int(msg.data2) & 0xFFFF }
-        
-        var nr: Int { return word1 }
-        var cyl: Int { return word2 }
-        var volume: Int { return word3 }
-        var pan: Int { return word4 }
-                                                        
+        var data1: Int { return Int(msg.data1) }
+        var data2: Int { return Int(msg.data2) }
+        var data3: Int { return Int(msg.data3) }
+        var data4: Int { return Int(msg.data4) }
+
+        var nr: Int { return data1 }
+        var cyl: Int { return data2 }
+        var volume: Int { return data3 }
+        var pan: Int { return data4 }
+        var pc: Int { return Int(UInt32(bitPattern: msg.data1)) }
+        var vector: Int { return data2 }
+
         // Only proceed if the proxy object is still alive
         if amiga == nil { return }
         
@@ -426,12 +428,11 @@ extension MyController {
             amiga.continueScript()
             
         case .HALT:
-            log("Received MSG_HALT", level: 2)
             shutDown()
             
         case .ABORT:
             log("Aborting with exit code \(msg.data1)")
-            exit(Int32(msg.data1))
+            exit(msg.data1)
             
         case .MUTE_ON:
             muted = true
@@ -464,16 +465,16 @@ extension MyController {
             inspector?.fullRefresh()
             
         case .BREAKPOINT_REACHED:
-            inspector?.signalBreakPoint(pc: Int(msg.data1))
+            inspector?.signalBreakPoint(pc: pc)
             
         case .WATCHPOINT_REACHED:
-            inspector?.signalWatchPoint(pc: Int(msg.data1))
+            inspector?.signalWatchPoint(pc: pc)
 
         case .CATCHPOINT_REACHED:
-            inspector?.signalCatchPoint(pc: Int(msg.data1), vector: Int(msg.data2))
+            inspector?.signalCatchPoint(pc: pc, vector: vector)
 
         case .SWTRAP_REACHED:
-            inspector?.signalSoftwareTrap(pc: Int(msg.data1))
+            inspector?.signalSoftwareTrap(pc: pc)
 
         case .COPPERBP_REACHED:
             inspector?.signalCopperBreakpoint()
@@ -485,11 +486,11 @@ extension MyController {
             refreshStatusBar()
             
         case .VIEWPORT:
-            renderer.canvas.updateTextureRect(hstrt: word1,
-                                              vstrt: word2,
-                                              hstop: word3,
-                                              vstop: word4)
-            
+            renderer.canvas.updateTextureRect(hstrt: data1,
+                                              vstrt: data2,
+                                              hstop: data3,
+                                              vstop: data4)
+
         case .MEM_LAYOUT:
             inspector?.fullRefresh()
             
@@ -562,10 +563,10 @@ extension MyController {
             resetAction(self)
             
         case .SER_IN:
-            serialIn += String(UnicodeScalar(Int(msg.data1) & 0xFF)!)
+            serialIn += String(UnicodeScalar(data1 & 0xFF)!)
             
         case .SER_OUT:
-            serialOut += String(UnicodeScalar(Int(msg.data1) & 0xFF)!)
+            serialOut += String(UnicodeScalar(data1 & 0xFF)!)
             
         case .AUTO_SNAPSHOT_TAKEN:
             mydocument.snapshots.append(amiga.latestAutoSnapshot)
