@@ -1071,13 +1071,17 @@ Amiga::execute()
 void
 Amiga::setFlag(u32 flag)
 {
-    SYNCHRONIZED flags |= flag;
+    SYNCHRONIZED
+
+    flags |= flag;
 }
 
 void
 Amiga::clearFlag(u32 flag)
 {
-    SYNCHRONIZED flags &= ~flag;
+    SYNCHRONIZED
+
+    flags &= ~flag;
 }
 
 void

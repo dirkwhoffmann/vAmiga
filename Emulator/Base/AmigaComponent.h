@@ -18,11 +18,14 @@
 /* The following macro can be utilized to prevent multiple threads to enter the
  * same code block. It mimics the behaviour of the well known Java construct
  * 'synchronized(this) { }'. To secure a code-block, use the following syntax:
- * { SYNCHRONIZED <commands> }
+ *
+ *     { SYNCHRONIZED <commands> }
+ *
+ * To prevent concurrent execution of a single static function, use:
+ *
+ *     { STATIC_SYNCHRONIZED <commands> }
  */
 #define SYNCHRONIZED util::AutoMutex _am(mutex);
-
-// Variant for static methods
 #define STATIC_SYNCHRONIZED static std::mutex m; std::lock_guard<std::mutex> lock(m);
 
 struct NoCopy

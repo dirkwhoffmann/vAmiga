@@ -9,6 +9,5 @@ target_sources(vAmigaCore PRIVATE
   StringUtils.cpp
   IOUtils.cpp
   Parser.cpp
-)
 
-#add_library(Utilities ${files})
+)

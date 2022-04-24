@@ -10,7 +10,6 @@
 #include "config.h"
 #include "AmigaComponent.h"
 #include "Checksum.h"
-#include "Serialization.h"
 
 void
 AmigaComponent::initialize()
@@ -117,7 +116,7 @@ AmigaComponent::save(u8 *buffer)
 {
     u8 *ptr = buffer;
     
-    // Call delegation method
+    // Call the delegate
     ptr += willSaveToBuffer(ptr);
     
     // Save internal state of all subcomponents
@@ -131,7 +130,7 @@ AmigaComponent::save(u8 *buffer)
     // Save the internal state of this component
     ptr += _save(ptr);
 
-    // Call delegation method
+    // Call the delegate
     ptr += didSaveToBuffer(ptr);
     isize result = (isize)(ptr - buffer);
     

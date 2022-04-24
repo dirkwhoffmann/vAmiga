@@ -168,7 +168,7 @@ Properties::load(const fs::path &path)
         throw VAError(ERROR_FILE_NOT_FOUND);
     }
     
-    debug(DEF_DEBUG, "Loading user defaults from %s...\n", path.c_str());
+    debug(DEF_DEBUG, "Loading user defaults from %s...\n", path.string().c_str());
     load(fs);
 }
 

@@ -247,32 +247,3 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
     }
 };
 #endif
-
-enum_long(EMULATOR_STATE)
-{
-    EMULATOR_STATE_OFF,
-    EMULATOR_STATE_PAUSED,
-    EMULATOR_STATE_RUNNING
-};
-typedef EMULATOR_STATE EmulatorState;
-
-#ifdef __cplusplus
-struct EmulatorStateEnum : util::Reflection<EmulatorStateEnum, EmulatorState>
-{
-    static constexpr long minVal = 0;
-    static constexpr long maxVal = EMULATOR_STATE_RUNNING;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
-
-    static const char *prefix() { return "EMULATOR_STATE"; }
-    static const char *key(EmulatorState value)
-    {
-        switch (value) {
-                
-            case EMULATOR_STATE_OFF:      return "OFF";
-            case EMULATOR_STATE_PAUSED:   return "PAUSED";
-            case EMULATOR_STATE_RUNNING:  return "RUNNING";
-        }
-        return "???";
-    }
-};
-#endif
