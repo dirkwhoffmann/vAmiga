@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "StringUtils.h"
-#include "Aliases.h"
 #include <sstream>
 
 namespace util {
@@ -163,16 +162,16 @@ string byteCountAsString(isize size)
     auto mbfrac = (size * 100 / (1024 * 1024)) % 100;
     auto gbfrac = (size * 100 / (1024 * 1024 * 1024)) % 100;
 
-    if (size < KB(1)) {
+    if (size < 1024) {
 
         return std::to_string(size) + " Bytes";
     }
-    if (size < MB(1)) {
+    if (size < 1024 * 1024) {
 
         auto frac = kbfrac == 0 ? "" : ("." + std::to_string(kbfrac));
         return std::to_string(kb) + frac + " KB";
     }
-    if (size < GB(1)) {
+    if (size < 1024 * 1024 * 1024) {
         
         auto frac = mbfrac == 0 ? "" : ("." + std::to_string(mbfrac));
         return std::to_string(mb) + frac + " MB";

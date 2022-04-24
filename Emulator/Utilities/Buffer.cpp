@@ -20,13 +20,13 @@ Allocator<T>::alloc(isize elements)
 {
     assert(usize(elements) <= maxCapacity);
     assert((size == 0) == (ptr == nullptr));
-
+    
     if (size != elements) try {
         
         dealloc();
         
         if (elements) {
-
+            
             size = elements;
             ptr = new T[size];
         }
@@ -42,9 +42,9 @@ template <class T> void
 Allocator<T>::dealloc()
 {
     assert((size == 0) == (ptr == nullptr));
-
+    
     if (ptr) {
- 
+        
         delete [] ptr;
         ptr = nullptr;
         size = 0;
@@ -93,7 +93,7 @@ Allocator<T>::init(const string &path)
     
     // Return an empty buffer if the stream could not be opened
     if (!stream) { dealloc(); return; }
-        
+    
     // Get the stream length in bytes
     auto length = streamLength(stream);
     
@@ -118,7 +118,7 @@ template <class T> void
 Allocator<T>::resize(isize elements)
 {
     assert((size == 0) == (ptr == nullptr));
-
+    
     if (size != elements) {
         
         if (elements == 0) {

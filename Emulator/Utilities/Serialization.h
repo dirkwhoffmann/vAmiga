@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Macros.h"
+#include "MemUtils.h"
 #include "Buffer.h"
 #include <vector>
 
@@ -99,6 +100,7 @@ inline void writeString(u8 *& buf, string value)
     value.copy((char *)buf, len);
     buf += len;
 }
+
 
 //
 // Counter (determines the state size)
@@ -522,7 +524,6 @@ public:
         std::memcpy((void *)ptr, src, n);
         ptr += n;
     }
-
 };
 
 
@@ -570,6 +571,20 @@ public:
     auto& operator<<(string &v)
     {
         v = "";
+        return *this;
+    }
+    
+    template <class T>
+    auto& operator<<(std::vector <T> &v)
+    {
+        v.clear();
+        return *this;
+    }
+
+    template <class T>
+    auto& operator>>(std::vector <T> &v)
+    {
+        v.clear();
         return *this;
     }
     

@@ -101,8 +101,6 @@ string makeAbsolutePath(const string &path)
 string
 makeUniquePath(const string &path)
 {
-    // if (!fileExists(path)) return path;
-    
     auto prefix = stripSuffix(path);
     auto suffix = "." + extractSuffix(path);
     
