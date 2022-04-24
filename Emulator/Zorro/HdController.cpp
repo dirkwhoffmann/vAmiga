@@ -270,6 +270,7 @@ HdController::spypeek16(u32 addr) const
                 debug(HDR_DEBUG, "Disabling auto boot\n");
                 return u16(true);
             }
+
             return u16(false);
 
         case EXPROM_SIZE + 6:

@@ -78,18 +78,18 @@ Properties::Properties()
     setFallback(OPT_STOP_DELAY, { 0, 1, 2, 3 }, MSEC(80));
     setFallback(OPT_STEP_DELAY, { 0, 1, 2, 3 }, USEC(8000));
     setFallback(OPT_DISK_SWAP_DELAY, { 0, 1, 2, 3 }, SEC(1.8));
-    setFallback(OPT_DRIVE_PAN, { 0, 1 }, 100);
-    setFallback(OPT_DRIVE_PAN, { 2, 3 }, -100);
-    setFallback(OPT_STEP_VOLUME, { 0, 1, 2, 3 }, 128);
-    setFallback(OPT_POLL_VOLUME, { 0, 1, 2, 3 }, 128);
-    setFallback(OPT_INSERT_VOLUME, { 0, 1, 2, 3 }, 128);
-    setFallback(OPT_EJECT_VOLUME, { 0, 1, 2, 3 }, 128);
+    setFallback(OPT_DRIVE_PAN, { 0, 2 }, 100);
+    setFallback(OPT_DRIVE_PAN, { 1, 3 }, 300);
+    setFallback(OPT_STEP_VOLUME, { 0, 1, 2, 3 }, 50);
+    setFallback(OPT_POLL_VOLUME, { 0, 1, 2, 3 }, 0);
+    setFallback(OPT_INSERT_VOLUME, { 0, 1, 2, 3 }, 50);
+    setFallback(OPT_EJECT_VOLUME, { 0, 1, 2, 3 }, 50);
     setFallback(OPT_HDC_CONNECT, 0, true);
     setFallback(OPT_HDC_CONNECT, { 1, 2, 3 }, false);
     setFallback(OPT_HDR_TYPE, { 0, 1, 2, 3 }, HDR_GENERIC);
-    setFallback(OPT_HDR_PAN, { 0, 1 }, 100);
-    setFallback(OPT_HDR_PAN, { 2, 3 }, -100);
-    setFallback(OPT_HDR_STEP_VOLUME, { 0, 1, 2, 3 }, 128);
+    setFallback(OPT_HDR_PAN, { 0, 2 }, 300);
+    setFallback(OPT_HDR_PAN, { 1, 3 }, 100);
+    setFallback(OPT_HDR_STEP_VOLUME, { 0, 1, 2, 3 }, 50);
     setFallback(OPT_SERIAL_DEVICE, SPD_NONE);
     setFallback(OPT_HIDDEN_BITPLANES, 0);
     setFallback(OPT_HIDDEN_SPRITES, 0);
@@ -325,6 +325,7 @@ Properties::getString(const string &key)
     if (values.contains(key)) return values[key];
     if (fallbacks.contains(key)) return fallbacks[key];
 
+    warn("Invalid key: %s\n", key.c_str());
     assert(false);
     throw VAError(ERROR_INVALID_KEY, key);
 }
@@ -364,6 +365,8 @@ string
 Properties::getFallback(const string &key)
 {
     if (!fallbacks.contains(key)) {
+
+        warn("Invalid key: %s\n", key.c_str());
         assert(false);
         throw VAError(ERROR_INVALID_KEY, key);
     }
@@ -379,6 +382,8 @@ Properties::setString(const string &key, const string &value)
         debug(DEF_DEBUG, "%s = %s\n", key.c_str(), value.c_str());
 
         if (!fallbacks.contains(key)) {
+
+            warn("Invalid key: %s\n", key.c_str());
             assert(false);
             throw VAError(ERROR_INVALID_KEY, key);
         }
@@ -470,6 +475,8 @@ Properties::remove(const string &key)
     {   SYNCHRONIZED
         
         if (!fallbacks.contains(key)) {
+
+            warn("Invalid key: %s\n", key.c_str());
             assert(false);
             throw VAError(ERROR_INVALID_KEY, key);
         }

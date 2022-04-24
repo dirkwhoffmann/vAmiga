@@ -146,9 +146,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0b4</string>
+	<string>2.0b5</string>
 	<key>CFBundleVersion</key>
-	<string>220418</string>
+	<string>220424</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.entertainment</string>
 	<key>LSMinimumSystemVersion</key>

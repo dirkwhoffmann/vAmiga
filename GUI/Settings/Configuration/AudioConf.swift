@@ -178,29 +178,13 @@ extension ConfigurationController {
     @IBAction func audPresetAction(_ sender: NSPopUpButton!) {
         
         amiga.suspend()
-                
-        config.vol0 = 100
-        config.vol1 = 100
-        config.vol2 = 100
-        config.vol3 = 100
-        config.volL = 50
-        config.volR = 50
-        config.samplingMethod = SamplingMethod.NONE.rawValue
-        config.df0Pan = 100
-        config.df1Pan = 300
-        config.df2Pan = 100
-        config.df3Pan = 300
-        config.hd0Pan = 100
-        config.hd1Pan = 300
-        config.hd2Pan = 100
-        config.hd3Pan = 300
-        config.stepVolume = 50
-        config.pollVolume = 0
-        config.insertVolume = 50
-        config.ejectVolume = 50
-        config.filterType = FilterType.BUTTERWORTH.rawValue
-        config.filterAlwaysOn = false
-                
+
+        // Revert to standard settings
+        AmigaProxy.defaults.removeAudioUserDefaults()
+
+        // Update the configuration
+        config.applyAudioUserDefaults()
+
         switch sender.selectedTag() {
 
         case 0: // Standard
