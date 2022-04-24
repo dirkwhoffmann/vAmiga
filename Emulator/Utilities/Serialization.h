@@ -157,6 +157,14 @@ public:
     }
 
     template <class T>
+    auto& operator<<(std::optional<T> &v)
+    {
+        if (v) { *this << *v; }
+        count += 1;
+        return *this;
+    }
+
+    template <class T>
     auto& operator<<(std::vector <T> &v)
     {
         auto len = v.size();
@@ -248,6 +256,13 @@ public:
         for (usize i = 0; i < len; i++) {
             hash = util::fnvIt64(hash, v[i]);
         }
+        return *this;
+    }
+
+    template <class T>
+    auto& operator<<(std::optional <T> &v)
+    {
+        if (v) { *this << *v; }
         return *this;
     }
 
@@ -352,6 +367,19 @@ public:
     auto& operator<<(string &v)
     {
         v = readString(ptr);
+        return *this;
+    }
+
+    template <class T>
+    auto& operator<<(std::optional <T> &v)
+    {
+        bool b;
+        *this << b;
+        if (b) {
+            T value;
+            *this << value;
+            v = value;
+        }
         return *this;
     }
 
@@ -473,6 +501,15 @@ public:
     }
 
     template <class T>
+    auto& operator<<(std::optional <T> &v)
+    {
+        bool b = v ? true : false;
+        *this << b;
+        if (b) { *this << *v; }
+        return *this;
+    }
+
+    template <class T>
     auto& operator<<(std::vector <T> &v)
     {
         auto len = v.size();
@@ -573,7 +610,14 @@ public:
         v = "";
         return *this;
     }
-    
+
+    template <class T>
+    auto& operator<<(std::optional <T> &v)
+    {
+        v = { };
+        return *this;
+    }
+
     template <class T>
     auto& operator<<(std::vector <T> &v)
     {

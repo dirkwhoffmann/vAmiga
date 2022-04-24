@@ -59,6 +59,7 @@ class HardDrive : public Drive {
     // Disk state flags
     bool modified = false;
     bool writeProtected = false;
+    optional <bool> bootable;
 
     // Indicates if write-through mode is enabled
     bool writeThrough = false;
@@ -132,7 +133,8 @@ private:
         >> drivers
         << data
         << modified
-        << writeProtected;
+        << writeProtected
+        << bootable;
     }
 
     template <class T>

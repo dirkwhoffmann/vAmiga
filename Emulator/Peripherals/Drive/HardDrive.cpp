@@ -281,6 +281,7 @@ HardDrive::connect()
         debug(WT_DEBUG, "Creating default disk...\n");
         init(MB(10));
         format(FS_OFS, defaultName());
+        bootable = false;
     }    
 }
 
@@ -414,6 +415,12 @@ HardDrive::_dump(Category category, std::ostream& os) const
         os << bol(modified) << std::endl;
         os << tab("Write protected");
         os << bol(writeProtected) << std::endl;
+        os << tab("Bootable");
+        if (bootable) {
+            os << bol(*bootable) << std::endl;
+        } else {
+            os << "Unknown" << std::endl;
+        }
     }
 }
 
