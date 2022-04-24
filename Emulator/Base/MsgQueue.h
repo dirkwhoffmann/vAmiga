@@ -28,9 +28,7 @@ class MsgQueue : public SubComponent {
     //
     // Constructing
     //
-    
-public:
-    
+
     using SubComponent::SubComponent;
     
     

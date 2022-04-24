@@ -12,6 +12,10 @@
 #include "Aliases.h"
 #include "Reflection.h"
 
+//
+// Enumerations
+//
+
 enum_long(MSG_TYPE)
 {
     MSG_NONE = 0,

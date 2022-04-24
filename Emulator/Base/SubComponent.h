@@ -102,7 +102,7 @@ public:
     virtual bool isPoweredOff() const override;
     virtual bool isPoweredOn() const override;
     virtual bool isPaused() const override;
-    virtual bool isRunning() const override; 
+    virtual bool isRunning() const override;
     virtual bool isSuspended() const override;
     virtual bool isHalted() const override;
 

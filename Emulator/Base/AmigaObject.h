@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "Error.h"
+
 /* Object model:
  *
  * ------------------
@@ -39,8 +41,6 @@
  * Thread adds the ability to run the component asynchroneously. It implements
  * the emulator's state model (off, paused, running).
  */
-
-#include "Error.h"
 
 enum class Category
 {    
