@@ -19,7 +19,7 @@ struct SyntaxError : public std::runtime_error {
     using runtime_error::runtime_error;
 };
 
-void process(const void *listener, long type, u32 data1, u32 data2);
+void process(const void *listener, long type, i32, i32, i32, i32);
 
 class Headless {
 
@@ -61,5 +61,5 @@ private:
 public:
     
     // Processes an incoming message
-    void process(long type, u32 data1, u32 data2);
+    void process(long type, i32, i32, i32, i32);
 };

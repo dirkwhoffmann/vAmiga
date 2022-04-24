@@ -151,20 +151,21 @@ Headless::checkArguments()
 }
 
 void
-process(const void *listener, long type, u32 data1, u32 data2)
+process(const void *listener, long type, i32 d1, i32 d2, i32 d3, i32 d4)
 {
-    ((Headless *)listener)->process(type, data1, data2);
+    ((Headless *)listener)->process(type, d1, d2, d3, d4);
 }
 
 void
-Headless::process(long type, u32 data1, u32 data2)
+Headless::process(long type, i32 d1, i32 d2, i32 d3, i32 d4)
 {
     static bool messages = keys.find("messages") != keys.end();
     
     if (messages) {
         
         std::cout << MsgTypeEnum::key(type);
-        std::cout << "(" << data1 << ", " << data2 << ")" << std::endl;
+        std::cout << "(" << d1 << ", " << d2 << ", " << d3 << ", " << d4 << ")";
+        std::cout << std::endl;
     }
         
     switch (type) {
