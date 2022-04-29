@@ -131,7 +131,6 @@
 		508FDFE721EA21780043D0E9 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 508FDFE621EA21780043D0E9 /* CoreAudio.framework */; };
 		508FDFE921EA21C80043D0E9 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 508FDFE821EA21C80043D0E9 /* AppKit.framework */; };
 		508FE01021EA227B0043D0E9 /* Speedometer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFEB21EA22780043D0E9 /* Speedometer.swift */; };
-		508FE01121EA227B0043D0E9 /* MyControllerToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFED21EA22780043D0E9 /* MyControllerToolbar.swift */; };
 		508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFEE21EA22780043D0E9 /* CIAPanel.swift */; };
 		508FE01521EA227B0043D0E9 /* GamePad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF121EA22780043D0E9 /* GamePad.swift */; };
 		508FE01821EA227B0043D0E9 /* MyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF421EA22790043D0E9 /* MyController.swift */; };
@@ -647,7 +646,6 @@
 		508FDFE621EA21780043D0E9 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		508FDFE821EA21C80043D0E9 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		508FDFEB21EA22780043D0E9 /* Speedometer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Speedometer.swift; sourceTree = "<group>"; };
-		508FDFED21EA22780043D0E9 /* MyControllerToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyControllerToolbar.swift; sourceTree = "<group>"; };
 		508FDFEE21EA22780043D0E9 /* CIAPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CIAPanel.swift; sourceTree = "<group>"; };
 		508FDFF121EA22780043D0E9 /* GamePad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamePad.swift; sourceTree = "<group>"; };
 		508FDFF421EA22790043D0E9 /* MyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyController.swift; sourceTree = "<group>"; };
@@ -1105,6 +1103,17 @@
 			path = FileSystems;
 			sourceTree = "<group>";
 		};
+		5058A916281C774600C223C9 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				50E1D2C126CCF830001FE199 /* DatatypeExtensions.swift */,
+				50E1D2C326CCF8C9001FE199 /* FileExtensions.swift */,
+				50E1D2C526CCF942001FE199 /* FontExtensions.swift */,
+				50E1D2C726CCF97C001FE199 /* ChronoExtensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		505B801C23FE626E002407FE /* Memory */ = {
 			isa = PBXGroup;
 			children = (
@@ -1136,13 +1145,12 @@
 		505B801E23FE6582002407FE /* System */ = {
 			isa = PBXGroup;
 			children = (
+				508FDFEB21EA22780043D0E9 /* Speedometer.swift */,
 				50E8199225B350DA00D2E3A5 /* Errors.swift */,
+				508FE00E21EA227B0043D0E9 /* MacAudio.swift */,
 				50F580652431D1A000E7D84D /* Screenshot.swift */,
 				501A9936243A07A100D269B2 /* Storage.swift */,
-				50E1D2C126CCF830001FE199 /* DatatypeExtensions.swift */,
-				50E1D2C326CCF8C9001FE199 /* FileExtensions.swift */,
-				50E1D2C526CCF942001FE199 /* FontExtensions.swift */,
-				50E1D2C726CCF97C001FE199 /* ChronoExtensions.swift */,
+				5058A916281C774600C223C9 /* Extensions */,
 			);
 			path = System;
 			sourceTree = "<group>";
@@ -1284,16 +1292,21 @@
 		508FDFDC21EA20600043D0E9 /* GUI */ = {
 			isa = PBXGroup;
 			children = (
+				508FDFF921EA22790043D0E9 /* Defaults.swift */,
 				508FE00C21EA227B0043D0E9 /* MyAppDelegate.swift */,
 				508FDFF721EA22790043D0E9 /* MyDocument.swift */,
 				508FE00921EA227B0043D0E9 /* WindowDelegate.swift */,
+				5039924225B2164E0084B808 /* MyDocumentController.swift */,
+				508FDFF421EA22790043D0E9 /* MyController.swift */,
+				508FDFF521EA22790043D0E9 /* MyControllerMenu.swift */,
+				5054DB6727FE98B100DAF784 /* MyControllerMedia.swift */,
+				50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */,
+				5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */,
+				5043F6C4221972F90047CC30 /* MyToolbar.swift */,
 				505B801E23FE6582002407FE /* System */,
-				509F7F1421ED13F300A530E4 /* Controller */,
-				508FE03921EA22CC0043D0E9 /* Dialogs */,
-				508FE03A21EA22CC0043D0E9 /* Settings */,
-				509F7F1521ED141F00A530E4 /* Inspector */,
-				509F7F1621ED156100A530E4 /* Peripherals */,
 				508FDFCB21EA20510043D0E9 /* Metal */,
+				508FE03921EA22CC0043D0E9 /* Dialogs */,
+				509F7F1621ED156100A530E4 /* Peripherals */,
 			);
 			path = GUI;
 			sourceTree = "<group>";
@@ -1315,6 +1328,10 @@
 			isa = PBXGroup;
 			children = (
 				508FE04721EA22CC0043D0E9 /* DialogController.swift */,
+				509F7F1521ED141F00A530E4 /* Inspector */,
+				5099123C24BA46E10007CAB6 /* Preferences */,
+				5099123D24BA46EB0007CAB6 /* Configuration */,
+				509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */,
 				501C514727C2AD8C00DF1DD5 /* DiskExporter.swift */,
 				5029C6E227CA2F66002F6CCC /* DiskInspector.swift */,
 				506B471C256396BC009FEFC3 /* VolumeInspector.swift */,
@@ -1325,21 +1342,10 @@
 				50EB8CCD2530710E0053988A /* VideoExporter.swift */,
 				501C514927C38FE500DF1DD5 /* DragImageView.swift */,
 				50B9354A243481AB000C78B8 /* SnapshotDialog.swift */,
-				509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */,
 				507727EC242F2CE3009D01DA /* iCarousel.h */,
 				507727ED242F2CE3009D01DA /* iCarousel.m */,
 			);
 			path = Dialogs;
-			sourceTree = "<group>";
-		};
-		508FE03A21EA22CC0043D0E9 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				508FDFF921EA22790043D0E9 /* Defaults.swift */,
-				5099123C24BA46E10007CAB6 /* Preferences */,
-				5099123D24BA46EB0007CAB6 /* Configuration */,
-			);
-			path = Settings;
 			sourceTree = "<group>";
 		};
 		508FE06021EA318D0043D0E9 /* Emulator */ = {
@@ -1418,23 +1424,6 @@
 				508FE03F21EA22CC0043D0E9 /* RomDropView.swift */,
 			);
 			path = Configuration;
-			sourceTree = "<group>";
-		};
-		509F7F1421ED13F300A530E4 /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-				5039924225B2164E0084B808 /* MyDocumentController.swift */,
-				508FDFF421EA22790043D0E9 /* MyController.swift */,
-				508FDFF521EA22790043D0E9 /* MyControllerMenu.swift */,
-				5054DB6727FE98B100DAF784 /* MyControllerMedia.swift */,
-				508FDFED21EA22780043D0E9 /* MyControllerToolbar.swift */,
-				50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */,
-				5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */,
-				5043F6C4221972F90047CC30 /* MyToolbar.swift */,
-				508FDFEB21EA22780043D0E9 /* Speedometer.swift */,
-				508FE00E21EA227B0043D0E9 /* MacAudio.swift */,
-			);
-			path = Controller;
 			sourceTree = "<group>";
 		};
 		509F7F1521ED141F00A530E4 /* Inspector */ = {
@@ -2147,7 +2136,6 @@
 				5071B7872621F88800D6FB54 /* CopperDebugger.cpp in Sources */,
 				508FE02D21EA227B0043D0E9 /* MyAppDelegate.swift in Sources */,
 				50F54B2F24B5D31D0078FDC9 /* getbits.c in Sources */,
-				508FE01121EA227B0043D0E9 /* MyControllerToolbar.swift in Sources */,
 				50AD905A2771B2770011ECCB /* RshServer.cpp in Sources */,
 				508FE05221EA22CC0043D0E9 /* RomDropView.swift in Sources */,
 				508FDFD621EA20510043D0E9 /* DragAndDrop.swift in Sources */,
