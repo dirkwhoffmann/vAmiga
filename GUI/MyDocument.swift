@@ -38,7 +38,7 @@ class MyDocument: NSDocument {
             return
         }
                 
-        // Register GUI related user defaults
+        // Register all GUI related user defaults
         AmigaProxy.defaults.registerUserDefaults()
         
         // Load the user default settings
@@ -46,7 +46,6 @@ class MyDocument: NSDocument {
         
         // Create an emulator instance
         amiga = AmigaProxy()
-
     }
  
     override open func makeWindowControllers() {
@@ -59,7 +58,7 @@ class MyDocument: NSDocument {
     }
   
     //
-    // Creating attachments
+    // Creating file proxys
     //
 
     func createFileProxy(from url: URL, allowedTypes: [FileType]) throws -> AmigaFileProxy? {
@@ -164,8 +163,7 @@ class MyDocument: NSDocument {
         log()
         
         if typeName == "vAmiga" {
-            
-            // Take snapshot
+
             if let snapshot = SnapshotProxy.make(withAmiga: amiga) {
 
                 do {

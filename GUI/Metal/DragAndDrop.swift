@@ -7,26 +7,22 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-import Foundation
-
-// import AppKit
-
 extension NSPasteboard.PasteboardType {
-    static let compatibleFileURL = NSPasteboard.PasteboardType(kUTTypeFileURL as String)
+
+    static let compatibleFileURL =
+    NSPasteboard.PasteboardType(kUTTypeFileURL as String)
 }
 
 public extension MetalView {
-    
-    // Returns a list of supported drag and drop types
-    func acceptedTypes() -> [NSPasteboard.PasteboardType] {
-        
-        return [.compatibleFileURL, .string, .fileContents]
-    }
-    
-    // Registers the supported drag and drop types
+
     func setupDragAndDrop() {
     
         registerForDraggedTypes(acceptedTypes())
+    }
+
+    func acceptedTypes() -> [NSPasteboard.PasteboardType] {
+
+        return [.compatibleFileURL, .string, .fileContents]
     }
 
     override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {

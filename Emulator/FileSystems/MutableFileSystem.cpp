@@ -573,7 +573,6 @@ MutableFileSystem::importDirectory(const string &path, bool recursive)
 void
 MutableFileSystem::importDirectory(const fs::directory_entry &dir, bool recursive)
 {
-  
     for (const auto& entry : fs::directory_iterator(dir)) {
         
         const auto path = entry.path().string();

@@ -111,7 +111,7 @@ enum_long(ERROR_CODE)
     ERROR_MISSING_ROM_KEY,
     ERROR_INVALID_ROM_KEY,
     
-    // Screen recorder
+    // Recorder
     ERROR_REC_LAUNCH,
 
     // OS Debugger

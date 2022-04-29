@@ -154,6 +154,7 @@ extension MyController: NSMenuItemValidation {
         
         // Wipe out all settings
         defaults.removeAll()
+        defaults.resetSearchPaths()
         defaults.save()
         
         // Apply new settings
@@ -253,7 +254,6 @@ extension MyController: NSMenuItemValidation {
         if screenshotBrowser == nil {
             screenshotBrowser = ScreenshotDialog(with: self, nibName: "ScreenshotDialog")
         }
-        screenshotBrowser?.checksum = amiga.df0.fnv
         screenshotBrowser?.showSheet()
     }
     

@@ -17,12 +17,12 @@ class Screenshot: CustomStringConvertible {
     
     // Creation date
     var date = Date()
-    
-    // Image width and heigt
+
+    // Image width and height
     var width: Int { return Int(screen?.size.width ?? 0) }
     var height: Int { return Int(screen?.size.height ?? 0) }
 
-    // Indicates if the upspaced texture has been recorded
+    // Indicates if the upscaled texture has been recorded
     var upscaled: Bool { return height > 1000 }
 
     // Textual description of the image source
@@ -98,8 +98,6 @@ class Screenshot: CustomStringConvertible {
     }
 
     func save(url: URL) throws {
-        
-        log("url: \(url)")
         
         // Convert to target format
         let data = screen?.representation(using: format)

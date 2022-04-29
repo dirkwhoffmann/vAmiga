@@ -67,7 +67,7 @@ class Recorder : public SubComponent {
     isize samplesPerFrame = 0;
     
     // The texture cutout that is going to be recorded
-    struct { int x1; int y1; int x2; int y2; } cutout;
+    struct { isize x1; isize y1; isize x2; isize y2; } cutout;
             
     // Time stamps
     util::Time recStart;
@@ -93,7 +93,7 @@ public:
     
 private:
     
-    const char *getDescription() const override { return "ScreenRecorder"; }
+    const char *getDescription() const override { return "Recorder"; }
     void _dump(Category category, std::ostream& os) const override;
     
     
@@ -102,20 +102,15 @@ private:
     //
     
 private:
-    
+
+    void _initialize() override;
     void _reset(bool hard) override;
 
     template <class T>
-    void applyToPersistentItems(T& worker)
-    {
-        
-    }
+    void applyToPersistentItems(T& worker) { }
 
     template <class T>
-    void applyToResetItems(T& worker, bool hard = true)
-    {
-        
-    }
+    void applyToResetItems(T& worker, bool hard = true) { }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
@@ -161,8 +156,9 @@ public:
     bool isRecording() const { return state != State::wait; }
         
     // Starts the screen recorder
-    void startRecording(int x1, int y1, int x2, int y2,
-                        long bitRate, long aspectX, long aspectY) throws;
+    void startRecording(isize x1, isize y1, isize x2, isize y2,
+                        isize bitRate,
+                        isize aspectX, isize aspectY) throws;
     
     // Stops the screen recorder
     void stopRecording();

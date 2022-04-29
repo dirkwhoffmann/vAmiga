@@ -1133,7 +1133,7 @@
 			path = LogicBoard;
 			sourceTree = "<group>";
 		};
-		505B801E23FE6582002407FE /* Foundation */ = {
+		505B801E23FE6582002407FE /* System */ = {
 			isa = PBXGroup;
 			children = (
 				50E8199225B350DA00D2E3A5 /* Errors.swift */,
@@ -1144,7 +1144,7 @@
 				50E1D2C526CCF942001FE199 /* FontExtensions.swift */,
 				50E1D2C726CCF97C001FE199 /* ChronoExtensions.swift */,
 			);
-			path = Foundation;
+			path = System;
 			sourceTree = "<group>";
 		};
 		508AC36527B7F634006AD2E7 /* Zorro */ = {
@@ -1287,7 +1287,7 @@
 				508FE00C21EA227B0043D0E9 /* MyAppDelegate.swift */,
 				508FDFF721EA22790043D0E9 /* MyDocument.swift */,
 				508FE00921EA227B0043D0E9 /* WindowDelegate.swift */,
-				505B801E23FE6582002407FE /* Foundation */,
+				505B801E23FE6582002407FE /* System */,
 				509F7F1421ED13F300A530E4 /* Controller */,
 				508FE03921EA22CC0043D0E9 /* Dialogs */,
 				508FE03A21EA22CC0043D0E9 /* Settings */,

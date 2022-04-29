@@ -91,12 +91,7 @@ class Preferences {
     
     // Emulation keys
     var keyMaps: [[MacKey: Int]] = [ [:], [:], [:] ]
-    /*
-            ControlsDefaults.std.mouseKeyMap,
-                    ControlsDefaults.std.joyKeyMap1,
-                    ControlsDefaults.std.joyKeyMap2 ]
-    */
-    
+
     // Joystick
     var disconnectJoyKeys: Bool!
     var autofire: Bool! {

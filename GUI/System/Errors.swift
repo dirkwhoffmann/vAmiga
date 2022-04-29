@@ -406,25 +406,5 @@ extension MyController {
     
     func askToPowerOff() -> Bool {
         return mydocument.askToPowerOff()
-        /*
-        if amiga.poweredOn {
-            
-            let alert = NSAlert()
-            
-            alert.alertStyle = .informational
-            alert.icon = NSImage(named: "powerSwitch")
-            alert.messageText = "The emulator must be powered off to perform this operation."
-            alert.informativeText = "Your changes will be lost if you proceed."
-            alert.addButton(withTitle: "Proceed")
-            alert.addButton(withTitle: "Cancel")
-            
-            if alert.runSheet(for: window!) == .alertFirstButtonReturn {
-                amiga.powerOff()
-            } else {
-                return false
-            }
-        }
-        return true
-        */
     }
 }

@@ -136,7 +136,7 @@ Interpreter::registerInstructions()
              &RetroShell::exec <Token::amiga, Token::inspect, Token::state>, 0);
 
     root.add({"amiga", "inspect", "defaults"},
-             "command", "Displays the user default storage",
+             "command", "Displays the user defaults storage",
              &RetroShell::exec <Token::amiga, Token::inspect, Token::defaults>, 0);
     
     

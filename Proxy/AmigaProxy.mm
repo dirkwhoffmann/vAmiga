@@ -916,10 +916,10 @@ using namespace moira;
                aspectY:(NSInteger)aspectY
              exception:(ExceptionWrapper *)ex
 {
-    int x1 = (int)rect.origin.x;
-    int y1 = (int)rect.origin.y;
-    int x2 = x1 + (int)rect.size.width;
-    int y2 = y1 + (int)rect.size.height;
+    auto x1 = isize(rect.origin.x);
+    auto y1 = isize(rect.origin.y);
+    auto x2 = isize(x1 + (int)rect.size.width);
+    auto y2 = isize(y1 + (int)rect.size.height);
     
     try { return [self recorder]->startRecording(x1, y1, x2, y2, rate, aspectX, aspectY); }
     catch (VAError &error) { [ex save:error]; }
@@ -2605,7 +2605,6 @@ using namespace moira;
 @synthesize keyboard;
 @synthesize mem;
 @synthesize paula;
-// @synthesize properties;
 @synthesize remoteManager;
 @synthesize retroShell;
 @synthesize rtc;
@@ -2646,7 +2645,6 @@ using namespace moira;
     keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];
     mem = [[MemProxy alloc] initWith:&amiga->mem];
     paula = [[PaulaProxy alloc] initWith:&amiga->paula];
-    // properties = [[PropertiesProxy alloc] initWith:&amiga->properties];
     retroShell = [[RetroShellProxy alloc] initWith:&amiga->retroShell];
     rtc = [[RtcProxy alloc] initWith:&amiga->rtc];
     recorder = [[RecorderProxy alloc] initWith:&amiga->denise.screenRecorder];

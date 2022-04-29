@@ -15,7 +15,7 @@ import Carbon.HIToolbox
 
 extension PropertiesProxy {
 
-    func load(url: URL) throws {
+    func resetSearchPaths() {
 
         set("ROM_PATH", UserDefaults.romUrl!.path)
         set("EXT_PATH", UserDefaults.extUrl!.path)
@@ -23,6 +23,11 @@ extension PropertiesProxy {
         set("HD1_PATH", UserDefaults.hd1Url!.path)
         set("HD2_PATH", UserDefaults.hd2Url!.path)
         set("HD3_PATH", UserDefaults.hd3Url!.path)
+    }
+
+    func load(url: URL) throws {
+
+        resetSearchPaths()
 
         let exception = ExceptionWrapper()
         load(url, exception: exception)
@@ -598,56 +603,18 @@ extension Keys {
     
     struct Dev {
 
-        static let schemes            = "DevSchemes"
-
-        // Mapping schemes (DEPRECATED)
-        /*
-        static let leftStickScheme1   = "DevLeftStickScheme1"
-        static let rightStickScheme1  = "DevRightStickScheme1"
-        static let hatSwitchScheme1   = "DevHatSwitchScheme1"
-
-        static let leftStickScheme2   = "DevLeftStickScheme2"
-        static let rightStickScheme2  = "DevRightStickScheme2"
-        static let hatSwitchScheme2   = "DevHatSwitchScheme2"
-        */
+        static let schemes            = "Devices.Schemes"
     }
 }
 
 extension PropertiesProxy {
     
     func registerDevicesUserDefaults() {
-        
-        /*
-        log(level: 2)
-        let defaults = AmigaProxy.defaults!
 
-        // Mapping schemes
-        defaults.register(Keys.Dev.leftStickScheme1, 0)
-        defaults.register(Keys.Dev.rightStickScheme1, 0)
-        defaults.register(Keys.Dev.hatSwitchScheme1, 0)
-
-        defaults.register(Keys.Dev.leftStickScheme2, 0)
-        defaults.register(Keys.Dev.rightStickScheme2, 0)
-        defaults.register(Keys.Dev.hatSwitchScheme2, 0)
-        */
     }
     
     func removeDevicesUserDefaults() {
-        
-        /*
-        log(level: 2)
-        let defaults = AmigaProxy.defaults!
 
-        let keys = [ Keys.Dev.leftStickScheme1,
-                     Keys.Dev.rightStickScheme1,
-                     Keys.Dev.hatSwitchScheme1,
-                     
-                     Keys.Dev.leftStickScheme2,
-                     Keys.Dev.rightStickScheme2,
-                     Keys.Dev.hatSwitchScheme2 ]
-
-        for key in keys { defaults.removeKey(key) }
-        */
     }
 }
 

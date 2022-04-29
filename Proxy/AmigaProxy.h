@@ -184,7 +184,6 @@
 @property (readonly, strong) KeyboardProxy *keyboard;
 @property (readonly, strong) MemProxy *mem;
 @property (readonly, strong) PaulaProxy *paula;
-// @property (readonly, strong) PropertiesProxy *properties;
 @property (readonly, strong) RemoteManagerProxy *remoteManager;
 @property (readonly, strong) RetroShellProxy *retroShell;
 @property (readonly, strong) RtcProxy *rtc;

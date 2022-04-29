@@ -17,7 +17,13 @@ Recorder::Recorder(Amiga& ref) : SubComponent(ref)
         
         &muxer
     };
-    
+}
+
+void
+Recorder::_initialize()
+{
+    AmigaComponent::_initialize();
+
     FFmpeg::init();
 }
 
@@ -76,12 +82,13 @@ Recorder::getDuration() const
 }
 
 void
-Recorder::startRecording(int x1, int y1, int x2, int y2,
-                         long bitRate, long aspectX, long aspectY)
+Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
+                         isize bitRate,
+                         isize aspectX, isize aspectY)
 {
     SYNCHRONIZED
     
-    debug(REC_DEBUG, "startRecording(%d,%d,%d,%d,%ld,%ld,%ld)\n",
+    debug(REC_DEBUG, "startRecording(%ld,%ld,%ld,%ld,%ld,%ld,%ld)\n",
           x1, y1, x2, y2, bitRate, aspectX, aspectY);
     
     if (isRecording()) {
@@ -101,7 +108,7 @@ Recorder::startRecording(int x1, int y1, int x2, int y2,
     debug(REC_DEBUG, "Pipes created\n");
     dump(Category::State);
     
-    debug(REC_DEBUG, "startRecording(%d,%d,%d,%d,%ld,%ld,%ld)\n",
+    debug(REC_DEBUG, "startRecording(%ld,%ld,%ld,%ld,%ld,%ld,%ld)\n",
           x1, y1, x2, y2, bitRate, aspectX, aspectY);
         
     // Make sure the screen dimensions are even
@@ -113,7 +120,7 @@ Recorder::startRecording(int x1, int y1, int x2, int y2,
     cutout.x2 = x2;
     cutout.y1 = y1;
     cutout.y2 = y2;
-    debug(REC_DEBUG, "Recorded area: (%d,%d) - (%d,%d)\n", x1, y1, x2, y2);
+    debug(REC_DEBUG, "Recorded area: (%ld,%ld) - (%ld,%ld)\n", x1, y1, x2, y2);
     
     // Set the bit rate, frame rate, and sample rate
     this->bitRate = bitRate;
