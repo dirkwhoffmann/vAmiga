@@ -163,7 +163,7 @@ HardDrive::init(const HDFFile &hdf)
     }
     
     // Print some debug information
-    debug(HDR_DEBUG, "%lu (needed) file system drivers\n", drivers.size());
+    debug(HDR_DEBUG, "%zu (needed) file system drivers\n", drivers.size());
     if constexpr (HDR_DEBUG) {
         for (auto &driver : drivers) driver.dump();
     }
@@ -670,7 +670,7 @@ HardDrive::readDriver(isize nr, Buffer<u8> &driver)
     for (auto &seg : segList) {
 
         auto offset = seg * geometry.bsize + 20;
-        
+
         assert(offset >= 0);
         assert(offset + bytesPerBlock <= data.size);
         

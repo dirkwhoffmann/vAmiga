@@ -556,7 +556,7 @@ HdController::processResource(u32 ptr)
         }
     }
     
-    debug(HDR_DEBUG, "Remaining drivers: %lu\n", drivers.size()); 
+    debug(HDR_DEBUG, "Remaining drivers: %zu\n", drivers.size());
 }
 
 void
