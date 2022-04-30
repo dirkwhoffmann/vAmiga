@@ -491,7 +491,7 @@ HdController::processInit(u32 ptr)
         mem.patch(ptr + devn_resBlks,       u32(part.reserved));
         mem.patch(ptr + devn_lowCyl,        u32(part.lowCyl));
         mem.patch(ptr + devn_upperCyl,      u32(part.highCyl));
-        mem.patch(ptr + devn_numBuffers,    u32(1));
+        mem.patch(ptr + devn_numBuffers,    u32(128));
         mem.patch(ptr + devn_memBufType,    u32(0));
         mem.patch(ptr + devn_transferSize,  u32(0x7FFFFFFF));
         mem.patch(ptr + devn_addMask,       u32(0xFFFFFFFE));
