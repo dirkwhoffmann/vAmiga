@@ -669,7 +669,7 @@ HardDrive::readDriver(isize nr, Buffer<u8> &driver)
     isize bytesRead = 0;
     for (auto &seg : segList) {
 
-        auto offset = seg * geometry.bsize + 20;
+        auto offset = isize(seg * geometry.bsize + 20);
 
         assert(offset >= 0);
         assert(offset + bytesPerBlock <= data.size);
