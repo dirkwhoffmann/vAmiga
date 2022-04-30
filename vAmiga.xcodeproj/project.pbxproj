@@ -1332,6 +1332,7 @@
 				5099123C24BA46E10007CAB6 /* Preferences */,
 				5099123D24BA46EB0007CAB6 /* Configuration */,
 				509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */,
+				50B9354A243481AB000C78B8 /* SnapshotDialog.swift */,
 				501C514727C2AD8C00DF1DD5 /* DiskExporter.swift */,
 				5029C6E227CA2F66002F6CCC /* DiskInspector.swift */,
 				506B471C256396BC009FEFC3 /* VolumeInspector.swift */,
@@ -1341,7 +1342,6 @@
 				50D715A227CCA84F0085C1AA /* PartitionSelector.swift */,
 				50EB8CCD2530710E0053988A /* VideoExporter.swift */,
 				501C514927C38FE500DF1DD5 /* DragImageView.swift */,
-				50B9354A243481AB000C78B8 /* SnapshotDialog.swift */,
 				507727EC242F2CE3009D01DA /* iCarousel.h */,
 				507727ED242F2CE3009D01DA /* iCarousel.m */,
 			);

@@ -245,9 +245,6 @@ Thread::run(bool blocking)
 
     // Never call this function inside the emulator thread
     assert(!isEmulatorThread());
-
-    // The emulator is expected to be powered on
-    if (isPoweredOff()) throw VAError(ERROR_POWERED_OFF);
         
     if (!isRunning()) {
 

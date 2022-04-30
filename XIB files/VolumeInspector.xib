@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -12,7 +12,6 @@
                 <outlet property="blockImageButton" destination="jVs-fp-kA4" id="CWY-pB-MmH"/>
                 <outlet property="blockSlider" destination="hbP-ug-wft" id="BBR-fz-Sma"/>
                 <outlet property="blockStepper" destination="v9x-P3-ijJ" id="ts4-8B-oPY"/>
-                <outlet property="blockText" destination="igt-RI-i5o" id="rOh-RH-jc1"/>
                 <outlet property="blocksInfo" destination="QpX-ux-oQP" id="rPY-WC-KYS"/>
                 <outlet property="bmBlockButton" destination="lA3-gG-xV1" id="pTR-Bn-L0M"/>
                 <outlet property="bmExtBlockButton" destination="sOR-bh-JAA" id="uje-TJ-nhm"/>
@@ -811,6 +810,6 @@
     <resources>
         <image name="NSTouchBarSearchTemplate" width="16" height="15"/>
         <image name="biohazard" width="276" height="277"/>
-        <image name="fileSystem" width="512" height="512"/>
+        <image name="fileSystem" width="255" height="256"/>
     </resources>
 </document>

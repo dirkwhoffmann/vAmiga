@@ -44,7 +44,7 @@ class VolumeInspector: DialogController {
 
     @IBOutlet weak var previewScrollView: NSScrollView!
     @IBOutlet weak var previewTable: NSTableView!
-    @IBOutlet weak var blockText: NSTextField!
+    // @IBOutlet weak var blockText: NSTextField!
     @IBOutlet weak var blockField: NSTextField!
     @IBOutlet weak var blockStepper: NSStepper!
     @IBOutlet weak var strictButton: NSButton!
@@ -84,8 +84,8 @@ class VolumeInspector: DialogController {
     
     let palette: [FSBlockType: NSColor] = [
         
-        .UNKNOWN_BLOCK: NSColor.white,
-        .EMPTY_BLOCK: NSColor.gray,
+        .UNKNOWN_BLOCK: Palette.white,
+        .EMPTY_BLOCK: Palette.gray,
         .BOOT_BLOCK: Palette.orange,
         .ROOT_BLOCK: Palette.red,
         .BITMAP_BLOCK: Palette.purple,

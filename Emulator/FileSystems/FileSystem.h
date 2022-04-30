@@ -110,8 +110,8 @@ public:
     // Reports usage information
     isize freeBlocks() const;
     isize usedBlocks() const;
-    isize freeBytes() const;
-    isize usedBytes() const;
+    isize freeBytes() const { return freeBlocks() * bsize; }
+    isize usedBytes() const { return usedBlocks() * bsize; }
     double fillLevel() const { return double(100) * usedBlocks() / numBlocks(); }
     
     // Returns the DOS version
@@ -296,7 +296,7 @@ public:
     // Determines how the layout image should look like in a certain column
     FSBlockType getDisplayType(isize column);
 
-    // Determines how the layout image should look like in a certain column
+    // Determines how the diagnose image should look like in a certain column
     isize diagnoseImageSlice(isize column);
 
     // Searches the block list for a block of a specific type

@@ -193,18 +193,6 @@ FileSystem::usedBlocks() const
     return numBlocks() - freeBlocks();
 }
 
-isize
-FileSystem::freeBytes() const
-{
-    return freeBlocks() * bsize;
-}
-
-isize
-FileSystem::usedBytes() const
-{
-    return usedBlocks() * bsize;
-}
-
 FSName
 FileSystem::getName() const
 {
