@@ -113,6 +113,8 @@ RomFile::identifier(u32 fingerprint)
         case 0x9BB8FC93: return ROM_HYP320_47_96_A4000;
         case 0x9188A509: return ROM_HYP320_47_96_A4000T;
 
+        case 0x9CE0F009: return ROM_AROS_54705;
+        case 0xE2C7F70A: return ROM_AROS_54705_EXT;
         case 0x3F4FCC0A: return ROM_AROS_55696;
         case 0xF2E52B07: return ROM_AROS_55696_EXT;
         case 0x4CE7C8D6: return ROM_AROS_1ED13DE6E3;
@@ -152,6 +154,8 @@ RomFile::isArosRom(RomIdentifier rev)
 
         case 0x00000000: return ROM_MISSING;
 
+        case ROM_AROS_54705:
+        case ROM_AROS_54705_EXT:
         case ROM_AROS_55696:
         case ROM_AROS_55696_EXT:
         case ROM_AROS_1ED13DE6E3:
@@ -302,8 +306,10 @@ RomFile::title(RomIdentifier rev)
         case ROM_HYP320_47_96_A4000:
         case ROM_HYP320_47_96_A4000T:   return "Kickstart 3.2 (Hyperion)";
 
+        case ROM_AROS_54705:
         case ROM_AROS_55696:
         case ROM_AROS_1ED13DE6E3:       return "AROS Kickstart replacement";
+        case ROM_AROS_54705_EXT:
         case ROM_AROS_55696_EXT:
         case ROM_AROS_1ED13DE6E3_EXT:   return "AROS Kickstart extension";
 
@@ -367,6 +373,8 @@ RomFile::version(RomIdentifier rev)
         case ROM_HYP320_47_96_A4000:
         case ROM_HYP320_47_96_A4000T:   return "Rev 47.96";
 
+        case ROM_AROS_54705:            return "SVN 54705";
+        case ROM_AROS_54705_EXT:        return "SVN 54705";
         case ROM_AROS_55696:            return "SVN 55696";
         case ROM_AROS_55696_EXT:        return "SVN 55696";
         case ROM_AROS_1ED13DE6E3:       return "Version 1ed13de6e3";
@@ -432,6 +440,8 @@ RomFile::released(RomIdentifier rev)
         case ROM_HYP320_47_96_A4000:
         case ROM_HYP320_47_96_A4000T:   return "May 2021";
 
+        case ROM_AROS_54705:            return "May 2017";
+        case ROM_AROS_54705_EXT:        return "May 2017";
         case ROM_AROS_55696:            return "February 2019";
         case ROM_AROS_55696_EXT:        return "February 2019";
         case ROM_AROS_1ED13DE6E3:       return "September 2021";
@@ -496,10 +506,12 @@ RomFile::model(RomIdentifier rev) {
         case ROM_HYP320_47_96_A4000:    return "A4000";
         case ROM_HYP320_47_96_A4000T:   return "A4000T";
 
-        case ROM_AROS_55696:            return "All Models";
-        case ROM_AROS_55696_EXT:        return "All Models";
-        case ROM_AROS_1ED13DE6E3:       return "All Models";
-        case ROM_AROS_1ED13DE6E3_EXT:   return "All Models";
+        case ROM_AROS_54705:            return "UAE version";
+        case ROM_AROS_54705_EXT:        return "UAE version";
+        case ROM_AROS_55696:            return "SAE version";
+        case ROM_AROS_55696_EXT:        return "SAE version";
+        case ROM_AROS_1ED13DE6E3:       return "";
+        case ROM_AROS_1ED13DE6E3_EXT:   return "";
 
         case ROM_DIAG11:                return "";
         case ROM_DIAG12:                return "";
@@ -509,12 +521,6 @@ RomFile::model(RomIdentifier rev) {
         default:                        return "";
     }
 }
-
-/*
-RomFile::RomFile()
-{
-}
-*/
 
 bool
 RomFile::isCompatible(std::istream &stream)
