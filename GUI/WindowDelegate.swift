@@ -49,6 +49,7 @@ extension MyController: NSWindowDelegate {
             return false
         }
     }
+
     public func windowWillClose(_ notification: Notification) {
         
         log()
@@ -74,8 +75,6 @@ extension MyController: NSWindowDelegate {
         
         log("Shutting down the emulator...", level: 2)
         amiga.halt()
-
-        log("Exiting", level: 2)
     }
     
     func shutDown() {
@@ -84,8 +83,6 @@ extension MyController: NSWindowDelegate {
         
         amiga.kill()
         amiga = nil
-        
-        log("Exiting", level: 2)
     }
     
     public func windowWillEnterFullScreen(_ notification: Notification) {

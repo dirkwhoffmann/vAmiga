@@ -346,9 +346,7 @@ extension MyController: NSMenuItemValidation {
             amiga.powerOff()
             
         } else {
-            
-            amiga.powerOn()
-            
+
             do {
                 try amiga.run()
             } catch {
@@ -427,7 +425,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func newDiskAction(_ sender: NSMenuItem!) {
 
         let drive = amiga.df(sender.tag)!
-        
+
         // Ask the user if a modified hard drive should be detached
         if !proceedWithUnsavedFloppyDisk(drive: drive) { return }
 
@@ -476,13 +474,14 @@ extension MyController: NSMenuItemValidation {
 
     func insertRecentDiskAction(drive: Int, slot: Int) {
         
+        let types: [FileType] = [ .ADF, .EXT, .DMS, .EXE, .DIR ]
+
         if let url = myAppDelegate.getRecentlyInsertedDiskURL(slot) {
-            
+
             do {
-                let types: [FileType] = [ .ADF, .EXT, .DMS, .EXE, .DIR ]
                 try self.mydocument.addMedia(url: url,
                                              allowedTypes: types,
-                                             df: slot)
+                                             df: drive)
             } catch {
                 self.showAlert(.cantInsert, error: error)
             }
@@ -511,7 +510,6 @@ extension MyController: NSMenuItemValidation {
             
             do {
                 try mydocument.export(drive: n, to: url)
-                
             } catch {
                 showAlert(.cantExport(url: url), error: error)
             }

@@ -50,7 +50,7 @@ var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     // List of recently attached hard drive URLs
     var attachedHardDrives: [URL] = []
     
-    // List of recently exported hard drive URLs
+    // List of recently exported hard drive URLs (one list for each drive)
     var exportedHardDrives: [[URL]] = [[URL]](repeating: [URL](), count: 4)
 
     override init() {
@@ -165,7 +165,7 @@ extension MyAppDelegate {
                 // Start playback
                 if !c.macAudio!.isRunning {
                     c.macAudio!.startPlayback()
-                    c.amiga.paula.rampUpFromZero()
+                    if !c.amiga.warpMode { c.amiga.paula.rampUpFromZero() }
                 }
                 
                 // Update the visibility of all drive menus

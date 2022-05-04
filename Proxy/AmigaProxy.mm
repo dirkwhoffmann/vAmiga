@@ -83,7 +83,7 @@ using namespace moira;
 // Properties
 //
 
-@implementation PropertiesProxy
+@implementation DefaultsProxy
 
 - (Properties *)props
 {
@@ -1343,6 +1343,7 @@ using namespace moira;
 {
     [self drive]->markDiskAsUnmodified();
 }
+
 - (void)toggleWriteProtection
 {
     [self drive]->toggleWriteProtection();
@@ -2660,9 +2661,9 @@ using namespace moira;
     return (Amiga *)obj;
 }
 
-+ (PropertiesProxy *) defaults
++ (DefaultsProxy *) defaults
 {
-    return [[PropertiesProxy alloc] initWith:&Amiga::properties];
+    return [[DefaultsProxy alloc] initWith:&Amiga::properties];
 }
 
 - (void)dealloc

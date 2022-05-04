@@ -13,7 +13,7 @@ import Carbon.HIToolbox
 // Proxy extensions
 //
 
-extension PropertiesProxy {
+extension DefaultsProxy {
 
     func resetSearchPaths() {
 
@@ -181,7 +181,6 @@ extension PropertiesProxy {
         
         if let jsonString = getString(key) {
 
-            log("Decoding jsonString '\(jsonString)'")
             if let data = Data(base64Encoded: jsonString) {
 
                 if let decoded = try? JSONDecoder().decode(T.self, from: data) {
@@ -231,7 +230,7 @@ extension UserDefaults {
 // User defaults (all)
 //
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerUserDefaults() {
         
@@ -315,7 +314,7 @@ struct Keys {
     }
 }
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerGeneralUserDefaults() {
         
@@ -472,7 +471,7 @@ extension Keys {
     }
 }
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerControlsUserDefaults() {
         
@@ -607,7 +606,7 @@ extension Keys {
     }
 }
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerDevicesUserDefaults() {
 
@@ -635,14 +634,10 @@ extension Preferences {
 }
 
 //
-// User defaults (Roms)
-//
-
-//
 // User defaults (Chipset)
 //
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerChipsetUserDefaults() {
     
@@ -699,7 +694,7 @@ extension Configuration {
 // User defaults (Memory)
 //
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerMemoryUserDefaults() {
     
@@ -778,7 +773,7 @@ extension Keys {
     }
 }
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerPeripheralsUserDefaults() {
 
@@ -885,7 +880,7 @@ extension Configuration {
 // User defaults (Compatibility)
 //
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerCompatibilityUserDefaults() {
 
@@ -963,7 +958,7 @@ extension Configuration {
 // User defaults (Audio)
 //
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerAudioUserDefaults() {
 
@@ -1109,7 +1104,7 @@ extension Keys {
     }
 }
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerVideoUserDefaults() {
 
