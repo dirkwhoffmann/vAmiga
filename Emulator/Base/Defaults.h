@@ -12,7 +12,7 @@
 #include "AmigaComponent.h"
 #include "IOUtils.h"
 
-class Properties : public AmigaObject {
+class Defaults : public AmigaObject {
 
     mutable util::ReentrantMutex mutex;
     
@@ -29,9 +29,9 @@ class Properties : public AmigaObject {
     
 public:
     
-    Properties();
-    Properties(Properties const&) = delete;
-    void operator=(Properties const&) = delete;
+    Defaults();
+    Defaults(Defaults const&) = delete;
+    void operator=(Defaults const&) = delete;
     
     
     //

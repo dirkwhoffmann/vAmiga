@@ -23,7 +23,7 @@
 #include "MsgQueue.h"
 #include "OSDebugger.h"
 #include "Paula.h"
-#include "Properties.h"
+#include "Defaults.h"
 #include "RegressionTester.h"
 #include "RemoteManager.h"
 #include "RetroShell.h"
@@ -59,7 +59,7 @@ class Amiga : public Thread {
 public:
 
     // User settings
-    static Properties properties;
+    static Defaults properties;
 
     // Core components
     CPU cpu = CPU(*this);

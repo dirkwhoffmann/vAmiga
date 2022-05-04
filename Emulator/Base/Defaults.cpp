@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Properties.h"
+#include "Defaults.h"
 #include "Amiga.h"
 #include "StringUtils.h"
 #include "AgnusTypes.h"
@@ -27,7 +27,7 @@
 #include "RemoteManagerTypes.h"
 #include "RemoteServerTypes.h"
 
-Properties::Properties()
+Defaults::Defaults()
 {
     setFallback(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
     setFallback(OPT_SLOW_RAM_MIRROR, true);
@@ -140,7 +140,7 @@ Properties::Properties()
 }
 
 void
-Properties::_dump(Category category, std::ostream& os) const
+Defaults::_dump(Category category, std::ostream& os) const
 {
     for (const auto &it: fallbacks) {
         
@@ -160,7 +160,7 @@ Properties::_dump(Category category, std::ostream& os) const
 }
 
 void
-Properties::load(const fs::path &path)
+Defaults::load(const fs::path &path)
 {
     auto fs = std::ifstream(path, std::ifstream::binary);
     
@@ -173,7 +173,7 @@ Properties::load(const fs::path &path)
 }
 
 void
-Properties::load(std::ifstream &stream)
+Defaults::load(std::ifstream &stream)
 {
     std::stringstream ss;
     ss << stream.rdbuf();
@@ -182,7 +182,7 @@ Properties::load(std::ifstream &stream)
 }
 
 void
-Properties::load(std::stringstream &stream)
+Defaults::load(std::stringstream &stream)
 {
     isize line = 0;
     isize accepted = 0;
@@ -251,7 +251,7 @@ Properties::load(std::stringstream &stream)
 }
 
 void
-Properties::save(const fs::path &path)
+Defaults::save(const fs::path &path)
 {
     auto fs = std::ofstream(path, std::ofstream::binary);
     
@@ -263,7 +263,7 @@ Properties::save(const fs::path &path)
 }
 
 void
-Properties::save(std::ofstream &stream)
+Defaults::save(std::ofstream &stream)
 {
     std::stringstream ss;
     save(ss);
@@ -272,7 +272,7 @@ Properties::save(std::ofstream &stream)
 }
 
 void
-Properties::save(std::stringstream &stream)
+Defaults::save(std::stringstream &stream)
 {
     {   SYNCHRONIZED
         
@@ -320,7 +320,7 @@ Properties::save(std::stringstream &stream)
 }
 
 string
-Properties::getString(const string &key)
+Defaults::getString(const string &key)
 {
     if (values.contains(key)) return values[key];
     if (fallbacks.contains(key)) return fallbacks[key];
@@ -331,7 +331,7 @@ Properties::getString(const string &key)
 }
 
 i64
-Properties::getInt(const string &key)
+Defaults::getInt(const string &key)
 {
     auto value = getString(key);
     i64 result = 0;
@@ -350,19 +350,19 @@ Properties::getInt(const string &key)
 }
 
 i64
-Properties::get(Option option)
+Defaults::get(Option option)
 {
     return getInt(string(OptionEnum::key(option)));
 }
 
 i64
-Properties::get(Option option, isize nr)
+Defaults::get(Option option, isize nr)
 {
     return getInt(string(OptionEnum::key(option)) + std::to_string(nr));
 }
 
 string
-Properties::getFallback(const string &key)
+Defaults::getFallback(const string &key)
 {
     if (!fallbacks.contains(key)) {
 
@@ -375,7 +375,7 @@ Properties::getFallback(const string &key)
 }
 
 void
-Properties::setString(const string &key, const string &value)
+Defaults::setString(const string &key, const string &value)
 {
     {   SYNCHRONIZED
         
@@ -393,7 +393,7 @@ Properties::setString(const string &key, const string &value)
 }
 
 void
-Properties::set(Option option, i64 value)
+Defaults::set(Option option, i64 value)
 {
     auto key = string(OptionEnum::key(option));
     auto val = std::to_string(value);
@@ -402,7 +402,7 @@ Properties::set(Option option, i64 value)
 }
 
 void
-Properties::set(Option option, isize nr, i64 value)
+Defaults::set(Option option, isize nr, i64 value)
 {
     auto key = string(OptionEnum::key(option)) + std::to_string(nr);
     auto val = std::to_string(value);
@@ -411,13 +411,13 @@ Properties::set(Option option, isize nr, i64 value)
 }
 
 void
-Properties::set(Option option, std::vector <isize> nrs, i64 value)
+Defaults::set(Option option, std::vector <isize> nrs, i64 value)
 {
     for (auto &nr : nrs) set(option, nr, value);
 }
 
 void
-Properties::setFallback(const string &key, const string &value)
+Defaults::setFallback(const string &key, const string &value)
 {
     {   SYNCHRONIZED
         
@@ -428,49 +428,49 @@ Properties::setFallback(const string &key, const string &value)
 }
 
 void
-Properties::setFallback(Option option, const string &value)
+Defaults::setFallback(Option option, const string &value)
 {
     setFallback(string(OptionEnum::key(option)), value);
 }
 
 void
-Properties::setFallback(Option option, i64 value)
+Defaults::setFallback(Option option, i64 value)
 {
     setFallback(option, std::to_string(value));
 }
 
 void
-Properties::setFallback(Option option, isize nr, const string &value)
+Defaults::setFallback(Option option, isize nr, const string &value)
 {
     setFallback(string(OptionEnum::key(option)) + std::to_string(nr), value);
 }
 
 void
-Properties::setFallback(Option option, isize nr, i64 value)
+Defaults::setFallback(Option option, isize nr, i64 value)
 {
     setFallback(option, nr, std::to_string(value));
 }
 
 void
-Properties::setFallback(Option option, std::vector <isize> nrs, const string &value)
+Defaults::setFallback(Option option, std::vector <isize> nrs, const string &value)
 {
     for (auto &nr : nrs) setFallback(option, nr, value);
 }
 
 void
-Properties::setFallback(Option option, std::vector <isize> nrs, i64 value)
+Defaults::setFallback(Option option, std::vector <isize> nrs, i64 value)
 {
     setFallback(option, nrs, std::to_string(value));
 }
 
 void
-Properties::remove()
+Defaults::remove()
 {
     SYNCHRONIZED values.clear();
 }
 
 void
-Properties::remove(const string &key)
+Defaults::remove(const string &key)
 {
     {   SYNCHRONIZED
         
@@ -487,19 +487,19 @@ Properties::remove(const string &key)
 }
 
 void
-Properties::remove(Option option)
+Defaults::remove(Option option)
 {
     remove(string(OptionEnum::key(option)));
     }
 
 void
-Properties::remove(Option option, isize nr)
+Defaults::remove(Option option, isize nr)
 {
     remove(string(OptionEnum::key(option)) + std::to_string(nr));
 }
 
 void
-Properties::remove(Option option, std::vector <isize> nrs)
+Defaults::remove(Option option, std::vector <isize> nrs)
 {
     for (auto &nr : nrs) remove(option, nr);
 }

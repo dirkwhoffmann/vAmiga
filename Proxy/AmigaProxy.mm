@@ -85,9 +85,9 @@ using namespace moira;
 
 @implementation DefaultsProxy
 
-- (Properties *)props
+- (Defaults *)props
 {
-    return (Properties *)obj;
+    return (Defaults *)obj;
 }
 
 - (void)load:(NSURL *)url exception:(ExceptionWrapper *)ex
