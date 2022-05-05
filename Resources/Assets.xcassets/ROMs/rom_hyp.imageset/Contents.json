@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "romHyp.pdf",
+      "filename" : "hyperion_rom.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "altRm.pdf",
+      "filename" : "hyperion_rom_darkmode.pdf",
       "idiom" : "universal"
     }
   ],
