@@ -13,9 +13,10 @@
 #include "IOUtils.h"
 #include "Paula.h"
 
-ControlPort::ControlPort(Amiga& ref, PortNr portNr) : SubComponent(ref), nr(portNr)
+ControlPort::ControlPort(Amiga& ref, isize nr) : SubComponent(ref), nr(nr)
 {
-    assert_enum(PortNr, portNr);
+    assert(nr == PORT_1 || nr == PORT_2);
+
     subComponents = std::vector<AmigaComponent *> { &mouse, &joystick };
 }
 

@@ -103,7 +103,7 @@ Memory::_initialize()
 {
     AmigaComponent::_initialize();
     
-    if (auto romPath = Amiga::properties.getString("ROM_PATH"); romPath != "") {
+    if (auto romPath = Amiga::defaults.getString("ROM_PATH"); romPath != "") {
 
         msg("Trying to load Rom from %s...\n", romPath.c_str());
         
@@ -112,7 +112,7 @@ Memory::_initialize()
         }
     }
     
-    if (auto extPath = Amiga::properties.getString("EXT_PATH"); extPath != "") {
+    if (auto extPath = Amiga::defaults.getString("EXT_PATH"); extPath != "") {
 
         msg("Trying to load extension Rom from %s...\n", extPath.c_str());
         
@@ -147,7 +147,7 @@ void
 Memory::resetConfig()
 {
     assert(isPoweredOff());
-    auto &defaults = amiga.properties;
+    auto &defaults = amiga.defaults;
 
     std::vector <Option> options = {
         

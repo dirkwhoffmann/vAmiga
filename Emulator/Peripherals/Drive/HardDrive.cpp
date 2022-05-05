@@ -195,7 +195,7 @@ void
 HardDrive::resetConfig()
 {
     assert(isPoweredOff());
-    auto &defaults = amiga.properties;
+    auto &defaults = amiga.defaults;
 
     std::vector <Option> options = {
         
@@ -495,7 +495,7 @@ HardDrive::disableWriteThrough()
 string
 HardDrive::writeThroughPath()
 {
-    return Amiga::properties.getString("HD" + std::to_string(nr) + "_PATH");
+    return Amiga::defaults.getString("HD" + std::to_string(nr) + "_PATH");
 }
 
 void

@@ -2663,7 +2663,7 @@ using namespace moira;
 
 + (DefaultsProxy *) defaults
 {
-    return [[DefaultsProxy alloc] initWith:&Amiga::properties];
+    return [[DefaultsProxy alloc] initWith:&Amiga::defaults];
 }
 
 - (void)dealloc
