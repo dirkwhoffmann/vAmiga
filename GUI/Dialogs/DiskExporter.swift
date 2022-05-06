@@ -348,27 +348,27 @@ class DiskExporter: DialogController {
 
             case Format.adf:
                 
-                log("Exporting ADF")
+                debug(.media, "Exporting ADF")
                 try parent.mydocument.export(fileProxy: adf!, to: url)
 
             case Format.ext:
                 
-                log("Exporting Extended ADF")
+                debug(.media, "Exporting Extended ADF")
                 try parent.mydocument.export(fileProxy: ext!, to: url)
 
             case Format.img:
                 
-                log("Exporting IMG")
+                debug(.media, "Exporting IMG")
                 try parent.mydocument.export(fileProxy: img!, to: url)
 
             case Format.ima:
                 
-                log("Exporting IMA")
+                debug(.media, "Exporting IMA")
                 try parent.mydocument.export(fileProxy: img!, to: url)
 
             case Format.vol:
                 
-                log("Exporting file system")
+                debug(.media, "Exporting file system")
                 try vol!.export(url: url)
                 
             default:
@@ -391,12 +391,12 @@ class DiskExporter: DialogController {
             
             if let nr = partition {
 
-                log("Exporting partiton \(nr) to \(url)")
+                debug(.media, "Exporting partiton \(nr) to \(url)")
                 try hdf?.writeToFile(url: url, partition: nr)
 
             } else {
 
-                log("Exporting entire HDF to \(url)")
+                debug(.media, "Exporting entire HDF to \(url)")
                 try hdf?.writeToFile(url: url)
             }
             

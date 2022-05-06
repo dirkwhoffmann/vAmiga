@@ -142,7 +142,7 @@ class FloppyCreator: DialogController {
         bootBlock.selectedTag() == 4 ? .BYTE_BANDIT : .NONE
         
         let name = nameField.stringValue
-        log("Dos = \(fs) Boot = \(bb) Name = \(name)")
+        debug(.media, "Dos = \(fs) Boot = \(bb) Name = \(name)")
         
         do {
 

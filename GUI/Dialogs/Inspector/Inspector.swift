@@ -597,7 +597,7 @@ class Inspector: DialogController {
     }
     
     deinit {
-        log()
+        debug(.lifetime)
     }
     
     // Assigns a number formatter to a control

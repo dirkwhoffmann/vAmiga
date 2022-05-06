@@ -238,7 +238,7 @@ extension MyController: NSMenuItemValidation {
         // Take screenshot
         guard let screen = renderer.canvas.screenshot(source: format) else {
             
-            log(warning: "Failed to create screenshot")
+            warn("Failed to create screenshot")
             return
         }
 
@@ -309,7 +309,7 @@ extension MyController: NSMenuItemValidation {
         let pasteBoard = NSPasteboard.general
         guard let text = pasteBoard.string(forType: .string) else {
             
-            log(warning: "Cannot paste. No text in pasteboard")
+            warn("Cannot paste. No text in pasteboard")
             return
         }
         
@@ -379,9 +379,9 @@ extension MyController: NSMenuItemValidation {
             virtualKeyboard = VirtualKeyboardController.make(parent: self)
         }
         if virtualKeyboard?.window?.isVisible == true {
-            log("Virtual keyboard already open")
+            debug(.lifetime, "Virtual keyboard already open")
         } else {
-            log("Opeining virtual keyboard as a window")
+            debug(.lifetime, "Opeining virtual keyboard as a window")
         }
         virtualKeyboard?.showWindow()
     }
@@ -657,7 +657,7 @@ extension MyController: NSMenuItemValidation {
 
     func exportRecentAction(hd n: Int, slot: Int) {
         
-        log("hd\(n) slot: \(slot)")
+        debug(.media, "hd\(n) slot: \(slot)")
 
         if let url = myAppDelegate.getRecentlyExportedHdrURL(slot, hd: n) {
             

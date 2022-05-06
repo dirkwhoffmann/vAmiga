@@ -11,13 +11,11 @@
 // Logging / Debugging
 //
 
-let logLevel = releaseBuild ? 0 : 1
+public func debug(_ enable: Int, _ msg: String = "",
+                  path: String = #file, function: String = #function, line: Int = #line) {
 
-public func log(_ msg: String = "", level: Int = 1,
-                path: String = #file, function: String = #function, line: Int = #line) {
-    
-    if level <= logLevel {
-        
+    if enable > 0 {
+
         if let file = URL(string: path)?.deletingPathExtension().lastPathComponent {
             if msg == "" {
                 print("\(file).\(line)::\(function)")
@@ -28,10 +26,10 @@ public func log(_ msg: String = "", level: Int = 1,
     }
 }
 
-public func log(warning: String,
-                path: String = #file, function: String = #function, line: Int = #line) {
-    
-    log(warning, level: logLevel, path: path, function: function, line: line)
+public func warn(_ msg: String = "",
+                 path: String = #file, function: String = #function, line: Int = #line) {
+
+    debug(1, msg, path: path, function: function, line: line)
 }
 
 //

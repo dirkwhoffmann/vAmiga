@@ -25,6 +25,7 @@
 		5010A78222B50B690041388B /* PortPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5010A78122B50B690041388B /* PortPanel.swift */; };
 		501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501429D82445F12B00FBDC90 /* TextureToolbox.swift */; };
 		5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
+		50157EED28257B7C000E9DDD /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50157EEC28257B7C000E9DDD /* Config.swift */; };
 		5019605B231257270051B669 /* Monitor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5019605A231257270051B669 /* Monitor.xib */; };
 		5019605D23125E680051B669 /* Monitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5019605C23125E680051B669 /* Monitor.swift */; };
 		5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5019B1EE254B292D00A7AB95 /* EXEFile.cpp */; };
@@ -471,6 +472,7 @@
 		501429D82445F12B00FBDC90 /* TextureToolbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureToolbox.swift; sourceTree = "<group>"; };
 		5014DD1321F3625200BC14BA /* Keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Keyboard.cpp; sourceTree = "<group>"; };
 		5014DD1421F3625200BC14BA /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
+		50157EEC28257B7C000E9DDD /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		5015FF3E242BA00F005175D9 /* Frame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Frame.h; sourceTree = "<group>"; };
 		5019605A231257270051B669 /* Monitor.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Monitor.xib; sourceTree = "<group>"; };
 		5019605C23125E680051B669 /* Monitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monitor.swift; sourceTree = "<group>"; };
@@ -1292,6 +1294,7 @@
 		508FDFDC21EA20600043D0E9 /* GUI */ = {
 			isa = PBXGroup;
 			children = (
+				50157EEC28257B7C000E9DDD /* Config.swift */,
 				508FDFF921EA22790043D0E9 /* Defaults.swift */,
 				508FE00C21EA227B0043D0E9 /* MyAppDelegate.swift */,
 				508FDFF721EA22790043D0E9 /* MyDocument.swift */,
@@ -2052,6 +2055,7 @@
 				50BF1CCE276DC7BB00386540 /* GdbServerCmds.cpp in Sources */,
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
 				50984B65263A9E9C00E37184 /* RegressionTester.cpp in Sources */,
+				50157EED28257B7C000E9DDD /* Config.swift in Sources */,
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
 				50AD904D276E10660011ECCB /* TextStorage.cpp in Sources */,
 				50B9C428260942D000A86C31 /* RetroShell.cpp in Sources */,

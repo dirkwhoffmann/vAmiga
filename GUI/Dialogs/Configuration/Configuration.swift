@@ -499,7 +499,7 @@ class Configuration {
     
     func saveRomUserDefaults() throws {
                 
-        log(level: 2)
+        debug(.defaults)
         
         let defaults = AmigaProxy.defaults!
         let fm = FileManager.default

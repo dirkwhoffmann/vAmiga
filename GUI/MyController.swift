@@ -160,7 +160,7 @@ extension MyController {
     
     override open func awakeFromNib() {
         
-        log()
+        debug(.lifetime)
         
         mydocument = document as? MyDocument
         
@@ -175,7 +175,7 @@ extension MyController {
     
     override open func windowDidLoad() {
         
-        log()
+        debug(.lifetime)
         
         // Create keyboard controller
         keyboard = KeyboardController(parent: self)
@@ -379,7 +379,7 @@ extension MyController {
         switch msg.type {
             
         case .REGISTER:
-            log("Successfully connected to message queue")
+            debug(.lifetime, "Successfully connected to message queue")
             
         case .CONFIG:
             inspector?.fullRefresh()
@@ -431,7 +431,7 @@ extension MyController {
             shutDown()
             
         case .ABORT:
-            log("Aborting with exit code \(msg.data1)")
+            debug(.shutdown, "Aborting with exit code \(msg.data1)")
             exit(msg.data1)
             
         case .MUTE_ON:
@@ -607,7 +607,7 @@ extension MyController {
             break
             
         default:
-            log(warning: "Unknown message: \(msg)")
+            warn("Unknown message: \(msg)")
             fatalError()
         }
     }
