@@ -634,6 +634,47 @@ extension Preferences {
 }
 
 //
+// User Defaults (Roms)
+//
+
+extension Configuration {
+
+    func saveRomUserDefaults() throws {
+
+        debug(.defaults)
+
+        let defaults = AmigaProxy.defaults!
+        let fm = FileManager.default
+        var url: URL?
+
+        amiga.suspend()
+
+        defaults.set(.EXT_START, extStart)
+        defaults.save()
+        
+        do {
+
+            url = UserDefaults.romUrl
+            if url == nil { throw VAError(.FILE_CANT_WRITE) }
+            try? fm.removeItem(at: url!)
+            try amiga.mem.saveRom(url!)
+
+            url = UserDefaults.extUrl
+            if url == nil { throw VAError(.FILE_CANT_WRITE) }
+            try? fm.removeItem(at: url!)
+            try amiga.mem.saveExt(url!)
+
+        } catch {
+
+            amiga.resume()
+            throw error
+        }
+
+        amiga.resume()
+    }
+}
+
+//
 // User defaults (Chipset)
 //
 
