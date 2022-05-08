@@ -198,7 +198,8 @@ static const int HOLD_MOUSE_L    = 0; // Hold down the left mouse button
 static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
 
 // Expansion boards
-static const int ZOR_DEBUG       = 0; // Zorro space, autoconfig
+static const int ZOR_DEBUG       = 0; // Zorro space
+static const int ACF_DEBUG       = 0; // Autoconfig
 static const int FAS_DEBUG       = 0; // FastRam
 static const int HDR_DEBUG       = 0; // HardDrive
 static const int DBD_DEBUG       = 0; // DebugBoard
