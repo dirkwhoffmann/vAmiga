@@ -1,0 +1,12 @@
+{
+  "data" : [
+    {
+      "filename" : "aros-svn54705-rom.bin",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -174,9 +174,7 @@ class CopperTableView: NSTableView {
     func doubleClickAction(row: Int) {
         
         if let addr = addrInRow[row] {
-            
-            log("Double-clicked in row \(row) addr = \(addr)")
-            
+                        
             if breakpoints.isSet(at: addr) {
                 breakpoints.remove(at: addr)
             } else {

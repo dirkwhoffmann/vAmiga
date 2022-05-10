@@ -287,12 +287,10 @@ extension ConfigurationController {
             
         case 0: // Recommended settings
             
-            log()
             AmigaProxy.defaults.removeVideoUserDefaults()
                         
         case 1: // Narrow Geometry
             
-            log()
             AmigaProxy.defaults.removeGeometryUserDefaults()
             defaults.set(Keys.Vid.hAutoCenter, true)
             defaults.set(Keys.Vid.vAutoCenter, true)
@@ -303,7 +301,6 @@ extension ConfigurationController {
             
         case 2: // Wide Geometry
             
-            log()
             AmigaProxy.defaults.removeGeometryUserDefaults()
             defaults.set(Keys.Vid.hAutoCenter, true)
             defaults.set(Keys.Vid.vAutoCenter, true)
@@ -314,7 +311,6 @@ extension ConfigurationController {
 
         case 3: // Extreme Geometry
             
-            log()
             AmigaProxy.defaults.removeGeometryUserDefaults()
             defaults.set(Keys.Vid.hAutoCenter, false)
             defaults.set(Keys.Vid.vAutoCenter, false)
@@ -325,13 +321,11 @@ extension ConfigurationController {
             
         case 6: // TFT Appearance
             
-            log()
             AmigaProxy.defaults.removeColorUserDefaults()
             AmigaProxy.defaults.removeShaderUserDefaults()
 
         case 7: // CRT Appearance
             
-            log()
             AmigaProxy.defaults.removeColorUserDefaults()
             AmigaProxy.defaults.removeShaderUserDefaults()
             defaults.set(Keys.Vid.blurRadius, 1.5)

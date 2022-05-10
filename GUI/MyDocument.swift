@@ -26,7 +26,7 @@ class MyDocument: NSDocument {
     
     override init() {
         
-        log()
+        debug(.lifetime)
         
         super.init()
 
@@ -50,7 +50,7 @@ class MyDocument: NSDocument {
  
     override open func makeWindowControllers() {
                 
-        log()
+        debug(.lifetime)
         
         let controller = MyController(windowNibName: "MyDocument")
         controller.amiga = amiga
@@ -63,7 +63,7 @@ class MyDocument: NSDocument {
 
     func createFileProxy(from url: URL, allowedTypes: [FileType]) throws -> AmigaFileProxy? {
             
-        log("Reading file \(url.lastPathComponent)")
+        debug(.media, "Reading file \(url.lastPathComponent)")
         
         // If the provided URL points to compressed file, decompress it first
         let newUrl = url.unpacked(maxSize: 2048 * 1024)
@@ -123,7 +123,7 @@ class MyDocument: NSDocument {
     
     override open func read(from url: URL, ofType typeName: String) throws {
              
-        log()
+        debug(.media)
 
         let types: [FileType] =
         [ .SNAPSHOT, .SCRIPT, .ADF, .HDF, .EXT, .IMG, .DMS, .EXE, .DIR ]
@@ -140,7 +140,7 @@ class MyDocument: NSDocument {
     
     override open func revert(toContentsOf url: URL, ofType typeName: String) throws {
         
-        log()
+        debug(.media)
         
         do {
             let proxy = try createFileProxy(from: url, allowedTypes: [.SNAPSHOT])
@@ -160,7 +160,7 @@ class MyDocument: NSDocument {
     
     override func write(to url: URL, ofType typeName: String) throws {
             
-        log()
+        debug(.media)
         
         if typeName == "vAmiga" {
 
@@ -242,7 +242,7 @@ class MyDocument: NSDocument {
         case "IMG", "IMA":
             df = try IMGFileProxy.make(with: amiga.df(nr)!)
         default:
-            log(warning: "Invalid path extension")
+            warn("Invalid path extension")
             return
         }
         
@@ -250,7 +250,7 @@ class MyDocument: NSDocument {
         amiga.df(nr)!.markDiskAsUnmodified()
         myAppDelegate.noteNewRecentlyExportedDiskURL(url, df: nr)
         
-        log("Disk exported successfully")
+        debug(.media, "Disk exported successfully")
     }
 
     func export(hardDrive nr: Int, to url: URL) throws {
@@ -260,7 +260,7 @@ class MyDocument: NSDocument {
         case "HDF":
             dh = try HDFFileProxy.make(with: amiga.hd(nr)!)
         default:
-            log(warning: "Invalid path extension")
+            warn("Invalid path extension")
             return
         }
         
@@ -269,12 +269,12 @@ class MyDocument: NSDocument {
         amiga.hd(nr)!.markDiskAsUnmodified()
         myAppDelegate.noteNewRecentlyExportedHdrURL(url, hd: nr)
 
-        log("Hard Drive exported successfully")
+        debug(.media, "Hard Drive exported successfully")
     }
     
     func export(fileProxy: AmigaFileProxy, to url: URL) throws {
         
-        log("Exporting to \(url)")
+        debug(.media, "Exporting to \(url)")
         try fileProxy.writeToFile(url: url)        
     }        
 }

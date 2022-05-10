@@ -163,7 +163,7 @@ HardDrive::init(const HDFFile &hdf)
     }
     
     // Print some debug information
-    debug(HDR_DEBUG, "%lu (needed) file system drivers\n", drivers.size());
+    debug(HDR_DEBUG, "%zu (needed) file system drivers\n", drivers.size());
     if constexpr (HDR_DEBUG) {
         for (auto &driver : drivers) driver.dump();
     }
@@ -195,7 +195,7 @@ void
 HardDrive::resetConfig()
 {
     assert(isPoweredOff());
-    auto &defaults = amiga.properties;
+    auto &defaults = amiga.defaults;
 
     std::vector <Option> options = {
         
@@ -495,7 +495,7 @@ HardDrive::disableWriteThrough()
 string
 HardDrive::writeThroughPath()
 {
-    return Amiga::properties.getString("HD" + std::to_string(nr) + "_PATH");
+    return Amiga::defaults.getString("HD" + std::to_string(nr) + "_PATH");
 }
 
 void
@@ -669,8 +669,8 @@ HardDrive::readDriver(isize nr, Buffer<u8> &driver)
     isize bytesRead = 0;
     for (auto &seg : segList) {
 
-        auto offset = seg * geometry.bsize + 20;
-        
+        auto offset = isize(seg * geometry.bsize + 20);
+
         assert(offset >= 0);
         assert(offset + bytesPerBlock <= data.size);
         

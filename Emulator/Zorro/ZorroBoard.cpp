@@ -116,14 +116,14 @@ ZorroBoard::peekACF8(u32 addr) const
         result = 0x00;
     }
     
-    trace(ZOR_DEBUG, "peekACF8(%06x) = %02x\n", offset, result);
+    trace(ACF_DEBUG, "peekACF8(%06x) = %02x\n", offset, result);
     return result;
 }
 
 void
 ZorroBoard::pokeACF8(u32 addr, u8 value)
 {
-    trace(ZOR_DEBUG, "pokeACF8(%06x,%02x)\n", addr, value);
+    trace(ACF_DEBUG, "pokeACF8(%06x,%02x)\n", addr, value);
     
     switch (addr & 0xFFFF) {
                         
@@ -137,7 +137,7 @@ ZorroBoard::pokeACF8(u32 addr, u8 value)
             // Update the memory map
             mem.updateMemSrcTables();
 
-            trace(ZOR_DEBUG, "Device mapped to $%06x\n", baseAddr);
+            trace(ACF_DEBUG, "Device mapped to $%06x\n", baseAddr);
             return;
             
         case 0x4A: // ec_BaseAddress (A19 - A16, 0x---X0000)

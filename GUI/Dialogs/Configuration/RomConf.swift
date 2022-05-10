@@ -42,7 +42,7 @@ extension ConfigurationController {
         romDeleteButton.isEnabled = poweredOff
         extDropView.isEnabled = poweredOff
         extDeleteButton.isEnabled = poweredOff
-        romArosButton.isEnabled = poweredOff
+        romArosPopup.isEnabled = poweredOff
         
         // Icons
         romDropView.image =
@@ -117,7 +117,7 @@ extension ConfigurationController {
 
     @IBAction func installArosAction(_ sender: NSButton!) {
 
-        installAros()
+        installAros(svn: sender.selectedTag())
     }
     
     @IBAction func romDefaultsAction(_ sender: NSButton!) {
@@ -133,9 +133,29 @@ extension ConfigurationController {
     }
 
     func installAros() {
-        
-        let arosRom = NSDataAsset(name: "aros-amiga-m68k-rom")!.data
-        let arosExt = NSDataAsset(name: "aros-amiga-m68k-ext")!.data
+
+        installAros(svn: 55696)
+    }
+
+    func installAros(svn: Int) {
+
+        switch svn {
+
+        case 54705: // Taken from UAE
+            installAros(rom: "aros-svn54705-rom", ext: "aros-svn54705-ext")
+
+        case 55696: // Taken from SAE
+            installAros(rom: "aros-svn55696-rom", ext: "aros-svn55696-ext")
+
+        default:
+            fatalError()
+        }
+    }
+
+    func installAros(rom: String, ext: String) {
+
+        let arosRom = NSDataAsset(name: rom)!.data
+        let arosExt = NSDataAsset(name: ext)!.data
 
         // Install the Aros Roms
         try? amiga.mem.loadRom(buffer: arosRom)

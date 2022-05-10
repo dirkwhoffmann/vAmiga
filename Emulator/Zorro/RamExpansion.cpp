@@ -49,11 +49,11 @@ RamExpansion::updateMemSrcTables()
     isize numPages = mem.getConfig().fastSize / 0x10000;
     isize firstPage = baseAddr / 0x10000;
 
-    // If the board hasn't been configured yet, map it to the default address
-    if (firstPage == 0) firstPage = 0x20;
-    
+    // Only proceed if the board has been configured
+    if (firstPage == 0) return;
+
     for (isize i = firstPage; i < firstPage + numPages; i++) {
-        
+
         mem.cpuMemSrc[i] = MEM_FAST;
     }
 }

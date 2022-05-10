@@ -127,7 +127,7 @@
                 <outlet property="perSerialPort" destination="Gxb-NC-mOX" id="V5A-IG-hhx"/>
                 <outlet property="perSerialPortText" destination="pod-he-ipL" id="Eb2-mW-4qo"/>
                 <outlet property="prefTabView" destination="IOZ-5e-6pS" id="tBY-5n-qBt"/>
-                <outlet property="romArosButton" destination="Bae-L4-jQm" id="HTJ-dm-Jkg"/>
+                <outlet property="romArosPopup" destination="b1E-it-StT" id="wif-eM-5JZ"/>
                 <outlet property="romDeleteButton" destination="YJW-vW-GDB" id="8dx-Bc-q9m"/>
                 <outlet property="romDropView" destination="Obf-WK-7zy" id="jaj-sU-4ca"/>
                 <outlet property="romExpImage" destination="RIB-cf-C5p" id="4om-LY-z6Z"/>
@@ -243,7 +243,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QPv-hw-IeK">
-                                            <rect key="frame" x="373" y="330" width="220" height="17"/>
+                                            <rect key="frame" x="373" y="333" width="220" height="14"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="9Cd-LV-jbJ">
                                                 <font key="font" metaFont="message" size="11"/>
@@ -252,7 +252,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gwj-zZ-ZxJ">
-                                            <rect key="frame" x="373" y="305" width="220" height="17"/>
+                                            <rect key="frame" x="373" y="307" width="220" height="14"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="69F-YH-4r0">
                                                 <font key="font" metaFont="message" size="11"/>
@@ -317,7 +317,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WJx-uw-qXE">
-                                            <rect key="frame" x="373" y="195" width="217" height="14"/>
+                                            <rect key="frame" x="373" y="198" width="217" height="14"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="KbZ-8v-lSw">
                                                 <font key="font" metaFont="message" size="11"/>
@@ -372,17 +372,6 @@ DQ
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <button verticalHuggingPriority="750" id="Bae-L4-jQm">
-                                            <rect key="frame" x="6" y="5" width="128" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" title="Install Aros" bezelStyle="rounded" image="aros_half" imagePosition="right" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="OgI-Be-WQh">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="installArosAction:" target="-2" id="jl3-8i-loB"/>
-                                            </connections>
-                                        </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oL6-42-FYa">
                                             <rect key="frame" x="140" y="5" width="128" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -436,7 +425,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IAc-n6-y1z">
-                                            <rect key="frame" x="373" y="172" width="220" height="17"/>
+                                            <rect key="frame" x="373" y="172" width="220" height="14"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="Jx4-Kd-DKw">
                                                 <font key="font" metaFont="message" size="11"/>
@@ -499,6 +488,24 @@ DQ
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </button>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b1E-it-StT">
+                                            <rect key="frame" x="9" y="8" width="128" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Install Aros..." bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="h2O-8a-diy" id="Q5u-S4-ml0">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" id="kL0-2m-Gp7">
+                                                    <items>
+                                                        <menuItem title="Install Aros..." hidden="YES" id="h2O-8a-diy"/>
+                                                        <menuItem title="SVN 54705" image="aros_small" tag="54705" id="Yyq-YL-spr"/>
+                                                        <menuItem title="SVN 55696" image="aros_small" tag="55696" id="uLi-3n-N3S"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="installArosAction:" target="-2" id="mdz-99-EJs"/>
+                                            </connections>
+                                        </popUpButton>
                                     </subviews>
                                 </view>
                             </tabViewItem>
@@ -3625,7 +3632,7 @@ DQ
         <image name="Lock" width="120" height="170"/>
         <image name="NSCaution" width="32" height="32"/>
         <image name="NSInfo" width="32" height="32"/>
-        <image name="aros_half" width="79" height="62"/>
+        <image name="aros_small" width="24" height="19"/>
         <image name="chipTemplate" width="24" height="24"/>
         <image name="devCableLoopTemplate" width="24" height="24"/>
         <image name="devCableTemplate" width="24" height="24"/>

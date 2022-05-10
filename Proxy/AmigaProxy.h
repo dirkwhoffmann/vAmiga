@@ -81,7 +81,7 @@
 @class MemProxy;
 @class MouseProxy;
 @class PaulaProxy;
-@class PropertiesProxy;
+@class DefaultsProxy;
 @class RemoteManagerProxy;
 @class RetroShellProxy;
 @class RomFileProxy;
@@ -151,7 +151,7 @@
     KeyboardProxy *keyboard;
     MemProxy *mem;
     PaulaProxy *paula;
-    PropertiesProxy *properties;
+    DefaultsProxy *properties;
     RemoteManagerProxy *remoteManager;
     RetroShellProxy *retroShell;
     RtcProxy *rtc;
@@ -190,7 +190,7 @@
 @property (readonly, strong) RecorderProxy *recorder;
 @property (readonly, strong) SerialPortProxy *serialPort;
 
-@property (class, readonly, strong) PropertiesProxy *defaults;
+@property (class, readonly, strong) DefaultsProxy *defaults;
 
 - (void)dealloc;
 - (void)kill;
@@ -252,7 +252,7 @@
 // Properties
 //
 
-@interface PropertiesProxy : Proxy { }
+@interface DefaultsProxy : Proxy { }
     
 - (void)load:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)save:(NSURL *)url exception:(ExceptionWrapper *)ex;

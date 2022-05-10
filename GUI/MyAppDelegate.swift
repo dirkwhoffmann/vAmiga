@@ -50,7 +50,7 @@ var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     // List of recently attached hard drive URLs
     var attachedHardDrives: [URL] = []
     
-    // List of recently exported hard drive URLs
+    // List of recently exported hard drive URLs (one list for each drive)
     var exportedHardDrives: [[URL]] = [[URL]](repeating: [URL](), count: 4)
 
     override init() {
@@ -61,12 +61,12 @@ var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     
     public func applicationDidFinishLaunching(_ aNotification: Notification) {
                         
-        log()                
+        debug(.lifetime)
     }
     
     public func applicationWillTerminate(_ aNotification: Notification) {
 
-        log()
+        debug(.lifetime)
     }
     
     //
@@ -165,7 +165,7 @@ extension MyAppDelegate {
                 // Start playback
                 if !c.macAudio!.isRunning {
                     c.macAudio!.startPlayback()
-                    c.amiga.paula.rampUpFromZero()
+                    if !c.amiga.warpMode { c.amiga.paula.rampUpFromZero() }
                 }
                 
                 // Update the visibility of all drive menus
@@ -207,14 +207,14 @@ extension MyAppDelegate {
         set {
             if newValue == false && eventTap != nil {
                 
-                log("Reenabling keyboard shortcuts...")
+                debug(.events, "Reenabling keyboard shortcuts...")
                 CGEvent.tapEnable(tap: eventTap!, enable: false)
                 eventTap = nil
             }
             
             if newValue == true && eventTap == nil {
                 
-                log("Trying to disable keyboard shortcuts...")
+                debug(.events, "Trying to disable keyboard shortcuts...")
                 
                 /* To disable keyboard shortcuts, we are going to filter out the
                  * Command flag from all keyUp and keyDown CGEvents by installing
@@ -231,7 +231,7 @@ extension MyAppDelegate {
                 
                 if !AXIsProcessTrustedWithOptions(privOptions) {
                     
-                    log(warning: "Aborting. Access denied")
+                    warn("Aborting. Access denied")
                     return
                 }
                 
@@ -251,7 +251,7 @@ extension MyAppDelegate {
                 
                 if eventTap == nil {
                     
-                    log(warning: "Aborting. Failed to create the event tap.")
+                    warn("Aborting. Failed to create the event tap.")
                     return
                 }
                 
@@ -259,7 +259,7 @@ extension MyAppDelegate {
                 let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
                 CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
                 CGEvent.tapEnable(tap: eventTap!, enable: true)
-                log("Success")
+                debug(.events, "Success")
             }
         }
     }

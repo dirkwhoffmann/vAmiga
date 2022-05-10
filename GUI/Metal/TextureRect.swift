@@ -83,7 +83,7 @@ extension Canvas {
             bw = x1 - 0.5 * (width - (x2 - x1))
             bw = max(bw, largest.minX)
             bw = min(bw, largest.maxX - width)
-            // log("AutoShift x: \(bw)")
+            debug(.events, "AutoShift x: \(bw)")
             
         } else {
             
@@ -95,7 +95,7 @@ extension Canvas {
             bh = y1 - 0.5 * (height - (y2 - y1))
             bh = max(bh, largest.minY)
             bh = min(bh, largest.maxY - height)
-            // log("AutoShift y: \(bh)")
+            debug(.events, "AutoShift y: \(bh)")
             
         } else {
             
@@ -117,7 +117,7 @@ extension Canvas {
 
     func updateTextureRect(hstrt: Int, vstrt: Int, hstop: Int, vstop: Int) {
 
-        // log("updateTextureRect \(hstrt) \(vstrt) \(hstop) \(vstop)")
+        debug(.metal, "updateTextureRect \(hstrt) \(vstrt) \(hstop) \(vstop)")
 
         // Convert to pixel coordinates
         x1 = 2 * CGFloat(hstrt)
@@ -132,7 +132,7 @@ extension Canvas {
         if x2 > max.maxX { x2 = max.maxX }
         if y2 > max.maxY { y2 = max.maxY }
 
-        // log("(\(x1),\(y1)) - \(x2),\(y2))")
+        debug(.metal, "(\(x1),\(y1)) - \(x2),\(y2))")
 
         // Compensate the texture shift
         x1 -= CGFloat(HBLANK_MIN) * 4

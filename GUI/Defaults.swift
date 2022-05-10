@@ -13,7 +13,7 @@ import Carbon.HIToolbox
 // Proxy extensions
 //
 
-extension PropertiesProxy {
+extension DefaultsProxy {
 
     func resetSearchPaths() {
 
@@ -36,7 +36,7 @@ extension PropertiesProxy {
 
     func load() {
         
-        log("Loading user defaults")
+        debug(.defaults, "Loading user defaults")
         
         do {
             let folder = try URL.appSupportFolder()
@@ -44,13 +44,13 @@ extension PropertiesProxy {
             
             do {
                 try load(url: path)
-                log("Successfully loaded user defaults from file \(path)")
+                debug(.defaults, "Successfully loaded user defaults from file \(path)")
             } catch {
-                log("Failed to load user defaults from file \(path)")
+                warn("Failed to load user defaults from file \(path)")
             }
             
         } catch {
-            log("Failed to access application support folder")
+            warn("Failed to access application support folder")
         }
     }
     
@@ -63,7 +63,7 @@ extension PropertiesProxy {
     
     func save() {
         
-        log("Saving user defaults")
+        debug(.defaults, "Saving user defaults")
         
         do {
             let folder = try URL.appSupportFolder()
@@ -71,13 +71,13 @@ extension PropertiesProxy {
             
             do {
                 try save(url: path)
-                log("Successfully saved user defaults to file \(path)")
+                debug(.defaults, "Successfully saved user defaults to file \(path)")
             } catch {
-                log("Failed to save user defaults file \(path)")
+                warn("Failed to save user defaults file \(path)")
             }
             
         } catch {
-            log("Failed to access application support folder")
+            warn("Failed to access application support folder")
         }
     }
 
@@ -181,18 +181,17 @@ extension PropertiesProxy {
         
         if let jsonString = getString(key) {
 
-            log("Decoding jsonString '\(jsonString)'")
             if let data = Data(base64Encoded: jsonString) {
 
                 if let decoded = try? JSONDecoder().decode(T.self, from: data) {
                     item = decoded
                 } else {
-                    log(warning: "Failed to decode \(jsonString)")
+                    warn("Failed to decode \(jsonString)")
                 }
                 return
             }
         }
-        log("Failed to decode jsonString")
+        warn("Failed to decode jsonString")
     }
 }
 
@@ -231,11 +230,11 @@ extension UserDefaults {
 // User defaults (all)
 //
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerUserDefaults() {
         
-        log("Registering user defaults")
+        debug(.lifetime, "Registering user defaults")
         
         registerGeneralUserDefaults()
         registerControlsUserDefaults()
@@ -254,7 +253,7 @@ extension Preferences {
 
     func applyUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         
         applyGeneralUserDefaults()
         applyControlsUserDefaults()
@@ -266,7 +265,7 @@ extension Configuration {
         
     func applyUserDefaults() {
     
-        log(level: 2)
+        debug(.defaults)
         
         applyChipsetUserDefaults()
         applyMemoryUserDefaults()
@@ -315,11 +314,11 @@ struct Keys {
     }
 }
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerGeneralUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         
         // Snapshots
         register(Keys.Gen.autoSnapshots, false)
@@ -352,7 +351,7 @@ extension PropertiesProxy {
     
     func removeGeneralUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         
         let keys = [ Keys.Gen.autoSnapshots,
                      Keys.Gen.autoSnapshotInterval,
@@ -385,7 +384,7 @@ extension Preferences {
 
     func saveGeneralUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
         
         defaults.set(Keys.Gen.autoSnapshots, autoSnapshots)
@@ -415,7 +414,7 @@ extension Preferences {
     
     func applyGeneralUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
         
         autoSnapshots = defaults.bool(Keys.Gen.autoSnapshots)
@@ -472,11 +471,11 @@ extension Keys {
     }
 }
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerControlsUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
 
         let emptyMap: [MacKey: Int] = [:]
 
@@ -521,7 +520,7 @@ extension PropertiesProxy {
     
     func removeControlsUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         
         let keys = [ Keys.Con.mouseKeyMap,
                      Keys.Con.joyKeyMap1,
@@ -548,7 +547,7 @@ extension Preferences {
 
     func saveControlsUserDefaults() {
     
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
                 
         defaults.encode(Keys.Con.mouseKeyMap, keyMaps[0])
@@ -573,7 +572,7 @@ extension Preferences {
     
     func applyControlsUserDefaults() {
            
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
         
         defaults.decode(Keys.Con.mouseKeyMap, &keyMaps[0])
@@ -607,7 +606,7 @@ extension Keys {
     }
 }
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerDevicesUserDefaults() {
 
@@ -622,7 +621,7 @@ extension Preferences {
 
     func saveDevicesUserDefaults() {
     
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
                         
         defaults.save()
@@ -630,29 +629,66 @@ extension Preferences {
     
     func applyDevicesUserDefaults() {
            
-        log(level: 2)
+        debug(.defaults)
     }
 }
 
 //
-// User defaults (Roms)
+// User Defaults (Roms)
 //
+
+extension Configuration {
+
+    func saveRomUserDefaults() throws {
+
+        debug(.defaults)
+
+        let defaults = AmigaProxy.defaults!
+        let fm = FileManager.default
+        var url: URL?
+
+        amiga.suspend()
+
+        defaults.set(.EXT_START, extStart)
+        defaults.save()
+        
+        do {
+
+            url = UserDefaults.romUrl
+            if url == nil { throw VAError(.FILE_CANT_WRITE) }
+            try? fm.removeItem(at: url!)
+            try amiga.mem.saveRom(url!)
+
+            url = UserDefaults.extUrl
+            if url == nil { throw VAError(.FILE_CANT_WRITE) }
+            try? fm.removeItem(at: url!)
+            try amiga.mem.saveExt(url!)
+
+        } catch {
+
+            amiga.resume()
+            throw error
+        }
+
+        amiga.resume()
+    }
+}
 
 //
 // User defaults (Chipset)
 //
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerChipsetUserDefaults() {
     
-        log(level: 2)
+        debug(.defaults)
         // No GUI related items in this sections
     }
 
     func removeChipsetUserDefaults() {
 
-        log(level: 2)
+        debug(.defaults)
                      
         remove(.AGNUS_REVISION)
         remove(.DENISE_REVISION)
@@ -665,7 +701,7 @@ extension Configuration {
 
     func applyChipsetUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
@@ -680,7 +716,7 @@ extension Configuration {
 
     func saveChipsetUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
@@ -699,17 +735,17 @@ extension Configuration {
 // User defaults (Memory)
 //
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerMemoryUserDefaults() {
     
-        log(level: 2)
+        debug(.defaults)
         // No GUI related items in this sections
     }
     
     func removeMemoryUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
 
         remove(.CHIP_RAM)
         remove(.SLOW_RAM)
@@ -726,7 +762,7 @@ extension Configuration {
 
     func saveMemoryUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
         
         amiga.suspend()
@@ -746,7 +782,7 @@ extension Configuration {
     
     func applyMemoryUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
@@ -778,11 +814,11 @@ extension Keys {
     }
 }
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerPeripheralsUserDefaults() {
 
-        log(level: 2)
+        debug(.defaults)
         
         // Port assignments
         register(Keys.Per.gameDevice1, 0)
@@ -791,7 +827,7 @@ extension PropertiesProxy {
 
     func removePeripheralsUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         
         remove(.DRIVE_CONNECT, [0, 1, 2, 3])
         remove(.DRIVE_TYPE, [0, 1, 2, 3])
@@ -808,7 +844,7 @@ extension Configuration {
 
     func savePeripheralsUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
@@ -846,7 +882,7 @@ extension Configuration {
 
     func applyPeripheralsUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
@@ -885,17 +921,17 @@ extension Configuration {
 // User defaults (Compatibility)
 //
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerCompatibilityUserDefaults() {
 
-        log(level: 2)
+        debug(.defaults)
         // No GUI related items in this sections
     }
     
     func removeCompatibilityUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         
         remove(.BLITTER_ACCURACY)
         remove(.TODBUG)
@@ -915,7 +951,7 @@ extension Configuration {
 
     func saveCompatibilityUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
         
         amiga.suspend()
@@ -938,7 +974,7 @@ extension Configuration {
 
     func applyCompatibilityUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
         
         amiga.suspend()
@@ -963,17 +999,17 @@ extension Configuration {
 // User defaults (Audio)
 //
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerAudioUserDefaults() {
 
-        log(level: 2)
+        debug(.defaults)
         // No GUI related items in this sections
     }
     
     func removeAudioUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
             
         remove(.AUDVOL, [0, 1, 2, 3])
         remove(.AUDPAN, [0, 1, 2, 3])
@@ -995,7 +1031,7 @@ extension Configuration {
     
     func saveAudioUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
@@ -1032,7 +1068,7 @@ extension Configuration {
     
     func applyAudioUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
@@ -1109,11 +1145,11 @@ extension Keys {
     }
 }
 
-extension PropertiesProxy {
+extension DefaultsProxy {
     
     func registerVideoUserDefaults() {
 
-        log(level: 2)
+        debug(.defaults)
         
         registerColorUserDefaults()
         registerGeometryUserDefaults()
@@ -1122,13 +1158,13 @@ extension PropertiesProxy {
 
     func registerColorUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         // No GUI related keys in this category
     }
 
     func registerGeometryUserDefaults() {
 
-        log(level: 2)
+        debug(.defaults)
 
         register(Keys.Vid.hAutoCenter, true)
         register(Keys.Vid.vAutoCenter, true)
@@ -1140,7 +1176,7 @@ extension PropertiesProxy {
     
     func registerShaderUserDefaults() {
 
-        log(level: 2)
+        debug(.defaults)
         
         register(Keys.Vid.enhancer, 0)
         register(Keys.Vid.upscaler, 0)
@@ -1164,7 +1200,7 @@ extension PropertiesProxy {
     
     func removeVideoUserDefaults() {
 
-        log(level: 2)
+        debug(.defaults)
         
         removeColorUserDefaults()
         removeGeometryUserDefaults()
@@ -1173,7 +1209,7 @@ extension PropertiesProxy {
     
     func removeColorUserDefaults() {
 
-        log(level: 2)
+        debug(.defaults)
 
         remove(.PALETTE)
         remove(.BRIGHTNESS)
@@ -1183,7 +1219,7 @@ extension PropertiesProxy {
 
     func removeGeometryUserDefaults() {
 
-        log(level: 2)
+        debug(.defaults)
         
         let keys = [ Keys.Vid.hAutoCenter,
                      Keys.Vid.vAutoCenter,
@@ -1197,7 +1233,7 @@ extension PropertiesProxy {
     
     func removeShaderUserDefaults() {
 
-        log(level: 2)
+        debug(.defaults)
         
         let keys = [ Keys.Vid.enhancer,
                      Keys.Vid.upscaler,
@@ -1226,7 +1262,7 @@ extension Configuration {
 
     func saveVideoUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         
         saveColorUserDefaults()
         saveGeometryUserDefaults()
@@ -1235,7 +1271,7 @@ extension Configuration {
          
     func saveColorUserDefaults() {
 
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
         
         amiga.suspend()
@@ -1252,7 +1288,7 @@ extension Configuration {
     
     func saveGeometryUserDefaults() {
 
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
         
         amiga.suspend()
@@ -1271,7 +1307,7 @@ extension Configuration {
   
     func saveShaderUserDefaults() {
 
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
         
         amiga.suspend()
@@ -1302,7 +1338,7 @@ extension Configuration {
     
     func applyVideoUserDefaults() {
         
-        log(level: 2)
+        debug(.defaults)
         
         applyColorUserDefaults()
         applyGeometryUserDefaults()
@@ -1311,7 +1347,7 @@ extension Configuration {
     
     func applyColorUserDefaults() {
     
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
         
         amiga.suspend()
@@ -1326,7 +1362,7 @@ extension Configuration {
 
     func applyGeometryUserDefaults() {
     
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
         
         amiga.suspend()
@@ -1343,7 +1379,7 @@ extension Configuration {
 
     func applyShaderUserDefaults() {
     
-        log(level: 2)
+        debug(.defaults)
         let defaults = AmigaProxy.defaults!
         
         amiga.suspend()

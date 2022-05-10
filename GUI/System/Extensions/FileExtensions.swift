@@ -256,7 +256,7 @@ extension URL {
             [ .tiff: "tiff", .bmp: "bmp", .gif: "gif", .jpeg: "jpeg", .png: "png" ]
         
         guard let ext = extensions[format] else {
-            log(warning: "Unsupported image format: \(format)")
+            warn("Unsupported image format: \(format)")
             return self
         }
         

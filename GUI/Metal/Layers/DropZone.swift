@@ -147,7 +147,6 @@ class DropZone: Layer {
     override func update(frames: Int64) {
         
         super.update(frames: frames)
-
         if alpha.current > 0 { updateAlpha() }
     }
     

@@ -64,7 +64,7 @@ class RessourceManager {
     
     init(view: MTKView, device: MTLDevice, renderer: Renderer) {
         
-        log()
+        debug(.lifetime)
         
         self.device = device
         self.renderer = renderer

@@ -41,7 +41,7 @@ class VideoExporter: DialogController {
             self.text.isHidden = false
         }
 
-        log("Export to \(path)")
+        debug(.exec, "Export to \(path)")
         if amiga.recorder.export(as: path.absoluteString) {
                         
             text.stringValue = "MPEG-4 Video Stream"

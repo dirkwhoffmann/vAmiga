@@ -238,7 +238,7 @@ extension MyController: NSMenuItemValidation {
         // Take screenshot
         guard let screen = renderer.canvas.screenshot(source: format) else {
             
-            log(warning: "Failed to create screenshot")
+            warn("Failed to create screenshot")
             return
         }
 
@@ -309,7 +309,7 @@ extension MyController: NSMenuItemValidation {
         let pasteBoard = NSPasteboard.general
         guard let text = pasteBoard.string(forType: .string) else {
             
-            log(warning: "Cannot paste. No text in pasteboard")
+            warn("Cannot paste. No text in pasteboard")
             return
         }
         
@@ -346,9 +346,7 @@ extension MyController: NSMenuItemValidation {
             amiga.powerOff()
             
         } else {
-            
-            amiga.powerOn()
-            
+
             do {
                 try amiga.run()
             } catch {
@@ -381,9 +379,9 @@ extension MyController: NSMenuItemValidation {
             virtualKeyboard = VirtualKeyboardController.make(parent: self)
         }
         if virtualKeyboard?.window?.isVisible == true {
-            log("Virtual keyboard already open")
+            debug(.lifetime, "Virtual keyboard already open")
         } else {
-            log("Opeining virtual keyboard as a window")
+            debug(.lifetime, "Opeining virtual keyboard as a window")
         }
         virtualKeyboard?.showWindow()
     }
@@ -427,7 +425,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func newDiskAction(_ sender: NSMenuItem!) {
 
         let drive = amiga.df(sender.tag)!
-        
+
         // Ask the user if a modified hard drive should be detached
         if !proceedWithUnsavedFloppyDisk(drive: drive) { return }
 
@@ -476,13 +474,14 @@ extension MyController: NSMenuItemValidation {
 
     func insertRecentDiskAction(drive: Int, slot: Int) {
         
+        let types: [FileType] = [ .ADF, .EXT, .DMS, .EXE, .DIR ]
+
         if let url = myAppDelegate.getRecentlyInsertedDiskURL(slot) {
-            
+
             do {
-                let types: [FileType] = [ .ADF, .EXT, .DMS, .EXE, .DIR ]
                 try self.mydocument.addMedia(url: url,
                                              allowedTypes: types,
-                                             df: slot)
+                                             df: drive)
             } catch {
                 self.showAlert(.cantInsert, error: error)
             }
@@ -511,7 +510,6 @@ extension MyController: NSMenuItemValidation {
             
             do {
                 try mydocument.export(drive: n, to: url)
-                
             } catch {
                 showAlert(.cantExport(url: url), error: error)
             }
@@ -659,7 +657,7 @@ extension MyController: NSMenuItemValidation {
 
     func exportRecentAction(hd n: Int, slot: Int) {
         
-        log("hd\(n) slot: \(slot)")
+        debug(.media, "hd\(n) slot: \(slot)")
 
         if let url = myAppDelegate.getRecentlyExportedHdrURL(slot, hd: n) {
             

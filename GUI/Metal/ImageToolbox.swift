@@ -189,7 +189,7 @@ public extension NSImage {
     static func make(texture: MTLTexture, rect: CGRect) -> NSImage? {
         
         guard let cgImage = CGImage.make(texture: texture, rect: rect) else {
-            log(warning: "Failed to create CGImage.")
+            warn("Failed to create CGImage.")
             return nil
         }
         
@@ -200,7 +200,7 @@ public extension NSImage {
     static func make(data: UnsafeMutableRawPointer, rect: CGSize) -> NSImage? {
         
         guard let cgImage = CGImage.make(data: data, size: rect) else {
-            log(warning: "Failed to create CGImage.")
+            warn("Failed to create CGImage.")
             return nil
         }
         

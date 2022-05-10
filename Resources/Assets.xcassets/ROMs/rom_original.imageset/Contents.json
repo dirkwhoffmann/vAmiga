@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "romOrig.pdf",
+      "filename" : "origRom.png",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "amigaOrig.pdf",
+      "filename" : "origRomDarkMode.pdf",
       "idiom" : "universal"
     }
   ],

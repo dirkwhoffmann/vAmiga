@@ -75,7 +75,7 @@ void
 RTC::resetConfig()
 {
     assert(isPoweredOff());
-    auto &defaults = amiga.properties;
+    auto &defaults = amiga.defaults;
 
     std::vector <Option> options = {
         

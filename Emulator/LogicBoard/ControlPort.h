@@ -17,7 +17,7 @@
 class ControlPort : public SubComponent {
     
     // The represented control port
-    PortNr nr;
+    isize nr;
 
     // The result of the latest inspection
     mutable ControlPortInfo info = {};
@@ -54,7 +54,7 @@ public:
     
 public:
     
-    ControlPort(Amiga& ref, PortNr nr);
+    ControlPort(Amiga& ref, isize nr);
 
     
     //

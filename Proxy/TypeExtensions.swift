@@ -204,7 +204,7 @@ extension ErrorCode {
         case .FS_INVALID_HASHTABLE_SIZE:
             return "Expected $48 (72 hash table entries)"
         default:
-            log(warning: "\(self)")
+            warn("\(self)")
             fatalError()
         }
     }

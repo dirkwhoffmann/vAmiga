@@ -42,81 +42,83 @@ extension MyController: NSWindowDelegate {
     
     public func windowShouldClose(_ sender: NSWindow) -> Bool {
         
-        log()
+        debug(.lifetime)
+
         if proceedWithUnsavedFloppyDisks() {
             return true
         } else {
             return false
         }
     }
+
     public func windowWillClose(_ notification: Notification) {
         
-        log()
+        debug(.lifetime)
                 
-        log("Stopping renderer...", level: 2)
+        debug(.shutdown, "Stopping renderer...")
         renderer.halt()
         
-        log("Stopping timers...", level: 2)
+        debug(.shutdown, "Stopping timers...")
         snapshotTimer?.invalidate()
         snapshotTimer = nil
 
-        log("Closing auxiliary windows...", level: 2)
+        debug(.shutdown, "Closing auxiliary windows...")
         inspector?.amiga = nil
         inspector?.close()
         monitor?.amiga = nil
         monitor?.close()
         
-        log("Shutting down the audio backend...", level: 2)
+        debug(.shutdown, "Shutting down the audio backend...")
         macAudio.shutDown()
 
-        log("Disconnecting gaming devices...", level: 2)
+        debug(.shutdown, "Disconnecting gaming devices...")
         gamePadManager.shutDown()
         
-        log("Shutting down the emulator...", level: 2)
+        debug(.shutdown, "Shutting down the emulator...")
         amiga.halt()
-
-        log("Exiting", level: 2)
     }
     
     func shutDown() {
                 
-        log("Removing proxy...", level: 2)
+        debug(.shutdown, "Removing proxy...")
         
         amiga.kill()
         amiga = nil
-        
-        log("Exiting", level: 2)
     }
     
     public func windowWillEnterFullScreen(_ notification: Notification) {
 
-        log()
+        debug(.lifetime)
+
         renderer.fullscreen = true
         showStatusBar(false)
     }
     
     public func windowDidEnterFullScreen(_ notification: Notification) {
 
-        log()
+        debug(.lifetime)
+
         renderer.monitors.updateMonitorPositions()
     }
     
     public func windowWillExitFullScreen(_ notification: Notification) {
 
-        log()
+        debug(.lifetime)
+
         renderer.fullscreen = false
         showStatusBar(true)
     }
     
     public func windowDidExitFullScreen(_ notification: Notification) {
 
-        log()
+        debug(.lifetime)
         renderer.monitors.updateMonitorPositions()
     }
     
     public func window(_ window: NSWindow, willUseFullScreenPresentationOptions proposedOptions: NSApplication.PresentationOptions = []) -> NSApplication.PresentationOptions {
         
-        log()
+        debug(.lifetime)
+        
         let autoHideToolbar = NSApplication.PresentationOptions.autoHideToolbar
         var options = NSApplication.PresentationOptions(rawValue: autoHideToolbar.rawValue)
         options.insert(proposedOptions)

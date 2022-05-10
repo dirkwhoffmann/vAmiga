@@ -14,6 +14,7 @@
 #include "ControlPort.h"
 #include "CIA.h"
 #include "CPU.h"
+#include "Defaults.h"
 #include "Denise.h"
 #include "FloppyDrive.h"
 #include "GdbServer.h"
@@ -23,7 +24,6 @@
 #include "MsgQueue.h"
 #include "OSDebugger.h"
 #include "Paula.h"
-#include "Properties.h"
 #include "RegressionTester.h"
 #include "RemoteManager.h"
 #include "RetroShell.h"
@@ -59,7 +59,7 @@ class Amiga : public Thread {
 public:
 
     // User settings
-    static Properties properties;
+    static Defaults defaults;
 
     // Core components
     CPU cpu = CPU(*this);

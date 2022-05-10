@@ -49,7 +49,7 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var romLockInfo2: NSTextField!
    
     // Buttons
-    @IBOutlet weak var romArosButton: NSButton!
+    @IBOutlet weak var romArosPopup: NSPopUpButton!
     @IBOutlet weak var romOKButton: NSButton!
     @IBOutlet weak var romPowerButton: NSButton!
 

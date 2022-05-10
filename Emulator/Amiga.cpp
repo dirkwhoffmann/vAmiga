@@ -23,7 +23,7 @@ static_assert(sizeof(u16) == 2, "u16 size mismatch");
 static_assert(sizeof(u32) == 4, "u32 size mismatch");
 static_assert(sizeof(u64) == 8, "u64 size mismatch");
 
-Properties Amiga::properties;
+Defaults Amiga::defaults;
 
 string
 Amiga::version()
@@ -830,7 +830,7 @@ Amiga::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Defaults) {
         
-        properties.dump(category, os);
+        defaults.dump(category, os);
     }
 }
 
