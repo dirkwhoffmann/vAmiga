@@ -34,6 +34,7 @@ Copper::serviceEvent(EventID id)
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Don't wake up in an odd cycle
+            assert(agnus.pos.h == agnus.pos.newh);
             if (IS_ODD(agnus.pos.h)) { reschedule(); break; }
 
             // Continue with fetching the first instruction word
@@ -48,6 +49,7 @@ Copper::serviceEvent(EventID id)
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
             
             // Don't wake up in an odd cycle
+            assert(agnus.pos.h == agnus.pos.newh);
             if (IS_ODD(agnus.pos.h)) { reschedule(); break; }
 
             // Check if the wakeup condition is still true
@@ -78,6 +80,7 @@ Copper::serviceEvent(EventID id)
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
             
             // Don't wake up in an odd cycle
+            assert(agnus.pos.h == agnus.pos.newh);
             if (IS_ODD(agnus.pos.h)) { reschedule(); break; }
             
             // Continue with fetching the first instruction word
@@ -220,6 +223,7 @@ Copper::serviceEvent(EventID id)
             trace(COP_DEBUG, "COP_WAIT_BLIT\n");
             
             // Wait for the next free cycle
+            assert(agnus.pos.h == agnus.pos.newh);
             if (agnus.busOwner[agnus.pos.h] != BUS_NONE &&
                 agnus.busOwner[agnus.pos.h] != BUS_BLITTER) {
                 // debug("COP_WAIT_BLIT delay\n");
@@ -258,6 +262,7 @@ Copper::serviceEvent(EventID id)
             (void)agnus.allocateBus<BUS_COPPER>();
 
             // In cycle $E0, Copper continues with the next state in $E1 (?!)
+            assert(agnus.pos.h == agnus.pos.newh);
             if (agnus.pos.h == 0xE0) {
                 schedule(COP_JMP2, 1);
                 break;

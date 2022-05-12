@@ -994,7 +994,8 @@ Blitter::beginSlowCopyBlit()
     // In debug mode, we execute the whole micro program immediately.
     // This let's us compare checksums with the FastBlitter.
     if constexpr (SLOW_BLT_DEBUG) {
-        
+
+        assert(agnus.pos.h == agnus.pos.newh);
         BusOwner owner = agnus.busOwner[agnus.pos.h];
         agnus.setBLS(false);
         
@@ -1050,8 +1051,9 @@ Blitter::beginSlowLineBlit()
 
     // In debug mode, we execute the whole micro program immediately.
     // This let's us compare checksums with the FastBlitter.
+    assert(agnus.pos.h == agnus.pos.newh);
     if constexpr (SLOW_BLT_DEBUG) {
-        
+
         BusOwner owner = agnus.busOwner[agnus.pos.h];
         agnus.setBLS(false);
         
@@ -1265,9 +1267,11 @@ Blitter::fakeExec()
 
     bltpc++;
 
+    assert(agnus.pos.h == agnus.pos.newh);
     if constexpr ((bool)(instr & (FETCH | WRITE_D))) {
 
         // Record some fake data to make the DMA debugger happy
+        assert(agnus.pos.h == agnus.pos.newh);
         assert(agnus.pos.h < HPOS_CNT);
         agnus.busValue[agnus.pos.h] = 0x8888;
     }
@@ -1475,6 +1479,7 @@ Blitter::fakeExecLine()
     if constexpr ((bool)(instr & (FETCH | BUS | WRITE_D))) {
 
         // Record some fake data to make the DMA debugger happy
+        assert(agnus.pos.h == agnus.pos.newh);
         assert(agnus.pos.h < HPOS_CNT);
         agnus.busValue[agnus.pos.h] = 0x8888;
     }

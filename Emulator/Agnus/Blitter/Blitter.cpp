@@ -596,6 +596,7 @@ Blitter::beginCopyBlit(isize level)
 void
 Blitter::clearBusyFlag()
 {
+    assert(agnus.pos.h == agnus.pos.newh);
     debug(BLTTIM_DEBUG, "(%ld,%ld) Blitter bbusy\n", agnus.pos.v, agnus.pos.h);
 
     // Clear the Blitter busy flag
@@ -605,6 +606,7 @@ Blitter::clearBusyFlag()
 void
 Blitter::endBlit()
 {
+    assert(agnus.pos.h == agnus.pos.newh);
     debug(BLTTIM_DEBUG, "(%ld,%ld) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
     
     running = false;

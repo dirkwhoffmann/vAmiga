@@ -23,7 +23,8 @@ class MyDocumentController: NSDocumentController {
             
             if let mydoc = doc as? MyDocument {
                 
-                try? mydoc.addMedia(url: url, allowedTypes: FileType.all)
+                // try? mydoc.addMedia(url: url, allowedTypes: FileType.all)
+                mydoc.launchUrl = url
                 return mydoc
             }
         }

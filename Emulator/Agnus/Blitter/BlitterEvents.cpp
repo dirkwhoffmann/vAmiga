@@ -20,6 +20,8 @@ Blitter::serviceEvent()
 void
 Blitter::serviceEvent(EventID id)
 {
+    assert(agnus.pos.h == agnus.pos.newh);
+
     switch (id) {
 
         case BLT_STRT1:

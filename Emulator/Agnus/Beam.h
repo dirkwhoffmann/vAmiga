@@ -17,14 +17,16 @@ struct Beam
     // Counters for the vertical and horizontal beam position
     isize v;
     isize h;
-    
+    isize newh; // Issue #681
+
     template <class W>
     void operator<<(W& worker)
     {
         worker
 
         << v
-        << h;
+        << h
+        << newh;
     }
     
     Beam(isize v, isize h) : v(v), h(h) { }

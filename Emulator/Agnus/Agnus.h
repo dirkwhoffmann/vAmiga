@@ -83,8 +83,11 @@ public:
     // Counters
     //
     
-    // Agnus has been emulated up to this master clock cycle
+    // Agnus has been emulated up to this master clock cycle (DEPRECATED, see #681)
     Cycle clock;
+
+    // Agnus has been emulated up to this master clock cycle (replacement for clock, see #681)
+    Cycle newClock;
 
     // The current beam position
     Beam pos;
@@ -239,7 +242,8 @@ private:
             
             worker
             
-            << clock;
+            << clock
+            << newClock;
         }
 
         worker
@@ -382,8 +386,8 @@ public:
     bool inLastRasterline() const { return inLastRasterline(pos.v); }
 
     // Returns the pixel position for the current horizontal position
-    Pixel ppos(isize posh) const { return (posh * 4) + 2; }
-    Pixel ppos() const { return ppos(pos.h); }
+    Pixel ppos(isize posh) const { assert(pos.h == pos.newh); return (posh * 4) + 2; }
+    Pixel ppos() const { assert(pos.h == pos.newh); return ppos(pos.h); }
 
     
     //
@@ -741,13 +745,13 @@ public:
     void scheduleNextBplEvent(isize hpos);
 
     // Schedules the next BPL event relative to the currently emulated DMA cycle
-    void scheduleNextBplEvent() { scheduleNextBplEvent(pos.h); }
+    void scheduleNextBplEvent() { assert(pos.h == pos.newh); scheduleNextBplEvent(pos.h); }
 
     // Schedules the earliest BPL event that occurs at or after the given DMA cycle
     void scheduleBplEventForCycle(isize hpos);
 
     // Updates the scheduled BPL event according to the current event table
-    void updateBplEvent() { scheduleBplEventForCycle(pos.h); }
+    void updateBplEvent() { assert(pos.h == pos.newh); scheduleBplEventForCycle(pos.h); }
 
     // Schedules the first BPL event
     void scheduleFirstDasEvent();
@@ -756,13 +760,13 @@ public:
     void scheduleNextDasEvent(isize hpos);
 
     // Schedules the next DAS event relative to the currently emulated DMA cycle
-    void scheduleNextDasEvent() { scheduleNextDasEvent(pos.h); }
+    void scheduleNextDasEvent() { assert(pos.h == pos.newh); scheduleNextDasEvent(pos.h); }
 
     // Schedules the earliest DAS event that occurs at or after the given DMA cycle
     void scheduleDasEventForCycle(isize hpos);
 
     // Updates the scheduled DAS event according to the current event table
-    void updateDasEvent() { scheduleDasEventForCycle(pos.h); }
+    void updateDasEvent() { assert(pos.h == pos.newh); scheduleDasEventForCycle(pos.h); }
 
     // Schedules the next register change event
     void scheduleNextREGEvent();

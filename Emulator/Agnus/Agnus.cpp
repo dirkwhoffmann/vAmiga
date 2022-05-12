@@ -44,7 +44,9 @@ Agnus::_reset(bool hard)
     }
     
     if (hard) assert(clock == 0);
-    
+
+    assert(clock == newClock);
+
     // Schedule initial events
     scheduleRel<SLOT_SEC>(NEVER, SEC_TRIGGER);
     scheduleRel<SLOT_TER>(NEVER, TER_TRIGGER);
@@ -58,6 +60,10 @@ Agnus::_reset(bool hard)
     scheduleFirstDasEvent();
     scheduleRel<SLOT_SRV>(SEC(0.5), SRV_LAUNCH_DAEMON);
     if (insEvent) scheduleRel <SLOT_INS> (0, insEvent);
+
+    // Make newClock match clock in Agnus::execute()
+    newClock = -DMA_CYCLES(1);
+    pos.newh = -1;
 }
 
 void
@@ -187,6 +193,7 @@ Agnus::cyclesInFrame() const
 Cycle
 Agnus::startOfFrame() const
 {
+    assert((clock - DMA_CYCLES(pos.v * HPOS_CNT + pos.h)) == (newClock - DMA_CYCLES(pos.v * HPOS_CNT + pos.newh)));
     return clock - DMA_CYCLES(pos.v * HPOS_CNT + pos.h);
 }
 
@@ -236,11 +243,21 @@ Agnus::cycleToBeam(Cycle cycle) const
 void
 Agnus::execute()
 {
+    // Advance the internal clock and the horizontal counter
+    newClock += DMA_CYCLES(1);
+    pos.newh = (pos.newh + 1) % HPOS_CNT;
+
+    assert(newClock == clock);
+    assert(pos.newh == pos.h);
+
     // Process pending events
     if (nextTrigger <= clock) executeUntil(clock);
 
-    // If this assertion hits, the HSYNC event hasn't been served
+    // REMOVE ASAP
+    assert(newClock == clock);
+    assert((pos.h == -1 && pos.newh == HPOS_MAX) || pos.newh == pos.h);
     assert(pos.h < HPOS_MAX);
+    assert(pos.newh <= HPOS_MAX);
 
     // Advance the internal clock and the horizontal counter
     clock += DMA_CYCLES(1);
@@ -304,6 +321,7 @@ void
 Agnus::executeUntilBusIsFree()
 {    
     isize posh = pos.h == 0 ? HPOS_MAX : pos.h - 1;
+    assert(posh == pos.newh);
 
     // Check if the bus is blocked
     if (busOwner[posh] != BUS_NONE) {
@@ -322,6 +340,7 @@ Agnus::executeUntilBusIsFree()
             
             posh = pos.h;
             execute();
+            assert(posh == pos.newh);
             if (++delay == 2) bls = true;
             
         } while (busOwner[posh] != BUS_NONE);
@@ -350,7 +369,8 @@ Agnus::executeUntilBusIsFreeForCIA()
     syncWithEClock();
     
     isize posh = pos.h == 0 ? HPOS_MAX : pos.h - 1;
-    
+    assert(posh == pos.newh);
+
     // Check if the bus is blocked
     if (busOwner[posh] != BUS_NONE) {
 
@@ -362,6 +382,7 @@ Agnus::executeUntilBusIsFreeForCIA()
 
             posh = pos.h;
             execute();
+            assert(posh == pos.newh);
             if (++delay == 2) bls = true;
             
         } while (busOwner[posh] != BUS_NONE);
@@ -544,6 +565,7 @@ Agnus::executeFirstSpriteCycle()
 
         sprDmaState[nr] = SPR_DMA_IDLE;
 
+        assert(pos.h == pos.newh);
         if (busOwner[pos.h] == BUS_NONE) {
 
             // Read in the next control word (POS part)
@@ -554,13 +576,15 @@ Agnus::executeFirstSpriteCycle()
                 denise.pokeSPRxPOS<nr>(value);
                 
             } else {
-                
+
+                assert(pos.h == pos.newh);
                 busOwner[pos.h] = BUS_BLOCKED;
             }
         }
 
     } else if (sprDmaState[nr] == SPR_DMA_ACTIVE) {
 
+        assert(pos.h == pos.newh);
         if (busOwner[pos.h] == BUS_NONE) {
 
             // Read in the next data word (part A)
@@ -570,7 +594,8 @@ Agnus::executeFirstSpriteCycle()
                 denise.pokeSPRxDATA<nr>(value);
                 
             } else {
-                
+
+                assert(pos.h == pos.newh);
                 busOwner[pos.h] = BUS_BLOCKED;
             }
         }
@@ -586,6 +611,7 @@ Agnus::executeSecondSpriteCycle()
 
         sprDmaState[nr] = SPR_DMA_IDLE;
 
+        assert(pos.h == pos.newh);
         if (busOwner[pos.h] == BUS_NONE) {
 
             if (sprdma()) {
@@ -596,13 +622,15 @@ Agnus::executeSecondSpriteCycle()
                 denise.pokeSPRxCTL<nr>(value);
                 
             } else {
-                
+
+                assert(pos.h == pos.newh);
                 busOwner[pos.h] = BUS_BLOCKED;
             }
         }
 
     } else if (sprDmaState[nr] == SPR_DMA_ACTIVE) {
 
+        assert(pos.h == pos.newh);
         if (busOwner[pos.h] == BUS_NONE) {
 
             if (sprdma()) {
@@ -612,7 +640,8 @@ Agnus::executeSecondSpriteCycle()
                 denise.pokeSPRxDATB<nr>(value);
                 
             } else {
-                
+
+                assert(pos.h == pos.newh);
                 busOwner[pos.h] = BUS_BLOCKED;
             }
         }
@@ -648,6 +677,7 @@ Agnus::updateSpriteDMA()
 void
 Agnus::hsyncHandler()
 {
+    assert(pos.newh == 0);
     assert(pos.h == 0);
     
     // Let Denise finish up the current line

@@ -86,10 +86,12 @@
 void
 Agnus::scheduleFirstBplEvent()
 {
+    assert(pos.h == pos.newh);
     assert(pos.h == 0 || pos.h == HPOS_MAX);
     
     u8 dmacycle = sequencer.bplEvent[0] ? 0 : sequencer.nextBplEvent[0];
-        
+
+    assert(pos.h == pos.newh);
     if (pos.h == 0) {
         scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle), sequencer.bplEvent[dmacycle]);
     } else {
@@ -100,6 +102,7 @@ Agnus::scheduleFirstBplEvent()
 void
 Agnus::scheduleNextBplEvent(isize hpos)
 {
+    assert(pos.h == pos.newh);
     assert(hpos >= 0 && hpos < HPOS_CNT);
 
     if (u8 next = sequencer.nextBplEvent[hpos]) {
@@ -111,6 +114,7 @@ Agnus::scheduleNextBplEvent(isize hpos)
 void
 Agnus::scheduleBplEventForCycle(isize hpos)
 {
+    assert(pos.h == pos.newh);
     assert(hpos >= pos.h && hpos < HPOS_CNT);
 
     if (sequencer.bplEvent[hpos] != EVENT_NONE) {
@@ -125,6 +129,7 @@ Agnus::scheduleBplEventForCycle(isize hpos)
 void
 Agnus::scheduleFirstDasEvent()
 {
+    assert(pos.h == pos.newh);
     assert(pos.h == 0 || pos.h == HPOS_MAX);
     
     u8 dmacycle = sequencer.nextDasEvent[0];
@@ -140,6 +145,7 @@ Agnus::scheduleFirstDasEvent()
 void
 Agnus::scheduleNextDasEvent(isize hpos)
 {
+    assert(pos.h == pos.newh);
     assert(hpos >= 0 && hpos < HPOS_CNT);
 
     if (u8 next = sequencer.nextDasEvent[hpos]) {
@@ -153,6 +159,7 @@ Agnus::scheduleNextDasEvent(isize hpos)
 void
 Agnus::scheduleDasEventForCycle(isize hpos)
 {
+    assert(pos.h == pos.newh);
     assert(hpos >= pos.h && hpos < HPOS_CNT);
 
     if (sequencer.dasEvent[hpos] != EVENT_NONE) {
@@ -193,6 +200,7 @@ Agnus::scheduleStrobe2Event()
 void
 Agnus::serviceREGEvent(Cycle until)
 {
+    assert(pos.h == pos.newh);
     assert(pos.h <= HPOS_MAX);
 
     // Iterate through all recorded register changes
@@ -285,14 +293,16 @@ Agnus::serviceREGEvent(Cycle until)
 void
 Agnus::serviceRASEvent()
 {
+    assert(pos.h == pos.newh);
     assert(id[SLOT_RAS] == RAS_HSYNC);
     
     // Let the hsync handler be called at the beginning of the next DMA cycle
     agnus.recordRegisterChange(0, SET_STRHOR, 1);
-    
+
     // Reset the horizontal counter (-1 to compensate for the increment to come)
     pos.h = -1;
-    
+    // Don't increment pos.newh, stays at HPOS_MAX
+
     // Reschedule event
     rescheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT));
 }
@@ -425,20 +435,24 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_L6_MOD | DRAW_BOTH:    LO_MOD_BOTH(5); break;
 
         case BPL_EOL:
+            assert(pos.h == pos.newh);
             assert(pos.h == 0xE2);
             return;
 
         case BPL_EOL | DRAW_ODD:
+            assert(pos.h == pos.newh);
             assert(pos.h == 0xE2);
             hires() ? denise.drawHiresOdd() : denise.drawLoresOdd();
             return;
 
         case BPL_EOL | DRAW_EVEN:
+            assert(pos.h == pos.newh);
             assert(pos.h == 0xE2);
             hires() ? denise.drawHiresEven() : denise.drawLoresEven();
             return;
 
         case BPL_EOL | DRAW_BOTH:
+            assert(pos.h == pos.newh);
             assert(pos.h == 0xE2);
             hires() ? denise.drawHiresBoth() : denise.drawLoresBoth();
             return;
@@ -472,8 +486,9 @@ Agnus::serviceVblEvent(EventID id)
     switch (id) {
 
         case VBL_STROBE0:
-            
+
             assert(pos.v == 0 || pos.v == 1);
+            assert(pos.h == pos.newh);
             assert(pos.h == 0);
             
             // Trigger the vertical blank interrupt
@@ -486,6 +501,7 @@ Agnus::serviceVblEvent(EventID id)
         case VBL_STROBE1:
             
             assert(pos.v == 5);
+            assert(pos.h == pos.newh);
             assert(pos.h == 84);
             
             // Increment the TOD counter of CIA A
@@ -498,6 +514,7 @@ Agnus::serviceVblEvent(EventID id)
         case VBL_STROBE2:
             
             assert(pos.v == 5);
+            assert(pos.h == pos.newh);
             assert(pos.h == 178);
             
             // Nothing is done here at the moment
@@ -514,6 +531,7 @@ Agnus::serviceVblEvent(EventID id)
 void
 Agnus::serviceDASEvent(EventID id)
 {
+    assert(pos.h == pos.newh);
     assert(id == sequencer.dasEvent[pos.h]);
 
     switch (id) {

@@ -60,6 +60,8 @@ Copper::switchToCopperList(isize nr)
 bool
 Copper::findMatchOld(Beam &match) const
 {
+    assert(agnus.pos.h == agnus.pos.newh);
+
     // Start searching at the current beam position
     u32 beam = (u32)(agnus.pos.v << 8 | agnus.pos.h);
 
@@ -103,6 +105,8 @@ Copper::findMatchOld(Beam &match) const
 bool
 Copper::findMatch(Beam &match) const
 {
+    assert(agnus.pos.h == agnus.pos.newh);
+
     // Start searching at the current beam position
     u32 beam = (u32)(agnus.pos.v << 8 | agnus.pos.h);
 
@@ -211,6 +215,7 @@ Copper::move(u32 addr, u16 value)
               "pokeCustom16(%X [%s], %X)\n", addr, Memory::regName(addr), value);
 
         // Color registers
+        assert(agnus.pos.h == agnus.pos.newh);
         pixelEngine.colChanges.insert(4 * agnus.pos.h, RegChange { addr, value} );
         return;
     }
@@ -245,6 +250,8 @@ Copper::runComparator(Beam beam, u16 waitpos, u16 mask) const
 bool
 Copper::runHorizontalComparator(Beam beam, u16 waitpos, u16 mask) const
 {
+    assert(agnus.pos.h == agnus.pos.newh);
+
     if (beam.h < 0xE0) {
         return ((beam.h + 0x02) & mask) >= (waitpos & 0xFF & mask);
     } else {
@@ -468,6 +475,8 @@ Copper::vsyncHandler()
 void
 Copper::blitterDidTerminate()
 {
+    assert(agnus.pos.h == agnus.pos.newh);
+
     if (agnus.hasEvent<SLOT_COP>(COP_WAIT_BLIT)) {
 
         // Wake up the Copper in the next even cycle
