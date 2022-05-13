@@ -40,7 +40,7 @@ Blitter::serviceEvent(EventID id)
             }
 
             // Proceed to the next state
-            agnus.scheduleRelOld<SLOT_BLT>(DMA_CYCLES(1), BLT_STRT2);
+            agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_STRT2);
             break;
 
         case BLT_STRT2:

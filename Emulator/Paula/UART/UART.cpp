@@ -186,6 +186,6 @@ UART::rxdHasChanged(bool value)
         Cycle delay = pulseWidth() * 3 / 2;
 
         // Schedule the event
-        agnus.scheduleRelOld<SLOT_RXD>(delay, RXD_BIT);
+        agnus.scheduleRel<SLOT_RXD>(delay, RXD_BIT);
     }
 }
