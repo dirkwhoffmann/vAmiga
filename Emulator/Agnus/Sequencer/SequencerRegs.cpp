@@ -22,12 +22,7 @@ Sequencer::pokeDDFSTRT(u16 value)
     value &= agnus.ddfMask();
     
     // Schedule the write cycle
-    if constexpr (s == ACCESSOR_CPU) {
-        agnus.recordRegisterChangeOld(DMA_CYCLES(3), SET_DDFSTRT, value);
-    }
-    if constexpr (s == ACCESSOR_AGNUS) {
-        agnus.recordRegisterChangeOld(DMA_CYCLES(4), SET_DDFSTRT, value);
-    }
+    agnus.recordRegisterChange(DMA_CYCLES(4), SET_DDFSTRT, value);
 }
 
 void
@@ -79,12 +74,7 @@ Sequencer::pokeDDFSTOP(u16 value)
     value &= agnus.ddfMask();
     
     // Schedule the write cycle
-    if constexpr (s == ACCESSOR_CPU) {
-        agnus.recordRegisterChangeOld(DMA_CYCLES(3), SET_DDFSTOP, value);
-    }
-    if constexpr (s == ACCESSOR_AGNUS) {
-        agnus.recordRegisterChangeOld(DMA_CYCLES(4), SET_DDFSTOP, value);
-    }
+    agnus.recordRegisterChange(DMA_CYCLES(4), SET_DDFSTOP, value);
 }
 
 void

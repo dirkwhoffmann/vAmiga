@@ -33,19 +33,7 @@ Agnus::pokeDMACON(u16 value)
     trace(DMA_DEBUG, "pokeDMACON(%04x)\n", value);
 
     // Schedule the write cycle
-    if constexpr (s == ACCESSOR_CPU) {
-        if (value & 0x8000) {
-            recordRegisterChangeOld(DMA_CYCLES(1), SET_DMACON, value);
-        } else {
-            recordRegisterChangeOld(DMA_CYCLES(1), SET_DMACON, value);
-        }
-    } else {
-        if (value & 0x8000) {
-            recordRegisterChangeOld(DMA_CYCLES(2), SET_DMACON, value);
-        } else {
-            recordRegisterChangeOld(DMA_CYCLES(2), SET_DMACON, value);
-        }
-    }
+    recordRegisterChange(DMA_CYCLES(2), SET_DMACON, value);
 }
 
 void
@@ -327,7 +315,7 @@ Agnus::pokeBPLCON0(u16 value)
     trace(DMA_DEBUG, "pokeBPLCON0(%04x)\n", value);
 
     if (bplcon0 != value) {
-        recordRegisterChangeOld(DMA_CYCLES(4), SET_BPLCON0_AGNUS, value);
+        recordRegisterChange(DMA_CYCLES(4), SET_BPLCON0_AGNUS, value);
     }
 }
 
@@ -371,7 +359,7 @@ Agnus::pokeBPLCON1(u16 value)
     trace(DMA_DEBUG, "pokeBPLCON1(%04x)\n", value);
     
     if (bplcon1 != value) {
-        recordRegisterChangeOld(DMA_CYCLES(1), SET_BPLCON1_AGNUS, value);
+        recordRegisterChange(DMA_CYCLES(1), SET_BPLCON1_AGNUS, value);
     }
 }
 
@@ -398,25 +386,27 @@ template <Accessor s> void
 Agnus::pokeDIWSTRT(u16 value)
 {
     trace(DIW_DEBUG, "pokeDIWSTRT<%s>(%04x)\n", AccessorEnum::key(s), value);
-    
-    recordRegisterChangeOld(DMA_CYCLES(4), SET_DIWSTRT_AGNUS, value);
-    recordRegisterChangeOld(DMA_CYCLES(3), SET_DIWSTRT_DENISE, value);
+
+    if (s == ACCESSOR_AGNUS) assert(clock == newClock);
+    recordRegisterChange(DMA_CYCLES(4), SET_DIWSTRT_AGNUS, value);
+    recordRegisterChange(DMA_CYCLES(3), SET_DIWSTRT_DENISE, value);
 }
 
 template <Accessor s> void
 Agnus::pokeDIWSTOP(u16 value)
 {
     trace(DIW_DEBUG, "pokeDIWSTOP<%s>(%04x)\n", AccessorEnum::key(s), value);
-    
-    recordRegisterChangeOld(DMA_CYCLES(4), SET_DIWSTOP_AGNUS, value);
-    recordRegisterChangeOld(DMA_CYCLES(3), SET_DIWSTOP_DENISE, value);
+
+    if (s == ACCESSOR_AGNUS) assert(clock == newClock);
+    recordRegisterChange(DMA_CYCLES(4), SET_DIWSTOP_AGNUS, value);
+    recordRegisterChange(DMA_CYCLES(3), SET_DIWSTOP_DENISE, value);
 }
 
 void
 Agnus::pokeBPL1MOD(u16 value)
 {
     trace(BPLMOD_DEBUG, "pokeBPL1MOD(%04x)\n", value);
-    recordRegisterChangeOld(DMA_CYCLES(2), SET_BPL1MOD, value);
+    recordRegisterChange(DMA_CYCLES(2), SET_BPL1MOD, value);
 }
 
 void
@@ -430,7 +420,7 @@ void
 Agnus::pokeBPL2MOD(u16 value)
 {
     trace(BPLMOD_DEBUG, "pokeBPL2MOD(%04x)\n", value);
-    recordRegisterChangeOld(DMA_CYCLES(2), SET_BPL2MOD, value);
+    recordRegisterChange(DMA_CYCLES(2), SET_BPL2MOD, value);
 }
 
 void
@@ -479,12 +469,7 @@ void Agnus::pokeDSKPTH(u16 value)
     trace(DSKREG_DEBUG, "pokeDSKPTH(%04x) [%s]\n", value, AccessorEnum::key(s));
 
     // Schedule the write cycle
-    if constexpr (s == ACCESSOR_CPU) {
-        recordRegisterChangeOld(DMA_CYCLES(1), SET_DSKPTH, value, s);
-    }
-    if constexpr (s == ACCESSOR_AGNUS) {
-        recordRegisterChangeOld(DMA_CYCLES(2), SET_DSKPTH, value, s);
-    }
+    recordRegisterChange(DMA_CYCLES(2), SET_DSKPTH, value, s);
 }
 
 void
@@ -509,12 +494,7 @@ void Agnus::pokeDSKPTL(u16 value)
     trace(DSKREG_DEBUG, "pokeDSKPTL(%04x) [%s]\n", value, AccessorEnum::key(s));
 
     // Schedule the write cycle
-    if constexpr (s == ACCESSOR_CPU) {
-        recordRegisterChangeOld(DMA_CYCLES(1), SET_DSKPTL, value, s);
-    }
-    if constexpr (s == ACCESSOR_AGNUS) {
-        recordRegisterChangeOld(DMA_CYCLES(2), SET_DSKPTL, value, s);
-    }
+    recordRegisterChange(DMA_CYCLES(2), SET_DSKPTL, value, s);
 }
 
 void
@@ -551,12 +531,7 @@ Agnus::pokeBPLxPTH(u16 value)
     trace(BPLREG_DEBUG, "pokeBPL%dPTH(%04x) [%s]\n", x, value, AccessorEnum::key(s));
     
     // Schedule the write cycle
-    if constexpr (s == ACCESSOR_CPU) {
-        recordRegisterChangeOld(DMA_CYCLES(1), SET_BPL1PTH + x - 1, value, s);
-    }
-    if constexpr (s == ACCESSOR_AGNUS) {
-        recordRegisterChangeOld(DMA_CYCLES(2), SET_BPL1PTH + x - 1, value, s);
-    }
+    recordRegisterChange(DMA_CYCLES(2), SET_BPL1PTH + x - 1, value, s);
 }
 
 template <int x> void
@@ -581,12 +556,7 @@ Agnus::pokeBPLxPTL(u16 value)
     trace(BPLREG_DEBUG, "pokeBPL%dPTL(%04x) [%s]\n", x, value, AccessorEnum::key(s));
 
     // Schedule the write cycle
-    if constexpr (s == ACCESSOR_CPU) {
-        recordRegisterChangeOld(DMA_CYCLES(1), SET_BPL1PTL + x - 1, value, s);
-    }
-    if constexpr (s == ACCESSOR_AGNUS) {
-        recordRegisterChangeOld(DMA_CYCLES(2), SET_BPL1PTL + x - 1, value, s);
-    }
+    recordRegisterChange(DMA_CYCLES(2), SET_BPL1PTL + x - 1, value, s);
 }
 
 template <int x> void
@@ -607,12 +577,7 @@ Agnus::pokeSPRxPTH(u16 value)
     trace(SPRREG_DEBUG, "pokeSPR%dPTH(%04x) [%s]\n", x, value, AccessorEnum::key(s));
 
     // Schedule the write cycle
-    if constexpr (s == ACCESSOR_CPU) {
-        recordRegisterChangeOld(DMA_CYCLES(1), SET_SPR0PTH + x, value, s);
-    }
-    if constexpr (s == ACCESSOR_AGNUS) {
-        recordRegisterChangeOld(DMA_CYCLES(2), SET_SPR0PTH + x, value, s);
-    }
+    recordRegisterChange(DMA_CYCLES(2), SET_SPR0PTH + x, value, s);
 }
 
 template <int x> void
@@ -637,12 +602,7 @@ Agnus::pokeSPRxPTL(u16 value)
     trace(SPRREG_DEBUG, "pokeSPR%dPTL(%04x) [%s]\n", x, value, AccessorEnum::key(s));
 
     // Schedule the write cycle
-    if constexpr (s == ACCESSOR_CPU) {
-        recordRegisterChangeOld(DMA_CYCLES(1), SET_SPR0PTL + x, value, s);
-    }
-    if constexpr (s == ACCESSOR_AGNUS) {
-        recordRegisterChangeOld(DMA_CYCLES(2), SET_SPR0PTL + x, value, s);
-    }
+    recordRegisterChange(DMA_CYCLES(2), SET_SPR0PTL + x, value, s);
 }
 
 template <int x> void
