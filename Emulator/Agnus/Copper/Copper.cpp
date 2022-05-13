@@ -257,8 +257,6 @@ Copper::scheduleWaitWakeup(bool bfd)
 {
     Beam trigger;
 
-    assert(agnus.clock == agnus.newClock);
-
     if constexpr (LEGACY_COPPER) {
         
         // Find the trigger position for this WAIT command
@@ -448,8 +446,6 @@ Copper::isIllegalInstr(u32 addr) const
 void
 Copper::vsyncHandler()
 {
-    assert(agnus.clock == agnus.newClock);
-
     /* "At the start of each vertical blanking interval, COP1LC is automatically
      *  used to start the program counter. That is, no matter what the Copper is
      *  doing, when the end of vertical blanking occurs, the Copper is
@@ -472,8 +468,6 @@ Copper::vsyncHandler()
 void
 Copper::blitterDidTerminate()
 {
-    assert(agnus.clock == agnus.newClock);
-
     if (agnus.hasEvent <SLOT_COP> (COP_WAIT_BLIT)) {
 
         // Wake up the Copper in the next even cycle

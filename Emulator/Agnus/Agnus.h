@@ -82,11 +82,8 @@ public:
     //
     // Counters
     //
-    
-    // Agnus has been emulated up to this master clock cycle (DEPRECATED, see #681)
-    Cycle clock;
 
-    // Agnus has been emulated up to this master clock cycle (replacement for clock, see #681)
+    // Agnus has been emulated up to this master clock cycle
     Cycle newClock;
 
     // The current beam position
@@ -241,8 +238,7 @@ private:
         if (hard) {
             
             worker
-            
-            << clock
+
             << newClock;
         }
 

@@ -452,7 +452,7 @@ Agnus::_dump(Category category, std::ostream& os) const
     if (category == Category::State) {
         
         os << tab("Clock");
-        os << dec(clock) << std::endl;
+        os << dec(newClock) << std::endl;
         os << tab("Frame");
         os << dec(frame.nr) << std::endl;
         os << tab("LOF");
@@ -611,7 +611,7 @@ Agnus::_inspect() const
     
     eventInfo.cpuClock = cpu.getMasterClock();
     eventInfo.cpuCycles = cpu.getCpuClock();
-    eventInfo.dmaClock = agnus.clock;
+    eventInfo.dmaClock = agnus.newClock;
     eventInfo.ciaAClock = ciaa.getClock();
     eventInfo.ciaBClock  = ciab.getClock();
     eventInfo.frame = agnus.frame.nr;
@@ -634,7 +634,7 @@ Agnus::inspectSlot(EventSlot nr) const
     info.slot = nr;
     info.eventId = id[nr];
     info.trigger = cycle;
-    info.triggerRel = cycle - agnus.clock;
+    info.triggerRel = cycle - agnus.newClock;
     
     if (agnus.belongsToCurrentFrame(cycle)) {
         

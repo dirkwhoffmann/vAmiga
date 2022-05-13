@@ -451,7 +451,7 @@ RetroShell::dump(AmigaObject &component, Category category)
 void
 RetroShell::vsyncHandler()
 {
-    if (agnus.clock >= wakeUp) {
+    if (agnus.newClock >= wakeUp) {
         
         msgQueue.put(MSG_SCRIPT_WAKEUP);
         wakeUp = INT64_MAX;

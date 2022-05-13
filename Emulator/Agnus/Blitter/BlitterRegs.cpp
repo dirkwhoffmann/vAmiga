@@ -314,7 +314,6 @@ Blitter::setBLTSIZE(u16 value)
         trace(XFILES, "XFILES: Overwriting existing Blitter event\n");
     }
 
-    assert(agnus.clock == agnus.newClock);
     agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_STRT1);
 }
 
@@ -463,8 +462,6 @@ Blitter::pokeDMACON(u16 oldValue, u16 newValue)
 {
     bool oldBltDma = (oldValue & (DMAEN | BLTEN)) == (DMAEN | BLTEN);
     bool newBltDma = (newValue & (DMAEN | BLTEN)) == (DMAEN | BLTEN);
-
-    assert(agnus.clock == agnus.newClock);
 
     // Check if Blitter DMA got switched on
     if (!oldBltDma && newBltDma) {

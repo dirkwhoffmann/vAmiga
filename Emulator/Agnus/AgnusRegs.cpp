@@ -387,7 +387,6 @@ Agnus::pokeDIWSTRT(u16 value)
 {
     trace(DIW_DEBUG, "pokeDIWSTRT<%s>(%04x)\n", AccessorEnum::key(s), value);
 
-    if (s == ACCESSOR_AGNUS) assert(clock == newClock);
     recordRegisterChange(DMA_CYCLES(4), SET_DIWSTRT_AGNUS, value);
     recordRegisterChange(DMA_CYCLES(3), SET_DIWSTRT_DENISE, value);
 }
@@ -397,7 +396,6 @@ Agnus::pokeDIWSTOP(u16 value)
 {
     trace(DIW_DEBUG, "pokeDIWSTOP<%s>(%04x)\n", AccessorEnum::key(s), value);
 
-    if (s == ACCESSOR_AGNUS) assert(clock == newClock);
     recordRegisterChange(DMA_CYCLES(4), SET_DIWSTOP_AGNUS, value);
     recordRegisterChange(DMA_CYCLES(3), SET_DIWSTOP_DENISE, value);
 }

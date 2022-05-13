@@ -17,7 +17,7 @@ Paula::serviceIrqEvent()
 {
     assert(agnus.id[SLOT_IRQ] == IRQ_CHECK);
 
-    Cycle clock = agnus.clock;
+    Cycle clock = agnus.newClock;
     Cycle next = NEVER;
 
     // Check all interrupt sources

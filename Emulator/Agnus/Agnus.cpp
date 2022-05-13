@@ -43,16 +43,14 @@ Agnus::_reset(bool hard)
         data[i] = 0;
     }
     
-    if (hard) assert(clock == 0);
-
-    assert(clock == newClock);
+    if (hard) assert(newClock == 0);
 
     // Schedule initial events
     scheduleRel<SLOT_SEC>(NEVER, SEC_TRIGGER);
     scheduleRel<SLOT_TER>(NEVER, TER_TRIGGER);
     scheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
-    scheduleRel<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
-    scheduleRel<SLOT_CIAB>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
+    scheduleRel<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(newClock)), CIA_EXECUTE);
+    scheduleRel<SLOT_CIAB>(CIA_CYCLES(AS_CIA_CYCLES(newClock)), CIA_EXECUTE);
     scheduleStrobe0Event();
     scheduleRel<SLOT_IRQ>(NEVER, IRQ_CHECK);
     diskController.scheduleFirstDiskEvent();
@@ -246,17 +244,8 @@ Agnus::execute()
     newClock += DMA_CYCLES(1);
     pos.h = (pos.h + 1) % HPOS_CNT;
 
-    assert(newClock == clock);
-
     // Process pending events
-    if (nextTrigger <= clock) executeUntil(clock);
-
-    // REMOVE ASAP
-    assert(newClock == clock);
-    assert(pos.h <= HPOS_MAX);
-
-    // Advance the internal clock and the horizontal counter
-    clock += DMA_CYCLES(1);
+    if (nextTrigger <= newClock) executeUntil(newClock);
 }
 
 void
@@ -279,7 +268,7 @@ Agnus::syncWithEClock()
      */
 
     // Determine where we are in the current E clock cycle
-    Cycle eClk = (clock >> 2) % 10;
+    Cycle eClk = (newClock >> 2) % 10;
     
     // We want to sync to position (2).
     // If we are already too close, we seek (2) in the next E clock cycle.
@@ -303,7 +292,7 @@ Agnus::syncWithEClock()
     }
     
     // Doublecheck that we are going to sync to a DMA cycle
-    assert(DMA_CYCLES(AS_DMA_CYCLES(clock + delay)) == clock + delay);
+    assert(DMA_CYCLES(AS_DMA_CYCLES(newClock + delay)) == newClock + delay);
     
     // Execute Agnus until the target cycle has been reached
     execute(AS_DMA_CYCLES(delay));
@@ -684,11 +673,13 @@ Agnus::hsyncHandler()
 void
 Agnus::vsyncHandler()
 {
+    assert(newClock >= 0);
+
     // Run the screen recorder
-    denise.screenRecorder.vsyncHandler(clock - 50 * DMA_CYCLES(HPOS_CNT));
+    denise.screenRecorder.vsyncHandler(newClock - 50 * DMA_CYCLES(HPOS_CNT));
     
     // Synthesize sound samples
-    paula.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT));
+    paula.executeUntil(newClock - 50 * DMA_CYCLES(HPOS_CNT));
 
     // Advance to the next frame
     frame.next(denise.lace());

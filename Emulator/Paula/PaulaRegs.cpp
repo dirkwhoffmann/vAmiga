@@ -100,7 +100,6 @@ Paula::pokeINTENA(u16 value)
 {
     trace(INTREG_DEBUG, "pokeINTENA(%x)\n", value);
 
-    if (s == ACCESSOR_AGNUS) assert(agnus.clock == agnus.newClock);
     agnus.recordRegisterChange(DMA_CYCLES(1), SET_INTENA, value);
 }
 

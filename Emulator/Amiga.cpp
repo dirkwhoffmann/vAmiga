@@ -802,7 +802,7 @@ Amiga::_inspect() const
     {   SYNCHRONIZED
         
         info.cpuClock = cpu.getMasterClock();
-        info.dmaClock = agnus.clock;
+        info.dmaClock = agnus.newClock;
         info.ciaAClock = ciaA.getClock();
         info.ciaBClock = ciaB.getClock();
         info.frame = agnus.frame.nr;

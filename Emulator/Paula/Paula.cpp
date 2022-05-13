@@ -138,7 +138,7 @@ void
 Paula::scheduleIrqRel(IrqSource src, Cycle trigger)
 {
     assert(trigger != 0);
-    scheduleIrqAbs(src, agnus.clock + trigger);
+    scheduleIrqAbs(src, agnus.newClock + trigger);
 }
 
 void

@@ -90,7 +90,6 @@ Agnus::scheduleFirstBplEvent()
     
     u8 dmacycle = sequencer.bplEvent[0] ? 0 : sequencer.nextBplEvent[0];
 
-    assert(agnus.clock == agnus.newClock);
     if (pos.h == 0) {
         scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle), sequencer.bplEvent[dmacycle]);
     } else {
@@ -103,8 +102,6 @@ Agnus::scheduleNextBplEvent(isize hpos)
 {
     assert(hpos >= 0 && hpos < HPOS_CNT);
 
-    assert(agnus.clock == agnus.newClock);
-
     if (u8 next = sequencer.nextBplEvent[hpos]) {
         scheduleRel<SLOT_BPL>(DMA_CYCLES(next - pos.h), sequencer.bplEvent[next]);
     }
@@ -115,8 +112,6 @@ void
 Agnus::scheduleBplEventForCycle(isize hpos)
 {
     assert(hpos >= pos.h && hpos < HPOS_CNT);
-
-    assert(agnus.clock == agnus.newClock);
 
     if (sequencer.bplEvent[hpos] != EVENT_NONE) {
         scheduleRel<SLOT_BPL>(DMA_CYCLES(hpos - pos.h), sequencer.bplEvent[hpos]);
@@ -135,8 +130,6 @@ Agnus::scheduleFirstDasEvent()
     u8 dmacycle = sequencer.nextDasEvent[0];
     assert(dmacycle != 0);
 
-    assert(agnus.clock == agnus.newClock);
-
     if (pos.h == 0) {
         scheduleRel<SLOT_DAS>(DMA_CYCLES(dmacycle), sequencer.dasEvent[dmacycle]);
     } else {
@@ -148,8 +141,6 @@ void
 Agnus::scheduleNextDasEvent(isize hpos)
 {
     assert(hpos >= 0 && hpos < HPOS_CNT);
-
-    assert(agnus.clock == agnus.newClock);
 
     if (u8 next = sequencer.nextDasEvent[hpos]) {
         scheduleRel<SLOT_DAS>(DMA_CYCLES(next - pos.h), sequencer.dasEvent[next]);
@@ -163,8 +154,6 @@ void
 Agnus::scheduleDasEventForCycle(isize hpos)
 {
     assert(hpos >= pos.h && hpos < HPOS_CNT);
-
-    assert(agnus.clock == agnus.newClock);
 
     if (sequencer.dasEvent[hpos] != EVENT_NONE) {
         scheduleRel<SLOT_DAS>(DMA_CYCLES(hpos - pos.h), sequencer.dasEvent[hpos]);
@@ -299,10 +288,7 @@ Agnus::serviceRASEvent()
     assert(id[SLOT_RAS] == RAS_HSYNC);
     
     // Let the hsync handler be called at the beginning of the next DMA cycle
-    assert(clock == newClock);
     agnus.recordRegisterChange(0, SET_STRHOR, 1);
-
-    assert(agnus.clock == agnus.newClock);
 
     // Reschedule event
     rescheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT));
