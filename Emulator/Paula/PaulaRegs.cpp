@@ -65,12 +65,7 @@ Paula::pokeINTREQ(u16 value)
 {
     trace(INTREG_DEBUG, "pokeINTREQ(%x) (INTENA = %x INTREQ = %x)\n", value, intena, intreq);
 
-    // Add a one cycle delay if Copper writes
-    if constexpr (s == ACCESSOR_CPU) {
-        paula.setINTREQ(value);
-    } else {
-        agnus.recordRegisterChange(DMA_CYCLES(1), SET_INTREQ, value);
-    }
+    agnus.recordRegisterChange(DMA_CYCLES(1), SET_INTREQ, value);
 }
 
 void
@@ -105,12 +100,7 @@ Paula::pokeINTENA(u16 value)
 {
     trace(INTREG_DEBUG, "pokeINTENA(%x)\n", value);
 
-    // Add a one cycle delay if Copper writes
-    if constexpr (s == ACCESSOR_CPU) {
-        paula.setINTENA(value);
-    } else {
-        agnus.recordRegisterChange(DMA_CYCLES(1), SET_INTENA, value);
-    }
+    agnus.recordRegisterChange(DMA_CYCLES(1), SET_INTENA, value);
 }
 
 void
