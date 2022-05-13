@@ -35,8 +35,7 @@ Sequencer::setDDFSTRT(u16 old, u16 value)
 {
     trace(DDF_DEBUG | SEQ_DEBUG, "setDDFSTRT(%d, %d)\n", old, value);
 
-    assert(agnus.pos.h == agnus.pos.newh);
-    auto posh = agnus.pos.h;
+    auto posh = agnus.pos.newh;
     
     if (old != posh && value != posh) {
         
@@ -93,8 +92,7 @@ Sequencer::setDDFSTOP(u16 old, u16 value)
 {
     trace(DDF_DEBUG | SEQ_DEBUG, "setDDFSTOP(%d, %d)\n", old, value);
 
-    assert(agnus.pos.h == agnus.pos.newh);
-    auto posh = agnus.pos.h;
+    auto posh = agnus.pos.newh;
     
     if (old != posh && value != posh) {
         
@@ -139,8 +137,7 @@ Sequencer::setDIWSTRT(u16 value)
     
     if (agnus.pos.v == vstrt && agnus.pos.v != vstop) {
 
-        assert(agnus.pos.h == agnus.pos.newh);
-        sigRecorder.insert(agnus.pos.h + 2, SIG_VFLOP_SET);
+        sigRecorder.insert(agnus.pos.newh + 2, SIG_VFLOP_SET);
         computeBplEventTable(sigRecorder);
     }
 }
@@ -158,15 +155,13 @@ Sequencer::setDIWSTOP(u16 value)
     
     if (agnus.pos.v == vstop) {
 
-        assert(agnus.pos.h == agnus.pos.newh);
-        sigRecorder.insert(agnus.pos.h + 2, SIG_VFLOP_CLR);
+        sigRecorder.insert(agnus.pos.newh + 2, SIG_VFLOP_CLR);
         computeBplEventTable(sigRecorder);
     }
 
     if (agnus.pos.v != vstop && agnus.pos.v == vstrt) {
 
-        assert(agnus.pos.h == agnus.pos.newh);
-        sigRecorder.insert(agnus.pos.h + 2, SIG_VFLOP_SET);
+        sigRecorder.insert(agnus.pos.newh + 2, SIG_VFLOP_SET);
         computeBplEventTable(sigRecorder);
     }
 }

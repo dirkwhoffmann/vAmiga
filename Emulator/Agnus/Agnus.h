@@ -386,8 +386,8 @@ public:
     bool inLastRasterline() const { return inLastRasterline(pos.v); }
 
     // Returns the pixel position for the current horizontal position
-    Pixel ppos(isize posh) const { assert(pos.h == pos.newh); return (posh * 4) + 2; }
-    Pixel ppos() const { assert(pos.h == pos.newh); return ppos(pos.h); }
+    Pixel ppos(isize posh) const { return (posh * 4) + 2; }
+    Pixel ppos() const { return ppos(pos.newh); }
 
     
     //
@@ -745,13 +745,13 @@ public:
     void scheduleNextBplEvent(isize hpos);
 
     // Schedules the next BPL event relative to the currently emulated DMA cycle
-    void scheduleNextBplEvent() { assert(pos.h == pos.newh); scheduleNextBplEvent(pos.h); }
+    void scheduleNextBplEvent() { scheduleNextBplEvent(pos.newh); }
 
     // Schedules the earliest BPL event that occurs at or after the given DMA cycle
     void scheduleBplEventForCycle(isize hpos);
 
     // Updates the scheduled BPL event according to the current event table
-    void updateBplEvent() { assert(pos.h == pos.newh); scheduleBplEventForCycle(pos.h); }
+    void updateBplEvent() { scheduleBplEventForCycle(pos.newh); }
 
     // Schedules the first BPL event
     void scheduleFirstDasEvent();
@@ -760,13 +760,13 @@ public:
     void scheduleNextDasEvent(isize hpos);
 
     // Schedules the next DAS event relative to the currently emulated DMA cycle
-    void scheduleNextDasEvent() { assert(pos.h == pos.newh); scheduleNextDasEvent(pos.h); }
+    void scheduleNextDasEvent() { scheduleNextDasEvent(pos.newh); }
 
     // Schedules the earliest DAS event that occurs at or after the given DMA cycle
     void scheduleDasEventForCycle(isize hpos);
 
     // Updates the scheduled DAS event according to the current event table
-    void updateDasEvent() { assert(pos.h == pos.newh); scheduleDasEventForCycle(pos.h); }
+    void updateDasEvent() { scheduleDasEventForCycle(pos.newh); }
 
     // Schedules the next register change event
     void scheduleNextREGEvent();

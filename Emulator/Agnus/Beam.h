@@ -16,7 +16,7 @@ struct Beam
 {
     // Counters for the vertical and horizontal beam position
     isize v;
-    isize h;
+    [[deprecated]] isize h;
     isize newh; // Issue #681
 
     template <class W>
