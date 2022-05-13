@@ -995,15 +995,15 @@ Blitter::beginSlowCopyBlit()
     // This let's us compare checksums with the FastBlitter.
     if constexpr (SLOW_BLT_DEBUG) {
 
-        BusOwner owner = agnus.busOwner[agnus.pos.newh];
+        BusOwner owner = agnus.busOwner[agnus.pos.h];
         agnus.setBLS(false);
         
         while (agnus.hasEvent<SLOT_BLT>()) {
-            agnus.busOwner[agnus.pos.newh] = BUS_NONE;
+            agnus.busOwner[agnus.pos.h] = BUS_NONE;
             serviceEvent();
         }
         
-        agnus.busOwner[agnus.pos.newh] = owner;
+        agnus.busOwner[agnus.pos.h] = owner;
     }
 }
 
@@ -1052,15 +1052,15 @@ Blitter::beginSlowLineBlit()
     // This let's us compare checksums with the FastBlitter.
     if constexpr (SLOW_BLT_DEBUG) {
 
-        BusOwner owner = agnus.busOwner[agnus.pos.newh];
+        BusOwner owner = agnus.busOwner[agnus.pos.h];
         agnus.setBLS(false);
         
         while (agnus.hasEvent<SLOT_BLT>()) {
-            agnus.busOwner[agnus.pos.newh] = BUS_NONE;
+            agnus.busOwner[agnus.pos.h] = BUS_NONE;
             serviceEvent();
         }
         
-        agnus.busOwner[agnus.pos.newh] = owner;
+        agnus.busOwner[agnus.pos.h] = owner;
     }
 }
 
@@ -1268,8 +1268,8 @@ Blitter::fakeExec()
     if constexpr ((bool)(instr & (FETCH | WRITE_D))) {
 
         // Record some fake data to make the DMA debugger happy
-        assert(agnus.pos.newh < HPOS_CNT);
-        agnus.busValue[agnus.pos.newh] = 0x8888;
+        assert(agnus.pos.h < HPOS_CNT);
+        agnus.busValue[agnus.pos.h] = 0x8888;
     }
 
     if constexpr ((bool)(instr & REPEAT)) {
@@ -1475,8 +1475,8 @@ Blitter::fakeExecLine()
     if constexpr ((bool)(instr & (FETCH | BUS | WRITE_D))) {
 
         // Record some fake data to make the DMA debugger happy
-        assert(agnus.pos.newh < HPOS_CNT);
-        agnus.busValue[agnus.pos.newh] = 0x8888;
+        assert(agnus.pos.h < HPOS_CNT);
+        agnus.busValue[agnus.pos.h] = 0x8888;
     }
 
     if constexpr ((bool)(instr & REPEAT)) {

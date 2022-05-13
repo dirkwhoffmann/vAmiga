@@ -20,7 +20,7 @@ template <BusOwner owner> bool
 Agnus::busIsFree()
 {
     // Deny if the bus is in use
-    if (busOwner[pos.newh] != BUS_NONE) return false;
+    if (busOwner[pos.h] != BUS_NONE) return false;
 
     if constexpr (owner == BUS_COPPER) {
         
@@ -28,10 +28,10 @@ Agnus::busIsFree()
         if (!copdma()) return false;
         
         // Deny in cycle E0
-        if (pos.newh == 0xE0) {
+        if (pos.h == 0xE0) {
          
             // If the Copper wants the bus in E0, nobody can have it
-            busOwner[pos.newh] = BUS_BLOCKED;
+            busOwner[pos.h] = BUS_BLOCKED;
             
             return false;
         }
@@ -55,12 +55,12 @@ template <BusOwner owner> bool
 Agnus::allocateBus()
 {
     // Deny if the bus has been allocated already
-    if (busOwner[pos.newh] != BUS_NONE) return false;
+    if (busOwner[pos.h] != BUS_NONE) return false;
     
     if constexpr (owner == BUS_COPPER) {
         
         // Assign bus to the Copper
-        busOwner[pos.newh] = BUS_COPPER;
+        busOwner[pos.h] = BUS_COPPER;
         
         return true;
     }
@@ -73,7 +73,7 @@ Agnus::allocateBus()
         if (bls && !bltpri()) return false;
         
         // Assign the bus to the Blitter
-        busOwner[pos.newh] = BUS_BLITTER;
+        busOwner[pos.h] = BUS_BLITTER;
         
         return true;
     }
@@ -85,8 +85,8 @@ Agnus::doDiskDmaRead()
     u16 result = mem.peek16 <ACCESSOR_AGNUS> (dskpt);
     dskpt += 2;
 
-    busOwner[pos.newh] = BUS_DISK;
-    busValue[pos.newh] = result;
+    busOwner[pos.h] = BUS_DISK;
+    busValue[pos.h] = result;
     stats.usage[BUS_DISK]++;
 
     return result;
@@ -100,8 +100,8 @@ Agnus::doAudioDmaRead()
     u16 result = mem.peek16 <ACCESSOR_AGNUS> (audpt[channel]);
     audpt[channel] += 2;
 
-    busOwner[pos.newh] = owner;
-    busValue[pos.newh] = result;
+    busOwner[pos.h] = owner;
+    busValue[pos.h] = result;
     stats.usage[owner]++;
 
     return result;
@@ -116,8 +116,8 @@ Agnus::doBitplaneDmaRead()
     u16 result = mem.peek16 <ACCESSOR_AGNUS> (bplpt[bitplane]);
     bplpt[bitplane] += 2;
 
-    busOwner[pos.newh] = owner;
-    busValue[pos.newh] = result;
+    busOwner[pos.h] = owner;
+    busValue[pos.h] = result;
     stats.usage[owner]++;
 
     return result;
@@ -132,8 +132,8 @@ Agnus::doSpriteDmaRead()
     u16 result = mem.peek16 <ACCESSOR_AGNUS> (sprpt[channel]);
     sprpt[channel] += 2;
 
-    busOwner[pos.newh] = owner;
-    busValue[pos.newh] = result;
+    busOwner[pos.h] = owner;
+    busValue[pos.h] = result;
     stats.usage[owner]++;
 
     return result;
@@ -144,8 +144,8 @@ Agnus::doCopperDmaRead(u32 addr)
 {
     u16 result = mem.peek16 <ACCESSOR_AGNUS> (addr);
 
-    busOwner[pos.newh] = BUS_COPPER;
-    busValue[pos.newh] = result;
+    busOwner[pos.h] = BUS_COPPER;
+    busValue[pos.h] = result;
     stats.usage[BUS_COPPER]++;
 
     return result;
@@ -155,12 +155,12 @@ u16
 Agnus::doBlitterDmaRead(u32 addr)
 {
     // Assure that the Blitter owns the bus when this function is called
-    assert(busOwner[pos.newh] == BUS_BLITTER);
+    assert(busOwner[pos.h] == BUS_BLITTER);
 
     u16 result = mem.peek16 <ACCESSOR_AGNUS> (addr);
 
-    busOwner[pos.newh] = BUS_BLITTER;
-    busValue[pos.newh] = result;
+    busOwner[pos.h] = BUS_BLITTER;
+    busValue[pos.h] = result;
     stats.usage[BUS_BLITTER]++;
 
     return result;
@@ -172,8 +172,8 @@ Agnus::doDiskDmaWrite(u16 value)
     mem.poke16 <ACCESSOR_AGNUS> (dskpt, value);
     dskpt += 2;
 
-    busOwner[pos.newh] = BUS_DISK;
-    busValue[pos.newh] = value;
+    busOwner[pos.h] = BUS_DISK;
+    busValue[pos.h] = value;
     stats.usage[BUS_DISK]++;
 }
 
@@ -182,8 +182,8 @@ Agnus::doCopperDmaWrite(u32 addr, u16 value)
 {
     mem.pokeCustom16<ACCESSOR_AGNUS>(addr, value);
 
-    busOwner[pos.newh] = BUS_COPPER;
-    busValue[pos.newh] = value;
+    busOwner[pos.h] = BUS_COPPER;
+    busValue[pos.h] = value;
     stats.usage[BUS_COPPER]++;
 }
 
@@ -192,8 +192,8 @@ Agnus::doBlitterDmaWrite(u32 addr, u16 value)
 {
     mem.poke16 <ACCESSOR_AGNUS> (addr, value);
 
-    assert(busOwner[pos.newh] == BUS_BLITTER); // Bus is already allocated
-    busValue[pos.newh] = value;
+    assert(busOwner[pos.h] == BUS_BLITTER); // Bus is already allocated
+    busValue[pos.h] = value;
     stats.usage[BUS_BLITTER]++;
 }
 

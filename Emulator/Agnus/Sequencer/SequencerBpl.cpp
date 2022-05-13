@@ -70,7 +70,7 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
     updateBplJumpTable();
 
     // Rectify the scheduled event
-    agnus.scheduleBplEventForCycle(agnus.pos.newh);
+    agnus.scheduleBplEventForCycle(agnus.pos.h);
     
     // Write back the new ddf state
     ddf = state;

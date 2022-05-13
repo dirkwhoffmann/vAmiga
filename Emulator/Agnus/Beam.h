@@ -16,7 +16,7 @@ struct Beam
 {
     // Counters for the vertical and horizontal beam position
     isize v;
-    isize newh; // Issue #681
+    isize h;
 
     template <class W>
     void operator<<(W& worker)
@@ -24,29 +24,29 @@ struct Beam
         worker
 
         << v
-        << newh;
+        << h;
     }
     
-    Beam(isize v, isize h) : v(v), newh(h) { }
+    Beam(isize v, isize h) : v(v), h(h) { }
     Beam(isize cycle = 0) : Beam(cycle / HPOS_CNT, cycle % HPOS_CNT) { }
 
     bool operator==(const Beam& beam) const
     {
-        return v == beam.v && newh == beam.newh;
+        return v == beam.v && h == beam.h;
     }
 
     bool operator!=(const Beam& beam) const
     {
-        return v != beam.v || newh != beam.newh;
+        return v != beam.v || h != beam.h;
     }
 
     Beam& operator+=(const Beam& beam)
     {
         v += beam.v;
-        newh += beam.newh;
+        h += beam.h;
 
-        if (newh >= HPOS_CNT) { newh -= HPOS_CNT; v++; }
-        else if (newh < 0)    { newh += HPOS_CNT; v--; }
+        if (h >= HPOS_CNT) { h -= HPOS_CNT; v++; }
+        else if (h < 0)    { h += HPOS_CNT; v--; }
 
         return *this;
     }
@@ -54,7 +54,7 @@ struct Beam
     Beam operator+(const Beam& beam) const
     {
         auto vv = v + beam.v;
-        auto hh = newh + beam.newh;
+        auto hh = h + beam.h;
 
         if (hh >= HPOS_CNT) { hh -= HPOS_CNT; vv++; }
         else if (hh < 0)    { hh += HPOS_CNT; vv--; }
@@ -69,18 +69,18 @@ struct Beam
 
     isize operator-(const Beam& beam) const
     {
-        return (v * HPOS_CNT + newh) - (beam.v * HPOS_CNT + beam.newh);
+        return (v * HPOS_CNT + h) - (beam.v * HPOS_CNT + beam.h);
     }
 
     Beam& operator++()
     {
-        if (++newh > HPOS_MAX) { v++; newh = 0; }
+        if (++h > HPOS_MAX) { v++; h = 0; }
         return *this;
     }
 
     Beam& operator--()
     {
-        if (--newh < 0) { v--; newh = HPOS_MAX; }
+        if (--h < 0) { v--; h = HPOS_MAX; }
         return *this;
     }
 };

@@ -387,7 +387,7 @@ public:
 
     // Returns the pixel position for the current horizontal position
     Pixel ppos(isize posh) const { return (posh * 4) + 2; }
-    Pixel ppos() const { return ppos(pos.newh); }
+    Pixel ppos() const { return ppos(pos.h); }
 
     
     //
@@ -745,13 +745,13 @@ public:
     void scheduleNextBplEvent(isize hpos);
 
     // Schedules the next BPL event relative to the currently emulated DMA cycle
-    void scheduleNextBplEvent() { scheduleNextBplEvent(pos.newh); }
+    void scheduleNextBplEvent() { scheduleNextBplEvent(pos.h); }
 
     // Schedules the earliest BPL event that occurs at or after the given DMA cycle
     void scheduleBplEventForCycle(isize hpos);
 
     // Updates the scheduled BPL event according to the current event table
-    void updateBplEvent() { scheduleBplEventForCycle(pos.newh); }
+    void updateBplEvent() { scheduleBplEventForCycle(pos.h); }
 
     // Schedules the first BPL event
     void scheduleFirstDasEvent();
@@ -760,13 +760,13 @@ public:
     void scheduleNextDasEvent(isize hpos);
 
     // Schedules the next DAS event relative to the currently emulated DMA cycle
-    void scheduleNextDasEvent() { scheduleNextDasEvent(pos.newh); }
+    void scheduleNextDasEvent() { scheduleNextDasEvent(pos.h); }
 
     // Schedules the earliest DAS event that occurs at or after the given DMA cycle
     void scheduleDasEventForCycle(isize hpos);
 
     // Updates the scheduled DAS event according to the current event table
-    void updateDasEvent() { scheduleDasEventForCycle(pos.newh); }
+    void updateDasEvent() { scheduleDasEventForCycle(pos.h); }
 
     // Schedules the next register change event
     void scheduleNextREGEvent();

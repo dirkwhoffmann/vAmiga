@@ -46,7 +46,7 @@ Denise::setDIWSTRT(u16 value)
      *    6) old < new < cur : Already triggered. Nothing to do in this line.
      */
 
-    isize cur = 2 * agnus.pos.newh;
+    isize cur = 2 * agnus.pos.h;
     
     // (1) and (2)
     if (cur < denise.hstrt && cur < newDiwHstrt) {
@@ -86,7 +86,7 @@ Denise::setDIWSTOP(u16 value)
     }
     
     // Check if the change already takes effect in the current rasterline.
-    isize cur = 2 * agnus.pos.newh;
+    isize cur = 2 * agnus.pos.h;
     
     // (1) and (2) (see setDIWSTRT)
     if (cur < hstop && cur < newDiwHstop) {
@@ -163,7 +163,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     trace(BPLREG_DEBUG, "setBPLCON0(%X,%X)\n", oldValue, newValue);
 
     // Record the register change
-    i64 pixel = std::max(4 * agnus.pos.newh - 4, (isize)0);
+    i64 pixel = std::max(4 * agnus.pos.h - 4, (isize)0);
     conChanges.insert(pixel, RegChange { SET_BPLCON0_DENISE, newValue });
     
     // Check if the HAM bit has changed
@@ -225,7 +225,7 @@ Denise::setBPLCON2(u16 newValue)
     if (pf2px() > 4) { trace(XFILES, "XFILES (BPLCON2): PF2P = %d\n", pf2px()); }
     
     // Record the register change
-    i64 pixel = 4 * agnus.pos.newh + 4;
+    i64 pixel = 4 * agnus.pos.h + 4;
     conChanges.insert(pixel, RegChange { SET_BPLCON2, newValue });    
 }
 
@@ -305,7 +305,7 @@ Denise::setBPLxDAT(u16 value)
         armedEven = true;
 
         spriteClipBegin = std::min(spriteClipBegin,
-                                   (Pixel)((agnus.pos.newh + 1) * 4));
+                                   (Pixel)((agnus.pos.h + 1) * 4));
     }
 }
 
@@ -319,7 +319,7 @@ Denise::pokeSPRxPOS(u16 value)
     // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Hx = HSTART)
 
     // Record the register change
-    i64 pos = 4 * (agnus.pos.newh + 1);
+    i64 pos = 4 * (agnus.pos.h + 1);
     sprChanges[x/2].insert(pos, RegChange { SET_SPR0POS + x, value } );
 }
 
@@ -336,7 +336,7 @@ Denise::pokeSPRxCTL(u16 value)
     // CLR_BIT(armed, x);
 
     // Record the register change
-    i64 pos = 4 * (agnus.pos.newh + 1);
+    i64 pos = 4 * (agnus.pos.h + 1);
     sprChanges[x/2].insert(pos, RegChange { SET_SPR0CTL + x, value } );
 }
 
@@ -353,7 +353,7 @@ Denise::pokeSPRxDATA(u16 value)
     SET_BIT(wasArmed, x);
 
     // Record the register change
-    i64 pos = 4 * (agnus.pos.newh + 1);
+    i64 pos = 4 * (agnus.pos.h + 1);
     sprChanges[x/2].insert(pos, RegChange { SET_SPR0DATA + x, value } );
 }
 
@@ -367,7 +367,7 @@ Denise::pokeSPRxDATB(u16 value)
     if (GET_BIT(config.hiddenSprites, x)) value = 0;
 
     // Record the register change
-    i64 pos = 4 * (agnus.pos.newh + 1);
+    i64 pos = 4 * (agnus.pos.h + 1);
     sprChanges[x/2].insert(pos, RegChange { SET_SPR0DATB + x, value });
 }
 
@@ -379,7 +379,7 @@ Denise::pokeCOLORxx(u16 value)
     constexpr u32 reg = 0x180 + 2*xx;
 
     // Record the color change
-    pixelEngine.colChanges.insert(4 * agnus.pos.newh, RegChange { reg, value } );
+    pixelEngine.colChanges.insert(4 * agnus.pos.h, RegChange { reg, value } );
 }
 
 u16

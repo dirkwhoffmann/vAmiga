@@ -61,7 +61,7 @@ bool
 Copper::findMatchOld(Beam &match) const
 {
     // Start searching at the current beam position
-    u32 beam = (u32)(agnus.pos.v << 8 | agnus.pos.newh);
+    u32 beam = (u32)(agnus.pos.v << 8 | agnus.pos.h);
 
     // Get the comparison position and the comparison mask
     u32 comp = getVPHP();
@@ -79,7 +79,7 @@ Copper::findMatchOld(Beam &match) const
 
                 // Success
                 match.v = beam >> 8;
-                match.newh = beam & 0xFF;
+                match.h = beam & 0xFF;
                 return true;
             }
         }
@@ -89,7 +89,7 @@ Copper::findMatchOld(Beam &match) const
 
             // Success
             match.v = beam >> 8;
-            match.newh = beam & 0xFF;
+            match.h = beam & 0xFF;
             return true;
         }
 
@@ -104,7 +104,7 @@ bool
 Copper::findMatch(Beam &match) const
 {
     // Start searching at the current beam position
-    u32 beam = (u32)(agnus.pos.v << 8 | agnus.pos.newh);
+    u32 beam = (u32)(agnus.pos.v << 8 | agnus.pos.h);
 
     // Get the comparison position and the comparison mask
     u32 comp = getVPHP();
@@ -122,7 +122,7 @@ Copper::findMatch(Beam &match) const
 
                 // Success
                 match.v = beam >> 8;
-                match.newh = beam & 0xFF;
+                match.h = beam & 0xFF;
                 return true;
             }
         }
@@ -132,7 +132,7 @@ Copper::findMatch(Beam &match) const
 
             // Success
             match.v = beam >> 8;
-            match.newh = beam & 0xFF;
+            match.h = beam & 0xFF;
             return true;
         }
 
@@ -211,7 +211,7 @@ Copper::move(u32 addr, u16 value)
               "pokeCustom16(%X [%s], %X)\n", addr, Memory::regName(addr), value);
 
         // Color registers
-        pixelEngine.colChanges.insert(4 * agnus.pos.newh, RegChange { addr, value} );
+        pixelEngine.colChanges.insert(4 * agnus.pos.h, RegChange { addr, value} );
         return;
     }
 
@@ -245,10 +245,10 @@ Copper::runComparator(Beam beam, u16 waitpos, u16 mask) const
 bool
 Copper::runHorizontalComparator(Beam beam, u16 waitpos, u16 mask) const
 {
-    if (beam.newh < 0xE0) {
-        return ((beam.newh + 0x02) & mask) >= (waitpos & 0xFF & mask);
+    if (beam.h < 0xE0) {
+        return ((beam.h + 0x02) & mask) >= (waitpos & 0xFF & mask);
     } else {
-        return ((beam.newh - 0xE0) & mask) >= (waitpos & 0xFF & mask);
+        return ((beam.h - 0xE0) & mask) >= (waitpos & 0xFF & mask);
     }
 }
 
@@ -471,7 +471,7 @@ Copper::blitterDidTerminate()
     if (agnus.hasEvent<SLOT_COP>(COP_WAIT_BLIT)) {
 
         // Wake up the Copper in the next even cycle
-        if (IS_EVEN(agnus.pos.newh)) {
+        if (IS_EVEN(agnus.pos.h)) {
             serviceEvent(COP_WAIT_BLIT);
         } else {
             agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(1), COP_WAIT_BLIT);

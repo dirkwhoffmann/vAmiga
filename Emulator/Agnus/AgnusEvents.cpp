@@ -86,11 +86,11 @@
 void
 Agnus::scheduleFirstBplEvent()
 {
-    assert(pos.newh == 0 || pos.newh == HPOS_MAX);
+    assert(pos.h == 0 || pos.h == HPOS_MAX);
     
     u8 dmacycle = sequencer.bplEvent[0] ? 0 : sequencer.nextBplEvent[0];
 
-    if (pos.newh == 0) {
+    if (pos.h == 0) {
         scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle), sequencer.bplEvent[dmacycle]);
     } else {
         scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle + 1), sequencer.bplEvent[dmacycle]);
@@ -103,7 +103,7 @@ Agnus::scheduleNextBplEvent(isize hpos)
     assert(hpos >= 0 && hpos < HPOS_CNT);
 
     if (u8 next = sequencer.nextBplEvent[hpos]) {
-        scheduleRel<SLOT_BPL>(DMA_CYCLES(next - pos.newh), sequencer.bplEvent[next]);
+        scheduleRel<SLOT_BPL>(DMA_CYCLES(next - pos.h), sequencer.bplEvent[next]);
     }
     assert(hasEvent<SLOT_BPL>());
 }
@@ -111,10 +111,10 @@ Agnus::scheduleNextBplEvent(isize hpos)
 void
 Agnus::scheduleBplEventForCycle(isize hpos)
 {
-    assert(hpos >= pos.newh && hpos < HPOS_CNT);
+    assert(hpos >= pos.h && hpos < HPOS_CNT);
 
     if (sequencer.bplEvent[hpos] != EVENT_NONE) {
-        scheduleRel<SLOT_BPL>(DMA_CYCLES(hpos - pos.newh), sequencer.bplEvent[hpos]);
+        scheduleRel<SLOT_BPL>(DMA_CYCLES(hpos - pos.h), sequencer.bplEvent[hpos]);
     } else {
         scheduleNextBplEvent(hpos);
     }
@@ -125,12 +125,12 @@ Agnus::scheduleBplEventForCycle(isize hpos)
 void
 Agnus::scheduleFirstDasEvent()
 {
-    assert(pos.newh == 0 || pos.newh == HPOS_MAX);
+    assert(pos.h == 0 || pos.h == HPOS_MAX);
     
     u8 dmacycle = sequencer.nextDasEvent[0];
     assert(dmacycle != 0);
     
-    if (pos.newh == 0) {
+    if (pos.h == 0) {
         scheduleRel<SLOT_DAS>(DMA_CYCLES(dmacycle), sequencer.dasEvent[dmacycle]);
     } else {
         scheduleRel<SLOT_DAS>(DMA_CYCLES(dmacycle + 1), sequencer.dasEvent[dmacycle]);
@@ -143,7 +143,7 @@ Agnus::scheduleNextDasEvent(isize hpos)
     assert(hpos >= 0 && hpos < HPOS_CNT);
 
     if (u8 next = sequencer.nextDasEvent[hpos]) {
-        scheduleRel<SLOT_DAS>(DMA_CYCLES(next - pos.newh), sequencer.dasEvent[next]);
+        scheduleRel<SLOT_DAS>(DMA_CYCLES(next - pos.h), sequencer.dasEvent[next]);
         assert(hasEvent<SLOT_DAS>());
     } else {
         cancel<SLOT_DAS>();
@@ -153,10 +153,10 @@ Agnus::scheduleNextDasEvent(isize hpos)
 void
 Agnus::scheduleDasEventForCycle(isize hpos)
 {
-    assert(hpos >= pos.newh && hpos < HPOS_CNT);
+    assert(hpos >= pos.h && hpos < HPOS_CNT);
 
     if (sequencer.dasEvent[hpos] != EVENT_NONE) {
-        scheduleRel<SLOT_DAS>(DMA_CYCLES(hpos - pos.newh), sequencer.dasEvent[hpos]);
+        scheduleRel<SLOT_DAS>(DMA_CYCLES(hpos - pos.h), sequencer.dasEvent[hpos]);
     } else {
         scheduleNextDasEvent(hpos);
     }
@@ -193,7 +193,7 @@ Agnus::scheduleStrobe2Event()
 void
 Agnus::serviceREGEvent(Cycle until)
 {
-    assert(pos.newh <= HPOS_MAX);
+    assert(pos.h <= HPOS_MAX);
 
     // Iterate through all recorded register changes
     while (!changeRecorder.isEmpty()) {
@@ -422,21 +422,21 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_L6_MOD | DRAW_BOTH:    LO_MOD_BOTH(5); break;
 
         case BPL_EOL:
-            assert(pos.newh == 0xE2);
+            assert(pos.h == 0xE2);
             return;
 
         case BPL_EOL | DRAW_ODD:
-            assert(pos.newh == 0xE2);
+            assert(pos.h == 0xE2);
             hires() ? denise.drawHiresOdd() : denise.drawLoresOdd();
             return;
 
         case BPL_EOL | DRAW_EVEN:
-            assert(pos.newh == 0xE2);
+            assert(pos.h == 0xE2);
             hires() ? denise.drawHiresEven() : denise.drawLoresEven();
             return;
 
         case BPL_EOL | DRAW_BOTH:
-            assert(pos.newh == 0xE2);
+            assert(pos.h == 0xE2);
             hires() ? denise.drawHiresBoth() : denise.drawLoresBoth();
             return;
             
@@ -471,7 +471,7 @@ Agnus::serviceVblEvent(EventID id)
         case VBL_STROBE0:
 
             assert(pos.v == 0 || pos.v == 1);
-            assert(pos.newh == 0);
+            assert(pos.h == 0);
             
             // Trigger the vertical blank interrupt
             paula.raiseIrq(INT_VERTB);
@@ -483,7 +483,7 @@ Agnus::serviceVblEvent(EventID id)
         case VBL_STROBE1:
             
             assert(pos.v == 5);
-            assert(pos.newh == 84);
+            assert(pos.h == 84);
             
             // Increment the TOD counter of CIA A
             ciaa.tod.increment();
@@ -495,7 +495,7 @@ Agnus::serviceVblEvent(EventID id)
         case VBL_STROBE2:
             
             assert(pos.v == 5);
-            assert(pos.newh == 178);
+            assert(pos.h == 178);
             
             // Nothing is done here at the moment
             
@@ -511,7 +511,7 @@ Agnus::serviceVblEvent(EventID id)
 void
 Agnus::serviceDASEvent(EventID id)
 {
-    assert(id == sequencer.dasEvent[pos.newh]);
+    assert(id == sequencer.dasEvent[pos.h]);
 
     switch (id) {
 
