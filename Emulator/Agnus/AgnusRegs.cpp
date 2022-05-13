@@ -90,12 +90,10 @@ Agnus::setDMACON(u16 oldValue, u16 value)
         sequencer.hsyncActions |= UPDATE_DAS_TABLE;
         
         // Make the effect visible in the current rasterline as well
-        assert(pos.h == pos.newh);
-        sequencer.updateDasEvents(newDAS, pos.h + 2);
+        sequencer.updateDasEvents(newDAS, pos.newh + 2);
   
         // Rectify the currently scheduled DAS event
-        assert(pos.h == pos.newh);
-        scheduleDasEventForCycle(pos.h);
+        scheduleDasEventForCycle(pos.newh);
     }
     
     // Copper DMA
@@ -117,14 +115,13 @@ Agnus::setDMACON(u16 oldValue, u16 value)
 void
 Agnus::setBPLEN(bool value)
 {
-    assert(pos.h == pos.newh);
     trace(SEQ_DEBUG, "setBPLEN(%d)\n", value);
     
     // Update the bitplane event table
     if (value) {
-        sequencer.sigRecorder.insert(pos.h + 3, SIG_BMAPEN_SET);
+        sequencer.sigRecorder.insert(pos.newh + 3, SIG_BMAPEN_SET);
     } else {
-        sequencer.sigRecorder.insert(pos.h + 3, SIG_BMAPEN_CLR);
+        sequencer.sigRecorder.insert(pos.newh + 3, SIG_BMAPEN_CLR);
     }
     sequencer.computeBplEventTable(sequencer.sigRecorder);
 }
@@ -194,12 +191,10 @@ Agnus::peekVHPOSR() const
     } else {
         
         // The returned position is four cycles ahead
-        auto pos = agnus.pos + Beam {0,4};
+        // auto pos = agnus.pos + Beam {0,4};
 
-        // NEW CODE
-        auto pos2 = Beam { agnus.pos.v, agnus.pos.newh } + Beam {0,5};
-        assert(pos == pos2);
-        assert(pos.v == pos2.v && pos.h == pos2.h);
+        // The returned position is five cycles ahead
+        auto pos = Beam { agnus.pos.v, agnus.pos.newh } + Beam {0,5};
 
         // Rectify the vertical position if it has wrapped over
         if (pos.v >= frame.numLines()) pos.v = 0;
@@ -258,12 +253,10 @@ Agnus::peekVPOSR() const
     } else {
         
         // The returned position is four cycles ahead
-        auto pos = agnus.pos + Beam {0,4};
+        // auto pos = agnus.pos + Beam {0,4};
 
-        // NEW CODE
-        auto pos2 = Beam { agnus.pos.v, agnus.pos.newh } + Beam {0,5};
-        assert(pos == pos2);
-        assert(pos.v == pos2.v && pos.h == pos2.h);
+        // The returned position is five cycles ahead
+        auto pos = Beam { agnus.pos.v, agnus.pos.newh } + Beam {0,5};
 
         // Rectify the vertical position if it has wrapped over
         if (pos.v >= frame.numLines()) pos.v = 0;
@@ -347,8 +340,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
     if ((oldValue ^ newValue) & 0xF000) {
             
         // Record the change
-        assert(pos.h == pos.newh);
-        sequencer.sigRecorder.insert(pos.h, SIG_CON | newValue >> 12);
+        sequencer.sigRecorder.insert(pos.newh, SIG_CON | newValue >> 12);
         
         if (bpldma()) {
 
@@ -358,8 +350,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
             sequencer.computeBplEventTable(sequencer.sigRecorder);
                 
             // Since the table has changed, we need to update the event slot
-            assert(pos.h == pos.newh);
-            scheduleBplEventForCycle(pos.h);
+            scheduleBplEventForCycle(pos.newh);
 
         } else {
                 
@@ -400,8 +391,7 @@ Agnus::setBPLCON1(u16 oldValue, u16 newValue)
     sequencer.computeBplEventTable(sequencer.sigRecorder);
     
     // Update the scheduled bitplane event according to the new table
-    assert(pos.h == pos.newh);
-    scheduleBplEventForCycle(pos.h);
+    scheduleBplEventForCycle(pos.newh);
 }
 
 template <Accessor s> void
@@ -456,8 +446,7 @@ Agnus::pokeSPRxPOS(u16 value)
     trace(SPRREG_DEBUG, "pokeSPR%dPOS(%04x)\n", x, value);
 
     // Compute the value of the vertical counter that is seen here
-    if (_accessor == ACCESSOR_AGNUS) assert(pos.h == pos.newh);
-    i16 v = (i16)(pos.h < 0xDF ? pos.v : (pos.v + 1));
+    i16 v = (i16)(pos.newh < 0xDF ? pos.v : (pos.v + 1));
 
     // Compute the new vertical start position
     sprVStrt[x] = ((value & 0xFF00) >> 8) | (sprVStrt[x] & 0x0100);
@@ -473,8 +462,7 @@ Agnus::pokeSPRxCTL(u16 value)
     trace(SPRREG_DEBUG, "pokeSPR%dCTL(%04x)\n", x, value);
 
     // Compute the value of the vertical counter that is seen here
-    if (_accessor == ACCESSOR_AGNUS) assert(pos.h == pos.newh);
-    i16 v = (i16)(pos.h < 0xDF ? pos.v : (pos.v + 1));
+    i16 v = (i16)(pos.newh < 0xDF ? pos.v : (pos.v + 1));
 
     // Compute the new vertical start and stop position
     sprVStrt[x] = (i16)((value & 0b100) << 6 | (sprVStrt[x] & 0x00FF));
@@ -675,8 +663,7 @@ Agnus::dropWrite(BusOwner owner)
     /* A write to a pointer register is dropped if the pointer was used one
      * cycle before the update would happen.
      */
-    assert(pos.h == pos.newh);
-    if (!NO_PTR_DROPS && pos.h >= 1 && busOwner[pos.h - 1] == owner) {
+    if (!NO_PTR_DROPS && pos.newh >= 1 && busOwner[pos.h - 1] == owner) {
         
         trace(XFILES, "XFILES: Dropping pointer register write (%d)\n", owner);
         return true;
