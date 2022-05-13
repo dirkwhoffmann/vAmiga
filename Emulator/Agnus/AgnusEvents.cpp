@@ -91,9 +91,9 @@ Agnus::scheduleFirstBplEvent()
     u8 dmacycle = sequencer.bplEvent[0] ? 0 : sequencer.nextBplEvent[0];
 
     if (pos.h == 0) {
-        scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle), sequencer.bplEvent[dmacycle]);
+        scheduleRelOld<SLOT_BPL>(DMA_CYCLES(dmacycle), sequencer.bplEvent[dmacycle]);
     } else {
-        scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle + 1), sequencer.bplEvent[dmacycle]);
+        scheduleRelOld<SLOT_BPL>(DMA_CYCLES(dmacycle + 1), sequencer.bplEvent[dmacycle]);
     }
 }
 
@@ -103,7 +103,7 @@ Agnus::scheduleNextBplEvent(isize hpos)
     assert(hpos >= 0 && hpos < HPOS_CNT);
 
     if (u8 next = sequencer.nextBplEvent[hpos]) {
-        scheduleRel<SLOT_BPL>(DMA_CYCLES(next - pos.h), sequencer.bplEvent[next]);
+        scheduleRelOld<SLOT_BPL>(DMA_CYCLES(next - pos.h), sequencer.bplEvent[next]);
     }
     assert(hasEvent<SLOT_BPL>());
 }
@@ -114,7 +114,7 @@ Agnus::scheduleBplEventForCycle(isize hpos)
     assert(hpos >= pos.h && hpos < HPOS_CNT);
 
     if (sequencer.bplEvent[hpos] != EVENT_NONE) {
-        scheduleRel<SLOT_BPL>(DMA_CYCLES(hpos - pos.h), sequencer.bplEvent[hpos]);
+        scheduleRelOld<SLOT_BPL>(DMA_CYCLES(hpos - pos.h), sequencer.bplEvent[hpos]);
     } else {
         scheduleNextBplEvent(hpos);
     }
@@ -131,9 +131,9 @@ Agnus::scheduleFirstDasEvent()
     assert(dmacycle != 0);
     
     if (pos.h == 0) {
-        scheduleRel<SLOT_DAS>(DMA_CYCLES(dmacycle), sequencer.dasEvent[dmacycle]);
+        scheduleRelOld<SLOT_DAS>(DMA_CYCLES(dmacycle), sequencer.dasEvent[dmacycle]);
     } else {
-        scheduleRel<SLOT_DAS>(DMA_CYCLES(dmacycle + 1), sequencer.dasEvent[dmacycle]);
+        scheduleRelOld<SLOT_DAS>(DMA_CYCLES(dmacycle + 1), sequencer.dasEvent[dmacycle]);
     }
 }
 
@@ -143,7 +143,7 @@ Agnus::scheduleNextDasEvent(isize hpos)
     assert(hpos >= 0 && hpos < HPOS_CNT);
 
     if (u8 next = sequencer.nextDasEvent[hpos]) {
-        scheduleRel<SLOT_DAS>(DMA_CYCLES(next - pos.h), sequencer.dasEvent[next]);
+        scheduleRelOld<SLOT_DAS>(DMA_CYCLES(next - pos.h), sequencer.dasEvent[next]);
         assert(hasEvent<SLOT_DAS>());
     } else {
         cancel<SLOT_DAS>();
@@ -156,7 +156,7 @@ Agnus::scheduleDasEventForCycle(isize hpos)
     assert(hpos >= pos.h && hpos < HPOS_CNT);
 
     if (sequencer.dasEvent[hpos] != EVENT_NONE) {
-        scheduleRel<SLOT_DAS>(DMA_CYCLES(hpos - pos.h), sequencer.dasEvent[hpos]);
+        scheduleRelOld<SLOT_DAS>(DMA_CYCLES(hpos - pos.h), sequencer.dasEvent[hpos]);
     } else {
         scheduleNextDasEvent(hpos);
     }
@@ -291,7 +291,7 @@ Agnus::serviceRASEvent()
     agnus.recordRegisterChange(0, SET_STRHOR, 1);
 
     // Reschedule event
-    rescheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT));
+    rescheduleRelOld<SLOT_RAS>(DMA_CYCLES(HPOS_CNT));
 }
 
 #define LO_NONE(x)      { serviceBPLEventLores<x>(); }
@@ -696,5 +696,5 @@ Agnus::serviceINSEvent(EventID id)
     }
 
     // Reschedule event
-    rescheduleRel<SLOT_INS>((Cycle)(inspectionInterval * 28000000));
+    rescheduleRelOld<SLOT_INS>((Cycle)(inspectionInterval * 28000000));
 }

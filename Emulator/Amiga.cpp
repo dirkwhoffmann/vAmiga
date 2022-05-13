@@ -791,7 +791,7 @@ Amiga::setInspectionTarget(InspectionTarget target, Cycle trigger)
                 fatalError;
         }
         
-        agnus.scheduleRel<SLOT_INS>(trigger, id);
+        agnus.scheduleRelOld<SLOT_INS>(trigger, id);
         if (trigger == 0) agnus.serviceINSEvent(id);
     }
 }

@@ -348,9 +348,9 @@ void
 Mouse::pressAndReleaseLeft(Cycle duration, Cycle delay)
 {
     if (port.isPort1()) {
-        agnus.scheduleRel <SLOT_MSE1> (delay, MSE_PUSH_LEFT, duration);
+        agnus.scheduleRelOld <SLOT_MSE1> (delay, MSE_PUSH_LEFT, duration);
     } else {
-        agnus.scheduleRel <SLOT_MSE2> (delay, MSE_PUSH_LEFT, duration);
+        agnus.scheduleRelOld <SLOT_MSE2> (delay, MSE_PUSH_LEFT, duration);
     }
 }
 
@@ -358,9 +358,9 @@ void
 Mouse::pressAndReleaseRight(Cycle duration, Cycle delay)
 {
     if (port.isPort1()) {
-        agnus.scheduleRel <SLOT_MSE1> (delay, MSE_PUSH_RIGHT, duration);
+        agnus.scheduleRelOld <SLOT_MSE1> (delay, MSE_PUSH_RIGHT, duration);
     } else {
-        agnus.scheduleRel <SLOT_MSE2> (delay, MSE_PUSH_RIGHT, duration);
+        agnus.scheduleRelOld <SLOT_MSE2> (delay, MSE_PUSH_RIGHT, duration);
     }
 }
 
@@ -375,7 +375,7 @@ Mouse::serviceMouseEvent()
         case MSE_PUSH_LEFT:
             
             setLeftButton(true);
-            agnus.scheduleRel <s> (duration, MSE_RELEASE_LEFT);
+            agnus.scheduleRelOld <s> (duration, MSE_RELEASE_LEFT);
             break;
             
         case MSE_RELEASE_LEFT:
@@ -387,7 +387,7 @@ Mouse::serviceMouseEvent()
         case MSE_PUSH_RIGHT:
             
             setRightButton(true);
-            agnus.scheduleRel <s> (duration, MSE_RELEASE_RIGHT);
+            agnus.scheduleRelOld <s> (duration, MSE_RELEASE_RIGHT);
             break;
             
         case MSE_RELEASE_RIGHT:

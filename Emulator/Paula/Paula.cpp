@@ -149,7 +149,7 @@ Paula::checkInterrupt()
     if ((iplPipe & 0xFF) != level) {
     
         iplPipe = (iplPipe & ~0xFF) | level;
-        agnus.scheduleRel<SLOT_IPL>(0, IPL_CHANGE, 5);
+        agnus.scheduleRelOld<SLOT_IPL>(0, IPL_CHANGE, 5);
 
         trace(CPU_DEBUG, "iplPipe: %016llx\n", iplPipe);
     }

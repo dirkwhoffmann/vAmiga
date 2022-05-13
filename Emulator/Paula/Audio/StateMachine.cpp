@@ -118,10 +118,10 @@ StateMachine<nr>::percntrld()
 {
     u64 delay = DMA_CYCLES(audperLatch == 0 ? 0x10000 : audperLatch);
 
-    if constexpr (nr == 0) agnus.scheduleRel <SLOT_CH0> (delay, CHX_PERFIN);
-    if constexpr (nr == 1) agnus.scheduleRel <SLOT_CH1> (delay, CHX_PERFIN);
-    if constexpr (nr == 2) agnus.scheduleRel <SLOT_CH2> (delay, CHX_PERFIN);
-    if constexpr (nr == 3) agnus.scheduleRel <SLOT_CH3> (delay, CHX_PERFIN);
+    if constexpr (nr == 0) agnus.scheduleRelOld <SLOT_CH0> (delay, CHX_PERFIN);
+    if constexpr (nr == 1) agnus.scheduleRelOld <SLOT_CH1> (delay, CHX_PERFIN);
+    if constexpr (nr == 2) agnus.scheduleRelOld <SLOT_CH2> (delay, CHX_PERFIN);
+    if constexpr (nr == 3) agnus.scheduleRelOld <SLOT_CH3> (delay, CHX_PERFIN);
 }
 
 template <isize nr> void

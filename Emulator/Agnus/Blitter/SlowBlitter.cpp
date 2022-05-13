@@ -965,7 +965,7 @@ Blitter::beginFakeCopyBlit()
     lockD = true;
 
     // Schedule the first slow Blitter execution event
-    agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_COPY_FAKE);
+    agnus.scheduleRelOld<SLOT_BLT>(DMA_CYCLES(1), BLT_COPY_FAKE);
 }
 
 void
@@ -989,7 +989,7 @@ Blitter::beginSlowCopyBlit()
     lockD = true;
 
     // Schedule the first slow Blitter execution event
-    agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_COPY_SLOW);
+    agnus.scheduleRelOld<SLOT_BLT>(DMA_CYCLES(1), BLT_COPY_SLOW);
 
     // In debug mode, we execute the whole micro program immediately.
     // This let's us compare checksums with the FastBlitter.
@@ -1022,7 +1022,7 @@ Blitter::beginFakeLineBlit()
     lockD = true;
     
     // Schedule the first slow Blitter execution event
-    agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_LINE_FAKE);
+    agnus.scheduleRelOld<SLOT_BLT>(DMA_CYCLES(1), BLT_LINE_FAKE);
 }
 
 void
@@ -1046,7 +1046,7 @@ Blitter::beginSlowLineBlit()
     fillCarry = true;
     
     // Schedule the first slow Blitter execution event
-    agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_LINE_SLOW);
+    agnus.scheduleRelOld<SLOT_BLT>(DMA_CYCLES(1), BLT_LINE_SLOW);
 
     // In debug mode, we execute the whole micro program immediately.
     // This let's us compare checksums with the FastBlitter.

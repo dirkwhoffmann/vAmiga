@@ -182,5 +182,5 @@ SerServer::scheduleNextEvent()
         pulseWidth = 12000;
     }
     
-    agnus.scheduleRel<SLOT_SER>(8 * pulseWidth, SER_RECEIVE);
+    agnus.scheduleRelOld<SLOT_SER>(8 * pulseWidth, SER_RECEIVE);
 }

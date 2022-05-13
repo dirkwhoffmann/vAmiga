@@ -164,7 +164,7 @@ Keyboard::releaseAllKeys()
 void
 Keyboard::autoType(KeyCode keycode, Cycle duration, Cycle delay)
 {
-    agnus.scheduleRel<SLOT_KEY>(delay, KEY_PRESS, duration << 8 | keycode);
+    agnus.scheduleRelOld<SLOT_KEY>(delay, KEY_PRESS, duration << 8 | keycode);
 }
 
 void
@@ -247,7 +247,7 @@ Keyboard::execute()
             trace(KBD_DEBUG, "KB_SELFTEST\n");
             
             // Await a handshake within the next second
-            agnus.scheduleRel<SLOT_KBD>(SEC(1), KBD_TIMEOUT);
+            agnus.scheduleRelOld<SLOT_KBD>(SEC(1), KBD_TIMEOUT);
             break;
             
         case KB_SYNC:
@@ -318,7 +318,7 @@ Keyboard::sendKeyCode(u8 code)
 
         // In simple keyboard mode, send the keycode over in one chunk
         ciaa.setKeyCode(shiftReg);
-        agnus.scheduleRel<SLOT_KBD>(8*USEC(60) + MSEC(143), KBD_TIMEOUT);
+        agnus.scheduleRelOld<SLOT_KBD>(8*USEC(60) + MSEC(143), KBD_TIMEOUT);
     }
 }
 

@@ -54,7 +54,7 @@ Copper::switchToCopperList(isize nr)
 
     copList = nr;
     setPC(nr == 1 ? cop1lc : cop2lc);
-    agnus.scheduleRel<SLOT_COP>(0, COP_REQ_DMA);
+    agnus.scheduleRelOld<SLOT_COP>(0, COP_REQ_DMA);
 }
 
 bool
@@ -268,21 +268,21 @@ Copper::scheduleWaitWakeup(bool bfd)
             if (delay == 0) {
                 
                 // Copper does not stop
-                agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(2), COP_FETCH);
+                agnus.scheduleRelOld<SLOT_COP>(DMA_CYCLES(2), COP_FETCH);
                 
             } else if (delay == 2) {
                 
                 // Copper does not stop
-                agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(2), COP_FETCH);
+                agnus.scheduleRelOld<SLOT_COP>(DMA_CYCLES(2), COP_FETCH);
                 
             } else {
                 
                 // Wake up 2 cycles earlier with a WAKEUP event
                 delay -= 2;
                 if (bfd) {
-                    agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(delay), COP_WAKEUP);
+                    agnus.scheduleRelOld<SLOT_COP>(DMA_CYCLES(delay), COP_WAKEUP);
                 } else {
-                    agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(delay), COP_WAKEUP_BLIT);
+                    agnus.scheduleRelOld<SLOT_COP>(DMA_CYCLES(delay), COP_WAKEUP_BLIT);
                 }
             }
             
@@ -302,12 +302,12 @@ Copper::scheduleWaitWakeup(bool bfd)
             if (delay == 0) {
                 
                 EventID event = COP_FETCH;
-                agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(2), event);
+                agnus.scheduleRelOld<SLOT_COP>(DMA_CYCLES(2), event);
                 
             } else {
                 
                 EventID event = bfd ? COP_WAKEUP : COP_WAKEUP_BLIT;
-                agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(delay), event);
+                agnus.scheduleRelOld<SLOT_COP>(DMA_CYCLES(delay), event);
             }
             
         } else {
@@ -452,7 +452,7 @@ Copper::vsyncHandler()
      *  automatically forced to restart its operations at the address contained
      *  in COP1LC." [HRM]
      */
-    agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(0), COP_VBLANK);
+    agnus.scheduleRelOld<SLOT_COP>(DMA_CYCLES(0), COP_VBLANK);
     
     if constexpr (COP_CHECKSUM) {
         
@@ -474,7 +474,7 @@ Copper::blitterDidTerminate()
         if (IS_EVEN(agnus.pos.h)) {
             serviceEvent(COP_WAIT_BLIT);
         } else {
-            agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(1), COP_WAIT_BLIT);
+            agnus.scheduleRelOld<SLOT_COP>(DMA_CYCLES(1), COP_WAIT_BLIT);
         }
     }
 }

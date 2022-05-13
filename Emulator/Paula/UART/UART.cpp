@@ -136,7 +136,7 @@ UART::copyToTransmitShiftRegister()
     paula.raiseIrq(INT_TBE);
 
     // Schedule the transmission of the first bit
-    agnus.scheduleRel<SLOT_TXD>(0, TXD_BIT);
+    agnus.scheduleRelOld<SLOT_TXD>(0, TXD_BIT);
 }
 
 void
@@ -186,6 +186,6 @@ UART::rxdHasChanged(bool value)
         Cycle delay = pulseWidth() * 3 / 2;
 
         // Schedule the event
-        agnus.scheduleRel<SLOT_RXD>(delay, RXD_BIT);
+        agnus.scheduleRelOld<SLOT_RXD>(delay, RXD_BIT);
     }
 }

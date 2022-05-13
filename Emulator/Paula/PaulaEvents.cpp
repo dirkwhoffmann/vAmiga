@@ -50,7 +50,7 @@ Paula::serviceIplEvent()
     // Reschedule the event until the pipe has been shifted through entirely
     i64 repeat = agnus.data[SLOT_IPL];
     if (repeat) {
-        agnus.scheduleRel<SLOT_IPL>(DMA_CYCLES(1), IPL_CHANGE, repeat - 1);
+        agnus.scheduleRelOld<SLOT_IPL>(DMA_CYCLES(1), IPL_CHANGE, repeat - 1);
     } else {
         agnus.cancel<SLOT_IPL>();
     }
@@ -79,7 +79,7 @@ Paula::servicePotEvent(EventID id)
                 if (!outrx) chargeX1 = 0.0;
 
                 // Schedule the next discharge event
-                agnus.scheduleRel<SLOT_POT>(DMA_CYCLES(HPOS_CNT), POT_DISCHARGE);
+                agnus.scheduleRelOld<SLOT_POT>(DMA_CYCLES(HPOS_CNT), POT_DISCHARGE);
 
             } else {
 
@@ -91,7 +91,7 @@ Paula::servicePotEvent(EventID id)
                 potCntX1 = outrx ? 0 : (u8)-1;
 
                 // Schedule the first charge event
-                agnus.scheduleRel<SLOT_POT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
+                agnus.scheduleRelOld<SLOT_POT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
             }
             break;
         }
@@ -113,7 +113,7 @@ Paula::servicePotEvent(EventID id)
 
             // Schedule next event
             if (cont) {
-                agnus.scheduleRel<SLOT_POT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
+                agnus.scheduleRelOld<SLOT_POT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
             } else {
                 agnus.cancel<SLOT_POT>();
             }

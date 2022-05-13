@@ -48,18 +48,18 @@ Agnus::_reset(bool hard)
     assert(clock == newClock);
 
     // Schedule initial events
-    scheduleRel<SLOT_SEC>(NEVER, SEC_TRIGGER);
-    scheduleRel<SLOT_TER>(NEVER, TER_TRIGGER);
-    scheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
-    scheduleRel<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
-    scheduleRel<SLOT_CIAB>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
+    scheduleRelOld<SLOT_SEC>(NEVER, SEC_TRIGGER);
+    scheduleRelOld<SLOT_TER>(NEVER, TER_TRIGGER);
+    scheduleRelOld<SLOT_RAS>(DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
+    scheduleRelOld<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
+    scheduleRelOld<SLOT_CIAB>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
     scheduleStrobe0Event();
-    scheduleRel<SLOT_IRQ>(NEVER, IRQ_CHECK);
+    scheduleRelOld<SLOT_IRQ>(NEVER, IRQ_CHECK);
     diskController.scheduleFirstDiskEvent();
     scheduleFirstBplEvent();
     scheduleFirstDasEvent();
-    scheduleRel<SLOT_SRV>(SEC(0.5), SRV_LAUNCH_DAEMON);
-    if (insEvent) scheduleRel <SLOT_INS> (0, insEvent);
+    scheduleRelOld<SLOT_SRV>(SEC(0.5), SRV_LAUNCH_DAEMON);
+    if (insEvent) scheduleRelOld <SLOT_INS> (0, insEvent);
 
     // Make newClock match clock in Agnus::execute()
     newClock = -DMA_CYCLES(1);

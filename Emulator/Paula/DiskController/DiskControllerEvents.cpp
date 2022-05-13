@@ -50,6 +50,6 @@ DiskController::scheduleNextDiskEvent()
     if (turboMode()) {
         agnus.cancel<SLOT_DSK>();
     } else {
-        agnus.scheduleRel<SLOT_DSK>(DMA_CYCLES(rounded), DSK_ROTATE);
+        agnus.scheduleRelOld<SLOT_DSK>(DMA_CYCLES(rounded), DSK_ROTATE);
     }
 }
