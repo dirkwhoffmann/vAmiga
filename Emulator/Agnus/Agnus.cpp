@@ -193,8 +193,7 @@ Agnus::cyclesInFrame() const
 Cycle
 Agnus::startOfFrame() const
 {
-    assert((clock - DMA_CYCLES(pos.v * HPOS_CNT + pos.h)) == (newClock - DMA_CYCLES(pos.v * HPOS_CNT + pos.newh)));
-    return clock - DMA_CYCLES(pos.v * HPOS_CNT + pos.h);
+    return newClock - DMA_CYCLES(pos.v * HPOS_CNT + pos.newh);
 }
 
 Cycle
@@ -319,6 +318,35 @@ Agnus::syncWithEClock()
 
 void
 Agnus::executeUntilBusIsFree()
+{
+    // Check if the bus is blocked
+    if (busOwner[pos.newh] != BUS_NONE) {
+
+        // This variable counts the number of DMA cycles the CPU will be suspended
+        DMACycle delay = 0;
+
+        // Execute Agnus until the bus is free
+        do {
+
+            execute();
+            if (++delay == 2) bls = true;
+
+        } while (busOwner[pos.newh] != BUS_NONE);
+
+        // Clear the BLS line (Blitter slow down)
+        bls = false;
+
+        // Add wait states to the CPU
+        cpu.addWaitStates(DMA_CYCLES(delay));
+    }
+
+    // Assign bus to the CPU
+    busOwner[pos.newh] = BUS_CPU;
+}
+
+/*
+void
+Agnus::executeUntilBusIsFree()
 {    
     isize posh = pos.h == 0 ? HPOS_MAX : pos.h - 1;
     assert(posh == pos.newh);
@@ -331,13 +359,7 @@ Agnus::executeUntilBusIsFree()
 
         // Execute Agnus until the bus is free
         do {
-            
-            /*
-            if (pos.v >= 0x66 && pos.v <= 0x66) {
-                trace(true, "CPU blocked in %ld by %s\n", posh, BusOwnerEnum::key(busOwner[posh]));
-            }
-            */
-            
+
             posh = pos.h;
             execute();
             assert(posh == pos.newh);
@@ -351,17 +373,44 @@ Agnus::executeUntilBusIsFree()
         // Add wait states to the CPU
         cpu.addWaitStates(DMA_CYCLES(delay));
     }
-    
-    /*
-    if (pos.v >= 0x66 && pos.v <= 0x66) {
-        trace(true, "CPU got cycle %ld\n", posh);
-    }
-    */
-    
+
     // Assign bus to the CPU
     busOwner[posh] = BUS_CPU;
 }
+*/
 
+void
+Agnus::executeUntilBusIsFreeForCIA()
+{
+    // Sync with the E clock driving the CIA
+    syncWithEClock();
+
+    // Check if the bus is blocked
+    if (busOwner[pos.newh] != BUS_NONE) {
+
+        // This variable counts the number of DMA cycles the CPU will be suspended
+        DMACycle delay = 0;
+
+        // Execute Agnus until the bus is free
+        do {
+
+            execute();
+            if (++delay == 2) bls = true;
+
+        } while (busOwner[pos.newh] != BUS_NONE);
+
+        // Clear the BLS line (Blitter slow down)
+        bls = false;
+
+        // Add wait states to the CPU
+        cpu.addWaitStates(DMA_CYCLES(delay));
+    }
+
+    // Assign bus to the CPU
+    busOwner[pos.newh] = BUS_CPU;
+}
+
+/*
 void
 Agnus::executeUntilBusIsFreeForCIA()
 {
@@ -397,6 +446,7 @@ Agnus::executeUntilBusIsFreeForCIA()
     // Assign bus to the CPU
     busOwner[posh] = BUS_CPU;
 }
+*/
 
 void
 Agnus::recordRegisterChange(Cycle delay, u32 addr, u16 value, Accessor acc)
@@ -565,8 +615,7 @@ Agnus::executeFirstSpriteCycle()
 
         sprDmaState[nr] = SPR_DMA_IDLE;
 
-        assert(pos.h == pos.newh);
-        if (busOwner[pos.h] == BUS_NONE) {
+        if (busOwner[pos.newh] == BUS_NONE) {
 
             // Read in the next control word (POS part)
             if (sprdma()) {
@@ -577,15 +626,13 @@ Agnus::executeFirstSpriteCycle()
                 
             } else {
 
-                assert(pos.h == pos.newh);
-                busOwner[pos.h] = BUS_BLOCKED;
+                busOwner[pos.newh] = BUS_BLOCKED;
             }
         }
 
     } else if (sprDmaState[nr] == SPR_DMA_ACTIVE) {
 
-        assert(pos.h == pos.newh);
-        if (busOwner[pos.h] == BUS_NONE) {
+        if (busOwner[pos.newh] == BUS_NONE) {
 
             // Read in the next data word (part A)
             if (sprdma()) {
@@ -595,8 +642,7 @@ Agnus::executeFirstSpriteCycle()
                 
             } else {
 
-                assert(pos.h == pos.newh);
-                busOwner[pos.h] = BUS_BLOCKED;
+                busOwner[pos.newh] = BUS_BLOCKED;
             }
         }
     }
@@ -611,8 +657,7 @@ Agnus::executeSecondSpriteCycle()
 
         sprDmaState[nr] = SPR_DMA_IDLE;
 
-        assert(pos.h == pos.newh);
-        if (busOwner[pos.h] == BUS_NONE) {
+        if (busOwner[pos.newh] == BUS_NONE) {
 
             if (sprdma()) {
                 
@@ -623,15 +668,13 @@ Agnus::executeSecondSpriteCycle()
                 
             } else {
 
-                assert(pos.h == pos.newh);
-                busOwner[pos.h] = BUS_BLOCKED;
+                busOwner[pos.newh] = BUS_BLOCKED;
             }
         }
 
     } else if (sprDmaState[nr] == SPR_DMA_ACTIVE) {
 
-        assert(pos.h == pos.newh);
-        if (busOwner[pos.h] == BUS_NONE) {
+        if (busOwner[pos.newh] == BUS_NONE) {
 
             if (sprdma()) {
                 
@@ -641,8 +684,7 @@ Agnus::executeSecondSpriteCycle()
                 
             } else {
 
-                assert(pos.h == pos.newh);
-                busOwner[pos.h] = BUS_BLOCKED;
+                busOwner[pos.newh] = BUS_BLOCKED;
             }
         }
     }
@@ -678,7 +720,6 @@ void
 Agnus::hsyncHandler()
 {
     assert(pos.newh == 0);
-    assert(pos.h == 0);
     
     // Let Denise finish up the current line
     denise.endOfLine(pos.v);

@@ -376,19 +376,10 @@ Denise::pokeCOLORxx(u16 value)
 {
     trace(COLREG_DEBUG, "pokeCOLOR%02ld(%X)\n", xx, value);
 
-    u32 reg = 0x180 + 2*xx;
-    isize pos = agnus.pos.h;
-
-    if constexpr (s == ACCESSOR_CPU) {
-
-        // If the CPU writes, the change takes effect one DMA cycle earlier
-        if (agnus.pos.h != 0) pos--;
-    }
-
-    if (agnus.pos.h != 0) assert(pos == agnus.pos.newh);
+    constexpr u32 reg = 0x180 + 2*xx;
 
     // Record the color change
-    pixelEngine.colChanges.insert(4 * pos, RegChange { reg, value } );
+    pixelEngine.colChanges.insert(4 * agnus.pos.newh, RegChange { reg, value } );
 }
 
 u16
