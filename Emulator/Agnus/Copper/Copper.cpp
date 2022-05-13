@@ -79,7 +79,6 @@ Copper::findMatchOld(Beam &match) const
 
                 // Success
                 match.v = beam >> 8;
-                match.h = beam & 0xFF;
                 match.newh = beam & 0xFF;
                 return true;
             }
@@ -90,7 +89,6 @@ Copper::findMatchOld(Beam &match) const
 
             // Success
             match.v = beam >> 8;
-            match.h = beam & 0xFF;
             match.newh = beam & 0xFF;
             return true;
         }
@@ -124,7 +122,6 @@ Copper::findMatch(Beam &match) const
 
                 // Success
                 match.v = beam >> 8;
-                match.h = beam & 0xFF;
                 match.newh = beam & 0xFF;
                 return true;
             }
@@ -135,7 +132,6 @@ Copper::findMatch(Beam &match) const
 
             // Success
             match.v = beam >> 8;
-            match.h = beam & 0xFF;
             match.newh = beam & 0xFF;
             return true;
         }
@@ -249,10 +245,10 @@ Copper::runComparator(Beam beam, u16 waitpos, u16 mask) const
 bool
 Copper::runHorizontalComparator(Beam beam, u16 waitpos, u16 mask) const
 {
-    if (beam.h < 0xE0) {
-        return ((beam.h + 0x02) & mask) >= (waitpos & 0xFF & mask);
+    if (beam.newh < 0xE0) {
+        return ((beam.newh + 0x02) & mask) >= (waitpos & 0xFF & mask);
     } else {
-        return ((beam.h - 0xE0) & mask) >= (waitpos & 0xFF & mask);
+        return ((beam.newh - 0xE0) & mask) >= (waitpos & 0xFF & mask);
     }
 }
 

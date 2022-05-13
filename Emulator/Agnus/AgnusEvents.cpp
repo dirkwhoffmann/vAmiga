@@ -290,10 +290,6 @@ Agnus::serviceRASEvent()
     // Let the hsync handler be called at the beginning of the next DMA cycle
     agnus.recordRegisterChange(0, SET_STRHOR, 1);
 
-    // Reset the horizontal counter (-1 to compensate for the increment to come)
-    pos.h = -1;
-    // Don't increment pos.newh, stays at HPOS_MAX
-
     // Reschedule event
     rescheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT));
 }

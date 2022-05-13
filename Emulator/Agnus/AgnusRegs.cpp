@@ -200,10 +200,10 @@ Agnus::peekVHPOSR() const
         if (pos.v >= frame.numLines()) pos.v = 0;
         
         // In cycle 0 and 1, we need to return the old value of posv
-        if (pos.h <= 1) {
-            result = HI_LO(agnus.pos.v & 0xFF, pos.h);
+        if (pos.newh <= 1) {
+            result = HI_LO(agnus.pos.v & 0xFF, pos.newh);
         } else {
-            result = HI_LO(pos.v & 0xFF, pos.h);
+            result = HI_LO(pos.v & 0xFF, pos.newh);
         }
     }
     
@@ -262,7 +262,7 @@ Agnus::peekVPOSR() const
         if (pos.v >= frame.numLines()) pos.v = 0;
         
         // In cycle 0 and 1, we need to return the old value of posv
-        if (pos.h <= 1) {
+        if (pos.newh <= 1) {
             result |= agnus.pos.v >> 8;
         } else {
             result |= pos.v >> 8;
@@ -663,7 +663,6 @@ Agnus::dropWrite(BusOwner owner)
     /* A write to a pointer register is dropped if the pointer was used one
      * cycle before the update would happen.
      */
-    assert(pos.newh == pos.h);
     if (!NO_PTR_DROPS && pos.newh >= 1 && busOwner[pos.newh - 1] == owner) {
         
         trace(XFILES, "XFILES: Dropping pointer register write (%d)\n", owner);

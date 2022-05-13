@@ -223,7 +223,7 @@ Agnus::belongsToNextFrame(Cycle cycle) const
 Cycle
 Agnus::beamToCycle(Beam beam) const
 {
-    return startOfFrame() + DMA_CYCLES(beam.v * HPOS_CNT + beam.h);
+    return startOfFrame() + DMA_CYCLES(beam.v * HPOS_CNT + beam.newh);
 }
 
 Beam
@@ -235,7 +235,7 @@ Agnus::cycleToBeam(Cycle cycle) const
     assert(diff >= 0);
 
     result.v = (isize)(diff / HPOS_CNT);
-    result.h = (isize)(diff % HPOS_CNT);
+    result.newh = (isize)(diff % HPOS_CNT);
     return result;
 }
 
@@ -247,20 +247,16 @@ Agnus::execute()
     pos.newh = (pos.newh + 1) % HPOS_CNT;
 
     assert(newClock == clock);
-    assert(pos.newh == pos.h);
 
     // Process pending events
     if (nextTrigger <= clock) executeUntil(clock);
 
     // REMOVE ASAP
     assert(newClock == clock);
-    assert((pos.h == -1 && pos.newh == HPOS_MAX) || pos.newh == pos.h);
-    assert(pos.h < HPOS_MAX);
     assert(pos.newh <= HPOS_MAX);
 
     // Advance the internal clock and the horizontal counter
     clock += DMA_CYCLES(1);
-    pos.h++;
 }
 
 void
