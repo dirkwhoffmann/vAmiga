@@ -285,11 +285,14 @@ Blitter::pokeBLTSIZE(u16 value)
     debug(BLTTIM_DEBUG, "(%ld,%ld) BLTSIZE(%x)\n", agnus.pos.v, agnus.pos.h, value);
     debug(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
 
+    agnus.recordRegisterChange(DMA_CYCLES(1), SET_BLTSIZE, value);
+    /*
     if constexpr (s == ACCESSOR_AGNUS) {
         agnus.recordRegisterChangeOld(DMA_CYCLES(1), SET_BLTSIZE, value);
     } else {
         blitter.setBLTSIZE(value);
     }
+    */
 }
 
 void
@@ -317,8 +320,9 @@ Blitter::setBLTSIZE(u16 value)
     if (agnus.id[SLOT_BLT]) {
         trace(XFILES, "XFILES: Overwriting existing Blitter event\n");
     }
-    
-    agnus.scheduleRelOld<SLOT_BLT>(DMA_CYCLES(1), BLT_STRT1);
+
+    assert(agnus.clock == agnus.newClock);
+    agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_STRT1);
 }
 
 void
@@ -473,8 +477,8 @@ Blitter::pokeDMACON(u16 oldValue, u16 newValue)
     if (!oldBltDma && newBltDma) {
 
         // Perform pending blit operation (if any)
-        if (agnus.hasEvent<SLOT_BLT>(BLT_STRT1)) {
-            agnus.scheduleRelOld<SLOT_BLT>(DMA_CYCLES(0), BLT_STRT1);
+        if (agnus.hasEvent <SLOT_BLT> (BLT_STRT1)) {
+            agnus.scheduleRel <SLOT_BLT> (DMA_CYCLES(0), BLT_STRT1);
         }
     }
     

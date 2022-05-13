@@ -772,10 +772,10 @@ HardDrive::scheduleIdleEvent()
     
     switch (nr) {
             
-        case 0: agnus.scheduleRelOld <SLOT_HD0> (delay, HDR_IDLE); break;
-        case 1: agnus.scheduleRelOld <SLOT_HD1> (delay, HDR_IDLE); break;
-        case 2: agnus.scheduleRelOld <SLOT_HD2> (delay, HDR_IDLE); break;
-        case 3: agnus.scheduleRelOld <SLOT_HD3> (delay, HDR_IDLE); break;
+        case 0: agnus.scheduleRel <SLOT_HD0> (delay, HDR_IDLE); break;
+        case 1: agnus.scheduleRel <SLOT_HD1> (delay, HDR_IDLE); break;
+        case 2: agnus.scheduleRel <SLOT_HD2> (delay, HDR_IDLE); break;
+        case 3: agnus.scheduleRel <SLOT_HD3> (delay, HDR_IDLE); break;
 
         default: fatalError;
     }

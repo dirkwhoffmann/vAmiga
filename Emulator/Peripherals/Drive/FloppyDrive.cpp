@@ -765,7 +765,7 @@ FloppyDrive::ejectDisk(Cycle delay)
     {   SUSPENDED
 
         // Schedule an ejection event
-        agnus.scheduleRelOld <s> (delay, DCH_EJECT);
+        agnus.scheduleRel <s> (delay, DCH_EJECT);
 
         // If there is no delay, service the event immediately
         if (delay == 0) serviceDiskChangeEvent <s> ();
@@ -799,7 +799,7 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
         diskToInsert = std::move(disk);
 
         // Schedule an insertion event
-        agnus.scheduleRelOld <s> (delay, DCH_INSERT);
+        agnus.scheduleRel <s> (delay, DCH_INSERT);
 
         // If there is no delay, service the event immediately
         if (delay == 0) serviceDiskChangeEvent <s> ();
