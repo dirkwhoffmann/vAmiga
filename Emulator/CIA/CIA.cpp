@@ -704,7 +704,7 @@ CIA::wakeUp()
     if (!sleeping) return;
     sleeping = false;
     
-    Cycle targetCycle = CIA_CYCLES(AS_CIA_CYCLES(agnus.newClock));
+    Cycle targetCycle = CIA_CYCLES(AS_CIA_CYCLES(agnus.clock));
     wakeUp(targetCycle);
 }
 
@@ -740,7 +740,7 @@ CIA::wakeUp(Cycle targetCycle)
 CIACycle
 CIA::idleSince() const
 {
-    return isAwake() ? 0 : AS_CIA_CYCLES(agnus.newClock - sleepCycle);
+    return isAwake() ? 0 : AS_CIA_CYCLES(agnus.clock - sleepCycle);
 }
 
 

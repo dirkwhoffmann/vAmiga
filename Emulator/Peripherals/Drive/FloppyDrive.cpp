@@ -475,8 +475,8 @@ FloppyDrive::motorSpeed()const
     if (!config.mechanicalDelays) return motor ? 100.0 : 0.0;
     
     // Determine the elapsed cycles since the last motor change
-    Cycle elapsed = agnus.newClock - switchCycle;
-    if (agnus.newClock >= 0) assert(elapsed >= 0);
+    Cycle elapsed = agnus.clock - switchCycle;
+    if (agnus.clock >= 0) assert(elapsed >= 0);
     
     // Compute the current speed
     if (motor) {
@@ -496,7 +496,7 @@ FloppyDrive::setMotor(bool value)
     
     // Switch motor state
     switchSpeed = motorSpeed();
-    switchCycle = agnus.newClock;
+    switchCycle = agnus.clock;
     motor = value;
     
     // Reset the identification bit counter if motor has been turned off
@@ -549,7 +549,7 @@ FloppyDrive::readByte() const
     }
 
     // Case 2: A step operation is in progress
-    if (config.mechanicalDelays && (agnus.newClock - stepCycle) < config.stepDelay) {
+    if (config.mechanicalDelays && (agnus.clock - stepCycle) < config.stepDelay) {
         return (u8)rand(); // 0xFF;
     }
     
@@ -630,7 +630,7 @@ bool
 FloppyDrive::readyToStep() const
 {
     if (config.mechanicalDelays) {
-        return agnus.newClock - stepCycle > 1060;
+        return agnus.clock - stepCycle > 1060;
     } else {
         return true;
     }
@@ -680,7 +680,7 @@ FloppyDrive::step(isize dir)
     }
         
     // Remember when we've performed the step
-    stepCycle = agnus.newClock;
+    stepCycle = agnus.clock;
 }
 
 void

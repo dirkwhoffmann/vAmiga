@@ -169,7 +169,7 @@ StateMachine<nr>::penhi()
     trace(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
                 
     if (!sampler.isFull()) {
-        sampler.append(agnus.newClock, scaled);
+        sampler.append(agnus.clock, scaled);
     } else {
         warn("penhi: Sample buffer is full\n");
     }
@@ -190,7 +190,7 @@ StateMachine<nr>::penlo()
     trace(AUD_DEBUG, "penlo: %d %d\n", sample, scaled);
 
     if (!sampler.isFull()) {
-        sampler.append(agnus.newClock, scaled);
+        sampler.append(agnus.clock, scaled);
     } else {
         warn("penlo: Sample buffer is full\n");
     }

@@ -84,7 +84,7 @@ public:
     //
 
     // Agnus has been emulated up to this master clock cycle
-    Cycle newClock;
+    Cycle clock;
 
     // The current beam position
     Beam pos;
@@ -239,7 +239,7 @@ private:
             
             worker
 
-            << newClock;
+            << clock;
         }
 
         worker
@@ -688,11 +688,11 @@ public:
         rescheduleAbs<s>(trigger[s] + cycle);
     }
     template<EventSlot s> void scheduleRel(Cycle cycle, EventID id) {
-        scheduleAbs<s>(newClock + cycle, id);
+        scheduleAbs<s>(clock + cycle, id);
     }
 
     template<EventSlot s> void scheduleRel(Cycle cycle, EventID id, i64 data) {
-        scheduleAbs<s>(newClock + cycle, id, data);
+        scheduleAbs<s>(clock + cycle, id, data);
     }
 
     /*
@@ -718,7 +718,7 @@ public:
     }
     
     template<EventSlot s> void rescheduleRel(Cycle cycle) {
-        rescheduleAbs<s>(newClock + cycle);
+        rescheduleAbs<s>(clock + cycle);
     }
 
     /*

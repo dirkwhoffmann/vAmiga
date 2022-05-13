@@ -340,7 +340,7 @@ DiskController::executeFifo()
                 (config.autoDskSync && syncCounter++ > 20000)) {
                 
                 // Save time stamp
-                syncCycle = agnus.newClock;
+                syncCycle = agnus.clock;
                 
                 // Trigger a word SYNC interrupt
                 trace(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);

@@ -61,7 +61,7 @@ RetroShell::exec <Token::wait> (Arguments &argv, long param)
 {
     auto seconds = util::parseNum(argv.front());
     
-    Cycle limit = agnus.newClock + SEC(seconds);
+    Cycle limit = agnus.clock + SEC(seconds);
     amiga.retroShell.wakeUp = limit;
     
     throw ScriptInterruption("");
