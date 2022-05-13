@@ -299,7 +299,7 @@ Agnus::serviceRASEvent()
     assert(id[SLOT_RAS] == RAS_HSYNC);
     
     // Let the hsync handler be called at the beginning of the next DMA cycle
-    agnus.recordRegisterChange(0, SET_STRHOR, 1);
+    agnus.recordRegisterChangeOld(0, SET_STRHOR, 1);
 
     assert(agnus.clock == agnus.newClock);
 
@@ -709,5 +709,5 @@ Agnus::serviceINSEvent(EventID id)
     }
 
     // Reschedule event
-    rescheduleRelOld<SLOT_INS>((Cycle)(inspectionInterval * 28000000));
+    rescheduleRel<SLOT_INS>((Cycle)(inspectionInterval * 28000000));
 }

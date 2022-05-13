@@ -440,9 +440,10 @@ public:
     // Executes Agnus until the CPU can acquire the bus
     void executeUntilBusIsFree();
     void executeUntilBusIsFreeForCIA();
-    
+
     // Schedules a register to change its value
     void recordRegisterChange(Cycle delay, u32 addr, u16 value, Accessor acc = 0);
+    void recordRegisterChangeOld(Cycle delay, u32 addr, u16 value, Accessor acc = 0);
 
 private:
 

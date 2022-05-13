@@ -65,7 +65,7 @@ Paula::pokeINTREQ(u16 value)
 {
     trace(INTREG_DEBUG, "pokeINTREQ(%x) (INTENA = %x INTREQ = %x)\n", value, intena, intreq);
 
-    agnus.recordRegisterChange(DMA_CYCLES(1), SET_INTREQ, value);
+    agnus.recordRegisterChangeOld(DMA_CYCLES(1), SET_INTREQ, value);
 }
 
 void
@@ -100,7 +100,7 @@ Paula::pokeINTENA(u16 value)
 {
     trace(INTREG_DEBUG, "pokeINTENA(%x)\n", value);
 
-    agnus.recordRegisterChange(DMA_CYCLES(1), SET_INTENA, value);
+    agnus.recordRegisterChangeOld(DMA_CYCLES(1), SET_INTENA, value);
 }
 
 void

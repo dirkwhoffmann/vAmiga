@@ -16,7 +16,7 @@ Blitter::pokeBLTCON0(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCON0(%X)\n", value);
 
-    agnus.recordRegisterChange(DMA_CYCLES(2), SET_BLTCON0, value);
+    agnus.recordRegisterChangeOld(DMA_CYCLES(2), SET_BLTCON0, value);
 }
 
 void
@@ -37,7 +37,7 @@ Blitter::pokeBLTCON0L(u16 value)
     // ECS only register
     if (agnus.isOCS()) return;
 
-    agnus.recordRegisterChange(DMA_CYCLES(2), SET_BLTCON0L, value);
+    agnus.recordRegisterChangeOld(DMA_CYCLES(2), SET_BLTCON0L, value);
 }
 
 void
@@ -92,7 +92,7 @@ void
 Blitter::pokeBLTCON1(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCON1(%X)\n", value);
-    agnus.recordRegisterChange(DMA_CYCLES(2), SET_BLTCON1, value);
+    agnus.recordRegisterChangeOld(DMA_CYCLES(2), SET_BLTCON1, value);
 }
 
 void
@@ -286,7 +286,7 @@ Blitter::pokeBLTSIZE(u16 value)
     debug(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
 
     if constexpr (s == ACCESSOR_AGNUS) {
-        agnus.recordRegisterChange(DMA_CYCLES(1), SET_BLTSIZE, value);
+        agnus.recordRegisterChangeOld(DMA_CYCLES(1), SET_BLTSIZE, value);
     } else {
         blitter.setBLTSIZE(value);
     }
@@ -329,7 +329,7 @@ Blitter::pokeBLTSIZV(u16 value)
     // ECS only register
     if (agnus.isOCS()) return;
 
-    agnus.recordRegisterChange(DMA_CYCLES(2), SET_BLTSIZV, value);
+    agnus.recordRegisterChangeOld(DMA_CYCLES(2), SET_BLTSIZV, value);
 }
 
 void
@@ -367,7 +367,7 @@ Blitter::pokeBLTSIZH(u16 value)
     if (!bltsizeV) bltsizeV = 0x8000;
     if (!bltsizeH) bltsizeH = 0x0800;
 
-    agnus.scheduleRelOld<SLOT_BLT>(DMA_CYCLES(1), BLT_STRT1);
+    agnus.scheduleRel<SLOT_BLT>(DMA_CYCLES(1), BLT_STRT1);
 }
 
 void
@@ -466,7 +466,9 @@ Blitter::pokeDMACON(u16 oldValue, u16 newValue)
 {
     bool oldBltDma = (oldValue & (DMAEN | BLTEN)) == (DMAEN | BLTEN);
     bool newBltDma = (newValue & (DMAEN | BLTEN)) == (DMAEN | BLTEN);
-    
+
+    assert(agnus.clock == agnus.newClock);
+
     // Check if Blitter DMA got switched on
     if (!oldBltDma && newBltDma) {
 
