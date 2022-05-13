@@ -17,7 +17,7 @@ struct Beam
     // Counters for the vertical and horizontal beam position
     isize v;
     isize h;
-    
+
     template <class W>
     void operator<<(W& worker)
     {
@@ -53,13 +53,13 @@ struct Beam
 
     Beam operator+(const Beam& beam) const
     {
-        auto newv = v + beam.v;
-        auto newh = h + beam.h;
+        auto vv = v + beam.v;
+        auto hh = h + beam.h;
 
-        if (newh >= HPOS_CNT) { newh -= HPOS_CNT; newv++; }
-        else if (newh < 0)    { newh += HPOS_CNT; newv--; }
+        if (hh >= HPOS_CNT) { hh -= HPOS_CNT; vv++; }
+        else if (hh < 0)    { hh += HPOS_CNT; vv--; }
 
-        return Beam(newv, newh);
+        return Beam(vv, hh);
     }
 
     Beam operator+(const isize i) const

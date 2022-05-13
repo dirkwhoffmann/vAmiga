@@ -994,7 +994,7 @@ Blitter::beginSlowCopyBlit()
     // In debug mode, we execute the whole micro program immediately.
     // This let's us compare checksums with the FastBlitter.
     if constexpr (SLOW_BLT_DEBUG) {
-        
+
         BusOwner owner = agnus.busOwner[agnus.pos.h];
         agnus.setBLS(false);
         
@@ -1051,7 +1051,7 @@ Blitter::beginSlowLineBlit()
     // In debug mode, we execute the whole micro program immediately.
     // This let's us compare checksums with the FastBlitter.
     if constexpr (SLOW_BLT_DEBUG) {
-        
+
         BusOwner owner = agnus.busOwner[agnus.pos.h];
         agnus.setBLS(false);
         

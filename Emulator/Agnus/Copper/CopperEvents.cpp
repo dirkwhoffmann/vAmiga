@@ -295,11 +295,11 @@ Copper::serviceEvent(EventID id)
 void
 Copper::schedule(EventID next, int delay)
 {
-    agnus.scheduleRel<SLOT_COP>(DMA_CYCLES(delay), next);
+    agnus.scheduleRel <SLOT_COP> (DMA_CYCLES(delay), next);
 }
 
 void
 Copper::reschedule(int delay)
 {
-    agnus.rescheduleRel<SLOT_COP>(DMA_CYCLES(delay));
+    agnus.rescheduleRel <SLOT_COP> (DMA_CYCLES(delay));
 }

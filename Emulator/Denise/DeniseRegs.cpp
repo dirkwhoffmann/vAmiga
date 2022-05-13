@@ -45,7 +45,7 @@ Denise::setDIWSTRT(u16 value)
      *    5) old < cur < new : Already triggered. Nothing to do in this line.
      *    6) old < new < cur : Already triggered. Nothing to do in this line.
      */
-    
+
     isize cur = 2 * agnus.pos.h;
     
     // (1) and (2)
@@ -274,6 +274,8 @@ Denise::pokeCLXCON(u16 value)
 template <isize x, Accessor s> void
 Denise::pokeBPLxDAT(u16 value)
 {
+    _accessor = s;
+
     assert(x < 6);
     trace(BPLREG_DEBUG, "pokeBPL%ldDAT(%X)\n", x + 1, value);
 
@@ -301,7 +303,7 @@ Denise::setBPLxDAT(u16 value)
 
         armedOdd = true;
         armedEven = true;
-        
+
         spriteClipBegin = std::min(spriteClipBegin,
                                    (Pixel)((agnus.pos.h + 1) * 4));
     }
@@ -374,17 +376,10 @@ Denise::pokeCOLORxx(u16 value)
 {
     trace(COLREG_DEBUG, "pokeCOLOR%02ld(%X)\n", xx, value);
 
-    u32 reg = 0x180 + 2*xx;
-    isize pos = agnus.pos.h;
+    constexpr u32 reg = 0x180 + 2*xx;
 
-    if constexpr (s == ACCESSOR_CPU) {
-
-        // If the CPU writes, the change takes effect one DMA cycle earlier
-        if (agnus.pos.h != 0) pos--;
-    }
-    
     // Record the color change
-    pixelEngine.colChanges.insert(4 * pos, RegChange { reg, value } );
+    pixelEngine.colChanges.insert(4 * agnus.pos.h, RegChange { reg, value } );
 }
 
 u16

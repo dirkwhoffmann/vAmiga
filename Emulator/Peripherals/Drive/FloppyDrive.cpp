@@ -476,7 +476,7 @@ FloppyDrive::motorSpeed()const
     
     // Determine the elapsed cycles since the last motor change
     Cycle elapsed = agnus.clock - switchCycle;
-    assert(elapsed >= 0);
+    if (agnus.clock >= 0) assert(elapsed >= 0);
     
     // Compute the current speed
     if (motor) {

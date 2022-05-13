@@ -199,7 +199,10 @@ extension MyController {
                                 
         // Enable message processing
         registerAsListener()
-                
+
+        // Add media file (if provided on startup)
+        mydocument.addMedia()
+
         do {
             // Switch the Amiga on
             amiga.powerOn()

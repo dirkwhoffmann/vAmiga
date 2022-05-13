@@ -14,6 +14,9 @@
 #include "RomFileTypes.h"
 #include "MemUtils.h"
 
+// REMOVE ASAP
+extern Accessor _accessor;
+
 using util::Allocator;
 using util::Buffer;
 

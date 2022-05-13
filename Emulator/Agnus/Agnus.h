@@ -82,7 +82,7 @@ public:
     //
     // Counters
     //
-    
+
     // Agnus has been emulated up to this master clock cycle
     Cycle clock;
 
@@ -238,7 +238,7 @@ private:
         if (hard) {
             
             worker
-            
+
             << clock;
         }
 
@@ -436,7 +436,7 @@ public:
     // Executes Agnus until the CPU can acquire the bus
     void executeUntilBusIsFree();
     void executeUntilBusIsFreeForCIA();
-    
+
     // Schedules a register to change its value
     void recordRegisterChange(Cycle delay, u32 addr, u16 value, Accessor acc = 0);
 
@@ -687,15 +687,24 @@ public:
     {
         rescheduleAbs<s>(trigger[s] + cycle);
     }
-                
     template<EventSlot s> void scheduleRel(Cycle cycle, EventID id) {
         scheduleAbs<s>(clock + cycle, id);
     }
-    
+
     template<EventSlot s> void scheduleRel(Cycle cycle, EventID id, i64 data) {
         scheduleAbs<s>(clock + cycle, id, data);
     }
+
+    /*
+    template<EventSlot s> [[deprecated]] void scheduleRelOld(Cycle cycle, EventID id) {
+        scheduleAbs<s>(clock + cycle, id);
+    }
     
+    template<EventSlot s> [[deprecated]] void scheduleRelOld(Cycle cycle, EventID id, i64 data) {
+        scheduleAbs<s>(clock + cycle, id, data);
+    }
+    */
+
     template<EventSlot s> void schedulePos(Beam pos, EventID id, i64 data) {
         scheduleAbs<s>(beamToCycle(pos), id, data);
     }
@@ -712,6 +721,12 @@ public:
         rescheduleAbs<s>(clock + cycle);
     }
 
+    /*
+    template<EventSlot s> [[deprecated]] void rescheduleRelOld(Cycle cycle) {
+        rescheduleAbs<s>(clock + cycle);
+    }
+    */
+    
     template<EventSlot s> void reschedulePos(Beam pos) {
         rescheduleAbs<s>(beamToCycle(pos));
     }

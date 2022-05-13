@@ -89,7 +89,7 @@ Agnus::scheduleFirstBplEvent()
     assert(pos.h == 0 || pos.h == HPOS_MAX);
     
     u8 dmacycle = sequencer.bplEvent[0] ? 0 : sequencer.nextBplEvent[0];
-        
+
     if (pos.h == 0) {
         scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle), sequencer.bplEvent[dmacycle]);
     } else {
@@ -129,7 +129,7 @@ Agnus::scheduleFirstDasEvent()
     
     u8 dmacycle = sequencer.nextDasEvent[0];
     assert(dmacycle != 0);
-    
+
     if (pos.h == 0) {
         scheduleRel<SLOT_DAS>(DMA_CYCLES(dmacycle), sequencer.dasEvent[dmacycle]);
     } else {
@@ -289,10 +289,7 @@ Agnus::serviceRASEvent()
     
     // Let the hsync handler be called at the beginning of the next DMA cycle
     agnus.recordRegisterChange(0, SET_STRHOR, 1);
-    
-    // Reset the horizontal counter (-1 to compensate for the increment to come)
-    pos.h = -1;
-    
+
     // Reschedule event
     rescheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT));
 }
@@ -472,7 +469,7 @@ Agnus::serviceVblEvent(EventID id)
     switch (id) {
 
         case VBL_STROBE0:
-            
+
             assert(pos.v == 0 || pos.v == 1);
             assert(pos.h == 0);
             

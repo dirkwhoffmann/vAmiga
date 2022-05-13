@@ -181,7 +181,7 @@ void
 Agnus::doCopperDmaWrite(u32 addr, u16 value)
 {
     mem.pokeCustom16<ACCESSOR_AGNUS>(addr, value);
-    
+
     busOwner[pos.h] = BUS_COPPER;
     busValue[pos.h] = value;
     stats.usage[BUS_COPPER]++;

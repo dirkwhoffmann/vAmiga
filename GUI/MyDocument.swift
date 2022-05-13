@@ -13,7 +13,10 @@ class MyDocument: NSDocument {
     
     // The window controller for this document
     var parent: MyController { return windowControllers.first as! MyController }
-    
+
+    // Optional media URL provided on app launch
+    var launchUrl: URL?
+
     // Gateway to the core emulator
     var amiga: AmigaProxy!
 
@@ -180,9 +183,16 @@ class MyDocument: NSDocument {
     //
     // Handling media files
     //
-    
+
+    func addMedia() {
+
+        if let url = launchUrl {
+            try? addMedia(url: url)
+        }
+    }
+
     func addMedia(url: URL,
-                  allowedTypes types: [FileType],
+                  allowedTypes types: [FileType] = FileType.all,
                   df: Int = 0,
                   hd: Int = 0,
                   force: Bool = false,
@@ -210,7 +220,7 @@ class MyDocument: NSDocument {
             try processSnapshotFile(proxy)
         }
         if let proxy = proxy as? ScriptProxy {
-            
+
             parent.renderer.console.runScript(script: proxy)
         }
         if let proxy = proxy as? HDFFileProxy {
