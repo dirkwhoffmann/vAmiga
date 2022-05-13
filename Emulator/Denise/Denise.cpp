@@ -379,23 +379,6 @@ Denise::drawHiresBoth()
 {
     drawHiresOdd();
     drawHiresEven();
-    
-    /*
-    updateShiftRegisters();
-
-    if (armedOdd && armedEven && pixelOffsetOdd == pixelOffsetEven) {
-
-        assert((agnus.pos.h & 0x3) == agnus.scrollHiresOdd);
-        assert((agnus.pos.h & 0x3) == agnus.scrollHiresEven);
-        
-        drawBoth <true> (pixelOffsetOdd);
-
-    } else {
-    
-        if (armedOdd) drawOdd <true> (pixelOffsetOdd);
-        if (armedEven) drawEven <true> (pixelOffsetEven);
-    }
-    */
 }
 
 void

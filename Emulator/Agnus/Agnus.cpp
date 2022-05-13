@@ -344,41 +344,6 @@ Agnus::executeUntilBusIsFree()
     busOwner[pos.newh] = BUS_CPU;
 }
 
-/*
-void
-Agnus::executeUntilBusIsFree()
-{    
-    isize posh = pos.h == 0 ? HPOS_MAX : pos.h - 1;
-    assert(posh == pos.newh);
-
-    // Check if the bus is blocked
-    if (busOwner[posh] != BUS_NONE) {
-
-        // This variable counts the number of DMA cycles the CPU will be suspended
-        DMACycle delay = 0;
-
-        // Execute Agnus until the bus is free
-        do {
-
-            posh = pos.h;
-            execute();
-            assert(posh == pos.newh);
-            if (++delay == 2) bls = true;
-            
-        } while (busOwner[posh] != BUS_NONE);
-
-        // Clear the BLS line (Blitter slow down)
-        bls = false;
-
-        // Add wait states to the CPU
-        cpu.addWaitStates(DMA_CYCLES(delay));
-    }
-
-    // Assign bus to the CPU
-    busOwner[posh] = BUS_CPU;
-}
-*/
-
 void
 Agnus::executeUntilBusIsFreeForCIA()
 {
@@ -409,44 +374,6 @@ Agnus::executeUntilBusIsFreeForCIA()
     // Assign bus to the CPU
     busOwner[pos.newh] = BUS_CPU;
 }
-
-/*
-void
-Agnus::executeUntilBusIsFreeForCIA()
-{
-    // Sync with the E clock driving the CIA
-    syncWithEClock();
-    
-    isize posh = pos.h == 0 ? HPOS_MAX : pos.h - 1;
-    assert(posh == pos.newh);
-
-    // Check if the bus is blocked
-    if (busOwner[posh] != BUS_NONE) {
-
-        // This variable counts the number of DMA cycles the CPU will be suspended
-        DMACycle delay = 0;
-
-        // Execute Agnus until the bus is free
-        do {
-
-            posh = pos.h;
-            execute();
-            assert(posh == pos.newh);
-            if (++delay == 2) bls = true;
-            
-        } while (busOwner[posh] != BUS_NONE);
-
-        // Clear the BLS line (Blitter slow down)
-        bls = false;
-
-        // Add wait states to the CPU
-        cpu.addWaitStates(DMA_CYCLES(delay));
-    }
-
-    // Assign bus to the CPU
-    busOwner[posh] = BUS_CPU;
-}
-*/
 
 void
 Agnus::recordRegisterChange(Cycle delay, u32 addr, u16 value, Accessor acc)

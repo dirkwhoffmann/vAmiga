@@ -663,7 +663,8 @@ Agnus::dropWrite(BusOwner owner)
     /* A write to a pointer register is dropped if the pointer was used one
      * cycle before the update would happen.
      */
-    if (!NO_PTR_DROPS && pos.newh >= 1 && busOwner[pos.h - 1] == owner) {
+    assert(pos.newh == pos.h);
+    if (!NO_PTR_DROPS && pos.newh >= 1 && busOwner[pos.newh - 1] == owner) {
         
         trace(XFILES, "XFILES: Dropping pointer register write (%d)\n", owner);
         return true;

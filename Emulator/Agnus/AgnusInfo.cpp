@@ -460,7 +460,7 @@ Agnus::_dump(Category category, std::ostream& os) const
         os << tab("LOF in previous frame");
         os << dec(frame.prevlof) << std::endl;
         os << tab("Beam position");
-        os << "(" << dec(pos.v) << "," << dec(pos.h) << ")" << std::endl;
+        os << "(" << dec(pos.v) << "," << dec(pos.newh) << ")" << std::endl;
         os << tab("Latched position");
         os << "(" << dec(latchedPos.v) << "," << dec(latchedPos.h) << ")" << std::endl;
         os << tab("scrollOdd");
@@ -580,7 +580,7 @@ Agnus::_inspect() const
     SYNCHRONIZED
     
     info.vpos     = pos.v;
-    info.hpos     = pos.h;
+    info.hpos     = pos.newh;
     
     info.dmacon   = dmacon;
     info.bplcon0  = bplcon0;
@@ -616,7 +616,7 @@ Agnus::_inspect() const
     eventInfo.ciaBClock  = ciab.getClock();
     eventInfo.frame = agnus.frame.nr;
     eventInfo.vpos = agnus.pos.v;
-    eventInfo.hpos = agnus.pos.h;
+    eventInfo.hpos = agnus.pos.newh;
     
     for (EventSlot i = 0; i < SLOT_COUNT; i++) {
         inspectSlot(i);
@@ -640,7 +640,7 @@ Agnus::inspectSlot(EventSlot nr) const
         
         Beam beam = agnus.cycleToBeam(cycle);
         info.vpos = beam.v;
-        info.hpos = beam.h;
+        info.hpos = beam.newh;
         info.frameRel = 0;
         
     } else if (agnus.belongsToNextFrame(cycle)) {
