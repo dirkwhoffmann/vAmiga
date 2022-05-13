@@ -136,7 +136,7 @@ UART::copyToTransmitShiftRegister()
     paula.raiseIrq(INT_TBE);
 
     // Schedule the transmission of the first bit
-    agnus.scheduleRelOld<SLOT_TXD>(0, TXD_BIT);
+    agnus.scheduleRel<SLOT_TXD>(0, TXD_BIT);
 }
 
 void
