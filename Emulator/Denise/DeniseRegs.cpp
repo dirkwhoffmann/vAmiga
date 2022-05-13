@@ -154,6 +154,7 @@ Denise::pokeBPLCON0(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPLCON0(%X)\n", value);
 
+    if (s == ACCESSOR_AGNUS) assert(agnus.clock == agnus.newClock);
     agnus.recordRegisterChangeOld(DMA_CYCLES(1), SET_BPLCON0_DENISE, value);
 }
 
@@ -192,6 +193,7 @@ Denise::pokeBPLCON1(u16 value)
     trace(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
 
     // Record the register change
+    if (s == ACCESSOR_AGNUS) assert(agnus.clock == agnus.newClock);
     agnus.recordRegisterChangeOld(DMA_CYCLES(1), SET_BPLCON1_DENISE, value);
 }
 
@@ -211,6 +213,7 @@ Denise::pokeBPLCON2(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPLCON2(%X)\n", value);
 
+    if (s == ACCESSOR_AGNUS) assert(agnus.clock == agnus.newClock);
     agnus.recordRegisterChangeOld(DMA_CYCLES(1), SET_BPLCON2, value);
 }
 
@@ -234,6 +237,7 @@ Denise::pokeBPLCON3(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPLCON3(%X)\n", value);
 
+    assert(agnus.clock == agnus.newClock);
     agnus.recordRegisterChangeOld(DMA_CYCLES(1), SET_BPLCON3, value);
 }
 

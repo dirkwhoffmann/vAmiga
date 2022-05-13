@@ -700,6 +700,7 @@ public:
         scheduleAbs<s>(newClock + cycle, id, data);
     }
 
+    /*
     template<EventSlot s> [[deprecated]] void scheduleRelOld(Cycle cycle, EventID id) {
         scheduleAbs<s>(clock + cycle, id);
     }
@@ -707,7 +708,8 @@ public:
     template<EventSlot s> [[deprecated]] void scheduleRelOld(Cycle cycle, EventID id, i64 data) {
         scheduleAbs<s>(clock + cycle, id, data);
     }
-    
+    */
+
     template<EventSlot s> void schedulePos(Beam pos, EventID id, i64 data) {
         scheduleAbs<s>(beamToCycle(pos), id, data);
     }
@@ -724,10 +726,12 @@ public:
         rescheduleAbs<s>(newClock + cycle);
     }
 
+    /*
     template<EventSlot s> [[deprecated]] void rescheduleRelOld(Cycle cycle) {
         rescheduleAbs<s>(clock + cycle);
     }
-
+    */
+    
     template<EventSlot s> void reschedulePos(Beam pos) {
         rescheduleAbs<s>(beamToCycle(pos));
     }
