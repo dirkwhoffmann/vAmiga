@@ -1550,7 +1550,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_CHIP> (u32 addr, u8 value)
     ASSERT_CHIP_ADDR(addr);
     
     if constexpr (BLT_MEM_GUARD) {
-        if (blitter.memguard[addr & mem.chipMask]) {
+        if (blitter.checkMemguard(addr & mem.chipMask)) {
             trace(true, "CPU(8) OVERWRITES BLITTER AT ADDR %x\n", addr);
         }
     }
@@ -1568,7 +1568,7 @@ Memory::poke16 <ACCESSOR_CPU, MEM_CHIP> (u32 addr, u16 value)
     ASSERT_CHIP_ADDR(addr);
     
     if constexpr (BLT_MEM_GUARD) {
-        if (blitter.memguard[addr & mem.chipMask]) {
+        if (blitter.checkMemguard(addr & mem.chipMask)) {
             trace(true, "CPU(16) OVERWRITES BLITTER AT ADDR %x\n", addr);
         }
     }

@@ -282,6 +282,13 @@ Blitter::pokeBLTALWM(u16 value)
 template <Accessor s> void
 Blitter::pokeBLTSIZE(u16 value)
 {
+    /*
+    if (s == ACCESSOR_CPU) {
+        if (running) trace(BLTREG_DEBUG, "Wait for Blitter...\n");
+        while (running) agnus.execute();
+    }
+    */
+
     trace(BLTTIM_DEBUG, "(%ld,%ld) BLTSIZE(%x)\n", agnus.pos.v, agnus.pos.h, value);
     trace(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
 
@@ -321,6 +328,11 @@ Blitter::setBLTSIZE(u16 value)
 void
 Blitter::pokeBLTSIZV(u16 value)
 {
+    /*
+     if (running) trace(BLTREG_DEBUG, "Wait for Blitter...\n");
+     while (running) agnus.execute();
+     */
+
     trace(BLTREG_DEBUG || ECSREG_DEBUG, "pokeBLTSIZV(%X)\n", value);
 
     // ECS only register

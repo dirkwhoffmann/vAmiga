@@ -1103,7 +1103,7 @@ Blitter::exec()
             agnus.doBlitterDmaWrite(bltdpt, dhold);
 
             if constexpr (BLT_MEM_GUARD) {
-                memguard[bltdpt & agnus.ptrMask & mem.chipMask] = 1;
+                memguard[bltdpt & agnus.ptrMask & mem.chipMask] = blitcount;
             }
 
             if constexpr (BLT_CHECKSUM) {
@@ -1366,7 +1366,7 @@ Blitter::execLine()
             agnus.doBlitterDmaWrite(bltdpt, dhold);
 
             if constexpr (BLT_MEM_GUARD) {
-                memguard[bltdpt & agnus.ptrMask & mem.chipMask] = 1;
+                memguard[bltdpt & agnus.ptrMask & mem.chipMask] = blitcount;
             }
 
             if constexpr (BLT_CHECKSUM) {
