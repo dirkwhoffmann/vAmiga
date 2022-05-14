@@ -62,7 +62,7 @@ Blitter::_reset(bool hard)
 void
 Blitter::_run()
 {
-    if constexpr (BLT_GUARD) {
+    if constexpr (BLT_MEM_GUARD) {
 
         memguard.resize(mem.getConfig().chipSize);
         memguard.clear();
@@ -503,7 +503,7 @@ Blitter::beginBlit()
 {
     auto level = config.accuracy;
 
-    if constexpr (BLT_GUARD) memguard.clear();
+    if constexpr (BLT_MEM_GUARD) memguard.clear();
 
     if (bltconLINE()) {
 
@@ -609,7 +609,7 @@ Blitter::endBlit()
     
     running = false;
     
-    if constexpr (BLT_GUARD) memguard.clear();
+    // if constexpr (BLT_GUARD) memguard.clear();
     
     // Clear the Blitter slot
     agnus.cancel<SLOT_BLT>();

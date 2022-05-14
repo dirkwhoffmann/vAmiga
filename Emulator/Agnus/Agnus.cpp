@@ -300,6 +300,12 @@ Agnus::syncWithEClock()
 void
 Agnus::executeUntilBusIsFree()
 {
+    // EXPERIMENTAL
+    if (cpu.penalty) {
+        execute();
+        cpu.penalty = 0;
+    }
+    
     // Check if the bus is blocked
     if (busOwner[pos.h] != BUS_NONE) {
 

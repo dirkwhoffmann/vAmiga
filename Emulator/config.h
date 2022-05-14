@@ -102,7 +102,7 @@ static const int DIAG_BOARD      = 0; // Plug in the diagnose board
 //
 
 // General
-static const int XFILES          = 0; // Report paranormal activity
+static const int XFILES          = 1; // Report paranormal activity
 static const int CNF_DEBUG       = 0; // Configuration options
 static const int OBJ_DEBUG       = 0; // Object life-times
 static const int DEF_DEBUG       = 0; // User defaults
@@ -138,7 +138,8 @@ static const int COP_DEBUG       = 0; // Copper execution
 // Blitter
 static const int BLT_CHECKSUM    = 0; // Compute Blitter checksums
 static const int BLTREG_DEBUG    = 0; // Blitter registers
-static const int BLT_GUARD       = 0; // Guard registers while Blitter runs
+static const int BLT_REG_GUARD   = 1; // Guard registers while Blitter runs
+static const int BLT_MEM_GUARD   = 0; // Guard memory while Blitter runs
 static const int BLT_DEBUG       = 0; // Blitter execution
 static const int BLTTIM_DEBUG    = 0; // Blitter Timing
 static const int SLOW_BLT_DEBUG  = 0; // Execute micro-instructions in one chunk

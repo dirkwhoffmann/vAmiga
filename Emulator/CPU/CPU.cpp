@@ -24,11 +24,32 @@ namespace moira {
 void
 Moira::sync(int cycles)
 {
-    // Advance the CPU clock
-    clock += cycles;
+    overclocking = 0;
+    
+    if (!overclocking) {
 
-    // Emulate Agnus up to the same cycle
-    agnus.execute(CPU_AS_DMA_CYCLES(cycles));
+        // Advance the CPU clock
+        clock += cycles;
+
+        // Emulate Agnus up to the same cycle
+        agnus.execute(CPU_AS_DMA_CYCLES(cycles));
+
+    } else {
+
+        // Advance the overclocking counter
+        penalty += cycles;
+
+        while (penalty >= 2 * overclocking) {
+
+            // Advance the CPU clock by one DMA cycle
+            clock += 2;
+
+            // Emulate Agnus for one DMA cycle
+            agnus.execute();
+
+            penalty -= 2 * overclocking;
+        }
+    }
 }
 
 u8

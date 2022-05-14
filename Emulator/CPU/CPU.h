@@ -74,6 +74,8 @@ private:
             
             << flags
             << clock
+            << overclocking
+            << penalty
             
             << reg.pc
             << reg.pc0
