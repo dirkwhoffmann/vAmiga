@@ -305,7 +305,8 @@ Agnus::executeUntilBusIsFree()
         execute();
         cpu.penalty = 0;
     }
-    
+    // cpu.penalty = 2 * 8;
+
     // Check if the bus is blocked
     if (busOwner[pos.h] != BUS_NONE) {
 

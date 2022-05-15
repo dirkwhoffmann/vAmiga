@@ -36,7 +36,13 @@ Moira::sync(int cycles)
 
     } else {
 
-        // Advance the overclocking counter
+        // Resync with Agnus if the CPU owns the bus
+        if (agnus.busOwner[agnus.pos.h] == BUS_CPU && penalty) {
+
+            agnus.execute();
+            penalty = 0;
+        }
+
         penalty += cycles;
 
         while (penalty >= 2 * overclocking) {
