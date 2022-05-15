@@ -161,7 +161,10 @@ public:
     // Delays the CPU by a certain amout of master cycles
     void addWaitStates(Cycle cycles) { clock += AS_CPU_CYCLES(cycles); }
     
-    
+    // Resynchronizes an overclocked CPU with the Agnus clock
+    void resyncOverclockedCpu();
+
+
     //
     // Running the disassembler
     //

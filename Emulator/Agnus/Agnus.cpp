@@ -300,12 +300,8 @@ Agnus::syncWithEClock()
 void
 Agnus::executeUntilBusIsFree()
 {
-    // EXPERIMENTAL
-    if (cpu.penalty) {
-        execute();
-        cpu.penalty = 0;
-    }
-    // cpu.penalty = 2 * 8;
+    // If the CPU is overclocked, sync it with Agnus
+    cpu.resyncOverclockedCpu();
 
     // Check if the bus is blocked
     if (busOwner[pos.h] != BUS_NONE) {
@@ -335,6 +331,9 @@ Agnus::executeUntilBusIsFree()
 void
 Agnus::executeUntilBusIsFreeForCIA()
 {
+    // If the CPU is overclocked, sync it with Agnus
+    cpu.resyncOverclockedCpu();
+
     // Sync with the E clock driving the CIA
     syncWithEClock();
 

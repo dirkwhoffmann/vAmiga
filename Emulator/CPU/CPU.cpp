@@ -39,6 +39,7 @@ Moira::sync(int cycles)
         // Resync with Agnus if the CPU owns the bus
         if (agnus.busOwner[agnus.pos.h] == BUS_CPU && cpu->penalty) {
 
+            clock += 2;
             agnus.execute();
             cpu->penalty = 0;
         }
@@ -534,6 +535,17 @@ CPU::didLoadFromBuffer(const u8 *buffer)
     debugger.breakpoints.setNeedsCheck(debugger.breakpoints.elements() != 0);
     debugger.watchpoints.setNeedsCheck(debugger.watchpoints.elements() != 0);
     return 0;
+}
+
+void
+CPU::resyncOverclockedCpu()
+{
+    if (penalty) {
+
+        clock += 2;
+        agnus.execute();
+        penalty = 0;
+    }
 }
 
 const char *
