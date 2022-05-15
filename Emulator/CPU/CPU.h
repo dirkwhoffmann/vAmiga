@@ -16,6 +16,8 @@
 
 class CPU : public moira::Moira {
 
+    friend class Moira;
+    
     // The current configuration
     CPUConfig config = {};
 
@@ -33,7 +35,7 @@ class CPU : public moira::Moira {
 public:
     
     // Overclocking factor
-    isize overclocking;
+    // isize overclocking;
 
     // Sub-cycle counter
     i64 penalty;
@@ -75,6 +77,8 @@ private:
     {
         worker
 
+        << config.revision
+        << config.overclocking
         << config.regResetVal;
     }
 
@@ -87,7 +91,6 @@ private:
             
             << flags
             << clock
-            << overclocking
             << penalty
             
             << reg.pc

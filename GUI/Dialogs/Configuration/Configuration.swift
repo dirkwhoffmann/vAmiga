@@ -35,7 +35,11 @@ class Configuration {
     // Hardware
     //
 
-    var overclocking: Int {
+    var cpuRev: Int {
+        get { return amiga.getConfig(.CPU_REVISION) }
+        set { amiga.configure(.CPU_REVISION, value: newValue) }
+    }
+    var cpuSpeed: Int {
         get { return amiga.getConfig(.CPU_OVERCLOCKING) }
         set { amiga.configure(.CPU_OVERCLOCKING, value: newValue) }
     }

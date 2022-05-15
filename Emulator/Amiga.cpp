@@ -230,6 +230,7 @@ Amiga::getConfigItem(Option option) const
             
             return agnus.dmaDebugger.getConfigItem(option);
 
+        case OPT_CPU_REVISION:
         case OPT_CPU_OVERCLOCKING:
         case OPT_CPU_RESET_VAL:
 
@@ -426,6 +427,7 @@ Amiga::configure(Option option, i64 value)
             agnus.dmaDebugger.setConfigItem(option, value);
             break;
 
+        case OPT_CPU_REVISION:
         case OPT_CPU_OVERCLOCKING:
         case OPT_CPU_RESET_VAL:
             

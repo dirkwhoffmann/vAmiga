@@ -59,34 +59,31 @@ class ConfigurationController: DialogController {
     
     // CPU
     @IBOutlet weak var csCpuRevision: NSPopUpButton!
+    @IBOutlet weak var csCpuSpeed: NSPopUpButton!
     @IBOutlet weak var csCpuInfo1: NSTextField!
     @IBOutlet weak var csCpuInfo2: NSTextField!
-    @IBOutlet weak var csCpuInfo3: NSTextField!
 
     // Agnus
     @IBOutlet weak var csAgnusRevision: NSPopUpButton!
     @IBOutlet weak var csAgnusInfo1: NSTextField!
     @IBOutlet weak var csAgnusInfo2: NSTextField!
-    @IBOutlet weak var csAgnusInfo3: NSTextField!
 
     // Denise
     @IBOutlet weak var csDeniseRevision: NSPopUpButton!
     @IBOutlet weak var csDeniseInfo1: NSTextField!
     @IBOutlet weak var csDeniseInfo2: NSTextField!
-    @IBOutlet weak var csDeniseInfo3: NSTextField!
 
     // CIAs
     @IBOutlet weak var csCiaRevision: NSPopUpButton!
     @IBOutlet weak var csCiaInfo1: NSTextField!
     @IBOutlet weak var csCiaInfo2: NSTextField!
-    @IBOutlet weak var csCiaInfo3: NSTextField!
 
     // RT clock
     @IBOutlet weak var csRtcRevision: NSPopUpButton!
     @IBOutlet weak var csRtcInfo1: NSTextField!
     @IBOutlet weak var csRtcInfo2: NSTextField!
-    @IBOutlet weak var csRtcInfo3: NSTextField!
-    
+    @IBOutlet weak var csRtcIcon: NSButton!
+
     // Lock
     @IBOutlet weak var csLockImage: NSButton!
     @IBOutlet weak var csLockInfo1: NSTextField!

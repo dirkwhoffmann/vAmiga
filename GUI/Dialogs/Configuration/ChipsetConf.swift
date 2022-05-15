@@ -14,38 +14,34 @@ extension ConfigurationController {
         let poweredOff = amiga.poweredOff
         
         // CPU
+        csCpuRevision.selectItem(withTag: config.cpuRev)
+        csCpuSpeed.selectItem(withTag: config.cpuSpeed)
         csCpuInfo1.stringValue = "Motorola MC68000"
-        csCpuInfo2.stringValue = "7.09 MHz"
-        csCpuInfo3.stringValue = "All models"
+        csCpuInfo2.stringValue = "All models"
 
         // Agnus
         csAgnusRevision.selectItem(withTag: config.agnusRev)
         switch AgnusRevision(rawValue: config.agnusRev) {
 
         case .OCS_OLD:
-            csAgnusInfo1.stringValue = "MOS 8367"
-            csAgnusInfo2.stringValue = "PAL"
-            csAgnusInfo3.stringValue = "A1000, A2000A"
+            csAgnusInfo1.stringValue = "MOS 8367 (PAL)"
+            csAgnusInfo2.stringValue = "A1000, A2000A"
 
         case .OCS:
-            csAgnusInfo1.stringValue = "MOS 8371"
-            csAgnusInfo2.stringValue = "PAL"
-            csAgnusInfo3.stringValue = "Early A500/A2000"
+            csAgnusInfo1.stringValue = "MOS 8371 (PAL)"
+            csAgnusInfo2.stringValue = "Early A500, A2000"
 
         case .ECS_1MB:
-            csAgnusInfo1.stringValue = "MOS 8372A"
-            csAgnusInfo2.stringValue = "PAL"
-            csAgnusInfo3.stringValue = "Later A500/A2000"
+            csAgnusInfo1.stringValue = "MOS 8372A (PAL)"
+            csAgnusInfo2.stringValue = "Later A500, A2000"
 
         case .ECS_2MB:
-            csAgnusInfo1.stringValue = "MOS 8375"
-            csAgnusInfo2.stringValue = "PAL"
-            csAgnusInfo3.stringValue = "A500+, A600"
+            csAgnusInfo1.stringValue = "MOS 8375 (PAL)"
+            csAgnusInfo2.stringValue = "A500+, A600"
             
         default:
             csAgnusInfo1.stringValue = "Invalid"
             csAgnusInfo2.stringValue = ""
-            csAgnusInfo3.stringValue = ""
         }
         
         // Denise
@@ -53,24 +49,20 @@ extension ConfigurationController {
         switch DeniseRevision(rawValue: config.deniseRev) {
         
         case .OCS:
-            csDeniseInfo1.stringValue = "MOS 8362R8"
-            csDeniseInfo2.stringValue = "PAL"
-            csDeniseInfo3.stringValue = "A500, A1000, A2000"
+            csDeniseInfo1.stringValue = "MOS 8362R8 (PAL)"
+            csDeniseInfo2.stringValue = "A500, A1000, A2000"
 
         case .OCS_BRDRBLNK:
-            csDeniseInfo1.stringValue = "MOS 8362R8"
-            csDeniseInfo2.stringValue = "PAL"
-            csDeniseInfo3.stringValue = "Emulator mod"
+            csDeniseInfo1.stringValue = "MOS 8362R8 (PAL)"
+            csDeniseInfo2.stringValue = "Emulator mod"
             
         case .ECS:
-            csDeniseInfo1.stringValue = "MOS 8373R4"
-            csDeniseInfo2.stringValue = "PAL"
-            csDeniseInfo3.stringValue = "A500+, A600"
+            csDeniseInfo1.stringValue = "MOS 8373R4 (PAL)"
+            csDeniseInfo2.stringValue = "A500+, A600"
             
         default:
             csDeniseInfo1.stringValue = "Invalid"
             csDeniseInfo2.stringValue = ""
-            csDeniseInfo3.stringValue = ""
         }
 
         // CIAs
@@ -79,18 +71,15 @@ extension ConfigurationController {
 
         case .MOS_8520_DIP:
             csCiaInfo1.stringValue = "MOS 8520"
-            csCiaInfo2.stringValue = "40 pin package"
-            csCiaInfo3.stringValue = "A500, A1000, A2000"
+            csCiaInfo2.stringValue = "A500, A1000, A2000"
 
         case .MOS_8520_PLCC:
             csCiaInfo1.stringValue = "MOS 8520PL"
-            csCiaInfo2.stringValue = "44 pin package"
-            csCiaInfo3.stringValue = "A600"
+            csCiaInfo2.stringValue = "A600"
 
         default:
             csCiaInfo1.stringValue = "Invalid"
             csCiaInfo2.stringValue = ""
-            csCiaInfo3.stringValue = ""
         }
         
         // RTC
@@ -100,26 +89,26 @@ extension ConfigurationController {
         case .NONE:
             csRtcInfo1.stringValue = ""
             csRtcInfo2.stringValue = ""
-            csRtcInfo3.stringValue = ""
+            csRtcIcon.isHidden = true
 
         case .OKI:
             csRtcInfo1.stringValue = "MSM6242B"
-            csRtcInfo2.stringValue = "Real-time clock"
-            csRtcInfo3.stringValue = "A2000"
+            csRtcInfo2.stringValue = "A2000"
+            csRtcIcon.isHidden = false
 
         case .RICOH:
             csRtcInfo1.stringValue = "RF5C01A"
-            csRtcInfo2.stringValue = "Real-time clock"
-            csRtcInfo3.stringValue = "A3000, A4000"
+            csRtcInfo2.stringValue = "A3000, A4000"
+            csRtcIcon.isHidden = false
 
         default:
             csRtcInfo1.stringValue = "Invalid"
             csRtcInfo2.stringValue = ""
-            csRtcInfo3.stringValue = ""
+            csRtcIcon.isHidden = true
         }
         
         // Disable some controls if emulator is powered on
-        csCpuRevision.isEnabled = poweredOff
+        // csCpuRevision.isEnabled = poweredOff
         csAgnusRevision.isEnabled = poweredOff
         csDeniseRevision.isEnabled = poweredOff
         csCiaRevision.isEnabled = poweredOff
@@ -135,8 +124,15 @@ extension ConfigurationController {
         csPowerButton.isHidden = !bootable
     }
 
-    @IBAction func csCpusRevAction(_ sender: NSPopUpButton!) {
+    @IBAction func csCpuRevAction(_ sender: NSPopUpButton!) {
 
+        config.cpuRev = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func csCpuSpeedAction(_ sender: NSPopUpButton!) {
+
+        config.cpuSpeed = sender.selectedTag()
         refresh()
     }
 

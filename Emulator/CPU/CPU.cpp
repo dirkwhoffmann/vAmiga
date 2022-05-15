@@ -26,9 +26,7 @@ Moira::sync(int cycles)
 {
     CPU *cpu = (CPU *)this;
 
-    cpu->overclocking = 2;
-    
-    if (!cpu->overclocking) {
+    if (!cpu->config.overclocking) {
 
         // Advance the CPU clock
         clock += cycles;
@@ -47,7 +45,7 @@ Moira::sync(int cycles)
 
         cpu->penalty += cycles;
 
-        while (cpu->penalty >= 2 * cpu->overclocking) {
+        while (cpu->penalty >= 2 * cpu->config.overclocking) {
 
             // Advance the CPU clock by one DMA cycle
             clock += 2;
@@ -55,7 +53,7 @@ Moira::sync(int cycles)
             // Emulate Agnus for one DMA cycle
             agnus.execute();
 
-            cpu->penalty -= 2 * cpu->overclocking;
+            cpu->penalty -= 2 * cpu->config.overclocking;
         }
     }
 }
@@ -265,6 +263,7 @@ CPU::getConfigItem(Option option) const
 {
     switch (option) {
 
+        case OPT_CPU_REVISION:      return (long)config.revision;
         case OPT_CPU_OVERCLOCKING:  return (long)config.overclocking;
         case OPT_CPU_RESET_VAL:     return (long)config.regResetVal;
         
@@ -277,6 +276,15 @@ void
 CPU::setConfigItem(Option option, i64 value)
 {
     switch (option) {
+
+        case OPT_CPU_REVISION:
+
+            if (!CPURevisionEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, CPURevisionEnum::keyList());
+            }
+
+            config.revision = CPURevision(value);
+            return;
 
         case OPT_CPU_OVERCLOCKING:
 
@@ -303,6 +311,7 @@ CPU::resetConfig()
 
     std::vector <Option> options = {
 
+        OPT_CPU_REVISION,
         OPT_CPU_OVERCLOCKING,
         OPT_CPU_RESET_VAL
     };
@@ -369,12 +378,10 @@ CPU::_dump(Category category, std::ostream& os) const
 {
     if (category == Category::Config) {
 
+        os << util::tab("CPU model");
+        os << CPURevisionEnum::key(config.revision) << std::endl;
         os << util::tab("Overclocking");
-        if (config.overclocking) {
-            os << util::dec(config.regResetVal) << "x" << std::endl;
-        } else {
-            os << "Off" << std::endl;
-        }
+        os << util::dec(config.overclocking) << std::endl;
         os << util::tab("Register reset value");
         os << util::hex(config.regResetVal) << std::endl;
     }
