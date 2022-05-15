@@ -24,9 +24,11 @@ namespace moira {
 void
 Moira::sync(int cycles)
 {
-    overclocking = 0;
+    CPU *cpu = (CPU *)this;
+
+    cpu->overclocking = 2;
     
-    if (!overclocking) {
+    if (!cpu->overclocking) {
 
         // Advance the CPU clock
         clock += cycles;
@@ -37,15 +39,15 @@ Moira::sync(int cycles)
     } else {
 
         // Resync with Agnus if the CPU owns the bus
-        if (agnus.busOwner[agnus.pos.h] == BUS_CPU && penalty) {
+        if (agnus.busOwner[agnus.pos.h] == BUS_CPU && cpu->penalty) {
 
             agnus.execute();
-            penalty = 0;
+            cpu->penalty = 0;
         }
 
-        penalty += cycles;
+        cpu->penalty += cycles;
 
-        while (penalty >= 2 * overclocking) {
+        while (cpu->penalty >= 2 * cpu->overclocking) {
 
             // Advance the CPU clock by one DMA cycle
             clock += 2;
@@ -53,7 +55,7 @@ Moira::sync(int cycles)
             // Emulate Agnus for one DMA cycle
             agnus.execute();
 
-            penalty -= 2 * overclocking;
+            cpu->penalty -= 2 * cpu->overclocking;
         }
     }
 }
@@ -262,8 +264,9 @@ i64
 CPU::getConfigItem(Option option) const
 {
     switch (option) {
-            
-        case OPT_REG_RESET_VAL:  return (long)config.regResetVal;
+
+        case OPT_CPU_OVERCLOCKING:  return (long)config.overclocking;
+        case OPT_CPU_RESET_VAL:     return (long)config.regResetVal;
         
         default:
             fatalError;
@@ -274,10 +277,17 @@ void
 CPU::setConfigItem(Option option, i64 value)
 {
     switch (option) {
-            
-        case OPT_REG_RESET_VAL:
 
-            config.regResetVal = (u32)value;
+        case OPT_CPU_OVERCLOCKING:
+
+            suspend();
+            config.overclocking = isize(value);
+            resume();
+            return;
+
+        case OPT_CPU_RESET_VAL:
+
+            config.regResetVal = u32(value);
             return;
                         
         default:
@@ -292,8 +302,9 @@ CPU::resetConfig()
     auto &defaults = amiga.defaults;
 
     std::vector <Option> options = {
-        
-        OPT_REG_RESET_VAL
+
+        OPT_CPU_OVERCLOCKING,
+        OPT_CPU_RESET_VAL
     };
 
     for (auto &option : options) {
@@ -357,7 +368,13 @@ void
 CPU::_dump(Category category, std::ostream& os) const
 {
     if (category == Category::Config) {
-        
+
+        os << util::tab("Overclocking");
+        if (config.overclocking) {
+            os << util::dec(config.regResetVal) << "x" << std::endl;
+        } else {
+            os << "Off" << std::endl;
+        }
         os << util::tab("Register reset value");
         os << util::hex(config.regResetVal) << std::endl;
     }

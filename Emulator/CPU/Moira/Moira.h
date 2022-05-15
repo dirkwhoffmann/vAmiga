@@ -107,16 +107,6 @@ protected:
 
     // Number of elapsed cycles since powerup
     i64 clock;
-
-    // Overclocking factor
-    isize overclocking;
-
-public:
-
-    // Overclocking counter
-    i64 penalty;
-
-protected:
     
     // The data and address registers
     Registers reg;

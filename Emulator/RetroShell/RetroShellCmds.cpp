@@ -295,10 +295,17 @@ RetroShell::exec <Token::cpu, Token::config> (Arguments &argv, long param)
 }
 
 template <> void
+RetroShell::exec <Token::cpu, Token::set, Token::overclocking> (Arguments &argv, long param)
+{
+    auto value = util::parseNum(argv.front());
+    amiga.configure(OPT_CPU_OVERCLOCKING, value);
+}
+
+template <> void
 RetroShell::exec <Token::cpu, Token::set, Token::regreset> (Arguments &argv, long param)
 {
     auto value = util::parseNum(argv.front());
-    amiga.configure(OPT_REG_RESET_VAL, value);
+    amiga.configure(OPT_CPU_RESET_VAL, value);
 }
 
 template <> void

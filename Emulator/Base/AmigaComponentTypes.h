@@ -40,7 +40,8 @@ enum_long(OPT)
     OPT_DMA_DEBUG_COLOR,
     
     // CPU
-    OPT_REG_RESET_VAL,
+    OPT_CPU_OVERCLOCKING,
+    OPT_CPU_RESET_VAL,
     
     // Real-time clock
     OPT_RTC_MODEL,
@@ -165,7 +166,8 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_DMA_DEBUG_CHANNEL:     return "DMA_DEBUG_CHANNEL";
             case OPT_DMA_DEBUG_COLOR:       return "DMA_DEBUG_COLOR";
 
-            case OPT_REG_RESET_VAL:         return "REG_RESET_VAL";
+            case OPT_CPU_OVERCLOCKING:      return "CPU_OVERCLOCKING";
+            case OPT_CPU_RESET_VAL:         return "CPU_RESET_VAL";
                 
             case OPT_RTC_MODEL:             return "RTC_MODEL";
 

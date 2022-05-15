@@ -23,6 +23,7 @@
 
 typedef struct
 {
+    isize overclocking;
     u32 regResetVal;
 }
 CPUConfig;

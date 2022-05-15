@@ -24,8 +24,21 @@ class CPU : public moira::Moira {
 
     // Recorded call stack
     CallstackRecorder callstack;
+
+
+    //
+    // Overclocking
+    //
+
+public:
     
-    
+    // Overclocking factor
+    isize overclocking;
+
+    // Sub-cycle counter
+    i64 penalty;
+
+
     //
     // Initializing
     //

@@ -230,7 +230,11 @@ Interpreter::registerInstructions()
 
     root.add({"cpu", "set"},
              "command", "Configures the component");
-    
+
+    root.add({"cpu", "set", "overclocking"},
+             "key", "Overclocks the CPU by the specified factor",
+             &RetroShell::exec <Token::cpu, Token::set, Token::overclocking>, 1);
+
     root.add({"cpu", "set", "regreset"},
              "key", "Selects the reset value of data and address registers",
              &RetroShell::exec <Token::cpu, Token::set, Token::regreset>, 1);
