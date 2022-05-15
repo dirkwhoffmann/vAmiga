@@ -36,9 +36,11 @@ Moira::sync(int cycles)
 
     } else {
 
-        // Resync with Agnus if the CPU owns the bus
-        if (agnus.busOwner[agnus.pos.h] == BUS_CPU && cpu->penalty) {
+        // Consume some cycles if the CPU owns the bus
+        if (agnus.busOwner[agnus.pos.h] == BUS_CPU) {
 
+            clock += 2;
+            agnus.execute();
             clock += 2;
             agnus.execute();
             cpu->penalty = 0;
