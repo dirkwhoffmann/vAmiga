@@ -241,7 +241,7 @@ class Monitor: DialogController {
     
     @IBAction func busDisplayAction(_ sender: NSButton!) {
         
-        amiga.configure(.DMA_DEBUG_ENABLE, id: sender.tag, enable: sender.state == .on)
+        amiga.configure(.DMA_DEBUG_CHANNEL, id: sender.tag, enable: sender.state == .on)
         refresh()
     }
     
