@@ -124,8 +124,8 @@ Moira::signalResetInstr()
 void
 Moira::signalStopInstr(u16 op)
 {
-    if constexpr (XFILES) {
-        if (!(op & 0x2000)) trace(true, "XFILES: STOP instruction (%x)\n", op);
+    if (!(op & 0x2000)) {
+        trace(XFILES, "XFILES: STOP instruction (%x)\n", op);
     }
 }
 
