@@ -21,7 +21,8 @@ enum_long(OPT)
     // Agnus
     OPT_AGNUS_REVISION,
     OPT_SLOW_RAM_MIRROR,
-    
+    OPT_PTR_DROPS,
+
     // Denise
     OPT_DENISE_REVISION,
     OPT_VIEWPORT_TRACKING,
@@ -152,6 +153,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
                 
             case OPT_AGNUS_REVISION:        return "AGNUS_REVISION";
             case OPT_SLOW_RAM_MIRROR:       return "SLOW_RAM_MIRROR";
+            case OPT_PTR_DROPS:             return "PTR_DROPS";
                 
             case OPT_DENISE_REVISION:       return "DENISE_REVISION";
             case OPT_VIEWPORT_TRACKING:     return "VIEWPORT_TRACKING";

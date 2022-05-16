@@ -424,6 +424,10 @@ Interpreter::registerInstructions()
              "key", "Enables or disables ECS Slow Ram mirroring",
              &RetroShell::exec <Token::agnus, Token::set, Token::slowrammirror>, 1);
 
+    root.add({"agnus", "set", "ptrdrops"},
+             "key", "Emulate dropped register writes",
+             &RetroShell::exec <Token::agnus, Token::set, Token::ptrdrops>, 1);
+
     root.add({"agnus", "inspect"},
              "command", "Displays the internal state");
 

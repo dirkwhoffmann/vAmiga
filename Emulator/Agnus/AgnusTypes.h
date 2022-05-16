@@ -440,6 +440,7 @@ typedef struct
 {
     AgnusRevision revision;
     bool slowRamMirror;
+    bool ptrDrops;
 }
 AgnusConfig;
 

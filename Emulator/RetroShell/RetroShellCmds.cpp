@@ -562,6 +562,13 @@ RetroShell::exec <Token::agnus, Token::set, Token::slowrammirror> (Arguments &ar
 }
 
 template <> void
+RetroShell::exec <Token::agnus, Token::set, Token::ptrdrops> (Arguments &argv, long param)
+{
+    auto value = util::parseBool(argv.front());
+    amiga.configure(OPT_PTR_DROPS, value);
+}
+
+template <> void
 RetroShell::exec <Token::agnus, Token::inspect, Token::state> (Arguments &argv, long param)
 {
     dump(amiga.agnus, Category::State);

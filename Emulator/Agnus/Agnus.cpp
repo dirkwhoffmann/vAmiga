@@ -69,7 +69,8 @@ Agnus::resetConfig()
     std::vector <Option> options = {
         
         OPT_AGNUS_REVISION,
-        OPT_SLOW_RAM_MIRROR
+        OPT_SLOW_RAM_MIRROR,
+        OPT_PTR_DROPS
     };
 
     for (auto &option : options) {
@@ -82,8 +83,9 @@ Agnus::getConfigItem(Option option) const
 {
     switch (option) {
             
-        case OPT_AGNUS_REVISION: return config.revision;
-        case OPT_SLOW_RAM_MIRROR: return config.slowRamMirror;
+        case OPT_AGNUS_REVISION:    return config.revision;
+        case OPT_SLOW_RAM_MIRROR:   return config.slowRamMirror;
+        case OPT_PTR_DROPS:         return config.ptrDrops;
             
         default:
             fatalError;
@@ -120,6 +122,11 @@ Agnus::setConfigItem(Option option, i64 value)
         case OPT_SLOW_RAM_MIRROR:
             
             config.slowRamMirror = value;
+            return;
+
+        case OPT_PTR_DROPS:
+
+            config.ptrDrops = value;
             return;
             
         default:

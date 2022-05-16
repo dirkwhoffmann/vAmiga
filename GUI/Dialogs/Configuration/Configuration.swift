@@ -248,6 +248,10 @@ class Configuration {
         get { return amiga.getConfig(.TODBUG) != 0 }
         set { amiga.configure(.TODBUG, enable: newValue) }
     }
+    var ptrDrops: Bool {
+        get { return amiga.getConfig(.PTR_DROPS) != 0 }
+        set { amiga.configure(.PTR_DROPS, enable: newValue) }
+    }
     var eClockSyncing: Bool {
         get { return amiga.getConfig(.ECLOCK_SYNCING) != 0 }
         set { amiga.configure(.ECLOCK_SYNCING, enable: newValue) }

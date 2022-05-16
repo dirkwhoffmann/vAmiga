@@ -49,6 +49,7 @@
                 <outlet property="compMechanicalDelays" destination="gyp-kk-PwN" id="YvX-xg-lxM"/>
                 <outlet property="compOKButton" destination="XEX-Bs-kpl" id="NgB-R0-ldR"/>
                 <outlet property="compPowerButton" destination="56p-by-mEB" id="HVb-hA-04o"/>
+                <outlet property="compPtrDrops" destination="fpb-wN-mwG" id="PCa-Yv-jcU"/>
                 <outlet property="compTodBug" destination="tNc-ID-mnd" id="KZr-eH-u7F"/>
                 <outlet property="csAgnusInfo1" destination="wLf-sj-Myk" id="ZLP-JH-fWH"/>
                 <outlet property="csAgnusInfo2" destination="XLM-HY-hK6" id="aWT-pJ-DLU"/>
@@ -772,12 +773,12 @@ DQ
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PgV-ga-20g" userLabel="System">
                                             <rect key="frame" x="169" y="373" width="91" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="7 MHz" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="crx-06-qxi" id="YyS-kP-Noo" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="7 MHz" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="crx-06-qxi" id="YyS-kP-Noo" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="VIG-hv-Dsq">
                                                     <items>
-                                                        <menuItem title="7 MHz" id="crx-06-qxi"/>
+                                                        <menuItem title="7 MHz" state="on" id="crx-06-qxi"/>
                                                         <menuItem title="14 MHz" tag="2" id="KpM-wA-vO7"/>
                                                         <menuItem title="21 MHz" tag="3" id="xcp-NK-hvc"/>
                                                         <menuItem title="28 MHz" tag="4" id="kX7-5A-GSB"/>
@@ -2114,6 +2115,17 @@ DQ
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fpb-wN-mwG">
+                                            <rect key="frame" x="54" y="190" width="220" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Emulate dropped register writes" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="sZt-eK-vK0">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="compPtrDropAction:" target="-2" id="XCn-Bu-PaQ"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                 </view>
                             </tabViewItem>

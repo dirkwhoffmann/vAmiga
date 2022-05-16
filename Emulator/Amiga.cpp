@@ -202,7 +202,8 @@ Amiga::getConfigItem(Option option) const
 
         case OPT_AGNUS_REVISION:
         case OPT_SLOW_RAM_MIRROR:
-            
+        case OPT_PTR_DROPS:
+
             return agnus.getConfigItem(option);
             
         case OPT_DENISE_REVISION:
@@ -395,6 +396,7 @@ Amiga::configure(Option option, i64 value)
 
         case OPT_AGNUS_REVISION:
         case OPT_SLOW_RAM_MIRROR:
+        case OPT_PTR_DROPS:
             
             agnus.setConfigItem(option, value);
             break;

@@ -24,6 +24,7 @@ extension ConfigurationController {
         
         // Chipset features
         compTodBug.state = config.todBug ? .on : .off
+        compPtrDrops.state = config.ptrDrops ? .on : .off
 
         // Floppy drives
         let speed = config.driveSpeed
@@ -71,7 +72,13 @@ extension ConfigurationController {
         config.todBug = sender.state == .on
         refresh()
     }
-    
+
+    @IBAction func compPtrDropAction(_ sender: NSButton!) {
+
+        config.ptrDrops = sender.state == .on
+        refresh()
+    }
+
     @IBAction func compDriveSpeedAction(_ sender: NSPopUpButton!) {
 
         config.driveSpeed = sender.selectedTag()

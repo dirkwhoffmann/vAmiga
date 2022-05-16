@@ -31,6 +31,7 @@ Defaults::Defaults()
 {
     setFallback(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
     setFallback(OPT_SLOW_RAM_MIRROR, true);
+    setFallback(OPT_PTR_DROPS, true);
     setFallback(OPT_DENISE_REVISION, DENISE_OCS);
     setFallback(OPT_VIEWPORT_TRACKING, true);
     setFallback(OPT_PALETTE, PALETTE_COLOR);

@@ -181,6 +181,7 @@ class ConfigurationController: DialogController {
 
     // Chipset features
     @IBOutlet weak var compTodBug: NSButton!
+    @IBOutlet weak var compPtrDrops: NSButton!
 
     // Timing
     @IBOutlet weak var compEClockSyncing: NSButton!
