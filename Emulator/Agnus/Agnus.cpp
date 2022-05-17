@@ -310,6 +310,9 @@ Agnus::executeUntilBusIsFree()
     // If the CPU is overclocked, sync it with Agnus
     cpu.resyncOverclockedCpu();
 
+    // Disable overclocking temporarily
+    cpu.slowCycles = 1;
+    
     // Check if the bus is blocked
     if (busOwner[pos.h] != BUS_NONE) {
 
@@ -343,27 +346,6 @@ Agnus::executeUntilBusIsFreeForCIA()
 
     // Sync with the E clock driving the CIA
     syncWithEClock();
-
-    // Check if the bus is blocked
-    if (busOwner[pos.h] != BUS_NONE) {
-
-        // This variable counts the number of DMA cycles the CPU will be suspended
-        DMACycle delay = 0;
-
-        // Execute Agnus until the bus is free
-        do {
-
-            execute();
-            if (++delay == 2) bls = true;
-
-        } while (busOwner[pos.h] != BUS_NONE);
-
-        // Clear the BLS line (Blitter slow down)
-        bls = false;
-
-        // Add wait states to the CPU
-        cpu.addWaitStates(DMA_CYCLES(delay));
-    }
 
     // Assign bus to the CPU
     busOwner[pos.h] = BUS_CPU;

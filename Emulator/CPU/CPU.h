@@ -33,12 +33,12 @@ class CPU : public moira::Moira {
     //
 
 public:
-    
-    // Overclocking factor
-    // isize overclocking;
 
     // Sub-cycle counter
     i64 penalty;
+
+    // Number of cycles that should be executed at normal speed
+    i64 slowCycles;
 
 
     //
@@ -92,6 +92,7 @@ private:
             << flags
             << clock
             << penalty
+            << slowCycles
             
             << reg.pc
             << reg.pc0

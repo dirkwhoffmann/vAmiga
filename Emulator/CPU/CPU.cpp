@@ -36,19 +36,21 @@ Moira::sync(int cycles)
 
     } else {
 
-        // Consume some cycles if the CPU owns the bus
-        if (agnus.busOwner[agnus.pos.h] == BUS_CPU) {
+        // Compute the number of mico-cycles executed in one DMA cycle
+        auto microCyclesPerCycle = 2 * cpu->config.overclocking;
 
-            clock += 2;
-            agnus.execute();
-            clock += 2;
-            agnus.execute();
-            cpu->penalty = 0;
+        // Execute some cycles at normal speed if required
+        while (cpu->slowCycles && cycles) {
+
+            cpu->penalty += microCyclesPerCycle;
+            cycles--;
+            cpu->slowCycles--;
         }
 
+        // Execute all other cycles
         cpu->penalty += cycles;
 
-        while (cpu->penalty >= 2 * cpu->config.overclocking) {
+        while (cpu->penalty >= microCyclesPerCycle) {
 
             // Advance the CPU clock by one DMA cycle
             clock += 2;
@@ -56,7 +58,7 @@ Moira::sync(int cycles)
             // Emulate Agnus for one DMA cycle
             agnus.execute();
 
-            cpu->penalty -= 2 * cpu->config.overclocking;
+            cpu->penalty -= microCyclesPerCycle;
         }
     }
 }
