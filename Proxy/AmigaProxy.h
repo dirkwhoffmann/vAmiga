@@ -355,12 +355,15 @@
 
 - (MemoryStats) getStats;
 
+- (RomIdentifier) romIdentifierOf:(u64)fingerprint;
+
 - (BOOL) isBootRom:(RomIdentifier)rev;
 - (BOOL) isArosRom:(RomIdentifier)rev;
 - (BOOL) isDiagRom:(RomIdentifier)rev;
 - (BOOL) isCommodoreRom:(RomIdentifier)rev;
 - (BOOL) isHyperionRom:(RomIdentifier)rev;
 - (BOOL) isPatchedRom:(RomIdentifier)rev;
+- (NSString *) romTitleOf:(RomIdentifier)rev;
 
 @property (readonly) BOOL hasRom;
 @property (readonly) BOOL hasBootRom;

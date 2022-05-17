@@ -306,6 +306,7 @@ class ConfigurationController: DialogController {
 
         super.awakeFromNib()
         awakeVideoPrefsFromNib()
+        refreshRomSelector()
     }
 
     override func sheetWillShow() {

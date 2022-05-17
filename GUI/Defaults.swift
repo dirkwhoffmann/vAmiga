@@ -206,7 +206,12 @@ extension UserDefaults {
         let folder = try? URL.appSupportFolder("Roms")
         return folder?.appendingPathComponent(name)
     }
-    
+
+    static func romUrl(fingerprint: Int) -> URL? {
+
+        return romUrl(name: String(format: "%08x", fingerprint) + ".rom")
+    }
+
     static func mediaUrl(name: String) -> URL? {
         
         let folder = try? URL.appSupportFolder("Media")

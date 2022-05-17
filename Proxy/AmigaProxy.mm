@@ -427,6 +427,17 @@ using namespace moira;
     return RomFile::isPatchedRom(rev);
 }
 
+- (RomIdentifier) romIdentifierOf:(u64)fingerprint
+{
+    return RomFile::identifier(u32(fingerprint));
+}
+
+- (NSString *) romTitleOf:(RomIdentifier)rev
+{
+    const char *str = RomFile::title(rev);
+    return str ? @(str) : nullptr;
+}
+
 - (BOOL)hasRom
 {
     return [self mem]->hasKickRom();

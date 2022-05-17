@@ -93,6 +93,26 @@ extension ConfigurationController {
         romPowerButton.isHidden = !bootable
     }
 
+    func refreshRomSelector() {
+
+        romArosPopup.autoenablesItems = false
+
+        let fm = FileManager.default
+
+        for item in romArosPopup.itemArray where item.tag != 0 {
+
+            let id = amiga.mem.romIdentifier(of: u64(item.tag))
+
+            if amiga.mem.isArosRom(id) {
+                item.isEnabled = true
+            } else if let url = UserDefaults.romUrl(fingerprint: item.tag) {
+                item.isEnabled = fm.fileExists(atPath: url.path)
+            } else {
+                item.isEnabled = false
+            }
+        }
+    }
+
     //
     // Action methods
     //
@@ -117,7 +137,18 @@ extension ConfigurationController {
 
     @IBAction func installArosAction(_ sender: NSButton!) {
 
-        installAros(svn: sender.selectedTag())
+        debug(1, "Tag = \(sender.selectedTag())")
+        let id = amiga.mem.romIdentifier(of: u64(sender.selectedTag()))
+        debug(1, "id = \(id)")
+        if amiga.mem.isArosRom(id) {
+
+            installAros(id: id)
+
+        } else if let url = UserDefaults.romUrl(fingerprint: sender.tag) {
+
+            debug(1, "Loading Rom from \(url)")
+            try? amiga.mem.loadRom(url)
+        }
     }
     
     @IBAction func romDefaultsAction(_ sender: NSButton!) {
@@ -134,17 +165,17 @@ extension ConfigurationController {
 
     func installAros() {
 
-        installAros(svn: 55696)
+        installAros(id: .AROS_55696)
     }
 
-    func installAros(svn: Int) {
+    func installAros(id: RomIdentifier) {
 
-        switch svn {
+        switch id {
 
-        case 54705: // Taken from UAE
+        case .AROS_54705: // Taken from UAE
             installAros(rom: "aros-svn54705-rom", ext: "aros-svn54705-ext")
 
-        case 55696: // Taken from SAE
+        case .AROS_55696: // Taken from SAE
             installAros(rom: "aros-svn55696-rom", ext: "aros-svn55696-ext")
 
         default:

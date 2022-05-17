@@ -489,14 +489,41 @@ DQ
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b1E-it-StT">
                                             <rect key="frame" x="9" y="8" width="128" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Install Aros..." bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="h2O-8a-diy" id="Q5u-S4-ml0">
+                                            <popUpButtonCell key="cell" type="push" title="Install Rom..." bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" autoenablesItems="NO" selectedItem="h2O-8a-diy" id="Q5u-S4-ml0">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
-                                                <menu key="menu" id="kL0-2m-Gp7">
+                                                <menu key="menu" autoenablesItems="NO" id="kL0-2m-Gp7">
                                                     <items>
-                                                        <menuItem title="Install Aros..." hidden="YES" id="h2O-8a-diy"/>
-                                                        <menuItem title="SVN 54705" image="aros_small" tag="54705" id="Yyq-YL-spr"/>
-                                                        <menuItem title="SVN 55696" image="aros_small" tag="55696" id="uLi-3n-N3S"/>
+                                                        <menuItem title="Install Rom..." state="on" hidden="YES" id="h2O-8a-diy"/>
+                                                        <menuItem title="Amiga Kickstart 1.2" image="chipTemplate" tag="2798523958" id="Uka-jK-LJg">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Amiga Kickstart 1.3" image="chipTemplate" tag="3304125791" id="4Sh-iT-Gus">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Amiga Kickstart 2.04" image="chipTemplate" tag="3283989056" id="Dns-T5-L00">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Amiga Kickstart 3.1" image="chipTemplate" tag="4230262285" id="sLj-aG-cA2">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem isSeparatorItem="YES" id="N3M-HM-1cr"/>
+                                                        <menuItem title="Hyperion Kickstart 3.14" image="chipTemplate" tag="3576386301" id="6W6-VI-BY0">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Hyperion Kickstart 3.2" image="chipTemplate" tag="2171852726" id="geS-8F-g06">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem isSeparatorItem="YES" id="zIK-wc-oAf"/>
+                                                        <menuItem title="Aros Kickstart Replacement SVN 54705" image="chipTemplate" tag="2631987209" id="Yyq-YL-spr"/>
+                                                        <menuItem title="Aros Kickstart Replacement SVN 55696" image="chipTemplate" tag="1062194186" id="uLi-3n-N3S"/>
+                                                        <menuItem isSeparatorItem="YES" id="eoN-df-wHj"/>
+                                                        <menuItem title="DiagRom 1.2.1" image="chipTemplate" tag="2231503309" id="kib-Jn-TWF">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Logica Diagnostic Rom 2.0" image="chipTemplate" tag="2223305766" id="wOf-rE-Ey3">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -3649,7 +3676,7 @@ DQ
         <image name="Lock" width="120" height="170"/>
         <image name="NSCaution" width="32" height="32"/>
         <image name="NSInfo" width="32" height="32"/>
-        <image name="aros_small" width="24" height="19"/>
+        <image name="chipTemplate" width="24" height="24"/>
         <image name="devCableLoopTemplate" width="24" height="24"/>
         <image name="devCableTemplate" width="24" height="24"/>
         <image name="devGamepad1Template" width="20" height="21"/>
