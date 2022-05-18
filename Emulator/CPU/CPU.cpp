@@ -296,6 +296,7 @@ CPU::setConfigItem(Option option, i64 value)
             suspend();
             config.overclocking = isize(value);
             resume();
+            msgQueue.put(MSG_OVERCLOCKING, config.overclocking);
             return;
 
         case OPT_CPU_RESET_VAL:

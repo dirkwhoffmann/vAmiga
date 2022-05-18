@@ -110,6 +110,12 @@ extension ConfigurationController {
             } else {
                 item.isEnabled = false
             }
+            
+            if item.isEnabled {
+                item.image = NSImage(named: "chipTemplate")
+            } else {
+                item.image = NSImage(named: "lockTemplate")
+            }
         }
     }
 

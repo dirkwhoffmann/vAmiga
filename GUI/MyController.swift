@@ -375,6 +375,7 @@ extension MyController {
         var pan: Int { return data4 }
         var pc: Int { return Int(UInt32(bitPattern: msg.data1)) }
         var vector: Int { return data2 }
+        var acceleration: Double { return Double(data1 == 0 ? 1 : data1) }
 
         // Only proceed if the proxy object is still alive
         if amiga == nil { return }
@@ -462,7 +463,13 @@ extension MyController {
             
         case .DMA_DEBUG_OFF:
             renderer.zoomTextureIn()
-            
+
+        case .OVERCLOCKING:
+            speedometer.acceleration = acceleration
+            activityBar.maxValue = 140.0 * acceleration
+            activityBar.warningValue = 77.0 * acceleration
+            activityBar.criticalValue = 105.0 * acceleration
+
         case .BREAKPOINT_UPDATED, .WATCHPOINT_UPDATED, .CATCHPOINT_UPDATED,
                 .COPPERBP_UPDATED, .COPPERWP_UPDATED:
             inspector?.fullRefresh()

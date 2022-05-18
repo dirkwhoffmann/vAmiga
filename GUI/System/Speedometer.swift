@@ -8,10 +8,13 @@
 // -----------------------------------------------------------------------------
 
 class Speedometer {
-    
+
+    // Acceleration factor (overclocking)
+    var acceleration = 1.0
+
     // Current emulation speed in MHz
     private var _mhz = 0.0
-    var mhz: Double { return _mhz.truncate(digits: 2) }
+    var mhz: Double { return (_mhz * acceleration).truncate(digits: 2) }
     
     // Current GPU performance in frames per second
     private var _fps = 0.0
@@ -33,7 +36,7 @@ class Speedometer {
 
         latchedTimestamp = Date().timeIntervalSince1970
     }
-        
+
     /* Updates speed, frame and jitter information. 'cycles' is the number of
      * elapsed cycles since power up. 'frames' is the number of computed frames
      * since power up.

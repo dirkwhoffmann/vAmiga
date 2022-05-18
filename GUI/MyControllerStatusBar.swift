@@ -191,9 +191,7 @@ extension MyController {
     
     func updateSpeedometer() {
 
-        var clock = amiga.cpu.clock
-        let speed = config.cpuSpeed
-        if speed > 1 { clock *= Int64(speed) }
+        let clock = amiga.cpu.clock
 
         speedometer.updateWith(cycle: clock, frame: renderer.frames)
         
