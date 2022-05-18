@@ -528,7 +528,7 @@ DQ
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="installArosAction:" target="-2" id="mdz-99-EJs"/>
+                                                <action selector="installRomAction:" target="-2" id="1w8-gU-GEi"/>
                                             </connections>
                                         </popUpButton>
                                     </subviews>
