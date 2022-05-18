@@ -15,14 +15,16 @@ extension MyController: NSMenuItemValidation {
         let running = amiga.running
         let paused = amiga.paused
         let recording = amiga.recorder.recording
-        
+
+        var driveNr: Int { return item.tag / 10 }
+        var slotNr: Int { return item.tag % 10 }
         var dfn: FloppyDriveProxy { return amiga.df(item.tag)! }
         var hdn: HardDriveProxy { return amiga.hd(item.tag)! }
 
         func validateURLlist(_ list: [URL], image: NSImage) -> Bool {
             
             let slot = item.tag % 10
-            
+
             if let url = myAppDelegate.getRecentlyUsedURL(slot, from: list) {
                 
                 item.title = url.lastPathComponent
@@ -84,7 +86,7 @@ extension MyController: NSMenuItemValidation {
             return amiga.df(item)!.hasDisk
                         
         case #selector(MyController.exportRecentDiskAction(_:)):
-            return validateURLlist(myAppDelegate.exportedFloppyDisks[item.tag],
+            return validateURLlist(myAppDelegate.exportedFloppyDisks[driveNr],
                                    image: smallDisk)
             
         case #selector(MyController.writeProtectAction(_:)):
@@ -99,7 +101,7 @@ extension MyController: NSMenuItemValidation {
             return amiga.hd(item)!.hasDisk
 
         case #selector(MyController.exportRecentHdrAction(_:)):
-            return validateURLlist(myAppDelegate.exportedFloppyDisks[item.tag],
+            return validateURLlist(myAppDelegate.exportedHardDrives[driveNr],
                                    image: smallHdr)
 
         case #selector(MyController.writeProtectHdrAction(_:)):

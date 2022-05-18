@@ -1477,7 +1477,7 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Export To" id="r6T-Vb-Sf8">
                                     <items>
-                                        <menuItem title="0" tag="10" id="8Lv-OZ-CXc">
+                                        <menuItem title="0" tag="30" id="8Lv-OZ-CXc">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="exportRecentHdrAction:" target="-1" id="NvM-3d-ZcE"/>
