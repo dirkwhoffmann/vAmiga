@@ -107,7 +107,7 @@ protected:
 
     // Number of elapsed cycles since powerup
     i64 clock;
-
+    
     // The data and address registers
     Registers reg;
 

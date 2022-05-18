@@ -34,7 +34,15 @@ class Configuration {
     //
     // Hardware
     //
-    
+
+    var cpuRev: Int {
+        get { return amiga.getConfig(.CPU_REVISION) }
+        set { amiga.configure(.CPU_REVISION, value: newValue) }
+    }
+    var cpuSpeed: Int {
+        get { return amiga.getConfig(.CPU_OVERCLOCKING) }
+        set { amiga.configure(.CPU_OVERCLOCKING, value: newValue) }
+    }
     var agnusRev: Int {
         get { return amiga.getConfig(.AGNUS_REVISION) }
         set { amiga.configure(.AGNUS_REVISION, value: newValue) }
@@ -239,6 +247,10 @@ class Configuration {
     var todBug: Bool {
         get { return amiga.getConfig(.TODBUG) != 0 }
         set { amiga.configure(.TODBUG, enable: newValue) }
+    }
+    var ptrDrops: Bool {
+        get { return amiga.getConfig(.PTR_DROPS) != 0 }
+        set { amiga.configure(.PTR_DROPS, enable: newValue) }
     }
     var eClockSyncing: Bool {
         get { return amiga.getConfig(.ECLOCK_SYNCING) != 0 }

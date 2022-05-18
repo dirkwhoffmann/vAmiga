@@ -69,7 +69,8 @@ Agnus::resetConfig()
     std::vector <Option> options = {
         
         OPT_AGNUS_REVISION,
-        OPT_SLOW_RAM_MIRROR
+        OPT_SLOW_RAM_MIRROR,
+        OPT_PTR_DROPS
     };
 
     for (auto &option : options) {
@@ -82,8 +83,9 @@ Agnus::getConfigItem(Option option) const
 {
     switch (option) {
             
-        case OPT_AGNUS_REVISION: return config.revision;
-        case OPT_SLOW_RAM_MIRROR: return config.slowRamMirror;
+        case OPT_AGNUS_REVISION:    return config.revision;
+        case OPT_SLOW_RAM_MIRROR:   return config.slowRamMirror;
+        case OPT_PTR_DROPS:         return config.ptrDrops;
             
         default:
             fatalError;
@@ -120,6 +122,11 @@ Agnus::setConfigItem(Option option, i64 value)
         case OPT_SLOW_RAM_MIRROR:
             
             config.slowRamMirror = value;
+            return;
+
+        case OPT_PTR_DROPS:
+
+            config.ptrDrops = value;
             return;
             
         default:
@@ -300,6 +307,12 @@ Agnus::syncWithEClock()
 void
 Agnus::executeUntilBusIsFree()
 {
+    // If the CPU is overclocked, sync it with Agnus
+    cpu.resyncOverclockedCpu();
+
+    // Disable overclocking temporarily
+    cpu.slowCycles = 1;
+    
     // Check if the bus is blocked
     if (busOwner[pos.h] != BUS_NONE) {
 
@@ -328,32 +341,14 @@ Agnus::executeUntilBusIsFree()
 void
 Agnus::executeUntilBusIsFreeForCIA()
 {
+    // If the CPU is overclocked, sync it with Agnus
+    cpu.resyncOverclockedCpu();
+
     // Sync with the E clock driving the CIA
     syncWithEClock();
 
-    // Check if the bus is blocked
-    if (busOwner[pos.h] != BUS_NONE) {
-
-        // This variable counts the number of DMA cycles the CPU will be suspended
-        DMACycle delay = 0;
-
-        // Execute Agnus until the bus is free
-        do {
-
-            execute();
-            if (++delay == 2) bls = true;
-
-        } while (busOwner[pos.h] != BUS_NONE);
-
-        // Clear the BLS line (Blitter slow down)
-        bls = false;
-
-        // Add wait states to the CPU
-        cpu.addWaitStates(DMA_CYCLES(delay));
-    }
-
     // Assign bus to the CPU
-    busOwner[pos.h] = BUS_CPU;
+    // busOwner[pos.h] = BUS_CPU;
 }
 
 void

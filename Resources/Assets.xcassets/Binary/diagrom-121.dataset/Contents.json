@@ -1,7 +1,7 @@
 {
-  "images" : [
+  "data" : [
     {
-      "filename" : "lockTemplate.pdf",
+      "filename" : "diagrom-121.bin",
       "idiom" : "universal"
     }
   ],

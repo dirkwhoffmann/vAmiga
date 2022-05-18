@@ -54,6 +54,7 @@ Blitter::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS(hard)
 
     if (hard) {
+        blitcount = 1;
         copycount = 0;
         linecount = 0;
     }
@@ -62,7 +63,7 @@ Blitter::_reset(bool hard)
 void
 Blitter::_run()
 {
-    if constexpr (BLT_GUARD) {
+    if constexpr (BLT_MEM_GUARD) {
 
         memguard.resize(mem.getConfig().chipSize);
         memguard.clear();
@@ -503,8 +504,6 @@ Blitter::beginBlit()
 {
     auto level = config.accuracy;
 
-    if constexpr (BLT_GUARD) memguard.clear();
-
     if (bltconLINE()) {
 
         if constexpr (BLT_CHECKSUM) {
@@ -608,8 +607,7 @@ Blitter::endBlit()
     debug(BLTTIM_DEBUG, "(%ld,%ld) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
     
     running = false;
-    
-    if constexpr (BLT_GUARD) memguard.clear();
+    if constexpr (BLT_MEM_GUARD) blitcount++;
     
     // Clear the Blitter slot
     agnus.cancel<SLOT_BLT>();

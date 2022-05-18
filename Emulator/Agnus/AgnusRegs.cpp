@@ -177,9 +177,6 @@ Agnus::peekVHPOSR() const
         result = HI_LO(latchedPos.v & 0xFF, 0);
 
     } else {
-        
-        // The returned position is four cycles ahead
-        // auto pos = agnus.pos + Beam {0,4};
 
         // The returned position is five cycles ahead
         auto pos = Beam { agnus.pos.v, agnus.pos.h } + Beam {0,5};
@@ -239,9 +236,6 @@ Agnus::peekVPOSR() const
         result |= latchedPos.v >> 8;
 
     } else {
-        
-        // The returned position is four cycles ahead
-        // auto pos = agnus.pos + Beam {0,4};
 
         // The returned position is five cycles ahead
         auto pos = Beam { agnus.pos.v, agnus.pos.h } + Beam {0,5};
@@ -621,7 +615,7 @@ Agnus::dropWrite(BusOwner owner)
     /* A write to a pointer register is dropped if the pointer was used one
      * cycle before the update would happen.
      */
-    if (!NO_PTR_DROPS && pos.h >= 1 && busOwner[pos.h - 1] == owner) {
+    if (config.ptrDrops && pos.h >= 1 && busOwner[pos.h - 1] == owner) {
         
         trace(XFILES, "XFILES: Dropping pointer register write (%d)\n", owner);
         return true;

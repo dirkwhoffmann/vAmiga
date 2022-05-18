@@ -21,7 +21,8 @@ enum_long(OPT)
     // Agnus
     OPT_AGNUS_REVISION,
     OPT_SLOW_RAM_MIRROR,
-    
+    OPT_PTR_DROPS,
+
     // Denise
     OPT_DENISE_REVISION,
     OPT_VIEWPORT_TRACKING,
@@ -40,7 +41,9 @@ enum_long(OPT)
     OPT_DMA_DEBUG_COLOR,
     
     // CPU
-    OPT_REG_RESET_VAL,
+    OPT_CPU_REVISION,
+    OPT_CPU_OVERCLOCKING,
+    OPT_CPU_RESET_VAL,
     
     // Real-time clock
     OPT_RTC_MODEL,
@@ -150,6 +153,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
                 
             case OPT_AGNUS_REVISION:        return "AGNUS_REVISION";
             case OPT_SLOW_RAM_MIRROR:       return "SLOW_RAM_MIRROR";
+            case OPT_PTR_DROPS:             return "PTR_DROPS";
                 
             case OPT_DENISE_REVISION:       return "DENISE_REVISION";
             case OPT_VIEWPORT_TRACKING:     return "VIEWPORT_TRACKING";
@@ -165,7 +169,9 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_DMA_DEBUG_CHANNEL:     return "DMA_DEBUG_CHANNEL";
             case OPT_DMA_DEBUG_COLOR:       return "DMA_DEBUG_COLOR";
 
-            case OPT_REG_RESET_VAL:         return "REG_RESET_VAL";
+            case OPT_CPU_REVISION:          return "CPU_REVISION";
+            case OPT_CPU_OVERCLOCKING:      return "CPU_OVERCLOCKING";
+            case OPT_CPU_RESET_VAL:         return "CPU_RESET_VAL";
                 
             case OPT_RTC_MODEL:             return "RTC_MODEL";
 

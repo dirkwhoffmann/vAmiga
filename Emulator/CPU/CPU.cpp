@@ -24,11 +24,43 @@ namespace moira {
 void
 Moira::sync(int cycles)
 {
-    // Advance the CPU clock
-    clock += cycles;
+    CPU *cpu = (CPU *)this;
 
-    // Emulate Agnus up to the same cycle
-    agnus.execute(CPU_AS_DMA_CYCLES(cycles));
+    if (!cpu->config.overclocking) {
+
+        // Advance the CPU clock
+        clock += cycles;
+
+        // Emulate Agnus up to the same cycle
+        agnus.execute(CPU_AS_DMA_CYCLES(cycles));
+
+    } else {
+
+        // Compute the number of mico-cycles executed in one DMA cycle
+        auto microCyclesPerCycle = 2 * cpu->config.overclocking;
+
+        // Execute some cycles at normal speed if required
+        while (cpu->slowCycles && cycles) {
+
+            cpu->penalty += microCyclesPerCycle;
+            cycles--;
+            cpu->slowCycles--;
+        }
+
+        // Execute all other cycles
+        cpu->penalty += cycles;
+
+        while (cpu->penalty >= microCyclesPerCycle) {
+
+            // Advance the CPU clock by one DMA cycle
+            clock += 2;
+
+            // Emulate Agnus for one DMA cycle
+            agnus.execute();
+
+            cpu->penalty -= microCyclesPerCycle;
+        }
+    }
 }
 
 u8
@@ -94,8 +126,8 @@ Moira::signalResetInstr()
 void
 Moira::signalStopInstr(u16 op)
 {
-    if constexpr (XFILES) {
-        if (!(op & 0x2000)) trace(true, "XFILES: STOP instruction (%x)\n", op);
+    if (!(op & 0x2000)) {
+        trace(XFILES, "XFILES: STOP instruction (%x)\n", op);
     }
 }
 
@@ -235,8 +267,10 @@ i64
 CPU::getConfigItem(Option option) const
 {
     switch (option) {
-            
-        case OPT_REG_RESET_VAL:  return (long)config.regResetVal;
+
+        case OPT_CPU_REVISION:      return (long)config.revision;
+        case OPT_CPU_OVERCLOCKING:  return (long)config.overclocking;
+        case OPT_CPU_RESET_VAL:     return (long)config.regResetVal;
         
         default:
             fatalError;
@@ -247,10 +281,27 @@ void
 CPU::setConfigItem(Option option, i64 value)
 {
     switch (option) {
-            
-        case OPT_REG_RESET_VAL:
 
-            config.regResetVal = (u32)value;
+        case OPT_CPU_REVISION:
+
+            if (!CPURevisionEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, CPURevisionEnum::keyList());
+            }
+
+            config.revision = CPURevision(value);
+            return;
+
+        case OPT_CPU_OVERCLOCKING:
+
+            suspend();
+            config.overclocking = isize(value);
+            resume();
+            msgQueue.put(MSG_OVERCLOCKING, config.overclocking);
+            return;
+
+        case OPT_CPU_RESET_VAL:
+
+            config.regResetVal = u32(value);
             return;
                         
         default:
@@ -265,8 +316,10 @@ CPU::resetConfig()
     auto &defaults = amiga.defaults;
 
     std::vector <Option> options = {
-        
-        OPT_REG_RESET_VAL
+
+        OPT_CPU_REVISION,
+        OPT_CPU_OVERCLOCKING,
+        OPT_CPU_RESET_VAL
     };
 
     for (auto &option : options) {
@@ -330,7 +383,11 @@ void
 CPU::_dump(Category category, std::ostream& os) const
 {
     if (category == Category::Config) {
-        
+
+        os << util::tab("CPU model");
+        os << CPURevisionEnum::key(config.revision) << std::endl;
+        os << util::tab("Overclocking");
+        os << util::dec(config.overclocking) << std::endl;
         os << util::tab("Register reset value");
         os << util::hex(config.regResetVal) << std::endl;
     }
@@ -483,6 +540,17 @@ CPU::didLoadFromBuffer(const u8 *buffer)
     debugger.breakpoints.setNeedsCheck(debugger.breakpoints.elements() != 0);
     debugger.watchpoints.setNeedsCheck(debugger.watchpoints.elements() != 0);
     return 0;
+}
+
+void
+CPU::resyncOverclockedCpu()
+{
+    if (penalty) {
+
+        clock += 2;
+        agnus.execute();
+        penalty = 0;
+    }
 }
 
 const char *

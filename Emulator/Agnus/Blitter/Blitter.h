@@ -160,6 +160,7 @@ private:
     isize remaining;
 
     // Debug counters
+    isize blitcount;
     isize copycount;
     isize linecount;
 
@@ -170,7 +171,7 @@ private:
 public:
     
     // Optional storage for recording memory locations if BLT_GUARD is enabled
-    Buffer<u8> memguard;
+    Buffer<isize> memguard;
     
  
     //
@@ -499,4 +500,13 @@ private:
     void resetYCounter() { setYCounter(bltsizeV); }
     void decXCounter() { setXCounter(xCounter - 1); }
     void decYCounter() { setYCounter(yCounter - 1); }
+
+
+    //
+    // Debugging
+    //
+
+public:
+    
+    bool checkMemguard(u32 addr) { return memguard[addr] == blitcount; }
 };

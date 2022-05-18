@@ -28,15 +28,16 @@ enum class Token
     hide, ignore, init, info, insert, inspect, interrupt, interrupts, joystick,
     jump, keyboard, keyset, layers, left, library, libraries, list, load, lock,
     mechanics, memory, mode, model, monitor, mouse, none, off, on, opacity,
-    open, os, palette, pan, partition, path, paula, pause, poll, port, ports,
-    power, press, process, processes, pull, pullup, raminitpattern, refresh,
-    registers, regreset, regression, release, reset, resource, resources,
-    revision, right, rom, rshell, rtc, run, sampling, saturation, save,
-    saveroms, screenshot, searchpath, serial, server, set, setup, shakedetector,
-    show, slow, slowramdelay, slowrammirror, source, speed, sprites, start,
-    state, status, step, stop, swapdelay, swtraps, task, tasks, tod, todbug,
-    tracking, trap, unmappingtype, up, vector, verbose, velocity, volume,
-    volumes, wait, watch, watchpoint, wom, wp, xaxis, yaxis, zorro
+    open, os, overclocking, palette, pan, partition, path, paula, pause,
+    ptrdrops, poll, port, ports, power, press, process, processes, pull, pullup,
+    raminitpattern, refresh, registers, regreset, regression, release, reset,
+    resource, resources, revision, right, rom, rshell, rtc, run, sampling,
+    saturation, save, saveroms, screenshot, searchpath, serial, server, set,
+    setup, shakedetector, show, slow, slowramdelay, slowrammirror, source,
+    speed, sprites, start, state, status, step, stop, swapdelay, swtraps, task,
+    tasks, tod, todbug, tracking, trap, unmappingtype, up, vector, verbose,
+    velocity,volume, volumes, wait, watch, watchpoint, wom, wp, xaxis, yaxis,
+    zorro
 };
 
 struct TooFewArgumentsError : public util::ParseError {

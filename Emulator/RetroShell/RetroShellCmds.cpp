@@ -295,10 +295,17 @@ RetroShell::exec <Token::cpu, Token::config> (Arguments &argv, long param)
 }
 
 template <> void
+RetroShell::exec <Token::cpu, Token::set, Token::overclocking> (Arguments &argv, long param)
+{
+    auto value = util::parseNum(argv.front());
+    amiga.configure(OPT_CPU_OVERCLOCKING, value);
+}
+
+template <> void
 RetroShell::exec <Token::cpu, Token::set, Token::regreset> (Arguments &argv, long param)
 {
     auto value = util::parseNum(argv.front());
-    amiga.configure(OPT_REG_RESET_VAL, value);
+    amiga.configure(OPT_CPU_RESET_VAL, value);
 }
 
 template <> void
@@ -552,6 +559,13 @@ template <> void
 RetroShell::exec <Token::agnus, Token::set, Token::slowrammirror> (Arguments &argv, long param)
 {
     amiga.configure(OPT_SLOW_RAM_MIRROR, util::parseBool(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::agnus, Token::set, Token::ptrdrops> (Arguments &argv, long param)
+{
+    auto value = util::parseBool(argv.front());
+    amiga.configure(OPT_PTR_DROPS, value);
 }
 
 template <> void

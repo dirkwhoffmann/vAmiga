@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Aliases.h"
+#include "Reflection.h"
 
 #ifdef __cplusplus
 #include "RingBuffer.h"
@@ -17,12 +18,45 @@
 
 #define CPUINFO_INSTR_COUNT 256
 
+
+//
+// Enumerations
+//
+
+enum_long(CPU_REVISION)
+{
+    CPU_MC68000
+};
+typedef CPU_REVISION CPURevision;
+
+#ifdef __cplusplus
+struct CPURevisionEnum : util::Reflection<CPURevisionEnum, CPURevision>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = CPU_MC68000;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
+
+    static const char *prefix() { return "CPU"; }
+    static const char *key(CPURevision value)
+    {
+        switch (value) {
+
+            case CPU_MC68000:   return "MC68000";
+        }
+        return "???";
+    }
+};
+#endif
+
+
 //
 // Structures
 //
 
 typedef struct
 {
+    CPURevision revision;
+    isize overclocking;
     u32 regResetVal;
 }
 CPUConfig;

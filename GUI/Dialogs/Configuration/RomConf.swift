@@ -93,6 +93,35 @@ extension ConfigurationController {
         romPowerButton.isHidden = !bootable
     }
 
+    func refreshRomSelector() {
+
+        romArosPopup.autoenablesItems = false
+
+        let fm = FileManager.default
+
+        for item in romArosPopup.itemArray where item.tag != 0 {
+
+            switch amiga.mem.romIdentifier(of: u64(item.tag)) {
+
+            case .AROS_54705, .AROS_55696, .DIAG121:
+                item.isEnabled = true
+
+            default:
+                if let url = UserDefaults.romUrl(fingerprint: item.tag) {
+                    item.isEnabled = fm.fileExists(atPath: url.path)
+                } else {
+                    item.isEnabled = false
+                }
+            }
+
+            if item.isEnabled {
+                item.image = NSImage(named: "chipTemplate")
+            } else {
+                item.image = NSImage(named: "lockTemplate")
+            }
+        }
+    }
+
     //
     // Action methods
     //
@@ -115,9 +144,28 @@ extension ConfigurationController {
         refresh()
     }
 
-    @IBAction func installArosAction(_ sender: NSButton!) {
+    @IBAction func installRomAction(_ sender: NSButton!) {
 
-        installAros(svn: sender.selectedTag())
+        let hash = sender.selectedTag()
+        let id = amiga.mem.romIdentifier(of: UInt64(hash))
+
+        switch id {
+        case .AROS_54705: // Taken from UAE
+            installAros(rom: "aros-svn54705-rom", ext: "aros-svn54705-ext")
+
+        case .AROS_55696: // Taken from SAE
+            installAros(rom: "aros-svn55696-rom", ext: "aros-svn55696-ext")
+
+        case .DIAG121:
+            install(rom: "diagrom-121")
+
+        default:
+            if let url = UserDefaults.romUrl(fingerprint: hash) {
+                try? amiga.mem.loadRom(url)
+            }
+        }
+
+        refresh()
     }
     
     @IBAction func romDefaultsAction(_ sender: NSButton!) {
@@ -134,17 +182,17 @@ extension ConfigurationController {
 
     func installAros() {
 
-        installAros(svn: 55696)
+        installAros(id: .AROS_55696)
     }
 
-    func installAros(svn: Int) {
+    func installAros(id: RomIdentifier) {
 
-        switch svn {
+        switch id {
 
-        case 54705: // Taken from UAE
+        case .AROS_54705: // Taken from UAE
             installAros(rom: "aros-svn54705-rom", ext: "aros-svn54705-ext")
 
-        case 55696: // Taken from SAE
+        case .AROS_55696: // Taken from SAE
             installAros(rom: "aros-svn55696-rom", ext: "aros-svn55696-ext")
 
         default:
@@ -154,12 +202,11 @@ extension ConfigurationController {
 
     func installAros(rom: String, ext: String) {
 
-        let arosRom = NSDataAsset(name: rom)!.data
-        let arosExt = NSDataAsset(name: ext)!.data
+        // Install both Roms
+        install(rom: rom)
+        install(ext: ext)
 
-        // Install the Aros Roms
-        try? amiga.mem.loadRom(buffer: arosRom)
-        try? amiga.mem.loadExt(buffer: arosExt)
+        // Configure the location of the exansion Rom
         config.extStart = 0xE0
 
         // Make sure the machine has enough Ram to run Aros
@@ -167,7 +214,17 @@ extension ConfigurationController {
         let slow = amiga.getConfig(.SLOW_RAM)
         let fast = amiga.getConfig(.FAST_RAM)
         if chip + slow + fast < 1024*1024 { config.slowRam = 512 }
-        
-        refresh()
+    }
+
+    func install(rom: String) {
+
+        let data = NSDataAsset(name: rom)!.data
+        try? amiga.mem.loadRom(buffer: data)
+    }
+
+    func install(ext: String) {
+
+        let data = NSDataAsset(name: ext)!.data
+        try? amiga.mem.loadExt(buffer: data)
     }
 }

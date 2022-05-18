@@ -202,7 +202,8 @@ Amiga::getConfigItem(Option option) const
 
         case OPT_AGNUS_REVISION:
         case OPT_SLOW_RAM_MIRROR:
-            
+        case OPT_PTR_DROPS:
+
             return agnus.getConfigItem(option);
             
         case OPT_DENISE_REVISION:
@@ -229,9 +230,11 @@ Amiga::getConfigItem(Option option) const
         case OPT_DMA_DEBUG_OPACITY:
             
             return agnus.dmaDebugger.getConfigItem(option);
-            
-        case OPT_REG_RESET_VAL:
-            
+
+        case OPT_CPU_REVISION:
+        case OPT_CPU_OVERCLOCKING:
+        case OPT_CPU_RESET_VAL:
+
             return cpu.getConfigItem(option);
             
         case OPT_RTC_MODEL:
@@ -393,6 +396,7 @@ Amiga::configure(Option option, i64 value)
 
         case OPT_AGNUS_REVISION:
         case OPT_SLOW_RAM_MIRROR:
+        case OPT_PTR_DROPS:
             
             agnus.setConfigItem(option, value);
             break;
@@ -425,7 +429,9 @@ Amiga::configure(Option option, i64 value)
             agnus.dmaDebugger.setConfigItem(option, value);
             break;
 
-        case OPT_REG_RESET_VAL:
+        case OPT_CPU_REVISION:
+        case OPT_CPU_OVERCLOCKING:
+        case OPT_CPU_RESET_VAL:
             
             cpu.setConfigItem(option, value);
             break;
