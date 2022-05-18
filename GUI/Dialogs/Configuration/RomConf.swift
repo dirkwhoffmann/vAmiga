@@ -110,7 +110,7 @@ extension ConfigurationController {
             } else {
                 item.isEnabled = false
             }
-            
+
             if item.isEnabled {
                 item.image = NSImage(named: "chipTemplate")
             } else {
@@ -143,18 +143,19 @@ extension ConfigurationController {
 
     @IBAction func installArosAction(_ sender: NSButton!) {
 
-        debug(1, "Tag = \(sender.selectedTag())")
-        let id = amiga.mem.romIdentifier(of: u64(sender.selectedTag()))
-        debug(1, "id = \(id)")
+        let hash = sender.selectedTag()
+        let id = amiga.mem.romIdentifier(of: UInt64(hash))
+
         if amiga.mem.isArosRom(id) {
 
             installAros(id: id)
 
-        } else if let url = UserDefaults.romUrl(fingerprint: sender.tag) {
+        } else if let url = UserDefaults.romUrl(fingerprint: hash) {
 
-            debug(1, "Loading Rom from \(url)")
             try? amiga.mem.loadRom(url)
         }
+
+        refresh()
     }
     
     @IBAction func romDefaultsAction(_ sender: NSButton!) {
@@ -204,7 +205,5 @@ extension ConfigurationController {
         let slow = amiga.getConfig(.SLOW_RAM)
         let fast = amiga.getConfig(.FAST_RAM)
         if chip + slow + fast < 1024*1024 { config.slowRam = 512 }
-        
-        refresh()
     }
 }

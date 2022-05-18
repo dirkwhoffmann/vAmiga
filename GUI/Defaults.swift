@@ -209,6 +209,7 @@ extension UserDefaults {
 
     static func romUrl(fingerprint: Int) -> URL? {
 
+        debug(1, "Rom hash = \(fingerprint)")
         return romUrl(name: String(format: "%08x", fingerprint) + ".rom")
     }
 

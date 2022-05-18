@@ -84,6 +84,21 @@ class RomDropView: DropView {
             
             let rom = try RomFileProxy.make(with: url)
             try amiga.mem.loadRom(rom)
+
+            // Check if we should keep this Rom
+            let hash = Int(amiga.mem.romFingerprint)
+
+            for item in parent.romArosPopup.itemArray {
+
+                if item.tag == hash && hash != 0 {
+
+                    if let url = UserDefaults.romUrl(fingerprint: hash) {
+                        debug(1, "Saving \(url)")
+                        try? amiga.mem.saveRom(url)
+                        parent.refreshRomSelector()
+                    }
+                }
+            }
             return true
             
         } catch {
