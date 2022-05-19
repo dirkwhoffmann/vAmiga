@@ -455,7 +455,7 @@ Agnus::pokeSPRxCTL(u16 value)
         trace(XFILES, "XFILES: pokeSPRxCTL: Extended VSTRT bit set\n");
         if (isECS()) sprVStrt[x] |= 0x0200;
     }
-    if (GET_BIT(value, 7)) {
+    if (GET_BIT(value, 5)) {
         trace(XFILES, "XFILES: pokeSPRxCTL: Extended VSTOP bit set\n");
         if (isECS()) sprVStop[x] |= 0x0200;
     }
