@@ -346,9 +346,6 @@ Agnus::executeUntilBusIsFreeForCIA()
 
     // Sync with the E clock driving the CIA
     syncWithEClock();
-
-    // Assign bus to the CPU
-    // busOwner[pos.h] = BUS_CPU;
 }
 
 void

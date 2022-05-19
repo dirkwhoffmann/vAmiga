@@ -331,9 +331,6 @@ Denise::pokeSPRxCTL(u16 value)
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
-    
-    // Disarm the sprite
-    // CLR_BIT(armed, x);
 
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
