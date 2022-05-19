@@ -116,7 +116,8 @@ public:
     
 private:
     
-    void encodeTrack(class FloppyDisk &disk, Track t) const throws;
+    void encodeStandardTrack(class ADFFile &adf, Track t) const throws;
+    void encodeExtendedTrack(class FloppyDisk &disk, Track t) const throws;
 
 
     // Scanning the raw data
