@@ -450,6 +450,16 @@ Agnus::pokeSPRxCTL(u16 value)
     sprVStrt[x] = (i16)((value & 0b100) << 6 | (sprVStrt[x] & 0x00FF));
     sprVStop[x] = (i16)((value & 0b010) << 7 | (value >> 8));
 
+    // ECS Agnus supports an additional position bit (encoded in 'unused' area)
+    if (GET_BIT(value, 6)) {
+        trace(XFILES, "XFILES: pokeSPRxCTL: Extended VSTRT bit set\n");
+        if (isECS()) sprVStrt[x] |= 0x0200;
+    }
+    if (GET_BIT(value, 7)) {
+        trace(XFILES, "XFILES: pokeSPRxCTL: Extended VSTOP bit set\n");
+        if (isECS()) sprVStop[x] |= 0x0200;
+    }
+
     // Update sprite DMA status
     if (sprVStrt[x] == v) sprDmaState[x] = SPR_DMA_ACTIVE;
     if (sprVStop[x] == v) sprDmaState[x] = SPR_DMA_IDLE;
