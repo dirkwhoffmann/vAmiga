@@ -1058,8 +1058,11 @@ Denise::beginOfLine(isize vpos)
     hflopOn = denise.hstrt; 
     hflopOff = denise.hstop;
 
-    // Clear the bBuffer
-    std::memset(bBuffer, 0, sizeof(bBuffer));
+    // Wrap around the unprocessed bBuffer part
+    for (isize i = 0; i < 32; i++) bBuffer[i] = bBuffer[HPIXELS + i];
+
+    // Clear the rest of the bBuffer
+    std::memset(bBuffer + 32, 0, sizeof(bBuffer) - 32);
 
     // Reset the sprite clipping range
     spriteClipBegin = HPIXELS;
