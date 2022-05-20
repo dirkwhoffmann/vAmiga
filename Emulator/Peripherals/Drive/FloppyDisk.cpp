@@ -143,6 +143,14 @@ FloppyDisk::clearDisk()
 }
 
 void
+FloppyDisk::clearDisk(u8 value)
+{
+    for (isize i = 0; i < isizeof(data.raw); i++) {
+        data.raw[i] = value;
+    }
+}
+
+void
 FloppyDisk::clearTrack(Track t)
 {
     assert(t < numTracks());

@@ -103,11 +103,20 @@ EXTFile::finalizeRead()
     }
 
     for (isize i = 0; i < numTracks; i++) {
-        
-        if (typeOfTrack(i) != 1) {
+
+        if (typeOfTrack(i) != 0 && typeOfTrack(i) != 1) {
             
-            warn("Only MFM encoded tracks are supported yet\n");
+            warn("Unsupported track format\n");
             throw VAError(ERROR_EXT_INCOMPATIBLE);
+        }
+
+        if (typeOfTrack(i) == 0) {
+
+            if (usedBitsForTrack(i) != 11 * 512 * 8) {
+
+                warn("Unsupported standard track size\n");
+                throw VAError(ERROR_EXT_CORRUPTED);
+            }
         }
 
         if (usedBitsForTrack(i) > availableBytesForTrack(i) * 8) {
@@ -165,31 +174,53 @@ void
 EXTFile::encodeDisk(class FloppyDisk &disk) const
 {
     assert(!data.empty());
-    
+
     isize tracks = storedTracks();
     debug(MFM_DEBUG, "Encoding Amiga disk with %ld tracks\n", tracks);
 
-    // Start with an unformatted disk
-    disk.clearDisk();
+    // Create an empty ADF
+    ADFFile adf(getDiameter(), getDensity());
 
-    // Encode all tracks
-    for (Track t = 0; t < tracks; t++) encodeTrack(disk, t);
+    // Wipe out all data
+    disk.clearDisk(0);
+
+    // Encode all standard tracks
+    for (Track t = 0; t < tracks; t++) encodeStandardTrack(adf, t);
+
+    // Convert the ADF to a disk
+    disk.encodeDisk(adf);
+
+    // Encode all extended tracks
+    for (Track t = 0; t < tracks; t++) encodeExtendedTrack(disk, t);
 }
 
 void
-EXTFile::encodeTrack(class FloppyDisk &disk, Track t) const
+EXTFile::encodeStandardTrack(ADFFile &adf, Track t) const
 {
-    auto numTracks = storedTracks();
-    
-    for (isize i = 0; i < numTracks; i++) {
+    if (typeOfTrack(t) == 0) {
 
-        debug(MFM_DEBUG, "Encoding track %ld\n", i);
-        
-        auto numBits = usedBitsForTrack(i);
+        debug(MFM_DEBUG, "Encoding standard track %ld\n", t);
+
+        auto numBits = usedBitsForTrack(t);
         assert(numBits % 8 == 0);
-        
-        std::memcpy(disk.data.track[i], trackData(i), numBits / 8);
-        disk.length.track[i] = (i32)(numBits / 8);
+
+        auto ptr = adf.data.ptr + t * 11 * 512;
+        std::memcpy(ptr, trackData(t), size_t(numBits / 8));
+    }
+}
+
+void
+EXTFile::encodeExtendedTrack(class FloppyDisk &disk, Track t) const
+{
+    if (typeOfTrack(t) == 1) {
+
+        debug(MFM_DEBUG, "Encoding extended track %ld\n", t);
+
+        auto numBits = usedBitsForTrack(t);
+        assert(numBits % 8 == 0);
+
+        std::memcpy(disk.data.track[t], trackData(t), size_t(numBits / 8));
+        disk.length.track[t] = i32(numBits / 8);
     }
 }
 

@@ -182,6 +182,9 @@ public:
     // Initializes the disk with random data
     void clearDisk();
 
+    // Initializes the disk with a constant value
+    void clearDisk(u8 value);
+
     // Initializes a single track with random data or a specific value
     void clearTrack(Track t);
     void clearTrack(Track t, u8 value);
