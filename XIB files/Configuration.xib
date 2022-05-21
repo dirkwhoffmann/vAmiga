@@ -994,6 +994,12 @@ DQ
                                                         <menuItem title="512 KB" tag="512" id="2rF-Yd-o5Y">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
+                                                        <menuItem title="1 MB" tag="1024" id="8mV-Ua-Rly">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="1,5 MB" tag="1536" id="oH8-6a-xXL">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>

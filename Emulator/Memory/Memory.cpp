@@ -212,8 +212,8 @@ Memory::setConfigItem(Option option, i64 value)
             if (!isPoweredOff()) {
                 throw VAError(ERROR_OPT_LOCKED);
             }
-            if ((value % 256) != 0 || value > 512) {
-                throw VAError(ERROR_OPT_INVARG, "0, 256, 512");
+            if ((value % 256) != 0 || value > 1536) {
+                throw VAError(ERROR_OPT_INVARG, "0, 256, 512, ..., 1536");
             }
                         
             mem.allocSlow((i32)KB(value));
@@ -484,14 +484,14 @@ void
 Memory::allocSlow(i32 bytes, bool update)
 {
     config.slowSize = bytes;
-    alloc(slowAllocator, bytes, slowMask, update);
+    alloc(slowAllocator, bytes, update);
 }
 
 void
 Memory::allocFast(i32 bytes, bool update)
 {
     config.fastSize = bytes;
-    alloc(fastAllocator, bytes, fastMask, update);
+    alloc(fastAllocator, bytes, update);
 }
             
 void
@@ -516,19 +516,26 @@ Memory::allocExt(i32 bytes, bool update)
 }
 
 void
-Memory::alloc(Allocator<u8> &allocator, isize bytes, u32 &mask, bool update)
+Memory::alloc(Allocator<u8> &allocator, isize bytes, bool update)
 {
     // Only proceed if memory layout will change
     if (bytes == allocator.size) return;
 
     // Allocate memory
     allocator.alloc(bytes);
-    
-    // Set the memory mask
-    mask = bytes ? u32(bytes - 1) : 0;
 
     // Update the memory source tables if requested
     if (update) updateMemSrcTables();
+}
+
+void
+Memory::alloc(Allocator<u8> &allocator, isize bytes, u32 &mask, bool update)
+{
+    // Set the memory mask
+    mask = bytes ? u32(bytes - 1) : 0;
+
+    // Allocate
+    alloc(allocator, bytes, update);
 }
 
 void
