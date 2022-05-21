@@ -867,6 +867,23 @@ Denise::drawAttachedSpritePixelPair(Pixel hpos)
 }
 
 void
+Denise::copyOverlappedSpritePixels()
+{
+    /* This function is a hack to make DPaint IV work. It scans the current
+     * contents of the mBuffer which still contain the multiplexed pixels from
+     * the previous line. If the buffer is not empty, a sprite pixel is present.
+     * This pixel is copied into the beginning of the bBuffer to make the
+     * sprite occur. The code is does not take any priority bits into accout
+     * yet.
+     */
+    for (isize i = 0; i < 32; i++) {
+        if (denise.mBuffer[HPIXELS + i]) {
+            denise.bBuffer[i] = denise.mBuffer[HPIXELS + i];
+        }
+    }
+}
+
+void
 Denise::updateBorderColor()
 {
     if (config.revision != DENISE_OCS && ecsena() && brdrblnk()) {
@@ -1066,7 +1083,7 @@ Denise::beginOfLine(isize vpos)
 
     // Reset the sprite clipping range
     spriteClipBegin = HPIXELS;
-    spriteClipEnd = HPIXELS;
+    spriteClipEnd = HPIXELS + 32;
 }
 
 void
@@ -1074,6 +1091,9 @@ Denise::endOfLine(isize vpos)
 {
     // Check if we are below the VBLANK area
     if (vpos >= 26) {
+
+        // Take care of overlapping sprite pixels from the previous line
+        copyOverlappedSpritePixels();
 
         // Translate bitplane data to color register indices
         translate();
