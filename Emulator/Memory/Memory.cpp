@@ -953,7 +953,7 @@ Memory::inSlowRam(u32 addr)
     if (addr > 0xFFFFFF) return false;
         
     auto memSrc = cpuMemSrc[addr >> 16];
-    return memSrc == MEM_SLOW || memSrc == MEM_SLOW_MIRROR;
+    return memSrc == MEM_SLOW;
 }
 
 bool
@@ -1341,7 +1341,6 @@ Memory::peek8 <ACCESSOR_CPU> (u32 addr)
         case MEM_CHIP:          return peek8 <ACCESSOR_CPU, MEM_CHIP>     (addr);
         case MEM_CHIP_MIRROR:   return peek8 <ACCESSOR_CPU, MEM_CHIP>     (addr);
         case MEM_SLOW:          return peek8 <ACCESSOR_CPU, MEM_SLOW>     (addr);
-        case MEM_SLOW_MIRROR:   return peek8 <ACCESSOR_CPU, MEM_SLOW>     (addr);
         case MEM_FAST:          return peek8 <ACCESSOR_CPU, MEM_FAST>     (addr);
         case MEM_CIA:           return peek8 <ACCESSOR_CPU, MEM_CIA>      (addr);
         case MEM_CIA_MIRROR:    return peek8 <ACCESSOR_CPU, MEM_CIA>      (addr);
@@ -1371,7 +1370,6 @@ Memory::peek16 <ACCESSOR_CPU> (u32 addr)
         case MEM_CHIP:          return peek16 <ACCESSOR_CPU, MEM_CHIP>     (addr);
         case MEM_CHIP_MIRROR:   return peek16 <ACCESSOR_CPU, MEM_CHIP>     (addr);
         case MEM_SLOW:          return peek16 <ACCESSOR_CPU, MEM_SLOW>     (addr);
-        case MEM_SLOW_MIRROR:   return peek16 <ACCESSOR_CPU, MEM_SLOW>     (addr);
         case MEM_FAST:          return peek16 <ACCESSOR_CPU, MEM_FAST>     (addr);
         case MEM_CIA:           return peek16 <ACCESSOR_CPU, MEM_CIA>      (addr);
         case MEM_CIA_MIRROR:    return peek16 <ACCESSOR_CPU, MEM_CIA>      (addr);
@@ -1401,7 +1399,6 @@ Memory::spypeek16 <ACCESSOR_CPU> (u32 addr) const
         case MEM_CHIP:          return spypeek16 <ACCESSOR_CPU, MEM_CHIP>     (addr);
         case MEM_CHIP_MIRROR:   return spypeek16 <ACCESSOR_CPU, MEM_CHIP>     (addr);
         case MEM_SLOW:          return spypeek16 <ACCESSOR_CPU, MEM_SLOW>     (addr);
-        case MEM_SLOW_MIRROR:   return spypeek16 <ACCESSOR_CPU, MEM_SLOW>     (addr);
         case MEM_FAST:          return spypeek16 <ACCESSOR_CPU, MEM_FAST>     (addr);
         case MEM_CIA:           return spypeek16 <ACCESSOR_CPU, MEM_CIA>      (addr);
         case MEM_CIA_MIRROR:    return spypeek16 <ACCESSOR_CPU, MEM_CIA>      (addr);
@@ -1485,7 +1482,7 @@ Memory::peek16 <ACCESSOR_AGNUS, MEM_SLOW> (u32 addr)
 {
     assert((addr & agnus.ptrMask) == addr);
     trace(XFILES, "XFILES (AGNUS): Reading from Slow RAM mirror\n");
-    dataBus = READ_SLOW_16(addr & 0x7FFFF);
+    dataBus = READ_SLOW_16(SLOW_RAM_STRT + (addr & 0x7FFFF));
     return dataBus;
 }
 
@@ -1493,7 +1490,7 @@ template<> u16
 Memory::spypeek16 <ACCESSOR_AGNUS, MEM_SLOW> (u32 addr) const
 {
     assert((addr & agnus.ptrMask) == addr);
-    return READ_SLOW_16(addr);
+    return READ_SLOW_16(SLOW_RAM_STRT + (addr & 0x7FFFF));
 }
 
 template<> u16
@@ -1792,7 +1789,6 @@ Memory::poke8 <ACCESSOR_CPU> (u32 addr, u8 value)
         case MEM_CHIP:          poke8 <ACCESSOR_CPU, MEM_CHIP>     (addr, value); return;
         case MEM_CHIP_MIRROR:   poke8 <ACCESSOR_CPU, MEM_CHIP>     (addr, value); return;
         case MEM_SLOW:          poke8 <ACCESSOR_CPU, MEM_SLOW>     (addr, value); return;
-        case MEM_SLOW_MIRROR:   poke8 <ACCESSOR_CPU, MEM_SLOW>     (addr, value); return;
         case MEM_FAST:          poke8 <ACCESSOR_CPU, MEM_FAST>     (addr, value); return;
         case MEM_CIA:           poke8 <ACCESSOR_CPU, MEM_CIA>      (addr, value); return;
         case MEM_CIA_MIRROR:    poke8 <ACCESSOR_CPU, MEM_CIA>      (addr, value); return;
@@ -1822,7 +1818,6 @@ Memory::poke16 <ACCESSOR_CPU> (u32 addr, u16 value)
         case MEM_CHIP:          poke16 <ACCESSOR_CPU, MEM_CHIP>     (addr, value); return;
         case MEM_CHIP_MIRROR:   poke16 <ACCESSOR_CPU, MEM_CHIP>     (addr, value); return;
         case MEM_SLOW:          poke16 <ACCESSOR_CPU, MEM_SLOW>     (addr, value); return;
-        case MEM_SLOW_MIRROR:   poke16 <ACCESSOR_CPU, MEM_SLOW>     (addr, value); return;
         case MEM_FAST:          poke16 <ACCESSOR_CPU, MEM_FAST>     (addr, value); return;
         case MEM_CIA:           poke16 <ACCESSOR_CPU, MEM_CIA>      (addr, value); return;
         case MEM_CIA_MIRROR:    poke16 <ACCESSOR_CPU, MEM_CIA>      (addr, value); return;
@@ -2698,7 +2693,6 @@ Memory::patch(u32 addr, u8 value)
         case MEM_CHIP:          patch <MEM_CHIP>     (addr, value); return;
         case MEM_CHIP_MIRROR:   patch <MEM_CHIP>     (addr, value); return;
         case MEM_SLOW:          patch <MEM_SLOW>     (addr, value); return;
-        case MEM_SLOW_MIRROR:   patch <MEM_SLOW>     (addr, value); return;
         case MEM_FAST:          patch <MEM_FAST>     (addr, value); return;
         case MEM_ROM:           patch <MEM_ROM>      (addr, value); return;
         case MEM_ROM_MIRROR:    patch <MEM_ROM>      (addr, value); return;
