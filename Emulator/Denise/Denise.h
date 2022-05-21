@@ -508,8 +508,8 @@ private:
     template <isize x> void drawSpritePixel(Pixel hpos);
     template <isize x> void drawAttachedSpritePixelPair(Pixel hpos);
 
-    // Called in endOfLine() to make overlapping sprites work
-    void copyOverlappedSpritePixels();
+    // Copy overlapping sprite pixels into the next line
+    void copyOverlappingSpritePixels();
 
     
     //
