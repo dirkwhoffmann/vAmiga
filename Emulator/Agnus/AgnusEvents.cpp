@@ -270,6 +270,8 @@ Agnus::serviceREGEvent(Cycle until)
                                 
             case SET_DSKPTH: setDSKPTH(change.value); break;
             case SET_DSKPTL: setDSKPTL(change.value); break;
+
+            case SET_SERDAT: uart.setSERDAT(change.value); break;
                 
             case SET_STRHOR: hsyncHandler(); break;
                 
