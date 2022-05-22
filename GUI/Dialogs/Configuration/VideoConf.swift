@@ -239,39 +239,57 @@ extension ConfigurationController {
 
     @IBAction func vidHAutoCenterAction(_ sender: NSButton) {
 
-        config.hAutoCenter = sender.state == .off
+        let state = sender.state == .off
+        debug(.config, "hAutoCenter = \(state)")
+
+        config.hAutoCenter = state
         parent.renderer.canvas.updateTextureRect()
         refresh()
     }
 
     @IBAction func vidVAutoCenterAction(_ sender: NSButton) {
 
-        config.vAutoCenter = sender.state == .off
+        let state = sender.state == .off
+        debug(.config, "vAutoCenter = \(state)")
+
+        config.vAutoCenter = state
         parent.renderer.canvas.updateTextureRect()
         refresh()
     }
 
     @IBAction func vidHCenterAction(_ sender: NSSlider!) {
 
-        config.hCenter = sender.floatValue / 1000
+        let value = sender.floatValue / 1000
+        debug(.config, "hCenter = \(value)")
+
+        config.hCenter = value
         refresh()
     }
     
     @IBAction func vidVCenterAction(_ sender: NSSlider!) {
-        
-        config.vCenter = sender.floatValue / 1000
+
+        let value = sender.floatValue / 1000
+        debug(.config, "vCenter = \(value)")
+
+        config.vCenter = value
         refresh()
     }
     
     @IBAction func vidHZoomAction(_ sender: NSSlider!) {
-        
-        config.hZoom = sender.floatValue / 1000
+
+        let value = sender.floatValue / 1000
+        debug(.config, "hZoom = \(value)")
+
+        config.hZoom = value
         refresh()
     }
 
     @IBAction func vidVZoomAction(_ sender: NSSlider!) {
-        
-        config.vZoom = sender.floatValue / 1000
+
+        let value = sender.floatValue / 1000
+        debug(.config, "vZoom = \(value)")
+
+        config.vZoom = value
         refresh()
     }
     
@@ -332,7 +350,19 @@ extension ConfigurationController {
             defaults.set(Keys.Vid.bloom, 1)
             defaults.set(Keys.Vid.dotMask, 1)
             defaults.set(Keys.Vid.scanlines, 2)
-            
+
+        case 10: // My personal monitor (ViewSonic VP191b)
+
+            AmigaProxy.defaults.removeColorUserDefaults()
+            AmigaProxy.defaults.removeShaderUserDefaults()
+            AmigaProxy.defaults.removeGeometryUserDefaults()
+            defaults.set(Keys.Vid.hAutoCenter, false)
+            defaults.set(Keys.Vid.vAutoCenter, false)
+            defaults.set(Keys.Vid.hCenter, 0.39813587)
+            defaults.set(Keys.Vid.vCenter, 1.0)
+            defaults.set(Keys.Vid.hZoom, 0.6763221)
+            defaults.set(Keys.Vid.vZoom, 0.032)
+
         default:
             fatalError()
         }
