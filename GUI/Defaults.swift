@@ -1381,7 +1381,7 @@ extension Configuration {
         hAutoCenter = defaults.bool(Keys.Vid.hAutoCenter)
         vAutoCenter = defaults.bool(Keys.Vid.vAutoCenter)
         hCenter = defaults.float(Keys.Vid.hCenter)
-        hCenter = defaults.float(Keys.Vid.vCenter)
+        vCenter = defaults.float(Keys.Vid.vCenter)
         hZoom = defaults.float(Keys.Vid.hZoom)
         vZoom = defaults.float(Keys.Vid.vZoom)
                 

@@ -135,7 +135,9 @@ enum RegChangeID : i32
     SET_SPR7PTL,
 
     SET_DSKPTH,
-    SET_DSKPTL
+    SET_DSKPTL,
+
+    SET_SERDAT
 };
 
 struct RegChange

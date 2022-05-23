@@ -118,9 +118,11 @@ public:
 
     // Serial port data and stop bits write
     void pokeSERDAT(u16 value);
+    void setSERDAT(u16 value);
 
     // Serial port period and control
     void pokeSERPER(u16 value);
+    void setSERPER(u16 value);
 
     // Returns the pulse width measured in master cylces
     Cycle pulseWidth() const { return DMA_CYCLES((serper & 0x7FFF) + 1); }

@@ -867,6 +867,26 @@ Denise::drawAttachedSpritePixelPair(Pixel hpos)
 }
 
 void
+Denise::copyOverlappingSpritePixels()
+{
+    /* This function is called inside endOfLine(). At this point, the mBuffer
+     * may contain sprite pixels at indices greater than HPIXELS. To make these
+     * pixels appear, we need to copy them at the beginning of the bBuffer.
+     *
+     * The current code has been written to handle overscan mode in DPaint IV
+     * correctly. The implementation is not 100% accurate, because the sprite
+     * pixels are simply copied over the existing pixels. This is correct for
+     * DPaint IV, but does not work in scenarios with different bitplane
+     * priority settings.
+     */
+    for (isize i = 0; i < 32; i++) {
+        if (denise.mBuffer[HPIXELS + i]) {
+            denise.bBuffer[i] = denise.mBuffer[HPIXELS + i];
+        }
+    }
+}
+
+void
 Denise::updateBorderColor()
 {
     if (config.revision != DENISE_OCS && ecsena() && brdrblnk()) {
@@ -1058,12 +1078,15 @@ Denise::beginOfLine(isize vpos)
     hflopOn = denise.hstrt; 
     hflopOff = denise.hstop;
 
-    // Clear the bBuffer
-    std::memset(bBuffer, 0, sizeof(bBuffer));
+    // Wrap around the unprocessed bBuffer part
+    for (isize i = 0; i < 32; i++) bBuffer[i] = bBuffer[HPIXELS + i];
+
+    // Clear the rest of the bBuffer
+    std::memset(bBuffer + 32, 0, sizeof(bBuffer) - 32);
 
     // Reset the sprite clipping range
     spriteClipBegin = HPIXELS;
-    spriteClipEnd = HPIXELS;
+    spriteClipEnd = HPIXELS + 32;
 }
 
 void
@@ -1071,6 +1094,9 @@ Denise::endOfLine(isize vpos)
 {
     // Check if we are below the VBLANK area
     if (vpos >= 26) {
+
+        // Take care of overlapping sprite pixels from the previous line
+        if (wasArmed) copyOverlappingSpritePixels();
 
         // Translate bitplane data to color register indices
         translate();

@@ -90,7 +90,16 @@ UART::spypeekSERDATR() const
 void
 UART::pokeSERDAT(u16 value)
 {
-    trace(SER_DEBUG, "pokeSERDAT(%X)\n", value);
+    trace(SER_DEBUG, "pokeSERDAT(%04x)\n", value);
+
+    // Schedule the write cycle
+    agnus.recordRegisterChange(DMA_CYCLES(2), SET_SERDAT, value);
+}
+
+void
+UART::setSERDAT(u16 value)
+{
+    trace(SER_DEBUG, "setSERDAT(%04x)\n", value);
 
     // Write value into the transmit buffer
     transmitBuffer = value & 0x3FF;
@@ -102,10 +111,17 @@ UART::pokeSERDAT(u16 value)
 void
 UART::pokeSERPER(u16 value)
 {
-    trace(SER_DEBUG, "pokeSERPER(%X)\n", value);
+    trace(SPRREG_DEBUG, "pokeSERPER(%04x)\n", value);
+
+    setSERPER(value);
+}
+
+void
+UART::setSERPER(u16 value)
+{
+    trace(SER_DEBUG, "setSERPER(%04x)\n", value);
     serper = value;
     trace(SER_DEBUG, "New baud rate = %ld\n", baudRate());
-
 }
 
 void
@@ -133,7 +149,8 @@ UART::copyToTransmitShiftRegister()
 
     // Trigger a TBE interrupt
     trace(SER_DEBUG, "Triggering TBE interrupt\n");
-    paula.raiseIrq(INT_TBE);
+    // paula.raiseIrq(INT_TBE);
+    paula.scheduleIrqRel(INT_TBE, DMA_CYCLES(2));
 
     // Schedule the transmission of the first bit
     agnus.scheduleRel<SLOT_TXD>(0, TXD_BIT);

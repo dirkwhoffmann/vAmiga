@@ -994,6 +994,12 @@ DQ
                                                         <menuItem title="512 KB" tag="512" id="2rF-Yd-o5Y">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
+                                                        <menuItem title="1 MB" tag="1024" id="8mV-Ua-Rly">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="1,5 MB" tag="1536" id="oH8-6a-xXL">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -3323,6 +3329,13 @@ DQ
                                                             </connections>
                                                         </menuItem>
                                                         <menuItem isSeparatorItem="YES" id="xwn-wj-QV7"/>
+                                                        <menuItem title="ViewSonic VP191b" tag="10" id="6K7-Ed-04f">
+                                                            <attributedString key="attributedTitle"/>
+                                                            <connections>
+                                                                <action selector="vidPresetAction:" target="-2" id="jWc-UT-8O9"/>
+                                                            </connections>
+                                                        </menuItem>
+                                                        <menuItem isSeparatorItem="YES" id="vdu-oI-n6i"/>
                                                         <menuItem title="Geometry" id="tu7-cl-NYW">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                             <menu key="submenu" title="Geometry" id="z8l-o7-fX3">

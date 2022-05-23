@@ -30,7 +30,7 @@ Sequencer::initSigRecorder()
     sigRecorder.insert(ddfstrt, SIG_BPHSTART);
     sigRecorder.insert(ddfstop, SIG_BPHSTOP);
     sigRecorder.insert(0xD8, SIG_RHW);
-    sigRecorder.insert(HPOS_MAX, SIG_DONE);
+    sigRecorder.insert(HPOS_CNT, SIG_DONE);
  
     sigRecorder.modified = false;
 }
@@ -144,7 +144,7 @@ Sequencer::computeBplEventsSlow(const SigRecorder &sr, DDFState &state)
         u16 signal = sigRecorder.elements[i];
         isize trigger = (isize)sigRecorder.keys[i];
         
-        assert(trigger < HPOS_CNT);
+        assert(trigger <= HPOS_CNT);
         
         // Emulate the display logic up to the next signal change
         computeBplEvents <ecs> (cycle, trigger, state);
@@ -208,8 +208,10 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
         }
         
         // Superimpose drawing flags
-        if ((j & mask) == (agnus.scrollOdd & mask))  id = (EventID)(id | 1);
-        if ((j & mask) == (agnus.scrollEven & mask)) id = (EventID)(id | 2);
+        isize jj = j >= 1 ? j : HPOS_CNT + j;
+
+        if ((jj & mask) == (agnus.scrollOdd & mask))  id = (EventID)(id | 1);
+        if ((jj & mask) == (agnus.scrollEven & mask)) id = (EventID)(id | 2);
         
         bplEvent[j] = id;
     }

@@ -13,6 +13,7 @@
 
 public extension Int {
 
+    static let config       = 0     // Configuration
     static let defaults     = 0     // User defaults
     static let events       = 0     // Event processing
     static let exec         = 0     // Execution of external tools
