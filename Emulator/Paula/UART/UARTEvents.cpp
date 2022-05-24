@@ -15,6 +15,52 @@
 void
 UART::serviceTxdEvent(EventID id)
 {
+    trace(SER_DEBUG, "serveTxdEvent(%d)\n", id);
+
+    switch (id) {
+
+        case TXD_BIT:
+
+            if (shiftRegEmpty()) {
+
+                // Check if there is a new data packet to send
+                if (transmitBuffer) {
+
+                    // Load shift register
+                    copyToTransmitShiftRegister();
+
+                } else {
+
+                    // Abort the transmission
+                    trace(SER_DEBUG, "End of transmission\n");
+                    agnus.cancel<SLOT_TXD>();
+                    break;
+                }
+
+            } else {
+
+                // Run the shift register
+                transmitShiftReg >>= 1;
+                updateTXD();
+            }
+
+            // Let the rightmost bit appear on the TXD line
+            trace(SER_DEBUG, "Transmitting bit %d\n", transmitShiftReg & 1);
+            outBit = transmitShiftReg & 1;
+
+            // Schedule the next event
+            agnus.scheduleRel<SLOT_TXD>(pulseWidth(), TXD_BIT);
+            break;
+
+        default:
+            fatalError;
+    }
+}
+
+/*
+void
+UART::serviceTxdEvent(EventID id)
+{
     // debug(SER_DEBUG, "serveTxdEvent(%d)\n", id);
 
     switch (id) {
@@ -57,6 +103,7 @@ UART::serviceTxdEvent(EventID id)
             fatalError;
     }
 }
+*/
 
 void
 UART::serviceRxdEvent(EventID id)

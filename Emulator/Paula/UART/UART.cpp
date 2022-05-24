@@ -105,7 +105,9 @@ UART::setSERDAT(u16 value)
     transmitBuffer = value & 0x3FF;
 
     // Start the transmission if the shift register is empty
-    if (transmitShiftReg == 0 && transmitBuffer != 0) copyToTransmitShiftRegister();
+    if (transmitShiftReg == 0 && transmitBuffer != 0) {
+        agnus.scheduleRel<SLOT_TXD>(DMA_CYCLES(0), TXD_BIT);
+    }
 }
 
 void
@@ -127,7 +129,7 @@ UART::setSERPER(u16 value)
 void
 UART::copyToTransmitShiftRegister()
 {
-    trace(SER_DEBUG, "Copying %X into transmit shift register\n", transmitBuffer);
+    trace(SER_DEBUG, "Copying %04x into transmit shift register\n", transmitBuffer);
 
     assert(transmitShiftReg == 0);
     assert(transmitBuffer != 0);
@@ -151,9 +153,6 @@ UART::copyToTransmitShiftRegister()
     trace(SER_DEBUG, "Triggering TBE interrupt\n");
     // paula.raiseIrq(INT_TBE);
     paula.scheduleIrqRel(INT_TBE, DMA_CYCLES(2));
-
-    // Schedule the transmission of the first bit
-    agnus.scheduleRel<SLOT_TXD>(0, TXD_BIT);
 }
 
 void
