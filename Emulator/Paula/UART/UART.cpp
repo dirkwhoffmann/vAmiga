@@ -92,8 +92,12 @@ UART::pokeSERDAT(u16 value)
 {
     trace(SER_DEBUG, "pokeSERDAT(%04x)\n", value);
 
+    // Experimental findings:
+    // From here, the TSRE bit goes high in
+    // DMA_CYCLES(1) + (bitcount(value) + 1) * pulseWidth() cycles
+
     // Schedule the write cycle
-    agnus.recordRegisterChange(DMA_CYCLES(2), SET_SERDAT, value);
+    agnus.recordRegisterChange(DMA_CYCLES(1), SET_SERDAT, value);
 }
 
 void
@@ -102,11 +106,11 @@ UART::setSERDAT(u16 value)
     trace(SER_DEBUG, "setSERDAT(%04x)\n", value);
 
     // Write value into the transmit buffer
-    transmitBuffer = value & 0x3FF;
+    transmitBuffer = value;
 
     // Start the transmission if the shift register is empty
     if (transmitShiftReg == 0 && transmitBuffer != 0) {
-        agnus.scheduleRel<SLOT_TXD>(DMA_CYCLES(0), TXD_BIT);
+        agnus.scheduleRel <SLOT_TXD> (DMA_CYCLES(0), TXD_BIT);
     }
 }
 

@@ -26,27 +26,28 @@ UART::serviceTxdEvent(EventID id)
                 // Check if there is a new data packet to send
                 if (transmitBuffer) {
 
-                    // Load shift register
+                    // Copy new packet into shift register
+                    trace(SER_DEBUG, "Transmitting packet %x\n", transmitBuffer);
                     copyToTransmitShiftRegister();
 
                 } else {
 
                     // Abort the transmission
-                    trace(SER_DEBUG, "End of transmission\n");
+                    trace(SER_DEBUG, "All packets sent\n");
                     agnus.cancel<SLOT_TXD>();
                     break;
                 }
 
             } else {
 
-                // Run the shift register
+                // Shift out bit and let it appear on the TXD line
+                trace(SER_DEBUG, "Transmitting bit %d\n", transmitShiftReg & 1);
                 transmitShiftReg >>= 1;
-                updateTXD();
             }
 
-            // Let the rightmost bit appear on the TXD line
-            trace(SER_DEBUG, "Transmitting bit %d\n", transmitShiftReg & 1);
+            // Send bit
             outBit = transmitShiftReg & 1;
+            updateTXD();
 
             // Schedule the next event
             agnus.scheduleRel<SLOT_TXD>(pulseWidth(), TXD_BIT);
@@ -61,7 +62,8 @@ UART::serviceTxdEvent(EventID id)
 void
 UART::serviceTxdEvent(EventID id)
 {
-    // debug(SER_DEBUG, "serveTxdEvent(%d)\n", id);
+    trace(true, "serveTxdEvent(%d)\n", id);
+    trace(SER_DEBUG, "serveTxdEvent(%d)\n", id);
 
     switch (id) {
 
