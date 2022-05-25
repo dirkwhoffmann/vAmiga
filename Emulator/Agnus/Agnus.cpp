@@ -245,7 +245,7 @@ Agnus::execute()
 {
     // Advance the internal clock and the horizontal counter
     clock += DMA_CYCLES(1);
-    pos.h = (pos.h + 1) % HPOS_CNT;
+    pos.h += 1;
 
     // Process pending events
     if (nextTrigger <= clock) executeUntil(clock);
@@ -619,7 +619,8 @@ Agnus::updateSpriteDMA()
 void
 Agnus::hsyncHandler()
 {
-    assert(pos.h == 0);
+    assert(pos.h == HPOS_MAX + 1);
+    pos.h = 0;
     
     // Let Denise finish up the current line
     denise.endOfLine(pos.v);

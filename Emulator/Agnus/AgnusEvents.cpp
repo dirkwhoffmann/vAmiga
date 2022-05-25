@@ -193,7 +193,7 @@ Agnus::scheduleStrobe2Event()
 void
 Agnus::serviceREGEvent(Cycle until)
 {
-    assert(pos.h <= HPOS_MAX);
+    assert(pos.h <= HPOS_MAX + 1);
 
     // Iterate through all recorded register changes
     while (!changeRecorder.isEmpty()) {
@@ -279,7 +279,9 @@ Agnus::serviceREGEvent(Cycle until)
                 fatalError;
         }
     }
-    
+
+    assert(pos.h <= HPOS_MAX);
+
     // Schedule next event
     scheduleNextREGEvent();
 }
