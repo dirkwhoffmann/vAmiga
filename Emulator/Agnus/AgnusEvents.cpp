@@ -86,15 +86,10 @@
 void
 Agnus::scheduleFirstBplEvent()
 {
-    assert(pos.h == 0 || pos.h == HPOS_MAX);
+    assert(pos.h == 0);
     
     u8 dmacycle = sequencer.bplEvent[0] ? 0 : sequencer.nextBplEvent[0];
-
-    if (pos.h == 0) {
-        scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle), sequencer.bplEvent[dmacycle]);
-    } else {
-        scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle + 1), sequencer.bplEvent[dmacycle]);
-    }
+    scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle), sequencer.bplEvent[dmacycle]);
 }
 
 void
@@ -125,16 +120,11 @@ Agnus::scheduleBplEventForCycle(isize hpos)
 void
 Agnus::scheduleFirstDasEvent()
 {
-    assert(pos.h == 0 || pos.h == HPOS_MAX);
+    assert(pos.h == 0);
     
     u8 dmacycle = sequencer.nextDasEvent[0];
     assert(dmacycle != 0);
-
-    if (pos.h == 0) {
-        scheduleRel<SLOT_DAS>(DMA_CYCLES(dmacycle), sequencer.dasEvent[dmacycle]);
-    } else {
-        scheduleRel<SLOT_DAS>(DMA_CYCLES(dmacycle + 1), sequencer.dasEvent[dmacycle]);
-    }
+    scheduleRel<SLOT_DAS>(DMA_CYCLES(dmacycle), sequencer.dasEvent[dmacycle]);
 }
 
 void
