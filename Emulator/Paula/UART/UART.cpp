@@ -110,9 +110,7 @@ UART::setSERDAT(u16 value)
 
     // Start the transmission if the shift register is empty
     if (transmitShiftReg == 0 && transmitBuffer != 0) {
-
         agnus.scheduleRel <SLOT_TXD> (DMA_CYCLES(0), TXD_BIT);
-        // paula.raiseIrq(INT_TBE);
     }
 }
 

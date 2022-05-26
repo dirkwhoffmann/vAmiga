@@ -57,7 +57,7 @@ UART::serviceTxdEvent(EventID id)
             outBit = transmitShiftReg & 1;
             updateTXD();
 
-            // Schedule the next event
+            // Schedule next event
             agnus.scheduleRel<SLOT_TXD>(pulseWidth(), TXD_BIT);
             break;
 
