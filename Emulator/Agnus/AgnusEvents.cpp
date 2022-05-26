@@ -278,18 +278,6 @@ Agnus::serviceREGEvent(Cycle until)
     scheduleNextREGEvent();
 }
 
-void
-Agnus::serviceRASEvent()
-{
-    assert(id[SLOT_RAS] == RAS_HSYNC);
-    
-    // Let the hsync handler be called at the beginning of the next DMA cycle
-    agnus.recordRegisterChange(0, SET_STRHOR, 1);
-
-    // Reschedule event
-    rescheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT));
-}
-
 #define LO_NONE(x)      { serviceBPLEventLores<x>(); }
 #define LO_ODD(x)       { denise.drawLoresOdd();  LO_NONE(x) }
 #define LO_EVEN(x)      { denise.drawLoresEven(); LO_NONE(x) }
@@ -418,21 +406,21 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_L6_MOD | DRAW_BOTH:    LO_MOD_BOTH(5); break;
 
         case BPL_EOL:
-            assert(pos.h == 0xE2);
+            serviceEOL();
             return;
 
         case BPL_EOL | DRAW_ODD:
-            assert(pos.h == 0xE2);
+            serviceEOL();
             hires() ? denise.drawHiresOdd() : denise.drawLoresOdd();
             return;
 
         case BPL_EOL | DRAW_EVEN:
-            assert(pos.h == 0xE2);
+            serviceEOL();
             hires() ? denise.drawHiresEven() : denise.drawLoresEven();
             return;
 
         case BPL_EOL | DRAW_BOTH:
-            assert(pos.h == 0xE2);
+            serviceEOL();
             hires() ? denise.drawHiresBoth() : denise.drawLoresBoth();
             return;
             
@@ -457,6 +445,15 @@ Agnus::serviceBPLEventLores()
 {
     // Perform bitplane DMA
     denise.setBPLxDAT<nr>(doBitplaneDmaRead<nr>());
+}
+
+void
+Agnus::serviceEOL()
+{
+    assert(pos.h == 0xE2);
+
+    // Let the hsync handler be called at the beginning of the next DMA cycle
+    recordRegisterChange(0, SET_STRHOR, 1);
 }
 
 void

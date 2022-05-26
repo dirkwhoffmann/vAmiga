@@ -797,13 +797,11 @@ public:
     // Services a register change event
     void serviceREGEvent(Cycle until);
 
-    // Services a raster event
-    void serviceRASEvent();
-
     // Services a bitplane event
     void serviceBPLEvent(EventID id);
     template <isize nr> void serviceBPLEventHires();
     template <isize nr> void serviceBPLEventLores();
+    void serviceEOL();
 
     // Services a vertical blank interrupt
     void serviceVblEvent(EventID id);

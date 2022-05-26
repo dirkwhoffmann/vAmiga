@@ -321,16 +321,6 @@ Agnus::eventName(EventSlot slot, EventID id)
             }
             break;
             
-        case SLOT_RAS:
-
-            switch (id) {
-
-                case EVENT_NONE:    return "none";
-                case RAS_HSYNC:     return "RAS_HSYNC";
-                default:            return "*** INVALID ***";
-            }
-            break;
-
         case SLOT_TER:
 
             switch (id) {

@@ -34,7 +34,6 @@ extension EventSlot: CustomStringConvertible {
         case .TXD:      return "UART out"
         case .RXD:      return "UART in"
         case .POT:      return "Potentiometer"
-        case .RAS:      return "Rasterline"
         case .TER:      return "Next tertiary event"
 
         case .DC0:      return "Disk Change Df0"
