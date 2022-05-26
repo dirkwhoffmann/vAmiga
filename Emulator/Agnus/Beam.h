@@ -26,9 +26,9 @@ struct Beam
         << v
         << h;
     }
-    
+
+    Beam() : v(0), h(0) { }
     Beam(isize v, isize h) : v(v), h(h) { }
-    Beam(isize cycle = 0) : Beam(cycle / HPOS_CNT, cycle % HPOS_CNT) { }
 
     bool operator==(const Beam& beam) const
     {
@@ -40,21 +40,12 @@ struct Beam
         return v != beam.v || h != beam.h;
     }
 
-    Beam& operator+=(const Beam& beam)
+    Beam operator+(const isize i) const
     {
-        v += beam.v;
-        h += beam.h;
+        assert(usize(i) < HPOS_CNT);
 
-        if (h >= HPOS_CNT) { h -= HPOS_CNT; v++; }
-        else if (h < 0)    { h += HPOS_CNT; v--; }
-
-        return *this;
-    }
-
-    Beam operator+(const Beam& beam) const
-    {
-        auto vv = v + beam.v;
-        auto hh = h + beam.h;
+        auto vv = v;
+        auto hh = h + i;
 
         if (hh >= HPOS_CNT) { hh -= HPOS_CNT; vv++; }
         else if (hh < 0)    { hh += HPOS_CNT; vv--; }
@@ -62,25 +53,8 @@ struct Beam
         return Beam(vv, hh);
     }
 
-    Beam operator+(const isize i) const
-    {
-        return *this + Beam(i);
-    }
-
     isize operator-(const Beam& beam) const
     {
         return (v * HPOS_CNT + h) - (beam.v * HPOS_CNT + beam.h);
-    }
-
-    Beam& operator++()
-    {
-        if (++h > HPOS_MAX) { v++; h = 0; }
-        return *this;
-    }
-
-    Beam& operator--()
-    {
-        if (--h < 0) { v--; h = HPOS_MAX; }
-        return *this;
     }
 };

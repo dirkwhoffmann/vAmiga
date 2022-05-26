@@ -179,7 +179,7 @@ Agnus::peekVHPOSR() const
     } else {
 
         // The returned position is five cycles ahead
-        auto pos = Beam { agnus.pos.v, agnus.pos.h } + Beam {0,5};
+        auto pos = Beam { agnus.pos.v, agnus.pos.h } + 5;
 
         // Rectify the vertical position if it has wrapped over
         if (pos.v >= frame.numLines()) pos.v = 0;
@@ -238,7 +238,7 @@ Agnus::peekVPOSR() const
     } else {
 
         // The returned position is five cycles ahead
-        auto pos = Beam { agnus.pos.v, agnus.pos.h } + Beam {0,5};
+        auto pos = Beam { agnus.pos.v, agnus.pos.h } + 5;
 
         // Rectify the vertical position if it has wrapped over
         if (pos.v >= frame.numLines()) pos.v = 0;
