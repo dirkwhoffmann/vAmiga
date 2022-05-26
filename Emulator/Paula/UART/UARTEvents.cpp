@@ -10,6 +10,7 @@
 #include "config.h"
 #include "UART.h"
 #include "Agnus.h"
+#include "Paula.h"
 #include "SerialPort.h"
 
 void
@@ -43,6 +44,18 @@ UART::serviceTxdEvent(EventID id)
                 // Shift out bit and let it appear on the TXD line
                 trace(SER_DEBUG, "Transmitting bit %d\n", transmitShiftReg & 1);
                 transmitShiftReg >>= 1;
+
+                if (!transmitShiftReg && transmitBuffer) {
+
+                    copyToTransmitShiftRegister();
+
+                    // Trigger a TBE interrupt
+                    /*
+                    trace(SER_DEBUG, "Triggering TBE interrupt\n");
+                    paula.raiseIrq(INT_TBE);
+                    // paula.scheduleIrqRel(INT_TBE, DMA_CYCLES(2));
+                    */
+                }
             }
 
             // Send bit
@@ -57,55 +70,6 @@ UART::serviceTxdEvent(EventID id)
             fatalError;
     }
 }
-
-/*
-void
-UART::serviceTxdEvent(EventID id)
-{
-    trace(true, "serveTxdEvent(%d)\n", id);
-    trace(SER_DEBUG, "serveTxdEvent(%d)\n", id);
-
-    switch (id) {
-
-        case TXD_BIT:
-
-            // This event should not occurr if the shift register is empty
-            assert(!shiftRegEmpty());
-
-            // Shift out bit and let it appear on the TXD line
-            trace(SER_DEBUG, "Transmitting bit %d\n", transmitShiftReg & 1);
-            outBit = transmitShiftReg & 1;
-            transmitShiftReg >>= 1;
-            updateTXD();
-
-            // Check if the shift register is empty
-            if (!transmitShiftReg) {
-
-                // Check if there is a new data packet to send
-                if (transmitBuffer) {
-
-                    // Copy new packet into shift register
-                    // debug("Transmission continues with packet %X '%c'\n", transmitBuffer, transmitBuffer & 0xFF);
-                    copyToTransmitShiftRegister();
-
-                } else {
-
-                    // Abort the transmission
-                    trace(SER_DEBUG, "End of transmission\n");
-                    agnus.cancel<SLOT_TXD>();
-                    break;
-                }
-            }
-
-            // Schedule the next event
-            agnus.scheduleRel<SLOT_TXD>(pulseWidth(), TXD_BIT);
-            break;
-
-        default:
-            fatalError;
-    }
-}
-*/
 
 void
 UART::serviceRxdEvent(EventID id)

@@ -203,7 +203,9 @@ Agnus::serviceREGEvent(Cycle until)
 
         // Apply the register change
         RegChange &change = changeRecorder.read();
-        
+
+        assert (change.addr == SET_STRHOR || pos.h <= HPOS_MAX);
+
         switch (change.addr) {
                 
             case SET_BLTSIZE: blitter.setBLTSIZE(change.value); break;
