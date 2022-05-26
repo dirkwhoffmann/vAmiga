@@ -157,7 +157,6 @@ UART::copyToTransmitShiftRegister()
 
     // Trigger a TBE interrupt
     trace(SER_DEBUG, "Triggering TBE interrupt\n");
-    // paula.raiseIrq(INT_TBE);
     paula.scheduleIrqRel(INT_TBE, DMA_CYCLES(2));
 }
 

@@ -28,7 +28,7 @@ UART::serviceTxdEvent(EventID id)
                 if (transmitBuffer) {
 
                     // Copy new packet into shift register
-                    trace(SER_DEBUG, "Transmitting packet %x\n", transmitBuffer);
+                    trace(SER_DEBUG, "Transmitting first packet %x\n", transmitBuffer);
                     copyToTransmitShiftRegister();
 
                 } else {
@@ -41,24 +41,19 @@ UART::serviceTxdEvent(EventID id)
 
             } else {
 
-                // Shift out bit and let it appear on the TXD line
+                // Run the shift register
                 trace(SER_DEBUG, "Transmitting bit %d\n", transmitShiftReg & 1);
                 transmitShiftReg >>= 1;
 
                 if (!transmitShiftReg && transmitBuffer) {
 
+                    // Copy next packet into shift register
+                    trace(SER_DEBUG, "Transmitting next packet %x\n", transmitBuffer);
                     copyToTransmitShiftRegister();
-
-                    // Trigger a TBE interrupt
-                    /*
-                    trace(SER_DEBUG, "Triggering TBE interrupt\n");
-                    paula.raiseIrq(INT_TBE);
-                    // paula.scheduleIrqRel(INT_TBE, DMA_CYCLES(2));
-                    */
                 }
             }
 
-            // Send bit
+            // Let the bit appear on the TXD line
             outBit = transmitShiftReg & 1;
             updateTXD();
 
