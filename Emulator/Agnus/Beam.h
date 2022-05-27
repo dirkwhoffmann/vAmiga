@@ -12,11 +12,43 @@
 #include "Aliases.h"
 #include "Constants.h"
 
+enum_long(LINE_TYPE)
+{
+    LINE_PAL,           // 227 DMA cycles
+    LINE_NTSC_SHORT,    // 227 DMA cycles
+    LINE_NTSC_LONG      // 228 DMA cycles
+};
+typedef LINE_TYPE LineType;
+
+#ifdef __cplusplus
+struct LineTypeEnum : util::Reflection<LineTypeEnum, LineType>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = LINE_NTSC_LONG;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
+
+    static const char *prefix() { return "LINE"; }
+    static const char *key(AgnusRevision value)
+    {
+        switch (value) {
+
+            case LINE_PAL:          return "PAL";
+            case LINE_NTSC_SHORT:   return "NTSC_SHORT";
+            case LINE_NTSC_LONG:    return "NTSC_LONG";
+        }
+        return "???";
+    }
+};
+#endif
+
 struct Beam
 {
-    // Counters for the vertical and horizontal beam position
+    // The vertical and horizontal beam position
     isize v;
     isize h;
+
+    // The type of the current line
+    LineType type;
 
     template <class W>
     void operator<<(W& worker)
@@ -24,11 +56,15 @@ struct Beam
         worker
 
         << v
-        << h;
+        << h
+        << type;
     }
 
-    Beam() : v(0), h(0) { }
-    Beam(isize v, isize h) : v(v), h(h) { }
+    Beam() : v(0), h(0), type(LINE_PAL) { }
+    Beam(isize v, isize h) : v(v), h(h), type(LINE_PAL) { }
+
+    isize hCnt() const { return type == LINE_NTSC_LONG ? 228 : 227; }
+    isize hMax() const { return type == LINE_NTSC_LONG ? 227 : 226; }
 
     bool operator==(const Beam& beam) const
     {
@@ -42,19 +78,35 @@ struct Beam
 
     Beam operator+(const isize i) const
     {
-        assert(usize(i) < HPOS_CNT);
+        assert(i >= 0 && i < HPOS_CNT_PAL);
 
         auto vv = v;
         auto hh = h + i;
 
-        if (hh >= HPOS_CNT) { hh -= HPOS_CNT; vv++; }
-        else if (hh < 0)    { hh += HPOS_CNT; vv--; }
+        if (hh >= hCnt()) { hh -= hCnt(); vv++; }
 
         return Beam(vv, hh);
     }
 
     isize operator-(const Beam& beam) const
     {
-        return (v * HPOS_CNT + h) - (beam.v * HPOS_CNT + beam.h);
+        assert(v >= beam.v);
+        assert(v != beam.v || h >= beam.h);
+
+        // Compute the number of elapsed cycles between the two beam positions
+        isize result = (v * HPOS_CNT_PAL + h) - (beam.v * HPOS_CNT_PAL + beam.h);
+
+        // Add missing NTSC cycles
+        switch (type) {
+
+            case LINE_PAL:          break;
+            case LINE_NTSC_SHORT:   result += (beam.v - v) / 2; break;
+            case LINE_NTSC_LONG:    result += (beam.v - v + 1) / 2; break;
+
+            default:
+                fatalError;
+        }
+
+        return result;
     }
 };
