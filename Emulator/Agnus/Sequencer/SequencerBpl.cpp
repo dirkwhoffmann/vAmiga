@@ -14,8 +14,8 @@
 void
 Sequencer::initBplEvents()
 {
-    for (isize i = 0; i < HPOS_MAX_NTSC; i++) bplEvent[i] = EVENT_NONE;
-    for (isize i = 0; i < HPOS_MAX_NTSC; i++) nextBplEvent[i] = HPOS_MAX_PAL;
+    for (isize i = 0; i < HPOS_MAX; i++) bplEvent[i] = EVENT_NONE;
+    for (isize i = 0; i < HPOS_MAX; i++) nextBplEvent[i] = HPOS_MAX_PAL;
     
     bplEvent[HPOS_MAX_PAL] = BPL_EOL;
     nextBplEvent[HPOS_MAX_PAL] = 0;
@@ -176,7 +176,7 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
     
     for (isize j = strt; j < stop; j++) {
     
-        assert(j >= 0 && j <= HPOS_MAX_NTSC);
+        assert(j >= 0 && j <= HPOS_MAX);
         
         EventID id;
 
@@ -412,7 +412,7 @@ Sequencer::updateBplJumpTable()
 {
     u8 next = 0;
     
-    for (isize i = HPOS_MAX_NTSC; i >= 0; i--) {
+    for (isize i = HPOS_MAX; i >= 0; i--) {
         
         nextBplEvent[i] = next;
         if (bplEvent[i]) next = (i8)i;

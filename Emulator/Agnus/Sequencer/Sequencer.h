@@ -124,7 +124,7 @@ class Sequencer : public SubComponent
 private:
     
     // Disk, audio, and sprites lookup table ([Bits 0 .. 5 of DMACON])
-    static EventID dasDMA[64][HPOS_CNT_NTSC];
+    static EventID dasDMA[64][HPOS_CNT];
 
     // Offset into the DAS lookup table
     u16 dmaDAS;
@@ -135,12 +135,12 @@ private:
 public:
 
     // Currently scheduled events
-    EventID bplEvent[HPOS_CNT_NTSC];
-    EventID dasEvent[HPOS_CNT_NTSC];
+    EventID bplEvent[HPOS_CNT];
+    EventID dasEvent[HPOS_CNT];
 
     // Jump tables connecting the scheduled events
-    u8 nextBplEvent[HPOS_CNT_NTSC];
-    u8 nextDasEvent[HPOS_CNT_NTSC];
+    u8 nextBplEvent[HPOS_CNT];
+    u8 nextDasEvent[HPOS_CNT];
     
     
     //

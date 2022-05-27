@@ -38,13 +38,14 @@
 #define VPOS_MAX      312
 #define VPOS_CNT      313
 
-// #define HPOS_MAX      226 // DEPRECATED
-// #define HPOS_CNT      227 // DEPRECATED
-
 #define HPOS_MAX_PAL  226
 #define HPOS_CNT_PAL  227
+
 #define HPOS_MAX_NTSC 227
 #define HPOS_CNT_NTSC 228
+
+#define HPOS_MAX      HPOS_MAX_NTSC
+#define HPOS_CNT      HPOS_CNT_NTSC
 
 
 /* Screen buffer dimensions

@@ -183,8 +183,8 @@ Agnus::scheduleStrobe2Event()
 void
 Agnus::serviceREGEvent(Cycle until)
 {
-    assert(pos.type != LINE_PAL || pos.h <= HPOS_MAX_PAL + 1);
-    assert(pos.type == LINE_PAL || pos.h <= HPOS_MAX_NTSC + 1);
+    assert(pos.type != LINE_PAL || pos.h <= HPOS_CNT_PAL);
+    assert(pos.type == LINE_PAL || pos.h <= HPOS_CNT_NTSC);
 
     // Iterate through all recorded register changes
     while (!changeRecorder.isEmpty()) {
