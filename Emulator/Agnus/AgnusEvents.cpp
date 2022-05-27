@@ -95,7 +95,7 @@ Agnus::scheduleFirstBplEvent()
 void
 Agnus::scheduleNextBplEvent(isize hpos)
 {
-    assert(hpos >= 0 && hpos < HPOS_CNT);
+    assert(hpos >= 0 && hpos < HPOS_CNT_NTSC);
 
     if (u8 next = sequencer.nextBplEvent[hpos]) {
         scheduleRel<SLOT_BPL>(DMA_CYCLES(next - pos.h), sequencer.bplEvent[next]);
@@ -106,7 +106,7 @@ Agnus::scheduleNextBplEvent(isize hpos)
 void
 Agnus::scheduleBplEventForCycle(isize hpos)
 {
-    assert(hpos >= pos.h && hpos < HPOS_CNT);
+    assert(hpos >= pos.h && hpos < HPOS_CNT_NTSC);
 
     if (sequencer.bplEvent[hpos] != EVENT_NONE) {
         scheduleRel<SLOT_BPL>(DMA_CYCLES(hpos - pos.h), sequencer.bplEvent[hpos]);
@@ -450,10 +450,18 @@ Agnus::serviceBPLEventLores()
 void
 Agnus::serviceEOL()
 {
-    assert(pos.h == 0xE2);
+    assert(pos.h == HPOS_MAX_PAL || pos.h == HPOS_MAX_NTSC);
 
-    // Let the hsync handler be called at the beginning of the next DMA cycle
-    recordRegisterChange(0, SET_STRHOR, 1);
+    if (pos.h == HPOS_MAX_PAL && pos.type == LINE_NTSC_LONG) {
+
+        // Run for an additional cycle
+        agnus.scheduleNextBplEvent(pos.h);
+
+    } else {
+
+        // Call the hsync handler at the beginning of the next DMA cycle
+        recordRegisterChange(0, SET_STRHOR, 1);
+    }
 }
 
 void

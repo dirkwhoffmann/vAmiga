@@ -197,7 +197,7 @@ private:
 
 public:
     
-    void setSyncDelay(util::Time newDelay);
+    void setFrequency(double hz);
     void setMode(SyncMode newMode);
 
     

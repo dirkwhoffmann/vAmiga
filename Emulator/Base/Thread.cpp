@@ -92,9 +92,9 @@ void
 Thread::main()
 {
     debug(RUN_DEBUG, "main()\n");
-          
+    
     while (++loopCounter) {
-           
+
         if (isRunning()) {
                         
             switch (mode) {
@@ -197,9 +197,9 @@ Thread::main()
 }
 
 void
-Thread::setSyncDelay(util::Time newDelay)
+Thread::setFrequency(double hz)
 {
-    delay = newDelay;
+    delay = util::Time(i64(1000000000.0 / hz));
 }
 
 void
