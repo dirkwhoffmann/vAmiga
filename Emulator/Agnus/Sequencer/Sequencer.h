@@ -135,12 +135,12 @@ private:
 public:
 
     // Currently scheduled events
-    EventID bplEvent[HPOS_CNT];
-    EventID dasEvent[HPOS_CNT];
+    EventID bplEvent[HPOS_CNT_NTSC];
+    EventID dasEvent[HPOS_CNT_NTSC];
 
     // Jump tables connecting the scheduled events
-    u8 nextBplEvent[HPOS_CNT];
-    u8 nextDasEvent[HPOS_CNT];
+    u8 nextBplEvent[HPOS_CNT_NTSC];
+    u8 nextDasEvent[HPOS_CNT_NTSC];
     
     
     //
