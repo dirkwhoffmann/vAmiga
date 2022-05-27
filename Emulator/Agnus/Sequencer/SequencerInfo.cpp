@@ -55,9 +55,9 @@ Sequencer::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Dma) {
         
-        for (isize row = 0; row < HPOS_CNT; row++) {
+        for (isize row = 0; row < HPOS_CNT_NTSC; row++) {
             
-            isize i = (row / 2) + ((row % 2) ? ((HPOS_CNT + 1) / 2) : 0);
+            isize i = (row / 2) + ((row % 2) ? ((HPOS_CNT_NTSC + 1) / 2) : 0);
             
             string cycle = std::to_string(i) + ":";
             os << std::left << std::setw(5) << cycle;

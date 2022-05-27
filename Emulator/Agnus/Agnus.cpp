@@ -187,13 +187,15 @@ Agnus::slowRamIsMirroredIn() const
 Cycle
 Agnus::cyclesInFrame() const
 {
-    return DMA_CYCLES(frame.numLines() * HPOS_CNT);
+    // TODO: ADD NTSC MODE COMPATIBILITY
+    return DMA_CYCLES(frame.numLines() * HPOS_CNT_PAL);
 }
 
 Cycle
 Agnus::startOfFrame() const
 {
-    return clock - DMA_CYCLES(pos.v * HPOS_CNT + pos.h);
+    // TODO: ADD NTSC MODE COMPATIBILITY
+    return clock - DMA_CYCLES(pos.v * HPOS_CNT_PAL + pos.h);
 }
 
 Cycle
@@ -223,19 +225,22 @@ Agnus::belongsToNextFrame(Cycle cycle) const
 Cycle
 Agnus::beamToCycle(Beam beam) const
 {
-    return startOfFrame() + DMA_CYCLES(beam.v * HPOS_CNT + beam.h);
+    // TODO: Add NTSC compatibility
+    return startOfFrame() + DMA_CYCLES(beam.v * HPOS_CNT_PAL + beam.h);
 }
 
 Beam
 Agnus::cycleToBeam(Cycle cycle) const
 {
+    // TODO: Add NTSC compatibility
+
     Beam result;
 
     Cycle diff = AS_DMA_CYCLES(cycle - startOfFrame());
     assert(diff >= 0);
 
-    result.v = (isize)(diff / HPOS_CNT);
-    result.h = (isize)(diff % HPOS_CNT);
+    result.v = (isize)(diff / HPOS_CNT_PAL);
+    result.h = (isize)(diff % HPOS_CNT_PAL);
     return result;
 }
 
@@ -641,7 +646,7 @@ Agnus::hsyncHandler()
     bplcon1Initial = bplcon1;
     
     // Clear the bus usage table
-    for (isize i = 0; i < HPOS_CNT; i++) busOwner[i] = BUS_NONE;
+    for (isize i = 0; i < HPOS_CNT_NTSC; i++) busOwner[i] = BUS_NONE;
 
     // Pass control to the sequencer
     sequencer.hsyncHandler();
@@ -660,10 +665,10 @@ Agnus::vsyncHandler()
     assert(clock >= 0);
 
     // Run the screen recorder
-    denise.screenRecorder.vsyncHandler(clock - 50 * DMA_CYCLES(HPOS_CNT));
+    denise.screenRecorder.vsyncHandler(clock - 50 * DMA_CYCLES(HPOS_CNT_PAL));
     
     // Synthesize sound samples
-    paula.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT));
+    paula.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT_PAL));
 
     // Advance to the next frame
     frame.next(denise.lace());

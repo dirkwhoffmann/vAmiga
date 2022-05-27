@@ -130,7 +130,7 @@ Agnus::scheduleFirstDasEvent()
 void
 Agnus::scheduleNextDasEvent(isize hpos)
 {
-    assert(hpos >= 0 && hpos < HPOS_CNT);
+    assert(hpos >= 0 && hpos < HPOS_CNT_NTSC);
 
     if (u8 next = sequencer.nextDasEvent[hpos]) {
         scheduleRel<SLOT_DAS>(DMA_CYCLES(next - pos.h), sequencer.dasEvent[next]);
@@ -143,7 +143,7 @@ Agnus::scheduleNextDasEvent(isize hpos)
 void
 Agnus::scheduleDasEventForCycle(isize hpos)
 {
-    assert(hpos >= pos.h && hpos < HPOS_CNT);
+    assert(hpos >= pos.h && hpos < HPOS_CNT_NTSC);
 
     if (sequencer.dasEvent[hpos] != EVENT_NONE) {
         scheduleRel<SLOT_DAS>(DMA_CYCLES(hpos - pos.h), sequencer.dasEvent[hpos]);

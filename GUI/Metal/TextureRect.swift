@@ -23,7 +23,7 @@ extension Canvas {
     // Returns the used texture area (including HBLANK and VBLANK)
     var entire: CGRect {
         
-        return CGRect(x: 0, y: 0, width: 4 * Int(HPOS_CNT), height: Int(VPOS_CNT))
+        return CGRect(x: 0, y: 0, width: 4 * Int(HPOS_CNT_PAL), height: Int(VPOS_CNT))
     }
     
     var entireNormalized: CGRect {
@@ -35,7 +35,7 @@ extension Canvas {
     var largestVisible: CGRect {
         
         let x1 = Int(HBLANK_CNT) * 4
-        let x2 = Int(HPOS_CNT) * 4
+        let x2 = Int(HPOS_CNT_PAL) * 4
         let y1 = Int(VBLANK_CNT)
         let y2 = Int(VPOS_CNT) - 2
         

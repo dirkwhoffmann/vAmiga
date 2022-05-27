@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Sequencer.h"
 
-EventID Sequencer::dasDMA[64][HPOS_CNT];
+EventID Sequencer::dasDMA[64][HPOS_CNT_NTSC];
 
 void
 Sequencer::initDasEventTable()
@@ -64,7 +64,7 @@ Sequencer::initDasEventTable()
 void
 Sequencer::initDasEvents()
 {
-    for (isize i = 0; i < HPOS_CNT; i++) dasEvent[i] = dasDMA[0][i];
+    for (isize i = 0; i < HPOS_CNT_NTSC; i++) dasEvent[i] = dasDMA[0][i];
     updateDasJumpTable();
 }
 
@@ -83,7 +83,7 @@ Sequencer::updateDasEvents(u16 dmacon, isize pos)
 void
 Sequencer::updateDasJumpTable(i16 end)
 {
-    assert(end <= HPOS_MAX);
+    assert(end <= HPOS_MAX_NTSC);
 
     u8 next = nextDasEvent[end];
     
