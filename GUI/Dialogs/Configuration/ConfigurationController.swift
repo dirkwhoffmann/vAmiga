@@ -65,6 +65,7 @@ class ConfigurationController: DialogController {
 
     // Agnus
     @IBOutlet weak var csAgnusRevision: NSPopUpButton!
+    @IBOutlet weak var csPal: NSPopUpButton!
     @IBOutlet weak var csAgnusInfo1: NSTextField!
     @IBOutlet weak var csAgnusInfo2: NSTextField!
 

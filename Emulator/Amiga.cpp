@@ -200,6 +200,7 @@ Amiga::getConfigItem(Option option) const
 {
     switch (option) {
 
+        case OPT_PAL_MODE:
         case OPT_AGNUS_REVISION:
         case OPT_SLOW_RAM_MIRROR:
         case OPT_PTR_DROPS:
@@ -394,6 +395,7 @@ Amiga::configure(Option option, i64 value)
 
     switch (option) {
 
+        case OPT_PAL_MODE:
         case OPT_AGNUS_REVISION:
         case OPT_SLOW_RAM_MIRROR:
         case OPT_PTR_DROPS:
@@ -704,6 +706,7 @@ Amiga::configure(ConfigScheme scheme)
                 
                 configure(OPT_CHIP_RAM, 512);
                 configure(OPT_SLOW_RAM, 512);
+                configure(OPT_PAL_MODE, true);
                 configure(OPT_AGNUS_REVISION, AGNUS_OCS_OLD);
                 break;
 
@@ -711,6 +714,7 @@ Amiga::configure(ConfigScheme scheme)
                 
                 configure(OPT_CHIP_RAM, 512);
                 configure(OPT_SLOW_RAM, 512);
+                configure(OPT_PAL_MODE, true);
                 configure(OPT_AGNUS_REVISION, AGNUS_OCS);
                 break;
                 
@@ -718,6 +722,7 @@ Amiga::configure(ConfigScheme scheme)
                 
                 configure(OPT_CHIP_RAM, 512);
                 configure(OPT_SLOW_RAM, 512);
+                configure(OPT_PAL_MODE, true);
                 configure(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
                 break;
                 

@@ -19,6 +19,7 @@
 enum_long(OPT)
 {
     // Agnus
+    OPT_PAL_MODE,
     OPT_AGNUS_REVISION,
     OPT_SLOW_RAM_MIRROR,
     OPT_PTR_DROPS,
@@ -150,7 +151,8 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
     static const char *key(Option value)
     {
         switch (value) {
-                
+
+            case OPT_PAL_MODE:              return "PAL_MODE";
             case OPT_AGNUS_REVISION:        return "AGNUS_REVISION";
             case OPT_SLOW_RAM_MIRROR:       return "SLOW_RAM_MIRROR";
             case OPT_PTR_DROPS:             return "PTR_DROPS";

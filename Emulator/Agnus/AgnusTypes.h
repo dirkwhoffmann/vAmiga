@@ -433,6 +433,7 @@ struct SprDmaStateEnum : util::Reflection<SprDmaStateEnum, SprDMAState>
 typedef struct
 {
     AgnusRevision revision;
+    bool pal;
     bool slowRamMirror;
     bool ptrDrops;
 }

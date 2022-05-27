@@ -66,7 +66,8 @@ Agnus::resetConfig()
     auto &defaults = amiga.defaults;
 
     std::vector <Option> options = {
-        
+
+        OPT_PAL_MODE,
         OPT_AGNUS_REVISION,
         OPT_SLOW_RAM_MIRROR,
         OPT_PTR_DROPS
@@ -81,7 +82,8 @@ i64
 Agnus::getConfigItem(Option option) const
 {
     switch (option) {
-            
+
+        case OPT_PAL_MODE:          return config.pal;
         case OPT_AGNUS_REVISION:    return config.revision;
         case OPT_SLOW_RAM_MIRROR:   return config.slowRamMirror;
         case OPT_PTR_DROPS:         return config.ptrDrops;
@@ -95,7 +97,25 @@ void
 Agnus::setConfigItem(Option option, i64 value)
 {
     switch (option) {
-            
+
+        case OPT_PAL_MODE:
+
+        {   SUSPENDED
+
+            config.pal = value;
+
+            if (value) {
+
+                trace(1, "Switching to PAL\n");
+                pos.type = LINE_PAL;
+
+            } else {
+
+                trace(1, "Switching to NTSC\n");
+                pos.type = LINE_NTSC_LONG;
+            }
+        }
+
         case OPT_AGNUS_REVISION:
                         
             if (!isPoweredOff()) {
@@ -194,8 +214,9 @@ Agnus::cyclesInFrame() const
 Cycle
 Agnus::startOfFrame() const
 {
-    // TODO: ADD NTSC MODE COMPATIBILITY
-    return clock - DMA_CYCLES(pos.v * HPOS_CNT_PAL + pos.h);
+    // TODO: FIX NTSC MODE COMPATIBILITY
+    assert(clock - DMA_CYCLES(pos.v * HPOS_CNT_PAL + pos.h) == frame.start);
+    return frame.start;
 }
 
 Cycle
@@ -222,10 +243,10 @@ Agnus::belongsToNextFrame(Cycle cycle) const
     return cycle >= startOfNextFrame();
 }
 
+// DEPRECATED: NOT NTSC COMPATIBLE
 Cycle
 Agnus::beamToCycle(Beam beam) const
 {
-    // TODO: Add NTSC compatibility
     return startOfFrame() + DMA_CYCLES(beam.v * HPOS_CNT_PAL + beam.h);
 }
 
@@ -619,9 +640,30 @@ Agnus::updateSpriteDMA()
 void
 Agnus::hsyncHandler()
 {
-    assert(pos.h == HPOS_CNT_PAL || pos.h == HPOS_CNT_NTSC);
+    // Toggle the line type in NTSC mode
+    switch (pos.type) {
+
+        case LINE_PAL:
+
+            assert(pos.h == HPOS_CNT_PAL);
+            break;
+
+        case LINE_NTSC_SHORT:
+
+            assert(pos.h == HPOS_CNT_PAL);
+            pos.type = LINE_NTSC_LONG;
+            break;
+
+        case LINE_NTSC_LONG:
+
+            assert(pos.h == HPOS_CNT_NTSC);
+            pos.type = LINE_NTSC_SHORT;
+            break;
+    }
+
+    // Reset the horizontal counter
     pos.h = 0;
-    
+
     // Let Denise finish up the current line
     denise.endOfLine(pos.v);
 
@@ -671,7 +713,7 @@ Agnus::vsyncHandler()
     paula.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT_PAL));
 
     // Advance to the next frame
-    frame.next(denise.lace());
+    frame.next(denise.lace(), clock, pos.type);
 
     // Reset vertical position counter
     pos.v = 0;

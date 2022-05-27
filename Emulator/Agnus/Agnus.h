@@ -695,44 +695,56 @@ public:
         scheduleAbs<s>(clock + cycle, id, data);
     }
 
-    /*
-    template<EventSlot s> [[deprecated]] void scheduleRelOld(Cycle cycle, EventID id) {
-        scheduleAbs<s>(clock + cycle, id);
-    }
-    
-    template<EventSlot s> [[deprecated]] void scheduleRelOld(Cycle cycle, EventID id, i64 data) {
-        scheduleAbs<s>(clock + cycle, id, data);
-    }
-    */
-
     template<EventSlot s> void schedulePos(Beam pos, EventID id, i64 data) {
-        scheduleAbs<s>(beamToCycle(pos), id, data);
+
+        // scheduleAbs<s>(beamToCycle(pos), id, data);
+        scheduleAbs<s>(frame.posToCycle(pos.v, pos.h), id, data);
+
+        // REMOVE ASAP
+        if (frame.type == LINE_PAL) {
+            assert(trigger[s] == beamToCycle(pos));
+        }
     }
 
     template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id) {
-        scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id);
+
+        // scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id);
+        scheduleAbs<s>(frame.posToCycle(vpos, hpos), id);
+
+        // REMOVE ASAP
+        if (frame.type == LINE_PAL) {
+            assert(trigger[s] == beamToCycle( Beam { vpos, hpos } ));
+        }
     }
 
     template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id, i64 data) {
-        scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id, data);
+
+        // scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id, data);
+        scheduleAbs<s>(frame.posToCycle(vpos, hpos), id, data);
+
+        // REMOVE ASAP
+        if (frame.type == LINE_PAL) {
+            assert(trigger[s] == beamToCycle( Beam { vpos, hpos } ));
+        }
     }
     
     template<EventSlot s> void rescheduleRel(Cycle cycle) {
         rescheduleAbs<s>(clock + cycle);
     }
-
-    /*
-    template<EventSlot s> [[deprecated]] void rescheduleRelOld(Cycle cycle) {
-        rescheduleAbs<s>(clock + cycle);
-    }
-    */
     
     template<EventSlot s> void reschedulePos(Beam pos) {
         rescheduleAbs<s>(beamToCycle(pos));
     }
 
     template<EventSlot s> void reschedulePos(i16 vpos, i16 hpos) {
-        rescheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ));
+
+        // rescheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ));
+        rescheduleAbs<s>(frame.posToCycle(vpos, hpos));
+
+        // REMOVE ASAP
+        if (frame.type == LINE_PAL) {
+            assert(trigger[s] == beamToCycle( Beam { vpos, hpos } ));
+        }
     }
 
     template<EventSlot s> void cancel()

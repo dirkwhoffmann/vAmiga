@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Aliases.h"
+#include "Macros.h"
 
 struct Frame
 {
@@ -19,9 +20,15 @@ struct Frame
     // The long frame flipflop
     bool lof;
     
-    // Value of the frame flipflop in the previous frame
+    // The value of the frame flipflop in the previous frame
     bool prevlof;
-    
+
+    // The master clock at the beginning of this frame
+    Cycle start;
+
+    // The type of the first line in this frame
+    LineType type;
+
     template <class W>
     void operator<<(W& worker)
     {
@@ -29,11 +36,13 @@ struct Frame
 
         << nr
         << lof
-        << prevlof;
+        << prevlof
+        << start
+        << type;
     }
     
-    Frame() : nr(0), lof(false), prevlof(false) { }
-    
+    Frame() : nr(0), lof(false), prevlof(false), start(0), type(LINE_PAL) { }
+
     bool isLongFrame() const { return lof; }
     bool isShortFrame() const { return !lof; }
     isize numLines() const { return lof ? 313 : 312; }
@@ -45,12 +54,32 @@ struct Frame
     isize prevLastLine() const { return prevlof ? 312 : 311; }
 
     // Advances one frame
-    void next(bool laceBit)
+    void next(bool laceBit, Cycle newStart, LineType newType)
     {
         nr++;
         prevlof = lof;
+        start = newStart;
+        type = newType;
         
         // Toggle the long frame flipflop in interlace mode
         if (laceBit) { lof = !lof; }
+    }
+
+    // Computes the master cycle for a position in the current frame
+    Cycle posToCycle(isize v, isize h)
+    {
+        isize cycles = v * HPOS_CNT_PAL + h;
+
+        switch (type) {
+
+            case LINE_PAL:          break;
+            case LINE_NTSC_SHORT:   cycles += v / 2; break;
+            case LINE_NTSC_LONG:    cycles += (v + 1) / 2; break;
+
+            default:
+                fatalError;
+        }
+
+        return start + DMA_CYCLES(cycles);
     }
 };

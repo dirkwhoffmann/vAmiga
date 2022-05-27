@@ -47,6 +47,10 @@ class Configuration {
         get { return amiga.getConfig(.AGNUS_REVISION) }
         set { amiga.configure(.AGNUS_REVISION, value: newValue) }
     }
+    var pal: Bool {
+        get { return amiga.getConfig(.PAL_MODE) != 0 }
+        set { amiga.configure(.PAL_MODE, enable: newValue) }
+    }
     var deniseRev: Int {
         get { return amiga.getConfig(.DENISE_REVISION) }
         set { amiga.configure(.DENISE_REVISION, value: newValue) }

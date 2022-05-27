@@ -88,25 +88,50 @@ struct Beam
         return Beam(vv, hh);
     }
 
+    // Returns the number of elapsed cycles between two beam positions
     isize operator-(const Beam& beam) const
     {
         assert(v >= beam.v);
         assert(v != beam.v || h >= beam.h);
 
-        // Compute the number of elapsed cycles between the two beam positions
-        isize result = (v * HPOS_CNT_PAL + h) - (beam.v * HPOS_CNT_PAL + beam.h);
+        isize count1 = v * HPOS_CNT_PAL + h + ll();
+        isize count2 = beam.v * HPOS_CNT_PAL + beam.h + beam.ll();
 
-        // Add missing NTSC cycles
+        if (type == LINE_PAL) {
+            assert(count1 - count2 ==
+                   (v * HPOS_CNT_PAL + h) - (beam.v * HPOS_CNT_PAL + beam.h));
+        }
+
+        return count1 - count2;
+    }
+
+    // Returns the number of long lines above the current vertical position
+    isize ll() const {
+
         switch (type) {
 
-            case LINE_PAL:          break;
-            case LINE_NTSC_SHORT:   result += (beam.v - v) / 2; break;
-            case LINE_NTSC_LONG:    result += (beam.v - v + 1) / 2; break;
+            case LINE_PAL:          return 0;
+            case LINE_NTSC_SHORT:   return IS_EVEN(v) ? (v / 2) : (v + 1) / 2;
+            case LINE_NTSC_LONG:    return IS_EVEN(v) ? (v + 1) / 2 : (v / 2);
 
             default:
                 fatalError;
         }
-
-        return result;
     }
 };
+
+/* REMOVE ASAP:
+0 L 0 (v + 1) / 2
+1 S 1
+2 L 1
+3 S 2
+4 L 2
+5 S 3
+
+0 S 0 (v / 2)
+1 L 0
+2 S 1
+3 L 1
+4 S 2
+5 L 2
+*/
