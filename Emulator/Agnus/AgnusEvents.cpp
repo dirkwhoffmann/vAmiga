@@ -468,7 +468,7 @@ Agnus::serviceEOL()
 }
 
 void
-Agnus::serviceVblEvent(EventID id)
+Agnus::serviceVBLEvent(EventID id)
 {
     switch (id) {
 
@@ -509,6 +509,19 @@ Agnus::serviceVblEvent(EventID id)
             
         default:
             fatalError;
+    }
+}
+
+void
+Agnus::rectifyVBLEvent()
+{
+    switch (id[SLOT_VBL]) {
+
+        case VBL_STROBE0: scheduleStrobe0Event(); break;
+        case VBL_STROBE1: scheduleStrobe1Event(); break;
+        case VBL_STROBE2: scheduleStrobe2Event(); break;
+
+        default: break;
     }
 }
 

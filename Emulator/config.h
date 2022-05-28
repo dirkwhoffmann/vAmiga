@@ -93,7 +93,6 @@ struct FloatStereo; typedef struct FloatStereo SampleType;
 //
 
 static const int NO_SEQ_FASTPATH = 0; // Disable sequencer speed optimizations
-static const int LEGACY_COPPER   = 0; // Enable deprecated Copper code
 static const int DIAG_BOARD      = 0; // Plug in the diagnose board
 
 

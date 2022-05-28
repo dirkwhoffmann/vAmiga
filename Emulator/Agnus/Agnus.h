@@ -816,8 +816,11 @@ public:
     void serviceEOL();
 
     // Services a vertical blank interrupt
-    void serviceVblEvent(EventID id);
-    
+    void serviceVBLEvent(EventID id);
+
+    // Renews the trigger cycle of a pending VBL event
+    void rectifyVBLEvent();
+
     // Services a Disk, Audio, or Sprite event
     void serviceDASEvent(EventID id);
     

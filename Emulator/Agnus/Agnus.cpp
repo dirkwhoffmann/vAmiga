@@ -100,21 +100,31 @@ Agnus::setConfigItem(Option option, i64 value)
 
         case OPT_PAL_MODE:
 
-        {   SUSPENDED
+            // if (config.pal != value)
+            {
 
-            config.pal = value;
+                SUSPENDED
 
-            if (value) {
+                config.pal = value;
 
-                trace(1, "Switching to PAL\n");
-                pos.type = LINE_PAL;
+                if (value) {
 
-            } else {
+                    trace(1, "Switching to PAL\n");
+                    pos.type = LINE_PAL;
+                    frame.type = LINE_PAL;
 
-                trace(1, "Switching to NTSC\n");
-                pos.type = LINE_NTSC_LONG;
+                } else {
+
+                    trace(1, "Switching to NTSC\n");
+                    pos.type = LINE_NTSC_LONG;
+                    frame.type = LINE_NTSC_LONG;
+                }
+
+                // Rectify the trigger cycles of some events
+                if (isPoweredOn()) {
+                    rectifyVBLEvent();
+                }
             }
-        }
 
         case OPT_AGNUS_REVISION:
                         
@@ -434,7 +444,7 @@ Agnus::executeUntil(Cycle cycle) {
             paula.diskController.serviceDiskEvent();
         }
         if (isDue<SLOT_VBL>(cycle)) {
-            agnus.serviceVblEvent(id[SLOT_VBL]);
+            agnus.serviceVBLEvent(id[SLOT_VBL]);
         }
         if (isDue<SLOT_IRQ>(cycle)) {
             paula.serviceIrqEvent();

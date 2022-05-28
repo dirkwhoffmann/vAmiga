@@ -293,14 +293,7 @@ Agnus::setVPOS(u16 value)
     /* Reschedule a pending VBL event with a trigger cycle that is consistent
      * with the new value of the LOF bit.
      */
-    switch (id[SLOT_VBL]) {
-
-        case VBL_STROBE0: scheduleStrobe0Event(); break;
-        case VBL_STROBE1: scheduleStrobe1Event(); break;
-        case VBL_STROBE2: scheduleStrobe2Event(); break;
-            
-        default: break;
-    }
+    rectifyVBLEvent();
 }
 
 template <Accessor s> void
