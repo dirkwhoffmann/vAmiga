@@ -801,12 +801,12 @@ DQ
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PgV-ga-20g" userLabel="System">
                                             <rect key="frame" x="223" y="373" width="89" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="7 MHz" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="mixed" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="crx-06-qxi" id="YyS-kP-Noo" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="7 MHz" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="crx-06-qxi" id="YyS-kP-Noo" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="VIG-hv-Dsq">
                                                     <items>
-                                                        <menuItem title="7 MHz" state="mixed" id="crx-06-qxi"/>
+                                                        <menuItem title="7 MHz" state="on" id="crx-06-qxi"/>
                                                         <menuItem title="14 MHz" tag="2" id="KpM-wA-vO7"/>
                                                         <menuItem title="21 MHz" tag="3" id="xcp-NK-hvc"/>
                                                         <menuItem title="28 MHz" tag="4" id="kX7-5A-GSB"/>

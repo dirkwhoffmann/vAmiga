@@ -11,6 +11,7 @@
 
 #include "Aliases.h"
 #include "Macros.h"
+#include "Beam.h"
 
 struct Frame
 {
@@ -45,13 +46,13 @@ struct Frame
 
     bool isLongFrame() const { return lof; }
     bool isShortFrame() const { return !lof; }
-    isize numLines() const { return lof ? 313 : 312; }
-    isize lastLine() const { return lof ? 312 : 311; }
+    isize numLines() const;
+    isize lastLine() const;
     
     bool wasLongFrame() const { return prevlof; }
     bool wasShortFrame() const { return !prevlof; }
-    isize prevNumLines() const { return prevlof ? 313 : 312; }
-    isize prevLastLine() const { return prevlof ? 312 : 311; }
+    isize prevNumLines() const;
+    isize prevLastLine() const;
 
     // Advances one frame
     void next(bool laceBit, Cycle newStart, LineType newType)
@@ -66,38 +67,8 @@ struct Frame
     }
 
     // Computes the master cycle for a position in the current frame
-    Cycle posToCycle(isize v, isize h) const
-    {
-        isize cycles = v * HPOS_CNT_PAL + h;
-
-        switch (type) {
-
-            case LINE_PAL:          break;
-            case LINE_NTSC_SHORT:   cycles += v / 2; break;
-            case LINE_NTSC_LONG:    cycles += (v + 1) / 2; break;
-
-            default:
-                fatalError;
-        }
-
-        return start + DMA_CYCLES(cycles);
-    }
+    Cycle posToCycle(isize v, isize h) const;
 
     // Computes the number of cycles between two beam positions
-    Cycle diff(isize v1, isize h1, isize v2, isize h2) const
-    {
-        assert(v1 >= v2);
-        assert(v1 != v2|| h1 >= h2);
-
-        auto count1 = posToCycle(v1, h1);
-        auto count2 = posToCycle(v2, h2);
-        assert(count1 >= count2);
-
-        if (type == LINE_PAL) {
-            assert(count1 - count2 ==
-                   DMA_CYCLES((v1 * HPOS_CNT_PAL + h1) - (v2 * HPOS_CNT_PAL + h2)));
-        }
-
-        return count1 - count2;
-    }
+    Cycle diff(isize v1, isize h1, isize v2, isize h2) const;
 };

@@ -100,31 +100,10 @@ Agnus::setConfigItem(Option option, i64 value)
 
         case OPT_PAL_MODE:
 
-            // if (config.pal != value)
-            {
-
-                SUSPENDED
-
-                config.pal = value;
-
-                if (value) {
-
-                    trace(1, "Switching to PAL\n");
-                    pos.type = LINE_PAL;
-                    frame.type = LINE_PAL;
-
-                } else {
-
-                    trace(1, "Switching to NTSC\n");
-                    pos.type = LINE_NTSC_LONG;
-                    frame.type = LINE_NTSC_LONG;
-                }
-
-                // Rectify the trigger cycles of some events
-                if (isPoweredOn()) {
-                    rectifyVBLEvent();
-                }
+            if (config.pal != value) {
+                switchMachineType(value);
             }
+            return;
 
         case OPT_AGNUS_REVISION:
                         
@@ -161,6 +140,31 @@ Agnus::setConfigItem(Option option, i64 value)
         default:
             fatalError;
     }
+}
+
+void
+Agnus::switchMachineType(bool pal)
+{
+    SUSPENDED
+
+    config.pal = pal;
+
+    trace(NTSC_DEBUG, "Switching to %s mode\n", pal ? "PAL" : "NTSC");
+
+    // Change line types
+    pos.type = pal ? LINE_PAL : LINE_NTSC_LONG;
+    frame.type = pal ? LINE_PAL : LINE_NTSC_LONG;
+
+    // Rectify the trigger cycles of events that rely on exact beam positions
+    if (isPoweredOn()) rectifyVBLEvent();
+
+    // Adjust the video frequency
+    amiga.setFrequency(pal ? 50 : 60);
+
+    // TODO: Erase the emulator texture
+
+    // TODO: Inform the GUI
+
 }
 
 bool

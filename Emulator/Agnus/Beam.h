@@ -11,6 +11,7 @@
 
 #include "Aliases.h"
 #include "Constants.h"
+#include "Reflection.h"
 
 enum_long(LINE_TYPE)
 {
@@ -28,7 +29,7 @@ struct LineTypeEnum : util::Reflection<LineTypeEnum, LineType>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "LINE"; }
-    static const char *key(AgnusRevision value)
+    static const char *key(LineType value)
     {
         switch (value) {
 

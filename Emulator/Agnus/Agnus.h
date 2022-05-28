@@ -299,15 +299,22 @@ public:
     
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
-    
+
+private:
+
+    void switchMachineType(bool pal);
     
     //
     // Querying chip properties
     //
-    
+
+public:
+
     bool isOCS() const;
     bool isECS() const;
-    
+    bool isPAL() const { return config.pal; }
+    bool isNTSC() const { return !config.pal; }
+
     // Returns the chip identification bits of this Agnus (show up in VPOSR)
     u16 idBits() const;
     
