@@ -33,11 +33,13 @@ extension Canvas {
     
     // Returns the largest visibile texture area (excluding HBLANK and VBLANK)
     var largestVisible: CGRect {
+
+        let pal = renderer.config.machineType == MachineType.PAL.rawValue
         
         let x1 = Int(HBLANK_CNT) * 4
         let x2 = Int(HPOS_CNT_PAL) * 4
         let y1 = Int(VBLANK_CNT)
-        let y2 = Int(VPOS_CNT) - 2
+        let y2 = pal ? Int(VPOS_CNT) - 2 : 262
         
         return CGRect(x: x1, y: y1, width: x2 - x1, height: y2 - y1)
     }

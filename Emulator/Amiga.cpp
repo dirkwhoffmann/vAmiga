@@ -392,7 +392,7 @@ Amiga::setConfigItem(Option option, i64 value)
 
             if (value != config.type) {
 
-                setMachineType(value);
+                setMachineType(MachineType(value));
             }
             return;
 
@@ -805,7 +805,7 @@ Amiga::setMachineType(MachineType type)
     {   SUSPENDED
 
         config.type = type;
-        
+
         // Change the frame type
         agnus.pos.type = pal ? LINE_PAL : LINE_NTSC_LONG;
         agnus.frame.type = pal ? LINE_PAL : LINE_NTSC_LONG;

@@ -512,7 +512,7 @@ DQ
                                                         <menuItem title="Hyperion Kickstart 3.14" image="chipTemplate" tag="3576386301" id="6W6-VI-BY0">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Hyperion Kickstart 3.2" image="chipTemplate" tag="2171852726" id="geS-8F-g06">
+                                                        <menuItem title="Hyperion Kickstart 3.2.1" image="chipTemplate" tag="1325892694" id="geS-8F-g06">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem isSeparatorItem="YES" id="zIK-wc-oAf"/>
