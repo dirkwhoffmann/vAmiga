@@ -11,9 +11,11 @@
 #include "IOUtils.h"
 #include "MutableFileSystem.h"
 #include "MemUtils.h"
+
 #include <climits>
 #include <set>
 #include <stack>
+#include <algorithm>
 
 FileSystem::~FileSystem()
 {
