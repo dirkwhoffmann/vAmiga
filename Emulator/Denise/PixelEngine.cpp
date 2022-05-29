@@ -31,6 +31,25 @@ PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
 }
 
 void
+PixelEngine::clearTextures()
+{
+    lockStableBuffer();
+    
+    // Initialize frame buffers with a checkerboard pattern
+    for (isize line = 0; line < VPIXELS; line++) {
+        for (isize i = 0; i < HPIXELS; i++) {
+
+            isize pos = line * HPIXELS + i;
+            u32 col = (line / 4) % 2 == (i / 8) % 2 ? 0xFF222222 : 0xFF444444;
+            emuTexture[0].ptr[pos] = col;
+            emuTexture[1].ptr[pos] = col;
+        }
+    }
+
+    unlockStableBuffer();
+}
+
+void
 PixelEngine::_initialize()
 {
     AmigaComponent::_initialize();
@@ -74,16 +93,7 @@ PixelEngine::didLoadFromBuffer(const u8 *buffer)
 void
 PixelEngine::_powerOn()
 {
-    // Initialize frame buffers with a checkerboard pattern (for debugging)
-    for (isize line = 0; line < VPIXELS; line++) {
-        for (isize i = 0; i < HPIXELS; i++) {
-
-            isize pos = line * HPIXELS + i;
-            u32 col = (line / 4) % 2 == (i / 8) % 2 ? 0xFF222222 : 0xFF444444;
-            emuTexture[0].ptr[pos] = col;
-            emuTexture[1].ptr[pos] = col;
-        }
-    }
+    clearTextures();
 }
 
 void

@@ -464,6 +464,9 @@ extension MyController {
         case .DMA_DEBUG_OFF:
             renderer.zoomTextureIn()
 
+        case .MACHINE_TYPE:
+            debug(1, "Machine type: \(data1)")
+
         case .OVERCLOCKING:
             speedometer.acceleration = acceleration
             activityBar.maxValue = 140.0 * acceleration

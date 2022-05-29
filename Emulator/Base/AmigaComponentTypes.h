@@ -18,8 +18,10 @@
 
 enum_long(OPT)
 {
+    // Amiga
+    OPT_MACHINE_TYPE,
+    
     // Agnus
-    OPT_PAL_MODE,
     OPT_AGNUS_REVISION,
     OPT_SLOW_RAM_MIRROR,
     OPT_PTR_DROPS,
@@ -152,7 +154,8 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
     {
         switch (value) {
 
-            case OPT_PAL_MODE:              return "PAL_MODE";
+            case OPT_MACHINE_TYPE:          return "MACHINE_TYPE";
+
             case OPT_AGNUS_REVISION:        return "AGNUS_REVISION";
             case OPT_SLOW_RAM_MIRROR:       return "SLOW_RAM_MIRROR";
             case OPT_PTR_DROPS:             return "PTR_DROPS";

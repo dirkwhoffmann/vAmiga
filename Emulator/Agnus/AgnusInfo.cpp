@@ -433,10 +433,9 @@ Agnus::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Config) {
 
-        os << tab("Machine type");
-        os << bol(config.pal, "PAL", "NTSC") << std::endl;
         os << tab("Chip Revison");
-        os << AgnusRevisionEnum::key(config.revision) << std::endl;
+        os << AgnusRevisionEnum::key(config.revision);
+        os << bol(isPAL(), " (PAL)", " (NTSC)") << std::endl;
         os << tab("Slow Ram mirror");
         os << bol(config.slowRamMirror) << std::endl;
         os << tab("Pointer drops");

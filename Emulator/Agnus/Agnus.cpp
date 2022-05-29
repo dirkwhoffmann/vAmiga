@@ -67,7 +67,6 @@ Agnus::resetConfig()
 
     std::vector <Option> options = {
 
-        OPT_PAL_MODE,
         OPT_AGNUS_REVISION,
         OPT_SLOW_RAM_MIRROR,
         OPT_PTR_DROPS
@@ -83,7 +82,6 @@ Agnus::getConfigItem(Option option) const
 {
     switch (option) {
 
-        case OPT_PAL_MODE:          return config.pal;
         case OPT_AGNUS_REVISION:    return config.revision;
         case OPT_SLOW_RAM_MIRROR:   return config.slowRamMirror;
         case OPT_PTR_DROPS:         return config.ptrDrops;
@@ -97,13 +95,6 @@ void
 Agnus::setConfigItem(Option option, i64 value)
 {
     switch (option) {
-
-        case OPT_PAL_MODE:
-
-            if (config.pal != value) {
-                switchMachineType(value);
-            }
-            return;
 
         case OPT_AGNUS_REVISION:
                         
@@ -140,31 +131,6 @@ Agnus::setConfigItem(Option option, i64 value)
         default:
             fatalError;
     }
-}
-
-void
-Agnus::switchMachineType(bool pal)
-{
-    SUSPENDED
-
-    config.pal = pal;
-
-    trace(NTSC_DEBUG, "Switching to %s mode\n", pal ? "PAL" : "NTSC");
-
-    // Change line types
-    pos.type = pal ? LINE_PAL : LINE_NTSC_LONG;
-    frame.type = pal ? LINE_PAL : LINE_NTSC_LONG;
-
-    // Rectify the trigger cycles of events that rely on exact beam positions
-    if (isPoweredOn()) rectifyVBLEvent();
-
-    // Adjust the video frequency
-    amiga.setFrequency(pal ? 50 : 60);
-
-    // TODO: Erase the emulator texture
-
-    // TODO: Inform the GUI
-
 }
 
 bool

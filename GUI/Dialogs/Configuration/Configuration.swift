@@ -35,6 +35,10 @@ class Configuration {
     // Hardware
     //
 
+    var machineType: Int {
+        get { return amiga.getConfig(.MACHINE_TYPE) }
+        set { amiga.configure(.MACHINE_TYPE, value: newValue) }
+    }
     var cpuRev: Int {
         get { return amiga.getConfig(.CPU_REVISION) }
         set { amiga.configure(.CPU_REVISION, value: newValue) }
@@ -46,10 +50,6 @@ class Configuration {
     var agnusRev: Int {
         get { return amiga.getConfig(.AGNUS_REVISION) }
         set { amiga.configure(.AGNUS_REVISION, value: newValue) }
-    }
-    var pal: Bool {
-        get { return amiga.getConfig(.PAL_MODE) != 0 }
-        set { amiga.configure(.PAL_MODE, enable: newValue) }
     }
     var deniseRev: Int {
         get { return amiga.getConfig(.DENISE_REVISION) }

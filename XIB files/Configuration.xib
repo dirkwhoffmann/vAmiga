@@ -68,8 +68,8 @@
                 <outlet property="csLockImage" destination="nxr-43-cIJ" id="ElE-Ga-2uJ"/>
                 <outlet property="csLockInfo1" destination="DDQ-1d-Teh" id="ABA-0a-Oku"/>
                 <outlet property="csLockInfo2" destination="dpR-tS-CiI" id="lqK-OQ-5fr"/>
+                <outlet property="csMachineType" destination="0dC-Bp-GRH" id="A6c-EO-Ao4"/>
                 <outlet property="csOKButton" destination="RnF-fY-9yx" id="Ce9-PL-yaj"/>
-                <outlet property="csPal" destination="0dC-Bp-GRH" id="A6c-EO-Ao4"/>
                 <outlet property="csPowerButton" destination="A9W-ux-mNv" id="0Ou-mR-F0e"/>
                 <outlet property="csRtcIcon" destination="O4z-MY-Gb2" id="sdk-W0-SBc"/>
                 <outlet property="csRtcInfo1" destination="Wyd-E9-HnG" id="wAR-lm-wUh"/>
@@ -931,18 +931,18 @@ DQ
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0dC-Bp-GRH" userLabel="System">
                                             <rect key="frame" x="223" y="253" width="91" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="PAL" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="559-c9-gxY" id="YMd-SZ-Ded" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="PAL" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="559-c9-gxY" id="YMd-SZ-Ded" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="45Q-Gy-xxi">
                                                     <items>
-                                                        <menuItem title="PAL" state="on" tag="1" id="559-c9-gxY"/>
-                                                        <menuItem title="NTSC" id="0jZ-6B-bYZ"/>
+                                                        <menuItem title="PAL" state="on" id="559-c9-gxY"/>
+                                                        <menuItem title="NTSC" tag="1" id="0jZ-6B-bYZ"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="csPalAction:" target="-2" id="rQB-2G-H9i"/>
+                                                <action selector="csMachineTypeAction:" target="-2" id="1m5-Pq-L63"/>
                                             </connections>
                                         </popUpButton>
                                     </subviews>

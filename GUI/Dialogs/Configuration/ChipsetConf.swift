@@ -12,7 +12,7 @@ extension ConfigurationController {
     func refreshChipsetTab() {
 
         let poweredOff = amiga.poweredOff
-        let pal = config.pal
+        let pal = config.machineType == MachineType.PAL.rawValue
 
         // CPU
         csCpuRevision.selectItem(withTag: config.cpuRev)
@@ -21,7 +21,7 @@ extension ConfigurationController {
         csCpuInfo2.stringValue = "All models"
 
         // Agnus
-        csPal.selectItem(withTag: config.pal ? 1 : 0)
+        csMachineType.selectItem(withTag: config.machineType)
         csAgnusRevision.selectItem(withTag: config.agnusRev)
         switch AgnusRevision(rawValue: config.agnusRev) {
 
@@ -110,7 +110,7 @@ extension ConfigurationController {
         }
         
         // Disable some controls if emulator is powered on
-        // csCpuRevision.isEnabled = poweredOff
+        csCpuRevision.isEnabled = poweredOff
         csAgnusRevision.isEnabled = poweredOff
         csDeniseRevision.isEnabled = poweredOff
         csCiaRevision.isEnabled = poweredOff
@@ -144,9 +144,9 @@ extension ConfigurationController {
         refresh()
     }
 
-    @IBAction func csPalAction(_ sender: NSPopUpButton!) {
+    @IBAction func csMachineTypeAction(_ sender: NSPopUpButton!) {
 
-        config.pal = sender.selectedTag() == 1
+        config.machineType = sender.selectedTag()
         refresh()
     }
 
