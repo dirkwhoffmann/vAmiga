@@ -193,7 +193,9 @@ extension MyController {
 
         let clock = amiga.cpu.clock
 
-        speedometer.updateWith(cycle: clock, frame: renderer.frames)
+        speedometer.updateWith(cycle: clock,
+                               emuFrame: Int64(amiga.agnus.frameCount),
+                               gpuFrame: renderer.frames)
         
         switch activityType.selectedTag() {
 
@@ -201,14 +203,19 @@ extension MyController {
             let mhz = speedometer.mhz
             activityBar.doubleValue = 10 * mhz
             activityInfo.stringValue = String(format: "%.2f MHz", mhz)
-            
+
         case 1:
+            let fps = speedometer.emuFps
+            activityBar.doubleValue = fps
+            activityInfo.stringValue = String(format: "%d Hz", Int(fps))
+
+        case 2:
             let cpu = amiga.cpuLoad
             activityBar.integerValue = cpu
             activityInfo.stringValue = String(format: "%d%% CPU", cpu)
             
-        case 2:
-            let fps = speedometer.fps
+        case 3:
+            let fps = speedometer.gpsFps
             activityBar.doubleValue = fps
             activityInfo.stringValue = String(format: "%d FPS", Int(fps))
 
@@ -240,8 +247,9 @@ extension MyController {
         switch sender.selectedTag() {
         
         case 0: min = 0; max = 140; warn = 77; crit = 105
-        case 1: min = 0; max = 100; warn = 50; crit = 75
-        case 2: min = 0; max = 120; warn = 75; crit = 100
+        case 1: min = 0; max = 120; warn = 75; crit = 100
+        case 2: min = 0; max = 100; warn = 50; crit = 75
+        case 3: min = 0; max = 120; warn = 75; crit = 100
 
         default:
             fatalError()

@@ -710,6 +710,11 @@ using namespace moira;
     return [self agnus]->isECS();
 }
 
+- (NSInteger)frameCount
+{
+    return [self agnus]->frame.nr;
+}
+
 - (AgnusStats)getStats
 {
     return [self agnus]->getStats();
