@@ -48,7 +48,6 @@ Agnus::_reset(bool hard)
     // Schedule initial events
     scheduleRel<SLOT_SEC>(NEVER, SEC_TRIGGER);
     scheduleRel<SLOT_TER>(NEVER, TER_TRIGGER);
-    scheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_MAX), RAS_HSYNC);
     scheduleRel<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
     scheduleRel<SLOT_CIAB>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
     scheduleStrobe0Event();
@@ -67,7 +66,7 @@ Agnus::resetConfig()
     auto &defaults = amiga.defaults;
 
     std::vector <Option> options = {
-        
+
         OPT_AGNUS_REVISION,
         OPT_SLOW_RAM_MIRROR,
         OPT_PTR_DROPS
@@ -82,7 +81,7 @@ i64
 Agnus::getConfigItem(Option option) const
 {
     switch (option) {
-            
+
         case OPT_AGNUS_REVISION:    return config.revision;
         case OPT_SLOW_RAM_MIRROR:   return config.slowRamMirror;
         case OPT_PTR_DROPS:         return config.ptrDrops;
@@ -96,7 +95,7 @@ void
 Agnus::setConfigItem(Option option, i64 value)
 {
     switch (option) {
-            
+
         case OPT_AGNUS_REVISION:
                         
             if (!isPoweredOff()) {
@@ -188,13 +187,16 @@ Agnus::slowRamIsMirroredIn() const
 Cycle
 Agnus::cyclesInFrame() const
 {
-    return DMA_CYCLES(frame.numLines() * HPOS_CNT);
+    // TODO: ADD NTSC MODE COMPATIBILITY
+    return DMA_CYCLES(frame.numLines() * HPOS_CNT_PAL);
 }
 
 Cycle
 Agnus::startOfFrame() const
 {
-    return clock - DMA_CYCLES(pos.v * HPOS_CNT + pos.h);
+    // TODO: FIX NTSC MODE COMPATIBILITY
+    assert(clock - DMA_CYCLES(pos.v * HPOS_CNT_PAL + pos.h) == frame.start);
+    return frame.start;
 }
 
 Cycle
@@ -221,22 +223,25 @@ Agnus::belongsToNextFrame(Cycle cycle) const
     return cycle >= startOfNextFrame();
 }
 
+// DEPRECATED: NOT NTSC COMPATIBLE
 Cycle
 Agnus::beamToCycle(Beam beam) const
 {
-    return startOfFrame() + DMA_CYCLES(beam.v * HPOS_CNT + beam.h);
+    return startOfFrame() + DMA_CYCLES(beam.v * HPOS_CNT_PAL + beam.h);
 }
 
 Beam
 Agnus::cycleToBeam(Cycle cycle) const
 {
+    // TODO: Add NTSC compatibility
+
     Beam result;
 
     Cycle diff = AS_DMA_CYCLES(cycle - startOfFrame());
     assert(diff >= 0);
 
-    result.v = (isize)(diff / HPOS_CNT);
-    result.h = (isize)(diff % HPOS_CNT);
+    result.v = (isize)(diff / HPOS_CNT_PAL);
+    result.h = (isize)(diff % HPOS_CNT_PAL);
     return result;
 }
 
@@ -245,7 +250,7 @@ Agnus::execute()
 {
     // Advance the internal clock and the horizontal counter
     clock += DMA_CYCLES(1);
-    pos.h = (pos.h + 1) % HPOS_CNT;
+    pos.h += 1;
 
     // Process pending events
     if (nextTrigger <= clock) executeUntil(clock);
@@ -409,7 +414,7 @@ Agnus::executeUntil(Cycle cycle) {
             paula.diskController.serviceDiskEvent();
         }
         if (isDue<SLOT_VBL>(cycle)) {
-            agnus.serviceVblEvent(id[SLOT_VBL]);
+            agnus.serviceVBLEvent(id[SLOT_VBL]);
         }
         if (isDue<SLOT_IRQ>(cycle)) {
             paula.serviceIrqEvent();
@@ -429,10 +434,6 @@ Agnus::executeUntil(Cycle cycle) {
         if (isDue<SLOT_IPL>(cycle)) {
             paula.serviceIplEvent();
         }
-        if (isDue<SLOT_RAS>(cycle)) {
-            agnus.serviceRASEvent();
-        }
-
         if (isDue<SLOT_TER>(cycle)) {
 
             //
@@ -619,8 +620,30 @@ Agnus::updateSpriteDMA()
 void
 Agnus::hsyncHandler()
 {
-    assert(pos.h == 0);
-    
+    // Toggle the line type in NTSC mode
+    switch (pos.type) {
+
+        case LINE_PAL:
+
+            assert(pos.h == HPOS_CNT_PAL);
+            break;
+
+        case LINE_NTSC_SHORT:
+
+            assert(pos.h == HPOS_CNT_PAL);
+            pos.type = LINE_NTSC_LONG;
+            break;
+
+        case LINE_NTSC_LONG:
+
+            assert(pos.h == HPOS_CNT_NTSC);
+            pos.type = LINE_NTSC_SHORT;
+            break;
+    }
+
+    // Reset the horizontal counter
+    pos.h = 0;
+
     // Let Denise finish up the current line
     denise.endOfLine(pos.v);
 
@@ -645,7 +668,7 @@ Agnus::hsyncHandler()
     bplcon1Initial = bplcon1;
     
     // Clear the bus usage table
-    for (isize i = 0; i < HPOS_CNT; i++) busOwner[i] = BUS_NONE;
+    for (isize i = 0; i < HPOS_CNT_NTSC; i++) busOwner[i] = BUS_NONE;
 
     // Pass control to the sequencer
     sequencer.hsyncHandler();
@@ -664,13 +687,13 @@ Agnus::vsyncHandler()
     assert(clock >= 0);
 
     // Run the screen recorder
-    denise.screenRecorder.vsyncHandler(clock - 50 * DMA_CYCLES(HPOS_CNT));
+    denise.screenRecorder.vsyncHandler(clock - 50 * DMA_CYCLES(HPOS_CNT_PAL));
     
     // Synthesize sound samples
-    paula.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT));
+    paula.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT_PAL));
 
     // Advance to the next frame
-    frame.next(denise.lace());
+    frame.next(denise.lace(), clock, pos.type);
 
     // Reset vertical position counter
     pos.v = 0;

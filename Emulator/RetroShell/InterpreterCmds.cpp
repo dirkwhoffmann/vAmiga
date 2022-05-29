@@ -89,7 +89,22 @@ Interpreter::registerInstructions()
     
     root.add({"amiga"},
              "component", "The virtual Amiga");
-        
+
+    root.add({"amiga", "config"},
+             "command", "Displays the current configuration",
+             &RetroShell::exec <Token::amiga, Token::config>, 0);
+
+    root.add({"amiga", "set"},
+             "command", "Configures the component");
+
+    root.add({"amiga", "set", "pal"},
+             "key", "Emulates a PAL machine",
+             &RetroShell::exec <Token::amiga, Token::set, Token::pal>, 0);
+
+    root.add({"amiga", "set", "pal"},
+             "key", "Emulates a NTSC machine",
+             &RetroShell::exec <Token::amiga, Token::set, Token::ntsc>, 0);
+
     root.add({"amiga", "init"},
              "command", "Initializes the Amiga with a predefined scheme",
              &RetroShell::exec <Token::amiga, Token::init>, 1);

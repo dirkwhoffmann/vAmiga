@@ -16,6 +16,33 @@
 // Enumerations
 //
 
+enum_long(MACHINE_TYPE)
+{
+    MACHINE_PAL,
+    MACHINE_NTSC
+};
+typedef MACHINE_TYPE MachineType;
+
+#ifdef __cplusplus
+struct MachineTypeEnum : util::Reflection<MachineTypeEnum, MachineType>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = MACHINE_NTSC;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
+
+    static const char *prefix() { return "MACHINE"; }
+    static const char *key(MachineType value)
+    {
+        switch (value) {
+
+            case MACHINE_PAL:   return "PAL";
+            case MACHINE_NTSC:  return "NTSC";
+        }
+        return "???";
+    }
+};
+#endif
+
 enum_long(CONFIG_SCHEME)
 {
     CONFIG_A1000_OCS_1MB,
@@ -254,6 +281,12 @@ struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
 //
 // Structures
 //
+
+typedef struct
+{
+    MachineType type;
+}
+AmigaConfig;
 
 typedef struct
 {

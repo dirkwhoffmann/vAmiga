@@ -1137,6 +1137,13 @@ Denise::endOfLine(isize vpos)
     
     // Encode a HIRES / LORES marker in the first HBLANK pixel
     *denise.pixelEngine.pixelAddr(HBLANK_MIN * 4) = hires() ? 0 : -1;
+
+    // Add a debug pixel if requested
+    if constexpr (NTSC_DEBUG) {
+
+        u32 color = agnus.pos.type == LINE_NTSC_LONG ? -1 : 0;
+        *denise.pixelEngine.pixelAddr(HBLANK_MIN * 4 + 1) =  color;
+    }
 }
 
 template void Denise::drawOdd<false>(Pixel offset);

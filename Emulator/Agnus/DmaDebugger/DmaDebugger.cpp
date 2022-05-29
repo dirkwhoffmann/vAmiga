@@ -339,7 +339,7 @@ DmaDebugger::computeOverlay()
 
     }
 
-    for (isize i = 0; i < HPOS_CNT; i++, ptr += 4) {
+    for (isize i = 0; i < HPOS_CNT_PAL; i++, ptr += 4) {
 
         BusOwner owner = owners[i];
 

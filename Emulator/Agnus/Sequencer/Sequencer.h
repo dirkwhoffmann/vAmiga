@@ -336,7 +336,7 @@ public:
 private:
 
     // Updates the jump table for the dasEvent table
-    void updateDasJumpTable(i16 end = HPOS_MAX);
+    void updateDasJumpTable(i16 end = HPOS_MAX_NTSC);
     
     
     //

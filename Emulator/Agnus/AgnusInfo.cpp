@@ -321,16 +321,6 @@ Agnus::eventName(EventSlot slot, EventID id)
             }
             break;
             
-        case SLOT_RAS:
-
-            switch (id) {
-
-                case EVENT_NONE:    return "none";
-                case RAS_HSYNC:     return "RAS_HSYNC";
-                default:            return "*** INVALID ***";
-            }
-            break;
-
         case SLOT_TER:
 
             switch (id) {
@@ -442,9 +432,10 @@ Agnus::_dump(Category category, std::ostream& os) const
     using namespace util;
     
     if (category == Category::Config) {
-        
+
         os << tab("Chip Revison");
-        os << AgnusRevisionEnum::key(config.revision) << std::endl;
+        os << AgnusRevisionEnum::key(config.revision);
+        os << bol(isPAL(), " (PAL)", " (NTSC)") << std::endl;
         os << tab("Slow Ram mirror");
         os << bol(config.slowRamMirror) << std::endl;
         os << tab("Pointer drops");
@@ -512,9 +503,9 @@ Agnus::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Bus) {
         
-        for (isize i = 0; i < HPOS_CNT; i++) {
+        for (isize i = 0; i < HPOS_CNT_NTSC; i++) {
             
-            isize cycle = (i / 6) + (i % 6) * ((HPOS_CNT + 1) / 6);
+            isize cycle = (i / 6) + (i % 6) * ((HPOS_CNT_NTSC + 1) / 6);
             
             string key = std::to_string(cycle) + ":";
             os << std::left << std::setw(5) << key;

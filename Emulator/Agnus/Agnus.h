@@ -149,10 +149,10 @@ public:
 public:
     
     // Recorded DMA values for all cycles in the current rasterline
-    u16 busValue[HPOS_CNT];
+    u16 busValue[HPOS_CNT_NTSC];
 
     // Recorded DMA usage for all cycles in the current rasterline
-    BusOwner busOwner[HPOS_CNT];
+    BusOwner busOwner[HPOS_CNT_NTSC];
 
     
     //
@@ -299,15 +299,19 @@ public:
     
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
-    
-    
+
+
     //
     // Querying chip properties
     //
-    
+
+public:
+
     bool isOCS() const;
     bool isECS() const;
-    
+    bool isPAL() const { return frame.type == LINE_PAL; }
+    bool isNTSC() const { return frame.type != LINE_PAL; }
+
     // Returns the chip identification bits of this Agnus (show up in VPOSR)
     u16 idBits() const;
     
@@ -695,44 +699,56 @@ public:
         scheduleAbs<s>(clock + cycle, id, data);
     }
 
-    /*
-    template<EventSlot s> [[deprecated]] void scheduleRelOld(Cycle cycle, EventID id) {
-        scheduleAbs<s>(clock + cycle, id);
-    }
-    
-    template<EventSlot s> [[deprecated]] void scheduleRelOld(Cycle cycle, EventID id, i64 data) {
-        scheduleAbs<s>(clock + cycle, id, data);
-    }
-    */
-
     template<EventSlot s> void schedulePos(Beam pos, EventID id, i64 data) {
-        scheduleAbs<s>(beamToCycle(pos), id, data);
+
+        // scheduleAbs<s>(beamToCycle(pos), id, data);
+        scheduleAbs<s>(frame.posToCycle(pos.v, pos.h), id, data);
+
+        // REMOVE ASAP
+        if (frame.type == LINE_PAL) {
+            assert(trigger[s] == beamToCycle(pos));
+        }
     }
 
     template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id) {
-        scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id);
+
+        // scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id);
+        scheduleAbs<s>(frame.posToCycle(vpos, hpos), id);
+
+        // REMOVE ASAP
+        if (frame.type == LINE_PAL) {
+            assert(trigger[s] == beamToCycle( Beam { vpos, hpos } ));
+        }
     }
 
     template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id, i64 data) {
-        scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id, data);
+
+        // scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id, data);
+        scheduleAbs<s>(frame.posToCycle(vpos, hpos), id, data);
+
+        // REMOVE ASAP
+        if (frame.type == LINE_PAL) {
+            assert(trigger[s] == beamToCycle( Beam { vpos, hpos } ));
+        }
     }
     
     template<EventSlot s> void rescheduleRel(Cycle cycle) {
         rescheduleAbs<s>(clock + cycle);
     }
-
-    /*
-    template<EventSlot s> [[deprecated]] void rescheduleRelOld(Cycle cycle) {
-        rescheduleAbs<s>(clock + cycle);
-    }
-    */
     
     template<EventSlot s> void reschedulePos(Beam pos) {
         rescheduleAbs<s>(beamToCycle(pos));
     }
 
     template<EventSlot s> void reschedulePos(i16 vpos, i16 hpos) {
-        rescheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ));
+
+        // rescheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ));
+        rescheduleAbs<s>(frame.posToCycle(vpos, hpos));
+
+        // REMOVE ASAP
+        if (frame.type == LINE_PAL) {
+            assert(trigger[s] == beamToCycle( Beam { vpos, hpos } ));
+        }
     }
 
     template<EventSlot s> void cancel()
@@ -797,17 +813,18 @@ public:
     // Services a register change event
     void serviceREGEvent(Cycle until);
 
-    // Services a raster event
-    void serviceRASEvent();
-
     // Services a bitplane event
     void serviceBPLEvent(EventID id);
     template <isize nr> void serviceBPLEventHires();
     template <isize nr> void serviceBPLEventLores();
+    void serviceEOL();
 
     // Services a vertical blank interrupt
-    void serviceVblEvent(EventID id);
-    
+    void serviceVBLEvent(EventID id);
+
+    // Renews the trigger cycle of a pending VBL event
+    void rectifyVBLEvent();
+
     // Services a Disk, Audio, or Sprite event
     void serviceDASEvent(EventID id);
     

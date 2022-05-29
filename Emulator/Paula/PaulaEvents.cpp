@@ -79,7 +79,7 @@ Paula::servicePotEvent(EventID id)
                 if (!outrx) chargeX1 = 0.0;
 
                 // Schedule the next discharge event
-                agnus.scheduleRel<SLOT_POT>(DMA_CYCLES(HPOS_CNT), POT_DISCHARGE);
+                agnus.scheduleRel<SLOT_POT>(DMA_CYCLES(HPOS_CNT_PAL), POT_DISCHARGE);
 
             } else {
 
@@ -91,7 +91,7 @@ Paula::servicePotEvent(EventID id)
                 potCntX1 = outrx ? 0 : (u8)-1;
 
                 // Schedule the first charge event
-                agnus.scheduleRel<SLOT_POT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
+                agnus.scheduleRel<SLOT_POT>(DMA_CYCLES(HPOS_CNT_PAL), POT_CHARGE);
             }
             break;
         }
@@ -113,7 +113,7 @@ Paula::servicePotEvent(EventID id)
 
             // Schedule next event
             if (cont) {
-                agnus.scheduleRel<SLOT_POT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
+                agnus.scheduleRel<SLOT_POT>(DMA_CYCLES(HPOS_CNT_PAL), POT_CHARGE);
             } else {
                 agnus.cancel<SLOT_POT>();
             }

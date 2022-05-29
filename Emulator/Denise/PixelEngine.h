@@ -103,7 +103,10 @@ public:
     
     PixelEngine(Amiga& ref);
  
-    
+    // Initializes frame buffers with a checkerboard patter
+    void clearTextures();
+
+
     //
     // Methods from AmigaObject
     //

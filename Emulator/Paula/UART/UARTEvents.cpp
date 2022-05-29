@@ -10,46 +10,54 @@
 #include "config.h"
 #include "UART.h"
 #include "Agnus.h"
+#include "Paula.h"
 #include "SerialPort.h"
 
 void
 UART::serviceTxdEvent(EventID id)
 {
-    // debug(SER_DEBUG, "serveTxdEvent(%d)\n", id);
+    trace(SER_DEBUG, "serveTxdEvent(%d)\n", id);
 
     switch (id) {
 
         case TXD_BIT:
 
-            // This event should not occurr if the shift register is empty
-            assert(!shiftRegEmpty());
-
-            // Shift out bit and let it appear on the TXD line
-            trace(SER_DEBUG, "Transmitting bit %d\n", transmitShiftReg & 1);
-            outBit = transmitShiftReg & 1;
-            transmitShiftReg >>= 1;
-            updateTXD();
-
-            // Check if the shift register is empty
-            if (!transmitShiftReg) {
+            if (shiftRegEmpty()) {
 
                 // Check if there is a new data packet to send
                 if (transmitBuffer) {
 
                     // Copy new packet into shift register
-                    // debug("Transmission continues with packet %X '%c'\n", transmitBuffer, transmitBuffer & 0xFF);
+                    trace(SER_DEBUG, "Transmitting first packet %x\n", transmitBuffer);
                     copyToTransmitShiftRegister();
 
                 } else {
 
                     // Abort the transmission
-                    trace(SER_DEBUG, "End of transmission\n");
+                    trace(SER_DEBUG, "All packets sent\n");
                     agnus.cancel<SLOT_TXD>();
                     break;
                 }
+
+            } else {
+
+                // Run the shift register
+                trace(SER_DEBUG, "Transmitting bit %d\n", transmitShiftReg & 1);
+                transmitShiftReg >>= 1;
+
+                if (!transmitShiftReg && transmitBuffer) {
+
+                    // Copy next packet into shift register
+                    trace(SER_DEBUG, "Transmitting next packet %x\n", transmitBuffer);
+                    copyToTransmitShiftRegister();
+                }
             }
 
-            // Schedule the next event
+            // Let the bit appear on the TXD line
+            outBit = transmitShiftReg & 1;
+            updateTXD();
+
+            // Schedule next event
             agnus.scheduleRel<SLOT_TXD>(pulseWidth(), TXD_BIT);
             break;
 

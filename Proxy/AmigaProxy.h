@@ -419,6 +419,7 @@
 - (EventSlotInfo)getEventSlotInfo:(NSInteger)slot;
 @property (readonly) BOOL isOCS;
 @property (readonly) BOOL isECS;
+@property (readonly) NSInteger frameCount;
 - (AgnusStats)getStats;
 
 @end

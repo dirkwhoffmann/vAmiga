@@ -38,20 +38,26 @@
 #define VPOS_MAX      312
 #define VPOS_CNT      313
 
-#define HPOS_MAX      226
-#define HPOS_CNT      227
+#define HPOS_MAX_PAL  226
+#define HPOS_CNT_PAL  227
+
+#define HPOS_MAX_NTSC 227
+#define HPOS_CNT_NTSC 228
+
+#define HPOS_MAX      HPOS_MAX_NTSC
+#define HPOS_CNT      HPOS_CNT_NTSC
 
 
 /* Screen buffer dimensions
  *
  * All values are measured in pixels. One DMA cycle corresponds to 4 pixels.
- * Hence, HPIXELS equals 4 * HPOS_CNT. VPIXELS is one greater than VPOS_CNT,
+ * Hence, HPIXELS equals 4 * HPOS_CNT_PAL. VPIXELS is one greater than VPOS_CNT,
  * because of the misalignment offset applied to the screen buffer start
  * address (see below).
  */
 
 #define VPIXELS       314                    // VPOS_CNT + 1 line
-#define HPIXELS       908                    // 4 * HPOS_CNT
+#define HPIXELS       908                    // 4 * HPOS_CNT_PAL
 #define PIXELS        (VPIXELS * HPIXELS)
 
 

@@ -11,12 +11,45 @@
 
 #include "Aliases.h"
 #include "Constants.h"
+#include "Reflection.h"
+
+enum_long(LINE_TYPE)
+{
+    LINE_PAL,           // 227 DMA cycles
+    LINE_NTSC_SHORT,    // 227 DMA cycles
+    LINE_NTSC_LONG      // 228 DMA cycles
+};
+typedef LINE_TYPE LineType;
+
+#ifdef __cplusplus
+struct LineTypeEnum : util::Reflection<LineTypeEnum, LineType>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = LINE_NTSC_LONG;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
+
+    static const char *prefix() { return "LINE"; }
+    static const char *key(LineType value)
+    {
+        switch (value) {
+
+            case LINE_PAL:          return "PAL";
+            case LINE_NTSC_SHORT:   return "NTSC_SHORT";
+            case LINE_NTSC_LONG:    return "NTSC_LONG";
+        }
+        return "???";
+    }
+};
+#endif
 
 struct Beam
 {
-    // Counters for the vertical and horizontal beam position
+    // The vertical and horizontal beam position
     isize v;
     isize h;
+
+    // The type of the current line
+    LineType type;
 
     template <class W>
     void operator<<(W& worker)
@@ -24,11 +57,15 @@ struct Beam
         worker
 
         << v
-        << h;
+        << h
+        << type;
     }
-    
-    Beam(isize v, isize h) : v(v), h(h) { }
-    Beam(isize cycle = 0) : Beam(cycle / HPOS_CNT, cycle % HPOS_CNT) { }
+
+    Beam() : v(0), h(0), type(LINE_PAL) { }
+    Beam(isize v, isize h) : v(v), h(h), type(LINE_PAL) { }
+
+    isize hCnt() const { return type == LINE_NTSC_LONG ? 228 : 227; }
+    isize hMax() const { return type == LINE_NTSC_LONG ? 227 : 226; }
 
     bool operator==(const Beam& beam) const
     {
@@ -40,47 +77,15 @@ struct Beam
         return v != beam.v || h != beam.h;
     }
 
-    Beam& operator+=(const Beam& beam)
-    {
-        v += beam.v;
-        h += beam.h;
-
-        if (h >= HPOS_CNT) { h -= HPOS_CNT; v++; }
-        else if (h < 0)    { h += HPOS_CNT; v--; }
-
-        return *this;
-    }
-
-    Beam operator+(const Beam& beam) const
-    {
-        auto vv = v + beam.v;
-        auto hh = h + beam.h;
-
-        if (hh >= HPOS_CNT) { hh -= HPOS_CNT; vv++; }
-        else if (hh < 0)    { hh += HPOS_CNT; vv--; }
-
-        return Beam(vv, hh);
-    }
-
     Beam operator+(const isize i) const
     {
-        return *this + Beam(i);
-    }
+        assert(i >= 0 && i < HPOS_CNT_PAL);
 
-    isize operator-(const Beam& beam) const
-    {
-        return (v * HPOS_CNT + h) - (beam.v * HPOS_CNT + beam.h);
-    }
+        auto vv = v;
+        auto hh = h + i;
 
-    Beam& operator++()
-    {
-        if (++h > HPOS_MAX) { v++; h = 0; }
-        return *this;
-    }
+        if (hh >= hCnt()) { hh -= hCnt(); vv++; }
 
-    Beam& operator--()
-    {
-        if (--h < 0) { v--; h = HPOS_MAX; }
-        return *this;
+        return Beam(vv, hh);
     }
 };

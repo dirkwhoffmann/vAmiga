@@ -86,21 +86,16 @@
 void
 Agnus::scheduleFirstBplEvent()
 {
-    assert(pos.h == 0 || pos.h == HPOS_MAX);
+    assert(pos.h == 0);
     
     u8 dmacycle = sequencer.bplEvent[0] ? 0 : sequencer.nextBplEvent[0];
-
-    if (pos.h == 0) {
-        scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle), sequencer.bplEvent[dmacycle]);
-    } else {
-        scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle + 1), sequencer.bplEvent[dmacycle]);
-    }
+    scheduleRel<SLOT_BPL>(DMA_CYCLES(dmacycle), sequencer.bplEvent[dmacycle]);
 }
 
 void
 Agnus::scheduleNextBplEvent(isize hpos)
 {
-    assert(hpos >= 0 && hpos < HPOS_CNT);
+    assert(hpos >= 0 && hpos < HPOS_CNT_NTSC);
 
     if (u8 next = sequencer.nextBplEvent[hpos]) {
         scheduleRel<SLOT_BPL>(DMA_CYCLES(next - pos.h), sequencer.bplEvent[next]);
@@ -111,7 +106,7 @@ Agnus::scheduleNextBplEvent(isize hpos)
 void
 Agnus::scheduleBplEventForCycle(isize hpos)
 {
-    assert(hpos >= pos.h && hpos < HPOS_CNT);
+    assert(hpos >= pos.h && hpos < HPOS_CNT_NTSC);
 
     if (sequencer.bplEvent[hpos] != EVENT_NONE) {
         scheduleRel<SLOT_BPL>(DMA_CYCLES(hpos - pos.h), sequencer.bplEvent[hpos]);
@@ -125,22 +120,17 @@ Agnus::scheduleBplEventForCycle(isize hpos)
 void
 Agnus::scheduleFirstDasEvent()
 {
-    assert(pos.h == 0 || pos.h == HPOS_MAX);
+    assert(pos.h == 0);
     
     u8 dmacycle = sequencer.nextDasEvent[0];
     assert(dmacycle != 0);
-
-    if (pos.h == 0) {
-        scheduleRel<SLOT_DAS>(DMA_CYCLES(dmacycle), sequencer.dasEvent[dmacycle]);
-    } else {
-        scheduleRel<SLOT_DAS>(DMA_CYCLES(dmacycle + 1), sequencer.dasEvent[dmacycle]);
-    }
+    scheduleRel<SLOT_DAS>(DMA_CYCLES(dmacycle), sequencer.dasEvent[dmacycle]);
 }
 
 void
 Agnus::scheduleNextDasEvent(isize hpos)
 {
-    assert(hpos >= 0 && hpos < HPOS_CNT);
+    assert(hpos >= 0 && hpos < HPOS_CNT_NTSC);
 
     if (u8 next = sequencer.nextDasEvent[hpos]) {
         scheduleRel<SLOT_DAS>(DMA_CYCLES(next - pos.h), sequencer.dasEvent[next]);
@@ -153,7 +143,7 @@ Agnus::scheduleNextDasEvent(isize hpos)
 void
 Agnus::scheduleDasEventForCycle(isize hpos)
 {
-    assert(hpos >= pos.h && hpos < HPOS_CNT);
+    assert(hpos >= pos.h && hpos < HPOS_CNT_NTSC);
 
     if (sequencer.dasEvent[hpos] != EVENT_NONE) {
         scheduleRel<SLOT_DAS>(DMA_CYCLES(hpos - pos.h), sequencer.dasEvent[hpos]);
@@ -193,7 +183,8 @@ Agnus::scheduleStrobe2Event()
 void
 Agnus::serviceREGEvent(Cycle until)
 {
-    assert(pos.h <= HPOS_MAX);
+    assert(pos.type != LINE_PAL || pos.h <= HPOS_CNT_PAL);
+    assert(pos.type == LINE_PAL || pos.h <= HPOS_CNT_NTSC);
 
     // Iterate through all recorded register changes
     while (!changeRecorder.isEmpty()) {
@@ -203,7 +194,10 @@ Agnus::serviceREGEvent(Cycle until)
 
         // Apply the register change
         RegChange &change = changeRecorder.read();
-        
+
+        assert (pos.type != LINE_PAL || change.addr == SET_STRHOR || pos.h <= HPOS_MAX_PAL);
+        assert (pos.type == LINE_PAL || change.addr == SET_STRHOR || pos.h <= HPOS_MAX_NTSC);
+
         switch (change.addr) {
                 
             case SET_BLTSIZE: blitter.setBLTSIZE(change.value); break;
@@ -279,21 +273,12 @@ Agnus::serviceREGEvent(Cycle until)
                 fatalError;
         }
     }
-    
+
+    assert (pos.type != LINE_PAL || pos.h <= HPOS_MAX_PAL);
+    assert (pos.type == LINE_PAL || pos.h <= HPOS_MAX_NTSC);
+
     // Schedule next event
     scheduleNextREGEvent();
-}
-
-void
-Agnus::serviceRASEvent()
-{
-    assert(id[SLOT_RAS] == RAS_HSYNC);
-    
-    // Let the hsync handler be called at the beginning of the next DMA cycle
-    agnus.recordRegisterChange(0, SET_STRHOR, 1);
-
-    // Reschedule event
-    rescheduleRel<SLOT_RAS>(DMA_CYCLES(HPOS_CNT));
 }
 
 #define LO_NONE(x)      { serviceBPLEventLores<x>(); }
@@ -424,21 +409,21 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_L6_MOD | DRAW_BOTH:    LO_MOD_BOTH(5); break;
 
         case BPL_EOL:
-            assert(pos.h == 0xE2);
+            serviceEOL();
             return;
 
         case BPL_EOL | DRAW_ODD:
-            assert(pos.h == 0xE2);
+            serviceEOL();
             hires() ? denise.drawHiresOdd() : denise.drawLoresOdd();
             return;
 
         case BPL_EOL | DRAW_EVEN:
-            assert(pos.h == 0xE2);
+            serviceEOL();
             hires() ? denise.drawHiresEven() : denise.drawLoresEven();
             return;
 
         case BPL_EOL | DRAW_BOTH:
-            assert(pos.h == 0xE2);
+            serviceEOL();
             hires() ? denise.drawHiresBoth() : denise.drawLoresBoth();
             return;
             
@@ -466,7 +451,24 @@ Agnus::serviceBPLEventLores()
 }
 
 void
-Agnus::serviceVblEvent(EventID id)
+Agnus::serviceEOL()
+{
+    assert(pos.h == HPOS_MAX_PAL || pos.h == HPOS_MAX_NTSC);
+
+    if (pos.h == HPOS_MAX_PAL && pos.type == LINE_NTSC_LONG) {
+
+        // Run for an additional cycle
+        agnus.scheduleNextBplEvent(pos.h);
+
+    } else {
+
+        // Call the hsync handler at the beginning of the next DMA cycle
+        recordRegisterChange(0, SET_STRHOR, 1);
+    }
+}
+
+void
+Agnus::serviceVBLEvent(EventID id)
 {
     switch (id) {
 
@@ -507,6 +509,19 @@ Agnus::serviceVblEvent(EventID id)
             
         default:
             fatalError;
+    }
+}
+
+void
+Agnus::rectifyVBLEvent()
+{
+    switch (id[SLOT_VBL]) {
+
+        case VBL_STROBE0: scheduleStrobe0Event(); break;
+        case VBL_STROBE1: scheduleStrobe1Event(); break;
+        case VBL_STROBE2: scheduleStrobe2Event(); break;
+
+        default: break;
     }
 }
 

@@ -257,63 +257,26 @@ Copper::scheduleWaitWakeup(bool bfd)
 {
     Beam trigger;
 
-    if constexpr (LEGACY_COPPER) {
-        
-        // Find the trigger position for this WAIT command
-        if (findMatchOld(trigger)) {
-            
-            // In how many cycles do we get there?
-            isize delay = trigger - agnus.pos;
-            
-            if (delay == 0) {
-                
-                // Copper does not stop
-                agnus.scheduleRel <SLOT_COP> (DMA_CYCLES(2), COP_FETCH);
-                
-            } else if (delay == 2) {
-                
-                // Copper does not stop
-                agnus.scheduleRel <SLOT_COP> (DMA_CYCLES(2), COP_FETCH);
-                
-            } else {
-                
-                // Wake up 2 cycles earlier with a WAKEUP event
-                delay -= 2;
-                if (bfd) {
-                    agnus.scheduleRel <SLOT_COP> (DMA_CYCLES(delay), COP_WAKEUP);
-                } else {
-                    agnus.scheduleRel <SLOT_COP> (DMA_CYCLES(delay), COP_WAKEUP_BLIT);
-                }
-            }
-            
+    // Find the trigger position for this WAIT command
+    if (findMatch(trigger)) {
+
+        // In how many cycles do we get there?
+        auto delay = agnus.frame.diff(trigger.v, trigger.h, agnus.pos.v, agnus.pos.h);
+
+        if (delay == 0) {
+
+            EventID event = COP_FETCH;
+            agnus.scheduleRel <SLOT_COP> (DMA_CYCLES(2), event);
+
         } else {
-            
-            agnus.scheduleAbs <SLOT_COP> (NEVER, COP_REQ_DMA);
+
+            EventID event = bfd ? COP_WAKEUP : COP_WAKEUP_BLIT;
+            agnus.scheduleRel <SLOT_COP> (delay, event);
         }
-        
+
     } else {
-    
-        // Find the trigger position for this WAIT command
-        if (findMatch(trigger)) {
-            
-            // In how many cycles do we get there?
-            isize delay = trigger - agnus.pos;
-            
-            if (delay == 0) {
-                
-                EventID event = COP_FETCH;
-                agnus.scheduleRel <SLOT_COP> (DMA_CYCLES(2), event);
-                
-            } else {
-                
-                EventID event = bfd ? COP_WAKEUP : COP_WAKEUP_BLIT;
-                agnus.scheduleRel <SLOT_COP> (DMA_CYCLES(delay), event);
-            }
-            
-        } else {
-            
-            agnus.scheduleAbs <SLOT_COP> (NEVER, COP_REQ_DMA);
-        }
+
+        agnus.scheduleAbs <SLOT_COP> (NEVER, COP_REQ_DMA);
     }
 }
 

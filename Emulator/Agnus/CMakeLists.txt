@@ -5,6 +5,7 @@ AgnusInfo.cpp
 AgnusRegs.cpp
 AgnusDma.cpp
 AgnusEvents.cpp
+Frame.cpp
 
 )
 

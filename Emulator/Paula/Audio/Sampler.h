@@ -21,7 +21,7 @@
  * is tagged by the cycle it was produced.
  */
 
-struct Sampler : util::SortedRingBuffer <i16, VPOS_CNT * HPOS_CNT> {
+struct Sampler : util::SortedRingBuffer <i16, VPOS_CNT * HPOS_CNT_PAL> {
     
     // Initializes the ring buffer with a single dummy element
     void reset();

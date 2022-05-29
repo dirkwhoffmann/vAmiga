@@ -132,6 +132,24 @@ RetroShell::exec <Token::amiga, Token::init> (Arguments &argv, long param)
 }
 
 template <> void
+RetroShell::exec <Token::amiga, Token::config> (Arguments& argv, long param)
+{
+    dump(amiga, Category::Config);
+}
+
+template <> void
+RetroShell::exec <Token::amiga, Token::set, Token::pal> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_MACHINE_TYPE, MACHINE_PAL);
+}
+
+template <> void
+RetroShell::exec <Token::amiga, Token::set, Token::ntsc> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_MACHINE_TYPE, MACHINE_NTSC);
+}
+
+template <> void
 RetroShell::exec <Token::amiga, Token::power, Token::on> (Arguments &argv, long param)
 {
     amiga.powerOn();

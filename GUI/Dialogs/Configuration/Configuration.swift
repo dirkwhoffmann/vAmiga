@@ -35,6 +35,10 @@ class Configuration {
     // Hardware
     //
 
+    var machineType: Int {
+        get { return amiga.getConfig(.MACHINE_TYPE) }
+        set { amiga.configure(.MACHINE_TYPE, value: newValue) }
+    }
     var cpuRev: Int {
         get { return amiga.getConfig(.CPU_REVISION) }
         set { amiga.configure(.CPU_REVISION, value: newValue) }

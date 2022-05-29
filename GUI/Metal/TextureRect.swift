@@ -23,7 +23,7 @@ extension Canvas {
     // Returns the used texture area (including HBLANK and VBLANK)
     var entire: CGRect {
         
-        return CGRect(x: 0, y: 0, width: 4 * Int(HPOS_CNT), height: Int(VPOS_CNT))
+        return CGRect(x: 0, y: 0, width: 4 * Int(HPOS_CNT_PAL), height: Int(VPOS_CNT))
     }
     
     var entireNormalized: CGRect {
@@ -33,11 +33,13 @@ extension Canvas {
     
     // Returns the largest visibile texture area (excluding HBLANK and VBLANK)
     var largestVisible: CGRect {
+
+        let pal = renderer.config.machineType == MachineType.PAL.rawValue
         
         let x1 = Int(HBLANK_CNT) * 4
-        let x2 = Int(HPOS_CNT) * 4
+        let x2 = Int(HPOS_CNT_PAL) * 4
         let y1 = Int(VBLANK_CNT)
-        let y2 = Int(VPOS_CNT) - 2
+        let y2 = pal ? Int(VPOS_CNT) - 2 : 262
         
         return CGRect(x: x1, y: y1, width: x2 - x1, height: y2 - y1)
     }
@@ -111,8 +113,12 @@ extension Canvas {
     }
     
     func updateTextureRect() {
-        
-        textureRect = visibleNormalized
+
+        if amiga.getConfig(.DMA_DEBUG_ENABLE) != 0 {
+            textureRect = entireNormalized
+        } else {
+            textureRect = visibleNormalized
+        }
     }
 
     func updateTextureRect(hstrt: Int, vstrt: Int, hstop: Int, vstop: Int) {

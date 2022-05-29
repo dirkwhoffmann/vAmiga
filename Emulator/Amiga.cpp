@@ -195,10 +195,29 @@ Amiga::_reset(bool hard)
     flags = 0;
 }
 
+void
+Amiga::resetConfig()
+{
+    assert(isPoweredOff());
+
+    std::vector <Option> options = {
+
+        OPT_MACHINE_TYPE
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
+}
+
 i64
 Amiga::getConfigItem(Option option) const
 {
     switch (option) {
+
+        case OPT_MACHINE_TYPE:
+
+            return config.type;
 
         case OPT_AGNUS_REVISION:
         case OPT_SLOW_RAM_MIRROR:
@@ -365,6 +384,24 @@ Amiga::getConfigItem(Option option, long id) const
 }
 
 void
+Amiga::setConfigItem(Option option, i64 value)
+{
+    switch (option) {
+
+        case OPT_MACHINE_TYPE:
+
+            if (value != config.type) {
+
+                setMachineType(MachineType(value));
+            }
+            return;
+
+        default:
+            fatalError;
+    }
+}
+
+void
 Amiga::configure(Option option, i64 value)
 {
     debug(CNF_DEBUG, "configure(%s, %lld)\n", OptionEnum::key(option), value);
@@ -393,6 +430,11 @@ Amiga::configure(Option option, i64 value)
     value = overrideOption(option, value);
 
     switch (option) {
+
+        case OPT_MACHINE_TYPE:
+
+            setConfigItem(option, value);
+            break;
 
         case OPT_AGNUS_REVISION:
         case OPT_SLOW_RAM_MIRROR:
@@ -701,7 +743,8 @@ Amiga::configure(ConfigScheme scheme)
         switch(scheme) {
 
             case CONFIG_A1000_OCS_1MB:
-                
+
+                configure(OPT_MACHINE_TYPE, MACHINE_PAL);
                 configure(OPT_CHIP_RAM, 512);
                 configure(OPT_SLOW_RAM, 512);
                 configure(OPT_AGNUS_REVISION, AGNUS_OCS_OLD);
@@ -709,6 +752,7 @@ Amiga::configure(ConfigScheme scheme)
 
             case CONFIG_A500_OCS_1MB:
                 
+                configure(OPT_MACHINE_TYPE, MACHINE_PAL);
                 configure(OPT_CHIP_RAM, 512);
                 configure(OPT_SLOW_RAM, 512);
                 configure(OPT_AGNUS_REVISION, AGNUS_OCS);
@@ -716,6 +760,7 @@ Amiga::configure(ConfigScheme scheme)
                 
             case CONFIG_A500_ECS_1MB:
                 
+                configure(OPT_MACHINE_TYPE, MACHINE_PAL);
                 configure(OPT_CHIP_RAM, 512);
                 configure(OPT_SLOW_RAM, 512);
                 configure(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
@@ -749,6 +794,34 @@ Amiga::overrideOption(Option option, i64 value)
     }
 
     return value;
+}
+
+void
+Amiga::setMachineType(MachineType type)
+{
+    bool pal = type == MACHINE_PAL;
+    trace(NTSC_DEBUG, "Switching to %s mode\n", pal ? "PAL" : "NTSC");
+
+    {   SUSPENDED
+
+        config.type = type;
+
+        // Change the frame type
+        agnus.pos.type = pal ? LINE_PAL : LINE_NTSC_LONG;
+        agnus.frame.type = pal ? LINE_PAL : LINE_NTSC_LONG;
+
+        // Rectify pending events that rely on exact beam positions
+        if (isPoweredOn()) agnus.rectifyVBLEvent();
+
+        // Adjust the video frequency
+        setFrequency(type == MACHINE_PAL ? 50 : 60);
+
+        // Clear frame buffers
+        denise.pixelEngine.clearTextures();
+
+        // Inform the GUI
+        msgQueue.put(MSG_MACHINE_TYPE, config.type);
+    }
 }
 
 InspectionTarget
@@ -821,7 +894,13 @@ void
 Amiga::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
-    
+
+    if (category == Category::Config) {
+
+        os << tab("Machine type");
+        os << MachineTypeEnum::key(config.type);
+    }
+
     if (category == Category::State) {
         
         os << tab("Power");

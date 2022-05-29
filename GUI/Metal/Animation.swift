@@ -129,7 +129,13 @@ extension Renderer {
 
     func zoomTextureIn(steps: Int = 30) {
 
+        let current = canvas.textureRect
         let target = canvas.visibleNormalized
+
+        cutoutX1.current = Float(current.minX)
+        cutoutY1.current = Float(current.minY)
+        cutoutX2.current = Float(current.maxX)
+        cutoutY2.current = Float(current.maxY)
         
         cutoutX1.target = Float(target.minX)
         cutoutY1.target = Float(target.minY)

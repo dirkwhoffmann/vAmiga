@@ -12,7 +12,8 @@ extension ConfigurationController {
     func refreshChipsetTab() {
 
         let poweredOff = amiga.poweredOff
-        
+        let pal = config.machineType == MachineType.PAL.rawValue
+
         // CPU
         csCpuRevision.selectItem(withTag: config.cpuRev)
         csCpuSpeed.selectItem(withTag: config.cpuSpeed)
@@ -20,23 +21,24 @@ extension ConfigurationController {
         csCpuInfo2.stringValue = "All models"
 
         // Agnus
+        csMachineType.selectItem(withTag: config.machineType)
         csAgnusRevision.selectItem(withTag: config.agnusRev)
         switch AgnusRevision(rawValue: config.agnusRev) {
 
         case .OCS_OLD:
-            csAgnusInfo1.stringValue = "MOS 8367 (PAL)"
+            csAgnusInfo1.stringValue = pal ? "MOS 8367" : "MOS 8361"
             csAgnusInfo2.stringValue = "A1000, A2000A"
 
         case .OCS:
-            csAgnusInfo1.stringValue = "MOS 8371 (PAL)"
+            csAgnusInfo1.stringValue = pal ? "MOS 8371" : "MOS 8370"
             csAgnusInfo2.stringValue = "Early A500, A2000"
 
         case .ECS_1MB:
-            csAgnusInfo1.stringValue = "MOS 8372A (PAL)"
+            csAgnusInfo1.stringValue = "MOS 8372A"
             csAgnusInfo2.stringValue = "Later A500, A2000"
 
         case .ECS_2MB:
-            csAgnusInfo1.stringValue = "MOS 8375 (PAL)"
+            csAgnusInfo1.stringValue = "MOS 8375"
             csAgnusInfo2.stringValue = "A500+, A600"
             
         default:
@@ -49,15 +51,15 @@ extension ConfigurationController {
         switch DeniseRevision(rawValue: config.deniseRev) {
         
         case .OCS:
-            csDeniseInfo1.stringValue = "MOS 8362R8 (PAL)"
+            csDeniseInfo1.stringValue = "MOS 8362R8"
             csDeniseInfo2.stringValue = "A500, A1000, A2000"
 
         case .OCS_BRDRBLNK:
-            csDeniseInfo1.stringValue = "MOS 8362R8 (PAL)"
+            csDeniseInfo1.stringValue = "MOS 8362R8"
             csDeniseInfo2.stringValue = "Emulator mod"
             
         case .ECS:
-            csDeniseInfo1.stringValue = "MOS 8373R4 (PAL)"
+            csDeniseInfo1.stringValue = "MOS 8373R4"
             csDeniseInfo2.stringValue = "A500+, A600"
             
         default:
@@ -108,7 +110,7 @@ extension ConfigurationController {
         }
         
         // Disable some controls if emulator is powered on
-        // csCpuRevision.isEnabled = poweredOff
+        csCpuRevision.isEnabled = poweredOff
         csAgnusRevision.isEnabled = poweredOff
         csDeniseRevision.isEnabled = poweredOff
         csCiaRevision.isEnabled = poweredOff
@@ -139,6 +141,12 @@ extension ConfigurationController {
     @IBAction func csAgnusRevAction(_ sender: NSPopUpButton!) {
 
         config.agnusRev = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func csMachineTypeAction(_ sender: NSPopUpButton!) {
+
+        config.machineType = sender.selectedTag()
         refresh()
     }
 

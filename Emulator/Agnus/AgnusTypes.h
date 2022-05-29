@@ -92,7 +92,6 @@ enum_long(SLOT)
     SLOT_TXD,                       // Serial data out (UART)
     SLOT_RXD,                       // Serial data in (UART)
     SLOT_POT,                       // Potentiometer
-    SLOT_RAS,                       // HSYNC handler (End of Line)
     SLOT_TER,                       // Enables tertiary slots
     
     // Tertiary slots
@@ -148,7 +147,6 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
             case SLOT_TXD:   return "TXD";
             case SLOT_RXD:   return "RXD";
             case SLOT_POT:   return "POT";
-            case SLOT_RAS:   return "RAS";
             case SLOT_TER:   return "TER";
                 
             case SLOT_DC0:   return "DC0";
@@ -326,11 +324,7 @@ enum_i8(EventID)
     // Screenshots
     SCR_TAKE            = 1,
     SCR_EVENT_COUNT,
-    
-    // Rasterline slot
-    RAS_HSYNC           = 1,
-    RAS_EVENT_COUNT,
-    
+        
     // SEC slot
     TER_TRIGGER         = 1,
     TER_EVENT_COUNT,

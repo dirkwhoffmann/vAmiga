@@ -93,7 +93,6 @@ struct FloatStereo; typedef struct FloatStereo SampleType;
 //
 
 static const int NO_SEQ_FASTPATH = 0; // Disable sequencer speed optimizations
-static const int LEGACY_COPPER   = 0; // Enable deprecated Copper code
 static const int DIAG_BOARD      = 0; // Plug in the diagnose board
 
 
@@ -128,6 +127,7 @@ static const int MEM_DEBUG       = 0; // Memory
 static const int DMA_DEBUG       = 0; // DMA registers
 static const int DDF_DEBUG       = 0; // Display data fetch
 static const int SEQ_DEBUG       = 0; // Bitplane sequencer
+static const int NTSC_DEBUG      = 1; // NTSC mode
 
 // Copper
 static const int COP_CHECKSUM    = 0; // Compute Copper checksums

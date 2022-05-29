@@ -179,7 +179,7 @@ Agnus::peekVHPOSR() const
     } else {
 
         // The returned position is five cycles ahead
-        auto pos = Beam { agnus.pos.v, agnus.pos.h } + Beam {0,5};
+        auto pos = agnus.pos + 5;
 
         // Rectify the vertical position if it has wrapped over
         if (pos.v >= frame.numLines()) pos.v = 0;
@@ -238,7 +238,7 @@ Agnus::peekVPOSR() const
     } else {
 
         // The returned position is five cycles ahead
-        auto pos = Beam { agnus.pos.v, agnus.pos.h } + Beam {0,5};
+        auto pos = agnus.pos + 5;
 
         // Rectify the vertical position if it has wrapped over
         if (pos.v >= frame.numLines()) pos.v = 0;
@@ -293,14 +293,7 @@ Agnus::setVPOS(u16 value)
     /* Reschedule a pending VBL event with a trigger cycle that is consistent
      * with the new value of the LOF bit.
      */
-    switch (id[SLOT_VBL]) {
-
-        case VBL_STROBE0: scheduleStrobe0Event(); break;
-        case VBL_STROBE1: scheduleStrobe1Event(); break;
-        case VBL_STROBE2: scheduleStrobe2Event(); break;
-            
-        default: break;
-    }
+    rectifyVBLEvent();
 }
 
 template <Accessor s> void

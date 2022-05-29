@@ -10,6 +10,8 @@
 #pragma once
 
 #include "Aliases.h"
+#include "Macros.h"
+#include "Beam.h"
 
 struct Frame
 {
@@ -19,9 +21,15 @@ struct Frame
     // The long frame flipflop
     bool lof;
     
-    // Value of the frame flipflop in the previous frame
+    // The value of the frame flipflop in the previous frame
     bool prevlof;
-    
+
+    // The master clock at the beginning of this frame
+    Cycle start;
+
+    // The type of the first line in this frame
+    LineType type;
+
     template <class W>
     void operator<<(W& worker)
     {
@@ -29,28 +37,38 @@ struct Frame
 
         << nr
         << lof
-        << prevlof;
+        << prevlof
+        << start
+        << type;
     }
     
-    Frame() : nr(0), lof(false), prevlof(false) { }
-    
+    Frame() : nr(0), lof(false), prevlof(false), start(0), type(LINE_PAL) { }
+
     bool isLongFrame() const { return lof; }
     bool isShortFrame() const { return !lof; }
-    isize numLines() const { return lof ? 313 : 312; }
-    isize lastLine() const { return lof ? 312 : 311; }
+    isize numLines() const;
+    isize lastLine() const;
     
     bool wasLongFrame() const { return prevlof; }
     bool wasShortFrame() const { return !prevlof; }
-    isize prevNumLines() const { return prevlof ? 313 : 312; }
-    isize prevLastLine() const { return prevlof ? 312 : 311; }
+    isize prevNumLines() const;
+    isize prevLastLine() const;
 
     // Advances one frame
-    void next(bool laceBit)
+    void next(bool laceBit, Cycle newStart, LineType newType)
     {
         nr++;
         prevlof = lof;
+        start = newStart;
+        type = newType;
         
         // Toggle the long frame flipflop in interlace mode
         if (laceBit) { lof = !lof; }
     }
+
+    // Computes the master cycle for a position in the current frame
+    Cycle posToCycle(isize v, isize h) const;
+
+    // Computes the number of cycles between two beam positions
+    Cycle diff(isize v1, isize h1, isize v2, isize h2) const;
 };
