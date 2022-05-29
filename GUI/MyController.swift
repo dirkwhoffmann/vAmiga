@@ -465,7 +465,6 @@ extension MyController {
             renderer.zoomTextureIn()
 
         case .MACHINE_TYPE:
-            debug(1, "Machine type: \(data1)")
             renderer.canvas.updateTextureRect()
 
         case .OVERCLOCKING:
