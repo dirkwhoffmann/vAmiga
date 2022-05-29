@@ -31,7 +31,11 @@ Agnus::_reset(bool hard)
     
     // Start with a long frame
     frame = Frame();
-    
+
+    // Setup the correct line type
+    pos.type = frame.type =
+    amiga.getConfig().type == MACHINE_PAL ? LINE_PAL : LINE_NTSC_LONG;
+
     // Initialize statistical counters
     clearStats();
             
