@@ -12,6 +12,7 @@
 #include "DiagBoard.h"
 #include "DiagBoardRom.h"
 #include "Amiga.h"
+#include <algorithm>
 
 DiagBoard::DiagBoard(Amiga& ref) : ZorroBoard(ref)
 {
