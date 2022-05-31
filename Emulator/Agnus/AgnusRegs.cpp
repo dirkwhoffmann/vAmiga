@@ -219,13 +219,16 @@ u16
 Agnus::peekVPOSR() const
 {
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
-    // LF I6 I5 I4 I3 I2 I1 I0 -- -- -- -- -- -- -- V8
+    // LF I6 I5 I4 I3 I2 I1 I0 LL -- -- -- -- -- -- V8
  
     // I5 I4 I3 I2 I1 I0 (Chip Identification)
     u16 result = idBits();
 
     // LF (Long frame bit)
     if (frame.isLongFrame()) result |= 0x8000;
+
+    // LL (Long line bit)
+    if (pos.type == LINE_NTSC_LONG) result |= 0x0080;
 
     // V8 (Vertical position MSB)
     // result |= (ersy(bplcon0Initial) ? latchedPos.v : pos.v) >> 8;
@@ -271,29 +274,28 @@ Agnus::setVPOS(u16 value)
         trace(XFILES, "XFILES (VPOS): Toggling V8 is not supported\n");
     }
 
-    /* I don't really know what exactly we are supposed to do here.
-     * For the time being, I only take care of the LOF bit.
-     */
+    // Check the LOF bit
     bool newlof = value & 0x8000;
-    if (frame.lof == newlof) return;
+    if (frame.lof != newlof) {
         
-    /* If a long frame gets changed to a short frame, we only proceed if
-     * Agnus is not in the last rasterline. Otherwise, we would corrupt the
-     * emulators internal state (we would be in a line that is unreachable).
-     */
-    if (!newlof && inLastRasterline()) {
+        /* If a long frame gets changed to a short frame, we only proceed if
+         * Agnus is not in the last rasterline. Otherwise, we would corrupt the
+         * emulators internal state (we would be in a line that is unreachable).
+         */
+        if (!newlof && inLastRasterline()) {
 
-        trace(XFILES, "XFILES (VPOS): LOF bit changed in last scanline\n");
-        return;
+            trace(XFILES, "XFILES (VPOS): LOF bit changed in last scanline\n");
+            return;
+        }
+
+        trace(XFILES, "XFILES (VPOS): Making a %s frame\n", newlof ? "long" : "short");
+        frame.lof = newlof;
+
+        /* Reschedule a pending VBL event with a trigger cycle that is consistent
+         * with the new value of the LOF bit.
+         */
+        rectifyVBLEvent();
     }
-    
-    trace(XFILES, "XFILES (VPOS): Making a %s frame\n", newlof ? "long" : "short");
-    frame.lof = newlof;
-    
-    /* Reschedule a pending VBL event with a trigger cycle that is consistent
-     * with the new value of the LOF bit.
-     */
-    rectifyVBLEvent();
 }
 
 template <Accessor s> void
@@ -458,8 +460,25 @@ Agnus::pokeSPRxCTL(u16 value)
     if (sprVStop[x] == v) sprDmaState[x] = SPR_DMA_IDLE;
 }
 
-template <Accessor s>
-void Agnus::pokeDSKPTH(u16 value)
+void
+Agnus::pokeBEAMCON0(u16 value)
+{
+    trace(1, "pokeBEAMCON0(%04x)\n", value);
+
+    if (GET_BIT(value, 5)) {
+
+        // Switch to PAL mode
+        // TODO
+
+    } else {
+
+        // Switch to NTSC mode
+        // TODO
+    }
+}
+
+template <Accessor s> void
+Agnus::pokeDSKPTH(u16 value)
 {
     trace(DSKREG_DEBUG, "pokeDSKPTH(%04x) [%s]\n", value, AccessorEnum::key(s));
 

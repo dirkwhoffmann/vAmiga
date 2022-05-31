@@ -570,6 +570,8 @@ public:
     template <int x> void pokeSPRxPOS(u16 value);
     template <int x> void pokeSPRxCTL(u16 value);
 
+    void pokeBEAMCON0(u16 value);
+
     
     //
     // Accessing DMA pointer registers (AgnusRegisters.cpp)
