@@ -50,6 +50,7 @@ Frame::prevLastLine() const
     }
 }
 
+
 Cycle
 Frame::posToCycleOld(isize v, isize h) const
 {
@@ -66,22 +67,4 @@ Frame::posToCycleOld(isize v, isize h) const
     }
 
     return start + DMA_CYCLES(cycles);
-}
-
-Cycle
-Frame::diff(isize v1, isize h1, isize v2, isize h2) const
-{
-    assert(v1 >= v2);
-    assert(v1 != v2|| h1 >= h2);
-
-    auto count1 = posToCycleOld(v1, h1);
-    auto count2 = posToCycleOld(v2, h2);
-    assert(count1 >= count2);
-
-    if (type == LINE_PAL) {
-        assert(count1 - count2 ==
-               DMA_CYCLES((v1 * HPOS_CNT_PAL + h1) - (v2 * HPOS_CNT_PAL + h2)));
-    }
-
-    return count1 - count2;
 }

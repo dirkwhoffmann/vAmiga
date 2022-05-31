@@ -705,10 +705,11 @@ public:
 
         assert(target.v > pos.v || (target.v == pos.v && target.h >= pos.h));
 
-        scheduleAbs<s>(frame.posToCycleOld(target.v, target.h), id, data);
+        // scheduleAbs<s>(frame.posToCycleOld(target.v, target.h), id, data);
+        scheduleRel<s>(DMA_CYCLES(pos.diff(target.v, target.h)), id, data);
 
         // REMOVE ASAP
-        assert(trigger[s] == clock + DMA_CYCLES(this->pos.diff(target.v, target.h)));
+        assert(trigger[s] == frame.posToCycleOld(target.v, target.h));
         if (frame.type == LINE_PAL) {
             assert(trigger[s] == beamToCycle(target));
         }
@@ -718,10 +719,11 @@ public:
 
         assert(vpos > pos.v || (vpos == pos.v && hpos >= pos.h));
 
-        scheduleAbs<s>(frame.posToCycleOld(vpos, hpos), id);
+        // scheduleAbs<s>(frame.posToCycleOld(vpos, hpos), id);
+        scheduleRel<s>(DMA_CYCLES(this->pos.diff(vpos, hpos)), id);
 
         // REMOVE ASAP
-        assert(trigger[s] == clock + DMA_CYCLES(this->pos.diff(vpos, hpos)));
+        assert(trigger[s] == frame.posToCycleOld(vpos, hpos));
         if (frame.type == LINE_PAL) {
             assert(trigger[s] == beamToCycle( Beam { vpos, hpos } ));
         }
@@ -731,11 +733,12 @@ public:
 
         assert(vpos > pos.v || (vpos == pos.v && hpos >= pos.h));
 
-        // scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id, data);
-        scheduleAbs<s>(frame.posToCycleOld(vpos, hpos), id, data);
+        // scheduleAbs<s>(frame.posToCycleOld(vpos, hpos), id, data);
+        scheduleRel<s>(DMA_CYCLES(this->pos.diff(vpos, hpos)), id, data);
+
 
         // REMOVE ASAP
-        assert(trigger[s] == clock + DMA_CYCLES(this->pos.diff(vpos, hpos)));
+        assert(trigger[s] == frame.posToCycleOld(vpos, hpos));
         if (frame.type == LINE_PAL) {
             assert(trigger[s] == beamToCycle( Beam { vpos, hpos } ));
         }
@@ -753,10 +756,11 @@ public:
 
         assert(vpos > pos.v || (vpos == pos.v && hpos >= pos.h));
 
-        rescheduleAbs<s>(frame.posToCycleOld(vpos, hpos));
+        // rescheduleAbs<s>(frame.posToCycleOld(vpos, hpos));
+        rescheduleRel<s>(DMA_CYCLES(this->pos.diff(vpos, hpos)));
 
         // REMOVE ASAP
-        assert(trigger[s] == clock + DMA_CYCLES(this->pos.diff(vpos, hpos)));
+        assert(trigger[s] == frame.posToCycleOld(vpos, hpos));
         if (frame.type == LINE_PAL) {
             assert(trigger[s] == beamToCycle( Beam { vpos, hpos } ));
         }

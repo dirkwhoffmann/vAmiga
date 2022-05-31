@@ -261,7 +261,9 @@ Copper::scheduleWaitWakeup(bool bfd)
     if (findMatch(trigger)) {
 
         // In how many cycles do we get there?
-        auto delay = agnus.frame.diff(trigger.v, trigger.h, agnus.pos.v, agnus.pos.h);
+        // auto delay = agnus.frame.diff(trigger.v, trigger.h, agnus.pos.v, agnus.pos.h);
+        // assert(delay == DMA_CYCLES(agnus.pos.diff(trigger.v, trigger.h)));
+        auto delay = DMA_CYCLES(agnus.pos.diff(trigger.v, trigger.h));
 
         if (delay == 0) {
 
