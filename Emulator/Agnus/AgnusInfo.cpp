@@ -628,28 +628,31 @@ Agnus::inspectSlot(EventSlot nr) const
     info.eventId = id[nr];
     info.trigger = cycle;
     info.triggerRel = cycle - agnus.clock;
-    
-    if (agnus.belongsToCurrentFrame(cycle)) {
-        
-        Beam beam = agnus.cycleToBeam(cycle);
-        info.vpos = beam.v;
-        info.hpos = beam.h;
-        info.frameRel = 0;
-        
-    } else if (agnus.belongsToNextFrame(cycle)) {
-        
-        info.vpos = 0;
-        info.hpos = 0;
-        info.frameRel = 1;
-        
-    } else {
-        
-        assert(agnus.belongsToPreviousFrame(cycle));
+
+    auto beam = agnus.cycleToBeam(cycle);
+
+    if (beam.v == INT32_MIN) {
+
+        // Previous frame
         info.vpos = 0;
         info.hpos = 0;
         info.frameRel = -1;
+
+    } else if (beam.v == INT32_MAX) {
+
+        // Next frame
+        info.vpos = 0;
+        info.hpos = 0;
+        info.frameRel = 1;
+
+    } else {
+
+        // Current frame
+        info.vpos = beam.v;
+        info.hpos = beam.h;
+        info.frameRel = 0;
     }
-    
+
     info.eventName = agnus.eventName((EventSlot)nr, id[nr]);
 }
 

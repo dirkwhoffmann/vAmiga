@@ -90,8 +90,55 @@ struct Beam
         return v != beam.v || h != beam.h;
     }
 
+    bool operator>(const Beam& beam) const
+    {
+        return v > beam.v || (v == beam.v && h > beam.h);
+    }
+
+    bool operator<(const Beam& beam) const
+    {
+        return v < beam.v || (v == beam.v && h < beam.h);
+    }
+
+    bool operator>=(const Beam& beam) const
+    {
+        return *this == beam || *this > beam;
+    }
+
+    bool operator<=(const Beam& beam) const
+    {
+        return *this == beam || *this < beam;
+    }
+
+    Beam& operator+=(isize i)
+    {
+        assert(i >= 0 && i <= HPOS_CNT_PAL);
+
+        h = h + i;
+        if (h >= hCnt()) {
+
+            h -= hCnt();
+            v += 1;
+            if (lolToggle) lol = !lol;
+
+            if (v >= vCnt()) {
+
+                v = 0;
+                if (lofToggle) lof = !lof;
+            }
+        }
+
+        return *this;
+    }
+
     Beam operator+(const isize i) const
     {
+        auto result = *this;
+
+        result += i;
+
+        return result;
+        /*
         assert(i >= 0 && i <= HPOS_CNT_PAL);
 
         auto result = *this;
@@ -111,6 +158,7 @@ struct Beam
         }
 
         return result;
+        */
     }
 
     isize diff(isize v2, isize h2) const

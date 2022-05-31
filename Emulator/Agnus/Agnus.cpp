@@ -188,64 +188,35 @@ Agnus::slowRamIsMirroredIn() const
     }
 }
 
-Cycle
-Agnus::cyclesInFrame() const
-{
-    // TODO: ADD NTSC MODE COMPATIBILITY
-    return DMA_CYCLES(frame.numLines() * HPOS_CNT_PAL);
-}
-
-Cycle
-Agnus::startOfFrame() const
-{
-    return frame.start;
-}
-
-Cycle
-Agnus::startOfNextFrame() const
-{
-    return startOfFrame() + cyclesInFrame();
-}
-
-bool
-Agnus::belongsToPreviousFrame(Cycle cycle) const
-{
-    return cycle < startOfFrame();
-}
-
-bool
-Agnus::belongsToCurrentFrame(Cycle cycle) const
-{
-    return !belongsToPreviousFrame(cycle) && !belongsToNextFrame(cycle);
-}
-
-bool
-Agnus::belongsToNextFrame(Cycle cycle) const
-{
-    return cycle >= startOfNextFrame();
-}
-
-// DEPRECATED: NOT NTSC COMPATIBLE
-/*
-Cycle
-Agnus::beamToCycle(Beam beam) const
-{
-    return startOfFrame() + DMA_CYCLES(beam.v * HPOS_CNT_PAL + beam.h);
-}
-*/
-
 Beam
 Agnus::cycleToBeam(Cycle cycle) const
 {
-    // TODO: Add NTSC compatibility
+    auto result = pos;
+    Cycle diff = AS_DMA_CYCLES(cycle - clock);
 
-    Beam result;
+    // Bail out if the cycle has already been passed
+    if (diff < 0) {
 
-    Cycle diff = AS_DMA_CYCLES(cycle - startOfFrame());
-    assert(diff >= 0);
+        result.v = result.h = INT32_MIN;
+        return result;
+    }
 
-    result.v = (isize)(diff / HPOS_CNT_PAL);
-    result.h = (isize)(diff % HPOS_CNT_PAL);
+    while (diff >= HPOS_CNT_PAL) {
+
+        diff -= HPOS_CNT_PAL;
+        auto newPos = result + HPOS_CNT_PAL;
+
+        // Bail out if the position is in the next frame
+        if (newPos < result) {
+
+            result.v = result.h = INT32_MAX;
+            return result;
+        }
+
+        result = newPos;
+    }
+    result += diff;
+
     return result;
 }
 

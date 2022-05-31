@@ -352,23 +352,10 @@ private:
 
 public:
 
-    /* Returns the number of master cycles in the current frame. The result
-     * depends on the number of lines that are drawn. This values varies
-     * between long and short frames.
-     */
-    Cycle cyclesInFrame() const;
+ 
+    // Returns the master cycle belonging to beam position (0,0)
+    // Cycle startOfFrame() const;
 
-    /* Returns the master cycle belonging to beam position (0,0). The first
-     * function treats (0,0) as the upper left position of the current frame.
-     * The second function referes to the next frame.
-     */
-    Cycle startOfFrame() const;
-    Cycle startOfNextFrame() const;
-
-    // Indicates if the provided master cycle belongs to a specific frame.
-    bool belongsToPreviousFrame(Cycle cycle) const;
-    bool belongsToCurrentFrame(Cycle cycle) const;
-    bool belongsToNextFrame(Cycle cycle) const;
 
 
     //
@@ -396,13 +383,11 @@ public:
 
 public:
 
-    /* Translates a beam position to a master cycle. The beam position must be
-     * a position inside the current frame.
-     */
-    // Cycle beamToCycle(Beam beam) const;
-
-    /* Translates a master cycle to a beam position. The beam position must
-     * belong to the current frame.
+    /* Translates a master cycle to a beam position. The functions only returns
+     * a meaningful result if the cycle specifies a beam position between the
+     * current position and the frame end. If the cycle has alrady been passed,
+     * (INT32_MIN, INT32_MIN) is returned. If the cycle belongs to the next
+     * frame, (INT32_MAX, INT32_MAX) is returned.
      */
     Beam cycleToBeam(Cycle cycle) const;
 
