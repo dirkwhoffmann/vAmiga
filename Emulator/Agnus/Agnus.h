@@ -701,23 +701,27 @@ public:
         scheduleAbs<s>(clock + cycle, id, data);
     }
 
-    template<EventSlot s> void schedulePos(Beam pos, EventID id, i64 data) {
+    template<EventSlot s> void schedulePos(Beam target, EventID id, i64 data) {
 
-        // scheduleAbs<s>(beamToCycle(pos), id, data);
-        scheduleAbs<s>(frame.posToCycle(pos.v, pos.h), id, data);
+        assert(target.v > pos.v || (target.v == pos.v && target.h >= pos.h));
+
+        scheduleAbs<s>(frame.posToCycleOld(target.v, target.h), id, data);
 
         // REMOVE ASAP
+        assert(trigger[s] == clock + DMA_CYCLES(this->pos.diff(target.v, target.h)));
         if (frame.type == LINE_PAL) {
-            assert(trigger[s] == beamToCycle(pos));
+            assert(trigger[s] == beamToCycle(target));
         }
     }
 
     template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id) {
 
-        // scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id);
-        scheduleAbs<s>(frame.posToCycle(vpos, hpos), id);
+        assert(vpos > pos.v || (vpos == pos.v && hpos >= pos.h));
+
+        scheduleAbs<s>(frame.posToCycleOld(vpos, hpos), id);
 
         // REMOVE ASAP
+        assert(trigger[s] == clock + DMA_CYCLES(this->pos.diff(vpos, hpos)));
         if (frame.type == LINE_PAL) {
             assert(trigger[s] == beamToCycle( Beam { vpos, hpos } ));
         }
@@ -725,10 +729,13 @@ public:
 
     template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id, i64 data) {
 
+        assert(vpos > pos.v || (vpos == pos.v && hpos >= pos.h));
+
         // scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id, data);
-        scheduleAbs<s>(frame.posToCycle(vpos, hpos), id, data);
+        scheduleAbs<s>(frame.posToCycleOld(vpos, hpos), id, data);
 
         // REMOVE ASAP
+        assert(trigger[s] == clock + DMA_CYCLES(this->pos.diff(vpos, hpos)));
         if (frame.type == LINE_PAL) {
             assert(trigger[s] == beamToCycle( Beam { vpos, hpos } ));
         }
@@ -744,10 +751,12 @@ public:
 
     template<EventSlot s> void reschedulePos(i16 vpos, i16 hpos) {
 
-        // rescheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ));
-        rescheduleAbs<s>(frame.posToCycle(vpos, hpos));
+        assert(vpos > pos.v || (vpos == pos.v && hpos >= pos.h));
+
+        rescheduleAbs<s>(frame.posToCycleOld(vpos, hpos));
 
         // REMOVE ASAP
+        assert(trigger[s] == clock + DMA_CYCLES(this->pos.diff(vpos, hpos)));
         if (frame.type == LINE_PAL) {
             assert(trigger[s] == beamToCycle( Beam { vpos, hpos } ));
         }

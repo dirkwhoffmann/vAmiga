@@ -51,7 +51,7 @@ Frame::prevLastLine() const
 }
 
 Cycle
-Frame::posToCycle(isize v, isize h) const
+Frame::posToCycleOld(isize v, isize h) const
 {
     isize cycles = v * HPOS_CNT_PAL + h;
 
@@ -74,8 +74,8 @@ Frame::diff(isize v1, isize h1, isize v2, isize h2) const
     assert(v1 >= v2);
     assert(v1 != v2|| h1 >= h2);
 
-    auto count1 = posToCycle(v1, h1);
-    auto count2 = posToCycle(v2, h2);
+    auto count1 = posToCycleOld(v1, h1);
+    auto count2 = posToCycleOld(v2, h2);
     assert(count1 >= count2);
 
     if (type == LINE_PAL) {

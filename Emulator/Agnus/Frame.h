@@ -67,7 +67,8 @@ struct Frame
     }
 
     // Computes the master cycle for a position in the current frame
-    Cycle posToCycle(isize v, isize h) const;
+    Cycle posToCycleOld(isize v, isize h) const;
+    // Cycle posToCycleNew(isize v, isize h) const;
 
     // Computes the number of cycles between two beam positions
     Cycle diff(isize v1, isize h1, isize v2, isize h2) const;

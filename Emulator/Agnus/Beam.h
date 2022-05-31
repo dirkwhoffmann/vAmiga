@@ -79,13 +79,38 @@ struct Beam
 
     Beam operator+(const isize i) const
     {
-        assert(i >= 0 && i < HPOS_CNT_PAL);
+        assert(i >= 0 && i <= HPOS_CNT_PAL);
 
-        auto vv = v;
-        auto hh = h + i;
+        auto result = *this;
+        assert(result.hCnt() == hCnt());
 
-        if (hh >= hCnt()) { hh -= hCnt(); vv++; }
+        result.h = h + i;
+        if (result.h >= hCnt()) {
 
-        return Beam(vv, hh);
+            result.v++;
+            result.h -= hCnt();
+
+            if (type == LINE_NTSC_LONG) result.type = LINE_NTSC_SHORT;
+            if (type == LINE_NTSC_SHORT) result.type = LINE_NTSC_LONG;
+        }
+
+        return result;
+    }
+
+    isize diff(isize v2, isize h2) const
+    {
+        assert(v2 > v || (v2 == v && h2 >= h));
+
+        isize result = 0;
+
+        auto b = *this;
+        while (b.v < v2) {
+            b = b + HPOS_CNT_PAL;
+            result += HPOS_CNT_PAL;
+        }
+        result += h2 - b.h;
+
+        assert(result >= 0);
+        return result;
     }
 };
