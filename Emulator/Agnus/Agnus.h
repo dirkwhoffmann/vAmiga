@@ -704,44 +704,19 @@ public:
     template<EventSlot s> void schedulePos(Beam target, EventID id, i64 data) {
 
         assert(target.v > pos.v || (target.v == pos.v && target.h >= pos.h));
-
-        // scheduleAbs<s>(frame.posToCycleOld(target.v, target.h), id, data);
         scheduleRel<s>(DMA_CYCLES(pos.diff(target.v, target.h)), id, data);
-
-        // REMOVE ASAP
-        assert(trigger[s] == frame.posToCycleOld(target.v, target.h));
-        if (frame.type == LINE_PAL) {
-            assert(trigger[s] == beamToCycle(target));
-        }
     }
 
     template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id) {
 
         assert(vpos > pos.v || (vpos == pos.v && hpos >= pos.h));
-
-        // scheduleAbs<s>(frame.posToCycleOld(vpos, hpos), id);
         scheduleRel<s>(DMA_CYCLES(this->pos.diff(vpos, hpos)), id);
-
-        // REMOVE ASAP
-        assert(trigger[s] == frame.posToCycleOld(vpos, hpos));
-        if (frame.type == LINE_PAL) {
-            assert(trigger[s] == beamToCycle( Beam { vpos, hpos } ));
-        }
     }
 
     template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id, i64 data) {
 
         assert(vpos > pos.v || (vpos == pos.v && hpos >= pos.h));
-
-        // scheduleAbs<s>(frame.posToCycleOld(vpos, hpos), id, data);
         scheduleRel<s>(DMA_CYCLES(this->pos.diff(vpos, hpos)), id, data);
-
-
-        // REMOVE ASAP
-        assert(trigger[s] == frame.posToCycleOld(vpos, hpos));
-        if (frame.type == LINE_PAL) {
-            assert(trigger[s] == beamToCycle( Beam { vpos, hpos } ));
-        }
     }
     
     template<EventSlot s> void rescheduleRel(Cycle cycle) {
@@ -755,15 +730,7 @@ public:
     template<EventSlot s> void reschedulePos(i16 vpos, i16 hpos) {
 
         assert(vpos > pos.v || (vpos == pos.v && hpos >= pos.h));
-
-        // rescheduleAbs<s>(frame.posToCycleOld(vpos, hpos));
         rescheduleRel<s>(DMA_CYCLES(this->pos.diff(vpos, hpos)));
-
-        // REMOVE ASAP
-        assert(trigger[s] == frame.posToCycleOld(vpos, hpos));
-        if (frame.type == LINE_PAL) {
-            assert(trigger[s] == beamToCycle( Beam { vpos, hpos } ));
-        }
     }
 
     template<EventSlot s> void cancel()

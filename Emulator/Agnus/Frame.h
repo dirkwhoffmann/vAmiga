@@ -65,7 +65,4 @@ struct Frame
         // Toggle the long frame flipflop in interlace mode
         if (laceBit) { lof = !lof; }
     }
-
-    // Computes the master cycle for a position in the current frame
-    Cycle posToCycleOld(isize v, isize h) const;
 };

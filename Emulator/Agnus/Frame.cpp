@@ -49,22 +49,3 @@ Frame::prevLastLine() const
         default:        return prevlof ? 262 : 261;
     }
 }
-
-
-Cycle
-Frame::posToCycleOld(isize v, isize h) const
-{
-    isize cycles = v * HPOS_CNT_PAL + h;
-
-    switch (type) {
-
-        case LINE_PAL:          break;
-        case LINE_NTSC_SHORT:   cycles += v / 2; break;
-        case LINE_NTSC_LONG:    cycles += (v + 1) / 2; break;
-
-        default:
-            fatalError;
-    }
-
-    return start + DMA_CYCLES(cycles);
-}
