@@ -376,22 +376,7 @@ public:
     Pixel ppos(isize posh) const { return (posh * 4) + 2; }
     Pixel ppos() const { return ppos(pos.h); }
 
-    
-    //
-    // Working with the beam position
-    //
 
-public:
-
-    /* Translates a master cycle to a beam position. The functions only returns
-     * a meaningful result if the cycle specifies a beam position between the
-     * current position and the frame end. If the cycle has alrady been passed,
-     * (INT32_MIN, INT32_MIN) is returned. If the cycle belongs to the next
-     * frame, (INT32_MAX, INT32_MAX) is returned.
-     */
-    Beam cycleToBeam(Cycle cycle) const;
-
-    
     //
     // Querying graphic modes
     //

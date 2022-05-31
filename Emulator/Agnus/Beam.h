@@ -110,71 +110,17 @@ struct Beam
         return *this == beam || *this < beam;
     }
 
-    Beam& operator+=(isize i)
-    {
-        assert(i >= 0 && i <= HPOS_CNT_PAL);
+    Beam& operator+=(isize i);
+    Beam operator+(const isize i) const;
 
-        h = h + i;
-        if (h >= hCnt()) {
+    isize diff(isize v2, isize h2) const;
 
-            h -= hCnt();
-            v += 1;
-            if (lolToggle) lol = !lol;
-
-            if (v >= vCnt()) {
-
-                v = 0;
-                if (lofToggle) lof = !lof;
-            }
-        }
-
-        return *this;
-    }
-
-    Beam operator+(const isize i) const
-    {
-        auto result = *this;
-
-        result += i;
-
-        return result;
-        /*
-        assert(i >= 0 && i <= HPOS_CNT_PAL);
-
-        auto result = *this;
-
-        result.h = h + i;
-        if (result.h >= hCnt()) {
-
-            result.h -= hCnt();
-            result.v += 1;
-            if (lolToggle) result.lol = !result.lol;
-
-            if (result.v >= vCnt()) {
-
-                result.v = 0;
-                if (lofToggle) result.lof = !result.lof;
-            }
-        }
-
-        return result;
-        */
-    }
-
-    isize diff(isize v2, isize h2) const
-    {
-        assert(v2 > v || (v2 == v && h2 >= h));
-
-        isize result = 0;
-
-        auto b = *this;
-        while (b.v != v2) {
-            b = b + HPOS_CNT_PAL;
-            result += HPOS_CNT_PAL;
-        }
-        result += h2 - b.h;
-
-        assert(result >= 0);
-        return result;
-    }
+    /* Translates a cycle delta (DMA cycle relative to the current position)
+     * to a beam position. The function only returns a precise position if
+     * the result is located between the current position and the frame end.
+     * If a negative delta is provided, location (INT32_MIN, INT32_MIN) is
+     * returned. If the current position plus the provided delta is a beam
+     * position in the next frame, location (INT32_MAX, INT32_MAX) is returned.
+     */
+    Beam translate(DMACycle diff) const;
 };

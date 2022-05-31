@@ -274,6 +274,15 @@ Agnus::setVPOS(u16 value)
         trace(XFILES, "XFILES (VPOS): Toggling V8 is not supported\n");
     }
 
+    // Check the LOL bit
+    bool newlol = value & 0x0080;
+    if (pos.lol != newlol) {
+
+        // trace(1, "LOL bit manually set to %d\n", newlol);
+        pos.lol = newlol;
+        rectifyVBLEvent();
+    }
+
     // Check the LOF bit
     bool newlof = value & 0x8000;
     if (frame.lof != newlof) {

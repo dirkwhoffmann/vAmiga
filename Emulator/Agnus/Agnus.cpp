@@ -188,38 +188,6 @@ Agnus::slowRamIsMirroredIn() const
     }
 }
 
-Beam
-Agnus::cycleToBeam(Cycle cycle) const
-{
-    auto result = pos;
-    Cycle diff = AS_DMA_CYCLES(cycle - clock);
-
-    // Bail out if the cycle has already been passed
-    if (diff < 0) {
-
-        result.v = result.h = INT32_MIN;
-        return result;
-    }
-
-    while (diff >= HPOS_CNT_PAL) {
-
-        diff -= HPOS_CNT_PAL;
-        auto newPos = result + HPOS_CNT_PAL;
-
-        // Bail out if the position is in the next frame
-        if (newPos < result) {
-
-            result.v = result.h = INT32_MAX;
-            return result;
-        }
-
-        result = newPos;
-    }
-    result += diff;
-
-    return result;
-}
-
 void
 Agnus::execute()
 {

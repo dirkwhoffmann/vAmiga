@@ -54,6 +54,8 @@
 		5029C6E127CA2EAB002F6CCC /* DiskInspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5029C6E027CA2EAB002F6CCC /* DiskInspector.xib */; };
 		5029C6E327CA2F66002F6CCC /* DiskInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5029C6E227CA2F66002F6CCC /* DiskInspector.swift */; };
 		5029C6E627CA6209002F6CCC /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5029C6E427CA6209002F6CCC /* FileSystem.cpp */; };
+		502B303828469CF600673377 /* Beam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502B303728469CF600673377 /* Beam.cpp */; };
+		502B303928469CF600673377 /* Beam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502B303728469CF600673377 /* Beam.cpp */; };
 		502BB09E229C00C800A8DFCD /* CompatibilityConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502BB09D229C00C800A8DFCD /* CompatibilityConf.swift */; };
 		502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD092248EC0200F0E118 /* EventPanel.swift */; };
 		502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD0B2248ECAA00F0E118 /* EventTableView.swift */; };
@@ -518,6 +520,7 @@
 		5029C6E227CA2F66002F6CCC /* DiskInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskInspector.swift; sourceTree = "<group>"; };
 		5029C6E427CA6209002F6CCC /* FileSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
 		5029C6E527CA6209002F6CCC /* FileSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
+		502B303728469CF600673377 /* Beam.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Beam.cpp; sourceTree = "<group>"; };
 		502BB09D229C00C800A8DFCD /* CompatibilityConf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityConf.swift; sourceTree = "<group>"; };
 		502C135027C613DB009534BD /* HdControllerRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HdControllerRom.h; sourceTree = "<group>"; };
 		502EFD092248EC0200F0E118 /* EventPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPanel.swift; sourceTree = "<group>"; };
@@ -1069,6 +1072,7 @@
 			children = (
 				50CF4634262042D300BB3B95 /* CMakeLists.txt */,
 				503990C522D8CCB600035783 /* Beam.h */,
+				502B303728469CF600673377 /* Beam.cpp */,
 				5015FF3E242BA00F005175D9 /* Frame.h */,
 				50AE2BD428426207006F4E03 /* Frame.cpp */,
 				50A6143B260CE6C400A01428 /* BusTypes.h */,
@@ -2090,6 +2094,7 @@
 				508FE01A21EA227B0043D0E9 /* MyFormatter.swift in Sources */,
 				500C7170255EE2AC00DDEEB2 /* Concurrency.cpp in Sources */,
 				50A61463260DB7F900A01428 /* Parser.cpp in Sources */,
+				502B303828469CF600673377 /* Beam.cpp in Sources */,
 				50C8C4552607524400F4E012 /* Monitors.swift in Sources */,
 				501A9937243A07A100D269B2 /* Storage.swift in Sources */,
 				509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */,
@@ -2387,6 +2392,7 @@
 				50FC049C27DA197500C3E566 /* Agnus.cpp in Sources */,
 				50FC04A827DA198100C3E566 /* CopperRegs.cpp in Sources */,
 				50FC04CE27DA19E900C3E566 /* IMGFile.cpp in Sources */,
+				502B303928469CF600673377 /* Beam.cpp in Sources */,
 				50FC04F827DA1A8F00C3E566 /* StateMachineEvents.cpp in Sources */,
 				50FC047627DA10AD00C3E566 /* Headless.cpp in Sources */,
 				50FC049227DA196500C3E566 /* DeniseRegs.cpp in Sources */,

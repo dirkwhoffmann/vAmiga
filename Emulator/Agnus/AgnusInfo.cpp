@@ -629,7 +629,7 @@ Agnus::inspectSlot(EventSlot nr) const
     info.trigger = cycle;
     info.triggerRel = cycle - agnus.clock;
 
-    auto beam = agnus.cycleToBeam(cycle);
+    auto beam = pos.translate(AS_DMA_CYCLES(cycle - clock));
 
     if (beam.v == INT32_MIN) {
 
