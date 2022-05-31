@@ -165,7 +165,7 @@ Agnus::scheduleNextREGEvent()
 void
 Agnus::scheduleStrobe0Event()
 {
-    schedulePos<SLOT_VBL>(frame.numLines() + vStrobeLine(), 0, VBL_STROBE0);
+    schedulePos<SLOT_VBL>(vStrobeLine(), 0, VBL_STROBE0);
 }
 
 void
@@ -455,9 +455,9 @@ Agnus::serviceEOL()
 {
     assert(pos.h == HPOS_MAX_PAL || pos.h == HPOS_MAX_NTSC);
 
-    if (pos.h == HPOS_MAX_PAL && pos.type == LINE_NTSC_LONG) {
+    if (pos.h == HPOS_MAX_PAL && pos.lol) {
 
-        // Run for an additional cycle
+        // Run for an additional cycle (long line)
         agnus.scheduleNextBplEvent(pos.h);
 
     } else {
@@ -497,14 +497,12 @@ Agnus::serviceVBLEvent(EventID id)
             break;
             
         case VBL_STROBE2:
-            
+
             assert(pos.v == 5);
             assert(pos.h == 178);
-            
+
             // Nothing is done here at the moment
-            
-            // Schedule next event
-            scheduleStrobe0Event();
+            cancel<SLOT_VBL>();
             break;
             
         default:

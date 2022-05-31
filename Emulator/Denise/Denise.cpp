@@ -1141,7 +1141,7 @@ Denise::endOfLine(isize vpos)
     // Add a debug pixel if requested
     if constexpr (NTSC_DEBUG) {
 
-        u32 color = agnus.pos.type == LINE_NTSC_LONG ? -1 : 0;
+        u32 color = agnus.pos.lol ? -1 : 0;
         *denise.pixelEngine.pixelAddr(HBLANK_MIN * 4 + 1) =  color;
     }
 }

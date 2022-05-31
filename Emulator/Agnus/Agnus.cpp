@@ -34,7 +34,7 @@ Agnus::_reset(bool hard)
 
     // Setup the correct line type
     pos.type = frame.type =
-    amiga.getConfig().type == MACHINE_PAL ? LINE_PAL : LINE_NTSC_LONG;
+    amiga.getConfig().type == MACHINE_PAL ? LINE_PAL : LINE_NTSC;
 
     // Initialize statistical counters
     clearStats();
@@ -54,7 +54,7 @@ Agnus::_reset(bool hard)
     scheduleRel<SLOT_TER>(NEVER, TER_TRIGGER);
     scheduleRel<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
     scheduleRel<SLOT_CIAB>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
-    scheduleStrobe0Event();
+    // scheduleStrobe0Event();
     scheduleRel<SLOT_IRQ>(NEVER, IRQ_CHECK);
     diskController.scheduleFirstDiskEvent();
     scheduleFirstBplEvent();
@@ -198,8 +198,6 @@ Agnus::cyclesInFrame() const
 Cycle
 Agnus::startOfFrame() const
 {
-    // TODO: FIX NTSC MODE COMPATIBILITY
-    assert(clock - DMA_CYCLES(pos.v * HPOS_CNT_PAL + pos.h) == frame.start);
     return frame.start;
 }
 
@@ -228,11 +226,13 @@ Agnus::belongsToNextFrame(Cycle cycle) const
 }
 
 // DEPRECATED: NOT NTSC COMPATIBLE
+/*
 Cycle
 Agnus::beamToCycle(Beam beam) const
 {
     return startOfFrame() + DMA_CYCLES(beam.v * HPOS_CNT_PAL + beam.h);
 }
+*/
 
 Beam
 Agnus::cycleToBeam(Cycle cycle) const
@@ -624,7 +624,7 @@ Agnus::updateSpriteDMA()
 void
 Agnus::hsyncHandler()
 {
-    // Toggle the line type in NTSC mode
+    // REMOVE ASAP
     switch (pos.type) {
 
         case LINE_PAL:
@@ -632,21 +632,18 @@ Agnus::hsyncHandler()
             assert(pos.h == HPOS_CNT_PAL);
             break;
 
-        case LINE_NTSC_SHORT:
+        case LINE_NTSC:
 
-            assert(pos.h == HPOS_CNT_PAL);
-            pos.type = LINE_NTSC_LONG;
-            break;
-
-        case LINE_NTSC_LONG:
-
-            assert(pos.h == HPOS_CNT_NTSC);
-            pos.type = LINE_NTSC_SHORT;
+            assert(pos.lol || pos.h == HPOS_CNT_PAL);
+            assert(!pos.lol || pos.h == HPOS_CNT_NTSC);
             break;
     }
 
     // Reset the horizontal counter
     pos.h = 0;
+
+    // Toggle line length if needed
+    if (pos.lolToggle) pos.lol = !pos.lol;
 
     // Let Denise finish up the current line
     denise.endOfLine(pos.v);
@@ -697,11 +694,14 @@ Agnus::vsyncHandler()
     paula.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT_PAL));
 
     // Advance to the next frame
-    frame.next(denise.lace(), clock, pos.type);
+    assert(denise.lace() == pos.lofToggle);
+    frame.next(pos.lofToggle, clock, pos.type);
 
     // Reset vertical position counter
     pos.v = 0;
-            
+
+    scheduleStrobe0Event();
+
     // Let other components do their own VSYNC stuff
     sequencer.vsyncHandler();
     copper.vsyncHandler();

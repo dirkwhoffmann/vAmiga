@@ -228,7 +228,7 @@ Agnus::peekVPOSR() const
     if (frame.isLongFrame()) result |= 0x8000;
 
     // LL (Long line bit)
-    if (pos.type == LINE_NTSC_LONG) result |= 0x0080;
+    if (pos.lol) result |= 0x0080;
 
     // V8 (Vertical position MSB)
     // result |= (ersy(bplcon0Initial) ? latchedPos.v : pos.v) >> 8;
@@ -338,6 +338,9 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
     
     // Latch the position counters if the ERSY bit is set
     if ((newValue & 0b10) && !(oldValue & 0b10)) latchedPos = pos;
+
+    // Check the LACE bit
+    pos.lofToggle = newValue & 0b100;
 
     bplcon0 = newValue;
 }

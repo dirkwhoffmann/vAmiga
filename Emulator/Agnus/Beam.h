@@ -16,8 +16,7 @@
 enum_long(LINE_TYPE)
 {
     LINE_PAL,           // 227 DMA cycles
-    LINE_NTSC_SHORT,    // 227 DMA cycles
-    LINE_NTSC_LONG      // 228 DMA cycles
+    LINE_NTSC           // 227 or 228 DMA cycles
 };
 typedef LINE_TYPE LineType;
 
@@ -25,7 +24,7 @@ typedef LINE_TYPE LineType;
 struct LineTypeEnum : util::Reflection<LineTypeEnum, LineType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = LINE_NTSC_LONG;
+    static constexpr long maxVal = LINE_NTSC;
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "LINE"; }
@@ -33,9 +32,8 @@ struct LineTypeEnum : util::Reflection<LineTypeEnum, LineType>
     {
         switch (value) {
 
-            case LINE_PAL:          return "PAL";
-            case LINE_NTSC_SHORT:   return "NTSC_SHORT";
-            case LINE_NTSC_LONG:    return "NTSC_LONG";
+            case LINE_PAL:  return "PAL";
+            case LINE_NTSC: return "NTSC";
         }
         return "???";
     }
@@ -45,8 +43,16 @@ struct LineTypeEnum : util::Reflection<LineTypeEnum, LineType>
 struct Beam
 {
     // The vertical and horizontal beam position
-    isize v;
-    isize h;
+    isize v = 0;
+    isize h = 0;
+
+    // Long frame flipflop
+    bool lof = false;
+    bool lofToggle = false;
+
+    // Long line fliflop
+    bool lol = false;
+    bool lolToggle = false;
 
     // The type of the current line
     LineType type;
@@ -58,14 +64,21 @@ struct Beam
 
         << v
         << h
+        << lof
+        << lofToggle
+        << lol
+        << lolToggle
         << type;
     }
 
-    Beam() : v(0), h(0), type(LINE_PAL) { }
-    Beam(isize v, isize h) : v(v), h(h), type(LINE_PAL) { }
-
-    isize hCnt() const { return type == LINE_NTSC_LONG ? 228 : 227; }
-    isize hMax() const { return type == LINE_NTSC_LONG ? 227 : 226; }
+    isize hCnt() const { return lol ? 228 : 227; }
+    isize hMax() const { return lol ? 227 : 226; }
+    isize vCnt() const { return type == LINE_PAL ? vCntPal() : vCntNtsc(); }
+    isize vMax() const { return type == LINE_PAL ? vMaxPal() : vMaxNtsc(); }
+    isize vMaxPal() const { return lof ? 312 : 311; }
+    isize vMaxNtsc() const { return lof ? 262 : 261; }
+    isize vCntPal() const { return lof ? 313 : 312; }
+    isize vCntNtsc() const { return lof ? 263 : 262; }
 
     bool operator==(const Beam& beam) const
     {
@@ -82,16 +95,19 @@ struct Beam
         assert(i >= 0 && i <= HPOS_CNT_PAL);
 
         auto result = *this;
-        assert(result.hCnt() == hCnt());
 
         result.h = h + i;
         if (result.h >= hCnt()) {
 
-            result.v++;
             result.h -= hCnt();
+            result.v += 1;
+            if (lolToggle) result.lol = !result.lol;
 
-            if (type == LINE_NTSC_LONG) result.type = LINE_NTSC_SHORT;
-            if (type == LINE_NTSC_SHORT) result.type = LINE_NTSC_LONG;
+            if (result.v >= vCnt()) {
+
+                result.v = 0;
+                if (lofToggle) result.lof = !result.lof;
+            }
         }
 
         return result;
@@ -104,7 +120,7 @@ struct Beam
         isize result = 0;
 
         auto b = *this;
-        while (b.v < v2) {
+        while (b.v != v2) {
             b = b + HPOS_CNT_PAL;
             result += HPOS_CNT_PAL;
         }
