@@ -80,15 +80,12 @@ struct Beam
 
     isize hCnt() const { return lol ? 228 : 227; }
     isize hMax() const { return lol ? 227 : 226; }
-    isize numLines() const { return type == PAL ? vCntPal() : vCntNtsc(); }
-    isize lastLine() const { return type == PAL ? vMaxPal() : vMaxNtsc(); }
+    isize vCnt() const { return type == PAL ? vCntPal() : vCntNtsc(); }
+    isize vMax() const { return type == PAL ? vMaxPal() : vMaxNtsc(); }
     isize vMaxPal() const { return lof ? 312 : 311; }
     isize vMaxNtsc() const { return lof ? 262 : 261; }
     isize vCntPal() const { return lof ? 313 : 312; }
     isize vCntNtsc() const { return lof ? 263 : 262; }
-
-    // isize numLines() const { return vCnt(); }
-    // isize lastLine() const { return vMax(); }
 
     bool operator==(const Beam& beam) const
     {

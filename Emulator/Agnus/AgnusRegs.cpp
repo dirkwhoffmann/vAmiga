@@ -182,7 +182,7 @@ Agnus::peekVHPOSR() const
         auto pos = agnus.pos + 5;
 
         // Rectify the vertical position if it has wrapped over
-        if (pos.v >= pos.numLines()) pos.v = 0;
+        if (pos.v > pos.vMax()) pos.v = 0;
         
         // In cycle 0 and 1, we need to return the old value of posv
         if (pos.h <= 1) {
@@ -239,7 +239,7 @@ Agnus::peekVPOSR() const
         auto pos = agnus.pos + 5;
 
         // Rectify the vertical position if it has wrapped over
-        if (pos.v >= pos.numLines()) pos.v = 0;
+        if (pos.v > pos.vMax()) pos.v = 0;
         
         // In cycle 0 and 1, we need to return the old value of posv
         if (pos.h <= 1) {

@@ -627,7 +627,7 @@ Agnus::inspectSlot(EventSlot nr) const
     
     auto &info = slotInfo[nr];
     auto cycle = trigger[nr];
-    
+
     info.slot = nr;
     info.eventId = id[nr];
     info.trigger = cycle;

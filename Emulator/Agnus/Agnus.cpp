@@ -547,7 +547,7 @@ Agnus::updateSpriteDMA()
      }
 
     // Disable DMA in the last rasterline
-    if (v == pos.lastLine()) {
+    if (v == pos.vMax()) {
         for (isize i = 0; i < 8; i++) sprDmaState[i] = SPR_DMA_IDLE;
         return;
     }
@@ -601,7 +601,7 @@ Agnus::hsyncHandler()
     paula.channel3.requestDMA();
 
     // Advance the vertical counter
-    if (++pos.v >= pos.numLines()) vsyncHandler();
+    if (++pos.v > pos.vMax()) vsyncHandler();
 
     // Save the current value of certain variables
     dmaconInitial = dmacon;

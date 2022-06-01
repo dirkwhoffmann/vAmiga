@@ -22,7 +22,7 @@ Beam::operator+=(isize i)
         v += 1;
         if (lolToggle) lol = !lol;
 
-        if (v >= numLines()) {
+        if (v >= vCnt()) {
 
             v = 0;
             if (lofToggle) lof = !lof;
