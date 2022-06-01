@@ -133,7 +133,7 @@ Joystick::reload()
 void
 Joystick::scheduleNextShot()
 {
-    nextAutofireFrame = agnus.frame.nr + config.autofireDelay;
+    nextAutofireFrame = agnus.pos.frame + config.autofireDelay;
 }
 
 void
@@ -231,7 +231,7 @@ Joystick::vsyncHandler()
     if (!config.autofire || config.autofireDelay < 0) return;
   
     // Only proceed if a trigger frame has been reached
-    if (agnus.frame.nr != nextAutofireFrame) return;
+    if (agnus.pos.frame != nextAutofireFrame) return;
 
     // Only proceed if there are bullets left
     if (bulletCounter == 0) return;

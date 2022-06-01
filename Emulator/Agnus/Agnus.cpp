@@ -30,7 +30,8 @@ Agnus::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS(hard)
     
     // Start with a long frame
-    frame = Frame();
+    // frame = Frame();
+    pos.lof = true;
 
     // Setup the correct line type
     pos.type = amiga.getConfig().type == PAL ? LINE_PAL : LINE_NTSC;
@@ -633,7 +634,7 @@ Agnus::vsyncHandler()
 
     // Advance to the next frame
     assert(denise.lace() == pos.lofToggle);
-    frame.next();
+    pos.frame++;
     if (pos.lofToggle) { pos.lof = !pos.lof; }
 
     // Reset vertical position counter

@@ -47,6 +47,9 @@ struct Beam
     isize v = 0;
     isize h = 0;
 
+    // The frame count
+    i64 frame = 0;
+
     // Long frame flipflop
     bool lof = false;
     bool lofToggle = false;
@@ -65,6 +68,7 @@ struct Beam
 
         << v
         << h
+        << frame
         << lof
         << lofToggle
         << lol

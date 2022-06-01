@@ -17,7 +17,6 @@
 #include "Copper.h"
 #include "DmaDebugger.h"
 #include "Sequencer.h"
-#include "Frame.h"
 #include "Memory.h"
 
 /* Bitplane event modifiers
@@ -92,9 +91,6 @@ public:
     // Latched beam position (recorded when BPLCON0::ERSY is set)
     Beam latchedPos;
     
-    // Information about the current frame
-    Frame frame;
-
     
     //
     // Registers
@@ -252,7 +248,6 @@ private:
 
         >> pos
         >> latchedPos
-        >> frame
 
         << bplcon0
         << bplcon0Initial

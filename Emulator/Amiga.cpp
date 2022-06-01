@@ -144,7 +144,7 @@ void
 Amiga::prefix() const
 {
     fprintf(stderr, "[%lld] (%3ld,%3ld) ",
-            agnus.frame.nr, agnus.pos.v, agnus.pos.h);
+            agnus.pos.frame, agnus.pos.v, agnus.pos.h);
 
     fprintf(stderr, "%06X ", cpu.getPC0());
     fprintf(stderr, "%2X ", cpu.getIPL());
@@ -885,7 +885,7 @@ Amiga::_inspect() const
         info.dmaClock = agnus.clock;
         info.ciaAClock = ciaA.getClock();
         info.ciaBClock = ciaB.getClock();
-        info.frame = agnus.frame.nr;
+        info.frame = agnus.pos.frame;
         info.vpos = agnus.pos.v;
         info.hpos = agnus.pos.h;
     }

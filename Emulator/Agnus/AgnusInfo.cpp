@@ -447,7 +447,11 @@ Agnus::_dump(Category category, std::ostream& os) const
         os << tab("Clock");
         os << dec(clock) << std::endl;
         os << tab("Frame");
-        os << dec(frame.nr) << std::endl;
+        os << dec(pos.frame) << std::endl;
+        os << tab("Beam position");
+        os << "(" << dec(pos.v) << "," << dec(pos.h) << ")" << std::endl;
+        os << tab("Latched position");
+        os << "(" << dec(latchedPos.v) << "," << dec(latchedPos.h) << ")" << std::endl;
         os << tab("LOF");
         os << dec(pos.lof) << std::endl;
         os << tab("LOF toggle");
@@ -456,10 +460,6 @@ Agnus::_dump(Category category, std::ostream& os) const
         os << dec(pos.lol) << std::endl;
         os << tab("LOL toggle");
         os << dec(pos.lolToggle) << std::endl;
-        os << tab("Beam position");
-        os << "(" << dec(pos.v) << "," << dec(pos.h) << ")" << std::endl;
-        os << tab("Latched position");
-        os << "(" << dec(latchedPos.v) << "," << dec(latchedPos.h) << ")" << std::endl;
         os << tab("scrollOdd");
         os << dec(scrollOdd) << std::endl;
         os << tab("scrollEven");
@@ -611,7 +611,7 @@ Agnus::_inspect() const
     eventInfo.dmaClock = agnus.clock;
     eventInfo.ciaAClock = ciaa.getClock();
     eventInfo.ciaBClock  = ciab.getClock();
-    eventInfo.frame = agnus.frame.nr;
+    eventInfo.frame = agnus.pos.frame;
     eventInfo.vpos = agnus.pos.v;
     eventInfo.hpos = agnus.pos.h;
     

@@ -712,7 +712,7 @@ using namespace moira;
 
 - (NSInteger)frameCount
 {
-    return [self agnus]->frame.nr;
+    return [self agnus]->pos.frame;
 }
 
 - (AgnusStats)getStats

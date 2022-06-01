@@ -6,7 +6,6 @@ AgnusRegs.cpp
 AgnusDma.cpp
 AgnusEvents.cpp
 Beam.cpp
-Frame.cpp
 
 )
 
