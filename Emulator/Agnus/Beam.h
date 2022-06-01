@@ -12,6 +12,7 @@
 #include "Aliases.h"
 #include "Constants.h"
 #include "Reflection.h"
+#include "AmigaTypes.h"
 
 enum_long(LINE_TYPE)
 {

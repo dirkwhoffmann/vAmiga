@@ -19,23 +19,21 @@ struct Frame
     i64 nr;
 
     // The type of the first line in this frame
-    LineType type;
+    // [[deprecated]] LineType type;
 
     template <class W>
     void operator<<(W& worker)
     {
         worker
 
-        << nr
-        << type;
+        << nr;
     }
     
-    Frame() : nr(0), type(LINE_PAL) { }
+    Frame() : nr(0) { }
 
     // Advances one frame
-    void next(bool laceBit, Cycle newStart, LineType newType)
+    void next()
     {
         nr++;
-        type = newType;
     }
 };

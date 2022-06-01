@@ -33,8 +33,7 @@ Agnus::_reset(bool hard)
     frame = Frame();
 
     // Setup the correct line type
-    pos.type = frame.type =
-    amiga.getConfig().type == PAL ? LINE_PAL : LINE_NTSC;
+    pos.type = amiga.getConfig().type == PAL ? LINE_PAL : LINE_NTSC;
 
     // Initialize statistical counters
     clearStats();
@@ -634,7 +633,7 @@ Agnus::vsyncHandler()
 
     // Advance to the next frame
     assert(denise.lace() == pos.lofToggle);
-    frame.next(pos.lofToggle, clock, pos.type);
+    frame.next();
     if (pos.lofToggle) { pos.lof = !pos.lof; }
 
     // Reset vertical position counter

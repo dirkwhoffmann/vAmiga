@@ -807,7 +807,6 @@ Amiga::setVideoFormat(VideoFormat type)
         config.type = type;
 
         // Change the frame type
-        agnus.frame.type = pal ? LINE_PAL : LINE_NTSC;
         agnus.pos.type = pal ? LINE_PAL : LINE_NTSC;
         agnus.pos.lol = false;
         agnus.pos.lolToggle = !pal;
