@@ -36,8 +36,8 @@ class Configuration {
     //
 
     var machineType: Int {
-        get { return amiga.getConfig(.MACHINE_TYPE) }
-        set { amiga.configure(.MACHINE_TYPE, value: newValue) }
+        get { return amiga.getConfig(.VIDEO_FORMAT) }
+        set { amiga.configure(.VIDEO_FORMAT, value: newValue) }
     }
     var cpuRev: Int {
         get { return amiga.getConfig(.CPU_REVISION) }

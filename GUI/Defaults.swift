@@ -695,7 +695,7 @@ extension DefaultsProxy {
 
         debug(.defaults)
 
-        remove(.MACHINE_TYPE)
+        remove(.VIDEO_FORMAT)
         remove(.CPU_REVISION)
         remove(.CPU_OVERCLOCKING)
         remove(.AGNUS_REVISION)
@@ -714,7 +714,7 @@ extension Configuration {
 
         amiga.suspend()
 
-        machineType = defaults.get(.MACHINE_TYPE)
+        machineType = defaults.get(.VIDEO_FORMAT)
         cpuRev = defaults.get(.CPU_REVISION)
         cpuSpeed = defaults.get(.CPU_OVERCLOCKING)
         agnusRev = defaults.get(.AGNUS_REVISION)
@@ -732,7 +732,7 @@ extension Configuration {
 
         amiga.suspend()
 
-        defaults.set(.MACHINE_TYPE, machineType)
+        defaults.set(.VIDEO_FORMAT, machineType)
         defaults.set(.CPU_REVISION, cpuRev)
         defaults.set(.CPU_OVERCLOCKING, cpuSpeed)
         defaults.set(.AGNUS_REVISION, agnusRev)

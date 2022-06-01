@@ -29,7 +29,7 @@
 
 Defaults::Defaults()
 {
-    setFallback(OPT_MACHINE_TYPE, MACHINE_PAL);
+    setFallback(OPT_VIDEO_FORMAT, PAL);
     setFallback(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
     setFallback(OPT_SLOW_RAM_MIRROR, true);
     setFallback(OPT_PTR_DROPS, true);

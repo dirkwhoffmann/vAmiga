@@ -202,7 +202,7 @@ Amiga::resetConfig()
 
     std::vector <Option> options = {
 
-        OPT_MACHINE_TYPE
+        OPT_VIDEO_FORMAT
     };
 
     for (auto &option : options) {
@@ -215,7 +215,7 @@ Amiga::getConfigItem(Option option) const
 {
     switch (option) {
 
-        case OPT_MACHINE_TYPE:
+        case OPT_VIDEO_FORMAT:
 
             return config.type;
 
@@ -388,11 +388,11 @@ Amiga::setConfigItem(Option option, i64 value)
 {
     switch (option) {
 
-        case OPT_MACHINE_TYPE:
+        case OPT_VIDEO_FORMAT:
 
             if (value != config.type) {
 
-                setMachineType(MachineType(value));
+                setVideoFormat(VideoFormat(value));
             }
             return;
 
@@ -431,7 +431,7 @@ Amiga::configure(Option option, i64 value)
 
     switch (option) {
 
-        case OPT_MACHINE_TYPE:
+        case OPT_VIDEO_FORMAT:
 
             setConfigItem(option, value);
             break;
@@ -744,7 +744,7 @@ Amiga::configure(ConfigScheme scheme)
 
             case CONFIG_A1000_OCS_1MB:
 
-                configure(OPT_MACHINE_TYPE, MACHINE_PAL);
+                configure(OPT_VIDEO_FORMAT, PAL);
                 configure(OPT_CHIP_RAM, 512);
                 configure(OPT_SLOW_RAM, 512);
                 configure(OPT_AGNUS_REVISION, AGNUS_OCS_OLD);
@@ -752,7 +752,7 @@ Amiga::configure(ConfigScheme scheme)
 
             case CONFIG_A500_OCS_1MB:
                 
-                configure(OPT_MACHINE_TYPE, MACHINE_PAL);
+                configure(OPT_VIDEO_FORMAT, PAL);
                 configure(OPT_CHIP_RAM, 512);
                 configure(OPT_SLOW_RAM, 512);
                 configure(OPT_AGNUS_REVISION, AGNUS_OCS);
@@ -760,7 +760,7 @@ Amiga::configure(ConfigScheme scheme)
                 
             case CONFIG_A500_ECS_1MB:
                 
-                configure(OPT_MACHINE_TYPE, MACHINE_PAL);
+                configure(OPT_VIDEO_FORMAT, PAL);
                 configure(OPT_CHIP_RAM, 512);
                 configure(OPT_SLOW_RAM, 512);
                 configure(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
@@ -797,9 +797,9 @@ Amiga::overrideOption(Option option, i64 value)
 }
 
 void
-Amiga::setMachineType(MachineType type)
+Amiga::setVideoFormat(VideoFormat type)
 {
-    bool pal = type == MACHINE_PAL;
+    bool pal = type == PAL;
     trace(NTSC_DEBUG, "Switching to %s mode\n", pal ? "PAL" : "NTSC");
 
     {   SUSPENDED
@@ -899,8 +899,8 @@ Amiga::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Config) {
 
-        os << tab("Machine type");
-        os << MachineTypeEnum::key(config.type);
+        os << tab("Video format");
+        os << VideoFormatEnum::key(config.type);
     }
 
     if (category == Category::State) {

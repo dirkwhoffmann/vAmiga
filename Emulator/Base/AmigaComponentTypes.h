@@ -19,7 +19,7 @@
 enum_long(OPT)
 {
     // Amiga
-    OPT_MACHINE_TYPE,
+    OPT_VIDEO_FORMAT,
     
     // Agnus
     OPT_AGNUS_REVISION,
@@ -154,7 +154,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
     {
         switch (value) {
 
-            case OPT_MACHINE_TYPE:          return "MACHINE_TYPE";
+            case OPT_VIDEO_FORMAT:          return "VIDEO_FORMAT";
 
             case OPT_AGNUS_REVISION:        return "AGNUS_REVISION";
             case OPT_SLOW_RAM_MIRROR:       return "SLOW_RAM_MIRROR";

@@ -16,27 +16,27 @@
 // Enumerations
 //
 
-enum_long(MACHINE_TYPE)
+enum_long(VIDEO_FORMAT)
 {
-    MACHINE_PAL,
-    MACHINE_NTSC
+    PAL,
+    NTSC
 };
-typedef MACHINE_TYPE MachineType;
+typedef VIDEO_FORMAT VideoFormat;
 
 #ifdef __cplusplus
-struct MachineTypeEnum : util::Reflection<MachineTypeEnum, MachineType>
+struct VideoFormatEnum : util::Reflection<VideoFormatEnum, VideoFormat>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = MACHINE_NTSC;
+    static constexpr long maxVal = NTSC;
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
-    static const char *prefix() { return "MACHINE"; }
-    static const char *key(MachineType value)
+    static const char *prefix() { return ""; }
+    static const char *key(VideoFormat value)
     {
         switch (value) {
 
-            case MACHINE_PAL:   return "PAL";
-            case MACHINE_NTSC:  return "NTSC";
+            case PAL:   return "PAL";
+            case NTSC:  return "NTSC";
         }
         return "???";
     }
@@ -284,7 +284,7 @@ struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
 
 typedef struct
 {
-    MachineType type;
+    VideoFormat type;
 }
 AmigaConfig;
 

@@ -34,7 +34,7 @@ Agnus::_reset(bool hard)
 
     // Setup the correct line type
     pos.type = frame.type =
-    amiga.getConfig().type == MACHINE_PAL ? LINE_PAL : LINE_NTSC;
+    amiga.getConfig().type == PAL ? LINE_PAL : LINE_NTSC;
 
     // Initialize statistical counters
     clearStats();
