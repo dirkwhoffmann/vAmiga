@@ -182,8 +182,7 @@ Agnus::peekVHPOSR() const
         auto pos = agnus.pos + 5;
 
         // Rectify the vertical position if it has wrapped over
-        assert(agnus.frame.numLines() == agnus.pos.numLines());
-        if (pos.v >= frame.numLines()) pos.v = 0;
+        if (pos.v >= pos.numLines()) pos.v = 0;
         
         // In cycle 0 and 1, we need to return the old value of posv
         if (pos.h <= 1) {
@@ -225,16 +224,10 @@ Agnus::peekVPOSR() const
     // I5 I4 I3 I2 I1 I0 (Chip Identification)
     u16 result = idBits();
 
-    // LF (Long frame bit)
-    assert(frame.isLongFrame() == pos.lof);
-    if (frame.isLongFrame()) result |= 0x8000;
-
-    // LL (Long line bit)
+    // LF LL (Long Frame bit, Long Line bit)
+    if (pos.lof) result |= 0x8000;
     if (pos.lol) result |= 0x0080;
 
-    // V8 (Vertical position MSB)
-    // result |= (ersy(bplcon0Initial) ? latchedPos.v : pos.v) >> 8;
-    
     if (ersy(bplcon0Initial)) {
 
         // Return the latched position if external synchronization is enabled
@@ -246,8 +239,7 @@ Agnus::peekVPOSR() const
         auto pos = agnus.pos + 5;
 
         // Rectify the vertical position if it has wrapped over
-        assert(frame.numLines() == pos.numLines());
-        if (pos.v >= frame.numLines()) pos.v = 0;
+        if (pos.v >= pos.numLines()) pos.v = 0;
         
         // In cycle 0 and 1, we need to return the old value of posv
         if (pos.h <= 1) {

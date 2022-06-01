@@ -10,6 +10,7 @@
 #include "config.h"
 #include "Frame.h"
 
+/*
 isize
 Frame::numLines() const
 {
@@ -29,3 +30,4 @@ Frame::lastLine() const
         default:        return lof ? 262 : 261;
     }
 }
+*/

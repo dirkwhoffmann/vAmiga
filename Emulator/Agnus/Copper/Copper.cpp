@@ -68,8 +68,7 @@ Copper::findMatchOld(Beam &match) const
     u32 mask = getVMHM();
 
     // Iterate through all lines starting from the current position
-    assert(agnus.frame.numLines() == agnus.pos.numLines());
-    isize numLines = agnus.frame.numLines();
+    isize numLines = agnus.pos.numLines();
     while ((isize)(beam >> 8) < numLines) {
 
         // Check if the vertical components are equal
@@ -112,8 +111,7 @@ Copper::findMatch(Beam &match) const
     u32 mask = getVMHM();
 
     // Iterate through all lines starting from the current position
-    assert(agnus.frame.numLines() == agnus.pos.numLines());
-    isize numLines = agnus.frame.numLines();
+    isize numLines = agnus.pos.numLines();
     while ((isize)(beam >> 8) < numLines) {
 
         // Check if the vertical components are equal

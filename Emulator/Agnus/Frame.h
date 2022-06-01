@@ -40,11 +40,6 @@ struct Frame
     
     Frame() : nr(0), lof(false), start(0), type(LINE_PAL) { }
 
-    [[deprecated]] bool isLongFrame() const { return lof; }
-    // [[deprecated]] bool isShortFrame() const { return !lof; }
-    [[deprecated]] isize numLines() const;
-    [[deprecated]] isize lastLine() const;
-
     // Advances one frame
     void next(bool laceBit, Cycle newStart, LineType newType)
     {
