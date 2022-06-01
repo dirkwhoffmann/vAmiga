@@ -140,6 +140,6 @@ fprintf(stderr, "XFILES: " format, ##__VA_ARGS__); }}
 #define debug(enable, format, ...)
 #define plain(enable, format, ...)
 #define trace(enable, format, ...)
-#define xfiles(enable, format, ...)
+#define xfiles(format, ...)
 
 #endif

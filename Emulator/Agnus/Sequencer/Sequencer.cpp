@@ -65,6 +65,7 @@ Sequencer::hsyncHandler()
         newDmaDAS = agnus.dmacon & 0b111111;
 
         // Disable sprites outside the sprite DMA area
+        assert(agnus.frame.lastLine() == agnus.pos.lastLine());
         if (agnus.pos.v < 25 || agnus.pos.v >= agnus.frame.lastLine()) {
             newDmaDAS &= 0b011111;
         }

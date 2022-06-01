@@ -33,17 +33,17 @@ struct Frame
         worker
 
         << nr
-        << lof
+        // << lof
         << start
         << type;
     }
     
     Frame() : nr(0), lof(false), start(0), type(LINE_PAL) { }
 
-    bool isLongFrame() const { return lof; }
-    bool isShortFrame() const { return !lof; }
-    isize numLines() const;
-    isize lastLine() const;
+    [[deprecated]] bool isLongFrame() const { return lof; }
+    // [[deprecated]] bool isShortFrame() const { return !lof; }
+    [[deprecated]] isize numLines() const;
+    [[deprecated]] isize lastLine() const;
 
     // Advances one frame
     void next(bool laceBit, Cycle newStart, LineType newType)

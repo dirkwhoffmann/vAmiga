@@ -548,6 +548,7 @@ Agnus::updateSpriteDMA()
      }
 
     // Disable DMA in the last rasterline
+    assert(frame.lastLine() == pos.lastLine());
     if (v == frame.lastLine()) {
         for (isize i = 0; i < 8; i++) sprDmaState[i] = SPR_DMA_IDLE;
         return;
@@ -600,6 +601,7 @@ Agnus::hsyncHandler()
     paula.channel3.requestDMA();
 
     // Advance the vertical counter
+    assert(frame.numLines() == pos.numLines());
     if (++pos.v >= frame.numLines()) vsyncHandler();
 
     // Save the current value of certain variables
@@ -635,6 +637,7 @@ Agnus::vsyncHandler()
     // Advance to the next frame
     assert(denise.lace() == pos.lofToggle);
     frame.next(pos.lofToggle, clock, pos.type);
+    if (pos.lofToggle) { pos.lof = !pos.lof; }
 
     // Reset vertical position counter
     pos.v = 0;

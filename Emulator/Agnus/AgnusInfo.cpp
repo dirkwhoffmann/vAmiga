@@ -449,7 +449,13 @@ Agnus::_dump(Category category, std::ostream& os) const
         os << tab("Frame");
         os << dec(frame.nr) << std::endl;
         os << tab("LOF");
-        os << dec(frame.lof) << std::endl;
+        os << dec(pos.lof) << std::endl;
+        os << tab("LOF toggle");
+        os << dec(pos.lofToggle) << std::endl;
+        os << tab("LOL");
+        os << dec(pos.lol) << std::endl;
+        os << tab("LOL toggle");
+        os << dec(pos.lolToggle) << std::endl;
         os << tab("Beam position");
         os << "(" << dec(pos.v) << "," << dec(pos.h) << ")" << std::endl;
         os << tab("Latched position");

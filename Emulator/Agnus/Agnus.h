@@ -369,7 +369,7 @@ public:
     bool inVBlankArea() const { return inVBlankArea(pos.v); }
 
     // Indicates if the current rasterline is the last line in this frame
-    bool inLastRasterline(isize posv) const { return posv == frame.lastLine(); }
+    bool inLastRasterline(isize posv) const { assert(frame.lastLine() == pos.lastLine()); return posv == frame.lastLine(); }
     bool inLastRasterline() const { return inLastRasterline(pos.v); }
 
     // Returns the pixel position for the current horizontal position

@@ -313,11 +313,13 @@ PixelEngine::swapBuffers()
 
         frameBuffer = emuTexture[1].ptr;
         emuTexture[1].longFrame = agnus.frame.lof;
+        assert(agnus.frame.lof == agnus.pos.lof);
         
     } else {
 
         frameBuffer = emuTexture[0].ptr;
         emuTexture[0].longFrame = agnus.frame.lof;
+        assert(agnus.frame.lof == agnus.pos.lof);
 
     }
     

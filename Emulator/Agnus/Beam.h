@@ -80,6 +80,9 @@ struct Beam
     isize vCntPal() const { return lof ? 313 : 312; }
     isize vCntNtsc() const { return lof ? 263 : 262; }
 
+    isize numLines() const { return vCnt(); }
+    isize lastLine() const { return vMax(); }
+
     bool operator==(const Beam& beam) const
     {
         return v == beam.v && h == beam.h;

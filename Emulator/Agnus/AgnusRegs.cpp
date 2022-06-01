@@ -182,6 +182,7 @@ Agnus::peekVHPOSR() const
         auto pos = agnus.pos + 5;
 
         // Rectify the vertical position if it has wrapped over
+        assert(agnus.frame.numLines() == agnus.pos.numLines());
         if (pos.v >= frame.numLines()) pos.v = 0;
         
         // In cycle 0 and 1, we need to return the old value of posv
@@ -225,6 +226,7 @@ Agnus::peekVPOSR() const
     u16 result = idBits();
 
     // LF (Long frame bit)
+    assert(frame.isLongFrame() == pos.lof);
     if (frame.isLongFrame()) result |= 0x8000;
 
     // LL (Long line bit)
@@ -244,6 +246,7 @@ Agnus::peekVPOSR() const
         auto pos = agnus.pos + 5;
 
         // Rectify the vertical position if it has wrapped over
+        assert(frame.numLines() == pos.numLines());
         if (pos.v >= frame.numLines()) pos.v = 0;
         
         // In cycle 0 and 1, we need to return the old value of posv
@@ -285,6 +288,7 @@ Agnus::setVPOS(u16 value)
 
     // Check the LOF bit
     bool newlof = value & 0x8000;
+    assert(frame.lof == pos.lof);
     if (frame.lof != newlof) {
         
         /* If a long frame gets changed to a short frame, we only proceed if
@@ -299,7 +303,8 @@ Agnus::setVPOS(u16 value)
 
         xfiles("VPOS: Making a %s frame\n", newlof ? "long" : "short");
         frame.lof = newlof;
-
+        pos.lof = newlof;
+        
         /* Reschedule a pending VBL event with a trigger cycle that is consistent
          * with the new value of the LOF bit.
          */
