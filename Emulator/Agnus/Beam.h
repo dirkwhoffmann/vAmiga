@@ -122,5 +122,5 @@ struct Beam
      * returned. If the current position plus the provided delta is a beam
      * position in the next frame, location (INT32_MAX, INT32_MAX) is returned.
      */
-    Beam translate(DMACycle diff) const;
+    Beam translate(isize diff) const;
 };

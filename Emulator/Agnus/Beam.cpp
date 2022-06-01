@@ -59,7 +59,7 @@ Beam::diff(isize v2, isize h2) const
 }
 
 Beam
-Beam::translate(DMACycle diff) const
+Beam::translate(isize diff) const
 {
     auto result = *this;
 

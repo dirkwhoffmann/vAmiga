@@ -130,10 +130,16 @@ if constexpr (enable) { if (verbose) { \
 prefix(); \
 fprintf(stderr, "%s:%d " format, getDescription(), __LINE__, ##__VA_ARGS__); }}
 
+#define xfiles(format, ...) \
+if constexpr (XFILES) { if (verbose) { \
+prefix(); \
+fprintf(stderr, "XFILES: " format, ##__VA_ARGS__); }}
+
 #else
 
 #define debug(enable, format, ...)
 #define plain(enable, format, ...)
 #define trace(enable, format, ...)
+#define xfiles(enable, format, ...)
 
 #endif

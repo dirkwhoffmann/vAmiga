@@ -311,7 +311,7 @@ Blitter::setBLTSIZE(u16 value)
     
     // Warn if the previous Blitter operation is overwritten
     if (agnus.id[SLOT_BLT]) {
-        trace(XFILES, "XFILES: Overwriting existing Blitter event\n");
+        xfiles("Overwriting existing Blitter event\n");
     }
 
     running = true;

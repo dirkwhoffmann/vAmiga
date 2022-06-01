@@ -210,7 +210,7 @@ Agnus::setVHPOS(u16 value)
     [[maybe_unused]] int v7v0 = HI_BYTE(value);
     [[maybe_unused]] int h8h1 = LO_BYTE(value);
     
-    trace(XFILES, "XFILES (VHPOS): %x (%d,%d)\n", value, v7v0, h8h1);
+    xfiles("setVHPOS(%04x) (%d,%d)\n", value, v7v0, h8h1);
 
     // Don't know what to do here ...
 }
@@ -271,7 +271,7 @@ Agnus::setVPOS(u16 value)
 {
     if (!!GET_BIT(value, 0) != !!GET_BIT(pos.v, 8)) {
 
-        trace(XFILES, "XFILES (VPOS): Toggling V8 is not supported\n");
+        xfiles("VPOS: Toggling V8 is not supported\n");
     }
 
     // Check the LOL bit
@@ -293,11 +293,11 @@ Agnus::setVPOS(u16 value)
          */
         if (!newlof && inLastRasterline()) {
 
-            trace(XFILES, "XFILES (VPOS): LOF bit changed in last scanline\n");
+            xfiles("VPOS: LOF bit changed in last scanline\n");
             return;
         }
 
-        trace(XFILES, "XFILES (VPOS): Making a %s frame\n", newlof ? "long" : "short");
+        xfiles("VPOS: Making a %s frame\n", newlof ? "long" : "short");
         frame.lof = newlof;
 
         /* Reschedule a pending VBL event with a trigger cycle that is consistent
@@ -459,11 +459,11 @@ Agnus::pokeSPRxCTL(u16 value)
 
     // ECS Agnus supports an additional position bit (encoded in 'unused' area)
     if (GET_BIT(value, 6)) {
-        trace(XFILES, "XFILES: pokeSPRxCTL: Extended VSTRT bit set\n");
+        xfiles("pokeSPRxCTL: Extended VSTRT bit set\n");
         if (isECS()) sprVStrt[x] |= 0x0200;
     }
     if (GET_BIT(value, 5)) {
-        trace(XFILES, "XFILES: pokeSPRxCTL: Extended VSTOP bit set\n");
+        xfiles("pokeSPRxCTL: Extended VSTOP bit set\n");
         if (isECS()) sprVStop[x] |= 0x0200;
     }
 
@@ -510,7 +510,7 @@ Agnus::setDSKPTH(u16 value)
     dskpt = REPLACE_HI_WORD(dskpt, value);
     
     if (dskpt & ~agnus.ptrMask) {
-        trace(XFILES, "DSKPT %08x out of range\n", dskpt);
+        xfiles("DSKPT %08x out of range\n", dskpt);
     }
 }
 
@@ -572,7 +572,7 @@ Agnus::setBPLxPTH(u16 value)
     bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value);
     
     if (bplpt[x - 1] & ~agnus.ptrMask) {
-        trace(XFILES, "BPL%dPT %08x out of range\n", x, bplpt[x - 1]);
+        xfiles("BPL%dPT %08x out of range\n", x, bplpt[x - 1]);
     }
 }
 
@@ -618,7 +618,7 @@ Agnus::setSPRxPTH(u16 value)
     sprpt[x] = REPLACE_HI_WORD(sprpt[x], value);
     
     if (sprpt[x] & ~agnus.ptrMask) {
-        trace(XFILES, "SPR%dPT %08x out of range\n", x, sprpt[x]);
+        xfiles("SPR%dPT %08x out of range\n", x, sprpt[x]);
     }
 }
 
@@ -651,7 +651,7 @@ Agnus::dropWrite(BusOwner owner)
      */
     if (config.ptrDrops && pos.h >= 1 && busOwner[pos.h - 1] == owner) {
         
-        trace(XFILES, "XFILES: Dropping pointer register write (%d)\n", owner);
+        xfiles("Dropping pointer register write (%d)\n", owner);
         return true;
     }
     

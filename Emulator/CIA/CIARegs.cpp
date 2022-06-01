@@ -226,7 +226,7 @@ CIA::poke(u16 addr, u8 value)
         case 0x02: // CIA_DATA_DIRECTION_A
         
             if ((isCIAA() && value != 0x03) || (isCIAB() && value != 0xC0)) {
-                trace(XFILES, "XFILES (DDRA) Setting unusual value %x\n", value);
+                xfiles("DDRA: Setting unusual value %x\n", value);
             }
             pokeDDRA(value);
             return;
@@ -234,7 +234,7 @@ CIA::poke(u16 addr, u8 value)
         case 0x03: // CIA_DATA_DIRECTION_B
         
             if (isCIAB() && value != 0xFF) {
-                trace(XFILES, "XFILES (DDRB) Setting unusual value %x\n", value);
+                xfiles("DDRB: Setting unusual value %x\n", value);
             }
             pokeDDRB(value);
             return;

@@ -59,7 +59,7 @@ Copper::serviceEvent(EventID id)
             } else {
 
                 // Reschedule the wakeup event
-                trace(XFILES, "XFILES: Copper wakeup aborted\n");
+                xfiles("Copper wakeup aborted\n");
                 scheduleWaitWakeup(getBFD());
             }
             break;

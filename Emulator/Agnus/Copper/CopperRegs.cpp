@@ -36,7 +36,7 @@ Copper::pokeCOPJMP1()
     if constexpr (s == ACCESSOR_CPU) {
 
         if (agnus.blitter.isActive()) {
-            trace(XFILES, "pokeCOPJMP1: Blitter is running\n");
+            xfiles("pokeCOPJMP1: Blitter is running\n");
         }
         switchToCopperList(1);
     }
@@ -55,7 +55,7 @@ Copper::pokeCOPJMP2()
     if constexpr (s == ACCESSOR_CPU) {
 
         if (agnus.blitter.isActive()) {
-            trace(XFILES, "pokeCOPJMP2: Blitter is running\n");
+            xfiles("pokeCOPJMP2: Blitter is running\n");
         }
         switchToCopperList(2);
     }
@@ -69,7 +69,7 @@ Copper::pokeCOPINS(u16 value)
     /* COPINS is a dummy address that can be used to write the first or
      * the second instruction register, depending on the current state.
      */
-    trace(XFILES, "Write to COPINS (%x)\n", value); 
+    xfiles("Write to COPINS (%x)\n", value); 
     
     // TODO: The following is certainly wrong...
     /* if (state == COP_MOVE || state == COP_WAIT_OR_SKIP) {

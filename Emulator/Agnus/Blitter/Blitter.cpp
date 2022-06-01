@@ -555,10 +555,10 @@ Blitter::beginLineBlit(isize level)
         debug(BLT_CHECKSUM, "Performing level %ld line blits.\n", level);
     }
     if (bltcon0 & BLTCON0_USEB) {
-        trace(XFILES, "Performing line blit with channel B enabled\n");
+        xfiles("Performing line blit with channel B enabled\n");
     }
     if (bltsizeH != 2) {
-        trace(XFILES, "Performing line blit with WIDTH = %d\n", bltsizeH);
+        xfiles("Performing line blit with WIDTH = %d\n", bltsizeH);
     }
     
     switch (level) {

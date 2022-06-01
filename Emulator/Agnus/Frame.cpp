@@ -29,23 +29,3 @@ Frame::lastLine() const
         default:        return lof ? 262 : 261;
     }
 }
-
-isize
-Frame::prevNumLines() const
-{
-    switch (type) {
-
-        case LINE_PAL:  return prevlof ? 313 : 312;
-        default:        return prevlof ? 263 : 262;
-    }
-}
-
-isize
-Frame::prevLastLine() const
-{
-    switch (type) {
-
-        case LINE_PAL:  return prevlof ? 312 : 311;
-        default:        return prevlof ? 262 : 261;
-    }
-}

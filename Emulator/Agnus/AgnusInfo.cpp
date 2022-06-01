@@ -450,8 +450,6 @@ Agnus::_dump(Category category, std::ostream& os) const
         os << dec(frame.nr) << std::endl;
         os << tab("LOF");
         os << dec(frame.lof) << std::endl;
-        os << tab("LOF in previous frame");
-        os << dec(frame.prevlof) << std::endl;
         os << tab("Beam position");
         os << "(" << dec(pos.v) << "," << dec(pos.h) << ")" << std::endl;
         os << tab("Latched position");

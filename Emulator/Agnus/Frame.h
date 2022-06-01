@@ -20,9 +20,6 @@ struct Frame
     
     // The long frame flipflop
     bool lof;
-    
-    // The value of the frame flipflop in the previous frame
-    bool prevlof;
 
     // The master clock at the beginning of this frame
     Cycle start;
@@ -37,28 +34,21 @@ struct Frame
 
         << nr
         << lof
-        << prevlof
         << start
         << type;
     }
     
-    Frame() : nr(0), lof(false), prevlof(false), start(0), type(LINE_PAL) { }
+    Frame() : nr(0), lof(false), start(0), type(LINE_PAL) { }
 
     bool isLongFrame() const { return lof; }
     bool isShortFrame() const { return !lof; }
     isize numLines() const;
     isize lastLine() const;
-    
-    bool wasLongFrame() const { return prevlof; }
-    bool wasShortFrame() const { return !prevlof; }
-    isize prevNumLines() const;
-    isize prevLastLine() const;
 
     // Advances one frame
     void next(bool laceBit, Cycle newStart, LineType newType)
     {
         nr++;
-        prevlof = lof;
         start = newStart;
         type = newType;
         

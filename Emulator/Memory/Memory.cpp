@@ -1127,7 +1127,7 @@ template<> u16
 Memory::peek16 <ACCESSOR_CPU, MEM_CIA> (u32 addr)
 {
     ASSERT_CIA_ADDR(addr);
-    trace(XFILES, "XFILES (CIA): Reading a WORD from %x\n", addr);
+    xfiles("CIA: Reading a WORD from %x\n", addr);
 
     agnus.executeUntilBusIsFreeForCIA();
     
@@ -1452,7 +1452,7 @@ template<> u16
 Memory::peek16 <ACCESSOR_AGNUS, MEM_NONE> (u32 addr)
 {
     assert((addr & agnus.ptrMask) == addr);
-    trace(XFILES, "XFILES (AGNUS): Reading from unmapped RAM\n");
+    xfiles("Agnus reads from unmapped RAM\n");
     return peek16 <ACCESSOR_CPU, MEM_NONE> (addr);
 }
 
@@ -1481,7 +1481,7 @@ template<> u16
 Memory::peek16 <ACCESSOR_AGNUS, MEM_SLOW> (u32 addr)
 {
     assert((addr & agnus.ptrMask) == addr);
-    trace(XFILES, "XFILES (AGNUS): Reading from Slow RAM mirror\n");
+    xfiles("Agnus reads from Slow RAM mirror\n");
     dataBus = READ_SLOW_16(SLOW_RAM_STRT + (addr & 0x7FFFF));
     return dataBus;
 }
@@ -1641,7 +1641,7 @@ template <> void
 Memory::poke16 <ACCESSOR_CPU, MEM_CIA> (u32 addr, u16 value)
 {
     ASSERT_CIA_ADDR(addr);
-    trace(XFILES, "XFILES (CIA): Writing a WORD into %x\n", addr);
+    xfiles("CIA: Writing a WORD into %x\n", addr);
 
     agnus.executeUntilBusIsFreeForCIA();
     
@@ -2222,7 +2222,7 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x03A >> 1: // STRVBL
         case 0x03C >> 1: // STRHOR
         case 0x03E >> 1: // STRLONG
-            trace(XFILES, "XFILES (STROBE): %x\n", addr);
+            xfiles("STROBE register write: %04x\n", addr);
             return; // ignore
         case 0x040 >> 1: // BLTCON0
             blitter.pokeBLTCON0(value); return;

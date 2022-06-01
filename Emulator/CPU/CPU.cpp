@@ -95,8 +95,8 @@ Moira::read16OnReset(u32 addr)
 void
 Moira::write8(u32 addr, u8 val)
 {
-    if constexpr (XFILES) if (addr - reg.pc < 5) {
-        trace(true, "XFILES: write8 close to PC %x\n", reg.pc);
+    if constexpr (XFILES) {
+        if (addr - reg.pc < 5) xfiles("write8 close to PC %x\n", reg.pc);
     }
     mem.poke8 <ACCESSOR_CPU> (addr, val);
 }
@@ -104,8 +104,8 @@ Moira::write8(u32 addr, u8 val)
 void
 Moira::write16(u32 addr, u16 val)
 {
-    if constexpr (XFILES) if (addr - reg.pc < 5) {
-        trace(true, "XFILES: write16 close to PC %x\n", reg.pc);
+    if constexpr (XFILES) {
+        if (addr - reg.pc < 5) xfiles("write16 close to PC %x\n", reg.pc);
     }
     mem.poke16 <ACCESSOR_CPU> (addr, val);
 }
@@ -119,7 +119,7 @@ Moira::readIrqUserVector(u8 level) const
 void
 Moira::signalResetInstr()
 {
-    trace(XFILES, "XFILES: RESET instruction\n");
+    xfiles("RESET instruction\n");
     amiga.softReset();
 }
 
@@ -127,14 +127,14 @@ void
 Moira::signalStopInstr(u16 op)
 {
     if (!(op & 0x2000)) {
-        trace(XFILES, "XFILES: STOP instruction (%x)\n", op);
+        xfiles("STOP instruction (%x)\n", op);
     }
 }
 
 void
 Moira::signalTasInstr()
 {
-    trace(XFILES, "XFILES: TAS instruction\n");
+    xfiles("TAS instruction\n");
 }
 
 void
@@ -146,26 +146,26 @@ Moira::signalHalt()
 void
 Moira::signalAddressError(moira::AEStackFrame &frame)
 {
-    trace(XFILES, "XFILES: Address error exception %x %x %x %x %x\n",
+    xfiles("Address error exception %x %x %x %x %x\n",
           frame.code, frame.addr, frame.ird, frame.sr, frame.pc);
 }
 
 void
 Moira::signalLineAException(u16 opcode)
 {
-    trace(XFILES, "XFILES: lineAException(%x)\n", opcode);
+    xfiles("lineAException(%x)\n", opcode);
 }
 
 void
 Moira::signalLineFException(u16 opcode)
 {
-    trace(XFILES, "XFILES: lineFException(%x)\n", opcode);
+    xfiles("lineFException(%x)\n", opcode);
 }
 
 void
 Moira::signalIllegalOpcodeException(u16 opcode)
 {
-    trace(XFILES, "XFILES: illegalOpcodeException(%x)\n", opcode);
+    xfiles("illegalOpcodeException(%x)\n", opcode);
 }
 
 void
@@ -177,7 +177,7 @@ Moira::signalTraceException()
 void
 Moira::signalTrapException()
 {
-    trace(XFILES, "XFILES: trapException\n");
+    xfiles("trapException\n");
 }
 
 void
