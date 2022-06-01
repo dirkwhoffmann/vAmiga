@@ -304,8 +304,8 @@ public:
 
     bool isOCS() const;
     bool isECS() const;
-    bool isPAL() const { return pos.type == LINE_PAL; }
-    bool isNTSC() const { return pos.type == LINE_NTSC; }
+    bool isPAL() const { return pos.type == PAL; }
+    bool isNTSC() const { return pos.type == NTSC; }
 
     // Returns the chip identification bits of this Agnus (show up in VPOSR)
     u16 idBits() const;

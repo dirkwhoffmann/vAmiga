@@ -22,7 +22,7 @@ Beam::operator+=(isize i)
         v += 1;
         if (lolToggle) lol = !lol;
 
-        if (v >= vCnt()) {
+        if (v >= numLines()) {
 
             v = 0;
             if (lofToggle) lof = !lof;
@@ -59,7 +59,7 @@ Beam::diff(isize v2, isize h2) const
 }
 
 Beam
-Beam::translate(isize diff) const
+Beam::translate(Cycle diff) const
 {
     auto result = *this;
 
@@ -84,7 +84,7 @@ Beam::translate(isize diff) const
 
         result = newPos;
     }
-    result += diff;
+    result += isize(diff);
 
     return result;
 }

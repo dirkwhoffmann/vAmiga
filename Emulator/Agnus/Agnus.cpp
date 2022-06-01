@@ -30,11 +30,10 @@ Agnus::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS(hard)
     
     // Start with a long frame
-    // frame = Frame();
     pos.lof = true;
 
     // Setup the correct line type
-    pos.type = amiga.getConfig().type == PAL ? LINE_PAL : LINE_NTSC;
+    pos.type = amiga.getConfig().type;
 
     // Initialize statistical counters
     clearStats();
@@ -563,15 +562,17 @@ Agnus::updateSpriteDMA()
 void
 Agnus::hsyncHandler()
 {
+    assert(pos.h == HPOS_CNT_PAL || pos.h == HPOS_CNT_NTSC);
+    
     // REMOVE ASAP
     switch (pos.type) {
 
-        case LINE_PAL:
+        case PAL:
 
             assert(pos.h == HPOS_CNT_PAL);
             break;
 
-        case LINE_NTSC:
+        case NTSC:
 
             assert(pos.lol || pos.h == HPOS_CNT_PAL);
             assert(!pos.lol || pos.h == HPOS_CNT_NTSC);

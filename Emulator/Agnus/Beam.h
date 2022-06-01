@@ -14,6 +14,7 @@
 #include "Reflection.h"
 #include "AmigaTypes.h"
 
+/*
 enum_long(LINE_TYPE)
 {
     LINE_PAL,           // 227 DMA cycles
@@ -40,6 +41,7 @@ struct LineTypeEnum : util::Reflection<LineTypeEnum, LineType>
     }
 };
 #endif
+*/
 
 struct Beam
 {
@@ -59,7 +61,7 @@ struct Beam
     bool lolToggle = false;
 
     // The type of the current line
-    LineType type;
+    VideoFormat type;
 
     template <class W>
     void operator<<(W& worker)
@@ -78,15 +80,15 @@ struct Beam
 
     isize hCnt() const { return lol ? 228 : 227; }
     isize hMax() const { return lol ? 227 : 226; }
-    isize vCnt() const { return type == LINE_PAL ? vCntPal() : vCntNtsc(); }
-    isize vMax() const { return type == LINE_PAL ? vMaxPal() : vMaxNtsc(); }
+    isize numLines() const { return type == PAL ? vCntPal() : vCntNtsc(); }
+    isize lastLine() const { return type == PAL ? vMaxPal() : vMaxNtsc(); }
     isize vMaxPal() const { return lof ? 312 : 311; }
     isize vMaxNtsc() const { return lof ? 262 : 261; }
     isize vCntPal() const { return lof ? 313 : 312; }
     isize vCntNtsc() const { return lof ? 263 : 262; }
 
-    isize numLines() const { return vCnt(); }
-    isize lastLine() const { return vMax(); }
+    // isize numLines() const { return vCnt(); }
+    // isize lastLine() const { return vMax(); }
 
     bool operator==(const Beam& beam) const
     {
@@ -130,5 +132,5 @@ struct Beam
      * returned. If the current position plus the provided delta is a beam
      * position in the next frame, location (INT32_MAX, INT32_MAX) is returned.
      */
-    Beam translate(isize diff) const;
+    Beam translate(Cycle diff) const;
 };

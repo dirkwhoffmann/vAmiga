@@ -799,23 +799,22 @@ Amiga::overrideOption(Option option, i64 value)
 void
 Amiga::setVideoFormat(VideoFormat type)
 {
-    bool pal = type == PAL;
-    trace(NTSC_DEBUG, "Switching to %s mode\n", pal ? "PAL" : "NTSC");
+    trace(NTSC_DEBUG, "Switching to %s mode\n", VideoFormatEnum::key(type));
 
     {   SUSPENDED
 
         config.type = type;
 
         // Change the frame type
-        agnus.pos.type = pal ? LINE_PAL : LINE_NTSC;
+        agnus.pos.type = type;
         agnus.pos.lol = false;
-        agnus.pos.lolToggle = !pal;
+        agnus.pos.lolToggle = type == NTSC;
 
         // Rectify pending events that rely on exact beam positions
         if (isPoweredOn()) agnus.rectifyVBLEvent();
 
         // Adjust the video frequency
-        setFrequency(pal ? 50 : 60);
+        setFrequency(type == PAL ? 50 : 60);
 
         // Clear frame buffers
         denise.pixelEngine.clearTextures();
