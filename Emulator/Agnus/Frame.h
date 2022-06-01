@@ -19,7 +19,7 @@ struct Frame
     i64 nr;
     
     // The long frame flipflop
-    bool lof;
+    // [[deprecated]] bool lof;
 
     // The master clock at the beginning of this frame
     Cycle start;
@@ -33,12 +33,11 @@ struct Frame
         worker
 
         << nr
-        // << lof
         << start
         << type;
     }
     
-    Frame() : nr(0), lof(false), start(0), type(LINE_PAL) { }
+    Frame() : nr(0), start(0), type(LINE_PAL) { }
 
     // Advances one frame
     void next(bool laceBit, Cycle newStart, LineType newType)
@@ -48,6 +47,6 @@ struct Frame
         type = newType;
         
         // Toggle the long frame flipflop in interlace mode
-        if (laceBit) { lof = !lof; }
+        // if (laceBit) { lof = !lof; }
     }
 };

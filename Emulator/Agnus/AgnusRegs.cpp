@@ -280,8 +280,7 @@ Agnus::setVPOS(u16 value)
 
     // Check the LOF bit
     bool newlof = value & 0x8000;
-    assert(frame.lof == pos.lof);
-    if (frame.lof != newlof) {
+    if (pos.lof != newlof) {
         
         /* If a long frame gets changed to a short frame, we only proceed if
          * Agnus is not in the last rasterline. Otherwise, we would corrupt the
@@ -294,7 +293,6 @@ Agnus::setVPOS(u16 value)
         }
 
         xfiles("VPOS: Making a %s frame\n", newlof ? "long" : "short");
-        frame.lof = newlof;
         pos.lof = newlof;
         
         /* Reschedule a pending VBL event with a trigger cycle that is consistent
