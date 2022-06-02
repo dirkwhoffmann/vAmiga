@@ -142,15 +142,13 @@ struct Beam
 
     // Predicts the type of the next frame
     static isize predictNextFrameType(FrameType type, bool toggle);
-    FrameType predictNextFrameType() const {
-        return predictNextFrameType(predictFrameType(), lofToggle); }
+    FrameType predictNextFrameType() const;
 
     // Returns the number of DMA cycles executed in a single frame
     static isize cyclesPerFrame(FrameType type);
-    isize cyclesPerFrame() const { return cyclesPerFrame(type); }
+    isize cyclesPerFrame() const;
 
-    // Returns the number of DMA cycles executed in two consecutive frames
-    static isize cyclesPerFramePair(FrameType type, bool toggle);
-    isize cyclesPerFramePair() const { return cyclesPerFramePair(type, lofToggle); }
-
+    // Returns the number of DMA cycles executed in a certain number of frames
+    static isize cyclesPerFrames(isize count, FrameType type, bool toggle);
+    isize cyclesPerFrames(isize count) const;
 };

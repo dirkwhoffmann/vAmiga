@@ -133,6 +133,12 @@ Beam::predictNextFrameType(FrameType type, bool toggle)
     }
 }
 
+FrameType
+Beam::predictNextFrameType() const
+{
+    return predictNextFrameType(predictFrameType(), lofToggle);
+}
+
 isize
 Beam::cyclesPerFrame(FrameType type)
 {
@@ -160,9 +166,27 @@ Beam::cyclesPerFrame(FrameType type)
 }
 
 isize
-Beam::cyclesPerFramePair(FrameType type, bool toggle)
+Beam::cyclesPerFrame() const
 {
-    return
-    cyclesPerFrame(type) +
-    cyclesPerFrame(predictNextFrameType(type, toggle));
+    return cyclesPerFrame(type);
+}
+
+isize
+Beam::cyclesPerFrames(isize count, FrameType type, bool toggle)
+{
+    isize result = 0;
+
+    for (isize i = 0; i < count; i++) {
+
+        result += cyclesPerFrame(type);
+        type = predictNextFrameType(type, toggle);
+    }
+
+    return result;
+}
+
+isize
+Beam::cyclesPerFrames(isize count) const
+{
+    return cyclesPerFrames(count, type, lofToggle);
 }
