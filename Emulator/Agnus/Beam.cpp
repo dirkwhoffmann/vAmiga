@@ -88,3 +88,81 @@ Beam::translate(Cycle diff) const
 
     return result;
 }
+
+FrameType
+Beam::predictFrameType() const
+{
+    // PAL
+    if (type == PAL) {
+        return lof ? FRAME_PAL_LF : FRAME_PAL_SF;
+    }
+
+    // NTSC
+    if (IS_EVEN(v) && lol) {
+        return lof ? FRAME_NTSC_LF_LL : FRAME_NTSC_SF_LL;
+    } else {
+        return lof ? FRAME_NTSC_LF_SL : FRAME_NTSC_SF_SL;
+    }
+}
+
+FrameType
+Beam::predictNextFrameType(FrameType type, bool toggle)
+{
+    switch (type) {
+
+        case FRAME_PAL_LF:
+            return toggle ? FRAME_PAL_SF : FRAME_PAL_LF;
+
+        case FRAME_PAL_SF:
+            return toggle ? FRAME_PAL_LF : FRAME_PAL_SF;
+
+        case FRAME_NTSC_LF_LL:
+            return toggle ? FRAME_NTSC_SF_SL : FRAME_NTSC_LF_SL;
+
+        case FRAME_NTSC_LF_SL:
+            return toggle ? FRAME_NTSC_SF_LL : FRAME_NTSC_LF_LL;
+
+        case FRAME_NTSC_SF_LL:
+            return toggle ? FRAME_NTSC_LF_LL : FRAME_NTSC_SF_LL;
+
+        case FRAME_NTSC_SF_SL:
+            return toggle ? FRAME_NTSC_LF_SL : FRAME_NTSC_SF_SL;
+
+        default:
+            fatalError;
+    }
+}
+
+isize
+Beam::cyclesPerFrame(FrameType type)
+{
+    switch (type) {
+
+        case FRAME_PAL_LF:
+            return VPOS_CNT_PAL_LF * HPOS_CNT_PAL;
+
+        case FRAME_PAL_SF:
+            return VPOS_CNT_PAL_SF * HPOS_CNT_PAL;
+
+        case FRAME_NTSC_LF_LL:
+            return 132 * HPOS_CNT_NTSC_LL + 131 * HPOS_CNT_NTSC_SL;
+
+        case FRAME_NTSC_LF_SL:
+            return 132 * HPOS_CNT_NTSC_SL + 131 * HPOS_CNT_NTSC_LL;
+
+        case FRAME_NTSC_SF_LL:
+        case FRAME_NTSC_SF_SL:
+            return 131 * HPOS_CNT_NTSC_SL + 131 * HPOS_CNT_NTSC_LL;
+
+        default:
+            fatalError;
+    }
+}
+
+isize
+Beam::cyclesPerFramePair(FrameType type, bool toggle)
+{
+    return
+    cyclesPerFrame(type) +
+    cyclesPerFrame(predictNextFrameType(type, toggle));
+}

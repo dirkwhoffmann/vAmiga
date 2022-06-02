@@ -14,34 +14,40 @@
 #include "Reflection.h"
 #include "AmigaTypes.h"
 
-/*
-enum_long(LINE_TYPE)
+enum_long(FRAME_TYPE)
 {
-    LINE_PAL,           // 227 DMA cycles
-    LINE_NTSC           // 227 or 228 DMA cycles
+    FRAME_PAL_LF,       // PAL long frame
+    FRAME_PAL_SF,       // PAL short frame
+    FRAME_NTSC_LF_LL,   // NTSC long frame starting with a long line
+    FRAME_NTSC_LF_SL,   // NTSC long frame starting with a short line
+    FRAME_NTSC_SF_LL,   // NTSC short frame starting with a long line
+    FRAME_NTSC_SF_SL    // NTSC short frame starting with a short line
 };
-typedef LINE_TYPE LineType;
+typedef FRAME_TYPE FrameType;
 
 #ifdef __cplusplus
-struct LineTypeEnum : util::Reflection<LineTypeEnum, LineType>
+struct FrameTypeEnum : util::Reflection<FrameTypeEnum, FrameType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = LINE_NTSC;
+    static constexpr long maxVal = FRAME_NTSC_SF_SL;
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
-    static const char *prefix() { return "LINE"; }
-    static const char *key(LineType value)
+    static const char *prefix() { return "FRAME"; }
+    static const char *key(FrameType value)
     {
         switch (value) {
 
-            case LINE_PAL:  return "PAL";
-            case LINE_NTSC: return "NTSC";
+            case FRAME_PAL_LF:      return "PAL_LF";
+            case FRAME_PAL_SF:      return "PAL_SF";
+            case FRAME_NTSC_LF_LL:  return "NTSC_LF_LL";
+            case FRAME_NTSC_LF_SL:  return "NTSC_LF_SL";
+            case FRAME_NTSC_SF_LL:  return "NTSC_SF_LL";
+            case FRAME_NTSC_SF_SL:  return "NTSC_SF_SL";
         }
         return "???";
     }
 };
 #endif
-*/
 
 struct Beam
 {
@@ -130,4 +136,21 @@ struct Beam
      * position in the next frame, location (INT32_MAX, INT32_MAX) is returned.
      */
     Beam translate(Cycle diff) const;
+
+    // Predicts the type of the current frame
+    FrameType predictFrameType() const;
+
+    // Predicts the type of the next frame
+    static isize predictNextFrameType(FrameType type, bool toggle);
+    FrameType predictNextFrameType() const {
+        return predictNextFrameType(predictFrameType(), lofToggle); }
+
+    // Returns the number of DMA cycles executed in a single frame
+    static isize cyclesPerFrame(FrameType type);
+    isize cyclesPerFrame() const { return cyclesPerFrame(type); }
+
+    // Returns the number of DMA cycles executed in two consecutive frames
+    static isize cyclesPerFramePair(FrameType type, bool toggle);
+    isize cyclesPerFramePair() const { return cyclesPerFramePair(type, lofToggle); }
+
 };
