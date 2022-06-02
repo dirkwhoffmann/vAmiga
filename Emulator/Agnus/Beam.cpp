@@ -13,19 +13,30 @@
 Beam&
 Beam::operator+=(isize i)
 {
-    assert(i >= 0 && i <= HPOS_CNT_PAL);
+    if (i < 0) { *this -= -i; return *this; }
 
-    h = h + i;
-    if (h >= hCnt()) {
+    // Jump near the target frame
+    auto cycles = cyclesPerFrames(4);
+    frame += (i / cycles) * 4;
+    i %= cycles;
 
-        h -= hCnt();
-        v += 1;
-        if (lolToggle) lol = !lol;
+    while (i > 0) {
 
-        if (v >= vCnt()) {
+        auto cycles = i < HPOS_MAX_PAL ? i : HPOS_MAX_PAL;
+        i -= cycles;
+        h += cycles;
 
-            v = 0;
-            if (lofToggle) lof = !lof;
+        if (h >= hCnt()) {
+
+            h -= hCnt();
+            if (lolToggle) lol = !lol;
+
+            if (++v >= vCnt()) {
+
+                frame++;
+                if (lofToggle) lof = !lof;
+                v = 0;
+            }
         }
     }
 
@@ -37,6 +48,47 @@ Beam::operator+(const isize i) const
 {
     auto result = *this;
     result += i;
+    return result;
+}
+
+Beam&
+Beam::operator-=(isize i)
+{
+    if (i < 0) { *this += -i; return *this; }
+
+    // Jump near the target frame
+    auto cycles = cyclesPerFrames(4);
+    frame -= (i / cycles) * 4;
+    i %= cycles;
+
+    while (i > 0) {
+
+        auto cycles = i < HPOS_MAX_PAL ? i : HPOS_MAX_PAL;
+        i -= cycles;
+        h -= cycles;
+
+        if (h < 0) {
+
+            if (lolToggle) lol = !lol;
+            h += hCnt();
+
+            if (--v < 0) {
+
+                frame--;
+                if (lofToggle) lof = !lof;
+                v = vCnt();
+            }
+        }
+    }
+
+    return *this;
+}
+
+Beam
+Beam::operator-(const isize i) const
+{
+    auto result = *this;
+    result -= i;
     return result;
 }
 
@@ -55,37 +107,6 @@ Beam::diff(isize v2, isize h2) const
     result += h2 - b.h;
 
     assert(result >= 0);
-    return result;
-}
-
-Beam
-Beam::translate(Cycle diff) const
-{
-    auto result = *this;
-
-    // Bail out if the cycle has already been passed
-    if (diff < 0) {
-
-        result.v = result.h = INT32_MIN;
-        return result;
-    }
-
-    while (diff >= HPOS_CNT_PAL) {
-
-        diff -= HPOS_CNT_PAL;
-        auto newPos = result + HPOS_CNT_PAL;
-
-        // Bail out if the position is in the next frame
-        if (newPos < result) {
-
-            result.v = result.h = INT32_MAX;
-            return result;
-        }
-
-        result = newPos;
-    }
-    result += isize(diff);
-
     return result;
 }
 

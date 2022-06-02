@@ -538,10 +538,10 @@ Agnus::_dump(Category category, std::ostream& os) const
             
             if (info.trigger != NEVER) {
                 
-                if (info.frameRel == -1) {
+                if (info.frameRel < 0) {
                     os << std::left << std::setw(18) << "previous frame";
                 } else if (info.frameRel > 0) {
-                    os << std::left << std::setw(18) << "other frame";
+                    os << std::left << std::setw(18) << "upcoming frame";
                 } else {
                     string vpos = std::to_string(info.vpos);
                     string hpos = std::to_string(info.hpos);
@@ -633,29 +633,11 @@ Agnus::inspectSlot(EventSlot nr) const
     info.trigger = cycle;
     info.triggerRel = cycle - agnus.clock;
 
-    auto beam = pos.translate(AS_DMA_CYCLES(cycle - clock));
+    auto beam = pos + AS_DMA_CYCLES(cycle - clock);
 
-    if (beam.v == INT32_MIN) {
-
-        // Previous frame
-        info.vpos = 0;
-        info.hpos = 0;
-        info.frameRel = -1;
-
-    } else if (beam.v == INT32_MAX) {
-
-        // Next frame
-        info.vpos = 0;
-        info.hpos = 0;
-        info.frameRel = 1;
-
-    } else {
-
-        // Current frame
-        info.vpos = beam.v;
-        info.hpos = beam.h;
-        info.frameRel = 0;
-    }
+    info.vpos = beam.v;
+    info.hpos = beam.h;
+    info.frameRel = beam.frame - pos.frame;
 
     info.eventName = agnus.eventName((EventSlot)nr, id[nr]);
 }

@@ -126,16 +126,11 @@ struct Beam
     Beam& operator+=(isize i);
     Beam operator+(const isize i) const;
 
-    isize diff(isize v2, isize h2) const;
+    Beam& operator-=(isize i);
+    Beam operator-(const isize i) const;
 
-    /* Translates a cycle delta (DMA cycle relative to the current position)
-     * to a beam position. The function only returns a precise position if
-     * the result is located between the current position and the frame end.
-     * If a negative delta is provided, location (INT32_MIN, INT32_MIN) is
-     * returned. If the current position plus the provided delta is a beam
-     * position in the next frame, location (INT32_MAX, INT32_MAX) is returned.
-     */
-    Beam translate(Cycle diff) const;
+    // Computes the DMA cycle difference to the specified position
+    isize diff(isize v2, isize h2) const;
 
     // Predicts the type of the current frame
     FrameType predictFrameType() const;
