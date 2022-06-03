@@ -640,7 +640,7 @@ Agnus::inspectSlot(EventSlot nr) const
 
     info.vpos = beam.v;
     info.hpos = beam.h;
-    info.frameRel = beam.frame - pos.frame;
+    info.frameRel = long(beam.frame - pos.frame);
 
     info.eventName = agnus.eventName((EventSlot)nr, id[nr]);
 }

@@ -226,7 +226,7 @@ Denise::drawOdd(Pixel offset)
     };
     
     u16 mask = masks[bpu()];
-    Pixel currentPixel = agnus.ppos() + offset;
+    Pixel currentPixel = agnus.pixelpos() + offset;
     
     u8 slices[16];
     extractSlicesOdd(slices);
@@ -272,7 +272,7 @@ Denise::drawEven(Pixel offset)
     };
     
     u16 mask = masks[bpu()];
-    Pixel currentPixel = agnus.ppos() + offset;
+    Pixel currentPixel = agnus.pixelpos() + offset;
     
     u8 slices[16];
     extractSlicesEven(slices);
@@ -308,48 +308,6 @@ Denise::drawBoth(Pixel offset)
 {
     drawOdd<hiresMode>(offset);
     drawEven<hiresMode>(offset);
-    
-    /*
-    static constexpr u16 masks[7] = {
-        
-        0b000000, // 0 bitplanes
-        0b000001, // 1 bitplanes
-        0b000011, // 2 bitplanes
-        0b000111, // 3 bitplanes
-        0b001111, // 4 bitplanes
-        0b011111, // 5 bitplanes
-        0b111111  // 6 bitplanes
-    };
-    
-    u16 mask = masks[bpu()];
-    Pixel currentPixel = agnus.ppos() + offset;
-    
-    u8 slices[16];
-    extractSlices(slices);
-    
-    for (isize i = 0; i < 16; i++) {
-        
-        u8 index = slices[i] & mask;
-        
-        if (hiresMode) {
-            
-            // Synthesize one hires pixel
-            assert(currentPixel < isizeof(bBuffer));
-            bBuffer[currentPixel++] = index;
-            
-        } else {
-            
-            // Synthesize two lores pixels
-            assert(currentPixel + 1 < isizeof(bBuffer));
-            bBuffer[currentPixel++] = index;
-            bBuffer[currentPixel++] = index;
-        }
-    }
-    
-    // Disarm and clear the shift registers
-    armedEven = armedOdd = false;
-    for (isize i = 0; i < 6; i++) shiftReg[i] = 0;
-    */
 }
 
 void

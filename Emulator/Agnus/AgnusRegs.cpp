@@ -469,7 +469,7 @@ Agnus::pokeSPRxCTL(u16 value)
 void
 Agnus::pokeBEAMCON0(u16 value)
 {
-    // trace(NTSC_DEBUG, "pokeBEAMCON0(%04x)\n", value);
+    xfiles("pokeBEAMCON0(%04x)\n", value);
 
     // ECS only register
     if (agnus.isOCS()) return;
@@ -481,19 +481,11 @@ Agnus::pokeBEAMCON0(u16 value)
 
     // PAL
     VideoFormat type = GET_BIT(value, 5) ? PAL : NTSC;
-    if (pos.type != type) {
-
-        xfiles("BEAMCON0: Manually switching to %s\n", VideoFormatEnum::key(type));
-        agnus.setVideoFormat(type);
-    }
+    if (pos.type != type) agnus.setVideoFormat(type);
 
     // LOLDIS
     bool loldis = GET_BIT(value, 11);
-    if (pos.type == NTSC) {
-
-        if (loldis) xfiles("BEAMCON0: Manually disabling LOL toggling\n");
-        pos.lolToggle = !loldis;
-    }
+    if (pos.type == NTSC) pos.lolToggle = !loldis;
 }
 
 template <Accessor s> void

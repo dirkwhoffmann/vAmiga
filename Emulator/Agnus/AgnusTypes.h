@@ -480,8 +480,7 @@ typedef struct
     Cycle trigger;
     Cycle triggerRel;
 
-    // Trigger relative to the current frame
-    // -1 = earlier frame, 0 = current frame, 1 = later frame
+    // Trigger frame relative to the current frame
     long frameRel;
 
     // The trigger cycle translated to a beam position.

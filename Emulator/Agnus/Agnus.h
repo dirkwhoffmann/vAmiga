@@ -370,8 +370,8 @@ public:
     bool inLastRasterline() const { return inLastRasterline(pos.v); }
 
     // Returns the pixel position for the current horizontal position
-    Pixel ppos(isize posh) const { return (posh * 4) + 2; }
-    Pixel ppos() const { return ppos(pos.h); }
+    Pixel pixelpos(isize posh) const { return (posh * 4) + 2; }
+    Pixel pixelpos() const { return pixelpos(pos.h); }
 
 
     //
