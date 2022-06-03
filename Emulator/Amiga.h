@@ -267,9 +267,6 @@ private:
     // Overrides a config option if the corresponding debug option is enabled
     i64 overrideOption(Option option, i64 value);
 
-    // Sets the video format (PAL or NTSC)
-    void setVideoFormat(VideoFormat type);
-
 
     //
     // Analyzing

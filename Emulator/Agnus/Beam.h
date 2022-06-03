@@ -123,11 +123,11 @@ struct Beam
         return *this == beam || *this < beam;
     }
 
-    Beam& operator+=(isize i);
-    Beam operator+(const isize i) const;
+    Beam& operator+=(DMACycle i);
+    Beam operator+(const DMACycle i) const;
 
-    Beam& operator-=(isize i);
-    Beam operator-(const isize i) const;
+    Beam& operator-=(DMACycle i);
+    Beam operator-(const DMACycle i) const;
 
     // Computes the DMA cycle difference to the specified position
     isize diff(isize v2, isize h2) const;

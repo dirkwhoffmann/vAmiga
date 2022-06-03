@@ -145,6 +145,9 @@ Agnus::setVideoFormat(VideoFormat newFormat)
     agnus.pos.lol = false;
     agnus.pos.lolToggle = newFormat == NTSC;
 
+    // Adjust the refresh rate
+    amiga.setFrequency(newFormat == PAL ? 50 : 60);
+
     // Rectify pending events that rely on exact beam positions
     agnus.rectifyVBLEvent();
     

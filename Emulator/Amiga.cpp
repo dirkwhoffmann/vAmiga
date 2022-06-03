@@ -392,7 +392,10 @@ Amiga::setConfigItem(Option option, i64 value)
 
             if (value != config.type) {
 
-                setVideoFormat(VideoFormat(value));
+                SUSPENDED
+
+                config.type = VideoFormat(value);
+                agnus.setVideoFormat(config.type);
             }
             return;
 
@@ -794,35 +797,6 @@ Amiga::overrideOption(Option option, i64 value)
     }
 
     return value;
-}
-
-void
-Amiga::setVideoFormat(VideoFormat type)
-{
-    trace(NTSC_DEBUG, "Switching to %s mode\n", VideoFormatEnum::key(type));
-
-    {   SUSPENDED
-
-        config.type = type;
-        setFrequency(type == PAL ? 50 : 60);
-        agnus.setVideoFormat(type);
-
-        /*
-        // Change the frame type
-        agnus.pos.type = type;
-        agnus.pos.lol = false;
-        agnus.pos.lolToggle = type == NTSC;
-
-        // Rectify pending events that rely on exact beam positions
-        if (isPoweredOn()) agnus.rectifyVBLEvent();
-
-        // Clear frame buffers
-        denise.pixelEngine.clearTextures();
-
-        // Inform the GUI
-        msgQueue.put(MSG_MACHINE_TYPE, config.type);
-        */
-    }
 }
 
 InspectionTarget
