@@ -32,8 +32,9 @@ Agnus::_reset(bool hard)
     // Start with a long frame
     pos.lof = true;
 
-    // Setup the correct line type
+    // Setup PAL / NTSC parameters
     pos.type = amiga.getConfig().type;
+    pos.lolToggle = pos.type == NTSC;
 
     // Initialize statistical counters
     clearStats();
@@ -53,7 +54,6 @@ Agnus::_reset(bool hard)
     scheduleRel<SLOT_TER>(NEVER, TER_TRIGGER);
     scheduleRel<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
     scheduleRel<SLOT_CIAB>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);
-    // scheduleStrobe0Event();
     scheduleRel<SLOT_IRQ>(NEVER, IRQ_CHECK);
     diskController.scheduleFirstDiskEvent();
     scheduleFirstBplEvent();

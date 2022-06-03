@@ -27,8 +27,8 @@ Agnus::busIsFree()
         // Deny if Copper DMA is disabled
         if (!copdma()) return false;
         
-        // Deny in cycle E0
-        if (pos.h == 0xE0) {
+        // Deny in cycle E0 / E1
+        if (pos.h == (pos.lol ? 0xE1 : 0xE0)) {
          
             // If the Copper wants the bus in E0, nobody can have it
             busOwner[pos.h] = BUS_BLOCKED;

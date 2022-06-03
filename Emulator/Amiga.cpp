@@ -190,7 +190,7 @@ void
 Amiga::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
-    
+
     // Clear all runloop flags
     flags = 0;
 }

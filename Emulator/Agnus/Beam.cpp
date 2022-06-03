@@ -22,7 +22,7 @@ Beam::operator+=(isize i)
 
     while (i > 0) {
 
-        auto cycles = i < HPOS_MAX_PAL ? i : HPOS_MAX_PAL;
+        cycles = i < HPOS_MAX_PAL ? i : HPOS_MAX_PAL;
         i -= cycles;
         h += cycles;
 
@@ -63,7 +63,7 @@ Beam::operator-=(isize i)
 
     while (i > 0) {
 
-        auto cycles = i < HPOS_MAX_PAL ? i : HPOS_MAX_PAL;
+        cycles = i < HPOS_MAX_PAL ? i : HPOS_MAX_PAL;
         i -= cycles;
         h -= cycles;
 

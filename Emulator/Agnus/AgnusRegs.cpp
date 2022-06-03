@@ -269,12 +269,11 @@ Agnus::setVPOS(u16 value)
         xfiles("VPOS: Toggling V8 is not supported\n");
     }
 
-    // Check the LOL bit
-    bool newlol = value & 0x0080;
-    if (pos.lol != newlol) {
+    // Writing to this register clears the LOL bit
+    if (pos.lol) {
 
-        // trace(1, "LOL bit manually set to %d\n", newlol);
-        pos.lol = newlol;
+        trace(NTSC_DEBUG, "Clearing the LOL bit\n");
+        pos.lol = false;
         rectifyVBLEvent();
     }
 
@@ -470,16 +469,18 @@ Agnus::pokeSPRxCTL(u16 value)
 void
 Agnus::pokeBEAMCON0(u16 value)
 {
-    trace(1, "pokeBEAMCON0(%04x)\n", value);
+    trace(NTSC_DEBUG, "pokeBEAMCON0(%04x)\n", value);
 
     if (GET_BIT(value, 5)) {
 
         // Switch to PAL mode
+        // amiga.setVideoFormat(PAL);
         // TODO
 
     } else {
 
         // Switch to NTSC mode
+        // amiga.setVideoFormat(NTSC);
         // TODO
     }
 }
