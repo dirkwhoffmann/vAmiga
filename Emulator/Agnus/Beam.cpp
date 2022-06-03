@@ -11,7 +11,7 @@
 #include "Beam.h"
 
 Beam&
-Beam::operator+=(DMACycle i)
+Beam::operator+=(isize i)
 {
     if (i < 0) { *this -= -i; return *this; }
 
@@ -44,7 +44,7 @@ Beam::operator+=(DMACycle i)
 }
 
 Beam
-Beam::operator+(const DMACycle i) const
+Beam::operator+(const isize i) const
 {
     auto result = *this;
     result += i;
@@ -52,7 +52,7 @@ Beam::operator+(const DMACycle i) const
 }
 
 Beam&
-Beam::operator-=(DMACycle i)
+Beam::operator-=(isize i)
 {
     if (i < 0) { *this += -i; return *this; }
 
@@ -85,7 +85,7 @@ Beam::operator-=(DMACycle i)
 }
 
 Beam
-Beam::operator-(const DMACycle i) const
+Beam::operator-(const isize i) const
 {
     auto result = *this;
     result -= i;

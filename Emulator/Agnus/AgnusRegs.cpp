@@ -471,16 +471,28 @@ Agnus::pokeBEAMCON0(u16 value)
 {
     // trace(NTSC_DEBUG, "pokeBEAMCON0(%04x)\n", value);
 
+    // ECS only register
+    if (agnus.isOCS()) return;
+
     // 15: unused       11: LOLDIS      7: VARBEAMEN    3: unused
     // 14: HARDDIS      10: CSCBEN      6: DUAL         2: CSYTRUE
     // 13: LPENDIS       9: VARVSYEN    5: PAL          1: VSYTRUE
     // 12: VARVBEN       8: VARHSYEN    4: VARCSYEN     0: HSYTRUE
 
-    if (isECS()) {
+    // PAL
+    VideoFormat type = GET_BIT(value, 5) ? PAL : NTSC;
+    if (pos.type != type) {
 
-        // Bit 5: PAL
-        VideoFormat type = GET_BIT(value, 5) ? PAL : NTSC;
-        if (pos.type != type) agnus.setVideoFormat(type);
+        xfiles("BEAMCON0: Manually switching to %s\n", VideoFormatEnum::key(type));
+        agnus.setVideoFormat(type);
+    }
+
+    // LOLDIS
+    bool loldis = GET_BIT(value, 11);
+    if (pos.type == NTSC) {
+
+        if (loldis) xfiles("BEAMCON0: Manually disabling LOL toggling\n");
+        pos.lolToggle = !loldis;
     }
 }
 
