@@ -132,7 +132,7 @@ public:
     //
     // Derived values
     //
-        
+
     // Shift values derives from BPLCON1
     i8 scrollOdd;
     i8 scrollEven;
@@ -295,6 +295,8 @@ public:
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
 
+    void setVideoFormat(VideoFormat newFormat);
+
 
     //
     // Querying chip properties
@@ -305,7 +307,7 @@ public:
     bool isOCS() const;
     bool isECS() const;
     bool isPAL() const { return pos.type == PAL; }
-    bool isNTSC() const { return pos.type == NTSC; }
+    bool isNTSC() const { return !isPAL(); }
 
     // Returns the chip identification bits of this Agnus (show up in VPOSR)
     u16 idBits() const;

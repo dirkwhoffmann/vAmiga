@@ -710,6 +710,16 @@ using namespace moira;
     return [self agnus]->isECS();
 }
 
+- (BOOL)isPAL
+{
+    return [self agnus]->isPAL();
+}
+
+- (BOOL)isNTSC
+{
+    return [self agnus]->isNTSC();
+}
+
 - (NSInteger)frameCount
 {
     return [self agnus]->pos.frame;

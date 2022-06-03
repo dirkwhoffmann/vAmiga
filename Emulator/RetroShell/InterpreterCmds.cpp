@@ -450,6 +450,10 @@ Interpreter::registerInstructions()
              "category", "Displays the current state",
              &RetroShell::exec <Token::agnus, Token::inspect, Token::state>, 0);
 
+    root.add({"agnus", "inspect", "beam"},
+             "category", "Displays the current beam position",
+             &RetroShell::exec <Token::agnus, Token::inspect, Token::beam>, 0);
+
     root.add({"agnus", "inspect", "registers"},
              "category", "Displays the current register values",
              &RetroShell::exec <Token::agnus, Token::inspect, Token::registers>, 0);

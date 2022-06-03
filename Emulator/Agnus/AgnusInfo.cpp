@@ -434,8 +434,7 @@ Agnus::_dump(Category category, std::ostream& os) const
     if (category == Category::Config) {
 
         os << tab("Chip Revison");
-        os << AgnusRevisionEnum::key(config.revision);
-        os << bol(isPAL(), " (PAL)", " (NTSC)") << std::endl;
+        os << AgnusRevisionEnum::key(config.revision) << std::endl;
         os << tab("Slow Ram mirror");
         os << bol(config.slowRamMirror) << std::endl;
         os << tab("Pointer drops");
@@ -446,20 +445,6 @@ Agnus::_dump(Category category, std::ostream& os) const
         
         os << tab("Clock");
         os << dec(clock) << std::endl;
-        os << tab("Frame");
-        os << dec(pos.frame) << std::endl;
-        os << tab("Beam position");
-        os << "(" << dec(pos.v) << "," << dec(pos.h) << ")" << std::endl;
-        os << tab("Latched position");
-        os << "(" << dec(latchedPos.v) << "," << dec(latchedPos.h) << ")" << std::endl;
-        os << tab("LOF");
-        os << dec(pos.lof) << std::endl;
-        os << tab("LOF toggle");
-        os << dec(pos.lofToggle) << std::endl;
-        os << tab("LOL");
-        os << dec(pos.lol) << std::endl;
-        os << tab("LOL toggle");
-        os << dec(pos.lolToggle) << std::endl;
         os << tab("scrollOdd");
         os << dec(scrollOdd) << std::endl;
         os << tab("scrollEven");
@@ -469,7 +454,25 @@ Agnus::_dump(Category category, std::ostream& os) const
         
         sequencer.dump(Category::State, os);
     }
-    
+
+    if (category == Category::Beam) {
+
+        os << tab("Frame");
+        os << dec(pos.frame) << bol(isPAL(), " (PAL)", " (NTSC)") << std::endl;
+        os << tab("Position");
+        os << "(" << dec(pos.v) << "," << dec(pos.h) << ")" << std::endl;
+        os << tab("Latched");
+        os << "(" << dec(latchedPos.v) << "," << dec(latchedPos.h) << ")" << std::endl;
+        os << tab("LOF");
+        os << dec(pos.lof) << std::endl;
+        os << tab("LOF toggle");
+        os << dec(pos.lofToggle) << std::endl;
+        os << tab("LOL");
+        os << dec(pos.lol) << std::endl;
+        os << tab("LOL toggle");
+        os << dec(pos.lolToggle) << std::endl;
+    }
+
     if (category == Category::Registers) {
         
         sequencer.dump(Category::Registers, os);

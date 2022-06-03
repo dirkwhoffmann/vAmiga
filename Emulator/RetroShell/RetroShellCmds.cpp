@@ -593,6 +593,12 @@ RetroShell::exec <Token::agnus, Token::inspect, Token::state> (Arguments &argv, 
 }
 
 template <> void
+RetroShell::exec <Token::agnus, Token::inspect, Token::beam> (Arguments &argv, long param)
+{
+    dump(amiga.agnus, Category::Beam);
+}
+
+template <> void
 RetroShell::exec <Token::agnus, Token::inspect, Token::registers> (Arguments &argv, long param)
 {
     dump(amiga.agnus, Category::Registers);

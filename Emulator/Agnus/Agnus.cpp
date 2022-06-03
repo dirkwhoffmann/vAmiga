@@ -32,9 +32,8 @@ Agnus::_reset(bool hard)
     // Start with a long frame
     pos.lof = true;
 
-    // Setup PAL / NTSC parameters
-    pos.type = amiga.getConfig().type;
-    pos.lolToggle = pos.type == NTSC;
+    // Adjust to the correct video mode
+    setVideoFormat(amiga.getConfig().type);
 
     // Initialize statistical counters
     clearStats();
@@ -134,6 +133,26 @@ Agnus::setConfigItem(Option option, i64 value)
         default:
             fatalError;
     }
+}
+
+void
+Agnus::setVideoFormat(VideoFormat newFormat)
+{
+    trace(NTSC_DEBUG, "Video format = %s\n", VideoFormatEnum::key(newFormat));
+
+    // Change the frame type
+    agnus.pos.type = newFormat;
+    agnus.pos.lol = false;
+    agnus.pos.lolToggle = newFormat == NTSC;
+
+    // Rectify pending events that rely on exact beam positions
+    agnus.rectifyVBLEvent();
+    
+    // Clear frame buffers
+    denise.pixelEngine.clearTextures();
+
+    // Inform the GUI
+    msgQueue.put(MSG_MACHINE_TYPE, newFormat);
 }
 
 bool

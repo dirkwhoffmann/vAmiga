@@ -804,7 +804,10 @@ Amiga::setVideoFormat(VideoFormat type)
     {   SUSPENDED
 
         config.type = type;
+        setFrequency(type == PAL ? 50 : 60);
+        agnus.setVideoFormat(type);
 
+        /*
         // Change the frame type
         agnus.pos.type = type;
         agnus.pos.lol = false;
@@ -813,14 +816,12 @@ Amiga::setVideoFormat(VideoFormat type)
         // Rectify pending events that rely on exact beam positions
         if (isPoweredOn()) agnus.rectifyVBLEvent();
 
-        // Adjust the video frequency
-        setFrequency(type == PAL ? 50 : 60);
-
         // Clear frame buffers
         denise.pixelEngine.clearTextures();
 
         // Inform the GUI
         msgQueue.put(MSG_MACHINE_TYPE, config.type);
+        */
     }
 }
 
