@@ -336,7 +336,6 @@ Recorder::recordVideo(Cycle target)
     
     isize width = sizeof(u32) * (cutout.x2 - cutout.x1);
     isize height = cutout.y2 - cutout.y1;
-    // isize offset = agnus.pixelpos(cutout.y1, HBLANK_MIN) + cutout.x1;
     isize offset = cutout.y1 * HPIXELS + cutout.x1;
     u8 *src = (u8 *)(buffer + offset);
     u8 *dst = (u8 *)videoData.ptr;

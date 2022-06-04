@@ -211,7 +211,7 @@ Copper::move(u32 addr, u16 value)
               "pokeCustom16(%X [%s], %X)\n", addr, Memory::regName(addr), value);
 
         // Color registers
-        pixelEngine.colChanges.insert(agnus.pixelpos(), RegChange { addr, value} );
+        pixelEngine.colChanges.insert(agnus.pos.pixel(), RegChange { addr, value} );
         return;
     }
 

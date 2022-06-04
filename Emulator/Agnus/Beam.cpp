@@ -212,6 +212,21 @@ Beam::cyclesPerFrames(isize count) const
     return cyclesPerFrames(count, type, lofToggle);
 }
 
+Pixel
+Beam::pixel(isize hpos) const
+{
+    if (hpos >= HBLANK_MIN) {
+
+        // Every texture line starts with the HBLANK area
+        return 4 * (hpos - HBLANK_MIN);
+        
+    } else {
+
+        // Everything left to the HBLANK area belongs to the previous line
+        return 4 * (hpos - HBLANK_MIN + hLatched);
+    }
+}
+
 void
 Beam::eol()
 {

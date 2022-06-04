@@ -419,8 +419,8 @@ PixelEngine::colorize(isize line)
     colChanges.clear();
 
     // Wipe out the HBLANK area
-    auto start = agnus.pixelpos(HBLANK_MIN);
-    auto stop  = agnus.pixelpos(HBLANK_MAX);
+    auto start = agnus.pos.pixel(HBLANK_MIN);
+    auto stop  = agnus.pos.pixel(HBLANK_MAX);
     for (pixel = start; pixel <= stop; pixel++) dst[pixel] = rgbaHBlank;
 }
 

@@ -9,45 +9,9 @@
 
 #pragma once
 
-#include "Aliases.h"
-#include "Constants.h"
-#include "Reflection.h"
+#include "BeamTypes.h"
 #include "AmigaTypes.h"
-
-enum_long(FRAME_TYPE)
-{
-    FRAME_PAL_LF,       // PAL long frame
-    FRAME_PAL_SF,       // PAL short frame
-    FRAME_NTSC_LF_LL,   // NTSC long frame starting with a long line
-    FRAME_NTSC_LF_SL,   // NTSC long frame starting with a short line
-    FRAME_NTSC_SF_LL,   // NTSC short frame starting with a long line
-    FRAME_NTSC_SF_SL    // NTSC short frame starting with a short line
-};
-typedef FRAME_TYPE FrameType;
-
-#ifdef __cplusplus
-struct FrameTypeEnum : util::Reflection<FrameTypeEnum, FrameType>
-{
-    static constexpr long minVal = 0;
-    static constexpr long maxVal = FRAME_NTSC_SF_SL;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
-
-    static const char *prefix() { return "FRAME"; }
-    static const char *key(FrameType value)
-    {
-        switch (value) {
-
-            case FRAME_PAL_LF:      return "PAL_LF";
-            case FRAME_PAL_SF:      return "PAL_SF";
-            case FRAME_NTSC_LF_LL:  return "NTSC_LF_LL";
-            case FRAME_NTSC_LF_SL:  return "NTSC_LF_SL";
-            case FRAME_NTSC_SF_LL:  return "NTSC_SF_LL";
-            case FRAME_NTSC_SF_SL:  return "NTSC_SF_SL";
-        }
-        return "???";
-    }
-};
-#endif
+#include "Constants.h"
 
 struct Beam
 {
@@ -88,6 +52,10 @@ struct Beam
         << type;
     }
 
+    //
+    // Querying boundaries
+    //
+
     isize hCnt() const { return lol ? 228 : 227; }
     isize hMax() const { return lol ? 227 : 226; }
     isize vCnt() const { return type == PAL ? vCntPal() : vCntNtsc(); }
@@ -96,6 +64,11 @@ struct Beam
     isize vMaxNtsc() const { return lof ? 262 : 261; }
     isize vCntPal() const { return lof ? 313 : 312; }
     isize vCntNtsc() const { return lof ? 263 : 262; }
+
+
+    //
+    // Comparing
+    //
 
     bool operator==(const Beam& beam) const
     {
@@ -127,6 +100,11 @@ struct Beam
         return *this == beam || *this < beam;
     }
 
+
+    //
+    // Calculating new beam positions
+    //
+
     Beam& operator+=(isize i);
     Beam operator+(const isize i) const;
 
@@ -150,6 +128,20 @@ struct Beam
     // Returns the number of DMA cycles executed in a certain number of frames
     static isize cyclesPerFrames(isize count, FrameType type, bool toggle);
     isize cyclesPerFrames(isize count) const;
+
+
+    //
+    // Converting positions to pixel locations
+    //
+
+    // Translates a DMA cycle to a pixel position
+    Pixel pixel(isize h) const;
+    Pixel pixel() const { return pixel(h); }
+
+
+    //
+    // Switching lines and frames
+    //
 
     // Called by Agnus in the EOL handler to switch to the next line
     void eol();

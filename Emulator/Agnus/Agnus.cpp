@@ -209,32 +209,6 @@ Agnus::slowRamIsMirroredIn() const
     }
 }
 
-Pixel
-Agnus::pixelpos(isize v, isize h)
-{
-    isize hh = h - HBLANK_MIN;
-    if (hh < 0) {
-        if (v) v--;
-        hh = h + (HPOS_CNT_PAL - HBLANK_MIN);
-    }
-
-    return v * HPIXELS + 4 * hh;
-}
-
-Pixel
-Agnus::pixelpos(isize h) const
-{
-    if (h >= HBLANK_MIN) {
-
-        // Every texture line starts with the HBLANK area
-        return 4 * (h - HBLANK_MIN);
-    } else {
-
-        // Everything left to the HBLANK area belongs to the previous line
-        return 4 * (h - HBLANK_MIN + pos.hLatched);
-    }
-}
-
 void
 Agnus::execute()
 {

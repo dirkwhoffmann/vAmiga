@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Aliases.h"
+#include "BeamTypes.h"
 #include "BusTypes.h"
 #include "AgnusTypes.h"
 #include "SequencerTypes.h"

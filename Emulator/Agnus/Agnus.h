@@ -357,11 +357,6 @@ public:
     bool inLastRasterline(isize posv) const { return posv == pos.vMax(); }
     bool inLastRasterline() const { return inLastRasterline(pos.v); }
 
-    // Translates a DMA cycle to a pixel position
-    [[deprecated]] static Pixel pixelpos(isize v, isize h);
-    Pixel pixelpos(isize h) const;
-    Pixel pixelpos() const { return pixelpos(pos.h); }
-
 
     //
     // Querying graphic modes

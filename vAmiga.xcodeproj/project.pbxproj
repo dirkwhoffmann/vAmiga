@@ -610,6 +610,7 @@
 		507C9C4526076EF7006779B5 /* RessourceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RessourceManager.swift; sourceTree = "<group>"; };
 		507D7767228BE3EF001E97A9 /* StateMachine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachine.cpp; sourceTree = "<group>"; };
 		507D7768228BE3EF001E97A9 /* StateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachine.h; sourceTree = "<group>"; };
+		507D9062284BEBCE0079E72A /* BeamTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BeamTypes.h; sourceTree = "<group>"; };
 		50826F7627F0B2AD005FBF3B /* DiagBoard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiagBoard.cpp; sourceTree = "<group>"; };
 		50826F7727F0B2AD005FBF3B /* DiagBoard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiagBoard.h; sourceTree = "<group>"; };
 		50826F7927F0B2C5005FBF3B /* DiagBoardRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiagBoardRom.h; sourceTree = "<group>"; };
@@ -1067,6 +1068,7 @@
 			isa = PBXGroup;
 			children = (
 				50CF4634262042D300BB3B95 /* CMakeLists.txt */,
+				507D9062284BEBCE0079E72A /* BeamTypes.h */,
 				503990C522D8CCB600035783 /* Beam.h */,
 				502B303728469CF600673377 /* Beam.cpp */,
 				50A6143B260CE6C400A01428 /* BusTypes.h */,

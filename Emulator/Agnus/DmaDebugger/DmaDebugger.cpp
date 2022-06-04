@@ -341,7 +341,7 @@ DmaDebugger::computeOverlay(isize posv)
 
     for (isize i = 0; i < HPOS_CNT_PAL; i++) {
 
-        u32 *ptr = base + agnus.pixelpos(i);
+        u32 *ptr = base + agnus.pos.pixel(i);
 
         BusOwner owner = owners[i];
 
