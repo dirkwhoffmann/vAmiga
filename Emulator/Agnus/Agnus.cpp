@@ -209,6 +209,27 @@ Agnus::slowRamIsMirroredIn() const
     }
 }
 
+Pixel
+Agnus::pixelpos(isize v, isize h)
+{
+    isize hh = h - HBLANK_MIN;
+    if (hh < 0) {
+        if (v) v--;
+        hh = h + (HPOS_CNT_PAL - HBLANK_MIN);
+    }
+    return v * HPIXELS + 4 * hh;
+}
+
+Pixel
+Agnus::pixelpos(isize h)
+{
+    // return 4 * h;
+
+    isize hh = h - HBLANK_MIN;
+    if (hh < 0) hh = h + (HPOS_CNT_PAL - HBLANK_MIN);
+    return 4 * hh;
+}
+
 void
 Agnus::execute()
 {

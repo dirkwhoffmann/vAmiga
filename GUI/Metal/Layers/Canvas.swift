@@ -256,7 +256,7 @@ class Canvas: Layer {
             currLOF = amiga.denise.longFrame
             
             // Update the GPU texture
-            let offset = Int(HBLANK_MIN) * 4
+            let offset = 0 // Int(HBLANK_MIN) * 4
             if currLOF {
                 longFrameTexture.replace(w: Int(HPIXELS),
                                          h: Int(VPIXELS),

@@ -341,18 +341,6 @@ private:
     void inspectSlot(EventSlot nr) const;
     void clearStats();
     void updateStats();
-    
-
-    //
-    // Examining the current frame
-    //
-
-public:
-
- 
-    // Returns the master cycle belonging to beam position (0,0)
-    // Cycle startOfFrame() const;
-
 
 
     //
@@ -370,8 +358,8 @@ public:
     bool inLastRasterline() const { return inLastRasterline(pos.v); }
 
     // Translates a DMA cycle to a pixel position
-    static Pixel pixelpos(isize v, isize h) { return HPIXELS * v + 4 * h; }
-    static Pixel pixelpos(isize h) { return 4 * h; }
+    static Pixel pixelpos(isize v, isize h);
+    static Pixel pixelpos(isize h);
     Pixel pixelpos() const { return pixelpos(pos.h); }
 
 

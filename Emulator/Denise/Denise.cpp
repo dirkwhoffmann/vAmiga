@@ -861,7 +861,8 @@ void
 Denise::drawBorder()
 {
     bool hFlopWasSet = hflop || hflopOn != -1;
-    
+    isize hblank = 4 * HBLANK_MIN;
+
     if (agnus.sequencer.lineIsBlank || !hFlopWasSet) {
 
         // Draw blank line
@@ -873,14 +874,14 @@ Denise::drawBorder()
 
         // Draw left border
         if (!hflop && hflopOn != -1) {
-            for (isize i = 0; i < 2 * hflopOn; i++) {
+            for (isize i = 0; i < 2 * hflopOn - hblank; i++) {
                 bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
             }
         }
 
         // Draw right border
         if (hflopOff != -1) {
-            for (isize i = 2 * hflopOff; i < HPIXELS; i++) {
+            for (isize i = 2 * hflopOff - hblank; i < HPIXELS; i++) {
                 bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
             }
         }
@@ -1094,7 +1095,8 @@ Denise::endOfLine(isize vpos)
     dmaDebugger.computeOverlay();
     
     // Encode a HIRES / LORES marker in the first HBLANK pixel
-    u32 *ptr = pixelEngine.frameBuffer + agnus.pixelpos(agnus.pos.v, HBLANK_MIN);
+    // u32 *ptr = pixelEngine.frameBuffer + agnus.pixelpos(agnus.pos.v, HBLANK_MIN);
+    u32 *ptr = pixelEngine.frameBuffer + HPIXELS * agnus.pos.v;
     *ptr = hires() ? 0 : -1;
 
     // Add a debug pixel if requested
