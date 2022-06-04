@@ -91,8 +91,11 @@ public:
     // Latched beam position (recorded when BPLCON0::ERSY is set)
     Beam latchedPos;
 
-    // Value of pos.v at the time the VSYNC handler was called
-    isize latchedV;
+    // Value of pos.h during the latest EOL event
+    isize latchedEol;
+
+    // Value of pos.v during the latest EOF event
+    // isize latchedEof;
 
     
     //
@@ -251,7 +254,8 @@ private:
 
         >> pos
         >> latchedPos
-        << latchedV
+        << latchedEol
+        // << latchedEof
         
         << bplcon0
         << bplcon0Initial
@@ -362,8 +366,8 @@ public:
     bool inLastRasterline() const { return inLastRasterline(pos.v); }
 
     // Translates a DMA cycle to a pixel position
-    static Pixel pixelpos(isize v, isize h);
-    static Pixel pixelpos(isize h);
+    [[deprecated]] static Pixel pixelpos(isize v, isize h);
+    Pixel pixelpos(isize h) const;
     Pixel pixelpos() const { return pixelpos(pos.h); }
 
 

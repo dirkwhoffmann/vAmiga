@@ -217,17 +217,22 @@ Agnus::pixelpos(isize v, isize h)
         if (v) v--;
         hh = h + (HPOS_CNT_PAL - HBLANK_MIN);
     }
+
     return v * HPIXELS + 4 * hh;
 }
 
 Pixel
-Agnus::pixelpos(isize h)
+Agnus::pixelpos(isize h) const
 {
-    // return 4 * h;
+    if (h >= HBLANK_MIN) {
 
-    isize hh = h - HBLANK_MIN;
-    if (hh < 0) hh = h + (HPOS_CNT_PAL - HBLANK_MIN);
-    return 4 * hh;
+        // Every texture line starts with the HBLANK area
+        return 4 * (h - HBLANK_MIN);
+    } else {
+
+        // Everything left to the HBLANK area belongs to the previous line
+        return 4 * (h - HBLANK_MIN + latchedEol);
+    }
 }
 
 void
@@ -622,11 +627,8 @@ Agnus::eolHandler()
             break;
     }
 
-    // Reset the horizontal counter
-    pos.h = 0;
-
-    // Toggle line length if needed
-    if (pos.lolToggle) pos.lol = !pos.lol;
+    // Move to the next line
+    pos.eol();
 
     // Update pot counters
     if (paula.chargeX0 < 1.0) U8_INC(paula.potCntX0, 1);
@@ -640,8 +642,8 @@ Agnus::eolHandler()
     paula.channel2.requestDMA();
     paula.channel3.requestDMA();
 
-    // Advance the vertical counter
-    if (++pos.v > pos.vMax()) eofHandler();
+    // Check if we have reached a new frame
+    if (pos.v == 0) eofHandler();
 
     // Save the current value of certain variables
     dmaconInitial = dmacon;
@@ -660,21 +662,14 @@ void
 Agnus::eofHandler()
 {
     assert(clock >= 0);
+    assert(pos.v == 0);
+    assert(denise.lace() == pos.lofToggle);
 
     // Run the screen recorder
     denise.screenRecorder.vsyncHandler(clock - 50 * DMA_CYCLES(HPOS_CNT_PAL));
     
     // Synthesize sound samples
     paula.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT_PAL));
-
-    // Advance to the next frame
-    assert(denise.lace() == pos.lofToggle);
-    pos.frame++;
-    if (pos.lofToggle) { pos.lof = !pos.lof; }
-
-    // Reset vertical position counter
-    latchedV = pos.v - 1;
-    pos.v = 0;
 
     scheduleStrobe0Event();
 

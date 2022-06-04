@@ -1028,7 +1028,7 @@ Denise::drawLine()
 {
     assert(agnus.pos.h == 0x11);
 
-    isize vpos = agnus.pos.v ? agnus.pos.v - 1 : agnus.latchedV;
+    isize vpos = agnus.pos.v ? agnus.pos.v - 1 : agnus.pos.vLatched - 1;
     assert(vpos >= 0 && vpos <= VPOS_MAX_PAL_LF);
 
     //

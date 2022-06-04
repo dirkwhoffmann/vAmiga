@@ -55,6 +55,10 @@ struct Beam
     isize v = 0;
     isize h = 0;
 
+    // Latched coordinates (recorded in eof() and eol(), respectively)
+    isize vLatched = VPOS_CNT;
+    isize hLatched = HPOS_CNT;
+
     // The frame count
     i64 frame = 0;
 
@@ -146,4 +150,10 @@ struct Beam
     // Returns the number of DMA cycles executed in a certain number of frames
     static isize cyclesPerFrames(isize count, FrameType type, bool toggle);
     isize cyclesPerFrames(isize count) const;
+
+    // Called by Agnus in the EOL handler to switch to the next line
+    void eol();
+
+    // Called by Agnus in the EOF handler to switch to the next frame
+    void eof();
 };

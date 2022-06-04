@@ -211,3 +211,31 @@ Beam::cyclesPerFrames(isize count) const
 {
     return cyclesPerFrames(count, type, lofToggle);
 }
+
+void
+Beam::eol()
+{
+    // Remember and reset the horizontal coordinate
+    hLatched = h;
+
+    // Advance to the next line
+    h = 0;
+    if (++v > vMax()) eof();
+
+    // Toggle the line length if toggling is enabled
+    if (lolToggle) lol = !lol;
+}
+
+void
+Beam::eof()
+{
+    // Remember and reset the vertical coordinate
+    vLatched = v;
+
+    // Advance to the next frame
+    v = 0;
+    frame++;
+
+    // Toggle the frame length if toggling is enabled
+    if (lofToggle) lof = !lof;
+}
