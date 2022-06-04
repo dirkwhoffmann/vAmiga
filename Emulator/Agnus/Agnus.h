@@ -91,12 +91,6 @@ public:
     // Latched beam position (recorded when BPLCON0::ERSY is set)
     Beam latchedPos;
 
-    // Value of pos.h during the latest EOL event
-    isize latchedEol;
-
-    // Value of pos.v during the latest EOF event
-    // isize latchedEof;
-
     
     //
     // Registers
@@ -254,8 +248,6 @@ private:
 
         >> pos
         >> latchedPos
-        << latchedEol
-        // << latchedEof
         
         << bplcon0
         << bplcon0Initial

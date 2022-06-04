@@ -464,9 +464,6 @@ Agnus::serviceEOL()
 
         // Call the hsync handler at the beginning of the next DMA cycle
         recordRegisterChange(0, SET_STRHOR, 1);
-
-        // Remember the horizontal position
-        latchedEol = pos.h + 1;
     }
 }
 

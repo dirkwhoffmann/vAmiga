@@ -231,7 +231,7 @@ Agnus::pixelpos(isize h) const
     } else {
 
         // Everything left to the HBLANK area belongs to the previous line
-        return 4 * (h - HBLANK_MIN + latchedEol);
+        return 4 * (h - HBLANK_MIN + pos.hLatched);
     }
 }
 
