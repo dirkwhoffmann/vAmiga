@@ -332,6 +332,7 @@ PixelEngine::getNoise() const
     return noise.ptr + offset;
 }
 
+/*
 u32 *
 PixelEngine::pixelAddr(isize pixel) const
 {
@@ -342,6 +343,7 @@ PixelEngine::pixelAddr(isize pixel) const
 
     return frameBuffer + offset;
 }
+*/
 
 void
 PixelEngine::vsyncHandler()
@@ -417,9 +419,9 @@ PixelEngine::colorize(isize line)
     colChanges.clear();
 
     // Wipe out the HBLANK area
-    for (pixel = 4 * HBLANK_MIN; pixel <= 4 * HBLANK_MAX; pixel++) {
-        dst[pixel] = rgbaHBlank;
-    }
+    auto start = agnus.pixelpos(HBLANK_MIN);
+    auto stop  = agnus.pixelpos(HBLANK_MAX);
+    for (pixel = start; pixel <= stop; pixel++) dst[pixel] = rgbaHBlank;
 }
 
 void

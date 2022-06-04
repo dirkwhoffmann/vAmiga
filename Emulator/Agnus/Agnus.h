@@ -369,8 +369,9 @@ public:
     bool inLastRasterline(isize posv) const { return posv == pos.vMax(); }
     bool inLastRasterline() const { return inLastRasterline(pos.v); }
 
-    // Returns the pixel position for the current horizontal position
-    Pixel pixelpos(isize posh) const { return (posh * 4) + 2; }
+    // Translates a DMA cycle to a pixel position
+    static Pixel pixelpos(isize v, isize h) { return HPIXELS * v + 4 * h; }
+    static Pixel pixelpos(isize h) { return 4 * h; }
     Pixel pixelpos() const { return pixelpos(pos.h); }
 
 

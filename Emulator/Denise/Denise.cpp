@@ -226,8 +226,8 @@ Denise::drawOdd(Pixel offset)
     };
     
     u16 mask = masks[bpu()];
-    Pixel currentPixel = agnus.pixelpos() + offset;
-    
+    Pixel currentPixel = agnus.pixelpos() + offset + 2;
+
     u8 slices[16];
     extractSlicesOdd(slices);
     
@@ -272,8 +272,8 @@ Denise::drawEven(Pixel offset)
     };
     
     u16 mask = masks[bpu()];
-    Pixel currentPixel = agnus.pixelpos() + offset;
-    
+    Pixel currentPixel = agnus.pixelpos() + offset + 2;
+
     u8 slices[16];
     extractSlicesEven(slices);
     
@@ -1094,13 +1094,14 @@ Denise::endOfLine(isize vpos)
     dmaDebugger.computeOverlay();
     
     // Encode a HIRES / LORES marker in the first HBLANK pixel
-    *denise.pixelEngine.pixelAddr(HBLANK_MIN * 4) = hires() ? 0 : -1;
+    u32 *ptr = pixelEngine.frameBuffer + agnus.pixelpos(agnus.pos.v, HBLANK_MIN);
+    *ptr = hires() ? 0 : -1;
 
     // Add a debug pixel if requested
     if constexpr (NTSC_DEBUG) {
 
         u32 color = agnus.pos.lol ? -1 : 0;
-        *denise.pixelEngine.pixelAddr(HBLANK_MIN * 4 + 1) =  color;
+        *(ptr + 1) = color;
     }
 }
 

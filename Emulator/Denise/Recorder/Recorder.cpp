@@ -336,11 +336,11 @@ Recorder::recordVideo(Cycle target)
     
     isize width = sizeof(u32) * (cutout.x2 - cutout.x1);
     isize height = cutout.y2 - cutout.y1;
-    isize offset = cutout.y1 * HPIXELS + cutout.x1 + HBLANK_MIN * 4;
+    isize offset = agnus.pixelpos(cutout.y1, HBLANK_MIN) + cutout.x1;
     u8 *src = (u8 *)(buffer + offset);
     u8 *dst = (u8 *)videoData.ptr;
     
-    for (isize y = 0; y < height; y++, src += 4 * HPIXELS, dst += width) {
+    for (isize y = 0; y < height; y++, src += sizeof(u32) * HPIXELS, dst += width) {
         std::memcpy(dst, src, width);
     }
     

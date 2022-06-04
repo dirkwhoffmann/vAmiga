@@ -145,10 +145,10 @@ OSDebugger::read(u32 addr, os::ExecBase *result) const
         read(addr + 420,  &result->TaskWait);
         
         for (u32 i = 0; i < 5; i++) {
-            read(addr + 434 + i*16, &result->SoftInts[i]);
+            read(addr + 434 + i * 16, &result->SoftInts[i]);
         }
         for (u32 i = 0; i < 5; i++) {
-            read(addr + 514 + i*4, &result->LastAlert[i]);
+            read(addr + 514 + i * 4, &result->LastAlert[i]);
         }
         
         read(addr + 530,  &result->VBlankFrequency);

@@ -308,7 +308,7 @@ DmaDebugger::computeOverlay()
 
     BusOwner *owners = agnus.busOwner;
     u16 *values = agnus.busValue;
-    u32 *ptr = denise.pixelEngine.pixelAddr(0);
+    u32 *ptr = pixelEngine.frameBuffer + agnus.pixelpos(agnus.pos.v, 0);
 
     double opacity = config.opacity / 100.0;
     double bgWeight = 0;

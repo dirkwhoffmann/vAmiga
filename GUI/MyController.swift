@@ -329,11 +329,11 @@ extension MyController {
         
         // DMA monitors
         let dma = amiga.agnus.getStats()
-        let copDMA = Float(dma.copperActivity) / (313*120)
-        let bltDMA = Float(dma.blitterActivity) / (313*120)
-        let dskDMA = Float(dma.diskActivity) / (313*3)
-        let audDMA = Float(dma.audioActivity) / (313*4)
-        let sprDMA = Float(dma.spriteActivity) / (313*16)
+        let copDMA = Float(dma.copperActivity) / (313 * 120)
+        let bltDMA = Float(dma.blitterActivity) / (313 * 120)
+        let dskDMA = Float(dma.diskActivity) / (313 * 3)
+        let audDMA = Float(dma.audioActivity) / (313 * 4)
+        let sprDMA = Float(dma.spriteActivity) / (313 * 16)
         let bplDMA = Float(dma.bitplaneActivity) / 39330
         
         addValue(Monitors.Monitor.copper, copDMA)

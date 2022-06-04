@@ -18,9 +18,10 @@ Thumbnail::take(Amiga &amiga, isize dx, isize dy)
     u32 *source = (u32 *)amiga.denise.pixelEngine.getStableBuffer().ptr;
     u32 *target = screen;
     
-    isize xStart = 4 * HBLANK_MAX + 1, xEnd = HPIXELS + 4 * HBLANK_MIN;
-    isize yStart = VBLANK_CNT, yEnd = VPIXELS - 2;
-    
+    isize xStart = Agnus::pixelpos(HBLANK_MAX) + 1;
+    isize xEnd = HPIXELS + Agnus::pixelpos(HBLANK_MIN);
+    isize yStart = VBLANK_CNT;
+    isize yEnd = VPIXELS - 2;
     width  = (i32)((xEnd - xStart) / dx);
     height = (i32)((yEnd - yStart) / dy);
     
