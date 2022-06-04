@@ -538,7 +538,7 @@ public:
     void vsyncHandler();
 
     // Called by Agnus at the beginning of each rasterline
-    void beginOfLine(isize vpos);
+    void beginOfLine();
 
     // Called by Agnus at the end of a rasterline
     void endOfLine(isize vpos);

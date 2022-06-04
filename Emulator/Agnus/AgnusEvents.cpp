@@ -559,6 +559,10 @@ Agnus::serviceDASEvent(EventID id)
             break;
 
         case DAS_A2:
+
+            denise.endOfLine(pos.v);
+            denise.beginOfLine();
+
             if (audxDR[2]) {
                 audxDR[2] = false;
                 paula.channel2.pokeAUDxDAT(doAudioDmaRead<2>());

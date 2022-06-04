@@ -1023,7 +1023,7 @@ Denise::vsyncHandler()
 }
 
 void
-Denise::beginOfLine(isize vpos)
+Denise::beginOfLine()
 {    
     // Save the current values of various Denise registers
     initialBplcon0 = bplcon0;

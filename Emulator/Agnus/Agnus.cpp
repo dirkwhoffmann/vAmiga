@@ -608,7 +608,7 @@ Agnus::hsyncHandler()
     if (pos.lolToggle) pos.lol = !pos.lol;
 
     // Let Denise finish up the current line
-    denise.endOfLine(pos.v);
+    // denise.endOfLine(pos.v);
 
     // Update pot counters
     if (paula.chargeX0 < 1.0) U8_INC(paula.potCntX0, 1);
@@ -641,7 +641,7 @@ Agnus::hsyncHandler()
     scheduleFirstDasEvent();
     
     // Let Denise prepare for the next line
-    denise.beginOfLine(pos.v);
+    // denise.beginOfLine(pos.v);
 }
 
 void
