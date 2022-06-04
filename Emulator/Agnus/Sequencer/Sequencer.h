@@ -345,6 +345,6 @@ private:
 
 private:
     
-    void hsyncHandler();
-    void vsyncHandler();
+    void eolHandler();
+    void eofHandler();
 };

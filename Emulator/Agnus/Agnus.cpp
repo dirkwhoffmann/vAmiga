@@ -603,7 +603,7 @@ Agnus::updateSpriteDMA()
 }
 
 void
-Agnus::hsyncHandler()
+Agnus::eolHandler()
 {
     assert(pos.h == HPOS_CNT_PAL || pos.h == HPOS_CNT_NTSC);
     
@@ -628,9 +628,6 @@ Agnus::hsyncHandler()
     // Toggle line length if needed
     if (pos.lolToggle) pos.lol = !pos.lol;
 
-    // Let Denise finish up the current line
-    // denise.endOfLine(pos.v);
-
     // Update pot counters
     if (paula.chargeX0 < 1.0) U8_INC(paula.potCntX0, 1);
     if (paula.chargeY0 < 1.0) U8_INC(paula.potCntY0, 1);
@@ -644,29 +641,23 @@ Agnus::hsyncHandler()
     paula.channel3.requestDMA();
 
     // Advance the vertical counter
-    if (++pos.v > pos.vMax()) vsyncHandler();
+    if (++pos.v > pos.vMax()) eofHandler();
 
     // Save the current value of certain variables
     dmaconInitial = dmacon;
     bplcon0Initial = bplcon0;
     bplcon1Initial = bplcon1;
-    
-    // Clear the bus usage table
-    for (isize i = 0; i < HPOS_CNT_NTSC; i++) busOwner[i] = BUS_NONE;
 
     // Pass control to the sequencer
-    sequencer.hsyncHandler();
+    sequencer.eolHandler();
     
     // Schedule the first BPL and DAS events
     scheduleFirstBplEvent();
     scheduleFirstDasEvent();
-    
-    // Let Denise prepare for the next line
-    // denise.beginOfLine(pos.v);
 }
 
 void
-Agnus::vsyncHandler()
+Agnus::eofHandler()
 {
     assert(clock >= 0);
 
@@ -682,12 +673,13 @@ Agnus::vsyncHandler()
     if (pos.lofToggle) { pos.lof = !pos.lof; }
 
     // Reset vertical position counter
+    latchedV = pos.v - 1;
     pos.v = 0;
 
     scheduleStrobe0Event();
 
     // Let other components do their own VSYNC stuff
-    sequencer.vsyncHandler();
+    sequencer.eofHandler();
     copper.vsyncHandler();
     denise.vsyncHandler();
     controlPort1.joystick.vsyncHandler();
@@ -701,6 +693,17 @@ Agnus::vsyncHandler()
     // Let the thread synchronize
     amiga.setFlag(RL::SYNC_THREAD);
 }
+
+void
+Agnus::hsyncHandler()
+{
+    // Let Denise draw the current line
+    denise.drawLine();
+
+    // Clear the bus usage table
+    for (isize i = 0; i < HPOS_CNT_NTSC; i++) busOwner[i] = BUS_NONE;
+}
+
 
 //
 // Instantiate template functions

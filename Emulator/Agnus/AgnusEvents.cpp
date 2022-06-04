@@ -267,7 +267,7 @@ Agnus::serviceREGEvent(Cycle until)
 
             case SET_SERDAT: uart.setSERDAT(change.value); break;
                 
-            case SET_STRHOR: hsyncHandler(); break;
+            case SET_STRHOR: eolHandler(); break;
                 
             default:
                 fatalError;
@@ -560,8 +560,8 @@ Agnus::serviceDASEvent(EventID id)
 
         case DAS_A2:
 
-            denise.endOfLine(pos.v);
-            denise.beginOfLine();
+            // We have reached the beginning of the HSYNC area
+            hsyncHandler();
 
             if (audxDR[2]) {
                 audxDR[2] = false;

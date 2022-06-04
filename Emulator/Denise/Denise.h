@@ -537,11 +537,8 @@ public:
     // Called by Agnus at the beginning of each frame
     void vsyncHandler();
 
-    // Called by Agnus at the beginning of each rasterline
-    void beginOfLine();
-
-    // Called by Agnus at the end of a rasterline
-    void endOfLine(isize vpos);
+    // Called by Agnus at the beginning of the HSYNC area
+    void drawLine();
     
     
     //

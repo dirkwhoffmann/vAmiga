@@ -101,8 +101,8 @@ private:
 
 public:
     
-    // Superimposes the debug output onto the current rasterline
-    void computeOverlay();
+    // Superimposes the debug output onto the specified line
+    void computeOverlay(isize line);
 
     // Cleans up some texture data at the end of each frame
     void vSyncHandler();

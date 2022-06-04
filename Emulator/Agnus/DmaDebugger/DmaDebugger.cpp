@@ -301,14 +301,14 @@ DmaDebugger::setColor(BusOwner owner, u32 rgba)
 }
 
 void
-DmaDebugger::computeOverlay()
+DmaDebugger::computeOverlay(isize posv)
 {
     // Only proceed if DMA debugging has been turned on
     if (!config.enabled) return;
 
     BusOwner *owners = agnus.busOwner;
     u16 *values = agnus.busValue;
-    u32 *ptr = pixelEngine.frameBuffer + agnus.pixelpos(agnus.pos.v, 0);
+    u32 *base = pixelEngine.frameBuffer + posv * HPIXELS;
 
     double opacity = config.opacity / 100.0;
     double bgWeight = 0;
@@ -339,7 +339,9 @@ DmaDebugger::computeOverlay()
 
     }
 
-    for (isize i = 0; i < HPOS_CNT_PAL; i++, ptr += 4) {
+    for (isize i = 0; i < HPOS_CNT_PAL; i++) {
+
+        u32 *ptr = base + agnus.pixelpos(i);
 
         BusOwner owner = owners[i];
 

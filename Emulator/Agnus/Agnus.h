@@ -87,10 +87,13 @@ public:
 
     // The current beam position
     Beam pos;
-    
+
     // Latched beam position (recorded when BPLCON0::ERSY is set)
     Beam latchedPos;
-    
+
+    // Value of pos.v at the time the VSYNC handler was called
+    isize latchedV;
+
     
     //
     // Registers
@@ -248,7 +251,8 @@ private:
 
         >> pos
         >> latchedPos
-
+        << latchedV
+        
         << bplcon0
         << bplcon0Initial
         << bplcon1
@@ -414,13 +418,16 @@ private:
     // Updates the sprite DMA status in cycle 0xDF
     void updateSpriteDMA();
 
-    // Finishes up the current rasterline
-    void hsyncHandler();
+    // Finishes up the current line
+    void eolHandler();
 
     // Finishes up the current frame
-    void vsyncHandler();
+    void eofHandler();
 
-    
+    // Called at the beginning of the HSYNC area
+    void hsyncHandler();
+
+
     //
     // Controlling DMA (AgnusDma.cpp)
     //

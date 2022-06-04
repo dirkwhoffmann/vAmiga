@@ -1024,33 +1024,17 @@ Denise::vsyncHandler()
 }
 
 void
-Denise::beginOfLine()
-{    
-    // Save the current values of various Denise registers
-    initialBplcon0 = bplcon0;
-    initialBplcon1 = bplcon1;
-    initialBplcon2 = bplcon2;
-    wasArmed = armed;
-
-    // Update the horizontal DIW flipflop
-    hflop = (hflopOff != -1) ? false : (hflopOn != -1) ? true : hflop;
-    hflopOn = denise.hstrt; 
-    hflopOff = denise.hstop;
-
-    // Wrap around the unprocessed bBuffer part
-    for (isize i = 0; i < 32; i++) bBuffer[i] = bBuffer[HPIXELS + i];
-
-    // Clear the rest of the bBuffer
-    std::memset(bBuffer + 32, 0, sizeof(bBuffer) - 32);
-
-    // Reset the sprite clipping range
-    spriteClipBegin = HPIXELS;
-    spriteClipEnd = HPIXELS + 32;
-}
-
-void
-Denise::endOfLine(isize vpos)
+Denise::drawLine()
 {
+    assert(agnus.pos.h == 0x11);
+
+    isize vpos = agnus.pos.v ? agnus.pos.v - 1 : agnus.latchedV;
+    assert(vpos >= 0 && vpos <= VPOS_MAX_PAL_LF);
+
+    //
+    // Finish the current line
+    //
+
     // Check if we are below the VBLANK area
     if (vpos >= 26) {
 
@@ -1092,11 +1076,11 @@ Denise::endOfLine(isize vpos)
     assert(sprChanges[3].isEmpty());
 
     // Invoke the DMA debugger
-    dmaDebugger.computeOverlay();
+    dmaDebugger.computeOverlay(vpos);
     
     // Encode a HIRES / LORES marker in the first HBLANK pixel
     // u32 *ptr = pixelEngine.frameBuffer + agnus.pixelpos(agnus.pos.v, HBLANK_MIN);
-    u32 *ptr = pixelEngine.frameBuffer + HPIXELS * agnus.pos.v;
+    u32 *ptr = pixelEngine.frameBuffer + HPIXELS * vpos;
     *ptr = hires() ? 0 : -1;
 
     // Add a debug pixel if requested
@@ -1105,6 +1089,31 @@ Denise::endOfLine(isize vpos)
         u32 color = agnus.pos.lol ? -1 : 0;
         *(ptr + 1) = color;
     }
+
+    //
+    // Prepare for the next line
+    //
+
+    // Save the current values of various Denise registers
+    initialBplcon0 = bplcon0;
+    initialBplcon1 = bplcon1;
+    initialBplcon2 = bplcon2;
+    wasArmed = armed;
+
+    // Update the horizontal DIW flipflop
+    hflop = (hflopOff != -1) ? false : (hflopOn != -1) ? true : hflop;
+    hflopOn = denise.hstrt;
+    hflopOff = denise.hstop;
+
+    // Wrap around the unprocessed bBuffer part
+    for (isize i = 0; i < 32; i++) bBuffer[i] = bBuffer[HPIXELS + i];
+
+    // Clear the rest of the bBuffer
+    std::memset(bBuffer + 32, 0, sizeof(bBuffer) - 32);
+
+    // Reset the sprite clipping range
+    spriteClipBegin = HPIXELS;
+    spriteClipEnd = HPIXELS + 32;
 }
 
 template void Denise::drawOdd<false>(Pixel offset);
