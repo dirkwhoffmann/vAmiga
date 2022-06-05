@@ -825,26 +825,6 @@ Denise::drawAttachedSpritePixelPair(Pixel hpos)
 }
 
 void
-Denise::copyOverlappingSpritePixels()
-{
-    /* This function is called inside endOfLine(). At this point, the mBuffer
-     * may contain sprite pixels at indices greater than HPIXELS. To make these
-     * pixels appear, we need to copy them at the beginning of the bBuffer.
-     *
-     * The current code has been written to handle overscan mode in DPaint IV
-     * correctly. The implementation is not 100% accurate, because the sprite
-     * pixels are simply copied over the existing pixels. This is correct for
-     * DPaint IV, but does not work in scenarios with different bitplane
-     * priority settings.
-     */
-    for (isize i = 0; i < 32; i++) {
-        if (denise.mBuffer[HPIXELS + i]) {
-            denise.bBuffer[i] = denise.mBuffer[HPIXELS + i];
-        }
-    }
-}
-
-void
 Denise::updateBorderColor()
 {
     if (config.revision != DENISE_OCS && ecsena() && brdrblnk()) {
@@ -1039,9 +1019,6 @@ Denise::hsyncHandler()
     // Check if we are below the VBLANK area
     if (vpos >= 26) {
 
-        // Take care of overlapping sprite pixels from the previous line
-        if (wasArmed) copyOverlappingSpritePixels();
-
         // Translate bitplane data to color register indices
         translate();
 
@@ -1089,6 +1066,13 @@ Denise::hsyncHandler()
 
     // Clear the bBuffer
     std::memset(bBuffer, 0, sizeof(bBuffer));
+
+    // Remember whether sprites were armed in this line
+    wasArmed = armed;
+
+    // Reset the sprite clipping range
+    spriteClipBegin = HPIXELS;
+    spriteClipEnd = HPIXELS + 32;
 }
 
 void
@@ -1098,16 +1082,11 @@ Denise::eolHandler()
     initialBplcon0 = bplcon0;
     initialBplcon1 = bplcon1;
     initialBplcon2 = bplcon2;
-    wasArmed = armed;
 
     // Update the horizontal DIW flipflop
     hflop = (hflopOff != -1) ? false : (hflopOn != -1) ? true : hflop;
     hflopOn = denise.hstrt;
     hflopOff = denise.hstop;
-
-    // Reset the sprite clipping range
-    spriteClipBegin = HPIXELS;
-    spriteClipEnd = HPIXELS + 32;
 }
 
 template void Denise::drawOdd<false>(Pixel offset);

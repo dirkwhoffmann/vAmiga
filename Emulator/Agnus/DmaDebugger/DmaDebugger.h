@@ -25,8 +25,10 @@ class DmaDebugger : public SubComponent {
     // Colors used for highlighting DMA (derived from config.debugColor)
     RgbColor debugColor[BUS_COUNT][5] = {};
 
-    // Local copies of the corresponding Agnus arrays
+    // A local copy of the bus value table (recorded in the EOL handler)
     u16 busValue[HPOS_CNT];
+
+    // A local copy of the bus owner table (recorded in the EOL handler)
     BusOwner busOwner[HPOS_CNT];
 
 
