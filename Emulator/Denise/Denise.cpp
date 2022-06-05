@@ -1024,11 +1024,12 @@ Denise::vsyncHandler()
 }
 
 void
-Denise::drawLine()
+Denise::hsyncHandler()
 {
     assert(agnus.pos.h == 0x11);
 
     isize vpos = agnus.pos.v ? agnus.pos.v - 1 : agnus.pos.vLatched - 1;
+    assert (vpos == agnus.pos.vPrev());
     assert(vpos >= 0 && vpos <= VPOS_MAX_PAL_LF);
 
     //
@@ -1074,9 +1075,6 @@ Denise::drawLine()
     assert(sprChanges[1].isEmpty());
     assert(sprChanges[2].isEmpty());
     assert(sprChanges[3].isEmpty());
-
-    // Invoke the DMA debugger
-    dmaDebugger.computeOverlay(vpos);
     
     // Encode a HIRES / LORES marker in the first HBLANK pixel
     u32 *ptr = pixelEngine.frameBuffer + HPIXELS * vpos;
@@ -1089,10 +1087,13 @@ Denise::drawLine()
         *(ptr + 1) = color;
     }
 
-    //
-    // Prepare for the next line
-    //
+    // Clear the bBuffer
+    std::memset(bBuffer, 0, sizeof(bBuffer));
+}
 
+void
+Denise::eolHandler()
+{
     // Save the current values of various Denise registers
     initialBplcon0 = bplcon0;
     initialBplcon1 = bplcon1;
@@ -1103,12 +1104,6 @@ Denise::drawLine()
     hflop = (hflopOff != -1) ? false : (hflopOn != -1) ? true : hflop;
     hflopOn = denise.hstrt;
     hflopOff = denise.hstop;
-
-    // Wrap around the unprocessed bBuffer part
-    for (isize i = 0; i < 32; i++) bBuffer[i] = bBuffer[HPIXELS + i];
-
-    // Clear the rest of the bBuffer
-    std::memset(bBuffer + 32, 0, sizeof(bBuffer) - 32);
 
     // Reset the sprite clipping range
     spriteClipBegin = HPIXELS;

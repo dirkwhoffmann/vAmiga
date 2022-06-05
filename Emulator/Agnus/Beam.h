@@ -52,6 +52,15 @@ struct Beam
         << type;
     }
 
+
+    //
+    // Querying coordinates
+    //
+
+    isize vPrev() const { return v ? v - 1 : vLatched - 1; }
+    isize hPrev() const { return h ? h - 1 : hLatched - 1; }
+
+    
     //
     // Querying boundaries
     //

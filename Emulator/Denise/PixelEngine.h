@@ -27,7 +27,7 @@ struct ScreenBuffer : public Buffer<u32> {
 class PixelEngine : public SubComponent {
 
     friend class Denise;
-    friend class DmaDebugger;
+    // friend class DmaDebugger;
 
     // Current configuration
     PixelEngineConfig config = {};
@@ -231,9 +231,9 @@ public:
     
     // Returns a pointer to randon noise
     u32 *getNoise() const;
-    
-    // Returns the frame buffer address of a certain pixel in the current line
-    // u32 *pixelAddr(isize pixel) const;
+
+    // Returns the address of the first pixel in a certain frambuffer line
+    u32 *getLine(isize line) const;
 
     // Called after each line in the VBLANK area
     void endOfVBlankLine();

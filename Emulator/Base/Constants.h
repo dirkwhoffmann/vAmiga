@@ -15,14 +15,17 @@
 // Frequencies
 //
 
-// Clock rate of the master clock in Hz (PAL Amiga, 28.37516 MHz)
-#define MASTER_FREQUENCY 28375160
+// Clock rate of the master clock in Hz
+#define CLK_FREQUENCY_PAL   28375160                    // 28.375160 MHz
+#define CLK_FREQUENCY_NTSC  28636360                    // 28.636360 MHz
 
-// Clock rate of the Motorola 68000 CPU in Hz (7.09379 MHz)
-#define CPU_FREQUENY (28375160 / 4)
+// Clock rate of the CPU in Hz
+#define CPU_FREQUENY_PAL    (MAS_FREQUENCY_PAL / 4)     //  7.093790 MHz
+#define CPU_FREQUENY_NTSC   (MAS_FREQUENCY_NTSC / 4)    //  7.159090 MHz
 
-// Clock rate of the DMA bus in Hz (3.546895 MHz)
-#define DMA_FREQUENY (28375160 / 8)
+// Clock rate of the DMA bus in Hz
+#define DMA_FREQUENY_PAL    (MAS_FREQUENCY_PAL / 8)     //  3.546895 MHz
+#define DMA_FREQUENY_NTSC   (MAS_FREQUENCY_NTSC / 8)    //  3.579545 MHz
 
 
 //
@@ -31,8 +34,8 @@
 
 /* Beam positions
  *
- * Vertical coordinates are measured in scanlines.
- * Horizontal coordinates are measured in DMA cycles.
+ * Vertical coordinates are measured in scanlines
+ * Horizontal coordinates are measured in DMA cycles
  */
 
 #define VPOS_CNT_PAL_LF     313
@@ -67,41 +70,32 @@
 /* Screen buffer dimensions
  *
  * All values are measured in pixels. One DMA cycle corresponds to 4 pixels.
- * Hence, HPIXELS equals 4 * HPOS_CNT_PAL. VPIXELS is one greater than VPOS_CNT,
- * because of the misalignment offset applied to the screen buffer start
- * address (see below).
+ * Hence, HPIXELS equals 4 * HPOS_CNT_PAL.
  */
 
-#define VPIXELS       314                    // VPOS_CNT + 1 line
+#define VPIXELS       313                    // VPOS_CNT
 #define HPIXELS       908                    // 4 * HPOS_CNT_PAL
 #define PIXELS        (VPIXELS * HPIXELS)
 
 
 /* Blanking area
  *
- * To understand the horizontal position of the Amiga screen, it is important
+ * To understand the horizontal alignment of the Amiga screen, it is important
  * to note that the HBLANK area does *not* start at DMA cycle 0. According to
- * "Amiga Intern", DMA cycle $0F (15) is the first and $35 (53) the last cycles
- * inside the HBLANK area. However, these values seem to be wrong and I am
- * using different values instead.
- *
+ * "Amiga Intern", DMA cycle $0F is the first and $35 the last cycles inside
+ * the HBLANK area. However, these values seem to be wrong. According to the
+ * Agnus schematics, the first HBLANK cycle is $12 and the last cycle is $23.
  * As a result, the early DMA cycles do not appear on the left side of the
- * screen, but on the right side in the previous scanline. To mimic this
- * behaviour, a misalignment offset is added to the start address of the screen
- * buffer before it is written into the GPU texture. The offset is chosen such
- * that the HBLANK area starts at the first pixel of each line in the texture.
- * As a side effect of adding this offset, constant VPIXELS needs to be greater
- * than VPOS_CNT. Otherwise, we would access unallocated memory at the end of
- * the last scanline.
+ * screen.
  */
 
-#define HBLANK_MIN    0x12 // 0x0A
-#define HBLANK_MAX    0x23 // 0x30
-#define HBLANK_CNT    0x12 // 0x27 // equals HBLANK_MAX - HBLANK_MIN + 1
+#define HBLANK_MIN    0x12      // First HBLANK cycle
+#define HBLANK_MAX    0x23      // Last HBLANK cycle
+#define HBLANK_CNT    0x12      // HBLANK_MAX - HBLANK_MIN + 1
 
-#define VBLANK_MIN    0x00
-#define VBLANK_MAX    0x19
-#define VBLANK_CNT    0x1A // equals VBLANK_MAX - VBLANK_MIN + 1
+#define VBLANK_MIN    0x00      // First VBLANK line
+#define VBLANK_MAX    0x19      // Last VBLANK line
+#define VBLANK_CNT    0x1A      // VBLANK_MAX - VBLANK_MIN + 1
 
 
 //

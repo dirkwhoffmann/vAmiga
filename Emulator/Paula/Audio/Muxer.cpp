@@ -252,7 +252,7 @@ Muxer::setSampleRate(double hz)
     trace(AUD_DEBUG, "setSampleRate(%f)\n", hz);
 
     sampleRate = hz;
-    cyclesPerSample = MASTER_FREQUENCY / hz;
+    cyclesPerSample = CLK_FREQUENCY_PAL / hz;
 
     filterL.setSampleRate(hz);
     filterR.setSampleRate(hz);

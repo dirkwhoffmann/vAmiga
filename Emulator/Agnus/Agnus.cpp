@@ -624,9 +624,14 @@ Agnus::eolHandler()
     bplcon0Initial = bplcon0;
     bplcon1Initial = bplcon1;
 
-    // Pass control to the sequencer
+    // Pass control to other components
     sequencer.eolHandler();
-    
+    denise.eolHandler();
+    dmaDebugger.eolHandler();
+
+    // Clear the bus usage table
+    for (isize i = 0; i < HPOS_CNT; i++) busOwner[i] = BUS_NONE;
+
     // Schedule the first BPL and DAS events
     scheduleFirstBplEvent();
     scheduleFirstDasEvent();
@@ -666,11 +671,8 @@ Agnus::eofHandler()
 void
 Agnus::hsyncHandler()
 {
-    // Let Denise draw the current line
-    denise.drawLine();
-
-    // Clear the bus usage table
-    for (isize i = 0; i < HPOS_CNT_NTSC; i++) busOwner[i] = BUS_NONE;
+    denise.hsyncHandler();
+    dmaDebugger.hsyncHandler();
 }
 
 

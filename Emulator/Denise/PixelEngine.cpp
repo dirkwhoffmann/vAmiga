@@ -332,18 +332,12 @@ PixelEngine::getNoise() const
     return noise.ptr + offset;
 }
 
-/*
 u32 *
-PixelEngine::pixelAddr(isize pixel) const
+PixelEngine::getLine(isize line) const
 {
-    isize offset = pixel + agnus.pos.v * HPIXELS;
-
-    assert(pixel < HPIXELS);
-    assert(offset < PIXELS);
-
-    return frameBuffer + offset;
+    assert(line >= 0 && line <= VPOS_MAX);
+    return frameBuffer + line * HPIXELS;
 }
-*/
 
 void
 PixelEngine::vsyncHandler()

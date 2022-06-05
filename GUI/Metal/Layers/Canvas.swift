@@ -43,8 +43,8 @@ class Canvas: Layer {
      * The texture is updated in function updateTexture() which is called
      * periodically in drawRect().
      */
-    var longFrameTexture: MTLTexture! = nil
-    var shortFrameTexture: MTLTexture! = nil
+    var lfTexture: MTLTexture! = nil
+    var sfTexture: MTLTexture! = nil
 
     /* Merge texture (1024 x 1024)
      * The long frame and short frame textures are merged into this one.
@@ -138,13 +138,13 @@ class Canvas: Layer {
         let rwtp: MTLTextureUsage = [ .shaderRead, .shaderWrite, .renderTarget, .pixelFormatView ]
 
         // Emulator texture (long frames)
-        longFrameTexture = device.makeTexture(size: TextureSize.original, usage: r)
-        renderer.metalAssert(longFrameTexture != nil,
+        lfTexture = device.makeTexture(size: TextureSize.original, usage: r)
+        renderer.metalAssert(lfTexture != nil,
                              "The frame texture (long frames) could not be allocated.")
         
         // Emulator texture (short frames)
-        shortFrameTexture = device.makeTexture(size: TextureSize.original, usage: r)
-        renderer.metalAssert(shortFrameTexture != nil,
+        sfTexture = device.makeTexture(size: TextureSize.original, usage: r)
+        renderer.metalAssert(sfTexture != nil,
                              "The frame texture (short frames) could not be allocated.")
         
         // Merged emulator texture (long frame + short frame)
@@ -224,20 +224,17 @@ class Canvas: Layer {
     
     func updateTexture() {
         
-        precondition(longFrameTexture != nil)
-        precondition(shortFrameTexture != nil)
+        precondition(lfTexture != nil)
+        precondition(sfTexture != nil)
 
         if amiga.poweredOff {
-                    
+
+            // Update the GPU texture with random noise
             var buffer = amiga.denise.noise!
-            longFrameTexture.replace(w: Int(HPIXELS),
-                                     h: Int(VPIXELS),
-                                     buffer: buffer)
+            lfTexture.replace(w: Int(HPIXELS), h: Int(VPIXELS), buffer: buffer)
             
             buffer = amiga.denise.noise!
-            shortFrameTexture.replace(w: Int(HPIXELS),
-                                      h: Int(VPIXELS),
-                                      buffer: buffer)
+            sfTexture.replace(w: Int(HPIXELS), h: Int(VPIXELS), buffer: buffer)
             return
         }
         
@@ -256,15 +253,10 @@ class Canvas: Layer {
             currLOF = amiga.denise.longFrame
             
             // Update the GPU texture
-            let offset = 0 // Int(HBLANK_MIN) * 4
             if currLOF {
-                longFrameTexture.replace(w: Int(HPIXELS),
-                                         h: Int(VPIXELS),
-                                         buffer: buffer + offset)
+                lfTexture.replace(w: Int(HPIXELS), h: Int(VPIXELS), buffer: buffer)
             } else {
-                shortFrameTexture.replace(w: Int(HPIXELS),
-                                          h: Int(VPIXELS),
-                                          buffer: buffer + offset)
+                sfTexture.replace(w: Int(HPIXELS), h: Int(VPIXELS), buffer: buffer)
             }
         }
         
@@ -298,7 +290,7 @@ class Canvas: Layer {
             mergeUniforms.shortFrameScale = (flickerCnt % 4 >= 2) ? weight : 1.0
             
             mergeFilter.apply(commandBuffer: buffer,
-                              textures: [longFrameTexture, shortFrameTexture, mergeTexture],
+                              textures: [lfTexture, sfTexture, mergeTexture],
                               options: &mergeUniforms,
                               length: MemoryLayout<MergeUniforms>.stride)
             
@@ -306,12 +298,12 @@ class Canvas: Layer {
             
             // Case 2: Non-interlace drawing (two long frames in a row)
             mergeBypass.apply(commandBuffer: buffer,
-                              textures: [longFrameTexture, mergeTexture])
+                              textures: [lfTexture, mergeTexture])
         } else {
             
             // Case 3: Non-interlace drawing (two short frames in a row)
             mergeBypass.apply(commandBuffer: buffer,
-                              textures: [shortFrameTexture, mergeTexture])
+                              textures: [sfTexture, mergeTexture])
         }
         
         // Compute the upscaled texture (first pass, in-texture upscaling)

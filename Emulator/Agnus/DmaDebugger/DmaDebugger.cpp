@@ -301,14 +301,41 @@ DmaDebugger::setColor(BusOwner owner, u32 rgba)
 }
 
 void
-DmaDebugger::computeOverlay(isize posv)
+DmaDebugger::eolHandler()
 {
     // Only proceed if DMA debugging has been turned on
     if (!config.enabled) return;
 
-    BusOwner *owners = agnus.busOwner;
-    u16 *values = agnus.busValue;
-    u32 *base = pixelEngine.frameBuffer + posv * HPIXELS;
+    // Copy Agnus array before they get deleted
+    std::memcpy(busValue, agnus.busValue, sizeof(agnus.busValue));
+    std::memcpy(busOwner, agnus.busOwner, sizeof(agnus.busOwner));
+}
+
+void
+DmaDebugger::hsyncHandler()
+{
+    assert(agnus.pos.h == 0x11);
+
+    // Only proceed if DMA debugging has been turned on
+    if (!config.enabled) return;
+
+    isize vpos1 = agnus.pos.v - 1;
+    isize vpos2 = agnus.pos.v - 2;
+    if (vpos1 < 0) vpos1 += agnus.pos.vLatched;
+    if (vpos2 < 0) vpos2 += agnus.pos.vLatched;
+
+    // Draw first chunk (previous line)
+    computeOverlay(pixelEngine.getLine(vpos2) + agnus.pos.pixel(0), 0, HBLANK_MIN - 1);
+
+    // Draw second chunk (current line)
+    computeOverlay(pixelEngine.getLine(vpos1), HBLANK_MIN, HPOS_MAX_PAL);
+}
+
+void
+DmaDebugger::computeOverlay(u32 *ptr, isize first, isize last)
+{
+    BusOwner *owners = busOwner;
+    u16 *values = busValue;
 
     double opacity = config.opacity / 100.0;
     double bgWeight = 0;
@@ -339,9 +366,7 @@ DmaDebugger::computeOverlay(isize posv)
 
     }
 
-    for (isize i = 0; i < HPOS_CNT_PAL; i++) {
-
-        u32 *ptr = base + agnus.pos.pixel(i);
+    for (isize i = first; i <= last; i++, ptr += 4) {
 
         BusOwner owner = owners[i];
 
@@ -383,11 +408,13 @@ DmaDebugger::vSyncHandler()
     // Only proceed if the debugger is enabled
     if (!config.enabled) return;
 
-    // Clear old data in the next frame's VBLANK area
-    u32 *ptr = denise.pixelEngine.frameBuffer;
+    // Clear old data in the VBLANK area of the next frame
     for (isize row = 0; row < VBLANK_CNT; row++) {
+
+        u32 *ptr = denise.pixelEngine.getLine(row);
         for (isize col = 0; col < HPIXELS; col++) {
-            ptr[row * HPIXELS + col] = PixelEngine::rgbaVBlank;
+
+            ptr[col] = PixelEngine::rgbaVBlank;
         }
     }
 }

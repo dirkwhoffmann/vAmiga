@@ -539,8 +539,11 @@ public:
     void vsyncHandler();
 
     // Called by Agnus at the beginning of the HSYNC area
-    void drawLine();
-    
+    void hsyncHandler();
+
+    // Called by Agnus at the end of each line
+    void eolHandler();
+
     
     //
     // Accessing registers (DeniseRegs.cpp)

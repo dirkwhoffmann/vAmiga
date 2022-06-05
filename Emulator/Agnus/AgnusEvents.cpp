@@ -535,6 +535,10 @@ Agnus::serviceDASEvent(EventID id)
             busOwner[0x03] = BUS_REFRESH;
             busOwner[0x05] = BUS_REFRESH;
             busOwner[pos.lol ? 0xE3 : 0xE2] = BUS_REFRESH;
+            busValue[0x01] = 0;
+            busValue[0x03] = 0;
+            busValue[0x05] = 0;
+            busValue[pos.lol ? 0xE3 : 0xE2] = 0;
             stats.usage[BUS_REFRESH] += 4;
             break;
 

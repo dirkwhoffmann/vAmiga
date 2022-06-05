@@ -145,10 +145,10 @@ public:
 public:
     
     // Recorded DMA values for all cycles in the current rasterline
-    u16 busValue[HPOS_CNT_NTSC];
+    u16 busValue[HPOS_CNT];
 
     // Recorded DMA usage for all cycles in the current rasterline
-    BusOwner busOwner[HPOS_CNT_NTSC];
+    BusOwner busOwner[HPOS_CNT];
 
     
     //
