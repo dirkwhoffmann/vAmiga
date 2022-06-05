@@ -31,7 +31,7 @@ class DmaDebugger : public SubComponent {
     // A local copy of the bus owner table (recorded in the EOL handler)
     BusOwner busOwner[HPOS_CNT];
 
-    // Location information (recorded in the EOL handler)
+    // HSYNC handler information (recorded in the EOL handler)
     isize pixel0 = 0;
     isize line1 = 0;
     isize line2 = 0;

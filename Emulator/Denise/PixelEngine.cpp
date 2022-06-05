@@ -34,19 +34,25 @@ void
 PixelEngine::clearTextures()
 {
     lockStableBuffer();
-    
-    // Initialize frame buffers with a checkerboard pattern
-    for (isize line = 0; line < VPIXELS; line++) {
-        for (isize i = 0; i < HPIXELS; i++) {
 
-            isize pos = line * HPIXELS + i;
-            u32 col = (line / 4) % 2 == (i / 8) % 2 ? 0xFF222222 : 0xFF444444;
-            emuTexture[0].ptr[pos] = col;
-            emuTexture[1].ptr[pos] = col;
-        }
+    for (isize line = 0; line < VPIXELS; line++) {
+        clearLine(emuTexture[0].ptr, line);
+    }
+    for (isize line = 0; line < VPIXELS; line++) {
+        clearLine(emuTexture[1].ptr, line);
     }
 
     unlockStableBuffer();
+}
+
+void
+PixelEngine::clearLine(u32 *ptr, isize line)
+{
+    ptr += line * HPIXELS;
+
+    for (isize i = 0; i < HPIXELS; i++) {
+        ptr[i] = ((line >> 2) & 1) == ((i >> 3) & 1) ? 0xFF222222 : 0xFF444444;
+    }
 }
 
 void
