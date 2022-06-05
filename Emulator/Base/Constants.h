@@ -70,11 +70,11 @@
 /* Screen buffer dimensions
  *
  * All values are measured in pixels. One DMA cycle corresponds to 4 pixels.
- * Hence, HPIXELS equals 4 * HPOS_CNT_PAL.
+ * Hence, HPIXELS equals 4 * HPOS_CNT.
  */
 
 #define VPIXELS       313                    // VPOS_CNT
-#define HPIXELS       908                    // 4 * HPOS_CNT_PAL
+#define HPIXELS       912                    // 4 * HPOS_CNT
 #define PIXELS        (VPIXELS * HPIXELS)
 
 

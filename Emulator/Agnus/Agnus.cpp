@@ -601,6 +601,9 @@ Agnus::eolHandler()
             break;
     }
 
+    // Pass control to the DMA debugger
+    dmaDebugger.eolHandler();
+
     // Move to the next line
     pos.eol();
 
@@ -627,7 +630,6 @@ Agnus::eolHandler()
     // Pass control to other components
     sequencer.eolHandler();
     denise.eolHandler();
-    dmaDebugger.eolHandler();
 
     // Clear the bus usage table
     for (isize i = 0; i < HPOS_CNT; i++) busOwner[i] = BUS_NONE;

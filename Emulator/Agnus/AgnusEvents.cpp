@@ -535,6 +535,7 @@ Agnus::serviceDASEvent(EventID id)
             busOwner[0x03] = BUS_REFRESH;
             busOwner[0x05] = BUS_REFRESH;
             busOwner[pos.lol ? 0xE3 : 0xE2] = BUS_REFRESH;
+            // assert(busOwner[pos.lol ? 0xE2 : 0xE3] == BUS_NONE);
             busValue[0x01] = 0;
             busValue[0x03] = 0;
             busValue[0x05] = 0;

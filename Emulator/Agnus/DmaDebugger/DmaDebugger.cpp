@@ -309,6 +309,11 @@ DmaDebugger::eolHandler()
     // Copy Agnus array before they get deleted
     std::memcpy(busValue, agnus.busValue, sizeof(agnus.busValue));
     std::memcpy(busOwner, agnus.busOwner, sizeof(agnus.busOwner));
+
+    // Record some information for being picked up in the HSYNC handler
+    pixel0 = agnus.pos.pixel(0);
+    line1 = agnus.pos.vPrev();
+    line2 = agnus.pos.v;
 }
 
 void
@@ -319,16 +324,25 @@ DmaDebugger::hsyncHandler()
     // Only proceed if DMA debugging has been turned on
     if (!config.enabled) return;
 
+    // Draw first chunk (previous line)
+    computeOverlay(pixelEngine.getLine(line1) + pixel0, 0, HBLANK_MIN - 1);
+
+    // Draw second chunk (current line)
+    computeOverlay(pixelEngine.getLine(line2), HBLANK_MIN, HPOS_MAX);
+
+    /*
     isize vpos1 = agnus.pos.v - 1;
     isize vpos2 = agnus.pos.v - 2;
     if (vpos1 < 0) vpos1 += agnus.pos.vLatched;
     if (vpos2 < 0) vpos2 += agnus.pos.vLatched;
 
     // Draw first chunk (previous line)
+
     computeOverlay(pixelEngine.getLine(vpos2) + agnus.pos.pixel(0), 0, HBLANK_MIN - 1);
 
     // Draw second chunk (current line)
-    computeOverlay(pixelEngine.getLine(vpos1), HBLANK_MIN, HPOS_MAX_PAL);
+    computeOverlay(pixelEngine.getLine(vpos1), HBLANK_MIN, HPOS_MAX);
+    */
 }
 
 void

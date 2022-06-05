@@ -31,6 +31,11 @@ class DmaDebugger : public SubComponent {
     // A local copy of the bus owner table (recorded in the EOL handler)
     BusOwner busOwner[HPOS_CNT];
 
+    // Location information (recorded in the EOL handler)
+    isize pixel0 = 0;
+    isize line1 = 0;
+    isize line2 = 0;
+
 
     //
     // Initializing
@@ -120,5 +125,5 @@ public:
 private:
 
     // Visualizes DMA usage for a certain range of DMA cycles
-    void computeOverlay(u32 *ptr, isize first, isize last); 
+    void computeOverlay(u32 *ptr, isize first, isize last);
 };
