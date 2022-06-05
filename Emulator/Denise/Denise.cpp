@@ -866,17 +866,6 @@ Denise::drawBorder()
             }
         }
     }
-
-#ifdef LINE_DEBUG
-    if (LINE_DEBUG) {
-        for (Pixel i = 0; i < HPIXELS / 2; i++) {
-            iBuffer[i] = mBuffer[i] = 64;
-        }
-    }
-#endif
-#ifdef COLUMN_DEBUG
-    iBuffer[4*COLUMN_DEBUG] = mBuffer[4*COLUMN_DEBUG] = 64;
-#endif
 }
 
 template <int x> void
@@ -1008,9 +997,8 @@ Denise::hsyncHandler()
 {
     assert(agnus.pos.h == 0x11);
 
-    isize vpos = agnus.pos.v ? agnus.pos.v - 1 : agnus.pos.vLatched - 1;
-    assert (vpos == agnus.pos.vPrev());
-    assert(vpos >= 0 && vpos <= VPOS_MAX_PAL_LF);
+    isize vpos = agnus.pos.vPrev();
+    assert(vpos >= 0 && vpos <= VPOS_MAX);
 
     //
     // Finish the current line
@@ -1052,9 +1040,22 @@ Denise::hsyncHandler()
     assert(sprChanges[1].isEmpty());
     assert(sprChanges[2].isEmpty());
     assert(sprChanges[3].isEmpty());
-    
-    // Encode a HIRES / LORES marker in the first HBLANK pixel
+
     u32 *ptr = pixelEngine.frameBuffer + HPIXELS * vpos;
+
+#ifdef LINE_DEBUG
+    if (LINE_DEBUG) {
+        for (Pixel i = 0; i < HPIXELS; i++) {
+            ptr[i] = (i & 1) ? 0xFF0000FF : 0xFFFFFFFF;
+        }
+    }
+#endif
+#ifdef COLUMN_DEBUG
+    iBuffer[4*COLUMN_DEBUG] = mBuffer[4*COLUMN_DEBUG] = 64;
+#endif
+
+    // Encode a HIRES / LORES marker in the first HBLANK pixel
+    // u32 *ptr = pixelEngine.frameBuffer + HPIXELS * vpos;
     *ptr = hires() ? 0 : -1;
 
     // Add a debug pixel if requested

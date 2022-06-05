@@ -180,17 +180,17 @@ extension Renderer {
         
         let view = matrix_identity_float4x4
         let proj = Renderer.perspectiveMatrix(fovY: Float(65.0 * (.pi / 180.0)),
-                                     aspect: aspect,
-                                     nearZ: 0.1,
-                                     farZ: 100.0)
+                                              aspect: aspect,
+                                              nearZ: 0.1,
+                                              farZ: 100.0)
 
         let transEye = Renderer.translationMatrix(x: xShift,
-                                         y: yShift,
-                                         z: zShift + 1.393 - 0.16)
+                                                  y: yShift,
+                                                  z: zShift + 1.393 - 0.16)
 
         let transRotX = Renderer.translationMatrix(x: 0.0,
-                                          y: 0.0,
-                                          z: 0.16)
+                                                   y: 0.0,
+                                                   z: 0.16)
 
         let rotX = Renderer.rotationMatrix(radians: xAngle, x: 0.5, y: 0.0, z: 0.0)
         let rotY = Renderer.rotationMatrix(radians: yAngle, x: 0.0, y: 0.5, z: 0.0)

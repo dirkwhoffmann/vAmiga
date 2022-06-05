@@ -324,25 +324,17 @@ DmaDebugger::hsyncHandler()
     // Only proceed if DMA debugging has been turned on
     if (!config.enabled) return;
 
+    /*
+    if (agnus.pos.v == 10) {
+        trace(1, "line1 = %d line2 = %d\n", line1, line2);
+    }
+    */
+    
     // Draw first chunk (previous line)
     computeOverlay(pixelEngine.getLine(line1) + pixel0, 0, HBLANK_MIN - 1);
 
     // Draw second chunk (current line)
     computeOverlay(pixelEngine.getLine(line2), HBLANK_MIN, HPOS_MAX);
-
-    /*
-    isize vpos1 = agnus.pos.v - 1;
-    isize vpos2 = agnus.pos.v - 2;
-    if (vpos1 < 0) vpos1 += agnus.pos.vLatched;
-    if (vpos2 < 0) vpos2 += agnus.pos.vLatched;
-
-    // Draw first chunk (previous line)
-
-    computeOverlay(pixelEngine.getLine(vpos2) + agnus.pos.pixel(0), 0, HBLANK_MIN - 1);
-
-    // Draw second chunk (current line)
-    computeOverlay(pixelEngine.getLine(vpos1), HBLANK_MIN, HPOS_MAX);
-    */
 }
 
 void

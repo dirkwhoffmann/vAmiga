@@ -61,7 +61,7 @@ struct FloatStereo; typedef struct FloatStereo SampleType;
 */
 
 // Uncomment to colorize a certain row or column
-// #define LINE_DEBUG (agnus.pos.v == 260 || agnus.pos.v == 300)
+// #define LINE_DEBUG (vpos == 0 || vpos == 160 || vpos == 300)
 // #define COLUMN_DEBUG 114
 
 

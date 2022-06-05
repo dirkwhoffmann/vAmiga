@@ -460,9 +460,11 @@ extension MyController {
                         
         case .DMA_DEBUG_ON:
             renderer.zoomTextureOut()
+            renderer.zoomOut()
             
         case .DMA_DEBUG_OFF:
             renderer.zoomTextureIn()
+            renderer.zoomIn()
 
         case .MACHINE_TYPE:
             renderer.canvas.updateTextureRect()

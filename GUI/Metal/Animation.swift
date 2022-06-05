@@ -177,9 +177,9 @@ extension Renderer {
     // Geometry animations
     //
 
-    func zoomIn(steps: Int = 60) {
+    func zoomIn(steps: Int = 30) {
 
-        shiftZ.current = 6.0
+        shiftZ.current = 0.025
         shiftZ.target = 0.0
         angleX.target = 0.0
         angleY.target = 0.0
@@ -193,9 +193,9 @@ extension Renderer {
         animates |= AnimationType.geometry
     }
 
-    func zoomOut(steps: Int = 40) {
+    func zoomOut(steps: Int = 30) {
 
-        shiftZ.target = 6.0
+        shiftZ.target = 0.025
         angleX.target = 0.0
         angleY.target = 0.0
         angleZ.target = 0.0

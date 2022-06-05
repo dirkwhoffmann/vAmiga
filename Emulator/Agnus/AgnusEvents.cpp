@@ -531,25 +531,29 @@ Agnus::serviceDASEvent(EventID id)
     switch (id) {
 
         case DAS_REFRESH:
+
             busOwner[0x01] = BUS_REFRESH;
             busOwner[0x03] = BUS_REFRESH;
             busOwner[0x05] = BUS_REFRESH;
             busOwner[pos.lol ? 0xE3 : 0xE2] = BUS_REFRESH;
-            // assert(busOwner[pos.lol ? 0xE2 : 0xE3] == BUS_NONE);
+
             busValue[0x01] = 0;
             busValue[0x03] = 0;
             busValue[0x05] = 0;
             busValue[pos.lol ? 0xE3 : 0xE2] = 0;
+
             stats.usage[BUS_REFRESH] += 4;
             break;
 
         case DAS_D0:
         case DAS_D1:
         case DAS_D2:
+
             paula.diskController.performDMA();
             break;
 
         case DAS_A0:
+
             if (audxDR[0]) {
                 audxDR[0] = false;
                 paula.channel0.pokeAUDxDAT(doAudioDmaRead<0>());
@@ -557,6 +561,7 @@ Agnus::serviceDASEvent(EventID id)
             break;
 
         case DAS_A1:
+
             if (audxDR[1]) {
                 audxDR[1] = false;
                 paula.channel1.pokeAUDxDAT(doAudioDmaRead<1>());
@@ -575,6 +580,7 @@ Agnus::serviceDASEvent(EventID id)
             break;
 
         case DAS_A3:
+
             if (audxDR[3]) {
                 audxDR[3] = false;
                 paula.channel3.pokeAUDxDAT(doAudioDmaRead<3>());
@@ -582,74 +588,92 @@ Agnus::serviceDASEvent(EventID id)
             break;
 
         case DAS_S0_1:
+
             executeFirstSpriteCycle<0>();
             break;
 
         case DAS_S0_2:
+
             executeSecondSpriteCycle<0>();
             break;
 
         case DAS_S1_1:
+
             executeFirstSpriteCycle<1>();
             break;
 
         case DAS_S1_2:
+
             executeSecondSpriteCycle<1>();
             break;
 
         case DAS_S2_1:
+
             executeFirstSpriteCycle<2>();
             break;
 
         case DAS_S2_2:
+
             executeSecondSpriteCycle<2>();
             break;
 
         case DAS_S3_1:
+
             executeFirstSpriteCycle<3>();
             break;
 
         case DAS_S3_2:
+
             executeSecondSpriteCycle<3>();
             break;
 
         case DAS_S4_1:
+
             executeFirstSpriteCycle<4>();
             break;
 
         case DAS_S4_2:
+
             executeSecondSpriteCycle<4>();
             break;
 
         case DAS_S5_1:
+
             executeFirstSpriteCycle<5>();
             break;
 
         case DAS_S5_2:
+
             executeSecondSpriteCycle<5>();
             break;
 
         case DAS_S6_1:
+
             executeFirstSpriteCycle<6>();
             break;
 
         case DAS_S6_2:
+
             executeSecondSpriteCycle<6>();
             break;
 
         case DAS_S7_1:
+
             executeFirstSpriteCycle<7>();
             break;
 
         case DAS_S7_2:
+
             executeSecondSpriteCycle<7>();
             break;
 
         case DAS_SDMA:
+
             updateSpriteDMA();
             break;
 
         case DAS_TICK:
+            
             ciab.tod.increment();
             break;
 
