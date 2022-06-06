@@ -100,7 +100,6 @@ Agnus::scheduleNextBplEvent(isize hpos)
     if (u8 next = sequencer.nextBplEvent[hpos]) {
         scheduleRel<SLOT_BPL>(DMA_CYCLES(next - pos.h), sequencer.bplEvent[next]);
     }
-    assert(hasEvent<SLOT_BPL>());
 }
 
 void
@@ -313,6 +312,10 @@ Agnus::serviceBPLEvent(EventID id)
 {
     switch (id) {
 
+        case EVENT_NONE:
+            assert(pos.h == HPOS_MAX);
+            break;
+
         case EVENT_NONE | DRAW_ODD:
             hires() ? denise.drawHiresOdd() : denise.drawLoresOdd();
             break;
@@ -416,21 +419,21 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_L6_MOD | DRAW_BOTH:    LO_MOD_BOTH(5); break;
 
         case BPL_EOL:
-            serviceEOL();
+            // serviceEOL();
             return;
 
         case BPL_EOL | DRAW_ODD:
-            serviceEOL();
+            // serviceEOL();
             hires() ? denise.drawHiresOdd() : denise.drawLoresOdd();
             return;
 
         case BPL_EOL | DRAW_EVEN:
-            serviceEOL();
+            // serviceEOL();
             hires() ? denise.drawHiresEven() : denise.drawLoresEven();
             return;
 
         case BPL_EOL | DRAW_BOTH:
-            serviceEOL();
+            // serviceEOL();
             hires() ? denise.drawHiresBoth() : denise.drawLoresBoth();
             return;
             
@@ -457,6 +460,7 @@ Agnus::serviceBPLEventLores()
     denise.setBPLxDAT<nr>(doBitplaneDmaRead<nr>());
 }
 
+/*
 void
 Agnus::serviceEOL()
 {
@@ -469,10 +473,11 @@ Agnus::serviceEOL()
 
     } else {
 
-        // Call the hsync handler at the beginning of the next DMA cycle
+        // Call the EOL handler at the beginning of the next DMA cycle
         recordRegisterChange(0, SET_STRHOR, 1);
     }
 }
+*/
 
 void
 Agnus::serviceVBLEvent(EventID id)
@@ -686,7 +691,23 @@ Agnus::serviceDASEvent(EventID id)
             // Call the HSYNC handler at the beginning of the next cycle
             recordRegisterChange(DMA_CYCLES(1), SET_NONE, 0);
             break;
-            
+
+        case DAS_EOL:
+
+            assert(pos.h == HPOS_MAX_PAL || pos.h == HPOS_MAX_NTSC);
+
+            if (pos.h == HPOS_MAX_PAL && pos.lol) {
+
+                // Run for an additional cycle (long line)
+                break;
+
+            } else {
+
+                // Call the EOL handler at the beginning of the next DMA cycle
+                recordRegisterChange(0, SET_STRHOR, 1);
+            }
+            break;
+
         default:
             fatalError;
     }

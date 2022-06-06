@@ -241,6 +241,7 @@ enum_i8(EventID)
     DAS_SDMA,
     DAS_TICK,
     DAS_HSYNC,
+    DAS_EOL,
     DAS_EVENT_COUNT,
 
     // Copper slot

@@ -760,7 +760,7 @@ public:
     void serviceBPLEvent(EventID id);
     template <isize nr> void serviceBPLEventHires();
     template <isize nr> void serviceBPLEventLores();
-    void serviceEOL();
+    // void serviceEOL();
 
     // Services a vertical blank interrupt
     void serviceVBLEvent(EventID id);

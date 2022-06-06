@@ -60,7 +60,8 @@
  *     nextBplEvent[0x2E] = 0x2F     nextDasEvent[0x2E] = 0x2F
  *     nextBplEvent[0x2F] = 0x31     nextDasEvent[0x2F] = 0x31
  *           ...                           ...
- *     nextBplEvent[0xE2] = 0x00     nextDasEvent[0xE2] = 0x00
+ *     nextBplEvent[0xE2] = 0xE2     nextDasEvent[0xE2] = 0xE3
+ *     nextBplEvent[0xE3] = 0x00     nextDasEvent[0xE3] = 0x00
  *
  * Whenever one the DMA tables is modified, the corresponding jump table
  * has to be updated, too.
@@ -336,7 +337,7 @@ public:
 private:
 
     // Updates the jump table for the dasEvent table
-    void updateDasJumpTable(i16 end = HPOS_MAX_NTSC);
+    void updateDasJumpTable(i16 end = HPOS_MAX);
     
     
     //

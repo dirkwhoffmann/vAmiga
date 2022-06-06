@@ -14,13 +14,13 @@
 void
 Sequencer::initBplEvents()
 {
-    for (isize i = 0; i < HPOS_MAX; i++) bplEvent[i] = EVENT_NONE;
-    for (isize i = 0; i < HPOS_MAX; i++) nextBplEvent[i] = HPOS_MAX_PAL;
+    for (isize i = 0; i < HPOS_CNT; i++) bplEvent[i] = EVENT_NONE;
+    for (isize i = 0; i < HPOS_CNT; i++) nextBplEvent[i] = HPOS_MAX;
     
-    bplEvent[HPOS_MAX_PAL] = BPL_EOL;
-    nextBplEvent[HPOS_MAX_PAL] = 0;
-    bplEvent[HPOS_MAX_NTSC] = BPL_EOL;
-    nextBplEvent[HPOS_MAX_NTSC] = 0;
+    // bplEvent[HPOS_MAX_PAL] = BPL_EOL;
+    // nextBplEvent[HPOS_MAX_PAL] = 0;
+    // bplEvent[HPOS_MAX_NTSC] = BPL_EOL;
+    // nextBplEvent[HPOS_MAX_NTSC] = 0;
 }
 
 void
@@ -66,8 +66,8 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
     }
     
     // Add EOL events (end of line)
-    bplEvent[HPOS_MAX_PAL] |= BPL_EOL;
-    bplEvent[HPOS_MAX_NTSC] |= BPL_EOL;
+    // bplEvent[HPOS_MAX_PAL] |= BPL_EOL;
+    // bplEvent[HPOS_MAX_NTSC] |= BPL_EOL;
 
     // Update the jump table
     updateBplJumpTable();
@@ -96,7 +96,7 @@ Sequencer::computeBplEventsFast(const SigRecorder &sr, DDFState &state)
     trace(SEQ_DEBUG, "Fast path (no bitplane DMA in this line)\n");
 
     // Erase all events
-    for (isize i = 0; i < HPOS_CNT_NTSC; i++) bplEvent[i] = EVENT_NONE;
+    for (isize i = 0; i < HPOS_CNT; i++) bplEvent[i] = EVENT_NONE;
     
     // Add drawing flags
     if (state.bmctl & 0x8) {
@@ -105,10 +105,10 @@ Sequencer::computeBplEventsFast(const SigRecorder &sr, DDFState &state)
         auto even = agnus.scrollEven & 0b11;
 
         if (odd == even) {
-            for (isize i = odd; i < HPOS_CNT_NTSC; i += 4) bplEvent[i] = (EventID)3;
+            for (isize i = odd; i < HPOS_CNT; i += 4) bplEvent[i] = (EventID)3;
         } else {
-            for (isize i = odd; i < HPOS_CNT_NTSC; i += 4) bplEvent[i] = (EventID)1;
-            for (isize i = even; i < HPOS_CNT_NTSC; i += 4) bplEvent[i] = (EventID)2;
+            for (isize i = odd; i < HPOS_CNT; i += 4) bplEvent[i] = (EventID)1;
+            for (isize i = even; i < HPOS_CNT; i += 4) bplEvent[i] = (EventID)2;
         }
 
     } else {
@@ -117,10 +117,10 @@ Sequencer::computeBplEventsFast(const SigRecorder &sr, DDFState &state)
         auto even = agnus.scrollEven & 0b111;
 
         if (odd == even) {
-            for (isize i = odd; i < HPOS_CNT_NTSC; i += 8) bplEvent[i] = (EventID)3;
+            for (isize i = odd; i < HPOS_CNT; i += 8) bplEvent[i] = (EventID)3;
         } else {
-            for (isize i = odd; i < HPOS_CNT_NTSC; i += 8) bplEvent[i] = (EventID)1;
-            for (isize i = even; i < HPOS_CNT_NTSC; i += 8) bplEvent[i] = (EventID)2;
+            for (isize i = odd; i < HPOS_CNT; i += 8) bplEvent[i] = (EventID)1;
+            for (isize i = even; i < HPOS_CNT; i += 8) bplEvent[i] = (EventID)2;
         }
     }
         
@@ -410,7 +410,7 @@ Sequencer::processSignal <true> (u16 signal, DDFState &state)
 void
 Sequencer::updateBplJumpTable()
 {
-    u8 next = 0;
+    u8 next = HPOS_MAX;
     
     for (isize i = HPOS_MAX; i >= 0; i--) {
         
