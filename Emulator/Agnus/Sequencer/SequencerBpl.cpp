@@ -406,8 +406,8 @@ void
 Sequencer::updateBplJumpTable(i16 end)
 {
     assert(end <= HPOS_MAX);
+    assert(nextBplEvent[HPOS_MAX] == HPOS_MAX);
 
-    nextBplEvent[HPOS_MAX] = HPOS_MAX;
     u8 next = nextBplEvent[end];
     
     for (isize i = end; i >= 0; i--) {

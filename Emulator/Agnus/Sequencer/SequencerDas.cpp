@@ -69,6 +69,7 @@ void
 Sequencer::initDasEvents()
 {
     for (isize i = 0; i < HPOS_CNT; i++) dasEvent[i] = dasDMA[0][i];
+    for (isize i = 0; i < HPOS_CNT; i++) nextDasEvent[i] = HPOS_MAX;
     updateDasJumpTable();
 }
 
@@ -88,8 +89,8 @@ void
 Sequencer::updateDasJumpTable(i16 end)
 {
     assert(end <= HPOS_MAX);
+    assert(nextDasEvent[HPOS_MAX] == HPOS_MAX);
 
-    nextDasEvent[HPOS_MAX] = HPOS_MAX;
     u8 next = nextDasEvent[end];
     
     for (isize i = end; i >= 0; i--) {
