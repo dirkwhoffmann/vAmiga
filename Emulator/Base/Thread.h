@@ -148,8 +148,7 @@ protected:
     isize loopCounter = 0;
     isize suspendCounter = 0;
     
-    // Time stamps for adjusting the execution speed
-    util::Time delay = util::Time(1000000000 / 50);
+    // Time stamp for adjusting the execution speed
     util::Time targetTime;
             
     // Clocks for measuring the CPU load
@@ -187,6 +186,9 @@ private:
     // The code to be executed in each iteration (implemented by the subclass)
     virtual void execute() = 0;
 
+    // Delay between two frames in nanoseconds (provided by the subclass)
+    virtual util::Time getDelay() = 0;
+
     // Returns true if this functions is called from within the emulator thread
     bool isEmulatorThread() { return std::this_thread::get_id() == thread.get_id(); }
 
@@ -197,7 +199,6 @@ private:
 
 public:
     
-    void setFrequency(double hz);
     void setMode(SyncMode newMode);
 
     

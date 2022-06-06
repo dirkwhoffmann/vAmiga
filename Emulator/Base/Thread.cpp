@@ -77,7 +77,7 @@ Thread::sleep <Thread::SyncMode::Periodic> ()
     // Sleep for a while
     // std::cout << "Sleeping... " << targetTime.asMilliseconds() << std::endl;
     // std::cout << "Delay = " << delay.asNanoseconds() << std::endl;
-    targetTime += delay;
+    targetTime += getDelay();
     targetTime.sleepUntil();
 }
 
@@ -194,12 +194,6 @@ Thread::main()
             nonstopClock.restart();
         }
     }
-}
-
-void
-Thread::setFrequency(double hz)
-{
-    delay = util::Time(i64(1000000000.0 / hz));
 }
 
 void

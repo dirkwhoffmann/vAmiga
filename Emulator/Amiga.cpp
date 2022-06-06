@@ -1128,6 +1128,19 @@ Amiga::execute()
     }
 }
 
+util::Time
+Amiga::getDelay()
+{
+    switch (config.type) {
+
+        case PAL:   return util::Time(i64(1000000000 / 50));
+        case NTSC:  return util::Time(i64(1000000000 / 60));
+
+        default:
+            fatalError;
+    }
+}
+
 void
 Amiga::setFlag(u32 flag)
 {

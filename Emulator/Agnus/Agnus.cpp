@@ -143,9 +143,6 @@ Agnus::setVideoFormat(VideoFormat newFormat)
     // Change the frame type
     agnus.pos.switchMode(newFormat);
 
-    // Adjust the refresh rate
-    amiga.setFrequency(newFormat == PAL ? 50 : 60);
-
     // Rectify pending events that rely on exact beam positions
     agnus.rectifyVBLEvent();
     

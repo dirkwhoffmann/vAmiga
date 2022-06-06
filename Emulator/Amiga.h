@@ -236,8 +236,9 @@ private:
 private:
     
     void execute() override;
+    util::Time getDelay() override;
 
-    
+
     //
     // Configuring
     //
