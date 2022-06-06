@@ -29,7 +29,9 @@ Sequencer::initDasEventTable()
             p[0x09] = DAS_D1;
             p[0x0B] = DAS_D2;
         }
-        
+
+        p[0x10] = DAS_HSYNC;
+
         // Audio DMA is possible even in lines where the DMACON bits are false
         p[0x0D] = DAS_A0;
         p[0x0F] = DAS_A1;

@@ -141,9 +141,7 @@ Agnus::setVideoFormat(VideoFormat newFormat)
     trace(NTSC_DEBUG, "Video format = %s\n", VideoFormatEnum::key(newFormat));
 
     // Change the frame type
-    agnus.pos.type = newFormat;
-    agnus.pos.lol = false;
-    agnus.pos.lolToggle = newFormat == NTSC;
+    agnus.pos.switchMode(newFormat);
 
     // Adjust the refresh rate
     amiga.setFrequency(newFormat == PAL ? 50 : 60);
@@ -656,11 +654,10 @@ Agnus::eofHandler()
 
     // Let other components do their own VSYNC stuff
     sequencer.eofHandler();
-    copper.vsyncHandler();
-    denise.vsyncHandler();
-    controlPort1.joystick.vsyncHandler();
-    controlPort2.joystick.vsyncHandler();
-    retroShell.vsyncHandler();
+    copper.eofHandler();
+    controlPort1.joystick.eofHandler();
+    controlPort2.joystick.eofHandler();
+    retroShell.eofHandler();
 
     // Update statistics
     updateStats();
@@ -673,8 +670,19 @@ Agnus::eofHandler()
 void
 Agnus::hsyncHandler()
 {
-    denise.hsyncHandler();
-    dmaDebugger.hsyncHandler();
+    // Draw the previous line
+    isize vpos = agnus.pos.vPrev();
+    denise.hsyncHandler(vpos);
+    dmaDebugger.hsyncHandler(vpos);
+
+    // Call the vsyncHandler once we've finished a frame
+    if (pos.v == 0) vsyncHandler();
+}
+
+void
+Agnus::vsyncHandler()
+{
+    denise.vsyncHandler();
 }
 
 

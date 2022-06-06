@@ -993,12 +993,12 @@ Denise::vsyncHandler()
 }
 
 void
-Denise::hsyncHandler()
+Denise::hsyncHandler(isize vpos)
 {
     assert(agnus.pos.h == 0x11);
-
-    isize vpos = agnus.pos.vPrev();
     assert(vpos >= 0 && vpos <= VPOS_MAX);
+
+    // isize vpos = agnus.pos.vPrev();
 
     //
     // Finish the current line
@@ -1041,29 +1041,9 @@ Denise::hsyncHandler()
     assert(sprChanges[2].isEmpty());
     assert(sprChanges[3].isEmpty());
 
-    u32 *ptr = pixelEngine.frameBuffer + HPIXELS * vpos;
-
-#ifdef LINE_DEBUG
-    if (LINE_DEBUG) {
-        for (Pixel i = 0; i < HPIXELS; i++) {
-            ptr[i] = (i & 1) ? 0xFF0000FF : 0xFFFFFFFF;
-        }
-    }
-#endif
-#ifdef COLUMN_DEBUG
-    iBuffer[4*COLUMN_DEBUG] = mBuffer[4*COLUMN_DEBUG] = 64;
-#endif
-
     // Encode a HIRES / LORES marker in the first HBLANK pixel
-    // u32 *ptr = pixelEngine.frameBuffer + HPIXELS * vpos;
+    u32 *ptr = pixelEngine.frameBuffer + HPIXELS * vpos;
     *ptr = hires() ? 0 : -1;
-
-    // Add a debug pixel if requested
-    if constexpr (NTSC_DEBUG) {
-
-        u32 color = agnus.pos.lol ? -1 : 0;
-        *(ptr + 1) = color;
-    }
 
     // Clear the bBuffer
     std::memset(bBuffer, 0, sizeof(bBuffer));
@@ -1074,6 +1054,15 @@ Denise::hsyncHandler()
     // Reset the sprite clipping range
     spriteClipBegin = HPIXELS;
     spriteClipEnd = HPIXELS + 32;
+
+    // Add some debug information if requested
+#ifdef LINE_DEBUG
+    if (LINE_DEBUG) {
+        for (Pixel i = 0; i < HPIXELS; i++) {
+            ptr[i] = (i & 1) ? 0xFF0000FF : 0xFFFFFFFF;
+        }
+    }
+#endif
 }
 
 void

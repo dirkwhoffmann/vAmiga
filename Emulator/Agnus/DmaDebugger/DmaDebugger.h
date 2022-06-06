@@ -33,8 +33,6 @@ class DmaDebugger : public SubComponent {
 
     // HSYNC handler information (recorded in the EOL handler)
     isize pixel0 = 0;
-    isize line1 = 0;
-    isize line2 = 0;
 
 
     //
@@ -117,7 +115,7 @@ public:
     void eolHandler();
 
     // Called by Agnus at the beginning of the HSYNC area
-    void hsyncHandler();
+    void hsyncHandler(isize vpos);
 
     // Cleans by Agnus at the end of each frame
     void vSyncHandler();
@@ -125,5 +123,5 @@ public:
 private:
 
     // Visualizes DMA usage for a certain range of DMA cycles
-    void computeOverlay(u32 *ptr, isize first, isize last);
+    void computeOverlay(u32 *ptr, isize first, isize last, BusOwner *own, u16 *val);
 };

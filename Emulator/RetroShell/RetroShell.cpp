@@ -449,7 +449,7 @@ RetroShell::dump(AmigaObject &component, Category category)
 }
 
 void
-RetroShell::vsyncHandler()
+RetroShell::eofHandler()
 {
     if (agnus.clock >= wakeUp) {
         

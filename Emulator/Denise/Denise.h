@@ -536,7 +536,7 @@ public:
     void vsyncHandler();
 
     // Called by Agnus at the beginning of the HSYNC area
-    void hsyncHandler();
+    void hsyncHandler(isize vpos);
 
     // Called by Agnus at the end of each line
     void eolHandler();

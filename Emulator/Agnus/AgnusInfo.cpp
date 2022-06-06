@@ -166,6 +166,7 @@ Agnus::eventName(EventSlot slot, EventID id)
                 case DAS_S7_2:      return "DAS_S7_2";
                 case DAS_SDMA:      return "DAS_SDMA";
                 case DAS_TICK:      return "DAS_TICK";
+                case DAS_HSYNC:     return "DAS_HSYNC";
                 default:            return "*** INVALID ***";
             }
             break;

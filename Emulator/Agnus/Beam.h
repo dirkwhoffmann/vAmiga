@@ -149,7 +149,7 @@ struct Beam
 
 
     //
-    // Switching lines and frames
+    // Switching lines, frames, and video modes
     //
 
     // Called by Agnus in the EOL handler to switch to the next line
@@ -157,4 +157,7 @@ struct Beam
 
     // Called by Agnus in the EOF handler to switch to the next frame
     void eof();
+
+    // Called by Agnus when the video format is changed (PAL / NTSC)
+    void switchMode(VideoFormat format);
 };

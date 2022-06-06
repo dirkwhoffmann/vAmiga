@@ -313,7 +313,7 @@ public:
 private:
     
     // Executed after each frame
-    void vsyncHandler();
+    void eofHandler();
     
 
     //

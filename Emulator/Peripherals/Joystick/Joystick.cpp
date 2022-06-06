@@ -225,7 +225,7 @@ Joystick::trigger(GamePadAction event)
 }
 
 void
-Joystick::vsyncHandler()
+Joystick::eofHandler()
 {
     // Only proceed if auto fire is enabled
     if (!config.autofire || config.autofireDelay < 0) return;

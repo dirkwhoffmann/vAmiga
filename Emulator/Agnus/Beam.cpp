@@ -254,3 +254,30 @@ Beam::eof()
     // Toggle the frame length if toggling is enabled
     if (lofToggle) lof = !lof;
 }
+
+void
+Beam::switchMode(VideoFormat format)
+{
+    switch (format) {
+
+        case PAL:
+
+            type = PAL;
+            lol = false;
+            lolToggle = false;
+            vLatched = VPOS_MAX_PAL_LF;
+            break;
+
+        case NTSC:
+
+            type = NTSC;
+            lol = false;
+            lolToggle = true;
+            vLatched = VPOS_MAX_NTSC_LF;
+            break;
+
+        default:
+            fatalError;
+    }
+}
+

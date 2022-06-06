@@ -186,6 +186,11 @@ Agnus::serviceREGEvent(Cycle until)
     assert(pos.type != PAL || pos.h <= HPOS_CNT_PAL);
     assert(pos.type == PAL || pos.h <= HPOS_CNT_NTSC);
 
+    // Call the HSYNC handler at the beginning of the VSYNC area
+    if (pos.h == 0x11) hsyncHandler();
+
+    // TODO: TAKE CARE OF THE EOL HANDLER IN A SIMILAR WAY
+
     // Iterate through all recorded register changes
     while (!changeRecorder.isEmpty()) {
 
@@ -199,7 +204,9 @@ Agnus::serviceREGEvent(Cycle until)
         assert (pos.type == PAL || change.addr == SET_STRHOR || pos.h <= HPOS_MAX_NTSC);
 
         switch (change.addr) {
-                
+
+            case SET_NONE: break;
+
             case SET_BLTSIZE: blitter.setBLTSIZE(change.value); break;
             case SET_BLTSIZV: blitter.setBLTSIZV(change.value); break;
                 
@@ -268,7 +275,7 @@ Agnus::serviceREGEvent(Cycle until)
             case SET_SERDAT: uart.setSERDAT(change.value); break;
                 
             case SET_STRHOR: eolHandler(); break;
-                
+
             default:
                 fatalError;
         }
@@ -570,9 +577,6 @@ Agnus::serviceDASEvent(EventID id)
 
         case DAS_A2:
 
-            // We have reached the beginning of the HSYNC area
-            hsyncHandler();
-
             if (audxDR[2]) {
                 audxDR[2] = false;
                 paula.channel2.pokeAUDxDAT(doAudioDmaRead<2>());
@@ -677,6 +681,12 @@ Agnus::serviceDASEvent(EventID id)
             ciab.tod.increment();
             break;
 
+        case DAS_HSYNC:
+
+            // Call the HSYNC handler at the beginning of the next cycle
+            recordRegisterChange(DMA_CYCLES(1), SET_NONE, 0);
+            break;
+            
         default:
             fatalError;
     }

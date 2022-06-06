@@ -306,43 +306,34 @@ DmaDebugger::eolHandler()
     // Only proceed if DMA debugging has been turned on
     if (!config.enabled) return;
 
-    // Copy Agnus array before they get deleted
+    // Copy Agnus arrays before they get deleted
     std::memcpy(busValue, agnus.busValue, sizeof(agnus.busValue));
     std::memcpy(busOwner, agnus.busOwner, sizeof(agnus.busOwner));
 
     // Record some information for being picked up in the HSYNC handler
     pixel0 = agnus.pos.pixel(0);
-    line1 = agnus.pos.vPrev();
-    line2 = agnus.pos.v;
 }
 
 void
-DmaDebugger::hsyncHandler()
+DmaDebugger::hsyncHandler(isize vpos)
 {
     assert(agnus.pos.h == 0x11);
 
     // Only proceed if DMA debugging has been turned on
     if (!config.enabled) return;
 
-    /*
-    if (agnus.pos.v == 10) {
-        trace(1, "line1 = %d line2 = %d\n", line1, line2);
-    }
-    */
-    
-    // Draw first chunk (previous line)
-    computeOverlay(pixelEngine.getLine(line1) + pixel0, 0, HBLANK_MIN - 1);
+    // Draw first chunk (data from previous DMA line)
+    u32 *ptr1 = pixelEngine.getLine(vpos);
+    computeOverlay(ptr1, HBLANK_MIN, HPOS_MAX, busOwner, busValue);
 
-    // Draw second chunk (current line)
-    computeOverlay(pixelEngine.getLine(line2), HBLANK_MIN, HPOS_MAX);
+    // Draw second chunk (data from current DMA line)
+    u32 *ptr2 = ptr1 + agnus.pos.pixel(0);
+    computeOverlay(ptr2, 0, HBLANK_MIN - 1, agnus.busOwner, agnus.busValue);
 }
 
 void
-DmaDebugger::computeOverlay(u32 *ptr, isize first, isize last)
+DmaDebugger::computeOverlay(u32 *ptr, isize first, isize last, BusOwner *own, u16 *val)
 {
-    BusOwner *owners = busOwner;
-    u16 *values = busValue;
-
     double opacity = config.opacity / 100.0;
     double bgWeight = 0;
     double fgWeight = 0;
@@ -374,7 +365,7 @@ DmaDebugger::computeOverlay(u32 *ptr, isize first, isize last)
 
     for (isize i = first; i <= last; i++, ptr += 4) {
 
-        BusOwner owner = owners[i];
+        BusOwner owner = own[i];
 
         // Handle the easy case first: No foreground pixels
         if (!visualize[owner]) {
@@ -389,10 +380,10 @@ DmaDebugger::computeOverlay(u32 *ptr, isize first, isize last)
         }
 
         // Get RGBA values of foreground pixels
-        GpuColor col0 = debugColor[owner][(values[i] & 0xC000) >> 14];
-        GpuColor col1 = debugColor[owner][(values[i] & 0x0C00) >> 10];
-        GpuColor col2 = debugColor[owner][(values[i] & 0x00C0) >> 6];
-        GpuColor col3 = debugColor[owner][(values[i] & 0x000C) >> 2];
+        GpuColor col0 = debugColor[owner][(val[i] & 0xC000) >> 14];
+        GpuColor col1 = debugColor[owner][(val[i] & 0x0C00) >> 10];
+        GpuColor col2 = debugColor[owner][(val[i] & 0x00C0) >> 6];
+        GpuColor col3 = debugColor[owner][(val[i] & 0x000C) >> 2];
 
         if (fgWeight != 0.0) {
             col0 = col0.mix(GpuColor(ptr[0]), fgWeight);

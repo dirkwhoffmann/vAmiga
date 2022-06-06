@@ -114,7 +114,7 @@ public:
     void trigger(GamePadAction event);
 
     // To be called after each frame
-    void vsyncHandler();
+    void eofHandler();
     
 private:
 

@@ -409,7 +409,7 @@ Copper::isIllegalInstr(u32 addr) const
 }
 
 void
-Copper::vsyncHandler()
+Copper::eofHandler()
 {
     /* "At the start of each vertical blanking interval, COP1LC is automatically
      *  used to start the program counter. That is, no matter what the Copper is

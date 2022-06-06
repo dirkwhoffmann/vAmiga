@@ -418,6 +418,9 @@ private:
     // Called at the beginning of the HSYNC area
     void hsyncHandler();
 
+    // Called at the beginning of the VSYNC area
+    void vsyncHandler();
+
 
     //
     // Controlling DMA (AgnusDma.cpp)

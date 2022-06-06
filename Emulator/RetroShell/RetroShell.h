@@ -218,5 +218,5 @@ public:
     
 public:
     
-    void vsyncHandler();
+    void eofHandler();
 };
