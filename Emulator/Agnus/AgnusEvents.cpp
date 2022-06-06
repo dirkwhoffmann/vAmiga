@@ -154,10 +154,10 @@ void
 Agnus::scheduleNextREGEvent()
 {
     // Determine when the next register change happens
-    Cycle nextTrigger = changeRecorder.trigger();
+    Cycle next = changeRecorder.trigger();
 
     // Schedule a register change event for that cycle
-    scheduleAbs<SLOT_REG>(nextTrigger, REG_CHANGE);
+    if (next < trigger[SLOT_REG]) scheduleAbs<SLOT_REG>(next, REG_CHANGE);
 }
 
 void
@@ -184,26 +184,27 @@ Agnus::serviceREGEvent(Cycle until)
     assert(pos.type != PAL || pos.h <= HPOS_CNT_PAL);
     assert(pos.type == PAL || pos.h <= HPOS_CNT_NTSC);
 
-    // Call the HSYNC handler at the beginning of the VSYNC area
-    if (pos.h == 0x11) hsyncHandler();
+    if (syncEvent) {
 
-    // TODO: TAKE CARE OF THE EOL HANDLER IN A SIMILAR WAY
+        // Call the EOL handler if requested
+        if (syncEvent == DAS_EOL) eolHandler();
+
+        // Call the HSYNC handler if requested
+        if (syncEvent == DAS_HSYNC) hsyncHandler();
+
+        syncEvent = EVENT_NONE;
+    }
 
     // Iterate through all recorded register changes
     while (!changeRecorder.isEmpty()) {
 
         // We're done once the trigger cycle exceeds the target cycle
-        if (changeRecorder.trigger() > until) return;
+        if (changeRecorder.trigger() > until) break;
 
         // Apply the register change
         RegChange &change = changeRecorder.read();
 
-        assert (pos.type != PAL || change.addr == SET_STRHOR || pos.h <= HPOS_MAX_PAL);
-        assert (pos.type == PAL || change.addr == SET_STRHOR || pos.h <= HPOS_MAX_NTSC);
-
         switch (change.addr) {
-
-            case SET_NONE: break;
 
             case SET_BLTSIZE: blitter.setBLTSIZE(change.value); break;
             case SET_BLTSIZV: blitter.setBLTSIZV(change.value); break;
@@ -271,16 +272,11 @@ Agnus::serviceREGEvent(Cycle until)
             case SET_DSKPTL: setDSKPTL(change.value); break;
 
             case SET_SERDAT: uart.setSERDAT(change.value); break;
-                
-            case SET_STRHOR: eolHandler(); break;
 
             default:
                 fatalError;
         }
     }
-
-    assert (pos.type != PAL || pos.h <= HPOS_MAX_PAL);
-    assert (pos.type == PAL || pos.h <= HPOS_MAX_NTSC);
 
     // Schedule next event
     scheduleNextREGEvent();
@@ -439,25 +435,6 @@ Agnus::serviceBPLEventLores()
     // Perform bitplane DMA
     denise.setBPLxDAT<nr>(doBitplaneDmaRead<nr>());
 }
-
-/*
-void
-Agnus::serviceEOL()
-{
-    assert(pos.h == HPOS_MAX_PAL || pos.h == HPOS_MAX_NTSC);
-
-    if (pos.h == HPOS_MAX_PAL && pos.lol) {
-
-        // Run for an additional cycle (long line)
-        agnus.scheduleNextBplEvent(pos.h);
-
-    } else {
-
-        // Call the EOL handler at the beginning of the next DMA cycle
-        recordRegisterChange(0, SET_STRHOR, 1);
-    }
-}
-*/
 
 void
 Agnus::serviceVBLEvent(EventID id)
@@ -668,8 +645,15 @@ Agnus::serviceDASEvent(EventID id)
 
         case DAS_HSYNC:
 
-            // Call the HSYNC handler at the beginning of the next cycle
-            recordRegisterChange(DMA_CYCLES(1), SET_NONE, 0);
+            /* Ask the REG slot handler to call the HSYNC handler at the
+             * beginning of the next cycle. We utilize the REG handler,
+             * because it is the first one to execute. Hence, we can assure
+             * that the the HSYNC handler is executed before any other
+             * operation is performed in this cycle.
+             */
+            syncEvent = id;
+            // recordRegisterChange(DMA_CYCLES(1), REG_NONE, 0);
+            scheduleRel <SLOT_REG> (DMA_CYCLES(1), REG_CHANGE);
             break;
 
         case DAS_EOL:
@@ -683,8 +667,14 @@ Agnus::serviceDASEvent(EventID id)
 
             } else {
 
-                // Call the EOL handler at the beginning of the next DMA cycle
-                recordRegisterChange(0, SET_STRHOR, 1);
+                /* Ask the REG slot handler to call the EOL handler at the
+                 * beginning of the next cycle. We utilize the REG handler,
+                 * because it is the first one to execute. Hence, we can assure
+                 * that the the EOL handler is executed before any other
+                 * operation is performed in this cycle.
+                 */
+                syncEvent = id;
+                scheduleRel <SLOT_REG> (DMA_CYCLES(1), REG_CHANGE);
             }
             break;
 

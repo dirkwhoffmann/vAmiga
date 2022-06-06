@@ -36,9 +36,7 @@
 enum RegChangeID : i32
 {
     SET_NONE,
- 
-    SET_STRHOR,
-    
+     
     SET_BLTSIZE,
     SET_BLTSIZV,
     SET_BLTCON0,

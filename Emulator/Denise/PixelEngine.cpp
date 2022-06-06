@@ -62,8 +62,8 @@ PixelEngine::clear(u32 *ptr, isize line, Pixel first, Pixel last)
 {
     ptr += line * HPIXELS;
 
-    constexpr u32 col1 = 0xFF662222; // 0xFF222222
-    constexpr u32 col2 = 0xFFAA4444; // 0xFF444444
+    constexpr u32 col1 = 0xFF222222; // 0xFF662222
+    constexpr u32 col2 = 0xFF444444; // 0xFFAA4444
 
     for (Pixel i = 4 * first; i < 4 * (last + 1); i++) {
         ptr[i] = ((line >> 2) & 1) == ((i >> 3) & 1) ? col1 : col2;

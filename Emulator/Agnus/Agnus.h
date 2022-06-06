@@ -76,7 +76,10 @@ public:
     
     // Pending register changes
     RegChangeRecorder<8> changeRecorder;
-    
+
+    // An optional sync event to be processed in serviceRegEvent()
+    EventID syncEvent = EVENT_NONE;
+
     
     //
     // Counters
@@ -245,7 +248,8 @@ private:
         << data
         << nextTrigger
         >> changeRecorder
-
+        << syncEvent
+        
         >> pos
         >> latchedPos
         
@@ -760,7 +764,6 @@ public:
     void serviceBPLEvent(EventID id);
     template <isize nr> void serviceBPLEventHires();
     template <isize nr> void serviceBPLEventLores();
-    // void serviceEOL();
 
     // Services a vertical blank interrupt
     void serviceVBLEvent(EventID id);
