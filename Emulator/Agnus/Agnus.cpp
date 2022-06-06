@@ -150,7 +150,7 @@ Agnus::setVideoFormat(VideoFormat newFormat)
     denise.pixelEngine.clearAll();
 
     // Inform the GUI
-    msgQueue.put(MSG_MACHINE_TYPE, newFormat);
+    msgQueue.put(MSG_VIDEO_FORMAT, newFormat);
 }
 
 bool

@@ -207,7 +207,7 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        
+        worker << config.type;
     }
 
     template <class T>

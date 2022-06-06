@@ -466,7 +466,8 @@ extension MyController {
             renderer.zoomTextureIn()
             renderer.zoomIn()
 
-        case .MACHINE_TYPE:
+        case .VIDEO_FORMAT:
+            debug(1, "Video format = \(data1)")
             renderer.canvas.updateTextureRect()
 
         case .OVERCLOCKING:

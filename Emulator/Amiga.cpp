@@ -1236,8 +1236,12 @@ Amiga::latestUserSnapshot()
 void
 Amiga::loadSnapshot(const Snapshot &snapshot)
 {
+    // bool wasPAL, isPAL;
+
     {   SUSPENDED
-        
+
+        // wasPAL = agnus.isPAL();
+
         try {
             
             // Restore the saved state
@@ -1253,11 +1257,14 @@ Amiga::loadSnapshot(const Snapshot &snapshot)
              */
             hardReset();
             throw error;
-        }        
+        }
+
+        // isPAL = agnus.isPAL();
     }
     
     // Inform the GUI
     msgQueue.put(MSG_SNAPSHOT_RESTORED);
+    msgQueue.put(MSG_VIDEO_FORMAT, agnus.isPAL() ? PAL : NTSC);
 }
 
 void
