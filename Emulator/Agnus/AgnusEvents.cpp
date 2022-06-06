@@ -97,9 +97,8 @@ Agnus::scheduleNextBplEvent(isize hpos)
 {
     assert(hpos >= 0 && hpos < HPOS_CNT_NTSC);
 
-    if (u8 next = sequencer.nextBplEvent[hpos]) {
-        scheduleRel<SLOT_BPL>(DMA_CYCLES(next - pos.h), sequencer.bplEvent[next]);
-    }
+    u8 next = sequencer.nextBplEvent[hpos];
+    scheduleRel<SLOT_BPL>(DMA_CYCLES(next - pos.h), sequencer.bplEvent[next]);
 }
 
 void
@@ -112,8 +111,6 @@ Agnus::scheduleBplEventForCycle(isize hpos)
     } else {
         scheduleNextBplEvent(hpos);
     }
-
-    assert(hasEvent<SLOT_BPL>());
 }
 
 void
