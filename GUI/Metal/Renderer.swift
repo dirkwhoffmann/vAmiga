@@ -222,12 +222,10 @@ class Renderer: NSObject, MTKViewDelegate {
 
             // Commit the command buffer
             buffer.addCompletedHandler { _ in
-                // self.canvas.updateTexture()
                 self.semaphore.signal()
             }
             buffer.present(drawable)
             buffer.commit()
-            // buffer.waitUntilCompleted()
         }
         
         // Perform periodic events inside the controller
