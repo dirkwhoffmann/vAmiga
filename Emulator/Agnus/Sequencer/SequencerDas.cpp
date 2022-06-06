@@ -89,6 +89,7 @@ Sequencer::updateDasJumpTable(i16 end)
 {
     assert(end <= HPOS_MAX);
 
+    nextDasEvent[HPOS_MAX] = HPOS_MAX;
     u8 next = nextDasEvent[end];
     
     for (isize i = end; i >= 0; i--) {

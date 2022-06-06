@@ -36,10 +36,9 @@
  *     bplEvent[0x2E] = BPL_L5       dasEvent[0x2E] = EVENT_NONE
  *     bplEvent[0x2F] = BPL_L1       dasEvent[0x2F] = DAS_S6_2
  *         ...                           ...
- *     bplEvent[0xE2] = BPL_EOL      dasEvent[0xE2] = BUS_REFRESH
- *
- * The BPL_EOL event doesn't perform DMA. It concludes the current line.
- *
+ *     bplEvent[0xE2] = EVENT_NONE   dasEvent[0xE2] = BUS_REFRESH
+ *     bplEvent[0xE3] = EVENT_NONE   dasEvent[0xE3] = EVENT_NONE
+*
  * All events in the BPL_SLOT can be superimposed by two drawing flags (bit 0
  * and bit 1) which trigger the transfer of the data registers into the shift
  * registers at the correct DMA cycle. Bit 0 controls the odd bitplanes and
@@ -314,7 +313,7 @@ private:
     template <bool ecs> void processSignal(u16 signal, DDFState &state);
  
     // Updates the jump table for the bplEvent table
-    void updateBplJumpTable();
+    void updateBplJumpTable(i16 end = HPOS_MAX);
 
     // Computes the layout of a single fetch unit
     void computeFetchUnit(u8 dmacon);

@@ -15,12 +15,7 @@ void
 Sequencer::initBplEvents()
 {
     for (isize i = 0; i < HPOS_CNT; i++) bplEvent[i] = EVENT_NONE;
-    for (isize i = 0; i < HPOS_CNT; i++) nextBplEvent[i] = HPOS_MAX;
-    
-    // bplEvent[HPOS_MAX_PAL] = BPL_EOL;
-    // nextBplEvent[HPOS_MAX_PAL] = 0;
-    // bplEvent[HPOS_MAX_NTSC] = BPL_EOL;
-    // nextBplEvent[HPOS_MAX_NTSC] = 0;
+    for (isize i = 0; i < HPOS_CNT; i++) nextBplEvent[i] = HPOS_MAX;    
 }
 
 void
@@ -408,11 +403,14 @@ Sequencer::processSignal <true> (u16 signal, DDFState &state)
 }
 
 void
-Sequencer::updateBplJumpTable()
+Sequencer::updateBplJumpTable(i16 end)
 {
-    u8 next = HPOS_MAX;
+    assert(end <= HPOS_MAX);
+
+    nextBplEvent[HPOS_MAX] = HPOS_MAX;
+    u8 next = nextBplEvent[end];
     
-    for (isize i = HPOS_MAX; i >= 0; i--) {
+    for (isize i = end; i >= 0; i--) {
         
         nextBplEvent[i] = next;
         if (bplEvent[i]) next = (i8)i;

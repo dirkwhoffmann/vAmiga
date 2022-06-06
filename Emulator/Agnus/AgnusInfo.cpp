@@ -128,10 +128,6 @@ Agnus::eventName(EventSlot slot, EventID id)
                 case BPL_H4_MOD | DRAW_ODD:     return "BPL_H4*[O]";
                 case BPL_H4_MOD | DRAW_EVEN:    return "BPL_H4*[E]";
                 case BPL_H4_MOD | DRAW_BOTH:    return "BPL_H4*[OE]";
-                case BPL_EOL:                   return "BPL_EOL";
-                case BPL_EOL | DRAW_ODD:        return "BPL_EOL [O]";
-                case BPL_EOL | DRAW_EVEN:       return "BPL_EOL [E]";
-                case BPL_EOL | DRAW_BOTH:       return "BPL_EOL [OE]";
                 default:                        return "*** INVALID ***";
             }
             break;

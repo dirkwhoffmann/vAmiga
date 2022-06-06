@@ -129,20 +129,19 @@ Agnus::scheduleFirstDasEvent()
 void
 Agnus::scheduleNextDasEvent(isize hpos)
 {
-    assert(hpos >= 0 && hpos < HPOS_CNT_NTSC);
+    assert(hpos >= 0 && hpos < HPOS_CNT);
 
-    if (u8 next = sequencer.nextDasEvent[hpos]) {
-        scheduleRel<SLOT_DAS>(DMA_CYCLES(next - pos.h), sequencer.dasEvent[next]);
-        assert(hasEvent<SLOT_DAS>());
-    } else {
-        cancel<SLOT_DAS>();
-    }
+    u8 next = sequencer.nextDasEvent[hpos];
+    assert(next >= 0 && next < HPOS_CNT);
+
+    scheduleRel<SLOT_DAS>(DMA_CYCLES(next - pos.h), sequencer.dasEvent[next]);
+    assert(hasEvent<SLOT_DAS>());
 }
 
 void
 Agnus::scheduleDasEventForCycle(isize hpos)
 {
-    assert(hpos >= pos.h && hpos < HPOS_CNT_NTSC);
+    assert(hpos >= pos.h && hpos < HPOS_CNT);
 
     if (sequencer.dasEvent[hpos] != EVENT_NONE) {
         scheduleRel<SLOT_DAS>(DMA_CYCLES(hpos - pos.h), sequencer.dasEvent[hpos]);
@@ -417,25 +416,6 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_L6_MOD | DRAW_ODD:     LO_MOD_ODD(5);  break;
         case BPL_L6_MOD | DRAW_EVEN:    LO_MOD_EVEN(5); break;
         case BPL_L6_MOD | DRAW_BOTH:    LO_MOD_BOTH(5); break;
-
-        case BPL_EOL:
-            // serviceEOL();
-            return;
-
-        case BPL_EOL | DRAW_ODD:
-            // serviceEOL();
-            hires() ? denise.drawHiresOdd() : denise.drawLoresOdd();
-            return;
-
-        case BPL_EOL | DRAW_EVEN:
-            // serviceEOL();
-            hires() ? denise.drawHiresEven() : denise.drawLoresEven();
-            return;
-
-        case BPL_EOL | DRAW_BOTH:
-            // serviceEOL();
-            hires() ? denise.drawHiresBoth() : denise.drawLoresBoth();
-            return;
             
         default:
             dump(Category::Dma);
