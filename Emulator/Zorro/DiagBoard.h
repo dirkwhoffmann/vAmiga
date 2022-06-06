@@ -104,7 +104,7 @@ public:
     virtual u8 product() const override          { return 0x77; }
     virtual u8 flags() const override            { return 0x00; }
     virtual u16 manufacturer() const override    { return 0x0539; }
-    virtual u32 serialNumber() const override    { return 1; }
+    virtual u32 serialNumber() const override    { return 16180; }
     virtual u16 initDiagVec() const override     { return 0x40; }
     virtual string vendorName() const override   { return "RASTEC"; }
     virtual string productName() const override  { return "Diag Board"; }
