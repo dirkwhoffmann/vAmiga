@@ -20,10 +20,10 @@ extension Canvas {
                       height: rect.height / texH)
     }
 
-    // Returns the used texture area (including HBLANK and VBLANK)
+    // Returns the entire texture area (including HBLANK and VBLANK)
     var entire: CGRect {
         
-        return CGRect(x: 0, y: 0, width: 4 * Int(HPOS_CNT_PAL), height: Int(VPOS_CNT))
+        return CGRect(x: 0, y: 0, width: 4 * Int(HPOS_CNT), height: Int(VPOS_CNT))
     }
     
     var entireNormalized: CGRect {
@@ -39,7 +39,7 @@ extension Canvas {
         let x1 = Int(HBLANK_CNT) * 4
         let x2 = Int(HPOS_CNT_PAL) * 4
         let y1 = Int(VBLANK_CNT)
-        let y2 = pal ? Int(VPOS_CNT) - 2 : 262
+        let y2 = pal ? Int(VPOS_CNT_PAL) : Int(VPOS_CNT_NTSC)
         
         return CGRect(x: x1, y: y1, width: x2 - x1, height: y2 - y1)
     }

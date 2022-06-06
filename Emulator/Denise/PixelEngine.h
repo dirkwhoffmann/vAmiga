@@ -104,11 +104,16 @@ public:
     
     PixelEngine(Amiga& ref);
  
-    // Initializes frame buffers with a checkerboard pattern
-    void clearTextures();
+    // Initializes both frame buffers with a checkerboard pattern
+    void clearAll();
 
-    // Initializes a single line with a checkerboard pattern
-    void clearLine(u32 *ptr, isize line);
+    // Initializes (part of) the current frame buffer with a checkerboard pattern
+    void clear(isize line);
+    void clear(isize line, Pixel pixel);
+
+private:
+
+    void clear(u32 *ptr, isize line, Pixel first = 0, Pixel last = HPOS_MAX);
 
 
     //

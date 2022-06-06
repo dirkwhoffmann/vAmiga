@@ -42,16 +42,18 @@
 #define VPOS_CNT_PAL_SF     312
 #define VPOS_MAX_PAL_LF     312
 #define VPOS_MAX_PAL_SF     311
+#define VPOS_CNT_PAL        VPOS_CNT_PAL_LF
+#define VPOS_MAX_PAL        VPOS_MAX_PAL_LF
 
 #define VPOS_CNT_NTSC_LF    263
 #define VPOS_CNT_NTSC_SF    262
 #define VPOS_MAX_NTSC_LF    262
 #define VPOS_MAX_NTSC_SF    261
-
 #define VPOS_CNT_NTSC       VPOS_CNT_NTSC_LF
 #define VPOS_MAX_NTSC       VPOS_MAX_NTSC_LF
-#define VPOS_CNT            VPOS_CNT_PAL_LF
-#define VPOS_MAX            VPOS_MAX_PAL_LF
+
+#define VPOS_CNT            VPOS_CNT_PAL
+#define VPOS_MAX            VPOS_MAX_PAL
 
 #define HPOS_CNT_PAL        227
 #define HPOS_MAX_PAL        226
@@ -60,9 +62,9 @@
 #define HPOS_CNT_NTSC_SL    227
 #define HPOS_MAX_NTSC_LL    227
 #define HPOS_MAX_NTSC_SL    226
-
 #define HPOS_CNT_NTSC       HPOS_CNT_NTSC_LL
 #define HPOS_MAX_NTSC       HPOS_MAX_NTSC_LL
+
 #define HPOS_MAX            HPOS_MAX_NTSC_LL
 #define HPOS_CNT            HPOS_CNT_NTSC_LL
 

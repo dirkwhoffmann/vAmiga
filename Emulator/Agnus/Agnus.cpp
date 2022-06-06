@@ -150,7 +150,7 @@ Agnus::setVideoFormat(VideoFormat newFormat)
     agnus.rectifyVBLEvent();
     
     // Clear frame buffers
-    denise.pixelEngine.clearTextures();
+    denise.pixelEngine.clearAll();
 
     // Inform the GUI
     msgQueue.put(MSG_MACHINE_TYPE, newFormat);

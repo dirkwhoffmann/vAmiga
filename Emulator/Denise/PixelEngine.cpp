@@ -31,27 +31,42 @@ PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
 }
 
 void
-PixelEngine::clearTextures()
+PixelEngine::clearAll()
 {
     lockStableBuffer();
 
     for (isize line = 0; line < VPIXELS; line++) {
-        clearLine(emuTexture[0].ptr, line);
+        clear(emuTexture[0].ptr, line);
     }
     for (isize line = 0; line < VPIXELS; line++) {
-        clearLine(emuTexture[1].ptr, line);
+        clear(emuTexture[1].ptr, line);
     }
 
     unlockStableBuffer();
 }
 
 void
-PixelEngine::clearLine(u32 *ptr, isize line)
+PixelEngine::clear(isize line)
+{
+    clear(frameBuffer, line, 0, HPOS_MAX);
+}
+
+void
+PixelEngine::clear(isize line, Pixel pixel)
+{
+    clear(frameBuffer, line, pixel, pixel);
+}
+
+void
+PixelEngine::clear(u32 *ptr, isize line, Pixel first, Pixel last)
 {
     ptr += line * HPIXELS;
 
-    for (isize i = 0; i < HPIXELS; i++) {
-        ptr[i] = ((line >> 2) & 1) == ((i >> 3) & 1) ? 0xFF222222 : 0xFF444444;
+    constexpr u32 col1 = 0xFF662222; // 0xFF222222
+    constexpr u32 col2 = 0xFFAA4444; // 0xFF444444
+
+    for (Pixel i = 4 * first; i < 4 * (last + 1); i++) {
+        ptr[i] = ((line >> 2) & 1) == ((i >> 3) & 1) ? col1 : col2;
     }
 }
 
@@ -99,7 +114,7 @@ PixelEngine::didLoadFromBuffer(const u8 *buffer)
 void
 PixelEngine::_powerOn()
 {
-    clearTextures();
+    clearAll();
 }
 
 void

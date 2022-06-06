@@ -998,8 +998,6 @@ Denise::hsyncHandler(isize vpos)
     assert(agnus.pos.h == 0x11);
     assert(vpos >= 0 && vpos <= VPOS_MAX);
 
-    // isize vpos = agnus.pos.vPrev();
-
     //
     // Finish the current line
     //
@@ -1044,6 +1042,9 @@ Denise::hsyncHandler(isize vpos)
     // Encode a HIRES / LORES marker in the first HBLANK pixel
     u32 *ptr = pixelEngine.frameBuffer + HPIXELS * vpos;
     *ptr = hires() ? 0 : -1;
+
+    // Clear the last pixel if this line was a short line
+    if (agnus.pos.hLatched == HPOS_CNT_PAL) pixelEngine.clear(vpos, HPOS_MAX);
 
     // Clear the bBuffer
     std::memset(bBuffer, 0, sizeof(bBuffer));
