@@ -460,14 +460,11 @@ extension MyController {
                         
         case .DMA_DEBUG_ON:
             renderer.zoomTextureOut()
-            renderer.zoomOut()
-            
+
         case .DMA_DEBUG_OFF:
             renderer.zoomTextureIn()
-            renderer.zoomIn()
 
         case .VIDEO_FORMAT:
-            debug(1, "Video format = \(data1)")
             renderer.canvas.updateTextureRect()
 
         case .OVERCLOCKING:
@@ -593,7 +590,8 @@ extension MyController {
             renderer.flash()
             
         case .SNAPSHOT_RESTORED:
-            renderer.rotateRight()
+            // renderer.blend(steps: 50)
+            renderer.flash(steps: 60)
             hideOrShowDriveMenus()
             assignSlots()
             updateWarp()

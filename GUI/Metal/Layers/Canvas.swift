@@ -121,7 +121,7 @@ class Canvas: Layer {
     func buildVertexBuffers() {
         
         quad2D = Node(device: device,
-                      x: -1.0, y: -1.0, z: 0.0, w: 2.0, h: 2.0,
+                      x: -1.0, y: -1.0, z: 0.98, w: 2.0, h: 2.0,
                       t: textureRect)
         
         quad3D = Quad(device: device,

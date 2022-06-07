@@ -256,12 +256,18 @@ extension Renderer {
     // Color animation
     //
     
-    func flash() {
+    func flash(steps: Int = 20) {
                 
         white.current = 1.0
         white.target = 0.0
-        white.steps = 20
+        white.steps = steps
         
         animates |= AnimationType.color
+    }
+
+    func blend(steps: Int = 20) {
+
+        canvas.alpha.current = 0
+        canvas.alpha.steps = steps
     }
 }

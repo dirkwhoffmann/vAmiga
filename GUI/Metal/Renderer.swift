@@ -212,9 +212,11 @@ class Renderer: NSObject, MTKViewDelegate {
                 semaphore.signal()
                 return
             }
-            
+
+            // Select the 2D or the 3D renderer
+            let flat = !fullscreen || !parent.pref.keepAspectRatio
+
             // Render the scene
-            let flat = fullscreen && !parent.pref.keepAspectRatio
             if canvas.isTransparent || animates != 0 { splashScreen.render(encoder) }
             if canvas.isVisible { canvas.render(encoder, flat: flat) }
             if monitors.isVisible { monitors.render(encoder) }

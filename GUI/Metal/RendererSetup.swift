@@ -157,11 +157,14 @@ extension Renderer {
     
     func buildMatrices2D() {
 
-        let model = Renderer.translationMatrix(x: 0, y: 0, z: 0.99)
+        /*
+        let model = Renderer.translationMatrix(x: 0, y: 0, z: 0)
         let view = matrix_identity_float4x4
         let proj = matrix_identity_float4x4
         let mvp = proj * view * model
-        
+        */
+        let mvp = matrix_identity_float4x4
+
         canvas.vertexUniforms2D.mvp = mvp
         monitors.vertexUniforms2D.mvp = mvp
     }

@@ -174,7 +174,7 @@ class BarChart: ActivityMonitor {
         upperTexture = device.makeTexture(size: fgSize, buffer: upperBuffer)!
         lowerTexture = device.makeTexture(size: fgSize, buffer: lowerBuffer)!
 
-        bgRect = Node(device: device, x: 0.00, y: 0.00, z: 0.001, w: 1.0, h: 1.0)
+        bgRect = Node(device: device, x: 0.0, y: 0.0, z: 0.0, w: 1.0, h: 1.0)
         
         upperValues = Array(repeating: 0.0, count: capacity)
         lowerValues = Array(repeating: 0.0, count: capacity)
