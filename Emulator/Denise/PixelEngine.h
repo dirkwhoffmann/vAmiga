@@ -241,7 +241,9 @@ public:
     u32 *getNoise() const;
 
     // Returns the address of the first pixel in a certain frambuffer line
-    u32 *getLine(isize line) const;
+    u32 *frameBufferAddr() const { return frameBuffer; }
+    u32 *frameBufferAddr(isize v) const { return frameBufferAddr(v, 0); }
+    u32 *frameBufferAddr(isize v, isize h) const;
 
     // Called after each line in the VBLANK area
     void endOfVBlankLine();

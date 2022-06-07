@@ -354,10 +354,12 @@ PixelEngine::getNoise() const
 }
 
 u32 *
-PixelEngine::getLine(isize line) const
+PixelEngine::frameBufferAddr(isize v, isize h) const
 {
-    assert(line >= 0 && line <= VPOS_MAX);
-    return frameBuffer + line * HPIXELS;
+    assert(v >= 0 && v <= VPOS_MAX);
+    assert(h >= 0 && h <= HPOS_MAX);
+    
+    return frameBuffer + v * HPIXELS + h;
 }
 
 void

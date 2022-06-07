@@ -674,6 +674,9 @@ Agnus::hsyncHandler()
     denise.hsyncHandler(vpos);
     dmaDebugger.hsyncHandler(vpos);
 
+    // Encode a HIRES / LORES marker in the first HBLANK pixel
+    REPLACE_BIT(*pixelEngine.frameBufferAddr(vpos), 28, hires());
+
     // Call the vsyncHandler once we've finished a frame
     if (pos.v == 0) vsyncHandler();
 }

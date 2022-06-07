@@ -323,7 +323,7 @@ DmaDebugger::hsyncHandler(isize vpos)
     if (!config.enabled) return;
 
     // Draw first chunk (data from previous DMA line)
-    u32 *ptr1 = pixelEngine.getLine(vpos);
+    u32 *ptr1 = pixelEngine.frameBufferAddr(vpos);
     computeOverlay(ptr1, HBLANK_MIN, HPOS_MAX, busOwner, busValue);
 
     // Draw second chunk (data from current DMA line)
@@ -408,7 +408,7 @@ DmaDebugger::vSyncHandler()
     // Clear old data in the VBLANK area of the next frame
     for (isize row = 0; row < VBLANK_CNT; row++) {
 
-        u32 *ptr = denise.pixelEngine.getLine(row);
+        u32 *ptr = denise.pixelEngine.frameBufferAddr(row);
         for (isize col = 0; col < HPIXELS; col++) {
 
             ptr[col] = PixelEngine::rgbaVBlank;

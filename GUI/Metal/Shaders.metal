@@ -332,10 +332,11 @@ kernel void inPlaceEpx(texture2d<half, access::read>  in   [[ texture(0) ]],
 {
     // We only apply in-texture upscaling for lores lines. The emulator encodes
     // this information in a certain texture pixel.
-    if (in.read(uint2(0, gid.y)).g == 0) {
+    if (in.read(uint2(0, gid.y)).a == 1.0) {
         
         // This line has been marked as a hires line by the emulator
         out.write(in.read(gid), gid);
+        // out.write(half4(1.0,0.0,0.0,1.0), gid);
         return;
     }
 
