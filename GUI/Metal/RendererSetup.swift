@@ -208,7 +208,6 @@ extension Renderer {
         let model = transEye * rotX * transRotX * rotY * rotZ
         let mvp = proj * view * model
         
-        canvas.vertexUniforms3D.mvp = mvp
         monitors.vertexUniforms3D.mvp = mvp
     }
 

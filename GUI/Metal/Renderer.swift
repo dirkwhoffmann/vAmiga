@@ -213,19 +213,14 @@ class Renderer: NSObject, MTKViewDelegate {
                 return
             }
 
-            // Select the 2D or the 3D renderer
-            let flat = true
-
             // Render the scene
-            if canvas.isTransparent || animates != 0 { splashScreen.render(encoder) }
-            if canvas.isVisible { canvas.render(encoder, flat: flat) }
+            if canvas.isTransparent { splashScreen.render(encoder) }
+            if canvas.isVisible { canvas.render(encoder) }
             if monitors.isVisible { monitors.render(encoder) }
             encoder.endEncoding()
 
             // Commit the command buffer
-            buffer.addCompletedHandler { _ in
-                self.semaphore.signal()
-            }
+            buffer.addCompletedHandler { _ in self.semaphore.signal() }
             buffer.present(drawable)
             buffer.commit()
         }

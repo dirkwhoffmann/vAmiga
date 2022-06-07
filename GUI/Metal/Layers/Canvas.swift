@@ -89,10 +89,8 @@ class Canvas: Layer {
     //
     
     var quad2D: Node?
-    var quad3D: Quad?
             
     var vertexUniforms2D = VertexUniforms(mvp: matrix_identity_float4x4)
-    var vertexUniforms3D = VertexUniforms(mvp: matrix_identity_float4x4)
     var fragmentUniforms = FragmentUniforms(alpha: 1.0,
                                             white: 0.0,
                                             dotMaskWidth: 0,
@@ -122,12 +120,7 @@ class Canvas: Layer {
         
         quad2D = Node(device: device,
                       x: -1.0, y: -1.0, z: 0.98, w: 2.0, h: 2.0,
-                      t: textureRect)
-        
-        quad3D = Quad(device: device,
-                      x1: -0.64, y1: -0.48, z1: -0.64,
-                      x2: 0.64, y2: 0.48, z2: 0.64,
-                      t: textureRect)
+                      t: textureRect)        
     }
     
     func buildTextures() {
@@ -374,13 +367,8 @@ class Canvas: Layer {
                                  length: MemoryLayout<FragmentUniforms>.stride,
                                  index: 1)
     }
-    
-    func render(_ encoder: MTLRenderCommandEncoder, flat: Bool) {
-        
-        flat ? render2D(encoder: encoder) : render3D(encoder: encoder)
-    }
-    
-    func render2D(encoder: MTLRenderCommandEncoder) {
+
+    func render(_ encoder: MTLRenderCommandEncoder) {
         
         // Configure the vertex shader
         encoder.setVertexBytes(&vertexUniforms2D,
@@ -392,21 +380,5 @@ class Canvas: Layer {
         
         // Render
         quad2D!.drawPrimitives(encoder)
-    }
-    
-    func render3D(encoder: MTLRenderCommandEncoder) {
-        
-        let animates = renderer.animates
-        
-        // Configure the vertex shader
-        encoder.setVertexBytes(&vertexUniforms3D,
-                               length: MemoryLayout<VertexUniforms>.stride,
-                               index: 1)
-        
-        // Configure fragment shader
-        setupFragmentShader(encoder: encoder)
-        
-        // Render (part of) the cube
-        quad3D!.draw(encoder, allSides: animates != 0)
     }
 }
