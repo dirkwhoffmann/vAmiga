@@ -240,6 +240,7 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
             case HUNK_BREAK:
 
                 section.size = 0;
+                h++;
                 break;
 
             default:

@@ -580,21 +580,6 @@ void
 Agnus::eolHandler()
 {
     assert(pos.h == HPOS_CNT_PAL || pos.h == HPOS_CNT_NTSC);
-    
-    // REMOVE ASAP
-    switch (pos.type) {
-
-        case PAL:
-
-            assert(pos.h == HPOS_CNT_PAL);
-            break;
-
-        case NTSC:
-
-            assert(pos.lol || pos.h == HPOS_CNT_PAL);
-            assert(!pos.lol || pos.h == HPOS_CNT_NTSC);
-            break;
-    }
 
     // Pass control to the DMA debugger
     dmaDebugger.eolHandler();

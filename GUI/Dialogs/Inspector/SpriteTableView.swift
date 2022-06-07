@@ -9,14 +9,13 @@
 
 class SpriteTableView: NSTableView {
 
-    // var spriteInfo = [SpriteInfo?](repeating: nil, count: 8)
+    @IBOutlet weak var inspector: Inspector!
+    var amiga: AmigaProxy!
+
     var spriteDat = [UInt64](repeating: 0, count: Int(VPOS_CNT))
     var spriteCol = [NSColor](repeating: NSColor.white, count: 16)
     var spriteLines = 0
 
-    @IBOutlet weak var inspector: Inspector!
-    var amiga: AmigaProxy!
-    
     override func awakeFromNib() {
 
         amiga = inspector.amiga
@@ -78,7 +77,7 @@ extension SpriteTableView: NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
 
-        return spriteLines
+        return spriteLines > 0 ? spriteLines - 1 : 0
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
