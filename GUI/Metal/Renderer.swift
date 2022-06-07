@@ -214,7 +214,7 @@ class Renderer: NSObject, MTKViewDelegate {
             }
 
             // Select the 2D or the 3D renderer
-            let flat = !fullscreen || !parent.pref.keepAspectRatio
+            let flat = true
 
             // Render the scene
             if canvas.isTransparent || animates != 0 { splashScreen.render(encoder) }

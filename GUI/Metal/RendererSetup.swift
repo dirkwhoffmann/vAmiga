@@ -157,13 +157,19 @@ extension Renderer {
     
     func buildMatrices2D() {
 
-        /*
-        let model = Renderer.translationMatrix(x: 0, y: 0, z: 0)
-        let view = matrix_identity_float4x4
-        let proj = matrix_identity_float4x4
-        let mvp = proj * view * model
-        */
-        let mvp = matrix_identity_float4x4
+        let aspect = Float(size.width) / Float(size.height)
+        var xs = Float(1.0)
+
+        debug(.metal, "buildMatrices2D: aspect = \(aspect)")
+
+        // Scale horizontal coordinates if necessary
+        if parent.pref.keepAspectRatio && abs(aspect - (4/3)) > 0.1 {
+
+            xs = 4 / (3 * aspect)
+            debug(.metal, "Fixing aspect ratio with scaling factor \(xs)")
+        }
+
+        let mvp = Renderer.scalingMatrix(xs: xs, ys: 1.0, zs: 1.0)
 
         canvas.vertexUniforms2D.mvp = mvp
         monitors.vertexUniforms2D.mvp = mvp
