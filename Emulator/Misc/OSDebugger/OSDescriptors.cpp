@@ -136,9 +136,9 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
     auto numHunks = isize(read());
     if (numHunks == 0) throw VAError(ERROR_HUNK_NO_SECTIONS);
     auto first = isize(read());
-    if (first != 0) throw VAError(ERROR_HUNK_UNSUPPORTED);
+    if (first != 0) throw VAError(ERROR_HUNK_BAD_HEADER);
     auto last = isize(read());
-    if (last != numHunks - 1) throw VAError(ERROR_HUNK_UNSUPPORTED);
+    if (last != numHunks - 1) throw VAError(ERROR_HUNK_BAD_HEADER);
 
     // Read hunk sizes
     for (isize i = 0; i < numHunks; i++) {
@@ -222,9 +222,9 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
             case HUNK_END:
 
                 section.size = 0;
-                h++; continue;
-                // break;
-                
+                h++;
+                continue;
+
             case HUNK_HEADER:
                 
                 // There cannot be a second header section

@@ -312,7 +312,11 @@ VAError::VAError(ErrorCode code, const string &s)
         case ERROR_HUNK_BAD_COOKIE:
             description = "Invalid magic cookie.";
             break;
-            
+
+        case ERROR_HUNK_BAD_HEADER:
+            description = "Bad header.";
+            break;
+
         case ERROR_HUNK_NO_SECTIONS:
             description = "No hunks found.";
             break;
