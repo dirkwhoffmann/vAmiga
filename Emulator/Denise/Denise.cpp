@@ -1052,14 +1052,8 @@ Denise::hsyncHandler(isize vpos)
     spriteClipBegin = HPIXELS;
     spriteClipEnd = HPIXELS + 32;
 
-    // Add some debug information if requested
-#ifdef LINE_DEBUG
-    if (LINE_DEBUG) {
-        for (Pixel i = 0; i < HPIXELS; i++) {
-            ptr[i] = (i & 1) ? 0xFF0000FF : 0xFFFFFFFF;
-        }
-    }
-#endif
+    // Hand control over to the debugger
+    debugger.hsyncHandler(vpos);
 }
 
 void

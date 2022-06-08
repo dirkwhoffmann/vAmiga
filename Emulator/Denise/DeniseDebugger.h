@@ -101,8 +101,9 @@ public:
 
     
     //
-    // Handling periodic events
+    // Handling SYNC events
     //
-    
+
+    void hsyncHandler(isize vpos);
     void vsyncHandler();
 };
