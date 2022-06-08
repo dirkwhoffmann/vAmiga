@@ -22,9 +22,6 @@
 #include "RTC.h"
 #include "ZorroManager.h"
 
-// REMOVE ASAP
-Accessor _accessor;
-
 void
 Memory::_dump(Category category, std::ostream& os) const
 {
@@ -2179,9 +2176,6 @@ Memory::spypeekCustom16(u32 addr) const
 template <Accessor s> void
 Memory::pokeCustom16(u32 addr, u16 value)
 {
-    _accessor = s;
-    assert(string(regName(addr)) == string(Memory::regName(addr)));
-
     if ((addr & 0xFFF) == 0x30) {
         trace(OCSREG_DEBUG, "pokeCustom16(SERDAT, '%c')\n", (char)value);
     } else {

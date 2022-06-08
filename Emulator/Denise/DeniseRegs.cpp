@@ -274,8 +274,6 @@ Denise::pokeCLXCON(u16 value)
 template <isize x, Accessor s> void
 Denise::pokeBPLxDAT(u16 value)
 {
-    _accessor = s;
-
     assert(x < 6);
     trace(BPLREG_DEBUG, "pokeBPL%ldDAT(%X)\n", x + 1, value);
 
