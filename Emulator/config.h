@@ -17,13 +17,13 @@
 #define VER_MAJOR 2
 #define VER_MINOR 1
 #define VER_SUBMINOR 0
-#define VER_BETA 1
+#define VER_BETA 2
 
 // Snapshot version number
 #define SNP_MAJOR 2
 #define SNP_MINOR 1
 #define SNP_SUBMINOR 0
-#define SNP_BETA 1
+#define SNP_BETA 2
 
 // Uncomment this setting in a release build
 // #define RELEASEBUILD
@@ -127,7 +127,7 @@ static const int MEM_DEBUG       = 0; // Memory
 static const int DMA_DEBUG       = 0; // DMA registers
 static const int DDF_DEBUG       = 0; // Display data fetch
 static const int SEQ_DEBUG       = 0; // Bitplane sequencer
-static const int NTSC_DEBUG      = 1; // NTSC mode
+static const int NTSC_DEBUG      = 0; // NTSC mode
 
 // Copper
 static const int COP_CHECKSUM    = 0; // Compute Copper checksums

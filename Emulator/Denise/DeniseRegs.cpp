@@ -198,7 +198,7 @@ Denise::pokeBPLCON1(u16 value)
 void
 Denise::setBPLCON1(u16 oldValue, u16 newValue)
 {
-    trace(BPLREG_DEBUG, "setBPLCON1(%X)\n", newValue);
+    trace(BPLREG_DEBUG, "setBPLCON1(%x,%x)\n", oldValue, newValue);
 
     bplcon1 = newValue & 0xFF;
 
