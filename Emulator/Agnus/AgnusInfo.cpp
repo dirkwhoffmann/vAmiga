@@ -142,7 +142,7 @@ Agnus::eventName(EventSlot slot, EventID id)
                 case DAS_D2:        return "DAS_D2";
                 case DAS_A0:        return "DAS_A0";
                 case DAS_A1:        return "DAS_A1";
-                case DAS_A2:        return "DAS_A2";
+                case DAS_A2:        return "DAS_A2, DAS_HSYNC";
                 case DAS_A3:        return "DAS_A3";
                 case DAS_S0_1:      return "DAS_S0_1";
                 case DAS_S0_2:      return "DAS_S0_2";
@@ -162,7 +162,7 @@ Agnus::eventName(EventSlot slot, EventID id)
                 case DAS_S7_2:      return "DAS_S7_2";
                 case DAS_SDMA:      return "DAS_SDMA";
                 case DAS_TICK:      return "DAS_TICK";
-                case DAS_HSYNC:     return "DAS_HSYNC";
+                // case DAS_HSYNC:     return "DAS_HSYNC";
                 case DAS_EOL:       return "DAS_EOL";
                 default:            return "*** INVALID ***";
             }

@@ -317,7 +317,7 @@ DmaDebugger::eolHandler()
 void
 DmaDebugger::hsyncHandler(isize vpos)
 {
-    assert(agnus.pos.h == 0x11);
+    assert(agnus.pos.h == 0x12);
 
     // Only proceed if DMA debugging has been turned on
     if (!config.enabled) return;

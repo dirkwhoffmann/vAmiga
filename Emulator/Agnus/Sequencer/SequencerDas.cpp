@@ -59,7 +59,7 @@ Sequencer::initDasEventTable()
         p[0xDF] = DAS_SDMA;
         p[0x66] = DAS_TICK;
 
-        p[0x10] = DAS_HSYNC;
+        // p[0x10] = DAS_HSYNC; // Same cycle as A2
         p[0xE2] = DAS_EOL;
         p[0xE3] = DAS_EOL;
     }

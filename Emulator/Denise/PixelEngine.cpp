@@ -405,7 +405,7 @@ void
 PixelEngine::colorize(isize line)
 {
     // Jump to the first pixel in the specified line in the active frame buffer
-    u32 *dst = frameBuffer + line * HPIXELS;
+    u32 *dst = frameBufferAddr(line);
     Pixel pixel = 0;
 
     // Initialize the HAM mode hold register with the current background color

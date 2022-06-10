@@ -995,7 +995,7 @@ Denise::vsyncHandler()
 void
 Denise::hsyncHandler(isize vpos)
 {
-    assert(agnus.pos.h == 0x11);
+    assert(agnus.pos.h == 0x12);
     assert(vpos >= 0 && vpos <= VPOS_MAX);
 
     //

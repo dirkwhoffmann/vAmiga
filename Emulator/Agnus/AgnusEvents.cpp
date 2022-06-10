@@ -536,6 +536,16 @@ Agnus::serviceDASEvent(EventID id)
 
         case DAS_A2:
 
+            /* Ask the REG slot handler to call the HSYNC handler at the
+             * beginning of the next cycle. We utilize the REG handler,
+             * because it is the first one to execute. Hence, we can assure
+             * that the the HSYNC handler is executed before any other
+             * operation is performed in this cycle.
+             */
+            syncEvent = DAS_HSYNC;
+            // recordRegisterChange(DMA_CYCLES(1), REG_NONE, 0);
+            scheduleRel <SLOT_REG> (DMA_CYCLES(1), REG_CHANGE);
+
             if (audxDR[2]) {
                 audxDR[2] = false;
                 paula.channel2.pokeAUDxDAT(doAudioDmaRead<2>());
@@ -640,18 +650,14 @@ Agnus::serviceDASEvent(EventID id)
             ciab.tod.increment();
             break;
 
+        /*
         case DAS_HSYNC:
 
-            /* Ask the REG slot handler to call the HSYNC handler at the
-             * beginning of the next cycle. We utilize the REG handler,
-             * because it is the first one to execute. Hence, we can assure
-             * that the the HSYNC handler is executed before any other
-             * operation is performed in this cycle.
-             */
             syncEvent = id;
             // recordRegisterChange(DMA_CYCLES(1), REG_NONE, 0);
             scheduleRel <SLOT_REG> (DMA_CYCLES(1), REG_CHANGE);
             break;
+        */
 
         case DAS_EOL:
 

@@ -160,7 +160,7 @@ Denise::pokeBPLCON0(u16 value)
 void
 Denise::setBPLCON0(u16 oldValue, u16 newValue)
 {
-    trace(BPLREG_DEBUG, "setBPLCON0(%X,%X)\n", oldValue, newValue);
+    trace(BPLREG_DEBUG, "setBPLCON0(%04x,%04x)\n", oldValue, newValue);
 
     // Record the register change
     i64 pixel = std::max(agnus.pos.pixel() - 4, (isize)0);

@@ -652,7 +652,7 @@ Agnus::eofHandler()
 void
 Agnus::hsyncHandler()
 {
-    assert(pos.h == 0x11);
+    assert(pos.h == 0x12);
     
     // Draw the previous line
     isize vpos = agnus.pos.vPrev();

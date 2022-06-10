@@ -239,9 +239,10 @@ enum_i8(EventID)
     DAS_S7_2,
     DAS_SDMA,
     DAS_TICK,
-    DAS_HSYNC,
     DAS_EOL,
     DAS_EVENT_COUNT,
+
+    DAS_HSYNC = DAS_A2, // Same cycle as A2
 
     // Copper slot
     COP_REQ_DMA         = 1,
