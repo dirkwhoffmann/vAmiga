@@ -843,7 +843,7 @@ Denise::drawBorder()
     bool hFlopWasSet = hflop || hflopOn != -1;
     isize hblank = 4 * HBLANK_MIN;
 
-    if (agnus.sequencer.lineIsBlank || !hFlopWasSet) {
+    if (agnus.sequencer.lineWasBlank || !hFlopWasSet) {
 
         // Draw blank line
         for (Pixel i = 0; i < HPIXELS; i++) {
@@ -1052,6 +1052,11 @@ Denise::hsyncHandler(isize vpos)
     spriteClipBegin = HPIXELS;
     spriteClipEnd = HPIXELS + 32;
 
+    // Update the horizontal DIW flipflop
+    hflop = (hflopOff != -1) ? false : (hflopOn != -1) ? true : hflop;
+    hflopOn = denise.hstrt;
+    hflopOff = denise.hstop;
+    
     // Hand control over to the debugger
     debugger.hsyncHandler(vpos);
 }
@@ -1063,11 +1068,6 @@ Denise::eolHandler()
     initialBplcon0 = bplcon0;
     initialBplcon1 = bplcon1;
     initialBplcon2 = bplcon2;
-
-    // Update the horizontal DIW flipflop
-    hflop = (hflopOff != -1) ? false : (hflopOn != -1) ? true : hflop;
-    hflopOn = denise.hstrt;
-    hflopOff = denise.hstop;
 }
 
 template void Denise::drawOdd<false>(Pixel offset);

@@ -50,7 +50,8 @@ Sequencer::eolHandler()
         ddfInitial.bpv = ddf.bpv = true;
         hsyncActions |= UPDATE_SIG_RECORDER;
     }
-    
+
+    lineWasBlank = lineIsBlank;
     lineIsBlank = !ddfInitial.bpv;
 
     //
