@@ -173,6 +173,14 @@ Moira::checkForIrq()
 {
     if (reg.ipl > reg.sr.ipl || reg.ipl == 7) {
 
+        /*
+        auto diff = clock - iplCycle;
+        if (diff <= 1) {
+            trace(1, "IPL cycle too recent (%lld)\n", diff);
+            return false;
+        }
+        */
+        
         // Trigger interrupt
         execIrqException(reg.ipl);
         return true;
@@ -307,6 +315,8 @@ void
 Moira::setIPL(u8 val)
 {
     if (ipl != val) {
+
+        // iplCycle = clock;
         ipl = val;
         flags |= CPU_CHECK_IRQ;
     }

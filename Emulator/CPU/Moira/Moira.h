@@ -116,7 +116,8 @@ protected:
 
     // Current value on the IPL pins (Interrupt Priority Level)
     u8 ipl;
-
+    // i64 iplCycle;
+    
     // Value on the lower two function code pins (FC1|FC0)
     u8 fcl;
             
