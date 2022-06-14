@@ -840,7 +840,7 @@ Denise::updateBorderColor()
 void
 Denise::drawBorder()
 {
-    bool hFlopWasSet = hflop || hflopOn != -1;
+    bool hFlopWasSet = hflopPrev || hflopOnPrev != -1;
     isize hblank = 4 * HBLANK_MIN;
 
     if (agnus.sequencer.lineWasBlank || !hFlopWasSet) {
@@ -853,15 +853,15 @@ Denise::drawBorder()
     } else {
 
         // Draw left border
-        if (!hflop && hflopOn != -1) {
-            for (isize i = 0; i < 2 * hflopOn - hblank; i++) {
+        if (!hflopPrev && hflopOnPrev != -1) {
+            for (isize i = 0; i < 2 * hflopOnPrev - hblank; i++) {
                 bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
             }
         }
 
         // Draw right border
-        if (hflopOff != -1) {
-            for (isize i = 2 * hflopOff - hblank; i < HPIXELS; i++) {
+        if (hflopOffPrev != -1) {
+            for (isize i = 2 * hflopOffPrev - hblank; i < HPIXELS; i++) {
                 bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
             }
         }
@@ -1052,11 +1052,6 @@ Denise::hsyncHandler(isize vpos)
     spriteClipBegin = HPIXELS;
     spriteClipEnd = HPIXELS + 32;
 
-    // Update the horizontal DIW flipflop
-    hflop = (hflopOff != -1) ? false : (hflopOn != -1) ? true : hflop;
-    hflopOn = denise.hstrt;
-    hflopOff = denise.hstop;
-    
     // Hand control over to the debugger
     debugger.hsyncHandler(vpos);
 }
@@ -1068,6 +1063,16 @@ Denise::eolHandler()
     initialBplcon0 = bplcon0;
     initialBplcon1 = bplcon1;
     initialBplcon2 = bplcon2;
+
+    // Preserve the old DIW flipflop
+    hflopPrev = hflop;
+    hflopOnPrev = hflopOn;
+    hflopOffPrev = hflopOff;
+
+    // Update the horizontal DIW flipflop
+    hflop = (hflopOff != -1) ? false : (hflopOn != -1) ? true : hflop;
+    hflopOn = denise.hstrt;
+    hflopOff = denise.hstop;
 }
 
 template void Denise::drawOdd<false>(Pixel offset);

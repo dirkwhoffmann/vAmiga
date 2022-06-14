@@ -73,21 +73,28 @@ public:
      *   3. The smallest recognised value for DIWSTRT is $02.
      *   4. The largest recognised value for DIWSTOP is $(1)C7.
      *
-     * The value of this variable is updated at the beginning of each
-     * rasterline and cannot change thereafter. It stores the value of the
-     * horizontal DIW flipflop as it was at the beginning of the rasterline.
-     * To find out the value of the horizontal flipflop inside or at the end
-     * of a rasterline, hFlopOn and hFlopOff need to be evaluated.
+     * The value of this variable is updated at the beginning of each DMA line
+     * and cannot change thereafter. It stores the value of the horizontal DIW
+     * flipflop as it was at the beginning of the rasterline. To find out the
+     * value of the horizontal flipflop inside or at the end of a rasterline,
+     * hFlopOn and hFlopOff need to be evaluated.
      */
     bool hflop;
 
-    /* At the end of a rasterline, these variable conains the pixel coordinates
+    /* At the end of a DMA line, these variable conains the pixel coordinates
      * where the hpos counter matched diwHstrt or diwHstop, respectively. A
      * value of -1 indicates that no matching event took place.
      */
     isize hflopOn;
     isize hflopOff;
-    
+
+    /* At the end of a DMA line, the values of hflop, hflopOn, and hflopOff are
+     * preserved in these variables. Their values are used later on in function
+     * drawBorder() */
+    bool hflopPrev;
+    isize hflopOnPrev;
+    isize hflopOffPrev;
+
     // Bitplane control registers
     u16 bplcon0;
     u16 bplcon1;
@@ -349,6 +356,9 @@ private:
         << hflop
         << hflopOn
         << hflopOff
+        << hflopPrev
+        << hflopOnPrev
+        << hflopOffPrev
         << bplcon0
         << bplcon1
         << bplcon2
