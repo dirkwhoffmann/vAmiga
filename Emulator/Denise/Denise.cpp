@@ -840,27 +840,50 @@ Denise::updateBorderColor()
 void
 Denise::drawBorder()
 {
-    bool hFlopWasSet = hflopPrev || hflopOnPrev != -1;
-    isize hblank = 4 * HBLANK_MIN;
+    /* The following cases need to be distinguished:
+     *
+     * (1) No border                1 --------------------
+     *     flop && !off             0
+     *
+     * (2) Blank line               1
+     *     !flop && !on             0 --------------------
+     *
+     * (3) Right border only        1 ---------------
+     *     flop && off              0                -----
+     *
+     * (4) Left and right border    1      ----------
+     *     !flop && on && off       0 -----          -----
+     *
+     * (5) Left border only         1      ---------------
+     *     !flop && on && !off      0 -----
+     */
 
-    if (agnus.sequencer.lineWasBlank || !hFlopWasSet) {
+    bool flop = hflopPrev;
+    bool on = hflopOnPrev != -1;
+    bool off = hflopOffPrev != -1;
 
-        // Draw blank line
+    if (agnus.sequencer.lineWasBlank || (!flop && !on)) {
+
+        // Draw blank line (2)
         for (Pixel i = 0; i < HPIXELS; i++) {
             bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
         }
 
     } else {
 
-        // Draw left border
-        if (!hflopPrev && hflopOnPrev != -1) {
+        isize hblank = 4 * HBLANK_MIN;
+
+        if (!flop && on) {
+
+            // Draw left border (4,5)
             for (isize i = 0; i < 2 * hflopOnPrev - hblank; i++) {
                 bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
             }
         }
 
-        // Draw right border
-        if (hflopOffPrev != -1) {
+        if (off) {
+
+            // Draw right border (3,4)
             for (isize i = 2 * hflopOffPrev - hblank; i < HPIXELS; i++) {
                 bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
             }
