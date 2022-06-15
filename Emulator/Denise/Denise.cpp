@@ -859,8 +859,8 @@ Denise::drawBorder()
      */
 
     bool flop = hflopPrev;
-    bool on = hflopOnPrev != -1;
-    bool off = hflopOffPrev != -1;
+    bool on = hflopOnPrev != INT16_MAX;
+    bool off = hflopOffPrev != INT16_MAX;
 
     if (agnus.sequencer.lineWasBlank || (!flop && !on)) {
 
@@ -1093,7 +1093,7 @@ Denise::eolHandler()
     hflopOffPrev = hflopOff;
 
     // Update the horizontal DIW flipflop
-    hflop = (hflopOff != -1) ? false : (hflopOn != -1) ? true : hflop;
+    hflop = (hflopOff != INT16_MAX) ? false : (hflopOn != INT16_MAX) ? true : hflop;
     hflopOn = denise.hstrt;
     hflopOff = denise.hstop;
 }

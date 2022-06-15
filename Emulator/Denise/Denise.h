@@ -83,7 +83,7 @@ public:
 
     /* At the end of a DMA line, these variable conains the pixel coordinates
      * where the hpos counter matched diwHstrt or diwHstop, respectively. A
-     * value of -1 indicates that no matching event took place.
+     * value of INT16_MAX indicates that no matching event took place.
      */
     isize hflopOn;
     isize hflopOff;

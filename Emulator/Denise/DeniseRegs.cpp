@@ -27,7 +27,7 @@ Denise::setDIWSTRT(u16 value)
     if (newDiwHstrt < 2) {
         
         trace(DIW_DEBUG, "newDiwHstrt is too small\n");
-        newDiwHstrt = -1;
+        newDiwHstrt = INT16_MAX;
     }
     
     /* Check if the change takes effect in the current rasterline.
@@ -37,8 +37,8 @@ Denise::setDIWSTRT(u16 value)
      *     val: New trigger coordinate
      */
     isize cur = 2 * agnus.pos.h;
-    isize old = hflopOn == -1 ? INT16_MAX : hflopOn;
-    isize val = newDiwHstrt == -1 ? INT16_MAX : newDiwHstrt;
+    isize old = hflopOn;
+    isize val = newDiwHstrt;
 
     /* The following cases have to be taken into accout:
      *
@@ -56,7 +56,7 @@ Denise::setDIWSTRT(u16 value)
 
             // (3)
             trace(DIW_DEBUG, "Won't trigger in this line\n");
-            hflopOn = -1;
+            hflopOn = INT16_MAX;
 
         } else {
 
@@ -70,10 +70,6 @@ Denise::setDIWSTRT(u16 value)
         // (4), (5), (6)
         trace(DIW_DEBUG, "Already triggered at %ld\n", old);
     }
-
-    // Invalidate the position if it is out of bounds
-    if (hflopOn == INT16_MAX) hflopOn = -1;
-    if (val == INT16_MAX) val = -1;
 
     hstrt = val;
     trace(DIW_DEBUG, "hstrt = %ld, hflopOn = %ld\n", hstrt, hflopOn);
@@ -97,12 +93,12 @@ Denise::setDIWSTOP(u16 value)
     if (newDiwHstop > 0x1C7) {
 
         trace(DIW_DEBUG, "newDiwHstop is too large\n");
-        newDiwHstop = -1;
+        newDiwHstop = INT16_MAX;
     }
 
     isize cur = 2 * agnus.pos.h;
-    isize old = hflopOff == -1 ? INT16_MAX : hflopOff;
-    isize val = newDiwHstop == -1 ? INT16_MAX : newDiwHstop;
+    isize old = hflopOff;
+    isize val = newDiwHstop;
 
     if (cur < old) {
 
@@ -110,7 +106,7 @@ Denise::setDIWSTOP(u16 value)
 
             // (3)
             trace(DIW_DEBUG, "Won't trigger in this line\n");
-            hflopOff = -1;
+            hflopOff = INT16_MAX;
 
         } else {
 
@@ -125,33 +121,9 @@ Denise::setDIWSTOP(u16 value)
         trace(DIW_DEBUG, "Already triggered at %ld\n", old);
     }
 
-    // Invalidate the position if it is out of bounds
-    if (hflopOff == INT16_MAX) hflopOff = -1;
-    if (val == INT16_MAX) val = -1;
-
-/*
-    // Check if the change already takes effect in the current rasterline.
-    {
-        isize cur = 2 * agnus.pos.h;
-        trace(DIW_DEBUG, "cur: %ld hstop: %ld newDiwStop: %ld \n", cur, hstop, newDiwHstop);
-
-        // (1) and (2) (see setDIWSTRT)
-        if (cur < hstop && cur < newDiwHstop) {
-
-            trace(DIW_DEBUG, "Updating hFlopOff immediately at %ld\n", cur);
-            hflopOff = newDiwHstop;
-        }
-
-        // (3) (see setDIWSTRT)
-        if (newDiwHstop < cur && cur < hstop) {
-
-            trace(DIW_DEBUG, "hFlop not switched off in current line\n");
-            hflopOff = -1;
-        }
-    }
-*/
     hstop = val;
-    
+    trace(DIW_DEBUG, "hstop = %ld, hflopOff = %ld\n", hstop, hflopOff);
+
     // Let the debugger know about the register change
     debugger.updateDIW(diwstrt, diwstop);
 }
