@@ -250,7 +250,19 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var vidBrightnessSlider: NSSlider!
     @IBOutlet weak var vidContrastSlider: NSSlider!
     @IBOutlet weak var vidSaturationSlider: NSSlider!
-    
+
+    // Geometry
+    @IBOutlet weak var vidZoom: NSPopUpButton!
+    @IBOutlet weak var vidHZoom: NSSlider!
+    @IBOutlet weak var vidVZoom: NSSlider!
+    @IBOutlet weak var vidHZoomLabel: NSTextField!
+    @IBOutlet weak var vidVZoomLabel: NSTextField!
+    @IBOutlet weak var vidCenter: NSPopUpButton!
+    @IBOutlet weak var vidHCenter: NSSlider!
+    @IBOutlet weak var vidVCenter: NSSlider!
+    @IBOutlet weak var vidHCenterLabel: NSTextField!
+    @IBOutlet weak var vidVCenterLabel: NSTextField!
+
     // Effects
     @IBOutlet weak var vidEnhancerPopUp: NSPopUpButton!
     @IBOutlet weak var vidUpscalerPopUp: NSPopUpButton!
@@ -275,14 +287,6 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var vidMisalignmentPopUp: NSPopUpButton!
     @IBOutlet weak var vidMisalignmentXSlider: NSSlider!
     @IBOutlet weak var vidMisalignmentYSlider: NSSlider!
-    
-    // Geometry
-    @IBOutlet weak var vidHAutoCenter: NSButton!
-    @IBOutlet weak var vidVAutoCenter: NSButton!
-    @IBOutlet weak var vidHCenter: NSSlider!
-    @IBOutlet weak var vidVCenter: NSSlider!
-    @IBOutlet weak var vidHZoom: NSSlider!
-    @IBOutlet weak var vidVZoom: NSSlider!
 
     // Buttons
     @IBOutlet weak var vidOKButton: NSButton!

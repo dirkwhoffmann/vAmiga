@@ -35,24 +35,32 @@ extension ConfigurationController {
 
         let renderer = parent.renderer!
 
-        // Geometry
-        vidHAutoCenter.state = config.hAutoCenter ? .off : .on
-        vidVAutoCenter.state = config.vAutoCenter ? .off : .on
-        vidHCenter.isEnabled = !config.hAutoCenter
-        vidVCenter.isEnabled = !config.vAutoCenter
-        vidHCenter.floatValue = config.hCenter * 1000
-        vidVCenter.floatValue = config.vCenter * 1000
-        vidHZoom.floatValue = config.hZoom * 1000
-        vidVZoom.floatValue = config.vZoom * 1000
-
-        // Video
-        vidEnhancerPopUp.selectItem(withTag: config.enhancer)
-        vidUpscalerPopUp.selectItem(withTag: config.upscaler)
+        // Colors
         vidPalettePopUp.selectItem(withTag: config.palette)
         vidBrightnessSlider.integerValue = config.brightness
         vidContrastSlider.integerValue = config.contrast
         vidSaturationSlider.integerValue = config.saturation
-        
+
+        // Geometry
+        vidZoom.selectItem(withTag: config.zoom)
+        vidHZoom.floatValue = config.hZoom * 1000
+        vidVZoom.floatValue = config.vZoom * 1000
+        vidHZoom.isEnabled = config.zoom == 0
+        vidVZoom.isEnabled = config.zoom == 0
+        vidHZoomLabel.textColor = config.zoom == 0 ? .labelColor : .disabledControlTextColor
+        vidVZoomLabel.textColor = config.zoom == 0 ? .labelColor : .disabledControlTextColor
+        vidCenter.selectItem(withTag: config.center)
+        vidHCenter.floatValue = config.hCenter * 1000
+        vidVCenter.floatValue = config.vCenter * 1000
+        vidHCenter.isEnabled = config.center == 0
+        vidVCenter.isEnabled = config.center == 0
+        vidHCenterLabel.textColor = config.center == 0 ? .labelColor : .disabledControlTextColor
+        vidVCenterLabel.textColor = config.center == 0 ? .labelColor : .disabledControlTextColor
+
+        // Upscalers
+        vidEnhancerPopUp.selectItem(withTag: config.enhancer)
+        vidUpscalerPopUp.selectItem(withTag: config.upscaler)
+
         // Effects
         vidBlurPopUp.selectItem(withTag: Int(config.blur))
         vidBlurRadiusSlider.floatValue = config.blurRadius
@@ -237,23 +245,35 @@ extension ConfigurationController {
     // Action methods (Geometry)
     //
 
-    @IBAction func vidHAutoCenterAction(_ sender: NSButton) {
+    @IBAction func vidZoomAction(_ sender: NSPopUpButton) {
 
-        let state = sender.state == .off
-        debug(.config, "hAutoCenter = \(state)")
-
-        config.hAutoCenter = state
-        parent.renderer.canvas.updateTextureRect()
+        config.zoom = sender.selectedTag()
+        debug(.config, "zoom = \(config.zoom)")
         refresh()
     }
 
-    @IBAction func vidVAutoCenterAction(_ sender: NSButton) {
+    @IBAction func vidHZoomAction(_ sender: NSSlider!) {
 
-        let state = sender.state == .off
-        debug(.config, "vAutoCenter = \(state)")
+        let value = sender.floatValue / 1000
+        debug(.config, "hZoom = \(value)")
 
-        config.vAutoCenter = state
-        parent.renderer.canvas.updateTextureRect()
+        config.hZoom = value
+        refresh()
+    }
+
+    @IBAction func vidVZoomAction(_ sender: NSSlider!) {
+
+        let value = sender.floatValue / 1000
+        debug(.config, "vZoom = \(value)")
+
+        config.vZoom = value
+        refresh()
+    }
+
+    @IBAction func vidCenterAction(_ sender: NSPopUpButton) {
+
+        config.center = sender.selectedTag()
+        debug(.config, "zoom = \(config.center)")
         refresh()
     }
 
@@ -274,25 +294,7 @@ extension ConfigurationController {
         config.vCenter = value
         refresh()
     }
-    
-    @IBAction func vidHZoomAction(_ sender: NSSlider!) {
 
-        let value = sender.floatValue / 1000
-        debug(.config, "hZoom = \(value)")
-
-        config.hZoom = value
-        refresh()
-    }
-
-    @IBAction func vidVZoomAction(_ sender: NSSlider!) {
-
-        let value = sender.floatValue / 1000
-        debug(.config, "vZoom = \(value)")
-
-        config.vZoom = value
-        refresh()
-    }
-    
     //
     // Action methods (Misc)
     //
@@ -303,65 +305,43 @@ extension ConfigurationController {
 
         switch sender.tag {
             
-        case 0: // Recommended settings
+        case 0: // Recommended settings (all)
             
             AmigaProxy.defaults.removeVideoUserDefaults()
-                        
-        case 1: // Narrow Geometry
-            
-            AmigaProxy.defaults.removeGeometryUserDefaults()
-            defaults.set(Keys.Vid.hAutoCenter, true)
-            defaults.set(Keys.Vid.vAutoCenter, true)
-            defaults.set(Keys.Vid.hCenter, 0.6)
-            defaults.set(Keys.Vid.vCenter, 0.47)
-            defaults.set(Keys.Vid.hZoom, 1.0)
-            defaults.set(Keys.Vid.vZoom, 0.27)
-            
-        case 2: // Wide Geometry
-            
-            AmigaProxy.defaults.removeGeometryUserDefaults()
-            defaults.set(Keys.Vid.hAutoCenter, true)
-            defaults.set(Keys.Vid.vAutoCenter, true)
-            defaults.set(Keys.Vid.hCenter, 0.409)
-            defaults.set(Keys.Vid.vCenter, 0.143)
-            defaults.set(Keys.Vid.hZoom, 0.747)
-            defaults.set(Keys.Vid.vZoom, 0.032)
 
-        case 3: // Extreme Geometry
-            
+        case 10: // Recommended settings (geometry)
+
             AmigaProxy.defaults.removeGeometryUserDefaults()
-            defaults.set(Keys.Vid.hAutoCenter, false)
-            defaults.set(Keys.Vid.vAutoCenter, false)
-            defaults.set(Keys.Vid.hCenter, 0)
-            defaults.set(Keys.Vid.vCenter, 0)
-            defaults.set(Keys.Vid.hZoom, 0)
-            defaults.set(Keys.Vid.vZoom, 0)
-            
-        case 6: // TFT Appearance
-            
+
+        case 11: // My personal monitor (ViewSonic VP191b)
+
+            debug(1, "ViewSonic VP191b")
+            AmigaProxy.defaults.removeGeometryUserDefaults()
+            defaults.set(Keys.Vid.zoom, 0)
+            defaults.set(Keys.Vid.hZoom, 0.6763221)
+            defaults.set(Keys.Vid.vZoom, 0.032)
+            defaults.set(Keys.Vid.center, 0)
+            defaults.set(Keys.Vid.hCenter, 0.39813587)
+            defaults.set(Keys.Vid.vCenter, 1.0)
+
+        case 20: // Recommended settings (colors + shader)
+
             AmigaProxy.defaults.removeColorUserDefaults()
             AmigaProxy.defaults.removeShaderUserDefaults()
 
-        case 7: // CRT Appearance
-            
+        case 21: // TFT monitor
+
+            AmigaProxy.defaults.removeColorUserDefaults()
+            AmigaProxy.defaults.removeShaderUserDefaults()
+
+        case 22: // CRT monitor
+
             AmigaProxy.defaults.removeColorUserDefaults()
             AmigaProxy.defaults.removeShaderUserDefaults()
             defaults.set(Keys.Vid.blurRadius, 1.5)
             defaults.set(Keys.Vid.bloom, 1)
             defaults.set(Keys.Vid.dotMask, 1)
             defaults.set(Keys.Vid.scanlines, 2)
-
-        case 10: // My personal monitor (ViewSonic VP191b)
-
-            AmigaProxy.defaults.removeColorUserDefaults()
-            AmigaProxy.defaults.removeShaderUserDefaults()
-            AmigaProxy.defaults.removeGeometryUserDefaults()
-            defaults.set(Keys.Vid.hAutoCenter, false)
-            defaults.set(Keys.Vid.vAutoCenter, false)
-            defaults.set(Keys.Vid.hCenter, 0.39813587)
-            defaults.set(Keys.Vid.vCenter, 1.0)
-            defaults.set(Keys.Vid.hZoom, 0.6763221)
-            defaults.set(Keys.Vid.vZoom, 0.032)
 
         default:
             fatalError()

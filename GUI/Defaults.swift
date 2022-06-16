@@ -1130,13 +1130,13 @@ extension Keys {
     struct Vid {
 
         // Geometry
-        static let hAutoCenter        = "Geometry.HAutoCenter"
-        static let vAutoCenter        = "Geometry.VAutoCenter"
-        static let hCenter            = "Geometry.HCenter"
-        static let vCenter            = "Geometry.VCenter"
+        static let zoom               = "Geometry.Zoom"
         static let hZoom              = "Geometry.HZoom"
         static let vZoom              = "Geometry.VZoom"
-        
+        static let center             = "Geometry.Center"
+        static let hCenter            = "Geometry.HCenter"
+        static let vCenter            = "Geometry.VCenter"
+
         // Shaders
         static let enhancer           = "Shaders.Enhancer"
         static let upscaler           = "Shaders.Upscaler"
@@ -1180,12 +1180,12 @@ extension DefaultsProxy {
 
         debug(.defaults)
 
-        register(Keys.Vid.hAutoCenter, true)
-        register(Keys.Vid.vAutoCenter, true)
-        register(Keys.Vid.hCenter, 0.6)
-        register(Keys.Vid.vCenter, 0.47)
+        register(Keys.Vid.zoom, 2)
         register(Keys.Vid.hZoom, 1.0)
         register(Keys.Vid.vZoom, 0.27)
+        register(Keys.Vid.center, 1)
+        register(Keys.Vid.hCenter, 0.6)
+        register(Keys.Vid.vCenter, 0.47)
     }
     
     func registerShaderUserDefaults() {
@@ -1235,12 +1235,12 @@ extension DefaultsProxy {
 
         debug(.defaults)
         
-        let keys = [ Keys.Vid.hAutoCenter,
-                     Keys.Vid.vAutoCenter,
-                     Keys.Vid.hCenter,
-                     Keys.Vid.vCenter,
+        let keys = [ Keys.Vid.zoom,
                      Keys.Vid.hZoom,
-                     Keys.Vid.vZoom ]
+                     Keys.Vid.vZoom,
+                     Keys.Vid.center,
+                     Keys.Vid.hCenter,
+                     Keys.Vid.vCenter ]
 
         for key in keys { removeKey(key) }
     }
@@ -1307,13 +1307,13 @@ extension Configuration {
         
         amiga.suspend()
                 
-        defaults.set(Keys.Vid.hAutoCenter, hAutoCenter)
-        defaults.set(Keys.Vid.vAutoCenter, vAutoCenter)
-        defaults.set(Keys.Vid.hCenter, hCenter)
-        defaults.set(Keys.Vid.vCenter, vCenter)
+        defaults.set(Keys.Vid.zoom, zoom)
         defaults.set(Keys.Vid.hZoom, hZoom)
         defaults.set(Keys.Vid.vZoom, vZoom)
-        
+        defaults.set(Keys.Vid.center, center)
+        defaults.set(Keys.Vid.hCenter, hCenter)
+        defaults.set(Keys.Vid.vCenter, vCenter)
+
         defaults.save()
         
         amiga.resume()
@@ -1381,13 +1381,13 @@ extension Configuration {
         
         amiga.suspend()
           
-        hAutoCenter = defaults.bool(Keys.Vid.hAutoCenter)
-        vAutoCenter = defaults.bool(Keys.Vid.vAutoCenter)
-        hCenter = defaults.float(Keys.Vid.hCenter)
-        vCenter = defaults.float(Keys.Vid.vCenter)
+        zoom = defaults.int(Keys.Vid.zoom)
         hZoom = defaults.float(Keys.Vid.hZoom)
         vZoom = defaults.float(Keys.Vid.vZoom)
-                
+        center = defaults.int(Keys.Vid.center)
+        hCenter = defaults.float(Keys.Vid.hCenter)
+        vCenter = defaults.float(Keys.Vid.vCenter)
+
         amiga.resume()
     }
 

@@ -51,7 +51,19 @@ extension Canvas {
     
     // Returns the visible texture area based on the zoom and center parameters
     var visible: CGRect {
-        
+
+        // Determine zoom factors
+        var hZoom = renderer.config.hZoom
+        var vZoom = renderer.config.vZoom
+
+        switch renderer.config.zoom {
+
+        case 1: hZoom = 1.0; vZoom = 0.27       // Narrow
+        case 2: hZoom = 0.747; vZoom = 0.032    // Wide
+        case 3: hZoom = 0; vZoom = 0            // Extreme
+        default: break
+        }
+
         /*
          *       aw <--------- maxWidth --------> dw
          *    ah |-----|---------------------|-----|
@@ -72,35 +84,29 @@ extension Canvas {
         
         let largest = largestVisible
         
-        let hscale = CGFloat(1.0 - 0.2 * renderer.config.hZoom)
-        let vscale = CGFloat(1.0 - 0.2 * renderer.config.vZoom)
+        let hscale = CGFloat(1.0 - 0.2 * hZoom)
+        let vscale = CGFloat(1.0 - 0.2 * vZoom)
         let width = hscale * largest.width
         let height = vscale * largest.height
 
         var bw: CGFloat
         var bh: CGFloat
         
-        if renderer.parent.config.hAutoCenter {
+        if renderer.parent.config.center == 1 {
             
             bw = x1 - 0.5 * (width - (x2 - x1))
             bw = max(bw, largest.minX)
             bw = min(bw, largest.maxX - width)
             debug(.events, "AutoShift x: \(bw)")
-            
-        } else {
-            
-            bw = largest.minX + CGFloat(renderer.config.hCenter) * (largest.width - width)
-        }
-        
-        if renderer.parent.config.vAutoCenter {
-            
+
             bh = y1 - 0.5 * (height - (y2 - y1))
             bh = max(bh, largest.minY)
             bh = min(bh, largest.maxY - height)
             debug(.events, "AutoShift y: \(bh)")
-            
+
         } else {
             
+            bw = largest.minX + CGFloat(renderer.config.hCenter) * (largest.width - width)
             bh = largest.minY + CGFloat(renderer.config.vCenter) * (largest.height - height)
         }
                 

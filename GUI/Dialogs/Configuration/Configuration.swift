@@ -421,18 +421,22 @@ class Configuration {
         get { return amiga.getConfig(.SATURATION) }
         set { amiga.configure(.SATURATION, value: newValue) }
     }
-    var hAutoCenter: Bool = false
-    var hCenter: Float = 0 {
-        didSet { renderer.canvas.updateTextureRect() }
-    }
-    var vAutoCenter: Bool = false
-    var vCenter: Float = 0 {
+    var zoom: Int = 0 {
         didSet { renderer.canvas.updateTextureRect() }
     }
     var hZoom: Float = 0 {
         didSet { renderer.canvas.updateTextureRect() }
     }
     var vZoom: Float = 0 {
+        didSet { renderer.canvas.updateTextureRect() }
+    }
+    var center: Int = 0 {
+        didSet { renderer.canvas.updateTextureRect() }
+    }
+    var hCenter: Float = 0 {
+        didSet { renderer.canvas.updateTextureRect() }
+    }
+    var vCenter: Float = 0 {
         didSet { renderer.canvas.updateTextureRect() }
     }
     var enhancer: Int = 0 {
