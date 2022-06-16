@@ -38,11 +38,6 @@
 #pragma GCC diagnostic ignored "-Wnested-anon-types"
 #endif
 
-// Type alias for the datatype used by the host machine's audio backend
-// struct U16Mono; typedef U16Mono SampleType;
-// struct U16Stereo; typedef U16Stereo SampleType;
-struct FloatStereo; typedef struct FloatStereo SampleType;
-
 
 //
 // Configuration overrides
@@ -86,6 +81,17 @@ struct FloatStereo; typedef struct FloatStereo SampleType;
 
 // Add addresses to launch the emulator with preset breakpoints
 #define INITIAL_BREAKPOINTS { }
+
+
+//
+// Audio settings
+//
+
+// Type alias for the datatype used by the host machine's audio backend
+struct FloatStereo; typedef struct FloatStereo SampleType;
+
+// Scaling factor used by the FloatStereo SampleType
+#define AUD_SCALE 0.00001f
 
 
 //
