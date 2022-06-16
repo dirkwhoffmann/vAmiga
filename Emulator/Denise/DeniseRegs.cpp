@@ -35,12 +35,8 @@ Denise::setDIWSTRT(u16 value)
      *     cur: Current coordinate
      *     old: Old trigger coordinate
      *     val: New trigger coordinate
-     */
-    isize cur = 2 * agnus.pos.h;
-    isize old = hflopOn;
-    isize val = newDiwHstrt;
-
-    /* The following cases have to be taken into accout:
+     *
+     * The following cases have to be taken into accout:
      *
      *    1) cur < old < val : Change takes effect in this rasterline
      *    2) cur < val < old : Change takes effect in this rasterline
@@ -50,7 +46,11 @@ Denise::setDIWSTRT(u16 value)
      *    6) old < val < cur : Already triggered. Nothing to do
      */
 
-    if (cur < old) {
+    isize cur = 2 * agnus.pos.h;
+    isize old = hflopOn;
+    isize val = newDiwHstrt;
+
+    if (cur <= old) {
 
         if (val < cur) {
 
@@ -100,7 +100,7 @@ Denise::setDIWSTOP(u16 value)
     isize old = hflopOff;
     isize val = newDiwHstop;
 
-    if (cur < old) {
+    if (cur <= old) {
 
         if (val < cur) {
 

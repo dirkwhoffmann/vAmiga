@@ -383,7 +383,7 @@ Agnus::pokeDIWSTRT(u16 value)
     trace(DIW_DEBUG, "pokeDIWSTRT<%s>(%04x)\n", AccessorEnum::key(s), value);
 
     recordRegisterChange(DMA_CYCLES(4), SET_DIWSTRT_AGNUS, value);
-    recordRegisterChange(DMA_CYCLES(3), SET_DIWSTRT_DENISE, value);
+    recordRegisterChange(DMA_CYCLES(1), SET_DIWSTRT_DENISE, value);
 }
 
 template <Accessor s> void
@@ -392,7 +392,7 @@ Agnus::pokeDIWSTOP(u16 value)
     trace(DIW_DEBUG, "pokeDIWSTOP<%s>(%04x)\n", AccessorEnum::key(s), value);
 
     recordRegisterChange(DMA_CYCLES(4), SET_DIWSTOP_AGNUS, value);
-    recordRegisterChange(DMA_CYCLES(3), SET_DIWSTOP_DENISE, value);
+    recordRegisterChange(DMA_CYCLES(1), SET_DIWSTOP_DENISE, value);
 }
 
 void
