@@ -1477,8 +1477,8 @@ Memory::spypeek16 <ACCESSOR_AGNUS, MEM_CHIP> (u32 addr) const
 template<> u16
 Memory::peek16 <ACCESSOR_AGNUS, MEM_SLOW> (u32 addr)
 {
-    assert((addr & agnus.ptrMask) == addr);
-    xfiles("Agnus reads from Slow RAM mirror\n");
+    xfiles("Agnus reads from Slow RAM mirror at %x\n", addr);
+
     dataBus = READ_SLOW_16(SLOW_RAM_STRT + (addr & 0x7FFFF));
     return dataBus;
 }
@@ -1486,7 +1486,6 @@ Memory::peek16 <ACCESSOR_AGNUS, MEM_SLOW> (u32 addr)
 template<> u16
 Memory::spypeek16 <ACCESSOR_AGNUS, MEM_SLOW> (u32 addr) const
 {
-    assert((addr & agnus.ptrMask) == addr);
     return READ_SLOW_16(SLOW_RAM_STRT + (addr & 0x7FFFF));
 }
 
@@ -1856,11 +1855,10 @@ Memory::poke16 <ACCESSOR_AGNUS, MEM_CHIP> (u32 addr, u16 value)
 template <> void
 Memory::poke16 <ACCESSOR_AGNUS, MEM_SLOW> (u32 addr, u16 value)
 {
-    assert((addr & agnus.ptrMask) == addr);
-    trace(MEM_DEBUG, "Writing to Slow RAM mirror\n");
+    xfiles("Agnus writes to Slow RAM mirror at %x\n", addr);
 
     dataBus = value;
-    WRITE_SLOW_16(addr, value);
+    WRITE_SLOW_16(SLOW_RAM_STRT + (addr & 0x7FFFF), value);
 }
 
 template<> void
