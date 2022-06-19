@@ -149,7 +149,7 @@ Sequencer::computeBplEventsSlow(const SigRecorder &sr, DDFState &state)
         
         // Emulate the signal change
         processSignal <ecs> (signal, state);
-        
+
         // Exit if the DONE signal has been processed
         if (signal & SIG_DONE) break;
 
@@ -189,11 +189,11 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
                 if (!ecs) state.shw = false;
 
             } else if (state.rhw || state.bphstop) {
-                
+
                 state.lastFu = true;
             }
         }
-    
+
         if (state.bprun) {
                             
             id = fetch[state.lastFu ? 1 : 0][state.cnt];
@@ -204,7 +204,7 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
             id = EVENT_NONE;
             state.cnt = 0;
         }
-        
+
         // Superimpose drawing flags
         isize jj = j >= 1 ? j : HPOS_CNT_PAL + j;
 

@@ -51,6 +51,7 @@ struct DDFState
     bool bphstop = false;
     bool bprun = false;
     bool lastFu = false;
+    bool stopreq = false;
     u8   bmctl = 0;
     u8   cnt = 0;
 
@@ -65,6 +66,7 @@ struct DDFState
         this->bphstop == rhs.bphstop &&
         this->bprun == rhs.bprun &&
         this->lastFu == rhs.lastFu &&
+        this->stopreq == rhs.stopreq &&
         this->bmctl == rhs.bmctl &&
         this->cnt == rhs.cnt;
     }
@@ -87,6 +89,7 @@ struct DDFState
         << bphstop
         << bprun
         << lastFu
+        << stopreq
         << bmctl
         << cnt;
     }
