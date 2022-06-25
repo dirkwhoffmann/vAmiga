@@ -31,6 +31,8 @@ Sequencer::_dump(Category category, std::ostream& os) const
         os << bol(ddf.bphstart) << " (" << bol(ddfInitial.bphstart) << ")" << std::endl;
         os << tab("BPHSTOP");
         os << bol(ddf.bphstop) << " (" << bol(ddfInitial.bphstop) << ")" << std::endl;
+        os << tab("STOPREQ");
+        os << bol(ddf.stopreq) << " (" << bol(ddfInitial.stopreq) << ")" << std::endl;
         os << tab("BPRRUN");
         os << bol(ddf.bprun) << " (" << bol(ddfInitial.bprun) << ")" << std::endl;
         os << tab("LASTFU");

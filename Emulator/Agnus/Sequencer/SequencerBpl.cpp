@@ -188,8 +188,10 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
                 state.bphstop = false;
                 if (!ecs) state.shw = false;
 
-            } else if (state.rhw || state.bphstop) {
+            // } else if (state.rhw || state.bphstop) {
+            } else if (state.stopreq) {
 
+                state.stopreq = false;
                 state.lastFu = true;
             }
         }
@@ -266,6 +268,7 @@ Sequencer::processSignal <false> (u16 signal, DDFState &state)
         case SIG_RHW:
 
             state.rhw |= state.bprun;
+            state.stopreq |= state.bprun;
             break;
     }
     switch (signal & (SIG_BPHSTART | SIG_BPHSTOP)) {
@@ -276,7 +279,8 @@ Sequencer::processSignal <false> (u16 signal, DDFState &state)
                 
                 state.bphstart &= !state.bprun;
                 state.bphstop |= state.bprun;
-                
+                state.stopreq |= state.bprun;
+
             } else {
                 
                 state.bphstart = state.bphstart || state.shw;
@@ -294,11 +298,13 @@ Sequencer::processSignal <false> (u16 signal, DDFState &state)
 
             state.bphstart &= !state.bprun;
             state.bphstop |= state.bprun;
+            state.stopreq |= state.bprun;
             break;
     }
     if (signal & SIG_DONE) {
         
         state.rhw = false;
+        state.stopreq = false;
     }
 }
 
@@ -355,6 +361,7 @@ Sequencer::processSignal <true> (u16 signal, DDFState &state)
         case SIG_RHW:
 
             state.rhw = true;
+            state.stopreq = true;
             break;
     }
     switch (signal & (SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW | SIG_RHW)) {
@@ -368,12 +375,14 @@ Sequencer::processSignal <true> (u16 signal, DDFState &state)
         case SIG_BPHSTART | SIG_BPHSTOP | SIG_RHW:
             
             state.bphstop |= state.bprun;
+            state.stopreq |= state.bprun;
             state.bphstart = true;
             break;
             
         case SIG_BPHSTART | SIG_BPHSTOP:
             
             state.bphstop |= state.bprun;
+            state.stopreq |= state.bprun;
             state.bphstart = true;
             state.bprun = (state.bprun || state.shw) && state.bpv && state.bmapen;
             break;
@@ -392,6 +401,7 @@ Sequencer::processSignal <true> (u16 signal, DDFState &state)
 
             state.bphstart = false;
             state.bphstop |= state.bprun;
+            state.stopreq |= state.bprun;
             break;
     }
     if (signal & SIG_DONE) {
@@ -399,6 +409,7 @@ Sequencer::processSignal <true> (u16 signal, DDFState &state)
         state.rhw = false;
         state.shw = false;
         state.bphstop = false;
+        state.stopreq = false;
     }
 }
 
