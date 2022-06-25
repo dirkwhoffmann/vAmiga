@@ -181,7 +181,7 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
         if (agnus.pos.v == 115) trace(true, "%d: %d %d %d %d %d %d %d %d %d %d\n", j, state.bpv, state.bmapen, state.shw, state.rhw, state.bphstart, state.bphstop, state.bprun, state.lastFu, state.bmctl, counter);
          */
         
-        if (counter == 0 && state.bprun) {
+        if (counter == 0) { // } && state.bprun) {
     
             if (state.lastFu) {
 
@@ -349,7 +349,7 @@ Sequencer::processSignal <true> (u16 signal, DDFState &state)
         case SIG_RHW:
 
             state.rhw = true;
-            state.stopreq = true;
+            state.stopreq |= state.bprun;
             break;
     }
     switch (signal & (SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW | SIG_RHW)) {
@@ -414,7 +414,7 @@ Sequencer::processSignal <true> (u16 signal, DDFState &state)
         state.rhw = false;
         state.shw = false;
         state.bphstop = false;
-        state.stopreq = false;
+        // state.stopreq = false;
     }
 }
 
