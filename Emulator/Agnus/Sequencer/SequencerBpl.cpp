@@ -175,22 +175,25 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
         
         EventID id;
 
+        auto counter = state.cnt << 1 | (j & 1);
+
         /*
-        if (agnus.pos.v == 128) trace(true, "%d: %d %d %d %d %d %d %d %d %d %d\n", j, state.bpv, state.bmapen, state.shw, state.rhw, state.bphstart, state.bphstop, state.bprun, state.lastFu, state.bmctl, state.cnt);
+        if (agnus.pos.v == 115) trace(true, "%d: %d %d %d %d %d %d %d %d %d %d\n", j, state.bpv, state.bmapen, state.shw, state.rhw, state.bphstart, state.bphstop, state.bprun, state.lastFu, state.bmctl, counter);
          */
         
-        if (state.cnt == 0 && state.bprun) {
+        if (counter == 0 && state.bprun) {
     
             if (state.lastFu) {
-                
+
+                // trace(1, "STOP\n");
                 state.bprun = false;
                 state.lastFu = false;
                 state.bphstop = false;
                 if (!ecs) state.shw = false;
 
-            // } else if (state.rhw || state.bphstop) {
             } else if (state.stopreq) {
 
+                // trace(1, "LASTFU\n");
                 state.stopreq = false;
                 state.lastFu = true;
             }
@@ -198,8 +201,8 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
 
         if (state.bprun) {
                             
-            id = fetch[state.lastFu ? 1 : 0][state.cnt];
-            state.cnt = (state.cnt + 1) & 7;
+            id = fetch[state.lastFu ? 1 : 0][counter];
+            if (IS_ODD(j)) state.cnt = (state.cnt + 1) & 3;
             
         } else {
             
@@ -320,21 +323,6 @@ Sequencer::processSignal <true> (u16 signal, DDFState &state)
         state.bmctl = (u8)(signal & 0xF);
         computeFetchUnit(state.bmctl);
     }
-    switch (signal & (SIG_BMAPEN_CLR | SIG_BMAPEN_SET)) {
-            
-        case SIG_BMAPEN_CLR:
-        
-            state.bmapen = false;
-            state.bprun = false;
-            state.cnt = 0;
-            break;
-            
-        case SIG_BMAPEN_SET:
-        
-            state.bmapen = true;
-            state.bprun = (state.bprun || state.shw) && state.bpv && state.bphstart;
-            break;
-    }
     switch (signal & (SIG_VFLOP_SET | SIG_VFLOP_CLR)) {
             
         case SIG_VFLOP_SET:
@@ -399,9 +387,26 @@ Sequencer::processSignal <true> (u16 signal, DDFState &state)
         case SIG_BPHSTOP | SIG_SHW:
         case SIG_BPHSTOP | SIG_RHW:
 
+            // trace(1, "SIG_BPHSTOP\n");
             state.bphstart = false;
             state.bphstop |= state.bprun;
             state.stopreq |= state.bprun;
+            break;
+    }
+    switch (signal & (SIG_BMAPEN_CLR | SIG_BMAPEN_SET)) {
+
+        case SIG_BMAPEN_CLR:
+
+            // trace(1, "SIG_BMAPEN_CLR\n");
+            state.bmapen = false;
+            state.bprun = false;
+            state.cnt = 0;
+            break;
+
+        case SIG_BMAPEN_SET:
+
+            state.bmapen = true;
+            state.bprun = (state.bprun || state.shw) && state.bpv && state.bphstart;
             break;
     }
     if (signal & SIG_DONE) {
