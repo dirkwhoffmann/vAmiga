@@ -15,16 +15,16 @@
 void
 Thumbnail::take(Amiga &amiga, isize dx, isize dy)
 {
-    u32 *source = (u32 *)amiga.denise.pixelEngine.getStableBuffer().ptr;
-    u32 *target = screen;
-    
-    isize xStart = 4 * HBLANK_CNT + 1;
-    isize xEnd = HPIXELS;
+    isize xStart = 4 * HBLANK_CNT;
+    isize xEnd = 4 * HPOS_CNT_PAL;
     isize yStart = VBLANK_CNT;
-    isize yEnd = VPIXELS - 2;
+    isize yEnd = amiga.agnus.isPAL() ? VPOS_CNT_PAL_SF : VPOS_CNT_NTSC_SF;
+
     width  = (i32)((xEnd - xStart) / dx);
     height = (i32)((yEnd - yStart) / dy);
-    
+
+    u32 *target = screen;
+    u32 *source = (u32 *)amiga.denise.pixelEngine.getStableBuffer().ptr;
     source += xStart + yStart * HPIXELS;
     
     for (isize y = 0; y < height; y++) {
