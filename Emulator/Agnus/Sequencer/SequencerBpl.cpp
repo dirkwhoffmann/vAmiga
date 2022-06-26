@@ -181,19 +181,20 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
         if (agnus.pos.v == 115) trace(true, "%d: %d %d %d %d %d %d %d %d %d %d\n", j, state.bpv, state.bmapen, state.shw, state.rhw, state.bphstart, state.bphstop, state.bprun, state.lastFu, state.bmctl, counter);
          */
         
-        if (counter == 0) { // } && state.bprun) {
+        if (counter == 0) {
     
             if (state.lastFu) {
 
-                // trace(1, "STOP\n");
+                // trace(1, "%d: STOP\n", j);
                 state.bprun = false;
                 state.lastFu = false;
                 state.bphstop = false;
                 if (!ecs) state.shw = false;
+            }
 
-            } else if (state.stopreq) {
+            if (state.stopreq) {
 
-                // trace(1, "LASTFU\n");
+                // trace(1, "%d: LASTFU\n", j);
                 state.stopreq = false;
                 state.lastFu = true;
             }
@@ -293,7 +294,7 @@ Sequencer::processSignal <false> (u16 signal, DDFState &state)
                         
         case SIG_BPHSTART:
 
-            state.bphstart = state.bphstart || state.shw;
+            state.bphstart |= state.shw && state.bmapen;
             state.bprun = (state.bprun || state.shw) && state.bpv && state.bmapen;
             break;
             
@@ -350,6 +351,7 @@ Sequencer::processSignal <true> (u16 signal, DDFState &state)
 
             state.rhw = true;
             state.stopreq |= state.bprun;
+            // trace(1, "SIG_RHW: %d\n", state.bprun);
             break;
     }
     switch (signal & (SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW | SIG_RHW)) {
@@ -414,7 +416,6 @@ Sequencer::processSignal <true> (u16 signal, DDFState &state)
         state.rhw = false;
         state.shw = false;
         state.bphstop = false;
-        // state.stopreq = false;
     }
 }
 
