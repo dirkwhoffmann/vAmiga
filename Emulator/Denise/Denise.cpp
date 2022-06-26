@@ -1075,6 +1075,11 @@ Denise::hsyncHandler(isize vpos)
     spriteClipBegin = HPIXELS;
     spriteClipEnd = HPIXELS + 32;
 
+    // Save the current values of various Denise registers
+    initialBplcon0 = bplcon0;
+    initialBplcon1 = bplcon1;
+    initialBplcon2 = bplcon2;
+
     // Hand control over to the debugger
     debugger.hsyncHandler(vpos);
 }
@@ -1082,11 +1087,6 @@ Denise::hsyncHandler(isize vpos)
 void
 Denise::eolHandler()
 {
-    // Save the current values of various Denise registers
-    initialBplcon0 = bplcon0;
-    initialBplcon1 = bplcon1;
-    initialBplcon2 = bplcon2;
-
     // Preserve the old DIW flipflop
     hflopPrev = hflop;
     hflopOnPrev = hflopOn;
