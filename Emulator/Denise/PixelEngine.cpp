@@ -384,15 +384,6 @@ PixelEngine::getNoise() const
     return noise.ptr + offset;
 }
 
-u32 *
-PixelEngine::frameBufferAddr(isize v, isize h) const
-{
-    assert(v >= 0 && v <= VPOS_MAX);
-    assert(h >= 0 && h <= HPOS_MAX);
-    
-    return workingBuffer->slice[0].ptr + v * HPIXELS + h;
-}
-
 void
 PixelEngine::vsyncHandler()
 {
@@ -436,7 +427,7 @@ void
 PixelEngine::colorize(isize line)
 {
     // Jump to the first pixel in the specified line in the active frame buffer
-    u32 *dst = frameBufferAddr(line);
+    u32 *dst = workingPtr(0, line);
     Pixel pixel = 0;
 
     // Initialize the HAM mode hold register with the current background color

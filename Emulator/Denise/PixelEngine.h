@@ -246,11 +246,6 @@ public:
     // Returns a pointer to randon noise
     u32 *getNoise() const;
 
-    // Returns the address of the first pixel in a certain frambuffer line
-    u32 *frameBufferAddr() const { return workingBuffer->slice[0].ptr; }
-    u32 *frameBufferAddr(isize v) const { return frameBufferAddr(v, 0); }
-    u32 *frameBufferAddr(isize v, isize h) const;
-
     // Called after each line in the VBLANK area
     void endOfVBlankLine();
 
