@@ -53,8 +53,8 @@ private:
      */
     FrameBuffer emuTexture[2];
 
-    // Pointer to the current working buffer
-    FrameBuffer *workingBuffer = &emuTexture[0];
+    // The currently active buffer
+    isize activeBuffer = 0;
 
     // Mutex for synchronizing access to the stable buffer
     util::Mutex bufferMutex;

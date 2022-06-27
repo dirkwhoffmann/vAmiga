@@ -52,13 +52,13 @@ PixelEngine::clearAll()
 void
 PixelEngine::clear(isize line)
 {
-    clear(workingBuffer->slice[0].ptr, line, 0, HPOS_MAX);
+    clear(workingPtr(), line, 0, HPOS_MAX);
 }
 
 void
 PixelEngine::clear(isize line, Pixel pixel)
 {
-    clear(workingBuffer->slice[0].ptr, line, pixel, pixel);
+    clear(workingPtr(), line, pixel, pixel);
 }
 
 void
@@ -103,8 +103,8 @@ PixelEngine::_reset(bool hard)
         emuTexture[0].longFrame = true;
         emuTexture[1].longFrame = true;
     }
-    
-    workingBuffer = &emuTexture[0];
+
+    activeBuffer = 0;
     updateRGBA();
 }
 
@@ -322,17 +322,13 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
 const FrameBuffer &
 PixelEngine::getStableBuffer()
 {
-    if (workingBuffer == &emuTexture[0]) {
-        return emuTexture[1];
-    } else {
-        return emuTexture[0];
-    }
+    return emuTexture[!activeBuffer];
 }
 
 const FrameBuffer &
 PixelEngine::getWorkingBuffer()
 {
-    return *workingBuffer;
+    return emuTexture[activeBuffer];
 }
 
 u32 *
@@ -360,18 +356,10 @@ void
 PixelEngine::swapBuffers()
 {
     lockStableBuffer();
-    
-    if (workingBuffer == &emuTexture[0]) {
 
-        workingBuffer = &emuTexture[1];
-        emuTexture[1].longFrame = agnus.pos.lof;
+    activeBuffer = !activeBuffer;
+    emuTexture[activeBuffer].longFrame = agnus.pos.lof;
 
-    } else {
-
-        workingBuffer = &emuTexture[0];
-        emuTexture[0].longFrame = agnus.pos.lof;
-    }
-    
     unlockStableBuffer();
 }
 
@@ -526,7 +514,7 @@ PixelEngine::colorizeHAM(u32 *dst, Pixel from, Pixel to, u16& ham)
 void
 PixelEngine::hide(isize line, u16 layers, u8 alpha)
 {
-    u32 *p = workingBuffer->slice[0].ptr + line * HPIXELS;
+    u32 *p = workingPtr(0, line);
 
     for (Pixel i = 0; i < HPIXELS; i++) {
 
