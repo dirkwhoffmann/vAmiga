@@ -332,7 +332,7 @@ Recorder::record(Cycle target)
 void
 Recorder::recordVideo(Cycle target)
 {
-    u32 *buffer = denise.pixelEngine.getStableBuffer().ptr;
+    u32 *buffer = denise.pixelEngine.stablePtr();
     
     isize width = sizeof(u32) * (cutout.x2 - cutout.x1);
     isize height = cutout.y2 - cutout.y1;

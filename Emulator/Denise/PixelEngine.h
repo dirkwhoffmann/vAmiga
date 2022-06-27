@@ -17,8 +17,9 @@
 
 using util::Buffer;
 
-struct FrameBuffer : public Buffer<u32> {
-    
+struct FrameBuffer {
+
+    Buffer<u32> slice[2];
     bool longFrame;
     
     FrameBuffer(); 
@@ -227,8 +228,13 @@ private:
 
 public:
 
-    // Returns the stable frame buffer
+    // Returns the working buffer or the stable buffer
+    const FrameBuffer &getWorkingBuffer();
     const FrameBuffer &getStableBuffer();
+
+    // Return a pointer into the pixel storage
+    u32 *workingPtr(isize sliceNr = 0, isize v = 0, isize h = 0);
+    u32 *stablePtr(isize sliceNr = 0, isize v = 0, isize h = 0);
 
     // Locks or unlocks the stable buffer
     void lockStableBuffer() { bufferMutex.lock(); }
@@ -241,7 +247,7 @@ public:
     u32 *getNoise() const;
 
     // Returns the address of the first pixel in a certain frambuffer line
-    u32 *frameBufferAddr() const { return workingBuffer->ptr; }
+    u32 *frameBufferAddr() const { return workingBuffer->slice[0].ptr; }
     u32 *frameBufferAddr(isize v) const { return frameBufferAddr(v, 0); }
     u32 *frameBufferAddr(isize v, isize h) const;
 

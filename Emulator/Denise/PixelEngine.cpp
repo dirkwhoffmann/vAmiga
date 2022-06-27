@@ -18,7 +18,8 @@
 
 FrameBuffer::FrameBuffer()
 {
-    alloc(PIXELS);
+    slice[0].alloc(PIXELS);
+    slice[1].alloc(PIXELS);
 }
 
 PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
@@ -35,11 +36,14 @@ PixelEngine::clearAll()
 {
     lockStableBuffer();
 
-    for (isize line = 0; line < VPIXELS; line++) {
-        clear(emuTexture[0].ptr, line);
-    }
-    for (isize line = 0; line < VPIXELS; line++) {
-        clear(emuTexture[1].ptr, line);
+    for (isize i = 0; i < 2; i++) {
+
+        for (isize line = 0; line < VPIXELS; line++) {
+            clear(emuTexture[0].slice[i].ptr, line);
+        }
+        for (isize line = 0; line < VPIXELS; line++) {
+            clear(emuTexture[1].slice[i].ptr, line);
+        }
     }
 
     unlockStableBuffer();
@@ -48,13 +52,13 @@ PixelEngine::clearAll()
 void
 PixelEngine::clear(isize line)
 {
-    clear(workingBuffer->ptr, line, 0, HPOS_MAX);
+    clear(workingBuffer->slice[0].ptr, line, 0, HPOS_MAX);
 }
 
 void
 PixelEngine::clear(isize line, Pixel pixel)
 {
-    clear(workingBuffer->ptr, line, pixel, pixel);
+    clear(workingBuffer->slice[0].ptr, line, pixel, pixel);
 }
 
 void
@@ -325,6 +329,33 @@ PixelEngine::getStableBuffer()
     }
 }
 
+const FrameBuffer &
+PixelEngine::getWorkingBuffer()
+{
+    return *workingBuffer;
+}
+
+u32 *
+PixelEngine::workingPtr(isize nr, isize v, isize h)
+{
+    assert(nr == 0 || nr == 1);
+    assert(v >= 0 && v <= VPOS_MAX);
+    assert(h >= 0 && h <= HPOS_MAX);
+
+    return getWorkingBuffer().slice[nr].ptr + v * HPIXELS + h;
+}
+
+u32 *
+PixelEngine::stablePtr(isize nr, isize v, isize h)
+{
+    assert(nr == 0 || nr == 1);
+    assert(v >= 0 && v <= VPOS_MAX);
+    assert(h >= 0 && h <= HPOS_MAX);
+
+    return getStableBuffer().slice[nr].ptr + v * HPIXELS + h;
+
+}
+
 void
 PixelEngine::swapBuffers()
 {
@@ -359,7 +390,7 @@ PixelEngine::frameBufferAddr(isize v, isize h) const
     assert(v >= 0 && v <= VPOS_MAX);
     assert(h >= 0 && h <= HPOS_MAX);
     
-    return workingBuffer->ptr + v * HPIXELS + h;
+    return workingBuffer->slice[0].ptr + v * HPIXELS + h;
 }
 
 void
@@ -504,7 +535,7 @@ PixelEngine::colorizeHAM(u32 *dst, Pixel from, Pixel to, u16& ham)
 void
 PixelEngine::hide(isize line, u16 layers, u8 alpha)
 {
-    u32 *p = workingBuffer->ptr + line * HPIXELS;
+    u32 *p = workingBuffer->slice[0].ptr + line * HPIXELS;
 
     for (Pixel i = 0; i < HPIXELS; i++) {
 

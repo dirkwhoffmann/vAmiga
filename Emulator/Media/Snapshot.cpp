@@ -24,7 +24,7 @@ Thumbnail::take(Amiga &amiga, isize dx, isize dy)
     height = (i32)((yEnd - yStart) / dy);
 
     u32 *target = screen;
-    u32 *source = (u32 *)amiga.denise.pixelEngine.getStableBuffer().ptr;
+    u32 *source = (u32 *)amiga.denise.pixelEngine.stablePtr();
     source += xStart + yStart * HPIXELS;
     
     for (isize y = 0; y < height; y++) {
