@@ -17,11 +17,11 @@
 
 using util::Buffer;
 
-struct ScreenBuffer : public Buffer<u32> {
+struct FrameBuffer : public Buffer<u32> {
     
     bool longFrame;
     
-    ScreenBuffer(); 
+    FrameBuffer(); 
 };
 
 class PixelEngine : public SubComponent {
@@ -50,10 +50,10 @@ private:
      * buffer and the GPU reads from the stable buffer. Once a frame has
      * been completed, the working buffer and the stable buffer are swapped.
      */
-    ScreenBuffer emuTexture[2];
+    FrameBuffer emuTexture[2];
 
-    // Pointer to the texture data in the working buffer
-    u32 *frameBuffer = emuTexture[0].ptr;
+    // Pointer to the current working buffer
+    FrameBuffer *workingBuffer = &emuTexture[0];
 
     // Mutex for synchronizing access to the stable buffer
     util::Mutex bufferMutex;
@@ -228,7 +228,7 @@ private:
 public:
 
     // Returns the stable frame buffer
-    const ScreenBuffer &getStableBuffer();
+    const FrameBuffer &getStableBuffer();
 
     // Locks or unlocks the stable buffer
     void lockStableBuffer() { bufferMutex.lock(); }
@@ -241,7 +241,7 @@ public:
     u32 *getNoise() const;
 
     // Returns the address of the first pixel in a certain frambuffer line
-    u32 *frameBufferAddr() const { return frameBuffer; }
+    u32 *frameBufferAddr() const { return workingBuffer->ptr; }
     u32 *frameBufferAddr(isize v) const { return frameBufferAddr(v, 0); }
     u32 *frameBufferAddr(isize v, isize h) const;
 
