@@ -34,8 +34,6 @@ PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
 void
 PixelEngine::clearAll()
 {
-    lockStableBuffer();
-
     for (isize i = 0; i < 2; i++) {
 
         for (isize line = 0; line < VPIXELS; line++) {
@@ -45,8 +43,6 @@ PixelEngine::clearAll()
             clear(emuTexture[1].slice[i].ptr, line);
         }
     }
-
-    unlockStableBuffer();
 }
 
 void
@@ -355,12 +351,8 @@ PixelEngine::stablePtr(isize nr, isize v, isize h)
 void
 PixelEngine::swapBuffers()
 {
-    lockStableBuffer();
-
     activeBuffer = !activeBuffer;
     emuTexture[activeBuffer].longFrame = agnus.pos.lof;
-
-    unlockStableBuffer();
 }
 
 u32 *

@@ -230,9 +230,6 @@ class Canvas: Layer {
             sfTexture.replace(w: Int(HPIXELS), h: Int(VPIXELS), buffer: buffer)
             return
         }
-        
-        // Lock the most recent texture
-        amiga.denise.lockStableBuffer()
 
         // Get the texture
         let buffer = amiga.denise.stableBuffer!
@@ -251,10 +248,7 @@ class Canvas: Layer {
             } else {
                 sfTexture.replace(w: Int(HPIXELS), h: Int(VPIXELS), buffer: buffer)
             }
-        }
-        
-        // Unlock texture
-        amiga.denise.unlockStableBuffer()
+        }        
     }
     
     //

@@ -476,8 +476,6 @@
 - (u64)sprData:(NSInteger)nr line:(NSInteger)line;
 - (u16)sprColor:(NSInteger)nr reg:(NSInteger)reg;
 
-- (void)lockStableBuffer;
-- (void)unlockStableBuffer;
 @property (readonly) BOOL longFrame;
 @property (readonly) u32 *stableBuffer;
 @property (readonly) u32 *noise;

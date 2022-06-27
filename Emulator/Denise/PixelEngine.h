@@ -235,10 +235,6 @@ public:
     // Return a pointer into the pixel storage
     u32 *workingPtr(isize sliceNr = 0, isize v = 0, isize h = 0);
     u32 *stablePtr(isize sliceNr = 0, isize v = 0, isize h = 0);
-
-    // Locks or unlocks the stable buffer
-    void lockStableBuffer() { bufferMutex.lock(); }
-    void unlockStableBuffer() { bufferMutex.unlock(); }
     
     // Swaps the working buffer and the stable buffer
     void swapBuffers();
