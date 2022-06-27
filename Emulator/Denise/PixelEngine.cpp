@@ -22,6 +22,59 @@ FrameBuffer::FrameBuffer()
     slice[1].alloc(PIXELS);
 }
 
+void
+FrameBuffer::cleanSlice(isize nr)
+{
+    auto *ptr = slice[nr].ptr;
+
+    for (isize row = 0; row < VPIXELS; row++) {
+        for (isize col = 0; col < HPIXELS; col++) {
+            ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? col1 : col2;
+        }
+    }
+}
+
+void
+FrameBuffer::cleanSlice(isize nr, isize row)
+{
+    auto *ptr = slice[nr].ptr + row * HPIXELS;
+
+    for (isize col = 0; col < HPIXELS; col++) {
+        ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? col1 : col2;
+    }
+}
+
+void
+FrameBuffer::cleanSlice(isize nr, isize row, isize cycle)
+{
+    auto *ptr = slice[nr].ptr + row * HPIXELS + 4 * cycle;
+
+    for (isize col = 0; col < 4; col++) {
+        ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? col1 : col2;
+    }
+}
+
+void
+FrameBuffer::clean()
+{
+    cleanSlice(0);
+    cleanSlice(1);
+}
+
+void
+FrameBuffer::clean(isize row)
+{
+    cleanSlice(0, row);
+    cleanSlice(1, row);
+}
+
+void
+FrameBuffer::clean(isize row, isize col)
+{
+    cleanSlice(0, row, col);
+    cleanSlice(1, row, col);
+}
+
 PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
 {
     // Create random background noise pattern
@@ -34,17 +87,11 @@ PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
 void
 PixelEngine::clearAll()
 {
-    for (isize i = 0; i < 2; i++) {
-
-        for (isize line = 0; line < VPIXELS; line++) {
-            clear(emuTexture[0].slice[i].ptr, line);
-        }
-        for (isize line = 0; line < VPIXELS; line++) {
-            clear(emuTexture[1].slice[i].ptr, line);
-        }
-    }
+    emuTexture[0].clean();
+    emuTexture[1].clean();
 }
 
+/*
 void
 PixelEngine::clear(isize line)
 {
@@ -69,6 +116,7 @@ PixelEngine::clear(u32 *ptr, isize line, Pixel first, Pixel last)
         ptr[i] = ((line >> 2) & 1) == ((i >> 3) & 1) ? col1 : col2;
     }
 }
+*/
 
 void
 PixelEngine::_initialize()
@@ -321,31 +369,30 @@ PixelEngine::getStableBuffer()
     return emuTexture[!activeBuffer];
 }
 
-const FrameBuffer &
+FrameBuffer &
 PixelEngine::getWorkingBuffer()
 {
     return emuTexture[activeBuffer];
 }
 
 u32 *
-PixelEngine::workingPtr(isize nr, isize v, isize h)
+PixelEngine::workingPtr(isize nr, isize row, isize col)
 {
     assert(nr == 0 || nr == 1);
-    assert(v >= 0 && v <= VPOS_MAX);
-    assert(h >= 0 && h <= HPOS_MAX);
+    assert(row >= 0 && row <= VPOS_MAX);
+    assert(col >= 0 && col <= HPOS_MAX);
 
-    return getWorkingBuffer().slice[nr].ptr + v * HPIXELS + h;
+    return getWorkingBuffer().slice[nr].ptr + row * HPIXELS + col;
 }
 
 u32 *
-PixelEngine::stablePtr(isize nr, isize v, isize h)
+PixelEngine::stablePtr(isize nr, isize row, isize col)
 {
     assert(nr == 0 || nr == 1);
-    assert(v >= 0 && v <= VPOS_MAX);
-    assert(h >= 0 && h <= HPOS_MAX);
+    assert(row >= 0 && row <= VPOS_MAX);
+    assert(col >= 0 && col <= HPOS_MAX);
 
-    return getStableBuffer().slice[nr].ptr + v * HPIXELS + h;
-
+    return getStableBuffer().slice[nr].ptr + row * HPIXELS + col;
 }
 
 void

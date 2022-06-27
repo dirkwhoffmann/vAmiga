@@ -19,16 +19,27 @@ using util::Buffer;
 
 struct FrameBuffer {
 
+    // Checkerboard colors
+    static constexpr u32 col1 = 0xFF222222; // 0xFF662222
+    static constexpr u32 col2 = 0xFF444444; // 0xFFAA4444
+
     Buffer<u32> slice[2];
     bool longFrame;
     
-    FrameBuffer(); 
+    FrameBuffer();
+
+    // Initializes (a portion of) the frame buffer with a checkerboard pattern
+    void cleanSlice(isize slice);
+    void cleanSlice(isize slice, isize row);
+    void cleanSlice(isize slice, isize row, isize cycle);
+    void clean();
+    void clean(isize row);
+    void clean(isize row, isize cycle);
 };
 
 class PixelEngine : public SubComponent {
 
     friend class Denise;
-    // friend class DmaDebugger;
 
     // Current configuration
     PixelEngineConfig config = {};
@@ -109,12 +120,12 @@ public:
     void clearAll();
 
     // Initializes (part of) the current frame buffer with a checkerboard pattern
-    void clear(isize line);
-    void clear(isize line, Pixel pixel);
+    // void clear(isize line);
+    // void clear(isize line, Pixel pixel);
 
 private:
 
-    void clear(u32 *ptr, isize line, Pixel first = 0, Pixel last = HPOS_MAX);
+    // void clear(u32 *ptr, isize line, Pixel first = 0, Pixel last = HPOS_MAX);
 
 
     //
@@ -229,12 +240,12 @@ private:
 public:
 
     // Returns the working buffer or the stable buffer
-    const FrameBuffer &getWorkingBuffer();
+    FrameBuffer &getWorkingBuffer();
     const FrameBuffer &getStableBuffer();
 
     // Return a pointer into the pixel storage
-    u32 *workingPtr(isize sliceNr = 0, isize v = 0, isize h = 0);
-    u32 *stablePtr(isize sliceNr = 0, isize v = 0, isize h = 0);
+    u32 *workingPtr(isize sliceNr = 0, isize row = 0, isize col = 0);
+    u32 *stablePtr(isize sliceNr = 0, isize row = 0, isize col = 0);
     
     // Swaps the working buffer and the stable buffer
     void swapBuffers();
