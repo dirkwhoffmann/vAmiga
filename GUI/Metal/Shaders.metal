@@ -205,27 +205,42 @@ kernel void bypassmerger(texture2d<half, access::read>  inTexture   [[ texture(0
                          texture2d<half, access::write> outTexture  [[ texture(1) ]],
                          uint2                          gid         [[ thread_position_in_grid ]])
 {
-    half4 result = inTexture.read(uint2(gid.x, gid.y / 2));
+    half4 result = inTexture.read(uint2(gid.x / 2, gid.y / 4));
     outTexture.write(result, gid);
 }
     
-kernel void merge(texture2d<half, access::read>  longFrame   [[ texture(0) ]],
-                  texture2d<half, access::read>  shortFrame  [[ texture(1) ]],
-                  texture2d<half, access::write> outTexture  [[ texture(2) ]],
-                  constant MergeUniforms         &uniforms   [[ buffer(0) ]],
-                  uint2                          gid         [[ thread_position_in_grid ]])
+kernel void merge(texture2d<half, access::read>  longFrameEven  [[ texture(0) ]],
+                  texture2d<half, access::read>  longFrameOdd   [[ texture(1) ]],
+                  texture2d<half, access::read>  shortFrameEven [[ texture(2) ]],
+                  texture2d<half, access::read>  shortFrameOdd  [[ texture(3) ]],
+                  texture2d<half, access::write> outTexture     [[ texture(4) ]],
+                  constant MergeUniforms         &uniforms      [[ buffer(0) ]],
+                  uint2                          gid            [[ thread_position_in_grid ]])
 {
     half4 result;
     float s;
-    
-    if (gid.y % 2 == 0) {
+
+    if (gid.y % 4 < 2) {
+
         s = uniforms.longFrameScale;
-        result = longFrame.read(uint2(gid.x, gid.y / 2));
+
+        if (gid.x % 2 == 0) {
+            result = longFrameEven.read(uint2(gid.x / 2, gid.y / 4));
+        } else {
+            result = longFrameOdd.read(uint2(gid.x / 2, gid.y / 4));
+        }
+
     } else {
+
         s = uniforms.shortFrameScale;
-        result = shortFrame.read(uint2(gid.x, gid.y / 2));
+
+        if (gid.x % 2 == 0) {
+            result = shortFrameEven.read(uint2(gid.x / 2, gid.y / 4));
+        } else {
+            result = shortFrameOdd.read(uint2(gid.x / 2, gid.y / 4));
+        }
     }
-    
+
     outTexture.write(result * vec<half,4>(s,s,s,1), gid);
 }
 
@@ -246,9 +261,10 @@ kernel void bypassupscaler(texture2d<half, access::read>  inTexture   [[ texture
 // EPX upscaler (Eric's Pixel Expansion)
 //
 
-void doEPX(texture2d<half, access::write> out, uint2 gid,
-           half4 A, half4 C, half4 P, half4 B, half4 D)
+half4x4 doEPX(half4 A, half4 C, half4 P, half4 B, half4 D)
 {
+    half4x4 result;
+
     //   A    --\ 1 2
     // C P B  --/ 3 4
     //   D
@@ -258,73 +274,19 @@ void doEPX(texture2d<half, access::write> out, uint2 gid,
     // IF D==C AND D!=B AND C!=A => 3=C
     // IF B==D AND B!=A AND D!=C => 4=D
     
-    half4 r1 = (all(C == A) && any(C != D) && any(A != B)) ? A : P;
-    half4 r2 = (all(A == B) && any(A != C) && any(B != D)) ? B : P;
-    half4 r3 = (all(A == B) && any(A != C) && any(B != D)) ? C : P;
-    half4 r4 = (all(B == D) && any(B != A) && any(D != C)) ? D : P;
+    result[0] = (all(C == A) && any(C != D) && any(A != B)) ? A : P;
+    result[1] = (all(A == B) && any(A != C) && any(B != D)) ? B : P;
+    result[2] = (all(D == C) && any(D != B) && any(C != A)) ? C : P;
+    result[3] = (all(B == D) && any(B != A) && any(D != C)) ? D : P;
     
     // DEBUGGING
-    /*
-    r1 = half4(1.0,0.0,0.0,1.0);
-    r2 = half4(1.0,0.0,0.0,1.0);
-    r3 = half4(1.0,0.0,0.0,1.0);
-    r4 = half4(1.0,0.0,0.0,1.0);
-    */
-    
-    out.write(r1, gid + uint2(0,0));
-    out.write(r2, gid + uint2(1,0));
-    out.write(r3, gid + uint2(0,1));
-    out.write(r4, gid + uint2(1,1));
-}
+    // result[0] = half4(1.0,1.0,0.0,1.0);
+    // result[1] = half4(1.0,0.0,0.0,1.0);
+    // result[2] = half4(0.0,1.0,0.0,1.0);
+    // result[3] = half4(0.0,0.0,1.0,1.0);
 
-#if 0
-kernel void inPlaceEpx(texture2d<half, access::read>  in   [[ texture(0) ]],
-                       texture2d<half, access::write> out  [[ texture(1) ]],
-                       uint2                          gid  [[ thread_position_in_grid ]])
-{
-    if((gid.x % SCALE_FACTOR != 0) || (gid.y % SCALE_FACTOR != 0))
-        return;
-    
-    // Check for lores fragment (a == b == c == d)
-    // a b
-    // c d
-    
-    half4 a = in.read(gid + uint2(0,0));
-    half4 b = in.read(gid + uint2(1,0));
-    half4 c = in.read(gid + uint2(0,1));
-    half4 d = in.read(gid + uint2(1,1));
-
-    if (all(a == b && b == c && c == d)) {
-        
-        //   A
-        // C P B
-        //   D
-        
-        half4 A = in.read(gid + uint2( 0,-2));
-        half4 C = in.read(gid + uint2(-2, 0));
-        half4 P = in.read(gid + uint2( 0, 0));
-        half4 B = in.read(gid + uint2( 2, 0));
-        half4 D = in.read(gid + uint2( 0, 2));
-        
-        doEPX(out, gid, A, C, P, B, D);
-        
-    } else {
-        
-        // DEBUGGING
-        /*
-        a = half4(1.0,0.0,0.0,1.0);
-        b = half4(1.0,0.0,0.0,1.0);
-        c = half4(1.0,0.0,0.0,1.0);
-        d = half4(1.0,0.0,0.0,1.0);
-        */
-        
-        out.write(a, gid + uint2(0,0));
-        out.write(b, gid + uint2(1,0));
-        out.write(c, gid + uint2(0,1));
-        out.write(d, gid + uint2(1,1));
-    }
+    return result;
 }
-#endif
 
 kernel void inPlaceEpx(texture2d<half, access::read>  in   [[ texture(0) ]],
                        texture2d<half, access::write> out  [[ texture(1) ]],
@@ -333,71 +295,67 @@ kernel void inPlaceEpx(texture2d<half, access::read>  in   [[ texture(0) ]],
     // We only apply in-texture upscaling for lores lines. The emulator encodes
     // this information in a certain texture pixel.
     if (in.read(uint2(0, gid.y)).a == 1.0) {
-        
+
         // This line has been marked as a hires line by the emulator
         out.write(in.read(gid), gid);
         // out.write(half4(1.0,0.0,0.0,1.0), gid);
         return;
     }
 
-    if (gid.x % SCALE_FACTOR != 0 || gid.y % 2 != 0) return;
-    
-    // Check for lores fragment (a == b == c == d)
-    // a b
-    // c d
-    
-    half4 a = in.read(gid + uint2(0,0));
-    half4 b = in.read(gid + uint2(1,0));
-    half4 c = in.read(gid + uint2(0,1));
-    half4 d = in.read(gid + uint2(1,1));
+    if (gid.x % 4 != 0 || gid.y % 4 != 0) return;
 
-    if (all(a == b && b == c && c == d)) {
-        
-        //   A
-        // C P B
-        //   D
-        
-        half4 A = in.read(gid + uint2( 0,-2));
-        half4 C = in.read(gid + uint2(-2, 0));
-        half4 P = in.read(gid + uint2( 0, 0));
-        half4 B = in.read(gid + uint2( 2, 0));
-        half4 D = in.read(gid + uint2( 0, 2));
-        
-        doEPX(out, gid, A, C, P, B, D);
-        
-    } else {
-        
-        // DEBUGGING
-        /*
-        a = half4(1.0,0.0,0.0,1.0);
-        b = half4(1.0,0.0,0.0,1.0);
-        c = half4(1.0,0.0,0.0,1.0);
-        d = half4(1.0,0.0,0.0,1.0);
-        */
-        
-        out.write(a, gid + uint2(0,0));
-        out.write(b, gid + uint2(1,0));
-        out.write(c, gid + uint2(0,1));
-        out.write(d, gid + uint2(1,1));
-    }
+    //   A
+    // C P B
+    //   D
+
+    half4 A = in.read(gid + 4 * uint2( 0,-1));
+    half4 C = in.read(gid + 4 * uint2(-1, 0));
+    half4 P = in.read(gid + 4 * uint2( 0, 0));
+    half4 B = in.read(gid + 4 * uint2( 1, 0));
+    half4 D = in.read(gid + 4 * uint2( 0, 1));
+
+    half4x4 epx = doEPX(A, C, P, B, D);
+
+    out.write(epx[0], gid + uint2(0,0));
+    out.write(epx[0], gid + uint2(0,1));
+    out.write(epx[0], gid + uint2(1,0));
+    out.write(epx[0], gid + uint2(1,1));
+
+    out.write(epx[1], gid + uint2(2,0));
+    out.write(epx[1], gid + uint2(2,1));
+    out.write(epx[1], gid + uint2(3,0));
+    out.write(epx[1], gid + uint2(3,1));
+
+    out.write(epx[2], gid + uint2(0,2));
+    out.write(epx[2], gid + uint2(0,3));
+    out.write(epx[2], gid + uint2(1,2));
+    out.write(epx[2], gid + uint2(1,3));
+
+    out.write(epx[3], gid + uint2(2,2));
+    out.write(epx[3], gid + uint2(2,3));
+    out.write(epx[3], gid + uint2(3,2));
+    out.write(epx[3], gid + uint2(3,3));
 }
 
 kernel void epxupscaler(texture2d<half, access::read>  in   [[ texture(0) ]],
                         texture2d<half, access::write> out  [[ texture(1) ]],
                         uint2                          gid  [[ thread_position_in_grid ]])
 {
-    if((gid.x % SCALE_FACTOR != 0) || (gid.y % SCALE_FACTOR != 0))
+    if((gid.x % 2 != 0) || (gid.y % 2 != 0))
         return;
-    
-    uint2 ggid = gid / 2;
-    
-    half4 A = in.read(ggid + uint2( 0,-1));
-    half4 C = in.read(ggid + uint2(-1, 0));
-    half4 P = in.read(ggid + uint2( 0, 0));
-    half4 B = in.read(ggid + uint2( 1, 0));
-    half4 D = in.read(ggid + uint2( 0, 1));
-    
-    doEPX(out, gid, A, C, P, B, D);
+
+    half4 A = in.read(gid + 2 * uint2( 0,-1));
+    half4 C = in.read(gid + 2 * uint2(-1, 0));
+    half4 P = in.read(gid + 2 * uint2( 0, 0));
+    half4 B = in.read(gid + 2 * uint2( 1, 0));
+    half4 D = in.read(gid + 2 * uint2( 0, 1));
+
+    half4x4 epx = doEPX(A, C, P, B, D);
+
+    out.write(epx[0], gid);
+    out.write(epx[1], gid + uint2(1,0));
+    out.write(epx[2], gid + uint2(0,1));
+    out.write(epx[3], gid + uint2(1,1));
 }
 
 //
@@ -434,12 +392,13 @@ half d(half3 pixelA, half3 pixelB)
     */
 }
 
-void doXBR(texture2d<half, access::write> out, uint2 gid,
-           half3 m0, half3 m1, half3 m2, half3 m3, half3 m4, half3 m5,
-           half3 m6, half3 m7, half3 m8, half3 m9, half3 m10, half3 m11,
-           half3 m12, half3 m13, half3 m14, half3 m15, half3 m16, half3 m17,
-           half3 m18, half3 m19, half3 m20)
+half4x4 doXBR(half3 m0, half3 m1, half3 m2, half3 m3, half3 m4, half3 m5,
+              half3 m6, half3 m7, half3 m8, half3 m9, half3 m10, half3 m11,
+              half3 m12, half3 m13, half3 m14, half3 m15, half3 m16, half3 m17,
+              half3 m18, half3 m19, half3 m20)
 {
+    half4x4 result;
+
     half d_10_9    = d(m10, m9);
     half d_10_5    = d(m10, m5);
     half d_10_11   = d(m10, m11);
@@ -468,7 +427,7 @@ void doXBR(texture2d<half, access::write> out, uint2 gid,
     half d_16_19   = d(m16, m19);
     half d_15_20   = d(m15, m20);
     half d_15_17   = d(m15, m17);
-    
+
     half3 pixel;
     const half blend = 0.5;
     
@@ -484,8 +443,8 @@ void doXBR(texture2d<half, access::write> out, uint2 gid,
     } else {
         pixel = m10;
     }
-    out.write(half4(pixel,1.0), gid);
-    
+    result[0] = half4(pixel,1.0);
+
     // -X
     // --
     
@@ -498,8 +457,8 @@ void doXBR(texture2d<half, access::write> out, uint2 gid,
     } else {
         pixel = m10;
     }
-    out.write(half4(pixel, 1.0), gid + uint2(1,0));
-    
+    result[1] = half4(pixel,1.0);
+
     // --
     // X-
     
@@ -512,8 +471,8 @@ void doXBR(texture2d<half, access::write> out, uint2 gid,
     } else {
         pixel = m10;
     }
-    out.write(half4(pixel, 1.0), gid + uint2(0,1));
-    
+    result[2] = half4(pixel,1.0);
+
     // --
     // -X
     
@@ -525,7 +484,15 @@ void doXBR(texture2d<half, access::write> out, uint2 gid,
     } else {
         pixel = m10;
     }
-    out.write(half4(pixel, 1.0), gid + uint2(1,1));
+    result[3] = half4(pixel,1.0);
+
+    // DEBUGGING
+    // result[0] = half4(1.0,1.0,0.0,1.0);
+    // result[1] = half4(1.0,0.0,0.0,1.0);
+    // result[2] = half4(0.0,1.0,0.0,1.0);
+    // result[3] = half4(0.0,0.0,1.0,1.0);
+
+    return result;
 }
     
 kernel void xbrupscaler(texture2d<half, access::read>  in   [[ texture(0) ]],
@@ -533,80 +500,22 @@ kernel void xbrupscaler(texture2d<half, access::read>  in   [[ texture(0) ]],
                         uint2                          gid  [[ thread_position_in_grid ]])
 {
     
-    if (gid.x % SCALE_FACTOR != 0 || gid.y % SCALE_FACTOR != 0) return;
+    if (gid.x % 2 != 0 || gid.y % 2 != 0) return;
   
-    //         -2   -1   +0   +1   +2
+    //         -4   -2   +0   +2   +4
     //
     //            ----------------
-    //  -2        |  0 |  1 |  2 |
+    //  -4        |  0 |  1 |  2 |
     //       --------------------------
-    //  -1   |  3 |  4 |  5 |  6 |  7 |
+    //  -2   |  3 |  4 |  5 |  6 |  7 |
     //       --------------------------
     //   0   |  8 |  9 | 10 | 11 | 12 |
     //       --------------------------
-    //  +1   | 13 | 14 | 15 | 16 | 17 |
+    //  +2   | 13 | 14 | 15 | 16 | 17 |
     //       --------------------------
-    //  +2        | 18 | 19 | 20 |
+    //  +4        | 18 | 19 | 20 |
     //            ----------------
-    
-    uint2 ggid = gid / SCALE_FACTOR;
-    
-    half3 m0  = in.read(ggid + uint2(-1,-2)).xyz;
-    half3 m1  = in.read(ggid + uint2( 0,-2)).xyz;
-    half3 m2  = in.read(ggid + uint2( 1,-2)).xyz;
-    half3 m3  = in.read(ggid + uint2(-2,-1)).xyz;
-    half3 m4  = in.read(ggid + uint2(-1,-1)).xyz;
-    half3 m5  = in.read(ggid + uint2( 0,-1)).xyz;
-    half3 m6  = in.read(ggid + uint2( 1,-1)).xyz;
-    half3 m7  = in.read(ggid + uint2( 2,-1)).xyz;
-    half3 m8  = in.read(ggid + uint2(-2, 0)).xyz;
-    half3 m9  = in.read(ggid + uint2(-1, 0)).xyz;
-    half3 m10 = in.read(ggid + uint2( 0, 0)).xyz;
-    half3 m11 = in.read(ggid + uint2( 1, 0)).xyz;
-    half3 m12 = in.read(ggid + uint2( 2, 0)).xyz;
-    half3 m13 = in.read(ggid + uint2(-2, 1)).xyz;
-    half3 m14 = in.read(ggid + uint2(-1, 1)).xyz;
-    half3 m15 = in.read(ggid + uint2( 0, 1)).xyz;
-    half3 m16 = in.read(ggid + uint2( 1, 1)).xyz;
-    half3 m17 = in.read(ggid + uint2( 2, 1)).xyz;
-    half3 m18 = in.read(ggid + uint2(-1, 2)).xyz;
-    half3 m19 = in.read(ggid + uint2( 0, 2)).xyz;
-    half3 m20 = in.read(ggid + uint2( 1, 2)).xyz;
-    
-    doXBR(out, gid,
-          m0,  m1,  m2,  m3,  m4,  m5,  m6,  m7,  m8,  m9,
-          m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20);
-}
 
-kernel void inPlaceXbr(texture2d<half, access::read>  in   [[ texture(0) ]],
-                       texture2d<half, access::write> out  [[ texture(1) ]],
-                       uint2                          gid  [[ thread_position_in_grid ]])
-{
-    // We only apply in-texture upscaling for lores lines. The emulator encodes
-    // this information in a certain texture pixel.
-    if (in.read(uint2(0, gid.y)).g == 0) {
-        
-        // This line has been marked as a hires line by the emulator
-        out.write(in.read(gid), gid);
-        return;
-    }
-        
-    if (gid.x % SCALE_FACTOR != 0 || gid.y % 2 != 0) return;
-
-    //         -2   -1   +0   +1   +2
-    //
-    //            ----------------
-    //  -2        |  0 |  1 |  2 |
-    //       --------------------------
-    //  -1   |  3 |  4 |  5 |  6 |  7 |
-    //       --------------------------
-    //   0   |  8 |  9 | 10 | 11 | 12 |
-    //       --------------------------
-    //  +1   | 13 | 14 | 15 | 16 | 17 |
-    //       --------------------------
-    //  +2        | 18 | 19 | 20 |
-    //            ----------------
-    
     half3 m0  = in.read(gid + 2 * uint2(-1,-2)).xyz;
     half3 m1  = in.read(gid + 2 * uint2( 0,-2)).xyz;
     half3 m2  = in.read(gid + 2 * uint2( 1,-2)).xyz;
@@ -628,22 +537,89 @@ kernel void inPlaceXbr(texture2d<half, access::read>  in   [[ texture(0) ]],
     half3 m18 = in.read(gid + 2 * uint2(-1, 2)).xyz;
     half3 m19 = in.read(gid + 2 * uint2( 0, 2)).xyz;
     half3 m20 = in.read(gid + 2 * uint2( 1, 2)).xyz;
-    
-    doXBR(out, gid,
-          m0,  m1,  m2,  m3,  m4,  m5,  m6,  m7,  m8,  m9,
-          m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20);
+
+    half4x4 xbr = doXBR(m0,  m1,  m2,  m3,  m4,  m5,  m6,  m7,  m8,  m9,
+                        m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20);
+
+    out.write(xbr[0], gid);
+    out.write(xbr[1], gid + uint2(1,0));
+    out.write(xbr[2], gid + uint2(0,1));
+    out.write(xbr[3], gid + uint2(1,1));
+}
+
+kernel void inPlaceXbr(texture2d<half, access::read>  in   [[ texture(0) ]],
+                       texture2d<half, access::write> out  [[ texture(1) ]],
+                       uint2                          gid  [[ thread_position_in_grid ]])
+{
+    // We only apply in-texture upscaling for lores lines. The emulator encodes
+    // this information in a certain texture pixel.
+    if (in.read(uint2(0, gid.y)).g == 0) {
         
-    // DEBUGGING
-    /*
-    a = half4(1.0,0.0,0.0,1.0);
-    b = half4(1.0,0.0,0.0,1.0);
-    c = half4(1.0,0.0,0.0,1.0);
-    d = half4(1.0,0.0,0.0,1.0);
-    out.write(a, gid + uint2(0,0));
-    out.write(b, gid + uint2(1,0));
-    out.write(c, gid + uint2(0,1));
-    out.write(d, gid + uint2(1,1));
-    */
+        // This line has been marked as a hires line by the emulator
+        out.write(in.read(gid), gid);
+        return;
+    }
+        
+    if (gid.x % 4 != 0 || gid.y % 4 != 0) return;
+
+    //         -8   -4   +0   +4   +8
+    //
+    //            ----------------
+    //  -8        |  0 |  1 |  2 |
+    //       --------------------------
+    //  -4   |  3 |  4 |  5 |  6 |  7 |
+    //       --------------------------
+    //   0   |  8 |  9 | 10 | 11 | 12 |
+    //       --------------------------
+    //  +4   | 13 | 14 | 15 | 16 | 17 |
+    //       --------------------------
+    //  +8        | 18 | 19 | 20 |
+    //            ----------------
+    
+    half3 m0  = in.read(gid + 4 * uint2(-1,-2)).xyz;
+    half3 m1  = in.read(gid + 4 * uint2( 0,-2)).xyz;
+    half3 m2  = in.read(gid + 4 * uint2( 1,-2)).xyz;
+    half3 m3  = in.read(gid + 4 * uint2(-2,-1)).xyz;
+    half3 m4  = in.read(gid + 4 * uint2(-1,-1)).xyz;
+    half3 m5  = in.read(gid + 4 * uint2( 0,-1)).xyz;
+    half3 m6  = in.read(gid + 4 * uint2( 1,-1)).xyz;
+    half3 m7  = in.read(gid + 4 * uint2( 2,-1)).xyz;
+    half3 m8  = in.read(gid + 4 * uint2(-2, 0)).xyz;
+    half3 m9  = in.read(gid + 4 * uint2(-1, 0)).xyz;
+    half3 m10 = in.read(gid + 4 * uint2( 0, 0)).xyz;
+    half3 m11 = in.read(gid + 4 * uint2( 1, 0)).xyz;
+    half3 m12 = in.read(gid + 4 * uint2( 2, 0)).xyz;
+    half3 m13 = in.read(gid + 4 * uint2(-2, 1)).xyz;
+    half3 m14 = in.read(gid + 4 * uint2(-1, 1)).xyz;
+    half3 m15 = in.read(gid + 4 * uint2( 0, 1)).xyz;
+    half3 m16 = in.read(gid + 4 * uint2( 1, 1)).xyz;
+    half3 m17 = in.read(gid + 4 * uint2( 2, 1)).xyz;
+    half3 m18 = in.read(gid + 4 * uint2(-1, 2)).xyz;
+    half3 m19 = in.read(gid + 4 * uint2( 0, 2)).xyz;
+    half3 m20 = in.read(gid + 4 * uint2( 1, 2)).xyz;
+    
+    half4x4 xbr = doXBR(m0,  m1,  m2,  m3,  m4,  m5,  m6,  m7,  m8,  m9,
+                        m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20);
+
+    out.write(xbr[0], gid + uint2(0,0));
+    out.write(xbr[0], gid + uint2(0,1));
+    out.write(xbr[0], gid + uint2(1,0));
+    out.write(xbr[0], gid + uint2(1,1));
+
+    out.write(xbr[1], gid + uint2(2,0));
+    out.write(xbr[1], gid + uint2(2,1));
+    out.write(xbr[1], gid + uint2(3,0));
+    out.write(xbr[1], gid + uint2(3,1));
+
+    out.write(xbr[2], gid + uint2(0,2));
+    out.write(xbr[2], gid + uint2(0,3));
+    out.write(xbr[2], gid + uint2(1,2));
+    out.write(xbr[2], gid + uint2(1,3));
+
+    out.write(xbr[3], gid + uint2(2,2));
+    out.write(xbr[3], gid + uint2(2,3));
+    out.write(xbr[3], gid + uint2(3,2));
+    out.write(xbr[3], gid + uint2(3,3));
 }
 
 //
@@ -665,13 +641,6 @@ kernel void scanlines(texture2d<half, access::read>  inTexture   [[ texture(0) ]
 //
 // RGB splitter
 //
-
-/*
-struct BloomUniforms {
-    float bloomBrightness;
-    float bloomWeight;
-};
-*/
 
 kernel void split(texture2d<half, access::read>  t_in        [[ texture(0) ]],
                   texture2d<half, access::write> t_out_r     [[ texture(1) ]],

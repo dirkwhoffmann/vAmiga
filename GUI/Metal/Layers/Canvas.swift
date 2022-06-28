@@ -46,7 +46,7 @@ class Canvas: Layer {
     var lfTexture: MTLTexture! = nil
     var sfTexture: MTLTexture! = nil
 
-    /* Merge texture (1024 x 1024)
+    /* Merge texture
      * The long frame and short frame textures are merged into this one.
      */
     var mergeTexture: MTLTexture! = nil
@@ -80,6 +80,10 @@ class Canvas: Layer {
      * the upscaled texture.
      */
     var scanlineTexture: MTLTexture! = nil
+
+    /* The final texture. This texture is passed to the fragment shader.
+     */
+    var finalTexture: MTLTexture! = nil
 
     // Part of the texture that is currently visible
     var textureRect = CGRect() { didSet { buildVertexBuffers() } }
@@ -256,7 +260,7 @@ class Canvas: Layer {
     //
     
     func makeCommandBuffer(buffer: MTLCommandBuffer) {
-                
+
         func applyGauss(_ texture: inout MTLTexture, radius: Float) {
             
             let gauss = MPSImageGaussianBlur(device: device, sigma: radius)
@@ -280,24 +284,45 @@ class Canvas: Layer {
                               textures: [lfTexture, sfTexture, mergeTexture],
                               options: &mergeUniforms,
                               length: MemoryLayout<MergeUniforms>.stride)
-            
+
         } else if currLOF {
             
             // Case 2: Non-interlace drawing (two long frames in a row)
+            mergeFilter.apply(commandBuffer: buffer,
+                              textures: [lfTexture, lfTexture, lfTexture, lfTexture,
+                                         mergeTexture],
+                              options: &mergeUniforms,
+                              length: MemoryLayout<MergeUniforms>.stride)
+
+            /*
             mergeBypass.apply(commandBuffer: buffer,
                               textures: [lfTexture, mergeTexture])
+            */
         } else {
             
             // Case 3: Non-interlace drawing (two short frames in a row)
+            mergeFilter.apply(commandBuffer: buffer,
+                              textures: [sfTexture, sfTexture, sfTexture, sfTexture,
+                                         mergeTexture],
+                              options: &mergeUniforms,
+                              length: MemoryLayout<MergeUniforms>.stride)
+            /*
             mergeBypass.apply(commandBuffer: buffer,
                               textures: [sfTexture, mergeTexture])
+            */
         }
-        
+        finalTexture = mergeTexture
+
         // Compute the upscaled texture (first pass, in-texture upscaling)
-        enhancer.apply(commandBuffer: buffer,
-                       source: mergeTexture,
-                       target: lowresEnhancedTexture)
-        
+        if renderer.config.enhancer != 0 {
+
+            enhancer.apply(commandBuffer: buffer,
+                           source: finalTexture,
+                           target: lowresEnhancedTexture)
+
+            finalTexture = lowresEnhancedTexture
+        }
+
         // Compute the bloom textures
         if renderer.shaderOptions.bloom != 0 {
             bloomFilter.apply(commandBuffer: buffer,
@@ -314,28 +339,36 @@ class Canvas: Layer {
         }
         
         // Compute the upscaled texture (second pass)
-        upscaler.apply(commandBuffer: buffer,
-                       source: lowresEnhancedTexture,
-                       target: upscaledTexture)
-        
-        // Blur the upscaled texture
-        if renderer.shaderOptions.blur > 0 {
-            
-            applyGauss(&upscaledTexture, radius: renderer.shaderOptions.blurRadius)
+        if renderer.config.upscaler != 0 {
+
+            upscaler.apply(commandBuffer: buffer,
+                           source: finalTexture,
+                           target: upscaledTexture)
+            finalTexture = upscaledTexture
         }
-        
+
+        // Blur the upscaled texture
+        if renderer.shaderOptions.blur != 0 {
+            
+            applyGauss(&finalTexture, radius: renderer.shaderOptions.blurRadius)
+        }
+
         // Emulate scanlines
-        scanlineFilter.apply(commandBuffer: buffer,
-                             source: upscaledTexture,
-                             target: scanlineTexture,
-                             options: &renderer.shaderOptions,
-                             length: MemoryLayout<ShaderOptions>.stride)
+        if renderer.shaderOptions.scanlines == 1 {
+
+            scanlineFilter.apply(commandBuffer: buffer,
+                                 source: mergeTexture,
+                                 target: scanlineTexture,
+                                 options: &renderer.shaderOptions,
+                                 length: MemoryLayout<ShaderOptions>.stride)
+            finalTexture = scanlineTexture
+        }
     }
     
     func setupFragmentShader(encoder: MTLRenderCommandEncoder) {
         
         // Setup textures
-        encoder.setFragmentTexture(scanlineTexture, index: 0)
+        encoder.setFragmentTexture(finalTexture, index: 0)
         encoder.setFragmentTexture(bloomTextureR, index: 1)
         encoder.setFragmentTexture(bloomTextureG, index: 2)
         encoder.setFragmentTexture(bloomTextureB, index: 3)
