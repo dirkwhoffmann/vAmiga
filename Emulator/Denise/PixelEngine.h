@@ -23,7 +23,7 @@ struct FrameBuffer {
     static constexpr u32 col1 = 0xFF222222; // 0xFF662222
     static constexpr u32 col2 = 0xFF444444; // 0xFFAA4444
 
-    Buffer<u32> slice[2];
+    Buffer<u64> slice[2];
     bool longFrame;
     
     FrameBuffer();
@@ -92,7 +92,7 @@ private:
      * 65 .. 72 : Additional colors used for debugging
      */
     static const int rgbaIndexCnt = 32 + 32 + 1 + 8;
-    u32 indexedRgba[rgbaIndexCnt];
+    u64 indexedRgba[rgbaIndexCnt];
     
     // Indicates whether HAM mode is switched
     bool hamMode;
@@ -213,7 +213,7 @@ public:
 
     // Returns a color value in Amiga format or RGBA format
     u16 getColor(isize nr) const { return colreg[nr]; }
-    u32 getRGBA(isize nr) const { return indexedRgba[nr]; }
+    u32 getRGBA(isize nr) const { return (u32)indexedRgba[nr]; }
 
     // Returns sprite color in Amiga format or RGBA format
     u16 getSpriteColor(isize s, isize nr) const { return getColor(16 + nr + 2 * (s & 6)); }
@@ -244,8 +244,8 @@ public:
     const FrameBuffer &getStableBuffer();
 
     // Return a pointer into the pixel storage
-    u32 *workingPtr(isize sliceNr = 0, isize row = 0, isize col = 0);
-    u32 *stablePtr(isize sliceNr = 0, isize row = 0, isize col = 0);
+    u64 *workingPtr(isize sliceNr = 0, isize row = 0, isize col = 0);
+    u64 *stablePtr(isize sliceNr = 0, isize row = 0, isize col = 0);
     
     // Swaps the working buffer and the stable buffer
     void swapBuffers();
@@ -284,8 +284,8 @@ public:
     
 private:
     
-    void colorize(u32 *dst, Pixel from, Pixel to);
-    void colorizeHAM(u32 *dst, Pixel from, Pixel to, u16& ham);
+    void colorize(u64 *dst, Pixel from, Pixel to);
+    void colorizeHAM(u64 *dst, Pixel from, Pixel to, u16& ham);
     
     /* Hides some graphics layers. This function is an optional stage applied
      * after colorize(). It can be used to hide some layers for debugging.

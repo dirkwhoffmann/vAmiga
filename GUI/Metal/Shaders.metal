@@ -205,7 +205,7 @@ kernel void bypassmerger(texture2d<half, access::read>  inTexture   [[ texture(0
                          texture2d<half, access::write> outTexture  [[ texture(1) ]],
                          uint2                          gid         [[ thread_position_in_grid ]])
 {
-    half4 result = inTexture.read(uint2(gid.x / 2, gid.y / 4));
+    half4 result = inTexture.read(uint2(gid.x, gid.y / 4));
     outTexture.write(result, gid);
 }
     
@@ -223,22 +223,12 @@ kernel void merge(texture2d<half, access::read>  longFrameEven  [[ texture(0) ]]
     if (gid.y % 4 < 2) {
 
         s = uniforms.longFrameScale;
-
-        if (gid.x % 2 == 0) {
-            result = longFrameEven.read(uint2(gid.x / 2, gid.y / 4));
-        } else {
-            result = longFrameOdd.read(uint2(gid.x / 2, gid.y / 4));
-        }
+        result = longFrameEven.read(uint2(gid.x, gid.y / 4));
 
     } else {
 
         s = uniforms.shortFrameScale;
-
-        if (gid.x % 2 == 0) {
-            result = shortFrameEven.read(uint2(gid.x / 2, gid.y / 4));
-        } else {
-            result = shortFrameOdd.read(uint2(gid.x / 2, gid.y / 4));
-        }
+        result = shortFrameEven.read(uint2(gid.x, gid.y / 4));
     }
 
     outTexture.write(result * vec<half,4>(s,s,s,1), gid);

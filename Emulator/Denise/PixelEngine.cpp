@@ -260,8 +260,11 @@ PixelEngine::setColor(isize reg, u16 value)
     u8 g = (value & 0x0F0) >> 4;
     u8 b = (value & 0x00F);
 
-    indexedRgba[reg] = rgba[value & 0xFFF];
-    indexedRgba[reg + 32] = rgba[((r / 2) << 8) | ((g / 2) << 4) | (b / 2)];
+    auto col = rgba[value & 0xFFF];
+    auto ehb = rgba[((r / 2) << 8) | ((g / 2) << 4) | (b / 2)];
+
+    indexedRgba[reg] = ((u64)col << 32) | col;
+    indexedRgba[reg + 32] = ((u64)ehb << 32) | ehb;
 }
 
 void
@@ -375,7 +378,7 @@ PixelEngine::getWorkingBuffer()
     return emuTexture[activeBuffer];
 }
 
-u32 *
+u64 *
 PixelEngine::workingPtr(isize nr, isize row, isize col)
 {
     assert(nr == 0 || nr == 1);
@@ -385,7 +388,7 @@ PixelEngine::workingPtr(isize nr, isize row, isize col)
     return getWorkingBuffer().slice[nr].ptr + row * HPIXELS + col;
 }
 
-u32 *
+u64 *
 PixelEngine::stablePtr(isize nr, isize row, isize col)
 {
     assert(nr == 0 || nr == 1);
@@ -454,7 +457,7 @@ void
 PixelEngine::colorize(isize line)
 {
     // Jump to the first pixel in the specified line in the active frame buffer
-    u32 *dst = workingPtr(0, line);
+    auto *dst = workingPtr(0, line);
     Pixel pixel = 0;
 
     // Initialize the HAM mode hold register with the current background color
@@ -491,7 +494,7 @@ PixelEngine::colorize(isize line)
 }
 
 void
-PixelEngine::colorize(u32 *dst, Pixel from, Pixel to)
+PixelEngine::colorize(u64 *dst, Pixel from, Pixel to)
 {
     u8 *mbuf = denise.mBuffer;
 
@@ -501,7 +504,7 @@ PixelEngine::colorize(u32 *dst, Pixel from, Pixel to)
 }
 
 void
-PixelEngine::colorizeHAM(u32 *dst, Pixel from, Pixel to, u16& ham)
+PixelEngine::colorizeHAM(u64 *dst, Pixel from, Pixel to, u16& ham)
 {
     u8 *bbuf = denise.bBuffer;
     u8 *ibuf = denise.iBuffer;
@@ -553,7 +556,7 @@ PixelEngine::colorizeHAM(u32 *dst, Pixel from, Pixel to, u16& ham)
 void
 PixelEngine::hide(isize line, u16 layers, u8 alpha)
 {
-    u32 *p = workingPtr(0, line);
+    auto *p = workingPtr(0, line);
 
     for (Pixel i = 0; i < HPIXELS; i++) {
 

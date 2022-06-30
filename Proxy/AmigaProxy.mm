@@ -850,7 +850,7 @@ using namespace moira;
 
 - (u32 *)stableBuffer
 {
-    return [self denise]->pixelEngine.stablePtr();
+    return (u32 *)([self denise]->pixelEngine.stablePtr());
 }
 
 - (u32 *)noise

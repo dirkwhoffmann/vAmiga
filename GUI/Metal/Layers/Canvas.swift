@@ -248,9 +248,9 @@ class Canvas: Layer {
             
             // Update the GPU texture
             if currLOF {
-                lfTexture.replace(w: Int(HPIXELS), h: Int(VPIXELS), buffer: buffer)
+                lfTexture.replace(w: 2 * Int(HPIXELS), h: Int(VPIXELS), buffer: buffer)
             } else {
-                sfTexture.replace(w: Int(HPIXELS), h: Int(VPIXELS), buffer: buffer)
+                sfTexture.replace(w: 2 * Int(HPIXELS), h: Int(VPIXELS), buffer: buffer)
             }
         }        
     }
