@@ -23,7 +23,7 @@ struct FrameBuffer {
     static constexpr u32 col1 = 0xFF222222; // 0xFF662222
     static constexpr u32 col2 = 0xFF444444; // 0xFFAA4444
 
-    Buffer<u64> slice;
+    Buffer <u64> pixels;
     bool longFrame;
     
     FrameBuffer();

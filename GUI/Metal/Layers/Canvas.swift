@@ -286,30 +286,15 @@ class Canvas: Layer {
                               length: MemoryLayout<MergeUniforms>.stride)
 
         } else if currLOF {
-            
-            // Case 2: Non-interlace drawing (two long frames in a row)
-            mergeFilter.apply(commandBuffer: buffer,
-                              textures: [lfTexture, lfTexture, lfTexture, lfTexture,
-                                         mergeTexture],
-                              options: &mergeUniforms,
-                              length: MemoryLayout<MergeUniforms>.stride)
 
-            /*
             mergeBypass.apply(commandBuffer: buffer,
                               textures: [lfTexture, mergeTexture])
-            */
+
         } else {
             
             // Case 3: Non-interlace drawing (two short frames in a row)
-            mergeFilter.apply(commandBuffer: buffer,
-                              textures: [sfTexture, sfTexture, sfTexture, sfTexture,
-                                         mergeTexture],
-                              options: &mergeUniforms,
-                              length: MemoryLayout<MergeUniforms>.stride)
-            /*
             mergeBypass.apply(commandBuffer: buffer,
                               textures: [sfTexture, mergeTexture])
-            */
         }
         finalTexture = mergeTexture
 

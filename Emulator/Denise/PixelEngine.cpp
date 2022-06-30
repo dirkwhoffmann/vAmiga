@@ -18,13 +18,13 @@
 
 FrameBuffer::FrameBuffer()
 {
-    slice.alloc(PIXELS);
+    pixels.alloc(PIXELS);
 }
 
 void
 FrameBuffer::clean()
 {
-    auto *ptr = slice.ptr;
+    auto *ptr = pixels.ptr;
 
     for (isize row = 0; row < VPIXELS; row++) {
         for (isize col = 0; col < HPIXELS; col++) {
@@ -36,7 +36,7 @@ FrameBuffer::clean()
 void
 FrameBuffer::clean(isize row)
 {
-    auto *ptr = slice.ptr + row * HPIXELS;
+    auto *ptr = pixels.ptr + row * HPIXELS;
 
     for (isize col = 0; col < HPIXELS; col++) {
         ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? col1 : col2;
@@ -46,7 +46,7 @@ FrameBuffer::clean(isize row)
 void
 FrameBuffer::clean(isize row, isize cycle)
 {
-    auto *ptr = slice.ptr + row * HPIXELS + 4 * cycle;
+    auto *ptr = pixels.ptr + row * HPIXELS + 4 * cycle;
 
     for (isize col = 0; col < 4; col++) {
         ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? col1 : col2;
@@ -224,8 +224,8 @@ PixelEngine::setColor(isize reg, u16 value)
     auto col = rgba[value & 0xFFF];
     auto ehb = rgba[((r / 2) << 8) | ((g / 2) << 4) | (b / 2)];
 
-    indexedRgba[reg] = ((u64)col << 32) | col;
-    indexedRgba[reg + 32] = ((u64)ehb << 32) | ehb;
+    indexedRgba[reg] = (u64)col << 32 | col;
+    indexedRgba[reg + 32] = (u64)ehb << 32 | ehb;
 }
 
 void
@@ -345,7 +345,7 @@ PixelEngine::workingPtr(isize row, isize col)
     assert(row >= 0 && row <= VPOS_MAX);
     assert(col >= 0 && col <= HPOS_MAX);
 
-    return getWorkingBuffer().slice.ptr + row * HPIXELS + col;
+    return getWorkingBuffer().pixels.ptr + row * HPIXELS + col;
 }
 
 u64 *
@@ -354,7 +354,7 @@ PixelEngine::stablePtr(isize row, isize col)
     assert(row >= 0 && row <= VPOS_MAX);
     assert(col >= 0 && col <= HPOS_MAX);
 
-    return getStableBuffer().slice.ptr + row * HPIXELS + col;
+    return getStableBuffer().pixels.ptr + row * HPIXELS + col;
 }
 
 void
