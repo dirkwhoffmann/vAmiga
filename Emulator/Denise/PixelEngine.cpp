@@ -18,14 +18,13 @@
 
 FrameBuffer::FrameBuffer()
 {
-    slice[0].alloc(PIXELS);
-    slice[1].alloc(PIXELS);
+    slice.alloc(PIXELS);
 }
 
 void
-FrameBuffer::cleanSlice(isize nr)
+FrameBuffer::clean()
 {
-    auto *ptr = slice[nr].ptr;
+    auto *ptr = slice.ptr;
 
     for (isize row = 0; row < VPIXELS; row++) {
         for (isize col = 0; col < HPIXELS; col++) {
@@ -35,9 +34,9 @@ FrameBuffer::cleanSlice(isize nr)
 }
 
 void
-FrameBuffer::cleanSlice(isize nr, isize row)
+FrameBuffer::clean(isize row)
 {
-    auto *ptr = slice[nr].ptr + row * HPIXELS;
+    auto *ptr = slice.ptr + row * HPIXELS;
 
     for (isize col = 0; col < HPIXELS; col++) {
         ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? col1 : col2;
@@ -45,34 +44,13 @@ FrameBuffer::cleanSlice(isize nr, isize row)
 }
 
 void
-FrameBuffer::cleanSlice(isize nr, isize row, isize cycle)
+FrameBuffer::clean(isize row, isize cycle)
 {
-    auto *ptr = slice[nr].ptr + row * HPIXELS + 4 * cycle;
+    auto *ptr = slice.ptr + row * HPIXELS + 4 * cycle;
 
     for (isize col = 0; col < 4; col++) {
         ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? col1 : col2;
     }
-}
-
-void
-FrameBuffer::clean()
-{
-    cleanSlice(0);
-    cleanSlice(1);
-}
-
-void
-FrameBuffer::clean(isize row)
-{
-    cleanSlice(0, row);
-    cleanSlice(1, row);
-}
-
-void
-FrameBuffer::clean(isize row, isize col)
-{
-    cleanSlice(0, row, col);
-    cleanSlice(1, row, col);
 }
 
 PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
@@ -91,50 +69,33 @@ PixelEngine::clearAll()
     emuTexture[1].clean();
 }
 
-/*
-void
-PixelEngine::clear(isize line)
-{
-    clear(workingPtr(), line, 0, HPOS_MAX);
-}
-
-void
-PixelEngine::clear(isize line, Pixel pixel)
-{
-    clear(workingPtr(), line, pixel, pixel);
-}
-
-void
-PixelEngine::clear(u32 *ptr, isize line, Pixel first, Pixel last)
-{
-    ptr += line * HPIXELS;
-
-    constexpr u32 col1 = 0xFF222222; // 0xFF662222
-    constexpr u32 col2 = 0xFF444444; // 0xFFAA4444
-
-    for (Pixel i = 4 * first; i < 4 * (last + 1); i++) {
-        ptr[i] = ((line >> 2) & 1) == ((i >> 3) & 1) ? col1 : col2;
-    }
-}
-*/
-
 void
 PixelEngine::_initialize()
 {
     AmigaComponent::_initialize();
-    
+
+    auto col64 = GpuColor(0x00, 0x00, 0x00).rawValue;
+    auto col65 = GpuColor(0xD0, 0x00, 0x00).rawValue;
+    auto col66 = GpuColor(0xA0, 0x00, 0x00).rawValue;
+    auto col67 = GpuColor(0x90, 0x00, 0x00).rawValue;
+    auto col68 = GpuColor(0x00, 0xFF, 0xFF).rawValue;
+    auto col69 = GpuColor(0x00, 0xD0, 0xD0).rawValue;
+    auto col70 = GpuColor(0x00, 0xA0, 0xA0).rawValue;
+    auto col71 = GpuColor(0x00, 0x90, 0x90).rawValue;
+    auto col72 = GpuColor(0xFF, 0x00, 0x00).rawValue;
+
     // Setup ECS BRDRBLNK color
-    indexedRgba[64] = GpuColor(0x00, 0x00, 0x00).rawValue;
+    indexedRgba[64] = (u64)col64 << 32 | col64;
     
     // Setup some debug colors
-    indexedRgba[65] = GpuColor(0xD0, 0x00, 0x00).rawValue;
-    indexedRgba[66] = GpuColor(0xA0, 0x00, 0x00).rawValue;
-    indexedRgba[67] = GpuColor(0x90, 0x00, 0x00).rawValue;
-    indexedRgba[68] = GpuColor(0x00, 0xFF, 0xFF).rawValue;
-    indexedRgba[69] = GpuColor(0x00, 0xD0, 0xD0).rawValue;
-    indexedRgba[70] = GpuColor(0x00, 0xA0, 0xA0).rawValue;
-    indexedRgba[71] = GpuColor(0x00, 0x90, 0x90).rawValue;
-    indexedRgba[72] = GpuColor(0xFF, 0x00, 0x00).rawValue;    
+    indexedRgba[65] = (u64)col65 << 32 | col65;
+    indexedRgba[66] = (u64)col66 << 32 | col66;
+    indexedRgba[67] = (u64)col67 << 32 | col67;
+    indexedRgba[68] = (u64)col68 << 32 | col68;
+    indexedRgba[69] = (u64)col69 << 32 | col69;
+    indexedRgba[70] = (u64)col70 << 32 | col70;
+    indexedRgba[71] = (u64)col71 << 32 | col71;
+    indexedRgba[72] = (u64)col72 << 32 | col72;
 }
 
 void
@@ -379,23 +340,21 @@ PixelEngine::getWorkingBuffer()
 }
 
 u64 *
-PixelEngine::workingPtr(isize nr, isize row, isize col)
+PixelEngine::workingPtr(isize row, isize col)
 {
-    assert(nr == 0 || nr == 1);
     assert(row >= 0 && row <= VPOS_MAX);
     assert(col >= 0 && col <= HPOS_MAX);
 
-    return getWorkingBuffer().slice[nr].ptr + row * HPIXELS + col;
+    return getWorkingBuffer().slice.ptr + row * HPIXELS + col;
 }
 
 u64 *
-PixelEngine::stablePtr(isize nr, isize row, isize col)
+PixelEngine::stablePtr(isize row, isize col)
 {
-    assert(nr == 0 || nr == 1);
     assert(row >= 0 && row <= VPOS_MAX);
     assert(col >= 0 && col <= HPOS_MAX);
 
-    return getStableBuffer().slice[nr].ptr + row * HPIXELS + col;
+    return getStableBuffer().slice.ptr + row * HPIXELS + col;
 }
 
 void
@@ -457,7 +416,7 @@ void
 PixelEngine::colorize(isize line)
 {
     // Jump to the first pixel in the specified line in the active frame buffer
-    auto *dst = workingPtr(0, line);
+    auto *dst = workingPtr(line);
     Pixel pixel = 0;
 
     // Initialize the HAM mode hold register with the current background color
@@ -556,7 +515,7 @@ PixelEngine::colorizeHAM(u64 *dst, Pixel from, Pixel to, u16& ham)
 void
 PixelEngine::hide(isize line, u16 layers, u8 alpha)
 {
-    auto *p = workingPtr(0, line);
+    auto *p = workingPtr(line);
 
     for (Pixel i = 0; i < HPIXELS; i++) {
 

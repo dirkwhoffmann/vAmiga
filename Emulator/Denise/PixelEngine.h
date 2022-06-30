@@ -23,15 +23,12 @@ struct FrameBuffer {
     static constexpr u32 col1 = 0xFF222222; // 0xFF662222
     static constexpr u32 col2 = 0xFF444444; // 0xFFAA4444
 
-    Buffer<u64> slice[2];
+    Buffer<u64> slice;
     bool longFrame;
     
     FrameBuffer();
 
     // Initializes (a portion of) the frame buffer with a checkerboard pattern
-    void cleanSlice(isize slice);
-    void cleanSlice(isize slice, isize row);
-    void cleanSlice(isize slice, isize row, isize cycle);
     void clean();
     void clean(isize row);
     void clean(isize row, isize cycle);
@@ -244,8 +241,8 @@ public:
     const FrameBuffer &getStableBuffer();
 
     // Return a pointer into the pixel storage
-    u64 *workingPtr(isize sliceNr = 0, isize row = 0, isize col = 0);
-    u64 *stablePtr(isize sliceNr = 0, isize row = 0, isize col = 0);
+    u64 *workingPtr(isize row = 0, isize col = 0);
+    u64 *stablePtr(isize row = 0, isize col = 0);
     
     // Swaps the working buffer and the stable buffer
     void swapBuffers();
