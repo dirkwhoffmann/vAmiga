@@ -332,7 +332,7 @@ DmaDebugger::hsyncHandler(isize vpos)
 }
 
 void
-DmaDebugger::computeOverlay(u32 *ptr, isize first, isize last, BusOwner *own, u16 *val)
+DmaDebugger::computeOverlay(Texel *ptr, isize first, isize last, BusOwner *own, u16 *val)
 {
     double opacity = config.opacity / 100.0;
     double bgWeight = 0;
@@ -363,7 +363,7 @@ DmaDebugger::computeOverlay(u32 *ptr, isize first, isize last, BusOwner *own, u1
 
     }
 
-    for (isize i = first; i <= last; i++, ptr += 8) {
+    for (isize i = first; i <= last; i++, ptr += 4) {
 
         BusOwner owner = own[i];
 
@@ -371,10 +371,11 @@ DmaDebugger::computeOverlay(u32 *ptr, isize first, isize last, BusOwner *own, u1
         if (!visualize[owner]) {
 
             if (bgWeight != 0.0) {
-                ptr[0] = ptr[1] = GpuColor(ptr[0]).shade(bgWeight).rawValue;
-                ptr[2] = ptr[3] = GpuColor(ptr[1]).shade(bgWeight).rawValue;
-                ptr[4] = ptr[5] = GpuColor(ptr[2]).shade(bgWeight).rawValue;
-                ptr[6] = ptr[7] = GpuColor(ptr[3]).shade(bgWeight).rawValue;
+
+                ptr[0] = GpuColor(ptr[0]).shade(bgWeight).texel();
+                ptr[1] = GpuColor(ptr[1]).shade(bgWeight).texel();
+                ptr[2] = GpuColor(ptr[2]).shade(bgWeight).texel();
+                ptr[3] = GpuColor(ptr[3]).shade(bgWeight).texel();
             }
             continue;
         }
@@ -386,16 +387,17 @@ DmaDebugger::computeOverlay(u32 *ptr, isize first, isize last, BusOwner *own, u1
         GpuColor col3 = debugColor[owner][(val[i] & 0x000C) >> 2];
 
         if (fgWeight != 0.0) {
+
             col0 = col0.mix(GpuColor(ptr[0]), fgWeight);
             col1 = col1.mix(GpuColor(ptr[2]), fgWeight);
             col2 = col2.mix(GpuColor(ptr[4]), fgWeight);
             col3 = col3.mix(GpuColor(ptr[6]), fgWeight);
         }
 
-        ptr[0] = ptr[1] = col0.rawValue;
-        ptr[2] = ptr[3] = col1.rawValue;
-        ptr[4] = ptr[5] = col2.rawValue;
-        ptr[6] = ptr[7] = col3.rawValue;
+        ptr[0] = col0.texel();
+        ptr[1] = col1.texel();
+        ptr[2] = col2.texel();
+        ptr[3] = col3.texel();
     }
 }
 

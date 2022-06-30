@@ -39,7 +39,7 @@ Denise::_inspect() const
         }
         for (isize i = 0; i < 32; i++) {
             info.colorReg[i] = pixelEngine.getColor(i);
-            info.color[i] = pixelEngine.getRGBA(i);
+            info.color[i] = (u32)pixelEngine.indexedRgba[i];
         }
     }
 }

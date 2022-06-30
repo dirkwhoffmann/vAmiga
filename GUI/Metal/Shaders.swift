@@ -57,6 +57,7 @@ struct MergeUniforms {
 
     var longFrameScale: Float
     var shortFrameScale: Float
+    var xScale: Float
 }
 
 //

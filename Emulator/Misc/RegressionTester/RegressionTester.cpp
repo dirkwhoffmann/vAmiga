@@ -98,7 +98,7 @@ RegressionTester::dumpTexture(Amiga &amiga, std::ostream& os)
 {
     {   SUSPENDED
         
-        u64 *ptr = amiga.denise.pixelEngine.stablePtr() - 4 * HBLANK_MIN;
+        Texel *ptr = amiga.denise.pixelEngine.stablePtr() - 4 * HBLANK_MIN;
 
         for (isize y = y1; y < y2; y++) {
             

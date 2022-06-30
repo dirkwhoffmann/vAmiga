@@ -84,6 +84,23 @@
 
 
 //
+// Video settings
+//
+
+// Uncomment to generate a texture in hires resolution
+#define TPP 1
+
+// Uncomment to generate a texture in super-hires resolution
+// #define TPP 2
+
+#if TPP == 1
+typedef unsigned int Texel;
+#else
+typedef unsigned long long Texel;
+#endif
+
+
+//
 // Audio settings
 //
 

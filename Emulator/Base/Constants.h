@@ -74,10 +74,10 @@
  * All values are measured in pixels. One DMA cycle corresponds to 4 pixels.
  * Hence, HPIXELS equals 4 * HPOS_CNT.
  */
-
-#define VPIXELS       313                    // VPOS_CNT
-#define HPIXELS       912                    // 4 * HPOS_CNT
-#define PIXELS        (VPIXELS * HPIXELS)
+// #define TPC         sizeof(Texel)       // Texels per DMA cycle (4 or 8)
+#define VPIXELS     313                 // VPOS_CNT
+#define HPIXELS     912                 // 4 * HPOS_CNT
+#define PIXELS      (VPIXELS * HPIXELS)
 
 
 /* Blanking area

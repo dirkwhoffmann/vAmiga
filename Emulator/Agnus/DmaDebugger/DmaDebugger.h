@@ -123,5 +123,5 @@ public:
 private:
 
     // Visualizes DMA usage for a certain range of DMA cycles
-    void computeOverlay(u32 *ptr, isize first, isize last, BusOwner *own, u16 *val);
+    void computeOverlay(Texel *ptr, isize first, isize last, BusOwner *own, u16 *val);
 };

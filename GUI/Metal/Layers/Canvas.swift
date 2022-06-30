@@ -102,7 +102,8 @@ class Canvas: Layer {
                                             scanlineDistance: 0)
 
     var mergeUniforms = MergeUniforms(longFrameScale: 1.0,
-                                      shortFrameScale: 1.0)
+                                      shortFrameScale: 1.0,
+                                      xScale: TPP == 1 ? 0.5 : 1.0)
     
     //
     // Initializing
@@ -248,9 +249,9 @@ class Canvas: Layer {
             
             // Update the GPU texture
             if currLOF {
-                lfTexture.replace(w: 2 * Int(HPIXELS), h: Int(VPIXELS), buffer: buffer)
+                lfTexture.replace(w: Int(TPP * HPIXELS), h: Int(VPIXELS), buffer: buffer)
             } else {
-                sfTexture.replace(w: 2 * Int(HPIXELS), h: Int(VPIXELS), buffer: buffer)
+                sfTexture.replace(w: Int(TPP * HPIXELS), h: Int(VPIXELS), buffer: buffer)
             }
         }        
     }
@@ -287,14 +288,27 @@ class Canvas: Layer {
 
         } else if currLOF {
 
+            // Case 2: Non-interlace drawing (two long frames in a row)
+            mergeFilter.apply(commandBuffer: buffer,
+                              textures: [lfTexture, lfTexture, mergeTexture],
+                              options: &mergeUniforms,
+                              length: MemoryLayout<MergeUniforms>.stride)
+            /*
             mergeBypass.apply(commandBuffer: buffer,
                               textures: [lfTexture, mergeTexture])
+            */
 
         } else {
             
             // Case 3: Non-interlace drawing (two short frames in a row)
+            mergeFilter.apply(commandBuffer: buffer,
+                              textures: [sfTexture, sfTexture, mergeTexture],
+                              options: &mergeUniforms,
+                              length: MemoryLayout<MergeUniforms>.stride)
+            /*
             mergeBypass.apply(commandBuffer: buffer,
                               textures: [sfTexture, mergeTexture])
+            */
         }
         finalTexture = mergeTexture
 

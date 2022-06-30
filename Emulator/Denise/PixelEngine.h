@@ -23,7 +23,7 @@ struct FrameBuffer {
     static constexpr u32 col1 = 0xFF222222; // 0xFF662222
     static constexpr u32 col2 = 0xFF444444; // 0xFFAA4444
 
-    Buffer <u64> pixels;
+    Buffer <Texel> pixels;
     bool longFrame;
     
     FrameBuffer();
@@ -44,8 +44,8 @@ class PixelEngine : public SubComponent {
 public:
 
     // RGBA colors used to visualize the HBLANK and VBLANK area in the debugger
-    static const u32 rgbaHBlank = 0xFF444444;
-    static const u32 rgbaVBlank = 0xFF444444;
+    static const Texel rgbaHBlank = Texel(0xFF444444FF444444);
+    static const u64 rgbaVBlank = Texel(0xFF444444FF444444);
 
     //
     // Screen buffers
@@ -68,7 +68,7 @@ private:
     util::Mutex bufferMutex;
         
     // Buffer with background noise (random black and white pixels)
-    Buffer<u32> noise;
+    Buffer <u32> noise;
 
     
     //
@@ -79,7 +79,7 @@ private:
     u16 colreg[32];
 
     // RGBA values for all possible 4096 Amiga colors
-    u32 rgba[4096];
+    Texel rgba[4096];
 
     /* The color register values translated to RGBA
      * Note that the number of elements exceeds the number of color registers:
@@ -89,7 +89,7 @@ private:
      * 65 .. 72 : Additional colors used for debugging
      */
     static const int rgbaIndexCnt = 32 + 32 + 1 + 8;
-    u64 indexedRgba[rgbaIndexCnt];
+    Texel indexedRgba[rgbaIndexCnt];
     
     // Indicates whether HAM mode is switched
     bool hamMode;
@@ -210,11 +210,9 @@ public:
 
     // Returns a color value in Amiga format or RGBA format
     u16 getColor(isize nr) const { return colreg[nr]; }
-    u32 getRGBA(isize nr) const { return (u32)indexedRgba[nr]; }
 
     // Returns sprite color in Amiga format or RGBA format
     u16 getSpriteColor(isize s, isize nr) const { return getColor(16 + nr + 2 * (s & 6)); }
-    u32 getSpriteRGBA(isize s, isize nr) const { return rgba[getSpriteColor(s,nr)]; }
 
 
     //
@@ -241,8 +239,8 @@ public:
     const FrameBuffer &getStableBuffer();
 
     // Return a pointer into the pixel storage
-    u64 *workingPtr(isize row = 0, isize col = 0);
-    u64 *stablePtr(isize row = 0, isize col = 0);
+    Texel *workingPtr(isize row = 0, isize col = 0);
+    Texel *stablePtr(isize row = 0, isize col = 0);
     
     // Swaps the working buffer and the stable buffer
     void swapBuffers();
@@ -281,8 +279,8 @@ public:
     
 private:
     
-    void colorize(u64 *dst, Pixel from, Pixel to);
-    void colorizeHAM(u64 *dst, Pixel from, Pixel to, u16& ham);
+    void colorize(Texel *dst, Pixel from, Pixel to);
+    void colorizeHAM(Texel *dst, Pixel from, Pixel to, u16& ham);
     
     /* Hides some graphics layers. This function is an optional stage applied
      * after colorize(). It can be used to hide some layers for debugging.

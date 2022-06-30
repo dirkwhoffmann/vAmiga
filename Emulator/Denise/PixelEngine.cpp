@@ -26,7 +26,7 @@ FrameBuffer::clean()
 {
     auto *ptr = pixels.ptr;
 
-    for (isize row = 0; row < VPIXELS; row++) {
+    for (isize row = 0; row < VPIXELS; row++, ptr += HPIXELS) {
         for (isize col = 0; col < HPIXELS; col++) {
             ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? col1 : col2;
         }
@@ -74,28 +74,18 @@ PixelEngine::_initialize()
 {
     AmigaComponent::_initialize();
 
-    auto col64 = GpuColor(0x00, 0x00, 0x00).rawValue;
-    auto col65 = GpuColor(0xD0, 0x00, 0x00).rawValue;
-    auto col66 = GpuColor(0xA0, 0x00, 0x00).rawValue;
-    auto col67 = GpuColor(0x90, 0x00, 0x00).rawValue;
-    auto col68 = GpuColor(0x00, 0xFF, 0xFF).rawValue;
-    auto col69 = GpuColor(0x00, 0xD0, 0xD0).rawValue;
-    auto col70 = GpuColor(0x00, 0xA0, 0xA0).rawValue;
-    auto col71 = GpuColor(0x00, 0x90, 0x90).rawValue;
-    auto col72 = GpuColor(0xFF, 0x00, 0x00).rawValue;
-
     // Setup ECS BRDRBLNK color
-    indexedRgba[64] = (u64)col64 << 32 | col64;
+    indexedRgba[64] = GpuColor(0x00, 0x00, 0x00).texel();
     
     // Setup some debug colors
-    indexedRgba[65] = (u64)col65 << 32 | col65;
-    indexedRgba[66] = (u64)col66 << 32 | col66;
-    indexedRgba[67] = (u64)col67 << 32 | col67;
-    indexedRgba[68] = (u64)col68 << 32 | col68;
-    indexedRgba[69] = (u64)col69 << 32 | col69;
-    indexedRgba[70] = (u64)col70 << 32 | col70;
-    indexedRgba[71] = (u64)col71 << 32 | col71;
-    indexedRgba[72] = (u64)col72 << 32 | col72;
+    indexedRgba[65] = GpuColor(0xD0, 0x00, 0x00).texel();
+    indexedRgba[66] = GpuColor(0xA0, 0x00, 0x00).texel();
+    indexedRgba[67] = GpuColor(0x90, 0x00, 0x00).texel();
+    indexedRgba[68] = GpuColor(0x00, 0xFF, 0xFF).texel();
+    indexedRgba[69] = GpuColor(0x00, 0xD0, 0xD0).texel();
+    indexedRgba[70] = GpuColor(0x00, 0xA0, 0xA0).texel();
+    indexedRgba[71] = GpuColor(0x00, 0x90, 0x90).texel();
+    indexedRgba[72] = GpuColor(0xFF, 0x00, 0x00).texel();
 }
 
 void
@@ -224,8 +214,8 @@ PixelEngine::setColor(isize reg, u16 value)
     auto col = rgba[value & 0xFFF];
     auto ehb = rgba[((r / 2) << 8) | ((g / 2) << 4) | (b / 2)];
 
-    indexedRgba[reg] = (u64)col << 32 | col;
-    indexedRgba[reg + 32] = (u64)ehb << 32 | ehb;
+    indexedRgba[reg] = col;
+    indexedRgba[reg + 32] = ehb;
 }
 
 void
@@ -243,7 +233,8 @@ PixelEngine::updateRGBA()
         adjustRGB(r, g, b);
 
         // Write the result into the register lookup table
-        rgba[col] = HI_HI_LO_LO(0xFF, b, g, r);
+        auto rgba32 = HI_HI_LO_LO(0xFF, b, g, r);
+        rgba[col] = Texel((u64)rgba32 << 32 | rgba32);
     }
 
     // Update all RGBA values that are cached in indexedRgba[]
@@ -339,7 +330,7 @@ PixelEngine::getWorkingBuffer()
     return emuTexture[activeBuffer];
 }
 
-u64 *
+Texel *
 PixelEngine::workingPtr(isize row, isize col)
 {
     assert(row >= 0 && row <= VPOS_MAX);
@@ -348,7 +339,7 @@ PixelEngine::workingPtr(isize row, isize col)
     return getWorkingBuffer().pixels.ptr + row * HPIXELS + col;
 }
 
-u64 *
+Texel *
 PixelEngine::stablePtr(isize row, isize col)
 {
     assert(row >= 0 && row <= VPOS_MAX);
@@ -453,7 +444,7 @@ PixelEngine::colorize(isize line)
 }
 
 void
-PixelEngine::colorize(u64 *dst, Pixel from, Pixel to)
+PixelEngine::colorize(Texel *dst, Pixel from, Pixel to)
 {
     u8 *mbuf = denise.mBuffer;
 
@@ -463,7 +454,7 @@ PixelEngine::colorize(u64 *dst, Pixel from, Pixel to)
 }
 
 void
-PixelEngine::colorizeHAM(u64 *dst, Pixel from, Pixel to, u16& ham)
+PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, u16& ham)
 {
     u8 *bbuf = denise.bBuffer;
     u8 *ibuf = denise.iBuffer;
