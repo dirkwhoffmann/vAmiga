@@ -324,11 +324,11 @@ DmaDebugger::hsyncHandler(isize vpos)
 
     // Draw first chunk (data from previous DMA line)
     auto *ptr1 = pixelEngine.workingPtr(vpos);
-    computeOverlay((u32 *)ptr1, HBLANK_MIN, HPOS_MAX, busOwner, busValue);
+    computeOverlay(ptr1, HBLANK_MIN, HPOS_MAX, busOwner, busValue);
 
     // Draw second chunk (data from current DMA line)
     auto *ptr2 = ptr1 + agnus.pos.pixel(0);
-    computeOverlay((u32 *)ptr2, 0, HBLANK_MIN - 1, agnus.busOwner, agnus.busValue);
+    computeOverlay(ptr2, 0, HBLANK_MIN - 1, agnus.busOwner, agnus.busValue);
 }
 
 void
@@ -366,6 +366,7 @@ DmaDebugger::computeOverlay(Texel *ptr, isize first, isize last, BusOwner *own, 
     for (isize i = first; i <= last; i++, ptr += 4) {
 
         BusOwner owner = own[i];
+        // u32 *ptr32 = (u32 *)ptr;
 
         // Handle the easy case first: No foreground pixels
         if (!visualize[owner]) {

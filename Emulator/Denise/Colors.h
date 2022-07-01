@@ -100,6 +100,7 @@ struct GpuColor {
 
     GpuColor() : rawValue(0) {}
     GpuColor(u32 v) : rawValue(v) {}
+    GpuColor(u64 v) : rawValue((u32)v) {}
     GpuColor(const struct RgbColor &c);
     GpuColor(const struct AmigaColor &c);
     GpuColor(u8 r, u8 g, u8 b);

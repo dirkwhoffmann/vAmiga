@@ -226,22 +226,25 @@ class Canvas: Layer {
 
         if amiga.poweredOff {
 
-            // Update the GPU texture with random noise
-            var buffer = amiga.denise.noise!
-            lfTexture.replace(w: Int(HPIXELS), h: Int(VPIXELS), buffer: buffer)
-            
-            buffer = amiga.denise.noise!
-            sfTexture.replace(w: Int(HPIXELS), h: Int(VPIXELS), buffer: buffer)
+            // Get the noise texture
+            let buffer = amiga.denise.noise!
 
+            // Ensure that the merge shader is used
+            prevLOF = currLOF
             currLOF = !prevLOF
-            return
-        }
 
-        // Get the texture
-        let buffer = amiga.denise.stableBuffer!
-        
-        if prevBuffer != buffer {
-            
+            // Update the GPU texture
+            if currLOF {
+                lfTexture.replace(w: Int(TPP * HPIXELS), h: Int(VPIXELS), buffer: buffer)
+            } else {
+                sfTexture.replace(w: Int(TPP * HPIXELS), h: Int(VPIXELS), buffer: buffer)
+            }
+
+        } else {
+
+            // Get the emulator texture
+            let buffer = amiga.denise.stableBuffer!
+            if prevBuffer == buffer { return }
             prevBuffer = buffer
             
             // Determine if the new texture is a long frame or a short frame
