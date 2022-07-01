@@ -210,7 +210,11 @@ enum_i8(EventID)
     BPL_H3_MOD          = 0x48,
     BPL_H4              = 0x4C,
     BPL_H4_MOD          = 0x50,
-    BPL_EVENT_COUNT     = 0x54,
+    BPL_S1              = 0x54,
+    BPL_S1_MOD          = 0x58,
+    BPL_S2              = 0x5C,
+    BPL_S2_MOD          = 0x60,
+    BPL_EVENT_COUNT     = 0x64,
 
     // DAS slot
     DAS_REFRESH         = 1,

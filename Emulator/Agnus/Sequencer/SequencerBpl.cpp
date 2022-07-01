@@ -60,10 +60,6 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
         computeBplEventsFast <ecs> (sr, state);
     }
     
-    // Add EOL events (end of line)
-    // bplEvent[HPOS_MAX_PAL] |= BPL_EOL;
-    // bplEvent[HPOS_MAX_NTSC] |= BPL_EOL;
-
     // Update the jump table
     updateBplJumpTable();
 
@@ -437,7 +433,21 @@ Sequencer::updateBplJumpTable(i16 end)
 void
 Sequencer::computeFetchUnit(u8 dmacon)
 {
-    if (dmacon & 0x8) {
+    if (GET_BIT(agnus.bplcon0, 6)) {
+
+        switch (dmacon & 0x7) {
+
+            case 0: computeShresFetchUnit <0> (); break;
+            case 1: computeShresFetchUnit <1> (); break;
+            case 2: computeShresFetchUnit <2> (); break;
+            case 3: computeShresFetchUnit <0> (); break;
+            case 4: computeShresFetchUnit <0> (); break;
+            case 5: computeShresFetchUnit <0> (); break;
+            case 6: computeShresFetchUnit <0> (); break;
+            case 7: computeShresFetchUnit <0> (); break;
+        }
+
+    } else if (dmacon & 0x8) {
         
         switch (dmacon & 0x7) {
         
@@ -509,4 +519,26 @@ Sequencer::computeHiresFetchUnit()
     fetch[1][5] = channels < 2 ? 0 : BPL_H2_MOD;
     fetch[1][6] = channels < 3 ? 0 : BPL_H3_MOD;
     fetch[1][7] = channels < 1 ? 0 : BPL_H1_MOD;
+}
+
+template <u8 channels> void
+Sequencer::computeShresFetchUnit()
+{
+    fetch[0][0] = channels < 2 ? 0 : BPL_S2;
+    fetch[0][1] = channels < 1 ? 0 : BPL_S1;
+    fetch[0][2] = channels < 2 ? 0 : BPL_S2;
+    fetch[0][3] = channels < 1 ? 0 : BPL_S1;
+    fetch[0][4] = channels < 2 ? 0 : BPL_S2;
+    fetch[0][5] = channels < 1 ? 0 : BPL_S1;
+    fetch[0][6] = channels < 2 ? 0 : BPL_S2;
+    fetch[0][7] = channels < 1 ? 0 : BPL_S1;
+
+    fetch[1][0] = channels < 2 ? 0 : BPL_S2;
+    fetch[1][1] = channels < 1 ? 0 : BPL_S1;
+    fetch[1][2] = channels < 2 ? 0 : BPL_S2;
+    fetch[1][3] = channels < 1 ? 0 : BPL_S1;
+    fetch[1][4] = channels < 2 ? 0 : BPL_S2_MOD;
+    fetch[1][5] = channels < 1 ? 0 : BPL_S1_MOD;
+    fetch[1][6] = channels < 2 ? 0 : BPL_S2_MOD;
+    fetch[1][7] = channels < 1 ? 0 : BPL_S1_MOD;
 }

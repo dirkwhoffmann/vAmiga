@@ -54,13 +54,11 @@ extension ConfigurationController {
             csDeniseInfo1.stringValue = "MOS 8362R8"
             csDeniseInfo2.stringValue = "A500, A1000, A2000"
 
-        case .OCS_BRDRBLNK:
+        case .ECS:
             csDeniseInfo1.stringValue = "MOS 8362R8"
             csDeniseInfo2.stringValue = "Emulator mod"
-            
-        case .ECS:
-            csDeniseInfo1.stringValue = "MOS 8373R4"
-            csDeniseInfo2.stringValue = "A500+, A600"
+            // csDeniseInfo1.stringValue = "MOS 8373R4"
+            // csDeniseInfo2.stringValue = "A500+, A600"
             
         default:
             csDeniseInfo1.stringValue = "Invalid"

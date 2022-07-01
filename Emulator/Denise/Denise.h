@@ -442,12 +442,15 @@ public:
 public:
             
     // Wrappers around the core drawing routines
-    void drawHiresOdd();
-    void drawHiresEven();
-    void drawHiresBoth();
     void drawLoresOdd();
     void drawLoresEven();
     void drawLoresBoth();
+    void drawHiresOdd();
+    void drawHiresEven();
+    void drawHiresBoth();
+    void drawShresOdd();
+    void drawShresEven();
+    void drawShresBoth();
 
 private:
     

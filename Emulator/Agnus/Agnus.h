@@ -762,8 +762,9 @@ public:
 
     // Services a bitplane event
     void serviceBPLEvent(EventID id);
-    template <isize nr> void serviceBPLEventHires();
     template <isize nr> void serviceBPLEventLores();
+    template <isize nr> void serviceBPLEventHires();
+    template <isize nr> void serviceBPLEventShres();
 
     // Services a vertical blank interrupt
     void serviceVBLEvent(EventID id);

@@ -311,35 +311,6 @@ Denise::drawBoth(Pixel offset)
 }
 
 void
-Denise::drawHiresOdd()
-{
-    if (armedOdd) {
-        
-        updateShiftRegistersOdd();
-        drawOdd <true> (pixelOffsetOdd);
-        armedOdd = false;
-    }
-}
-
-void
-Denise::drawHiresEven()
-{
-    if (armedEven) {
-        
-        updateShiftRegistersEven();
-        drawEven <true> (pixelOffsetEven);
-        armedEven = false;
-    }
-}
-
-void
-Denise::drawHiresBoth()
-{
-    drawHiresOdd();
-    drawHiresEven();
-}
-
-void
 Denise::drawLoresOdd()
 {
     if (armedOdd) {
@@ -366,6 +337,68 @@ Denise::drawLoresBoth()
 {
     drawLoresOdd();
     drawLoresEven();
+}
+
+void
+Denise::drawHiresOdd()
+{
+    if (armedOdd) {
+
+        updateShiftRegistersOdd();
+        drawOdd <true> (pixelOffsetOdd);
+        armedOdd = false;
+    }
+}
+
+void
+Denise::drawHiresEven()
+{
+    if (armedEven) {
+
+        updateShiftRegistersEven();
+        drawEven <true> (pixelOffsetEven);
+        armedEven = false;
+    }
+}
+
+void
+Denise::drawHiresBoth()
+{
+    drawHiresOdd();
+    drawHiresEven();
+}
+
+void
+Denise::drawShresOdd()
+{
+    /*
+    if (armedOdd) {
+
+        updateShiftRegistersOdd();
+        drawOdd <SHRES> (pixelOffsetOdd);
+        armedOdd = false;
+    }
+    */
+}
+
+void
+Denise::drawShresEven()
+{
+    /*
+    if (armedEven) {
+
+        updateShiftRegistersEven();
+        drawEven <SHRES> (pixelOffsetEven);
+        armedEven = false;
+    }
+    */
+}
+
+void
+Denise::drawShresBoth()
+{
+    drawShresOdd();
+    drawShresEven();
 }
 
 void

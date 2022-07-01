@@ -321,7 +321,8 @@ private:
     void computeFetchUnit(u8 dmacon);
     template <u8 channels> void computeLoresFetchUnit();
     template <u8 channels> void computeHiresFetchUnit();
-    
+    template <u8 channels> void computeShresFetchUnit();
+
     
     //
     // Managing the disk, audio, sprite time slot table (SequencerDas.cpp)

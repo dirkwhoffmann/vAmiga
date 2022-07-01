@@ -19,8 +19,7 @@
 enum_long(DENISE_REV)
 {
     DENISE_OCS,           // Revision 8362R8
-    DENISE_OCS_BRDRBLNK,  // Revision 8362R8 + ECS Border blank feature
-    DENISE_ECS            // Revision 8373 (not supported yet)
+    DENISE_ECS            // Revision 8373      (only partially supported)
 };
 typedef DENISE_REV DeniseRevision;
 
@@ -37,13 +36,42 @@ struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision>
         switch (value) {
                 
             case DENISE_OCS:          return "OCS";
-            case DENISE_OCS_BRDRBLNK: return "OCS_BRDRBLNK";
             case DENISE_ECS:          return "ECS";
         }
         return "???";
     }
 };
 #endif
+
+enum_long(RESOLUTION)
+{
+    LORES,      // Lores mode
+    HIRES,      // Hires mode
+    SHRES       // SuperHires mode (ECS only)
+};
+typedef RESOLUTION Resolution;
+
+#ifdef __cplusplus
+struct ResolutionEnum : util::Reflection<ResolutionEnum, ResolutionEnum>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = SHRES;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
+
+    static const char *prefix() { return ""; }
+    static const char *key(Resolution value)
+    {
+        switch (value) {
+
+            case LORES:          return "LORES";
+            case HIRES:          return "HIRES";
+            case SHRES:          return "SHRES";
+        }
+        return "???";
+    }
+};
+#endif
+
 
 //
 // Structures
