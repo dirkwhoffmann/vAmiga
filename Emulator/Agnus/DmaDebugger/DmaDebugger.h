@@ -10,6 +10,7 @@
 #pragma once
 
 #include "DmaDebuggerTypes.h"
+#include "FrameBufferTypes.h"
 #include "SubComponent.h"
 #include "Colors.h"
 #include "Constants.h"

@@ -16,42 +16,8 @@
 
 #include <fstream>
 
-FrameBuffer::FrameBuffer()
-{
-    pixels.alloc(PIXELS);
-}
-
-void
-FrameBuffer::clean()
-{
-    auto *ptr = pixels.ptr;
-
-    for (isize row = 0; row < VPIXELS; row++, ptr += HPIXELS) {
-        for (isize col = 0; col < HPIXELS; col++) {
-            ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? col1 : col2;
-        }
-    }
-}
-
-void
-FrameBuffer::clean(isize row)
-{
-    auto *ptr = pixels.ptr + row * HPIXELS;
-
-    for (isize col = 0; col < HPIXELS; col++) {
-        ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? col1 : col2;
-    }
-}
-
-void
-FrameBuffer::clean(isize row, isize cycle)
-{
-    auto *ptr = pixels.ptr + row * HPIXELS + 4 * cycle;
-
-    for (isize col = 0; col < 4; col++) {
-        ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? col1 : col2;
-    }
-}
+const Texel PixelEngine::rgbaHBlank = TEXEL(GpuColor(0xFF444444).rawValue);
+const Texel PixelEngine::rgbaVBlank = TEXEL(GpuColor(0xFF444444).rawValue);
 
 PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
 {
@@ -65,8 +31,8 @@ PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
 void
 PixelEngine::clearAll()
 {
-    emuTexture[0].clean();
-    emuTexture[1].clean();
+    emuTexture[0].clear();
+    emuTexture[1].clear();
 }
 
 void
@@ -75,17 +41,17 @@ PixelEngine::_initialize()
     AmigaComponent::_initialize();
 
     // Setup ECS BRDRBLNK color
-    indexedRgba[64] = GpuColor(0x00, 0x00, 0x00).texel();
+    indexedRgba[64] = TEXEL(GpuColor(0x00, 0x00, 0x00).rawValue);
     
     // Setup some debug colors
-    indexedRgba[65] = GpuColor(0xD0, 0x00, 0x00).texel();
-    indexedRgba[66] = GpuColor(0xA0, 0x00, 0x00).texel();
-    indexedRgba[67] = GpuColor(0x90, 0x00, 0x00).texel();
-    indexedRgba[68] = GpuColor(0x00, 0xFF, 0xFF).texel();
-    indexedRgba[69] = GpuColor(0x00, 0xD0, 0xD0).texel();
-    indexedRgba[70] = GpuColor(0x00, 0xA0, 0xA0).texel();
-    indexedRgba[71] = GpuColor(0x00, 0x90, 0x90).texel();
-    indexedRgba[72] = GpuColor(0xFF, 0x00, 0x00).texel();
+    indexedRgba[65] = TEXEL(GpuColor(0xD0, 0x00, 0x00).rawValue);
+    indexedRgba[66] = TEXEL(GpuColor(0xA0, 0x00, 0x00).rawValue);
+    indexedRgba[67] = TEXEL(GpuColor(0x90, 0x00, 0x00).rawValue);
+    indexedRgba[68] = TEXEL(GpuColor(0x00, 0xFF, 0xFF).rawValue);
+    indexedRgba[69] = TEXEL(GpuColor(0x00, 0xD0, 0xD0).rawValue);
+    indexedRgba[70] = TEXEL(GpuColor(0x00, 0xA0, 0xA0).rawValue);
+    indexedRgba[71] = TEXEL(GpuColor(0x00, 0x90, 0x90).rawValue);
+    indexedRgba[72] = TEXEL(GpuColor(0xFF, 0x00, 0x00).rawValue);
 }
 
 void

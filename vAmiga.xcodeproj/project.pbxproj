@@ -90,6 +90,8 @@
 		505C83F927739ED0001F8159 /* RemoteManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C83F727739ED0001F8159 /* RemoteManager.cpp */; };
 		505C83FD2773C9BA001F8159 /* SerServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C83FB2773C9BA001F8159 /* SerServer.cpp */; };
 		505CEF5E26BD12430078FF52 /* DropZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505CEF5D26BD12430078FF52 /* DropZone.swift */; };
+		50627FD3286EBA7300F2A835 /* FrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50627FD1286EBA7300F2A835 /* FrameBuffer.cpp */; };
+		50627FD5286EBACA00F2A835 /* FrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50627FD1286EBA7300F2A835 /* FrameBuffer.cpp */; };
 		5062DB1224370FE400ACEEE2 /* MyControllerSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */; };
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
 		506ACE44279AC75100BA7877 /* SequencerDas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506ACE43279AC75100BA7877 /* SequencerDas.cpp */; };
@@ -580,6 +582,9 @@
 		505C83FB2773C9BA001F8159 /* SerServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SerServer.cpp; sourceTree = "<group>"; };
 		505C83FC2773C9BA001F8159 /* SerServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SerServer.h; sourceTree = "<group>"; };
 		505CEF5D26BD12430078FF52 /* DropZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropZone.swift; sourceTree = "<group>"; };
+		50627FD1286EBA7300F2A835 /* FrameBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FrameBuffer.cpp; sourceTree = "<group>"; };
+		50627FD2286EBA7300F2A835 /* FrameBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameBuffer.h; sourceTree = "<group>"; };
+		50627FD4286EBAC000F2A835 /* FrameBufferTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameBufferTypes.h; sourceTree = "<group>"; };
 		5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerSnapshots.swift; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* Memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Memory.cpp; sourceTree = "<group>"; };
 		5064851021EC7A1700FC4AC3 /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
@@ -1057,9 +1062,12 @@
 				50A61413260CCF9B00A01428 /* PixelEngineTypes.h */,
 				502F7DD32221E52200AEEC65 /* PixelEngine.h */,
 				502F7DD22221E52200AEEC65 /* PixelEngine.cpp */,
-				50E19057277F693C00B8DBE2 /* Recorder */,
+				50627FD4286EBAC000F2A835 /* FrameBufferTypes.h */,
+				50627FD2286EBA7300F2A835 /* FrameBuffer.h */,
+				50627FD1286EBA7300F2A835 /* FrameBuffer.cpp */,
 				50D2B85126D292B7008040E5 /* DeniseDebugger.h */,
 				50D2B85026D292B7008040E5 /* DeniseDebugger.cpp */,
+				50E19057277F693C00B8DBE2 /* Recorder */,
 			);
 			path = Denise;
 			sourceTree = "<group>";
@@ -2237,6 +2245,7 @@
 				508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */,
 				50A64B96257A63A600442964 /* BootBlockImage.cpp in Sources */,
 				50ECF98622B153FB007B3DE7 /* ExtendedRomFile.cpp in Sources */,
+				50627FD3286EBA7300F2A835 /* FrameBuffer.cpp in Sources */,
 				508FE05621EA22CC0043D0E9 /* PreferencesController.swift in Sources */,
 				505A215022869FF10016EA21 /* AudioFilter.cpp in Sources */,
 				50E8199325B350DA00D2E3A5 /* Errors.swift in Sources */,
@@ -2361,6 +2370,7 @@
 				50FC048527DA190400C3E566 /* Error.cpp in Sources */,
 				50FC048727DA194200C3E566 /* CPU.cpp in Sources */,
 				50FC04D327DA19F600C3E566 /* FSObjects.cpp in Sources */,
+				50627FD5286EBACA00F2A835 /* FrameBuffer.cpp in Sources */,
 				50FC04AD27DA198E00C3E566 /* BlitterInfo.cpp in Sources */,
 				50FC04D627DA1A0000C3E566 /* Command.cpp in Sources */,
 				50FC04E227DA1A1400C3E566 /* u_heavy.c in Sources */,

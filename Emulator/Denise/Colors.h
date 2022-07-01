@@ -113,7 +113,7 @@ struct GpuColor {
     static const GpuColor magenta;
     static const GpuColor cyan;
 
-    Texel texel() { return Texel((u64)rawValue << 32 | rawValue); }
+    // Texel texel() { return Texel((u64)rawValue << 32 | rawValue); }
     GpuColor mix(const struct RgbColor &color, double weight) const;
     GpuColor tint(double weight) const { return mix(RgbColor::white, weight); }
     GpuColor shade(double weight) const { return mix(RgbColor::black, weight); }

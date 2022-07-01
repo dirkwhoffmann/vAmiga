@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "FrameBufferTypes.h"
 #include "Aliases.h"
 #include "Reflection.h"
 

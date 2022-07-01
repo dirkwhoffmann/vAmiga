@@ -87,17 +87,12 @@
 // Video settings
 //
 
-// Uncomment to generate a texture in hires resolution
+/* Texels per pixel. Set to 1 to generate a texture in hires resolution (every
+ * hires pixel is represented by a single texel). Set to 2 to generate a
+ * texture in super-hires resolution (every hires pixel is represented by a
+ * two texels).
+ */
 #define TPP 1
-
-// Uncomment to generate a texture in super-hires resolution
-// #define TPP 2
-
-#if TPP == 1
-typedef unsigned int Texel;
-#else
-typedef unsigned long long Texel;
-#endif
 
 
 //

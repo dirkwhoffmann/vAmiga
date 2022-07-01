@@ -13,26 +13,7 @@
 #include "SubComponent.h"
 #include "ChangeRecorder.h"
 #include "Constants.h"
-#include "Buffer.h"
-
-using util::Buffer;
-
-struct FrameBuffer {
-
-    // Checkerboard colors
-    static constexpr u32 col1 = 0xFF222222; // 0xFF662222
-    static constexpr u32 col2 = 0xFF444444; // 0xFFAA4444
-
-    Buffer <Texel> pixels;
-    bool longFrame;
-    
-    FrameBuffer();
-
-    // Initializes (a portion of) the frame buffer with a checkerboard pattern
-    void clean();
-    void clean(isize row);
-    void clean(isize row, isize cycle);
-};
+#include "FrameBuffer.h"
 
 class PixelEngine : public SubComponent {
 
@@ -44,8 +25,8 @@ class PixelEngine : public SubComponent {
 public:
 
     // RGBA colors used to visualize the HBLANK and VBLANK area in the debugger
-    static const Texel rgbaHBlank = Texel(0xFF444444FF444444);
-    static const u64 rgbaVBlank = Texel(0xFF444444FF444444);
+    static const Texel rgbaHBlank;
+    static const Texel rgbaVBlank;
 
     //
     // Screen buffers

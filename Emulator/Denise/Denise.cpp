@@ -1063,7 +1063,7 @@ Denise::hsyncHandler(isize vpos)
     assert(sprChanges[3].isEmpty());
 
     // Clear the last pixel if this line was a short line
-    if (agnus.pos.hLatched == HPOS_CNT_PAL) pixelEngine.getWorkingBuffer().clean(vpos, HPOS_MAX);
+    if (agnus.pos.hLatched == HPOS_CNT_PAL) pixelEngine.getWorkingBuffer().clear(vpos, HPOS_MAX);
 
     // Clear the bBuffer
     std::memset(bBuffer, 0, sizeof(bBuffer));
