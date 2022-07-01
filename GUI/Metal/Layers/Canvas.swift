@@ -12,7 +12,7 @@ import MetalPerformanceShaders
 class Canvas: Layer {
     
     var mergeFilter: ComputeKernel! { return ressourceManager.mergeFilter }
-    var mergeBypass: ComputeKernel! { return ressourceManager.mergeBypassFilter }
+    var scaleFilter: ComputeKernel! { return ressourceManager.scaleFilter }
     var enhancer: ComputeKernel! { return ressourceManager.enhancer }
     var bloomFilter: ComputeKernel! { return ressourceManager.bloomFilter }
     var upscaler: ComputeKernel! { return ressourceManager.upscaler }
@@ -102,8 +102,7 @@ class Canvas: Layer {
                                             scanlineDistance: 0)
 
     var mergeUniforms = MergeUniforms(longFrameScale: 1.0,
-                                      shortFrameScale: 1.0,
-                                      xScale: TPP == 1 ? 0.5 : 1.0)
+                                      shortFrameScale: 1.0)
     
     //
     // Initializing
@@ -268,47 +267,43 @@ class Canvas: Layer {
             gauss.encode(commandBuffer: buffer,
                          inPlaceTexture: &texture, fallbackCopyAllocator: nil)
         }
-        
+
         // Compute the merge texture
-        if currLOF != prevLOF {
-            
-            // Case 1: Interlace drawing
-            var weight = Float(1.0)
-            if renderer.shaderOptions.flicker > 0 {
-                weight -= renderer.shaderOptions.flickerWeight
+        if currLOF == prevLOF {
+
+            if currLOF {
+
+                // Case 1: Non-interlace mode, two long frames in a row
+                scaleFilter.apply(commandBuffer: buffer,
+                                  textures: [lfTexture, mergeTexture])
+
+            } else {
+
+                // Case 2: Non-interlace mode, two short frames in a row
+                scaleFilter.apply(commandBuffer: buffer,
+                                  textures: [sfTexture, mergeTexture])
             }
-            flickerCnt += 1
-            mergeUniforms.longFrameScale = (flickerCnt % 4 >= 2) ? 1.0 : weight
-            mergeUniforms.shortFrameScale = (flickerCnt % 4 >= 2) ? weight : 1.0
+
+        } else {
+
+            // Case 3: Interlace mode, long frame followed by a short frame
+            if renderer.shaderOptions.flicker > 0 {
+
+                let weight = 1.0 - renderer.shaderOptions.flickerWeight
+                mergeUniforms.longFrameScale = (flickerCnt % 4 >= 2) ? 1.0 : weight
+                mergeUniforms.shortFrameScale = (flickerCnt % 4 >= 2) ? weight : 1.0
+                flickerCnt += 1
+
+            } else {
+
+                mergeUniforms.longFrameScale = 1.0
+                mergeUniforms.shortFrameScale = 1.0
+            }
             
             mergeFilter.apply(commandBuffer: buffer,
                               textures: [lfTexture, sfTexture, mergeTexture],
                               options: &mergeUniforms,
                               length: MemoryLayout<MergeUniforms>.stride)
-
-        } else if currLOF {
-
-            // Case 2: Non-interlace drawing (two long frames in a row)
-            mergeFilter.apply(commandBuffer: buffer,
-                              textures: [lfTexture, lfTexture, mergeTexture],
-                              options: &mergeUniforms,
-                              length: MemoryLayout<MergeUniforms>.stride)
-            /*
-            mergeBypass.apply(commandBuffer: buffer,
-                              textures: [lfTexture, mergeTexture])
-            */
-
-        } else {
-            
-            // Case 3: Non-interlace drawing (two short frames in a row)
-            mergeFilter.apply(commandBuffer: buffer,
-                              textures: [sfTexture, sfTexture, mergeTexture],
-                              options: &mergeUniforms,
-                              length: MemoryLayout<MergeUniforms>.stride)
-            /*
-            mergeBypass.apply(commandBuffer: buffer,
-                              textures: [sfTexture, mergeTexture])
-            */
         }
         finalTexture = mergeTexture
 

@@ -69,7 +69,6 @@ struct MergeUniforms {
 
     float longFrameScale;
     float shortFrameScale;
-    float xScale;
 };
 
 //
@@ -199,22 +198,30 @@ fragment half4 fragment_main(ProjectedVertex vert [[ stage_in ]],
 
 
 //
-// Texture merger
+// Texture scalers and mergers
 //
 
-kernel void bypassmerger(texture2d<half, access::read>  inTexture   [[ texture(0) ]],
-                         texture2d<half, access::write> outTexture  [[ texture(1) ]],
-                         uint2                          gid         [[ thread_position_in_grid ]])
+kernel void scale1X4Y(texture2d<half, access::read>  input   [[ texture(0) ]],
+                      texture2d<half, access::write> output  [[ texture(1) ]],
+                      uint2                          gid     [[ thread_position_in_grid ]])
 {
-    half4 result = inTexture.read(uint2(gid.x / 2, gid.y / 4));
-    outTexture.write(result, gid);
+    half4 result = input.read(uint2(gid.x, gid.y / 4));
+    output.write(result, gid);
 }
-    
-kernel void merge(texture2d<half, access::read>  longFrame  [[ texture(0) ]],
-                  texture2d<half, access::read>  shortFrame [[ texture(1) ]],
-                  texture2d<half, access::write> outTexture [[ texture(2) ]],
-                  constant MergeUniforms         &uniforms  [[ buffer(0) ]],
-                  uint2                          gid        [[ thread_position_in_grid ]])
+
+kernel void scale2X4Y(texture2d<half, access::read>  input   [[ texture(0) ]],
+                      texture2d<half, access::write> output  [[ texture(1) ]],
+                      uint2                          gid     [[ thread_position_in_grid ]])
+{
+    half4 result = input.read(uint2(gid.x / 2, gid.y / 4));
+    output.write(result, gid);
+}
+
+kernel void merge1X4Y(texture2d<half, access::read>  longFrame  [[ texture(0) ]],
+                      texture2d<half, access::read>  shortFrame [[ texture(1) ]],
+                      texture2d<half, access::write> output     [[ texture(2) ]],
+                      constant MergeUniforms         &uniforms  [[ buffer(0) ]],
+                      uint2                          gid        [[ thread_position_in_grid ]])
 {
     half4 result;
     float s;
@@ -222,15 +229,38 @@ kernel void merge(texture2d<half, access::read>  longFrame  [[ texture(0) ]],
     if (gid.y % 4 < 2) {
 
         s = uniforms.longFrameScale;
-        result = longFrame.read(uint2(gid.x * uniforms.xScale, gid.y / 4));
+        result = longFrame.read(uint2(gid.x, gid.y / 4));
 
     } else {
 
         s = uniforms.shortFrameScale;
-        result = shortFrame.read(uint2(gid.x * uniforms.xScale, gid.y / 4));
+        result = shortFrame.read(uint2(gid.x, gid.y / 4));
     }
 
-    outTexture.write(result * vec<half,4>(s,s,s,1), gid);
+    output.write(result * vec<half,4>(s,s,s,1), gid);
+}
+
+kernel void merge2X4Y(texture2d<half, access::read>  longFrame  [[ texture(0) ]],
+                      texture2d<half, access::read>  shortFrame [[ texture(1) ]],
+                      texture2d<half, access::write> output     [[ texture(2) ]],
+                      constant MergeUniforms         &uniforms  [[ buffer(0) ]],
+                      uint2                          gid        [[ thread_position_in_grid ]])
+{
+    half4 result;
+    float s;
+
+    if (gid.y % 4 < 2) {
+
+        s = uniforms.longFrameScale;
+        result = longFrame.read(uint2(gid.x / 2, gid.y / 4));
+
+    } else {
+
+        s = uniforms.shortFrameScale;
+        result = shortFrame.read(uint2(gid.x / 2, gid.y / 4));
+    }
+
+    output.write(result * vec<half,4>(s,s,s,1), gid);
 }
 
 

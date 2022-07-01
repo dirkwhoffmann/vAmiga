@@ -57,7 +57,6 @@ struct MergeUniforms {
 
     var longFrameScale: Float
     var shortFrameScale: Float
-    var xScale: Float
 }
 
 //
@@ -183,15 +182,15 @@ class BypassFilter: ComputeKernel {
 class MergeFilter: ComputeKernel {
     
     convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int, Int)) {
-        self.init(name: "merge",
+        self.init(name: "merge\(3 - TPP)X4Y",
                   device: device, library: library, cutout: cutout)
     }
 }
 
-class MergeBypassFilter: ComputeKernel {
+class ScaleFilter: ComputeKernel {
     
     convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int, Int)) {
-        self.init(name: "bypassmerger",
+        self.init(name: "scale\(3 - TPP)X4Y",
                   device: device, library: library, cutout: cutout)
     }
 }

@@ -36,7 +36,7 @@ class RessourceManager {
     
     // Shader galleries
     var mergeFilter: MergeFilter! = nil
-    var mergeBypassFilter: MergeBypassFilter! = nil
+    var scaleFilter: ScaleFilter! = nil
     var enhancerGallery = [ComputeKernel?](repeating: nil, count: 3)
     var upscalerGallery = [ComputeKernel?](repeating: nil, count: 3)
     var bloomFilterGallery = [ComputeKernel?](repeating: nil, count: 2)
@@ -191,9 +191,9 @@ class RessourceManager {
         library = device.makeDefaultLibrary()
         renderer.metalAssert(library != nil, "The Shader Library could not be built.")
         
-        // Build merge filters
+        // Build merge and scale filters
         mergeFilter = MergeFilter(device: device, library: library, cutout: mc)
-        mergeBypassFilter = MergeBypassFilter(device: device, library: library, cutout: mc)
+        scaleFilter = ScaleFilter(device: device, library: library, cutout: mc)
         
         // Build enhancers (first-pass, in-texture upscaling)
         enhancerGallery[0] = BypassFilter(device: device, library: library, cutout: mc)
