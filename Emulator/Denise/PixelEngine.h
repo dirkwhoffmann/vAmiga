@@ -24,10 +24,6 @@ class PixelEngine : public SubComponent {
 
 public:
 
-    // RGBA colors used to visualize the HBLANK and VBLANK area in the debugger
-    static const Texel rgbaHBlank;
-    static const Texel rgbaVBlank;
-
     //
     // Screen buffers
     //
@@ -49,7 +45,7 @@ private:
     util::Mutex bufferMutex;
         
     // Buffer with background noise (random black and white pixels)
-    Buffer <u32> noise;
+    Buffer <Texel> noise;
 
     
     //
@@ -227,7 +223,7 @@ public:
     void swapBuffers();
     
     // Returns a pointer to randon noise
-    u32 *getNoise() const;
+    Texel *getNoise() const;
 
     // Called after each line in the VBLANK area
     void endOfVBlankLine();

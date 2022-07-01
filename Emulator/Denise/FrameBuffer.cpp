@@ -23,7 +23,7 @@ FrameBuffer::clear()
 
     for (isize row = 0; row < VPIXELS; row++, ptr += HPIXELS) {
         for (isize col = 0; col < HPIXELS; col++) {
-            ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? col1 : col2;
+            ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? cb1 : cb2;
         }
     }
 }
@@ -34,7 +34,7 @@ FrameBuffer::clear(isize row)
     auto *ptr = pixels.ptr + row * HPIXELS;
 
     for (isize col = 0; col < HPIXELS; col++) {
-        ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? col1 : col2;
+        ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? cb1 : cb2;
     }
 }
 
@@ -44,6 +44,6 @@ FrameBuffer::clear(isize row, isize cycle)
     auto *ptr = pixels.ptr + row * HPIXELS + 4 * cycle;
 
     for (isize col = 0; col < 4; col++) {
-        ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? col1 : col2;
+        ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? cb1 : cb2;
     }
 }

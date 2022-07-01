@@ -16,15 +16,12 @@
 
 #include <fstream>
 
-const Texel PixelEngine::rgbaHBlank = TEXEL(GpuColor(0xFF444444).rawValue);
-const Texel PixelEngine::rgbaVBlank = TEXEL(GpuColor(0xFF444444).rawValue);
-
 PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
 {
     // Create random background noise pattern
-    noise.alloc(2 * VPIXELS * HPIXELS);
+    noise.alloc(2 * PIXELS);
     for (isize i = 0; i < noise.size; i++) {
-        noise[i] = rand() % 2 ? 0xFF000000 : 0xFFFFFFFF;
+        noise[i] = rand() % 2 ? FrameBuffer::black : FrameBuffer::white;
     }
 }
 
@@ -321,13 +318,10 @@ PixelEngine::swapBuffers()
     emuTexture[activeBuffer].longFrame = agnus.pos.lof;
 }
 
-u32 *
+Texel *
 PixelEngine::getNoise() const
 {
-    static u32 offset = 0;
-    
-    offset = (offset + 100) % PIXELS;
-    return noise.ptr + offset;
+    return noise.ptr + (rand() % PIXELS);
 }
 
 void
@@ -406,7 +400,7 @@ PixelEngine::colorize(isize line)
     // Wipe out the HBLANK area
     auto start = agnus.pos.pixel(HBLANK_MIN);
     auto stop  = agnus.pos.pixel(HBLANK_MAX);
-    for (pixel = start; pixel <= stop; pixel++) dst[pixel] = rgbaHBlank;
+    for (pixel = start; pixel <= stop; pixel++) dst[pixel] = FrameBuffer::hblank;
 }
 
 void

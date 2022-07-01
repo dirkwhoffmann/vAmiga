@@ -855,7 +855,7 @@ using namespace moira;
 
 - (u32 *)noise
 {
-    return [self denise]->pixelEngine.getNoise();
+    return (u32 *)([self denise]->pixelEngine.getNoise());
 }
 
 @end

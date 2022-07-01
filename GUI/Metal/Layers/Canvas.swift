@@ -232,6 +232,8 @@ class Canvas: Layer {
             
             buffer = amiga.denise.noise!
             sfTexture.replace(w: Int(HPIXELS), h: Int(VPIXELS), buffer: buffer)
+
+            currLOF = !prevLOF
             return
         }
 
