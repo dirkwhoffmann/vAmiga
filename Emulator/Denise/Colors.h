@@ -11,6 +11,11 @@
 
 #include "Aliases.h"
 
+struct RgbColor;
+struct YuvColor;
+struct AmigaColor;
+struct GpuColor;
+
 struct RgbColor {
 
     double r;
@@ -21,9 +26,9 @@ struct RgbColor {
     RgbColor(double rv, double gv, double bv) : r(rv), g(gv), b(bv) {}
     RgbColor(u8 rv, u8 gv, u8 bv) : r(rv / 255.0), g(gv / 255.0), b(bv / 255.0) {}
     RgbColor(u32 rgba) : RgbColor((u8)(rgba >> 24), (u8)(rgba >> 16), (u8)(rgba >> 8)) {}
-    RgbColor(const struct YuvColor &c);
-    RgbColor(const struct AmigaColor &c);
-    RgbColor(const struct GpuColor &c);
+    RgbColor(const YuvColor &c);
+    RgbColor(const AmigaColor &c);
+    RgbColor(const GpuColor &c);
 
     static const RgbColor black;
     static const RgbColor white;
@@ -48,9 +53,9 @@ struct YuvColor {
     YuvColor() : y(0), u(0), v(0) { }
     YuvColor(double yv, double uv, double vv) : y(yv), u(uv), v(vv) { }
     YuvColor(u8 yv, u8 uv, u8 vv) : y(yv / 255.0), u(uv / 255.0), v(vv / 255.0) { }
-    YuvColor(const struct RgbColor &c);
-    YuvColor(const struct AmigaColor &c) : YuvColor(RgbColor(c)) { }
-    YuvColor(const struct GpuColor &c) : YuvColor(RgbColor(c)) { }
+    YuvColor(const RgbColor &c);
+    YuvColor(const AmigaColor &c) : YuvColor(RgbColor(c)) { }
+    YuvColor(const GpuColor &c) : YuvColor(RgbColor(c)) { }
 
     static const YuvColor black;
     static const YuvColor white;
@@ -72,9 +77,9 @@ struct AmigaColor {
 
     AmigaColor() : rawValue(0) {}
     AmigaColor(u16 v) : rawValue(v) {}
-    AmigaColor(const struct RgbColor &c);
-    AmigaColor(const struct YuvColor &c) : AmigaColor(RgbColor(c)) { }
-    AmigaColor(const struct GpuColor &c);
+    AmigaColor(const RgbColor &c);
+    AmigaColor(const YuvColor &c) : AmigaColor(RgbColor(c)) { }
+    AmigaColor(const GpuColor &c);
 
     u16 r() const { return (rawValue >> 4) & 0xF0; }
     u16 g() const { return (rawValue >> 0) & 0xF0; }
@@ -101,8 +106,8 @@ struct GpuColor {
     GpuColor() : rawValue(0) {}
     GpuColor(u32 v) : rawValue(v) {}
     GpuColor(u64 v) : rawValue((u32)v) {}
-    GpuColor(const struct RgbColor &c);
-    GpuColor(const struct AmigaColor &c);
+    GpuColor(const RgbColor &c);
+    GpuColor(const AmigaColor &c);
     GpuColor(u8 r, u8 g, u8 b);
 
     static const GpuColor black;
@@ -114,7 +119,6 @@ struct GpuColor {
     static const GpuColor magenta;
     static const GpuColor cyan;
 
-    // Texel texel() { return Texel((u64)rawValue << 32 | rawValue); }
     GpuColor mix(const struct RgbColor &color, double weight) const;
     GpuColor tint(double weight) const { return mix(RgbColor::white, weight); }
     GpuColor shade(double weight) const { return mix(RgbColor::black, weight); }

@@ -196,8 +196,7 @@ PixelEngine::updateRGBA()
         adjustRGB(r, g, b);
 
         // Write the result into the register lookup table
-        auto rgba32 = HI_HI_LO_LO(0xFF, b, g, r);
-        rgba[col] = Texel((u64)rgba32 << 32 | rgba32);
+        rgba[col] = TEXEL(HI_HI_LO_LO(0xFF, b, g, r));
     }
 
     // Update all RGBA values that are cached in indexedRgba[]
@@ -422,8 +421,24 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
 
     if constexpr (sizeof(Texel) == 4) {
 
-        // TODO
-        fatalError;
+        for (Pixel i = from; i < to; i++) {
+
+            auto r1 = (indexedRgba[mbuf[i] >> 4]) >> 16 & 0xFF;
+            auto g1 = (indexedRgba[mbuf[i] >> 4]) >> 8 & 0xFF;
+            auto b1 = (indexedRgba[mbuf[i] >> 4]) >> 0 & 0xFF;
+
+            auto r2 = (indexedRgba[mbuf[i] & 0xf]) >> 16 & 0xFF;
+            auto g2 = (indexedRgba[mbuf[i] & 0xf]) >> 8 & 0xFF;
+            auto b2 = (indexedRgba[mbuf[i] & 0xf]) >> 0 & 0xFF;
+
+            auto r = (r1 + r2) / 2;
+            auto g = (g1 + g2) / 2;
+            auto b = (b1 + b2) / 2;
+
+            dst[i] = u32(0xFF << 24 | r << 16 | g << 8 | b);
+
+            // dst[i] = indexedRgba[mbuf[i] & 0xf];
+        }
 
     } else {
 
