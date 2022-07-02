@@ -226,7 +226,7 @@ Denise::drawOdd(Pixel offset)
     };
     
     u16 mask = masks[bpu()];
-    Pixel currentPixel = agnus.pos.pixel() + offset + 2;
+    Pixel pixel = agnus.pos.pixel() + offset + 2;
 
     u8 slices[16];
     extractSlicesOdd(slices);
@@ -240,27 +240,31 @@ Denise::drawOdd(Pixel offset)
             case LORES:
 
                 // Synthesize two lores pixels
-                assert(currentPixel + 1 < isizeof(bBuffer));
-                bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
-                currentPixel++;
-                bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
-                currentPixel++;
+                assert(pixel + 1 < isizeof(bBuffer));
+                bBuffer[pixel] = (bBuffer[pixel] & 0b101010) | index;
+                pixel++;
+                bBuffer[pixel] = (bBuffer[pixel] & 0b101010) | index;
+                pixel++;
                 break;
 
             case HIRES:
 
                 // Synthesize one hires pixel
-                assert(currentPixel < isizeof(bBuffer));
-                bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
-                currentPixel++;
+                assert(pixel < isizeof(bBuffer));
+                bBuffer[pixel] = (bBuffer[pixel] & 0b101010) | index;
+                pixel++;
                 break;
 
             case SHRES:
 
                 // Synthesize a superHires pixel
-                assert(currentPixel < isizeof(bBuffer));
-                bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
-                if (i % 2) currentPixel++;
+                assert(pixel < isizeof(bBuffer));
+                if (i % 2 == 0) {
+                    bBuffer[pixel] = u8((bBuffer[pixel] & 0b101111) | index << 4);
+                } else {
+                    bBuffer[pixel] = u8((bBuffer[pixel] & 0b111110) | index);
+                    pixel++;
+                }
                 break;
 
             default:
@@ -287,7 +291,7 @@ Denise::drawEven(Pixel offset)
     };
     
     u16 mask = masks[bpu()];
-    Pixel currentPixel = agnus.pos.pixel() + offset + 2;
+    Pixel pixel = agnus.pos.pixel() + offset + 2;
 
     u8 slices[16];
     extractSlicesEven(slices);
@@ -300,28 +304,32 @@ Denise::drawEven(Pixel offset)
 
             case LORES:
 
-                // Synthesize two lores pixels
-                assert(currentPixel + 1 < isizeof(bBuffer));
-                bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
-                currentPixel++;
-                bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
-                currentPixel++;
+                // Synthesize s lores pixel
+                assert(pixel + 1 < isizeof(bBuffer));
+                bBuffer[pixel] = (bBuffer[pixel] & 0b010101) | index;
+                pixel++;
+                bBuffer[pixel] = (bBuffer[pixel] & 0b010101) | index;
+                pixel++;
                 break;
 
             case HIRES:
 
-                // Synthesize one hires pixel
-                assert(currentPixel < isizeof(bBuffer));
-                bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
-                currentPixel++;
+                // Synthesize a hires pixel
+                assert(pixel < isizeof(bBuffer));
+                bBuffer[pixel] = (bBuffer[pixel] & 0b010101) | index;
+                pixel++;
                 break;
 
             case SHRES:
 
                 // Synthesize a superHires pixel
-                assert(currentPixel < isizeof(bBuffer));
-                bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
-                if (i % 2) currentPixel++;
+                assert(pixel < isizeof(bBuffer));
+                if (i % 2 == 0) {
+                    bBuffer[pixel] = u8((bBuffer[pixel] & 0b011111) | index << 4);
+                } else {
+                    bBuffer[pixel] = u8((bBuffer[pixel] & 0b111101) | index);
+                    pixel++;
+                }
                 break;
 
             default:

@@ -383,7 +383,9 @@ PixelEngine::colorize(isize line)
         RegChange &change = colChanges.elements[i];
 
         // Colorize a chunk of pixels
-        if (hamMode) {
+        if (denise.res == SHRES) {
+            colorizeSHRES(dst, pixel, trigger);
+        } else if (hamMode) {
             colorizeHAM(dst, pixel, trigger, hold);
         } else {
             colorize(dst, pixel, trigger);
@@ -410,6 +412,28 @@ PixelEngine::colorize(Texel *dst, Pixel from, Pixel to)
 
     for (Pixel i = from; i < to; i++) {
         dst[i] = indexedRgba[mbuf[i]];
+    }
+}
+
+void
+PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
+{
+    u8 *mbuf = denise.mBuffer;
+
+    if constexpr (sizeof(Texel) == 4) {
+
+        // TODO
+        fatalError;
+
+    } else {
+
+        for (Pixel i = from; i < to; i++) {
+
+            u32 *p = (u32 *)(dst + i);
+            p[0] = u32(indexedRgba[mbuf[i] >> 4]);
+            p[1] = u32(indexedRgba[mbuf[i] & 0xf]);
+        }
+
     }
 }
 

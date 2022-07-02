@@ -257,6 +257,7 @@ public:
 private:
     
     void colorize(Texel *dst, Pixel from, Pixel to);
+    void colorizeSHRES(Texel *dst, Pixel from, Pixel to);
     void colorizeHAM(Texel *dst, Pixel from, Pixel to, u16& ham);
     
     /* Hides some graphics layers. This function is an optional stage applied
