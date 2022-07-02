@@ -135,7 +135,7 @@ Sequencer::computeBplEventsSlow(const SigRecorder &sr, DDFState &state)
         
         assert(i < sigRecorder.count());
 
-        u16 signal = sigRecorder.elements[i];
+        auto signal = sigRecorder.elements[i];
         isize trigger = (isize)sigRecorder.keys[i];
         
         assert(trigger <= HPOS_CNT_NTSC);
@@ -221,7 +221,7 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
 }
 
 template <> void
-Sequencer::processSignal <false> (u16 signal, DDFState &state)
+Sequencer::processSignal <false> (u32 signal, DDFState &state)
 {
     //
     // OCS logic
@@ -229,7 +229,7 @@ Sequencer::processSignal <false> (u16 signal, DDFState &state)
 
     if (signal & SIG_CON) {
         
-        state.bmctl = (u8)(signal & 0xF);
+        state.bmctl = u8(HI_WORD(signal) >> 12);
         computeFetchUnit(state.bmctl);
     }
     switch (signal & (SIG_BMAPEN_CLR | SIG_BMAPEN_SET)) {
@@ -312,7 +312,7 @@ Sequencer::processSignal <false> (u16 signal, DDFState &state)
 }
 
 template <> void
-Sequencer::processSignal <true> (u16 signal, DDFState &state)
+Sequencer::processSignal <true> (u32 signal, DDFState &state)
 {
     //
     // ECS logic
@@ -320,7 +320,7 @@ Sequencer::processSignal <true> (u16 signal, DDFState &state)
     
     if (signal & SIG_CON) {
         
-        state.bmctl = (u8)(signal & 0xF);
+        state.bmctl = u8(HI_WORD(signal) >> 12);
         computeFetchUnit(state.bmctl);
     }
     switch (signal & (SIG_VFLOP_SET | SIG_VFLOP_CLR)) {

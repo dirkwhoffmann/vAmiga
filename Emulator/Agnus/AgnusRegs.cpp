@@ -320,7 +320,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
     if ((oldValue ^ newValue) & 0xF000) {
             
         // Record the change
-        sequencer.sigRecorder.insert(pos.h, SIG_CON | newValue >> 12);
+        sequencer.sigRecorder.insert(pos.h, HI_W_LO_W(newValue, SIG_CON));
         
         if (bpldma()) {
 

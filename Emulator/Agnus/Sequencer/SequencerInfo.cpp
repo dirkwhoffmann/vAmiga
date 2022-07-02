@@ -82,33 +82,11 @@ Sequencer::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Signals) {
         
-        auto name = [](u16 signal) -> string {
+        auto name = [](u32 signal) -> string {
             
             string result;
-            
-            if (signal & 0x10) {
-                
-                switch (signal & 0x1f) {
-                        
-                    case SIG_CON_L0:        result += "CON_L0 "; break;
-                    case SIG_CON_L1:        result += "CON_L1 "; break;
-                    case SIG_CON_L2:        result += "CON_L2 "; break;
-                    case SIG_CON_L3:        result += "CON_L3 "; break;
-                    case SIG_CON_L4:        result += "CON_L4 "; break;
-                    case SIG_CON_L5:        result += "CON_L5 "; break;
-                    case SIG_CON_L6:        result += "CON_L6 "; break;
-                    case SIG_CON_L7:        result += "CON_L7 "; break;
-                    case SIG_CON_H0:        result += "CON_H0 "; break;
-                    case SIG_CON_H1:        result += "CON_H1 "; break;
-                    case SIG_CON_H2:        result += "CON_H2 "; break;
-                    case SIG_CON_H3:        result += "CON_H3 "; break;
-                    case SIG_CON_H4:        result += "CON_H4 "; break;
-                    case SIG_CON_H5:        result += "CON_H5 "; break;
-                    case SIG_CON_H6:        result += "CON_H6 "; break;
-                    case SIG_CON_H7:        result += "CON_H7 "; break;
-                }
-            }
-            
+
+            if (signal & SIG_CON)           result += "CON ";
             if (signal & SIG_BMAPEN_CLR)    result += "BMAPEN_CLR ";
             if (signal & SIG_BMAPEN_SET)    result += "BMAPEN_SET ";
             if (signal & SIG_VFLOP_CLR)     result += "VFLOP_CLR ";

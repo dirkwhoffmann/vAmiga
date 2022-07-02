@@ -174,7 +174,7 @@ struct RegChangeRecorder : public util::SortedRingBuffer<RegChange, capacity>
 // Signal change recorder
 //
 
-struct SigRecorder : public util::SortedArray<u16, 256>
+struct SigRecorder : public util::SortedArray<u32, 256>
 {
     bool modified = false;
     
@@ -184,7 +184,7 @@ struct SigRecorder : public util::SortedArray<u16, 256>
         worker << this->modified << this->elements << this->w << this->keys;
     }
     
-    void insert(i64 key, u16 signal) {
+    void insert(i64 key, u32 signal) {
     
         modified = true;
         
@@ -199,7 +199,7 @@ struct SigRecorder : public util::SortedArray<u16, 256>
         SortedArray::insert(key, signal);
     }
     
-    void invalidate(i64 key, u16 signal) {
+    void invalidate(i64 key, u32 signal) {
         
         modified = true;
         

@@ -312,7 +312,7 @@ private:
     template <bool ecs> void computeBplEvents(isize strt, isize stop, DDFState &state);
 
     // Processes a signal change
-    template <bool ecs> void processSignal(u16 signal, DDFState &state);
+    template <bool ecs> void processSignal(u32 signal, DDFState &state);
  
     // Updates the jump table for the bplEvent table
     void updateBplJumpTable(i16 end = HPOS_MAX);
