@@ -164,7 +164,10 @@ template <bool ecs> void
 Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
 {
     isize mask = (state.bmctl & 0x8) ? 0b11 : 0b111;
-    
+
+    // TODO: CLEAN THIS UP
+    if (GET_BIT(agnus.bplcon0, 6)) mask = 0b1;
+
     for (isize j = strt; j < stop; j++) {
     
         assert(j >= 0 && j <= HPOS_MAX);
@@ -537,8 +540,8 @@ Sequencer::computeShresFetchUnit()
     fetch[1][1] = channels < 1 ? 0 : BPL_S1;
     fetch[1][2] = channels < 2 ? 0 : BPL_S2;
     fetch[1][3] = channels < 1 ? 0 : BPL_S1;
-    fetch[1][4] = channels < 2 ? 0 : BPL_S2_MOD;
-    fetch[1][5] = channels < 1 ? 0 : BPL_S1_MOD;
+    fetch[1][4] = channels < 2 ? 0 : BPL_S2;
+    fetch[1][5] = channels < 1 ? 0 : BPL_S1;
     fetch[1][6] = channels < 2 ? 0 : BPL_S2_MOD;
     fetch[1][7] = channels < 1 ? 0 : BPL_S1_MOD;
 }

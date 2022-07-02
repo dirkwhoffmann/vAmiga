@@ -455,9 +455,9 @@ public:
 private:
     
     // Core drawing routines
-    template <bool hiresMode> void drawOdd(Pixel offset);
-    template <bool hiresMode> void drawEven(Pixel offset);
-    template <bool hiresMode> void drawBoth(Pixel offset);
+    template <Resolution mode> void drawOdd(Pixel offset);
+    template <Resolution mode> void drawEven(Pixel offset);
+    template <Resolution mode> void drawBoth(Pixel offset);
 
     // Data type used by the translation functions
     typedef struct { u16 zpf1; u16 zpf2; bool prio; bool ham; } PFState;

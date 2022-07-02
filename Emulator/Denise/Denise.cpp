@@ -211,7 +211,7 @@ Denise::extractSlicesEven(u8 slices[16])
     }
 }
 
-template <bool hiresMode> void
+template <Resolution mode> void
 Denise::drawOdd(Pixel offset)
 {
     static constexpr u16 masks[7] = {
@@ -234,22 +234,37 @@ Denise::drawOdd(Pixel offset)
     for (isize i = 0; i < 16; i++) {
         
         u8 index = slices[i] & mask;
-        
-        if (hiresMode) {
-            
-            // Synthesize one hires pixel
-            assert(currentPixel < isizeof(bBuffer));
-            bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
-            currentPixel++;
-            
-        } else {
-            
-            // Synthesize two lores pixels
-            assert(currentPixel + 1 < isizeof(bBuffer));
-            bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
-            currentPixel++;
-            bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
-            currentPixel++;
+
+        switch (mode) {
+
+            case LORES:
+
+                // Synthesize two lores pixels
+                assert(currentPixel + 1 < isizeof(bBuffer));
+                bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
+                currentPixel++;
+                bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
+                currentPixel++;
+                break;
+
+            case HIRES:
+
+                // Synthesize one hires pixel
+                assert(currentPixel < isizeof(bBuffer));
+                bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
+                currentPixel++;
+                break;
+
+            case SHRES:
+
+                // Synthesize a superHires pixel
+                assert(currentPixel < isizeof(bBuffer));
+                bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
+                if (i % 2) currentPixel++;
+                break;
+
+            default:
+                fatalError;
         }
     }
  
@@ -257,7 +272,7 @@ Denise::drawOdd(Pixel offset)
     shiftReg[0] = shiftReg[2] = shiftReg[4] = 0;
 }
 
-template <bool hiresMode> void
+template <Resolution mode> void
 Denise::drawEven(Pixel offset)
 {    
     static constexpr u16 masks[7] = {
@@ -280,22 +295,37 @@ Denise::drawEven(Pixel offset)
     for (isize i = 0; i < 16; i++) {
 
         u8 index = slices[i] & mask;
-        
-        if (hiresMode) {
-            
-            // Synthesize one hires pixel
-            assert(currentPixel < isizeof(bBuffer));
-            bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
-            currentPixel++;
 
-        } else {
-            
-            // Synthesize two lores pixels
-            assert(currentPixel + 1 < isizeof(bBuffer));
-            bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
-            currentPixel++;
-            bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
-            currentPixel++;
+        switch (mode) {
+
+            case LORES:
+
+                // Synthesize two lores pixels
+                assert(currentPixel + 1 < isizeof(bBuffer));
+                bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
+                currentPixel++;
+                bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
+                currentPixel++;
+                break;
+
+            case HIRES:
+
+                // Synthesize one hires pixel
+                assert(currentPixel < isizeof(bBuffer));
+                bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
+                currentPixel++;
+                break;
+
+            case SHRES:
+
+                // Synthesize a superHires pixel
+                assert(currentPixel < isizeof(bBuffer));
+                bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
+                if (i % 2) currentPixel++;
+                break;
+
+            default:
+                fatalError;
         }
     }
  
@@ -303,11 +333,11 @@ Denise::drawEven(Pixel offset)
     shiftReg[1] = shiftReg[3] = shiftReg[5] = 0;
 }
 
-template <bool hiresMode> void
+template <Resolution mode> void
 Denise::drawBoth(Pixel offset)
 {
-    drawOdd<hiresMode>(offset);
-    drawEven<hiresMode>(offset);
+    drawOdd <mode> (offset);
+    drawEven <mode> (offset);
 }
 
 void
@@ -316,7 +346,7 @@ Denise::drawLoresOdd()
     if (armedOdd) {
 
         updateShiftRegistersOdd();
-        drawOdd <false> (pixelOffsetOdd);
+        drawOdd <LORES> (pixelOffsetOdd);
         armedOdd = false;
     }
 }
@@ -327,7 +357,7 @@ Denise::drawLoresEven()
     if (armedEven) {
         
         updateShiftRegistersEven();
-        drawEven <false> (pixelOffsetEven);
+        drawEven <LORES> (pixelOffsetEven);
         armedEven = false;
     }
 }
@@ -345,7 +375,7 @@ Denise::drawHiresOdd()
     if (armedOdd) {
 
         updateShiftRegistersOdd();
-        drawOdd <true> (pixelOffsetOdd);
+        drawOdd <HIRES> (pixelOffsetOdd);
         armedOdd = false;
     }
 }
@@ -356,7 +386,7 @@ Denise::drawHiresEven()
     if (armedEven) {
 
         updateShiftRegistersEven();
-        drawEven <true> (pixelOffsetEven);
+        drawEven <HIRES> (pixelOffsetEven);
         armedEven = false;
     }
 }
@@ -371,27 +401,23 @@ Denise::drawHiresBoth()
 void
 Denise::drawShresOdd()
 {
-    /*
     if (armedOdd) {
 
         updateShiftRegistersOdd();
         drawOdd <SHRES> (pixelOffsetOdd);
         armedOdd = false;
     }
-    */
 }
 
 void
 Denise::drawShresEven()
 {
-    /*
     if (armedEven) {
 
         updateShiftRegistersEven();
         drawEven <SHRES> (pixelOffsetEven);
         armedEven = false;
     }
-    */
 }
 
 void
