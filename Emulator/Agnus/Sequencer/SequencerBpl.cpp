@@ -163,10 +163,17 @@ Sequencer::computeBplEventsSlow(const SigRecorder &sr, DDFState &state)
 template <bool ecs> void
 Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
 {
-    isize mask = (state.bmctl() & 0x8) ? 0b11 : 0b111;
+    isize mask;
 
-    // TODO: CLEAN THIS UP
-    if (GET_BIT(agnus.bplcon0, 6)) mask = 0b1;
+    switch (agnus.resolution(state.bplcon0)) {
+
+        case LORES: mask = 0b111; break;
+        case HIRES: mask = 0b011; break;
+        case SHRES: mask = 0b001; break;
+
+        default:
+            fatalError;
+    }
 
     for (isize j = strt; j < stop; j++) {
     
