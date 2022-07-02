@@ -106,6 +106,9 @@ public:
     u16 initialBplcon1;
     u16 initialBplcon2;
 
+    // Bitplane resolution (derived from bplcon0)
+    Resolution res;
+
     // Extracted from BPLCON1 to emulate horizontal scrolling
     Pixel pixelOffsetOdd;
     Pixel pixelOffsetEven;
@@ -366,6 +369,7 @@ private:
         << initialBplcon0
         << initialBplcon1
         << initialBplcon2
+        << res
         << pixelOffsetOdd
         << pixelOffsetEven
         << borderColor
@@ -409,7 +413,17 @@ public:
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
     
-    
+
+    //
+    // Querying chip properties
+    //
+
+public:
+
+    bool isOCS() const { return config.revision == DENISE_OCS; }
+    bool isECS() const { return config.revision == DENISE_ECS; }
+
+
     //
     // Analyzing
     //
@@ -643,7 +657,10 @@ public:
     //
 
 private:
-    
+
+    // Computes the bitmap resolution from a given BPLCON0 value
+    Resolution resolution(u16 v);
+
     // Computes the z buffer depth for playfield 1 or 2
     static u16 zPF(u16 prioBits);
     static u16 zPF1(u16 bplcon2) { return zPF(pf1px(bplcon2)); }
@@ -658,7 +675,6 @@ private:
      * BPLxDAT registers at the end of a fetch unit. It is computed out of the
      * three BPU bits stored in BPLCON0, but not identical with them. The value
      * differs if the BPU bits reflect an invalid bit pattern.
-     * Compare with Agnus::bpu() which returns the Agnus view of the BPU bits.
      */
     static u8 bpu(u16 v);
     u8 bpu() const { return bpu(bplcon0); }

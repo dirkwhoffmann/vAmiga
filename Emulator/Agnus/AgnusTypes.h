@@ -12,7 +12,7 @@
 #include "Aliases.h"
 #include "BeamTypes.h"
 #include "BusTypes.h"
-#include "AgnusTypes.h"
+#include "DeniseTypes.h"
 #include "SequencerTypes.h"
 #include "Reflection.h"
 

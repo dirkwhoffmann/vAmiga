@@ -37,8 +37,8 @@ Sequencer::_dump(Category category, std::ostream& os) const
         os << bol(ddf.bprun) << " (" << bol(ddfInitial.bprun) << ")" << std::endl;
         os << tab("LASTFU");
         os << bol(ddf.lastFu) << " (" << bol(ddfInitial.lastFu) << ")" << std::endl;
-        os << tab("BMCTL");
-        os << hex(ddf.bmctl) << " (" << hex(ddfInitial.bmctl) << ")" << std::endl;
+        os << tab("BPLCON0");
+        os << hex(ddf.bplcon0) << " (" << hex(ddfInitial.bplcon0) << ")" << std::endl;
         os << tab("CNT");
         os << dec(ddf.cnt) << " (" << dec(ddfInitial.cnt) << ")" << std::endl;
     }

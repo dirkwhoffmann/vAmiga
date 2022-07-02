@@ -47,8 +47,8 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
         
     // Update the DMA and BMCTL bits
     state.bmapen = agnus.bpldma(agnus.dmaconInitial);
-    state.bmctl = agnus.bplcon0Initial >> 12;
-    computeFetchUnit(state.bmctl);
+    state.bplcon0 = agnus.bplcon0Initial;
+    computeFetchUnit(state.bmctl());
     
     // Evaluate the current state of the vertical DIW flipflop
     if (!state.bpv) { state.bprun = false; state.cnt = 0; }
@@ -90,7 +90,7 @@ Sequencer::computeBplEventsFast(const SigRecorder &sr, DDFState &state)
     for (isize i = 0; i < HPOS_CNT; i++) bplEvent[i] = EVENT_NONE;
     
     // Add drawing flags
-    if (state.bmctl & 0x8) {
+    if (state.bmctl() & 0x8) {
 
         auto odd = agnus.scrollOdd & 0b11;
         auto even = agnus.scrollEven & 0b11;
@@ -163,7 +163,7 @@ Sequencer::computeBplEventsSlow(const SigRecorder &sr, DDFState &state)
 template <bool ecs> void
 Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
 {
-    isize mask = (state.bmctl & 0x8) ? 0b11 : 0b111;
+    isize mask = (state.bmctl() & 0x8) ? 0b11 : 0b111;
 
     // TODO: CLEAN THIS UP
     if (GET_BIT(agnus.bplcon0, 6)) mask = 0b1;
@@ -229,8 +229,8 @@ Sequencer::processSignal <false> (u32 signal, DDFState &state)
 
     if (signal & SIG_CON) {
         
-        state.bmctl = u8(HI_WORD(signal) >> 12);
-        computeFetchUnit(state.bmctl);
+        state.bplcon0 = HI_WORD(signal);
+        computeFetchUnit(state.bmctl());
     }
     switch (signal & (SIG_BMAPEN_CLR | SIG_BMAPEN_SET)) {
             
@@ -320,8 +320,8 @@ Sequencer::processSignal <true> (u32 signal, DDFState &state)
     
     if (signal & SIG_CON) {
         
-        state.bmctl = u8(HI_WORD(signal) >> 12);
-        computeFetchUnit(state.bmctl);
+        state.bplcon0 = HI_WORD(signal);
+        computeFetchUnit(state.bmctl());
     }
     switch (signal & (SIG_VFLOP_SET | SIG_VFLOP_CLR)) {
             

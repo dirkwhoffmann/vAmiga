@@ -193,7 +193,10 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     
     // Update value
     bplcon0 = newValue;
-    
+
+    // Determine the new bitmap resolution
+    res = resolution(newValue);
+
     // Update border color index, because the ECSENA bit might have changed
     updateBorderColor();
     
@@ -201,8 +204,8 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     u16 newBpuBits = (newValue >> 12) & 0b111;
     
     // Report a suspicious BPU value
-    if (newBpuBits > (hires(bplcon0) ? 4 : 6)) {
-        xfiles("BPLCON0: BPU = %d\n", newBpuBits);
+    if (newBpuBits > ((res == LORES) ? 6 : (res == HIRES) ? 4 : 2)) {
+        xfiles("BPLCON0: BPU set to irregular value %d\n", newBpuBits);
     }
 }
 
@@ -394,6 +397,18 @@ Denise::pokeCOLORxx(u16 value)
 
     // Record the color change
     pixelEngine.colChanges.insert(agnus.pos.pixel(), RegChange { reg, value } );
+}
+
+Resolution
+Denise::resolution(u16 v)
+{
+    if (GET_BIT(v,6) && isECS()) {
+        return SHRES;
+    } else if (GET_BIT(v,15)) {
+        return HIRES;
+    } else {
+        return LORES;
+    }
 }
 
 u16

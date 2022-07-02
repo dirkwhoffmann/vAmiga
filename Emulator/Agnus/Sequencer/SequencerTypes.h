@@ -36,7 +36,7 @@ struct DDFState
     bool bprun = false;
     bool lastFu = false;
     bool stopreq = false;
-    u8   bmctl = 0;
+    u16  bplcon0 = 0;
     u8   cnt = 0;
 
     bool operator==(const DDFState &rhs) const
@@ -51,7 +51,7 @@ struct DDFState
         this->bprun == rhs.bprun &&
         this->lastFu == rhs.lastFu &&
         this->stopreq == rhs.stopreq &&
-        this->bmctl == rhs.bmctl &&
+        this->bplcon0 == rhs.bplcon0 &&
         this->cnt == rhs.cnt;
     }
 
@@ -74,9 +74,11 @@ struct DDFState
         << bprun
         << lastFu
         << stopreq
-        << bmctl
+        << bplcon0
         << cnt;
     }
+
+    u8 bmctl() { return u8(bplcon0 >> 12); }
 };
 
 #endif

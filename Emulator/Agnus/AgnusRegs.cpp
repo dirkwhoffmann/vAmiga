@@ -316,6 +316,9 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
 {
     trace(DMA_DEBUG | SEQ_DEBUG, "setBPLCON0(%04x,%04x)\n", oldValue, newValue);
 
+    // Determine the new bitmap resolution
+    res = resolution(newValue);
+
     // Check if the hires bit or one of the BPU bits have been modified
     if ((oldValue ^ newValue) & 0xF000) {
             

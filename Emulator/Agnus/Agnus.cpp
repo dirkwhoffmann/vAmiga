@@ -204,6 +204,18 @@ Agnus::slowRamIsMirroredIn() const
     }
 }
 
+Resolution
+Agnus::resolution(u16 v)
+{
+    if (GET_BIT(v,6) && isECS()) {
+        return SHRES;
+    } else if (GET_BIT(v,15)) {
+        return HIRES;
+    } else {
+        return LORES;
+    }
+}
+
 void
 Agnus::execute()
 {
@@ -659,8 +671,8 @@ Agnus::hsyncHandler()
     denise.hsyncHandler(vpos);
     dmaDebugger.hsyncHandler(vpos);
 
-    // Encode a HIRES / LORES marker in the first HBLANK pixel
-    REPLACE_BIT(*pixelEngine.workingPtr(vpos), 28, hires());
+    // Encode a LORES marker in the first HBLANK pixel
+    REPLACE_BIT(*pixelEngine.workingPtr(vpos), 28, res != LORES);
 
     // Call the vsyncHandler once we've finished a frame
     if (pos.v == 0) vsyncHandler();
