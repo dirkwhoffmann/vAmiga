@@ -141,7 +141,13 @@ Denise::setConfigItem(Option option, i64 value)
 void
 Denise::updateSprCoords(isize x)
 {
-    
+    // Assemble the horizontal sprite coordinate
+    sprhpos[x] = u16((sprpos[x] & 0xFF) << 2 |  // SH1 - SH8
+                     (sprctl[x] & 0x01) << 1 |  // SH0
+                     (sprctl[x] & 0x10) >> 4);  // SHSH1 (ECS only)
+
+    // Convert to a pixel position
+    sprhppos[x] = sprhpos[x] + 2 - 4 * HBLANK_MIN;
 }
 
 bool
@@ -704,6 +710,7 @@ Denise::drawSpritePair()
                     setSPRxPOS(sprite1, change.value);
                     assert(sprpos[sprite1] == change.value);
                     strt1 = getSprhppos<sprite1>();
+                    assert(strt1 == sprhppos[sprite1]);
                     break;
                     
                 case SET_SPR0POS + sprite2:
@@ -711,6 +718,7 @@ Denise::drawSpritePair()
                     setSPRxPOS(sprite2, change.value);
                     assert(sprpos[sprite2] == change.value);
                     strt2 = getSprhppos<sprite2>();
+                    assert(strt2 == sprhppos[sprite2]);
                     break;
                     
                 case SET_SPR0CTL + sprite1:
@@ -718,6 +726,7 @@ Denise::drawSpritePair()
                     setSPRxCTL(sprite1, change.value);
                     assert(sprctl[sprite1] == change.value);
                     strt1 = getSprhppos<sprite1>();
+                    assert(strt1 == sprhppos[sprite1]);
                     CLR_BIT(armed, sprite1);
                     break;
                     
@@ -726,6 +735,7 @@ Denise::drawSpritePair()
                     setSPRxCTL(sprite2, change.value);
                     assert(sprctl[sprite2] == change.value);
                     strt2 = getSprhppos<sprite2>();
+                    assert(strt2 == sprhppos[sprite2]);
                     CLR_BIT(armed, sprite2);
                     break;
 

@@ -169,6 +169,10 @@ public:
     u16 sprpos[8];
     u16 sprctl[8];
 
+    // Horizontal (pixel) coordinates of all 8 sprites
+    i16 sprhpos[8];
+    i16 sprhppos[8];
+
     // The serial shift registers of all 8 sprites
     u16 ssra[8];
     u16 ssrb[8];
@@ -387,6 +391,8 @@ private:
         << sprdatb
         << sprpos
         << sprctl
+        << sprhpos
+        << sprhppos
         << ssra
         << ssrb
         << armed
