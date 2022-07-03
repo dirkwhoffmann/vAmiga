@@ -452,34 +452,23 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
 
     if constexpr (sizeof(Texel) == 4) {
 
+        // Melt two super-hires pixels into a single texel
         for (Pixel i = from; i < to; i++) {
-
-            auto r1 = (palette[mbuf[i] >> 4]) >> 16 & 0xFF;
-            auto g1 = (palette[mbuf[i] >> 4]) >> 8 & 0xFF;
-            auto b1 = (palette[mbuf[i] >> 4]) >> 0 & 0xFF;
-
-            auto r2 = (palette[mbuf[i] & 0xf]) >> 16 & 0xFF;
-            auto g2 = (palette[mbuf[i] & 0xf]) >> 8 & 0xFF;
-            auto b2 = (palette[mbuf[i] & 0xf]) >> 0 & 0xFF;
-
-            auto r = (r1 + r2) / 2;
-            auto g = (g1 + g2) / 2;
-            auto b = (b1 + b2) / 2;
-
-            dst[i] = u32(0xFF << 24 | r << 16 | g << 8 | b);
-
-            // dst[i] = indexedRgba[mbuf[i] & 0xf];
+            dst[i] = palette[64 + mbuf[i]];
         }
 
     } else {
 
+        // Map each super-hires pixel to a seperate texel
         for (Pixel i = from; i < to; i++) {
 
-            u32 *p = (u32 *)(dst + i);
-            p[0] = u32(palette[mbuf[i] >> 4]);
-            p[1] = u32(palette[mbuf[i] & 0xf]);
-        }
+            auto pix1 = mbuf[i] >> 2;
+            auto pix2 = mbuf[i] & 3;
 
+            u32 *p = (u32 *)(dst + i);
+            p[0] = u32(palette[pix1 | pix1 << 2]);
+            p[1] = u32(palette[pix2 | pix2 << 2]);
+        }
     }
 }
 

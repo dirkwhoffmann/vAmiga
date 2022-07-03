@@ -110,7 +110,12 @@ AmigaColor::ehb() const
 AmigaColor
 AmigaColor::shr() const
 {
-    return AmigaColor { u8(r & 0xC), u8(g & 0xC), u8(b & 0xC) };
+    return AmigaColor {
+
+        u8((r & 0xC) | r >> 2),
+        u8((g & 0xC) | g >> 2),
+        u8((b & 0xC) | b >> 2)
+    };
 }
 
 AmigaColor

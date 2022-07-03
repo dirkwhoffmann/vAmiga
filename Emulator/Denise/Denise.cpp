@@ -260,7 +260,7 @@ Denise::drawOdd(Pixel offset)
                 // Synthesize a superHires pixel
                 assert(pixel < isizeof(bBuffer));
                 if (i % 2 == 0) {
-                    bBuffer[pixel] = u8((bBuffer[pixel] & 0b101111) | index << 4);
+                    bBuffer[pixel] = u8((bBuffer[pixel] & 0b111011) | index << 2);
                 } else {
                     bBuffer[pixel] = u8((bBuffer[pixel] & 0b111110) | index);
                     pixel++;
@@ -325,7 +325,7 @@ Denise::drawEven(Pixel offset)
                 // Synthesize a superHires pixel
                 assert(pixel < isizeof(bBuffer));
                 if (i % 2 == 0) {
-                    bBuffer[pixel] = u8((bBuffer[pixel] & 0b011111) | index << 4);
+                    bBuffer[pixel] = u8((bBuffer[pixel] & 0b110111) | index << 2);
                 } else {
                     bBuffer[pixel] = u8((bBuffer[pixel] & 0b111101) | index);
                     pixel++;
