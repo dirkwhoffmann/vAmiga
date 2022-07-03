@@ -176,11 +176,14 @@ PixelEngine::setColor(isize reg, u16 value)
     switch (reg) {
 
         case 0:
-        
+
             palette[64] = colorSpace[newColor.shr().rawValue()];
             palette[65] = colorSpace[newColor.mix(color[1]).rawValue()];
             palette[66] = colorSpace[newColor.mix(color[2]).rawValue()];
             palette[67] = colorSpace[newColor.mix(color[3]).rawValue()];
+            palette[68] = colorSpace[newColor.mix(color[1]).rawValue()];
+            palette[72] = colorSpace[newColor.mix(color[2]).rawValue()];
+            palette[76] = colorSpace[newColor.mix(color[3]).rawValue()];
             break;
 
         case 1:
@@ -189,6 +192,9 @@ PixelEngine::setColor(isize reg, u16 value)
             palette[69] = colorSpace[newColor.shr().rawValue()];
             palette[70] = colorSpace[newColor.mix(color[2]).rawValue()];
             palette[71] = colorSpace[newColor.mix(color[3]).rawValue()];
+            palette[65] = colorSpace[newColor.mix(color[0]).rawValue()];
+            palette[73] = colorSpace[newColor.mix(color[2]).rawValue()];
+            palette[77] = colorSpace[newColor.mix(color[3]).rawValue()];
             break;
 
         case 2:
@@ -197,6 +203,9 @@ PixelEngine::setColor(isize reg, u16 value)
             palette[73] = colorSpace[newColor.mix(color[1]).rawValue()];
             palette[74] = colorSpace[newColor.shr().rawValue()];
             palette[75] = colorSpace[newColor.mix(color[3]).rawValue()];
+            palette[66] = colorSpace[newColor.mix(color[0]).rawValue()];
+            palette[70] = colorSpace[newColor.mix(color[1]).rawValue()];
+            palette[78] = colorSpace[newColor.mix(color[3]).rawValue()];
             break;
 
         case 3:
@@ -205,6 +214,9 @@ PixelEngine::setColor(isize reg, u16 value)
             palette[77] = colorSpace[newColor.mix(color[1]).rawValue()];
             palette[78] = colorSpace[newColor.mix(color[2]).rawValue()];
             palette[79] = colorSpace[newColor.shr().rawValue()];
+            palette[67] = colorSpace[newColor.mix(color[0]).rawValue()];
+            palette[71] = colorSpace[newColor.mix(color[1]).rawValue()];
+            palette[75] = colorSpace[newColor.mix(color[2]).rawValue()];
             break;
 
         case 16:
