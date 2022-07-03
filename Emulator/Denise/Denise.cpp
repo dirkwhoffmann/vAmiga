@@ -605,12 +605,30 @@ Denise::translateDPF(Pixel from, Pixel to, PFState &state)
 void
 Denise::drawSprites()
 {
+    res == SHRES ? drawSprites <SHRES> () : drawSprites <LORES> ();
+
+    /*
+    switch (res) {
+
+        case LORES: drawSprites <LORES> (); break;
+        case HIRES: drawSprites <HIRES> (); break;
+        case SHRES: drawSprites <SHRES> (); break;
+
+        default:
+            fatalError;
+    }
+    */
+}
+
+template <Resolution R> void
+Denise::drawSprites()
+{
     if (wasArmed) {
         
-        if (wasArmed & 0b11000000) drawSpritePair <3> ();
-        if (wasArmed & 0b00110000) drawSpritePair <2> ();
-        if (wasArmed & 0b00001100) drawSpritePair <1> ();
-        if (wasArmed & 0b00000011) drawSpritePair <0> ();
+        if (wasArmed & 0b11000000) drawSpritePair <3,R> ();
+        if (wasArmed & 0b00110000) drawSpritePair <2,R> ();
+        if (wasArmed & 0b00001100) drawSpritePair <1,R> ();
+        if (wasArmed & 0b00000011) drawSpritePair <0,R> ();
         
         // Record sprite data in debug mode
         if (amiga.inDebugMode()) debugger.recordSprites(wasArmed);
@@ -628,7 +646,7 @@ Denise::drawSprites()
     if (!sprChanges[0].isEmpty()) replaySpriteRegChanges <0> ();
 }
 
-template <isize pair> void
+template <isize pair, Resolution R> void
 Denise::drawSpritePair()
 {
     constexpr isize sprite1 = 2 * pair;
@@ -647,7 +665,7 @@ Denise::drawSpritePair()
             RegChange &change = sprChanges[pair].elements[i];
             
             // Draw a chunk of pixels
-            drawSpritePair <pair> (strt, trigger, strt1, strt2);
+            drawSpritePair <pair,R> (strt, trigger, strt1, strt2);
             strt = trigger;
             
             // Apply the recorded register change
@@ -708,7 +726,7 @@ Denise::drawSpritePair()
     }
     
     // Draw until the end of the line
-    drawSpritePair <pair> (strt, sizeof(mBuffer) - 1, strt1, strt2);
+    drawSpritePair <pair,R> (strt, sizeof(mBuffer) - 1, strt1, strt2);
     
     sprChanges[pair].clear();
 }
@@ -774,7 +792,7 @@ Denise::replaySpriteRegChanges()
     sprChanges[pair].clear();
 }
 
-template <isize pair> void
+template <isize pair, Resolution R> void
 Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2)
 {
     assert(pair < 4);
@@ -792,8 +810,9 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2)
     bool armed2 = GET_BIT(armed, sprite2);
 
     bool attached = GET_BIT(sprctl[sprite2], 7);
+    Pixel offset = R == SHRES ? 1 : 2;
 
-    for (Pixel hpos = hstrt; hpos < hstop; hpos += 2) {
+    for (Pixel hpos = hstrt; hpos < hstop; hpos += offset) {
 
         if (hpos == strt1 && armed1) {
             
@@ -812,12 +831,12 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2)
                                 
                 if (attached) {
                     
-                    drawAttachedSpritePixelPair<sprite2>(hpos);
+                    drawAttachedSpritePixelPair <sprite2,R> (hpos);
                     
                 } else {
                     
-                    drawSpritePixel <sprite1> (hpos);
-                    drawSpritePixel <sprite2> (hpos);
+                    drawSpritePixel <sprite1,R> (hpos);
+                    drawSpritePixel <sprite2,R> (hpos);
                 }
             }
             
@@ -841,7 +860,7 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2)
     }
 }
 
-template <isize x> void
+template <isize x, Resolution R> void
 Denise::drawSpritePixel(Pixel hpos)
 {
     assert(hpos >= spriteClipBegin && hpos < spriteClipEnd);
@@ -855,14 +874,22 @@ Denise::drawSpritePixel(Pixel hpos)
         u16 z = Z_SP[x];
         u8 base = 16 + 2 * (x & 6);
 
-        if (z > zBuffer[hpos]) mBuffer[hpos] = base | col;
-        if (z > zBuffer[hpos + 1]) mBuffer[hpos + 1] = base | col;
-        zBuffer[hpos] |= z;
-        zBuffer[hpos + 1] |= z;
+        if constexpr (R == SHRES) {
+
+            if (z > zBuffer[hpos]) mBuffer[hpos] = base | col;
+            zBuffer[hpos] |= z;
+
+        } else {
+
+            if (z > zBuffer[hpos]) mBuffer[hpos] = base | col;
+            if (z > zBuffer[hpos + 1]) mBuffer[hpos + 1] = base | col;
+            zBuffer[hpos] |= z;
+            zBuffer[hpos + 1] |= z;
+        }
     }
 }
 
-template <isize x> void
+template <isize x, Resolution R> void
 Denise::drawAttachedSpritePixelPair(Pixel hpos)
 {
     assert(IS_ODD(x));

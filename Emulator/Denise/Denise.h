@@ -523,18 +523,19 @@ private:
     
     // Draws all sprites
     void drawSprites();
-    
+    template <Resolution R> void drawSprites();
+
     // Draws an sprite pair. Called by drawSprites()
-    template <isize pair> void drawSpritePair();
-    template <isize pair> void drawSpritePair(Pixel hstrt, Pixel hstop,
-                                              Pixel strt1, Pixel strt2);
+    template <isize pair, Resolution R> void drawSpritePair();
+    template <isize pair, Resolution R> void drawSpritePair(Pixel hstrt, Pixel hstop,
+                                                            Pixel strt1, Pixel strt2);
     
     // Replays all recorded sprite register changes
     template <isize pair> void replaySpriteRegChanges();
 
     // Draws a single sprite pixel
-    template <isize x> void drawSpritePixel(Pixel hpos);
-    template <isize x> void drawAttachedSpritePixelPair(Pixel hpos);
+    template <isize x, Resolution R> void drawSpritePixel(Pixel hpos);
+    template <isize x, Resolution R> void drawAttachedSpritePixelPair(Pixel hpos);
 
     
     //

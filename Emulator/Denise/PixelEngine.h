@@ -185,6 +185,7 @@ public:
     
     // Changes one of the 32 Amiga color registers
     void setColor(isize reg, u16 value);
+    void setColor(isize reg, AmigaColor value);
 
     // Returns a color value in Amiga format
     u16 getColor(isize nr) const { return colreg[nr].rawValue(); }

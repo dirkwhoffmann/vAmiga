@@ -164,9 +164,6 @@ PixelEngine::setColor(isize reg, u16 value)
     assert(reg < 32);
     AmigaColor color(value);
 
-    // Only proceed if the color changes
-    // if (colreg[reg] == color) return;
-
     colreg[reg] = color;
 
     // Update standard palette entry
@@ -208,6 +205,17 @@ PixelEngine::setColor(isize reg, u16 value)
             palette[77] = rgba[color.mix(colreg[1]).rawValue()];
             palette[78] = rgba[color.mix(colreg[2]).rawValue()];
             palette[79] = rgba[color.shr().rawValue()];
+            break;
+
+        case 16:
+        case 17:
+        case 18:
+        case 19:
+
+            palette[64 + reg] =
+            palette[68 + reg] =
+            palette[72 + reg] =
+            palette[76 + reg] = rgba[color.shr().rawValue()];
             break;
     }
 }
@@ -381,14 +389,18 @@ PixelEngine::applyRegisterChange(const RegChange &change)
             break;
 
         case 0x100: // BPLCON0
-            
+
             hamMode = Denise::ham(change.value);
             break;
             
         default: // It must be a color register then
             
-            assert(change.addr >= 0x180 && change.addr <= 0x1BE);
-            setColor((change.addr - 0x180) >> 1, change.value);
+            auto nr = (change.addr - 0x180) >> 1;
+            assert(nr < 32);
+
+            if (colreg[nr].rawValue() != change.value) {
+                setColor(nr, change.value);
+            }
             break;
     }
 }
