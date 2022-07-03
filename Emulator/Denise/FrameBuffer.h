@@ -12,6 +12,7 @@
 #include "FrameBufferTypes.h"
 #include "Buffer.h"
 #include "Constants.h"
+#include "Colors.h"
 
 using util::Buffer;
 

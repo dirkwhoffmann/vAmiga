@@ -12,11 +12,11 @@
 
 RgbColor::RgbColor(const AmigaColor &c)
 {
-    r = ((c.rawValue >> 4) & 0xF0) / 255.0;
-    g = (c.rawValue & 0xF0) / 255.0;
-    b = ((c.rawValue << 4) & 0xF0) / 255.0;
-
+    r = c.r / 15.0;
+    g = c.g / 15.0;
+    b = c.b / 15.0;
 }
+
 RgbColor::RgbColor(const GpuColor &c)
 {
     r = (c.rawValue & 0xFF) / 255.0;
@@ -80,20 +80,16 @@ const YuvColor YuvColor::cyan(RgbColor::cyan);
 
 AmigaColor::AmigaColor(const GpuColor &c)
 {
-    auto r = c.rawValue & 0x0000F0;
-    auto g = c.rawValue & 0x00F000;
-    auto b = c.rawValue & 0xF00000;
-
-    rawValue = (u16)(r << 4 | g | b >> 4);
+    r = u8(c.rawValue >> 4  & 0xF);
+    g = u8(c.rawValue >> 12 & 0xF);
+    b = u8(c.rawValue >> 20 & 0xF);
 }
 
 AmigaColor::AmigaColor(const struct RgbColor &c)
 {
-    auto r = (u8)(c.r * 0xF);
-    auto g = (u8)(c.g * 0xF);
-    auto b = (u8)(c.b * 0xF);
-
-    rawValue = (u16)(r << 8 | g << 4 | b);
+    r = u8(c.r * 0xF);
+    g = u8(c.g * 0xF);
+    b = u8(c.b * 0xF);
 }
 
 const AmigaColor AmigaColor::black(RgbColor::black);
@@ -111,28 +107,23 @@ const AmigaColor AmigaColor::cyan(RgbColor::cyan);
 
 GpuColor::GpuColor(const AmigaColor &c)
 {
-    auto a = 0xFF;
-    auto r = c.rawValue & 0xF00;
-    auto g = c.rawValue & 0x0F0;
-    auto b = c.rawValue & 0x00F;
-
-    rawValue = (u32)(a << 24 | b << 20 | g << 8 | r >> 4);
+    rawValue = u32(0xFF << 24 | c.b << 20 | c.g << 12 | c.r << 4);
 }
 
 GpuColor::GpuColor(const RgbColor &c)
 {
     auto a = 255;
-    auto r = (u8)(c.r * 255);
-    auto g = (u8)(c.g * 255);
-    auto b = (u8)(c.b * 255);
+    auto r = u8(c.r * 255);
+    auto g = u8(c.g * 255);
+    auto b = u8(c.b * 255);
 
-    rawValue = (u32)(a << 24 | b << 16 | g << 8 | r);
+    rawValue = u32(a << 24 | b << 16 | g << 8 | r);
 }
 
 GpuColor::GpuColor(u8 r, u8 g, u8 b)
 {
     auto a = 255;
-    rawValue = (u32)(a << 24 | b << 16 | g << 8 | r);
+    rawValue = u32(a << 24 | b << 16 | g << 8 | r);
 }
 
 const GpuColor GpuColor::black(RgbColor::black);

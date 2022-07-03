@@ -200,7 +200,7 @@ PixelEngine::updateRGBA()
     }
 
     // Update all RGBA values that are cached in indexedRgba[]
-    for (isize i = 0; i < 32; i++) setColor(i, colreg[i]);
+    for (isize i = 0; i < 32; i++) setColor(i, colreg[i].rawValue());
 }
 
 void
@@ -370,7 +370,7 @@ PixelEngine::colorize(isize line)
     Pixel pixel = 0;
 
     // Initialize the HAM mode hold register with the current background color
-    u16 hold = colreg[0];
+    AmigaColor hold = colreg[0];
 
     // Add a dummy register change to ensure we draw until the line end
     colChanges.insert(HPIXELS, RegChange { SET_NONE, 0 } );
@@ -453,7 +453,7 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
 }
 
 void
-PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, u16& ham)
+PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
 {
     u8 *bbuf = denise.bBuffer;
     u8 *ibuf = denise.iBuffer;
@@ -473,20 +473,17 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, u16& ham)
 
             case 0b01: // Modify blue
 
-                ham &= 0xFF0;
-                ham |= (index & 0b1111);
+                ham.b = index & 0xF;
                 break;
 
             case 0b10: // Modify red
 
-                ham &= 0x0FF;
-                ham |= (index & 0b1111) << 8;
+                ham.r = index & 0xF;
                 break;
 
             case 0b11: // Modify green
 
-                ham &= 0xF0F;
-                ham |= (index & 0b1111) << 4;
+                ham.g = index & 0xF;
                 break;
 
             default:
@@ -495,9 +492,9 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, u16& ham)
 
         // Synthesize pixel
         if (denise.spritePixelIsVisible(i)) {
-            dst[i] = rgba[colreg[mbuf[i]]];
+            dst[i] = indexedRgba[mbuf[i]];
         } else {
-            dst[i] = rgba[ham];
+            dst[i] = rgba[ham.rawValue()];
         }
     }
 }

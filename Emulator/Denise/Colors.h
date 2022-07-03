@@ -25,7 +25,7 @@ struct RgbColor {
     RgbColor() : r(0), g(0), b(0) {}
     RgbColor(double rv, double gv, double bv) : r(rv), g(gv), b(bv) {}
     RgbColor(u8 rv, u8 gv, u8 bv) : r(rv / 255.0), g(gv / 255.0), b(bv / 255.0) {}
-    RgbColor(u32 rgba) : RgbColor((u8)(rgba >> 24), (u8)(rgba >> 16), (u8)(rgba >> 8)) {}
+    RgbColor(u32 rgba) : RgbColor(u8(rgba >> 24), u8(rgba >> 16), u8(rgba >> 8)) {}
     RgbColor(const YuvColor &c);
     RgbColor(const AmigaColor &c);
     RgbColor(const GpuColor &c);
@@ -73,17 +73,20 @@ struct YuvColor {
 
 struct AmigaColor {
 
-    u16 rawValue;
+    u8 r;
+    u8 g;
+    u8 b;
 
-    AmigaColor() : rawValue(0) {}
-    AmigaColor(u16 v) : rawValue(v) {}
+    template <class W> void operator<<(W& worker) { worker << r << g << b; }
+
+    AmigaColor() : r(0), g(0), b(0) {}
+    AmigaColor(u8 rv, u8 gv, u8 bv) : r(rv & 0xF), g(gv & 0xF), b(bv & 0xF) {}
+    AmigaColor(u16 rgb) : AmigaColor(u8(rgb >> 8), u8(rgb >> 4), u8(rgb)) {}
     AmigaColor(const RgbColor &c);
     AmigaColor(const YuvColor &c) : AmigaColor(RgbColor(c)) { }
     AmigaColor(const GpuColor &c);
 
-    u16 r() const { return (rawValue >> 4) & 0xF0; }
-    u16 g() const { return (rawValue >> 0) & 0xF0; }
-    u16 b() const { return (rawValue << 4) & 0xF0; }
+    u16 rawValue() const { return u16(r << 8 | g << 4 | b); }
 
     static const AmigaColor black;
     static const AmigaColor white;
@@ -105,10 +108,15 @@ struct GpuColor {
 
     GpuColor() : rawValue(0) {}
     GpuColor(u32 v) : rawValue(v) {}
-    GpuColor(u64 v) : rawValue((u32)v) {}
+    GpuColor(u64 v) : rawValue(u32(v)) {}
     GpuColor(const RgbColor &c);
     GpuColor(const AmigaColor &c);
     GpuColor(u8 r, u8 g, u8 b);
+
+    u8 r() const { return u8(rawValue       & 0xFF); }
+    u8 g() const { return u8(rawValue >> 8  & 0xFF); }
+    u8 b() const { return u8(rawValue >> 16 & 0xFF); }
+    u8 a() const { return u8(rawValue >> 24 & 0xFF); }
 
     static const GpuColor black;
     static const GpuColor white;

@@ -53,7 +53,7 @@ private:
     //
 
     // The 32 Amiga color registers
-    u16 colreg[32];
+    AmigaColor colreg[32];
 
     // RGBA values for all possible 4096 Amiga colors
     Texel rgba[4096];
@@ -153,7 +153,7 @@ private:
         worker
 
         >> colChanges
-        << colreg
+        >> colreg
         << hamMode;
     }
 
@@ -186,7 +186,7 @@ public:
     void setColor(isize reg, u16 value);
 
     // Returns a color value in Amiga format or RGBA format
-    u16 getColor(isize nr) const { return colreg[nr]; }
+    u16 getColor(isize nr) const { return colreg[nr].rawValue(); }
 
     // Returns sprite color in Amiga format or RGBA format
     u16 getSpriteColor(isize s, isize nr) const { return getColor(16 + nr + 2 * (s & 6)); }
@@ -258,7 +258,7 @@ private:
     
     void colorize(Texel *dst, Pixel from, Pixel to);
     void colorizeSHRES(Texel *dst, Pixel from, Pixel to);
-    void colorizeHAM(Texel *dst, Pixel from, Pixel to, u16& ham);
+    void colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham);
     
     /* Hides some graphics layers. This function is an optional stage applied
      * after colorize(). It can be used to hide some layers for debugging.
