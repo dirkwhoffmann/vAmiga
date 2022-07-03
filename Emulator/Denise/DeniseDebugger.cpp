@@ -47,7 +47,8 @@ DeniseDebugger::recordSprite(isize nr)
     // Record additional information in sprite line 0
     if (line == 0) {
         
-        spriteInfo[nr].hstrt = ((denise.sprpos[nr] & 0xFF) << 1) | (denise.sprctl[nr] & 0x01);
+        // spriteInfo[nr].hstrt = ((denise.sprpos[nr] & 0xFF) << 1) | (denise.sprctl[nr] & 0x01);
+        spriteInfo[nr].hstrt =  (denise.sprpos[nr] & 0xFF) << 2 | (denise.sprctl[nr] & 0x01) << 1 | (denise.sprctl[nr] & 0x10) >> 4;
         spriteInfo[nr].vstrt = agnus.sprVStrt[nr];
         spriteInfo[nr].vstop = agnus.sprVStop[nr];
         spriteInfo[nr].attach = IS_ODD(nr) ? GET_BIT(denise.sprctl[nr], 7) : 0;

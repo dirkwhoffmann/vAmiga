@@ -510,11 +510,11 @@ public:
     
     // Returns the horizontal position of a sprite in sprite coordinates
     template <isize x> Pixel sprhpos() const {
-        return ((sprpos[x] & 0xFF) << 1) | (sprctl[x] & 0x01); }
+        return (sprpos[x] & 0xFF) << 2 | (sprctl[x] & 0x01) << 1 | (sprctl[x] & 0x10) >> 4; }
 
     // Returns the horizontal position of a sprite in pixel coordinates
     template <isize x> Pixel sprhppos() const {
-        return 2 * (sprhpos<x>() + 1) - 4 * HBLANK_MIN; }
+        return sprhpos<x>() + 2 - 4 * HBLANK_MIN; }
     
     // Checks the z buffer and returns true if a sprite pixel is visible
     bool spritePixelIsVisible(Pixel hpos) const;

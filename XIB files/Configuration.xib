@@ -732,7 +732,7 @@ DQ
                                                 <menu key="menu" id="3v0-HJ-QLg">
                                                     <items>
                                                         <menuItem title="OCS" state="on" id="6ZC-38-juZ"/>
-                                                        <menuItem title="OCS + BRDRBLNK" tag="1" id="zLq-c3-Uz4"/>
+                                                        <menuItem title="ECS (Beta)" tag="1" id="zLq-c3-Uz4"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
