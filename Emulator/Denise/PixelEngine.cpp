@@ -173,50 +173,58 @@ PixelEngine::setColor(isize reg, u16 value)
     palette[reg + 32] = colorSpace[newColor.ehb().rawValue()];
 
     // Update super-hires palette entries
+
+    /*     | 00 01 02 03
+     *  ----------------
+     *  00 | 64 65 66 67
+     *  10 | 68 69 70 71
+     *  20 | 72 73 74 75
+     *  30 | 76 77 78 79
+     */
     switch (reg) {
 
         case 0:
 
             palette[64] = colorSpace[newColor.shr().rawValue()];
-            palette[65] = colorSpace[newColor.mix(color[1]).rawValue()];
-            palette[66] = colorSpace[newColor.mix(color[2]).rawValue()];
-            palette[67] = colorSpace[newColor.mix(color[3]).rawValue()];
+            palette[65] =
             palette[68] = colorSpace[newColor.mix(color[1]).rawValue()];
+            palette[66] =
             palette[72] = colorSpace[newColor.mix(color[2]).rawValue()];
+            palette[67] =
             palette[76] = colorSpace[newColor.mix(color[3]).rawValue()];
             break;
 
         case 1:
 
-            palette[68] = colorSpace[newColor.mix(color[0]).rawValue()];
             palette[69] = colorSpace[newColor.shr().rawValue()];
-            palette[70] = colorSpace[newColor.mix(color[2]).rawValue()];
-            palette[71] = colorSpace[newColor.mix(color[3]).rawValue()];
-            palette[65] = colorSpace[newColor.mix(color[0]).rawValue()];
+            palette[65] =
+            palette[68] = colorSpace[newColor.mix(color[0]).rawValue()];
+            palette[70] =
             palette[73] = colorSpace[newColor.mix(color[2]).rawValue()];
+            palette[71] =
             palette[77] = colorSpace[newColor.mix(color[3]).rawValue()];
             break;
 
         case 2:
 
-            palette[72] = colorSpace[newColor.mix(color[0]).rawValue()];
-            palette[73] = colorSpace[newColor.mix(color[1]).rawValue()];
             palette[74] = colorSpace[newColor.shr().rawValue()];
-            palette[75] = colorSpace[newColor.mix(color[3]).rawValue()];
-            palette[66] = colorSpace[newColor.mix(color[0]).rawValue()];
-            palette[70] = colorSpace[newColor.mix(color[1]).rawValue()];
+            palette[66] =
+            palette[72] = colorSpace[newColor.mix(color[0]).rawValue()];
+            palette[70] =
+            palette[73] = colorSpace[newColor.mix(color[1]).rawValue()];
+            palette[75] =
             palette[78] = colorSpace[newColor.mix(color[3]).rawValue()];
             break;
 
         case 3:
 
-            palette[76] = colorSpace[newColor.mix(color[0]).rawValue()];
-            palette[77] = colorSpace[newColor.mix(color[1]).rawValue()];
-            palette[78] = colorSpace[newColor.mix(color[2]).rawValue()];
             palette[79] = colorSpace[newColor.shr().rawValue()];
-            palette[67] = colorSpace[newColor.mix(color[0]).rawValue()];
-            palette[71] = colorSpace[newColor.mix(color[1]).rawValue()];
-            palette[75] = colorSpace[newColor.mix(color[2]).rawValue()];
+            palette[67] =
+            palette[76] = colorSpace[newColor.mix(color[0]).rawValue()];
+            palette[71] =
+            palette[77] = colorSpace[newColor.mix(color[1]).rawValue()];
+            palette[75] =
+            palette[78] = colorSpace[newColor.mix(color[2]).rawValue()];
             break;
 
         case 16:

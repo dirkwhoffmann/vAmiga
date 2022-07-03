@@ -138,6 +138,12 @@ Denise::setConfigItem(Option option, i64 value)
     }
 }
 
+void
+Denise::updateSprCoords(isize x)
+{
+    
+}
+
 bool
 Denise::spritePixelIsVisible(Pixel hpos) const
 {
@@ -653,8 +659,8 @@ Denise::drawSpritePair()
     constexpr isize sprite2 = 2 * pair + 1;
 
     Pixel strt = 0;
-    Pixel strt1 = sprhppos<sprite1>();
-    Pixel strt2 = sprhppos<sprite2>();
+    Pixel strt1 = getSprhppos<sprite1>();
+    Pixel strt2 = getSprhppos<sprite2>();
     
     // Iterate over all recorded register changes
     if (!sprChanges[pair].isEmpty()) {
@@ -694,28 +700,32 @@ Denise::drawSpritePair()
                     break;
                                         
                 case SET_SPR0POS + sprite1:
-                    
-                    sprpos[sprite1] = change.value;
-                    strt1 = sprhppos<sprite1>();
+
+                    setSPRxPOS(sprite1, change.value);
+                    assert(sprpos[sprite1] == change.value);
+                    strt1 = getSprhppos<sprite1>();
                     break;
                     
                 case SET_SPR0POS + sprite2:
                     
-                    sprpos[sprite2] = change.value;
-                    strt2 = sprhppos<sprite2>();
+                    setSPRxPOS(sprite2, change.value);
+                    assert(sprpos[sprite2] == change.value);
+                    strt2 = getSprhppos<sprite2>();
                     break;
                     
                 case SET_SPR0CTL + sprite1:
-                    
-                    sprctl[sprite1] = change.value;
-                    strt1 = sprhppos<sprite1>();
+
+                    setSPRxCTL(sprite1, change.value);
+                    assert(sprctl[sprite1] == change.value);
+                    strt1 = getSprhppos<sprite1>();
                     CLR_BIT(armed, sprite1);
                     break;
                     
                 case SET_SPR0CTL + sprite2:
-                    
-                    sprctl[sprite2] = change.value;
-                    strt2 = sprhppos<sprite2>();
+
+                    setSPRxCTL(sprite2, change.value);
+                    assert(sprctl[sprite2] == change.value);
+                    strt2 = getSprhppos<sprite2>();
                     CLR_BIT(armed, sprite2);
                     break;
 
@@ -765,23 +775,27 @@ Denise::replaySpriteRegChanges()
                 break;
                 
             case SET_SPR0POS + sprite1:
-                
-                sprpos[sprite1] = change.value;
+
+                setSPRxPOS(sprite1, change.value);
+                assert(sprpos[sprite1] == change.value);
                 break;
                 
             case SET_SPR0POS + sprite2:
-                
-                sprpos[sprite2] = change.value;
+
+                setSPRxPOS(sprite2, change.value);
+                assert(sprpos[sprite2] == change.value);
                 break;
                 
             case SET_SPR0CTL + sprite1:
-                
-                sprctl[sprite1] = change.value;
+
+                setSPRxCTL(sprite1, change.value);
+                assert(sprctl[sprite1] == change.value);
                 break;
                 
             case SET_SPR0CTL + sprite2:
-                
-                sprctl[sprite2] = change.value;
+
+                setSPRxCTL(sprite2, change.value);
+                assert(sprctl[sprite2] == change.value);
                 break;
                 
             default:
