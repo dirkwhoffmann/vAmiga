@@ -38,17 +38,12 @@ PixelEngine::_initialize()
     AmigaComponent::_initialize();
 
     // Setup ECS BRDRBLNK color
-    indexedRgba[64] = TEXEL(GpuColor(0x00, 0x00, 0x00).rawValue);
+    palette[96] = TEXEL(GpuColor(0x00, 0x00, 0x00).rawValue);
     
     // Setup some debug colors
-    indexedRgba[65] = TEXEL(GpuColor(0xD0, 0x00, 0x00).rawValue);
-    indexedRgba[66] = TEXEL(GpuColor(0xA0, 0x00, 0x00).rawValue);
-    indexedRgba[67] = TEXEL(GpuColor(0x90, 0x00, 0x00).rawValue);
-    indexedRgba[68] = TEXEL(GpuColor(0x00, 0xFF, 0xFF).rawValue);
-    indexedRgba[69] = TEXEL(GpuColor(0x00, 0xD0, 0xD0).rawValue);
-    indexedRgba[70] = TEXEL(GpuColor(0x00, 0xA0, 0xA0).rawValue);
-    indexedRgba[71] = TEXEL(GpuColor(0x00, 0x90, 0x90).rawValue);
-    indexedRgba[72] = TEXEL(GpuColor(0xFF, 0x00, 0x00).rawValue);
+    palette[97] = TEXEL(GpuColor(0xD0, 0x00, 0x00).rawValue);
+    palette[98] = TEXEL(GpuColor(0xA0, 0x00, 0x00).rawValue);
+    palette[99] = TEXEL(GpuColor(0x90, 0x00, 0x00).rawValue);
 }
 
 void
@@ -167,18 +162,54 @@ void
 PixelEngine::setColor(isize reg, u16 value)
 {
     assert(reg < 32);
+    AmigaColor color(value);
 
-    colreg[reg] = value & 0xFFF;
+    // Only proceed if the color changes
+    // if (colreg[reg] == color) return;
 
-    u8 r = (value & 0xF00) >> 8;
-    u8 g = (value & 0x0F0) >> 4;
-    u8 b = (value & 0x00F);
+    colreg[reg] = color;
 
-    auto col = rgba[value & 0xFFF];
-    auto ehb = rgba[((r / 2) << 8) | ((g / 2) << 4) | (b / 2)];
+    // Update standard palette entry
+    palette[reg] = rgba[value];
 
-    indexedRgba[reg] = col;
-    indexedRgba[reg + 32] = ehb;
+    // Update halfbright palette entry
+    palette[reg + 32] = rgba[color.ehb().rawValue()];
+
+    // Update super-hires palette entries
+    switch (reg) {
+
+        case 0:
+        
+            palette[64] = rgba[color.shr().rawValue()];
+            palette[65] = rgba[color.mix(colreg[1]).rawValue()];
+            palette[66] = rgba[color.mix(colreg[2]).rawValue()];
+            palette[67] = rgba[color.mix(colreg[3]).rawValue()];
+            break;
+
+        case 1:
+
+            palette[68] = rgba[color.mix(colreg[0]).rawValue()];
+            palette[69] = rgba[color.shr().rawValue()];
+            palette[70] = rgba[color.mix(colreg[2]).rawValue()];
+            palette[71] = rgba[color.mix(colreg[3]).rawValue()];
+            break;
+
+        case 2:
+
+            palette[72] = rgba[color.mix(colreg[0]).rawValue()];
+            palette[73] = rgba[color.mix(colreg[1]).rawValue()];
+            palette[74] = rgba[color.shr().rawValue()];
+            palette[75] = rgba[color.mix(colreg[3]).rawValue()];
+            break;
+
+        case 3:
+
+            palette[76] = rgba[color.mix(colreg[0]).rawValue()];
+            palette[77] = rgba[color.mix(colreg[1]).rawValue()];
+            palette[78] = rgba[color.mix(colreg[2]).rawValue()];
+            palette[79] = rgba[color.shr().rawValue()];
+            break;
+    }
 }
 
 void
@@ -410,7 +441,7 @@ PixelEngine::colorize(Texel *dst, Pixel from, Pixel to)
     u8 *mbuf = denise.mBuffer;
 
     for (Pixel i = from; i < to; i++) {
-        dst[i] = indexedRgba[mbuf[i]];
+        dst[i] = palette[mbuf[i]];
     }
 }
 
@@ -423,13 +454,13 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
 
         for (Pixel i = from; i < to; i++) {
 
-            auto r1 = (indexedRgba[mbuf[i] >> 4]) >> 16 & 0xFF;
-            auto g1 = (indexedRgba[mbuf[i] >> 4]) >> 8 & 0xFF;
-            auto b1 = (indexedRgba[mbuf[i] >> 4]) >> 0 & 0xFF;
+            auto r1 = (palette[mbuf[i] >> 4]) >> 16 & 0xFF;
+            auto g1 = (palette[mbuf[i] >> 4]) >> 8 & 0xFF;
+            auto b1 = (palette[mbuf[i] >> 4]) >> 0 & 0xFF;
 
-            auto r2 = (indexedRgba[mbuf[i] & 0xf]) >> 16 & 0xFF;
-            auto g2 = (indexedRgba[mbuf[i] & 0xf]) >> 8 & 0xFF;
-            auto b2 = (indexedRgba[mbuf[i] & 0xf]) >> 0 & 0xFF;
+            auto r2 = (palette[mbuf[i] & 0xf]) >> 16 & 0xFF;
+            auto g2 = (palette[mbuf[i] & 0xf]) >> 8 & 0xFF;
+            auto b2 = (palette[mbuf[i] & 0xf]) >> 0 & 0xFF;
 
             auto r = (r1 + r2) / 2;
             auto g = (g1 + g2) / 2;
@@ -445,8 +476,8 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
         for (Pixel i = from; i < to; i++) {
 
             u32 *p = (u32 *)(dst + i);
-            p[0] = u32(indexedRgba[mbuf[i] >> 4]);
-            p[1] = u32(indexedRgba[mbuf[i] & 0xf]);
+            p[0] = u32(palette[mbuf[i] >> 4]);
+            p[1] = u32(palette[mbuf[i] & 0xf]);
         }
 
     }
@@ -462,7 +493,7 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
     for (Pixel i = from; i < to; i++) {
 
         u8 index = ibuf[i];
-        assert(isRgbaIndex(index));
+        assert(isPaletteIndex(index));
 
         switch ((bbuf[i] >> 4) & 0b11) {
 
@@ -492,7 +523,7 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
 
         // Synthesize pixel
         if (denise.spritePixelIsVisible(i)) {
-            dst[i] = indexedRgba[mbuf[i]];
+            dst[i] = palette[mbuf[i]];
         } else {
             dst[i] = rgba[ham.rawValue()];
         }

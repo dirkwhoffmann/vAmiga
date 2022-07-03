@@ -39,6 +39,10 @@ struct RgbColor {
     static const RgbColor magenta;
     static const RgbColor cyan;
 
+    bool operator==(const RgbColor &rhs) const {
+        return r == rhs.r && g == rhs.g && b == rhs.b;
+    }
+
     RgbColor mix(RgbColor additive, double weight) const;
     RgbColor tint(double weight) const { return mix(white, weight); }
     RgbColor shade(double weight) const { return mix(black, weight); }
@@ -65,6 +69,10 @@ struct YuvColor {
     static const YuvColor yellow;
     static const YuvColor magenta;
     static const YuvColor cyan;
+
+    bool operator==(const YuvColor &rhs) const {
+        return y == rhs.y && u == rhs.u && v == rhs.v;
+    }
 };
 
 //
@@ -96,6 +104,14 @@ struct AmigaColor {
     static const AmigaColor yellow;
     static const AmigaColor magenta;
     static const AmigaColor cyan;
+
+    bool operator==(const AmigaColor &rhs) const {
+        return r == rhs.r && g == rhs.g && b == rhs.b;
+    }
+
+    AmigaColor ehb() const;
+    AmigaColor shr() const;
+    AmigaColor mix(const AmigaColor &c) const;
 };
 
 //
@@ -127,7 +143,11 @@ struct GpuColor {
     static const GpuColor magenta;
     static const GpuColor cyan;
 
-    GpuColor mix(const struct RgbColor &color, double weight) const;
+    bool operator==(const GpuColor &rhs) const {
+        return rawValue == rhs.rawValue;
+    }
+
+    GpuColor mix(const RgbColor &color, double weight) const;
     GpuColor tint(double weight) const { return mix(RgbColor::white, weight); }
     GpuColor shade(double weight) const { return mix(RgbColor::black, weight); }
 };

@@ -101,6 +101,25 @@ const AmigaColor AmigaColor::yellow(RgbColor::yellow);
 const AmigaColor AmigaColor::magenta(RgbColor::magenta);
 const AmigaColor AmigaColor::cyan(RgbColor::cyan);
 
+AmigaColor
+AmigaColor::ehb() const
+{
+    return AmigaColor { u8(r / 2), u8(g / 2), u8(b / 2) };
+}
+
+AmigaColor
+AmigaColor::shr() const
+{
+    return AmigaColor { u8(r & 0xC), u8(g & 0xC), u8(b & 0xC) };
+}
+
+AmigaColor
+AmigaColor::mix(const AmigaColor &c) const
+{
+    return AmigaColor { u8((r+c.r)/2), u8((g+c.g)/2), u8((b+c.b)/2) };
+}
+
+
 //
 //
 //

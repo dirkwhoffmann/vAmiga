@@ -52,21 +52,22 @@ private:
     // Color management
     //
 
+    // Lookup table for all 4096 Amiga colors
+    Texel rgba[4096];
+
     // The 32 Amiga color registers
     AmigaColor colreg[32];
 
-    // RGBA values for all possible 4096 Amiga colors
-    Texel rgba[4096];
-
-    /* The color register values translated to RGBA
-     * Note that the number of elements exceeds the number of color registers:
-     *  0 .. 31 : RGBA values of the 32 color registers
-     * 32 .. 63 : RGBA values of the 32 color registers in halfbright mode
-     *       64 : Pure black (used if the ECS BRDRBLNK bit is set)
-     * 65 .. 72 : Additional colors used for debugging
+    /* Active color palette
+     *
+     *  0 .. 31 : ABGR values of the 32 color registers
+     * 32 .. 63 : ABGR values of the 32 color registers in halfbright mode
+     * 64 .. 95 : ABGR values used in SuperHires mode
+     *       96 : Pure black (used if the ECS BRDRBLNK bit is set)
+     * 97 .. 99 : Additional debug colors
      */
-    static const int rgbaIndexCnt = 32 + 32 + 1 + 8;
-    Texel indexedRgba[rgbaIndexCnt];
+    static const int paletteCnt = 32 + 32 + 32 + 1 + 3;
+    Texel palette[paletteCnt];
     
     // Indicates whether HAM mode is switched
     bool hamMode;
@@ -179,16 +180,16 @@ private:
 
 public:
 
-    // Performs a consistency check for debugging.
-    static bool isRgbaIndex(isize nr) { return nr < rgbaIndexCnt; }
+    // Performs a consistency check for debugging
+    static bool isPaletteIndex(isize nr) { return nr < paletteCnt; }
     
-    // Changes one of the 32 Amiga color registers.
+    // Changes one of the 32 Amiga color registers
     void setColor(isize reg, u16 value);
 
-    // Returns a color value in Amiga format or RGBA format
+    // Returns a color value in Amiga format
     u16 getColor(isize nr) const { return colreg[nr].rawValue(); }
 
-    // Returns sprite color in Amiga format or RGBA format
+    // Returns sprite color in Amiga format
     u16 getSpriteColor(isize s, isize nr) const { return getColor(16 + nr + 2 * (s & 6)); }
 
 

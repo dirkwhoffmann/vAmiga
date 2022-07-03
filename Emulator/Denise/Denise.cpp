@@ -519,7 +519,7 @@ Denise::translateSPF(Pixel from, Pixel to, PFState &state)
 
              u8 s = bBuffer[i];
 
-             assert(PixelEngine::isRgbaIndex(s));
+             assert(PixelEngine::isPaletteIndex(s));
              iBuffer[i] = mBuffer[i] = (s & 0x10) ? (s & 0x30) : s;
              zBuffer[i] = 0;
          }
@@ -531,7 +531,7 @@ Denise::translateSPF(Pixel from, Pixel to, PFState &state)
         
         u8 s = bBuffer[i];
         
-        assert(PixelEngine::isRgbaIndex(s));
+        assert(PixelEngine::isPaletteIndex(s));
         iBuffer[i] = mBuffer[i] = s;
         zBuffer[i] = s ? state.zpf2 : 0;
     }
@@ -895,12 +895,12 @@ void
 Denise::updateBorderColor()
 {
     if (config.revision != DENISE_OCS && ecsena() && brdrblnk()) {
-        borderColor = 64; // Pure black
+        borderColor = 96; // Pure black
     } else {
         borderColor = 0;  // Background color
     }
     if constexpr (BORDER_DEBUG) {
-        borderColor = 65; // Debug color
+        borderColor = 97; // Debug color
     }
 }
 
