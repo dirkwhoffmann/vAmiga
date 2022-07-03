@@ -162,49 +162,49 @@ void
 PixelEngine::setColor(isize reg, u16 value)
 {
     assert(reg < 32);
-    AmigaColor color(value);
+    AmigaColor newColor(value);
 
-    colreg[reg] = color;
+    color[reg] = newColor;
 
     // Update standard palette entry
-    palette[reg] = rgba[value];
+    palette[reg] = colorSpace[value];
 
     // Update halfbright palette entry
-    palette[reg + 32] = rgba[color.ehb().rawValue()];
+    palette[reg + 32] = colorSpace[newColor.ehb().rawValue()];
 
     // Update super-hires palette entries
     switch (reg) {
 
         case 0:
         
-            palette[64] = rgba[color.shr().rawValue()];
-            palette[65] = rgba[color.mix(colreg[1]).rawValue()];
-            palette[66] = rgba[color.mix(colreg[2]).rawValue()];
-            palette[67] = rgba[color.mix(colreg[3]).rawValue()];
+            palette[64] = colorSpace[newColor.shr().rawValue()];
+            palette[65] = colorSpace[newColor.mix(color[1]).rawValue()];
+            palette[66] = colorSpace[newColor.mix(color[2]).rawValue()];
+            palette[67] = colorSpace[newColor.mix(color[3]).rawValue()];
             break;
 
         case 1:
 
-            palette[68] = rgba[color.mix(colreg[0]).rawValue()];
-            palette[69] = rgba[color.shr().rawValue()];
-            palette[70] = rgba[color.mix(colreg[2]).rawValue()];
-            palette[71] = rgba[color.mix(colreg[3]).rawValue()];
+            palette[68] = colorSpace[newColor.mix(color[0]).rawValue()];
+            palette[69] = colorSpace[newColor.shr().rawValue()];
+            palette[70] = colorSpace[newColor.mix(color[2]).rawValue()];
+            palette[71] = colorSpace[newColor.mix(color[3]).rawValue()];
             break;
 
         case 2:
 
-            palette[72] = rgba[color.mix(colreg[0]).rawValue()];
-            palette[73] = rgba[color.mix(colreg[1]).rawValue()];
-            palette[74] = rgba[color.shr().rawValue()];
-            palette[75] = rgba[color.mix(colreg[3]).rawValue()];
+            palette[72] = colorSpace[newColor.mix(color[0]).rawValue()];
+            palette[73] = colorSpace[newColor.mix(color[1]).rawValue()];
+            palette[74] = colorSpace[newColor.shr().rawValue()];
+            palette[75] = colorSpace[newColor.mix(color[3]).rawValue()];
             break;
 
         case 3:
 
-            palette[76] = rgba[color.mix(colreg[0]).rawValue()];
-            palette[77] = rgba[color.mix(colreg[1]).rawValue()];
-            palette[78] = rgba[color.mix(colreg[2]).rawValue()];
-            palette[79] = rgba[color.shr().rawValue()];
+            palette[76] = colorSpace[newColor.mix(color[0]).rawValue()];
+            palette[77] = colorSpace[newColor.mix(color[1]).rawValue()];
+            palette[78] = colorSpace[newColor.mix(color[2]).rawValue()];
+            palette[79] = colorSpace[newColor.shr().rawValue()];
             break;
 
         case 16:
@@ -215,7 +215,7 @@ PixelEngine::setColor(isize reg, u16 value)
             palette[64 + reg] =
             palette[68 + reg] =
             palette[72 + reg] =
-            palette[76 + reg] = rgba[color.shr().rawValue()];
+            palette[76 + reg] = colorSpace[newColor.shr().rawValue()];
             break;
     }
 }
@@ -226,20 +226,19 @@ PixelEngine::updateRGBA()
     // Iterate through all 4096 colors
     for (u16 col = 0x000; col <= 0xFFF; col++) {
 
-        // Convert the Amiga color into an RGBA value
         u8 r = (col >> 4) & 0xF0;
         u8 g = (col >> 0) & 0xF0;
         u8 b = (col << 4) & 0xF0;
 
-        // Convert the Amiga value to an RGBA value
+        // Adjust the RBG values according to the current video settings
         adjustRGB(r, g, b);
 
         // Write the result into the register lookup table
-        rgba[col] = TEXEL(HI_HI_LO_LO(0xFF, b, g, r));
+        colorSpace[col] = TEXEL(HI_HI_LO_LO(0xFF, b, g, r));
     }
 
-    // Update all RGBA values that are cached in indexedRgba[]
-    for (isize i = 0; i < 32; i++) setColor(i, colreg[i].rawValue());
+    // Update all cached RGBA values
+    for (isize i = 0; i < 32; i++) setColor(i, color[i].rawValue());
 }
 
 void
@@ -398,7 +397,7 @@ PixelEngine::applyRegisterChange(const RegChange &change)
             auto nr = (change.addr - 0x180) >> 1;
             assert(nr < 32);
 
-            if (colreg[nr].rawValue() != change.value) {
+            if (color[nr].rawValue() != change.value) {
                 setColor(nr, change.value);
             }
             break;
@@ -413,7 +412,7 @@ PixelEngine::colorize(isize line)
     Pixel pixel = 0;
 
     // Initialize the HAM mode hold register with the current background color
-    AmigaColor hold = colreg[0];
+    AmigaColor hold = color[0];
 
     // Add a dummy register change to ensure we draw until the line end
     colChanges.insert(HPIXELS, RegChange { SET_NONE, 0 } );
@@ -500,7 +499,7 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
 
             case 0b00: // Get color from register
 
-                ham = colreg[index];
+                ham = color[index];
                 break;
 
             case 0b01: // Modify blue
@@ -526,7 +525,7 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
         if (denise.spritePixelIsVisible(i)) {
             dst[i] = palette[mbuf[i]];
         } else {
-            dst[i] = rgba[ham.rawValue()];
+            dst[i] = colorSpace[ham.rawValue()];
         }
     }
 }

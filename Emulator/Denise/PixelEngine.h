@@ -53,10 +53,10 @@ private:
     //
 
     // Lookup table for all 4096 Amiga colors
-    Texel rgba[4096];
+    Texel colorSpace[4096];
 
-    // The 32 Amiga color registers
-    AmigaColor colreg[32];
+    // Color register colors
+    AmigaColor color[32];
 
     /* Active color palette
      *
@@ -154,7 +154,7 @@ private:
         worker
 
         >> colChanges
-        >> colreg
+        >> color
         << hamMode;
     }
 
@@ -188,7 +188,7 @@ public:
     void setColor(isize reg, AmigaColor value);
 
     // Returns a color value in Amiga format
-    u16 getColor(isize nr) const { return colreg[nr].rawValue(); }
+    u16 getColor(isize nr) const { return color[nr].rawValue(); }
 
     // Returns sprite color in Amiga format
     u16 getSpriteColor(isize s, isize nr) const { return getColor(16 + nr + 2 * (s & 6)); }
