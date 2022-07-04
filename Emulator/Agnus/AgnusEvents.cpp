@@ -319,15 +319,28 @@ Agnus::serviceBPLEvent(EventID id)
             break;
 
         case EVENT_NONE | DRAW_ODD:
-            hires() ? denise.drawHiresOdd() : denise.drawLoresOdd();
+
+            switch (res) {
+                case LORES: denise.drawLoresOdd(); break;
+                case HIRES: denise.drawHiresOdd(); break;
+                case SHRES: denise.drawShresOdd(); break;
+            }
             break;
 
         case EVENT_NONE | DRAW_EVEN:
-            hires() ? denise.drawHiresEven() : denise.drawLoresEven();
+            switch (res) {
+                case LORES: denise.drawLoresEven(); break;
+                case HIRES: denise.drawHiresEven(); break;
+                case SHRES: denise.drawShresEven(); break;
+            }
             break;
 
         case EVENT_NONE | DRAW_BOTH:
-            hires() ? denise.drawHiresBoth() : denise.drawLoresBoth();
+            switch (res) {
+                case LORES: denise.drawLoresBoth(); break;
+                case HIRES: denise.drawHiresBoth(); break;
+                case SHRES: denise.drawShresBoth(); break;
+            }
             break;
 
         case BPL_L1:                    LO_NONE(0);     break;

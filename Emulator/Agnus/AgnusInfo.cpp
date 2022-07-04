@@ -460,6 +460,8 @@ Agnus::_dump(Category category, std::ostream& os) const
         
         os << tab("Clock");
         os << dec(clock) << std::endl;
+        os << tab("Resolution");
+        os << ResolutionEnum::key(res) << std::endl;
         os << tab("scrollOdd");
         os << dec(scrollOdd) << std::endl;
         os << tab("scrollEven");

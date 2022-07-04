@@ -70,7 +70,14 @@ Denise::_dump(Category category, std::ostream& os) const
         os << tab("clxSprSpr");
         os << bol(config.clxSprSpr) << std::endl;
     }
-    
+
+    if (category == Category::State) {
+
+        os << tab("Resolution");
+        os << ResolutionEnum::key(res) << std::endl;
+
+    }
+
     if (category == Category::Registers) {
         
         os << tab("BPLCON0");
