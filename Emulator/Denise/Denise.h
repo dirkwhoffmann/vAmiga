@@ -633,6 +633,8 @@ public:
 public:
     
     // BPLCON0
+    static bool shres(u16 v) { return GET_BIT(v, 6); }
+    bool shres() const { return ham(bplcon0); }
     static bool hires(u16 v) { return GET_BIT(v, 15); }
     bool hires() const { return hires(bplcon0); }
     static bool lores(u16 v) { return !hires(v); }

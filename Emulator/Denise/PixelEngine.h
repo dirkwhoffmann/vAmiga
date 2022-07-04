@@ -69,9 +69,10 @@ private:
     static const int paletteCnt = 32 + 32 + 32 + 1 + 3;
     Texel palette[paletteCnt];
     
-    // Indicates whether HAM mode is switched
+    // Indicates whether HAM mode or SHRES mode is enabled
     bool hamMode;
-    
+    bool shresMode;
+
     
     //
     // Register change history buffer
@@ -93,14 +94,6 @@ public:
  
     // Initializes both frame buffers with a checkerboard pattern
     void clearAll();
-
-    // Initializes (part of) the current frame buffer with a checkerboard pattern
-    // void clear(isize line);
-    // void clear(isize line, Pixel pixel);
-
-private:
-
-    // void clear(u32 *ptr, isize line, Pixel first = 0, Pixel last = HPOS_MAX);
 
 
     //
@@ -155,7 +148,8 @@ private:
 
         >> colChanges
         >> color
-        << hamMode;
+        << hamMode
+        << shresMode;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

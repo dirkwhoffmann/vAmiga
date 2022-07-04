@@ -319,8 +319,8 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
     // Determine the new bitmap resolution
     res = resolution(newValue);
 
-    // Check if the hires bit or one of the BPU bits have been modified
-    if ((oldValue ^ newValue) & 0xF000) {
+    // Check if one of the resolution bits or the BPU bits have been modified
+    if ((oldValue ^ newValue) & 0xF040) {
             
         // Record the change
         sequencer.sigRecorder.insert(pos.h, HI_W_LO_W(newValue, SIG_CON));

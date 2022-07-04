@@ -410,6 +410,7 @@ PixelEngine::applyRegisterChange(const RegChange &change)
         case 0x100: // BPLCON0
 
             hamMode = Denise::ham(change.value);
+            shresMode = Denise::shres(change.value);
             break;
             
         default: // It must be a color register then
@@ -444,7 +445,7 @@ PixelEngine::colorize(isize line)
         RegChange &change = colChanges.elements[i];
 
         // Colorize a chunk of pixels
-        if (denise.res == SHRES) {
+        if (shresMode) {
             colorizeSHRES(dst, pixel, trigger);
         } else if (hamMode) {
             colorizeHAM(dst, pixel, trigger, hold);
