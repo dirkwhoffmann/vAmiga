@@ -55,10 +55,8 @@ extension ConfigurationController {
             csDeniseInfo2.stringValue = "A500, A1000, A2000"
 
         case .ECS:
-            csDeniseInfo1.stringValue = "MOS 8362R8"
-            csDeniseInfo2.stringValue = "Emulator mod"
-            // csDeniseInfo1.stringValue = "MOS 8373R4"
-            // csDeniseInfo2.stringValue = "A500+, A600"
+            csDeniseInfo1.stringValue = "MOS 8373R4"
+            csDeniseInfo2.stringValue = "A500+, A600"
             
         default:
             csDeniseInfo1.stringValue = "Invalid"
@@ -71,7 +69,7 @@ extension ConfigurationController {
 
         case .MOS_8520_DIP:
             csCiaInfo1.stringValue = "MOS 8520"
-            csCiaInfo2.stringValue = "A500, A1000, A2000"
+            csCiaInfo2.stringValue = "A500, A1000, A2000, A500+"
 
         case .MOS_8520_PLCC:
             csCiaInfo1.stringValue = "MOS 8520PL"
@@ -93,7 +91,7 @@ extension ConfigurationController {
 
         case .OKI:
             csRtcInfo1.stringValue = "MSM6242B"
-            csRtcInfo2.stringValue = "A2000"
+            csRtcInfo2.stringValue = "A2000, A500+"
             csRtcIcon.isHidden = false
 
         case .RICOH:
@@ -180,18 +178,28 @@ extension ConfigurationController {
             
             // Amiga 500
             defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_1MB.rawValue)
+            defaults.set(.DENISE_REVISION, DeniseRevision.OCS.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.NONE.rawValue)
 
         case 1:
             
             // Amiga 1000
             defaults.set(.AGNUS_REVISION, AgnusRevision.OCS_OLD.rawValue)
+            defaults.set(.DENISE_REVISION, DeniseRevision.OCS.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.NONE.rawValue)
 
         case 2:
             
             // Amiga 2000
             defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_2MB.rawValue)
+            defaults.set(.DENISE_REVISION, DeniseRevision.OCS.rawValue)
+            defaults.set(.RTC_MODEL, RTCRevision.OKI.rawValue)
+
+        case 3:
+
+            // Amiga 500+
+            defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_2MB.rawValue)
+            defaults.set(.DENISE_REVISION, DeniseRevision.ECS.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.OKI.rawValue)
 
         default:
