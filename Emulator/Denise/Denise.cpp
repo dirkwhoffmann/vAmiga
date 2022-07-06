@@ -356,8 +356,73 @@ Denise::drawEven(Pixel offset)
 template <Resolution mode> void
 Denise::drawBoth(Pixel offset)
 {
-    drawOdd <mode> (offset);
-    drawEven <mode> (offset);
+    if (NO_BPL_FASTPATH) {
+
+        drawOdd <mode> (offset);
+        drawEven <mode> (offset);
+        return;
+    }
+
+    static constexpr u16 masks[7] = {
+
+        0b000000, // 0 bitplanes
+        0b000001, // 1 bitplanes
+        0b000011, // 2 bitplanes
+        0b000111, // 3 bitplanes
+        0b001111, // 4 bitplanes
+        0b011111, // 5 bitplanes
+        0b111111  // 6 bitplanes
+    };
+
+    u16 mask = masks[bpu()];
+    Pixel pixel = agnus.pos.pixel() + offset + 2;
+
+    u8 slices[16];
+    extractSlices(slices);
+
+    for (isize i = 0; i < 16; i++) {
+
+        u8 index = slices[i] & mask;
+
+        switch (mode) {
+
+            case LORES:
+
+                // Synthesize s lores pixel
+                assert(pixel + 1 < isizeof(bBuffer));
+                bBuffer[pixel] = index;
+                pixel++;
+                bBuffer[pixel] = index;
+                pixel++;
+                break;
+
+            case HIRES:
+
+                // Synthesize a hires pixel
+                assert(pixel < isizeof(bBuffer));
+                bBuffer[pixel] = index;
+                pixel++;
+                break;
+
+            case SHRES:
+
+                // Synthesize a superHires pixel
+                assert(pixel < isizeof(bBuffer));
+                if (i % 2 == 0) {
+                    bBuffer[pixel] = u8(index << 2);
+                } else {
+                    bBuffer[pixel] = u8(bBuffer[pixel] | index);
+                    pixel++;
+                }
+                break;
+
+            default:
+                fatalError;
+        }
+    }
+
+    // Clear the shift registers
+    for (isize i = 0; i < 6; i++) shiftReg[i] = 0;
 }
 
 void
