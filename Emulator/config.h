@@ -110,7 +110,7 @@ struct FloatStereo; typedef struct FloatStereo SampleType;
 // Execution settings
 //
 
-static const int NO_SEQ_FASTPATH = 1; // Disable sequencer speed optimizations
+static const int NO_SEQ_FASTPATH = 0; // Disable sequencer speed optimizations
 static const int DIAG_BOARD      = 0; // Plug in the diagnose board
 
 

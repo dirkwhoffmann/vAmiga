@@ -88,33 +88,55 @@ Sequencer::computeBplEventsFast(const SigRecorder &sr, DDFState &state)
 
     // Erase all events
     for (isize i = 0; i < HPOS_CNT; i++) bplEvent[i] = EVENT_NONE;
-    
+
     // Add drawing flags
-    if (state.bmctl() & 0x8) {
+    auto odd = agnus.scrollOdd;
+    auto even = agnus.scrollEven;
+    switch (agnus.resolution(state.bplcon0)) {
 
-        auto odd = agnus.scrollOdd & 0b11;
-        auto even = agnus.scrollEven & 0b11;
+        case LORES:
 
-        if (odd == even) {
-            for (isize i = odd; i < HPOS_CNT; i += 4) bplEvent[i] = (EventID)3;
-        } else {
-            for (isize i = odd; i < HPOS_CNT; i += 4) bplEvent[i] = (EventID)1;
-            for (isize i = even; i < HPOS_CNT; i += 4) bplEvent[i] = (EventID)2;
-        }
+            odd &= 0b111;
+            even &= 0b111;
 
-    } else {
+            if (odd == even) {
+                for (isize i = odd; i < HPOS_CNT; i += 8) bplEvent[i] = (EventID)3;
+            } else {
+                for (isize i = odd; i < HPOS_CNT; i += 8) bplEvent[i] = (EventID)1;
+                for (isize i = even; i < HPOS_CNT; i += 8) bplEvent[i] = (EventID)2;
+            }
+            break;
 
-        auto odd = agnus.scrollOdd & 0b111;
-        auto even = agnus.scrollEven & 0b111;
+        case HIRES:
 
-        if (odd == even) {
-            for (isize i = odd; i < HPOS_CNT; i += 8) bplEvent[i] = (EventID)3;
-        } else {
-            for (isize i = odd; i < HPOS_CNT; i += 8) bplEvent[i] = (EventID)1;
-            for (isize i = even; i < HPOS_CNT; i += 8) bplEvent[i] = (EventID)2;
-        }
+            odd &= 0b11;
+            even &= 0b11;
+
+            if (odd == even) {
+                for (isize i = odd; i < HPOS_CNT; i += 4) bplEvent[i] = (EventID)3;
+            } else {
+                for (isize i = odd; i < HPOS_CNT; i += 4) bplEvent[i] = (EventID)1;
+                for (isize i = even; i < HPOS_CNT; i += 4) bplEvent[i] = (EventID)2;
+            }
+            break;
+
+        case SHRES:
+
+            odd &= 0b11;
+            even &= 0b11;
+
+            if (odd == even) {
+                for (isize i = odd; i < HPOS_CNT; i += 2) bplEvent[i] = (EventID)3;
+            } else {
+                for (isize i = odd; i < HPOS_CNT; i += 2) bplEvent[i] = (EventID)1;
+                for (isize i = even; i < HPOS_CNT; i += 2) bplEvent[i] = (EventID)2;
+            }
+            break;
+
+        default:
+            fatalError;
     }
-        
+
     // Emulate all signal events
     for (isize i = 0;; i++) {
         
@@ -151,13 +173,6 @@ Sequencer::computeBplEventsSlow(const SigRecorder &sr, DDFState &state)
 
         cycle = trigger;
     }
-    
-    // EXPERIMENTAL
-    /*
-    bplEvent[0] |= (EventID)3;
-    static int cnt = 0;
-    if (cnt++ % 20 == 0) dump(dump::Dma);
-    */
 }
 
 template <bool ecs> void
