@@ -513,21 +513,13 @@ private:
     //
 
 public:
-    
-    // Returns the horizontal position of a sprite in sprite coordinates
-    template <isize x> Pixel getSprhpos() const {
-        return (sprpos[x] & 0xFF) << 2 | (sprctl[x] & 0x01) << 1 | (sprctl[x] & 0x10) >> 4; }
-
-    // Returns the horizontal position of a sprite in pixel coordinates
-    template <isize x> Pixel getSprhppos() const {
-        return getSprhpos<x>() + 2 - 4 * HBLANK_MIN; }
 
     // Setter for SPRxPOS and SPRxCTL
-    void setSPRxPOS(isize x, u16 value) { sprpos[x] = value; updateSprCoords(x); }
-    void setSPRxCTL(isize x, u16 value) { sprctl[x] = value; updateSprCoords(x); }
+    void setSPRxPOS(isize x, u16 value) { sprpos[x] = value; updateSprHCoords(x); }
+    void setSPRxCTL(isize x, u16 value) { sprctl[x] = value; updateSprHCoords(x); }
 
     // Updates the cached values for horizontal coordinates
-    void updateSprCoords(isize x);
+    void updateSprHCoords(isize x);
 
     // Checks the z buffer and returns true if a sprite pixel is visible
     bool spritePixelIsVisible(Pixel hpos) const;
