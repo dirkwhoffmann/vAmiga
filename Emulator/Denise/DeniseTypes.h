@@ -136,6 +136,8 @@ ViewPortInfo;
 
 typedef struct
 {
+    bool ecs;
+
     u16 bplcon0;
     u16 bplcon1;
     u16 bplcon2;

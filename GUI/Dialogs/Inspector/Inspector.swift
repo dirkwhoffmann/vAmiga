@@ -336,6 +336,7 @@ class Inspector: DialogController {
     @IBOutlet weak var deniseHOMOD: NSButton!
     @IBOutlet weak var deniseDBPLF: NSButton!
     @IBOutlet weak var deniseLACE: NSButton!
+    @IBOutlet weak var deniseSHRES: NSButton!
 
     @IBOutlet weak var deniseBPLCON1: NSTextField!
     @IBOutlet weak var deniseP1H: NSTextField!

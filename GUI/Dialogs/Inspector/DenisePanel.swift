@@ -43,6 +43,8 @@ extension Inspector {
         deniseHOMOD.state = (bplcon0 & 0b0000100000000000 != 0) ? .on : .off
         deniseDBPLF.state = (bplcon0 & 0b0000010000000000 != 0) ? .on : .off
         deniseLACE.state = (bplcon0 & 0b0000000000000100 != 0) ? .on : .off
+        deniseSHRES.state = (bplcon0 & 0b0000000001000000 != 0) ? .on : .off
+        deniseSHRES.isEnabled = deniseInfo.ecs
 
         deniseBPLCON1.integerValue = bplcon1
         deniseP1H.integerValue = (bplcon1 & 0b00001111)

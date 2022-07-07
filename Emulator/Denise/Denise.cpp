@@ -356,7 +356,7 @@ Denise::drawEven(Pixel offset)
 template <Resolution mode> void
 Denise::drawBoth(Pixel offset)
 {
-    if (NO_BPL_FASTPATH) {
+    if constexpr (NO_BPL_FASTPATH) {
 
         drawOdd <mode> (offset);
         drawEven <mode> (offset);

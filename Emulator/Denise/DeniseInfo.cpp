@@ -17,6 +17,8 @@ void
 Denise::_inspect() const
 {
     {   SYNCHRONIZED
+
+        info.ecs = isECS();
         
         info.bplcon0 = bplcon0;
         info.bplcon1 = bplcon1;
