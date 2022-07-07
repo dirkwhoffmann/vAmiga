@@ -48,7 +48,7 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
     // Update the DMA and BMCTL bits
     state.bmapen = agnus.bpldma(agnus.dmaconInitial);
     state.bplcon0 = agnus.bplcon0Initial;
-    computeFetchUnit(state.bmctl());
+    computeFetchUnit(state.bplcon0);
     
     // Evaluate the current state of the vertical DIW flipflop
     if (!state.bpv) { state.bprun = false; state.cnt = 0; }
@@ -252,7 +252,7 @@ Sequencer::processSignal <false> (u32 signal, DDFState &state)
     if (signal & SIG_CON) {
         
         state.bplcon0 = HI_WORD(signal);
-        computeFetchUnit(state.bmctl());
+        computeFetchUnit(state.bplcon0);
     }
     switch (signal & (SIG_BMAPEN_CLR | SIG_BMAPEN_SET)) {
             
@@ -343,7 +343,7 @@ Sequencer::processSignal <true> (u32 signal, DDFState &state)
     if (signal & SIG_CON) {
         
         state.bplcon0 = HI_WORD(signal);
-        computeFetchUnit(state.bmctl());
+        computeFetchUnit(state.bplcon0);
     }
     switch (signal & (SIG_VFLOP_SET | SIG_VFLOP_CLR)) {
             
@@ -456,49 +456,56 @@ Sequencer::updateBplJumpTable(i16 end)
 }
 
 void
-Sequencer::computeFetchUnit(u8 dmacon)
+Sequencer::computeFetchUnit(u16 bplcon0)
 {
-    if (GET_BIT(agnus.bplcon0, 6)) {
+    auto bpu = bplcon0 >> 12 & 0b111;
 
-        switch (dmacon & 0x7) {
+    switch (agnus.resolution(bplcon0)) {
 
-            case 0: computeShresFetchUnit <0> (); break;
-            case 1: computeShresFetchUnit <1> (); break;
-            case 2: computeShresFetchUnit <2> (); break;
-            case 3: computeShresFetchUnit <0> (); break;
-            case 4: computeShresFetchUnit <0> (); break;
-            case 5: computeShresFetchUnit <0> (); break;
-            case 6: computeShresFetchUnit <0> (); break;
-            case 7: computeShresFetchUnit <0> (); break;
-        }
+        case LORES:
 
-    } else if (dmacon & 0x8) {
-        
-        switch (dmacon & 0x7) {
-        
-            case 0: computeHiresFetchUnit <0> (); break;
-            case 1: computeHiresFetchUnit <1> (); break;
-            case 2: computeHiresFetchUnit <2> (); break;
-            case 3: computeHiresFetchUnit <3> (); break;
-            case 4: computeHiresFetchUnit <4> (); break;
-            case 5: computeHiresFetchUnit <0> (); break;
-            case 6: computeHiresFetchUnit <0> (); break;
-            case 7: computeHiresFetchUnit <0> (); break;
-        }
+            switch (bpu) {
 
-    } else {
-      
-        switch (dmacon & 0x7) {
-        
-            case 0: computeLoresFetchUnit <0> (); break;
-            case 1: computeLoresFetchUnit <1> (); break;
-            case 2: computeLoresFetchUnit <2> (); break;
-            case 3: computeLoresFetchUnit <3> (); break;
-            case 4: computeLoresFetchUnit <4> (); break;
-            case 5: computeLoresFetchUnit <5> (); break;
-            case 6: computeLoresFetchUnit <6> (); break;
-            case 7: computeLoresFetchUnit <4> (); break;
-        }
+                case 0: computeLoresFetchUnit <0> (); break;
+                case 1: computeLoresFetchUnit <1> (); break;
+                case 2: computeLoresFetchUnit <2> (); break;
+                case 3: computeLoresFetchUnit <3> (); break;
+                case 4: computeLoresFetchUnit <4> (); break;
+                case 5: computeLoresFetchUnit <5> (); break;
+                case 6: computeLoresFetchUnit <6> (); break;
+                case 7: computeLoresFetchUnit <4> (); break;
+            }
+            break;
+
+        case HIRES:
+
+            switch (bpu) {
+
+                case 0: computeHiresFetchUnit <0> (); break;
+                case 1: computeHiresFetchUnit <1> (); break;
+                case 2: computeHiresFetchUnit <2> (); break;
+                case 3: computeHiresFetchUnit <3> (); break;
+                case 4: computeHiresFetchUnit <4> (); break;
+                case 5: computeHiresFetchUnit <0> (); break;
+                case 6: computeHiresFetchUnit <0> (); break;
+                case 7: computeHiresFetchUnit <0> (); break;
+            }
+            break;
+
+        case SHRES:
+
+            switch (bpu) {
+
+                case 0: computeShresFetchUnit <0> (); break;
+                case 1: computeShresFetchUnit <1> (); break;
+                case 2: computeShresFetchUnit <2> (); break;
+                case 3: computeShresFetchUnit <0> (); break;
+                case 4: computeShresFetchUnit <0> (); break;
+                case 5: computeShresFetchUnit <0> (); break;
+                case 6: computeShresFetchUnit <0> (); break;
+                case 7: computeShresFetchUnit <0> (); break;
+            }
+            break;
     }
 }
 

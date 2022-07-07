@@ -77,8 +77,6 @@ struct DDFState
         << bplcon0
         << cnt;
     }
-
-    u8 bmctl() { return u8(bplcon0 >> 12); } // DEPRECATED
 };
 
 #endif
