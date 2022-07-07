@@ -728,10 +728,11 @@ Denise::drawSpritePair()
 {
     constexpr isize sprite1 = 2 * pair;
     constexpr isize sprite2 = 2 * pair + 1;
+    constexpr Pixel hposMask = R == SHRES ? ~0 : ~1;
 
     Pixel strt = 0;
-    Pixel strt1 = sprhppos[sprite1];
-    Pixel strt2 = sprhppos[sprite2];
+    Pixel strt1 = sprhppos[sprite1] & hposMask;
+    Pixel strt2 = sprhppos[sprite2] & hposMask;
     
     // Iterate over all recorded register changes
     if (!sprChanges[pair].isEmpty()) {
@@ -773,26 +774,26 @@ Denise::drawSpritePair()
                 case SET_SPR0POS + sprite1:
 
                     setSPRxPOS(sprite1, change.value);
-                    strt1 = sprhppos[sprite1];
+                    strt1 = sprhppos[sprite1] & hposMask;
                     break;
                     
                 case SET_SPR0POS + sprite2:
                     
                     setSPRxPOS(sprite2, change.value);
-                    strt2 = sprhppos[sprite2];
+                    strt2 = sprhppos[sprite2] & hposMask;
                     break;
                     
                 case SET_SPR0CTL + sprite1:
 
                     setSPRxCTL(sprite1, change.value);
-                    strt1 = sprhppos[sprite1];
+                    strt1 = sprhppos[sprite1] & hposMask;
                     CLR_BIT(armed, sprite1);
                     break;
                     
                 case SET_SPR0CTL + sprite2:
 
                     setSPRxCTL(sprite2, change.value);
-                    strt2 = sprhppos[sprite2];
+                    strt2 = sprhppos[sprite2] & hposMask;
                     CLR_BIT(armed, sprite2);
                     break;
 
