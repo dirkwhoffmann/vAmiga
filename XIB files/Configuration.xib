@@ -553,6 +553,7 @@ DQ
                                                 <menu key="menu" id="18D-pR-SwS">
                                                     <items>
                                                         <menuItem title="68000" state="on" id="1vX-aH-r8M"/>
+                                                        <menuItem title="68010" tag="1" id="U9p-JK-c4z"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>

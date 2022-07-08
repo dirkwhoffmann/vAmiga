@@ -37,6 +37,13 @@ Moira::~Moira()
 }
 
 void
+Moira::setModel(CPUModel model)
+{
+    this->model = model;
+    createJumpTables();
+}
+
+void
 Moira::reset()
 {
     flags = CPU_CHECK_IRQ;
@@ -148,9 +155,18 @@ Moira::execute()
     }
 
     // Execute the instruction
-    reg.pc += 2;
-    (this->*exec[queue.ird])(queue.ird);
-    assert(reg.pc0 == reg.pc);
+    if (flags & CPU_IS_LOOPING) {
+
+        reg.pc += 2;
+        (this->*execLoop[queue.ird])(queue.ird);
+        assert(reg.pc0 == reg.pc);
+
+    } else {
+
+        reg.pc += 2;
+        (this->*exec[queue.ird])(queue.ird);
+        assert(reg.pc0 == reg.pc);
+    }
 
 done:
     

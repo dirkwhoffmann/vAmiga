@@ -289,6 +289,7 @@ CPU::setConfigItem(Option option, i64 value)
             }
 
             config.revision = CPURevision(value);
+            setModel(moira::CPUModel(value));
             return;
 
         case OPT_CPU_OVERCLOCKING:

@@ -35,7 +35,7 @@ class Moira : public SubComponent {
 
 protected:
 
-    // Emulated CPU model (68000 is the only supported model yet)
+    // Emulated CPU model
     CPUModel model = M68000;
 
     // Interrupt mode of this CPU
@@ -72,6 +72,10 @@ protected:
      *     the STOP instruction has been executed. The state is left when the
      *     next interrupt occurs.
      *
+     * CPU_IS_LOOPING:
+     *     Set when the CPU is running in "loop mode". This mode is a 68010
+     *     feature to speed up the execution of certain loops.
+     *
      * CPU_LOG_INSTRUCTION:
      *     This flag is set if instruction logging is enabled. If set, the
      *     CPU records the current register contents in a log buffer.
@@ -95,15 +99,16 @@ protected:
      *    This flag indicates whether the CPU should check fo watchpoints.
      */
     int flags;
-    static const int CPU_IS_HALTED         = (1 << 8);
-    static const int CPU_IS_STOPPED        = (1 << 9);
-    static const int CPU_LOG_INSTRUCTION   = (1 << 10);
-    static const int CPU_CHECK_IRQ         = (1 << 11);
-    static const int CPU_TRACE_EXCEPTION   = (1 << 12);
-    static const int CPU_TRACE_FLAG        = (1 << 13);
-    static const int CPU_CHECK_BP          = (1 << 14);
-    static const int CPU_CHECK_WP          = (1 << 15);
-    static const int CPU_CHECK_CP          = (1 << 16);
+    static constexpr int CPU_IS_HALTED         = (1 << 8);
+    static constexpr int CPU_IS_STOPPED        = (1 << 9);
+    static constexpr int CPU_IS_LOOPING        = (1 << 10);
+    static constexpr int CPU_LOG_INSTRUCTION   = (1 << 11);
+    static constexpr int CPU_CHECK_IRQ         = (1 << 12);
+    static constexpr int CPU_TRACE_EXCEPTION   = (1 << 13);
+    static constexpr int CPU_TRACE_FLAG        = (1 << 14);
+    static constexpr int CPU_CHECK_BP          = (1 << 15);
+    static constexpr int CPU_CHECK_WP          = (1 << 16);
+    static constexpr int CPU_CHECK_CP          = (1 << 17);
 
     // Number of elapsed cycles since powerup
     i64 clock;
@@ -128,6 +133,9 @@ protected:
     typedef void (Moira::*ExecPtr)(u16);
     ExecPtr exec[65536];
 
+    // Jump table holding the instruction handlers for the 68010 loop mode
+    ExecPtr execLoop[65536];
+
     // Jump table holding the disassebler handlers
     typedef void (Moira::*DasmPtr)(StrWriter&, u32&, u16);
     DasmPtr *dasm = nullptr;
@@ -147,10 +155,16 @@ public:
     Moira(Amiga &ref);
     virtual ~Moira();
 
-    void createJumpTables();
+    // Selects the emulated CPU model
+    void setModel(CPUModel model);
 
     // Configures the output format of the disassembler
     void configDasm(bool h, bool u) { hex = h; upper = u; }
+
+private:
+
+    // Registers all callbacks
+    void createJumpTables();
 
 
     //

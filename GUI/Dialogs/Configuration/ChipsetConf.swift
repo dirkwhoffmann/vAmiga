@@ -17,8 +17,20 @@ extension ConfigurationController {
         // CPU
         csCpuRevision.selectItem(withTag: config.cpuRev)
         csCpuSpeed.selectItem(withTag: config.cpuSpeed)
-        csCpuInfo1.stringValue = "Motorola MC68000"
-        csCpuInfo2.stringValue = "All models"
+        switch CPURevision(rawValue: config.cpuRev) {
+
+        case .MC68000:
+            csCpuInfo1.stringValue = "Motorola MC68000"
+            csCpuInfo2.stringValue = "All models"
+
+        case .MC68010:
+            csCpuInfo1.stringValue = "WORK IN PROGRESS"
+            csCpuInfo2.stringValue = "DON'T USE"
+
+        default:
+            csCpuInfo1.stringValue = "Invalid"
+            csCpuInfo2.stringValue = ""
+        }
 
         // Agnus
         csMachineType.selectItem(withTag: config.machineType)
