@@ -158,7 +158,7 @@ Moira::execute()
     if (flags & CPU_IS_LOOPING) {
 
         reg.pc += 2;
-        (this->*execLoop[queue.ird])(queue.ird);
+        (this->*loop[queue.ird])(queue.ird);
         assert(reg.pc0 == reg.pc);
 
     } else {

@@ -134,7 +134,7 @@ protected:
     ExecPtr exec[65536];
 
     // Jump table holding the instruction handlers for the 68010 loop mode
-    ExecPtr execLoop[65536];
+    ExecPtr loop[65536];
 
     // Jump table holding the disassebler handlers
     typedef void (Moira::*DasmPtr)(StrWriter&, u32&, u16);
