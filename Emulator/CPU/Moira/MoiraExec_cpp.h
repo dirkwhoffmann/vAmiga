@@ -1431,6 +1431,37 @@ Moira::execMoveq(u16 opcode)
 }
 
 template<Instr I, Mode M, Size S> void
+Moira::execMoveFromCcrRg(u16 opcode)
+{
+    assert(model == M68010);
+    EXEC_DEBUG
+
+    int dst = _____________xxx(opcode);
+
+    u32 ea, data;
+    if (!readOp <M,S> (dst, ea, data)) return;
+    prefetch<POLLIPL>();
+
+    sync(2);
+    writeD <S> (dst, getCCR());
+}
+
+template<Instr I, Mode M, Size S> void
+Moira::execMoveFromCcrEa(u16 opcode)
+{
+    assert(model == M68010);
+    EXEC_DEBUG
+
+    int dst = _____________xxx(opcode);
+    u32 ea, data;
+
+    if (!readOp <M,S, STD_AE_FRAME> (dst, ea, data)) return;
+    prefetch();
+
+    writeOp <M,S, POLLIPL> (dst, ea, getCCR());
+}
+
+template<Instr I, Mode M, Size S> void
 Moira::execMoveToCcr(u16 opcode)
 {
     EXEC_DEBUG

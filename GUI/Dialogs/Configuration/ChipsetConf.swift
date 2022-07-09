@@ -118,7 +118,7 @@ extension ConfigurationController {
         }
         
         // Disable some controls if emulator is powered on
-        csCpuRevision.isEnabled = poweredOff
+        // csCpuRevision.isEnabled = poweredOff
         csAgnusRevision.isEnabled = poweredOff
         csDeniseRevision.isEnabled = poweredOff
         csCiaRevision.isEnabled = poweredOff

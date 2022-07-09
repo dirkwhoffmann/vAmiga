@@ -288,8 +288,10 @@ CPU::setConfigItem(Option option, i64 value)
                 throw VAError(ERROR_OPT_INVARG, CPURevisionEnum::keyList());
             }
 
+            suspend();
             config.revision = CPURevision(value);
             setModel(moira::CPUModel(value));
+            resume();
             return;
 
         case OPT_CPU_OVERCLOCKING:

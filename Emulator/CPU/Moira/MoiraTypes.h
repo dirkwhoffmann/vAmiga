@@ -107,7 +107,8 @@ typedef enum
     LSR,            // Logical shift right
     MOVE,           // Copy data from source to destination
     MOVEA,          // Move address
-    MOVECCR,        // Copy data to condition code register from source
+    MOVEFCCR,       // Copy data from condition code register to destination
+    MOVETCCR,       // Copy data to condition code register from source
     MOVEFSR,        // Copy data from status register to destination
     MOVETSR,        // Copy data to status register from source
     MOVEUSP,        // Copy data to or from USP

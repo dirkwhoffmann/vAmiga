@@ -959,6 +959,23 @@ Moira::createJumpTable()
     opcode = parse("0111 ---0 ---- ----");
     ____XXX_XXXXXXXX(bind, opcode, MOVEQ, MODE_IM, Long, Moveq);
 
+    // MOVE from CCR
+    //
+    //       Syntax: MOVE CCR,<ea>
+    //         Size: Word
+    //
+    //               -------------------------------------------------
+    // #<data>,<ea>  | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | A | B |
+    //               -------------------------------------------------
+    //                 X       X   X   X   X   X   X   X
+
+    if (model == M68010) {
+
+        opcode = parse("0100 0010 11-- ----");
+        __________MMMXXX(bind, opcode, MOVEFCCR, 0b100000000000, Word, MoveFromCcrRg);
+        __________MMMXXX(bind, opcode, MOVEFCCR, 0b001111111000, Word, MoveFromCcrEa);
+    }
+
 
     // MOVE to CCR
     //
@@ -971,7 +988,7 @@ Moira::createJumpTable()
     //                 X       X   X   X   X   X   X   X   X   X   X
 
     opcode = parse("0100 0100 11-- ----");
-    __________MMMXXX(bind, opcode, MOVETSR, 0b101111111111, Word, MoveToCcr);
+    __________MMMXXX(bind, opcode, MOVETCCR, 0b101111111111, Word, MoveToCcr);
 
 
     // MOVE from SR

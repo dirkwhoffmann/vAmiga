@@ -45,7 +45,7 @@ Moira::execDbcc68010(u16 opcode)
                 // Enter loop mode
                 flags |= CPU_IS_LOOPING;
                 queue.irc = opcode;
-                printf("Entering loop mode (IRD: %x IRC: %x)\n", queue.ird, queue.irc);
+                // printf("Entering loop mode (IRD: %x IRC: %x)\n", queue.ird, queue.irc);
             }
             return;
 
@@ -69,8 +69,6 @@ Moira::execDbccLoop(u16 opcode)
 {
     EXEC_DEBUG
 
-    // printf("loopDbcc(%x) IRD = %x IRC = %x\n", opcode, queue.ird, queue.irc);
-
     sync(2);
     if (!cond<I>()) {
 
@@ -78,7 +76,6 @@ Moira::execDbccLoop(u16 opcode)
         u32 newpc = U32_ADD(reg.pc, -4);
 
         bool takeBranch = readD<Word>(dn) != 0;
-        // printf("takeBranch = %d\n", takeBranch);
 
         // Check for address error
         if (misaligned<S>(newpc)) {
@@ -93,13 +90,10 @@ Moira::execDbccLoop(u16 opcode)
         if (takeBranch) {
             reg.pc = newpc;
             reg.pc0 = reg.pc;
-            // fullPrefetch<POLLIPL>();
             queue.ird = queue.irc;
             queue.irc = opcode;
-            // printf("Repeating loop (%d): IRD = %x IRC = %x\n", readD<Word>(dn), opcode, queue.ird, queue.irc);
             return;
         } else {
-            // printf("Exiting loop PC = %x\n", reg.pc);
             (void)readMS <MEM_PROG, Word> (reg.pc + 2);
         }
     } else {
@@ -110,7 +104,7 @@ Moira::execDbccLoop(u16 opcode)
     reg.pc += 2;
     fullPrefetch<POLLIPL>();
     flags &= ~CPU_IS_LOOPING;
-    printf("Exiting loop mode (IRD: %x IRC: %x)\n", queue.ird, queue.irc);
+    // printf("Exiting loop mode (IRD: %x IRC: %x)\n", queue.ird, queue.irc);
 }
 
 template<Instr I, Mode M, Size S> void

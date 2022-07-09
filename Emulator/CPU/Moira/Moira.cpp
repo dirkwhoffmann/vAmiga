@@ -44,6 +44,7 @@ Moira::setModel(CPUModel model)
 
         this->model = model;
         createJumpTable();
+        flags &= ~CPU_IS_LOOPING;
     }
 }
 
