@@ -985,8 +985,15 @@ Moira::createJumpTable()
     //                 X       X   X   X   X   X   X   X
 
     opcode = parse("0100 0000 11-- ----");
+
     __________MMMXXX(bind, opcode, MOVEFSR, 0b100000000000, Word, MoveFromSrRg);
     __________MMMXXX(bind, opcode, MOVEFSR, 0b001111111000, Word, MoveFromSrEa);
+
+    if (model == M68010) {
+
+        __________MMMXXX(bindExec, opcode, MOVEFSR, 0b100000000000, Word, MoveFromSrRg68010);
+        __________MMMXXX(bindExec, opcode, MOVEFSR, 0b001111111000, Word, MoveFromSrEa68010);
+    }
 
 
     // MOVE to SR

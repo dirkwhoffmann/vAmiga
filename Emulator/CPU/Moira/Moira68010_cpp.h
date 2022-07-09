@@ -112,3 +112,21 @@ Moira::execDbccLoop(u16 opcode)
     flags &= ~CPU_IS_LOOPING;
     printf("Exiting loop mode (IRD: %x IRC: %x)\n", queue.ird, queue.irc);
 }
+
+template<Instr I, Mode M, Size S> void
+Moira::execMoveFromSrRg68010(u16 opcode)
+{
+    EXEC_DEBUG
+
+    SUPERVISOR_MODE_ONLY
+    execMoveFromSrRg <I,M,S> (opcode);
+}
+
+template<Instr I, Mode M, Size S> void
+Moira::execMoveFromSrEa68010(u16 opcode)
+{
+    EXEC_DEBUG
+
+    SUPERVISOR_MODE_ONLY
+    execMoveFromSrEa <I,M,S> (opcode);
+}

@@ -138,6 +138,8 @@ MOIRA_DECLARE(Unlk)
 //
 
 MOIRA_DECLARE_EXEC(Dbcc68010)
+MOIRA_DECLARE(MoveFromSrRg68010)
+MOIRA_DECLARE(MoveFromSrEa68010)
 
 // Musashi compatibility mode
 template<Instr I, Mode M, Size S> void execMulMusashi(u16 op);
