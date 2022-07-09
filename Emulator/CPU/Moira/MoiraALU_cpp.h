@@ -74,6 +74,7 @@ Moira::shift(int cnt, u64 data) {
     switch(I) {
 
         case ASL:
+        case ASL_LOOP:
         {
             bool carry = false;
             u32 changed = 0;
@@ -89,6 +90,7 @@ Moira::shift(int cnt, u64 data) {
             break;
         }
         case ASR:
+        case ASR_LOOP:
         {
             bool carry = false;
             u32 changed = 0;
@@ -104,6 +106,7 @@ Moira::shift(int cnt, u64 data) {
             break;
         }
         case LSL:
+        case LSL_LOOP:
         {
             bool carry = false;
             for (int i = 0; i < cnt; i++) {
@@ -116,6 +119,7 @@ Moira::shift(int cnt, u64 data) {
             break;
         }
         case LSR:
+        case LSR_LOOP:
         {
             bool carry = false;
             for (int i = 0; i < cnt; i++) {
@@ -128,6 +132,7 @@ Moira::shift(int cnt, u64 data) {
             break;
         }
         case ROL:
+        case ROL_LOOP:
         {
             bool carry = false;
             for (int i = 0; i < cnt; i++) {
@@ -139,6 +144,7 @@ Moira::shift(int cnt, u64 data) {
             break;
         }
         case ROR:
+        case ROR_LOOP:
         {
             bool carry = false;
             for (int i = 0; i < cnt; i++) {
@@ -151,6 +157,7 @@ Moira::shift(int cnt, u64 data) {
             break;
         }
         case ROXL:
+        case ROXL_LOOP:
         {
             bool carry = reg.sr.x;
             for (int i = 0; i < cnt; i++) {
@@ -165,6 +172,7 @@ Moira::shift(int cnt, u64 data) {
             break;
         }
         case ROXR:
+        case ROXR_LOOP:
         {
             bool carry = reg.sr.x;
             for (int i = 0; i < cnt; i++) {
@@ -329,6 +337,7 @@ Moira::bcd(u32 op1, u32 op2)
     switch(I) {
 
         case ABCD:
+        case ABCD_LOOP:
         {
             // Extract nibbles
             u16 op1_hi = op1 & 0xF0, op1_lo = op1 & 0x0F;
@@ -348,6 +357,7 @@ Moira::bcd(u32 op1, u32 op2)
             break;
         }
         case SBCD:
+        case SBCD_LOOP:
         {
             // Extract nibbles
             u16 op1_hi = op1 & 0xF0, op1_lo = op1 & 0x0F;
@@ -399,6 +409,7 @@ Moira::logic(u32 op)
     switch(I) {
 
         case NOT:
+        case NOT_LOOP:
         {
             result = ~op;
             reg.sr.n = NBIT<S>(result);
@@ -408,11 +419,13 @@ Moira::logic(u32 op)
             break;
         }
         case NEG:
+        case NEG_LOOP:
         {
             result = addsub<SUB,S>(op, 0);
             break;
         }
         case NEGX:
+        case NEGX_LOOP:
         {
             result = addsub<SUBX,S>(op, 0);
             break;
