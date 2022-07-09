@@ -14,13 +14,23 @@
  *    dasmXXX : Handler for disassembling an instruction
  */
 
+#define MOIRA_DECLARE_EXEC(x) \
+template<Instr I, Mode M, Size S> void exec##x(u16 op);
+
+#define MOIRA_DECLARE_DASM(x) \
+template<Instr I, Mode M, Size S> void dasm##x(StrWriter &str, u32 &addr, u16 op);
+
+#define MOIRA_DECLARE(x) \
+MOIRA_DECLARE_EXEC(x) \
+MOIRA_DECLARE_DASM(x)
+
 #define MOIRA_DECLARE_SIMPLE(x) \
 void dasm##x(StrWriter &str, u32 &addr, u16 op); \
 void exec##x(u16 op);
 
-#define MOIRA_DECLARE(x) \
-template<Instr I, Mode M, Size S> void dasm##x(StrWriter &str, u32 &addr, u16 op); \
-template<Instr I, Mode M, Size S> void exec##x(u16 op);
+//
+// Handlers (68000 + 68010)
+//
 
 MOIRA_DECLARE_SIMPLE(LineA)
 MOIRA_DECLARE_SIMPLE(LineF)
@@ -62,6 +72,7 @@ MOIRA_DECLARE(CmpiEa)
 MOIRA_DECLARE(Cmpm)
 
 MOIRA_DECLARE(Dbcc)
+MOIRA_DECLARE_EXEC(DbccLoop)
 
 MOIRA_DECLARE(ExgDxDy)
 MOIRA_DECLARE(ExgAxDy)
@@ -121,6 +132,12 @@ MOIRA_DECLARE(Trapv)
 MOIRA_DECLARE(Tst)
 
 MOIRA_DECLARE(Unlk)
+
+//
+// Handlers (68010)
+//
+
+MOIRA_DECLARE_EXEC(Dbcc68010)
 
 // Musashi compatibility mode
 template<Instr I, Mode M, Size S> void execMulMusashi(u16 op);

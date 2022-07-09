@@ -196,6 +196,7 @@ Moira::addsub(u32 op1, u32 op2)
     switch(I) {
 
         case ADD:
+        case ADD_LOOP:
         case ADDI:
         case ADDQ:
         {
@@ -207,6 +208,7 @@ Moira::addsub(u32 op1, u32 op2)
             break;
         }
         case ADDX:
+        case ADDX_LOOP:
         {
             result = U64_ADD3(op1, op2, reg.sr.x);
 
@@ -216,6 +218,7 @@ Moira::addsub(u32 op1, u32 op2)
             break;
         }
         case SUB:
+        case SUB_LOOP:
         case SUBI:
         case SUBQ:
         {
@@ -227,6 +230,7 @@ Moira::addsub(u32 op1, u32 op2)
             break;
         }
         case SUBX:
+        case SUBX_LOOP:
         {
             result = U64_SUB3(op2, op1, reg.sr.x);
 

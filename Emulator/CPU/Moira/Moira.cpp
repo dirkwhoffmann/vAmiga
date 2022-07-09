@@ -19,6 +19,7 @@ namespace moira {
 #include "MoiraDataflow_cpp.h"
 #include "MoiraExceptions_cpp.h"
 #include "MoiraExec_cpp.h"
+#include "Moira68010_cpp.h"
 #include "StrWriter_cpp.h"
 #include "MoiraDasm_cpp.h"
 
@@ -27,7 +28,7 @@ Moira::Moira(Amiga &ref) : SubComponent(ref)
     if (BUILD_INSTR_INFO_TABLE) info = new InstrInfo[65536];
     if (ENABLE_DASM) dasm = new DasmPtr[65536];
 
-    createJumpTables();
+    createJumpTable();
 }
 
 Moira::~Moira()
@@ -39,8 +40,11 @@ Moira::~Moira()
 void
 Moira::setModel(CPUModel model)
 {
-    this->model = model;
-    createJumpTables();
+    if (this->model != model) {
+
+        this->model = model;
+        createJumpTable();
+    }
 }
 
 void
@@ -158,9 +162,13 @@ Moira::execute()
     if (flags & CPU_IS_LOOPING) {
 
         reg.pc += 2;
-        (this->*loop[queue.ird])(queue.ird);
-        assert(reg.pc0 == reg.pc);
-
+        if (loop[queue.ird] == nullptr) {
+            printf("Callback missing\n");
+            breakpointReached(reg.pc0);
+        } else {
+            (this->*loop[queue.ird])(queue.ird);
+            assert(reg.pc0 == reg.pc);
+        }
     } else {
 
         reg.pc += 2;
@@ -189,14 +197,12 @@ Moira::checkForIrq()
 {
     if (reg.ipl > reg.sr.ipl || reg.ipl == 7) {
 
-        /*
-        auto diff = clock - iplCycle;
-        if (diff <= 1) {
-            trace(1, "IPL cycle too recent (%lld)\n", diff);
-            return false;
+        // Exit loop mode if necessary
+        if (flags & CPU_IS_LOOPING) {
+            // printf("INTERRUPT IN LOOP MODE\n");
+            flags &= ~CPU_IS_LOOPING;
         }
-        */
-        
+
         // Trigger interrupt
         execIrqException(reg.ipl);
         return true;

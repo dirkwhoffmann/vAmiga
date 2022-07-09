@@ -161,10 +161,13 @@ public:
     // Configures the output format of the disassembler
     void configDasm(bool h, bool u) { hex = h; upper = u; }
 
-private:
+protected:
 
-    // Registers all callbacks
-    void createJumpTables();
+    // Creates the generic jump table (all models)
+    void createJumpTable();
+
+    // Adjusts the jump table for a specific model
+    void modifyJumpTableFor68010();
 
 
     //

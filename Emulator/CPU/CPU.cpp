@@ -531,6 +531,22 @@ CPU::_debugOff()
 }
 
 isize
+CPU::_load(const u8 *buffer)
+{
+    auto oldModel = config.revision;
+
+    util::SerReader reader(buffer);
+    applyToPersistentItems(reader);
+    applyToResetItems(reader);
+
+    if (oldModel != config.revision) {
+        createJumpTable();
+    }
+
+    return isize(reader.ptr - buffer);
+}
+
+isize
 CPU::didLoadFromBuffer(const u8 *buffer)
 {
     /* Because we don't save breakpoints and watchpoints in a snapshot, the

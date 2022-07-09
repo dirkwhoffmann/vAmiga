@@ -162,9 +162,42 @@ typedef enum
     TRAP,      // Trap
     TRAPV,     // Trap on overflow
     TST,       // Test an operand
-    UNLK       // Unlink
+    UNLK,      // Unlink
+
+    // Loop mode extensions (68010)
+    ABCD_LOOP,
+    ADD_LOOP,
+    ADDA_LOOP,
+    ADDX_LOOP,
+    AND_LOOP,
+    ASL_LOOP,
+    ASR_LOOP,
+    CLR_LOOP,
+    CMP_LOOP,
+    CMPA_LOOP,
+    EOR_LOOP,
+    LSL_LOOP,
+    LSR_LOOP,
+    MOVE_LOOP,
+    NBCD_LOOP,
+    NEG_LOOP,
+    NEGX_LOOP,
+    NOT_LOOP,
+    OR_LOOP,
+    ROL_LOOP,
+    ROR_LOOP,
+    ROXL_LOOP,
+    ROXR_LOOP,
+    SBCD_LOOP,
+    SUB_LOOP,
+    SUBA_LOOP,
+    SUBX_LOOP,
+    TST_LOOP
 }
 Instr;
+
+template <Instr I>
+consteval bool looping() { return I >= ABCD_LOOP; }
 
 typedef enum
 {

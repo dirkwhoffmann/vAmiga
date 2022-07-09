@@ -622,6 +622,7 @@
 		5082D83A21EF891200CF7692 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		5083CF572546A22E00A28EF8 /* FSTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSTypes.h; sourceTree = "<group>"; };
 		5085FE5821FB6856009753EF /* ProxyExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyExtensions.swift; sourceTree = "<group>"; };
+		50880BD828795B4400AAD23F /* Moira68010_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Moira68010_cpp.h; sourceTree = "<group>"; };
 		508833EC21F0D21B009890EA /* ADFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ADFFile.cpp; sourceTree = "<group>"; };
 		508833ED21F0D21B009890EA /* ADFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADFFile.h; sourceTree = "<group>"; };
 		50894D812593CF4400C0499D /* HIDExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HIDExtensions.swift; sourceTree = "<group>"; };
@@ -1799,6 +1800,7 @@
 				50E2BE27240D418500155AE4 /* MoiraExceptions.h */,
 				50927DAA24865F11008DF3B8 /* MoiraExceptions_cpp.h */,
 				50E2BE30240D418500155AE4 /* MoiraExec_cpp.h */,
+				50880BD828795B4400AAD23F /* Moira68010_cpp.h */,
 				50E2BE2E240D418500155AE4 /* MoiraInit.h */,
 				50E2BE28240D418500155AE4 /* MoiraInit_cpp.h */,
 				50E2BE32240D418600155AE4 /* StrWriter.h */,

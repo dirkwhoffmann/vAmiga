@@ -116,6 +116,9 @@ template<Flags F = 0> void prefetch();
 // Performs a full prefetch cycle
 template<Flags F = 0, int delay = 0> void fullPrefetch();
 
+// prefetch replacement if loop mode is active
+void noPrefetch();
+
 // Reads an extension word from memory
 void readExt();
 

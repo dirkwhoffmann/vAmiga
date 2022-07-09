@@ -446,7 +446,7 @@ Moira::prefetch()
      * executed instruction.
      */
     reg.pc0 = reg.pc;
-    
+
     queue.ird = queue.irc;
     queue.irc = (u16)readMS <MEM_PROG, Word, F> (reg.pc + 2);
 }
@@ -463,6 +463,15 @@ Moira::fullPrefetch()
     queue.irc = (u16)readMS <MEM_PROG, Word> (reg.pc);
     if (delay) sync(delay);
     prefetch<F>();
+}
+
+void
+Moira::noPrefetch()
+{
+    assert(flags & CPU_IS_LOOPING);
+
+    reg.pc0 = reg.pc;
+    std::swap(queue.irc, queue.ird);
 }
 
 void
