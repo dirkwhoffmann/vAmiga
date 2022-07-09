@@ -292,28 +292,32 @@ struct StatusRegister {
 
 struct Registers {
 
-    u32 pc;               // Program counter
-    u32 pc0;              // Beginning of the currently executed instruction
-    StatusRegister sr;    // Status register
+    u32 pc;                 // Program counter
+    u32 pc0;                // Beginning of the currently executed instruction
+    StatusRegister sr;      // Status register
 
     union {
         struct {
-            u32 d[8];     // D0, D1 ... D7
-            u32 a[8];     // A0, A1 ... A7
+            u32 d[8];       // D0, D1 ... D7
+            u32 a[8];       // A0, A1 ... A7
         };
         struct {
-            u32 r[16];    // D0, D1 ... D7, A0, A1 ... A7
+            u32 r[16];      // D0, D1 ... D7, A0, A1 ... A7
         };
         struct {
             u32 _pad[15];
-            u32 sp;       // Visible stack pointer (overlays a[7])
+            u32 sp;         // Visible stack pointer (overlays a[7])
         };
     };
 
-    u32 usp;              // User Stack Pointer
-    u32 ssp;              // Supervisor Stack Pointer
+    u32 usp;                // User Stack Pointer
+    u32 ssp;                // Supervisor Stack Pointer
 
-    u8 ipl;               // Polled Interrupt Priority Level
+    u8 ipl;                 // Polled Interrupt Priority Level
+
+    u32 vbr;                // Vector Base Register (68010+)
+    u32 sfc;                // Source Function Code (68010+)
+    u32 dfc;                // Destination Function Code (68010+)
 };
 
 struct PrefetchQueue {    // http://pasti.fxatari.com/68kdocs/68kPrefetch.html

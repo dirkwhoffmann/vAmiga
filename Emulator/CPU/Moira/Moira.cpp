@@ -53,21 +53,13 @@ Moira::reset()
 {
     flags = CPU_CHECK_IRQ;
 
-    for(int i = 0; i < 8; i++) reg.d[i] = reg.a[i] = 0;
-    reg.usp = 0;
-    reg.ipl = 0;
+    reg = { };
+    reg.sr.s = 1;
+    reg.sr.ipl = 7;
+
     ipl = 0;
     fcl = 0;
     
-    reg.sr.t = 0;
-    reg.sr.s = 1;
-    reg.sr.x = 0;
-    reg.sr.n = 0;
-    reg.sr.z = 0;
-    reg.sr.v = 0;
-    reg.sr.c = 0;
-    reg.sr.ipl = 7;
-
     sync(16);
 
     // Read the initial (supervisor) stack pointer from memory

@@ -491,7 +491,7 @@ Moira::readExt()
 template<Flags F> void
 Moira::jumpToVector(int nr)
 {
-    u32 vectorAddr = 4 * nr;
+    u32 vectorAddr = reg.vbr + 4 * nr;
 
     exception = nr;
     

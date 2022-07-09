@@ -108,7 +108,10 @@ private:
             << reg.usp
             << reg.ssp
             << reg.ipl
-            
+            << reg.vbr
+            << reg.sfc
+            << reg.dfc
+
             << queue.irc
             << queue.ird
             
