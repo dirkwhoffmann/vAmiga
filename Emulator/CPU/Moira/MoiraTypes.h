@@ -65,6 +65,7 @@ typedef enum
     BVS,            // Branch on overflow set
     BCHG,           // Test a bit and change
     BCLR,           // Test a bit and clear
+    BKPT,           // 68010+: Run breakbpoint cycle
     BRA,            // Branch always
     BSET,           // Test a bit and set
     BSR,            // Branch to subroutine
@@ -107,6 +108,7 @@ typedef enum
     LSR,            // Logical shift right
     MOVE,           // Copy data from source to destination
     MOVEA,          // Move address
+    MOVEC,          // 68010+: Move Control Register
     MOVEFCCR,       // Copy data from condition code register to destination
     MOVETCCR,       // Copy data to condition code register from source
     MOVEFSR,        // Copy data from status register to destination
@@ -115,6 +117,7 @@ typedef enum
     MOVEM,          // Move multiple registers
     MOVEP,          // Move peripheral data
     MOVEQ,          // Move quick
+    MOVES,          // 68010+: Move address space
     MULS,           // Signed multiply
     MULU,           // Unsigned multiply
     NBCD,           // Negate decimal with sign extend
@@ -132,6 +135,7 @@ typedef enum
     ROR,            // Rotate right
     ROXL,           // Rotate left with extend
     ROXR,           // Rotate righ with extend
+    RTD,            // 68010+: Return and deallocate
     RTE,            // Return from exception
     RTR,            // Return and restore condition codes
     RTS,            // Return from subroutine

@@ -29,7 +29,7 @@ void dasm##x(StrWriter &str, u32 &addr, u16 op); \
 void exec##x(u16 op);
 
 //
-// Handlers (68000 + 68010)
+// Handlers (68000+)
 //
 
 MOIRA_DECLARE_SIMPLE(LineA)
@@ -136,8 +136,14 @@ MOIRA_DECLARE(Tst)
 MOIRA_DECLARE(Unlk)
 
 //
-// Handlers (68010)
+// Handlers (68010+)
 //
+
+MOIRA_DECLARE(Bkpt)
+MOIRA_DECLARE(MovecRcRx)
+MOIRA_DECLARE(MovecRxRc)
+MOIRA_DECLARE(MovesRgEa)
+MOIRA_DECLARE(Rtd)
 
 MOIRA_DECLARE_EXEC(Dbcc68010)
 MOIRA_DECLARE(MoveFromSrRg68010)

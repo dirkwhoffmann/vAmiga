@@ -458,6 +458,17 @@ Moira::createJumpTable()
     opcode = parse("0000 1000 10-- ----");
     __________MMMXXX(bind, opcode, BCLR, 0b101111111000, Byte, BitImEa);
 
+    // BKPT (68010+)
+    //
+    //       Syntax: BKPT #<vector>
+    //        Sizes: Unsized
+
+    if (model == M68010) {
+
+        opcode = parse("0100 1000 0100 1---");
+        _____________XXX(bind, opcode, BKPT, MODE_IP, Long, Bkpt);
+    }
+
 
     // BSET
     //
@@ -594,6 +605,11 @@ Moira::createJumpTable()
     opcode = parse("0000 1100 ---- ----");
     ________SSMMMXXX(bind, opcode, CMPI, 0b100000000000, Byte | Word | Long, CmpiRg);
     ________SSMMMXXX(bind, opcode, CMPI, 0b001111111000, Byte | Word | Long, CmpiEa);
+
+    if (model == M68000) {
+
+        ________SSMMMXXX(bind, opcode, CMPI, 0b000000000110, Byte | Word | Long, CmpiEa);
+    }
 
 
     // CMPM
@@ -908,6 +924,19 @@ Moira::createJumpTable()
     ____XXX___MMMXXX(bind, opcode | 1 << 12, MOVEA, 0b111111111111, Word, Movea)
 
 
+    // MOVEC
+    //
+    //       Syntax: MOVEC Rc,Rx
+    //               MOVEC Rx,Rc
+    //        Sizes: Longword
+
+    if (model == M68010) {
+
+        // bind(parse("0100 1110 0111 1010"), MovecRcRx, MOVEC, MODE_IP, Long);
+        // bind(parse("0100 1110 0111 1011"), MovecRxRc, MOVEC, MODE_IP, Long);
+    }
+
+
     // MOVEM
     //
     //       Syntax: MOVEM <ea>,<register list>
@@ -958,6 +987,24 @@ Moira::createJumpTable()
     // #<data>,Dn
     opcode = parse("0111 ---0 ---- ----");
     ____XXX_XXXXXXXX(bind, opcode, MOVEQ, MODE_IM, Long, Moveq);
+
+
+    // MOVES
+    //
+    //       Syntax: MOVES Dx,<ea>
+    //        Sizes: Byte, Word, Longword
+
+    //               -------------------------------------------------
+    // Dx,<ea>       | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | A | B |
+    //               -------------------------------------------------
+    //                         X   X   X   X   X   X   X
+
+    if (model == M68010) {
+
+        opcode = parse("0000 1110 ---- ----");
+        ________SSMMMXXX(bind, opcode, ADD, 0b001111111000, Byte | Word | Long, MovesRgEa);
+    }
+
 
     // MOVE from CCR
     //
@@ -1270,6 +1317,14 @@ Moira::createJumpTable()
     //        Sizes: Unsized
 
     bind(parse("0100 1110 0111 0000"), Reset, RESET, MODE_IP, Long);
+
+
+    // RTD
+    //
+    //       Syntax: RTD
+    //        Sizes: Unsized
+
+    bind(parse("0100 1110 0111 0100"), Rtd, RTD, MODE_IP, Long);
 
 
     // RTE

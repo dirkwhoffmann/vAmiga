@@ -307,6 +307,14 @@ Moira::dasmAndisr(StrWriter &str, u32 &addr, u16 op)
 }
 
 template<Instr I, Mode M, Size S> void
+Moira::dasmBkpt(StrWriter &str, u32 &addr, u16 op)
+{
+    auto nr = Imu ( _____________xxx(op) );
+
+    str << Ins<I>{} << tab << nr;
+}
+
+template<Instr I, Mode M, Size S> void
 Moira::dasmBsr(StrWriter &str, u32 &addr, u16 op)
 {
     if constexpr (MIMIC_MUSASHI && S == Byte) {
@@ -319,8 +327,6 @@ Moira::dasmBsr(StrWriter &str, u32 &addr, u16 op)
     u32 dst = addr;
     U32_INC(dst, 2);
     U32_INC(dst, S == Byte ? (i8)op : (i16)dasmRead<S>(addr));
-    // u32 dst = U32_ADD(addr, 2);
-    // dst += (S == Byte) ? (i8)op : (i16)dasmRead<S>(addr);
 
     str << Ins<I>{} << tab << UInt(dst);
 }
@@ -586,6 +592,24 @@ Moira::dasmMovea(StrWriter &str, u32 &addr, u16 op)
 }
 
 template<Instr I, Mode M, Size S> void
+Moira::dasmMovecRcRx(StrWriter &str, u32 &addr, u16 op)
+{
+    auto dst = "???";
+    auto arg = u16(dasmRead<Word>(addr));
+
+    str << Ins<I>{} << tab << "???, " << dst;
+}
+
+template<Instr I, Mode M, Size S> void
+Moira::dasmMovecRxRc(StrWriter &str, u32 &addr, u16 op)
+{
+    auto src = "???";
+    auto arg = u16(dasmRead<Word>(addr));
+
+    str << Ins<I>{} << tab << src << ", ???";
+}
+
+template<Instr I, Mode M, Size S> void
 Moira::dasmMovemEaRg(StrWriter &str, u32 &addr, u16 op)
 {
     auto dst = RegRegList ( (u16)dasmRead<Word>(addr)  );
@@ -631,6 +655,15 @@ Moira::dasmMoveq(StrWriter &str, u32 &addr, u16 op)
     auto dst = Dn  ( ____xxx_________(op) );
 
     str << Ins<I>{} << tab << src << ", " << dst;
+}
+
+template<Instr I, Mode M, Size S> void
+Moira::dasmMovesRgEa(StrWriter &str, u32 &addr, u16 op)
+{
+    auto src = Dn       ( ____xxx_________(op)       );
+    auto dst = Op <M,S> ( _____________xxx(op), addr );
+
+    str << Ins<I>{} << Sz<S>{} << tab << src << ", " << dst;
 }
 
 template<Instr I, Mode M, Size S> void
@@ -739,6 +772,12 @@ Moira::dasmPea(StrWriter &str, u32 &addr, u16 op)
 
 template <Instr I, Mode M, Size S> void
 Moira::dasmReset(StrWriter &str, u32 &addr, u16 op)
+{
+    str << Ins<I>{};
+}
+
+template <Instr I, Mode M, Size S> void
+Moira::dasmRtd(StrWriter &str, u32 &addr, u16 op)
 {
     str << Ins<I>{};
 }

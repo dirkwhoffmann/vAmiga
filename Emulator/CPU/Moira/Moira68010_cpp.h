@@ -8,6 +8,88 @@
 // -----------------------------------------------------------------------------
 
 template<Instr I, Mode M, Size S> void
+Moira::execBkpt(u16 opcode)
+{
+    EXEC_DEBUG
+
+    // TODO
+    printf("BKPT: Implementation missing\n");
+    breakpointReached(reg.pc0);
+
+    prefetch<POLLIPL>();
+}
+
+template<Instr I, Mode M, Size S> void
+Moira::execRtd(u16 opcode)
+{
+    EXEC_DEBUG
+
+    // TODO
+    printf("RTD: Implementation missing\n");
+    breakpointReached(reg.pc0);
+
+    fullPrefetch<POLLIPL>();
+}
+
+template<Instr I, Mode M, Size S> void
+Moira::execMovecRcRx(u16 opcode)
+{
+    EXEC_DEBUG
+
+    auto arg = readI<Word>();
+    int dst = xxxx____________(arg);
+    int src = arg & 0x0FFF;
+
+    prefetch<POLLIPL>();
+
+    switch(src) {
+
+        case 0x000: reg.r[dst] = reg.sfc & 0b111; break;
+        case 0x001: reg.r[dst] = reg.dfc & 0b111; break;
+        case 0x800: reg.r[dst] = reg.usp; break;
+        case 0x801: reg.r[dst] = reg.vbr; break;
+
+        default:
+            execIllegal(opcode);
+    }
+}
+
+template<Instr I, Mode M, Size S> void
+Moira::execMovecRxRc(u16 opcode)
+{
+    EXEC_DEBUG
+
+    auto arg = readI<Word>();
+    int src = xxxx____________(arg);
+    int dst = arg & 0x0FFF;
+
+    prefetch<POLLIPL>();
+
+    switch(dst) {
+
+        case 0x000: reg.sfc = reg.r[src] & 0b111; break;
+        case 0x001: reg.dfc = reg.r[src] & 0b111; break;
+        case 0x800: reg.usp = reg.r[src]; break;
+        case 0x801: reg.vbr = reg.r[src]; break;
+
+        default:
+            execIllegal(opcode);
+    }
+}
+
+template<Instr I, Mode M, Size S> void
+Moira::execMovesRgEa(u16 opcode)
+{
+    EXEC_DEBUG
+
+    // TODO
+    printf("MovesRgEa: Implementation missing\n");
+    breakpointReached(reg.pc0);
+
+    fullPrefetch<POLLIPL>();
+}
+
+template<Instr I, Mode M, Size S> void
 Moira::execDbcc68010(u16 opcode)
 {
     EXEC_DEBUG
