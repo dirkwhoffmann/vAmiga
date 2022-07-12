@@ -1587,7 +1587,15 @@ Moira::execMulMusashi(u16 op)
     prefetch<POLLIPL>();
     result = mulMusashi<I>(data, readD<Word>(dst));
 
-    sync(50);
+    switch (I) {
+
+        case MULU: model == M68000 ? sync(50) : sync(26); break;
+        case MULS: model == M68000 ? sync(50) : sync(28); break;
+
+        default:
+            fatalError;
+    }
+
     writeD(dst, result);
 }
 

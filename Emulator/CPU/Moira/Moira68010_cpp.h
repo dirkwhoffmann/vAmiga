@@ -12,11 +12,9 @@ Moira::execBkpt(u16 opcode)
 {
     EXEC_DEBUG
 
-    // TODO
-    printf("BKPT: Implementation missing\n");
-    breakpointReached(reg.pc0);
-
-    prefetch<POLLIPL>();
+    sync(4);
+    signalIllegalOpcodeException(opcode);
+    execUnimplemented(4);
 }
 
 template<Instr I, Mode M, Size S> void
@@ -24,10 +22,20 @@ Moira::execRtd(u16 opcode)
 {
     EXEC_DEBUG
 
-    // TODO
-    printf("RTD: Implementation missing\n");
-    breakpointReached(reg.pc0);
+    signalRtdInstr();
 
+    bool error;
+    u32 newpc = readM<M, Long>(reg.sp, error);
+    if (error) return;
+
+    reg.sp += 4 + queue.irc;
+
+    if (misaligned(newpc)) {
+        execAddressError(makeFrame<AE_PROG>(newpc, reg.pc));
+        return;
+    }
+
+    setPC(newpc);
     fullPrefetch<POLLIPL>();
 }
 
@@ -78,15 +86,34 @@ Moira::execMovecRxRc(u16 opcode)
 }
 
 template<Instr I, Mode M, Size S> void
-Moira::execMovesRgEa(u16 opcode)
+Moira::execMoves(u16 opcode)
 {
     EXEC_DEBUG
+    SUPERVISOR_MODE_ONLY
 
-    // TODO
-    printf("MovesRgEa: Implementation missing\n");
-    breakpointReached(reg.pc0);
+    u32 ea, data;
 
-    fullPrefetch<POLLIPL>();
+    if (queue.irc & 0x800) {      // Rg -> Ea
+
+        auto arg = readI<Word>();
+        int src = xxxx____________(arg);
+        int dst = _____________xxx(opcode);
+        u32 ea  = computeEA <M,Long, SKIP_LAST_READ> (dst);
+
+        bool error;
+        writeM <M,S> (ea, readR<S>(src), error);
+
+    } else {                // Ea -> Rg
+
+        auto arg = readI<Word>();
+        int src = _____________xxx(opcode);
+        int dst = xxxx____________(arg);
+
+        if (!readOp<M,S, STD_AE_FRAME>(src, ea, data)) return;
+        writeR<S>(dst, data);
+    }
+
+    prefetch<POLLIPL>();
 }
 
 template<Instr I, Mode M, Size S> void

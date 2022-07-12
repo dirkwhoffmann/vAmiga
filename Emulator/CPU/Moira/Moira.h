@@ -266,7 +266,8 @@ protected:
     virtual void signalInterrupt(u8 level) { };
     virtual void signalJumpToVector(int nr, u32 addr) { };
     virtual void signalSoftwareTrap(u16 opcode, SoftwareTrap trap) { };
-
+    virtual void signalBkptInstruction(int nr);
+    
     // Exception delegates
     virtual void addressErrorHandler() { };
     
@@ -303,6 +304,7 @@ protected:
     void signalTasInstr();
     virtual void signalJsrBsrInstr(u16 opcode, u32 oldPC, u32 newPC) { };
     virtual void signalRtsInstr() { };
+    virtual void signalRtdInstr() { };
 
     // State delegates
     void signalHalt();
@@ -318,7 +320,8 @@ protected:
     void signalInterrupt(u8 level);
     void signalJumpToVector(int nr, u32 addr);
     void signalSoftwareTrap(u16 instr, SoftwareTrap trap);
-    
+    void signalBkptInstruction(int nr);
+
     // Exception delegates
     void addressErrorHandler();
     

@@ -209,6 +209,12 @@ Moira::signalSoftwareTrap(u16 instr, SoftwareTrap trap)
 }
 
 void
+Moira::signalBkptInstruction(int nr)
+{
+    xfiles("68010: BKPT instruction executed\n");
+}
+
+void
 Moira::addressErrorHandler()
 {
     
@@ -676,22 +682,21 @@ CPU::signalJsrBsrInstr(u16 opcode, u32 oldPC, u32 newPC)
 }
 
 void
-CPU::signalRtsInstr()
+CPU::signalRtsRtdInstr(const string &instr)
 {
     if (amiga.inDebugMode()) {
         
-        trace(CST_DEBUG, "RTS [%ld]\n", callstack.count());
+        trace(CST_DEBUG, "%s [%ld]\n", instr.c_str(), callstack.count());
         
         if (callstack.isEmpty()) {
             
-            trace(CST_DEBUG, "RTS: Empty stack\n");
+            trace(CST_DEBUG, "%s: Empty stack\n", instr.c_str());
             return;
         }
         
         (void)callstack.read();
     }
 }
-
 void
 CPU::setBreakpoint(u32 addr)
 {

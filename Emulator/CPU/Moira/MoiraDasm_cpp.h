@@ -595,7 +595,7 @@ template<Instr I, Mode M, Size S> void
 Moira::dasmMovecRcRx(StrWriter &str, u32 &addr, u16 op)
 {
     auto dst = "???";
-    auto arg = u16(dasmRead<Word>(addr));
+    // auto arg = u16(dasmRead<Word>(addr));
 
     str << Ins<I>{} << tab << "???, " << dst;
 }
@@ -604,7 +604,7 @@ template<Instr I, Mode M, Size S> void
 Moira::dasmMovecRxRc(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = "???";
-    auto arg = u16(dasmRead<Word>(addr));
+    // auto arg = u16(dasmRead<Word>(addr));
 
     str << Ins<I>{} << tab << src << ", ???";
 }
@@ -658,12 +658,12 @@ Moira::dasmMoveq(StrWriter &str, u32 &addr, u16 op)
 }
 
 template<Instr I, Mode M, Size S> void
-Moira::dasmMovesRgEa(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmMoves(StrWriter &str, u32 &addr, u16 op)
 {
-    auto src = Dn       ( ____xxx_________(op)       );
-    auto dst = Op <M,S> ( _____________xxx(op), addr );
+    // auto src = Dn       ( ____xxx_________(op)       );
+    // auto dst = Op <M,S> ( _____________xxx(op), addr );
 
-    str << Ins<I>{} << Sz<S>{} << tab << src << ", " << dst;
+    str << Ins<I>{} << "?????"; // Sz<S>{} << tab << src << ", " << dst;
 }
 
 template<Instr I, Mode M, Size S> void
