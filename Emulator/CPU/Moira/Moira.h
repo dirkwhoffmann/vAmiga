@@ -121,11 +121,13 @@ protected:
 
     // Current value on the IPL pins (Interrupt Priority Level)
     u8 ipl;
-    // i64 iplCycle;
-    
+
     // Value on the lower two function code pins (FC1|FC0)
     u8 fcl;
-            
+
+    // Determines the source of the function code pins
+    FCSource fcSource;
+
     // Remembers the number of the last processed exception
     int exception;
 
@@ -165,9 +167,6 @@ protected:
 
     // Creates the generic jump table (all models)
     void createJumpTable();
-
-    // Adjusts the jump table for a specific model
-    void modifyJumpTableFor68010();
 
 
     //
@@ -250,6 +249,7 @@ protected:
     virtual void signalTasInstr() { };
     virtual void signalJsrBsrInstr(u16 opcode, u32 oldPC, u32 newPC) { };
     virtual void signalRtsInstr() { };
+    virtual void signalRtdInstr() { };
 
     // State delegates
     virtual void signalHardReset() { };
@@ -266,7 +266,7 @@ protected:
     virtual void signalInterrupt(u8 level) { };
     virtual void signalJumpToVector(int nr, u32 addr) { };
     virtual void signalSoftwareTrap(u16 opcode, SoftwareTrap trap) { };
-    virtual void signalBkptInstruction(int nr);
+    virtual void signalBkptInstruction(int nr) { };
     
     // Exception delegates
     virtual void addressErrorHandler() { };
@@ -350,6 +350,13 @@ protected:
     // Advances the clock (called before each memory access)
     void sync(int cycles);
 
+    template <CPUModel C>
+    void sync([[maybe_unused]] int c1, [[maybe_unused]] int c2) {
+
+        if constexpr (C == M68000) sync(c1);
+        if constexpr (C == M68010) sync(c2);
+    }
+
 
     //
     // Accessing registers
@@ -390,6 +397,15 @@ public:
     u32 getUSP() const { return reg.sr.s ? reg.usp : reg.sp; }
     void setUSP(u32 val) { if (reg.sr.s) reg.usp = val; else reg.sp = val; }
 
+    u32 getVBR() const { return reg.vbr; }
+    void setVBR(u32 val) { reg.vbr = val; }
+
+    u32 getSFC() const { return reg.sfc; }
+    void setSFC(u32 val) { reg.sfc = val & 0b111; }
+
+    u32 getDFC() const { return reg.dfc; }
+    void setDFC(u32 val) { reg.dfc = val & 0b111; }
+
     void setSupervisorMode(bool enable);
 
     u8 getCCR(const StatusRegister &sr) const;
@@ -416,7 +432,7 @@ protected:
 public:
     
     // Returns the current value on the function code pins
-    FunctionCode readFC() { return (FunctionCode)((reg.sr.s ? 4 : 0) | fcl); }
+    FunctionCode readFC();
 
     private:
     

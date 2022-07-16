@@ -27,7 +27,20 @@ Moira::saveToStack(AEStackFrame &frame)
 }
 
 void
-Moira::saveToStackBrief(u16 sr, u32 pc)
+Moira::saveToStackBrief(u16 nr, u16 sr, u32 pc)
+{
+    switch (model) {
+
+        case M68000: saveToStackBrief68000(nr, sr, pc); break;
+        case M68010: saveToStackBrief68010(nr, sr, pc); break;
+
+        default:
+            assert(false);
+    }
+}
+
+void
+Moira::saveToStackBrief68000(u16 nr, u16 sr, u32 pc)
 {
     if constexpr (MIMIC_MUSASHI) {
 
@@ -40,6 +53,25 @@ Moira::saveToStackBrief(u16 sr, u32 pc)
         writeMS <MEM_DATA, Word> ((reg.sp + 4) & ~1, pc & 0xFFFF);
         writeMS <MEM_DATA, Word> ((reg.sp + 0) & ~1, sr);
         writeMS <MEM_DATA, Word> ((reg.sp + 2) & ~1, pc >> 16);
+    }
+}
+
+void
+Moira::saveToStackBrief68010(u16 nr, u16 sr, u32 pc)
+{
+    if constexpr (MIMIC_MUSASHI) {
+
+        push <Word> (4 * nr);
+        push <Long> (pc);
+        push <Word> (sr);
+
+    } else {
+
+        reg.sp -= 8;
+        writeMS <MEM_DATA, Word> ((reg.sp + 0) & ~1, 4 * nr);
+        writeMS <MEM_DATA, Word> ((reg.sp + 6) & ~1, pc & 0xFFFF);
+        writeMS <MEM_DATA, Word> ((reg.sp + 2) & ~1, sr);
+        writeMS <MEM_DATA, Word> ((reg.sp + 4) & ~1, pc >> 16);
     }
 }
 
@@ -80,6 +112,27 @@ Moira::execAddressError(AEStackFrame frame, int delay)
 }
 
 void
+Moira::execFormatError()
+{
+    EXEC_DEBUG
+
+    u16 status = getSR();
+
+    // Enter supervisor mode
+    setSupervisorMode(true);
+
+    // Disable tracing
+    clearTraceFlag();
+    flags &= ~CPU_TRACE_EXCEPTION;
+
+    // Write exception information to stack
+    sync(4);
+    saveToStackBrief(14, status, reg.pc);
+
+    jumpToVector<AE_SET_CB3>(14);
+}
+
+void
 Moira::execUnimplemented(int nr)
 {
     EXEC_DEBUG
@@ -95,7 +148,7 @@ Moira::execUnimplemented(int nr)
 
     // Write exception information to stack
     sync(4);
-    saveToStackBrief(status, reg.pc - 2);
+    saveToStackBrief(u16(nr), status, reg.pc - 2);
 
     jumpToVector<AE_SET_CB3>(nr);
 }
@@ -164,7 +217,7 @@ Moira::execTraceException()
 
     // Write exception information to stack
     sync(4);
-    saveToStackBrief(status, reg.pc);
+    saveToStackBrief(9, status, reg.pc);
 
     jumpToVector(9);
 }
@@ -185,7 +238,7 @@ Moira::execTrapException(int nr)
     clearTraceFlag();
 
     // Write exception information to stack
-    saveToStackBrief(status);
+    saveToStackBrief(u16(nr), status);
 
     jumpToVector(nr);
 }
@@ -208,7 +261,7 @@ Moira::execPrivilegeException()
 
     // Write exception information to stack
     sync(4);
-    saveToStackBrief(status, reg.pc - 2);
+    saveToStackBrief(8, status, reg.pc - 2);
 
     jumpToVector<AE_SET_CB3>(8);
 }

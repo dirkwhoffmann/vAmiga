@@ -337,7 +337,6 @@ Moira::bcd(u32 op1, u32 op2)
     switch(I) {
 
         case ABCD:
-        case ABCD_LOOP:
         {
             // Extract nibbles
             u16 op1_hi = op1 & 0xF0, op1_lo = op1 & 0x0F;
@@ -357,7 +356,6 @@ Moira::bcd(u32 op1, u32 op2)
             break;
         }
         case SBCD:
-        case SBCD_LOOP:
         {
             // Extract nibbles
             u16 op1_hi = op1 & 0xF0, op1_lo = op1 & 0x0F;
@@ -511,22 +509,22 @@ Moira::cond() {
 
     switch(I) {
 
-        case BRA: case DBT:  case ST:  return true;
-        case DBF: case SF:             return false;
-        case BHI: case DBHI: case SHI: return !reg.sr.c && !reg.sr.z;
-        case BLS: case DBLS: case SLS: return reg.sr.c || reg.sr.z;
-        case BCC: case DBCC: case SCC: return !reg.sr.c;
-        case BCS: case DBCS: case SCS: return reg.sr.c;
-        case BNE: case DBNE: case SNE: return !reg.sr.z;
-        case BEQ: case DBEQ: case SEQ: return reg.sr.z;
-        case BVC: case DBVC: case SVC: return !reg.sr.v;
-        case BVS: case DBVS: case SVS: return reg.sr.v;
-        case BPL: case DBPL: case SPL: return !reg.sr.n;
-        case BMI: case DBMI: case SMI: return reg.sr.n;
-        case BGE: case DBGE: case SGE: return reg.sr.n == reg.sr.v;
-        case BLT: case DBLT: case SLT: return reg.sr.n != reg.sr.v;
-        case BGT: case DBGT: case SGT: return reg.sr.n == reg.sr.v && !reg.sr.z;
-        case BLE: case DBLE: case SLE: return reg.sr.n != reg.sr.v || reg.sr.z;
+        case BRA: case ST:  case DBT:  case DBT_LOOP:  return true;
+        case SF:            case DBF:  case DBF_LOOP:  return false;
+        case BHI: case SHI: case DBHI: case DBHI_LOOP: return !reg.sr.c && !reg.sr.z;
+        case BLS: case SLS: case DBLS: case DBLS_LOOP: return reg.sr.c || reg.sr.z;
+        case BCC: case SCC: case DBCC: case DBCC_LOOP: return !reg.sr.c;
+        case BCS: case SCS: case DBCS: case DBCS_LOOP: return reg.sr.c;
+        case BNE: case SNE: case DBNE: case DBNE_LOOP: return !reg.sr.z;
+        case BEQ: case SEQ: case DBEQ: case DBEQ_LOOP: return reg.sr.z;
+        case BVC: case SVC: case DBVC: case DBVC_LOOP: return !reg.sr.v;
+        case BVS: case SVS: case DBVS: case DBVS_LOOP: return reg.sr.v;
+        case BPL: case SPL: case DBPL: case DBPL_LOOP: return !reg.sr.n;
+        case BMI: case SMI: case DBMI: case DBMI_LOOP: return reg.sr.n;
+        case BGE: case SGE: case DBGE: case DBGE_LOOP: return reg.sr.n == reg.sr.v;
+        case BLT: case SLT: case DBLT: case DBLT_LOOP: return reg.sr.n != reg.sr.v;
+        case BGT: case SGT: case DBGT: case DBGT_LOOP: return reg.sr.n == reg.sr.v && !reg.sr.z;
+        case BLE: case SLE: case DBLE: case DBLE_LOOP: return reg.sr.n != reg.sr.v || reg.sr.z;
     }
 
     fatalError;
@@ -630,7 +628,7 @@ Moira::cyclesDiv(u32 op1, u16 op2)
     fatalError;
 }
 
-template <Instr I> u32
+template <CPUModel C, Instr I> u32
 Moira::mulMusashi(u32 op1, u32 op2)
 {
     u32 result;
@@ -659,7 +657,7 @@ Moira::mulMusashi(u32 op1, u32 op2)
     return result;
 }
 
-template <Instr I> u32
+template <CPUModel C, Instr I> u32
 Moira::divMusashi(u32 op1, u32 op2)
 {
     u32 result;
@@ -668,7 +666,7 @@ Moira::divMusashi(u32 op1, u32 op2)
 
         case DIVS:
         {
-            sync(model == M68000 ? 154 : 118);
+            sync<C>(154, 118);
 
             if (op1 == 0x80000000 && (i32)op2 == -1) {
 
@@ -700,7 +698,7 @@ Moira::divMusashi(u32 op1, u32 op2)
         }
         case DIVU:
         {
-            sync(model == M68000 ? 136 : 104);
+            sync<C>(136, 104);
 
             i64 quotient  = op1 / op2;
             u16 remainder = (u16)(op1 % op2);

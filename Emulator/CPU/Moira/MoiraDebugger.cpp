@@ -322,7 +322,7 @@ Debugger::logEntryAbs(int n)
     return logEntryRel(loggedInstructions() - n - 1);
 }
 
-string
+std::string
 Debugger::vectorName(u8 vectorNr)
 {
     if (vectorNr >= 12 && vectorNr <= 14) {

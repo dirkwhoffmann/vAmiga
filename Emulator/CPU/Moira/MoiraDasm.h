@@ -20,3 +20,6 @@ int outerDispWords(u16 ext);
 
 // Assembles an operand
 template <Mode M, Size S> Ea<M,S> Op(u16 reg, u32 &pc);
+
+// Returns a auxiliary string for model specific instructions, e.g. "(1+)"
+template <Instr I, Mode M, Size S> const char *availability(u16 opcode, u16 ext = 0);

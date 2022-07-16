@@ -13,26 +13,26 @@ Moira::readOp(int n, u32 &ea, u32 &result)
     switch (M) {
             
         // Handle non-memory modes
-        case MODE_DN: result = readD<S>(n); return true;
-        case MODE_AN: result = readA<S>(n); return true;
-        case MODE_IM: result = readI<S>();  return true;
+        case MODE_DN: result = readD <S> (n); return true;
+        case MODE_AN: result = readA <S> (n); return true;
+        case MODE_IM: result = readI <S> ();  return true;
             
         default:
             
             // Compute effective address
-            ea = computeEA<M,S,F>(n);
+            ea = computeEA <M,S,F> (n);
 
             // Read from effective address
-            bool error; result = readM<M,S,F>(ea, error);
+            bool error; result = readM <M,S,F> (ea, error);
 
             // Emulate -(An) register modification
-            updateAnPD<M,S>(n);
+            updateAnPD <M,S> (n);
 
             // Exit if an address error has occurred
             if (error) return false;
 
             // Emulate (An)+ register modification
-            updateAnPI<M,S>(n);
+            updateAnPI <M,S> (n);
             
             return !error;
     }
@@ -44,26 +44,26 @@ Moira::writeOp(int n, u32 val)
     switch (M) {
             
         // Handle non-memory modes
-        case MODE_DN: writeD<S>(n, val); return true;
-        case MODE_AN: writeA<S>(n, val); return true;
+        case MODE_DN: writeD <S> (n, val); return true;
+        case MODE_AN: writeA <S> (n, val); return true;
         case MODE_IM: fatalError;
 
         default:
             
             // Compute effective address
-            u32 ea = computeEA<M,S>(n);
+            u32 ea = computeEA <M,S> (n);
             
             // Write to effective address
             bool error; writeM <M,S,F> (ea, val, error);
             
             // Emulate -(An) register modification
-            updateAnPD<M,S>(n);
+            updateAnPD <M,S> (n);
             
             // Early exit in case of an address error
             if (error) return false;
             
             // Emulate (An)+ register modification
-            updateAnPI<M,S>(n);
+            updateAnPI <M,S> (n);
             
             return !error;
     }

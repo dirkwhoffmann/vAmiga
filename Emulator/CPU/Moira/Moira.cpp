@@ -19,7 +19,6 @@ namespace moira {
 #include "MoiraDataflow_cpp.h"
 #include "MoiraExceptions_cpp.h"
 #include "MoiraExec_cpp.h"
-#include "Moira68010_cpp.h"
 #include "StrWriter_cpp.h"
 #include "MoiraDasm_cpp.h"
 
@@ -59,6 +58,7 @@ Moira::reset()
 
     ipl = 0;
     fcl = 0;
+    fcSource = FC_FROM_FCL;
     
     sync(16);
 
@@ -312,6 +312,20 @@ Moira::setSupervisorMode(bool enable)
     }
 }
 
+FunctionCode
+Moira::readFC()
+{
+    switch (fcSource) {
+
+        case FC_FROM_FCL: return FunctionCode((reg.sr.s ? 4 : 0) | fcl);
+        case FC_FROM_SFC: return FunctionCode(reg.sfc);
+        case FC_FROM_DFC: return FunctionCode(reg.dfc);
+
+        default:
+            fatalError;
+    }
+}
+
 void
 Moira::setFC(FunctionCode value)
 {
@@ -330,8 +344,6 @@ void
 Moira::setIPL(u8 val)
 {
     if (ipl != val) {
-
-        // iplCycle = clock;
         ipl = val;
         flags |= CPU_CHECK_IRQ;
     }

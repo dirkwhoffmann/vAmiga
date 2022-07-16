@@ -169,7 +169,6 @@ typedef enum
     TST,            // Test an operand
     UNLK,           // Unlink
 
-    // 68010 additions
     ABCD_LOOP,
     ADD_LOOP,
     ADDA_LOOP,
@@ -180,6 +179,22 @@ typedef enum
     CLR_LOOP,
     CMP_LOOP,
     CMPA_LOOP,
+    DBCC_LOOP,
+    DBCS_LOOP,
+    DBEQ_LOOP,
+    DBGE_LOOP,
+    DBGT_LOOP,
+    DBHI_LOOP,
+    DBLE_LOOP,
+    DBLS_LOOP,
+    DBLT_LOOP,
+    DBMI_LOOP,
+    DBNE_LOOP,
+    DBPL_LOOP,
+    DBVC_LOOP,
+    DBVS_LOOP,
+    DBF_LOOP,
+    DBT_LOOP,
     EOR_LOOP,
     LSL_LOOP,
     LSR_LOOP,
@@ -202,13 +217,13 @@ typedef enum
 Instr;
 
 template <Instr I>
-consteval bool looping() { return I >= ABCD_LOOP; }
+constexpr bool looping() { return I >= ABCD_LOOP; }
 
 typedef enum
 {
     MODE_DN,   //  0         Dn : Data register direct
     MODE_AN,   //  1         An : Address register direct
-    MODE_AI,   //  2       (An) : Register indirect
+    MODE_AI,   //  2       (An) : Address register indirect
     MODE_PI,   //  3      (An)+ : Postincrement register indirect
     MODE_PD,   //  4      -(An) : Predecrement register indirect
     MODE_DI,   //  5     (d,An) : Register indirect with displacement
@@ -263,6 +278,14 @@ typedef enum
     FC_SUPERVISOR_PROG = 6
 }
 FunctionCode;
+
+typedef enum
+{
+    FC_FROM_FCL,
+    FC_FROM_SFC,
+    FC_FROM_DFC
+}
+FCSource;
 
 typedef enum
 {

@@ -107,6 +107,51 @@ Moira::Op(u16 reg, u32 &pc)
     return result;
 }
 
+template <Instr I, Mode M, Size S> const char *
+Moira::availability(u16 opcode, u16 ext)
+{
+    switch(I) {
+
+        case BKPT:
+        case MOVES:
+        case MOVEFCCR:
+        case RTD:
+
+            return "; (1+)";
+
+        case CMPI:
+
+            return isPrgMode(M) ? "; (1+)" : "";
+
+        case MOVEC:
+
+            switch (ext & 0x0FFF) {
+
+                case 0x000:
+                case 0x001:
+                case 0x800:
+                case 0x801: return "; (1+)";
+                case 0x002:
+                case 0x803:
+                case 0x804: return "; (2+)";
+                case 0x802: return "; (2,3)";
+                case 0x003:
+                case 0x004:
+                case 0x005:
+                case 0x006:
+                case 0x007:
+                case 0x805:
+                case 0x806:
+                case 0x807: return "; (4+)";
+
+                default:    return "; (?)";
+            }
+
+        default:
+            fatalError;
+    }
+}
+
 void
 Moira::dasmIllegal(StrWriter &str, u32 &addr, u16 op)
 {
@@ -309,9 +354,9 @@ Moira::dasmAndisr(StrWriter &str, u32 &addr, u16 op)
 template<Instr I, Mode M, Size S> void
 Moira::dasmBkpt(StrWriter &str, u32 &addr, u16 op)
 {
-    auto nr = Imu ( _____________xxx(op) );
+    auto nr = Imd ( _____________xxx(op) );
 
-    str << Ins<I>{} << tab << nr;
+    str << Ins<I>{} << tab << nr << availability <I, M, S> (op);
 }
 
 template<Instr I, Mode M, Size S> void
@@ -373,6 +418,7 @@ Moira::dasmCmpiRg(StrWriter &str, u32 &addr, u16 op)
     auto dst = Dn  ( _____________xxx(op)       );
 
     str << Ins<I>{} << Sz<S>{} << tab << src << ", " << dst;
+    str << availability <I, M, S> (op);
 }
 
 template<Instr I, Mode M, Size S> void
@@ -382,6 +428,7 @@ Moira::dasmCmpiEa(StrWriter &str, u32 &addr, u16 op)
     auto dst = Op <M,S> ( _____________xxx(op), addr );
 
     str << Ins<I>{} << Sz<S>{} << tab << src << ", " << dst;
+    str << availability <I, M, S> (op);
 }
 
 template<Instr I, Mode M, Size S> void
@@ -594,19 +641,23 @@ Moira::dasmMovea(StrWriter &str, u32 &addr, u16 op)
 template<Instr I, Mode M, Size S> void
 Moira::dasmMovecRcRx(StrWriter &str, u32 &addr, u16 op)
 {
-    auto dst = "???";
-    // auto arg = u16(dasmRead<Word>(addr));
+    auto arg = u16(dasmRead<Word>(addr));
+    auto src = Cn(____xxxxxxxxxxxx(arg));
+    auto dst = Rn(xxxx____________(arg));
 
-    str << Ins<I>{} << tab << "???, " << dst;
+    str << Ins<I>{} << tab << src << ", " << dst;
+    str << availability <I, M, S> (op, arg);
 }
 
 template<Instr I, Mode M, Size S> void
 Moira::dasmMovecRxRc(StrWriter &str, u32 &addr, u16 op)
 {
-    auto src = "???";
-    // auto arg = u16(dasmRead<Word>(addr));
+    auto arg = u16(dasmRead<Word>(addr));
+    auto dst = Cn(____xxxxxxxxxxxx(arg));
+    auto src = Rn(xxxx____________(arg));
 
-    str << Ins<I>{} << tab << src << ", ???";
+    str << Ins<I>{} << tab << src << ", " << dst;
+    str << availability <I, M, S> (op, arg);
 }
 
 template<Instr I, Mode M, Size S> void
@@ -660,10 +711,16 @@ Moira::dasmMoveq(StrWriter &str, u32 &addr, u16 op)
 template<Instr I, Mode M, Size S> void
 Moira::dasmMoves(StrWriter &str, u32 &addr, u16 op)
 {
-    // auto src = Dn       ( ____xxx_________(op)       );
-    // auto dst = Op <M,S> ( _____________xxx(op), addr );
+    auto ext = (u16)dasmRead<Word>(addr);
+    auto ea = Op <M,S> ( _____________xxx(op), addr );
+    auto reg = Rn ( xxxx____________(ext) );
 
-    str << Ins<I>{} << "?????"; // Sz<S>{} << tab << src << ", " << dst;
+    if (ext & 0x800) {      // Rg -> Ea
+        str << Ins<I>{} << Sz<S>{} << tab << reg << ", " << ea;
+    } else {                // Ea -> Rg
+        str << Ins<I>{} << Sz<S>{} << tab << ea << ", " << reg;
+    }
+    str << availability <I, M, S> (op);
 }
 
 template<Instr I, Mode M, Size S> void
@@ -671,7 +728,7 @@ Moira::dasmMoveFromCcrRg(StrWriter &str, u32 &addr, u16 op)
 {
     auto dst = Dn ( _____________xxx(op) );
 
-    str << Ins<I>{} << tab << "CCR, " << dst;
+    str << Ins<I>{} << tab << "CCR, " << dst << availability <I, M, S> (op);
 }
 
 template<Instr I, Mode M, Size S> void
@@ -679,7 +736,7 @@ Moira::dasmMoveFromCcrEa(StrWriter &str, u32 &addr, u16 op)
 {
     auto dst = Op <M,S> ( _____________xxx(op), addr );
 
-    str << Ins<I>{} << tab << "CCR, " << dst;
+    str << Ins<I>{} << tab << "CCR, " << dst << availability <I, M, S> (op);
 }
 
 template<Instr I, Mode M, Size S> void
@@ -779,7 +836,9 @@ Moira::dasmReset(StrWriter &str, u32 &addr, u16 op)
 template <Instr I, Mode M, Size S> void
 Moira::dasmRtd(StrWriter &str, u32 &addr, u16 op)
 {
-    str << Ins<I>{};
+    auto disp = Ims ( i16(dasmRead<Word>(addr)) );
+
+    str << Ins<I>{} << tab << disp << availability <I, M, S> (op);
 }
 
 template <Instr I, Mode M, Size S> void

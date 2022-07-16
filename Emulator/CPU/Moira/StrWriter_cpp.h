@@ -189,6 +189,34 @@ StrWriter::operator<<(Rn rn)
 }
 
 StrWriter&
+StrWriter::operator<<(Cn cn)
+{
+    switch(cn.raw) {
+
+        case 0x000: *this << "SFC";   break;
+        case 0x001: *this << "DFC";   break;
+        case 0x800: *this << "USP";   break;
+        case 0x801: *this << "VBR";   break;
+        case 0x002: *this << "CACR";  break;
+        case 0x802: *this << "CAAR";  break;
+        case 0x803: *this << "MSP";   break;
+        case 0x804: *this << "ISP";   break;
+        case 0x003: *this << "TC";    break;
+        case 0x004: *this << "ITT0";  break;
+        case 0x005: *this << "ITT1";  break;
+        case 0x006: *this << "DTT0";  break;
+        case 0x007: *this << "DTT1";  break;
+        case 0x805: *this << "MMUSR"; break;
+        case 0x806: *this << "URP";   break;
+        case 0x807: *this << "SRP";   break;
+
+        default:
+            *this << UInt(cn.raw);
+    }
+    return *this;
+}
+
+StrWriter&
 StrWriter::operator<<(Imu im)
 {
     *ptr++ = '#';

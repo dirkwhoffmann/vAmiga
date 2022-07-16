@@ -25,6 +25,7 @@ struct UInt32     { u32 raw;     UInt32(u32 v) : raw(v) { } };
 struct Dn         { int raw;         Dn(int v) : raw(v) { } };
 struct An         { int raw;         An(int v) : raw(v) { } };
 struct Rn         { int raw;         Rn(int v) : raw(v) { } };
+struct Cn         { u16 raw;         Cn(u16 v) : raw(v) { } };
 struct Imu        { u32 raw;        Imu(u32 v) : raw(v) { } };
 struct Ims        { i32 raw;        Ims(i32 v) : raw(v) { } };
 struct Imd        { u32 raw;        Imd(u32 v) : raw(v) { } };
@@ -68,6 +69,7 @@ public:
     StrWriter& operator<<(Dn dn);
     StrWriter& operator<<(An an);
     StrWriter& operator<<(Rn rn);
+    StrWriter& operator<<(Cn rn);
     StrWriter& operator<<(Imu im);
     StrWriter& operator<<(Ims im);
     StrWriter& operator<<(Imd im);
