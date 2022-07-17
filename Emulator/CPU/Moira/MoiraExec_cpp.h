@@ -848,10 +848,10 @@ Moira::execDbcc(u16 opcode)
                     queue.irc = opcode;
                     // printf("Entering loop mode (IRD: %x IRC: %x)\n", queue.ird, queue.irc);
                 }
+                */
 
                 if (MIMIC_MUSASHI) sync(2);
                 return;
-                */
 
             } else {
 
