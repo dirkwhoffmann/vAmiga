@@ -332,7 +332,15 @@ CPU::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option));
+
+        try {
+
+            setConfigItem(option, defaults.get(option));
+
+        } catch (VAError &e) {
+
+            std::cout << "Config error: " << e.what() << std::endl;
+        }
     }
 }
 

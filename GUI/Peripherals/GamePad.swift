@@ -196,6 +196,7 @@ class GamePad {
         if vendorID != "" { print("v: \(vendorID) ", terminator: "") }
         if productID != "" { print("p: \(productID) ", terminator: "") }
         if locationID != "" { print("l: \(locationID) ", terminator: "") }
+        print("")
     }
     
     //
