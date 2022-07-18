@@ -342,8 +342,8 @@ Moira::execIrqException(u8 level)
     // Remember the current value of the status register
     u16 status = getSR();
 
-    // Recover from stop state
-    flags &= ~CPU_IS_STOPPED;
+    // Recover from stop state and terminate loop mode
+    flags &= ~(CPU_IS_STOPPED | CPU_IS_LOOPING);
 
     // Clear the polled IPL value
     reg.ipl = 0;

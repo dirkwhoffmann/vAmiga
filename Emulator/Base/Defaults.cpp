@@ -58,7 +58,7 @@ Defaults::Defaults()
     setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_BITPLANE, 0x00FFFF00);
     setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_CPU, 0xFFFFFF00);
     setFallback(OPT_DMA_DEBUG_COLOR, DMA_CHANNEL_REFRESH, 0xFF000000);
-    setFallback(OPT_CPU_REVISION, CPU_MC68000);
+    setFallback(OPT_CPU_REVISION, CPU_68000);
     setFallback(OPT_CPU_OVERCLOCKING, 0);
     setFallback(OPT_CPU_RESET_VAL, 0);
     setFallback(OPT_RTC_MODEL, RTC_OKI);

@@ -246,6 +246,10 @@ Interpreter::registerInstructions()
     root.add({"cpu", "set"},
              "command", "Configures the component");
 
+    root.add({"cpu", "set", "revision"},
+             "key", "Selects the emulated chip model",
+             &RetroShell::exec <Token::cpu, Token::set, Token::revision>, 1);
+
     root.add({"cpu", "set", "overclocking"},
              "key", "Overclocks the CPU by the specified factor",
              &RetroShell::exec <Token::cpu, Token::set, Token::overclocking>, 1);

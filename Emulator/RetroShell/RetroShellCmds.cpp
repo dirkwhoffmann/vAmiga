@@ -313,6 +313,13 @@ RetroShell::exec <Token::cpu, Token::config> (Arguments &argv, long param)
 }
 
 template <> void
+RetroShell::exec <Token::cpu, Token::set, Token::revision> (Arguments &argv, long param)
+{
+    auto value = util::parseEnum <CPURevisionEnum> (argv.front());
+    amiga.configure(OPT_CPU_REVISION, value);
+}
+
+template <> void
 RetroShell::exec <Token::cpu, Token::set, Token::overclocking> (Arguments &argv, long param)
 {
     auto value = util::parseNum(argv.front());
