@@ -132,8 +132,8 @@ extension Canvas {
         debug(.metal, "updateTextureRect \(hstrt) \(vstrt) \(hstop) \(vstop)")
 
         // Convert to pixel coordinates
-        x1 = 2 * CGFloat(hstrt)
-        x2 = 2 * CGFloat(hstop)
+        x1 = CGFloat(2 * Int(TPP) * hstrt)
+        x2 = CGFloat(2 * Int(TPP) * hstop)
         y1 = CGFloat(vstrt)
         y2 = CGFloat(vstop)
 
@@ -147,8 +147,8 @@ extension Canvas {
         debug(.metal, "(\(x1),\(y1)) - \(x2),\(y2))")
 
         // Compensate the texture shift
-        x1 -= CGFloat(HBLANK_MIN) * 4
-        x2 -= CGFloat(HBLANK_MIN) * 4
+        x1 -= CGFloat(HBLANK_MIN * TPP) * 4
+        x2 -= CGFloat(HBLANK_MIN * TPP) * 4
         
         updateTextureRect()
     }
