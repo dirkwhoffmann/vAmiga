@@ -114,7 +114,7 @@
 		508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
 		50894D822593CF4400C0499D /* HIDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50894D812593CF4400C0499D /* HIDExtensions.swift */; };
 		508AC36927B7F6FD006AD2E7 /* HdController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508AC36727B7F6FC006AD2E7 /* HdController.cpp */; };
-		508E7F952206CDBD00F7D88C /* CPUModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508E7F932206CDBD00F7D88C /* CPUModel.cpp */; };
+		508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508E7F932206CDBD00F7D88C /* CPU.cpp */; };
 		508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */; };
 		508FDF8721EA1FBC0043D0E9 /* MsgQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF521EA1FBC0043D0E9 /* MsgQueue.cpp */; };
 		508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5921EA1FBC0043D0E9 /* TOD.cpp */; };
@@ -307,7 +307,7 @@
 		50FC048427DA190400C3E566 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5042F2DB26BE57E600126C05 /* Thread.cpp */; };
 		50FC048527DA190400C3E566 /* Error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6F8425D71FBE0004AFBC /* Error.cpp */; };
 		50FC048627DA194200C3E566 /* MoiraDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */; };
-		50FC048727DA194200C3E566 /* CPUModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508E7F932206CDBD00F7D88C /* CPUModel.cpp */; };
+		50FC048727DA194200C3E566 /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508E7F932206CDBD00F7D88C /* CPU.cpp */; };
 		50FC048827DA194200C3E566 /* Moira.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE37240D41EE00155AE4 /* Moira.cpp */; };
 		50FC048927DA195600C3E566 /* TOD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5921EA1FBC0043D0E9 /* TOD.cpp */; };
 		50FC048A27DA195600C3E566 /* CIARegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B81E0924E6BEA5004384C9 /* CIARegs.cpp */; };
@@ -629,7 +629,7 @@
 		508AC36727B7F6FC006AD2E7 /* HdController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HdController.cpp; sourceTree = "<group>"; };
 		508AC36827B7F6FC006AD2E7 /* HdController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HdController.h; sourceTree = "<group>"; };
 		508C6BCF23F7E77500D8938F /* ChangeRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangeRecorder.h; sourceTree = "<group>"; };
-		508E7F932206CDBD00F7D88C /* CPUModel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPUModel.cpp; sourceTree = "<group>"; };
+		508E7F932206CDBD00F7D88C /* CPU.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPU.cpp; sourceTree = "<group>"; };
 		508E7F942206CDBD00F7D88C /* CPU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPU.h; sourceTree = "<group>"; };
 		508FDE6421EA1FA40043D0E9 /* vAmiga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vAmiga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1198,7 +1198,7 @@
 				50CF463A262042F300BB3B95 /* CMakeLists.txt */,
 				5051922822B61C8A0012C4BB /* CPUTypes.h */,
 				508E7F942206CDBD00F7D88C /* CPU.h */,
-				508E7F932206CDBD00F7D88C /* CPUModel.cpp */,
+				508E7F932206CDBD00F7D88C /* CPU.cpp */,
 				50E2BE25240D417200155AE4 /* Moira */,
 			);
 			path = CPU;
@@ -2195,7 +2195,7 @@
 				50EB8CCE2530710E0053988A /* VideoExporter.swift in Sources */,
 				50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */,
 				50B36395277760320030A50C /* BlitterPanel.swift in Sources */,
-				508E7F952206CDBD00F7D88C /* CPUModel.cpp in Sources */,
+				508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */,
 				50F0BD2622AF883C001F4616 /* UART.cpp in Sources */,
 				50357BB6239123B2007E7563 /* Renderer.swift in Sources */,
 				5078A5D52529E7FA00FCE384 /* Sampler.cpp in Sources */,
@@ -2368,7 +2368,7 @@
 				50FC04FE27DA1AAB00C3E566 /* UART.cpp in Sources */,
 				50FC048E27DA195D00C3E566 /* PaulaRegs.cpp in Sources */,
 				50FC048527DA190400C3E566 /* Error.cpp in Sources */,
-				50FC048727DA194200C3E566 /* CPUModel.cpp in Sources */,
+				50FC048727DA194200C3E566 /* CPU.cpp in Sources */,
 				50FC04D327DA19F600C3E566 /* FSObjects.cpp in Sources */,
 				50627FD5286EBACA00F2A835 /* FrameBuffer.cpp in Sources */,
 				50FC04AD27DA198E00C3E566 /* BlitterInfo.cpp in Sources */,

@@ -36,7 +36,7 @@ class Moira : public SubComponent {
 protected:
 
     // Emulated CPU model
-    CPUModel model = M68000;
+    Type model = M68000;
 
     // Interrupt mode of this CPU
     IrqMode irqMode = IRQ_AUTO;
@@ -158,7 +158,7 @@ public:
     virtual ~Moira();
 
     // Selects the emulated CPU model
-    void setModel(CPUModel model);
+    void setModel(Type model);
 
     // Configures the output format of the disassembler
     void configDasm(bool h, bool u) { hex = h; upper = u; }
@@ -350,11 +350,11 @@ protected:
     // Advances the clock (called before each memory access)
     void sync(int cycles);
 
-    template <CPUModel C>
+    template <Type CPU>
     void sync([[maybe_unused]] int c1, [[maybe_unused]] int c2) {
 
-        if constexpr (C == M68000) sync(c1);
-        if constexpr (C == M68010) sync(c2);
+        if constexpr (CPU == M68000) sync(c1);
+        if constexpr (CPU == M68010) sync(c2);
     }
 
 

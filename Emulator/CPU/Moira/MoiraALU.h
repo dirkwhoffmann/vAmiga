@@ -34,5 +34,5 @@ template <Instr I>         int  cyclesMul(u16 data);
 template <Instr I>         int  cyclesDiv(u32 dividend, u16 divisor);
 
 // Musashi compatibility mode
-template <CPUModel C, Instr I>  u32  mulMusashi(u32 op1, u32 op2);
-template <CPUModel C, Instr I>  u32  divMusashi(u32 op1, u32 op2);
+template <Type CPU, Instr I>  u32  mulMusashi(u32 op1, u32 op2);
+template <Type CPU, Instr I>  u32  divMusashi(u32 op1, u32 op2);

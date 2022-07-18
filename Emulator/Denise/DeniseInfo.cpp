@@ -56,7 +56,7 @@ Denise::_dump(Category category, std::ostream& os) const
         os << tab("Chip revision");
         os << DeniseRevisionEnum::key(config.revision) << std::endl;
         os << tab("Viewport tracking");
-        os << hex(config.hiddenBitplanes) << std::endl;
+        os << bol(config.viewportTracking) << std::endl;
         os << tab("Hidden bitplanes");
         os << hex(config.hiddenBitplanes) << std::endl;
         os << tab("Hidden sprites");

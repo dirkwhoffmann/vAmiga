@@ -296,7 +296,7 @@ CPU::setConfigItem(Option option, i64 value)
 
             suspend();
             config.revision = CPURevision(value);
-            setModel(moira::CPUModel(value));
+            setModel(moira::Type(value));
             resume();
             return;
 

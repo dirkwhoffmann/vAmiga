@@ -27,9 +27,9 @@ typedef unsigned long long u64;
 typedef enum
 {
     M68000,         // Fully supported
-    M68010          // Work on progress (don't use!)
+    M68010          // Experimental
 }
-CPUModel;
+Type;
 
 typedef enum
 {

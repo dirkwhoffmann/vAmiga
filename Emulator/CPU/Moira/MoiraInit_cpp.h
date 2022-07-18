@@ -9,11 +9,11 @@
 
 // Assembles an instruction handler name
 #define EXEC_IMS(func,I,M,S) &Moira::exec##func <I,M,S>
-#define EXEC_CIMS(func,C,I,M,S) &Moira::exec##func <C,I,M,S>
+#define EXEC_CIMS(func,T,I,M,S) &Moira::exec##func <T,I,M,S>
 #define DASM_IMS(func,I,M,S) &Moira::dasm##func <I,M,S>
 
 // Registers an instruction handler
-#define IMS(id, name, I, M, S) { \
+#define IMS(id,name,I,M,S) { \
 assert(exec[id] == &Moira::execIllegal); \
 if (dasm) assert(dasm[id] == &Moira::dasmIllegal); \
 exec[id] = EXEC_IMS(name,I,M,S); \
@@ -30,12 +30,12 @@ if (info) info[id] = InstrInfo {I,M,S}; \
 }
 
 // Registers a special loop-mode instruction handler
-#define IMSloop(id, name, I, M, S) { \
+#define IMSloop(id,name,I,M,S) { \
 assert(loop[id] == nullptr); \
 loop[id] = EXEC_IMS(name,I##_LOOP,M,S); \
 }
 
-#define CIMSloop(id, name, I, M, S) { \
+#define CIMSloop(id,name,I,M,S) { \
 assert(loop[id] == nullptr); \
 loop[id] = EXEC_CIMS(name,M68010,I##_LOOP,M,S); \
 }

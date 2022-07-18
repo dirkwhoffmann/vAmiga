@@ -37,7 +37,7 @@ Moira::~Moira()
 }
 
 void
-Moira::setModel(CPUModel model)
+Moira::setModel(Type model)
 {
     if (this->model != model) {
 

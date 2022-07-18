@@ -279,7 +279,7 @@ Moira::execIrqException(u8 level)
     }
 }
 
-template <CPUModel C> void
+template <Type CPU> void
 Moira::execIrqException(u8 level)
 {
     EXEC_DEBUG
@@ -308,7 +308,7 @@ Moira::execIrqException(u8 level)
     clearTraceFlag();
     flags &= ~CPU_TRACE_EXCEPTION;
 
-    if constexpr (C == M68000) {
+    if constexpr (CPU == M68000) {
 
         sync(6);
         reg.sp -= 6;
@@ -322,7 +322,7 @@ Moira::execIrqException(u8 level)
         writeMS <MEM_DATA, Word> (reg.sp + 2, reg.pc >> 16);
     }
 
-    if constexpr (C == M68010) {
+    if constexpr (CPU == M68010) {
 
         sync(6);
         reg.sp -= 8;
