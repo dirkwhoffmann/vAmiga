@@ -186,11 +186,11 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     i64 pixel = std::max(agnus.pos.pixel() - 4, (isize)0);
     conChanges.insert(pixel, RegChange { SET_BPLCON0_DENISE, newValue });
     
-    // Check if the HAM bit has changed
-    if (ham(oldValue) ^ ham(newValue)) {
+    // Check if the HAM bit or the SHRES bit have changed
+    if ((ham(oldValue) ^ ham(newValue)) || (shres(oldValue) ^ shres(newValue))) {
         pixelEngine.colChanges.insert(pixel, RegChange { 0x100, newValue } );
     }
-    
+
     // Update value
     bplcon0 = newValue;
 
