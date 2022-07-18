@@ -36,3 +36,4 @@ void execPrivilegeException();
 
 // Emulates an interrupt exception
 void execIrqException(u8 level);
+template <CPUModel C> void execIrqException(u8 level);

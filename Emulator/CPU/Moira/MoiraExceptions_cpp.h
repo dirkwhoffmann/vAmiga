@@ -68,10 +68,10 @@ Moira::saveToStackBrief68010(u16 nr, u16 sr, u32 pc)
     } else {
 
         reg.sp -= 8;
-        writeMS <MEM_DATA, Word> ((reg.sp + 0) & ~1, 4 * nr);
-        writeMS <MEM_DATA, Word> ((reg.sp + 6) & ~1, pc & 0xFFFF);
-        writeMS <MEM_DATA, Word> ((reg.sp + 2) & ~1, sr);
-        writeMS <MEM_DATA, Word> ((reg.sp + 4) & ~1, pc >> 16);
+        writeMS <MEM_DATA, Word> ((reg.sp + 6) & ~1, 4 * nr);
+        writeMS <MEM_DATA, Word> ((reg.sp + 4) & ~1, pc & 0xFFFF);
+        writeMS <MEM_DATA, Word> ((reg.sp + 0) & ~1, sr);
+        writeMS <MEM_DATA, Word> ((reg.sp + 2) & ~1, pc >> 16);
     }
 }
 
@@ -269,6 +269,19 @@ Moira::execPrivilegeException()
 void
 Moira::execIrqException(u8 level)
 {
+    switch (model) {
+
+        case M68000: execIrqException <M68000> (level); break;
+        case M68010: execIrqException <M68010> (level); break;
+
+        default:
+            assert(false);
+    }
+}
+
+template <CPUModel C> void
+Moira::execIrqException(u8 level)
+{
     EXEC_DEBUG
     
     assert(level < 8);
@@ -294,17 +307,36 @@ Moira::execIrqException(u8 level)
     // Disable tracing
     clearTraceFlag();
     flags &= ~CPU_TRACE_EXCEPTION;
-        
-    sync(6);
-    reg.sp -= 6;
-    writeMS <MEM_DATA, Word> (reg.sp + 4, reg.pc & 0xFFFF);
 
-    sync(4);
-    queue.ird = getIrqVector(level);
-    
-    sync(4);
-    writeMS <MEM_DATA, Word> (reg.sp + 0, status);
-    writeMS <MEM_DATA, Word> (reg.sp + 2, reg.pc >> 16);
+    if constexpr (C == M68000) {
+
+        sync(6);
+        reg.sp -= 6;
+        writeMS <MEM_DATA, Word> (reg.sp + 4, reg.pc & 0xFFFF);
+
+        sync(4);
+        queue.ird = getIrqVector(level);
+
+        sync(4);
+        writeMS <MEM_DATA, Word> (reg.sp + 0, status);
+        writeMS <MEM_DATA, Word> (reg.sp + 2, reg.pc >> 16);
+    }
+
+    if constexpr (C == M68010) {
+
+        sync(6);
+        reg.sp -= 8;
+        writeMS <MEM_DATA, Word> (reg.sp + 4, reg.pc & 0xFFFF);
+
+        sync(4);
+        queue.ird = getIrqVector(level);
+
+        sync(4);
+        writeMS <MEM_DATA, Word> (reg.sp + 0, status);
+        writeMS <MEM_DATA, Word> (reg.sp + 2, reg.pc >> 16);
+
+        writeMS <MEM_DATA, Word> (reg.sp + 6, 4 * queue.ird);
+    }
 
     jumpToVector<AE_SET_CB3>(queue.ird);
 }
