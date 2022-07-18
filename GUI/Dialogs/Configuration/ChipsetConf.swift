@@ -24,8 +24,8 @@ extension ConfigurationController {
             csCpuInfo2.stringValue = "All models"
 
         case .MC68010:
-            csCpuInfo1.stringValue = "WORK IN PROGRESS"
-            csCpuInfo2.stringValue = "DON'T USE"
+            csCpuInfo1.stringValue = "Motorola MC68010"
+            csCpuInfo2.stringValue = "Work in progess"
 
         default:
             csCpuInfo1.stringValue = "Invalid"

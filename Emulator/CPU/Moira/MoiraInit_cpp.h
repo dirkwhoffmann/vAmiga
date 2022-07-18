@@ -14,8 +14,6 @@
 
 // Registers an instruction handler
 #define IMS(id,name,I,M,S) { \
-assert(exec[id] == &Moira::execIllegal); \
-if (dasm) assert(dasm[id] == &Moira::dasmIllegal); \
 exec[id] = EXEC_IMS(name,I,M,S); \
 if (dasm) dasm[id] = DASM_IMS(name,I,M,S); \
 if (info) info[id] = InstrInfo {I,M,S}; \
@@ -67,6 +65,12 @@ for (int j = 0; j < 16; j++) func((op) | j, f, I, M, S); }
 
 #define ________XXXXXXXX(op,I,M,S,f,func) { \
 for (int j = 0; j < 256; j++) func((op) | j, f, I, M, S); }
+
+#define ____XXXXXXXXXXXX(op,I,M,S,f,func) { \
+for (int j = 0; j < 4096; j++) func((op) | j, f, I, M, S); }
+
+#define XXXXXXXXXXXXXXXX(I,M,S,f,func) { \
+for (int j = 0; j < 65536; j++) func(j, f, I, M, S); }
 
 #define ____XXX______XXX(op,I,M,S,f,func) { \
 for (int i = 0; i < 8; i++) _____________XXX((op) | i << 9, I, M, S, f, func); }
@@ -143,11 +147,10 @@ Moira::createJumpTable()
     // Start with clean tables
     //
 
+    XXXXXXXXXXXXXXXX(ILLEGAL, MODE_IP, (Size)0, Illegal, CIMS);
+
     for (int i = 0; i < 0x10000; i++) {
-        exec[i] = &Moira::execIllegal;
         loop[i] = nullptr;
-        if (dasm) dasm[i] = &Moira::dasmIllegal;
-        if (info) info[i] = InstrInfo { ILLEGAL, MODE_IP, (Size)0 };
     }
 
 
@@ -156,6 +159,13 @@ Moira::createJumpTable()
     //       Format: 1010 ---- ---- ---- (Line A instructions)
     //               1111 ---- ---- ---- (Line F instructions)
 
+    opcode = parse("1010 ---- ---- ----");
+    ____XXXXXXXXXXXX(opcode, LINE_A, MODE_IP, (Size)0, LineA, CIMS);
+
+    opcode = parse("1111 ---- ---- ----");
+    ____XXXXXXXXXXXX(opcode, LINE_F, MODE_IP, (Size)0, LineF, CIMS);
+
+    /*
     for (int i = 0; i < 0x1000; i++) {
 
         exec[0b1010 << 12 | i] = &Moira::execLineA;
@@ -166,6 +176,7 @@ Moira::createJumpTable()
         if (dasm) dasm[0b1111 << 12 | i] = &Moira::dasmLineF;
         if (info) info[0b1111 << 12 | i] = InstrInfo { LINE_F, MODE_IP, (Size)0 };
     }
+    */
 
 
     // ABCD

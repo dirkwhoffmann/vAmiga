@@ -39,6 +39,49 @@
 (M == MODE_DIPC)            ? AE_DEC_PC : \
 (M == MODE_IXPC)            ? AE_DEC_PC : 0
 
+template<Type CPU, Instr I, Mode M, Size S> void
+Moira::execLineA(u16 opcode)
+{
+    EXEC_DEBUG
+
+    // Check if a software trap is set for this instruction
+    if (debugger.swTraps.traps.contains(opcode)) {
+
+        auto &trap = debugger.swTraps.traps[opcode];
+
+        // Smuggle the original instruction back into the CPU
+        reg.pc = reg.pc0;
+        queue.irc = trap.instruction;
+        prefetch();
+
+        // Call the delegates
+        signalSoftwareTrap(opcode, debugger.swTraps.traps[opcode]);
+        swTrapReached(reg.pc0);
+        return;
+    }
+
+    signalLineAException(opcode);
+    execUnimplemented(10);
+}
+
+template<Type CPU, Instr I, Mode M, Size S> void
+Moira::execLineF(u16 opcode)
+{
+    EXEC_DEBUG
+
+    signalLineFException(opcode);
+    execUnimplemented(11);
+}
+
+template<Type CPU, Instr I, Mode M, Size S> void
+Moira::execIllegal(u16 opcode)
+{
+    EXEC_DEBUG
+
+    signalIllegalOpcodeException(opcode);
+    execUnimplemented(4);
+}
+
 template<Instr I, Mode M, Size S> void
 Moira::execShiftRg(u16 opcode)
 {
@@ -1434,7 +1477,7 @@ Moira::execMovecRcRx(u16 opcode)
         case 0x801: break;
 
         default:
-            execIllegal(opcode);
+            execIllegal <M68010,I,M,S> (opcode);
             return;
     }
 
@@ -1468,7 +1511,7 @@ Moira::execMovecRxRc(u16 opcode)
         case 0x801: break;
 
         default:
-            execIllegal(opcode);
+            execIllegal <M68010,I,M,S> (opcode);
             return;
     }
 

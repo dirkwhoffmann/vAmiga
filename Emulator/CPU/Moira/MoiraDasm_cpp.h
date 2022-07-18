@@ -152,19 +152,19 @@ Moira::availability(u16 opcode, u16 ext)
     }
 }
 
-void
+template<Instr I, Mode M, Size S> void
 Moira::dasmIllegal(StrWriter &str, u32 &addr, u16 op)
 {
     str << "dc.w " << UInt16{op} << "; ILLEGAL";
 }
 
-void
+template<Instr I, Mode M, Size S> void
 Moira::dasmLineA(StrWriter &str, u32 &addr, u16 op)
 {
     str << "dc.w " << tab << UInt16{op} << "; opcode 1010";
 }
 
-void
+template<Instr I, Mode M, Size S> void
 Moira::dasmLineF(StrWriter &str, u32 &addr, u16 op)
 {
     str << "dc.w " << tab << UInt16{op} << "; opcode 1111";
@@ -364,7 +364,7 @@ Moira::dasmBsr(StrWriter &str, u32 &addr, u16 op)
 {
     if constexpr (MIMIC_MUSASHI && S == Byte) {
         if ((u8)op == 0xFF) {
-            dasmIllegal(str, addr, op);
+            dasmIllegal <I,M,S> (str, addr, op);
             return;
         }
     }
@@ -445,7 +445,7 @@ Moira::dasmBcc(StrWriter &str, u32 &addr, u16 op)
 {
     if constexpr (MIMIC_MUSASHI && S == Byte) {
         if ((u8)op == 0xFF) {
-            dasmIllegal(str, addr, op);
+            dasmIllegal <I,M,S> (str, addr, op);
             return;
         }
     }

@@ -208,49 +208,6 @@ Moira::execUnimplemented(int nr)
 }
 
 void
-Moira::execLineA(u16 opcode)
-{
-    EXEC_DEBUG
-
-    // Check if a software trap is set for this instruction
-    if (debugger.swTraps.traps.contains(opcode)) {
-
-        auto &trap = debugger.swTraps.traps[opcode];
-        
-        // Smuggle the original instruction back into the CPU
-        reg.pc = reg.pc0;
-        queue.irc = trap.instruction;
-        prefetch();
-        
-        // Call the delegates
-        signalSoftwareTrap(opcode, debugger.swTraps.traps[opcode]);
-        swTrapReached(reg.pc0);
-        return;
-    }
-    
-    signalLineAException(opcode);
-    execUnimplemented(10);
-}
-
-void
-Moira::execLineF(u16 opcode)
-{
-    EXEC_DEBUG
-
-    signalLineFException(opcode);
-    execUnimplemented(11);
-}
-
-void
-Moira::execIllegal(u16 opcode)
-{
-    EXEC_DEBUG
-
-    signalIllegalOpcodeException(opcode);
-    execUnimplemented(4);
-}
-
-void
 Moira::execTraceException()
 {
     switch (model) {
@@ -318,7 +275,7 @@ Moira::execTrapException(int nr)
     clearTraceFlag();
 
     // Write exception information to stack
-    saveToStackBrief(u16(nr), status);
+    saveToStackBrief(u16(nr), status, reg.pc);
 
     jumpToVector(nr);
 }

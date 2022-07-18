@@ -7,12 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// Saves information to stack for group 0 exceptions
+// Emulates a group 0 exception
 void saveToStack(AEStackFrame &frame);
 template <Type CPU> void saveToStack(AEStackFrame &frame);
 
-// Saves information to stack for group 1 and group 2 exceptions
-void saveToStackBrief(u16 nr, u16 sr) { saveToStackBrief(nr, sr, reg.pc); }
+// Emulates a group 1 or group 2 exception
 void saveToStackBrief(u16 nr, u16 sr, u32 pc);
 template <Type CPU> void saveToStackBrief(u16 nr, u16 sr, u32 pc);
 
