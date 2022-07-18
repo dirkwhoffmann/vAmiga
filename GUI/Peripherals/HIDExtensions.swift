@@ -97,8 +97,12 @@ extension IOHIDDevice {
          */
                         
         let bluetooth = transportKey.hasPrefix("Bluetooth")
+        let spi = transportKey.hasPrefix("SPI")
         let builtIn = builtInKey == "1"
-        
+
+        // Classify all SPI connected devices as internal
+        if spi { return true }
+
         // For mice, evaluate the BuiltIn key
         if isMouse { return builtIn }
 
