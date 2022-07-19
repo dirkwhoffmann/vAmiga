@@ -58,6 +58,7 @@ enum_long(ROM_IDENTIFIER)
     ROM_KICK30_39_106_A1200,
     ROM_KICK30_39_106_A4000,
     ROM_KICK31_40_063_A500,
+    ROM_KICK31_40_063_A500_R,
     ROM_KICK31_40_068_A1200,
     ROM_KICK31_40_068_A3000,
     ROM_KICK31_40_068_A4000,
@@ -136,7 +137,8 @@ struct RomIdentifierEnum : util::Reflection<RomIdentifierEnum, RomIdentifier>
 
             case ROM_KICK30_39_106_A1200:
             case ROM_KICK30_39_106_A4000:   return "KICK30_39_106";
-            case ROM_KICK31_40_063_A500:    return "KICK31_40_063";
+            case ROM_KICK31_40_063_A500:
+            case ROM_KICK31_40_063_A500_R:  return "KICK31_40_063";
             case ROM_KICK31_40_068_A1200:
             case ROM_KICK31_40_068_A3000:
             case ROM_KICK31_40_068_A4000:   return "KICK31_40_068";

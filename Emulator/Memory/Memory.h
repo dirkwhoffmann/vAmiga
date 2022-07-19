@@ -393,7 +393,10 @@ public:
 
     // Fixes two bugs in Kickstart 1.2 expansion.library
     void patchExpansionLib();
-    
+
+    // Returns true iff the Rom is a ReKick image
+    bool isRelocated();
+
     
     //
     // Maintaining the memory source table

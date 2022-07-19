@@ -484,6 +484,11 @@ using namespace moira;
     catch (VAError &error) { [ex save:error]; }
 }
 
+- (BOOL)isRelocated
+{
+    return [self mem]->isRelocated();
+}
+
 - (u64)romFingerprint
 {
     return [self mem]->romFingerprint();

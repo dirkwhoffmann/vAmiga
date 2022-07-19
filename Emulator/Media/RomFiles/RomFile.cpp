@@ -38,12 +38,11 @@ const u8 RomFile::kickRomHeaders[7][7] = {
     // Kickstart 1.3 (Guardian)
     { 0x11, 0x11, 0x4E, 0xF9, 0x00, 0xFE, 0x09 },
 
-    // Kickstart 2.04
+    // Kickstart 2.04, 3.1
     { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00 },
 
-    // Kickstart 3.1
-    { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00 },
-    // { 0x11, 0x16, 0x4E, 0xF9, 0x00, 0x20, 0x00 }, not working
+    // Kickstart relocation patches
+    { 0x11, 0x16, 0x4E, 0xF9, 0x00, 0x20, 0x00 },
 
     // Diagnostic v2.0 (Logica)
     { 0x11, 0x11, 0x4E, 0xF9, 0x00, 0xF8, 0x04 }
@@ -96,6 +95,7 @@ RomFile::identifier(u32 fingerprint)
         case 0x6C9B07D2: return ROM_KICK30_39_106_A1200;
         case 0x9E6AC152: return ROM_KICK30_39_106_A4000;
         case 0xFC24AE0D: return ROM_KICK31_40_063_A500;
+        case 0x88136CA9: return ROM_KICK31_40_063_A500_R;
         case 0x1483A091: return ROM_KICK31_40_068_A1200;
         case 0xEFB239CC: return ROM_KICK31_40_068_A3000;
         case 0xD6BAE334: return ROM_KICK31_40_068_A4000;
@@ -291,6 +291,7 @@ RomFile::title(RomIdentifier rev)
         case ROM_KICK30_39_106_A1200:
         case ROM_KICK30_39_106_A4000:   return "Kickstart 3.0";
         case ROM_KICK31_40_063_A500:
+        case ROM_KICK31_40_063_A500_R:
         case ROM_KICK31_40_068_A1200:
         case ROM_KICK31_40_068_A3000:
         case ROM_KICK31_40_068_A4000:
@@ -359,6 +360,7 @@ RomFile::version(RomIdentifier rev)
         case ROM_KICK30_39_106_A1200:
         case ROM_KICK30_39_106_A4000:   return "Rev 39.106";
         case ROM_KICK31_40_063_A500:    return "Rev 40.063";
+        case ROM_KICK31_40_063_A500_R:  return "Rev 40.063 (patched)";
         case ROM_KICK31_40_068_A1200:
         case ROM_KICK31_40_068_A3000:
         case ROM_KICK31_40_068_A4000:   return "Rev 40.068";
@@ -427,6 +429,7 @@ RomFile::released(RomIdentifier rev)
         case ROM_KICK30_39_106_A1200:
         case ROM_KICK30_39_106_A4000:   return "September 1992";
         case ROM_KICK31_40_063_A500:    return "July 1993";
+        case ROM_KICK31_40_063_A500_R:  return "ReKick image";
         case ROM_KICK31_40_068_A1200:
         case ROM_KICK31_40_068_A3000:
         case ROM_KICK31_40_068_A4000:   return "December 1993";
@@ -494,6 +497,7 @@ RomFile::model(RomIdentifier rev) {
         case ROM_KICK30_39_106_A1200:   return "A1200";
         case ROM_KICK30_39_106_A4000:   return "A4000";
         case ROM_KICK31_40_063_A500:    return "A500, A600, A2000";
+        case ROM_KICK31_40_063_A500_R:  return "";
         case ROM_KICK31_40_068_A1200:   return "A1200";
         case ROM_KICK31_40_068_A3000:   return "A3000";
         case ROM_KICK31_40_068_A4000:   return "A4000";

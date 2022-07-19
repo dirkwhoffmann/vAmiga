@@ -20,6 +20,7 @@ extension ConfigurationController {
         let hasCommodoreRom = amiga.mem.isCommodoreRom(romIdentifier)
         let hasHyperionRom  = amiga.mem.isHyperionRom(romIdentifier)
         let hasPatchedRom   = amiga.mem.isPatchedRom(romIdentifier)
+        let isRelocatedRom  = amiga.mem.isRelocated
 
         let extIdentifier   = amiga.mem.extIdentifier
         let hasExt          = extIdentifier != .MISSING
@@ -36,7 +37,8 @@ extension ConfigurationController {
         let romDiag         = NSImage(named: "rom_diag")
         let romPatched      = NSImage(named: "rom_patched")
         let romUnknown      = NSImage(named: "rom_unknown")
-        
+        let romRelocated    = NSImage(named: "rom_broken")
+
         // Lock controls if emulator is powered on
         romDropView.isEnabled = poweredOff
         romDeleteButton.isEnabled = poweredOff
@@ -46,20 +48,21 @@ extension ConfigurationController {
         
         // Icons
         romDropView.image =
-            hasHyperionRom  ? romHyperion :
-            hasArosRom      ? romAros :
-            hasDiagRom      ? romDiag :
-            hasCommodoreRom ? romOrig :
-            hasPatchedRom   ? romPatched :
-            hasRom          ? romUnknown : romMissing
+        isRelocatedRom  ? romRelocated :
+        hasHyperionRom  ? romHyperion :
+        hasArosRom      ? romAros :
+        hasDiagRom      ? romDiag :
+        hasCommodoreRom ? romOrig :
+        hasPatchedRom   ? romPatched :
+        hasRom          ? romUnknown : romMissing
 
         extDropView.image =
-            hasHyperionExt  ? romHyperion :
-            hasArosExt      ? romAros :
-            hasDiagExt      ? romDiag :
-            hasCommodoreExt ? romOrig :
-            hasPatchedExt   ? romPatched :
-            hasExt          ? romUnknown : romMissing
+        hasHyperionExt  ? romHyperion :
+        hasArosExt      ? romAros :
+        hasDiagExt      ? romDiag :
+        hasCommodoreExt ? romOrig :
+        hasPatchedExt   ? romPatched :
+        hasExt          ? romUnknown : romMissing
 
         // Titles and subtitles
         romTitle.stringValue = amiga.mem.romTitle
@@ -79,11 +82,6 @@ extension ConfigurationController {
         extMapText.isHidden = !hasExt
         extMapAddr.isHidden = !hasExt
 
-        // Explanation
-        romExpImage.isHidden = !poweredOff
-        romExpInfo1.isHidden = !poweredOff
-        romExpInfo2.isHidden = !poweredOff
-
         // Lock
         romLockImage.isHidden = poweredOff
         romLockInfo1.isHidden = poweredOff
@@ -91,6 +89,26 @@ extension ConfigurationController {
 
         // Buttons
         romPowerButton.isHidden = !bootable
+
+        // Explanation
+        if isRelocatedRom {
+            romExpImage.image = NSImage(named: "NSCaution")
+            romExpImage.isHidden = false
+            // romExpInfo1.stringValue = "The selected Kickstart Rom is a relocation image."
+            // romExpInfo1.stringValue = "The selected Kickstart Rom won't work in the Rom slot."
+            romExpInfo1.stringValue = "The selected Kickstart Rom is a relocation image."
+            romExpInfo1.isHidden = false
+            // romExpInfo2.stringValue = "It won't work in the Rom slot and needs to be loaded from disk."
+            romExpInfo2.stringValue = "It won't work in the Rom slot."
+            romExpInfo2.isHidden = false
+        } else {
+            romExpImage.image = NSImage(named: "NSInfo")
+            romExpImage.isHidden = !poweredOff
+            romExpInfo1.stringValue = "To add a Rom, drag a Rom image file onto one of the chip icons."
+            romExpInfo1.isHidden = !poweredOff
+            romExpInfo2.stringValue = "Original Roms are protected by copyright. Please obey legal regulations."
+            romExpInfo2.isHidden = !poweredOff
+        }
     }
 
     func refreshRomSelector() {
