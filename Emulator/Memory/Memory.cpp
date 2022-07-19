@@ -789,7 +789,8 @@ bool
 Memory::isRelocated()
 {
     if (rom) {
-        return HI_HI_LO_LO(0, rom[5], 0, 0) != 0x00FC0000;
+        auto addr = HI_HI_LO_LO(rom[4], rom[5], rom[6], rom[7]);
+        return (addr & 0x00F00000) != 0x00F00000;
     } else {
         return false;
     }
@@ -918,21 +919,6 @@ Memory::updateCpuMemSrcTable()
 
     // Expansion boards
     zorro.updateMemSrcTables();
-
-    // Check if we've got a relocation Kickstart (EXPERIMENTAL)
-    if (rom) {
-
-        auto ovlAddr = HI_HI_LO_LO(rom[4], rom[5], rom[6], 0);
-        printf("ovlAddr = %x\n", ovlAddr);
-
-        if (ovlAddr != 0xF80000) {
-            printf("Kickstart is relocated to %x\n", ovlAddr);
-
-            for (isize i = rom[5]; i < rom[5] + 8; i++) {
-                cpuMemSrc[i] = MEM_ROM_MIRROR;
-            }
-        }
-    }
 
     msgQueue.put(MSG_MEM_LAYOUT);
 }
