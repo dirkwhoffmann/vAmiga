@@ -683,18 +683,6 @@ void
 Denise::drawSprites()
 {
     res == SHRES ? drawSprites <SHRES> () : drawSprites <LORES> ();
-
-    /*
-    switch (res) {
-
-        case LORES: drawSprites <LORES> (); break;
-        case HIRES: drawSprites <HIRES> (); break;
-        case SHRES: drawSprites <SHRES> (); break;
-
-        default:
-            fatalError;
-    }
-    */
 }
 
 template <Resolution R> void

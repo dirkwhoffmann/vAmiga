@@ -92,7 +92,7 @@
  * texture in super-hires resolution (every hires pixel is represented by a
  * two texels).
  */
-#define TPP 1
+#define TPP 2
 
 
 //
