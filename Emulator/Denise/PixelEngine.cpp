@@ -480,7 +480,8 @@ PixelEngine::colorize(Texel *dst, Pixel from, Pixel to)
 void
 PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
 {
-    u8 *mbuf = denise.mBuffer;
+    auto *mbuf = denise.mBuffer;
+    auto *zbuf = denise.zBuffer;
 
     if constexpr (sizeof(Texel) == 4) {
 
@@ -494,12 +495,18 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
         // Map each super-hires pixel to a seperate texel
         for (Pixel i = from; i < to; i++) {
 
-            auto pix1 = mbuf[i] >> 2;
-            auto pix2 = mbuf[i] & 3;
-
             u32 *p = (u32 *)(dst + i);
-            p[0] = u32(palette[pix1 | pix1 << 2]);
-            p[1] = u32(palette[pix2 | pix2 << 2]);
+
+            if (Denise::isSpritePixel(zbuf[i])) {
+
+                p[0] =
+                p[1] = u32(palette[mbuf[i]]);
+
+            } else {
+
+                p[0] = u32(palette[mbuf[i] >> 2]);
+                p[1] = u32(palette[mbuf[i] & 3]);
+            }
         }
     }
 }

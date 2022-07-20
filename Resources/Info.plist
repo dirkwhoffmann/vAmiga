@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string></string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -117,8 +119,6 @@
 			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
 		</dict>
 		<dict>
-			<key>LSTypeIsPackage</key>
-			<false/>
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>INI</string>
@@ -129,6 +129,8 @@
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 			<key>NSDocumentClass</key>
 			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
 		</dict>
@@ -148,7 +150,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>2.1b4</string>
 	<key>CFBundleVersion</key>
-	<string>220707</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.entertainment</string>
 	<key>LSMinimumSystemVersion</key>
@@ -159,8 +161,6 @@
 	<string>Copyright © 2022 Dirk Hoffmann. All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
-	<key>CFBundleDisplayName</key>
-	<string></string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>
