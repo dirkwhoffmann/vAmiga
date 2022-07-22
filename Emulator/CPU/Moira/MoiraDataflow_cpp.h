@@ -496,7 +496,7 @@ Moira::jumpToVector(int nr)
     exception = nr;
     
     // Update the program counter
-    reg.pc = readMS <MEM_DATA, Long> (vectorAddr);
+    reg.pc = readMS <MEM_DATA, Long> (vectorAddr) & ~1;
     
     // Check for address error
     if (misaligned(reg.pc)) {

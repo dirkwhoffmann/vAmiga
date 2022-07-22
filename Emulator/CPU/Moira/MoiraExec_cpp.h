@@ -1522,10 +1522,10 @@ Moira::execMovecRxRc(u16 opcode)
 
     switch(arg & 0x0FFF) {
 
-        case 0x000: reg.sfc = reg.r[src] & 0b111; break;
-        case 0x001: reg.dfc = reg.r[src] & 0b111; break;
+        case 0x000: setSFC(reg.r[src]); break;
+        case 0x001: setDFC(reg.r[src]); break;
         case 0x800: reg.usp = reg.r[src]; break;
-        case 0x801: reg.vbr = reg.r[src]; break;
+        case 0x801: setVBR(reg.r[src]); break;
     }
 
     prefetch<POLLIPL>();

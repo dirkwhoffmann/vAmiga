@@ -398,7 +398,7 @@ public:
     void setUSP(u32 val) { if (reg.sr.s) reg.usp = val; else reg.sp = val; }
 
     u32 getVBR() const { return reg.vbr; }
-    void setVBR(u32 val) { reg.vbr = val; }
+    void setVBR(u32 val) { reg.vbr = val & ~0x3FF; }
 
     u32 getSFC() const { return reg.sfc; }
     void setSFC(u32 val) { reg.sfc = val & 0b111; }
