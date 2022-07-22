@@ -26,7 +26,7 @@ Thumbnail::take(Amiga &amiga, isize dx, isize dy)
     auto *target = screen;
     auto *source = amiga.denise.pixelEngine.stablePtr();
     source += xStart + yStart * HPIXELS;
-    
+
     for (isize y = 0; y < height; y++) {
         for (isize x = 0; x < width; x++) {
             target[x] = u32(source[x * dx]);
@@ -34,7 +34,7 @@ Thumbnail::take(Amiga &amiga, isize dx, isize dy)
         source += dy * HPIXELS;
         target += width;
     }
-    
+
     timestamp = time(nullptr);
 }
 
