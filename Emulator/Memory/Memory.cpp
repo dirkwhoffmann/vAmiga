@@ -2624,6 +2624,8 @@ Memory::pokeCustom16(u32 addr, u16 value)
             denise.pokeCOLORxx<s,31>(value); return;
         case 0x1DC >> 1: // BEAMCON0
             agnus.pokeBEAMCON0(value); return;
+        case 0x1E4 >> 1: // DIWHIGH (ECS)
+            agnus.pokeDIWHIGH<s>(value); return;
         case 0x1FE >> 1: // NO-OP
             copper.pokeNOOP(value); return;
     }

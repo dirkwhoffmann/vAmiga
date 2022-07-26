@@ -15,7 +15,7 @@
 void
 Denise::setDIWSTRT(u16 value)
 {
-    trace(DIW_DEBUG, "setDIWSTRT(%X)\n", value);
+    trace(DIW_DEBUG, "setDIWSTRT(%x)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // -- -- -- -- -- -- -- -- H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0
@@ -81,7 +81,7 @@ Denise::setDIWSTRT(u16 value)
 void
 Denise::setDIWSTOP(u16 value)
 {
-    trace(DIW_DEBUG, "setDIWSTOP(%X)\n", value);
+    trace(DIW_DEBUG, "setDIWSTOP(%x)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // -- -- -- -- -- -- -- -- H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1
@@ -126,6 +126,25 @@ Denise::setDIWSTOP(u16 value)
 
     // Let the debugger know about the register change
     debugger.updateDIW(diwstrt, diwstop);
+}
+
+void
+Denise::setDIWHIGH(u16 value)
+{
+    trace(DIW_DEBUG, "setDIWHIGH(%x)\n", value);
+
+    if (!isECS()) return;
+
+    // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+    // -- -- H8 -- -- -- -- -- -- -- H8 -- -- -- -- --
+    //     (stop)                  (strt)
+
+    diwhigh = value;
+
+    hstrt = LO_BYTE(diwstrt) | (GET_BIT(diwhigh,  5) ? 0x100 : 0x000);
+    hstop = LO_BYTE(diwstop) | (GET_BIT(diwhigh, 13) ? 0x100 : 0x000);
+
+    // TODO: DEBUGGER UPDATE
 }
 
 u16

@@ -156,6 +156,23 @@ Sequencer::setDIWSTOP(u16 value)
     }
 }
 
+void
+Sequencer::setDIWHIGH(u16 value)
+{
+    trace(DIW_DEBUG | SEQ_DEBUG, "setDIWHIGH(%X)\n", value);
+
+    // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+    // -- -- -- -- -- VA V9 V8 -- -- -- -- -- VA V9 V8
+    //                 (stop)                  (strt)
+
+    diwhigh = value;
+
+    vstrt = HI_BYTE(diwstrt) | (diwhigh & 0x07);
+    vstop = HI_BYTE(diwstop) | (diwhigh & 0x70) << 8;
+
+    // TODO: Inform debugger
+}
+
 template void Sequencer::pokeDDFSTRT<ACCESSOR_CPU>(u16 value);
 template void Sequencer::pokeDDFSTRT<ACCESSOR_AGNUS>(u16 value);
 template void Sequencer::pokeDDFSTOP<ACCESSOR_CPU>(u16 value);

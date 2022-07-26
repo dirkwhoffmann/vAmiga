@@ -90,6 +90,12 @@ Denise::_dump(Category category, std::ostream& os) const
         os << hex(bplcon2) << std::endl;
         os << tab("BPLCON3");
         os << hex(bplcon3) << std::endl;
+        os << tab("DIWSTART");
+        os << hex(diwstrt) << std::endl;
+        os << tab("DIWSTOP");
+        os << hex(diwstop) << std::endl;
+        os << tab("DIWHIGH");
+        os << hex(diwhigh) << std::endl;
         os << tab("SPRxDATA");
         for (isize i = 0; i < 8; i++) os << hex(sprdata[i]) << ' ';
         os << std::endl;

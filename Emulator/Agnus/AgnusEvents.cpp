@@ -226,6 +226,8 @@ Agnus::serviceREGEvent(Cycle until)
             case SET_DIWSTRT_DENISE: denise.setDIWSTRT(change.value); break;
             case SET_DIWSTOP_AGNUS: sequencer.setDIWSTOP(change.value); break;
             case SET_DIWSTOP_DENISE: denise.setDIWSTOP(change.value); break;
+            case SET_DIWHIGH_AGNUS: sequencer.setDIWHIGH(change.value); break;
+            case SET_DIWHIGH_DENISE: denise.setDIWHIGH(change.value); break;
 
             case SET_DDFSTRT: sequencer.setDDFSTRT(change.value); break;
             case SET_DDFSTOP: sequencer.setDDFSTOP(change.value); break;
