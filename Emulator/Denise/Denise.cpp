@@ -992,12 +992,12 @@ void
 Denise::updateBorderColor()
 {
     if (config.revision != DENISE_OCS && ecsena() && brdrblnk()) {
-        borderColor = 96; // Pure black
+        borderColor = 64; // Pure black
     } else {
         borderColor = 0;  // Background color
     }
     if constexpr (BORDER_DEBUG) {
-        borderColor = 97; // Debug color
+        borderColor = 65; // Debug color
     }
 }
 

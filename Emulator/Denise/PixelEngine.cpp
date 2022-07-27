@@ -38,12 +38,12 @@ PixelEngine::_initialize()
     AmigaComponent::_initialize();
 
     // Setup ECS BRDRBLNK color
-    palette[96] = TEXEL(GpuColor(0x00, 0x00, 0x00).rawValue);
+    palette[64] = TEXEL(GpuColor(0x00, 0x00, 0x00).rawValue);
     
     // Setup some debug colors
-    palette[97] = TEXEL(GpuColor(0xD0, 0x00, 0x00).rawValue);
-    palette[98] = TEXEL(GpuColor(0xA0, 0x00, 0x00).rawValue);
-    palette[99] = TEXEL(GpuColor(0x90, 0x00, 0x00).rawValue);
+    palette[65] = TEXEL(GpuColor(0xD0, 0x00, 0x00).rawValue);
+    palette[66] = TEXEL(GpuColor(0xA0, 0x00, 0x00).rawValue);
+    palette[67] = TEXEL(GpuColor(0x90, 0x00, 0x00).rawValue);
 }
 
 void
@@ -171,73 +171,6 @@ PixelEngine::setColor(isize reg, u16 value)
 
     // Update halfbright palette entry
     palette[reg + 32] = colorSpace[newColor.ehb().rawValue()];
-
-    // Update super-hires palette entries
-
-    /*     | 00 01 02 03
-     *  ----------------
-     *  00 | 64 65 66 67
-     *  10 | 68 69 70 71
-     *  20 | 72 73 74 75
-     *  30 | 76 77 78 79
-     */
-    switch (reg) {
-
-        case 0:
-
-            palette[64] = colorSpace[newColor.shr().rawValue()];
-            palette[65] =
-            palette[68] = colorSpace[newColor.mix(color[1]).rawValue()];
-            palette[66] =
-            palette[72] = colorSpace[newColor.mix(color[2]).rawValue()];
-            palette[67] =
-            palette[76] = colorSpace[newColor.mix(color[3]).rawValue()];
-            break;
-
-        case 1:
-
-            palette[69] = colorSpace[newColor.shr().rawValue()];
-            palette[65] =
-            palette[68] = colorSpace[newColor.mix(color[0]).rawValue()];
-            palette[70] =
-            palette[73] = colorSpace[newColor.mix(color[2]).rawValue()];
-            palette[71] =
-            palette[77] = colorSpace[newColor.mix(color[3]).rawValue()];
-            break;
-
-        case 2:
-
-            palette[74] = colorSpace[newColor.shr().rawValue()];
-            palette[66] =
-            palette[72] = colorSpace[newColor.mix(color[0]).rawValue()];
-            palette[70] =
-            palette[73] = colorSpace[newColor.mix(color[1]).rawValue()];
-            palette[75] =
-            palette[78] = colorSpace[newColor.mix(color[3]).rawValue()];
-            break;
-
-        case 3:
-
-            palette[79] = colorSpace[newColor.shr().rawValue()];
-            palette[67] =
-            palette[76] = colorSpace[newColor.mix(color[0]).rawValue()];
-            palette[71] =
-            palette[77] = colorSpace[newColor.mix(color[1]).rawValue()];
-            palette[75] =
-            palette[78] = colorSpace[newColor.mix(color[2]).rawValue()];
-            break;
-
-        case 16:
-        case 17:
-        case 18:
-        case 19:
-
-            palette[64 + reg] =
-            palette[68 + reg] =
-            palette[72 + reg] =
-            palette[76 + reg] = colorSpace[newColor.shr().rawValue()];
-            break;
-    }
 }
 
 void
@@ -485,14 +418,14 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
 
     if constexpr (sizeof(Texel) == 4) {
 
-        // Melt two super-hires pixels into a single texel
+        // Output two super-hires pixels as a single texel
         for (Pixel i = from; i < to; i++) {
-            dst[i] = palette[64 + mbuf[i]];
+            dst[i] = palette[mbuf[i]];
         }
 
     } else {
 
-        // Map each super-hires pixel to a seperate texel
+        // Output each super-hires pixel as a seperate texel
         for (Pixel i = from; i < to; i++) {
 
             u32 *p = (u32 *)(dst + i);

@@ -17,13 +17,13 @@
 #define VER_MAJOR 2
 #define VER_MINOR 1
 #define VER_SUBMINOR 0
-#define VER_BETA 4
+#define VER_BETA 5
 
 // Snapshot version number
 #define SNP_MAJOR 2
 #define SNP_MINOR 1
 #define SNP_SUBMINOR 0
-#define SNP_BETA 4
+#define SNP_BETA 5
 
 // Uncomment this setting in a release build
 // #define RELEASEBUILD
@@ -92,7 +92,7 @@
  * texture in super-hires resolution (every hires pixel is represented by a
  * two texels).
  */
-#define TPP 2
+#define TPP 1
 
 
 //
