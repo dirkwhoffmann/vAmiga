@@ -84,8 +84,10 @@ public:
     //
     
     void resetDIWTracker();
-    void recordDIW(u16 diwstrt, u16 diwstop);
-    void updateDIW(u16 diwstrt, u16 diwstop);
+    void recordDiwH(isize hstrt, isize hstop);
+    void recordDiwV(isize vstrt, isize vstop);
+    void updateDiwH(isize hstrt, isize hstop);
+    void updateDiwV(isize vstrt, isize vstop);
 
     
     //

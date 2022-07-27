@@ -47,8 +47,10 @@ DeniseDebugger::recordSprite(isize nr)
     // Record additional information in sprite line 0
     if (line == 0) {
         
-        // spriteInfo[nr].hstrt = ((denise.sprpos[nr] & 0xFF) << 1) | (denise.sprctl[nr] & 0x01);
-        spriteInfo[nr].hstrt =  (denise.sprpos[nr] & 0xFF) << 2 | (denise.sprctl[nr] & 0x01) << 1 | (denise.sprctl[nr] & 0x10) >> 4;
+        spriteInfo[nr].hstrt =
+        (denise.sprpos[nr] & 0xFF) << 2 |
+        (denise.sprctl[nr] & 0x01) << 1 |
+        (denise.sprctl[nr] & 0x10) >> 4;
         spriteInfo[nr].vstrt = agnus.sprVStrt[nr];
         spriteInfo[nr].vstop = agnus.sprVStop[nr];
         spriteInfo[nr].attach = IS_ODD(nr) ? GET_BIT(denise.sprctl[nr], 7) : 0;
@@ -64,36 +66,48 @@ DeniseDebugger::recordSprite(isize nr)
 void
 DeniseDebugger::resetDIWTracker()
 {
-    recordDIW(denise.diwstrt, denise.diwstop);
+    recordDiwH(denise.hstrt, denise.hstop);
+    recordDiwV(agnus.sequencer.vstrt, agnus.sequencer.vstop);
     vpChanged = true;
     vpMsgSent = 0;
 }
 
 void
-DeniseDebugger::recordDIW(u16 diwstrt, u16 diwstop)
+DeniseDebugger::recordDiwH(isize hstrt, isize hstop)
 {
     if (denise.config.viewportTracking) {
-        
-        maxViewPort.hstrt = LO_BYTE(diwstrt) > 2 ? LO_BYTE(diwstrt) : 2;
-        maxViewPort.vstrt = HI_BYTE(diwstrt);
-        maxViewPort.hstop = LO_BYTE(diwstop) | 0x100;
-        maxViewPort.vstop = HI_BYTE(diwstop) | ((diwstop & 0x8000) ? 0 : 0x100);
-     }
+
+        maxViewPort.hstrt = hstrt;
+        maxViewPort.hstop = hstop;
+    }
 }
 
 void
-DeniseDebugger::updateDIW(u16 diwstrt, u16 diwstop)
+DeniseDebugger::recordDiwV(isize vstrt, isize vstop)
 {
     if (denise.config.viewportTracking) {
-        
-        isize hstrt = LO_BYTE(diwstrt) > 2 ? LO_BYTE(diwstrt) : 2;
-        isize vstrt = HI_BYTE(diwstrt);
-        isize hstop = LO_BYTE(diwstop) | 0x100;
-        isize vstop = HI_BYTE(diwstop) | ((diwstop & 0x8000) ? 0 : 0x100);
-                
+
+        maxViewPort.vstrt = vstrt;
+        maxViewPort.vstop = vstop;
+    }
+}
+
+void
+DeniseDebugger::updateDiwH(isize hstrt, isize hstop)
+{
+    if (denise.config.viewportTracking) {
+
         maxViewPort.hstrt = std::min(maxViewPort.hstrt, hstrt);
-        maxViewPort.vstrt = std::min(maxViewPort.vstrt, vstrt);
         maxViewPort.hstop = std::max(maxViewPort.hstop, hstop);
+    }
+}
+
+void
+DeniseDebugger::updateDiwV(isize vstrt, isize vstop)
+{
+    if (denise.config.viewportTracking) {
+
+        maxViewPort.vstrt = std::min(maxViewPort.vstrt, vstrt);
         maxViewPort.vstop = std::max(maxViewPort.vstop, vstop);
     }
 }
@@ -165,7 +179,8 @@ DeniseDebugger::vsyncHandler()
         }
         
         // Start over with the current viewport
-        recordDIW(denise.diwstrt, denise.diwstop);
+        recordDiwH(denise.hstrt, denise.hstop);
+        recordDiwV(agnus.sequencer.vstrt, agnus.sequencer.vstop);
     }
     
     //

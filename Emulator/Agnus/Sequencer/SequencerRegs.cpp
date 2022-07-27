@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "Agnus.h"
+#include "Denise.h"
 
 template <Accessor s> void
 Sequencer::pokeDDFSTRT(u16 value)
@@ -130,6 +131,9 @@ Sequencer::setDIWSTRT(u16 value)
         sigRecorder.insert(agnus.pos.h + 2, SIG_VFLOP_SET);
         computeBplEventTable(sigRecorder);
     }
+
+    // Inform the debugger about the changed display window
+    denise.debugger.updateDiwV(vstrt, vstop);
 }
 
 void
@@ -154,6 +158,9 @@ Sequencer::setDIWSTOP(u16 value)
         sigRecorder.insert(agnus.pos.h + 2, SIG_VFLOP_SET);
         computeBplEventTable(sigRecorder);
     }
+
+    // Inform the debugger about the changed display window
+    denise.debugger.updateDiwV(vstrt, vstop);
 }
 
 void
@@ -167,10 +174,11 @@ Sequencer::setDIWHIGH(u16 value)
 
     diwhigh = value;
 
-    vstrt = HI_BYTE(diwstrt) | (diwhigh & 0x07);
-    vstop = HI_BYTE(diwstop) | (diwhigh & 0x70) << 8;
+    vstrt = HI_BYTE(diwstrt) | (diwhigh & 0x0007) << 8;
+    vstop = HI_BYTE(diwstop) | (diwhigh & 0x0700);
 
-    // TODO: Inform debugger
+    // Inform the debugger about the changed display window
+    denise.debugger.updateDiwV(vstrt, vstop);
 }
 
 template void Sequencer::pokeDDFSTRT<ACCESSOR_CPU>(u16 value);

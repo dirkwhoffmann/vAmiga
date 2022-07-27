@@ -74,8 +74,8 @@ Denise::setDIWSTRT(u16 value)
     hstrt = val;
     trace(DIW_DEBUG, "hstrt = %ld, hflopOn = %ld\n", hstrt, hflopOn);
 
-    // Let the debugger know about the register change
-    debugger.updateDIW(diwstrt, diwstop);
+    // Inform the debugger about the changed display window
+    debugger.updateDiwH(hstrt, hstop);
 }
 
 void
@@ -124,8 +124,8 @@ Denise::setDIWSTOP(u16 value)
     hstop = val;
     trace(DIW_DEBUG, "hstop = %ld, hflopOff = %ld\n", hstop, hflopOff);
 
-    // Let the debugger know about the register change
-    debugger.updateDIW(diwstrt, diwstop);
+    // Inform the debugger about the changed display window
+    debugger.updateDiwH(hstrt, hstop);
 }
 
 void
@@ -144,7 +144,11 @@ Denise::setDIWHIGH(u16 value)
     hstrt = LO_BYTE(diwstrt) | (GET_BIT(diwhigh,  5) ? 0x100 : 0x000);
     hstop = LO_BYTE(diwstop) | (GET_BIT(diwhigh, 13) ? 0x100 : 0x000);
 
-    // TODO: DEBUGGER UPDATE
+    if (hstrt > 0x1C7) hstrt = INT16_MAX;
+    if (hstop > 0x1C7) hstop = INT16_MAX;
+
+    // Inform the debugger about the changed display window
+    debugger.updateDiwH(hstrt, hstop);
 }
 
 u16
