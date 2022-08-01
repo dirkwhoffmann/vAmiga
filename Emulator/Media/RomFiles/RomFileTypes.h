@@ -76,6 +76,10 @@ enum_long(ROM_IDENTIFIER)
     ROM_HYP320_47_96_A4000,
     ROM_HYP320_47_96_A4000T,
     ROM_HYP321_47_102_A500,
+    ROM_HYP321_47_102_A1200,
+    ROM_HYP321_47_102_A3000,
+    ROM_HYP321_47_102_A4000,
+    ROM_HYP321_47_102_A4000T,
 
     // Free Kickstart Rom replacements
     ROM_AROS_54705,
@@ -153,7 +157,11 @@ struct RomIdentifierEnum : util::Reflection<RomIdentifierEnum, RomIdentifier>
             case ROM_HYP320_47_96_A3000:
             case ROM_HYP320_47_96_A4000:
             case ROM_HYP320_47_96_A4000T:   return "HYP320_47_96";
-            case ROM_HYP321_47_102_A500:    return "HYP321_47_102";
+            case ROM_HYP321_47_102_A500:
+            case ROM_HYP321_47_102_A1200:
+            case ROM_HYP321_47_102_A3000:
+            case ROM_HYP321_47_102_A4000:
+            case ROM_HYP321_47_102_A4000T:  return "HYP321_47_102";
 
             case ROM_AROS_54705:            return "AROS_54705";
             case ROM_AROS_54705_EXT:        return "AROS_54705_EXT";
