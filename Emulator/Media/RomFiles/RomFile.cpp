@@ -113,6 +113,10 @@ RomFile::identifier(u32 fingerprint)
         case 0x9BB8FC93: return ROM_HYP320_47_96_A4000;
         case 0x9188A509: return ROM_HYP320_47_96_A4000T;
         case 0x4F078456: return ROM_HYP321_47_102_A500;
+        case 0x2B653371: return ROM_HYP321_47_102_A1200;
+        case 0x0078F607: return ROM_HYP321_47_102_A3000;
+        case 0xF3CED3B8: return ROM_HYP321_47_102_A4000;
+        case 0xAF3452EC: return ROM_HYP321_47_102_A4000T;
 
         case 0x9CE0F009: return ROM_AROS_54705;
         case 0xE2C7F70A: return ROM_AROS_54705_EXT;
@@ -237,7 +241,11 @@ RomFile::isHyperionRom(RomIdentifier rev)
         case ROM_HYP320_47_96_A3000:
         case ROM_HYP320_47_96_A4000:
         case ROM_HYP320_47_96_A4000T:
-        case ROM_HYP321_47_102_A500:    return true;
+        case ROM_HYP321_47_102_A500:
+        case ROM_HYP321_47_102_A1200:
+        case ROM_HYP321_47_102_A3000:
+        case ROM_HYP321_47_102_A4000:
+        case ROM_HYP321_47_102_A4000T: return true;
 
         default: return false;
     }
@@ -307,7 +315,11 @@ RomFile::title(RomIdentifier rev)
         case ROM_HYP320_47_96_A3000:
         case ROM_HYP320_47_96_A4000:
         case ROM_HYP320_47_96_A4000T:   return "Kickstart 3.2 (Hyperion)";
-        case ROM_HYP321_47_102_A500:    return "Kickstart 3.2.1 (Hyperion)";
+        case ROM_HYP321_47_102_A500:
+        case ROM_HYP321_47_102_A1200:
+        case ROM_HYP321_47_102_A3000:
+        case ROM_HYP321_47_102_A4000:
+        case ROM_HYP321_47_102_A4000T:  return "Kickstart 3.2.1 (Hyperion)";
 
         case ROM_AROS_54705:
         case ROM_AROS_55696:
@@ -375,7 +387,11 @@ RomFile::version(RomIdentifier rev)
         case ROM_HYP320_47_96_A3000:
         case ROM_HYP320_47_96_A4000:
         case ROM_HYP320_47_96_A4000T:   return "Rev 47.96";
-        case ROM_HYP321_47_102_A500:    return "Rev 47.102";
+        case ROM_HYP321_47_102_A500:
+        case ROM_HYP321_47_102_A1200:
+        case ROM_HYP321_47_102_A3000:
+        case ROM_HYP321_47_102_A4000:
+        case ROM_HYP321_47_102_A4000T:  return "Rev 47.102";
 
         case ROM_AROS_54705:            return "SVN 54705";
         case ROM_AROS_54705_EXT:        return "SVN 54705";
@@ -443,7 +459,11 @@ RomFile::released(RomIdentifier rev)
         case ROM_HYP320_47_96_A3000:
         case ROM_HYP320_47_96_A4000:
         case ROM_HYP320_47_96_A4000T:   return "May 2021";
-        case ROM_HYP321_47_102_A500:    return "December 2021";
+        case ROM_HYP321_47_102_A500:
+        case ROM_HYP321_47_102_A1200:
+        case ROM_HYP321_47_102_A3000:
+        case ROM_HYP321_47_102_A4000:
+        case ROM_HYP321_47_102_A4000T:  return "December 2021";
 
         case ROM_AROS_54705:            return "May 2017";
         case ROM_AROS_54705_EXT:        return "May 2017";
@@ -511,6 +531,10 @@ RomFile::model(RomIdentifier rev) {
         case ROM_HYP320_47_96_A4000:    return "A4000";
         case ROM_HYP320_47_96_A4000T:   return "A4000T";
         case ROM_HYP321_47_102_A500:    return "A500, A600, A1000, A2000, CDTV";
+        case ROM_HYP321_47_102_A1200:   return "A1200";
+        case ROM_HYP321_47_102_A3000:   return "A3000";
+        case ROM_HYP321_47_102_A4000:   return "A4000";
+        case ROM_HYP321_47_102_A4000T:  return "A4000T";
 
         case ROM_AROS_54705:            return "UAE version";
         case ROM_AROS_54705_EXT:        return "UAE version";
