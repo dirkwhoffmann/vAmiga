@@ -59,7 +59,7 @@
  * If the source is a register or an immediate value, variable ea remains
  * untouched.
  */
-template<Mode M, Size S, Flags F = 0> bool readOp(int n, u32 &ea, u32 &result);
+template <Core C, Mode M, Size S, Flags F = 0> bool readOp(int n, u32 &ea, u32 &result);
 
 /* Writes an operand
  *
@@ -67,60 +67,70 @@ template<Mode M, Size S, Flags F = 0> bool readOp(int n, u32 &ea, u32 &result);
  * by the addressing mode M. Parameter 'last' indicates if this function is
  * initiates the last memory bus cycle of an instruction.
  */
-template<Mode M, Size S, Flags F = 0> bool writeOp(int n, u32 val);
-template<Mode M, Size S, Flags F = 0> void writeOp(int n, u32 ea, u32 val);
+template <Core C, Mode M, Size S, Flags F = 0> bool writeOp(int n, u32 val);
+template <Core C, Mode M, Size S, Flags F = 0> void writeOp(int n, u32 ea, u32 val);
 
 // Computes an effective address
-template<Mode M, Size S, Flags F = 0> u32 computeEA(u32 n);
+template <Core C, Mode M, Size S, Flags F = 0> u32 computeEA(u32 n);
+template <Core C, Mode M, Size S, Flags F = 0> u32 computeEAbrief(u32 an);
+template <Core C, Mode M, Size S, Flags F = 0> u32 computeEAfull(u32 an);
 
 // Emulates the address register modification for modes (An)+, (An)-
-template<Mode M, Size S> void updateAn(int n);
-template<Mode M, Size S> void updateAnPD(int n);
-template<Mode M, Size S> void undoAnPD(int n);
-template<Mode M, Size S> void updateAnPI(int n);
+template <Mode M, Size S> void updateAn(int n);
+template <Mode M, Size S> void updateAnPD(int n);
+template <Mode M, Size S> void undoAnPD(int n);
+template <Mode M, Size S> void updateAnPI(int n);
 
 // Reads a value from program or data space, depending on the addressing mode
-template<Mode M, Size S, Flags F = 0> u32 readM(u32 addr);
-template<Mode M, Size S, Flags F = 0> u32 readM(u32 addr, bool &error);
+template <Core C, Mode M, Size S, Flags F = 0> u32 readM(u32 addr);
+template <Core C, Mode M, Size S, Flags F = 0> u32 readM(u32 addr, bool &error);
 
 // Reads a value from a specific memory space
-template<MemSpace MS, Size S, Flags F = 0> u32 readMS(u32 addr);
-template<MemSpace MS, Size S, Flags F = 0> u32 readMS(u32 addr, bool &error);
+template <Core C, MemSpace MS, Size S, Flags F = 0> u32 readMS(u32 addr);
+template <Core C, MemSpace MS, Size S, Flags F = 0> u32 readMS(u32 addr, bool &error);
 
 // Writes an operand to memory (without or with address error checking)
-template<Mode M, Size S, Flags F = 0> void writeM(u32 addr, u32 val);
-template<Mode M, Size S, Flags F = 0> void writeM(u32 addr, u32 val, bool &error);
+template <Core C, Mode M, Size S, Flags F = 0> void writeM(u32 addr, u32 val);
+template <Core C, Mode M, Size S, Flags F = 0> void writeM(u32 addr, u32 val, bool &error);
 
 // Writes a value to a specific memory space
-template<MemSpace MS, Size S, Flags F = 0> void writeMS(u32 addr, u32 val);
-template<MemSpace MS, Size S, Flags F = 0> void writeMS(u32 addr, u32 val, bool &error);
+template <Core C, MemSpace MS, Size S, Flags F = 0> void writeMS(u32 addr, u32 val);
+template <Core C, MemSpace MS, Size S, Flags F = 0> void writeMS(u32 addr, u32 val, bool &error);
 
 // Reads an immediate value from memory
-template<Size S> u32 readI();
+template <Core C, Size S> u32 readI();
 
 // Pushes a value onto the stack
-template<Size S, Flags F = 0> void push(u32 value);
-template<Size S, Flags F = 0> void push(u32 value, bool &error);
+template <Core C, Size S, Flags F = 0> void push(u32 value);
+template <Core C, Size S, Flags F = 0> void push(u32 value, bool &error);
 
 // Checks whether the provided address should trigger an address error
-template<Size S = Word> bool misaligned(u32 addr);
+template <Core C, Size S = Word> bool misaligned(u32 addr);
 
 // Creates an address error stack frame
-template<Flags F = 0> AEStackFrame makeFrame(u32 addr, u32 pc, u16 sr, u16 ird);
-template<Flags F = 0> AEStackFrame makeFrame(u32 addr, u32 pc);
-template<Flags F = 0> AEStackFrame makeFrame(u32 addr);
+template <Flags F = 0> StackFrame makeFrame(u32 addr, u32 pc, u16 sr, u16 ird);
+template <Flags F = 0> StackFrame makeFrame(u32 addr, u32 pc);
+template <Flags F = 0> StackFrame makeFrame(u32 addr);
 
 // Prefetches the next instruction
-template<Flags F = 0> void prefetch();
+template <Core C, Flags F = 0> void prefetch();
 
 // Performs a full prefetch cycle
-template<Flags F = 0, int delay = 0> void fullPrefetch();
+template <Core C, Flags F = 0, int delay = 0> void fullPrefetch();
 
 // prefetch replacement if loop mode is active
 void noPrefetch();
 
 // Reads an extension word from memory
-void readExt();
+template <Core C> void readExt();
+template <Core C, Size S> u32 readExt();
 
 // Jumps to an exception vector
-template<Flags F = 0> void jumpToVector(int nr);
+template <Core C, Flags F = 0> void jumpToVector(int nr);
+
+// Computes the number of extension words provided in full extension format
+int baseDispWords(u16 ext);
+int outerDispWords(u16 ext);
+
+// Computes the cycle penalty for extended 68020 addressing modes
+template <Core C, Mode M, Size S> int penaltyCycles(u16 ext);

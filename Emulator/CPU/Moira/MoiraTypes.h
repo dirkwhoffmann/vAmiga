@@ -13,6 +13,11 @@
 #include <string>
 #include <optional>
 
+#if defined(__clang__)
+#pragma GCC diagnostic ignored "-Wgnu-anonymous-struct"
+#pragma GCC diagnostic ignored "-Wnested-anon-types"
+#endif
+
 namespace moira {
 
 typedef int8_t             i8;
@@ -26,193 +31,85 @@ typedef unsigned long long u64;
 
 typedef enum
 {
-    M68000,         // Fully supported
-    M68010          // Experimental
+    M68000,             // Fully supported
+    M68010,             // Experimentally supported
+    M68020              // Experimentally supported
 }
-Type;
+Core;
 
 typedef enum
 {
-    ILLEGAL,        // Illegal instruction
-    LINE_A,         // Unused instruction (line A)
-    LINE_F,         // Unused instruction (line F)
+    DASM_MOIRA,         // Default disassembler style
+    DASM_MUSASHI,       // Musashi style
+    DASM_VDA68K_MOT,    // Vda68k style (Motorola)
+    DASM_VDA68K_MIT     // Vda68k style (MIT)
+}
+DasmStyle;
 
-    ABCD,           // Add decimal with extend
-    ADD,            // Add binary
-    ADDA,           // Add address
-    ADDI,           // Add immediate
-    ADDQ,           // Add quick
-    ADDX,           // Add extended
-    AND,            // AND logical
-    ANDI,           // AND immediate
-    ANDICCR,        // AND immediate to condition code register
-    ANDISR,         // AND immediate to status register
-    ASL,            // Arithmetic shift left
-    ASR,            // Arithmetic shift right
-    BCC,            // Branch on carry clear
-    BCS,            // Branch on carry set
-    BEQ,            // Branch on equal
-    BGE,            // Branch on greater than or equal
-    BGT,            // Branch on greater than
-    BHI,            // Branch on higher than
-    BLE,            // Branch on less than or equal
-    BLS,            // Branch on lower than or same
-    BLT,            // Branch on less than
-    BMI,            // Branch on minus
-    BNE,            // Branch on not equal
-    BPL,            // Branch on plus
-    BVC,            // Branch on overflow clear
-    BVS,            // Branch on overflow set
-    BCHG,           // Test a bit and change
-    BCLR,           // Test a bit and clear
-    BKPT,           // 68010+: Run breakbpoint cycle
-    BRA,            // Branch always
-    BSET,           // Test a bit and set
-    BSR,            // Branch to subroutine
-    BTST,           // Test a bit
-    CHK,            // Check register against bounds
-    CLR,            // Clear an operand
-    CMP,            // Compare
-    CMPA,           // Compare address
-    CMPI,           // Compare immediate
-    CMPM,           // Compare memory with memory
-    DBCC,           // Test, decrement, and branch on carry clear
-    DBCS,           // Test, decrement, and branch on carry set
-    DBEQ,           // Test, decrement, and branch on equal
-    DBGE,           // Test, decrement, and branch on greater than or equal
-    DBGT,           // Test, decrement, and branch on greater than
-    DBHI,           // Test, decrement, and branch on higher than
-    DBLE,           // Test, decrement, and branch on less than or equal
-    DBLS,           // Test, decrement, and branch on lower than or same
-    DBLT,           // Test, decrement, and branch on less than
-    DBMI,           // Test, decrement, and branch on minus
-    DBNE,           // Test, decrement, and branch on not equal
-    DBPL,           // Test, decrement, and branch on on plus
-    DBVC,           // Test, decrement, and branch on overflow clear
-    DBVS,           // Test, decrement, and branch on overflow set
-    DBF,            // Test, decrement, and branch on false (never)
-    DBT,            // Test, decrement, and branch on true (always)
-    DIVS,           // Signed divide
-    DIVU,           // Unsigned divide
-    EOR,            // Exclusive OR logical
-    EORI,           // Exclusive OR immediate
-    EORICCR,        // Exclusive OR immediate to condition code register
-    EORISR,         // Exclusive OR immediate to status register
-    EXG,            // Exchange registers
-    EXT,            // Sign-extend a data register
-    JMP,            // Jump
-    JSR,            // Jump to subroutine
-    LEA,            // Load effective address
-    LINK,           // Link and allocate
-    LSL,            // Logical shift left
-    LSR,            // Logical shift right
-    MOVE,           // Copy data from source to destination
-    MOVEA,          // Move address
-    MOVEC,          // 68010+: Move Control Register
-    MOVEFCCR,       // Copy data from condition code register to destination
-    MOVETCCR,       // Copy data to condition code register from source
-    MOVEFSR,        // Copy data from status register to destination
-    MOVETSR,        // Copy data to status register from source
-    MOVEUSP,        // Copy data to or from USP
-    MOVEM,          // Move multiple registers
-    MOVEP,          // Move peripheral data
-    MOVEQ,          // Move quick
-    MOVES,          // 68010+: Move address space
-    MULS,           // Signed multiply
-    MULU,           // Unsigned multiply
-    NBCD,           // Negate decimal with sign extend
-    NEG,            // Negate
-    NEGX,           // Negate with extend
-    NOP,            // No operation
-    NOT,            // Logical complement
-    OR,             // OR logical
-    ORI,            // OR immediate
-    ORICCR,         // OR immediate to condition code register
-    ORISR,          // OR immediate to status register
-    PEA,            // Push effective address
-    RESET,          // Reset external devices
-    ROL,            // Rotate left
-    ROR,            // Rotate right
-    ROXL,           // Rotate left with extend
-    ROXR,           // Rotate righ with extend
-    RTD,            // 68010+: Return and deallocate
-    RTE,            // Return from exception
-    RTR,            // Return and restore condition codes
-    RTS,            // Return from subroutine
-    SBCD,           // Subtract decimal with extend
-    SCC,            // Set on carry clear
-    SCS,            // Set on carry set
-    SEQ,            // Set on equal
-    SGE,            // Set on greater than or equal
-    SGT,            // Set on greater than
-    SHI,            // Set on higher than
-    SLE,            // Set on less than or equal
-    SLS,            // Set on lower than or same
-    SLT,            // Set on less than
-    SMI,            // Set on minus
-    SNE,            // Set on not equal
-    SPL,            // Set on plus
-    SVC,            // Set on overflow clear
-    SVS,            // Set on overflow set
-    SF,             // Set on false (never set)
-    ST,             // Set on true (always set)
-    STOP,           // Load status register and stop
-    SUB,            // Subtract binary
-    SUBA,           // Subtract address
-    SUBI,           // Subtract immediate
-    SUBQ,           // Subtract quick
-    SUBX,           // Subtract extended
-    SWAP,           // Swap register halves
-    TAS,            // Test and set an operand
-    TRAP,           // Trap
-    TRAPV,          // Trap on overflow
-    TST,            // Test an operand
-    UNLK,           // Unlink
+typedef enum
+{
+    DASM_MIXED_CASE,    // Style is determined by the selected DasmStyle
+    DASM_LOWER_CASE,    // Everything is printed in lowercase
+    DASM_UPPER_CASE     // Everything is printed in uppercase
+}
+DasmLetterCase;
 
-    ABCD_LOOP,
-    ADD_LOOP,
-    ADDA_LOOP,
-    ADDX_LOOP,
-    AND_LOOP,
-    ASL_LOOP,
-    ASR_LOOP,
-    CLR_LOOP,
-    CMP_LOOP,
-    CMPA_LOOP,
-    DBCC_LOOP,
-    DBCS_LOOP,
-    DBEQ_LOOP,
-    DBGE_LOOP,
-    DBGT_LOOP,
-    DBHI_LOOP,
-    DBLE_LOOP,
-    DBLS_LOOP,
-    DBLT_LOOP,
-    DBMI_LOOP,
-    DBNE_LOOP,
-    DBPL_LOOP,
-    DBVC_LOOP,
-    DBVS_LOOP,
-    DBF_LOOP,
-    DBT_LOOP,
-    EOR_LOOP,
-    LSL_LOOP,
-    LSR_LOOP,
-    MOVE_LOOP,
-    NBCD_LOOP,
-    NEG_LOOP,
-    NEGX_LOOP,
-    NOT_LOOP,
-    OR_LOOP,
-    ROL_LOOP,
-    ROR_LOOP,
-    ROXL_LOOP,
-    ROXR_LOOP,
-    SBCD_LOOP,
-    SUB_LOOP,
-    SUBA_LOOP,
-    SUBX_LOOP,
-    TST_LOOP
+typedef struct
+{
+    const char *prefix;     // Prefix for hexidecimal numbers
+    u8 radix;               // 10 or 16
+    bool upperCase;         // Lettercase for hexadecimal digits A...F
+    bool plainZero;         // Determines if 0 is printed with or without prefix
+}
+DasmNumberFormat;
+
+typedef enum
+{
+    // 68000+ instruction set
+    ABCD,       ADD,        ADDA,       ADDI,       ADDQ,       ADDX,
+    AND,        ANDI,       ANDICCR,    ANDISR,     ASL,        ASR,
+    BCC,        BCS,        BEQ,        BGE,        BGT,        BHI,
+    BLE,        BLS,        BLT,        BMI,        BNE,        BPL,
+    BVC,        BVS,        BCHG,       BCLR,       BRA,        BSET,
+    BSR,        BTST,       CHK,        CLR,        CMP,        CMPA,
+    CMPI,       CMPM,       DBCC,       DBCS,       DBEQ,       DBGE,
+    DBGT,       DBHI,       DBLE,       DBLS,       DBLT,       DBMI,
+    DBNE,       DBPL,       DBVC,       DBVS,       DBF,        DBT,
+    DIVS,       DIVU,       EOR,        EORI,       EORICCR,    EORISR,
+    EXG,        EXT,        ILLEGAL,    JMP,        JSR,        LEA,
+    LINE_A,     LINE_F,     LINK,       LSL,        LSR,        MOVE,
+    MOVEA,      MOVEFCCR,   MOVETCCR,   MOVEFSR,    MOVETSR,    MOVEUSP,
+    MOVEM,      MOVEP,      MOVEQ,      MULS,       MULU,       NBCD,
+    NEG,        NEGX,       NOP,        NOT,        OR,         ORI,
+    ORICCR,     ORISR,      PEA,        RESET,      ROL,        ROR,
+    ROXL,       ROXR,       RTE,        RTR,        RTS,        SBCD,
+    SCC,        SCS,        SEQ,        SGE,        SGT,        SHI,
+    SLE,        SLS,        SLT,        SMI,        SNE,        SPL,
+    SVC,        SVS,        SF,         ST,         STOP,       SUB,
+    SUBA,       SUBI,       SUBQ,       SUBX,       SWAP,       TAS,
+    TRAP,       TRAPV,      TST,        UNLK,
+
+    // 68010+ instructions
+    BKPT,       MOVEC,      MOVES,      RTD,
+
+    // 68020+ instructions
+    BFCHG,      BFCLR,      BFEXTS,     BFEXTU,     BFFFO,      BFINS,
+    BFSET,      BFTST,      CALLM,      CAS,        CAS2,       CHK2,
+    CMP2,       cpBcc,      cpDBcc,     cpGEN,      cpRESTORE,  cpSAVE,
+    cpScc,      cpTRAPcc,   DIVL,       EXTB,       MULL,       PACK,
+    RTM,        TRAPCC,     TRAPCS,     TRAPEQ,     TRAPGE,     TRAPGT,
+    TRAPHI,     TRAPLE,     TRAPLS,     TRAPLT,     TRAPMI,     TRAPNE,
+    TRAPPL,     TRAPVC,     TRAPVS,     TRAPF,      TRAPT,      UNPK,
+
+    // Loop mode variants (68010)
+    ABCD_LOOP,  ADD_LOOP,   ADDA_LOOP,  ADDX_LOOP,  AND_LOOP,   ASL_LOOP,
+    ASR_LOOP,   CLR_LOOP,   CMP_LOOP,   CMPA_LOOP,  DBCC_LOOP,  DBCS_LOOP,
+    DBEQ_LOOP,  DBGE_LOOP,  DBGT_LOOP,  DBHI_LOOP,  DBLE_LOOP,  DBLS_LOOP,
+    DBLT_LOOP,  DBMI_LOOP,  DBNE_LOOP,  DBPL_LOOP,  DBVC_LOOP,  DBVS_LOOP,
+    DBF_LOOP,   DBT_LOOP,   EOR_LOOP,   LSL_LOOP,   LSR_LOOP,   MOVE_LOOP,
+    NBCD_LOOP,  NEG_LOOP,   NEGX_LOOP,  NOT_LOOP,   OR_LOOP,    ROL_LOOP,
+    ROR_LOOP,   ROXL_LOOP,  ROXR_LOOP,  SBCD_LOOP,  SUB_LOOP,   SUBA_LOOP,
+    SUBX_LOOP,  TST_LOOP
 }
 Instr;
 
@@ -221,19 +118,19 @@ constexpr bool looping() { return I >= ABCD_LOOP; }
 
 typedef enum
 {
-    MODE_DN,   //  0         Dn : Data register direct
-    MODE_AN,   //  1         An : Address register direct
-    MODE_AI,   //  2       (An) : Address register indirect
-    MODE_PI,   //  3      (An)+ : Postincrement register indirect
-    MODE_PD,   //  4      -(An) : Predecrement register indirect
-    MODE_DI,   //  5     (d,An) : Register indirect with displacement
-    MODE_IX,   //  6  (d,An,Xi) : Indexed register indirect with displacement
-    MODE_AW,   //  7   (####).w : Absolute addressing short
-    MODE_AL,   //  8   (####).l : Absolute addressing long
-    MODE_DIPC, //  9     (d,PC) : PC relative with displacement
-    MODE_IXPC, // 10  (d,PC,Xi) : Indexed PC relative with displacement
-    MODE_IM,   // 11       #### : Immediate data addressing
-    MODE_IP    // 12       ---- : Implied addressing
+    MODE_DN,                //  0         Dn
+    MODE_AN,                //  1         An
+    MODE_AI,                //  2       (An)
+    MODE_PI,                //  3      (An)+
+    MODE_PD,                //  4      -(An)
+    MODE_DI,                //  5     (d,An)
+    MODE_IX,                //  6  (d,An,Xi)
+    MODE_AW,                //  7   (####).w
+    MODE_AL,                //  8   (####).l
+    MODE_DIPC,              //  9     (d,PC)
+    MODE_IXPC,              // 10  (d,PC,Xi)
+    MODE_IM,                // 11       ####
+    MODE_IP                 // 12       ----
 }
 Mode;
 
@@ -247,11 +144,53 @@ constexpr bool isImmMode(Mode M) { return M == 11; }
 
 typedef enum
 {
-    Byte = 1,  // .b : Byte addressing
-    Word = 2,  // .w : Word addressing
-    Long = 4   // .l : Long word addressing
+    Unsized = 0,
+    Byte    = 1,            // .b : Byte addressing
+    Word    = 2,            // .w : Word addressing
+    Long    = 4             // .l : Long word addressing
 }
 Size;
+
+typedef enum
+{
+    COND_BT,                // Always true
+    COND_BF,                // Always false
+    COND_HI,                // Higher than
+    COND_LS,                // Lower or same
+    COND_CC,                // Carry clear
+    COND_CS,                // Carry set
+    COND_NE,                // Not equal
+    COND_EQ,                // Equal
+    COND_VC,                // Overflow clear
+    COND_VS,                // Overflow set
+    COND_PL,                // Plus
+    COND_MI,                // Minus
+    COND_GE,                // Greater or equal
+    COND_LT,                // Less than
+    COND_GT,                // Greater than
+    COND_LE                 // Less than
+}
+Cond;
+
+typedef enum
+{
+    EXC_RESET               = 1,
+    EXC_BUS_ERROR           = 2,
+    EXC_ADDRESS_ERROR       = 3,
+    EXC_ILLEGAL             = 4,
+    EXC_DIVIDE_BY_ZERO      = 5,
+    EXC_CHK                 = 6,
+    EXC_TRAPV               = 7,
+    EXC_PRIVILEGE_VIOLATION = 8,
+    EXC_TRACE               = 9,
+    EXC_LINEA               = 10,
+    EXC_LINEF               = 11,
+    EXC_FORMAT_ERROR        = 14,
+    EXC_IRQ_UNINITIALIZED   = 15,
+    EXC_IRQ_SPURIOUS        = 24,
+    EXC_TRAP                = 32
+}
+ExceptionType;
 
 typedef struct
 {
@@ -272,10 +211,10 @@ IrqMode;
 
 typedef enum
 {
-    FC_USER_DATA       = 1,
-    FC_USER_PROG       = 2,
-    FC_SUPERVISOR_DATA = 5,
-    FC_SUPERVISOR_PROG = 6
+    FC_USER_DATA            = 1,
+    FC_USER_PROG            = 2,
+    FC_SUPERVISOR_DATA      = 5,
+    FC_SUPERVISOR_PROG      = 6
 }
 FunctionCode;
 
@@ -289,8 +228,8 @@ FCSource;
 
 typedef enum
 {
-    MEM_DATA = 1,
-    MEM_PROG = 2
+    MEM_DATA                = 1,
+    MEM_PROG                = 2
 }
 MemSpace;
 
@@ -302,19 +241,21 @@ typedef struct
     u16 sr;
     u32 pc;
 }
-AEStackFrame;
+StackFrame;
 
 struct StatusRegister {
 
-    bool t;               // Trace flag
-    bool s;               // Supervisor flag
-    bool x;               // Extend flag
-    bool n;               // Negative flag
-    bool z;               // Zero flag
-    bool v;               // Overflow flag
-    bool c;               // Carry flag
+    bool t1;                // Trace flag
+    bool t0;                // Trace flag         (68020 only)
+    bool s;                 // Supervisor flag
+    bool m;                 // Master flag        (68020 only)
+    bool x;                 // Extend flag
+    bool n;                 // Negative flag
+    bool z;                 // Zero flag
+    bool v;                 // Overflow flag
+    bool c;                 // Carry flag
 
-    u8 ipl;               // Required Interrupt Priority Level
+    u8 ipl;                 // Required Interrupt Priority Level
 };
 
 struct Registers {
@@ -338,51 +279,55 @@ struct Registers {
     };
 
     u32 usp;                // User Stack Pointer
-    u32 ssp;                // Supervisor Stack Pointer
+    u32 isp;                // Interrupt Stack Pointer
+    u32 msp;                // Master Stack Pointer             (68020+)
 
     u8 ipl;                 // Polled Interrupt Priority Level
 
-    u32 vbr;                // Vector Base Register (68010+)
-    u32 sfc;                // Source Function Code (68010+)
-    u32 dfc;                // Destination Function Code (68010+)
+    u32 vbr;                // Vector Base Register             (68010+)
+    u32 sfc;                // Source Function Code             (68010+)
+    u32 dfc;                // Destination Function Code        (68010+)
+
+    // Unemulated registers
+    u32 cacr;               // Cache Control Register           (68020+)
+    u32 caar;               // Cache Address Register           (68020+)
 };
 
-struct PrefetchQueue {    // http://pasti.fxatari.com/68kdocs/68kPrefetch.html
+struct PrefetchQueue {
 
-    u16 irc;              // The most recent word prefetched from memory
-    u16 ird;              // The instruction currently being executed
+    u16 irc;                // The most recent word prefetched from memory
+    u16 ird;                // The instruction currently being executed
 };
 
 /* Execution flags
  *
- * The Motorola 68000 is a well organized processor that utilizes the same
- * general execution scheme for many instructions. However, the schemes
- * slighty differ between instruction. To take care of the subtle differences,
- * some execution functions take an dditional 'flags' argument which allows to
- * alter their behavior. All flags are passed as a template parameter for
- * efficiency.
+ * The M68k is a well organized processor that breaks down the execution of
+ * an instruction to a limited number of general execution schemes. However,
+ * the schemes slighty differ between instruction. To take care of the subtle
+ * differences, some functions take an additional 'flags' argument to alter
+ * their behavior. All flags are passed as a template parameter for efficiency.
  */
- 
+
 typedef u64 Flags;
 
 // Memory access flags
-static const u64 REVERSE        (1 << 0);  // Reverse the long word access order
-static const u64 SKIP_LAST_READ (1 << 1);  // Don't read the extension word
+constexpr u64 REVERSE       (1 << 0);   // Reverse the long word access order
+constexpr u64 SKIP_LAST_RD  (1 << 1);   // Don't read the extension word
 
 // Interrupt flags
-static const u64 POLLIPL        (1 << 2);  // Poll the interrupt lines
-                           
-// Address error stack frame flags
-static const u64 AE_WRITE       (1 << 3);  // Clear read flag in code word
-static const u64 AE_PROG        (1 << 4);  // Set FC pins to program space
-static const u64 AE_DATA        (1 << 5);  // Set FC pins to user space
-static const u64 AE_INC_PC      (1 << 6);  // Increment PC by 2 in stack frame
-static const u64 AE_DEC_PC      (1 << 7);  // Decrement PC by 2 in stack frame
-static const u64 AE_INC_ADDR    (1 << 8);  // Increment ADDR by 2 in stack frame
-static const u64 AE_DEC_ADDR    (1 << 9);  // Decrement ADDR by 2 in stack frame
-static const u64 AE_SET_CB3     (1 << 10); // Set bit 3 in CODE segment
+constexpr u64 POLLIPL       (1 << 2);   // Poll the interrupt lines
 
-// Experimental
-static const u64 IMPLICIT_DECR  (1 << 11); // Omit 2 cycle delay in -(An) mode
+// Address error flags
+constexpr u64 AE_WRITE      (1 << 3);   // Clear read flag in code word
+constexpr u64 AE_PROG       (1 << 4);   // Set FC pins to program space
+constexpr u64 AE_DATA       (1 << 5);   // Set FC pins to user space
+constexpr u64 AE_INC_PC     (1 << 6);   // Increment PC by 2 in stack frame
+constexpr u64 AE_DEC_PC     (1 << 7);   // Decrement PC by 2 in stack frame
+constexpr u64 AE_INC_A      (1 << 8);   // Increment ADDR by 2 in stack frame
+constexpr u64 AE_DEC_A      (1 << 9);   // Decrement ADDR by 2 in stack frame
+constexpr u64 AE_SET_CB3    (1 << 10);  // Set bit 3 in CODE segment
+
+// Timing flags
+constexpr u64 IMPL_DEC      (1 << 11);  // Omit 2 cycle delay in -(An) mode
 
 }

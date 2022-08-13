@@ -9,22 +9,11 @@
 
 #pragma once
 
-#include "MoiraConfig.h"
 #include "MoiraTypes.h"
 #include "MoiraDebugger.h"
-#include "StrWriter.h"
 #include "SubComponent.h"
 
-#include <cassert>
-
 namespace moira {
-
-#ifdef _MSC_VER
-#define unreachable    __assume(false)
-#else
-#define unreachable    __builtin_unreachable()
-#endif
-#define fatalError     assert(false); unreachable
 
 class Moira : public SubComponent {
 
@@ -33,26 +22,8 @@ class Moira : public SubComponent {
     friend class Watchpoints;
     friend class Catchpoints;
 
-protected:
-
-    // Emulated CPU model
-    Type model = M68000;
-
-    // Interrupt mode of this CPU
-    IrqMode irqMode = IRQ_AUTO;
-
-    // Number format used by the disassembler (hex or decimal)
-    bool hex = true;
-
-    // Text formatting style used by the disassembler (upper case or lower case)
-    bool upper = false;
-
-    // Tab spacing used by the disassembler
-    Align tab{8};
-
-
     //
-    // Internals
+    // Sub components
     //
 
 public:
@@ -60,7 +31,24 @@ public:
     // Breakpoints, watchpoints, catchpoints, instruction tracing
     Debugger debugger = Debugger(*this);
 
+
+    //
+    // Internals
+    //
+
 protected:
+
+    // The emulated CPU core
+    Core core = M68000;
+
+    // The interrupt mode of this CPU
+    IrqMode irqMode = IRQ_AUTO;
+
+    // The disassembler format
+    DasmStyle style = DASM_MOIRA;
+    DasmNumberFormat numberFormat { .prefix = "$", .radix = 16 };
+    DasmLetterCase letterCase = DASM_MIXED_CASE;
+    Tab tab{8};
 
     /* State flags
      *
@@ -99,21 +87,21 @@ protected:
      *    This flag indicates whether the CPU should check fo watchpoints.
      */
     int flags;
-    static constexpr int CPU_IS_HALTED         = (1 << 8);
-    static constexpr int CPU_IS_STOPPED        = (1 << 9);
-    static constexpr int CPU_IS_LOOPING        = (1 << 10);
-    static constexpr int CPU_LOG_INSTRUCTION   = (1 << 11);
-    static constexpr int CPU_CHECK_IRQ         = (1 << 12);
-    static constexpr int CPU_TRACE_EXCEPTION   = (1 << 13);
-    static constexpr int CPU_TRACE_FLAG        = (1 << 14);
-    static constexpr int CPU_CHECK_BP          = (1 << 15);
-    static constexpr int CPU_CHECK_WP          = (1 << 16);
-    static constexpr int CPU_CHECK_CP          = (1 << 17);
+    static constexpr int CPU_IS_HALTED          = (1 << 8);
+    static constexpr int CPU_IS_STOPPED         = (1 << 9);
+    static constexpr int CPU_IS_LOOPING         = (1 << 10);
+    static constexpr int CPU_LOG_INSTRUCTION    = (1 << 11);
+    static constexpr int CPU_CHECK_IRQ          = (1 << 12);
+    static constexpr int CPU_TRACE_EXCEPTION    = (1 << 13);
+    static constexpr int CPU_TRACE_FLAG         = (1 << 14);
+    static constexpr int CPU_CHECK_BP           = (1 << 15);
+    static constexpr int CPU_CHECK_WP           = (1 << 16);
+    static constexpr int CPU_CHECK_CP           = (1 << 17);
 
     // Number of elapsed cycles since powerup
     i64 clock;
     
-    // The data and address registers
+    // The egister set
     Registers reg;
 
     // The prefetch queue
@@ -130,6 +118,9 @@ protected:
 
     // Remembers the number of the last processed exception
     int exception;
+
+    // Cycle penalty (needed for 68020+ extended addressing modes)
+    int cp;
 
     // Jump table holding the instruction handlers
     typedef void (Moira::*ExecPtr)(u16);
@@ -157,15 +148,18 @@ public:
     Moira(Amiga &ref);
     virtual ~Moira();
 
-    // Selects the emulated CPU model
-    void setModel(Type model);
+    // Selects the emulated CPU core
+    void setCore(Core core);
 
-    // Configures the output format of the disassembler
-    void configDasm(bool h, bool u) { hex = h; upper = u; }
+    // Configures the disassembler
+    void setDasmStyle(DasmStyle value);
+    void setDasmNumberFormat(DasmNumberFormat value);
+    void setDasmLetterCase(DasmLetterCase value);
+    void setIndentation(int value);
 
 protected:
 
-    // Creates the generic jump table (all models)
+    // Creates the generic jump table
     void createJumpTable();
 
 
@@ -186,6 +180,9 @@ public:
     
 private:
 
+    // Called by reset()
+    template <Core C> void reset();
+
     // Invoked inside execute() to check for a pending interrupt
     bool checkForIrq();
 
@@ -200,7 +197,7 @@ private:
 public:
 
     // Disassembles a single instruction and returns the instruction size
-    int disassemble(u32 addr, char *str);
+    int disassemble(u32 addr, char *str, DasmStyle core = DASM_MUSASHI);
 
     // Returns a textual representation for a single word
     void disassembleWord(u32 value, char *str);
@@ -226,63 +223,6 @@ public:
 
 protected:
 
-#if 0
-    
-    // Reads a byte or a word from memory
-    virtual u8 read8(u32 addr) = 0;
-    virtual u16 read16(u32 addr) = 0;
-
-    // Special variants used by the reset routine and the disassembler
-    virtual u16 read16OnReset(u32 addr) { return read16(addr); }
-    virtual u16 read16Dasm(u32 addr) { return read16(addr); }
-
-    // Writes a byte or word into memory
-    virtual void write8  (u32 addr, u8  val) = 0;
-    virtual void write16 (u32 addr, u16 val) = 0;
-
-    // Provides the interrupt level in IRQ_USER mode
-    virtual u16 readIrqUserVector(u8 level) const { return 0; }
-
-    // Instrution delegates
-    virtual void signalResetInstr() { };
-    virtual void signalStopInstr(u16 op) { };
-    virtual void signalTasInstr() { };
-    virtual void signalJsrBsrInstr(u16 opcode, u32 oldPC, u32 newPC) { };
-    virtual void signalRtsInstr() { };
-    virtual void signalRtdInstr() { };
-
-    // State delegates
-    virtual void signalHardReset() { };
-    virtual void signalHalt() { };
-
-    // Exception delegates
-    virtual void signalAddressError(AEStackFrame &frame) { };
-    virtual void signalLineAException(u16 opcode) { };
-    virtual void signalLineFException(u16 opcode) { };
-    virtual void signalIllegalOpcodeException(u16 opcode) { };
-    virtual void signalTraceException() { };
-    virtual void signalTrapException() { };
-    virtual void signalPrivilegeViolation() { };
-    virtual void signalInterrupt(u8 level) { };
-    virtual void signalJumpToVector(int nr, u32 addr) { };
-    virtual void signalSoftwareTrap(u16 opcode, SoftwareTrap trap) { };
-    virtual void signalBkptInstruction(int nr) { };
-    
-    // Exception delegates
-    virtual void addressErrorHandler() { };
-    
-    // Called when a debug point is reached
-    virtual void softstopReached(u32 addr);
-    virtual void breakpointReached(u32 addr);
-    virtual void watchpointReached(u32 addr);
-    virtual void catchpointReached(u8 vector);
-    virtual void swTrapReached(u32 addr);
-    
-    // Called at the beginning of each instruction handler (see EXEC_DEBUG)
-    virtual void execDebug(const char *cmd) { };
-    
-#endif
-    
     // Reads a byte or a word from memory
     u8 read8(u32 addr);
     u16 read16(u32 addr);
@@ -292,49 +232,36 @@ protected:
     u16 read16Dasm(u32 addr);
 
     // Writes a byte or word into memory
-    void write8  (u32 addr, u8  val);
-    void write16 (u32 addr, u16 val);
+    void write8(u32 addr, u8 val);
+    void write16(u32 addr, u16 val);
 
     // Provides the interrupt level in IRQ_USER mode
     u16 readIrqUserVector(u8 level) const;
 
-    // Instrution delegates
-    void signalResetInstr();
-    void signalStopInstr(u16 op);
-    void signalTasInstr();
-    virtual void signalJsrBsrInstr(u16 opcode, u32 oldPC, u32 newPC) { };
-    virtual void signalRtsInstr() { };
-    virtual void signalRtdInstr() { };
+    // Instruction delegates
+    void willExecute(const char *func, Instr I, Mode M, Size S, u16 opcode);
+    void didExecute(const char *func, Instr I, Mode M, Size S, u16 opcode);
+
+    // Exception delegates
+    void willExecute(ExceptionType exc, u16 vector);
+    void didExecute(ExceptionType exc, u16 vector);
 
     // State delegates
+    void signalHardReset();
     void signalHalt();
 
     // Exception delegates
-    void signalAddressError(AEStackFrame &frame);
-    void signalLineAException(u16 opcode);
-    void signalLineFException(u16 opcode);
-    void signalIllegalOpcodeException(u16 opcode);
-    void signalTraceException();
-    void signalTrapException();
-    void signalPrivilegeViolation();
     void signalInterrupt(u8 level);
     void signalJumpToVector(int nr, u32 addr);
-    void signalSoftwareTrap(u16 instr, SoftwareTrap trap);
-    void signalBkptInstruction(int nr);
+    void signalSoftwareTrap(u16 opcode, SoftwareTrap trap);
 
-    // Exception delegates
-    void addressErrorHandler();
-    
-    // Called when a debug point is reached
+	// Called when a debug point is reached
     void softstopReached(u32 addr);
     void breakpointReached(u32 addr);
     void watchpointReached(u32 addr);
     void catchpointReached(u8 vector);
-    void swTrapReached(u32 addr);
-    
-    // Called at the beginning of each instruction handler (see EXEC_DEBUG)
-    void execDebug(const char *cmd);
- 
+    void softwareTrapReached(u32 addr);
+
 
     //
     // Accessing the clock
@@ -349,13 +276,6 @@ protected:
 
     // Advances the clock (called before each memory access)
     void sync(int cycles);
-
-    template <Type CPU>
-    void sync([[maybe_unused]] int c1, [[maybe_unused]] int c2) {
-
-        if constexpr (CPU == M68000) sync(c1);
-        if constexpr (CPU == M68010) sync(c2);
-    }
 
 
     //
@@ -391,14 +311,17 @@ public:
     u32 getSP() const { return reg.sp; }
     void setSP(u32 val) { reg.sp = val; }
 
-    u32 getSSP() const { return reg.sr.s ? reg.sp : reg.ssp; }
-    void setSSP(u32 val) { if (reg.sr.s) reg.sp = val; else reg.ssp = val; }
+    u32 getUSP() const { return !reg.sr.s ? reg.sp : reg.usp; }
+    void setUSP(u32 val) { if (!reg.sr.s) reg.sp = val; else reg.usp = val; }
 
-    u32 getUSP() const { return reg.sr.s ? reg.usp : reg.sp; }
-    void setUSP(u32 val) { if (reg.sr.s) reg.usp = val; else reg.sp = val; }
+    u32 getISP() const { return (reg.sr.s && !reg.sr.m) ? reg.sp : reg.isp; }
+    void setISP(u32 val) { if (reg.sr.s && !reg.sr.m) reg.sp = val; else reg.isp = val; }
+
+    u32 getMSP() const { return (reg.sr.s && reg.sr.m) ? reg.sp : reg.msp; }
+    void setMSP(u32 val) { if (reg.sr.s && reg.sr.m) reg.sp = val; else reg.msp = val; }
 
     u32 getVBR() const { return reg.vbr; }
-    void setVBR(u32 val) { reg.vbr = val & ~0x3FF; }
+    void setVBR(u32 val) { reg.vbr = val; }
 
     u32 getSFC() const { return reg.sfc; }
     void setSFC(u32 val) { reg.sfc = val & 0b111; }
@@ -406,24 +329,38 @@ public:
     u32 getDFC() const { return reg.dfc; }
     void setDFC(u32 val) { reg.dfc = val & 0b111; }
 
-    void setSupervisorMode(bool enable);
+    u32 getCACR() const { return reg.cacr; }
+    void setCACR(u32 val) { reg.cacr = val & 0b1111; }
+
+    u32 getCAAR() const { return reg.caar; }
+    void setCAAR(u32 val) { reg.caar = val & 0b1111; }
+
+    void setSupervisorMode(bool value);
+    void setMasterMode(bool value);
+    void setSupervisorFlags(bool s, bool m);
 
     u8 getCCR(const StatusRegister &sr) const;
     u16 getSR(const StatusRegister &sr) const;
 
 private:
 
-    void setTraceFlag() { reg.sr.t = true; flags |= CPU_TRACE_FLAG; }
-    void clearTraceFlag() { reg.sr.t = false; flags &= ~CPU_TRACE_FLAG; }
+    void setTraceFlag() { reg.sr.t1 = true; flags |= CPU_TRACE_FLAG; }
+    void clearTraceFlag() { reg.sr.t1 = false; flags &= ~CPU_TRACE_FLAG; }
 
+    void setTrace0Flag() { reg.sr.t0 = true; }
+    void clearTrace0Flag() { reg.sr.t0 = false; }
+
+    void clearTraceFlags() { clearTraceFlag(); clearTrace0Flag(); }
+    
 protected:
 
-    template<Size S = Long> u32 readD(int n) const;
-    template<Size S = Long> u32 readA(int n) const;
-    template<Size S = Long> u32 readR(int n) const;
-    template<Size S = Long> void writeD(int n, u32 v);
-    template<Size S = Long> void writeA(int n, u32 v);
-    template<Size S = Long> void writeR(int n, u32 v);
+    template <Size S = Long> u32 readD(int n) const;
+    template <Size S = Long> u32 readA(int n) const;
+    template <Size S = Long> u32 readR(int n) const;
+    template <Size S = Long> void writeD(int n, u32 v);
+    template <Size S = Long> void writeA(int n, u32 v);
+    template <Size S = Long> void writeR(int n, u32 v);
+
 
     //
     // Managing the function code pins
@@ -440,7 +377,7 @@ public:
     void setFC(FunctionCode value);
 
     // Sets the function code pins according the the provided addressing mode
-    template<Mode M> void setFC();
+    template <Mode M> void setFC();
 
 
     //

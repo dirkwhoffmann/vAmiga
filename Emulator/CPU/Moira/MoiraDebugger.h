@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "MoiraConfig.h"
 #include "MoiraTypes.h"
+#include "StrWriter.h"
 #include <map>
 
 namespace moira {
@@ -29,7 +29,7 @@ struct Guard {
 
     // Ignore counter
     long ignore = 0;
-    
+
 public:
 
     // Returns true if the guard hits
@@ -45,7 +45,7 @@ public:
 class Guards {
 
     friend class Debugger;
-    
+
 protected:
 
     // Capacity of the guards array
@@ -58,11 +58,11 @@ protected:
     long count = 0;
 
 public:
-    
+
     // A copy of the latest match
     std::optional <Guard> hit;
 
-    
+
     //
     // Constructing
     //
@@ -71,8 +71,8 @@ public:
 
     // Guards(Moira& ref) : moira(ref) { }
     virtual ~Guards();
-    
-    
+
+
     //
     // Inspecting the guard list
     //
@@ -83,7 +83,7 @@ public:
 
     std::optional<u32> guardAddr(long nr) const;
 
-    
+
     //
     // Adding or removing guards
     //
@@ -99,7 +99,7 @@ public:
 
     void replace(long nr, u32 addr);
 
-    
+
     //
     // Enabling or disabling guards
     //
@@ -117,8 +117,8 @@ public:
     void setEnableAt(u32 addr, bool val);
 
     void ignore(long nr, long count);
-    
-    
+
+
     //
     // Checking guards
     //
@@ -143,7 +143,7 @@ public:
 class Watchpoints : public Guards {
 
     class Moira &moira;
-    
+
 public:
 
     Watchpoints(Moira& ref) : moira(ref) { }
@@ -153,7 +153,7 @@ public:
 class Catchpoints : public Guards {
 
     class Moira &moira;
-    
+
 public:
 
     Catchpoints(Moira& ref) : moira(ref) { }
@@ -166,19 +166,19 @@ public:
 //
 
 struct SoftwareTrap {
-  
+
     // The original instruction that has been replaced by this trap
     u16 instruction;
 };
 
 struct SoftwareTraps {
-    
-    std::map <u16,SoftwareTrap> traps;
-    
+
+    std::map<u16, SoftwareTrap>traps;
+
     // Creates a new software trap for a given instruction
     u16 create(u16 instr);
     u16 create(u16 key, u16 instr);
-    
+
     // Replaces a software trap by its original opcode
     u16 resolve(u16 instr);
 };
@@ -194,10 +194,10 @@ public:
     Breakpoints breakpoints = Breakpoints(moira);
     Watchpoints watchpoints = Watchpoints(moira);
     Catchpoints catchpoints = Catchpoints(moira);
-    
+
     // Software traps
     SoftwareTraps swTraps;
-    
+
 private:
 
     /* Soft breakpoint for implementing single-stepping. In contrast to a
@@ -207,7 +207,7 @@ private:
      * to implement "step into").
      */
     std::optional <i64> softStop;
-    
+
     // Buffer storing logged instructions
     static const int logBufferCapacity = 256;
     Registers logBuffer[logBufferCapacity];
@@ -226,22 +226,22 @@ public:
 
     void reset();
 
-    
+
     //
     // Analyzing instructions
     //
-    
+
     static bool isLineAInstr(u16 opcode) { return (opcode & 0xF000) == 0xA000; }
     static bool isLineFInstr(u16 opcode) { return (opcode & 0xF000) == 0xF000; }
 
-    
+
     //
     // Providing textual descriptions
     //
-    
+
     // Returns a human-readable name for an exception vector
     static std::string vectorName(u8 vector);
-    
+
 
     //
     // Working with breakpoints, watchpoints, and catchpoints
@@ -259,7 +259,7 @@ public:
     bool watchpointMatches(u32 addr, Size S);
     bool catchpointMatches(u32 vectorNr);
 
-    
+
     //
     // Working with the log buffer
     //
@@ -273,7 +273,7 @@ public:
 
     // Logs an instruction
     void logInstruction();
-    
+
     /* Reads an item from the log buffer
      *
      *    xxxRel: n == 0 returns the most recently recorded entry
@@ -284,14 +284,14 @@ public:
 
     // Clears the log buffer
     void clearLog() { logCnt = 0; }
-    
-    
+
+
     //
     // Changing state
     //
-    
+
     // Continues program execution at the specified address
-    void jump(u32 addr);    
+    void jump(u32 addr);
 };
 
 }

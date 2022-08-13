@@ -26,7 +26,8 @@
 enum_long(CPU_REVISION)
 {
     CPU_68000,
-    CPU_68010
+    CPU_68010,
+    CPU_68020
 };
 typedef CPU_REVISION CPURevision;
 
@@ -34,7 +35,7 @@ typedef CPU_REVISION CPURevision;
 struct CPURevisionEnum : util::Reflection<CPURevisionEnum, CPURevision>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = CPU_68010;
+    static constexpr long maxVal = CPU_68020;
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "CPU"; }
@@ -44,6 +45,7 @@ struct CPURevisionEnum : util::Reflection<CPURevisionEnum, CPURevision>
 
             case CPU_68000:   return "68000";
             case CPU_68010:   return "68010";
+            case CPU_68020:   return "68020";
         }
         return "???";
     }

@@ -14,6 +14,8 @@
 #include "RingBuffer.h"
 #include "Moira.h"
 
+// using namespace moira;
+
 class CPU : public moira::Moira {
 
     friend class Moira;
@@ -96,8 +98,10 @@ private:
             
             << reg.pc
             << reg.pc0
-            << reg.sr.t
+            << reg.sr.t1
+            << reg.sr.t0
             << reg.sr.s
+            << reg.sr.m
             << reg.sr.x
             << reg.sr.n
             << reg.sr.z
@@ -106,18 +110,23 @@ private:
             << reg.sr.ipl
             << reg.r
             << reg.usp
-            << reg.ssp
+            << reg.isp
+            << reg.msp
             << reg.ipl
             << reg.vbr
             << reg.sfc
             << reg.dfc
+            << reg.cacr
+            << reg.caar
 
             << queue.irc
             << queue.ird
             
             << ipl
             << fcl
-            << exception;
+            // << fcSource  TODO: WRITE THIS INTO SNAPSHOT
+            << exception
+            << cp;
         }
     }
 
@@ -200,12 +209,19 @@ public:
     //
     // Instruction delegates
     //
-    
+
+    void willExecute(const char *func, moira::Instr I, moira::Mode M, moira::Size S, u16 opcode);
+    void didExecute(const char *func, moira::Instr I, moira::Mode M, moira::Size S, u16 opcode);
+    void willExecute(moira::ExceptionType exc, u16 vector);
+    void didExecute(moira::ExceptionType exc, u16 vector);
+
+    /*
     virtual void signalJsrBsrInstr(u16 opcode, u32 oldPC, u32 newPC) override;
     virtual void signalRtsInstr() override { signalRtsRtdInstr("RTS"); }
     virtual void signalRtdInstr() override { signalRtsRtdInstr("RTD"); }
     void signalRtsRtdInstr(const string &instr);
-    
+    */
+
     //
     // Debugging
     //

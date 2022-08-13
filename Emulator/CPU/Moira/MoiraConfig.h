@@ -9,14 +9,24 @@
 
 #pragma once
 
-#include "config.h"
+/* Set to true to enable precise timing mode (68000 and 68010 only).
+ *
+ * If disabled, Moira calls function 'sync' at the end of each instruction
+ * with the number of elapsed cycles as argument. In precise timing mode,
+ * 'sync' is called prior to each memory access. This enables the client to
+ * emulate the surrounding hardware up the point where the memory access
+ * actually happens.
+ *
+ * Enable to improve accuracy, disable to gain speed.
+ */
+#define PRECISE_TIMING true
 
 /* Set to true to enable address error checking.
  *
- * The Motorola 68k signals an address error violation if a odd memory location
- * is addressed in combination with word or long word addressing.
+ * The 68000 and 68010 signal an address error violation if an odd memory
+ * location is accessed in combination with word or long word addressing.
  *
- * Enable to improve emulation compatibility, disable to gain speed.
+ * Enable to improve accuracy, disable to gain speed.
  */
 #define EMULATE_ADDRESS_ERROR true
 
@@ -26,14 +36,14 @@
  * to inspect the access type. If used, these pins are usually connected to an
  * external memory management unit (MMU).
  *
- * Enable to improve emulation compatibility, disable to gain speed.
+ * Enable to improve accuracy, disable to gain speed.
  */
 #define EMULATE_FC true
 
 /* Set to true to enable the disassembler.
  *
  * The disassembler requires a jump table which consumes about 1MB of memory.
- * By disabling the disassembler, you can save this amount of memory.
+ * Disabling the disassembler will decrease the memory footprint.
  */
 #define ENABLE_DASM true
 
@@ -52,14 +62,23 @@
  * The compatibility mode is used by the test runner application to compare
  * the results computed by Moira and Musashi, respectively.
  *
- * Disable to improve emulation compatibility.
+ * Disable to improve emulation accuracy.
  */
 #define MIMIC_MUSASHI false
 
-/* Execution debugging
- *
- * This macro is evaluated at the beginning of the execution handlers of all
- * instructions. It is intended to invoke debug code. Make sure to define it
- * as an empty macro in release builds.
+/* The following macro appear at the beginning of each instruction handler.
+ * Moira will call 'willExecute(...)' for all listed instructions.
  */
-#define EXEC_DEBUG { /* execDebug(__func__); */ }
+#define WILL_EXECUTE    I == STOP || I == TAS || I == BKPT
+
+/* The following macro appear at the end of each instruction handler.
+ * Moira will call 'didExecute(...)' for all listed instructions.
+ */
+#define DID_EXECUTE     I == RESET
+
+/* Comment out to enable assertion checking.
+ *
+ * Uncomment in release builds, comment out in debug builds.
+ */
+// #define NDEBUG
+#include <cassert>

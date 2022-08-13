@@ -7,38 +7,36 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// Emulates a group 0 exception
-void saveToStack(AEStackFrame &frame);
-template <Type CPU> void saveToStack(AEStackFrame &frame);
+/* Creates a stack frame of a certain format
+ *
+ * Format  Description                  68000  68010  68020
+ * ----------------------------------------------------------------------------
+ *  AEBE   Address error / Bus error      X
+ *  0000   Short format                   X      X      X
+ *  0001   Throwaway                                    X
+ *  0010   Instruction exception                        X
+ *  1000   Bus fault                             X
+ *  1001   Coprocessor mid-instruction                  X
+ *  1010   Short bus fault                              X
+ *  1011   Long bus fault                               X
+ */
+template <Core C> void writeStackFrameAEBE(StackFrame &frame);
+template <Core C> void writeStackFrame0000(u16 sr, u32 pc, u16 nr);
+template <Core C> void writeStackFrame0001(u16 sr, u32 pc, u16 nr);
+template <Core C> void writeStackFrame0010(u16 sr, u32 pc, u32 ia, u16 nr);
+template <Core C> void writeStackFrame1000(u16 sr, u32 pc, u16 nr);
+template <Core C> void writeStackFrame1001(u16 sr, u32 pc, u32 ia, u16 nr);
+template <Core C> void writeStackFrame1010(u16 sr, u32 pc, u16 nr);
+template <Core C> void writeStackFrame1011(u16 sr, u32 pc, u16 nr);
 
-// Emulates a group 1 or group 2 exception
-void saveToStackBrief(u16 nr, u16 sr, u32 pc);
-template <Type CPU> void saveToStackBrief(u16 nr, u16 sr, u32 pc);
+// Emulates an exception other than address errors and interrupts
+void execException(ExceptionType exc, int nr = 0);
+template <Core C> void execException(ExceptionType exc, int nr = 0);
 
 // Emulates an address error
-void execAddressError(AEStackFrame frame, int delay = 0);
-template <Type CPU> void execAddressError(AEStackFrame frame, int delay = 0);
+void execAddressError(StackFrame frame, int delay = 0);
+template <Core C> void execAddressError(StackFrame frame, int delay = 0);
 
-// Emulates a format error (68010+)
-void execFormatError();
-template <Type CPU> void execFormatError();
-
-// Emulates the execution of unimplemented and illegal instructions
-void execUnimplemented(int nr);
-template <Type CPU> void execUnimplemented(int nr);
-
-// Emulates a trace exception
-void execTraceException();
-template <Type CPU> void execTraceException();
-
-// Emulates a trap exception
-void execTrapException(int nr);
-template <Type CPU> void execTrapException(int nr);
-
-// Emulates a priviledge exception
-void execPrivilegeException();
-template <Type CPU> void execPrivilegeException();
-
-// Emulates an interrupt exception
-void execIrqException(u8 level);
-template <Type CPU> void execIrqException(u8 level);
+// Emulates an interrupt
+void execInterrupt(u8 level);
+template <Core C> void execInterrupt(u8 level);

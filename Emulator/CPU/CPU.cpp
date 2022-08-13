@@ -117,6 +117,77 @@ Moira::readIrqUserVector(u8 level) const
 }
 
 void
+Moira::willExecute(const char *func, Instr I, Mode M, Size S, u16 opcode)
+{
+    switch (I) {
+
+        case STOP:
+
+            if (!(opcode & 0x2000)) xfiles("STOP instruction (%x)\n", opcode);
+            break;
+
+        case TAS:
+
+            xfiles("TAS instruction\n");
+            break;
+
+        case BKPT:
+
+            xfiles("BKPT instruction\n");
+            break;
+
+        default:
+            break;
+    }
+}
+
+void
+Moira::didExecute(const char *func, Instr I, Mode M, Size S, u16 opcode)
+{
+    switch (I) {
+
+        case RESET:
+
+            xfiles("RESET instruction\n");
+            amiga.softReset();
+            break;
+
+        default:
+            break;
+    }
+}
+
+void
+Moira::willExecute(ExceptionType exc, u16 vector)
+{
+    switch (exc) {
+
+        case EXC_RESET:                 xfiles("EXC_RESET\n");              break;
+        case EXC_BUS_ERROR:             xfiles("EXC_BUS_ERROR");            break;
+        case EXC_ADDRESS_ERROR:         xfiles("EXC_ADDRESS_ERROR");        break;
+        case EXC_ILLEGAL:               xfiles("EXC_ILLEGAL");              break;
+        case EXC_DIVIDE_BY_ZERO:        xfiles("EXC_DIVIDE_BY_ZERO");       break;
+        case EXC_CHK:                   xfiles("EXC_CHK");                  break;
+        case EXC_TRAPV:                 xfiles("EXC_TRAPV");                break;
+        case EXC_PRIVILEGE_VIOLATION:   xfiles("EXC_PRIVILEGE_VIOLATION");  break;
+        case EXC_TRACE:                 xfiles("EXC_TRACE");                break;
+        case EXC_LINEA:                 xfiles("EXC_LINEA");                break;
+        case EXC_LINEF:                 xfiles("EXC_LINEF");                break;
+        case EXC_FORMAT_ERROR:          xfiles("EXC_FORMAT_ERROR");         break;
+        case EXC_IRQ_UNINITIALIZED:     xfiles("EXC_IRQ_UNINITIALIZED");    break;
+        case EXC_IRQ_SPURIOUS:          xfiles("EXC_IRQ_SPURIOUS");         break;
+        case EXC_TRAP:                  xfiles("EXC_TRAP");                 break;
+    }
+}
+
+void
+Moira::didExecute(ExceptionType exc, u16 vector)
+{
+
+}
+
+/*
+void
 Moira::signalResetInstr()
 {
     xfiles("RESET instruction\n");
@@ -136,6 +207,7 @@ Moira::signalTasInstr()
 {
     xfiles("TAS instruction\n");
 }
+*/
 
 void
 Moira::signalHalt()
@@ -143,6 +215,7 @@ Moira::signalHalt()
     msgQueue.put(MSG_CPU_HALT);
 }
 
+/*
 void
 Moira::signalAddressError(moira::AEStackFrame &frame)
 {
@@ -185,6 +258,7 @@ Moira::signalPrivilegeViolation()
 {
     
 }
+*/
 
 void
 Moira::signalInterrupt(u8 level)
@@ -208,6 +282,7 @@ Moira::signalSoftwareTrap(u16 instr, SoftwareTrap trap)
  
 }
 
+/*
 void
 Moira::signalBkptInstruction(int nr)
 {
@@ -219,6 +294,7 @@ Moira::addressErrorHandler()
 {
     
 }
+*/
 
 void
 Moira::softstopReached(u32 addr)
@@ -245,17 +321,9 @@ Moira::catchpointReached(u8 vector)
 }
 
 void
-Moira::swTrapReached(u32 addr)
+Moira::softwareTrapReached(u32 addr)
 {
     amiga.setFlag(RL::SWTRAP_REACHED);
-}
-
-void
-Moira::execDebug(const char *cmd)
-{
-    if (agnus.pos.v == 76 || agnus.pos.v == 77) {
-        trace(true, "%s\n", cmd);
-    }
 }
 
 }
@@ -296,7 +364,7 @@ CPU::setConfigItem(Option option, i64 value)
 
             suspend();
             config.revision = CPURevision(value);
-            setModel(moira::Type(value));
+            setCore(moira::Core(value));
             resume();
             return;
 
@@ -391,7 +459,7 @@ CPU::_inspect(u32 dasmStart) const
             info.a[i] = getA((int)i);
         }
         info.usp = getUSP();
-        info.ssp = getSSP();
+        info.ssp = getISP();  // TODO: Rename ssp, add other registers
         info.sr = getSR();
     }
 }
@@ -425,8 +493,8 @@ CPU::_dump(Category category, std::ostream& os) const
         os << util::hex(reg.pc0) << std::endl;
         os << std::endl;
         
-        os << util::tab("SSP");
-        os << util::hex(reg.ssp) << std::endl;
+        os << util::tab("ISP");
+        os << util::hex(reg.isp) << std::endl;
         os << util::tab("USP");
         os << util::hex(reg.usp) << std::endl;
         os << util::tab("IRC");
@@ -450,8 +518,10 @@ CPU::_dump(Category category, std::ostream& os) const
         os << std::endl;
         
         os << util::tab("Flags");
-        os << (reg.sr.t ? 'T' : 't');
-        os << (reg.sr.s ? 'S' : 's') << "--";
+        os << (reg.sr.t1 ? 'T' : 't');
+        os << (reg.sr.t0 ? 'T' : 't');
+        os << (reg.sr.s ? 'S' : 's');
+        os << (reg.sr.m ? 'M' : 'm') << "-";
         os << "<" << util::dec(reg.sr.ipl) << ">---";
         os << (reg.sr.x ? 'X' : 'x');
         os << (reg.sr.n ? 'N' : 'n');
@@ -665,6 +735,7 @@ CPU::jump(u32 addr)
     }
 }
 
+/*
 void
 CPU::signalJsrBsrInstr(u16 opcode, u32 oldPC, u32 newPC)
 {
@@ -705,6 +776,8 @@ CPU::signalRtsRtdInstr(const string &instr)
         (void)callstack.read();
     }
 }
+*/
+
 void
 CPU::setBreakpoint(u32 addr)
 {

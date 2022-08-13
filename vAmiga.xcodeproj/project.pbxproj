@@ -534,6 +534,7 @@
 		5030C2DE252A2E8400107E00 /* AudioStream.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioStream.cpp; sourceTree = "<group>"; };
 		5030C2DF252A2E8400107E00 /* AudioStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioStream.h; sourceTree = "<group>"; };
 		5031FFD2279F3D95002EF894 /* MemoryConf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryConf.swift; sourceTree = "<group>"; };
+		5034229628A6E2BE007018BB /* MoiraMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraMacros.h; sourceTree = "<group>"; };
 		50357BB5239123B2007E7563 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		50357BB723912929007E7563 /* RendererSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererSetup.swift; sourceTree = "<group>"; };
 		50384C8421FC6B66006E7748 /* Snapshot.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Snapshot.cpp; sourceTree = "<group>"; };
@@ -1786,6 +1787,7 @@
 				50CF463D262042FC00BB3B95 /* CMakeLists.txt */,
 				50E2BE35240D41EE00155AE4 /* MoiraConfig.h */,
 				50E2BE2F240D418500155AE4 /* MoiraTypes.h */,
+				5034229628A6E2BE007018BB /* MoiraMacros.h */,
 				50E2BE34240D41DD00155AE4 /* Moira.h */,
 				50E2BE37240D41EE00155AE4 /* Moira.cpp */,
 				50E2BE38240D41EE00155AE4 /* MoiraALU.h */,
