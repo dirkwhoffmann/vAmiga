@@ -68,11 +68,22 @@ CPUConfig;
 typedef struct
 {
     u32 pc0;
+    u16 ird;
+    u16 irc;
     u32 d[8];
     u32 a[8];
+    u32 isp;
     u32 usp;
-    u32 ssp;
+    u32 msp;
+    u32 vbr;
     u16 sr;
+    u8 sfc;
+    u8 dfc;
+    u8 cacr;
+    u8 caar;
+    u8 ipl;
+    u8 fc;
+    bool halt;
 }
 CPUInfo;
 

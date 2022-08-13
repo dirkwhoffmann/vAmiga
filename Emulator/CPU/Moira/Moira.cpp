@@ -397,7 +397,7 @@ Moira::setSupervisorFlags(bool s, bool m)
 }
 
 FunctionCode
-Moira::readFC()
+Moira::readFC() const
 {
     switch (fcSource) {
 

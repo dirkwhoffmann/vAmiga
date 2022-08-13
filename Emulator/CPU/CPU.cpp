@@ -446,23 +446,28 @@ CPU::_reset(bool hard)
 void
 CPU::_inspect() const
 {
-    _inspect(getPC0());
-}
-
-void
-CPU::_inspect(u32 dasmStart) const
-{
     {   SYNCHRONIZED
         
         info.pc0 = getPC0() & 0xFFFFFF;
+        info.ird = getIRD();
+        info.irc = getIRC();
         
-        for (isize i = 0; i < 8; i++) {
-            info.d[i] = getD((int)i);
-            info.a[i] = getA((int)i);
+        for (int i = 0; i < 8; i++) {
+            info.d[i] = getD(i);
+            info.a[i] = getA(i);
         }
+        info.isp = getISP();
         info.usp = getUSP();
-        info.ssp = getISP();  // TODO: Rename ssp, add other registers
+        info.msp = getMSP();
+        info.vbr = getVBR();
         info.sr = getSR();
+        info.sfc = (u8)getSFC();
+        info.dfc = (u8)getDFC();
+        info.cacr = (u8)getCACR();
+        info.caar = (u8)getCAAR();
+        info.ipl = (u8)getIPL();
+        info.fc = (u8)readFC(); // TODO
+        info.halt = isHalted();
     }
 }
 

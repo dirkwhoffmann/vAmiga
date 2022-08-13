@@ -369,7 +369,7 @@ protected:
 public:
     
     // Returns the current value on the function code pins
-    FunctionCode readFC();
+    FunctionCode readFC() const;
 
     private:
     

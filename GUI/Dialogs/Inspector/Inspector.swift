@@ -30,6 +30,22 @@ class Inspector: DialogController {
     @IBOutlet weak var cpuBreakView: BreakTableView!
     @IBOutlet weak var cpuWatchView: WatchTableView!
     @IBOutlet weak var cpuPC: NSTextField!
+    @IBOutlet weak var cpuIRD: NSTextField!
+    @IBOutlet weak var cpuIRC: NSTextField!
+    @IBOutlet weak var cpuISP: NSTextField!
+    @IBOutlet weak var cpuUSP: NSTextField!
+    @IBOutlet weak var cpuMSP: NSTextField!
+    @IBOutlet weak var cpuMSPlabel: NSTextField!
+    @IBOutlet weak var cpuVBR: NSTextField!
+    @IBOutlet weak var cpuVBRlabel: NSTextField!
+    @IBOutlet weak var cpuSFC: NSTextField!
+    @IBOutlet weak var cpuSFClabel: NSTextField!
+    @IBOutlet weak var cpuDFC: NSTextField!
+    @IBOutlet weak var cpuDFClabel: NSTextField!
+    @IBOutlet weak var cpuCACR: NSTextField!
+    @IBOutlet weak var cpuCACRlabel: NSTextField!
+    @IBOutlet weak var cpuCAAR: NSTextField!
+    @IBOutlet weak var cpuCAARlabel: NSTextField!
     @IBOutlet weak var cpuD0: NSTextField!
     @IBOutlet weak var cpuD1: NSTextField!
     @IBOutlet weak var cpuD2: NSTextField!
@@ -46,11 +62,13 @@ class Inspector: DialogController {
     @IBOutlet weak var cpuA5: NSTextField!
     @IBOutlet weak var cpuA6: NSTextField!
     @IBOutlet weak var cpuA7: NSTextField!
-    @IBOutlet weak var cpuUSP: NSTextField!
-    @IBOutlet weak var cpuSSP: NSTextField!
 
-    @IBOutlet weak var cpuT: NSButton!
+    @IBOutlet weak var cpuT1: NSButton!
+    @IBOutlet weak var cpuT0: NSButton!
+    @IBOutlet weak var cpuT0label: NSTextField!
     @IBOutlet weak var cpuS: NSButton!
+    @IBOutlet weak var cpuM: NSButton!
+    @IBOutlet weak var cpuMlabel: NSTextField!
     @IBOutlet weak var cpuI2: NSButton!
     @IBOutlet weak var cpuI1: NSButton!
     @IBOutlet weak var cpuI0: NSButton!
@@ -59,6 +77,13 @@ class Inspector: DialogController {
     @IBOutlet weak var cpuZ: NSButton!
     @IBOutlet weak var cpuV: NSButton!
     @IBOutlet weak var cpuC: NSButton!
+    @IBOutlet weak var cpuIPL2: NSButton!
+    @IBOutlet weak var cpuIPL1: NSButton!
+    @IBOutlet weak var cpuIPL0: NSButton!
+    @IBOutlet weak var cpuFC2: NSButton!
+    @IBOutlet weak var cpuFC1: NSButton!
+    @IBOutlet weak var cpuFC0: NSButton!
+    @IBOutlet weak var cpuHalt: NSButton!
 
     @IBOutlet weak var cpuTraceClearButton: NSButton!
 
