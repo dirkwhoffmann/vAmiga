@@ -56,7 +56,7 @@
 */
 
 // Uncomment to colorize a certain scanline
-// #define LINE_DEBUG (vpos == 0 || vpos == 160 || vpos == 300)
+// #define LINE_DEBUG (vpos == 0 || vpos == 160)
 // #define LINE_DEBUG (vpos == 200)
 
 
