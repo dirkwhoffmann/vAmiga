@@ -347,7 +347,8 @@ CPU::getConfigItem(Option option) const
         case OPT_CPU_REVISION:      return (long)config.revision;
         case OPT_CPU_OVERCLOCKING:  return (long)config.overclocking;
         case OPT_CPU_RESET_VAL:     return (long)config.regResetVal;
-        
+        case OPT_CPU_DASM_STYLE:    return (long)style;
+
         default:
             fatalError;
     }
@@ -382,7 +383,12 @@ CPU::setConfigItem(Option option, i64 value)
 
             config.regResetVal = u32(value);
             return;
-                        
+
+        case OPT_CPU_DASM_STYLE:
+
+            setDasmStyle(moira::DasmStyle(value));
+            return;
+
         default:
             fatalError;
     }

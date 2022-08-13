@@ -132,4 +132,11 @@ extension Inspector {
             sender.stringValue = ""
         }
     }
+
+    @IBAction func cpuSyntaxAction(_ sender: NSPopUpButton!) {
+
+        debug(1, "Setting DASM style to \(sender.selectedTag())")
+        amiga.configure(.CPU_DASM_STYLE, value: sender.selectedTag())
+    }
+
 }

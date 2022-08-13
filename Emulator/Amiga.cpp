@@ -253,6 +253,7 @@ Amiga::getConfigItem(Option option) const
         case OPT_CPU_REVISION:
         case OPT_CPU_OVERCLOCKING:
         case OPT_CPU_RESET_VAL:
+        case OPT_CPU_DASM_STYLE:
 
             return cpu.getConfigItem(option);
             
@@ -477,6 +478,7 @@ Amiga::configure(Option option, i64 value)
         case OPT_CPU_REVISION:
         case OPT_CPU_OVERCLOCKING:
         case OPT_CPU_RESET_VAL:
+        case OPT_CPU_DASM_STYLE:
             
             cpu.setConfigItem(option, value);
             break;
