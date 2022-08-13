@@ -28,7 +28,7 @@ extension ConfigurationController {
             csCpuInfo2.stringValue = ""
 
         case ._68020:
-            csCpuInfo1.stringValue = "Motorola MC68010"
+            csCpuInfo1.stringValue = "Motorola 68EC020"
             csCpuInfo2.stringValue = "A1200, A2500"
 
         default:

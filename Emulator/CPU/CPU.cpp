@@ -123,7 +123,9 @@ Moira::willExecute(const char *func, Instr I, Mode M, Size S, u16 opcode)
 
         case STOP:
 
-            if (!(opcode & 0x2000)) xfiles("STOP instruction (%x)\n", opcode);
+            if (!(opcode & 0x2000)) {
+                xfiles("STOP instruction (%x)\n", opcode);
+            }
             break;
 
         case TAS:

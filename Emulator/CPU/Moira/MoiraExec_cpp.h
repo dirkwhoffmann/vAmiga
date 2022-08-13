@@ -9,7 +9,7 @@
 
 #define AVAILABILITY(cpu) \
 if constexpr (WILL_EXECUTE) willExecute(__func__, I, M, S, opcode); \
-if constexpr (cpu == M68020) { printf("%s(%d,%d,%d,%x)\n", __func__, I, M, S, opcode); }\
+if constexpr ((cpu) == M68020) { printf("%s(%d,%d,%d,%x)\n", __func__, I, M, S, opcode); }\
 assert(C >= (cpu)); \
 if constexpr (C == M68020) cp = 0;
 
