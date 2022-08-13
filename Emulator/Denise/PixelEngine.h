@@ -62,11 +62,10 @@ private:
      *
      *  0 .. 31 : ABGR values of the 32 color registers
      * 32 .. 63 : ABGR values of the 32 color registers in halfbright mode
-     * 64 .. 95 : ABGR values used in SuperHires mode
-     *       96 : Pure black (used if the ECS BRDRBLNK bit is set)
-     * 97 .. 99 : Additional debug colors
+     *       64 : Pure black (used if the ECS BRDRBLNK bit is set)
+     * 65 .. 67 : Additional debug colors
      */
-    static const int paletteCnt = 32 + 32 + 32 + 1 + 3;
+    static const int paletteCnt = 32 + 32 + 1 + 3;
     Texel palette[paletteCnt];
     
     // Indicates whether HAM mode or SHRES mode is enabled

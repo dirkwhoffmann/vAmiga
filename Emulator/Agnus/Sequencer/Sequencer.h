@@ -164,9 +164,10 @@ public:
 
 public:
     
-    // Register values as written by pokeDIWSTRT/STOP()
+    // Register values as written by pokeDIW[STRT/STOP/HIGH]
     u16 diwstrt;
     u16 diwstop;
+    u16 diwhigh;
 
     // Extracted vertical display window coordinates
     isize vstrt;
@@ -254,6 +255,7 @@ private:
         
         << diwstrt
         << diwstop
+        << diwhigh
         << vstrt
         << vstop
         << lineIsBlank
@@ -286,6 +288,7 @@ public:
 
     void setDIWSTRT(u16 value);
     void setDIWSTOP(u16 value);
+    void setDIWHIGH(u16 value);
 
     
     //

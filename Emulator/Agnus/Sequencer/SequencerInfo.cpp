@@ -53,6 +53,8 @@ Sequencer::_dump(Category category, std::ostream& os) const
         os << hex(diwstrt) << std::endl;
         os << tab("DIWSTOP");
         os << hex(diwstop) << std::endl;
+        os << tab("DIWHIGH");
+        os << hex(diwhigh) << std::endl;
     }
     
     if (category == Category::Dma) {
