@@ -181,7 +181,7 @@ typedef enum
     EXC_DIVIDE_BY_ZERO      = 5,
     EXC_CHK                 = 6,
     EXC_TRAPV               = 7,
-    EXC_PRIVILEGE_VIOLATION = 8,
+    EXC_PRIVILEGE           = 8,
     EXC_TRACE               = 9,
     EXC_LINEA               = 10,
     EXC_LINEF               = 11,

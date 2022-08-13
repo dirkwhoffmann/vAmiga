@@ -9,7 +9,7 @@
 
 #define AVAILABILITY(cpu) \
 if constexpr (WILL_EXECUTE) willExecute(__func__, I, M, S, opcode); \
-if constexpr (false) printf("%s(%d,%d,%d,%x)\n", __func__, I, M, S, opcode); \
+if constexpr (cpu == M68020) { printf("%s(%d,%d,%d,%x)\n", __func__, I, M, S, opcode); }\
 assert(C >= (cpu)); \
 if constexpr (C == M68020) cp = 0;
 
@@ -18,7 +18,7 @@ if constexpr (DID_EXECUTE) didExecute(__func__, I, M, S, opcode);
 
 #define SUPERVISOR_MODE_ONLY \
 if (!reg.sr.s) { \
-execException<C>(EXC_PRIVILEGE_VIOLATION); \
+execException<C>(EXC_PRIVILEGE); \
 CYCLES_68000(34) \
 CYCLES_68010(38) \
 CYCLES_68020(34) \
@@ -854,7 +854,7 @@ Moira::execBitDxDy(u16 opcode)
     int dst = _____________xxx(opcode);
 
     u8 b = readD(src) & 0b11111;
-    auto c = cyclesBit<C, I>(b);
+    [[maybe_unused]] auto c = cyclesBit<C, I>(b);
 
     u32 data = readD(dst);
     data = bit<C, I>(data, b);
@@ -1776,7 +1776,7 @@ Moira::execCpBcc(u16 opcode)
     AVAILABILITY(M68020)
 
     // TODO
-    prefetch<C>();
+    execLineF<C, I, M, S>(opcode);
 
     FINALIZE
 }
@@ -1787,7 +1787,7 @@ Moira::execCpDbcc(u16 opcode)
     AVAILABILITY(M68020)
 
     // TODO
-    prefetch<C>();
+    execLineF<C, I, M, S>(opcode);
 
     FINALIZE
 }
@@ -1798,7 +1798,7 @@ Moira::execCpGen(u16 opcode)
     AVAILABILITY(M68020)
 
     // TODO
-    prefetch<C>();
+    execLineF<C, I, M, S>(opcode);
 
     FINALIZE
 }
@@ -1809,7 +1809,7 @@ Moira::execCpRestore(u16 opcode)
     AVAILABILITY(M68020)
 
     // TODO
-    prefetch<C>();
+    execLineF<C, I, M, S>(opcode);
 
     FINALIZE
 }
@@ -1820,7 +1820,7 @@ Moira::execCpSave(u16 opcode)
     AVAILABILITY(M68020)
 
     // TODO
-    prefetch<C>();
+    execLineF<C, I, M, S>(opcode);
 
     FINALIZE
 }
@@ -1831,7 +1831,7 @@ Moira::execCpScc(u16 opcode)
     AVAILABILITY(M68020)
 
     // TODO
-    prefetch<C>();
+    execLineF<C, I, M, S>(opcode);
 
     FINALIZE
 }
@@ -1842,7 +1842,7 @@ Moira::execCpTrapcc(u16 opcode)
     AVAILABILITY(M68020)
 
     // TODO
-    prefetch<C>();
+    execLineF<C, I, M, S>(opcode);
 
     FINALIZE
 }

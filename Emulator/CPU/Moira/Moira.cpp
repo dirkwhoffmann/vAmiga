@@ -187,7 +187,7 @@ Moira::execute()
             sync(4);
             reg.pc -= 2;
             flags &= ~CPU_IS_STOPPED;
-            execException(EXC_PRIVILEGE_VIOLATION);
+            execException(EXC_PRIVILEGE);
             return;
         }
 

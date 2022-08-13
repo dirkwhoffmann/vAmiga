@@ -227,7 +227,7 @@ Moira::execException(ExceptionType exc, int nr)
             jumpToVector<C>(vector);
             break;
 
-        case EXC_PRIVILEGE_VIOLATION:
+        case EXC_PRIVILEGE:
 
             // Clear any pending trace event
             flags &= ~CPU_TRACE_EXCEPTION;

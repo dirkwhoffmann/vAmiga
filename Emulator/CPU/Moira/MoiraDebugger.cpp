@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "MoiraConfig.h"
 #include "Moira.h"
 #include "MoiraMacros.h"
