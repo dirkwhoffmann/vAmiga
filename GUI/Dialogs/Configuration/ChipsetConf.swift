@@ -21,11 +21,15 @@ extension ConfigurationController {
 
         case ._68000:
             csCpuInfo1.stringValue = "Motorola MC68000"
-            csCpuInfo2.stringValue = "All models"
+            csCpuInfo2.stringValue = "Original Amigas"
 
         case ._68010:
             csCpuInfo1.stringValue = "Motorola MC68010"
-            csCpuInfo2.stringValue = "Work in progess"
+            csCpuInfo2.stringValue = ""
+
+        case ._68020:
+            csCpuInfo1.stringValue = "Motorola MC68010"
+            csCpuInfo2.stringValue = "A1200, A2500"
 
         default:
             csCpuInfo1.stringValue = "Invalid"

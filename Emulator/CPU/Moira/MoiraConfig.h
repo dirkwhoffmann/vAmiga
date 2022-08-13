@@ -75,10 +75,3 @@
  * Moira will call 'didExecute(...)' for all listed instructions.
  */
 #define DID_EXECUTE     I == RESET
-
-/* Comment out to enable assertion checking.
- *
- * Uncomment in release builds, comment out in debug builds.
- */
-// #define NDEBUG
-#include <cassert>

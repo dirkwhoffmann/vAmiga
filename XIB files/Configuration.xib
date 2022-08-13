@@ -554,6 +554,7 @@ DQ
                                                     <items>
                                                         <menuItem title="68000" state="on" id="1vX-aH-r8M"/>
                                                         <menuItem title="68010" tag="1" id="U9p-JK-c4z"/>
+                                                        <menuItem title="68020" tag="2" id="MEV-jP-nPJ"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
