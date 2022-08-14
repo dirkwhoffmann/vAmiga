@@ -123,7 +123,7 @@ private:
             
             << ipl
             << fcl
-            // << fcSource  TODO: WRITE THIS INTO SNAPSHOT
+            << fcSource
             << exception
             << cp;
         }

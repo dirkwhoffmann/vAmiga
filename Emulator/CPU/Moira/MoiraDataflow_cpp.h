@@ -387,7 +387,7 @@ Moira::writeM(u32 addr, u32 val, bool &error)
 template <Core C, Mode M, Size S, Flags F> void
 Moira::writeM(u32 addr, u32 val)
 {
-    if (isPrgMode(M)) {
+    if constexpr (isPrgMode(M)) {
         writeMS<C, MEM_PROG, S, F>(addr, val);
     } else {
         writeMS<C, MEM_DATA, S, F>(addr, val);

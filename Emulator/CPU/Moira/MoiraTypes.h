@@ -218,6 +218,7 @@ typedef enum
 }
 FunctionCode;
 
+/*
 typedef enum
 {
     FC_FROM_FCL,
@@ -225,6 +226,7 @@ typedef enum
     FC_FROM_DFC
 }
 FCSource;
+*/
 
 typedef enum
 {

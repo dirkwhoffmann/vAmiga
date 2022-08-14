@@ -114,7 +114,7 @@ protected:
     u8 fcl;
 
     // Determines the source of the function code pins
-    FCSource fcSource;
+    u8 fcSource;
 
     // Remembers the number of the last processed exception
     int exception;

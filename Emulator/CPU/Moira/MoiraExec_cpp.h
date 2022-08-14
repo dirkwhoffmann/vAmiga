@@ -862,7 +862,7 @@ Moira::execBitDxDy(u16 opcode)
     prefetch<C, POLLIPL>();
 
     SYNC(c);
-    if (I != BTST) writeD(dst, data);
+    if constexpr (I != BTST) writeD(dst, data);
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
@@ -888,7 +888,7 @@ Moira::execBitDxEa(u16 opcode)
     if constexpr (I == BCLR && C == M68010) { SYNC(2); }
 
     prefetch<C, POLLIPL>();
-    if (I != BTST) writeM<C, M, Byte>(ea, data);
+    if constexpr (I != BTST) writeM<C, M, Byte>(ea, data);
 
     [[maybe_unused]] auto c = I == BTST ? 0 : I == BCLR && C == M68010 ? 6 : 4;
 
@@ -924,7 +924,7 @@ Moira::execBitImDy(u16 opcode)
 
     [[maybe_unused]] auto c = cyclesBit<C, I>(src);
     SYNC(c);
-    if (I != BTST) writeD(dst, data);
+    if constexpr (I != BTST) writeD(dst, data);
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
@@ -947,7 +947,7 @@ Moira::execBitImEa(u16 opcode)
     data = bit<C, I>(data, src);
 
     prefetch<C, POLLIPL>();
-    if (I != BTST) writeM<C, M, S>(ea, data);
+    if constexpr (I != BTST) writeM<C, M, S>(ea, data);
 
     [[maybe_unused]] auto c = I == BTST ? 0 : 4;
 
@@ -1119,9 +1119,9 @@ Moira::execBitFieldEa(u16 opcode)
 
                 data = readM<C, M, Byte>(ea + 4);
 
-                if (I == BFCHG) writeM<C, M, Byte>(ea + 4, data ^ mask8);
-                if (I == BFCLR) writeM<C, M, Byte>(ea + 4, data & ~mask8);
-                if (I == BFSET) writeM<C, M, Byte>(ea + 4, data | mask8);
+                if constexpr (I == BFCHG) writeM<C, M, Byte>(ea + 4, data ^ mask8);
+                if constexpr (I == BFCLR) writeM<C, M, Byte>(ea + 4, data & ~mask8);
+                if constexpr (I == BFSET) writeM<C, M, Byte>(ea + 4, data | mask8);
 
                 reg.sr.z &= ZERO<Byte>(data & mask8);
             }
@@ -3114,7 +3114,7 @@ Moira::execMoves(u16 opcode)
         int dst = _____________xxx(opcode);
 
         // Make the DFC register visible on the FC pins
-        fcSource = FC_FROM_DFC;
+        fcSource = 2;
 
         auto value = readR<S>(src);
 
@@ -3133,7 +3133,7 @@ Moira::execMoves(u16 opcode)
         writeOp<C, M, S>(dst, value);
 
         // Switch back to the old FC pin values
-        fcSource = FC_FROM_FCL;
+        fcSource = 0;
 
         switch (M) {
 
@@ -3168,7 +3168,7 @@ Moira::execMoves(u16 opcode)
         if (!readOp<C, M, S, STD_AE_FRAME>(src, ea, data)) return;
 
         // Make the SFC register visible on the FC pins
-        fcSource = FC_FROM_SFC;
+        fcSource = 1;
 
         if (dst < 8) {
             writeR<S>(dst, data);
@@ -3177,7 +3177,7 @@ Moira::execMoves(u16 opcode)
         }
 
         // Switch back to the old FC pin values
-        fcSource = FC_FROM_FCL;
+        fcSource = 0;
 
         switch (M) {
 
@@ -3586,7 +3586,7 @@ Moira::execDiv(u16 opcode)
     // Check for division by zero
     if (divisor == 0) {
 
-        if (I == DIVU) {
+        if constexpr (I == DIVU) {
             reg.sr.n = NBIT<Long>(dividend);
             reg.sr.z = (dividend & 0xFFFF0000) == 0;
             reg.sr.v = 0;

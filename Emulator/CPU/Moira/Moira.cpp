@@ -108,7 +108,7 @@ Moira::reset()
 
     ipl = 0;
     fcl = 0;
-    fcSource = FC_FROM_FCL;
+    fcSource = 0;
 
     SYNC(16);
 
@@ -401,9 +401,9 @@ Moira::readFC() const
 {
     switch (fcSource) {
 
-        case FC_FROM_FCL: return FunctionCode((reg.sr.s ? 4 : 0) | fcl);
-        case FC_FROM_SFC: return FunctionCode(reg.sfc);
-        case FC_FROM_DFC: return FunctionCode(reg.dfc);
+        case 0: return FunctionCode((reg.sr.s ? 4 : 0) | fcl);
+        case 1: return FunctionCode(reg.sfc);
+        case 2: return FunctionCode(reg.dfc);
 
         default:
             fatalError;
