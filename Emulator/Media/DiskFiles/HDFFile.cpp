@@ -99,10 +99,10 @@ HDFFile::getGeometryDescriptor() const
     if (auto rdb = seekRDB(); rdb) {
 
         // Read the information from the rigid disk block
-        result.cylinders    = R32BE_ALIGNED(rdb + 64);
-        result.sectors      = R32BE_ALIGNED(rdb + 68);
-        result.heads        = R32BE_ALIGNED(rdb + 72);
-        result.bsize        = R32BE_ALIGNED(rdb + 16);
+        result.cylinders    = R32BE(rdb + 64);
+        result.sectors      = R32BE(rdb + 68);
+        result.heads        = R32BE(rdb + 72);
+        result.bsize        = R32BE(rdb + 16);
 
     } else {
         
@@ -128,20 +128,20 @@ HDFFile::getPartitionDescriptor(isize part) const
         
         // Extract information from the partition block
         result.name           = util::createStr(pb + 37, 31);
-        result.flags          = R32BE_ALIGNED(pb + 20);
-        result.sizeBlock      = R32BE_ALIGNED(pb + 132);
-        result.heads          = R32BE_ALIGNED(pb + 140);
-        result.sectors        = R32BE_ALIGNED(pb + 148);
-        result.reserved       = R32BE_ALIGNED(pb + 152);
-        result.interleave     = R32BE_ALIGNED(pb + 160);
-        result.lowCyl         = R32BE_ALIGNED(pb + 164);
-        result.highCyl        = R32BE_ALIGNED(pb + 168);
-        result.numBuffers     = R32BE_ALIGNED(pb + 172);
-        result.bufMemType     = R32BE_ALIGNED(pb + 176);
-        result.maxTransfer    = R32BE_ALIGNED(pb + 180);
-        result.mask           = R32BE_ALIGNED(pb + 184);
-        result.bootPri        = R32BE_ALIGNED(pb + 188);
-        result.dosType        = R32BE_ALIGNED(pb + 192);
+        result.flags          = R32BE(pb + 20);
+        result.sizeBlock      = R32BE(pb + 132);
+        result.heads          = R32BE(pb + 140);
+        result.sectors        = R32BE(pb + 148);
+        result.reserved       = R32BE(pb + 152);
+        result.interleave     = R32BE(pb + 160);
+        result.lowCyl         = R32BE(pb + 164);
+        result.highCyl        = R32BE(pb + 168);
+        result.numBuffers     = R32BE(pb + 172);
+        result.bufMemType     = R32BE(pb + 176);
+        result.maxTransfer    = R32BE(pb + 180);
+        result.mask           = R32BE(pb + 184);
+        result.bootPri        = R32BE(pb + 188);
+        result.dosType        = R32BE(pb + 192);
         
     } else {
         
@@ -182,12 +182,12 @@ HDFFile::getDriverDescriptor(isize driver) const
     if (auto fsh = seekFSH(driver); fsh) {
         
         // Extract information from the file system header block
-        result.dosType      = R32BE_ALIGNED(fsh + 32);
-        result.dosVersion   = R32BE_ALIGNED(fsh + 36);
-        result.patchFlags   = R32BE_ALIGNED(fsh + 40);
+        result.dosType      = R32BE(fsh + 32);
+        result.dosVersion   = R32BE(fsh + 36);
+        result.patchFlags   = R32BE(fsh + 40);
 
         // Traverse the seglist
-        auto lsegRef = R32BE_ALIGNED(fsh + 72);
+        auto lsegRef = R32BE(fsh + 72);
         
         for (isize i = 0; lsegRef != u32(-1); i++) {
 
@@ -201,7 +201,7 @@ HDFFile::getDriverDescriptor(isize driver) const
             }
             
             result.blocks.push_back(lsegRef);
-            lsegRef = R32BE_ALIGNED(lsegBlock + 16);
+            lsegRef = R32BE(lsegBlock + 16);
         }
     }
 
@@ -390,11 +390,11 @@ HDFFile::seekPB(isize nr) const
     if (auto rdb = seekRDB(); rdb) {
         
         // Go to the first partition block
-        result = seekBlock(R32BE_ALIGNED(rdb + 28));
+        result = seekBlock(R32BE(rdb + 28));
         
         // Traverse the linked list
         for (isize i = 0; i < nr && result; i++) {
-            result = seekBlock(R32BE_ALIGNED(result + 16));
+            result = seekBlock(R32BE(result + 16));
         }
 
         // Make sure the reached block is a partition block
@@ -413,11 +413,11 @@ HDFFile::seekFSH(isize nr) const
     if (auto rdb = seekRDB(); rdb) {
         
         // Go to the first file system header block
-        result = seekBlock(R32BE_ALIGNED(rdb + 32));
+        result = seekBlock(R32BE(rdb + 32));
         
         // Traverse the linked list
         for (isize i = 0; i < nr && result; i++) {
-            result = seekBlock(R32BE_ALIGNED(result + 16));
+            result = seekBlock(R32BE(result + 16));
         }
 
         // Make sure the reached block is a partition block

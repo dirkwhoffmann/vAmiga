@@ -494,7 +494,7 @@ Moira::logic(u32 op1, u32 op2)
 template <Instr I> u32
 Moira::bitfield(u32 data, u32 offset, u32 width, u32 mask)
 {
-    u32 result;
+    u32 result = 0;
 
     switch (I) {
 
@@ -573,7 +573,7 @@ Moira::bitfield(u32 data, u32 offset, u32 width, u32 mask)
             break;
 
         default:
-            fatalError;
+            break;
     }
 
     return result;

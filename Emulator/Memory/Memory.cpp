@@ -1370,8 +1370,6 @@ Memory::peek8 <ACCESSOR_CPU> (u32 addr)
 template<> u16
 Memory::peek16 <ACCESSOR_CPU> (u32 addr)
 {
-    assert(IS_EVEN(addr));
-    
     switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
             
         case MEM_NONE:          return peek16 <ACCESSOR_CPU, MEM_NONE>     (addr);
@@ -1399,8 +1397,6 @@ Memory::peek16 <ACCESSOR_CPU> (u32 addr)
 template<> u16
 Memory::spypeek16 <ACCESSOR_CPU> (u32 addr) const
 {
-    assert(IS_EVEN(addr));
-        
     switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
             
         case MEM_NONE:          return spypeek16 <ACCESSOR_CPU, MEM_NONE>     (addr);
@@ -1503,8 +1499,6 @@ Memory::spypeek16 <ACCESSOR_AGNUS, MEM_SLOW> (u32 addr) const
 template<> u16
 Memory::peek16 <ACCESSOR_AGNUS> (u32 addr)
 {
-    assert(IS_EVEN(addr));
-    
     addr &= agnus.ptrMask;
 
     switch (agnusMemSrc[addr >> 16]) {
@@ -1521,8 +1515,6 @@ Memory::peek16 <ACCESSOR_AGNUS> (u32 addr)
 template<> u16
 Memory::spypeek16 <ACCESSOR_AGNUS> (u32 addr) const
 {
-    assert(IS_EVEN(addr));
-    
     addr &= agnus.ptrMask;
     
     switch (agnusMemSrc[addr >> 16]) {
@@ -1817,8 +1809,6 @@ Memory::poke8 <ACCESSOR_CPU> (u32 addr, u8 value)
 template<> void
 Memory::poke16 <ACCESSOR_CPU> (u32 addr, u16 value)
 {
-    assert(IS_EVEN(addr));
-    
     switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
             
         case MEM_NONE:          poke16 <ACCESSOR_CPU, MEM_NONE>     (addr, value); return;
@@ -1875,8 +1865,6 @@ Memory::poke16 <ACCESSOR_AGNUS, MEM_SLOW> (u32 addr, u16 value)
 template<> void
 Memory::poke16 <ACCESSOR_AGNUS> (u32 addr, u16 value)
 {
-    assert(IS_EVEN(addr));
-    
     addr &= agnus.ptrMask;
     
     switch (agnusMemSrc[addr >> 16]) {
@@ -2006,8 +1994,6 @@ Memory::pokeCIA8(u32 addr, u8 value)
 void
 Memory::pokeCIA16(u32 addr, u16 value)
 {
-    assert(IS_EVEN(addr));
-    
     u16 reg = (u16)(addr >> 8 & 0b1111);
     u32 selA = (addr & 0x1000) == 0;
     u32 selB = (addr & 0x2000) == 0;
@@ -2065,8 +2051,6 @@ u16
 Memory::peekCustom16(u32 addr)
 {
     u16 result;
-
-    assert(IS_EVEN(addr));
 
     switch ((addr >> 1) & 0xFF) {
 
@@ -2140,8 +2124,6 @@ Memory::peekCustomFaulty16(u32 addr)
 u16
 Memory::spypeekCustom16(u32 addr) const
 {
-    assert(IS_EVEN(addr));
-    
     switch ((addr >> 1) & 0xFF) {
 
         case 0x002 >> 1: // DMACONR
@@ -2190,8 +2172,6 @@ Memory::pokeCustom16(u32 addr, u16 value)
     } else {
         trace(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n", addr, regName(addr), value);
     }
-
-    assert(IS_EVEN(addr));
 
     dataBus = value;
 

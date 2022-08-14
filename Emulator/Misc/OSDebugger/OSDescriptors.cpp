@@ -116,7 +116,7 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
     auto read = [&]() {
         
         if (offset + 4 > len) throw VAError(ERROR_HUNK_CORRUPTED);
-        auto result = R32BE_ALIGNED(buf + offset);
+        auto result = R32BE(buf + offset);
         offset += 4;
         return result;
     };
