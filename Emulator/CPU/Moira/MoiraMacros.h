@@ -18,41 +18,36 @@
 
 #if PRECISE_TIMING == true
 
-#define SYNC(x)         if constexpr (C != M68020) sync(x)
-#define SYNC_68000(x)   if constexpr (C == M68000) sync(x)
-#define SYNC_68010(x)   if constexpr (C == M68010) sync(x)
+#define SYNC(x)         { if constexpr (C != M68020) sync(x); }
+#define SYNC_68000(x)   { if constexpr (C == M68000) sync(x); }
+#define SYNC_68010(x)   { if constexpr (C == M68010) sync(x); }
 
-#define CYCLES_68000(c)
-#define CYCLES_68010(c)
-#define CYCLES_68020(c) if constexpr (C == M68020) { sync((c) + cp); }
+#define CYCLES_68000(c) { }
+#define CYCLES_68010(c) { }
+#define CYCLES_68020(c) { if constexpr (C == M68020) sync((c) + cp); }
 
 #else
 
-#define SYNC(x) { }
-#define SYNC_68000(x) { }
-#define SYNC_68010(x) { }
+#define SYNC(x)         { }
+#define SYNC_68000(x)   { }
+#define SYNC_68010(x)   { }
 
-#define CYCLES_68000(c) if constexpr (C == M68000) { sync(c); }
-#define CYCLES_68010(c) if constexpr (C == M68010) { sync(c); }
-#define CYCLES_68020(c) if constexpr (C == M68020) { sync((c) + cp); }
+#define CYCLES_68000(c) { if constexpr (C == M68000) sync(c); }
+#define CYCLES_68010(c) { if constexpr (C == M68010) sync(c); }
+#define CYCLES_68020(c) { if constexpr (C == M68020) sync((c) + cp); }
 
 #endif
 
 #define CYCLES(c) { CYCLES_68000(c) CYCLES_68010(c) CYCLES_68020(c) }
 
-#define CYCLES_BWL_00(m,b,w,l) CYCLES_68000(S == Byte ? (b) : S == Word ? (w) : (l))
-#define CYCLES_BWL_10(m,b,w,l) CYCLES_68010(S == Byte ? (b) : S == Word ? (w) : (l))
-#define CYCLES_BWL_20(m,b,w,l) CYCLES_68020(S == Byte ? (b) : S == Word ? (w) : (l))
+#define CYCLES_BWL_00(b,w,l) CYCLES_68000(S == Byte ? (b) : S == Word ? (w) : (l))
+#define CYCLES_BWL_10(b,w,l) CYCLES_68010(S == Byte ? (b) : S == Word ? (w) : (l))
+#define CYCLES_BWL_20(b,w,l) CYCLES_68020(S == Byte ? (b) : S == Word ? (w) : (l))
 
 #define CYCLES_MBWL(m,b0,b1,b2,w0,w1,w2,l0,l1,l2) \
-if constexpr (M == m) { CYCLES_BWL_00(m,b0,w0,l0) } \
-if constexpr (M == m) { CYCLES_BWL_10(m,b1,w1,l1) } \
-if constexpr (M == m) { CYCLES_BWL_20(m,b2,w2,l2) }
-
-#define CYCLES_IBWL(i,b0,b1,b2,w0,w1,w2,l0,l1,l2) \
-if constexpr (I == i) { CYCLES_BWL_00(m,b0,w0,l0) } \
-if constexpr (I == i) { CYCLES_BWL_10(m,b1,w1,l1) } \
-if constexpr (I == i) { CYCLES_BWL_20(m,b2,w2,l2) }
+{ if constexpr (M == m) { CYCLES_BWL_00(b0,w0,l0) } } \
+{ if constexpr (M == m) { CYCLES_BWL_10(b1,w1,l1) } } \
+{ if constexpr (M == m) { CYCLES_BWL_20(b2,w2,l2) } }
 
 #define CYCLES_DN(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(MODE_DN,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
 #define CYCLES_AN(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(MODE_AN,   b0,b1,b2,w0,w1,w2,l0,l1,l2)

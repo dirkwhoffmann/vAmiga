@@ -55,7 +55,6 @@ extension Inspector {
             let rev = CPURevision(rawValue: amiga.getConfig(.CPU_REVISION))
             let c20: NSColor = rev == ._68020 ? .labelColor : .tertiaryLabelColor
             let c10: NSColor = rev == ._68010 ? .labelColor : c20
-
             cpuT0.isEnabled = rev == ._68020
             cpuM.isEnabled = rev == ._68020
             cpuMSP.isEnabled = rev == ._68020
