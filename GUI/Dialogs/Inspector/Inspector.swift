@@ -66,6 +66,7 @@ class Inspector: DialogController {
     @IBOutlet weak var cpuA7: NSTextField!
 
     @IBOutlet weak var cpuT1: NSButton!
+    @IBOutlet weak var cpuT1label: NSTextField!
     @IBOutlet weak var cpuT0: NSButton!
     @IBOutlet weak var cpuT0label: NSTextField!
     @IBOutlet weak var cpuS: NSButton!

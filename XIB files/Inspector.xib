@@ -206,6 +206,7 @@
                 <outlet property="cpuT0" destination="S8F-7H-hCA" id="u9c-CY-lka"/>
                 <outlet property="cpuT0label" destination="qhN-TY-a7j" id="ug6-aO-WHp"/>
                 <outlet property="cpuT1" destination="kji-ty-NOX" id="i6Z-8x-YwW"/>
+                <outlet property="cpuT1label" destination="LJg-Kk-2Zl" id="8V1-EZ-cJC"/>
                 <outlet property="cpuTraceClearButton" destination="KgG-yb-NNc" id="9nJ-mh-hx2"/>
                 <outlet property="cpuTraceView" destination="9F9-Qx-tLH" id="1zf-01-nk7"/>
                 <outlet property="cpuUSP" destination="mex-HF-QUG" id="t5w-KV-epF"/>
@@ -1207,7 +1208,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Bt-Bv-9S5">
-                                                        <rect key="frame" x="139" y="57" width="22" height="17"/>
+                                                        <rect key="frame" x="139" y="73" width="22" height="17"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="-" id="TFF-XB-fWL">
                                                             <font key="font" metaFont="system"/>
@@ -1216,7 +1217,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dvh-BN-WgG">
-                                                        <rect key="frame" x="218" y="57" width="22" height="17"/>
+                                                        <rect key="frame" x="218" y="73" width="22" height="17"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="-" id="NFI-1b-x5v">
                                                             <font key="font" metaFont="system"/>
@@ -1225,7 +1226,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="em8-Oq-b82">
-                                                        <rect key="frame" x="236" y="57" width="22" height="17"/>
+                                                        <rect key="frame" x="236" y="73" width="22" height="17"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="-" id="FtH-ca-tnx">
                                                             <font key="font" metaFont="system"/>
@@ -1234,7 +1235,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gLT-AN-WOS">
-                                                        <rect key="frame" x="253" y="57" width="22" height="17"/>
+                                                        <rect key="frame" x="253" y="73" width="22" height="17"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="-" id="UDj-kx-Lbm">
                                                             <font key="font" metaFont="system"/>
