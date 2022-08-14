@@ -922,7 +922,7 @@ Moira::execBitImDy(u16 opcode)
 
     prefetch<C, POLLIPL>();
 
-    auto c = cyclesBit<C, I>(src);
+    [[maybe_unused]] auto c = cyclesBit<C, I>(src);
     SYNC(c);
     if (I != BTST) writeD(dst, data);
 
@@ -2611,7 +2611,7 @@ Moira::execMove7(u16 opcode)
 {
     AVAILABILITY(M68000)
 
-    u32 ea, data;
+    u32 ea, data = 0;
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);

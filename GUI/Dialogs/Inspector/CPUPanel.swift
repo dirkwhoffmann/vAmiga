@@ -47,6 +47,31 @@ extension Inspector {
             ]
 
             for (c, f) in elements { assignFormatter(f, c!) }
+
+            let style = amiga.getConfig(.CPU_DASM_STYLE)
+            cpuDasmStyle1.selectItem(withTag: style)
+            cpuDasmStyle2.selectItem(withTag: style)
+
+            let rev = CPURevision(rawValue: amiga.getConfig(.CPU_REVISION))
+            let c20: NSColor = rev == ._68020 ? .labelColor : .tertiaryLabelColor
+            let c10: NSColor = rev == ._68010 ? .labelColor : c20
+
+            cpuT0.isEnabled = rev == ._68020
+            cpuM.isEnabled = rev == ._68020
+            cpuMSP.isEnabled = rev == ._68020
+            cpuVBR.isEnabled = rev == ._68010 || rev == ._68020
+            cpuSFC.isEnabled = rev == ._68010 || rev == ._68020
+            cpuDFC.isEnabled = rev == ._68010 || rev == ._68020
+            cpuCACR.isEnabled = rev == ._68020
+            cpuCAAR.isEnabled = rev == ._68020
+            cpuT0label.textColor = c20
+            cpuMlabel.textColor = c20
+            cpuMSPlabel.textColor = c20
+            cpuVBRlabel.textColor = c10
+            cpuSFClabel.textColor = c10
+            cpuDFClabel.textColor = c10
+            cpuCACRlabel.textColor = c20
+            cpuCAARlabel.textColor = c20
         }
 
         cpuPC.integerValue = Int(cpuInfo.pc0)
@@ -135,7 +160,6 @@ extension Inspector {
 
     @IBAction func cpuSyntaxAction(_ sender: NSPopUpButton!) {
 
-        debug(1, "Setting DASM style to \(sender.selectedTag())")
         amiga.configure(.CPU_DASM_STYLE, value: sender.selectedTag())
     }
 

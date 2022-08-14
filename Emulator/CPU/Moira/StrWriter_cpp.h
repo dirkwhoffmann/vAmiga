@@ -1235,7 +1235,7 @@ StrWriter&
 StrWriter::operator<<(Sep)
 {
     *ptr++ = ',';
-    if (style == DASM_MUSASHI) *ptr++ = ' ';
+    if (style == DASM_MUSASHI || style == DASM_MOIRA) *ptr++ = ' ';
     return *this;
 }
 
