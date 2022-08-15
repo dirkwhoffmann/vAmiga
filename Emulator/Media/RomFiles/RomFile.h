@@ -16,7 +16,7 @@ class RomFile : public AmigaFile {
 
     // Accepted header signatures
     static const u8 bootRomHeaders[1][8];
-    static const u8 kickRomHeaders[7][7];
+    static const u8 kickRomHeaders[8][7];
     static const u8 encrRomHeaders[1][11];
 
     // Path to the rom.key file (if needed)
