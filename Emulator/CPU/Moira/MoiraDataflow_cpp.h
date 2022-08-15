@@ -179,15 +179,16 @@ Moira::computeEA(u32 n) {
                 } else {
                     result = computeEAbrief<C, M, S, F>(reg.pc);
                 }
-                break;
+
+            } else {
+
+                i8   d = (i8)queue.irc;
+                u32 xi = readR((queue.irc >> 12) & 0b1111);
+
+                result = U32_ADD3(reg.pc, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
+                SYNC(2);
+                if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
             }
-
-            i8   d = (i8)queue.irc;
-            u32 xi = readR((queue.irc >> 12) & 0b1111);
-
-            result = U32_ADD3(reg.pc, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
-            SYNC(2);
-            if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
             break;
         }
         case 11: // Im

@@ -2611,15 +2611,15 @@ Moira::execMove7(u16 opcode)
 {
     AVAILABILITY(M68000)
 
-    u32 ea, data = 0;
+    u32 ea, data;
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
     if (!readOp<C, M, S, STD_AE_FRAME>(src, &ea, &data)) return;
 
-    reg.sr.n = NBIT<S>(data);
-    reg.sr.z = ZERO<S>(data);
+    reg.sr.n = NBIT<S>(u64(data));
+    reg.sr.z = ZERO<S>(u64(data));
     reg.sr.v = 0;
     reg.sr.c = 0;
 
