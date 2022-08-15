@@ -8,22 +8,22 @@
 // -----------------------------------------------------------------------------
 
 template <Core C, Mode M, Size S, Flags F> bool
-Moira::readOp(int n, u32 &ea, u32 &result)
+Moira::readOp(int n, u32 *ea, u32 *result)
 {
     switch (M) {
 
             // Handle non-memory modes
-        case MODE_DN: result = readD<S>(n);   return true;
-        case MODE_AN: result = readA<S>(n);   return true;
-        case MODE_IM: result = readI<C, S>(); return true;
+        case MODE_DN: *result = readD<S>(n);   return true;
+        case MODE_AN: *result = readA<S>(n);   return true;
+        case MODE_IM: *result = readI<C, S>(); return true;
 
         default:
 
             // Compute effective address
-            ea = computeEA<C, M, S , F>(n);
+            *ea = computeEA<C, M, S , F>(n);
 
             // Read from effective address
-            bool error; result = readM<C, M, S, F>(ea, error);
+            bool error; *result = readM<C, M, S, F>(*ea, error);
 
             // Emulate -(An) register modification
             updateAnPD<M, S>(n);
@@ -134,17 +134,18 @@ Moira::computeEA(u32 n) {
                 } else {
                     result = computeEAbrief<C, M, S, F>(readA(n));
                 }
-                break;
+
+            } else {
+
+                i8   d = (i8)queue.irc;
+                u32 an = readA(n);
+                u32 xi = readR((queue.irc >> 12) & 0b1111);
+
+                result = U32_ADD3(an, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
+
+                SYNC(2);
+                if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
             }
-
-            i8   d = (i8)queue.irc;
-            u32 an = readA(n);
-            u32 xi = readR((queue.irc >> 12) & 0b1111);
-
-            result = U32_ADD3(an, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
-
-            SYNC(2);
-            if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
             break;
         }
         case 7: // ABS.W

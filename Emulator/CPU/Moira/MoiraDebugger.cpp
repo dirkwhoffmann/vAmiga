@@ -23,7 +23,7 @@ namespace moira {
 bool
 Guard::eval(u32 addr, Size S)
 {
-    if (this->addr >= addr && this->addr < addr + S && this->enabled) {
+    if (this->addr >= addr && this->addr < addr + u32(S) && this->enabled) {
 
         if (!ignore) return true;
         ignore--;

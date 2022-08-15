@@ -39,7 +39,10 @@ struct SnapshotHeader {
     u8 minor;
     u8 subminor;
     u8 beta;
-    
+
+    // Padding bytes
+    u8 reserved[6];
+
     // Preview image
     Thumbnail screenshot;
 };

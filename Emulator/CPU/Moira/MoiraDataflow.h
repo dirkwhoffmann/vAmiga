@@ -59,7 +59,7 @@
  * If the source is a register or an immediate value, variable ea remains
  * untouched.
  */
-template <Core C, Mode M, Size S, Flags F = 0> bool readOp(int n, u32 &ea, u32 &result);
+template <Core C, Mode M, Size S, Flags F = 0> bool readOp(int n, u32 *ea, u32 *result);
 
 /* Writes an operand
  *
