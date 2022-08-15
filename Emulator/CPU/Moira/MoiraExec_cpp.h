@@ -1927,15 +1927,13 @@ Moira::execDbcc(u16 opcode)
                 reg.pc = newpc;
                 fullPrefetch<C, POLLIPL>();
 
-                /*
-                 if (loop[queue.ird] && disp == -4) {
+                if (loop[queue.ird] && disp == -4) {
 
-                 // Enter loop mode
-                 flags |= CPU_IS_LOOPING;
-                 queue.irc = opcode;
-                 // printf("Entering loop mode (IRD: %x IRC: %x)\n", queue.ird, queue.irc);
-                 }
-                 */
+                    // Enter loop mode
+                    flags |= CPU_IS_LOOPING;
+                    queue.irc = opcode;
+                    // printf("Entering loop mode (IRD: %x IRC: %x)\n", queue.ird, queue.irc);
+                }
 
                 if (MIMIC_MUSASHI) SYNC(2);
                 CYCLES_68010(12);
@@ -1998,6 +1996,7 @@ Moira::execDbcc(u16 opcode)
         reg.pc += 2;
         fullPrefetch<C, POLLIPL>();
         flags &= ~CPU_IS_LOOPING;
+
         // printf("Exiting loop mode (IRD: %x IRC: %x)\n", queue.ird, queue.irc);
     };
 
@@ -2765,20 +2764,23 @@ Moira::execMovecRcRx(u16 opcode)
 
     switch (queue.irc & 0xFFF) {
 
-        case 0x000:
-        case 0x001:
-        case 0x800:
-        case 0x801: if constexpr (C >= M68010) break; [[fallthrough]];
-        case 0x002:
-        case 0x802:
-        case 0x803:
-        case 0x804: if constexpr (C >= M68020) break; [[fallthrough]];
+        case 0x000: case 0x001: case 0x800: case 0x801:
 
-        default:
-            execIllegal<C, I, M, S>(opcode);
-            return;
+            if constexpr (C != M68010 && C != M68020) {
+                execIllegal<C, I, M, S>(opcode);
+                return;
+            }
+            break;
+
+        case 0x002: case 0x802: case 0x803: case 0x804:
+
+            if constexpr (C != M68020) {
+                execIllegal<C, I, M, S>(opcode);
+                return;
+            }
+            break;
     }
-
+    
     SYNC(4);
 
     auto arg = readI<C, Word>();
@@ -2813,18 +2815,21 @@ Moira::execMovecRxRc(u16 opcode)
 
     switch (queue.irc & 0xFFF) {
 
-        case 0x000:
-        case 0x001:
-        case 0x800:
-        case 0x801: if constexpr (C >= M68010) break; [[fallthrough]];
-        case 0x002:
-        case 0x802:
-        case 0x803:
-        case 0x804: if constexpr (C >= M68020) break; [[fallthrough]];
+        case 0x000: case 0x001: case 0x800: case 0x801:
 
-        default:
-            execIllegal<C, I, M, S>(opcode);
-            return;
+            if constexpr (C != M68010 && C != M68020) {
+                execIllegal<C, I, M, S>(opcode);
+                return;
+            }
+            break;
+
+        case 0x002: case 0x802: case 0x803: case 0x804:
+
+            if constexpr (C != M68020) {
+                execIllegal<C, I, M, S>(opcode);
+                return;
+            }
+            break;
     }
 
     SYNC(2);
