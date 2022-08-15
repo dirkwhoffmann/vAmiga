@@ -1980,13 +1980,14 @@ Moira::execDbcc(u16 opcode)
 
             // Branch
             if (takeBranch) {
+                SYNC(4);
                 reg.pc = newpc;
                 reg.pc0 = reg.pc;
                 queue.ird = queue.irc;
                 queue.irc = opcode;
                 return;
             } else {
-                (void)readMS<C, MEM_PROG, Word>(reg.pc + 2);
+                // (void)readMS<C, MEM_PROG, Word>(reg.pc + 2);
             }
         } else {
             SYNC(2);
@@ -2762,23 +2763,26 @@ Moira::execMovecRcRx(u16 opcode)
     AVAILABILITY(M68000)
     SUPERVISOR_MODE_ONLY
 
-    switch (queue.irc & 0xFFF) {
+    if constexpr (C == M68010) {
 
-        case 0x000: case 0x001: case 0x800: case 0x801:
+        auto reg = queue.irc & 0xFFF;
 
-            if constexpr (C != M68010 && C != M68020) {
-                execIllegal<C, I, M, S>(opcode);
-                return;
-            }
-            break;
+        if (reg != 0x000 && reg != 0x001 && reg != 0x800 && reg != 0x801) {
 
-        case 0x002: case 0x802: case 0x803: case 0x804:
+            execIllegal<C, I, M, S>(opcode);
+            return;
+        }
+    }
+    if constexpr (C == M68020) {
 
-            if constexpr (C != M68020) {
-                execIllegal<C, I, M, S>(opcode);
-                return;
-            }
-            break;
+        auto reg = queue.irc & 0xFFF;
+
+        if (reg != 0x000 && reg != 0x001 && reg != 0x800 && reg != 0x801 &&
+            reg != 0x002 && reg != 0x802 && reg != 0x803 && reg != 0x804) {
+
+            execIllegal<C, I, M, S>(opcode);
+            return;
+        }
     }
     
     SYNC(4);
@@ -2813,23 +2817,26 @@ Moira::execMovecRxRc(u16 opcode)
     AVAILABILITY(M68010)
     SUPERVISOR_MODE_ONLY
 
-    switch (queue.irc & 0xFFF) {
+    if constexpr (C == M68010) {
 
-        case 0x000: case 0x001: case 0x800: case 0x801:
+        auto reg = queue.irc & 0xFFF;
 
-            if constexpr (C != M68010 && C != M68020) {
-                execIllegal<C, I, M, S>(opcode);
-                return;
-            }
-            break;
+        if (reg != 0x000 && reg != 0x001 && reg != 0x800 && reg != 0x801) {
 
-        case 0x002: case 0x802: case 0x803: case 0x804:
+            execIllegal<C, I, M, S>(opcode);
+            return;
+        }
+    }
+    if constexpr (C == M68020) {
 
-            if constexpr (C != M68020) {
-                execIllegal<C, I, M, S>(opcode);
-                return;
-            }
-            break;
+        auto reg = queue.irc & 0xFFF;
+
+        if (reg != 0x000 && reg != 0x001 && reg != 0x800 && reg != 0x801 &&
+            reg != 0x002 && reg != 0x802 && reg != 0x803 && reg != 0x804) {
+
+            execIllegal<C, I, M, S>(opcode);
+            return;
+        }
     }
 
     SYNC(2);

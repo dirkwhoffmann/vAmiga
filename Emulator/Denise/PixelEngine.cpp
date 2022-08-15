@@ -162,12 +162,13 @@ void
 PixelEngine::setColor(isize reg, u16 value)
 {
     assert(reg < 32);
-    AmigaColor newColor(value);
+
+    AmigaColor newColor(value & 0xFFF);
 
     color[reg] = newColor;
 
     // Update standard palette entry
-    palette[reg] = colorSpace[value];
+    palette[reg] = colorSpace[value & 0xFFF];
 
     // Update halfbright palette entry
     palette[reg + 32] = colorSpace[newColor.ehb().rawValue()];

@@ -1040,7 +1040,8 @@ Denise::drawBorder()
         if (!flop && on) {
 
             // Draw left border (4,5)
-            for (isize i = 0; i < 2 * hflopOnPrev - hblank; i++) {
+            auto end = std::min(2 * hflopOnPrev - hblank, isize(HPIXELS + 1));
+            for (isize i = 0; i < end; i++) {
                 bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
             }
         }
@@ -1048,7 +1049,8 @@ Denise::drawBorder()
         if (off) {
 
             // Draw right border (3,4)
-            for (isize i = 2 * hflopOffPrev - hblank; i < HPIXELS; i++) {
+            auto start = std::max(2 * hflopOffPrev - hblank, isize(0));
+            for (isize i = start; i < HPIXELS; i++) {
                 bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
             }
         }
