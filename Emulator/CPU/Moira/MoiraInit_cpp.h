@@ -8,24 +8,20 @@
 // -----------------------------------------------------------------------------
 
 // Assembles an instruction handler name
-#define EXEC_IMS(func,I,M,S) &Moira::exec##func<I,M,S>
-#define EXEC_CIMS(func,C,I,M,S) &Moira::exec##func<C,I,M,S>
-#define DASM_IMS(func,I,M,S) &Moira::dasm##func<I,M,S>
+#define EXEC_HANDLER(func,C,I,M,S) &Moira::exec##func<C,I,M,S>
+#define DASM_HANDLER(func,I,M,S) &Moira::dasm##func<I,M,S>
 
+// Registers an instruction handler
 #define CIMS(id,name,I,M,S) { \
-switch (core) { \
-case M68000: exec[id] = EXEC_CIMS(name,M68000,I,M,S); break; \
-case M68010: exec[id] = EXEC_CIMS(name,M68010,I,M,S); break; \
-case M68020: exec[id] = EXEC_CIMS(name,M68020,I,M,S); break; \
-} \
-if (dasm) dasm[id] = DASM_IMS(name,I,M,S); \
+exec[id] = EXEC_HANDLER(name,C,I,M,S); \
+if (dasm) dasm[id] = DASM_HANDLER(name,I,M,S); \
 if (info) info[id] = InstrInfo {I,M,S}; \
 }
 
 // Registers a special loop-mode instruction handler
 #define CIMSloop(id,name,I,M,S) { \
 assert(loop[id] == nullptr); \
-loop[id] = EXEC_CIMS(name,M68010,I##_LOOP,M,S); \
+loop[id] = EXEC_HANDLER(name,M68010,I##_LOOP,M,S); \
 }
 
 // Registers an instruction in one of the standard instruction formats:
@@ -146,6 +142,20 @@ parse(const char *s, int sum = 0)
 }
 
 void
+Moira::createJumpTable()
+{
+    switch (core) {
+
+        case M68000: createJumpTable<M68000>(); break;
+        case M68010: createJumpTable<M68010>(); break;
+        case M68020: createJumpTable<M68020>(); break;
+
+        default:
+            fatalError;
+    }
+}
+
+template <Core C> void
 Moira::createJumpTable()
 {
     u16 opcode;

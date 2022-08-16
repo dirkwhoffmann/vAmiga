@@ -162,6 +162,10 @@ protected:
     // Creates the generic jump table
     void createJumpTable();
 
+private:
+
+    template <Core C> void createJumpTable();
+
 
     //
     // Running the CPU
