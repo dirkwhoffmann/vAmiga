@@ -31,9 +31,20 @@ typedef unsigned long long u64;
 
 typedef enum
 {
-    M68000,             // Fully supported
-    M68010,             // Experimentally supported
-    M68020              // Experimentally supported
+    M68000,             // Full supported
+    M68010,             // Work in progress
+    M68EC020,           // Work in progress
+    M68020,             // Work in progress
+    M68EC030,           // Work in progress
+    M68030              // Work in progress
+}
+Model;
+
+typedef enum
+{
+    C68000,             // Used by M68000
+    C68010,             // Used by M68010
+    C68020              // Used by M68EC020, M68020, M68EC030, and M68030
 }
 Core;
 
@@ -88,10 +99,10 @@ typedef enum
     SVC,        SVS,        SF,         ST,         STOP,       SUB,
     SUBA,       SUBI,       SUBQ,       SUBX,       SWAP,       TAS,
     TRAP,       TRAPV,      TST,        UNLK,
-
+    
     // 68010+ instructions
     BKPT,       MOVEC,      MOVES,      RTD,
-
+    
     // 68020+ instructions
     BFCHG,      BFCLR,      BFEXTS,     BFEXTU,     BFFFO,      BFINS,
     BFSET,      BFTST,      CALLM,      CAS,        CAS2,       CHK2,
@@ -100,7 +111,7 @@ typedef enum
     RTM,        TRAPCC,     TRAPCS,     TRAPEQ,     TRAPGE,     TRAPGT,
     TRAPHI,     TRAPLE,     TRAPLS,     TRAPLT,     TRAPMI,     TRAPNE,
     TRAPPL,     TRAPVC,     TRAPVS,     TRAPF,      TRAPT,      UNPK,
-
+    
     // Loop mode variants (68010)
     ABCD_LOOP,  ADD_LOOP,   ADDA_LOOP,  ADDX_LOOP,  AND_LOOP,   ASL_LOOP,
     ASR_LOOP,   CLR_LOOP,   CMP_LOOP,   CMPA_LOOP,  DBCC_LOOP,  DBCS_LOOP,
@@ -236,7 +247,7 @@ typedef struct
 StackFrame;
 
 struct StatusRegister {
-
+    
     bool t1;                // Trace flag
     bool t0;                // Trace flag         (68020 only)
     bool s;                 // Supervisor flag
@@ -246,16 +257,16 @@ struct StatusRegister {
     bool z;                 // Zero flag
     bool v;                 // Overflow flag
     bool c;                 // Carry flag
-
+    
     u8 ipl;                 // Required Interrupt Priority Level
 };
 
 struct Registers {
-
+    
     u32 pc;                 // Program counter
     u32 pc0;                // Beginning of the currently executed instruction
     StatusRegister sr;      // Status register
-
+    
     union {
         struct {
             u32 d[8];       // D0, D1 ... D7
@@ -269,24 +280,24 @@ struct Registers {
             u32 sp;         // Visible stack pointer (overlays a[7])
         };
     };
-
+    
     u32 usp;                // User Stack Pointer
     u32 isp;                // Interrupt Stack Pointer
     u32 msp;                // Master Stack Pointer             (68020+)
-
+    
     u8 ipl;                 // Polled Interrupt Priority Level
-
+    
     u32 vbr;                // Vector Base Register             (68010+)
     u32 sfc;                // Source Function Code             (68010+)
     u32 dfc;                // Destination Function Code        (68010+)
-
+    
     // Unemulated registers
     u32 cacr;               // Cache Control Register           (68020+)
     u32 caar;               // Cache Address Register           (68020+)
 };
 
 struct PrefetchQueue {
-
+    
     u16 irc;                // The most recent word prefetched from memory
     u16 ird;                // The instruction currently being executed
 };

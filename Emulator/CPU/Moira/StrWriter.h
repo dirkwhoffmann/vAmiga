@@ -78,25 +78,25 @@ struct Finish { };
 
 class StrWriter
 {
-
+    
 public:
-
+    
     char comment[32];       // Appended to the end of the disassembled string
     char *base;             // Start address of the destination string
     char *ptr;              // Current writing position
     DasmStyle style;
     DasmNumberFormat nf;
-
+    
 public:
-
+    
     StrWriter(char *p, DasmStyle s, DasmNumberFormat n) {
-
+        
         base = ptr = p;
         style = s;
         nf = n;
         comment[0] = 0;
     };
-
+    
     StrWriter& operator<<(const char *);
     StrWriter& operator<<(int);
     StrWriter& operator<<(unsigned int);
@@ -121,7 +121,7 @@ public:
     template <Mode M, Size S> StrWriter& operator<<(IxMus<M,S>);
     template <Mode M, Size S> StrWriter& operator<<(IxMot<M,S>);
     template <Mode M, Size S> StrWriter& operator<<(IxMit<M,S>);
-
+    
     StrWriter& operator<<(Rn);
     StrWriter& operator<<(Rnr);
     StrWriter& operator<<(Ccr);

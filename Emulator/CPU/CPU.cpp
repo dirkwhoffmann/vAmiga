@@ -367,7 +367,7 @@ CPU::setConfigItem(Option option, i64 value)
 
             suspend();
             config.revision = CPURevision(value);
-            setCore(moira::Core(value));
+            setModel(moira::Model(value));
             resume();
             return;
 

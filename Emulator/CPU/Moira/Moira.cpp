@@ -31,7 +31,7 @@ Moira::Moira(Amiga &ref) : SubComponent(ref)
 {
     if (BUILD_INSTR_INFO_TABLE) info = new InstrInfo[65536];
     if (ENABLE_DASM) dasm = new DasmPtr[65536];
-
+    
     createJumpTable();
 }
 
@@ -42,11 +42,11 @@ Moira::~Moira()
 }
 
 void
-Moira::setCore(Core core)
+Moira::setModel(Model model)
 {
-    if (this->core != core) {
-
-        this->core = core;
+    if (this->model != model) {
+        
+        this->model = model;
         createJumpTable();
         flags &= ~CPU_IS_LOOPING;
     }
@@ -67,7 +67,7 @@ Moira::setDasmNumberFormat(DasmNumberFormat value)
     if (value.radix != 10 && value.radix != 16) {
         throw std::runtime_error("Invalid radix: " + std::to_string(value.radix));
     }
-
+    
     numberFormat = value;
 }
 
@@ -86,11 +86,14 @@ Moira::setIndentation(int value)
 void
 Moira::reset()
 {
-    switch (core) {
+    switch (model) {
 
-        case M68000: reset <M68000> (); break;
-        case M68010: reset <M68010> (); break;
-        case M68020: reset <M68020> (); break;
+        case M68000:    reset<C68000>(); break;
+        case M68010:    reset<C68010>(); break;
+        case M68EC020:
+        case M68020:
+        case M68EC030:
+        case M68030:    reset<C68020>(); break;
 
         default:
             assert(false);
@@ -101,17 +104,17 @@ template <Core C> void
 Moira::reset()
 {
     flags = CPU_CHECK_IRQ;
-
+    
     reg = { };
     reg.sr.s = 1;
     reg.sr.ipl = 7;
-
+    
     ipl = 0;
     fcl = 0;
     fcSource = 0;
-
+    
     SYNC(16);
-
+    
     // Read the initial (supervisor) stack pointer from memory
     SYNC(2);
     reg.sp = read16OnReset(0);
@@ -121,13 +124,13 @@ Moira::reset()
     reg.pc = read16OnReset(4);
     SYNC(4);
     reg.pc = (read16OnReset(6) & ~0x1) | reg.pc << 16;
-
+    
     // Fill the prefetch queue
     SYNC(4);
     queue.irc = read16OnReset(reg.pc & 0xFFFFFF);
     SYNC(2);
     prefetch<C>();
-
+    
     debugger.reset();
 }
 
@@ -137,51 +140,51 @@ Moira::execute()
     // Check the integrity of the CPU flags
     if (reg.ipl > reg.sr.ipl || reg.ipl == 7) assert(flags & CPU_CHECK_IRQ);
     assert(!!(flags & CPU_TRACE_FLAG) == reg.sr.t1);
-
+    
     // Check the integrity of the program counter
     assert(reg.pc0 == reg.pc);
-
+    
     //
     // The quick execution path: Call the instruction handler and return
     //
-
+    
     if (!flags) {
-
+        
         reg.pc += 2;
         (this->*exec[queue.ird])(queue.ird);
         assert(reg.pc0 == reg.pc);
         return;
     }
-
+    
     //
     // The slow execution path: Process flags one by one
     //
-
+    
     // Only continue if the CPU is not halted
     if (flags & CPU_IS_HALTED) {
         sync(2);
         return;
     }
-
+    
     // Process pending trace exception (if any)
     if (flags & CPU_TRACE_EXCEPTION) {
         execException(EXC_TRACE);
         goto done;
     }
-
+    
     // Check if the T flag is set inside the status register
     if ((flags & CPU_TRACE_FLAG) && !(flags & CPU_IS_STOPPED)) {
         flags |= CPU_TRACE_EXCEPTION;
     }
-
+    
     // Process pending interrupt (if any)
     if (flags & CPU_CHECK_IRQ) {
         if (checkForIrq()) goto done;
     }
-
+    
     // If the CPU is stopped, poll the IPL lines and return
     if (flags & CPU_IS_STOPPED) {
-
+        
         // Initiate a privilege exception if the supervisor bit is cleared
         if (!reg.sr.s) {
             sync(4);
@@ -190,20 +193,20 @@ Moira::execute()
             execException(EXC_PRIVILEGE);
             return;
         }
-
+        
         pollIpl();
         sync(MIMIC_MUSASHI ? 1 : 2);
         return;
     }
-
+    
     // If logging is enabled, record the executed instruction
     if (flags & CPU_LOG_INSTRUCTION) {
         debugger.logInstruction();
     }
-
+    
     // Execute the instruction
     if (flags & CPU_IS_LOOPING) {
-
+        
         reg.pc += 2;
         if (loop[queue.ird] == nullptr) {
             printf("Callback missing\n");
@@ -213,23 +216,23 @@ Moira::execute()
             assert(reg.pc0 == reg.pc);
         }
     } else {
-
+        
         reg.pc += 2;
         (this->*exec[queue.ird])(queue.ird);
         assert(reg.pc0 == reg.pc);
     }
-
+    
 done:
-
+    
     // Check if a breakpoint has been reached
     if (flags & CPU_CHECK_BP) {
-
+        
         // Don't break if the instruction won't be executed due to tracing
         if (flags & CPU_TRACE_EXCEPTION) return;
-
+        
         // Check if a softstop has been reached
         if (debugger.softstopMatches(reg.pc0)) softstopReached(reg.pc0);
-
+        
         // Check if a breakpoint has been reached
         if (debugger.breakpointMatches(reg.pc0)) breakpointReached(reg.pc0);
     }
@@ -239,18 +242,18 @@ bool
 Moira::checkForIrq()
 {
     if (reg.ipl > reg.sr.ipl || reg.ipl == 7) {
-
+        
         // Exit loop mode if necessary
         if (flags & CPU_IS_LOOPING) {
             flags &= ~CPU_IS_LOOPING;
         }
-
+        
         // Trigger interrupt
         execInterrupt(reg.ipl);
         return true;
-
+        
     } else {
-
+        
         // If the polled IPL is up to date, we disable interrupt checking for
         // the time being, because no interrupt can occur as long as the
         // external IPL or the IPL mask inside the status register keep the
@@ -267,7 +270,7 @@ Moira::halt()
     // Halt the CPU
     flags |= CPU_IS_HALTED;
     reg.pc = reg.pc0;
-
+    
     // Inform the delegate
     signalHalt();
 }
@@ -333,7 +336,7 @@ Moira::getSR(const StatusRegister &sr) const
     sr.s   << 13 |
     sr.m   << 12 |
     sr.ipl <<  8 | getCCR();
-
+    
     return u16(flags);
 }
 
@@ -343,19 +346,19 @@ Moira::setSR(u16 val)
     bool t1 = (val >> 15) & 1;
     bool s = (val >> 13) & 1;
     u8 ipl = (val >> 8) & 7;
-
+    
     reg.sr.ipl = ipl;
     flags |= CPU_CHECK_IRQ;
     t1 ? setTraceFlag() : clearTraceFlag();
-
+    
     setCCR((u8)val);
     setSupervisorMode(s);
-
-    if (core == M68020) {
-
+    
+    if (model > M68010) {
+        
         bool t0 = (val >> 14) & 1;
         bool m = (val >> 12) & 1;
-
+        
         t0 ? setTrace0Flag() : clearTrace0Flag();
         setMasterMode(m);
     }
@@ -379,18 +382,18 @@ Moira::setSupervisorFlags(bool s, bool m)
     bool uspWasVisible = !reg.sr.s;
     bool ispWasVisible =  reg.sr.s && !reg.sr.m;
     bool mspWasVisible =  reg.sr.s &&  reg.sr.m;
-
+    
     if (uspWasVisible) reg.usp = reg.sp;
     if (ispWasVisible) reg.isp = reg.sp;
     if (mspWasVisible) reg.msp = reg.sp;
-
+    
     reg.sr.s = s;
     reg.sr.m = m;
-
+    
     bool uspIsVisible  = !reg.sr.s;
     bool ispIsVisible  =  reg.sr.s && !reg.sr.m;
     bool mspIsVisible  =  reg.sr.s &&  reg.sr.m;
-
+    
     if (uspIsVisible)  reg.sp = reg.usp;
     if (ispIsVisible)  reg.sp = reg.isp;
     if (mspIsVisible)  reg.sp = reg.msp;
@@ -400,11 +403,11 @@ FunctionCode
 Moira::readFC() const
 {
     switch (fcSource) {
-
+            
         case 0: return FunctionCode((reg.sr.s ? 4 : 0) | fcl);
         case 1: return FunctionCode(reg.sfc);
         case 2: return FunctionCode(reg.dfc);
-
+            
         default:
             fatalError;
     }
@@ -435,17 +438,17 @@ Moira::setIPL(u8 val)
 
 u16
 Moira::getIrqVector(u8 level) const {
-
+    
     assert(level < 8);
-
+    
     switch (irqMode) {
-
+            
         case IRQ_AUTO:          return 24 + level;
         case IRQ_USER:          return readIrqUserVector(level) & 0xFF;
         case IRQ_SPURIOUS:      return 24;
         case IRQ_UNINITIALIZED: return 15;
     }
-
+    
     assert(false);
     return 0;
 }
@@ -454,42 +457,42 @@ int
 Moira::disassemble(u32 addr, char *str, DasmStyle core)
 {
     if constexpr (!ENABLE_DASM) {
-
+        
         printf("This feature requires ENABLE_DASM = true\n");
         assert(false);
         return 0;
     }
-
+    
     u32 pc     = addr;
     u16 opcode = read16Dasm(pc);
-
+    
     StrWriter writer(str, style, numberFormat);
-
+    
     (this->*dasm[opcode])(writer, pc, opcode);
     writer << Finish{};
-
+    
     // Post process disassembler output
     switch (letterCase) {
-
+            
         case DASM_MIXED_CASE:
-
+            
             break;
-
+            
         case DASM_LOWER_CASE:
-
+            
             for (auto p = writer.base; p < writer.ptr; p++) {
                 *p = char(std::tolower(*p));
             }
             break;
-
+            
         case DASM_UPPER_CASE:
-
+            
             for (auto p = writer.base; p < writer.ptr; p++) {
                 *p = char(std::toupper(*p));
             }
             break;
     }
-
+    
     return pc - addr + 2;
 }
 
@@ -503,7 +506,7 @@ void
 Moira::disassembleMemory(u32 addr, int cnt, char *str)
 {
     U32_DEC(addr, 2); // Because dasmRead increases addr first
-
+    
     for (int i = 0; i < cnt; i++) {
         u32 value = dasmRead<Word>(addr);
         sprintx(str, value, { .prefix = "", .radix = 16, .upperCase = true }, 4);
@@ -567,12 +570,12 @@ InstrInfo
 Moira::getInfo(u16 op)
 {
     if (BUILD_INSTR_INFO_TABLE == false) {
-
+        
         printf("This feature requires BUILD_INSTR_INFO_TABLE = true\n");
         assert(false);
         return InstrInfo { ILLEGAL, MODE_IP, (Size)0 };
     }
-
+    
     return info[op];
 }
 

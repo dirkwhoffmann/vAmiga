@@ -34,7 +34,7 @@ void execException(ExceptionType exc, int nr = 0);
 template <Core C> void execException(ExceptionType exc, int nr = 0);
 
 // Emulates an address error
-void execAddressError(StackFrame frame, int delay = 0);
+// void execAddressError(StackFrame frame, int delay = 0);
 template <Core C> void execAddressError(StackFrame frame, int delay = 0);
 
 // Emulates an interrupt
