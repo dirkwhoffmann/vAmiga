@@ -32,8 +32,8 @@ extension Inspector {
 
                             cpuSFC: fmt4,
                             cpuDFC: fmt4,
-                           cpuCACR: fmt4,
-                           cpuCAAR: fmt4,
+                           cpuCACR: fmt32,
+                           cpuCAAR: fmt32,
 
                              cpuD0: fmt32, cpuD1: fmt32,
                              cpuD2: fmt32, cpuD3: fmt32,
@@ -53,24 +53,25 @@ extension Inspector {
             cpuDasmStyle2.selectItem(withTag: style)
 
             let rev = CPURevision(rawValue: amiga.getConfig(.CPU_REVISION))
-            cpuMSP.isHidden = rev != ._68020
-            cpuVBR.isHidden = rev == ._68000
-            cpuSFC.isHidden = rev == ._68000
-            cpuDFC.isHidden = rev == ._68000
-            cpuCACR.isHidden = rev != ._68020
-            cpuCAAR.isHidden = rev != ._68020
-            cpuMSPlabel.isHidden = rev != ._68020
-            cpuVBRlabel.isHidden = rev == ._68000
-            cpuSFClabel.isHidden = rev == ._68000
-            cpuDFClabel.isHidden = rev == ._68000
-            cpuCACRlabel.isHidden = rev != ._68020
-            cpuCAARlabel.isHidden = rev != ._68020
-            cpuT1label.stringValue = rev != ._68020 ? "T" : "T1"
-            cpuT0label.stringValue = rev != ._68020 ? "-" : "T0"
-            cpuT0.isHidden = rev != ._68020
-            cpuMlabel.stringValue = rev != ._68020 ? "-" : "M"
-            cpuM.isHidden = rev != ._68020
-
+            let below10 = rev == ._68000
+            let below20 = rev == ._68000 || rev == ._68010
+            cpuMSP.isHidden = below20
+            cpuVBR.isHidden = below10
+            cpuSFC.isHidden = below10
+            cpuDFC.isHidden = below10
+            cpuCACR.isHidden = below20
+            cpuCAAR.isHidden = below20
+            cpuMSPlabel.isHidden = below20
+            cpuVBRlabel.isHidden = below10
+            cpuSFClabel.isHidden = below10
+            cpuDFClabel.isHidden = below10
+            cpuCACRlabel.isHidden = below20
+            cpuCAARlabel.isHidden = below20
+            cpuT1label.stringValue = below20 ? "T" : "T1"
+            cpuT0label.stringValue = below20 ? "-" : "T0"
+            cpuT0.isHidden = below20
+            cpuMlabel.stringValue = below20 ? "-" : "M"
+            cpuM.isHidden = below20
         }
 
         cpuPC.integerValue = Int(cpuInfo.pc0)

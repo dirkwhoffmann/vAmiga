@@ -367,7 +367,14 @@ CPU::setConfigItem(Option option, i64 value)
 
             suspend();
             config.revision = CPURevision(value);
-            setModel(moira::Model(value));
+
+            switch (value) {
+
+                case CPU_68000:     setModel(moira::M68000); break;
+                case CPU_68010:     setModel(moira::M68010); break;
+                case CPU_68EC020:   setModel(moira::M68EC020); break;
+                case CPU_68EC030:   setModel(moira::M68EC030); break;
+            }
             resume();
             return;
 

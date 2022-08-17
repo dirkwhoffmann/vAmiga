@@ -1289,9 +1289,9 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zK2-bc-AkX">
-                                                        <rect key="frame" x="61" y="137" width="18" height="22"/>
+                                                        <rect key="frame" x="61" y="137" width="72" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="F" drawsBackground="YES" id="TDd-TZ-qlj">
+                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="FF00FF00" drawsBackground="YES" id="TDd-TZ-qlj">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1381,9 +1381,9 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6VO-7C-tJG">
-                                                        <rect key="frame" x="61" y="110" width="18" height="22"/>
+                                                        <rect key="frame" x="61" y="110" width="72" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="F" drawsBackground="YES" id="A2S-5d-CeD">
+                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="FF00FF00" drawsBackground="YES" id="A2S-5d-CeD">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1511,7 +1511,7 @@
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <popUpButtonCell key="cell" type="roundTextured" title="Moira" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="1kW-Ow-zBB" id="H2M-we-SHF">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
+                                                                    <font key="font" metaFont="menu"/>
                                                                     <menu key="menu" id="YML-pW-Fu1">
                                                                         <items>
                                                                             <menuItem title="Moira" state="on" id="1kW-Ow-zBB"/>
@@ -1538,7 +1538,7 @@
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" id="GzR-dn-mO8">
                                                                     <rect key="frame" x="1" y="1" width="385" height="313"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="DdI-Dc-nEd" id="9F9-Qx-tLH" customClass="TraceTableView" customModule="vAmiga" customModuleProvider="target">
                                                                             <rect key="frame" x="0.0" y="0.0" width="385" height="288"/>
@@ -1592,7 +1592,7 @@
                                                                     <nil key="backgroundColor"/>
                                                                 </clipView>
                                                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="r5u-Iy-MSD">
-                                                                    <rect key="frame" x="1" y="300" width="385" height="16"/>
+                                                                    <rect key="frame" x="1" y="298" width="385" height="16"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="57s-YL-mqU">
@@ -1629,7 +1629,7 @@
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <popUpButtonCell key="cell" type="roundTextured" title="Moira" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="3fi-AM-iNw" id="uCQ-bd-udh">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
+                                                                    <font key="font" metaFont="menu"/>
                                                                     <menu key="menu" id="dJf-2d-rUc">
                                                                         <items>
                                                                             <menuItem title="Moira" state="on" id="3fi-AM-iNw"/>
