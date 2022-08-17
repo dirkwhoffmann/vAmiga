@@ -7,26 +7,26 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-template <> u32
-Moira::dasmRead<Byte>(u32 &addr)
+template <Size S> u32
+Moira::dasmRead(u32 &addr)
 {
-    U32_INC(addr, 2);
-    return read16Dasm(addr) & 0xFF;
-}
+    switch (S) {
 
-template <> u32
-Moira::dasmRead<Word>(u32 &addr)
-{
-    U32_INC(addr, 2);
-    return read16Dasm(addr);
-}
+        case Byte:
 
-template <> u32
-Moira::dasmRead<Long>(u32 &addr)
-{
-    u32 result = dasmRead<Word>(addr) << 16;
-    result |= dasmRead<Word>(addr);
-    return result;
+            U32_INC(addr, 2);
+            return read16Dasm(addr) & 0xFF;
+
+        case Unsized:
+        case Word:
+
+            U32_INC(addr, 2);
+            return read16Dasm(addr);
+
+        case Long:
+
+            return dasmRead<Word>(addr) << 16 | dasmRead<Word>(addr) << 16;
+    }
 }
 
 template <Mode M, Size S> Ea<M,S>
