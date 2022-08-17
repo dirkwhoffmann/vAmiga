@@ -179,6 +179,9 @@ Moira::willExecute(ExceptionType exc, u16 vector)
         case EXC_IRQ_UNINITIALIZED: xfiles("EXC_IRQ_UNINITIALIZED\n");  break;
         case EXC_IRQ_SPURIOUS:      xfiles("EXC_IRQ_SPURIOUS\n");       break;
         case EXC_TRAP:              xfiles("EXC_TRAP\n");               break;
+
+        default:
+            break;
     }
 }
 

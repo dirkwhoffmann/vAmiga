@@ -199,7 +199,10 @@ typedef enum
     EXC_FORMAT_ERROR        = 14,
     EXC_IRQ_UNINITIALIZED   = 15,
     EXC_IRQ_SPURIOUS        = 24,
-    EXC_TRAP                = 32
+    EXC_TRAP                = 32,
+
+    // Experimental
+    EXC_BKPT
 }
 ExceptionType;
 

@@ -214,11 +214,25 @@ Moira::execException(ExceptionType exc, int nr)
             
             // Write stack frame
             writeStackFrame0000<C>(status, reg.pc - 2, vector);
-            
-            // Branch to the exception handler
+
+            // Branch to exception handler
             jumpToVector<C, AE_SET_CB3>(vector);
             break;
-            
+
+        case EXC_BKPT:
+
+            // Clear any pending trace event
+            flags &= ~CPU_TRACE_EXCEPTION;
+
+            SYNC(4);
+
+            // Write stack frame
+            writeStackFrame0000<C>(status, reg.pc, 4);
+
+            // Branch to exception handler
+            jumpToVector<C, AE_SET_CB3>(4);
+            break;
+
         case EXC_DIVIDE_BY_ZERO:
         case EXC_CHK:
         case EXC_TRAPV:
@@ -228,7 +242,7 @@ Moira::execException(ExceptionType exc, int nr)
             writeStackFrame0010<C>(status, reg.pc, reg.pc0, vector) :
             writeStackFrame0000<C>(status, reg.pc, vector);
             
-            // Branch to the exception handler
+            // Branch to exception handler
             jumpToVector<C>(vector);
             break;
             
@@ -242,7 +256,7 @@ Moira::execException(ExceptionType exc, int nr)
             // Write stack frame
             writeStackFrame0000<C>(status, reg.pc - 2, vector);
             
-            // Branch to the exception handler
+            // Branch to exception handler
             jumpToVector<C,AE_SET_CB3>(vector);
             break;
             
@@ -259,7 +273,7 @@ Moira::execException(ExceptionType exc, int nr)
             // Write stack frame
             writeStackFrame0000<C>(status, reg.pc, vector);
             
-            // Branch to the exception handler
+            // Branch to exception handler
             jumpToVector<C>(vector);
             break;
             
@@ -273,7 +287,7 @@ Moira::execException(ExceptionType exc, int nr)
             // Write stack frame
             writeStackFrame0000<C>(status, reg.pc, vector);
             
-            // Branch to the exception handler
+            // Branch to exception handler
             jumpToVector<C, AE_SET_CB3>(vector);
             break;
             
@@ -282,7 +296,7 @@ Moira::execException(ExceptionType exc, int nr)
             // Write stack frame
             writeStackFrame0000<C>(status, reg.pc, u16(vector));
             
-            // Branch to the exception handler
+            // Branch to exception handler
             jumpToVector<C>(vector);
             break;
             

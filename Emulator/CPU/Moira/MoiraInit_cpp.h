@@ -333,9 +333,8 @@ Moira::createJumpTable()
     
     opcode = parse("1100 ---0 ---- ----");
     ____XXX_SSMMMXXX(opcode, AND, 0b101111111111, Byte | Word | Long, AndEaRg, CIMS)
-    ____XXX_SSMMMXXX(opcode, AND, 0b001110000000, Byte,        AddEaRg, CIMSloop)
-    ____XXX_SSMMMXXX(opcode, AND, 0b001110000000, Word | Long, AddEaRg, CIMSloop)
-    
+    ____XXX_SSMMMXXX(opcode, AND, 0b001110000000, Byte | Word | Long, AndEaRg, CIMSloop)
+
     
     //               -------------------------------------------------
     // Dx,<ea>       | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | A | B |
@@ -1387,8 +1386,7 @@ Moira::createJumpTable()
     
     opcode = parse("1000 ---0 ---- ----");
     ____XXX_SSMMMXXX(opcode, OR, 0b101111111111, Byte | Word | Long, AndEaRg, CIMS)
-    ____XXX_SSMMMXXX(opcode, OR, 0b001110000000, Byte,        AddEaRg, CIMSloop)
-    ____XXX_SSMMMXXX(opcode, OR, 0b001110000000, Word | Long, AddEaRg, CIMSloop)
+    ____XXX_SSMMMXXX(opcode, OR, 0b001110000000, Byte | Word | Long, AndEaRg, CIMSloop)
     
     
     //               -------------------------------------------------

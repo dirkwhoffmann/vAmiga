@@ -465,17 +465,17 @@ Moira::logic(u32 op1, u32 op2)
     
     switch (I) {
             
-        case AND: case ANDI: case ANDICCR: case ANDISR:
-            
+        case AND: case ANDI: case ANDICCR: case ANDISR: case AND_LOOP:
+
             result = op1 & op2;
             break;
             
-        case OR: case ORI: case ORICCR: case ORISR:
+        case OR: case ORI: case ORICCR: case ORISR: case OR_LOOP:
             
             result = op1 | op2;
             break;
             
-        case EOR: case EORI: case EORICCR: case EORISR:
+        case EOR: case EORI: case EORICCR: case EORISR: case EOR_LOOP:
             
             result = op1 ^ op2;
             break;

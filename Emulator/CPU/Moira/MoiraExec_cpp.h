@@ -1245,7 +1245,8 @@ Moira::execBkpt(u16 opcode)
     AVAILABILITY(C68010)
 
     if (!MIMIC_MUSASHI) SYNC(4);
-    execException<C>(EXC_ILLEGAL);
+    // execException<C>(EXC_ILLEGAL);
+    execException<C>(EXC_BKPT);
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l

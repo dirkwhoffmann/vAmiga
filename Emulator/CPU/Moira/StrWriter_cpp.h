@@ -18,7 +18,7 @@ static const char *mnemonics[]
     "ble",      "bls",      "blt",      "bmi",      "bne",      "bpl",
     "bvc",      "bvs",      "bchg",     "bclr",     "bra",      "bset",
     "bsr",      "btst",     "chk",      "clr",      "cmp",     "cmpa",
-    "cmpi",      "cmpm",     "dbcc",    "dbcs",     "dbeq",     "dbge",
+    "cmpi",     "cmpm",     "dbcc",    "dbcs",      "dbeq",     "dbge",
     "dbgt",     "dbhi",     "dble",     "dbls",     "dblt",     "dbmi",
     "dbne",     "dbpl",     "dbvc",     "dbvs",     "dbra",     "dbt",
     "divs",     "divu",     "eor",      "eori",     "eori",     "eori",
