@@ -17,15 +17,14 @@ Moira::dasmRead(u32 &addr)
             U32_INC(addr, 2);
             return read16Dasm(addr) & 0xFF;
 
-        case Unsized:
-        case Word:
-
-            U32_INC(addr, 2);
-            return read16Dasm(addr);
-
         case Long:
 
             return dasmRead<Word>(addr) << 16 | dasmRead<Word>(addr) << 16;
+
+        default:
+
+            U32_INC(addr, 2);
+            return read16Dasm(addr);
     }
 }
 
