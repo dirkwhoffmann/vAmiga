@@ -19,7 +19,7 @@ Moira::dasmRead(u32 &addr)
 
         case Long:
 
-            return dasmRead<Word>(addr) << 16 | dasmRead<Word>(addr) << 16;
+            return dasmRead<Word>(addr) << 16 | dasmRead<Word>(addr);
 
         default:
 
