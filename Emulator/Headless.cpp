@@ -7,10 +7,14 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+
 #include "config.h"
 #include "Headless.h"
 #include "Script.h"
+
+#ifndef _WIN32
 #include <getopt.h>
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -82,6 +86,16 @@ Headless::main(int argc, char *argv[])
     }
 }
 
+#ifdef _WIN32
+
+void
+Headless::parseArguments(int argc, char *argv[])
+{
+    keys["arg1"] = util::makeAbsolutePath("default.ini");
+}
+
+#else
+
 void
 Headless::parseArguments(int argc, char *argv[])
 {
@@ -132,6 +146,8 @@ Headless::parseArguments(int argc, char *argv[])
     
     checkArguments();
 }
+
+#endif
 
 void
 Headless::checkArguments()
