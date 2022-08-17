@@ -7,10 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#define AVAILABILITY(cpu) \
-if constexpr (WILL_EXECUTE) willExecute(__func__, I, M, S, opcode); \
-assert(C >= (cpu)); \
-if constexpr (C == C68020) cp = 0;
+#define AVAILABILITY(core) \
+if constexpr ((core) == C68010) { static_assert(C != C68000); } \
+if constexpr ((core) == C68020) { static_assert(C != C68000 && C != C68010); } \
+if constexpr (C == C68020) cp = 0; \
+if constexpr (WILL_EXECUTE) willExecute(__func__, I, M, S, opcode);
 
 #define FINALIZE \
 if constexpr (DID_EXECUTE) didExecute(__func__, I, M, S, opcode);
@@ -4604,7 +4605,7 @@ Moira::execUnpkPd(u16 opcode)
     if (!readOp<C, M, Byte>(dy, &ea, &data)) return;
 
     u16 adj = (u16)readI<C, Word>();
-
+    
     u32 src = ((data << 4 & 0x0F00) | (data & 0x000F)) + adj;
 
     writeOp<C, M, Byte>(dx, src >> 8 & 0xFF);
@@ -4622,4 +4623,3 @@ Moira::execUnpkPd(u16 opcode)
 #undef AVAILABILITY
 #undef SUPERVISOR_MODE_ONLY
 #undef FINALIZE
-

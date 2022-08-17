@@ -44,11 +44,18 @@ protected:
     // The interrupt mode of this CPU
     IrqMode irqMode = IRQ_AUTO;
     
-    // The disassembler format
+    // The selected disassembler syntax
     DasmStyle style = DASM_MOIRA;
+
+    // The number format used by the disassembler
     DasmNumberFormat numberFormat { .prefix = "$", .radix = 16 };
+
+    // The letter case used by the disassembler
     DasmLetterCase letterCase = DASM_MIXED_CASE;
+
+    // Space between instruction names and arguments
     Tab tab{8};
+
     
     /* State flags
      *
@@ -165,7 +172,20 @@ protected:
 private:
     
     template <Core C> void createJumpTable();
-    
+
+
+    //
+    // Querying CPU properties
+    //
+
+public:
+
+    // Returns the memory address mask (address bus width)
+    template <Core C> u32 addrMask() const;
+
+    // Returns the cache register mask (accessible CACR bits)
+    u32 cacrMask() const;
+
     
     //
     // Running the CPU
@@ -334,10 +354,10 @@ public:
     void setDFC(u32 val) { reg.dfc = val & 0b111; }
     
     u32 getCACR() const { return reg.cacr; }
-    void setCACR(u32 val) { reg.cacr = val & 0b1111; }
+    void setCACR(u32 val) { reg.cacr = val & cacrMask(); }
     
     u32 getCAAR() const { return reg.caar; }
-    void setCAAR(u32 val) { reg.caar = val & 0b1111; }
+    void setCAAR(u32 val) { reg.caar = val; }
     
     void setSupervisorMode(bool value);
     void setMasterMode(bool value);

@@ -369,7 +369,8 @@ Moira::readMS(u32 addr)
         // Perform the read operation
         SYNC(2);
         if (F & POLLIPL) pollIpl();
-        result = (S == Byte) ? read8(addr & 0xFFFFFF) : read16(addr & 0xFFFFFF);
+        if constexpr (S == Byte) result = read8(addr & addrMask<C>());
+        if constexpr (S == Word) result = read16(addr & addrMask<C>());
         SYNC(2);
     }
     

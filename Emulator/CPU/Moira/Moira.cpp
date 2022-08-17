@@ -48,6 +48,8 @@ Moira::setModel(Model model)
         
         this->model = model;
         createJumpTable();
+
+        reg.cacr &= cacrMask();
         flags &= ~CPU_IS_LOOPING;
     }
 }
@@ -81,6 +83,31 @@ void
 Moira::setIndentation(int value)
 {
     tab = Tab{value};
+}
+
+template <Core C> u32
+Moira::addrMask() const
+{
+    if constexpr (C == C68020) {
+
+        if (model == M68020) return 0xFFFFFFFF;
+        if (model == M68030) return 0xFFFFFFFF;
+    }
+
+    return 0x00FFFFFF;
+}
+
+u32
+Moira::cacrMask() const
+{
+    switch (model) {
+
+        case M68020: case M68EC020: return 0x000F;
+        case M68030: case M68EC030: return 0xFF1F;
+
+        default:
+            return 0xFFFF;
+    }
 }
 
 void
@@ -127,7 +154,7 @@ Moira::reset()
     
     // Fill the prefetch queue
     SYNC(4);
-    queue.irc = read16OnReset(reg.pc & 0xFFFFFF);
+    queue.irc = read16OnReset(reg.pc & addrMask<C>());
     SYNC(2);
     prefetch<C>();
     
