@@ -358,7 +358,7 @@ Moira::bcd(u32 op1, u32 op2)
 {
     u64 tmp, result;
 
-    // Extract nibbles
+    // Extract digits
     u16 hi1 = op1 & 0xF0, lo1 = op1 & 0x0F;
     u16 hi2 = op2 & 0xF0, lo2 = op2 & 0x0F;
 
@@ -366,32 +366,44 @@ Moira::bcd(u32 op1, u32 op2)
             
         case ABCD:
         {
-            // Compute sum
+            // Add digits
             u16 lo = lo1 + lo2 + reg.sr.x;
             u16 hi = hi1 + hi2;
             result = tmp = hi + lo;
-            if (lo > 9) result += 6;
 
-            // Set X flag
-            reg.sr.x = (result & 0x3F0) > 0x90;
-            if (reg.sr.x) result += 0x60;
+            // Rectify first digit
+            if (lo > 9) {
+                result += 0x06;
+            }
+
+            // Rectify second digit
+            if ((result & 0x3F0) > 0x90) {
+                result += 0x60;
+                reg.sr.x = 1;
+            } else {
+                reg.sr.x = 0;
+            }
             break;
         }
         case SBCD:
         {
-            // Compute difference
-            u16 resLo = lo2 - lo1 - reg.sr.x;
-            u16 resHi = hi2 - hi1;
-            result = tmp = resHi + resLo;
-            int bcd = 0;
-            if (resLo & 0xf0) {
-                bcd = 6;
-                result -= 6;
-            }
-            if (((op2 - op1 - reg.sr.x) & 0x100) > 0xff) result -= 0x60;
+            // Subtract digits
+            u16 lo = lo2 - lo1 - reg.sr.x;
+            u16 hi = hi2 - hi1;
+            result = tmp = hi + lo;
 
-            // Set X flags X
-            reg.sr.x = ((op2 - op1 - bcd - reg.sr.x) & 0x300) > 0xff;
+            // Rectify first digit
+            if (lo & 0xF0) {
+                result -= 0x06;
+                reg.sr.x = ((op2 - op1 - 6 - reg.sr.x) & 0x300) > 0xFF;
+            } else {
+                reg.sr.x = ((op2 - op1 - reg.sr.x) & 0x300) > 0xFF;
+            }
+
+            // Rectify second digit
+            if (((op2 - op1 - reg.sr.x) & 0x100) > 0xFF) {
+                result -= 0x60;
+            }
             break;
         }
             
