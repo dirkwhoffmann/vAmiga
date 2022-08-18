@@ -356,7 +356,7 @@ Moira::div(u32 op1, u32 op2)
 template <Core C, Instr I, Size S> u32
 Moira::bcd(u32 op1, u32 op2)
 {
-    u64 result;
+    u64 tmp, result;
 
     // Extract nibbles
     u16 hi1 = op1 & 0xF0, lo1 = op1 & 0x0F;
@@ -366,25 +366,15 @@ Moira::bcd(u32 op1, u32 op2)
             
         case ABCD:
         {
-            printf("exec ABCD\n");
             // Compute sum
             u16 lo = lo1 + lo2 + reg.sr.x;
             u16 hi = hi1 + hi2;
-            u64 tmp = hi + lo;
-            result = tmp;
+            result = tmp = hi + lo;
             if (lo > 9) result += 6;
 
-            // Set flags
+            // Set X flag
             reg.sr.x = (result & 0x3F0) > 0x90;
-            reg.sr.c = reg.sr.x;
-            if (reg.sr.c) result += 0x60;
-            if (CLIP<Byte>(result)) reg.sr.z = 0;
-            reg.sr.n = NBIT<Byte>(result);
-            if constexpr (C != C68020) {
-                reg.sr.v = ((tmp & 0x80) == 0) && ((result & 0x80) == 0x80);
-            } else {
-                reg.sr.v = 0;
-            }
+            if (reg.sr.x) result += 0x60;
             break;
         }
         case SBCD:
@@ -392,8 +382,7 @@ Moira::bcd(u32 op1, u32 op2)
             // Compute difference
             u16 resLo = lo2 - lo1 - reg.sr.x;
             u16 resHi = hi2 - hi1;
-            u64 tmp = resHi + resLo;
-            result = tmp;
+            result = tmp = resHi + resLo;
             int bcd = 0;
             if (resLo & 0xf0) {
                 bcd = 6;
@@ -401,24 +390,25 @@ Moira::bcd(u32 op1, u32 op2)
             }
             if (((op2 - op1 - reg.sr.x) & 0x100) > 0xff) result -= 0x60;
 
-            // Set flags
+            // Set X flags X
             reg.sr.x = ((op2 - op1 - bcd - reg.sr.x) & 0x300) > 0xff;
-            reg.sr.c = reg.sr.x;
-            if (CLIP<Byte>(result)) reg.sr.z = 0;
-            reg.sr.n = NBIT<Byte>(result);
-            if constexpr (C != C68020) {
-                reg.sr.v = ((tmp & 0x80) == 0x80) && ((result & 0x80) == 0);
-            } else {
-                reg.sr.v = 0;
-            }
             break;
         }
             
         default:
             fatalError;
     }
-    
+
+    // Set other flags
+    reg.sr.c = reg.sr.x;
     reg.sr.n = NBIT<S>(result);
+    if (CLIP<Byte>(result)) reg.sr.z = 0;
+    if constexpr (C != C68020) {
+        reg.sr.v = ((tmp & 0x80) == 0x80) && ((result & 0x80) == 0);
+    } else {
+        reg.sr.v = 0;
+    }
+
     return (u32)result;
 }
 
