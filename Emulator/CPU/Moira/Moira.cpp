@@ -236,7 +236,7 @@ Moira::execute()
         
         reg.pc += 2;
         if (loop[queue.ird] == nullptr) {
-            printf("Callback missing\n");
+            printf("Callback missing [%d]\n", queue.ird);
             breakpointReached(reg.pc0);
         } else {
             (this->*loop[queue.ird])(queue.ird);

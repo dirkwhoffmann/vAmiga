@@ -588,7 +588,7 @@ Moira::execAndEaRg(u16 opcode)
     if (!readOp<C, M, S, STD_AE_FRAME>(src, &ea, &data)) return;
 
     u32 result = logic<C, I, S>(data, readD<S>(dst));
-    prefetch<C, POLLIPL>();
+    looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
 
     if constexpr (C == C68000) {
         if constexpr (S == Long) SYNC(isRegMode(M) || isImmMode(M) ? 4 : 2);
