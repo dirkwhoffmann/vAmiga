@@ -4078,70 +4078,76 @@ Moira::execRte(u16 opcode)
         }
         case C68010:
         {
-            u16 format = (u16)(readMS<C, MEM_DATA, Word>(reg.sp + 6) >> 12);
+            u16 format = u16(readMS<C, MEM_DATA, Word>(reg.sp + 6) >> 12);
 
-            if (format == 0) {
+            switch (format) {
 
-                newsr = (u16)readMS<C, MEM_DATA, Word>(reg.sp);
-                reg.sp += 2;
+                case 0b0000: // Short format
 
-                newpc = readMS<C, MEM_DATA, Long>(reg.sp);
-                reg.sp += 4;
+                    newsr = (u16)readMS<C, MEM_DATA, Word>(reg.sp);
+                    reg.sp += 2;
 
-                (void)readMS<C, MEM_DATA, Word>(reg.sp);
-                reg.sp += 2;
-                break;
+                    newpc = readMS<C, MEM_DATA, Long>(reg.sp);
+                    reg.sp += 4;
 
-            } else if (format == 8) {
+                    (void)readMS<C, MEM_DATA, Word>(reg.sp);
+                    reg.sp += 2;
+                    break;
 
-                newsr = (u16)readMS<C, MEM_DATA, Word>(reg.sp);
-                reg.sp += 2;
+                case 0b1000: // Long format
 
-                newpc = readMS<C, MEM_DATA, Long>(reg.sp);
-                reg.sp += 4;
+                    newsr = (u16)readMS<C, MEM_DATA, Word>(reg.sp);
+                    reg.sp += 2;
 
-                (void)readMS<C, MEM_DATA, Word>(reg.sp); // format word
-                reg.sp += 2;
-                (void)readMS<C, MEM_DATA, Word>(reg.sp); // special status word
-                reg.sp += 2;
-                (void)readMS<C, MEM_DATA, Long>(reg.sp); // fault address
-                reg.sp += 4;
-                (void)readMS<C, MEM_DATA, Word>(reg.sp); // unused/reserved
-                reg.sp += 2;
-                (void)readMS<C, MEM_DATA, Word>(reg.sp); // data output buffer
-                reg.sp += 2;
-                (void)readMS<C, MEM_DATA, Word>(reg.sp); // unused/reserved
-                reg.sp += 2;
-                (void)readMS<C, MEM_DATA, Word>(reg.sp); // data input buffer
-                reg.sp += 2;
-                (void)readMS<C, MEM_DATA, Word>(reg.sp); // unused/reserved
-                reg.sp += 2;
-                (void)readMS<C, MEM_DATA, Word>(reg.sp); // instruction input buffer
-                reg.sp += 2;
-                (void)readMS<C, MEM_DATA, Long>(reg.sp); // internal information, 16 words
-                reg.sp += 4;
-                (void)readMS<C, MEM_DATA, Long>(reg.sp); // internal information, 16 words
-                reg.sp += 4;
-                (void)readMS<C, MEM_DATA, Long>(reg.sp); // internal information, 16 words
-                reg.sp += 4;
-                (void)readMS<C, MEM_DATA, Long>(reg.sp); // internal information, 16 words
-                reg.sp += 4;
-                (void)readMS<C, MEM_DATA, Long>(reg.sp); // internal information, 16 words
-                reg.sp += 4;
-                (void)readMS<C, MEM_DATA, Long>(reg.sp); // internal information, 16 words
-                reg.sp += 4;
-                (void)readMS<C, MEM_DATA, Long>(reg.sp); // internal information, 16 words
-                reg.sp += 4;
-                (void)readMS<C, MEM_DATA, Long>(reg.sp); // internal information, 16 words
-                reg.sp += 4;
+                    newpc = readMS<C, MEM_DATA, Long>(reg.sp);
+                    reg.sp += 4;
 
-            } else {
+                    (void)readMS<C, MEM_DATA, Word>(reg.sp); // format word
+                    reg.sp += 2;
+                    (void)readMS<C, MEM_DATA, Word>(reg.sp); // special status word
+                    reg.sp += 2;
+                    (void)readMS<C, MEM_DATA, Long>(reg.sp); // fault address
+                    reg.sp += 4;
+                    (void)readMS<C, MEM_DATA, Word>(reg.sp); // unused/reserved
+                    reg.sp += 2;
+                    (void)readMS<C, MEM_DATA, Word>(reg.sp); // data output buffer
+                    reg.sp += 2;
+                    (void)readMS<C, MEM_DATA, Word>(reg.sp); // unused/reserved
+                    reg.sp += 2;
+                    (void)readMS<C, MEM_DATA, Word>(reg.sp); // data input buffer
+                    reg.sp += 2;
+                    (void)readMS<C, MEM_DATA, Word>(reg.sp); // unused/reserved
+                    reg.sp += 2;
+                    (void)readMS<C, MEM_DATA, Word>(reg.sp); // instruction input buffer
+                    reg.sp += 2;
+                    (void)readMS<C, MEM_DATA, Long>(reg.sp); // internal information, 16 words
+                    reg.sp += 4;
+                    (void)readMS<C, MEM_DATA, Long>(reg.sp); // internal information, 16 words
+                    reg.sp += 4;
+                    (void)readMS<C, MEM_DATA, Long>(reg.sp); // internal information, 16 words
+                    reg.sp += 4;
+                    (void)readMS<C, MEM_DATA, Long>(reg.sp); // internal information, 16 words
+                    reg.sp += 4;
+                    (void)readMS<C, MEM_DATA, Long>(reg.sp); // internal information, 16 words
+                    reg.sp += 4;
+                    (void)readMS<C, MEM_DATA, Long>(reg.sp); // internal information, 16 words
+                    reg.sp += 4;
+                    (void)readMS<C, MEM_DATA, Long>(reg.sp); // internal information, 16 words
+                    reg.sp += 4;
+                    (void)readMS<C, MEM_DATA, Long>(reg.sp); // internal information, 16 words
+                    reg.sp += 4;
+                    break;
 
-                execException(EXC_FORMAT_ERROR);
-                CYCLES_68010(4)
-                return;
+                default: // Format error
+
+                    reg.sr.n = format & 0b1000;
+                    reg.sr.z = 0;
+                    reg.sr.v = 0;
+
+                    execException(EXC_FORMAT_ERROR);
+                    CYCLES_68010(4)
+                    return;
             }
-
             break;
         }
         case C68020:
