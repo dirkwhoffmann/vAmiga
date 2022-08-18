@@ -1100,9 +1100,10 @@ Moira::execBitFieldEa(u16 opcode)
         ea--;
     }
 
-    // Create the bit masks
-    u32 mask = u32(0xFFFFFFFF00000000 >> width) >> offset;
-    u8 mask8 = u8(0xFFFFFFFF00000000 >> width);
+    // Create bit masks
+    u64 baseMask = (0xFFFFFFFF00000000 << (32 - width)) >> offset;
+    auto mask = u32(baseMask >> 32);
+    auto mask8 = u8(baseMask >> 24);
 
     u32 data = readM<C, M, S>(ea);
 
