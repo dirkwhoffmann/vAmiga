@@ -356,51 +356,61 @@ Moira::div(u32 op1, u32 op2)
 template <Core C, Instr I, Size S> u32
 Moira::bcd(u32 op1, u32 op2)
 {
-    u64 result, tmpResult;
-    
+    u64 result;
+
+    // Extract nibbles
+    u16 hi1 = op1 & 0xF0, lo1 = op1 & 0x0F;
+    u16 hi2 = op2 & 0xF0, lo2 = op2 & 0x0F;
+
     switch (I) {
             
         case ABCD:
         {
-            // Extract nibbles
-            u16 op1_hi = op1 & 0xF0, op1_lo = op1 & 0x0F;
-            u16 op2_hi = op2 & 0xF0, op2_lo = op2 & 0x0F;
-            
-            // From portable68000
-            u16 resLo = op1_lo + op2_lo + reg.sr.x;
-            u16 resHi = op1_hi + op2_hi;
-            
-            result = tmpResult = resHi + resLo;
-            if (resLo > 9) result += 6;
-            reg.sr.x = reg.sr.c = (result & 0x3F0) > 0x90;
+            printf("exec ABCD\n");
+            // Compute sum
+            u16 lo = lo1 + lo2 + reg.sr.x;
+            u16 hi = hi1 + hi2;
+            u64 tmp = hi + lo;
+            result = tmp;
+            if (lo > 9) result += 6;
+
+            // Set flags
+            reg.sr.x = (result & 0x3F0) > 0x90;
+            reg.sr.c = reg.sr.x;
             if (reg.sr.c) result += 0x60;
             if (CLIP<Byte>(result)) reg.sr.z = 0;
             reg.sr.n = NBIT<Byte>(result);
-            reg.sr.v = ((tmpResult & 0x80) == 0) && ((result & 0x80) == 0x80);
+            if constexpr (C != C68020) {
+                reg.sr.v = ((tmp & 0x80) == 0) && ((result & 0x80) == 0x80);
+            } else {
+                reg.sr.v = 0;
+            }
             break;
         }
         case SBCD:
         {
-            // Extract nibbles
-            u16 op1_hi = op1 & 0xF0, op1_lo = op1 & 0x0F;
-            u16 op2_hi = op2 & 0xF0, op2_lo = op2 & 0x0F;
-            
-            // From portable68000
-            u16 resLo = op2_lo - op1_lo - reg.sr.x;
-            u16 resHi = op2_hi - op1_hi;
-            
-            result = tmpResult = resHi + resLo;
+            // Compute difference
+            u16 resLo = lo2 - lo1 - reg.sr.x;
+            u16 resHi = hi2 - hi1;
+            u64 tmp = resHi + resLo;
+            result = tmp;
             int bcd = 0;
             if (resLo & 0xf0) {
                 bcd = 6;
                 result -= 6;
             }
             if (((op2 - op1 - reg.sr.x) & 0x100) > 0xff) result -= 0x60;
-            reg.sr.c = reg.sr.x = ((op2 - op1 - bcd - reg.sr.x) & 0x300) > 0xff;
-            
+
+            // Set flags
+            reg.sr.x = ((op2 - op1 - bcd - reg.sr.x) & 0x300) > 0xff;
+            reg.sr.c = reg.sr.x;
             if (CLIP<Byte>(result)) reg.sr.z = 0;
             reg.sr.n = NBIT<Byte>(result);
-            reg.sr.v = ((tmpResult & 0x80) == 0x80) && ((result & 0x80) == 0);
+            if constexpr (C != C68020) {
+                reg.sr.v = ((tmp & 0x80) == 0x80) && ((result & 0x80) == 0);
+            } else {
+                reg.sr.v = 0;
+            }
             break;
         }
             
