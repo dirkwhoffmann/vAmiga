@@ -974,19 +974,18 @@ Moira::execBitFieldDn(u16 opcode)
 
     int dy     = _____________xxx (opcode);
     int dn     = _xxx____________ (ext);
-    int offset = _____xxxxx______ (ext);
+    int of     = _____xxxxx______ (ext);
     int doBit  = ____x___________ (ext);
-    int width  = ___________xxxxx (ext);
+    int wi     = ___________xxxxx (ext);
     int dwBit  = __________x_____ (ext);
 
-    // If Do or Dw is set, offset or width are taken from data registers
-    int rawoffset = offset;
-    if (doBit) rawoffset = reg.d[offset & 0b111];
-    if (doBit) offset = reg.d[offset & 0b111] & 0b11111;
-    if (dwBit) width = reg.d[width & 0b111];
+    // If do or dw is set, offset or width are taken from data registers
+    int rawOffset = doBit ? reg.d[of & 0b111] : of;
+    int rawWidth = dwBit ? reg.d[wi & 0b111] : wi;
 
-    // Map width to 32, 1 ... 31
-    width = ((width - 1) & 0b11111) + 1;
+    // Crop offset and map width to 32, 1 ... 31
+    int offset = rawOffset & 0b11111;
+    int width = ((rawWidth - 1) & 0b11111) + 1;
 
     // Create the bit mask
     u32 mask = std::rotr(u32(0xFFFFFFFF00000000 >> width), offset);
@@ -1022,25 +1021,8 @@ Moira::execBitFieldDn(u16 opcode)
 
         case BFFFO:
         {
-            u32 probe = u32(0x80000000 >> offset);
-
-            reg.sr.n = data & probe;
-            reg.sr.z = 1;
-            reg.sr.v = 0;
-            reg.sr.c = 0;
-
-            u32 result = rawoffset;
-
-            for(isize i = 0; i < width; i++, result++) {
-
-                if (data & probe) {
-
-                    reg.sr.z = 0;
-                    break;
-                }
-                probe = std::rotr(probe, 1);
-            }
-
+            data = std::rotl(data, offset);
+            result = bitfield<I>(data, rawOffset, width, mask);
             writeD(dn, result);
 
             //           00  10  20        00  10  20        00  10  20
