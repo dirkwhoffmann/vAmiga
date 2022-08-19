@@ -1464,12 +1464,14 @@ Moira::execChk(u16 opcode)
     SYNC_68000(6);
     SYNC_68010(4);
 
-    // TODO: SET N HERE AS IT IS NOT UNDEFINED
+    reg.sr.n = MIMIC_MUSASHI ? reg.sr.n : 0;
     setUndefinedFlags<C, I, S>(SEXT<S>(data), SEXT<S>(dy));
 
     if (SEXT<S>(dy) > SEXT<S>(data)) {
 
         SYNC(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 2);
+
+        reg.sr.n = NBIT<S>(dy);
         execException<C>(EXC_CHK);
 
         CYCLES_68000(40)
@@ -1481,6 +1483,8 @@ Moira::execChk(u16 opcode)
     if (SEXT<S>(dy) < 0) {
 
         SYNC(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 4);
+        
+        reg.sr.n = MIMIC_MUSASHI ? NBIT<S>(dy) : 1;
         execException<C>(EXC_CHK);
 
         CYCLES_68000(40)

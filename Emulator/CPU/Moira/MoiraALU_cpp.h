@@ -1002,7 +1002,6 @@ Moira::setUndefinedFlags(i32 arg1, i32 arg2, i32 arg3)
 
                     reg.sr.c = 0;
                     reg.sr.z = dst == 0 ? 1 : 0;
-                    reg.sr.n = dst < 0 ? 1 : 0;
                     reg.sr.v = 0;
                     break;
 
@@ -1011,7 +1010,6 @@ Moira::setUndefinedFlags(i32 arg1, i32 arg2, i32 arg3)
                     reg.sr.c = reg.sr.z = reg.sr.n = reg.sr.v = 0;
 
                     if (dst == 0) reg.sr.z = 1;
-                    reg.sr.n = dst < 0;
                     if (dst < 0 || dst > src) {
 
                         if constexpr (S == Word) {
