@@ -985,80 +985,141 @@ Moira::divluMusashi(u64 op1, u32 op2)
     return { u32(quotient), u32(remainder) };
 }
 
-void
-Moira::setChk2NV(i32 lower, i32 upper, i32 val)
+template <Core C, Instr I, Size S> void
+Moira::setUndefinedFlags(i32 arg1, i32 arg2, i32 arg3)
 {
-    reg.sr.n = reg.sr.v = 0;
+    switch (I) {
 
-    if (val == lower || val == upper) return;
+        case CHK:
+        {
+            i32 src = arg1;
+            i32 dst = arg2;
 
-    if (lower < 0 && upper >= 0) {
-        if (val < lower) {
-            reg.sr.n = 1;
-        }
-        if (val >= 0 && val < upper) {
-            reg.sr.n = 1;
-        }
-        if (val >= 0 && lower - val >= 0) {
-            reg.sr.v = 1;
-            reg.sr.n = 0;
-            if (val > upper) {
-                reg.sr.n = 1;
+            switch (C) {
+
+                case C68000:
+                case C68010:
+
+                    reg.sr.c = 0;
+                    reg.sr.z = dst == 0 ? 1 : 0;
+                    reg.sr.n = dst < 0 ? 1 : 0;
+                    reg.sr.v = 0;
+                    break;
+
+                case C68020:
+
+                    reg.sr.c = reg.sr.z = reg.sr.n = reg.sr.v = 0;
+
+                    if (dst == 0) reg.sr.z = 1;
+                    reg.sr.n = dst < 0;
+                    if (dst < 0 || dst > src) {
+
+                        if constexpr (S == Word) {
+                            int flgs = i16(dst) < 0;
+                            int flgo = i16(src) < 0;
+                            i16 val = i16(src) - i16(dst);
+                            int flgn = val < 0;
+                            reg.sr.v = (flgs ^ flgo) & (flgn ^ flgo);
+                        } else {
+                            int flgs = dst < 0;
+                            int flgo = src < 0;
+                            i32 val = src - dst;
+                            int flgn = val < 0;
+                            reg.sr.v = (flgs ^ flgo) & (flgn ^ flgo);
+                        }
+                        if (dst < 0) {
+                            reg.sr.c = dst > src || src >= 0;
+                        } else {
+                            reg.sr.c = src >= 0;
+                        }
+                    }
+                    break;
             }
+            break;
         }
-    } else if (lower >= 0 && upper < 0) {
-        if (val >= 0) {
-            reg.sr.n = 1;
+        case CHK2:
+        {
+            i32 lower = arg1;
+            i32 upper = arg2;
+            i32 value = arg3;
+
+            // Logic taken from UAE
+            reg.sr.n = reg.sr.v = 0;
+
+            if (value == lower || value == upper) return;
+
+            if (lower < 0 && upper >= 0) {
+                if (value < lower) {
+                    reg.sr.n = 1;
+                }
+                if (value >= 0 && value < upper) {
+                    reg.sr.n = 1;
+                }
+                if (value >= 0 && lower - value >= 0) {
+                    reg.sr.v = 1;
+                    reg.sr.n = 0;
+                    if (value > upper) {
+                        reg.sr.n = 1;
+                    }
+                }
+            } else if (lower >= 0 && upper < 0) {
+                if (value >= 0) {
+                    reg.sr.n = 1;
+                }
+                if (value > upper) {
+                    reg.sr.n = 1;
+                }
+                if (value > lower && upper - value >= 0) {
+                    reg.sr.v = 1;
+                    reg.sr.n = 0;
+                }
+            } else if (lower >= 0 && upper >= 0 && lower > upper) {
+                if (value > upper && value < lower) {
+                    reg.sr.n = 1;
+                }
+                if (value < 0 && lower - value < 0) {
+                    reg.sr.v = 1;
+                }
+                if (value < 0 && lower - value >= 0) {
+                    reg.sr.n = 1;
+                }
+            } else if (lower >= 0 && upper >= 0 && lower <= upper) {
+                if (value >= 0 && value < lower) {
+                    reg.sr.n = 1;
+                }
+                if (value > upper) {
+                    reg.sr.n = 1;
+                }
+                if (value < 0 && upper - value < 0) {
+                    reg.sr.n = 1;
+                    reg.sr.v = 1;
+                }
+            } else if (lower < 0 && upper < 0 && lower > upper) {
+                if (value >= 0) {
+                    reg.sr.n = 1;
+                }
+                if (value > upper && value < lower) {
+                    reg.sr.n = 1;
+                }
+                if (value >= 0 && value - lower < 0) {
+                    reg.sr.n = 0;
+                    reg.sr.v = 1;
+                }
+            } else if (lower < 0 && upper < 0 && lower <= upper) {
+                if (value < lower) {
+                    reg.sr.n = 1;
+                }
+                if (value < 0 && value > upper) {
+                    reg.sr.n = 1;
+                }
+                if (value >= 0 && value - lower < 0) {
+                    reg.sr.n = 1;
+                    reg.sr.v = 1;
+                }
+            }
+            break;
         }
-        if (val > upper) {
-            reg.sr.n = 1;
-        }
-        if (val > lower && upper - val >= 0) {
-            reg.sr.v = 1;
-            reg.sr.n = 0;
-        }
-    } else if (lower >= 0 && upper >= 0 && lower > upper) {
-        if (val > upper && val < lower) {
-            reg.sr.n = 1;
-        }
-        if (val < 0 && lower - val < 0) {
-            reg.sr.v = 1;
-        }
-        if (val < 0 && lower - val >= 0) {
-            reg.sr.n = 1;
-        }
-    } else if (lower >= 0 && upper >= 0 && lower <= upper) {
-        if (val >= 0 && val < lower) {
-            reg.sr.n = 1;
-        }
-        if (val > upper) {
-            reg.sr.n = 1;
-        }
-        if (val < 0 && upper - val < 0) {
-            reg.sr.n = 1;
-            reg.sr.v = 1;
-        }
-    } else if (lower < 0 && upper < 0 && lower > upper) {
-        if (val >= 0) {
-            reg.sr.n = 1;
-        }
-        if (val > upper && val < lower) {
-            reg.sr.n = 1;
-        }
-        if (val >= 0 && val - lower < 0) {
-            reg.sr.n = 0;
-            reg.sr.v = 1;
-        }
-    } else if (lower < 0 && upper < 0 && lower <= upper) {
-        if (val < lower) {
-            reg.sr.n = 1;
-        }
-        if (val < 0 && val > upper) {
-            reg.sr.n = 1;
-        }
-        if (val >= 0 && val - lower < 0) {
-            reg.sr.n = 1;
-            reg.sr.v = 1;
-        }
+        default:
+            fatalError;
     }
 }

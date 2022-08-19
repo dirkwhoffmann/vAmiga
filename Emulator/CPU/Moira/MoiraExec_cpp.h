@@ -1464,17 +1464,13 @@ Moira::execChk(u16 opcode)
     SYNC_68000(6);
     SYNC_68010(4);
 
-    reg.sr.z = ZERO<S>(dy);
-    reg.sr.v = 0;
-    reg.sr.c = 0;
-    reg.sr.n = MIMIC_MUSASHI ? reg.sr.n : 0;
+    // TODO: SET N HERE AS IT IS NOT UNDEFINED
+    setUndefinedFlags<C, I, S>(SEXT<S>(data), SEXT<S>(dy));
 
     if (SEXT<S>(dy) > SEXT<S>(data)) {
 
         SYNC(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 2);
-        reg.sr.n = NBIT<S>(dy);
         execException<C>(EXC_CHK);
-        // execTrapException(6);
 
         CYCLES_68000(40)
         CYCLES_68010(44)
@@ -1485,9 +1481,7 @@ Moira::execChk(u16 opcode)
     if (SEXT<S>(dy) < 0) {
 
         SYNC(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 4);
-        reg.sr.n = MIMIC_MUSASHI ? NBIT<S>(dy) : 1;
         execException<C>(EXC_CHK);
-        // execTrapException(6);
 
         CYCLES_68000(40)
         CYCLES_68010(44)
@@ -1542,7 +1536,7 @@ Moira::execChkCmp2(u16 opcode)
     reg.sr.z = compare == bound1 || compare == bound2;
 
     // Emulate undefined behaviour for N and V
-    setChk2NV(bound1, bound2, compare);
+    setUndefinedFlags<C, I, S>(bound1, bound2, compare);
 
     if ((ext & 0x800) && reg.sr.c) {
 
