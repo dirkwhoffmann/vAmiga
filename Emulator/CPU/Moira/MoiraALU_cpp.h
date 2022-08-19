@@ -984,3 +984,81 @@ Moira::divluMusashi(u64 op1, u32 op2)
     
     return { u32(quotient), u32(remainder) };
 }
+
+void
+Moira::setChk2NV(i32 lower, i32 upper, i32 val)
+{
+    reg.sr.n = reg.sr.v = 0;
+
+    if (val == lower || val == upper) return;
+
+    if (lower < 0 && upper >= 0) {
+        if (val < lower) {
+            reg.sr.n = 1;
+        }
+        if (val >= 0 && val < upper) {
+            reg.sr.n = 1;
+        }
+        if (val >= 0 && lower - val >= 0) {
+            reg.sr.v = 1;
+            reg.sr.n = 0;
+            if (val > upper) {
+                reg.sr.n = 1;
+            }
+        }
+    } else if (lower >= 0 && upper < 0) {
+        if (val >= 0) {
+            reg.sr.n = 1;
+        }
+        if (val > upper) {
+            reg.sr.n = 1;
+        }
+        if (val > lower && upper - val >= 0) {
+            reg.sr.v = 1;
+            reg.sr.n = 0;
+        }
+    } else if (lower >= 0 && upper >= 0 && lower > upper) {
+        if (val > upper && val < lower) {
+            reg.sr.n = 1;
+        }
+        if (val < 0 && lower - val < 0) {
+            reg.sr.v = 1;
+        }
+        if (val < 0 && lower - val >= 0) {
+            reg.sr.n = 1;
+        }
+    } else if (lower >= 0 && upper >= 0 && lower <= upper) {
+        if (val >= 0 && val < lower) {
+            reg.sr.n = 1;
+        }
+        if (val > upper) {
+            reg.sr.n = 1;
+        }
+        if (val < 0 && upper - val < 0) {
+            reg.sr.n = 1;
+            reg.sr.v = 1;
+        }
+    } else if (lower < 0 && upper < 0 && lower > upper) {
+        if (val >= 0) {
+            reg.sr.n = 1;
+        }
+        if (val > upper && val < lower) {
+            reg.sr.n = 1;
+        }
+        if (val >= 0 && val - lower < 0) {
+            reg.sr.n = 0;
+            reg.sr.v = 1;
+        }
+    } else if (lower < 0 && upper < 0 && lower <= upper) {
+        if (val < lower) {
+            reg.sr.n = 1;
+        }
+        if (val < 0 && val > upper) {
+            reg.sr.n = 1;
+        }
+        if (val >= 0 && val - lower < 0) {
+            reg.sr.n = 1;
+            reg.sr.v = 1;
+        }
+    }
+}

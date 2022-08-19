@@ -47,3 +47,5 @@ template <Core C, Instr I> u32 divMusashi(u32 op1, u32 op2);
 template <Size S> std::pair<u32,u32> divlsMusashi(u64 op1, u32 op2);
 template <Size S> std::pair<u32,u32> divluMusashi(u64 op1, u32 op2);
 
+// Misc
+void setChk2NV(i32 lower, i32 upper, i32 val);

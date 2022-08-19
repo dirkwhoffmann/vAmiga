@@ -1529,25 +1529,44 @@ Moira::execChkCmp2(u16 opcode)
     if (!readOp<C, M, S>(src, &ea, &data1)) return;
     data2 = readM<C, M, S>(ea + S);
 
-    auto bound1 = ((M == 9 || M == 10) && S == Byte) ? (i32)data1 : SEXT<S>(data1);
-    auto bound2 = ((M == 9 || M == 10) && S == Byte) ? (i32)data2 : SEXT<S>(data2);
+    if (dst < 8) {
 
-    i32 compare = readR<S>(dst);
-    if (dst < 8) compare = SEXT<S>(compare);
+        i32 bound1 = SEXT<S>(data1);
+        i32 bound2 = SEXT<S>(data2);
+        i32 compare = SEXT<S>(readR<S>(dst));
 
-    reg.sr.z = compare == bound1 || compare == bound2;
+        if (bound1 <= bound2) {
+            reg.sr.c = compare < bound1 || compare > bound2;
+        } else {
+            reg.sr.c = compare < bound1 && compare > bound2;
+        }
+        reg.sr.z = compare == bound1 || compare == bound2;
 
-    // THIS MIMICS MUSASHI AND IS LIKELY WRONG
-    if (bound1 < bound2) {
-        reg.sr.c = compare < bound1 || compare > bound2;
+        // Emulate undefined behaviour for N and V
+        setChk2NV(bound1, bound2, compare);
+
     } else {
-        reg.sr.c = compare > bound2 || compare < bound1;
+
+        i32 bound1 = SEXT<S>(data1);
+        i32 bound2 = SEXT<S>(data2);
+        i32 compare = readR(dst);
+
+        if (dst < 8) compare = SEXT<S>(compare);
+
+        if (bound1 <= bound2) {
+            reg.sr.c = compare < bound1 || compare > bound2;
+        } else {
+            reg.sr.c = compare < bound1 && compare > bound2;
+        }
+        reg.sr.z = compare == bound1 || compare == bound2;
+
+        // Emulate undefined behaviour for N and V
+        setChk2NV(bound1, bound2, compare);
     }
 
     if ((ext & 0x800) && reg.sr.c) {
 
         execException<C>(EXC_CHK);
-        // execTrapException<C>(6);
         CYCLES_68020(40)
 
     } else {
