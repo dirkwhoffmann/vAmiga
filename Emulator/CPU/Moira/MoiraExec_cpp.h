@@ -1186,7 +1186,9 @@ Moira::execBitFieldEa(u16 opcode)
         case BFINS:
         {
             insert = readD(dn);
+
             insert = u32(insert << (32 - width));
+            u8 insert8 = u8(insert);
 
             reg.sr.n = NBIT<S>(insert);
             reg.sr.z = ZERO<S>(insert);
@@ -1197,10 +1199,11 @@ Moira::execBitFieldEa(u16 opcode)
 
             if((width + offset) > 32) {
 
+                insert8 = u8(readD(dn) << (8 - ((width + offset) - 32)));
                 data = readM<C, M, Byte>(ea + 4);
-                reg.sr.z &= ZERO<Byte>(data & mask8);
+                reg.sr.z &= ZERO<Byte>(insert8);
 
-                writeM<C, M, Byte>(ea + 4, (data & ~mask8) | (insert & 0xFF));
+                writeM<C, M, Byte>(ea + 4, (data & ~mask8) | insert8);
             }
 
             //           00  10  20        00  10  20        00  10  20
