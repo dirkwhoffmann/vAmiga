@@ -1186,9 +1186,7 @@ Moira::execBitFieldEa(u16 opcode)
         case BFINS:
         {
             insert = readD(dn);
-
             insert = u32(insert << (32 - width));
-            u8 insert8 = u8(insert);
 
             reg.sr.n = NBIT<S>(insert);
             reg.sr.z = ZERO<S>(insert);
@@ -1199,11 +1197,10 @@ Moira::execBitFieldEa(u16 opcode)
 
             if((width + offset) > 32) {
 
-                insert8 = u8(readD(dn) << (8 - ((width + offset) - 32)));
                 data = readM<C, M, Byte>(ea + 4);
-                reg.sr.z &= ZERO<Byte>(insert8);
-
+                u8 insert8 = u8(readD(dn) << (8 - ((width + offset) - 32)));
                 writeM<C, M, Byte>(ea + 4, (data & ~mask8) | insert8);
+                reg.sr.z &= ZERO<Byte>(insert8);
             }
 
             //           00  10  20        00  10  20        00  10  20
@@ -1406,10 +1403,14 @@ Moira::execCas2(u16 opcode)
     auto compare1 = readD(dc1);
     auto compare2 = readD(dc2);
 
+    printf("  CAS2: ea1 = %x ea2 = %x data1 = %x data2 = %x (%x,%x)\n", ea1, ea2, data1, data2, compare1, compare2);
+
     // Set flags
     cmp<C, S>(CLIP<S>(compare1), data1);
 
     if (reg.sr.z) {
+
+        printf("  CAS2: reg.sr.z\n");
 
         // Set flags
         cmp<C, S>(CLIP<S>(compare2), data2);
@@ -1424,6 +1425,10 @@ Moira::execCas2(u16 opcode)
         }
     }
 
+    writeD<S>(dc1, data1);
+    writeD<S>(dc2, data2);
+
+    /*
     if (rn1 & 0x8) {
         writeD(dc1, SEXT<S>(data1));
     } else {
@@ -1434,6 +1439,7 @@ Moira::execCas2(u16 opcode)
     } else {
         writeD<S>(dc2, data2);
     }
+    */
 
     prefetch<C, POLLIPL>();
 
