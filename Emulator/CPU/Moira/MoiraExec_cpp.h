@@ -980,6 +980,8 @@ Moira::execBitFieldDn(u16 opcode)
     int dwBit  = __________x_____ (ext);
 
     // If Do or Dw is set, offset or width are taken from data registers
+    int rawoffset = offset;
+    if (doBit) rawoffset = reg.d[offset & 0b111];
     if (doBit) offset = reg.d[offset & 0b111] & 0b11111;
     if (dwBit) width = reg.d[width & 0b111];
 
@@ -1019,16 +1021,33 @@ Moira::execBitFieldDn(u16 opcode)
             break;
 
         case BFFFO:
+        {
+            u32 probe = u32(0x80000000 >> offset);
 
-            data = std::rotl(data, offset);
-            result = bitfield<I>(data, offset, width, mask);
+            reg.sr.n = data & probe;
+            reg.sr.z = 1;
+            reg.sr.v = 0;
+            reg.sr.c = 0;
+
+            u32 result = rawoffset;
+
+            for(isize i = 0; i < width; i++, result++) {
+
+                if (data & probe) {
+
+                    reg.sr.z = 0;
+                    break;
+                }
+                probe = std::rotr(probe, 1);
+            }
+
             writeD(dn, result);
 
             //           00  10  20        00  10  20        00  10  20
             //           .b  .b  .b        .w  .w  .w        .l  .l  .l
             CYCLES_DN   ( 0,  0,  0,        0,  0,  0,        0,  0, 18)
             break;
-
+        }
         case BFINS:
 
             insert = readD(dn);
@@ -1164,6 +1183,7 @@ Moira::execBitFieldEa(u16 opcode)
             data = CLIP<Long>(data << offset);
 
             if((offset + width) > 32) {
+
                 data |= (readM<C, M, Byte>(ea + 4) << offset) >> 8;
             }
 
