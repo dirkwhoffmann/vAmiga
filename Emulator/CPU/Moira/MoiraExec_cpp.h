@@ -1531,45 +1531,18 @@ Moira::execChkCmp2(u16 opcode)
 
     i32 bound1 = SEXT<S>(data1);
     i32 bound2 = SEXT<S>(data2);
-    i32 compare = readR(dst);
+    i32 compare = dst < 8 ? SEXT<S>(readR(dst)) : readR(dst);
 
-    if (dst < 8) compare = SEXT<S>(readR(dst));
-    if (dst < 8) {
-
-        /*
-        i32 bound1 = SEXT<S>(data1);
-        i32 bound2 = SEXT<S>(data2);
-        i32 compare = SEXT<S>(readR(dst));
-        */
-        if (bound1 <= bound2) {
-            reg.sr.c = compare < bound1 || compare > bound2;
-        } else {
-            reg.sr.c = compare < bound1 && compare > bound2;
-        }
-        reg.sr.z = compare == bound1 || compare == bound2;
-
-        // Emulate undefined behaviour for N and V
-        setChk2NV(bound1, bound2, compare);
-
+    // Set flags
+    if (bound1 <= bound2) {
+        reg.sr.c = compare < bound1 || compare > bound2;
     } else {
-
-        /*
-        i32 bound1 = SEXT<S>(data1);
-        i32 bound2 = SEXT<S>(data2);
-        i32 compare = readR(dst);
-        */
-        // if (dst < 8) compare = SEXT<S>(compare);
-
-        if (bound1 <= bound2) {
-            reg.sr.c = compare < bound1 || compare > bound2;
-        } else {
-            reg.sr.c = compare < bound1 && compare > bound2;
-        }
-        reg.sr.z = compare == bound1 || compare == bound2;
-
-        // Emulate undefined behaviour for N and V
-        setChk2NV(bound1, bound2, compare);
+        reg.sr.c = compare < bound1 && compare > bound2;
     }
+    reg.sr.z = compare == bound1 || compare == bound2;
+
+    // Emulate undefined behaviour for N and V
+    setChk2NV(bound1, bound2, compare);
 
     if ((ext & 0x800) && reg.sr.c) {
 
