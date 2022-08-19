@@ -1529,12 +1529,18 @@ Moira::execChkCmp2(u16 opcode)
     if (!readOp<C, M, S>(src, &ea, &data1)) return;
     data2 = readM<C, M, S>(ea + S);
 
+    i32 bound1 = SEXT<S>(data1);
+    i32 bound2 = SEXT<S>(data2);
+    i32 compare = readR(dst);
+
+    if (dst < 8) compare = SEXT<S>(readR(dst));
     if (dst < 8) {
 
+        /*
         i32 bound1 = SEXT<S>(data1);
         i32 bound2 = SEXT<S>(data2);
-        i32 compare = SEXT<S>(readR<S>(dst));
-
+        i32 compare = SEXT<S>(readR(dst));
+        */
         if (bound1 <= bound2) {
             reg.sr.c = compare < bound1 || compare > bound2;
         } else {
@@ -1547,11 +1553,12 @@ Moira::execChkCmp2(u16 opcode)
 
     } else {
 
+        /*
         i32 bound1 = SEXT<S>(data1);
         i32 bound2 = SEXT<S>(data2);
         i32 compare = readR(dst);
-
-        if (dst < 8) compare = SEXT<S>(compare);
+        */
+        // if (dst < 8) compare = SEXT<S>(compare);
 
         if (bound1 <= bound2) {
             reg.sr.c = compare < bound1 || compare > bound2;
