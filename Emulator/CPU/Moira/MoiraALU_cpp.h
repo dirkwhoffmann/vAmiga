@@ -1003,6 +1003,71 @@ Moira::divluMusashi(u64 op1, u32 op2)
     return { u32(quotient), u32(remainder) };
 }
 
+template <Size S> std::pair<u32,u32>
+Moira::divlsMoira(i64 a, u32 src)
+{
+    i64 quotient, remainder;
+
+    // TODO: CLEAN THIS UP
+    if (S == Word) { a = (i64)(i32)a; }
+
+    if ((u64)a == 0x8000000000000000UL && (i32)src == -1) {
+
+        assert(S == Word);
+        reg.sr.v = 1;
+        return { u32(0), u32(0) };
+
+    } else {
+
+        remainder = a % (i64)(i32)src;
+        quotient = a / (i64)(i32)src;
+
+        if ((quotient & u64(0xffffffff80000000)) != 0
+            && (quotient & u64(0xffffffff80000000)) != u64(0xffffffff80000000)) {
+
+            assert(S != Word);
+            reg.sr.v = 1;
+            return { u32(0), u32(0) };
+
+        } else {
+
+            if (((i32)remainder < 0) != ((i64)a < 0)) {
+                remainder = -remainder;
+            }
+
+            reg.sr.v = 0;
+            reg.sr.c = 0;
+            reg.sr.z = (i32)quotient == 0;
+            reg.sr.n = (i32)quotient < 0;
+
+            return { u32(quotient), u32(remainder) };
+        }
+    }
+}
+
+template <Size S> std::pair<u32,u32>
+Moira::divluMoira(u64 a, u32 src)
+{
+    u64 quotient, remainder;
+
+    remainder = a % (u64)src;
+    quotient = a / (u64)src;
+    if (quotient > 0xffffffffu) {
+
+        reg.sr.v = 1;
+        return { u32(0), u32(0) };
+
+    } else {
+
+        reg.sr.v = 0;
+        reg.sr.c = 0;
+        reg.sr.z = (i32)quotient == 0;
+        reg.sr.n = (i32)quotient < 0;
+
+        return { u32(quotient), u32(remainder) };
+    }
+}
+
 template <Core C, Instr I, Size S> void
 Moira::setUndefinedFlags(i32 arg1, i32 arg2, i32 arg3)
 {
@@ -1191,6 +1256,54 @@ Moira::setUndefinedDIVS(i32 dividend, i16 divisor)
 }
 
 template <Core C, Size S> void
+Moira::setUndefinedDIVUL(i64 a, i32 divisor)
+{
+    i32 a32 = (i32)a;
+    bool neg32 = a32 < 0;
+    
+    reg.sr.n = neg32;
+    reg.sr.z = a32 == 0;
+    reg.sr.c = 0;
+}
+
+template <Core C, Size S> void
+Moira::setUndefinedDIVSL(i64 a, i32 divisor)
+{
+    i32 a32 = (i32)a;
+    bool neg64 = a < 0;
+    bool neg32 = a32 < 0;
+
+    if constexpr (S == Long) {
+
+        i32 ahigh = a >> 32;
+        if (ahigh == 0) {
+            reg.sr.z = 1;
+            reg.sr.n = 0;
+        } else if (ahigh < 0 && divisor < 0 && ahigh > divisor) {
+            reg.sr.z = 0;
+            reg.sr.n = 0;
+        } else {
+            if (a32 == 0) {
+                reg.sr.z = 1;
+                reg.sr.n = 0;
+            } else {
+                reg.sr.z = 0;
+                reg.sr.n = neg32 ^ neg64;
+            }
+        }
+    } else {
+        if (a32 == 0) {
+            reg.sr.z = 1;
+            reg.sr.n = 0;
+        } else {
+            reg.sr.n = neg32;
+            reg.sr.z = 0;
+        }
+    }
+    reg.sr.c = 0;
+}
+
+template <Core C, Size S> void
 Moira::setDivZeroDIVU(u32 dividend)
 {
     switch (C) {
@@ -1238,4 +1351,20 @@ Moira::setDivZeroDIVS(u32 dividend)
             reg.sr.z = 1;
             break;
     }
+}
+
+template <Core C, Size S> void
+Moira::setDivZeroDIVUL(i64 dividend)
+{
+    i32 a32 = (i32)dividend;
+    bool neg32 = a32 < 0;
+    reg.sr.n = neg32;
+    reg.sr.z = a32 == 0;
+}
+
+template <Core C, Size S> void
+Moira::setDivZeroDIVSL(i64 dividend)
+{
+    reg.sr.n = 0;
+    reg.sr.z = 1;
 }

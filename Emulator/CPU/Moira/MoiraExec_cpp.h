@@ -3740,9 +3740,107 @@ Moira::execDivl(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execDivlMoira(u16 opcode)
 {
-    // TODO
+    u64 dividend;
+    u32 ea, divisor;
+    u16 ext = (u16)readI<C, Word>();
 
-    execDivlMusashi<C, I, M, S>(opcode);
+    int src = _____________xxx(opcode);
+    int dh  = _____________xxx(ext);
+    int dl  = _xxx____________(ext);
+
+    if (!readOp<C, M, S>(src, &ea, &divisor)) return;
+
+    if (ext & 0x400) {
+        dividend = (u64)readD(dh) << 32 | readD(dl);
+    } else {
+        dividend = readD(dl);
+    }
+
+    if (divisor == 0) {
+
+        if (ext & 0x800) {
+
+            reg.sr.c = 0;
+            setDivZeroDIVSL<C, S>(i64(dividend));
+
+        } else {
+
+            reg.sr.v = 1;
+            reg.sr.c = 0;
+            setDivZeroDIVUL<C, S>(i64(dividend));
+        }
+
+        execException<C>(EXC_DIVIDE_BY_ZERO);
+        CYCLES_68020(38);
+        return;
+    }
+
+    prefetch<C, POLLIPL>();
+
+    switch (____xx__________(ext)) {
+
+        case 0b00:
+        {
+            auto result = divluMoira<Word>(dividend, divisor);
+
+            writeD(dh, result.second);
+            writeD(dl, result.first);
+            break;
+        }
+        case 0b01:
+        {
+            auto result = divluMoira<Long>(dividend, divisor);
+
+            if(!reg.sr.v) {
+
+                writeD(dh, result.second);
+                writeD(dl, result.first);
+
+            } else {
+
+                setUndefinedDIVUL<C, S>(dividend, divisor);
+            }
+            break;
+        }
+        case 0b10:
+        {
+            // auto result = divlsMusashi<Word>(dividend, divisor);
+            auto result = divlsMoira<Word>(dividend, divisor);
+
+            writeD(dh, result.second);
+            writeD(dl, result.first);
+            break;
+        }
+        case 0b11:
+        {
+            auto result = divlsMoira<Long>(dividend, divisor);
+
+            if(!reg.sr.v) {
+
+                writeD(dh, result.second);
+                writeD(dl, result.first);
+
+            } else {
+
+                setUndefinedDIVSL<C, S>(dividend, divisor);
+            }
+            break;
+        }
+    }
+
+    //           00  10  20        00  10  20        00  10  20
+    //           .b  .b  .b        .w  .w  .w        .l  .l  .l
+    CYCLES_DN   ( 0,  0,  0,        0,  0,  0,        0,  0, 84)
+    CYCLES_AI   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
+    CYCLES_PI   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
+    CYCLES_PD   ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
+    CYCLES_DI   ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
+    CYCLES_IX   ( 0,  0,  0,        0,  0,  0,        0,  0, 91)
+    CYCLES_AW   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
+    CYCLES_AL   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
+    CYCLES_DIPC ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
+    CYCLES_IXPC ( 0,  0,  0,        0,  0,  0,        0,  0, 91)
+    CYCLES_IM   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
 }
 
 template <Core C, Instr I, Mode M, Size S> void

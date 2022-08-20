@@ -236,7 +236,7 @@ Moira::execException(ExceptionType exc, int nr)
         case EXC_DIVIDE_BY_ZERO:
         case EXC_CHK:
         case EXC_TRAPV:
-            
+
             // Write stack frame
             C == C68020 ?
             writeStackFrame0010<C>(status, reg.pc, reg.pc0, vector) :
