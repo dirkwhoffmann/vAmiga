@@ -3438,9 +3438,16 @@ Moira::execMul(u16 opcode)
 
     if constexpr (MIMIC_MUSASHI) {
         execMulMusashi<C, I, M, S>(opcode);
-        return;
+    } else {
+        execMulMoira<C, I, M, S>(opcode);
     }
 
+    FINALIZE;
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execMulMoira(u16 opcode)
+{
     u32 ea, data, result;
 
     int src = _____________xxx(opcode);
@@ -3458,20 +3465,8 @@ Moira::execMul(u16 opcode)
 }
 
 template <Core C, Instr I, Mode M, Size S> void
-Moira::execMull(u16 opcode)
-{
-    AVAILABILITY(C68020)
-
-    execMullMusashi<C, I, M, S>(opcode);
-
-    FINALIZE
-}
-
-template <Core C, Instr I, Mode M, Size S> void
 Moira::execMulMusashi(u16 opcode)
 {
-    AVAILABILITY(C68000)
-
     u32 ea, data, result;
 
     int src = _____________xxx(opcode);
@@ -3523,10 +3518,30 @@ Moira::execMulMusashi(u16 opcode)
 }
 
 template <Core C, Instr I, Mode M, Size S> void
-Moira::execMullMusashi(u16 opcode)
+Moira::execMull(u16 opcode)
 {
     AVAILABILITY(C68020)
 
+    if constexpr (MIMIC_MUSASHI) {
+        execMullMusashi<C, I, M, S>(opcode);
+    } else {
+        execMullMoira<C, I, M, S>(opcode);
+    }
+
+    FINALIZE;
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execMullMoira(u16 opcode)
+{
+    // TODO
+
+    execMullMusashi<C, I, M, S>(opcode);
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execMullMusashi(u16 opcode)
+{
     u64 result;
     u32 ea, data;
     u16 ext = (u16)readI<C, Word>();
@@ -3589,11 +3604,17 @@ Moira::execDiv(u16 opcode)
     AVAILABILITY(C68000)
 
     if constexpr (MIMIC_MUSASHI) {
-
         execDivMusashi<C, I, M, S>(opcode);
-        return;
+    } else {
+        execDivMoira<C, I, M, S>(opcode);
     }
 
+    FINALIZE
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execDivMoira(u16 opcode)
+{
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
@@ -3618,8 +3639,6 @@ Moira::execDiv(u16 opcode)
 
         SYNC(8);
         execException<C>(EXC_DIVIDE_BY_ZERO);
-        // execTrapException(5);
-        FINALIZE
         return;
     }
 
@@ -3629,25 +3648,11 @@ Moira::execDiv(u16 opcode)
 
     [[maybe_unused]] auto cycles = cyclesDiv<C, I>(dividend, (u16)divisor) - 4;
     SYNC(cycles);
-
-    FINALIZE
-}
-
-template <Core C, Instr I, Mode M, Size S> void
-Moira::execDivl(u16 opcode)
-{
-    AVAILABILITY(C68020)
-
-    execDivlMusashi<C, I, M, S>(opcode);
-
-    FINALIZE
 }
 
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execDivMusashi(u16 opcode)
 {
-    AVAILABILITY(C68000)
-
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
@@ -3718,10 +3723,30 @@ Moira::execDivMusashi(u16 opcode)
 }
 
 template <Core C, Instr I, Mode M, Size S> void
-Moira::execDivlMusashi(u16 opcode)
+Moira::execDivl(u16 opcode)
 {
     AVAILABILITY(C68020)
 
+    if constexpr (MIMIC_MUSASHI) {
+        execDivlMusashi<C, I, M, S>(opcode);
+    } else {
+        execDivlMoira<C, I, M, S>(opcode);
+    }
+
+    FINALIZE
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execDivlMoira(u16 opcode)
+{
+    // TODO
+
+    execDivlMusashi<C, I, M, S>(opcode);
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execDivlMusashi(u16 opcode)
+{
     u64 dividend;
     u32 ea, divisor;
     u16 ext = (u16)readI<C, Word>();
@@ -3735,10 +3760,7 @@ Moira::execDivlMusashi(u16 opcode)
     if (divisor == 0) {
 
         execException<C>(EXC_DIVIDE_BY_ZERO);
-        // execTrapException(5);
         CYCLES_68020(38);
-
-        FINALIZE
         return;
     }
 
@@ -3802,8 +3824,6 @@ Moira::execDivlMusashi(u16 opcode)
     CYCLES_DIPC ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
     CYCLES_IXPC ( 0,  0,  0,        0,  0,  0,        0,  0, 91)
     CYCLES_IM   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
-
-    FINALIZE
 }
 
 template <Core C, Instr I, Mode M, Size S> void

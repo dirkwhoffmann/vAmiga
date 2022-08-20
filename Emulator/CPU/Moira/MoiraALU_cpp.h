@@ -1121,3 +1121,53 @@ Moira::setUndefinedFlags(i32 arg1, i32 arg2, i32 arg3)
             fatalError;
     }
 }
+
+template <Core C, Size S> void
+Moira::setUndefinedDIVU(u32 dividend, u16 divisor)
+{
+    auto iDividend = i32(dividend);
+
+    switch (C) {
+
+        case C68000:
+        case C68010:
+
+            reg.sr.n = 1;
+            reg.sr.z = 0;
+            break;
+
+        case C68020:
+
+            if (iDividend < 0) reg.sr.n = 1;
+            break;
+    }
+}
+
+template <Core C, Size S> void
+Moira::setUndefinedDIVS(i32 dividend, i16 divisor)
+{
+    auto uDividend = u32(std::abs(dividend));
+    auto uDivisor = u16(std::abs(divisor));
+
+    switch (C) {
+
+        case C68000:
+        case C68010:
+
+            reg.sr.n = 1;
+            reg.sr.z = 0;
+            break;
+
+        case C68020:
+
+            reg.sr.n = 0;
+            reg.sr.z = 0;
+
+            if ((uDividend >> 16) < uDivisor) {
+
+                u32 quot = uDividend / uDivisor;
+                if (i8(quot) == 0) reg.sr.z = 1;
+                if (i8(quot) < 0) reg.sr.n = 1;
+            }
+    }
+}

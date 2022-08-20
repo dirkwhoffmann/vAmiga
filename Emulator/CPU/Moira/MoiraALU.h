@@ -49,3 +49,6 @@ template <Size S> std::pair<u32,u32> divluMusashi(u64 op1, u32 op2);
 
 // Computes the values of undefined flags for certain instructions
 template <Core C, Instr I, Size S> void setUndefinedFlags(i32 arg1, i32 arg2, i32 arg3 = 0);
+
+template <Core C, Size S> void setUndefinedDIVU(u32 dividend, u16 divisor);
+template <Core C, Size S> void setUndefinedDIVS(i32 dividend, i16 divisor);
