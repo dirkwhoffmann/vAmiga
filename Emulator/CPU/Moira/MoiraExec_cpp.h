@@ -3600,30 +3600,30 @@ Moira::execDivs(u16 opcode)
     AVAILABILITY(C68000)
 
     if constexpr (MIMIC_MUSASHI) {
-        execDivMusashi<C, I, M, S>(opcode);
+        execDivsMusashi<C, I, M, S>(opcode);
     } else {
-        execDivMoira<C, I, M, S>(opcode);
+        execDivsMoira<C, I, M, S>(opcode);
     }
+
+    //           00  10  20        00  10  20        00  10  20
+    //           .b  .b  .b        .w  .w  .w        .l  .l  .l
+    CYCLES_DN   ( 0,  0,  0,      158,122, 56,        0,  0,  0)
+    CYCLES_AI   ( 0,  0,  0,      162,126, 60,        0,  0,  0)
+    CYCLES_PI   ( 0,  0,  0,      162,126, 60,        0,  0,  0)
+    CYCLES_PD   ( 0,  0,  0,      164,128, 61,        0,  0,  0)
+    CYCLES_DI   ( 0,  0,  0,      166,130, 61,        0,  0,  0)
+    CYCLES_IX   ( 0,  0,  0,      168,132, 63,        0,  0,  0)
+    CYCLES_AW   ( 0,  0,  0,      166,130, 60,        0,  0,  0)
+    CYCLES_AL   ( 0,  0,  0,      170,134, 60,        0,  0,  0)
+    CYCLES_DIPC ( 0,  0,  0,      166,130, 61,        0,  0,  0)
+    CYCLES_IXPC ( 0,  0,  0,      168,132, 63,        0,  0,  0)
+    CYCLES_IM   ( 0,  0,  0,      162,126, 58,        0,  0,  0)
 
     FINALIZE
 }
 
 template <Core C, Instr I, Mode M, Size S> void
-Moira::execDivu(u16 opcode)
-{
-    AVAILABILITY(C68000)
-
-    if constexpr (MIMIC_MUSASHI) {
-        execDivMusashi<C, I, M, S>(opcode);
-    } else {
-        execDivMoira<C, I, M, S>(opcode);
-    }
-
-    FINALIZE
-}
-
-template <Core C, Instr I, Mode M, Size S> void
-Moira::execDivMoira(u16 opcode)
+Moira::execDivsMoira(u16 opcode)
 {
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -3635,22 +3635,11 @@ Moira::execDivMoira(u16 opcode)
     // Check for division by zero
     if (divisor == 0) {
 
-        if constexpr (I == DIVU) {
-
-            reg.sr.n = NBIT<Long>(dividend);
-            reg.sr.z = (dividend & 0xFFFF0000) == 0;
-            reg.sr.v = 0;
-            reg.sr.c = 0;
-            setDivZeroDIVU<C, S>(dividend);
-
-        } else {
-
-            reg.sr.n = 0;
-            reg.sr.z = 1;
-            reg.sr.v = 0;
-            reg.sr.c = 0;
-            setDivZeroDIVS<C, S>(dividend);
-        }
+        reg.sr.n = 0;
+        reg.sr.z = 1;
+        reg.sr.v = 0;
+        reg.sr.c = 0;
+        setDivZeroDIVS<C, S>(dividend);
 
         SYNC(8);
         execException<C>(EXC_DIVIDE_BY_ZERO);
@@ -3666,7 +3655,7 @@ Moira::execDivMoira(u16 opcode)
 }
 
 template <Core C, Instr I, Mode M, Size S> void
-Moira::execDivMusashi(u16 opcode)
+Moira::execDivsMusashi(u16 opcode)
 {
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -3687,54 +3676,112 @@ Moira::execDivMusashi(u16 opcode)
         CYCLES_68000(38);
         CYCLES_68010(44);
         CYCLES_68020(38);
-        FINALIZE
         return;
     }
 
     u32 dividend = readD(dst);
     result = divMusashi<C, I>(dividend, divisor);
 
-    if constexpr (I == DIVU) { SYNC_68000(136); SYNC_68010(104); }
-    if constexpr (I == DIVS) { SYNC_68000(154); SYNC_68010(118); }
+    SYNC_68000(154);
+    SYNC_68010(118);
 
     writeD(dst, result);
     prefetch<C, POLLIPL>();
+}
 
-    if constexpr (I == DIVU) {
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execDivu(u16 opcode)
+{
+    AVAILABILITY(C68000)
 
-        //           00  10  20        00  10  20        00  10  20
-        //           .b  .b  .b        .w  .w  .w        .l  .l  .l
-        CYCLES_DN   ( 0,  0,  0,      140,108, 44,       0,  0,  0)
-        CYCLES_AI   ( 0,  0,  0,      144,112, 48,       0,  0,  0)
-        CYCLES_PI   ( 0,  0,  0,      144,112, 48,       0,  0,  0)
-        CYCLES_PD   ( 0,  0,  0,      146,114, 49,       0,  0,  0)
-        CYCLES_DI   ( 0,  0,  0,      148,116, 49,       0,  0,  0)
-        CYCLES_IX   ( 0,  0,  0,      150,118, 51,       0,  0,  0)
-        CYCLES_AW   ( 0,  0,  0,      148,116, 48,       0,  0,  0)
-        CYCLES_AL   ( 0,  0,  0,      152,120, 48,       0,  0,  0)
-        CYCLES_DIPC ( 0,  0,  0,      148,116, 49,       0,  0,  0)
-        CYCLES_IXPC ( 0,  0,  0,      150,118, 51,       0,  0,  0)
-        CYCLES_IM   ( 0,  0,  0,      144,112, 46,       0,  0,  0)
+    if constexpr (MIMIC_MUSASHI) {
+        execDivuMusashi<C, I, M, S>(opcode);
+    } else {
+        execDivuMoira<C, I, M, S>(opcode);
     }
 
-    if constexpr (I == DIVS) {
-
-        //           00  10  20        00  10  20        00  10  20
-        //           .b  .b  .b        .w  .w  .w        .l  .l  .l
-        CYCLES_DN   ( 0,  0,  0,      158,122, 56,        0,  0,  0)
-        CYCLES_AI   ( 0,  0,  0,      162,126, 60,        0,  0,  0)
-        CYCLES_PI   ( 0,  0,  0,      162,126, 60,        0,  0,  0)
-        CYCLES_PD   ( 0,  0,  0,      164,128, 61,        0,  0,  0)
-        CYCLES_DI   ( 0,  0,  0,      166,130, 61,        0,  0,  0)
-        CYCLES_IX   ( 0,  0,  0,      168,132, 63,        0,  0,  0)
-        CYCLES_AW   ( 0,  0,  0,      166,130, 60,        0,  0,  0)
-        CYCLES_AL   ( 0,  0,  0,      170,134, 60,        0,  0,  0)
-        CYCLES_DIPC ( 0,  0,  0,      166,130, 61,        0,  0,  0)
-        CYCLES_IXPC ( 0,  0,  0,      168,132, 63,        0,  0,  0)
-        CYCLES_IM   ( 0,  0,  0,      162,126, 58,        0,  0,  0)
-    }
+    //           00  10  20        00  10  20        00  10  20
+    //           .b  .b  .b        .w  .w  .w        .l  .l  .l
+    CYCLES_DN   ( 0,  0,  0,      140,108, 44,       0,  0,  0)
+    CYCLES_AI   ( 0,  0,  0,      144,112, 48,       0,  0,  0)
+    CYCLES_PI   ( 0,  0,  0,      144,112, 48,       0,  0,  0)
+    CYCLES_PD   ( 0,  0,  0,      146,114, 49,       0,  0,  0)
+    CYCLES_DI   ( 0,  0,  0,      148,116, 49,       0,  0,  0)
+    CYCLES_IX   ( 0,  0,  0,      150,118, 51,       0,  0,  0)
+    CYCLES_AW   ( 0,  0,  0,      148,116, 48,       0,  0,  0)
+    CYCLES_AL   ( 0,  0,  0,      152,120, 48,       0,  0,  0)
+    CYCLES_DIPC ( 0,  0,  0,      148,116, 49,       0,  0,  0)
+    CYCLES_IXPC ( 0,  0,  0,      150,118, 51,       0,  0,  0)
+    CYCLES_IM   ( 0,  0,  0,      144,112, 46,       0,  0,  0)
 
     FINALIZE
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execDivuMoira(u16 opcode)
+{
+    int src = _____________xxx(opcode);
+    int dst = ____xxx_________(opcode);
+
+    u32 ea, divisor, result;
+    if (!readOp<C, M, Word, STD_AE_FRAME>(src, &ea, &divisor)) return;
+    u32 dividend = readD(dst);
+
+    // Check for division by zero
+    if (divisor == 0) {
+
+        reg.sr.n = NBIT<Long>(dividend);
+        reg.sr.z = (dividend & 0xFFFF0000) == 0;
+        reg.sr.v = 0;
+        reg.sr.c = 0;
+        setDivZeroDIVU<C, S>(dividend);
+
+        SYNC(8);
+        execException<C>(EXC_DIVIDE_BY_ZERO);
+        return;
+    }
+
+    result = div<C, I>(dividend, divisor);
+    writeD(dst, result);
+    prefetch<C, POLLIPL>();
+
+    [[maybe_unused]] auto cycles = cyclesDiv<C, I>(dividend, (u16)divisor) - 4;
+    SYNC(cycles);
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execDivuMusashi(u16 opcode)
+{
+    int src = _____________xxx(opcode);
+    int dst = ____xxx_________(opcode);
+
+    [[maybe_unused]] i64 c = clock;
+    u32 ea, divisor, result;
+    if (!readOp<C, M, Word>(src, &ea, &divisor)) return;
+
+    // Check for division by zero
+    if (divisor == 0) {
+        if constexpr (C == C68000) {
+            SYNC(8 - (int)(clock - c));
+        } else {
+            SYNC(10 - (int)(clock - c));
+        }
+        execException<C>(EXC_DIVIDE_BY_ZERO);
+
+        CYCLES_68000(38);
+        CYCLES_68010(44);
+        CYCLES_68020(38);
+        return;
+    }
+
+    u32 dividend = readD(dst);
+    result = divMusashi<C, I>(dividend, divisor);
+
+    SYNC_68000(136);
+    SYNC_68010(104);
+
+    writeD(dst, result);
+    prefetch<C, POLLIPL>();
 }
 
 template <Core C, Instr I, Mode M, Size S> void
@@ -3747,6 +3794,20 @@ Moira::execDivl(u16 opcode)
     } else {
         execDivlMoira<C, I, M, S>(opcode);
     }
+
+    //           00  10  20        00  10  20        00  10  20
+    //           .b  .b  .b        .w  .w  .w        .l  .l  .l
+    CYCLES_DN   ( 0,  0,  0,        0,  0,  0,        0,  0, 84)
+    CYCLES_AI   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
+    CYCLES_PI   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
+    CYCLES_PD   ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
+    CYCLES_DI   ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
+    CYCLES_IX   ( 0,  0,  0,        0,  0,  0,        0,  0, 91)
+    CYCLES_AW   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
+    CYCLES_AL   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
+    CYCLES_DIPC ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
+    CYCLES_IXPC ( 0,  0,  0,        0,  0,  0,        0,  0, 91)
+    CYCLES_IM   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
 
     FINALIZE
 }
@@ -3841,20 +3902,6 @@ Moira::execDivlMoira(u16 opcode)
             break;
         }
     }
-
-    //           00  10  20        00  10  20        00  10  20
-    //           .b  .b  .b        .w  .w  .w        .l  .l  .l
-    CYCLES_DN   ( 0,  0,  0,        0,  0,  0,        0,  0, 84)
-    CYCLES_AI   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
-    CYCLES_PI   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
-    CYCLES_PD   ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
-    CYCLES_DI   ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
-    CYCLES_IX   ( 0,  0,  0,        0,  0,  0,        0,  0, 91)
-    CYCLES_AW   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
-    CYCLES_AL   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
-    CYCLES_DIPC ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
-    CYCLES_IXPC ( 0,  0,  0,        0,  0,  0,        0,  0, 91)
-    CYCLES_IM   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
 }
 
 template <Core C, Instr I, Mode M, Size S> void
@@ -3923,20 +3970,6 @@ Moira::execDivlMusashi(u16 opcode)
             break;
         }
     }
-
-    //           00  10  20        00  10  20        00  10  20
-    //           .b  .b  .b        .w  .w  .w        .l  .l  .l
-    CYCLES_DN   ( 0,  0,  0,        0,  0,  0,        0,  0, 84)
-    CYCLES_AI   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
-    CYCLES_PI   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
-    CYCLES_PD   ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
-    CYCLES_DI   ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
-    CYCLES_IX   ( 0,  0,  0,        0,  0,  0,        0,  0, 91)
-    CYCLES_AW   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
-    CYCLES_AL   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
-    CYCLES_DIPC ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
-    CYCLES_IXPC ( 0,  0,  0,        0,  0,  0,        0,  0, 91)
-    CYCLES_IM   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
 }
 
 template <Core C, Instr I, Mode M, Size S> void
