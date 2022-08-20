@@ -1781,7 +1781,6 @@ Moira::execCpBcc(u16 opcode)
 {
     AVAILABILITY(C68020)
 
-    // TODO
     execLineF<C, I, M, S>(opcode);
 
     FINALIZE
@@ -1792,7 +1791,6 @@ Moira::execCpDbcc(u16 opcode)
 {
     AVAILABILITY(C68020)
 
-    // TODO
     execLineF<C, I, M, S>(opcode);
 
     FINALIZE
@@ -1803,7 +1801,6 @@ Moira::execCpGen(u16 opcode)
 {
     AVAILABILITY(C68020)
 
-    // TODO
     execLineF<C, I, M, S>(opcode);
 
     FINALIZE
@@ -1813,8 +1810,8 @@ template <Core C, Instr I, Mode M, Size S> void
 Moira::execCpRestore(u16 opcode)
 {
     AVAILABILITY(C68020)
+    SUPERVISOR_MODE_ONLY
 
-    // TODO
     execLineF<C, I, M, S>(opcode);
 
     FINALIZE
@@ -1824,8 +1821,8 @@ template <Core C, Instr I, Mode M, Size S> void
 Moira::execCpSave(u16 opcode)
 {
     AVAILABILITY(C68020)
+    SUPERVISOR_MODE_ONLY
 
-    // TODO
     execLineF<C, I, M, S>(opcode);
 
     FINALIZE
@@ -1836,7 +1833,6 @@ Moira::execCpScc(u16 opcode)
 {
     AVAILABILITY(C68020)
 
-    // TODO
     execLineF<C, I, M, S>(opcode);
 
     FINALIZE
@@ -1847,7 +1843,6 @@ Moira::execCpTrapcc(u16 opcode)
 {
     AVAILABILITY(C68020)
 
-    // TODO
     execLineF<C, I, M, S>(opcode);
 
     FINALIZE
