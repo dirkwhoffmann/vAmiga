@@ -1403,14 +1403,10 @@ Moira::execCas2(u16 opcode)
     auto compare1 = readD(dc1);
     auto compare2 = readD(dc2);
 
-    printf("  CAS2: ea1 = %x ea2 = %x data1 = %x data2 = %x (%x,%x)\n", ea1, ea2, data1, data2, compare1, compare2);
-
     // Set flags
     cmp<C, S>(CLIP<S>(compare1), data1);
 
     if (reg.sr.z) {
-
-        printf("  CAS2: reg.sr.z\n");
 
         // Set flags
         cmp<C, S>(CLIP<S>(compare2), data2);
@@ -3626,15 +3622,20 @@ Moira::execDivMoira(u16 opcode)
     if (divisor == 0) {
 
         if constexpr (I == DIVU) {
+
             reg.sr.n = NBIT<Long>(dividend);
             reg.sr.z = (dividend & 0xFFFF0000) == 0;
             reg.sr.v = 0;
             reg.sr.c = 0;
+            setDivZeroDIVU<C, S>(dividend);
+
         } else {
+
             reg.sr.n = 0;
             reg.sr.z = 1;
             reg.sr.v = 0;
             reg.sr.c = 0;
+            setDivZeroDIVS<C, S>(dividend);
         }
 
         SYNC(8);

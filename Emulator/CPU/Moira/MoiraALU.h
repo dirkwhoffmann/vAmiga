@@ -52,3 +52,5 @@ template <Core C, Instr I, Size S> void setUndefinedFlags(i32 arg1, i32 arg2, i3
 
 template <Core C, Size S> void setUndefinedDIVU(u32 dividend, u16 divisor);
 template <Core C, Size S> void setUndefinedDIVS(i32 dividend, i16 divisor);
+template <Core C, Size S> void setDivZeroDIVU(u32 dividend);
+template <Core C, Size S> void setDivZeroDIVS(u32 dividend);

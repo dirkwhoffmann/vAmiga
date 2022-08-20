@@ -316,9 +316,7 @@ Moira::div(u32 op1, u32 op2)
 {
     u32 result;
     bool overflow;
-    
-    reg.sr.n = reg.sr.z = reg.sr.v = reg.sr.c = 0;
-    
+
     switch (I) {
             
         case DIVS: // Signed division
@@ -345,11 +343,31 @@ Moira::div(u32 op1, u32 op2)
         default:
             fatalError;
     }
-    
-    reg.sr.v = overflow ? 1        : reg.sr.v;
-    reg.sr.n = overflow ? 1        : NBIT<Word>(result);
-    reg.sr.z = overflow ? reg.sr.z : ZERO<Word>(result);
-    
+
+    // TODO: CLEAN THIS UP
+    auto oldc = reg.sr.c;
+
+    reg.sr.c = 0;
+    reg.sr.v = overflow;
+
+    if (I == DIVS) {
+        if (overflow) {
+            setUndefinedDIVS<C, Word>(i32(op1), i16(op2));
+        } else {
+            reg.sr.n = NBIT<Word>(result);
+            reg.sr.z = ZERO<Word>(result);
+        }
+    }
+    if (I == DIVU) {
+        if (overflow) {
+            setUndefinedDIVU<C, Word>(i32(op1), i16(op2));
+            if constexpr (C == C68020) reg.sr.c = oldc;
+        } else {
+            reg.sr.n = NBIT<Word>(result);
+            reg.sr.z = ZERO<Word>(result);
+        }
+    }
+
     return overflow ? op1 : result;
 }
 
@@ -1169,5 +1187,55 @@ Moira::setUndefinedDIVS(i32 dividend, i16 divisor)
                 if (i8(quot) == 0) reg.sr.z = 1;
                 if (i8(quot) < 0) reg.sr.n = 1;
             }
+    }
+}
+
+template <Core C, Size S> void
+Moira::setDivZeroDIVU(u32 dividend)
+{
+    switch (C) {
+
+        case C68000:
+        case C68010:
+        {
+            reg.sr.n = 0;
+            reg.sr.z = 0;
+
+            i16 d = i16(dividend >> 16);
+            if (d < 0) reg.sr.n = 1;
+            if (d == 0) reg.sr.z = 1;
+            break;
+        }
+        case C68020:
+        {
+            reg.sr.n = 0;
+            reg.sr.z = 0;
+            reg.sr.v = 1;
+            
+            i16 d = i16(dividend >> 16);
+            if (d < 0) reg.sr.n = 1;
+            if (d == 0) reg.sr.z = 1;
+            break;
+        }
+    }
+}
+
+template <Core C, Size S> void
+Moira::setDivZeroDIVS(u32 dividend)
+{
+    switch (C) {
+
+        case C68000:
+        case C68010:
+
+            reg.sr.n = 0;
+            reg.sr.z = 1;
+            break;
+
+        case C68020:
+
+            reg.sr.n = 0;
+            reg.sr.z = 1;
+            break;
     }
 }
