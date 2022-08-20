@@ -1207,11 +1207,20 @@ Moira::dasmMull(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmDiv(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmDivs(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = Dn       ( ____xxx_________(op)       );
     
+    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+}
+
+template <Instr I, Mode M, Size S> void
+Moira::dasmDivu(StrWriter &str, u32 &addr, u16 op)
+{
+    auto src = Op <M,S> ( _____________xxx(op), addr );
+    auto dst = Dn       ( ____xxx_________(op)       );
+
     str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
 }
 

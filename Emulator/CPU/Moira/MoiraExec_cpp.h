@@ -3595,7 +3595,21 @@ Moira::execMullMusashi(u16 opcode)
 }
 
 template <Core C, Instr I, Mode M, Size S> void
-Moira::execDiv(u16 opcode)
+Moira::execDivs(u16 opcode)
+{
+    AVAILABILITY(C68000)
+
+    if constexpr (MIMIC_MUSASHI) {
+        execDivMusashi<C, I, M, S>(opcode);
+    } else {
+        execDivMoira<C, I, M, S>(opcode);
+    }
+
+    FINALIZE
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execDivu(u16 opcode)
 {
     AVAILABILITY(C68000)
 
