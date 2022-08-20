@@ -344,25 +344,30 @@ Moira::div(u32 op1, u32 op2)
             fatalError;
     }
 
-    // TODO: CLEAN THIS UP
-    auto oldc = reg.sr.c;
-
-    reg.sr.c = 0;
     reg.sr.v = overflow;
 
     if (I == DIVS) {
+
         if (overflow) {
+
             setUndefinedDIVS<C, Word>(i32(op1), i16(op2));
+
         } else {
+
+            reg.sr.c = 0;
             reg.sr.n = NBIT<Word>(result);
             reg.sr.z = ZERO<Word>(result);
         }
     }
     if (I == DIVU) {
+
         if (overflow) {
+
             setUndefinedDIVU<C, Word>(i32(op1), i16(op2));
-            if constexpr (C == C68020) reg.sr.c = oldc;
+
         } else {
+
+            reg.sr.c = 0;
             reg.sr.n = NBIT<Word>(result);
             reg.sr.z = ZERO<Word>(result);
         }
@@ -1215,6 +1220,7 @@ Moira::setUndefinedDIVU(u32 dividend, u16 divisor)
         case C68000:
         case C68010:
 
+            reg.sr.c = 0;
             reg.sr.n = 1;
             reg.sr.z = 0;
             break;
@@ -1237,12 +1243,14 @@ Moira::setUndefinedDIVS(i32 dividend, i16 divisor)
         case C68000:
         case C68010:
 
+            reg.sr.c = 0;
             reg.sr.n = 1;
             reg.sr.z = 0;
             break;
 
         case C68020:
 
+            reg.sr.c = 0;
             reg.sr.n = 0;
             reg.sr.z = 0;
 
