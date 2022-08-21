@@ -47,7 +47,6 @@ ramExpansion(ref.ramExpansion),
 remoteManager(ref.remoteManager),
 retroShell(ref.retroShell),
 rtc(ref.rtc),
-scheduler(ref.agnus.scheduler),
 serialPort(ref.serialPort),
 uart(ref.paula.uart),
 zorro(ref.zorro)

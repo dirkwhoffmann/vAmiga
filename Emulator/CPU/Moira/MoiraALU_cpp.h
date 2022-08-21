@@ -1179,13 +1179,13 @@ Moira::setUndefinedFlags(i32 arg1, i32 arg2, i32 arg3)
                         if constexpr (S == Word) {
                             int flgs = i16(dst) < 0;
                             int flgo = i16(src) < 0;
-                            i16 val = i16(src) - i16(dst);
+                            i16 val = i16(i64(src) - i64(dst));
                             int flgn = val < 0;
                             reg.sr.v = (flgs ^ flgo) & (flgn ^ flgo);
                         } else {
                             int flgs = dst < 0;
                             int flgo = src < 0;
-                            i32 val = src - dst;
+                            i32 val = i32(i64(src) - i64(dst));
                             int flgn = val < 0;
                             reg.sr.v = (flgs ^ flgo) & (flgn ^ flgo);
                         }

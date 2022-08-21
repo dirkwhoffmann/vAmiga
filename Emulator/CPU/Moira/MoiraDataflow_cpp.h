@@ -220,7 +220,7 @@ Moira::computeEAbrief(u32 an)
     u16 scale = _____xx_________ (ext);
     u16 disp  = ________xxxxxxxx (ext);
     
-    u32 xn = (lw ? readR(rn) : SEXT<Word>(readR(rn))) << scale;
+    u32 xn = u32(u64(lw ? readR(rn) : SEXT<Word>(readR(rn))) << scale);
     result = U32_ADD3(an, i8(disp), xn);
     
     SYNC(2);

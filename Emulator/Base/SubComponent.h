@@ -41,7 +41,6 @@ class RemoteManager;
 class RetroShell;
 class RshServer;
 class RTC;
-class Scheduler;
 class SerialPort;
 class UART;
 class ZorroManager;
@@ -88,7 +87,6 @@ protected:
     RemoteManager &remoteManager;
     RetroShell &retroShell;
     RTC &rtc;
-    Scheduler &scheduler;
     SerialPort &serialPort;
     UART &uart;
     ZorroManager &zorro;

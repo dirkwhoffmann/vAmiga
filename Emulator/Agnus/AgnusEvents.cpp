@@ -286,30 +286,30 @@ Agnus::serviceREGEvent(Cycle until)
 #define LO_EVEN(x)      { denise.drawLoresEven(); LO_NONE(x) }
 #define LO_BOTH(x)      { denise.drawLoresBoth(); LO_NONE(x) }
 
-#define LO_MOD(x)       { LO_NONE(x); bplpt[x] += (x & 1) ? bpl2mod : bpl1mod; }
-#define LO_MOD_ODD(x)   { LO_ODD(x);  bplpt[x] += (x & 1) ? bpl2mod : bpl1mod; }
-#define LO_MOD_EVEN(x)  { LO_EVEN(x); bplpt[x] += (x & 1) ? bpl2mod : bpl1mod; }
-#define LO_MOD_BOTH(x)  { LO_BOTH(x); bplpt[x] += (x & 1) ? bpl2mod : bpl1mod; }
+#define LO_MOD(x)       { LO_NONE(x); U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
+#define LO_MOD_ODD(x)   { LO_ODD(x);  U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
+#define LO_MOD_EVEN(x)  { LO_EVEN(x); U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
+#define LO_MOD_BOTH(x)  { LO_BOTH(x); U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
 
 #define HI_NONE(x)      { serviceBPLEventHires<x>(); }
 #define HI_ODD(x)       { denise.drawHiresOdd();  HI_NONE(x) }
 #define HI_EVEN(x)      { denise.drawHiresEven(); HI_NONE(x) }
 #define HI_BOTH(x)      { denise.drawHiresBoth(); HI_NONE(x) }
 
-#define HI_MOD(x)       { HI_NONE(x); bplpt[x] += (x & 1) ? bpl2mod : bpl1mod; }
-#define HI_MOD_ODD(x)   { HI_ODD(x);  bplpt[x] += (x & 1) ? bpl2mod : bpl1mod; }
-#define HI_MOD_EVEN(x)  { HI_EVEN(x); bplpt[x] += (x & 1) ? bpl2mod : bpl1mod; }
-#define HI_MOD_BOTH(x)  { HI_BOTH(x); bplpt[x] += (x & 1) ? bpl2mod : bpl1mod; }
+#define HI_MOD(x)       { HI_NONE(x); U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
+#define HI_MOD_ODD(x)   { HI_ODD(x);  U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
+#define HI_MOD_EVEN(x)  { HI_EVEN(x); U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
+#define HI_MOD_BOTH(x)  { HI_BOTH(x); U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
 
 #define SH_NONE(x)      { serviceBPLEventShres<x>(); }
 #define SH_ODD(x)       { denise.drawShresOdd();  SH_NONE(x) }
 #define SH_EVEN(x)      { denise.drawShresEven(); SH_NONE(x) }
 #define SH_BOTH(x)      { denise.drawShresBoth(); SH_NONE(x) }
 
-#define SH_MOD(x)       { SH_NONE(x); bplpt[x] += (x & 1) ? bpl2mod : bpl1mod; }
-#define SH_MOD_ODD(x)   { SH_ODD(x);  bplpt[x] += (x & 1) ? bpl2mod : bpl1mod; }
-#define SH_MOD_EVEN(x)  { SH_EVEN(x); bplpt[x] += (x & 1) ? bpl2mod : bpl1mod; }
-#define SH_MOD_BOTH(x)  { SH_BOTH(x); bplpt[x] += (x & 1) ? bpl2mod : bpl1mod; }
+#define SH_MOD(x)       { SH_NONE(x); U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
+#define SH_MOD_ODD(x)   { SH_ODD(x);  U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
+#define SH_MOD_EVEN(x)  { SH_EVEN(x); U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
+#define SH_MOD_BOTH(x)  { SH_BOTH(x); U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
 
 void
 Agnus::serviceBPLEvent(EventID id)

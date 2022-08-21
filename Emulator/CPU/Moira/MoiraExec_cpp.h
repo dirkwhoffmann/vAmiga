@@ -2844,7 +2844,7 @@ Moira::execMovecRxRc(u16 opcode)
 
     auto arg = readI<C, Word>();
     int  src = xxxx____________(arg);
-    u32  val = readD(src);
+    u32  val = readR(src);
 
     switch (arg & 0x0FFF) {
 
