@@ -482,6 +482,14 @@ Moira::bcd(u32 op1, u32 op2)
             } else {
                 reg.sr.x = 0;
             }
+
+            // Set V flag
+            if constexpr (C != C68020) {
+                reg.sr.v = ((tmp & 0x80) == 0) && ((result & 0x80) == 0x80);
+            } else {
+                reg.sr.v = 0;
+            }
+
             break;
         }
         case SBCD:
@@ -503,6 +511,14 @@ Moira::bcd(u32 op1, u32 op2)
             if (((op2 - op1 - reg.sr.x) & 0x100) > 0xFF) {
                 result -= 0x60;
             }
+
+            // Set V flag
+            if constexpr (C != C68020) {
+                reg.sr.v = ((tmp & 0x80) == 0x80) && ((result & 0x80) == 0);
+            } else {
+                reg.sr.v = 0;
+            }
+
             break;
         }
             
@@ -514,11 +530,6 @@ Moira::bcd(u32 op1, u32 op2)
     reg.sr.c = reg.sr.x;
     reg.sr.n = NBIT<S>(result);
     if (CLIP<Byte>(result)) reg.sr.z = 0;
-    if constexpr (C != C68020) {
-        reg.sr.v = ((tmp & 0x80) == 0x80) && ((result & 0x80) == 0);
-    } else {
-        reg.sr.v = 0;
-    }
 
     return (u32)result;
 }
