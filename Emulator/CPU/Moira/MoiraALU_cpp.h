@@ -282,6 +282,7 @@ Moira::addsub(u32 op1, u32 op2)
     return (u32)result;
 }
 
+/*
 template <Core C, Instr I> u32
 Moira::mul(u32 op1, u32 op2)
 {
@@ -303,11 +304,86 @@ Moira::mul(u32 op1, u32 op2)
             fatalError;
     }
     
-    reg.sr.n = NBIT <Long> (result);
-    reg.sr.z = ZERO <Long> (result);
+    reg.sr.n = NBIT<Long>(result);
+    reg.sr.z = ZERO<Long>(result);
     reg.sr.v = 0;
     reg.sr.c = 0;
     
+    return result;
+}
+*/
+
+template <Core C> u32
+Moira::muls(u32 op1, u32 op2)
+{
+    u32 result = (i16)op1 * (i16)op2;
+
+    reg.sr.n = NBIT<Long>(result);
+    reg.sr.z = ZERO<Long>(result);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
+
+    return result;
+}
+
+template <Core C> u32
+Moira::mulu(u32 op1, u32 op2)
+{
+    u32 result = op1 * op2;
+
+    reg.sr.n = NBIT<Long>(result);
+    reg.sr.z = ZERO<Long>(result);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
+
+    return result;
+}
+
+template <Core C, Size S> u64
+Moira::mulls(u32 op1, u32 op2)
+{
+    u64 result = u64(i64(i32(op1)) * i64(i32(op2)));
+
+    if constexpr (S == Word) {
+
+        reg.sr.n = NBIT<Long>(result);
+        reg.sr.z = ZERO<Long>(result);
+        reg.sr.v = result != u64(i32(result));
+        reg.sr.c = 0;
+    }
+
+    if constexpr (S == Long) {
+
+        reg.sr.n = NBIT<Long>(result >> 32);
+        reg.sr.z = result == 0;
+        reg.sr.v = 0;
+        reg.sr.c = 0;
+    }
+
+    return result;
+}
+
+template <Core C, Size S> u64
+Moira::mullu(u32 op1, u32 op2)
+{
+    u64 result = u64(op1) * u64(op2);
+
+    if constexpr (S == Word) {
+
+        reg.sr.n = NBIT<Long>(result);
+        reg.sr.z = ZERO<Long>(result);
+        reg.sr.v = (result >> 32) != 0;
+        reg.sr.c = 0;
+    }
+
+    if constexpr (S == Long) {
+
+        reg.sr.n = NBIT<Long>(result >> 32);
+        reg.sr.z = result == 0;
+        reg.sr.v = 0;
+        reg.sr.c = 0;
+    }
+
     return result;
 }
 

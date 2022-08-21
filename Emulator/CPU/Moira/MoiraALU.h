@@ -23,7 +23,10 @@ bool cond(Cond C);
 
 template <Core C, Instr I, Size S> u32    shift(int cnt, u64 data);
 template <Core C, Instr I, Size S> u32   addsub(u32 op1, u32 op2);
-template <Core C, Instr I>         u32      mul(u32 op1, u32 op2);
+template <Core C>                  u32     muls(u32 op1, u32 op2);
+template <Core C>                  u32     mulu(u32 op1, u32 op2);
+template <Core C,          Size S> u64    mulls(u32 op1, u32 op2);
+template <Core C,          Size S> u64    mullu(u32 op1, u32 op2);
 template <Core C, Instr I>         u32      div(u32 op1, u32 op2);
 template <Core C, Instr I, Size S> u32      bcd(u32 op1, u32 op2);
 template <Core C,          Size S> void     cmp(u32 op1, u32 op2);
@@ -39,7 +42,7 @@ template <Core C, Instr I>         int  cyclesDiv(u32 dividend, u16 divisor) con
 template <Instr I> u32 bitfield(u32 data, u32 offset, u32 width, u32 mask);
 
 // Multiplication, Division
-template <Core C, Instr I> u32 mulMusashi(u32 op1, u32 op2);
+template <Core C, Instr I> [[deprecated]] u32 mulMusashi(u32 op1, u32 op2);
 template <Size S> u64 mullsMusashi(u32 op1, u32 op2);
 template <Size S> u64 mulluMusashi(u32 op1, u32 op2);
 

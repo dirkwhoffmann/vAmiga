@@ -3461,7 +3461,7 @@ Moira::execMulsMoira(u16 opcode)
     if (!readOp<C, M, Word, STD_AE_FRAME>(src, &ea, &data)) return;
 
     prefetch<C, POLLIPL>();
-    result = mul<C, I>(data, readD<Word>(dst));
+    result = muls<C>(data, readD<Word>(dst));
 
     [[maybe_unused]] auto cycles = cyclesMul<C, I>(u16(data));
     SYNC(cycles);
@@ -3527,7 +3527,7 @@ Moira::execMuluMoira(u16 opcode)
     if (!readOp<C, M, Word, STD_AE_FRAME>(src, &ea, &data)) return;
 
     prefetch<C, POLLIPL>();
-    result = mul<C, I>(data, readD<Word>(dst));
+    result = mulu<C>(data, readD<Word>(dst));
 
     [[maybe_unused]] auto cycles = cyclesMul<C, I>(u16(data));
     SYNC(cycles);
