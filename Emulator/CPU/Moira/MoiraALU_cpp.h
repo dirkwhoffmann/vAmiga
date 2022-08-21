@@ -1201,6 +1201,10 @@ Moira::setUndefinedFlags(i32 arg1, i32 arg2, i32 arg3)
         }
         case CHK2:
         {
+            auto diff = [&](i32 arg1, i32 arg2) {
+                return i32((i64)arg1 - (i64)arg2);
+            };
+
             i32 lower = arg1;
             i32 upper = arg2;
             i32 value = arg3;
@@ -1217,7 +1221,9 @@ Moira::setUndefinedFlags(i32 arg1, i32 arg2, i32 arg3)
                 if (value >= 0 && value < upper) {
                     reg.sr.n = 1;
                 }
-                if (value >= 0 && lower - value >= 0) {
+                // assert((lower - value >= 0) == i32((u32)lower - (u32)value) >= 0);
+                if (value >= 0 && diff(lower, value) >= 0) {
+                // if (value >= 0 && lower - value >= 0) {
                     reg.sr.v = 1;
                     reg.sr.n = 0;
                     if (value > upper) {
@@ -1231,7 +1237,7 @@ Moira::setUndefinedFlags(i32 arg1, i32 arg2, i32 arg3)
                 if (value > upper) {
                     reg.sr.n = 1;
                 }
-                if (value > lower && upper - value >= 0) {
+                if (value > lower && diff(upper, value) >= 0) {
                     reg.sr.v = 1;
                     reg.sr.n = 0;
                 }
@@ -1239,10 +1245,10 @@ Moira::setUndefinedFlags(i32 arg1, i32 arg2, i32 arg3)
                 if (value > upper && value < lower) {
                     reg.sr.n = 1;
                 }
-                if (value < 0 && lower - value < 0) {
+                if (value < 0 && diff(lower, value) < 0) {
                     reg.sr.v = 1;
                 }
-                if (value < 0 && lower - value >= 0) {
+                if (value < 0 && diff(lower, value) >= 0) {
                     reg.sr.n = 1;
                 }
             } else if (lower >= 0 && upper >= 0 && lower <= upper) {
@@ -1252,7 +1258,7 @@ Moira::setUndefinedFlags(i32 arg1, i32 arg2, i32 arg3)
                 if (value > upper) {
                     reg.sr.n = 1;
                 }
-                if (value < 0 && upper - value < 0) {
+                if (value < 0 && diff(upper, value) < 0) {
                     reg.sr.n = 1;
                     reg.sr.v = 1;
                 }
@@ -1263,7 +1269,7 @@ Moira::setUndefinedFlags(i32 arg1, i32 arg2, i32 arg3)
                 if (value > upper && value < lower) {
                     reg.sr.n = 1;
                 }
-                if (value >= 0 && value - lower < 0) {
+                if (value >= 0 && diff(value, lower) < 0) {
                     reg.sr.n = 0;
                     reg.sr.v = 1;
                 }
@@ -1274,7 +1280,7 @@ Moira::setUndefinedFlags(i32 arg1, i32 arg2, i32 arg3)
                 if (value < 0 && value > upper) {
                     reg.sr.n = 1;
                 }
-                if (value >= 0 && value - lower < 0) {
+                if (value >= 0 && diff(value, lower) < 0) {
                     reg.sr.n = 1;
                     reg.sr.v = 1;
                 }
