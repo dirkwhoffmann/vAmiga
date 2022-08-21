@@ -3602,7 +3602,7 @@ Moira::execMullMoira(u16 opcode)
 
         case 0b00: { // Unsigned 32 bit
 
-            u64 result = mullu<C, Word>(data, readD(dl));
+            result = mullu<C, Word>(data, readD(dl));
 
             writeD(dl, u32(result));
             break;

@@ -83,7 +83,7 @@ Moira::shift(int cnt, u64 data) {
             for (int i = 0; i < cnt; i++) {
                 
                 carry = NBIT<S>(data);
-                u64 shifted = data << 1;
+                u64 shifted = (data & 0xFFFFFFFF) << 1;
                 changed |= (u32)(data ^ shifted);
                 data = shifted;
             }
