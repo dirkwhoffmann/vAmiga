@@ -261,7 +261,11 @@ protected:
     
     // Provides the interrupt level in IRQ_USER mode
     u16 readIrqUserVector(u8 level) const;
-    
+
+    // State delegates
+    void signalHardReset();
+    void signalHalt();
+
     // Instruction delegates
     void willExecute(const char *func, Instr I, Mode M, Size S, u16 opcode);
     void didExecute(const char *func, Instr I, Mode M, Size S, u16 opcode);
@@ -269,16 +273,16 @@ protected:
     // Exception delegates
     void willExecute(ExceptionType exc, u16 vector);
     void didExecute(ExceptionType exc, u16 vector);
-    
-    // State delegates
-    void signalHardReset();
-    void signalHalt();
-    
+
     // Exception delegates
     void signalInterrupt(u8 level);
     void signalJumpToVector(int nr, u32 addr);
     void signalSoftwareTrap(u16 opcode, SoftwareTrap trap);
-    
+
+    // Cache register delegated
+    void didChangeCACR(u32 value) { };
+    void didChangeCAAR(u32 value) { };
+
     // Called when a debug point is reached
     void softstopReached(u32 addr);
     void breakpointReached(u32 addr);
@@ -354,10 +358,10 @@ public:
     void setDFC(u32 val) { reg.dfc = val & 0b111; }
     
     u32 getCACR() const { return reg.cacr; }
-    void setCACR(u32 val) { reg.cacr = val & cacrMask(); }
+    void setCACR(u32 val);
     
     u32 getCAAR() const { return reg.caar; }
-    void setCAAR(u32 val) { reg.caar = val; }
+    void setCAAR(u32 val);
     
     void setSupervisorMode(bool value);
     void setMasterMode(bool value);

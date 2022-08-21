@@ -102,8 +102,8 @@ Moira::cacrMask() const
 {
     switch (model) {
 
-        case M68020: case M68EC020: return 0x000F;
-        case M68030: case M68EC030: return 0xFF1F;
+        case M68020: case M68EC020: return 0x0003;
+        case M68030: case M68EC030: return 0x3F13;
 
         default:
             return 0xFFFF;
@@ -389,6 +389,20 @@ Moira::setSR(u16 val)
         t0 ? setTrace0Flag() : clearTrace0Flag();
         setMasterMode(m);
     }
+}
+
+void
+Moira::setCACR(u32 val)
+{
+    reg.cacr = val & cacrMask();
+    didChangeCACR(val);
+}
+
+void
+Moira::setCAAR(u32 val)
+{
+    reg.caar = val;
+    didChangeCAAR(val);
 }
 
 void
