@@ -462,7 +462,7 @@ Moira::execAddqAn(u16 opcode)
     int dst = _____________xxx(opcode);
 
     if (src == 0) src = 8;
-    u32 result = (I == ADDQ) ? readA(dst) + src : readA(dst) - src;
+    u32 result = (I == ADDQ) ? U32_ADD(readA(dst), src) : U32_SUB(readA(dst), src);
     prefetch<C, POLLIPL>();
 
     if constexpr (C == C68000 || S == Long) SYNC(4);
