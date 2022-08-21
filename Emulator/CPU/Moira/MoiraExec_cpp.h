@@ -3585,9 +3585,51 @@ Moira::execMull(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMullMoira(u16 opcode)
 {
-    // TODO
+    u64 result;
+    u32 ea, data;
+    u16 ext = (u16)readI<C, Word>();
 
-    execMullMusashi<C, I, M, S>(opcode);
+    int src = _____________xxx(opcode);
+    int dh  = _____________xxx(ext);
+    int dl  = _xxx____________(ext);
+
+    if (!readOp<C, M, S>(src, &ea, &data)) return;
+
+    prefetch<C, POLLIPL>();
+
+    switch (____xx__________(ext)) {
+
+        case 0b00: { // Unsigned 32 bit
+
+            u64 result = mulluMusashi<Word>(data, readD(dl));
+
+            writeD(dl, u32(result));
+            break;
+        }
+        case 0b01: // Unsigned 64 bit
+
+            result = mulluMusashi<Long>(data, readD(dl));
+
+            // Note: 68040 switched the write-order
+            writeD(dl, u32(result));
+            writeD(dh, u32(result >> 32));
+            break;
+
+        case 0b10: // Signed 32 bit
+
+            result = mullsMusashi<Word>(data, readD(dl));
+            writeD(dl, u32(result));
+            break;
+
+        case 0b11: // Signed 64 bit
+
+            result = mullsMusashi<Long>(data, readD(dl));
+
+            // Note: 68040 switched the write-order
+            writeD(dl, u32(result));
+            writeD(dh, u32(result >> 32));
+            break;
+    }
 }
 
 template <Core C, Instr I, Mode M, Size S> void
