@@ -3423,21 +3423,35 @@ Moira::execMoveAnUsp(u16 opcode)
 }
 
 template <Core C, Instr I, Mode M, Size S> void
-Moira::execMul(u16 opcode)
+Moira::execMuls(u16 opcode)
 {
     AVAILABILITY(C68000)
 
     if constexpr (MIMIC_MUSASHI) {
-        execMulMusashi<C, I, M, S>(opcode);
+        execMulsMusashi<C, I, M, S>(opcode);
     } else {
-        execMulMoira<C, I, M, S>(opcode);
+        execMulsMoira<C, I, M, S>(opcode);
     }
+
+    //           00  10  20        00  10  20        00  10  20
+    //           .b  .b  .b        .w  .w  .w        .l  .l  .l
+    CYCLES_DN   ( 0,  0,  0,       54,  32,  27,      0,  0,  0)
+    CYCLES_AI   ( 0,  0,  0,       58,  36,  31,      0,  0,  0)
+    CYCLES_PI   ( 0,  0,  0,       58,  36,  31,      0,  0,  0)
+    CYCLES_PD   ( 0,  0,  0,       60,  38,  32,      0,  0,  0)
+    CYCLES_DI   ( 0,  0,  0,       62,  40,  32,      0,  0,  0)
+    CYCLES_IX   ( 0,  0,  0,       64,  42,  34,      0,  0,  0)
+    CYCLES_AW   ( 0,  0,  0,       62,  40,  31,      0,  0,  0)
+    CYCLES_AL   ( 0,  0,  0,       66,  44,  31,      0,  0,  0)
+    CYCLES_DIPC ( 0,  0,  0,       62,  40,  32,      0,  0,  0)
+    CYCLES_IXPC ( 0,  0,  0,       64,  42,  34,      0,  0,  0)
+    CYCLES_IM   ( 0,  0,  0,       58,  36,  29,      0,  0,  0)
 
     FINALIZE;
 }
 
 template <Core C, Instr I, Mode M, Size S> void
-Moira::execMulMoira(u16 opcode)
+Moira::execMulsMoira(u16 opcode)
 {
     u32 ea, data, result;
 
@@ -3456,7 +3470,7 @@ Moira::execMulMoira(u16 opcode)
 }
 
 template <Core C, Instr I, Mode M, Size S> void
-Moira::execMulMusashi(u16 opcode)
+Moira::execMulsMusashi(u16 opcode)
 {
     u32 ea, data, result;
 
@@ -3472,40 +3486,72 @@ Moira::execMulMusashi(u16 opcode)
     if constexpr (I == MULS) { SYNC_68000(50); SYNC_68010(28); }
 
     writeD(dst, result);
+}
 
-    if constexpr (I == MULU) {
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execMulu(u16 opcode)
+{
+    AVAILABILITY(C68000)
 
-        //           00  10  20        00  10  20        00  10  20
-        //           .b  .b  .b        .w  .w  .w        .l  .l  .l
-        CYCLES_DN   ( 0,  0,  0,       54,  30,  27,      0,  0,  0)
-        CYCLES_AI   ( 0,  0,  0,       58,  34,  31,      0,  0,  0)
-        CYCLES_PI   ( 0,  0,  0,       58,  34,  31,      0,  0,  0)
-        CYCLES_PD   ( 0,  0,  0,       60,  36,  32,      0,  0,  0)
-        CYCLES_DI   ( 0,  0,  0,       62,  38,  32,      0,  0,  0)
-        CYCLES_IX   ( 0,  0,  0,       64,  40,  34,      0,  0,  0)
-        CYCLES_AW   ( 0,  0,  0,       62,  38,  31,      0,  0,  0)
-        CYCLES_AL   ( 0,  0,  0,       66,  42,  31,      0,  0,  0)
-        CYCLES_DIPC ( 0,  0,  0,       62,  38,  32,      0,  0,  0)
-        CYCLES_IXPC ( 0,  0,  0,       64,  40,  34,      0,  0,  0)
-        CYCLES_IM   ( 0,  0,  0,       58,  34,  29,      0,  0,  0)
+    if constexpr (MIMIC_MUSASHI) {
+        execMuluMusashi<C, I, M, S>(opcode);
+    } else {
+        execMuluMoira<C, I, M, S>(opcode);
     }
 
-    if constexpr (I == MULS) {
+    //           00  10  20        00  10  20        00  10  20
+    //           .b  .b  .b        .w  .w  .w        .l  .l  .l
+    CYCLES_DN   ( 0,  0,  0,       54,  30,  27,      0,  0,  0)
+    CYCLES_AI   ( 0,  0,  0,       58,  34,  31,      0,  0,  0)
+    CYCLES_PI   ( 0,  0,  0,       58,  34,  31,      0,  0,  0)
+    CYCLES_PD   ( 0,  0,  0,       60,  36,  32,      0,  0,  0)
+    CYCLES_DI   ( 0,  0,  0,       62,  38,  32,      0,  0,  0)
+    CYCLES_IX   ( 0,  0,  0,       64,  40,  34,      0,  0,  0)
+    CYCLES_AW   ( 0,  0,  0,       62,  38,  31,      0,  0,  0)
+    CYCLES_AL   ( 0,  0,  0,       66,  42,  31,      0,  0,  0)
+    CYCLES_DIPC ( 0,  0,  0,       62,  38,  32,      0,  0,  0)
+    CYCLES_IXPC ( 0,  0,  0,       64,  40,  34,      0,  0,  0)
+    CYCLES_IM   ( 0,  0,  0,       58,  34,  29,      0,  0,  0)
 
-        //           00  10  20        00  10  20        00  10  20
-        //           .b  .b  .b        .w  .w  .w        .l  .l  .l
-        CYCLES_DN   ( 0,  0,  0,       54,  32,  27,      0,  0,  0)
-        CYCLES_AI   ( 0,  0,  0,       58,  36,  31,      0,  0,  0)
-        CYCLES_PI   ( 0,  0,  0,       58,  36,  31,      0,  0,  0)
-        CYCLES_PD   ( 0,  0,  0,       60,  38,  32,      0,  0,  0)
-        CYCLES_DI   ( 0,  0,  0,       62,  40,  32,      0,  0,  0)
-        CYCLES_IX   ( 0,  0,  0,       64,  42,  34,      0,  0,  0)
-        CYCLES_AW   ( 0,  0,  0,       62,  40,  31,      0,  0,  0)
-        CYCLES_AL   ( 0,  0,  0,       66,  44,  31,      0,  0,  0)
-        CYCLES_DIPC ( 0,  0,  0,       62,  40,  32,      0,  0,  0)
-        CYCLES_IXPC ( 0,  0,  0,       64,  42,  34,      0,  0,  0)
-        CYCLES_IM   ( 0,  0,  0,       58,  36,  29,      0,  0,  0)
-    }
+    FINALIZE;
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execMuluMoira(u16 opcode)
+{
+    u32 ea, data, result;
+
+    int src = _____________xxx(opcode);
+    int dst = ____xxx_________(opcode);
+
+    if (!readOp<C, M, Word, STD_AE_FRAME>(src, &ea, &data)) return;
+
+    prefetch<C, POLLIPL>();
+    result = mul<C, I>(data, readD<Word>(dst));
+
+    [[maybe_unused]] auto cycles = cyclesMul<C, I>(u16(data));
+    SYNC(cycles);
+
+    writeD(dst, result);
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execMuluMusashi(u16 opcode)
+{
+    u32 ea, data, result;
+
+    int src = _____________xxx(opcode);
+    int dst = ____xxx_________(opcode);
+
+    if (!readOp<C, M, Word>(src, &ea, &data)) return;
+
+    prefetch<C, POLLIPL>();
+    result = mulMusashi<C, I>(data, readD<Word>(dst));
+
+    if constexpr (I == MULU) { SYNC_68000(50); SYNC_68010(26); }
+    if constexpr (I == MULS) { SYNC_68000(50); SYNC_68010(28); }
+
+    writeD(dst, result);
 }
 
 template <Core C, Instr I, Mode M, Size S> void
@@ -3518,6 +3564,20 @@ Moira::execMull(u16 opcode)
     } else {
         execMullMoira<C, I, M, S>(opcode);
     }
+
+    //           00  10  20        00  10  20        00  10  20
+    //           .b  .b  .b        .w  .w  .w        .l  .l  .l
+    CYCLES_DN   ( 0,  0,  0,        0,  0, 43,        0,  0, 43)
+    CYCLES_AI   ( 0,  0,  0,        0,  0, 47,        0,  0, 47)
+    CYCLES_PI   ( 0,  0,  0,        0,  0, 47,        0,  0, 47)
+    CYCLES_PD   ( 0,  0,  0,        0,  0, 48,        0,  0, 48)
+    CYCLES_DI   ( 0,  0,  0,        0,  0, 48,        0,  0, 48)
+    CYCLES_IX   ( 0,  0,  0,        0,  0, 50,        0,  0, 50)
+    CYCLES_AW   ( 0,  0,  0,        0,  0, 47,        0,  0, 47)
+    CYCLES_AL   ( 0,  0,  0,        0,  0, 47,        0,  0, 47)
+    CYCLES_DIPC ( 0,  0,  0,        0,  0, 48,        0,  0, 48)
+    CYCLES_IXPC ( 0,  0,  0,        0,  0, 50,        0,  0, 50)
+    CYCLES_IM   ( 0,  0,  0,        0,  0, 47,        0,  0, 47)
 
     FINALIZE;
 }
@@ -3573,20 +3633,6 @@ Moira::execMullMusashi(u16 opcode)
             writeD(dl, u32(result));
             break;
     }
-
-    //           00  10  20        00  10  20        00  10  20
-    //           .b  .b  .b        .w  .w  .w        .l  .l  .l
-    CYCLES_DN   ( 0,  0,  0,        0,  0, 43,        0,  0, 43)
-    CYCLES_AI   ( 0,  0,  0,        0,  0, 47,        0,  0, 47)
-    CYCLES_PI   ( 0,  0,  0,        0,  0, 47,        0,  0, 47)
-    CYCLES_PD   ( 0,  0,  0,        0,  0, 48,        0,  0, 48)
-    CYCLES_DI   ( 0,  0,  0,        0,  0, 48,        0,  0, 48)
-    CYCLES_IX   ( 0,  0,  0,        0,  0, 50,        0,  0, 50)
-    CYCLES_AW   ( 0,  0,  0,        0,  0, 47,        0,  0, 47)
-    CYCLES_AL   ( 0,  0,  0,        0,  0, 47,        0,  0, 47)
-    CYCLES_DIPC ( 0,  0,  0,        0,  0, 48,        0,  0, 48)
-    CYCLES_IXPC ( 0,  0,  0,        0,  0, 50,        0,  0, 50)
-    CYCLES_IM   ( 0,  0,  0,        0,  0, 47,        0,  0, 47)
 }
 
 template <Core C, Instr I, Mode M, Size S> void

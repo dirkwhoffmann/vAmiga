@@ -1182,12 +1182,18 @@ Moira::dasmMoveAnUsp(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmMul(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmMuls(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = Dn       ( ____xxx_________(op)       );
     
     str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+}
+
+template <Instr I, Mode M, Size S> void
+Moira::dasmMulu(StrWriter &str, u32 &addr, u16 op)
+{
+    dasmMuls<I, M, S>(str, addr, op);
 }
 
 template <Instr I, Mode M, Size S> void

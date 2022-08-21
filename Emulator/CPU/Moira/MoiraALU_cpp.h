@@ -703,7 +703,7 @@ Moira::cond(Instr I) {
 }
 
 template <Core C, Instr I> int
-Moira::cyclesBit(u8 bit)
+Moira::cyclesBit(u8 bit) const
 {
     switch (I)
     {
@@ -718,7 +718,7 @@ Moira::cyclesBit(u8 bit)
 }
 
 template <Core C, Instr I> int
-Moira::cyclesMul(u16 data)
+Moira::cyclesMul(u16 data) const
 {
     int mcycles = 17;
     
@@ -741,7 +741,7 @@ Moira::cyclesMul(u16 data)
 }
 
 template <Core C, Instr I> int
-Moira::cyclesDiv(u32 op1, u16 op2)
+Moira::cyclesDiv(u32 op1, u16 op2) const
 {
     int result;
     

@@ -1312,10 +1312,10 @@ Moira::createJumpTable()
     //                 X       X   X   X   X   X   X   X   X   X   X
     
     opcode = parse("1100 ---1 11-- ----");
-    ____XXX___MMMXXX(opcode, MULS, 0b101111111111, Word, Mul, CIMS)
+    ____XXX___MMMXXX(opcode, MULS, 0b101111111111, Word, Muls, CIMS)
     
     opcode = parse("1100 ---0 11-- ----");
-    ____XXX___MMMXXX(opcode, MULU, 0b101111111111, Word, Mul, CIMS)
+    ____XXX___MMMXXX(opcode, MULU, 0b101111111111, Word, Mulu, CIMS)
     
     if constexpr (C >= C68020) {
         
