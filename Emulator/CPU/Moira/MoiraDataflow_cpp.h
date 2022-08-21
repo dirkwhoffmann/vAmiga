@@ -325,9 +325,9 @@ template <Core C, Mode M, Size S, Flags F> u32
 Moira::readM(u32 addr)
 {
     if (isPrgMode(M)) {
-        return readMS<C, MEM_PROG, S, F> (addr);
+        return readMS<C, MEM_PROG, S, F>(addr);
     } else {
-        return readMS<C, MEM_DATA, S, F> (addr);
+        return readMS<C, MEM_DATA, S, F>(addr);
     }
 }
 

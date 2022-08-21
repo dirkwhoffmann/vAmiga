@@ -4174,14 +4174,14 @@ Moira::execPackDn(u16 opcode)
 {
     AVAILABILITY(C68020)
 
-    int dx  = ____xxx_________(opcode);
-    int dy  = _____________xxx(opcode);
+    int dx  = _____________xxx(opcode);
+    int dy  = ____xxx_________(opcode);
 
     u16 adj = (u16)readI<C, Word>();
-    u32 src = readD(dy) + adj;
+    u32 src = readD(dx) + adj;
     u32 dst = (src >> 4 & 0xF0) | (src & 0x0F);
 
-    writeD<Byte>(dx, dst);
+    writeD<Byte>(dy, dst);
     prefetch<C>();
 
     //           00  10  20        00  10  20        00  10  20
@@ -4196,20 +4196,21 @@ Moira::execPackPd(u16 opcode)
 {
     AVAILABILITY(C68020)
 
-    int dx  = ____xxx_________(opcode);
-    int dy  = _____________xxx(opcode);
+    int ax  = _____________xxx(opcode);
+    int ay  = ____xxx_________(opcode);
 
-    u32 ea1, data1;
-    if (!readOp<C, M, Byte>(dy, &ea1, &data1)) return;
+    reg.a[ax]--;
+    auto data1 = readMS<C, MEM_DATA, Byte>(readA(ax));
 
     u16 adj = (u16)readI<C, Word>();
 
-    u32 ea2, data2;
-    if (!readOp<C, M, Byte>(dy, &ea2, &data2)) return;
+    reg.a[ax]--;
+    auto data2 = readMS<C, MEM_DATA, Byte>(readA(ax));
 
-    u32 src = (data1 << 8 | data2) + adj;
+    u32 src = (data2 << 8 | data1) + adj;
+    u32 dst = (src >> 4 & 0xF0) | (src & 0x0F);
 
-    writeOp<C, M, Byte>(dx, (src >> 4 & 0xF0) | (src & 0x0F));
+    writeOp<C, M, Byte>(ay, dst);
     prefetch<C>();
 
     //           00  10  20        00  10  20        00  10  20
