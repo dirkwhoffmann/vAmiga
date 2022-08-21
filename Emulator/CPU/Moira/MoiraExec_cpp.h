@@ -4842,14 +4842,14 @@ Moira::execUnpkDn(u16 opcode)
 {
     AVAILABILITY(C68020)
 
-    int dx  = ____xxx_________(opcode);
-    int dy  = _____________xxx(opcode);
+    int dx  = _____________xxx(opcode);
+    int dy  = ____xxx_________(opcode);
 
     u16 adj = (u16)readI<C, Word>();
-    u32 src = readD(dy);
+    u32 src = readD(dx);
 
     u32 dst = ((src << 4 & 0x0F00) | (src & 0x000F)) + adj;
-    writeD<Word>(dx, dst);
+    writeD<Word>(dy, dst);
 
     prefetch<C>();
 
@@ -4865,18 +4865,20 @@ Moira::execUnpkPd(u16 opcode)
 {
     AVAILABILITY(C68020)
 
-    int dx  = ____xxx_________(opcode);
-    int dy  = _____________xxx(opcode);
+    int ax = _____________xxx(opcode);
+    int ay = ____xxx_________(opcode);
 
     u32 ea, data;
-    if (!readOp<C, M, Byte>(dy, &ea, &data)) return;
+    if (!readOp<C, M, Byte>(ax, &ea, &data)) return;
 
     u16 adj = (u16)readI<C, Word>();
-    
-    u32 src = ((data << 4 & 0x0F00) | (data & 0x000F)) + adj;
+    u32 dst = ((data << 4 & 0x0F00) | (data & 0x000F)) + adj;
 
-    writeOp<C, M, Byte>(dx, src >> 8 & 0xFF);
-    writeOp<C, M, Byte>(dx, src & 0xFF);
+    reg.a[ay]--;
+    writeMS<C, MEM_DATA, Byte>(readA(ay), dst & 0xFF);
+
+    reg.a[ay]--;
+    writeMS<C, MEM_DATA, Byte>(readA(ay), dst >> 8 & 0xFF);
 
     prefetch<C>();
 
