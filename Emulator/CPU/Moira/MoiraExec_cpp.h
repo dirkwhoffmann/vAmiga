@@ -2970,11 +2970,12 @@ Moira::execMovemRgEa(u16 opcode)
                 if (mask & (0x8000 >> i)) {
 
                     ea -= S;
+                    if constexpr (C == C68020) writeA(dst, ea);
                     writeM<C, M, S, MIMIC_MUSASHI ? REVERSE : 0>(ea, reg.r[i]);
                     cnt++;
                 }
             }
-            writeA(dst, ea);
+            if constexpr (C != C68020) writeA(dst, ea);
             break;
         }
         default:
@@ -3601,14 +3602,14 @@ Moira::execMullMoira(u16 opcode)
 
         case 0b00: { // Unsigned 32 bit
 
-            u64 result = mulluMusashi<Word>(data, readD(dl));
+            u64 result = mullu<C, Word>(data, readD(dl));
 
             writeD(dl, u32(result));
             break;
         }
         case 0b01: // Unsigned 64 bit
 
-            result = mulluMusashi<Long>(data, readD(dl));
+            result = mullu<C, Long>(data, readD(dl));
 
             // Note: 68040 switched the write-order
             writeD(dl, u32(result));
@@ -3617,13 +3618,13 @@ Moira::execMullMoira(u16 opcode)
 
         case 0b10: // Signed 32 bit
 
-            result = mullsMusashi<Word>(data, readD(dl));
+            result = mulls<C, Word>(data, readD(dl));
             writeD(dl, u32(result));
             break;
 
         case 0b11: // Signed 64 bit
 
-            result = mullsMusashi<Long>(data, readD(dl));
+            result = mulls<C, Long>(data, readD(dl));
 
             // Note: 68040 switched the write-order
             writeD(dl, u32(result));
@@ -3651,26 +3652,26 @@ Moira::execMullMusashi(u16 opcode)
 
         case 0b00:
 
-            result = mulluMusashi<Word>(data, readD(dl));
+            result = mullu<C, Word>(data, readD(dl));
             writeD(dl, u32(result));
             break;
 
         case 0b01:
 
-            result = mulluMusashi<Long>(data, readD(dl));
+            result = mullu<C, Long>(data, readD(dl));
             writeD(dh, u32(result >> 32));
             writeD(dl, u32(result));
             break;
 
         case 0b10:
 
-            result = mullsMusashi<Word>(data, readD(dl));
+            result = mulls<C, Word>(data, readD(dl));
             writeD(dl, u32(result));
             break;
 
         case 0b11:
 
-            result = mullsMusashi<Long>(data, readD(dl));
+            result = mulls<C, Long>(data, readD(dl));
             writeD(dh, u32(result >> 32));
             writeD(dl, u32(result));
             break;
