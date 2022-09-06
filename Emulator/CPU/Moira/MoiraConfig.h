@@ -2,9 +2,7 @@
 // This file is part of Moira - A Motorola 68k emulator
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
-// Licensed under the GNU General Public License v3
-//
-// See https://www.gnu.org for license information
+// Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
 #pragma once
@@ -20,6 +18,19 @@
  * Enable to improve accuracy, disable to gain speed.
  */
 #define PRECISE_TIMING true
+
+/* Set to true to implement the CPU interface as virtual functions.
+ *
+ * To communicate with the environment (e.g., for reading a word from memory),
+ * the CPU calls an appropriate function that has to be implemented by the
+ * client. If this option is set to true, all API functions are declared as
+ * virtual which corresponds to the standard OOP pradigm. Because virtual
+ * functions impose a performance penalty, Moira allows to link the client API
+ * statically by setting this option to false.
+ *
+ * Enable to follow the standard OOP paradigm, disable to gain speed.
+ */
+#define VIRTUAL_API false
 
 /* Set to true to enable address error checking.
  *

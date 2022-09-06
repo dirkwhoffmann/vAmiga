@@ -2,9 +2,7 @@
 // This file is part of Moira - A Motorola 68k emulator
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
-// Licensed under the GNU General Public License v3
-//
-// See https://www.gnu.org for license information
+// Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
 /* The following functions emulate the arithmetic logical unit of the CPU:
@@ -41,15 +39,10 @@ template <Core C, Instr I>         int  cyclesDiv(u32 dividend, u16 divisor) con
 // Bitfield instructions (68020)
 template <Instr I> u32 bitfield(u32 data, u32 offset, u32 width, u32 mask);
 
-// Multiplication, Division (DEPRECATED: USE mul, mulls, mullu instead
-template <Core C, Instr I> [[deprecated]] u32 mulMusashi(u32 op1, u32 op2);
-template <Size S> [[deprecated]] u64 mullsMusashi(u32 op1, u32 op2);
-template <Size S> [[deprecated]] u64 mulluMusashi(u32 op1, u32 op2);
-
+// Division
 template <Core C, Instr I> u32 divMusashi(u32 op1, u32 op2);
 template <Size S> std::pair<u32,u32> divlsMusashi(u64 op1, u32 op2);
 template <Size S> std::pair<u32,u32> divluMusashi(u64 op1, u32 op2);
-
 template <Size S> std::pair<u32,u32> divlsMoira(i64 op1, u32 op2);
 template <Size S> std::pair<u32,u32> divluMoira(u64 op1, u32 op2);
 

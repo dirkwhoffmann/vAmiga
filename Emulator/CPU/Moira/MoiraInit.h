@@ -2,9 +2,7 @@
 // This file is part of Moira - A Motorola 68k emulator
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
-// Licensed under the GNU General Public License v3
-//
-// See https://www.gnu.org for license information
+// Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
 /* This file declares all instruction handlers. All handlers follow a common
@@ -78,13 +76,6 @@ MOIRA_DECLARE(Cmpa)
 MOIRA_DECLARE(CmpiRg)
 MOIRA_DECLARE(CmpiEa)
 MOIRA_DECLARE(Cmpm)
-MOIRA_DECLARE(CpBcc)
-MOIRA_DECLARE(CpDbcc)
-MOIRA_DECLARE(CpGen)
-MOIRA_DECLARE(CpRestore)
-MOIRA_DECLARE(CpSave)
-MOIRA_DECLARE(CpScc)
-MOIRA_DECLARE(CpTrapcc)
 
 MOIRA_DECLARE(Dbcc)
 MOIRA_DECLARE(Divs)
@@ -165,16 +156,63 @@ MOIRA_DECLARE(Unlk)
 MOIRA_DECLARE(UnpkDn)
 MOIRA_DECLARE(UnpkPd)
 
-MOIRA_DECLARE_EXEC(MulsMoira)
-MOIRA_DECLARE_EXEC(MuluMoira)
-MOIRA_DECLARE_EXEC(MullMoira)
-MOIRA_DECLARE_EXEC(DivsMoira)
-MOIRA_DECLARE_EXEC(DivuMoira)
-MOIRA_DECLARE_EXEC(DivlMoira)
+// CPI (Coprocessor interface)
+MOIRA_DECLARE(CpBcc)
+MOIRA_DECLARE(CpDbcc)
+MOIRA_DECLARE(CpGen)
+MOIRA_DECLARE(CpRestore)
+MOIRA_DECLARE(CpRestoreInvalid)
+MOIRA_DECLARE(CpSave)
+MOIRA_DECLARE(CpScc)
+MOIRA_DECLARE(CpTrapcc)
 
-MOIRA_DECLARE_EXEC(MulsMusashi)
-MOIRA_DECLARE_EXEC(MuluMusashi)
-MOIRA_DECLARE_EXEC(MullMusashi)
-MOIRA_DECLARE_EXEC(DivsMusashi)
-MOIRA_DECLARE_EXEC(DivuMusashi)
-MOIRA_DECLARE_EXEC(DivlMusashi)
+// MMU (Memory management unit)
+MOIRA_DECLARE(PGen)
+MOIRA_DECLARE(PFlush)
+MOIRA_DECLARE(PFlusha)
+MOIRA_DECLARE(PFlush40)
+MOIRA_DECLARE(PLoad)
+MOIRA_DECLARE(PMove)
+MOIRA_DECLARE(PTest)
+MOIRA_DECLARE(PTest40)
+
+// FPU (Floating point unit)
+MOIRA_DECLARE(FBcc)
+MOIRA_DECLARE(FDbcc)
+MOIRA_DECLARE(FGen)
+MOIRA_DECLARE(FNop)
+MOIRA_DECLARE(FRestore)
+MOIRA_DECLARE(FSave)
+MOIRA_DECLARE(FScc)
+MOIRA_DECLARE(FTrapcc)
+
+MOIRA_DECLARE(FMove)
+MOIRA_DECLARE(FMovecr)
+MOIRA_DECLARE(FMovem)
+MOIRA_DECLARE_DASM(FGeneric)
+MOIRA_DECLARE_DASM(FGeneric2)
+MOIRA_DECLARE_DASM(FGeneric3)
+
+// 68040
+MOIRA_DECLARE(Cinv)
+MOIRA_DECLARE(Cpush)
+MOIRA_DECLARE(Move16PiPi)
+MOIRA_DECLARE(Move16PiAl)
+MOIRA_DECLARE(Move16AlPi)
+MOIRA_DECLARE(Move16AiAl)
+MOIRA_DECLARE(Move16AlAi)
+
+// Sub handlers 
+template <Core C, Instr I, Mode M, Size S> void execMulsMoira(u16);
+template <Core C, Instr I, Mode M, Size S> void execMuluMoira(u16);
+template <Core C, Instr I, Mode M, Size S> void execMullMoira(u16);
+template <Core C, Instr I, Mode M, Size S> bool execDivsMoira(u16, bool *);
+template <Core C, Instr I, Mode M, Size S> bool execDivuMoira(u16, bool *);
+template <Core C, Instr I, Mode M, Size S> bool execDivlMoira(u16, bool *);
+
+template <Core C, Instr I, Mode M, Size S> void execMulsMusashi(u16);
+template <Core C, Instr I, Mode M, Size S> void execMuluMusashi(u16);
+template <Core C, Instr I, Mode M, Size S> void execMullMusashi(u16);
+template <Core C, Instr I, Mode M, Size S> bool execDivsMusashi(u16, bool *);
+template <Core C, Instr I, Mode M, Size S> bool execDivuMusashi(u16, bool *);
+template <Core C, Instr I, Mode M, Size S> bool execDivlMusashi(u16, bool *);

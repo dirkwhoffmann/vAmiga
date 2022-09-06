@@ -287,19 +287,17 @@ Moira::signalSoftwareTrap(u16 instr, SoftwareTrap trap)
  
 }
 
-/*
 void
-Moira::signalBkptInstruction(int nr)
+Moira::didChangeCACR(u32 value)
 {
-    xfiles("68010: BKPT instruction executed\n");
+
 }
 
 void
-Moira::addressErrorHandler()
+Moira::didChangeCAAR(u32 value)
 {
-    
+
 }
-*/
 
 void
 Moira::softstopReached(u32 addr)

@@ -2,9 +2,7 @@
 // This file is part of Moira - A Motorola 68k emulator
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
-// Licensed under the GNU General Public License v3
-//
-// See https://www.gnu.org for license information
+// Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
 #pragma once
@@ -75,20 +73,32 @@
 #define ____________xxxx(opcode) (u8)((opcode >> 0)  & 0b1111)
 #define ___________xxxxx(opcode) (u8)((opcode >> 0)  & 0b11111)
 #define __________xxxxxx(opcode) (u8)((opcode >> 0)  & 0b111111)
+#define _________xxxxxxx(opcode) (u8)((opcode >> 0)  & 0b1111111)
 #define ________xxxxxxxx(opcode) (u8)((opcode >> 0)  & 0b11111111)
 #define ____xxxxxxxxxxxx(opcode) (u16)((opcode >> 0) & 0b111111111111)
+#define ___________xxx__(opcode) (u8)((opcode >> 2)  & 0b111)
+#define ___________xx___(opcode) (u8)((opcode >> 3)  & 0b11)
 #define __________xxx___(opcode) (u8)((opcode >> 3)  & 0b111)
 #define __________xx____(opcode) (u8)((opcode >> 4)  & 0b11)
+#define _________xxx____(opcode) (u8)((opcode >> 4)  & 0b111)
+#define __________x_____(opcode) (u8)((opcode >> 5)  & 0b1)
+#define ________xxx_____(opcode) (u8)((opcode >> 5)  & 0b111)
+#define _______xxxx_____(opcode) (u8)((opcode >> 5)  & 0b1111)
+#define _________x______(opcode) (u8)((opcode >> 6)  & 0b1)
+#define ________xx______(opcode) (u8)((opcode >> 6)  & 0b11)
 #define _______xxx______(opcode) (u8)((opcode >> 6)  & 0b111)
 #define ______xxxx______(opcode) (u8)((opcode >> 6)  & 0b1111)
 #define _____xxxxx______(opcode) (u8)((opcode >> 6)  & 0b11111)
-#define __________x_____(opcode) (u8)((opcode >> 5)  & 0b1)
-#define _________x______(opcode) (u8)((opcode >> 6)  & 0b1)
 #define ________x_______(opcode) (u8)((opcode >> 7)  & 0b1)
+#define ______xxx_______(opcode) (u8)((opcode >> 7)  & 0b111)
 #define _______x________(opcode) (u8)((opcode >> 8)  & 0b1)
+#define ______x_________(opcode) (u8)((opcode >> 9)  & 0b1)
 #define _____xx_________(opcode) (u8)((opcode >> 9)  & 0b11)
 #define ____xxx_________(opcode) (u8)((opcode >> 9)  & 0b111)
 #define ____xx__________(opcode) (u8)((opcode >> 10) & 0b11)
+#define ___xxx__________(opcode) (u8)((opcode >> 10) & 0b111)
 #define ____x___________(opcode) (u8)((opcode >> 11) & 0b1)
+#define ___xx___________(opcode) (u8)((opcode >> 11) & 0b11)
 #define _xxx____________(opcode) (u8)((opcode >> 12) & 0b111)
 #define xxxx____________(opcode) (u8)((opcode >> 12) & 0b1111)
+#define xxx_____________(opcode) (u8)((opcode >> 13) & 0b111)

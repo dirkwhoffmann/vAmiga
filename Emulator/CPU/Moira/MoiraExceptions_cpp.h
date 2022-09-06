@@ -2,9 +2,7 @@
 // This file is part of Moira - A Motorola 68k emulator
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
-// Licensed under the GNU General Public License v3
-//
-// See https://www.gnu.org for license information
+// Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
 template <Core C> void
@@ -174,13 +172,7 @@ Moira::execException(ExceptionType exc, int nr)
 
         case M68000:    execException<C68000>(exc, nr); break;
         case M68010:    execException<C68010>(exc, nr); break;
-        case M68EC020:
-        case M68020:
-        case M68EC030:
-        case M68030:    execException<C68020>(exc, nr); break;
-            
-        default:
-            assert(false);
+        default:        execException<C68020>(exc, nr); break;
     }
 }
 
@@ -188,13 +180,16 @@ template <Core C> void
 Moira::execException(ExceptionType exc, int nr)
 {
     u16 status = getSR();
-    
+
     // Determine the exception vector number
     u16 vector = (exc == EXC_TRAP) ? u16(exc + nr) : u16(exc);
-    
+
     // Inform the delegate
     willExecute(exc, vector);
-    
+
+    // Remember the exception vector
+    exception = vector;
+
     // Enter supervisor mode and leave trace mode
     setSupervisorMode(true);
     clearTraceFlags();
@@ -285,7 +280,11 @@ Moira::execException(ExceptionType exc, int nr)
             SYNC(4);
             
             // Write stack frame
-            writeStackFrame0000<C>(status, reg.pc - 2, vector);
+            if (MIMIC_MUSASHI) {
+                writeStackFrame0000<C>(status, reg.pc, vector);
+            } else {
+                writeStackFrame0000<C>(status, reg.pc - 2, vector);
+            }
             
             // Branch to exception handler
             jumpToVector<C, AE_SET_CB3>(vector);
@@ -315,13 +314,7 @@ Moira::execInterrupt(u8 level)
 
         case M68000:    execInterrupt<C68000>(level); break;
         case M68010:    execInterrupt<C68010>(level); break;
-        case M68EC020:
-        case M68020:
-        case M68EC030:
-        case M68030:    execInterrupt<C68020>(level); break;
-
-        default:
-            assert(false);
+        default:        execInterrupt<C68020>(level); break;
     }
 }
 

@@ -2,9 +2,7 @@
 // This file is part of Moira - A Motorola 68k emulator
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
-// Licensed under the GNU General Public License v3
-//
-// See https://www.gnu.org for license information
+// Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
 template <Core C, Mode M, Size S, Flags F> bool
@@ -610,9 +608,7 @@ template <Core C, Flags F> void
 Moira::jumpToVector(int nr)
 {
     u32 vectorAddr = reg.vbr + 4 * nr;
-    
-    exception = nr;
-    
+
     // Update the program counter
     reg.pc = readMS<C, MEM_DATA, Long>(vectorAddr);
     

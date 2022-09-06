@@ -2,9 +2,7 @@
 // This file is part of Moira - A Motorola 68k emulator
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
-// Licensed under the GNU General Public License v3
-//
-// See https://www.gnu.org for license information
+// Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
 #pragma once
@@ -36,24 +34,40 @@ typedef enum
     M68EC020,           // Work in progress
     M68020,             // Work in progress
     M68EC030,           // Work in progress
-    M68030              // Work in progress
+    M68030,             // Work in progress
+    M68EC040,           // Work in progress
+    M68LC040,           // Work in progress
+    M68040              // Work in progress
 }
 Model;
+
+// Availabilty masks
+constexpr u16 AV_68040    = 1 << M68EC040 | 1 << M68LC040 | 1 << M68040;
+constexpr u16 AV_68030    = 1 << M68EC030 | 1 << M68030;
+constexpr u16 AV_68020    = 1 << M68EC020 | 1 << M68020;
+constexpr u16 AV_68030_UP = AV_68030 | AV_68040;
+constexpr u16 AV_68020_UP = AV_68020 | AV_68030_UP;
+constexpr u16 AV_68010_UP = 1 << M68010 | AV_68020_UP;
+constexpr u16 AV_68000_UP = 1 << M68000 | AV_68010_UP;
+constexpr u16 AV_MMU      = 1 << M68030 | 1 << M68LC040 | 1 << M68040;
+constexpr u16 AV_FPU      = 1 << M68040;
 
 typedef enum
 {
     C68000,             // Used by M68000
     C68010,             // Used by M68010
-    C68020              // Used by M68EC020, M68020, M68EC030, and M68030
+    C68020              // Used by all others
 }
 Core;
 
 typedef enum
 {
-    DASM_MOIRA,         // Default disassembler style
-    DASM_MUSASHI,       // Musashi style
-    DASM_VDA68K_MOT,    // Vda68k style (Motorola)
-    DASM_VDA68K_MIT     // Vda68k style (MIT)
+    DASM_MOIRA_MOT,      // Official syntax styles
+    DASM_MOIRA_MIT,
+
+    DASM_GNU,           // Legacy styles (for unit testing)
+    DASM_GNU_MIT,
+    DASM_MUSASHI,
 }
 DasmStyle;
 
@@ -111,7 +125,31 @@ typedef enum
     RTM,        TRAPCC,     TRAPCS,     TRAPEQ,     TRAPGE,     TRAPGT,
     TRAPHI,     TRAPLE,     TRAPLS,     TRAPLT,     TRAPMI,     TRAPNE,
     TRAPPL,     TRAPVC,     TRAPVS,     TRAPF,      TRAPT,      UNPK,
+
+    // 68040+ instructions
+    CINV,       CPUSH,      MOVE16,
     
+    // MMU instructions
+    PFLUSH,     PFLUSHA,    PFLUSHAN,   PFLUSHN,
+    PLOAD,      PMOVE,      PTEST,
+
+    // FPU instructions (68040 and 6888x)
+    FABS,       FADD,       FBcc,       FCMP,       FDBcc,      FDIV,
+    FMOVE,      FMOVEM,     FMUL,       FNEG,       FNOP,       FRESTORE,
+    FSAVE,      FScc,       FSQRT,      FSUB,       FTRAPcc,    FTST,
+
+    // FPU instructions (68040 only)
+    FSABS,      FDABS,      FSADD,      FDADD,      FSDIV,      FDDIV,
+    FSMOVE,     FDMOVE,     FSMUL,      FDMUL,      FSNEG,      FDNEG,
+    FSSQRT,     FDSQRT,     FSSUB,      FDSUB,
+
+    // FPU instructions (6888x only)
+    FACOS,      FASIN,      FATAN,      FATANH,     FCOS,       FCOSH,
+    FETOX,      FETOXM1,    FGETEXP,    FGETMAN,    FINT,       FINTRZ,
+    FLOG10,     FLOG2,      FLOGN,      FLOGNP1,    FMOD,       FMOVECR,
+    FREM,       FSCAL,      FSGLDIV,    FSGLMUL,    FSIN,       FSINCOS,
+    FSINH,      FTAN,       FTANH,      FTENTOX,    FTWOTOX,
+
     // Loop mode variants (68010)
     ABCD_LOOP,  ADD_LOOP,   ADDA_LOOP,  ADDX_LOOP,  AND_LOOP,   ASL_LOOP,
     ASR_LOOP,   CLR_LOOP,   CMP_LOOP,   CMPA_LOOP,  DBCC_LOOP,  DBCS_LOOP,
@@ -125,7 +163,7 @@ typedef enum
 Instr;
 
 template <Instr I>
-constexpr bool looping() { return I >= ABCD_LOOP; }
+constexpr bool looping() { return I >= ABCD_LOOP && I <= TST_LOOP; }
 
 typedef enum
 {

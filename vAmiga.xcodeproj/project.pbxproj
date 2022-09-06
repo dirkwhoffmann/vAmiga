@@ -732,6 +732,10 @@
 		50A61470260DCA6200A01428 /* RomFileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomFileTypes.h; sourceTree = "<group>"; };
 		50A64B94257A63A600442964 /* BootBlockImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BootBlockImage.h; sourceTree = "<group>"; };
 		50A64B95257A63A600442964 /* BootBlockImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BootBlockImage.cpp; sourceTree = "<group>"; };
+		50A6F50328C7AB51002F31EA /* MoiraDasmMMU_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraDasmMMU_cpp.h; sourceTree = "<group>"; };
+		50A6F50428C7AB6A002F31EA /* MoiraDasmFPU_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraDasmFPU_cpp.h; sourceTree = "<group>"; };
+		50A6F50528C7AB7F002F31EA /* MoiraExecMMU_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraExecMMU_cpp.h; sourceTree = "<group>"; };
+		50A6F50628C7AB8F002F31EA /* MoiraExecFPU_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraExecFPU_cpp.h; sourceTree = "<group>"; };
 		50AD9048276DCB470011ECCB /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50AD904A276E104E0011ECCB /* TextStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextStorage.h; sourceTree = "<group>"; };
 		50AD904C276E10660011ECCB /* TextStorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TextStorage.cpp; sourceTree = "<group>"; };
@@ -1794,6 +1798,8 @@
 				50E2BE36240D41EE00155AE4 /* MoiraALU_cpp.h */,
 				50E2BE31240D418500155AE4 /* MoiraDasm.h */,
 				50E2BE26240D418500155AE4 /* MoiraDasm_cpp.h */,
+				50A6F50428C7AB6A002F31EA /* MoiraDasmFPU_cpp.h */,
+				50A6F50328C7AB51002F31EA /* MoiraDasmMMU_cpp.h */,
 				50E2BE2A240D418500155AE4 /* MoiraDataflow.h */,
 				50E2BE2C240D418500155AE4 /* MoiraDataflow_cpp.h */,
 				50E2BE2B240D418500155AE4 /* MoiraDebugger.h */,
@@ -1801,6 +1807,8 @@
 				50E2BE27240D418500155AE4 /* MoiraExceptions.h */,
 				50927DAA24865F11008DF3B8 /* MoiraExceptions_cpp.h */,
 				50E2BE30240D418500155AE4 /* MoiraExec_cpp.h */,
+				50A6F50628C7AB8F002F31EA /* MoiraExecFPU_cpp.h */,
+				50A6F50528C7AB7F002F31EA /* MoiraExecMMU_cpp.h */,
 				50E2BE2E240D418500155AE4 /* MoiraInit.h */,
 				50E2BE28240D418500155AE4 /* MoiraInit_cpp.h */,
 				50E2BE32240D418600155AE4 /* StrWriter.h */,

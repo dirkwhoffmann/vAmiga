@@ -2,9 +2,7 @@
 // This file is part of Moira - A Motorola 68k emulator
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
-// Licensed under the GNU General Public License v3
-//
-// See https://www.gnu.org for license information
+// Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
 #define AVAILABILITY(core) \
@@ -1247,9 +1245,15 @@ Moira::execBkpt(u16 opcode)
 {
     AVAILABILITY(C68010)
 
-    if (!MIMIC_MUSASHI) SYNC(4);
-    // execException<C>(EXC_ILLEGAL);
-    execException<C>(EXC_BKPT);
+    if (MIMIC_MUSASHI) {
+
+        execException<C>(EXC_ILLEGAL);
+
+    } else {
+
+        SYNC(4);
+        execException<C>(EXC_BKPT);
+    }
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
@@ -1421,21 +1425,24 @@ Moira::execCas2(u16 opcode)
         }
     }
 
-    writeD<S>(dc1, data1);
-    writeD<S>(dc2, data2);
+    if (MIMIC_MUSASHI) {
 
-    /*
-    if (rn1 & 0x8) {
-        writeD(dc1, SEXT<S>(data1));
+        if (rn1 & 0x8) {
+            writeD(dc1, SEXT<S>(data1));
+        } else {
+            writeD<S>(dc1, data1);
+        }
+        if (rn2 & 0x8) {
+            writeD(dc2, SEXT<S>(data2));
+        } else {
+            writeD<S>(dc2, data2);
+        }
+
     } else {
+
         writeD<S>(dc1, data1);
-    }
-    if (rn2 & 0x8) {
-        writeD(dc2, SEXT<S>(data2));
-    } else {
         writeD<S>(dc2, data2);
     }
-    */
 
     prefetch<C, POLLIPL>();
 
@@ -1460,8 +1467,17 @@ Moira::execChk(u16 opcode)
     SYNC_68000(6);
     SYNC_68010(4);
 
-    reg.sr.n = MIMIC_MUSASHI ? reg.sr.n : 0;
-    setUndefinedFlags<C, I, S>(SEXT<S>(data), SEXT<S>(dy));
+    if (MIMIC_MUSASHI) {
+
+        reg.sr.z = ZERO<S>(dy);
+        reg.sr.v = 0;
+        reg.sr.c = 0;
+
+    } else {
+
+        reg.sr.n = 0;
+        setUndefinedFlags<C, I, S>(SEXT<S>(data), SEXT<S>(dy));
+    }
 
     if (SEXT<S>(dy) > SEXT<S>(data)) {
 
@@ -1523,20 +1539,34 @@ Moira::execChkCmp2(u16 opcode)
     if (!readOp<C, M, S>(src, &ea, &data1)) return;
     data2 = readM<C, M, S>(ea + S);
 
-    i32 bound1 = SEXT<S>(data1);
-    i32 bound2 = SEXT<S>(data2);
-    i32 compare = dst < 8 ? SEXT<S>(readR(dst)) : readR(dst);
+    if (MIMIC_MUSASHI) {
 
-    // Set flags
-    if (bound1 <= bound2) {
-        reg.sr.c = compare < bound1 || compare > bound2;
+        auto bound1 = ((M == 9 || M == 10) && S == Byte) ? (i32)data1 : SEXT<S>(data1);
+        auto bound2 = ((M == 9 || M == 10) && S == Byte) ? (i32)data2 : SEXT<S>(data2);
+        i32 compare = readR<S>(dst);
+        if (dst < 8) compare = SEXT<S>(compare);
+
+        if (bound1 < bound2) {
+            reg.sr.c = compare < bound1 || compare > bound2;
+        } else {
+            reg.sr.c = compare > bound2 || compare < bound1;
+        }
+        reg.sr.z = compare == bound1 || compare == bound2;
+
     } else {
-        reg.sr.c = compare < bound1 && compare > bound2;
-    }
-    reg.sr.z = compare == bound1 || compare == bound2;
 
-    // Emulate undefined behaviour for N and V
-    setUndefinedFlags<C, I, S>(bound1, bound2, compare);
+        i32 bound1 = SEXT<S>(data1);
+        i32 bound2 = SEXT<S>(data2);
+        i32 compare = dst < 8 ? SEXT<S>(readR(dst)) : readR(dst);
+
+        if (bound1 <= bound2) {
+            reg.sr.c = compare < bound1 || compare > bound2;
+        } else {
+            reg.sr.c = compare < bound1 && compare > bound2;
+        }
+        reg.sr.z = compare == bound1 || compare == bound2;
+        setUndefinedFlags<C, I, S>(bound1, bound2, compare);
+    }
 
     if ((ext & 0x800) && reg.sr.c) {
 
@@ -1811,6 +1841,16 @@ Moira::execCpRestore(u16 opcode)
 {
     AVAILABILITY(C68020)
     SUPERVISOR_MODE_ONLY
+
+    execLineF<C, I, M, S>(opcode);
+
+    FINALIZE
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execCpRestoreInvalid(u16 opcode)
+{
+    AVAILABILITY(C68020)
 
     execLineF<C, I, M, S>(opcode);
 
@@ -2970,12 +3010,12 @@ Moira::execMovemRgEa(u16 opcode)
                 if (mask & (0x8000 >> i)) {
 
                     ea -= S;
-                    if constexpr (C == C68020) writeA(dst, ea);
+                    if constexpr (C == C68020 && !MIMIC_MUSASHI) writeA(dst, ea);
                     writeM<C, M, S, MIMIC_MUSASHI ? REVERSE : 0>(ea, reg.r[i]);
                     cnt++;
                 }
             }
-            if constexpr (C != C68020) writeA(dst, ea);
+            if constexpr (C != C68020 || MIMIC_MUSASHI) writeA(dst, ea);
             break;
         }
         default:
@@ -3481,7 +3521,7 @@ Moira::execMulsMusashi(u16 opcode)
     if (!readOp<C, M, Word>(src, &ea, &data)) return;
 
     prefetch<C, POLLIPL>();
-    result = mulMusashi<C, I>(data, readD<Word>(dst));
+    result = muls<C>(data, readD<Word>(dst));
 
     if constexpr (I == MULU) { SYNC_68000(50); SYNC_68010(26); }
     if constexpr (I == MULS) { SYNC_68000(50); SYNC_68010(28); }
@@ -3547,7 +3587,7 @@ Moira::execMuluMusashi(u16 opcode)
     if (!readOp<C, M, Word>(src, &ea, &data)) return;
 
     prefetch<C, POLLIPL>();
-    result = mulMusashi<C, I>(data, readD<Word>(dst));
+    result = mulu<C>(data, readD<Word>(dst));
 
     if constexpr (I == MULU) { SYNC_68000(50); SYNC_68010(26); }
     if constexpr (I == MULS) { SYNC_68000(50); SYNC_68010(28); }
@@ -3683,40 +3723,51 @@ Moira::execDivs(u16 opcode)
 {
     AVAILABILITY(C68000)
 
+    bool success;
+    bool divByZero = false;
+
     if constexpr (MIMIC_MUSASHI) {
-        execDivsMusashi<C, I, M, S>(opcode);
+        success = execDivsMusashi<C, I, M, S>(opcode, &divByZero);
     } else {
-        execDivsMoira<C, I, M, S>(opcode);
+        success = execDivsMoira<C, I, M, S>(opcode, &divByZero);
     }
 
-    //           00  10  20        00  10  20        00  10  20
-    //           .b  .b  .b        .w  .w  .w        .l  .l  .l
-    CYCLES_DN   ( 0,  0,  0,      158,122, 56,        0,  0,  0)
-    CYCLES_AI   ( 0,  0,  0,      162,126, 60,        0,  0,  0)
-    CYCLES_PI   ( 0,  0,  0,      162,126, 60,        0,  0,  0)
-    CYCLES_PD   ( 0,  0,  0,      164,128, 61,        0,  0,  0)
-    CYCLES_DI   ( 0,  0,  0,      166,130, 61,        0,  0,  0)
-    CYCLES_IX   ( 0,  0,  0,      168,132, 63,        0,  0,  0)
-    CYCLES_AW   ( 0,  0,  0,      166,130, 60,        0,  0,  0)
-    CYCLES_AL   ( 0,  0,  0,      170,134, 60,        0,  0,  0)
-    CYCLES_DIPC ( 0,  0,  0,      166,130, 61,        0,  0,  0)
-    CYCLES_IXPC ( 0,  0,  0,      168,132, 63,        0,  0,  0)
-    CYCLES_IM   ( 0,  0,  0,      162,126, 58,        0,  0,  0)
+    if (success) {
+
+        //           00  10  20        00  10  20        00  10  20
+        //           .b  .b  .b        .w  .w  .w        .l  .l  .l
+        CYCLES_DN   ( 0,  0,  0,      158,122, 56,        0,  0,  0)
+        CYCLES_AI   ( 0,  0,  0,      162,126, 60,        0,  0,  0)
+        CYCLES_PI   ( 0,  0,  0,      162,126, 60,        0,  0,  0)
+        CYCLES_PD   ( 0,  0,  0,      164,128, 61,        0,  0,  0)
+        CYCLES_DI   ( 0,  0,  0,      166,130, 61,        0,  0,  0)
+        CYCLES_IX   ( 0,  0,  0,      168,132, 63,        0,  0,  0)
+        CYCLES_AW   ( 0,  0,  0,      166,130, 60,        0,  0,  0)
+        CYCLES_AL   ( 0,  0,  0,      170,134, 60,        0,  0,  0)
+        CYCLES_DIPC ( 0,  0,  0,      166,130, 61,        0,  0,  0)
+        CYCLES_IXPC ( 0,  0,  0,      168,132, 63,        0,  0,  0)
+        CYCLES_IM   ( 0,  0,  0,      162,126, 58,        0,  0,  0)
+
+    } else if (divByZero) {
+
+        CYCLES_68000(38);
+        CYCLES_68010(44);
+        CYCLES_68020(38);
+    }
 
     FINALIZE
 }
 
-template <Core C, Instr I, Mode M, Size S> void
-Moira::execDivsMoira(u16 opcode)
+template <Core C, Instr I, Mode M, Size S> bool
+Moira::execDivsMoira(u16 opcode, bool *divByZero)
 {
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
     u32 ea, divisor, result;
-    if (!readOp<C, M, Word, STD_AE_FRAME>(src, &ea, &divisor)) return;
+    if (!readOp<C, M, Word, STD_AE_FRAME>(src, &ea, &divisor)) return false;
     u32 dividend = readD(dst);
 
-    // Check for division by zero
     if (divisor == 0) {
 
         reg.sr.n = 0;
@@ -3727,7 +3778,8 @@ Moira::execDivsMoira(u16 opcode)
 
         SYNC(8);
         execException<C>(EXC_DIVIDE_BY_ZERO);
-        return;
+        *divByZero = true;
+        return false;
     }
 
     result = div<C, I>(dividend, divisor);
@@ -3736,31 +3788,30 @@ Moira::execDivsMoira(u16 opcode)
 
     [[maybe_unused]] auto cycles = cyclesDiv<C, I>(dividend, (u16)divisor) - 4;
     SYNC(cycles);
+    return true;
 }
 
-template <Core C, Instr I, Mode M, Size S> void
-Moira::execDivsMusashi(u16 opcode)
+template <Core C, Instr I, Mode M, Size S> bool
+Moira::execDivsMusashi(u16 opcode, bool *divByZero)
 {
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
     [[maybe_unused]] i64 c = clock;
-    u32 ea, divisor, result;
-    if (!readOp<C, M, Word>(src, &ea, &divisor)) return;
 
-    // Check for division by zero
+    u32 ea, divisor, result;
+    if (!readOp<C, M, Word>(src, &ea, &divisor)) return false;
+
     if (divisor == 0) {
+
         if constexpr (C == C68000) {
             SYNC(8 - (int)(clock - c));
         } else {
             SYNC(10 - (int)(clock - c));
         }
         execException<C>(EXC_DIVIDE_BY_ZERO);
-
-        CYCLES_68000(38);
-        CYCLES_68010(44);
-        CYCLES_68020(38);
-        return;
+        *divByZero = true;
+        return false;
     }
 
     u32 dividend = readD(dst);
@@ -3771,6 +3822,7 @@ Moira::execDivsMusashi(u16 opcode)
 
     writeD(dst, result);
     prefetch<C, POLLIPL>();
+    return true;
 }
 
 template <Core C, Instr I, Mode M, Size S> void
@@ -3778,37 +3830,49 @@ Moira::execDivu(u16 opcode)
 {
     AVAILABILITY(C68000)
 
+    bool success;
+    bool divByZero = false;
+
     if constexpr (MIMIC_MUSASHI) {
-        execDivuMusashi<C, I, M, S>(opcode);
+        success = execDivuMusashi<C, I, M, S>(opcode, &divByZero);
     } else {
-        execDivuMoira<C, I, M, S>(opcode);
+        success = execDivuMoira<C, I, M, S>(opcode, &divByZero);
     }
 
-    //           00  10  20        00  10  20        00  10  20
-    //           .b  .b  .b        .w  .w  .w        .l  .l  .l
-    CYCLES_DN   ( 0,  0,  0,      140,108, 44,       0,  0,  0)
-    CYCLES_AI   ( 0,  0,  0,      144,112, 48,       0,  0,  0)
-    CYCLES_PI   ( 0,  0,  0,      144,112, 48,       0,  0,  0)
-    CYCLES_PD   ( 0,  0,  0,      146,114, 49,       0,  0,  0)
-    CYCLES_DI   ( 0,  0,  0,      148,116, 49,       0,  0,  0)
-    CYCLES_IX   ( 0,  0,  0,      150,118, 51,       0,  0,  0)
-    CYCLES_AW   ( 0,  0,  0,      148,116, 48,       0,  0,  0)
-    CYCLES_AL   ( 0,  0,  0,      152,120, 48,       0,  0,  0)
-    CYCLES_DIPC ( 0,  0,  0,      148,116, 49,       0,  0,  0)
-    CYCLES_IXPC ( 0,  0,  0,      150,118, 51,       0,  0,  0)
-    CYCLES_IM   ( 0,  0,  0,      144,112, 46,       0,  0,  0)
+    if (success) {
+
+        //           00  10  20        00  10  20        00  10  20
+        //           .b  .b  .b        .w  .w  .w        .l  .l  .l
+        CYCLES_DN   ( 0,  0,  0,      140,108, 44,       0,  0,  0)
+        CYCLES_AI   ( 0,  0,  0,      144,112, 48,       0,  0,  0)
+        CYCLES_PI   ( 0,  0,  0,      144,112, 48,       0,  0,  0)
+        CYCLES_PD   ( 0,  0,  0,      146,114, 49,       0,  0,  0)
+        CYCLES_DI   ( 0,  0,  0,      148,116, 49,       0,  0,  0)
+        CYCLES_IX   ( 0,  0,  0,      150,118, 51,       0,  0,  0)
+        CYCLES_AW   ( 0,  0,  0,      148,116, 48,       0,  0,  0)
+        CYCLES_AL   ( 0,  0,  0,      152,120, 48,       0,  0,  0)
+        CYCLES_DIPC ( 0,  0,  0,      148,116, 49,       0,  0,  0)
+        CYCLES_IXPC ( 0,  0,  0,      150,118, 51,       0,  0,  0)
+        CYCLES_IM   ( 0,  0,  0,      144,112, 46,       0,  0,  0)
+
+    } else if (divByZero) {
+
+        CYCLES_68000(38);
+        CYCLES_68010(44);
+        CYCLES_68020(38);
+    }
 
     FINALIZE
 }
 
-template <Core C, Instr I, Mode M, Size S> void
-Moira::execDivuMoira(u16 opcode)
+template <Core C, Instr I, Mode M, Size S> bool
+Moira::execDivuMoira(u16 opcode, bool *divByZero)
 {
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
     u32 ea, divisor, result;
-    if (!readOp<C, M, Word, STD_AE_FRAME>(src, &ea, &divisor)) return;
+    if (!readOp<C, M, Word, STD_AE_FRAME>(src, &ea, &divisor)) return false;
     u32 dividend = readD(dst);
 
     // Check for division by zero
@@ -3822,7 +3886,8 @@ Moira::execDivuMoira(u16 opcode)
 
         SYNC(8);
         execException<C>(EXC_DIVIDE_BY_ZERO);
-        return;
+        *divByZero = true;
+        return false;
     }
 
     result = div<C, I>(dividend, divisor);
@@ -3831,17 +3896,18 @@ Moira::execDivuMoira(u16 opcode)
 
     [[maybe_unused]] auto cycles = cyclesDiv<C, I>(dividend, (u16)divisor) - 4;
     SYNC(cycles);
+    return true;
 }
 
-template <Core C, Instr I, Mode M, Size S> void
-Moira::execDivuMusashi(u16 opcode)
+template <Core C, Instr I, Mode M, Size S> bool
+Moira::execDivuMusashi(u16 opcode, bool *divByZero)
 {
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
     [[maybe_unused]] i64 c = clock;
     u32 ea, divisor, result;
-    if (!readOp<C, M, Word>(src, &ea, &divisor)) return;
+    if (!readOp<C, M, Word>(src, &ea, &divisor)) return false;
 
     // Check for division by zero
     if (divisor == 0) {
@@ -3851,11 +3917,8 @@ Moira::execDivuMusashi(u16 opcode)
             SYNC(10 - (int)(clock - c));
         }
         execException<C>(EXC_DIVIDE_BY_ZERO);
-
-        CYCLES_68000(38);
-        CYCLES_68010(44);
-        CYCLES_68020(38);
-        return;
+        *divByZero = true;
+        return false;
     }
 
     u32 dividend = readD(dst);
@@ -3866,6 +3929,8 @@ Moira::execDivuMusashi(u16 opcode)
 
     writeD(dst, result);
     prefetch<C, POLLIPL>();
+
+    return true;
 }
 
 template <Core C, Instr I, Mode M, Size S> void
@@ -3873,31 +3938,43 @@ Moira::execDivl(u16 opcode)
 {
     AVAILABILITY(C68020)
 
+    bool success;
+    bool divByZero = false;
+
     if constexpr (MIMIC_MUSASHI) {
-        execDivlMusashi<C, I, M, S>(opcode);
+        success = execDivlMusashi<C, I, M, S>(opcode, &divByZero);
     } else {
-        execDivlMoira<C, I, M, S>(opcode);
+        success = execDivlMoira<C, I, M, S>(opcode, &divByZero);
     }
 
-    //           00  10  20        00  10  20        00  10  20
-    //           .b  .b  .b        .w  .w  .w        .l  .l  .l
-    CYCLES_DN   ( 0,  0,  0,        0,  0,  0,        0,  0, 84)
-    CYCLES_AI   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
-    CYCLES_PI   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
-    CYCLES_PD   ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
-    CYCLES_DI   ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
-    CYCLES_IX   ( 0,  0,  0,        0,  0,  0,        0,  0, 91)
-    CYCLES_AW   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
-    CYCLES_AL   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
-    CYCLES_DIPC ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
-    CYCLES_IXPC ( 0,  0,  0,        0,  0,  0,        0,  0, 91)
-    CYCLES_IM   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
+    if (success) {
+
+        //           00  10  20        00  10  20        00  10  20
+        //           .b  .b  .b        .w  .w  .w        .l  .l  .l
+        CYCLES_DN   ( 0,  0,  0,        0,  0,  0,        0,  0, 84)
+        CYCLES_AI   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
+        CYCLES_PI   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
+        CYCLES_PD   ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
+        CYCLES_DI   ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
+        CYCLES_IX   ( 0,  0,  0,        0,  0,  0,        0,  0, 91)
+        CYCLES_AW   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
+        CYCLES_AL   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
+        CYCLES_DIPC ( 0,  0,  0,        0,  0,  0,        0,  0, 89)
+        CYCLES_IXPC ( 0,  0,  0,        0,  0,  0,        0,  0, 91)
+        CYCLES_IM   ( 0,  0,  0,        0,  0,  0,        0,  0, 88)
+
+    } else if (divByZero) {
+
+        CYCLES_68000(38);
+        CYCLES_68010(44);
+        CYCLES_68020(38);
+    }
 
     FINALIZE
 }
 
-template <Core C, Instr I, Mode M, Size S> void
-Moira::execDivlMoira(u16 opcode)
+template <Core C, Instr I, Mode M, Size S> bool
+Moira::execDivlMoira(u16 opcode, bool *divByZero)
 {
     u64 dividend;
     u32 ea, divisor;
@@ -3907,7 +3984,7 @@ Moira::execDivlMoira(u16 opcode)
     int dh  = _____________xxx(ext);
     int dl  = _xxx____________(ext);
 
-    if (!readOp<C, M, S>(src, &ea, &divisor)) return;
+    if (!readOp<C, M, S>(src, &ea, &divisor)) return false;
 
     if (ext & 0x400) {
         dividend = (u64)readD(dh) << 32 | readD(dl);
@@ -3930,8 +4007,8 @@ Moira::execDivlMoira(u16 opcode)
         }
 
         execException<C>(EXC_DIVIDE_BY_ZERO);
-        CYCLES_68020(38);
-        return;
+        *divByZero = true;
+        return false;
     }
 
     prefetch<C, POLLIPL>();
@@ -3986,10 +4063,12 @@ Moira::execDivlMoira(u16 opcode)
             break;
         }
     }
+
+    return true;
 }
 
-template <Core C, Instr I, Mode M, Size S> void
-Moira::execDivlMusashi(u16 opcode)
+template <Core C, Instr I, Mode M, Size S> bool
+Moira::execDivlMusashi(u16 opcode, bool *divByZero)
 {
     u64 dividend;
     u32 ea, divisor;
@@ -3999,13 +4078,13 @@ Moira::execDivlMusashi(u16 opcode)
     int dh  = _____________xxx(ext);
     int dl  = _xxx____________(ext);
 
-    if (!readOp<C, M, S>(src, &ea, &divisor)) return;
+    if (!readOp<C, M, S>(src, &ea, &divisor)) return false;
 
     if (divisor == 0) {
 
         execException<C>(EXC_DIVIDE_BY_ZERO);
-        CYCLES_68020(38);
-        return;
+        *divByZero = true;
+        return false;
     }
 
     prefetch<C, POLLIPL>();
@@ -4050,10 +4129,11 @@ Moira::execDivlMusashi(u16 opcode)
                 writeD(dh, result.second);
                 writeD(dl, result.first);
             }
-
             break;
         }
     }
+
+    return true;
 }
 
 template <Core C, Instr I, Mode M, Size S> void
@@ -4199,18 +4279,36 @@ Moira::execPackPd(u16 opcode)
     int ax  = _____________xxx(opcode);
     int ay  = ____xxx_________(opcode);
 
-    reg.a[ax]--;
-    auto data1 = readMS<C, MEM_DATA, Byte>(readA(ax));
+    if (MIMIC_MUSASHI) {
 
-    u16 adj = (u16)readI<C, Word>();
+        u32 ea1, data1;
+        if (!readOp<C, M, Byte>(ax, &ea1, &data1)) return;
 
-    reg.a[ax]--;
-    auto data2 = readMS<C, MEM_DATA, Byte>(readA(ax));
+        u16 adj = (u16)readI<C, Word>();
 
-    u32 src = (data2 << 8 | data1) + adj;
-    u32 dst = (src >> 4 & 0xF0) | (src & 0x0F);
+        u32 ea2, data2;
+        if (!readOp<C, M, Byte>(ax, &ea2, &data2)) return;
 
-    writeOp<C, M, Byte>(ay, dst);
+        u32 src = (data1 << 8 | data2) + adj;
+
+        writeOp<C, M, Byte>(ay, (src >> 4 & 0xF0) | (src & 0x0F));
+
+    } else {
+
+        reg.a[ax]--;
+        auto data1 = readMS<C, MEM_DATA, Byte>(readA(ax));
+
+        u16 adj = (u16)readI<C, Word>();
+
+        reg.a[ax]--;
+        auto data2 = readMS<C, MEM_DATA, Byte>(readA(ax));
+
+        u32 src = (data2 << 8 | data1) + adj;
+        u32 dst = (src >> 4 & 0xF0) | (src & 0x0F);
+
+        writeOp<C, M, Byte>(ay, dst);
+    }
+
     prefetch<C>();
 
     //           00  10  20        00  10  20        00  10  20
@@ -4400,9 +4498,12 @@ Moira::execRte(u16 opcode)
 
                 default: // Format error
 
-                    reg.sr.n = format & 0b1000;
-                    reg.sr.z = 0;
-                    reg.sr.v = 0;
+                    if (!MIMIC_MUSASHI) {
+
+                        reg.sr.n = format & 0b1000;
+                        reg.sr.z = 0;
+                        reg.sr.v = 0;
+                    }
 
                     execException(EXC_FORMAT_ERROR);
                     CYCLES_68010(4)
@@ -4874,11 +4975,19 @@ Moira::execUnpkPd(u16 opcode)
     u16 adj = (u16)readI<C, Word>();
     u32 dst = ((data << 4 & 0x0F00) | (data & 0x000F)) + adj;
 
-    reg.a[ay]--;
-    writeMS<C, MEM_DATA, Byte>(readA(ay), dst & 0xFF);
+    if (MIMIC_MUSASHI) {
 
-    reg.a[ay]--;
-    writeMS<C, MEM_DATA, Byte>(readA(ay), dst >> 8 & 0xFF);
+        writeOp<C, M, Byte>(ay, dst >> 8 & 0xFF);
+        writeOp<C, M, Byte>(ay, dst & 0xFF);
+
+    } else {
+
+        reg.a[ay]--;
+        writeMS<C, MEM_DATA, Byte>(readA(ay), dst & 0xFF);
+
+        reg.a[ay]--;
+        writeMS<C, MEM_DATA, Byte>(readA(ay), dst >> 8 & 0xFF);
+    }
 
     prefetch<C>();
 
@@ -4888,6 +4997,79 @@ Moira::execUnpkPd(u16 opcode)
 
     FINALIZE
 }
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execCinv(u16 opcode)
+{
+    AVAILABILITY(C68020)
+
+    execLineF<C, I, M, S>(opcode);
+
+    FINALIZE
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execCpush(u16 opcode)
+{
+    AVAILABILITY(C68020)
+
+    execLineF<C, I, M, S>(opcode);
+
+    FINALIZE
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execMove16PiPi(u16 opcode)
+{
+    AVAILABILITY(C68020)
+
+    execLineF<C, I, M, S>(opcode);
+
+    FINALIZE
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execMove16PiAl(u16 opcode)
+{
+    AVAILABILITY(C68020)
+
+    execLineF<C, I, M, S>(opcode);
+
+    FINALIZE
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execMove16AlPi(u16 opcode)
+{
+    AVAILABILITY(C68020)
+
+    execLineF<C, I, M, S>(opcode);
+
+    FINALIZE
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execMove16AiAl(u16 opcode)
+{
+    AVAILABILITY(C68020)
+
+    execLineF<C, I, M, S>(opcode);
+
+    FINALIZE
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execMove16AlAi(u16 opcode)
+{
+    AVAILABILITY(C68020)
+
+    execLineF<C, I, M, S>(opcode);
+
+    FINALIZE
+}
+
+#include "MoiraExecMMU_cpp.h"
+#include "MoiraExecFPU_cpp.h"
 
 #undef AVAILABILITY
 #undef SUPERVISOR_MODE_ONLY

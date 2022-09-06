@@ -2,9 +2,7 @@
 // This file is part of Moira - A Motorola 68k emulator
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
-// Licensed under the GNU General Public License v3
-//
-// See https://www.gnu.org for license information
+// Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
 // Assembles an instruction handler name
@@ -48,6 +46,9 @@ for (int j = 0; j < 8; j++) func((op) | j, f, I, M, S); }
 
 #define ____________XXXX(op,I,M,S,f,func) { \
 for (int j = 0; j < 16; j++) func((op) | j, f, I, M, S); }
+
+#define ___________XXXXX(op,I,M,S,f,func) { \
+for (int j = 0; j < 32; j++) func((op) | j, f, I, M, S); }
 
 #define __________XXXXXX(op,I,M,S,f,func) { \
 for (int j = 0; j < 64; j++) func((op) | j, f, I, M, S); }
@@ -146,12 +147,30 @@ Moira::createJumpTable()
 {
     switch (model) {
 
-        case M68000:    createJumpTable<C68000>(); break;
-        case M68010:    createJumpTable<C68010>(); break;
+        case M68000:
+
+            createJumpTable<C68000>();
+            break;
+
+        case M68010:
+
+            createJumpTable<C68010>();
+            break;
+
         case M68EC020:
         case M68020:
         case M68EC030:
-        case M68030:    createJumpTable<C68020>(); break;
+        case M68030:
+
+            createJumpTable<C68020>();
+            break;
+
+        case M68EC040:
+        case M68LC040:
+        case M68040:
+
+            createJumpTable<C68020>();
+            break;
 
         default:
             fatalError;
@@ -185,35 +204,7 @@ Moira::createJumpTable()
     opcode = parse("1111 ---- ---- ----");
     ____XXXXXXXXXXXX(opcode, LINE_F, MODE_IP, (Size)0, LineF, CIMS)
     
-    if constexpr (C >= C68020) {
-        
-        opcode = parse("1111 ---0 10-- ----");
-        ____XXX___XXXXXX(opcode, cpBcc, MODE_IP, Word, CpBcc, CIMS)
-        opcode = parse("1111 ---0 11-- ----");
-        ____XXX___XXXXXX(opcode, cpBcc, MODE_IP, Long, CpBcc, CIMS)
-        
-        opcode = parse("1111 ---0 00-- ----");
-        ____XXX___XXXXXX(opcode, cpGEN, MODE_IP, (Size)0, CpGen, CIMS)
-        
-        opcode = parse("1111 ---1 01-- ----");
-        ____XXX___MMMXXX(opcode, cpRESTORE, 0b001101111110, Word, CpRestore, CIMS)
-        
-        opcode = parse("1111 ---1 00-- ----");
-        ____XXX___MMMXXX(opcode, cpSAVE, 0b001011111000, Word, CpSave, CIMS)
-        
-        opcode = parse("1111 ---0 0111 1---");
-        ____XXX___XXX___(opcode | 0b010, cpTRAPcc, MODE_IP, Word, CpTrapcc, CIMS)
-        ____XXX___XXX___(opcode | 0b011, cpTRAPcc, MODE_IP, Long, CpTrapcc, CIMS)
-        ____XXX___XXX___(opcode | 0b100, cpTRAPcc, MODE_IP, Byte, CpTrapcc, CIMS)
-        
-        opcode = parse("1111 ---0 01-- ----");
-        ____XXX___MMMXXX(opcode, cpScc, 0b101111111000, (Size)0, CpScc, CIMS)
-        
-        opcode = parse("1111 ---0 0100 1---");
-        ____XXX______XXX(opcode, cpDBcc, MODE_IP, (Size)0, CpDbcc, CIMS)
-    }
-    
-    
+
     // ABCD
     //
     //       Syntax: (1) ABCD Dx,Dy
@@ -1893,5 +1884,147 @@ Moira::createJumpTable()
         opcode = parse("1000 ---1 1000 1---");
         ____XXX______XXX(opcode, UNPK, MODE_PD, Word, UnpkPd, CIMS)
     }
-}
 
+    //
+    // Line-F area
+    //
+
+    if constexpr (C >= C68020) {
+
+        //
+        // Coprocessor interface
+        //
+
+        if (hasCPI()) {
+
+            opcode = parse("1111 ---0 10-- ----");
+            ____XXX___XXXXXX(opcode, cpBcc, MODE_IP, Word, CpBcc, CIMS)
+
+            opcode = parse("1111 ---0 11-- ----");
+            ____XXX___XXXXXX(opcode, cpBcc, MODE_IP, Long, CpBcc, CIMS)
+
+            opcode = parse("1111 ---0 00-- ----");
+            ____XXX___XXXXXX(opcode, cpGEN, MODE_IP, (Size)0, CpGen, CIMS)
+
+            opcode = parse("1111 ---1 01-- ----");
+            ____XXX___MMMXXX(opcode, cpRESTORE, 0b001101111110, Word, CpRestore, CIMS)
+
+            opcode = parse("1111 ---1 00-- ----");
+            ____XXX___MMMXXX(opcode, cpSAVE, 0b001011111000, Word, CpSave, CIMS)
+
+            opcode = parse("1111 ---0 0111 1---");
+            ____XXX______XXX(opcode, cpTRAPcc, MODE_IP, Word, CpTrapcc, CIMS)
+
+            opcode = parse("1111 ---0 01-- ----");
+            ____XXX___MMMXXX(opcode, cpScc, 0b101111111000, Byte, CpScc, CIMS)
+
+            opcode = parse("1111 ---0 0100 1---");
+            ____XXX______XXX(opcode, cpDBcc, MODE_IP, (Size)0, CpDbcc, CIMS)
+        }
+
+        //
+        // Memory management unit
+        //
+
+        if (model == M68030) {
+
+            opcode = parse("1111 0000 00-- ----");
+            __________XXXXXX(opcode, cpGEN, MODE_IP, Unsized, PGen, CIMS)
+            __________MMMXXX(opcode, cpGEN, 0b111111111111, Unsized, PGen, CIMS)
+        }
+
+        if (model == M68040 || model == M68LC040) {
+
+            opcode = parse("1111 0101 000- ----");
+            ___________XXXXX(opcode, PFLUSH, MODE_IP, Unsized, PFlush40, CIMS)
+
+            opcode = parse("1111 0101 0100 1---");
+            _____________XXX(opcode, PTEST, MODE_IP, Unsized, PTest40, CIMS)
+            opcode = parse("1111 0101 0110 1---");
+            _____________XXX(opcode, PTEST, MODE_IP, Unsized, PTest40, CIMS)
+        }
+
+
+        //
+        // Floating point unit
+        //
+
+        if (model == M68040) {
+
+            opcode = parse("1111 0010 100- ----");
+            ___________XXXXX(opcode, FBcc, MODE_IP, Word, FBcc, CIMS)
+
+            opcode = parse("1111 0010 110- ----");
+            ___________XXXXX(opcode, FBcc, MODE_IP, Long, FBcc, CIMS)
+
+            opcode = parse("1111 0010 00-- ----");
+            __________XXXXXX(opcode, cpGEN, MODE_IP, Unsized, FGen, CIMS)
+            __________MMMXXX(opcode, cpGEN, 0b111111111111, Unsized, FGen, CIMS)
+
+            opcode = parse("1111 0011 01-- ----");
+            __________MMMXXX(opcode, FRESTORE, 0b001101111110, Word, FRestore, CIMS)
+
+            opcode = parse("1111 0011 00-- ----");
+            __________MMMXXX(opcode, FSAVE, 0b001011111000, Word, FSave, CIMS)
+
+            opcode = parse("1111 0010 0111 1---");
+            ________________(opcode | 0b010, FTRAPcc, MODE_IP, Word, FTrapcc, CIMS)
+            ________________(opcode | 0b011, FTRAPcc, MODE_IP, Long, FTrapcc, CIMS)
+            ________________(opcode | 0b100, FTRAPcc, MODE_IP, Unsized, FTrapcc, CIMS)
+
+            opcode = parse("1111 0010 01-- ----");
+            __________MMMXXX(opcode, FScc, 0b101111111000, Byte, FScc, CIMS)
+
+            opcode = parse("1111 0010 0100 1---");
+            _____________XXX(opcode, FDBcc, MODE_IP, Word, FDbcc, CIMS)
+        }
+
+
+        //
+        // 68040 instructions
+        //
+
+        if (model == M68040 || model == M68EC040 || model == M68LC040) {
+
+
+            //
+            // CINV
+            //
+
+            opcode = parse("1111 0100 --0- ----");
+            for (int i = 0; i < 4; i++) {
+                ___________XXXXX(opcode | i << 6, CINV, MODE_AI, Unsized, Cinv, CIMS)
+            }
+
+
+            //
+            // CPUSH
+            //
+
+            opcode = parse("1111 0100 --1- ----");
+            for (int i = 0; i < 4; i++) {
+                ___________XXXXX(opcode | i << 6, CPUSH, MODE_AI, Unsized, Cpush, CIMS)
+            }
+
+
+            //
+            // MOVE16
+            //
+
+            opcode = parse("1111 0110 0010 0---");
+            _____________XXX(opcode, MOVE16, MODE_IP, Unsized, Move16PiPi, CIMS)
+
+            opcode = parse("1111 0110 0000 0---");
+            _____________XXX(opcode, MOVE16, MODE_IP, Unsized, Move16PiAl, CIMS)
+
+            opcode = parse("1111 0110 0000 1---");
+            _____________XXX(opcode, MOVE16, MODE_IP, Unsized, Move16AlPi, CIMS)
+
+            opcode = parse("1111 0110 0001 0---");
+            _____________XXX(opcode, MOVE16, MODE_IP, Unsized, Move16AiAl, CIMS)
+
+            opcode = parse("1111 0110 0001 1---");
+            _____________XXX(opcode, MOVE16, MODE_IP, Unsized, Move16AlAi, CIMS)
+        }
+    }
+}

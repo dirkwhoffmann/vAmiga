@@ -2,9 +2,7 @@
 // This file is part of Moira - A Motorola 68k emulator
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
-// Licensed under the GNU General Public License v3
-//
-// See https://www.gnu.org for license information
+// Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
 // Sanitizer friendly macros for adding signed offsets to u32 values
@@ -891,70 +889,6 @@ Moira::cyclesDiv(u32 op1, u16 op2) const
             }
             result = 2 * mcycles;
         }
-    }
-    
-    return result;
-}
-
-template <Core C, Instr I> u32
-Moira::mulMusashi(u32 op1, u32 op2)
-{
-    u32 result;
-    
-    if constexpr (I == MULS) result = (i16)op1 * (i16)op2;
-    if constexpr (I == MULU) result = op1 * op2;
-    
-    reg.sr.n = NBIT<Long>(result);
-    reg.sr.z = ZERO<Long>(result);
-    reg.sr.v = 0;
-    reg.sr.c = 0;
-    
-    return result;
-}
-
-template <Size S> u64
-Moira::mullsMusashi(u32 op1, u32 op2)
-{
-    u64 result = u64(i64(i32(op1)) * i64(i32(op2)));
-    
-    if constexpr (S == Word) {
-        
-        reg.sr.n = NBIT<Long>(result);
-        reg.sr.z = ZERO<Long>(result);
-        reg.sr.v = result != u64(i32(result));
-        reg.sr.c = 0;
-    }
-    
-    if constexpr (S == Long) {
-        
-        reg.sr.n = NBIT<Long>(result >> 32);
-        reg.sr.z = result == 0;
-        reg.sr.v = 0;
-        reg.sr.c = 0;
-    }
-    
-    return result;
-}
-
-template <Size S> u64
-Moira::mulluMusashi(u32 op1, u32 op2)
-{
-    u64 result = u64(op1) * u64(op2);
-    
-    if constexpr (S == Word) {
-        
-        reg.sr.n = NBIT<Long>(result);
-        reg.sr.z = ZERO<Long>(result);
-        reg.sr.v = (result >> 32) != 0;
-        reg.sr.c = 0;
-    }
-    
-    if constexpr (S == Long) {
-        
-        reg.sr.n = NBIT<Long>(result >> 32);
-        reg.sr.z = result == 0;
-        reg.sr.v = 0;
-        reg.sr.c = 0;
     }
     
     return result;
