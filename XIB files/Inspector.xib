@@ -1509,15 +1509,18 @@
                                                             <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XT2-ik-3Zd">
                                                                 <rect key="frame" x="255" y="331" width="143" height="25"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <popUpButtonCell key="cell" type="roundTextured" title="Moira" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="1kW-Ow-zBB" id="H2M-we-SHF">
+                                                                <popUpButtonCell key="cell" type="roundTextured" title="Motorola" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="1kW-Ow-zBB" id="H2M-we-SHF">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="menu"/>
                                                                     <menu key="menu" id="YML-pW-Fu1">
                                                                         <items>
-                                                                            <menuItem title="Moira" state="on" id="1kW-Ow-zBB"/>
-                                                                            <menuItem title="Musashi" tag="1" id="VpB-Ay-dNA"/>
-                                                                            <menuItem title="Vda68k (Motorola)" tag="2" id="7SW-8c-iDc"/>
-                                                                            <menuItem title="Vda68k (MIT)" tag="3" id="lbC-pZ-QNN"/>
+                                                                            <menuItem title="Motorola" state="on" id="1kW-Ow-zBB"/>
+                                                                            <menuItem title="MIT" tag="1" id="Wvh-XB-Hwc"/>
+                                                                            <menuItem isSeparatorItem="YES" id="wgj-9z-h8B"/>
+                                                                            <menuItem title="GNU Motorola" tag="2" id="VpB-Ay-dNA"/>
+                                                                            <menuItem title="GNU MIT" tag="3" id="7SW-8c-iDc"/>
+                                                                            <menuItem isSeparatorItem="YES" id="aCI-aU-zPg"/>
+                                                                            <menuItem title="Musashi" tag="4" id="lbC-pZ-QNN"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
@@ -1538,7 +1541,7 @@
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" id="GzR-dn-mO8">
                                                                     <rect key="frame" x="1" y="1" width="385" height="313"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="DdI-Dc-nEd" id="9F9-Qx-tLH" customClass="TraceTableView" customModule="vAmiga" customModuleProvider="target">
                                                                             <rect key="frame" x="0.0" y="0.0" width="385" height="288"/>
@@ -1627,15 +1630,18 @@
                                                             <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4vn-i8-Na7">
                                                                 <rect key="frame" x="255" y="331" width="143" height="25"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <popUpButtonCell key="cell" type="roundTextured" title="Moira" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="3fi-AM-iNw" id="uCQ-bd-udh">
+                                                                <popUpButtonCell key="cell" type="roundTextured" title="Motorola" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="3fi-AM-iNw" id="uCQ-bd-udh">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="menu"/>
                                                                     <menu key="menu" id="dJf-2d-rUc">
                                                                         <items>
-                                                                            <menuItem title="Moira" state="on" id="3fi-AM-iNw"/>
-                                                                            <menuItem title="Musashi" tag="1" id="o8X-Wa-5db"/>
-                                                                            <menuItem title="Vda68k (Motorola)" tag="2" id="03z-ye-Aq6"/>
-                                                                            <menuItem title="Vda68k (MIT)" tag="3" id="wai-MR-P6f"/>
+                                                                            <menuItem title="Motorola" state="on" id="3fi-AM-iNw"/>
+                                                                            <menuItem title="MIT" tag="1" id="o8X-Wa-5db"/>
+                                                                            <menuItem isSeparatorItem="YES" id="lb4-zO-UHq"/>
+                                                                            <menuItem title="GNU Motorola" tag="2" id="03z-ye-Aq6"/>
+                                                                            <menuItem title="GNU MIT" tag="3" id="wai-MR-P6f"/>
+                                                                            <menuItem isSeparatorItem="YES" id="IcU-wX-Nn5"/>
+                                                                            <menuItem title="Musashi" tag="4" id="Ppo-oQ-CI3"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
@@ -1663,7 +1669,7 @@
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <clipView key="contentView" drawsBackground="NO" id="lYO-RC-hWy">
                                                                                 <rect key="frame" x="1" y="1" width="163" height="307"/>
-                                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="bK4-tf-JR6" id="pd6-3V-YaN" customClass="BreakTableView" customModule="vAmiga" customModuleProvider="target">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="168" height="282"/>
@@ -1744,7 +1750,7 @@
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <clipView key="contentView" drawsBackground="NO" id="K6U-NB-Phg">
                                                                                 <rect key="frame" x="1" y="1" width="164" height="307"/>
-                                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="vNZ-f6-Hoj" id="g7V-Rx-9ei" customClass="WatchTableView" customModule="vAmiga" customModuleProvider="target">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="168" height="282"/>
