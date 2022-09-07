@@ -343,6 +343,16 @@ struct PrefetchQueue {
     u16 ird;                // The instruction currently being executed
 };
 
+struct MMU {
+
+    u64 crp;                // Cpu Root Pointer
+    u64 srp;                // Supervisor Root Pointer
+    u32 trc;                // Translation Control Register
+    u32 tt0;                // Transparent Translation Register 0
+    u32 tt1;                // Transparent Translation Register 1
+    u16 mmusr;              // MMU status register
+};
+
 /* Execution flags
  *
  * The M68k is a well organized processor that breaks down the execution of

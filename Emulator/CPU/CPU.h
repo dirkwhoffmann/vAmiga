@@ -120,7 +120,14 @@ private:
 
             << queue.irc
             << queue.ird
-            
+
+            << mmu.crp
+            << mmu.srp
+            << mmu.trc
+            << mmu.tt0
+            << mmu.tt1
+            << mmu.mmusr
+
             << ipl
             << fcl
             << fcSource

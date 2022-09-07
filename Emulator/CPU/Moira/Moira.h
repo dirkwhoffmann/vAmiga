@@ -107,11 +107,14 @@ protected:
     // Number of elapsed cycles since powerup
     i64 clock;
     
-    // The egister set
+    // The register set
     Registers reg;
     
     // The prefetch queue
     PrefetchQueue queue;
+
+    // The memory management unit
+    MMU mmu;
     
     // Current value on the IPL pins (Interrupt Priority Level)
     u8 ipl;
