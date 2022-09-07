@@ -555,7 +555,12 @@ DQ
                                                         <menuItem title="68000" state="on" id="1vX-aH-r8M"/>
                                                         <menuItem title="68010" tag="1" id="U9p-JK-c4z"/>
                                                         <menuItem title="68EC020" tag="2" id="MEV-jP-nPJ"/>
-                                                        <menuItem title="68EC030" tag="3" id="M9J-fS-CSl"/>
+                                                        <menuItem title="68020" tag="3" id="TvX-YB-qqk"/>
+                                                        <menuItem title="68EC030" tag="4" id="M9J-fS-CSl"/>
+                                                        <menuItem title="68030" tag="5" id="rTV-fK-bQq"/>
+                                                        <menuItem title="68EC040" tag="6" id="jq2-Lg-Lel"/>
+                                                        <menuItem title="68LC040" tag="7" id="Elx-Zb-kG1"/>
+                                                        <menuItem title="68040" tag="8" id="6yp-DM-qR3"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
