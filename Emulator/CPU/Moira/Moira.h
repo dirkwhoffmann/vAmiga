@@ -509,7 +509,21 @@ private:
     
     // Selects the IRQ vector to branch to
     u16 getIrqVector(u8 level) const;
-    
+
+
+    //
+    // Working with the MMU
+    //
+
+private:
+
+    // Translates a logical address to a physical address
+    template <Core C, bool write> u32 translate(u32 addr, u8 fc);
+
+
+
+private:
+
 #include "MoiraInit.h"
 #include "MoiraALU.h"
 #include "MoiraDataflow.h"

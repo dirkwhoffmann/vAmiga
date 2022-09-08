@@ -312,7 +312,7 @@ Moira::updateAn(int n)
 template <Core C, Mode M, Size S, Flags F> u32
 Moira::readM(u32 addr, bool &error)
 {
-    if (isPrgMode(M)) {
+    if constexpr (isPrgMode(M)) {
         return readMS<C, MEM_PROG, S, F>(addr, error);
     } else {
         return readMS<C, MEM_DATA, S, F>(addr, error);
@@ -322,7 +322,7 @@ Moira::readM(u32 addr, bool &error)
 template <Core C, Mode M, Size S, Flags F> u32
 Moira::readM(u32 addr)
 {
-    if (isPrgMode(M)) {
+    if constexpr (isPrgMode(M)) {
         return readMS<C, MEM_PROG, S, F>(addr);
     } else {
         return readMS<C, MEM_DATA, S, F>(addr);
@@ -347,28 +347,42 @@ template <Core C, MemSpace MS, Size S, Flags F> u32
 Moira::readMS(u32 addr)
 {
     u32 result;
-    
-    if constexpr (S == Long) {
-        
-        // Break down the long word access into two word accesses
-        result = readMS<C, MS, Word>(addr) << 16;
-        result |= readMS<C, MS, Word, F>(addr + 2);
-        
-    } else {
-        
-        // Update function code pins
-        setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
-        
-        // Check if a watchpoint is being accessed
-        if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
-            watchpointReached(addr);
-        }
-        
-        // Perform the read operation
+
+    // Update function code pins
+    u8 fc = MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG;
+    setFC(fc);
+
+    // Derive physical address
+    addr = translate<C, false>(addr, fc);
+
+    // Check if a watchpoint has been reached
+    if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
+        watchpointReached(addr);
+    }
+
+    if constexpr (S == Byte) {
+
         SYNC(2);
         if (F & POLLIPL) pollIpl();
-        if constexpr (S == Byte) result = read8(addr & addrMask<C>());
-        if constexpr (S == Word) result = read16(addr & addrMask<C>());
+        result = read8(addr & addrMask<C>());
+        SYNC(2);
+    }
+
+    if constexpr (S == Word) {
+
+        SYNC(2);
+        if (F & POLLIPL) pollIpl();
+        result = read16(addr & addrMask<C>());
+        SYNC(2);
+    }
+
+    if constexpr (S == Long) {
+
+        SYNC(2);
+        result = read16(addr & addrMask<C>()) << 16;
+        SYNC(4);
+        if (F & POLLIPL) pollIpl();
+        result |= read16((addr + 2) & addrMask<C>());
         SYNC(2);
     }
     
@@ -400,6 +414,7 @@ Moira::writeMS(u32 addr, u32 val, bool &error)
 {
     // Check for address errors
     if ((error = misaligned<C, S>(addr)) == true) {
+
         setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
         execAddressError<C>(makeFrame<F|AE_WRITE>(addr), 2);
         return;
@@ -411,32 +426,54 @@ Moira::writeMS(u32 addr, u32 val, bool &error)
 template <Core C, MemSpace MS, Size S, Flags F> void
 Moira::writeMS(u32 addr, u32 val)
 {
-    if constexpr (S == Long) {
-        
-        // Break down the long word access into two word accesses
-        if (F & REVERSE) {
-            writeMS<C, MS, Word>   (addr + 2, val & 0xFFFF);
-            writeMS<C, MS, Word, F>(addr,     val >> 16   );
-        } else {
-            writeMS<C, MS, Word>   (addr,     val >> 16   );
-            writeMS<C, MS, Word, F>(addr + 2, val & 0xFFFF);
-        }
-        
-    } else {
-        
-        // Update function code pins
-        setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
-        
-        // Check if a watchpoint is being accessed
-        if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
-            watchpointReached(addr);
-        }
-        
-        // Perform the write operation
+    // Update function code pins
+    u8 fc = MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG;
+    setFC(fc);
+
+    // Derive physical address
+    addr = translate<C, true>(addr, fc);
+
+    // Check if a watchpoint is being accessed
+    if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
+        watchpointReached(addr);
+    }
+
+    if constexpr (S == Byte) {
+
         SYNC(2);
         if (F & POLLIPL) pollIpl();
-        S == Byte ? write8(addr & 0xFFFFFF, (u8)val) : write16(addr & 0xFFFFFF, (u16)val);
+        write8(addr & addrMask<C>(), (u8)val);
         SYNC(2);
+    }
+
+    if constexpr (S == Word) {
+
+        SYNC(2);
+        if (F & POLLIPL) pollIpl();
+        write16(addr & addrMask<C>(), (u16)val);
+        SYNC(2);
+    }
+
+    if constexpr (S == Long) {
+        
+        if (F & REVERSE) {
+
+            SYNC(2);
+            write16((addr + 2) & addrMask<C>(), u16(val & 0xFFFF));
+            SYNC(4);
+            if (F & POLLIPL) pollIpl();
+            write16(addr & addrMask<C>(), u16(val >> 16));
+            SYNC(2);
+
+        } else {
+
+            SYNC(2);
+            write16(addr & addrMask<C>(), u16(val >> 16));
+            SYNC(4);
+            if (F & POLLIPL) pollIpl();
+            write16((addr + 2) & addrMask<C>(), u16(val & 0xFFFF));
+            SYNC(2);
+        }
     }
 }
 

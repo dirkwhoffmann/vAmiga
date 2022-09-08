@@ -261,14 +261,11 @@ typedef enum
 }
 IrqMode;
 
-typedef enum
-{
-    FC_USER_DATA            = 1,
-    FC_USER_PROG            = 2,
-    FC_SUPERVISOR_DATA      = 5,
-    FC_SUPERVISOR_PROG      = 6
-}
-FunctionCode;
+typedef u8 FunctionCode;
+static constexpr u8 FC_USER_DATA = 1;
+static constexpr u8 FC_USER_PROG = 2;
+static constexpr u8 FC_SUPERVISOR_DATA = 5;
+static constexpr u8 FC_SUPERVISOR_PROG = 6;
 
 typedef enum
 {

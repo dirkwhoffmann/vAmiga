@@ -722,7 +722,7 @@ Moira::execAndiccr(u16 opcode)
     u32 result = logic<C, I, S>(src, dst);
     setCCR((u8)result);
 
-    (void)readMS<C, MEM_DATA, Word>(reg.pc+2);
+    (void)readMS<C, MEM_DATA, Word>(reg.pc + 2);
     prefetch<C, POLLIPL>();
 
     //           00  10  20        00  10  20        00  10  20
@@ -748,7 +748,7 @@ Moira::execAndisr(u16 opcode)
     u32 result = logic<C, I, S>(src, dst);
     setSR((u16)result);
 
-    (void)readMS<C, MEM_DATA, Word>(reg.pc+2);
+    (void)readMS<C, MEM_DATA, Word>(reg.pc + 2);
     prefetch<C, POLLIPL>();
 
     //           00  10  20        00  10  20        00  10  20

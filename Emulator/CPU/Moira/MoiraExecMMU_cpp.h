@@ -5,6 +5,19 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
+template <Core C, bool write> u32
+Moira::translate(u32 addr, u8 fc)
+{
+    // Only proceed if a MMU capable core is present
+    if constexpr (C == C68000 || C == C68010) return addr;
+
+    // Only proceed of the selected CPU model has a MMU
+    if (!hasMMU()) return addr;
+
+    // TODO: Translate address
+    return addr;
+}
+
 bool
 Moira::isValidExtMMU(Instr I, Mode M, u16 op, u32 ext)
 {

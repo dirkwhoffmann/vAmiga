@@ -13,6 +13,7 @@
 #include <cmath>
 #include <bit>
 #include <vector>
+#include <stdexcept>
 
 namespace moira {
 
@@ -126,9 +127,8 @@ template <Core C> u32
 Moira::addrMask() const
 {
     if constexpr (C == C68020) {
-
-        if (model == M68020) return 0xFFFFFFFF;
-        if (model == M68030) return 0xFFFFFFFF;
+        
+        return model == M68EC020 ? 0x00FFFFFF : 0xFFFFFFFF;
     }
 
     return 0x00FFFFFF;
