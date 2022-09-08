@@ -59,6 +59,9 @@
  */
 template <Core C, Mode M, Size S, Flags F = 0> bool readOp(int n, u32 *ea, u32 *result);
 
+// EXPERIMENTAL
+template <Mode M, Flags F = 0> bool readOp64(int n, u32 *ea, u64 *result);
+
 /* Writes an operand
  *
  * If parameter ea is omitted, the destination of the operand is determined
@@ -67,6 +70,9 @@ template <Core C, Mode M, Size S, Flags F = 0> bool readOp(int n, u32 *ea, u32 *
  */
 template <Core C, Mode M, Size S, Flags F = 0> bool writeOp(int n, u32 val);
 template <Core C, Mode M, Size S, Flags F = 0> void writeOp(int n, u32 ea, u32 val);
+
+// EXPERIMENTAL
+template <Core C, Mode M, Flags F = 0> bool writeOp64(int n, u64 val);
 
 // Computes an effective address
 template <Core C, Mode M, Size S, Flags F = 0> u32 computeEA(u32 n);

@@ -125,7 +125,44 @@ Moira::isValidExtMMU(Instr I, Mode M, u16 op, u32 ext)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPGen(u16 opcode)
 {
-    printf("TODO: execPGen");
+    auto ext = queue.irc;
+
+    // PLOAD: 0010 00x0 000x xxxx
+    if ((ext & 0xFDE0) == 0x2000) {
+
+        execPLoad<C, PLOAD, M, S>(opcode);
+        return;
+    }
+
+    // PFLUSHA: 0010 010x xxxx xxxx
+    if ((ext & 0xFE00) == 0x2400) {
+
+        execPFlusha<C, PFLUSHA, M, S>(opcode);
+        return;
+    }
+
+    // PFLUSH: 001x xx0x xxxx xxxx
+    if ((ext & 0xE200) == 0x2000) {
+
+        execPFlush<C, PFLUSH, M, S>(opcode);
+        return;
+    }
+
+    // PTEST: 100x xxxx xxxx xxxx
+    if ((ext & 0xE000) == 0x8000) {
+
+        execPTest<C, PTEST, M, S>(opcode);
+        return;
+    }
+
+    // PMOVE: 010x xxxx 0000 0000 || 0110 00x0 0000 0000 || 000x xxxx 0000 0000
+    if ((ext & 0xE0FF) == 0x4000 || (ext & 0xFDFF) == 0x6000 || (ext & 0xE0FF) == 0x0000) {
+
+        execPMove<C, PMOVE, M, S>(opcode);
+        return;
+    }
+
+    execIllegal<C, I, M, S>(opcode);
 }
 
 template <Core C, Instr I, Mode M, Size S> void
@@ -155,7 +192,149 @@ Moira::execPLoad(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPMove(u16 opcode)
 {
-    printf("TODO: execPMove");
+    AVAILABILITY(C68020)
+
+    u16 ext = queue.irc;
+    auto fmt  = xxx_____________ (ext);
+    auto preg = ___xxx__________ (ext);
+    bool rw   = ______x_________ (ext);
+
+    // Catch illegal extension words
+    if (!isValidExtMMU(I, M, opcode, ext)) {
+
+        execIllegal<C, ILLEGAL, M, S>(opcode);
+        return;
+    }
+
+    (void)readI<C, Word>();
+
+    switch (fmt) {
+
+        case 0:
+
+            switch (preg) {
+
+                case 0b010: execPMove<M>(opcode, REG_TT0, rw); break;
+                case 0b011: execPMove<M>(opcode, REG_TT1, rw); break;
+            }
+            break;
+
+        case 2:
+
+            switch (preg) {
+
+                case 0b000: execPMove<M>(opcode, REG_TC, rw); break;
+                case 0b010: execPMove<M>(opcode, REG_SRP, rw); break;
+                case 0b011: execPMove<M>(opcode, REG_CRP, rw); break;
+            }
+            break;
+
+        case 3:
+
+            switch (preg) {
+
+                case 0b000: execPMove<M>(opcode, REG_MMUSR, rw); break;
+            }
+            break;
+    }
+
+    prefetch<C, POLLIPL>();
+
+    CYCLES_68020(8);
+    FINALIZE
+}
+
+template <Mode M> void
+Moira::execPMove(u16 opcode, RegName mmuReg, bool rw)
+{
+    u32 ea;
+    u32 data32;
+    u64 data64;
+
+    auto reg  = _____________xxx (opcode);
+
+    if (rw) {
+
+        switch (mmuReg) {
+
+            case REG_MMUSR:
+
+                writeOp<C68020, M, Word>(reg, mmu.mmusr);
+                break;
+
+            case REG_TT0:
+
+                writeOp<C68020, M, Long>(reg, mmu.tt0);
+                break;
+
+            case REG_TT1:
+
+                writeOp<C68020, M, Long>(reg, mmu.tt1);
+                break;
+
+            case REG_TC:
+
+                writeOp<C68020, M, Long>(reg, mmu.tc);
+                break;
+
+            case REG_CRP:
+
+                writeOp64<C68020, M>(reg, mmu.crp);
+                break;
+
+            case REG_SRP:
+
+                writeOp64<C68020, M>(reg, mmu.srp);
+                break;
+
+            default:
+                assert(false);
+        }
+
+    } else {
+
+        switch (mmuReg) {
+
+            case REG_MMUSR:
+
+                if (!readOp<C68020, M, Word>(reg, &ea, &data32)) return;
+                mmu.mmusr = u16(data32);
+                break;
+
+            case REG_TT0:
+
+                if (!readOp<C68020, M, Word>(reg, &ea, &data32)) return;
+                mmu.tt0 = data32;
+                break;
+
+            case REG_TT1:
+
+                if (!readOp<C68020, M, Word>(reg, &ea, &data32)) return;
+                mmu.tt1 = data32;
+                break;
+
+            case REG_TC:
+
+                if (!readOp<C68020, M, Word>(reg, &ea, &data32)) return;
+                mmu.tc = data32;
+                break;
+
+            case REG_CRP:
+
+                if (!readOp64<M, Word>(reg, &ea, &data64)) return;
+                mmu.crp = data64;
+                break;
+
+            case REG_SRP:
+
+                if (!readOp64<M, Word>(reg, &ea, &data64)) return;
+                mmu.srp = data64;
+                break;
+
+            default:
+                assert(false);
+        }
+    }
 }
 
 template <Core C, Instr I, Mode M, Size S> void

@@ -123,7 +123,7 @@ private:
 
             << mmu.crp
             << mmu.srp
-            << mmu.trc
+            << mmu.tc
             << mmu.tt0
             << mmu.tt1
             << mmu.mmusr

@@ -216,3 +216,6 @@ template <Core C, Instr I, Mode M, Size S> void execMullMusashi(u16);
 template <Core C, Instr I, Mode M, Size S> bool execDivsMusashi(u16, bool *);
 template <Core C, Instr I, Mode M, Size S> bool execDivuMusashi(u16, bool *);
 template <Core C, Instr I, Mode M, Size S> bool execDivlMusashi(u16, bool *);
+
+template <Mode M> void execPMove(u16, RegName, bool);
+

@@ -162,6 +162,17 @@ typedef enum
 }
 Instr;
 
+typedef enum
+{
+    REG_TT0,
+    REG_TT1,
+    REG_MMUSR,
+    REG_CRP,
+    REG_SRP,
+    REG_TC
+}
+RegName;
+
 template <Instr I>
 constexpr bool looping() { return I >= ABCD_LOOP && I <= TST_LOOP; }
 
@@ -344,7 +355,7 @@ struct MMU {
 
     u64 crp;                // Cpu Root Pointer
     u64 srp;                // Supervisor Root Pointer
-    u32 trc;                // Translation Control Register
+    u32 tc;                 // Translation Control Register
     u32 tt0;                // Transparent Translation Register 0
     u32 tt1;                // Transparent Translation Register 1
     u16 mmusr;              // MMU status register
