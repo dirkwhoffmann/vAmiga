@@ -115,6 +115,9 @@ protected:
 
     // The memory management unit
     MMU mmu;
+
+    // The floating point unit
+    FPU fpu;
     
     // Current value on the IPL pins (Interrupt Priority Level)
     u8 ipl;

@@ -164,11 +164,14 @@ Moira::reset()
     reg = { };
     reg.sr.s = 1;
     reg.sr.ipl = 7;
-    
+
     ipl = 0;
     fcl = 0;
     fcSource = 0;
-    
+
+    mmu = { };
+    fpu = { };
+
     SYNC(16);
     
     // Read the initial (supervisor) stack pointer from memory

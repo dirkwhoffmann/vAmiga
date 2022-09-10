@@ -18,6 +18,8 @@
 
 namespace moira {
 
+#include "softfloat-types.h"
+
 typedef int8_t             i8;
 typedef int16_t            i16;
 typedef int32_t            i32;
@@ -211,6 +213,14 @@ typedef enum
 }
 Size;
 
+/* TODO:
+
+ typedef enum
+ {
+ }
+ FSize;
+*/
+
 typedef enum
 {
     COND_BT,                // Always true
@@ -351,6 +361,11 @@ struct PrefetchQueue {
     u16 ird;                // The instruction currently being executed
 };
 
+
+//
+// Memory management unit
+//
+
 struct MMU {
 
     u64 crp;                // Cpu Root Pointer
@@ -359,6 +374,24 @@ struct MMU {
     u32 tt0;                // Transparent Translation Register 0
     u32 tt1;                // Transparent Translation Register 1
     u16 mmusr;              // MMU status register
+};
+
+
+//
+// Floating point unit
+//
+
+struct Float80 {
+
+    softfloat::floatx80 raw;
+};
+
+struct FPU {
+
+    Float80 fpr[8];
+    u32 fpiar;
+    u32 fpsr;
+    u32 fpcr;
 };
 
 /* Execution flags
