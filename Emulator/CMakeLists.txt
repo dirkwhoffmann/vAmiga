@@ -26,7 +26,7 @@ if(WIN32)
   target_link_libraries(vAmigaConsole ws2_32)
 endif()
 if(MSVC)
-  target_compile_options(vAmigaCore PUBLIC /W4 /WX /bigobj)
+  target_compile_options(vAmigaCore PUBLIC /W4 /bigobj) # /WX disabled for now
   target_compile_options(vAmigaCore PUBLIC /wd4100 /wd4201 /wd4324 /wd4458)
   set_source_files_properties(CPU/Moira/Moira.cpp PROPERTIES COMPILE_FLAGS "/wd4127")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
