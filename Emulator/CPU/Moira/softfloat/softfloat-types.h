@@ -6,11 +6,13 @@ namespace softfloat {
 /*----------------------------------------------------------------------------
 | One of the macros `BIGENDIAN' or `LITTLEENDIAN' must be defined.
 *----------------------------------------------------------------------------*/
+/*
 #ifdef LSB_FIRST
 #define LITTLEENDIAN
 #else
 #define BIGENDIAN
 #endif
+*/
 
 /*----------------------------------------------------------------------------
 | The macro `BITS64' can be defined to indicate that 64-bit integer types are
