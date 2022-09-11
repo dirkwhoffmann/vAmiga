@@ -45,6 +45,7 @@ int8 floatx80_rounding_precision = 80;
 #endif
 
 int8 float_rounding_mode = float_round_nearest_even;
+}
 
 /*----------------------------------------------------------------------------
 | Functions and definitions to determine:  (1) whether tininess for underflow
@@ -66,6 +67,8 @@ int8 float_rounding_mode = float_round_nearest_even;
 | point input is too large, the invalid exception is raised and the largest
 | positive or negative integer is returned.
 *----------------------------------------------------------------------------*/
+
+namespace softfloat {
 
 static int32 roundAndPackInt32( flag zSign, bits64 absZ )
 {

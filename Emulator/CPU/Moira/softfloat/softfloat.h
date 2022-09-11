@@ -32,40 +32,6 @@ these four paragraphs for those parts of this code that are retained.
 
 #include "softfloat-types.h"
 
-#if 0
-/*----------------------------------------------------------------------------
-| The macro `FLOATX80' must be defined to enable the extended double-precision
-| floating-point format `floatx80'.  If this macro is not defined, the
-| `floatx80' type will not be defined, and none of the functions that either
-| input or output the `floatx80' type will be defined.  The same applies to
-| the `FLOAT128' macro and the quadruple-precision format `float128'.
-*----------------------------------------------------------------------------*/
-#define FLOATX80
-#define FLOAT128
-
-
-namespace softfloat {
-
-/*----------------------------------------------------------------------------
-| Software IEC/IEEE floating-point types.
-*----------------------------------------------------------------------------*/
-typedef bits32 float32;
-typedef bits64 float64;
-#ifdef FLOATX80
-typedef struct {
-	bits16 high;
-	bits64 low;
-} floatx80;
-#endif
-#ifdef FLOAT128
-typedef struct {
-	bits64 high, low;
-} float128;
-#endif
-
-}
-#endif
-
 /*----------------------------------------------------------------------------
  | Primitive arithmetic functions, including multi-word arithmetic, and
  | division and square root approximations.  (Can be specialized to target if

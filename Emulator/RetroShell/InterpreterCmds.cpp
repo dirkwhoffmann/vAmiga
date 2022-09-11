@@ -261,6 +261,14 @@ Interpreter::registerInstructions()
     root.add({"cpu", "inspect"},
              "command", "Displays the component state");
 
+    root.add({"cpu", "inspect", "fpu"},
+             "command", "Inspects the floating point unit",
+             &RetroShell::exec <Token::cpu, Token::inspect, Token::fpu>, 0);
+
+    root.add({"cpu", "inspect", "mmu"},
+             "command", "Inspects the memory management unit",
+             &RetroShell::exec <Token::cpu, Token::inspect, Token::mmu>, 0);
+
     root.add({"cpu", "inspect", "state"},
              "command", "Displays the current state",
              &RetroShell::exec <Token::cpu, Token::inspect, Token::state>, 0);

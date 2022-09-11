@@ -30,6 +30,8 @@ these four paragraphs for those parts of this code that are retained.
 
 =============================================================================*/
 
+namespace softfloat {
+
 flag float32_is_nan( float32 a );
 flag float64_is_nan( float64 a );
 flag floatx80_is_nan( floatx80 a );
@@ -473,4 +475,4 @@ static float128 propagateFloat128NaN( float128 a, float128 b )
 }
 
 #endif
-
+}

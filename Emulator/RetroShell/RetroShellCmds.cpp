@@ -334,6 +334,18 @@ RetroShell::exec <Token::cpu, Token::set, Token::regreset> (Arguments &argv, lon
 }
 
 template <> void
+RetroShell::exec <Token::cpu, Token::inspect, Token::fpu> (Arguments& argv, long param)
+{
+    dump(amiga.cpu, Category::Fpu);
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::inspect, Token::mmu> (Arguments& argv, long param)
+{
+    dump(amiga.cpu, Category::Mmu);
+}
+
+template <> void
 RetroShell::exec <Token::cpu, Token::inspect, Token::state> (Arguments& argv, long param)
 {
     dump(amiga.cpu, Category::State);

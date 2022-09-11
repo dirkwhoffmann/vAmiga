@@ -14,6 +14,7 @@
 #include "IOUtils.h"
 #include "Memory.h"
 #include "MsgQueue.h"
+#include "softfloat.h"
 
 //
 // Moira
@@ -551,6 +552,39 @@ CPU::_dump(Category category, std::ostream& os) const
         os << (reg.sr.c ? 'C' : 'c') << std::endl;
     }
 
+    if (category == Category::Fpu) {
+        
+        os << util::tab("FPIAR");
+        os << util::hex(fpu.fpiar) << std::endl;
+        os << util::tab("FPSR");
+        os << util::hex(fpu.fpsr) << std::endl;
+        os << util::tab("FPCR");
+        os << util::hex(fpu.fpcr) << std::endl;
+
+        for (isize i = 0; i < 8; i++) {
+            
+            auto value = softfloat::floatx80_to_float32(fpu.fpr[i].raw);
+            os << util::tab("FP" + std::to_string(i));
+            os << util::flt(value) << std::endl;
+        }
+    }
+
+    if (category == Category::Mmu) {
+
+        os << util::tab("CRP");
+        os << util::hex(mmu.crp) << std::endl;
+        os << util::tab("SRP");
+        os << util::hex(mmu.srp) << std::endl;
+        os << util::tab("TC");
+        os << util::hex(mmu.tc) << std::endl;
+        os << util::tab("TT0");
+        os << util::hex(mmu.tt0) << std::endl;
+        os << util::tab("TT1");
+        os << util::hex(mmu.tt1) << std::endl;
+        os << util::tab("MMUSR");
+        os << util::hex(mmu.mmusr) << std::endl;
+    }
+    
     if (category == Category::Breakpoints) {
         
         for (int i = 0; i < debugger.breakpoints.elements(); i++) {

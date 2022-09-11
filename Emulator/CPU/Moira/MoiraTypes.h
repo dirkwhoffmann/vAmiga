@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <string>
 #include <optional>
+#include "softfloat-types.h"
 
 #if defined(__clang__)
 #pragma GCC diagnostic ignored "-Wgnu-anonymous-struct"
@@ -17,8 +18,6 @@
 #endif
 
 namespace moira {
-
-#include "softfloat-types.h"
 
 typedef int8_t             i8;
 typedef int16_t            i16;
