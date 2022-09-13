@@ -303,19 +303,19 @@ Moira::execPMove(u16 opcode, RegName mmuReg, bool rw)
 
             case REG_TT0:
 
-                if (!readOp<C68020, M, Word>(reg, &ea, &data32)) return;
+                if (!readOp<C68020, M, Long>(reg, &ea, &data32)) return;
                 mmu.tt0 = data32;
                 break;
 
             case REG_TT1:
 
-                if (!readOp<C68020, M, Word>(reg, &ea, &data32)) return;
+                if (!readOp<C68020, M, Long>(reg, &ea, &data32)) return;
                 mmu.tt1 = data32;
                 break;
 
             case REG_TC:
 
-                if (!readOp<C68020, M, Word>(reg, &ea, &data32)) return;
+                if (!readOp<C68020, M, Long>(reg, &ea, &data32)) return;
                 mmu.tc = data32;
                 break;
 
