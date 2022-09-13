@@ -194,25 +194,101 @@ Moira::execPGen(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPFlush(u16 opcode)
 {
-    printf("TODO: execPFlush");
+    AVAILABILITY(C68020)
+
+    debug(MMU_DEBUG, "PFLUSH not supported yet\n");
+
+    u16 ext   = queue.irc;
+    auto reg  = _____________xxx (opcode);
+    auto mode = ___xxx__________ (ext);
+
+    // Catch illegal extension words
+    if (!isValidExtMMU(I, M, opcode, ext)) {
+
+        execIllegal<C, ILLEGAL, M, S>(opcode);
+        return;
+    }
+
+    (void)readI<C, Word>();
+
+    if (mode == 0b110) {
+        
+        u32 ea; u32 data;
+        readOp<C68020, M>(reg, &ea, &data);
+    }
+    
+    prefetch<C, POLLIPL>();
+
+    CYCLES_68020(8);
+    FINALIZE
 }
 
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPFlusha(u16 opcode)
 {
-    printf("TODO: execPFlusha");
+    AVAILABILITY(C68020)
+
+    debug(MMU_DEBUG, "PFLUSHA not supported yet\n");
+
+    u16 ext = queue.irc;
+
+    // Catch illegal extension words
+    if (!isValidExtMMU(I, M, opcode, ext)) {
+
+        execIllegal<C, ILLEGAL, M, S>(opcode);
+        return;
+    }
+
+    (void)readI<C, Word>();
+    
+    prefetch<C, POLLIPL>();
+
+    CYCLES_68020(8);
+    FINALIZE
 }
 
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPFlush40(u16 opcode)
 {
-    printf("TODO: execPFlush40");
+    AVAILABILITY(C68020)
+
+    debug(MMU_DEBUG, "PFLUSH40 not supported yet\n");
+
+    auto reg  = _____________xxx (opcode);
+    auto mode = ___________xx___ (opcode);
+    
+    printf("Mode = %d\n", mode);
+
+    switch (mode) {
+
+        case 0:
+        case 1:
+                        
+            u32 ea; u32 data;
+            readOp<C68020, M>(reg, &ea, &data);
+            break;
+            
+        case 2:
+        case 3:
+
+            break;
+    }
+
+    prefetch<C, POLLIPL>();
+
+    CYCLES_68020(8);
+    FINALIZE
 }
 
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPLoad(u16 opcode)
 {
+    AVAILABILITY(C68020)
+
     printf("TODO: execPLoad");
+    
+    CYCLES_68020(8);
+    FINALIZE
 }
 
 template <Core C, Instr I, Mode M, Size S> void

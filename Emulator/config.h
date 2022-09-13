@@ -134,6 +134,8 @@ static const int SNP_DEBUG       = 0; // Serialization (snapshots)
 
 // CPU
 static const int CPU_DEBUG       = 0; // CPU
+static const int MMU_DEBUG       = 1; // Memory management unit
+static const int FPU_DEBUG       = 0; // Floating point unit
 static const int CST_DEBUG       = 0; // Call stack recording
 
 // Memory access
