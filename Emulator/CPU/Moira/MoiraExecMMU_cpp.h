@@ -19,6 +19,32 @@ Moira::translate(u32 addr, u8 fc)
 }
 
 bool
+Moira::testTT(u32 ttx, u32 addr, u8 fc, bool rw)
+{
+    u32 addrBase = ttx >> 24 & 0xFF;
+    u32 addrMask = ttx >> 16 & 0xFF;
+    auto e       = x_______________ (ttx);
+    auto rwb     = ______x_________ (ttx);
+    auto rwm     = _______x________ (ttx);
+    auto fcBase  = _________xxx____ (ttx);
+    auto fcMask  = _____________xxx (ttx);
+    
+    if (!e) {
+        return false;
+    }
+    if ((addr >> 24 | addrMask) != (addrBase | addrMask)) {
+        return false;
+    }
+    if ((fc | fcMask) != (fcBase | fcMask)) {
+        return false;
+    }
+    if ((rw | rwm) != (rwb | rwm)) {
+        return false;
+    }
+    return true;
+}
+
+bool
 Moira::isValidExtMMU(Instr I, Mode M, u16 op, u32 ext)
 {
     auto preg  = [ext]() { return ext >> 10 & 0b111;   };
@@ -340,7 +366,41 @@ Moira::execPMove(u16 opcode, RegName mmuReg, bool rw)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPTest(u16 opcode)
 {
-    printf("TODO: execPTest");
+    AVAILABILITY(C68020)
+    
+    u16 ext  = queue.irc;
+    auto rg  = _____________xxx (opcode);
+    auto fc  = ___________xxxxx (ext);
+    auto rw  = ______x_________ (ext);
+
+    // Catch illegal extension words
+    if (!isValidExtMMU(I, M, opcode, ext)) {
+
+        execIllegal<C, ILLEGAL, M, S>(opcode);
+        return;
+    }
+
+    (void)readI<C, Word>();
+        
+    u32 ea; u32 data;
+    readOp<C68020, M, Long>(rg, &ea, &data);
+    
+    u8 fcode;
+    if (fc == 0) { fcode = (u8)reg.sfc; }
+    else if (fc == 1) { fcode = (u8)reg.dfc; }
+    else if (fc & 0b01000) { fcode = readD(fc & 0b111) & 0b111; }
+    else { fcode = fc & 0b111; }
+    
+    if (testTT(mmu.tt0, ea, fcode, rw) || testTT(mmu.tt1, ea, fcode, rw)) {
+        mmu.mmusr |= 0x40;
+    } else {
+        mmu.mmusr &= ~0x40;
+    }
+    
+    prefetch<C, POLLIPL>();
+
+    CYCLES_68020(8);
+    FINALIZE
 }
 
 template <Core C, Instr I, Mode M, Size S> void

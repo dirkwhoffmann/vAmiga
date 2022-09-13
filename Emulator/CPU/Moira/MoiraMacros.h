@@ -102,3 +102,4 @@
 #define _xxx____________(opcode) (u8)((opcode >> 12) & 0b111)
 #define xxxx____________(opcode) (u8)((opcode >> 12) & 0b1111)
 #define xxx_____________(opcode) (u8)((opcode >> 13) & 0b111)
+#define x_______________(opcode) (u8)((opcode >> 15) & 0b1)
