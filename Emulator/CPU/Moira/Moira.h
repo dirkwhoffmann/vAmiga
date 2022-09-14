@@ -519,7 +519,7 @@ private:
     //
 
 private:
-
+    
     // Translates a logical address to a physical address
     template <Core C, bool write> u32 translate(u32 addr, u8 fc);
 

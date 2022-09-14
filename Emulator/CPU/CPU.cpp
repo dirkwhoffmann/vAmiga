@@ -576,6 +576,26 @@ CPU::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Mmu) {
 
+        auto pageSize = [&](isize ps) {
+            
+            switch (ps) {
+                    
+                case 0b1000: return "256 bytes";
+                case 0b1001: return "512 bytes";
+                case 0b1010: return "1KB";
+                case 0b1011: return "4KB";
+                case 0b1100: return "8KB";
+                case 0b1101: return "16KB";
+                case 0b1111: return "32KB";
+                
+                default:
+                    return "???";
+            }
+        };
+        
+        os << util::tab("Enabled");
+        os << util::bol(mmu.tc & 0x8000) << std::endl;
+        os << std::endl;
         os << util::tab("CRP");
         os << util::hex(mmu.crp) << std::endl;
         os << util::tab("SRP");
@@ -588,6 +608,23 @@ CPU::_dump(Category category, std::ostream& os) const
         os << util::hex(mmu.tt1) << std::endl;
         os << util::tab("MMUSR");
         os << util::hex(mmu.mmusr) << std::endl;
+        os << std::endl;
+        os << util::tab("TIA");
+        os << util::dec(mmu.tc >> 12 & 0xF) << std::endl;
+        os << util::tab("TIB");
+        os << util::dec(mmu.tc >> 8 & 0xF) << std::endl;
+        os << util::tab("TIC");
+        os << util::dec(mmu.tc >> 4 & 0xF) << std::endl;
+        os << util::tab("TID");
+        os << util::dec(mmu.tc >> 0 & 0xF) << std::endl;
+        os << util::tab("Initial shift");
+        os << util::dec(mmu.tc >> 16 & 0xF) << std::endl;
+        os << util::tab("Page Size");
+        os << pageSize(mmu.tc >> 20 & 0xF) << std::endl;
+        os << util::tab("Function Code Lookup");
+        os << util::dec(mmu.tc >> 24 & 0xF) << std::endl;
+        os << util::tab("Supervisor Root Enable");
+        os << util::dec(mmu.tc >> 25 & 0xF) << std::endl;
     }
     
     if (category == Category::Breakpoints) {

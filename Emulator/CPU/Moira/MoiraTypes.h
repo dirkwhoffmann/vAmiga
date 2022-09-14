@@ -372,7 +372,7 @@ struct MMU {
     u32 tc;                 // Translation Control Register
     u32 tt0;                // Transparent Translation Register 0
     u32 tt1;                // Transparent Translation Register 1
-    u16 mmusr;              // MMU status register
+    u32 mmusr;              // MMU status register
 };
 
 
