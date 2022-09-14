@@ -196,7 +196,7 @@ Moira::execPFlush(u16 opcode)
 {
     AVAILABILITY(C68020)
 
-    debug(MMU_DEBUG, "PFLUSH not supported yet\n");
+    debug(MMU_DEBUG, "PFLUSH (68030) not supported yet\n");
 
     u16 ext   = queue.irc;
     auto reg  = _____________xxx (opcode);
@@ -228,7 +228,7 @@ Moira::execPFlusha(u16 opcode)
 {
     AVAILABILITY(C68020)
 
-    debug(MMU_DEBUG, "PFLUSHA not supported yet\n");
+    debug(MMU_DEBUG, "PFLUSHA (68030) not supported yet\n");
 
     u16 ext = queue.irc;
 
@@ -252,7 +252,7 @@ Moira::execPFlush40(u16 opcode)
 {
     AVAILABILITY(C68020)
 
-    debug(MMU_DEBUG, "PFLUSH40 not supported yet\n");
+    debug(MMU_DEBUG, "PFLUSH (68040) not supported yet\n");
 
     auto reg  = _____________xxx (opcode);
     auto mode = ___________xx___ (opcode);
@@ -285,7 +285,29 @@ Moira::execPLoad(u16 opcode)
 {
     AVAILABILITY(C68020)
 
-    printf("TODO: execPLoad");
+    u16 ext   = queue.irc;
+    auto reg  = _____________xxx (opcode);
+    auto rw   = ______x_________ (ext);
+
+    if (rw) {
+        debug(MMU_DEBUG, "PLOADR (68030) not supported yet\n");
+    } else {
+        debug(MMU_DEBUG, "PLOADW (68030) not supported yet\n");
+    }
+    
+    // Catch illegal extension words
+    if (!isValidExtMMU(I, M, opcode, ext)) {
+
+        execIllegal<C, ILLEGAL, M, S>(opcode);
+        return;
+    }
+
+    (void)readI<C, Word>();
+        
+    u32 ea; u32 data;
+    readOp<C68020, M>(reg, &ea, &data);
+    
+    prefetch<C, POLLIPL>();
     
     CYCLES_68020(8);
     FINALIZE
