@@ -254,5 +254,5 @@ Moira::dasmPTest40(StrWriter &str, u32 &addr, u16 op)
     auto rw  = __________x_____(op);
 
     str << Ins<I>{} << (rw ? "r" : "w") << tab;
-    str << Op<MODE_AI>(reg, addr);
+    str << Op<M>(reg, addr);
 }

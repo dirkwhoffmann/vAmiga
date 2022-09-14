@@ -53,9 +53,11 @@ Moira::isValidExtMMU(Instr I, Mode M, u16 op, u32 ext)
     auto mask  = [ext]() { return ext >>  5 & 0b1111;  }; // 68851 mask is 4 bit
     auto reg   = [ext]() { return ext >>  5 & 0b111;   };
     auto fc    = [ext]() { return ext       & 0b11111; };
-
-    auto validFC = [&]() { return fc() <= 1 || (fc() >= 8); }; // Binutils checks M68851
-
+    
+    auto validFC = [&]() {
+            return fc() <= 1 || (fc() >= 8); // Binutils checks M68851
+    };
+    
     switch (I) {
 
         case PFLUSHA:
@@ -480,7 +482,7 @@ Moira::execPTest(u16 opcode)
 
     (void)readI<C, Word>();
         
-    u32 ea; u32 data;
+    u32 ea = 0; u32 data;
     readOp<C68020, M, Long>(rg, &ea, &data);
     
     u8 fcode;
@@ -504,5 +506,29 @@ Moira::execPTest(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPTest40(u16 opcode)
 {
-    printf("TODO: execPTest40");
+    AVAILABILITY(C68020)
+    
+    auto rg  = _____________xxx (opcode);
+    auto rw  = __________x_____ (opcode);
+        
+    if (rw) {
+        debug(MMU_DEBUG, "PTESTR (68040) not supported yet\n");
+    } else {
+        debug(MMU_DEBUG, "PTESTW (68040) not supported yet\n");
+    }
+
+    u32 ea = 0; u32 data;
+    readOp<C68020, M, Long>(rg, &ea, &data);
+    
+    u8 fcode = u8(reg.dfc);
+    if (testTT(mmu.tt0, ea, fcode, rw) || testTT(mmu.tt1, ea, fcode, rw)) {
+        mmu.mmusr |= 0x40;
+    } else {
+        mmu.mmusr &= ~0x40;
+    }
+    
+    prefetch<C, POLLIPL>();
+
+    CYCLES_68020(8);
+    FINALIZE
 }

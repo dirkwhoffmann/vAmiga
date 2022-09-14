@@ -1939,9 +1939,9 @@ Moira::createJumpTable()
             ___________XXXXX(opcode, PFLUSH, MODE_IP, Unsized, PFlush40, CIMS)
 
             opcode = parse("1111 0101 0100 1---");
-            _____________XXX(opcode, PTEST, MODE_IP, Unsized, PTest40, CIMS)
+            _____________XXX(opcode, PTEST, MODE_AI, Unsized, PTest40, CIMS)
             opcode = parse("1111 0101 0110 1---");
-            _____________XXX(opcode, PTEST, MODE_IP, Unsized, PTest40, CIMS)
+            _____________XXX(opcode, PTEST, MODE_AI, Unsized, PTest40, CIMS)
         }
 
 
