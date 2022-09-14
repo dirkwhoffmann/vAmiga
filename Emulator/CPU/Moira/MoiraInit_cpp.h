@@ -1936,10 +1936,11 @@ Moira::createJumpTable()
         if (model == M68040 || model == M68LC040) {
 
             opcode = parse("1111 0101 000- ----");
-            ___________XXXXX(opcode, PFLUSH, MODE_IP, Unsized, PFlush40, CIMS)
-
+            ___________XXXXX(opcode, PFLUSH, MODE_AI, Unsized, PFlush40, CIMS)
+            
             opcode = parse("1111 0101 0100 1---");
             _____________XXX(opcode, PTEST, MODE_AI, Unsized, PTest40, CIMS)
+            
             opcode = parse("1111 0101 0110 1---");
             _____________XXX(opcode, PTEST, MODE_AI, Unsized, PTest40, CIMS)
         }

@@ -108,8 +108,8 @@ Moira::dasmPFlush40(StrWriter &str, u32 &addr, u16 op)
 
     switch (mode) {
 
-        case 0: str << Ins<PFLUSHN>{} << tab << Op<MODE_AI>(reg, addr); break;
-        case 1: str << Ins<PFLUSH>{} << tab << Op<MODE_AI>(reg, addr); break;
+        case 0: str << Ins<PFLUSHN>{} << tab << Op<M>(reg, addr); break;
+        case 1: str << Ins<PFLUSH>{} << tab << Op<M>(reg, addr); break;
         case 2: str << Ins<PFLUSHAN>{}; break;
         case 3: str << Ins<PFLUSHA>{}; break;
     }
