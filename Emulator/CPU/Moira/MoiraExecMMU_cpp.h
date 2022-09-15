@@ -14,7 +14,188 @@ Moira::translate(u32 addr, u8 fc)
     // Only proceed of the selected CPU model has a MMU
     if (!hasMMU()) return addr;
 
-    // TODO: Translate address
+    // Only proceed if the MMU is enabled
+    if (!(mmu.tc & 0x80000000)) return addr;
+    
+    // Get the root pointer
+    u64 rp = (reg.sr.s && (mmu.tc & 0x02000000)) ? mmu.srp : mmu.crp;
+    
+    // Decode the root pointer
+    u32 ptr   = u32(rp >> 0)      & 0xFFFFFFF0;
+    u32 limit = u32(rp >> 48)     & 0x7FFF;
+    u32 type  = u32(rp >> 32)     & 0x3;
+    u32 is    = u32(mmu.tc >> 16) & 0xF;
+    u32 abits = u32(mmu.tc >> 12) & 0xF;
+    u32 bbits = u32(mmu.tc >> 8)  & 0xF;
+    u32 cbits = u32(mmu.tc >> 4)  & 0xF;
+    u32 dbits = u32(mmu.tc >> 0)  & 0xF;
+    // bool lu   = rp & 0x80000000;
+
+    printf("MMU: Mapping %x (%d %d %d %d)\n", addr, abits, bbits, cbits, dbits);
+    
+    if (limit) {
+        
+        printf("TODO (1): MMU limit field is not supported yet\n");
+        assert(0);
+        return addr;
+    }
+    
+    u32 entry, entry2;
+    u32 offset, shift;
+        
+    //
+    // Search table A
+    //
+    
+    switch (type) {
+
+        case 0:     // Invalid descriptor type
+            
+            // TODO: Trigger MMU exception
+            printf("TODO (2): Trigger MMU exception\n");
+            assert(0);
+            return addr;
+            // break;
+            
+        case 1:     // Page descriptor (early termination)
+            
+            printf("TODO (2): Page descriptor (early termination)\n");
+            assert(0);
+            return ptr + addr; // TODO: Do we need to cancel some bits?
+            // break;
+
+        case 2:     // Valid table with 'short' entries
+
+            // Read short entry from table A
+            offset = 4 * ((addr << is) >> (32 - abits));
+            entry = readMMU(ptr + offset);
+            printf("Table A: Short entry[%d] = %x\n", offset, entry);
+            ptr = entry & 0xFFFFFFF0;
+            type = entry & 0x3;
+            break;
+
+        case 3:     // Valid table with 'long' entries
+
+            // Read long entry from table A
+            offset = 8 * ((addr << is) >> (32 - abits));
+            entry = readMMU(ptr + offset);
+            entry2 = readMMU(ptr + offset + 4);
+            printf("Table A: Long entry[%d] = %x %x\n", offset, entry, entry2);
+            ptr = entry & 0xFFFFFFF0;
+            type = entry2 & 0x3;
+            break;
+    }
+    
+    //
+    // Search table B
+    //
+
+    switch (type) {
+
+        case 0:     // Invalid descriptor type
+            
+            // TODO: Trigger MMU exception
+            printf("TODO (3): Trigger MMU exception\n");
+            assert(0);
+            return addr;
+            
+        case 1:     // Page descriptor (early termination)
+            
+            shift = is + abits;
+            printf("Table A: Page descriptor: -> %x\n", ((addr << shift) >> shift) + ptr);
+            return ((addr << shift) >> shift) + ptr;
+
+        case 2:     // Valid table with 'short' entries
+
+            // Read short entry from table B
+            offset = 4 * ((addr << (is + abits)) >> (32 - bbits));
+            entry = readMMU(ptr + offset);
+            printf("Table B: Short entry[%d] = %x\n", offset, entry);
+            ptr = entry & 0xFFFFFFF0;
+            type = entry & 0x3;
+            break;
+                        
+        case 3:     // Valid table with 'long' entries
+
+            // Read long entry from table B
+            offset = 8 * ((addr << (is + abits)) >> (32 - bbits));
+            entry = readMMU(ptr + offset);
+            printf("Table B: Long entry[%d] = %x %x\n", offset, entry, entry2);
+            ptr = entry & 0xFFFFFFF0;
+            type = entry & 0x3;
+            break;
+    }
+ 
+    //
+    // Search table C
+    //
+
+    switch (type) {
+
+        case 0:     // Invalid descriptor type
+            
+            // TODO: Trigger MMU exception
+            printf("TODO (4): Trigger MMU exception\n");
+            assert(0);
+            return addr;
+            
+        case 1: // Page descriptor (early termination)
+            
+            shift = is + abits + bbits;
+            printf("Table B: Page descriptor: -> %x\n", ((addr << shift) >> shift) + ptr);
+            return ((addr << shift) >> shift) + ptr;
+
+        case 2:     // Valid table with 'short' entries
+
+            // Read short entry from table C
+            offset = 4 * ((addr << (is + abits + bbits)) >> (32 - cbits));
+            entry = readMMU(ptr + offset);
+            printf("Table C: Short entry[%d] = %x\n", offset, entry);
+            ptr = entry & 0xFFFFFFF0;
+            type = entry & 0x3;
+            break;
+                        
+        case 3:     // Valid table with 'long' entries
+
+            // Read long entry from table C
+            offset = 8 * ((addr << (is + abits + bbits)) >> (32 - cbits));
+            entry = readMMU(ptr + offset);
+            printf("Table C: Long entry[%d] = %x %x\n", offset, entry, entry2);
+            ptr = entry & 0xFFFFFFF0;
+            type = entry & 0x3;
+            break;
+    }
+    
+    switch (type)
+    {
+        case 0:     // Invalid descriptor type
+            
+            // TODO: Trigger MMU exception
+            printf("Table C: Invalid descriptor\n");
+            printf("TODO (5): Trigger MMU exception\n");
+            assert(0);
+            return addr;
+            
+        case 1:     // Page descriptor (early termination)
+         
+            printf("Table C: Page descriptor reached\n");
+            shift = is + abits + bbits + cbits;
+            return ((addr << shift) >> shift) + ptr;
+
+        case 2:     // Valid table with 'short' entries
+
+            printf("TODO (6): Yet unhandeled table C case.\n");
+            assert(0);
+            return addr;
+            
+        case 3:     // Valid table with 'long' entries
+
+            printf("TODO (7): Yet unhandeled table C case.\n");
+            assert(0);
+            return addr;
+    }
+    
+    assert(false);
     return addr;
 }
 

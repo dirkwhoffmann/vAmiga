@@ -67,19 +67,25 @@ Moira::sync(int cycles)
 u8
 Moira::read8(u32 addr)
 {
-    return mem.peek8 <ACCESSOR_CPU> (addr);
+    return mem.peek8<ACCESSOR_CPU>(addr);
 }
 
 u16
 Moira::read16(u32 addr)
 {
-    return mem.peek16 <ACCESSOR_CPU> (addr); 
+    return mem.peek16<ACCESSOR_CPU>(addr);
+}
+
+u32
+Moira::readMMU(u32 addr)
+{
+    return mem.spypeek32<ACCESSOR_CPU>(addr);
 }
 
 u16
 Moira::read16Dasm(u32 addr)
 {
-    auto result = mem.spypeek16 <ACCESSOR_CPU> (addr);
+    auto result = mem.spypeek16<ACCESSOR_CPU>(addr);
     
     // For LINE-A instructions, check if the opcode is a software trap
     if (Debugger::isLineAInstr(result)) result = debugger.swTraps.resolve(result);
