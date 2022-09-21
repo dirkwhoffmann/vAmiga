@@ -1108,6 +1108,10 @@ Memory::peek8 <ACCESSOR_CPU, MEM_FAST> (u32 addr)
 template<> u16
 Memory::peek16 <ACCESSOR_CPU, MEM_FAST> (u32 addr)
 {
+    if (!((addr - FAST_RAM_STRT) < (u32)config.fastSize)) {
+        printf("addr = %x (start: %x size: %x)\n", addr, FAST_RAM_STRT, (u32)config.fastSize);
+    }
+    
     ASSERT_FAST_ADDR(addr);
     
     stats.fastReads.raw++;
@@ -1343,7 +1347,9 @@ Memory::spypeek16 <ACCESSOR_CPU, MEM_EXT> (u32 addr) const
 template<> u8
 Memory::peek8 <ACCESSOR_CPU> (u32 addr)
 {
-    switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
+    addr &= 0xFFFFFF;
+    
+    switch (cpuMemSrc[addr >> 16]) {
             
         case MEM_NONE:          return peek8 <ACCESSOR_CPU, MEM_NONE>     (addr);
         case MEM_CHIP:          return peek8 <ACCESSOR_CPU, MEM_CHIP>     (addr);
@@ -1370,7 +1376,9 @@ Memory::peek8 <ACCESSOR_CPU> (u32 addr)
 template<> u16
 Memory::peek16 <ACCESSOR_CPU> (u32 addr)
 {
-    switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
+    addr &= 0xFFFFFF;
+
+    switch (cpuMemSrc[addr >> 16]) {
             
         case MEM_NONE:          return peek16 <ACCESSOR_CPU, MEM_NONE>     (addr);
         case MEM_CHIP:          return peek16 <ACCESSOR_CPU, MEM_CHIP>     (addr);
@@ -1397,7 +1405,9 @@ Memory::peek16 <ACCESSOR_CPU> (u32 addr)
 template<> u16
 Memory::spypeek16 <ACCESSOR_CPU> (u32 addr) const
 {
-    switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
+    addr &= 0xFFFFFF;
+
+    switch (cpuMemSrc[addr >> 16]) {
             
         case MEM_NONE:          return spypeek16 <ACCESSOR_CPU, MEM_NONE>     (addr);
         case MEM_CHIP:          return spypeek16 <ACCESSOR_CPU, MEM_CHIP>     (addr);
@@ -1782,7 +1792,9 @@ Memory::poke16 <ACCESSOR_CPU, MEM_EXT> (u32 addr, u16 value)
 template<> void
 Memory::poke8 <ACCESSOR_CPU> (u32 addr, u8 value)
 {
-    switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
+    addr &= 0xFFFFFF;
+    
+    switch (cpuMemSrc[addr >> 16]) {
             
         case MEM_NONE:          poke8 <ACCESSOR_CPU, MEM_NONE>     (addr, value); return;
         case MEM_CHIP:          poke8 <ACCESSOR_CPU, MEM_CHIP>     (addr, value); return;
@@ -1809,7 +1821,9 @@ Memory::poke8 <ACCESSOR_CPU> (u32 addr, u8 value)
 template<> void
 Memory::poke16 <ACCESSOR_CPU> (u32 addr, u16 value)
 {
-    switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
+    addr &= 0xFFFFFF;
+    
+    switch (cpuMemSrc[addr >> 16]) {
             
         case MEM_NONE:          poke16 <ACCESSOR_CPU, MEM_NONE>     (addr, value); return;
         case MEM_CHIP:          poke16 <ACCESSOR_CPU, MEM_CHIP>     (addr, value); return;
@@ -2675,7 +2689,9 @@ Memory::patch <MEM_EXT> (u32 addr, u8 value)
 void
 Memory::patch(u32 addr, u8 value)
 {
-    switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
+    addr &= 0xFFFFFF;
+    
+    switch (cpuMemSrc[addr >> 16]) {
             
         case MEM_CHIP:          patch <MEM_CHIP>     (addr, value); return;
         case MEM_CHIP_MIRROR:   patch <MEM_CHIP>     (addr, value); return;

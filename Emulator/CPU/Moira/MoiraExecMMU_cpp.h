@@ -8,6 +8,8 @@
 template <Core C, bool write> u32
 Moira::translate(u32 addr, u8 fc)
 {
+    static int tmp = 0;
+    
     // Only proceed if a MMU capable core is present
     if constexpr (C == C68000 || C == C68010) return addr;
 
@@ -16,7 +18,9 @@ Moira::translate(u32 addr, u8 fc)
 
     // Only proceed if the MMU is enabled
     if (!(mmu.tc & 0x80000000)) return addr;
-    
+
+    bool debug = tmp++ < 10;
+
     // Get the root pointer
     u64 rp = (reg.sr.s && (mmu.tc & 0x02000000)) ? mmu.srp : mmu.crp;
     
@@ -31,16 +35,16 @@ Moira::translate(u32 addr, u8 fc)
     u32 dbits = u32(mmu.tc >> 0)  & 0xF;
     // bool lu   = rp & 0x80000000;
 
-    printf("MMU: Mapping %x (%d %d %d %d)\n", addr, abits, bbits, cbits, dbits);
+    if (debug) printf("MMU: Mapping %x %s (%d %d %d %d %d)\n", addr, write ? "(WRITE)" : "(READ)", is, abits, bbits, cbits, dbits);
     
     if (limit) {
         
-        printf("TODO (1): MMU limit field is not supported yet\n");
+        if (debug) printf("TODO (1): MMU limit field is not supported yet\n");
         assert(0);
         return addr;
     }
     
-    u32 entry, entry2;
+    u32 entry, entry2 = 0;
     u32 offset, shift;
         
     //
@@ -52,14 +56,14 @@ Moira::translate(u32 addr, u8 fc)
         case 0:     // Invalid descriptor type
             
             // TODO: Trigger MMU exception
-            printf("TODO (2): Trigger MMU exception\n");
+            if (debug) printf("TODO (2): Trigger MMU exception\n");
             assert(0);
             return addr;
             // break;
             
         case 1:     // Page descriptor (early termination)
             
-            printf("TODO (2): Page descriptor (early termination)\n");
+            if (debug) printf("TODO (2): Page descriptor (early termination)\n");
             assert(0);
             return ptr + addr; // TODO: Do we need to cancel some bits?
             // break;
@@ -69,7 +73,7 @@ Moira::translate(u32 addr, u8 fc)
             // Read short entry from table A
             offset = 4 * ((addr << is) >> (32 - abits));
             entry = readMMU(ptr + offset);
-            printf("Table A: Short entry[%d] = %x\n", offset, entry);
+            if (debug) printf("Table A (%x): Short entry[%d] = %x\n", ptr, offset / 4, entry);
             ptr = entry & 0xFFFFFFF0;
             type = entry & 0x3;
             break;
@@ -80,7 +84,8 @@ Moira::translate(u32 addr, u8 fc)
             offset = 8 * ((addr << is) >> (32 - abits));
             entry = readMMU(ptr + offset);
             entry2 = readMMU(ptr + offset + 4);
-            printf("Table A: Long entry[%d] = %x %x\n", offset, entry, entry2);
+            if ((entry2 & 0x3) == 0) debug = true;
+            if (debug) printf("Table A (%x): Long entry[%d] = %x %x\n", ptr, offset / 8, entry, entry2);
             ptr = entry & 0xFFFFFFF0;
             type = entry2 & 0x3;
             break;
@@ -95,22 +100,24 @@ Moira::translate(u32 addr, u8 fc)
         case 0:     // Invalid descriptor type
             
             // TODO: Trigger MMU exception
-            printf("TODO (3): Trigger MMU exception\n");
+            if (debug) printf("TODO (3): Trigger MMU exception\n");
             assert(0);
             return addr;
             
         case 1:     // Page descriptor (early termination)
-            
+        {
             shift = is + abits;
-            printf("Table A: Page descriptor: -> %x\n", ((addr << shift) >> shift) + ptr);
+            u32 physAddr = ((addr << shift) >> shift) + ptr;
+            if (debug) printf("Physical address = %x\n", physAddr);
+            // if (addr != physAddr) printf("Mapping %x -> %x\n", addr, physAddr);
             return ((addr << shift) >> shift) + ptr;
-
+        }
         case 2:     // Valid table with 'short' entries
 
             // Read short entry from table B
             offset = 4 * ((addr << (is + abits)) >> (32 - bbits));
             entry = readMMU(ptr + offset);
-            printf("Table B: Short entry[%d] = %x\n", offset, entry);
+            if (debug) printf("Table B: Short entry[%d] = %x\n", offset / 4, entry);
             ptr = entry & 0xFFFFFFF0;
             type = entry & 0x3;
             break;
@@ -120,9 +127,10 @@ Moira::translate(u32 addr, u8 fc)
             // Read long entry from table B
             offset = 8 * ((addr << (is + abits)) >> (32 - bbits));
             entry = readMMU(ptr + offset);
-            printf("Table B: Long entry[%d] = %x %x\n", offset, entry, entry2);
+            entry2 = readMMU(ptr + offset + 4);
+            if (debug) printf("Table B: Long entry[%d] = %x %x\n", offset / 8, entry, entry2);
             ptr = entry & 0xFFFFFFF0;
-            type = entry & 0x3;
+            type = entry2 & 0x3;
             break;
     }
  
@@ -135,14 +143,14 @@ Moira::translate(u32 addr, u8 fc)
         case 0:     // Invalid descriptor type
             
             // TODO: Trigger MMU exception
-            printf("TODO (4): Trigger MMU exception\n");
+            if (debug) printf("TODO (4): Trigger MMU exception\n");
             assert(0);
             return addr;
             
         case 1: // Page descriptor (early termination)
             
             shift = is + abits + bbits;
-            printf("Table B: Page descriptor: -> %x\n", ((addr << shift) >> shift) + ptr);
+            if (debug) printf("Physical address = %x\n", ((addr << shift) >> shift) + ptr);
             return ((addr << shift) >> shift) + ptr;
 
         case 2:     // Valid table with 'short' entries
@@ -150,7 +158,7 @@ Moira::translate(u32 addr, u8 fc)
             // Read short entry from table C
             offset = 4 * ((addr << (is + abits + bbits)) >> (32 - cbits));
             entry = readMMU(ptr + offset);
-            printf("Table C: Short entry[%d] = %x\n", offset, entry);
+            if (debug) printf("Table C: Short entry[%d] = %x\n", offset / 4, entry);
             ptr = entry & 0xFFFFFFF0;
             type = entry & 0x3;
             break;
@@ -160,9 +168,10 @@ Moira::translate(u32 addr, u8 fc)
             // Read long entry from table C
             offset = 8 * ((addr << (is + abits + bbits)) >> (32 - cbits));
             entry = readMMU(ptr + offset);
-            printf("Table C: Long entry[%d] = %x %x\n", offset, entry, entry2);
+            entry2 = readMMU(ptr + offset + 4);
+            if (debug) printf("Table C: Long entry[%d] = %x %x\n", offset / 8, entry, entry2);
             ptr = entry & 0xFFFFFFF0;
-            type = entry & 0x3;
+            type = entry2 & 0x3;
             break;
     }
     
@@ -171,26 +180,27 @@ Moira::translate(u32 addr, u8 fc)
         case 0:     // Invalid descriptor type
             
             // TODO: Trigger MMU exception
-            printf("Table C: Invalid descriptor\n");
-            printf("TODO (5): Trigger MMU exception\n");
+            if (debug) printf("Table C: Invalid descriptor\n");
+            if (debug) printf("TODO (5): Trigger MMU exception\n");
             assert(0);
             return addr;
             
         case 1:     // Page descriptor (early termination)
-         
-            printf("Table C: Page descriptor reached\n");
+        {
             shift = is + abits + bbits + cbits;
-            return ((addr << shift) >> shift) + ptr;
-
+            u32 physAddr = ((addr << shift) >> shift) + ptr;            
+            if (debug) printf("Physical address = %x\n", physAddr);
+            return physAddr;
+        }
         case 2:     // Valid table with 'short' entries
 
-            printf("TODO (6): Yet unhandeled table C case.\n");
+            if (debug) printf("TODO (6): Yet unhandeled table C case.\n");
             assert(0);
             return addr;
             
         case 3:     // Valid table with 'long' entries
 
-            printf("TODO (7): Yet unhandeled table C case.\n");
+            if (debug) printf("TODO (7): Yet unhandeled table C case.\n");
             assert(0);
             return addr;
     }
