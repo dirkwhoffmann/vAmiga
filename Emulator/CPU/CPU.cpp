@@ -198,79 +198,11 @@ Moira::didExecute(ExceptionType exc, u16 vector)
 
 }
 
-/*
-void
-Moira::signalResetInstr()
-{
-    xfiles("RESET instruction\n");
-    amiga.softReset();
-}
-
-void
-Moira::signalStopInstr(u16 op)
-{
-    if (!(op & 0x2000)) {
-        xfiles("STOP instruction (%x)\n", op);
-    }
-}
-
-void
-Moira::signalTasInstr()
-{
-    xfiles("TAS instruction\n");
-}
-*/
-
 void
 Moira::signalHalt()
 {
     msgQueue.put(MSG_CPU_HALT);
 }
-
-/*
-void
-Moira::signalAddressError(moira::AEStackFrame &frame)
-{
-    xfiles("Address error exception %x %x %x %x %x\n",
-          frame.code, frame.addr, frame.ird, frame.sr, frame.pc);
-}
-
-void
-Moira::signalLineAException(u16 opcode)
-{
-    xfiles("lineAException(%x)\n", opcode);
-}
-
-void
-Moira::signalLineFException(u16 opcode)
-{
-    xfiles("lineFException(%x)\n", opcode);
-}
-
-void
-Moira::signalIllegalOpcodeException(u16 opcode)
-{
-    xfiles("illegalOpcodeException(%x)\n", opcode);
-}
-
-void
-Moira::signalTraceException()
-{
-
-}
-
-void
-Moira::signalTrapException()
-{
-    xfiles("trapException\n");
-}
-
-void
-Moira::signalPrivilegeViolation()
-{
-    
-}
-*/
 
 void
 Moira::signalInterrupt(u8 level)

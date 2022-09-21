@@ -73,8 +73,13 @@ Moira::writeStackFrame0001(u16 sr, u32 pc, u16 nr)
 {
     assert(C == C68020);
     
+    // 0001 | Vector offset
     push<C, Word>(0x1000 | nr << 2);
+    
+    // Program counter
     push<C, Long>(pc);
+    
+    // Status register
     push<C, Word>(sr);
 }
 
@@ -83,9 +88,16 @@ Moira::writeStackFrame0010(u16 sr, u32 pc, u32 ia, u16 nr)
 {
     assert(C == C68020);
     
+    // Instruction address
     push<C, Long>(ia);
+
+    // 0010 | Vector offset
     push<C, Word>(0x2000 | nr << 2);
+
+    // Program counter
     push<C, Long>(pc);
+
+    // Status register
     push<C, Word>(sr);
 }
 
@@ -102,31 +114,109 @@ Moira::writeStackFrame1001(u16 sr, u32 pc, u32 ia, u16 nr)
 }
 
 template <Core C> void
-Moira::writeStackFrame1010(u16 sr, u32 pc, u16 nr){
-    
+Moira::writeStackFrame1010(u16 sr, u32 pc, u16 nr)
+{
+    // Internal registers
+    push<C, Word>(0);
+    push<C, Word>(0);
+
+    // Data output buffer
+    push<C, Long>(0);
+
+    // Internal registers
+    push<C, Word>(0);
+    push<C, Word>(0);
+
+    // Data cycle fault address
+    push<C, Long>(0);
+
+    // Instruction pipe stage B
+    push<C, Word>(0);
+
+    // Instruction pipe stage C
+    push<C, Word>(0);
+
+    // Special status word
+    push<C, Word>(0);
+
+    // Internal register
+    push<C, Word>(0);
+
+    // 1010 | Vector offset
+    push<C, Word>(0xA000 | nr << 2);
+
+    // Program counter
+    push<C, Long>(pc);
+
+    // Status register
+    push<C, Word>(sr);
 }
 
 template <Core C> void
 Moira::writeStackFrame1011(u16 sr, u32 pc, u16 nr)
 {
-    
-}
+    // Internal registers
+    push<C, Long>(0);
+    push<C, Long>(0);
+    push<C, Long>(0);
+    push<C, Long>(0);
+    push<C, Long>(0);
+    push<C, Long>(0);
+    push<C, Long>(0);
+    push<C, Long>(0);
+    push<C, Long>(0);
 
-/*
-void
-Moira::execAddressError(StackFrame frame, int delay)
-{
-    switch (core) {
-            
-        case C68000: execAddressError<C68000>(frame, delay); break;
-        case C68010: execAddressError<C68010>(frame, delay); break;
-        case C68020: execAddressError<C68020>(frame, delay); break;
-            
-        default:
-            assert(false);
-    }
+    // Version#, Internal information
+    push<C, Word>(0);
+
+    // Internal registers
+    push<C, Long>(0);
+    push<C, Word>(0);
+
+    // Data input buffer
+     push<C, Long>(0);
+
+    // Internal registers
+    push<C, Long>(0);
+
+    // Stage B address
+    push<C, Long>(0);
+
+    // Internal registers
+    push<C, Long>(0);
+    push<C, Long>(0);
+
+    // Data output buffer
+    push<C, Long>(0);
+
+    // Internal registers
+    push<C, Word>(0);
+    push<C, Word>(0);
+
+    // Data cycle fault address
+    push<C, Long>(0);
+
+    // Instruction pipe stage B
+    push<C, Word>(0);
+
+    // Instruction pipe stage C
+    push<C, Word>(0);
+
+    // Special status register
+    push<C, Word>(0);
+
+    // Internal register
+    push<C, Word>(0);
+
+    // 1011 | Vector offset
+    push<C, Word>(0xB000 | nr << 2);
+
+    // Program counter
+    push<C, Long>(pc);
+
+    // Status register
+    push<C, Word>(sr);
 }
-*/
 
 template <Core C> void
 Moira::execAddressError(StackFrame frame, int delay)
@@ -193,10 +283,17 @@ Moira::execException(ExceptionType exc, int nr)
     // Enter supervisor mode and leave trace mode
     setSupervisorMode(true);
     clearTraceFlags();
-    
-    // Leave trace mode
-    
+        
     switch (exc) {
+            
+        case EXC_BUS_ERROR:
+            
+            // Write stack frame
+            writeStackFrame1011<C>(status, reg.pc, 2);
+            
+            // Branch to exception handler
+            jumpToVector<C>(2);
+            break;
             
         case EXC_ILLEGAL:
         case EXC_LINEA:

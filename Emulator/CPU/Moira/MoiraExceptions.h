@@ -7,16 +7,16 @@
 
 /* Creates a stack frame of a certain format
  *
- * Format  Description                  68000  68010  68020
+ * Format  Description                  68000  68010  68020  68030
  * ----------------------------------------------------------------------------
  *  AEBE   Address error / Bus error      X
- *  0000   Short format                   X      X      X
- *  0001   Throwaway                                    X
- *  0010   Instruction exception                        X
+ *  0000   Short format                   X      X      X      X
+ *  0001   Throwaway                                    X      X
+ *  0010   Instruction exception                        X      X
  *  1000   Bus fault                             X
- *  1001   Coprocessor mid-instruction                  X
- *  1010   Short bus fault                              X
- *  1011   Long bus fault                               X
+ *  1001   Coprocessor mid-instruction                  X      X
+ *  1010   Short bus fault                              X      X
+ *  1011   Long bus fault                               X      X
  */
 template <Core C> void writeStackFrameAEBE(StackFrame &frame);
 template <Core C> void writeStackFrame0000(u16 sr, u32 pc, u16 nr);
@@ -32,7 +32,6 @@ void execException(ExceptionType exc, int nr = 0);
 template <Core C> void execException(ExceptionType exc, int nr = 0);
 
 // Emulates an address error
-// void execAddressError(StackFrame frame, int delay = 0);
 template <Core C> void execAddressError(StackFrame frame, int delay = 0);
 
 // Emulates an interrupt
