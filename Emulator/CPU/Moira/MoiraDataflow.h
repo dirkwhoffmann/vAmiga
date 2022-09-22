@@ -88,7 +88,6 @@ template <Mode M, Size S> void updateAnPI(int n);
 
 // Reads a value from program or data space, depending on the addressing mode
 template <Core C, Mode M, Size S, Flags F = 0> u32 readM(u32 addr);
-template <Core C, Mode M, Size S, Flags F = 0> u32 readM(u32 addr, bool &error);
 
 // Reads a value from a specific memory space
 template <Core C, MemSpace MS, Size S, Flags F = 0> u32 readMS(u32 addr);

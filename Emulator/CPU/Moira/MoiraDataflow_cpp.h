@@ -20,15 +20,23 @@ Moira::readOp(int n, u32 *ea, u32 *result)
             // Compute effective address
             *ea = computeEA<C, M, S, F>(n);
             
-            // Read from effective address
-            bool error; *result = readM<C, M, S, F>(*ea, error);
+            try {
+                
+                // Read from effective address
+                *result = readM<C, M, S, F>(*ea);
+                
+            } catch (...) {
+                
+                // Emulate -(An) register modification
+                updateAnPD<M, S>(n);
+
+                // Signal address error exception
+                throw AddressErrorException();
+            }
             
             // Emulate -(An) register modification
             updateAnPD<M, S>(n);
-            
-            // Exit if an address error has occurred
-            if (error) throw AddressErrorException();
-            
+                        
             // Emulate (An)+ register modification
             updateAnPI<M, S>(n);
     }
@@ -44,14 +52,22 @@ Moira::readOp64(int n, u32 *ea, u64 *result)
     // Compute effective address
     *ea = computeEA<C68020, M, Long, F>(n);
 
-    // Read from effective address
-    bool error; *result = readM<C68020, M, Long, F>(*ea, error);
+    try {
+
+        // Read from effective address
+        *result = readM<C68020, M, Long, F>(*ea);
+
+    } catch (...) {
+        
+        // Emulate -(An) register modification
+        updateAnPD<M, Long>(n);
+
+        // Signal address error exception
+        return false;
+    }
 
     // Emulate -(An) register modification
     updateAnPD<M, Long>(n);
-
-    // Exit if an address error has occurred
-    if (error) return false;
 
     // Emulate (An)+ register modification
     updateAnPI<M, Long>(n);
@@ -61,7 +77,7 @@ Moira::readOp64(int n, u32 *ea, u64 *result)
     updateAnPD<M, Long>(n);
     updateAnPI<M, Long>(n);
 
-    return !error;
+    return true;
 }
 
 template <Core C, Mode M, Size S, Flags F> bool
@@ -365,26 +381,6 @@ Moira::updateAn(int n)
     
     // -(An)
     if constexpr (M == 4) reg.a[n] -= (n == 7 && S == Byte) ? 2 : S;
-}
-
-template <Core C, Mode M, Size S, Flags F> u32
-Moira::readM(u32 addr, bool &error)
-{
-    error = false;
-
-    try {
-        
-        if constexpr (isPrgMode(M)) {
-            return readMS<C, MEM_PROG, S, F>(addr);
-        } else {
-            return readMS<C, MEM_DATA, S, F>(addr);
-        }
-        
-    } catch (...) {
-        
-        error = true;
-        return 0;
-    }
 }
 
 template <Core C, Mode M, Size S, Flags F> u32

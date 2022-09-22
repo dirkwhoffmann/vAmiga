@@ -4434,9 +4434,7 @@ Moira::execRtd(u16 opcode)
 {
     AVAILABILITY(C68010)
 
-    bool error;
-    u32 newpc = readM<C, M, Long>(reg.sp, error);
-    if (error) return;
+    u32 newpc = readM<C, M, Long>(reg.sp);
 
     reg.sp += 4 + i16(queue.irc);
 
@@ -4644,9 +4642,7 @@ Moira::execRtr(u16 opcode)
 {
     AVAILABILITY(C68000)
 
-    bool error;
-    u16 newccr = (u16)readM<C, M, Word>(reg.sp, error);
-    if (error) return;
+    u16 newccr = (u16)readM<C, M, Word>(reg.sp);
 
     reg.sp += 2;
 
@@ -4676,9 +4672,7 @@ Moira::execRts(u16 opcode)
 {
     AVAILABILITY(C68000)
 
-    bool error;
-    u32 newpc = readM<C, M, Long>(reg.sp, error);
-    if (error) return;
+    u32 newpc = readM<C, M, Long>(reg.sp);
 
     reg.sp += 4;
 
