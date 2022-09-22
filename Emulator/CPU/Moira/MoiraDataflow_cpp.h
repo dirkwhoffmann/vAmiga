@@ -78,14 +78,14 @@ Moira::readOp64(int n, u32 *ea, u64 *result)
     updateAnPI<M, Long>(n);
 }
 
-template <Core C, Mode M, Size S, Flags F> bool
+template <Core C, Mode M, Size S, Flags F> void
 Moira::writeOp(int n, u32 val)
 {
     switch (M) {
             
             // Handle non-memory modes
-        case MODE_DN: writeD<S>(n, val); return true;
-        case MODE_AN: writeA<S>(n, val); return true;
+        case MODE_DN: writeD<S>(n, val); break;
+        case MODE_AN: writeA<S>(n, val); break;
         case MODE_IM: fatalError;
             
         default:
@@ -103,8 +103,8 @@ Moira::writeOp(int n, u32 val)
                 // Emulate -(An) register modification
                 updateAnPD<M, S>(n);
                 
-                return false;
-                // throw AddressErrorException();
+                // Signal address error exception
+                throw AddressErrorException();
             }
             
             // Emulate -(An) register modification
@@ -112,8 +112,6 @@ Moira::writeOp(int n, u32 val)
                         
             // Emulate (An)+ register modification
             updateAnPI<M, S>(n);
-            
-            return true;
     }
 }
 
@@ -158,9 +156,9 @@ Moira::writeOp(int n, u32 ea, u32 val)
 {
     switch (M) {
             
-            // Handle non-memory modes
-        case MODE_DN: writeD<S>(n, val); return;
-        case MODE_AN: writeA<S>(n, val); return;
+        // Handle non-memory modes
+        case MODE_DN: writeD<S>(n, val); break;
+        case MODE_AN: writeA<S>(n, val); break;
         case MODE_IM: fatalError;
             
         default:

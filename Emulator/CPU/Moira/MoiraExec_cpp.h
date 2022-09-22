@@ -2339,7 +2339,7 @@ Moira::execMove0(u16 opcode)
     reg.sr.v = 0;
     reg.sr.c = 0;
 
-    if (!writeOp<C, MODE_DN, S>(dst, data)) return;
+    writeOp<C, MODE_DN, S>(dst, data);
 
     prefetch<C, POLLIPL>();
 
@@ -2375,7 +2375,7 @@ Moira::execMove2(u16 opcode)
 
     if constexpr (S == Long && !isMemMode(M)) {
 
-        if (!writeOp<C, MODE_AI, S, AE_INC_PC|POLLIPL>(dst, data)) return;
+        writeOp<C, MODE_AI, S, AE_INC_PC|POLLIPL>(dst, data);
 
         reg.sr.n = NBIT<S>(data);
         reg.sr.z = ZERO<S>(data);
@@ -2391,7 +2391,7 @@ Moira::execMove2(u16 opcode)
         reg.sr.v = 0;
         reg.sr.c = 0;
 
-        if (!writeOp<C, MODE_AI, S, AE_INC_PC>(dst, data)) return;
+        writeOp<C, MODE_AI, S, AE_INC_PC>(dst, data);
 
         reg.sr.n = NBIT<S>(data);
         reg.sr.z = ZERO<S>(data);
@@ -2431,7 +2431,7 @@ Moira::execMove3(u16 opcode)
 
     if constexpr (S == Long && !isMemMode(M)) {
 
-        if (!writeOp<C, MODE_PI, S, AE_INC_PC|POLLIPL>(dst, data)) return;
+        writeOp<C, MODE_PI, S, AE_INC_PC|POLLIPL>(dst, data);
 
         reg.sr.n = NBIT<S>(data);
         reg.sr.z = ZERO<S>(data);
@@ -2447,7 +2447,7 @@ Moira::execMove3(u16 opcode)
         reg.sr.v = 0;
         reg.sr.c = 0;
 
-        if (!writeOp<C, MODE_PI, S, AE_INC_PC|POLLIPL>(dst, data)) return;
+        writeOp<C, MODE_PI, S, AE_INC_PC|POLLIPL>(dst, data);
 
         reg.sr.n = NBIT<S>(data);
         reg.sr.z = ZERO<S>(data);
@@ -2558,7 +2558,7 @@ Moira::execMove5(u16 opcode)
         reg.sr.n = NBIT<Word>(data >> 16);
         reg.sr.z = ZERO<Word>(data >> 16) && reg.sr.z;
 
-        if (!writeOp<C, MODE_DI, S, POLLIPL>(dst, data)) return;
+        writeOp<C, MODE_DI, S, POLLIPL>(dst, data);
 
         reg.sr.n = NBIT<S>(data);
         reg.sr.z = ZERO<S>(data);
@@ -2574,8 +2574,7 @@ Moira::execMove5(u16 opcode)
         reg.sr.v = 0;
         reg.sr.c = 0;
 
-        if (!writeOp<C, MODE_DI, S>(dst, data)) return;
-
+        writeOp<C, MODE_DI, S>(dst, data);
         prefetch<C, POLLIPL>();
     }
 
@@ -2614,7 +2613,7 @@ Moira::execMove6(u16 opcode)
         reg.sr.n = NBIT<Word>(data >> 16);
         reg.sr.z = ZERO<Word>(data >> 16) && reg.sr.z;
 
-        if (!writeOp<C, MODE_IX, S, POLLIPL>(dst, data)) return;
+        writeOp<C, MODE_IX, S, POLLIPL>(dst, data);
 
         reg.sr.n = NBIT<S>(data);
         reg.sr.z = ZERO<S>(data);
@@ -2630,8 +2629,7 @@ Moira::execMove6(u16 opcode)
         reg.sr.v = 0;
         reg.sr.c = 0;
 
-        if (!writeOp<C, MODE_IX, S>(dst, data)) return;
-
+        writeOp<C, MODE_IX, S>(dst, data);
         prefetch<C, POLLIPL>();
     }
 
@@ -2670,8 +2668,7 @@ Moira::execMove7(u16 opcode)
     reg.sr.v = 0;
     reg.sr.c = 0;
 
-    if (!writeOp<C, MODE_AW, S>(dst, data)) return;
-
+    writeOp<C, MODE_AW, S>(dst, data);
     prefetch<C, POLLIPL>();
 
     //           00  10  20        00  10  20        00  10  20
@@ -2749,7 +2746,7 @@ Moira::execMove8(u16 opcode)
         reg.sr.v = 0;
         reg.sr.c = 0;
 
-        if (!writeOp<C, MODE_AL, S>(dst, data)) return;
+        writeOp<C, MODE_AL, S>(dst, data);
     }
 
     prefetch<C, POLLIPL>();
