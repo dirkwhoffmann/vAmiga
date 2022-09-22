@@ -94,11 +94,9 @@ template <Core C, MemSpace MS, Size S, Flags F = 0> u32 readMS(u32 addr);
 
 // Writes an operand to memory (without or with address error checking)
 template <Core C, Mode M, Size S, Flags F = 0> void writeM(u32 addr, u32 val);
-template <Core C, Mode M, Size S, Flags F = 0> void writeM(u32 addr, u32 val, bool &error);
 
 // Writes a value to a specific memory space
 template <Core C, MemSpace MS, Size S, Flags F = 0> void writeMS(u32 addr, u32 val);
-template <Core C, MemSpace MS, Size S, Flags F = 0> void writeMS(u32 addr, u32 val, bool &error);
 
 // Reads an immediate value from memory
 template <Core C, Size S> u32 readI();

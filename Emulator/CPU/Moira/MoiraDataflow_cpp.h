@@ -95,19 +95,27 @@ Moira::writeOp(int n, u32 val)
             // Compute effective address
             u32 ea = computeEA<C, M, S>(n);
             
-            // Write to effective address
-            bool error; writeM<C, M, S, F>(ea, val, error);
+            try {
+                
+                // Write to effective address
+                writeM<C, M, S, F>(ea, val);
+                
+            } catch (...) {
+                
+                // Emulate -(An) register modification
+                updateAnPD<M, S>(n);
+                
+                return false;
+                // throw AddressErrorException();
+            }
             
             // Emulate -(An) register modification
             updateAnPD<M, S>(n);
-            
-            // Early exit in case of an address error
-            if (error) return false;
-            
+                        
             // Emulate (An)+ register modification
             updateAnPI<M, S>(n);
             
-            return !error;
+            return true;
     }
 }
 
@@ -121,14 +129,21 @@ Moira::writeOp64(int n, u64 val)
     // Compute effective address
     u32 ea = computeEA<C, M, Long>(n);
 
-    // Write to effective address
-    bool error; writeM<C, M, Long, F>(ea, val >> 32, error);
+    try {
+        
+        // Write to effective address
+        writeM<C, M, Long, F>(ea, val >> 32);
+        
+    } catch (...) {
 
+        // Emulate -(An) register modification
+        updateAnPD<M, Long>(n);
+
+        return false;
+    }
+    
     // Emulate -(An) register modification
     updateAnPD<M, Long>(n);
-
-    // Early exit in case of an address error
-    if (error) return false;
 
     // Emulate (An)+ register modification
     updateAnPI<M, Long>(n);
@@ -138,7 +153,7 @@ Moira::writeOp64(int n, u64 val)
     updateAnPD<M, Long>(n);
     updateAnPI<M, Long>(n);
 
-    return !error;
+    return true;
 }
 
 template <Core C, Mode M, Size S, Flags F> void
@@ -448,16 +463,6 @@ Moira::readMS(u32 addr)
 }
 
 template <Core C, Mode M, Size S, Flags F> void
-Moira::writeM(u32 addr, u32 val, bool &error)
-{
-    if (isPrgMode(M)) {
-        writeMS<C, MEM_PROG, S, F>(addr, val, error);
-    } else {
-        writeMS<C, MEM_DATA, S, F>(addr, val, error);
-    }
-}
-
-template <Core C, Mode M, Size S, Flags F> void
 Moira::writeM(u32 addr, u32 val)
 {
     if constexpr (isPrgMode(M)) {
@@ -468,22 +473,16 @@ Moira::writeM(u32 addr, u32 val)
 }
 
 template <Core C, MemSpace MS, Size S, Flags F> void
-Moira::writeMS(u32 addr, u32 val, bool &error)
+Moira::writeMS(u32 addr, u32 val)
 {
     // Check for address errors
-    if ((error = misaligned<C, S>(addr)) == true) {
+    if (misaligned<C, S>(addr)) {
 
         setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
         execAddressError<C>(makeFrame<F|AE_WRITE>(addr), 2);
-        return;
+        throw AddressErrorException();
     }
     
-    writeMS<C, MS, S, F>(addr, val);
-}
-
-template <Core C, MemSpace MS, Size S, Flags F> void
-Moira::writeMS(u32 addr, u32 val)
-{
     // Update function code pins
     u8 fc = MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG;
     setFC(fc);
@@ -579,8 +578,16 @@ Moira::push(u32 val)
 template <Core C, Size S, Flags F> void
 Moira::push(u32 val, bool &error)
 {
-    reg.sp -= S;
-    writeMS<C, MEM_DATA, S, F>(reg.sp, val, error);
+    try {
+        
+        reg.sp -= S;
+        writeMS<C, MEM_DATA, S, F>(reg.sp, val);
+        error = false;
+        
+    } catch (...) {
+        
+        error = true;
+    }
 }
 
 template <Core C, Size S> bool
