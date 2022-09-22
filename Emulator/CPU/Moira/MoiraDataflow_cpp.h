@@ -370,10 +370,20 @@ Moira::updateAn(int n)
 template <Core C, Mode M, Size S, Flags F> u32
 Moira::readM(u32 addr, bool &error)
 {
-    if constexpr (isPrgMode(M)) {
-        return readMS<C, MEM_PROG, S, F>(addr, error);
-    } else {
-        return readMS<C, MEM_DATA, S, F>(addr, error);
+    error = false;
+
+    try {
+        
+        if constexpr (isPrgMode(M)) {
+            return readMS<C, MEM_PROG, S, F>(addr);
+        } else {
+            return readMS<C, MEM_DATA, S, F>(addr);
+        }
+        
+    } catch (...) {
+        
+        error = true;
+        return 0;
     }
 }
 
@@ -388,23 +398,17 @@ Moira::readM(u32 addr)
 }
 
 template <Core C, MemSpace MS, Size S, Flags F> u32
-Moira::readMS(u32 addr, bool &error)
-{
-    // Check for address errors
-    if ((error = misaligned<C, S>(addr)) == true) {
-        
-        setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
-        execAddressError<C>(makeFrame<F>(addr), 2);
-        return 0;
-    }
-    
-    return readMS<C, MS, S, F>(addr);
-}
-
-template <Core C, MemSpace MS, Size S, Flags F> u32
 Moira::readMS(u32 addr)
 {
     u32 result;
+
+    // Check for address errors
+    if (misaligned<C, S>(addr)) {
+        
+        setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
+        execAddressError<C>(makeFrame<F>(addr), 2);
+        throw AddressErrorException();
+    }
 
     // Update function code pins
     u8 fc = MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG;
