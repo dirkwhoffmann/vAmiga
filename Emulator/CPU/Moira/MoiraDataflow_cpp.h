@@ -639,6 +639,7 @@ Moira::fullPrefetch()
 {
     // Check for address error
     if (misaligned<C>(reg.pc)) {
+        
         execAddressError<C>(makeFrame(reg.pc), 2);
         return;
     }
@@ -664,6 +665,7 @@ Moira::readExt()
     
     // Check for address error
     if (misaligned<C>(reg.pc)) {
+        
         execAddressError<C>(makeFrame(reg.pc));
         return;
     }
