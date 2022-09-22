@@ -42,7 +42,7 @@ Moira::readOp(int n, u32 *ea, u32 *result)
     }
 }
 
-template <Mode M, Flags F> bool
+template <Mode M, Flags F> void
 Moira::readOp64(int n, u32 *ea, u64 *result)
 {
     assert(M != MODE_DN);
@@ -63,7 +63,7 @@ Moira::readOp64(int n, u32 *ea, u64 *result)
         updateAnPD<M, Long>(n);
 
         // Signal address error exception
-        return false;
+        throw AddressErrorException();
     }
 
     // Emulate -(An) register modification
@@ -76,8 +76,6 @@ Moira::readOp64(int n, u32 *ea, u64 *result)
     *result = *result << 32 | readM<C68020, M, Long, F>(*ea + 4);
     updateAnPD<M, Long>(n);
     updateAnPI<M, Long>(n);
-
-    return true;
 }
 
 template <Core C, Mode M, Size S, Flags F> bool
@@ -119,7 +117,7 @@ Moira::writeOp(int n, u32 val)
     }
 }
 
-template <Core C, Mode M, Flags F> bool
+template <Core C, Mode M, Flags F> void
 Moira::writeOp64(int n, u64 val)
 {
     assert(M != MODE_DN);
@@ -139,7 +137,8 @@ Moira::writeOp64(int n, u64 val)
         // Emulate -(An) register modification
         updateAnPD<M, Long>(n);
 
-        return false;
+        // Signal address error exception
+        throw AddressErrorException();
     }
     
     // Emulate -(An) register modification
@@ -152,8 +151,6 @@ Moira::writeOp64(int n, u64 val)
     writeM<C, M, Long, F>(ea + 4, val & 0xFFFFFFFF);
     updateAnPD<M, Long>(n);
     updateAnPI<M, Long>(n);
-
-    return true;
 }
 
 template <Core C, Mode M, Size S, Flags F> void
