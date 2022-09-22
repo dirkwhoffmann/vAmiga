@@ -1295,11 +1295,10 @@ Moira::execBsr(u16 opcode)
         return;
     }
 
-    // Save return address on stack
     SYNC(2);
-    bool error;
-    push <C,Long> (retpc, error);
-    if (error) return;
+
+    // Save return address on stack
+    push<C, Long>(retpc);
 
     // Jump to new address
     reg.pc = newpc;
@@ -2235,9 +2234,7 @@ Moira::execJsr(u16 opcode)
     }
 
     // Save return address on stack
-    bool error;
-    push <C,Long> (reg.pc, error);
-    if (error) return;
+    push<C, Long>(reg.pc);
 
     // Jump to new address
     reg.pc = ea;

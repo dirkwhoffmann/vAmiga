@@ -572,22 +572,7 @@ template <Core C, Size S, Flags F> void
 Moira::push(u32 val)
 {
     reg.sp -= S;
-    writeMS<C,MEM_DATA,S,F>(reg.sp, val);
-}
-
-template <Core C, Size S, Flags F> void
-Moira::push(u32 val, bool &error)
-{
-    try {
-        
-        reg.sp -= S;
-        writeMS<C, MEM_DATA, S, F>(reg.sp, val);
-        error = false;
-        
-    } catch (...) {
-        
-        error = true;
-    }
+    writeMS<C, MEM_DATA, S, F>(reg.sp, val);
 }
 
 template <Core C, Size S> bool

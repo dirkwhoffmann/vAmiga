@@ -103,7 +103,6 @@ template <Core C, Size S> u32 readI();
 
 // Pushes a value onto the stack
 template <Core C, Size S, Flags F = 0> void push(u32 value);
-template <Core C, Size S, Flags F = 0> void push(u32 value, bool &error);
 
 // Checks whether the provided address should trigger an address error
 template <Core C, Size S = Word> bool misaligned(u32 addr);
