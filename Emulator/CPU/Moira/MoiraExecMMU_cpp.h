@@ -614,37 +614,37 @@ Moira::execPMove(u16 opcode, RegName mmuReg, bool rw)
 
             case REG_MMUSR:
 
-                if (!readOp<C68020, M, Word>(reg, &ea, &data32)) return;
+                readOp<C68020, M, Word>(reg, &ea, &data32);
                 mmu.mmusr = u16(data32);
                 break;
 
             case REG_TT0:
 
-                if (!readOp<C68020, M, Long>(reg, &ea, &data32)) return;
+                readOp<C68020, M, Long>(reg, &ea, &data32);
                 mmu.tt0 = data32;
                 break;
 
             case REG_TT1:
 
-                if (!readOp<C68020, M, Long>(reg, &ea, &data32)) return;
+                readOp<C68020, M, Long>(reg, &ea, &data32);
                 mmu.tt1 = data32;
                 break;
 
             case REG_TC:
 
-                if (!readOp<C68020, M, Long>(reg, &ea, &data32)) return;
+                readOp<C68020, M, Long>(reg, &ea, &data32);
                 mmu.tc = data32;
                 break;
 
             case REG_CRP:
 
-                if (!readOp64<M, Word>(reg, &ea, &data64)) return;
+                readOp64<M, Word>(reg, &ea, &data64);
                 mmu.crp = data64;
                 break;
 
             case REG_SRP:
 
-                if (!readOp64<M, Word>(reg, &ea, &data64)) return;
+                readOp64<M, Word>(reg, &ea, &data64);
                 mmu.srp = data64;
                 break;
 

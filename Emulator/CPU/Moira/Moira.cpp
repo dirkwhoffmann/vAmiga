@@ -210,7 +210,7 @@ Moira::execute()
     if (!flags) {
         
         reg.pc += 2;
-        (this->*exec[queue.ird])(queue.ird);
+        try { (this->*exec[queue.ird])(queue.ird); } catch (...) { }
         assert(reg.pc0 == reg.pc);
         return;
     }
@@ -277,7 +277,7 @@ Moira::execute()
     } else {
         
         reg.pc += 2;
-        (this->*exec[queue.ird])(queue.ird);
+        try { (this->*exec[queue.ird])(queue.ird); } catch (...) { }
         assert(reg.pc0 == reg.pc);
     }
     

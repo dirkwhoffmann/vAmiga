@@ -58,7 +58,7 @@
  * untouched.
  */
 template <Core C, Mode M, Size S = Word, Flags F = 0>
-bool readOp(int n, u32 *ea, u32 *result);
+void readOp(int n, u32 *ea, u32 *result);
 
 // EXPERIMENTAL
 template <Mode M, Flags F = 0> bool readOp64(int n, u32 *ea, u64 *result);

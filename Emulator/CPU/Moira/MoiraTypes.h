@@ -28,6 +28,8 @@ typedef uint16_t           u16;
 typedef uint32_t           u32;
 typedef unsigned long long u64;
 
+class AddressErrorException : public std::exception { };
+
 typedef enum
 {
     M68000,             // Full supported

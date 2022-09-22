@@ -5,15 +5,15 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
-template <Core C, Mode M, Size S, Flags F> bool
+template <Core C, Mode M, Size S, Flags F> void
 Moira::readOp(int n, u32 *ea, u32 *result)
 {
     switch (M) {
             
             // Handle non-memory modes
-        case MODE_DN: *result = readD<S>(n);   return true;
-        case MODE_AN: *result = readA<S>(n);   return true;
-        case MODE_IM: *result = readI<C, S>(); return true;
+        case MODE_DN: *result = readD<S>(n);   break;
+        case MODE_AN: *result = readA<S>(n);   break;
+        case MODE_IM: *result = readI<C, S>(); break;
             
         default:
             
@@ -27,12 +27,10 @@ Moira::readOp(int n, u32 *ea, u32 *result)
             updateAnPD<M, S>(n);
             
             // Exit if an address error has occurred
-            if (error) return false;
+            if (error) throw AddressErrorException();
             
             // Emulate (An)+ register modification
             updateAnPI<M, S>(n);
-            
-            return !error;
     }
 }
 
