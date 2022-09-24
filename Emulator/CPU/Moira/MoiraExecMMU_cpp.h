@@ -56,19 +56,13 @@ Moira::translate(u32 addr, u8 fc)
     u32 ptr   = u32(rp >> 0)      & 0xFFFFFFF0;
     u32 limit = u32(rp >> 48)     & 0x7FFF;
     u32 dt    = u32(rp >> 32)     & 0x3;
-    /*
-    u32 is    = u32(mmu.tc >> 16) & 0xF;
-    u32 abits = u32(mmu.tc >> 12) & 0xF;
-    u32 bbits = u32(mmu.tc >> 8)  & 0xF;
-    u32 cbits = u32(mmu.tc >> 4)  & 0xF;
-    u32 dbits = u32(mmu.tc >> 0)  & 0xF;
-    */
+
     u32 idx[5];
-    idx[0] = u32(mmu.tc >> 16) & 0xF;
-    idx[1] = u32(mmu.tc >> 12) & 0xF;
-    idx[2] = u32(mmu.tc >> 8) & 0xF;
-    idx[3] = u32(mmu.tc >> 4) & 0xF;
-    idx[4] = u32(mmu.tc >> 0) & 0xF;
+    idx[0] = u32(mmu.tc >> 16) & 0xF;   // IS  (Initial Shift)
+    idx[1] = u32(mmu.tc >> 12) & 0xF;   // TIA (Table Index A)
+    idx[2] = u32(mmu.tc >>  8) & 0xF;   // TIB (Table Index B)
+    idx[3] = u32(mmu.tc >>  4) & 0xF;   // TIC (Table Index C)
+    idx[4] = u32(mmu.tc >>  0) & 0xF;   // TID (Table Index D)
     
     if (debug) printf("MMU: Mapping %x %s (%d %d %d %d %d)\n",
                       addr,
@@ -119,13 +113,13 @@ Moira::translate(u32 addr, u8 fc)
             case ShortTable:
             {
                 u32 offset = bitslice(pos, len);
-                u32 entry = readMMU(ptr + 4 * offset);
+                u32 lword0 = readMMU(ptr + 4 * offset);
                 
-                if (debug) printf("Short table: %c[%d] = %x\n", table, offset, entry);
+                if (debug) printf("ShortTable: %c[%d] = %x\n", table, offset, lword0);
                 
-                ptr = entry & 0xFFFFFFF0;
+                ptr = lword0 & 0xFFFFFFF0;
                 
-                switch (entry & 0x3) {
+                switch (lword0 & 0x3) {
                         
                     case 0:
 
@@ -191,7 +185,7 @@ Moira::translate(u32 addr, u8 fc)
             }
             case ShortInvalid:
             {
-                printf("Invalid descriptor: %x -> Bus error\n", addr);
+                printf("ShortInvalid: %x -> Bus error\n", addr);
                 throw BusErrorException();
             }
             case ShortIndirect:
@@ -199,9 +193,97 @@ Moira::translate(u32 addr, u8 fc)
                 u32 entry = readMMU(ptr);
                 ptr = entry & 0xFFFFFFF0;
                 physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
-                if (debug) printf("Short indirect -> %x\n", physAddr);
+                if (debug) printf("ShortIndirect: %x -> %x\n", addr, physAddr);
                 return physAddr;
             }
+            case LongTable:
+            {
+                u32 offset = bitslice(pos, len);
+                u32 lword0 = readMMU(ptr + 8 * offset);
+                u32 lword1 = readMMU(ptr + 8 * offset + 4);
+                
+                if (debug) printf("LongTable: %c[%d] = %x %x\n", table, offset, lword0, lword1);
+                
+                ptr = lword1 & 0xFFFFFFF0;
+                
+                switch (lword0 & 0x3) {
+                        
+                    case 0:
+
+                        type = LongInvalid;
+                        if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
+                        continue;
+                        
+                    case 1:
+
+                        type = table == 'D' ? LongPage : LongEarly;
+                        if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
+                        continue;
+                        
+                    case 2:
+                        
+                        if (table == 'D') {
+
+                            type = LongIndirect;
+                            if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
+
+                        } else {
+                            
+                            type = LongTable;
+                            if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
+
+                            table++;
+                            pos += len;
+                            len = idx[i+2];
+                        }
+                        continue;
+                        
+                    case 3:
+
+                        if (table == 'D') {
+
+                            type = LongIndirect;
+                            if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
+
+                        } else {
+                            
+                            type = LongTable;
+                            if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
+
+                            table++;
+                            pos += len;
+                            len = idx[i+2];
+                        }
+                        continue;
+                }
+                break;
+            }
+            case LongEarly:
+            {
+                physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
+                if (debug) printf("LongEarly: %x -> %x\n", addr, physAddr);
+                return physAddr;
+            }
+            case LongPage:
+            {
+                physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
+                if (debug) printf("LongPage: %x -> %x\n", addr, physAddr);
+                return physAddr;
+            }
+            case LongInvalid:
+            {
+                printf("LongInvalid: %x -> Bus error\n", addr);
+                throw BusErrorException();
+            }
+            case LongIndirect:
+            {
+                u32 lword1 = readMMU(ptr + 4);
+                ptr = lword1 & 0xFFFFFFF0;
+                physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
+                if (debug) printf("LongIndirect: %x -> %x\n", addr, physAddr);
+                return physAddr;
+            }
+                
             default:
                 assert(false);
         }

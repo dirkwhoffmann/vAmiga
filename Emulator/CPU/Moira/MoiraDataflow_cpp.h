@@ -460,9 +460,6 @@ Moira::readMS(u32 addr)
 template <Core C, Mode M, Size S, Flags F> void
 Moira::writeM(u32 addr, u32 val)
 {
-    if (addr == 0x75410) {
-        printf("Writing to %x\n", addr); 
-    }
     if constexpr (isPrgMode(M)) {
         writeMS<C, MEM_PROG, S, F>(addr, val);
     } else {
@@ -772,3 +769,6 @@ Moira::penaltyCycles(u16 ext)
     
     return 0;
 }
+
+// Explicit template instantiations
+template void Moira::fullPrefetch<C68000, POLLIPL>();
