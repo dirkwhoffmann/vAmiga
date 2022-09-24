@@ -56,14 +56,15 @@ Moira::translate(u32 addr, u8 fc)
     u32 ptr   = u32(rp >> 0)      & 0xFFFFFFF0;
     u32 limit = u32(rp >> 48)     & 0x7FFF;
     u32 dt    = u32(rp >> 32)     & 0x3;
-
+    
     u32 idx[5];
     idx[0] = u32(mmu.tc >> 16) & 0xF;   // IS  (Initial Shift)
     idx[1] = u32(mmu.tc >> 12) & 0xF;   // TIA (Table Index A)
     idx[2] = u32(mmu.tc >>  8) & 0xF;   // TIB (Table Index B)
     idx[3] = u32(mmu.tc >>  4) & 0xF;   // TIC (Table Index C)
     idx[4] = u32(mmu.tc >>  0) & 0xF;   // TID (Table Index D)
-    
+    bool fcl = mmu.tc & ( 1 << 24);
+
     if (debug) printf("MMU: Mapping %x %s (%d %d %d %d %d)\n",
                       addr,
                       write ? "(WRITE)" : "(READ)",
@@ -95,8 +96,30 @@ Moira::translate(u32 addr, u8 fc)
              */
             return ptr + addr;
             
-        case 2: type = ShortTable; break;
-        case 3: type = LongTable; break;
+        case 2:
+            
+            type = ShortTable;
+            
+            if (fcl) {
+                
+                u32 lword0 = readMMU(ptr + 4 * readFC());
+                ptr = lword0 & 0xFFFFFFF0;
+                type = (lword0 & 1) ? LongTable : ShortTable;
+            }
+            break;
+            
+        case 3:
+            
+            type = LongTable;
+            
+            if (fcl) {
+                
+                u32 lword0 = readMMU(ptr + 8 * readFC());
+                u32 lword1 = readMMU(ptr + 8 * readFC() + 4);
+                ptr = lword1 & 0xFFFFFFF0;
+                type = (lword0 & 1) ? LongTable : ShortTable;
+            }
+            break;
     }
     
     char table = 'A';
