@@ -392,7 +392,7 @@ CPU::_reset(bool hard)
         
         /* "The RESET instruction causes the processor to assert RESET for 124
          *  clock periods toreset the external devices of the system. The
-         *  internal state of the processor is notaffected. Neither the status
+         *  internal state of the processor is not affected. Neither the status
          *  register nor any of the internal registers is affected by an
          *  internal reset operation. All external devices in the system should
          *  be reset at the completion of the RESET instruction."

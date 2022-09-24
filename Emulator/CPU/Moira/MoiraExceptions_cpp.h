@@ -153,7 +153,7 @@ Moira::writeStackFrame1010(u16 sr, u32 pc, u16 nr)
 }
 
 template <Core C> void
-Moira::writeStackFrame1011(u16 sr, u32 pc, u16 nr)
+Moira::writeStackFrame1011(u16 sr, u32 pc, u32 ia, u16 nr)
 {
     // Internal registers
     push<C, Long>(0);
@@ -212,7 +212,7 @@ Moira::writeStackFrame1011(u16 sr, u32 pc, u16 nr)
     push<C, Word>(0xB000 | nr << 2);
 
     // Program counter
-    push<C, Long>(pc);
+    push<C, Long>(ia);
 
     // Status register
     push<C, Word>(sr);
@@ -289,7 +289,7 @@ Moira::execException(ExceptionType exc, int nr)
         case EXC_BUS_ERROR:
             
             // Write stack frame
-            writeStackFrame1011<C>(status, reg.pc, 2);
+            writeStackFrame1011<C>(status, reg.pc, reg.pc0, 2);
             
             // Branch to exception handler
             jumpToVector<C>(2);

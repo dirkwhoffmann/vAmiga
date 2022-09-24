@@ -4426,6 +4426,11 @@ Moira::execReset(u16 opcode)
 
     SUPERVISOR_MODE_ONLY
 
+    // Disable the MMU
+    mmu.tc  &= ~(1 << 31);
+    mmu.tt0 &= ~(1 << 15);
+    mmu.tt1 &= ~(1 << 15);
+    
     SYNC_68000(128);
     SYNC_68010(126);
 
@@ -4477,6 +4482,7 @@ Moira::execRte(u16 opcode)
 
         case C68000:
         {
+            // TODO: Use pop instead of readMS
             newsr = (u16)readMS<C, MEM_DATA, Word>(reg.sp);
             reg.sp += 2;
 
@@ -4492,6 +4498,8 @@ Moira::execRte(u16 opcode)
 
                 case 0b0000: // Short format
 
+                    // TODO: Use pop instead of readMS
+
                     newsr = (u16)readMS<C, MEM_DATA, Word>(reg.sp);
                     reg.sp += 2;
 
@@ -4503,6 +4511,8 @@ Moira::execRte(u16 opcode)
                     break;
 
                 case 0b1000: // Long format
+
+                    // TODO: Use pop instead of readMS
 
                     newsr = (u16)readMS<C, MEM_DATA, Word>(reg.sp);
                     reg.sp += 2;
@@ -4569,6 +4579,8 @@ Moira::execRte(u16 opcode)
 
                 if (format == 0b000) {  // Standard frame
 
+                    // TODO: Use pop instead of readMS
+
                     newsr = (u16)readMS<C, MEM_DATA, Word>(reg.sp);
                     reg.sp += 2;
 
@@ -4580,6 +4592,8 @@ Moira::execRte(u16 opcode)
                     break;
 
                 } else if (format == 0b001) {  // Throwaway frame
+
+                    // TODO: Use pop instead of readMS
 
                     newsr = (u16)readMS<C, MEM_DATA, Word>(reg.sp);
                     reg.sp += 2;
@@ -4595,6 +4609,8 @@ Moira::execRte(u16 opcode)
 
                 } else if (format == 0b010) {  // Trap
 
+                    // TODO: Use pop instead of readMS
+
                     newsr = (u16)readMS<C, MEM_DATA, Word>(reg.sp);
                     reg.sp += 2;
 
@@ -4608,6 +4624,75 @@ Moira::execRte(u16 opcode)
                     reg.sp += 4;
                     break;
 
+                } else if (format == 0b1011) {
+                    
+                    printf("1. reg.sp = %x\n", reg.sp);
+                    // Status register
+                    newsr = (u16)pop<C, Word>();
+
+                    printf("2. reg.sp = %x\n", reg.sp);
+                    // Program counter
+                    newpc = pop<C, Long>();
+
+                    // 1011 | Vector offset
+                    (void)pop<C, Word>();
+
+                    // Internal register
+                    (void)pop<C, Word>();
+
+                    // Special status register
+                    (void)pop<C, Word>();
+
+                    // Instruction pipe stage C
+                    (void)pop<C, Word>();
+
+                    // Instruction pipe stage B
+                    (void)pop<C, Word>();
+
+                    // Data cycle fault address
+                    (void)pop<C, Long>();
+
+                    // Internal registers
+                    (void)pop<C, Word>();
+                    (void)pop<C, Word>();
+
+                    // Data output buffer
+                    (void)pop<C, Long>();
+
+                    // Internal registers
+                    (void)pop<C, Long>();
+                    (void)pop<C, Long>();
+
+                    // Stage B address
+                    (void)pop<C, Long>();
+
+                    // Internal registers
+                    (void)pop<C, Long>();
+
+                    // Data input buffer
+                    (void)pop<C, Long>();
+
+                    // Internal registers
+                    (void)pop<C, Word>();
+                    (void)pop<C, Long>();
+
+                    // Version#, Internal information
+                    (void)pop<C, Word>();
+
+                    // Internal registers
+                    (void)pop<C, Long>();
+                    (void)pop<C, Long>();
+                    (void)pop<C, Long>();
+                    (void)pop<C, Long>();
+                    (void)pop<C, Long>();
+                    (void)pop<C, Long>();
+                    (void)pop<C, Long>();
+                    (void)pop<C, Long>();
+                    (void)pop<C, Long>();
+                    
+                    printf("Format b1011: SR = %x Jumping back to PC = %x\n", newsr, newpc); 
+                    break;
+                    
                 } else {
 
                     execException(EXC_FORMAT_ERROR);

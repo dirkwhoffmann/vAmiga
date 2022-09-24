@@ -25,7 +25,7 @@ template <Core C> void writeStackFrame0010(u16 sr, u32 pc, u32 ia, u16 nr);
 template <Core C> void writeStackFrame1000(u16 sr, u32 pc, u16 nr);
 template <Core C> void writeStackFrame1001(u16 sr, u32 pc, u32 ia, u16 nr);
 template <Core C> void writeStackFrame1010(u16 sr, u32 pc, u16 nr);
-template <Core C> void writeStackFrame1011(u16 sr, u32 pc, u16 nr);
+template <Core C> void writeStackFrame1011(u16 sr, u32 pc, u32 ia, u16 nr);
 
 // Emulates an exception other than address errors and interrupts
 void execException(ExceptionType exc, int nr = 0);

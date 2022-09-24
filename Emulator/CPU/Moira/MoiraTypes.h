@@ -29,6 +29,7 @@ typedef uint32_t           u32;
 typedef unsigned long long u64;
 
 class AddressErrorException : public std::exception { };
+class BusErrorException : public std::exception { };
 
 typedef enum
 {

@@ -210,7 +210,18 @@ Moira::execute()
     if (!flags) {
         
         reg.pc += 2;
-        try { (this->*exec[queue.ird])(queue.ird); } catch (...) { }
+        try {
+            (this->*exec[queue.ird])(queue.ird);
+        } catch (const BusErrorException &exc) {
+            printf("(1) BusErrorException\n");
+            execException(EXC_BUS_ERROR);
+            printf("execException called\n");
+        } catch (const AddressErrorException &exc) {
+            printf("AddressErrorException\n");
+        } catch (...) {
+            printf("Other exception\n");
+        }
+        
         assert(reg.pc0 == reg.pc);
         return;
     }
@@ -277,7 +288,13 @@ Moira::execute()
     } else {
         
         reg.pc += 2;
-        try { (this->*exec[queue.ird])(queue.ird); } catch (...) { }
+        try {
+            (this->*exec[queue.ird])(queue.ird);
+        } catch (const BusErrorException &) {
+            printf("(2) BusErrorException\n");
+            execException(EXC_BUS_ERROR);
+        } catch (...) { }
+
         assert(reg.pc0 == reg.pc);
     }
     

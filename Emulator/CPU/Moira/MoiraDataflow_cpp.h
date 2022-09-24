@@ -25,13 +25,13 @@ Moira::readOp(int n, u32 *ea, u32 *result)
                 // Read from effective address
                 *result = readM<C, M, S, F>(*ea);
                 
-            } catch (...) {
+            } catch (const AddressErrorException &exc) {
                 
                 // Emulate -(An) register modification
                 updateAnPD<M, S>(n);
 
-                // Signal address error exception
-                throw AddressErrorException();
+                // Rethrow exception
+                throw exc;
             }
             
             // Emulate -(An) register modification
@@ -57,13 +57,13 @@ Moira::readOp64(int n, u32 *ea, u64 *result)
         // Read from effective address
         *result = readM<C68020, M, Long, F>(*ea);
 
-    } catch (...) {
+    } catch (const AddressErrorException &exc) {
         
         // Emulate -(An) register modification
         updateAnPD<M, Long>(n);
 
-        // Signal address error exception
-        throw AddressErrorException();
+        // Rethrow exception
+        throw exc;
     }
 
     // Emulate -(An) register modification
@@ -98,13 +98,13 @@ Moira::writeOp(int n, u32 val)
                 // Write to effective address
                 writeM<C, M, S, F>(ea, val);
                 
-            } catch (...) {
+            } catch (const AddressErrorException &exc) {
                 
                 // Emulate -(An) register modification
                 updateAnPD<M, S>(n);
                 
-                // Signal address error exception
-                throw AddressErrorException();
+                // Rethrow exception
+                throw exc;
             }
             
             // Emulate -(An) register modification
@@ -130,13 +130,13 @@ Moira::writeOp64(int n, u64 val)
         // Write to effective address
         writeM<C, M, Long, F>(ea, val >> 32);
         
-    } catch (...) {
+    } catch (const AddressErrorException &exc) {
 
         // Emulate -(An) register modification
         updateAnPD<M, Long>(n);
 
-        // Signal address error exception
-        throw AddressErrorException();
+        // Rethrow exception
+        throw exc;
     }
     
     // Emulate -(An) register modification
@@ -460,6 +460,9 @@ Moira::readMS(u32 addr)
 template <Core C, Mode M, Size S, Flags F> void
 Moira::writeM(u32 addr, u32 val)
 {
+    if (addr == 0x75410) {
+        printf("Writing to %x\n", addr); 
+    }
     if constexpr (isPrgMode(M)) {
         writeMS<C, MEM_PROG, S, F>(addr, val);
     } else {
@@ -568,6 +571,14 @@ Moira::push(u32 val)
 {
     reg.sp -= S;
     writeMS<C, MEM_DATA, S, F>(reg.sp, val);
+}
+
+template <Core C, Size S, Flags F> u32
+Moira::pop()
+{
+    u32 result = readMS<C, MEM_DATA, S, F>(reg.sp);
+    reg.sp += S;
+    return result;
 }
 
 template <Core C, Size S> bool

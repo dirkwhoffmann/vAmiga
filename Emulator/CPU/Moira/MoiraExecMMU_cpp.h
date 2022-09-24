@@ -8,6 +8,7 @@
 template <Core C, bool write> u32
 Moira::translate(u32 addr, u8 fc)
 {
+    // REMOVE ASAP
     static int tmp = 0;
     
     // Only proceed if a MMU capable core is present
@@ -19,7 +20,7 @@ Moira::translate(u32 addr, u8 fc)
     // Only proceed if the MMU is enabled
     if (!(mmu.tc & 0x80000000)) return addr;
 
-    bool debug = tmp++ < 10;
+    bool debug = tmp++ < 10 || addr == 11844;
 
     // Get the root pointer
     u64 rp = (reg.sr.s && (mmu.tc & 0x02000000)) ? mmu.srp : mmu.crp;
@@ -55,11 +56,8 @@ Moira::translate(u32 addr, u8 fc)
 
         case 0:     // Invalid descriptor type
             
-            // TODO: Trigger MMU exception
-            if (debug) printf("TODO (2): Trigger MMU exception\n");
-            assert(0);
-            return addr;
-            // break;
+            printf("A: Invalid descriptor\n");
+            throw BusErrorException();
             
         case 1:     // Page descriptor (early termination)
             
@@ -99,11 +97,9 @@ Moira::translate(u32 addr, u8 fc)
 
         case 0:     // Invalid descriptor type
             
-            // TODO: Trigger MMU exception
-            if (debug) printf("TODO (3): Trigger MMU exception\n");
-            assert(0);
-            return addr;
-            
+            printf("B: Invalid descriptor\n");
+            throw BusErrorException();
+
         case 1:     // Page descriptor (early termination)
         {
             shift = is + abits;
@@ -142,11 +138,9 @@ Moira::translate(u32 addr, u8 fc)
 
         case 0:     // Invalid descriptor type
             
-            // TODO: Trigger MMU exception
-            if (debug) printf("TODO (4): Trigger MMU exception\n");
-            assert(0);
-            return addr;
-            
+            printf("C: Invalid descriptor\n");
+            throw BusErrorException();
+
         case 1: // Page descriptor (early termination)
             
             shift = is + abits + bbits;
@@ -179,12 +173,9 @@ Moira::translate(u32 addr, u8 fc)
     {
         case 0:     // Invalid descriptor type
             
-            // TODO: Trigger MMU exception
-            if (debug) printf("Table C: Invalid descriptor\n");
-            if (debug) printf("TODO (5): Trigger MMU exception\n");
-            assert(0);
-            return addr;
-            
+            printf("D: Invalid descriptor\n");
+            throw BusErrorException();
+
         case 1:     // Page descriptor (early termination)
         {
             shift = is + abits + bbits + cbits;
