@@ -8,6 +8,33 @@
 template <Core C, bool write> u32
 Moira::translate(u32 addr, u8 fc)
 {
+    MmuDescriptorType type = MmuDescriptorType(0);
+
+    auto bitslice = [addr](u32 start, u32 length) {
+    
+        u64 shifted = u32((u64)addr << start);
+        shifted = (shifted << length) >> 32;
+        return (u32)shifted;
+    };
+
+    auto name = [](MmuDescriptorType t) {
+
+        switch (t) {
+                
+            case ShortTable:    return "Short format table descriptor";
+            case ShortEarly:    return "Short format early termination descriptor";
+            case ShortPage:     return "Short format page descriptor";
+            case ShortInvalid:  return "Short format invalid descriptor";
+            case ShortIndirect: return "Short format indirect descriptor";
+            case LongTable:     return "Long format table descriptor";
+            case LongEarly:     return "Long format early termination descriptor";
+            case LongPage:      return "Long format page descriptor";
+            case LongInvalid:   return "Long format invalid descriptor";
+            case LongIndirect:  return "Long format indirect descriptor";
+            default:            return "Unknown table descriptor";
+        }
+    };
+
     // REMOVE ASAP
     static int tmp = 0;
     
@@ -20,7 +47,7 @@ Moira::translate(u32 addr, u8 fc)
     // Only proceed if the MMU is enabled
     if (!(mmu.tc & 0x80000000)) return addr;
 
-    bool debug = tmp++ < 10 || addr == 11844;
+    bool debug = tmp++ < 10;
 
     // Get the root pointer
     u64 rp = (reg.sr.s && (mmu.tc & 0x02000000)) ? mmu.srp : mmu.crp;
@@ -28,15 +55,25 @@ Moira::translate(u32 addr, u8 fc)
     // Decode the root pointer
     u32 ptr   = u32(rp >> 0)      & 0xFFFFFFF0;
     u32 limit = u32(rp >> 48)     & 0x7FFF;
-    u32 type  = u32(rp >> 32)     & 0x3;
+    u32 dt    = u32(rp >> 32)     & 0x3;
+    /*
     u32 is    = u32(mmu.tc >> 16) & 0xF;
     u32 abits = u32(mmu.tc >> 12) & 0xF;
     u32 bbits = u32(mmu.tc >> 8)  & 0xF;
     u32 cbits = u32(mmu.tc >> 4)  & 0xF;
     u32 dbits = u32(mmu.tc >> 0)  & 0xF;
-    // bool lu   = rp & 0x80000000;
-
-    if (debug) printf("MMU: Mapping %x %s (%d %d %d %d %d)\n", addr, write ? "(WRITE)" : "(READ)", is, abits, bbits, cbits, dbits);
+    */
+    u32 idx[5];
+    idx[0] = u32(mmu.tc >> 16) & 0xF;
+    idx[1] = u32(mmu.tc >> 12) & 0xF;
+    idx[2] = u32(mmu.tc >> 8) & 0xF;
+    idx[3] = u32(mmu.tc >> 4) & 0xF;
+    idx[4] = u32(mmu.tc >> 0) & 0xF;
+    
+    if (debug) printf("MMU: Mapping %x %s (%d %d %d %d %d)\n",
+                      addr,
+                      write ? "(WRITE)" : "(READ)",
+                      idx[0], idx[1], idx[2], idx[3], idx[4]);
     
     if (limit) {
         
@@ -44,6 +81,139 @@ Moira::translate(u32 addr, u8 fc)
         assert(0);
         return addr;
     }
+        
+    // Evaluate the root pointer
+    switch (dt) {
+            
+        case 0:
+            /* This value is not allowed in the root pointer and will cause
+             * an MMU exception.
+             */
+            
+            // TODO: WHICH EXCEPTION (MMU CONFIG ERROR? BUS ERROR?)
+            throw BusErrorException();
+
+        case 1:
+            
+            /* Early termination. No translation table exists, all memory
+             * accesses are calculated by adding the TableA address to the
+             * logical address specified.
+             */
+            return ptr + addr;
+            
+        case 2: type = ShortTable; break;
+        case 3: type = LongTable; break;
+    }
+    
+    char table = 'A';
+    
+    // Traverse the translation table
+    u32 pos = idx[0];
+    u32 len = idx[1];
+    u32 physAddr = 0;
+    
+    for (int i = 0;; i++) {
+        
+        switch (type) {
+                
+            case ShortTable:
+            {
+                u32 offset = bitslice(pos, len);
+                u32 entry = readMMU(ptr + 4 * offset);
+                
+                if (debug) printf("Short table: %c[%d] = %x\n", table, offset, entry);
+                
+                ptr = entry & 0xFFFFFFF0;
+                
+                switch (entry & 0x3) {
+                        
+                    case 0:
+
+                        type = ShortInvalid;
+                        if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
+                        continue;
+                        
+                    case 1:
+
+                        type = table == 'D' ? ShortPage : ShortEarly;
+                        if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
+                        continue;
+                        
+                    case 2:
+                        
+                        if (table == 'D') {
+
+                            type = ShortIndirect;
+                            if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
+
+                        } else {
+                            
+                            type = ShortTable;
+                            if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
+
+                            table++;
+                            pos += len;
+                            len = idx[i+2];
+                        }
+                        continue;
+                        
+                    case 3:
+
+                        if (table == 'D') {
+
+                            type = LongIndirect;
+                            if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
+
+                        } else {
+                            
+                            type = LongTable;
+                            if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
+
+                            table++;
+                            pos += len;
+                            len = idx[i+2];
+                        }
+                        continue;
+                }
+                break;
+            }
+            case ShortEarly:
+            {
+                physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
+                if (debug) printf("ShortEarly: %x -> %x\n", addr, physAddr);
+                return physAddr;
+            }
+            case ShortPage:
+            {
+                physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
+                if (debug) printf("ShortPage: %x -> %x\n", addr, physAddr);
+                return physAddr;
+            }
+            case ShortInvalid:
+            {
+                printf("Invalid descriptor: %x -> Bus error\n", addr);
+                throw BusErrorException();
+            }
+            case ShortIndirect:
+            {
+                u32 entry = readMMU(ptr);
+                ptr = entry & 0xFFFFFFF0;
+                physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
+                if (debug) printf("Short indirect -> %x\n", physAddr);
+                return physAddr;
+            }
+            default:
+                assert(false);
+        }
+    }
+    
+    assert(false);
+    
+#if 0
+    
+        // O L D   C O D E
+        
+        
     
     u32 entry, entry2 = 0;
     u32 offset, shift;
@@ -198,6 +368,8 @@ Moira::translate(u32 addr, u8 fc)
     
     assert(false);
     return addr;
+
+#endif
 }
 
 bool

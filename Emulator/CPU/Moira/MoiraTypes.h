@@ -19,6 +19,11 @@
 
 namespace moira {
 
+
+//
+// Datatypes
+//
+
 typedef int8_t             i8;
 typedef int16_t            i16;
 typedef int32_t            i32;
@@ -28,8 +33,18 @@ typedef uint16_t           u16;
 typedef uint32_t           u32;
 typedef unsigned long long u64;
 
+
+//
+// Exceptions
+//
+
 class AddressErrorException : public std::exception { };
 class BusErrorException : public std::exception { };
+
+
+//
+// CPU types
+//
 
 typedef enum
 {
@@ -66,7 +81,7 @@ Core;
 
 typedef enum
 {
-    DASM_MOIRA_MOT,      // Official syntax styles
+    DASM_MOIRA_MOT,     // Official syntax styles
     DASM_MOIRA_MIT,
 
     DASM_GNU,           // Legacy styles (for unit testing)
@@ -85,10 +100,10 @@ DasmLetterCase;
 
 typedef struct
 {
-    const char *prefix;     // Prefix for hexidecimal numbers
-    u8 radix;               // 10 or 16
-    bool upperCase;         // Lettercase for hexadecimal digits A...F
-    bool plainZero;         // Determines if 0 is printed with or without prefix
+    const char *prefix; // Prefix for hexidecimal numbers
+    u8 radix;           // 10 or 16
+    bool upperCase;     // Lettercase for hexadecimal digits A...F
+    bool plainZero;     // Determines if 0 is printed with or without prefix
 }
 DasmNumberFormat;
 
@@ -363,39 +378,6 @@ struct PrefetchQueue {
     u16 ird;                // The instruction currently being executed
 };
 
-
-//
-// Memory management unit
-//
-
-struct MMU {
-
-    u64 crp;                // Cpu Root Pointer
-    u64 srp;                // Supervisor Root Pointer
-    u32 tc;                 // Translation Control Register
-    u32 tt0;                // Transparent Translation Register 0
-    u32 tt1;                // Transparent Translation Register 1
-    u32 mmusr;              // MMU status register
-};
-
-
-//
-// Floating point unit
-//
-
-struct Float80 {
-
-    softfloat::floatx80 raw;
-};
-
-struct FPU {
-
-    Float80 fpr[8];
-    u32 fpiar;
-    u32 fpsr;
-    u32 fpcr;
-};
-
 /* Execution flags
  *
  * The M68k is a well organized processor that breaks down the execution of
@@ -426,5 +408,54 @@ constexpr u64 AE_SET_CB3    (1 << 10);  // Set bit 3 in CODE segment
 
 // Timing flags
 constexpr u64 IMPL_DEC      (1 << 11);  // Omit 2 cycle delay in -(An) mode
+
+
+//
+// MMU types
+//
+
+struct MMU {
+
+    u64 crp;                // Cpu Root Pointer
+    u64 srp;                // Supervisor Root Pointer
+    u32 tc;                 // Translation Control Register
+    u32 tt0;                // Transparent Translation Register 0
+    u32 tt1;                // Transparent Translation Register 1
+    u32 mmusr;              // MMU status register
+};
+
+typedef enum
+{
+    UnknownDescriptor,
+    ShortTable,             // Short format table descriptor
+    ShortEarly,             // Short format early termination descriptor
+    ShortPage,              // Short format page descriptor
+    ShortInvalid,           // Short format invalid descriptor
+    ShortIndirect,          // Short format indirect descriptor
+    LongTable,              // Long format table descriptor
+    LongEarly,              // Long format early termination descriptor
+    LongPage,               // Long format page descriptor
+    LongInvalid,            // Long format invalid descriptor
+    LongIndirect,           // Long format indirect descriptor
+}
+MmuDescriptorType;
+
+
+//
+// FPU types
+//
+
+struct Float80 {
+
+    softfloat::floatx80 raw;
+};
+
+struct FPU {
+
+    Float80 fpr[8];
+    u32 fpiar;
+    u32 fpsr;
+    u32 fpcr;
+};
 
 }
