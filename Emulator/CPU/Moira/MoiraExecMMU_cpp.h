@@ -128,6 +128,7 @@ Moira::translate(u32 addr, u8 fc)
     u32 pos = idx[0];
     u32 len = idx[1];
     u32 physAddr = 0;
+    u32 wp = 0;
     
     for (int i = 0;; i++) {
         
@@ -141,7 +142,8 @@ Moira::translate(u32 addr, u8 fc)
                 if (debug) printf("ShortTable: %c[%d] = %x\n", table, offset, lword0);
                 
                 ptr = lword0 & 0xFFFFFFF0;
-                
+                wp |= lword0 & 0x4;
+
                 switch (lword0 & 0x3) {
                         
                     case 0:
@@ -198,13 +200,13 @@ Moira::translate(u32 addr, u8 fc)
             {
                 physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
                 if (debug) printf("ShortEarly: %x -> %x\n", addr, physAddr);
-                return physAddr;
+                break;
             }
             case ShortPage:
             {
                 physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
                 if (debug) printf("ShortPage: %x -> %x\n", addr, physAddr);
-                return physAddr;
+                break;
             }
             case ShortInvalid:
             {
@@ -213,11 +215,11 @@ Moira::translate(u32 addr, u8 fc)
             }
             case ShortIndirect:
             {
-                u32 entry = readMMU(ptr);
-                ptr = entry & 0xFFFFFFF0;
+                u32 lword0 = readMMU(ptr);
+                ptr = lword0 & 0xFFFFFFF0;
                 physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
                 if (debug) printf("ShortIndirect: %x -> %x\n", addr, physAddr);
-                return physAddr;
+                break;
             }
             case LongTable:
             {
@@ -228,6 +230,7 @@ Moira::translate(u32 addr, u8 fc)
                 if (debug) printf("LongTable: %c[%d] = %x %x\n", table, offset, lword0, lword1);
                 
                 ptr = lword1 & 0xFFFFFFF0;
+                if constexpr (write) wp |= lword0 & 0x4;
                 
                 switch (lword0 & 0x3) {
                         
@@ -285,13 +288,13 @@ Moira::translate(u32 addr, u8 fc)
             {
                 physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
                 if (debug) printf("LongEarly: %x -> %x\n", addr, physAddr);
-                return physAddr;
+                break;
             }
             case LongPage:
             {
                 physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
                 if (debug) printf("LongPage: %x -> %x\n", addr, physAddr);
-                return physAddr;
+                break;
             }
             case LongInvalid:
             {
@@ -304,12 +307,17 @@ Moira::translate(u32 addr, u8 fc)
                 ptr = lword1 & 0xFFFFFFF0;
                 physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
                 if (debug) printf("LongIndirect: %x -> %x\n", addr, physAddr);
-                return physAddr;
+                break;
             }
                 
             default:
                 assert(false);
         }
+        
+        // Check write protection status
+        if constexpr (write) { if (wp) throw BusErrorException(); }
+        
+        return physAddr;
     }
     
     assert(false);
