@@ -271,7 +271,8 @@ protected:
     virtual u16 read16(u32 addr) = 0;
 
     // Special variant used by the MMU
-    virtual u32 readMMU(u32 addr) = 0;
+    virtual u32 readMMU32(u32 addr) = 0;
+    virtual u64 readMMU64(u32 addr) = 0;
 
     // Special variants used by the reset routine and the disassembler
     virtual u16 read16OnReset(u32 addr) { return read16(addr); }
@@ -322,7 +323,8 @@ protected:
     u16 read16(u32 addr);
 
     // Special variant used by the MMU
-    u32 readMMU(u32 addr);
+    u32 readMMU32(u32 addr);
+    u64 readMMU64(u32 addr);
 
     // Special variants used by the reset routine and the disassembler
     u16 read16OnReset(u32 addr);

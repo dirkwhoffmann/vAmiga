@@ -55,6 +55,16 @@ Moira::mmuLookup(u32 addr, u8 fc)
         }
     };
     
+    auto readShort = [this](u64 addr, u32 offset = 0) {
+        
+        return readMMU32((addr & 0xFFFFFFF0) + 4 * offset);
+    };
+
+    auto readLong = [this](u64 addr, u32 offset = 0) {
+
+        return readMMU64((addr & 0xFFFFFFF0) + 8 * offset);
+    };
+    
     // REMOVE ASAP
     static int tmp = 0;
         
@@ -106,7 +116,7 @@ Moira::mmuLookup(u32 addr, u8 fc)
             
             if (fcl) {
                 
-                u32 lword0 = readMMU(ptr + 4 * readFC());
+                u32 lword0 = readMMU32(ptr + 4 * readFC());
                 ptr = lword0 & 0xFFFFFFF0;
                 type = (lword0 & 1) ? LongTable : ShortTable;
             }
@@ -118,8 +128,8 @@ Moira::mmuLookup(u32 addr, u8 fc)
             
             if (fcl) {
                 
-                u32 lword0 = readMMU(ptr + 8 * readFC());
-                u32 lword1 = readMMU(ptr + 8 * readFC() + 4);
+                u32 lword0 = readMMU32(ptr + 8 * readFC());
+                u32 lword1 = readMMU32(ptr + 8 * readFC() + 4);
                 ptr = lword1 & 0xFFFFFFF0;
                 type = (lword0 & 1) ? LongTable : ShortTable;
             }
@@ -153,11 +163,13 @@ Moira::mmuLookup(u32 addr, u8 fc)
                 u32 offset = bitslice(pos, len);
                 
                 // Check offset range
+                /*
                 if (offset < lowerLimit || offset > upperLimit) {
                     throw BusErrorException();
                 }
+                */
                 
-                u32 lword0 = readMMU(ptr + 4 * offset);
+                u32 lword0 = readMMU32(ptr + 4 * offset);
                 
                 if (debug) printf("ShortTable: %c[%d] = %x\n", table, offset, lword0);
                 
@@ -237,7 +249,7 @@ Moira::mmuLookup(u32 addr, u8 fc)
             }
             case ShortIndirect:
             {
-                u32 lword0 = readMMU(ptr);
+                u32 lword0 = readMMU32(ptr);
                 ptr = lword0 & 0xFFFFFFF0;
                 physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
                 if (debug) printf("ShortIndirect: %x -> %x\n", addr, physAddr);
@@ -248,12 +260,13 @@ Moira::mmuLookup(u32 addr, u8 fc)
                 u32 offset = bitslice(pos, len);
                 
                 // Check offset range
+                /*
                 if (offset < lowerLimit || offset > upperLimit) {
                     throw BusErrorException();
                 }
-
-                u32 lword0 = readMMU(ptr + 8 * offset);
-                u32 lword1 = readMMU(ptr + 8 * offset + 4);
+                */
+                u32 lword0 = readMMU32(ptr + 8 * offset);
+                u32 lword1 = readMMU32(ptr + 8 * offset + 4);
                 
                 if (debug) printf("LongTable: %c[%d] = %x %x\n", table, offset, lword0, lword1);
                 
@@ -340,7 +353,7 @@ Moira::mmuLookup(u32 addr, u8 fc)
             }
             case LongIndirect:
             {
-                u32 lword1 = readMMU(ptr + 4);
+                u32 lword1 = readMMU32(ptr + 4);
                 ptr = lword1 & 0xFFFFFFF0;
                 physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
                 if (debug) printf("LongIndirect: %x -> %x\n", addr, physAddr);
@@ -358,168 +371,6 @@ Moira::mmuLookup(u32 addr, u8 fc)
     }
     
     assert(false);
-    
-#if 0
-    
-        // O L D   C O D E
-        
-        
-    
-    u32 entry, entry2 = 0;
-    u32 offset, shift;
-        
-    //
-    // Search table A
-    //
-    
-    switch (type) {
-
-        case 0:     // Invalid descriptor type
-            
-            printf("A: Invalid descriptor\n");
-            throw BusErrorException();
-            
-        case 1:     // Page descriptor (early termination)
-            
-            if (debug) printf("TODO (2): Page descriptor (early termination)\n");
-            assert(0);
-            return ptr + addr; // TODO: Do we need to cancel some bits?
-            // break;
-
-        case 2:     // Valid table with 'short' entries
-
-            // Read short entry from table A
-            offset = 4 * ((addr << is) >> (32 - abits));
-            entry = readMMU(ptr + offset);
-            if (debug) printf("Table A (%x): Short entry[%d] = %x\n", ptr, offset / 4, entry);
-            ptr = entry & 0xFFFFFFF0;
-            type = entry & 0x3;
-            break;
-
-        case 3:     // Valid table with 'long' entries
-
-            // Read long entry from table A
-            offset = 8 * ((addr << is) >> (32 - abits));
-            entry = readMMU(ptr + offset);
-            entry2 = readMMU(ptr + offset + 4);
-            if ((entry2 & 0x3) == 0) debug = true;
-            if (debug) printf("Table A (%x): Long entry[%d] = %x %x\n", ptr, offset / 8, entry, entry2);
-            ptr = entry & 0xFFFFFFF0;
-            type = entry2 & 0x3;
-            break;
-    }
-    
-    //
-    // Search table B
-    //
-
-    switch (type) {
-
-        case 0:     // Invalid descriptor type
-            
-            printf("B: Invalid descriptor\n");
-            throw BusErrorException();
-
-        case 1:     // Page descriptor (early termination)
-        {
-            shift = is + abits;
-            u32 physAddr = ((addr << shift) >> shift) + ptr;
-            if (debug) printf("Physical address = %x\n", physAddr);
-            // if (addr != physAddr) printf("Mapping %x -> %x\n", addr, physAddr);
-            return ((addr << shift) >> shift) + ptr;
-        }
-        case 2:     // Valid table with 'short' entries
-
-            // Read short entry from table B
-            offset = 4 * ((addr << (is + abits)) >> (32 - bbits));
-            entry = readMMU(ptr + offset);
-            if (debug) printf("Table B: Short entry[%d] = %x\n", offset / 4, entry);
-            ptr = entry & 0xFFFFFFF0;
-            type = entry & 0x3;
-            break;
-                        
-        case 3:     // Valid table with 'long' entries
-
-            // Read long entry from table B
-            offset = 8 * ((addr << (is + abits)) >> (32 - bbits));
-            entry = readMMU(ptr + offset);
-            entry2 = readMMU(ptr + offset + 4);
-            if (debug) printf("Table B: Long entry[%d] = %x %x\n", offset / 8, entry, entry2);
-            ptr = entry & 0xFFFFFFF0;
-            type = entry2 & 0x3;
-            break;
-    }
- 
-    //
-    // Search table C
-    //
-
-    switch (type) {
-
-        case 0:     // Invalid descriptor type
-            
-            printf("C: Invalid descriptor\n");
-            throw BusErrorException();
-
-        case 1: // Page descriptor (early termination)
-            
-            shift = is + abits + bbits;
-            if (debug) printf("Physical address = %x\n", ((addr << shift) >> shift) + ptr);
-            return ((addr << shift) >> shift) + ptr;
-
-        case 2:     // Valid table with 'short' entries
-
-            // Read short entry from table C
-            offset = 4 * ((addr << (is + abits + bbits)) >> (32 - cbits));
-            entry = readMMU(ptr + offset);
-            if (debug) printf("Table C: Short entry[%d] = %x\n", offset / 4, entry);
-            ptr = entry & 0xFFFFFFF0;
-            type = entry & 0x3;
-            break;
-                        
-        case 3:     // Valid table with 'long' entries
-
-            // Read long entry from table C
-            offset = 8 * ((addr << (is + abits + bbits)) >> (32 - cbits));
-            entry = readMMU(ptr + offset);
-            entry2 = readMMU(ptr + offset + 4);
-            if (debug) printf("Table C: Long entry[%d] = %x %x\n", offset / 8, entry, entry2);
-            ptr = entry & 0xFFFFFFF0;
-            type = entry2 & 0x3;
-            break;
-    }
-    
-    switch (type)
-    {
-        case 0:     // Invalid descriptor type
-            
-            printf("D: Invalid descriptor\n");
-            throw BusErrorException();
-
-        case 1:     // Page descriptor (early termination)
-        {
-            shift = is + abits + bbits + cbits;
-            u32 physAddr = ((addr << shift) >> shift) + ptr;            
-            if (debug) printf("Physical address = %x\n", physAddr);
-            return physAddr;
-        }
-        case 2:     // Valid table with 'short' entries
-
-            if (debug) printf("TODO (6): Yet unhandeled table C case.\n");
-            assert(0);
-            return addr;
-            
-        case 3:     // Valid table with 'long' entries
-
-            if (debug) printf("TODO (7): Yet unhandeled table C case.\n");
-            assert(0);
-            return addr;
-    }
-    
-    assert(false);
-    return addr;
-
-#endif
 }
 
 bool
