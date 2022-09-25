@@ -171,7 +171,7 @@ Moira::mmuLookup(u32 addr, u8 fc)
                 
                 desc = readShort(ptr, offset);
                 
-                if (debug) printf("ShortTable: %c[%d] = %x\n", table, offset, desc);
+                if (debug) printf("ShortTable: %c[%d] = %llx\n", table, offset, desc);
                 
                 ptr = desc & 0xFFFFFFF0;
                 if constexpr (write) { wp |= desc & 0x4; }
@@ -265,16 +265,19 @@ Moira::mmuLookup(u32 addr, u8 fc)
                     throw BusErrorException();
                 }
                 */
+                desc = readLong(ptr, offset);
+                /*
                 u32 lword0 = readMMU32(ptr + 8 * offset);
                 u32 lword1 = readMMU32(ptr + 8 * offset + 4);
+                */
                 
-                if (debug) printf("LongTable: %c[%d] = %x %x\n", table, offset, lword0, lword1);
+                if (debug) printf("LongTable: %c[%d] = %llx\n", table, offset, desc);
                 
-                ptr = lword1 & 0xFFFFFFF0;
-                if constexpr (write) wp |= lword0 & 0x4;
+                ptr = desc & 0xFFFFFFF0;
+                if constexpr (write) wp |= (desc >> 32) & 0x4;
                                 
                 // Evaluate the limit field
-                if (lword0 & (1 << 31)) {
+                if (desc & (1LL << 63)) {
                     lowerLimit = 0;
                     upperLimit = u32(rp >> 16) & 0x7FFF;
                 } else {
@@ -282,7 +285,7 @@ Moira::mmuLookup(u32 addr, u8 fc)
                     upperLimit = 0xFFFF;
                 }
                 
-                switch (lword0 & 0x3) {
+                switch ((desc >> 32) & 0x3) {
                         
                     case 0:
 
