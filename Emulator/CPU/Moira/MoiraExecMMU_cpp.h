@@ -28,7 +28,7 @@ template <Core C, bool write> u32
 Moira::mmuLookup(u32 addr, u8 fc)
 {
     MmuDescriptorType type;     // Type of the currently processed table
-    // u64 entry;
+    u64 desc;
     
     auto bitslice = [addr](u32 start, u32 length) {
         
@@ -116,9 +116,9 @@ Moira::mmuLookup(u32 addr, u8 fc)
             
             if (fcl) {
                 
-                u32 lword0 = readMMU32(ptr + 4 * readFC());
-                ptr = lword0 & 0xFFFFFFF0;
-                type = (lword0 & 1) ? LongTable : ShortTable;
+                desc = readShort(ptr, readFC());
+                ptr = desc & 0xFFFFFFF0;
+                type = (desc & 1) ? LongTable : ShortTable;
             }
             break;
             
@@ -128,10 +128,10 @@ Moira::mmuLookup(u32 addr, u8 fc)
             
             if (fcl) {
                 
-                u32 lword0 = readMMU32(ptr + 8 * readFC());
-                u32 lword1 = readMMU32(ptr + 8 * readFC() + 4);
-                ptr = lword1 & 0xFFFFFFF0;
-                type = (lword0 & 1) ? LongTable : ShortTable;
+                desc = readLong(ptr, readFC());
+                ptr = desc & 0xFFFFFFF0;
+                type = (desc & 0x10000) ? LongTable : ShortTable;
+
             }
             break;
             
@@ -169,16 +169,16 @@ Moira::mmuLookup(u32 addr, u8 fc)
                 }
                 */
                 
-                u32 lword0 = readMMU32(ptr + 4 * offset);
+                desc = readShort(ptr, offset);
                 
-                if (debug) printf("ShortTable: %c[%d] = %x\n", table, offset, lword0);
+                if (debug) printf("ShortTable: %c[%d] = %x\n", table, offset, desc);
                 
-                ptr = lword0 & 0xFFFFFFF0;
-                if constexpr (write) { wp |= lword0 & 0x4; }
+                ptr = desc & 0xFFFFFFF0;
+                if constexpr (write) { wp |= desc & 0x4; }
                 lowerLimit = 0;
                 upperLimit = 0xFFFF;
 
-                switch (lword0 & 0x3) {
+                switch (desc & 0x3) {
                         
                     case 0:
 
