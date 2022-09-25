@@ -8,17 +8,37 @@
 template <Core C, bool write> u32
 Moira::translate(u32 addr, u8 fc)
 {
-    MmuDescriptorType type = MmuDescriptorType(0);
-
-    auto bitslice = [addr](u32 start, u32 length) {
+    // Only proceed if a MMU capable core is present
+    if constexpr (C == C68000 || C == C68010) return addr;
     
+    // Only proceed of the selected CPU model has a MMU
+    if (!hasMMU()) return addr;
+    
+    // Only proceed if the MMU is enabled
+    if (!(mmu.tc & 0x80000000)) return addr;
+
+    //
+    // TODO: LOOKUP IN CACHE
+    //
+    
+    return mmuLookup<C, write>(addr, fc);
+}
+    
+template <Core C, bool write> u32
+Moira::mmuLookup(u32 addr, u8 fc)
+{
+    MmuDescriptorType type;     // Type of the currently processed table
+    // u64 entry;
+    
+    auto bitslice = [addr](u32 start, u32 length) {
+        
         u64 shifted = u32((u64)addr << start);
         shifted = (shifted << length) >> 32;
         return (u32)shifted;
     };
-
+    
     auto name = [](MmuDescriptorType t) {
-
+        
         switch (t) {
                 
             case ShortTable:    return "Short format table descriptor";
@@ -34,28 +54,28 @@ Moira::translate(u32 addr, u8 fc)
             default:            return "Unknown table descriptor";
         }
     };
-
+    
     // REMOVE ASAP
     static int tmp = 0;
-    
-    // Only proceed if a MMU capable core is present
-    if constexpr (C == C68000 || C == C68010) return addr;
-
-    // Only proceed of the selected CPU model has a MMU
-    if (!hasMMU()) return addr;
-
-    // Only proceed if the MMU is enabled
-    if (!(mmu.tc & 0x80000000)) return addr;
-
+        
     bool debug = tmp++ < 10;
+        
+    //
+    // Evaluate the root pointer
+    //
 
-    // Get the root pointer
+    // Start with the SRP or CRP
     u64 rp = (reg.sr.s && (mmu.tc & 0x02000000)) ? mmu.srp : mmu.crp;
     
     // Decode the root pointer
     u32 ptr   = u32(rp >> 0)      & 0xFFFFFFF0;
     u32 limit = u32(rp >> 48)     & 0x7FFF;
     u32 dt    = u32(rp >> 32)     & 0x3;
+    
+    // Evaluate the limit field
+    u32 lowerLimit = 0;
+    u32 upperLimit = 0XFFFF;
+    if (rp & (1LL << 63)) { upperLimit = limit; } else { lowerLimit = limit; }
     
     u32 idx[5];
     idx[0] = u32(mmu.tc >> 16) & 0xF;   // IS  (Initial Shift)
@@ -69,25 +89,9 @@ Moira::translate(u32 addr, u8 fc)
                       addr,
                       write ? "(WRITE)" : "(READ)",
                       idx[0], idx[1], idx[2], idx[3], idx[4]);
-    
-    if (limit) {
-        
-        if (debug) printf("TODO (1): MMU limit field is not supported yet\n");
-        assert(0);
-        return addr;
-    }
-        
-    // Evaluate the root pointer
+                
     switch (dt) {
-            
-        case 0:
-            /* This value is not allowed in the root pointer and will cause
-             * an MMU exception.
-             */
-            
-            // TODO: WHICH EXCEPTION (MMU CONFIG ERROR? BUS ERROR?)
-            throw BusErrorException();
-
+                        
         case 1:
             
             /* Early termination. No translation table exists, all memory
@@ -120,11 +124,19 @@ Moira::translate(u32 addr, u8 fc)
                 type = (lword0 & 1) ? LongTable : ShortTable;
             }
             break;
+            
+        default:
+            
+            // TODO: WHICH EXCEPTION? (MMU CONFIG ERROR? BUS ERROR?)
+            throw BusErrorException();
     }
     
     char table = 'A';
     
+    //
     // Traverse the translation table
+    //
+    
     u32 pos = idx[0];
     u32 len = idx[1];
     u32 physAddr = 0;
@@ -132,17 +144,27 @@ Moira::translate(u32 addr, u8 fc)
     
     for (int i = 0;; i++) {
         
+        if (debug) printf("%x: %s\n", ptr, name(type));
+        
         switch (type) {
                 
             case ShortTable:
             {
                 u32 offset = bitslice(pos, len);
+                
+                // Check offset range
+                if (offset < lowerLimit || offset > upperLimit) {
+                    throw BusErrorException();
+                }
+                
                 u32 lword0 = readMMU(ptr + 4 * offset);
                 
                 if (debug) printf("ShortTable: %c[%d] = %x\n", table, offset, lword0);
                 
                 ptr = lword0 & 0xFFFFFFF0;
-                wp |= lword0 & 0x4;
+                if constexpr (write) { wp |= lword0 & 0x4; }
+                lowerLimit = 0;
+                upperLimit = 0xFFFF;
 
                 switch (lword0 & 0x3) {
                         
@@ -224,6 +246,12 @@ Moira::translate(u32 addr, u8 fc)
             case LongTable:
             {
                 u32 offset = bitslice(pos, len);
+                
+                // Check offset range
+                if (offset < lowerLimit || offset > upperLimit) {
+                    throw BusErrorException();
+                }
+
                 u32 lword0 = readMMU(ptr + 8 * offset);
                 u32 lword1 = readMMU(ptr + 8 * offset + 4);
                 
@@ -231,6 +259,15 @@ Moira::translate(u32 addr, u8 fc)
                 
                 ptr = lword1 & 0xFFFFFFF0;
                 if constexpr (write) wp |= lword0 & 0x4;
+                                
+                // Evaluate the limit field
+                if (lword0 & (1 << 31)) {
+                    lowerLimit = 0;
+                    upperLimit = u32(rp >> 16) & 0x7FFF;
+                } else {
+                    lowerLimit = u32(rp >> 16) & 0x7FFF;
+                    upperLimit = 0xFFFF;
+                }
                 
                 switch (lword0 & 0x3) {
                         

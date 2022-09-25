@@ -529,6 +529,9 @@ private:
     // Translates a logical address to a physical address
     template <Core C, bool write> u32 translate(u32 addr, u8 fc);
 
+    // Looks up a physical address from the MMU table
+    template <Core C, bool write> u32 mmuLookup(u32 addr, u8 fc);
+    
     // Experimental
     bool testTT(u32 ttx, u32 addr, u8 fc, bool rw);
 
