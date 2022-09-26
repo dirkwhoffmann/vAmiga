@@ -68,8 +68,9 @@ Moira::mmuLookup(u32 addr, u8 fc)
     // REMOVE ASAP
     static int tmp = 0;
         
-    bool debug = tmp++ < 10;
-        
+    // bool debug = tmp++ < 10 || addr == 0xaff180;
+    bool debug = addr == 0xaff180;
+
     //
     // Evaluate the root pointer
     //
@@ -85,8 +86,12 @@ Moira::mmuLookup(u32 addr, u8 fc)
     // Evaluate the limit field
     u32 lowerLimit = 0;
     u32 upperLimit = 0XFFFF;
-    if (rp & (1LL << 63)) { upperLimit = limit; } else { lowerLimit = limit; }
-    
+    if (rp & (1LL << 63)) { lowerLimit = limit; } else { upperLimit = limit; }
+
+    if (debug) {
+        printf("RP %llx limit: %x: (%d,%d)\n", rp, limit, lowerLimit, upperLimit);
+    }
+
     u32 idx[5];
     idx[0] = u32(mmu.tc >> 16) & 0xF;   // IS  (Initial Shift)
     idx[1] = u32(mmu.tc >> 12) & 0xF;   // TIA (Table Index A)
@@ -151,7 +156,8 @@ Moira::mmuLookup(u32 addr, u8 fc)
     u32 len = idx[1];
     u32 physAddr = 0;
     u32 wp = 0;
-    
+    u32 su = 0;
+
     for (int i = 0;; i++) {
         
         if (debug) printf("%x: %s\n", ptr, name(type));
@@ -163,11 +169,11 @@ Moira::mmuLookup(u32 addr, u8 fc)
                 u32 offset = bitslice(pos, len);
                 
                 // Check offset range
-                /*
                 if (offset < lowerLimit || offset > upperLimit) {
+
+                    printf("Short table offset violation: %d [%d;%d]\n", offset, lowerLimit, upperLimit);
                     throw BusErrorException();
                 }
-                */
                 
                 desc = readShort(ptr, offset);
                 
@@ -175,6 +181,7 @@ Moira::mmuLookup(u32 addr, u8 fc)
                 
                 ptr = desc & 0xFFFFFFF0;
                 if constexpr (write) { wp |= desc & 0x4; }
+
                 lowerLimit = 0;
                 upperLimit = 0xFFFF;
 
@@ -260,29 +267,27 @@ Moira::mmuLookup(u32 addr, u8 fc)
                 u32 offset = bitslice(pos, len);
                 
                 // Check offset range
-                /*
                 if (offset < lowerLimit || offset > upperLimit) {
+
+                    printf("Long table offset violation: %d [%d;%d]\n", offset, lowerLimit, upperLimit);
                     throw BusErrorException();
                 }
-                */
-                desc = readLong(ptr, offset);
-                /*
-                u32 lword0 = readMMU32(ptr + 8 * offset);
-                u32 lword1 = readMMU32(ptr + 8 * offset + 4);
-                */
-                
+
+                desc = readLong(ptr, offset);                
                 if (debug) printf("LongTable: %c[%d] = %llx\n", table, offset, desc);
                 
                 ptr = desc & 0xFFFFFFF0;
                 if constexpr (write) wp |= (desc >> 32) & 0x4;
-                                
+                su |= (desc >> 32) & 0x100;
+                if (su) { printf("Supervisor protection\n"); }
+
                 // Evaluate the limit field
                 if (desc & (1LL << 63)) {
-                    lowerLimit = 0;
-                    upperLimit = u32(rp >> 16) & 0x7FFF;
-                } else {
-                    lowerLimit = u32(rp >> 16) & 0x7FFF;
+                    lowerLimit = u32(desc >> 48) & 0x7FFF;
                     upperLimit = 0xFFFF;
+                } else {
+                    lowerLimit = 0;
+                    upperLimit = u32(desc >> 48) & 0x7FFF;
                 }
                 
                 switch ((desc >> 32) & 0x3) {
@@ -367,9 +372,12 @@ Moira::mmuLookup(u32 addr, u8 fc)
                 assert(false);
         }
         
-        // Check write protection status
+        // Check for write protection
         if constexpr (write) { if (wp) throw BusErrorException(); }
-        
+
+        // Check for supervisor protection
+        if (su && !reg.sr.s) throw BusErrorException();
+
         return physAddr;
     }
     
