@@ -3409,6 +3409,9 @@ Moira::execMoveToSr(u16 opcode)
 {
     AVAILABILITY(C68000)
 
+    if (reg.sr.s) {
+        printf("execMoveToSr: SUPERVISOR MODE VIOLATION\n");
+    }
     SUPERVISOR_MODE_ONLY
 
     int src = _____________xxx(opcode);

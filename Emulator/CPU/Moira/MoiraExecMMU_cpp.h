@@ -28,7 +28,8 @@ template <Core C, bool write> u32
 Moira::mmuLookup(u32 addr, u8 fc)
 {
     MmuDescriptorType type;     // Type of the currently processed table
-    u64 desc;
+    u32 p;                      // Tree traversal pointer
+    u64 desc = 0;
     
     auto bitslice = [addr](u32 start, u32 length) {
         
@@ -68,8 +69,8 @@ Moira::mmuLookup(u32 addr, u8 fc)
     // REMOVE ASAP
     static int tmp = 0;
         
-    // bool debug = tmp++ < 10 || addr == 0xaff180;
-    bool debug = addr == 0xaff180;
+    bool debug = tmp++ < 10 || addr == 0xaff180;
+    // bool debug = write; // addr == 0xaff180;
 
     //
     // Evaluate the root pointer
@@ -125,6 +126,7 @@ Moira::mmuLookup(u32 addr, u8 fc)
                 ptr = desc & 0xFFFFFFF0;
                 type = (desc & 1) ? LongTable : ShortTable;
             }
+            p = ptr;
             break;
             
         case 3:
@@ -138,6 +140,7 @@ Moira::mmuLookup(u32 addr, u8 fc)
                 type = (desc & 0x10000) ? LongTable : ShortTable;
 
             }
+            p = ptr;
             break;
             
         default:
@@ -174,9 +177,10 @@ Moira::mmuLookup(u32 addr, u8 fc)
                     printf("Short table offset violation: %d [%d;%d]\n", offset, lowerLimit, upperLimit);
                     throw BusErrorException();
                 }
-                
+
+                p = (ptr & 0xFFFFFFF0) + 4 * offset;
                 desc = readShort(ptr, offset);
-                
+
                 if (debug) printf("ShortTable: %c[%d] = %llx\n", table, offset, desc);
                 
                 ptr = desc & 0xFFFFFFF0;
@@ -200,14 +204,18 @@ Moira::mmuLookup(u32 addr, u8 fc)
                         continue;
                         
                     case 2:
-                        
+                    {
                         if (table == 'D') {
 
                             type = ShortIndirect;
                             if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
 
                         } else {
-                            
+
+                            // Set U bit
+                            u64 desc2 = desc | (1LL << 3);
+                            write16(p + 2, (u16)desc2);
+
                             type = ShortTable;
                             if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
 
@@ -216,7 +224,7 @@ Moira::mmuLookup(u32 addr, u8 fc)
                             len = idx[i+2];
                         }
                         continue;
-                        
+                    }
                     case 3:
 
                         if (table == 'D') {
@@ -225,7 +233,11 @@ Moira::mmuLookup(u32 addr, u8 fc)
                             if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
 
                         } else {
-                            
+
+                            // Set U bit
+                            u64 desc2 = (desc >> 32) | (1LL << 3);
+                            write16(p + 2, (u16)desc2);
+
                             type = LongTable;
                             if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
 
@@ -239,12 +251,22 @@ Moira::mmuLookup(u32 addr, u8 fc)
             }
             case ShortEarly:
             {
-                physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
+                // Set U and M bit
+                u64 desc2 = desc | (1LL << 3);
+                if constexpr (write) { desc2 |= (1LL << 4); }
+                write16(p + 2, (u16)desc2);
+
+                physAddr = (ptr & 0xFFFFFF00) + bitslice(pos + len, 32 - (pos + len));
                 if (debug) printf("ShortEarly: %x -> %x\n", addr, physAddr);
                 break;
             }
             case ShortPage:
             {
+                // Set U and M bit
+                u64 desc2 = desc | (1LL << 3);
+                if constexpr (write) { desc2 |= (1LL << 4); }
+                write16(p + 2, (u16)desc2);
+
                 physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
                 if (debug) printf("ShortPage: %x -> %x\n", addr, physAddr);
                 break;
@@ -257,7 +279,14 @@ Moira::mmuLookup(u32 addr, u8 fc)
             case ShortIndirect:
             {
                 u32 lword0 = readMMU32(ptr);
-                ptr = lword0 & 0xFFFFFFF0;
+
+                // Set U and M bit
+                u64 desc2 = lword0 | (1LL << 3);
+                if constexpr (write) { desc2 |= (1LL << 4); }
+                write16(ptr + 2, (u16)desc2);
+
+                ptr = lword0 & 0xFFFFFF00;
+
                 physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
                 if (debug) printf("ShortIndirect: %x -> %x\n", addr, physAddr);
                 break;
@@ -273,7 +302,9 @@ Moira::mmuLookup(u32 addr, u8 fc)
                     throw BusErrorException();
                 }
 
-                desc = readLong(ptr, offset);                
+                p = (ptr & 0xFFFFFFF0) + 8 * offset;
+                desc = readLong(ptr, offset);
+
                 if (debug) printf("LongTable: %c[%d] = %llx\n", table, offset, desc);
                 
                 ptr = desc & 0xFFFFFFF0;
@@ -312,7 +343,11 @@ Moira::mmuLookup(u32 addr, u8 fc)
                             if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
 
                         } else {
-                            
+
+                            // Set U bit
+                            u64 desc2 = (desc >> 32) | (1LL << 3);
+                            write16(p + 2, (u16)desc2);
+
                             type = LongTable;
                             if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
 
@@ -330,7 +365,11 @@ Moira::mmuLookup(u32 addr, u8 fc)
                             if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
 
                         } else {
-                            
+
+                            // Set U bit
+                            u64 desc2 = (desc >> 32) | (1LL << 3);
+                            write16(p + 2, (u16)desc2);
+
                             type = LongTable;
                             if (debug) printf("%c[%d]: %s\n", table, offset, name(type));
 
@@ -344,12 +383,22 @@ Moira::mmuLookup(u32 addr, u8 fc)
             }
             case LongEarly:
             {
+                // Set U and M bit
+                u64 desc2 = (desc >> 32) | (1LL << 3);
+                if constexpr (write) { desc2 |= (1LL << 4); }
+                write16(p + 2, (u16)desc2);
+
                 physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
                 if (debug) printf("LongEarly: %x -> %x\n", addr, physAddr);
                 break;
             }
             case LongPage:
             {
+                // Set U and M bit
+                u64 desc2 = (desc >> 32) | (1LL << 3);
+                if constexpr (write) { desc2 |= (1LL << 4); }
+                write16(p + 2, (u16)desc2);
+
                 physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
                 if (debug) printf("LongPage: %x -> %x\n", addr, physAddr);
                 break;
@@ -361,7 +410,14 @@ Moira::mmuLookup(u32 addr, u8 fc)
             }
             case LongIndirect:
             {
+                u32 lword0 = readMMU32(ptr);
                 u32 lword1 = readMMU32(ptr + 4);
+
+                // Set U and M bit
+                u64 desc2 = lword0 | (1LL << 3);
+                if constexpr (write) { desc2 |= (1LL << 4); }
+                write16(ptr + 2, (u16)desc2);
+
                 ptr = lword1 & 0xFFFFFFF0;
                 physAddr = ptr + bitslice(pos + len, 32 - (pos + len));
                 if (debug) printf("LongIndirect: %x -> %x\n", addr, physAddr);
@@ -373,7 +429,13 @@ Moira::mmuLookup(u32 addr, u8 fc)
         }
         
         // Check for write protection
-        if constexpr (write) { if (wp) throw BusErrorException(); }
+        if constexpr (write) {
+            if (wp) {
+                
+                printf("WRITE PROTECTION VIOLATION\n");
+                throw BusErrorException();
+            }
+        }
 
         // Check for supervisor protection
         if (su && !reg.sr.s) throw BusErrorException();
