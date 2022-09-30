@@ -117,48 +117,61 @@ Moira::mmuLookup(u32 addr, u8 fc)
 
         case 2:
         {
-            /* FIX THIS
+            u32 taddr = rp & 0xFFFFFFF0;
+
             if (fcl) {
 
-                u32 desc = readMMU32((rp & 0xFFFFFFF0) + 4 * readFC());
+                u32 desc = readMMU32(taddr + 4 * readFC());
+
+                if (mmuDebug) printf("     RP -> FCL %d\n", readFC());
+
+                u32 offset = context.bitslice(context.pos, context.len);
+                context.pos += context.len;
+                context.len = context.idx[context.i+2];
+                context.i++;
 
                 if (desc & 0x1) {
-                    return mmuLookupLong<C, write>(desc & 0xFFFFFFF0, 0, context);
+                    return mmuLookupLong<C, write>(desc & 0xFFFFFFF0, offset, context);
                 } else {
-                    return mmuLookupShort<C, write>(desc & 0xFFFFFFF0, 0, context);
+                    return mmuLookupShort<C, write>(desc & 0xFFFFFFF0, offset, context);
                 }
             }
-            */
+
             u32 offset = context.bitslice(context.pos, context.len);
             context.pos += context.len;
             context.len = context.idx[context.i+2];
             context.i++;
 
-            u32 taddr = (rp & 0xFFFFFFF0);
             if (mmuDebug) printf("     RP = %08llx -> Short table %c[%d]\n", rp, 'A' + context.table, offset);
             return mmuLookupShort<C, write>(taddr, offset, context);
         }
         case 3:
         {
-            /* FIX THIS
+            u32 taddr = rp & 0xFFFFFFF0;
+
             if (fcl) {
 
-                u64 desc = readMMU64((rp & 0xFFFFFFF0) + 8 * readFC());
+                u64 desc = readMMU64(taddr + 8 * readFC());
+
+                if (mmuDebug) printf("     RP -> FCL %d\n", readFC());
+
+                u32 offset = context.bitslice(context.pos, context.len);
+                context.pos += context.len;
+                context.len = context.idx[context.i+2];
+                context.i++;
 
                 if (desc & 0x10000) {
-                    return mmuLookupLong<C, write>(desc & 0xFFFFFFF0, context);
+                    return mmuLookupLong<C, write>(desc & 0xFFFFFFF0, offset, context);
                 } else {
-                    return mmuLookupShort<C, write>(desc & 0xFFFFFFF0, context);
+                    return mmuLookupShort<C, write>(desc & 0xFFFFFFF0, offset, context);
                 }
             }
-            */
+
             u32 offset = context.bitslice(context.pos, context.len);
             context.pos += context.len;
             context.len = context.idx[context.i+2];
             context.i++;
 
-
-            u32 taddr = (rp & 0xFFFFFFF0) + 8 * offset;
             if (mmuDebug) printf("     RP = %016llx -> Long table %c[%d]\n", rp, 'A' + context.table, offset);
             return mmuLookupLong<C, write>(taddr, offset, context);
         }
@@ -173,6 +186,13 @@ Moira::mmuLookup(u32 addr, u8 fc)
 template <Core C, bool write> u32
 Moira::mmuLookupShort(u32 taddr, u32 offset, struct MmuContext &c)
 {
+    // Check offset
+    if (offset < c.lowerLimit || offset > c.upperLimit) {
+
+        printf("Short table offset violation: %d [%d;%d]\n", offset, c.lowerLimit, c.upperLimit);
+        throw BusErrorException();
+    }
+
     u32 physAddr;
     u32 descriptor = readMMU32(taddr + 4 * offset);
 
@@ -190,7 +210,7 @@ Moira::mmuLookupShort(u32 taddr, u32 offset, struct MmuContext &c)
             // Set U and M bit
             u64 desc2 = descriptor | (1LL << 3);
             if constexpr (write) { desc2 |= (1LL << 4); }
-            write16(taddr + 2, (u16)desc2);
+            write16(taddr + 4 * offset + 2, (u16)desc2);
 
             c.table++;
 
@@ -209,61 +229,80 @@ Moira::mmuLookupShort(u32 taddr, u32 offset, struct MmuContext &c)
             }
             break;
         }
-        case 2: // Short format table descriptor
+        case 2: // Short format table descriptor or indirect descriptor
         {
-            u32 offset = c.bitslice(c.pos, c.len);
-            c.pos += c.len;
-            c.len = c.idx[c.i+2];
-            c.i++;
+            if (c.table == 3) { // Indirect descriptor
 
-            taddr = descriptor & 0xFFFFFFF0;
-            c.table++;
+                taddr = descriptor & 0xFFFFFFFC;
 
-            if (mmuDebug) printf("(short table descriptor) -> %c[%d]\n", 'A' + c.table, offset);
+                if (mmuDebug) printf("(short indirect descriptor)\n");
 
-            // Check offset range
-            if (offset < c.lowerLimit || offset > c.upperLimit) {
+                physAddr = mmuLookupShort<C, write>(taddr, 0, c);
 
-                if (mmuDebug) printf("     Offset violation %d [%d;%d]\n",
-                                     offset, c.lowerLimit, c.upperLimit);
-                throw BusErrorException();
+            } else {
+
+                u32 offset = c.bitslice(c.pos, c.len);
+                c.pos += c.len;
+                c.len = c.idx[c.i+2];
+                c.i++;
+
+                taddr = descriptor & 0xFFFFFFF0;
+                c.table++;
+
+                if (mmuDebug) printf("(short table descriptor) -> %c[%d]\n", 'A' + c.table, offset);
+
+                // Check offset range
+                if (offset < c.lowerLimit || offset > c.upperLimit) {
+
+                    if (mmuDebug) printf("     Offset violation %d [%d;%d]\n",
+                                         offset, c.lowerLimit, c.upperLimit);
+                    throw BusErrorException();
+                }
+
+                if constexpr (write) { c.wp |= descriptor & 0x4; }
+                c.lowerLimit = 0;
+                c.upperLimit = 0xFFFF;
+
+                physAddr = mmuLookupShort<C, write>(taddr, offset, c);
             }
-
-            if constexpr (write) { c.wp |= descriptor & 0x4; }
-            c.lowerLimit = 0;
-            c.upperLimit = 0xFFFF;
-
-            physAddr = mmuLookupShort<C, write>(taddr, offset, c);
             break;
         }
         case 3: // Long format table descriptor
         {
-            u32 offset = c.bitslice(c.pos, c.len);
-            c.pos += c.len;
-            c.len = c.idx[c.i+2];
-            c.i++;
+            if (c.table == 3) { // Indirect descriptor
 
-            if (mmuDebug) printf("(long table descriptor) -> %c[%d]\n", 'A' + c.table, offset);
+                taddr = descriptor & 0xFFFFFFFC;
 
-            // Check offset range
-            if (offset < c.lowerLimit || offset > c.upperLimit) {
+                if (mmuDebug) printf("(long indirect descriptor)\n");
 
-                if (mmuDebug) printf("     Offset violation %d [%d;%d]\n",
-                                     offset, c.lowerLimit, c.upperLimit);
-                throw BusErrorException();
+                physAddr = mmuLookupLong<C, write>(taddr, 0, c);
+
+            } else {
+
+                u32 offset = c.bitslice(c.pos, c.len);
+                c.pos += c.len;
+                c.len = c.idx[c.i+2];
+                c.i++;
+
+                taddr = descriptor & 0xFFFFFFF0;
+                c.table++;
+
+                if (mmuDebug) printf("(long table descriptor) -> %c[%d]\n", 'A' + c.table, offset);
+
+                // Check offset range
+                if (offset < c.lowerLimit || offset > c.upperLimit) {
+
+                    if (mmuDebug) printf("     Offset violation %d [%d;%d]\n",
+                                         offset, c.lowerLimit, c.upperLimit);
+                    throw BusErrorException();
+                }
+
+                if constexpr (write) { c.wp |= descriptor & 0x4; }
+                c.lowerLimit = 0;
+                c.upperLimit = 0xFFFF;
+
+                physAddr = mmuLookupLong<C, write>(taddr, offset, c);
             }
-
-            if constexpr (write) { c.wp |= descriptor & 0x4; }
-            c.lowerLimit = 0;
-            c.upperLimit = 0xFFFF;
-
-            taddr = (descriptor & 0xFFFFFF00) + 8 * offset;
-
-            c.table++;
-            c.pos += c.len;
-            c.len = c.idx[c.i+2];
-
-            physAddr = mmuLookupLong<C, write>(taddr, offset, c);
             break;
         }
 
@@ -279,8 +318,106 @@ Moira::mmuLookupShort(u32 taddr, u32 offset, struct MmuContext &c)
 template <Core C, bool write> u32
 Moira::mmuLookupLong(u32 taddr, u32 offset, struct MmuContext &c)
 {
-    assert(false);
-    return 0;
+    // Check offset
+    if (offset < c.lowerLimit || offset > c.upperLimit) {
+
+        printf("Long table offset violation: %d [%d;%d]\n", offset, c.lowerLimit, c.upperLimit);
+        throw BusErrorException();
+    }
+
+    u32 physAddr;
+    u64 descriptor = readMMU64(taddr + 8 * offset);
+
+    if (mmuDebug) printf("     %c[%d] = %016llx ", c.table + 'A', offset, descriptor);
+
+    if constexpr (write) c.wp |= (descriptor >> 32) & 0x4;
+    c.su |= (descriptor >> 32) & 0x100;
+    // if (c.su) { printf("Supervisor protection\n"); }
+
+    // Evaluate the limit field
+    if (descriptor & (1LL << 63)) {
+        c.lowerLimit = u32(descriptor >> 48) & 0x7FFF;
+        c.upperLimit = 0xFFFF;
+    } else {
+        c.lowerLimit = 0;
+        c.upperLimit = u32(descriptor >> 48) & 0x7FFF;
+    }
+
+    switch ((descriptor >> 32) & 0x3) {
+
+        case 0: // Short format invalid descriptor
+        {
+            if (mmuDebug) printf("Bus error (invalid descriptor)\n");
+            throw BusErrorException();
+        }
+        case 1: // Long format page or early termination descriptor
+        {
+            // Set U and M bit
+            u64 desc2 = (descriptor >> 32) | (1LL << 3);
+            if constexpr (write) { desc2 |= (1LL << 4); }
+            write16(taddr + 8 * offset + 2, (u16)desc2);
+            c.table++;
+
+            physAddr = (descriptor & 0xFFFFFF00) + c.bitslice(c.pos, 32 - c.pos);
+            c.pos += c.len;
+            c.len = c.idx[c.i+2];
+            c.i++;
+
+            if (c.table == 3) {   // Long format page descriptor
+
+                if (mmuDebug) printf("(long page descriptor) -> %08x\n", physAddr);
+
+            } else {              // Long early termination descriptor
+
+                if (mmuDebug) printf("(long early descriptor) -> %08x\n", physAddr);
+            }
+            break;
+        }
+        default: // Long format table descriptor or indirect descriptor
+        {
+            if (c.table == 3) { // Indirect descriptor
+
+                taddr = descriptor & 0xFFFFFFFC;
+
+                if (mmuDebug) printf("(long indirect descriptor)\n");
+
+                physAddr = mmuLookupLong<C, write>(taddr, 0, c);
+
+            } else {
+
+                u32 offset = c.bitslice(c.pos, c.len);
+                c.pos += c.len;
+                c.len = c.idx[c.i+2];
+                c.i++;
+
+                taddr = descriptor & 0xFFFFFFF0;
+                c.table++;
+
+                if (mmuDebug) printf("(long table descriptor) -> %c[%d]\n", 'A' + c.table, offset);
+
+                // Check offset range
+                if (offset < c.lowerLimit || offset > c.upperLimit) {
+
+                    if (mmuDebug) printf("     Offset violation %d [%d;%d]\n",
+                                         offset, c.lowerLimit, c.upperLimit);
+                    throw BusErrorException();
+                }
+
+                if constexpr (write) { c.wp |= (descriptor >> 32) & 0x4; }
+                c.lowerLimit = 0;
+                c.upperLimit = 0xFFFF;
+
+                if ((descriptor & 0x3) == 2) {
+                    physAddr = mmuLookupShort<C, write>(taddr, offset, c);
+                } else {
+                    physAddr = mmuLookupLong<C, write>(taddr, offset, c);
+                }
+            }
+            break;
+        }
+    }
+
+    return physAddr;
 }
 
 template <Core C, bool write> u32
