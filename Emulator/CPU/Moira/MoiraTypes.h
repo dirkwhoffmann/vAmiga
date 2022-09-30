@@ -424,22 +424,6 @@ struct MMU {
     u32 mmusr;              // MMU status register
 };
 
-typedef enum
-{
-    UnknownDescriptor,
-    ShortTable,             // Short format table descriptor
-    ShortEarly,             // Short format early termination descriptor
-    ShortPage,              // Short format page descriptor
-    ShortInvalid,           // Short format invalid descriptor
-    ShortIndirect,          // Short format indirect descriptor
-    LongTable,              // Long format table descriptor
-    LongEarly,              // Long format early termination descriptor
-    LongPage,               // Long format page descriptor
-    LongInvalid,            // Long format invalid descriptor
-    LongIndirect,           // Long format indirect descriptor
-}
-MmuDescriptorType;
-
 
 //
 // FPU types
