@@ -241,6 +241,10 @@ Moira::mmuLookupShort(u32 taddr, u32 offset, struct MmuContext &c)
 
             } else {
 
+                // Set U bit
+                u64 desc2 = descriptor | (1LL << 3);
+                write16(taddr + 4 * offset + 2, (u16)desc2);
+
                 u32 offset = c.bitslice(c.pos, c.len);
                 c.pos += c.len;
                 c.len = c.idx[c.i+2];
@@ -279,6 +283,10 @@ Moira::mmuLookupShort(u32 taddr, u32 offset, struct MmuContext &c)
 
             } else {
 
+                // Set U bit
+                u64 desc2 = descriptor | (1LL << 3);
+                write16(taddr + 4 * offset + 2, (u16)desc2);
+
                 u32 offset = c.bitslice(c.pos, c.len);
                 c.pos += c.len;
                 c.len = c.idx[c.i+2];
@@ -311,6 +319,18 @@ Moira::mmuLookupShort(u32 taddr, u32 offset, struct MmuContext &c)
             assert(false);
             return 0;
     }
+
+    // Check for write protection
+    if constexpr (write) {
+        if (c.wp) {
+
+            printf("WRITE PROTECTION VIOLATION\n");
+            throw BusErrorException();
+        }
+    }
+
+    // Check for supervisor protection
+    if (c.su && !reg.sr.s) throw BusErrorException();
 
     return physAddr;
 }
@@ -385,6 +405,10 @@ Moira::mmuLookupLong(u32 taddr, u32 offset, struct MmuContext &c)
 
             } else {
 
+                // Set U bit
+                u64 desc2 = (descriptor >> 32) | (1LL << 3);
+                write16(taddr + 8 * offset + 2, (u16)desc2);
+
                 u32 offset = c.bitslice(c.pos, c.len);
                 c.pos += c.len;
                 c.len = c.idx[c.i+2];
@@ -416,6 +440,18 @@ Moira::mmuLookupLong(u32 taddr, u32 offset, struct MmuContext &c)
             break;
         }
     }
+
+    // Check for write protection
+    if constexpr (write) {
+        if (c.wp) {
+
+            printf("WRITE PROTECTION VIOLATION\n");
+            throw BusErrorException();
+        }
+    }
+
+    // Check for supervisor protection
+    if (c.su && !reg.sr.s) throw BusErrorException();
 
     return physAddr;
 }
