@@ -533,8 +533,8 @@ private:
 
     // Looks up a physical address from the MMU table
     template <Core C, bool write> u32 mmuLookup(u32 addr, u8 fc);
-    template <Core C, bool write> u32 mmuLookupShort(u32 taddr, struct MmuContext &context);
-    template <Core C, bool write> u32 mmuLookupLong(u32 taddr, struct MmuContext &context);
+    template <Core C, bool write> u32 mmuLookupShort(u32 taddr, u32 offset, struct MmuContext &context);
+    template <Core C, bool write> u32 mmuLookupLong(u32 taddr, u32 offset, struct MmuContext &context);
 
     // Looks up a physical address from the MMU table
     template <Core C, bool write> u32 mmuLookupOld(u32 addr, u8 fc);

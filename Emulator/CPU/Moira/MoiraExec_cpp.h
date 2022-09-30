@@ -3411,6 +3411,7 @@ Moira::execMoveToSr(u16 opcode)
 
     if (reg.sr.s) {
         printf("execMoveToSr: SUPERVISOR MODE VIOLATION\n");
+        // breakpointReached(0);
     }
     SUPERVISOR_MODE_ONLY
 

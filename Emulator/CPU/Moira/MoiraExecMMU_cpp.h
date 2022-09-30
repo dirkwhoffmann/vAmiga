@@ -49,13 +49,14 @@ Moira::translate(u32 addr, u8 fc)
     // TODO: LOOKUP IN CACHE
     //
     
-    return mmuLookupOld<C, write>(addr, fc);
+    return mmuLookup<C, write>(addr, fc);
 }
 
 template <Core C, bool write> u32
 Moira::mmuLookup(u32 addr, u8 fc)
 {
     MmuContext context { };
+    context.addr = addr;
 
     // TODO:
 
@@ -73,7 +74,6 @@ Moira::mmuLookup(u32 addr, u8 fc)
     // Decode the root pointer
     u32 ptr   = u32(rp >> 0)      & 0xFFFFFFF0;
     u32 limit = u32(rp >> 48)     & 0x7FFF;
-    // u32 dt    = u32(rp >> 32)     & 0x3;
 
     // Evaluate the limit field
     if (rp & (1LL << 63)) {
@@ -87,19 +87,22 @@ Moira::mmuLookup(u32 addr, u8 fc)
         context.upperLimit = limit;
     }
 
-    if (mmuDebug) printf("RP %llx limit: [%x,%x]\n", rp, context.lowerLimit, context.upperLimit);
-
     context.idx[0] = u32(mmu.tc >> 16) & 0xF;   // IS  (Initial Shift)
     context.idx[1] = u32(mmu.tc >> 12) & 0xF;   // TIA (Table Index A)
     context.idx[2] = u32(mmu.tc >>  8) & 0xF;   // TIB (Table Index B)
     context.idx[3] = u32(mmu.tc >>  4) & 0xF;   // TIC (Table Index C)
     context.idx[4] = u32(mmu.tc >>  0) & 0xF;   // TID (Table Index D)
+    context.pos = context.idx[0];
+    context.len = context.idx[1];
+    context.i = 0;
+
     bool fcl = mmu.tc & ( 1 << 24);
 
-    if (mmuDebug) printf("MMU: Mapping %x %s (%d %d %d %d %d)\n",
+    if (mmuDebug) printf("MMU: %s %x (%d %d %d %d %d) [%x,%x]\n",
+                         write ? "WRITE" : "READ",
                          addr,
-                         write ? "(WRITE)" : "(READ)",
-                         context.idx[0], context.idx[1], context.idx[2], context.idx[3], context.idx[4]);
+                         context.idx[0], context.idx[1], context.idx[2], context.idx[3], context.idx[4],
+                         context.lowerLimit, context.upperLimit);
 
     switch (rp >> 32 & 0x3) {
 
@@ -109,24 +112,35 @@ Moira::mmuLookup(u32 addr, u8 fc)
              * accesses are calculated by adding the TableA address to the
              * logical address specified.
              */
+            if (mmuDebug) printf("Early termination RP -> %x\n", ptr + addr);
             return ptr + addr;
 
         case 2:
-
+        {
+            /* FIX THIS
             if (fcl) {
 
                 u32 desc = readMMU32((rp & 0xFFFFFFF0) + 4 * readFC());
 
                 if (desc & 0x1) {
-                    return mmuLookupLong<C, write>(desc & 0xFFFFFFF0, context);
+                    return mmuLookupLong<C, write>(desc & 0xFFFFFFF0, 0, context);
                 } else {
-                    return mmuLookupShort<C, write>(desc & 0xFFFFFFF0, context);
+                    return mmuLookupShort<C, write>(desc & 0xFFFFFFF0, 0, context);
                 }
             }
-            return mmuLookupShort<C, write>(rp & 0xFFFFFFF0, context);
+            */
+            u32 offset = context.bitslice(context.pos, context.len);
+            context.pos += context.len;
+            context.len = context.idx[context.i+2];
+            context.i++;
 
+            u32 taddr = (rp & 0xFFFFFFF0);
+            if (mmuDebug) printf("     RP = %08llx -> Short table %c[%d]\n", rp, 'A' + context.table, offset);
+            return mmuLookupShort<C, write>(taddr, offset, context);
+        }
         case 3:
-
+        {
+            /* FIX THIS
             if (fcl) {
 
                 u64 desc = readMMU64((rp & 0xFFFFFFF0) + 8 * readFC());
@@ -137,26 +151,38 @@ Moira::mmuLookup(u32 addr, u8 fc)
                     return mmuLookupShort<C, write>(desc & 0xFFFFFFF0, context);
                 }
             }
-            return mmuLookupLong<C, write>(rp & 0xFFFFFFF0, context);
+            */
+            u32 offset = context.bitslice(context.pos, context.len);
+            context.pos += context.len;
+            context.len = context.idx[context.i+2];
+            context.i++;
 
+
+            u32 taddr = (rp & 0xFFFFFFF0) + 8 * offset;
+            if (mmuDebug) printf("     RP = %016llx -> Long table %c[%d]\n", rp, 'A' + context.table, offset);
+            return mmuLookupLong<C, write>(taddr, offset, context);
+        }
         default:
 
             // TODO: WHICH EXCEPTION? (MMU CONFIG ERROR? BUS ERROR?)
+            if (mmuDebug) printf("Invalid RP -> Bus error\n");
             throw BusErrorException();
     }
 }
 
 template <Core C, bool write> u32
-Moira::mmuLookupShort(u32 taddr, struct MmuContext &c)
+Moira::mmuLookupShort(u32 taddr, u32 offset, struct MmuContext &c)
 {
     u32 physAddr;
-    u32 descriptor = readMMU32(taddr);
+    u32 descriptor = readMMU32(taddr + 4 * offset);
+
+    if (mmuDebug) printf("     %c[%d] = %08x ", c.table + 'A', offset, descriptor);
 
     switch (descriptor & 0x3) {
 
         case 0: // Short format invalid descriptor
         {
-            if (mmuDebug) printf("ShortInvalid: %x -> Bus error\n", taddr);
+            if (mmuDebug) printf("Bus error (invalid descriptor)\n");
             throw BusErrorException();
         }
         case 1: // Short format page or early termination descriptor
@@ -166,29 +192,40 @@ Moira::mmuLookupShort(u32 taddr, struct MmuContext &c)
             if constexpr (write) { desc2 |= (1LL << 4); }
             write16(taddr + 2, (u16)desc2);
 
-            physAddr = (descriptor & 0xFFFFFF00) + c.bitslice(c.pos + c.len, 32 - (c.pos + c.len));
+            c.table++;
+
+            physAddr = (descriptor & 0xFFFFFF00) + c.bitslice(c.pos, 32 - c.pos);
+            c.pos += c.len;
+            c.len = c.idx[c.i+2];
+            c.i++;
 
             if (c.table == 3) {   // Short format page descriptor
 
-                if (mmuDebug) printf("ShortPage: %x -> %x\n", c.addr, physAddr);
+                if (mmuDebug) printf("(short page descriptor) -> %08x\n", physAddr);
 
             } else {            // Short early termination descriptor
 
-                if (mmuDebug) printf("ShortEarly: %x -> %x\n", c.addr, physAddr);
+                if (mmuDebug) printf("(short early descriptor) -> %08x\n", physAddr);
             }
             break;
         }
         case 2: // Short format table descriptor
         {
             u32 offset = c.bitslice(c.pos, c.len);
+            c.pos += c.len;
+            c.len = c.idx[c.i+2];
+            c.i++;
 
-            if (mmuDebug) printf("ShortTable %x[%d] -> Short table %x\n", taddr);
+            taddr = descriptor & 0xFFFFFFF0;
+            c.table++;
+
+            if (mmuDebug) printf("(short table descriptor) -> %c[%d]\n", 'A' + c.table, offset);
 
             // Check offset range
             if (offset < c.lowerLimit || offset > c.upperLimit) {
 
-                if (mmuDebug) printf("%x -> Offset violation %d [%d;%d]\n",
-                                     c.addr, offset, c.lowerLimit, c.upperLimit);
+                if (mmuDebug) printf("     Offset violation %d [%d;%d]\n",
+                                     offset, c.lowerLimit, c.upperLimit);
                 throw BusErrorException();
             }
 
@@ -196,25 +233,23 @@ Moira::mmuLookupShort(u32 taddr, struct MmuContext &c)
             c.lowerLimit = 0;
             c.upperLimit = 0xFFFF;
 
-            taddr = (descriptor & 0xFFFFFF00) + 4 * offset;
-
-            c.table++;
-            c.pos += c.len;
-            c.len = c.idx[c.i+2];
-
-            return mmuLookupShort<C, write>(taddr, c);
+            physAddr = mmuLookupShort<C, write>(taddr, offset, c);
+            break;
         }
         case 3: // Long format table descriptor
         {
             u32 offset = c.bitslice(c.pos, c.len);
+            c.pos += c.len;
+            c.len = c.idx[c.i+2];
+            c.i++;
 
-            if (mmuDebug) printf("ShortTable %x[%d] -> Long table %x\n", taddr);
+            if (mmuDebug) printf("(long table descriptor) -> %c[%d]\n", 'A' + c.table, offset);
 
             // Check offset range
             if (offset < c.lowerLimit || offset > c.upperLimit) {
 
-                if (mmuDebug) printf("%x -> Offset violation %d [%d;%d]\n",
-                                     c.addr, offset, c.lowerLimit, c.upperLimit);
+                if (mmuDebug) printf("     Offset violation %d [%d;%d]\n",
+                                     offset, c.lowerLimit, c.upperLimit);
                 throw BusErrorException();
             }
 
@@ -228,13 +263,21 @@ Moira::mmuLookupShort(u32 taddr, struct MmuContext &c)
             c.pos += c.len;
             c.len = c.idx[c.i+2];
 
-            return mmuLookupLong<C, write>(taddr, c);
+            physAddr = mmuLookupLong<C, write>(taddr, offset, c);
+            break;
         }
+
+        default:
+
+            assert(false);
+            return 0;
     }
+
+    return physAddr;
 }
 
 template <Core C, bool write> u32
-Moira::mmuLookupLong(u32 taddr, struct MmuContext &c)
+Moira::mmuLookupLong(u32 taddr, u32 offset, struct MmuContext &c)
 {
     assert(false);
     return 0;
