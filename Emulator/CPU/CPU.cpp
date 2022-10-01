@@ -232,7 +232,7 @@ Moira::signalJumpToVector(int nr, u32 addr)
 void
 Moira::signalSoftwareTrap(u16 instr, SoftwareTrap trap)
 {
- 
+
 }
 
 void
@@ -277,7 +277,21 @@ Moira::softwareTrapReached(u32 addr)
     amiga.setFlag(RL::SWTRAP_REACHED);
 }
 
+void
+Moira::mmuDidEnable()
+{
+    printf("Enabling MMU\n");
+    cpu.softstopReached(0);
 }
+
+void
+Moira::mmuDidDisable()
+{
+    printf("Disabling MMU\n");
+}
+
+}
+
 
 //
 // CPU

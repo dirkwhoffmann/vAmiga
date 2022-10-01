@@ -312,7 +312,11 @@ protected:
     virtual void watchpointReached(u32 addr) { }
     virtual void catchpointReached(u8 vector) { }
     virtual void softwareTrapReached(u32 addr) { }
-    
+
+    // MMU delegates
+    virtual void mmuDidEnable() { }
+    virtual void mmuDidDisable() { }
+
 #else
 
     // Advances the clock
@@ -364,6 +368,10 @@ protected:
     void watchpointReached(u32 addr);
     void catchpointReached(u8 vector);
     void softwareTrapReached(u32 addr);
+
+    // MMU delegates
+    void mmuDidEnable();
+    void mmuDidDisable();
 
 #endif
 
@@ -523,11 +531,16 @@ private:
 
 
     //
-    // Working with the MMU
+    // Running the MMU
     //
 
 private:
-    
+
+    // Sets a MMU register
+    void setTC(u32 value);
+    void setTT0(u64 value);
+    void setTT1(u64 value);
+
     // Translates a logical address to a physical address
     template <Core C, bool write> u32 translate(u32 addr, u8 fc);
 
@@ -535,7 +548,7 @@ private:
     template <Core C, bool write> u32 mmuLookup(u32 addr, u8 fc);
     template <Core C, bool write> u32 mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &con);
     template <Core C, bool write> u32 mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &con);
-    
+
     // Experimental
     bool testTT(u32 ttx, u32 addr, u8 fc, bool rw);
 

@@ -46,6 +46,29 @@ struct MmuContext {
     }
 };
 
+void
+Moira::setTC(u32 value)
+{
+    bool oldE = mmu.tc & (1 << 31);
+    mmu.tc = value;
+    bool newE = mmu.tc & (1 << 31);
+
+    if (!oldE && newE) mmuDidEnable();
+    if (oldE && !newE) mmuDidDisable();
+}
+
+void
+Moira::setTT0(u64 value)
+{
+
+}
+
+void
+Moira::setTT1(u64 value)
+{
+
+}
+
 template <Core C, bool write> u32
 Moira::translate(u32 addr, u8 fc)
 {
@@ -61,7 +84,12 @@ Moira::translate(u32 addr, u8 fc)
     //
     // TODO: LOOKUP IN CACHE
     //
-    
+
+    // REMOVE ASAP
+    if (write) {
+        softstopReached(0);
+    }
+
     return mmuLookup<C, write>(addr, fc);
 }
 
@@ -526,7 +554,7 @@ Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
                     throw BusErrorException();
                 }
 
-                if constexpr (write) { if (mmuDebug) { printf("WP Bit = %d\n", (descriptor >> 32) & 0x4); } c.wp |= (descriptor >> 32) & 0x4; }
+                if constexpr (write) { if (mmuDebug) { printf("WP Bit = %llu\n", (descriptor >> 32) & 0x4); } c.wp |= (descriptor >> 32) & 0x4; }
                 c.lowerLimit = 0;
                 c.upperLimit = 0xFFFF;
 
@@ -979,7 +1007,7 @@ Moira::execPMove(u16 opcode, RegName mmuReg, bool rw)
             case REG_TC:
 
                 readOp<C68020, M, Long>(reg, &ea, &data32);
-                mmu.tc = data32;
+                setTC(data32);
                 break;
 
             case REG_CRP:
