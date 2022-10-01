@@ -9,6 +9,10 @@ bool mmuDebug;
 
 struct MmuContext {
 
+    u64 addrBits;
+    u64 indexBits;
+    u8  shiftCnt;
+
     u32 addr;
 
     u32 lowerLimit;
@@ -25,12 +29,39 @@ struct MmuContext {
     bool wp;
     bool su;
 
+    // DEPRECATED
     u32 bitslice(u32 start, u32 length) {
 
         u64 shifted = u32((u64)addr << start);
         shifted = (shifted << length) >> 32;
         return (u32)shifted;
     };
+
+    u32 getAddrBits() { return u32(addrBits >> 32); }
+    u32 getIndexBits() { return u32(indexBits >> 32); }
+
+    u32 nextAddrBits() {
+
+        // Shift the new index into the upper word
+        indexBits = (indexBits & 0xFFFFFFFF) << 4;
+
+        // Get the upper word
+        auto shift = indexBits >> 32;
+
+        // Remember the total number of shifted bits
+        shiftCnt += u8(shift);
+
+        // Shift the new address bits into the upper word
+        addrBits = (addrBits & 0xFFFFFFFF) << shift;
+
+        // Return the upper word
+        return u32(addrBits >> 32);
+    }
+
+    u32 remainingAddrBits() {
+
+        return u32(addrBits) >> shiftCnt;
+    }
 };
 
 template <Core C, bool write> u32
@@ -80,6 +111,12 @@ Moira::mmuLookup(u32 addr, u8 fc)
         context.upperLimit = limit;
     }
 
+    context.addrBits = addr;
+    context.indexBits = mmu.tc << 12;
+
+    // Apply the initial shift (ignore some bits)
+    (void)context.nextAddrBits();
+
     context.idx[0] = u32(mmu.tc >> 16) & 0xF;   // IS  (Initial Shift)
     context.idx[1] = u32(mmu.tc >> 12) & 0xF;   // TIA (Table Index A)
     context.idx[2] = u32(mmu.tc >>  8) & 0xF;   // TIB (Table Index B)
@@ -120,9 +157,12 @@ Moira::mmuLookup(u32 addr, u8 fc)
                 if (mmuDebug) printf("     RP -> FCL %d\n", readFC());
 
                 u32 offset = context.bitslice(context.pos, context.len);
+                u32 newOffset = context.nextAddrBits();
+                assert(newOffset == offset);
                 context.pos += context.len;
                 context.len = context.idx[context.i+2];
                 context.i++;
+
 
                 if (desc & 0x1) {
                     return mmuLookupLong<C, write>('A', desc & 0xFFFFFFF0, offset, context);
@@ -132,6 +172,8 @@ Moira::mmuLookup(u32 addr, u8 fc)
             }
 
             u32 offset = context.bitslice(context.pos, context.len);
+            u32 newOffset = context.nextAddrBits();
+            assert(newOffset == offset);
             context.pos += context.len;
             context.len = context.idx[context.i+2];
             context.i++;
@@ -150,6 +192,8 @@ Moira::mmuLookup(u32 addr, u8 fc)
                 if (mmuDebug) printf("     RP -> FCL %d\n", readFC());
 
                 u32 offset = context.bitslice(context.pos, context.len);
+                u32 newOffset = context.nextAddrBits();
+                assert(newOffset == offset);
                 context.pos += context.len;
                 context.len = context.idx[context.i+2];
                 context.i++;
@@ -162,6 +206,8 @@ Moira::mmuLookup(u32 addr, u8 fc)
             }
 
             u32 offset = context.bitslice(context.pos, context.len);
+            u32 newOffset = context.nextAddrBits();
+            assert(newOffset == offset);
             context.pos += context.len;
             context.len = context.idx[context.i+2];
             context.i++;
@@ -207,6 +253,7 @@ Moira::mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &c)
             write16(taddr + 4 * offset + 2, (u16)desc2);
 
             physAddr = (descriptor & 0xFFFFFF00) + c.bitslice(c.pos, 32 - c.pos);
+            assert(c.bitslice(c.pos, 32 - c.pos) == c.remainingAddrBits());
             c.pos += c.len;
             c.len = c.idx[c.i+2];
             c.i++;
@@ -238,6 +285,8 @@ Moira::mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &c)
                 write16(taddr + 4 * offset + 2, (u16)desc2);
 
                 u32 offset = c.bitslice(c.pos, c.len);
+                u32 newOffset = c.nextAddrBits();
+                assert(newOffset == offset);
                 c.pos += c.len;
                 c.len = c.idx[c.i+2];
                 c.i++;
@@ -279,6 +328,8 @@ Moira::mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &c)
                 write16(taddr + 4 * offset + 2, (u16)desc2);
 
                 u32 offset = c.bitslice(c.pos, c.len);
+                u32 newOffset = c.nextAddrBits();
+                assert(newOffset == offset);
                 c.pos += c.len;
                 c.len = c.idx[c.i+2];
                 c.i++;
@@ -368,6 +419,7 @@ Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
             write16(taddr + 8 * offset + 2, (u16)desc2);
 
             physAddr = (descriptor & 0xFFFFFF00) + c.bitslice(c.pos, 32 - c.pos);
+            assert(c.bitslice(c.pos, 32 - c.pos) == c.remainingAddrBits());
             c.pos += c.len;
             c.len = c.idx[c.i+2];
             c.i++;
@@ -399,6 +451,8 @@ Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
                 write16(taddr + 8 * offset + 2, (u16)desc2);
 
                 u32 offset = c.bitslice(c.pos, c.len);
+                u32 newOffset = c.nextAddrBits();
+                assert(newOffset == offset);
                 c.pos += c.len;
                 c.len = c.idx[c.i+2];
                 c.i++;
