@@ -20,12 +20,6 @@ struct MmuContext {
 
     u8 idx[5];
 
-    // u8 table;
-
-    u8 i;
-    u8 pos;
-    u8 len;
-
     bool wp;
     bool su;
 
@@ -122,9 +116,6 @@ Moira::mmuLookup(u32 addr, u8 fc)
     context.idx[2] = u32(mmu.tc >>  8) & 0xF;   // TIB (Table Index B)
     context.idx[3] = u32(mmu.tc >>  4) & 0xF;   // TIC (Table Index C)
     context.idx[4] = u32(mmu.tc >>  0) & 0xF;   // TID (Table Index D)
-    context.pos = context.idx[0];
-    context.len = context.idx[1];
-    context.i = 0;
 
     bool fcl = mmu.tc & ( 1 << 24);
 
@@ -157,10 +148,6 @@ Moira::mmuLookup(u32 addr, u8 fc)
                 if (mmuDebug) printf("     RP -> FCL %d\n", readFC());
 
                 u32 offset = context.nextAddrBits();
-                context.pos += context.len;
-                context.len = context.idx[context.i+2];
-                context.i++;
-
 
                 if (desc & 0x1) {
                     return mmuLookupLong<C, write>('A', desc & 0xFFFFFFF0, offset, context);
@@ -170,9 +157,6 @@ Moira::mmuLookup(u32 addr, u8 fc)
             }
 
             u32 offset = context.nextAddrBits();
-            context.pos += context.len;
-            context.len = context.idx[context.i+2];
-            context.i++;
 
             if (mmuDebug) printf("     RP = %08llx -> Short table A[%d]\n", rp, offset);
             return mmuLookupShort<C, write>('A', taddr, offset, context);
@@ -188,9 +172,6 @@ Moira::mmuLookup(u32 addr, u8 fc)
                 if (mmuDebug) printf("     RP -> FCL %d\n", readFC());
 
                 u32 offset = context.nextAddrBits();
-                context.pos += context.len;
-                context.len = context.idx[context.i+2];
-                context.i++;
 
                 if (desc & 0x10000) {
                     return mmuLookupLong<C, write>('A', desc & 0xFFFFFFF0, offset, context);
@@ -200,9 +181,6 @@ Moira::mmuLookup(u32 addr, u8 fc)
             }
 
             u32 offset = context.nextAddrBits();
-            context.pos += context.len;
-            context.len = context.idx[context.i+2];
-            context.i++;
 
             if (mmuDebug) printf("     RP = %016llx -> Long table A[%d]\n", rp, offset);
             return mmuLookupLong<C, write>('A', taddr, offset, context);
@@ -245,9 +223,6 @@ Moira::mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &c)
             write16(taddr + 4 * offset + 2, (u16)desc2);
 
             physAddr = (descriptor & 0xFFFFFF00) + c.remainingAddrBits();
-            c.pos += c.len;
-            c.len = c.idx[c.i+2];
-            c.i++;
 
             if (table == 'D') {   // Short format page descriptor
 
@@ -276,9 +251,6 @@ Moira::mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &c)
                 write16(taddr + 4 * offset + 2, (u16)desc2);
 
                 u32 offset = c.nextAddrBits();
-                c.pos += c.len;
-                c.len = c.idx[c.i+2];
-                c.i++;
 
                 taddr = descriptor & 0xFFFFFFF0;
 
@@ -317,9 +289,6 @@ Moira::mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &c)
                 write16(taddr + 4 * offset + 2, (u16)desc2);
 
                 u32 offset = c.nextAddrBits();
-                c.pos += c.len;
-                c.len = c.idx[c.i+2];
-                c.i++;
 
                 taddr = descriptor & 0xFFFFFFF0;
 
@@ -406,9 +375,6 @@ Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
             write16(taddr + 8 * offset + 2, (u16)desc2);
 
             physAddr = (descriptor & 0xFFFFFF00) + c.remainingAddrBits();
-            c.pos += c.len;
-            c.len = c.idx[c.i+2];
-            c.i++;
 
             if (table == 'D') {   // Long format page descriptor
 
@@ -437,9 +403,6 @@ Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
                 write16(taddr + 8 * offset + 2, (u16)desc2);
 
                 u32 offset = c.nextAddrBits();
-                c.pos += c.len;
-                c.len = c.idx[c.i+2];
-                c.i++;
 
                 taddr = descriptor & 0xFFFFFFF0;
 
