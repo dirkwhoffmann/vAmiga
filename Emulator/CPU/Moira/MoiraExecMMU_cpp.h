@@ -230,6 +230,9 @@ Moira::mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &c)
             // | 08  |   24   | Page Address                    |
             // +-----+--------+---------------------------------+
 
+            // Record WP
+            if constexpr (write) c.wp |= descriptor & 0x4;
+
             // Set U and M bit
             u64 desc2 = descriptor | (1LL << 3);
             if constexpr (write) { desc2 |= (1LL << 4); }
@@ -237,11 +240,11 @@ Moira::mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &c)
 
             physAddr = (descriptor & 0xFFFFFF00) + c.remainingAddrBits();
 
-            if (table == 'D') {   // Short format page descriptor
+            if (table == 'D') {
 
                 if (mmuDebug) printf("(short page descriptor) -> %08x\n", physAddr);
 
-            } else {            // Short early termination descriptor
+            } else {
 
                 if (mmuDebug) printf("(short early descriptor) -> %08x\n", physAddr);
             }
@@ -279,6 +282,9 @@ Moira::mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &c)
                 // | 04  |   28   | Table Address                   |
                 // +-----+--------+---------------------------------+
 
+                // Record WP
+                if constexpr (write) c.wp |= descriptor & 0x4;
+
                 // Set U bit
                 u64 desc2 = descriptor | (1LL << 3);
                 write16(taddr + 4 * offset + 2, (u16)desc2);
@@ -297,7 +303,7 @@ Moira::mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &c)
                     throw BusErrorException();
                 }
 
-                if constexpr (write) { c.wp |= descriptor & 0x4; }
+                if constexpr (write) { if (mmuDebug) { printf("WP Bit = %d\n", descriptor & 0x4); } c.wp |= descriptor & 0x4; }
                 c.lowerLimit = 0;
                 c.upperLimit = 0xFFFF;
 
@@ -345,9 +351,6 @@ Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
     // Extract descriptor type
     u32 dt = u32(descriptor >> 32) & 0x3;
 
-    if constexpr (write) c.wp |= (descriptor >> 32) & 0x4;
-    c.su |= (descriptor >> 32) & 0x100;
-
     // Evaluate the limit field
     if (descriptor & (1LL << 63)) {
         c.lowerLimit = u32(descriptor >> 48) & 0x7FFF;
@@ -381,6 +384,10 @@ Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
         }
         case 1:
         {
+            // Record WP and S bit
+            if constexpr (write) c.wp |= (descriptor >> 32) & 0x4;
+            c.su |= (descriptor >> 32) & 0x100;
+
             // Set U and M bit
             u64 desc2 = (descriptor >> 32) | (1LL << 3);
             if constexpr (write) { desc2 |= (1LL << 4); }
@@ -447,9 +454,9 @@ Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
             }
             break;
         }
-        default: // Long format table descriptor or indirect descriptor
+        default:
         {
-            if (table == 'D') { // Indirect descriptor
+            if (table == 'D') {
 
                 // +------------------------------------------------+
                 // | LONG FORMAT INDIRECT DESCRIPTOR                |
@@ -497,6 +504,10 @@ Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
                 // | 04  |   28   | Table Address                   |
                 // +-----+--------+---------------------------------+
 
+                // Record WP and S bit
+                if constexpr (write) c.wp |= (descriptor >> 32) & 0x4;
+                c.su |= (descriptor >> 32) & 0x100;
+
                 // Set U bit
                 u64 desc2 = (descriptor >> 32) | (1LL << 3);
                 write16(taddr + 8 * offset + 2, (u16)desc2);
@@ -515,11 +526,11 @@ Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
                     throw BusErrorException();
                 }
 
-                if constexpr (write) { c.wp |= (descriptor >> 32) & 0x4; }
+                if constexpr (write) { if (mmuDebug) { printf("WP Bit = %d\n", (descriptor >> 32) & 0x4); } c.wp |= (descriptor >> 32) & 0x4; }
                 c.lowerLimit = 0;
                 c.upperLimit = 0xFFFF;
 
-                if ((descriptor & 0x3) == 2) {
+                if (dt == 2) {
                     physAddr = mmuLookupShort<C, write>(table + 1, taddr, offset, c);
                 } else {
                     physAddr = mmuLookupLong<C, write>(table + 1, taddr, offset, c);
