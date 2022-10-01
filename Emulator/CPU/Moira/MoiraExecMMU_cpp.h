@@ -13,8 +13,6 @@ struct MmuContext {
     u64 indexBits;
     u8  shiftCnt;
 
-    u32 addr;
-
     u32 lowerLimit;
     u32 upperLimit;
 
@@ -22,14 +20,6 @@ struct MmuContext {
 
     bool wp;
     bool su;
-
-    // DEPRECATED
-    [[deprecated]] u32 bitslice(u32 start, u32 length) {
-
-        u64 shifted = u32((u64)addr << start);
-        shifted = (shifted << length) >> 32;
-        return (u32)shifted;
-    };
 
     u32 getAddrBits() { return u32(addrBits >> 32); }
     u32 getIndexBits() { return u32(indexBits >> 32); }
@@ -80,7 +70,8 @@ Moira::translate(u32 addr, u8 fc)
 template <Core C, bool write> u32
 Moira::mmuLookup(u32 addr, u8 fc)
 {
-    MmuContext context { .addr = addr };
+    // MmuContext context { .addr = addr };
+    MmuContext context { .addrBits = addr, .indexBits = mmu.tc << 12 };
 
     // REMOVE ASAP
     static int tmp = 0;
@@ -105,8 +96,10 @@ Moira::mmuLookup(u32 addr, u8 fc)
         context.upperLimit = limit;
     }
 
+    /*
     context.addrBits = addr;
     context.indexBits = mmu.tc << 12;
+    */
 
     // Apply the initial shift (ignore some bits)
     (void)context.nextAddrBits();
