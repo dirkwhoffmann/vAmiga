@@ -16,8 +16,6 @@ struct MmuContext {
     u32 lowerLimit;
     u32 upperLimit;
 
-    u8 idx[5];
-
     bool wp;
     bool su;
 
@@ -96,27 +94,21 @@ Moira::mmuLookup(u32 addr, u8 fc)
         context.upperLimit = limit;
     }
 
-    /*
-    context.addrBits = addr;
-    context.indexBits = mmu.tc << 12;
-    */
-
     // Apply the initial shift (ignore some bits)
     (void)context.nextAddrBits();
-
-    context.idx[0] = u32(mmu.tc >> 16) & 0xF;   // IS  (Initial Shift)
-    context.idx[1] = u32(mmu.tc >> 12) & 0xF;   // TIA (Table Index A)
-    context.idx[2] = u32(mmu.tc >>  8) & 0xF;   // TIB (Table Index B)
-    context.idx[3] = u32(mmu.tc >>  4) & 0xF;   // TIC (Table Index C)
-    context.idx[4] = u32(mmu.tc >>  0) & 0xF;   // TID (Table Index D)
 
     bool fcl = mmu.tc & ( 1 << 24);
 
     if (mmuDebug) printf("MMU: %s %x (%d %d %d %d %d) [%x,%x]\n",
                          write ? "WRITE" : "READ",
                          addr,
-                         context.idx[0], context.idx[1], context.idx[2], context.idx[3], context.idx[4],
-                         context.lowerLimit, context.upperLimit);
+                         mmu.tc >> 16 & 0xF,
+                         mmu.tc >> 12 & 0xF,
+                         mmu.tc >> 8 & 0xF,
+                         mmu.tc >> 4 & 0xF,
+                         mmu.tc >> 0 & 0xF,
+                         context.lowerLimit,
+                         context.upperLimit);
 
     // Check the descriptor type
     switch (rp >> 32 & 0x3) {
