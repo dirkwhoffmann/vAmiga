@@ -181,27 +181,55 @@ Moira::mmuLookup(u32 addr, u8 fc)
 template <Core C, bool write> u32
 Moira::mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &c)
 {
+    u32 physAddr;
+
     // Check offset
     if (offset < c.lowerLimit || offset > c.upperLimit) {
 
-        printf("Short table offset violation: %d [%d;%d]\n", offset, c.lowerLimit, c.upperLimit);
+        if (mmuDebug) printf("Short table offset violation: %d [%d;%d]\n", offset, c.lowerLimit, c.upperLimit);
         throw BusErrorException();
     }
 
-    u32 physAddr;
+    // Read table entry
     u32 descriptor = readMMU32(taddr + 4 * offset);
-
     if (mmuDebug) printf("     %c[%d] = %08x ", table, offset, descriptor);
 
-    switch (descriptor & 0x3) {
+    // Extract descriptor type
+    u32 dt = descriptor & 0x3;
 
-        case 0: // Short format invalid descriptor
+    switch (dt) {
+
+        case 0:
         {
+            // +------------------------------------------------+
+            // | SHORT FORMAT INVALID DESCRIPTOR                |
+            // +-----+--------+---------------------------------+
+            // | Bit | Length | Contents                        |
+            // +-----+--------+---------------------------------+
+            // | 00  |   02   | Descriptor Type (DT)            |
+            // | 02  |   30   | Unused                          |
+            // +-----+--------+---------------------------------+
+
             if (mmuDebug) printf("Bus error (invalid descriptor)\n");
             throw BusErrorException();
         }
-        case 1: // Short format page or early termination descriptor
+        case 1:
         {
+            // +------------------------------------------------+
+            // | SHORT FORMAT EARLY TERM. OR PAGE DESCRIPTOR    |
+            // +-----+--------+---------------------------------+
+            // | Bit | Length | Contents                        |
+            // +-----+--------+---------------------------------+
+            // | 00  |   02   | Descriptor Type (DT)            |
+            // | 02  |   01   | Write Protect (WP)              |
+            // | 03  |   01   | Update (U)                      |
+            // | 04  |   01   | Modified (M)                    |
+            // | 05  |   01   | Reserved ( must be 0 )          |
+            // | 06  |   01   | Cache Inhibit (CI)              |
+            // | 07  |   01   | Reserved ( must be 0 )          |
+            // | 08  |   24   | Page Address                    |
+            // +-----+--------+---------------------------------+
+
             // Set U and M bit
             u64 desc2 = descriptor | (1LL << 3);
             if constexpr (write) { desc2 |= (1LL << 4); }
@@ -219,9 +247,18 @@ Moira::mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &c)
             }
             break;
         }
-        case 2: // Short format table descriptor or indirect descriptor
+        default:
         {
-            if (table == 'D') { // Indirect descriptor
+            if (table == 'D') {
+
+                // +------------------------------------------------+
+                // | SHORT FORMAT INDIRECT DESCRIPTOR               |
+                // +-----+--------+---------------------------------+
+                // | Bit | Length | Contents                        |
+                // +-----+--------+---------------------------------+
+                // | 00  |   02   | Descriptor Type (DT)            |
+                // | 02  |   30   | Descriptor Address              |
+                // +-----+--------+---------------------------------+
 
                 taddr = descriptor & 0xFFFFFFFC;
 
@@ -230,6 +267,17 @@ Moira::mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &c)
                 physAddr = mmuLookupShort<C, write>(table + 1, taddr, 0, c);
 
             } else {
+
+                // +------------------------------------------------+
+                // | SHORT FORMAT TABLE DESCRIPTOR                  |
+                // +-----+--------+---------------------------------+
+                // | Bit | Length | Contents                        |
+                // +-----+--------+---------------------------------+
+                // | 00  |   02   | Descriptor Type (DT)            |
+                // | 02  |   01   | Write Protect (WP)              |
+                // | 03  |   01   | Update (U)                      |
+                // | 04  |   28   | Table Address                   |
+                // +-----+--------+---------------------------------+
 
                 // Set U bit
                 u64 desc2 = descriptor | (1LL << 3);
@@ -253,53 +301,14 @@ Moira::mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &c)
                 c.lowerLimit = 0;
                 c.upperLimit = 0xFFFF;
 
-                physAddr = mmuLookupShort<C, write>(table + 1, taddr, offset, c);
-            }
-            break;
-        }
-        case 3: // Long format table descriptor
-        {
-            if (table == 'D') { // Indirect descriptor
-
-                taddr = descriptor & 0xFFFFFFFC;
-
-                if (mmuDebug) printf("(long indirect descriptor)\n");
-
-                physAddr = mmuLookupLong<C, write>(table + 1, taddr, 0, c);
-
-            } else {
-
-                // Set U bit
-                u64 desc2 = descriptor | (1LL << 3);
-                write16(taddr + 4 * offset + 2, (u16)desc2);
-
-                u32 offset = c.nextAddrBits();
-
-                taddr = descriptor & 0xFFFFFFF0;
-
-                if (mmuDebug) printf("(long table descriptor) -> %c[%d]\n", table, offset);
-
-                // Check offset range
-                if (offset < c.lowerLimit || offset > c.upperLimit) {
-
-                    if (mmuDebug) printf("     Offset violation %d [%d;%d]\n",
-                                         offset, c.lowerLimit, c.upperLimit);
-                    throw BusErrorException();
+                if (dt == 2) {
+                    physAddr = mmuLookupShort<C, write>(table + 1, taddr, offset, c);
+                } else {
+                    physAddr = mmuLookupLong<C, write>(table + 1, taddr, offset, c);
                 }
-
-                if constexpr (write) { c.wp |= descriptor & 0x4; }
-                c.lowerLimit = 0;
-                c.upperLimit = 0xFFFF;
-
-                physAddr = mmuLookupLong<C, write>(table + 1, taddr, offset, c);
             }
             break;
         }
-
-        default:
-
-            assert(false);
-            return 0;
     }
 
     // Check for write protection
@@ -320,6 +329,8 @@ Moira::mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &c)
 template <Core C, bool write> u32
 Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
 {
+    u32 physAddr;
+
     // Check offset
     if (offset < c.lowerLimit || offset > c.upperLimit) {
 
@@ -327,14 +338,15 @@ Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
         throw BusErrorException();
     }
 
-    u32 physAddr;
+    // Read table entry
     u64 descriptor = readMMU64(taddr + 8 * offset);
-
     if (mmuDebug) printf("     %c[%d] = %016llx ", table, offset, descriptor);
+
+    // Extract descriptor type
+    u32 dt = u32(descriptor >> 32) & 0x3;
 
     if constexpr (write) c.wp |= (descriptor >> 32) & 0x4;
     c.su |= (descriptor >> 32) & 0x100;
-    // if (c.su) { printf("Supervisor protection\n"); }
 
     // Evaluate the limit field
     if (descriptor & (1LL << 63)) {
@@ -345,14 +357,29 @@ Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
         c.upperLimit = u32(descriptor >> 48) & 0x7FFF;
     }
 
-    switch ((descriptor >> 32) & 0x3) {
+    switch (dt) {
 
-        case 0: // Short format invalid descriptor
+        case 0:
         {
+            // +------------------------------------------------+
+            // | LONG FORMAT INVALID DESCRIPTOR                 |
+            // +-----+--------+---------------------------------+
+            // | Bit | Length | Contents                        |
+            // +-----+--------+---------------------------------+
+            // | LongWord0                                      |
+            // +-----+--------+---------------------------------+
+            // | 00  |   02   | Descriptor Type (DT)            |
+            // | 02  |   30   | Unused                          |
+            // +-----+--------+---------------------------------+
+            // | LongWord1                                      |
+            // +-----+--------+---------------------------------+
+            // | 00  |   32   | Unused                          |
+            // +-----+--------+---------------------------------+
+
             if (mmuDebug) printf("Bus error (invalid descriptor)\n");
             throw BusErrorException();
         }
-        case 1: // Long format page or early termination descriptor
+        case 1:
         {
             // Set U and M bit
             u64 desc2 = (descriptor >> 32) | (1LL << 3);
@@ -361,11 +388,60 @@ Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
 
             physAddr = (descriptor & 0xFFFFFF00) + c.remainingAddrBits();
 
-            if (table == 'D') {   // Long format page descriptor
+            if (table == 'D') {
+
+                // +------------------------------------------------+
+                // | LONG FORMAT PAGE DESCRIPTOR                    |
+                // +-----+--------+---------------------------------+
+                // | Bit | Length | Contents                        |
+                // +-----+--------+---------------------------------+
+                // | LongWord0                                      |
+                // +-----+--------+---------------------------------+
+                // | 00  |   02   | Descriptor Type (DT)            |
+                // | 02  |   01   | Write Protect (WP)              |
+                // | 03  |   01   | Update (U)                      |
+                // | 04  |   01   | Modified (M)                    |
+                // | 05  |   01   | Reserved ( must be 0 )          |
+                // | 06  |   01   | Cache Inhibit (CI)              |
+                // | 07  |   01   | Reserved ( must be 0 )          |
+                // | 08  |   01   | Supervisor (S)                  |
+                // | 09  |   07   | Reserved ( must be 1111110 )    |
+                // | 16  |   16   | Unused                          |
+                // +-----+--------+---------------------------------+
+                // | LongWord1                                      |
+                // +-----+--------+---------------------------------+
+                // | 00  |   07   | Unused                          |
+                // | 08  |   24   | Page Address                    |
+                // +-----+--------+---------------------------------+
 
                 if (mmuDebug) printf("(long page descriptor) -> %08x\n", physAddr);
 
-            } else {              // Long early termination descriptor
+            } else {
+
+                // +------------------------------------------------+
+                // | LONG FORMAT EARLY TERMINATION PAGE DESCRIPTOR  |
+                // +-----+--------+---------------------------------+
+                // | Bit | Length | Contents                        |
+                // +-----+--------+---------------------------------+
+                // | LongWord0                                      |
+                // +-----+--------+---------------------------------+
+                // | 00  |   02   | Descriptor Type (DT)            |
+                // | 02  |   01   | Write Protect (WP)              |
+                // | 03  |   01   | Update (U)                      |
+                // | 04  |   01   | Modified (M)                    |
+                // | 05  |   01   | Reserved ( must be 0 )          |
+                // | 06  |   01   | Cache Inhibit (CI)              |
+                // | 07  |   01   | Reserved ( must be 0 )          |
+                // | 08  |   01   | Supervisor (S)                  |
+                // | 09  |   07   | Reserved ( must be 1111110 )    |
+                // | 16  |   15   | Limit                           |
+                // | 31  |   01   | L/U                             |
+                // +-----+--------+---------------------------------+
+                // | LongWord1                                      |
+                // +-----+--------+---------------------------------+
+                // | 00  |   07   | Unused                          |
+                // | 08  |   24   | Page Address                    |
+                // +-----+--------+---------------------------------+
 
                 if (mmuDebug) printf("(long early descriptor) -> %08x\n", physAddr);
             }
@@ -375,6 +451,22 @@ Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
         {
             if (table == 'D') { // Indirect descriptor
 
+                // +------------------------------------------------+
+                // | LONG FORMAT INDIRECT DESCRIPTOR                |
+                // +-----+--------+---------------------------------+
+                // | Bit | Length | Contents                        |
+                // +-----+--------+---------------------------------+
+                // | LongWord0                                      |
+                // +-----+--------+---------------------------------+
+                // | 00  |   02   | Descriptor Type (DT)            |
+                // | 02  |   30   | Unused                          |
+                // +-----+--------+---------------------------------+
+                // | LongWord1                                      |
+                // +-----+--------+---------------------------------+
+                // | 00  |   02   | Unused                          |
+                // | 02  |   30   | Descriptor Address              |
+                // +-----+--------+---------------------------------+
+
                 taddr = descriptor & 0xFFFFFFFC;
 
                 if (mmuDebug) printf("(long indirect descriptor)\n");
@@ -382,6 +474,28 @@ Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
                 physAddr = mmuLookupLong<C, write>(table, taddr, 0, c);
 
             } else {
+
+                // +------------------------------------------------+
+                // | LONG FORMAT TABLE DESCRIPTOR                   |
+                // +-----+--------+---------------------------------+
+                // | Bit | Length | Contents                        |
+                // +-----+--------+---------------------------------+
+                // | LongWord0                                      |
+                // +-----+--------+---------------------------------+
+                // | 00  |   02   | Descriptor Type (DT)            |
+                // | 02  |   01   | Write Protect (WP)              |
+                // | 03  |   01   | Update (U)                      |
+                // | 04  |   04   | Reserved ( must be 0000 )       |
+                // | 08  |   01   | Supervisor (S)                  |
+                // | 09  |   07   | Reserved ( must be 1111110 )    |
+                // | 16  |   15   | Limit                           |
+                // | 31  |   01   | L/U                             |
+                // +-----+--------+---------------------------------+
+                // | LongWord1                                      |
+                // +-----+--------+---------------------------------+
+                // | 00  |   04   | Unused                          |
+                // | 04  |   28   | Table Address                   |
+                // +-----+--------+---------------------------------+
 
                 // Set U bit
                 u64 desc2 = (descriptor >> 32) | (1LL << 3);
