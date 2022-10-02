@@ -157,17 +157,10 @@ Moira::mmuLookup(u32 addr, u8 fc)
 
             if (fcl) {
 
-                u32 desc = readMMU32(taddr + 4 * readFC());
+                u32 offset = readFC();
 
-                if (mmuDebug) printf("     RP -> FCL %d\n", readFC());
-
-                u32 offset = context.nextAddrBits();
-
-                if (desc & 0x1) {
-                    return mmuLookupLong<C, write>('A', desc & 0xFFFFFFF0, offset, context);
-                } else {
-                    return mmuLookupShort<C, write>('A', desc & 0xFFFFFFF0, offset, context);
-                }
+                if (mmuDebug) printf("     RP = %08llx -> FCL %d (Short)\n", rp, offset);
+                return mmuLookupShort<C, write>('A', taddr, offset, context);
             }
 
             u32 offset = context.nextAddrBits();
@@ -181,17 +174,10 @@ Moira::mmuLookup(u32 addr, u8 fc)
 
             if (fcl) {
 
-                u64 desc = readMMU64(taddr + 8 * readFC());
+                u32 offset = readFC();
 
-                if (mmuDebug) printf("     RP -> FCL %d\n", readFC());
-
-                u32 offset = context.nextAddrBits();
-
-                if (desc & 0x10000) {
-                    return mmuLookupLong<C, write>('A', desc & 0xFFFFFFF0, offset, context);
-                } else {
-                    return mmuLookupShort<C, write>('A', desc & 0xFFFFFFF0, offset, context);
-                }
+                if (mmuDebug) printf("     RP = %08llx -> FCL %d (Long)\n", rp, offset);
+                return mmuLookupLong<C, write>('A', taddr, offset, context);
             }
 
             u32 offset = context.nextAddrBits();
