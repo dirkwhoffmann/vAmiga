@@ -91,6 +91,21 @@ Moira::readMMU64(u32 addr)
     return hi << 32 | lo;
 }
 
+u32
+Moira::readMMU32Dasm(u32 addr) const
+{
+    return mem.spypeek32<ACCESSOR_CPU>(addr);
+}
+
+u64
+Moira::readMMU64Dasm(u32 addr) const
+{
+    u64 hi = mem.spypeek32<ACCESSOR_CPU>(addr);
+    u64 lo = mem.spypeek32<ACCESSOR_CPU>(addr + 4);
+
+    return hi << 32 | lo;
+}
+
 u16
 Moira::read16Dasm(u32 addr)
 {
@@ -281,7 +296,7 @@ void
 Moira::mmuDidEnable()
 {
     printf("Enabling MMU\n");
-    cpu.softstopReached(0);
+    // cpu.softstopReached(0);
 }
 
 void
@@ -583,9 +598,29 @@ CPU::_dump(Category category, std::ostream& os) const
         os << util::tab("Page Size");
         os << pageSize(mmu.tc >> 20 & 0xF) << std::endl;
         os << util::tab("Function Code Lookup");
-        os << util::dec(mmu.tc >> 24 & 0xF) << std::endl;
+        os << util::dec(mmu.tc >> 24 & 0x1) << std::endl;
         os << util::tab("Supervisor Root Enable");
-        os << util::dec(mmu.tc >> 25 & 0xF) << std::endl;
+        os << util::dec(mmu.tc >> 25 & 0x1) << std::endl;
+        os << std::endl;
+
+        if (mmu.tc >> 24 & 0x1) {
+            if ((mmu.crp >> 32 & 0x3) == 2) {
+                for (isize i = 0; i < 8; i++) {
+                    u32 addr = u32((mmu.crp & 0xFFFFFFF0) + 4 * i);
+                    u32 desc = readMMU32Dasm(addr);
+                    os << util::tab("Pointer FCL = " + std::to_string(i));
+                    os << util::hex(addr) << " (" << util::hex(desc) << ")" << std::endl;
+                }
+            }
+            if ((mmu.crp >> 32 & 0x3) == 3) {
+                for (isize i = 0; i < 8; i++) {
+                    u32 addr = u32((mmu.crp & 0xFFFFFFF0) + 8 * i);
+                    u64 desc = readMMU64Dasm(addr);
+                    os << util::tab("Pointer " + std::to_string(i));
+                    os << util::hex(addr) << " (" << util::hex(desc) << ")" << std::endl;
+                }
+            }
+        }
     }
     
     if (category == Category::Breakpoints) {

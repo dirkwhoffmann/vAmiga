@@ -120,7 +120,7 @@ static const int DIAG_BOARD      = 0; // Plug in the diagnose board
 //
 
 // General
-static const int XFILES          = 1; // Report paranormal activity
+static const int XFILES          = 0; // Report paranormal activity
 static const int CNF_DEBUG       = 0; // Configuration options
 static const int OBJ_DEBUG       = 0; // Object life-times
 static const int DEF_DEBUG       = 0; // User defaults

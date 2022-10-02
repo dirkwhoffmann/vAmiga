@@ -87,7 +87,7 @@ Moira::translate(u32 addr, u8 fc)
 
     // REMOVE ASAP
     if (write) {
-        softstopReached(0);
+        // softstopReached(0);
     }
 
     return mmuLookup<C, write>(addr, fc);
@@ -108,6 +108,7 @@ Moira::mmuLookup(u32 addr, u8 fc)
 
     // Decode the root pointer
     u32 ptr   = u32(rp >> 0)  & 0xFFFFFFF0;
+    u32 dt    = u32(rp >> 32) & 0x3;
     u32 limit = u32(rp >> 48) & 0x7FFF;
 
     // Evaluate the limit field
@@ -139,7 +140,7 @@ Moira::mmuLookup(u32 addr, u8 fc)
                          context.upperLimit);
 
     // Check the descriptor type
-    switch (rp >> 32 & 0x3) {
+    switch (dt) {
 
         case 1:
 
@@ -331,7 +332,7 @@ Moira::mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &c)
                     throw BusErrorException();
                 }
 
-                if constexpr (write) { if (mmuDebug) { printf("WP Bit = %d\n", descriptor & 0x4); } c.wp |= descriptor & 0x4; }
+                if constexpr (write) { c.wp |= descriptor & 0x4; }
                 c.lowerLimit = 0;
                 c.upperLimit = 0xFFFF;
 
@@ -554,7 +555,7 @@ Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
                     throw BusErrorException();
                 }
 
-                if constexpr (write) { if (mmuDebug) { printf("WP Bit = %llu\n", (descriptor >> 32) & 0x4); } c.wp |= (descriptor >> 32) & 0x4; }
+                if constexpr (write) { c.wp |= (descriptor >> 32) & 0x4; }
                 c.lowerLimit = 0;
                 c.upperLimit = 0xFFFF;
 
