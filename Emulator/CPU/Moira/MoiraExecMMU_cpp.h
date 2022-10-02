@@ -96,7 +96,6 @@ Moira::translate(u32 addr, u8 fc)
 template <Core C, bool write> u32
 Moira::mmuLookup(u32 addr, u8 fc)
 {
-    // MmuContext context { .addr = addr };
     MmuContext context { .addrBits = addr, .indexBits = mmu.tc << 12 };
 
     // REMOVE ASAP
@@ -555,7 +554,6 @@ Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
                     throw BusErrorException();
                 }
 
-                if constexpr (write) { c.wp |= (descriptor >> 32) & 0x4; }
                 c.lowerLimit = 0;
                 c.upperLimit = 0xFFFF;
 
@@ -579,7 +577,480 @@ Moira::mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &c)
     }
 
     // Check for supervisor protection
+    // TODO: THIS CAN PROBABLY BE DELETET. NO S BIT IN SHORT DESCRIPTORS
     if (c.su && !reg.sr.s) throw BusErrorException();
+
+    return physAddr;
+}
+
+template <Core C, bool write> u32
+Moira::mmuDryRun(u32 addr, u8 fc, u32 *mmusr)
+{
+    MmuContext context { .addrBits = addr, .indexBits = mmu.tc << 12 };
+    *mmusr = 0;
+
+    // REMOVE ASAP
+    static int tmp = 0;
+    mmuDebug = tmp++ < 10 || addr == 0xaff180;
+
+    // Start with the SRP or CRP
+    u64 rp = (reg.sr.s && (mmu.tc & 0x02000000)) ? mmu.srp : mmu.crp;
+
+    // +------------------------------------------------+
+    // | ROOT POINTER (CRP/SRP)                         |
+    // +-----+--------+---------------------------------+
+    // | Bit | Length | Contents                        |
+    // +-----+--------+---------------------------------+
+    // | 00  |   04   | reserved ( must be 0 )          |
+    // | 04  |   28   | TableA Address (upper 28 bits)  |
+    // | 32  |   02   | Descriptor Type                 |
+    // | 34  |   14   | reserved ( must be 0 )          |
+    // | 48  |   15   | Limit                           |
+    // | 63  |   01   | L/U                             |
+    // +----+---------+---------------------------------+
+
+    u32 taddr = u32(rp >> 0 ) & 0xFFFFFFF0;
+    u32 dt    = u32(rp >> 32) & 0x3;
+    u32 limit = u32(rp >> 48) & 0x7FFF;
+
+    // Evaluate the limit field
+    if (rp & (1LL << 63)) {
+
+        context.lowerLimit = limit;
+        context.upperLimit = 0XFFFF;
+
+    } else {
+
+        context.lowerLimit = 0;
+        context.upperLimit = limit;
+    }
+
+    // Apply the initial shift (ignore some bits)
+    (void)context.nextAddrBits();
+
+    if (mmuDebug) printf("MMU dry run: %s %x (%d %d %d %d %d) [%x,%x]\n",
+                         write ? "WRITE" : "READ",
+                         addr,
+                         mmu.tc >> 16 & 0xF,
+                         mmu.tc >> 12 & 0xF,
+                         mmu.tc >> 8 & 0xF,
+                         mmu.tc >> 4 & 0xF,
+                         mmu.tc >> 0 & 0xF,
+                         context.lowerLimit,
+                         context.upperLimit);
+
+    // Check the descriptor type
+    switch (dt) {
+
+        case 1:
+        {
+            /* Early termination. No translation table exists, all memory
+             * accesses are calculated by adding the TableA address to the
+             * logical address specified.
+             */
+            if (mmuDebug) printf("Early termination RP -> %x\n", taddr + addr);
+            return taddr + addr;
+        }
+        case 2:
+        {
+            *mmusr = 1;
+            bool fcl = mmu.tc & ( 1 << 24);
+
+            if (fcl) {
+
+                u32 offset = readFC();
+
+                if (mmuDebug) printf("     RP = %08llx -> FCL %d (Short)\n", rp, offset);
+                return mmuDryRunShort<C, write>(taddr, offset, context, mmusr);
+
+            } else {
+
+                u32 offset = context.nextAddrBits();
+
+                if (mmuDebug) printf("     RP = %08llx -> Short table A[%d]\n", rp, offset);
+                return mmuDryRunShort<C, write>(taddr, offset, context, mmusr);
+            }
+        }
+        case 3:
+        {
+            *mmusr = 1;
+            bool fcl = mmu.tc & ( 1 << 24);
+
+            if (fcl) {
+
+                u32 offset = readFC();
+
+                if (mmuDebug) printf("     RP = %08llx -> FCL %d (Long)\n", rp, offset);
+                return mmuDryRunLong<C, write>(taddr, offset, context, mmusr);
+
+            } else {
+
+                u32 offset = context.nextAddrBits();
+
+                if (mmuDebug) printf("     RP = %016llx -> Long table A[%d]\n", rp, offset);
+                return mmuDryRunLong<C, write>(taddr, offset, context, mmusr);
+            }
+        }
+        default:
+
+            // TODO: WHICH EXCEPTION? (MMU CONFIG ERROR? BUS ERROR?)
+            if (mmuDebug) printf("Invalid RP -> Bus error\n");
+            throw BusErrorException();
+    }
+}
+
+template <Core C, bool write> u32
+Moira::mmuDryRunShort(u32 taddr, u32 offset, struct MmuContext &c, u32 *mmusr)
+{
+    u32 physAddr;
+    char table = (*mmusr & 0b111) + 'A' - 1;
+
+    // Check offset
+    if (offset < c.lowerLimit || offset > c.upperLimit) {
+
+        if (mmuDebug) printf("Short table offset violation: %d [%d;%d]\n", offset, c.lowerLimit, c.upperLimit);
+        *mmusr |= MMUSR_LIMIT_VIOLATION;
+        return 0;
+    }
+
+    // Read table entry
+    u32 descriptor = readMMU32(taddr + 4 * offset);
+    if (mmuDebug) printf("     %c[%d] = %08x ", table, offset, descriptor);
+
+    // Extract descriptor type
+    u32 dt = descriptor & 0x3;
+
+    switch (dt) {
+
+        case 0:
+        {
+            // +------------------------------------------------+
+            // | SHORT FORMAT INVALID DESCRIPTOR                |
+            // +-----+--------+---------------------------------+
+            // | Bit | Length | Contents                        |
+            // +-----+--------+---------------------------------+
+            // | 00  |   02   | Descriptor Type (DT)            |
+            // | 02  |   30   | Unused                          |
+            // +-----+--------+---------------------------------+
+
+            if (mmuDebug) printf("Bus error (invalid descriptor)\n");
+            *mmusr |= MMUSR_BUS_ERROR;
+            return 0;
+        }
+        case 1:
+        {
+            // +------------------------------------------------+
+            // | SHORT FORMAT EARLY TERM. OR PAGE DESCRIPTOR    |
+            // +-----+--------+---------------------------------+
+            // | Bit | Length | Contents                        |
+            // +-----+--------+---------------------------------+
+            // | 00  |   02   | Descriptor Type (DT)            |
+            // | 02  |   01   | Write Protect (WP)              |
+            // | 03  |   01   | Update (U)                      |
+            // | 04  |   01   | Modified (M)                    |
+            // | 05  |   01   | Reserved ( must be 0 )          |
+            // | 06  |   01   | Cache Inhibit (CI)              |
+            // | 07  |   01   | Reserved ( must be 0 )          |
+            // | 08  |   24   | Page Address                    |
+            // +-----+--------+---------------------------------+
+
+            // Record WP and M
+            if  (descriptor & (1 << 2)) *mmusr |= MMUSR_WRITE_PROTECTED;
+            if  (descriptor & (1 << 4)) *mmusr |= MMUSR_MODIFIED;
+
+            physAddr = (descriptor & 0xFFFFFF00) + c.remainingAddrBits();
+
+            if (table == 'D') {
+
+                if (mmuDebug) printf("(short page descriptor) -> %08x\n", physAddr);
+
+            } else {
+
+                if (mmuDebug) printf("(short early descriptor) -> %08x\n", physAddr);
+            }
+            break;
+        }
+        default:
+        {
+            if (table == 'D') {
+
+                // +------------------------------------------------+
+                // | SHORT FORMAT INDIRECT DESCRIPTOR               |
+                // +-----+--------+---------------------------------+
+                // | Bit | Length | Contents                        |
+                // +-----+--------+---------------------------------+
+                // | 00  |   02   | Descriptor Type (DT)            |
+                // | 02  |   30   | Descriptor Address              |
+                // +-----+--------+---------------------------------+
+
+                taddr = descriptor & 0xFFFFFFFC;
+
+                if (mmuDebug) printf("(short indirect descriptor)\n");
+
+                // Increment 'number of levels' field
+                *mmusr += 1;
+
+                physAddr = mmuDryRunShort<C, write>(taddr, 0, c, mmusr);
+
+            } else {
+
+                // +------------------------------------------------+
+                // | SHORT FORMAT TABLE DESCRIPTOR                  |
+                // +-----+--------+---------------------------------+
+                // | Bit | Length | Contents                        |
+                // +-----+--------+---------------------------------+
+                // | 00  |   02   | Descriptor Type (DT)            |
+                // | 02  |   01   | Write Protect (WP)              |
+                // | 03  |   01   | Update (U)                      |
+                // | 04  |   28   | Table Address                   |
+                // +-----+--------+---------------------------------+
+
+                // Record WP
+                if  (descriptor & (1 << 2)) *mmusr |= MMUSR_WRITE_PROTECTED;
+
+                u32 offset = c.nextAddrBits();
+
+                taddr = descriptor & 0xFFFFFFF0;
+
+                if (mmuDebug) printf("(short table descriptor) -> %c[%d]\n", table, offset);
+
+                // Check offset range
+                if (offset < c.lowerLimit || offset > c.upperLimit) {
+
+                    if (mmuDebug) printf("     Offset violation %d [%d;%d]\n",
+                                         offset, c.lowerLimit, c.upperLimit);
+                    *mmusr |= MMUSR_LIMIT_VIOLATION;
+                    return 0;
+                }
+
+                c.lowerLimit = 0;
+                c.upperLimit = 0xFFFF;
+
+                // Increment 'number of levels' field
+                *mmusr += 1;
+
+                if (dt == 2) {
+                    physAddr = mmuDryRunShort<C, write>(taddr, offset, c, mmusr);
+                } else {
+                    physAddr = mmuDryRunLong<C, write>(taddr, offset, c, mmusr);
+                }
+            }
+            break;
+        }
+    }
+
+    return physAddr;
+}
+
+template <Core C, bool write> u32
+Moira::mmuDryRunLong(u32 taddr, u32 offset, struct MmuContext &c, u32 *mmusr)
+{
+    u32 physAddr;
+    char table = (*mmusr & 0b111) + 'A' - 1;
+
+    // Check offset
+    if (offset < c.lowerLimit || offset > c.upperLimit) {
+
+        printf("Long table offset violation: %d [%d;%d]\n", offset, c.lowerLimit, c.upperLimit);
+
+        throw BusErrorException();
+    }
+
+    // Read table entry
+    u64 descriptor = readMMU64(taddr + 8 * offset);
+    if (mmuDebug) printf("     %c[%d] = %016llx ", table, offset, descriptor);
+
+    // Extract descriptor type
+    u32 dt = u32(descriptor >> 32) & 0x3;
+
+    // Evaluate the limit field
+    if (descriptor & (1LL << 63)) {
+        c.lowerLimit = u32(descriptor >> 48) & 0x7FFF;
+        c.upperLimit = 0xFFFF;
+    } else {
+        c.lowerLimit = 0;
+        c.upperLimit = u32(descriptor >> 48) & 0x7FFF;
+    }
+
+    switch (dt) {
+
+        case 0:
+        {
+            // +------------------------------------------------+
+            // | LONG FORMAT INVALID DESCRIPTOR                 |
+            // +-----+--------+---------------------------------+
+            // | Bit | Length | Contents                        |
+            // +-----+--------+---------------------------------+
+            // | LongWord0                                      |
+            // +-----+--------+---------------------------------+
+            // | 00  |   02   | Descriptor Type (DT)            |
+            // | 02  |   30   | Unused                          |
+            // +-----+--------+---------------------------------+
+            // | LongWord1                                      |
+            // +-----+--------+---------------------------------+
+            // | 00  |   32   | Unused                          |
+            // +-----+--------+---------------------------------+
+
+            if (mmuDebug) printf("Bus error (invalid descriptor)\n");
+            *mmusr |= MMUSR_BUS_ERROR;
+            return 0;
+        }
+        case 1:
+        {
+            // Record WP, M and S
+            if  (descriptor & (1 << 2)) *mmusr |= MMUSR_WRITE_PROTECTED;
+            if  (descriptor & (1 << 4)) *mmusr |= MMUSR_MODIFIED;
+            if  (descriptor & (1 << 8)) *mmusr |= MMUSR_SUPERVISOR_ONLY;
+
+            physAddr = (descriptor & 0xFFFFFF00) + c.remainingAddrBits();
+
+            if (table == 'D') {
+
+                // +------------------------------------------------+
+                // | LONG FORMAT PAGE DESCRIPTOR                    |
+                // +-----+--------+---------------------------------+
+                // | Bit | Length | Contents                        |
+                // +-----+--------+---------------------------------+
+                // | LongWord0                                      |
+                // +-----+--------+---------------------------------+
+                // | 00  |   02   | Descriptor Type (DT)            |
+                // | 02  |   01   | Write Protect (WP)              |
+                // | 03  |   01   | Update (U)                      |
+                // | 04  |   01   | Modified (M)                    |
+                // | 05  |   01   | Reserved ( must be 0 )          |
+                // | 06  |   01   | Cache Inhibit (CI)              |
+                // | 07  |   01   | Reserved ( must be 0 )          |
+                // | 08  |   01   | Supervisor (S)                  |
+                // | 09  |   07   | Reserved ( must be 1111110 )    |
+                // | 16  |   16   | Unused                          |
+                // +-----+--------+---------------------------------+
+                // | LongWord1                                      |
+                // +-----+--------+---------------------------------+
+                // | 00  |   07   | Unused                          |
+                // | 08  |   24   | Page Address                    |
+                // +-----+--------+---------------------------------+
+
+                if (mmuDebug) printf("(long page descriptor) -> %08x\n", physAddr);
+
+            } else {
+
+                // +------------------------------------------------+
+                // | LONG FORMAT EARLY TERMINATION PAGE DESCRIPTOR  |
+                // +-----+--------+---------------------------------+
+                // | Bit | Length | Contents                        |
+                // +-----+--------+---------------------------------+
+                // | LongWord0                                      |
+                // +-----+--------+---------------------------------+
+                // | 00  |   02   | Descriptor Type (DT)            |
+                // | 02  |   01   | Write Protect (WP)              |
+                // | 03  |   01   | Update (U)                      |
+                // | 04  |   01   | Modified (M)                    |
+                // | 05  |   01   | Reserved ( must be 0 )          |
+                // | 06  |   01   | Cache Inhibit (CI)              |
+                // | 07  |   01   | Reserved ( must be 0 )          |
+                // | 08  |   01   | Supervisor (S)                  |
+                // | 09  |   07   | Reserved ( must be 1111110 )    |
+                // | 16  |   15   | Limit                           |
+                // | 31  |   01   | L/U                             |
+                // +-----+--------+---------------------------------+
+                // | LongWord1                                      |
+                // +-----+--------+---------------------------------+
+                // | 00  |   07   | Unused                          |
+                // | 08  |   24   | Page Address                    |
+                // +-----+--------+---------------------------------+
+
+                if (mmuDebug) printf("(long early descriptor) -> %08x\n", physAddr);
+            }
+            break;
+        }
+        default:
+        {
+            if (table == 'D') {
+
+                // +------------------------------------------------+
+                // | LONG FORMAT INDIRECT DESCRIPTOR                |
+                // +-----+--------+---------------------------------+
+                // | Bit | Length | Contents                        |
+                // +-----+--------+---------------------------------+
+                // | LongWord0                                      |
+                // +-----+--------+---------------------------------+
+                // | 00  |   02   | Descriptor Type (DT)            |
+                // | 02  |   30   | Unused                          |
+                // +-----+--------+---------------------------------+
+                // | LongWord1                                      |
+                // +-----+--------+---------------------------------+
+                // | 00  |   02   | Unused                          |
+                // | 02  |   30   | Descriptor Address              |
+                // +-----+--------+---------------------------------+
+
+                taddr = descriptor & 0xFFFFFFFC;
+
+                if (mmuDebug) printf("(long indirect descriptor)\n");
+
+                // Increment 'number of levels' field
+                *mmusr += 1;
+
+                physAddr = mmuDryRunLong<C, write>(taddr, 0, c, mmusr);
+
+            } else {
+
+                // +------------------------------------------------+
+                // | LONG FORMAT TABLE DESCRIPTOR                   |
+                // +-----+--------+---------------------------------+
+                // | Bit | Length | Contents                        |
+                // +-----+--------+---------------------------------+
+                // | LongWord0                                      |
+                // +-----+--------+---------------------------------+
+                // | 00  |   02   | Descriptor Type (DT)            |
+                // | 02  |   01   | Write Protect (WP)              |
+                // | 03  |   01   | Update (U)                      |
+                // | 04  |   04   | Reserved ( must be 0000 )       |
+                // | 08  |   01   | Supervisor (S)                  |
+                // | 09  |   07   | Reserved ( must be 1111110 )    |
+                // | 16  |   15   | Limit                           |
+                // | 31  |   01   | L/U                             |
+                // +-----+--------+---------------------------------+
+                // | LongWord1                                      |
+                // +-----+--------+---------------------------------+
+                // | 00  |   04   | Unused                          |
+                // | 04  |   28   | Table Address                   |
+                // +-----+--------+---------------------------------+
+
+                // Record WP and S
+                if  (descriptor & (1 << 2)) *mmusr |= MMUSR_WRITE_PROTECTED;
+                if  (descriptor & (1 << 8)) *mmusr |= MMUSR_SUPERVISOR_ONLY;
+
+                u32 offset = c.nextAddrBits();
+
+                taddr = descriptor & 0xFFFFFFF0;
+
+                if (mmuDebug) printf("(long table descriptor) -> %c[%d]\n", table, offset);
+
+                // Check offset range
+                if (offset < c.lowerLimit || offset > c.upperLimit) {
+
+                    if (mmuDebug) printf("     Offset violation %d [%d;%d]\n",
+                                         offset, c.lowerLimit, c.upperLimit);
+                    *mmusr |= MMUSR_LIMIT_VIOLATION;
+                    return 0;
+                }
+
+                if constexpr (write) { c.wp |= (descriptor >> 32) & 0x4; }
+                c.lowerLimit = 0;
+                c.upperLimit = 0xFFFF;
+
+                // Increment 'number of levels' field
+                *mmusr += 1;
+
+                if (dt == 2) {
+                    physAddr = mmuDryRunShort<C, write>(taddr, offset, c);
+                } else {
+                    physAddr = mmuLookupLong<C, write>(taddr, offset, c);
+                }
+            }
+            break;
+        }
+    }
 
     return physAddr;
 }
