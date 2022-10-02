@@ -106,8 +106,20 @@ Moira::mmuLookup(u32 addr, u8 fc)
     // Start with the SRP or CRP
     u64 rp = (reg.sr.s && (mmu.tc & 0x02000000)) ? mmu.srp : mmu.crp;
 
-    // Decode the root pointer
-    u32 ptr   = u32(rp >> 0)  & 0xFFFFFFF0;
+    // +------------------------------------------------+
+    // | ROOT POINTER (CRP/SRP)                         |
+    // +-----+--------+---------------------------------+
+    // | Bit | Length | Contents                        |
+    // +-----+--------+---------------------------------+
+    // | 00  |   04   | reserved ( must be 0 )          |
+    // | 04  |   28   | TableA Address (upper 28 bits)  |
+    // | 32  |   02   | Descriptor Type                 |
+    // | 34  |   14   | reserved ( must be 0 )          |
+    // | 48  |   15   | Limit                           |
+    // | 63  |   01   | L/U                             |
+    // +----+---------+---------------------------------+
+
+    u32 taddr = u32(rp >> 0 ) & 0xFFFFFFF0;
     u32 dt    = u32(rp >> 32) & 0x3;
     u32 limit = u32(rp >> 48) & 0x7FFF;
 
@@ -126,8 +138,6 @@ Moira::mmuLookup(u32 addr, u8 fc)
     // Apply the initial shift (ignore some bits)
     (void)context.nextAddrBits();
 
-    bool fcl = mmu.tc & ( 1 << 24);
-
     if (mmuDebug) printf("MMU: %s %x (%d %d %d %d %d) [%x,%x]\n",
                          write ? "WRITE" : "READ",
                          addr,
@@ -143,17 +153,17 @@ Moira::mmuLookup(u32 addr, u8 fc)
     switch (dt) {
 
         case 1:
-
+        {
             /* Early termination. No translation table exists, all memory
              * accesses are calculated by adding the TableA address to the
              * logical address specified.
              */
-            if (mmuDebug) printf("Early termination RP -> %x\n", ptr + addr);
-            return ptr + addr;
-
+            if (mmuDebug) printf("Early termination RP -> %x\n", taddr + addr);
+            return taddr + addr;
+        }
         case 2:
         {
-            u32 taddr = rp & 0xFFFFFFF0;
+            bool fcl = mmu.tc & ( 1 << 24);
 
             if (fcl) {
 
@@ -161,16 +171,18 @@ Moira::mmuLookup(u32 addr, u8 fc)
 
                 if (mmuDebug) printf("     RP = %08llx -> FCL %d (Short)\n", rp, offset);
                 return mmuLookupShort<C, write>('A', taddr, offset, context);
+
+            } else {
+
+                u32 offset = context.nextAddrBits();
+
+                if (mmuDebug) printf("     RP = %08llx -> Short table A[%d]\n", rp, offset);
+                return mmuLookupShort<C, write>('A', taddr, offset, context);
             }
-
-            u32 offset = context.nextAddrBits();
-
-            if (mmuDebug) printf("     RP = %08llx -> Short table A[%d]\n", rp, offset);
-            return mmuLookupShort<C, write>('A', taddr, offset, context);
         }
         case 3:
         {
-            u32 taddr = rp & 0xFFFFFFF0;
+            bool fcl = mmu.tc & ( 1 << 24);
 
             if (fcl) {
 
@@ -178,12 +190,14 @@ Moira::mmuLookup(u32 addr, u8 fc)
 
                 if (mmuDebug) printf("     RP = %08llx -> FCL %d (Long)\n", rp, offset);
                 return mmuLookupLong<C, write>('A', taddr, offset, context);
+
+            } else {
+
+                u32 offset = context.nextAddrBits();
+
+                if (mmuDebug) printf("     RP = %016llx -> Long table A[%d]\n", rp, offset);
+                return mmuLookupLong<C, write>('A', taddr, offset, context);
             }
-
-            u32 offset = context.nextAddrBits();
-
-            if (mmuDebug) printf("     RP = %016llx -> Long table A[%d]\n", rp, offset);
-            return mmuLookupLong<C, write>('A', taddr, offset, context);
         }
         default:
 
@@ -1033,10 +1047,14 @@ Moira::execPTest(u16 opcode)
     }
 
     (void)readI<C, Word>();
-        
-    u32 ea = 0; u32 data;
-    readOp<C68020, M, Long>(rg, &ea, &data);
-    
+
+    u32 ea = 0;
+
+    // Compute effective address
+    ea = computeEA<C68020, M, Long>(rg);
+
+    printf("EA = %x\n", ea);
+
     u8 fcode;
     if (fc == 0) { fcode = (u8)reg.sfc; }
     else if (fc == 1) { fcode = (u8)reg.dfc; }

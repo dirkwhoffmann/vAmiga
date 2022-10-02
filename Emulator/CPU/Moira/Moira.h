@@ -553,6 +553,11 @@ private:
     template <Core C, bool write> u32 mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &con);
     template <Core C, bool write> u32 mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &con);
 
+    // Looks up a physical address from the MMU table without causing side effects
+    template <Core C, bool write> u32 mmuDryRun(u32 addr, u8 fc, u32 *mmusr);
+    template <Core C, bool write> u32 mmuDryRunShort(u32 taddr, u32 offset, struct MmuContext &con, u32 *mmusr);
+    template <Core C, bool write> u32 mmuDryRunLong(u32 taddr, u32 offset, struct MmuContext &con, u32 *mmusr);
+
     // Experimental
     bool testTT(u32 ttx, u32 addr, u8 fc, bool rw);
 

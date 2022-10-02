@@ -570,7 +570,7 @@ CPU::_dump(Category category, std::ostream& os) const
         };
         
         os << util::tab("Enabled");
-        os << util::bol(mmu.tc & 0x8000) << std::endl;
+        os << util::bol(mmu.tc >> 31 & 0x1) << std::endl;
         os << std::endl;
         os << util::tab("CRP");
         os << util::hex(mmu.crp) << std::endl;
@@ -585,6 +585,8 @@ CPU::_dump(Category category, std::ostream& os) const
         os << util::tab("MMUSR");
         os << util::hex(mmu.mmusr) << std::endl;
         os << std::endl;
+        os << util::tab("Initial shift");
+        os << util::dec(mmu.tc >> 16 & 0xF) << std::endl;
         os << util::tab("TIA");
         os << util::dec(mmu.tc >> 12 & 0xF) << std::endl;
         os << util::tab("TIB");
@@ -593,10 +595,9 @@ CPU::_dump(Category category, std::ostream& os) const
         os << util::dec(mmu.tc >> 4 & 0xF) << std::endl;
         os << util::tab("TID");
         os << util::dec(mmu.tc >> 0 & 0xF) << std::endl;
-        os << util::tab("Initial shift");
-        os << util::dec(mmu.tc >> 16 & 0xF) << std::endl;
         os << util::tab("Page Size");
-        os << pageSize(mmu.tc >> 20 & 0xF) << std::endl;
+        os << util::dec(mmu.tc >> 20 & 0xF);
+        os << " (" << pageSize(mmu.tc >> 20 & 0xF) << ")" << std::endl;
         os << util::tab("Function Code Lookup");
         os << util::dec(mmu.tc >> 24 & 0x1) << std::endl;
         os << util::tab("Supervisor Root Enable");
