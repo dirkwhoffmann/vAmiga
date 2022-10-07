@@ -5,7 +5,8 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
-bool mmuDebug;
+bool mmuDebug = false;
+long mmuCnt = 0;
 
 struct MmuContext {
 
@@ -49,6 +50,8 @@ struct MmuContext {
 void
 Moira::setTC(u32 value)
 {
+    debug(MMU_DEBUG, "setTC(%x)\n", value);
+
     bool oldE = mmu.tc & (1 << 31);
     mmu.tc = value;
     bool newE = mmu.tc & (1 << 31);
@@ -72,6 +75,8 @@ Moira::setTT1(u64 value)
 template <Core C, bool write> u32
 Moira::translate(u32 addr, u8 fc)
 {
+    static int translations = 0;
+
     // Only proceed if a MMU capable core is present
     if constexpr (C == C68000 || C == C68010) return addr;
     
@@ -90,7 +95,14 @@ Moira::translate(u32 addr, u8 fc)
         // softstopReached(0);
     }
 
-    return mmuLookup<C, write>(addr, fc);
+    u32 result = mmuLookup<C, write>(addr, fc);
+/*
+    if (result != addr) {
+        printf("%d translations completed\n", translations);
+        assert(result == addr);
+    }
+*/
+    return result;
 }
 
 template <Core C, bool write> u32
@@ -100,7 +112,8 @@ Moira::mmuLookup(u32 addr, u8 fc)
 
     // REMOVE ASAP
     static int tmp = 0;
-    mmuDebug = tmp++ < 10 || addr == 0xaff180;
+    mmuDebug = tmp++ < 10 || (mmuCnt > 1632220 && mmuCnt < 1632228); //   addr == 0xaff180;
+    mmuCnt++;
 
     // Start with the SRP or CRP
     u64 rp = (reg.sr.s && (mmu.tc & 0x02000000)) ? mmu.srp : mmu.crp;
@@ -1503,6 +1516,8 @@ Moira::execPMove(u16 opcode, RegName mmuReg, bool rw)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPTest(u16 opcode)
 {
+    debug(MMU_DEBUG, "execPTest(%x)\n", opcode);
+
     AVAILABILITY(C68020)
     
     u16 ext  = queue.irc;

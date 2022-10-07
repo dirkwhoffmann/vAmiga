@@ -213,9 +213,8 @@ Moira::execute()
         try {
             (this->*exec[queue.ird])(queue.ird);
         } catch (const BusErrorException &exc) {
-            printf("(1) BusErrorException\n");
+            printf("Fast path: BusErrorException (MMU count = %ld)\n", mmuCnt);
             execException(EXC_BUS_ERROR);
-            printf("execException called\n");
         } catch (const AddressErrorException &exc) {
             printf("AddressErrorException\n");
         } catch (...) {
@@ -291,7 +290,8 @@ Moira::execute()
         try {
             (this->*exec[queue.ird])(queue.ird);
         } catch (const BusErrorException &) {
-            printf("(2) BusErrorException\n");
+            printf("Slow path: BusErrorException (MMU count = %ld)\n", mmuCnt);
+            // assert(false);
             execException(EXC_BUS_ERROR);
         } catch (...) { }
 
