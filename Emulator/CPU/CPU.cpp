@@ -552,76 +552,7 @@ CPU::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Mmu) {
 
-        auto pageSize = [&](isize ps) {
-            
-            switch (ps) {
-                    
-                case 0b1000: return "256 bytes";
-                case 0b1001: return "512 bytes";
-                case 0b1010: return "1KB";
-                case 0b1011: return "4KB";
-                case 0b1100: return "8KB";
-                case 0b1101: return "16KB";
-                case 0b1111: return "32KB";
-                
-                default:
-                    return "???";
-            }
-        };
-        
-        os << util::tab("Enabled");
-        os << util::bol(mmu.tc >> 31 & 0x1) << std::endl;
-        os << std::endl;
-        os << util::tab("CRP");
-        os << util::hex(mmu.crp) << std::endl;
-        os << util::tab("SRP");
-        os << util::hex(mmu.srp) << std::endl;
-        os << util::tab("TC");
-        os << util::hex(mmu.tc) << std::endl;
-        os << util::tab("TT0");
-        os << util::hex(mmu.tt0) << std::endl;
-        os << util::tab("TT1");
-        os << util::hex(mmu.tt1) << std::endl;
-        os << util::tab("MMUSR");
-        os << util::hex(mmu.mmusr) << std::endl;
-        os << std::endl;
-        os << util::tab("Initial shift");
-        os << util::dec(mmu.tc >> 16 & 0xF) << std::endl;
-        os << util::tab("TIA");
-        os << util::dec(mmu.tc >> 12 & 0xF) << std::endl;
-        os << util::tab("TIB");
-        os << util::dec(mmu.tc >> 8 & 0xF) << std::endl;
-        os << util::tab("TIC");
-        os << util::dec(mmu.tc >> 4 & 0xF) << std::endl;
-        os << util::tab("TID");
-        os << util::dec(mmu.tc >> 0 & 0xF) << std::endl;
-        os << util::tab("Page Size");
-        os << util::dec(mmu.tc >> 20 & 0xF);
-        os << " (" << pageSize(mmu.tc >> 20 & 0xF) << ")" << std::endl;
-        os << util::tab("Function Code Lookup");
-        os << util::dec(mmu.tc >> 24 & 0x1) << std::endl;
-        os << util::tab("Supervisor Root Enable");
-        os << util::dec(mmu.tc >> 25 & 0x1) << std::endl;
-        os << std::endl;
-
-        if (mmu.tc >> 24 & 0x1) {
-            if ((mmu.crp >> 32 & 0x3) == 2) {
-                for (isize i = 0; i < 8; i++) {
-                    u32 addr = u32((mmu.crp & 0xFFFFFFF0) + 4 * i);
-                    u32 desc = readMMU32Dasm(addr);
-                    os << util::tab("Pointer FCL = " + std::to_string(i));
-                    os << util::hex(addr) << " (" << util::hex(desc) << ")" << std::endl;
-                }
-            }
-            if ((mmu.crp >> 32 & 0x3) == 3) {
-                for (isize i = 0; i < 8; i++) {
-                    u32 addr = u32((mmu.crp & 0xFFFFFFF0) + 8 * i);
-                    u64 desc = readMMU64Dasm(addr);
-                    os << util::tab("Pointer " + std::to_string(i));
-                    os << util::hex(addr) << " (" << util::hex(desc) << ")" << std::endl;
-                }
-            }
-        }
+        os << "No MMU present\n";
     }
     
     if (category == Category::Breakpoints) {

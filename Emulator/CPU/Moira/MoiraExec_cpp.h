@@ -4425,11 +4425,6 @@ Moira::execReset(u16 opcode)
     AVAILABILITY(C68000)
 
     SUPERVISOR_MODE_ONLY
-
-    // Disable the MMU
-    mmu.tc  &= ~(1 << 31);
-    mmu.tt0 &= ~(1 << 15);
-    mmu.tt1 &= ~(1 << 15);
     
     SYNC_68000(128);
     SYNC_68010(126);

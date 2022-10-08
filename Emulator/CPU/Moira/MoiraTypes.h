@@ -411,30 +411,6 @@ constexpr u64 IMPL_DEC      (1 << 11);  // Omit 2 cycle delay in -(An) mode
 
 
 //
-// MMU types
-//
-
-struct MMU {
-
-    u64 crp;                // Cpu Root Pointer
-    u64 srp;                // Supervisor Root Pointer
-    u32 tc;                 // Translation Control Register
-    u32 tt0;                // Transparent Translation Register 0
-    u32 tt1;                // Transparent Translation Register 1
-    u32 mmusr;              // MMU status register
-};
-
-static constexpr u32 MMUSR_BUS_ERROR          = 1 << 15;
-static constexpr u32 MMUSR_LIMIT_VIOLATION    = 1 << 14;
-static constexpr u32 MMUSR_SUPERVISOR_ONLY    = 1 << 13;
-static constexpr u32 MMUSR_WRITE_PROTECTED    = 1 << 11;
-static constexpr u32 MMUSR_INVALID            = 1 << 10;
-static constexpr u32 MMUSR_MODIFIED           = 1 << 9;
-static constexpr u32 MMUSR_TRANSPARENT_ACCESS = 1 << 6;
-static constexpr u32 MMUSR_NUMBER_OF_LEVELS   = 0b111;
-
-
-//
 // FPU types
 //
 

@@ -420,9 +420,6 @@ Moira::readMS(u32 addr)
     u8 fc = MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG;
     setFC(fc);
 
-    // Derive physical address
-    addr = translate<C, false>(addr, fc);
-
     // Check if a watchpoint has been reached
     if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
         watchpointReached(addr);
@@ -481,9 +478,6 @@ Moira::writeMS(u32 addr, u32 val)
     // Update function code pins
     u8 fc = MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG;
     setFC(fc);
-
-    // Derive physical address
-    addr = translate<C, true>(addr, fc);
 
     // Check if a watchpoint is being accessed
     if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {

@@ -169,7 +169,6 @@ Moira::reset()
     fcl = 0;
     fcSource = 0;
 
-    mmu = { };
     fpu = { };
 
     SYNC(16);
@@ -212,13 +211,11 @@ Moira::execute()
         reg.pc += 2;
         try {
             (this->*exec[queue.ird])(queue.ird);
-        } catch (const BusErrorException &exc) {
-            printf("Fast path: BusErrorException (MMU count = %ld)\n", mmuCnt);
+        } catch (const BusErrorException &) {
+            // TODO: TRIGGER DOUBLE FAULT IF ANOTHER EXCEPTION OCCURS
             execException(EXC_BUS_ERROR);
-        } catch (const AddressErrorException &exc) {
-            printf("AddressErrorException\n");
-        } catch (...) {
-            printf("Other exception\n");
+        } catch (const AddressErrorException &) {
+            // TODO: TRIGGER DOUBLE FAULT IF ANOTHER EXCEPTION OCCURS
         }
         
         assert(reg.pc0 == reg.pc);
@@ -290,9 +287,10 @@ Moira::execute()
         try {
             (this->*exec[queue.ird])(queue.ird);
         } catch (const BusErrorException &) {
-            printf("Slow path: BusErrorException (MMU count = %ld)\n", mmuCnt);
-            // assert(false);
+            // TODO: TRIGGER DOUBLE FAULT IF ANOTHER EXCEPTION OCCURS
             execException(EXC_BUS_ERROR);
+        } catch (const AddressErrorException &) {
+            // TODO: TRIGGER DOUBLE FAULT IF ANOTHER EXCEPTION OCCURS
         } catch (...) { }
 
         assert(reg.pc0 == reg.pc);

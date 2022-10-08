@@ -113,9 +113,6 @@ protected:
     // The prefetch queue
     PrefetchQueue queue;
 
-    // The memory management unit
-    MMU mmu;
-
     // The floating point unit
     FPU fpu;
     
@@ -532,35 +529,6 @@ private:
     
     // Selects the IRQ vector to branch to
     u16 getIrqVector(u8 level) const;
-
-
-    //
-    // Running the MMU
-    //
-
-private:
-
-    // Sets a MMU register
-    void setTC(u32 value);
-    void setTT0(u64 value);
-    void setTT1(u64 value);
-
-    // Translates a logical address to a physical address
-    template <Core C, bool write> u32 translate(u32 addr, u8 fc);
-
-    // Looks up a physical address from the MMU table
-    template <Core C, bool write> u32 mmuLookup(u32 addr, u8 fc);
-    template <Core C, bool write> u32 mmuLookupShort(char table, u32 taddr, u32 offset, struct MmuContext &con);
-    template <Core C, bool write> u32 mmuLookupLong(char table, u32 taddr, u32 offset, struct MmuContext &con);
-
-    // Looks up a physical address from the MMU table without causing side effects
-    template <Core C, bool write> u32 mmuDryRun(u32 addr, u8 fc, u32 *mmusr);
-    template <Core C, bool write> u32 mmuDryRunShort(u32 taddr, u32 offset, struct MmuContext &con, u32 *mmusr);
-    template <Core C, bool write> u32 mmuDryRunLong(u32 taddr, u32 offset, struct MmuContext &con, u32 *mmusr);
-
-    // Experimental
-    bool testTT(u32 ttx, u32 addr, u8 fc, bool rw);
-
 
 private:
 
