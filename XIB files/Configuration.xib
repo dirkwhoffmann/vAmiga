@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21225" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21225"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -556,11 +556,11 @@ DQ
                                                         <menuItem title="68010" tag="1" id="U9p-JK-c4z"/>
                                                         <menuItem title="68EC020" tag="2" id="MEV-jP-nPJ"/>
                                                         <menuItem title="68020" tag="3" id="TvX-YB-qqk"/>
-                                                        <menuItem title="68EC030" tag="4" id="M9J-fS-CSl"/>
-                                                        <menuItem title="68030" tag="5" id="rTV-fK-bQq"/>
-                                                        <menuItem title="68EC040" tag="6" id="jq2-Lg-Lel"/>
-                                                        <menuItem title="68LC040" tag="7" id="Elx-Zb-kG1"/>
-                                                        <menuItem title="68040" tag="8" id="6yp-DM-qR3"/>
+                                                        <menuItem title="68EC030" tag="4" hidden="YES" id="M9J-fS-CSl"/>
+                                                        <menuItem title="68030" tag="5" hidden="YES" id="rTV-fK-bQq"/>
+                                                        <menuItem title="68EC040" tag="6" hidden="YES" id="jq2-Lg-Lel"/>
+                                                        <menuItem title="68LC040" tag="7" hidden="YES" id="Elx-Zb-kG1"/>
+                                                        <menuItem title="68040" tag="8" hidden="YES" id="6yp-DM-qR3"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
