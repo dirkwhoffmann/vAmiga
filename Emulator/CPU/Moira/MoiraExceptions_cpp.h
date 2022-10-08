@@ -461,21 +461,16 @@ Moira::execInterrupt(u8 level)
             break;
             
         case C68010:
-            
-            SYNC(6);
+
+            SYNC(12);
             reg.sp -= 8;
-            writeMS<C, MEM_DATA, Word>(reg.sp + 4, reg.pc & 0xFFFF);
-            
-            SYNC(4);
             queue.ird = getIrqVector(level);
-            
-            SYNC(4);
+            writeMS<C, MEM_DATA, Word>(reg.sp + 4, reg.pc & 0xFFFF);
             writeMS<C, MEM_DATA, Word>(reg.sp + 0, status);
             writeMS<C, MEM_DATA, Word>(reg.sp + 2, reg.pc >> 16);
-            
             writeMS<C, MEM_DATA, Word>(reg.sp + 6, 4 * queue.ird);
             break;
-            
+
         case C68020:
             
             queue.ird = getIrqVector(level);

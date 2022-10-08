@@ -99,9 +99,14 @@ Moira::dasmIllegal(StrWriter &str, u32 &addr, u16 op)
             str << ".short " << Int{op};
             break;
 
-        default:
+        case DASM_MUSASHI:
 
             str << "dc.w " << UInt16{op} << "; ILLEGAL";
+            break;
+
+        default:
+
+            str << "dc.w " << tab << UInt16{op} << "; ILLEGAL";
             break;
     }
 }

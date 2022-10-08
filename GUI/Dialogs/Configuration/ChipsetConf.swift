@@ -35,6 +35,7 @@ extension ConfigurationController {
             csCpuInfo1.stringValue = "Motorola MC68020"
             csCpuInfo2.stringValue = ""
 
+            /*
         case ._68EC030:
             csCpuInfo1.stringValue = "Motorola 68EC030"
             csCpuInfo2.stringValue = ""
@@ -54,7 +55,8 @@ extension ConfigurationController {
         case ._68040:
             csCpuInfo1.stringValue = "Motorola 68040"
             csCpuInfo2.stringValue = ""
-
+             */
+            
         default:
             csCpuInfo1.stringValue = "Invalid"
             csCpuInfo2.stringValue = ""
