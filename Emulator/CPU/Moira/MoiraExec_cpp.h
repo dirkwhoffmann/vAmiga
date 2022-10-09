@@ -602,15 +602,15 @@ Moira::execAndEaRg(u16 opcode)
     readOp<C, M, S, STD_AE_FRAME>(src, &ea, &data);
 
     u32 result = logic<C, I, S>(data, readD<S>(dst));
-    looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+    writeD<S>(dst, result);
 
     if constexpr (C == C68000) {
+        looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
         if constexpr (S == Long) SYNC(isRegMode(M) || isImmMode(M) ? 4 : 2);
     } else {
         if constexpr (S == Long) SYNC(2);
+        looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
     }
-
-    writeD<S>(dst, result);
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
@@ -732,14 +732,20 @@ Moira::execAndiccr(u16 opcode)
     u32 src = readI<C, S>();
     u8  dst = getCCR();
 
-    SYNC_68000(8);
-    SYNC_68010(4);
+    setCCR(u8(logic<C, I, S>(src, dst)));
 
-    u32 result = logic<C, I, S>(src, dst);
-    setCCR((u8)result);
+    if constexpr (C == C68000) {
 
-    (void)readMS<C, MEM_DATA, Word>(reg.pc + 2);
-    prefetch<C, POLLIPL>();
+        SYNC_68000(8);
+        (void)readMS<C, MEM_DATA, Word>(reg.pc + 2);
+        prefetch<C, POLLIPL>();
+
+    } else {
+
+        SYNC_68010(4);
+        prefetch<C, POLLIPL>();
+        SYNC_68010(4);
+    }
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
