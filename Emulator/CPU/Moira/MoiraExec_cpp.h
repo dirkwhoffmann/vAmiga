@@ -340,16 +340,19 @@ Moira::execAdda(u16 opcode)
     data = SEXT<S>(data);
 
     result = (I == ADDA) ? U32_ADD(readA(dst), data) : U32_SUB(readA(dst), data);
-    looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+    writeA(dst, result);
 
     SYNC(2);
     if constexpr (C == C68000) {
-        if constexpr (S == Word || isRegMode(M) || isImmMode(M)) SYNC(2);
-    } else {
-        if constexpr (S == Word) SYNC(2);
-    }
 
-    writeA(dst, result);
+        looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+        if constexpr (S == Word || isRegMode(M) || isImmMode(M)) SYNC(2);
+
+    } else {
+
+        if constexpr (S == Word || isRegMode(M) || isImmMode(M)) SYNC(2);
+        looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+    }
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
