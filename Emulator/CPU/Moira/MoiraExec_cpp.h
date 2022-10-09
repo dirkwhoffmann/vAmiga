@@ -4487,36 +4487,26 @@ Moira::execRte(u16 opcode)
         }
         case C68010:
         {
-            u16 format = u16(readMS<C, MEM_DATA, Word>(reg.sp + 6) >> 12);
+            // TODO: Use pop instead of readMS
 
+            newsr = (u16)readMS<C, MEM_DATA, Word>(reg.sp);
+            reg.sp += 2;
+
+            newpc = readMS<C, MEM_DATA, Long>(reg.sp);
+            reg.sp += 4;
+
+            u16 format = u16(readMS<C, MEM_DATA, Word>(reg.sp) >> 12);
+            reg.sp += 2;
+
+            // Check the frame format
             switch (format) {
 
-                case 0b0000: // Short format
+                case 0b0000: // Short format (we are done)
 
-                    // TODO: Use pop instead of readMS
-
-                    newsr = (u16)readMS<C, MEM_DATA, Word>(reg.sp);
-                    reg.sp += 2;
-
-                    newpc = readMS<C, MEM_DATA, Long>(reg.sp);
-                    reg.sp += 4;
-
-                    (void)readMS<C, MEM_DATA, Word>(reg.sp);
-                    reg.sp += 2;
                     break;
 
-                case 0b1000: // Long format
+                case 0b1000: // Long format (keep on reading)
 
-                    // TODO: Use pop instead of readMS
-
-                    newsr = (u16)readMS<C, MEM_DATA, Word>(reg.sp);
-                    reg.sp += 2;
-
-                    newpc = readMS<C, MEM_DATA, Long>(reg.sp);
-                    reg.sp += 4;
-
-                    (void)readMS<C, MEM_DATA, Word>(reg.sp); // format word
-                    reg.sp += 2;
                     (void)readMS<C, MEM_DATA, Word>(reg.sp); // special status word
                     reg.sp += 2;
                     (void)readMS<C, MEM_DATA, Long>(reg.sp); // fault address
