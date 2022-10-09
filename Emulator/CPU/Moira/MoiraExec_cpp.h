@@ -264,15 +264,19 @@ Moira::execAddEaRg(u16 opcode)
     readOp<C, M, S, STD_AE_FRAME>(src, &ea, &data);
 
     result = addsub<C, I, S>(data, readD<S>(dst));
-
-    looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+    writeD<S>(dst, result);
 
     if constexpr (C == C68000) {
+
+        looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
         if constexpr (S == Long) SYNC(2 + (isMemMode(M) ? 0 : 2));
+
     } else {
+
         if constexpr (S == Long) SYNC(2);
+        looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+
     }
-    writeD<S>(dst, result);
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
