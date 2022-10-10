@@ -519,12 +519,16 @@ Moira::execAddxRg(u16 opcode)
     int dst = ____xxx_________(opcode);
 
     u32 result = addsub<C, I, S>(readD<S>(src), readD<S>(dst));
-    prefetch<C, POLLIPL>();
 
     if constexpr (C == C68000) {
+
+        prefetch<C, POLLIPL>();
         if constexpr (S == Long) SYNC(4);
+
     } else {
+
         if constexpr (S == Long) SYNC(2);
+        prefetch<C, POLLIPL>();
     }
 
     writeD<S>(dst, result);
@@ -605,9 +609,12 @@ Moira::execAndEaRg(u16 opcode)
     writeD<S>(dst, result);
 
     if constexpr (C == C68000) {
+
         looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
         if constexpr (S == Long) SYNC(isRegMode(M) || isImmMode(M) ? 4 : 2);
+
     } else {
+
         if constexpr (S == Long) SYNC(2);
         looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
     }
@@ -1724,9 +1731,17 @@ Moira::execCmpa(u16 opcode)
 
     data = SEXT<S>(data);
     cmp<C, Long>(data, readA(dst));
-    looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
 
-    SYNC(2);
+    if constexpr (C == C68000) {
+
+        looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+        SYNC(2);
+
+    } else {
+
+        SYNC(2);
+        looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+    }
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
