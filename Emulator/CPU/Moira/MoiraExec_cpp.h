@@ -2022,8 +2022,8 @@ Moira::execDbcc(u16 opcode)
 
             } else {
 
-                SYNC(MIMIC_MUSASHI ? 4 : 2);
                 (void)readMS<C, MEM_PROG, Word>(reg.pc + 2);
+                SYNC(MIMIC_MUSASHI ? 4 : 2);
                 CYCLES_68010(8);
             }
 
