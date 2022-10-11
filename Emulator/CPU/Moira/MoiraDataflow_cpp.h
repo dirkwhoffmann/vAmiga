@@ -42,42 +42,6 @@ Moira::readOp(int n, u32 *ea, u32 *result)
     }
 }
 
-template <Mode M, Flags F> void
-Moira::readOp64(int n, u32 *ea, u64 *result)
-{
-    assert(M != MODE_DN);
-    assert(M != MODE_AN);
-    assert(M != MODE_IM);
-
-    // Compute effective address
-    *ea = computeEA<C68020, M, Long, F>(n);
-
-    try {
-
-        // Read from effective address
-        *result = readM<C68020, M, Long, F>(*ea);
-
-    } catch (const AddressErrorException &exc) {
-        
-        // Emulate -(An) register modification
-        updateAnPD<M, Long>(n);
-
-        // Rethrow exception
-        throw exc;
-    }
-
-    // Emulate -(An) register modification
-    updateAnPD<M, Long>(n);
-
-    // Emulate (An)+ register modification
-    updateAnPI<M, Long>(n);
-
-    // Read second long word
-    *result = *result << 32 | readM<C68020, M, Long, F>(*ea + 4);
-    updateAnPD<M, Long>(n);
-    updateAnPI<M, Long>(n);
-}
-
 template <Core C, Mode M, Size S, Flags F> void
 Moira::writeOp(int n, u32 val)
 {
@@ -113,42 +77,6 @@ Moira::writeOp(int n, u32 val)
             // Emulate (An)+ register modification
             updateAnPI<M, S>(n);
     }
-}
-
-template <Core C, Mode M, Flags F> void
-Moira::writeOp64(int n, u64 val)
-{
-    assert(M != MODE_DN);
-    assert(M != MODE_AN);
-    assert(M != MODE_IM);
-
-    // Compute effective address
-    u32 ea = computeEA<C, M, Long>(n);
-
-    try {
-        
-        // Write to effective address
-        writeM<C, M, Long, F>(ea, val >> 32);
-        
-    } catch (const AddressErrorException &exc) {
-
-        // Emulate -(An) register modification
-        updateAnPD<M, Long>(n);
-
-        // Rethrow exception
-        throw exc;
-    }
-    
-    // Emulate -(An) register modification
-    updateAnPD<M, Long>(n);
-
-    // Emulate (An)+ register modification
-    updateAnPI<M, Long>(n);
-
-    // Write second long word
-    writeM<C, M, Long, F>(ea + 4, val & 0xFFFFFFFF);
-    updateAnPD<M, Long>(n);
-    updateAnPI<M, Long>(n);
 }
 
 template <Core C, Mode M, Size S, Flags F> void

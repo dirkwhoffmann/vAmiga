@@ -2489,12 +2489,24 @@ Moira::execMove3(u16 opcode)
         reg.sr.v = 0;
         reg.sr.c = 0;
 
-        writeOp<C, MODE_PI, S, AE_INC_PC|POLLIPL>(dst, data);
+        if (C == C68000) {
 
-        reg.sr.n = NBIT<S>(data);
-        reg.sr.z = ZERO<S>(data);
+            writeOp<C, MODE_PI, S, AE_INC_PC|POLLIPL>(dst, data);
 
-        looping<I>() ? noPrefetch() : prefetch<C>();
+            reg.sr.n = NBIT<S>(data);
+            reg.sr.z = ZERO<S>(data);
+
+            looping<I>() ? noPrefetch() : prefetch<C>();
+
+        } else {
+
+            writeOp<C, MODE_PI, S, AE_INC_PC|POLLIPL>(dst, data);
+            looping<I>() ? noPrefetch() : prefetch<C>();
+
+            reg.sr.n = NBIT<S>(data);
+            reg.sr.z = ZERO<S>(data);
+
+        }
     }
 
     //           00  10  20        00  10  20        00  10  20
