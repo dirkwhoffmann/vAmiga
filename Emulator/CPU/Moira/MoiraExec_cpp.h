@@ -3562,11 +3562,20 @@ Moira::execMulsMoira(u16 opcode)
 
     readOp<C, M, Word, STD_AE_FRAME>(src, &ea, &data);
 
-    prefetch<C, POLLIPL>();
-    result = muls<C>(data, readD<Word>(dst));
+    if (C == C68000) {
 
-    [[maybe_unused]] auto cycles = cyclesMul<C, I>(u16(data));
-    SYNC(cycles);
+        prefetch<C, POLLIPL>();
+        result = muls<C>(data, readD<Word>(dst));
+        [[maybe_unused]] auto cycles = cyclesMul<C, I>(u16(data));
+        SYNC(cycles);
+
+    } else {
+
+        result = muls<C>(data, readD<Word>(dst));
+        [[maybe_unused]] auto cycles = cyclesMul<C, I>(u16(data));
+        SYNC(cycles);
+        prefetch<C, POLLIPL>();
+    }
 
     writeD(dst, result);
 }
@@ -3628,11 +3637,20 @@ Moira::execMuluMoira(u16 opcode)
 
     readOp<C, M, Word, STD_AE_FRAME>(src, &ea, &data);
 
-    prefetch<C, POLLIPL>();
-    result = mulu<C>(data, readD<Word>(dst));
+    if (C == C68000) {
 
-    [[maybe_unused]] auto cycles = cyclesMul<C, I>(u16(data));
-    SYNC(cycles);
+        prefetch<C, POLLIPL>();
+        result = mulu<C>(data, readD<Word>(dst));
+        [[maybe_unused]] auto cycles = cyclesMul<C, I>(u16(data));
+        SYNC(cycles);
+
+    } else {
+
+        result = mulu<C>(data, readD<Word>(dst));
+        [[maybe_unused]] auto cycles = cyclesMul<C, I>(u16(data));
+        SYNC(cycles);
+        prefetch<C, POLLIPL>();
+    }
 
     writeD(dst, result);
 }

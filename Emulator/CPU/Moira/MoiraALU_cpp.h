@@ -805,24 +805,34 @@ Moira::cyclesBit(u8 bit) const
 template <Core C, Instr I> int
 Moira::cyclesMul(u16 data) const
 {
-    int mcycles = 17;
-    
-    switch (I)
-    {
-        case MULU:
-            
-            for (; data; data >>= 1) if (data & 1) mcycles++;
-            return 2 * mcycles;
-            
-        case MULS:
-            
-            data = ((data << 1) ^ data) & 0xFFFF;
-            for (; data; data >>= 1) if (data & 1) mcycles++;
-            return 2 * mcycles;
-            
-        default:
-            fatalError;
+    int mcycles = 0;
+
+    if constexpr (C == C68000 && I == MULU) {
+
+        mcycles = 17;
+        for (; data; data >>= 1) if (data & 1) mcycles++;
+        mcycles *= 2;
     }
+
+    if constexpr (C == C68000 && I == MULS) {
+
+        mcycles = 17;
+        data = ((data << 1) ^ data) & 0xFFFF;
+        for (; data; data >>= 1) if (data & 1) mcycles++;
+        mcycles *= 2;
+    }
+
+    if constexpr (C == C68010 && I == MULU) {
+
+        mcycles = 36;
+    }
+
+    if constexpr (C == C68010 && I == MULS) {
+
+        mcycles = (data & 0x8000) ? 38 : 36;
+    }
+
+    return mcycles;
 }
 
 template <Core C, Instr I> int
