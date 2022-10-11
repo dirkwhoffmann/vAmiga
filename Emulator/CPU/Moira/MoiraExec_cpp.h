@@ -743,6 +743,7 @@ Moira::execAndiccr(u16 opcode)
         setCCR(u8(logic<C, I, S>(src, dst)));
 
         SYNC_68000(8);
+
         (void)readMS<C, MEM_DATA, Word>(reg.pc + 2);
         prefetch<C, POLLIPL>();
 

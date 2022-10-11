@@ -828,17 +828,17 @@ Moira::cyclesMul(u16 data) const
 template <Core C, Instr I> int
 Moira::cyclesDiv(u32 op1, u16 op2) const
 {
-    int result;
+    int result = 0;
     
-    if constexpr (I == DIVU) {
+    if constexpr (C == C68000 && I == DIVU) {
         
         u32 dividend = op1;
         u16 divisor  = op2;
         int mcycles  = 38;
-        
+
+        // Check if quotient is larger than 16 bit
         if ((dividend >> 16) >= divisor) {
             
-            // Quotient is larger than 16 bit
             result = 10;
             
         } else {
@@ -862,8 +862,8 @@ Moira::cyclesDiv(u32 op1, u16 op2) const
             result = 2 * mcycles;
         }
     }
-    
-    if constexpr (I == DIVS) {
+
+    if constexpr (C == C68000 && I == DIVS) {
         
         i32 dividend = (i32)op1;
         i16 divisor  = (i16)op2;
@@ -890,7 +890,57 @@ Moira::cyclesDiv(u32 op1, u16 op2) const
             result = 2 * mcycles;
         }
     }
-    
+
+    if constexpr (C == C68010 && I == DIVU) {
+
+        u32 dividend = op1;
+        u16 divisor  = op2;
+        int mcycles  = 78;
+
+        // Check if quotient is larger than 16 bit
+        if ((dividend >> 16) >= divisor) {
+
+            result = 8;
+
+        } else {
+
+            u32 hdivisor = divisor << 16;
+
+            for (int i = 0; i < 15; i++) {
+                if ((i32)dividend < 0) {
+                    dividend = (u32)((u64)dividend << 1);
+                    dividend = U32_SUB(dividend, hdivisor);
+                } else {
+                    dividend = (u32)((u64)dividend << 1);
+                    if (dividend >= hdivisor) {
+                        dividend = U32_SUB(dividend, hdivisor);
+                        mcycles += 2;
+                    } else {
+                        mcycles += 2;
+                    }
+                }
+            }
+            result = mcycles;
+        }
+    }
+
+    if constexpr (C == C68010 && I == DIVS) {
+
+        i32 dividend = (i32)op1;
+        i16 divisor  = (i16)op2;
+        int mcycles  = (dividend < 0) ? 120 : 118;
+
+        // Check if quotient is larger than 16 bit
+        if ((abs(dividend) >> 16) >= abs(divisor)) {
+
+            result = 12;
+
+        } else {
+
+            result = mcycles;
+        }
+    }
+
     return result;
 }
 
