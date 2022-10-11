@@ -736,12 +736,11 @@ Moira::execAndiccr(u16 opcode)
 {
     AVAILABILITY(C68000)
 
-    u32 src = readI<C, S>();
-    u8  dst = getCCR();
-
-    setCCR(u8(logic<C, I, S>(src, dst)));
-
     if constexpr (C == C68000) {
+
+        u32 src = readI<C, S>();
+        u8  dst = getCCR();
+        setCCR(u8(logic<C, I, S>(src, dst)));
 
         SYNC_68000(8);
         (void)readMS<C, MEM_DATA, Word>(reg.pc + 2);
@@ -749,9 +748,11 @@ Moira::execAndiccr(u16 opcode)
 
     } else {
 
-        SYNC_68010(4);
+        SYNC_68010(8);
+        u32 src = readI<C, S>();
+        u8  dst = getCCR();
+        setCCR(u8(logic<C, I, S>(src, dst)));
         prefetch<C, POLLIPL>();
-        SYNC_68010(4);
     }
 
     //           00  10  20        00  10  20        00  10  20
@@ -1982,8 +1983,9 @@ Moira::execDbcc(u16 opcode)
 
     auto exec68010 = [&]() {
 
-        SYNC(2);
         if (!cond(I)) {
+
+            SYNC(2);
 
             int dn = _____________xxx(opcode);
             i16 disp = (i16)queue.irc;
@@ -2025,17 +2027,19 @@ Moira::execDbcc(u16 opcode)
                 (void)readMS<C, MEM_PROG, Word>(reg.pc + 2);
                 SYNC(MIMIC_MUSASHI ? 4 : 2);
                 CYCLES_68010(8);
+
+                reg.pc += 2;
+                fullPrefetch<C, POLLIPL>();
             }
 
         } else {
 
             SYNC(2);
             CYCLES_68010(2);
-        }
 
-        // Fall through to next instruction
-        reg.pc += 2;
-        fullPrefetch<C, POLLIPL>();
+            reg.pc += 2;
+            fullPrefetch<C, POLLIPL>();
+        }
 
         CYCLES_68010(10);
     };
