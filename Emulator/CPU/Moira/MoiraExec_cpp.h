@@ -273,8 +273,9 @@ Moira::execAddEaRg(u16 opcode)
 
     } else {
 
+        pollIpl();
         if constexpr (S == Long) SYNC(2);
-        looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+        looping<I>() ? noPrefetch() : prefetch<C>();
 
     }
 
@@ -350,8 +351,9 @@ Moira::execAdda(u16 opcode)
 
     } else {
 
+        pollIpl();
         if constexpr (S == Word || isRegMode(M) || isImmMode(M)) SYNC(2);
-        looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+        looping<I>() ? noPrefetch() : prefetch<C>();
     }
 
     //           00  10  20        00  10  20        00  10  20
