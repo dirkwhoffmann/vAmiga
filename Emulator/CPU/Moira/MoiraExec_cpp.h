@@ -471,8 +471,7 @@ Moira::execAddqAn(u16 opcode)
     if (src == 0) src = 8;
     u32 result = (I == ADDQ) ? U32_ADD(readA(dst), src) : U32_SUB(readA(dst), src);
     prefetch<C, POLLIPL>();
-
-    if constexpr (C == C68000 || S == Long) SYNC(4);
+    SYNC(4);
     writeA(dst, result);
 
     //           00  10  20        00  10  20        00  10  20
@@ -2574,8 +2573,6 @@ Moira::execMove4(u16 opcode)
         if constexpr (S != Long) updateAn <MODE_PD, S> (dst);
         throw AddressErrorException();
     }
-
-    if constexpr (C == C68010 && S == Long) SYNC(2);
 
     writeM<C, MODE_PD, S, REVERSE>(ea, data);
     updateAn<MODE_PD, S>(dst);
