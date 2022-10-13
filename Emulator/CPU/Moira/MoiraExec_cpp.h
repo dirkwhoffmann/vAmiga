@@ -2255,7 +2255,7 @@ Moira::execJsr(u16 opcode)
     AVAILABILITY(C68000)
 
     int src = _____________xxx(opcode);
-    u32 ea  = computeEA <C, M, Long, SKIP_LAST_RD> (src);
+    u32 ea  = computeEA<C, M, Long, SKIP_LAST_RD>(src);
 
     [[maybe_unused]] const int delay[] = { 0,0,0,0,0,2,4,2,0,2,4,0 };
     SYNC(delay[M]);
@@ -4885,10 +4885,7 @@ Moira::execSccEa(u16 opcode)
         if constexpr (M == MODE_AI) SYNC(2);
         if constexpr (M == MODE_PI) SYNC(4);
         if constexpr (M == MODE_PD) SYNC(2);
-        // if constexpr (M == MODE_DI) SYNC(0);
         if constexpr (M == MODE_IX) SYNC(8);
-        // if constexpr (M == MODE_AW) SYNC(0);
-        // if constexpr (M == MODE_AL) SYNC(0);
 
         prefetch<C, POLLIPL>();
         data = cond(I) ? 0xFF : 0;
@@ -4984,18 +4981,43 @@ Moira::execTasEa(u16 opcode)
     int dst = ( _____________xxx(opcode) );
 
     u32 ea, data;
-    readOp<C, M, Byte>(dst, &ea, &data);
 
-    reg.sr.n = NBIT<Byte>(data);
-    reg.sr.z = ZERO<Byte>(data);
-    reg.sr.v = 0;
-    reg.sr.c = 0;
-    data |= 0x80;
+    if (C == C68000) {
 
-    if (!isRegMode(M)) SYNC(2);
-    writeOp<C, M, S>(dst, ea, data);
+        readOp<C, M, Byte>(dst, &ea, &data);
 
-    prefetch<C, POLLIPL>();
+        reg.sr.n = NBIT<Byte>(data);
+        reg.sr.z = ZERO<Byte>(data);
+        reg.sr.v = 0;
+        reg.sr.c = 0;
+        data |= 0x80;
+
+        if (!isRegMode(M)) SYNC(2);
+        writeOp<C, M, S>(dst, ea, data);
+
+        prefetch<C, POLLIPL>();
+
+    } else {
+
+        if constexpr (M == MODE_AI) SYNC(2);
+        if constexpr (M == MODE_PI) SYNC(4);
+        if constexpr (M == MODE_PD) SYNC(2);
+        if constexpr (M == MODE_IX) SYNC(2);
+
+        readOp<C, M, Byte>(dst, &ea, &data);
+
+        reg.sr.n = NBIT<Byte>(data);
+        reg.sr.z = ZERO<Byte>(data);
+        reg.sr.v = 0;
+        reg.sr.c = 0;
+        data |= 0x80;
+
+        // if (!isRegMode(M)) SYNC(2);
+        writeOp<C, M, S>(dst, ea, data);
+
+        prefetch<C, POLLIPL>();
+        SYNC(2);
+    }
 
     FINALIZE
 }
@@ -5025,7 +5047,11 @@ Moira::execTrapv(u16 opcode)
 
     if (reg.sr.v) {
 
-        (void)readMS<C, MEM_PROG, Word>(reg.pc + 2);
+        if (C == C68000) {
+            (void)readMS<C, MEM_PROG, Word>(reg.pc + 2);
+        } else {
+            SYNC(6);
+        }
         execException<C>(EXC_TRAPV);
 
         //           00  10  20        00  10  20        00  10  20
