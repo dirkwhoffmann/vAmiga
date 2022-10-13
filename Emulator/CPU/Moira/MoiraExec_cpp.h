@@ -4871,12 +4871,29 @@ Moira::execSccEa(u16 opcode)
     int dst = ( _____________xxx(opcode) );
     u32 ea, data;
 
-    readOp<C, M, Byte>(dst, &ea, &data);
+    if constexpr (C == C68000) {
 
-    data = cond(I) ? 0xFF : 0;
-    prefetch<C, POLLIPL>();
+        readOp<C, M, Byte>(dst, &ea, &data);
 
-    writeOp<C, M, Byte>(dst, ea, data);
+        prefetch<C, POLLIPL>();
+        data = cond(I) ? 0xFF : 0;
+        writeOp<C, M, Byte>(dst, ea, data);
+
+    } else {
+
+        ea = computeEA<C, M, Byte>(dst);
+        if constexpr (M == MODE_AI) SYNC(2);
+        if constexpr (M == MODE_PI) SYNC(4);
+        if constexpr (M == MODE_PD) SYNC(2);
+        // if constexpr (M == MODE_DI) SYNC(0);
+        if constexpr (M == MODE_IX) SYNC(8);
+        // if constexpr (M == MODE_AW) SYNC(0);
+        // if constexpr (M == MODE_AL) SYNC(0);
+
+        prefetch<C, POLLIPL>();
+        data = cond(I) ? 0xFF : 0;
+        writeOp<C, M, Byte>(dst, ea, data);
+    }
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l

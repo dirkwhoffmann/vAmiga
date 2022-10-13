@@ -76,36 +76,6 @@ Moira::read16(u32 addr)
     return mem.peek16<ACCESSOR_CPU>(addr);
 }
 
-u32
-Moira::readMMU32(u32 addr)
-{
-    return mem.spypeek32<ACCESSOR_CPU>(addr);
-}
-
-u64
-Moira::readMMU64(u32 addr)
-{
-    u64 hi = mem.spypeek32<ACCESSOR_CPU>(addr);
-    u64 lo = mem.spypeek32<ACCESSOR_CPU>(addr + 4);
-    
-    return hi << 32 | lo;
-}
-
-u32
-Moira::readMMU32Dasm(u32 addr) const
-{
-    return mem.spypeek32<ACCESSOR_CPU>(addr);
-}
-
-u64
-Moira::readMMU64Dasm(u32 addr) const
-{
-    u64 hi = mem.spypeek32<ACCESSOR_CPU>(addr);
-    u64 lo = mem.spypeek32<ACCESSOR_CPU>(addr + 4);
-
-    return hi << 32 | lo;
-}
-
 u16
 Moira::read16Dasm(u32 addr)
 {
