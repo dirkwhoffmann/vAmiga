@@ -1519,7 +1519,6 @@ Moira::execChk(u16 opcode)
     dy = readD<S>(dst);
 
     SYNC_68000(6);
-    SYNC_68010(4);
 
     if (MIMIC_MUSASHI) {
 
@@ -1549,7 +1548,7 @@ Moira::execChk(u16 opcode)
     if (SEXT<S>(dy) < 0) {
 
         SYNC(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 4);
-        
+
         reg.sr.n = MIMIC_MUSASHI ? NBIT<S>(dy) : 1;
         execException<C>(EXC_CHK);
 
@@ -1560,6 +1559,7 @@ Moira::execChk(u16 opcode)
     }
 
     prefetch<C, POLLIPL>();
+    SYNC_68010(4);
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
