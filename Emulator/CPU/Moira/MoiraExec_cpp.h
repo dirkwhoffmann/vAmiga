@@ -1329,13 +1329,27 @@ Moira::execBsr(u16 opcode)
 
     SYNC(2);
 
-    // Save return address on stack
-    push<C, Long>(retpc);
+    if (C == C68000) {
 
-    // Jump to new address
-    reg.pc = newpc;
+        // Save return address on stack
+        push<C, Long>(retpc);
 
-    fullPrefetch<C, POLLIPL>();
+        // Jump to new address
+        reg.pc = newpc;
+
+        fullPrefetch<C, POLLIPL>();
+
+    } else {
+
+        // Save return address on stack
+        push<C, Long, POLLIPL>(retpc);
+
+        // Jump to new address
+        reg.pc = newpc;
+
+        fullPrefetch<C>();
+    }
+
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
