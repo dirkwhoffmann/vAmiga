@@ -528,8 +528,9 @@ Moira::execAddxRg(u16 opcode)
 
     } else {
 
+        pollIpl();
         if constexpr (S == Long) SYNC(2);
-        prefetch<C, POLLIPL>();
+        prefetch<C>();
     }
 
     writeD<S>(dst, result);
@@ -576,11 +577,16 @@ Moira::execAddxEa(u16 opcode)
 
     u32 result = addsub<C, I, S>(data1, data2);
 
-    if constexpr (S == Long && !MIMIC_MUSASHI) {
+    if constexpr (S == Long && C == C68000 && !MIMIC_MUSASHI) {
 
         writeM<C, M, Word, POLLIPL>(ea2 + 2, result & 0xFFFF);
         looping<I>() ? noPrefetch() : prefetch<C>();
         writeM<C, M, Word>(ea2, result >> 16);
+
+    } else if constexpr (S == Long && C == C68010 && !MIMIC_MUSASHI) {
+
+        writeM<C, M, S>(ea2, result);
+        looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
 
     } else {
 
@@ -616,8 +622,9 @@ Moira::execAndEaRg(u16 opcode)
 
     } else {
 
+        pollIpl();
         if constexpr (S == Long) SYNC(2);
-        looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+        looping<I>() ? noPrefetch() : prefetch<C>();
     }
 
     //           00  10  20        00  10  20        00  10  20
