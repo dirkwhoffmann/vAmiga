@@ -115,5 +115,683 @@
             type = "65535">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Emulator/CPU/Moira/MoiraExec_cpp.h"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1566"
+            endingLineNumber = "1566"
+            landmarkName = "Moira::execChk(opcode)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - d3940012b1c25963"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)0, (moira::Instr)32, (moira::Mode)0, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "340">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - d3940012b1c25963"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)0, (moira::Instr)32, (moira::Mode)2, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "340">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - d3940012b1c25963"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)0, (moira::Instr)32, (moira::Mode)3, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "340">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - d3940012b1c25963"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)0, (moira::Instr)32, (moira::Mode)4, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "340">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - d3940012b1c25963"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)0, (moira::Instr)32, (moira::Mode)5, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "340">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - d3940012b1c25963"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)0, (moira::Instr)32, (moira::Mode)6, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "340">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - d3940012b1c25963"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)0, (moira::Instr)32, (moira::Mode)7, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "340">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - d3940012b1c25963"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)0, (moira::Instr)32, (moira::Mode)8, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "340">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - d3940012b1c25963"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)0, (moira::Instr)32, (moira::Mode)9, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "340">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 38063c73e7ce8964"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)0, (moira::Instr)32, (moira::Mode)10, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "340">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 38063c73e7ce8964"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)0, (moira::Instr)32, (moira::Mode)11, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "340">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 9ce74741b0c89464"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)1, (moira::Instr)32, (moira::Mode)0, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "348">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 9ce74741b0c89464"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)1, (moira::Instr)32, (moira::Mode)2, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "348">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 9ce74741b0c89464"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)1, (moira::Instr)32, (moira::Mode)3, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "348">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 9ce74741b0c89464"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)1, (moira::Instr)32, (moira::Mode)4, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "348">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 9ce74741b0c89464"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)1, (moira::Instr)32, (moira::Mode)5, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "348">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 9ce74741b0c89464"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)1, (moira::Instr)32, (moira::Mode)6, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "348">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 9ce74741b0c89464"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)1, (moira::Instr)32, (moira::Mode)7, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "348">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 9ce74741b0c89464"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)1, (moira::Instr)32, (moira::Mode)8, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "348">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 9ce74741b0c89464"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)1, (moira::Instr)32, (moira::Mode)9, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "348">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - d592d8c0204d465"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)1, (moira::Instr)32, (moira::Mode)10, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "348">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - d592d8c0204d465"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)1, (moira::Instr)32, (moira::Mode)11, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "348">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 59eabab08fdf2765"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)0, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 59eabab08fdf2765"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)2, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 59eabab08fdf2765"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)3, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 59eabab08fdf2765"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)4, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 59eabab08fdf2765"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)5, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 59eabab08fdf2765"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)6, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 59eabab08fdf2765"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)7, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 59eabab08fdf2765"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)8, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 59eabab08fdf2765"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)9, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 16fc5b2ebd3b7766"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)10, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 16fc5b2ebd3b7766"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)11, (moira::Size)2&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - bb13e2cedcaf6567"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)0, (moira::Size)4&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - bb13e2cedcaf6567"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)2, (moira::Size)4&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - bb13e2cedcaf6567"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)3, (moira::Size)4&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - bb13e2cedcaf6567"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)4, (moira::Size)4&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - bb13e2cedcaf6567"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)5, (moira::Size)4&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - bb13e2cedcaf6567"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)6, (moira::Size)4&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - bb13e2cedcaf6567"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)7, (moira::Size)4&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - bb13e2cedcaf6567"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)8, (moira::Size)4&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - bb13e2cedcaf6567"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)9, (moira::Size)4&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 703ef675c8eb9518"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)10, (moira::Size)4&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "ACF4A801-2743-4A63-8A10-FB8E74F80DAC - 703ef675c8eb9518"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void moira::Moira::execChk&lt;(moira::Core)2, (moira::Instr)32, (moira::Mode)11, (moira::Size)4&gt;(unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/vAmiga/Emulator/CPU/Moira/MoiraExec_cpp.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1566"
+                  endingLineNumber = "1566"
+                  offsetFromSymbolStart = "352">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

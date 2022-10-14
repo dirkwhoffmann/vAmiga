@@ -1534,8 +1534,15 @@ Moira::execChk(u16 opcode)
 
     if (SEXT<S>(dy) > SEXT<S>(data)) {
 
-        SYNC(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 2);
+        if (C == C68000) {
 
+            SYNC(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 2);
+
+        } else {
+
+            prefetch<C, POLLIPL>();
+            SYNC_68010(4);
+        }
         reg.sr.n = NBIT<S>(dy);
         execException<C>(EXC_CHK);
 
@@ -1547,8 +1554,15 @@ Moira::execChk(u16 opcode)
 
     if (SEXT<S>(dy) < 0) {
 
-        SYNC(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 4);
+        if (C == C68000) {
 
+            SYNC(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 4);
+
+        } else {
+
+            prefetch<C, POLLIPL>();
+            SYNC_68010(6);
+        }
         reg.sr.n = MIMIC_MUSASHI ? NBIT<S>(dy) : 1;
         execException<C>(EXC_CHK);
 
