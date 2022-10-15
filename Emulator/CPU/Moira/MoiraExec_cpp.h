@@ -1699,8 +1699,15 @@ Moira::execClr(u16 opcode)
             case MODE_AI:
             case MODE_PI:
 
-                writeOp<C, M, S>(dst, ea, 0);
-                looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+                // pollIpl();
+                writeOp<C, M, S, POLLIPL>(dst, ea, 0);
+                looping<I>() ? noPrefetch() : prefetch<C>();
+                break;
+
+            case MODE_PD:
+
+                writeOp<C, M, S, REVERSE | POLLIPL>(dst, ea, 0);
+                looping<I>() ? noPrefetch() : prefetch<C>();
                 break;
 
             case MODE_DI:
