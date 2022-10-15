@@ -13,7 +13,7 @@ Moira::readOp(int n, u32 *ea, u32 *result)
             // Handle non-memory modes
         case MODE_DN: *result = readD<S>(n);   break;
         case MODE_AN: *result = readA<S>(n);   break;
-        case MODE_IM: *result = readI<C, S>(); break;
+        case MODE_IM: if constexpr ((F & SKIP_READ) == 0) { *result = readI<C, S>(); } break;
             
         default:
             
@@ -23,7 +23,7 @@ Moira::readOp(int n, u32 *ea, u32 *result)
             try {
                 
                 // Read from effective address
-                *result = readM<C, M, S, F>(*ea);
+                if constexpr ((F & SKIP_READ) == 0) *result = readM<C, M, S, F>(*ea);
                 
             } catch (const AddressErrorException &exc) {
                 

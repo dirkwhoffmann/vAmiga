@@ -22,12 +22,12 @@ CYCLES_68010(38) \
 CYCLES_68020(34) \
 return; }
 
-#define STD_AE_FRAME \
+#define STD_AE_FRAME (\
 (M == MODE_PD && S != Long) ? AE_INC_PC : \
 (M == MODE_DI)              ? AE_DEC_PC : \
 (M == MODE_IX)              ? AE_DEC_PC : \
 (M == MODE_DIPC)            ? AE_DEC_PC : \
-(M == MODE_IXPC)            ? AE_DEC_PC : 0
+(M == MODE_IXPC)            ? AE_DEC_PC : 0)
 
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execLineA(u16 opcode)
@@ -1691,16 +1691,43 @@ Moira::execClr(u16 opcode)
 
         int dst = _____________xxx(opcode);
 
-        if constexpr (S == Long && isRegMode(M)) SYNC(2);
-        if constexpr (S == Long && isIdxMode(M)) SYNC(2);
+        u32 ea, data;
+        readOp<C, M, S, STD_AE_FRAME | SKIP_READ>(dst, &ea, &data);
 
-        if constexpr (MIMIC_MUSASHI) {
-            writeOp<C, M, S>(dst, 0);
-        } else {
-            writeOp<C, M, S, REVERSE>(dst, 0);
+        switch (M) {
+
+            case MODE_AI:
+            case MODE_PI:
+
+                writeOp<C, M, S>(dst, ea, 0);
+                looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+                break;
+
+            case MODE_DI:
+
+                looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+                writeOp<C, M, S, REVERSE>(dst, ea, 0);
+                break;
+
+            case MODE_IX:
+
+                SYNC(2);
+                looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+                writeOp<C, M, S, REVERSE>(dst, ea, 0);
+                break;
+
+            case MODE_AW:
+            case MODE_AL:
+
+                looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+                writeOp<C, M, S, REVERSE>(dst, ea, 0);
+                break;
+
+            default:
+
+                writeOp<C, M, S, REVERSE>(dst, ea, 0);
+                looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
         }
-
-        looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
 
         reg.sr.n = 0;
         reg.sr.z = 1;

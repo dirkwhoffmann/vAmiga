@@ -408,6 +408,7 @@ constexpr u64 AE_SET_CB3    (1 << 10);  // Set bit 3 in CODE segment
 
 // Timing flags
 constexpr u64 IMPL_DEC      (1 << 11);  // Omit 2 cycle delay in -(An) mode
+constexpr u64 SKIP_READ     (1 << 12);   
 
 
 //
