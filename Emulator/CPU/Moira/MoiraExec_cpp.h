@@ -343,14 +343,15 @@ Moira::execAdda(u16 opcode)
     result = (I == ADDA) ? U32_ADD(readA(dst), data) : U32_SUB(readA(dst), data);
     writeA(dst, result);
 
-    SYNC(2);
     if constexpr (C == C68000) {
 
         looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+        SYNC(2);
         if constexpr (S == Word || isRegMode(M) || isImmMode(M)) SYNC(2);
 
     } else {
 
+        SYNC(2);
         pollIpl();
         if constexpr (S == Word || isRegMode(M) || isImmMode(M)) SYNC(2);
         looping<I>() ? noPrefetch() : prefetch<C>();
@@ -1767,13 +1768,22 @@ Moira::execCmp(u16 opcode)
     u32 ea, data;
     readOp<C, M, S, STD_AE_FRAME>(src, &ea, &data);
 
-    if constexpr (S == Long && C == C68010 && isImmMode(M)) SYNC(2);
-    if constexpr (S == Long && C == C68010 && isRegMode(M)) SYNC(2);
+    if (C == C68000) {
 
-    cmp<C, S>(data, readD<S>(dst));
-    prefetch<C, POLLIPL>();
+        cmp<C, S>(data, readD<S>(dst));
+        prefetch<C, POLLIPL>();
 
-    if constexpr (S == Long && C == C68000) SYNC(2);
+        if constexpr (S == Long) SYNC(2);
+
+    } else {
+
+        if constexpr (S == Long && isImmMode(M)) SYNC(2);
+        if constexpr (S == Long && isRegMode(M)) SYNC(2);
+
+        cmp<C, S>(data, readD<S>(dst));
+        pollIpl();
+        prefetch<C>();
+    }
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
@@ -1815,7 +1825,8 @@ Moira::execCmpa(u16 opcode)
     } else {
 
         SYNC(2);
-        looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+        pollIpl();
+        looping<I>() ? noPrefetch() : prefetch<C>();
     }
 
     //           00  10  20        00  10  20        00  10  20
@@ -1905,12 +1916,24 @@ Moira::execCmpm(u16 opcode)
 
     u32 ea1, ea2, data1, data2;
 
-    readOp<C, M, S, AE_INC_PC>(src, &ea1, &data1);
-    pollIpl();
-    readOp<C, M, S, AE_INC_PC>(dst, &ea2, &data2);
+    if (C == C68000) {
 
-    cmp<C, S>(data1, data2);
-    prefetch<C>();
+        readOp<C, M, S, AE_INC_PC>(src, &ea1, &data1);
+        pollIpl();
+        readOp<C, M, S, AE_INC_PC>(dst, &ea2, &data2);
+
+        cmp<C, S>(data1, data2);
+        prefetch<C>();
+
+    } else {
+
+        readOp<C, M, S, AE_INC_PC>(src, &ea1, &data1);
+        readOp<C, M, S, AE_INC_PC>(dst, &ea2, &data2);
+        pollIpl();
+
+        cmp<C, S>(data1, data2);
+        prefetch<C>();
+    }
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
