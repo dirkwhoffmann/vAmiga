@@ -1760,10 +1760,13 @@ Moira::execCmp(u16 opcode)
     u32 ea, data;
     readOp<C, M, S, STD_AE_FRAME>(src, &ea, &data);
 
+    if constexpr (S == Long && C == C68010 && isImmMode(M)) SYNC(2);
+    if constexpr (S == Long && C == C68010 && isRegMode(M)) SYNC(2);
+
     cmp<C, S>(data, readD<S>(dst));
     prefetch<C, POLLIPL>();
 
-    if constexpr (S == Long) SYNC(2);
+    if constexpr (S == Long && C == C68000) SYNC(2);
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
