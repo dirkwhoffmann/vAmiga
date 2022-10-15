@@ -2371,14 +2371,28 @@ Moira::execJsr(u16 opcode)
         throw AddressErrorException();
     }
 
-    // Save return address on stack
-    push<C, Long>(reg.pc);
+    if (C == C68000) {
 
-    // Jump to new address
-    reg.pc = ea;
+        // Save return address on stack
+        push<C, Long>(reg.pc);
 
-    queue.irc = (u16)readMS<C, MEM_PROG, Word>(ea);
-    prefetch<C, POLLIPL>();
+        // Jump to new address
+        reg.pc = ea;
+
+        queue.irc = (u16)readMS<C, MEM_PROG, Word>(ea);
+        prefetch<C, POLLIPL>();
+
+    } else {
+
+        // Save return address on stack
+        push<C, Long, POLLIPL>(reg.pc);
+
+        // Jump to new address
+        reg.pc = ea;
+
+        queue.irc = (u16)readMS<C, MEM_PROG, Word>(ea);
+        prefetch<C>();
+    }
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
