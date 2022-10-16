@@ -943,7 +943,7 @@ Moira::cyclesDiv(u32 op1, u16 op2) const
         // Check if quotient is larger than 16 bit
         if ((abs(dividend) >> 16) >= abs(divisor)) {
 
-            result = 12;
+            result = 16;
 
         } else {
 
