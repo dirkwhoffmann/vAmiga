@@ -2459,7 +2459,7 @@ Moira::execLink(u16 opcode)
     pollIpl();
 
     // Write to stack
-    push <C,Long> (readA(ax) - ((MIMIC_MUSASHI && ax == 7) ? 4 : 0));
+    push <C, Long>(readA(ax) - ((MIMIC_MUSASHI && ax == 7) ? 4 : 0));
 
     // Modify address register and stack pointer
     writeA(ax, sp);
@@ -2525,30 +2525,62 @@ Moira::execMove2(u16 opcode)
 
     readOp<C, M, S, STD_AE_FRAME>(src, &ea, &data);
 
-    if constexpr (S == Long && !isMemMode(M)) {
+    if constexpr (C == C68000) {
 
-        writeOp<C, MODE_AI, S, AE_INC_PC|POLLIPL>(dst, data);
+        if constexpr (!isMemMode(M) && S == Long) {
 
-        reg.sr.n = NBIT<S>(data);
-        reg.sr.z = ZERO<S>(data);
-        reg.sr.v = 0;
-        reg.sr.c = 0;
+            writeOp<C, MODE_AI, S, AE_INC_PC|POLLIPL>(dst, data);
 
-        looping<I>() ? noPrefetch() : prefetch<C>();
+            reg.sr.n = NBIT<S>(data);
+            reg.sr.z = ZERO<S>(data);
+            reg.sr.v = 0;
+            reg.sr.c = 0;
+
+            looping<I>() ? noPrefetch() : prefetch<C>();
+
+        } else {
+
+            reg.sr.n = NBIT<Word>(data);
+            reg.sr.z = ZERO<Word>(data);
+            reg.sr.v = 0;
+            reg.sr.c = 0;
+
+            writeOp<C, MODE_AI, S, AE_INC_PC>(dst, data);
+
+            reg.sr.n = NBIT<S>(data);
+            reg.sr.z = ZERO<S>(data);
+
+            looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+        }
 
     } else {
 
-        reg.sr.n = NBIT<Word>(data);
-        reg.sr.z = ZERO<Word>(data);
-        reg.sr.v = 0;
-        reg.sr.c = 0;
+        if constexpr (!isMemMode(M)) {
 
-        writeOp<C, MODE_AI, S, AE_INC_PC>(dst, data);
+            pollIpl();
+            writeOp<C, MODE_AI, S, AE_INC_PC>(dst, data);
 
-        reg.sr.n = NBIT<S>(data);
-        reg.sr.z = ZERO<S>(data);
+            reg.sr.n = NBIT<S>(data);
+            reg.sr.z = ZERO<S>(data);
+            reg.sr.v = 0;
+            reg.sr.c = 0;
 
-        looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+            looping<I>() ? noPrefetch() : prefetch<C>();
+
+        } else {
+
+            reg.sr.n = NBIT<Word>(data);
+            reg.sr.z = ZERO<Word>(data);
+            reg.sr.v = 0;
+            reg.sr.c = 0;
+
+            writeOp<C, MODE_AI, S, AE_INC_PC>(dst, data);
+
+            reg.sr.n = NBIT<S>(data);
+            reg.sr.z = ZERO<S>(data);
+
+            looping<I>() ? noPrefetch() : prefetch<C, POLLIPL>();
+        }
     }
 
     //           00  10  20        00  10  20        00  10  20
@@ -2581,41 +2613,60 @@ Moira::execMove3(u16 opcode)
 
     readOp<C, M, S, STD_AE_FRAME>(src, &ea, &data);
 
-    if constexpr (S == Long && !isMemMode(M)) {
+    if constexpr (C == C68000) {
 
-        writeOp<C, MODE_PI, S, AE_INC_PC|POLLIPL>(dst, data);
-
-        reg.sr.n = NBIT<S>(data);
-        reg.sr.z = ZERO<S>(data);
-        reg.sr.v = 0;
-        reg.sr.c = 0;
-
-        looping<I>() ? noPrefetch() : prefetch<C>();
-
-    } else {
-
-        reg.sr.n = NBIT<Word>(data);
-        reg.sr.z = ZERO<Word>(data);
-        reg.sr.v = 0;
-        reg.sr.c = 0;
-
-        if (C == C68000) {
+        if constexpr (S == Long && !isMemMode(M)) {
 
             writeOp<C, MODE_PI, S, AE_INC_PC|POLLIPL>(dst, data);
 
             reg.sr.n = NBIT<S>(data);
             reg.sr.z = ZERO<S>(data);
+            reg.sr.v = 0;
+            reg.sr.c = 0;
 
             looping<I>() ? noPrefetch() : prefetch<C>();
 
         } else {
 
+            reg.sr.n = NBIT<Word>(data);
+            reg.sr.z = ZERO<Word>(data);
+            reg.sr.v = 0;
+            reg.sr.c = 0;
+
+            writeOp<C, MODE_PI, S, AE_INC_PC|POLLIPL>(dst, data);
+
+            reg.sr.n = NBIT<S>(data);
+            reg.sr.z = ZERO<S>(data);
+
+            looping<I>() ? noPrefetch() : prefetch<C>();
+        }
+
+    } else {
+
+        if constexpr (!isMemMode(M)) {
+
+            pollIpl();
+            writeOp<C, MODE_PI, S, AE_INC_PC>(dst, data);
+
+            reg.sr.n = NBIT<S>(data);
+            reg.sr.z = ZERO<S>(data);
+            reg.sr.v = 0;
+            reg.sr.c = 0;
+
+            looping<I>() ? noPrefetch() : prefetch<C>();
+
+        } else {
+
+            reg.sr.n = NBIT<Word>(data);
+            reg.sr.z = ZERO<Word>(data);
+            reg.sr.v = 0;
+            reg.sr.c = 0;
+
             writeOp<C, MODE_PI, S, AE_INC_PC|POLLIPL>(dst, data);
             looping<I>() ? noPrefetch() : prefetch<C>();
 
             reg.sr.n = NBIT<S>(data);
             reg.sr.z = ZERO<S>(data);
-
         }
     }
 
@@ -3572,7 +3623,7 @@ Moira::execMoveToSr(u16 opcode)
     SYNC(4);
     setSR((u16)data);
 
-    (void)readMS<C, MEM_PROG,Word>(reg.pc + 2);
+    (void)readMS<C, MEM_PROG, Word>(reg.pc + 2);
     prefetch<C, POLLIPL>();
 
     //           00  10  20        00  10  20        00  10  20
@@ -4562,19 +4613,36 @@ Moira::execPea(u16 opcode)
 
     if (isAbsMode(M)) {
 
-        push <C,Long> (ea);
-        prefetch<C, POLLIPL>();
+        if (C == C68000) {
+
+            push <C, Long> (ea);
+            prefetch<C, POLLIPL>();
+
+        } else {
+
+            pollIpl();
+            push <C, Long> (ea);
+            prefetch<C>();
+        }
 
     } else if (isIdxMode(M)) {
 
-        pollIpl();
-        prefetch<C>();
-        push <C,Long> (ea);
+        if (C == C68000) {
+
+            pollIpl();
+            prefetch<C>();
+            push <C, Long> (ea);
+
+        } else {
+
+            prefetch<C, POLLIPL>();
+            push <C, Long> (ea);
+        }
 
     } else {
 
         prefetch<C, POLLIPL>();
-        push <C,Long> (ea);
+        push <C, Long>(ea);
     }
 
     //           00  10  20        00  10  20        00  10  20

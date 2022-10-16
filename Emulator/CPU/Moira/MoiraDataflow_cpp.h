@@ -600,7 +600,7 @@ Moira::readExt()
         return;
     }
     
-    queue.irc = (u16)readMS<C, MEM_PROG,Word>(reg.pc);
+    queue.irc = (u16)readMS<C, MEM_PROG, Word>(reg.pc);
 }
 
 template <Core C, Size S> u32
