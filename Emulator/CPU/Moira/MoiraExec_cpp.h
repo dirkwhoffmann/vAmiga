@@ -4077,16 +4077,21 @@ Moira::execDivu(u16 opcode)
 {
     AVAILABILITY(C68000)
 
-    bool success;
     bool divByZero = false;
 
     if constexpr (MIMIC_MUSASHI) {
-        success = execDivuMusashi<C, I, M, S>(opcode, &divByZero);
+        execDivuMusashi<C, I, M, S>(opcode, &divByZero);
     } else {
-        success = execDivuMoira<C, I, M, S>(opcode, &divByZero);
+        execDivuMoira<C, I, M, S>(opcode, &divByZero);
     }
 
-    if (success) {
+    if (divByZero) {
+
+        CYCLES_68000(38);
+        CYCLES_68010(44);
+        CYCLES_68020(38);
+
+    } else {
 
         //           00  10  20        00  10  20        00  10  20
         //           .b  .b  .b        .w  .w  .w        .l  .l  .l
@@ -4101,31 +4106,20 @@ Moira::execDivu(u16 opcode)
         CYCLES_DIPC ( 0,  0,  0,      148,116, 49,       0,  0,  0)
         CYCLES_IXPC ( 0,  0,  0,      150,118, 51,       0,  0,  0)
         CYCLES_IM   ( 0,  0,  0,      144,112, 46,       0,  0,  0)
-
-    } else if (divByZero) {
-
-        CYCLES_68000(38);
-        CYCLES_68010(44);
-        CYCLES_68020(38);
     }
 
     FINALIZE
 }
 
-template <Core C, Instr I, Mode M, Size S> bool
+template <Core C, Instr I, Mode M, Size S> void
 Moira::execDivuMoira(u16 opcode, bool *divByZero)
 {
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
     
     u32 ea, divisor, result;
-    try {
-        readOp<C, M, Word, STD_AE_FRAME>(src, &ea, &divisor);
-    } catch(...) {
-        // TODO: Change return type from bool to void
-        return false;
-    }
-        
+    readOp<C, M, Word, STD_AE_FRAME>(src, &ea, &divisor);
+
     u32 dividend = readD(dst);
 
     // Check for division by zero
@@ -4140,7 +4134,7 @@ Moira::execDivuMoira(u16 opcode, bool *divByZero)
         SYNC(8);
         execException<C>(EXC_DIVIDE_BY_ZERO);
         *divByZero = true;
-        return false;
+        return;
     }
 
     result = div<C, I>(dividend, divisor);
@@ -4149,10 +4143,9 @@ Moira::execDivuMoira(u16 opcode, bool *divByZero)
 
     [[maybe_unused]] auto cycles = cyclesDiv<C, I>(dividend, (u16)divisor) - 4;
     SYNC(cycles);
-    return true;
 }
 
-template <Core C, Instr I, Mode M, Size S> bool
+template <Core C, Instr I, Mode M, Size S> void
 Moira::execDivuMusashi(u16 opcode, bool *divByZero)
 {
     int src = _____________xxx(opcode);
@@ -4160,12 +4153,7 @@ Moira::execDivuMusashi(u16 opcode, bool *divByZero)
 
     [[maybe_unused]] i64 c = clock;
     u32 ea, divisor, result;
-    try {
-        readOp<C, M, Word>(src, &ea, &divisor);
-    } catch(...) {
-        // TODO: Change return type from bool to void
-        return false;
-    }
+    readOp<C, M, Word>(src, &ea, &divisor);
 
     // Check for division by zero
     if (divisor == 0) {
@@ -4176,7 +4164,7 @@ Moira::execDivuMusashi(u16 opcode, bool *divByZero)
         }
         execException<C>(EXC_DIVIDE_BY_ZERO);
         *divByZero = true;
-        return false;
+        return;
     }
 
     u32 dividend = readD(dst);
@@ -4187,8 +4175,6 @@ Moira::execDivuMusashi(u16 opcode, bool *divByZero)
 
     writeD(dst, result);
     prefetch<C, POLLIPL>();
-
-    return true;
 }
 
 template <Core C, Instr I, Mode M, Size S> void
