@@ -13,6 +13,7 @@ Moira::readOp(int n, u32 *ea, u32 *result)
             // Handle non-memory modes
         case MODE_DN: *result = readD<S>(n);   break;
         case MODE_AN: *result = readA<S>(n);   break;
+            // TODO: SKIP_READ is wrong here. Ext words are not read
         case MODE_IM: if constexpr ((F & SKIP_READ) == 0) { *result = readI<C, S>(); } break;
             
         default:
@@ -356,27 +357,39 @@ Moira::readMS(u32 addr)
     if constexpr (S == Byte) {
 
         SYNC(2);
-        if (F & POLLIPL) pollIpl();
-        result = read8(addr & addrMask<C>());
-        SYNC(2);
+
+        if ((F & SKIP_READ2) == 0) {
+
+            if (F & POLLIPL) pollIpl();
+            result = read8(addr & addrMask<C>());
+            SYNC(2);
+        }
     }
 
     if constexpr (S == Word) {
 
         SYNC(2);
-        if (F & POLLIPL) pollIpl();
-        result = read16(addr & addrMask<C>());
-        SYNC(2);
+
+        if ((F & SKIP_READ2) == 0) {
+
+            if (F & POLLIPL) pollIpl();
+            result = read16(addr & addrMask<C>());
+            SYNC(2);
+        }
     }
 
     if constexpr (S == Long) {
 
         SYNC(2);
-        result = read16(addr & addrMask<C>()) << 16;
-        SYNC(4);
-        if (F & POLLIPL) pollIpl();
-        result |= read16((addr + 2) & addrMask<C>());
-        SYNC(2);
+
+        if ((F & SKIP_READ2) == 0) {
+
+            result = read16(addr & addrMask<C>()) << 16;
+            SYNC(4);
+            if (F & POLLIPL) pollIpl();
+            result |= read16((addr + 2) & addrMask<C>());
+            SYNC(2);
+        }
     }
     
     return result;

@@ -3531,8 +3531,8 @@ Moira::execMoveToCcr(u16 opcode)
     AVAILABILITY(C68000)
 
     int src = _____________xxx(opcode);
-    u32 ea, data;
 
+    u32 ea, data;
     readOp<C, M, S, STD_AE_FRAME>(src, &ea, &data);
 
     SYNC(4);
@@ -3586,13 +3586,24 @@ Moira::execMoveFromSrEa(u16 opcode)
     AVAILABILITY(C68000)
     if constexpr (C != C68000) SUPERVISOR_MODE_ONLY
 
-        int dst = _____________xxx(opcode);
-    u32 ea, data;
+    int dst = _____________xxx(opcode);
 
-    readOp<C, M, S, STD_AE_FRAME>(dst, &ea, &data);
-    prefetch<C>();
+    if (C == C68000) {
 
-    writeOp<C, M, S, POLLIPL>(dst, ea, getSR());
+        u32 ea, data;
+        readOp<C, M, S, STD_AE_FRAME>(dst, &ea, &data);
+        prefetch<C>();
+
+        writeOp<C, M, S, POLLIPL>(dst, ea, getSR());
+
+    } else {
+
+        if (M == MODE_AI) SYNC(2);
+        if (M == MODE_PI) SYNC(4);
+        if (M == MODE_PD) SYNC(2);
+        writeOp<C, M, S, POLLIPL>(dst, getSR());
+        prefetch<C>();
+    }
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
