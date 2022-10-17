@@ -3023,9 +3023,14 @@ Moira::execMovecRcRx(u16 opcode)
     AVAILABILITY(C68000)
     SUPERVISOR_MODE_ONLY
 
+    SYNC(4);
+
+    auto arg = readI<C, Word>();
+    int dst = xxxx____________(arg);
+
     if constexpr (C == C68010) {
 
-        auto reg = queue.irc & 0xFFF;
+        auto reg = arg & 0xFFF;
 
         if (reg != 0x000 && reg != 0x001 && reg != 0x800 && reg != 0x801) {
 
@@ -3035,7 +3040,7 @@ Moira::execMovecRcRx(u16 opcode)
     }
     if constexpr (C == C68020) {
 
-        auto reg = queue.irc & 0xFFF;
+        auto reg = arg & 0xFFF;
 
         if (reg != 0x000 && reg != 0x001 && reg != 0x800 && reg != 0x801 &&
             reg != 0x002 && reg != 0x802 && reg != 0x803 && reg != 0x804) {
@@ -3044,11 +3049,6 @@ Moira::execMovecRcRx(u16 opcode)
             return;
         }
     }
-
-    SYNC(4);
-
-    auto arg = readI<C, Word>();
-    int dst = xxxx____________(arg);
 
     switch (arg & 0x0FFF) {
 
@@ -3077,9 +3077,14 @@ Moira::execMovecRxRc(u16 opcode)
     AVAILABILITY(C68010)
     SUPERVISOR_MODE_ONLY
 
+    SYNC(2);
+
+    auto arg = readI<C, Word>();
+    int  src = xxxx____________(arg);
+
     if constexpr (C == C68010) {
 
-        auto reg = queue.irc & 0xFFF;
+        auto reg = arg & 0xFFF;
 
         if (reg != 0x000 && reg != 0x001 && reg != 0x800 && reg != 0x801) {
 
@@ -3089,7 +3094,7 @@ Moira::execMovecRxRc(u16 opcode)
     }
     if constexpr (C == C68020) {
 
-        auto reg = queue.irc & 0xFFF;
+        auto reg = arg & 0xFFF;
 
         if (reg != 0x000 && reg != 0x001 && reg != 0x800 && reg != 0x801 &&
             reg != 0x002 && reg != 0x802 && reg != 0x803 && reg != 0x804) {
@@ -3099,12 +3104,7 @@ Moira::execMovecRxRc(u16 opcode)
         }
     }
 
-    SYNC(2);
-
-    auto arg = readI<C, Word>();
-    int  src = xxxx____________(arg);
     u32  val = readR(src);
-
     switch (arg & 0x0FFF) {
 
         case 0x000: setSFC(val); break;
@@ -4695,6 +4695,7 @@ Moira::execRte(u16 opcode)
 
     u16 newsr = 0;
     u32 newpc = 0;
+    u16 format = 0;
 
     switch (C) {
 
@@ -4712,17 +4713,14 @@ Moira::execRte(u16 opcode)
         {
             // TODO: Use pop instead of readMS
 
-            newsr = (u16)readMS<C, MEM_DATA, Word>(reg.sp);
-            reg.sp += 2;
-
-            newpc = readMS<C, MEM_DATA, Long>(reg.sp);
-            reg.sp += 4;
-
-            u16 format = u16(readMS<C, MEM_DATA, Word>(reg.sp) >> 12);
-            reg.sp += 2;
+            format = (u16)readMS<C, MEM_DATA, Word>(reg.sp + 6);
+            newsr = (u16)readMS<C, MEM_DATA, Word>(reg.sp + 0);
+            if ((format & 0xFF) == 0x10) SYNC(4);
+            newpc = readMS<C, MEM_DATA, Long>(reg.sp + 2);
+            reg.sp += 8;
 
             // Check the frame format
-            switch (format) {
+            switch (format >> 12) {
 
                 case 0b0000: // Short format (we are done)
 
