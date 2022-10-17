@@ -307,7 +307,11 @@ Moira::execException(ExceptionType exc, int nr)
             SYNC(4);
             
             // Write stack frame
-            writeStackFrame0000<C>(status, reg.pc - 2, vector);
+            if (C == C68010) {
+                writeStackFrame0000<C>(status, reg.pc0, vector);
+            } else {
+                writeStackFrame0000<C>(status, reg.pc - 2, vector);
+            }
 
             // Branch to exception handler
             jumpToVector<C, AE_SET_CB3>(vector);
