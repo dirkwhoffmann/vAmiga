@@ -5199,7 +5199,8 @@ Moira::execTrapv(u16 opcode)
         if (C == C68000) {
             (void)readMS<C, MEM_PROG, Word>(reg.pc + 2);
         } else {
-            SYNC(6);
+            (void)readMS<C, MEM_PROG, Word>(reg.pc + 2);
+            SYNC(2);
         }
         execException<C>(EXC_TRAPV);
 
