@@ -3389,9 +3389,6 @@ Moira::execMoves(u16 opcode)
         int src = xxxx____________(arg);
         int dst = _____________xxx(opcode);
 
-        // Make the DFC register visible on the FC pins
-        fcSource = 2;
-
         auto value = readR<S>(src);
 
         // Take care of some special cases
@@ -3406,24 +3403,21 @@ Moira::execMoves(u16 opcode)
             value -= dst == 7 ? (S == Long ? 4 : 2) : S;
         }
 
+        if constexpr (M == MODE_AI) SYNC(6);
+        if constexpr (M == MODE_PI) SYNC(8);
+        if constexpr (M == MODE_PD) SYNC(6);
+        if constexpr (M == MODE_DI) SYNC(4);
+        if constexpr (M == MODE_IX) SYNC(6);
+        if constexpr (M == MODE_AW) SYNC(4);
+        if constexpr (M == MODE_AL) SYNC(4);
+
+        // Make the DFC register visible on the FC pins
+        fcSource = 2;
+
         writeOp<C, M, S>(dst, value);
 
         // Switch back to the old FC pin values
         fcSource = 0;
-
-        switch (M) {
-
-            case MODE_AI: SYNC(6); break;
-            case MODE_PD: SYNC(S == Long ? 10 : 6); break;
-            case MODE_IX: SYNC(S == Long ? 14 : 12); break;
-            case MODE_PI: SYNC(6); break;
-            case MODE_DI: SYNC(S == Long ? 12 : 10); break;
-            case MODE_AW: SYNC(S == Long ? 12 : 10); break;
-            case MODE_AL: SYNC(S == Long ? 12 : 10); break;
-
-            default:
-                fatalError;
-        }
 
         if (S == Long && (model == M68020 || model == M68EC020)) cp += 2;
 

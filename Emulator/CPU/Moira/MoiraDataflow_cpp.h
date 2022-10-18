@@ -61,7 +61,7 @@ Moira::writeOp(int n, u32 val)
             try {
                 
                 // Write to effective address
-                writeM<C, M, S, F>(ea, val);
+                if constexpr ((F & SKIP_WRITE) == 0) writeM<C, M, S, F>(ea, val);
                 
             } catch (const AddressErrorException &exc) {
                 
