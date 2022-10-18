@@ -3433,10 +3433,20 @@ Moira::execMoves(u16 opcode)
         int src = _____________xxx(opcode);
         int dst = xxxx____________(arg);
 
-        readOp<C, M, S, STD_AE_FRAME>(src, &ea, &data);
+        readOp<C, M, S, STD_AE_FRAME | SKIP_READ>(src, &ea, &data);
 
         // Make the SFC register visible on the FC pins
         fcSource = 1;
+
+        if constexpr (M == MODE_AI) SYNC(6);
+        if constexpr (M == MODE_PI) SYNC(8);
+        if constexpr (M == MODE_PD) SYNC(6);
+        if constexpr (M == MODE_DI) SYNC(4);
+        if constexpr (M == MODE_IX) SYNC(6);
+        if constexpr (M == MODE_AW) SYNC(4);
+        if constexpr (M == MODE_AL) SYNC(4);
+
+        data = readM<C, M, S>(ea);
 
         if (dst < 8) {
             writeR<S>(dst, data);
@@ -3446,20 +3456,6 @@ Moira::execMoves(u16 opcode)
 
         // Switch back to the old FC pin values
         fcSource = 0;
-
-        switch (M) {
-
-            case MODE_AI: SYNC(6); break;
-            case MODE_PD: SYNC(S == Long ? 10 : 6); break;
-            case MODE_IX: SYNC(S == Long ? 14 : 12); break;
-            case MODE_PI: SYNC(6); break;
-            case MODE_DI: SYNC(S == Long ? 12 : 10); break;
-            case MODE_AW: SYNC(S == Long ? 12 : 10); break;
-            case MODE_AL: SYNC(S == Long ? 12 : 10); break;
-
-            default:
-                fatalError;
-        }
 
         if (model == M68020 || model == M68EC020) cp += 2;
     }
