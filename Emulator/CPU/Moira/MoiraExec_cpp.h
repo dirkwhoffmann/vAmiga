@@ -3391,6 +3391,8 @@ Moira::execMoves(u16 opcode)
 
         auto value = readR<S>(src);
 
+        readOp<C, M, S, STD_AE_FRAME | SKIP_READ>(dst, &ea, &data);
+
         // Take care of some special cases
         if (M == MODE_PI && src == (dst | 0x8)) {
 
@@ -3414,7 +3416,8 @@ Moira::execMoves(u16 opcode)
         // Make the DFC register visible on the FC pins
         fcSource = 2;
 
-        writeOp<C, M, S>(dst, value);
+        // writeOp<C, M, S>(dst, value);
+        writeM<C, M, S>(ea, value);
 
         // Switch back to the old FC pin values
         fcSource = 0;
@@ -3495,12 +3498,12 @@ Moira::execMoveFromCcrEa(u16 opcode)
     AVAILABILITY(C68010)
 
     int dst = _____________xxx(opcode);
-    u32 ea, data;
 
-    readOp<C, M, S, STD_AE_FRAME>(dst, &ea, &data);
+    if (M == MODE_AI) SYNC(2);
+    if (M == MODE_PI) SYNC(4);
+    if (M == MODE_PD) SYNC(2);
+    writeOp<C, M, S, POLLIPL>(dst, getCCR());
     prefetch<C>();
-
-    writeOp<C, M, S, POLLIPL>(dst, ea, getCCR());
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
