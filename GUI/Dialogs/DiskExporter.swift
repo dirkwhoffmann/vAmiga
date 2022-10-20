@@ -388,18 +388,31 @@ class DiskExporter: DialogController {
     func exportHardDisk(url: URL) {
         
         do {
-            
-            if let nr = partition {
 
-                debug(.media, "Exporting partiton \(nr) to \(url)")
-                try hdf?.writeToFile(url: url, partition: nr)
+            switch formatPopup.selectedTag() {
 
-            } else {
+            case Format.hdf:
 
-                debug(.media, "Exporting entire HDF to \(url)")
-                try hdf?.writeToFile(url: url)
+                if let nr = partition {
+
+                    debug(.media, "Exporting partiton \(nr) to \(url)")
+                    try hdf?.writeToFile(url: url, partition: nr)
+
+                } else {
+
+                    debug(.media, "Exporting entire HDF to \(url)")
+                    try hdf?.writeToFile(url: url)
+                }
+
+            case Format.vol:
+
+                debug(.media, "Exporting file system")
+                try vol!.export(url: url)
+
+            default:
+                fatalError()
             }
-            
+
             hdn!.markDiskAsUnmodified()
             myAppDelegate.noteNewRecentlyExportedHdrURL(url, hd: hdn!.nr)
             
