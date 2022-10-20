@@ -4759,13 +4759,14 @@ Moira::execRte(u16 opcode)
 
                     if (!MIMIC_MUSASHI) {
 
-                        reg.sr.n = format & 0b1000;
+                        reg.sr.n = (format >> 12) & 0b1000;
                         reg.sr.z = 0;
                         reg.sr.v = 0;
                     }
 
+                    reg.sp -= 8;
                     execException(EXC_FORMAT_ERROR);
-                    CYCLES_68010(4)
+                    // CYCLES_68010(4)
                     return;
             }
             break;
