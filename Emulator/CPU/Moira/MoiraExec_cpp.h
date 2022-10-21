@@ -162,7 +162,7 @@ Moira::execShiftEa(u16 opcode)
     u32 ea, data;
     readOp<C, M, S, STD_AE_FRAME>(src, &ea, &data);
 
-    looping<I>() ? noPrefetch<C>() : prefetch<C, POLLIPL>();
+    looping<I>() ? noPrefetch<C>(4) : prefetch<C, POLLIPL>();
     writeM<C, M, S>(ea, shift<C, I, S>(1, data));
 
     if constexpr (I == ROR || I == ROL) {
@@ -345,7 +345,7 @@ Moira::execAdda(u16 opcode)
 
     if constexpr (C == C68000) {
 
-        looping<I>() ? noPrefetch<C>() : prefetch<C, POLLIPL>();
+        prefetch<C, POLLIPL>();
         SYNC(2);
         if constexpr (S == Word || isRegMode(M) || isImmMode(M)) SYNC(2);
 
@@ -354,7 +354,18 @@ Moira::execAdda(u16 opcode)
         SYNC(2);
         pollIpl();
         if constexpr (S == Word || isRegMode(M) || isImmMode(M)) SYNC(2);
-        looping<I>() ? noPrefetch<C>() : prefetch<C>();
+        if (looping<I>()) {
+            if (M == MODE_DN && S == Long) noPrefetch<C>(6);
+            else if (M == MODE_AI && S == Long) noPrefetch<C>(6);
+            else if (M == MODE_AI && S != Long) noPrefetch<C>(4);
+            else if (M == MODE_PI && S == Long) noPrefetch<C>(6);
+            else if (M == MODE_PI && S != Long) noPrefetch<C>(4);
+            else if (M == MODE_PD && S == Long) noPrefetch<C>(6);
+            else if (M == MODE_PD && S != Long) noPrefetch<C>(4);
+            else noPrefetch<C>();
+        } else {
+            prefetch<C>();
+        }
     }
 
     //           00  10  20        00  10  20        00  10  20
@@ -587,11 +598,11 @@ Moira::execAddxEa(u16 opcode)
     } else if constexpr (S == Long && C == C68010 && !MIMIC_MUSASHI) {
 
         writeM<C, M, S>(ea2, result);
-        looping<I>() ? noPrefetch<C>() : prefetch<C, POLLIPL>();
+        looping<I>() ? noPrefetch<C>(S == Long ? 0 : 2) : prefetch<C, POLLIPL>();
 
     } else {
 
-        looping<I>() ? noPrefetch<C>() : prefetch<C>();
+        looping<I>() ? noPrefetch<C>(S == Long ? 0 : 2) : prefetch<C>();
         writeM<C, M, S>(ea2, result);
     }
 
@@ -625,7 +636,7 @@ Moira::execAndEaRg(u16 opcode)
 
         pollIpl();
         if constexpr (S == Long) SYNC(2);
-        looping<I>() ? noPrefetch<C>() : prefetch<C>();
+        looping<I>() ? noPrefetch<C>(6) : prefetch<C>();
     }
 
     //           00  10  20        00  10  20        00  10  20
@@ -657,7 +668,7 @@ Moira::execAndRgEa(u16 opcode)
     readOp<C, M, S, STD_AE_FRAME>(dst, &ea, &data);
 
     u32 result = logic<C, I, S>(readD<S>(src), data);
-    looping<I>() ? noPrefetch<C>() : prefetch<C, POLLIPL>();
+    looping<I>() ? noPrefetch<C>(2) : prefetch<C, POLLIPL>();
 
     if constexpr (C == C68000) {
         if constexpr (S == Long && isRegMode(M)) SYNC(4);
@@ -1702,32 +1713,32 @@ Moira::execClr(u16 opcode)
 
                 // pollIpl();
                 writeOp<C, M, S, POLLIPL>(dst, ea, 0);
-                looping<I>() ? noPrefetch<C>() : prefetch<C>();
+                looping<I>() ? noPrefetch<C>(2) : prefetch<C>();
                 break;
 
             case MODE_PD:
 
                 writeOp<C, M, S, REVERSE | POLLIPL>(dst, ea, 0);
-                looping<I>() ? noPrefetch<C>() : prefetch<C>();
+                looping<I>() ? noPrefetch<C>(2) : prefetch<C>();
                 break;
 
             case MODE_DI:
 
-                looping<I>() ? noPrefetch<C>() : prefetch<C, POLLIPL>();
+                looping<I>() ? noPrefetch<C>(2) : prefetch<C, POLLIPL>();
                 writeOp<C, M, S, REVERSE>(dst, ea, 0);
                 break;
 
             case MODE_IX:
 
                 SYNC(2);
-                looping<I>() ? noPrefetch<C>() : prefetch<C, POLLIPL>();
+                looping<I>() ? noPrefetch<C>(2) : prefetch<C, POLLIPL>();
                 writeOp<C, M, S, REVERSE>(dst, ea, 0);
                 break;
 
             case MODE_AW:
             case MODE_AL:
 
-                looping<I>() ? noPrefetch<C>() : prefetch<C, POLLIPL>();
+                looping<I>() ? noPrefetch<C>(2) : prefetch<C, POLLIPL>();
                 writeOp<C, M, S, REVERSE>(dst, ea, 0);
                 break;
 
@@ -1782,7 +1793,7 @@ Moira::execCmp(u16 opcode)
 
         cmp<C, S>(data, readD<S>(dst));
         pollIpl();
-        prefetch<C>();
+        looping<I>() ? noPrefetch<C>(S == Long ? 4 : 2) : prefetch<C>();
     }
 
     //           00  10  20        00  10  20        00  10  20
@@ -1826,7 +1837,7 @@ Moira::execCmpa(u16 opcode)
 
         SYNC(2);
         pollIpl();
-        looping<I>() ? noPrefetch<C>() : prefetch<C>();
+        looping<I>() ? noPrefetch<C>(2) : prefetch<C>();
     }
 
     //           00  10  20        00  10  20        00  10  20
