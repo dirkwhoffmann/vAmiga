@@ -5044,7 +5044,7 @@ Moira::execSccEa(u16 opcode)
         if constexpr (M == MODE_AI) SYNC(2);
         if constexpr (M == MODE_PI) SYNC(4);
         if constexpr (M == MODE_PD) SYNC(2);
-        if constexpr (M == MODE_IX) SYNC(8);
+        if constexpr (M == MODE_IX) SYNC(2);
 
         prefetch<C, POLLIPL>();
         data = cond(I) ? 0xFF : 0;
