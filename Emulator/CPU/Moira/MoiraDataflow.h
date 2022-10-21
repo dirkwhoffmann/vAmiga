@@ -116,7 +116,7 @@ template <Core C, Flags F = 0> void prefetch();
 template <Core C, Flags F = 0, int delay = 0> void fullPrefetch();
 
 // prefetch replacement if loop mode is active
-void noPrefetch();
+template <Core C> void noPrefetch();
 
 // Reads an extension word from memory
 template <Core C> void readExt();

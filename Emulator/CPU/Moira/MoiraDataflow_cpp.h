@@ -592,13 +592,14 @@ Moira::fullPrefetch()
     prefetch<C, F>();
 }
 
-void
+template <Core C> void
 Moira::noPrefetch()
 {
     assert(flags & CPU_IS_LOOPING);
     
     reg.pc0 = reg.pc;
     std::swap(queue.irc, queue.ird);
+    SYNC(2);
 }
 
 template <Core C> void
