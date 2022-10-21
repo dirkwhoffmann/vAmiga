@@ -593,13 +593,13 @@ Moira::fullPrefetch()
 }
 
 template <Core C> void
-Moira::noPrefetch()
+Moira::noPrefetch(int delay)
 {
     assert(flags & CPU_IS_LOOPING);
     
     reg.pc0 = reg.pc;
     std::swap(queue.irc, queue.ird);
-    SYNC(2);
+    if (delay) SYNC(delay);
 }
 
 template <Core C> void

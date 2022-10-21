@@ -462,6 +462,7 @@ Moira::bcd(u32 op1, u32 op2)
     switch (I) {
             
         case ABCD:
+        case ABCD_LOOP:
         {
             // Add digits
             u16 lo = lo1 + lo2 + reg.sr.x;
@@ -491,6 +492,7 @@ Moira::bcd(u32 op1, u32 op2)
             break;
         }
         case SBCD:
+        case SBCD_LOOP:
         {
             // Subtract digits
             u16 lo = lo2 - lo1 - reg.sr.x;

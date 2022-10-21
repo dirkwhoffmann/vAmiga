@@ -240,7 +240,7 @@ Moira::execAbcdEa(u16 opcode)
     readOp<C, M, S, IMPL_DEC>(dst, &ea2, &data2);
 
     u32 result = bcd<C, I, Byte>(data1, data2);
-    looping<I>() ? noPrefetch<C>() : prefetch<C>();
+    looping<I>() ? noPrefetch<C>(4) : prefetch<C>();
 
     writeM<C, M, Byte>(ea2, result);
 
@@ -268,7 +268,7 @@ Moira::execAddEaRg(u16 opcode)
 
     if constexpr (C == C68000) {
 
-        looping<I>() ? noPrefetch<C>() : prefetch<C, POLLIPL>();
+        prefetch<C, POLLIPL>();
         if constexpr (S == Long) SYNC(2 + (isMemMode(M) ? 0 : 2));
 
     } else {
@@ -340,7 +340,7 @@ Moira::execAdda(u16 opcode)
     readOp<C, M, S, STD_AE_FRAME>(src, &ea, &data);
     data = SEXT<S>(data);
 
-    result = (I == ADDA) ? U32_ADD(readA(dst), data) : U32_SUB(readA(dst), data);
+    result = (I == ADDA || I == ADDA_LOOP) ? U32_ADD(readA(dst), data) : U32_SUB(readA(dst), data);
     writeA(dst, result);
 
     if constexpr (C == C68000) {
@@ -4399,7 +4399,7 @@ Moira::execNbcdRg(u16 opcode)
 
     int reg = _____________xxx(opcode);
 
-    prefetch<C, POLLIPL>();
+    looping<I>() ? noPrefetch<C>() : prefetch<C, POLLIPL>();
     SYNC(2);
     writeD<Byte>(reg, bcd<C, SBCD, Byte>(readD<Byte>(reg), 0));
 
@@ -4420,7 +4420,7 @@ Moira::execNbcdEa(u16 opcode)
     u32 ea, data;
     readOp<C, M, Byte>(reg, &ea, &data);
 
-    prefetch<C, POLLIPL>();
+    looping<I>() ? noPrefetch<C>() : prefetch<C, POLLIPL>();
     writeM<C, M, Byte>(ea, bcd<C, SBCD, Byte>(data, 0));
 
     //           00  10  20        00  10  20        00  10  20
