@@ -4431,7 +4431,14 @@ Moira::execNbcdEa(u16 opcode)
     u32 ea, data;
     readOp<C, M, Byte>(reg, &ea, &data);
 
-    looping<I>() ? noPrefetch<C>(2) : prefetch<C, POLLIPL>();
+    if (looping<I>()) {
+        if (M == MODE_AI) noPrefetch<C>(4);
+        else if (M == MODE_PI) noPrefetch<C>(4);
+        else if (M == MODE_PD) noPrefetch<C>(4);
+        else noPrefetch<C>(2);
+    } else {
+        prefetch<C, POLLIPL>();
+    }
     writeM<C, M, Byte>(ea, bcd<C, SBCD, Byte>(data, 0));
 
     //           00  10  20        00  10  20        00  10  20
@@ -4481,7 +4488,7 @@ Moira::execNegEa(u16 opcode)
     readOp<C, M, S, STD_AE_FRAME>(dst, &ea, &data);
 
     data = logic<C, I, S>(data);
-    looping<I>() ? noPrefetch<C>() : prefetch<C, POLLIPL>();
+    looping<I>() ? noPrefetch<C>(2) : prefetch<C, POLLIPL>();
 
     if constexpr (MIMIC_MUSASHI) {
         writeOp<C, M, S>(dst, ea, data);
