@@ -379,9 +379,7 @@ Moira::execException(ExceptionType exc, int nr)
             
             // Clear any pending trace event
             flags &= ~CPU_TRACE_EXCEPTION;
-            
-            SYNC(4);
-            
+                        
             // Write stack frame
             if (MIMIC_MUSASHI) {
                 writeStackFrame0000<C>(status, reg.pc, vector);
