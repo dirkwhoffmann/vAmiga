@@ -2163,23 +2163,32 @@ Moira::execDbcc(u16 opcode)
 
             // Branch
             if (takeBranch) {
-                SYNC(4);
+
+                SYNC(6);
                 reg.pc = newpc;
                 reg.pc0 = reg.pc;
                 queue.ird = queue.irc;
                 queue.irc = opcode;
                 return;
+
             } else {
-                // (void)readMS<C, MEM_PROG, Word>(reg.pc + 2);
+
+                SYNC(2);
+                // Fall through to next instruction
+                reg.pc += 2;
+                fullPrefetch<C, POLLIPL>();
+                flags &= ~CPU_IS_LOOPING;
             }
+
         } else {
+
             SYNC(2);
+            // Fall through to next instruction
+            reg.pc += 2;
+            fullPrefetch<C, POLLIPL>();
+            flags &= ~CPU_IS_LOOPING;
         }
 
-        // Fall through to next instruction
-        reg.pc += 2;
-        fullPrefetch<C, POLLIPL>();
-        flags &= ~CPU_IS_LOOPING;
 
         // printf("Exiting loop mode (IRD: %x IRC: %x)\n", queue.ird, queue.irc);
     };
