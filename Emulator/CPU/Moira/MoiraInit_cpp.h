@@ -809,6 +809,7 @@ Moira::createJumpTable()
     // (Ax)+,(Ay)+
     opcode = parse("1011 ---1 --00 1---");
     ____XXX_SS___XXX(opcode, CMPM, MODE_PI, Byte | Word | Long, Cmpm, CIMS)
+    ____XXX_SS___XXX(opcode, CMPM, MODE_PI, Byte | Word | Long, Cmpm, CIMSloop)
 
     
     // DBcc

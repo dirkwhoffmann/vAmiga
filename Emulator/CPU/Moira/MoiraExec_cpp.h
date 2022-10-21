@@ -1943,7 +1943,7 @@ Moira::execCmpm(u16 opcode)
         pollIpl();
 
         cmp<C, S>(data1, data2);
-        prefetch<C>();
+        looping<I>() ? noPrefetch<C>(S == Long ? 2 : 0) : prefetch<C>();
     }
 
     //           00  10  20        00  10  20        00  10  20
@@ -2740,7 +2740,7 @@ Moira::execMove4(u16 opcode)
     reg.sr.v = 0;
     reg.sr.c = 0;
 
-    looping<I>() ? noPrefetch<C>() : prefetch<C, POLLIPL>();
+    looping<I>() ? noPrefetch<C>(2) : prefetch<C, POLLIPL>();
 
     ea = computeEA <C, MODE_PD, S, IMPL_DEC> (dst);
 
@@ -4431,7 +4431,7 @@ Moira::execNbcdEa(u16 opcode)
     u32 ea, data;
     readOp<C, M, Byte>(reg, &ea, &data);
 
-    looping<I>() ? noPrefetch<C>() : prefetch<C, POLLIPL>();
+    looping<I>() ? noPrefetch<C>(2) : prefetch<C, POLLIPL>();
     writeM<C, M, Byte>(ea, bcd<C, SBCD, Byte>(data, 0));
 
     //           00  10  20        00  10  20        00  10  20
