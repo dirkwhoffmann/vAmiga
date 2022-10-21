@@ -275,7 +275,7 @@ Moira::execAddEaRg(u16 opcode)
 
         pollIpl();
         if constexpr (S == Long) SYNC(2);
-        looping<I>() ? noPrefetch<C>() : prefetch<C>();
+        looping<I>() ? noPrefetch<C>(6) : prefetch<C>();
 
     }
 
@@ -310,7 +310,7 @@ Moira::execAddRgEa(u16 opcode)
     readOp<C, M, S, STD_AE_FRAME>(dst, &ea, &data);
     result = addsub<C, I, S>(readD<S>(src), data);
 
-    looping<I>() ? noPrefetch<C>() : prefetch<C, POLLIPL>();
+    looping<I>() ? noPrefetch<C>(2) : prefetch<C, POLLIPL>();
 
     writeM<C, M, S>(ea, result);
 
