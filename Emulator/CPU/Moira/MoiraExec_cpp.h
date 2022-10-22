@@ -2154,7 +2154,6 @@ Moira::execDbcc(u16 opcode)
 
     auto execLoop = [&]() {
 
-        SYNC(2);
         if (!cond(I)) {
 
             int dn = _____________xxx(opcode);
@@ -2175,16 +2174,18 @@ Moira::execDbcc(u16 opcode)
             // Branch
             if (takeBranch) {
 
-                SYNC(4);
+                SYNC(6);
                 reg.pc = newpc;
                 reg.pc0 = reg.pc;
                 queue.ird = queue.irc;
                 queue.irc = opcode;
+                pollIpl();
                 return;
 
             } else {
 
-                // SYNC(2);
+                if (loopModeDelay) SYNC(loopModeDelay);
+                loopModeDelay = 2;
                 // Fall through to next instruction
                 reg.pc += 2;
                 fullPrefetch<C, POLLIPL>();
@@ -2193,7 +2194,7 @@ Moira::execDbcc(u16 opcode)
 
         } else {
 
-            SYNC(2);
+            SYNC(4);
             // Fall through to next instruction
             reg.pc += 2;
             fullPrefetch<C, POLLIPL>();
@@ -2600,6 +2601,7 @@ Moira::execMove2(u16 opcode)
             reg.sr.z = ZERO<S>(data);
 
             looping<I>() ? noPrefetch<C>() : prefetch<C, POLLIPL>();
+            if (looping<I>() && S == Long) loopModeDelay = 0;
         }
     }
 
@@ -2684,6 +2686,7 @@ Moira::execMove3(u16 opcode)
 
             writeOp<C, MODE_PI, S, AE_INC_PC|POLLIPL>(dst, data);
             looping<I>() ? noPrefetch<C>() : prefetch<C>();
+            if (looping<I>() && S == Long) loopModeDelay = 0;
 
             reg.sr.n = NBIT<S>(data);
             reg.sr.z = ZERO<S>(data);
@@ -2741,6 +2744,7 @@ Moira::execMove4(u16 opcode)
     reg.sr.c = 0;
 
     looping<I>() ? noPrefetch<C>(2) : prefetch<C, POLLIPL>();
+    if (looping<I>() && S == Long) loopModeDelay = 0;
 
     ea = computeEA <C, MODE_PD, S, IMPL_DEC> (dst);
 

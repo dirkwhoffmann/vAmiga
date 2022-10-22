@@ -130,7 +130,10 @@ protected:
     
     // Cycle penalty (needed for 68020+ extended addressing modes)
     int cp;
-    
+
+    // EXPERIMENTAL
+    int loopModeDelay = 2;
+
     // Jump table holding the instruction handlers
     typedef void (Moira::*ExecPtr)(u16);
     ExecPtr exec[65536];
