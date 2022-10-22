@@ -1711,41 +1711,42 @@ Moira::execClr(u16 opcode)
             case MODE_AI:
             case MODE_PI:
 
-                // pollIpl();
                 writeOp<C, M, S, POLLIPL>(dst, ea, 0);
-                looping<I>() ? noPrefetch<C>(2) : prefetch<C>();
+                looping<I>() ? noPrefetch<C>() : prefetch<C>();
+                if (looping<I>()) loopModeDelay = 4;
                 break;
 
             case MODE_PD:
 
                 writeOp<C, M, S, REVERSE | POLLIPL>(dst, ea, 0);
-                looping<I>() ? noPrefetch<C>(2) : prefetch<C>();
+                looping<I>() ? noPrefetch<C>() : prefetch<C>();
+                if (looping<I>()) loopModeDelay = 4;
                 break;
 
             case MODE_DI:
 
-                looping<I>() ? noPrefetch<C>(2) : prefetch<C, POLLIPL>();
+                prefetch<C, POLLIPL>();
                 writeOp<C, M, S, REVERSE>(dst, ea, 0);
                 break;
 
             case MODE_IX:
 
                 SYNC(2);
-                looping<I>() ? noPrefetch<C>(2) : prefetch<C, POLLIPL>();
+                prefetch<C, POLLIPL>();
                 writeOp<C, M, S, REVERSE>(dst, ea, 0);
                 break;
 
             case MODE_AW:
             case MODE_AL:
 
-                looping<I>() ? noPrefetch<C>(2) : prefetch<C, POLLIPL>();
+                prefetch<C, POLLIPL>();
                 writeOp<C, M, S, REVERSE>(dst, ea, 0);
                 break;
 
             default:
 
                 writeOp<C, M, S, REVERSE>(dst, ea, 0);
-                looping<I>() ? noPrefetch<C>() : prefetch<C, POLLIPL>();
+                prefetch<C, POLLIPL>();
         }
 
         reg.sr.n = 0;
