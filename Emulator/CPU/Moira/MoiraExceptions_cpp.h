@@ -102,9 +102,54 @@ Moira::writeStackFrame0010(u16 sr, u32 pc, u32 ia, u16 nr)
 }
 
 template <Core C> void
-Moira::writeStackFrame1000(u16 sr, u32 pc, u16 nr)
+Moira::writeStackFrame1000(u16 sr, u32 pc, u32 ia, u16 nr, u32 addr)
 {
-    
+    assert(C == C68010);
+
+    printf("writeStackFrame1000: %x %x %x %x %d %x\n", sr, ia, pc, ia, nr, addr);
+
+    // Internal information
+    reg.sp -= 6;
+    push<C, Word>(0);
+    push<C, Long>(0);
+    push<C, Long>(0);
+    push<C, Long>(0);
+    push<C, Long>(0);
+    push<C, Long>(0);
+    push<C, Long>(0);
+
+    // Instruction input buffer
+    push<C, Word>(0);
+
+    // Unused, reserved
+    push<C, Word>(0);
+
+    // Data input buffer
+    push<C, Word>(0);
+
+    // Unused, reserved
+    push<C, Word>(0);
+
+    // Data output buffer
+    push<C, Word>(0);
+
+    // Unused, reserved
+    push<C, Word>(0);
+
+    // Fault address
+    push<C, Long>(addr);
+
+    // Special status word
+    push<C, Word>(0);
+
+    // 1000 | Vector offset
+    push<C, Word>(0x8000 | nr << 2);
+
+    // Program counter
+    push<C, Long>(pc);
+
+    // Status register
+    push<C, Word>(sr);
 }
 
 template <Core C> void
@@ -224,7 +269,9 @@ template <Core C> void
 Moira::execAddressError(StackFrame frame, int delay)
 {
     assert(frame.addr & 1);
-    
+
+    u16 status = getSR();
+
     // Inform the delegate
     willExecute(EXC_ADDRESS_ERROR, 3);
     
@@ -243,13 +290,22 @@ Moira::execAddressError(StackFrame frame, int delay)
     bool doubleFault = misaligned<C>(reg.sp);
     
     if (!doubleFault) {
-        
+
         // Write stack frame
-        writeStackFrameAEBE<C>(frame);
-        SYNC(2);
-        jumpToVector<C>(3);
+        if (C == C68000) {
+
+            writeStackFrameAEBE<C>(frame);
+            SYNC(2);
+            jumpToVector<C>(3);
+
+        } else {
+
+            writeStackFrame1000<C>(status, reg.pc, reg.pc0, 3, frame.addr);
+            SYNC(2);
+            jumpToVector<C>(3);
+        }
     }
-    
+
     // Halt the CPU if a double fault occurred
     if (doubleFault) halt();
     
