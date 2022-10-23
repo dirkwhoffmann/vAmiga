@@ -112,6 +112,9 @@ GeometryDescriptor::checkCompatibility() const
     if constexpr (HDR_ACCEPT_ALL) {
         return;
     }
+    if (cylinders == 0 || FORCE_HDR_UNKNOWN_GEOMETRY) {
+        throw VAError(ERROR_HDR_UNKNOWN_GEOMETRY);
+    }
     if (numBytes() > MB(504) || FORCE_HDR_TOO_LARGE) {
         throw VAError(ERROR_HDR_TOO_LARGE);
     }

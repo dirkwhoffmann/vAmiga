@@ -227,7 +227,11 @@ VAError::VAError(ErrorCode code, const string &s)
             description += "block size of 512 bytes. ";
             description += "The drive stores " + s + " bytes per block.";
             break;
-            
+
+        case ERROR_HDR_UNKNOWN_GEOMETRY:
+            description = "vAmiga failed to derive to geometry of this drive.";
+            break;
+
         case ERROR_HDR_UNMATCHED_GEOMETRY:
             description = "The drive geometry doesn't match the hard drive capacity.";
             break;

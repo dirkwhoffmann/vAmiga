@@ -260,6 +260,7 @@ static const int FORCE_HDR_UNSUPPORTED_C        = 0;
 static const int FORCE_HDR_UNSUPPORTED_H        = 0;
 static const int FORCE_HDR_UNSUPPORTED_S        = 0;
 static const int FORCE_HDR_UNSUPPORTED_B        = 0;
+static const int FORCE_HDR_UNKNOWN_GEOMETRY     = 0;
 static const int FORCE_HDR_MODIFIED             = 0;
 static const int FORCE_FS_WRONG_BSIZE           = 0;
 static const int FORCE_FS_WRONG_CAPACITY        = 0;
