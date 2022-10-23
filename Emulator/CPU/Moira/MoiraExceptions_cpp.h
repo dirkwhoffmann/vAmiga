@@ -106,7 +106,7 @@ Moira::writeStackFrame1000(u16 sr, u32 pc, u32 ia, u16 nr, u32 addr)
 {
     assert(C == C68010);
 
-    printf("writeStackFrame1000: %x %x %x %x %d %x\n", sr, ia, pc, ia, nr, addr);
+    // printf("writeStackFrame1000: %x %x %x %d %x\n", sr, pc, ia, nr, addr);
 
     // Internal information
     reg.sp -= 6;
@@ -300,7 +300,7 @@ Moira::execAddressError(StackFrame frame, int delay)
 
         } else {
 
-            writeStackFrame1000<C>(status, reg.pc, reg.pc0, 3, frame.addr);
+            writeStackFrame1000<C>(status, reg.pc0, reg.pc0, 3, frame.addr);
             SYNC(2);
             jumpToVector<C>(3);
         }
