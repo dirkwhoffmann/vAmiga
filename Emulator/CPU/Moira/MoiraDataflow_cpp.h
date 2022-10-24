@@ -25,7 +25,7 @@ Moira::readOp(int n, u32 *ea, u32 *result)
                 
                 // Read from effective address
                 if constexpr ((F & SKIP_READ) == 0) *result = readM<C, M, S, F>(*ea);
-                
+
             } catch (const AddressErrorException &exc) {
                 
                 // Emulate -(An) register modification
@@ -67,7 +67,9 @@ Moira::writeOp(int n, u32 val)
                 
                 // Emulate -(An) register modification
                 updateAnPD<M, S>(n);
-                
+
+                writeBuffer = (S == Long) ? HI_WORD(val) : LO_WORD(val);
+
                 // Rethrow exception
                 throw exc;
             }
@@ -162,6 +164,7 @@ Moira::computeEA(u32 n) {
         case 7: // ABS.W
         {
             result = (i16)queue.irc;
+            readBuffer = queue.irc;
             if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
             break;
         }
@@ -170,6 +173,7 @@ Moira::computeEA(u32 n) {
             result = queue.irc << 16;
             readExt<C>();
             result |= queue.irc;
+            readBuffer = queue.irc;
             if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
             break;
         }
@@ -391,7 +395,7 @@ Moira::readMS(u32 addr)
             SYNC(2);
         }
     }
-    
+
     return result;
 }
 
@@ -408,17 +412,19 @@ Moira::writeM(u32 addr, u32 val)
 template <Core C, MemSpace MS, Size S, Flags F> void
 Moira::writeMS(u32 addr, u32 val)
 {
-    // Check for address errors
-    if (misaligned<C, S>(addr)) {
-
-        setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
-        execAddressError<C>(makeFrame<F|AE_WRITE>(addr), 2);
-        throw AddressErrorException();
-    }
-    
     // Update function code pins
     u8 fc = MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG;
     setFC(fc);
+
+    // Check for address errors
+    if (misaligned<C, S>(addr)) {
+
+        excfp = readFC();
+        readBufferExc = readBuffer;
+        writeBufferExc = writeBuffer;
+        execAddressError<C>(makeFrame<F|AE_WRITE>(addr), 2);
+        throw AddressErrorException();
+    }
 
     // Check if a watchpoint is being accessed
     if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
@@ -575,6 +581,7 @@ Moira::prefetch()
     
     queue.ird = queue.irc;
     queue.irc = (u16)readMS<C, MEM_PROG, Word, F>(reg.pc + 2);
+    readBuffer = queue.irc;
 }
 
 template <Core C, Flags F, int delay> void
@@ -615,6 +622,7 @@ Moira::readExt()
     }
     
     queue.irc = (u16)readMS<C, MEM_PROG, Word>(reg.pc);
+    // readBuffer = queue.irc;
 }
 
 template <Core C, Size S> u32

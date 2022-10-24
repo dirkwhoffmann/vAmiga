@@ -2737,7 +2737,7 @@ Moira::execMove4(u16 opcode)
     const u64 flags0 = AE_WRITE | AE_DATA;
     const u64 flags1 = AE_WRITE | AE_DATA | AE_SET_CB3;
     const u64 flags2 = AE_WRITE | AE_DATA;
-    int format = (S == Long) ? 0 : reg.sr.c ? 1 : 2;
+    int format = (S == Long) ? 0 : reg.sr.c ? 2 : 1;
 
     reg.sr.n = NBIT<S>(data);
     reg.sr.z = ZERO<S>(data);
@@ -3246,7 +3246,7 @@ Moira::execMovemRgEa(u16 opcode)
             if (mask && misaligned<C, S>(ea)) {
 
                 setFC<M>();
-                execAddressError<C>(makeFrame<AE_INC_PC|AE_WRITE>(ea - S));
+                execAddressError<C>(makeFrame<AE_INC_PC|AE_WRITE>(ea - 2));
                 throw AddressErrorException();
             }
 

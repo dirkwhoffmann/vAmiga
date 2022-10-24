@@ -109,8 +109,8 @@ Moira::writeStackFrame1000(u16 sr, u32 pc, u32 ia, u16 nr, u32 addr)
     // printf("writeStackFrame1000: %x %x %x %d %x\n", sr, pc, ia, nr, addr);
 
     // Internal information
-    reg.sp -= 6;
-    push<C, Word>(0);
+    push<C, Long>(0);
+    push<C, Long>(0);
     push<C, Long>(0);
     push<C, Long>(0);
     push<C, Long>(0);
@@ -119,28 +119,28 @@ Moira::writeStackFrame1000(u16 sr, u32 pc, u32 ia, u16 nr, u32 addr)
     push<C, Long>(0);
 
     // Instruction input buffer
-    push<C, Word>(0);
+    push<C, Word>(queue.irc);
 
     // Unused, reserved
-    push<C, Word>(0);
+    reg.sp -= 2;
 
     // Data input buffer
-    push<C, Word>(0);
+    push<C, Word>(readBufferExc);
 
     // Unused, reserved
-    push<C, Word>(0);
+    reg.sp -= 2;
 
     // Data output buffer
-    push<C, Word>(0);
+    push<C, Word>(writeBufferExc);
 
     // Unused, reserved
-    push<C, Word>(0);
+    reg.sp -= 2;
 
     // Fault address
     push<C, Long>(addr);
 
     // Special status word
-    push<C, Word>(0);
+    push<C, Word>(excfp);
 
     // 1000 | Vector offset
     push<C, Word>(0x8000 | nr << 2);
@@ -300,7 +300,8 @@ Moira::execAddressError(StackFrame frame, int delay)
 
         } else {
 
-            writeStackFrame1000<C>(status, reg.pc0, reg.pc0, 3, frame.addr);
+            // writeStackFrame1000<C>(status, reg.pc0, reg.pc0, 3, frame.addr);
+            writeStackFrame1000<C>(status, reg.pc, reg.pc0, 3, frame.addr);
             SYNC(2);
             jumpToVector<C>(3);
         }
