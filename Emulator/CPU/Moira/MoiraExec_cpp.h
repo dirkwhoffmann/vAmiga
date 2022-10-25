@@ -2598,6 +2598,7 @@ Moira::execMove2(u16 opcode)
         if constexpr (!isMemMode(M)) {
 
             pollIpl();
+
             writeOp<C, MODE_AI, S, AE_INC_PC>(dst, data);
 
             reg.sr.n = NBIT<S>(data);
@@ -2765,11 +2766,12 @@ Moira::execMove4(u16 opcode)
     looping<I>() ? noPrefetch<C>(2) : prefetch<C, POLLIPL>();
     if (looping<I>() && S == Long) loopModeDelay = 0;
 
-    ea = computeEA <C, MODE_PD, S, IMPL_DEC> (dst);
+    ea = computeEA<C, MODE_PD, S, IMPL_DEC>(dst);
 
     // Check for address error
     if (misaligned<C, S>(ea)) {
-        
+
+        writeBuffer = u16(data);
         if (format == 0) execAddressError<C>(makeFrame<flags0>(ea + 2, reg.pc + 2, getSR(), ird));
         if (format == 1) execAddressError<C>(makeFrame<flags1>(ea, reg.pc + 2), 2);
         if (format == 2) execAddressError<C>(makeFrame<flags2>(ea, reg.pc + 2), 2);
@@ -5240,7 +5242,6 @@ Moira::execTrap(u16 opcode)
 
     SYNC(4);
     execException<C>(EXC_TRAP, nr);
-    // execTrapNException<C>(32 + nr);
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l

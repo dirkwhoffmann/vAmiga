@@ -46,6 +46,8 @@ Moira::readOp(int n, u32 *ea, u32 *result)
 template <Core C, Mode M, Size S, Flags F> void
 Moira::writeOp(int n, u32 val)
 {
+    writeBuffer = (S == Long) ? HI_WORD(val) : LO_WORD(val);
+
     switch (M) {
             
             // Handle non-memory modes
@@ -68,8 +70,6 @@ Moira::writeOp(int n, u32 val)
                 // Emulate -(An) register modification
                 updateAnPD<M, S>(n);
 
-                writeBuffer = (S == Long) ? HI_WORD(val) : LO_WORD(val);
-
                 // Rethrow exception
                 throw exc;
             }
@@ -85,6 +85,8 @@ Moira::writeOp(int n, u32 val)
 template <Core C, Mode M, Size S, Flags F> void
 Moira::writeOp(int n, u32 ea, u32 val)
 {
+    writeBuffer = (S == Long) ? HI_WORD(val) : LO_WORD(val);
+
     switch (M) {
             
         // Handle non-memory modes
@@ -165,6 +167,7 @@ Moira::computeEA(u32 n) {
         {
             result = (i16)queue.irc;
             readBuffer = queue.irc;
+
             if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
             break;
         }
@@ -174,6 +177,7 @@ Moira::computeEA(u32 n) {
             readExt<C>();
             result |= queue.irc;
             readBuffer = queue.irc;
+
             if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
             break;
         }
@@ -420,8 +424,6 @@ Moira::writeMS(u32 addr, u32 val)
     if (misaligned<C, S>(addr)) {
 
         excfp = readFC();
-        readBufferExc = readBuffer;
-        writeBufferExc = writeBuffer;
         execAddressError<C>(makeFrame<F|AE_WRITE>(addr), 2);
         throw AddressErrorException();
     }
@@ -500,7 +502,8 @@ Moira::readI()
         default:
             fatalError;
     }
-    
+    readBuffer = queue.irc;
+
     return result;
 }
 
@@ -548,11 +551,14 @@ Moira::makeFrame(u32 addr, u32 pc, u16 sr, u16 ird)
     frame.pc = pc;
     
     // Adjust
-    if (F & AE_INC_PC) frame.pc += 2;
-    if (F & AE_DEC_PC) frame.pc -= 2;
-    if (F & AE_INC_A) frame.addr += 2;
-    if (F & AE_DEC_A) frame.addr -= 2;
-    if (F & AE_SET_CB3) frame.code |= (1 << 3);
+    { // if (model == M68000) { // TODO: Add template parameter C
+
+        if (F & AE_INC_PC) frame.pc += 2;
+        if (F & AE_DEC_PC) frame.pc -= 2;
+        if (F & AE_INC_A) frame.addr += 2;
+        if (F & AE_DEC_A) frame.addr -= 2;
+        if (F & AE_SET_CB3) frame.code |= (1 << 3);
+    }
     
     return frame;
 }
@@ -622,7 +628,6 @@ Moira::readExt()
     }
     
     queue.irc = (u16)readMS<C, MEM_PROG, Word>(reg.pc);
-    // readBuffer = queue.irc;
 }
 
 template <Core C, Size S> u32

@@ -125,13 +125,13 @@ Moira::writeStackFrame1000(u16 sr, u32 pc, u32 ia, u16 nr, u32 addr)
     reg.sp -= 2;
 
     // Data input buffer
-    push<C, Word>(readBufferExc);
+    push<C, Word>(readBuffer);
 
     // Unused, reserved
     reg.sp -= 2;
 
     // Data output buffer
-    push<C, Word>(writeBufferExc);
+    push<C, Word>(writeBuffer);
 
     // Unused, reserved
     reg.sp -= 2;
@@ -300,8 +300,8 @@ Moira::execAddressError(StackFrame frame, int delay)
 
         } else {
 
-            // writeStackFrame1000<C>(status, reg.pc0, reg.pc0, 3, frame.addr);
-            writeStackFrame1000<C>(status, reg.pc, reg.pc0, 3, frame.addr);
+            // writeStackFrame1000<C>(status, reg.pc, reg.pc0, 3, frame.addr);
+            writeStackFrame1000<C>(status, frame.pc, reg.pc0, 3, frame.addr);
             SYNC(2);
             jumpToVector<C>(3);
         }

@@ -136,8 +136,6 @@ protected:
     u8 excfp = 0;           // Function code value for 68010 address error frames
     u16 readBuffer;         // Appears in 68010 exception frame
     u16 writeBuffer;        // Appears in 68010 exception frame
-    u16 readBufferExc;      // Appears in 68010 exception frame
-    u16 writeBufferExc;     // Appears in 68010 exception frame
 
     // Jump table holding the instruction handlers
     typedef void (Moira::*ExecPtr)(u16);
