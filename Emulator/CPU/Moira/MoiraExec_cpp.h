@@ -1332,16 +1332,23 @@ Moira::execBsr(u16 opcode)
     u32 newpc = U32_ADD(oldpc, SEXT<S>(disp));
     u32 retpc = U32_ADD(reg.pc, S == Long || S == Word ? 2 : 0);
 
-    // Check for address error
-    if (misaligned<C>(newpc)) {
-
-        execAddressError<C>(makeFrame(newpc));
-        throw AddressErrorException();
-    }
-
     SYNC(2);
 
     if (C == C68000) {
+
+        // Check for address errors
+        if (misaligned<C>(reg.sp)) {
+
+            reg.sp -= 4;
+            execAddressError<C>(makeFrame<AE_WRITE|AE_DATA>(reg.sp));
+            throw AddressErrorException();
+        }
+
+        if (misaligned<C>(newpc)) {
+
+            execAddressError<C>(makeFrame(newpc));
+            throw AddressErrorException();
+        }
 
         // Save return address on stack
         push<C, Long>(retpc);
@@ -1352,6 +1359,20 @@ Moira::execBsr(u16 opcode)
         fullPrefetch<C, POLLIPL>();
 
     } else {
+
+        // Check for address errors
+        if (misaligned<C>(reg.sp)) {
+
+            reg.sp -= 4;
+            execAddressError<C>(makeFrame(reg.sp));
+            throw AddressErrorException();
+        }
+
+        if (misaligned<C>(newpc)) {
+
+            execAddressError<C>(makeFrame(newpc));
+            throw AddressErrorException();
+        }
 
         // Save return address on stack
         push<C, Long, POLLIPL>(retpc);
@@ -2377,16 +2398,13 @@ Moira::execJsr(u16 opcode)
     [[maybe_unused]] const int delay[] = { 0,0,0,0,0,2,4,2,0,2,4,0 };
     SYNC(delay[M]);
 
-    // Check for address error in displacement modes
+    // Check for address errors
     if (isDspMode(M) && misaligned<C>(ea)) {
 
-        // TODO: This special check shouldn't be necessary
-        
-        execAddressError<C>(makeFrame(ea));
+        execAddressError<C>(makeFrame<AE_DEC_PC>(ea));
         throw AddressErrorException();
     }
 
-    // Check for address error in all other modes
     if (misaligned<C>(ea)) {
         
         execAddressError<C>(makeFrame(ea));
