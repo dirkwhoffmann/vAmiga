@@ -3266,11 +3266,13 @@ Moira::execMovemRgEa(u16 opcode)
             if (mask && misaligned<C, S>(ea)) {
 
                 setFC<M>();
+                readBuffer = mask;
+                for (int i = 15; i >= 0; i--) if (mask & (0x8000 >> i)) { writeBuffer = LO_WORD(reg.r[i]); break; }
                 execAddressError<C>(makeFrame<AE_INC_PC|AE_WRITE>(ea - 2));
                 throw AddressErrorException();
             }
 
-            for(int i = 15; i >= 0; i--) {
+            for (int i = 15; i >= 0; i--) {
 
                 if (mask & (0x8000 >> i)) {
 
@@ -3291,6 +3293,8 @@ Moira::execMovemRgEa(u16 opcode)
             if (mask && misaligned<C, S>(ea)) {
 
                 setFC<M>();
+                readBuffer = mask;
+                for (int i = 0; i < 16; i++) if (mask & (1 << i)) { writeBuffer = HI_WORD(reg.r[i]); break; }
                 execAddressError<C>(makeFrame<AE_INC_PC|AE_WRITE>(ea));
                 throw AddressErrorException();
             }

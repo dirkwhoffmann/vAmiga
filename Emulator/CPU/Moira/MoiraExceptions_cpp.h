@@ -140,7 +140,7 @@ Moira::writeStackFrame1000(u16 sr, u32 pc, u32 ia, u16 nr, u32 addr)
     push<C, Long>(addr);
 
     // Special status word
-    push<C, Word>(excfp);
+    push<C, Word>(readFC()); // TODO: DELETE excfp (no longer used)
 
     // 1000 | Vector offset
     push<C, Word>(0x8000 | nr << 2);
