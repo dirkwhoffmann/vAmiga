@@ -3256,59 +3256,56 @@ Moira::execMovemRgEa(u16 opcode)
 
     int cnt = 0;
 
-    switch (M) {
+    if constexpr (M == 4) { // -(An)
 
-        case 4: // -(An)
-        {
-            u32 ea = readA(dst);
+        u32 ea = readA(dst);
+
+        for (int i = 15; i >= 0; i--) {
+
+            // Only proceed if the mask bit is set
+            if ((mask & (0x8000 >> i)) == 0) continue;
 
             // Check for address error
-            if (mask && misaligned<C, S>(ea)) {
+            if (misaligned<C, S>(ea)) {
 
                 setFC<M>();
                 readBuffer = mask;
-                for (int i = 15; i >= 0; i--) if (mask & (0x8000 >> i)) { writeBuffer = LO_WORD(reg.r[i]); break; }
+                writeBuffer = LO_WORD(reg.r[i]);
                 execAddressError<C>(makeFrame<AE_INC_PC|AE_WRITE>(ea - 2));
                 throw AddressErrorException();
             }
 
-            for (int i = 15; i >= 0; i--) {
-
-                if (mask & (0x8000 >> i)) {
-
-                    ea -= S;
-                    if constexpr (C == C68020 && !MIMIC_MUSASHI) writeA(dst, ea);
-                    writeM<C, M, S, MIMIC_MUSASHI ? REVERSE : 0>(ea, reg.r[i]);
-                    cnt++;
-                }
-            }
-            if constexpr (C != C68020 || MIMIC_MUSASHI) writeA(dst, ea);
-            break;
+            // Write register contents into memory
+            ea -= S;
+            if constexpr (C == C68020 && !MIMIC_MUSASHI) writeA(dst, ea);
+            writeM<C, M, S, MIMIC_MUSASHI ? REVERSE : 0>(ea, reg.r[i]);
+            cnt++;
         }
-        default:
-        {
-            u32 ea = computeEA<C, M, S>(dst);
+        if constexpr (C != C68020 || MIMIC_MUSASHI) writeA(dst, ea);
+
+    } else {
+
+        u32 ea = computeEA<C, M, S>(dst);
+
+        for(int i = 0; i < 16; i++) {
+
+            // Only proceed if the mask bit is set
+            if ((mask & (1 << i)) == 0) continue;
 
             // Check for address error
             if (mask && misaligned<C, S>(ea)) {
 
                 setFC<M>();
                 readBuffer = mask;
-                for (int i = 0; i < 16; i++) if (mask & (1 << i)) { writeBuffer = HI_WORD(reg.r[i]); break; }
+                writeBuffer = HI_WORD(reg.r[i]);
                 execAddressError<C>(makeFrame<AE_INC_PC|AE_WRITE>(ea));
                 throw AddressErrorException();
             }
 
-            for(int i = 0; i < 16; i++) {
-
-                if (mask & (1 << i)) {
-
-                    writeM<C, M, S>(ea, reg.r[i]);
-                    ea += S;
-                    cnt++;
-                }
-            }
-            break;
+            // Write register contents into memory
+            writeM<C, M, S>(ea, reg.r[i]);
+            ea += S;
+            cnt++;
         }
     }
     prefetch<C, POLLIPL>();
