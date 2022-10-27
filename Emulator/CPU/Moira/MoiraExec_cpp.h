@@ -2400,6 +2400,19 @@ Moira::execJsr(u16 opcode)
     SYNC(delay[M]);
 
     // Check for address errors
+    if (misaligned<C>(reg.sp)) {
+
+        if (isDspMode(M)) {
+            execAddressError<C>(makeFrame<AE_DEC_PC|AE_SET_IF|AE_SET_RW>(ea));
+        } else {
+            prefetch<C>();
+            reg.sp -= 4;
+            writeBuffer = HI_WORD(reg.pc);
+            execAddressError<C>(makeFrame<AE_DATA>(reg.sp));
+        }
+        throw AddressErrorException();
+    }
+
     if (isDspMode(M) && misaligned<C>(ea)) {
 
         execAddressError<C>(makeFrame<AE_DEC_PC>(ea));
@@ -2424,6 +2437,8 @@ Moira::execJsr(u16 opcode)
         prefetch<C, POLLIPL>();
 
     } else {
+
+        // TODO: IS PREFETCH DONE HERE???
 
         // Save return address on stack
         push<C, Long, POLLIPL>(reg.pc);

@@ -562,6 +562,7 @@ Moira::makeFrame(u32 addr, u32 pc, u16 sr, u16 ird)
     if constexpr (F & AE_SET_CB3) frame.code |= (1 << 3);
     if constexpr (F & AE_SET_RW) frame.ssw |= (1 << 8);
     if constexpr (F & AE_SET_DF) frame.ssw |= (1 << 12);
+    if constexpr (F & AE_SET_IF) frame.ssw |= (1 << 13);
 
     return frame;
 }
