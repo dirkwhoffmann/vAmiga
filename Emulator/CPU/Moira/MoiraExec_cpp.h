@@ -4780,6 +4780,14 @@ Moira::execRtd(u16 opcode)
 {
     AVAILABILITY(C68010)
 
+    // Check for address error
+    if (misaligned<C>(reg.sp)) {
+
+        readBuffer = u16(readM<C, M, Word>(reg.sp & ~1));
+        execAddressError<C>(makeFrame<AE_SET_RW|AE_SET_DF>(reg.sp));
+        throw AddressErrorException();
+    }
+
     u32 newpc = readM<C, M, Long>(reg.sp);
 
     reg.sp += 4 + i16(queue.irc);
