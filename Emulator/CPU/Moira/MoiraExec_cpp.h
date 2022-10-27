@@ -1363,8 +1363,9 @@ Moira::execBsr(u16 opcode)
         // Check for address errors
         if (misaligned<C>(reg.sp)) {
 
-            reg.sp -= 4;
-            execAddressError<C>(makeFrame(reg.sp));
+            // reg.sp -= 4;
+            writeBuffer = 0;
+            execAddressError<C>(makeFrame<AE_WRITE|AE_DATA>(newpc));
             throw AddressErrorException();
         }
 
@@ -3294,7 +3295,7 @@ Moira::execMovemRgEa(u16 opcode)
 
                 setFC<M>();
                 readBuffer = mask;
-                writeBuffer = HI_WORD(reg.r[i]);
+                writeBuffer = S == Long ? HI_WORD(reg.r[i]) : LO_WORD(reg.r[i]);
                 execAddressError<C>(makeFrame<AE_INC_PC|AE_WRITE>(ea));
                 throw AddressErrorException();
             }

@@ -137,7 +137,7 @@ Moira::writeStackFrame1000(StackFrame &frame, u16 sr, u32 pc, u32 ia, u16 nr, u3
     reg.sp -= 2;
 
     // Fault address
-    push<C, Long>(addr);
+    push<C, Long>(frame.addr);
 
     // Special status word
     push<C, Word>(frame.ssw);

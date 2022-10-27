@@ -541,9 +541,9 @@ Moira::makeFrame(u32 addr, u32 pc, u16 sr, u16 ird)
     u16 read = 0x10;
     
     // Prepare
-    if (F & AE_WRITE) read = 0;
-    if (F & AE_PROG) setFC(FC_USER_PROG);
-    if (F & AE_DATA) setFC(FC_USER_DATA);
+    if constexpr (F & AE_WRITE) read = 0;
+    if constexpr (F & AE_PROG) setFC(FC_USER_PROG);
+    if constexpr (F & AE_DATA) setFC(FC_USER_DATA);
     
     // Create
     frame.code = (ird & 0xFFE0) | (u16)readFC() | read;
@@ -555,13 +555,13 @@ Moira::makeFrame(u32 addr, u32 pc, u16 sr, u16 ird)
     frame.ssw = frame.fc;
 
     // Adjust
-    if (F & AE_INC_PC) frame.pc += 2;
-    if (F & AE_DEC_PC) frame.pc -= 2;
-    if (F & AE_INC_A) frame.addr += 2;
-    if (F & AE_DEC_A) frame.addr -= 2;
-    if (F & AE_SET_CB3) frame.code |= (1 << 3);
-    if (F & AE_SET_RW) frame.ssw |= (1 << 8);
-    if (F & AE_SET_DF) frame.ssw |= (1 << 12);
+    if constexpr (F & AE_INC_PC) frame.pc += 2;
+    if constexpr (F & AE_DEC_PC) frame.pc -= 2;
+    if constexpr (F & AE_INC_A) frame.addr += 2;
+    if constexpr (F & AE_DEC_A) frame.addr -= 2;
+    if constexpr (F & AE_SET_CB3) frame.code |= (1 << 3);
+    if constexpr (F & AE_SET_RW) frame.ssw |= (1 << 8);
+    if constexpr (F & AE_SET_DF) frame.ssw |= (1 << 12);
 
     return frame;
 }
