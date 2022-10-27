@@ -2768,10 +2768,11 @@ Moira::execMove4(u16 opcode)
 
     ea = computeEA<C, MODE_PD, S, IMPL_DEC>(dst);
 
+    writeBuffer = u16(data);
+
     // Check for address error
     if (misaligned<C, S>(ea)) {
 
-        writeBuffer = u16(data);
         if (format == 0) execAddressError<C>(makeFrame<flags0>(ea + 2, reg.pc + 2, getSR(), ird));
         if (format == 1) execAddressError<C>(makeFrame<flags1>(ea, reg.pc + 2), 2);
         if (format == 2) execAddressError<C>(makeFrame<flags2>(ea, reg.pc + 2), 2);
@@ -3187,43 +3188,39 @@ Moira::execMovemEaRg(u16 opcode)
 
         setFC<M>();
         if constexpr (M == MODE_IX || M == MODE_IXPC) {
-            execAddressError<C>(makeFrame<AE_DEC_PC>(ea));
+            execAddressError<C>(makeFrame<AE_DEC_PC|AE_SET_DF|AE_SET_RW>(ea));
         } else {
-            execAddressError<C>(makeFrame<AE_INC_PC>(ea));
+            execAddressError<C>(makeFrame<AE_INC_PC|AE_SET_DF|AE_SET_RW>(ea));
         }
         throw AddressErrorException();
     }
 
     if constexpr (S == Long) (void)readMS<C, MEM_DATA, Word>(ea);
 
-    switch (M) {
+    if constexpr (M == 3) {     // (An)+
 
-        case 3: // (An)+
-        {
-            for(int i = 0; i <= 15; i++) {
+        for (int i = 0; i <= 15; i++) {
 
-                if (mask & (1 << i)) {
+            // Only proceed if the mask bit is set
+            if ((mask & (1 << i)) == 0) continue;
 
-                    writeR(i, SEXT<S>(readM<C, M, S>(ea)));
-                    ea += S;
-                    cnt++;
-                }
-            }
-            writeA(src, ea);
-            break;
+            writeR(i, SEXT<S>(readM<C, M, S>(ea)));
+            ea += S;
+            cnt++;
         }
-        default:
-        {
-            for(int i = 0; i <= 15; i++) {
 
-                if (mask & (1 << i)) {
+        writeA(src, ea);
 
-                    writeR(i, SEXT<S>(readM<C, M, S>(ea)));
-                    ea += S;
-                    cnt++;
-                }
-            }
-            break;
+    } else {
+
+        for(int i = 0; i <= 15; i++) {
+
+            // Only proceed if the mask bit is set
+            if ((mask & (1 << i)) == 0) continue;
+
+            writeR(i, SEXT<S>(readM<C, M, S>(ea)));
+            ea += S;
+            cnt++;
         }
     }
     if constexpr (S == Word) (void)readMS<C, MEM_DATA, Word>(ea);
@@ -3256,7 +3253,7 @@ Moira::execMovemRgEa(u16 opcode)
 
     int cnt = 0;
 
-    if constexpr (M == 4) { // -(An)
+    if constexpr (M == 4) {     // -(An)
 
         u32 ea = readA(dst);
 

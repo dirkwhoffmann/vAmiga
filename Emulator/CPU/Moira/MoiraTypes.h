@@ -319,6 +319,9 @@ typedef struct
     u16 ird;
     u16 sr;
     u32 pc;
+
+    u16 fc;                 // Function code
+    u16 ssw;                // Special status word (68010)
 }
 StackFrame;
 
@@ -405,12 +408,14 @@ constexpr u64 AE_DEC_PC     (1 << 7);   // Decrement PC by 2 in stack frame
 constexpr u64 AE_INC_A      (1 << 8);   // Increment ADDR by 2 in stack frame
 constexpr u64 AE_DEC_A      (1 << 9);   // Decrement ADDR by 2 in stack frame
 constexpr u64 AE_SET_CB3    (1 << 10);  // Set bit 3 in CODE segment
+constexpr u64 AE_SET_RW     (1 << 11);   // Set bit 8 in the special status word (68010)
+constexpr u64 AE_SET_DF     (1 << 12);  // Set bit 12 in the special status word (68010)
 
 // Timing flags
-constexpr u64 IMPL_DEC      (1 << 11);  // Omit 2 cycle delay in -(An) mode
-constexpr u64 SKIP_READ     (1 << 12);   
-constexpr u64 SKIP_READ2    (1 << 13);
-constexpr u64 SKIP_WRITE    (1 << 14);
+constexpr u64 IMPL_DEC      (1 << 13);  // Omit 2 cycle delay in -(An) mode
+constexpr u64 SKIP_READ     (1 << 14);
+constexpr u64 SKIP_READ2    (1 << 15);
+constexpr u64 SKIP_WRITE    (1 << 16);
 
 
 //

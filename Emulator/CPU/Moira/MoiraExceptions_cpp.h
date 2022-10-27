@@ -102,7 +102,7 @@ Moira::writeStackFrame0010(u16 sr, u32 pc, u32 ia, u16 nr)
 }
 
 template <Core C> void
-Moira::writeStackFrame1000(u16 sr, u32 pc, u32 ia, u16 nr, u32 addr)
+Moira::writeStackFrame1000(StackFrame &frame, u16 sr, u32 pc, u32 ia, u16 nr, u32 addr)
 {
     assert(C == C68010);
 
@@ -140,7 +140,7 @@ Moira::writeStackFrame1000(u16 sr, u32 pc, u32 ia, u16 nr, u32 addr)
     push<C, Long>(addr);
 
     // Special status word
-    push<C, Word>(readFC()); // TODO: DELETE excfp (no longer used)
+    push<C, Word>(frame.ssw);
 
     // 1000 | Vector offset
     push<C, Word>(0x8000 | nr << 2);
@@ -300,8 +300,7 @@ Moira::execAddressError(StackFrame frame, int delay)
 
         } else {
 
-            // writeStackFrame1000<C>(status, reg.pc, reg.pc0, 3, frame.addr);
-            writeStackFrame1000<C>(status, frame.pc, reg.pc0, 3, frame.addr);
+            writeStackFrame1000<C>(frame, status, frame.pc, reg.pc0, 3, frame.addr);
             SYNC(2);
             jumpToVector<C>(3);
         }

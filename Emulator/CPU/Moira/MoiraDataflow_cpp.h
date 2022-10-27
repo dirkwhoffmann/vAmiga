@@ -46,7 +46,7 @@ Moira::readOp(int n, u32 *ea, u32 *result)
 template <Core C, Mode M, Size S, Flags F> void
 Moira::writeOp(int n, u32 val)
 {
-    writeBuffer = (S == Long) ? HI_WORD(val) : LO_WORD(val);
+//     writeBuffer = (S == Long) ? HI_WORD(val) : LO_WORD(val);
 
     switch (M) {
             
@@ -56,7 +56,9 @@ Moira::writeOp(int n, u32 val)
         case MODE_IM: fatalError;
             
         default:
-            
+
+            writeBuffer = (S == Long) ? HI_WORD(val) : LO_WORD(val);
+
             // Compute effective address
             u32 ea = computeEA<C, M, S>(n);
             
@@ -549,17 +551,18 @@ Moira::makeFrame(u32 addr, u32 pc, u16 sr, u16 ird)
     frame.ird = ird;
     frame.sr = sr;
     frame.pc = pc;
-    
-    // Adjust
-    { // if (model == M68000) { // TODO: Add template parameter C
+    frame.fc = readFC();
+    frame.ssw = frame.fc;
 
-        if (F & AE_INC_PC) frame.pc += 2;
-        if (F & AE_DEC_PC) frame.pc -= 2;
-        if (F & AE_INC_A) frame.addr += 2;
-        if (F & AE_DEC_A) frame.addr -= 2;
-        if (F & AE_SET_CB3) frame.code |= (1 << 3);
-    }
-    
+    // Adjust
+    if (F & AE_INC_PC) frame.pc += 2;
+    if (F & AE_DEC_PC) frame.pc -= 2;
+    if (F & AE_INC_A) frame.addr += 2;
+    if (F & AE_DEC_A) frame.addr -= 2;
+    if (F & AE_SET_CB3) frame.code |= (1 << 3);
+    if (F & AE_SET_RW) frame.ssw |= (1 << 8);
+    if (F & AE_SET_DF) frame.ssw |= (1 << 12);
+
     return frame;
 }
 
