@@ -1549,7 +1549,23 @@ Moira::execChk(u16 opcode)
     u32 ea, data, dy;
     [[maybe_unused]] auto c = clock;
 
-    readOp<C, M, S, STD_AE_FRAME>(src, &ea, &data);
+    try {
+        readOp<C, M, S, AE_NO_FRAME>(src, &ea, &data);
+    } catch (AddressErrorException &exc) {
+        if (C == C68000) {
+            execAddressError<C>(makeFrame<STD_AE_FRAME>(ea), 2);
+            throw exc;
+        } else {
+            readBuffer = (u16)readM<C, M, S>(ea & ~1);
+            updateAnPI<M, S>(src);
+            if (isAbsMode(M) || M == MODE_AI || M == MODE_PI || M == MODE_PD) {
+                execAddressError<C>(makeFrame<AE_SET_RW|AE_SET_DF>(ea), 2);
+            } else {
+                execAddressError<C>(makeFrame<AE_DEC_PC|AE_SET_RW|AE_SET_DF>(ea), 2);
+            }
+            throw exc;
+        }
+    }
     dy = readD<S>(dst);
 
     SYNC_68000(6);

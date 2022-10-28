@@ -351,7 +351,7 @@ Moira::readMS(u32 addr)
     if (misaligned<C, S>(addr)) {
         
         setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
-        execAddressError<C>(makeFrame<F>(addr), 2);
+        if ((F & AE_NO_FRAME) == 0) execAddressError<C>(makeFrame<F>(addr), 2);
         throw AddressErrorException();
     }
 
@@ -599,6 +599,8 @@ Moira::fullPrefetch()
 {
     // Check for address error
     if (misaligned<C>(reg.pc)) {
+
+        // NEVER REACHED???
         
         execAddressError<C>(makeFrame(reg.pc), 2);
         return;
@@ -653,6 +655,7 @@ template <Core C, Flags F> void
 Moira::jumpToVector(int nr)
 {
     u32 vectorAddr = reg.vbr + 4 * nr;
+    u32 oldpc = reg.pc;
 
     // Update the program counter
     reg.pc = readMS<C, MEM_DATA, Long>(vectorAddr);
@@ -660,7 +663,15 @@ Moira::jumpToVector(int nr)
     // Check for address error
     if (misaligned<C>(reg.pc)) {
         if (nr != 3) {
-            execAddressError<C>(makeFrame<F|AE_PROG>(reg.pc, vectorAddr));
+            if (C == C68000) {
+                execAddressError<C>(makeFrame<F|AE_PROG>(reg.pc, vectorAddr));
+            } else {
+
+                queue.irc = readBuffer = u16(reg.pc);
+                writeBuffer = u16(4 * nr);
+                execAddressError<C>(makeFrame<F|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
+            }
+            throw AddressErrorException();
         } else {
             halt(); // Double fault
         }

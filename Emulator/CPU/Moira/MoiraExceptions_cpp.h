@@ -397,7 +397,7 @@ Moira::execException(ExceptionType exc, int nr)
             writeStackFrame0000<C>(status, reg.pc, vector);
             
             // Branch to exception handler
-            jumpToVector<C>(vector);
+            jumpToVector<C,AE_SET_RW|AE_SET_IF>(vector);
             break;
             
         case EXC_PRIVILEGE:
