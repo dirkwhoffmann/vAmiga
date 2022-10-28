@@ -4783,6 +4783,7 @@ Moira::execRtd(u16 opcode)
     // Check for address error
     if (misaligned<C>(reg.sp)) {
 
+        setFC<M>();
         readBuffer = u16(readM<C, M, Word>(reg.sp & ~1));
         execAddressError<C>(makeFrame<AE_SET_RW|AE_SET_DF>(reg.sp));
         throw AddressErrorException();
@@ -5074,6 +5075,15 @@ Moira::execRtr(u16 opcode)
 {
     AVAILABILITY(C68000)
 
+    // Check for address error
+    if (misaligned<C>(reg.sp)) {
+
+        setFC<M>();
+        readBuffer = u16(readM<C, M, Word>(reg.sp & ~1));
+        execAddressError<C>(makeFrame<AE_SET_RW|AE_SET_DF>(reg.sp));
+        throw AddressErrorException();
+    }
+
     u16 newccr = (u16)readM<C, M, Word>(reg.sp);
 
     reg.sp += 2;
@@ -5105,6 +5115,15 @@ template <Core C, Instr I, Mode M, Size S> void
 Moira::execRts(u16 opcode)
 {
     AVAILABILITY(C68000)
+
+    // Check for address error
+    if (misaligned<C>(reg.sp)) {
+
+        setFC<M>();
+        readBuffer = u16(readM<C, M, Word>(reg.sp & ~1));
+        execAddressError<C>(makeFrame<AE_SET_RW|AE_SET_DF>(reg.sp));
+        throw AddressErrorException();
+    }
 
     u32 newpc = readM<C, M, Long>(reg.sp);
 
@@ -5435,7 +5454,7 @@ Moira::execUnlk(u16 opcode)
     // Check for address error
     if (misaligned<C>(readA(an))) {
 
-        execAddressError<C>(makeFrame<AE_DATA|AE_INC_PC>(readA(an)));
+        execAddressError<C>(makeFrame<AE_DATA|AE_INC_PC|AE_SET_DF|AE_SET_RW>(readA(an)));
         throw AddressErrorException();
     }
 
