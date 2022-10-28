@@ -63,13 +63,15 @@ extension MyController: NSWindowDelegate {
         snapshotTimer = nil
 
         debug(.shutdown, "Closing auxiliary windows...")
+        configurator?.amiga = nil
+        configurator?.close()
         inspector?.amiga = nil
         inspector?.close()
         monitor?.amiga = nil
         monitor?.close()
         virtualKeyboard?.amiga = nil
         virtualKeyboard?.close()
-        
+
         debug(.shutdown, "Shutting down the audio backend...")
         macAudio.shutDown()
 
