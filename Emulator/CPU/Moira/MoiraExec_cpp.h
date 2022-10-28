@@ -4117,7 +4117,23 @@ Moira::execDivsMoira(u16 opcode, bool *divByZero)
     int dst = ____xxx_________(opcode);
 
     u32 ea, divisor, result;
-    readOp<C, M, Word, STD_AE_FRAME>(src, &ea, &divisor);
+    try {
+        readOp<C, M, Word, AE_NO_FRAME>(src, &ea, &divisor);
+    } catch (AddressErrorException &exc) {
+        if (C == C68000) {
+            execAddressError<C>(makeFrame<STD_AE_FRAME>(ea), 2);
+            throw exc;
+        } else {
+            readBuffer = (u16)readM<C, M, S>(ea & ~1);
+            updateAnPI<M, S>(src);
+            if (isAbsMode(M) || M == MODE_AI || M == MODE_PI || M == MODE_PD) {
+                execAddressError<C>(makeFrame<AE_SET_RW|AE_SET_DF>(ea), 2);
+            } else {
+                execAddressError<C>(makeFrame<AE_DEC_PC|AE_SET_RW|AE_SET_DF>(ea), 2);
+            }
+            throw exc;
+        }
+    }
 
     u32 dividend = readD(dst);
 
@@ -4222,7 +4238,24 @@ Moira::execDivuMoira(u16 opcode, bool *divByZero)
     int dst = ____xxx_________(opcode);
     
     u32 ea, divisor, result;
-    readOp<C, M, Word, STD_AE_FRAME>(src, &ea, &divisor);
+
+    try {
+        readOp<C, M, Word, AE_NO_FRAME>(src, &ea, &divisor);
+    } catch (AddressErrorException &exc) {
+        if (C == C68000) {
+            execAddressError<C>(makeFrame<STD_AE_FRAME>(ea), 2);
+            throw exc;
+        } else {
+            readBuffer = (u16)readM<C, M, S>(ea & ~1);
+            updateAnPI<M, S>(src);
+            if (isAbsMode(M) || M == MODE_AI || M == MODE_PI || M == MODE_PD) {
+                execAddressError<C>(makeFrame<AE_SET_RW|AE_SET_DF>(ea), 2);
+            } else {
+                execAddressError<C>(makeFrame<AE_DEC_PC|AE_SET_RW|AE_SET_DF>(ea), 2);
+            }
+            throw exc;
+        }
+    }
 
     u32 dividend = readD(dst);
 

@@ -662,16 +662,22 @@ Moira::jumpToVector(int nr)
     
     // Check for address error
     if (misaligned<C>(reg.pc)) {
+
         if (nr != 3) {
             if (C == C68000) {
                 execAddressError<C>(makeFrame<F|AE_PROG>(reg.pc, vectorAddr));
+                throw AddressErrorException();
             } else {
-
+                // printf("jumpToVector(%d) %x\n", nr, reg.pc);
                 queue.irc = readBuffer = u16(reg.pc);
                 writeBuffer = u16(4 * nr);
-                execAddressError<C>(makeFrame<F|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
+                if (nr == EXC_ILLEGAL || nr == EXC_LINEA || nr == EXC_LINEF || nr == EXC_PRIVILEGE) {
+                    execAddressError<C>(makeFrame<F|AE_DEC_PC|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
+                } else {
+                    execAddressError<C>(makeFrame<F|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
+                }
+                throw AddressErrorException();
             }
-            throw AddressErrorException();
         } else {
             halt(); // Double fault
         }
