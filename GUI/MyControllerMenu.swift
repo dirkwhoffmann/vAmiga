@@ -172,18 +172,25 @@ extension MyController: NSMenuItemValidation {
     // Action methods (Machine menu)
     //
     
-    func openConfigurator(tab: String = "") {
+    func openConfiguratorAsSheet(tab: String = "") {
         
         if configurator == nil {
             configurator = ConfigurationController(with: self, nibName: "Configuration")
         }
-//         configurator?.showSheet(tab: tab)
-        configurator?.showWindow(self)
+        configurator?.showSheet(tab: tab)
     }
-    
+
+    func openConfiguratorAsWindow() {
+
+        if configurator == nil {
+            configurator = ConfigurationController(with: self, nibName: "Configuration")
+        }
+        configurator?.showWindow()
+    }
+
     @IBAction func configureAction(_ sender: Any!) {
         
-        openConfigurator()
+        openConfiguratorAsWindow()
     }
  
     @IBAction func inspectorAction(_ sender: Any!) {

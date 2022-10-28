@@ -119,7 +119,7 @@ class MyToolbar: NSToolbar {
         switch sender.selectedSegment {
 
         case 0: parent.preferencesAction(sender)
-        case 1: parent.configureAction(sender)
+        case 1: parent.openConfiguratorAsSheet()
 
         default:
             fatalError()
