@@ -4116,7 +4116,7 @@ Moira::execDivsMoira(u16 opcode, bool *divByZero)
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
-    u32 ea, divisor, result;
+    u32 ea = 0, divisor, result;
     try {
         readOp<C, M, Word, AE_NO_FRAME>(src, &ea, &divisor);
     } catch (AddressErrorException &exc) {

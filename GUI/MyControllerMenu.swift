@@ -43,12 +43,12 @@ extension MyController: NSMenuItemValidation {
         
         switch item.action {
             
-        // Machine menu
+            // Machine menu
         case #selector(MyController.captureScreenAction(_:)):
             item.title = recording ? "Stop Recording" : "Record Screen"
             return true
 
-        // Edit menu
+            // Edit menu
         case #selector(MyController.stopAndGoAction(_:)):
             item.title = running ? "Pause" : "Continue"
             return true
@@ -58,21 +58,21 @@ extension MyController: NSMenuItemValidation {
             return true
             
         case #selector(MyController.stepIntoAction(_:)),
-             #selector(MyController.stepOverAction(_:)),
-             #selector(MyController.stopAndGoAction(_:)):
+            #selector(MyController.stepOverAction(_:)),
+            #selector(MyController.stopAndGoAction(_:)):
             return paused
 
-        // View menu
+            // View menu
         case #selector(MyController.toggleStatusBarAction(_:)):
             item.title = statusBar ? "Hide Status Bar" : "Show Status Bar"
             return true
             
-        // Keyboard menu
+            // Keyboard menu
         case #selector(MyController.mapCmdKeysAction(_:)):
             item.state = (myAppDelegate.eventTap != nil) ? .on : .off
             return true
             
-        // Df<n> menu
+            // Df<n> menu
         case #selector(MyController.insertRecentDiskAction(_:)):
             return validateURLlist(myAppDelegate.insertedFloppyDisks, image: smallDisk)
             
@@ -81,10 +81,10 @@ extension MyController: NSMenuItemValidation {
             #selector(MyController.inspectFloppyDiskAction(_:)),
             #selector(MyController.inspectDfnVolumeAction(_:)):
             return dfn.hasDisk
-                        
+
         case #selector(MyController.exportRecentDiskDummyAction(_:)):
             return amiga.df(item)!.hasDisk
-                        
+
         case #selector(MyController.exportRecentDiskAction(_:)):
             return validateURLlist(myAppDelegate.exportedFloppyDisks[driveNr],
                                    image: smallDisk)
@@ -92,8 +92,8 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.writeProtectAction(_:)):
             item.state = dfn.hasProtectedDisk ? .on : .off
             return dfn.hasDisk
-             
-        // Hd<n> menu
+
+            // Hd<n> menu
         case #selector(MyController.attachRecentHdrAction(_:)):
             return validateURLlist(myAppDelegate.attachedHardDrives, image: smallHdr)
 
@@ -192,7 +192,7 @@ extension MyController: NSMenuItemValidation {
         
         openConfiguratorAsWindow()
     }
- 
+
     @IBAction func inspectorAction(_ sender: Any!) {
         
         if inspector == nil {
@@ -208,7 +208,7 @@ extension MyController: NSMenuItemValidation {
         }
         monitor?.showWindow(self)
     }
- 
+
     @IBAction func consoleAction(_ sender: Any!) {
         
         if renderer.console.isVisible {
@@ -241,7 +241,7 @@ extension MyController: NSMenuItemValidation {
     }
     
     @IBAction func takeScreenshotAction(_ sender: Any!) {
-                
+
         // Determine screenshot format
         let format = ScreenshotSource(rawValue: pref.screenshotSource)!
         
@@ -268,7 +268,7 @@ extension MyController: NSMenuItemValidation {
     }
     
     @IBAction func captureScreenAction(_ sender: Any!) {
-                
+
         if amiga.recorder.recording {
             
             amiga.recorder.stopRecording()
@@ -305,7 +305,7 @@ extension MyController: NSMenuItemValidation {
     }
     
     @IBAction func exportVideoAction(_ sender: Any!) {
-                
+
         let exporter = VideoExporter(with: self, nibName: "VideoExporter")
         exporter?.showSheet()
     }
@@ -315,7 +315,7 @@ extension MyController: NSMenuItemValidation {
     //
     
     @IBAction func paste(_ sender: Any!) {
-                
+
         let pasteBoard = NSPasteboard.general
         guard let text = pasteBoard.string(forType: .string) else {
             
@@ -395,7 +395,7 @@ extension MyController: NSMenuItemValidation {
         }
         virtualKeyboard?.showWindow()
     }
-     
+
     @IBAction func mapCmdKeysAction(_ sender: Any!) {
         
         myAppDelegate.mapCommandKeys = !myAppDelegate.mapCommandKeys
@@ -444,7 +444,7 @@ extension MyController: NSMenuItemValidation {
     }
 
     @IBAction func insertDiskAction(_ sender: NSMenuItem!) {
-       
+
         let drive = amiga.df(sender.tag)!
         
         // Ask the user if an unsafed disk should be replaced
@@ -504,13 +504,13 @@ extension MyController: NSMenuItemValidation {
         amiga.df(sender)!.toggleWriteProtection()
         amiga.resume()
     }
-        
+
     @IBAction func exportRecentDiskDummyAction(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentDiskAction(_ sender: NSMenuItem!) {
-                
+
         let n = sender.tag / 10
         let slot = sender.tag % 10
-                
+
         exportRecentAction(df: n, slot: slot)
     }
     
@@ -630,7 +630,7 @@ extension MyController: NSMenuItemValidation {
         
         let drive = sender.tag / 10
         let slot  = sender.tag % 10
-                    
+
         if let url = myAppDelegate.getRecentlyAttachedHdrURL(slot) {
             
             do {
@@ -655,13 +655,13 @@ extension MyController: NSMenuItemValidation {
             showAlert(.cantDetach, error: error)
         }
     }
-        
+
     @IBAction func exportRecentHdDummyAction(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentHdrAction(_ sender: NSMenuItem!) {
-                
+
         let n = sender.tag / 10
         let slot = sender.tag % 10
-                
+
         exportRecentAction(hd: n, slot: slot)
     }
 
@@ -671,12 +671,12 @@ extension MyController: NSMenuItemValidation {
 
         if let url = myAppDelegate.getRecentlyExportedHdrURL(slot, hd: n) {
             
-             do {
-                 try mydocument.export(hardDrive: n, to: url)
-                 
-             } catch {
-                 showAlert(.cantExport(url: url), error: error)
-             }
+            do {
+                try mydocument.export(hardDrive: n, to: url)
+
+            } catch {
+                showAlert(.cantExport(url: url), error: error)
+            }
         }
     }
     
@@ -750,8 +750,18 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func writeThroughFinderAction(_ sender: NSMenuItem!) {
         
-        if let url = UserDefaults.mediaUrl(name: "") {            
+        if let url = UserDefaults.mediaUrl(name: "") {
             NSWorkspace.shared.open(url)
         }
+    }
+
+    //
+    // Action methods (Window menu)
+    //
+
+    @IBAction func restoreOriginalWindowSize(_ sender: NSMenuItem!) {
+
+        restoreOriginalWindowSize()
+        debug(.metal, "New size of metal view: \(metal.frame)")
     }
 }
