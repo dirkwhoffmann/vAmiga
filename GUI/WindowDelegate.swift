@@ -233,6 +233,7 @@ extension MyController {
 
         // Get window frame
         guard var frame = window?.frame else { return }
+        let yCorrection = height - metal.frame.height
 
         // Modify the frame height
         let borderHeight = frame.height - metal.frame.height
@@ -240,11 +241,8 @@ extension MyController {
 
         // Compute the size correction
         let newSize = fixSizeX(window: window!, size: frame.size)
-        let xCorrection = newSize.width - frame.size.width
-        let yCorrection = newSize.height - frame.size.height
 
         // Adjust frame
-        frame.origin.x -= xCorrection
         frame.origin.y -= yCorrection
         frame.size = newSize
 
