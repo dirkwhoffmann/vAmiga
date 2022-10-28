@@ -203,8 +203,8 @@ extension MyController: NSWindowDelegate {
 
 extension MyController {
     
-    func adjustWindowSize(_ dv: CGFloat = 0.0) {
-                
+    func adjustWindowSize(dy: CGFloat = 0.0) {
+
         // Only proceed in window mode
         if renderer?.fullscreen == true { return }
         
@@ -212,8 +212,8 @@ extension MyController {
         guard var frame = window?.frame else { return }
         
         // Modify the frame height
-        frame.origin.y -= dv
-        frame.size.height += dv
+        frame.origin.y -= dy
+        frame.size.height += dy
 
         // Compute the size correction
         let newsize = windowWillResize(window!, to: frame.size)
@@ -223,10 +223,10 @@ extension MyController {
         frame.origin.y -= yCorrection
         frame.size = newsize
         
-        window!.setFrame(frame, display: true)        
+        window!.setFrame(frame, display: true)
     }
 
-    func restoreOriginalWindowSize() {
+    func adjustWindowSize(height: CGFloat) {
 
         // Only proceed in window mode
         if renderer?.fullscreen == true { return }
@@ -235,17 +235,18 @@ extension MyController {
         guard var frame = window?.frame else { return }
 
         // Modify the frame height
-        frame.size.width = 800
+        let borderHeight = frame.height - metal.frame.height
+        frame.size.height = round(height) + borderHeight
 
         // Compute the size correction
-        let newsize = fixSizeY(window: window!, size: frame.size)
-        let xCorrection = newsize.width - frame.size.width
-        let yCorrection = newsize.height - frame.size.height
+        let newSize = fixSizeX(window: window!, size: frame.size)
+        let xCorrection = newSize.width - frame.size.width
+        let yCorrection = newSize.height - frame.size.height
 
         // Adjust frame
         frame.origin.x -= xCorrection
         frame.origin.y -= yCorrection
-        frame.size = newsize
+        frame.size = newSize
 
         window!.setFrame(frame, display: true)
     }

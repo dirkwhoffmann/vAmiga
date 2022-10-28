@@ -160,7 +160,7 @@ extension Renderer {
         let aspect = Float(size.width) / Float(size.height)
         var xs = Float(1.0)
 
-        debug(.metal, "buildMatrices2D: aspect = \(aspect)")
+        // debug(.metal, "buildMatrices2D: aspect = \(aspect)")
 
         // Scale horizontal coordinates if necessary
         if parent.pref.keepAspectRatio && abs(aspect - (4/3)) > 0.1 {

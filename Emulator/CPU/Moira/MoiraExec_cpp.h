@@ -2416,65 +2416,82 @@ Moira::execJsr(u16 opcode)
     SYNC(delay[M]);
 
     // Check for address errors
-    if (misaligned<C>(ea) && misaligned<C>(reg.sp)) {
+    if (C == C68000) {
 
-        if (M == MODE_AI) {
+        if (isDspMode(M) && misaligned<C>(ea)) {
 
-            queue.irc = (u16)readMS<C, MEM_PROG, Word>(ea & ~1);
-            execAddressError<C>(makeFrame<AE_SET_IF|AE_SET_RW>(ea));
+            execAddressError<C>(makeFrame<AE_DEC_PC>(ea));
             throw AddressErrorException();
         }
 
-        if (isAbsMode(M)) {
-
-            auto frame = makeFrame<AE_SET_IF|AE_SET_RW>(ea);
-            frame.pc -= 4;
-            execAddressError<C>(frame);
-            throw AddressErrorException();
-        }
-        if (isDspMode(M)) {
-
-            execAddressError<C>(makeFrame<AE_DEC_PC|AE_SET_IF|AE_SET_RW>(ea));
-            throw AddressErrorException();
-
-        } else {
+        if (misaligned<C>(ea)) {
 
             execAddressError<C>(makeFrame(ea));
             throw AddressErrorException();
         }
-    }
 
-    if (misaligned<C>(ea)) {
+    } else {
 
-        if (isDspMode(M)) {
+        if (misaligned<C>(ea) && misaligned<C>(reg.sp)) {
 
-            execAddressError<C>(makeFrame<AE_SET_IF|AE_SET_RW>(ea));
-            throw AddressErrorException();
+            if (M == MODE_AI) {
 
-        } else {
+                queue.irc = (u16)readMS<C, MEM_PROG, Word>(ea & ~1);
+                execAddressError<C>(makeFrame<AE_SET_IF|AE_SET_RW>(ea));
+                throw AddressErrorException();
+            }
 
-            execAddressError<C>(makeFrame(ea));
-            throw AddressErrorException();
+            if (isAbsMode(M)) {
+
+                auto frame = makeFrame<AE_SET_IF|AE_SET_RW>(ea);
+                frame.pc -= 4;
+                execAddressError<C>(frame);
+                throw AddressErrorException();
+            }
+            if (isDspMode(M)) {
+
+                execAddressError<C>(makeFrame<AE_DEC_PC|AE_SET_IF|AE_SET_RW>(ea));
+                throw AddressErrorException();
+
+            } else {
+
+                execAddressError<C>(makeFrame(ea));
+                throw AddressErrorException();
+            }
         }
-    }
 
-    if (misaligned<C>(reg.sp)) {
+        if (misaligned<C>(ea)) {
 
-        if (isDspMode(M)) {
+            if (isDspMode(M)) {
 
-            prefetch<C>();
-            reg.sp -= 4;
-            writeBuffer = HI_WORD(reg.pc);
-            execAddressError<C>(makeFrame<AE_DATA>(reg.sp));
-            throw AddressErrorException();
+                execAddressError<C>(makeFrame<AE_SET_IF|AE_SET_RW>(ea));
+                throw AddressErrorException();
 
-        } else {
+            } else {
 
-            prefetch<C>();
-            reg.sp -= 4;
-            writeBuffer = HI_WORD(reg.pc);
-            execAddressError<C>(makeFrame<AE_DATA>(reg.sp));
-            throw AddressErrorException();
+                execAddressError<C>(makeFrame(ea));
+                throw AddressErrorException();
+            }
+        }
+
+        if (misaligned<C>(reg.sp)) {
+
+            if (isDspMode(M)) {
+
+                prefetch<C>();
+                reg.sp -= 4;
+                writeBuffer = HI_WORD(reg.pc);
+                execAddressError<C>(makeFrame<AE_DATA>(reg.sp));
+                throw AddressErrorException();
+
+            } else {
+
+                prefetch<C>();
+                reg.sp -= 4;
+                writeBuffer = HI_WORD(reg.pc);
+                execAddressError<C>(makeFrame<AE_DATA>(reg.sp));
+                throw AddressErrorException();
+            }
         }
     }
 

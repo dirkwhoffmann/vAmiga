@@ -759,9 +759,16 @@ extension MyController: NSMenuItemValidation {
     // Action methods (Window menu)
     //
 
-    @IBAction func restoreOriginalWindowSize(_ sender: NSMenuItem!) {
+    // Resizes the window such that every texture line hits a display line
+    @IBAction func autoResizeWindow(_ sender: NSMenuItem!) {
 
-        restoreOriginalWindowSize()
-        debug(.metal, "New size of metal view: \(metal.frame)")
+        let height = renderer.canvas.visible.height * 2
+
+        debug(.metal, "Old metal view: \(metal.frame)")
+        debug(.metal, "Visible texture lines: \(height)")
+
+        adjustWindowSize(height: height)
+
+        debug(.metal, "New metal view: \(metal.frame)")
     }
 }

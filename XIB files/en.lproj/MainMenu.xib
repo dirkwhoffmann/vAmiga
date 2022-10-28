@@ -1535,9 +1535,9 @@
                 <menuItem title="Window" id="19">
                     <menu key="submenu" title="Window" systemMenu="window" id="24">
                         <items>
-                            <menuItem title="Restore" id="nv4-Gy-40B">
+                            <menuItem title="Auto Resize" id="nv4-Gy-40B">
                                 <connections>
-                                    <action selector="restoreOriginalWindowSize:" target="-1" id="9Bz-ZV-b3k"/>
+                                    <action selector="autoResizeWindow:" target="-1" id="McJ-zg-eYE"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Minimize" keyEquivalent="m" id="23">
