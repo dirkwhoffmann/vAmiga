@@ -1535,7 +1535,7 @@
                 <menuItem title="Window" id="19">
                     <menu key="submenu" title="Window" systemMenu="window" id="24">
                         <items>
-                            <menuItem title="Auto Resize" id="nv4-Gy-40B">
+                            <menuItem title="Adjust" id="nv4-Gy-40B">
                                 <connections>
                                     <action selector="autoResizeWindow:" target="-1" id="McJ-zg-eYE"/>
                                 </connections>
