@@ -67,6 +67,8 @@ extension MyController: NSWindowDelegate {
         inspector?.close()
         monitor?.amiga = nil
         monitor?.close()
+        virtualKeyboard?.amiga = nil
+        virtualKeyboard?.close()
         
         debug(.shutdown, "Shutting down the audio backend...")
         macAudio.shutDown()

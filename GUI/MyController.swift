@@ -392,7 +392,6 @@ extension MyController {
             renderer.canvas.open(delay: 1.5)
             serialIn = ""
             serialOut = ""
-            virtualKeyboard = nil
             toolbar.updateToolbar()
             inspector?.powerOn()
             
