@@ -346,7 +346,8 @@ class ConfigurationController: DialogController {
     
     @IBAction override func okAction(_ sender: Any!) {
         
-        hideSheet()
+        // hideSheet()
+        close()
     }
 
     @IBAction func powerAction(_ sender: Any!) {

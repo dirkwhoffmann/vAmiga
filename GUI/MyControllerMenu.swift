@@ -169,7 +169,7 @@ extension MyController: NSMenuItemValidation {
     }
     
     //
-    // Action methods (File menu)
+    // Action methods (Machine menu)
     //
     
     func openConfigurator(tab: String = "") {
@@ -177,7 +177,8 @@ extension MyController: NSMenuItemValidation {
         if configurator == nil {
             configurator = ConfigurationController(with: self, nibName: "Configuration")
         }
-        configurator?.showSheet(tab: tab)
+//         configurator?.showSheet(tab: tab)
+        configurator?.showWindow(self)
     }
     
     @IBAction func configureAction(_ sender: Any!) {
