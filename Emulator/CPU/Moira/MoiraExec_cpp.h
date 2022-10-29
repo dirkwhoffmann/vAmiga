@@ -1304,7 +1304,6 @@ Moira::execBkpt(u16 opcode)
 
     } else {
 
-        SYNC(4);
         execException<C>(EXC_BKPT);
     }
 
@@ -4910,7 +4909,9 @@ Moira::execRte(u16 opcode)
                 case 0b0000: // Short format
 
                     newsr = (u16)readMS<C, MEM_DATA, Word>(reg.sp + 0);
-                    if ((format & 0xFF) == 0x10) SYNC(4);
+                    if ((format & 0xFF) == 0x10) {
+                        // SYNC(4); // ???? TODO: LOOKS WRONG
+                    }
                     newpc = readMS<C, MEM_DATA, Long>(reg.sp + 2);
                     reg.sp += 8;
 
@@ -4919,7 +4920,9 @@ Moira::execRte(u16 opcode)
                 case 0b1000: // Long format (keep on reading)
                 {
                     newsr = (u16)readMS<C, MEM_DATA, Word>(reg.sp + 0);
-                    if ((format & 0xFF) == 0x10) SYNC(4); // ???? TODO: LOOKS WRONG
+                    if ((format & 0xFF) == 0x10) {
+                        // SYNC(4); // ???? TODO: LOOKS WRONG
+                    }
                     newpc = readMS<C, MEM_DATA, Long>(reg.sp + 2);
 
                     (void)readMS<C, MEM_DATA, Word>(reg.sp + 8); // special status word

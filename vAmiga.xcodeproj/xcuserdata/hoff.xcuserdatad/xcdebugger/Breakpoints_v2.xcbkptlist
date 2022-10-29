@@ -125,9 +125,25 @@
             filePath = "Emulator/CPU/Moira/MoiraExec_cpp.h"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1834"
-            endingLineNumber = "1834"
+            startingLineNumber = "1833"
+            endingLineNumber = "1833"
             landmarkName = "Moira::execCmp(opcode)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "33193AC9-CEFE-4218-B0A8-84D200F85FB6"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Emulator/CPU/Moira/MoiraExec_cpp.h"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "4924"
+            endingLineNumber = "4924"
+            landmarkName = "Moira::execRte(opcode)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

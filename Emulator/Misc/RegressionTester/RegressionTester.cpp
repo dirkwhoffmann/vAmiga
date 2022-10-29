@@ -79,12 +79,18 @@ RegressionTester::dumpTexture(Amiga &amiga, const string &filename)
     file.close();
     
     // Convert raw data into a TIFF file
-    string cmd = "/usr/local/bin/raw2tiff";
+    string cmd = "raw2tiff";
     cmd += " -p rgb -b 3";
     cmd += " -w " + std::to_string(x2 - x1);
     cmd += " -l " + std::to_string(y2 - y1);
     cmd += " " + rawFile + " " + tiffFile;
-    
+
+    if (util::fileExists("/usr/local/bin/raw2tiff")) {
+        cmd = "/usr/local/bin/" + cmd;
+    } else if (util::fileExists("/opt/homebrew/bin/raw2tiff")) {
+        cmd = "/opt/homebrew/bin/" + cmd;
+    }
+
     if (system(cmd.c_str()) == -1) {
         warn("Error executing %s\n", cmd.c_str());
     }

@@ -654,7 +654,7 @@ Moira::readExt()
 template <Core C, Flags F> void
 Moira::jumpToVector(int nr)
 {
-    u32 vectorAddr = reg.vbr + 4 * nr;
+    u32 vectorAddr = (reg.vbr & ~0x1) + 4 * nr;
     u32 oldpc = reg.pc;
 
     // Update the program counter

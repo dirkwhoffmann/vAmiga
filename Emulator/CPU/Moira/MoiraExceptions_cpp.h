@@ -330,7 +330,7 @@ Moira::execException(ExceptionType exc, int nr)
     u16 status = getSR();
 
     // Determine the exception vector number
-    u16 vector = (exc == EXC_TRAP) ? u16(exc + nr) : u16(exc);
+    u16 vector = (exc == EXC_TRAP) ? u16(exc + nr) : (exc == EXC_BKPT) ? 4 : u16(exc);
 
     // Inform the delegate
     willExecute(exc, vector);
@@ -378,13 +378,15 @@ Moira::execException(ExceptionType exc, int nr)
             // Clear any pending trace event
             flags &= ~CPU_TRACE_EXCEPTION;
 
-            SYNC(4);
+            SYNC(2);
+            (void)readM<C, MODE_DN, Word>(reg.pc);
+            SYNC(2);
 
             // Write stack frame
-            writeStackFrame0000<C>(status, reg.pc, 4);
+            writeStackFrame0000<C>(status, reg.pc - 2, vector);
 
             // Branch to exception handler
-            jumpToVector<C, AE_SET_CB3>(4);
+            jumpToVector<C, AE_SET_CB3>(vector);
             break;
 
         case EXC_DIVIDE_BY_ZERO:
