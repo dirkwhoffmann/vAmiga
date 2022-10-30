@@ -711,10 +711,6 @@ Moira::outerDispWords(u16 ext)
 {
     u16 xx = ______________xx (ext);
     
-    /*
-     bool outer_disp      = (xx >= 2) && (ext & 0x47) < 0x44;
-     bool outer_disp_long = (xx == 3) && (ext & 0x47) < 0x44;
-     */
     bool outer_disp      = (xx >= 2);
     bool outer_disp_long = (xx == 3);
     

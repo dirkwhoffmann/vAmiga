@@ -2838,7 +2838,8 @@ Moira::execMove4(u16 opcode)
 
     // Determine next address error stack frame format
     const u64 flags0 = AE_WRITE | AE_DATA;
-    const u64 flags1 = AE_WRITE | AE_DATA | AE_SET_CB3;
+    // const u64 flags1 = AE_WRITE | AE_DATA | AE_SET_CB3;
+    const u64 flags1 = AE_WRITE | AE_DATA;
     const u64 flags2 = AE_WRITE | AE_DATA;
     int format = (S == Long) ? 0 : reg.sr.c ? 2 : 1;
 
@@ -3124,7 +3125,16 @@ Moira::execMovea(u16 opcode)
     int dst = ____xxx_________(opcode);
 
     u32 ea, data;
-    readOp<C, M, S, STD_AE_FRAME>(src, &ea, &data);
+
+    try { readOp<C, M, S, AE_NO_FRAME>(src, &ea, &data); }
+    catch (AddressErrorException &exc) {
+
+        // Rectify stack frame
+        auto frame = makeFrame<STD_AE_FRAME|AE_SET_RW|AE_SET_DF>(ea);
+        readBuffer = 0xFFFF; // To pass ADDRERR6 (needs investigation)
+        execAddressError<C>(frame, 2);
+        throw exc;
+    }
 
     prefetch<C, POLLIPL>();
     writeA(dst, SEXT<S>(data));
@@ -4970,6 +4980,7 @@ Moira::execRte(u16 opcode)
                     SYNC(4);
                     (void)readMS<C, MEM_DATA, Long>(reg.sp + 2);
 
+                    reg.sr.c = 1; // Check test case Exceptions/StackFrame/stackframe2
                     execException(EXC_FORMAT_ERROR);
                     return;
             }
