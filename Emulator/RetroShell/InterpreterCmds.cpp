@@ -101,7 +101,7 @@ Interpreter::registerInstructions()
              "key", "Emulates a PAL machine",
              &RetroShell::exec <Token::amiga, Token::set, Token::pal>, 0);
 
-    root.add({"amiga", "set", "pal"},
+    root.add({"amiga", "set", "ntsc"},
              "key", "Emulates a NTSC machine",
              &RetroShell::exec <Token::amiga, Token::set, Token::ntsc>, 0);
 
@@ -375,25 +375,27 @@ Interpreter::registerInstructions()
     // MMU
     //
 
+    /*
     root.add({"mmu"},
              "component", "Memory management unit");
 
     root.add({"mmu", "inspect"},
              "command", "Displays the component state",
              &RetroShell::exec <Token::mmu, Token::inspect>, 0);
-
+    */
 
     //
     // FPU
     //
 
+    /*
     root.add({"fpu"},
              "component", "Floating point unit");
 
     root.add({"fpu", "inspect"},
              "command", "Displays the component state",
              &RetroShell::exec <Token::fpu, Token::inspect>, 0);
-
+    */
 
     //
     // CIA
