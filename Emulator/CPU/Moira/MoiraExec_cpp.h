@@ -3124,7 +3124,7 @@ Moira::execMovea(u16 opcode)
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
-    u32 ea, data;
+    u32 ea = 0, data;
 
     try { readOp<C, M, S, AE_NO_FRAME>(src, &ea, &data); }
     catch (AddressErrorException &exc) {
