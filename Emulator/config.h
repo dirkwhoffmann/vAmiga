@@ -215,6 +215,7 @@ static const int PRT_DEBUG       = 0; // Control ports and connected devices
 static const int SER_DEBUG       = 0; // Serial interface
 static const int POT_DEBUG       = 0; // Potentiometer inputs
 static const int HOLD_MOUSE_L    = 0; // Hold down the left mouse button
+static const int HOLD_MOUSE_M    = 0; // Hold down the middle mouse button
 static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
 
 // Expansion boards

@@ -55,6 +55,7 @@ public:
     
     // Mouse button states
     bool leftButton = false;
+    bool middleButton = false;
     bool rightButton = false;
     
 private:
@@ -182,6 +183,7 @@ public:
 
     // Presses or releases a mouse button
     void setLeftButton(bool value);
+    void setMiddleButton(bool value);
     void setRightButton(bool value);
 
     // Triggers a gamepad event

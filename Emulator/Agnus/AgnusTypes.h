@@ -352,6 +352,8 @@ enum_i8(EventID)
     // Mouse
     MSE_PUSH_LEFT       = 1,
     MSE_RELEASE_LEFT,
+    MSE_PUSH_MIDDLE,
+    MSE_RELEASE_MIDDLE,
     MSE_PUSH_RIGHT,
     MSE_RELEASE_RIGHT,
     MSE_EVENT_COUNT,
