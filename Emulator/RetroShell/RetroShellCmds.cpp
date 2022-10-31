@@ -1228,6 +1228,40 @@ RetroShell::exec <Token::joystick, Token::inspect> (Arguments& argv, long param)
 }
 
 template <> void
+RetroShell::exec <Token::joystick, Token::press> (Arguments& argv, long param)
+{
+    auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
+    auto nr = util::parseNum(argv.front());
+
+    switch (nr) {
+
+        case 1: port.joystick.trigger(PRESS_FIRE); break;
+        case 2: port.joystick.trigger(PRESS_FIRE2); break;
+        case 3: port.joystick.trigger(PRESS_FIRE3); break;
+
+        default:
+            throw VAError(ERROR_OPT_INVARG, "1...3");
+    }
+}
+
+template <> void
+RetroShell::exec <Token::joystick, Token::unpress> (Arguments& argv, long param)
+{
+    auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
+    auto nr = util::parseNum(argv.front());
+
+    switch (nr) {
+
+        case 1: port.joystick.trigger(RELEASE_FIRE); break;
+        case 2: port.joystick.trigger(RELEASE_FIRE2); break;
+        case 3: port.joystick.trigger(RELEASE_FIRE3); break;
+
+        default:
+            throw VAError(ERROR_OPT_INVARG, "1...3");
+    }
+}
+
+template <> void
 RetroShell::exec <Token::joystick, Token::pull, Token::left> (Arguments& argv, long param)
 {
     auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
