@@ -117,22 +117,25 @@ ControlPort::pokeJOYTEST(u16 value)
 void
 ControlPort::changePotgo(u16 &potgo) const
 {
-    if (device == CPD_MOUSE) {
-        mouse.changePotgo(potgo);
+    switch (device) {
+
+        case CPD_MOUSE:     mouse.changePotgo(potgo); break;
+        case CPD_JOYSTICK:  joystick.changePotgo(potgo); break;
+
+        default:
+            break;
     }
 }
 
 void
 ControlPort::changePra(u8 &pra) const
 {
-    if (device == CPD_MOUSE) {
-        
-        mouse.changePra(pra);
-        return;
-    }
-    if (device == CPD_JOYSTICK) {
-        
-        joystick.changePra(pra);
-        return;
+    switch (device) {
+
+        case CPD_MOUSE:     mouse.changePra(pra); break;
+        case CPD_JOYSTICK:  joystick.changePra(pra); break;
+
+        default:
+            break;
     }
 }

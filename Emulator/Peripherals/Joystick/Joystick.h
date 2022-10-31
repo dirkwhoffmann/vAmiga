@@ -22,7 +22,9 @@ class Joystick : public SubComponent {
 
     // Button state
     bool button = false;
-    
+    bool button2 = false;
+    bool button3 = false;
+
     // Horizontal joystick position (-1 = left, 1 = right, 0 = released)
     int axisX = 0;
     
@@ -100,6 +102,9 @@ public:
     //
     
 public:
+
+    // Modifies the POTGOR bits according to the current button state
+    void changePotgo(u16 &potgo) const;
 
     // Modifies the PRA bits of CIA A according to the current button state
     void changePra(u8 &pra) const;

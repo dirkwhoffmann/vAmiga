@@ -249,7 +249,13 @@ class GamePad {
             
         case .PRESS_FIRE:
             return [.PRESS_FIRE]
-            
+
+        case .PRESS_FIRE2:
+            return [.PRESS_FIRE2]
+
+        case .PRESS_FIRE3:
+            return [.PRESS_FIRE3]
+
         case .PRESS_LEFT:
             return [.PRESS_LEFT]
             
@@ -286,7 +292,13 @@ class GamePad {
             
         case .PRESS_FIRE:
             return [.RELEASE_FIRE]
-            
+
+        case .PRESS_FIRE2:
+            return [.RELEASE_FIRE2]
+
+        case .PRESS_FIRE3:
+            return [.RELEASE_FIRE3]
+
         case .PRESS_LEFT:
             return [.RELEASE_LEFT]
             
