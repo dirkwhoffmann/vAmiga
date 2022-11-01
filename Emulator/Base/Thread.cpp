@@ -85,7 +85,7 @@ template <> void
 Thread::sleep<Thread::SyncMode::Pulsed>()
 {
     // Wait for the next pulse
-    if (!warpMode) waitForWakeUp();
+    if (!warpMode) waitForWakeUp(util::Time(100000000));
 }
 
 void

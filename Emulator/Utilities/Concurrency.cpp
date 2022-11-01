@@ -11,26 +11,20 @@
 #include "Concurrency.h"
 #include "Chrono.h"
 
-// #define ACTIVE_WAITING // REMOVE ASAP
-
 namespace util {
 
 void
-Wakeable::waitForWakeUp()
+Wakeable::waitForWakeUp(Time timeout)
 {
-    static util::Time now, past;
-
-#ifndef ACTIVE_WAITING
+    auto now = std::chrono::system_clock::now();
+    auto delay = std::chrono::nanoseconds(timeout.asNanoseconds());
 
     std::unique_lock<std::mutex> lock(condMutex);
-    auto timeout = std::chrono::system_clock::now();
-    timeout += std::chrono::milliseconds(400);
-    condVar.wait_until(lock, timeout, [this]{ return ready; });
+    condVar.wait_until(lock, now + delay, [this]{ return ready; });
     ready = false;
 
-#else
-
-    // REMOVEASAP
+    /* REMOVE ASAP
+     static util::Time now, past;
     auto base = util::Time::now();
 
     while (ready == false) {
@@ -42,30 +36,26 @@ Wakeable::waitForWakeUp()
     past = now;
 
     ready = false;
-
-#endif
+    */
 }
 
 void
 Wakeable::wakeUp()
 {
-#ifndef ACTIVE_WAITING
     {
         std::lock_guard<std::mutex> lock(condMutex);
         ready = true;
     }
     condVar.notify_one();
 
-#else
-
+    /* REMOVE ASAP
     static util::Time now, past;
 
     now = util::Time::now();
     past = now;
     
     ready = true;
-
-#endif
+    */
 }
 
 }
