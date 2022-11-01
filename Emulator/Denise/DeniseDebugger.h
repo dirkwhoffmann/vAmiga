@@ -108,4 +108,7 @@ public:
 
     void hsyncHandler(isize vpos);
     void vsyncHandler();
+
+    // Called at the end of each frame
+    void eofHandler();
 };

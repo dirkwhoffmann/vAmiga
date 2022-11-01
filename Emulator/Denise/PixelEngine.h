@@ -226,6 +226,8 @@ public:
     // Called after each frame to switch the frame buffers
     void vsyncHandler();
 
+    // Called at the end of each frame
+    void eofHandler();
 
     //
     // Working with recorded register changes

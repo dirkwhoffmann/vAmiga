@@ -24,7 +24,7 @@ Thread::~Thread()
 }
 
 template <> void
-Thread::execute <Thread::SyncMode::Periodic> ()
+Thread::execute<Thread::SyncMode::Periodic>()
 {
     loadClock.go();
     execute();
@@ -32,7 +32,7 @@ Thread::execute <Thread::SyncMode::Periodic> ()
 }
 
 template <> void
-Thread::execute <Thread::SyncMode::Pulsed> ()
+Thread::execute<Thread::SyncMode::Pulsed>()
 {
     loadClock.go();
     execute();
@@ -41,7 +41,7 @@ Thread::execute <Thread::SyncMode::Pulsed> ()
 }
 
 template <> void
-Thread::sleep <Thread::SyncMode::Periodic> ()
+Thread::sleep<Thread::SyncMode::Periodic>()
 {
     auto now = util::Time::now();
 
@@ -82,7 +82,7 @@ Thread::sleep <Thread::SyncMode::Periodic> ()
 }
 
 template <> void
-Thread::sleep <Thread::SyncMode::Pulsed> ()
+Thread::sleep<Thread::SyncMode::Pulsed>()
 {
     // Wait for the next pulse
     if (!warpMode) waitForWakeUp();
@@ -312,7 +312,6 @@ void
 Thread::changeStateTo(ExecutionState requestedState, bool blocking)
 {
     newState = requestedState;
-    wakeUp();
     if (blocking) while (state != requestedState) { };
 }
 
@@ -320,7 +319,6 @@ void
 Thread::changeWarpTo(u8 value, bool blocking)
 {
     newWarpMode = value;
-    wakeUp();
     if (blocking) while (warpMode != newWarpMode) { };
 }
 
@@ -328,7 +326,6 @@ void
 Thread::changeDebugTo(u8 value, bool blocking)
 {
     newDebugMode = value;
-    wakeUp();
     if (blocking) while (debugMode != newDebugMode) { };
 }
 

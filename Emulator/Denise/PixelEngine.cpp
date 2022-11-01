@@ -321,8 +321,15 @@ PixelEngine::getNoise() const
 void
 PixelEngine::vsyncHandler()
 {
-    swapBuffers();
+    // swapBuffers();
     dmaDebugger.vSyncHandler();
+}
+
+void
+PixelEngine::eofHandler()
+{
+    swapBuffers();
+    dmaDebugger.eofHandler();
 }
 
 void

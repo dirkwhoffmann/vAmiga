@@ -199,3 +199,9 @@ DeniseDebugger::vsyncHandler()
         std::memcpy(latchedSpriteData, spriteData, sizeof(spriteData));
     }
 }
+
+void
+DeniseDebugger::eofHandler()
+{
+    
+}

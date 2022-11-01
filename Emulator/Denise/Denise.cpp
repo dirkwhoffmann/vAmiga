@@ -1264,6 +1264,13 @@ Denise::eolHandler()
     hflopOff = denise.hstop;
 }
 
+void
+Denise::eofHandler()
+{
+    pixelEngine.eofHandler();
+    debugger.eofHandler();
+}
+
 template void Denise::drawOdd<false>(Pixel offset);
 template void Denise::drawOdd<true>(Pixel offset);
 template void Denise::drawEven<false>(Pixel offset);

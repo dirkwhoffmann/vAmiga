@@ -418,3 +418,9 @@ DmaDebugger::vSyncHandler()
         }
     }
 }
+
+void
+DmaDebugger::eofHandler()
+{
+
+}

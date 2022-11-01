@@ -640,13 +640,14 @@ Agnus::eofHandler()
 
     // Run the screen recorder
     denise.screenRecorder.vsyncHandler(clock - 50 * DMA_CYCLES(HPOS_CNT_PAL));
-    
+    denise.eofHandler();
+
     // Synthesize sound samples
     paula.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT_PAL));
 
     scheduleStrobe0Event();
 
-    // Let other components do their own VSYNC stuff
+    // Let other components do their own EOF stuff
     sequencer.eofHandler();
     copper.eofHandler();
     controlPort1.joystick.eofHandler();

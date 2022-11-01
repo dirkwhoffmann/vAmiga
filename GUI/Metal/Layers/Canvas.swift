@@ -253,7 +253,7 @@ class Canvas: Layer {
                 debug(.metal, "Frame sync mismatch (\(prevNr) -> \(nr))")
 
                 // Return immediately if we alredy have this texture
-                if nr == prevNr { return }
+                // if nr == prevNr { return }
             }
             prevBuffer = buffer
             prevNr = nr

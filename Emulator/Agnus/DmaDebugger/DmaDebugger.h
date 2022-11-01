@@ -121,6 +121,9 @@ public:
     // Cleans by Agnus at the end of each frame
     void vSyncHandler();
 
+    // Called at the end of each frame
+    void eofHandler();
+
 private:
 
     // Visualizes DMA usage for a certain range of DMA cycles

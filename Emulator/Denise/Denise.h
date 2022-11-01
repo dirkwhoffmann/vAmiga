@@ -567,7 +567,7 @@ private:
     
 public:
 
-    // Called by Agnus at the beginning of each frame
+    // Called by Agnus at the beginning of each frame (DEPRECATED)
     void vsyncHandler();
 
     // Called by Agnus at the beginning of the HSYNC area
@@ -575,6 +575,9 @@ public:
 
     // Called by Agnus at the end of each line
     void eolHandler();
+
+    // Called by Agnus at the end of each frame
+    void eofHandler();
 
     
     //
