@@ -250,7 +250,7 @@ class Canvas: Layer {
             // Check for duplicate frames or frame drops
             if nr != prevNr + 1 {
 
-                debug(.metal, "Frame sync mismatch (\(prevNr) -> \(nr))")
+                debug(.vsync, "Frame sync mismatch (\(prevNr) -> \(nr))")
 
                 // Return immediately if we alredy have this texture
                 // if nr == prevNr { return }
