@@ -15,25 +15,21 @@ namespace util {
 void
 Wakeable::waitForWakeUp()
 {
-    // Wait for wakup signal or time out
-    future.wait_for(std::chrono::milliseconds(25));
-
-    // Prepare a new promise/future pair
-    promise = std::promise<int>();
-    future = promise.get_future();
+    std::unique_lock<std::mutex> lock(condMutex);
+    auto timeout = std::chrono::system_clock::now();
+    timeout += std::chrono::milliseconds(40);
+    condVar.wait_until(lock, timeout, [this]{ return ready; });
+    ready = false;
 }
 
 void
 Wakeable::wakeUp()
 {
-    auto state = promise.get_future().wait_for(std::chrono::seconds(0));
-    if (state != std::future_status::ready) {
-        promise.set_value(true);
+    {
+        std::lock_guard<std::mutex> lock(condMutex);
+        ready = true;
     }
-
-    // REMOVE ASAP
-    state = promise.get_future().wait_for(std::chrono::seconds(0));
-    assert(state == std::future_status::ready);
+    condVar.notify_one();
 }
 
 }

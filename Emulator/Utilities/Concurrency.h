@@ -48,9 +48,10 @@ public:
 
 class Wakeable
 {
-    std::promise<int> promise;
-    std::future<int> future = promise.get_future();
-    
+    std::mutex condMutex;
+    std::condition_variable condVar;
+    bool ready = false;
+
 public:
 
     void waitForWakeUp();
