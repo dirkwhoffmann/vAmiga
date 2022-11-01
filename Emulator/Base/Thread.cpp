@@ -97,7 +97,8 @@ Thread::main()
 
         if (isRunning()) {
                         
-            switch (mode) {
+            switch (getSyncMode()) {
+
                 case SyncMode::Periodic: execute<SyncMode::Periodic>(); break;
                 case SyncMode::Pulsed: execute<SyncMode::Pulsed>(); break;
             }
@@ -105,7 +106,8 @@ Thread::main()
                 
         if (!warpMode || !isRunning()) {
             
-            switch (mode) {
+            switch (getSyncMode()) {
+
                 case SyncMode::Periodic: sleep<SyncMode::Periodic>(); break;
                 case SyncMode::Pulsed: sleep<SyncMode::Pulsed>(); break;
             }
@@ -196,11 +198,13 @@ Thread::main()
     }
 }
 
+/*
 void
 Thread::setMode(SyncMode newMode)
 {
     mode = newMode;
 }
+*/
 
 void
 Thread::powerOn(bool blocking)
@@ -308,6 +312,7 @@ void
 Thread::changeStateTo(ExecutionState requestedState, bool blocking)
 {
     newState = requestedState;
+    wakeUp();
     if (blocking) while (state != requestedState) { };
 }
 
@@ -315,6 +320,7 @@ void
 Thread::changeWarpTo(u8 value, bool blocking)
 {
     newWarpMode = value;
+    wakeUp();
     if (blocking) while (warpMode != newWarpMode) { };
 }
 
@@ -322,13 +328,14 @@ void
 Thread::changeDebugTo(u8 value, bool blocking)
 {
     newDebugMode = value;
+    wakeUp();
     if (blocking) while (debugMode != newDebugMode) { };
 }
 
 void
 Thread::wakeUp()
 {
-    if (mode == SyncMode::Pulsed) util::Wakeable::wakeUp();
+    if (getSyncMode() == SyncMode::Pulsed) util::Wakeable::wakeUp();
 }
 
 void

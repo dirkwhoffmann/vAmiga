@@ -22,7 +22,7 @@
  *        Off: The emulator is turned off
  *     Paused: The emulator is turned on, but not running
  *    Running: The emulator is turned on and running
- *  Suspended: The emulator is paused for a very short period of time
+ *  Suspended: The emulator is paused for a short period of time
  *     Halted: The emulator is shutting down
  *
  *   ---------  powerOn   ---------    run     ---------  suspend   ---------
@@ -87,7 +87,7 @@
  * temporarily. This functionality is utilized frequently by the GUI to carry
  * out atomic operations that cannot be performed while the emulator is running.
  * To pause the emulator temporarily, the critical code section can be embedded
- * in a suspend/resume block like so:
+ * in a suspend/resume block like this:
  *
  *       suspend();
  *       do something with the internal state;
@@ -107,16 +107,13 @@
  *
  * To speed up emulation (e.g., during disk accesses), the emulator may be put
  * into warp mode. In this mode, timing synchronization is disabled causing the
- * emulator to run as fast as possible. The current warp mode setting can be
- * "locked" which means that it can't be changed any more. This lock is utilized
- * by the regression tester to prevent the GUI from disabling warp mode during
- * an ongoing test.
+ * emulator to run as fast as possible.
  *
  * Similar to warp mode, the emulator may be put into debug mode. This mode is
  * enabled when the GUI debugger is opend and disabled when the debugger is
  * closed. In debug mode, several time-consuming tasks are performed that are
- * usually left out. E.g., the CPU records the callstack and tracks all
- * executed instructions in a trace buffer.
+ * usually left out. E.g., the CPU tracks all executed instructions and stores
+ * the recorded information in a trace buffer.
  */
 
 class Thread : public AmigaComponent, util::Wakeable {
@@ -130,7 +127,7 @@ protected:
 
     // The current synchronization mode
     enum class SyncMode { Periodic, Pulsed };
-    volatile SyncMode mode = SyncMode::Periodic;
+    // volatile SyncMode mode = SyncMode::Periodic;
     
     // The current thread state and a change request
     volatile ExecutionState state = EXEC_OFF;
@@ -187,7 +184,7 @@ private:
     virtual void execute() = 0;
 
     // Delay between two frames in nanoseconds (provided by the subclass)
-    virtual util::Time getDelay() = 0;
+    virtual util::Time getDelay() const = 0;
 
     // Returns true if this functions is called from within the emulator thread
     bool isEmulatorThread() { return std::this_thread::get_id() == thread.get_id(); }
@@ -199,9 +196,9 @@ private:
 
 public:
     
-    void setMode(SyncMode newMode);
+    // void setMode(SyncMode newMode);
 
-    
+
     //
     // Analyzing
     //
@@ -251,7 +248,10 @@ protected:
     //
 
 public:
-    
+
+    // Provides the current sync mode
+    virtual SyncMode getSyncMode() const = 0; 
+
     // Awakes the thread if it runs in pulse mode
     void wakeUp();
 

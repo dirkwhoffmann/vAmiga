@@ -1051,12 +1051,12 @@
 			isa = PBXGroup;
 			children = (
 				50CF461F2620423300BB3B95 /* CMakeLists.txt */,
-				507215B025EAF62B00787591 /* Aliases.h */,
 				5082D83A21EF891200CF7692 /* Constants.h */,
 				50A6145A260D14FE00A01428 /* ErrorTypes.h */,
 				5039924625B219FC0084B808 /* Error.h */,
 				50AE6F8425D71FBE0004AFBC /* Error.cpp */,
 				50B14C0621EB218E002E32A6 /* AmigaObject.h */,
+				507215B025EAF62B00787591 /* Aliases.h */,
 				50B14C0521EB218E002E32A6 /* AmigaObject.cpp */,
 				50A61468260DC2D700A01428 /* AmigaComponentTypes.h */,
 				50B14C0C21EB3708002E32A6 /* AmigaComponent.h */,

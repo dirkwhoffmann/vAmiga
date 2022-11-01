@@ -20,6 +20,7 @@ enum_long(OPT)
 {
     // Amiga
     OPT_VIDEO_FORMAT,
+    OPT_VSYNC,
     
     // Agnus
     OPT_AGNUS_REVISION,

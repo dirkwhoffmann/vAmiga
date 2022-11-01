@@ -2817,6 +2817,11 @@ using namespace moira;
     [self amiga]->halt();
 }
 
+- (void)wakeUp
+{
+    [self amiga]->wakeUp();
+}
+
 - (void)stopAndGo
 {
     [self amiga]->stopAndGo();

@@ -287,6 +287,7 @@ struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
 typedef struct
 {
     VideoFormat type;
+    bool vsync;
 }
 AmigaConfig;
 

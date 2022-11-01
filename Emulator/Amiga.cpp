@@ -219,6 +219,10 @@ Amiga::getConfigItem(Option option) const
 
             return config.type;
 
+        case OPT_VSYNC:
+
+            return config.vsync;
+
         case OPT_AGNUS_REVISION:
         case OPT_SLOW_RAM_MIRROR:
         case OPT_PTR_DROPS:
@@ -400,6 +404,16 @@ Amiga::setConfigItem(Option option, i64 value)
             }
             return;
 
+        case OPT_VSYNC:
+
+            if (value != config.vsync) {
+
+                SUSPENDED
+
+                config.vsync = value;
+            }
+            return;
+
         default:
             fatalError;
     }
@@ -436,7 +450,8 @@ Amiga::configure(Option option, i64 value)
     switch (option) {
 
         case OPT_VIDEO_FORMAT:
-
+        case OPT_VSYNC:
+            
             setConfigItem(option, value);
             break;
 
@@ -891,7 +906,9 @@ Amiga::_dump(Category category, std::ostream& os) const
     if (category == Category::Config) {
 
         os << tab("Video format");
-        os << VideoFormatEnum::key(config.type);
+        os << VideoFormatEnum::key(config.type) << std::endl;
+        os << tab("VSYNC");
+        os << bol(config.vsync) << std::endl;
     }
 
     if (category == Category::State) {
@@ -904,6 +921,8 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << bol(inWarpMode()) << std::endl;
         os << tab("Debug mode");
         os << bol(inDebugMode()) << std::endl;
+        os << tab("Sync mode");
+        os << (getSyncMode() == SyncMode::Periodic ? "PERIODIC" : "PULSED") << std::endl;
     }
     
     if (category == Category::Defaults) {
@@ -1030,6 +1049,12 @@ Amiga::save(u8 *buffer)
     return result;
 }
 
+Amiga::SyncMode
+Amiga::getSyncMode() const
+{
+    return config.vsync ? SyncMode::Pulsed : SyncMode::Periodic;
+}
+
 void
 Amiga::execute()
 {    
@@ -1147,7 +1172,7 @@ Amiga::execute()
 }
 
 util::Time
-Amiga::getDelay()
+Amiga::getDelay() const
 {
     switch (config.type) {
 

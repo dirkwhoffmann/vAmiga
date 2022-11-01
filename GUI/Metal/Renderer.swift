@@ -201,6 +201,7 @@ class Renderer: NSObject, MTKViewDelegate {
 
         semaphore.wait()
         canvas.updateTexture()
+        parent.amiga.wakeUp()
         
         if let drawable = metalLayer.nextDrawable() {
 

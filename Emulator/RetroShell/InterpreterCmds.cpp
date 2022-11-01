@@ -105,6 +105,17 @@ Interpreter::registerInstructions()
              "key", "Emulates a NTSC machine",
              &RetroShell::exec <Token::amiga, Token::set, Token::ntsc>, 0);
 
+    root.add({"amiga", "vsync"},
+             "command", "Turns VSYNC on or off");
+
+    root.add({"amiga", "vsync", "on"},
+             "state", "Turns VSYNC on",
+             &RetroShell::exec <Token::amiga, Token::vsync, Token::on>, 0);
+
+    root.add({"amiga", "vsync", "off"},
+             "state", "Turns VSYNC off",
+             &RetroShell::exec <Token::amiga, Token::vsync, Token::off>, 0);
+
     root.add({"amiga", "init"},
              "command", "Initializes the Amiga with a predefined scheme",
              &RetroShell::exec <Token::amiga, Token::init>, 1);

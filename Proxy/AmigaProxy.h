@@ -219,6 +219,8 @@
 - (void)pause;
 - (void)halt;
 
+- (void)wakeUp;
+
 - (void)stopAndGo;
 - (void)stepInto;
 - (void)stepOver;

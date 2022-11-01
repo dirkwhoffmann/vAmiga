@@ -207,7 +207,10 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker << config.type;
+        worker
+
+        << config.type
+        << config.vsync;
     }
 
     template <class T>
@@ -235,8 +238,9 @@ private:
     
 private:
     
+    SyncMode getSyncMode() const override;
     void execute() override;
-    util::Time getDelay() override;
+    util::Time getDelay() const override;
 
 
     //

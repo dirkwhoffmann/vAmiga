@@ -37,8 +37,8 @@ enum class Token
     show, slow, slowramdelay, slowrammirror, source, speed, sprites, start,
     state, status, step, stop, swapdelay, swtraps, task, tasks, tod, todbug,
     tracking, translate, trap, unmappingtype, unpress, up, vector, verbose,
-    velocity, volume, volumes, wait, watch, watchpoint, wom, wp, xaxis, yaxis,
-    zorro
+    velocity, volume, volumes, vsync, wait, watch, watchpoint, wom, wp, xaxis,
+    yaxis, zorro
 };
 
 struct TooFewArgumentsError : public util::ParseError {
