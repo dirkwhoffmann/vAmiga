@@ -55,6 +55,8 @@ PixelEngine::_reset(bool hard)
         
         emuTexture[0].longFrame = true;
         emuTexture[1].longFrame = true;
+        emuTexture[0].nr = 0;
+        emuTexture[1].nr = 0;
     }
 
     activeBuffer = 0;
@@ -306,6 +308,7 @@ void
 PixelEngine::swapBuffers()
 {
     activeBuffer = !activeBuffer;
+    emuTexture[activeBuffer].nr = agnus.pos.frame;
     emuTexture[activeBuffer].longFrame = agnus.pos.lof;
 }
 

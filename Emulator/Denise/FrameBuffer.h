@@ -37,6 +37,7 @@ struct FrameBuffer {
     static constexpr Texel cb2      = grey4;    // Checkerboard color 2
     
     Buffer <Texel> pixels;
+    i64 nr;
     bool longFrame;
 
     FrameBuffer();

@@ -848,6 +848,11 @@ using namespace moira;
     return [self denise]->debugger.getSpriteColor(nr, reg);
 }
 
+- (NSInteger)frameNr
+{
+    return [self denise]->pixelEngine.getStableBuffer().nr;
+}
+
 - (BOOL)longFrame
 {
     return [self denise]->pixelEngine.getStableBuffer().longFrame;
@@ -862,6 +867,14 @@ using namespace moira;
 {
     return (u32 *)([self denise]->pixelEngine.getNoise());
 }
+
+- (void)getStableBuffer:(u32 **)ptr nr:(i64 *)nr
+{
+    auto &frameBuffer = [self denise]->pixelEngine.getStableBuffer();
+    *ptr = frameBuffer.pixels.ptr;
+    *nr = frameBuffer.nr;
+}
+
 
 @end
 

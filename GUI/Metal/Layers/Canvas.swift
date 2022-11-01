@@ -24,7 +24,8 @@ class Canvas: Layer {
 
     // Used to determine if the GPU texture needs to be updated
     var prevBuffer: UnsafeMutablePointer<u32>?
-    
+    var prevNr = 0
+
     // Variable used to emulate interlace flickering
     var flickerCnt = 0
 
@@ -244,9 +245,18 @@ class Canvas: Layer {
 
             // Get the emulator texture
             let buffer = amiga.denise.stableBuffer!
-            if prevBuffer == buffer { return }
+            let nr = amiga.denise.frameNr
+
+            // Check for duplicate frames or frame drops
+            if nr != prevNr + 1 {
+
+                debug(.metal, "Frame sync mismatch (\(prevNr) -> \(nr))")
+
+                // Return immediately if we alredy have this texture
+                if nr == prevNr { return }
+            }
             prevBuffer = buffer
-            
+            prevNr = nr
             // Determine if the new texture is a long frame or a short frame
             prevLOF = currLOF
             currLOF = amiga.denise.longFrame
