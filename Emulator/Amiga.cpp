@@ -917,6 +917,8 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << bol(isPoweredOn()) << std::endl;
         os << tab("Running");
         os << bol(isRunning()) << std::endl;
+        os << tab("Suspended");
+        os << bol(isSuspended()) << std::endl;
         os << tab("Warp mode");
         os << bol(inWarpMode()) << std::endl;
         os << tab("Debug mode");

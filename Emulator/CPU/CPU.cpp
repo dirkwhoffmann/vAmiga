@@ -262,19 +262,6 @@ Moira::softwareTrapReached(u32 addr)
     amiga.setFlag(RL::SWTRAP_REACHED);
 }
 
-void
-Moira::mmuDidEnable()
-{
-    printf("Enabling MMU\n");
-    // cpu.softstopReached(0);
-}
-
-void
-Moira::mmuDidDisable()
-{
-    printf("Disabling MMU\n");
-}
-
 }
 
 
@@ -520,11 +507,6 @@ CPU::_dump(Category category, std::ostream& os) const
             os << util::tab("FP" + std::to_string(i));
             os << util::flt(value) << std::endl;
         }
-    }
-
-    if (category == Category::Mmu) {
-
-        os << "No MMU present\n";
     }
     
     if (category == Category::Breakpoints) {

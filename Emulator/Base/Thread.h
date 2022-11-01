@@ -127,7 +127,6 @@ protected:
 
     // The current synchronization mode
     enum class SyncMode { Periodic, Pulsed };
-    // volatile SyncMode mode = SyncMode::Periodic;
     
     // The current thread state and a change request
     volatile ExecutionState state = EXEC_OFF;

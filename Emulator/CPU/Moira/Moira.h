@@ -318,10 +318,6 @@ protected:
     virtual void catchpointReached(u8 vector) { }
     virtual void softwareTrapReached(u32 addr) { }
 
-    // MMU delegates
-    virtual void mmuDidEnable() { }
-    virtual void mmuDidDisable() { }
-
 #else
 
     // Advances the clock
@@ -375,10 +371,6 @@ protected:
     void watchpointReached(u32 addr);
     void catchpointReached(u8 vector);
     void softwareTrapReached(u32 addr);
-
-    // MMU delegates
-    void mmuDidEnable();
-    void mmuDidDisable();
 
 #endif
 
