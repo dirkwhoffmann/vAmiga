@@ -27,7 +27,7 @@ extension Renderer {
         buildLayers()
         buildPipeline()
         buildVertexBuffers()
-        
+
         reshape()
     }
 
@@ -45,6 +45,9 @@ extension Renderer {
         metalLayer.pixelFormat = MTLPixelFormat.bgra8Unorm
         metalLayer.framebufferOnly = true
         metalLayer.frame = metalLayer.frame
+
+        // Pass some system information to the emulator
+        parent.amiga.hostRefreshRate = view.preferredFramesPerSecond
     }
     
     func buildDescriptors() {

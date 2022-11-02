@@ -77,15 +77,18 @@ Thread::sleep<Thread::SyncMode::Periodic>()
     // Sleep for a while
     // std::cout << "Sleeping... " << targetTime.asMilliseconds() << std::endl;
     // std::cout << "Delay = " << delay.asNanoseconds() << std::endl;
-    targetTime += getDelay();
+    targetTime += util::Time(i64(1000000000 / refreshRate()));
     targetTime.sleepUntil();
 }
 
 template <> void
 Thread::sleep<Thread::SyncMode::Pulsed>()
 {
+    // Set a timeout to prevent the thread from stalling
+    auto timeout = util::Time(i64(2000000000 / refreshRate()));
+
     // Wait for the next pulse
-    if (!warpMode) waitForWakeUp(util::Time(100000000));
+    if (!warpMode) waitForWakeUp(timeout);
 }
 
 void
@@ -197,14 +200,6 @@ Thread::main()
         }
     }
 }
-
-/*
-void
-Thread::setMode(SyncMode newMode)
-{
-    mode = newMode;
-}
-*/
 
 void
 Thread::powerOn(bool blocking)

@@ -54,7 +54,12 @@ class Amiga : public Thread {
      */
     mutable AmigaInfo info = {};
 
-     
+public:
+    
+    // Information about the host system
+    HostInfo host = {};
+
+
     //
     // Sub components
     //
@@ -240,6 +245,7 @@ private:
     
     SyncMode getSyncMode() const override;
     void execute() override;
+    i16 refreshRate() const override;
     util::Time getDelay() const override;
 
 

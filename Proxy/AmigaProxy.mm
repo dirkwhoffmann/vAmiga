@@ -2747,6 +2747,16 @@ using namespace moira;
     }
 }
 
+- (NSInteger)hostRefreshRate
+{
+    return [self amiga]->host.refreshRate;
+}
+
+- (void)setHostRefreshRate:(NSInteger)value
+{
+    [self amiga]->host.refreshRate = i16(value);
+}
+
 - (NSInteger)cpuLoad
 {
     double load = [self amiga]->getCpuLoad();

@@ -923,8 +923,10 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << bol(inWarpMode()) << std::endl;
         os << tab("Debug mode");
         os << bol(inDebugMode()) << std::endl;
-        os << tab("Sync mode");
-        os << (getSyncMode() == SyncMode::Periodic ? "PERIODIC" : "PULSED") << std::endl;
+        os << tab("Amiga refresh rate");
+        os << dec(refreshRate()) << " Hz" << std::endl;
+        os << tab("Host refresh rate");
+        os << dec(host.refreshRate) << " Hz" << std::endl;
     }
     
     if (category == Category::Defaults) {
@@ -1170,6 +1172,19 @@ Amiga::execute()
                 break;
             }
         }
+    }
+}
+
+i16
+Amiga::refreshRate() const
+{
+    switch (getSyncMode()) {
+
+        case SyncMode::Pulsed:      return host.refreshRate;
+        case SyncMode::Periodic:    return config.type == PAL ? 50 : 60;
+
+        default:
+            fatalError;
     }
 }
 

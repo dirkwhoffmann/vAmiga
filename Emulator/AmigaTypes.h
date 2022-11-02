@@ -303,6 +303,12 @@ typedef struct
 }
 AmigaInfo;
 
+typedef struct
+{
+    i16 refreshRate;
+}
+HostInfo;
+
 
 //
 // Private data types
