@@ -248,4 +248,7 @@ public:
 
     // Charges or discharges a potentiometer capacitor
     void servicePotEvent(EventID id);
+
+    // Finishes up the current frame
+    void eofHandler();
 };

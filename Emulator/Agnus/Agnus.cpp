@@ -643,11 +643,12 @@ Agnus::eofHandler()
     denise.eofHandler();
 
     // Synthesize sound samples
-    paula.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT_PAL));
+    paula.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT_PAL)); // MOVE TO Paula::eofHandler
 
     scheduleStrobe0Event();
 
     // Let other components do their own EOF stuff
+    paula.eofHandler();
     sequencer.eofHandler();
     copper.eofHandler();
     controlPort1.joystick.eofHandler();

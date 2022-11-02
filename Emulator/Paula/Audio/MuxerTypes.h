@@ -44,5 +44,6 @@ typedef struct
     isize bufferOverflows;
     i64 producedSamples;
     i64 consumedSamples;
+    double fillLevel;
 }
 MuxerStats;

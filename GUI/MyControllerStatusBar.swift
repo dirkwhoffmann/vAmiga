@@ -219,6 +219,11 @@ extension MyController {
             activityBar.doubleValue = fps
             activityInfo.stringValue = String(format: "%d FPS", Int(fps))
 
+        case 4:
+            let fill = amiga.paula.muxerStats.fillLevel * 100.0
+            activityBar.doubleValue = fill
+            activityInfo.stringValue = String(format: "Fill level %d%%", Int(fill))
+
         default:
             activityBar.integerValue = 0
             activityInfo.stringValue = "???"
@@ -250,6 +255,7 @@ extension MyController {
         case 1: min = 0; max = 120; warn = 75; crit = 100
         case 2: min = 0; max = 100; warn = 50; crit = 75
         case 3: min = 0; max = 120; warn = 75; crit = 100
+        case 4: min = 0; max = 100; warn = 85; crit = 95
 
         default:
             fatalError()

@@ -172,3 +172,9 @@ Paula::interruptLevel()
 
     return 0;
 }
+
+void
+Paula::eofHandler() {
+
+    muxer.stats.fillLevel = muxer.stream.fillLevel();
+}

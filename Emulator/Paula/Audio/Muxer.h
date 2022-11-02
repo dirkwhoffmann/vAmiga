@@ -41,6 +41,8 @@
 
 class Muxer : public SubComponent {
 
+    friend class Paula;
+
     // Current configuration
     MuxerConfig config = {};
     
