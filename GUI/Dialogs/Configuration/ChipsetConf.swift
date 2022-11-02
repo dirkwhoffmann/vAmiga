@@ -62,7 +62,17 @@ extension ConfigurationController {
             csCpuInfo2.stringValue = ""
         }
 
+        /*
+        let mfreq = Double(amiga.masterFrequency) / 1000000
+        for i in 0 ... 6 {
+            let tag = Double(csCpuSpeed.item(at: i)!.tag)
+            let hz = (tag == 0 ? 1 : tag) * mfreq / 4
+            csCpuSpeed.item(at: i)?.title = String(format: "%.0f", hz) + " MHz"
+        }
+        */
+
         // Oscillator
+        csOscillator.selectItem(withTag: config.vsync)
         let hz = Double(pal ? CLK_FREQUENCY_PAL : CLK_FREQUENCY_NTSC) / 1000000
         csOscillator.item(at: 0)?.title = String(format: "%.2f", hz) + " MHz"
 
