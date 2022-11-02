@@ -61,6 +61,12 @@ Muxer::_dump(Category category, std::ostream& os) const
         os << tab("Right master volume");
         os << dec(config.volR) << std::endl;
     }
+
+    if (category == Category::State) {
+
+        os << tab("Fill level");
+        os << fillLevelAsString(stream.fillLevel()) << std::endl;
+    }
 }
 
 void
@@ -252,10 +258,16 @@ Muxer::setSampleRate(double hz)
     trace(AUD_DEBUG, "setSampleRate(%f)\n", hz);
 
     sampleRate = hz;
-    cyclesPerSample = CLK_FREQUENCY_PAL / hz;
+    adjustSpeed();
 
     filterL.setSampleRate(hz);
     filterR.setSampleRate(hz);
+}
+
+void
+Muxer::adjustSpeed()
+{
+    cyclesPerSample = double(amiga.masterClockFrequency()) / sampleRate;
 }
 
 isize

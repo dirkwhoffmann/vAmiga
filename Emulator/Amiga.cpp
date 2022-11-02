@@ -401,6 +401,7 @@ Amiga::setConfigItem(Option option, i64 value)
 
                 config.type = VideoFormat(value);
                 agnus.setVideoFormat(config.type);
+                paula.muxer.adjustSpeed();
             }
             return;
 
@@ -411,6 +412,7 @@ Amiga::setConfigItem(Option option, i64 value)
                 SUSPENDED
 
                 config.vsync = value;
+                paula.muxer.adjustSpeed();
             }
             return;
 
@@ -923,6 +925,8 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << bol(inWarpMode()) << std::endl;
         os << tab("Debug mode");
         os << bol(inDebugMode()) << std::endl;
+        os << tab("Master clock frequency");
+        os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
         os << tab("Amiga refresh rate");
         os << dec(refreshRate()) << " Hz" << std::endl;
         os << tab("Host refresh rate");
@@ -1182,6 +1186,19 @@ Amiga::refreshRate() const
 
         case SyncMode::Pulsed:      return host.refreshRate;
         case SyncMode::Periodic:    return config.type == PAL ? 50 : 60;
+
+        default:
+            fatalError;
+    }
+}
+
+i64
+Amiga::masterClockFrequency() const
+{
+    switch (config.type) {
+
+        case PAL:   return i64(CLK_FREQUENCY_PAL * (refreshRate() / 50.0));
+        case NTSC:  return i64(CLK_FREQUENCY_NTSC * (refreshRate() / 60.0));
 
         default:
             fatalError;

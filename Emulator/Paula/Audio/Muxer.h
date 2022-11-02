@@ -172,6 +172,9 @@ public:
     double getSampleRate() const { return sampleRate; }
     void setSampleRate(double hz);
 
+    // Needs to be called when the sampling rate or the CPU speed changes
+    void adjustSpeed();
+
 
     //
     // Analyzing

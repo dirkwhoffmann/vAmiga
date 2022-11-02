@@ -657,7 +657,7 @@ Agnus::eofHandler()
     // Update statistics
     updateStats();
     mem.updateStats();
-    
+
     // Let the thread synchronize
     amiga.setFlag(RL::SYNC_THREAD);
 }
