@@ -199,6 +199,7 @@
 @property BOOL warpMode;
 @property BOOL debugMode;
 @property NSInteger hostRefreshRate;
+@property (readonly) NSInteger masterFrequency;
 @property (readonly) NSInteger cpuLoad;
 @property InspectionTarget inspectionTarget;
 - (void) removeInspectionTarget;

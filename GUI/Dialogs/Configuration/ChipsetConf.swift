@@ -62,6 +62,10 @@ extension ConfigurationController {
             csCpuInfo2.stringValue = ""
         }
 
+        // Oscillator
+        let hz = Double(pal ? CLK_FREQUENCY_PAL : CLK_FREQUENCY_NTSC) / 1000000
+        csOscillator.item(at: 0)?.title = String(format: "%.2f", hz) + " MHz"
+
         // Agnus
         csMachineType.selectItem(withTag: config.machineType)
         csAgnusRevision.selectItem(withTag: config.agnusRev)
@@ -173,6 +177,12 @@ extension ConfigurationController {
     @IBAction func csCpuSpeedAction(_ sender: NSPopUpButton!) {
 
         config.cpuSpeed = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func csOscillatorAction(_ sender: NSPopUpButton!) {
+
+        config.vsync = sender.selectedTag()
         refresh()
     }
 

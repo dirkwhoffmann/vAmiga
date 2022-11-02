@@ -2757,6 +2757,11 @@ using namespace moira;
     [self amiga]->host.refreshRate = i16(value);
 }
 
+- (NSInteger)masterFrequency
+{
+    return [self amiga]->masterClockFrequency();
+}
+
 - (NSInteger)cpuLoad
 {
     double load = [self amiga]->getCpuLoad();

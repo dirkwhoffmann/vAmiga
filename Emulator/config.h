@@ -204,7 +204,7 @@ static const int WT_DEBUG        = 0; // Write-through mode
 // Audio
 static const int AUDREG_DEBUG    = 0; // Audio registers
 static const int AUD_DEBUG       = 0; // Audio execution
-static const int AUDBUF_DEBUG    = 1; // Audio buffers
+static const int AUDBUF_DEBUG    = 0; // Audio buffers
 static const int DISABLE_AUDIRQ  = 0; // Disable audio interrupts
 
 // Ports

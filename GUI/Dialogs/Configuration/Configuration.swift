@@ -47,6 +47,10 @@ class Configuration {
         get { return amiga.getConfig(.CPU_OVERCLOCKING) }
         set { amiga.configure(.CPU_OVERCLOCKING, value: newValue) }
     }
+    var vsync: Int {
+        get { return amiga.getConfig(.VSYNC) }
+        set { amiga.configure(.VSYNC, value: newValue) }
+    }
     var agnusRev: Int {
         get { return amiga.getConfig(.AGNUS_REVISION) }
         set { amiga.configure(.AGNUS_REVISION, value: newValue) }

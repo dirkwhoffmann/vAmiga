@@ -63,6 +63,9 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var csCpuInfo1: NSTextField!
     @IBOutlet weak var csCpuInfo2: NSTextField!
 
+    // Oscillator
+    @IBOutlet weak var csOscillator: NSPopUpButton!
+
     // Agnus
     @IBOutlet weak var csAgnusRevision: NSPopUpButton!
     @IBOutlet weak var csMachineType: NSPopUpButton!

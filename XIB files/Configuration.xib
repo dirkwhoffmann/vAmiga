@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21225" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21225"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -70,6 +70,7 @@
                 <outlet property="csLockInfo2" destination="dpR-tS-CiI" id="lqK-OQ-5fr"/>
                 <outlet property="csMachineType" destination="0dC-Bp-GRH" id="A6c-EO-Ao4"/>
                 <outlet property="csOKButton" destination="RnF-fY-9yx" id="Ce9-PL-yaj"/>
+                <outlet property="csOscillator" destination="DzY-uO-pBH" id="mCd-5M-4ZD"/>
                 <outlet property="csPowerButton" destination="A9W-ux-mNv" id="0Ou-mR-F0e"/>
                 <outlet property="csRtcIcon" destination="O4z-MY-Gb2" id="sdk-W0-SBc"/>
                 <outlet property="csRtcInfo1" destination="Wyd-E9-HnG" id="wAR-lm-wUh"/>
@@ -959,6 +960,32 @@ DQ
                                                 <action selector="csMachineTypeAction:" target="-2" id="1m5-Pq-L63"/>
                                             </connections>
                                         </popUpButton>
+                                        <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DzY-uO-pBH" userLabel="System">
+                                            <rect key="frame" x="395" y="373" width="152" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="28 MHz" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="LMh-2C-kZm" id="Sb6-SW-pST" userLabel="System">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" id="U9U-Bn-wmR">
+                                                    <items>
+                                                        <menuItem title="28 MHz" state="on" id="LMh-2C-kZm"/>
+                                                        <menuItem title="VSYNC" tag="1" id="sMI-jp-7hi"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="csOscillatorAction:" target="-2" id="adp-9Y-Xl2"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zdF-cj-uhb">
+                                            <rect key="frame" x="327" y="378" width="66" height="17"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Oscillator:" id="n3f-tW-cVm">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>
