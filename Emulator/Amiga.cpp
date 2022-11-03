@@ -202,7 +202,8 @@ Amiga::resetConfig()
 
     std::vector <Option> options = {
 
-        OPT_VIDEO_FORMAT
+        OPT_VIDEO_FORMAT,
+        OPT_VSYNC
     };
 
     for (auto &option : options) {
@@ -820,6 +821,13 @@ Amiga::revertToFactorySettings()
     initialize();
 }
 
+void
+Amiga::setHostRefreshRate(i16 refreshRate)
+{
+    host.refreshRate = refreshRate;
+    paula.muxer.adjustSpeed();
+}
+
 i64
 Amiga::overrideOption(Option option, i64 value)
 {
@@ -925,6 +933,8 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << bol(inWarpMode()) << std::endl;
         os << tab("Debug mode");
         os << bol(inDebugMode()) << std::endl;
+        os << tab("Sync mode");
+        os << (getSyncMode() == SyncMode::Periodic ? "PERIODIC" : "PULSED") << std::endl;
         os << tab("Master clock frequency");
         os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
         os << tab("Amiga refresh rate");

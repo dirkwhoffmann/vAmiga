@@ -54,10 +54,8 @@ class Amiga : public Thread {
      */
     mutable AmigaInfo info = {};
 
-public:
-    
     // Information about the host system
-    HostInfo host = {};
+    HostInfo host = { .refreshRate = 60 };
 
 
     //
@@ -275,6 +273,10 @@ public:
 
     // Reverts to factory settings
     void revertToFactorySettings();
+
+    // Gets or sets host parameters
+    i16 getHostRefreshRate() const { return host.refreshRate; }
+    void setHostRefreshRate(i16 refreshRate);
     
 private:
     

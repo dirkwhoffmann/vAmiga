@@ -268,6 +268,7 @@ void
 Muxer::adjustSpeed()
 {
     cyclesPerSample = double(amiga.masterClockFrequency()) / sampleRate;
+    assert(cyclesPerSample > 0);
 }
 
 isize
@@ -316,17 +317,17 @@ Muxer::synthesize(Cycle clock, Cycle target, long count)
             
         case SMP_NONE:
             
-            synthesize <SMP_NONE> (clock, count, cyclesPerSample);
+            synthesize<SMP_NONE>(clock, count, cyclesPerSample);
             break;
             
         case SMP_NEAREST:
             
-            synthesize <SMP_NEAREST> (clock, count, cyclesPerSample);
+            synthesize<SMP_NEAREST>(clock, count, cyclesPerSample);
             break;
             
         case SMP_LINEAR:
             
-            synthesize<SMP_LINEAR> (clock, count, cyclesPerSample);
+            synthesize<SMP_LINEAR>(clock, count, cyclesPerSample);
             break;
             
         default:
@@ -348,17 +349,17 @@ Muxer::synthesize(Cycle clock, Cycle target)
     switch (config.samplingMethod) {
         case SMP_NONE:
             
-            synthesize <SMP_NONE> (clock, count, cyclesPerSample);
+            synthesize<SMP_NONE>(clock, count, cyclesPerSample);
             break;
             
         case SMP_NEAREST:
             
-            synthesize <SMP_NEAREST> (clock, count, cyclesPerSample);
+            synthesize<SMP_NEAREST>(clock, count, cyclesPerSample);
             break;
             
         case SMP_LINEAR:
             
-            synthesize <SMP_LINEAR> (clock, count, cyclesPerSample);
+            synthesize<SMP_LINEAR>(clock, count, cyclesPerSample);
             break;
             
         default:

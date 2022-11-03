@@ -1277,10 +1277,17 @@ extension Configuration {
     func saveVideoUserDefaults() {
         
         debug(.defaults)
-        
+        let defaults = AmigaProxy.defaults!
+
+        amiga.suspend()
+
+        defaults.set(.VSYNC, vsync)
+
         saveColorUserDefaults()
         saveGeometryUserDefaults()
         saveShaderUserDefaults()
+
+        amiga.resume()
     }
          
     func saveColorUserDefaults() {

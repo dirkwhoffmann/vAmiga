@@ -46,8 +46,8 @@ extension Renderer {
         metalLayer.framebufferOnly = true
         metalLayer.frame = metalLayer.frame
 
-        // Pass some system information to the emulator
-        parent.amiga.hostRefreshRate = view.preferredFramesPerSecond
+        // Let the emulator now about the host's refresh rate
+        parent.adjustRefreshRate()
     }
     
     func buildDescriptors() {

@@ -27,6 +27,9 @@ extension MyController: NSWindowDelegate {
         // Make sure the aspect ratio is correct
         adjustWindowSize()
 
+        // Update the display's refresh rate
+        adjustRefreshRate()
+
         // Update the status bar
         refreshStatusBar()
     }
@@ -102,6 +105,7 @@ extension MyController: NSWindowDelegate {
 
         debug(.lifetime)
 
+        adjustRefreshRate()
         renderer.monitors.updateMonitorPositions()
     }
     
@@ -116,6 +120,8 @@ extension MyController: NSWindowDelegate {
     public func windowDidExitFullScreen(_ notification: Notification) {
 
         debug(.lifetime)
+
+        adjustRefreshRate()
         renderer.monitors.updateMonitorPositions()
     }
     
@@ -247,5 +253,23 @@ extension MyController {
         frame.size = newSize
 
         window!.setFrame(frame, display: true)
+    }
+
+    func adjustRefreshRate() {
+
+        if let main = NSScreen.main {
+
+            if #available(macOS 12.0, *) {
+
+                let fps = main.maximumFramesPerSecond
+                debug(.vsync, "Refresh rate: \(fps)")
+                amiga.hostRefreshRate = fps
+                return
+            }
+        }
+
+        let fps = renderer.view.preferredFramesPerSecond
+        debug(.vsync, "Preferred refresh rate: \(fps)")
+        amiga.hostRefreshRate = fps
     }
 }
