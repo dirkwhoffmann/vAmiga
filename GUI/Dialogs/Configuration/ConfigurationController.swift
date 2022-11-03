@@ -63,9 +63,6 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var csCpuInfo1: NSTextField!
     @IBOutlet weak var csCpuInfo2: NSTextField!
 
-    // Oscillator
-    @IBOutlet weak var csOscillator: NSPopUpButton!
-
     // Agnus
     @IBOutlet weak var csAgnusRevision: NSPopUpButton!
     @IBOutlet weak var csMachineType: NSPopUpButton!
@@ -265,6 +262,9 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var vidVCenter: NSSlider!
     @IBOutlet weak var vidHCenterLabel: NSTextField!
     @IBOutlet weak var vidVCenterLabel: NSTextField!
+
+    // Oscillator
+    @IBOutlet weak var vidVsync: NSButton!
 
     // Effects
     @IBOutlet weak var vidEnhancerPopUp: NSPopUpButton!

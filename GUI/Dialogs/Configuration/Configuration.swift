@@ -47,10 +47,6 @@ class Configuration {
         get { return amiga.getConfig(.CPU_OVERCLOCKING) }
         set { amiga.configure(.CPU_OVERCLOCKING, value: newValue) }
     }
-    var vsync: Int {
-        get { return amiga.getConfig(.VSYNC) }
-        set { amiga.configure(.VSYNC, value: newValue) }
-    }
     var agnusRev: Int {
         get { return amiga.getConfig(.AGNUS_REVISION) }
         set { amiga.configure(.AGNUS_REVISION, value: newValue) }
@@ -408,7 +404,11 @@ class Configuration {
     //
     // Video settings
     //
-    
+
+    var vsync: Bool {
+        get { return amiga.getConfig(.VSYNC) != 0 }
+        set { amiga.configure(.VSYNC, enable: newValue) }
+    }
     var palette: Int {
         get { return amiga.getConfig(.PALETTE) }
         set { amiga.configure(.PALETTE, value: newValue) }
