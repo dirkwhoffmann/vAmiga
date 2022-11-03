@@ -60,41 +60,20 @@ RegressionTester::dumpTexture(Amiga &amiga)
 void
 RegressionTester::dumpTexture(Amiga &amiga, const string &filename)
 {
-    /* This function is used for automatic regression testing. It generates a
-     * TIFF image of the current emulator texture in the /tmp directory and
-     * exits the application. The regression testing script will pick up the
-     * texture and compare it against a previously recorded reference image.
+    /* This function is used for automatic regression testing. It dumps the
+     * visible portion of the texture into the /tmp directory and exits the
+     * application. The regression test script picks up the texture and
+     * compares it against a previously recorded reference image.
      */
     std::ofstream file;
-        
-    // Assemble the target file names
-    string rawFile = "/tmp/" + filename + ".raw";
-    string tiffFile = "/tmp/" + filename + ".tiff";
 
     // Open an output stream
-    file.open(rawFile.c_str());
+    file.open(("/tmp/" + filename + ".raw").c_str());
     
     // Dump texture
     dumpTexture(amiga, file);
     file.close();
-    
-    // Convert raw data into a TIFF file
-    string cmd = "raw2tiff";
-    cmd += " -p rgb -b 3";
-    cmd += " -w " + std::to_string(x2 - x1);
-    cmd += " -l " + std::to_string(y2 - y1);
-    cmd += " " + rawFile + " " + tiffFile;
 
-    if (util::fileExists("/usr/local/bin/raw2tiff")) {
-        cmd = "/usr/local/bin/" + cmd;
-    } else if (util::fileExists("/opt/homebrew/bin/raw2tiff")) {
-        cmd = "/opt/homebrew/bin/" + cmd;
-    }
-
-    if (system(cmd.c_str()) == -1) {
-        warn("Error executing %s\n", cmd.c_str());
-    }
-    
     // Ask the GUI to quit
     msgQueue.put(MSG_ABORT, retValue);
 }
@@ -102,15 +81,28 @@ RegressionTester::dumpTexture(Amiga &amiga, const string &filename)
 void
 RegressionTester::dumpTexture(Amiga &amiga, std::ostream& os)
 {
+    Texel grey2 = FrameBuffer::grey2;
+    Texel grey4 = FrameBuffer::grey4;
+
+    auto checkerboard = [&](isize y, isize x) {
+        return ((y >> 3) & 1) == ((x >> 3) & 1) ? (char *)&grey2 : (char *)&grey4;
+    };
+
     {   SUSPENDED
         
         Texel *ptr = amiga.denise.pixelEngine.stablePtr() - 4 * HBLANK_MIN;
+        char *cptr;
 
-        for (isize y = y1; y < y2; y++) {
+        for (isize y = Y1; y < Y2; y++) {
             
-            for (isize x = x1; x < x2; x++) {
-                
-                char *cptr = (char *)(ptr + y * HPIXELS + x);
+            for (isize x = X1; x < X2; x++) {
+
+                if (y >= y1 && y < y2 && x >= x1 && x < x2) {
+                    cptr = (char *)(ptr + y * HPIXELS + x);
+                } else {
+                    cptr = checkerboard(y, x);
+                }
+
                 os.write(cptr + 0, 1);
                 os.write(cptr + 1, 1);
                 os.write(cptr + 2, 1);
