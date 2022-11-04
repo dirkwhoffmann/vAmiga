@@ -36,8 +36,6 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var extMapText: NSTextField!
     @IBOutlet weak var extMapAddr: NSPopUpButton!
 
-    @IBOutlet weak var arosButton: NSButton!
-
     // Explanation
     @IBOutlet weak var romExpImage: NSButton!
     @IBOutlet weak var romExpInfo1: NSTextField!

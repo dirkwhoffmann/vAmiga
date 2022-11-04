@@ -90,6 +90,7 @@
                 <outlet property="memLockImage" destination="A49-K9-a0K" id="IQj-rM-WgJ"/>
                 <outlet property="memLockInfo1" destination="gjl-2S-I9o" id="ZNj-Kk-zdr"/>
                 <outlet property="memLockInfo2" destination="2AS-Tr-ndZ" id="nm9-lK-KaI"/>
+                <outlet property="memOKButton" destination="HW4-LT-rs8" id="h6H-GG-2Ya"/>
                 <outlet property="memPowerButton" destination="Qwc-dN-z7X" id="dyR-6O-RRs"/>
                 <outlet property="memRamInitPattern" destination="fLm-ns-KKq" id="g9A-tU-8YM"/>
                 <outlet property="memSlowRamDelay" destination="zoM-Jm-flF" id="Z53-pp-7tp"/>
