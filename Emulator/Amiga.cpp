@@ -402,7 +402,6 @@ Amiga::setConfigItem(Option option, i64 value)
 
                 config.type = VideoFormat(value);
                 agnus.setVideoFormat(config.type);
-                paula.muxer.adjustSpeed();
             }
             return;
 

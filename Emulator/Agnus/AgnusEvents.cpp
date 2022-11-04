@@ -490,8 +490,8 @@ Agnus::serviceVBLEvent(EventID id)
 
         case VBL_STROBE0:
 
-            assert(pos.v == 0 || pos.v == 1);
-            assert(pos.h == 0);
+            assert(!isPAL() || (pos.v == 0 || pos.v == 1));
+            assert(!isPAL() || pos.h == 0);
             
             // Trigger the vertical blank interrupt
             paula.raiseIrq(INT_VERTB);
@@ -501,10 +501,10 @@ Agnus::serviceVBLEvent(EventID id)
             break;
 
         case VBL_STROBE1:
-            
-            assert(pos.v == 5);
-            assert(pos.h == 84);
-            
+
+            assert(!isPAL() || pos.v == 5);
+            assert(!isPAL() || pos.h == 84);
+
             // Increment the TOD counter of CIA A
             ciaa.tod.increment();
             
@@ -514,8 +514,8 @@ Agnus::serviceVBLEvent(EventID id)
             
         case VBL_STROBE2:
 
-            assert(pos.v == 5);
-            assert(pos.h == 178);
+            assert(!isPAL() || pos.v == 5);
+            assert(!isPAL() || pos.h == 178);
 
             // Nothing is done here at the moment
             cancel<SLOT_VBL>();
