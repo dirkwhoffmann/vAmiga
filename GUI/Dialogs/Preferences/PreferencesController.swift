@@ -79,6 +79,8 @@ class PreferencesController: DialogController {
 
     @IBOutlet weak var conMouseLeft: NSTextField!
     @IBOutlet weak var conMouseLeftButton: NSButton!
+    @IBOutlet weak var conMouseMiddle: NSTextField!
+    @IBOutlet weak var conMouseMiddleButton: NSButton!
     @IBOutlet weak var conMouseRight: NSTextField!
     @IBOutlet weak var conMouseRightButton: NSButton!
 

@@ -258,7 +258,10 @@ class GamePad {
 
         case .PRESS_LEFT:
             return [.PRESS_LEFT]
-            
+
+        case .PRESS_MIDDLE:
+            return [.PRESS_MIDDLE]
+
         case .PRESS_RIGHT:
             return [.PRESS_RIGHT]
             
@@ -301,7 +304,10 @@ class GamePad {
 
         case .PRESS_LEFT:
             return [.RELEASE_LEFT]
-            
+
+        case .PRESS_MIDDLE:
+            return [.RELEASE_MIDDLE]
+
         case .PRESS_RIGHT:
             return [.RELEASE_RIGHT]
             

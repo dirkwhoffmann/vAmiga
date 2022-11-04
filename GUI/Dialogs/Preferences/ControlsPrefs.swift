@@ -32,13 +32,13 @@ extension PreferencesController {
                 button.image = NSImage(named: "recordKey")
                 button.imageScaling = .scaleAxesIndependently
             }
-            // button.attributedTitle = macKeyCode
             button.title = keyCode
             txt.stringValue = keyDesc
         }
 
         // Mouse button keyset
         refreshKey(map: 0, dir: .PRESS_LEFT, button: conMouseLeftButton, txt: conMouseLeft)
+        refreshKey(map: 0, dir: .PRESS_MIDDLE, button: conMouseMiddleButton, txt: conMouseMiddle)
         refreshKey(map: 0, dir: .PRESS_RIGHT, button: conMouseRightButton, txt: conMouseRight)
 
         // First joystick keyset
@@ -83,7 +83,7 @@ extension PreferencesController {
     func gamePadAction(for tag: Int) -> (Int, GamePadAction) {
 
         switch tag {
-        case 5...6:   return (0, GamePadAction(rawValue: tag)!)      // Mouse
+        case 7...9:   return (0, GamePadAction(rawValue: tag)!)      // Mouse
         case 0...4:   return (1, GamePadAction(rawValue: tag)!)      // Joy 1
         case 10...14: return (2, GamePadAction(rawValue: tag - 10)!) // Joy 2
         default:      fatalError()
