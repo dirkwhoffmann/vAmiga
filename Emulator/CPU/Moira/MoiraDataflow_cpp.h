@@ -304,32 +304,36 @@ template <Mode M, Size S> void
 Moira::updateAnPD(int n)
 {
     // -(An)
-    if constexpr (M == 4) reg.a[n] -= (n == 7 && S == Byte) ? 2 : S;
+    // if constexpr (M == 4) reg.a[n] -= (n == 7 && S == Byte) ? 2 : S;
+    if constexpr (M == 4) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
 template <Mode M, Size S> void
 Moira::undoAnPD(int n)
 {
     // -(An)
-    if constexpr (M == 4) reg.a[n] += (n == 7 && S == Byte) ? 2 : S;
+    // if constexpr (M == 4) reg.a[n] += (n == 7 && S == Byte) ? 2 : S;
+    if constexpr (M == 4) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
 template <Mode M, Size S> void
 Moira::updateAnPI(int n)
 {
     // (An)+
-    if constexpr (M == 3) reg.a[n] += (n == 7 && S == Byte) ? 2 : S;
-    
+    // if constexpr (M == 3) reg.a[n] += (n == 7 && S == Byte) ? 2 : S;
+    if constexpr (M == 3) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
 template <Mode M, Size S> void
 Moira::updateAn(int n)
 {
     // (An)+
-    if constexpr (M == 3) reg.a[n] += (n == 7 && S == Byte) ? 2 : S;
-    
+    // if constexpr (M == 3) reg.a[n] += (n == 7 && S == Byte) ? 2 : S;
+    if constexpr (M == 3) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+
     // -(An)
-    if constexpr (M == 4) reg.a[n] -= (n == 7 && S == Byte) ? 2 : S;
+    // if constexpr (M == 4) reg.a[n] -= (n == 7 && S == Byte) ? 2 : S;
+    if constexpr (M == 4) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
 template <Core C, Mode M, Size S, Flags F> u32

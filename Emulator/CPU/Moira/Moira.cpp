@@ -245,7 +245,14 @@ Moira::execute()
     
     // Process pending interrupt (if any)
     if (flags & CPU_CHECK_IRQ) {
-        if (checkForIrq()) goto done;
+        try {
+            if (checkForIrq()) goto done;
+        } catch (const BusErrorException &) {
+            // TODO: TRIGGER DOUBLE FAULT IF ANOTHER EXCEPTION OCCURS
+            execException(EXC_BUS_ERROR);
+        } catch (const AddressErrorException &) {
+            // TODO: TRIGGER DOUBLE FAULT IF ANOTHER EXCEPTION OCCURS
+        } catch (...) { }
     }
     
     // If the CPU is stopped, poll the IPL lines and return
