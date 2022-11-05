@@ -506,7 +506,7 @@ private:
     // Determines the color register index for drawing the border
     void updateBorderColor();
 
-    // Draws the left and the right border
+    // Draws the horizontal border
     void drawBorder();
 
     
