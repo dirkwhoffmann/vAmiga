@@ -220,7 +220,10 @@ public:
     bool isHalted() const { return flags & CPU_IS_HALTED; }
     
 private:
-    
+
+    // Processes an exception that was catched in execute()
+    void processException(const std::exception &exception);
+
     // Called by reset()
     template <Core C> void reset();
     

@@ -1026,7 +1026,6 @@ Denise::drawBorder()
     bool on = hflopOnPrev != INT16_MAX;
     bool off = hflopOffPrev != INT16_MAX;
 
-    // if (agnus.sequencer.lineWasBlank || (!flop && !on)) {
     if (!flop && !on) {
 
         // Draw blank line (2)

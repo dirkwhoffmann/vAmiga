@@ -277,8 +277,6 @@ Moira::writeStackFrame1011(u16 sr, u32 pc, u32 ia, u16 nr)
 template <Core C> void
 Moira::execAddressError(StackFrame frame, int delay)
 {
-    // assert(frame.addr & 1);
-
     u16 status = getSR();
 
     // Inform the delegate

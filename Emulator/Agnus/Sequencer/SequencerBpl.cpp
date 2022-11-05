@@ -273,7 +273,6 @@ Sequencer::processSignal <false> (u32 signal, DDFState &state)
         case SIG_VFLOP_SET:
         
             state.bpv = true;
-            lineIsBlank = false;
             break;
             
         case SIG_VFLOP_CLR:
@@ -350,7 +349,6 @@ Sequencer::processSignal <true> (u32 signal, DDFState &state)
         case SIG_VFLOP_SET:
         
             state.bpv = true;
-            lineIsBlank = false;
             break;
             
         case SIG_VFLOP_CLR:

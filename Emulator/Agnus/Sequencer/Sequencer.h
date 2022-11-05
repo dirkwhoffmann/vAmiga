@@ -173,10 +173,6 @@ public:
     isize vstrt;
     isize vstop;
 
-    // Indicates if the current or previous line is a blank line
-    bool lineIsBlank;
-    bool lineWasBlank;
-
 
     //
     // Signal recorder
@@ -258,8 +254,6 @@ private:
         << diwhigh
         << vstrt
         << vstop
-        << lineIsBlank
-        << lineWasBlank
 
         >> sigRecorder
 

@@ -141,8 +141,8 @@
             filePath = "Emulator/CPU/Moira/MoiraExec_cpp.h"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "4934"
-            endingLineNumber = "4934"
+            startingLineNumber = "4935"
+            endingLineNumber = "4935"
             landmarkName = "Moira::execRte(opcode)"
             landmarkType = "7">
          </BreakpointContent>

@@ -211,13 +211,10 @@ Moira::execute()
         reg.pc += 2;
         try {
             (this->*exec[queue.ird])(queue.ird);
-        } catch (const BusErrorException &) {
-            // TODO: TRIGGER DOUBLE FAULT IF ANOTHER EXCEPTION OCCURS
-            execException(EXC_BUS_ERROR);
-        } catch (const AddressErrorException &) {
-            // TODO: TRIGGER DOUBLE FAULT IF ANOTHER EXCEPTION OCCURS
+        } catch (const std::exception &exc) {
+            processException(exc);
         }
-        
+
         assert(reg.pc0 == reg.pc);
         return;
     }
@@ -245,16 +242,14 @@ Moira::execute()
     
     // Process pending interrupt (if any)
     if (flags & CPU_CHECK_IRQ) {
+
         try {
             if (checkForIrq()) goto done;
-        } catch (const BusErrorException &) {
-            // TODO: TRIGGER DOUBLE FAULT IF ANOTHER EXCEPTION OCCURS
-            execException(EXC_BUS_ERROR);
-        } catch (const AddressErrorException &) {
-            // TODO: TRIGGER DOUBLE FAULT IF ANOTHER EXCEPTION OCCURS
-        } catch (...) { }
+        } catch (const std::exception &exc) {
+            processException(exc);
+        }
     }
-    
+
     // If the CPU is stopped, poll the IPL lines and return
     if (flags & CPU_IS_STOPPED) {
         
@@ -293,12 +288,9 @@ Moira::execute()
         reg.pc += 2;
         try {
             (this->*exec[queue.ird])(queue.ird);
-        } catch (const BusErrorException &) {
-            // TODO: TRIGGER DOUBLE FAULT IF ANOTHER EXCEPTION OCCURS
-            execException(EXC_BUS_ERROR);
-        } catch (const AddressErrorException &) {
-            // TODO: TRIGGER DOUBLE FAULT IF ANOTHER EXCEPTION OCCURS
-        } catch (...) { }
+        } catch (const std::exception &exc) {
+            processException(exc);
+        }
 
         assert(reg.pc0 == reg.pc);
     }
@@ -317,6 +309,25 @@ done:
         // Check if a breakpoint has been reached
         if (debugger.breakpointMatches(reg.pc0)) breakpointReached(reg.pc0);
     }
+}
+
+void
+Moira::processException(const std::exception &exception)
+{
+    auto aerror = dynamic_cast<const AddressErrorException *>(&exception);
+    if (aerror) {
+
+        return;
+    }
+
+    auto berror = dynamic_cast<const BusErrorException *>(&exception);
+    if (berror) {
+
+        execException(EXC_BUS_ERROR);
+        return;
+    }
+
+    throw exception;
 }
 
 bool

@@ -51,9 +51,6 @@ Sequencer::eolHandler()
         hsyncActions |= UPDATE_SIG_RECORDER;
     }
 
-    lineWasBlank = lineIsBlank;
-    lineIsBlank = !ddfInitial.bpv;
-
     //
     // Determine the disk, audio and sprite DMA status for the line to come
     //

@@ -604,10 +604,14 @@ Moira::fullPrefetch()
     // Check for address error
     if (misaligned<C>(reg.pc)) {
 
-        // NEVER REACHED???
-        
-        execAddressError<C>(makeFrame(reg.pc), 2);
-        return;
+        printf("SHOULD NEVER BE REACHED\n");
+        exit(1);
+        /*
+         execAddressError<C>(makeFrame(reg.pc), 2);
+         return;
+         */
+
+        // TODO: DELETE THIS BRANCH
     }
     
     queue.irc = (u16)readMS<C, MEM_PROG, Word>(reg.pc);
