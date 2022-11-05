@@ -133,7 +133,6 @@ protected:
 
     // EXPERIMENTAL
     int loopModeDelay = 2;  // Termination delay for 68010 loop mode
-    u8 excfp = 0;           // Function code value for 68010 address error frames
     u16 readBuffer;         // Appears in 68010 exception frame
     u16 writeBuffer;        // Appears in 68010 exception frame
 
@@ -223,7 +222,8 @@ private:
 
     // Processes an exception that was catched in execute()
     void processException(const std::exception &exception);
-
+    template <Core C> void processException(const std::exception &exception);
+    
     // Called by reset()
     template <Core C> void reset();
     

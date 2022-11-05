@@ -35,14 +35,6 @@ typedef unsigned long long u64;
 
 
 //
-// Exceptions
-//
-
-class AddressErrorException : public std::exception { };
-class BusErrorException : public std::exception { };
-
-
-//
 // CPU types
 //
 
@@ -411,7 +403,7 @@ constexpr u64 AE_SET_CB3    (1 << 10);  // Set bit 3 in CODE segment
 constexpr u64 AE_SET_RW     (1 << 11);   // Set bit 8 in the special status word (68010)
 constexpr u64 AE_SET_DF     (1 << 12);  // Set bit 12 in the special status word (68010)
 constexpr u64 AE_SET_IF     (1 << 13);  // Set bit 13 in the special status word (68010)
-constexpr u64 AE_NO_FRAME   (1 << 14);  // Experimental
+// constexpr u64 AE_NO_FRAME   (1 << 14);  // Experimental. TODO: DELETE ASAP
 
 // Timing flags
 constexpr u64 IMPL_DEC      (1 << 15);  // Omit 2 cycle delay in -(An) mode
@@ -435,6 +427,21 @@ struct FPU {
     u32 fpiar;
     u32 fpsr;
     u32 fpcr;
+};
+
+
+//
+// Exceptions
+//
+
+// class AddressErrorException : public std::exception { }; // DEPRECATED
+class BusErrorException : public std::exception { };
+
+struct AddressError : public std::exception {
+
+    StackFrame stackFrame;
+
+    AddressError(const StackFrame frame) { stackFrame = frame; }
 };
 
 }

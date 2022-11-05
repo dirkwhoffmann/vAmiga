@@ -26,8 +26,9 @@ Moira::readOp(int n, u32 *ea, u32 *result)
                 // Read from effective address
                 if constexpr ((F & SKIP_READ) == 0) *result = readM<C, M, S, F>(*ea);
 
-            } catch (const AddressErrorException &exc) {
-                
+            // } catch (const AddressErrorException &exc) {
+            } catch (const AddressError &exc) {
+
                 // Emulate -(An) register modification
                 updateAnPD<M, S>(n);
 
@@ -67,8 +68,9 @@ Moira::writeOp(int n, u32 val)
                 // Write to effective address
                 if constexpr ((F & SKIP_WRITE) == 0) writeM<C, M, S, F>(ea, val);
                 
-            } catch (const AddressErrorException &exc) {
-                
+            // } catch (const AddressErrorException &exc) {
+            } catch (const AddressError &exc) {
+
                 // Emulate -(An) register modification
                 updateAnPD<M, S>(n);
 
@@ -355,8 +357,10 @@ Moira::readMS(u32 addr)
     if (misaligned<C, S>(addr)) {
         
         setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
-        if ((F & AE_NO_FRAME) == 0) execAddressError<C>(makeFrame<F>(addr), 2);
-        throw AddressErrorException();
+        // if ((F & AE_NO_FRAME) == 0) execAddressError<C>(makeFrame<F>(addr), 2);
+        // throw AddressErrorException();
+        SYNC(2);
+        throw AddressError(makeFrame<F>(addr));
     }
 
     // Update function code pins
@@ -429,9 +433,11 @@ Moira::writeMS(u32 addr, u32 val)
     // Check for address errors
     if (misaligned<C, S>(addr)) {
 
-        excfp = readFC();
-        execAddressError<C>(makeFrame<F|AE_WRITE>(addr), 2);
-        throw AddressErrorException();
+        // execAddressError<C>(makeFrame<F|AE_WRITE>(addr), 2);
+        // throw AddressErrorException();
+        // auto frame = makeFrame<F|AE_WRITE>(addr);
+        SYNC(2);
+        throw AddressError(makeFrame<F|AE_WRITE>(addr));
     }
 
     // Check if a watchpoint is being accessed
@@ -673,18 +679,23 @@ Moira::jumpToVector(int nr)
 
         if (nr != 3) {
             if (C == C68000) {
-                execAddressError<C>(makeFrame<F|AE_PROG>(reg.pc, vectorAddr));
-                throw AddressErrorException();
+
+                // execAddressError<C>(makeFrame<F|AE_PROG>(reg.pc, vectorAddr));
+                // throw AddressErrorException();
+                throw AddressError(makeFrame<F|AE_PROG>(reg.pc, vectorAddr));
+
             } else {
                 // printf("jumpToVector(%d) %x\n", nr, reg.pc);
                 queue.irc = readBuffer = u16(reg.pc);
                 writeBuffer = u16(4 * nr);
                 if (nr == EXC_ILLEGAL || nr == EXC_LINEA || nr == EXC_LINEF || nr == EXC_PRIVILEGE) {
-                    execAddressError<C>(makeFrame<F|AE_DEC_PC|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
+                    // execAddressError<C>(makeFrame<F|AE_DEC_PC|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
+                    throw AddressError(makeFrame<F|AE_DEC_PC|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
                 } else {
-                    execAddressError<C>(makeFrame<F|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
+                    // execAddressError<C>(makeFrame<F|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
+                    throw AddressError(makeFrame<F|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
                 }
-                throw AddressErrorException();
+                // throw AddressErrorException();
             }
         } else {
             halt(); // Double fault

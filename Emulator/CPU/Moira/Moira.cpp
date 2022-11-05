@@ -314,11 +314,31 @@ done:
 void
 Moira::processException(const std::exception &exception)
 {
-    auto aerror = dynamic_cast<const AddressErrorException *>(&exception);
+    switch (model) {
+
+        case M68000:    processException<C68000>(exception); break;
+        case M68010:    processException<C68010>(exception); break;
+        default:        processException<C68020>(exception); break;
+    }
+}
+
+template <Core C> void
+Moira::processException(const std::exception &exception)
+{
+    auto aerror = dynamic_cast<const AddressError *>(&exception);
     if (aerror) {
+
+        execAddressError<C>(aerror->stackFrame);
+        return;
+    }
+
+    /*
+    auto adrerror = dynamic_cast<const AddressErrorException *>(&exception);
+    if (adrerror) {
 
         return;
     }
+    */
 
     auto berror = dynamic_cast<const BusErrorException *>(&exception);
     if (berror) {
