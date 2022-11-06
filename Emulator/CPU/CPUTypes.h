@@ -64,6 +64,39 @@ struct CPURevisionEnum : util::Reflection<CPURevisionEnum, CPURevision>
 };
 #endif
 
+enum_long(DASM_STYLE)
+{
+    DASM_STYLE_MOIRA,
+    DASM_STYLE_MOIRA_MIT,
+    DASM_STYLE_GNU,
+    DASM_STYLE_GNU_MIT,
+    DASM_STYLE_MUSASHI
+};
+typedef DASM_STYLE DasmStyle;
+
+#ifdef __cplusplus
+struct DasmStyleEnum : util::Reflection<DasmStyleEnum, DasmStyle>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = DASM_STYLE_MUSASHI;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
+
+    static const char *prefix() { return "DASM_STYLE"; }
+    static const char *key(CPURevision value)
+    {
+        switch (value) {
+
+            case DASM_STYLE_MOIRA:      return "MOIRA";
+            case DASM_STYLE_MOIRA_MIT:  return "MOIRA_MIT";
+            case DASM_STYLE_GNU:        return "GNU";
+            case DASM_STYLE_GNU_MIT:    return "GNU_MIT";
+            case DASM_STYLE_MUSASHI:    return "MUSASHI";
+        }
+        return "???";
+    }
+};
+#endif
+
 
 //
 // Structures
@@ -73,6 +106,7 @@ typedef struct
 {
     CPURevision revision;
     CPURevision dasmRevision;
+    DasmStyle dasmStyle;
     isize overclocking;
     u32 regResetVal;
 }

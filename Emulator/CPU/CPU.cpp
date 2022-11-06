@@ -281,7 +281,7 @@ CPU::getConfigItem(Option option) const
 
         case OPT_CPU_REVISION:      return (long)config.revision;
         case OPT_CPU_DASM_REVISION: return (long)config.dasmRevision;
-        case OPT_CPU_DASM_STYLE:    return (long)style;
+        case OPT_CPU_DASM_STYLE:    return (long)config.dasmStyle;
         case OPT_CPU_OVERCLOCKING:  return (long)config.overclocking;
         case OPT_CPU_RESET_VAL:     return (long)config.regResetVal;
 
@@ -294,6 +294,7 @@ void
 CPU::setConfigItem(Option option, i64 value)
 {
     auto model = [&](CPURevision rev) { return moira::Model(rev); };
+    auto style = [&](DasmStyle rev) { return moira::DasmStyle(rev); };
 
     switch (option) {
 
@@ -302,7 +303,12 @@ CPU::setConfigItem(Option option, i64 value)
             if (value >= CPU_68EC030 && value <= CPU_68040) {
                 throw VAError(ERROR_CPU_UNSUPPORTED, CPURevisionEnum::key(value));
             }
-            [[fallthrough]];
+
+            suspend();
+            config.revision = CPURevision(value);
+            setModel(model(config.revision), model(config.dasmRevision));
+            resume();
+            return;
 
         case OPT_CPU_DASM_REVISION:
 
@@ -311,14 +317,20 @@ CPU::setConfigItem(Option option, i64 value)
             }
 
             suspend();
-
-            if (option == OPT_CPU_REVISION) {
-                config.revision = CPURevision(value);
-            } else {
-                config.dasmRevision = CPURevision(value);
-            }
+            config.dasmRevision = CPURevision(value);
             setModel(model(config.revision), model(config.dasmRevision));
+            resume();
+            return;
 
+        case OPT_CPU_DASM_STYLE:
+
+            if (!DasmStyleEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, DasmStyleEnum::keyList());
+            }
+
+            suspend();
+            config.dasmStyle = DasmStyle(value);
+            setDasmStyle(style(value));
             resume();
             return;
 
@@ -333,11 +345,6 @@ CPU::setConfigItem(Option option, i64 value)
         case OPT_CPU_RESET_VAL:
 
             config.regResetVal = u32(value);
-            return;
-
-        case OPT_CPU_DASM_STYLE:
-
-            setDasmStyle(moira::DasmStyle(value));
             return;
 
         default:

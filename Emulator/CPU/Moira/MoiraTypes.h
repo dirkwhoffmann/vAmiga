@@ -44,11 +44,11 @@ typedef enum
     M68010,             // Fully supported
     M68EC020,           // Work in progress
     M68020,             // Work in progress
-    M68EC030,           // Work in progress
-    M68030,             // Work in progress
-    M68EC040,           // Work in progress
-    M68LC040,           // Work in progress
-    M68040              // Work in progress
+    M68EC030,           // Disassembler only
+    M68030,             // Disassembler only
+    M68EC040,           // Disassembler only
+    M68LC040,           // Disassembler only
+    M68040              // Disassembler only
 }
 Model;
 
