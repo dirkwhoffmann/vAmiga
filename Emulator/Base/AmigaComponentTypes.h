@@ -46,9 +46,10 @@ enum_long(OPT)
     
     // CPU
     OPT_CPU_REVISION,
+    OPT_CPU_DASM_REVISION,
+    OPT_CPU_DASM_STYLE,
     OPT_CPU_OVERCLOCKING,
     OPT_CPU_RESET_VAL,
-    OPT_CPU_DASM_STYLE,
 
     // Real-time clock
     OPT_RTC_MODEL,

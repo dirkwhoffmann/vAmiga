@@ -79,6 +79,7 @@ private:
         worker
 
         << config.revision
+        << config.dasmRevision
         << config.overclocking
         << config.regResetVal;
     }

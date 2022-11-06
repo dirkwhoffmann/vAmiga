@@ -40,8 +40,8 @@ typedef unsigned long long u64;
 
 typedef enum
 {
-    M68000,             // Full supported
-    M68010,             // Work in progress
+    M68000,             // Fully supported
+    M68010,             // Fully supported
     M68EC020,           // Work in progress
     M68020,             // Work in progress
     M68EC030,           // Work in progress

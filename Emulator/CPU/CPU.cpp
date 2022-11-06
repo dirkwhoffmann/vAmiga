@@ -280,9 +280,10 @@ CPU::getConfigItem(Option option) const
     switch (option) {
 
         case OPT_CPU_REVISION:      return (long)config.revision;
+        case OPT_CPU_DASM_REVISION: return (long)config.dasmRevision;
+        case OPT_CPU_DASM_STYLE:    return (long)style;
         case OPT_CPU_OVERCLOCKING:  return (long)config.overclocking;
         case OPT_CPU_RESET_VAL:     return (long)config.regResetVal;
-        case OPT_CPU_DASM_STYLE:    return (long)style;
 
         default:
             fatalError;
@@ -292,31 +293,38 @@ CPU::getConfigItem(Option option) const
 void
 CPU::setConfigItem(Option option, i64 value)
 {
+    auto model = [&](CPURevision rev) {
+
+        switch (rev) {
+
+            case CPU_68000:     return moira::M68000;
+            case CPU_68010:     return moira::M68010;
+            case CPU_68EC020:   return moira::M68EC020;
+            case CPU_68020:     return moira::M68020;
+
+            default:
+                fatalError;
+        }
+    };
+
     switch (option) {
 
         case OPT_CPU_REVISION:
+        case OPT_CPU_DASM_REVISION:
 
             if (!CPURevisionEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVARG, CPURevisionEnum::keyList());
             }
 
             suspend();
-            config.revision = CPURevision(value);
 
-            switch (value) {
-                    
-                case CPU_68000:     setModel(moira::M68000); break;
-                case CPU_68010:     setModel(moira::M68010); break;
-                case CPU_68EC020:   setModel(moira::M68EC020); break;
-                case CPU_68020:     setModel(moira::M68020); break;
-                    /*
-                case CPU_68EC030:   setModel(moira::M68EC030); break;
-                case CPU_68030:     setModel(moira::M68030); break;
-                case CPU_68EC040:   setModel(moira::M68EC040); break;
-                case CPU_68LC040:   setModel(moira::M68LC040); break;
-                case CPU_68040:     setModel(moira::M68040); break;
-                     */
+            if (option == OPT_CPU_REVISION) {
+                config.revision = CPURevision(value);
+            } else {
+                config.dasmRevision = CPURevision(value);
             }
+            setModel(model(config.revision), model(config.dasmRevision));
+
             resume();
             return;
 
@@ -433,6 +441,8 @@ CPU::_dump(Category category, std::ostream& os) const
 
         os << util::tab("CPU model");
         os << CPURevisionEnum::key(config.revision) << std::endl;
+        os << util::tab("Disassembler");
+        os << CPURevisionEnum::key(config.dasmRevision) << std::endl;
         os << util::tab("Overclocking");
         os << util::dec(config.overclocking) << std::endl;
         os << util::tab("Register reset value");

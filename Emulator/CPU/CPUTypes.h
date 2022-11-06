@@ -76,6 +76,7 @@ struct CPURevisionEnum : util::Reflection<CPURevisionEnum, CPURevision>
 typedef struct
 {
     CPURevision revision;
+    CPURevision dasmRevision;
     isize overclocking;
     u32 regResetVal;
 }
