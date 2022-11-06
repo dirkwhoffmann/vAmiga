@@ -4334,9 +4334,7 @@ Moira::execDivuMoira(u16 opcode, bool *divByZero)
     u32 ea = 0, divisor, result;
 
     try {
-        // readOp<C, M, Word, AE_NO_FRAME>(src, &ea, &divisor);
         readOp<C, M, Word>(src, &ea, &divisor);
-    // } catch (AddressErrorException &exc) {
     } catch (const AddressError &exc) {
 
         if (C == C68000) {
@@ -4346,15 +4344,12 @@ Moira::execDivuMoira(u16 opcode, bool *divByZero)
             readBuffer = (u16)readM<C, M, S>(ea & ~1);
             updateAnPI<M, S>(src);
             if (isAbsMode(M) || M == MODE_AI || M == MODE_PI || M == MODE_PD) {
-                // execAddressError<C>(makeFrame<AE_SET_RW|AE_SET_DF>(ea), 2);
                 SYNC(2);
                 throw AddressError(makeFrame<AE_SET_RW|AE_SET_DF>(ea));
             } else {
-                // execAddressError<C>(makeFrame<AE_DEC_PC|AE_SET_RW|AE_SET_DF>(ea), 2);
                 SYNC(2);
                 throw AddressError(makeFrame<AE_DEC_PC|AE_SET_RW|AE_SET_DF>(ea));
             }
-            // throw exc;
         }
     }
 

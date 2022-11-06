@@ -353,19 +353,14 @@ Moira::readMS(u32 addr)
 {
     u32 result;
 
+    // Update function code pins
+    setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
+    SYNC(2);
+
     // Check for address errors
     if (misaligned<C, S>(addr)) {
-        
-        setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
-        // if ((F & AE_NO_FRAME) == 0) execAddressError<C>(makeFrame<F>(addr), 2);
-        // throw AddressErrorException();
-        SYNC(2);
         throw AddressError(makeFrame<F>(addr));
     }
-
-    // Update function code pins
-    u8 fc = MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG;
-    setFC(fc);
 
     // Check if a watchpoint has been reached
     if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
@@ -373,8 +368,6 @@ Moira::readMS(u32 addr)
     }
 
     if constexpr (S == Byte) {
-
-        SYNC(2);
 
         if ((F & SKIP_READ2) == 0) {
 
@@ -386,8 +379,6 @@ Moira::readMS(u32 addr)
 
     if constexpr (S == Word) {
 
-        SYNC(2);
-
         if ((F & SKIP_READ2) == 0) {
 
             if (F & POLLIPL) pollIpl();
@@ -397,8 +388,6 @@ Moira::readMS(u32 addr)
     }
 
     if constexpr (S == Long) {
-
-        SYNC(2);
 
         if ((F & SKIP_READ2) == 0) {
 
@@ -427,27 +416,21 @@ template <Core C, MemSpace MS, Size S, Flags F> void
 Moira::writeMS(u32 addr, u32 val)
 {
     // Update function code pins
-    u8 fc = MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG;
-    setFC(fc);
+    setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
+    SYNC(2);
 
     // Check for address errors
     if (misaligned<C, S>(addr)) {
-
-        // execAddressError<C>(makeFrame<F|AE_WRITE>(addr), 2);
-        // throw AddressErrorException();
-        // auto frame = makeFrame<F|AE_WRITE>(addr);
-        SYNC(2);
         throw AddressError(makeFrame<F|AE_WRITE>(addr));
     }
 
-    // Check if a watchpoint is being accessed
+    // Check if a watchpoint has been reached
     if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
         watchpointReached(addr);
     }
 
     if constexpr (S == Byte) {
 
-        SYNC(2);
         if (F & POLLIPL) pollIpl();
         write8(addr & addrMask<C>(), (u8)val);
         SYNC(2);
@@ -455,7 +438,6 @@ Moira::writeMS(u32 addr, u32 val)
 
     if constexpr (S == Word) {
 
-        SYNC(2);
         if (F & POLLIPL) pollIpl();
         write16(addr & addrMask<C>(), (u16)val);
         SYNC(2);
@@ -465,7 +447,6 @@ Moira::writeMS(u32 addr, u32 val)
         
         if (F & REVERSE) {
 
-            SYNC(2);
             write16((addr + 2) & addrMask<C>(), u16(val & 0xFFFF));
             SYNC(4);
             if (F & POLLIPL) pollIpl();
@@ -474,7 +455,6 @@ Moira::writeMS(u32 addr, u32 val)
 
         } else {
 
-            SYNC(2);
             write16(addr & addrMask<C>(), u16(val >> 16));
             SYNC(4);
             if (F & POLLIPL) pollIpl();
@@ -680,22 +660,17 @@ Moira::jumpToVector(int nr)
         if (nr != 3) {
             if (C == C68000) {
 
-                // execAddressError<C>(makeFrame<F|AE_PROG>(reg.pc, vectorAddr));
-                // throw AddressErrorException();
                 throw AddressError(makeFrame<F|AE_PROG>(reg.pc, vectorAddr));
 
             } else {
-                // printf("jumpToVector(%d) %x\n", nr, reg.pc);
+
                 queue.irc = readBuffer = u16(reg.pc);
                 writeBuffer = u16(4 * nr);
                 if (nr == EXC_ILLEGAL || nr == EXC_LINEA || nr == EXC_LINEF || nr == EXC_PRIVILEGE) {
-                    // execAddressError<C>(makeFrame<F|AE_DEC_PC|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
                     throw AddressError(makeFrame<F|AE_DEC_PC|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
                 } else {
-                    // execAddressError<C>(makeFrame<F|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
                     throw AddressError(makeFrame<F|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
                 }
-                // throw AddressErrorException();
             }
         } else {
             halt(); // Double fault
