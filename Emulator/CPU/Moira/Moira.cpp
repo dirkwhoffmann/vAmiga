@@ -31,7 +31,7 @@ Moira::Moira(Amiga &ref) : SubComponent(ref)
     if (BUILD_INSTR_INFO_TABLE) info = new InstrInfo[65536];
     if (ENABLE_DASM) dasm = new DasmPtr[65536];
     
-    createJumpTable(model);
+    createJumpTable(cpuModel, dasmModel);
 }
 
 Moira::~Moira()
@@ -41,12 +41,14 @@ Moira::~Moira()
 }
 
 void
-Moira::setModel(Model model)
+Moira::setModel(Model cpuModel, Model dasmModel)
 {
-    if (this->model != model) {
+    if (this->cpuModel != cpuModel || this->dasmModel != dasmModel) {
         
-        this->model = model;
-        createJumpTable(model);
+        this->cpuModel = cpuModel;
+        this->dasmModel = dasmModel;
+
+        createJumpTable(cpuModel, dasmModel);
 
         reg.cacr &= cacrMask();
         flags &= ~CPU_IS_LOOPING;
@@ -87,7 +89,7 @@ Moira::setIndentation(int value)
 bool
 Moira::hasCPI()
 {
-    switch (model) {
+    switch (cpuModel) {
 
         case M68EC020: case M68020: case M68EC030: case M68030:
             return true;
@@ -100,7 +102,7 @@ Moira::hasCPI()
 bool
 Moira::hasMMU()
 {
-    switch (model) {
+    switch (cpuModel) {
 
         case M68030: case M68LC040: case M68040:
             return true;
@@ -113,7 +115,7 @@ Moira::hasMMU()
 bool
 Moira::hasFPU()
 {
-    switch (model) {
+    switch (cpuModel) {
 
         case M68040:
             return true;
@@ -128,7 +130,7 @@ Moira::addrMask() const
 {
     if constexpr (C == C68020) {
         
-        return model == M68EC020 ? 0x00FFFFFF : 0xFFFFFFFF;
+        return cpuModel == M68EC020 ? 0x00FFFFFF : 0xFFFFFFFF;
     }
 
     return 0x00FFFFFF;
@@ -137,7 +139,7 @@ Moira::addrMask() const
 u32
 Moira::cacrMask() const
 {
-    switch (model) {
+    switch (cpuModel) {
 
         case M68020: case M68EC020: return 0x0003;
         case M68030: case M68EC030: return 0x3F13;
@@ -148,7 +150,7 @@ Moira::cacrMask() const
 void
 Moira::reset()
 {
-    switch (model) {
+    switch (cpuModel) {
 
         case M68000:    reset<C68000>(); break;
         case M68010:    reset<C68010>(); break;
@@ -314,7 +316,7 @@ done:
 void
 Moira::processException(const std::exception &exception)
 {
-    switch (model) {
+    switch (cpuModel) {
 
         case M68000:    processException<C68000>(exception); break;
         case M68010:    processException<C68010>(exception); break;
@@ -468,7 +470,7 @@ Moira::setSR(u16 val)
     setCCR((u8)val);
     setSupervisorMode(s);
     
-    if (model > M68010) {
+    if (cpuModel > M68010) {
         
         bool t0 = (val >> 14) & 1;
         bool m = (val >> 12) & 1;

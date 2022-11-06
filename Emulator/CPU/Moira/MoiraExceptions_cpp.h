@@ -314,7 +314,7 @@ Moira::execAddressError(StackFrame frame, int delay)
 void
 Moira::execException(ExceptionType exc, int nr)
 {
-    switch (model) {
+    switch (cpuModel) {
 
         case M68000:    execException<C68000>(exc, nr); break;
         case M68010:    execException<C68010>(exc, nr); break;
@@ -467,7 +467,7 @@ Moira::execException(ExceptionType exc, int nr)
 void
 Moira::execInterrupt(u8 level)
 {
-    switch (model) {
+    switch (cpuModel) {
 
         case M68000:    execInterrupt<C68000>(level); break;
         case M68010:    execInterrupt<C68010>(level); break;

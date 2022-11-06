@@ -38,7 +38,7 @@ public:
 protected:
     
     // The emulated CPU model
-    Model model = M68000;  // REPLACE BY cpuModel
+    Model cpuModel = M68000;
 
     // The CPU model used by the disassembler
     Model dasmModel = M68000;
@@ -166,8 +166,9 @@ public:
     virtual ~Moira();
     
     // Selects the emulated CPU model
-    void setModel(Model model);
-    
+    void setModel(Model model) { setModel(model, model); }
+    void setModel(Model cpuModel, Model dasmModel);
+
     // Configures the disassembler
     void setDasmStyle(DasmStyle value);
     void setDasmNumberFormat(DasmNumberFormat value);
@@ -177,7 +178,7 @@ public:
 protected:
     
     // Creates the generic jump table
-    void createJumpTable(Model model, bool registerDasm = true);
+    void createJumpTable(Model cpuModel, Model dasmModel);
     
 private:
     

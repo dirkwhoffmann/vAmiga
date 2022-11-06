@@ -3527,7 +3527,7 @@ Moira::execMoves(u16 opcode)
         // Switch back to the old FC pin values
         fcSource = 0;
 
-        if (S == Long && (model == M68020 || model == M68EC020)) cp += 2;
+        if (S == Long && (cpuModel == M68020 || cpuModel == M68EC020)) cp += 2;
 
     } else {                    // Ea -> Rg
 
@@ -3559,7 +3559,7 @@ Moira::execMoves(u16 opcode)
         // Switch back to the old FC pin values
         fcSource = 0;
 
-        if (model == M68020 || model == M68EC020) cp += 2;
+        if (cpuModel == M68020 || cpuModel == M68EC020) cp += 2;
     }
 
     prefetch<C, POLLIPL>();

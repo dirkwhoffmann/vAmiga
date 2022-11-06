@@ -154,33 +154,26 @@ parse(const char *s, int sum = 0)
 }
 
 void
-Moira::createJumpTable(Model model, bool regDasm)
+Moira::createJumpTable(Model cpuModel, Model dasmModel)
 {
-    switch (model) {
+    auto core = [&](Model model) {
+        return model == M68000 ? C68000 : model == M68010 ? C68010 : C68020;
+    };
 
-        case M68000:
+    Core cpuCore = core(cpuModel);
+    Core dasmCore = core(dasmModel);
 
-            createJumpTable<C68000>(model, regDasm);
-            break;
+    // Register handlers based on the dasm model
+    if (dasmCore == C68000) createJumpTable<C68000>(dasmModel, true);
+    if (dasmCore == C68010) createJumpTable<C68010>(dasmModel, true);
+    if (dasmCore == C68020) createJumpTable<C68020>(dasmModel, true);
 
-        case M68010:
+    // If both models differ, reinstall handlers, but leave dasm handlers intact
+    if (cpuModel != dasmModel) {
 
-            createJumpTable<C68010>(model, regDasm);
-            break;
-
-        case M68EC020:
-        case M68020:
-        case M68EC030:
-        case M68030:
-        case M68EC040:
-        case M68LC040:
-        case M68040:
-
-            createJumpTable<C68020>(model, regDasm);
-            break;
-
-        default:
-            fatalError;
+        if (cpuCore == C68000) createJumpTable<C68000>(cpuModel, false);
+        if (cpuCore == C68010) createJumpTable<C68010>(cpuModel, false);
+        if (cpuCore == C68020) createJumpTable<C68020>(cpuModel, false);
     }
 }
 
