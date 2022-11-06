@@ -440,8 +440,9 @@ class BusErrorException : public std::exception { };
 struct AddressError : public std::exception {
 
     StackFrame stackFrame;
-
     AddressError(const StackFrame frame) { stackFrame = frame; }
 };
+
+struct DoubleFault : public std::exception { };
 
 }

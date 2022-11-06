@@ -831,10 +831,7 @@ Moira::execBra(u16 opcode)
 
     // Check for address error
     if (misaligned<C>(newpc)) {
-
-        // execAddressError<C>(makeFrame(newpc, reg.pc));
-        // throw AddressErrorException();
-        throw AddressError(makeFrame(newpc, reg.pc));
+        throw AddressError(makeFrame(newpc));
     }
 
     reg.pc = newpc;
@@ -870,10 +867,7 @@ Moira::execBcc(u16 opcode)
 
         // Check for address error
         if (misaligned<C>(newpc)) {
-
-            // execAddressError<C>(makeFrame(newpc, reg.pc));
-            // throw AddressErrorException();
-            throw AddressError(makeFrame(newpc, reg.pc));
+            throw AddressError(makeFrame(newpc));
         }
 
         // Take branch
@@ -1341,17 +1335,10 @@ Moira::execBsr(u16 opcode)
 
         // Check for address errors
         if (misaligned<C>(reg.sp)) {
-
             reg.sp -= 4;
-            // execAddressError<C>(makeFrame<AE_WRITE|AE_DATA>(reg.sp));
-            // throw AddressErrorException();
             throw AddressError(makeFrame<AE_WRITE|AE_DATA>(reg.sp));
         }
-
         if (misaligned<C>(newpc)) {
-
-            // execAddressError<C>(makeFrame(newpc));
-            // throw AddressErrorException();
             throw AddressError(makeFrame(newpc));
         }
 
@@ -1360,25 +1347,17 @@ Moira::execBsr(u16 opcode)
 
         // Jump to new address
         reg.pc = newpc;
-
         fullPrefetch<C, POLLIPL>();
 
     } else {
 
         // Check for address errors
         if (misaligned<C>(reg.sp)) {
-
             writeBuffer = 0;
-            // execAddressError<C>(makeFrame<AE_WRITE|AE_DATA>(newpc));
-            // throw AddressErrorException();
             throw AddressError(makeFrame<AE_WRITE|AE_DATA>(newpc));
 
         }
-
         if (misaligned<C>(newpc)) {
-
-            // execAddressError<C>(makeFrame(newpc));
-            // throw AddressErrorException();
             throw AddressError(makeFrame(newpc));
         }
 
@@ -1557,36 +1536,31 @@ Moira::execChk(u16 opcode)
     [[maybe_unused]] auto c = clock;
 
     try {
-        // readOp<C, M, S, AE_NO_FRAME>(src, &ea, &data);
+
         readOp<C, M, S>(src, &ea, &data);
-    // } catch (AddressErrorException &exc) {
+
     } catch (const AddressError &exc) {
 
-        // Rectify stack frame
+        // Rectify the stack frame
         if (C == C68000) {
 
-            // execAddressError<C>(makeFrame<STD_AE_FRAME>(ea), 2);
             SYNC(2);
-            // exc.stackFrame = makeFrame<STD_AE_FRAME>(ea);
-            // throw exc;
             throw AddressError( makeFrame<STD_AE_FRAME>(ea));
 
         } else {
+
             readBuffer = (u16)readM<C, M, S>(ea & ~1);
             updateAnPI<M, S>(src);
             if (isAbsMode(M) || M == MODE_AI || M == MODE_PI || M == MODE_PD) {
-                // execAddressError<C>(makeFrame<AE_SET_RW|AE_SET_DF>(ea), 2);
+
                 SYNC(2);
                 throw AddressError(makeFrame<AE_SET_RW|AE_SET_DF>(ea));
-                // exc.stackFrame = makeFrame<AE_SET_RW|AE_SET_DF>(ea);
 
             } else {
-                // execAddressError<C>(makeFrame<AE_DEC_PC|AE_SET_RW|AE_SET_DF>(ea), 2);
+
                 SYNC(2);
                 throw AddressError(makeFrame<AE_DEC_PC|AE_SET_RW|AE_SET_DF>(ea));
-                // exc.stackFrame = makeFrame<AE_DEC_PC|AE_SET_RW|AE_SET_DF>(ea);
             }
-            // throw exc;
         }
     }
     dy = readD<S>(dst);
@@ -2114,10 +2088,7 @@ Moira::execDbcc(u16 opcode)
 
             // Check for address error
             if (misaligned<C, S>(newpc)) {
-
-                // execAddressError<C>(makeFrame(newpc, newpc + 2));
-                // throw AddressErrorException();
-                throw AddressError(makeFrame(newpc, newpc + 2));
+                throw AddressError(makeFrame<AE_INC_PC>(newpc, newpc));
             }
 
             // Decrement loop counter
@@ -2167,10 +2138,7 @@ Moira::execDbcc(u16 opcode)
 
             // Check for address error
             if (misaligned<C, S>(newpc)) {
-
-                // execAddressError<C>(makeFrame(newpc, newpc + 2));
-                // throw AddressErrorException();
-                throw AddressError(makeFrame(newpc, newpc + 2));
+                throw AddressError(makeFrame<AE_INC_PC>(newpc, newpc));
             }
 
             // Decrement loop counter
@@ -2187,7 +2155,6 @@ Moira::execDbcc(u16 opcode)
                     // Enter loop mode
                     flags |= CPU_IS_LOOPING;
                     queue.irc = opcode;
-                    // printf("Entering loop mode (IRD: %x IRC: %x)\n", queue.ird, queue.irc);
                 }
 
                 if (MIMIC_MUSASHI) SYNC(2);
@@ -2227,10 +2194,7 @@ Moira::execDbcc(u16 opcode)
 
             // Check for address error
             if (misaligned<C, S>(newpc)) {
-
-                // execAddressError<C>(makeFrame(newpc, newpc + 2));
-                // throw AddressErrorException();
-                throw AddressError(makeFrame(newpc, newpc + 2));
+                throw AddressError(makeFrame<AE_INC_PC>(newpc, newpc));
             }
 
             // Decrement loop counter
@@ -2249,9 +2213,9 @@ Moira::execDbcc(u16 opcode)
 
             } else {
 
+                // Fall through to next instruction
                 if (loopModeDelay) SYNC(loopModeDelay);
                 loopModeDelay = 2;
-                // Fall through to next instruction
                 reg.pc += 2;
                 fullPrefetch<C, POLLIPL>();
                 flags &= ~CPU_IS_LOOPING;
@@ -2406,9 +2370,6 @@ Moira::execJmp(u16 opcode)
 
     // Check for address error
     if (misaligned<C, Word>(ea)) {
-
-        // execAddressError<C>(makeFrame(ea, oldpc));
-        // throw AddressErrorException();
         throw AddressError(makeFrame(ea, oldpc));
     }
 
@@ -2443,19 +2404,12 @@ Moira::execJsr(u16 opcode)
     SYNC(delay[M]);
 
     // Check for address errors
-    if (C == C68000) {
+    if constexpr (C == C68000) {
 
         if (isDspMode(M) && misaligned<C>(ea)) {
-
-            // execAddressError<C>(makeFrame<AE_DEC_PC>(ea));
-            // throw AddressErrorException();
             throw AddressError(makeFrame<AE_DEC_PC>(ea));
         }
-
         if (misaligned<C>(ea)) {
-
-            // execAddressError<C>(makeFrame(ea));
-            // throw AddressErrorException();
             throw AddressError(makeFrame(ea));
         }
 
@@ -2466,8 +2420,6 @@ Moira::execJsr(u16 opcode)
             if (M == MODE_AI) {
 
                 queue.irc = (u16)readMS<C, MEM_PROG, Word>(ea & ~1);
-                // execAddressError<C>(makeFrame<AE_SET_IF|AE_SET_RW>(ea));
-                // throw AddressErrorException();
                 throw AddressError(makeFrame<AE_SET_IF|AE_SET_RW>(ea));
             }
 
@@ -2475,20 +2427,14 @@ Moira::execJsr(u16 opcode)
 
                 auto frame = makeFrame<AE_SET_IF|AE_SET_RW>(ea);
                 frame.pc -= 4;
-                // execAddressError<C>(frame);
-                // throw AddressErrorException();
                 throw AddressError(frame);
             }
             if (isDspMode(M)) {
 
-                // execAddressError<C>(makeFrame<AE_DEC_PC|AE_SET_IF|AE_SET_RW>(ea));
-                // throw AddressErrorException();
                 throw AddressError(makeFrame<AE_DEC_PC|AE_SET_IF|AE_SET_RW>(ea));
 
             } else {
 
-                // execAddressError<C>(makeFrame(ea));
-                // throw AddressErrorException();
                 throw AddressError(makeFrame(ea));
             }
         }
@@ -2497,14 +2443,10 @@ Moira::execJsr(u16 opcode)
 
             if (isDspMode(M)) {
 
-                // execAddressError<C>(makeFrame<AE_SET_IF|AE_SET_RW>(ea));
-                // throw AddressErrorException();
                 throw AddressError(makeFrame<AE_SET_IF|AE_SET_RW>(ea));
 
             } else {
 
-                // execAddressError<C>(makeFrame(ea));
-                // throw AddressErrorException();
                 throw AddressError(makeFrame(ea));
             }
         }
@@ -2516,8 +2458,6 @@ Moira::execJsr(u16 opcode)
                 prefetch<C>();
                 reg.sp -= 4;
                 writeBuffer = HI_WORD(reg.pc);
-                // execAddressError<C>(makeFrame<AE_DATA>(reg.sp));
-                // throw AddressErrorException();
                 throw AddressError(makeFrame<AE_DATA>(reg.sp));
 
             } else {
@@ -2525,14 +2465,12 @@ Moira::execJsr(u16 opcode)
                 prefetch<C>();
                 reg.sp -= 4;
                 writeBuffer = HI_WORD(reg.pc);
-                // execAddressError<C>(makeFrame<AE_DATA>(reg.sp));
-                // throw AddressErrorException();
                 throw AddressError(makeFrame<AE_DATA>(reg.sp));
             }
         }
     }
 
-    if (C == C68000) {
+    if constexpr (C == C68000) {
 
         // Save return address on stack
         push<C, Long>(reg.pc);
@@ -2614,8 +2552,6 @@ Moira::execLink(u16 opcode)
 
         writeBuffer = HI_WORD(readA(ax));
         writeA(ax, sp);
-        // execAddressError<C>(makeFrame<AE_DATA|AE_WRITE>(sp, getPC() + 2, getSR(), ird));
-        // throw AddressErrorException();
         throw AddressError(makeFrame<AE_DATA|AE_WRITE>(sp, getPC() + 2, getSR(), ird));
     }
 
@@ -2898,12 +2834,6 @@ Moira::execMove4(u16 opcode)
     // Check for address error
     if (misaligned<C, S>(ea)) {
 
-        // if (format == 0) execAddressError<C>(makeFrame<flags0>(ea + 2, reg.pc + 2, getSR(), ird));
-        // if (format == 1) execAddressError<C>(makeFrame<flags1>(ea, reg.pc + 2), 2);
-        // if (format == 2) execAddressError<C>(makeFrame<flags2>(ea, reg.pc + 2), 2);
-        // if constexpr (S != Long) updateAn <MODE_PD, S> (dst);
-        // throw AddressErrorException();
-
         if constexpr (S != Long) updateAn<MODE_PD, S>(dst);
         if (format == 0) { throw AddressError(makeFrame<flags0>(ea + 2, reg.pc + 2, getSR(), ird)); }
         if (format == 1) { SYNC(2); throw AddressError(makeFrame<flags1>(ea, reg.pc + 2)); }
@@ -3116,9 +3046,6 @@ Moira::execMove8(u16 opcode)
 
         // Check for address error
         if (misaligned<C, S>(ea2)) {
-            
-            // execAddressError<C>(makeFrame<AE_WRITE|AE_DATA>(ea2));
-            // throw AddressErrorException();
             throw AddressError(makeFrame<AE_WRITE|AE_DATA>(ea2));
         }
 
@@ -3172,20 +3099,12 @@ Moira::execMovea(u16 opcode)
 
     u32 ea = 0, data;
 
-    try { readOp<C, M, S>(src, &ea, &data); }
-    // catch (AddressErrorException &exc) {
-    catch (const AddressError &exc) {
+    try { readOp<C, M, S>(src, &ea, &data); } catch (AddressError &exc) {
 
-        // Rectify stack frame
-        /*
-        auto frame = makeFrame<STD_AE_FRAME|AE_SET_RW|AE_SET_DF>(ea);
+        // Rectify the stack frame
         readBuffer = 0xFFFF; // To pass ADDRERR6 (needs investigation)
-        execAddressError<C>(frame, 2);
-        */
-        readBuffer = 0xFFFF; // To pass ADDRERR6 (needs investigation)
-        // exc.stackFrame = makeFrame<STD_AE_FRAME|AE_SET_RW|AE_SET_DF>(ea);
-        throw AddressError(makeFrame<STD_AE_FRAME|AE_SET_RW|AE_SET_DF>(ea));
-        // throw exc;
+        exc.stackFrame = makeFrame<STD_AE_FRAME|AE_SET_RW|AE_SET_DF>(ea);
+        throw exc;
     }
 
     prefetch<C, POLLIPL>();
@@ -3334,13 +3253,10 @@ Moira::execMovemEaRg(u16 opcode)
 
         setFC<M>();
         if constexpr (M == MODE_IX || M == MODE_IXPC) {
-            // execAddressError<C>(makeFrame<AE_DEC_PC|AE_SET_DF|AE_SET_RW>(ea));
             throw AddressError(makeFrame<AE_DEC_PC|AE_SET_DF|AE_SET_RW>(ea));
         } else {
-            // execAddressError<C>(makeFrame<AE_INC_PC|AE_SET_DF|AE_SET_RW>(ea));
             throw AddressError(makeFrame<AE_INC_PC|AE_SET_DF|AE_SET_RW>(ea));
         }
-        // throw AddressErrorException();
     }
 
     if constexpr (S == Long) (void)readMS<C, MEM_DATA, Word>(ea);
@@ -3416,9 +3332,7 @@ Moira::execMovemRgEa(u16 opcode)
                 setFC<M>();
                 readBuffer = mask;
                 writeBuffer = LO_WORD(reg.r[i]);
-                // execAddressError<C>(makeFrame<AE_INC_PC|AE_WRITE>(ea - 2));
-                // throw AddressErrorException();
-                throw AddressError(makeFrame<AE_INC_PC|AE_WRITE>(ea - 2));
+                throw AddressError(makeFrame<AE_INC_PC|AE_WRITE>(U32_SUB(ea, 2)));
             }
 
             // Write register contents into memory
@@ -3444,8 +3358,6 @@ Moira::execMovemRgEa(u16 opcode)
                 setFC<M>();
                 readBuffer = mask;
                 writeBuffer = S == Long ? HI_WORD(reg.r[i]) : LO_WORD(reg.r[i]);
-                // execAddressError<C>(makeFrame<AE_INC_PC|AE_WRITE>(ea));
-                // throw AddressErrorException();
                 throw AddressError(makeFrame<AE_INC_PC|AE_WRITE>(ea));
             }
 
@@ -4199,34 +4111,28 @@ Moira::execDivsMoira(u16 opcode, bool *divByZero)
     int dst = ____xxx_________(opcode);
 
     u32 ea = 0, divisor, result;
-    try {
-        // readOp<C, M, Word, AE_NO_FRAME>(src, &ea, &divisor);
-        readOp<C, M, Word>(src, &ea, &divisor);
-    // } catch (AddressErrorException &exc) {
-    } catch (AddressError &exc) {
 
+    try { readOp<C, M, Word>(src, &ea, &divisor); } catch (AddressError &exc) {
+
+        // Rectify the stack frame
         if (C == C68000) {
 
-            // execAddressError<C>(makeFrame<STD_AE_FRAME>(ea), 2);
             SYNC(2);
             exc.stackFrame = makeFrame<STD_AE_FRAME>(ea);
-            throw exc;
 
         } else {
 
             readBuffer = (u16)readM<C, M, S>(ea & ~1);
             updateAnPI<M, S>(src);
             if (isAbsMode(M) || M == MODE_AI || M == MODE_PI || M == MODE_PD) {
-                // execAddressError<C>(makeFrame<AE_SET_RW|AE_SET_DF>(ea), 2);
                 SYNC(2);
-                throw AddressError(makeFrame<AE_SET_RW|AE_SET_DF>(ea));
+                exc.stackFrame = makeFrame<AE_SET_RW|AE_SET_DF>(ea);
             } else {
-                // execAddressError<C>(makeFrame<AE_DEC_PC|AE_SET_RW|AE_SET_DF>(ea), 2);
                 SYNC(2);
-                throw AddressError(makeFrame<AE_DEC_PC|AE_SET_RW|AE_SET_DF>(ea));
+                exc.stackFrame = makeFrame<AE_DEC_PC|AE_SET_RW|AE_SET_DF>(ea);
             }
-            // throw exc;
         }
+        throw exc;
     }
 
     u32 dividend = readD(dst);
@@ -4333,23 +4239,26 @@ Moira::execDivuMoira(u16 opcode, bool *divByZero)
     
     u32 ea = 0, divisor, result;
 
-    try {
-        readOp<C, M, Word>(src, &ea, &divisor);
-    } catch (const AddressError &exc) {
+    try { readOp<C, M, Word>(src, &ea, &divisor); } catch (AddressError &exc) {
 
+        // Rectify the stack frame
         if (C == C68000) {
-            execAddressError<C>(makeFrame<STD_AE_FRAME>(ea), 2);
+
+            SYNC(2);
+            exc.stackFrame = makeFrame<STD_AE_FRAME>(ea);
             throw exc;
+
         } else {
+
             readBuffer = (u16)readM<C, M, S>(ea & ~1);
             updateAnPI<M, S>(src);
+            SYNC(2);
             if (isAbsMode(M) || M == MODE_AI || M == MODE_PI || M == MODE_PD) {
-                SYNC(2);
-                throw AddressError(makeFrame<AE_SET_RW|AE_SET_DF>(ea));
+                exc.stackFrame = makeFrame<AE_SET_RW|AE_SET_DF>(ea);
             } else {
-                SYNC(2);
-                throw AddressError(makeFrame<AE_DEC_PC|AE_SET_RW|AE_SET_DF>(ea));
+                exc.stackFrame = makeFrame<AE_DEC_PC|AE_SET_RW|AE_SET_DF>(ea);
             }
+            throw exc;
         }
     }
 
@@ -4828,34 +4737,29 @@ Moira::execPea(u16 opcode)
 
         if (C == C68000) {
 
-            reg.sp -= S;
+            U32_DEC(reg.sp, S);
+            // reg.sp -= S;
             if (isAbsMode(M)) {
-                // execAddressError<C>(makeFrame<AE_WRITE|AE_DATA>(reg.sp));
                 throw AddressError(makeFrame<AE_WRITE|AE_DATA>(reg.sp));
             } else {
-                // execAddressError<C>(makeFrame<AE_WRITE|AE_DATA|AE_INC_PC>(reg.sp));
                 throw AddressError(makeFrame<AE_WRITE|AE_DATA|AE_INC_PC>(reg.sp));
             }
-            // throw AddressErrorException();
 
         } else {
 
-            reg.sp -= S;
+            U32_DEC(reg.sp, S);
+            // reg.sp -= S;
             writeBuffer = HI_WORD(ea);
             if (isAbsMode(M)) {
                 readBuffer = queue.irc;
-                // execAddressError<C>(makeFrame<AE_WRITE|AE_DATA>(reg.sp, reg.pc - 4));
-                throw AddressError(makeFrame<AE_WRITE|AE_DATA>(reg.sp, reg.pc - 4));
+                throw AddressError(makeFrame<AE_WRITE|AE_DATA>(reg.sp, U32_SUB(reg.pc, 4)));
             } else if (isDspMode(M)) {
                 prefetch<C>();
-                // execAddressError<C>(makeFrame<AE_WRITE|AE_DATA|AE_DEC_PC>(reg.sp));
                 throw AddressError(makeFrame<AE_WRITE|AE_DATA|AE_DEC_PC>(reg.sp));
             } else {
                 prefetch<C>();
-                // execAddressError<C>(makeFrame<AE_WRITE|AE_DATA>(reg.sp));
                 throw AddressError(makeFrame<AE_WRITE|AE_DATA>(reg.sp));
             }
-            // throw AddressErrorException();
         }
     }
 
@@ -4935,21 +4839,15 @@ Moira::execRtd(u16 opcode)
 
         setFC<M>();
         readBuffer = u16(readM<C, M, Word>(reg.sp & ~1));
-        // execAddressError<C>(makeFrame<AE_SET_RW|AE_SET_DF>(reg.sp));
-        // throw AddressErrorException();
         throw AddressError(makeFrame<AE_SET_RW|AE_SET_DF>(reg.sp));
     }
 
     u32 newpc = readM<C, M, Long>(reg.sp);
-
     reg.sp += 4 + i16(queue.irc);
 
     // Check for address error
     if (misaligned<C>(newpc)) {
-
-        // execAddressError<C>(makeFrame<AE_PROG>(newpc, reg.pc));
-        // throw AddressErrorException();
-        throw AddressError(makeFrame<AE_PROG>(newpc, reg.pc));
+        throw AddressError(makeFrame<AE_PROG>(newpc));
     }
 
     setPC(newpc);
@@ -5200,10 +5098,7 @@ Moira::execRte(u16 opcode)
 
     // Check for address error
     if (misaligned<C>(newpc)) {
-
-        // execAddressError<C>(makeFrame<AE_PROG>(newpc, reg.pc));
-        // throw AddressErrorException();
-        throw AddressError(makeFrame<AE_PROG>(newpc, reg.pc));
+        throw AddressError(makeFrame<AE_PROG>(newpc));
     }
 
     setPC(newpc);
@@ -5238,8 +5133,6 @@ Moira::execRtr(u16 opcode)
 
         setFC<M>();
         readBuffer = u16(readM<C, M, Word>(reg.sp & ~1));
-        // execAddressError<C>(makeFrame<AE_SET_RW|AE_SET_DF>(reg.sp));
-        // throw AddressErrorException();
         throw AddressError(makeFrame<AE_SET_RW|AE_SET_DF>(reg.sp));
     }
 
@@ -5254,14 +5147,10 @@ Moira::execRtr(u16 opcode)
 
     // Check for address error
     if (misaligned<C>(newpc)) {
-
-        // execAddressError<C>(makeFrame<AE_PROG>(newpc, reg.pc));
-        // throw AddressErrorException();
-        throw AddressError(makeFrame<AE_PROG>(newpc, reg.pc));
+        throw AddressError(makeFrame<AE_PROG>(newpc));
     }
 
     setPC(newpc);
-
     fullPrefetch<C, POLLIPL>();
 
     //           00  10  20        00  10  20        00  10  20
@@ -5281,21 +5170,15 @@ Moira::execRts(u16 opcode)
 
         setFC<M>();
         readBuffer = u16(readM<C, M, Word>(reg.sp & ~1));
-        // execAddressError<C>(makeFrame<AE_SET_RW|AE_SET_DF>(reg.sp));
-        // throw AddressErrorException();
         throw AddressError(makeFrame<AE_SET_RW|AE_SET_DF>(reg.sp));
     }
 
     u32 newpc = readM<C, M, Long>(reg.sp);
-
     reg.sp += 4;
 
     // Check for address error
     if (misaligned<C>(newpc)) {
-
-        // execAddressError<C>(makeFrame<AE_PROG>(newpc, reg.pc));
-        // throw AddressErrorException();
-        throw AddressError(makeFrame<AE_PROG>(newpc, reg.pc));
+        throw AddressError(makeFrame<AE_PROG>(newpc));
     }
 
     setPC(newpc);
@@ -5615,9 +5498,6 @@ Moira::execUnlk(u16 opcode)
 
     // Check for address error
     if (misaligned<C>(readA(an))) {
-
-        // execAddressError<C>(makeFrame<AE_DATA|AE_INC_PC|AE_SET_DF|AE_SET_RW>(readA(an)));
-        // throw AddressErrorException();
         throw AddressError(makeFrame<AE_DATA|AE_INC_PC|AE_SET_DF|AE_SET_RW>(readA(an)));
     }
 
