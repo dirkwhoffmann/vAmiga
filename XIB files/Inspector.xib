@@ -178,6 +178,7 @@
                 <outlet property="cpuD7" destination="bAE-tQ-zGW" id="uE4-6Z-e0P"/>
                 <outlet property="cpuDFC" destination="L8m-LR-47x" id="Q8Z-Jk-mB4"/>
                 <outlet property="cpuDFClabel" destination="XRn-gS-B5c" id="KDW-m0-XMQ"/>
+                <outlet property="cpuDasmRev1" destination="lbO-wB-5cH" id="Wp4-0W-kGb"/>
                 <outlet property="cpuDasmStyle1" destination="XT2-ik-3Zd" id="fla-B3-f3x"/>
                 <outlet property="cpuDasmStyle2" destination="4vn-i8-Na7" id="xgW-2L-2gA"/>
                 <outlet property="cpuFC0" destination="Buj-9O-cUg" id="CLF-FP-z0G"/>
@@ -1498,7 +1499,7 @@
                                                                 </connections>
                                                             </searchField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yzb-bf-dNy">
-                                                                <rect key="frame" x="205" y="338" width="49" height="16"/>
+                                                                <rect key="frame" x="156" y="337" width="49" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Syntax:" id="ds9-Vj-OYH">
                                                                     <font key="font" metaFont="system"/>
@@ -1506,8 +1507,36 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
+                                                            <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lbO-wB-5cH">
+                                                                <rect key="frame" x="302" y="331" width="96" height="25"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <popUpButtonCell key="cell" type="roundTextured" title="68000" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="vzm-P6-kO8" id="5be-ty-b03">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="menu"/>
+                                                                    <menu key="menu" id="Tp9-L7-gLa">
+                                                                        <items>
+                                                                            <menuItem title="68000" state="on" id="vzm-P6-kO8"/>
+                                                                            <menuItem isSeparatorItem="YES" id="MeD-hc-R7m"/>
+                                                                            <menuItem title="68010" tag="1" id="86Q-Y3-j9m"/>
+                                                                            <menuItem isSeparatorItem="YES" id="oxW-by-pwU"/>
+                                                                            <menuItem title="68EC020" tag="2" id="idL-Z6-OdU"/>
+                                                                            <menuItem title="68020" tag="3" id="8Wk-Y5-hQ9"/>
+                                                                            <menuItem isSeparatorItem="YES" id="vYX-7d-iW4"/>
+                                                                            <menuItem title="68EC030" tag="4" id="tFq-Ba-hbi"/>
+                                                                            <menuItem title="68030" tag="5" id="yEZ-9v-gOB"/>
+                                                                            <menuItem isSeparatorItem="YES" id="JMt-0m-Ss1"/>
+                                                                            <menuItem title="68EC040" tag="6" id="yZG-6u-Qei"/>
+                                                                            <menuItem title="68LC040" tag="7" id="1Eu-wq-wzY"/>
+                                                                            <menuItem title="68040" tag="8" id="4KG-up-kIU"/>
+                                                                        </items>
+                                                                    </menu>
+                                                                </popUpButtonCell>
+                                                                <connections>
+                                                                    <action selector="cpuDasmRevAction:" target="-2" id="oRv-j6-heZ"/>
+                                                                </connections>
+                                                            </popUpButton>
                                                             <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XT2-ik-3Zd">
-                                                                <rect key="frame" x="255" y="331" width="143" height="25"/>
+                                                                <rect key="frame" x="205" y="331" width="96" height="25"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <popUpButtonCell key="cell" type="roundTextured" title="Motorola" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="1kW-Ow-zBB" id="H2M-we-SHF">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1517,7 +1546,7 @@
                                                                             <menuItem title="Motorola" state="on" id="1kW-Ow-zBB"/>
                                                                             <menuItem title="MIT" tag="1" id="Wvh-XB-Hwc"/>
                                                                             <menuItem isSeparatorItem="YES" id="wgj-9z-h8B"/>
-                                                                            <menuItem title="GNU Motorola" tag="2" id="VpB-Ay-dNA"/>
+                                                                            <menuItem title="GNU" tag="2" id="VpB-Ay-dNA"/>
                                                                             <menuItem title="GNU MIT" tag="3" id="7SW-8c-iDc"/>
                                                                             <menuItem isSeparatorItem="YES" id="aCI-aU-zPg"/>
                                                                             <menuItem title="Musashi" tag="4" id="lbC-pZ-QNN"/>

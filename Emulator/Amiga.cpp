@@ -493,6 +493,7 @@ Amiga::configure(Option option, i64 value)
             break;
 
         case OPT_CPU_REVISION:
+        case OPT_CPU_DASM_REVISION:
         case OPT_CPU_OVERCLOCKING:
         case OPT_CPU_RESET_VAL:
         case OPT_CPU_DASM_STYLE:

@@ -31,6 +31,7 @@ class Inspector: DialogController {
     @IBOutlet weak var cpuWatchView: WatchTableView!
     @IBOutlet weak var cpuDasmStyle1: NSPopUpButton!
     @IBOutlet weak var cpuDasmStyle2: NSPopUpButton!
+    @IBOutlet weak var cpuDasmRev1: NSPopUpButton!
     @IBOutlet weak var cpuPC: NSTextField!
     @IBOutlet weak var cpuIRD: NSTextField!
     @IBOutlet weak var cpuIRC: NSTextField!

@@ -163,4 +163,8 @@ extension Inspector {
         amiga.configure(.CPU_DASM_STYLE, value: sender.selectedTag())
     }
 
+    @IBAction func cpuDasmRevAction(_ sender: NSPopUpButton!) {
+
+        amiga.configure(.CPU_DASM_REVISION, value: sender.selectedTag())
+    }
 }
