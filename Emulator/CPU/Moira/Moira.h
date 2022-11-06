@@ -174,11 +174,11 @@ public:
 protected:
     
     // Creates the generic jump table
-    void createJumpTable();
+    void createJumpTable(bool regDasm = true);
     
 private:
     
-    template <Core C> void createJumpTable();
+    template <Core C> void createJumpTable(bool regDasm);
 
 
     //

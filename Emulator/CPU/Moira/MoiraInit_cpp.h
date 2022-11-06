@@ -10,13 +10,24 @@
 #define DASM_HANDLER(func,I,M,S) &Moira::dasm##func<I,M,S>
 
 // Registers an instruction handler
+#if ENABLE_DASM == true
+#define REGISTER_DASM(id,name,I,M,S) if (regDasm) dasm[id] = DASM_HANDLER(name,I,M,S);
+#else
+#define REGISTER_DASM(id,name,I,M,S) { }
+#endif
+
+#if BUILD_INSTR_INFO_TABLE == true
+#define REGISTER_INFO(id,name,I,M,S) info[id] = InstrInfo {I,M,S};
+#else
+#define REGISTER_INFO(id,name,I,M,S) { }
+#endif
+
 #define CIMS(id,name,I,M,S) { \
 exec[id] = EXEC_HANDLER(name,C,I,M,S); \
-if (dasm) dasm[id] = DASM_HANDLER(name,I,M,S); \
-if (info) info[id] = InstrInfo {I,M,S}; \
+REGISTER_DASM(id,name,I,M,S) \
+REGISTER_INFO(id,name,I,M,S) \
 }
 
-// Registers a special loop-mode instruction handler
 #define CIMSloop(id,name,I,M,S) { \
 assert(loop[id] == nullptr); \
 loop[id] = EXEC_HANDLER(name,C68010,I##_LOOP,M,S); \
@@ -143,18 +154,18 @@ parse(const char *s, int sum = 0)
 }
 
 void
-Moira::createJumpTable()
+Moira::createJumpTable(bool regDasm)
 {
     switch (model) {
 
         case M68000:
 
-            createJumpTable<C68000>();
+            createJumpTable<C68000>(regDasm);
             break;
 
         case M68010:
 
-            createJumpTable<C68010>();
+            createJumpTable<C68010>(regDasm);
             break;
 
         case M68EC020:
@@ -162,14 +173,14 @@ Moira::createJumpTable()
         case M68EC030:
         case M68030:
 
-            createJumpTable<C68020>();
+            createJumpTable<C68020>(regDasm);
             break;
 
         case M68EC040:
         case M68LC040:
         case M68040:
 
-            createJumpTable<C68020>();
+            createJumpTable<C68020>(regDasm);
             break;
 
         default:
@@ -178,7 +189,7 @@ Moira::createJumpTable()
 }
 
 template <Core C> void
-Moira::createJumpTable()
+Moira::createJumpTable(bool regDasm)
 {
     u16 opcode;
     
