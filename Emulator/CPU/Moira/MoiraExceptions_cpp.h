@@ -294,28 +294,19 @@ Moira::execAddressError(StackFrame frame, int delay)
     SYNC(8);
     
     // A misaligned stack pointer will cause a double fault
-    bool doubleFault = misaligned<C>(reg.sp);
-    
-    if (!doubleFault) {
+    if (misaligned<C>(reg.sp)) throw AddressError(makeFrame(reg.pc));
 
-        // Write stack frame
-        if (C == C68000) {
-
-            writeStackFrameAEBE<C>(frame);
-            SYNC(2);
-            jumpToVector<C>(3);
-
-        } else {
-
-            writeStackFrame1000<C>(frame, status, frame.pc, reg.pc0, 3, frame.addr);
-            SYNC(2);
-            jumpToVector<C>(3);
-        }
+    // Write stack frame
+    if (C == C68000) {
+        writeStackFrameAEBE<C>(frame);
+    } else {
+        writeStackFrame1000<C>(frame, status, frame.pc, reg.pc0, 3, frame.addr);
     }
+    SYNC(2);
 
-    // Halt the CPU if a double fault occurred
-    if (doubleFault) halt();
-    
+    // Jump to exception vector
+    jumpToVector<C>(3);
+
     // Inform the delegate
     didExecute(EXC_ADDRESS_ERROR, 3);
 }

@@ -587,18 +587,7 @@ Moira::prefetch()
 template <Core C, Flags F, int delay> void
 Moira::fullPrefetch()
 {
-    // Check for address error
-    if (misaligned<C>(reg.pc)) {
-
-        printf("SHOULD NEVER BE REACHED\n");
-        exit(1);
-        /*
-         execAddressError<C>(makeFrame(reg.pc), 2);
-         return;
-         */
-
-        // TODO: DELETE THIS BRANCH
-    }
+    assert(!misaligned<C>(reg.pc));
     
     queue.irc = (u16)readMS<C, MEM_PROG, Word>(reg.pc);
     if (delay) SYNC(delay);
@@ -618,15 +607,9 @@ Moira::noPrefetch(int delay)
 template <Core C> void
 Moira::readExt()
 {
+    assert(!misaligned<C>(reg.pc));
+
     reg.pc += 2;
-    
-    // Check for address error
-    if (misaligned<C>(reg.pc)) {
-        
-        execAddressError<C>(makeFrame(reg.pc));
-        return;
-    }
-    
     queue.irc = (u16)readMS<C, MEM_PROG, Word>(reg.pc);
 }
 
@@ -657,23 +640,21 @@ Moira::jumpToVector(int nr)
     // Check for address error
     if (misaligned<C>(reg.pc)) {
 
-        if (nr != 3) {
-            if (C == C68000) {
+        assert(nr != 3);
 
-                throw AddressError(makeFrame<F|AE_PROG>(reg.pc, vectorAddr));
+        if (C == C68000) {
 
-            } else {
+            throw AddressError(makeFrame<F|AE_PROG>(reg.pc, vectorAddr));
 
-                queue.irc = readBuffer = u16(reg.pc);
-                writeBuffer = u16(4 * nr);
-                if (nr == EXC_ILLEGAL || nr == EXC_LINEA || nr == EXC_LINEF || nr == EXC_PRIVILEGE) {
-                    throw AddressError(makeFrame<F|AE_DEC_PC|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
-                } else {
-                    throw AddressError(makeFrame<F|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
-                }
-            }
         } else {
-            halt(); // Double fault
+
+            queue.irc = readBuffer = u16(reg.pc);
+            writeBuffer = u16(4 * nr);
+            if (nr == EXC_ILLEGAL || nr == EXC_LINEA || nr == EXC_LINEF || nr == EXC_PRIVILEGE) {
+                throw AddressError(makeFrame<F|AE_DEC_PC|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
+            } else {
+                throw AddressError(makeFrame<F|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
+            }
         }
         return;
     }

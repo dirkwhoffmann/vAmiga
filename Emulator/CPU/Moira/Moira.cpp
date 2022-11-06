@@ -325,25 +325,26 @@ Moira::processException(const std::exception &exception)
 template <Core C> void
 Moira::processException(const std::exception &exception)
 {
-    auto aerror = dynamic_cast<const AddressError *>(&exception);
-    if (aerror) {
+    try {
 
-        execAddressError<C>(aerror->stackFrame);
-        return;
-    }
+        auto aerror = dynamic_cast<const AddressError *>(&exception);
+        if (aerror) {
 
-    /*
-    auto adrerror = dynamic_cast<const AddressErrorException *>(&exception);
-    if (adrerror) {
+            execAddressError<C>(aerror->stackFrame);
+            return;
+        }
 
-        return;
-    }
-    */
+        auto berror = dynamic_cast<const BusErrorException *>(&exception);
+        if (berror) {
 
-    auto berror = dynamic_cast<const BusErrorException *>(&exception);
-    if (berror) {
+            execException(EXC_BUS_ERROR);
+            return;
+        }
 
-        execException(EXC_BUS_ERROR);
+    } catch (std::exception &) {
+
+        // Halt the CPU (double fault)
+        halt();
         return;
     }
 
