@@ -570,7 +570,7 @@ Moira::dasmChk(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = Dn       ( ____xxx_________(op)       );
 
-    if (str.style != DASM_MUSASHI && !isAvailable(I, M, S)) {
+    if (str.style != DASM_MUSASHI && !isAvailable(dasmModel, I, M, S)) {
 
         addr = old;
         dasmIllegal<I, M, S>(str, addr, op);
@@ -1219,7 +1219,7 @@ Moira::dasmMoves(StrWriter &str, u32 &addr, u16 op)
     auto ea = Op <M,S> ( _____________xxx(op), addr );
     auto rg = Rn ( xxxx____________(ext) );
 
-    if (str.style != DASM_MUSASHI && !isAvailable(I, M, S, ext)) {
+    if (str.style != DASM_MUSASHI && !isAvailable(dasmModel, I, M, S, ext)) {
 
         addr = old;
         dasmIllegal<I, M, S>(str, addr, op);

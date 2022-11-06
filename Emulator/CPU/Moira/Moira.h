@@ -38,8 +38,11 @@ public:
 protected:
     
     // The emulated CPU model
-    Model model = M68000;
-    
+    Model model = M68000;  // REPLACE BY cpuModel
+
+    // The CPU model used by the disassembler
+    Model dasmModel = M68000;
+
     // The interrupt mode of this CPU
     IrqMode irqMode = IRQ_AUTO;
     
@@ -174,11 +177,11 @@ public:
 protected:
     
     // Creates the generic jump table
-    void createJumpTable(bool regDasm = true);
+    void createJumpTable(Model model, bool registerDasm = true);
     
 private:
     
-    template <Core C> void createJumpTable(bool regDasm);
+    template <Core C> void createJumpTable(Model model, bool registerDasm);
 
 
     //
@@ -480,10 +483,10 @@ protected:
     u16 availabilityMask(Instr I, Mode M, Size S);
     u16 availabilityMask(Instr I, Mode M, Size S, u16 ext);
 
-    // Checks if the currently selected CPU model supports a given instruction
-    bool isAvailable(Instr I);
-    bool isAvailable(Instr I, Mode M, Size S);
-    bool isAvailable(Instr I, Mode M, Size S, u16 ext);
+    // Checks if a certain CPU model supports a given instruction
+    bool isAvailable(Model model, Instr I);
+    bool isAvailable(Model model, Instr I, Mode M, Size S);
+    bool isAvailable(Model model, Instr I, Mode M, Size S, u16 ext);
 
 private:
 

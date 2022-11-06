@@ -154,33 +154,29 @@ parse(const char *s, int sum = 0)
 }
 
 void
-Moira::createJumpTable(bool regDasm)
+Moira::createJumpTable(Model model, bool regDasm)
 {
     switch (model) {
 
         case M68000:
 
-            createJumpTable<C68000>(regDasm);
+            createJumpTable<C68000>(model, regDasm);
             break;
 
         case M68010:
 
-            createJumpTable<C68010>(regDasm);
+            createJumpTable<C68010>(model, regDasm);
             break;
 
         case M68EC020:
         case M68020:
         case M68EC030:
         case M68030:
-
-            createJumpTable<C68020>(regDasm);
-            break;
-
         case M68EC040:
         case M68LC040:
         case M68040:
 
-            createJumpTable<C68020>(regDasm);
+            createJumpTable<C68020>(model, regDasm);
             break;
 
         default:
@@ -189,7 +185,7 @@ Moira::createJumpTable(bool regDasm)
 }
 
 template <Core C> void
-Moira::createJumpTable(bool regDasm)
+Moira::createJumpTable(Model model, bool regDasm)
 {
     u16 opcode;
     

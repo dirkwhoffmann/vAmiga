@@ -605,7 +605,7 @@ CPU::_load(const u8 *buffer)
     applyToResetItems(reader);
 
     if (oldModel != config.revision) {
-        createJumpTable();
+        createJumpTable(model);
     }
 
     return isize(reader.ptr - buffer);

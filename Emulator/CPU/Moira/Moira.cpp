@@ -31,7 +31,7 @@ Moira::Moira(Amiga &ref) : SubComponent(ref)
     if (BUILD_INSTR_INFO_TABLE) info = new InstrInfo[65536];
     if (ENABLE_DASM) dasm = new DasmPtr[65536];
     
-    createJumpTable();
+    createJumpTable(model);
 }
 
 Moira::~Moira()
@@ -46,7 +46,7 @@ Moira::setModel(Model model)
     if (this->model != model) {
         
         this->model = model;
-        createJumpTable();
+        createJumpTable(model);
 
         reg.cacr &= cacrMask();
         flags &= ~CPU_IS_LOOPING;
@@ -667,19 +667,19 @@ u16 Moira::availabilityMask(Instr I, Mode M, Size S, u16 ext)
 }
 
 bool
-Moira::isAvailable(Instr I)
+Moira::isAvailable(Model model, Instr I)
 {
     return availabilityMask(I) & (1 << model);
 }
 
 bool
-Moira::isAvailable(Instr I, Mode M, Size S)
+Moira::isAvailable(Model model, Instr I, Mode M, Size S)
 {
     return availabilityMask(I, M, S) & (1 << model);
 }
 
 bool
-Moira::isAvailable(Instr I, Mode M, Size S, u16 ext)
+Moira::isAvailable(Model model, Instr I, Mode M, Size S, u16 ext)
 {
     return availabilityMask(I, M, S, ext) & (1 << model);
 }
