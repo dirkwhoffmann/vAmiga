@@ -2403,94 +2403,81 @@ Moira::execJsr(u16 opcode)
     [[maybe_unused]] const int delay[] = { 0,0,0,0,0,2,4,2,0,2,4,0 };
     SYNC(delay[M]);
 
-    // Check for address errors
-    if constexpr (C == C68000) {
+    switch (C) {
 
-        if (isDspMode(M) && misaligned<C>(ea)) {
-            throw AddressError(makeFrame<AE_DEC_PC>(ea));
-        }
-        if (misaligned<C>(ea)) {
-            throw AddressError(makeFrame(ea));
-        }
+        case C68000:
 
-    } else {
-
-        if (misaligned<C>(ea) && misaligned<C>(reg.sp)) {
-
-            if (M == MODE_AI) {
-
-                queue.irc = (u16)readMS<C, MEM_PROG, Word>(ea & ~1);
-                throw AddressError(makeFrame<AE_SET_IF|AE_SET_RW>(ea));
+            // Check for address errors
+            if (isDspMode(M) && misaligned<C>(ea)) {
+                throw AddressError(makeFrame<AE_DEC_PC>(ea));
             }
-
-            if (isAbsMode(M)) {
-
-                auto frame = makeFrame<AE_SET_IF|AE_SET_RW>(ea);
-                frame.pc -= 4;
-                throw AddressError(frame);
-            }
-            if (isDspMode(M)) {
-
-                throw AddressError(makeFrame<AE_DEC_PC|AE_SET_IF|AE_SET_RW>(ea));
-
-            } else {
-
+            if (misaligned<C>(ea)) {
                 throw AddressError(makeFrame(ea));
             }
-        }
 
-        if (misaligned<C>(ea)) {
+            // Save return address on stack
+            push<C, Long>(reg.pc);
 
-            if (isDspMode(M)) {
+            // Jump to new address
+            reg.pc = ea;
 
-                throw AddressError(makeFrame<AE_SET_IF|AE_SET_RW>(ea));
+            queue.irc = (u16)readMS<C, MEM_PROG, Word>(ea);
+            prefetch<C, POLLIPL>();
+            break;
 
-            } else {
+        default:
 
-                throw AddressError(makeFrame(ea));
+            // Check for address errors
+            if (misaligned<C>(ea) && misaligned<C>(reg.sp)) {
+
+                if (M == MODE_AI) {
+
+                    queue.irc = (u16)readMS<C, MEM_PROG, Word>(ea & ~1);
+                    throw AddressError(makeFrame<AE_SET_IF|AE_SET_RW>(ea));
+                }
+
+                if (isAbsMode(M)) {
+
+                    auto frame = makeFrame<AE_SET_IF|AE_SET_RW>(ea);
+                    frame.pc -= 4;
+                    throw AddressError(frame);
+                }
+                if (isDspMode(M)) {
+
+                    throw AddressError(makeFrame<AE_DEC_PC|AE_SET_IF|AE_SET_RW>(ea));
+
+                } else {
+
+                    throw AddressError(makeFrame(ea));
+                }
             }
-        }
 
-        if (misaligned<C>(reg.sp)) {
+            if (misaligned<C>(ea)) {
 
-            if (isDspMode(M)) {
+                if (isDspMode(M)) {
+                    throw AddressError(makeFrame<AE_SET_IF|AE_SET_RW>(ea));
+                } else {
+                    throw AddressError(makeFrame(ea));
+                }
+            }
+
+            if (misaligned<C>(reg.sp)) {
 
                 prefetch<C>();
                 reg.sp -= 4;
                 writeBuffer = HI_WORD(reg.pc);
                 throw AddressError(makeFrame<AE_DATA>(reg.sp));
-
-            } else {
-
-                prefetch<C>();
-                reg.sp -= 4;
-                writeBuffer = HI_WORD(reg.pc);
-                throw AddressError(makeFrame<AE_DATA>(reg.sp));
             }
-        }
-    }
 
-    if constexpr (C == C68000) {
+            // Save return address on stack
+            push<C, Long, POLLIPL>(reg.pc);
 
-        // Save return address on stack
-        push<C, Long>(reg.pc);
+            // Jump to new address
+            reg.pc = ea;
 
-        // Jump to new address
-        reg.pc = ea;
-
-        queue.irc = (u16)readMS<C, MEM_PROG, Word>(ea);
-        prefetch<C, POLLIPL>();
-
-    } else {
-
-        // Save return address on stack
-        push<C, Long, POLLIPL>(reg.pc);
-
-        // Jump to new address
-        reg.pc = ea;
-
-        queue.irc = (u16)readMS<C, MEM_PROG, Word>(ea);
-        prefetch<C>();
+            queue.irc = (u16)readMS<C, MEM_PROG, Word>(ea);
+            prefetch<C>();
+            break;
     }
 
     //           00  10  20        00  10  20        00  10  20
