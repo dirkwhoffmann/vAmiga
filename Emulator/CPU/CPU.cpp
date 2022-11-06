@@ -293,23 +293,17 @@ CPU::getConfigItem(Option option) const
 void
 CPU::setConfigItem(Option option, i64 value)
 {
-    auto model = [&](CPURevision rev) {
-
-        switch (rev) {
-
-            case CPU_68000:     return moira::M68000;
-            case CPU_68010:     return moira::M68010;
-            case CPU_68EC020:   return moira::M68EC020;
-            case CPU_68020:     return moira::M68020;
-
-            default:
-                fatalError;
-        }
-    };
+    auto model = [&](CPURevision rev) { return moira::Model(rev); };
 
     switch (option) {
 
         case OPT_CPU_REVISION:
+
+            if (value >= CPU_68EC030 && value <= CPU_68040) {
+                throw VAError(ERROR_CPU_UNSUPPORTED, CPURevisionEnum::key(value));
+            }
+            [[fallthrough]];
+
         case OPT_CPU_DASM_REVISION:
 
             if (!CPURevisionEnum::isValid(value)) {
@@ -723,49 +717,6 @@ CPU::jump(u32 addr)
         debugger.jump(addr);
     }
 }
-
-/*
-void
-CPU::signalJsrBsrInstr(u16 opcode, u32 oldPC, u32 newPC)
-{
-    if (amiga.inDebugMode()) {
-        
-        trace(CST_DEBUG, "JSR/BSR: %x -> %x [%ld]\n", oldPC, newPC, callstack.count());
-        
-        if (callstack.isFull()) {
-            
-            debug(CST_DEBUG, "JSR/BSR: Large stack\n");
-            (void)callstack.read();
-        }
-        
-        CallStackEntry entry;
-        entry.opcode = opcode;
-        entry.oldPC = oldPC;
-        entry.newPC = newPC;
-        for (isize i = 0; i < 8; i++) entry.d[i] = reg.d[i];
-        for (isize i = 0; i < 8; i++) entry.a[i] = reg.a[i];
-        
-        callstack.write(entry);
-    }
-}
-
-void
-CPU::signalRtsRtdInstr(const string &instr)
-{
-    if (amiga.inDebugMode()) {
-        
-        trace(CST_DEBUG, "%s [%ld]\n", instr.c_str(), callstack.count());
-        
-        if (callstack.isEmpty()) {
-            
-            trace(CST_DEBUG, "%s: Empty stack\n", instr.c_str());
-            return;
-        }
-        
-        (void)callstack.read();
-    }
-}
-*/
 
 void
 CPU::setBreakpoint(u32 addr)

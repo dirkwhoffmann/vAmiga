@@ -179,8 +179,9 @@
                 <outlet property="cpuDFC" destination="L8m-LR-47x" id="Q8Z-Jk-mB4"/>
                 <outlet property="cpuDFClabel" destination="XRn-gS-B5c" id="KDW-m0-XMQ"/>
                 <outlet property="cpuDasmRev1" destination="lbO-wB-5cH" id="Wp4-0W-kGb"/>
+                <outlet property="cpuDasmRev2" destination="qJy-aR-FpH" id="IGA-4K-N7a"/>
                 <outlet property="cpuDasmStyle1" destination="XT2-ik-3Zd" id="fla-B3-f3x"/>
-                <outlet property="cpuDasmStyle2" destination="4vn-i8-Na7" id="xgW-2L-2gA"/>
+                <outlet property="cpuDasmStyle2" destination="m8u-Aq-uJf" id="zb5-mm-ycX"/>
                 <outlet property="cpuFC0" destination="Buj-9O-cUg" id="CLF-FP-z0G"/>
                 <outlet property="cpuFC1" destination="PlM-8c-FWz" id="YEj-x3-Lrb"/>
                 <outlet property="cpuFC2" destination="aVF-7r-v8Y" id="uam-d3-W4u"/>
@@ -1499,7 +1500,7 @@
                                                                 </connections>
                                                             </searchField>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yzb-bf-dNy">
-                                                                <rect key="frame" x="156" y="337" width="49" height="16"/>
+                                                                <rect key="frame" x="139" y="337" width="49" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Syntax:" id="ds9-Vj-OYH">
                                                                     <font key="font" metaFont="system"/>
@@ -1508,11 +1509,11 @@
                                                                 </textFieldCell>
                                                             </textField>
                                                             <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lbO-wB-5cH">
-                                                                <rect key="frame" x="302" y="331" width="96" height="25"/>
+                                                                <rect key="frame" x="298" y="334" width="96" height="19"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <popUpButtonCell key="cell" type="roundTextured" title="68000" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="vzm-P6-kO8" id="5be-ty-b03">
+                                                                <popUpButtonCell key="cell" type="roundRect" title="68000" bezelStyle="roundedRect" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="vzm-P6-kO8" id="5be-ty-b03">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="menu"/>
+                                                                    <font key="font" metaFont="cellTitle"/>
                                                                     <menu key="menu" id="Tp9-L7-gLa">
                                                                         <items>
                                                                             <menuItem title="68000" state="on" id="vzm-P6-kO8"/>
@@ -1536,11 +1537,11 @@
                                                                 </connections>
                                                             </popUpButton>
                                                             <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XT2-ik-3Zd">
-                                                                <rect key="frame" x="205" y="331" width="96" height="25"/>
+                                                                <rect key="frame" x="194" y="334" width="96" height="19"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <popUpButtonCell key="cell" type="roundTextured" title="Motorola" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="1kW-Ow-zBB" id="H2M-we-SHF">
+                                                                <popUpButtonCell key="cell" type="roundRect" title="Motorola" bezelStyle="roundedRect" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="1kW-Ow-zBB" id="H2M-we-SHF">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="menu"/>
+                                                                    <font key="font" metaFont="cellTitle"/>
                                                                     <menu key="menu" id="YML-pW-Fu1">
                                                                         <items>
                                                                             <menuItem title="Motorola" state="on" id="1kW-Ow-zBB"/>
@@ -1570,7 +1571,7 @@
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" id="GzR-dn-mO8">
                                                                     <rect key="frame" x="1" y="1" width="385" height="313"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="DdI-Dc-nEd" id="9F9-Qx-tLH" customClass="TraceTableView" customModule="vAmiga" customModuleProvider="target">
                                                                             <rect key="frame" x="0.0" y="0.0" width="385" height="288"/>
@@ -1648,7 +1649,7 @@
                                                                 </connections>
                                                             </button>
                                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tfP-My-zXg">
-                                                                <rect key="frame" x="205" y="338" width="49" height="16"/>
+                                                                <rect key="frame" x="139" y="337" width="49" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Syntax:" id="XmQ-HW-vyC">
                                                                     <font key="font" metaFont="system"/>
@@ -1656,26 +1657,54 @@
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>
-                                                            <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4vn-i8-Na7">
-                                                                <rect key="frame" x="255" y="331" width="143" height="25"/>
+                                                            <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m8u-Aq-uJf">
+                                                                <rect key="frame" x="194" y="334" width="96" height="19"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <popUpButtonCell key="cell" type="roundTextured" title="Motorola" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="3fi-AM-iNw" id="uCQ-bd-udh">
+                                                                <popUpButtonCell key="cell" type="roundRect" title="Motorola" bezelStyle="roundedRect" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="sAE-Dg-nuj" id="PCv-PZ-V9i">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="menu"/>
-                                                                    <menu key="menu" id="dJf-2d-rUc">
+                                                                    <font key="font" metaFont="cellTitle"/>
+                                                                    <menu key="menu" id="wvW-96-mNT">
                                                                         <items>
-                                                                            <menuItem title="Motorola" state="on" id="3fi-AM-iNw"/>
-                                                                            <menuItem title="MIT" tag="1" id="o8X-Wa-5db"/>
-                                                                            <menuItem isSeparatorItem="YES" id="lb4-zO-UHq"/>
-                                                                            <menuItem title="GNU Motorola" tag="2" id="03z-ye-Aq6"/>
-                                                                            <menuItem title="GNU MIT" tag="3" id="wai-MR-P6f"/>
-                                                                            <menuItem isSeparatorItem="YES" id="IcU-wX-Nn5"/>
-                                                                            <menuItem title="Musashi" tag="4" id="Ppo-oQ-CI3"/>
+                                                                            <menuItem title="Motorola" state="on" id="sAE-Dg-nuj"/>
+                                                                            <menuItem title="MIT" tag="1" id="Imj-kc-tmm"/>
+                                                                            <menuItem isSeparatorItem="YES" id="6tm-A0-afK"/>
+                                                                            <menuItem title="GNU" tag="2" id="nei-wq-ngX"/>
+                                                                            <menuItem title="GNU MIT" tag="3" id="LVd-Lm-0ba"/>
+                                                                            <menuItem isSeparatorItem="YES" id="vgL-lo-Huf"/>
+                                                                            <menuItem title="Musashi" tag="4" id="ljM-EJ-NlM"/>
                                                                         </items>
                                                                     </menu>
                                                                 </popUpButtonCell>
                                                                 <connections>
-                                                                    <action selector="cpuSyntaxAction:" target="-2" id="LQR-Uq-T9C"/>
+                                                                    <action selector="cpuSyntaxAction:" target="-2" id="YXA-Ju-Ubh"/>
+                                                                </connections>
+                                                            </popUpButton>
+                                                            <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qJy-aR-FpH">
+                                                                <rect key="frame" x="298" y="334" width="96" height="19"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <popUpButtonCell key="cell" type="roundRect" title="68000" bezelStyle="roundedRect" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="uK9-xc-vFS" id="Esf-S6-3lb">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="cellTitle"/>
+                                                                    <menu key="menu" id="cIt-Bz-Y9D">
+                                                                        <items>
+                                                                            <menuItem title="68000" state="on" id="uK9-xc-vFS"/>
+                                                                            <menuItem isSeparatorItem="YES" id="gCD-Si-LVT"/>
+                                                                            <menuItem title="68010" tag="1" id="4YJ-qa-ex4"/>
+                                                                            <menuItem isSeparatorItem="YES" id="UGN-4k-L9j"/>
+                                                                            <menuItem title="68EC020" tag="2" id="R80-kE-zcR"/>
+                                                                            <menuItem title="68020" tag="3" id="5Vo-Ab-mTm"/>
+                                                                            <menuItem isSeparatorItem="YES" id="r8Q-24-qGQ"/>
+                                                                            <menuItem title="68EC030" tag="4" id="YHL-LY-fYB"/>
+                                                                            <menuItem title="68030" tag="5" id="pLf-zI-SMA"/>
+                                                                            <menuItem isSeparatorItem="YES" id="v8m-nt-e9s"/>
+                                                                            <menuItem title="68EC040" tag="6" id="NDp-Ra-muU"/>
+                                                                            <menuItem title="68LC040" tag="7" id="1hg-q5-0l5"/>
+                                                                            <menuItem title="68040" tag="8" id="vpF-tc-uGL"/>
+                                                                        </items>
+                                                                    </menu>
+                                                                </popUpButtonCell>
+                                                                <connections>
+                                                                    <action selector="cpuDasmRevAction:" target="-2" id="5ah-Nf-IpV"/>
                                                                 </connections>
                                                             </popUpButton>
                                                         </subviews>
@@ -1698,7 +1727,7 @@
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <clipView key="contentView" drawsBackground="NO" id="lYO-RC-hWy">
                                                                                 <rect key="frame" x="1" y="1" width="161" height="305"/>
-                                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="bK4-tf-JR6" id="pd6-3V-YaN" customClass="BreakTableView" customModule="vAmiga" customModuleProvider="target">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="168" height="280"/>
@@ -1779,7 +1808,7 @@
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <clipView key="contentView" drawsBackground="NO" id="K6U-NB-Phg">
                                                                                 <rect key="frame" x="1" y="1" width="162" height="305"/>
-                                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="vNZ-f6-Hoj" id="g7V-Rx-9ei" customClass="WatchTableView" customModule="vAmiga" customModuleProvider="target">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="168" height="280"/>

@@ -52,6 +52,10 @@ extension Inspector {
             cpuDasmStyle1.selectItem(withTag: style)
             cpuDasmStyle2.selectItem(withTag: style)
 
+            let dasmRev = amiga.getConfig(.CPU_DASM_REVISION)
+            cpuDasmRev1.selectItem(withTag: dasmRev)
+            cpuDasmRev2.selectItem(withTag: dasmRev)
+
             let rev = CPURevision(rawValue: amiga.getConfig(.CPU_REVISION))
             let below10 = rev == ._68000
             let below20 = rev == ._68000 || rev == ._68010

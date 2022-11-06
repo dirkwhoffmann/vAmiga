@@ -50,39 +50,43 @@ VAError::VAError(ErrorCode code, const string &s)
             break;
 
         case ERROR_INVALID_KEY:
-            description = "Invalid key: " + s;
+            description = "Invalid key: " + s + ".";
             break;
             
         case ERROR_SYNTAX:
-            description = "Syntax error in line " + s;
+            description = "Syntax error in line " + s + ".";
+            break;
+
+        case ERROR_CPU_UNSUPPORTED:
+            description = "CPU revision is not supported yet.";
             break;
 
         case ERROR_BP_NOT_FOUND:
-            description = "Breakpoint " + s + " not found";
+            description = "Breakpoint " + s + " not found.";
             break;
             
         case ERROR_BP_ALREADY_SET:
-            description = "A breakpoint at " + s + " is already set";
+            description = "A breakpoint at " + s + " is already set.";
             break;
             
         case ERROR_WP_NOT_FOUND:
-            description = "Watchpoint " + s + " not found";
+            description = "Watchpoint " + s + " not found.";
             break;
 
         case ERROR_WP_ALREADY_SET:
-            description = "A watchpoint at " + s + " is already set";
+            description = "A watchpoint at " + s + " is already set.";
             break;
 
         case ERROR_CP_NOT_FOUND:
-            description = "Catchpoint " + s + " not found";
+            description = "Catchpoint " + s + " not found.";
             break;
 
         case ERROR_CP_ALREADY_SET:
-            description = "This catchpoint is already set";
+            description = "This catchpoint is already set.";
             break;
 
         case ERROR_CP_CANT_CATCH:
-            description = "Exception vector " + s + " cannot be catched";
+            description = "Exception vector " + s + " cannot be catched.";
             break;
             
         case ERROR_DIR_NOT_FOUND:

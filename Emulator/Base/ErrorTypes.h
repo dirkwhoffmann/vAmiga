@@ -33,6 +33,7 @@ enum_long(ERROR_CODE)
     ERROR_SYNTAX,
 
     // CPU
+    ERROR_CPU_UNSUPPORTED,
     ERROR_BP_NOT_FOUND,
     ERROR_BP_ALREADY_SET,
     ERROR_WP_NOT_FOUND,
@@ -214,6 +215,7 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_INVALID_KEY:                 return "INVALID_KEY";
             case ERROR_SYNTAX:                      return "SYNTAX";
                 
+            case ERROR_CPU_UNSUPPORTED:             return "CPU_UNSUPPORTED";
             case ERROR_BP_NOT_FOUND:                return "BP_NOT_FOUND";
             case ERROR_BP_ALREADY_SET:              return "BP_ALREADY_SET";
             case ERROR_WP_NOT_FOUND:                return "WP_NOT_FOUND";
