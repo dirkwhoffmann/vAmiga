@@ -11,7 +11,8 @@
                 <outlet property="activityBar" destination="212" id="Enu-fB-P92"/>
                 <outlet property="activityInfo" destination="oNV-mZ-JGc" id="HDY-Cq-tSN"/>
                 <outlet property="activityType" destination="0go-7K-IPf" id="caX-Zm-vUc"/>
-                <outlet property="cmdLock" destination="Qzo-AS-059" id="L1Y-30-MFU"/>
+                <outlet property="cmdLeftIcon" destination="dpd-DV-6eT" id="Ixb-aG-SB3"/>
+                <outlet property="cmdRightIcon" destination="1Ke-5u-05P" id="G6a-dT-XWP"/>
                 <outlet property="cylSlot0" destination="f19-16-42W" id="qi6-Qi-Wnz"/>
                 <outlet property="cylSlot1" destination="f7g-mT-LE7" id="L3Z-kO-mNv"/>
                 <outlet property="cylSlot2" destination="P62-wC-T1P" id="CiL-FT-qxc"/>
@@ -187,9 +188,17 @@
                         </buttonCell>
                     </button>
                     <button tag="2" id="46l-A8-v8C" userLabel="Halt">
-                        <rect key="frame" x="507" y="3" width="20" height="20"/>
+                        <rect key="frame" x="506" y="3" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="haltTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="Qoa-ac-fgt">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
+                    <button tag="2" id="1Ke-5u-05P" userLabel="Halt">
+                        <rect key="frame" x="476" y="3" width="20" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="cmdKeyTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="I2d-4O-y9r">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -236,10 +245,10 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button tag="2" id="Qzo-AS-059" userLabel="Halt">
-                        <rect key="frame" x="461" y="3" width="39" height="20"/>
+                    <button tag="2" id="dpd-DV-6eT" userLabel="Halt">
+                        <rect key="frame" x="454" y="3" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="cmdLockTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="nah-aa-GCT">
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="cmdKeyTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="R0x-fF-Es0">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -444,7 +453,7 @@
     <resources>
         <image name="bugTemplate" width="241" height="241"/>
         <image name="clickTemplate" width="36" height="36"/>
-        <image name="cmdLockTemplate" width="228" height="156"/>
+        <image name="cmdKeyTemplate" width="240" height="240"/>
         <image name="confTemplate" width="37" height="36"/>
         <image name="consoleTemplate" width="176" height="176"/>
         <image name="devGamepad1Template" width="20" height="21"/>

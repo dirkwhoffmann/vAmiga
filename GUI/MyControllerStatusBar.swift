@@ -8,7 +8,12 @@
 // -----------------------------------------------------------------------------
 
 extension MyController {
-    
+
+    func cmdKeyIcon(_ state: Bool) -> NSImage? {
+
+        return NSImage(named: state ? "amigaKeyTemplate" : "cmdKeyTemplate")
+    }
+
     var hourglassIcon: NSImage? {
         
         switch pref.warpMode {
@@ -48,7 +53,13 @@ extension MyController {
             refreshStatusBar(drive: n, cylinder: hdn.currentCyl)
             refreshStatusBar(drive: n, icon: hdn.templateIcon, toolTip: hdn.toolTip)
         }
-                        
+
+        // Command key icon
+        let mapLeft = myAppDelegate.mapLeftCmdKey
+        let mapRight = myAppDelegate.mapRightCmdKey
+        cmdLeftIcon.image = cmdKeyIcon(mapLeft)
+        cmdRightIcon.image = cmdKeyIcon(mapRight)
+
         // Remote server icon
         debugIcon.image = amiga.remoteManager.icon
         
@@ -74,7 +85,8 @@ extension MyController {
             cylSlot3: true,
 
             haltIcon: halted,
-            cmdLock: myAppDelegate.mapLeftCmdKey || myAppDelegate.mapRightCmdKey,
+            cmdLeftIcon: false, // mapLeft || mapRight,
+            cmdRightIcon: false, // mapLeft || mapRight,
             debugIcon: true,
             muteIcon: warp || muted,
 

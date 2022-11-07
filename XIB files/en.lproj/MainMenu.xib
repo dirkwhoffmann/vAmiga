@@ -296,20 +296,20 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="9ee-jY-6ug"/>
-                            <menuItem title="Map Left ⌘ to Amiga key" id="510">
+                            <menuItem title="Map Left ⌘ Key to Left Amiga Key" id="510">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="mapLeftCmdKeyAction:" target="-1" id="6t5-eB-ZYU"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Map Right ⌘ to Amiga key" id="PbJ-of-yYs">
+                            <menuItem title="Map Right ⌘ Key to Right Amiga Key" id="PbJ-of-yYs">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="mapRightCmdKeyAction:" target="-1" id="Z3K-od-06m"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="i1a-9I-H6M"/>
-                            <menuItem title="Reset keyboard handler" id="8aX-Ro-7wg">
+                            <menuItem title="Reset Keyboard Handler" id="8aX-Ro-7wg">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="clearKeyboardMatrixAction:" target="-1" id="sGi-3e-BCA"/>
