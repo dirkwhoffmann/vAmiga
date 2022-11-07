@@ -9,7 +9,42 @@
 
 import Cocoa
 
+@objc(MyApplication)
+class MyApplication: NSApplication {
+
+    var disableCmdKey = false
+
+    override func sendEvent(_ event: NSEvent) {
+
+        if disableCmdKey {
+
+            if event.type == NSEvent.EventType.keyUp {
+
+                if event.modifierFlags.contains(.command) {
+
+                    debug(.events, "keyUp: Removing CMD flag")
+                    event.cgEvent!.flags.remove(.maskCommand)
+                    super.sendEvent(NSEvent(cgEvent: event.cgEvent!)!)
+                    return
+                }
+            }
+            if event.type == NSEvent.EventType.keyDown {
+
+                if event.modifierFlags.contains(.command) {
+
+                    debug(.events, "keyDown: Removing CMD flag")
+                    event.cgEvent!.flags.remove(.maskCommand)
+                    super.sendEvent(NSEvent(cgEvent: event.cgEvent!)!)
+                    return
+                }
+            }
+        }
+        super.sendEvent(event)
+    }
+}
+
 var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
+var myApp: MyApplication { return NSApp as! MyApplication }
 
 @NSApplicationMain
 @objc public class MyAppDelegate: NSObject, NSApplicationDelegate {
@@ -27,12 +62,9 @@ var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     // Replace the old document controller by instantiating a custom controller
     let myDocumentController = MyDocumentController()
 
-    /* An event tap for interception CGEvents. CGEvents are intercepted to
-     * establish a direct mapping of the Command keys to the Amiga keys. To
-     * make such a mapping work, we have to disable all keyboard shortcuts,
-     * even the system-wide ones.
-     */
-    var eventTap: CFMachPort?
+    // Indicates if Cmd keys should be mapped to Amiga keys
+    var mapLeftCmdKey = false
+    var mapRightCmdKey = false
 
     // Preferences
     var pref: Preferences!
@@ -198,8 +230,10 @@ extension MyAppDelegate {
     }
 
     // Use this variable to switch direct mapping of the Command keys on or off
-    var mapCommandKeys: Bool {
-        
+/*
+    var mapCommandKeys: Bool
+    {
+
         get {
             return eventTap != nil
         }
@@ -216,16 +250,6 @@ extension MyAppDelegate {
                 
                 debug(.events, "Trying to disable keyboard shortcuts...")
                 
-                /* To disable keyboard shortcuts, we are going to filter out the
-                 * Command flag from all keyUp and keyDown CGEvents by installing
-                 * a CGEvent callback. Doing so requires accessability priviledges.
-                 * Hence, we first check if we have the priviledges and prompt the
-                 * user if we don't. In this case, the operation will fail and we
-                 * won't be able to disable shortcuts. In the meantime however, the
-                 * user has the ability to grant us access in the system
-                 * preferences. If he trust us, we'll pass this chechpoint in the
-                 * next function call.
-                 */
                 let trusted = kAXTrustedCheckOptionPrompt.takeUnretainedValue()
                 let privOptions = [trusted: true] as CFDictionary
                 
@@ -263,6 +287,7 @@ extension MyAppDelegate {
             }
         }
     }
+    */
 }
 
 // To establish a direct mapping of the Command keys to the Amiga keys, this
@@ -270,6 +295,7 @@ extension MyAppDelegate {
 // out the Command key modifier flag. As a result, all keyboard shortcuts are
 // disabled and all keys that are pressed in combination with the Command key
 // will trigger a standard Cocoa key event.
+/*
 func cgEventCallback(proxy: CGEventTapProxy,
                      type: CGEventType,
                      event: CGEvent,
@@ -278,3 +304,4 @@ func cgEventCallback(proxy: CGEventTapProxy,
     event.flags.remove(.maskCommand)
     return Unmanaged.passRetained(event)
 }
+*/

@@ -193,9 +193,6 @@
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
-                        <connections>
-                            <action selector="mapCmdKeysAction:" target="-2" id="4rP-jE-apn"/>
-                        </connections>
                     </button>
                     <button toolTip="Warp mode" id="1052">
                         <rect key="frame" x="703" y="4" width="18" height="18"/>

@@ -74,7 +74,7 @@ extension MyController {
             cylSlot3: true,
 
             haltIcon: halted,
-            cmdLock: myAppDelegate.mapCommandKeys,
+            cmdLock: myAppDelegate.mapLeftCmdKey || myAppDelegate.mapRightCmdKey,
             debugIcon: true,
             muteIcon: warp || muted,
 

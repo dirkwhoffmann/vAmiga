@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21225" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21225"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication"/>
@@ -296,10 +296,16 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="9ee-jY-6ug"/>
-                            <menuItem title="Map ⌘ to Amiga keys" id="510">
+                            <menuItem title="Map Left ⌘ to Amiga key" id="510">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="mapCmdKeysAction:" target="-1" id="m4N-sa-PeA"/>
+                                    <action selector="mapLeftCmdKeyAction:" target="-1" id="6t5-eB-ZYU"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Map Right ⌘ to Amiga key" id="PbJ-of-yYs">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="mapRightCmdKeyAction:" target="-1" id="Z3K-od-06m"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="i1a-9I-H6M"/>

@@ -50,7 +50,7 @@ class KeyboardController: NSObject {
     }
     
     func keyDown(with event: NSEvent) {
-        
+
         // Intercept if the console is open
         if renderer.console.isVisible { renderer.console.keyDown(with: event); return }
                 
@@ -72,7 +72,7 @@ class KeyboardController: NSObject {
     }
     
     func keyUp(with event: NSEvent) {
-           
+
         // Intercept if the console is open
         if renderer.console.isVisible { renderer.console.keyUp(with: event); return }
 
@@ -80,7 +80,7 @@ class KeyboardController: NSObject {
     }
     
     func flagsChanged(with event: NSEvent) {
-        
+
         // Check for a mouse controlling key combination
         if parent.metal.checkForMouseKeys(with: event) { return }
 
@@ -111,12 +111,14 @@ class KeyboardController: NSObject {
             rightOption = event.modifierFlags.contains(.option) ? !rightOption : false
             rightOption ? keyDown(with: MacKey.rightOption) : keyUp(with: MacKey.rightOption)
             
-        case kVK_Command where myAppDelegate.mapCommandKeys:
+        case kVK_Command where myAppDelegate.mapLeftCmdKey:
             leftCommand = event.modifierFlags.contains(.command) ? !leftCommand : false
+            myApp.disableCmdKey = leftCommand
             leftCommand ? keyDown(with: MacKey.command) : keyUp(with: MacKey.command)
             
-        case kVK_RightCommand where myAppDelegate.mapCommandKeys:
+        case kVK_RightCommand where myAppDelegate.mapRightCmdKey:
             rightCommand = event.modifierFlags.contains(.command) ? !rightCommand : false
+            myApp.disableCmdKey = rightCommand
             rightCommand ? keyDown(with: MacKey.rightCommand) : keyUp(with: MacKey.rightCommand)
 
         default:
@@ -125,7 +127,7 @@ class KeyboardController: NSObject {
     }
     
     func keyDown(with macKey: MacKey) {
-        
+
         // Check if this key is used to emulate a game device
         if parent.gamePad1?.processKeyDownEvent(macKey: macKey) == true {
             if pref.disconnectJoyKeys { return }
@@ -139,7 +141,7 @@ class KeyboardController: NSObject {
     }
     
     func keyUp(with macKey: MacKey) {
-        
+
         // Check if this key is used to emulate a game device
         if parent.gamePad1?.processKeyUpEvent(macKey: macKey) == true {
             if pref.disconnectJoyKeys { return }
@@ -151,21 +153,21 @@ class KeyboardController: NSObject {
         if let amigaKey = macKey.amigaKeyCode { keyboard.releaseKey(amigaKey) }
         parent.virtualKeyboard?.refreshIfVisible()
     }
-    
+
     func keyDown(with keyCode: UInt16) {
-        
+
         let macKey = MacKey(keyCode: keyCode)
         if let amigaKey = macKey.amigaKeyCode { keyboard.pressKey(amigaKey) }
         parent.virtualKeyboard?.refreshIfVisible()
     }
-    
+
     func keyUp(with keyCode: UInt16) {
-        
+
         let macKey = MacKey(keyCode: keyCode)
         if let amigaKey = macKey.amigaKeyCode { keyboard.releaseKey(amigaKey) }
         parent.virtualKeyboard?.refreshIfVisible()
     }
-    
+
     func autoTypeAsync(_ string: String, completion: (() -> Void)? = nil) {
         
         var truncated = string

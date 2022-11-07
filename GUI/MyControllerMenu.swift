@@ -68,10 +68,13 @@ extension MyController: NSMenuItemValidation {
             return true
             
             // Keyboard menu
-        case #selector(MyController.mapCmdKeysAction(_:)):
-            item.state = (myAppDelegate.eventTap != nil) ? .on : .off
+        case #selector(MyController.mapLeftCmdKeyAction(_:)):
+            item.state = myAppDelegate.mapLeftCmdKey ? .on : .off
             return true
-            
+        case #selector(MyController.mapRightCmdKeyAction(_:)):
+            item.state = myAppDelegate.mapRightCmdKey ? .on : .off
+            return true
+
             // Df<n> menu
         case #selector(MyController.insertRecentDiskAction(_:)):
             return validateURLlist(myAppDelegate.insertedFloppyDisks, image: smallDisk)
@@ -396,12 +399,18 @@ extension MyController: NSMenuItemValidation {
         virtualKeyboard?.showWindow()
     }
 
-    @IBAction func mapCmdKeysAction(_ sender: Any!) {
-        
-        myAppDelegate.mapCommandKeys = !myAppDelegate.mapCommandKeys
+    @IBAction func mapLeftCmdKeyAction(_ sender: NSMenuItem!) {
+
+        myAppDelegate.mapLeftCmdKey = !myAppDelegate.mapLeftCmdKey
         refreshStatusBar()
     }
-    
+
+    @IBAction func mapRightCmdKeyAction(_ sender: NSMenuItem!) {
+
+        myAppDelegate.mapRightCmdKey = !myAppDelegate.mapRightCmdKey
+        refreshStatusBar()
+    }
+
     @IBAction func clearKeyboardMatrixAction(_ sender: Any!) {
         
         amiga.keyboard.releaseAllKeys()
