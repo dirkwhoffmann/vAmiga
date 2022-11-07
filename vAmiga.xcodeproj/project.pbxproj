@@ -151,7 +151,7 @@
 		508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00121EA227A0043D0E9 /* GamePadManager.swift */; };
 		508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00221EA227A0043D0E9 /* MemoryPanel.swift */; };
 		508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00921EA227B0043D0E9 /* WindowDelegate.swift */; };
-		508FE02D21EA227B0043D0E9 /* MyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00C21EA227B0043D0E9 /* MyAppDelegate.swift */; };
+		508FE02D21EA227B0043D0E9 /* MyApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00C21EA227B0043D0E9 /* MyApplication.swift */; };
 		508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00E21EA227B0043D0E9 /* MacAudio.swift */; };
 		508FE04E21EA22CC0043D0E9 /* RomConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03B21EA22CC0043D0E9 /* RomConf.swift */; };
 		508FE04F21EA22CC0043D0E9 /* GeneralPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03C21EA22CC0043D0E9 /* GeneralPrefs.swift */; };
@@ -680,7 +680,7 @@
 		508FE00121EA227A0043D0E9 /* GamePadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamePadManager.swift; sourceTree = "<group>"; };
 		508FE00221EA227A0043D0E9 /* MemoryPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoryPanel.swift; sourceTree = "<group>"; };
 		508FE00921EA227B0043D0E9 /* WindowDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowDelegate.swift; sourceTree = "<group>"; };
-		508FE00C21EA227B0043D0E9 /* MyAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAppDelegate.swift; sourceTree = "<group>"; };
+		508FE00C21EA227B0043D0E9 /* MyApplication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyApplication.swift; sourceTree = "<group>"; };
 		508FE00E21EA227B0043D0E9 /* MacAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacAudio.swift; sourceTree = "<group>"; };
 		508FE03B21EA22CC0043D0E9 /* RomConf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RomConf.swift; sourceTree = "<group>"; };
 		508FE03C21EA22CC0043D0E9 /* GeneralPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralPrefs.swift; sourceTree = "<group>"; };
@@ -1336,7 +1336,7 @@
 			children = (
 				50157EEC28257B7C000E9DDD /* Config.swift */,
 				508FDFF921EA22790043D0E9 /* Defaults.swift */,
-				508FE00C21EA227B0043D0E9 /* MyAppDelegate.swift */,
+				508FE00C21EA227B0043D0E9 /* MyApplication.swift */,
 				508FDFF721EA22790043D0E9 /* MyDocument.swift */,
 				508FE00921EA227B0043D0E9 /* WindowDelegate.swift */,
 				5039924225B2164E0084B808 /* MyDocumentController.swift */,
@@ -2186,7 +2186,7 @@
 				50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */,
 				502F7DCE2221706000AEEC65 /* Copper.cpp in Sources */,
 				5071B7872621F88800D6FB54 /* CopperDebugger.cpp in Sources */,
-				508FE02D21EA227B0043D0E9 /* MyAppDelegate.swift in Sources */,
+				508FE02D21EA227B0043D0E9 /* MyApplication.swift in Sources */,
 				50F54B2F24B5D31D0078FDC9 /* getbits.c in Sources */,
 				50AD905A2771B2770011ECCB /* RshServer.cpp in Sources */,
 				508FE05221EA22CC0043D0E9 /* RomDropView.swift in Sources */,

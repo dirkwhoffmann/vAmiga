@@ -43,9 +43,6 @@ class MyApplication: NSApplication {
     }
 }
 
-var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
-var myApp: MyApplication { return NSApp as! MyApplication }
-
 @NSApplicationMain
 @objc public class MyAppDelegate: NSObject, NSApplicationDelegate {
     
@@ -228,80 +225,7 @@ extension MyAppDelegate {
     func devicePulled(events: [GamePadAction]) {
         prefController?.refreshDeviceEvents(events: events)
     }
-
-    // Use this variable to switch direct mapping of the Command keys on or off
-/*
-    var mapCommandKeys: Bool
-    {
-
-        get {
-            return eventTap != nil
-        }
-        
-        set {
-            if newValue == false && eventTap != nil {
-                
-                debug(.events, "Reenabling keyboard shortcuts...")
-                CGEvent.tapEnable(tap: eventTap!, enable: false)
-                eventTap = nil
-            }
-            
-            if newValue == true && eventTap == nil {
-                
-                debug(.events, "Trying to disable keyboard shortcuts...")
-                
-                let trusted = kAXTrustedCheckOptionPrompt.takeUnretainedValue()
-                let privOptions = [trusted: true] as CFDictionary
-                
-                if !AXIsProcessTrustedWithOptions(privOptions) {
-                    
-                    warn("Aborting. Access denied")
-                    return
-                }
-                
-                // Set up an event mask that matches keyDown and keyUp events
-                let mask = CGEventMask(
-                    (1 << CGEventType.keyDown.rawValue) |
-                        (1 << CGEventType.keyUp.rawValue) |
-                        (1 << CGEventType.mouseMoved.rawValue))
-                
-                // Try to create the event tap
-                eventTap = CGEvent.tapCreate(tap: .cgSessionEventTap,
-                                             place: .headInsertEventTap,
-                                             options: .defaultTap,
-                                             eventsOfInterest: mask,
-                                             callback: cgEventCallback,
-                                             userInfo: nil)
-                
-                if eventTap == nil {
-                    
-                    warn("Aborting. Failed to create the event tap.")
-                    return
-                }
-                
-                // Add the event tap to the run loop and enable it
-                let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0)
-                CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
-                CGEvent.tapEnable(tap: eventTap!, enable: true)
-                debug(.events, "Success")
-            }
-        }
-    }
-    */
 }
 
-// To establish a direct mapping of the Command keys to the Amiga keys, this
-// callback is registered. It intercepts keyDown and keyUp events and filters
-// out the Command key modifier flag. As a result, all keyboard shortcuts are
-// disabled and all keys that are pressed in combination with the Command key
-// will trigger a standard Cocoa key event.
-/*
-func cgEventCallback(proxy: CGEventTapProxy,
-                     type: CGEventType,
-                     event: CGEvent,
-                     refcon: UnsafeMutableRawPointer?) -> Unmanaged<CGEvent>? {
-        
-    event.flags.remove(.maskCommand)
-    return Unmanaged.passRetained(event)
-}
-*/
+var myApp: MyApplication { return NSApp as! MyApplication }
+var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
