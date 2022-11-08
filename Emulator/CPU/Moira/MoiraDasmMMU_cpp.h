@@ -62,7 +62,7 @@ Moira::dasmPFlush(StrWriter &str, u32 &addr, u16 op)
     auto fc   = ___________xxxxx (ext);
 
     // Only the MC68851 has four mask bits. The 68030 only has three.
-    if (str.style == DASM_MOIRA_MOT || str.style == DASM_MOIRA_MIT) mask &= 0b111;
+    if (str.style == DASM_MOIRA || str.style == DASM_MOIRA_MIT) mask &= 0b111;
 
     // Catch illegal extension words
     if (str.style == DASM_GNU || str.style == DASM_GNU_MIT) {

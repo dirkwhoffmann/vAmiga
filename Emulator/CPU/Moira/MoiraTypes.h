@@ -67,18 +67,18 @@ constexpr u16 AV_FPU      = 1 << M68040;
 
 typedef enum
 {
-    C68000,             // Used by M68000
-    C68010,             // Used by M68010
-    C68020              // Used by all others
+    C68000,                 // Used by M68000
+    C68010,                 // Used by M68010
+    C68020                  // Used by all others
 }
 Core;
 
 typedef enum
 {
-    DASM_MOIRA_MOT,     // Official syntax styles
+    DASM_MOIRA,             // Official syntax styles
     DASM_MOIRA_MIT,
 
-    DASM_GNU,           // Legacy styles (for unit testing)
+    DASM_GNU,               // Legacy styles (for unit testing)
     DASM_GNU_MIT,
     DASM_MUSASHI,
 }
@@ -86,24 +86,24 @@ DasmStyle;
 
 typedef enum
 {
-    DASM_MIXED_CASE,    // Style is determined by the selected DasmStyle
-    DASM_LOWER_CASE,    // Everything is printed in lowercase
-    DASM_UPPER_CASE     // Everything is printed in uppercase
+    DASM_MIXED_CASE,        // Style is determined by the selected DasmStyle
+    DASM_LOWER_CASE,        // Everything is printed in lowercase
+    DASM_UPPER_CASE         // Everything is printed in uppercase
 }
 DasmLetterCase;
 
 typedef struct
 {
-    const char *prefix; // Prefix for hexidecimal numbers
-    u8 radix;           // 10 or 16
-    bool upperCase;     // Lettercase for hexadecimal digits A...F
-    bool plainZero;     // Determines if 0 is printed with or without prefix
+    const char *prefix;     // Prefix for hexidecimal numbers
+    u8 radix;               // 10 (decimal) or 16 (hexadecimal)
+    bool upperCase;         // Lettercase for hexadecimal digits A...F
+    bool plainZero;         // Determines whether 0 is printed with a prefix
 }
 DasmNumberFormat;
 
 typedef enum
 {
-    // 68000+ instruction set
+    // 68000 instructions
     ABCD,       ADD,        ADDA,       ADDI,       ADDQ,       ADDX,
     AND,        ANDI,       ANDICCR,    ANDISR,     ASL,        ASR,
     BCC,        BCS,        BEQ,        BGE,        BGT,        BHI,
@@ -127,10 +127,10 @@ typedef enum
     SUBA,       SUBI,       SUBQ,       SUBX,       SWAP,       TAS,
     TRAP,       TRAPV,      TST,        UNLK,
     
-    // 68010+ instructions
+    // 68010 instructions
     BKPT,       MOVEC,      MOVES,      RTD,
     
-    // 68020+ instructions
+    // 68020 instructions
     BFCHG,      BFCLR,      BFEXTS,     BFEXTU,     BFFFO,      BFINS,
     BFSET,      BFTST,      CALLM,      CAS,        CAS2,       CHK2,
     CMP2,       cpBcc,      cpDBcc,     cpGEN,      cpRESTORE,  cpSAVE,
@@ -139,7 +139,7 @@ typedef enum
     TRAPHI,     TRAPLE,     TRAPLS,     TRAPLT,     TRAPMI,     TRAPNE,
     TRAPPL,     TRAPVC,     TRAPVS,     TRAPF,      TRAPT,      UNPK,
 
-    // 68040+ instructions
+    // 68040 instructions
     CINV,       CPUSH,      MOVE16,
     
     // MMU instructions
@@ -191,19 +191,19 @@ constexpr bool looping() { return I >= ABCD_LOOP && I <= TST_LOOP; }
 
 typedef enum
 {
-    MODE_DN,                //  0         Dn
-    MODE_AN,                //  1         An
-    MODE_AI,                //  2       (An)
-    MODE_PI,                //  3      (An)+
-    MODE_PD,                //  4      -(An)
-    MODE_DI,                //  5     (d,An)
-    MODE_IX,                //  6  (d,An,Xi)
-    MODE_AW,                //  7   (####).w
-    MODE_AL,                //  8   (####).l
-    MODE_DIPC,              //  9     (d,PC)
-    MODE_IXPC,              // 10  (d,PC,Xi)
-    MODE_IM,                // 11       ####
-    MODE_IP                 // 12       ----
+    MODE_DN,                //  0: Dn
+    MODE_AN,                //  1: An
+    MODE_AI,                //  2: (An)
+    MODE_PI,                //  3: (An)+
+    MODE_PD,                //  4: -(An)
+    MODE_DI,                //  5: (d,An)
+    MODE_IX,                //  6: (d,An,Xi)
+    MODE_AW,                //  7: (####).w
+    MODE_AL,                //  8: (####).l
+    MODE_DIPC,              //  9: (d,PC)
+    MODE_IXPC,              // 10: (d,PC,Xi)
+    MODE_IM,                // 11: ####
+    MODE_IP                 // 12: ----
 }
 Mode;
 
@@ -255,6 +255,7 @@ Cond;
 
 typedef enum
 {
+    // Native exceptions
     EXC_RESET               = 1,
     EXC_BUS_ERROR           = 2,
     EXC_ADDRESS_ERROR       = 3,
@@ -271,7 +272,7 @@ typedef enum
     EXC_IRQ_SPURIOUS        = 24,
     EXC_TRAP                = 32,
 
-    // Experimental
+    // Exception aliases (will be mapped to a native exception)
     EXC_BKPT
 }
 ExceptionType;
@@ -293,12 +294,6 @@ typedef enum
 }
 IrqMode;
 
-typedef u8 FunctionCode;
-static constexpr u8 FC_USER_DATA = 1;
-static constexpr u8 FC_USER_PROG = 2;
-static constexpr u8 FC_SUPERVISOR_DATA = 5;
-static constexpr u8 FC_SUPERVISOR_PROG = 6;
-
 typedef enum
 {
     MEM_DATA                = 1,
@@ -306,7 +301,13 @@ typedef enum
 }
 MemSpace;
 
-typedef struct
+// Function codes
+static constexpr u8 FC_USER_DATA        = 1;
+static constexpr u8 FC_USER_PROG        = 2;
+static constexpr u8 FC_SUPERVISOR_DATA  = 5;
+static constexpr u8 FC_SUPERVISOR_PROG  = 6;
+
+struct StackFrame
 {
     u16 code;
     u32 addr;
@@ -316,8 +317,7 @@ typedef struct
 
     u16 fc;                 // Function code
     u16 ssw;                // Special status word (68010)
-}
-StackFrame;
+};
 
 struct StatusRegister {
     
@@ -432,8 +432,6 @@ struct FPU {
 // Exceptions
 //
 
-// class AddressErrorException : public std::exception { }; // DEPRECATED
-class BusErrorException : public std::exception { };
 
 struct AddressError : public std::exception {
 
@@ -441,6 +439,7 @@ struct AddressError : public std::exception {
     AddressError(const StackFrame frame) { stackFrame = frame; }
 };
 
+struct BusErrorException : public std::exception { };
 struct DoubleFault : public std::exception { };
 
 }

@@ -20,7 +20,8 @@ class Moira : public SubComponent {
     friend class Breakpoints;
     friend class Watchpoints;
     friend class Catchpoints;
-    
+
+
     //
     // Sub components
     //
@@ -40,14 +41,11 @@ protected:
     // The emulated CPU model
     Model cpuModel = M68000;
 
-    // The CPU model used by the disassembler
+    // The instruction set used by the disassembler
     Model dasmModel = M68000;
 
-    // The interrupt mode of this CPU
-    IrqMode irqMode = IRQ_AUTO;
-    
     // The selected disassembler syntax
-    DasmStyle style = DASM_MOIRA_MOT;
+    DasmStyle style = DASM_MOIRA;
 
     // The number format used by the disassembler
     DasmNumberFormat numberFormat { .prefix = "$", .radix = 16 };
@@ -55,14 +53,18 @@ protected:
     // The letter case used by the disassembler
     DasmLetterCase letterCase = DASM_MIXED_CASE;
 
-    // Space between instruction names and arguments
+    // The spacing used by the disassembler
     Tab tab{8};
+
+    // The interrupt mode of this CPU
+    IrqMode irqMode = IRQ_AUTO;
 
     
     /* State flags
      *
      * CPU_IS_HALTED:
-     *     Set when the CPU is in "halted" state.
+     *     Set when the CPU is in "halted" state. This state is entered when
+     *     a double fault occurs. The state is left on reset, only.
      *
      * CPU_IS_STOPPED:
      *     Set when the CPU is in "stopped" state. This state is entered when
@@ -71,29 +73,29 @@ protected:
      *
      * CPU_IS_LOOPING:
      *     Set when the CPU is running in "loop mode". This mode is a 68010
-     *     feature to speed up the execution of certain loops.
+     *     feature to speed up the execution of certain DBcc loops.
      *
      * CPU_LOG_INSTRUCTION:
      *     This flag is set if instruction logging is enabled. If set, the
      *     CPU records the current register contents in a log buffer.
      *
-     * CPU_CHECK_INTERRUPTS:
+     * CPU_CHECK_IRQ:
      *     The CPU only checks for pending interrupts if this flag is set.
      *     To accelerate emulation, the CPU deletes this flag if it can assure
-     *     that no interrupt can trigger.
+     *     that no interrupt can happen.
      *
      * CPU_TRACE_EXCEPTION:
      *    If this flag is set, the CPU initiates the trace exception.
      *
      * CPU_TRACE_FLAG:
-     *    This flag is a copy of the T flag from the status register. The
-     *    copy is held to accelerate emulation.
+     *    This flag reflects the T flag from the status register. The copy is
+     *    held to accelerate emulation.
      *
      * CPU_CHECK_BP:
-     *    This flag indicates whether the CPU should check for breakpoints.
-     *
      * CPU_CHECK_WP:
-     *    This flag indicates whether the CPU should check fo watchpoints.
+     * CPU_CHECK_CP:
+     *    These flags indicate whether the CPU should check for breakpoints,
+     *    watchpoints, or catchpoints.
      */
     int flags;
     static constexpr int CPU_IS_HALTED          = (1 << 8);
@@ -116,7 +118,7 @@ protected:
     // The prefetch queue
     PrefetchQueue queue;
 
-    // The floating point unit
+    // The floating point unit (not supported yet)
     FPU fpu;
     
     // Current value on the IPL pins (Interrupt Priority Level)
@@ -128,7 +130,7 @@ protected:
     // Determines the source of the function code pins
     u8 fcSource;
     
-    // Remembers the vector number of the latest exception
+    // Remembers the vector number of the most recent exception
     int exception;
     
     // Cycle penalty (needed for 68020+ extended addressing modes)
@@ -143,7 +145,7 @@ protected:
     typedef void (Moira::*ExecPtr)(u16);
     ExecPtr exec[65536];
     
-    // Jump table holding the instruction handlers for the 68010 loop mode
+    // Jump table holding the loop mode instruction handlers (68010 only)
     ExecPtr loop[65536];
     
     // Jump table holding the disassebler handlers
@@ -177,7 +179,7 @@ public:
     
 protected:
     
-    // Creates the generic jump table
+    // Creates or updates all jump tables
     void createJumpTable(Model cpuModel, Model dasmModel);
     
 private:
@@ -507,12 +509,12 @@ private:
 public:
     
     // Returns the current value on the function code pins
-    FunctionCode readFC() const;
+    u8 readFC() const;
     
 private:
     
     // Sets the function code pins to a specific value
-    void setFC(FunctionCode value);
+    void setFC(u8 value);
     
     // Sets the function code pins according the the provided addressing mode
     template <Mode M> void setFC();

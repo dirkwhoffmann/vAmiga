@@ -276,7 +276,7 @@ StrWriter::operator<<(Szb<S>)
 {
     switch (style) {
 
-        case DASM_MOIRA_MOT:
+        case DASM_MOIRA:
 
             *ptr++ = '.';
             [[fallthrough]];
@@ -723,7 +723,7 @@ StrWriter::operator<<(Ai<M, S> wrapper)
     
     switch (style) {
             
-        case DASM_MOIRA_MOT:
+        case DASM_MOIRA:
         case DASM_MUSASHI:
         case DASM_GNU:
 
@@ -747,7 +747,7 @@ StrWriter::operator<<(Pi<M, S> wrapper)
     
     switch (style) {
             
-        case DASM_MOIRA_MOT:
+        case DASM_MOIRA:
         case DASM_MUSASHI:
         case DASM_GNU:
 
@@ -771,7 +771,7 @@ StrWriter::operator<<(Pd<M, S> wrapper)
     
     switch (style) {
             
-        case DASM_MOIRA_MOT:
+        case DASM_MOIRA:
         case DASM_MUSASHI:
         case DASM_GNU:
 
@@ -795,7 +795,7 @@ StrWriter::operator<<(Di<M, S> wrapper)
     
     switch (style) {
 
-        case DASM_MOIRA_MOT:
+        case DASM_MOIRA:
         case DASM_MUSASHI:
 
             *this << "(" << Int{(i16)ea.ext1} << "," << An{ea.reg} << ")";
@@ -1131,7 +1131,7 @@ StrWriter::operator<<(Aw<M, S> wrapper)
     
     switch (style) {
             
-        case DASM_MOIRA_MOT:
+        case DASM_MOIRA:
         case DASM_MOIRA_MIT:
         case DASM_MUSASHI:
 
@@ -1155,7 +1155,7 @@ StrWriter::operator<<(Al<M, S> wrapper)
     
     switch (style) {
             
-        case DASM_MOIRA_MOT:
+        case DASM_MOIRA:
         case DASM_MOIRA_MIT:
         case DASM_MUSASHI:
 
@@ -1180,7 +1180,7 @@ StrWriter::operator<<(DiPc<M, S> wrapper)
     
     switch (style) {
             
-        case DASM_MOIRA_MOT:
+        case DASM_MOIRA:
         case DASM_MUSASHI:
 
             *this << "(" << Int{(i16)ea.ext1} << ",PC)";
@@ -1212,7 +1212,7 @@ StrWriter::operator<<(Im<M, S> wrapper)
     
     switch (style) {
             
-        case DASM_MOIRA_MOT:
+        case DASM_MOIRA:
         case DASM_MOIRA_MIT:
         case DASM_GNU:
         case DASM_GNU_MIT:
@@ -1236,7 +1236,7 @@ StrWriter::operator<<(Ip<M, S> wrapper)
     
     switch (style) {
             
-        case DASM_MOIRA_MOT:
+        case DASM_MOIRA:
         case DASM_MUSASHI:
         case DASM_GNU:
 
@@ -1260,7 +1260,7 @@ StrWriter::operator<<(Scale s)
     
     switch (style) {
 
-        case DASM_MOIRA_MOT:
+        case DASM_MOIRA:
         case DASM_MUSASHI:
         case DASM_GNU:
 
@@ -1540,7 +1540,7 @@ StrWriter&
 StrWriter::operator<<(Sep)
 {
     *ptr++ = ',';
-    if (style == DASM_MUSASHI || style == DASM_MOIRA_MOT || style == DASM_MOIRA_MIT) *ptr++ = ' ';
+    if (style == DASM_MUSASHI || style == DASM_MOIRA || style == DASM_MOIRA_MIT) *ptr++ = ' ';
     return *this;
 }
 

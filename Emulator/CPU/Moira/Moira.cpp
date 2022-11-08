@@ -727,14 +727,14 @@ Moira::isValidExt(Instr I, Mode M, u16 op, u32 ext)
     }
 }
 
-FunctionCode
+u8
 Moira::readFC() const
 {
     switch (fcSource) {
             
-        case 0: return FunctionCode((reg.sr.s ? 4 : 0) | fcl);
-        case 1: return FunctionCode(reg.sfc);
-        case 2: return FunctionCode(reg.dfc);
+        case 0: return u8((reg.sr.s ? 4 : 0) | fcl);
+        case 1: return u8(reg.sfc);
+        case 2: return u8(reg.dfc);
             
         default:
             fatalError;
@@ -742,7 +742,7 @@ Moira::readFC() const
 }
 
 void
-Moira::setFC(FunctionCode value)
+Moira::setFC(u8 value)
 {
     if (!EMULATE_FC) return;
     fcl = (u8)value;
