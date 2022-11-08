@@ -784,15 +784,11 @@ Moira::getIrqVector(u8 level) const {
 int
 Moira::disassemble(u32 addr, char *str)
 {
-    if constexpr (!ENABLE_DASM) {
-
-        // TODO: Throw runtime exception
-        printf("This feature requires ENABLE_DASM = true\n");
-        assert(false);
-        return 0;
+    if constexpr (ENABLE_DASM == false) {
+        throw std::runtime_error("This feature requires ENABLE_DASM = true\n");
     }
     
-    u32 pc     = addr;
+    u32 pc = addr;
     u16 opcode = read16Dasm(pc);
     
     StrWriter writer(str, syntax, numberFormat);
@@ -871,38 +867,11 @@ Moira::disassembleSR(const StatusRegister &sr, char *str)
     str[16] = 0;
 }
 
-/*
- void
- Moira::disassembleSR(u16 sr, char *str)
- {
- str[0]  = (sr & 0b1000000000000000) ? 'T' : 't';
- str[1]  = '-';
- str[2]  = (sr & 0b0010000000000000) ? 'S' : 's';
- str[3]  = '-';
- str[4]  = '-';
- str[5]  = (sr & 0b0000010000000000) ? '1' : '0';
- str[6]  = (sr & 0b0000001000000000) ? '1' : '0';
- str[7]  = (sr & 0b0000000100000000) ? '1' : '0';
- str[8]  = '-';
- str[9]  = '-';
- str[10] = '-';
- str[11] = (sr & 0b0000000000010000) ? 'X' : 'x';
- str[12] = (sr & 0b0000000000001000) ? 'N' : 'n';
- str[13] = (sr & 0b0000000000000100) ? 'Z' : 'z';
- str[14] = (sr & 0b0000000000000010) ? 'V' : 'v';
- str[15] = (sr & 0b0000000000000001) ? 'C' : 'c';
- str[16] = 0;
- }
- */
-
 InstrInfo
 Moira::getInfo(u16 op)
 {
     if (BUILD_INSTR_INFO_TABLE == false) {
-        
-        printf("This feature requires BUILD_INSTR_INFO_TABLE = true\n");
-        assert(false);
-        return InstrInfo { ILLEGAL, MODE_IP, (Size)0 };
+        throw std::runtime_error("This feature requires BUILD_INSTR_INFO_TABLE = true\n");
     }
     
     return info[op];
