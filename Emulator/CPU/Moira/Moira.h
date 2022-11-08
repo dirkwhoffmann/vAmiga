@@ -45,7 +45,7 @@ protected:
     Model dasmModel = M68000;
 
     // The selected disassembler syntax
-    DasmStyle style = DASM_MOIRA;
+    DasmSyntax syntax = DASM_MOIRA;
 
     // The number format used by the disassembler
     DasmNumberFormat numberFormat { .prefix = "$", .radix = 16 };
@@ -91,9 +91,7 @@ protected:
      *    This flag reflects the T flag from the status register. The copy is
      *    held to accelerate emulation.
      *
-     * CPU_CHECK_BP:
-     * CPU_CHECK_WP:
-     * CPU_CHECK_CP:
+     * CPU_CHECK_BP, CPU_CHECK_WP, CPU_CHECK_CP:
      *    These flags indicate whether the CPU should check for breakpoints,
      *    watchpoints, or catchpoints.
      */
@@ -172,7 +170,7 @@ public:
     void setModel(Model cpuModel, Model dasmModel);
 
     // Configures the disassembler
-    void setDasmStyle(DasmStyle value);
+    void setDasmSyntax(DasmSyntax value);
     void setDasmNumberFormat(DasmNumberFormat value);
     void setDasmLetterCase(DasmLetterCase value);
     void setIndentation(int value);
@@ -247,7 +245,7 @@ private:
 public:
     
     // Disassembles a single instruction and returns the instruction size
-    int disassemble(u32 addr, char *str, DasmStyle core = DASM_MUSASHI);
+    int disassemble(u32 addr, char *str);
     
     // Returns a textual representation for a single word
     void disassembleWord(u32 value, char *str);

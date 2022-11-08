@@ -99,16 +99,16 @@ public:
     char *base;             // Start address of the destination string
     char *ptr;              // Write pointer
 
-    DasmStyle style;
+    DasmSyntax syntax;
     DasmNumberFormat nf;
     
 public:
     
-    StrWriter(char *p, DasmStyle s, DasmNumberFormat n) {
+    StrWriter(char *p, DasmSyntax s, DasmNumberFormat n) {
         
         comment[0] = 0;
         base = ptr = p;
-        style = s;
+        syntax = s;
         nf = n;
     };
 

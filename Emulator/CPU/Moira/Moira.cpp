@@ -56,9 +56,9 @@ Moira::setModel(Model cpuModel, Model dasmModel)
 }
 
 void
-Moira::setDasmStyle(DasmStyle value)
+Moira::setDasmSyntax(DasmSyntax value)
 {
-    style = value;
+    syntax = value;
 }
 
 void
@@ -782,10 +782,11 @@ Moira::getIrqVector(u8 level) const {
 }
 
 int
-Moira::disassemble(u32 addr, char *str, DasmStyle core)
+Moira::disassemble(u32 addr, char *str)
 {
     if constexpr (!ENABLE_DASM) {
-        
+
+        // TODO: Throw runtime exception
         printf("This feature requires ENABLE_DASM = true\n");
         assert(false);
         return 0;
@@ -794,7 +795,7 @@ Moira::disassemble(u32 addr, char *str, DasmStyle core)
     u32 pc     = addr;
     u16 opcode = read16Dasm(pc);
     
-    StrWriter writer(str, style, numberFormat);
+    StrWriter writer(str, syntax, numberFormat);
     
     (this->*dasm[opcode])(writer, pc, opcode);
     writer << Finish{};

@@ -77,12 +77,11 @@ typedef enum
 {
     DASM_MOIRA,             // Official syntax styles
     DASM_MOIRA_MIT,
-
     DASM_GNU,               // Legacy styles (for unit testing)
     DASM_GNU_MIT,
     DASM_MUSASHI,
 }
-DasmStyle;
+DasmSyntax;
 
 typedef enum
 {

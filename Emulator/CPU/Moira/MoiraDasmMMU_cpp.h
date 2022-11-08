@@ -62,10 +62,10 @@ Moira::dasmPFlush(StrWriter &str, u32 &addr, u16 op)
     auto fc   = ___________xxxxx (ext);
 
     // Only the MC68851 has four mask bits. The 68030 only has three.
-    if (str.style == DASM_MOIRA || str.style == DASM_MOIRA_MIT) mask &= 0b111;
+    if (str.syntax == DASM_MOIRA || str.syntax == DASM_MOIRA_MIT) mask &= 0b111;
 
     // Catch illegal extension words
-    if (str.style == DASM_GNU || str.style == DASM_GNU_MIT) {
+    if (str.syntax == DASM_GNU || str.syntax == DASM_GNU_MIT) {
 
         if (!isValidExtMMU(I, M, op, ext)) {
 
@@ -87,7 +87,7 @@ Moira::dasmPFlusha(StrWriter &str, u32 &addr, u16 op)
     auto ext = dasmRead<Word>(addr);
 
     // Catch illegal extension words
-    if (str.style == DASM_GNU || str.style == DASM_GNU_MIT) {
+    if (str.syntax == DASM_GNU || str.syntax == DASM_GNU_MIT) {
 
         if (!isValidExtMMU(I, M, op, ext)) {
 
@@ -123,7 +123,7 @@ Moira::dasmPLoad(StrWriter &str, u32 &addr, u16 op)
     auto ea  = Op <M,S> ( _____________xxx(op), addr );
 
     // Catch illegal extension words
-    if (str.style == DASM_GNU || str.style == DASM_GNU_MIT) {
+    if (str.syntax == DASM_GNU || str.syntax == DASM_GNU_MIT) {
 
         if (!isValidExtMMU(I, M, op, ext)) {
 
@@ -148,7 +148,7 @@ Moira::dasmPMove(StrWriter &str, u32 &addr, u16 op)
     auto nr   = ___________xxx__ (ext);
 
     // Catch illegal extension words
-    if (str.style == DASM_GNU || str.style == DASM_GNU_MIT) {
+    if (str.syntax == DASM_GNU || str.syntax == DASM_GNU_MIT) {
 
         if (!isValidExtMMU(I, M, op, ext)) {
 
@@ -158,7 +158,7 @@ Moira::dasmPMove(StrWriter &str, u32 &addr, u16 op)
         }
     }
 
-    const char *prefix = style == DASM_GNU_MIT || style == DASM_MOIRA_MIT ? "%" : "";
+    const char *prefix = syntax == DASM_GNU_MIT || syntax == DASM_MOIRA_MIT ? "%" : "";
     const char *suffix = (ext & 0x100) ? "fd" : "";
     const char *r = "";
     Size s = Size(Unsized);
@@ -232,7 +232,7 @@ Moira::dasmPTest(StrWriter &str, u32 &addr, u16 op)
     auto fc  = ___________xxxxx (ext);
 
     // Catch illegal extension words
-    if (str.style == DASM_GNU || str.style == DASM_GNU_MIT) {
+    if (str.syntax == DASM_GNU || str.syntax == DASM_GNU_MIT) {
 
         if (!isValidExtMMU(I, M, op, ext)) {
 
