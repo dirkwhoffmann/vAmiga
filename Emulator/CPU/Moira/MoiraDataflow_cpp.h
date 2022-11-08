@@ -26,7 +26,6 @@ Moira::readOp(int n, u32 *ea, u32 *result)
                 // Read from effective address
                 if constexpr ((F & SKIP_READ) == 0) *result = readM<C, M, S, F>(*ea);
 
-            // } catch (const AddressErrorException &exc) {
             } catch (const AddressError &exc) {
 
                 // Emulate -(An) register modification
@@ -303,39 +302,52 @@ Moira::computeEAfull(u32 an)
 }
 
 template <Mode M, Size S> void
-Moira::updateAnPD(int n)
+Moira::updateAn(int n)
 {
-    // -(An)
-    // if constexpr (M == 4) reg.a[n] -= (n == 7 && S == Byte) ? 2 : S;
-    if constexpr (M == 4) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
-}
+    updateAnPI<M, S>(n);
+    updateAnPD<M, S>(n);
+    /*
+     // (An)+
+     if constexpr (M == 3) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 
-template <Mode M, Size S> void
-Moira::undoAnPD(int n)
-{
-    // -(An)
-    // if constexpr (M == 4) reg.a[n] += (n == 7 && S == Byte) ? 2 : S;
-    if constexpr (M == 4) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+     // -(An)
+     if constexpr (M == 4) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+     */
 }
 
 template <Mode M, Size S> void
 Moira::updateAnPI(int n)
 {
     // (An)+
-    // if constexpr (M == 3) reg.a[n] += (n == 7 && S == Byte) ? 2 : S;
     if constexpr (M == 3) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
 template <Mode M, Size S> void
-Moira::updateAn(int n)
+Moira::updateAnPD(int n)
+{
+    // -(An)
+    if constexpr (M == 4) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+}
+
+template <Mode M, Size S> void
+Moira::undoAn(int n)
+{
+    undoAnPI<M, S>(n);
+    undoAnPD<M, S>(n);
+}
+
+template <Mode M, Size S> void
+Moira::undoAnPI(int n)
 {
     // (An)+
-    // if constexpr (M == 3) reg.a[n] += (n == 7 && S == Byte) ? 2 : S;
-    if constexpr (M == 3) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+    if constexpr (M == 3) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+}
 
+template <Mode M, Size S> void
+Moira::undoAnPD(int n)
+{
     // -(An)
-    // if constexpr (M == 4) reg.a[n] -= (n == 7 && S == Byte) ? 2 : S;
-    if constexpr (M == 4) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+    if constexpr (M == 4) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
 template <Core C, Mode M, Size S, Flags F> u32
@@ -369,34 +381,25 @@ Moira::readMS(u32 addr)
 
     if constexpr (S == Byte) {
 
-        if ((F & SKIP_READ2) == 0) {
-
-            if (F & POLLIPL) pollIpl();
-            result = read8(addr & addrMask<C>());
-            SYNC(2);
-        }
+        if (F & POLLIPL) pollIpl();
+        result = read8(addr & addrMask<C>());
+        SYNC(2);
     }
 
     if constexpr (S == Word) {
 
-        if ((F & SKIP_READ2) == 0) {
-
-            if (F & POLLIPL) pollIpl();
-            result = read16(addr & addrMask<C>());
-            SYNC(2);
-        }
+        if (F & POLLIPL) pollIpl();
+        result = read16(addr & addrMask<C>());
+        SYNC(2);
     }
 
     if constexpr (S == Long) {
-
-        if ((F & SKIP_READ2) == 0) {
-
-            result = read16(addr & addrMask<C>()) << 16;
-            SYNC(4);
-            if (F & POLLIPL) pollIpl();
-            result |= read16((addr + 2) & addrMask<C>());
-            SYNC(2);
-        }
+        
+        result = read16(addr & addrMask<C>()) << 16;
+        SYNC(4);
+        if (F & POLLIPL) pollIpl();
+        result |= read16((addr + 2) & addrMask<C>());
+        SYNC(2);
     }
 
     return result;

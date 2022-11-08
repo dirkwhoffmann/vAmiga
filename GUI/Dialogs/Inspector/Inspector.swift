@@ -348,17 +348,6 @@ class Inspector: DialogController {
     @IBOutlet weak var bltLF7Val: NSTextField!
     @IBOutlet weak var bltLFD: NSTextField!
 
-    // Currently unused
-    @IBOutlet weak var bltMinterm: NSTextField!
-    @IBOutlet weak var bltFirstWordTime1: NSButton!
-    @IBOutlet weak var bltFirstWordTime2: NSButton!
-    @IBOutlet weak var bltLastWordTime: NSButton!
-    @IBOutlet weak var bltSecPlusWordTime: NSButton!
-    @IBOutlet weak var bltFillCarryIn: NSButton!
-    @IBOutlet weak var bltFillCarryOut: NSButton!
-    @IBOutlet weak var bltFillEnable: NSButton!
-    @IBOutlet weak var bltStoreToDest: NSButton!
-
     // Denise panel
     @IBOutlet weak var deniseBPLCON0: NSTextField!
     @IBOutlet weak var deniseHIRES: NSButton!

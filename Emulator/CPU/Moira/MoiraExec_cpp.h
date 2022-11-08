@@ -2363,7 +2363,7 @@ Moira::execJmp(u16 opcode)
     u32 oldpc = reg.pc;
 
     int src = _____________xxx(opcode);
-    u32 ea  = computeEA <C, M, Long, SKIP_LAST_RD> (src);
+    u32 ea  = computeEA<C, M, Long, SKIP_LAST_RD>(src);
 
     [[maybe_unused]] const int delay[] = { 0,0,0,0,0,2,4,2,0,2,4,0 };
     SYNC(delay[M]);
@@ -2815,7 +2815,6 @@ Moira::execMove4(u16 opcode)
     if (looping<I>() && S == Long) loopModeDelay = 0;
 
     ea = computeEA<C, MODE_PD, S, IMPL_DEC>(dst);
-
     writeBuffer = u16(data);
 
     // Check for address error
@@ -3340,7 +3339,7 @@ Moira::execMovemRgEa(u16 opcode)
             if ((mask & (1 << i)) == 0) continue;
 
             // Check for address error
-            if (mask && misaligned<C, S>(ea)) {
+            if (misaligned<C, S>(ea)) {
 
                 setFC<M>();
                 readBuffer = mask;
@@ -4722,10 +4721,10 @@ Moira::execPea(u16 opcode)
     // Check for address error
     if (misaligned<C>(reg.sp)) {
 
+        U32_DEC(reg.sp, S);
+
         if (C == C68000) {
 
-            U32_DEC(reg.sp, S);
-            // reg.sp -= S;
             if (isAbsMode(M)) {
                 throw AddressError(makeFrame<AE_WRITE|AE_DATA>(reg.sp));
             } else {
@@ -4734,8 +4733,6 @@ Moira::execPea(u16 opcode)
 
         } else {
 
-            U32_DEC(reg.sp, S);
-            // reg.sp -= S;
             writeBuffer = HI_WORD(ea);
             if (isAbsMode(M)) {
                 readBuffer = queue.irc;
