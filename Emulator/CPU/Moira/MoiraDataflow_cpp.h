@@ -10,7 +10,6 @@ Moira::readOp(int n, u32 *ea, u32 *result)
 {
     switch (M) {
             
-            // Handle non-memory modes
         case MODE_DN: *result = readD<S>(n);   break;
         case MODE_AN: *result = readA<S>(n);   break;
             // TODO: SKIP_READ is wrong here. Ext words are not read
@@ -20,24 +19,13 @@ Moira::readOp(int n, u32 *ea, u32 *result)
             
             // Compute effective address
             *ea = computeEA<C, M, S, F>(n);
-            
-            try {
-                
-                // Read from effective address
-                if constexpr ((F & SKIP_READ) == 0) *result = readM<C, M, S, F>(*ea);
 
-            } catch (const AddressError &exc) {
-
-                // Emulate -(An) register modification
-                updateAnPD<M, S>(n);
-
-                // Rethrow exception
-                throw exc;
-            }
-            
             // Emulate -(An) register modification
             updateAnPD<M, S>(n);
-                        
+
+            // Read from effective address
+            if constexpr ((F & SKIP_READ) == 0) *result = readM<C, M, S, F>(*ea);
+
             // Emulate (An)+ register modification
             updateAnPI<M, S>(n);
     }
@@ -46,11 +34,8 @@ Moira::readOp(int n, u32 *ea, u32 *result)
 template <Core C, Mode M, Size S, Flags F> void
 Moira::writeOp(int n, u32 val)
 {
-//     writeBuffer = (S == Long) ? HI_WORD(val) : LO_WORD(val);
-
     switch (M) {
             
-            // Handle non-memory modes
         case MODE_DN: writeD<S>(n, val); break;
         case MODE_AN: writeA<S>(n, val); break;
         case MODE_IM: fatalError;
@@ -61,25 +46,13 @@ Moira::writeOp(int n, u32 val)
 
             // Compute effective address
             u32 ea = computeEA<C, M, S>(n);
-            
-            try {
-                
-                // Write to effective address
-                if constexpr ((F & SKIP_WRITE) == 0) writeM<C, M, S, F>(ea, val);
-                
-            // } catch (const AddressErrorException &exc) {
-            } catch (const AddressError &exc) {
 
-                // Emulate -(An) register modification
-                updateAnPD<M, S>(n);
-
-                // Rethrow exception
-                throw exc;
-            }
-            
             // Emulate -(An) register modification
             updateAnPD<M, S>(n);
-                        
+
+            // Write to effective address
+            if constexpr ((F & SKIP_WRITE) == 0) writeM<C, M, S, F>(ea, val);
+
             // Emulate (An)+ register modification
             updateAnPI<M, S>(n);
     }
