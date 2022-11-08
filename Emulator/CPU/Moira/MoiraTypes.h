@@ -12,10 +12,12 @@
 #include <optional>
 #include "softfloat-types.h"
 
+/*
 #if defined(__clang__)
 #pragma GCC diagnostic ignored "-Wgnu-anonymous-struct"
 #pragma GCC diagnostic ignored "-Wnested-anon-types"
 #endif
+*/
 
 namespace moira {
 

@@ -15,15 +15,18 @@
  * emulate the surrounding hardware up the point where the memory access
  * actually happens.
  *
+ * Precise timing mode is only available in 68000 or 68010 emulation. For
+ * all other supported models, this setting has no effect.
+ *
  * Enable to improve accuracy, disable to gain speed.
  */
 #define PRECISE_TIMING true
 
 /* Set to true to implement the CPU interface as virtual functions.
  *
- * To communicate with the environment (e.g., for reading a word from memory),
+ * To communicate with the environment (e.g., for reading data from memory),
  * the CPU calls an appropriate function that has to be implemented by the
- * client. If this option is set to true, all API functions are declared as
+ * client. If this option is set to true, all API functions are declared
  * virtual which corresponds to the standard OOP pradigm. Because virtual
  * functions impose a performance penalty, Moira allows to link the client API
  * statically by setting this option to false.
@@ -34,14 +37,14 @@
 
 /* Set to true to enable address error checking.
  *
- * The 68000 and 68010 signal an address error violation if an odd memory
- * location is accessed in combination with word or long word addressing.
+ * The 68000 and 68010 signal an address error violation if a word or long word
+ * is accessed at an odd memory location.
  *
  * Enable to improve accuracy, disable to gain speed.
  */
 #define EMULATE_ADDRESS_ERROR true
 
-/* Set to true to emulate the function code pins FC0 - FC2.
+/* Set to true to emulate function code pins FC0 - FC2.
  *
  * Whenever memory is accessed, the function code pins enable external hardware
  * to inspect the access type. If used, these pins are usually connected to an
@@ -54,30 +57,33 @@
 /* Set to true to enable the disassembler.
  *
  * The disassembler requires a jump table which consumes about 1MB of memory.
- * Disabling the disassembler will decrease the memory footprint.
+ *
+ * Disable to save space.
  */
 #define ENABLE_DASM true
 
 /* Set to true to build the InstrInfo lookup table.
  *
- * The info table stores information about the instruction (Instr I), the
- * addressing mode (Mode M), and the size attribute (Size S) for all 65536
- * instruction words. The table is meant to provide data for, e.g., external
- * debuggers. It is not needed by Moira itself and therefore disabled by
- * default.
+ * The instruction info table stores information about the instruction
+ * (Instr I), the addressing mode (Mode M), and the size attribute (Size S) for
+ * all 65536 opcode words. The table is meant to provide data for, e.g.,
+ * external debuggers. It is not needed by Moira itself and therefore disabled
+ * by default.
+ *
+ * Disable to save space.
  */
 #define BUILD_INSTR_INFO_TABLE false
 
 /* Set to true to run Moira in a special Musashi compatibility mode.
  *
  * The compatibility mode is used by the test runner application to compare
- * the results computed by Moira and Musashi, respectively.
+ * Moira against Musashi.
  *
- * Disable to improve emulation accuracy.
+ * Disable to improve accuracy.
  */
 #define MIMIC_MUSASHI false
 
-/* The following macro appear at the beginning of each instruction handler.
+/* The following macro appears at the beginning of each instruction handler.
  * Moira will call 'willExecute(...)' for all listed instructions.
  */
 #define WILL_EXECUTE    I == STOP || I == TAS || I == BKPT
