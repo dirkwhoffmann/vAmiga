@@ -406,8 +406,6 @@ constexpr u64 AE_SET_IF     (1 << 13);  // Set bit 13 in the special status word
 
 // Timing flags
 constexpr u64 IMPL_DEC      (1 << 14);  // Omit 2 cycle delay in -(An) mode
-constexpr u64 SKIP_READ     (1 << 15);
-constexpr u64 SKIP_WRITE    (1 << 16);
 
 
 //

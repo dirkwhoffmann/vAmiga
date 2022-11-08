@@ -12,8 +12,7 @@ Moira::readOp(int n, u32 *ea, u32 *result)
             
         case MODE_DN: *result = readD<S>(n);   break;
         case MODE_AN: *result = readA<S>(n);   break;
-            // TODO: SKIP_READ is wrong here. Ext words are not read
-        case MODE_IM: if constexpr ((F & SKIP_READ) == 0) { *result = readI<C, S>(); } break;
+        case MODE_IM: *result = readI<C, S>(); break;
             
         default:
             
@@ -24,7 +23,7 @@ Moira::readOp(int n, u32 *ea, u32 *result)
             updateAnPD<M, S>(n);
 
             // Read from effective address
-            if constexpr ((F & SKIP_READ) == 0) *result = readM<C, M, S, F>(*ea);
+            *result = readM<C, M, S, F>(*ea);
 
             // Emulate (An)+ register modification
             updateAnPI<M, S>(n);
@@ -51,7 +50,7 @@ Moira::writeOp(int n, u32 val)
             updateAnPD<M, S>(n);
 
             // Write to effective address
-            if constexpr ((F & SKIP_WRITE) == 0) writeM<C, M, S, F>(ea, val);
+            writeM<C, M, S, F>(ea, val);
 
             // Emulate (An)+ register modification
             updateAnPI<M, S>(n);

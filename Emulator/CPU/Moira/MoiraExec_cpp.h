@@ -1738,8 +1738,8 @@ Moira::execClr(u16 opcode)
 
         int dst = _____________xxx(opcode);
 
-        u32 ea, data;
-        readOp<C, M, S, STD_AE_FRAME | SKIP_READ>(dst, &ea, &data);
+        u32 ea = computeEA<C, M, S>(dst);
+        updateAn<M, S>(dst);
 
         switch (M) {
 
@@ -3470,10 +3470,6 @@ Moira::execMoves(u16 opcode)
     AVAILABILITY(C68010)
     SUPERVISOR_MODE_ONLY
 
-    // printf("execMoves: C,I,M,S = %d,%d,%d,%d cp = %d\n", C, I, M, S, cp);
-
-    u32 ea, data;
-
     if (queue.irc & 0x800) {    // Rg -> Ea
 
         auto arg = readI<C, Word>();
@@ -3482,7 +3478,9 @@ Moira::execMoves(u16 opcode)
 
         auto value = readR<S>(src);
 
-        readOp<C, M, S, STD_AE_FRAME | SKIP_READ>(dst, &ea, &data);
+        // readOp<C, M, S, STD_AE_FRAME | SKIP_READ>(dst, &ea, &data);
+        u32 ea = computeEA<C, M, S>(dst);
+        updateAn<M, S>(dst);
 
         // Take care of some special cases
         if (M == MODE_PI && src == (dst | 0x8)) {
@@ -3521,7 +3519,10 @@ Moira::execMoves(u16 opcode)
         int src = _____________xxx(opcode);
         int dst = xxxx____________(arg);
 
-        readOp<C, M, S, STD_AE_FRAME | SKIP_READ>(src, &ea, &data);
+        // u32 ea, data;
+        // readOp<C, M, S, STD_AE_FRAME | SKIP_READ>(src, &ea, &data);
+        u32 ea = computeEA<C, M, S>(src);
+        updateAn<M, S>(src);
 
         // Make the SFC register visible on the FC pins
         fcSource = 1;
@@ -3534,7 +3535,7 @@ Moira::execMoves(u16 opcode)
         if constexpr (M == MODE_AW) SYNC(4);
         if constexpr (M == MODE_AL) SYNC(4);
 
-        data = readM<C, M, S>(ea);
+        u32 data = readM<C, M, S>(ea);
 
         if (dst < 8) {
             writeR<S>(dst, data);
@@ -5216,8 +5217,10 @@ Moira::execSccEa(u16 opcode)
 
     } else {
 
-        readOp<C, M, Byte, SKIP_READ>(dst, &ea, &data);
-
+        // readOp<C, M, Byte, SKIP_READ>(dst, &ea, &data);
+        u32 ea = computeEA<C, M, S>(dst);
+        updateAn<M, S>(dst);
+        
         if constexpr (M == MODE_AI) SYNC(2);
         if constexpr (M == MODE_PI) SYNC(4);
         if constexpr (M == MODE_PD) SYNC(2);
