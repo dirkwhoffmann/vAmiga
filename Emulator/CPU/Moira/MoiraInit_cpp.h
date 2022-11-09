@@ -168,7 +168,7 @@ Moira::createJumpTable(Model cpuModel, Model dasmModel)
     if (dasmCore == C68010) createJumpTable<C68010>(dasmModel, true);
     if (dasmCore == C68020) createJumpTable<C68020>(dasmModel, true);
 
-    // If both models differ, reinstall handlers, but leave dasm handlers intact
+    // If both models differ, overwrite the exec handlers
     if (cpuModel != dasmModel) {
 
         if (cpuCore == C68000) createJumpTable<C68000>(cpuModel, false);

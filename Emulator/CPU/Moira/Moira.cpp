@@ -81,7 +81,7 @@ Moira::setDasmLetterCase(DasmLetterCase value)
 }
 
 void
-Moira::setIndentation(int value)
+Moira::setDasmIndentation(int value)
 {
     style.tab = value;
 }
@@ -125,17 +125,6 @@ Moira::hasFPU()
     }
 }
 
-template <Core C> u32
-Moira::addrMask() const
-{
-    if constexpr (C == C68020) {
-        
-        return cpuModel == M68EC020 ? 0x00FFFFFF : 0xFFFFFFFF;
-    }
-
-    return 0x00FFFFFF;
-}
-
 u32
 Moira::cacrMask() const
 {
@@ -145,6 +134,28 @@ Moira::cacrMask() const
         case M68030: case M68EC030: return 0x3F13;
         default:                    return 0xFFFF;
     }
+}
+
+u32
+Moira::addrMask() const
+{
+    switch (cpuModel) {
+
+        case M68000:    return addrMask<C68000>();
+        case M68010:    return addrMask<C68010>();
+        default:        return addrMask<C68020>();
+    }
+}
+
+template <Core C> u32
+Moira::addrMask() const
+{
+    if constexpr (C == C68020) {
+        
+        return cpuModel == M68EC020 ? 0x00FFFFFF : 0xFFFFFFFF;
+    }
+
+    return 0x00FFFFFF;
 }
 
 void

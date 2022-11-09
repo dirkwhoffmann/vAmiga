@@ -23,16 +23,6 @@ class Moira : public SubComponent {
 
 
     //
-    // Sub components
-    //
-    
-public:
-    
-    // Breakpoints, watchpoints, catchpoints, instruction tracing
-    Debugger debugger = Debugger(*this);
-    
-    
-    //
     // Configuration
     //
 
@@ -52,6 +42,16 @@ protected:
         .letterCase     = DASM_MIXED_CASE,
         .tab            = 8
     };
+
+
+    //
+    // Sub components
+    //
+
+public:
+
+    // Breakpoints, watchpoints, catchpoints, instruction tracing
+    Debugger debugger = Debugger(*this);
 
 
     //
@@ -130,26 +130,35 @@ public:
     
     Moira(Amiga &ref);
     virtual ~Moira();
-    
+
+protected:
+
+    // Creates or updates the jump tables
+    void createJumpTable(Model cpuModel, Model dasmModel);
+    void createJumpTable(Model model) { createJumpTable(model, model); }
+
+private:
+
+    // The createJumpTable core routine
+    template <Core C> void createJumpTable(Model model, bool registerDasm);
+
+
+    //
+    // Configuring
+    //
+
+public:
+
     // Selects the emulated CPU model
-    void setModel(Model model) { setModel(model, model); }
     void setModel(Model cpuModel, Model dasmModel);
+    void setModel(Model model) { setModel(model, model); }
 
     // Configures the disassembler
     void setDasmSyntax(DasmSyntax value);
     void setDasmNumberFormat(DasmNumberFormat value);
     void setDasmLetterCase(DasmLetterCase value);
-    void setIndentation(int value);
+    void setDasmIndentation(int value);
     
-protected:
-    
-    // Creates or updates all jump tables
-    void createJumpTable(Model cpuModel, Model dasmModel);
-    
-private:
-    
-    template <Core C> void createJumpTable(Model model, bool registerDasm);
-
 
     //
     // Querying CPU properties
@@ -166,11 +175,16 @@ public:
     // Checks if the emulated CPU model has a floating point unit
     bool hasFPU();
 
-    // Returns the address bus mask (bus width)
-    template <Core C> u32 addrMask() const;
-
     // Returns the cache register mask (accessible CACR bits)
     u32 cacrMask() const;
+
+    // Returns the address bus mask (bus width)
+    u32 addrMask() const;
+
+protected:
+
+    // The addrMask core routine
+    template <Core C> u32 addrMask() const;
 
     
     //
@@ -194,7 +208,7 @@ private:
     void processException(const std::exception &exception);
     template <Core C> void processException(const std::exception &exception);
     
-    // Called by reset()
+    // The reset core routine
     template <Core C> void reset();
     
     // Invoked inside execute() to check for a pending interrupt
@@ -205,7 +219,7 @@ private:
     
     
     //
-    // Running the Disassembler
+    // Running the disassembler
     //
     
 public:
