@@ -229,9 +229,9 @@ SoftwareTraps::create(u16 key, u16 instr)
 }
 
 u16
-SoftwareTraps::resolve(u16 instr)
+SoftwareTraps::resolve(u16 instr) const
 {
-    return traps.contains(instr) ? traps[instr].instruction : instr;
+    return traps.contains(instr) ? traps.at(instr).instruction : instr;
 }
 
 void

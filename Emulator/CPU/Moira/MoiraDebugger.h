@@ -180,7 +180,7 @@ struct SoftwareTraps {
     u16 create(u16 key, u16 instr);
     
     // Replaces a software trap by its original opcode
-    u16 resolve(u16 instr);
+    u16 resolve(u16 instr) const;
 };
 
 class Debugger {

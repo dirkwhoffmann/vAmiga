@@ -6,7 +6,7 @@
 // -----------------------------------------------------------------------------
 
 template <Size S> u32
-Moira::dasmRead(u32 &addr)
+Moira::dasmRead(u32 &addr) const
 {
     switch (S) {
 

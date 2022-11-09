@@ -844,7 +844,7 @@ Moira::disassembleWord(u32 value, char *str) const
 }
 
 void
-Moira::disassembleMemory(u32 addr, int cnt, char *str)
+Moira::disassembleMemory(u32 addr, int cnt, char *str) const
 {
     U32_DEC(addr, 2); // Because dasmRead increases addr first
     

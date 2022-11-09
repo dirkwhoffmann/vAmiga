@@ -231,7 +231,7 @@ public:
     void disassembleWord(u32 value, char *str) const;
     
     // Returns a textual representation for one or more words from memory
-    void disassembleMemory(u32 addr, int cnt, char *str);
+    void disassembleMemory(u32 addr, int cnt, char *str) const;
     
     // Returns a textual representation for the program counter
     void disassemblePC(char *str) { disassemblePC(reg.pc, str); }
@@ -261,12 +261,12 @@ protected:
     virtual u16 read16(u32 addr) const = 0;
 
     // Special variants used by the reset routine and the disassembler
-    virtual u16 read16OnReset(u32 addr) { return read16(addr); }
-    virtual u16 read16Dasm(u32 addr) { return read16(addr); }
+    virtual u16 read16OnReset(u32 addr) const { return read16(addr); }
+    virtual u16 read16Dasm(u32 addr) const { return read16(addr); }
 
     // Writes a byte or word into memory
-    virtual void write8(u32 addr, u8 val) = 0;
-    virtual void write16(u32 addr, u16 val) = 0;
+    virtual void write8(u32 addr, u8 val) const = 0;
+    virtual void write16(u32 addr, u16 val) const = 0;
 
     // Provides the interrupt level in IRQ_USER mode
     virtual u16 readIrqUserVector(u8 level) const { return 0; }
@@ -308,12 +308,12 @@ protected:
     u16 read16(u32 addr) const;
 
     // Special variants used by the reset routine and the disassembler
-    u16 read16OnReset(u32 addr);
-    u16 read16Dasm(u32 addr);
+    u16 read16OnReset(u32 addr) const;
+    u16 read16Dasm(u32 addr) const;
 
     // Writes a byte or word into memory
-    void write8(u32 addr, u8 val);
-    void write16(u32 addr, u16 val);
+    void write8(u32 addr, u8 val) const;
+    void write16(u32 addr, u16 val) const;
 
     // Provides the interrupt level in IRQ_USER mode
     u16 readIrqUserVector(u8 level) const;

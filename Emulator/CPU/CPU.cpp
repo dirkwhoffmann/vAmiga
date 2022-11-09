@@ -77,7 +77,7 @@ Moira::read16(u32 addr) const
 }
 
 u16
-Moira::read16Dasm(u32 addr)
+Moira::read16Dasm(u32 addr) const
 {
     auto result = mem.spypeek16<ACCESSOR_CPU>(addr);
     
@@ -88,13 +88,13 @@ Moira::read16Dasm(u32 addr)
 }
 
 u16
-Moira::read16OnReset(u32 addr)
+Moira::read16OnReset(u32 addr) const
 {
     return mem.chip ? read16(addr) : 0;
 }
 
 void
-Moira::write8(u32 addr, u8 val)
+Moira::write8(u32 addr, u8 val) const
 {
     if constexpr (XFILES) {
         if (addr - reg.pc < 5) xfiles("write8 close to PC %x\n", reg.pc);
@@ -103,7 +103,7 @@ Moira::write8(u32 addr, u8 val)
 }
 
 void
-Moira::write16(u32 addr, u16 val)
+Moira::write16(u32 addr, u16 val) const
 {
     if constexpr (XFILES) {
         if (addr - reg.pc < 5) xfiles("write16 close to PC %x\n", reg.pc);

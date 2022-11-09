@@ -10,7 +10,7 @@
 //
 
 // Reads a word from memory and increments addr
-template <Size S = Word> u32 dasmRead(u32 &addr);
+template <Size S = Word> u32 dasmRead(u32 &addr) const;
 
 // Assembles an operand
 template <Mode M, Size S = Word> Ea<M, S>Op(u16 reg, u32 &pc);
