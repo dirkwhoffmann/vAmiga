@@ -30,7 +30,7 @@ typedef unsigned long long u64;
 
 
 //
-// CPU types
+// Enumerations
 //
 
 typedef enum
@@ -46,17 +46,6 @@ typedef enum
     M68040              // Disassembler only
 }
 Model;
-
-// Availabilty masks
-constexpr u16 AV_68040    = 1 << M68EC040 | 1 << M68LC040 | 1 << M68040;
-constexpr u16 AV_68030    = 1 << M68EC030 | 1 << M68030;
-constexpr u16 AV_68020    = 1 << M68EC020 | 1 << M68020;
-constexpr u16 AV_68030_UP = AV_68030 | AV_68040;
-constexpr u16 AV_68020_UP = AV_68020 | AV_68030_UP;
-constexpr u16 AV_68010_UP = 1 << M68010 | AV_68020_UP;
-constexpr u16 AV_68000_UP = 1 << M68000 | AV_68010_UP;
-constexpr u16 AV_MMU      = 1 << M68030 | 1 << M68LC040 | 1 << M68040;
-constexpr u16 AV_FPU      = 1 << M68040;
 
 typedef enum
 {
@@ -83,24 +72,6 @@ typedef enum
     DASM_UPPER_CASE         // Everything is printed in uppercase
 }
 DasmLetterCase;
-
-typedef struct
-{
-    const char *prefix;     // Prefix for hexidecimal numbers
-    u8 radix;               // 10 (decimal) or 16 (hexadecimal)
-    bool upperCase;         // Lettercase for hexadecimal digits A...F
-    bool plainZero;         // Determines whether 0 is printed with a prefix
-}
-DasmNumberFormat;
-
-typedef struct
-{
-    DasmSyntax syntax;
-    DasmLetterCase letterCase;
-    DasmNumberFormat numberFormat;
-    int tab;
-}
-DasmStyle;
 
 typedef enum
 {
@@ -187,8 +158,14 @@ typedef enum
 }
 RegName;
 
-template <Instr I>
-constexpr bool looping() { return I >= ABCD_LOOP && I <= TST_LOOP; }
+typedef enum
+{
+    Unsized = 0,
+    Byte    = 1,            // .b : Byte addressing
+    Word    = 2,            // .w : Word addressing
+    Long    = 4             // .l : Long word addressing
+}
+Size;
 
 typedef enum
 {
@@ -215,23 +192,6 @@ constexpr bool isMemMode(Mode M) { return M >= 2 && M <= 10; }
 constexpr bool isPrgMode(Mode M) { return M == 9 || M == 10; }
 constexpr bool isDspMode(Mode M) { return M == 5 || M == 6 || M == 9 || M == 10; }
 constexpr bool isImmMode(Mode M) { return M == 11; }
-
-typedef enum
-{
-    Unsized = 0,
-    Byte    = 1,            // .b : Byte addressing
-    Word    = 2,            // .w : Word addressing
-    Long    = 4             // .l : Long word addressing
-}
-Size;
-
-/* TODO:
-
- typedef enum
- {
- }
- FSize;
-*/
 
 typedef enum
 {
@@ -278,14 +238,6 @@ typedef enum
 }
 ExceptionType;
 
-typedef struct
-{
-    Instr I;
-    Mode  M;
-    Size  S;
-}
-InstrInfo;
-
 typedef enum
 {
     IRQ_AUTO,
@@ -302,11 +254,18 @@ typedef enum
 }
 MemSpace;
 
-// Function codes
-static constexpr u8 FC_USER_DATA        = 1;
-static constexpr u8 FC_USER_PROG        = 2;
-static constexpr u8 FC_SUPERVISOR_DATA  = 5;
-static constexpr u8 FC_SUPERVISOR_PROG  = 6;
+/* TODO:
+
+ typedef enum
+ {
+ }
+ FSize;
+*/
+
+
+//
+// Structures
+//
 
 struct StackFrame
 {
@@ -376,6 +335,65 @@ struct PrefetchQueue {
     u16 ird;                // The instruction currently being executed
 };
 
+struct Float80 {
+
+    softfloat::floatx80 raw;
+};
+
+struct FPU {
+
+    Float80 fpr[8];
+    u32 fpiar;
+    u32 fpsr;
+    u32 fpcr;
+};
+
+struct InstrInfo
+{
+    Instr I;
+    Mode  M;
+    Size  S;
+};
+
+struct DasmNumberFormat
+{
+    const char *prefix;     // Prefix for hexidecimal numbers
+    u8 radix;               // 10 (decimal) or 16 (hexadecimal)
+    bool upperCase;         // Lettercase for hexadecimal digits A...F
+    bool plainZero;         // Determines whether 0 is printed with a prefix
+};
+
+struct DasmStyle
+{
+    DasmSyntax syntax;
+    DasmLetterCase letterCase;
+    DasmNumberFormat numberFormat;
+    int tab;
+};
+
+
+//
+// Flags and masks
+//
+
+// Function codes
+static constexpr u8 FC_USER_DATA        = 1;
+static constexpr u8 FC_USER_PROG        = 2;
+static constexpr u8 FC_SUPERVISOR_DATA  = 5;
+static constexpr u8 FC_SUPERVISOR_PROG  = 6;
+
+// Availabilty masks
+static constexpr u16 AV_68000           = 1 << M68000;
+static constexpr u16 AV_68010           = 1 << M68010;
+static constexpr u16 AV_68020           = 1 << M68EC020 | 1 << M68020;
+static constexpr u16 AV_68030           = 1 << M68EC030 | 1 << M68030;
+static constexpr u16 AV_68040           = 1 << M68EC040 | 1 << M68LC040 | 1 << M68040;
+static constexpr u16 AV_MMU             = 1 << M68030 | 1 << M68LC040 | 1 << M68040;
+static constexpr u16 AV_FPU             = 1 << M68040;
+static constexpr u16 AV_68030_UP        = AV_68030 | AV_68040;
+static constexpr u16 AV_68020_UP        = AV_68020 | AV_68030_UP;
+static constexpr u16 AV_68010_UP        = AV_68010 | AV_68020_UP;
+static constexpr u16 AV_68000_UP        = AV_68000 | AV_68010_UP;
 
 /* State flags
  *
@@ -412,7 +430,6 @@ struct PrefetchQueue {
  *    These flags indicate whether the CPU should check for breakpoints,
  *    watchpoints, or catchpoints.
  */
-
 static constexpr int CPU_IS_HALTED          = (1 << 8);
 static constexpr int CPU_IS_STOPPED         = (1 << 9);
 static constexpr int CPU_IS_LOOPING         = (1 << 10);
@@ -424,7 +441,6 @@ static constexpr int CPU_CHECK_BP           = (1 << 15);
 static constexpr int CPU_CHECK_WP           = (1 << 16);
 static constexpr int CPU_CHECK_CP           = (1 << 17);
 
-
 /* Execution flags
  *
  * The M68k is a well organized processor that breaks down the execution of
@@ -433,55 +449,35 @@ static constexpr int CPU_CHECK_CP           = (1 << 17);
  * differences, some functions take an additional 'flags' argument to alter
  * their behavior. All flags are passed as a template parameter for efficiency.
  */
-
 typedef u64 Flags;
 
 // Memory access flags
-constexpr u64 REVERSE       (1 << 0);   // Reverse the long word access order
-constexpr u64 SKIP_LAST_RD  (1 << 1);   // Don't read the extension word
+static constexpr u64 REVERSE       (1 << 0);   // Reverse the long word access order
+static constexpr u64 SKIP_LAST_RD  (1 << 1);   // Don't read the extension word
 
 // Interrupt flags
-constexpr u64 POLLIPL       (1 << 2);   // Poll the interrupt lines
+static constexpr u64 POLLIPL       (1 << 2);   // Poll the interrupt lines
 
 // Address error flags
-constexpr u64 AE_WRITE      (1 << 3);   // Clear read flag in code word
-constexpr u64 AE_PROG       (1 << 4);   // Set FC pins to program space
-constexpr u64 AE_DATA       (1 << 5);   // Set FC pins to user space
-constexpr u64 AE_INC_PC     (1 << 6);   // Increment PC by 2 in stack frame
-constexpr u64 AE_DEC_PC     (1 << 7);   // Decrement PC by 2 in stack frame
-constexpr u64 AE_INC_A      (1 << 8);   // Increment ADDR by 2 in stack frame
-constexpr u64 AE_DEC_A      (1 << 9);   // Decrement ADDR by 2 in stack frame
-constexpr u64 AE_SET_CB3    (1 << 10);  // Set bit 3 in CODE segment
-constexpr u64 AE_SET_RW     (1 << 11);  // Set bit 8 in the special status word (68010)
-constexpr u64 AE_SET_DF     (1 << 12);  // Set bit 12 in the special status word (68010)
-constexpr u64 AE_SET_IF     (1 << 13);  // Set bit 13 in the special status word (68010)
+static constexpr u64 AE_WRITE      (1 << 3);   // Clear read flag in code word
+static constexpr u64 AE_PROG       (1 << 4);   // Set FC pins to program space
+static constexpr u64 AE_DATA       (1 << 5);   // Set FC pins to user space
+static constexpr u64 AE_INC_PC     (1 << 6);   // Increment PC by 2 in stack frame
+static constexpr u64 AE_DEC_PC     (1 << 7);   // Decrement PC by 2 in stack frame
+static constexpr u64 AE_INC_A      (1 << 8);   // Increment ADDR by 2 in stack frame
+static constexpr u64 AE_DEC_A      (1 << 9);   // Decrement ADDR by 2 in stack frame
+static constexpr u64 AE_SET_CB3    (1 << 10);  // Set bit 3 in CODE segment
+static constexpr u64 AE_SET_RW     (1 << 11);  // Set bit 8 in the special status word (68010)
+static constexpr u64 AE_SET_DF     (1 << 12);  // Set bit 12 in the special status word (68010)
+static constexpr u64 AE_SET_IF     (1 << 13);  // Set bit 13 in the special status word (68010)
 
 // Timing flags
-constexpr u64 IMPL_DEC      (1 << 14);  // Omit 2 cycle delay in -(An) mode
-
-
-//
-// FPU types
-//
-
-struct Float80 {
-
-    softfloat::floatx80 raw;
-};
-
-struct FPU {
-
-    Float80 fpr[8];
-    u32 fpiar;
-    u32 fpsr;
-    u32 fpcr;
-};
+static constexpr u64 IMPL_DEC      (1 << 14);  // Omit 2 cycle delay in -(An) mode
 
 
 //
 // Exceptions
 //
-
 
 struct AddressError : public std::exception {
 

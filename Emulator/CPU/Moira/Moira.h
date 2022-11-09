@@ -465,6 +465,10 @@ private:
     // Returns an availability string (used by the disassembler)
     const char *availabilityString(Instr I, Mode M, Size S, u16 ext);
 
+    // Checks if an instruction is a loop mode instruction
+    template <Instr I>
+    constexpr bool looping() { return I >= ABCD_LOOP && I <= TST_LOOP; }
+
 
     //
     // Managing the function code pins
