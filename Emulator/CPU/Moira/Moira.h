@@ -245,7 +245,7 @@ public:
     int disassemble(u32 addr, char *str);
     
     // Returns a textual representation for a single word
-    void disassembleWord(u32 value, char *str);
+    void disassembleWord(u32 value, char *str) const;
     
     // Returns a textual representation for one or more words from memory
     void disassembleMemory(u32 addr, int cnt, char *str);
@@ -259,7 +259,7 @@ public:
     void disassembleSR(const StatusRegister &sr, char *str);
     
     // Return an info struct for a certain opcode
-    InstrInfo getInfo(u16 op); 
+    InstrInfo getInfo(u16 op) const;
     
     
     //
@@ -280,12 +280,6 @@ protected:
     // Special variants used by the reset routine and the disassembler
     virtual u16 read16OnReset(u32 addr) { return read16(addr); }
     virtual u16 read16Dasm(u32 addr) { return read16(addr); }
-
-    // Special variants used by the MMU
-    virtual u32 readMMU32(u32 addr) = 0;
-    virtual u64 readMMU64(u32 addr) = 0;
-    virtual u32 readMMU32Dasm(u32 addr) const = 0;
-    virtual u64 readMMU64Dasm(u32 addr) const = 0;
 
     // Writes a byte or word into memory
     virtual void write8(u32 addr, u8 val) = 0;
@@ -309,13 +303,12 @@ protected:
     // Exception delegates
     virtual void willInterrupt(u8 level) { }
     virtual void didJumpToVector(int nr, u32 addr) { }
-    virtual void signalSoftwareTrap(u16 opcode, SoftwareTrap trap) { }
 
     // Cache register delegated
     virtual void didChangeCACR(u32 value) { }
     virtual void didChangeCAAR(u32 value) { }
 
-    // Called when a debug point is reached
+    // Debugger delegates
     virtual void softstopReached(u32 addr) { }
     virtual void breakpointReached(u32 addr) { }
     virtual void watchpointReached(u32 addr) { }
@@ -334,12 +327,6 @@ protected:
     // Special variants used by the reset routine and the disassembler
     u16 read16OnReset(u32 addr);
     u16 read16Dasm(u32 addr);
-
-    // Special variants used by the MMU
-    u32 readMMU32(u32 addr);
-    u64 readMMU64(u32 addr);
-    u32 readMMU32Dasm(u32 addr) const;
-    u64 readMMU64Dasm(u32 addr) const;
 
     // Writes a byte or word into memory
     void write8(u32 addr, u8 val);
@@ -363,13 +350,12 @@ protected:
     // Exception delegates
     void willInterrupt(u8 level);
     void didJumpToVector(int nr, u32 addr);
-    void signalSoftwareTrap(u16 opcode, SoftwareTrap trap);
 
     // Cache register delegated
     void didChangeCACR(u32 value);
     void didChangeCAAR(u32 value);
 
-    // Called when a debug point is reached
+    // Debugger delegates
     void softstopReached(u32 addr);
     void breakpointReached(u32 addr);
     void watchpointReached(u32 addr);

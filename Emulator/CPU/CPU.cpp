@@ -221,12 +221,6 @@ Moira::didJumpToVector(int nr, u32 addr)
 }
 
 void
-Moira::signalSoftwareTrap(u16 instr, SoftwareTrap trap)
-{
-
-}
-
-void
 Moira::didChangeCACR(u32 value)
 {
 

@@ -827,7 +827,7 @@ Moira::disassemble(u32 addr, char *str)
 }
 
 void
-Moira::disassembleWord(u32 value, char *str)
+Moira::disassembleWord(u32 value, char *str) const
 {
     sprintx(str, value, { .prefix = "", .radix = 16, .upperCase = true }, 4);
 }
@@ -873,7 +873,7 @@ Moira::disassembleSR(const StatusRegister &sr, char *str)
 }
 
 InstrInfo
-Moira::getInfo(u16 op)
+Moira::getInfo(u16 op) const
 {
     if (BUILD_INSTR_INFO_TABLE == false) {
         throw std::runtime_error("This feature requires BUILD_INSTR_INFO_TABLE = true\n");
