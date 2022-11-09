@@ -65,13 +65,13 @@ Moira::sync(int cycles)
 }
 
 u8
-Moira::read8(u32 addr)
+Moira::read8(u32 addr) const
 {
     return mem.peek8<ACCESSOR_CPU>(addr);
 }
 
 u16
-Moira::read16(u32 addr)
+Moira::read16(u32 addr) const
 {
     return mem.peek16<ACCESSOR_CPU>(addr);
 }

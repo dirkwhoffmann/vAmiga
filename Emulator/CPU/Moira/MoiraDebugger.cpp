@@ -9,12 +9,14 @@
 
 #include "config.h"
 #include "MoiraConfig.h"
+#include "MoiraTypes.h"
 #include "Moira.h"
 #include "MoiraMacros.h"
 #include <cstring>
 #include <cstdio>
 
 namespace moira {
+
 
 //
 // Guard
@@ -179,9 +181,9 @@ void
 Breakpoints::setNeedsCheck(bool value)
 {
     if (value) {
-        moira.flags |= Moira::CPU_CHECK_BP;
+        moira.flags |= CPU_CHECK_BP;
     } else {
-        moira.flags &= ~Moira::CPU_CHECK_BP;
+        moira.flags &= ~CPU_CHECK_BP;
     }
 }
 
@@ -189,9 +191,9 @@ void
 Watchpoints::setNeedsCheck(bool value)
 {
     if (value) {
-        moira.flags |= Moira::CPU_CHECK_WP;
+        moira.flags |= CPU_CHECK_WP;
     } else {
-        moira.flags &= ~Moira::CPU_CHECK_WP;
+        moira.flags &= ~CPU_CHECK_WP;
     }
 }
 
@@ -199,9 +201,9 @@ void
 Catchpoints::setNeedsCheck(bool value)
 {
     if (value) {
-        moira.flags |= Moira::CPU_CHECK_CP;
+        moira.flags |= CPU_CHECK_CP;
     } else {
-        moira.flags &= ~Moira::CPU_CHECK_CP;
+        moira.flags &= ~CPU_CHECK_CP;
     }
 }
 
@@ -288,13 +290,13 @@ Debugger::catchpointMatches(u32 vectorNr)
 void
 Debugger::enableLogging()
 {
-    moira.flags |= Moira::CPU_LOG_INSTRUCTION;
+    moira.flags |= CPU_LOG_INSTRUCTION;
 }
 
 void
 Debugger::disableLogging()
 {
-    moira.flags &= ~Moira::CPU_LOG_INSTRUCTION;
+    moira.flags &= ~CPU_LOG_INSTRUCTION;
 }
 
 int

@@ -12,13 +12,6 @@
 #include <optional>
 #include "softfloat-types.h"
 
-/*
-#if defined(__clang__)
-#pragma GCC diagnostic ignored "-Wgnu-anonymous-struct"
-#pragma GCC diagnostic ignored "-Wnested-anon-types"
-#endif
-*/
-
 namespace moira {
 
 
@@ -382,6 +375,55 @@ struct PrefetchQueue {
     u16 irc;                // The most recent word prefetched from memory
     u16 ird;                // The instruction currently being executed
 };
+
+
+/* State flags
+ *
+ * CPU_IS_HALTED:
+ *     Set when the CPU is in "halted" state. This state is entered when
+ *     a double fault occurs. The state is left on reset, only.
+ *
+ * CPU_IS_STOPPED:
+ *     Set when the CPU is in "stopped" state. This state is entered when
+ *     the STOP instruction has been executed. The state is left when the
+ *     next interrupt occurs.
+ *
+ * CPU_IS_LOOPING:
+ *     Set when the CPU is running in "loop mode". This mode is a 68010
+ *     feature to speed up the execution of certain DBcc loops.
+ *
+ * CPU_LOG_INSTRUCTION:
+ *     This flag is set if instruction logging is enabled. If set, the
+ *     CPU records the current register contents in a log buffer.
+ *
+ * CPU_CHECK_IRQ:
+ *     The CPU only checks for pending interrupts if this flag is set.
+ *     To accelerate emulation, the CPU deletes this flag if it can assure
+ *     that no interrupt can happen.
+ *
+ * CPU_TRACE_EXCEPTION:
+ *    If this flag is set, the CPU initiates the trace exception.
+ *
+ * CPU_TRACE_FLAG:
+ *    This flag reflects the T flag from the status register. The copy is
+ *    held to accelerate emulation.
+ *
+ * CPU_CHECK_BP, CPU_CHECK_WP, CPU_CHECK_CP:
+ *    These flags indicate whether the CPU should check for breakpoints,
+ *    watchpoints, or catchpoints.
+ */
+
+static constexpr int CPU_IS_HALTED          = (1 << 8);
+static constexpr int CPU_IS_STOPPED         = (1 << 9);
+static constexpr int CPU_IS_LOOPING         = (1 << 10);
+static constexpr int CPU_LOG_INSTRUCTION    = (1 << 11);
+static constexpr int CPU_CHECK_IRQ          = (1 << 12);
+static constexpr int CPU_TRACE_EXCEPTION    = (1 << 13);
+static constexpr int CPU_TRACE_FLAG         = (1 << 14);
+static constexpr int CPU_CHECK_BP           = (1 << 15);
+static constexpr int CPU_CHECK_WP           = (1 << 16);
+static constexpr int CPU_CHECK_CP           = (1 << 17);
+
 
 /* Execution flags
  *

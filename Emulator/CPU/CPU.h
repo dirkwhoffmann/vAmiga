@@ -14,8 +14,6 @@
 #include "RingBuffer.h"
 #include "Moira.h"
 
-// using namespace moira;
-
 class CPU : public moira::Moira {
 
     friend class Moira;
@@ -90,12 +88,13 @@ private:
         if (hard) {
             
             worker
-            
-            << flags
-            << clock
+
+            // Items from CPU class
             << penalty
             << slowCycles
-            
+
+            // Items from Moira class
+            << clock
             << reg.pc
             << reg.pc0
             << reg.sr.t1
@@ -126,7 +125,11 @@ private:
             << fcl
             << fcSource
             << exception
-            << cp;
+            << cp
+            << loopModeDelay
+            << readBuffer
+            << writeBuffer
+            << flags;
         }
     }
 
