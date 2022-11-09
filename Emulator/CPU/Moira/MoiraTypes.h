@@ -96,8 +96,8 @@ DasmNumberFormat;
 typedef struct
 {
     DasmSyntax syntax;
-    DasmNumberFormat numberFormat;
     DasmLetterCase letterCase;
+    DasmNumberFormat numberFormat;
     int tab;
 }
 DasmStyle;

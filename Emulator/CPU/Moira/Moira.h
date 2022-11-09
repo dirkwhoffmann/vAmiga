@@ -28,18 +28,18 @@ class Moira : public SubComponent {
 
 protected:
     
-    // The emulated CPU model
+    // Emulated CPU model
     Model cpuModel = M68000;
 
-    // The instruction set used by the disassembler
+    // Instruction set used by the disassembler
     Model dasmModel = M68000;
 
-    // The selected disassembler style
+    // Disassembler styleh
     DasmStyle style = {
         
         .syntax         = DASM_MOIRA,
-        .numberFormat   = { .prefix = "$", .radix = 16 },
         .letterCase     = DASM_MIXED_CASE,
+        .numberFormat   = { .prefix = "$", .radix = 16 },
         .tab            = 8
     };
 
