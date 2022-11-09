@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmPGen(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmPGen(StrWriter &str, u32 &addr, u16 op) const
 {
     auto ext = dasmRead<Word>(addr);
     addr -= 2;
@@ -52,7 +52,7 @@ Moira::dasmPGen(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmPFlush(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmPFlush(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old  = addr;
     auto ext  = dasmRead<Word>(addr);
@@ -81,7 +81,7 @@ Moira::dasmPFlush(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmPFlusha(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmPFlusha(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
     auto ext = dasmRead<Word>(addr);
@@ -101,7 +101,7 @@ Moira::dasmPFlusha(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmPFlush40(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmPFlush40(StrWriter &str, u32 &addr, u16 op) const
 {
     auto reg  = _____________xxx (op);
     auto mode = ___________xx___ (op);
@@ -116,7 +116,7 @@ Moira::dasmPFlush40(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmPLoad(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmPLoad(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
     auto ext = dasmRead<Word>(addr);
@@ -138,7 +138,7 @@ Moira::dasmPLoad(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmPMove(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmPMove(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old  = addr;
     auto ext  = dasmRead<Word>(addr);
@@ -220,7 +220,7 @@ Moira::dasmPMove(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmPTest(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmPTest(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
     auto ext = dasmRead<Word>(addr);
@@ -248,7 +248,7 @@ Moira::dasmPTest(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmPTest40(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmPTest40(StrWriter &str, u32 &addr, u16 op) const
 {
     auto reg = _____________xxx(op);
     auto rw  = __________x_____(op);

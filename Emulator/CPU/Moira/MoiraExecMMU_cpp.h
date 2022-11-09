@@ -6,7 +6,7 @@
 // -----------------------------------------------------------------------------
 
 bool
-Moira::isValidExtMMU(Instr I, Mode M, u16 op, u32 ext)
+Moira::isValidExtMMU(Instr I, Mode M, u16 op, u32 ext) const
 {
     auto preg  = [ext]() { return ext >> 10 & 0b111;   };
     auto a     = [ext]() { return ext >>  8 & 0b1;     };

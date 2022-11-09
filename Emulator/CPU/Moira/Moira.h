@@ -115,7 +115,7 @@ private:
     ExecPtr loop[65536];
 
     // Jump table holding the disassebler handlers
-    typedef void (Moira::*DasmPtr)(StrWriter&, u32&, u16);
+    typedef void (Moira::*DasmPtr)(StrWriter&, u32&, u16) const;
     DasmPtr *dasm = nullptr;
 
     // Table holding instruction infos
@@ -225,7 +225,7 @@ private:
 public:
     
     // Disassembles a single instruction and returns the instruction size
-    int disassemble(u32 addr, char *str);
+    int disassemble(u32 addr, char *str) const;
     
     // Returns a textual representation for a single word
     void disassembleWord(u32 value, char *str) const;
@@ -446,21 +446,21 @@ protected:
     //
 
     // Returns the availability mask for a given instruction
-    u16 availabilityMask(Instr I);
-    u16 availabilityMask(Instr I, Mode M, Size S);
-    u16 availabilityMask(Instr I, Mode M, Size S, u16 ext);
+    u16 availabilityMask(Instr I) const;
+    u16 availabilityMask(Instr I, Mode M, Size S) const;
+    u16 availabilityMask(Instr I, Mode M, Size S, u16 ext) const;
 
     // Checks if a certain CPU model supports a given instruction
-    bool isAvailable(Model model, Instr I);
-    bool isAvailable(Model model, Instr I, Mode M, Size S);
-    bool isAvailable(Model model, Instr I, Mode M, Size S, u16 ext);
+    bool isAvailable(Model model, Instr I) const;
+    bool isAvailable(Model model, Instr I, Mode M, Size S) const;
+    bool isAvailable(Model model, Instr I, Mode M, Size S, u16 ext) const;
 
 private:
 
     // Checks the validity of the extension words
-    bool isValidExt(Instr I, Mode M, u16 op, u32 ext);
-    bool isValidExtMMU(Instr I, Mode M, u16 op, u32 ext);
-    bool isValidExtFPU(Instr I, Mode M, u16 op, u32 ext);
+    bool isValidExt(Instr I, Mode M, u16 op, u32 ext) const;
+    bool isValidExtMMU(Instr I, Mode M, u16 op, u32 ext) const;
+    bool isValidExtFPU(Instr I, Mode M, u16 op, u32 ext) const;
 
     // Returns an availability string (used by the disassembler)
     const char *availabilityString(Instr I, Mode M, Size S, u16 ext);

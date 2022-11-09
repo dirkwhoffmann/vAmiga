@@ -544,7 +544,7 @@ Moira::setSupervisorFlags(bool s, bool m)
 }
 
 u16
-Moira::availabilityMask(Instr I)
+Moira::availabilityMask(Instr I) const
 {
     
     switch (I) {
@@ -607,7 +607,7 @@ Moira::availabilityMask(Instr I)
 }
 
 u16
-Moira::availabilityMask(Instr I, Mode M, Size S)
+Moira::availabilityMask(Instr I, Mode M, Size S) const
 {
     u16 mask = availabilityMask(I);
 
@@ -638,7 +638,7 @@ Moira::availabilityMask(Instr I, Mode M, Size S)
     return mask;
 }
 
-u16 Moira::availabilityMask(Instr I, Mode M, Size S, u16 ext)
+u16 Moira::availabilityMask(Instr I, Mode M, Size S, u16 ext) const
 {
     u16 mask = availabilityMask(I);
 
@@ -683,19 +683,19 @@ u16 Moira::availabilityMask(Instr I, Mode M, Size S, u16 ext)
 }
 
 bool
-Moira::isAvailable(Model model, Instr I)
+Moira::isAvailable(Model model, Instr I) const
 {
     return availabilityMask(I) & (1 << model);
 }
 
 bool
-Moira::isAvailable(Model model, Instr I, Mode M, Size S)
+Moira::isAvailable(Model model, Instr I, Mode M, Size S) const
 {
     return availabilityMask(I, M, S) & (1 << model);
 }
 
 bool
-Moira::isAvailable(Model model, Instr I, Mode M, Size S, u16 ext)
+Moira::isAvailable(Model model, Instr I, Mode M, Size S, u16 ext) const
 {
     return availabilityMask(I, M, S, ext) & (1 << model);
 }
@@ -717,7 +717,7 @@ Moira::availabilityString(Instr I, Mode M, Size S, u16 ext)
 }
 
 bool
-Moira::isValidExt(Instr I, Mode M, u16 op, u32 ext)
+Moira::isValidExt(Instr I, Mode M, u16 op, u32 ext) const
 {
     switch (I) {
 
@@ -798,7 +798,7 @@ Moira::getIrqVector(u8 level) const {
 }
 
 int
-Moira::disassemble(u32 addr, char *str)
+Moira::disassemble(u32 addr, char *str) const
 {
     if constexpr (ENABLE_DASM == false) {
         throw std::runtime_error("This feature requires ENABLE_DASM = true\n");

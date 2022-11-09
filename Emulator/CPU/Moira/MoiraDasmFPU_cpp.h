@@ -10,7 +10,7 @@
 // #include "softfloat.h"
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmFGen(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmFGen(StrWriter &str, u32 &addr, u16 op) const
 {
     auto ext  = dasmRead<Word>(addr);
     auto cod  = xxx_____________(ext);
@@ -125,7 +125,7 @@ Moira::dasmFGen(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmFBcc(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmFBcc(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
     auto ext = dasmRead<S>(addr);
@@ -149,7 +149,7 @@ Moira::dasmFBcc(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmFDbcc(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmFDbcc(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
     auto ext = dasmRead(addr);
@@ -171,14 +171,14 @@ Moira::dasmFDbcc(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmFNop(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmFNop(StrWriter &str, u32 &addr, u16 op) const
 {
     str << Ins<I>{};
     if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) str << " ";
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmFRestore(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmFRestore(StrWriter &str, u32 &addr, u16 op) const
 {
     auto dn = _____________xxx (op);
 
@@ -186,7 +186,7 @@ Moira::dasmFRestore(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmFSave(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmFSave(StrWriter &str, u32 &addr, u16 op) const
 {
     auto dn = _____________xxx (op);
 
@@ -194,7 +194,7 @@ Moira::dasmFSave(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmFScc(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmFScc(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
     auto ext = dasmRead(addr);
@@ -213,7 +213,7 @@ Moira::dasmFScc(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmFTrapcc(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmFTrapcc(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
     auto ext = dasmRead(addr);
@@ -243,7 +243,7 @@ Moira::dasmFTrapcc(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmFGeneric(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmFGeneric(StrWriter &str, u32 &addr, u16 op) const
 {
     auto ext = dasmRead(addr);
     auto reg = _____________xxx (op);
@@ -306,7 +306,7 @@ Moira::dasmFGeneric(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmFGeneric2(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmFGeneric2(StrWriter &str, u32 &addr, u16 op) const
 {
     auto ext = dasmRead(addr);
     auto reg = _____________xxx (op);
@@ -373,7 +373,7 @@ Moira::dasmFGeneric2(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmFGeneric3(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmFGeneric3(StrWriter &str, u32 &addr, u16 op) const
 {
     auto ext = dasmRead(addr);
     auto reg = _____________xxx (op);
@@ -434,7 +434,7 @@ Moira::dasmFGeneric3(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmFMove(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmFMove(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
     auto ext = dasmRead(addr);
@@ -544,7 +544,7 @@ Moira::dasmFMove(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmFMovecr(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmFMovecr(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
     auto ext = dasmRead(addr);
@@ -566,7 +566,7 @@ Moira::dasmFMovecr(StrWriter &str, u32 &addr, u16 op)
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op)
+Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
     auto ext = dasmRead(addr);
