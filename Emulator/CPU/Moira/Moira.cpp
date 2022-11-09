@@ -58,7 +58,7 @@ Moira::setModel(Model cpuModel, Model dasmModel)
 void
 Moira::setDasmSyntax(DasmSyntax value)
 {
-    syntax = value;
+    style.syntax = value;
 }
 
 void
@@ -71,19 +71,19 @@ Moira::setDasmNumberFormat(DasmNumberFormat value)
         throw std::runtime_error("Invalid radix: " + std::to_string(value.radix));
     }
     
-    numberFormat = value;
+    style.numberFormat = value;
 }
 
 void
 Moira::setDasmLetterCase(DasmLetterCase value)
 {
-    letterCase = value;
+    style.letterCase = value;
 }
 
 void
 Moira::setIndentation(int value)
 {
-    tab = Tab{value};
+    style.tab = value;
 }
 
 bool
@@ -192,6 +192,9 @@ Moira::reset()
     prefetch<C>();
     
     debugger.reset();
+
+    // Inform the delegate
+    didReset();
 }
 
 void
@@ -388,7 +391,7 @@ Moira::halt()
     reg.pc = reg.pc0;
     
     // Inform the delegate
-    signalHalt();
+    didHalt();
 }
 
 template <Size S> u32
@@ -745,13 +748,15 @@ void
 Moira::setFC(u8 value)
 {
     if (!EMULATE_FC) return;
+
     fcl = (u8)value;
 }
 
 template <Mode M> void
 Moira::setFC()
 {
-    if (!EMULATE_FC) return;
+    if (!EMULATE_FC)  return;
+
     fcl = (M == MODE_DIPC || M == MODE_IXPC) ? FC_USER_PROG : FC_USER_DATA;
 }
 
@@ -791,13 +796,13 @@ Moira::disassemble(u32 addr, char *str)
     u32 pc = addr;
     u16 opcode = read16Dasm(pc);
     
-    StrWriter writer(str, syntax, numberFormat);
+    StrWriter writer(str, style);
     
     (this->*dasm[opcode])(writer, pc, opcode);
     writer << Finish{};
     
     // Post process disassembler output
-    switch (letterCase) {
+    switch (style.letterCase) {
             
         case DASM_MIXED_CASE:
             

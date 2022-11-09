@@ -99,17 +99,21 @@ public:
     char *base;             // Start address of the destination string
     char *ptr;              // Write pointer
 
-    DasmSyntax syntax;
-    DasmNumberFormat nf;
+    const DasmStyle &style;
+    Tab tab {8};
+    //    DasmSyntax syntax;
+//    DasmNumberFormat nf;
     
 public:
     
-    StrWriter(char *p, DasmSyntax s, DasmNumberFormat n) {
-        
+    // StrWriter(char *p, DasmSyntax s, DasmNumberFormat n) {
+    StrWriter(char *p, const DasmStyle &style) : style(style) {
+
         comment[0] = 0;
         base = ptr = p;
-        syntax = s;
-        nf = n;
+        // tab = Tab{ style.tab };
+        // syntax = s;
+        // nf = n;
     };
 
     StrWriter& operator<<(char);

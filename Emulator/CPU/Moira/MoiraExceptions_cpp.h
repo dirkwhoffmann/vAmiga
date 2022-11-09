@@ -481,7 +481,7 @@ Moira::execInterrupt(u8 level)
     assert(level < 8);
     
     // Notify delegate
-    signalInterrupt(level);
+    willInterrupt(level);
     
     // Remember the current value of the status register
     u16 status = getSR();

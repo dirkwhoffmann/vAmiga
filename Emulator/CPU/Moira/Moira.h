@@ -44,22 +44,66 @@ protected:
     // The instruction set used by the disassembler
     Model dasmModel = M68000;
 
-    // The selected disassembler syntax
-    DasmSyntax syntax = DASM_MOIRA;
+    // The selected disassembler style
+    DasmStyle style = {
+        
+        .syntax         = DASM_MOIRA,
+        .numberFormat   = { .prefix = "$", .radix = 16 },
+        .letterCase     = DASM_MIXED_CASE,
+        .tab            = 8
+    };
 
-    // The number format used by the disassembler
-    DasmNumberFormat numberFormat { .prefix = "$", .radix = 16 };
+    // Number of elapsed cycles since powerup
+    i64 clock;
+    
+    // The register set
+    Registers reg;
+    
+    // The prefetch queue
+    PrefetchQueue queue;
 
-    // The letter case used by the disassembler
-    DasmLetterCase letterCase = DASM_MIXED_CASE;
-
-    // The spacing used by the disassembler
-    Tab tab{8};
+    // The floating point unit (not supported yet)
+    FPU fpu;
 
     // The interrupt mode of this CPU
     IrqMode irqMode = IRQ_AUTO;
 
+    // Current value on the IPL pins (Interrupt Priority Level)
+    u8 ipl;
     
+    // Value on the lower two function code pins (FC1|FC0)
+    u8 fcl;
+    
+    // Determines the source of the function code pins
+    u8 fcSource;
+    
+    // Remembers the vector number of the most recent exception
+    int exception;
+    
+    // Cycle penalty (needed for 68020+ extended addressing modes)
+    int cp;
+
+    // Controls exact timing of instructions running in loop mode
+    int loopModeDelay = 2;
+
+    // Read and write buffers (appear in 68010 exception frames)
+    u16 readBuffer;
+    u16 writeBuffer;
+
+    // Jump table holding the instruction handlers
+    typedef void (Moira::*ExecPtr)(u16);
+    ExecPtr exec[65536];
+    
+    // Jump table holding the loop mode instruction handlers (68010 only)
+    ExecPtr loop[65536];
+    
+    // Jump table holding the disassebler handlers
+    typedef void (Moira::*DasmPtr)(StrWriter&, u32&, u16);
+    DasmPtr *dasm = nullptr;
+
+    // Table holding instruction infos
+    InstrInfo *info = nullptr;
+
     /* State flags
      *
      * CPU_IS_HALTED:
@@ -96,6 +140,7 @@ protected:
      *    watchpoints, or catchpoints.
      */
     int flags;
+
     static constexpr int CPU_IS_HALTED          = (1 << 8);
     static constexpr int CPU_IS_STOPPED         = (1 << 9);
     static constexpr int CPU_IS_LOOPING         = (1 << 10);
@@ -106,55 +151,7 @@ protected:
     static constexpr int CPU_CHECK_BP           = (1 << 15);
     static constexpr int CPU_CHECK_WP           = (1 << 16);
     static constexpr int CPU_CHECK_CP           = (1 << 17);
-    
-    // Number of elapsed cycles since powerup
-    i64 clock;
-    
-    // The register set
-    Registers reg;
-    
-    // The prefetch queue
-    PrefetchQueue queue;
 
-    // The floating point unit (not supported yet)
-    FPU fpu;
-    
-    // Current value on the IPL pins (Interrupt Priority Level)
-    u8 ipl;
-    
-    // Value on the lower two function code pins (FC1|FC0)
-    u8 fcl;
-    
-    // Determines the source of the function code pins
-    u8 fcSource;
-    
-    // Remembers the vector number of the most recent exception
-    int exception;
-    
-    // Cycle penalty (needed for 68020+ extended addressing modes)
-    int cp;
-
-    // EXPERIMENTAL
-    int loopModeDelay = 2;  // Termination delay for 68010 loop mode
-    u16 readBuffer;         // Appears in 68010 exception frame
-    u16 writeBuffer;        // Appears in 68010 exception frame
-
-    // Jump table holding the instruction handlers
-    typedef void (Moira::*ExecPtr)(u16);
-    ExecPtr exec[65536];
-    
-    // Jump table holding the loop mode instruction handlers (68010 only)
-    ExecPtr loop[65536];
-    
-    // Jump table holding the disassebler handlers
-    typedef void (Moira::*DasmPtr)(StrWriter&, u32&, u16);
-    DasmPtr *dasm = nullptr;
-    
-private:
-    
-    // Table holding instruction infos
-    InstrInfo *info = nullptr;
-    
     
     //
     // Constructing
@@ -298,8 +295,8 @@ protected:
     virtual u16 readIrqUserVector(u8 level) const { return 0; }
 
     // State delegates
-    virtual void signalHardReset() { }
-    virtual void signalHalt() { }
+    virtual void didReset() { }
+    virtual void didHalt() { }
 
     // Instruction delegates
     virtual void willExecute(const char *func, Instr I, Mode M, Size S, u16 opcode) { }
@@ -310,8 +307,8 @@ protected:
     virtual void didExecute(ExceptionType exc, u16 vector) { }
 
     // Exception delegates
-    virtual void signalInterrupt(u8 level) { }
-    virtual void signalJumpToVector(int nr, u32 addr) { }
+    virtual void willInterrupt(u8 level) { }
+    virtual void didJumpToVector(int nr, u32 addr) { }
     virtual void signalSoftwareTrap(u16 opcode, SoftwareTrap trap) { }
 
     // Cache register delegated
@@ -352,8 +349,8 @@ protected:
     u16 readIrqUserVector(u8 level) const;
 
     // State delegates
-    void signalHardReset();
-    void signalHalt();
+    void didReset();
+    void didHalt();
 
     // Instruction delegates
     void willExecute(const char *func, Instr I, Mode M, Size S, u16 opcode);
@@ -364,8 +361,8 @@ protected:
     void didExecute(ExceptionType exc, u16 vector);
 
     // Exception delegates
-    void signalInterrupt(u8 level);
-    void signalJumpToVector(int nr, u32 addr);
+    void willInterrupt(u8 level);
+    void didJumpToVector(int nr, u32 addr);
     void signalSoftwareTrap(u16 opcode, SoftwareTrap trap);
 
     // Cache register delegated

@@ -193,19 +193,25 @@ Moira::didExecute(ExceptionType exc, u16 vector)
 }
 
 void
-Moira::signalHalt()
+Moira::didReset()
+{
+
+}
+
+void
+Moira::didHalt()
 {
     msgQueue.put(MSG_CPU_HALT);
 }
 
 void
-Moira::signalInterrupt(u8 level)
+Moira::willInterrupt(u8 level)
 {
     debug(INT_DEBUG, "Executing level %d IRQ\n", level);
 }
 
 void
-Moira::signalJumpToVector(int nr, u32 addr)
+Moira::didJumpToVector(int nr, u32 addr)
 {
     bool isIrqException = nr >= 24 && nr <= 31;
 

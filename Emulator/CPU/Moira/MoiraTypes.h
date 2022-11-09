@@ -100,6 +100,15 @@ typedef struct
 }
 DasmNumberFormat;
 
+typedef struct
+{
+    DasmSyntax syntax;
+    DasmNumberFormat numberFormat;
+    DasmLetterCase letterCase;
+    int tab;
+}
+DasmStyle;
+
 typedef enum
 {
     // 68000 instructions

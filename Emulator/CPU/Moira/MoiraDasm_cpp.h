@@ -62,7 +62,7 @@ Moira::Op(u16 reg, u32 &pc)
                 result.ow = u8(outerDispWords((u16)result.ext1));
                 
                 // Compensate Musashi bug (?)
-                if (syntax == DASM_MUSASHI && (result.ext1 & 0x47) >= 0x44) {
+                if (style.syntax == DASM_MUSASHI && (result.ext1 & 0x47) >= 0x44) {
                     
                     result.ow = 0;
                 }
@@ -91,7 +91,7 @@ Moira::Op(u16 reg, u32 &pc)
 template <Instr I, Mode M, Size S> void
 Moira::dasmIllegal(StrWriter &str, u32 &addr, u16 op)
 {
-    switch (str.syntax) {
+    switch (str.style.syntax) {
 
         case DASM_GNU:
         case DASM_GNU_MIT:
@@ -106,7 +106,7 @@ Moira::dasmIllegal(StrWriter &str, u32 &addr, u16 op)
 
         default:
 
-            str << "dc.w " << tab << UInt16{op} << "; ILLEGAL";
+            str << "dc.w " << str.tab << UInt16{op} << "; ILLEGAL";
             break;
     }
 }
@@ -114,7 +114,7 @@ Moira::dasmIllegal(StrWriter &str, u32 &addr, u16 op)
 template <Instr I, Mode M, Size S> void
 Moira::dasmLineA(StrWriter &str, u32 &addr, u16 op)
 {
-    switch (str.syntax) {
+    switch (str.style.syntax) {
 
         case DASM_GNU:
         case DASM_GNU_MIT:
@@ -124,14 +124,14 @@ Moira::dasmLineA(StrWriter &str, u32 &addr, u16 op)
 
         default:
             
-            str << "dc.w " << tab << UInt16{op} << "; opcode 1010";
+            str << "dc.w " << str.tab << UInt16{op} << "; opcode 1010";
     }
 }
 
 template <Instr I, Mode M, Size S> void
 Moira::dasmLineF(StrWriter &str, u32 &addr, u16 op)
 {
-    switch (str.syntax) {
+    switch (str.style.syntax) {
 
         case DASM_GNU:
         case DASM_GNU_MIT:
@@ -141,7 +141,7 @@ Moira::dasmLineF(StrWriter &str, u32 &addr, u16 op)
 
         default:
             
-            str << "dc.w " << tab << UInt16{op} << "; opcode 1111";
+            str << "dc.w " << str.tab << UInt16{op} << "; opcode 1111";
     }
 }
 
@@ -151,7 +151,7 @@ Moira::dasmShiftRg(StrWriter &str, u32 &addr, u16 op)
     auto dst = Dn ( _____________xxx(op) );
     auto src = Dn ( ____xxx_________(op) );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -161,7 +161,7 @@ Moira::dasmShiftIm(StrWriter &str, u32 &addr, u16 op)
     auto dst = Dn  ( _____________xxx(op) );
     
     if (src.raw == 0) src.raw = 8;
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -169,7 +169,7 @@ Moira::dasmShiftEa(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = Op <M,S> ( _____________xxx(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -178,7 +178,7 @@ Moira::dasmAbcdRg(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = Op <M,S> ( ____xxx_________(op), addr );
     
-    str << Ins<I>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -187,7 +187,7 @@ Moira::dasmAbcdEa(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = Op <M,S> ( ____xxx_________(op), addr );
     
-    str << Ins<I>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -196,7 +196,7 @@ Moira::dasmAddEaRg(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = Dn       ( ____xxx_________(op)       );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -205,7 +205,7 @@ Moira::dasmAddRgEa(StrWriter &str, u32 &addr, u16 op)
     auto src = Dn       ( ____xxx_________(op)       );
     auto dst = Op <M,S> ( _____________xxx(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -214,7 +214,7 @@ Moira::dasmAdda(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = An       ( ____xxx_________(op)       );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -223,7 +223,7 @@ Moira::dasmAddiRg(StrWriter &str, u32 &addr, u16 op)
     auto src = dasmRead<S>(addr);
     auto dst = Dn ( _____________xxx(op) );
     
-    str << Ins<I>{} << Sz<S>{} << tab << Ims<S>(src) << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>(src) << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -232,7 +232,7 @@ Moira::dasmAddiEa(StrWriter &str, u32 &addr, u16 op)
     auto src = dasmRead<S>(addr);
     auto dst = Op <M,S> ( _____________xxx(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << Ims<S>(src) << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>(src) << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -243,16 +243,16 @@ Moira::dasmAddqDn(StrWriter &str, u32 &addr, u16 op)
     
     if (src == 0) src = 8;
     
-    switch (str.syntax) {
+    switch (str.style.syntax) {
             
         case DASM_MUSASHI:
             
-            str << Ins<I>{} << Sz<S>{} << tab << Imd{src} << Sep{} << Dn{dst};
+            str << Ins<I>{} << Sz<S>{} << str.tab << Imd{src} << Sep{} << Dn{dst};
             break;
             
         default:
             
-            str << Ins<I>{} << Sz<S>{} << tab << Ims<S>{src} << Sep{} << Dn{dst};
+            str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>{src} << Sep{} << Dn{dst};
     }
 }
 
@@ -264,16 +264,16 @@ Moira::dasmAddqAn(StrWriter &str, u32 &addr, u16 op)
     
     if (src == 0) src = 8;
     
-    switch (str.syntax) {
+    switch (str.style.syntax) {
             
         case DASM_MUSASHI:
             
-            str << Ins<I>{} << Sz<S>{} << tab << Imd{src} << Sep{} << An{dst};
+            str << Ins<I>{} << Sz<S>{} << str.tab << Imd{src} << Sep{} << An{dst};
             break;
             
         default:
             
-            str << Ins<I>{} << Sz<S>{} << tab << Ims<S>{src} << Sep{} << An{dst};
+            str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>{src} << Sep{} << An{dst};
     }
 }
 
@@ -285,16 +285,16 @@ Moira::dasmAddqEa(StrWriter &str, u32 &addr, u16 op)
     
     if (src == 0) src = 8;
     
-    switch (str.syntax) {
+    switch (str.style.syntax) {
             
         case DASM_MUSASHI:
             
-            str << Ins<I>{} << Sz<S>{} << tab << Imd{src} << Sep{} << dst;
+            str << Ins<I>{} << Sz<S>{} << str.tab << Imd{src} << Sep{} << dst;
             break;
             
         default:
             
-            str << Ins<I>{} << Sz<S>{} << tab << Ims<S>{src} << Sep{} << dst;
+            str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>{src} << Sep{} << dst;
     }
 }
 
@@ -304,7 +304,7 @@ Moira::dasmAddxRg(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = Op <M,S> ( ____xxx_________(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -313,7 +313,7 @@ Moira::dasmAddxEa(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = Op <M,S> ( ____xxx_________(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -322,7 +322,7 @@ Moira::dasmAndEaRg(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = Dn       ( ____xxx_________(op)       );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -331,7 +331,7 @@ Moira::dasmAndRgEa(StrWriter &str, u32 &addr, u16 op)
     auto src = Dn       ( ____xxx_________(op)       );
     auto dst = Op <M,S> ( _____________xxx(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -340,10 +340,10 @@ Moira::dasmAndiRg(StrWriter &str, u32 &addr, u16 op)
     auto src = dasmRead<S>(addr);
     auto dst = _____________xxx(op);
     
-    if (syntax == DASM_MUSASHI) {
-        str << Ins<I>{} << Sz<S>{} << tab << Imu{src} << Sep{} << Dn{dst};
+    if (str.style.syntax == DASM_MUSASHI) {
+        str << Ins<I>{} << Sz<S>{} << str.tab << Imu{src} << Sep{} << Dn{dst};
     } else {
-        str << Ins<I>{} << Sz<S>{} << tab << Ims<S>(src) << Sep{} << Dn{dst};
+        str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>(src) << Sep{} << Dn{dst};
     }
 }
 
@@ -353,10 +353,10 @@ Moira::dasmAndiEa(StrWriter &str, u32 &addr, u16 op)
     auto src = dasmRead<S>(addr);
     auto dst = Op <M,S> ( _____________xxx(op), addr );
     
-    if (syntax == DASM_MUSASHI) {
-        str << Ins<I>{} << Sz<S>{} << tab << Imu{src} << Sep{} << dst;
+    if (str.style.syntax == DASM_MUSASHI) {
+        str << Ins<I>{} << Sz<S>{} << str.tab << Imu{src} << Sep{} << dst;
     } else {
-        str << Ins<I>{} << Sz<S>{} << tab << Ims<S>(src) << "," << dst;
+        str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>(src) << "," << dst;
     }
 }
 
@@ -365,10 +365,10 @@ Moira::dasmAndiccr(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = dasmRead<S>(addr);
     
-    if (str.syntax == DASM_MUSASHI) {
-        str << Ins<I>{} << tab << Imu{src} << Sep{} << Ccr{};
+    if (str.style.syntax == DASM_MUSASHI) {
+        str << Ins<I>{} << str.tab << Imu{src} << Sep{} << Ccr{};
     } else {
-        str << Ins<I>{} << Sz<S>{} << tab << Ims<S>(src) << Sep{} << Ccr{};
+        str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>(src) << Sep{} << Ccr{};
     }
 }
 
@@ -377,10 +377,10 @@ Moira::dasmAndisr(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = dasmRead<S>(addr);
     
-    if (str.syntax == DASM_MUSASHI) {
-        str << Ins<I>{} << tab << Imu{src} << Sep{} << Sr{};
+    if (str.style.syntax == DASM_MUSASHI) {
+        str << Ins<I>{} << str.tab << Imu{src} << Sep{} << Sr{};
     } else {
-        str << Ins<I>{} << Sz<S>{} << tab << Ims<S>(src) << Sep{} << Sr{};
+        str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>(src) << Sep{} << Sr{};
     }
 }
 
@@ -394,14 +394,14 @@ Moira::dasmBitFieldDn(StrWriter &str, u32 &addr, u16 op)
     auto w   = ___________xxxxx(ext);
 
     // Catch illegal extension words
-    if ((str.syntax == DASM_GNU || str.syntax == DASM_GNU_MIT) && !isValidExt(I, M, op, ext)) {
+    if ((str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) && !isValidExt(I, M, op, ext)) {
 
         addr = old;
         dasmIllegal<I, M, S>(str, addr, op);
         return;
     }
 
-    str << Ins<I>{} << tab;
+    str << Ins<I>{} << str.tab;
 
     if constexpr (I == BFINS) {
         str << Dn ( _xxx____________(ext) ) << Sep{};
@@ -409,7 +409,7 @@ Moira::dasmBitFieldDn(StrWriter &str, u32 &addr, u16 op)
 
     str << Op<M, S>(dst, addr);
 
-    switch (str.syntax) {
+    switch (str.style.syntax) {
 
         case DASM_GNU:
         case DASM_GNU_MIT:
@@ -453,22 +453,22 @@ Moira::dasmBkpt(StrWriter &str, u32 &addr, u16 op)
 {
     auto nr = _____________xxx(op);
     
-    switch (str.syntax) {
+    switch (str.style.syntax) {
             
         case DASM_MUSASHI:
             
-            str << Ins<I>{} << tab << Imd(nr) << Av<I, M, S>{};
+            str << Ins<I>{} << str.tab << Imd(nr) << Av<I, M, S>{};
             break;
 
         case DASM_GNU:
         case DASM_GNU_MIT:
 
-            str << Ins<I>{} << tab << Int(nr);
+            str << Ins<I>{} << str.tab << Int(nr);
             break;
 
         default:
             
-            str << Ins<I>{} << tab << Imu(nr);
+            str << Ins<I>{} << str.tab << Imu(nr);
     }
 }
 
@@ -484,17 +484,17 @@ Moira::dasmCallm(StrWriter &str, u32 &addr, u16 op)
     auto src = dasmRead<Byte>(addr);
     auto dst = Op<M, S>( _____________xxx(op), addr );
     
-    switch (str.syntax) {
+    switch (str.style.syntax) {
             
         case DASM_GNU:
         case DASM_GNU_MIT:
 
-            str << Ins<I>{} << tab << Ims<Byte>(src) << Sep{} << dst;
+            str << Ins<I>{} << str.tab << Ims<Byte>(src) << Sep{} << dst;
             break;
 
         default:
             
-            str << Ins<I>{} << tab << Imu(src) << Sep{} << dst << Av<I, M, S>{};
+            str << Ins<I>{} << str.tab << Imu(src) << Sep{} << dst << Av<I, M, S>{};
     }
 }
 
@@ -508,14 +508,14 @@ Moira::dasmCas(StrWriter &str, u32 &addr, u16 op)
     auto dst = Op <M,S> ( _____________xxx(op), addr );
 
     // Catch illegal extension words
-    if ((str.syntax == DASM_GNU || str.syntax == DASM_GNU_MIT) && !isValidExt(I, M, op, ext)) {
+    if ((str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) && !isValidExt(I, M, op, ext)) {
 
         addr = old;
         dasmIllegal<I, M, S>(str, addr, op);
         return;
     }
 
-    str << Ins<I>{} << Sz<S>{} << tab << dc << Sep{} << du << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << dc << Sep{} << du << Sep{} << dst;
     str << Av<I, M, S>{};
 }
 
@@ -532,18 +532,18 @@ Moira::dasmCas2(StrWriter &str, u32 &addr, u16 op)
     auto rn2 = Rn ( (ext >> 12) & 0b1111 );
 
     // Catch illegal extension words (binutils only checks the first word)
-    if ((str.syntax == DASM_GNU || str.syntax == DASM_GNU_MIT) && !isValidExt(I, M, op, u16(ext >> 16))) {
+    if ((str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) && !isValidExt(I, M, op, u16(ext >> 16))) {
 
         addr = old;
         dasmIllegal<I, M, S>(str, addr, op);
         return;
     }
 
-    auto fill = str.syntax == DASM_GNU || str.syntax == DASM_GNU_MIT ? ',' : ':';
+    auto fill = str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT ? ',' : ':';
 
-    str << Ins<I>{} << Sz<S>{} << tab;
+    str << Ins<I>{} << Sz<S>{} << str.tab;
 
-    switch (str.syntax) {
+    switch (str.style.syntax) {
 
         case DASM_MOIRA_MIT:
         case DASM_GNU_MIT:
@@ -570,14 +570,14 @@ Moira::dasmChk(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = Dn       ( ____xxx_________(op)       );
 
-    if (str.syntax != DASM_MUSASHI && !isAvailable(dasmModel, I, M, S)) {
+    if (str.style.syntax != DASM_MUSASHI && !isAvailable(dasmModel, I, M, S)) {
 
         addr = old;
         dasmIllegal<I, M, S>(str, addr, op);
         return;
     }
 
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
     str << Av<I, M, S>{};
 }
 
@@ -590,7 +590,7 @@ Moira::dasmChkCmp2(StrWriter &str, u32 &addr, u16 op)
     auto dst = Rn       ( xxxx____________(ext)      );
 
     // Catch illegal extension words
-    if ((str.syntax == DASM_GNU || str.syntax == DASM_GNU_MIT) && !isValidExt(I, M, op, ext)) {
+    if ((str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) && !isValidExt(I, M, op, ext)) {
 
         addr = old;
         dasmIllegal<I, M, S>(str, addr, op);
@@ -598,9 +598,9 @@ Moira::dasmChkCmp2(StrWriter &str, u32 &addr, u16 op)
     }
 
     if (ext & 0x0800) {
-        str << Ins<CHK2>{} << Sz<S>{} << tab << src << Sep{} << dst;
+        str << Ins<CHK2>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
     } else {
-        str << Ins<CMP2>{} << Sz<S>{} << tab << src << Sep{} << dst;
+        str << Ins<CMP2>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
     }
     str << Av<I, M, S>{};
 }
@@ -610,7 +610,7 @@ Moira::dasmClr(StrWriter &str, u32 &addr, u16 op)
 {
     auto dst = Op <M,S> ( _____________xxx(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -619,7 +619,7 @@ Moira::dasmCmp(StrWriter &str, u32 &addr, u16 op)
     Ea<M,S> src = Op <M,S> ( _____________xxx(op), addr );
     Dn      dst = Dn       ( ____xxx_________(op)       );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -628,7 +628,7 @@ Moira::dasmCmpa(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = An       ( ____xxx_________(op)       );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -637,7 +637,7 @@ Moira::dasmCmpiRg(StrWriter &str, u32 &addr, u16 op)
     auto src = dasmRead<S>(addr);
     auto dst = Dn ( _____________xxx(op) );
     
-    str << Ins<I>{} << Sz<S>{} << tab << Ims<S>(src) << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>(src) << Sep{} << dst;
     str << Av<I, M, S>{};
 }
 
@@ -647,7 +647,7 @@ Moira::dasmCmpiEa(StrWriter &str, u32 &addr, u16 op)
     auto src = dasmRead<S>(addr);
     auto dst = Op <M,S> ( _____________xxx(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << Ims<S>(src) << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>(src) << Sep{} << dst;
     str << Av<I, M, S>{};
 }
 
@@ -657,13 +657,13 @@ Moira::dasmCmpm(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = Op <M,S> ( ____xxx_________(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
 Moira::dasmCpBcc(StrWriter &str, u32 &addr, u16 op)
 {
-    if (syntax == DASM_GNU || syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
         dasmIllegal<I, M, S>(str, addr, op);
         return;
@@ -678,14 +678,14 @@ Moira::dasmCpBcc(StrWriter &str, u32 &addr, u16 op)
     
     pc += SEXT<S>(disp);
     
-    str << id << Ins<I>{} << Cpcc{cnd} << tab << Ims<Word>(ext2);
+    str << id << Ins<I>{} << Cpcc{cnd} << str.tab << Ims<Word>(ext2);
     str << "; " << UInt(pc) << " (extension = " << Int(ext1) << ") (2-3)";
 }
 
 template <Instr I, Mode M, Size S> void
 Moira::dasmCpDbcc(StrWriter &str, u32 &addr, u16 op)
 {
-    if (syntax == DASM_GNU || syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
         dasmIllegal<I, M, S>(str, addr, op);
         return;
@@ -704,14 +704,14 @@ Moira::dasmCpDbcc(StrWriter &str, u32 &addr, u16 op)
 
     pc += i16(ext3);
 
-    str << id << Ins<I>{} << Cpcc{cnd} << tab << Dn{dn} << "," << Ims<Word>(ext4);
+    str << id << Ins<I>{} << Cpcc{cnd} << str.tab << Dn{dn} << "," << Ims<Word>(ext4);
     str << "; " << UInt(pc) << " (extension = " << Int(ext2) << ") (2-3)";
 }
 
 template <Instr I, Mode M, Size S> void
 Moira::dasmCpGen(StrWriter &str, u32 &addr, u16 op)
 {
-    if (syntax == DASM_GNU || syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
         dasmIllegal<I, M, S>(str, addr, op);
         return;
@@ -720,14 +720,14 @@ Moira::dasmCpGen(StrWriter &str, u32 &addr, u16 op)
     auto id  = ( ____xxx_________(op) );
     auto ext = Imu ( dasmRead<Long>(addr) );
 
-    str << id << Ins<I>{} << tab << ext;
+    str << id << Ins<I>{} << str.tab << ext;
     str << Av<I, M, S>{};
 }
 
 template <Instr I, Mode M, Size S> void
 Moira::dasmCpRestore(StrWriter &str, u32 &addr, u16 op)
 {
-    if (syntax == DASM_GNU || syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
         dasmIllegal<I, M, S>(str, addr, op);
         return;
@@ -744,7 +744,7 @@ Moira::dasmCpRestore(StrWriter &str, u32 &addr, u16 op)
 template <Instr I, Mode M, Size S> void
 Moira::dasmCpSave(StrWriter &str, u32 &addr, u16 op)
 {
-    if (syntax == DASM_GNU || syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
         dasmIllegal<I, M, S>(str, addr, op);
         return;
@@ -754,14 +754,14 @@ Moira::dasmCpSave(StrWriter &str, u32 &addr, u16 op)
     auto id = ( ____xxx_________(op) );
     auto ea = Op <M,S> (dn, addr);
 
-    str << id << Ins<I>{} << tab << ea;
+    str << id << Ins<I>{} << str.tab << ea;
     str << Av<I, M, S>{};
 }
 
 template <Instr I, Mode M, Size S> void
 Moira::dasmCpScc(StrWriter &str, u32 &addr, u16 op)
 {
-    if (syntax == DASM_GNU || syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
         dasmIllegal<I, M, S>(str, addr, op);
         return;
@@ -774,14 +774,14 @@ Moira::dasmCpScc(StrWriter &str, u32 &addr, u16 op)
     auto ext2 = dasmRead<Word>(addr);
     auto ea   = Op<M, S>(dn, addr);
 
-    str << id << Ins<I>{} << Cpcc{cnd} << tab << ea;
+    str << id << Ins<I>{} << Cpcc{cnd} << str.tab << ea;
     str << "; (extension = " << Int(ext2) << ") (2-3)";
 }
 
 template <Instr I, Mode M, Size S> void
 Moira::dasmCpTrapcc(StrWriter &str, u32 &addr, u16 op)
 {
-    if (syntax == DASM_GNU || syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
         dasmIllegal<I, M, S>(str, addr, op);
         return;
@@ -872,7 +872,7 @@ Moira::dasmBcc(StrWriter &str, u32 &addr, u16 op)
     U32_INC(dst, 2);
     U32_INC(dst, S == Byte ? (i8)op : SEXT<S>(dasmRead<S>(addr)));
     
-    switch (syntax) {
+    switch (str.style.syntax) {
             
         case DASM_MUSASHI:
             
@@ -882,18 +882,18 @@ Moira::dasmBcc(StrWriter &str, u32 &addr, u16 op)
                 break;
             }
             
-            str << Ins<I>{} << tab << UInt(dst) << Av<I, M, S>{};
+            str << Ins<I>{} << str.tab << UInt(dst) << Av<I, M, S>{};
             break;
 
         case DASM_GNU:
         case DASM_GNU_MIT:
 
-            str << Ins<I>{} << Szb<S>{} << tab << UInt(dst);
+            str << Ins<I>{} << Szb<S>{} << str.tab << UInt(dst);
             break;
 
         default:
             
-            str << Ins<I>{} << tab << UInt(dst) << Av<I, M, S>{};
+            str << Ins<I>{} << str.tab << UInt(dst) << Av<I, M, S>{};
             break;
     }
 }
@@ -910,7 +910,7 @@ Moira::dasmBitDxDy(StrWriter &str, u32 &addr, u16 op)
     auto src = Dn       ( ____xxx_________(op)       );
     auto dst = Op <M,S> ( _____________xxx(op), addr );
     
-    str << Ins<I>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -919,7 +919,7 @@ Moira::dasmBitDxEa(StrWriter &str, u32 &addr, u16 op)
     auto src = Dn       ( ____xxx_________(op)       );
     auto dst = Op <M,S> ( _____________xxx(op), addr );
     
-    str << Ins<I>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -928,17 +928,17 @@ Moira::dasmBitImDy(StrWriter &str, u32 &addr, u16 op)
     auto src = dasmRead<S>(addr);
     auto dst = Op <M,S> ( _____________xxx(op), addr );
     
-    switch (str.syntax) {
+    switch (str.style.syntax) {
             
         case DASM_GNU:
         case DASM_GNU_MIT:
 
-            str << Ins<I>{} << tab << Ims<S>(src) << Sep{} << dst;
+            str << Ins<I>{} << str.tab << Ims<S>(src) << Sep{} << dst;
             break;
             
         default:
             
-            str << Ins<I>{} << tab << Imu(src) << Sep{} << dst;
+            str << Ins<I>{} << str.tab << Imu(src) << Sep{} << dst;
     }
 }
 
@@ -948,17 +948,17 @@ Moira::dasmBitImEa(StrWriter &str, u32 &addr, u16 op)
     auto src = dasmRead<S>(addr);
     auto dst = Op <M,S> ( _____________xxx(op), addr );
     
-    switch (str.syntax) {
+    switch (str.style.syntax) {
             
         case DASM_GNU:
         case DASM_GNU_MIT:
 
-            str << Ins<I>{} << tab << Ims<S>(src) << Sep{} << dst;
+            str << Ins<I>{} << str.tab << Ims<S>(src) << Sep{} << dst;
             break;
             
         default:
             
-            str << Ins<I>{} << tab << Imu(src) << Sep{} << dst;
+            str << Ins<I>{} << str.tab << Imu(src) << Sep{} << dst;
     }
 }
 
@@ -970,7 +970,7 @@ Moira::dasmDbcc(StrWriter &str, u32 &addr, u16 op)
     
     U32_INC(dst, (i16)dasmRead<Word>(addr));
     
-    str << Ins<I>{} << tab << src << Sep{} << UInt(dst);
+    str << Ins<I>{} << str.tab << src << Sep{} << UInt(dst);
 }
 
 template <Instr I, Mode M, Size S> void
@@ -979,7 +979,7 @@ Moira::dasmExgDxDy(StrWriter &str, u32 &addr, u16 op)
     auto src = Dn ( ____xxx_________(op) );
     auto dst = Dn ( _____________xxx(op) );
     
-    str << Ins<I>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -988,7 +988,7 @@ Moira::dasmExgAxDy(StrWriter &str, u32 &addr, u16 op)
     auto src = Dn ( ____xxx_________(op) );
     auto dst = An ( _____________xxx(op) );
     
-    str << Ins<I>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -997,7 +997,7 @@ Moira::dasmExgAxAy(StrWriter &str, u32 &addr, u16 op)
     auto src = An ( ____xxx_________(op) );
     auto dst = An ( _____________xxx(op) );
     
-    str << Ins<I>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1005,7 +1005,7 @@ Moira::dasmExt(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = Dn ( _____________xxx(op) );
     
-    str << Ins<I>{} << Sz<S>{} << tab << Dn{src};
+    str << Ins<I>{} << Sz<S>{} << str.tab << Dn{src};
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1013,7 +1013,7 @@ Moira::dasmExtb(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = Dn ( _____________xxx(op) );
     
-    str << Ins<I>{} << Sz<S>{} << tab << Dn{src};
+    str << Ins<I>{} << Sz<S>{} << str.tab << Dn{src};
     str << Av<I, M, S>{};
 }
 
@@ -1022,7 +1022,7 @@ Moira::dasmJmp(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = Op <M,S> ( _____________xxx(op), addr );
     
-    str << Ins<I>{} << tab << src;
+    str << Ins<I>{} << str.tab << src;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1030,7 +1030,7 @@ Moira::dasmJsr(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = Op <M,S> (_____________xxx(op), addr);
     
-    str << Ins<I>{} << tab << src;
+    str << Ins<I>{} << str.tab << src;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1039,7 +1039,7 @@ Moira::dasmLea(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = An       ( ____xxx_________(op)       );
     
-    str << Ins<I>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1048,17 +1048,17 @@ Moira::dasmLink(StrWriter &str, u32 &addr, u16 op)
     auto dsp = dasmRead<S>(addr);
     auto src = An ( _____________xxx(op) );
     
-    switch (str.syntax) {
+    switch (str.style.syntax) {
             
         case DASM_GNU:
         case DASM_GNU_MIT:
 
-            str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << Ims<S>(dsp);
+            str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << Ims<S>(dsp);
             break;
             
         default:
             
-            str << Ins<I>{} << tab << src << Sep{} << Ims<S>(dsp) << Av<I, M, S>{};
+            str << Ins<I>{} << str.tab << src << Sep{} << Ims<S>(dsp) << Av<I, M, S>{};
     }
 }
 
@@ -1068,7 +1068,7 @@ Moira::dasmMove0(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = Dn       ( ____xxx_________(op)       );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1077,7 +1077,7 @@ Moira::dasmMove2(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S>       ( _____________xxx(op), addr );
     auto dst = Op <MODE_AI,S> ( ____xxx_________(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1086,7 +1086,7 @@ Moira::dasmMove3(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S>       ( _____________xxx(op), addr );
     auto dst = Op <MODE_PI,S> ( ____xxx_________(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1095,7 +1095,7 @@ Moira::dasmMove4(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S>       ( _____________xxx(op), addr );
     auto dst = Op <MODE_PD,S> ( ____xxx_________(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1104,7 +1104,7 @@ Moira::dasmMove5(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S>       ( _____________xxx(op), addr );
     auto dst = Op <MODE_DI,S> ( ____xxx_________(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1113,7 +1113,7 @@ Moira::dasmMove6(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S>       ( _____________xxx(op), addr );
     auto dst = Op <MODE_IX,S> ( ____xxx_________(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1122,7 +1122,7 @@ Moira::dasmMove7(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S>       ( _____________xxx(op), addr );
     auto dst = Op <MODE_AW,S> ( ____xxx_________(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1131,7 +1131,7 @@ Moira::dasmMove8(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S>       ( _____________xxx(op), addr );
     auto dst = Op <MODE_AL,S> ( ____xxx_________(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1140,7 +1140,7 @@ Moira::dasmMovea(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = An       ( ____xxx_________(op)       );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1150,7 +1150,7 @@ Moira::dasmMovecRcRx(StrWriter &str, u32 &addr, u16 op)
     auto src = Cn(____xxxxxxxxxxxx(ext));
     auto dst = Rn(xxxx____________(ext));
     
-    str << Ins<I>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << str.tab << src << Sep{} << dst;
     str << Av<I, M, S>{ext};
 }
 
@@ -1161,7 +1161,7 @@ Moira::dasmMovecRxRc(StrWriter &str, u32 &addr, u16 op)
     auto dst = Cn(____xxxxxxxxxxxx(ext));
     auto src = Rn(xxxx____________(ext));
     
-    str << Ins<I>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << str.tab << src << Sep{} << dst;
     str << Av<I, M, S>{ext};
 }
 
@@ -1171,7 +1171,7 @@ Moira::dasmMovemEaRg(StrWriter &str, u32 &addr, u16 op)
     auto dst = RegRegList ( (u16)dasmRead<Word>(addr)  );
     auto src = Op <M,S>   ( _____________xxx(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1181,7 +1181,7 @@ Moira::dasmMovemRgEa(StrWriter &str, u32 &addr, u16 op)
     auto dst = Op <M,S>   ( _____________xxx(op), addr );
     
     if constexpr (M == 4) { src.raw = REVERSE_16(src.raw); }
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1190,7 +1190,7 @@ Moira::dasmMovepDxEa(StrWriter &str, u32 &addr, u16 op)
     auto src = Dn             ( ____xxx_________(op)       );
     auto dst = Op <MODE_DI,S> ( _____________xxx(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
     
 }
 
@@ -1200,7 +1200,7 @@ Moira::dasmMovepEaDx(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <MODE_DI,S> ( _____________xxx(op), addr );
     auto dst = Dn             ( ____xxx_________(op)       );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1208,7 +1208,7 @@ Moira::dasmMoveq(StrWriter &str, u32 &addr, u16 op)
 {
     auto dst = Dn ( ____xxx_________(op) );
     
-    str << Ins<I>{} << tab << Ims<Byte>(op) << Sep{} << dst;
+    str << Ins<I>{} << str.tab << Ims<Byte>(op) << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1219,7 +1219,7 @@ Moira::dasmMoves(StrWriter &str, u32 &addr, u16 op)
     auto ea = Op <M,S> ( _____________xxx(op), addr );
     auto rg = Rn ( xxxx____________(ext) );
 
-    if (str.syntax != DASM_MUSASHI && !isAvailable(dasmModel, I, M, S, ext)) {
+    if (str.style.syntax != DASM_MUSASHI && !isAvailable(dasmModel, I, M, S, ext)) {
 
         addr = old;
         dasmIllegal<I, M, S>(str, addr, op);
@@ -1227,9 +1227,9 @@ Moira::dasmMoves(StrWriter &str, u32 &addr, u16 op)
     }
 
     if (ext & 0x800) {      // Rg -> Ea
-        str << Ins<I>{} << Sz<S>{} << tab << rg << Sep{} << ea;
+        str << Ins<I>{} << Sz<S>{} << str.tab << rg << Sep{} << ea;
     } else {                // Ea -> Rg
-        str << Ins<I>{} << Sz<S>{} << tab << ea << Sep{} << rg;
+        str << Ins<I>{} << Sz<S>{} << str.tab << ea << Sep{} << rg;
     }
     str << Av<I, M, S>{};
 }
@@ -1239,16 +1239,16 @@ Moira::dasmMoveFromCcrRg(StrWriter &str, u32 &addr, u16 op)
 {
     auto dst = Dn ( _____________xxx(op) );
 
-    switch (syntax) {
+    switch (str.style.syntax) {
 
         case DASM_MUSASHI:
 
-            str << Ins<I>{} << tab << Ccr{} << Sep{} << dst << Av<I, M, S>{};
+            str << Ins<I>{} << str.tab << Ccr{} << Sep{} << dst << Av<I, M, S>{};
             break;
 
         default:
 
-            str << Ins<I>{} << Sz<S>{} << tab << Ccr{} << Sep{} << dst;
+            str << Ins<I>{} << Sz<S>{} << str.tab << Ccr{} << Sep{} << dst;
     }
 }
 
@@ -1257,16 +1257,16 @@ Moira::dasmMoveFromCcrEa(StrWriter &str, u32 &addr, u16 op)
 {
     auto dst = Op <M,S> ( _____________xxx(op), addr );
 
-    switch (syntax) {
+    switch (str.style.syntax) {
 
         case DASM_MUSASHI:
 
-            str << Ins<I>{} << tab << Ccr{} << Sep{} << dst << Av<I, M, S>{};
+            str << Ins<I>{} << str.tab << Ccr{} << Sep{} << dst << Av<I, M, S>{};
             break;
 
         default:
 
-            str << Ins<I>{} << Sz<S>{} << tab << Ccr{} << Sep{} << dst;
+            str << Ins<I>{} << Sz<S>{} << str.tab << Ccr{} << Sep{} << dst;
     }
 }
 
@@ -1275,22 +1275,22 @@ Moira::dasmMoveToCcr(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = _____________xxx(op);
     
-    switch (str.syntax) {
+    switch (str.style.syntax) {
             
         case DASM_MUSASHI:
 
-            str << Ins<I>{} << tab << Op<M, Byte>(src, addr) << Sep{} << Ccr{};
+            str << Ins<I>{} << str.tab << Op<M, Byte>(src, addr) << Sep{} << Ccr{};
             break;
 
         case DASM_GNU:
         case DASM_GNU_MIT:
 
-            str << Ins<I>{} << Sz<S>{} << tab << Op<M, S>(src, addr) << Sep{} << Ccr{};
+            str << Ins<I>{} << Sz<S>{} << str.tab << Op<M, S>(src, addr) << Sep{} << Ccr{};
             break;
 
         default:
 
-            str << Ins<I>{} << Sz<S>{} << tab << Op<M, Byte>(src, addr) << Sep{} << Ccr{};
+            str << Ins<I>{} << Sz<S>{} << str.tab << Op<M, Byte>(src, addr) << Sep{} << Ccr{};
     }
 }
 
@@ -1299,16 +1299,16 @@ Moira::dasmMoveFromSrRg(StrWriter &str, u32 &addr, u16 op)
 {
     auto dst = Dn ( _____________xxx(op) );
 
-    switch (syntax) {
+    switch (str.style.syntax) {
 
         case DASM_MUSASHI:
 
-            str << Ins<I>{} << tab << Sr{} << Sep{} << dst;
+            str << Ins<I>{} << str.tab << Sr{} << Sep{} << dst;
             break;
 
         default:
 
-            str << Ins<I>{} << Sz<S>{} << tab << Sr{} << Sep{} << dst;
+            str << Ins<I>{} << Sz<S>{} << str.tab << Sr{} << Sep{} << dst;
     }
 }
 
@@ -1317,16 +1317,16 @@ Moira::dasmMoveFromSrEa(StrWriter &str, u32 &addr, u16 op)
 {
     auto dst = Op<M, S>( _____________xxx(op), addr );
 
-    switch (syntax) {
+    switch (str.style.syntax) {
 
         case DASM_MUSASHI:
 
-            str << Ins<I>{} << tab << Sr{} << Sep{} << dst;
+            str << Ins<I>{} << str.tab << Sr{} << Sep{} << dst;
             break;
 
         default:
 
-            str << Ins<I>{} << Sz<S>{} << tab << Sr{} << Sep{} << dst;
+            str << Ins<I>{} << Sz<S>{} << str.tab << Sr{} << Sep{} << dst;
     }
 }
 
@@ -1335,16 +1335,16 @@ Moira::dasmMoveToSr(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = Op <M,S> ( _____________xxx(op), addr );
 
-    switch (syntax) {
+    switch (str.style.syntax) {
 
         case DASM_MUSASHI:
 
-            str << Ins<I>{} << tab << src << Sep{} << Sr{};
+            str << Ins<I>{} << str.tab << src << Sep{} << Sr{};
             break;
 
         default:
 
-            str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << Sr{};
+            str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << Sr{};
     }
 }
 
@@ -1353,17 +1353,17 @@ Moira::dasmMoveUspAn(StrWriter &str, u32 &addr, u16 op)
 {
     auto dst = An ( _____________xxx(op) );
     
-    switch (str.syntax) {
+    switch (str.style.syntax) {
             
         case DASM_GNU:
         case DASM_GNU_MIT:
 
-            str << Ins<I>{} << Sz<S>{} << tab << Usp{} << Sep{} << dst;
+            str << Ins<I>{} << Sz<S>{} << str.tab << Usp{} << Sep{} << dst;
             break;
             
         default:
             
-            str << Ins<I>{} << tab << Usp{} << Sep{} << dst;
+            str << Ins<I>{} << str.tab << Usp{} << Sep{} << dst;
     }
 }
 
@@ -1372,17 +1372,17 @@ Moira::dasmMoveAnUsp(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = An ( _____________xxx(op) );
     
-    switch (str.syntax) {
+    switch (str.style.syntax) {
             
         case DASM_GNU:
         case DASM_GNU_MIT:
 
-            str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << Usp{};
+            str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << Usp{};
             break;
             
         default:
             
-            str << Ins<I>{} << tab << src << Sep{} << Usp{};
+            str << Ins<I>{} << str.tab << src << Sep{} << Usp{};
     }
 }
 
@@ -1392,7 +1392,7 @@ Moira::dasmMuls(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = Dn       ( ____xxx_________(op)       );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1410,9 +1410,9 @@ Moira::dasmMull(StrWriter &str, u32 &addr, u16 op)
     auto dl  = Dn       ( _xxx____________(ext)      );
     auto dh  = Dn       ( _____________xxx(ext)      );
 
-    auto fill = str.syntax == DASM_GNU || str.syntax == DASM_GNU_MIT ? "," : ":";
+    auto fill = str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT ? "," : ":";
 
-    switch (syntax) {
+    switch (str.style.syntax) {
 
         case DASM_GNU:
         case DASM_GNU_MIT:
@@ -1429,7 +1429,7 @@ Moira::dasmMull(StrWriter &str, u32 &addr, u16 op)
         default:
 
             (ext & 1 << 11) ? str << Ins<MULS>{} : str << Ins<MULU>{};
-            str << Sz<S>{} << tab << src << Sep{};
+            str << Sz<S>{} << str.tab << src << Sep{};
             (ext & 1 << 10) ? str << dh << fill << dl : str << dl;
             str << Av<I, M, S>{};
     }
@@ -1441,7 +1441,7 @@ Moira::dasmDivs(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = Dn       ( ____xxx_________(op)       );
     
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1450,7 +1450,7 @@ Moira::dasmDivu(StrWriter &str, u32 &addr, u16 op)
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = Dn       ( ____xxx_________(op)       );
 
-    str << Ins<I>{} << Sz<S>{} << tab << src << Sep{} << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1462,9 +1462,9 @@ Moira::dasmDivl(StrWriter &str, u32 &addr, u16 op)
     auto dl  = Dn       ( _xxx____________(ext)      );
     auto dh  = Dn       ( _____________xxx(ext)      );
 
-    auto fill = str.syntax == DASM_GNU || str.syntax == DASM_GNU_MIT ? "," : ":";
+    auto fill = str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT ? "," : ":";
 
-    switch (syntax) {
+    switch (str.style.syntax) {
 
         case DASM_GNU:
         case DASM_GNU_MIT:
@@ -1485,15 +1485,15 @@ Moira::dasmDivl(StrWriter &str, u32 &addr, u16 op)
             if (ext & 1 << 10) {
 
                 // DIVS.L <ea>,Dr:Dq    (64-bit dividend)
-                str << Sz<S>{} << tab << src << Sep{} << dh << fill << dl;
+                str << Sz<S>{} << str.tab << src << Sep{} << dh << fill << dl;
 
             } else {
 
                 // DIVSL.L <ea>,Dr:Dq   (32-bit dividend)
-                if (dl.raw == dh.raw && str.syntax == DASM_MUSASHI) {
-                    str << Sz<S>{} << tab << src << Sep{} << dh;
+                if (dl.raw == dh.raw && str.style.syntax == DASM_MUSASHI) {
+                    str << Sz<S>{} << str.tab << src << Sep{} << dh;
                 } else {
-                    str << "l" << Sz<S>{} << tab << src << Sep{} << dh << fill << dl;
+                    str << "l" << Sz<S>{} << str.tab << src << Sep{} << dh << fill << dl;
 
                 }
             }
@@ -1506,7 +1506,7 @@ Moira::dasmNbcdRg(StrWriter &str, u32 &addr, u16 op)
 {
     auto dst = Op <M,S> ( _____________xxx(op), addr );
     
-    str << Ins<NBCD>{} << tab << dst;
+    str << Ins<NBCD>{} << str.tab << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1514,7 +1514,7 @@ Moira::dasmNbcdEa(StrWriter &str, u32 &addr, u16 op)
 {
     auto dst = Op <M,S> ( _____________xxx(op), addr );
     
-    str << Ins<NBCD>{} << tab << dst;
+    str << Ins<NBCD>{} << str.tab << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1530,17 +1530,17 @@ Moira::dasmPackDn(StrWriter &str, u32 &addr, u16 op)
     auto rx = Op <M,S> ( _____________xxx(op), addr );
     auto ry = Op <M,S> ( ____xxx_________(op), addr );
     
-    switch (str.syntax) {
+    switch (str.style.syntax) {
             
         case DASM_GNU:
         case DASM_GNU_MIT:
 
-            str << Ins<I>{} << tab << rx << Sep{} << ry << Sep{} << Ims<S>(ext);
+            str << Ins<I>{} << str.tab << rx << Sep{} << ry << Sep{} << Ims<S>(ext);
             break;
             
         default:
             
-            str << Ins<I>{} << tab << rx << Sep{} << ry << Sep{} << Imu(ext);
+            str << Ins<I>{} << str.tab << rx << Sep{} << ry << Sep{} << Imu(ext);
             str << Av<I, M, S>{};
     }
 }
@@ -1556,7 +1556,7 @@ Moira::dasmPea(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = Op <M,S> ( _____________xxx(op), addr );
     
-    str << Ins<I>{} << tab << src;
+    str << Ins<I>{} << str.tab << src;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1570,7 +1570,7 @@ Moira::dasmRtd(StrWriter &str, u32 &addr, u16 op)
 {
     auto disp = dasmRead<Word>(addr);
     
-    str << Ins<I>{} << tab << Ims<Word>(disp);
+    str << Ins<I>{} << str.tab << Ims<Word>(disp);
     str << Av<I, M, S>{};
 }
 
@@ -1585,7 +1585,7 @@ Moira::dasmRtm(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = Rn ( ____________xxxx(op) );
     
-    str << Ins<I>{} << tab << src;
+    str << Ins<I>{} << str.tab << src;
     str << Av<I, M, S>{};
 }
 
@@ -1606,7 +1606,7 @@ Moira::dasmSccRg(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = Dn ( _____________xxx(op) );
     
-    str << Ins<I>{} << tab << src;
+    str << Ins<I>{} << str.tab << src;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1614,7 +1614,7 @@ Moira::dasmSccEa(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = Op <M,S> ( _____________xxx(op), addr );
     
-    str << Ins<I>{} << tab << src;
+    str << Ins<I>{} << str.tab << src;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1622,7 +1622,7 @@ Moira::dasmStop(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = dasmRead<S>(addr);
     
-    str << Ins<I>{} << tab << Ims<S>(src);
+    str << Ins<I>{} << str.tab << Ims<S>(src);
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1630,7 +1630,7 @@ Moira::dasmNegRg(StrWriter &str, u32 &addr, u16 op)
 {
     auto dst = Dn ( _____________xxx(op) );
     
-    str << Ins<I>{} << Sz<S>{} << tab << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1638,7 +1638,7 @@ Moira::dasmNegEa(StrWriter &str, u32 &addr, u16 op)
 {
     auto dst = Op <M,S> ( _____________xxx(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << dst;
+    str << Ins<I>{} << Sz<S>{} << str.tab << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1646,7 +1646,7 @@ Moira::dasmSwap(StrWriter &str, u32 &addr, u16 op)
 {
     Dn reg = Dn ( _____________xxx(op) );
     
-    str << Ins<I>{} << tab << reg;
+    str << Ins<I>{} << str.tab << reg;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1654,7 +1654,7 @@ Moira::dasmTasRg(StrWriter &str, u32 &addr, u16 op)
 {
     auto dst = Dn ( _____________xxx(op) );
     
-    str << Ins<I>{} << tab << dst;
+    str << Ins<I>{} << str.tab << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1662,7 +1662,7 @@ Moira::dasmTasEa(StrWriter &str, u32 &addr, u16 op)
 {
     auto dst = Op <M,S> ( _____________xxx(op), addr );
     
-    str << Ins<I>{} << tab << dst;
+    str << Ins<I>{} << str.tab << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1670,7 +1670,7 @@ Moira::dasmTrap(StrWriter &str, u32 &addr, u16 op)
 {
     auto nr = Imu ( ____________xxxx(op) );
     
-    str << Ins<I>{} << tab << nr;
+    str << Ins<I>{} << str.tab << nr;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1682,7 +1682,7 @@ Moira::dasmTrapv(StrWriter &str, u32 &addr, u16 op)
 template <Instr I, Mode M, Size S> void
 Moira::dasmTrapcc(StrWriter &str, u32 &addr, u16 op)
 {
-    switch (str.syntax) {
+    switch (str.style.syntax) {
 
         case DASM_GNU:
         case DASM_GNU_MIT:
@@ -1698,7 +1698,7 @@ Moira::dasmTrapcc(StrWriter &str, u32 &addr, u16 op)
                 case Long:
 
                     auto ext = dasmRead<S>(addr);
-                    str << Ins<I>{} << Sz<S>{} << tab << Ims<S>(ext);
+                    str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>(ext);
                     break;
             }
             break;
@@ -1709,14 +1709,14 @@ Moira::dasmTrapcc(StrWriter &str, u32 &addr, u16 op)
                     
                 case Byte:
                     
-                    str << Ins<I>{} << tab;
+                    str << Ins<I>{} << str.tab;
                     break;
                     
                 case Word:
                 case Long:
                     
                     auto ext = dasmRead<S>(addr);
-                    str << Ins<I>{} << tab << Imu(ext);
+                    str << Ins<I>{} << str.tab << Imu(ext);
                     break;
             }
     }
@@ -1729,7 +1729,7 @@ Moira::dasmTst(StrWriter &str, u32 &addr, u16 op)
 {
     auto ea = Op <M,S> ( _____________xxx(op), addr );
     
-    str << Ins<I>{} << Sz<S>{} << tab << ea;
+    str << Ins<I>{} << Sz<S>{} << str.tab << ea;
     str << Av<I, M, S>{};
 }
 
@@ -1738,7 +1738,7 @@ Moira::dasmUnlk(StrWriter &str, u32 &addr, u16 op)
 {
     auto reg = An ( _____________xxx(op) );
     
-    str << Ins<I>{} << tab << reg;
+    str << Ins<I>{} << str.tab << reg;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1748,17 +1748,17 @@ Moira::dasmUnpkDn(StrWriter &str, u32 &addr, u16 op)
     auto rx = Op <M,S> ( _____________xxx(op), addr );
     auto ry = Op <M,S> ( ____xxx_________(op), addr );
     
-    switch (str.syntax) {
+    switch (str.style.syntax) {
             
         case DASM_GNU:
         case DASM_GNU_MIT:
 
-            str << Ins<I>{} << tab << rx << Sep{} << ry << Sep{} << Ims<S>(ext);
+            str << Ins<I>{} << str.tab << rx << Sep{} << ry << Sep{} << Ims<S>(ext);
             break;
             
         default:
             
-            str << Ins<I>{} << tab << rx << Sep{} << ry << Sep{} << Imu(ext);
+            str << Ins<I>{} << str.tab << rx << Sep{} << ry << Sep{} << Imu(ext);
             str << Av<I, M, S>{};
     }
 }
@@ -1788,22 +1788,22 @@ Moira::dasmCinv(StrWriter &str, u32 &addr, u16 op)
 
         case 0b00:
 
-            str << Ins<I>{} << tab << "(illegal scope)";
+            str << Ins<I>{} << str.tab << "(illegal scope)";
             break;
 
         case 0b01:
 
-            str << Ins<I>{} << "l" << tab << cname[cache] << Sep{} << Op<M, Long>(reg, addr);
+            str << Ins<I>{} << "l" << str.tab << cname[cache] << Sep{} << Op<M, Long>(reg, addr);
             break;
 
         case 0b10:
 
-            str << Ins<I>{} << "p" << tab << cname[cache] << Sep{} << Op<M, Long>(reg, addr);
+            str << Ins<I>{} << "p" << str.tab << cname[cache] << Sep{} << Op<M, Long>(reg, addr);
             break;
 
         case 0b11:
 
-            str << Ins<I>{} << "a" << tab << cname[cache];
+            str << Ins<I>{} << "a" << str.tab << cname[cache];
             break;
     }
 
@@ -1831,7 +1831,7 @@ Moira::dasmMove16PiPi(StrWriter &str, u32 &addr, u16 op)
         return;
     }
 
-    str << Ins<I>{} << tab << Op<MODE_PI>(ax, addr) << Sep{} << Op<MODE_PI>(ay, addr);
+    str << Ins<I>{} << str.tab << Op<MODE_PI>(ax, addr) << Sep{} << Op<MODE_PI>(ay, addr);
     str << Av<I, M, S>{};
 }
 
@@ -1841,7 +1841,7 @@ Moira::dasmMove16PiAl(StrWriter &str, u32 &addr, u16 op)
     auto ext = dasmRead<Long>(addr);
     auto ay  = _____________xxx(op);
 
-    str << Ins<I>{} << tab << Op<MODE_PI>(ay, addr) << Sep{} << UInt(ext);
+    str << Ins<I>{} << str.tab << Op<MODE_PI>(ay, addr) << Sep{} << UInt(ext);
     str << Av<I, M, S>{};
 }
 
@@ -1851,7 +1851,7 @@ Moira::dasmMove16AlPi(StrWriter &str, u32 &addr, u16 op)
     auto ext = dasmRead<Long>(addr);
     auto ay  = _____________xxx(op);
 
-    str << Ins<I>{} << tab << UInt(ext) << Sep{} << Op<MODE_PI>(ay, addr);
+    str << Ins<I>{} << str.tab << UInt(ext) << Sep{} << Op<MODE_PI>(ay, addr);
     str << Av<I, M, S>{};
 }
 
@@ -1861,7 +1861,7 @@ Moira::dasmMove16AiAl(StrWriter &str, u32 &addr, u16 op)
     auto ext = dasmRead<Long>(addr);
     auto ay  = _____________xxx(op);
 
-    str << Ins<I>{} << tab << Op<MODE_AI>(ay, addr) << Sep{} << UInt(ext);
+    str << Ins<I>{} << str.tab << Op<MODE_AI>(ay, addr) << Sep{} << UInt(ext);
     str << Av<I, M, S>{};
 }
 
@@ -1871,7 +1871,7 @@ Moira::dasmMove16AlAi(StrWriter &str, u32 &addr, u16 op)
     auto ext = dasmRead<Long>(addr);
     auto ay  = _____________xxx(op);
 
-    str << Ins<I>{} << tab << UInt(ext) << Sep{} << Op<MODE_AI>(ay, addr);
+    str << Ins<I>{} << str.tab << UInt(ext) << Sep{} << Op<MODE_AI>(ay, addr);
     str << Av<I, M, S>{};
 }
 
