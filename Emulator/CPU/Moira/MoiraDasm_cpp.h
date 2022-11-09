@@ -27,7 +27,7 @@ Moira::dasmRead(u32 &addr) const
 }
 
 template <Mode M, Size S> Ea<M,S>
-Moira::Op(u16 reg, u32 &pc)
+Moira::Op(u16 reg, u32 &pc) const
 {
     Ea<M,S> result;
     result.reg = reg;

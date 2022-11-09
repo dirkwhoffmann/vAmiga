@@ -856,13 +856,13 @@ Moira::disassembleMemory(u32 addr, int cnt, char *str) const
 }
 
 void
-Moira::disassemblePC(u32 pc, char *str)
+Moira::disassemblePC(u32 pc, char *str) const
 {
     sprintx(str, pc, { .prefix = "", .radix = 16, .upperCase = true }, 6);
 }
 
 void
-Moira::disassembleSR(const StatusRegister &sr, char *str)
+Moira::disassembleSR(const StatusRegister &sr, char *str) const
 {
     str[0]  = sr.t1 ? 'T' : 't';
     str[1]  = sr.t0 ? 'T' : 't';

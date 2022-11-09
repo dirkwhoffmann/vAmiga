@@ -646,7 +646,7 @@ Moira::jumpToVector(int nr)
 }
 
 int
-Moira::baseDispWords(u16 ext)
+Moira::baseDispWords(u16 ext) const
 {
     u16 xx = __________xx____ (ext);
     
@@ -657,7 +657,7 @@ Moira::baseDispWords(u16 ext)
 }
 
 int
-Moira::outerDispWords(u16 ext)
+Moira::outerDispWords(u16 ext) const
 {
     u16 xx = ______________xx (ext);
     
@@ -668,7 +668,7 @@ Moira::outerDispWords(u16 ext)
 }
 
 template <Core C, Mode M, Size S> int
-Moira::penaltyCycles(u16 ext)
+Moira::penaltyCycles(u16 ext) const
 {
     constexpr u8 delay[64] = {
         

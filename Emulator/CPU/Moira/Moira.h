@@ -234,12 +234,12 @@ public:
     void disassembleMemory(u32 addr, int cnt, char *str) const;
     
     // Returns a textual representation for the program counter
-    void disassemblePC(char *str) { disassemblePC(reg.pc, str); }
-    void disassemblePC(u32 pc, char *str);
+    void disassemblePC(char *str) const { disassemblePC(reg.pc, str); }
+    void disassemblePC(u32 pc, char *str) const;
     
     // Returns a textual representation for the status register
-    void disassembleSR(char *str) { disassembleSR(reg.sr, str); }
-    void disassembleSR(const StatusRegister &sr, char *str);
+    void disassembleSR(char *str) const { disassembleSR(reg.sr, str); }
+    void disassembleSR(const StatusRegister &sr, char *str) const;
     
     // Return an info struct for a certain opcode
     InstrInfo getInfo(u16 op) const;
