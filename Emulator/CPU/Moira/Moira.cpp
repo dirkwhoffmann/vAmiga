@@ -8,6 +8,8 @@
 #include "config.h"
 #include "MoiraConfig.h"
 #include "Moira.h"
+#include "MoiraMacros.h"
+
 #include <cstdio>
 #include <algorithm>
 #include <cmath>
@@ -17,7 +19,6 @@
 
 namespace moira {
 
-#include "MoiraMacros.h"
 #include "MoiraInit_cpp.h"
 #include "MoiraALU_cpp.h"
 #include "MoiraDataflow_cpp.h"
@@ -43,16 +44,16 @@ Moira::~Moira()
 void
 Moira::setModel(Model cpuModel, Model dasmModel)
 {
-    if (this->cpuModel != cpuModel || this->dasmModel != dasmModel) {
-        
-        this->cpuModel = cpuModel;
-        this->dasmModel = dasmModel;
+    // Only proceed if the model changes
+    if (this->cpuModel == cpuModel && this->dasmModel == dasmModel) return;
 
-        createJumpTable(cpuModel, dasmModel);
+    this->cpuModel = cpuModel;
+    this->dasmModel = dasmModel;
 
-        reg.cacr &= cacrMask();
-        flags &= ~CPU_IS_LOOPING;
-    }
+    createJumpTable(cpuModel, dasmModel);
+
+    reg.cacr &= cacrMask();
+    flags &= ~CPU_IS_LOOPING;
 }
 
 void
@@ -173,11 +174,8 @@ template <Core C> void
 Moira::reset()
 {
     flags = CPU_CHECK_IRQ;
-    
-    reg = { };
-    reg.sr.s = 1;
-    reg.sr.ipl = 7;
 
+    reg = { .sr.s = 1, .sr.ipl = 7 };
     ipl = 0;
     fcl = 0;
     fcSource = 0;
@@ -211,19 +209,23 @@ Moira::reset()
 void
 Moira::execute()
 {
-    // Check the integrity of the CPU flags
+    // Check the integrity of the IRQ flag
     if (reg.ipl > reg.sr.ipl || reg.ipl == 7) assert(flags & CPU_CHECK_IRQ);
+    // TODO: CHECK THE OTHER DIRECTION, TOO
+
+    // Check the integrity of the trace flag
     assert(!!(flags & CPU_TRACE_FLAG) == reg.sr.t1);
     
     // Check the integrity of the program counter
     assert(reg.pc0 == reg.pc);
-    
-    //
-    // The quick execution path: Call the instruction handler and return
-    //
-    
+
+    // Take the fast path or the slow path
     if (!flags) {
-        
+
+        //
+        // Fast path: Call the instruction handler and return
+        //
+
         reg.pc += 2;
         try {
             (this->*exec[queue.ird])(queue.ird);
@@ -231,100 +233,96 @@ Moira::execute()
             processException(exc);
         }
 
-        assert(reg.pc0 == reg.pc);
-        return;
-    }
-    
-    //
-    // The slow execution path: Process flags one by one
-    //
-    
-    // Only continue if the CPU is not halted
-    if (flags & CPU_IS_HALTED) {
-        sync(2);
-        return;
-    }
-    
-    // Process pending trace exception (if any)
-    if (flags & CPU_TRACE_EXCEPTION) {
-        execException(EXC_TRACE);
-        goto done;
-    }
-    
-    // Check if the T flag is set inside the status register
-    if ((flags & CPU_TRACE_FLAG) && !(flags & CPU_IS_STOPPED)) {
-        flags |= CPU_TRACE_EXCEPTION;
-    }
-    
-    // Process pending interrupt (if any)
-    if (flags & CPU_CHECK_IRQ) {
+    } else {
 
-        try {
-            if (checkForIrq()) goto done;
-        } catch (const std::exception &exc) {
-            processException(exc);
-        }
-    }
+        //
+        // Slow path: Process flags one by one
+        //
 
-    // If the CPU is stopped, poll the IPL lines and return
-    if (flags & CPU_IS_STOPPED) {
-        
-        // Initiate a privilege exception if the supervisor bit is cleared
-        if (!reg.sr.s) {
-            sync(4);
-            reg.pc -= 2;
-            flags &= ~CPU_IS_STOPPED;
-            execException(EXC_PRIVILEGE);
+        // Only continue if the CPU is not halted
+        if (flags & CPU_IS_HALTED) {
+            sync(2);
             return;
         }
-        
-        pollIpl();
-        sync(MIMIC_MUSASHI ? 1 : 2);
-        return;
-    }
-    
-    // If logging is enabled, record the executed instruction
-    if (flags & CPU_LOG_INSTRUCTION) {
-        debugger.logInstruction();
-    }
-    
-    // Execute the instruction
-    if (flags & CPU_IS_LOOPING) {
-        
-        reg.pc += 2;
-        if (loop[queue.ird] == nullptr) {
-            printf("Callback missing [%d]\n", queue.ird);
-            breakpointReached(reg.pc0);
-        } else {
-            (this->*loop[queue.ird])(queue.ird);
-            assert(reg.pc0 == reg.pc);
-        }
-    } else {
-        
-        reg.pc += 2;
-        try {
-            (this->*exec[queue.ird])(queue.ird);
-        } catch (const std::exception &exc) {
-            processException(exc);
+
+        // Process pending trace exception (if any)
+        if (flags & CPU_TRACE_EXCEPTION) {
+            execException(EXC_TRACE);
+            goto done;
         }
 
-        assert(reg.pc0 == reg.pc);
-    }
-    
-done:
-    
-    // Check if a breakpoint has been reached
-    if (flags & CPU_CHECK_BP) {
-        
-        // Don't break if the instruction won't be executed due to tracing
-        if (flags & CPU_TRACE_EXCEPTION) return;
-        
-        // Check if a softstop has been reached
-        if (debugger.softstopMatches(reg.pc0)) softstopReached(reg.pc0);
-        
+        // Check if the T flag is set inside the status register
+        if ((flags & CPU_TRACE_FLAG) && !(flags & CPU_IS_STOPPED)) {
+            flags |= CPU_TRACE_EXCEPTION;
+        }
+
+        // Process pending interrupt (if any)
+        if (flags & CPU_CHECK_IRQ) {
+
+            try {
+                if (checkForIrq()) goto done;
+            } catch (const std::exception &exc) {
+                processException(exc);
+            }
+        }
+
+        // If the CPU is stopped, poll the IPL lines and return
+        if (flags & CPU_IS_STOPPED) {
+
+            // Initiate a privilege exception if the supervisor bit is cleared
+            if (!reg.sr.s) {
+                sync(4);
+                reg.pc -= 2;
+                flags &= ~CPU_IS_STOPPED;
+                execException(EXC_PRIVILEGE);
+                return;
+            }
+
+            pollIpl();
+            sync(MIMIC_MUSASHI ? 1 : 2);
+            return;
+        }
+
+        // If logging is enabled, record the executed instruction
+        if (flags & CPU_LOG_INSTRUCTION) {
+            debugger.logInstruction();
+        }
+
+        // Execute the instruction
+        if (flags & CPU_IS_LOOPING) {
+
+            reg.pc += 2;
+            assert(loop[queue.ird]);
+            (this->*loop[queue.ird])(queue.ird);
+
+        } else {
+
+            reg.pc += 2;
+            try {
+                (this->*exec[queue.ird])(queue.ird);
+            } catch (const std::exception &exc) {
+                processException(exc);
+            }
+        }
+
+    done:
+
         // Check if a breakpoint has been reached
-        if (debugger.breakpointMatches(reg.pc0)) breakpointReached(reg.pc0);
+        if (flags & CPU_CHECK_BP) {
+
+            // Don't break if the instruction won't be executed due to tracing
+            if (flags & CPU_TRACE_EXCEPTION) return;
+
+            // Check if a softstop has been reached
+            if (debugger.softstopMatches(reg.pc0)) softstopReached(reg.pc0);
+
+            // Check if a breakpoint has been reached
+            if (debugger.breakpointMatches(reg.pc0)) breakpointReached(reg.pc0);
+        }
     }
+
+    // Check the integrity of the program counter again
+    assert(reg.pc0 == reg.pc);
 }
 
 void

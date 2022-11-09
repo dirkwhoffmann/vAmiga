@@ -19,14 +19,14 @@ namespace moira {
 // Datatypes
 //
 
-typedef int8_t             i8;
-typedef int16_t            i16;
-typedef int32_t            i32;
-typedef long long          i64;
-typedef uint8_t            u8;
-typedef uint16_t           u16;
-typedef uint32_t           u32;
-typedef unsigned long long u64;
+typedef int8_t              i8;
+typedef int16_t             i16;
+typedef int32_t             i32;
+typedef long long           i64;
+typedef uint8_t             u8;
+typedef uint16_t            u16;
+typedef uint32_t            u32;
+typedef unsigned long long  u64;
 
 
 //
@@ -35,15 +35,15 @@ typedef unsigned long long u64;
 
 typedef enum
 {
-    M68000,             // Fully supported
-    M68010,             // Fully supported
-    M68EC020,           // Work in progress
-    M68020,             // Work in progress
-    M68EC030,           // Disassembler only
-    M68030,             // Disassembler only
-    M68EC040,           // Disassembler only
-    M68LC040,           // Disassembler only
-    M68040              // Disassembler only
+    M68000,                 // Fully supported
+    M68010,                 // Fully supported
+    M68EC020,               // Work in progress
+    M68020,                 // Work in progress
+    M68EC030,               // Disassembler only
+    M68030,                 // Disassembler only
+    M68EC040,               // Disassembler only
+    M68LC040,               // Disassembler only
+    M68040                  // Disassembler only
 }
 Model;
 
@@ -452,27 +452,27 @@ static constexpr int CPU_CHECK_CP           = (1 << 17);
 typedef u64 Flags;
 
 // Memory access flags
-static constexpr u64 REVERSE       (1 << 0);   // Reverse the long word access order
-static constexpr u64 SKIP_LAST_RD  (1 << 1);   // Don't read the extension word
+static constexpr u64 REVERSE        = (1 << 0);   // Reverse the long word access order
+static constexpr u64 SKIP_LAST_RD   = (1 << 1);   // Don't read the extension word
 
 // Interrupt flags
-static constexpr u64 POLLIPL       (1 << 2);   // Poll the interrupt lines
+static constexpr u64 POLLIPL        = (1 << 2);   // Poll the interrupt lines
 
 // Address error flags
-static constexpr u64 AE_WRITE      (1 << 3);   // Clear read flag in code word
-static constexpr u64 AE_PROG       (1 << 4);   // Set FC pins to program space
-static constexpr u64 AE_DATA       (1 << 5);   // Set FC pins to user space
-static constexpr u64 AE_INC_PC     (1 << 6);   // Increment PC by 2 in stack frame
-static constexpr u64 AE_DEC_PC     (1 << 7);   // Decrement PC by 2 in stack frame
-static constexpr u64 AE_INC_A      (1 << 8);   // Increment ADDR by 2 in stack frame
-static constexpr u64 AE_DEC_A      (1 << 9);   // Decrement ADDR by 2 in stack frame
-static constexpr u64 AE_SET_CB3    (1 << 10);  // Set bit 3 in CODE segment
-static constexpr u64 AE_SET_RW     (1 << 11);  // Set bit 8 in the special status word (68010)
-static constexpr u64 AE_SET_DF     (1 << 12);  // Set bit 12 in the special status word (68010)
-static constexpr u64 AE_SET_IF     (1 << 13);  // Set bit 13 in the special status word (68010)
+static constexpr u64 AE_WRITE       = (1 << 3);   // Clear read flag in code word
+static constexpr u64 AE_PROG        = (1 << 4);   // Set FC pins to program space
+static constexpr u64 AE_DATA        = (1 << 5);   // Set FC pins to user space
+static constexpr u64 AE_INC_PC      = (1 << 6);   // Increment PC by 2 in stack frame
+static constexpr u64 AE_DEC_PC      = (1 << 7);   // Decrement PC by 2 in stack frame
+static constexpr u64 AE_INC_A       = (1 << 8);   // Increment ADDR by 2 in stack frame
+static constexpr u64 AE_DEC_A       = (1 << 9);   // Decrement ADDR by 2 in stack frame
+static constexpr u64 AE_SET_CB3     = (1 << 10);  // Set bit 3 in CODE segment
+static constexpr u64 AE_SET_RW      = (1 << 11);  // Set bit 8 in the special status word (68010)
+static constexpr u64 AE_SET_DF      = (1 << 12);  // Set bit 12 in the special status word (68010)
+static constexpr u64 AE_SET_IF      = (1 << 13);  // Set bit 13 in the special status word (68010)
 
 // Timing flags
-static constexpr u64 IMPL_DEC      (1 << 14);  // Omit 2 cycle delay in -(An) mode
+static constexpr u64 IMPL_DEC       = (1 << 14);  // Omit 2 cycle delay in -(An) mode
 
 
 //
