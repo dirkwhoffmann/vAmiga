@@ -61,6 +61,8 @@
 #define CYCLES_IM(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(MODE_IM,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
 #define CYCLES_IP(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(MODE_IP,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
 
+#define POLL_IPL reg.ipl = ipl
+
 #define REVERSE_8(x) (u8)(((x) * 0x0202020202ULL & 0x010884422010ULL) % 1023)
 #define REVERSE_16(x) (u16)((REVERSE_8((x) & 0xFF) << 8) | REVERSE_8(((x) >> 8) & 0xFF))
 #define U32_ADD(x,y) (u32)((i64)(x) + (i64)(y))

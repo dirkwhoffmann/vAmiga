@@ -381,10 +381,10 @@ public:
     u16 getIRD() const { return queue.ird; }
     void setIRD(u16 val) { queue.ird = val; }
     
-    u8 getCCR() const { return getCCR(reg.sr); }
+    u8 getCCR() const;
     void setCCR(u8 val);
     
-    u16 getSR() const { return getSR(reg.sr); }
+    u16 getSR() const;
     void setSR(u16 val);
     
     u32 getSP() const { return reg.sp; }
@@ -419,12 +419,9 @@ private:
     void setSupervisorMode(bool value);
     void setMasterMode(bool value);
     void setSupervisorFlags(bool s, bool m);
-    
-    u8 getCCR(const StatusRegister &sr) const;
-    u16 getSR(const StatusRegister &sr) const;
-    
+
 private:
-    
+
     void setTraceFlag() { reg.sr.t1 = true; flags |= CPU_TRACE_FLAG; }
     void clearTraceFlag() { reg.sr.t1 = false; flags &= ~CPU_TRACE_FLAG; }
     
@@ -434,7 +431,7 @@ private:
     void clearTraceFlags() { clearTraceFlag(); clearTrace0Flag(); }
     
 protected:
-    
+
     template <Size S = Long> u32 readD(int n) const;
     template <Size S = Long> u32 readA(int n) const;
     template <Size S = Long> u32 readR(int n) const;
@@ -495,18 +492,17 @@ private:
     //
     
 public:
-    
+
+    // Gets or sets the value on the IPL pins
     u8 getIPL() const { return ipl; }
     void setIPL(u8 val);
     
 private:
-    
-    // Polls the IPL pins
-    void pollIpl() { reg.ipl = ipl; }
-    
+
     // Selects the IRQ vector to branch to
     u16 getIrqVector(u8 level) const;
 
+    
 private:
 
 #include "MoiraInit.h"

@@ -456,7 +456,7 @@ static constexpr u64 REVERSE        = (1 << 0);   // Reverse the long word acces
 static constexpr u64 SKIP_LAST_RD   = (1 << 1);   // Don't read the extension word
 
 // Interrupt flags
-static constexpr u64 POLLIPL        = (1 << 2);   // Poll the interrupt lines
+static constexpr u64 POLL           = (1 << 2);   // Poll the interrupt lines
 
 // Address error flags
 static constexpr u64 AE_WRITE       = (1 << 3);   // Clear read flag in code word

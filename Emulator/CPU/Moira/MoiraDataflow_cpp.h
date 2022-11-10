@@ -353,14 +353,14 @@ Moira::readMS(u32 addr)
 
     if constexpr (S == Byte) {
 
-        if (F & POLLIPL) pollIpl();
+        if (F & POLL) POLL_IPL;
         result = read8(addr & addrMask<C>());
         SYNC(2);
     }
 
     if constexpr (S == Word) {
 
-        if (F & POLLIPL) pollIpl();
+        if (F & POLL) POLL_IPL;
         result = read16(addr & addrMask<C>());
         SYNC(2);
     }
@@ -369,7 +369,7 @@ Moira::readMS(u32 addr)
         
         result = read16(addr & addrMask<C>()) << 16;
         SYNC(4);
-        if (F & POLLIPL) pollIpl();
+        if (F & POLL) POLL_IPL;
         result |= read16((addr + 2) & addrMask<C>());
         SYNC(2);
     }
@@ -406,14 +406,14 @@ Moira::writeMS(u32 addr, u32 val)
 
     if constexpr (S == Byte) {
 
-        if (F & POLLIPL) pollIpl();
+        if (F & POLL) POLL_IPL;
         write8(addr & addrMask<C>(), (u8)val);
         SYNC(2);
     }
 
     if constexpr (S == Word) {
 
-        if (F & POLLIPL) pollIpl();
+        if (F & POLL) POLL_IPL;
         write16(addr & addrMask<C>(), (u16)val);
         SYNC(2);
     }
@@ -424,7 +424,7 @@ Moira::writeMS(u32 addr, u32 val)
 
             write16((addr + 2) & addrMask<C>(), u16(val & 0xFFFF));
             SYNC(4);
-            if (F & POLLIPL) pollIpl();
+            if (F & POLL) POLL_IPL;
             write16(addr & addrMask<C>(), u16(val >> 16));
             SYNC(2);
 
@@ -432,7 +432,7 @@ Moira::writeMS(u32 addr, u32 val)
 
             write16(addr & addrMask<C>(), u16(val >> 16));
             SYNC(4);
-            if (F & POLLIPL) pollIpl();
+            if (F & POLL) POLL_IPL;
             write16((addr + 2) & addrMask<C>(), u16(val & 0xFFFF));
             SYNC(2);
         }
@@ -637,7 +637,7 @@ Moira::jumpToVector(int nr)
     // Update the prefetch queue
     queue.irc = (u16)readMS<C, MEM_PROG, Word>(reg.pc);
     SYNC(2);
-    prefetch<C, POLLIPL>();
+    prefetch<C, POLL>();
     
     // Stop emulation if the exception should be catched
     if (debugger.catchpointMatches(nr)) catchpointReached(u8(nr));
@@ -687,4 +687,4 @@ Moira::penaltyCycles(u16 ext) const
 }
 
 // Explicit template instantiations
-template void Moira::fullPrefetch<C68000, POLLIPL>();
+template void Moira::fullPrefetch<C68000, POLL>();

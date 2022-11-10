@@ -280,7 +280,7 @@ Moira::execute()
                 return;
             }
 
-            pollIpl();
+            POLL_IPL;
             sync(MIMIC_MUSASHI ? 1 : 2);
             return;
         }
@@ -403,9 +403,16 @@ Moira::halt()
 }
 
 u8
-Moira::getCCR(const StatusRegister &sr) const
+Moira::getCCR() const
 {
-    return (u8)(sr.c << 0 | sr.v << 1 | sr.z << 2 | sr.n << 3 | sr.x << 4);
+    auto result =
+    reg.sr.c << 0 |
+    reg.sr.v << 1 |
+    reg.sr.z << 2 |
+    reg.sr.n << 3 |
+    reg.sr.x << 4 ;
+
+    return u8(result);
 }
 
 void
@@ -419,37 +426,37 @@ Moira::setCCR(u8 val)
 }
 
 u16
-Moira::getSR(const StatusRegister &sr) const
+Moira::getSR() const
 {
     auto flags =
-    sr.t1  << 15 |
-    sr.t0  << 14 |
-    sr.s   << 13 |
-    sr.m   << 12 |
-    sr.ipl <<  8 | getCCR();
-    
-    return u16(flags);
+    reg.sr.t1  << 15 |
+    reg.sr.t0  << 14 |
+    reg.sr.s   << 13 |
+    reg.sr.m   << 12 |
+    reg.sr.ipl <<  8 ;
+
+    return u16(flags | getCCR());
 }
 
 void
 Moira::setSR(u16 val)
 {
-    bool t1 = (val >> 15) & 1;
-    bool s = (val >> 13) & 1;
-    u8 ipl = (val >> 8) & 7;
-    
+    bool t1  = (val >> 15) & 1;
+    bool s   = (val >> 13) & 1;
+    u8   ipl = (val >>  8) & 7;
+
     reg.sr.ipl = ipl;
     flags |= CPU_CHECK_IRQ;
     t1 ? setTraceFlag() : clearTraceFlag();
-    
-    setCCR((u8)val);
+
+    setCCR(u8(val));
     setSupervisorMode(s);
-    
+
     if (cpuModel > M68010) {
-        
+
         bool t0 = (val >> 14) & 1;
         bool m = (val >> 12) & 1;
-        
+
         t0 ? setTrace0Flag() : clearTrace0Flag();
         setMasterMode(m);
     }
@@ -788,10 +795,10 @@ Moira::getIrqVector(u8 level) const {
         case IRQ_USER:          return readIrqUserVector(level) & 0xFF;
         case IRQ_SPURIOUS:      return 24;
         case IRQ_UNINITIALIZED: return 15;
+
+        default:
+            fatalError;
     }
-    
-    assert(false);
-    return 0;
 }
 
 int
