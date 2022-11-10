@@ -5,6 +5,205 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
+template <Core C, Mode M, Size S, Flags F> u32
+Moira::computeEA(u32 n) {
+
+    assert(n < 8);
+
+    u32 result;
+
+    switch (M) {
+
+        case 0:  // Dn
+        case 1:  // An
+        {
+            result = n;
+            break;
+        }
+        case 2:  // (An)
+        {
+            result = readA(n);
+            break;
+        }
+        case 3:  // (An)+
+        {
+            result = readA(n);
+            break;
+        }
+        case 4:  // -(An)
+        {
+            if ((F & IMPL_DEC) == 0) SYNC(2);
+            result = readA(n) - ((n == 7 && S == Byte) ? 2 : S);
+            break;
+        }
+        case 5: // (d,An)
+        {
+            u32 an = readA(n);
+            i16  d = (i16)queue.irc;
+
+            result = U32_ADD(an, d);
+            if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
+            break;
+        }
+        case 6: // (d,An,Xi)
+        {
+            if constexpr (C == C68020) {
+
+                // printf("compteEA: irc = %x\n", queue.irc);
+                if (queue.irc & 0x100) {
+                    result = computeEAfull<C, M, S, F>(readA(n));
+                } else {
+                    result = computeEAbrief<C, M, S, F>(readA(n));
+                }
+
+            } else {
+
+                i8   d = (i8)queue.irc;
+                u32 an = readA(n);
+                u32 xi = readR((queue.irc >> 12) & 0b1111);
+
+                result = U32_ADD3(an, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
+
+                SYNC(2);
+                if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
+            }
+            break;
+        }
+        case 7: // ABS.W
+        {
+            result = (i16)queue.irc;
+            readBuffer = queue.irc;
+
+            if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
+            break;
+        }
+        case 8: // ABS.L
+        {
+            result = queue.irc << 16;
+            readExt<C>();
+            result |= queue.irc;
+            readBuffer = queue.irc;
+
+            if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
+            break;
+        }
+        case 9: // (d,PC)
+        {
+            i16  d = (i16)queue.irc;
+
+            result = U32_ADD(reg.pc, d);
+            if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
+            break;
+        }
+        case 10: // (d,PC,Xi)
+        {
+            if constexpr (C == C68020) {
+
+                if (queue.irc & 0x100) {
+                    result = computeEAfull<C, M, S, F>(reg.pc);
+                } else {
+                    result = computeEAbrief<C, M, S, F>(reg.pc);
+                }
+
+            } else {
+
+                i8   d = (i8)queue.irc;
+                u32 xi = readR((queue.irc >> 12) & 0b1111);
+
+                result = U32_ADD3(reg.pc, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
+                SYNC(2);
+                if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
+            }
+            break;
+        }
+        case 11: // Im
+        {
+            result = readI<C, S>();
+            break;
+        }
+        default:
+        {
+            fatalError;
+        }
+    }
+    return result;
+}
+
+template <Core C, Mode M, Size S, Flags F> u32
+Moira::computeEAbrief(u32 an)
+{
+    u32 result;
+
+    //   15 - 12    11   10   09   08   07   06   05   04   03   02   01   00
+    // -----------------------------------------------------------------------
+    // | REGISTER | LW | SCALE   | 0  | DISPLACEMENT                         |
+    // -----------------------------------------------------------------------
+
+    u16 ext   = queue.irc;
+    u16 rn    = xxxx____________ (ext);
+    u16 lw    = ____x___________ (ext);
+    u16 scale = _____xx_________ (ext);
+    u16 disp  = ________xxxxxxxx (ext);
+
+    u32 xn = u32(u64(lw ? readR(rn) : SEXT<Word>(readR(rn))) << scale);
+    result = U32_ADD3(an, i8(disp), xn);
+
+    SYNC(2);
+    if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
+
+    return result;
+}
+
+template <Core C, Mode M, Size S, Flags F> u32
+Moira::computeEAfull(u32 an)
+{
+    u32 result;
+
+    //   15 - 12    11   10   09   08   07   06   05   04   03   02   01   00
+    // -----------------------------------------------------------------------
+    // | REGISTER | LW | SCALE   | 1  | BS | IS | BD SIZE  | 0  | IIS        |
+    // -----------------------------------------------------------------------
+
+    u16  ext   = queue.irc;
+    u16  rn    = xxxx____________ (ext);
+    u16  lw    = ____x___________ (ext);
+    u16  scale = _____xx_________ (ext);
+    u16  bs    = ________x_______ (ext);
+    u16  is    = _________x______ (ext);
+    u16  iis   = _____________xxx (ext);
+
+    u32 xn = 0, bd = 0, od = 0;
+
+    // Read extension words
+    readExt<C>();
+    auto dw = baseDispWords(ext);
+    if (dw == 1) bd = SEXT<Word>(readExt<C, Word>());
+    if (dw == 2) bd = readExt<C, Long>();
+    auto ow = outerDispWords(ext);
+    if (ow == 1) od = SEXT<Word>(readExt<C, Word>());
+    if (ow == 2) od = readExt<C, Long>();
+
+    // Wipe out an if base register is present
+    if (bs) an = 0;
+
+    // Check if index is present
+    if (!is) xn = (lw ? readR(rn) : SEXT<Word>(readR(rn))) << scale;
+
+    // Compute effective address
+    if (iis & 0b100) {
+        result = readM<C, M, Long>(an + bd) + xn + od;
+    } else if (iis & 0b011) {
+        result = readM<C, M, Long>(an + bd + xn) + od;
+    } else {
+        result = an + bd + xn;
+    }
+
+    // Add the number of extra cycles consumed in this addressing mode
+    cp += penaltyCycles<C, M, S>(ext);
+
+    return result;
+}
+
 template <Core C, Mode M, Size S, Flags F> void
 Moira::readOp(int n, u32 *ea, u32 *result)
 {
@@ -62,7 +261,6 @@ Moira::writeOp(int n, u32 ea, u32 val)
 {
     switch (M) {
             
-        // Handle non-memory modes
         case MODE_DN: writeD<S>(n, val); break;
         case MODE_AN: writeA<S>(n, val); break;
         case MODE_IM: fatalError;
@@ -70,207 +268,10 @@ Moira::writeOp(int n, u32 ea, u32 val)
         default:
 
             writeBuffer = (S == Long) ? HI_WORD(val) : LO_WORD(val);
+
+            // Write to effective address
             writeM<C, M, S, F>(ea, val);
     }
-}
-
-template <Core C, Mode M, Size S, Flags F> u32
-Moira::computeEA(u32 n) {
-    
-    assert(n < 8);
-    
-    u32 result;
-    
-    switch (M) {
-            
-        case 0:  // Dn
-        case 1:  // An
-        {
-            result = n;
-            break;
-        }
-        case 2:  // (An)
-        {
-            result = readA(n);
-            break;
-        }
-        case 3:  // (An)+
-        {
-            result = readA(n);
-            break;
-        }
-        case 4:  // -(An)
-        {
-            if ((F & IMPL_DEC) == 0) SYNC(2);
-            result = readA(n) - ((n == 7 && S == Byte) ? 2 : S);
-            break;
-        }
-        case 5: // (d,An)
-        {
-            u32 an = readA(n);
-            i16  d = (i16)queue.irc;
-            
-            result = U32_ADD(an, d);
-            if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
-            break;
-        }
-        case 6: // (d,An,Xi)
-        {
-            if constexpr (C == C68020) {
-                
-                // printf("compteEA: irc = %x\n", queue.irc);
-                if (queue.irc & 0x100) {
-                    result = computeEAfull<C, M, S, F>(readA(n));
-                } else {
-                    result = computeEAbrief<C, M, S, F>(readA(n));
-                }
-                
-            } else {
-                
-                i8   d = (i8)queue.irc;
-                u32 an = readA(n);
-                u32 xi = readR((queue.irc >> 12) & 0b1111);
-                
-                result = U32_ADD3(an, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
-                
-                SYNC(2);
-                if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
-            }
-            break;
-        }
-        case 7: // ABS.W
-        {
-            result = (i16)queue.irc;
-            readBuffer = queue.irc;
-
-            if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
-            break;
-        }
-        case 8: // ABS.L
-        {
-            result = queue.irc << 16;
-            readExt<C>();
-            result |= queue.irc;
-            readBuffer = queue.irc;
-
-            if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
-            break;
-        }
-        case 9: // (d,PC)
-        {
-            i16  d = (i16)queue.irc;
-            
-            result = U32_ADD(reg.pc, d);
-            if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
-            break;
-        }
-        case 10: // (d,PC,Xi)
-        {
-            if constexpr (C == C68020) {
-                
-                if (queue.irc & 0x100) {
-                    result = computeEAfull<C, M, S, F>(reg.pc);
-                } else {
-                    result = computeEAbrief<C, M, S, F>(reg.pc);
-                }
-                
-            } else {
-                
-                i8   d = (i8)queue.irc;
-                u32 xi = readR((queue.irc >> 12) & 0b1111);
-                
-                result = U32_ADD3(reg.pc, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
-                SYNC(2);
-                if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
-            }
-            break;
-        }
-        case 11: // Im
-        {
-            result = readI<C, S>();
-            break;
-        }
-        default:
-        {
-            fatalError;
-        }
-    }
-    return result;
-}
-
-template <Core C, Mode M, Size S, Flags F> u32
-Moira::computeEAbrief(u32 an)
-{
-    u32 result;
-    
-    //   15 - 12    11   10   09   08   07   06   05   04   03   02   01   00
-    // -----------------------------------------------------------------------
-    // | REGISTER | LW | SCALE   | 0  | DISPLACEMENT                         |
-    // -----------------------------------------------------------------------
-    
-    u16 ext   = queue.irc;
-    u16 rn    = xxxx____________ (ext);
-    u16 lw    = ____x___________ (ext);
-    u16 scale = _____xx_________ (ext);
-    u16 disp  = ________xxxxxxxx (ext);
-    
-    u32 xn = u32(u64(lw ? readR(rn) : SEXT<Word>(readR(rn))) << scale);
-    result = U32_ADD3(an, i8(disp), xn);
-    
-    SYNC(2);
-    if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
-    
-    return result;
-}
-
-template <Core C, Mode M, Size S, Flags F> u32
-Moira::computeEAfull(u32 an)
-{
-    u32 result;
-    
-    //   15 - 12    11   10   09   08   07   06   05   04   03   02   01   00
-    // -----------------------------------------------------------------------
-    // | REGISTER | LW | SCALE   | 1  | BS | IS | BD SIZE  | 0  | IIS        |
-    // -----------------------------------------------------------------------
-    
-    u16  ext   = queue.irc;
-    u16  rn    = xxxx____________ (ext);
-    u16  lw    = ____x___________ (ext);
-    u16  scale = _____xx_________ (ext);
-    u16  bs    = ________x_______ (ext);
-    u16  is    = _________x______ (ext);
-    u16  iis   = _____________xxx (ext);
-    
-    u32 xn = 0, bd = 0, od = 0;
-    
-    // Read extension words
-    readExt<C>();
-    auto dw = baseDispWords(ext);
-    if (dw == 1) bd = SEXT<Word>(readExt<C, Word>());
-    if (dw == 2) bd = readExt<C, Long>();
-    auto ow = outerDispWords(ext);
-    if (ow == 1) od = SEXT<Word>(readExt<C, Word>());
-    if (ow == 2) od = readExt<C, Long>();
-    
-    // Wipe out an if base register is present
-    if (bs) an = 0;
-    
-    // Check if index is present
-    if (!is) xn = (lw ? readR(rn) : SEXT<Word>(readR(rn))) << scale;
-    
-    // Compute effective address
-    if (iis & 0b100) {
-        result = readM<C, M, Long>(an + bd) + xn + od;
-    } else if (iis & 0b011) {
-        result = readM<C, M, Long>(an + bd + xn) + od;
-    } else {
-        result = an + bd + xn;
-    }
-    
-    // Add the number of extra cycles consumed in this addressing mode
-    cp += penaltyCycles<C, M, S>(ext);
-    
-    return result;
 }
 
 template <Mode M, Size S> void
@@ -278,26 +279,17 @@ Moira::updateAn(int n)
 {
     updateAnPI<M, S>(n);
     updateAnPD<M, S>(n);
-    /*
-     // (An)+
-     if constexpr (M == 3) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
-
-     // -(An)
-     if constexpr (M == 4) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
-     */
 }
 
 template <Mode M, Size S> void
 Moira::updateAnPI(int n)
 {
-    // (An)+
     if constexpr (M == 3) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
 template <Mode M, Size S> void
 Moira::updateAnPD(int n)
 {
-    // -(An)
     if constexpr (M == 4) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
@@ -311,14 +303,12 @@ Moira::undoAn(int n)
 template <Mode M, Size S> void
 Moira::undoAnPI(int n)
 {
-    // (An)+
     if constexpr (M == 3) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
 template <Mode M, Size S> void
 Moira::undoAnPD(int n)
 {
-    // -(An)
     if constexpr (M == 4) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
@@ -326,14 +316,14 @@ template <Core C, Mode M, Size S, Flags F> u32
 Moira::readM(u32 addr)
 {
     if constexpr (isPrgMode(M)) {
-        return readMS<C, MEM_PROG, S, F>(addr);
+        return read<C, MEM_PROG, S, F>(addr);
     } else {
-        return readMS<C, MEM_DATA, S, F>(addr);
+        return read<C, MEM_DATA, S, F>(addr);
     }
 }
 
 template <Core C, MemSpace MS, Size S, Flags F> u32
-Moira::readMS(u32 addr)
+Moira::read(u32 addr)
 {
     u32 result;
 
@@ -381,14 +371,14 @@ template <Core C, Mode M, Size S, Flags F> void
 Moira::writeM(u32 addr, u32 val)
 {
     if constexpr (isPrgMode(M)) {
-        writeMS<C, MEM_PROG, S, F>(addr, val);
+        write<C, MEM_PROG, S, F>(addr, val);
     } else {
-        writeMS<C, MEM_DATA, S, F>(addr, val);
+        write<C, MEM_DATA, S, F>(addr, val);
     }
 }
 
 template <Core C, MemSpace MS, Size S, Flags F> void
-Moira::writeMS(u32 addr, u32 val)
+Moira::write(u32 addr, u32 val)
 {
     // Update function code pins
     setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
@@ -478,13 +468,13 @@ template <Core C, Size S, Flags F> void
 Moira::push(u32 val)
 {
     reg.sp -= S;
-    writeMS<C, MEM_DATA, S, F>(reg.sp, val);
+    write<C, MEM_DATA, S, F>(reg.sp, val);
 }
 
 template <Core C, Size S, Flags F> u32
 Moira::pop()
 {
-    u32 result = readMS<C, MEM_DATA, S, F>(reg.sp);
+    u32 result = read<C, MEM_DATA, S, F>(reg.sp);
     reg.sp += S;
     return result;
 }
@@ -555,7 +545,7 @@ Moira::prefetch()
     reg.pc0 = reg.pc;
     
     queue.ird = queue.irc;
-    queue.irc = (u16)readMS<C, MEM_PROG, Word, F>(reg.pc + 2);
+    queue.irc = (u16)read<C, MEM_PROG, Word, F>(reg.pc + 2);
     readBuffer = queue.irc;
 }
 
@@ -564,7 +554,7 @@ Moira::fullPrefetch()
 {
     assert(!misaligned<C>(reg.pc));
     
-    queue.irc = (u16)readMS<C, MEM_PROG, Word>(reg.pc);
+    queue.irc = (u16)read<C, MEM_PROG, Word>(reg.pc);
     if (delay) SYNC(delay);
     prefetch<C, F>();
 }
@@ -585,7 +575,7 @@ Moira::readExt()
     assert(!misaligned<C>(reg.pc));
 
     reg.pc += 2;
-    queue.irc = (u16)readMS<C, MEM_PROG, Word>(reg.pc);
+    queue.irc = (u16)read<C, MEM_PROG, Word>(reg.pc);
 }
 
 template <Core C, Size S> u32
@@ -610,7 +600,7 @@ Moira::jumpToVector(int nr)
     u32 oldpc = reg.pc;
 
     // Update the program counter
-    reg.pc = readMS<C, MEM_DATA, Long>(vectorAddr);
+    reg.pc = read<C, MEM_DATA, Long>(vectorAddr);
     
     // Check for address error
     if (misaligned<C>(reg.pc)) {
@@ -635,7 +625,7 @@ Moira::jumpToVector(int nr)
     }
     
     // Update the prefetch queue
-    queue.irc = (u16)readMS<C, MEM_PROG, Word>(reg.pc);
+    queue.irc = (u16)read<C, MEM_PROG, Word>(reg.pc);
     SYNC(2);
     prefetch<C, POLL>();
     

@@ -47,6 +47,12 @@
  *
  */
 
+/* Computes an effective address
+ */
+template <Core C, Mode M, Size S, Flags F = 0> u32 computeEA(u32 n);
+template <Core C, Mode M, Size S, Flags F = 0> u32 computeEAbrief(u32 an);
+template <Core C, Mode M, Size S, Flags F = 0> u32 computeEAfull(u32 an);
+
 /* Reads an operand
  *
  * The source of the operand is determined by the addressing mode M. If the
@@ -65,11 +71,6 @@ void readOp(int n, u32 *ea, u32 *result);
 template <Core C, Mode M, Size S, Flags F = 0> void writeOp(int n, u32 val);
 template <Core C, Mode M, Size S, Flags F = 0> void writeOp(int n, u32 ea, u32 val);
 
-// Computes an effective address
-template <Core C, Mode M, Size S, Flags F = 0> u32 computeEA(u32 n);
-template <Core C, Mode M, Size S, Flags F = 0> u32 computeEAbrief(u32 an);
-template <Core C, Mode M, Size S, Flags F = 0> u32 computeEAfull(u32 an);
-
 // Emulates the address register modification for modes (An)+, (An)-
 template <Mode M, Size S> void updateAn(int n);
 template <Mode M, Size S> void updateAnPI(int n);
@@ -82,13 +83,13 @@ template <Mode M, Size S> void undoAnPD(int n);
 template <Core C, Mode M, Size S, Flags F = 0> u32 readM(u32 addr);
 
 // Reads a value from a specific memory space
-template <Core C, MemSpace MS, Size S, Flags F = 0> u32 readMS(u32 addr);
+template <Core C, MemSpace MS, Size S, Flags F = 0> u32 read(u32 addr);
 
 // Writes an operand to memory (without or with address error checking)
 template <Core C, Mode M, Size S, Flags F = 0> void writeM(u32 addr, u32 val);
 
 // Writes a value to a specific memory space
-template <Core C, MemSpace MS, Size S, Flags F = 0> void writeMS(u32 addr, u32 val);
+template <Core C, MemSpace MS, Size S, Flags F = 0> void write(u32 addr, u32 val);
 
 // Reads an immediate value from memory
 template <Core C, Size S> u32 readI();
