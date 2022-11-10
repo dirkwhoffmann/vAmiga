@@ -175,7 +175,10 @@ Moira::reset()
 {
     flags = CPU_CHECK_IRQ;
 
-    reg = { .sr.s = 1, .sr.ipl = 7 };
+    reg = { };
+    reg.sr.s = 1;
+    reg.sr.ipl = 7;
+
     ipl = 0;
     fcl = 0;
     fcSource = 0;

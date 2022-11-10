@@ -60,8 +60,6 @@ Moira::writeOp(int n, u32 val)
 template <Core C, Mode M, Size S, Flags F> void
 Moira::writeOp(int n, u32 ea, u32 val)
 {
-    writeBuffer = (S == Long) ? HI_WORD(val) : LO_WORD(val);
-
     switch (M) {
             
         // Handle non-memory modes
@@ -70,6 +68,8 @@ Moira::writeOp(int n, u32 ea, u32 val)
         case MODE_IM: fatalError;
             
         default:
+
+            writeBuffer = (S == Long) ? HI_WORD(val) : LO_WORD(val);
             writeM<C, M, S, F>(ea, val);
     }
 }
