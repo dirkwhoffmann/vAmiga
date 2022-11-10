@@ -688,129 +688,121 @@ Moira::mullu(u32 op1, u32 op2)
     return result;
 }
 
-template <Core C, Instr I> u32
-Moira::div(u32 op1, u32 op2)
+template <Core C> u32
+Moira::divsMoira(u32 op1, u32 op2)
 {
     u32 result;
     bool overflow;
 
-    switch (I) {
+    i64 quotient  = (i64)(i32)op1 / (i16)op2;
+    i16 remainder = (i64)(i32)op1 % (i16)op2;
 
-        case DIVS: // Signed division
-        {
-            i64 quotient  = (i64)(i32)op1 / (i16)op2;
-            i16 remainder = (i64)(i32)op1 % (i16)op2;
-
-            result = (u32)((quotient & 0xffff) | remainder << 16);
-            overflow = ((quotient & 0xffff8000) != 0 &&
-                        (quotient & 0xffff8000) != 0xffff8000);
-            overflow |= op1 == 0x80000000 && (i16)op2 == -1;
-            break;
-        }
-        case DIVU: // Unsigned division
-        {
-            i64 quotient  = op1 / op2;
-            u16 remainder = (u16)(op1 % op2);
-
-            result = (u32)((quotient & 0xffff) | remainder << 16);
-            overflow = quotient > 0xFFFF;
-            break;
-        }
-
-        default:
-            fatalError;
-    }
-
+    result = (u32)((quotient & 0xffff) | remainder << 16);
+    overflow = ((quotient & 0xffff8000) != 0 &&
+                (quotient & 0xffff8000) != 0xffff8000);
+    overflow |= op1 == 0x80000000 && (i16)op2 == -1;
     reg.sr.v = overflow;
 
-    if (I == DIVS) {
+    if (overflow) {
 
-        if (overflow) {
+        setUndefinedDIVS<C, Word>(i32(op1), i16(op2));
 
-            setUndefinedDIVS<C, Word>(i32(op1), i16(op2));
+    } else {
 
-        } else {
-
-            reg.sr.c = 0;
-            reg.sr.n = NBIT<Word>(result);
-            reg.sr.z = ZERO<Word>(result);
-        }
-    }
-    if (I == DIVU) {
-
-        if (overflow) {
-
-            setUndefinedDIVU<C, Word>(i32(op1), i16(op2));
-
-        } else {
-
-            reg.sr.c = 0;
-            reg.sr.n = NBIT<Word>(result);
-            reg.sr.z = ZERO<Word>(result);
-        }
+        reg.sr.c = 0;
+        reg.sr.n = NBIT<Word>(result);
+        reg.sr.z = ZERO<Word>(result);
     }
 
     return overflow ? op1 : result;
 }
 
-template <Core C, Instr I> u32
-Moira::divMusashi(u32 op1, u32 op2)
+template <Core C> u32
+Moira::divuMoira(u32 op1, u32 op2)
 {
     u32 result;
-    
-    if constexpr (I == DIVS) {
-        
-        if (op1 == 0x80000000 && (i32)op2 == -1) {
-            
-            reg.sr.z = 0;
-            reg.sr.n = 0;
-            reg.sr.v = 0;
-            reg.sr.c = 0;
-            result = 0;
-            
-        } else {
-            
-            i64 quotient  = (i64)(i32)op1 / (i16)op2;
-            i16 remainder = (i64)(i32)op1 % (i16)op2;
-            
-            if (quotient == (i16)quotient) {
-                
-                result = (quotient & 0xffff) | (u16)remainder << 16;
-                
-                reg.sr.z = quotient;
-                reg.sr.n = NBIT<Word>(quotient);
-                reg.sr.v = 0;
-                reg.sr.c = 0;
-                
-            } else {
-                
-                result = op1;
-                reg.sr.v = 1;
-            }
-        }
+    bool overflow;
+
+    i64 quotient  = op1 / op2;
+    u16 remainder = (u16)(op1 % op2);
+
+    result = (u32)((quotient & 0xffff) | remainder << 16);
+    overflow = quotient > 0xFFFF;
+    reg.sr.v = overflow;
+
+    if (overflow) {
+
+        setUndefinedDIVU<C, Word>(i32(op1), i16(op2));
+
+    } else {
+
+        reg.sr.c = 0;
+        reg.sr.n = NBIT<Word>(result);
+        reg.sr.z = ZERO<Word>(result);
     }
-    
-    if constexpr (I == DIVU) {
-        
-        i64 quotient  = op1 / op2;
-        u16 remainder = (u16)(op1 % op2);
-        
-        if(quotient < 0x10000) {
-            
-            result = (quotient & 0xffff) | remainder << 16;
-            
+
+    return overflow ? op1 : result;
+}
+
+template <Core C> u32
+Moira::divsMusashi(u32 op1, u32 op2)
+{
+    u32 result;
+
+    if (op1 == 0x80000000 && (i32)op2 == -1) {
+
+        reg.sr.z = 0;
+        reg.sr.n = 0;
+        reg.sr.v = 0;
+        reg.sr.c = 0;
+        result = 0;
+
+    } else {
+
+        i64 quotient  = (i64)(i32)op1 / (i16)op2;
+        i16 remainder = (i64)(i32)op1 % (i16)op2;
+
+        if (quotient == (i16)quotient) {
+
+            result = (quotient & 0xffff) | (u16)remainder << 16;
+
             reg.sr.z = quotient;
             reg.sr.n = NBIT<Word>(quotient);
             reg.sr.v = 0;
             reg.sr.c = 0;
-            
+
         } else {
-            
+
             result = op1;
             reg.sr.v = 1;
         }
     }
-    
+
+    return result;
+}
+
+template <Core C> u32
+Moira::divuMusashi(u32 op1, u32 op2)
+{
+    u32 result;
+    i64 quotient  = op1 / op2;
+    u16 remainder = (u16)(op1 % op2);
+
+    if(quotient < 0x10000) {
+
+        result = (quotient & 0xffff) | remainder << 16;
+
+        reg.sr.z = quotient;
+        reg.sr.n = NBIT<Word>(quotient);
+        reg.sr.v = 0;
+        reg.sr.c = 0;
+
+    } else {
+
+        result = op1;
+        reg.sr.v = 1;
+    }
+
     return result;
 }
 

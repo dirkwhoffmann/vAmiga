@@ -4138,7 +4138,7 @@ Moira::execDivsMoira(u16 opcode, bool *divByZero)
         return;
     }
 
-    result = div<C, I>(dividend, divisor);
+    result = divsMoira<C>(dividend, divisor);
     writeD(dst, result);
     prefetch<C, POLL>();
 
@@ -4170,7 +4170,7 @@ Moira::execDivsMusashi(u16 opcode, bool *divByZero)
     }
 
     u32 dividend = readD(dst);
-    result = divMusashi<C, I>(dividend, divisor);
+    result = divsMusashi<C>(dividend, divisor);
 
     SYNC_68000(154);
     SYNC_68010(118);
@@ -4266,7 +4266,7 @@ Moira::execDivuMoira(u16 opcode, bool *divByZero)
         return;
     }
 
-    result = div<C, I>(dividend, divisor);
+    result = divuMoira<C>(dividend, divisor);
     writeD(dst, result);
     prefetch<C, POLL>();
 
@@ -4297,7 +4297,7 @@ Moira::execDivuMusashi(u16 opcode, bool *divByZero)
     }
 
     u32 dividend = readD(dst);
-    result = divMusashi<C, I>(dividend, divisor);
+    result = divuMusashi<C>(dividend, divisor);
 
     SYNC_68000(136);
     SYNC_68010(104);
