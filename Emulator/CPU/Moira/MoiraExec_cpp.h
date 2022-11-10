@@ -570,10 +570,9 @@ Moira::execAddxEa(u16 opcode)
     try {
         readOp<C, M, S, flags>(src, &ea1, &data1);
         
-    // } catch (const AddressErrorException  &exc) {
     } catch (const AddressError &exc) {
 
-        // TODO: Handle undoAnPD stuff in form of a flag
+        // Rectify stack frame
         if constexpr (S == Long) undoAnPD<M,S>(src);
         throw exc;
     }
@@ -581,10 +580,10 @@ Moira::execAddxEa(u16 opcode)
 
     try {
         readOp<C, M, S, flags|IMPL_DEC> (dst, &ea2, &data2);
-    // } catch (const AddressErrorException  &exc) {
+
     } catch (const AddressError &exc) {
 
-        // TODO: Handle undoAnPD stuff in form of a flag
+        // Rectify stack frame
         if constexpr (S == Long) undoAnPD<M,S>(dst);
         throw exc;
     }
@@ -672,11 +671,14 @@ Moira::execAndRgEa(u16 opcode)
     u32 result = logic<C, I, S>(readD<S>(src), data);
     looping<I>() ? noPrefetch<C>(2) : prefetch<C, POLL>();
 
+    if constexpr (S == Long && isRegMode(M)) { SYNC_68000(4); SYNC_68010(2); }
+    /*
     if constexpr (C == C68000) {
         if constexpr (S == Long && isRegMode(M)) SYNC(4);
     } else {
         if constexpr (S == Long && isRegMode(M)) SYNC(2);
     }
+    */
 
     if constexpr (MIMIC_MUSASHI) {
         writeOp<C, M, S>(dst, ea, result);
@@ -763,20 +765,18 @@ Moira::execAndiccr(u16 opcode)
         u32 src = readI<C, S>();
         u8  dst = getCCR();
         setCCR(u8(logic<C, I, S>(src, dst)));
-
-        SYNC_68000(8);
-
+        SYNC(8);
         (void)read<C, MEM_DATA, Word>(reg.pc + 2);
-        prefetch<C, POLL>();
 
     } else {
 
-        SYNC_68010(8);
+        SYNC(8);
         u32 src = readI<C, S>();
         u8  dst = getCCR();
         setCCR(u8(logic<C, I, S>(src, dst)));
-        prefetch<C, POLL>();
     }
+
+    prefetch<C, POLL>();
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
@@ -2229,9 +2229,6 @@ Moira::execDbcc(u16 opcode)
             fullPrefetch<C, POLL>();
             flags &= ~CPU_IS_LOOPING;
         }
-
-
-        // printf("Exiting loop mode (IRD: %x IRC: %x)\n", queue.ird, queue.irc);
     };
 
     switch (C) {

@@ -101,9 +101,7 @@ public:
 
     const DasmStyle &style;
     Tab tab {8};
-    //    DasmSyntax syntax;
-//    DasmNumberFormat nf;
-    
+
 public:
     
     // StrWriter(char *p, DasmSyntax s, DasmNumberFormat n) {
@@ -111,9 +109,6 @@ public:
 
         comment[0] = 0;
         base = ptr = p;
-        // tab = Tab{ style.tab };
-        // syntax = s;
-        // nf = n;
     };
 
     StrWriter& operator<<(char);
