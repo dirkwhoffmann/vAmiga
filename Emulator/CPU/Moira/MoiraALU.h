@@ -5,50 +5,66 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
-/* The following functions emulate the arithmetic logical unit of the CPU:
- *
- *        cond : Bcc, DBcc, Scc, TRAPcc
- *       shift : ASx, LSx, ROx, ROXx
- *      addsub : ADDx, SUBx
- *         bcd : ABCD, NBCD, SBCD
- *         cmp : CMPx
- *       logic : NOT, NEG, NEGX, ANDx, ORx, EORx
- *         bit : BCHG, BSET, BCLR, BTST
- */
+//
+// Logic functions
+//
 
+// Branch conditions (Bcc, DBcc, Scc, TRAPcc)
 template <Instr I> bool cond();
 template <Cond C>  bool cond();
 
-template <Core C, Instr I, Size S> u32    shift(int cnt, u64 data);
-template <Core C, Instr I, Size S> u32   addsub(u32 op1, u32 op2);
-template <Core C>                  u32     muls(u32 op1, u32 op2);
-template <Core C>                  u32     mulu(u32 op1, u32 op2);
-template <Core C,          Size S> u64    mulls(u32 op1, u32 op2);
-template <Core C,          Size S> u64    mullu(u32 op1, u32 op2);
-template <Core C, Instr I>         u32      div(u32 op1, u32 op2);
-template <Core C, Instr I, Size S> u32      bcd(u32 op1, u32 op2);
-template <Core C,          Size S> void     cmp(u32 op1, u32 op2);
-template <Core C, Instr I, Size S> u32    logic(u32 op1);
-template <Core C, Instr I, Size S> u32    logic(u32 op1, u32 op2);
-template <Core C, Instr I>         u32      bit(u32 op,  u8 nr);
+// Shift instructions (ASx, LSx, ROx, ROXx)
+template <Core C, Instr I, Size S> u32 shift(int cnt, u64 data);
 
-template <Core C, Instr I>         int  cyclesBit(u8 nr) const;
-template <Core C, Instr I>         int  cyclesMul(u16 data) const;
-template <Core C, Instr I>         int  cyclesDiv(u32 dividend, u16 divisor) const;
+// BCD arithmetic (ABCD, NBCD, SBCD)
+template <Core C, Instr I, Size S> u32 bcd(u32 op1, u32 op2);
 
-// Bitfield instructions (68020)
+// Compare instructions (CMPx)
+template <Core C, Size S> void cmp(u32 op1, u32 op2);
+
+// Logic instructions (NOT, NEG, NEGX, ANDx, ORx, EORx)
+template <Core C, Instr I, Size S> u32 logic(u32 op1);
+template <Core C, Instr I, Size S> u32 logic(u32 op1, u32 op2);
+
+// Bit instructions (BCHG, BSET, BCLR, BTST)
+template <Core C, Instr I> u32 bit(u32 op,  u8 nr);
+
+// Bitfield instructions (68020+)
 template <Instr I> u32 bitfield(u32 data, u32 offset, u32 width, u32 mask);
 
-// Division
+// Addition and subtraction (MULS, MULU, MULLS, MULLU)
+template <Core C, Instr I, Size S> u32 addsub(u32 op1, u32 op2);
+
+// Multiplication (MULS, MULU, MULLS, MULLU)
+template <Core C> u32 muls(u32 op1, u32 op2);
+template <Core C> u32 mulu(u32 op1, u32 op2);
+template <Core C, Size S> u64 mulls(u32 op1, u32 op2);
+template <Core C, Size S> u64 mullu(u32 op1, u32 op2);
+
+// Division (DIVS, DIVU, DIVSL, DIVUL)
+template <Core C, Instr I> u32 div(u32 op1, u32 op2);
 template <Core C, Instr I> u32 divMusashi(u32 op1, u32 op2);
 template <Size S> std::pair<u32,u32> divlsMusashi(u64 op1, u32 op2);
 template <Size S> std::pair<u32,u32> divluMusashi(u64 op1, u32 op2);
 template <Size S> std::pair<u32,u32> divlsMoira(i64 op1, u32 op2);
 template <Size S> std::pair<u32,u32> divluMoira(u64 op1, u32 op2);
 
-// Computes the values of undefined flags for certain instructions
-template <Core C, Instr I, Size S> void setUndefinedFlags(i32 arg1, i32 arg2, i32 arg3 = 0);
 
+//
+// Cycle counts
+//
+
+template <Core C, Instr I> int cyclesBit(u8 nr) const;
+template <Core C, Instr I> int cyclesMul(u16 data) const;
+template <Core C, Instr I> int cyclesDiv(u32 dividend, u16 divisor) const;
+
+
+//
+// Undefined flags
+//
+
+template <Core C, Size S> void setUndefinedCHK(i32 arg1, i32 arg2);
+template <Core C, Size S> void setUndefinedCHK2(i32 lower, i32 upper, i32 value);
 template <Core C, Size S> void setUndefinedDIVU(u32 dividend, u16 divisor);
 template <Core C, Size S> void setUndefinedDIVS(i32 dividend, i16 divisor);
 template <Core C, Size S> void setUndefinedDIVUL(i64 dividend, i32 divisor);

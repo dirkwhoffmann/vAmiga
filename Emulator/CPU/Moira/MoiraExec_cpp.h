@@ -1576,7 +1576,7 @@ Moira::execChk(u16 opcode)
     } else {
 
         reg.sr.n = 0;
-        setUndefinedFlags<C, I, S>(SEXT<S>(data), SEXT<S>(dy));
+        setUndefinedCHK<C, S>(SEXT<S>(data), SEXT<S>(dy));
     }
 
     if (SEXT<S>(dy) > SEXT<S>(data)) {
@@ -1680,7 +1680,7 @@ Moira::execChkCmp2(u16 opcode)
             reg.sr.c = compare < bound1 && compare > bound2;
         }
         reg.sr.z = compare == bound1 || compare == bound2;
-        setUndefinedFlags<C, I, S>(bound1, bound2, compare);
+        setUndefinedCHK2<C, S>(bound1, bound2, compare);
     }
 
     if ((ext & 0x800) && reg.sr.c) {
@@ -5423,7 +5423,6 @@ Moira::execTrapcc(u16 opcode)
     if (cond<I>()) {
 
         execException<C>(EXC_TRAPV);
-        // execTrapException(7);
         CYCLES_68020(20);
         return;
     }

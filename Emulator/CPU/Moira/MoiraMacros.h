@@ -65,10 +65,22 @@
 
 #define REVERSE_8(x) (u8)(((x) * 0x0202020202ULL & 0x010884422010ULL) % 1023)
 #define REVERSE_16(x) (u16)((REVERSE_8((x) & 0xFF) << 8) | REVERSE_8(((x) >> 8) & 0xFF))
+
+// Sanitizer friendly macros for adding signed offsets to u32 values
 #define U32_ADD(x,y) (u32)((i64)(x) + (i64)(y))
 #define U32_SUB(x,y) (u32)((i64)(x) - (i64)(y))
+#define U32_ADD3(x,y,z) (u32)((i64)(x) + (i64)(y) + (i64)(z))
+#define U32_SUB3(x,y,z) (u32)((i64)(x) - (i64)(y) - (i64)(z))
 #define U32_INC(x,y) x = U32_ADD(x,y)
 #define U32_DEC(x,y) x = U32_SUB(x,y)
+
+// Sanitizer friendly macros for adding signed offsets to u64 values
+#define U64_ADD(x,y) (u64)((i64)(x) + (i64)(y))
+#define U64_SUB(x,y) (u64)((i64)(x) - (i64)(y))
+#define U64_ADD3(x,y,z) (u64)((i64)(x) + (i64)(y) + (i64)(z))
+#define U64_SUB3(x,y,z) (u64)((i64)(x) - (i64)(y) - (i64)(z))
+#define U64_INC(x,y) x = U64_ADD(x,y)
+#define U64_DEC(x,y) x = U64_SUB(x,y)
 
 #define ______________xx(opcode) (u8)((opcode >> 0)  & 0b11)
 #define _____________xxx(opcode) (u8)((opcode >> 0)  & 0b111)
