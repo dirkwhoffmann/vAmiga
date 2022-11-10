@@ -807,80 +807,6 @@ Moira::divuMusashi(u32 op1, u32 op2)
 }
 
 template <Size S> std::pair<u32,u32>
-Moira::divlsMusashi(u64 op1, u32 op2)
-{
-    u64 quotient, remainder;
-    
-    if constexpr (S == Word) {
-        
-        quotient  = (u64)((i64)((i32)op1) / (i64)((i32)op2));
-        remainder = (u64)((i64)((i32)op1) % (i64)((i32)op2));
-        
-        reg.sr.n = NBIT<Long>(quotient);
-        reg.sr.z = ZERO<Long>(quotient);
-        reg.sr.v = 0;
-        reg.sr.c = 0;
-    }
-    
-    if constexpr (S == Long) {
-        
-        quotient  = u64(i64(op1) / i64(i32(op2)));
-        remainder = u64(i64(op1) % i64(i32(op2)));
-        
-        if (i64(quotient) == i64(i32(quotient))) {
-            
-            reg.sr.n = NBIT<Long>(quotient);
-            reg.sr.z = ZERO<Long>(quotient);
-            reg.sr.v = 0;
-            reg.sr.c = 0;
-            
-        } else {
-            
-            reg.sr.v = 1;
-        }
-    }
-    
-    return { u32(quotient), u32(remainder) };
-}
-
-template <Size S> std::pair<u32,u32>
-Moira::divluMusashi(u64 op1, u32 op2)
-{
-    u64 quotient, remainder;
-    
-    if (S == Word) {
-        
-        quotient  = op1 / op2;
-        remainder = op1 % op2;
-        
-        reg.sr.n = NBIT<Long>(quotient);
-        reg.sr.z = ZERO<Long>(quotient);
-        reg.sr.v = 0;
-        reg.sr.c = 0;
-    }
-    
-    if constexpr (S == Long) {
-        
-        quotient  = op1 / op2;
-        remainder = op1 % op2;
-        
-        if (quotient <= 0xffffffff) {
-            
-            reg.sr.n = NBIT<Long>(quotient);
-            reg.sr.z = ZERO<Long>(quotient);
-            reg.sr.v = 0;
-            reg.sr.c = 0;
-            
-        } else {
-            
-            reg.sr.v = 1;
-        }
-    }
-    
-    return { u32(quotient), u32(remainder) };
-}
-
-template <Size S> std::pair<u32,u32>
 Moira::divlsMoira(i64 a, u32 src)
 {
     i64 quotient, remainder;
@@ -943,6 +869,80 @@ Moira::divluMoira(u64 a, u32 src)
 
         return { u32(quotient), u32(remainder) };
     }
+}
+
+template <Size S> std::pair<u32,u32>
+Moira::divlsMusashi(u64 op1, u32 op2)
+{
+    u64 quotient, remainder;
+
+    if constexpr (S == Word) {
+
+        quotient  = (u64)((i64)((i32)op1) / (i64)((i32)op2));
+        remainder = (u64)((i64)((i32)op1) % (i64)((i32)op2));
+
+        reg.sr.n = NBIT<Long>(quotient);
+        reg.sr.z = ZERO<Long>(quotient);
+        reg.sr.v = 0;
+        reg.sr.c = 0;
+    }
+
+    if constexpr (S == Long) {
+
+        quotient  = u64(i64(op1) / i64(i32(op2)));
+        remainder = u64(i64(op1) % i64(i32(op2)));
+
+        if (i64(quotient) == i64(i32(quotient))) {
+
+            reg.sr.n = NBIT<Long>(quotient);
+            reg.sr.z = ZERO<Long>(quotient);
+            reg.sr.v = 0;
+            reg.sr.c = 0;
+
+        } else {
+
+            reg.sr.v = 1;
+        }
+    }
+
+    return { u32(quotient), u32(remainder) };
+}
+
+template <Size S> std::pair<u32,u32>
+Moira::divluMusashi(u64 op1, u32 op2)
+{
+    u64 quotient, remainder;
+
+    if (S == Word) {
+
+        quotient  = op1 / op2;
+        remainder = op1 % op2;
+
+        reg.sr.n = NBIT<Long>(quotient);
+        reg.sr.z = ZERO<Long>(quotient);
+        reg.sr.v = 0;
+        reg.sr.c = 0;
+    }
+
+    if constexpr (S == Long) {
+
+        quotient  = op1 / op2;
+        remainder = op1 % op2;
+
+        if (quotient <= 0xffffffff) {
+
+            reg.sr.n = NBIT<Long>(quotient);
+            reg.sr.z = ZERO<Long>(quotient);
+            reg.sr.v = 0;
+            reg.sr.c = 0;
+
+        } else {
+
+            reg.sr.v = 1;
+        }
+    }
+
+    return { u32(quotient), u32(remainder) };
 }
 
 template <Core C, Instr I> int

@@ -46,10 +46,10 @@ template <Core C> u32 divsMoira(u32 op1, u32 op2);
 template <Core C> u32 divuMoira(u32 op1, u32 op2);
 template <Core C> u32 divsMusashi(u32 op1, u32 op2);
 template <Core C> u32 divuMusashi(u32 op1, u32 op2);
-template <Size S> std::pair<u32,u32> divlsMusashi(u64 op1, u32 op2);
-template <Size S> std::pair<u32,u32> divluMusashi(u64 op1, u32 op2);
 template <Size S> std::pair<u32,u32> divlsMoira(i64 op1, u32 op2);
 template <Size S> std::pair<u32,u32> divluMoira(u64 op1, u32 op2);
+template <Size S> std::pair<u32,u32> divlsMusashi(u64 op1, u32 op2);
+template <Size S> std::pair<u32,u32> divluMusashi(u64 op1, u32 op2);
 
 
 //
