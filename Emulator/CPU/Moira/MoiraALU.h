@@ -7,17 +7,17 @@
 
 /* The following functions emulate the arithmetic logical unit of the CPU:
  *
+ *        cond : Bcc, DBcc, Scc, TRAPcc
  *       shift : ASx, LSx, ROx, ROXx
  *      addsub : ADDx, SUBx
  *         bcd : ABCD, NBCD, SBCD
  *         cmp : CMPx
  *       logic : NOT, NEG, NEGX, ANDx, ORx, EORx
  *         bit : BCHG, BSET, BCLR, BTST
- *        cond : Bxx, DBxx, Sx
  */
 
-bool cond(Instr I);
-bool cond(Cond C);
+template <Instr I> bool cond();
+template <Cond C>  bool cond();
 
 template <Core C, Instr I, Size S> u32    shift(int cnt, u64 data);
 template <Core C, Instr I, Size S> u32   addsub(u32 op1, u32 op2);

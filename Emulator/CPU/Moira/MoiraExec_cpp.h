@@ -853,7 +853,7 @@ Moira::execBcc(u16 opcode)
 
     SYNC(2);
 
-    if (cond(I)) {
+    if (cond<I>()) {
 
         u32 disp = S == Byte ? (u8)opcode : queue.irc;
 
@@ -2079,7 +2079,7 @@ Moira::execDbcc(u16 opcode)
     auto exec68000 = [&]() {
 
         SYNC(2);
-        if (!cond(I)) {
+        if (!cond<I>()) {
 
             int dn = _____________xxx(opcode);
             u32 newpc = U32_ADD(reg.pc, (i16)queue.irc);
@@ -2125,7 +2125,7 @@ Moira::execDbcc(u16 opcode)
 
     auto exec68010 = [&]() {
 
-        if (!cond(I)) {
+        if (!cond<I>()) {
 
             SYNC(2);
 
@@ -2185,7 +2185,7 @@ Moira::execDbcc(u16 opcode)
 
     auto execLoop = [&]() {
 
-        if (!cond(I)) {
+        if (!cond<I>()) {
 
             int dn = _____________xxx(opcode);
             u32 newpc = U32_ADD(reg.pc, -4);
@@ -5186,7 +5186,7 @@ Moira::execSccRg(u16 opcode)
 
     readOp<C, M, Byte>(dst, &ea, &data);
 
-    data = cond(I) ? 0xFF : 0;
+    data = cond<I>() ? 0xFF : 0;
     prefetch<C, POLL>();
     if constexpr (C == C68000) { if (data) SYNC(2); }
 
@@ -5212,7 +5212,7 @@ Moira::execSccEa(u16 opcode)
         readOp<C, M, Byte>(dst, &ea, &data);
 
         prefetch<C, POLL>();
-        data = cond(I) ? 0xFF : 0;
+        data = cond<I>() ? 0xFF : 0;
         writeOp<C, M, Byte>(dst, ea, data);
 
     } else {
@@ -5227,7 +5227,7 @@ Moira::execSccEa(u16 opcode)
         if constexpr (M == MODE_IX) SYNC(2);
 
         prefetch<C, POLL>();
-        data = cond(I) ? 0xFF : 0;
+        data = cond<I>() ? 0xFF : 0;
         writeOp<C, M, Byte>(dst, ea, data);
     }
 
@@ -5420,7 +5420,7 @@ Moira::execTrapcc(u16 opcode)
         case 0b011: (void)readI<C, Long>(); break;
     }
 
-    if (cond(I)) {
+    if (cond<I>()) {
 
         execException<C>(EXC_TRAPV);
         // execTrapException(7);

@@ -444,6 +444,8 @@ protected:
     // Analyzing instructions
     //
 
+public:
+
     // Returns the availability mask for a given instruction
     u16 availabilityMask(Instr I) const;
     u16 availabilityMask(Instr I, Mode M, Size S) const;
@@ -502,7 +504,7 @@ private:
     // Selects the IRQ vector to branch to
     u16 getIrqVector(u8 level) const;
 
-    
+
 private:
 
 #include "MoiraInit.h"
