@@ -238,21 +238,24 @@ Moira::execute()
         // Slow path: Process flags one by one
         //
 
-        // Only continue if the CPU is not halted
-        if (flags & CPU_IS_HALTED) {
-            sync(2);
-            return;
-        }
+        if (flags & (CPU_IS_HALTED | CPU_TRACE_EXCEPTION | CPU_TRACE_FLAG)) {
 
-        // Process pending trace exception (if any)
-        if (flags & CPU_TRACE_EXCEPTION) {
-            execException(EXC_TRACE);
-            goto done;
-        }
+            // Only continue if the CPU is not halted
+            if (flags & CPU_IS_HALTED) {
+                sync(2);
+                return;
+            }
 
-        // Check if the T flag is set inside the status register
-        if ((flags & CPU_TRACE_FLAG) && !(flags & CPU_IS_STOPPED)) {
-            flags |= CPU_TRACE_EXCEPTION;
+            // Process pending trace exception (if any)
+            if (flags & CPU_TRACE_EXCEPTION) {
+                execException(EXC_TRACE);
+                goto done;
+            }
+
+            // Check if the T flag is set inside the status register
+            if ((flags & CPU_TRACE_FLAG) && !(flags & CPU_IS_STOPPED)) {
+                flags |= CPU_TRACE_EXCEPTION;
+            }
         }
 
         // Process pending interrupt (if any)
@@ -367,7 +370,7 @@ Moira::checkForIrq()
 {
     if (reg.ipl > reg.sr.ipl || reg.ipl == 7) {
         
-        // Exit loop mode if necessary
+        // Exit loop mode
         if (flags & CPU_IS_LOOPING) flags &= ~CPU_IS_LOOPING;
         
         // Trigger interrupt
@@ -397,42 +400,6 @@ Moira::halt()
     
     // Inform the delegate
     didHalt();
-}
-
-template <Size S> u32
-Moira::readD(int n) const
-{
-    return CLIP<S>(reg.d[n]);
-}
-
-template <Size S> u32
-Moira::readA(int n) const
-{
-    return CLIP<S>(reg.a[n]);
-}
-
-template <Size S> u32
-Moira::readR(int n) const
-{
-    return CLIP<S>(reg.r[n]);
-}
-
-template <Size S> void
-Moira::writeD(int n, u32 v)
-{
-    reg.d[n] = WRITE<S>(reg.d[n], v);
-}
-
-template <Size S> void
-Moira::writeA(int n, u32 v)
-{
-    reg.a[n] = WRITE<S>(reg.a[n], v);
-}
-
-template <Size S> void
-Moira::writeR(int n, u32 v)
-{
-    reg.r[n] = WRITE<S>(reg.r[n], v);
 }
 
 u8
@@ -535,6 +502,42 @@ Moira::setSupervisorFlags(bool s, bool m)
     if (uspIsVisible)  reg.sp = reg.usp;
     if (ispIsVisible)  reg.sp = reg.isp;
     if (mspIsVisible)  reg.sp = reg.msp;
+}
+
+template <Size S> u32
+Moira::readD(int n) const
+{
+    return CLIP<S>(reg.d[n]);
+}
+
+template <Size S> u32
+Moira::readA(int n) const
+{
+    return CLIP<S>(reg.a[n]);
+}
+
+template <Size S> u32
+Moira::readR(int n) const
+{
+    return CLIP<S>(reg.r[n]);
+}
+
+template <Size S> void
+Moira::writeD(int n, u32 v)
+{
+    reg.d[n] = WRITE<S>(reg.d[n], v);
+}
+
+template <Size S> void
+Moira::writeA(int n, u32 v)
+{
+    reg.a[n] = WRITE<S>(reg.a[n], v);
+}
+
+template <Size S> void
+Moira::writeR(int n, u32 v)
+{
+    reg.r[n] = WRITE<S>(reg.r[n], v);
 }
 
 u16

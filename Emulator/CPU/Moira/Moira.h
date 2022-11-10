@@ -413,7 +413,9 @@ public:
     
     u32 getCAAR() const { return reg.caar; }
     void setCAAR(u32 val);
-    
+
+private:
+
     void setSupervisorMode(bool value);
     void setMasterMode(bool value);
     void setSupervisorFlags(bool s, bool m);
