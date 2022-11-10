@@ -211,7 +211,6 @@ Moira::execute()
 {
     // Check the integrity of the IRQ flag
     if (reg.ipl > reg.sr.ipl || reg.ipl == 7) assert(flags & CPU_CHECK_IRQ);
-    // TODO: CHECK THE OTHER DIRECTION, TOO
 
     // Check the integrity of the trace flag
     assert(!!(flags & CPU_TRACE_FLAG) == reg.sr.t1);
@@ -289,15 +288,15 @@ Moira::execute()
         }
 
         // Execute the instruction
+        reg.pc += 2;
+
         if (flags & CPU_IS_LOOPING) {
 
-            reg.pc += 2;
             assert(loop[queue.ird]);
             (this->*loop[queue.ird])(queue.ird);
 
         } else {
 
-            reg.pc += 2;
             try {
                 (this->*exec[queue.ird])(queue.ird);
             } catch (const std::exception &exc) {
@@ -326,44 +325,41 @@ Moira::execute()
 }
 
 void
-Moira::processException(const std::exception &exception)
+Moira::processException(const std::exception &exc)
 {
     switch (cpuModel) {
 
-        case M68000:    processException<C68000>(exception); break;
-        case M68010:    processException<C68010>(exception); break;
-        default:        processException<C68020>(exception); break;
+        case M68000:    processException<C68000>(exc); break;
+        case M68010:    processException<C68010>(exc); break;
+        default:        processException<C68020>(exc); break;
     }
 }
 
 template <Core C> void
-Moira::processException(const std::exception &exception)
+Moira::processException(const std::exception &exc)
 {
-    {
-        auto exc = dynamic_cast<const AddressError *>(&exception);
-        if (exc) {
+    auto ae = dynamic_cast<const AddressError *>(&exc);
+    if (ae) {
 
-            execAddressError<C>(exc->stackFrame);
-            return;
-        }
+        execAddressError<C>(ae->stackFrame);
+        return;
     }
-    {
-        auto exc = dynamic_cast<const BusErrorException *>(&exception);
-        if (exc) {
 
-            execException(EXC_BUS_ERROR);
-            return;
-        }
-    }
-    {
-        auto exc = dynamic_cast<const DoubleFault *>(&exception);
-        if (exc) {
+    auto be = dynamic_cast<const BusErrorException *>(&exc);
+    if (be) {
 
-            halt();
-            return;
-        }
+        execException(EXC_BUS_ERROR);
+        return;
     }
-    throw exception;
+
+    auto df = dynamic_cast<const DoubleFault *>(&exc);
+    if (df) {
+
+        halt();
+        return;
+    }
+
+    throw exc;
 }
 
 bool
@@ -372,12 +368,11 @@ Moira::checkForIrq()
     if (reg.ipl > reg.sr.ipl || reg.ipl == 7) {
         
         // Exit loop mode if necessary
-        if (flags & CPU_IS_LOOPING) {
-            flags &= ~CPU_IS_LOOPING;
-        }
+        if (flags & CPU_IS_LOOPING) flags &= ~CPU_IS_LOOPING;
         
         // Trigger interrupt
         execInterrupt(reg.ipl);
+
         return true;
         
     } else {
@@ -388,6 +383,7 @@ Moira::checkForIrq()
         // same. If one of these variables changes, we reenable interrupt
         // checking.
         if (reg.ipl == ipl) flags &= ~CPU_CHECK_IRQ;
+
         return false;
     }
 }
