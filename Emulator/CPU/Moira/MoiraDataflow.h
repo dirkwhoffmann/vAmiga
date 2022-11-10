@@ -5,7 +5,7 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
-/* Moira utilizes a three layer design to model dataflow inside the processor.
+/* Moira utilizes three layers to model dataflow inside the processor.
  *
  * Layer 1: Main entry points. Most instruction execution handlers call a
  *          layer 1 function to read or write their operands.
@@ -32,13 +32,10 @@
  *                 /        |       computeEA -----------                \
  *                /         |           |               |                 \
  * - - - - - - - -|- - - - -|- - - - - -|- - - - - - - -|- - - - - - - - -|- - -
- * Layer 2:       |         |           |               V                 |
- *                |         |           |            readExt              |
- *                V         V           V                                 V
- *              readD     readA      readM -----> addressError          readI
+ * Layer 2:       |         |           |               |                 |
+ *                V         V           V               V                 V
+ *              readD     readA      readM           readExt            readI
  *             (writeD)  (writeA)   (writeM)
- *                                      |
- *                                  updateAn()
  *                                      |
  * - - - - - - - - - - - - - - - - - - -|- - - - - - - - - - - - - - - - - - - -
  * Layer 3:                             |
@@ -63,8 +60,7 @@ void readOp(int n, u32 *ea, u32 *result);
 /* Writes an operand
  *
  * If parameter ea is omitted, the destination of the operand is determined
- * by the addressing mode M. Parameter 'last' indicates if this function is
- * initiates the last memory bus cycle of an instruction.
+ * by the addressing mode M.
  */
 template <Core C, Mode M, Size S, Flags F = 0> void writeOp(int n, u32 val);
 template <Core C, Mode M, Size S, Flags F = 0> void writeOp(int n, u32 ea, u32 val);
