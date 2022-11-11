@@ -414,7 +414,7 @@ public:
     u32 getCAAR() const { return reg.caar; }
     void setCAAR(u32 val);
 
-private:
+public:
 
     void setSupervisorMode(bool value);
     void setMasterMode(bool value);

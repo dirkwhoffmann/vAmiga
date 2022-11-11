@@ -569,7 +569,7 @@ Moira::execAddxEa(u16 opcode)
 
     try {
         readOp<C, M, S, flags>(src, &ea1, &data1);
-        
+
     } catch (const AddressError &exc) {
 
         // Rectify stack frame
@@ -672,13 +672,6 @@ Moira::execAndRgEa(u16 opcode)
     looping<I>() ? noPrefetch<C>(2) : prefetch<C, POLL>();
 
     if constexpr (S == Long && isRegMode(M)) { SYNC_68000(4); SYNC_68010(2); }
-    /*
-    if constexpr (C == C68000) {
-        if constexpr (S == Long && isRegMode(M)) SYNC(4);
-    } else {
-        if constexpr (S == Long && isRegMode(M)) SYNC(2);
-    }
-    */
 
     if constexpr (MIMIC_MUSASHI) {
         writeOp<C, M, S>(dst, ea, result);
@@ -2462,7 +2455,7 @@ Moira::execJsr(u16 opcode)
 
                 prefetch<C>();
                 reg.sp -= 4;
-                writeBuffer = HI_WORD(reg.pc);
+                writeBuffer = u16(reg.pc >> 16);
                 throw AddressError(makeFrame<AE_DATA>(reg.sp));
             }
 
@@ -2534,7 +2527,7 @@ Moira::execLink(u16 opcode)
     // Check for address error
     if (misaligned<C>(sp)) {
 
-        writeBuffer = HI_WORD(readA(ax));
+        writeBuffer = u16(readA(ax) >> 16);
         writeA(ax, sp);
         throw AddressError(makeFrame<AE_DATA|AE_WRITE>(sp, getPC() + 2, getSR(), ird));
     }
@@ -3314,7 +3307,7 @@ Moira::execMovemRgEa(u16 opcode)
 
                 setFC<M>();
                 readBuffer = mask;
-                writeBuffer = LO_WORD(reg.r[i]);
+                writeBuffer = u16(reg.r[i] & 0xFFFF);
                 throw AddressError(makeFrame<AE_INC_PC|AE_WRITE>(U32_SUB(ea, 2)));
             }
 
@@ -3340,7 +3333,7 @@ Moira::execMovemRgEa(u16 opcode)
 
                 setFC<M>();
                 readBuffer = mask;
-                writeBuffer = S == Long ? HI_WORD(reg.r[i]) : LO_WORD(reg.r[i]);
+                writeBuffer = S == Long ? u16(reg.r[i] >> 16) : u16(reg.r[i] & 0xFFFF);
                 throw AddressError(makeFrame<AE_INC_PC|AE_WRITE>(ea));
             }
 
@@ -3668,7 +3661,7 @@ Moira::execMoveFromSrEa(u16 opcode)
     AVAILABILITY(C68000)
     if constexpr (C != C68000) SUPERVISOR_MODE_ONLY
 
-    int dst = _____________xxx(opcode);
+        int dst = _____________xxx(opcode);
 
     if (C == C68000) {
 
@@ -4220,7 +4213,7 @@ Moira::execDivuMoira(u16 opcode, bool *divByZero)
 {
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
-    
+
     u32 ea = 0, divisor, result;
 
     try { readOp<C, M, Word>(src, &ea, &divisor); } catch (AddressError &exc) {
@@ -4731,7 +4724,7 @@ Moira::execPea(u16 opcode)
 
         } else {
 
-            writeBuffer = HI_WORD(ea);
+            writeBuffer = u16(ea >> 16);
             if (isAbsMode(M)) {
                 readBuffer = queue.irc;
                 throw AddressError(makeFrame<AE_WRITE|AE_DATA>(reg.sp, U32_SUB(reg.pc, 4)));
@@ -4798,7 +4791,7 @@ Moira::execReset(u16 opcode)
     AVAILABILITY(C68000)
 
     SUPERVISOR_MODE_ONLY
-    
+
     SYNC_68000(128);
     SYNC_68010(126);
 
@@ -4894,19 +4887,19 @@ Moira::execRte(u16 opcode)
 
                     (void)read<C, MEM_DATA, Word>(reg.sp + 8); // special status word
                     (void)read<C, MEM_DATA, Long>(reg.sp + 10); // fault address
-                    
+
                     u16 value = (u16)read<C, MEM_DATA, Word>(reg.sp + 26); // internal information, 16 words
                     u16 version = (value >> 10) & 0xF;
-                    
+
                     if (version != 0) { // TODO: PUT IN CPU VERSION NUMBER (GET FROM REAL CPU)
-                        
+
                         SYNC(4);
                         execException(EXC_FORMAT_ERROR);
                         return;
                     }
-                    
+
                     (void)read<C, MEM_DATA, Word>(reg.sp + 28); // internal information, 16 words
-                    
+
                     (void)read<C, MEM_DATA, Word>(reg.sp + 14); // unused/reserved
                     (void)read<C, MEM_DATA, Word>(reg.sp + 16); // data output buffer
                     (void)read<C, MEM_DATA, Word>(reg.sp + 18); // unused/reserved
@@ -4921,7 +4914,7 @@ Moira::execRte(u16 opcode)
                     (void)read<C, MEM_DATA, Long>(reg.sp + 46); // internal information, 16 words
                     (void)read<C, MEM_DATA, Long>(reg.sp + 50); // internal information, 16 words
                     (void)read<C, MEM_DATA, Long>(reg.sp + 54); // internal information, 16 words
-                    
+
                     reg.sp += 58;
                     break;
                 }
@@ -4997,12 +4990,10 @@ Moira::execRte(u16 opcode)
                     break;
 
                 } else if (format == 0b1011) {
-                    
-                    printf("1. reg.sp = %x\n", reg.sp);
+
                     // Status register
                     newsr = (u16)pop<C, Word>();
 
-                    printf("2. reg.sp = %x\n", reg.sp);
                     // Program counter
                     newpc = pop<C, Long>();
 
@@ -5061,10 +5052,8 @@ Moira::execRte(u16 opcode)
                     (void)pop<C, Long>();
                     (void)pop<C, Long>();
                     (void)pop<C, Long>();
-                    
-                    printf("Format b1011: SR = %x Jumping back to PC = %x\n", newsr, newpc); 
                     break;
-                    
+
                 } else {
 
                     execException(EXC_FORMAT_ERROR);
@@ -5181,17 +5170,17 @@ Moira::execSccRg(u16 opcode)
     int dst = ( _____________xxx(opcode) );
     u32 ea, data;
 
-    readOp<C, M, Byte>(dst, &ea, &data);
+    readOp<C, M, S>(dst, &ea, &data);
 
     data = cond<I>() ? 0xFF : 0;
     prefetch<C, POLL>();
     if constexpr (C == C68000) { if (data) SYNC(2); }
 
-    writeD<Byte>(dst, data);
+    writeD<S>(dst, data);
 
-    //           00  10  20           00     10  20        00  10  20
-    //           .b  .b  .b           .w     .w  .w        .l  .l  .l
-    CYCLES_DN   ( 0,  0,  0,       data?6:4,  4,  4,        0,  0,  0)
+    //              00     10  20        00  10  20        00  10  20
+    //              .b     .b  .b        .w  .w  .w        .l  .l  .l
+    CYCLES_DN   (data?6:4,  4,  4,        0,  0,  0,        0,  0,  0)
 
     FINALIZE
 }
@@ -5217,7 +5206,7 @@ Moira::execSccEa(u16 opcode)
         // readOp<C, M, Byte, SKIP_READ>(dst, &ea, &data);
         u32 ea = computeEA<C, M, S>(dst);
         updateAn<M, S>(dst);
-        
+
         if constexpr (M == MODE_AI) SYNC(2);
         if constexpr (M == MODE_PI) SYNC(4);
         if constexpr (M == MODE_PD) SYNC(2);
@@ -5225,18 +5214,18 @@ Moira::execSccEa(u16 opcode)
 
         prefetch<C, POLL>();
         data = cond<I>() ? 0xFF : 0;
-        writeOp<C, M, Byte>(dst, ea, data);
+        writeOp<C, M, S>(dst, ea, data);
     }
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
-    CYCLES_AI   ( 0,  0,  0,       12, 12, 10,        0,  0,  0)
-    CYCLES_PI   ( 0,  0,  0,       12, 12, 10,        0,  0,  0)
-    CYCLES_PD   ( 0,  0,  0,       14, 14, 11,        0,  0,  0)
-    CYCLES_DI   ( 0,  0,  0,       16, 16, 11,        0,  0,  0)
-    CYCLES_IX   ( 0,  0,  0,       18, 18, 13,        0,  0,  0)
-    CYCLES_AW   ( 0,  0,  0,       16, 16, 10,        0,  0,  0)
-    CYCLES_AL   ( 0,  0,  0,       20, 20, 10,        0,  0,  0)
+    CYCLES_AI   (12, 12, 10,        0,  0,  0,        0,  0,  0)
+    CYCLES_PI   (12, 12, 10,        0,  0,  0,        0,  0,  0)
+    CYCLES_PD   (14, 14, 11,        0,  0,  0,        0,  0,  0)
+    CYCLES_DI   (16, 16, 11,        0,  0,  0,        0,  0,  0)
+    CYCLES_IX   (18, 18, 13,        0,  0,  0,        0,  0,  0)
+    CYCLES_AW   (16, 16, 10,        0,  0,  0,        0,  0,  0)
+    CYCLES_AL   (20, 20, 10,        0,  0,  0,        0,  0,  0)
 
     FINALIZE
 }

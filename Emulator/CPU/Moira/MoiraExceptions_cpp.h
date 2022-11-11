@@ -115,8 +115,6 @@ Moira::writeStackFrame1000(StackFrame &frame, u16 sr, u32 pc, u32 ia, u16 nr, u3
 {
     assert(C == C68010);
 
-    // printf("writeStackFrame1000: %x %x %x %x %x\n", queue.irc, readBuffer, writeBuffer, frame.addr, frame.ssw);
-
     // Internal information
     push<C, Long>(0);
     push<C, Long>(0);
@@ -209,8 +207,6 @@ Moira::writeStackFrame1010(u16 sr, u32 pc, u16 nr)
 template <Core C> void
 Moira::writeStackFrame1011(u16 sr, u32 pc, u32 ia, u16 nr)
 {
-    printf("writeStackFrame1011: %x %x %x %d\n", sr, pc, ia, nr);
-
     // Internal registers
     push<C, Long>(0);
     push<C, Long>(0);

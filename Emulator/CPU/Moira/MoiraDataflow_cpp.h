@@ -49,7 +49,6 @@ Moira::computeEA(u32 n) {
         {
             if constexpr (C == C68020) {
 
-                // printf("compteEA: irc = %x\n", queue.irc);
                 if (queue.irc & 0x100) {
                     result = computeEAfull<C, M, S, F>(readA(n));
                 } else {
@@ -240,7 +239,7 @@ Moira::writeOp(int n, u32 val)
 
         default:
 
-            writeBuffer = (S == Long) ? HI_WORD(val) : LO_WORD(val);
+            writeBuffer = (S == Long) ? u16(val >> 16) : u16(val & 0xFFFF);
 
             // Compute effective address
             u32 ea = computeEA<C, M, S>(n);
@@ -267,7 +266,7 @@ Moira::writeOp(int n, u32 ea, u32 val)
 
         default:
 
-            writeBuffer = (S == Long) ? HI_WORD(val) : LO_WORD(val);
+            writeBuffer = (S == Long) ? u16(val >> 16) : u16(val & 0xFFFF);
 
             // Write to effective address
             writeM<C, M, S, F>(ea, val);
@@ -596,7 +595,8 @@ Moira::readExt()
 template <Core C, Flags F> void
 Moira::jumpToVector(int nr)
 {
-    u32 vectorAddr = (reg.vbr & ~0x1) + 4 * nr;
+    u32 vbr = C == C68000 ? 0 : reg.vbr;
+    u32 vectorAddr = (vbr & ~0x1) + 4 * nr;
     u32 oldpc = reg.pc;
 
     // Update the program counter
