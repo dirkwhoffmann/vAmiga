@@ -556,8 +556,8 @@ DQ
                                                     <items>
                                                         <menuItem title="68000" state="on" id="1vX-aH-r8M"/>
                                                         <menuItem title="68010" tag="1" id="U9p-JK-c4z"/>
-                                                        <menuItem title="68EC020" tag="2" id="MEV-jP-nPJ"/>
-                                                        <menuItem title="68020" tag="3" id="TvX-YB-qqk"/>
+                                                        <menuItem title="68EC020 (Beta)" tag="2" id="MEV-jP-nPJ"/>
+                                                        <menuItem title="68020" tag="3" hidden="YES" id="TvX-YB-qqk"/>
                                                         <menuItem title="68EC030" tag="4" hidden="YES" id="M9J-fS-CSl"/>
                                                         <menuItem title="68030" tag="5" hidden="YES" id="rTV-fK-bQq"/>
                                                         <menuItem title="68EC040" tag="6" hidden="YES" id="jq2-Lg-Lel"/>

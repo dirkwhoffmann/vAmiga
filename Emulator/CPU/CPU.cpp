@@ -293,32 +293,33 @@ CPU::getConfigItem(Option option) const
 void
 CPU::setConfigItem(Option option, i64 value)
 {
-    auto model = [&](CPURevision rev) { return moira::Model(rev); };
-    auto syntax = [&](DasmStyle rev) { return moira::DasmSyntax(rev); };
+    auto cpuModel = [&](CPURevision rev) { return moira::Model(rev); };
+    auto dasmModel = [&](DasmRevision rev) { return moira::Model(rev); };
+    auto dasmSyntax = [&](DasmStyle rev) { return moira::DasmSyntax(rev); };
 
     switch (option) {
 
         case OPT_CPU_REVISION:
-
-            if (value >= CPU_68EC030 && value <= CPU_68040) {
-                throw VAError(ERROR_CPU_UNSUPPORTED, CPURevisionEnum::key(value));
-            }
-
-            suspend();
-            config.revision = CPURevision(value);
-            setModel(model(config.revision), model(config.dasmRevision));
-            resume();
-            return;
-
-        case OPT_CPU_DASM_REVISION:
 
             if (!CPURevisionEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVARG, CPURevisionEnum::keyList());
             }
 
             suspend();
-            config.dasmRevision = CPURevision(value);
-            setModel(model(config.revision), model(config.dasmRevision));
+            config.revision = CPURevision(value);
+            setModel(cpuModel(config.revision), dasmModel(config.dasmRevision));
+            resume();
+            return;
+
+        case OPT_CPU_DASM_REVISION:
+
+            if (!DasmRevisionEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, DasmRevisionEnum::keyList());
+            }
+
+            suspend();
+            config.dasmRevision = DasmRevision(value);
+            setModel(cpuModel(config.revision), dasmModel(config.dasmRevision));
             resume();
             return;
 
@@ -330,7 +331,7 @@ CPU::setConfigItem(Option option, i64 value)
 
             suspend();
             config.dasmStyle = DasmStyle(value);
-            setDasmSyntax(syntax(value));
+            setDasmSyntax(dasmSyntax(value));
             resume();
             return;
 
