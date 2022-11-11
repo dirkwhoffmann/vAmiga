@@ -2791,10 +2791,8 @@ Moira::execMove4(u16 opcode)
     // Determine next address error stack frame format
     const u64 flags0 = AE_WRITE | AE_DATA;
     const u64 flags1 = AE_WRITE | AE_DATA | AE_SET_CB3;
-    // const u64 flags1 = AE_WRITE | AE_DATA;
     const u64 flags2 = AE_WRITE | AE_DATA;
-    int format = (S == Long) ? 0 : reg.sr.c ? 2 : 1;
-    // int format = reg.sr.c ? 2 : 1;
+    int format = (S == Long) ? 0 : (reg.sr.s || reg.sr.c) ? 2 : 1;
 
     reg.sr.n = NBIT<S>(data);
     reg.sr.z = ZERO<S>(data);
