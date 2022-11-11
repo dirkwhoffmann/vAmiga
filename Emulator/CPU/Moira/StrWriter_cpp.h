@@ -1211,16 +1211,14 @@ StrWriter::operator<<(Im<M, S> wrapper)
     auto &ea = wrapper.ea;
     
     switch (style.syntax) {
-            
-        case DASM_MOIRA:
-        case DASM_MOIRA_MIT:
+
         case DASM_GNU:
         case DASM_GNU_MIT:
 
             *this << Ims<S>(ea.ext1);
             break;
             
-        case DASM_MUSASHI:
+        default:
             
             *this << Imu(ea.ext1);
             break;
@@ -1540,7 +1538,22 @@ StrWriter&
 StrWriter::operator<<(Sep)
 {
     *ptr++ = ',';
-    if (style.syntax == DASM_MUSASHI || style.syntax == DASM_MOIRA || style.syntax == DASM_MOIRA_MIT) *ptr++ = ' ';
+
+    switch (style.syntax) {
+
+        case DASM_MOIRA:
+        case DASM_MOIRA_MIT:
+        case DASM_MUSASHI:
+
+            *ptr++ = ' ';
+            break;
+
+        case DASM_GNU:
+        case DASM_GNU_MIT:
+
+            break;
+    }
+
     return *this;
 }
 
