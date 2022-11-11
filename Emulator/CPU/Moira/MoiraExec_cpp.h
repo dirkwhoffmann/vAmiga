@@ -3076,7 +3076,7 @@ Moira::execMovea(u16 opcode)
     try { readOp<C, M, S>(src, &ea, &data); } catch (AddressError &exc) {
 
         // Rectify the stack frame
-        readBuffer = 0xFFFF; // To pass ADDRERR6 (needs investigation)
+        if (reg.sr.s) readBuffer = 0xFFFF; // To pass ADDRERR6 (needs investigation)
         exc.stackFrame = makeFrame<STD_AE_FRAME|AE_SET_RW|AE_SET_DF>(ea);
         throw exc;
     }
