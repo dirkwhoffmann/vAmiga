@@ -118,23 +118,23 @@ Moira::cond() {
 
 template <Core C, Instr I, Size S> u32
 Moira::shift(int cnt, u64 data) {
-    
+
     switch (I) {
-            
+
         case ASL:
         case ASL_LOOP:
         {
             bool carry = false;
             u32 changed = 0;
-            
+
             for (int i = 0; i < cnt; i++) {
-                
+
                 carry = NBIT<S>(data);
                 u64 shifted = (data & 0xFFFFFFFF) << 1;
                 changed |= (u32)(data ^ shifted);
                 data = shifted;
             }
-            
+
             if (cnt) reg.sr.x = carry;
             reg.sr.c = carry;
             reg.sr.v = NBIT<S>(changed);
@@ -145,15 +145,15 @@ Moira::shift(int cnt, u64 data) {
         {
             bool carry = false;
             u32 changed = 0;
-            
+
             for (int i = 0; i < cnt; i++) {
-                
+
                 carry = data & 1;
                 u64 shifted = SEXT<S>(data) >> 1;
                 changed |= (u32)(data ^ shifted);
                 data = shifted;
             }
-            
+
             if (cnt) reg.sr.x = carry;
             reg.sr.c = carry;
             reg.sr.v = NBIT<S>(changed);
@@ -163,13 +163,13 @@ Moira::shift(int cnt, u64 data) {
         case LSL_LOOP:
         {
             bool carry = false;
-            
+
             for (int i = 0; i < cnt; i++) {
-                
+
                 carry = NBIT<S>(data);
                 data = data << 1;
             }
-            
+
             if (cnt) reg.sr.x = carry;
             reg.sr.c = carry;
             reg.sr.v = 0;
@@ -179,13 +179,13 @@ Moira::shift(int cnt, u64 data) {
         case LSR_LOOP:
         {
             bool carry = false;
-            
+
             for (int i = 0; i < cnt; i++) {
-                
+
                 carry = data & 1;
                 data = data >> 1;
             }
-            
+
             if (cnt) reg.sr.x = carry;
             reg.sr.c = carry;
             reg.sr.v = 0;
@@ -195,13 +195,13 @@ Moira::shift(int cnt, u64 data) {
         case ROL_LOOP:
         {
             bool carry = false;
-            
+
             for (int i = 0; i < cnt; i++) {
-                
+
                 carry = NBIT<S>(data);
                 data = data << 1 | (carry ? 1 : 0);
             }
-            
+
             reg.sr.c = carry;
             reg.sr.v = 0;
             break;
@@ -210,14 +210,14 @@ Moira::shift(int cnt, u64 data) {
         case ROR_LOOP:
         {
             bool carry = false;
-            
+
             for (int i = 0; i < cnt; i++) {
-                
+
                 carry = data & 1;
                 data >>= 1;
                 if (carry) data |= MSBIT<S>();
             }
-            
+
             reg.sr.c = carry;
             reg.sr.v = 0;
             break;
@@ -226,14 +226,14 @@ Moira::shift(int cnt, u64 data) {
         case ROXL_LOOP:
         {
             bool carry = reg.sr.x;
-            
+
             for (int i = 0; i < cnt; i++) {
-                
+
                 bool extend = carry;
                 carry = NBIT<S>(data);
                 data = data << 1 | (extend ? 1 : 0);
             }
-            
+
             reg.sr.x = carry;
             reg.sr.c = carry;
             reg.sr.v = 0;
@@ -243,28 +243,28 @@ Moira::shift(int cnt, u64 data) {
         case ROXR_LOOP:
         {
             bool carry = reg.sr.x;
-            
+
             for (int i = 0; i < cnt; i++) {
-                
+
                 bool extend = carry;
                 carry = data & 1;
                 data >>= 1;
                 if (extend) data |= MSBIT<S>();
             }
-            
+
             reg.sr.x = carry;
             reg.sr.c = carry;
             reg.sr.v = 0;
             break;
         }
-            
+
         default:
             fatalError;
     }
-    
+
     reg.sr.n = NBIT<S>(data);
     reg.sr.z = ZERO<S>(data);
-    
+
     return CLIP<S>(data);
 }
 
@@ -469,87 +469,87 @@ template <Instr I> u32
 Moira::bitfield(u32 data, u32 offset, u32 width, u32 mask)
 {
     u32 result = 0;
-    
+
     switch (I) {
-            
+
         case BFCHG:
-            
+
             result = data ^ mask;
-            
+
             reg.sr.n = NBIT<Long>(data << offset);
             reg.sr.z = ZERO<Long>(data & mask);
             reg.sr.v = 0;
             reg.sr.c = 0;
             break;
-            
+
         case BFCLR:
-            
+
             result = data & ~mask;
-            
+
             reg.sr.n = NBIT<Long>(data << offset);
             reg.sr.z = ZERO<Long>(data & mask);
             reg.sr.v = 0;
             reg.sr.c = 0;
             break;
-            
+
         case BFSET:
-            
+
             result = data | mask;
-            
+
             reg.sr.n = NBIT<Long>(data << offset);
             reg.sr.z = ZERO<Long>(data & mask);
             reg.sr.v = 0;
             reg.sr.c = 0;
             break;
-            
+
         case BFEXTS:
-            
+
             result = SEXT<Long>(data) >> (32 - width);
-            
+
             reg.sr.n = NBIT<Long>(data);
             reg.sr.z = ZERO<Long>(result);
             reg.sr.v = 0;
             reg.sr.c = 0;
             break;
-            
+
         case BFEXTU:
-            
+
             result = data >> (32 - width);
-            
+
             reg.sr.n = NBIT<Long>(data);
             reg.sr.z = ZERO<Long>(result);
             reg.sr.v = 0;
             reg.sr.c = 0;
             break;
-            
+
         case BFFFO:
-            
+
             reg.sr.n = NBIT<Long>(data);
             data >>= 32 - width;
             reg.sr.z = ZERO<Long>(data);
             reg.sr.v = 0;
             reg.sr.c = 0;
-            
+
             result = offset;
             for(u32 bit = 1 << (width - 1); bit && !(data & bit); bit >>= 1) {
                 result++;
             }
             break;
-            
+
         case BFTST:
-            
+
             result = 0;
-            
+
             reg.sr.n = NBIT<Long>(data << offset);
             reg.sr.z = ZERO<Long>(data & mask);
             reg.sr.v = 0;
             reg.sr.c = 0;
             break;
-            
+
         default:
             break;
     }
-    
+
     return result;
 }
 
@@ -1298,7 +1298,7 @@ Moira::setUndefinedDIVUL(i64 a, i32 divisor)
 {
     i32 a32 = (i32)a;
     bool neg32 = a32 < 0;
-    
+
     reg.sr.n = neg32;
     reg.sr.z = a32 == 0;
     reg.sr.c = 0;
@@ -1362,7 +1362,7 @@ Moira::setDivZeroDIVU(u32 dividend)
             reg.sr.n = 0;
             reg.sr.z = 0;
             reg.sr.v = 1;
-            
+
             i16 d = i16(dividend >> 16);
             if (d < 0) reg.sr.n = 1;
             if (d == 0) reg.sr.z = 1;

@@ -9,19 +9,19 @@ template <Core C> void
 Moira::writeStackFrameAEBE(StackFrame &frame)
 {
     // assert(C == C68000);
-    
+
     // Push PC
     push<C, Word>((u16)frame.pc);
     push<C, Word>(frame.pc >> 16);
-    
+
     // Push SR and IRD
     push<C, Word>(frame.sr);
     push<C, Word>(frame.ird);
-    
+
     // Push address
     push<C, Word>((u16)frame.addr);
     push<C, Word>(frame.addr >> 16);
-    
+
     // Push memory access type and function code
     push<C, Word>(frame.code);
 }
@@ -30,16 +30,16 @@ template <Core C> void
 Moira::writeStackFrame0000(u16 sr, u32 pc, u16 nr)
 {
     switch (C) {
-            
+
         case C68000:
-            
+
             if constexpr (MIMIC_MUSASHI) {
-                
+
                 push<C, Long>(pc);
                 push<C, Word>(sr);
-                
+
             } else {
-                
+
                 // reg.sp -= 6;
                 // write<C, MEM_DATA, Word>((reg.sp + 4) & ~1, pc & 0xFFFF);
                 // write<C, MEM_DATA, Word>((reg.sp + 0) & ~1, sr);
@@ -50,18 +50,18 @@ Moira::writeStackFrame0000(u16 sr, u32 pc, u16 nr)
                 write<C, MEM_DATA, Word>(U32_ADD(reg.sp, 2) & ~1, pc >> 16);
             }
             break;
-            
+
         case C68010:
         case C68020:
-            
+
             if constexpr (MIMIC_MUSASHI) {
-                
+
                 push<C, Word>(nr << 2);
                 push<C, Long>(pc);
                 push<C, Word>(sr);
-                
+
             } else {
-                
+
                 // reg.sp -= 8;
                 // write<C, MEM_DATA, Word>((reg.sp + 6) & ~1, 4 * nr);
                 // write<C, MEM_DATA, Word>((reg.sp + 4) & ~1, pc & 0xFFFF);
@@ -81,13 +81,13 @@ template <Core C> void
 Moira::writeStackFrame0001(u16 sr, u32 pc, u16 nr)
 {
     assert(C == C68020);
-    
+
     // 0001 | Vector offset
     push<C, Word>(0x1000 | nr << 2);
-    
+
     // Program counter
     push<C, Long>(pc);
-    
+
     // Status register
     push<C, Word>(sr);
 }
@@ -96,7 +96,7 @@ template <Core C> void
 Moira::writeStackFrame0010(u16 sr, u32 pc, u32 ia, u16 nr)
 {
     assert(C == C68020);
-    
+
     // Instruction address
     push<C, Long>(ia);
 
@@ -164,7 +164,7 @@ Moira::writeStackFrame1000(StackFrame &frame, u16 sr, u32 pc, u32 ia, u16 nr, u3
 template <Core C> void
 Moira::writeStackFrame1001(u16 sr, u32 pc, u32 ia, u16 nr)
 {
-    
+
 }
 
 template <Core C> void
@@ -230,7 +230,7 @@ Moira::writeStackFrame1011(u16 sr, u32 pc, u32 ia, u16 nr)
     push<C, Word>(0);
 
     // Data input buffer
-     push<C, Long>(0);
+    push<C, Long>(0);
 
     // Internal registers
     push<C, Long>(0);
@@ -281,18 +281,18 @@ Moira::execAddressError(StackFrame frame, int delay)
 
     // Inform the delegate
     willExecute(EXC_ADDRESS_ERROR, 3);
-    
+
     // Emulate additional delay
     sync(delay);
-    
+
     // Enter supervisor mode
     setSupervisorMode(true);
-    
+
     // Disable tracing
     clearTraceFlags();
     flags &= ~CPU_TRACE_EXCEPTION;
     SYNC(8);
-    
+
     // A misaligned stack pointer will cause a double fault
     if (misaligned<C>(reg.sp)) throw DoubleFault();
 
@@ -339,27 +339,27 @@ Moira::execException(ExceptionType exc, int nr)
     // Enter supervisor mode and leave trace mode
     setSupervisorMode(true);
     clearTraceFlags();
-        
+
     switch (exc) {
-            
+
         case EXC_BUS_ERROR:
-            
+
             // Write stack frame
             writeStackFrame1011<C>(status, reg.pc, reg.pc0, 2);
-            
+
             // Branch to exception handler
             jumpToVector<C>(2);
             break;
-            
+
         case EXC_ILLEGAL:
         case EXC_LINEA:
         case EXC_LINEF:
-            
+
             // Clear any pending trace event
             flags &= ~CPU_TRACE_EXCEPTION;
-            
+
             SYNC(4);
-            
+
             // Write stack frame
             if (C == C68010) {
                 writeStackFrame0000<C>(status, reg.pc0, vector);
@@ -395,71 +395,71 @@ Moira::execException(ExceptionType exc, int nr)
             C == C68020 ?
             writeStackFrame0010<C>(status, reg.pc, reg.pc0, vector) :
             writeStackFrame0000<C>(status, reg.pc, vector);
-            
+
             // Branch to exception handler
             jumpToVector<C,AE_SET_RW|AE_SET_IF>(vector);
             break;
-            
+
         case EXC_PRIVILEGE:
-            
+
             // Clear any pending trace event
             flags &= ~CPU_TRACE_EXCEPTION;
-            
+
             SYNC(4);
-            
+
             // Write stack frame
             writeStackFrame0000<C>(status, reg.pc - 2, vector);
-            
+
             // Branch to exception handler
             jumpToVector<C,AE_SET_CB3>(vector);
             break;
-            
+
         case EXC_TRACE:
-            
+
             // Clear any pending trace event
             flags &= ~CPU_TRACE_EXCEPTION;
-            
+
             // Recover from stop state
             flags &= ~CPU_IS_STOPPED;
-            
+
             SYNC(4);
-            
+
             // Write stack frame
             writeStackFrame0000<C>(status, reg.pc, vector);
-            
+
             // Branch to exception handler
             jumpToVector<C>(vector);
             break;
-            
+
         case EXC_FORMAT_ERROR:
-            
+
             // Clear any pending trace event
             flags &= ~CPU_TRACE_EXCEPTION;
-                        
+
             // Write stack frame
             if (MIMIC_MUSASHI) {
                 writeStackFrame0000<C>(status, reg.pc, vector);
             } else {
                 writeStackFrame0000<C>(status, reg.pc - 2, vector);
             }
-            
+
             // Branch to exception handler
             jumpToVector<C, AE_SET_CB3>(vector);
             break;
-            
+
         case EXC_TRAP:
-            
+
             // Write stack frame
             writeStackFrame0000<C>(status, reg.pc, u16(vector));
-            
+
             // Branch to exception handler
             jumpToVector<C>(vector);
             break;
-            
+
         default:
             break;
     }
-    
+
     // Inform the delegate
     didExecute(exc, vector);
 }
@@ -479,45 +479,45 @@ template <Core C> void
 Moira::execInterrupt(u8 level)
 {
     assert(level < 8);
-    
+
     // Notify delegate
     willInterrupt(level);
-    
+
     // Remember the current value of the status register
     u16 status = getSR();
-    
+
     // Recover from stop state and terminate loop mode
     flags &= ~(CPU_IS_STOPPED | CPU_IS_LOOPING);
-    
+
     // Clear the polled IPL value
     reg.ipl = 0;
-    
+
     // Temporarily raise the interrupt threshold
     reg.sr.ipl = level;
-    
+
     // Enter supervisor mode
     setSupervisorMode(true);
-    
+
     // Disable tracing
     clearTraceFlags();
     flags &= ~CPU_TRACE_EXCEPTION;
-    
+
     switch (C) {
-            
+
         case C68000:
-            
+
             SYNC(6);
             reg.sp -= 6;
             write<C, MEM_DATA, Word>(reg.sp + 4, reg.pc & 0xFFFF);
-            
+
             SYNC(4);
             queue.ird = getIrqVector(level);
-            
+
             SYNC(4);
             write<C, MEM_DATA, Word>(reg.sp + 0, status);
             write<C, MEM_DATA, Word>(reg.sp + 2, reg.pc >> 16);
             break;
-            
+
         case C68010:
 
             SYNC(12);
@@ -530,16 +530,16 @@ Moira::execInterrupt(u8 level)
             break;
 
         case C68020:
-            
+
             queue.ird = getIrqVector(level);
-            
+
             writeStackFrame0000<C>(status, reg.pc, 4 * queue.ird);
-            
+
             if (reg.sr.m) {
-                
+
                 writeStackFrame0001<C>(status, reg.pc, 4 * queue.ird);
             }
     }
-    
+
     jumpToVector<C, AE_SET_CB3>(queue.ird);
 }

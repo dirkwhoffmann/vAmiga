@@ -208,13 +208,13 @@ template <Core C, Mode M, Size S, Flags F> void
 Moira::readOp(int n, u32 *ea, u32 *result)
 {
     switch (M) {
-            
+
         case MODE_DN: *result = readD<S>(n);   break;
         case MODE_AN: *result = readA<S>(n);   break;
         case MODE_IM: *result = readI<C, S>(); break;
-            
+
         default:
-            
+
             // Compute effective address
             *ea = computeEA<C, M, S, F>(n);
 
@@ -233,11 +233,11 @@ template <Core C, Mode M, Size S, Flags F> void
 Moira::writeOp(int n, u32 val)
 {
     switch (M) {
-            
+
         case MODE_DN: writeD<S>(n, val); break;
         case MODE_AN: writeA<S>(n, val); break;
         case MODE_IM: fatalError;
-            
+
         default:
 
             writeBuffer = (S == Long) ? HI_WORD(val) : LO_WORD(val);
@@ -260,11 +260,11 @@ template <Core C, Mode M, Size S, Flags F> void
 Moira::writeOp(int n, u32 ea, u32 val)
 {
     switch (M) {
-            
+
         case MODE_DN: writeD<S>(n, val); break;
         case MODE_AN: writeA<S>(n, val); break;
         case MODE_IM: fatalError;
-            
+
         default:
 
             writeBuffer = (S == Long) ? HI_WORD(val) : LO_WORD(val);
@@ -356,7 +356,7 @@ Moira::read(u32 addr)
     }
 
     if constexpr (S == Long) {
-        
+
         result = read16(addr & addrMask<C>()) << 16;
         SYNC(4);
         if (F & POLL) POLL_IPL;
@@ -409,7 +409,7 @@ Moira::write(u32 addr, u32 val)
     }
 
     if constexpr (S == Long) {
-        
+
         if (F & REVERSE) {
 
             write16((addr + 2) & addrMask<C>(), u16(val & 0xFFFF));
@@ -433,29 +433,29 @@ template <Core C, Size S> u32
 Moira::readI()
 {
     u32 result;
-    
+
     switch (S) {
-            
+
         case Byte:
-            
+
             result = (u8)queue.irc;
             readExt<C>();
             break;
-            
+
         case Word:
-            
+
             result = queue.irc;
             readExt<C>();
             break;
-            
+
         case Long:
-            
+
             result = queue.irc << 16;
             readExt<C>();
             result |= queue.irc;
             readExt<C>();
             break;
-            
+
         default:
             fatalError;
     }
@@ -494,12 +494,12 @@ Moira::makeFrame(u32 addr, u32 pc, u16 sr, u16 ird)
 {
     StackFrame frame;
     u16 read = 0x10;
-    
+
     // Prepare
     if constexpr (F & AE_WRITE) read = 0;
     if constexpr (F & AE_PROG) setFC(FC_USER_PROG);
     if constexpr (F & AE_DATA) setFC(FC_USER_DATA);
-    
+
     // Create
     frame.code = (ird & 0xFFE0) | (u16)readFC() | read;
     frame.addr = addr;
@@ -543,7 +543,7 @@ Moira::prefetch()
      * executed instruction.
      */
     reg.pc0 = reg.pc;
-    
+
     queue.ird = queue.irc;
     queue.irc = (u16)read<C, MEM_PROG, Word, F>(reg.pc + 2);
     readBuffer = queue.irc;
@@ -553,7 +553,7 @@ template <Core C, Flags F, int delay> void
 Moira::fullPrefetch()
 {
     assert(!misaligned<C>(reg.pc));
-    
+
     queue.irc = (u16)read<C, MEM_PROG, Word>(reg.pc);
     if (delay) SYNC(delay);
     prefetch<C, F>();
@@ -563,7 +563,7 @@ template <Core C> void
 Moira::noPrefetch(int delay)
 {
     assert(flags & CPU_IS_LOOPING);
-    
+
     reg.pc0 = reg.pc;
     std::swap(queue.irc, queue.ird);
     if (delay) SYNC(delay);
@@ -583,13 +583,13 @@ Moira::readExt()
 {
     u32 result = queue.irc;
     readExt<C>();
-    
+
     if constexpr (S == Long) {
-        
+
         result = result << 16 | queue.irc;
         readExt<C>();
     }
-    
+
     return result;
 }
 
@@ -601,7 +601,7 @@ Moira::jumpToVector(int nr)
 
     // Update the program counter
     reg.pc = read<C, MEM_DATA, Long>(vectorAddr);
-    
+
     // Check for address error
     if (misaligned<C>(reg.pc)) {
 
@@ -623,15 +623,15 @@ Moira::jumpToVector(int nr)
         }
         return;
     }
-    
+
     // Update the prefetch queue
     queue.irc = (u16)read<C, MEM_PROG, Word>(reg.pc);
     SYNC(2);
     prefetch<C, POLL>();
-    
+
     // Stop emulation if the exception should be catched
     if (debugger.catchpointMatches(nr)) catchpointReached(u8(nr));
-    
+
     didJumpToVector(nr, reg.pc);
 }
 
@@ -639,10 +639,10 @@ int
 Moira::baseDispWords(u16 ext) const
 {
     u16 xx = __________xx____ (ext);
-    
+
     bool base_disp      = (xx >= 2);
     bool base_disp_long = (xx == 3);
-    
+
     return base_disp ? (base_disp_long ? 2 : 1) : 0;
 }
 
@@ -650,10 +650,10 @@ int
 Moira::outerDispWords(u16 ext) const
 {
     u16 xx = ______________xx (ext);
-    
+
     bool outer_disp      = (xx >= 2);
     bool outer_disp_long = (xx == 3);
-    
+
     return outer_disp ? (outer_disp_long ? 2 : 1) : 0;
 }
 
@@ -661,18 +661,18 @@ template <Core C, Mode M, Size S> int
 Moira::penaltyCycles(u16 ext) const
 {
     constexpr u8 delay[64] = {
-        
+
         0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
         0,  5,  7,  7,  0,  5,  7,  7,  0,  5,  7,  7,  0,  5,  7,  7,
         2,  7,  9,  9,  0,  7,  9,  9,  0,  7,  9,  9,  0,  7,  9,  9,
         6, 11, 13, 13,  0, 11, 13, 13,  0, 11, 13, 13,  0, 11, 13, 13
     };
-    
+
     if constexpr (C == C68020 && (M == MODE_IX || M == MODE_IXPC)) {
-        
+
         if (ext & 0x100) return delay[ext & 0x3F];
     }
-    
+
     return 0;
 }
 

@@ -295,7 +295,7 @@ CPU::setConfigItem(Option option, i64 value)
 {
     auto cpuModel = [&](CPURevision rev) { return moira::Model(rev); };
     auto dasmModel = [&](DasmRevision rev) { return moira::Model(rev); };
-    auto dasmSyntax = [&](DasmStyle rev) { return moira::DasmSyntax(rev); };
+    auto syntax = [&](DasmStyle rev) { return moira::DasmSyntax(rev); };
 
     switch (option) {
 
@@ -331,7 +331,7 @@ CPU::setConfigItem(Option option, i64 value)
 
             suspend();
             config.dasmStyle = DasmStyle(value);
-            setDasmSyntax(dasmSyntax(value));
+            setDasmSyntax(syntax(value));
             resume();
             return;
 

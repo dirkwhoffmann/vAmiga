@@ -34,10 +34,10 @@ static const char *mnemonics[]
     "svc",      "svs",      "sf",       "st",       "stop",     "sub",
     "suba",     "subi",     "subq",     "subx",     "swap",     "tas",
     "trap",     "trapv",    "tst",      "unlk",
-    
+
     // 68010
     "bkpt",     "movec",    "moves",    "rtd",
-    
+
     // 68020
     "bfchg",    "bfclr",    "bfexts",   "bfextu",   "bfffo",    "bfins",
     "bfset",    "bftst",    "callm",    "cas",      "cas2",     "chk2",
@@ -76,7 +76,7 @@ static int hexDigits(u64 value) { return (binDigits(value) + 3) / 4; }
 static void sprintd(char *&s, u64 value, int digits)
 {
     for (int i = digits - 1; i >= 0; i--) {
-        
+
         u8 digit = value % 10;
         s[i] = '0' + digit;
         value /= 10;
@@ -98,13 +98,13 @@ static void sprintd_signed(char *&s, i64 value)
 static void sprintx(char *&s, u64 value, const DasmNumberFormat &fmt, int digits)
 {
     char a = (fmt.upperCase ? 'A' : 'a') - 10;
-    
+
     if (value || !fmt.plainZero) {
-        
+
         for (int i = 0; fmt.prefix[i]; i++) *s++ = fmt.prefix[i];
     }
     for (int i = digits - 1; i >= 0; i--) {
-        
+
         auto digit = char(value % 16);
         s[i] = (digit <= 9) ? ('0' + digit) : (a + digit);
         value /= 16;
@@ -236,18 +236,18 @@ template <Instr I> StrWriter&
 StrWriter::operator<<(Ins<I> i)
 {
     if constexpr (I == DBF) {
-        
+
         if (style.syntax == DASM_GNU || style.syntax == DASM_GNU_MIT) {
             *this << "dbf";
         } else {
             *this << "dbra";
         }
-        
+
     } else {
-        
+
         *this << mnemonics[I];
     }
-    
+
     return *this;
 }
 
@@ -301,7 +301,7 @@ StrWriter&
 StrWriter::operator<<(Cc cc)
 {
     switch (Cond(cc.raw)) {
-            
+
         case COND_BT: *this << "t";   break;
         case COND_BF: *this << "f";   break;
         case COND_HI: *this << "hi";  break;
@@ -359,7 +359,7 @@ StrWriter::operator<<(Cpcc cpcc)
         case 29: *this << "ngt";    break;
         case 30: *this << "sne";    break;
         case 31: *this << "st";     break;
-            
+
         default:
             *this << "?";
     }
@@ -569,7 +569,7 @@ StrWriter::operator<<(Cn cn)
         }
 
         switch (cn.raw) {
-                
+
             case 0x000: *this << (upper ? "SFC"   : "sfc");   break;
             case 0x001: *this << (upper ? "DFC"   : "dfc");   break;
             case 0x002: *this << (upper ? "CACR"  : "cacr");  break;
@@ -589,7 +589,7 @@ StrWriter::operator<<(Cn cn)
             case 0x807: *this << (upper ? "SRP"   : "srp");   break;
             case 0x808: *this << (upper ? "PCR"   : "pcr");   break;
         }
-        
+
     } else {
 
         if (style.syntax == DASM_MUSASHI || style.syntax == DASM_GNU || style.syntax == DASM_GNU_MIT) {
@@ -598,7 +598,7 @@ StrWriter::operator<<(Cn cn)
             *this << "INVALID";
         }
     }
-    
+
     return *this;
 }
 
@@ -606,32 +606,32 @@ StrWriter&
 StrWriter::operator<<(RegList l)
 {
     int r[16];
-    
+
     // Step 1: Fill array r with the register list bits, e.g., 11101101
     for (int i = 0; i <= 15; i++) { r[i] = !!(l.raw & (1 << i)); }
-    
+
     // Step 2: Convert 11101101 to 12301201
     for (int i = 1; i <= 15; i++) { if (r[i]) r[i] = r[i-1] + 1; }
-    
+
     // Step 3: Convert 12301201 to 33302201
     for (int i = 14; i >= 0; i--) { if (r[i] && r[i+1]) r[i] = r[i+1]; }
-    
+
     // Step 4: Convert 33302201 to "D0-D2/D4/D5/D7"
     bool first = true;
     for (int i = 0; i <= 15; i += r[i] + 1) {
-        
+
         if (r[i] == 0) continue;
-        
+
         // Print delimiter
         if (first) { first = false; } else { *this << "/"; }
-        
+
         // Format variant 1: Single register
         if (r[i] == 1) { *this << Rn{i}; }
-        
+
         // Format variant 2: Register range
         else { *this << Rn{i} << "-" << Rn{i+r[i]-1}; }
     }
-    
+
     return *this;
 }
 
@@ -696,7 +696,7 @@ template <Mode M, Size S> StrWriter&
 StrWriter::operator<<(const Ea<M, S> &ea)
 {
     switch (M) {
-            
+
         case MODE_DN:   *this << Dn{ea.reg};    break;
         case MODE_AN:   *this << An{ea.reg};    break;
         case MODE_AI:   *this << Ai<M,S>{ea};   break;
@@ -720,9 +720,9 @@ template <Mode M, Size S> StrWriter&
 StrWriter::operator<<(Ai<M, S> wrapper)
 {
     auto &ea = wrapper.ea;
-    
+
     switch (style.syntax) {
-            
+
         case DASM_MOIRA:
         case DASM_MUSASHI:
         case DASM_GNU:
@@ -736,7 +736,7 @@ StrWriter::operator<<(Ai<M, S> wrapper)
             *this << An{ea.reg} << "@";
             break;
     }
-    
+
     return *this;
 }
 
@@ -744,9 +744,9 @@ template <Mode M, Size S> StrWriter&
 StrWriter::operator<<(Pi<M, S> wrapper)
 {
     auto &ea = wrapper.ea;
-    
+
     switch (style.syntax) {
-            
+
         case DASM_MOIRA:
         case DASM_MUSASHI:
         case DASM_GNU:
@@ -760,7 +760,7 @@ StrWriter::operator<<(Pi<M, S> wrapper)
             *this << An{ea.reg} << "@+";
             break;
     }
-    
+
     return *this;
 }
 
@@ -768,9 +768,9 @@ template <Mode M, Size S> StrWriter&
 StrWriter::operator<<(Pd<M, S> wrapper)
 {
     auto &ea = wrapper.ea;
-    
+
     switch (style.syntax) {
-            
+
         case DASM_MOIRA:
         case DASM_MUSASHI:
         case DASM_GNU:
@@ -784,7 +784,7 @@ StrWriter::operator<<(Pd<M, S> wrapper)
             *this << An{ea.reg} << "@-";
             break;
     }
-    
+
     return *this;
 }
 
@@ -792,7 +792,7 @@ template <Mode M, Size S> StrWriter&
 StrWriter::operator<<(Di<M, S> wrapper)
 {
     auto &ea = wrapper.ea;
-    
+
     switch (style.syntax) {
 
         case DASM_MOIRA:
@@ -800,7 +800,7 @@ StrWriter::operator<<(Di<M, S> wrapper)
 
             *this << "(" << Int{(i16)ea.ext1} << "," << An{ea.reg} << ")";
             return *this;
-            
+
         case DASM_GNU:
 
             *this << Int{(i16)ea.ext1} << "(" << An{ea.reg} << ")";
@@ -812,7 +812,7 @@ StrWriter::operator<<(Di<M, S> wrapper)
             *this << An{ea.reg} << "@(" << Int{(i16)ea.ext1} << ")";
             break;
     }
-    
+
     return *this;
 }
 
@@ -836,7 +836,7 @@ StrWriter::operator<<(Ix<M, S> wrapper)
 
             *this << IxMot<M, S>{wrapper.ea};
     }
-    
+
     return *this;
 }
 
@@ -1128,9 +1128,9 @@ template <Mode M, Size S> StrWriter&
 StrWriter::operator<<(Aw<M, S> wrapper)
 {
     auto &ea = wrapper.ea;
-    
+
     switch (style.syntax) {
-            
+
         case DASM_MOIRA:
         case DASM_MOIRA_MIT:
         case DASM_MUSASHI:
@@ -1144,7 +1144,7 @@ StrWriter::operator<<(Aw<M, S> wrapper)
             *this << UInt(ea.ext1);
             break;
     }
-    
+
     return *this;
 }
 
@@ -1152,23 +1152,23 @@ template <Mode M, Size S> StrWriter&
 StrWriter::operator<<(Al<M, S> wrapper)
 {
     auto &ea = wrapper.ea;
-    
+
     switch (style.syntax) {
-            
+
         case DASM_MOIRA:
         case DASM_MOIRA_MIT:
         case DASM_MUSASHI:
 
             *this << UInt(ea.ext1) << Sz<Long>{};
             break;
-            
+
         case DASM_GNU:
         case DASM_GNU_MIT:
 
             *this << UInt(ea.ext1);
             break;
     }
-    
+
     return *this;
 }
 
@@ -1177,9 +1177,9 @@ StrWriter::operator<<(DiPc<M, S> wrapper)
 {
     auto &ea = wrapper.ea;
     u32 resolved;
-    
+
     switch (style.syntax) {
-            
+
         case DASM_MOIRA:
         case DASM_MUSASHI:
 
@@ -1187,7 +1187,7 @@ StrWriter::operator<<(DiPc<M, S> wrapper)
             resolved = U32_ADD(U32_ADD(ea.pc, (i16)ea.ext1), 2);
             StrWriter(comment, style) << "; (" << UInt(resolved) << ")" << Finish{};
             break;
-            
+
         case DASM_GNU:
 
             resolved = U32_ADD(U32_ADD(ea.pc, (i16)ea.ext1), 2);
@@ -1201,7 +1201,7 @@ StrWriter::operator<<(DiPc<M, S> wrapper)
             *this << Pc{} << "@(" << UInt(resolved) << ")";
             break;
     }
-    
+
     return *this;
 }
 
@@ -1209,7 +1209,7 @@ template <Mode M, Size S> StrWriter&
 StrWriter::operator<<(Im<M, S> wrapper)
 {
     auto &ea = wrapper.ea;
-    
+
     switch (style.syntax) {
 
         case DASM_GNU:
@@ -1217,13 +1217,13 @@ StrWriter::operator<<(Im<M, S> wrapper)
 
             *this << Ims<S>(ea.ext1);
             break;
-            
+
         default:
-            
+
             *this << Imu(ea.ext1);
             break;
     }
-    
+
     return *this;
 }
 
@@ -1231,9 +1231,9 @@ template <Mode M, Size S> StrWriter&
 StrWriter::operator<<(Ip<M, S> wrapper)
 {
     auto &ea = wrapper.ea;
-    
+
     switch (style.syntax) {
-            
+
         case DASM_MOIRA:
         case DASM_MUSASHI:
         case DASM_GNU:
@@ -1247,7 +1247,7 @@ StrWriter::operator<<(Ip<M, S> wrapper)
             *this << An{ea.reg} << "@-";
             break;
     }
-    
+
     return *this;
 }
 
@@ -1255,7 +1255,7 @@ StrWriter&
 StrWriter::operator<<(Scale s)
 {
     if (!s.raw) return *this;
-    
+
     switch (style.syntax) {
 
         case DASM_MOIRA:
@@ -1273,7 +1273,7 @@ StrWriter::operator<<(Scale s)
             *ptr++ = '0' + (char)(1 << s.raw);
             break;
     }
-    
+
     return *this;
 }
 
@@ -1403,37 +1403,37 @@ template <Instr I, Mode M, Size S> StrWriter&
 StrWriter::operator<<(const Av<I, M, S> &av)
 {
     if (style.syntax == DASM_GNU || style.syntax == DASM_GNU_MIT) { return *this; }
-    
+
     switch (I) {
-            
+
         case BKPT:
         case MOVES:
         case MOVEFCCR:
         case RTD:
-            
+
             *this << "; (1+)";
             break;
-            
+
         case CMPI:
-            
+
             *this << (isPrgMode(M) ? "; (1+)" : "");
             break;
-            
+
         case CALLM:
         case RTM:
-            
+
             *this << "; (2)";
             break;
-            
+
         case cpGEN:
         case cpRESTORE:
         case cpSAVE:
         case cpScc:
         case cpTRAPcc:
-            
+
             *this << "; (2-3)";
             break;
-            
+
         case BFCHG:
         case BFCLR:
         case BFEXTS:
@@ -1467,10 +1467,10 @@ StrWriter::operator<<(const Av<I, M, S> &av)
         case TRAPF:
         case TRAPT:
         case UNPK:
-            
+
             *this << "; (2+)";
             break;
-            
+
         case CHK:
         case LINK:
         case BRA:
@@ -1489,10 +1489,10 @@ StrWriter::operator<<(const Av<I, M, S> &av)
         case BGT:
         case BLE:
         case BSR:
-            
+
             *this << (S == Long ? "; (2+)" : "");
             break;
-            
+
         case TST:
             *this << (M == 1 || M >= 9 ? "; (2+)" : "");
             break;
@@ -1505,9 +1505,9 @@ StrWriter::operator<<(const Av<I, M, S> &av)
             break;
 
         case MOVEC:
-            
+
             switch (av.ext1 & 0x0FFF) {
-                    
+
                 case 0x000:
                 case 0x001:
                 case 0x800:
@@ -1524,10 +1524,10 @@ StrWriter::operator<<(const Av<I, M, S> &av)
                 case 0x805:
                 case 0x806:
                 case 0x807: *this << "; (4+)"; break;
-                    
+
                 default:    *this << "; (?)";
             }
-            
+
         default:
             break;
     }
@@ -1562,9 +1562,9 @@ StrWriter::operator<<(Finish)
 {
     // Append comment
     for (int i = 0; comment[i] != 0; i++) *ptr++ = comment[i];
-    
+
     // Terminate the string
     *ptr = 0;
-    
+
     return *this;
 }

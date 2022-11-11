@@ -408,11 +408,11 @@ Amiga::setConfigItem(Option option, i64 value)
 
         case OPT_VSYNC:
 
-            if (value != config.vsync) {
+            if (bool(value) != config.vsync) {
 
                 SUSPENDED
 
-                config.vsync = value;
+                config.vsync = bool(value);
                 paula.muxer.adjustSpeed();
             }
             return;

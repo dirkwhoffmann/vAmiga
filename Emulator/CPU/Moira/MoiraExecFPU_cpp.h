@@ -19,13 +19,13 @@ Moira::isValidExtFPU(Instr I, Mode M, u16 op, u32 ext) const
         case FDBcc:
         case FScc:
         case FTRAPcc:
-            
+
             return (ext & 0xFFE0) == 0;
 
         case FMOVECR:
 
             return (op & 0x3F) == 0;
-            
+
         case FMOVE:
 
             switch (cod) {

@@ -98,10 +98,10 @@ typedef enum
     SVC,        SVS,        SF,         ST,         STOP,       SUB,
     SUBA,       SUBI,       SUBQ,       SUBX,       SWAP,       TAS,
     TRAP,       TRAPV,      TST,        UNLK,
-    
+
     // 68010 instructions
     BKPT,       MOVEC,      MOVES,      RTD,
-    
+
     // 68020 instructions
     BFCHG,      BFCLR,      BFEXTS,     BFEXTU,     BFFFO,      BFINS,
     BFSET,      BFTST,      CALLM,      CAS,        CAS2,       CHK2,
@@ -113,7 +113,7 @@ typedef enum
 
     // 68040 instructions
     CINV,       CPUSH,      MOVE16,
-    
+
     // MMU instructions
     PFLUSH,     PFLUSHA,    PFLUSHAN,   PFLUSHN,
     PLOAD,      PMOVE,      PTEST,
@@ -260,7 +260,7 @@ MemSpace;
  {
  }
  FSize;
-*/
+ */
 
 
 //
@@ -280,7 +280,7 @@ struct StackFrame
 };
 
 struct StatusRegister {
-    
+
     bool t1;                // Trace flag
     bool t0;                // Trace flag         (68020 only)
     bool s;                 // Supervisor flag
@@ -290,16 +290,16 @@ struct StatusRegister {
     bool z;                 // Zero flag
     bool v;                 // Overflow flag
     bool c;                 // Carry flag
-    
+
     u8 ipl;                 // Required Interrupt Priority Level
 };
 
 struct Registers {
-    
+
     u32 pc;                 // Program counter
     u32 pc0;                // Beginning of the currently executed instruction
     StatusRegister sr;      // Status register
-    
+
     union {
         struct {
             u32 d[8];       // D0, D1 ... D7
@@ -313,24 +313,24 @@ struct Registers {
             u32 sp;         // Visible stack pointer (overlays a[7])
         };
     };
-    
+
     u32 usp;                // User Stack Pointer
     u32 isp;                // Interrupt Stack Pointer
     u32 msp;                // Master Stack Pointer             (68020+)
-    
+
     u8 ipl;                 // Polled Interrupt Priority Level
-    
+
     u32 vbr;                // Vector Base Register             (68010+)
     u32 sfc;                // Source Function Code             (68010+)
     u32 dfc;                // Destination Function Code        (68010+)
-    
+
     // Unemulated registers
     u32 cacr;               // Cache Control Register           (68020+)
     u32 caar;               // Cache Address Register           (68020+)
 };
 
 struct PrefetchQueue {
-    
+
     u16 irc;                // The most recent word prefetched from memory
     u16 ird;                // The instruction currently being executed
 };

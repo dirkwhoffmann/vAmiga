@@ -31,11 +31,11 @@ extension ConfigurationController {
             csCpuInfo1.stringValue = "Motorola 68EC020"
             csCpuInfo2.stringValue = "A1200, A2500"
 
+            /*
         case ._68020:
             csCpuInfo1.stringValue = "Motorola MC68020"
             csCpuInfo2.stringValue = ""
 
-            /*
         case ._68EC030:
             csCpuInfo1.stringValue = "Motorola 68EC030"
             csCpuInfo2.stringValue = ""

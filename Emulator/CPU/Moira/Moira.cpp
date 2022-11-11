@@ -31,7 +31,7 @@ Moira::Moira(Amiga &ref) : SubComponent(ref)
 {
     if (BUILD_INSTR_INFO_TABLE) info = new InstrInfo[65536];
     if (ENABLE_DASM) dasm = new DasmPtr[65536];
-    
+
     createJumpTable(cpuModel, dasmModel);
 }
 
@@ -71,7 +71,7 @@ Moira::setDasmNumberFormat(DasmNumberFormat value)
     if (value.radix != 10 && value.radix != 16) {
         throw std::runtime_error("Invalid radix: " + std::to_string(value.radix));
     }
-    
+
     style.numberFormat = value;
 }
 
@@ -152,7 +152,7 @@ template <Core C> u32
 Moira::addrMask() const
 {
     if constexpr (C == C68020) {
-        
+
         return cpuModel == M68EC020 ? 0x00FFFFFF : 0xFFFFFFFF;
     }
 
@@ -186,7 +186,7 @@ Moira::reset()
     fpu = { };
 
     SYNC(16);
-    
+
     // Read the initial (supervisor) stack pointer from memory
     SYNC(2);
     reg.sp = read16OnReset(0);
@@ -196,13 +196,13 @@ Moira::reset()
     reg.pc = read16OnReset(4);
     SYNC(4);
     reg.pc = (read16OnReset(6) & ~0x1) | reg.pc << 16;
-    
+
     // Fill the prefetch queue
     SYNC(4);
     queue.irc = read16OnReset(reg.pc & addrMask<C>());
     SYNC(2);
     prefetch<C>();
-    
+
     debugger.reset();
 
     // Inform the delegate
@@ -217,7 +217,7 @@ Moira::execute()
 
     // Check the integrity of the trace flag
     assert(!!(flags & CPU_TRACE_FLAG) == reg.sr.t1);
-    
+
     // Check the integrity of the program counter
     assert(reg.pc0 == reg.pc);
 
@@ -372,17 +372,17 @@ bool
 Moira::checkForIrq()
 {
     if (reg.ipl > reg.sr.ipl || reg.ipl == 7) {
-        
+
         // Exit loop mode
         if (flags & CPU_IS_LOOPING) flags &= ~CPU_IS_LOOPING;
-        
+
         // Trigger interrupt
         execInterrupt(reg.ipl);
 
         return true;
-        
+
     } else {
-        
+
         // If the polled IPL is up to date, we disable interrupt checking for
         // the time being, because no interrupt can occur as long as the
         // external IPL or the IPL mask inside the status register keep the
@@ -400,7 +400,7 @@ Moira::halt()
     // Halt the CPU
     flags |= CPU_IS_HALTED;
     reg.pc = reg.pc0;
-    
+
     // Inform the delegate
     didHalt();
 }
@@ -497,18 +497,18 @@ Moira::setSupervisorFlags(bool s, bool m)
     bool uspWasVisible = !reg.sr.s;
     bool ispWasVisible =  reg.sr.s && !reg.sr.m;
     bool mspWasVisible =  reg.sr.s &&  reg.sr.m;
-    
+
     if (uspWasVisible) reg.usp = reg.sp;
     if (ispWasVisible) reg.isp = reg.sp;
     if (mspWasVisible) reg.msp = reg.sp;
-    
+
     reg.sr.s = s;
     reg.sr.m = m;
-    
+
     bool uspIsVisible  = !reg.sr.s;
     bool ispIsVisible  =  reg.sr.s && !reg.sr.m;
     bool mspIsVisible  =  reg.sr.s &&  reg.sr.m;
-    
+
     if (uspIsVisible)  reg.sp = reg.usp;
     if (ispIsVisible)  reg.sp = reg.isp;
     if (mspIsVisible)  reg.sp = reg.msp;
@@ -553,7 +553,7 @@ Moira::writeR(int n, u32 v)
 u16
 Moira::availabilityMask(Instr I) const
 {
-    
+
     switch (I) {
 
         case BKPT: case MOVEC: case MOVES: case MOVEFCCR: case RTD:
@@ -676,7 +676,7 @@ u16 Moira::availabilityMask(Instr I, Mode M, Size S, u16 ext) const
                     break;
             }
             break;
-            
+
         case MOVES:
 
             if (ext & 0x7FF) mask = 0;
@@ -752,11 +752,11 @@ u8
 Moira::readFC() const
 {
     switch (fcSource) {
-            
+
         case 0: return u8((reg.sr.s ? 4 : 0) | fcl);
         case 1: return u8(reg.sfc);
         case 2: return u8(reg.dfc);
-            
+
         default:
             fatalError;
     }
@@ -789,11 +789,11 @@ Moira::setIPL(u8 val)
 
 u16
 Moira::getIrqVector(u8 level) const {
-    
+
     assert(level < 8);
-    
+
     switch (irqMode) {
-            
+
         case IRQ_AUTO:          return 24 + level;
         case IRQ_USER:          return readIrqUserVector(level) & 0xFF;
         case IRQ_SPURIOUS:      return 24;
@@ -810,7 +810,7 @@ Moira::getInfo(u16 op) const
     if (BUILD_INSTR_INFO_TABLE == false) {
         throw std::runtime_error("This feature requires BUILD_INSTR_INFO_TABLE = true\n");
     }
-    
+
     return info[op];
 }
 

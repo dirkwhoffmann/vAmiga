@@ -15,7 +15,7 @@
 namespace moira {
 
 class Moira : public SubComponent {
-    
+
     friend class Debugger;
     friend class Breakpoints;
     friend class Watchpoints;
@@ -27,7 +27,7 @@ class Moira : public SubComponent {
     //
 
 protected:
-    
+
     // Emulated CPU model
     Model cpuModel = M68000;
 
@@ -36,7 +36,7 @@ protected:
 
     // Disassembler styleh
     DasmStyle style = {
-        
+
         .syntax         = DASM_MOIRA,
         .letterCase     = DASM_MIXED_CASE,
         .numberFormat   = { .prefix = "$", .radix = 16 },
@@ -62,10 +62,10 @@ protected:
 
     // Number of elapsed cycles since powerup
     i64 clock;
-    
+
     // The register set
     Registers reg;
-    
+
     // The prefetch queue
     PrefetchQueue queue;
 
@@ -77,16 +77,16 @@ protected:
 
     // Current value on the IPL pins (Interrupt Priority Level)
     u8 ipl;
-    
+
     // Value on the lower two function code pins (FC1|FC0)
     u8 fcl;
-    
+
     // Determines the source of the function code pins
     u8 fcSource;
-    
+
     // Remembers the vector number of the most recent exception
     int exception;
-    
+
     // Cycle penalty (needed for 68020+ extended addressing modes)
     int cp;
 
@@ -121,13 +121,13 @@ private:
     // Table holding instruction infos
     InstrInfo *info = nullptr;
 
-    
+
     //
     // Constructing
     //
-    
+
 public:
-    
+
     Moira(Amiga &ref);
     virtual ~Moira();
 
@@ -158,7 +158,7 @@ public:
     void setDasmNumberFormat(DasmNumberFormat value);
     void setDasmLetterCase(DasmLetterCase value);
     void setDasmIndentation(int value);
-    
+
 
     //
     // Querying CPU properties
@@ -186,69 +186,69 @@ protected:
     // The addrMask core routine
     template <Core C> u32 addrMask() const;
 
-    
+
     //
     // Running the CPU
     //
-    
+
 public:
-    
+
     // Performs a hard reset (power up)
     void reset();
-    
+
     // Executes the next instruction
     void execute();
-    
+
     // Returns true if the CPU is in HALT state
     bool isHalted() const { return flags & CPU_IS_HALTED; }
-    
+
 private:
 
     // Processes an exception that was catched in execute()
     void processException(const std::exception &exception);
     template <Core C> void processException(const std::exception &exception);
-    
+
     // The reset core routine
     template <Core C> void reset();
-    
+
     // Invoked inside execute() to check for a pending interrupt
     bool checkForIrq();
-    
+
     // Puts the CPU into HALT state
     void halt();
-    
-    
+
+
     //
     // Running the disassembler
     //
-    
+
 public:
-    
+
     // Disassembles a single instruction and returns the instruction size
     int disassemble(u32 addr, char *str) const;
-    
+
     // Returns a textual representation for a single word
     void disassembleWord(u32 value, char *str) const;
-    
+
     // Returns a textual representation for one or more words from memory
     void disassembleMemory(u32 addr, int cnt, char *str) const;
-    
+
     // Returns a textual representation for the program counter
     void disassemblePC(char *str) const { disassemblePC(reg.pc, str); }
     void disassemblePC(u32 pc, char *str) const;
-    
+
     // Returns a textual representation for the status register
     void disassembleSR(char *str) const { disassembleSR(reg.sr, str); }
     void disassembleSR(const StatusRegister &sr, char *str) const;
-    
+
     // Return an info struct for a certain opcode
     InstrInfo getInfo(u16 op) const;
-    
-    
+
+
     //
     // Interfacing with other components
     //
-    
+
 protected:
 
 #if VIRTUAL_API == true
@@ -278,7 +278,7 @@ protected:
     // Instruction delegates
     virtual void willExecute(const char *func, Instr I, Mode M, Size S, u16 opcode) { }
     virtual void didExecute(const char *func, Instr I, Mode M, Size S, u16 opcode) { }
-    
+
     // Exception delegates
     virtual void willExecute(ExceptionType exc, u16 vector) { }
     virtual void didExecute(ExceptionType exc, u16 vector) { }
@@ -350,67 +350,67 @@ protected:
     //
     // Accessing the clock
     //
-    
+
 public:
-    
+
     i64 getClock() const { return clock; }
     void setClock(i64 val) { clock = val; }
 
-    
+
     //
     // Accessing registers
     //
-    
+
 public:
-    
+
     u32 getD(int n) const { return readD(n); }
     void setD(int n, u32 v) { writeD(n,v); }
-    
+
     u32 getA(int n) const { return readA(n); }
     void setA(int n, u32 v) { writeA(n,v); }
-    
+
     u32 getPC() const { return reg.pc; }
     void setPC(u32 val) { reg.pc = val; }
-    
+
     u32 getPC0() const { return reg.pc0; }
     void setPC0(u32 val) { reg.pc0 = val; }
-    
+
     u16 getIRC() const { return queue.irc; }
     void setIRC(u16 val) { queue.irc = val; }
-    
+
     u16 getIRD() const { return queue.ird; }
     void setIRD(u16 val) { queue.ird = val; }
-    
+
     u8 getCCR() const;
     void setCCR(u8 val);
-    
+
     u16 getSR() const;
     void setSR(u16 val);
-    
+
     u32 getSP() const { return reg.sp; }
     void setSP(u32 val) { reg.sp = val; }
-    
+
     u32 getUSP() const { return !reg.sr.s ? reg.sp : reg.usp; }
     void setUSP(u32 val) { if (!reg.sr.s) reg.sp = val; else reg.usp = val; }
-    
+
     u32 getISP() const { return (reg.sr.s && !reg.sr.m) ? reg.sp : reg.isp; }
     void setISP(u32 val) { if (reg.sr.s && !reg.sr.m) reg.sp = val; else reg.isp = val; }
-    
+
     u32 getMSP() const { return (reg.sr.s && reg.sr.m) ? reg.sp : reg.msp; }
     void setMSP(u32 val) { if (reg.sr.s && reg.sr.m) reg.sp = val; else reg.msp = val; }
-    
+
     u32 getVBR() const { return reg.vbr; }
     void setVBR(u32 val) { reg.vbr = val; }
-    
+
     u32 getSFC() const { return reg.sfc; }
     void setSFC(u32 val) { reg.sfc = val & 0b111; }
-    
+
     u32 getDFC() const { return reg.dfc; }
     void setDFC(u32 val) { reg.dfc = val & 0b111; }
-    
+
     u32 getCACR() const { return reg.cacr; }
     void setCACR(u32 val);
-    
+
     u32 getCAAR() const { return reg.caar; }
     void setCAAR(u32 val);
 
@@ -424,12 +424,12 @@ private:
 
     void setTraceFlag() { reg.sr.t1 = true; flags |= CPU_TRACE_FLAG; }
     void clearTraceFlag() { reg.sr.t1 = false; flags &= ~CPU_TRACE_FLAG; }
-    
+
     void setTrace0Flag() { reg.sr.t0 = true; }
     void clearTrace0Flag() { reg.sr.t0 = false; }
-    
+
     void clearTraceFlags() { clearTraceFlag(); clearTrace0Flag(); }
-    
+
 protected:
 
     template <Size S = Long> u32 readD(int n) const;
@@ -474,31 +474,31 @@ private:
     //
     // Managing the function code pins
     //
-    
+
 public:
-    
+
     // Returns the current value on the function code pins
     u8 readFC() const;
-    
+
 private:
-    
+
     // Sets the function code pins to a specific value
     void setFC(u8 value);
-    
+
     // Sets the function code pins according the the provided addressing mode
     template <Mode M> void setFC();
-    
-    
+
+
     //
     // Handling interrupts
     //
-    
+
 public:
 
     // Gets or sets the value on the IPL pins
     u8 getIPL() const { return ipl; }
     void setIPL(u8 val);
-    
+
 private:
 
     // Selects the IRQ vector to branch to
