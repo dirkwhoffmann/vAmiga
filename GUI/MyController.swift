@@ -499,8 +499,6 @@ extension MyController {
             refreshStatusBar()
             
         case .VIEWPORT:
-            // debug(1, "(\(data1),\(data2)) - (\(data3),\(data4))")
-            
             renderer.canvas.updateTextureRect(hstrt: data1,
                                               vstrt: data2,
                                               hstop: data3,

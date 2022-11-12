@@ -208,7 +208,8 @@ extension MyController {
         speedometer.updateWith(cycle: clock,
                                emuFrame: Int64(amiga.agnus.frameCount),
                                gpuFrame: renderer.frames)
-        
+
+        // Set value
         switch activityType.selectedTag() {
 
         case 0:
@@ -239,6 +240,21 @@ extension MyController {
         default:
             activityBar.integerValue = 0
             activityInfo.stringValue = "???"
+        }
+
+        // Set color
+        let min = activityBar.minValue
+        let max = activityBar.maxValue
+        let cur = (activityBar.doubleValue - min) / (max - min)
+
+        if cur < 0.4 || cur > 0.6 {
+            if cur < 0.15 || cur > 0.85 {
+                activityBar.fillColor = .systemRed
+            } else {
+                activityBar.fillColor = .systemYellow
+            }
+        } else {
+            activityBar.fillColor = .systemGreen
         }
     }
     
