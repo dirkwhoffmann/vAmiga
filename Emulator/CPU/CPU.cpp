@@ -325,13 +325,13 @@ CPU::setConfigItem(Option option, i64 value)
 
         case OPT_CPU_DASM_SYNTAX:
 
-            if (!DasmStyleEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, DasmStyleEnum::keyList());
+            if (!DasmSyntaxEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, DasmSyntaxEnum::keyList());
             }
 
             suspend();
             config.dasmSyntax = DasmSyntax(value);
-            setDasmSyntax(syntax(value));
+            setDasmSyntax(syntax(config.dasmSyntax));
             resume();
             return;
 

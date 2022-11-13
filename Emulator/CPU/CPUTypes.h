@@ -104,7 +104,7 @@ enum_long(DASM_SYNTAX)
 typedef DASM_SYNTAX DasmSyntax;
 
 #ifdef __cplusplus
-struct DasmStyleEnum : util::Reflection<DasmStyleEnum, DasmSyntax>
+struct DasmSyntaxEnum : util::Reflection<DasmSyntaxEnum, DasmSyntax>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = DASM_SYNTAX_MUSASHI;
