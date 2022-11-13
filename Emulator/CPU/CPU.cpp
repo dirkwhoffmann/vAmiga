@@ -513,13 +513,14 @@ CPU::_dump(Category category, std::ostream& os) const
         os << util::tab("FPCR");
         os << util::hex(fpu.fpcr) << std::endl;
 
+        /*
         for (isize i = 0; i < 8; i++) {
             
             auto value = softfloat::floatx80_to_float32(fpu.fpr[i].raw);
             os << util::tab("FP" + std::to_string(i));
-            // os << util::flt(value) << std::endl;
-            os << util::hex(value) << std::endl;
+            os << util::hex(u32(value)) << std::endl;
         }
+        */
     }
     
     if (category == Category::Breakpoints) {

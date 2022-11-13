@@ -3690,8 +3690,6 @@ Moira::execMoveToCcr(u16 opcode)
 {
     AVAILABILITY(C68000)
 
-    printf("execToFromCcrEa: %d\n", M);
-
     int src = _____________xxx(opcode);
 
     u32 ea, data;
