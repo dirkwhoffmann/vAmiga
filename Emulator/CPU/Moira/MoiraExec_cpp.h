@@ -3488,6 +3488,8 @@ Moira::execMoves(u16 opcode)
     AVAILABILITY(C68010)
     SUPERVISOR_MODE_ONLY
 
+    auto old = queue.irc;
+
     if (queue.irc & 0x800) {    // Rg -> Ea
 
         auto arg = readI<C, Word>();
@@ -3496,7 +3498,6 @@ Moira::execMoves(u16 opcode)
 
         auto value = readR<S>(src);
 
-        // readOp<C, M, S, STD_AE_FRAME | SKIP_READ>(dst, &ea, &data);
         u32 ea = computeEA<C, M, S>(dst);
         updateAn<M, S>(dst);
 
@@ -3524,7 +3525,16 @@ Moira::execMoves(u16 opcode)
         fcSource = 2;
 
         // writeOp<C, M, S>(dst, value);
-        writeM<C, M, S>(ea, value);
+        try {
+            writeM<C, M, S, AE_INC_PC>(ea, value);
+        } catch (AddressError &exc) {
+
+            writeBuffer = (S == Long ? u16(value >> 16) : u16(value & 0xFFFF));
+
+            // EXPERIMENTAL: CLEAN THIS UP (RENAME stackFrame.ird to irc?!)
+            queue.irc = old;
+            throw exc;
+        }
 
         // Switch back to the old FC pin values
         fcSource = 0;
@@ -3539,8 +3549,17 @@ Moira::execMoves(u16 opcode)
 
         // u32 ea, data;
         // readOp<C, M, S, STD_AE_FRAME | SKIP_READ>(src, &ea, &data);
-        u32 ea = computeEA<C, M, S>(src);
-        updateAn<M, S>(src);
+        u32 ea;
+        try {
+
+            ea = computeEA<C, M, S>(src);
+            updateAn<M, S>(src);
+
+        } catch (AddressError &exc) {
+
+            exc.stackFrame.ird = old;
+            throw exc;
+        }
 
         // Make the SFC register visible on the FC pins
         fcSource = 1;
