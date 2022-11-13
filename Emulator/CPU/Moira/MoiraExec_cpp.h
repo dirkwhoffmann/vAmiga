@@ -1538,7 +1538,7 @@ Moira::execChk(u16 opcode)
         if (C == C68000) {
 
             SYNC(2);
-            throw AddressError( makeFrame<STD_AE_FRAME>(ea));
+            throw AddressError(makeFrame<STD_AE_FRAME>(ea));
 
         } else {
 
@@ -1574,17 +1574,23 @@ Moira::execChk(u16 opcode)
 
     if (SEXT<S>(dy) > SEXT<S>(data)) {
 
-        if (C == C68000) {
+        switch (C) {
 
-            SYNC(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 2);
+            case C68000:
+            case C68020:
 
-        } else {
+                SYNC(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 2);
+                break;
 
-            prefetch<C, POLL>();
-            SYNC_68010(4);
+            case C68010:
+
+                prefetch<C, POLL>();
+                SYNC_68010(4);
+                break;
         }
         reg.sr.n = NBIT<S>(dy);
         execException<C>(EXC_CHK);
+
 
         CYCLES_68000(40)
         CYCLES_68010(44)
@@ -1594,14 +1600,18 @@ Moira::execChk(u16 opcode)
 
     if (SEXT<S>(dy) < 0) {
 
-        if (C == C68000) {
+        switch (C) {
 
-            SYNC(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 4);
+            case C68000:
+            case C68020:
 
-        } else {
+                SYNC(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 4);
+                break;
 
-            prefetch<C, POLL>();
-            SYNC_68010(6);
+            case C68010:
+
+                prefetch<C, POLL>();
+                SYNC_68010(6);
         }
         reg.sr.n = MIMIC_MUSASHI ? NBIT<S>(dy) : 1;
         execException<C>(EXC_CHK);
@@ -1773,9 +1783,9 @@ Moira::execClr(u16 opcode)
 
                 prefetch<C, POLL>();
                 if constexpr (S == Long) {
-                    writeOp<C, M, S, REVERSE | POLL | AE_INC_PC | AE_INC_A>(dst, ea, 0);
+                    writeOp<C, M, S, REVERSE | AE_INC_PC | AE_INC_A>(dst, ea, 0);
                 } else {
-                    writeOp<C, M, S, REVERSE | POLL | AE_INC_PC>(dst, ea, 0);
+                    writeOp<C, M, S, REVERSE | AE_INC_PC>(dst, ea, 0);
                 }
                 break;
 
@@ -1787,11 +1797,11 @@ Moira::execClr(u16 opcode)
                 reg.sr.c = 0;
 
                 SYNC(2);
-                prefetch<C, POLL>();
+                prefetch<C,POLL>();
                 if constexpr (S == Long) {
-                    writeOp<C, M, S, REVERSE | POLL | AE_INC_PC | AE_INC_A>(dst, ea, 0);
+                    writeOp<C, M, S, REVERSE | AE_INC_PC | AE_INC_A>(dst, ea, 0);
                 } else {
-                    writeOp<C, M, S, REVERSE | POLL | AE_INC_PC>(dst, ea, 0);
+                    writeOp<C, M, S, REVERSE | AE_INC_PC>(dst, ea, 0);
                 }
                 break;
 
@@ -3145,9 +3155,9 @@ Moira::execMovecRcRx(u16 opcode)
 
     if constexpr (C == C68010) {
 
-        auto reg = arg & 0xFFF;
+        auto rc = arg & 0xFFF;
 
-        if (reg != 0x000 && reg != 0x001 && reg != 0x800 && reg != 0x801) {
+        if (rc != 0x000 && rc != 0x001 && rc != 0x800 && rc != 0x801) {
 
             execIllegal<C, I, M, S>(opcode);
             return;
@@ -3155,10 +3165,10 @@ Moira::execMovecRcRx(u16 opcode)
     }
     if constexpr (C == C68020) {
 
-        auto reg = arg & 0xFFF;
+        auto rc = arg & 0xFFF;
 
-        if (reg != 0x000 && reg != 0x001 && reg != 0x800 && reg != 0x801 &&
-            reg != 0x002 && reg != 0x802 && reg != 0x803 && reg != 0x804) {
+        if (rc != 0x000 && rc != 0x001 && rc != 0x800 && rc != 0x801 &&
+            rc != 0x002 && rc != 0x802 && rc != 0x803 && rc != 0x804) {
 
             execIllegal<C, I, M, S>(opcode);
             return;

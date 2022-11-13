@@ -357,7 +357,7 @@ Moira::execException(ExceptionType exc, int nr)
             SYNC(4);
 
             // Write stack frame
-            if (C == C68010) {
+            if (C == C68010 || C == C68020) {
                 writeStackFrame0000<C>(status, reg.pc0, vector);
             } else {
                 writeStackFrame0000<C>(status, reg.pc - 2, vector);
