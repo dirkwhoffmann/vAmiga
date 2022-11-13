@@ -1532,7 +1532,7 @@ Moira::execChk(u16 opcode)
 
         readOp<C, M, S>(src, &ea, &data);
 
-    } catch (const AddressError &exc) {
+    } catch (const AddressError &) {
 
         // Rectify the stack frame
         if (C == C68000) {
@@ -4953,7 +4953,6 @@ Moira::execRte(u16 opcode)
 
     u16 newsr = 0;
     u32 newpc = 0;
-    u16 format = 0;
 
     switch (C) {
 
@@ -4970,7 +4969,7 @@ Moira::execRte(u16 opcode)
         case C68010:
         {
             // TODO: Use pop instead of read (?)
-            format = (u16)read<C, MEM_DATA, Word>(reg.sp + 6);
+            u16 format = (u16)read<C, MEM_DATA, Word>(reg.sp + 6);
 
             // Check the frame format
             switch (format >> 12) {
@@ -5313,7 +5312,7 @@ Moira::execSccEa(u16 opcode)
     } else {
 
         // readOp<C, M, Byte, SKIP_READ>(dst, &ea, &data);
-        u32 ea = computeEA<C, M, S>(dst);
+        ea = computeEA<C, M, S>(dst);
         updateAn<M, S>(dst);
 
         if constexpr (M == MODE_AI) SYNC(2);

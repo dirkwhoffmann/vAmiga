@@ -229,7 +229,6 @@
 		50BF1CCE276DC7BB00386540 /* GdbServerCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF1CCD276DC7BB00386540 /* GdbServerCmds.cpp */; };
 		50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */; };
 		50C50B86220479E000D796DA /* BankTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C50B85220479E000D796DA /* BankTableView.swift */; };
-		50C6653E29216423004C4213 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 50C6653D29216423004C4213 /* CMakeLists.txt */; };
 		50C8C44A2607396200F4E012 /* Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C4492607396200F4E012 /* Layer.swift */; };
 		50C8C44F260740AC00F4E012 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C44E260740AC00F4E012 /* SplashScreen.swift */; };
 		50C8C452260747EA00F4E012 /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C451260747EA00F4E012 /* Canvas.swift */; };
@@ -248,7 +247,6 @@
 		50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DED6AE2202EBA200B8195F /* Inspector.xib */; };
 		50DED6B12202EC3100B8195F /* Inspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DED6B02202EC3100B8195F /* Inspector.swift */; };
 		50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DF2C9F2269135800795256 /* SpriteTableView.swift */; };
-		50E19059277F695C00B8DBE2 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 50E19058277F695C00B8DBE2 /* CMakeLists.txt */; };
 		50E1905C277F69B300B8DBE2 /* FFmpeg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1905A277F69B300B8DBE2 /* FFmpeg.cpp */; };
 		50E1905F277F69CA00B8DBE2 /* NamedPipe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1905D277F69CA00B8DBE2 /* NamedPipe.cpp */; };
 		50E1B0A627CE7164005E41DA /* DiskFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1B0A427CE7164005E41DA /* DiskFile.cpp */; };
@@ -2025,10 +2023,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				500A4EAD2447364E002A4DE1 /* eject.aiff in Resources */,
-				50E19059277F695C00B8DBE2 /* CMakeLists.txt in Resources */,
 				50BBE08B21F5EB9B0099BBBB /* A1000ANSI.xib in Resources */,
 				5050EC3F27BE876F00394F4F /* HardDiskCreator.xib in Resources */,
-				50C6653E29216423004C4213 /* CMakeLists.txt in Resources */,
 				50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */,
 				50D715A127CCA5AA0085C1AA /* PartitionSelector.xib in Resources */,
 				50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */,

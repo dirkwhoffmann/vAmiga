@@ -10,8 +10,8 @@
 //
 
 // Branch conditions (Bcc, DBcc, Scc, TRAPcc)
+template <Cond C> bool evalCond();
 template <Instr I> bool cond();
-template <Cond C>  bool cond();
 
 // Shift instructions (ASx, LSx, ROx, ROXx)
 template <Core C, Instr I, Size S> u32 shift(int cnt, u64 data);
