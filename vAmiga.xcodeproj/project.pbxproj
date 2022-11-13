@@ -229,6 +229,7 @@
 		50BF1CCE276DC7BB00386540 /* GdbServerCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF1CCD276DC7BB00386540 /* GdbServerCmds.cpp */; };
 		50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */; };
 		50C50B86220479E000D796DA /* BankTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C50B85220479E000D796DA /* BankTableView.swift */; };
+		50C6653E29216423004C4213 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 50C6653D29216423004C4213 /* CMakeLists.txt */; };
 		50C8C44A2607396200F4E012 /* Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C4492607396200F4E012 /* Layer.swift */; };
 		50C8C44F260740AC00F4E012 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C44E260740AC00F4E012 /* SplashScreen.swift */; };
 		50C8C452260747EA00F4E012 /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C451260747EA00F4E012 /* Canvas.swift */; };
@@ -813,6 +814,7 @@
 		50C0B78125EC367000CDE1F2 /* IOUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOUtils.h; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
+		50C6653D29216423004C4213 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50C8C42C2605D51A00F4E012 /* Types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Types.h; sourceTree = "<group>"; };
 		50C8C4492607396200F4E012 /* Layer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layer.swift; sourceTree = "<group>"; };
 		50C8C44E260740AC00F4E012 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
@@ -1004,6 +1006,7 @@
 				5002349428CC8D9500145D6E /* softfloat.h */,
 				5002349528CC8D9500145D6E /* softfloat-specialize */,
 				5002349628CC8D9500145D6E /* softfloat.cpp */,
+				50C6653D29216423004C4213 /* CMakeLists.txt */,
 			);
 			path = softfloat;
 			sourceTree = "<group>";
@@ -1829,8 +1832,8 @@
 				50A6F50528C7AB7F002F31EA /* MoiraExecMMU_cpp.h */,
 				50A6F50628C7AB8F002F31EA /* MoiraExecFPU_cpp.h */,
 				50E2BE31240D418500155AE4 /* MoiraDasm.h */,
-				50E2BE26240D418500155AE4 /* MoiraDasm_cpp.h */,
 				50A6F50328C7AB51002F31EA /* MoiraDasmMMU_cpp.h */,
+				50E2BE26240D418500155AE4 /* MoiraDasm_cpp.h */,
 				50A6F50428C7AB6A002F31EA /* MoiraDasmFPU_cpp.h */,
 				50E2BE2B240D418500155AE4 /* MoiraDebugger.h */,
 				50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */,
@@ -2025,6 +2028,7 @@
 				50E19059277F695C00B8DBE2 /* CMakeLists.txt in Resources */,
 				50BBE08B21F5EB9B0099BBBB /* A1000ANSI.xib in Resources */,
 				5050EC3F27BE876F00394F4F /* HardDiskCreator.xib in Resources */,
+				50C6653E29216423004C4213 /* CMakeLists.txt in Resources */,
 				50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */,
 				50D715A127CCA5AA0085C1AA /* PartitionSelector.xib in Resources */,
 				50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */,

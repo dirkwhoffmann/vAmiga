@@ -49,6 +49,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/Utilities
 ${CMAKE_CURRENT_SOURCE_DIR}/Base
 ${CMAKE_CURRENT_SOURCE_DIR}/CPU
 ${CMAKE_CURRENT_SOURCE_DIR}/CPU/Moira
+${CMAKE_CURRENT_SOURCE_DIR}/CPU/Moira/softfloat
 ${CMAKE_CURRENT_SOURCE_DIR}/CIA
 ${CMAKE_CURRENT_SOURCE_DIR}/Paula
 ${CMAKE_CURRENT_SOURCE_DIR}/Paula/Audio
@@ -97,8 +98,9 @@ add_subdirectory(FileSystems)
 add_subdirectory(RetroShell)
 add_subdirectory(Misc)
 add_subdirectory(xdms)
+add_subdirectory(CPU/Moira/softfloat)
 
 # Add libraries
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-target_link_libraries(vAmigaCore xdms Threads::Threads)
+target_link_libraries(vAmigaCore xdms softfloat Threads::Threads)
