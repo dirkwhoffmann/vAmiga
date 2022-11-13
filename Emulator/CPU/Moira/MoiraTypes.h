@@ -67,7 +67,7 @@ DasmSyntax;
 
 typedef enum
 {
-    DASM_MIXED_CASE,        // Style is determined by the selected DasmStyle
+    DASM_MIXED_CASE,        // Style is determined by the selected DasmSyntax
     DASM_LOWER_CASE,        // Everything is printed in lowercase
     DASM_UPPER_CASE         // Everything is printed in uppercase
 }

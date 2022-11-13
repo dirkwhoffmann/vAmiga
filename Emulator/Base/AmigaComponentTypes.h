@@ -47,7 +47,7 @@ enum_long(OPT)
     // CPU
     OPT_CPU_REVISION,
     OPT_CPU_DASM_REVISION,
-    OPT_CPU_DASM_STYLE,
+    OPT_CPU_DASM_SYNTAX,
     OPT_CPU_OVERCLOCKING,
     OPT_CPU_RESET_VAL,
 
@@ -180,7 +180,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_CPU_REVISION:          return "CPU_REVISION";
             case OPT_CPU_OVERCLOCKING:      return "CPU_OVERCLOCKING";
             case OPT_CPU_RESET_VAL:         return "CPU_RESET_VAL";
-            case OPT_CPU_DASM_STYLE:        return "CPU_DASM_STYLE";
+            case OPT_CPU_DASM_SYNTAX:       return "CPU_DASM_SYNTAX";
 
             case OPT_RTC_MODEL:             return "RTC_MODEL";
 

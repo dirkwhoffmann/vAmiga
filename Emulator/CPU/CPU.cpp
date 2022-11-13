@@ -281,7 +281,7 @@ CPU::getConfigItem(Option option) const
 
         case OPT_CPU_REVISION:      return (long)config.revision;
         case OPT_CPU_DASM_REVISION: return (long)config.dasmRevision;
-        case OPT_CPU_DASM_STYLE:    return (long)config.dasmStyle;
+        case OPT_CPU_DASM_SYNTAX:   return (long)config.dasmSyntax;
         case OPT_CPU_OVERCLOCKING:  return (long)config.overclocking;
         case OPT_CPU_RESET_VAL:     return (long)config.regResetVal;
 
@@ -295,7 +295,7 @@ CPU::setConfigItem(Option option, i64 value)
 {
     auto cpuModel = [&](CPURevision rev) { return moira::Model(rev); };
     auto dasmModel = [&](DasmRevision rev) { return moira::Model(rev); };
-    auto syntax = [&](DasmStyle rev) { return moira::DasmSyntax(rev); };
+    auto syntax = [&](DasmSyntax rev) { return moira::DasmSyntax(rev); };
 
     switch (option) {
 
@@ -323,14 +323,14 @@ CPU::setConfigItem(Option option, i64 value)
             resume();
             return;
 
-        case OPT_CPU_DASM_STYLE:
+        case OPT_CPU_DASM_SYNTAX:
 
             if (!DasmStyleEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVARG, DasmStyleEnum::keyList());
             }
 
             suspend();
-            config.dasmStyle = DasmStyle(value);
+            config.dasmSyntax = DasmSyntax(value);
             setDasmSyntax(syntax(value));
             resume();
             return;

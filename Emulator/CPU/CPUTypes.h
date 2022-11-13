@@ -93,33 +93,33 @@ struct DasmRevisionEnum : util::Reflection<DasmRevisionEnum, DasmRevision>
 };
 #endif
 
-enum_long(DASM_STYLE)
+enum_long(DASM_SYNTAX)
 {
-    DASM_STYLE_MOIRA,
-    DASM_STYLE_MOIRA_MIT,
-    DASM_STYLE_GNU,
-    DASM_STYLE_GNU_MIT,
-    DASM_STYLE_MUSASHI
+    DASM_SYNTAX_MOIRA,
+    DASM_SYNTAX_MOIRA_MIT,
+    DASM_SYNTAX_GNU,
+    DASM_SYNTAX_GNU_MIT,
+    DASM_SYNTAX_MUSASHI
 };
-typedef DASM_STYLE DasmStyle;
+typedef DASM_SYNTAX DasmSyntax;
 
 #ifdef __cplusplus
-struct DasmStyleEnum : util::Reflection<DasmStyleEnum, DasmStyle>
+struct DasmStyleEnum : util::Reflection<DasmStyleEnum, DasmSyntax>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = DASM_STYLE_MUSASHI;
+    static constexpr long maxVal = DASM_SYNTAX_MUSASHI;
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
-    static const char *prefix() { return "DASM_STYLE"; }
+    static const char *prefix() { return "DASM_SYNTAX"; }
     static const char *key(CPURevision value)
     {
         switch (value) {
 
-            case DASM_STYLE_MOIRA:      return "MOIRA";
-            case DASM_STYLE_MOIRA_MIT:  return "MOIRA_MIT";
-            case DASM_STYLE_GNU:        return "GNU";
-            case DASM_STYLE_GNU_MIT:    return "GNU_MIT";
-            case DASM_STYLE_MUSASHI:    return "MUSASHI";
+            case DASM_SYNTAX_MOIRA:      return "MOIRA";
+            case DASM_SYNTAX_MOIRA_MIT:  return "MOIRA_MIT";
+            case DASM_SYNTAX_GNU:        return "GNU";
+            case DASM_SYNTAX_GNU_MIT:    return "GNU_MIT";
+            case DASM_SYNTAX_MUSASHI:    return "MUSASHI";
         }
         return "???";
     }
@@ -135,7 +135,7 @@ typedef struct
 {
     CPURevision revision;
     DasmRevision dasmRevision;
-    DasmStyle dasmStyle;
+    DasmSyntax dasmSyntax;
     isize overclocking;
     u32 regResetVal;
 }

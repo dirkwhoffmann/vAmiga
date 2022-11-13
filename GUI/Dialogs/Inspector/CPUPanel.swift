@@ -48,7 +48,7 @@ extension Inspector {
 
             for (c, f) in elements { assignFormatter(f, c!) }
 
-            let style = amiga.getConfig(.CPU_DASM_STYLE)
+            let style = amiga.getConfig(.CPU_DASM_SYNTAX)
             cpuDasmStyle1.selectItem(withTag: style)
             cpuDasmStyle2.selectItem(withTag: style)
 
@@ -164,7 +164,7 @@ extension Inspector {
 
     @IBAction func cpuSyntaxAction(_ sender: NSPopUpButton!) {
 
-        amiga.configure(.CPU_DASM_STYLE, value: sender.selectedTag())
+        amiga.configure(.CPU_DASM_SYNTAX, value: sender.selectedTag())
     }
 
     @IBAction func cpuDasmRevAction(_ sender: NSPopUpButton!) {
