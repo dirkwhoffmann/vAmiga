@@ -3532,6 +3532,7 @@ Moira::execMoves(u16 opcode)
             writeBuffer = (S == Long ? u16(value >> 16) : u16(value & 0xFFFF));
 
             // EXPERIMENTAL: CLEAN THIS UP (RENAME stackFrame.ird to irc?!)
+            fcSource = 0;
             queue.irc = old;
             throw exc;
         }
@@ -3631,8 +3632,35 @@ Moira::execMoveFromCcrEa(u16 opcode)
     if (M == MODE_AI) SYNC(2);
     if (M == MODE_PI) SYNC(4);
     if (M == MODE_PD) SYNC(2);
+
+    auto val = getCCR();
+
+    // Compute effective address
+    u32 ea = computeEA<C, M, S>(dst);
+
+    // Emulate -(An) register modification
+    updateAnPD<M, S>(dst);
+
+    prefetch<C>();
+
+    if (misaligned<C>(ea)) {
+
+        writeBuffer = val & 0xFFFF;
+        updateAnPI<M, S>(dst);
+        setFC<M>();
+        throw AddressError(makeFrame<AE_WRITE|AE_INC_PC>(ea));
+    }
+
+    // Write to effective address
+    writeM<C, M, S, POLL>(ea, val);
+
+    // Emulate (An)+ register modification
+    updateAnPI<M, S>(dst);
+
+    /*
     writeOp<C, M, S, POLL>(dst, getCCR());
     prefetch<C>();
+    */
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
@@ -3651,6 +3679,8 @@ template <Core C, Instr I, Mode M, Size S> void
 Moira::execMoveToCcr(u16 opcode)
 {
     AVAILABILITY(C68000)
+
+    printf("execToFromCcrEa: %d\n", M);
 
     int src = _____________xxx(opcode);
 
@@ -3723,8 +3753,33 @@ Moira::execMoveFromSrEa(u16 opcode)
         if (M == MODE_AI) SYNC(2);
         if (M == MODE_PI) SYNC(4);
         if (M == MODE_PD) SYNC(2);
+
+        auto val = getSR();
+        u32 ea = computeEA<C, M, S>(dst);
+
+        // Emulate -(An) register modification
+        updateAnPD<M, S>(dst);
+
+        prefetch<C>();
+
+        if (misaligned<C>(ea)) {
+
+            writeBuffer = val & 0xFFFF;
+            updateAnPI<M, S>(dst);
+            setFC<M>();
+            throw AddressError(makeFrame<AE_WRITE|AE_INC_PC>(ea));
+        }
+
+        // Write to effective address
+        writeM<C, M, S, POLL>(ea, val);
+
+        // Emulate (An)+ register modification
+        updateAnPI<M, S>(dst);
+
+        /*
         writeOp<C, M, S, POLL>(dst, getSR());
         prefetch<C>();
+        */
     }
 
     //           00  10  20        00  10  20        00  10  20
