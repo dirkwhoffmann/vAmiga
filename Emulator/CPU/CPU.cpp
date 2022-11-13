@@ -517,7 +517,8 @@ CPU::_dump(Category category, std::ostream& os) const
             
             auto value = softfloat::floatx80_to_float32(fpu.fpr[i].raw);
             os << util::tab("FP" + std::to_string(i));
-            os << util::flt(value) << std::endl;
+            // os << util::flt(value) << std::endl;
+            os << util::hex(value) << std::endl;
         }
     }
     
