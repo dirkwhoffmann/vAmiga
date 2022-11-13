@@ -1732,36 +1732,67 @@ Moira::execClr(u16 opcode)
         int dst = _____________xxx(opcode);
 
         u32 ea = computeEA<C, M, S>(dst);
-        updateAn<M, S>(dst);
+        // updateAnPD<M, S>(dst);
+        // if (!misaligned<C>(ea)) updateAnPI<M, S>(dst);
 
         switch (M) {
 
             case MODE_AI:
+
+                writeOp<C, M, S, POLL | AE_INC_PC>(dst, ea, 0);
+                looping<I>() ? noPrefetch<C>() : prefetch<C>();
+                if (looping<I>()) loopModeDelay = 4;
+                break;
+
             case MODE_PI:
 
-                writeOp<C, M, S, POLL>(dst, ea, 0);
+                writeOp<C, M, S, POLL | AE_INC_PC>(dst, ea, 0);
+                updateAnPI<M, S>(dst);
                 looping<I>() ? noPrefetch<C>() : prefetch<C>();
                 if (looping<I>()) loopModeDelay = 4;
                 break;
 
             case MODE_PD:
 
-                writeOp<C, M, S, REVERSE | POLL>(dst, ea, 0);
+                if constexpr (S == Long) {
+                    writeOp<C, M, S, REVERSE | POLL | AE_INC_PC | AE_INC_A>(dst, ea, 0);
+                } else {
+                    writeOp<C, M, S, REVERSE | POLL | AE_INC_PC>(dst, ea, 0);
+                }
+                updateAnPD<M, S>(dst);
                 looping<I>() ? noPrefetch<C>() : prefetch<C>();
                 if (looping<I>()) loopModeDelay = 4;
                 break;
 
             case MODE_DI:
 
+                reg.sr.n = 0;
+                reg.sr.z = 1;
+                reg.sr.v = 0;
+                reg.sr.c = 0;
+
                 prefetch<C, POLL>();
-                writeOp<C, M, S, REVERSE>(dst, ea, 0);
+                if constexpr (S == Long) {
+                    writeOp<C, M, S, REVERSE | POLL | AE_INC_PC | AE_INC_A>(dst, ea, 0);
+                } else {
+                    writeOp<C, M, S, REVERSE | POLL | AE_INC_PC>(dst, ea, 0);
+                }
                 break;
 
             case MODE_IX:
 
+                reg.sr.n = 0;
+                reg.sr.z = 1;
+                reg.sr.v = 0;
+                reg.sr.c = 0;
+
                 SYNC(2);
                 prefetch<C, POLL>();
-                writeOp<C, M, S, REVERSE>(dst, ea, 0);
+                if constexpr (S == Long) {
+                    writeOp<C, M, S, REVERSE | POLL | AE_INC_PC | AE_INC_A>(dst, ea, 0);
+                } else {
+                    writeOp<C, M, S, REVERSE | POLL | AE_INC_PC>(dst, ea, 0);
+                }
                 break;
 
             case MODE_AW:
@@ -4846,7 +4877,7 @@ Moira::execRte(u16 opcode)
 
         case C68000:
         {
-            // TODO: Use pop instead of read
+            // TODO: Use pop instead of read (?)
             newsr = (u16)read<C, MEM_DATA, Word>(reg.sp);
             reg.sp += 2;
 
@@ -4856,8 +4887,7 @@ Moira::execRte(u16 opcode)
         }
         case C68010:
         {
-            // TODO: Use pop instead of read
-
+            // TODO: Use pop instead of read (?)
             format = (u16)read<C, MEM_DATA, Word>(reg.sp + 6);
 
             // Check the frame format
@@ -4927,7 +4957,7 @@ Moira::execRte(u16 opcode)
                     SYNC(4);
                     (void)read<C, MEM_DATA, Long>(reg.sp + 2);
 
-                    reg.sr.c = 1; // Check test case Exceptions/StackFrame/stackframe2
+                    // reg.sr.c = 1; // Check test case Exceptions/StackFrame/stackframe2
                     execException(EXC_FORMAT_ERROR);
                     return;
             }
