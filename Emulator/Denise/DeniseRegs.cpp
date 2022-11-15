@@ -362,7 +362,7 @@ Denise::pokeSPRxPOS(u16 value)
     // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Hx = HSTART)
 
     // Record the register change
-    i64 pos = agnus.pos.pixel() + 4;
+    i64 pos = agnus.pos.pixel() + 6;
     sprChanges[x/2].insert(pos, RegChange { SET_SPR0POS + x, value } );
 }
 
@@ -376,7 +376,7 @@ Denise::pokeSPRxCTL(u16 value)
     // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
 
     // Record the register change
-    i64 pos = agnus.pos.pixel() + 4;
+    i64 pos = agnus.pos.pixel() + 6;
     sprChanges[x/2].insert(pos, RegChange { SET_SPR0CTL + x, value } );
 }
 
