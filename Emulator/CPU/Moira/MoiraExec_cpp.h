@@ -3613,7 +3613,7 @@ Moira::execMoves(u16 opcode)
 }
 
 template <Core C, Instr I, Mode M, Size S> void
-Moira::execMoveFromCcrRg(u16 opcode)
+Moira::execMoveCcrRg(u16 opcode)
 {
     AVAILABILITY(C68010)
 
@@ -3633,7 +3633,7 @@ Moira::execMoveFromCcrRg(u16 opcode)
 }
 
 template <Core C, Instr I, Mode M, Size S> void
-Moira::execMoveFromCcrEa(u16 opcode)
+Moira::execMoveCcrEa(u16 opcode)
 {
     AVAILABILITY(C68010)
 
@@ -3719,7 +3719,7 @@ Moira::execMoveToCcr(u16 opcode)
 }
 
 template <Core C, Instr I, Mode M, Size S> void
-Moira::execMoveFromSrRg(u16 opcode)
+Moira::execMoveSrRg(u16 opcode)
 {
     AVAILABILITY(C68000)
     if constexpr (C != C68000) SUPERVISOR_MODE_ONLY
@@ -3741,7 +3741,7 @@ Moira::execMoveFromSrRg(u16 opcode)
 }
 
 template <Core C, Instr I, Mode M, Size S> void
-Moira::execMoveFromSrEa(u16 opcode)
+Moira::execMoveSrEa(u16 opcode)
 {
     AVAILABILITY(C68000)
     if constexpr (C != C68000) SUPERVISOR_MODE_ONLY

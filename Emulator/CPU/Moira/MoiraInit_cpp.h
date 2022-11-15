@@ -1234,8 +1234,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     if constexpr (C >= C68010) {
 
         opcode = parse("0100 0010 11-- ----");
-        __________MMMXXX(opcode, MOVEFCCR, 0b100000000000, Word, MoveFromCcrRg, CIMS)
-        __________MMMXXX(opcode, MOVEFCCR, 0b001111111000, Word, MoveFromCcrEa, CIMS)
+        __________MMMXXX(opcode, MOVEFCCR, 0b100000000000, Word, MoveCcrRg, CIMS)
+        __________MMMXXX(opcode, MOVEFCCR, 0b001111111000, Word, MoveCcrEa, CIMS)
     }
 
 
@@ -1265,8 +1265,8 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     opcode = parse("0100 0000 11-- ----");
 
-    __________MMMXXX(opcode, MOVEFSR, 0b100000000000, Word, MoveFromSrRg, CIMS)
-    __________MMMXXX(opcode, MOVEFSR, 0b001111111000, Word, MoveFromSrEa, CIMS)
+    __________MMMXXX(opcode, MOVEFSR, 0b100000000000, Word, MoveSrRg, CIMS)
+    __________MMMXXX(opcode, MOVEFSR, 0b001111111000, Word, MoveSrEa, CIMS)
 
 
     // MOVE to SR

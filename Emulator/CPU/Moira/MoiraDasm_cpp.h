@@ -1321,7 +1321,7 @@ Moira::dasmMoves(StrWriter &str, u32 &addr, u16 op) const
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmMoveFromCcrRg(StrWriter &str, u32 &addr, u16 op) const
+Moira::dasmMoveCcrRg(StrWriter &str, u32 &addr, u16 op) const
 {
     auto dst = Dn ( _____________xxx(op) );
 
@@ -1339,7 +1339,7 @@ Moira::dasmMoveFromCcrRg(StrWriter &str, u32 &addr, u16 op) const
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmMoveFromCcrEa(StrWriter &str, u32 &addr, u16 op) const
+Moira::dasmMoveCcrEa(StrWriter &str, u32 &addr, u16 op) const
 {
     auto dst = Op <M,S> ( _____________xxx(op), addr );
 
@@ -1381,7 +1381,7 @@ Moira::dasmMoveToCcr(StrWriter &str, u32 &addr, u16 op) const
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmMoveFromSrRg(StrWriter &str, u32 &addr, u16 op) const
+Moira::dasmMoveSrRg(StrWriter &str, u32 &addr, u16 op) const
 {
     auto dst = Dn ( _____________xxx(op) );
 
@@ -1399,7 +1399,7 @@ Moira::dasmMoveFromSrRg(StrWriter &str, u32 &addr, u16 op) const
 }
 
 template <Instr I, Mode M, Size S> void
-Moira::dasmMoveFromSrEa(StrWriter &str, u32 &addr, u16 op) const
+Moira::dasmMoveSrEa(StrWriter &str, u32 &addr, u16 op) const
 {
     auto dst = Op<M, S>( _____________xxx(op), addr );
 
