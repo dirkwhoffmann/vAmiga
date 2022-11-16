@@ -68,7 +68,7 @@ class DiskExporter: DialogController {
         // Select the export partition
         select(partition: 0)
         
-        super.showSheet()
+        super.showAsSheet()
     }
 
     func showSheet(hardDrive nr: Int) {
@@ -81,7 +81,7 @@ class DiskExporter: DialogController {
         // Select the export partition
         select(partition: numPartitions == 1 ? 0 : nil)
         
-        super.showSheet()
+        super.showAsSheet()
     }
     
     func select(partition nr: Int?) {

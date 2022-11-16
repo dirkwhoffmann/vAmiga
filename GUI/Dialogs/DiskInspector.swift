@@ -96,7 +96,7 @@ class DiskInspector: DialogController {
 
         let protected = drive!.hasProtectedDisk
         image = (decoder as? FloppyFileProxy)?.icon(protected: protected)
-        showWindow()
+        showAsWindow()
     }
     
     func show(hardDrive nr: Int) {
@@ -107,7 +107,7 @@ class DiskInspector: DialogController {
         decoder = try? HDFFileProxy.make(with: amiga.hd(nr)!)
 
         image = NSImage(named: "hdf")!
-        showWindow()
+        showAsWindow()
     }
             
     override func sheetWillShow() {

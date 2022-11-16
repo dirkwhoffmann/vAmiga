@@ -176,7 +176,7 @@ class VolumeInspector: DialogController {
         let adf = try ADFFileProxy.make(with: dfn)
         vol = try FileSystemProxy.make(withADF: adf)
         
-        showWindow()
+        showAsWindow()
     }
     
     func show(hardDrive nr: Int) throws {
@@ -208,13 +208,13 @@ class VolumeInspector: DialogController {
         let hdf = try HDFFileProxy.make(with: hdn)
         vol = try FileSystemProxy.make(withHDF: hdf, partition: partition)
         
-        showWindow()
+        showAsWindow()
     }
     
     func showSheet(fs: FileSystemProxy) {
      
         vol = fs
-        showWindow()
+        showAsWindow()
     }
         
     override func windowDidLoad() {

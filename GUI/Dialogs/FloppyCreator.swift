@@ -38,7 +38,7 @@ class FloppyCreator: DialogController {
     func showSheet(forDrive nr: Int) {
                 
         self.nr = nr
-        super.showSheet()
+        super.showAsSheet()
     }
             
     override public func awakeFromNib() {

@@ -91,7 +91,7 @@ class HardDiskConfigurator: DialogController {
         sectors = origSectors
         bsize = origBsize
 
-        super.showSheet()
+        super.showAsSheet()
     }
             
     override public func awakeFromNib() {

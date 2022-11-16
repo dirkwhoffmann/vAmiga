@@ -76,7 +76,7 @@ class VirtualKeyboardController: DialogController {
     func showSheet() {
 
         autoClose = true
-        super.showSheet()
+        super.showAsSheet()
     }
 
     func showWindow() {

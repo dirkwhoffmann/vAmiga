@@ -305,7 +305,7 @@ class ConfigurationController: DialogController {
     func showSheet(tab: String) {
 
         firstTab = tab
-        showSheet()
+        showAsSheet()
     }
 
     override func awakeFromNib() {
@@ -347,8 +347,8 @@ class ConfigurationController: DialogController {
     
     @IBAction override func okAction(_ sender: Any!) {
         
-        // hideSheet()
-        close()
+        hideSheet()
+        // close()
     }
 
     @IBAction func powerAction(_ sender: Any!) {

@@ -74,7 +74,7 @@ class HardDiskCreator: DialogController {
     func show(forDrive nr: Int) {
                 
         self.nr = nr
-        super.showSheet()
+        super.showAsSheet()
     }
             
     override public func awakeFromNib() {

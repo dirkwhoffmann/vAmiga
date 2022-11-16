@@ -188,7 +188,7 @@ extension MyController: NSMenuItemValidation {
         if configurator == nil {
             configurator = ConfigurationController(with: self, nibName: "Configuration")
         }
-        configurator?.showWindow()
+        configurator?.showAsWindow()
     }
 
     @IBAction func configureAction(_ sender: Any!) {
@@ -240,7 +240,7 @@ extension MyController: NSMenuItemValidation {
         if snapshotBrowser == nil {
             snapshotBrowser = SnapshotDialog(with: self, nibName: "SnapshotDialog")
         }
-        snapshotBrowser?.showSheet()
+        snapshotBrowser?.showAsSheet()
     }
     
     @IBAction func takeScreenshotAction(_ sender: Any!) {
@@ -267,7 +267,7 @@ extension MyController: NSMenuItemValidation {
         if screenshotBrowser == nil {
             screenshotBrowser = ScreenshotDialog(with: self, nibName: "ScreenshotDialog")
         }
-        screenshotBrowser?.showSheet()
+        screenshotBrowser?.showAsSheet()
     }
     
     @IBAction func captureScreenAction(_ sender: Any!) {
@@ -310,7 +310,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func exportVideoAction(_ sender: Any!) {
 
         let exporter = VideoExporter(with: self, nibName: "VideoExporter")
-        exporter?.showSheet()
+        exporter?.showAsSheet()
     }
     
     //

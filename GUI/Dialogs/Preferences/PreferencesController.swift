@@ -140,7 +140,7 @@ class PreferencesController: DialogController {
     func showSheet(tab: String) {
         
         firstTab = tab
-        showSheet()
+        showAsSheet()
     }
 
     override func awakeFromNib() {

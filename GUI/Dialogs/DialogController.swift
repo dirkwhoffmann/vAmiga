@@ -18,11 +18,6 @@ class DialogWindow: NSWindow {
     }
 }
 
-/* Base class for all auxiliary windows. The class extends NSWindowController
- * by a reference to the controller of the connected emulator window (parent)
- * and a reference to the parents proxy object. It also provides some wrappers
- * around showing and hiding the window.
- */
 protocol DialogControllerDelegate: AnyObject {
     
     // Called before beginSheet() is called
@@ -40,12 +35,15 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     var parent: MyController!
     var amiga: AmigaProxy!
 
-    // List of open windows or sheets (to make ARC happy)
+    // References to all open dialogs (to make ARC happy)
     static var active: [DialogController] = []
     
     // Remembers whether awakeFromNib has been called
     var awake = false
-    
+
+    // Indicates if this dialog is displayed as a sheet
+    var sheet = false
+
     convenience init?(with controller: MyController, nibName: NSNib.Name) {
     
         self.init(windowNibName: nibName)
@@ -80,47 +78,62 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     }
     
     func sheetWillShow() {
-        
+
+        debug(.lifetime)
     }
     
     func sheetDidShow() {
-        
+
+        debug(.lifetime)
     }
     
     func cleanup() {
-        
+
+        debug(.lifetime)
     }
     
-    func showWindow(completionHandler handler:(() -> Void)? = nil) {
+    func showAsWindow(completionHandler handler:(() -> Void)? = nil) {
 
+        sheet = false
         register()
         if awake { sheetWillShow() }
         
         showWindow(self)
+        sheetDidShow()
     }
 
-    func showSheet(completionHandler handler:(() -> Void)? = nil) {
+    func showAsSheet(completionHandler handler:(() -> Void)? = nil) {
 
+        sheet = true
         register()
+
         if awake { sheetWillShow() }
-        
+        /*
         parent.window?.beginSheet(window!, completionHandler: { result in
 
             handler?()
             self.cleanup()
         })
-
+        */
+        parent.window?.beginSheet(window!)
         sheetDidShow()
     }
-            
+
     func hideSheet() {
-    
-        if let win = window {
-            parent.window?.endSheet(win, returnCode: .cancel)
+
+        cleanup()
+
+        if sheet {
+            if let win = window {
+                parent.window?.endSheet(win, returnCode: .cancel)
+            }
+        } else {
+            close()
         }
+
         unregister()
     }
-    
+
     @IBAction func okAction(_ sender: Any!) {
         
         hideSheet()

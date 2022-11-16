@@ -26,9 +26,9 @@ class VideoExporter: DialogController {
     var tmp: URL { return URL(fileURLWithPath: NSTemporaryDirectory()) }
     var path: URL { return tmp.appendingPathComponent(name); }
     
-    override func showSheet(completionHandler handler: (() -> Void)? = nil) {
+    override func showAsSheet(completionHandler handler: (() -> Void)? = nil) {
             
-        super.showSheet()
+        super.showAsSheet()
 
         duration.stringValue = ""
         sizeOnDisk.stringValue = ""
