@@ -21,10 +21,10 @@ class DialogWindow: NSWindow {
 protocol DialogControllerDelegate: AnyObject {
     
     // Called before beginSheet() is called
-    func sheetWillShow()
+    func dialogWillShow()
 
     // Called after beginSheet() has beed called
-    func sheetDidShow()
+    func dialogDidShow()
 
     // Called after the completion handler has been executed
     func cleanup()
@@ -63,26 +63,20 @@ class DialogController: NSWindowController, DialogControllerDelegate {
         DialogController.active = DialogController.active.filter {$0 != self}
         debug(.lifetime, "Unregister: \(DialogController.active)")
     }
-    
-    override func windowWillLoad() {
-    }
-    
-    override func windowDidLoad() {
-    }
-    
+
     override func awakeFromNib() {
     
         awake = true
         window?.delegate = self
-        sheetWillShow()
+        dialogWillShow()
     }
     
-    func sheetWillShow() {
+    func dialogWillShow() {
 
         debug(.lifetime)
     }
     
-    func sheetDidShow() {
+    func dialogDidShow() {
 
         debug(.lifetime)
     }
@@ -92,14 +86,14 @@ class DialogController: NSWindowController, DialogControllerDelegate {
         debug(.lifetime)
     }
     
-    func showAsWindow(completionHandler handler:(() -> Void)? = nil) {
+    func showAsWindow() {
 
         sheet = false
         register()
-        if awake { sheetWillShow() }
-        
+
+        if awake { dialogWillShow() }
         showWindow(self)
-        sheetDidShow()
+        dialogDidShow()
     }
 
     func showAsSheet(completionHandler handler:(() -> Void)? = nil) {
@@ -107,19 +101,12 @@ class DialogController: NSWindowController, DialogControllerDelegate {
         sheet = true
         register()
 
-        if awake { sheetWillShow() }
-        /*
-        parent.window?.beginSheet(window!, completionHandler: { result in
-
-            handler?()
-            self.cleanup()
-        })
-        */
-        parent.window?.beginSheet(window!)
-        sheetDidShow()
+        if awake { dialogWillShow() }
+        parent.window?.beginSheet(window!, completionHandler: { result in handler?() })
+        dialogDidShow()
     }
 
-    func hideSheet() {
+    func hide() {
 
         cleanup()
 
@@ -136,12 +123,12 @@ class DialogController: NSWindowController, DialogControllerDelegate {
 
     @IBAction func okAction(_ sender: Any!) {
         
-        hideSheet()
+        hide()
     }
     
     @IBAction func cancelAction(_ sender: Any!) {
         
-        hideSheet()
+        hide()
     }
 }
 

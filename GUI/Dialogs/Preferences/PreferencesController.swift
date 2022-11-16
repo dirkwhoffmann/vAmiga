@@ -151,8 +151,9 @@ class PreferencesController: DialogController {
         refresh()
     }
 
-    override func sheetDidShow() {
+    override func dialogDidShow() {
 
+        super.dialogDidShow()
         if let id = firstTab { tabView?.selectTabViewItem(withIdentifier: id) }
     }
 

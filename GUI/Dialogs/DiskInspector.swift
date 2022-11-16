@@ -110,8 +110,10 @@ class DiskInspector: DialogController {
         showAsWindow()
     }
             
-    override func sheetWillShow() {
-                            
+    override func dialogWillShow() {
+
+        super.dialogWillShow()
+
         cylinderStepper.maxValue = .greatestFiniteMagnitude
         headStepper.maxValue = .greatestFiniteMagnitude
         trackStepper.maxValue = .greatestFiniteMagnitude

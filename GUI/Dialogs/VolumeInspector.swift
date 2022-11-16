@@ -221,8 +221,10 @@ class VolumeInspector: DialogController {
                 
     }
 
-    override func sheetWillShow() {
-             
+    override func dialogWillShow() {
+
+        super.dialogWillShow()
+
         // Register to receive mouse click events
         previewTable.action = #selector(clickAction(_:))
         
@@ -241,10 +243,6 @@ class VolumeInspector: DialogController {
         updateDiagnoseImage()
         
         update()
-    }
-
-    override func sheetDidShow() {
-        
     }
      
     //

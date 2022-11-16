@@ -97,8 +97,9 @@ class VirtualKeyboardController: DialogController {
         refresh()
     }
     
-    override func sheetDidShow() {
-        
+    override func dialogDidShow() {
+
+        super.dialogDidShow()
         refresh()
     }
         

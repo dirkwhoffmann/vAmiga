@@ -59,15 +59,16 @@ class ScreenshotDialog: DialogController {
         debug(.media, "All screenshots saved")
     }
     
-    override func sheetWillShow() {
-        
+    override func dialogWillShow() {
+
+        super.dialogWillShow()
         loadScreenshots()
     }
     
-    override func sheetDidShow() {
-          
+    override func dialogDidShow() {
+
+        super.dialogDidShow()
         now = Date()
-        
         updateLabels()
         
         self.carousel.type = iCarouselType.coverFlow
@@ -162,7 +163,7 @@ class ScreenshotDialog: DialogController {
     
     @IBAction override func cancelAction(_ sender: Any!) {
                                 
-        hideSheet()
+        hide()
                 
         carousel.isHidden = true
         leftButton.isHidden = true

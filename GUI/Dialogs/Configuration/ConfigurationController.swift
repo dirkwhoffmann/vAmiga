@@ -315,8 +315,9 @@ class ConfigurationController: DialogController {
         refreshRomSelector()
     }
 
-    override func sheetWillShow() {
-        
+    override func dialogWillShow() {
+
+        super.dialogWillShow()
         if firstTab != "" { prefTabView?.selectTabViewItem(withIdentifier: firstTab) }
         refresh()
     }
@@ -347,13 +348,13 @@ class ConfigurationController: DialogController {
     
     @IBAction override func okAction(_ sender: Any!) {
         
-        hideSheet()
+        hide()
         // close()
     }
 
     @IBAction func powerAction(_ sender: Any!) {
         
-        hideSheet()
+        hide()
         try? amiga.run()
     }
 }

@@ -79,14 +79,6 @@ class FloppyCreator: DialogController {
         update()
     }
     
-    override func windowDidLoad() {
-
-    }
-    
-    override func sheetDidShow() {
-     
-    }
-    
     //
     // Updating the displayed information
     //
@@ -148,7 +140,7 @@ class FloppyCreator: DialogController {
 
             try drive?.insertNew(fileSystem: fs, bootBlock: bb, name: name)
             myAppDelegate.clearRecentlyExportedDiskURLs(df: nr)
-            hideSheet()
+            hide()
             
         } catch {
             

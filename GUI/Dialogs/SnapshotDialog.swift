@@ -31,8 +31,10 @@ class SnapshotDialog: DialogController {
    
     }
     
-    override func sheetDidShow() {
-          
+    override func dialogDidShow() {
+
+        super.dialogDidShow()
+
         now = Date()
         
         parent.stopSnapshotTimer()
@@ -182,7 +184,7 @@ class SnapshotDialog: DialogController {
                 
         do {
             try parent.restoreSnapshot(item: currentItem)
-            hideSheet()
+            hide()
         } catch {
             NSSound.beep()
         }
@@ -201,7 +203,7 @@ class SnapshotDialog: DialogController {
             carousel
         ]
 
-        hideSheet()
+        hide()
         parent.validateSnapshotTimer()
         for item in items { item.isHidden = true }
      }

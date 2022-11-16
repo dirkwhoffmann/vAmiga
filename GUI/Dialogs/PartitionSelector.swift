@@ -47,15 +47,7 @@ class PartitionSelector: DialogController {
 
         update()
     }
-    
-    override func windowDidLoad() {
         
-    }
-    
-    override func sheetDidShow() {
-        
-    }
-    
     //
     // Updating the displayed information
     //

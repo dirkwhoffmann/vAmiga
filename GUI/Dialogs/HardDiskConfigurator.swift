@@ -124,15 +124,7 @@ class HardDiskConfigurator: DialogController {
         
         update()
     }
-    
-    override func windowDidLoad() {
-
-    }
-    
-    override func sheetDidShow() {
         
-    }
-    
     //
     // Updating the displayed information
     //
@@ -240,7 +232,7 @@ class HardDiskConfigurator: DialogController {
         
         do {
             try drive.changeGeometry(c: cyls, h: heads, s: sectors)
-            hideSheet()
+            hide()
             
         } catch {
             parent.showAlert(.cantChangeGeometry, error: error, window: window)

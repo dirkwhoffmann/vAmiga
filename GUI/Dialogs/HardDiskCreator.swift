@@ -90,14 +90,6 @@ class HardDiskCreator: DialogController {
         update()
     }
     
-    override func windowDidLoad() {
-
-    }
-    
-    override func sheetDidShow() {
-     
-    }
-    
     func setCapacity(mb: Int) {
         
         bsize = 512
@@ -224,7 +216,7 @@ class HardDiskCreator: DialogController {
         do {
             try drive?.attach(c: cylinders, h: heads, s: sectors, b: bsize)
             try drive?.format(fs: fs, name: name)
-            hideSheet()
+            hide()
             
         } catch {
             

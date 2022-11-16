@@ -155,11 +155,7 @@ class DiskExporter: DialogController {
     override func windowDidLoad() {
                     
     }
-    
-    override func sheetDidShow() {
         
-    }
-    
     func update() {
           
         // Update icons
@@ -378,7 +374,7 @@ class DiskExporter: DialogController {
             dfn!.markDiskAsUnmodified()
             myAppDelegate.noteNewRecentlyExportedDiskURL(url, df: dfn!.nr)
             
-            hideSheet()
+            hide()
 
         } catch {
             parent.showAlert(.cantExport(url: url), error: error, async: true, window: window)
@@ -416,7 +412,7 @@ class DiskExporter: DialogController {
             hdn!.markDiskAsUnmodified()
             myAppDelegate.noteNewRecentlyExportedHdrURL(url, hd: hdn!.nr)
             
-            hideSheet()
+            hide()
             
         } catch {
             parent.showAlert(.cantExport(url: url), error: error, async: true, window: window)
