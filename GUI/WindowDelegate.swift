@@ -205,6 +205,19 @@ extension MyController: NSWindowDelegate {
 
         return fixRect(window: window, rect: newFrame)
     }
+
+    public func windowDidChangeScreen(_ notification: Notification) {
+
+        debug(.vsync)
+        if #available(macOS 12.0, *) {
+            adjustRefreshRate(rate: window!.screen!.maximumFramesPerSecond)
+        }
+    }
+
+    public func windowDidChangeScreenProfile(_ notification: Notification) {
+
+        debug(.vsync)
+    }
 }
 
 extension MyController {
@@ -257,19 +270,27 @@ extension MyController {
 
     func adjustRefreshRate() {
 
-        if let main = NSScreen.main {
+        debug(.vsync)
 
-            if #available(macOS 12.0, *) {
-
-                let fps = main.maximumFramesPerSecond
-                debug(.vsync, "Refresh rate: \(fps)")
-                amiga.hostRefreshRate = fps
-                return
-            }
+        if #available(macOS 12.0, *) {
+            adjustRefreshRate(rate: NSScreen.main?.maximumFramesPerSecond ?? 60)
+        } else {
+            adjustRefreshRate(rate: 60)
         }
+    }
 
-        let fps = renderer.view.preferredFramesPerSecond
-        debug(.vsync, "Preferred refresh rate: \(fps)")
-        amiga.hostRefreshRate = fps
+    func adjustRefreshRate(rate: Int) {
+
+        if renderer == nil { return }
+
+        amiga.hostRefreshRate = rate
+        debug(.vsync, "New frame rate: \(rate) Hz")
+
+        if #available(macOS 12.0, *) {
+
+            // TODO: This doesn't work.
+            // preferredFramesPerSecond only takes effect on launch (?!)
+            renderer.view.preferredFramesPerSecond = rate
+        }
     }
 }

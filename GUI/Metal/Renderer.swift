@@ -107,6 +107,23 @@ class Renderer: NSObject, MTKViewDelegate {
         self.view.device = device
         self.view.delegate = self
 
+        /*
+        let screens = NSScreen.screens
+        if #available(macOS 12.0, *) {
+
+            for screen in screens {
+
+                let fps = screen.maximumFramesPerSecond
+                let min = 1.0 / screen.minimumRefreshInterval
+                let max = 1.0 / screen.maximumRefreshInterval
+                let name = screen.localizedName
+                print("\(name):  Min = \(min) Hz, Max = \(max) Hz maxfps = \(fps)")
+            }
+        }
+
+        view.preferredFramesPerSecond = 60
+        */
+        
         setup()
     }
     
