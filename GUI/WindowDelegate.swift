@@ -27,9 +27,6 @@ extension MyController: NSWindowDelegate {
         // Make sure the aspect ratio is correct
         adjustWindowSize()
 
-        // Update the display's refresh rate
-        adjustRefreshRate()
-
         // Update the status bar
         refreshStatusBar()
     }
@@ -104,15 +101,12 @@ extension MyController: NSWindowDelegate {
     public func windowDidEnterFullScreen(_ notification: Notification) {
 
         debug(.lifetime)
-
-        adjustRefreshRate()
         renderer.monitors.updateMonitorPositions()
     }
     
     public func windowWillExitFullScreen(_ notification: Notification) {
 
         debug(.lifetime)
-
         renderer.fullscreen = false
         showStatusBar(true)
     }
@@ -120,8 +114,6 @@ extension MyController: NSWindowDelegate {
     public func windowDidExitFullScreen(_ notification: Notification) {
 
         debug(.lifetime)
-
-        adjustRefreshRate()
         renderer.monitors.updateMonitorPositions()
     }
     
@@ -209,9 +201,6 @@ extension MyController: NSWindowDelegate {
     public func windowDidChangeScreen(_ notification: Notification) {
 
         debug(.vsync)
-        if #available(macOS 12.0, *) {
-            adjustRefreshRate(rate: window!.screen!.maximumFramesPerSecond)
-        }
     }
 
     public func windowDidChangeScreenProfile(_ notification: Notification) {
@@ -266,31 +255,5 @@ extension MyController {
         frame.size = newSize
 
         window!.setFrame(frame, display: true)
-    }
-
-    func adjustRefreshRate() {
-
-        debug(.vsync)
-
-        if #available(macOS 12.0, *) {
-            adjustRefreshRate(rate: NSScreen.main?.maximumFramesPerSecond ?? 60)
-        } else {
-            adjustRefreshRate(rate: 60)
-        }
-    }
-
-    func adjustRefreshRate(rate: Int) {
-
-        if renderer == nil { return }
-
-        amiga.hostRefreshRate = rate
-        debug(.vsync, "New frame rate: \(rate) Hz")
-
-        if #available(macOS 12.0, *) {
-
-            // TODO: This doesn't work.
-            // preferredFramesPerSecond only takes effect on launch (?!)
-            renderer.view.preferredFramesPerSecond = rate
-        }
     }
 }

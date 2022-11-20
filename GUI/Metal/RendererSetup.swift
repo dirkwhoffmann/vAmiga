@@ -45,9 +45,6 @@ extension Renderer {
         metalLayer.pixelFormat = MTLPixelFormat.bgra8Unorm
         metalLayer.framebufferOnly = true
         metalLayer.frame = metalLayer.frame
-
-        // Let the emulator now about the host's refresh rate
-        parent.adjustRefreshRate()
     }
     
     func buildDescriptors() {

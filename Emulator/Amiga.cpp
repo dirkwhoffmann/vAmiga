@@ -825,8 +825,22 @@ Amiga::revertToFactorySettings()
 void
 Amiga::setHostRefreshRate(double refreshRate)
 {
-    host.refreshRate = refreshRate;
-    paula.muxer.adjustSpeed();
+    // printf("setHostRefreshRate(%f)\n", refreshRate);
+
+    switch (i16(refreshRate)) {
+
+        case 50: case 60: case 100: case 120: case 200: case 240:
+
+            host.refreshRate = refreshRate;
+            paula.muxer.adjustSpeed();
+            break;
+
+        default:
+
+            // We keep the old value because the new value is likely the result
+            // of a wrong measurement.
+            break;
+    }
 }
 
 i64

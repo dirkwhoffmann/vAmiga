@@ -28,7 +28,13 @@ class Renderer: NSObject, MTKViewDelegate {
 
     // Number of drawn frames since power up
     var frames: Int64 = 0
-    
+
+    // The current frame GPU frame rate
+    var fps = 60
+
+    // Time stamp used for auto-detecting the frame rate
+    var timestamp = CACurrentMediaTime()
+
     // Frame synchronization semaphore
     var semaphore = DispatchSemaphore(value: 1)
 
@@ -244,6 +250,24 @@ class Renderer: NSObject, MTKViewDelegate {
         }
         
         // Perform periodic events inside the controller
-        if frames % 5 == 0 { parent.timerFunc() }
+        if frames % 5 == 0 {
+
+            parent.timerFunc()
+
+            if frames % 10 == 0 {
+
+                let now = CACurrentMediaTime()
+                let elapsed = now - timestamp
+                timestamp = now
+
+                let newfps = Int(round(10.0 / elapsed))
+                if newfps != fps {
+
+                    fps = newfps
+                    parent.amiga.hostRefreshRate = Int(fps)
+                    debug(.vsync, "New GPU frame rate: \(fps)")
+                }
+            }
+        }
     }
 }
