@@ -300,7 +300,7 @@ Debugger::disableLogging()
 }
 
 int
-Debugger::loggedInstructions()
+Debugger::loggedInstructions() const
 {
     return logCnt < logBufferCapacity ? (int)logCnt : logBufferCapacity;
 }
@@ -312,15 +312,15 @@ Debugger::logInstruction()
     logCnt++;
 }
 
-Registers &
-Debugger::logEntryRel(int n)
+const Registers &
+Debugger::logEntryRel(int n) const
 {
     assert(n < loggedInstructions());
     return logBuffer[(logCnt - 1 - n) % logBufferCapacity];
 }
 
-Registers &
-Debugger::logEntryAbs(int n)
+const Registers &
+Debugger::logEntryAbs(int n) const
 {
     assert(n < loggedInstructions());
     return logEntryRel(loggedInstructions() - n - 1);

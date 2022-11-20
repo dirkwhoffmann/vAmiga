@@ -69,7 +69,6 @@ public:
 
 public:
 
-    // Guards(Moira& ref) : moira(ref) { }
     virtual ~Guards();
 
 
@@ -269,7 +268,7 @@ public:
     void disableLogging();
 
     // Returns the number of logged instructions
-    int loggedInstructions();
+    int loggedInstructions() const;
 
     // Logs an instruction
     void logInstruction();
@@ -279,8 +278,8 @@ public:
      *    xxxRel: n == 0 returns the most recently recorded entry
      *    xxxAbs: n == 0 returns the oldest entry
      */
-    Registers &logEntryRel(int n);
-    Registers &logEntryAbs(int n);
+    const Registers &logEntryRel(int n) const;
+    const Registers &logEntryAbs(int n) const;
 
     // Clears the log buffer
     void clearLog() { logCnt = 0; }

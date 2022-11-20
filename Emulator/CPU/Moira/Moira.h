@@ -329,8 +329,6 @@ protected:
     // Exception delegates
     void willExecute(ExceptionType exc, u16 vector);
     void didExecute(ExceptionType exc, u16 vector);
-
-    // Exception delegates
     void willInterrupt(u8 level);
     void didJumpToVector(int nr, u32 addr);
 

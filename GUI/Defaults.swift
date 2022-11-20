@@ -239,7 +239,7 @@ extension DefaultsProxy {
     
     func registerUserDefaults() {
         
-        debug(.lifetime, "Registering user defaults")
+        debug(.defaults, "Registering user defaults")
         
         registerGeneralUserDefaults()
         registerControlsUserDefaults()
@@ -258,7 +258,7 @@ extension Preferences {
 
     func applyUserDefaults() {
         
-        debug(.defaults)
+        debug(.defaults, "Applying user defaults")
         
         applyGeneralUserDefaults()
         applyControlsUserDefaults()
