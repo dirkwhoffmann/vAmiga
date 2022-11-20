@@ -243,12 +243,13 @@ private:
     
     SyncMode getSyncMode() const override;
     void execute() override;
-    util::Time getDelay() const override;
+    // util::Time getDelay() const override;
 
 public:
 
-    i16 refreshRate() const override;
-    i64 masterClockFrequency() const;
+    double refreshRate() const override;
+    i64 masterClockFrequency() const; // TODO: MOVE TO ANOTHER SECTION (NOT A THREAD METHOD)
+
 
     //
     // Configuring
@@ -275,8 +276,8 @@ public:
     void revertToFactorySettings();
 
     // Gets or sets host parameters
-    i16 getHostRefreshRate() const { return host.refreshRate; }
-    void setHostRefreshRate(i16 refreshRate);
+    double getHostRefreshRate() const { return host.refreshRate; }
+    void setHostRefreshRate(double refreshRate);
     
 private:
     

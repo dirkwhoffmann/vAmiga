@@ -144,7 +144,7 @@ protected:
     isize loopCounter = 0;
     isize suspendCounter = 0;
     
-    // Time stamp for adjusting the execution speed
+    // Time stamp for adjusting execution speed
     util::Time targetTime;
             
     // Clocks for measuring the CPU load
@@ -183,27 +183,17 @@ private:
     virtual void execute() = 0;
 
     // Target frame rate of this thread (provided by the subclass)
-    virtual i16 refreshRate() const = 0;
-
-    // Delay between two frames in nanoseconds (provided by the subclass) (DEPRECATED)
-    virtual util::Time getDelay() const = 0;
+    virtual double refreshRate() const = 0;
 
     // Returns true if this functions is called from within the emulator thread
     bool isEmulatorThread() { return std::this_thread::get_id() == thread.get_id(); }
-
-    
-    //
-    // Configuring
-    //
-
-public:
-    
-    // void setMode(SyncMode newMode);
 
 
     //
     // Analyzing
     //
+
+public:
     
     double getCpuLoad() { return cpuLoad; }
     

@@ -2749,12 +2749,12 @@ using namespace moira;
 
 - (NSInteger)hostRefreshRate
 {
-    return [self amiga]->getHostRefreshRate();
+    return (NSInteger)[self amiga]->getHostRefreshRate();
 }
 
 - (void)setHostRefreshRate:(NSInteger)value
 {
-    [self amiga]->setHostRefreshRate((i16)value);
+    [self amiga]->setHostRefreshRate((double)value);
 }
 
 - (NSInteger)masterFrequency

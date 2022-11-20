@@ -823,7 +823,7 @@ Amiga::revertToFactorySettings()
 }
 
 void
-Amiga::setHostRefreshRate(i16 refreshRate)
+Amiga::setHostRefreshRate(double refreshRate)
 {
     host.refreshRate = refreshRate;
     paula.muxer.adjustSpeed();
@@ -939,9 +939,9 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << tab("Master clock frequency");
         os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
         os << tab("Amiga refresh rate");
-        os << dec(refreshRate()) << " Hz" << std::endl;
+        os << flt(float(refreshRate())) << " Hz" << std::endl;
         os << tab("Host refresh rate");
-        os << dec(host.refreshRate) << " Hz" << std::endl;
+        os << flt(float(host.refreshRate)) << " Hz" << std::endl;
     }
     
     if (category == Category::Defaults) {
@@ -1190,13 +1190,13 @@ Amiga::execute()
     }
 }
 
-i16
+double
 Amiga::refreshRate() const
 {
     switch (getSyncMode()) {
 
         case SyncMode::Pulsed:      return host.refreshRate;
-        case SyncMode::Periodic:    return config.type == PAL ? 50 : 60;
+        case SyncMode::Periodic:    return config.type == PAL ? 50.0 : 60.0;
 
         default:
             fatalError;
@@ -1210,19 +1210,6 @@ Amiga::masterClockFrequency() const
 
         case PAL:   return i64(CLK_FREQUENCY_PAL * (refreshRate() / 50.0));
         case NTSC:  return i64(CLK_FREQUENCY_NTSC * (refreshRate() / 60.0));
-
-        default:
-            fatalError;
-    }
-}
-
-util::Time
-Amiga::getDelay() const
-{
-    switch (config.type) {
-
-        case PAL:   return util::Time(i64(1000000000 / 50));
-        case NTSC:  return util::Time(i64(1000000000 / 60));
 
         default:
             fatalError;
