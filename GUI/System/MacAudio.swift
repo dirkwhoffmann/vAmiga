@@ -13,9 +13,9 @@ public class MacAudio: NSObject {
     
     struct Sounds {
         
-        static let step = "drive_head"
         static let insert = "insert"
         static let eject = "eject"
+        static let step = "drive_head"
         static let move = "hdr_click"
     }
     
@@ -30,7 +30,9 @@ public class MacAudio: NSObject {
     
     // Cached audio players
     var audioPlayers: [String: [AVAudioPlayer]] = [:]
-    
+
+    var queue = DispatchQueue(label: "vAmiga.audioplayer.queue")
+
     override init() {
 
         super.init()
@@ -106,6 +108,31 @@ public class MacAudio: NSObject {
             warn("Failed to allocate RenderResources")
             return nil
         }
+
+        // Pre-allocate some audio players for playing sound effects
+        initAudioPlayers(name: Sounds.insert)
+        initAudioPlayers(name: Sounds.eject)
+        initAudioPlayers(name: Sounds.step, count: 3)
+        initAudioPlayers(name: Sounds.move, count: 3)
+    }
+
+    func initAudioPlayers(name: String, count: Int = 1) {
+
+        let url = Bundle.main.url(forResource: name, withExtension: "aiff")!
+        initAudioPlayers(name: name, url: url)
+    }
+
+    func initAudioPlayers(name: String, url: URL, count: Int = 1) {
+
+        audioPlayers[name] = []
+
+        do {
+            for _ in 1 ... count {
+                try audioPlayers[name]!.append(AVAudioPlayer(contentsOf: url))
+            }
+        } catch let error {
+            print(error.localizedDescription)
+        }
     }
 
     func shutDown() {
@@ -175,35 +202,17 @@ public class MacAudio: NSObject {
         
         // Only proceed if the volume is greater 0
         if volume == 0.0 { return }
-        
-        // Check for cached players for this sound file
-        if audioPlayers[name] == nil {
-            
-            // Lookup sound file in bundle
-            guard let url = Bundle.main.url(forResource: name, withExtension: "aiff") else {
 
-                warn("Cannot open sound file \(name)")
+        // Play sound if a free player is available
+        queue.async {
+
+            for player in self.audioPlayers[name]! where !player.isPlaying {
+
+                player.volume = volume
+                player.pan = pan
+                player.play()
                 return
             }
-            
-            // Create a couple of player instances for this sound file
-            do {
-                audioPlayers[name] = []
-                try audioPlayers[name]!.append(AVAudioPlayer(contentsOf: url))
-                try audioPlayers[name]!.append(AVAudioPlayer(contentsOf: url))
-                try audioPlayers[name]!.append(AVAudioPlayer(contentsOf: url))
-            } catch let error {
-                print(error.localizedDescription)
-            }
-        }
-        
-        // Play sound if a free player is available
-        for player in audioPlayers[name]! where !player.isPlaying {
-            
-            player.volume = volume
-            player.pan = pan
-            player.play()
-            return
         }
     }
 }
