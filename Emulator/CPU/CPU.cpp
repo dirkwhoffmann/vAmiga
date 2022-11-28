@@ -43,15 +43,15 @@ Moira::sync(int cycles)
         // Execute some cycles at normal speed if required
         while (cpu->slowCycles && cycles) {
 
-            cpu->penalty += microCyclesPerCycle;
+            cpu->debt += microCyclesPerCycle;
             cycles--;
             cpu->slowCycles--;
         }
 
         // Execute all other cycles
-        cpu->penalty += cycles;
+        cpu->debt += cycles;
 
-        while (cpu->penalty >= microCyclesPerCycle) {
+        while (cpu->debt >= microCyclesPerCycle) {
 
             // Advance the CPU clock by one DMA cycle
             clock += 2;
@@ -59,7 +59,7 @@ Moira::sync(int cycles)
             // Emulate Agnus for one DMA cycle
             agnus.execute();
 
-            cpu->penalty -= microCyclesPerCycle;
+            cpu->debt -= microCyclesPerCycle;
         }
     }
 }
@@ -641,11 +641,11 @@ CPU::didLoadFromBuffer(const u8 *buffer)
 void
 CPU::resyncOverclockedCpu()
 {
-    if (penalty) {
+    if (debt) {
 
         clock += 2;
         agnus.execute();
-        penalty = 0;
+        debt = 0;
     }
 }
 

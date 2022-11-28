@@ -35,7 +35,7 @@ class CPU : public moira::Moira {
 public:
 
     // Sub-cycle counter
-    i64 penalty;
+    i64 debt;
 
     // Number of cycles that should be executed at normal speed
     i64 slowCycles;
@@ -90,7 +90,7 @@ private:
             worker
 
             // Items from CPU class
-            << penalty
+            << debt
             << slowCycles
 
             // Items from Moira class

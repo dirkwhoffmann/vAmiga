@@ -243,7 +243,6 @@ private:
     
     SyncMode getSyncMode() const override;
     void execute() override;
-    // util::Time getDelay() const override;
 
 public:
 
