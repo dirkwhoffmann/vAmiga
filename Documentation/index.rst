@@ -1,4 +1,4 @@
-.. image:: images/va-logo-wide.png
+.. image:: images/va-titlepage.png
    :width: 100%
    :align: center
    :alt: Banner
@@ -22,8 +22,8 @@ Emulator Reference Manual
    :maxdepth: 1
    :caption: How-to guides
 
-   HowTo/HowToAddMediaFiles
-   HowTo/HowToUseInputDevices
+   HowTo/HowToUseFloppyDisks
+   HowTo/HowToUseTheKeyboard
 
 .. toctree::
    :maxdepth: 1
@@ -33,5 +33,5 @@ Emulator Reference Manual
    :maxdepth: 1
    :caption: References
    
-   References/HardwareSettings
-   References/CompatibilitySettings
+   References/Settings/Preferences
+   References/Settings/Configuration

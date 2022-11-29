@@ -1,6 +1,6 @@
-# Getting started 
+# Getting Started 
 
-## Installing 
+## Installing vAmiga
 
 Amiga is a native Mac application and as easy to install as most other Mac applications. Download the latest version from the main page and copy the executable into the application folder. 
 
