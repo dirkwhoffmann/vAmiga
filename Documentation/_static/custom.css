@@ -1,0 +1,20 @@
+:root {
+    --pst-color-link: #64ADF7;
+}
+
+.headerbtn, div {
+    background-color: #ECF5FE;
+}
+
+pre {
+    background-color: #D9EBFD;
+}
+
+span.pre, h1 {
+    color: #1685F3;
+}
+
+nav, a.reference, a.reference.internal, a.reference.external, div.prev-next-info, a.left-prev, p.prev-next-subtitle { 
+    background-color: #ECF5FE;
+    color: #1685F3;
+}
