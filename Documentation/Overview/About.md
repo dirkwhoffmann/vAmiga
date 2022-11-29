@@ -26,4 +26,4 @@ I have written vAmiga with three goals in mind:
 
 vAmiga is open-source and published under the terms of the GNU General Public License. The CPU core has been re-licensed recently. It is published under the terms of the MIT license now, allowing much broader use. Please refer to the Moira project for more details about this topic.
 
-To run the emulator, a Kickstart Rom is required. Please note that the original Amiga Roms cannot be shipped with the emulator as they are the intellectual property of Cloanto. By purchasing a license of Amiga Forever™ you can acquire legal Kickstart Roms und use them in vAmiga.
+To run the emulator, a Kickstart Rom is required. Please note that the original Amiga Roms cannot be shipped with the emulator as they are the intellectual property of Cloanto™. By purchasing a license of Amiga Forever™ you can acquire legal Kickstart Roms und use them in vAmiga.

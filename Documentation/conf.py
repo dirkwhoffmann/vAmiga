@@ -37,7 +37,7 @@ html_theme_options = {
     "use_repository_button": True,
     "logo_only": False,
 }
-html_logo = "images/logo.png"
+html_logo = "images/icon.png"
 html_title = "vAmiga 2.2"
 html_static_path = ["_static"]
 html_css_files = ["custom.css"]

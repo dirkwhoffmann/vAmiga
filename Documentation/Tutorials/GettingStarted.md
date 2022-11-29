@@ -1,68 +1,35 @@
 # Getting started 
 
-## Obtaining 
+## Installing 
 
-The recommended way to download Moira is to clone the project directly from GitHub:
+Amiga is a native Mac application and as easy to install as most other Mac applications. Download the latest version from the main page and copy the executable into the application folder. 
 
-````bash
-git clone https://github.com/dirkwhoffmann/Moira.git
-cd Moira 
-````
+vAmiga’s deployment target is macOS 10.15 (Catalina) which means that you can’t run the app on earlier macOS releases. Please note that vAmiga is only extensively tested with the latest macOS version. Thus, compatibility problems may well occur with older macOS versions. 
 
-Older versions can be downloaded from the [Moira release page](https://github.com/dirkwhoffmann/Moira/releases).  
+Please keep in mind that vAmiga has been developed with limited work-power and we have ressources for supporting older macOS releases. You can always extract older version from the source-code repository, but you will be on your own by doing so. 
 
-## Configuring 
+## Installing a Kickstart Rom
 
-All compile-time options are configured in a single file called `MoiraConfig.h`. For this tutorial, there is no need to change any of the default settings. However, you may already want to peek inside the file to get an idea about available options:
+Emulating an Amiga requires a Kickstart Rom. Since the original Amiga Roms are the intellectual property of Cloanto™, they cannot ship with the emulator. Thus, when opening vAmiga for the first time, the emulator will greet you with a Rom dialog:
 
-````bash
-cat Moira/MoiraConfig.h
-````
+![Inspectors](../images/Tutorials/roms1.png "Rom Dialog")
 
-All available options are explained in detail in a seperate section.
+In this dialog, a Kickstart Rom can be added via drag and drop. If you are the legal owner of a Cloanto™ rom, you can easily install it by dragging it over the Rom icon:
 
-## Compiling 
+![Inspectors](../images/Tutorials/roms2.png "Rom Dialog")
 
-The easies way to compile Moira is via `CMake`. Simply create a build directory, invoke `CMake` to setup the build-chain, and call `make` afterwards:
+Once the Rom is installed, the emulator is ready to be powered on. To do so, click the power button and have fun with your new old Amiga:
 
-````bash
-mkdir build
-cd build
-cmake ..
-make
-````
+![Inspectors](../images/Tutorials/roms3.png "Rom Dialog")
 
-## Running 
+In case you don't own a legal rom, you can alternatively start vAmiga with the free Aros Kickstart replacement. Aros Roms ship with the emulator and can be installed easily by clicking the **Install Aros** button:
 
-If build as explained above, an application called `testRunner` is created. The application iterates over all opcodes, runs Moira and Musashi in parallel, and compares the outcome. If everything works as expected, the application terminates after a few minutes. If a disrepancy is detected, an error rerport is generated. In such a case, please file a bug on GitHub. Every help in ruling out remaining bugs is highly appreciated.
+![Inspectors](../images/Tutorials/roms4.png "Rom Dialog")
 
-````text
-Moira CPU tester. (C) Dirk W. Hoffmann, 2019 - 2022
+Again, clicking the power button starts the emulator. With the free Kickstart Rom replacement installed, the Aros boot screen shows up:
 
-The test program runs Moira agains Musashi with randomly generated data.
+![Inspectors](../images/Tutorials/roms5.png "Rom Dialog")
 
-    Test rounds : 1
-    Random seed : 442
-     Exec range : (opcode >= 0x0000 && opcode <= 0xEFFF)
-     Dasm range : (opcode >= 0x0000 && opcode <= 0xFFFF)
+Even though the Aros Roms are a great achievement of the open source community, we recommend installing original Commodore Roms as they offer much higher compatibility.
 
-Round 1:
-
-68000 CPU ................................ PASSED  (Moira: 0.65s  Musashi: 0.89s)
-68010 CPU ................................ PASSED  (Moira: 1.31s  Musashi: 1.78s)
-EC020 CPU ................................ PASSED  (Moira: 1.99s  Musashi: 2.70s)
-68020 CPU ................................ PASSED  (Moira: 2.67s  Musashi: 3.62s)
-EC030 CPU ................................ PASSED  (Moira: 3.34s  Musashi: 4.53s)
-68030 CPU ................................ PASSED  (Moira: 4.02s  Musashi: 5.45s)
-68030 MMU ................................ PASSED  (Moira: 4.02s  Musashi: 5.45s)
-EC040 CPU ................................ PASSED  (Moira: 4.69s  Musashi: 6.35s)
-LC040 CPU ................................ PASSED  (Moira: 5.35s  Musashi: 7.26s)
-LC040 MMU ................................ PASSED  (Moira: 5.35s  Musashi: 7.26s)
-68040 CPU ................................ PASSED  (Moira: 6.04s  Musashi: 8.18s)
-68040 MMU ................................ PASSED  (Moira: 6.04s  Musashi: 8.18s)
-68040 FPU ................................ PASSED  (Moira: 6.04s  Musashi: 8.18s)
-
-All tests completed
-````
-
-Please note that not all test rounds execute instructions. This happens only in the first four rounds, when a 68000, 68010, 68EC020, or 68020 is emulated. For all other CPU models, only the disassembler is invoked. 
+Please keep in mind that vAmiga will not remember the Rom settings by default, i.e., the next time the emulator is startet, the Rom dialog will appear again. If you wish to use the currently installed Rom permanently, click the **Use as Default** button next to the Aros button.
