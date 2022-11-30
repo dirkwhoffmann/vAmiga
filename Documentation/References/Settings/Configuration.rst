@@ -6,6 +6,7 @@ Virtual Machine Settings
    :maxdepth: 1
    :caption: Virtual Machine Settings
 
+   Roms
    Chipset
    Memory
    Peripherals
