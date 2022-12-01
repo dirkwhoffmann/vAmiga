@@ -30,8 +30,8 @@ Emulator Reference Manual
    :maxdepth: 1
    :caption: References
    
-   References/Settings/Preferences
-   References/Settings/Configuration
+   References/Preferences/index.rst
+   References/Configuration/index.rst
 
 .. toctree::
    :maxdepth: 1
