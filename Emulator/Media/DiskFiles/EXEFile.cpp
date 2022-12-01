@@ -36,8 +36,8 @@ void
 EXEFile::finalizeRead()
 {
     // REMOVE ASAP
-    ProgramUnitDescriptor descr(data.ptr, data.size);
-    descr.dump(Category::Sections);
+    // ProgramUnitDescriptor descr(data.ptr, data.size);
+    // descr.dump(Category::Sections);
 
     /*
     auto offset = descr.seek(HUNK_CODE);

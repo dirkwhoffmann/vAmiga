@@ -17,6 +17,7 @@ Emulator Reference Manual
    :caption: Tutorials
 
    Tutorials/GettingStarted
+   Tutorials/Exploring
 
 .. toctree::
    :maxdepth: 1
@@ -27,11 +28,16 @@ Emulator Reference Manual
 
 .. toctree::
    :maxdepth: 1
-   :caption: Explanations
-
-.. toctree::
-   :maxdepth: 1
    :caption: References
    
    References/Settings/Preferences
    References/Settings/Configuration
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Developers Corner
+
+   Developer/ClassHierarchy
+   Developer/ThreadClass
+   Developer/RunLoop
+   Developer/EventManager
