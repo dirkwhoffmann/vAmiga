@@ -49,8 +49,13 @@ In cases where you need to press a key that is not directly accessible from your
 
 The keys on the virtual keyboard can be clicked with either the left or the right mouse button:
 
-- When the left moused button is used, the selected key is pushed down and automatically released after a short delay. Use this option if you wish to press a single key on the keyboard.
-- When the right mouse button is used, the selected key is permanently pushed down or permanently released if it was pushed down. Use this option if you want to press a specific key combination, e.g. the reset combination *Ctrl+Amiga+Amiga* as shown in the screenshot. 
+- **Left Button**
+
+  When the left moused button is used, the selected key is pushed down and automatically released after a short delay. Use this option if you wish to press a single key on the keyboard.
+
+- **Right button**
+
+  When the right mouse button is used, the selected key is permanently pushed down or permanently released if it was pushed down. Use this option if you want to press a specific key combination, e.g. the reset combination *Ctrl+Amiga+Amiga* as shown in the screenshot. 
 
 As soon as a key is pressed with the left mouse button, the virtual keyboard disappears. However, it is also possible to open the virtual keyboard as a separate window that can reside next to the emulator window. To open the virtual keyboard as window, press *Cmd-K*, the key equivalent for the *Show...* item in the *Keyboard* menu. 
 

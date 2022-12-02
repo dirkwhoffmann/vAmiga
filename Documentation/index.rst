@@ -23,8 +23,7 @@ vAmiga User's Manual
    :maxdepth: 1
    :caption: How-to guides
 
-   HowTo/HowToUseFloppyDisks
-   HowTo/HowToUseTheKeyboard
+   HowTo/MappingCmd
 
 .. toctree::
    :maxdepth: 1
@@ -32,6 +31,7 @@ vAmiga User's Manual
    
    References/Preferences/index.rst
    References/Configuration/index.rst
+   References/FileFormats
 
 .. toctree::
    :maxdepth: 1
