@@ -3,8 +3,8 @@
    :align: center
    :alt: Banner
 
-Emulator Reference Manual
-=========================
+vAmiga User's Manual
+====================
 
 .. toctree::
    :maxdepth: 1

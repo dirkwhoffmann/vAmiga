@@ -10,11 +10,11 @@ I have written vAmiga with three goals in mind:
 
 - **Accuracy**
 
-  vAmiga aims to emulate the three original Commodore Amiga machines, the A500, A1000, and A2000, with very high accuracy. It is tried to emulate all components with cycle-exact accuracy, meaning that each memory access is  performed at the exact same DMA cycle as on the original machine.
+  vAmiga aims to emulate the three original Commodore Amiga machines, the A500, A1000, and A2000, with high accuracy. It is tried to emulate all components with cycle-exact precision, meaning that each memory access is  performed at the exact same DMA cycle as on the original machine.
 
 - **Usability**
 
-  Providing an appealing graphical user interface is a crucial aspect in retro computing as the purpose of an emulator is not only to run aged software, but to bring back old memories from back in the day. vAmiga provides an easy-to-use interface that tries to hide as many technical details from the user as possible.
+  Providing an appealing graphical user interface is a crucial aspect in retro computing for me, as the purpose of an emulator is not only to run aged software, but to bring back old memories from back in the day. vAmiga provides an easy-to-use interface that tries to hide as many technical details from the user as possible.
 
 - **Quality**
 
