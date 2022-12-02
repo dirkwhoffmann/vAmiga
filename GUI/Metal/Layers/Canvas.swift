@@ -390,8 +390,8 @@ class Canvas: Layer {
         }
         
         // Setup uniforms
-        // fragmentUniforms.alpha = alpha.current // REMOVE ASAP
-        fragmentUniforms.alpha = amiga.paused ? 0.5 : alpha.current
+        fragmentUniforms.alpha = alpha.current // REMOVE ASAP
+        // fragmentUniforms.alpha = amiga.paused ? 0.5 : alpha.current
         fragmentUniforms.white = renderer.white.current
         fragmentUniforms.dotMaskHeight = Int32(ressourceManager.dotMask.height)
         fragmentUniforms.dotMaskWidth = Int32(ressourceManager.dotMask.width)
