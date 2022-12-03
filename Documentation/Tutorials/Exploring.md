@@ -25,13 +25,13 @@ The functionality of these buttons is what you might have already guessed:
 
 ![Toolbar](images/toolbar2.png "Toolbar")
 
-The two buttons in the *Preferences* section let us configure vAmiga. The left button opens the *Preferences* window, which manages the settings that apply to all emulator instances.
+The two buttons in the *Preferences* section let us configure vAmiga. The left button opens the *emulator settings* window, which manages the settings that apply to all emulator instances simultaniously.
 
 ![Preferences](images/generalPanel.png "Preferences")
 
 All available options are described in a separate document. For the purpose of this tutorial, we do not need to change anything here and can proceed to the next point right away. 
 
-The right button opens the Configurator window where the virtual machine is configured. The options are organized in tabs, similar to the preferences window. You are already familiar with the first tab if you have read the *Getting started* tutorial. It is the tab where the Rom of the Amiga is configured. 
+The right button opens the Configurator window where the virtual machine is configured. The options are organized in tabs, similar to the emulator settings window. You are already familiar with the first tab if you have read the *Getting started* tutorial. It is the tab where the Rom of the Amiga is configured. 
 
 ![Configuration](images/romPanel.png "Configuration")
 
@@ -69,7 +69,7 @@ All available devices are displayed in a popup menu:
 
 ![Gameport menu](images/gameports.png "Gameport menu")
 
-The mouse refers to the Mac's internal mouse. Note that the Mac does not distinguish between the mouse and the touchpad. This means that both devices cannot be used independently. The next two items refer to keyboard-emulated joysticks. vAmiga differentiates between two sets of keys, which can be configured in the preferences. The last two items are placeholders, which are currently grayed out. As soon as a compatible gamepad is connected to the host, e.g. a compatible USB joystick, the new device will appear in one of the placeholder slots.
+The mouse refers to the Mac's internal mouse. Note that the Mac does not distinguish between the mouse and the touchpad. This means that both devices cannot be used independently. The next two items refer to keyboard-emulated joysticks. vAmiga differentiates between two sets of keys, which can be configured in the emulator settings. The last two items are placeholders, which are currently grayed out. As soon as a compatible gamepad is connected to the host, e.g. a compatible USB joystick, the new device will appear in one of the placeholder slots.
 
 ### Snapshots
 

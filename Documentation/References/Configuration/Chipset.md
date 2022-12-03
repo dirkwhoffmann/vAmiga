@@ -1,6 +1,6 @@
 # Chipset Panel
 
-Use this panel to configure the CPU and the custom chips of the virtual Amiga.
+Use this panel to configure the CPU and custom chips of the virtual Amiga.
 
 ![Chipset Panel](images/chipsetPanel.png "Chipset Panel")
 
@@ -10,80 +10,85 @@ vAmiga supports three different CPU revisions:
 
 - **M68000**
 
-  The M68000 is a 16/32-bit CISC microprocessor which was introduced by Motorola in 1979. Commodore has used this CPU in all classical Amiga models. Choose this revision, if you wish to emulate the classic Amigas with highest precision. 
+  The M68000 is a 16/32-bit CISC microprocessor introduced by Motorola in 1979. Commodore has used this CPU in all classic Amiga models. Choose this revision to emulate the classic Amigas at highest precision. 
 
 - **M68010**
 
-  The MC68010 processor was released in 1982 as the successor to the Motorola 68000. It was never used officially by Commodore in any Amiga model. However, because the M68010 is pin-compatible to the M68000, it could be used as a drop-in relacement for the M68000 in all classic Amiga models. Using the M68010 instead of the M68000 usually resulted in a speed gain of approx. 10%. A major source for this speed-up was a special operation mode called *loop mode*. The CPU entered this mode automatically when certain loop constructions were used and was able to process these loop much faster than the M68000. Please keep in mind that the M68010 is not 100% software compatible to the M68000. Hence, some titles might refuse to work if this CPU is selected. 
+  The MC68010 processor was released in 1982 as the successor to the Motorola 68000. It was never officially used by Commodore in any Amiga model. However, since the M68010 was pin-compatible with the M68000, it can be used as a replacement for the M68000 in all classic Amigas. The following image shows one of my test machines that has been upgraded with an M68010. I've used this machine extensively while adding M68010 support in vAmiga: 
+
+  ![M68010](images/68010.png "M68010")
+
+  Using the M68010 instead of the M68000 results in a speed gain of about 10%. Among other things, this is due to a special operating mode, called *loop mode*, which is entered automatically when certain loop constructs are executed. In this mode, some redundant memory accesses are skipped, resulting is faster execution speed. Please note that the M68010 is not 100% software compatible with the M68000. Therefore, some games or demos may not work when this CPU is selected. 
 
 - **68EC020**
 
-  The M68EC020 is a lower-cost version of the Motorola 68020 processor which was released in 1984. It was used by Commodore in the Amiga 1200 with a clock frequency of 14MHz. The 68020 is a major improvement over the M68010 since it was the first CPU in the M68k series that featured on-board caches. vAmiga is emulate the M68EC020, but at a lower precision-level compared to the M68000 and M68010. For the first two models, vAmiga is capable of performing cycle-exact emulation which means that all instructions consume the exakt amout of CPU cycles and every memory access is performed during the exact same DMA cycle as it is performed on the real-machine. In 68020 mode, the CPU is emulated with much less accuracy. E.g., caching is not emulated at all. 
+  The M68EC020 is a lower-cost version of the Motorola 68020 processor, which was launched in 1984. It was used by Commodore in the Amiga 1200 with a clock frequency of 14MHz. The 68020 was a significant improvement over the M68010, as it was the first CPU in the M68k series to have an on-board cache. vAmiga emulates the M68EC020, but with less precision than the M68000 and M68010. The first two models can be emulated by vAmiga with exact cycle precision, which means that all instructions not only consume the proper number of CPU cycles, but also access memory during the exact same DMA cycle as the real machine does. In 68020 mode, the CPU is emulated with lower accuracy. For example, vAmiga does not emulate caching, yet.
 
-The next two options select the emulated chip revisions of Agnus and Denise which are two of the so called *custom chips* of the Amiga. These chips were extremely important for the Amiga because a big portion of it's computing power come from those chips. Without them, the Amiga would never have taken the prominent place in computer history it occupies today.
+The next two options choose the emulated chip revisions of Agnus and Denise, two of the so-called *custom chips*. These chips were extremely important for the Amiga, as they were one of the main reasons for its competitive computing power back in the day. Without the custom chips, the Amiga would never have taken the prominent place in computer history it occupies today.
 
-All custom chips can be classified into one of three chip generations. The first generation is called OCS (Original Chip Set). All orginal Amiga were equipped with those chips. The second generation is called ECS (Enhanced Chip Set). Both the OCS and ECS chipset is supported by vAmiga. The third generation of custom chips was labelled AGA for Advanced Graphics Architecture. Commodore equipped the A1200 and A4000 with those chips. The AGA chipset is *not* supported by vAmiga at the moment and will probably never be.
+All custom chips can be classified into one of three generations. The first chip generation is called OCS (Original Chip Set). All original Amigas were equipped with these chips. The second generation is called ECS (Enhanced Chip Set) and was used by Commodore in the A500+ and the A600. Some ECS chips were also used in later revisions of the A500 and the A2000. Commodore shipped them with an ECS Agnus and an OCS Denise. My test computer pictured above also belongs to these models. It is equipped with an Agnus 8372A, a revision of the ECS generation. Denise, however, has revision number 8362R8, which is the OCS version of this chip.
+The third generation of custom chips was called AGA (Advanced Graphics Architecture). Commodore equipped the A1200 and A4000 with these chips.
+
+Both the OCS and ECS chipsets are supported by vAmiga. The AGA chipset is currently *not* supported and probably will never be.
 
 ## Agnus
 
-Agnus is undoubtedly the most significant among these chip because it controls the interaction of all other components. I.e., every DMA access is done by this chip.
+Agnus can be considered the boss among the custom chips, because it controls the interaction of all other components. It also acts as a data provider for the other chips, as it performs all DMA accesses.
 
-Over time, Commodore has developed several revision of this chip. vAmiga offers the following configuration options for this chip:
+vAmiga is able to emulate the following revisions of this chip:
 
 - **Early OCS**
 
-  This option emulates the MOS8367. It was used in the A1000 and in a very early revision of the A2000 which is sually refered to as the A2000A.
+  This option emulates the MOS 8367. It was used in the A1000 and in a very early version of the A2000, usually called the A2000A.
 
 - **OCS** 
-
-  This option emulates the MOS8371. This chip was used in many revision of the A500 and A2000. It is the most commonly used OCS version of this chip.
+  
+  This option emulates the MOS 8371 which was used by Commodore in many revisions of the A500 and A2000. It is the most commonly used OCS version of this chip.
 
 - **ECS (1MB)**
     
-  This option emulates the MOS8372A. It is the first ECS revision of this chip and was used in later revisions of the A500 and the A2000. Apart from several minor details, the ECS variant mainly differs in the size of the addressable memory. While the OCS models can address 512 KB of chip RAM, only, the ECS version was able to address twice as much. 
+  This option emulates the MOS 8372A. It is the first ECS revision of this chip. Apart from some minor details, the ECS variant differs mainly in the size of the addressable memory space. While the OCS models can only address 512 KB of Chip Ram, the ECS version was capable of addressing twice as much. 
 
 - **ECS (2MB)**
 
-  This option emulates the MOS 8375. It bumped up the range of addressable Chip Ram to 2 MB and was used in the Amiga 500+ and the Amiga 600 which were released in 1991 and 1992, respectively.
+   This option emulates the MOS 8375, which increased the range of addressable Chip Ram to 2 MB. It is used in the A500+ and A600, released in 1991 and 1992 respectively.
 
 ## Denise 
 
 - **OCS**
 
-This option selects the MOS 8362R8 which was used in all revisions of the Amiga 1000, Amiga 500 and Amiga 2000. 
+  This option selects the MOS 8362R8 which was used in all revisions of the Amiga 1000, Amiga 500, and Amiga 2000. 
 
 - **ECS**
 
-This option selects the MOS 8373R4. The chip is sometimes refered to as *HiRes Denise* and was used in the Amiga 500+ and the Amiga 3000. Compared to it's predecessor, it supported additional graphics modes and featured a more advanced sprite unit. It also had a feature called *Border Blank* which causes the border to be drawn in black instead of the current background color. Some games use this functionality to surround the drawing area with a nicer looking frame. 
+  This option selects the MOS 8373R4. The chip is sometimes referred to as *HiRes Denise* and was used in the Amiga 500+ and the Amiga 3000. Compared to its predecessor, it supports additional graphics modes and features an advanced sprite unit. It also offers a special *Border Blank* mode, which causes the border to be drawn in black color instead of the currently selected background color. Some games use this feature to surround the drawing area with a nicer looking border.
 
 ## CIAs
 
-The Amiga utilises CIAs of type MOS 8520 to interact with peripheral devices. These chip are similar to the well-known MOS 6526 chips which were used in the C64. There are subtle differences, though. For example, Commodore has replaced the TOD clock with a native 24-bit counter and implemented an autostart mechanism for the CIA timers. 
-
-vAmiga supports emulation of two MOS 8520 models:
+  The Amiga utilizes CIAs of type MOS 8520 to interact with peripheral devices. These chips are similar to the well-known MOS 6526 revisions used in the C64. However, there are subtle differences. For example, Commodore replaced the TOD clock with a native 24-bit counter and supplied the CIA timers with an autostart mechanism.
 
 - **DIP**
 
-  This options selects the DIP version of the MOS 8520 complex interface adapter (CIA). The DIP models are the default option since they were used in all classic Amigas. 
+   This option selects the DIP version of the MOS 8520. The DIP models are the default option as they were used in all classic Amigas. 
 
 - **PLCC** 
 
-  This options selects the PLCC version of the MOS 8520. The PLCC version was used, e.g., in the Amiga 600. 
+   This option selects the PLCC version of the MOS 8520, which was used e.g. in the Amiga 600. The differences to the DIP version are extremely subtle.
 
 ## RTC
 
-RTC refers to the real-time clock of the Amiga. The first Amiga, the Amiga 1000, never shipped with a real-time clock and it was pretty cumbersome to add such a device. For the Amiga 500, adding an RTC was easy as many trapdoor memory expansion cards had such a device on board. They can be easily recognized by the battery, which is required to keep the register contents alive. In the Amiga 2000, the real-time clock was soldered directly onto the motherboard. In hindsight, this was a bad idea, since the battery, which was also soldered directly onto the motherboard, is the number one death bringer of such machines today. Many of us lost the beloved machines due to leaking battery.
+The term RTC refers to the Amiga's real-time clock. The first Amiga, the Amiga 1000, never shipped with such a device and it was quite cumbersome to add one. For the Amiga 500, adding an RTC was easy, as many trapdoor memory expansion cards shipped with such a device on board. They are easily recognized by the battery needed to keep the register contents alive. In the Amiga 2000, the real-time clock was soldered directly to the motherboard. In hindsight, this was a bad idea, as the battery, which was also soldered directly to the motherboard, is now the number one death bringer of such machines. Many of us have lost our beloved devices because of the damage caused by the acid of a leaking battery.
 
 vAmiga offers the following configuration options:
 
 - **None**
 
-If this option is selected, no real-time clock will be emulated.
+  If this option is selected, no real-time clock is emulated.
 
 - **Oki**
 
-This options emulates a real-time clock of type MSM6242B manufactured by Oki Semiconductor. Commodore used this chip in the A2000 and the A500+.
+  This option emulates a real-time clock of the type MSM6242B, manufactured by Oki Semiconductor. Commodore used this chip in the A2000 and the A500+.
 
 - **Ricoh**
 
-This option emulates a real-time clock of type RF5C01A menufactured by Ricoh, Ltd. Commodore used this chip in the A3000 and the A4000. 
+  This option emulates a real-time clock of type RF5C01A, manufactured by Ricoh, Ltd. Commodore used this chip in the A3000 and the A4000. 

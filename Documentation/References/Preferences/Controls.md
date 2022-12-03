@@ -1,19 +1,19 @@
 # Controls Panel
 
-Use this panel to configure the mouse, joysticks, and the joystick emulation keys.
+Use this section to configure the mouse, joysticks, and joystick emulation keys.
 
 ![Controls Panel](images/controlsPanel.png "Controls Panel")
 
 ## Mouse
 
-vAmiga supports multiple ways to release and retain the mouse pointer. The traditional way to release the mouse pointer is by using a special key combination. Since different emulators use different key combinations for this purpose, vAmiga allows the user to choose among *Alt+Cmd* and *Alt-Ctrl*. The most convenient method for releasing the mouse is by activating the shake detector. If active, simply perform some rapid mouse movements to the left and right to release the mouse pointer. 
+vAmiga supports several ways to release and retain the mouse pointer. The conventional way is to use a special key combination. Since different emulators use different combinations, vAmiga allows the user to choose between **Alt+Cmd** and **Alt-Ctrl**. The most convenient way to release the mouse is to activate the shake detector. When activated, rapidly move the mouse from left to right a few times to release the mouse.
 
-vAmiga also offers several options for retaining the mouse. Besides using a special combination, the emulator can be configured to retain the mouse by clicking inside the emulator window or by simply moving the mouse pointer inside. 
+vAmiga also offers several options for retaining the mouse. Besides using a special key combination, the emulator can be configured to retain the mouse when the user pushed the left button inside the emulator window or to retain the mouse automatically when the mouse pointer is dragged into the emulator window.
 
 ## Joysticks
 
-vAmiga offers a built-in multi-shot mode. In addition to ajusting the fire frequency, you may choose to fire constantly or in volleys with a customizabel number of bullets per volley. 
+The emulator offers a built-in multi-shot mode. You can adjust the firing frequency and choose whether to fire constantly or in volleys with a certain number of bullets. 
 
 ## Emulation keys 
 
-As an alternative to a real joystick, you can use the emulator with a key-emulated device. vAmiga allows you to pre-define two keysets. In addition, you may also emulate the mouse buttons with a key. This is a handy option for the right or middle mouse button which does not physically exist on most Apple mice.  
+As an alternative to a real joystick, you can use the emulator with a key-emulated joystick. vAmiga allows you to predefine two sets of emulation keys. Mouse buttons can be mapped, too. This is a handy solution for the right and middle mouse button, which are not physically present on most Apple mice.  

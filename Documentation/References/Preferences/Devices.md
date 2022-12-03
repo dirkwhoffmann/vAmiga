@@ -1,14 +1,14 @@
 # Devices Panel
 
-Use this panel to configure plugged-in USB devices.
+Use this field to configure external USB gamepads.
 
 ![Devices Panel](images/devicesPanel.png "Devices Panel")
 
-After plugging in an external USB device, vAmiga reads some information from the device. If the device can be used as input device, the information is displayed in this panel. In addition, if the connected device is a game pad, the axis mapping can be ajusted. vAmiga comes with a list of known devices. If such a device is connected, the correct axis mapping is setup automatically. If an unknown device is connected, you have a good change to make the device work by trying out a few axis mappings manually. 
+After plugging in an external USB device, vAmiga checks the device for compatibility. If a suitable gamepad is detected, vAmiga allows the user to adjust the axis assignment. vAmiga comes with a list of known devices and automatically chooses the correct axis assignment when such a device is detected. For gamepads that are not known to the emulator, you have a good chance of getting it to work by trying some axis assignments manually. 
 
 ## Supported devices
 
-As of the writing of this documentation the following devices are among the known devices:
+At the time of writing this documentation, known devices include the following:
 
 - Competition Pro SL-650212
 - Competition Pro SL-6602
@@ -26,9 +26,9 @@ As of the writing of this documentation the following devices are among the know
 
 ## Supported USB adapters
 
-By using a USB retro adapter, you are able to connect original Commodore joysticks, too. vAmiga has been tested with the following two adapters:
+With the help of a USB retro adapter you can also connect original Commodore joysticks. vAmiga has been tested with the following two adapters:
 
 - aJoy Retro Adapter
 - RetroFun! Joystick Adapter
 
-My personal recommendation is to invest money into the Competition Pro SL-650212. It has smaller latency than it's predecessor, the SL-6602, and provides the best retro-experience in my oppinion. I can also recommend using an original Competition Pro from back in the day in combination with the RetroFun! adapter.
+My personal recommendation is to invest in the Competition Pro SL-650212. It has lower latency than its predecessor, the SL-6602, and offers the best retro experience in my opinion. Also, I can recommend using an original Competition Pro from back in the day in combination with the RetroFun!
