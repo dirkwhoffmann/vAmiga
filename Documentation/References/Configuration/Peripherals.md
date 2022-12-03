@@ -10,7 +10,7 @@ Just like a real Amiga, vAmiga supports up to four floppy drives. The internal d
 
 ## Hard Drives
 
-Thanks to GitHub user mras0, vAmiga is able to emulate hard drives, too. Up to four hard drive controllers are supported. Each controller occupies a Zorro II slot and identifies itself to the Amiga via the AUTOCONFIG mechanism at boot time. 
+Thanks to Michael Rasmussen, vAmiga is able to emulate hard drives. Up to four hard drive controllers are supported. Each controller occupies a Zorro II slot and identifies itself to the Amiga via the AUTOCONFIG mechanism at boot time. 
 
 ## Game Ports
 
@@ -32,5 +32,5 @@ vAmiga offers the following options for the serial port:
   - **Loopback Cable** 
 
     A loopback cable connects the output pins of the serial port with its input pins. Such a cable is required, e.g., to run the serial port test built into **Amiga Test Kit**: 
-    
+
     ![Amiga Test Kit](images/AmigaTestKitSerial.png "Amiga Test Kit")
