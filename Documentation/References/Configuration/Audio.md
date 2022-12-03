@@ -8,34 +8,34 @@ The audio settings are organized in four sections:
 
 ## Audio In 
 
-In this section, the volume of all four Amiga audio channels is specified. To remove an audio channel, simply lower the channel volume to zero. Using the pan control knobs, each channel to be freely distributed between the left and right speakers. The default setting route channel 1 and 2 to the left speaker and channel 0 and 4 to the right speaker, just as a real Amiga does. 
+This section controls the volumes of the four Amiga audio channels. To mute an audio channel, simply lower the volume to zero. The pan controls can be used to freely distribute each channel to the left and right speakers. By default, channels 1 and 2 are routed to the left speaker and channels 0 and 4 to the right speaker, just like the real Amiga does.
 
 ## Audio Out
 
 - **Left**, **Right** 
 
-  The two volume sliders change the master volume of the two stereo output streams. Both streams are composed out of the four Amiga audio channels as specified in the Audio In section. 
-
+  The two volume controls change the main volume of the two stereo output streams. Both streams are mixed together from the four Amiga audio channels as specified in the Audio In section. 
+  
 - **Interpolation**
   
-  The Amiga can produce audio streams with varying sample rates. This means that the audio stream needs to be translated to a suitable audio stream for the host computer. The Interpolation settings controls how this translation is done. You may choose among three methods:
+  The Amiga can generate audio streams with different sampling rates. This means that the audio stream must be translated into a suitable audio stream for the host computer. The interpolation settings control how this conversion is performed. You can choose between three methods:
   
   - **Off**
 
-    In this mode, no interpolation takes place. Based on the time stamp of the audio sample to create, the current contents of the audio output buffer is copied into the audio stream of the host machine. This mode trades is quality for speed. 
+    In this mode, no interpolation takes place. Based on the timestamp of the audio sample to be created, the current content of the audio output buffer is fed into the audio stream of the host computer. This mode trades in quality for speed. 
 
   - **Nearest**
 
-    Based on the time stamp of the audio sample to create, the Amiga audio sample with the closest time stamp is selected. This mode is slower than the first one, but produces an audio stream of better quality. 
+    Based on the timestamp of the audio sample to be created, the Amiga audio sample with the closest timestamp is selected. This mode is slightly slower than the first one, but produces better quality. 
 
   - **Linear**
 
-    Based on the time stamp of the audio sample to create, the two surrounding samples in the Amiga audio samples are looked up and interpolated linearly. This mode produces the best result, but is the slowest among the three options.
+    Based on the timestamp of the audio sample to be created, the two surrounding samples are looked up in the Amiga audio stream and linearly interpolated. This mode gives the best result, but is also the slowest among the three options.
 
 ## Drive volumes 
 
-In this section, the volumes of multiple sound effects can be controlled. vAmiga distinguishes between heads steps and polling clicks. The latter describe the heads steps that are performed to detect a disk change. Because polling clicks can become very annoying, especially when two more drives are connected, it's possible to silence them by lowering the volume of polling clicks to zero. All normal head step movements will still be audible in this case. 
+In this area, the volumes of several sound effects are controlled. vAmiga distinguishes between heads steps and polling clicks. The latter describe the steps of the drive head that are executed to detect a disk change. Since polling clicks may become annoying, especially when two or more drives are connected, it is possible to silence them by reducing the volume of the polling clicks to zero. All normal head movements will still be audible in this case.
 
 ## Drive locations 
 
-Using the pan control knobs, you can distribute the drive sounds freely among the left and right speaker output. In the default setting, all sounds of the internal floppy drive are routed to the right speaker, because this is where the floppy drive is located in the Amiga 500. 
+With the pan controls you can freely distribute the drive sounds to the left and right speaker outputs. In the default setting, all sounds from the internal floppy drive are routed to the right speaker, since the floppy drive in the Amiga 500 is located on the right side of the computer case. 
