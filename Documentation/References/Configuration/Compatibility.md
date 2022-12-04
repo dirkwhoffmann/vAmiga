@@ -22,7 +22,7 @@ Amiga supports three Blitter accuracy levels. Level 0 is the fastest option. In 
 
 - **Sync CIA accesses with E-clock**
 
-  Both Complex Interace Adapters (CIAs) are driven by the so-called *E-clock*, a special signal that is output by the CPU with a frequency equal to one tenth of the native clock rate. Before the CPU can read or write a CIA register, it must synchronize with the E-clock, which slightly slows down program execution. If you disable this option, synchronization with the E-clock is skipped. In this case vAmiga can access CIA registers as fast as all other memory cells.
+  Both Complex Interface Adapters (CIAs) are driven by the so-called *E-clock*, a special signal that is output by the CPU with a frequency equal to one tenth of the native clock rate. Before the CPU can read or write a CIA register, it must synchronize with the E-clock, which slightly slows down program execution. If you disable this option, synchronization with the E-clock is skipped. In this case vAmiga can access CIA registers as fast as all other memory cells.
 
 ## Floppy drives
 

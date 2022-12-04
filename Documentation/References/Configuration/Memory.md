@@ -54,4 +54,4 @@ Since 512 KB Chip Ram was very little and Fast Ram was very expensive, 512 KB of
 
 - **Emulate Slow Ram Bus delays**
 
-  As mentioned before, the CPU needs a free DMA cycle to access Slow Ram. By default, vAmiga emulates this behavior. Disabling this option removes this restriction, allowing the CPU to access Slow Ram at the same pace as Fast Ram. Please note that accelerating Slow Ram accesses may cause incompatibilities in rare occasions, as the emulated behaviour now deviates from what we see on the real machine.
+  As mentioned before, the CPU needs a free DMA cycle to access Slow Ram. By default, vAmiga emulates this behavior. Disabling this option removes this restriction, allowing the CPU to access Slow Ram at the same pace as Fast Ram. Please note that accelerating Slow Ram accesses may cause incompatibilities in rare occasions, as the emulated behavior now deviates from what we see on the real machine.

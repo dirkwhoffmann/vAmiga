@@ -14,7 +14,7 @@ Thanks to Michael Rasmussen, vAmiga is able to emulate hard drives. Up to four h
 
 ## Game Ports
 
-The Amiga is equipped with two game ports for connecting input devices such as joysticks or mice. The connected input device can be selected via a popup menu. By default, vAmiga offers you to leave the port empty, to connect the internal mouse or to connect a keyboard-emulated joystick. If an external mouse or a compatible GamePad is present, the device is shown as another option in the popup menu.
+The Amiga is equipped with two game ports for connecting input devices such as joysticks or mice. The connected input device can be selected via a popup menu. By default, vAmiga offers you to leave the port empty, to connect the internal mouse or to connect a keyboard-emulated joystick. If an external mouse or a compatible gamepad is present, the device is shown as another option in the popup menu.
 
 ## Serial Port
 

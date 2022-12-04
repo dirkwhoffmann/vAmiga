@@ -6,7 +6,7 @@ This tutorial describes how to launch vAmiga and install a Kickstart Rom.
 
 Amiga is a native Mac application and as easy to install as most other Mac software. Download the latest version from the main page and copy the executable into the application folder. 
 
-vAmiga’s deployment target is macOS 10.15 (Catalina) which means that you can’t run the app on earlier macOS releases. Please note that vAmiga is only extensively tested with the latest macOS version. Thus, compatibility problems may well occur with older macOS versions. 
+vAmiga's deployment target is macOS 10.15 (Catalina) which means that you can't run the app on earlier macOS releases. Please note that vAmiga is only extensively tested with the latest macOS version. Thus, compatibility problems may well occur with older macOS versions. 
 
 Please keep in mind that vAmiga has been developed with limited work-power leaving no room for supporting older macOS releases. You can always extract older version from the source-code repository, but you will be on your own by doing so. 
 
@@ -40,13 +40,13 @@ Again, clicking the power button starts the emulator. With the free Kickstart Ro
 
 Even though the Aros Roms are a great achievement of the open source community, we recommend installing original Commodore Roms as they offer much higher compatibility.
 
-Please keep in mind that vAmiga will not remember the Rom settings by default, i.e., the next time the emulator is startet, the Rom dialog will appear again. If you wish to use the currently installed Rom permanently, click the *Use as Default* button next to the Aros button.
+Please keep in mind that vAmiga will not remember the Rom settings by default, i.e., the next time the emulator is started, the Rom dialog will appear again. If you wish to use the currently installed Rom permanently, click the *Use as Default* button next to the Aros button.
 
 ## Inserting a floppy disk
 
 Next, we'll show how to insert a floppy disk. Thanks to the diligent work of many Amiga enthusiasts, almost all Amiga software from back in the day has been saved from decay and translated into modern data formats. The most important data format for the Amiga is the ADF format, which is a digital image of an Amiga floppy disk. On the Internet you will find countless ADFs and most likely your beloved titles from back then, too. Please note that despite their age, most Amiga titles are protected by copyright and may not be used without the permission of the rights holders.
 
-The most convinient way to insert a floppy disk is per drag and drop. When an ADF file is dragged into the emulator window, four drop zones appear representing drives Df0 through Df3. Simply drop the file onto the drive in which you want to insert the disk. 
+The most convenient way to insert a floppy disk is per drag and drop. When an ADF file is dragged into the emulator window, four drop zones appear representing drives Df0 through Df3. Simply drop the file onto the drive in which you want to insert the disk. 
 
 ![Inserting a floppy disk](images/dropzone.png "Inserting a floppy disk")
 

@@ -8,4 +8,4 @@ Therefore, the command keys are not mapped by default. However, if you want to a
 
 ![Keyboard menu](images/mappingCmd.png "Keyboard menu")
 
-A feasible tradeoff is to map the right Command key, only, since the Amiga used the right Amiga key to trigger OS-specific commands. If the left command key is left unmapped, you can trigger Amiga commands using the right Command key while still controlling the Mac application with the standard macOS-specific keyboard shortcuts. 
+A feasible trade off is to map the right Command key, only, since the Amiga used the right Amiga key to trigger OS-specific commands. If the left command key is left unmapped, you can trigger Amiga commands using the right Command key while still controlling the Mac application with the standard macOS-specific keyboard shortcuts. 

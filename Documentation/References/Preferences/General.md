@@ -14,7 +14,7 @@ The options in this category allow the user to customize the source, layout and 
 
 ## Screen captures
 
-vAmiga features a screen recorder that utilizes FFmpeg as a backend. The options in this category allow the user to set various recording parameters. Please note that FFmpeg cannot be bundled with the emulator due to licensing contraints. Before using the screen recorder, you must manually install FFmpeg on your computer.
+vAmiga features a screen recorder that utilizes FFmpeg as a backend. The options in this category allow the user to set various recording parameters. Please note that FFmpeg cannot be bundled with the emulator due to licensing constraints. Before using the screen recorder, you must manually install FFmpeg on your computer.
 
 ## Warp mode
 

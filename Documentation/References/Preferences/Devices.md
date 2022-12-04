@@ -19,7 +19,7 @@ At the time of writing this documentation, known devices include the following:
 - XBox One Wired Controller
 - Sony DualShock 3
 - Sony DualShock 4
-- Sony Dualshock 4 (2nd Gen)
+- Sony DualShock 4 (2nd Gen)
 - Sony DualSense
 - HORIPAD for Nintendo Switch
 - The C64 Joystick

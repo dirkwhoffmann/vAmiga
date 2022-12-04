@@ -65,7 +65,7 @@ vAmiga is able to emulate the following revisions of this chip:
 
 ## CIAs
 
-  The Amiga utilizes CIAs of type MOS 8520 to interact with peripheral devices. These chips are similar to the well-known MOS 6526 revisions used in the C64. However, there are subtle differences. For example, Commodore replaced the TOD clock with a native 24-bit counter and supplied the CIA timers with an autostart mechanism.
+  The Amiga utilizes CIAs of type MOS 8520 to interact with peripheral devices. These chips are similar to the well-known MOS 6526 revisions used in the C64. However, there are subtle differences. For example, Commodore replaced the TOD clock with a native 24-bit counter and supplied the CIA timers with an auto-start mechanism.
 
 - **DIP**
 

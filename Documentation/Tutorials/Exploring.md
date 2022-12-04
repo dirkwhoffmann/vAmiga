@@ -25,7 +25,7 @@ The functionality of these buttons is what you might have already guessed:
 
 ![Toolbar](images/toolbar2.png "Toolbar")
 
-The two buttons in the *Preferences* section let us configure vAmiga. The left button opens the *emulator settings* window, which manages the settings that apply to all emulator instances simultaniously.
+The two buttons in the *Preferences* section let us configure vAmiga. The left button opens the *emulator settings* window, which manages the settings that apply to all emulator instances simultaneously.
 
 ![Preferences](images/generalPanel.png "Preferences")
 
@@ -61,7 +61,7 @@ As soon as a key is pressed with the left mouse button, the virtual keyboard dis
 
 ### Game Ports
 
-The two gameport icons allow us to quickly switch between the input devices connected to the gamports of the Amiga.
+The two gameport icons allow us to quickly switch between the input devices connected to the gameports of the Amiga.
 
 ![Toolbar](images/toolbar4.png "Toolbar")
 
@@ -111,13 +111,13 @@ The left column contains the controls for the DMA debugger, which can be used to
 
 ![DMA debugger](images/dmaDebugger.png "DMA debugger")
 
-The yellow and brown dots represent Copper and Blitter accesses, respectively. The red dots mark the memory refresh cycles and the pink dots the DMA slots for transferring audio data. Bitplane DMA is visualized in cyan. The scene reveals a lot about the inner workings of this demo. The creators decided to use a very small bitplane window that just covers the polygon. This bitplane window is permanently relocated as the polygon moves. [This small Youtube video](https://www.youtube.com/watch?v=aDFVwy4gTaE) shows what *Rink a Dink* looks like when run in vAmiga with the DMA debugger enabled. If you don't want to watch the entire video, you can fast forward at 1:20. Here you can see the animated polygon in action.
+The yellow and brown dots represent Copper and Blitter accesses, respectively. The red dots mark the memory refresh cycles and the pink dots the DMA slots for transferring audio data. Bitplane DMA is visualized in cyan. The scene reveals a lot about the inner workings of this demo. The creators decided to use a very small bitplane window that just covers the polygon. This bitplane window is permanently relocated as the polygon moves. [This small YouTube video](https://www.youtube.com/watch?v=aDFVwy4gTaE) shows what *Rink a Dink* looks like when run in vAmiga with the DMA debugger enabled. If you don't want to watch the entire video, you can fast forward at 1:20. Here you can see the animated polygon in action.
 
 The center area of the monitor panel controls the so-called *activity monitors*. When activated, the texture of the emulator is overlaid with small displays giving insight into the activity of various Amiga components:
 
 ![Activity monitors](images/activityMonitors.png "Activity monitors")
 
-The elements in the right column control the stencil feature. With this feature vAmiga is able to erwipe out ase certain graphic layers. For example, it is possible to remove all pixels of a certain playing field or to remove all pixels of a certain sprite. The removed pixels are replaced by the pixels of a checkerboard pattern that looks like it shows through holes in the emulator texture, especially in animated scenes. 
+The elements in the right column control the stencil feature. With this feature vAmiga is able to erase certain graphic layers. For example, it is possible to remove all pixels of a certain playing field or to remove all pixels of a certain sprite. The removed pixels are replaced by the pixels of a checkerboard pattern that looks like it shows through holes in the emulator texture, especially in animated scenes. 
 
 The elements in the right column control the stencil feature. With this feature, vAmiga is able to wipe out certain graphics layers. For example, it is possible to remove all pixels of a certain playfield or sprite. The removed pixels are replaces by the pixels of a checkerboard pattern which will look like as it shines through holes in the emulator texture, especially in animated scenes. 
 

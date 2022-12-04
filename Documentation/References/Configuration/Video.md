@@ -91,7 +91,7 @@ Three scanline modes are supported: *None*, *Embedded* and *Superimposed*.
 
 ### Rays
 
-  A CRT tube uses three separate electron beams, one for each color channel. Each beam produces a seperate image on the phosphor layer. When the electron beams are aligned, the color layers appear to be stacked precisely on top of each other and produce a crisp image. If the electron beams get disaligned, color artifacts occur because the three color layers are now shifted against each other. vAmiga can emulate this effect with varying intensity. 
+  A CRT tube uses three separate electron beams, one for each color channel. Each beam produces a separate image on the phosphor layer. When the electron beams are aligned, the color layers appear to be stacked precisely on top of each other and produce a crisp image. If the electron beams get misaligned, color artifacts occur because the three color layers are now shifted against each other. vAmiga can emulate this effect with varying intensity. 
 
   ![Original image](images/defenderOriginal.png "Original image")
   ![Misaligned](images/defenderMisaligned.png "Misaligned")
