@@ -1,12 +1,12 @@
 # Compatibility Panel
 
-Use this panel to configure emulation accuracy. 
+Use this panel to configure the emulation accuracy.
 
 ![Compatibility Panel](images/compatibilityPanel.png "Compatibility Panel")
 
 ## Blitter accuracy
 
-Amiga supports three Blitter accuracy levels. Level 0 is the fastest option. In this mode, all data is moved together in a single chunk when the **BLTSIZE** register is written. Although this option is far from being accurate, many games do work with this option. In level 1, the Blitter also moves the data in a single chunk, just as in level 0. However, bus timing is emulated afterwards. This means that vAmiga blocks the data bus in the exact same cycles as the real Blitter would. Level 2 is recommended in all scenarios where high accuracy is required. In this mode, the Blitter is emulated cycle by cycle. It transfers data in the exact same cycles as the real Blitter would.
+Amiga supports three Blitter accuracy levels. Level 0 is the fastest option. In this mode, all data is moved together in a single chunk when the **BLTSIZE** register is written. Although this option is far from being accurate, many games do work with this option. In level 1, the Blitter also moves the data in a single chunk, just as in level 0; however, bus timing is emulated afterwards. This means that vAmiga blocks the data bus in the exact same cycles as the real Blitter would. Level 2 is recommended in all scenarios where high accuracy is required. In this mode, the Blitter is emulated cycle by cycle. It transfers data in the exact same cycles as the real Blitter would.
 
 ## Chipset Features
 
@@ -58,9 +58,7 @@ Amiga supports three Blitter accuracy levels. Level 0 is the fastest option. In 
 
 - **Collision detection** 
 
-  vAmiga allows to disable the collision checking circuity, which is part of Denise. By default, collision checking is disabled because it is expensive to emulate in software and is only needed by a few titles (e.g. Archon and Rotor).
-
-  vAmiga allows to disable the collision checking circuity which is part of Denise. By default, collision checking is disabled because it is expensive to emulate and only needed by a very few titles such as Archon or Rotor.
+  vAmiga allows to disable the collision checking circuity, which is part of Denise. By default, collision checking is disabled because it is expensive to emulate in software and is only needed by a few titles such as Archon or Rotor.
 
 ### Keyboard 
 

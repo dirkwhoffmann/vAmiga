@@ -6,7 +6,7 @@ Use this field to set up peripheral devices.
 
 ## Floppy Drives
 
-Just like a real Amiga, vAmiga supports up to four floppy drives. The internal drive is labeled Df0 and always present. The external drives are labeled Df1 to Df3. The internal drive is a 3.5" double-density drive providing a storage capacity of 880 KB per floppy disk. The external drives can be configured as double-density drives like the internal drive, or as high-density drives which provide twice the storage capacity. Back in the day, many users, including myself, had an external 5.25" floppy drive connected to their Amiga, mainly because of the much lower price of 5.25" floppy disks. However, such drives only offered a reduced storage capacity of 440 KB. Such single-density drives are not yet supported by vAmiga and will probably never be. 
+Just like a real Amiga, vAmiga supports up to four floppy drives. The internal drive is labeled DF0 and is always present. The external drives are labeled DF1 to DF3. The internal drive is a 3.5" double-density drive providing a storage capacity of 880 KB per floppy disk. The external drives can be configured as double-density drives like the internal drive, or as high-density drives which provide twice the storage capacity. Back in the day, many users, including myself, had an external 5.25" floppy drive connected to their Amiga, mainly because of the much lower price of 5.25" floppy disks. However, such drives only offered a reduced storage capacity of 440 KB. Such single-density drives are not yet supported by vAmiga and will probably never be.
 
 ## Hard Drives
 
@@ -23,7 +23,6 @@ vAmiga offers the following options for the serial port:
   - **No Device**
 
     No device is attached. This is the default option. 
-
 
   - **Null Modem Cable**
 

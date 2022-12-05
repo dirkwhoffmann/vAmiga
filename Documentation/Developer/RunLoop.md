@@ -1,6 +1,6 @@
 # The Run Loop
 
-In this document we will examine how vAmiga calculates a single frame. If you've studied the document about the `Thread` class, you already know that the calculation of a single frame is triggered within the threads main execution function. When the thread is running in *periodoc* mode, the following function is executed: 
+In this document we will examine how vAmiga calculates a single frame. If you've studied the document about the `Thread` class, you already know that the calculation of a single frame is triggered within the threads main execution function. When the thread is running in *periodic* mode, the following function is executed:
 
 ```c++
 template <> void
@@ -43,7 +43,7 @@ Amiga::execute()
     }
 ```
 
-The function enters an infinite loop, which we refer to as the `run loop`. The inner workings are quite simple. First the CPU is asked to execute a single instruction. After that, variable `flags` is checked. This variable is a bit field storing several *action flags* whose purpose is to trigger specific actions within the run loop. The following list gives you an idea about what kind of actions we are talking about:
+The function enters an infinite loop, which we refer to as the `run loop`. The inner working is quite simple. First the CPU is asked to execute a single instruction. After that, the variable `flags` is checked. This variable is a bit field storing several *action flags* whose purpose is to trigger specific actions within the run loop. The following list gives you an idea about what kind of actions we are talking about:
 
 ```c++
 namespace RL
@@ -64,9 +64,9 @@ constexpr u32 SYNC_THREAD        = (1 << 12);
 };
 ```
 
-In most cases, variable `flags` equals zero. In this case, the loop simply executes one CPU instruction after another. 
+In most cases the variable `flags` equals zero. In this case, the loop simply executes one CPU instruction after another.
 
-But wait, didn't we say the function only calculates a single frame? The answer is yes, and this is where the `SYNC_THREAD` flag comes into play. The flag is set by Agnus in the following function:
+But wait, didn't we say the function only calculates a single frame? The answer is yes, and this is where the `SYNC_THREAD` flag comes into play. The flag is set by `Agnus` in the following function:
 
 ```c++ 
 void
@@ -79,7 +79,7 @@ Agnus::eofHandler()
 }
 ```
 
-The acronym `eof` refers to *end of frame*. As you may have guessed already, the function is executed at the end of each frame. Once the variable `SYNC_THREAD` is set, the run loop will be terminated with the next check of  variable `flags`.
+The acronym `eof` refers to *end of frame*. As you may have guessed already, the function is executed at the end of each frame. Once the variable `SYNC_THREAD` is set, the run loop will be terminated with the next check of the variable `flags`.
 
 Overall, it's pretty simple, isn't it? Well, the answer is yes and no. For instance, we just learned that the `SYNC_THREAD` flag is set by Agnus in its end-of-frame handler, but where is this function called? The run loop does nothing of that sort, it just calls the CPU and checks some flags. 
 
@@ -100,7 +100,7 @@ Moira::execBra(u16 opcode)
 }
 ```
 
-The `SYNC` statement is the one we need to examine. It is a macro that expands to a call to the `sync` function, at least when emulating an M68000 or M68010. The CPU calls this function to signal to the surrounding logic that the CPU clock has advanced a certain number of cycles. In this particular example, it signals that 2 CPU cycles have elapsed. 
+The `SYNC` statement is the one we need to examine. It is a macro that expands to a call to the `sync` function, at least when emulating a M68000 or M68010. The CPU calls this function to signal to the surrounding logic that the CPU clock has advanced a certain number of cycles. In this particular example, it signals that 2 CPU cycles have elapsed.
 
 Let's see how the `sync` function is implemented. An uncluttered version of this function looks like this: 
 
@@ -116,9 +116,9 @@ Moira::sync(int cycles)
 }
 ```
 
-After advancing the internal clock, the function asks Agnus to emulate the surrounding logic up to the point in time where the CPU currently is. After that, control is returned to the CPU. Now, when the CPU performs a memory access, it is assured that the surrounding logic is up to date. For write accesses, this means that the operation is carried out at the proper point in time, and for read accesses, it means that correct values will be read. 
+After advancing the internal clock, the function asks `Agnus` to emulate the surrounding logic up to the point in time where the CPU currently is. After that, control is returned to the CPU. Now, when the CPU performs a memory access, it is assured that the surrounding logic is up to date. For write accesses, this means that the operation is carried out at the proper point in time, and for read accesses, it means that correct values will be read.
 
-Let's head over to Agnus and have a closer look at what the execute function does. The function that was actually called is a convenience wrapper around the actual execution function:
+Let's head over to `Agnus` and have a closer look at what the execute function does. The function that was actually called is a convenience wrapper around the actual execution function:
 
 ```c++ 
 void
@@ -143,8 +143,8 @@ Agnus::execute()
 }
 ```
 
-This function emulates Agnus for one bus cycle. First, it increments the color clock and the horizontal counter by one. After that it calls the event scheduler if a pending event is present.
+This function emulates `Agnus` for one bus cycle. First, it increments the color clock and the horizontal counter by one. After that, if a pending event is present, it calls the event scheduler.
 
-The Event Scheduler can undoubtedly be considered the central component of vAmiga, as everything is built around it. All actions that have to be executed in a certain bus cycle are triggered by this component. The scheduler can be viewed as a big to-do list that is processed one by one in `executeUntil'. Please always remember that the event scheduler, despite its central role, is never called directly inside the run loop of vAmiga. It is only called indirectly, before each memory access of the CPU. 
+The Event Scheduler can undoubtedly be considered the central component of vAmiga, as everything is built around it. All actions that have to be executed in a certain bus cycle are triggered by this component. The scheduler can be viewed as a big to-do list that is processed one by one in `executeUntil`. Please always remember that the event scheduler, despite its central role, is never called directly inside the run loop of vAmiga. It is only called indirectly, before each memory access of the CPU.
 
 The event scheduler is of such great importance that we'll examine it in more detail in a separate document. 

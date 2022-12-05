@@ -1,6 +1,6 @@
 # Audio Panel
 
-Use this panel to change audio settings. 
+Use this panel to change the audio settings.
 
 ![Audio Panel](images/audioPanel.png "Audio Panel")
 
@@ -8,7 +8,7 @@ The audio settings are organized in four sections:
 
 ## Audio In 
 
-This section controls the volumes of the four Amiga audio channels. To mute an audio channel, simply lower the volume to zero. The pan controls can be used to freely distribute each channel to the left and right speakers. By default, channels 1 and 2 are routed to the left speaker and channels 0 and 4 to the right speaker, just like the real Amiga does.
+This section controls the volumes of the four Amiga audio channels. To mute an audio channel, simply lower the volume to zero. The pan controls can be used to freely distribute each channel to the left and right speakers. By default, channels 1 and 2 are routed to the left speaker and channels 0 and 4 to the right speaker, just like a real Amiga does.
 
 ## Audio Out
 

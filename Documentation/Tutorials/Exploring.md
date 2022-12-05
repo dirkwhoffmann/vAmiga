@@ -31,11 +31,11 @@ The two buttons in the *Preferences* section let us configure vAmiga. The left b
 
 All available options are described in a separate document. For the purpose of this tutorial, we do not need to change anything here and can proceed to the next point right away. 
 
-The right button opens the Configurator window where the virtual machine is configured. The options are organized in tabs, similar to the emulator settings window. You are already familiar with the first tab if you have read the *Getting started* tutorial. It is the tab where the Rom of the Amiga is configured. 
+The right button opens the Configuration window where the virtual machine is configured. The options are organized in tabs, similar to the emulator settings window. You are already familiar with the first tab if you have read the *Getting started* tutorial. It is the tab where the ROM of the Amiga is configured.
 
 ![Configuration](images/romPanel.png "Configuration")
 
-All available options are described in a separate document. Please note that all settings made in the Configurator are specific to a single emulator instance. Therefore, it is possible to run two emulator instances with different configurations side by side.
+All available options are described in a separate document. Please note that all settings made in the Configuration are specific to a single emulator instance. Therefore, it is possible to run two emulator instances with different configurations side by side.
 
 ### Keyboard
 
@@ -51,7 +51,7 @@ The keys on the virtual keyboard can be clicked with either the left or the righ
 
 - **Left Button**
 
-  When the left moused button is used, the selected key is pushed down and automatically released after a short delay. Use this option if you wish to press a single key on the keyboard.
+  When the left mouse button is used, the selected key is pushed down and automatically released after a short delay. Use this option if you wish to press a single key on the keyboard.
 
 - **Right button**
 
@@ -85,7 +85,7 @@ The three toolbar icons in this section can be used to manage snapshots. Snapsho
 
    The snapshot browser is to vAmiga what *Time Machine* is to the Mac. It lets us browse through the snapshot memory in a graphical way.
 
-Please note that snapshots are not stored permanently. The next time you start vAmiga, you will start over with an empty snapshot storage. This is because snapshots were originally intended as a safe-point mechanism for mastering difficult games. Snapshots were never intended for long-term preservation of emulator states, and never will be, although many users would like to use them that way. The reason is that snapshots do not only contain Amiga specific data like the Ram contents or the values of CPU registers. It also contains the values of many emulator-specific variables that have no direct equivalent on the real machine. The set of internal variables usually changes from release to release, and so does the snapshot format. Therefore, you can almost be certain that snapshots taken with the current version of vAmiga will no longer work when the next version comes out.
+Please note that snapshots are not stored permanently. The next time you start vAmiga, you will start over with an empty snapshot storage. This is because snapshots were originally intended as a safe-point mechanism for mastering difficult games. Snapshots were never intended for long-term preservation of emulator states, and never will be, although many users would like to use them that way. The reason is that snapshots do not only contain Amiga specific data like the RAM contents or the values of CPU registers. It also contains the values of many emulator-specific variables that have no direct equivalent on the real machine. The set of internal variables usually changes from release to release, and so does the snapshot format. Therefore, you can almost be certain that snapshots taken with the current version of vAmiga will no longer work when the next version comes out.
 
 ### Inspectors
 
@@ -107,7 +107,7 @@ The monitor panel provides additional debugging aids:
 
 ![Monitor panel](images/monitorPanel.png "Monitor panel")
 
-The left column contains the controls for the DMA debugger, which can be used to visualize all memory bus accesses in real time. When enabled, the emulator texture is overlaid with an additional graphics layer that visualizes the bus owner for chip or slow ram accesses. The following screenshot shows a scene from Rink a Dink with the DMA debugger enabled.  
+The left column contains the controls for the DMA debugger, which can be used to visualize all memory bus accesses in real time. When enabled, the emulator texture is overlaid with an additional graphics layer that visualizes the bus owner for Chip or Slow RAM accesses. The following screenshot shows a scene from Rink a Dink with the DMA debugger enabled.
 
 ![DMA debugger](images/dmaDebugger.png "DMA debugger")
 
@@ -117,15 +117,13 @@ The center area of the monitor panel controls the so-called *activity monitors*.
 
 ![Activity monitors](images/activityMonitors.png "Activity monitors")
 
-The elements in the right column control the stencil feature. With this feature vAmiga is able to erase certain graphic layers. For example, it is possible to remove all pixels of a certain playing field or to remove all pixels of a certain sprite. The removed pixels are replaced by the pixels of a checkerboard pattern that looks like it shows through holes in the emulator texture, especially in animated scenes. 
-
-The elements in the right column control the stencil feature. With this feature, vAmiga is able to wipe out certain graphics layers. For example, it is possible to remove all pixels of a certain playfield or sprite. The removed pixels are replaces by the pixels of a checkerboard pattern which will look like as it shines through holes in the emulator texture, especially in animated scenes. 
+The elements in the right column control the stencil feature. With this feature, vAmiga is able to erase certain graphic layers. For example, it is possible to remove all pixels of a certain playfield or sprite. The removed pixels are replaced by the pixels of a checkerboard pattern that looks like it shines through holes in the emulator texture, especially in animated scenes. 
 
 ![Stencils](images/stencil.png "Stencils")
 
 #### Retro Shell
 
-The third button in the *Inspectors* section opens *Retro Shell*, vAmiga's text-based debug console. The shell can be used to control vAmiga via a variety of text commands.
+The third button in the *Inspectors* section opens *Retro Shell*, vAmiga's text-based debug console. The shell can be used to control vAmiga with a variety of text commands.
 
 ![Retro Shell](images/retroShell.png "Retro Shell")
 
