@@ -40,4 +40,4 @@ vAmiga User's Manual
    Developer/ClassHierarchy
    Developer/ThreadClass
    Developer/RunLoop
-   Developer/EventManager
+   Developer/EventScheduler

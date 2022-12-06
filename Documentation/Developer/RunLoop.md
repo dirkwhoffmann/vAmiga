@@ -145,6 +145,6 @@ Agnus::execute()
 
 This function emulates `Agnus` for one bus cycle. First, it increments the color clock and the horizontal counter by one. After that, if a pending event is present, it calls the event scheduler.
 
-The Event Scheduler can undoubtedly be considered the central component of vAmiga, as everything is built around it. All actions that have to be executed in a certain bus cycle are triggered by this component. The scheduler can be viewed as a big to-do list that is processed one by one in `executeUntil`. Please always remember that the event scheduler, despite its central role, is never called directly inside the run loop of vAmiga. It is only called indirectly, before each memory access of the CPU.
+The Event Scheduler can undoubtedly be considered the central component of vAmiga, as everything is built around it. All actions that have to be executed in a certain bus cycle are triggered by this component. Please always remember that the event scheduler, despite its central role, is never called directly inside the run loop of vAmiga. It is only called indirectly, before each memory access of the CPU.
 
-The event scheduler is of such great importance that we'll examine it in more detail in a separate document. 
+Since the event scheduler is of such great importance, we'll examine it in more detail in a separate document. 
