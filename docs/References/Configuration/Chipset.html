@@ -1,0 +1,599 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Chipset Panel &#8212; vAmiga 2.2</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Memory Panel" href="Memory.html" />
+    <link rel="prev" title="ROM Panel" href="Roms.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"><img src="https://dirkwhoffmann.github.io/Moira/images/banner-va-2.jpg" width="100%" alt="Banner"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/icon.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Overview
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../Overview/About.html">
+   About
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../Tutorials/GettingStarted.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../Tutorials/Exploring.html">
+   Exploring the User Interface
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  How-to guides
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../HowTo/MappingCmd.html">
+   Mapping the Command keys
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Preferences/index.html">
+   Emulator Settings
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Preferences/General.html">
+     General Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Preferences/Controls.html">
+     Controls Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Preferences/Devices.html">
+     Devices Panel
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Virtual Machine Settings
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Roms.html">
+     ROM Panel
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Chipset Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Memory.html">
+     Memory Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Peripherals.html">
+     Peripherals Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Compatibility.html">
+     Compatibility Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Audio.html">
+     Audio Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Video.html">
+     Video Panel
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../FileFormats.html">
+   Supported File Formats
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Developers Corner
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../Developer/ClassHierarchy.html">
+   The Class Hierarchy
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../Developer/ThreadClass.html">
+   The Thread Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../Developer/RunLoop.html">
+   The Run Loop
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../Developer/EventScheduler.html">
+   The Event Scheduler
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+<a href="https://dirkwhoffmann.github.io/vAmiga/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="bottom"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/References/Configuration/Chipset.md.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cpu">
+   CPU
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#agnus">
+   Agnus
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#denise">
+   Denise
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cias">
+   CIAs
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#rtc">
+   RTC
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Chipset Panel</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cpu">
+   CPU
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#agnus">
+   Agnus
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#denise">
+   Denise
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cias">
+   CIAs
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#rtc">
+   RTC
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="chipset-panel">
+<h1>Chipset Panel<a class="headerlink" href="#chipset-panel" title="Permalink to this heading">#</a></h1>
+<p>Use this panel to configure the CPU and the custom chips of the virtual Amiga.</p>
+<p><img alt="Chipset Panel" src="../../_images/chipsetPanel.png" /></p>
+<section id="cpu">
+<h2>CPU<a class="headerlink" href="#cpu" title="Permalink to this heading">#</a></h2>
+<p>vAmiga supports three different CPU revisions:</p>
+<ul>
+<li><p><strong>M68000</strong></p>
+<p>The M68000 is a 16/32-bit CISC microprocessor introduced by Motorola in 1979. Commodore has used this CPU in all classic Amiga models. Choose this revision to emulate the classic Amigas at the highest precision.</p>
+</li>
+<li><p><strong>M68010</strong></p>
+<p>The MC68010 processor was released in 1982 as the successor to the Motorola 68000. It was never officially used by Commodore in any Amiga model. However, since the M68010 was pin-compatible with the M68000, it can be used as a replacement for the M68000 in all classic Amigas. The following image shows one of my test machines that has been upgraded with a M68010. I’ve used this machine extensively while adding M68010 support in vAmiga:</p>
+<p><img alt="M68010" src="../../_images/68010.png" /></p>
+<p>Using the M68010 instead of the M68000 results in a speed gain of about 10%. Among other things, this is due to a special operating mode, called <em>loop mode</em>, which is entered automatically when certain loop constructs are executed. In this mode, some redundant memory accesses are skipped, resulting in faster execution speed. Please note that the M68010 is not 100% software compatible with the M68000. Therefore, some games or demos may not work when this CPU is selected.</p>
+</li>
+<li><p><strong>68EC020</strong></p>
+<p>The M68EC020 is a lower-cost version of the Motorola 68020 processor, which was launched in 1984. It was used by Commodore in the Amiga 1200 with a clock frequency of 14MHz. The 68020 was a significant improvement over the M68010, as it was the first CPU in the M68K series to have an on-board cache. vAmiga emulates the M68EC020, but with less precision than the M68000 and M68010. The first two models can be emulated by vAmiga with exact cycle precision, which means that all instructions not only consume the proper number of CPU cycles, but also access memory during the exact same DMA cycle as the real machine does. In 68020 mode, the CPU is emulated with lower accuracy. For example, vAmiga does not emulate caching, yet.</p>
+</li>
+</ul>
+<p>The next two options choose the emulated chip revisions of Agnus and Denise, two of the so-called <em>custom chips</em>. These chips were extremely important for the Amiga, as they were one of the main reasons for its competitive computing power back in the day. Without the custom chips, the Amiga would never have taken the prominent place in computer history it occupies today.</p>
+<p>All custom chips can be classified into one of three generations. The first chip generation is called OCS (Original Chip Set). All original Amigas were equipped with these chips. The second generation is called ECS (Enhanced Chip Set) and was used by Commodore in the A500+ and the A600. Some ECS chips were also used in later revisions of the A500 and the A2000. Commodore shipped them with an ECS Agnus and an OCS Denise. My test computer pictured above also belongs to these models. It is equipped with an Agnus 8372A, a revision of the ECS generation. Denise, however, has revision number 8362R8, which is the OCS version of this chip.
+The third generation of custom chips was called AGA (Advanced Graphics Architecture). Commodore equipped the A1200 and A4000 with these chips.</p>
+<p>Both the OCS and ECS chipsets are supported by vAmiga. The AGA chipset is currently <em>not</em> supported and probably will never be.</p>
+</section>
+<section id="agnus">
+<h2>Agnus<a class="headerlink" href="#agnus" title="Permalink to this heading">#</a></h2>
+<p>Agnus can be considered the boss among the custom chips, because it controls the interaction of all other components. It also acts as a data provider for the other chips, as it performs all DMA accesses.</p>
+<p>vAmiga is able to emulate the following revisions of this chip:</p>
+<ul>
+<li><p><strong>Early OCS</strong></p>
+<p>This option emulates the MOS 8367. It was used in the A1000 and in a very early version of the A2000, usually called the A2000A.</p>
+</li>
+<li><p><strong>OCS</strong></p>
+<p>This option emulates the MOS 8371 which was used by Commodore in many revisions of the A500 and A2000. It is the most commonly used OCS version of this chip.</p>
+</li>
+<li><p><strong>ECS (1MB)</strong></p>
+<p>This option emulates the MOS 8372A. It is the first ECS revision of this chip. Apart from some minor details, the ECS variant differs mainly in the size of the addressable memory space. While the OCS models can only address 512 KB of Chip Ram, the ECS version was capable of addressing twice as much.</p>
+</li>
+<li><p><strong>ECS (2MB)</strong></p>
+<p>This option emulates the MOS 8375, which increased the range of addressable Chip Ram to 2 MB. It is used in the A500+ and A600, released in 1991 and 1992 respectively.</p>
+</li>
+</ul>
+</section>
+<section id="denise">
+<h2>Denise<a class="headerlink" href="#denise" title="Permalink to this heading">#</a></h2>
+<ul>
+<li><p><strong>OCS</strong></p>
+<p>This option selects the MOS 8362R8 which was used in all revisions of the Amiga 1000, Amiga 500, and Amiga 2000.</p>
+</li>
+<li><p><strong>ECS</strong></p>
+<p>This option selects the MOS 8373R4. The chip is sometimes referred to as <em>HiRes Denise</em> and was used in the Amiga 500+ and the Amiga 3000. Compared to its predecessor, it supports additional graphics modes and features an advanced sprite unit. It also offers a special <em>Border Blank</em> mode, which causes the border to be drawn in black color instead of the currently selected background color. Some games use this feature to surround the drawing area with a nicer looking border.</p>
+</li>
+</ul>
+</section>
+<section id="cias">
+<h2>CIAs<a class="headerlink" href="#cias" title="Permalink to this heading">#</a></h2>
+<p>The Amiga utilizes MOS 8520 CIAs to interact with peripheral devices. These chips are similar to the well-known MOS 6526 revisions used in the C64. However, there are subtle differences. For example, Commodore replaced the TOD clock with a native 24-bit counter and supplied the CIA timers with an auto-start mechanism.</p>
+<ul>
+<li><p><strong>DIP</strong></p>
+<p>This option selects the DIP version of the MOS 8520. The DIP models are the default option as they were used in all classic Amigas.</p>
+</li>
+<li><p><strong>PLCC</strong></p>
+<p>This option selects the PLCC version of the MOS 8520, which was used e.g. in the Amiga 600. The differences to the DIP version are extremely subtle.</p>
+</li>
+</ul>
+</section>
+<section id="rtc">
+<h2>RTC<a class="headerlink" href="#rtc" title="Permalink to this heading">#</a></h2>
+<p>The term RTC refers to the Amiga’s real-time clock. The first Amiga, the Amiga 1000, never shipped with such a device and it was quite cumbersome to add one. For the Amiga 500, adding an RTC was easy, as many trapdoor memory expansion cards shipped with such a device on board. They are easily recognized by the battery needed to keep the register contents alive. In the Amiga 2000, the real-time clock was soldered directly to the motherboard. In hindsight, this was a bad idea, as the battery, which was also soldered directly to the motherboard, is now the number one death bringer of such machines. Many of us have lost our beloved devices because of the damage caused by the acid of a leaking battery.</p>
+<p>vAmiga offers the following configuration options:</p>
+<ul>
+<li><p><strong>None</strong></p>
+<p>If this option is selected, no real-time clock is emulated.</p>
+</li>
+<li><p><strong>Oki</strong></p>
+<p>This option emulates a MSM6242B real-time clock, manufactured by Oki Semiconductor. Commodore used this chip in the A2000 and the A500+.</p>
+</li>
+<li><p><strong>Ricoh</strong></p>
+<p>This option emulates a RF5C01A real-time clock, manufactured by Ricoh, Ltd. Commodore used this chip in the A3000 and the A4000.</p>
+</li>
+</ul>
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="Roms.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">ROM Panel</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="Memory.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Memory Panel</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Dirk W. Hoffmann<br/>
+  
+      &copy; Copyright 2022, Dirk W. Hoffmann.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

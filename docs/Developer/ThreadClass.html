@@ -1,0 +1,610 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>The Thread Class &#8212; vAmiga 2.2</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The Run Loop" href="RunLoop.html" />
+    <link rel="prev" title="The Class Hierarchy" href="ClassHierarchy.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"><img src="https://dirkwhoffmann.github.io/Moira/images/banner-va-2.jpg" width="100%" alt="Banner"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/icon.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Overview
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Overview/About.html">
+   About
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Tutorials/GettingStarted.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Tutorials/Exploring.html">
+   Exploring the User Interface
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  How-to guides
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../HowTo/MappingCmd.html">
+   Mapping the Command keys
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../References/Preferences/index.html">
+   Emulator Settings
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Preferences/General.html">
+     General Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Preferences/Controls.html">
+     Controls Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Preferences/Devices.html">
+     Devices Panel
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../References/Configuration/index.html">
+   Virtual Machine Settings
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Roms.html">
+     ROM Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Chipset.html">
+     Chipset Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Memory.html">
+     Memory Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Peripherals.html">
+     Peripherals Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Compatibility.html">
+     Compatibility Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Audio.html">
+     Audio Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Video.html">
+     Video Panel
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../References/FileFormats.html">
+   Supported File Formats
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Developers Corner
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="ClassHierarchy.html">
+   The Class Hierarchy
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   The Thread Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="RunLoop.html">
+   The Run Loop
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="EventScheduler.html">
+   The Event Scheduler
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+<a href="https://dirkwhoffmann.github.io/vAmiga/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="bottom"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/Developer/ThreadClass.md.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#main-function">
+   Main function
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#state-model">
+   State model
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>The Thread Class</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#main-function">
+   Main function
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#state-model">
+   State model
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="the-thread-class">
+<h1>The Thread Class<a class="headerlink" href="#the-thread-class" title="Permalink to this heading">#</a></h1>
+<p>In this document we will take a closer look at the <code class="docutils literal notranslate"><span class="pre">Thread</span></code> class, which adds concurrent code execution capabilities to the <code class="docutils literal notranslate"><span class="pre">Amiga</span></code> class. In addition, it implements the state model of the emulator.</p>
+<p><img alt="Thread class" src="../_images/classHierarchyThread.png" /></p>
+<p>As soon as an instance of the <code class="docutils literal notranslate"><span class="pre">Amiga</span></code> class is created, an emulator thread is spawned in the constructor:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">Amiga</span><span class="o">::</span><span class="n">Amiga</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Start the thread and enter the main function</span>
+<span class="w">    </span><span class="kr">thread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Thread</span><span class="o">::</span><span class="n">main</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The thread is never terminated. It remains alive until the application quits.</p>
+<section id="main-function">
+<h2>Main function<a class="headerlink" href="#main-function" title="Permalink to this heading">#</a></h2>
+<p>After the thread has been created, it starts executing the <code class="docutils literal notranslate"><span class="pre">Thread::main</span></code> function which is inherited from the <code class="docutils literal notranslate"><span class="pre">Thread</span></code> class. This function consists of a large <code class="docutils literal notranslate"><span class="pre">while</span></code> loop which looks like this:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"></span>
+<span class="nf">Thread::main</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w">    </span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">++</span><span class="n">loopCounter</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">isRunning</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                        </span>
+<span class="w">            </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">getSyncMode</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">                </span><span class="k">case</span><span class="w"> </span><span class="no">SyncMode</span><span class="o">::</span><span class="no">Periodic</span><span class="p">:</span><span class="w"> </span><span class="n">execute</span><span class="o">&lt;</span><span class="n">SyncMode</span><span class="o">::</span><span class="n">Periodic</span><span class="o">&gt;</span><span class="p">();</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="k">case</span><span class="w"> </span><span class="no">SyncMode</span><span class="o">::</span><span class="no">Pulsed</span><span class="p">:</span><span class="w"> </span><span class="n">execute</span><span class="o">&lt;</span><span class="n">SyncMode</span><span class="o">::</span><span class="n">Pulsed</span><span class="o">&gt;</span><span class="p">();</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">                </span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">warpMode</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">isRunning</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span>
+<span class="w">            </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">getSyncMode</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">                </span><span class="k">case</span><span class="w"> </span><span class="no">SyncMode</span><span class="o">::</span><span class="no">Periodic</span><span class="p">:</span><span class="w"> </span><span class="n">sleep</span><span class="o">&lt;</span><span class="n">SyncMode</span><span class="o">::</span><span class="n">Periodic</span><span class="o">&gt;</span><span class="p">();</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="k">case</span><span class="w"> </span><span class="no">SyncMode</span><span class="o">::</span><span class="no">Pulsed</span><span class="p">:</span><span class="w"> </span><span class="n">sleep</span><span class="o">&lt;</span><span class="n">SyncMode</span><span class="o">::</span><span class="n">Pulsed</span><span class="o">&gt;</span><span class="p">();</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span>
+
+<span class="w">        </span><span class="p">...</span><span class="w">       </span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Because the thread is never terminated, the loop is executed during the entire lifetime of the application. Within the loop body, two switch-case blocks can be spotted. The first one is executed as long as the emulator is running and calls one of two possible functions, depending on the operation mode of the thread. Both functions emulate the Amiga for a single frame. The second switch-case block is executed when the emulator is not running in warp mode. Within this block, one of two synchronization functions is called, again depending on the selected operation mode. The purpose of these functions is to keep the thread running at the right pace. That is, they ensure that the functions are called 50 times per second for PAL machines and 60 times per second for NTSC machines.</p>
+<p>Two synchronization modes are available: <em>Periodic</em> and <em>Pulsed</em>.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">SyncMode</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Periodic</span><span class="p">,</span><span class="w"> </span><span class="n">Pulsed</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+<p>In <em>periodic mode</em> the thread puts itself to sleep and utilizes a timer to schedule a wakeup call. This method is the default mode for vAmiga, as it supports arbitrary frame rates.</p>
+<p>In <em>pulsed mode</em>, the synchronization function waits for an external wake-up signal. vAmiga uses this mode when VSYNC is enabled. In this case the external signal is sent from the graphics backend.</p>
+</section>
+<section id="state-model">
+<h2>State model<a class="headerlink" href="#state-model" title="Permalink to this heading">#</a></h2>
+<p>Let’s take a closer look at the <code class="docutils literal notranslate"><span class="pre">isRunning()</span></code> function, whose implementation is very straightforward:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">bool</span> <span class="n">isRunning</span><span class="p">()</span> <span class="n">const</span> <span class="n">override</span> <span class="p">{</span> <span class="k">return</span> <span class="n">state</span> <span class="o">==</span> <span class="n">EXEC_RUNNING</span><span class="p">;</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>The variable <code class="docutils literal notranslate"><span class="pre">state</span></code> may hold one of the following values:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">EXEC_OFF</span></code>: The emulator is turned off.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EXEC_PAUSED</span></code>: The emulator is turned on, but not running.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EXEC_RUNNING</span></code>: The emulator does its job. The virtual Amiga is alive.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EXEC_SUSPENDED</span></code>: The emulator is paused for a short period of time.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EXEC_HALTED</span></code>: The emulator is shutting down.</p></li>
+</ul>
+<p>The following image provides a visual representation of the state model:</p>
+<p><img alt="State model" src="../_images/stateModel.png" /></p>
+<p>After creating an instance of the <code class="docutils literal notranslate"><span class="pre">Amiga</span></code> class the emulator is in <code class="docutils literal notranslate"><span class="pre">OFF</span></code> state. By calling the function <code class="docutils literal notranslate"><span class="pre">powerOn()</span></code> the emulator is put into <code class="docutils literal notranslate"><span class="pre">PAUSED</span></code> state. This is the same state that is entered when the user presses the <em>Pause</em> button in the toolbar. A call to <code class="docutils literal notranslate"><span class="pre">run()</span></code> brings the virtual Amiga to life by putting it into a <code class="docutils literal notranslate"><span class="pre">RUNNING</span></code> state.</p>
+<p>The Thread class provides a suspend-resume mechanism that can be used to pause the thread for a short period of time. This functionality is frequently used by the graphical user interface to carry out atomic operations that cannot be performed while the emulator is running. Theoretically, the thread could also be put into <code class="docutils literal notranslate"><span class="pre">PAUSED</span></code> state for this purpose, but this would also stop audio. To avoid disruptions, a special <code class="docutils literal notranslate"><span class="pre">SUSPENDED</span></code> state has been added. In this state the execute function is no longer called, but other services, such as the audio playback, are kept alive.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SUSPENDED</span></code> state is entered by calling <code class="docutils literal notranslate"><span class="pre">suspend()</span></code> and exited by calling <code class="docutils literal notranslate"><span class="pre">resume()</span></code>. Critical code sections can be executed safely by embedding them in a suspend-resume block like this:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">suspend</span><span class="p">();</span><span class="w"></span>
+
+<span class="c1">// Change the internal state of the emulator as you like.</span>
+
+<span class="n">resume</span><span class="p">();</span><span class="w"></span>
+</pre></div>
+</div>
+<p>It is safe to nest multiple suspend-resume blocks, but it is essential that each call to <code class="docutils literal notranslate"><span class="pre">suspend()</span></code> is followed by a call to <code class="docutils literal notranslate"><span class="pre">resume()</span></code>. Consequently, the critical code section must not be exited in the middle, e.g. by throwing an exception. For this reason, you will often see the keyword <code class="docutils literal notranslate"><span class="pre">SUSPENDED</span></code> in the code, which is an exit-safe wrapper around <code class="docutils literal notranslate"><span class="pre">suspend()</span></code> and <code class="docutils literal notranslate"><span class="pre">resume()</span></code>. With this macro, the above code snippet can be rewritten as follows:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w">   </span><span class="n">SUSPENDED</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Change the internal state of the emulator as you like.</span>
+<span class="w">    </span><span class="c1">// Feel free to return or throw an exception.</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>To speed up emulation, e.g. during disk accesses, the emulator may be put into <em>warp mode</em>, which is also handled by the <code class="docutils literal notranslate"><span class="pre">Thread</span></code> class. As you have seen in the code fragment of the <code class="docutils literal notranslate"><span class="pre">Thread::main()</span></code> function, neither of the two synchronization functions is called when warp mode is active.</p>
+<p>Similar to warp mode, the emulator can be put into <em>debug mode</em>. This mode is activated when the GUI debugger is opened and deactivated when the debugger is closed. In debug mode, several time-consuming tasks are performed that are normally skipped. For example, the CPU keeps track of all executed instructions and stores the recorded information in a trace buffer.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Thread</span></code> class provides several API functions for changing state such as <code class="docutils literal notranslate"><span class="pre">powerOn()</span></code>, <code class="docutils literal notranslate"><span class="pre">powerOff()</span></code>, <code class="docutils literal notranslate"><span class="pre">run()</span></code>, <code class="docutils literal notranslate"><span class="pre">pause()</span></code> or <code class="docutils literal notranslate"><span class="pre">halt()</span></code>. These functions request the thread to change state by assigning the new state to the variable <code class="docutils literal notranslate"><span class="pre">newState</span></code>. The <code class="docutils literal notranslate"><span class="pre">main</span></code> function checks this variable in each iteration of the <code class="docutils literal notranslate"><span class="pre">while</span></code> loop and performs a state change when necessary. The corresponding code is not visible in the code snippet above. It hides behind the three dots (<code class="docutils literal notranslate"><span class="pre">...</span></code>) and looks like this:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="c1">// Are we requested to enter or exit warp mode?</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">newWarpMode</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">warpMode</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span>
+<span class="w">            </span><span class="n">AmigaComponent</span><span class="o">::</span><span class="n">warpOnOff</span><span class="p">(</span><span class="n">newWarpMode</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="n">warpMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newWarpMode</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">        </span><span class="c1">// Are we requested to enter or exit warp mode?</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">newDebugMode</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">debugMode</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span>
+<span class="w">            </span><span class="n">AmigaComponent</span><span class="o">::</span><span class="n">debugOnOff</span><span class="p">(</span><span class="n">newDebugMode</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="n">debugMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newDebugMode</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">        </span><span class="c1">// Are we requested to change state?</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">newState</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">state</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EXEC_OFF</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">newState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EXEC_PAUSED</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span>
+<span class="w">                </span><span class="n">AmigaComponent</span><span class="o">::</span><span class="n">powerOn</span><span class="p">();</span><span class="w"></span>
+<span class="w">                </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EXEC_PAUSED</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EXEC_OFF</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">newState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EXEC_RUNNING</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">                </span><span class="n">AmigaComponent</span><span class="o">::</span><span class="n">powerOn</span><span class="p">();</span><span class="w"></span>
+<span class="w">                </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EXEC_PAUSED</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="p">...</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="ClassHierarchy.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">The Class Hierarchy</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="RunLoop.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">The Run Loop</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Dirk W. Hoffmann<br/>
+  
+      &copy; Copyright 2022, Dirk W. Hoffmann.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

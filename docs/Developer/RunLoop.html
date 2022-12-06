@@ -1,0 +1,564 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>The Run Loop &#8212; vAmiga 2.2</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The Event Scheduler" href="EventScheduler.html" />
+    <link rel="prev" title="The Thread Class" href="ThreadClass.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"><img src="https://dirkwhoffmann.github.io/Moira/images/banner-va-2.jpg" width="100%" alt="Banner"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/icon.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Overview
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Overview/About.html">
+   About
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Tutorials/GettingStarted.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Tutorials/Exploring.html">
+   Exploring the User Interface
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  How-to guides
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../HowTo/MappingCmd.html">
+   Mapping the Command keys
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../References/Preferences/index.html">
+   Emulator Settings
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Preferences/General.html">
+     General Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Preferences/Controls.html">
+     Controls Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Preferences/Devices.html">
+     Devices Panel
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../References/Configuration/index.html">
+   Virtual Machine Settings
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Roms.html">
+     ROM Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Chipset.html">
+     Chipset Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Memory.html">
+     Memory Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Peripherals.html">
+     Peripherals Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Compatibility.html">
+     Compatibility Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Audio.html">
+     Audio Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Video.html">
+     Video Panel
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../References/FileFormats.html">
+   Supported File Formats
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Developers Corner
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="ClassHierarchy.html">
+   The Class Hierarchy
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ThreadClass.html">
+   The Thread Class
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   The Run Loop
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="EventScheduler.html">
+   The Event Scheduler
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+<a href="https://dirkwhoffmann.github.io/vAmiga/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="bottom"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/Developer/RunLoop.md.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>The Run Loop</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="the-run-loop">
+<h1>The Run Loop<a class="headerlink" href="#the-run-loop" title="Permalink to this heading">#</a></h1>
+<p>In this document we will examine how vAmiga calculates a single frame. If you’ve studied the document about the <code class="docutils literal notranslate"><span class="pre">Thread</span></code> class, you already know that the calculation of a single frame is triggered within the threads main execution function. When the thread is running in <em>periodic</em> mode, the following function is executed:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"></span>
+<span class="n">Thread</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">Thread</span><span class="o">::</span><span class="n">SyncMode</span><span class="o">::</span><span class="n">Periodic</span><span class="o">&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">loadClock</span><span class="p">.</span><span class="n">go</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="n">execute</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="n">loadClock</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">loadClock</span></code> is used to measure the CPU load. All the action takes place in function <code class="docutils literal notranslate"><span class="pre">execute</span></code>, which is declared as a pure virtual function inside the <code class="docutils literal notranslate"><span class="pre">Thread</span></code> class:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">execute</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">Amiga</span></code> class implements this function as follows:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"></span>
+<span class="nf">Amiga::execute</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w">    </span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span>
+<span class="w">        </span><span class="c1">// Emulate the next CPU instruction</span>
+<span class="w">        </span><span class="n">cpu</span><span class="p">.</span><span class="n">execute</span><span class="p">();</span><span class="w"></span>
+
+<span class="w">        </span><span class="c1">// Check if special action needs to be taken</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">flags</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                        </span>
+<span class="w">            </span><span class="p">...</span><span class="w"></span>
+<span class="w">            </span>
+<span class="w">            </span><span class="c1">// Are we requested to synchronize the thread?</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">flags</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">RL</span><span class="o">::</span><span class="n">SYNC_THREAD</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="n">clearFlag</span><span class="p">(</span><span class="n">RL</span><span class="o">::</span><span class="n">SYNC_THREAD</span><span class="p">);</span><span class="w"></span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The function enters an infinite loop, which we refer to as the <code class="docutils literal notranslate"><span class="pre">run</span> <span class="pre">loop</span></code>. The inner working is quite simple. First the CPU is asked to execute a single instruction. After that, the variable <code class="docutils literal notranslate"><span class="pre">flags</span></code> is checked. This variable is a bit field storing several <em>action flags</em> whose purpose is to trigger specific actions within the run loop. The following list gives you an idea about what kind of actions we are talking about:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">RL</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">STOP</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">WARP_ON</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">WARP_OFF</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"></span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">SOFTSTOP_REACHED</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span><span class="w"></span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">BREAKPOINT_REACHED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span><span class="w"></span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">WATCHPOINT_REACHED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span><span class="w"></span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">CATCHPOINT_REACHED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">6</span><span class="p">);</span><span class="w"></span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">SWTRAP_REACHED</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">7</span><span class="p">);</span><span class="w"></span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">COPPERBP_REACHED</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">8</span><span class="p">);</span><span class="w"></span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">COPPERWP_REACHED</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">9</span><span class="p">);</span><span class="w"></span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">AUTO_SNAPSHOT</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span><span class="w"></span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">USER_SNAPSHOT</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">11</span><span class="p">);</span><span class="w"></span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">SYNC_THREAD</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">12</span><span class="p">);</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+<p>In most cases the variable <code class="docutils literal notranslate"><span class="pre">flags</span></code> equals zero. In this case, the loop simply executes one CPU instruction after another.</p>
+<p>But wait, didn’t we say the function only calculates a single frame? The answer is yes, and this is where the <code class="docutils literal notranslate"><span class="pre">SYNC_THREAD</span></code> flag comes into play. The flag is set by <code class="docutils literal notranslate"><span class="pre">Agnus</span></code> in the following function:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"></span>
+<span class="nf">Agnus::eofHandler</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Let the thread synchronize</span>
+<span class="w">    </span><span class="n">amiga</span><span class="p">.</span><span class="n">setFlag</span><span class="p">(</span><span class="n">RL</span><span class="o">::</span><span class="n">SYNC_THREAD</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The acronym <code class="docutils literal notranslate"><span class="pre">eof</span></code> refers to <em>end of frame</em>. As you may have guessed already, the function is executed at the end of each frame. Once the variable <code class="docutils literal notranslate"><span class="pre">SYNC_THREAD</span></code> is set, the run loop will be terminated with the next check of the variable <code class="docutils literal notranslate"><span class="pre">flags</span></code>.</p>
+<p>Overall, it’s pretty simple, isn’t it? Well, the answer is yes and no. For instance, we just learned that the <code class="docutils literal notranslate"><span class="pre">SYNC_THREAD</span></code> flag is set by Agnus in its end-of-frame handler, but where is this function called? The run loop does nothing of that sort, it just calls the CPU and checks some flags.</p>
+<p>The sky clears up by taking a closer look at what’s happening inside <code class="docutils literal notranslate"><span class="pre">CPU::execute()</span></code>. Let’s assume that the next instruction to be executed is a <code class="docutils literal notranslate"><span class="pre">BRA</span></code> instruction. Inside <code class="docutils literal notranslate"><span class="pre">CPU::execute()</span></code> the CPU starts executing some internal actions. After that it calls the execution handler of the <code class="docutils literal notranslate"><span class="pre">BRA</span></code> instruction, which begins as follows:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="n">Core</span><span class="w"> </span><span class="n">C</span><span class="p">,</span><span class="w"> </span><span class="n">Instr</span><span class="w"> </span><span class="n">I</span><span class="p">,</span><span class="w"> </span><span class="n">Mode</span><span class="w"> </span><span class="n">M</span><span class="p">,</span><span class="w"> </span><span class="n">Size</span><span class="w"> </span><span class="n">S</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"></span>
+<span class="n">Moira</span><span class="o">::</span><span class="n">execBra</span><span class="p">(</span><span class="n">u16</span><span class="w"> </span><span class="n">opcode</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">AVAILABILITY</span><span class="p">(</span><span class="n">S</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">Long</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">C68020</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">C68000</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">u32</span><span class="w"> </span><span class="n">oldpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reg</span><span class="p">.</span><span class="n">pc</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">u32</span><span class="w"> </span><span class="n">disp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">Byte</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="p">(</span><span class="n">u8</span><span class="p">)</span><span class="n">opcode</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">queue</span><span class="p">.</span><span class="n">irc</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">SYNC</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">SYNC</span></code> statement is the one we need to examine. It is a macro that expands to a call to the <code class="docutils literal notranslate"><span class="pre">sync</span></code> function, at least when emulating a M68000 or M68010. The CPU calls this function to signal to the surrounding logic that the CPU clock has advanced a certain number of cycles. In this particular example, it signals that 2 CPU cycles have elapsed.</p>
+<p>Let’s see how the <code class="docutils literal notranslate"><span class="pre">sync</span></code> function is implemented. An uncluttered version of this function looks like this:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"></span>
+<span class="nf">Moira::sync</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">cycles</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Advance the CPU clock</span>
+<span class="w">    </span><span class="n">clock</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">cycles</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Emulate Agnus up to the same cycle</span>
+<span class="w">    </span><span class="n">agnus</span><span class="p">.</span><span class="n">execute</span><span class="p">(</span><span class="n">CPU_AS_DMA_CYCLES</span><span class="p">(</span><span class="n">cycles</span><span class="p">));</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>After advancing the internal clock, the function asks <code class="docutils literal notranslate"><span class="pre">Agnus</span></code> to emulate the surrounding logic up to the point in time where the CPU currently is. After that, control is returned to the CPU. Now, when the CPU performs a memory access, it is assured that the surrounding logic is up to date. For write accesses, this means that the operation is carried out at the proper point in time, and for read accesses, it means that correct values will be read.</p>
+<p>Let’s head over to <code class="docutils literal notranslate"><span class="pre">Agnus</span></code> and have a closer look at what the execute function does. The function that was actually called is a convenience wrapper around the actual execution function:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"></span>
+<span class="nf">Agnus::execute</span><span class="p">(</span><span class="n">DMACycle</span><span class="w"> </span><span class="n">cycles</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">DMACycle</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">cycles</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">execute</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>So let’s dig a little deeper:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"></span>
+<span class="nf">Agnus::execute</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Advance the internal clock and the horizontal counter</span>
+<span class="w">    </span><span class="n">clock</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">DMA_CYCLES</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">pos</span><span class="p">.</span><span class="n">h</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// Process pending events</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nextTrigger</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">clock</span><span class="p">)</span><span class="w"> </span><span class="n">executeUntil</span><span class="p">(</span><span class="n">clock</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>This function emulates <code class="docutils literal notranslate"><span class="pre">Agnus</span></code> for one bus cycle. First, it increments the color clock and the horizontal counter by one. After that, if a pending event is present, it calls the event scheduler.</p>
+<p>The Event Scheduler can undoubtedly be considered the central component of vAmiga, as everything is built around it. All actions that have to be executed in a certain bus cycle are triggered by this component. Please always remember that the event scheduler, despite its central role, is never called directly inside the run loop of vAmiga. It is only called indirectly, before each memory access of the CPU.</p>
+<p>Since the event scheduler is of such great importance, we’ll examine it in more detail in a separate document.</p>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="ThreadClass.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">The Thread Class</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="EventScheduler.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">The Event Scheduler</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Dirk W. Hoffmann<br/>
+  
+      &copy; Copyright 2022, Dirk W. Hoffmann.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

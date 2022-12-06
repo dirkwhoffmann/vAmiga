@@ -1,0 +1,473 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>The Class Hierarchy &#8212; vAmiga 2.2</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The Thread Class" href="ThreadClass.html" />
+    <link rel="prev" title="Supported File Formats" href="../References/FileFormats.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"><img src="https://dirkwhoffmann.github.io/Moira/images/banner-va-2.jpg" width="100%" alt="Banner"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/icon.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Overview
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Overview/About.html">
+   About
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Tutorials/GettingStarted.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Tutorials/Exploring.html">
+   Exploring the User Interface
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  How-to guides
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../HowTo/MappingCmd.html">
+   Mapping the Command keys
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../References/Preferences/index.html">
+   Emulator Settings
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Preferences/General.html">
+     General Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Preferences/Controls.html">
+     Controls Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Preferences/Devices.html">
+     Devices Panel
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../References/Configuration/index.html">
+   Virtual Machine Settings
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Roms.html">
+     ROM Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Chipset.html">
+     Chipset Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Memory.html">
+     Memory Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Peripherals.html">
+     Peripherals Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Compatibility.html">
+     Compatibility Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Audio.html">
+     Audio Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Video.html">
+     Video Panel
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../References/FileFormats.html">
+   Supported File Formats
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Developers Corner
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   The Class Hierarchy
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ThreadClass.html">
+   The Thread Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="RunLoop.html">
+   The Run Loop
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="EventScheduler.html">
+   The Event Scheduler
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+<a href="https://dirkwhoffmann.github.io/vAmiga/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="bottom"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/Developer/ClassHierarchy.md.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>The Class Hierarchy</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="the-class-hierarchy">
+<h1>The Class Hierarchy<a class="headerlink" href="#the-class-hierarchy" title="Permalink to this heading">#</a></h1>
+<p>This document describes the basic software architecture of vAmiga. The emulator has been written in C++ and is based on the following class hierarchy:</p>
+<p><img alt="Class hierarchy" src="../_images/classHierarchy.png" /></p>
+<p>The most prominent class is the <code class="docutils literal notranslate"><span class="pre">Amiga</span></code> class, as each instance of this class represents a complete virtual Amiga. The class inherits from three other classes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">AmigaObject</span></code></p>
+<p>This class encapsulates some common functionalities that are useful for most classes in the vAmiga universe. For example, it provides the API functions for printing debug messages.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AmigaComponent</span></code></p>
+<p>This class defines functionalities shared by all classes representing a hardware component. It includes functions to initialize, configure, and serialize objects, as well as functions to power on, power off, run, and pause.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Thread</span></code></p>
+<p>This class enables the <code class="docutils literal notranslate"><span class="pre">Amiga</span></code> class to run code in a separate thread. The architecture and functionality of this class is covered in a separate document.</p>
+</li>
+</ul>
+<p>Another important entity is the <code class="docutils literal notranslate"><span class="pre">SubComponent</span></code> class, which is the ancestor of all, you guessed it, subcomponents of the Amiga. As a rule of thumb, you’ll find a separate class for almost every component you’ll find on the motherboard of a real Amiga. There is a <code class="docutils literal notranslate"><span class="pre">CPU</span></code> class, a <code class="docutils literal notranslate"><span class="pre">Memory</span></code> class, and classes for the custom chips <code class="docutils literal notranslate"><span class="pre">Agnus</span></code>, <code class="docutils literal notranslate"><span class="pre">Denise</span></code> and <code class="docutils literal notranslate"><span class="pre">Paula</span></code>. The <code class="docutils literal notranslate"><span class="pre">Blitter</span></code> and <code class="docutils literal notranslate"><span class="pre">Copper</span></code> are also encapsulated in individual classes. You’ll find the instances of these classes inside <code class="docutils literal notranslate"><span class="pre">Agnus</span></code>, just as you would find the logic circuits of these chips inside the <code class="docutils literal notranslate"><span class="pre">Agnus</span></code> chip in the real machine.</p>
+<p>The inner structure of the <code class="docutils literal notranslate"><span class="pre">SubComponent</span></code> class is very simple, as its main purpose is to make all subcomponents visible to each others. In the class diagram you may have spotted the associated arrow that connects the <code class="docutils literal notranslate"><span class="pre">SubComponent</span></code> class with the <code class="docutils literal notranslate"><span class="pre">Amiga</span></code> class:</p>
+<p><img alt="SubComponent Association" src="../_images/classHierarchy2.png" /></p>
+<p>In the code, the connection is established in the constructor of the <code class="docutils literal notranslate"><span class="pre">SubComponent</span></code> class:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">SubComponent</span><span class="p">(</span><span class="n">Amiga</span><span class="o">&amp;</span><span class="w"> </span><span class="n">ref</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Inside the constructor, a number of references like the following are set up:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">CPU</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cpu</span><span class="p">;</span><span class="w"></span>
+<span class="n">Memory</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mem</span><span class="p">;</span><span class="w"></span>
+<span class="n">Agnus</span><span class="w"> </span><span class="o">&amp;</span><span class="n">agnus</span><span class="p">;</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The references are available in any subclass of <code class="docutils literal notranslate"><span class="pre">SubComponent</span></code> and provide easy access to all subcomponents of the virtual Amiga. For example, whenever <code class="docutils literal notranslate"><span class="pre">Agnus</span></code> needs to block the CPU for a certain number of cycles, it can do so by calling an appropriate API function of the <code class="docutils literal notranslate"><span class="pre">cpu</span></code> reference:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">cpu</span><span class="p">.</span><span class="n">addWaitStates</span><span class="p">(</span><span class="n">delay</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="../References/FileFormats.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Supported File Formats</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="ThreadClass.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">The Thread Class</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Dirk W. Hoffmann<br/>
+  
+      &copy; Copyright 2022, Dirk W. Hoffmann.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

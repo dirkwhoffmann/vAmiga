@@ -1,0 +1,607 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>The Event Scheduler &#8212; vAmiga 2.2</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="The Run Loop" href="RunLoop.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"><img src="https://dirkwhoffmann.github.io/Moira/images/banner-va-2.jpg" width="100%" alt="Banner"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/icon.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Overview
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Overview/About.html">
+   About
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Tutorials/GettingStarted.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Tutorials/Exploring.html">
+   Exploring the User Interface
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  How-to guides
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../HowTo/MappingCmd.html">
+   Mapping the Command keys
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../References/Preferences/index.html">
+   Emulator Settings
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Preferences/General.html">
+     General Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Preferences/Controls.html">
+     Controls Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Preferences/Devices.html">
+     Devices Panel
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../References/Configuration/index.html">
+   Virtual Machine Settings
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Roms.html">
+     ROM Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Chipset.html">
+     Chipset Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Memory.html">
+     Memory Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Peripherals.html">
+     Peripherals Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Compatibility.html">
+     Compatibility Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Audio.html">
+     Audio Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Video.html">
+     Video Panel
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../References/FileFormats.html">
+   Supported File Formats
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Developers Corner
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="ClassHierarchy.html">
+   The Class Hierarchy
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ThreadClass.html">
+   The Thread Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="RunLoop.html">
+   The Run Loop
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   The Event Scheduler
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+<a href="https://dirkwhoffmann.github.io/vAmiga/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="bottom"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/Developer/EventScheduler.md.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#event-slots">
+   Event slots
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#scheduling-events">
+   Scheduling events
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>The Event Scheduler</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#event-slots">
+   Event slots
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#scheduling-events">
+   Scheduling events
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="the-event-scheduler">
+<h1>The Event Scheduler<a class="headerlink" href="#the-event-scheduler" title="Permalink to this heading">#</a></h1>
+<p>vAmiga is an event-driven emulator. If an action has to be performed in a certain bus cycle, the action is scheduled via the event handler API and executed when the trigger cycle is reached. The scheduler can be viewed as a large to-do list that is processed sequentially in <code class="docutils literal notranslate"><span class="pre">Agnus::executeUntil</span></code>. In the document about the <em>Run Loop</em> you have learned that this function is called in <code class="docutils literal notranslate"><span class="pre">Agnus::execute</span></code> which emulates Agnus for one bus cycle.</p>
+<section id="event-slots">
+<h2>Event slots<a class="headerlink" href="#event-slots" title="Permalink to this heading">#</a></h2>
+<p>Scheduled events are stored in so-called <em>event slots</em>. Each slot is bound to a specific component and is either empty or contains a single event. For instance, there is a slot for Copper events, a slot for Blitter events, a slot for UART events, and so on. From a theoretical point of view, each event slot represents a state machine that runs in parallel with all others. It is important to remember that the state machines interact with each other in various ways (e.g., by blocking the DMA bus). Therefore, the slot ordering is important: if two events are triggered in the same cycle, the slot with the smaller number is served first.</p>
+<p>Enough theory for now. Let’s open the <em>Events</em> tab of the <em>Inspector</em> panel and examine what an event typically looks like. When the emulator is running, you’ll see something similar to this:</p>
+<p><img alt="Event scheduler" src="../_images/events.png" /></p>
+<p>The first seven slots comprise the so-called <em>primary event table</em>. The basic idea of the primary table is to group together all event slots with high traffic. Let’s look at the contents of these slots at the time the screenshot was taken:</p>
+<ul>
+<li><p><strong>Registers</strong>
+This event slot is used to emulate the access delays of the custom registers. It is either empty if no register change is pending, or it contains a <code class="docutils literal notranslate"><span class="pre">REG_CHANGE</span></code> event if one or more registers will change in the near future. Note that in our example, the trigger cycle of this slot is overdue. For speed reasons, the event scheduler sometimes skips updating the trigger cycle. A trigger cycle lying in the past has the same meaning as a trigger cycle that matches the value of the Agnus clock: It is due immediately.</p></li>
+<li><p><strong>CIA A</strong> and <strong>CIA B</strong></p>
+<p>Each CIA is controlled by its own event slot. As you can see in the screenshot, the slots for both CIAs contain a <code class="docutils literal notranslate"><span class="pre">CIA_WAKEUP</span></code> event, which means that both CIAs are inactive at the moment. The event slots are grayed out, which means that the slots are disabled. When either CIA gets something to do, the corresponding slot is enabled by updating the trigger cycle.</p>
+</li>
+<li><p><strong>Bitplane DMA</strong></p>
+<p>This slot manages all bitplane DMA accesses. In the example shown above, a <code class="docutils literal notranslate"><span class="pre">BPL_L3</span></code> event is due at DMA cycle 61 ($3D) in the current scanline. If you are familiar with the DMA cycle diagram found in the <em>Hardware Reference Manuel</em>, you can easily understand what the emulator will be doing when the event triggers. It will perform the bitplane DMA fetch cycle surrounded by a red box:</p>
+<p><img alt="Bus cycle diagram from the HRM" src="../_images/busCycleDiagram.png" /></p>
+</li>
+<li><p><strong>Other DMA</strong></p>
+<p>This slot is used to manage disk DMA, audio DMA and sprite DMA, as well as to perform some special actions that must be carried out at specific positions on a scanline. In the example shown above, the slot contains a scheduled <code class="docutils literal notranslate"><span class="pre">DAS_TICK</span></code> event. When this event is triggered, the 24-bit counter of CIA B is incremented by one. This counter is used by the Amiga to keep track of the currently processed scanline.</p>
+</li>
+<li><p><strong>Copper</strong> and <strong>Blitter</strong></p>
+<p>These two slots manage the Copper and Blitter, respectively. The Copper slot has a scheduled wake-up event which is used to implement the <code class="docutils literal notranslate"><span class="pre">WAIT</span></code> instruction. Nothing is scheduled in the Blitter slot, which means that the Blitter is currently inactive.</p>
+</li>
+<li><p><strong>Next secondary event</strong></p>
+<p>This is the last slot in the primary slot table and utilized to speed up emulation. It indicates whether the event scheduler needs to proceed with checking the events in the other slots. To understand how this works, let’s return to theory for a moment.</p>
+</li>
+</ul>
+<p>The event slots are divided into <em>primary</em>, <em>secondary</em> and <em>tertiary</em> slots. We have already made ourselves familiar with the primary slots, which manage all frequently occurring events. The secondary slots manage events that occur less frequently, such as interrupts or the events that control Paula’s four audio state machines. Events that occur very occasionally are scheduled in the tertiary slots, such as the insertion of a floppy disk. Accordingly, we call an event <em>primary</em>, <em>secondary</em>, or <em>tertiary</em> if it is scheduled in a primary, secondary, or tertiary slot, respectively.</p>
+<p>To speed up, the event scheduler checks only the primary event slots by default. In order for the event handler to also check the secondary slots, a <code class="docutils literal notranslate"><span class="pre">SEC_TRIGGER</span></code> event must be scheduled in the SEC_SLOT. Since this slot belongs to the primary event table, too, it is always checked, just like the other slots in the primary event table. Triggering this event acts like a wake-up call requesting the event handler to check for secondary events as well. Thus, if an event is scheduled in a secondary slot, it must be ensured that <code class="docutils literal notranslate"><span class="pre">SEC_SLOT</span></code> contains a <code class="docutils literal notranslate"><span class="pre">SEC_TRIGGER</span></code> event with a trigger cycle equal to the smallest trigger cycle of all secondary events.</p>
+<p>The same applies to tertiary events. When such an event is scheduled, the event scheduler automatically schedules a <code class="docutils literal notranslate"><span class="pre">TER_TRIGGER</span></code> wake-up event in <code class="docutils literal notranslate"><span class="pre">TER_SLOT</span></code>, which is the last event slot in the secondary slot table.</p>
+<p>As you can see in the screenshot above, two tertiary slots contain a scheduled event. The first event is scheduled in the Server Daemon slot. It is used to monitor external socket connections. Such a connection is used, for example, to emulate a null modem cable connecting two vAmigas. The last slot is the <em>Inspector slot</em> and contains an event of type <code class="docutils literal notranslate"><span class="pre">INS_EVENTS</span></code>. When this event is triggered, an <em>inspection</em> of the event table is carried out. This means that all entries of the event table are recorded and passed to the GUI. In fact, it’s these recorded values that we see in the screenshot above. This also clarifies why the <code class="docutils literal notranslate"><span class="pre">INS_EVENT</span></code> event is always listed as “due immediately” in the inspector.</p>
+<p>Overall, the introduction of an event hierarchy significantly improves emulation speed, as it prevents the event scheduler from having to traverse the entire event table when looking for due events.</p>
+</section>
+<section id="scheduling-events">
+<h2>Scheduling events<a class="headerlink" href="#scheduling-events" title="Permalink to this heading">#</a></h2>
+<p>Internally, events are scheduled by calling an appropriate function from the event scheduling API. Among those are the following two variants of <code class="docutils literal notranslate"><span class="pre">scheduleAbs</span></code> which are implemented as follows:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="n">EventSlot</span><span class="w"> </span><span class="n">s</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">scheduleAbs</span><span class="p">(</span><span class="n">Cycle</span><span class="w"> </span><span class="n">cycle</span><span class="p">,</span><span class="w"> </span><span class="n">EventID</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">trigger</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cycle</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cycle</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">nextTrigger</span><span class="p">)</span><span class="w"> </span><span class="n">nextTrigger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cycle</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="p">(</span><span class="n">isTertiarySlot</span><span class="p">(</span><span class="n">s</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cycle</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">trigger</span><span class="p">[</span><span class="n">SLOT_TER</span><span class="p">])</span><span class="w"> </span><span class="n">trigger</span><span class="p">[</span><span class="n">SLOT_TER</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cycle</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cycle</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">trigger</span><span class="p">[</span><span class="n">SLOT_SEC</span><span class="p">])</span><span class="w"> </span><span class="n">trigger</span><span class="p">[</span><span class="n">SLOT_SEC</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cycle</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="p">(</span><span class="n">isSecondarySlot</span><span class="p">(</span><span class="n">s</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cycle</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">trigger</span><span class="p">[</span><span class="n">SLOT_SEC</span><span class="p">])</span><span class="w"> </span><span class="n">trigger</span><span class="p">[</span><span class="n">SLOT_SEC</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cycle</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="n">EventSlot</span><span class="w"> </span><span class="n">s</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">scheduleAbs</span><span class="p">(</span><span class="n">Cycle</span><span class="w"> </span><span class="n">cycle</span><span class="p">,</span><span class="w"> </span><span class="n">EventID</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">i64</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">scheduleAbs</span><span class="o">&lt;</span><span class="n">s</span><span class="o">&gt;</span><span class="p">(</span><span class="n">cycle</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">);</span><span class="w"></span>
+<span class="w">      </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The first variant requires three arguments. In addition to the template argument, which specifies the event slot in which the event is to be scheduled, it expects a trigger cycle and an event ID. The second variant has an additional data argument. For example, most events dealing with floppy drives store the drive number in the event’s data field.</p>
+<p>Other scheduling functions are <code class="docutils literal notranslate"><span class="pre">scheduleImm</span></code>, <code class="docutils literal notranslate"><span class="pre">scheduleInc</span></code>, or <code class="docutils literal notranslate"><span class="pre">scheduleRel</span></code>. All these functions differ in the way the trigger cycle is set:</p>
+<ul>
+<li><p><strong>Absolute (Abs)</strong></p>
+<p>The trigger cycle is specified in the form of a specific master cycle.</p>
+</li>
+<li><p><strong>Immediate (Imm)</strong></p>
+<p>The trigger cycle is the next DMA cycle.</p>
+</li>
+<li><p><strong>Incremental (Inc)</strong></p>
+<p>The trigger cycle is specified relative to the old trigger cycle.</p>
+</li>
+<li><p><strong>Relative (Rel)</strong></p>
+<p>The trigger cycle is specified relative to the current Agnus clock cycle.</p>
+</li>
+</ul>
+<p>Events can also be <em>rescheduled</em>, <em>cancelled</em> or <em>disabled</em>. Rescheduling means that the event ID in the selected event slot remains unchanged. Canceling is done by calling the following function:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="n">EventSlot</span><span class="w"> </span><span class="n">s</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">cancel</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">id</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">EventID</span><span class="p">)</span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">data</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">trigger</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NEVER</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The crucial statement here is the last assignment. It sets the trigger cycle to <code class="docutils literal notranslate"><span class="pre">NEVER</span></code>, which is defined as a simple preprocessor constant:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Time stamp used for messages that never trigger</span>
+<span class="cp">#define NEVER INT64_MAX</span>
+</pre></div>
+</div>
+<p>This means that a canceled event keeps being scheduled, but with a trigger cycle so high that it will never trigger.</p>
+<p>When we say that an event slot is <em>disabled</em>, we simply mean that the trigger cycle is set to <code class="docutils literal notranslate"><span class="pre">NEVER</span></code>, but the ID and data are preserved. This is sometimes done for speed reasons, e.g. when the IDs of two consecutive events do not change.</p>
+<p>Note that the event scheduler treats all cycle values as master cycles. If a trigger value is specified in a different unit, it must be converted to master cycles first. Several conversion macros are defined for this purpose:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#define CPU_CYCLES(cycles)    ((Cycle)(cycles) &lt;&lt; 2)</span>
+<span class="cp">#define CIA_CYCLES(cycles)    ((Cycle)(cycles) * 40)</span>
+<span class="cp">#define DMA_CYCLES(cycles)    ((Cycle)(cycles) &lt;&lt; 3)</span>
+</pre></div>
+</div>
+<p>The macros convert a value given in CPU cycles, CIA cycles or DMA cycles to the corresponding value on the master cycle scale. Reconversion is also possible by applying one of the following macros:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#define AS_CPU_CYCLES(cycles) ((Cycle)(cycles) &gt;&gt; 2)</span>
+<span class="cp">#define AS_CIA_CYCLES(cycles) ((Cycle)(cycles) / 40)</span>
+<span class="cp">#define AS_DMA_CYCLES(cycles) ((Cycle)(cycles) &gt;&gt; 3)</span>
+</pre></div>
+</div>
+<p>All event IDs are defined in a large <code class="docutils literal notranslate"><span class="pre">enum</span></code> called <code class="docutils literal notranslate"><span class="pre">EventID</span></code>.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">enum_i8</span><span class="p">(</span><span class="n">EventID</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">EVENT_NONE</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">//</span>
+<span class="w">    </span><span class="c1">// Events in the primary event table</span>
+<span class="w">    </span><span class="c1">//</span>
+
+<span class="w">    </span><span class="c1">// REG slot</span>
+<span class="w">    </span><span class="n">REG_CHANGE</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">REG_EVENT_COUNT</span><span class="p">,</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// CIA slots</span>
+<span class="w">    </span><span class="n">CIA_EXECUTE</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">CIA_WAKEUP</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="n">CIA_EVENT_COUNT</span><span class="p">,</span><span class="w"></span>
+
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Note that event IDs are reused across the event slots. For example, the <code class="docutils literal notranslate"><span class="pre">REG_CHANGE</span></code> and <code class="docutils literal notranslate"><span class="pre">CIA_EXECUTE</span></code> events share the same ID.</p>
+<p>Congratulations. If you have worked through the documentation up to this point, you already have a good understanding of the basic software structure and inner workings of vAmiga.</p>
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="RunLoop.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">The Run Loop</p>
+        </div>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Dirk W. Hoffmann<br/>
+  
+      &copy; Copyright 2022, Dirk W. Hoffmann.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

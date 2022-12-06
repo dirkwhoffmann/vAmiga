@@ -1,0 +1,672 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Exploring the User Interface &#8212; vAmiga 2.2</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Mapping the Command keys" href="../HowTo/MappingCmd.html" />
+    <link rel="prev" title="Getting Started" href="GettingStarted.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"><img src="https://dirkwhoffmann.github.io/Moira/images/banner-va-2.jpg" width="100%" alt="Banner"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/icon.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Overview
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Overview/About.html">
+   About
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="GettingStarted.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Exploring the User Interface
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  How-to guides
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../HowTo/MappingCmd.html">
+   Mapping the Command keys
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../References/Preferences/index.html">
+   Emulator Settings
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Preferences/General.html">
+     General Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Preferences/Controls.html">
+     Controls Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Preferences/Devices.html">
+     Devices Panel
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../References/Configuration/index.html">
+   Virtual Machine Settings
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Roms.html">
+     ROM Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Chipset.html">
+     Chipset Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Memory.html">
+     Memory Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Peripherals.html">
+     Peripherals Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Compatibility.html">
+     Compatibility Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Audio.html">
+     Audio Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Video.html">
+     Video Panel
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../References/FileFormats.html">
+   Supported File Formats
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Developers Corner
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Developer/ClassHierarchy.html">
+   The Class Hierarchy
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Developer/ThreadClass.html">
+   The Thread Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Developer/RunLoop.html">
+   The Run Loop
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Developer/EventScheduler.html">
+   The Event Scheduler
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+<a href="https://dirkwhoffmann.github.io/vAmiga/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="bottom"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/Tutorials/Exploring.md.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#toolbar">
+   Toolbar
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#controls">
+     Controls
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#preferences">
+     Preferences
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#keyboard">
+     Keyboard
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#game-ports">
+     Game Ports
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#snapshots">
+     Snapshots
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#inspectors">
+     Inspectors
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#inspector-panel">
+       Inspector Panel
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#monitor-panel">
+       Monitor Panel
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#retro-shell">
+       Retro Shell
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Exploring the User Interface</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#toolbar">
+   Toolbar
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#controls">
+     Controls
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#preferences">
+     Preferences
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#keyboard">
+     Keyboard
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#game-ports">
+     Game Ports
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#snapshots">
+     Snapshots
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#inspectors">
+     Inspectors
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#inspector-panel">
+       Inspector Panel
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#monitor-panel">
+       Monitor Panel
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#retro-shell">
+       Retro Shell
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="exploring-the-user-interface">
+<h1>Exploring the User Interface<a class="headerlink" href="#exploring-the-user-interface" title="Permalink to this heading">#</a></h1>
+<p>In this tutorial, we will explore the most commonly used elements of the vAmiga user interface.</p>
+<section id="toolbar">
+<h2>Toolbar<a class="headerlink" href="#toolbar" title="Permalink to this heading">#</a></h2>
+<p>Many of the basic emulator properties can be controlled via the toolbar, which defaults to the following:</p>
+<p><img alt="Toolbar" src="../_images/toolbar.png" /></p>
+<p>We will review the elements of the toolbar one by one.</p>
+<section id="controls">
+<h3>Controls<a class="headerlink" href="#controls" title="Permalink to this heading">#</a></h3>
+<p>The three buttons in the <em>Control</em> section allow us to control the emulator state:</p>
+<p><img alt="Toolbar" src="../_images/toolbar1.png" /></p>
+<p>The functionality of these buttons is what you might have already guessed:</p>
+<ul class="simple">
+<li><p>The left button pauses or resumes emulation.</p></li>
+<li><p>The middle button performs a hard reset.</p></li>
+<li><p>The right button switches the Amiga on or off.</p></li>
+</ul>
+</section>
+<section id="preferences">
+<h3>Preferences<a class="headerlink" href="#preferences" title="Permalink to this heading">#</a></h3>
+<p><img alt="Toolbar" src="../_images/toolbar2.png" /></p>
+<p>The two buttons in the <em>Preferences</em> section let us configure vAmiga. The left button opens the <em>emulator settings</em> window, which manages the settings that apply to all emulator instances simultaneously.</p>
+<p><img alt="Preferences" src="../_images/generalPanel1.png" /></p>
+<p>All available options are described in a separate document. For the purpose of this tutorial, we do not need to change anything here and can proceed to the next point right away.</p>
+<p>The right button opens the Configuration window where the virtual machine is configured. The options are organized in tabs, similar to the emulator settings window. You are already familiar with the first tab if you have read the <em>Getting started</em> tutorial. It is the tab where the ROM of the Amiga is configured.</p>
+<p><img alt="Configuration" src="../_images/romPanel1.png" /></p>
+<p>All available options are described in a separate document. Please note that all settings made in the Configuration are specific to a single emulator instance. Therefore, it is possible to run two emulator instances with different configurations side by side.</p>
+</section>
+<section id="keyboard">
+<h3>Keyboard<a class="headerlink" href="#keyboard" title="Permalink to this heading">#</a></h3>
+<p><img alt="Toolbar" src="../_images/toolbar3.png" /></p>
+<p>Although the Amiga is quite an aged computer by now, it already utilized a keyboard whose layout was quite similar to the ones used today. Therefore, in vAmiga you will be using the native Mac keyboard for typing, and for most Amiga keys you will find a perfect match on your native keyboard. However, there are exceptions. For example, the Amiga is equipped with a special help key that has no direct counterpart on the Mac keyboard. Also, some Mac keys are directly linked to operating system actions, which affects emulation. The most prominent examples are the two Command keys that are used to trigger operating system actions.</p>
+<p>In cases where you need to press a key that is not directly accessible from your native keyboard. If you click the corresponding icon in the toolbar, the virtual keyboard will open as a sheet on top of the emulator window:</p>
+<p><img alt="Virtual keyboard" src="../_images/virtualKeyboard.png" /></p>
+<p>The keys on the virtual keyboard can be clicked with either the left or the right mouse button:</p>
+<ul>
+<li><p><strong>Left Button</strong></p>
+<p>When the left mouse button is used, the selected key is pushed down and automatically released after a short delay. Use this option if you wish to press a single key on the keyboard.</p>
+</li>
+<li><p><strong>Right button</strong></p>
+<p>When the right mouse button is used, the selected key is permanently pushed down or permanently released if it was pushed down. Use this option if you want to press a specific key combination, e.g. the reset combination <em>Ctrl+Amiga+Amiga</em> as shown in the screenshot.</p>
+</li>
+</ul>
+<p>As soon as a key is pressed with the left mouse button, the virtual keyboard disappears. However, it is also possible to open the virtual keyboard as a separate window that can reside next to the emulator window. To open the virtual keyboard as window, press <em>Cmd-K</em>, the key equivalent for the <em>Show…</em> item in the <em>Keyboard</em> menu.</p>
+</section>
+<section id="game-ports">
+<h3>Game Ports<a class="headerlink" href="#game-ports" title="Permalink to this heading">#</a></h3>
+<p>The two gameport icons allow us to quickly switch between the input devices connected to the gameports of the Amiga.</p>
+<p><img alt="Toolbar" src="../_images/toolbar4.png" /></p>
+<p>All available devices are displayed in a popup menu:</p>
+<p><img alt="Gameport menu" src="../_images/gameports.png" /></p>
+<p>The mouse refers to the Mac’s internal mouse. Note that the Mac does not distinguish between the mouse and the touchpad. This means that both devices cannot be used independently. The next two items refer to keyboard-emulated joysticks. vAmiga differentiates between two sets of keys, which can be configured in the emulator settings. The last two items are placeholders, which are currently grayed out. As soon as a compatible gamepad is connected to the host, e.g. a compatible USB joystick, the new device will appear in one of the placeholder slots.</p>
+</section>
+<section id="snapshots">
+<h3>Snapshots<a class="headerlink" href="#snapshots" title="Permalink to this heading">#</a></h3>
+<p>The three toolbar icons in this section can be used to manage snapshots. Snapshots are frozen emulator states that can be restored at a later time.</p>
+<p><img alt="Toolbar" src="../_images/toolbar5.png" /></p>
+<ul>
+<li><p>The left button creates a snapshot and puts it in the snapshot storage.</p></li>
+<li><p>The middle button reverts to the emulator state recorded in the most recent snapshot.</p></li>
+<li><p>The right button opens the snapshot browser.</p>
+<p><img alt="Snapshot browser" src="../_images/snapshotBrowser.png" /></p>
+<p>The snapshot browser is to vAmiga what <em>Time Machine</em> is to the Mac. It lets us browse through the snapshot memory in a graphical way.</p>
+</li>
+</ul>
+<p>Please note that snapshots are not stored permanently. The next time you start vAmiga, you will start over with an empty snapshot storage. This is because snapshots were originally intended as a safe-point mechanism for mastering difficult games. Snapshots were never intended for long-term preservation of emulator states, and never will be, although many users would like to use them that way. The reason is that snapshots do not only contain Amiga specific data like the RAM contents or the values of CPU registers. It also contains the values of many emulator-specific variables that have no direct equivalent on the real machine. The set of internal variables usually changes from release to release, and so does the snapshot format. Therefore, you can almost be certain that snapshots taken with the current version of vAmiga will no longer work when the next version comes out.</p>
+</section>
+<section id="inspectors">
+<h3>Inspectors<a class="headerlink" href="#inspectors" title="Permalink to this heading">#</a></h3>
+<p>A major design goal of vAmiga was to make the emulated Amiga as transparent as possible. To achieve this goal, vAmiga offers a number of tools that give the user insight into the Amiga’s internal workings. The <em>Inspectors</em> section of the toolbar grants access to these tools.</p>
+<p><img alt="Toolbar" src="../_images/toolbar6.png" /></p>
+<section id="inspector-panel">
+<h4>Inspector Panel<a class="headerlink" href="#inspector-panel" title="Permalink to this heading">#</a></h4>
+<p>The Inspector is the primary place to retrieve information about the current state of the emulator. It provides several tabs where the current state of various components can be examined. The first tab is the CPU tab, which looks like this:</p>
+<p><img alt="Inspector panel" src="../_images/inspectorPanel.png" /></p>
+<p>The panel displays the currently executed program and the contents of all CPU registers. The CPU panel is also the gateway to the CPU debugger. We can use it to single-step through the currently executing instruction stream or to set breakpoints and watchpoints.</p>
+</section>
+<section id="monitor-panel">
+<h4>Monitor Panel<a class="headerlink" href="#monitor-panel" title="Permalink to this heading">#</a></h4>
+<p>The monitor panel provides additional debugging aids:</p>
+<p><img alt="Monitor panel" src="../_images/monitorPanel.png" /></p>
+<p>The left column contains the controls for the DMA debugger, which can be used to visualize all memory bus accesses in real time. When enabled, the emulator texture is overlaid with an additional graphics layer that visualizes the bus owner for Chip or Slow RAM accesses. The following screenshot shows a scene from Rink a Dink with the DMA debugger enabled.</p>
+<p><img alt="DMA debugger" src="../_images/dmaDebugger.png" /></p>
+<p>The yellow and brown dots represent Copper and Blitter accesses, respectively. The red dots mark the memory refresh cycles and the pink dots the DMA slots for transferring audio data. Bitplane DMA is visualized in cyan. The scene reveals a lot about the inner workings of this demo. The creators decided to use a very small bitplane window that just covers the polygon. This bitplane window is permanently relocated as the polygon moves. <a class="reference external" href="https://www.youtube.com/watch?v=aDFVwy4gTaE">This small YouTube video</a> shows what <em>Rink a Dink</em> looks like when run in vAmiga with the DMA debugger enabled. If you don’t want to watch the entire video, you can fast forward at 1:20. Here you can see the animated polygon in action.</p>
+<p>The center area of the monitor panel controls the so-called <em>activity monitors</em>. When activated, the texture of the emulator is overlaid with small displays giving insight into the activity of various Amiga components:</p>
+<p><img alt="Activity monitors" src="../_images/activityMonitors.png" /></p>
+<p>The elements in the right column control the stencil feature. With this feature, vAmiga is able to erase certain graphic layers. For example, it is possible to remove all pixels of a certain playfield or sprite. The removed pixels are replaced by the pixels of a checkerboard pattern that looks like it shines through holes in the emulator texture, especially in animated scenes.</p>
+<p><img alt="Stencils" src="../_images/stencil.png" /></p>
+</section>
+<section id="retro-shell">
+<h4>Retro Shell<a class="headerlink" href="#retro-shell" title="Permalink to this heading">#</a></h4>
+<p>The third button in the <em>Inspectors</em> section opens <em>Retro Shell</em>, vAmiga’s text-based debug console. The shell can be used to control vAmiga with a variety of text commands.</p>
+<p><img alt="Retro Shell" src="../_images/retroShell.png" /></p>
+<p>Retro Shell can also process script files. This functionality is used extensively by vAmiga’s test suite (vAmigaTS) to perform automatic regression tests. As a normal user, you will most likely never need to use the shell, since most of the emulator’s functions are accessible through the graphical user interface.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="GettingStarted.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Getting Started</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../HowTo/MappingCmd.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Mapping the Command keys</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Dirk W. Hoffmann<br/>
+  
+      &copy; Copyright 2022, Dirk W. Hoffmann.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
