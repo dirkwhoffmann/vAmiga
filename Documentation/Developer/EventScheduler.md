@@ -16,20 +16,25 @@ The first seven slots comprise the so-called *primary event table*. The basic id
   This event slot is used to emulate the access delays of the custom registers. It is either empty if no register change is pending, or it contains a `REG_CHANGE` event if one or more registers will change in the near future. Note that in our example, the trigger cycle of this slot is overdue. For speed reasons, the event scheduler sometimes skips updating the trigger cycle. A trigger cycle lying in the past has the same meaning as a trigger cycle that matches the value of the Agnus clock: It is due immediately.
 
 - **CIA A** and **CIA B**
+
   Each CIA is controlled by its own event slot. As you can see in the screenshot, the slots for both CIAs contain a `CIA_WAKEUP` event, which means that both CIAs are inactive at the moment. The event slots are grayed out, which means that the slots are disabled. When either CIA gets something to do, the corresponding slot is enabled by updating the trigger cycle. 
   
 - **Bitplane DMA**
+
   This slot manages all bitplane DMA accesses. In the example shown above, a `BPL_L3` event is due at DMA cycle 61 ($3D) in the current scanline. If you are familiar with the DMA cycle diagram found in the *Hardware Reference Manuel*, you can easily understand what the emulator will be doing when the event triggers. It will perform the bitplane DMA fetch cycle surrounded by a red box: 
 
   ![Bus cycle diagram from the HRM](images/busCycleDiagram.png "Bus cycle diagram from the HRM")
 
 - **Other DMA**
+
   This slot is used to manage disk DMA, audio DMA and sprite DMA, as well as to perform some special actions that must be carried out at specific positions on a scanline. In the example shown above, the slot contains a scheduled `DAS_TICK` event. When this event is triggered, the 24-bit counter of CIA B is incremented by one. This counter is used by the Amiga to keep track of the currently processed scanline. 
   
 - **Copper** and **Blitter**
+
   These two slots manage the Copper and Blitter, respectively. The Copper slot has a scheduled wake-up event which is used to implement the `WAIT` instruction. Nothing is scheduled in the Blitter slot, which means that the Blitter is currently inactive. 
 
 - **Next secondary event** 
+
   This is the last slot in the primary slot table and utilized to speed up emulation. It indicates whether the event scheduler needs to proceed with checking the events in the other slots. To understand how this works, let's return to theory for a moment.
 
 The event slots are divided into *primary*, *secondary* and *tertiary* slots. We have already made ourselves familiar with the primary slots, which manage all frequently occurring events. The secondary slots manage events that occur less frequently, such as interrupts or the events that control Paula's four audio state machines. Events that occur very occasionally are scheduled in the tertiary slots, such as the insertion of a floppy disk. Accordingly, we call an event *primary*, *secondary*, or *tertiary* if it is scheduled in a primary, secondary, or tertiary slot, respectively. 
@@ -75,15 +80,19 @@ The first variant requires three arguments. In addition to the template argument
 Other scheduling functions are `scheduleImm`, `scheduleInc`, or `scheduleRel`. All these functions differ in the way the trigger cycle is set:
 
 - **Absolute (Abs)**
+
   The trigger cycle is specified in the form of a specific master cycle.
 
 - **Immediate (Imm)**
+
   The trigger cycle is the next DMA cycle.
  
 - **Incremental (Inc)**
+
   The trigger cycle is specified relative to the old trigger cycle.
  
 - **Relative (Rel)** 
+
     The trigger cycle is specified relative to the current Agnus clock cycle.
 
 Events can also be *rescheduled*, *cancelled* or *disabled*. Rescheduling means that the event ID in the selected event slot remains unchanged. Canceling is done by calling the following function:
