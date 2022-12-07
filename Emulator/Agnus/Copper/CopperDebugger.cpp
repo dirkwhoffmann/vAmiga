@@ -48,7 +48,7 @@ CopperDebugger::_dump(Category category, std::ostream& os) const
 
         isize count = (current1->end - current1->start) / 4;
         for (isize i = 0; i < count && i < 100; i++) {
-            os << string(disassemble(1, i)) << std::endl;
+            os << string(disassemble(1, i, true)) << std::endl;
         }
     }
     
@@ -56,7 +56,7 @@ CopperDebugger::_dump(Category category, std::ostream& os) const
 
         isize count = (current2->end - current2->start) / 4;
         for (isize i = 0; i < count && i < 100; i++) {
-            os << string(disassemble(2, i)) << std::endl;
+            os << string(disassemble(2, i, true)) << std::endl;
         }
     }
     
