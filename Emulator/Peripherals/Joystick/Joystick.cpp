@@ -10,8 +10,9 @@
 #include "config.h"
 #include "Joystick.h"
 #include "Amiga.h"
-// #include "ControlPort.h"
 #include "IOUtils.h"
+
+namespace vamiga {
 
 Joystick::Joystick(Amiga& ref, ControlPort& pref) : SubComponent(ref), port(pref)
 {
@@ -202,7 +203,7 @@ Joystick::trigger(GamePadAction event)
     assert_enum(GamePadAction, event);
 
     debug(PRT_DEBUG, "trigger(%s)\n", GamePadActionEnum::key(event));
-     
+
     switch (event) {
             
         case PULL_UP:       axisY = -1; break;
@@ -227,7 +228,7 @@ Joystick::trigger(GamePadAction event)
                     button = false;
                     
                 } else {
-                
+
                     // Load magazine
                     button = true;
                     reload();
@@ -254,7 +255,7 @@ Joystick::eofHandler()
 {
     // Only proceed if auto fire is enabled
     if (!config.autofire || config.autofireDelay < 0) return;
-  
+
     // Only proceed if a trigger frame has been reached
     if (agnus.pos.frame != nextAutofireFrame) return;
 
@@ -268,4 +269,6 @@ Joystick::eofHandler()
         button = true;
     }
     scheduleNextShot();
+}
+
 }

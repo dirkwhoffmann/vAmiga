@@ -15,7 +15,7 @@
 #include "SubComponent.h"
 #include "Chrono.h"
 
-using namespace vamiga;
+namespace vamiga {
 
 class ShakeDetector {
     
@@ -109,7 +109,7 @@ private:
     //
     // Methods from AmigaComponent
     //
-        
+
 private:
     
     void _reset(bool hard) override;
@@ -207,3 +207,5 @@ public:
 
     template <EventSlot s> void serviceMouseEvent();
 };
+
+}

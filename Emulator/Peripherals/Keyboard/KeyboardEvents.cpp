@@ -12,6 +12,8 @@
 #include "Agnus.h"
 #include "CIA.h"
 
+namespace vamiga {
+
 void
 Keyboard::serviceKeyboardEvent(EventID id)
 {
@@ -121,4 +123,6 @@ Keyboard::serviceKeyEvent()
         default:
             fatalError;
     }
+}
+
 }

@@ -22,6 +22,8 @@
 #include "RTC.h"
 #include "ZorroManager.h"
 
+namespace vamiga {
+
 void
 Memory::_dump(Category category, std::ostream& os) const
 {
@@ -212,7 +214,7 @@ Memory::setConfigItem(Option option, i64 value)
             if ((value % 256) != 0 || value > 1536) {
                 throw VAError(ERROR_OPT_INVARG, "0, 256, 512, ..., 1536");
             }
-                        
+
             mem.allocSlow((i32)KB(value));
             return;
             
@@ -224,7 +226,7 @@ Memory::setConfigItem(Option option, i64 value)
             if ((value % 64) != 0 || value > 8192) {
                 throw VAError(ERROR_OPT_INVARG, "0, 64, 128, ..., 8192");
             }
-                        
+
             mem.allocFast((i32)KB(value));
             return;
             
@@ -280,7 +282,7 @@ Memory::setConfigItem(Option option, i64 value)
                 throw VAError(ERROR_OPT_INVARG, RamInitPatternEnum::keyList());
             }
 
-            { SUSPENDED config.ramInitPattern = (RamInitPattern)value; }
+        { SUSPENDED config.ramInitPattern = (RamInitPattern)value; }
             if (isPoweredOff()) fillRamWithInitPattern();
             return;
 
@@ -490,7 +492,7 @@ Memory::allocFast(i32 bytes, bool update)
     config.fastSize = bytes;
     alloc(fastAllocator, bytes, update);
 }
-            
+
 void
 Memory::allocRom(i32 bytes, bool update)
 {
@@ -719,7 +721,7 @@ Memory::loadExt(const u8 *buf, isize len)
     ExtendedRomFile file(buf, len);
     loadExt(file);
 }
- 
+
 void
 Memory::saveRom(const string &path)
 {
@@ -770,7 +772,7 @@ Memory::patchExpansionLib()
                     R16BE(rom + i + 22) == 0x0002) {
                     
                     msg("Patching Kickstart 1.2 at %lx\n", i);
-            
+
                     W32BE(rom + i, 0x426f0004);
                     W16BE(rom + i + 22, 0x0000);
                     return;
@@ -846,7 +848,7 @@ Memory::updateCpuMemSrcTable()
             cpuMemSrc[i] = MEM_CHIP_MIRROR;
         }
     }
-        
+
     // CIAs
     for (isize i = 0xA0; i <= 0xBE; i++) {
         cpuMemSrc[i] = MEM_CIA_MIRROR;
@@ -950,7 +952,7 @@ bool
 Memory::inChipRam(u32 addr)
 {
     if (addr > 0xFFFFFF) return false;
-        
+
     auto memSrc = cpuMemSrc[addr >> 16];
     return memSrc == MEM_CHIP || memSrc == MEM_CHIP_MIRROR;
 }
@@ -959,7 +961,7 @@ bool
 Memory::inSlowRam(u32 addr)
 {
     if (addr > 0xFFFFFF) return false;
-        
+
     auto memSrc = cpuMemSrc[addr >> 16];
     return memSrc == MEM_SLOW;
 }
@@ -968,7 +970,7 @@ bool
 Memory::inFastRam(u32 addr)
 {
     if (addr > 0xFFFFFF) return false;
-        
+
     auto memSrc = cpuMemSrc[addr >> 16];
     return memSrc == MEM_FAST;
 }
@@ -983,7 +985,7 @@ bool
 Memory::inRom(u32 addr)
 {
     if (addr > 0xFFFFFF) return false;
-        
+
     auto memSrc = cpuMemSrc[addr >> 16];
     
     return
@@ -1050,7 +1052,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_CHIP> (u32 addr)
     dataBus = READ_CHIP_8(addr);
     return (u8)dataBus;
 }
-    
+
 template<> u16
 Memory::peek16 <ACCESSOR_CPU, MEM_CHIP> (u32 addr)
 {
@@ -1078,7 +1080,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_SLOW> (u32 addr)
     dataBus = READ_SLOW_8(addr);
     return (u8)dataBus;
 }
-    
+
 template<> u16
 Memory::peek16 <ACCESSOR_CPU, MEM_SLOW> (u32 addr)
 {
@@ -1186,7 +1188,7 @@ template<> u8
 Memory::peek8 <ACCESSOR_CPU, MEM_CUSTOM> (u32 addr)
 {
     ASSERT_CUSTOM_ADDR(addr);
-            
+
     agnus.executeUntilBusIsFree();
 
     if (IS_EVEN(addr)) {
@@ -1226,7 +1228,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr)
             return (u8)dataBus;
         }
     }
-        
+
     dataBus = (u16)(zorro.peekACF(addr));
     return (u8)dataBus;
 }
@@ -1235,11 +1237,11 @@ template<> u16
 Memory::peek16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr)
 {
     ASSERT_AUTO_ADDR(addr);
-        
+
     auto hi = zorro.peekACF(addr);
     auto lo = zorro.peekACF(addr + 1);
     
-    dataBus = HI_LO(hi,lo);    
+    dataBus = HI_LO(hi,lo);
     return dataBus;
 }
 
@@ -1401,7 +1403,7 @@ Memory::peek16 <ACCESSOR_CPU> (u32 addr)
             fatalError;
     }
 }
-    
+
 template<> u16
 Memory::spypeek16 <ACCESSOR_CPU> (u32 addr) const
 {
@@ -1592,7 +1594,7 @@ Memory::poke16 <ACCESSOR_CPU, MEM_CHIP> (u32 addr, u16 value)
     dataBus = value;
     WRITE_CHIP_16(addr, value);
 }
-    
+
 template <> void
 Memory::poke8 <ACCESSOR_CPU, MEM_SLOW> (u32 addr, u8 value)
 {
@@ -1657,7 +1659,7 @@ Memory::poke16 <ACCESSOR_CPU, MEM_CIA> (u32 addr, u16 value)
     dataBus = value;
     pokeCIA16(addr, value);
 }
-    
+
 template <> void
 Memory::poke8 <ACCESSOR_CPU, MEM_RTC> (u32 addr, u8 value)
 {
@@ -1707,7 +1709,7 @@ template <> void
 Memory::poke8 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr, u8 value)
 {
     ASSERT_AUTO_ADDR(addr);
-        
+
     dataBus = value;
     zorro.pokeACF(addr, value);
 }
@@ -1748,7 +1750,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_ROM> (u32 addr, u8 value)
         debug(MEM_DEBUG, "Locking WOM\n");
         womIsLocked = true;
         updateMemSrcTables();
-    }        
+    }
 }
 
 template <> void
@@ -2129,7 +2131,7 @@ Memory::peekCustomFaulty16(u32 addr)
      *   - DMA cycle data (if DMA happened on the bus).
      *   - 0xFFFF or some some ANDed old data otherwise.
      */
-            
+
     pokeCustom16<ACCESSOR_CPU>(addr, dataBus);
     
     return dataBus;
@@ -2820,3 +2822,5 @@ template const char *Memory::ascii <ACCESSOR_AGNUS> (u32 addr);
 
 template const char *Memory::hex <ACCESSOR_CPU> (u32 addr, isize bytes);
 template const char *Memory::hex <ACCESSOR_AGNUS> (u32 addr, isize bytes);
+
+}

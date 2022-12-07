@@ -11,6 +11,8 @@
 
 #include "AmigaFile.h"
 
+namespace vamiga {
+
 class ExtendedRomFile : public AmigaFile {
 
 private:
@@ -47,3 +49,5 @@ public:
 
     FileType type() const override { return FILETYPE_EXTENDED_ROM; }
 };
+
+}

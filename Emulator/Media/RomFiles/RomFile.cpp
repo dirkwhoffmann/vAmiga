@@ -12,6 +12,8 @@
 #include "IOUtils.h"
 #include "MemUtils.h"
 
+namespace vamiga {
+
 //
 // Boot Roms
 //
@@ -655,4 +657,6 @@ RomFile::decrypt()
     if (!isRomBuffer(data.ptr, data.size)) {
         throw VAError(ERROR_INVALID_ROM_KEY);
     }
+}
+
 }

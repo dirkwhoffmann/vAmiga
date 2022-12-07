@@ -30,12 +30,12 @@ class FloppyDrive;
 class HardDrive;
 class HdController;
 class GdbServer;
-
-}
 class Joystick;
 class Keyboard;
 class Memory;
 class Mouse;
+
+}
 class MsgQueue;
 class OSDebugger;
 class Paula;

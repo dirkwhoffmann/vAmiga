@@ -21,6 +21,8 @@
 #include "RomFile.h"
 #include "Script.h"
 
+namespace vamiga {
+
 void
 AmigaFile::init(const string &path)
 {
@@ -67,7 +69,7 @@ AmigaFile::init(FILE *file)
     int c; while ((c = fgetc(file)) != EOF) { stream.put((char)c); }
     init(stream);
 }
-    
+
 AmigaFile::~AmigaFile()
 {
     // if (data) delete[] data;
@@ -271,4 +273,6 @@ isize
 AmigaFile::writeToBuffer(Buffer<u8> &buffer)
 {
     return writeToBuffer(buffer, 0, data.size);
+}
+
 }

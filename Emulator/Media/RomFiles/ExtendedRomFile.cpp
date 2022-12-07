@@ -11,6 +11,8 @@
 #include "ExtendedRomFile.h"
 #include "IOUtils.h"
 
+namespace vamiga {
+
 // AROS Extended ROM
 const u8 ExtendedRomFile::magicBytes1[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
 const u8 ExtendedRomFile::magicBytes2[] = { 0x4E, 0x71, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
@@ -36,4 +38,6 @@ ExtendedRomFile::isExtendedRomFile(const string &path)
 {
     std::ifstream stream(path, std::ifstream::binary);
     return stream.is_open() ? isCompatible(stream) : false;
+}
+
 }

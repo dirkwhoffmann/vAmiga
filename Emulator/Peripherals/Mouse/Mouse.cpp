@@ -11,9 +11,9 @@
 #include "Mouse.h"
 #include "Amiga.h"
 #include "Chrono.h"
-// #include "ControlPort.h"
 #include "IOUtils.h"
-// #include "MsgQueue.h"
+
+namespace vamiga {
 
 Mouse::Mouse(Amiga& ref, ControlPort& pref) : SubComponent(ref), port(pref)
 {
@@ -82,7 +82,7 @@ Mouse::setConfigItem(Option option, i64 value)
             
             config.pullUpResistors = value;
             return;
- 
+
         case OPT_SHAKE_DETECTION:
             
             config.shakeDetection = value;
@@ -326,14 +326,14 @@ ShakeDetector::isShakingRel(double dx) {
     
     // Check for a direction reversal
     if (dx * dxsign < 0) {
-    
+
         u64 dt = util::Time::now().asNanoseconds() - lastTurn;
         dxsign = -dxsign;
 
         // A direction reversal is considered part of a shake, if the
         // previous reversal happened a short while ago.
         if (dt < 400 * 1000 * 1000) {
-  
+
             // Eliminate jitter by demanding that the mouse has travelled
             // a long enough distance.
             if (dxsum > 400) {
@@ -436,3 +436,5 @@ Mouse::serviceMouseEvent()
 
 template void Mouse::serviceMouseEvent<SLOT_MSE1>();
 template void Mouse::serviceMouseEvent<SLOT_MSE2>();
+
+}

@@ -12,6 +12,8 @@
 #include "Amiga.h"
 #include "IOUtils.h"
 
+namespace vamiga {
+
 void
 Keyboard::_reset(bool hard)
 {
@@ -44,7 +46,7 @@ Keyboard::getConfigItem(Option option) const
     switch (option) {
             
         case OPT_ACCURATE_KEYBOARD:  return config.accurate;
-        
+
         default:
             fatalError;
     }
@@ -59,7 +61,7 @@ Keyboard::setConfigItem(Option option, i64 value)
             
             config.accurate = value;
             return;
-                        
+
         default:
             fatalError;
     }
@@ -226,7 +228,7 @@ Keyboard::processHandshake()
         case KB_STRM_ON:   state = KB_STRM_OFF; break;
         case KB_STRM_OFF:  state = KB_SEND;     break;
         case KB_SEND:                           break;
-       
+
         default:
             fatalError;
     }
@@ -341,5 +343,7 @@ Keyboard::sendSyncPulse()
         
         // In simple keyboard mode, send a whole byte
         sendKeyCode(0xFF);
-     }
+    }
+}
+
 }

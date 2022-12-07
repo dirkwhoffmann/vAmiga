@@ -20,6 +20,8 @@
 
 using util::Buffer;
 
+namespace vamiga {
+
 /* All media files are organized in the class hierarchy displayed below. Two
  * abstract classes are involed: AmigaFile, DiskFile, and FloppyFile.
  * AmigaFile provides basic functionalities for reading and writing files,
@@ -76,7 +78,7 @@ public:
 public:
 
     virtual ~AmigaFile();
-        
+
     void init(std::istream &stream) throws;
     void init(const string &path, std::istream &stream) throws;
     void init(const u8 *buf, isize len) throws;
@@ -107,18 +109,18 @@ public:
     
     // Returns the type of this file
     virtual FileType type() const { return FILETYPE_UNKNOWN; }
-            
+
     // Returns a textual description of the file size
     virtual string sizeAsString();
     
     // Returns a fingerprint (hash value) for this file
     virtual u64 fnv() const { return data.fnv64(); }
-        
+
     
     //
     // Flashing
     //
-            
+
     // Copies the file contents into a buffer
     virtual void flash(u8 *buf, isize offset, isize len) const;
     virtual void flash(u8 *buf, isize offset) const;
@@ -157,3 +159,5 @@ private:
     virtual void finalizeRead() throws { };
     virtual void finalizeWrite() throws { };
 };
+
+}
