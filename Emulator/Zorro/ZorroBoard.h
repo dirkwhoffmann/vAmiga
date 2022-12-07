@@ -12,7 +12,7 @@
 #include "SubComponent.h"
 #include "ZorroBoardTypes.h"
 
-using namespace vamiga;
+namespace vamiga {
 
 class ZorroBoard : public SubComponent {
     
@@ -41,7 +41,7 @@ public:
     //
     
 protected:
-        
+
     void _dump(Category category, std::ostream& os) const override;
 
 
@@ -76,7 +76,7 @@ private:
     u8 peekACF8(u32 addr) const;
     u8 spypeekACF8(u32 addr) const { return peekACF8(addr); }
     void pokeACF8(u32 addr, u8 value);
-        
+
     // Reads a single byte from configuration space
     u8 getDescriptorByte(isize offset) const;
 
@@ -127,3 +127,5 @@ private:
     // Updates the current memory map
     virtual void updateMemSrcTables() { };
 };
+
+}

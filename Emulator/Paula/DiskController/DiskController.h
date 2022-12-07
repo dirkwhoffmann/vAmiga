@@ -14,7 +14,7 @@
 #include "Reflection.h"
 #include "FloppyDisk.h"
 
-using namespace vamiga;
+namespace vamiga {
 
 class DiskController : public SubComponent
 {
@@ -50,7 +50,7 @@ class DiskController : public SubComponent
     
     // The latest incoming byte (value shows up in DSKBYTER)
     u16 incoming;
-        
+
     /* The drive controller's FIFO buffer. On each DSK_ROTATE event, a byte is
      * read from the selected drive and put into this buffer. Each Disk DMA
      * operation will read two bytes from the buffer and stores them at the
@@ -236,7 +236,7 @@ public:
     // Write protects or unprotects a disk
     void setWriteProtection(isize nr, bool value);
 
-        
+
     //
     // Serving events
     //
@@ -285,7 +285,7 @@ private:
      * is written to the drive head.
      */
     void executeFifo();
-         
+
     
     //
     // Performing DMA
@@ -329,14 +329,16 @@ public:
      * Neither does it uses the disk DMA slots, nor does it interact with
      * the FIFO buffer.
      */
-  
+
     // Performs DMA in standard mode
     void performDMA();
     void performDMARead(FloppyDrive *drive, u32 count);
     void performDMAWrite(FloppyDrive *drive, u32 count);
-     
+
     // Performs DMA in turbo mode
     void performTurboDMA(FloppyDrive *d);
     void performTurboRead(FloppyDrive *drive);
     void performTurboWrite(FloppyDrive *drive);
 };
+
+}

@@ -13,6 +13,8 @@
 #include "FloppyDrive.h"
 #include <cmath>
 
+namespace vamiga {
+
 void
 DiskController::serviceDiskEvent()
 {        
@@ -52,4 +54,6 @@ DiskController::scheduleNextDiskEvent()
     } else {
         agnus.scheduleRel<SLOT_DSK>(DMA_CYCLES(rounded), DSK_ROTATE);
     }
+}
+
 }

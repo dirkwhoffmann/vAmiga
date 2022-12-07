@@ -11,6 +11,8 @@
 #include "DmaDebugger.h"
 #include "Amiga.h"
 
+namespace vamiga {
+
 DmaDebugger::DmaDebugger(Amiga &ref) : SubComponent(ref)
 {
 }
@@ -53,7 +55,7 @@ DmaDebugger::getConfigItem(Option option) const
         case OPT_DMA_DEBUG_ENABLE:  return config.enabled;
         case OPT_DMA_DEBUG_MODE:    return config.displayMode;
         case OPT_DMA_DEBUG_OPACITY: return config.opacity;
-                        
+
         default:
             fatalError;
     }
@@ -68,7 +70,7 @@ DmaDebugger::getConfigItem(Option option, long id) const
             
         case OPT_DMA_DEBUG_CHANNEL: return config.visualize[id];
         case OPT_DMA_DEBUG_COLOR:   return config.debugColor[id];
-                        
+
         default:
             fatalError;
     }
@@ -78,9 +80,9 @@ void
 DmaDebugger::setConfigItem(Option option, i64 value)
 {
     switch (option) {
-                                    
+
         case OPT_DMA_DEBUG_ENABLE:
-                        
+
             config.enabled = value;
             msgQueue.put(value ? MSG_DMA_DEBUG_ON : MSG_DMA_DEBUG_OFF);
             return;
@@ -95,7 +97,7 @@ DmaDebugger::setConfigItem(Option option, i64 value)
             return;
 
         case OPT_DMA_DEBUG_OPACITY:
-                        
+
             config.opacity = (isize)value;
             return;
 
@@ -112,13 +114,13 @@ DmaDebugger::setConfigItem(Option option, long id, i64 value)
     DmaChannel channel = (DmaChannel)id;
     
     switch (option) {
-                                    
+
         case OPT_DMA_DEBUG_CHANNEL:
             
             config.visualize[channel] = value;
 
             switch(channel) {
-                                        
+
                 case DMA_CHANNEL_CPU:
                     
                     visualize[BUS_CPU] = value;
@@ -151,7 +153,7 @@ DmaDebugger::setConfigItem(Option option, long id, i64 value)
 
                     visualize[BUS_BLITTER] = value;
                     return;
-        
+
                 case DMA_CHANNEL_BITPLANE:
 
                     visualize[BUS_BPL1] = value;
@@ -173,7 +175,7 @@ DmaDebugger::setConfigItem(Option option, long id, i64 value)
                     visualize[BUS_SPRITE6] = value;
                     visualize[BUS_SPRITE7] = value;
                     return;
-                                        
+
                 default:
                     return;
             }
@@ -183,7 +185,7 @@ DmaDebugger::setConfigItem(Option option, long id, i64 value)
             config.debugColor[channel] = (u32)value;
 
             switch(channel) {
-                                        
+
                 case DMA_CHANNEL_CPU:
                     
                     setColor(BUS_CPU, (u32)value);
@@ -216,7 +218,7 @@ DmaDebugger::setConfigItem(Option option, long id, i64 value)
 
                     setColor(BUS_BLITTER, (u32)value);
                     return;
-        
+
                 case DMA_CHANNEL_BITPLANE:
 
                     setColor(BUS_BPL1, (u32)value);
@@ -238,7 +240,7 @@ DmaDebugger::setConfigItem(Option option, long id, i64 value)
                     setColor(BUS_SPRITE6, (u32)value);
                     setColor(BUS_SPRITE7, (u32)value);
                     return;
-                                        
+
                 default:
                     return;
             }
@@ -291,7 +293,7 @@ void
 DmaDebugger::setColor(BusOwner owner, u32 rgba)
 {
     assert_enum(BusOwner, owner);
-                          
+
     // Compute the color variants used for drawing
     RgbColor color = RgbColor(rgba);
     debugColor[owner][0] = color.shade(0.3);
@@ -422,5 +424,7 @@ DmaDebugger::vSyncHandler()
 void
 DmaDebugger::eofHandler()
 {
+
+}
 
 }

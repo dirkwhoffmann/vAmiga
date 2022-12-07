@@ -15,7 +15,7 @@
 #include "Colors.h"
 #include "Constants.h"
 
-using namespace vamiga;
+namespace vamiga {
 
 class DmaDebugger : public SubComponent {
 
@@ -131,3 +131,5 @@ private:
     // Visualizes DMA usage for a certain range of DMA cycles
     void computeOverlay(Texel *ptr, isize first, isize last, BusOwner *own, u16 *val);
 };
+
+}

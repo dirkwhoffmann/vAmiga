@@ -23,11 +23,11 @@ class CIAB;
 class ControlPort;
 class Copper;
 class Denise;
-
-}
 class DiagBoard;
 class DiskController;
 class DmaDebugger;
+
+}
 class FloppyDrive;
 class HardDrive;
 class HdController;
@@ -47,7 +47,9 @@ class RshServer;
 class RTC;
 class SerialPort;
 class UART;
+namespace vamiga {
 class ZorroManager;
+}
 
 using namespace vamiga;
 

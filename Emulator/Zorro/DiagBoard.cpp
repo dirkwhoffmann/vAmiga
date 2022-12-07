@@ -14,6 +14,8 @@
 #include "Amiga.h"
 #include <algorithm>
 
+namespace vamiga {
+
 DiagBoard::DiagBoard(Amiga& ref) : ZorroBoard(ref)
 {
 
@@ -23,7 +25,7 @@ void
 DiagBoard::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
-        
+
     ZorroBoard::_dump(category, os);
 }
 
@@ -67,7 +69,7 @@ DiagBoard::getConfigItem(Option option) const
     switch (option) {
             
         case OPT_DIAG_BOARD: return config.enabled;
-        
+
         default:
             fatalError;
     }
@@ -79,7 +81,7 @@ DiagBoard::setConfigItem(Option option, i64 value)
     switch (option) {
             
         case OPT_DIAG_BOARD:
-                        
+
             if (!isPoweredOff()) {
                 throw VAError(ERROR_OPT_LOCKED);
             }
@@ -249,7 +251,7 @@ DiagBoard::processAddTask(u32 ptr1)
         tasks.push_back(ptr1);
         debug(DBD_DEBUG, "Added %s '%s'\n",
               type == os::NT_TASK ? "task" : "process", name.c_str());
-    
+
     } catch (...) {
 
         warn("processAddTask failed\n");
@@ -278,7 +280,7 @@ DiagBoard::processRemTask(u32 ptr1)
             warn("RemTask: '%s' (%x) not found\n", name.c_str(), ptr1);
             return;
         }
-                        
+
         // Remove task
         tasks.erase(it);
         debug(DBD_DEBUG, "Removed '%s'\n", name.c_str());
@@ -295,7 +297,7 @@ DiagBoard::processLoadSeg(u32 ptr1, u32 ptr2, bool bstr)
     try {
         
         debug(DBD_DEBUG, "processLoadSeg(%x,%x)\n", ptr1, ptr2);
-                
+
         // Read task name
         string name;
         if (bstr) {
@@ -315,7 +317,7 @@ DiagBoard::processLoadSeg(u32 ptr1, u32 ptr2, bool bstr)
             cpu.debugger.breakpoints.setAt(addr);
             debug(DBD_DEBUG, "Setting breakpoint at %x\n", addr);
         }
-            
+
     } catch (...) {
         
         warn("processLoadSeg failed\n");
@@ -334,4 +336,6 @@ DiagBoard::catchTask(const string &name)
             targets.push_back(name);
         }
     }
+}
+
 }

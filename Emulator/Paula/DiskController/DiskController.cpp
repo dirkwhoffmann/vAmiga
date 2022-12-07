@@ -19,6 +19,8 @@
 #include "Thread.h"
 #include <algorithm>
 
+namespace vamiga {
+
 void
 DiskController::_reset(bool hard)
 {
@@ -26,7 +28,7 @@ DiskController::_reset(bool hard)
     
     prb = 0xFF;
     selected = -1;
-    dsksync = 0x4489;    
+    dsksync = 0x4489;
 }
 
 void
@@ -180,7 +182,7 @@ DiskController::_dump(Category category, std::ostream& os) const
         os << tab("autoDskSync");
         os << bol(config.autoDskSync) << std::endl;
     }
-            
+
     if (category == Category::State) {
         
         os << tab("selected");
@@ -360,7 +362,7 @@ DiskController::executeFifo()
             
         case DRIVE_DMA_WRITE:
         case DRIVE_DMA_FLUSH:
-                        
+
             if (fifoIsEmpty()) {
                 
                 // Switch off DMA if the last byte has been flushed out
@@ -607,4 +609,6 @@ DiskController::performTurboWrite(FloppyDrive *drive)
     debug(DSK_CHECKSUM,
           "Turbo write %s: checkcnt = %llu check1 = %x check2 = %x\n",
           drive->getDescription(), checkcnt, check1, check2);
+}
+
 }

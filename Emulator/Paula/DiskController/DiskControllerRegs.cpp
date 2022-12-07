@@ -15,6 +15,8 @@
 #include "MsgQueue.h"
 #include "Paula.h"
 
+namespace vamiga {
+
 u16
 DiskController::peekDSKDATR() const
 {
@@ -91,7 +93,7 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
             }
         }
     }
-        
+
     // If turbo drives are emulated, perform DMA immediately
     if (turboMode()) performTurboDMA(drive);
 }
@@ -127,7 +129,7 @@ DiskController::computeDSKBYTR() const
     
     // DSKBYT and DATA
     u16 result = incoming;
-        
+
     // DMAON
     if (agnus.dskdma() && state != DRIVE_DMA_OFF) SET_BIT(result, 14);
 
@@ -191,7 +193,7 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
             selected = i;
         }
     }
-        
+
     if (oldSelected != selected) {
         
         if (selected == -1) {
@@ -203,4 +205,6 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
         // Inform the GUI
         msgQueue.put(MSG_DRIVE_SELECT, selected);
     }
+}
+
 }

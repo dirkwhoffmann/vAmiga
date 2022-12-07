@@ -12,6 +12,8 @@
 #include "IOUtils.h"
 #include "Memory.h"
 
+namespace vamiga {
+
 void
 ZorroBoard::_dump(Category category, std::ostream& os) const
 {
@@ -58,7 +60,7 @@ u8
 ZorroBoard::getDescriptorByte(isize offset) const
 {
     assert((usize)offset <= 15);
-        
+
     auto sizeBits = [&]() {
         
         switch (pages()) {
@@ -102,14 +104,14 @@ ZorroBoard::peekACF8(u32 addr) const
 {
     u8 result = 0xFF;
     u8 offset = addr & 0xFF;
-            
+
     if (IS_EVEN(offset) && offset < 0x40) {
 
         result = getDescriptorByte(offset >> 2);
 
         result = (offset & 2) ? LO_NIBBLE(result) : HI_NIBBLE(result);
         result = (offset < 4) ? (u8)(result << 4) : (u8)~(result << 4);
-    
+
     } else if (offset == 0x40 || offset == 0x42) {
         
         // Interrupt pending register
@@ -126,7 +128,7 @@ ZorroBoard::pokeACF8(u32 addr, u8 value)
     trace(ACF_DEBUG, "pokeACF8(%06x,%02x)\n", addr, value);
     
     switch (addr & 0xFFFF) {
-                        
+
         case 0x48: // Base address (A23 - A20, 0x--X-0000)
             
             baseAddr |= (value & 0xF0) << 16;
@@ -165,4 +167,6 @@ void
 ZorroBoard::shutup()
 {
     state = STATE_SHUTUP;
+}
+
 }

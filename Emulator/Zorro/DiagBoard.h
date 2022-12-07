@@ -13,14 +13,16 @@
 #include "ZorroBoard.h"
 #include "Memory.h"
 
+namespace vamiga {
+
 class DiagBoard : public ZorroBoard {
-        
+
     // Current configuration
     DiagBoardConfig config = {};
     
     // Rom code
     Buffer<u8> rom;
-        
+
     // Transmitted pointers
     u32 pointer1 = 0;
     u32 pointer2 = 0;
@@ -118,16 +120,16 @@ private:
     //
     // Accessing the board
     //
-      
+
 public:
-        
+
     u8 peek8(u32 addr) override;
     u16 peek16(u32 addr) override;
     u8 spypeek8(u32 addr) const override;
     u16 spypeek16(u32 addr) const override;
     void poke8(u32 addr, u8 value) override;
     void poke16(u32 addr, u16 value) override;
-        
+
 private:
     
     void processInit(u32 ptr1);
@@ -145,3 +147,5 @@ public:
     // Pauses emulation when the specified task launches
     void catchTask(const string &name);
 };
+
+}

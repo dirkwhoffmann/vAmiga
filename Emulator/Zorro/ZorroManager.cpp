@@ -12,6 +12,8 @@
 #include "Amiga.h"
 #include "Memory.h"
 
+namespace vamiga {
+
 ZorroManager::ZorroManager(Amiga& ref) : SubComponent(ref)
 {
 
@@ -125,4 +127,6 @@ ZorroManager::mappedInDevice(u32 addr) const
         if (slots[i]->mappedIn(addr)) return slots[i];
     }
     fatalError;
+}
+
 }
