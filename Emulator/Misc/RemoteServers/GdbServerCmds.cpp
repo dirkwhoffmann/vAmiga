@@ -17,6 +17,8 @@
 #include "MsgQueue.h"
 #include "RetroShell.h"
 
+namespace vamiga {
+
 template <> void
 GdbServer::process <' ', GdbCmd::CtrlC> (string arg)
 {
@@ -46,7 +48,7 @@ template <> void
 GdbServer::process <'q', GdbCmd::Offset> (string arg)
 {
     string result;
-            
+
     result += "Text=" + util::hexstr <8> (codeSeg()) + ";";
     result += "Data=" + util::hexstr <8> (dataSeg()) + ";";
     result += "Bss="  + util::hexstr <8> (bssSeg());
@@ -143,7 +145,7 @@ GdbServer::process <'v'> (string cmd)
         return;
     }
     if (command == "Cont?") {
-    
+
         process <'v', GdbCmd::ContQ> ("");
         return;
     }
@@ -166,7 +168,7 @@ template <> void
 GdbServer::process <'q'> (string cmd)
 {
     auto command = cmd.substr(0, cmd.find(":"));
-        
+
     if (command == "Supported") {
         
         process <'q', GdbCmd::Supported> ("");
@@ -225,12 +227,12 @@ template <> void
 GdbServer::process <'Q'> (string cmd)
 {
     auto tokens = util::split(cmd, ':');
-               
-     if (tokens[0] == "StartNoAckMode") {
 
-         process <'Q', GdbCmd::StartNoAckMode> ("");
-         return;
-     }
+    if (tokens[0] == "StartNoAckMode") {
+
+        process <'Q', GdbCmd::StartNoAckMode> ("");
+        return;
+    }
     
     throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "Q");
 }
@@ -274,16 +276,16 @@ GdbServer::process <'?'> (string cmd)
     reply("T051:" + pc + ";");
 
     /*
-    if (amiga.isRunning()) {
+     if (amiga.isRunning()) {
 
-        reply("OK");
+     reply("OK");
 
-    } else {
+     } else {
 
-        auto pc = util::hexstr <8> (cpu.getPC0());
-        reply("T051:" + pc + ";");
-    }
-    */
+     auto pc = util::hexstr <8> (cpu.getPC0());
+     reply("T051:" + pc + ";");
+     }
+     */
 }
 
 template <> void
@@ -319,7 +321,7 @@ GdbServer::process <'m'> (string cmd)
         reply(result);
 
     } else {
-    
+
         throw VAError(ERROR_GDB_UNSUPPORTED_CMD, "m");
     }
 }
@@ -365,9 +367,9 @@ GdbServer::process <'Z'> (string cmd)
 
         auto type = std::stol(tokens[0]);
         auto addr = std::stol(tokens[1], 0, 16);
-                
+
         if (type == 0) {
-         
+
             cpu.debugger.breakpoints.setAt((u32)addr);
         }
         
@@ -388,14 +390,14 @@ GdbServer::process <'z'> (string cmd)
 
         auto type = std::stol(tokens[0]);
         auto addr = std::stol(tokens[1], 0, 16);
-                
+
         if (type == 0) {
-         
+
             cpu.debugger.breakpoints.removeAt((u32)addr);
         }
         
         reply("OK");
-    
+
     } else {
 
         throw VAError(ERROR_GDB_INVALID_FORMAT, "z");
@@ -412,7 +414,7 @@ GdbServer::process(string package)
 
     // Strip off the acknowledgment symbol if present
     if (package[0] == '+') package.erase(0,1);
-        
+
     if (auto len = package.length()) {
         
         // Check for Ctrl+C
@@ -423,7 +425,7 @@ GdbServer::process(string package)
         
         // Check for '$x[...]#xx'
         if (package[0] == '$' && len >= 5 && package[len - 3] == '#') {
-                                    
+
             auto cmd = package[1];
             auto arg = package.substr(2, len - 5);
             auto chk = package.substr(len - 2, 2);
@@ -452,7 +454,7 @@ void
 GdbServer::process(char cmd, string package)
 {
     switch (cmd) {
- 
+
         case 'v' : process <'v'> (package); break;
         case 'q' : process <'q'> (package); break;
         case 'Q' : process <'Q'> (package); break;
@@ -476,4 +478,6 @@ GdbServer::process(char cmd, string package)
         default:
             throw VAError(ERROR_GDB_UNRECOGNIZED_CMD, string(1, cmd));
     }
+}
+
 }

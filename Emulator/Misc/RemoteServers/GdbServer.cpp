@@ -18,6 +18,8 @@
 #include "OSDebugger.h"
 #include "RetroShell.h"
 
+namespace vamiga {
+
 GdbServer::GdbServer(Amiga& ref) : RemoteServer(ref)
 {
 
@@ -27,7 +29,7 @@ void
 GdbServer::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
-     
+
     RemoteServer::_dump(category, os);
 
     if (category == Category::Segments) {
@@ -132,7 +134,7 @@ GdbServer::didConnect()
 {
     ackMode = true;
 }
- 
+
 void
 GdbServer::reply(const string &payload)
 {
@@ -156,7 +158,7 @@ GdbServer::attach(const string &name)
     readSegList();
     
     if (segList.empty()) {
-    
+
         retroShell << "Waiting for process '" << processName << "' to launch.\n";
         return false;
     }
@@ -193,7 +195,7 @@ GdbServer::readSegList()
 u32
 GdbServer::codeSeg() const
 {
-   return segList.size() > 0 ? segList[0].first : 0;
+    return segList.size() > 0 ? segList[0].first : 0;
 }
 
 u32
@@ -254,4 +256,6 @@ GdbServer::breakpointReached()
 {
     debug(GDB_DEBUG, "breakpointReached()\n");
     process <'?'> ("");
+}
+
 }

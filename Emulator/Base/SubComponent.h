@@ -29,9 +29,9 @@ class DmaDebugger;
 class FloppyDrive;
 class HardDrive;
 class HdController;
+class GdbServer;
 
 }
-class GdbServer;
 class Joystick;
 class Keyboard;
 class Memory;

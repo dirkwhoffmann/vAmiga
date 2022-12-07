@@ -11,6 +11,8 @@
 #include "Socket.h"
 #include "MemUtils.h"
 
+namespace vamiga {
+
 Socket::Socket() : socket(INVALID_SOCKET)
 {
     debug(SCK_DEBUG, "Socket constructor\n");
@@ -35,7 +37,7 @@ Socket& Socket::operator=(Socket&& other)
 
         close();
         socket = other.socket;
-        other.socket = INVALID_SOCKET;        
+        other.socket = INVALID_SOCKET;
     }
     return *this;
 }
@@ -187,4 +189,6 @@ Socket::close()
 #endif
         socket = INVALID_SOCKET;
     }
+}
+
 }
