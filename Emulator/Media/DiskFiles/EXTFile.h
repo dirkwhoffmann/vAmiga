@@ -11,6 +11,8 @@
 
 #include "ADFFile.h"
 
+namespace vamiga {
+
 /* This class represents a file in extended ADF format. Layout:
  *
  *   1. Header section:
@@ -37,7 +39,7 @@
  */
 
 class EXTFile : public FloppyFile {
-        
+
     // Accepted header signatures
     static const std::vector<string> extAdfHeaders;
     
@@ -45,11 +47,11 @@ class EXTFile : public FloppyFile {
     ADFFile adf;
     
 public:
-            
+
     static bool isCompatible(const string &path);
     static bool isCompatible(std::istream &stream);
 
- 
+
     //
     // Initializing
     //
@@ -62,7 +64,7 @@ public:
     EXTFile(const u8 *buf, isize len) throws { init(buf, len); }
     EXTFile(class FloppyDisk &disk) throws { init(disk); }
     EXTFile(class FloppyDrive &drive) throws { init(drive); }
- 
+
     void init(FloppyDisk &disk) throws;
     void init(FloppyDrive &drive) throws;
 
@@ -135,3 +137,5 @@ public:
     // Returns a pointer to the first data byte of a certain track
     u8 *trackData(isize nr) const;
 };
+
+}

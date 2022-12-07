@@ -11,6 +11,8 @@
 #include "FSDescriptors.h"
 #include "IOUtils.h"
 
+namespace vamiga {
+
 FileSystemDescriptor::FileSystemDescriptor(isize numBlocks, FSVolumeType dos)
 {
     init(numBlocks, dos);
@@ -162,4 +164,6 @@ GeometryDescriptor::GeometryDescriptor(Diameter type, Density density)
     }
     
     fatalError;
+}
+
 }

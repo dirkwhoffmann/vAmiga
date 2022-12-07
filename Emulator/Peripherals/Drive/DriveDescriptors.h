@@ -14,8 +14,10 @@
 #include "FloppyDiskTypes.h"
 #include <vector>
 
+namespace vamiga {
+
 struct GeometryDescriptor {
-  
+
     // Constants
     static constexpr isize cMin = HDR_C_MIN;
     static constexpr isize cMax = HDR_C_MAX;
@@ -59,7 +61,7 @@ struct GeometryDescriptor {
     bool operator == (const GeometryDescriptor &rhs) const;
     bool operator != (const GeometryDescriptor &rhs) const;
     bool operator < (const GeometryDescriptor &rhs) const;
-        
+
     // Computed values
     isize numTracks() const { return cylinders * heads; }
     isize numBlocks() const { return cylinders * heads * sectors; }
@@ -119,7 +121,7 @@ struct PartitionDescriptor {
     // Initializers
     PartitionDescriptor() { };
     PartitionDescriptor(const GeometryDescriptor &geo);
-        
+
     // Prints debug information
     void dump() const;
     void dump(std::ostream& os) const;
@@ -150,7 +152,7 @@ struct DriverDescriptor {
     
     // Initializers
     DriverDescriptor() { };
-        
+
     // Prints debug information
     void dump() const;
     void dump(std::ostream& os) const;
@@ -158,3 +160,5 @@ struct DriverDescriptor {
     // Throws an exception if inconsistent or unsupported values are present
     void checkCompatibility() const;
 };
+
+}

@@ -12,6 +12,8 @@
 #include "FSTypes.h"
 #include "AmigaFile.h"
 
+namespace vamiga {
+
 class DiskFile : public AmigaFile {
 
     //
@@ -19,7 +21,7 @@ class DiskFile : public AmigaFile {
     //
     
 public:
-       
+
     virtual isize numCyls() const = 0;
     virtual isize numHeads() const = 0;
     virtual isize numSectors() const = 0;
@@ -64,3 +66,5 @@ public:
     string asciidump(isize t, isize s, isize offset, isize len) const;
     string asciidump(isize c, isize h, isize s, isize offset, isize len) const;
 };
+
+}

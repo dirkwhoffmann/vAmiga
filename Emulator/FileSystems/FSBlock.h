@@ -19,20 +19,22 @@
 
 using util::Buffer;
 
+namespace vamiga {
+
 struct FSBlock : AmigaObject {
-        
+
     // The device this block belongs to
     class FileSystem &device;
 
     // The type of this block
     FSBlockType type = FS_UNKNOWN_BLOCK;
-        
+
     // The sector number of this block
     Block nr;
     
     // Outcome of the latest integrity check (0 = OK, n = n-th corrupted block)
     isize corrupted = 0;
-        
+
     // Block data
     Buffer<u8> data;
 
@@ -67,7 +69,7 @@ public:
 
     // Returns the number of data bytes stored in this block
     isize dsize() const;
-        
+
     // Returns the role of a certain byte in this block
     FSItemType itemType(isize byte) const;
     
@@ -85,7 +87,7 @@ public:
 
     // Checks the integrity of a certain byte in this block
     ErrorCode check(isize pos, u8 *expected, bool strict) const;
-        
+
     
     //
     // Reading and writing block data
@@ -146,13 +148,13 @@ public:
     
     // Exports this block to the host file system
     ErrorCode exportBlock(const fs::path &path);
-        
+
 private:
     
     ErrorCode exportUserDirBlock(const fs::path &path);
     ErrorCode exportFileHeaderBlock(const fs::path &path);
 
-                
+
     //
     // Geting and setting names and comments
     //
@@ -231,7 +233,7 @@ public:
     void setNextDataBlockRef(Block ref);
     FSBlock *getNextDataBlock();
 
-        
+
     //
     // Working with hash tables
     //
@@ -286,7 +288,7 @@ public:
     isize getNumDataBlockRefs() const;
     void setNumDataBlockRefs(u32 val);
     void incNumDataBlockRefs();
-        
+
     // Adds a data block reference to this block
     bool addDataBlockRef(Block ref);
     bool addDataBlockRef(u32 first, u32 ref);
@@ -326,13 +328,13 @@ if (value != (exp)) { *expected = (exp); return ERROR_FS_EXPECTED_VALUE; } }
 
 #define EXPECT_LONGWORD(exp) { \
 if ((byte % 4) == 0 && BYTE3(value) != BYTE3((u32)exp)) \
-    { *expected = (BYTE3((u32)exp)); return ERROR_FS_EXPECTED_VALUE; } \
+{ *expected = (BYTE3((u32)exp)); return ERROR_FS_EXPECTED_VALUE; } \
 if ((byte % 4) == 1 && BYTE2(value) != BYTE2((u32)exp)) \
-    { *expected = (BYTE2((u32)exp)); return ERROR_FS_EXPECTED_VALUE; } \
+{ *expected = (BYTE2((u32)exp)); return ERROR_FS_EXPECTED_VALUE; } \
 if ((byte % 4) == 2 && BYTE1(value) != BYTE1((u32)exp)) \
-    { *expected = (BYTE1((u32)exp)); return ERROR_FS_EXPECTED_VALUE; } \
+{ *expected = (BYTE1((u32)exp)); return ERROR_FS_EXPECTED_VALUE; } \
 if ((byte % 4) == 3 && BYTE0(value) != BYTE0((u32)exp)) \
-    { *expected = (BYTE0((u32)exp)); return ERROR_FS_EXPECTED_VALUE; } }
+{ *expected = (BYTE0((u32)exp)); return ERROR_FS_EXPECTED_VALUE; } }
 
 #define EXPECT_CHECKSUM EXPECT_LONGWORD(checksum())
 
@@ -390,3 +392,5 @@ if (value == 0) return ERROR_FS_EXPECTED_DATABLOCK_NR; }
 
 #define EXPECT_HASHTABLE_SIZE { \
 if (value != 72) return ERROR_FS_INVALID_HASHTABLE_SIZE; }
+
+}

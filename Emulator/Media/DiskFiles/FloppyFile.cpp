@@ -16,6 +16,8 @@
 #include "Folder.h"
 #include "StringUtils.h"
 
+namespace vamiga {
+
 FloppyFile *
 FloppyFile::make(const string &path)
 {
@@ -34,4 +36,6 @@ FloppyFile::make(const string &path)
             break;
     }
     throw VAError(ERROR_FILE_TYPE_MISMATCH);
+}
+
 }

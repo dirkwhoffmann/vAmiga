@@ -18,6 +18,8 @@
 #include <stack>
 #include <set>
 
+namespace vamiga {
+
 class ADFFile;
 class HDFFile;
 class FloppyDrive;
@@ -38,13 +40,13 @@ class FileSystem : public AmigaObject {
     friend struct FSPartition;
     
 protected:
-                        
+
     // File system version
     FSVolumeType dos = FS_NODOS;
     
     // Block storage
     std::vector<BlockPtr> blocks;
-            
+
     // Size of a single block in bytes
     isize bsize = 512;
 
@@ -57,7 +59,7 @@ protected:
     // Location of the bitmap blocks and extended bitmap blocks
     std::vector<Block> bmBlocks;
     std::vector<Block> bmExtBlocks;
-        
+
     // The currently selected directory (reference to FSDirBlock)
     Block cd = 0;
     
@@ -101,7 +103,7 @@ protected:
     //
 
 public:
-                
+
     // Returns capacity information
     isize numBlocks() const { return isize(blocks.size()); }
     isize numBytes() const { return numBlocks() * bsize; }
@@ -128,7 +130,7 @@ public:
     string getBootBlockName() const;
     BootBlockType bootBlockType() const;
     bool hasVirus() const { return bootBlockType() == BB_VIRUS; }
-        
+
     
     //
     // Accessing blocks
@@ -278,13 +280,13 @@ protected:
     FSBlock *lastHashBlockInChain(Block start);
     FSBlock *lastHashBlockInChain(FSBlock *block);
     
- 
+
     //
     // Importing and exporting
     //
     
 public:
-        
+
     // Predicts the type of a block by analyzing its number and data
     FSBlockType predictBlockType(Block nr, const u8 *buffer);
 
@@ -305,3 +307,5 @@ public:
     // Searches the block list for a corrupted block
     isize nextCorruptedBlock(isize after);
 };
+
+}

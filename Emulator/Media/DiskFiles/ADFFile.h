@@ -11,6 +11,8 @@
 
 #include "FloppyFile.h"
 
+namespace vamiga {
+
 class MutableFileSystem;
 
 class ADFFile : public FloppyFile {
@@ -92,7 +94,7 @@ public:
     
 public:
     
-    FSVolumeType getDos() const override; 
+    FSVolumeType getDos() const override;
     void setDos(FSVolumeType dos) override;
     Diameter getDiameter() const override;
     Density getDensity() const override;
@@ -120,12 +122,12 @@ public:
     
     // Returns a file system descriptor for this volume
     struct FileSystemDescriptor getFileSystemDescriptor() const;
- 
+
     
     //
     // Formatting
     //
- 
+
 public:
     
     void formatDisk(FSVolumeType fs, BootBlockId id, string name) throws;
@@ -134,8 +136,10 @@ public:
     //
     // Debugging
     //
- 
+
 public:
     
     void dumpSector(Sector s) const;
 };
+
+}

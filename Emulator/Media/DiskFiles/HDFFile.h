@@ -13,6 +13,8 @@
 #include "MutableFileSystem.h"
 #include "DriveTypes.h"
 
+namespace vamiga {
+
 class FloppyDisk;
 
 class HDFFile : public DiskFile {
@@ -27,7 +29,7 @@ public:
     
     // Included device drivers
     std::vector <DriverDescriptor> drivers;
-                
+
     static bool isCompatible(const string &path);
     static bool isCompatible(std::istream &stream);
     static bool isOversized(isize size) { return size > MB(504); }
@@ -84,11 +86,11 @@ public:
     std::vector<DriverDescriptor> getDriverDescriptors() const;
     FileSystemDescriptor getFileSystemDescriptor(isize part = 0) const;
 
-        
+
     //
     // Querying product information
     //
- 
+
 public:
     
     std::optional<string> getDiskVendor() const { return rdbString(160, 8); }
@@ -97,8 +99,8 @@ public:
     std::optional<string> getControllerVendor() const { return rdbString(188, 8); }
     std::optional<string> getControllerProduct() const { return rdbString(196, 16); }
     std::optional<string> getControllerRevision() const { return rdbString(212, 4); }
-     
-            
+
+
     //
     // Querying volume information
     //
@@ -124,7 +126,7 @@ public:
     
     // Predicts the number of blocks of this hard drive
     isize predictNumBlocks() const;
-        
+
     
     //
     // Scanning raw disk data
@@ -168,3 +170,5 @@ public:
     
     isize writePartitionToFile(const string &path, isize nr);
 };
+
+}

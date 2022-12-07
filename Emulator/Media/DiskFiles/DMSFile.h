@@ -11,6 +11,8 @@
 
 #include "ADFFile.h"
 
+namespace vamiga {
+
 class DMSFile : public FloppyFile {
 
     ADFFile adf;
@@ -34,7 +36,7 @@ public:
     DMSFile(const u8 *buf, isize len) throws { init(buf, len); }
     
     const char *getDescription() const override { return "DMS"; }
-        
+
     
     //
     // Methods from AmigaFile
@@ -70,3 +72,5 @@ public:
     void readSector(u8 *target, isize t, isize s) const override { return adf.readSector(target, t, s); }
     void encodeDisk(class FloppyDisk &disk) const throws override { return adf.encodeDisk(disk); }
 };
+
+}

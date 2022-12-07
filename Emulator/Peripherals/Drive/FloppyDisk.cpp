@@ -11,6 +11,8 @@
 #include "FloppyDisk.h"
 #include "FloppyFile.h"
 
+namespace vamiga {
+
 void
 FloppyDisk::init(Diameter dia, Density den)
 {
@@ -317,4 +319,6 @@ string
 FloppyDisk::readTrackBits(Cylinder c, Head h) const
 {
     return readTrackBits(2 * c + h);
+}
+
 }

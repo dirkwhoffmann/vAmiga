@@ -11,10 +11,12 @@
 
 #include "FloppyFile.h"
 
+namespace vamiga {
+
 class IMGFile : public FloppyFile {
     
 public:
-        
+
     static constexpr isize IMGSIZE_35_DD = 737280;  // 720 KB PC disk
     
     static bool isCompatible(const string &path);
@@ -53,7 +55,7 @@ public:
     //
     // Methods from AmigaFile
     //
-        
+
     bool isCompatiblePath(const string &path) const override { return isCompatible(path); }
     bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
     FileType type() const override { return FILETYPE_IMG; }
@@ -71,7 +73,7 @@ public:
     //
     // Methods from FloppyFile
     //
-      
+
     FSVolumeType getDos() const override { return FS_NODOS; }
     void setDos(FSVolumeType dos) override { };
     Diameter getDiameter() const override { return INCH_35; }
@@ -87,3 +89,5 @@ private:
     void decodeTrack(class FloppyDisk &disk, Track t) throws;
     void decodeSector(u8 *dst, u8 *src);
 };
+
+}

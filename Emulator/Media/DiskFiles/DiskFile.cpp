@@ -10,6 +10,8 @@
 #include "config.h"
 #include "DiskFile.h"
 
+namespace vamiga {
+
 u8
 DiskFile::readByte(isize t, isize s, isize offset) const
 {
@@ -106,4 +108,6 @@ string
 DiskFile::asciidump(isize c, isize h, isize s, isize offset, isize len) const
 {
     return asciidump(c * numHeads() + h, s, offset, len);
+}
+
 }

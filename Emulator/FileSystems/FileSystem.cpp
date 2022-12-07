@@ -17,6 +17,8 @@
 #include <stack>
 #include <algorithm>
 
+namespace vamiga {
+
 FileSystem::~FileSystem()
 {
     for (auto &b : blocks) delete b;
@@ -27,7 +29,7 @@ FileSystem::init(const ADFFile &adf)
 {
     // Get a file system descriptor
     auto descriptor = adf.getFileSystemDescriptor();
-            
+
     // Import the file system
     init(descriptor, adf.data.ptr, descriptor.numBlocks * 512);
 }
@@ -75,7 +77,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     
     // Only proceed if the volume is formatted
     if (layout.dos == FS_NODOS) throw VAError(ERROR_FS_UNFORMATTED);
-        
+
     // Copy layout parameters
     dos         = layout.dos;
     numReserved = layout.numReserved;
@@ -88,7 +90,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     for (isize i = 0; i < layout.numBlocks; i++) {
         
         const u8 *data = buf + i * bsize;
-                
+
         // Determine the type of the new block
         FSBlockType type = predictBlockType((Block)i, data);
         
@@ -367,7 +369,7 @@ FileSystem::isFree(Block nr) const
     // Locate the allocation bit in the bitmap block
     isize byte, bit;
     FSBlock *bm = locateAllocationBit(nr, &byte, &bit);
-        
+
     // Read the bit
     return bm ? GET_BIT(bm->data[byte], bit) : false;
 }
@@ -441,14 +443,14 @@ FileSystem::changeDir(const string &name)
     FSBlock *cdb = currentDirBlock();
 
     if (name == "/") {
-                
+
         // Move to top level
         cd = rootBlock;
         return currentDirBlock();
     }
 
     if (name == "..") {
-                
+
         // Move one level up
         cd = cdb->getParentDirRef();
         return currentDirBlock();
@@ -479,7 +481,7 @@ FileSystem::getPath(FSBlock *block)
 {
     string result = "";
     std::set<Block> visited;
- 
+
     while(block) {
 
         // Break the loop if this block has an invalid type
@@ -490,7 +492,7 @@ FileSystem::getPath(FSBlock *block)
         
         // Add the block to the set of visited blocks
         visited.insert(block->nr);
-                
+
         // Expand the path
         string name = block->getName().c_str();
         result = (result == "") ? name : name + "/" + result;
@@ -555,7 +557,7 @@ FileSystem::collect(Block nr, std::vector<Block> &result, bool recursive)
 
 void
 FileSystem::collectHashedRefs(Block nr,
-                            std::stack<Block> &result, std::set<Block> &visited)
+                              std::stack<Block> &result, std::set<Block> &visited)
 {
     if (FSBlock *b = blockPtr(nr)) {
         
@@ -581,7 +583,7 @@ FileSystem::collectRefsWithSameHashValue(Block nr,
         visited.insert(b->nr);
         refs.push(b->nr);
     }
-  
+
     // Push the collected elements onto the result stack
     while (refs.size() > 0) { result.push(refs.top()); refs.pop(); }
 }
@@ -811,7 +813,7 @@ FileSystem::getDisplayType(isize column)
 
     // Cache values when the type of the first column is requested
     if (column == 0) {
-    
+
         // Start from scratch
         for (isize i = 0; i < width; i++) cache[i] = FS_UNKNOWN_BLOCK;
         
@@ -830,7 +832,7 @@ FileSystem::getDisplayType(isize column)
         pri[FS_DATA_BLOCK_FFS]     = 2;
         
         for (isize i = 0; i < numBlocks(); i++) {
-                        
+
             auto pos = i * (width - 1) / (numBlocks() - 1);
             if (pri[cache[pos]] < pri[blocks[i]->type]) {
                 cache[pos] = blocks[i]->type;
@@ -860,10 +862,10 @@ FileSystem::diagnoseImageSlice(isize column)
 
     // Cache values when the type of the first column is requested
     if (column == 0) {
-    
+
         // Start from scratch
         for (isize i = 0; i < width; i++) cache[i] = -1;
-                
+
         // Compute values
         for (isize i = 0; i < numBlocks(); i++) {
 
@@ -922,4 +924,6 @@ FileSystem::nextCorruptedBlock(isize after)
     } while (result != after);
     
     return -1;
+}
+
 }

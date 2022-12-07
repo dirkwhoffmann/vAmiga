@@ -16,6 +16,8 @@
 #include "FSBlock.h"
 #include "DriveDescriptors.h"
 
+namespace vamiga {
+
 /* To create a FileSystem, several layout parameters need to to be provided.
  * This is done by passing a FileSystemDescriptor which contains the necessary
  * information.
@@ -35,10 +37,10 @@ struct FileSystemDescriptor {
     
     // Number of reserved blocks
     isize numReserved = 0;
-        
+
     // File system type
     FSVolumeType dos = FS_NODOS;
-            
+
     // Location of the root block
     Block rootBlock = 0;
     
@@ -55,7 +57,7 @@ struct FileSystemDescriptor {
     void init(isize numBlocks, FSVolumeType dos);
     void init(const GeometryDescriptor &geometry, FSVolumeType dos);
     void init(Diameter type, Density density, FSVolumeType dos);
-        
+
     // Computed values
     isize numBytes() const { return numBlocks * bsize; }
     
@@ -66,3 +68,5 @@ struct FileSystemDescriptor {
     // Throws an exception if the descriptor contains unsupported values
     void checkCompatibility() const;
 };
+
+}

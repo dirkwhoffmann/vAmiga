@@ -11,6 +11,8 @@
 
 #include "FileSystem.h"
 
+namespace vamiga {
+
 /* The MutableFileSystem class extends the FileSystem class with functions for
  * modifiying the contents of the file system. It provides functions for
  * creating empty file systems of a certain type as well as functions for
@@ -36,7 +38,7 @@ public:
     MutableFileSystem(Diameter dia, Density den, FSVolumeType dos) { init(dia, den, dos); }
     MutableFileSystem(Diameter dia, Density den, const string &path) { init(dia, den, path); }
     MutableFileSystem(FSVolumeType type, const string &path) { init(type, path); }
-        
+
 private:
     
     void init(isize capacity);
@@ -108,7 +110,7 @@ public:
     //
 
 public:
-        
+
     // Marks a block as allocated or free
     void markAsAllocated(Block nr) { setAllocationBit(nr, 0); }
     void markAsFree(Block nr) { setAllocationBit(nr, 1); }
@@ -120,7 +122,7 @@ public:
     //
     
 public:
-        
+
     // Creates a new directory
     FSBlock *createDir(const string &name);
 
@@ -128,7 +130,7 @@ public:
     FSBlock *createFile(const string &name);
     FSBlock *createFile(const string &name, const u8 *buffer, isize size);
     FSBlock *createFile(const string &name, const string &str);
-        
+
 private:
     
     // Adds a reference to the current directory
@@ -144,7 +146,7 @@ private:
     //
     
 public:
-        
+
     // Imports the volume from a buffer compatible with the ADF format
     void importVolume(const u8 *src, isize size) throws;
 
@@ -165,3 +167,5 @@ public:
     // Exports the volume to a directory of the host file system
     void exportDirectory(const string &path, bool createDir = true) throws;
 };
+
+}

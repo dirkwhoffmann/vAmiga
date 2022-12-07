@@ -13,6 +13,8 @@
 #include "FloppyDisk.h"
 #include "IOUtils.h"
 
+namespace vamiga {
+
 bool
 IMGFile::isCompatible(const string &path)
 {
@@ -36,7 +38,7 @@ IMGFile::init(Diameter dia, Density den)
     if (dia == INCH_35 && den == DENSITY_DD) {
 
         data.init(9 * 160 * 512);
- 
+
     } else {
 
         throw VAError(ERROR_DISK_INVALID_LAYOUT);
@@ -114,7 +116,7 @@ IMGFile::encodeTrack(FloppyDisk &disk, Track t) const
     p[6] = 0x55; p[7] = 0x52;
     p += 8;
     p += 80;                                        // GAP
-        
+
     // Encode all sectors
     for (Sector s = 0; s < sectors; s++) encodeSector(disk, t, s);
     
@@ -127,7 +129,7 @@ void
 IMGFile::encodeSector(FloppyDisk &disk, Track t, Sector s) const
 {
     u8 buf[60 + 512 + 2 + 109]; // Header + Data + CRC + Gap
-        
+
     debug(IMG_DEBUG, "  Encoding DOS sector %ld\n", s);
     
     // Write SYNC
@@ -216,7 +218,7 @@ void
 IMGFile::decodeTrack(FloppyDisk &disk, Track t)
 {
     assert(t < disk.numTracks());
-        
+
     long numSectors = 9;
     u8 *src = disk.data.track[t];
     u8 *dst = data.ptr + t * numSectors * 512;
@@ -263,7 +265,7 @@ IMGFile::decodeTrack(FloppyDisk &disk, Track t)
     if (cnt != numSectors) {
         throw VAError(ERROR_DISK_WRONG_SECTOR_COUNT);
     }
-        
+
     // Do some consistency checking
     for (isize i = 0; i < numSectors; i++) assert(sectorStart[i] != 0);
     
@@ -277,4 +279,6 @@ void
 IMGFile::decodeSector(u8 *dst, u8 *src)
 {
     FloppyDisk::decodeMFM(dst, src, 512);
+}
+
 }

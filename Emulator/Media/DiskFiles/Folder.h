@@ -11,12 +11,14 @@
 
 #include "ADFFile.h"
 
+namespace vamiga {
+
 class Folder : public FloppyFile {
-        
+
 public:
 
     ADFFile *adf = nullptr;
-                
+
     static bool isCompatible(const string &path);
     static bool isCompatible(std::istream &stream) { return false; }
 
@@ -39,7 +41,7 @@ private:
 public:
     
     const char *getDescription() const override { return "Folder"; }
-        
+
     
     //
     // Methods from AmigaFile
@@ -77,3 +79,5 @@ public:
     void readSector(u8 *target, isize t, isize s) const override { return adf->readSector(target, t, s); }
     void encodeDisk(class FloppyDisk &disk) const throws override { adf->encodeDisk(disk); }
 };
+
+}

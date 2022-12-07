@@ -11,6 +11,8 @@
 
 #include "AmigaObject.h"
 
+namespace vamiga {
+
 struct FSString {
     
     // File system identifier stored as a C string
@@ -66,3 +68,5 @@ struct FSTime {
     string timeStr() const;
     string str() const;
 };
+
+}

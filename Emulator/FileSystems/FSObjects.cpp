@@ -14,6 +14,8 @@
 #include <algorithm>
 #include <cstring>
 
+namespace vamiga {
+
 FSString::FSString(const string &cppString, isize limit) : FSString(cppString.c_str(), limit)
 {
 }
@@ -170,4 +172,6 @@ FSTime::str() const
 {
     string result = dateStr() + "  " + timeStr();
     return result;
+}
+
 }

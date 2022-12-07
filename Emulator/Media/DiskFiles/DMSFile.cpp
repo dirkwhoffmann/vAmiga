@@ -16,6 +16,8 @@ unsigned short extractDMS(const unsigned char *in, size_t inSize,
                           unsigned char **out, size_t *outSize, int verbose);
 }
 
+namespace vamiga {
+
 bool
 DMSFile::isCompatible(const string &path)
 {
@@ -44,4 +46,6 @@ DMSFile::finalizeRead()
     
     if (adfData) free(adfData);
     if (!adf) throw VAError(ERROR_DMS_CANT_CREATE);
+}
+
 }

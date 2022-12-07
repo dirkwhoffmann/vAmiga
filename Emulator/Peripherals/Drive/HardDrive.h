@@ -16,6 +16,8 @@
 #include "HDFFile.h"
 #include "MemUtils.h"
 
+namespace vamiga {
+
 class HardDrive : public Drive {
     
     friend class HDFFile;
@@ -43,10 +45,10 @@ class HardDrive : public Drive {
     
     // Partition table
     std::vector <PartitionDescriptor> ptable;
-            
+
     // Loadable file system drivers
     std::vector <DriverDescriptor> drivers;
-        
+
     // Disk data
     Buffer<u8> data;
     
@@ -182,7 +184,7 @@ public:
     bool hasProtectedDisk() const override;
     void setModificationFlag(bool value) override;
     void setProtectionFlag(bool value) override;
-        
+
     
     //
     // Configuring
@@ -227,7 +229,7 @@ public:
     // Gets or sets the 'modification' flag
     bool isModified() const { return modified; }
     void setModified(bool value) { modified = value; }
-       
+
     // Returns the current controller state
     HdcState getHdcState();
 
@@ -266,7 +268,7 @@ public:
     void readDriver(isize nr, Buffer<u8> &driver);
     
 private:
-        
+
     // Checks the given argument list for consistency
     i8 verify(isize offset, isize length, u32 addr);
 
@@ -318,3 +320,5 @@ public:
     template <EventSlot s> void serviceHdrEvent();
     
 };
+
+}

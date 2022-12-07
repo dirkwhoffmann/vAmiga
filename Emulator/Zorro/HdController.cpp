@@ -16,6 +16,8 @@
 #include "OSDebugger.h"
 #include "OSDescriptors.h"
 
+namespace vamiga {
+
 HdController::HdController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref), drive(hdr)
 {
     nr = drive.getNr();
@@ -40,7 +42,7 @@ void
 HdController::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
-        
+
     ZorroBoard::_dump(category, os);
     
     if (category == Category::Config) {
@@ -117,7 +119,7 @@ void
 HdController::setConfigItem(Option option, i64 value)
 {
     switch (option) {
-         
+
         case OPT_HDC_CONNECT:
             
             if (!isPoweredOff()) {
@@ -127,7 +129,7 @@ HdController::setConfigItem(Option option, i64 value)
             if (bool(value) == config.connected) {
                 break;
             }
-                        
+
             if (value) {
                 
                 config.connected = true;
@@ -312,7 +314,7 @@ HdController::poke16(u32 addr, u16 value)
             break;
 
         case EXPROM_SIZE + 4:
-                        
+
             switch (value) {
                     
                 case 0xfede: processCmd(pointer); break;
@@ -377,7 +379,7 @@ HdController::processCmd(u32 ptr)
             error = drive.write(offset, length, addr);
             actual = u32(length);
             break;
-  
+
         case CMD_RESET:
         case CMD_UPDATE:
         case CMD_CLEAR:
@@ -414,7 +416,7 @@ HdController::processInit(u32 ptr)
     debug(HDR_DEBUG, "processInit(%x)\n", ptr);
 
     auto assignDosName = [&](isize partition, char *name) {
-                
+
         name[0] = 'D';
         name[1] = 'H';
 
@@ -534,7 +536,7 @@ HdController::processResource(u32 ptr)
               OSDebugger::dosVersionStr(fse.fse_Version).c_str());
         
         for (auto it = drivers.begin(); it != drivers.end(); ) {
-        
+
             if constexpr (HDR_FS_LOAD_ALL) {
 
                 it++;
@@ -546,9 +548,9 @@ HdController::processResource(u32 ptr)
                 debug(HDR_DEBUG, "Not needed: %s %s\n",
                       OSDebugger::dosTypeStr(it->dosType).c_str(),
                       OSDebugger::dosVersionStr(it->dosVersion).c_str());
-        
+
                 it = drivers.erase(it);
-            
+
             } else {
                 
                 it++;
@@ -581,7 +583,7 @@ HdController::processInfoReq(u32 ptr)
             throw VAError(ERROR_HDC_INIT, "Invalid driver number: " + std::to_string(num));
         }
         auto &driver = drive.drivers[num];
-    
+
         // Read driver
         Buffer<u8> code;
         drive.readDriver(num, code);
@@ -601,7 +603,7 @@ HdController::processInfoReq(u32 ptr)
         for (isize i = 0; i < numHunks; i++) {
             mem.patch(u32(ptr + fsinfo_hunk + 4 * i), descr.hunks[i].memRaw);
         }
-                
+
     } catch (VAError &e) {
 
         warn("processInfoReq: %s\n", e.what());
@@ -625,12 +627,12 @@ HdController::processInitSeg(u32 ptr)
         if (num >= drive.drivers.size()) {
             throw VAError(ERROR_HDC_INIT, "Invalid driver number: " + std::to_string(num));
         }
-  
+
         // Read driver
         Buffer<u8> code;
         drive.readDriver(num, code);
         ProgramUnitDescriptor descr(code);
-    
+
         // We accept up to three hunks
         auto numHunks = descr.numHunks();
         if (numHunks == 0 || numHunks > 3) {
@@ -665,7 +667,7 @@ HdController::processInitSeg(u32 ptr)
 
                     // Add a BPTR to the next hunk in the list
                     mem.patch(segPtrs[i] + 4, last ? 0 : (segPtrs[i + 1] + 4) >> 2);
-            
+
                     // Copy data
                     debug(HDR_DEBUG, "Copying %d bytes from %d\n", s.size, s.offset + 8);
                     mem.patch(segPtrs[i] + 8, code.ptr + s.offset + 8, s.size);
@@ -703,4 +705,6 @@ HdController::processInitSeg(u32 ptr)
     }
     
     debug(HDR_DEBUG, "processInitSeg completed\n");
+}
+
 }

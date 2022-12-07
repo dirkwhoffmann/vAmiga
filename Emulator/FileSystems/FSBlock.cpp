@@ -12,6 +12,8 @@
 #include "MutableFileSystem.h"
 #include "MemUtils.h"
 
+namespace vamiga {
+
 FSBlock::FSBlock(FileSystem &ref, Block nr, FSBlockType t) : device(ref)
 {
     assert(t != FS_UNKNOWN_BLOCK);
@@ -48,7 +50,7 @@ FSBlock::FSBlock(FileSystem &ref, Block nr, FSBlockType t) : device(ref)
             break;
             
         case FS_USERDIR_BLOCK:
-                            
+
             set32(0, 2);                         // Type
             set32(1, nr);                        // Block pointer to itself
             setCreationDate(time(nullptr));      // Creation date
@@ -137,7 +139,7 @@ FSBlock::dsize() const
             
         case FS_DATA_BLOCK_OFS: return bsize() - 24;
         case FS_DATA_BLOCK_FFS: return bsize();
-                        
+
         default:
             fatalError;
     }
@@ -293,7 +295,7 @@ FSBlock::itemType(isize byte) const
             return word <= -51 ? FSI_DATA_BLOCK_REF : FSI_UNUSED;
             
         case FS_DATA_BLOCK_OFS:
-                        
+
             switch (word) {
                     
                 case 0: return FSI_TYPE_ID;
@@ -305,7 +307,7 @@ FSBlock::itemType(isize byte) const
             }
             
             return FSI_DATA;
-        
+
         case FS_DATA_BLOCK_FFS:
             
             return FSI_DATA;
@@ -357,7 +359,7 @@ FSBlock::check(isize byte, u8 *expected, bool strict) const
             u32 value = data[byte];
 
             if (nr == 0) {
-                         
+
                 if (byte == 0) EXPECT_BYTE('D');
                 if (byte == 1) EXPECT_BYTE('O');
                 if (byte == 2) EXPECT_BYTE('S');
@@ -456,7 +458,7 @@ FSBlock::check(isize byte, u8 *expected, bool strict) const
                 case  -2: EXPECT_OPTIONAL_FILELIST_REF;          break;
                 case  -1: EXPECT_LONGWORD(-3);                   break;
             }
-                
+
             // Data block reference area
             if (word <= -51 && value) EXPECT_DATABLOCK_REF;
             if (word == -51) {
@@ -506,7 +508,7 @@ FSBlock::check(isize byte, u8 *expected, bool strict) const
             }
             break;
         }
-                  
+
         case FS_DATA_BLOCK_OFS:
         {
             /* Note: At location 1, many disks store a reference to the bitmap
@@ -518,7 +520,7 @@ FSBlock::check(isize byte, u8 *expected, bool strict) const
                 
                 isize word = byte / 4;
                 u32 value = get32(word);
-                        
+
                 switch (word) {
                         
                     case 0: EXPECT_LONGWORD(8);                 break;
@@ -550,7 +552,7 @@ FSBlock::read32(const u8 *p)
 {
     return p[0] << 24 | p[1] << 16 | p[2] << 8 | p[3];
 }
-    
+
 void
 FSBlock::write32(u8 *p, u32 value)
 {
@@ -620,7 +622,7 @@ FSBlock::checksumBootBlock() const
 {
     // Only call this function for the first boot block in a partition
     assert(nr == 0);
-        
+
     u32 result = get32(0), prec;
 
     // First boot block
@@ -653,7 +655,7 @@ void
 FSBlock::dump() const
 {
     switch (type) {
-                        
+
         case FS_BOOT_BLOCK:
             
             msg("       Header : ");
@@ -770,7 +772,7 @@ FSBlock::exportBlock(u8 *dst, isize size)
 {
     assert(dst);
     assert(size == bsize());
-            
+
     // Rectify the checksum
     updateChecksum();
 
@@ -792,7 +794,7 @@ FSBlock::exportBlock(const fs::path &path)
             
         default:
             return ERROR_OK;
-    }    
+    }
 }
 
 ErrorCode
@@ -823,13 +825,13 @@ FSName
 FSBlock::getName() const
 {
     switch (type) {
-    
+
         case FS_ROOT_BLOCK:
         case FS_USERDIR_BLOCK:
         case FS_FILEHEADER_BLOCK:
             
             return FSName(addr32(-20));
-    
+
         default:
             return FSName("");
     }
@@ -839,13 +841,13 @@ void
 FSBlock::setName(FSName name)
 {
     switch (type) {
-    
+
         case FS_ROOT_BLOCK:
         case FS_USERDIR_BLOCK:
         case FS_FILEHEADER_BLOCK:
             
             name.write(addr32(-20));
-    
+
         default:
             break;
     }
@@ -855,7 +857,7 @@ bool
 FSBlock::isNamed(FSName &other) const
 {
     switch (type) {
-    
+
         case FS_ROOT_BLOCK:
         case FS_USERDIR_BLOCK:
         case FS_FILEHEADER_BLOCK:
@@ -872,7 +874,7 @@ FSComment
 FSBlock::getComment() const
 {
     switch (type) {
-    
+
         case FS_USERDIR_BLOCK:
         case FS_FILEHEADER_BLOCK:
 
@@ -888,7 +890,7 @@ void
 FSBlock::setComment(FSComment name)
 {
     switch (type) {
-    
+
         case FS_USERDIR_BLOCK:
         case FS_FILEHEADER_BLOCK:
             
@@ -948,7 +950,7 @@ FSBlock::getModificationDate() const
         case FS_ROOT_BLOCK:
             
             return FSTime(addr32(-23));
-                        
+
         default:
             return FSTime((time_t)0);
     }
@@ -963,7 +965,7 @@ FSBlock::setModificationDate(FSTime t)
             
             t.write(addr32(-23));
             break;
-                        
+
         default:
             break;
     }
@@ -973,7 +975,7 @@ u32
 FSBlock::getProtectionBits() const
 {
     switch (type) {
-                        
+
         case FS_USERDIR_BLOCK:
         case FS_FILEHEADER_BLOCK:
 
@@ -988,7 +990,7 @@ void
 FSBlock::setProtectionBits(u32 val)
 {
     switch (type) {
-                        
+
         case FS_USERDIR_BLOCK:
         case FS_FILEHEADER_BLOCK:
 
@@ -1004,7 +1006,7 @@ u32
 FSBlock::getFileSize() const
 {
     switch (type) {
-                        
+
         case FS_FILEHEADER_BLOCK:
 
             return get32(-47);
@@ -1018,7 +1020,7 @@ void
 FSBlock::setFileSize(u32 val)
 {
     switch (type) {
-                        
+
         case FS_FILEHEADER_BLOCK:
 
             set32(-47, val);
@@ -1033,7 +1035,7 @@ Block
 FSBlock::getParentDirRef() const
 {
     switch (type) {
-                        
+
         case FS_USERDIR_BLOCK:
         case FS_FILEHEADER_BLOCK:
 
@@ -1048,7 +1050,7 @@ void
 FSBlock::setParentDirRef(Block ref)
 {
     switch (type) {
-                        
+
         case FS_USERDIR_BLOCK:
         case FS_FILEHEADER_BLOCK:
 
@@ -1084,7 +1086,7 @@ void
 FSBlock::setFileHeaderRef(Block ref)
 {
     switch (type) {
-                        
+
         case FS_FILELIST_BLOCK:  set32(-3, ref); break;
         case FS_DATA_BLOCK_OFS:  set32(1, ref); break;
             
@@ -1104,7 +1106,7 @@ Block
 FSBlock::getNextHashRef() const
 {
     switch (type) {
-                        
+
         case FS_USERDIR_BLOCK:
         case FS_FILEHEADER_BLOCK:
 
@@ -1119,7 +1121,7 @@ void
 FSBlock::setNextHashRef(Block ref)
 {
     switch (type) {
-                        
+
         case FS_USERDIR_BLOCK:
         case FS_FILEHEADER_BLOCK:
 
@@ -1142,7 +1144,7 @@ Block
 FSBlock::getNextListBlockRef() const
 {
     switch (type) {
-                        
+
         case FS_FILEHEADER_BLOCK:
         case FS_FILELIST_BLOCK:
             
@@ -1157,7 +1159,7 @@ void
 FSBlock::setNextListBlockRef(Block ref)
 {
     switch (type) {
-                        
+
         case FS_FILEHEADER_BLOCK:
         case FS_FILELIST_BLOCK:
             
@@ -1228,7 +1230,7 @@ void
 FSBlock::setFirstDataBlockRef(Block ref)
 {
     switch (type) {
-                        
+
         case FS_FILEHEADER_BLOCK:
         case FS_FILELIST_BLOCK:
             
@@ -1378,13 +1380,13 @@ FSBlock::addBitmapBlockRefs(std::vector<Block> &refs)
     assert(type == FS_ROOT_BLOCK);
     
     auto it = refs.begin();
-     
+
     // Record the first 25 references in the root block
     for (isize i = 0; i < 25; i++, it++) {
         if (it == refs.end()) return true;
         setBmBlockRef(i, *it);
     }
-            
+
     // Record the remaining references in bitmap extension blocks
     FSBlock *ext = getNextBmExtBlock();
     while (ext && it != refs.end()) {
@@ -1452,9 +1454,9 @@ FSBlock::getDataBlockNr() const
 {
     switch (type) {
             
-        case FS_DATA_BLOCK_OFS: return get32(2); 
+        case FS_DATA_BLOCK_OFS: return get32(2);
         case FS_DATA_BLOCK_FFS: return 0;
-                        
+
         default:
             fatalError;
     }
@@ -1467,7 +1469,7 @@ FSBlock::setDataBlockNr(u32 val)
             
         case FS_DATA_BLOCK_OFS: set32(2, val); break;
         case FS_DATA_BLOCK_FFS: break;
-                        
+
         default:
             fatalError;
     }
@@ -1488,7 +1490,7 @@ FSBlock::getNumDataBlockRefs() const
         case FS_FILELIST_BLOCK:
             
             return get32(2);
-    
+
         default:
             return 0;
     }
@@ -1558,7 +1560,7 @@ FSBlock::addDataBlockRef(u32 first, u32 ref)
             
             return false;
         }
-         
+
         case FS_FILELIST_BLOCK:
         {
             // The caller has to ensure that this block contains free slots
@@ -1585,7 +1587,7 @@ FSBlock::getDataBytesInBlock() const
             
         case FS_DATA_BLOCK_OFS: return get32(3);
         case FS_DATA_BLOCK_FFS: return 0;
-                        
+
         default:
             fatalError;
     }
@@ -1598,7 +1600,7 @@ FSBlock::setDataBytesInBlock(u32 val)
             
         case FS_DATA_BLOCK_OFS: set32(3, val); break;
         case FS_DATA_BLOCK_FFS: break;
-                        
+
         default:
             fatalError;
     }
@@ -1699,7 +1701,7 @@ FSBlock::writeData(Buffer<u8> &buf)
             
             Block ref = block->getDataBlockRef(i);
             if (FSBlock *dataBlock = device.dataBlockPtr(ref)) {
-                                
+
                 isize bytesWritten = dataBlock->writeData(buf, bytesTotal, bytesRemaining);
                 bytesTotal += bytesWritten;
                 bytesRemaining -= bytesWritten;
@@ -1810,4 +1812,6 @@ FSBlock::overwriteData(Buffer<u8> &buf, isize offset, isize count)
         default:
             fatalError;
     }
+}
+
 }

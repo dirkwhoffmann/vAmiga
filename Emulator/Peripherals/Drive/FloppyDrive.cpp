@@ -17,6 +17,8 @@
 #include "MsgQueue.h"
 #include "OSDescriptors.h"
 
+namespace vamiga {
+
 FloppyDrive::FloppyDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 {
     string path;
@@ -107,7 +109,7 @@ void
 FloppyDrive::setConfigItem(Option option, i64 value)
 {
     switch (option) {
-                            
+
         case OPT_DRIVE_TYPE:
             
             if (!FloppyDriveTypeEnum::isValid(value)) {
@@ -121,27 +123,27 @@ FloppyDrive::setConfigItem(Option option, i64 value)
             return;
 
         case OPT_EMULATE_MECHANICS:
-        
+
             config.mechanicalDelays = value;
             return;
 
         case OPT_START_DELAY:
-        
+
             config.startDelay = value;
             return;
 
         case OPT_STOP_DELAY:
-        
+
             config.stopDelay = value;
             return;
 
         case OPT_STEP_DELAY:
-        
+
             config.stepDelay = value;
             return;
 
         case OPT_DISK_SWAP_DELAY:
-        
+
             config.diskSwapDelay = value;
             return;
 
@@ -641,7 +643,7 @@ FloppyDrive::step(isize dir)
 {    
     // Update the disk change signal
     if (hasDisk()) dskchange = true;
- 
+
     // Only proceed if the last head step was a while ago
     if (!readyToStep()) return;
     
@@ -673,12 +675,12 @@ FloppyDrive::step(isize dir)
         msgQueue.put(MSG_DRIVE_POLL,
                      i16(nr), i16(head.cylinder), config.pollVolume, config.pan);
         
-        } else {
-            
+    } else {
+
         msgQueue.put(MSG_DRIVE_STEP,
                      i16(nr), i16(head.cylinder), config.stepVolume, config.pan);
     }
-        
+
     // Remember when we've performed the step
     stepCycle = agnus.clock;
 }
@@ -739,7 +741,7 @@ FloppyDrive::isInsertable(Diameter t, Density d) const
             
         case DRIVE_DD_525:
             return t == INCH_525 && d == DENSITY_DD;
-                        
+
         default:
             fatalError;
     }
@@ -891,7 +893,7 @@ FloppyDrive::swapDisk(std::unique_ptr<FloppyDisk> disk)
 
     // Determine delay (in pause mode, we insert immediately)
     auto delay = isRunning() ? config.diskSwapDelay : 0;
-        
+
     {   SUSPENDED
 
         if (hasDisk()) {
@@ -904,7 +906,7 @@ FloppyDrive::swapDisk(std::unique_ptr<FloppyDisk> disk)
             // Insert the new disk immediately
             delay = 0;
         }
-                
+
         // Insert the new disk with a delay
         insertDisk(std::move(disk), delay);
     }
@@ -1015,4 +1017,6 @@ FloppyDrive::PRBdidChange(u8 oldValue, u8 newValue)
     
     // Evaluate the side selection bit
     selectSide((newValue & 0b100) ? 0 : 1);
+}
+
 }

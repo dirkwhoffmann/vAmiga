@@ -16,6 +16,8 @@
 #include "OSDescriptors.h"
 #include "StringUtils.h"
 
+namespace vamiga {
+
 bool
 HDFFile::isCompatible(const string &path)
 {
@@ -115,7 +117,7 @@ HDFFile::getGeometryDescriptor() const
         // Use the first match by default
         if (geometries.size()) result = geometries.front();
     }
-        
+
     return result;
 }
 
@@ -212,7 +214,7 @@ std::vector<DriverDescriptor>
 HDFFile::getDriverDescriptors() const
 {
     std::vector<DriverDescriptor> result;
-        
+
     for (isize i = 0; i < 16 && seekFSH(i); i++) {
         result.push_back(getDriverDescriptor(i));
     }
@@ -224,7 +226,7 @@ FileSystemDescriptor
 HDFFile::getFileSystemDescriptor(isize nr) const
 {
     FileSystemDescriptor result;
-        
+
     auto &part = ptable[nr];
     
     auto c = part.highCyl - part.lowCyl + 1;
@@ -261,7 +263,7 @@ HDFFile::getFileSystemDescriptor(isize nr) const
     while (ref && ref < (Block)result.numBlocks) {
 
         const u8 *p = dptr + (ref * 512) + offset;
-    
+
         // Collect all references to bitmap blocks stored in this block
         for (isize i = 0; i < cnt; i++, p += 4) {
             if (Block bmb = FSBlock::read32(p)) {
@@ -325,7 +327,7 @@ HDFFile::predictNumBlocks() const
     };
     
     if (auto root = seekRB(); root) {
-                        
+
         // Predict block count by analyzing the file size
         highKey = data.size / bsize() - 1;
         if (match()) return highKey + 1;
@@ -477,4 +479,6 @@ HDFFile::writePartitionToFile(const string &path, isize nr)
     auto size = partitionSize(nr);
     
     return writeToFile(path, offset, size);
+}
+
 }

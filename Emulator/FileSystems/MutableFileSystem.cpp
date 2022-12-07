@@ -15,6 +15,8 @@
 #include <set>
 #include <stack>
 
+namespace vamiga {
+
 void
 MutableFileSystem::init(isize capacity)
 {
@@ -42,7 +44,7 @@ MutableFileSystem::init(FileSystemDescriptor &layout)
     bmExtBlocks = layout.bmExtBlocks;
 
     // Create all blocks
-    format(); 
+    format();
     
     // Set the current directory to '/'
     cd = rootBlock;
@@ -59,7 +61,7 @@ MutableFileSystem::init(Diameter dia, Density den, FSVolumeType dos)
 {
     // Get a device descriptor
     auto descriptor = FileSystemDescriptor(dia, den, dos);
-        
+
     // Create the device
     init(descriptor);
 }
@@ -201,7 +203,7 @@ MutableFileSystem::requiredBlocks(isize fileSize) const
     
     return 1 + numDataBlocks + numFileListBlocks;
 }
- 
+
 Block
 MutableFileSystem::allocateBlock()
 {
@@ -300,7 +302,7 @@ MutableFileSystem::newUserDirBlock(const string &name)
     FSBlock *block = nullptr;
     
     if (Block nr = allocateBlock()) {
-    
+
         block = new FSBlock(*this, nr, FS_USERDIR_BLOCK);
         block->setName(FSName(name));
         blocks[nr] = block;
@@ -453,7 +455,7 @@ MutableFileSystem::addData(FSBlock &block, const u8 *buffer, isize size)
         case FS_FILEHEADER_BLOCK:
         {
             assert(block.getFileSize() == 0);
-                
+
             // Compute the required number of blocks
             isize numDataBlocks = requiredDataBlocks(size);
             isize numListBlocks = requiredFileListBlocks(size);
@@ -530,12 +532,12 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
 
     // Only proceed if all partitions contain a valid file system
     if (dos == FS_NODOS) throw VAError(ERROR_FS_UNSUPPORTED);
-        
+
     // Import all blocks
     for (isize i = 0; i < numBlocks(); i++) {
         
         const u8 *data = src + i * bsize;
-                
+
         // Determine the type of the new block
         FSBlockType type = predictBlockType((Block)i, data);
         
@@ -658,7 +660,7 @@ MutableFileSystem::exportBlocks(Block first, Block last, u8 *dst, isize size, Er
         if (err) *err = ERROR_FS_WRONG_CAPACITY;
         return false;
     }
-        
+
     // Wipe out the target buffer
     std::memset(dst, 0, size);
     
@@ -695,7 +697,7 @@ MutableFileSystem::exportDirectory(const string &path, bool createDir)
     // Collect all files and directories
     std::vector<Block> items;
     collect(cd, items);
-        
+
     // Export all items
     for (auto const& i : items) {
         
@@ -705,4 +707,6 @@ MutableFileSystem::exportDirectory(const string &path, bool createDir)
     }
     
     debug(FS_DEBUG, "Exported %zu items", items.size());
+}
+
 }

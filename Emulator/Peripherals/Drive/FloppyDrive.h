@@ -18,10 +18,12 @@
 #include "DiskController.h"
 #include "Thread.h"
 
+namespace vamiga {
+
 class FloppyDrive : public Drive {
     
     friend class DiskController;
-        
+
     // Current configuration
     FloppyDriveConfig config = {};
 
@@ -62,7 +64,7 @@ class FloppyDrive : public Drive {
     
     // A copy of the PRB register of CIA B
     u8 prb;
-        
+
     /* History buffer storing the most recently visited tracks. The buffer is
      * used to detect the polling head movements that are issued by track disc
      * device to detect a newly inserted disk.
@@ -195,7 +197,7 @@ public:
     
     // Returns the result of the latest inspection
     FloppyDriveInfo getInfo() const { return AmigaComponent::getInfo(info); }
- 
+
     // Return the identification pattern of this drive
     u32 getDriveId() const;
 
@@ -219,7 +221,7 @@ public:
     //
     // Operating the drive motor
     //
-        
+
 public:
     
     // Returns the current motor speed in percent
@@ -286,7 +288,7 @@ public:
     //
 
 public:
-            
+
     bool isInsertable(Diameter t, Density d) const;
     bool isInsertable(const FloppyFile &file) const;
     bool isInsertable(const FloppyDisk &disk) const;
@@ -340,3 +342,5 @@ public:
     // Write handler for the PRB register of CIA B
     void PRBdidChange(u8 oldValue, u8 newValue);
 };
+
+}

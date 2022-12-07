@@ -14,6 +14,8 @@
 #include "MutableFileSystem.h"
 #include "IOUtils.h"
 
+namespace vamiga {
+
 const std::vector<string> EXTFile::extAdfHeaders =
 {
     "UAE--ADF",
@@ -64,7 +66,7 @@ EXTFile::init(FloppyDrive &drive)
 isize
 EXTFile::numCyls() const
 {
-   return (storedTracks() + 1) / 2;
+    return (storedTracks() + 1) / 2;
 }
 
 isize
@@ -136,14 +138,14 @@ EXTFile::finalizeRead()
      * the extended ADF does not contain a standard Amiga disk.
      */
     try {
-                
+
         // Convert the extended ADF to a disk
         auto disk = FloppyDisk(*this);
 
         // Convert the disk to a standard ADF
         adf.init(disk);
         
-    } catch (...) { }    
+    } catch (...) { }
 }
 
 FSVolumeType
@@ -355,4 +357,6 @@ EXTFile::trackData(isize nr) const
     }
     
     return p;
+}
+
 }

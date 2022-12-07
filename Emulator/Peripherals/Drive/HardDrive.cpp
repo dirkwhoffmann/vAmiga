@@ -15,6 +15,8 @@
 #include "Memory.h"
 #include "MsgQueue.h"
 
+namespace vamiga {
+
 std::fstream HardDrive::wtStream[4];
 
 HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
@@ -27,12 +29,12 @@ HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
     if (nr == 3) path = INITIAL_HD3;
     
     if (path != "") {
-            
+
         try {
             
             auto hdf = HDFFile(path);
             init(hdf);
-                        
+
         } catch (...) {
             
             warn("Cannot open HDF file %s\n", path.c_str());
@@ -75,7 +77,7 @@ HardDrive::init(const GeometryDescriptor &geometry)
     // Create the drive description
     this->geometry = geometry;
     ptable.push_back(PartitionDescriptor(geometry));
-        
+
     // Create the new drive
     data.resize(geometry.numBytes());
 }
@@ -102,7 +104,7 @@ void
 HardDrive::init(const HDFFile &hdf)
 {
     auto geometry = hdf.getGeometry();
-  
+
     // Create the drive
     init(geometry);
 
@@ -227,7 +229,7 @@ void
 HardDrive::setConfigItem(Option option, i64 value)
 {
     switch (option) {
-         
+
         case OPT_HDR_TYPE:
             
             if (!HardDriveTypeEnum::isValid(value)) {
@@ -270,7 +272,7 @@ HardDrive::connect()
             debug(WT_DEBUG, "Success\n");
 
         } catch (VAError &e) {
-    
+
             warn("Error: %s\n", e.what());
         }
     }
@@ -282,7 +284,7 @@ HardDrive::connect()
         init(MB(10));
         format(FS_OFS, defaultName());
         bootable = false;
-    }    
+    }
 }
 
 void
@@ -471,9 +473,9 @@ HardDrive::enableWriteThrough()
     debug(WT_DEBUG, "enableWriteThrough()\n");
     
     if (!writeThrough) {
-    
+
         saveWriteThroughImage();
-      
+
         debug(WT_DEBUG, "Write-through mode enabled\n");
         writeThrough = true;
     }
@@ -561,7 +563,7 @@ HardDrive::format(FSVolumeType fsType, string name)
 
         // Add name and bootblock
         fs.setName(name);
-                
+
         // Copy all blocks over
         fs.exportVolume(data.ptr, geometry.numBytes());
     }
@@ -578,11 +580,11 @@ void
 HardDrive::changeGeometry(const GeometryDescriptor &geometry)
 {
     geometry.checkCompatibility();
-        
+
     if (this->geometry.numBytes() == geometry.numBytes()) {
         
         this->geometry = geometry;
-    
+
     } else {
         
         throw VAError(ERROR_HDR_UNMATCHED_GEOMETRY);
@@ -606,7 +608,7 @@ HardDrive::read(isize offset, isize length, u32 addr)
 
         // Perform the read operation
         mem.patch(addr, data.ptr + offset, length);
-                
+
         // Inform the GUI
         msgQueue.put(MSG_HDR_READ);
         
@@ -626,7 +628,7 @@ HardDrive::write(isize offset, isize length, u32 addr)
     auto error = verify(offset, length, addr);
     
     if (!error) {
-    
+
         state = HDR_STATE_WRITING;
 
         // Move the drive head to the specified location
@@ -710,7 +712,7 @@ HardDrive::verify(isize offset, isize length, u32 addr)
 
     return 0;
 }
- 
+
 void
 HardDrive::moveHead(isize lba)
 {
@@ -736,24 +738,24 @@ HardDrive::moveHead(isize c, isize h, isize s)
 }
 
 /*
-bool
-HardDrive::persistDisk() throws
-{
-    if (!backup.empty()) try {
-        
-        auto hdf = HDFFile(*this);
-        hdf.writeToFile(backup);
-        msg("HD%ld persisted at %s\n", nr, backup.c_str());
-        
-    } catch (...) {
-        
-        warn("Failed to persist HD%ld at %s\n", nr, backup.c_str());
-        return false;
-    }
-    
-    return true;
-}
-*/
+ bool
+ HardDrive::persistDisk() throws
+ {
+ if (!backup.empty()) try {
+
+ auto hdf = HDFFile(*this);
+ hdf.writeToFile(backup);
+ msg("HD%ld persisted at %s\n", nr, backup.c_str());
+
+ } catch (...) {
+
+ warn("Failed to persist HD%ld at %s\n", nr, backup.c_str());
+ return false;
+ }
+
+ return true;
+ }
+ */
 
 void
 HardDrive::writeToFile(const string &path) throws
@@ -793,3 +795,5 @@ template void HardDrive::serviceHdrEvent <SLOT_HD0> ();
 template void HardDrive::serviceHdrEvent <SLOT_HD1> ();
 template void HardDrive::serviceHdrEvent <SLOT_HD2> ();
 template void HardDrive::serviceHdrEvent <SLOT_HD3> ();
+
+}

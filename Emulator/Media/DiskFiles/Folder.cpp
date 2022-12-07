@@ -12,6 +12,8 @@
 #include "MutableFileSystem.h"
 #include "IOUtils.h"
 
+namespace vamiga {
+
 bool
 Folder::isCompatible(const string &path)
 {
@@ -22,7 +24,7 @@ void
 Folder::init(const string &path)
 {
     debug(FS_DEBUG, "make(%s)\n", path.c_str());
-              
+
     // Only proceed if the provided filename points to a directory
     if (!isCompatiblePath(path)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
 
@@ -45,4 +47,6 @@ Folder::init(const string &path)
 
     // Convert the file system into an ADF
     adf = new ADFFile(volume);
+}
+
 }

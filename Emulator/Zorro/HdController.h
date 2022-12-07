@@ -14,6 +14,8 @@
 #include "HDFFile.h"
 #include "RomFileTypes.h"
 
+namespace vamiga {
+
 class HdController : public ZorroBoard {
     
     // Number of this controller
@@ -158,16 +160,16 @@ private:
     //
     // Accessing the board
     //
-      
+
 public:
-        
+
     u8 peek8(u32 addr) override;
     u16 peek16(u32 addr) override;
     u8 spypeek8(u32 addr) const override;
     u16 spypeek16(u32 addr) const override;
     void poke8(u32 addr, u8 value) override;
     void poke16(u32 addr, u16 value) override;
-        
+
 private:
     
     void processCmd(u32 ptr);
@@ -176,3 +178,5 @@ private:
     void processInfoReq(u32 ptr);
     void processInitSeg(u32 ptr);
 };
+
+}

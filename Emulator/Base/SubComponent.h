@@ -26,11 +26,11 @@ class Denise;
 class DiagBoard;
 class DiskController;
 class DmaDebugger;
-
-}
 class FloppyDrive;
 class HardDrive;
 class HdController;
+
+}
 class GdbServer;
 class Joystick;
 class Keyboard;
