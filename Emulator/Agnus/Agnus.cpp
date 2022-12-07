@@ -11,6 +11,8 @@
 #include "Agnus.h"
 #include "Amiga.h"
 
+namespace vamiga {
+
 Agnus::Agnus(Amiga& ref) : SubComponent(ref)
 {    
     subComponents = std::vector<AmigaComponent *> {
@@ -37,7 +39,7 @@ Agnus::_reset(bool hard)
 
     // Initialize statistical counters
     clearStats();
-            
+
     // Initialize all event slots
     for (isize i = 0; i < SLOT_COUNT; i++) {
         
@@ -99,21 +101,21 @@ Agnus::setConfigItem(Option option, i64 value)
     switch (option) {
 
         case OPT_AGNUS_REVISION:
-                        
+
             if (!isPoweredOff()) {
                 throw VAError(ERROR_OPT_LOCKED);
             }
             if (!AgnusRevisionEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVARG, AgnusRevisionEnum::keyList());
-            }            
-                                    
+            }
+
             switch (config.revision = (AgnusRevision)value) {
                     
                 case AGNUS_OCS_OLD:
                 case AGNUS_OCS:     ptrMask = 0x07FFFF; break;
                 case AGNUS_ECS_1MB: ptrMask = 0x0FFFFF; break;
                 case AGNUS_ECS_2MB: ptrMask = 0x1FFFFF; break;
-                
+
                 default:
                     fatalError;
             }
@@ -576,7 +578,7 @@ Agnus::updateSpriteDMA()
     if (v == 25 && sprdma()) {
         for (isize i = 0; i < 8; i++) sprVStop[i] = 25;
         return;
-     }
+    }
 
     // Disable DMA in the last rasterline
     if (v == pos.vMax()) {
@@ -711,3 +713,5 @@ template void Agnus::executeSecondSpriteCycle<4>();
 template void Agnus::executeSecondSpriteCycle<5>();
 template void Agnus::executeSecondSpriteCycle<6>();
 template void Agnus::executeSecondSpriteCycle<7>();
+
+}

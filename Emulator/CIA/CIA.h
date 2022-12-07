@@ -14,7 +14,7 @@
 #include "AgnusTypes.h"
 #include "TOD.h"
 
-using namespace vamiga;
+namespace vamiga {
 
 constexpr u64 CIACountA0 =   (1ULL << 0); // Decrements timer A
 constexpr u64 CIACountA1 =   (1ULL << 1);
@@ -121,7 +121,7 @@ protected:
     // Timer counters
     u16 counterA;
     u16 counterB;
-        
+
     // Timer latches
     u16 latchA;
     u16 latchB;
@@ -143,7 +143,7 @@ protected:
     
     // ICR bits that need to deleted when CIAAckIcr1 hits
     u8 icrAck;
-        
+
     
     //
     // Peripheral ports
@@ -218,7 +218,7 @@ protected:
      *  format.
      */
     u8 sdr;
-        
+
     // Serial shift register
     u8 ssr;
     
@@ -351,7 +351,7 @@ private:
     //
     
 public:
-        
+
     void resetConfig() override;
     const CIAConfig &getConfig() const { return config; }
     i64 getConfigItem(Option option) const;
@@ -403,7 +403,7 @@ private:
     // Returns the data direction register
     u8 getDDRA() const { return ddra; }
     u8 getDDRB() const { return ddrb; }
-        
+
     // Updates variable pa with the value we currently see at port A
     virtual void updatePA() = 0;
     virtual u8 computePA() const = 0;
@@ -505,7 +505,7 @@ public:
     //
     
 public:
-        
+
     // Executes the CIA for one CIA cycle
     void executeOneCycle();
     
@@ -528,7 +528,7 @@ public:
     // Returns true if the CIA is in idle state or not
     bool isSleeping() const { return sleeping; }
     bool isAwake() const { return !sleeping; }
-        
+
     // Returns the number of cycles the CIA is idle since
     CIACycle idleSince() const;
     
@@ -590,7 +590,7 @@ public:
 private:
 
     const char *getDescription() const override { return "CIAB"; }
-        
+
     void pullDownInterruptLine() override;
     void releaseInterruptLine() override;
     
@@ -604,3 +604,5 @@ private:
     void updatePB() override;
     u8 computePB() const override;
 };
+
+}

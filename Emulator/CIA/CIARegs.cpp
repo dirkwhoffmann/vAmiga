@@ -12,6 +12,8 @@
 #include "Constants.h"
 #include "Keyboard.h"
 
+namespace vamiga {
+
 u8
 CIA::peek(u16 addr)
 {
@@ -72,7 +74,7 @@ CIA::peek(u16 addr)
             result = tod.getCounterLo(clock - DMA_CYCLES(isCIAA() ? 95 : 210));
             tod.defreeze();
             break;
-        
+
         case 0x09: // EVENT_8_15
 
             result = tod.getCounterMid(clock - DMA_CYCLES(isCIAA() ? 95 : 210));
@@ -109,7 +111,7 @@ CIA::peek(u16 addr)
             
             // Discard pending interrupts
             delay &= ~(CIASetInt0 | CIASetInt1);
-        
+
             // Schedule the ICR bits to be cleared
             delay |= CIAClearIcr0; // Uppermost bit
             delay |= CIAAckIcr0;   // Other bits
@@ -146,7 +148,7 @@ CIA::spypeek(u16 addr) const
     bool running;
 
     switch(addr) {
-          
+
         case 0x00: // CIA_DATA_PORT_A
             return pa;
             
@@ -212,7 +214,7 @@ CIA::poke(u16 addr, u8 value)
     wakeUp();
     
     switch(addr) {
-        
+
         case 0x00: // CIA_DATA_PORT_A
 
             pokePA(value);
@@ -224,7 +226,7 @@ CIA::poke(u16 addr, u8 value)
             return;
             
         case 0x02: // CIA_DATA_DIRECTION_A
-        
+
             if ((isCIAA() && value != 0x03) || (isCIAB() && value != 0xC0)) {
                 xfiles("DDRA: Setting unusual value %x\n", value);
             }
@@ -232,7 +234,7 @@ CIA::poke(u16 addr, u8 value)
             return;
             
         case 0x03: // CIA_DATA_DIRECTION_B
-        
+
             if (isCIAB() && value != 0xFF) {
                 xfiles("DDRB: Setting unusual value %x\n", value);
             }
@@ -350,7 +352,7 @@ CIA::poke(u16 addr, u8 value)
             return;
             
         case 0x0B: // UNUSED
-        
+
             return;
             
         case 0x0C: // CIA_DATA_REGISTER
@@ -376,7 +378,7 @@ CIA::poke(u16 addr, u8 value)
             return;
             
         case 0x0E: // CIA_CONTROL_REG_A
-        
+
             // -------0 : Stop timer
             // -------1 : Start timer
             
@@ -441,7 +443,7 @@ CIA::poke(u16 addr, u8 value)
                 delay &= ~(CIACountA1 | CIACountA0);
                 feed &= ~CIACountA0;
             }
-    
+
             // -0------ : Serial shift register in input mode (read)
             // -1------ : Serial shift register in output mode (write)
             
@@ -452,13 +454,13 @@ CIA::poke(u16 addr, u8 value)
 
                 // Inform the keyboard if this CIA is connected to it
                 if (isCIAA()) keyboard.setSPLine(!(value & 0x40), clock);
-                                
+
                 serCounter = 0;
                 
                 delay &= ~(CIASsrToSdr0 | CIASsrToSdr1 | CIASsrToSdr2 | CIASsrToSdr3);
                 delay &= ~(CIASdrToSsr0 | CIASdrToSsr1);
                 feed &= ~CIASdrToSsr0;
-            
+
                 delay &= ~(CIASerClk0 | CIASerClk1 | CIASerClk2);
                 feed &= ~CIASerClk0;
             }
@@ -544,4 +546,6 @@ CIA::poke(u16 addr, u8 value)
         default:
             fatalError;
     }
+}
+
 }

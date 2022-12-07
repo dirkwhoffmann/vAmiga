@@ -19,6 +19,8 @@
 #include "Paula.h"
 #include "SerialPort.h"
 
+namespace vamiga {
+
 CIA::CIA(int n, Amiga& ref) : SubComponent(ref), nr(n)
 {    
     subComponents = std::vector<AmigaComponent *> { &tod };
@@ -57,7 +59,7 @@ CIA::_reset(bool hard)
     // Update the memory layout because the OVL bit may have changed
     mem.updateMemSrcTables();
 }
- 
+
 void
 CIA::resetConfig()
 {
@@ -84,7 +86,7 @@ CIA::getConfigItem(Option option) const
         case OPT_CIA_REVISION:   return config.revision;
         case OPT_TODBUG:         return config.todBug;
         case OPT_ECLOCK_SYNCING: return config.eClockSyncing;
-        
+
         default:
             fatalError;
     }
@@ -105,7 +107,7 @@ CIA::setConfigItem(Option option, i64 value)
             return;
 
         case OPT_TODBUG:
-                        
+
             config.todBug = value;
             return;
             
@@ -345,7 +347,7 @@ void
 CIA::executeOneCycle()
 {
     clock += CIA_CYCLES(1);
- 
+
     // Make a local copy for speed
     u64 delay = this->delay;
     
@@ -353,107 +355,107 @@ CIA::executeOneCycle()
     u64 oldFeed  = feed;
     
     //
-	// Layout of timer (A and B)
-	//
+    // Layout of timer (A and B)
+    //
 
     // Source: "A Software Model of the CIA6526" by Wolfgang Lorenz
-	//
+    //
     //                           Phi2            Phi2                  Phi2
-	//                            |               |                     |
-	// timerA      -----    ------v------   ------v------     ----------v---------
-	// input  ---->| & |--->| dwDelay & |-X-| dwDelay & |---->| decrement counter|
-	//         --->|   |    |  CountA2  | | |  CountA3  |     |        (1)       |
-	//         |   -----    ------------- | -------------     |                  |
-	// -----------------          ^ Clr   |                   |                  |
-	// | bCRA & 0x01   | Clr (3)  |       | ------------------| new counter = 0? |
-	// | timer A start |<----     |       | |                 |                  |
-	// -----------------    |     |       v v                 |                  |
- 	//                    -----   |      -----                |      timer A     |
-	//                    | & |   |      | & |                |  16 bit counter  |
-	//                    |   |   |      |   |                |     and latch    |
-	//                    -----   |      -----                |                  |
+    //                            |               |                     |
+    // timerA      -----    ------v------   ------v------     ----------v---------
+    // input  ---->| & |--->| dwDelay & |-X-| dwDelay & |---->| decrement counter|
+    //         --->|   |    |  CountA2  | | |  CountA3  |     |        (1)       |
+    //         |   -----    ------------- | -------------     |                  |
+    // -----------------          ^ Clr   |                   |                  |
+    // | bCRA & 0x01   | Clr (3)  |       | ------------------| new counter = 0? |
+    // | timer A start |<----     |       | |                 |                  |
+    // -----------------    |     |       v v                 |                  |
+    //                    -----   |      -----                |      timer A     |
+    //                    | & |   |      | & |                |  16 bit counter  |
+    //                    |   |   |      |   |                |     and latch    |
+    //                    -----   |      -----                |                  |
     //                     ^ ^    |        |(2)               |                  |
     //                     | |    ---------|-------------     |                  |
     //                     | |             |            |     |                  |
-	// timer A             | |             |    -----   |     |                  |
-	// output  <-----------|-X-------------X--->|>=1|---X---->| load from latch  |
-	//                     |                --->|   |         |        (4)       |
-	//                    -----             |   -----         --------------------
-	//                    |>=1|             |
-	//                    |   |             |       Phi2
-	//                    -----             |        |
-	//                     ^ ^              |  ------v------    ----------------
-	//                     | |              ---| dwDelay & |<---| bcRA & 0x10  |
-	//                     | ----------------  |  LoadA1   |    | force load   |
-	//                     |       Phi2     |  -------------    ----------------
+    // timer A             | |             |    -----   |     |                  |
+    // output  <-----------|-X-------------X--->|>=1|---X---->| load from latch  |
+    //                     |                --->|   |         |        (4)       |
+    //                    -----             |   -----         --------------------
+    //                    |>=1|             |
+    //                    |   |             |       Phi2
+    //                    -----             |        |
+    //                     ^ ^              |  ------v------    ----------------
+    //                     | |              ---| dwDelay & |<---| bcRA & 0x10  |
+    //                     | ----------------  |  LoadA1   |    | force load   |
+    //                     |       Phi2     |  -------------    ----------------
     //                     |        |       |                            ^ Clr
-	// -----------------   |  ------v------ |                            |
-	// | bCRA & 0x08   |   |  | dwDelay & | |                           Phi2
-	// | one shot      |---X->| oneShotA0 |--
-	// -----------------      -------------
+    // -----------------   |  ------v------ |                            |
+    // | bCRA & 0x08   |   |  | dwDelay & | |                           Phi2
+    // | one shot      |---X->| oneShotA0 |--
+    // -----------------      -------------
 
     //
-	// Timer A
+    // Timer A
     //
     
-	// (1) : Decrement counter
-	if (delay & CIACountA3) counterA--;
-	
-	// (2) : Check underflow condition
-	bool timerAOutput = (counterA == 0 && (delay & CIACountA2));
-	
-	if (timerAOutput) {
-                
+    // (1) : Decrement counter
+    if (delay & CIACountA3) counterA--;
+
+    // (2) : Check underflow condition
+    bool timerAOutput = (counterA == 0 && (delay & CIACountA2));
+
+    if (timerAOutput) {
+
         icrAck &= ~0x01;
         
-		// (3) Stop timer in one shot mode
-		if ((delay | feed) & CIAOneShotA0) {
+        // (3) Stop timer in one shot mode
+        if ((delay | feed) & CIAOneShotA0) {
             
-			cra &= ~0x01;
-			delay &= ~(CIACountA2 | CIACountA1 | CIACountA0);
-			feed &= ~CIACountA0;
-		}
-		
-		// Timer A output to timer B in cascade mode
-		if ((crb & 0x61) == 0x41 || ((crb & 0x61) == 0x61 && cnt)) {
+            cra &= ~0x01;
+            delay &= ~(CIACountA2 | CIACountA1 | CIACountA0);
+            feed &= ~CIACountA0;
+        }
+
+        // Timer A output to timer B in cascade mode
+        if ((crb & 0x61) == 0x41 || ((crb & 0x61) == 0x61 && cnt)) {
             
-			delay |= CIACountB1;
-		}
+            delay |= CIACountB1;
+        }
         
         // Reload counter immediately
-		delay |= CIALoadA1;
-	}
+        delay |= CIALoadA1;
+    }
     
-	// (4) : Load counter
-	if (delay & CIALoadA1) reloadTimerA(&delay);
-	
-    //
-	// Timer B
-	//
-    
-	// (1) : Decrement counter
-	if (delay & CIACountB3) counterB--;
+    // (4) : Load counter
+    if (delay & CIALoadA1) reloadTimerA(&delay);
 
-	// (2) : Check underflow condition
-	bool timerBOutput = (counterB == 0 && (delay & CIACountB2));
-	
-	if (timerBOutput) {
-				
+    //
+    // Timer B
+    //
+    
+    // (1) : Decrement counter
+    if (delay & CIACountB3) counterB--;
+
+    // (2) : Check underflow condition
+    bool timerBOutput = (counterB == 0 && (delay & CIACountB2));
+
+    if (timerBOutput) {
+
         icrAck &= ~0x02;
         
-		// (3) : Stop timer in one shot mode
-		if ((delay | feed) & CIAOneShotB0) {
+        // (3) : Stop timer in one shot mode
+        if ((delay | feed) & CIAOneShotB0) {
             
-			crb &= ~0x01;
-			delay &= ~(CIACountB2 | CIACountB1 | CIACountB0);
-			feed &= ~CIACountB0;
-		}
-		delay |= CIALoadB1;
-	}
-	
-	// (4) : Load counter
-	if (delay & CIALoadB1) reloadTimerB(&delay);
-		
+            crb &= ~0x01;
+            delay &= ~(CIACountB2 | CIACountB1 | CIACountB0);
+            feed &= ~CIACountB0;
+        }
+        delay |= CIALoadB1;
+    }
+
+    // (4) : Load counter
+    if (delay & CIALoadB1) reloadTimerB(&delay);
+
     //
     // Serial register
     //
@@ -499,119 +501,119 @@ CIA::executeOneCycle()
             serCounter--;
         }
     }
-	
-	//
-	// Timer output to PB6 (timer A) and PB7 (timer B)
-    // 
-	
-	// Source: "A Software Model of the CIA6526" by Wolfgang Lorenz
-	//
-	//                     (7)            -----------------
+
+    //
+    // Timer output to PB6 (timer A) and PB7 (timer B)
+    //
+
+    // Source: "A Software Model of the CIA6526" by Wolfgang Lorenz
+    //
+    //                     (7)            -----------------
     //         -------------------------->| bCRA & 0x04   |
     //         |                          | timer mode    |  ----------------
-	//         |                          | 0x00: pulse   |->| 0x02 (timer) |
-	// timerA  | Flip ---------------     |       (7)     |  |              |
+    //         |                          | 0x00: pulse   |->| 0x02 (timer) |
+    // timerA  | Flip ---------------     |       (7)     |  |              |
     // output -X----->| bPB67Toggle |---->| 0x04: toggle  |  | bCRA & 0x02  |
-	//            (5) |  ^ 0x40     |     |       (8)     |  | output mode  |-> PB6 out
-	//                ---------------     -----------------  |     (6)      |
-	//                       ^ Set        -----------------  | 0x00 (port)  |
-	//                       |            | port B bit 6  |->|              |
-	// ----------------- 0->1|            |    output     |  ----------------
-	// | bCRA & 0x01   |------            -----------------
-	// | timer A start |
-	// -----------------
+    //            (5) |  ^ 0x40     |     |       (8)     |  | output mode  |-> PB6 out
+    //                ---------------     -----------------  |     (6)      |
+    //                       ^ Set        -----------------  | 0x00 (port)  |
+    //                       |            | port B bit 6  |->|              |
+    // ----------------- 0->1|            |    output     |  ----------------
+    // | bCRA & 0x01   |------            -----------------
+    // | timer A start |
+    // -----------------
 
     //
-	// Timer A output to PB6
+    // Timer A output to PB6
     //
     
-	if (timerAOutput) {
-		
-        // (5) : Toggle underflow counter bit
-		pb67Toggle ^= 0x40;
-		
-        // (6)
-		if (cra & 0x02) {
+    if (timerAOutput) {
 
-			if ((cra & 0x04) == 0) {
+        // (5) : Toggle underflow counter bit
+        pb67Toggle ^= 0x40;
+
+        // (6)
+        if (cra & 0x02) {
+
+            if ((cra & 0x04) == 0) {
                 
-				// (7) : Set PB6 high for one clock cycle
-				pb67TimerOut |= 0x40;
-				delay |= CIAPB6Low0;
-				delay &= ~CIAPB6Low1;
+                // (7) : Set PB6 high for one clock cycle
+                pb67TimerOut |= 0x40;
+                delay |= CIAPB6Low0;
+                delay &= ~CIAPB6Low1;
                 
-			} else {
+            } else {
                 
-				// (8) : Toggle PB6
+                // (8) : Toggle PB6
                 pb67TimerOut ^= 0x40;
-			}
-		}
-	}
+            }
+        }
+    }
 
     //
-	// Timer B output to PB7
-	//
+    // Timer B output to PB7
+    //
     
-	if (timerBOutput) {
-		
+    if (timerBOutput) {
+
         // (5) : Toggle underflow counter bit
-		pb67Toggle ^= 0x80;
-	
+        pb67Toggle ^= 0x80;
+
         // (6)
-		if (crb & 0x02) {
-		
-			if ((crb & 0x04) == 0) {
+        if (crb & 0x02) {
+
+            if ((crb & 0x04) == 0) {
                 
-				// (7) : Set PB7 high for one clock cycle
-				pb67TimerOut |= 0x80;
-				delay |= CIAPB7Low0;
-				delay &= ~CIAPB7Low1;
+                // (7) : Set PB7 high for one clock cycle
+                pb67TimerOut |= 0x80;
+                delay |= CIAPB7Low0;
+                delay &= ~CIAPB7Low1;
                 
-			} else {
+            } else {
                 
-				// (8) : Toggle PB7
+                // (8) : Toggle PB7
                 pb67TimerOut ^= 0x80;
-			}
-		}
-	}
-	
-	// Set PB67 back to low
+            }
+        }
+    }
+
+    // Set PB67 back to low
     if (delay & CIAPB6Low1) { pb67TimerOut &= ~0x40; }
     if (delay & CIAPB7Low1) { pb67TimerOut &= ~0x80; }
 
-	
-	//
-	// Interrupt logic
+
     //
-	
-	// Source: "A Software Model of the CIA6526" by Wolfgang Lorenz
-	//
-	//                      ----------
-	//                      | bIMR & |----
-	//                      |  0x01  |   |    -----
-	//                      ----------   ---->| & |----
-	// timerA       (9) Set ----------   ---->|   |   |
-	// output  ------------>| bICR & |   |    -----   |
-	//           ---------->|  0x01  |----            |  -----
-	//           |      Clr ----------                -->|>=1|---
-	//           |          ----------                -->|   |  |
-	//           |          | bIMR & |----            |  -----  |
-	//           |          |  0x02  |   |    -----   |         |
-	//           |          ----------   ---->| & |----         |
-	// timerB    | (10) Set ----------   ---->|   |             |
-	// output  --|--------->| bICR & |   |    -----             |
-	//           X--------->|  0x01  |----                      |
-	//           |      Clr ----------       	                |
-	// read      |                                              |
-	// ICR ------X---------------X-------------------           |
-	//                           | (12)             |           |
-	//                           v Clr              v Clr       |
-	//           ------      ----------      ----------------   | (11)
-	// Int    <--| -1 |<-----| bICR & |<-----|   dwDelay &  |<---
-	// ouptput   |    |      |  0x80  | Set  |  Interrupt1  |
-	// (14)      ------      ---------- (13) -------^--------
-	//                                              |
-	//                                             Phi2
+    // Interrupt logic
+    //
+
+    // Source: "A Software Model of the CIA6526" by Wolfgang Lorenz
+    //
+    //                      ----------
+    //                      | bIMR & |----
+    //                      |  0x01  |   |    -----
+    //                      ----------   ---->| & |----
+    // timerA       (9) Set ----------   ---->|   |   |
+    // output  ------------>| bICR & |   |    -----   |
+    //           ---------->|  0x01  |----            |  -----
+    //           |      Clr ----------                -->|>=1|---
+    //           |          ----------                -->|   |  |
+    //           |          | bIMR & |----            |  -----  |
+    //           |          |  0x02  |   |    -----   |         |
+    //           |          ----------   ---->| & |----         |
+    // timerB    | (10) Set ----------   ---->|   |             |
+    // output  --|--------->| bICR & |   |    -----             |
+    //           X--------->|  0x01  |----                      |
+    //           |      Clr ----------       	                |
+    // read      |                                              |
+    // ICR ------X---------------X-------------------           |
+    //                           | (12)             |           |
+    //                           v Clr              v Clr       |
+    //           ------      ----------      ----------------   | (11)
+    // Int    <--| -1 |<-----| bICR & |<-----|   dwDelay &  |<---
+    // ouptput   |    |      |  0x80  | Set  |  Interrupt1  |
+    // (14)      ------      ---------- (13) -------^--------
+    //                                              |
+    //                                             Phi2
     
     if (timerAOutput) { icr |= 0x01; } // (9)
     if (timerBOutput) { icr |= 0x02; } // (10)
@@ -1005,7 +1007,7 @@ CIAB::computePA() const
     
     return result;
 }
-    
+
 //            -------
 //  /STEP <-- | PB0 |   (Floppy drive step heads)
 //    DIR <-- | PB1 |   (Floppy drive head direction)
@@ -1071,4 +1073,6 @@ CIAB::computePB() const
         result = (result & ~ddrb) | (prb & ddrb);
     
     return result;
+}
+
 }

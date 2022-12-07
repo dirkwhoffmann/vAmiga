@@ -12,6 +12,8 @@
 #include "CIA.h"
 #include "IOUtils.h"
 
+namespace vamiga {
+
 TOD::TOD(CIA &ciaref, Amiga& ref) : SubComponent(ref), cia(ciaref)
 {
 
@@ -176,7 +178,7 @@ TOD::increment()
 
     preTod = tod;
     lastInc = cia.clock;
-        
+
     if (!incLoNibble(tod.lo))  goto check;
     if (!incHiNibble(tod.lo))  goto check;
     if (!incLoNibble(tod.mid)) goto check;
@@ -224,4 +226,6 @@ TOD::checkIrq()
         cia.todInterrupt();
     }
     matching = (tod.value == alarm.value);
+}
+
 }

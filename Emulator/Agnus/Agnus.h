@@ -19,7 +19,7 @@
 #include "Sequencer.h"
 #include "Memory.h"
 
-using namespace vamiga;
+namespace vamiga {
 
 /* Bitplane event modifiers
  *
@@ -33,7 +33,7 @@ static constexpr usize DRAW_EVEN = 0b010;
 static constexpr usize DRAW_BOTH = 0b011;
 
 class Agnus : public SubComponent {
-            
+
     // Current configuration
     AgnusConfig config = {};
 
@@ -145,7 +145,7 @@ public:
     i8 scrollOdd;
     i8 scrollEven;
     
-        
+
     //
     // Data bus
     //
@@ -324,7 +324,7 @@ public:
     
     // Returns the maximum amout of Chip Ram in KB this Agnus can handle
     isize chipRamLimit() const;
-        
+
     // Returns the line in which the VERTB interrupt is triggered
     isize vStrobeLine() const { return config.revision == AGNUS_OCS_OLD ? 1 : 0; }
     
@@ -333,7 +333,7 @@ public:
     
     // Checks whether Agnus is able to access Slow Ram
     bool slowRamIsMirroredIn() const;
-        
+
     
     //
     // Analyzing
@@ -343,7 +343,7 @@ public:
     
     AgnusInfo getInfo() const { return AmigaComponent::getInfo(info); }
     EventInfo getEventInfo() const { return AmigaComponent::getInfo(eventInfo); }
-    EventSlotInfo getSlotInfo(isize nr) const; 
+    EventSlotInfo getSlotInfo(isize nr) const;
     const AgnusStats &getStats() { return stats; }
     
 private:
@@ -461,13 +461,13 @@ public:
     bool sprdma() const { return sprdma(dmacon); }
     bool dskdma() const { return dskdma(dmacon); }
     
-        
+
     //
     // Performing DMA (AgnusDma.cpp)
     //
 
 public:
-        
+
     // Checks if the bus is currently available for the specified resource
     template <BusOwner owner> bool busIsFree();
 
@@ -636,7 +636,7 @@ public:
         scheduleAbs<s>(0, id);
         this->data[s] = data;
     }
-        
+
     template<EventSlot s> void scheduleInc(Cycle cycle, EventID id)
     {
         scheduleAbs<s>(trigger[s] + cycle, id);
@@ -647,7 +647,7 @@ public:
         scheduleAbs<s>(trigger[s] + cycle, id);
         this->data[s] = data;
     }
-        
+
     template<EventSlot s> void rescheduleAbs(Cycle cycle)
     {
         trigger[s] = cycle;
@@ -674,12 +674,12 @@ public:
     }
 
     /*
-    template<EventSlot s> void schedulePos(Beam target, EventID id, i64 data) {
+     template<EventSlot s> void schedulePos(Beam target, EventID id, i64 data) {
 
-        assert(target.v > pos.v || (target.v == pos.v && target.h >= pos.h));
-        scheduleRel<s>(DMA_CYCLES(pos.diff(target.v, target.h)), id, data);
-    }
-    */
+     assert(target.v > pos.v || (target.v == pos.v && target.h >= pos.h));
+     scheduleRel<s>(DMA_CYCLES(pos.diff(target.v, target.h)), id, data);
+     }
+     */
 
     template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id) {
 
@@ -698,10 +698,10 @@ public:
     }
 
     /*
-    template<EventSlot s> void reschedulePos(Beam pos) {
-        rescheduleAbs<s>(beamToCycle(pos));
-    }
-    */
+     template<EventSlot s> void reschedulePos(Beam pos) {
+     rescheduleAbs<s>(beamToCycle(pos));
+     }
+     */
 
     template<EventSlot s> void reschedulePos(i16 vpos, i16 hpos) {
 
@@ -789,3 +789,5 @@ public:
     // Services an inspection event
     void serviceINSEvent(EventID id);
 };
+
+}

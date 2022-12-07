@@ -12,7 +12,7 @@
 #include "TODTypes.h"
 #include "SubComponent.h"
 
-using namespace vamiga;
+namespace vamiga {
 
 typedef union
 {
@@ -35,7 +35,7 @@ class TOD : public SubComponent {
 
     // Result of the latest inspection
     mutable TODInfo info = {};
-            
+
     // The 24 bit counter
     Counter24 tod;
     
@@ -44,7 +44,7 @@ class TOD : public SubComponent {
     
     // Time stamp of the last increment
     Cycle lastInc;
-        
+
     // The counter latch
     Counter24 latch;
     
@@ -134,7 +134,7 @@ public:
 
     void _inspect() const override;
 
- 
+
     //
     // Accessing
     //
@@ -205,3 +205,5 @@ private:
     // Starts the counter
     void cont() { stopped = false; }
 };
+
+}

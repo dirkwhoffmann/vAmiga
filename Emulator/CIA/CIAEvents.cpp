@@ -11,6 +11,8 @@
 #include "CIA.h"
 #include "Agnus.h"
 
+namespace vamiga {
+
 void
 CIA::serviceEvent(EventID id)
 {
@@ -49,4 +51,6 @@ CIA::scheduleWakeUp()
     } else {
         agnus.scheduleAbs<SLOT_CIAB>(wakeUpCycle, CIA_WAKEUP);
     }
+}
+
 }
