@@ -12,6 +12,8 @@
 #include "AmigaComponent.h"
 #include "IOUtils.h"
 
+namespace vamiga {
+
 class Defaults : public AmigaObject {
 
     mutable util::ReentrantMutex mutex;
@@ -93,3 +95,5 @@ public:
     void remove(Option option, isize nr) throws;
     void remove(Option option, std::vector <isize> nrs) throws;
 };
+
+}

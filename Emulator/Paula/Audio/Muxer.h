@@ -17,6 +17,8 @@
 #include "Chrono.h"
 #include "Sampler.h"
 
+namespace vamiga {
+
 /* Architecture of the audio pipeline
  *
  *           Mux class
@@ -63,7 +65,7 @@ class Muxer : public SubComponent {
 
     // Volume control
     Volume volume;
-            
+
     // Volume scaling factors
     float vol[4];
     float volL;
@@ -89,12 +91,12 @@ public:
     };
 
     // Output
-    AudioStream<SampleType> stream;
+    AudioStream<SAMPLE_T> stream;
     
     // Audio filters
     AudioFilter filterL = AudioFilter(amiga);
     AudioFilter filterR = AudioFilter(amiga);
-        
+
     
     //
     // Initializing
@@ -143,7 +145,7 @@ private:
         << volL
         << volR;
     }
-        
+
     template <class T>
     void applyToResetItems(T& worker, bool hard = true)
     {
@@ -190,13 +192,13 @@ public:
     // Returns true if the output volume is zero
     bool isMuted() const { return config.volL == 0 && config.volR == 0; }
 
-        
+
     //
     // Controlling volume
     //
     
 public:
-        
+
     /* Starts to ramp up the volume. This function configures variables volume
      * and targetVolume to simulate a smooth audio fade in.
      */
@@ -250,5 +252,7 @@ public:
      * the ring buffer's read pointer is not closer than n elements to the
      * buffer end.
      */
-    SampleType *nocopy(isize n);
+    SAMPLE_T *nocopy(isize n);
 };
+
+}

@@ -100,7 +100,7 @@
 //
 
 // Type alias for the datatype used by the host machine's audio backend
-struct FloatStereo; typedef struct FloatStereo SampleType;
+#define SAMPLE_T FloatStereo
 
 // Scaling factor used by the FloatStereo SampleType
 #define AUD_SCALE 0.00001f

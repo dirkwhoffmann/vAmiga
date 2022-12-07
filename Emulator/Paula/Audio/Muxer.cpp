@@ -16,6 +16,8 @@
 #include <cmath>
 #include <algorithm>
 
+namespace vamiga {
+
 Muxer::Muxer(Amiga& ref) : SubComponent(ref)
 {
     subComponents = std::vector<AmigaComponent *> {
@@ -140,7 +142,7 @@ Muxer::getConfigItem(Option option) const
             assert(filterL.type == config.filterType);
             assert(filterR.type == config.filterType);
             return config.filterType;
-                        
+
         case OPT_FILTER_ALWAYS_ON:
             return config.filterAlwaysOn;
 
@@ -197,9 +199,9 @@ Muxer::setConfigItem(Option option, i64 value)
             filterL.type = ((FilterType)value);
             filterR.type = ((FilterType)value);
             return;
-                        
+
         case OPT_FILTER_ALWAYS_ON:
-                        
+
             config.filterAlwaysOn = value;
             return;
 
@@ -207,7 +209,7 @@ Muxer::setConfigItem(Option option, i64 value)
             
             config.volL = std::clamp(value, 0LL, 100LL);
             volL = powf((float)value / 50, 1.4f);
-                        
+
             if (wasMuted != isMuted())
                 msgQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
             return;
@@ -230,17 +232,17 @@ void
 Muxer::setConfigItem(Option option, long id, i64 value)
 {
     switch (option) {
-                        
+
         case OPT_AUDVOL:
-    
+
             assert(id >= 0 && id <= 3);
-                        
+
             config.vol[id] = std::clamp(value, 0LL, 100LL);
             vol[id] = powf((float)value / 100, 1.4f);
             return;
             
         case OPT_AUDPAN:
-                        
+
             assert(id >= 0 && id <= 3);
 
             config.pan[id] = value;
@@ -294,7 +296,7 @@ Muxer::rampUpFromZero()
     
     rampUp();
 }
- 
+
 void
 Muxer::rampDown()
 {
@@ -312,7 +314,7 @@ Muxer::synthesize(Cycle clock, Cycle target, long count)
 
     // Determine the number of elapsed cycles per audio sample
     double cyclesPerSample = (double)(target - clock) / (double)count;
-                
+
     switch (config.samplingMethod) {
             
         case SMP_NONE:
@@ -345,7 +347,7 @@ Muxer::synthesize(Cycle clock, Cycle target)
     double exact = (double)(target - clock) / cyclesPerSample + fraction;
     long count = (long)exact;
     fraction = exact - (double)count;
-             
+
     switch (config.samplingMethod) {
         case SMP_NONE:
             
@@ -510,16 +512,18 @@ Muxer::copy(void *buffer1, void *buffer2, isize n)
     stream.unlock();
 }
 
-SampleType *
+SAMPLE_T *
 Muxer::nocopy(isize n)
 {
     stream.lock();
     
     if (stream.count() < n) handleBufferUnderflow();
-    SampleType *addr = stream.currentAddr();
+    SAMPLE_T *addr = stream.currentAddr();
     stream.skip(n);
     stats.consumedSamples += n;
 
     stream.unlock();
     return addr;
+}
+
 }

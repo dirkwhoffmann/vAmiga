@@ -12,6 +12,8 @@
 #include "Paula.h"
 #include "IOUtils.h"
 
+namespace vamiga {
+
 template <isize nr>
 StateMachine<nr>::StateMachine(Amiga& ref) : SubComponent(ref)
 {
@@ -70,11 +72,11 @@ StateMachine<nr>::enableDMA()
 
     switch (state) {
 
-         case 0b000:
+        case 0b000:
 
-             move_000_001();
-             break;
-     }
+            move_000_001();
+            break;
+    }
 }
 
 template <isize nr> void
@@ -160,14 +162,14 @@ template <isize nr> void
 StateMachine<nr>::penhi()
 {
     if (!enablePenhi) return;
- 
+
     Sampler &sampler = paula.muxer.sampler[nr];
 
     i8 sample = (i8)HI_BYTE(buffer);
     i16 scaled = (i16)(sample * audvol);
     
     trace(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
-                
+
     if (!sampler.isFull()) {
         sampler.append(agnus.clock, scaled);
     } else {
@@ -420,3 +422,5 @@ template void StateMachine<0>::move_011_010();
 template void StateMachine<1>::move_011_010();
 template void StateMachine<2>::move_011_010();
 template void StateMachine<3>::move_011_010();
+
+}

@@ -14,7 +14,7 @@
 #include "Chrono.h"
 #include "Concurrency.h"
 
-using namespace vamiga;
+namespace vamiga {
 
 /* This class manages the emulator thread that runs side by side with the GUI.
  * The thread exists during the lifetime of the emulator instance, but may not
@@ -148,7 +148,7 @@ protected:
     
     // Time stamp for adjusting execution speed
     util::Time targetTime;
-            
+
     // Clocks for measuring the CPU load
     util::Clock nonstopClock;
     util::Clock loadClock;
@@ -244,7 +244,7 @@ protected:
 public:
 
     // Provides the current sync mode
-    virtual SyncMode getSyncMode() const = 0; 
+    virtual SyncMode getSyncMode() const = 0;
 
     // Awakes the thread if it runs in pulse mode
     void wakeUp();
@@ -263,3 +263,5 @@ struct AutoResume {
 };
 
 #define SUSPENDED AutoResume _ar(this);
+
+}

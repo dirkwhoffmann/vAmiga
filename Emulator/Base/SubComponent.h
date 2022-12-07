@@ -47,12 +47,6 @@ class SerialPort;
 class UART;
 class ZorroManager;
 
-}
-
-using namespace vamiga;
-
-namespace vamiga {
-
 /* This class extends the AmigaComponent class with references to all components
  * that are part of the Amiga class.
  */

@@ -12,7 +12,7 @@
 #include "AudioFilterTypes.h"
 #include "SubComponent.h"
 
-using namespace vamiga;
+namespace vamiga {
 
 class AudioFilter : public SubComponent {
     
@@ -87,7 +87,7 @@ private:
     //
     
 private:
-        
+
     // Sets the sample rate (only to be called by the Muxer)
     void setSampleRate(double sampleRate);
     
@@ -104,3 +104,5 @@ public:
     // Inserts a sample into the filter pipeline
     float apply(float sample);
 };
+
+}

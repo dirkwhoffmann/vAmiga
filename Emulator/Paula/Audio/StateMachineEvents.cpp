@@ -10,6 +10,8 @@
 #include "config.h"
 #include "Paula.h"
 
+namespace vamiga {
+
 template <isize nr> void
 StateMachine<nr>::serviceEvent()
 {
@@ -38,3 +40,5 @@ template void StateMachine<0>::serviceEvent();
 template void StateMachine<1>::serviceEvent();
 template void StateMachine<2>::serviceEvent();
 template void StateMachine<3>::serviceEvent();
+
+}

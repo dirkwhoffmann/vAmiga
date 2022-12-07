@@ -12,6 +12,8 @@
 #include "RingBuffer.h"
 #include "AgnusTypes.h"
 
+namespace vamiga {
+
 /* A key role in the architecture of vAmiga is played by two sorted ring
  * buffers:
  *
@@ -36,7 +38,7 @@
 enum RegChangeID : i32
 {
     SET_NONE,
-     
+
     SET_BLTSIZE,
     SET_BLTSIZV,
     SET_BLTCON0,
@@ -187,7 +189,7 @@ struct SigRecorder : public util::SortedArray<u32, 256>
     }
     
     void insert(i64 key, u32 signal) {
-    
+
         modified = true;
         
         for (isize i = 0; i < w; i++) {
@@ -213,3 +215,5 @@ struct SigRecorder : public util::SortedArray<u32, 256>
         }
     }
 };
+
+}

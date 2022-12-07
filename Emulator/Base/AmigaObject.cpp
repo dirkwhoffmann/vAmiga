@@ -11,6 +11,8 @@
 #include "AmigaObject.h"
 #include <iostream>
 
+namespace vamiga {
+
 bool
 AmigaObject::verbose = true;
 
@@ -30,4 +32,6 @@ void
 AmigaObject::dump(Category category) const
 {
     dump(category, std::cout);
+}
+
 }

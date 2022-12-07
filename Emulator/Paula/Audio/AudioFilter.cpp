@@ -11,6 +11,8 @@
 #include "AudioFilter.h"
 #include <cmath>
 
+namespace vamiga {
+
 void
 AudioFilter::setSampleRate(double sampleRate)
 {
@@ -60,4 +62,6 @@ AudioFilter::apply(float sample)
     y2 = y1; y1 = y0;
     
     return (float)y0;
+}
+
 }

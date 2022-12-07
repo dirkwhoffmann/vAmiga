@@ -13,6 +13,8 @@
 #include "Concurrency.h"
 #include "RingBuffer.h"
 
+namespace vamiga {
+
 /* About the AudioStream
  *
  * The audio stream is the last element in the audio pipeline. It is a temporary
@@ -149,7 +151,7 @@ public:
     
     // Adds a sample to the ring buffer
     void add(float l, float r) { this->write(T(l,r)); }
-        
+
     // Puts the write pointer somewhat ahead of the read pointer
     void alignWritePtr();
     
@@ -180,3 +182,5 @@ public:
     float draw(u32 *buffer, isize width, isize height,
                bool left, float highestAmplitude, u32 color) const;
 };
+
+}

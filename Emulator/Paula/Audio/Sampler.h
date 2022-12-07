@@ -14,6 +14,8 @@
 #include "RingBuffer.h"
 #include "Reflection.h"
 
+namespace vamiga {
+
 /* This buffer type is used to temporarily store the sound samples produced by
  * the state machine. Keep in mind that the state machine doesn't output
  * at a constant sampling rate. Instead, a new sample is generated whenever the
@@ -25,7 +27,9 @@ struct Sampler : util::SortedRingBuffer <i16, VPOS_CNT * HPOS_CNT_PAL> {
     
     // Initializes the ring buffer with a single dummy element
     void reset();
-     
+
     // Interpolates a sound sample for the specified target cycle
     template <SamplingMethod method> i16 interpolate(Cycle clock);
 };
+
+}

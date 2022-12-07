@@ -11,6 +11,8 @@
 
 #include "Error.h"
 
+namespace vamiga {
+
 /* Object model:
  *
  * ------------------
@@ -143,3 +145,5 @@ fprintf(stderr, "XFILES: " format, ##__VA_ARGS__); }}
 #define xfiles(format, ...)
 
 #endif
+
+}

@@ -11,6 +11,8 @@
 #include "AudioStream.h"
 #include <algorithm>
 
+namespace vamiga {
+
 void
 Volume::shift()
 {
@@ -157,8 +159,10 @@ AudioStream<T>::draw(u32 *buffer, isize width, isize height,
 // Instantiate template functions
 //
 
-template void AudioStream<SampleType>::wipeOut();
-template void AudioStream<SampleType>::alignWritePtr();
-template void AudioStream<SampleType>::copy(void *, isize, Volume &);
-template void AudioStream<SampleType>::copy(void *, void *, isize, Volume &);
-template float AudioStream<SampleType>::draw(u32 *, isize, isize, bool, float, u32) const;
+template void AudioStream<SAMPLE_T>::wipeOut();
+template void AudioStream<SAMPLE_T>::alignWritePtr();
+template void AudioStream<SAMPLE_T>::copy(void *, isize, Volume &);
+template void AudioStream<SAMPLE_T>::copy(void *, void *, isize, Volume &);
+template float AudioStream<SAMPLE_T>::draw(u32 *, isize, isize, bool, float, u32) const;
+
+}

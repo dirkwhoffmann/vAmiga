@@ -14,6 +14,8 @@
 #include "Sampler.h"
 #include "Agnus.h"
 
+namespace vamiga {
+
 template <isize nr>
 class StateMachine : public SubComponent {
 
@@ -51,7 +53,7 @@ public:
 
     // Audio DMA request to Agnus for one word of data
     bool audDR;
-        
+
     // Set to true if the next 011->010 transition should trigger an interrupt
     bool intreq2;
 
@@ -148,7 +150,7 @@ private:
 public:
     
     StateMachineInfo getInfo() const { return AmigaComponent::getInfo(info); }
-        
+
     
     //
     // Performing state machine actions
@@ -253,3 +255,5 @@ public:
 
     void serviceEvent();
 };
+
+}

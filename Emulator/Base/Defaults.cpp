@@ -27,6 +27,8 @@
 #include "RemoteManagerTypes.h"
 #include "RemoteServerTypes.h"
 
+namespace vamiga {
+
 Defaults::Defaults()
 {
     setFallback(OPT_VIDEO_FORMAT, PAL);
@@ -319,7 +321,7 @@ Defaults::save(std::stringstream &stream)
             stream << std::endl << "[" << group << "]" << std::endl;
 
             for (const auto &[key, value]: values) {
-            
+
                 stream << key << "=" << value << std::endl;
             }
         }
@@ -497,7 +499,7 @@ void
 Defaults::remove(Option option)
 {
     remove(string(OptionEnum::key(option)));
-    }
+}
 
 void
 Defaults::remove(Option option, isize nr)
@@ -509,4 +511,6 @@ void
 Defaults::remove(Option option, std::vector <isize> nrs)
 {
     for (auto &nr : nrs) remove(option, nr);
+}
+
 }

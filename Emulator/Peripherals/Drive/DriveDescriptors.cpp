@@ -17,6 +17,8 @@
 #include <vector>
 #include <algorithm>
 
+namespace vamiga {
+
 //
 // GeometryDescriptor
 //
@@ -61,7 +63,7 @@ GeometryDescriptor::driveGeometries(isize numBlocks, isize bsize)
     // Compute all geometries compatible with the given block count
     for (isize h = GeometryDescriptor::hMin; h <= GeometryDescriptor::hMax; h++) {
         for (isize i = 0; i < isizeof(sizes); i++) {
-                  
+
             auto s = isize(sizes[i]);
             auto blocksPerCyl = h * s;
             
@@ -79,7 +81,7 @@ GeometryDescriptor::driveGeometries(isize numBlocks, isize bsize)
 
     // Sort all entries
     std::sort(result.begin(), result.end());
-        
+
     return result;
 }
 
@@ -213,7 +215,7 @@ void
 DriverDescriptor::dump(std::ostream& os) const
 {
     using namespace util;
-        
+
     os << tab("DOS type");
     os << hex(dosType);
     os << " (" << OSDebugger::dosTypeStr(dosType) << ")" << std::endl;
@@ -232,5 +234,7 @@ DriverDescriptor::dump(std::ostream& os) const
 void
 DriverDescriptor::checkCompatibility() const
 {
+
+}
 
 }

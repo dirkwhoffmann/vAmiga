@@ -12,6 +12,8 @@
 #include "Chrono.h"
 #include <iostream>
 
+namespace vamiga {
+
 Thread::Thread()
 {
 
@@ -47,13 +49,13 @@ Thread::sleep<Thread::SyncMode::Periodic>()
 
     // Only proceed if we're not running in warp mode
     if (warpMode) return;
-        
+
     // Check if we're running too slow...
     if (now > targetTime) {
         
         // Check if we're completely out of sync...
         if ((now - targetTime).asMilliseconds() > 200) {
-                        
+
             warn("Emulation is way too slow: %f\n",(now - targetTime).asSeconds());
 
             // Restart the sync timer
@@ -73,7 +75,7 @@ Thread::sleep<Thread::SyncMode::Periodic>()
             targetTime = util::Time::now();
         }
     }
-        
+
     // Sleep for a while
     targetTime += util::Time(i64(1000000000.0 / refreshRate()));
     targetTime.sleepUntil();
@@ -97,14 +99,14 @@ Thread::main()
     while (++loopCounter) {
 
         if (isRunning()) {
-                        
+
             switch (getSyncMode()) {
 
                 case SyncMode::Periodic: execute<SyncMode::Periodic>(); break;
                 case SyncMode::Pulsed: execute<SyncMode::Pulsed>(); break;
             }
         }
-                
+
         if (!warpMode || !isRunning()) {
             
             switch (getSyncMode()) {
@@ -145,17 +147,17 @@ Thread::main()
                 
                 AmigaComponent::powerOff();
                 state = EXEC_OFF;
-            
+
             } else if (state == EXEC_PAUSED && newState == EXEC_RUNNING) {
                 
                 AmigaComponent::run();
                 state = EXEC_RUNNING;
-            
+
             } else if (state == EXEC_RUNNING && newState == EXEC_OFF) {
                 
                 AmigaComponent::pause();
                 state = EXEC_PAUSED;
-            
+
             } else if (state == EXEC_RUNNING && newState == EXEC_PAUSED) {
                 
                 AmigaComponent::pause();
@@ -223,7 +225,7 @@ Thread::powerOff(bool blocking)
     assert(!isEmulatorThread());
     
     if (!isPoweredOff()) {
-                
+
         // Request a state change and wait until the new state has been reached
         changeStateTo(EXEC_OFF, blocking);
     }
@@ -236,7 +238,7 @@ Thread::run(bool blocking)
 
     // Never call this function inside the emulator thread
     assert(!isEmulatorThread());
-        
+
     if (!isRunning()) {
 
         // Throw an exception if the emulator is not ready to run
@@ -256,7 +258,7 @@ Thread::pause(bool blocking)
     assert(!isEmulatorThread());
     
     if (isRunning()) {
-                
+
         // Request a state change and wait until the new state has been reached
         changeStateTo(EXEC_PAUSED, blocking);
     }
@@ -352,4 +354,6 @@ Thread::resume()
         changeStateTo(EXEC_RUNNING, true);
         run();
     }
+}
+
 }

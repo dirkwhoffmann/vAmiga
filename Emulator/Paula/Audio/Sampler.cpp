@@ -10,6 +10,8 @@
 #include "config.h"
 #include "Sampler.h"
 
+namespace vamiga {
+
 void
 Sampler::reset()
 {
@@ -76,3 +78,5 @@ Sampler::interpolate(Cycle clock)
 template i16 Sampler::interpolate<SMP_NONE>(Cycle clock);
 template i16 Sampler::interpolate<SMP_NEAREST>(Cycle clock);
 template i16 Sampler::interpolate<SMP_LINEAR>(Cycle clock);
+
+}
