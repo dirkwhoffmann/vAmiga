@@ -14,6 +14,8 @@
 
 #include <fstream>
 
+namespace vamiga {
+
 void
 RegressionTester::prepare(ConfigScheme scheme, string rom, string ext)
 {
@@ -37,7 +39,7 @@ RegressionTester::prepare(ConfigScheme scheme, string rom, string ext)
     constexpr isize warpSource = 1;
     
     // Run as fast as possible
-    amiga.warpOn(warpSource);    
+    amiga.warpOn(warpSource);
 }
 
 void
@@ -45,7 +47,7 @@ RegressionTester::run(string adf)
 {
     // Insert the test disk
     df0.swapDisk(adf);
- 
+
     // Run the emulator
     amiga.powerOn();
     amiga.run();
@@ -115,4 +117,6 @@ void
 RegressionTester::setErrorCode(u8 value)
 {
     retValue = value;
+}
+
 }

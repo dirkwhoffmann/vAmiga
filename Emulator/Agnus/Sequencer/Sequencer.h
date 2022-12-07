@@ -15,7 +15,7 @@
 #include "SubComponent.h"
 #include "MemoryTypes.h"
 
-using namespace vamiga;
+namespace vamiga {
 
 /* A central element in the emulation of the Amiga is the accurate modeling of
  * the DMA timeslot allocation table (Fig. 6-9 im the HRM, 3rd revision). All
@@ -40,7 +40,7 @@ using namespace vamiga;
  *         ...                           ...
  *     bplEvent[0xE2] = EVENT_NONE   dasEvent[0xE2] = BUS_REFRESH
  *     bplEvent[0xE3] = EVENT_NONE   dasEvent[0xE3] = EVENT_NONE
-*
+ *
  * All events in the BPL_SLOT can be superimposed by two drawing flags (bit 0
  * and bit 1) which trigger the transfer of the data registers into the shift
  * registers at the correct DMA cycle. Bit 0 controls the odd bitplanes and
@@ -213,7 +213,7 @@ private:
     // Methods from AmigaObject
     //
 
-    private:
+private:
 
     const char *getDescription() const override { return "Sequencer"; }
     void _dump(Category category, std::ostream& os) const override;
@@ -223,7 +223,7 @@ private:
     // Methods from AmigaComponent
     //
 
-    private:
+private:
 
     void _reset(bool hard) override;
 
@@ -245,7 +245,7 @@ private:
         << dasEvent
         << nextBplEvent
         << nextDasEvent
-                
+
         << ddfstrt
         << ddfstop
         >> ddfInitial
@@ -312,7 +312,7 @@ private:
 
     // Processes a signal change
     template <bool ecs> void processSignal(u32 signal, DDFState &state);
- 
+
     // Updates the jump table for the bplEvent table
     void updateBplJumpTable(i16 end = HPOS_MAX);
 
@@ -350,3 +350,5 @@ private:
     void eolHandler();
     void eofHandler();
 };
+
+}

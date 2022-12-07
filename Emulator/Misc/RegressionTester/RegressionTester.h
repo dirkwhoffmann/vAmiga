@@ -13,12 +13,7 @@
 #include "Constants.h"
 #include "AmigaTypes.h"
 
-namespace vamiga
-{
-class Amiga;
-}
-
-using namespace vamiga;
+namespace vamiga {
 
 class RegressionTester : public SubComponent {
 
@@ -67,7 +62,7 @@ private:
     //
     // Methods from AmigaComponent
     //
-        
+
 private:
     
     void _reset(bool hard) override { };
@@ -110,3 +105,5 @@ public:
     // Assigns the return code
     void setErrorCode(u8 value);
 };
+
+}

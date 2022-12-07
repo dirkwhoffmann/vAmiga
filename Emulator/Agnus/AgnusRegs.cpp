@@ -11,8 +11,9 @@
 #include "Agnus.h"
 #include "Denise.h"
 #include "Paula.h"
-
 #include "Amiga.h"
+
+namespace vamiga {
 
 u16
 Agnus::peekDMACONR() const
@@ -53,22 +54,22 @@ Agnus::setDMACON(u16 oldValue, u16 value)
         trace(SEQ_DEBUG, "setDMACON: Skipping (value does not change)\n");
         return;
     }
-        
+
     dmacon = newValue;
     
     u16 oldDma = (oldValue & DMAEN) ? oldValue : 0;
     u16 newDma = (newValue & DMAEN) ? newValue : 0;
     u16 diff = oldDma ^ newDma;
-         
+
     // Inform the delegates
     blitter.pokeDMACON(oldValue, newValue);
     
     // Bitplane DMA
     if (diff & BPLEN) setBPLEN(newDma & BPLEN);
-                    
+
     // Disk DMA and sprite DMA
     if (diff & (DSKEN | SPREN)) {
-                
+
         if (diff & SPREN) setSPREN(newDma & SPREN);
         if (diff & DSKEN) setDSKEN(newDma & DSKEN);
         
@@ -79,7 +80,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
         
         // Make the effect visible in the current rasterline as well
         sequencer.updateDasEvents(newDAS, pos.h + 2);
-  
+
         // Rectify the currently scheduled DAS event
         scheduleDasEventForCycle(pos.h);
     }
@@ -220,7 +221,7 @@ Agnus::peekVPOSR() const
 {
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // LF I6 I5 I4 I3 I2 I1 I0 LL -- -- -- -- -- -- V8
- 
+
     // I5 I4 I3 I2 I1 I0 (Chip Identification)
     u16 result = idBits();
 
@@ -321,7 +322,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
 
     // Check if one of the resolution bits or the BPU bits have been modified
     if ((oldValue ^ newValue) & 0xF040) {
-            
+
         // Record the change
         sequencer.sigRecorder.insert(pos.h, HI_W_LO_W(newValue, SIG_CON));
         
@@ -331,12 +332,12 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
 
             // Recompute the bitplane event table
             sequencer.computeBplEventTable(sequencer.sigRecorder);
-                
+
             // Since the table has changed, we need to update the event slot
             scheduleBplEventForCycle(pos.h);
 
         } else {
-                
+
             // Speed optimization: Recomputation will happen in the next line
             trace(SEQ_DEBUG, "setBPLCON0: Postponing recomputation\n");
         }
@@ -553,7 +554,7 @@ Agnus::pokeAUDxLCH(u16 value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dLCH(%X)\n", x, value);
 
-     audlc[x] = REPLACE_HI_WORD(audlc[x], value);
+    audlc[x] = REPLACE_HI_WORD(audlc[x], value);
 }
 
 template <int x, Accessor s> void
@@ -824,3 +825,5 @@ template void Agnus::pokeDIWSTOP<ACCESSOR_AGNUS>(u16 value);
 
 template void Agnus::pokeDIWHIGH<ACCESSOR_CPU>(u16 value);
 template void Agnus::pokeDIWHIGH<ACCESSOR_AGNUS>(u16 value);
+
+}

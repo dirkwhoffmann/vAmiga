@@ -11,24 +11,26 @@
 #include "Sequencer.h"
 #include "Agnus.h"
 
+namespace vamiga {
+
 void
 Sequencer::initBplEvents()
 {
     for (isize i = 0; i < HPOS_CNT; i++) bplEvent[i] = EVENT_NONE;
-    for (isize i = 0; i < HPOS_CNT; i++) nextBplEvent[i] = HPOS_MAX;    
+    for (isize i = 0; i < HPOS_CNT; i++) nextBplEvent[i] = HPOS_MAX;
 }
 
 void
 Sequencer::initSigRecorder()
 {
     sigRecorder.clear();
-     
+
     sigRecorder.insert(0x18, SIG_SHW);
     sigRecorder.insert(ddfstrt, SIG_BPHSTART);
     sigRecorder.insert(ddfstop, SIG_BPHSTOP);
     sigRecorder.insert(0xD8, SIG_RHW);
     sigRecorder.insert(HPOS_CNT_NTSC, SIG_DONE);
- 
+
     sigRecorder.modified = false;
 }
 
@@ -44,7 +46,7 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
     trace(SEQ_DEBUG, "computeBplEvents\n");
 
     auto state = ddfInitial;
-        
+
     // Update the DMA and BMCTL bits
     state.bmapen = agnus.bpldma(agnus.dmaconInitial);
     state.bplcon0 = agnus.bplcon0Initial;
@@ -71,7 +73,7 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
 
     // Check if we need to recompute all events in the next scanline
     if (state != ddfInitial) {
-     
+
         trace(SEQ_DEBUG, "Recompute table in next line\n");
         hsyncActions |= UPDATE_BPL_TABLE;
     }
@@ -191,7 +193,7 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
     }
 
     for (isize j = strt; j < stop; j++) {
-    
+
         assert(j >= 0 && j <= HPOS_MAX);
         
         EventID id;
@@ -199,11 +201,11 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
         auto counter = state.cnt << 1 | (j & 1);
 
         /*
-        if (agnus.pos.v == 115) trace(true, "%d: %d %d %d %d %d %d %d %d %d %d\n", j, state.bpv, state.bmapen, state.shw, state.rhw, state.bphstart, state.bphstop, state.bprun, state.lastFu, state.bmctl, counter);
+         if (agnus.pos.v == 115) trace(true, "%d: %d %d %d %d %d %d %d %d %d %d\n", j, state.bpv, state.bmapen, state.shw, state.rhw, state.bphstart, state.bphstop, state.bprun, state.lastFu, state.bmctl, counter);
          */
         
         if (counter == 0) {
-    
+
             if (state.lastFu) {
 
                 // trace(1, "%d: STOP\n", j);
@@ -222,7 +224,7 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
         }
 
         if (state.bprun) {
-                            
+
             id = fetch[state.lastFu ? 1 : 0][counter];
             if (IS_ODD(j)) state.cnt = (state.cnt + 1) & 3;
             
@@ -257,26 +259,26 @@ Sequencer::processSignal <false> (u32 signal, DDFState &state)
     switch (signal & (SIG_BMAPEN_CLR | SIG_BMAPEN_SET)) {
             
         case SIG_BMAPEN_CLR:
-        
+
             state.bmapen = false;
             state.bprun = false;
             state.cnt = 0;
             break;
             
         case SIG_BMAPEN_SET:
-        
+
             state.bmapen = true;
             break;
     }
     switch (signal & (SIG_VFLOP_SET | SIG_VFLOP_CLR)) {
             
         case SIG_VFLOP_SET:
-        
+
             state.bpv = true;
             break;
             
         case SIG_VFLOP_CLR:
-        
+
             state.bpv = false;
             state.bprun = false;
             state.cnt = 0;
@@ -311,7 +313,7 @@ Sequencer::processSignal <false> (u32 signal, DDFState &state)
                 state.bprun = (state.bprun || state.shw) && state.bpv && state.bmapen;
             }
             break;
-                        
+
         case SIG_BPHSTART:
 
             state.bphstart |= state.shw && state.bmapen;
@@ -347,12 +349,12 @@ Sequencer::processSignal <true> (u32 signal, DDFState &state)
     switch (signal & (SIG_VFLOP_SET | SIG_VFLOP_CLR)) {
             
         case SIG_VFLOP_SET:
-        
+
             state.bpv = true;
             break;
             
         case SIG_VFLOP_CLR:
-        
+
             state.bpv = false;
             state.bprun = false;
             state.cnt = 0;
@@ -395,7 +397,7 @@ Sequencer::processSignal <true> (u32 signal, DDFState &state)
             state.bphstart = true;
             state.bprun = (state.bprun || state.shw) && state.bpv && state.bmapen;
             break;
-                        
+
         case SIG_BPHSTART:
         case SIG_BPHSTART | SIG_SHW:
         case SIG_BPHSTART | SIG_RHW:
@@ -571,4 +573,6 @@ Sequencer::computeShresFetchUnit()
     fetch[1][5] = channels < 1 ? 0 : BPL_S1;
     fetch[1][6] = channels < 2 ? 0 : BPL_S2_MOD;
     fetch[1][7] = channels < 1 ? 0 : BPL_S1_MOD;
+}
+
 }

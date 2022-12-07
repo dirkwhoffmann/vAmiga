@@ -13,6 +13,8 @@
 #include "CIA.h"
 #include "CPU.h"
 
+namespace vamiga {
+
 const char *
 Agnus::eventName(EventSlot slot, EventID id)
 {
@@ -179,7 +181,7 @@ Agnus::eventName(EventSlot slot, EventID id)
                 case DAS_S7_2:      return "DAS_S7_2";
                 case DAS_SDMA:      return "DAS_SDMA";
                 case DAS_TICK:      return "DAS_TICK";
-                // case DAS_HSYNC:     return "DAS_HSYNC";
+                    // case DAS_HSYNC:     return "DAS_HSYNC";
                 case DAS_EOL:       return "DAS_EOL";
                 default:            return "*** INVALID ***";
             }
@@ -722,4 +724,6 @@ Agnus::updateStats()
     stats.bitplaneActivity = w * stats.bitplaneActivity + (1 - w) * bitplaneUsage;
     
     for (isize i = 0; i < BUS_COUNT; i++) stats.usage[i] = 0;
+}
+
 }

@@ -11,6 +11,8 @@
 #include "config.h"
 #include "FrameBuffer.h"
 
+namespace vamiga {
+
 FrameBuffer::FrameBuffer()
 {
     pixels.alloc(PIXELS);
@@ -46,4 +48,6 @@ FrameBuffer::clear(isize row, isize cycle)
     for (isize col = 0; col < 4; col++) {
         ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? cb1 : cb2;
     }
+}
+
 }

@@ -13,6 +13,8 @@
 #include "Memory.h"
 #include "Paula.h"
 
+namespace vamiga {
+
 /* Micro-instructions:
  *
  * To keep the implementation flexible, the SlowBlitter is emulated as a
@@ -883,7 +885,7 @@ Blitter::initSlowBlitter()
                 &Blitter::fakeExecLine <BLTDONE>
             }
         },
-    
+
         // B enabled, C disabled (unusual)
         {
             {
@@ -1290,7 +1292,7 @@ Blitter::fakeExec()
             bltpc = newpc;
             resetXCounter();
             decYCounter();
-        
+
         } else {
             
             clearBusyFlag();
@@ -1406,7 +1408,7 @@ Blitter::execLine()
 
         // Run the minterm logic circuit
         dhold = doMintermLogic(ahold, (bhold & 1) ? 0xFFFF : 0, chold, bltcon0 & 0xFF);
-                
+
         // Determine if we need to lock the D channel in WRITE_D
         lockD = (sing && !fillCarry) || !useC;
 
@@ -1429,7 +1431,7 @@ Blitter::execLine()
             decYCounter();
 
         } else {
-        
+
             clearBusyFlag();
         }
         
@@ -1500,4 +1502,6 @@ Blitter::fakeExecLine()
 
         endBlit();
     }
+}
+
 }

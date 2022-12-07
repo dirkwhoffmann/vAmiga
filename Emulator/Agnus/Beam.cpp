@@ -10,6 +10,8 @@
 #include "config.h"
 #include "Beam.h"
 
+namespace vamiga {
+
 Beam&
 Beam::operator+=(isize i)
 {
@@ -281,3 +283,4 @@ Beam::switchMode(VideoFormat format)
     }
 }
 
+}

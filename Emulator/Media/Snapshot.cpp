@@ -12,6 +12,8 @@
 #include "Amiga.h"
 #include "IOUtils.h"
 
+namespace vamiga {
+
 void
 Thumbnail::take(Amiga &amiga, isize dx, isize dy)
 {
@@ -125,4 +127,6 @@ void
 Snapshot::takeScreenshot(Amiga &amiga)
 {
     ((SnapshotHeader *)data.ptr)->screenshot.take(amiga);
+}
+
 }

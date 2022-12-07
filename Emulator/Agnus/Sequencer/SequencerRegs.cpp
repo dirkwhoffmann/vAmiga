@@ -11,6 +11,8 @@
 #include "Agnus.h"
 #include "Denise.h"
 
+namespace vamiga {
+
 template <Accessor s> void
 Sequencer::pokeDDFSTRT(u16 value)
 {
@@ -39,7 +41,7 @@ Sequencer::setDDFSTRT(u16 old, u16 value)
             trace(SEQ_DEBUG, "setDDFSTRT: Skipping (value does not change)\n");
             return;
         }
-    
+
     } else {
         
         if (posh == old) {
@@ -91,7 +93,7 @@ Sequencer::setDDFSTOP(u16 old, u16 value)
             trace(SEQ_DEBUG, "setDDFSTOP: Skipping (value does not change)\n");
             return;
         }
-    
+
     } else {
         
         if (posh == old) {
@@ -185,3 +187,5 @@ template void Sequencer::pokeDDFSTRT<ACCESSOR_CPU>(u16 value);
 template void Sequencer::pokeDDFSTRT<ACCESSOR_AGNUS>(u16 value);
 template void Sequencer::pokeDDFSTOP<ACCESSOR_CPU>(u16 value);
 template void Sequencer::pokeDDFSTOP<ACCESSOR_AGNUS>(u16 value);
+
+}

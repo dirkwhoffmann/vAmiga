@@ -10,6 +10,8 @@
 #include "config.h"
 #include "Drive.h"
 
+namespace vamiga {
+
 Drive::Drive(Amiga& ref, isize n) : SubComponent(ref), nr(n)
 {
     assert(usize(nr) < 4);
@@ -23,4 +25,6 @@ Drive::toggleWriteProtection()
     
     // Toggle the protection flag
     setProtectionFlag(hasUnprotectedDisk());
+}
+
 }

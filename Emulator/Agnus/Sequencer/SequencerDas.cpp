@@ -10,6 +10,8 @@
 #include "config.h"
 #include "Sequencer.h"
 
+namespace vamiga {
+
 EventID Sequencer::dasDMA[64][HPOS_CNT];
 
 void
@@ -98,4 +100,6 @@ Sequencer::updateDasJumpTable(i16 end)
         nextDasEvent[i] = next;
         if (dasEvent[i]) next = (i8)i;
     }
+}
+
 }

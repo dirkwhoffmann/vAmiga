@@ -17,6 +17,8 @@
 #include "Paula.h"
 #include "SerialPort.h"
 
+namespace vamiga {
+
 /* About the event scheduler
  *
  * vAmiga is an event triggered emulator. If an action has to be performed at
@@ -241,14 +243,14 @@ Agnus::serviceREGEvent(Cycle until)
             case SET_BPL4PTH: setBPLxPTH<4>(change.value); break;
             case SET_BPL5PTH: setBPLxPTH<5>(change.value); break;
             case SET_BPL6PTH: setBPLxPTH<6>(change.value); break;
-                                
+
             case SET_BPL1PTL: setBPLxPTL<1>(change.value); break;
             case SET_BPL2PTL: setBPLxPTL<2>(change.value); break;
             case SET_BPL3PTL: setBPLxPTL<3>(change.value); break;
             case SET_BPL4PTL: setBPLxPTL<4>(change.value); break;
             case SET_BPL5PTL: setBPLxPTL<5>(change.value); break;
             case SET_BPL6PTL: setBPLxPTL<6>(change.value); break;
-                                
+
             case SET_SPR0PTH: setSPRxPTH<0>(change.value); break;
             case SET_SPR1PTH: setSPRxPTH<1>(change.value); break;
             case SET_SPR2PTH: setSPRxPTH<2>(change.value); break;
@@ -257,7 +259,7 @@ Agnus::serviceREGEvent(Cycle until)
             case SET_SPR5PTH: setSPRxPTH<5>(change.value); break;
             case SET_SPR6PTH: setSPRxPTH<6>(change.value); break;
             case SET_SPR7PTH: setSPRxPTH<7>(change.value); break;
-                                
+
             case SET_SPR0PTL: setSPRxPTL<0>(change.value); break;
             case SET_SPR1PTL: setSPRxPTL<1>(change.value); break;
             case SET_SPR2PTL: setSPRxPTL<2>(change.value); break;
@@ -266,7 +268,7 @@ Agnus::serviceREGEvent(Cycle until)
             case SET_SPR5PTL: setSPRxPTL<5>(change.value); break;
             case SET_SPR6PTL: setSPRxPTL<6>(change.value); break;
             case SET_SPR7PTL: setSPRxPTL<7>(change.value); break;
-                                
+
             case SET_DSKPTH: setDSKPTH(change.value); break;
             case SET_DSKPTL: setDSKPTL(change.value); break;
 
@@ -700,14 +702,14 @@ Agnus::serviceDASEvent(EventID id)
             ciab.tod.increment();
             break;
 
-        /*
-        case DAS_HSYNC:
+            /*
+             case DAS_HSYNC:
 
-            syncEvent = id;
-            // recordRegisterChange(DMA_CYCLES(1), REG_NONE, 0);
-            scheduleRel <SLOT_REG> (DMA_CYCLES(1), REG_CHANGE);
-            break;
-        */
+             syncEvent = id;
+             // recordRegisterChange(DMA_CYCLES(1), REG_NONE, 0);
+             scheduleRel <SLOT_REG> (DMA_CYCLES(1), REG_CHANGE);
+             break;
+             */
 
         case DAS_EOL:
 
@@ -792,11 +794,13 @@ Agnus::serviceINSEvent(EventID id)
             
             agnus.inspect();
             break;
-                        
+
         default:
             fatalError;
     }
 
     // Reschedule event
     rescheduleRel<SLOT_INS>((Cycle)(inspectionInterval * 28000000));
+}
+
 }

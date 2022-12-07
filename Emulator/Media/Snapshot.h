@@ -14,12 +14,6 @@
 
 namespace vamiga {
 
-class Amiga;
-
-}
-
-using namespace vamiga;
-
 struct Thumbnail {
     
     // Image size
@@ -32,7 +26,7 @@ struct Thumbnail {
     time_t timestamp;
     
     // Takes a screenshot from a given Amiga
-    void take(Amiga &amiga, isize dx = 2, isize dy = 1);
+    void take(class Amiga &amiga, isize dx = 2, isize dy = 1);
 };
 
 struct SnapshotHeader {
@@ -54,7 +48,7 @@ struct SnapshotHeader {
 };
 
 class Snapshot : public AmigaFile {
- 
+
 public:
     
     static bool isCompatible(const string &path);
@@ -71,7 +65,7 @@ public:
     Snapshot(Amiga &amiga);
     
     const char *getDescription() const override { return "Snapshot"; }
-            
+
     
     //
     // Methods from AmigaFile
@@ -107,3 +101,5 @@ public:
     // Takes a screenshot
     void takeScreenshot(Amiga &amiga);
 };
+
+}

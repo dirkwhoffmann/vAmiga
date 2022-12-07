@@ -11,8 +11,10 @@
 
 #include "Types.h"
 
+namespace vamiga {
+
 class NamedPipe {
-        
+    
     int pipe = -1;
     string name;
     
@@ -24,3 +26,5 @@ public:
     bool close();
     isize write(u8 *buffer, isize length);
 };
+
+}

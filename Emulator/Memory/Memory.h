@@ -14,7 +14,6 @@
 #include "RomFileTypes.h"
 #include "MemUtils.h"
 
-
 using util::Allocator;
 using util::Buffer;
 

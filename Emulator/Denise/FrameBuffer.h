@@ -16,6 +16,8 @@
 
 using util::Buffer;
 
+namespace vamiga {
+
 struct FrameBuffer {
 
     // Predefined colors
@@ -47,3 +49,5 @@ struct FrameBuffer {
     void clear(isize row);
     void clear(isize row, isize cycle);
 };
+
+}

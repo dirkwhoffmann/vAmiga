@@ -14,11 +14,13 @@
 #include <unistd.h>
 #endif
 
+namespace vamiga {
+
 bool
 NamedPipe::create(const string &name)
 {
     this->name = name;
- 
+
 #ifdef _WIN32
 
     return false;
@@ -89,4 +91,6 @@ NamedPipe::write(u8 *buffer, isize length)
     return ::write(pipe, (void *)buffer, (size_t)length);
     
 #endif
+}
+
 }

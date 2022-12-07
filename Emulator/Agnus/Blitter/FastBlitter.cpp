@@ -14,6 +14,8 @@
 #include "Memory.h"
 #include "Paula.h"
 
+namespace vamiga {
+
 void
 Blitter::initFastBlitter()
 {
@@ -128,7 +130,7 @@ void Blitter::doFastCopyBlit()
             // Run the barrel shifter on path A (even if channel A is disabled)
             ahold = barrelShifter(anew & mask, aold, bltconASH(), desc);
             aold = anew & mask;
-                        
+
             // Run the barrel shifter on path B (if channel B is enabled)
             if (useB) {
                 bhold = barrelShifter(bnew, bold, bltconBSH(), desc);
@@ -249,13 +251,13 @@ Blitter::doFastLineBlit()
         
         sign = (i16)bltapt < 0;
     };
-            
+
     // Fallback to the old implementation (WinFellow) if requested
     if constexpr (OLD_LINE_BLIT) {
         doLegacyFastLineBlit();
         return;
     }
-                                    
+
     for (isize i = 0; i < bltsizeV; i++) {
         
         // Fetch B
@@ -276,18 +278,18 @@ Blitter::doFastLineBlit()
         
         // Run the minterm circuit
         dhold = doMintermLogic(ahold, (bhold & 1) ? 0xFFFF : 0, chold, bltcon0 & 0xFF);
-                
+
         bool writeEnable = (!sing || firstPixel) && useC;
 
         // Run the line logic circuit
         doLineLogic();
-                
+
         // Update the zero flag
         if (dhold) bzero = false;
 
         // Write D
         if (writeEnable) {
-                        
+
             mem.poke16 <ACCESSOR_AGNUS> (bltdpt, dhold);
             
             if (BLT_CHECKSUM) {
@@ -477,4 +479,6 @@ Blitter::doLegacyFastLineBlit()
     bltcpt = bltcpt_local & agnus.ptrMask;
     bltdpt = bltdpt_local & agnus.ptrMask;
     bzero  = bzero_local == 0;
+}
+
 }

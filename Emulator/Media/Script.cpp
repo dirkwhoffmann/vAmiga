@@ -14,6 +14,8 @@
 
 #include <sstream>
 
+namespace vamiga {
+
 bool
 Script::isCompatible(const string &path)
 {
@@ -32,4 +34,6 @@ Script::execute(class Amiga &amiga)
 {
     string s((char *)data.ptr, data.size);
     try { amiga.retroShell.execScript(s); } catch (util::Exception &) { }
+}
+
 }

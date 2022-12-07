@@ -11,6 +11,8 @@
 #include "Recorder.h"
 #include "Amiga.h"
 
+namespace vamiga {
+
 Recorder::Recorder(Amiga& ref) : SubComponent(ref)
 {
     subComponents = std::vector<AmigaComponent *> {
@@ -50,7 +52,7 @@ Recorder::_dump(Category category, std::ostream& os) const
         os << bol(isRecording()) << std::endl;
     }
 }
-    
+
 string
 Recorder::videoPipePath()
 {
@@ -110,7 +112,7 @@ Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
     
     debug(REC_DEBUG, "startRecording(%ld,%ld,%ld,%ld,%ld,%ld,%ld)\n",
           x1, y1, x2, y2, bitRate, aspectX, aspectY);
-        
+
     // Make sure the screen dimensions are even
     if ((x2 - x1) % 2) x2--;
     if ((y2 - y1) % 2) y2--;
@@ -235,7 +237,7 @@ Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
     }
     
     debug(REC_DEBUG, "Success\n");
-    state = State::prepare;    
+    state = State::prepare;
 }
 
 void
@@ -259,7 +261,7 @@ Recorder::exportAs(const string &path)
     //
     // Assemble the command line arguments for the video encoder
     //
-        
+
     // Verbosity
     string cmd = "-loglevel " + loglevel();
 
@@ -380,7 +382,7 @@ Recorder::recordAudio(Cycle target)
     assert(audioPipe.isOpen());
     isize length = 2 * sizeof(float) * samplesPerFrame;
     isize written = audioPipe.write((u8 *)audioData.ptr, length);
- 
+
     if (written != length || FORCE_RECORDING_ERROR) {
         state = State::abort;
     }
@@ -408,4 +410,6 @@ Recorder::abort()
 {
     finalize();
     msgQueue.put(MSG_RECORDING_ABORTED);
+}
+
 }

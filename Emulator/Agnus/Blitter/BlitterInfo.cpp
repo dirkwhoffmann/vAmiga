@@ -11,6 +11,8 @@
 #include "Agnus.h"
 #include "IOUtils.h"
 
+namespace vamiga {
+
 void
 Blitter::_dump(Category category, std::ostream& os) const
 {
@@ -125,4 +127,6 @@ Blitter::_inspect() const
     info.fco = fillCarry;
     info.fillEnable = bltconFE();
     info.storeToDest = bltconUSED() && !lockD;
+}
+
 }

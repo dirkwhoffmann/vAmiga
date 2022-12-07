@@ -11,6 +11,8 @@
 #include "Blitter.h"
 #include "Agnus.h"
 
+namespace vamiga {
+
 void
 Blitter::serviceEvent()
 {
@@ -82,4 +84,6 @@ Blitter::serviceEvent(EventID id)
         default:
             fatalError;
     }
+}
+
 }

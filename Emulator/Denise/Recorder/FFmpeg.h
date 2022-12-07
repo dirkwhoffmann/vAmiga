@@ -12,6 +12,8 @@
 #include "Types.h"
 #include <vector>
 
+namespace vamiga {
+
 class FFmpeg {
     
 public:
@@ -21,7 +23,7 @@ public:
     
     // Path to the selected FFmpeg executable
     static string exec;
-        
+
 #ifdef _MSC_VER
 
 #else
@@ -56,3 +58,5 @@ public:
     // Waits until the FFmpeg instance has terminated
     void join();
 };
+
+}

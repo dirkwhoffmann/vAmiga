@@ -11,9 +11,11 @@
 #include "FFmpeg.h"
 #include "IOUtils.h"
 
+namespace vamiga {
+
 std::vector<string> FFmpeg::paths;
 string FFmpeg::exec;
-    
+
 void
 FFmpeg::init()
 {
@@ -22,7 +24,7 @@ FFmpeg::init()
             paths.push_back(path);
         }
     };
-        
+
     if (paths.empty()) {
 
         add("/Applications/ffmpeg");
@@ -51,7 +53,7 @@ FFmpeg::setExecPath(const string &path)
         exec = paths[0];
         return;
     }
-     
+
     exec = path;
 }
 
@@ -110,4 +112,6 @@ FFmpeg::join()
     handle = nullptr;
     
 #endif
+}
+
 }

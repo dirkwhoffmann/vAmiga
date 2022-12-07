@@ -11,6 +11,8 @@
 #include "Agnus.h"
 #include "Denise.h"
 
+namespace vamiga {
+
 template <> bool Agnus::auddma<0>(u16 v) { return (v & DMAEN) && (v & AUD0EN); }
 template <> bool Agnus::auddma<1>(u16 v) { return (v & DMAEN) && (v & AUD1EN); }
 template <> bool Agnus::auddma<2>(u16 v) { return (v & DMAEN) && (v & AUD2EN); }
@@ -29,7 +31,7 @@ Agnus::busIsFree()
         
         // Deny in cycle E0 / E1
         if (pos.h == (pos.lol ? 0xE1 : 0xE0)) {
-         
+
             // If the Copper wants the bus in E0, nobody can have it
             busOwner[pos.h] = BUS_BLOCKED;
             
@@ -223,3 +225,5 @@ template bool Agnus::allocateBus<BUS_BLITTER>();
 
 template bool Agnus::busIsFree<BUS_COPPER>();
 template bool Agnus::busIsFree<BUS_BLITTER>();
+
+}

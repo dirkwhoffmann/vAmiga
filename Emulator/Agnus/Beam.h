@@ -13,6 +13,8 @@
 #include "AmigaTypes.h"
 #include "Constants.h"
 
+namespace vamiga {
+
 struct Beam
 {
     // The vertical and horizontal beam position
@@ -161,3 +163,5 @@ struct Beam
     // Called by Agnus when the video format is changed (PAL / NTSC)
     void switchMode(VideoFormat format);
 };
+
+}

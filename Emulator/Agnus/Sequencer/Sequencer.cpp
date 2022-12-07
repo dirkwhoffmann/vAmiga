@@ -11,6 +11,8 @@
 #include "Sequencer.h"
 #include "Agnus.h"
 
+namespace vamiga {
+
 Sequencer::Sequencer(Amiga& ref) : SubComponent(ref)
 {
     initDasEventTable();
@@ -101,5 +103,7 @@ Sequencer::eolHandler()
 void
 Sequencer::eofHandler()
 {
+
+}
 
 }

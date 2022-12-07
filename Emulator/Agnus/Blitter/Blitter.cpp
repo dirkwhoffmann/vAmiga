@@ -14,9 +14,11 @@
 #include "IOUtils.h"
 #include "Thread.h"
 
+namespace vamiga {
+
 Blitter::Blitter(Amiga& ref) : SubComponent(ref)
 {
-    // Initialize the fill pattern tables    
+    // Initialize the fill pattern tables
     for (isize carryIn = 0; carryIn < 2; carryIn++) {
         
         for (isize byte = 0; byte < 256; byte++) {
@@ -45,7 +47,7 @@ Blitter::_initialize()
     AmigaComponent::_initialize();
     
     initFastBlitter();
-    initSlowBlitter();    
+    initSlowBlitter();
 }
 
 void
@@ -92,7 +94,7 @@ Blitter::getConfigItem(Option option) const
     switch (option) {
             
         case OPT_BLITTER_ACCURACY: return config.accuracy;
-        
+
         default:
             fatalError;
     }
@@ -145,7 +147,7 @@ Blitter::doMintermLogic(u16 a, u16 b, u16 c, u8 minterm) const
         if (minterm & 0b00000100) result2 |= ~a &  b & ~c;
         if (minterm & 0b00000010) result2 |= ~a & ~b &  c;
         if (minterm & 0b00000001) result2 |= ~a & ~b & ~c;
-    
+
         if (result != result2) fatal("Blitter minterm error\n");
     }
     
@@ -442,10 +444,10 @@ Blitter::doLine()
     auto decx = [&]() { if (decASH()) U32_INC(bltcpt, -2); };
     auto incy = [&]() { U32_INC(bltcpt, bltcmod); fillCarry = true; };
     auto decy = [&]() { U32_INC(bltcpt, -bltcmod); fillCarry = true; };
- 
+
     bool sign = bltcon1 & BLTCON1_SIGN;
     fillCarry = false;
-        
+
     if (bltcon1 & BLTCON1_SUD) {
         
         if (bltcon1 & BLTCON1_AUL) {
@@ -479,7 +481,7 @@ Blitter::doLine()
         else
             U32_INC(bltapt, bltamod);
     }
-        
+
     // Update the SIGN bit in BPLCON1
     REPLACE_BIT(bltcon1, 6, (i16)bltapt < 0);
 }
@@ -621,4 +623,6 @@ Blitter::endBlit()
     
     // Let the Copper know about the termination
     copper.blitterDidTerminate();
+}
+
 }
