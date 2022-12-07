@@ -12,6 +12,8 @@
 #include "IOUtils.h"
 #include "Memory.h"
 
+namespace vamiga {
+
 void
 OSDebugger::read(u32 addr, u8 *result) const
 {
@@ -401,7 +403,7 @@ OSDebugger::read(u32 addr, os::Task *result) const
 {
     if (isValidPtr(addr)) {
         
-    result->addr = addr;
+        result->addr = addr;
         
         read(addr + 0,  &result->tc_Node);
         read(addr + 14, &result->tc_Flags);
@@ -436,10 +438,10 @@ void
 OSDebugger::read(u32 addr, std::vector <os::FileSysEntry> &result) const
 {
     for (isize i = 0; isValidPtr(addr) && i < 128; i++) {
-               
+
         os::FileSysEntry fse;
         read(addr, &fse);
-                
+
         addr = fse.fse_Node.ln_Succ;
         if (addr) result.push_back(fse);
     }
@@ -449,7 +451,7 @@ void
 OSDebugger::read(std::vector <os::Task> &result) const
 {
     auto execBase = getExecBase();
-        
+
     os::Task current;
     read(execBase.ThisTask, &current);
     
@@ -479,7 +481,7 @@ void
 OSDebugger::read(u32 addr, std::vector <os::Task> &result) const
 {
     for (isize i = 0; isValidPtr(addr) && i < 128; i++) {
-                
+
         os::Task task;
         read(addr, &task);
         
@@ -525,7 +527,7 @@ OSDebugger::read(const os::Process &pr, os::SegList &result) const
      *   which is an array of SegLists. In this case, we will find the segments
      *   in the third list.
      */
-        
+
     if (pr.pr_CLI && pr.pr_TaskNum) {
 
         os::CommandLineInterface cli;
@@ -556,3 +558,4 @@ OSDebugger::read(u32 addr, os::SegList &result) const
     }
 }
 
+}

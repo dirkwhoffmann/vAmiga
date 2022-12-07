@@ -12,6 +12,8 @@
 #include "ControlPort.h"
 #include "CPU.h"
 
+namespace vamiga {
+
 void
 Paula::serviceIrqEvent()
 {
@@ -28,7 +30,7 @@ Paula::serviceIrqEvent()
             setINTREQ(true, (u16)(1 << src));
             setIntreq[src] = NEVER;
         } else {
-             next = std::min(next, setIntreq[src]);
+            next = std::min(next, setIntreq[src]);
         }
     }
 
@@ -39,7 +41,7 @@ Paula::serviceIrqEvent()
 void
 Paula::serviceIplEvent()
 {
-    assert(agnus.id[SLOT_IPL] == IPL_CHANGE);    
+    assert(agnus.id[SLOT_IPL] == IPL_CHANGE);
 
     // Update the value on the CPU's IPL pin
     cpu.setIPL((iplPipe >> 24) & 0xFF);
@@ -122,4 +124,6 @@ Paula::servicePotEvent(EventID id)
         default:
             fatalError;
     }
+}
+
 }

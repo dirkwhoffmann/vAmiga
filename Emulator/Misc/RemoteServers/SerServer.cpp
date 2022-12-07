@@ -16,6 +16,8 @@
 #include "Thread.h"
 #include "UART.h"
 
+namespace vamiga {
+
 SerServer::SerServer(Amiga& ref) : RemoteServer(ref)
 {
 }
@@ -24,7 +26,7 @@ void
 SerServer::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
-        
+
     RemoteServer::_dump(category, os);
     
     if (category == Category::State) {
@@ -118,14 +120,14 @@ void
 SerServer::didConnect()
 {
     SUSPENDED
-        
+
     // Start a new sessing
     skippedTransmissions = 0;
     receivedBytes = 0;
     transmittedBytes = 0;
     processedBytes = 0;
     lostBytes = 0;
-        
+
     // Start scheduling messages
     assert(agnus.id[SLOT_SER] == EVENT_NONE);
     agnus.scheduleImm <SLOT_SER> (SER_RECEIVE);
@@ -156,7 +158,7 @@ SerServer::serviceSerEvent()
         if (++skippedTransmissions > 8) buffering = false;
 
     } else {
-    
+
         // Hand the oldest buffer element over to the UART
         uart.receiveShiftReg = buffer.read();
         uart.copyFromReceiveShiftRegister();
@@ -183,4 +185,6 @@ SerServer::scheduleNextEvent()
     }
     
     agnus.scheduleRel<SLOT_SER>(8 * pulseWidth, SER_RECEIVE);
+}
+
 }

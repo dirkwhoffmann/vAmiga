@@ -11,8 +11,10 @@
 
 #include "ZorroBoard.h"
 
+namespace vamiga {
+
 class RamExpansion : public ZorroBoard {
-            
+
     //
     // Constructing
     //
@@ -67,7 +69,7 @@ private:
     //
     // Methods from ZorroBoard
     //
-        
+
     virtual bool pluggedIn() const override;
     virtual isize pages() const override;
     virtual u8 type() const override             { return ERT_ZORROII | ERTF_MEMLIST; }
@@ -82,3 +84,5 @@ private:
 
     void updateMemSrcTables() override;
 };
+
+}

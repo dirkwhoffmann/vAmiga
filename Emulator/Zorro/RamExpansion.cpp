@@ -11,12 +11,14 @@
 #include "RamExpansion.h"
 #include "Memory.h"
 
+namespace vamiga {
+
 void
 RamExpansion::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
-        
-    ZorroBoard::_dump(category, os);    
+
+    ZorroBoard::_dump(category, os);
 }
 
 void
@@ -56,4 +58,6 @@ RamExpansion::updateMemSrcTables()
 
         mem.cpuMemSrc[i] = MEM_FAST;
     }
+}
+
 }

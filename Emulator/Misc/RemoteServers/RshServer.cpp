@@ -13,6 +13,8 @@
 #include "RetroShell.h"
 #include "StringUtils.h"
 
+namespace vamiga {
+
 RshServer::RshServer(Amiga& ref) : RemoteServer(ref)
 {
 
@@ -122,5 +124,7 @@ void
 RshServer::doProcess(const string &payload)
 {
     retroShell.press(payload);
-    retroShell.press('\n');    
+    retroShell.press('\n');
+}
+
 }

@@ -16,6 +16,8 @@
 
 #include <fstream>
 
+namespace vamiga {
+
 PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
 {
     // Create random background noise pattern
@@ -146,7 +148,7 @@ PixelEngine::setConfigItem(Option option, i64 value)
             return;
 
         case OPT_SATURATION:
-        
+
             if (value < 0 || value > 100) {
                 throw VAError(ERROR_OPT_INVARG, "0...100");
             }
@@ -522,12 +524,12 @@ PixelEngine::hide(isize line, u16 layers, u8 alpha)
             if (Denise::isSpritePixel<5>(z) && !(layers & 0x20)) continue;
             if (Denise::isSpritePixel<6>(z) && !(layers & 0x40)) continue;
             if (Denise::isSpritePixel<7>(z) && !(layers & 0x80)) continue;
-        
+
         } else {
 
             // Check for case 2: Playfield 1 is visible
             if ((Denise::upperPlayfield(z) == 1) && !(layers & 0x100)) continue;
-        
+
             // Check for case 3: layfield 2 is visible
             if ((Denise::upperPlayfield(z) == 2) && !(layers & 0x200)) continue;
         }
@@ -544,4 +546,6 @@ PixelEngine::hide(isize line, u16 layers, u8 alpha)
         
         p[i] = 0xFF000000 | newb << 16 | newg << 8 | newr;
     }
+}
+
 }

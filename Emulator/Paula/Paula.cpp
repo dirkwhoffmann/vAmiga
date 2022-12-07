@@ -13,6 +13,8 @@
 #include "CPU.h"
 #include "IOUtils.h"
 
+namespace vamiga {
+
 Paula::Paula(Amiga& ref) : SubComponent(ref)
 {
     subComponents = std::vector<AmigaComponent *> {
@@ -59,7 +61,7 @@ Paula::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS(hard)
 
     for (isize i = 0; i < 16; i++) setIntreq[i] = NEVER;
-    cpu.setIPL(0);    
+    cpu.setIPL(0);
 }
 
 void
@@ -98,7 +100,7 @@ Paula::_inspect() const
         
         info.intreq = intreq;
         info.intena = intena;
-        info.adkcon = adkcon;        
+        info.adkcon = adkcon;
     }
 }
 
@@ -145,9 +147,9 @@ void
 Paula::checkInterrupt()
 {
     u8 level = interruptLevel();
-        
+
     if ((iplPipe & 0xFF) != level) {
-    
+
         iplPipe = (iplPipe & ~0xFF) | level;
         agnus.scheduleRel<SLOT_IPL>(0, IPL_CHANGE, 5);
 
@@ -177,4 +179,6 @@ void
 Paula::eofHandler() {
 
     muxer.stats.fillLevel = muxer.stream.fillLevel();
+}
+
 }

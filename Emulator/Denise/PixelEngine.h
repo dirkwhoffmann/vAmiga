@@ -15,7 +15,7 @@
 #include "Constants.h"
 #include "FrameBuffer.h"
 
-using namespace vamiga;
+namespace vamiga {
 
 class PixelEngine : public SubComponent {
 
@@ -45,7 +45,7 @@ private:
 
     // Mutex for synchronizing access to the stable buffer
     util::Mutex bufferMutex;
-        
+
     // Buffer with background noise (random black and white pixels)
     Buffer <Texel> noise;
 
@@ -92,7 +92,7 @@ public:
 public:
     
     PixelEngine(Amiga& ref);
- 
+
     // Initializes both frame buffers with a checkerboard pattern
     void clearAll();
 
@@ -267,3 +267,5 @@ public:
     
     void hide(isize line, u16 layer, u8 alpha);
 };
+
+}

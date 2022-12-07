@@ -12,6 +12,8 @@
 #include "CIA.h"
 #include "ControlPort.h"
 
+namespace vamiga {
+
 u16
 Paula::peekADKCONR() const
 {
@@ -32,16 +34,16 @@ Paula::pokeADKCON(u16 value)
     if (set && (GET_BIT(value, 13) || GET_BIT(value, 14))) {
         xfiles("ADKCON: PRECOMP set (%x)\n", value);
     }
-        if (clr && GET_BIT(value, 12)) {
+    if (clr && GET_BIT(value, 12)) {
         xfiles("ADKCON: MFMPREC cleared (GCR) (%x)\n", value);
     }
-        if (set && GET_BIT(value, 9)) {
+    if (set && GET_BIT(value, 9)) {
         xfiles("ADKCON: MSBSYNC set (GCR) (%x)\n", value);
     }
-        if (clr && GET_BIT(value, 8)) {
+    if (clr && GET_BIT(value, 8)) {
         xfiles("ADKCON: FAST cleared (GCR) (%x)\n", value);
     }
-        
+
     if (set) adkcon |= (value & 0x7FFF); else adkcon &= ~value;
 
     // Take care of a possible change of the UARTBRK bit
@@ -181,3 +183,5 @@ template void Paula::pokeINTENA<ACCESSOR_CPU>(u16 value);
 template void Paula::pokeINTENA<ACCESSOR_AGNUS>(u16 value);
 template u16 Paula::peekPOTxDAT<0>() const;
 template u16 Paula::peekPOTxDAT<1>() const;
+
+}

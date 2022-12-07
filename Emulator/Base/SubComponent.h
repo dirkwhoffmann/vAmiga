@@ -34,14 +34,14 @@ class Joystick;
 class Keyboard;
 class Memory;
 class Mouse;
-
-}
 class MsgQueue;
 class OSDebugger;
 class Paula;
 class PixelEngine;
 class RamExpansion;
 class RemoteManager;
+
+}
 class RetroShell;
 class RshServer;
 class RTC;

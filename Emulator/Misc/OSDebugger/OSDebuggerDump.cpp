@@ -14,6 +14,8 @@
 #include "Thread.h"
 #include <sstream>
 
+namespace vamiga {
+
 void
 OSDebugger::dumpInfo(std::ostream& s)
 {
@@ -162,7 +164,7 @@ void
 OSDebugger::dumpIntVector(std::ostream& s, const os::IntVector &intVec)
 {
     {   SUSPENDED
-                
+
         os::Interrupt irq;
         read(intVec.iv_Node, &irq);
         
@@ -376,10 +378,10 @@ OSDebugger::dumpTasks(std::ostream& s)
         
         std::vector <os::Task> tasks;
         read(tasks);
-                
+
         for (auto &t: tasks) {
             dumpTask(s, t, false);
-        }        
+        }
     }
 }
 
@@ -533,7 +535,7 @@ OSDebugger::dumpProcess(std::ostream& s, const os::Process &process, bool verbos
         using namespace util;
         
         if (verbose) {
-                        
+
             s << tab("StackSize");
             s << dec(process.pr_StackSize) << std::endl;
             s << tab("StackBase");
@@ -551,7 +553,7 @@ OSDebugger::dumpProcess(std::ostream& s, const os::Process &process, bool verbos
             s << hex(process.pr_ConsoleTask) << std::endl;
             
             if (process.pr_CLI) {
-            
+
                 os::CommandLineInterface cli;
                 read(BPTR(process.pr_CLI), &cli);
 
@@ -563,7 +565,7 @@ OSDebugger::dumpProcess(std::ostream& s, const os::Process &process, bool verbos
 
                 string cmdFile;
                 read(BPTR(cli.cli_CommandFile) + 1, cmdFile);
-                                
+
                 s << tab("Command Dir");
                 s << cmdDir << std::endl;
                 s << tab("Command Name");
@@ -588,4 +590,6 @@ OSDebugger::dumpProcess(std::ostream& s, const os::Process &process, bool verbos
             dumpTask(s, process.pr_Task, verbose);
         }
     }
+}
+
 }

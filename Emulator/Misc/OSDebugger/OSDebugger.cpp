@@ -15,6 +15,8 @@
 
 using namespace os;
 
+namespace vamiga {
+
 string
 OSDebugger::dosTypeStr(u32 type)
 {
@@ -480,4 +482,6 @@ OSDebugger::checkExecBase(const os::ExecBase &execBase) const
             throw VAError(ERROR_OSDB, "ExecBase: MaxExtMem doesn't match bank map");
         }
     }
+}
+
 }

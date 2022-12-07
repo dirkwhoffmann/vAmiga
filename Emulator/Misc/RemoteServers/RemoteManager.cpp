@@ -13,6 +13,8 @@
 #include "Agnus.h"
 #include "SerialPort.h"
 
+namespace vamiga {
+
 RemoteManager::RemoteManager(Amiga& ref) : SubComponent(ref)
 {
     subComponents = std::vector<AmigaComponent *> {
@@ -119,7 +121,7 @@ void
 RemoteManager::serviceServerEvent()
 {
     assert(agnus.id[SLOT_SRV] == SRV_LAUNCH_DAEMON);
-        
+
     // Run the launch daemon
     if (serServer.config.autoRun) {
         serServer.shouldRun() ? serServer._start() : serServer._stop();
@@ -133,4 +135,6 @@ RemoteManager::serviceServerEvent()
 
     // Schedule next event
     agnus.scheduleInc <SLOT_SRV> (SEC(0.5), SRV_LAUNCH_DAEMON);
+}
+
 }

@@ -19,6 +19,8 @@
 #include "StateMachine.h"
 #include "UART.h"
 
+namespace vamiga {
+
 class Paula : public SubComponent {
     
 private:
@@ -72,7 +74,7 @@ public:
 
     // Value pipe for emulating the delay on the IPL pins
     u64 iplPipe;
-        
+
     
     //
     // Control ports
@@ -119,7 +121,7 @@ private:
     //
     // Methods from AmigaComponent
     //
-        
+
 private:
     
     void _reset(bool hard) override;
@@ -214,7 +216,7 @@ private:
     //
     
 public:
-        
+
     u16 peekADKCONR() const;
     void pokeADKCON(u16 value);
 
@@ -252,3 +254,5 @@ public:
     // Finishes up the current frame
     void eofHandler();
 };
+
+}
