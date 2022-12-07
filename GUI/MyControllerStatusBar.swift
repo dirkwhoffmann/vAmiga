@@ -203,6 +203,21 @@ extension MyController {
     
     func updateSpeedometer() {
 
+        func setColor(color: [NSColor]) {
+
+            let min = activityBar.minValue
+            let max = activityBar.maxValue
+            let cur = (activityBar.doubleValue - min) / (max - min)
+
+            let index =
+            cur < 0.15 ? 0 :
+            cur < 0.40 ? 1 :
+            cur < 0.60 ? 2 :
+            cur < 0.85 ? 3 : 4
+
+            activityBar.fillColor = color[index]
+        }
+
         let clock = amiga.cpu.clock
 
         speedometer.updateWith(cycle: clock,
@@ -216,45 +231,35 @@ extension MyController {
             let mhz = speedometer.mhz
             activityBar.doubleValue = 10 * mhz
             activityInfo.stringValue = String(format: "%.2f MHz", mhz)
+            setColor(color: [.systemRed, .systemYellow, .systemGreen, .systemYellow, .systemRed])
 
         case 1:
             let fps = speedometer.emuFps
             activityBar.doubleValue = fps
             activityInfo.stringValue = String(format: "%d Hz", Int(fps))
+            setColor(color: [.systemRed, .systemYellow, .systemGreen, .systemYellow, .systemRed])
 
         case 2:
             let cpu = amiga.cpuLoad
             activityBar.integerValue = cpu
             activityInfo.stringValue = String(format: "%d%% CPU", cpu)
-            
+            setColor(color: [.systemGreen, .systemGreen, .systemGreen, .systemYellow, .systemRed])
+
         case 3:
             let fps = speedometer.gpsFps
             activityBar.doubleValue = fps
             activityInfo.stringValue = String(format: "%d FPS", Int(fps))
+            setColor(color: [.systemRed, .systemYellow, .systemGreen, .systemYellow, .systemRed])
 
         case 4:
             let fill = amiga.paula.muxerStats.fillLevel * 100.0
             activityBar.doubleValue = fill
             activityInfo.stringValue = String(format: "Fill level %d%%", Int(fill))
+            setColor(color: [.systemRed, .systemYellow, .systemGreen, .systemYellow, .systemRed])
 
         default:
             activityBar.integerValue = 0
             activityInfo.stringValue = "???"
-        }
-
-        // Set color
-        let min = activityBar.minValue
-        let max = activityBar.maxValue
-        let cur = (activityBar.doubleValue - min) / (max - min)
-
-        if cur < 0.4 || cur > 0.6 {
-            if cur < 0.15 || cur > 0.85 {
-                activityBar.fillColor = .systemRed
-            } else {
-                activityBar.fillColor = .systemYellow
-            }
-        } else {
-            activityBar.fillColor = .systemGreen
         }
     }
     

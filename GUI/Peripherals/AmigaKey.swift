@@ -299,9 +299,11 @@ extension NSImage {
     
     func imprint(text: String,
                  x: CGFloat, y: CGFloat, fontSize: CGFloat, tint: String) {
-        
+
         let font = NSFont.systemFont(ofSize: fontSize)
-        let color: NSColor = tint == "dark" ? .keyCapColor2 : .keyCapColor
+        let color: NSColor =
+        tint == "white" ? .keyCapColor :
+        tint == "dark" ? .keyCapColor2 : .black
 
         imprint(text: text, x: x, y: y, font: font, color: color)
     }

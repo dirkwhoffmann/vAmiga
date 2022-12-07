@@ -14,7 +14,7 @@ class DropZone: Layer {
     class func createImage(_ name: String, label: String) -> NSImage {
         
         let img = NSImage(named: name)!.copy() as! NSImage
-        img.imprint(text: label, x: 235, y: 330, fontSize: 100, tint: "light")
+        img.imprint(text: label, x: 235, y: 330, fontSize: 100, tint: "black")
         return img
     }
     
