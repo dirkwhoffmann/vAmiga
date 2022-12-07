@@ -14,7 +14,7 @@
 #include "SubComponent.h"
 #include "AgnusTypes.h"
 
-using namespace vamiga;
+namespace vamiga {
 
 class UART : public SubComponent {
     
@@ -35,7 +35,7 @@ class UART : public SubComponent {
     u16 transmitShiftReg;
 
     // The bit which is currently seen on the TXD line
-    bool outBit; 
+    bool outBit;
 
     // Overrun bit
     bool ovrun;
@@ -107,7 +107,7 @@ public:
 
     UARTInfo getInfo() const { return AmigaComponent::getInfo(info); }
 
- 
+
     //
     // Accessing
     //
@@ -171,5 +171,6 @@ public:
 
     // Process a bit reception event
     void serviceRxdEvent(EventID id);
-
 };
+
+}

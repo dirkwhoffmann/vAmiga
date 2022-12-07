@@ -17,6 +17,8 @@
 #include <fstream>
 #include <sstream>
 
+namespace vamiga {
+
 //
 // Top-level commands
 //
@@ -1488,7 +1490,7 @@ template <> void
 RetroShell::exec <Token::dfn, Token::set, Token::searchpath> (Arguments& argv, long param)
 {
     string path = argv.front();
-        
+
     if (param == 0 || param > 3) df0.setSearchPath(path);
     if (param == 1 || param > 3) df1.setSearchPath(path);
     if (param == 2 || param > 3) df2.setSearchPath(path);
@@ -1852,4 +1854,6 @@ template <> void
 RetroShell::exec <Token::server, Token::list> (Arguments& argv, long param)
 {
     dump(remoteManager, Category::State);
+}
+
 }

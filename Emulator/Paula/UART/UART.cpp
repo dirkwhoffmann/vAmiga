@@ -17,6 +17,8 @@
 #include "SerialPort.h"
 #include <iostream>
 
+namespace vamiga {
+
 void
 UART::_reset(bool hard)
 {
@@ -207,4 +209,6 @@ UART::rxdHasChanged(bool value)
         // Schedule the event
         agnus.scheduleRel<SLOT_RXD>(delay, RXD_BIT);
     }
+}
+
 }

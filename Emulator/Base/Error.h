@@ -16,6 +16,8 @@
 // VAError
 //
 
+namespace vamiga {
+
 struct VAError : public util::Exception
 {
     VAError(ErrorCode code, const string &s);
@@ -24,3 +26,5 @@ struct VAError : public util::Exception
     
     const char *what() const throw() override;
 };
+
+}

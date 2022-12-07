@@ -12,7 +12,8 @@
 #include "Chrono.h"
 #include "Amiga.h"
 #include "IOUtils.h"
-// #include "Memory.h"
+
+namespace vamiga {
 
 i64
 RTC::getConfigItem(Option option) const
@@ -20,7 +21,7 @@ RTC::getConfigItem(Option option) const
     switch (option) {
             
         case OPT_RTC_MODEL:  return (long)config.model;
-        
+
         default:
             fatalError;
     }
@@ -32,7 +33,7 @@ RTC::setConfigItem(Option option, i64 value)
     switch (option) {
             
         case OPT_RTC_MODEL:
-                
+
             if (!isPoweredOff()) {
                 throw VAError(ERROR_OPT_LOCKED);
             }
@@ -43,7 +44,7 @@ RTC::setConfigItem(Option option, i64 value)
             config.model = (RTCRevision)value;
             mem.updateMemSrcTables();
             return;
-                        
+
         default:
             fatalError;
     }
@@ -118,7 +119,7 @@ RTC::getTime()
     Cycle master = cpu.getMasterClock();
 
     auto timeBetweenCalls = AS_SEC(master - lastCall);
-           
+
     if (timeBetweenCalls > 2) {
 
         /* If the time between two read accesses is long, we compute the result
@@ -184,7 +185,7 @@ RTC::spypeek(isize nr) const
             
             result = reg[bank()][nr];
     }
-        
+
     trace(RTC_DEBUG, "peek(%ld) = $%X [bank %ld]\n", nr, result, bank());
     return result;
 }
@@ -298,7 +299,7 @@ RTC::registers2time()
     
     // Read the registers
     config.model == RTC_RICOH ? registers2timeRicoh(&t) : registers2timeOki(&t);
-  
+
     // Convert the tm struct to a time_t value
     time_t rtcTime = mktime(&t);
     
@@ -326,4 +327,6 @@ RTC::registers2timeRicoh(tm *t)
     t->tm_mday = reg[0][0x7] + 10 * reg[0][0x8];
     t->tm_mon  = reg[0][0x9] + 10 * reg[0][0xA] - 1;
     t->tm_year = reg[0][0xB] + 10 * reg[0][0xC];
+}
+
 }

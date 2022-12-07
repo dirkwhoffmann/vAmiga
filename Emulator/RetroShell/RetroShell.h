@@ -16,6 +16,8 @@
 #include <sstream>
 #include <fstream>
 
+namespace vamiga {
+
 class RetroShell : public SubComponent {
     
     // Interpreter for commands typed into the console window
@@ -28,13 +30,13 @@ class RetroShell : public SubComponent {
     
     // The text storage
     TextStorage storage;
- 
+
     // History buffer storing old input strings and cursor positions
     std::vector<std::pair<string,isize>> history;
     
     // The currently active input string
     isize ipos = 0;
-        
+
     
     //
     // User input
@@ -74,7 +76,7 @@ class RetroShell : public SubComponent {
 public:
     
     RetroShell(Amiga& ref);
-            
+
     
     //
     // Methods from AmigaObject
@@ -112,7 +114,7 @@ public:
     
     // Returns the contents of the whole storage as a single C string
     const char *text();
-        
+
     // Moves the cursor forward to a certain column
     void tab(isize pos);
 
@@ -125,7 +127,7 @@ public:
     
     // Assigns an additional output stream
     void setStream(std::ostream &os);
-       
+
 private:
     
     // Marks the text storage as dirty
@@ -136,7 +138,7 @@ private:
     
     // Prints a help line
     void printHelp();
-        
+
     
     //
     // Managing user input
@@ -164,7 +166,7 @@ public:
     
     isize historyLength() { return (isize)history.size(); }
 
-        
+
     
     //
     // Executing commands
@@ -220,3 +222,5 @@ public:
     
     void eofHandler();
 };
+
+}

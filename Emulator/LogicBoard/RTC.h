@@ -12,7 +12,7 @@
 #include "RTCTypes.h"
 #include "SubComponent.h"
 
-using namespace vamiga;
+namespace vamiga {
 
 class RTC : public SubComponent {
 
@@ -174,3 +174,5 @@ private:
     void registers2timeOki(tm *t);
     void registers2timeRicoh(tm *t);
 };
+
+}

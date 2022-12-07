@@ -12,6 +12,8 @@
 #include "IOUtils.h"
 #include "Amiga.h"
 
+namespace vamiga {
+
 void
 SerialPort::resetConfig()
 {
@@ -51,9 +53,9 @@ SerialPort::setConfigItem(Option option, i64 value)
                 throw VAError(ERROR_OPT_INVARG, SerialPortDeviceEnum::keyList());
             }
             
-            config.device = (SerialPortDevice)value;            
+            config.device = (SerialPortDevice)value;
             return;
-                        
+
         default:
             fatalError;
     }
@@ -90,7 +92,7 @@ SerialPort::_dump(Category category, std::ostream& os) const
         
         os << tab("port");
         os << hex(port);
-    }    
+    }
 }
 
 bool
@@ -140,4 +142,6 @@ SerialPort::setPort(u32 mask, bool value)
 
     // Inform the UART if RXD has changed
     if ((oldPort ^ port) & RXD_MASK) uart.rxdHasChanged(value);
+}
+
 }

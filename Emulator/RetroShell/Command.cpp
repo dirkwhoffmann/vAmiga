@@ -11,6 +11,8 @@
 #include "Command.h"
 #include <algorithm>
 
+namespace vamiga {
+
 void
 Command::add(const std::vector<string> &tokens,
              const string &type,
@@ -194,4 +196,6 @@ Command::usage() const
     }
     
     return tokens() + " " + firstArg + " " + otherArgs;
+}
+
 }

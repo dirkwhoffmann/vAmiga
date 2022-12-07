@@ -11,6 +11,8 @@
 #include "Error.h"
 #include "Constants.h"
 
+namespace vamiga {
+
 VAError::VAError(ErrorCode code, const string &s)
 {
     data = code;
@@ -389,4 +391,6 @@ const char *
 VAError::what() const throw()
 {
     return description.c_str();
+}
+
 }

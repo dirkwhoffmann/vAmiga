@@ -12,9 +12,11 @@
 #include "Amiga.h"
 #include "Parser.h"
 
+namespace vamiga {
+
 RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
 {    
- 
+
 }
 
 void
@@ -81,7 +83,7 @@ RetroShell::text()
     
     // Add the storage contents
     storage.text(all);
-        
+
     // Add the input line
     all += prompt + input + " ";
     
@@ -135,7 +137,7 @@ RetroShell::press(RetroShellKey key)
     assert_enum(RetroShellKey, key);
     assert(ipos >= 0 && ipos < historyLength());
     assert(cursor >= 0 && cursor <= inputLength());
-        
+
     switch(key) {
             
         case RSKEY_UP:
@@ -198,7 +200,7 @@ RetroShell::press(RetroShellKey key)
         case RSKEY_TAB:
             
             if (tabPressed) {
-                        
+
                 // TAB was pressed twice
                 help(input);
 
@@ -350,7 +352,7 @@ RetroShell::continueScript()
 {
     string command;
     while(std::getline(script, command)) {
-            
+
         // Print the command
         *this << command << '\n';
         
@@ -362,7 +364,7 @@ RetroShell::continueScript()
             
             msgQueue.put(MSG_SCRIPT_PAUSE, scriptLine);
             return;
-        
+
         } catch (std::exception &) {
             
             *this << "Aborted in line " << scriptLine << '\n';
@@ -385,7 +387,7 @@ RetroShell::describe(const std::exception &e)
         *this << '\n';
         return;
     }
-        
+
     if (auto err = dynamic_cast<const TooManyArgumentsError *>(&e)) {
         
         *this << err->what() << ": Too many arguments";
@@ -456,4 +458,6 @@ RetroShell::eofHandler()
         msgQueue.put(MSG_SCRIPT_WAKEUP);
         wakeUp = INT64_MAX;
     }
+}
+
 }

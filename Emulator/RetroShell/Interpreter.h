@@ -15,7 +15,7 @@
 #include "Error.h"
 #include "Parser.h"
 
-using namespace vamiga;
+namespace vamiga {
 
 enum class Token
 {
@@ -132,7 +132,7 @@ public:
     // Executes a single command
     void exec(const string& userInput, bool verbose = false) throws;
     void exec(const Arguments &argv, bool verbose = false) throws;
-            
+
     // Prints a usage string for a command
     void usage(const Command &command);
     
@@ -142,3 +142,5 @@ public:
     void help(const Command &command);
 
 };
+
+}

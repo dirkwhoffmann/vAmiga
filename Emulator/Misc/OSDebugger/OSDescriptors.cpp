@@ -14,6 +14,8 @@
 #include "IOUtils.h"
 #include "Error.h"
 
+namespace vamiga {
+
 string
 HunkTypeEnum::key(u32 type) {
     
@@ -47,7 +49,7 @@ HunkTypeEnum::key(u32 type) {
 
 string
 MemFlagsEnum::key(u32 value) {
-            
+
     string result;
     
     auto add = [&](const char *str) {
@@ -128,7 +130,7 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
     
     // Skip strings
     for (auto count = read(); count != 0; count = read()) {
-                        
+
         for (usize i = 0; i < count; i++) (void)read();
     }
 
@@ -154,7 +156,7 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
         auto descr = HunkDescriptor { .memRaw = value, .memSize = size, .memFlags = flags };
         hunks.push_back(descr);
     }
-        
+
     // Scan sections (s) of all hunks (h)
     for (isize h = 0, s = 0; h < numHunks; s++) {
         
@@ -196,7 +198,7 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
 
                     section.size += 4 * count;
                     section.target = read();
-                                        
+
                     while (count--) {
                         section.relocations.push_back(read());
                     }
@@ -295,4 +297,6 @@ ProgramUnitDescriptor::dump(Category category, std::ostream& os) const
             }
         }
     }
+}
+
 }

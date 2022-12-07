@@ -14,6 +14,8 @@
 #include <fstream>
 #include <vector>
 
+namespace vamiga {
+
 class TextStorage {
 
     // Maximum number of stored lines
@@ -21,7 +23,7 @@ class TextStorage {
     
     // The stored lines
     std::vector<string> storage;
-        
+
 public:
     
     // Optional output stream for debugging
@@ -43,7 +45,7 @@ public:
 
     // Returns the whole storage contents
     void text(string &all);
-            
+
     
     //
     // Writing
@@ -71,3 +73,5 @@ public:
     // Prints the help line
     void printHelp();
 };
+
+}

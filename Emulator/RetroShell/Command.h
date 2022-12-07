@@ -12,6 +12,8 @@
 #include "Aliases.h"
 #include <vector>
 
+namespace vamiga {
+
 class RetroShell;
 
 typedef std::vector<string> Arguments;
@@ -45,7 +47,7 @@ struct Command {
     
     // Indicates if this command appears in the help descriptions
     bool hidden = false;
-        
+
     // Creates a new node in the command tree
     void add(const std::vector<string> &tokens,
              const string &type,
@@ -88,3 +90,5 @@ struct Command {
     // Returns a syntax string for this command
     string usage() const;
 };
+
+}

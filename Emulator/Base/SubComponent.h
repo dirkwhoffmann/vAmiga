@@ -40,15 +40,13 @@ class Paula;
 class PixelEngine;
 class RamExpansion;
 class RemoteManager;
-
-}
 class RetroShell;
 class RshServer;
 class RTC;
 class SerialPort;
 class UART;
-namespace vamiga {
 class ZorroManager;
+
 }
 
 using namespace vamiga;

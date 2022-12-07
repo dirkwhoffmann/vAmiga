@@ -11,6 +11,8 @@
 #include "Interpreter.h"
 #include "RetroShell.h"
 
+namespace vamiga {
+
 void
 Interpreter::registerInstructions()
 {
@@ -69,7 +71,7 @@ Interpreter::registerInstructions()
     
     root.add({"screenshot", "set"},
              "command", "Configures the regression test");
-        
+
     root.add({"screenshot", "set", "filename"},
              "key", "Assigns the screen shot filename",
              &RetroShell::exec <Token::screenshot, Token::set, Token::filename>, 1);
@@ -179,7 +181,7 @@ Interpreter::registerInstructions()
 
     root.add({"memory", "set"},
              "command", "Configures the component");
-        
+
     root.add({"memory", "set", "chip"},
              "key", "Configures the amouts of chip memory",
              &RetroShell::exec <Token::memory, Token::set, Token::chip>, 1);
@@ -218,7 +220,7 @@ Interpreter::registerInstructions()
     
     root.add({"memory", "load"},
              "command", "Installs a Rom image");
-            
+
     root.add({"memory", "load", "rom"},
              "command", "Installs a Kickstart Rom",
              &RetroShell::exec <Token::memory, Token::load, Token::rom>, 1);
@@ -387,26 +389,26 @@ Interpreter::registerInstructions()
     //
 
     /*
-    root.add({"mmu"},
-             "component", "Memory management unit");
+     root.add({"mmu"},
+     "component", "Memory management unit");
 
-    root.add({"mmu", "inspect"},
-             "command", "Displays the component state",
-             &RetroShell::exec <Token::mmu, Token::inspect>, 0);
-    */
+     root.add({"mmu", "inspect"},
+     "command", "Displays the component state",
+     &RetroShell::exec <Token::mmu, Token::inspect>, 0);
+     */
 
     //
     // FPU
     //
 
     /*
-    root.add({"fpu"},
-             "component", "Floating point unit");
+     root.add({"fpu"},
+     "component", "Floating point unit");
 
-    root.add({"fpu", "inspect"},
-             "command", "Displays the component state",
-             &RetroShell::exec <Token::fpu, Token::inspect>, 0);
-    */
+     root.add({"fpu", "inspect"},
+     "command", "Displays the component state",
+     &RetroShell::exec <Token::fpu, Token::inspect>, 0);
+     */
 
     //
     // CIA
@@ -471,7 +473,7 @@ Interpreter::registerInstructions()
     
     root.add({"agnus", "set"},
              "command", "Configures the component");
-        
+
     root.add({"agnus", "set", "revision"},
              "key", "Selects the emulated chip model",
              &RetroShell::exec <Token::agnus, Token::set, Token::revision>, 1);
@@ -521,7 +523,7 @@ Interpreter::registerInstructions()
     
     root.add({"blitter", "set"},
              "command", "Configures the component");
-        
+
     root.add({"blitter", "set", "accuracy"},
              "level", "Selects the emulation accuracy level",
              &RetroShell::exec <Token::blitter, Token::set, Token::accuracy>, 1);
@@ -586,7 +588,7 @@ Interpreter::registerInstructions()
     root.add({"copper", "break", "ignore"},
              "command", "Ignores a breakpoint a certain number of times",
              &RetroShell::exec <Token::copper, Token::bp, Token::ignore>, 2);
- 
+
     root.add({"copper", "watch"},
              "command", "Manages watchpoints");
 
@@ -622,7 +624,7 @@ Interpreter::registerInstructions()
     root.add({"denise"},
              "component", "Custom chip");
     
-        root.add({"denise", "config"},
+    root.add({"denise", "config"},
              "command", "Displays the current configuration",
              &RetroShell::exec <Token::denise, Token::config>, 0);
 
@@ -901,7 +903,7 @@ Interpreter::registerInstructions()
 
     root.add({"rtc", "set"},
              "command", "Configures the component");
-        
+
     root.add({"rtc", "set", "revision"},
              "key", "Selects the emulated chip model",
              &RetroShell::exec <Token::rtc, Token::set, Token::revision>, 1);
@@ -951,7 +953,7 @@ Interpreter::registerInstructions()
     
     root.add({"keyboard", "set"},
              "command", "Configures the component");
-        
+
     root.add({"keyboard", "set", "accuracy"},
              "key", "Determines the emulation accuracy level",
              &RetroShell::exec <Token::keyboard, Token::set, Token::accuracy>, 1);
@@ -1105,7 +1107,7 @@ Interpreter::registerInstructions()
 
     root.add({"serial", "set"},
              "command", "Configures the component");
-        
+
     root.add({"serial", "set", "device"},
              "key", "",
              &RetroShell::exec <Token::serial, Token::set, Token::device>, 1);
@@ -1128,7 +1130,7 @@ Interpreter::registerInstructions()
 
     root.add({"diskcontroller", "set"},
              "command", "Configures the component");
-        
+
     root.add({"diskcontroller", "set", "speed"},
              "key", "Configures the drive speed",
              &RetroShell::exec <Token::dc, Token::speed>, 1);
@@ -1143,7 +1145,7 @@ Interpreter::registerInstructions()
     root.add({"diskcontroller", "dsksync", "lock"},
              "key", "Prevents writes to DSKSYNC",
              &RetroShell::exec <Token::dc, Token::dsksync, Token::lock>, 1);
-        
+
     root.add({"diskcontroller", "inspect"},
              "command", "Displays the internal state",
              &RetroShell::exec <Token::dc, Token::inspect>, 0);
@@ -1171,7 +1173,7 @@ Interpreter::registerInstructions()
     for (isize i = 0; i < 4; i++) {
 
         string df = "df" + std::to_string(i);
-                
+
         root.add({df, "config"},
                  "command", "Displays the current configuration",
                  &RetroShell::exec <Token::dfn, Token::config>, 0, i);
@@ -1198,7 +1200,7 @@ Interpreter::registerInstructions()
     for (isize i = 0; i < 5; i++) {
 
         string df = i < 4 ? "df" + std::to_string(i) : "dfn";
-                
+
         root.add({df, "set"},
                  "command", "Configures the component");
         
@@ -1213,7 +1215,7 @@ Interpreter::registerInstructions()
         root.add({df, "set", "searchpath"},
                  "key", "Sets the search path for media files",
                  &RetroShell::exec <Token::dfn, Token::set, Token::searchpath>, 1, i);
-                
+
         root.add({df, "set", "swapdelay"},
                  "key", "Sets the disk change delay",
                  &RetroShell::exec <Token::dfn, Token::set, Token::swapdelay>, 1, i);
@@ -1286,7 +1288,7 @@ Interpreter::registerInstructions()
     for (isize i = 0; i < 5; i++) {
 
         string hd = i < 4 ? "hd" + std::to_string(i) : "hdn";
-                
+
         root.add({hd, "set"},
                  "command", "Configures the component");
         
@@ -1296,14 +1298,14 @@ Interpreter::registerInstructions()
         
         root.add({hd, "audiate"},
                  "command", "Sets the volume of drive sounds");
-                
+
         root.add({hd, "audiate", "step"},
                  "command", "Makes head steps audible",
                  &RetroShell::exec <Token::hdn, Token::audiate, Token::step>, 1, i);
     }
     
     for (isize i = 0; i < 4; i++) {
-            
+
         string hd = "hd" + std::to_string(i);
         
         root.add({hd, "inspect"},
@@ -1390,7 +1392,7 @@ Interpreter::registerInstructions()
 
     root.add({"os", "set"},
              "command", "Configures the component");
-        
+
     root.add({"os", "set", "diagboard" },
              "command", "Attaches or detaches the debug expansion board",
              &RetroShell::exec <Token::os, Token::set, Token::diagboard>, 1);
@@ -1405,14 +1407,14 @@ Interpreter::registerInstructions()
 
     root.add({"server", "serial"},
              "component", "Serial port server");
-        
+
     root.add({"server", "serial", "config"},
              "command", "Displays the current configuration",
              &RetroShell::exec <Token::server, Token::serial, Token::config>, 0);
 
     root.add({"server", "serial", "set"},
              "command", "Configures the component");
-        
+
     root.add({"server", "serial", "set", "port"},
              "key", "Assigns the port number",
              &RetroShell::exec <Token::server, Token::serial, Token::set, Token::port>, 1);
@@ -1424,7 +1426,7 @@ Interpreter::registerInstructions()
     root.add({"server", "serial", "inspect"},
              "command", "Displays the internal state",
              &RetroShell::exec <Token::server, Token::serial, Token::inspect>, 0);
-  
+
     root.add({"server", "rshell"},
              "component", "Retro shell server");
 
@@ -1446,7 +1448,7 @@ Interpreter::registerInstructions()
 
     root.add({"server", "rshell", "set"},
              "command", "Configures the component");
-        
+
     root.add({"server", "rshell", "set", "port"},
              "key", "Assigns the port number",
              &RetroShell::exec <Token::server, Token::rshell, Token::set, Token::port>, 1);
@@ -1458,7 +1460,7 @@ Interpreter::registerInstructions()
     root.add({"server", "rshell", "inspect"},
              "command", "Displays the internal state",
              &RetroShell::exec <Token::server, Token::rshell, Token::inspect>, 0, 0);
-   
+
     root.add({"server", "gdb"},
              "component", "GDB server");
 
@@ -1476,7 +1478,7 @@ Interpreter::registerInstructions()
 
     root.add({"server", "gdb", "set"},
              "command", "Configures the component");
-        
+
     root.add({"server", "gdb", "set", "port"},
              "key", "Assigns the port number",
              &RetroShell::exec <Token::server, Token::gdb, Token::set, Token::port>, 1);
@@ -1492,4 +1494,6 @@ Interpreter::registerInstructions()
     root.add({"server", "list"},
              "command", "Displays a server status summary",
              &RetroShell::exec <Token::server, Token::list>, 0);
+}
+
 }

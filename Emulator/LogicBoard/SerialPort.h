@@ -12,6 +12,8 @@
 #include "SerialPortTypes.h"
 #include "SubComponent.h"
 
+namespace vamiga {
+
 #define TXD_MASK (1 << 2)
 #define RXD_MASK (1 << 3)
 #define RTS_MASK (1 << 4)
@@ -20,8 +22,6 @@
 #define CD_MASK  (1 << 8)
 #define DTR_MASK (1 << 20)
 #define RI_MASK  (1 << 22)
-
-using namespace vamiga;
 
 class SerialPort : public SubComponent {
 
@@ -97,7 +97,7 @@ public:
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
     
-        
+
     //
     // Analyzing
     //
@@ -105,7 +105,7 @@ public:
 public:
 
     SerialPortInfo getInfo() const { return AmigaComponent::getInfo(info); }
- 
+
 
     //
     // Accessing
@@ -142,3 +142,5 @@ private:
 
     void setPort(u32 mask, bool value);
 };
+
+}
