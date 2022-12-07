@@ -11,6 +11,8 @@
 #include "Agnus.h"
 #include "IOUtils.h"
 
+namespace vamiga {
+
 void
 Copper::_dump(Category category, std::ostream& os) const
 {
@@ -23,7 +25,7 @@ Copper::_dump(Category category, std::ostream& os) const
         os << tab("Skip flag");
         os << bol(skip) << std::endl;
     }
-            
+
     if (category == Category::Registers) {
         
         auto deltaPC = coppc - coppc0;
@@ -65,4 +67,6 @@ Copper::_inspect() const
     info.cop2lc = cop2lc & agnus.ptrMask;
     info.cop1ins = cop1ins;
     info.cop2ins = cop2ins;
+}
+
 }

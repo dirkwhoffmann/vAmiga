@@ -11,6 +11,8 @@
 #include "DeniseDebugger.h"
 #include "Amiga.h"
 
+namespace vamiga {
+
 void
 DeniseDebugger::_initialize()
 {
@@ -161,7 +163,7 @@ DeniseDebugger::vsyncHandler()
         
         // Take action if the viewport has changed
         if (vpChanged) {
-                        
+
             latchedMaxViewPort = maxViewPort;
             
             // Notify the GUI if the last message was sent a while ago
@@ -204,4 +206,6 @@ void
 DeniseDebugger::eofHandler()
 {
     
+}
+
 }

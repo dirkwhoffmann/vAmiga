@@ -17,7 +17,7 @@
 #include "CopperDebugger.h"
 #include "Memory.h"
 
-using namespace vamiga;
+namespace vamiga {
 
 class Copper : public SubComponent
 {
@@ -42,14 +42,14 @@ private:
      * condition holds.
      */
     bool skip = false;
-     
+
     // The Copper list location pointers
     u32 cop1lc = 0;
     u32 cop2lc = 0;
 
     // The Copper Danger bit (CDANG)
     bool cdang = false;
-        
+
     // The Copper instruction registers
     u16 cop1ins = 0;
     u16 cop2ins = 0;
@@ -177,7 +177,7 @@ public:
     //
     
 private:
- 
+
     // Sets the program counter to a given address
     void setPC(u32 addr);
     
@@ -210,10 +210,10 @@ private:
 
     // Runs the comparator circuit (DEPRECATED)
     /*
-    bool comparator(Beam beam, u16 waitpos, u16 mask) const;
-    bool comparator(Beam beam) const;
-    bool comparator() const;
-    */
+     bool comparator(Beam beam, u16 waitpos, u16 mask) const;
+     bool comparator(Beam beam) const;
+     bool comparator() const;
+     */
     
     // Runs the comparator circuit
     bool runComparator() const;
@@ -254,7 +254,7 @@ private:
      * variant analyzes the instruction in the instructions register. The
      * second variant analyzes the instruction at a certain location in memory.
      */
- 
+
     bool isMoveCmd() const;
     bool isMoveCmd(u32 addr) const;
     
@@ -295,7 +295,7 @@ public:
     // Returns true if the Copper instruction at addr is illegal
     bool isIllegalInstr(u32 addr) const;
     
- 
+
     //
     // Managing events
     //
@@ -326,3 +326,5 @@ public:
 
     void blitterDidTerminate();
 };
+
+}

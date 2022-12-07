@@ -11,6 +11,8 @@
 #include "Copper.h"
 #include "Agnus.h"
 
+namespace vamiga {
+
 void
 Copper::pokeCOPCON(u16 value)
 {
@@ -69,15 +71,15 @@ Copper::pokeCOPINS(u16 value)
     /* COPINS is a dummy address that can be used to write the first or
      * the second instruction register, depending on the current state.
      */
-    xfiles("Write to COPINS (%x)\n", value); 
+    xfiles("Write to COPINS (%x)\n", value);
     
     // TODO: The following is certainly wrong...
     /* if (state == COP_MOVE || state == COP_WAIT_OR_SKIP) {
-        cop2ins = value;
-    } else {
-        cop1ins = value;
-    }
-    */
+     cop2ins = value;
+     } else {
+     cop1ins = value;
+     }
+     */
     cop1ins = value;
 }
 
@@ -155,3 +157,5 @@ template void Copper::pokeCOPJMP1<ACCESSOR_CPU>();
 template void Copper::pokeCOPJMP1<ACCESSOR_AGNUS>();
 template void Copper::pokeCOPJMP2<ACCESSOR_CPU>();
 template void Copper::pokeCOPJMP2<ACCESSOR_AGNUS>();
+
+}

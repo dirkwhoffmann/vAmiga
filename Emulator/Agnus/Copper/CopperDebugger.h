@@ -13,7 +13,7 @@
 #include "MoiraDebugger.h"
 #include <map>
 
-using namespace vamiga;
+namespace vamiga {
 
 struct CopperList {
     
@@ -42,13 +42,13 @@ public:
 };
 
 class CopperDebugger: public SubComponent {
-               
+
     friend class Amiga;
     friend class Copper;
     
     // Cached Copper lists
     std::map<u32, CopperList> cache;
-        
+
     // The most recently used Copper list 1
     CopperList *current1 = nullptr;
 
@@ -137,3 +137,5 @@ public:
     void disableWatchpoint(isize nr) throws;
     void ignoreWatchpoint(isize nr, isize count) throws;
 };
+
+}

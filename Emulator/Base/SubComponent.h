@@ -12,6 +12,7 @@
 #include "AmigaComponent.h"
 
 namespace vamiga {
+
 class Agnus;
 class Amiga;
 class Blitter;
@@ -19,10 +20,11 @@ class CPU;
 class CIA;
 class CIAA;
 class CIAB;
-}
 class ControlPort;
 class Copper;
 class Denise;
+
+}
 class DiagBoard;
 class DiskController;
 class DmaDebugger;

@@ -18,6 +18,8 @@
 #include "Reflection.h"
 #include "Recorder.h"
 
+namespace vamiga {
+
 class Denise : public SubComponent {
     
     friend class DeniseDebugger;
@@ -210,7 +212,7 @@ public:
     Pixel spriteClipBegin;
     Pixel spriteClipEnd;
 
- 
+
     //
     // Rasterline data
     //
@@ -280,7 +282,7 @@ public:
     static constexpr u16 Z_SP6 = 0b00000000'00100000;
     static constexpr u16 Z_SP7 = 0b00000000'00010000;
     static constexpr u16 Z_4   = 0b00000000'00001000;
- 
+
     // Dual-playfield bits (meta-information, not used for depth)
     static constexpr u16 Z_DPF   = 0x1;  // Both playfields transparent
     static constexpr u16 Z_DPF1  = 0x2;  // PF1 opaque, PF2 transparent
@@ -462,7 +464,7 @@ public:
     //
 
 public:
-            
+
     // Wrappers around the core drawing routines
     void drawLoresOdd();
     void drawLoresEven();
@@ -693,3 +695,5 @@ private:
     static u8 bpu(u16 v);
     u8 bpu() const { return bpu(bplcon0); }
 };
+
+}

@@ -10,6 +10,8 @@
 #include "config.h"
 #include "Colors.h"
 
+namespace vamiga {
+
 RgbColor::RgbColor(const AmigaColor &c)
 {
     r = c.r / 15.0;
@@ -164,4 +166,6 @@ GpuColor::mix(const RgbColor &color, double weight) const
 {
     RgbColor mixedColor = RgbColor(*this).mix(color, weight);
     return GpuColor(mixedColor);
+}
+
 }

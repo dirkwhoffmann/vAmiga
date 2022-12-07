@@ -14,6 +14,8 @@
 #include "IOUtils.h"
 #include "SSEUtils.h"
 
+namespace vamiga {
+
 Denise::Denise(Amiga& ref) : SubComponent(ref)
 {    
     subComponents = std::vector<AmigaComponent *> {
@@ -228,13 +230,13 @@ Denise::drawOdd(Pixel offset)
 {
     static constexpr u16 masks[7] = {
         
-       0b000000, // 0 bitplanes
-       0b000001, // 1 bitplanes
-       0b000001, // 2 bitplanes
-       0b000101, // 3 bitplanes
-       0b000101, // 4 bitplanes
-       0b010101, // 5 bitplanes
-       0b010101  // 6 bitplanes
+        0b000000, // 0 bitplanes
+        0b000001, // 1 bitplanes
+        0b000001, // 2 bitplanes
+        0b000101, // 3 bitplanes
+        0b000101, // 4 bitplanes
+        0b010101, // 5 bitplanes
+        0b010101  // 6 bitplanes
     };
     
     u16 mask = masks[bpu()];
@@ -283,7 +285,7 @@ Denise::drawOdd(Pixel offset)
                 fatalError;
         }
     }
- 
+
     // Clear the shift registers
     shiftReg[0] = shiftReg[2] = shiftReg[4] = 0;
 }
@@ -293,13 +295,13 @@ Denise::drawEven(Pixel offset)
 {    
     static constexpr u16 masks[7] = {
         
-       0b000000, // 0 bitplanes
-       0b000000, // 1 bitplanes
-       0b000010, // 2 bitplanes
-       0b000010, // 3 bitplanes
-       0b001010, // 4 bitplanes
-       0b001010, // 5 bitplanes
-       0b101010  // 6 bitplanes
+        0b000000, // 0 bitplanes
+        0b000000, // 1 bitplanes
+        0b000010, // 2 bitplanes
+        0b000010, // 3 bitplanes
+        0b001010, // 4 bitplanes
+        0b001010, // 5 bitplanes
+        0b101010  // 6 bitplanes
     };
     
     u16 mask = masks[bpu()];
@@ -348,7 +350,7 @@ Denise::drawEven(Pixel offset)
                 fatalError;
         }
     }
- 
+
     // Clear the shift registers
     shiftReg[1] = shiftReg[3] = shiftReg[5] = 0;
 }
@@ -519,7 +521,7 @@ Denise::translate()
 
     // Wipe out some bitplane data if requested
     if (config.hiddenBitplanes) {
-    
+
         for (isize i = 0; i < isizeof(bBuffer); i++) {
             bBuffer[i] &= ~config.hiddenBitplanes;
         }
@@ -594,12 +596,12 @@ Denise::translateSPF(Pixel from, Pixel to, PFState &state)
         
         for (Pixel i = from; i < to; i++) {
 
-             u8 s = bBuffer[i];
+            u8 s = bBuffer[i];
 
-             assert(PixelEngine::isPaletteIndex(s));
-             iBuffer[i] = mBuffer[i] = (s & 0x10) ? (s & 0x30) : s;
-             zBuffer[i] = 0;
-         }
+            assert(PixelEngine::isPaletteIndex(s));
+            iBuffer[i] = mBuffer[i] = (s & 0x10) ? (s & 0x30) : s;
+            zBuffer[i] = 0;
+        }
         return;
     }
     
@@ -724,7 +726,7 @@ Denise::drawSpritePair()
     
     // Iterate over all recorded register changes
     if (!sprChanges[pair].isEmpty()) {
-                
+
         for (isize i = 0, end = sprChanges[pair].end(); i < end; i++) {
             
             Pixel trigger = (Pixel)sprChanges[pair].keys[i];
@@ -758,7 +760,7 @@ Denise::drawSpritePair()
                     
                     sprdatb[sprite2] = change.value;
                     break;
-                                        
+
                 case SET_SPR0POS + sprite1:
 
                     setSPRxPOS(sprite1, change.value);
@@ -802,7 +804,7 @@ Denise::replaySpriteRegChanges()
 {
     constexpr isize sprite1 = 2 * pair;
     constexpr isize sprite2 = 2 * pair + 1;
-        
+
     for (isize i = 0, end = sprChanges[pair].end(); i < end; i++) {
         
         RegChange &change = sprChanges[pair].elements[i];
@@ -898,7 +900,7 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2)
         if (ssra[sprite1] | ssrb[sprite1] | ssra[sprite2] | ssrb[sprite2]) {
             
             if (hpos >= spriteClipBegin && hpos < spriteClipEnd) {
-                                
+
                 if (attached) {
                     
                     drawAttachedSpritePixelPair <sprite2,R> (hpos);
@@ -1278,3 +1280,5 @@ template void Denise::drawEven<true>(Pixel offset);
 
 template void Denise::translateDPF<true>(Pixel from, Pixel to, PFState &state);
 template void Denise::translateDPF<false>(Pixel from, Pixel to, PFState &state);
+
+}

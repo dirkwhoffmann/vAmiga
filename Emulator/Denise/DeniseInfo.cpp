@@ -13,6 +13,8 @@
 #include "ControlPort.h"
 #include "IOUtils.h"
 
+namespace vamiga {
+
 void
 Denise::_inspect() const
 {
@@ -109,4 +111,6 @@ Denise::_dump(Category category, std::ostream& os) const
         for (isize i = 0; i < 8; i++) os << hex(sprctl[i]) << ' ';
         os << std::endl;
     }
+}
+
 }

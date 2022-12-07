@@ -12,6 +12,8 @@
 #include "Agnus.h"
 #include "ControlPort.h"
 
+namespace vamiga {
+
 void
 Denise::setDIWSTRT(u16 value)
 {
@@ -22,7 +24,7 @@ Denise::setDIWSTRT(u16 value)
     
     diwstrt = value;
     isize newDiwHstrt = LO_BYTE(value);
-        
+
     // Invalidate the horizontal coordinate if it is out of range
     if (newDiwHstrt < 2) {
         
@@ -85,10 +87,10 @@ Denise::setDIWSTOP(u16 value)
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // -- -- -- -- -- -- -- -- H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1
-        
+
     diwstop = value;
     isize newDiwHstop = LO_BYTE(value) | 0x100;
-        
+
     // Invalidate the coordinate if it is out of range
     if (newDiwHstop > 0x1C7) {
 
@@ -272,7 +274,7 @@ Denise::setBPLCON2(u16 newValue)
     
     // Record the register change
     i64 pixel = agnus.pos.pixel() + 4;
-    conChanges.insert(pixel, RegChange { SET_BPLCON2, newValue });    
+    conChanges.insert(pixel, RegChange { SET_BPLCON2, newValue });
 }
 
 template <Accessor s> void
@@ -325,8 +327,8 @@ Denise::pokeBPLxDAT(u16 value)
 
     if constexpr (s == ACCESSOR_AGNUS) {
         /*
-        debug("BPL%dDAT written by Agnus (%x)\n", x, value);
-        */
+         debug("BPL%dDAT written by Agnus (%x)\n", x, value);
+         */
     }
     
     setBPLxDAT<x>(value);
@@ -588,3 +590,5 @@ template void Denise::pokeCOLORxx<ACCESSOR_CPU, 30>(u16 value);
 template void Denise::pokeCOLORxx<ACCESSOR_AGNUS, 30>(u16 value);
 template void Denise::pokeCOLORxx<ACCESSOR_CPU, 31>(u16 value);
 template void Denise::pokeCOLORxx<ACCESSOR_AGNUS, 31>(u16 value);
+
+}

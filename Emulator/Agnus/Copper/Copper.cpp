@@ -15,6 +15,8 @@
 #include "IOUtils.h"
 #include "PixelEngine.h"
 
+namespace vamiga {
+
 Copper::Copper(Amiga& ref) : SubComponent(ref)
 {
     subComponents = std::vector<AmigaComponent *> {
@@ -42,7 +44,7 @@ void
 Copper::advancePC()
 {
     coppc += 2;
-        
+
     // Notify the debugger
     if (amiga.inDebugMode()) { debugger.advanced(); }
 }
@@ -169,7 +171,7 @@ Copper::findHorizontalMatch(u32 &match, u32 comp, u32 mask) const
 {
     u32 v = match & 0x1FF00;
     u32 h = match & 0x000FF;
-        
+
     // Iterate through all horizontal positions execept the last three
     for (auto i = h + 2; i <= 0xE1; i++, h++) {
 
@@ -299,7 +301,7 @@ bool Copper::isMoveCmd(u32 addr) const
 
 bool Copper::isWaitCmd() const
 {
-     return (cop1ins & 1) && !(cop2ins & 1);
+    return (cop1ins & 1) && !(cop2ins & 1);
 }
 
 bool Copper::isWaitCmd(u32 addr) const
@@ -314,7 +316,7 @@ bool Copper::isWaitCmd(u32 addr) const
 
 bool Copper::isSkipCmd() const
 {
-     return (cop1ins & 1) && (cop2ins & 1);
+    return (cop1ins & 1) && (cop2ins & 1);
 }
 
 bool Copper::isSkipCmd(u32 addr) const
@@ -442,4 +444,6 @@ Copper::blitterDidTerminate()
             agnus.scheduleRel <SLOT_COP> (DMA_CYCLES(1), COP_WAIT_BLIT);
         }
     }
+}
+
 }

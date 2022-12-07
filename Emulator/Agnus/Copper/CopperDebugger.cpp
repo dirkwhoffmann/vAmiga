@@ -13,6 +13,8 @@
 #include "Copper.h"
 #include "IOUtils.h"
 
+namespace vamiga {
+
 void
 CopperBreakpoints::setNeedsCheck(bool value)
 {
@@ -297,4 +299,6 @@ CopperDebugger::ignoreWatchpoint(isize nr, isize count)
 
     watchpoints.ignore(nr, count);
     msgQueue.put(MSG_COPPERWP_UPDATED);
+}
+
 }

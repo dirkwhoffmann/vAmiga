@@ -13,6 +13,8 @@
 #include "IOUtils.h"
 #include "Paula.h"
 
+namespace vamiga {
+
 ControlPort::ControlPort(Amiga& ref, isize nr) : SubComponent(ref), nr(nr)
 {
     assert(nr == PORT_1 || nr == PORT_2);
@@ -25,7 +27,7 @@ ControlPort::getDescription() const
 {
     return nr == PORT_1 ? "Port1" : "Port2";
 }
-    
+
 void
 ControlPort::_inspect() const
 {
@@ -138,4 +140,6 @@ ControlPort::changePra(u8 &pra) const
         default:
             break;
     }
+}
+
 }

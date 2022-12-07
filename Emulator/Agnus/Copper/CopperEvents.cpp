@@ -11,6 +11,8 @@
 #include "Copper.h"
 #include "Amiga.h"
 
+namespace vamiga {
+
 void
 Copper::serviceEvent()
 {
@@ -99,7 +101,7 @@ Copper::serviceEvent(EventID id)
                 // If the BFD flag is cleared, we also need to check the Blitter
                 if (!getBFD()) skip &= !agnus.blitter.isActive();
             }
-                
+
             // Remember the program counter (picked up by the debugger)
             coppc0 = coppc;
             
@@ -247,7 +249,7 @@ Copper::serviceEvent(EventID id)
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
-                        
+
             // Continue with the next command
             schedule(COP_FETCH);
             break;
@@ -302,4 +304,6 @@ void
 Copper::reschedule(int delay)
 {
     agnus.rescheduleRel <SLOT_COP> (DMA_CYCLES(delay));
+}
+
 }
