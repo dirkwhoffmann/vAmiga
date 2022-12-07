@@ -14,6 +14,8 @@
 #include "Reflection.h"
 #include "FloppyDisk.h"
 
+using namespace vamiga;
+
 class DiskController : public SubComponent
 {
     // Current configuration

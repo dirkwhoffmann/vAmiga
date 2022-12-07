@@ -11,6 +11,8 @@
 #include "SubComponent.h"
 #include "Amiga.h"  
 
+namespace vamiga {
+
 SubComponent::SubComponent(Amiga& ref) :
 agnus(ref.agnus),
 amiga(ref),
@@ -105,4 +107,6 @@ void
 SubComponent::prefix() const
 {
     amiga.prefix();
+}
+
 }

@@ -15,6 +15,8 @@
 #include "Thread.h"
 #include <thread>
 
+using namespace vamiga;
+
 class RemoteServer : public SubComponent {
         
     friend class RemoteManager;

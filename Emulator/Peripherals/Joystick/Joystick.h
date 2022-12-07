@@ -12,6 +12,8 @@
 #include "JoystickTypes.h"
 #include "SubComponent.h"
 
+using namespace vamiga;
+
 class Joystick : public SubComponent {
 
     // Reference to control port this device belongs to

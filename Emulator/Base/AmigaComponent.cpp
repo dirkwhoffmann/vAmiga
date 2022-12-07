@@ -11,6 +11,8 @@
 #include "AmigaComponent.h"
 #include "Checksum.h"
 
+namespace vamiga {
+
 void
 AmigaComponent::initialize()
 {
@@ -91,7 +93,7 @@ AmigaComponent::load(const u8 *buffer)
     isize result = (isize)(ptr - buffer);
 
     // Check integrity
-    if (hash != _checksum() || FORCE_SNAP_CORRUPTED) {        
+    if (hash != _checksum() || FORCE_SNAP_CORRUPTED) {
         throw VAError(ERROR_SNAP_CORRUPTED);
     }
     
@@ -103,7 +105,7 @@ void
 AmigaComponent::didLoad()
 {
     assert(!isRunning());
-        
+
     for (AmigaComponent *c : subComponents) {
         c->didLoad();
     }
@@ -163,7 +165,7 @@ AmigaComponent::powerOn()
     for (auto c : subComponents) { c->powerOn(); }
     _powerOn();
 }
-    
+
 void
 AmigaComponent::powerOff()
 {
@@ -218,4 +220,6 @@ AmigaComponent::debugOff()
 {
     for (auto c : subComponents) { c->debugOff(); }
     _debugOff();
+}
+
 }

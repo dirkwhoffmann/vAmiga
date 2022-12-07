@@ -14,6 +14,8 @@
 #include "AgnusTypes.h"
 #include "TOD.h"
 
+using namespace vamiga;
+
 constexpr u64 CIACountA0 =   (1ULL << 0); // Decrements timer A
 constexpr u64 CIACountA1 =   (1ULL << 1);
 constexpr u64 CIACountA2 =   (1ULL << 2);

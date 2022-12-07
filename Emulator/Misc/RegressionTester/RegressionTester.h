@@ -13,6 +13,13 @@
 #include "Constants.h"
 #include "AmigaTypes.h"
 
+namespace vamiga
+{
+class Amiga;
+}
+
+using namespace vamiga;
+
 class RegressionTester : public SubComponent {
 
     // Pixel area that is written to the test image
@@ -89,9 +96,9 @@ public:
     void run(string adf);
     
     // Creates the test image and exits the emulator
-    void dumpTexture(class Amiga &amiga);
-    void dumpTexture(class Amiga &amiga, const string &filename);
-    void dumpTexture(class Amiga &amiga, std::ostream& os);
+    void dumpTexture(Amiga &amiga);
+    void dumpTexture(Amiga &amiga, const string &filename);
+    void dumpTexture(Amiga &amiga, std::ostream& os);
 
     
     //

@@ -12,6 +12,8 @@
 #include "SubComponent.h"
 #include "ZorroBoardTypes.h"
 
+using namespace vamiga;
+
 class ZorroBoard : public SubComponent {
     
     friend class ZorroManager;

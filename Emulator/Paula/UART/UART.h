@@ -14,6 +14,8 @@
 #include "SubComponent.h"
 #include "AgnusTypes.h"
 
+using namespace vamiga;
+
 class UART : public SubComponent {
     
     friend class SerServer;

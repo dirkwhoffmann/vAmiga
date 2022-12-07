@@ -15,6 +15,8 @@
 #include "Error.h"
 #include "Parser.h"
 
+using namespace vamiga;
+
 enum class Token
 {
     about, accuracy, agnus, amiga, at, attach, audiate, audio, autofire,

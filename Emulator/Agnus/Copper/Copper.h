@@ -17,6 +17,8 @@
 #include "CopperDebugger.h"
 #include "Memory.h"
 
+using namespace vamiga;
+
 class Copper : public SubComponent
 {
     friend class Agnus;

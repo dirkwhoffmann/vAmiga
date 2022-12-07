@@ -12,7 +12,7 @@
 #include "AmigaComponent.h"
 
 class Agnus;
-class Amiga;
+namespace vamiga { class Amiga; }
 class Blitter;
 class CPU;
 class CIA;
@@ -44,6 +44,8 @@ class RTC;
 class SerialPort;
 class UART;
 class ZorroManager;
+
+namespace vamiga {
 
 /* This class extends the AmigaComponent class with references to all components
  * that are part of the Amiga class.
@@ -109,3 +111,5 @@ public:
     
     void prefix() const override;
 };
+
+}

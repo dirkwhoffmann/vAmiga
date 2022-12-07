@@ -13,6 +13,8 @@
 #include "MoiraDebugger.h"
 #include <map>
 
+using namespace vamiga;
+
 struct CopperList {
     
     u32 start;

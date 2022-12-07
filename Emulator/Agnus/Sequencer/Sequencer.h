@@ -15,6 +15,8 @@
 #include "SubComponent.h"
 #include "MemoryTypes.h"
 
+using namespace vamiga;
+
 /* A central element in the emulation of the Amiga is the accurate modeling of
  * the DMA timeslot allocation table (Fig. 6-9 im the HRM, 3rd revision). All
  * bitplane related events are managed in the BPL_SLOT. All disk, audio, and

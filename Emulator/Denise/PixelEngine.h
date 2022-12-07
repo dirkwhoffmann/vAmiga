@@ -15,6 +15,8 @@
 #include "Constants.h"
 #include "FrameBuffer.h"
 
+using namespace vamiga;
+
 class PixelEngine : public SubComponent {
 
     friend class Denise;

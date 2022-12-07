@@ -12,7 +12,13 @@
 #include "AmigaFile.h"
 #include "Constants.h"
 
+namespace vamiga {
+
 class Amiga;
+
+}
+
+using namespace vamiga;
 
 struct Thumbnail {
     

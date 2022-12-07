@@ -15,6 +15,8 @@
 #include "Concurrency.h"
 #include <vector>
 
+namespace vamiga {
+
 /* The following macro can be utilized to prevent multiple threads to enter the
  * same code block. It mimics the behaviour of the well known Java construct
  * 'synchronized(this) { }'. To secure a code-block, use the following syntax:
@@ -41,7 +43,7 @@ struct NoAssign
 };
 
 class AmigaComponent : public AmigaObject, NoCopy, NoAssign {
-        
+
 protected:
     
     // Set to false to silence all debug messages for this component
@@ -49,14 +51,14 @@ protected:
 
     // Sub components
     std::vector<AmigaComponent *> subComponents;
-                    
+
     /* Mutex for implementing the 'synchronized' macro. The macro can be used
      * to prevent multiple threads to enter the same code block. It mimics the
      * behaviour of the well known Java construct 'synchronized(this) { }'.
      */
     mutable util::ReentrantMutex mutex;
 
-        
+
     //
     // Initializing
     //
@@ -136,13 +138,13 @@ private:
     //
     // Configuring
     //
-            
+
 public:
     
     // Initializes all configuration items with their default values
     virtual void resetConfig() { };
 
-        
+
     //
     // Analyzing
     //
@@ -240,3 +242,5 @@ util::SerWriter writer(buffer); \
 applyToPersistentItems(writer); \
 applyToResetItems(writer); \
 return (isize)(writer.ptr - buffer);
+
+}

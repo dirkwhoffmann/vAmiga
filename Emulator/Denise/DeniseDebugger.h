@@ -13,6 +13,8 @@
 #include "Constants.h"
 #include "DeniseTypes.h"
 
+using namespace vamiga;
+
 class DeniseDebugger: public SubComponent {
         
     // Largest viewport seen in the current frame (constantly changing)

@@ -19,6 +19,8 @@
 #include "Sequencer.h"
 #include "Memory.h"
 
+using namespace vamiga;
+
 /* Bitplane event modifiers
  *
  *                DRAW_ODD : Starts the shift registers of the odd bitplanes

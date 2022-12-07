@@ -28,6 +28,8 @@
  * Level 0 and 1 invoke the FastBlitter. Level 2 invokes the SlowBlitter.
  */
 
+using namespace vamiga;
+
 class Blitter : public SubComponent
 {
     friend class Agnus;

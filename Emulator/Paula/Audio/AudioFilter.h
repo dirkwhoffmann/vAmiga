@@ -12,6 +12,8 @@
 #include "AudioFilterTypes.h"
 #include "SubComponent.h"
 
+using namespace vamiga;
+
 class AudioFilter : public SubComponent {
     
     friend class Muxer;

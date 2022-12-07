@@ -12,6 +12,8 @@
 #include "RTCTypes.h"
 #include "SubComponent.h"
 
+using namespace vamiga;
+
 class RTC : public SubComponent {
 
     // The current configuration

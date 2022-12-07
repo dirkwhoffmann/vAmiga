@@ -14,6 +14,8 @@
 #include "Chrono.h"
 #include "Concurrency.h"
 
+using namespace vamiga;
+
 /* This class manages the emulator thread that runs side by side with the GUI.
  * The thread exists during the lifetime of the emulator instance, but may not
  * execute the emulator all the time. The exact behavior is controlled by the

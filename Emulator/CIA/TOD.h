@@ -12,6 +12,8 @@
 #include "TODTypes.h"
 #include "SubComponent.h"
 
+using namespace vamiga;
+
 typedef union
 {
     struct

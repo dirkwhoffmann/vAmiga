@@ -30,8 +30,11 @@
 #include "RshServer.h"
 #include "RTC.h"
 #include "SerialPort.h"
+#include "Snapshot.h"
 #include "Thread.h"
 #include "ZorroManager.h"
+
+namespace vamiga {
 
 /* A complete virtual Amiga. This class is the most prominent one of all. To
  * run the emulator, it is sufficient to create a single object of this type.
@@ -126,7 +129,7 @@ public:
     //
     
 private:
-        
+
     /* Run loop flags. This variable is checked at the end of each runloop
      * iteration. Most of the time, the variable is 0 which causes the runloop
      * to repeat. A value greater than 0 means that one or more runloop control
@@ -134,16 +137,16 @@ private:
      * repeats or terminates depending on the provided flags.
      */
     RunLoopFlags flags = 0;
-                
+
 
     //
     // Snapshot storage
     //
-        
+
 private:
     
-    class Snapshot *autoSnapshot = nullptr;
-    class Snapshot *userSnapshot = nullptr;
+    Snapshot *autoSnapshot = nullptr;
+    Snapshot *userSnapshot = nullptr;
 
     
     //
@@ -295,14 +298,14 @@ public:
     InspectionTarget getInspectionTarget() const;
     void setInspectionTarget(InspectionTarget target, Cycle trigger = 0);
     void removeInspectionTarget() { setInspectionTarget(INSPECTION_NONE); }
-        
-        
+
+
     //
     // Running the emulator
     //
-            
+
 public:
-        
+
     /* Sets or clears a flag for controlling the run loop. The functions are
      * thread-safe and can be called safely from outside the emulator thread.
      */
@@ -331,7 +334,7 @@ public:
      * length bytes of the current instruction and starts the emulator thread.
      */
     void stepOver();
-        
+
     
     //
     // Handling snapshots
@@ -346,7 +349,7 @@ public:
      */
     void requestAutoSnapshot();
     void requestUserSnapshot();
-         
+
     /* Returns the most recent snapshot or nullptr if none was taken. If a
      * snapshot was taken, the function hands over the ownership to the caller
      * and deletes the internal pointer.
@@ -376,3 +379,5 @@ public:
     // Assembles a path to a temporary file
     static fs::path tmp(const string &name, bool unique = false) throws;
 };
+
+}

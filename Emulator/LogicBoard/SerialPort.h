@@ -21,6 +21,8 @@
 #define DTR_MASK (1 << 20)
 #define RI_MASK  (1 << 22)
 
+using namespace vamiga;
+
 class SerialPort : public SubComponent {
 
     // Current configuration

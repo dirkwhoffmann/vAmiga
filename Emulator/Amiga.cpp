@@ -13,6 +13,8 @@
 #include "ADFFile.h"
 #include <algorithm>
 
+namespace vamiga {
+
 // Perform some consistency checks
 static_assert(sizeof(i8)  == 1, "i8  size mismatch");
 static_assert(sizeof(i16) == 2, "i16 size mismatch");
@@ -98,7 +100,7 @@ Amiga::Amiga()
     // Set up the initial state
     initialize();
     hardReset();
-        
+
     // Initialize the sync timer
     targetTime = util::Time::now();
     
@@ -131,7 +133,7 @@ Amiga::Amiga()
         msg("            Volume : %zu bytes\n", sizeof(Volume));
         msg("             Zorro : %zu bytes\n", sizeof(ZorroManager));
         msg("\n");
-    }    
+    }
 }
 
 Amiga::~Amiga()
@@ -301,7 +303,7 @@ Amiga::getConfigItem(Option option) const
 
             return serialPort.getConfigItem(option);
 
-        case OPT_CIA_REVISION: 
+        case OPT_CIA_REVISION:
         case OPT_TODBUG:
         case OPT_ECLOCK_SYNCING:
             
@@ -387,7 +389,7 @@ Amiga::getConfigItem(Option option, long id) const
             
         default:
             fatalError;
-    }    
+    }
 }
 
 void
@@ -555,7 +557,7 @@ Amiga::configure(Option option, i64 value)
             hd[2]->setConfigItem(option, value);
             hd[3]->setConfigItem(option, value);
             break;
-     
+
         case OPT_SAMPLING_METHOD:
         case OPT_FILTER_TYPE:
         case OPT_FILTER_ALWAYS_ON:
@@ -978,7 +980,7 @@ Amiga::_powerOn()
         Snapshot snapshot(INITIAL_SNAPSHOT);
         loadSnapshot(snapshot);
     }
-            
+
     // Set initial breakpoints
     for (auto &bp : std::vector <u32> (INITIAL_BREAKPOINTS)) {
         
@@ -1388,7 +1390,7 @@ Amiga::tmp()
     STATIC_SYNCHRONIZED
     
     static fs::path base;
-            
+
     if (base.empty()) {
 
         // Use /tmp as default folder for temporary files
@@ -1428,4 +1430,6 @@ Amiga::tmp(const string &name, bool unique)
     if (unique) result = fs::path(util::makeUniquePath(result.string()));
     
     return result;
+}
+
 }

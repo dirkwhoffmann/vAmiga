@@ -14,6 +14,8 @@
 #include "SubComponent.h"
 #include "RingBuffer.h"
 
+using namespace vamiga;
+
 class Keyboard : public SubComponent {
 
     // Current configuration

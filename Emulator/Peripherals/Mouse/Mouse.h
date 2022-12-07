@@ -15,6 +15,8 @@
 #include "SubComponent.h"
 #include "Chrono.h"
 
+using namespace vamiga;
+
 class ShakeDetector {
     
     // Horizontal position

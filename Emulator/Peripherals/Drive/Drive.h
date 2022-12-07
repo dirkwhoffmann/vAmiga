@@ -13,6 +13,8 @@
 #include "SubComponent.h"
 #include "IOUtils.h"
 
+using namespace vamiga;
+
 class Drive : public SubComponent {
 
 protected:

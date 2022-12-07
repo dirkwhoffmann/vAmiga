@@ -15,6 +15,8 @@
 #include "Colors.h"
 #include "Constants.h"
 
+using namespace vamiga;
+
 class DmaDebugger : public SubComponent {
 
     // Current configuration

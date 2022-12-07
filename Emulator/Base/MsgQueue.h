@@ -13,6 +13,8 @@
 #include "SubComponent.h"
 #include "RingBuffer.h"
 
+using namespace vamiga;
+
 class MsgQueue : public SubComponent {
         
     // Ring buffer storing all pending messages

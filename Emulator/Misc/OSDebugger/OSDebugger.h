@@ -13,6 +13,8 @@
 #include "SubComponent.h"
 #include "Constants.h"
 
+using namespace vamiga;
+
 class OSDebugger : public SubComponent {
     
 private:
