@@ -15,9 +15,7 @@ namespace vamiga {
 class Agnus;
 class Amiga;
 class Blitter;
-}
 class CPU;
-namespace vamiga {
 class CIA;
 class CIAA;
 class CIAB;

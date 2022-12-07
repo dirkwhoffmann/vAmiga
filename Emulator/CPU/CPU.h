@@ -14,6 +14,8 @@
 #include "RingBuffer.h"
 #include "Moira.h"
 
+namespace vamiga {
+
 class CPU : public moira::Moira {
 
     friend class Moira;
@@ -151,7 +153,7 @@ public:
     
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
- 
+
     
     //
     // Analyzing
@@ -160,7 +162,7 @@ public:
 public:
     
     CPUInfo getInfo() const { return AmigaComponent::getInfo(info); }
-        
+
 
     //
     // Working with the clock
@@ -244,3 +246,5 @@ public:
     void disableCatchpoint(isize nr) throws;
     void ignoreCatchpoint(isize nr, isize count) throws;
 };
+
+}

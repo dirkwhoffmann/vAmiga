@@ -20,6 +20,7 @@
 // Moira
 //
 
+
 namespace moira {
 
 void
@@ -269,6 +270,8 @@ Moira::softwareTrapReached(u32 addr)
 // CPU
 //
 
+namespace vamiga {
+
 CPU::CPU(Amiga& ref) : moira::Moira(ref)
 {
     
@@ -385,7 +388,7 @@ CPU::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS(hard)
 
     if (hard) {
-                
+
         // Reset the Moira core
         Moira::reset();
         
@@ -404,7 +407,7 @@ CPU::_reset(bool hard)
          *  internal reset operation. All external devices in the system should
          *  be reset at the completion of the RESET instruction."
          *  [Motorola M68000 User Manual]
-         */            
+         */
     }
 }
 
@@ -514,13 +517,13 @@ CPU::_dump(Category category, std::ostream& os) const
         os << util::hex(fpu.fpcr) << std::endl;
 
         /*
-        for (isize i = 0; i < 8; i++) {
-            
-            auto value = softfloat::floatx80_to_float32(fpu.fpr[i].raw);
-            os << util::tab("FP" + std::to_string(i));
-            os << util::hex(u32(value)) << std::endl;
-        }
-        */
+         for (isize i = 0; i < 8; i++) {
+
+         auto value = softfloat::floatx80_to_float32(fpu.fpr[i].raw);
+         os << util::tab("FP" + std::to_string(i));
+         os << util::hex(u32(value)) << std::endl;
+         }
+         */
     }
     
     if (category == Category::Breakpoints) {
@@ -571,7 +574,7 @@ CPU::_dump(Category category, std::ostream& os) const
     }
 
     if (category == Category::SwTraps) {
-                
+
         for (auto &trap : debugger.swTraps.traps) {
 
             os << util::tab("0x" + util::hexstr <4> (trap.first));
@@ -581,7 +584,7 @@ CPU::_dump(Category category, std::ostream& os) const
     }
 
     if (category == Category::Callstack) {
-               
+
         isize nr = 0;
         for (isize i = callstack.begin(); i != callstack.end(); i = callstack.next(i)) {
 
@@ -861,4 +864,6 @@ CPU::ignoreCatchpoint(isize nr, isize count)
 
     debugger.catchpoints.ignore(nr, count);
     msgQueue.put(MSG_CATCHPOINT_UPDATED);
+}
+
 }
