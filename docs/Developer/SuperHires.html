@@ -1,0 +1,480 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>SuperHires mode &#8212; vAmiga 2.2</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="The Event Scheduler" href="EventScheduler.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"><img src="https://dirkwhoffmann.github.io/Moira/images/banner-va-2.jpg" width="100%" alt="Banner"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/icon.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Overview
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Overview/About.html">
+   About
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Tutorials/GettingStarted.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Tutorials/Exploring.html">
+   Exploring the User Interface
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  How-to guides
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../HowTo/MappingCmd.html">
+   Mapping the Command keys
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  References
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../References/Preferences/index.html">
+   Emulator Settings
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Preferences/General.html">
+     General Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Preferences/Controls.html">
+     Controls Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Preferences/Devices.html">
+     Devices Panel
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../References/Configuration/index.html">
+   Virtual Machine Settings
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Roms.html">
+     ROM Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Chipset.html">
+     Chipset Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Memory.html">
+     Memory Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Peripherals.html">
+     Peripherals Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Compatibility.html">
+     Compatibility Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Audio.html">
+     Audio Panel
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../References/Configuration/Video.html">
+     Video Panel
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../References/FileFormats.html">
+   Supported File Formats
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Developers Corner
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="ClassHierarchy.html">
+   The Class Hierarchy
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ThreadClass.html">
+   The Thread Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="RunLoop.html">
+   The Run Loop
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="EventScheduler.html">
+   The Event Scheduler
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   SuperHires mode
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+<a href="https://dirkwhoffmann.github.io/vAmiga/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="bottom"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/Developer/SuperHires.md.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>SuperHires mode</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="superhires-mode">
+<h1>SuperHires mode<a class="headerlink" href="#superhires-mode" title="Permalink to this heading">#</a></h1>
+<p>This document outlines how SuperHires mode is implemented in vAmiga. This mode is a feature of the ECS chipset and available e.g. on the Amiga 500+. SuperHires mode provides a pixel display rate of 35 ns, which is twice the horizontal resolution of Hires mode, and four times the resolution of Lores mode.</p>
+<p>The integration of SuperHires mode into vAmiga was driven by three design goals:</p>
+<ul>
+<li><p><strong>Customizable texture size</strong></p>
+<p>Early versions of vAmiga generated a GPU texture in Hires resolution, meaning that each Hires pixel on the Amiga side corresponded to a single <em>texel</em> on the GPU side. The term <em>texel</em> is a mixture of the words pixel and commonly used to describe a single pixel in a GPU texture. Since SuperHires mode doubles the horizontal resolution, I had to decide whether the horizontal GPU texture size should be doubled, too. I came to the conclusion that vAmiga should support two horizontal texture resolutions, because the emulator’s webports might have problems with a too large texture.</p>
+</li>
+<li><p><strong>Low performance impact</strong></p>
+<p>SuperHires mode is a rarely used feature of the Amiga and the vast majority of users will be running vAmiga in one of the default modes most of the time. Therefore, the performance hit caused by adding SuperHires mode had to be kept as low as possible.</p>
+</li>
+<li><p><strong>No code cluttering</strong></p>
+<p>One of the strengths of vAmiga is a clean code base. Therefore, my goal was to change the existing code as little as possible. I.e., I wanted to avoid cluttering the code with an armada of if-statements checking the currently used texture format.</p>
+</li>
+</ul>
+<p>To fulfill the first requirement I added a configuration option called <code class="docutils literal notranslate"><span class="pre">TPP</span></code>. This abbreviation stands for <em>Texels Per Pixel</em> and describes the number of texels that make up a single Hires pixel. <code class="docutils literal notranslate"><span class="pre">TPP</span></code> can be either 1 or 2. When set to 1, vAmiga generates a Hires texture, just like the early versions, meaning that each Hires pixel is represented by a single texel. If set to 2, vAmiga generates a texture in SuperHires resolution, which means each hires pixel is represented by two texels.</p>
+<p>The following images illustrate the effects of the <code class="docutils literal notranslate"><span class="pre">TPP</span></code> setting. When <code class="docutils literal notranslate"><span class="pre">TPP</span></code> is equal to 1 and the Amiga draws a line in Hires mode, each Hires pixel is mapped to a single texel:</p>
+<p><img alt="TPP=1, Hires mode" src="../_images/superHires1.png" /></p>
+<p>In SuperHires mode, however, the GPU texture is too coarse to represent each emulator pixel individually. In this case, the drawing logic interpolates two emulator pixels into a single texel:</p>
+<p><img alt="TPP=1, SuperHires mode" src="../_images/superHires2.png" /></p>
+<p>If <code class="docutils literal notranslate"><span class="pre">TPP</span></code> equals 2, each Hires pixel is mapped to two texels:</p>
+<p><img alt="TPP=2, Hires mode" src="../_images/superHires3.png" /></p>
+<p>In SuperHires mode, vAmiga performs a one-to-one mapping of SuperHires pixels to texels:</p>
+<p><img alt="TPP=2, SuperHires mode" src="../_images/superHires4.png" /></p>
+<p>Let us revisit the design goals mentioned above. To achieve the latter two, <code class="docutils literal notranslate"><span class="pre">TPP</span></code> had to be made a compile-time option. This means that it has to be decided in advance which texture format should be used.</p>
+<p>Let us now take a closer look at the compile-time changes triggered by <code class="docutils literal notranslate"><span class="pre">TPP</span></code>. The most important code fragment is located in <code class="docutils literal notranslate"><span class="pre">FrameBufferTypes.h</span></code>. Among others, this file defines the <code class="docutils literal notranslate"><span class="pre">Texel</span></code> type, which is used to address elements in the GPU texture. It is defined as follows:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#if TPP == 1</span>
+<span class="k">typedef</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">Texel</span><span class="p">;</span><span class="w"></span>
+<span class="cp">#else</span>
+<span class="k">typedef</span><span class="w"> </span><span class="n">u64</span><span class="w"> </span><span class="n">Texel</span><span class="p">;</span><span class="w"></span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+<p>As you can see, the value of <code class="docutils literal notranslate"><span class="pre">TPP</span></code> affects the underlying data type of <code class="docutils literal notranslate"><span class="pre">Texel</span></code>. When <code class="docutils literal notranslate"><span class="pre">TPP</span></code> equals 1, <code class="docutils literal notranslate"><span class="pre">Texel</span></code> corresponds to an unsigned 32-bit integer. If <code class="docutils literal notranslate"><span class="pre">TPP</span></code> is 2, the data type is twice as large.</p>
+<p>In addition, there is a macro called <code class="docutils literal notranslate"><span class="pre">TEXEL</span></code> which converts an 32-bit RGBA value into a <code class="docutils literal notranslate"><span class="pre">Texel</span></code>.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#if TPP == 1</span>
+<span class="cp">#define TEXEL(rgba) (rgba)</span>
+<span class="cp">#else</span>
+<span class="cp">#define TEXEL(rgba) ((u64)rgba &lt;&lt; 32 | rgba)</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+<p>The definition of this macro reveals the trick vAmiga uses to keep the performance penalty low. If <code class="docutils literal notranslate"><span class="pre">TPP</span></code> is equal 1, this macro is a direct mapping. In other words: If <code class="docutils literal notranslate"><span class="pre">TPP</span></code> is equal 1, a texel <em>is</em> a 32-bit value. If <code class="docutils literal notranslate"><span class="pre">TPP</span></code> equals 2, the <code class="docutils literal notranslate"><span class="pre">TEXEL</span></code> macro repeats the RGBA pattern. This means that the generated 64-bit value will represent the same RGBA value twice in a row. Thus, when the emulator sets a single texel in the texture, it actually sets two texels because a texel is always 32-bit on the GPU side. Since writing a 64-bit value is about as fast as writing a 32-bit value, the actual <code class="docutils literal notranslate"><span class="pre">TPP</span></code> value has no relevant impact on vAmiga’s performance. Of course, we have to pay a price on the GPU side. Since the emulator texture has doubled in size, the GPU has to move around twice as much memory for each frame.</p>
+<p>Also, hiding the actual texture size in the <code class="docutils literal notranslate"><span class="pre">Texel</span></code> data type prevents the code quality to degrade. From the emulator side, the horizontal texture size appears to be independent of the <code class="docutils literal notranslate"><span class="pre">TPP</span></code> value, since everything is counted in texels. As a result, the same code can be used for both possible <code class="docutils literal notranslate"><span class="pre">TPP</span></code> values and there is no need to clutter the code with a large amount of <code class="docutils literal notranslate"><span class="pre">if</span></code> statements.</p>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="EventScheduler.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">The Event Scheduler</p>
+        </div>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Dirk W. Hoffmann<br/>
+  
+      &copy; Copyright 2022, Dirk W. Hoffmann.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
