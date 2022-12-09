@@ -22,7 +22,8 @@
 #import "Script.h"
 #import "Snapshot.h"
 
-using namespace moira;
+using namespace vamiga;
+using namespace vamiga::moira;
 
 @implementation ExceptionWrapper
 

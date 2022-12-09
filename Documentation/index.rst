@@ -41,3 +41,4 @@ vAmiga User's Manual
    Developer/ThreadClass
    Developer/RunLoop
    Developer/EventScheduler
+   Developer/SuperHires

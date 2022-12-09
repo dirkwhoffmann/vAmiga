@@ -17,7 +17,7 @@
 #include <vector>
 #include <stdexcept>
 
-namespace moira {
+namespace vamiga::moira {
 
 #include "MoiraInit_cpp.h"
 #include "MoiraALU_cpp.h"

@@ -13,7 +13,7 @@
 #include "StrWriter.h"
 #include <map>
 
-namespace moira {
+namespace vamiga::moira {
 
 //
 // A single breakpoint, watchpoint, or catchpoint

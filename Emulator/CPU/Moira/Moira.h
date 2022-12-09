@@ -12,9 +12,7 @@
 #include "MoiraDebugger.h"
 #include "SubComponent.h"
 
-using namespace vamiga;
-
-namespace moira {
+namespace vamiga::moira {
 
 class Moira : public SubComponent {
 

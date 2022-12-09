@@ -9,7 +9,7 @@
 
 #pragma once
 
-namespace moira {
+namespace vamiga::moira {
 
 //
 // Wrapper structures controlling the output format

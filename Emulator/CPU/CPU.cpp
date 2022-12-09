@@ -21,7 +21,7 @@
 //
 
 
-namespace moira {
+namespace vamiga::moira {
 
 void
 Moira::sync(int cycles)

@@ -12,7 +12,7 @@
 #include <optional>
 #include "softfloat-types.h"
 
-namespace moira {
+namespace vamiga::moira {
 
 
 //

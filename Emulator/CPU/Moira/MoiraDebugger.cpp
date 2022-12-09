@@ -15,7 +15,7 @@
 #include <cstring>
 #include <cstdio>
 
-namespace moira {
+namespace vamiga::moira {
 
 
 //
