@@ -14,6 +14,12 @@
 
 namespace vamiga {
 
+Interpreter::Interpreter(Amiga &ref) : SubComponent(ref)
+{
+    initCommandShell(commandShellRoot);
+    initDebugShell(debugShellRoot);
+}
+
 Arguments
 Interpreter::split(const string& userInput)
 {
@@ -66,7 +72,7 @@ Interpreter::autoComplete(const string& userInput)
     for (const auto &it : tokens) { result += (result == "" ? "" : " ") + it; }
 
     // Add a space if the command has been fully completed
-    if (!tokens.empty() && root.seek(tokens)) result += " ";
+    if (!tokens.empty() && getRoot().seek(tokens)) result += " ";
     
     return result;
 }
@@ -74,7 +80,7 @@ Interpreter::autoComplete(const string& userInput)
 void
 Interpreter::autoComplete(Arguments &argv)
 {
-    Command *current = &root;
+    Command *current = &getRoot();
     string prefix, token;
 
     for (auto it = argv.begin(); current && it != argv.end(); it++) {
@@ -82,6 +88,22 @@ Interpreter::autoComplete(Arguments &argv)
         *it = current->autoComplete(*it);
         current = current->seek(*it);
     }
+}
+
+Command &
+Interpreter::getRoot()
+{
+    switch (shell) {
+
+        case Shell::Command: return commandShellRoot;
+        case Shell::Debug: return debugShellRoot;
+    }
+}
+
+void
+Interpreter::switchInterpreter()
+{
+    shell = inCommandShell() ? Shell::Debug : Shell::Command;
 }
 
 void
@@ -116,7 +138,7 @@ Interpreter::exec(const Arguments &argv, bool verbose)
     if (argv.empty()) return;
     
     // Seek the command in the command tree
-    Command *current = &root, *next;
+    Command *current = &getRoot(), *next;
     Arguments args = argv;
 
     while (!args.empty() && ((next = current->seek(args.front())) != nullptr)) {
@@ -163,7 +185,7 @@ Interpreter::help(const string& userInput)
 void
 Interpreter::help(const Arguments &argv)
 {
-    Command *current = &root;
+    Command *current = &getRoot();
     string prefix, token;
 
     for (auto &it : argv) {

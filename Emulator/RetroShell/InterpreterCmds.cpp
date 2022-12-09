@@ -14,19 +14,19 @@
 namespace vamiga {
 
 void
-Interpreter::registerInstructions()
+Interpreter::initCommons(Command &root)
 {
     //
-    // Commands
+    // Common commands
     //
-    
+
     root.add({"clear"},
              "command", "Clears the console window",
              &RetroShell::exec <Token::clear>, 0);
     root.seek("clear")->hidden = true;
 
     root.add({"close"},
-             "command", "Hides the debug console",
+             "command", "Hides the console window",
              &RetroShell::exec <Token::close>, 0);
     root.seek("close")->hidden = true;
 
@@ -35,20 +35,31 @@ Interpreter::registerInstructions()
              &RetroShell::exec <Token::help>, {0, 1});
     root.seek("help")->hidden = true;
 
+    root.add({"."},
+             "command", "Enters or exits the debugger",
+             &RetroShell::exec <Token::debug>, 0);
+    root.seek(".")->hidden = true;
+
     root.add({"joshua"},
              "command", "",
              &RetroShell::exec <Token::easteregg>, 0);
     root.seek("joshua")->hidden = true;
-    
+
     root.add({"source"},
              "command", "Processes a command script",
              &RetroShell::exec <Token::source>, 1);
-    
+
     root.add({"wait"},
              "command", "Pauses the execution of a command script",
              &RetroShell::exec <Token::wait>, 2);
 
-    
+}
+
+void
+Interpreter::initCommandShell(Command &root)
+{
+    initCommons(root);
+
     //
     // Regression testing
     //
@@ -285,104 +296,6 @@ Interpreter::registerInstructions()
     root.add({"cpu", "callstack" },
              "command", "Prints recorded subroutine calls",
              &RetroShell::exec <Token::cpu, Token::callstack>, 0);
-    
-    root.add({"cpu", "break"},
-             "command", "Manages breakpoints");
-
-    root.add({"cpu", "break", "info"},
-             "command", "Lists all breakpoints",
-             &RetroShell::exec <Token::cpu, Token::bp, Token::info>, 0);
-
-    root.add({"cpu", "break", "at"},
-             "command", "Sets a breakpoint at the specified address",
-             &RetroShell::exec <Token::cpu, Token::bp, Token::at>, 1);
-
-    root.add({"cpu", "break", "delete"},
-             "command", "Deletes a breakpoint",
-             &RetroShell::exec <Token::cpu, Token::bp, Token::del>, 1);
-
-    root.add({"cpu", "break", "enable"},
-             "command", "Enables a breakpoint",
-             &RetroShell::exec <Token::cpu, Token::bp, Token::enable>, 1);
-
-    root.add({"cpu", "break", "disable"},
-             "command", "Disables a breakpoint",
-             &RetroShell::exec <Token::cpu, Token::bp, Token::disable>, 1);
-
-    root.add({"cpu", "break", "ignore"},
-             "command", "Ignores a breakpoint a certain number of times",
-             &RetroShell::exec <Token::cpu, Token::bp, Token::ignore>, 2);
-
-    root.add({"cpu", "watch"},
-             "command", "Manages watchpoints");
-
-    root.add({"cpu", "watch", "info"},
-             "command", "Lists all watchpoints",
-             &RetroShell::exec <Token::cpu, Token::wp, Token::info>, 0);
-
-    root.add({"cpu", "watch", "at"},
-             "command", "Sets a watchpoint at the specified address",
-             &RetroShell::exec <Token::cpu, Token::wp, Token::at>, 1);
-
-    root.add({"cpu", "watch", "delete"},
-             "command", "Deletes a watchpoint",
-             &RetroShell::exec <Token::cpu, Token::wp, Token::del>, 1);
-
-    root.add({"cpu", "watch", "enable"},
-             "command", "Enables a watchpoint",
-             &RetroShell::exec <Token::cpu, Token::wp, Token::enable>, 1);
-
-    root.add({"cpu", "watch", "disable"},
-             "command", "Disables a watchpoint",
-             &RetroShell::exec <Token::cpu, Token::wp, Token::disable>, 1);
-
-    root.add({"cpu", "watch", "ignore"},
-             "command", "Ignores a watchpoint a certain number of times",
-             &RetroShell::exec <Token::cpu, Token::wp, Token::ignore>, 2);
-    
-    root.add({"cpu", "catch"},
-             "command", "Manages catchpoints");
-
-    root.add({"cpu", "catch", "info"},
-             "command", "Lists all catchpoints",
-             &RetroShell::exec <Token::cpu, Token::cp, Token::info>, 0);
-
-    root.add({"cpu", "catch", "vector"},
-             "command", "Catches an exception vector",
-             &RetroShell::exec <Token::cpu, Token::cp, Token::vector>, 1);
-
-    root.add({"cpu", "catch", "interrupt"},
-             "command", "Catches an interrupt",
-             &RetroShell::exec <Token::cpu, Token::cp, Token::interrupt>, 1);
-
-    root.add({"cpu", "catch", "trap"},
-             "command", "Catches a trap instruction",
-             &RetroShell::exec <Token::cpu, Token::cp, Token::trap>, 1);
-
-    root.add({"cpu", "catch", "delete"},
-             "command", "Deletes a catchpoint",
-             &RetroShell::exec <Token::cpu, Token::cp, Token::del>, 1);
-
-    root.add({"cpu", "catch", "enable"},
-             "command", "Enables a catchpoint",
-             &RetroShell::exec <Token::cpu, Token::cp, Token::enable>, 1);
-
-    root.add({"cpu", "catch", "disable"},
-             "command", "Disables a catchpoint",
-             &RetroShell::exec <Token::cpu, Token::cp, Token::disable>, 1);
-
-    root.add({"cpu", "catch", "ignore"},
-             "command", "Ignores a catchpoint a certain number of times",
-             &RetroShell::exec <Token::cpu, Token::cp, Token::ignore>, 2);
-
-    root.add({"cpu", "swtraps"},
-             "command", "Lists all software traps",
-             &RetroShell::exec <Token::cpu, Token::swtraps>, 0);
-
-    root.add({"cpu", "jump"},
-             "command", "Jumps to the specified address",
-             &RetroShell::exec <Token::cpu, Token::jump>, 1);
-
 
     //
     // MMU
@@ -1494,6 +1407,130 @@ Interpreter::registerInstructions()
     root.add({"server", "list"},
              "command", "Displays a server status summary",
              &RetroShell::exec <Token::server, Token::list>, 0);
+}
+
+void
+Interpreter::initDebugShell(Command &root)
+{
+    initCommons(root);
+
+
+    //
+    // Breakpoints
+    //
+
+    root.add({"break"},
+             "command", "Manages breakpoints");
+
+    root.add({"break", "info"},
+             "command", "Lists all breakpoints",
+             &RetroShell::exec <Token::cpu, Token::bp, Token::info>, 0);
+
+    root.add({"break", "at"},
+             "command", "Sets a breakpoint at the specified address",
+             &RetroShell::exec <Token::cpu, Token::bp, Token::at>, 1);
+
+    root.add({"break", "delete"},
+             "command", "Deletes a breakpoint",
+             &RetroShell::exec <Token::cpu, Token::bp, Token::del>, 1);
+
+    root.add({"break", "enable"},
+             "command", "Enables a breakpoint",
+             &RetroShell::exec <Token::cpu, Token::bp, Token::enable>, 1);
+
+    root.add({"break", "disable"},
+             "command", "Disables a breakpoint",
+             &RetroShell::exec <Token::cpu, Token::bp, Token::disable>, 1);
+
+    root.add({"break", "ignore"},
+             "command", "Ignores a breakpoint a certain number of times",
+             &RetroShell::exec <Token::cpu, Token::bp, Token::ignore>, 2);
+
+
+    //
+    // Watchpoints
+    //
+
+    root.add({"watch"},
+             "command", "Manages watchpoints");
+
+    root.add({"watch", "info"},
+             "command", "Lists all watchpoints",
+             &RetroShell::exec <Token::cpu, Token::wp, Token::info>, 0);
+
+    root.add({"watch", "at"},
+             "command", "Sets a watchpoint at the specified address",
+             &RetroShell::exec <Token::cpu, Token::wp, Token::at>, 1);
+
+    root.add({"watch", "delete"},
+             "command", "Deletes a watchpoint",
+             &RetroShell::exec <Token::cpu, Token::wp, Token::del>, 1);
+
+    root.add({"watch", "enable"},
+             "command", "Enables a watchpoint",
+             &RetroShell::exec <Token::cpu, Token::wp, Token::enable>, 1);
+
+    root.add({"watch", "disable"},
+             "command", "Disables a watchpoint",
+             &RetroShell::exec <Token::cpu, Token::wp, Token::disable>, 1);
+
+    root.add({"watch", "ignore"},
+             "command", "Ignores a watchpoint a certain number of times",
+             &RetroShell::exec <Token::cpu, Token::wp, Token::ignore>, 2);
+
+
+    //
+    // Catchpoints
+    //
+
+    root.add({"catch"},
+             "command", "Manages catchpoints");
+
+    root.add({"catch", "info"},
+             "command", "Lists all catchpoints",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::info>, 0);
+
+    root.add({"catch", "vector"},
+             "command", "Catches an exception vector",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::vector>, 1);
+
+    root.add({"catch", "interrupt"},
+             "command", "Catches an interrupt",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::interrupt>, 1);
+
+    root.add({"catch", "trap"},
+             "command", "Catches a trap instruction",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::trap>, 1);
+
+    root.add({"catch", "delete"},
+             "command", "Deletes a catchpoint",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::del>, 1);
+
+    root.add({"catch", "enable"},
+             "command", "Enables a catchpoint",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::enable>, 1);
+
+    root.add({"catch", "disable"},
+             "command", "Disables a catchpoint",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::disable>, 1);
+
+    root.add({"catch", "ignore"},
+             "command", "Ignores a catchpoint a certain number of times",
+             &RetroShell::exec <Token::cpu, Token::cp, Token::ignore>, 2);
+
+
+    //
+    // Misc
+    //
+
+    root.add({"swtraps"},
+             "command", "Lists all software traps",
+             &RetroShell::exec <Token::cpu, Token::swtraps>, 0);
+
+    root.add({"jump"},
+             "command", "Jumps to the specified address",
+             &RetroShell::exec <Token::cpu, Token::jump>, 1);
+
 }
 
 }

@@ -76,6 +76,15 @@ RetroShell::operator<<(std::stringstream &stream)
     return *this;
 }
 
+const string &
+RetroShell::getPrompt()
+{
+    static const string cmdPrompt = "vAmiga% ";
+    static const string debugPrompt = "debug% ";
+
+    return interpreter.inCommandShell() ? cmdPrompt : debugPrompt;
+}
+
 const char *
 RetroShell::text()
 {
@@ -85,7 +94,7 @@ RetroShell::text()
     storage.text(all);
 
     // Add the input line
-    all += prompt + input + " ";
+    all += getPrompt() + input + " ";
     
     return all.c_str();
 }
@@ -214,11 +223,11 @@ RetroShell::press(RetroShellKey key)
             
         case RSKEY_RETURN:
             
-            *this << '\r' << prompt << input << '\n';
+            *this << '\r' << getPrompt() << input << '\n';
             execUserCommand(input);
             input = "";
             cursor = 0;
-            remoteManager.rshServer.send(prompt);
+            remoteManager.rshServer.send(getPrompt());
             break;
             
         case RSKEY_CR:
@@ -297,10 +306,23 @@ RetroShell::execUserCommand(const string &command)
         
         // Execute the command
         try { exec(command); } catch (...) { };
-        
+
+        concludeUserCommand();
+
     } else {
         
         printHelp();
+    }
+}
+
+void
+RetroShell::concludeUserCommand()
+{
+    if (interpreter.inDebugShell()) {
+
+        *this << '\n';
+        dump(amiga, Category::Summary);
+        *this << '\n';
     }
 }
 

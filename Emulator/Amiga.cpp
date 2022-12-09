@@ -964,6 +964,46 @@ Amiga::_dump(Category category, std::ostream& os) const
         
         defaults.dump(category, os);
     }
+
+    if (category == Category::Summary) {
+
+        auto dmacon = agnus.dmacon;
+        bool dmaen = dmacon & DMAEN;
+
+        char instr[128];
+        (void)cpu.disassemble(cpu.getPC0(), instr);
+
+        char sr[32];
+        (void)cpu.disassembleSR(sr);
+
+        os << std::setfill('0');
+        os << "VPOS HPOS DMACON INTENA INTREQ  COP PC   CPU PC  IPL";
+        os << std::endl;
+        os << std::right << std::setw(4) << std::dec << isize(agnus.pos.v);
+        os << " ";
+        os << std::right << std::setw(4) << std::dec << isize(agnus.pos.h);
+        os << " ";
+        os << ((dmacon & BPLEN) ? (dmaen ? 'B' : 'B') : '-');
+        os << ((dmacon & COPEN) ? (dmaen ? 'C' : 'c') : '-');
+        os << ((dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : '-');
+        os << ((dmacon & SPREN) ? (dmaen ? 'S' : 's') : '-');
+        os << ((dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-');
+        os << ((dmacon & AUDEN) ? (dmaen ? 'A' : 'a') : '-');
+        os << " 0x";
+        os << std::right << std::setw(4) << std::hex << isize(paula.intena);
+        os << " 0x";
+        os << std::right << std::setw(4) << std::hex << isize(paula.intreq);
+        os << " 0x";
+        os << std::right << std::setw(6) << std::hex << isize(agnus.copper.getCopPC0());
+        os << " 0x";
+        os << std::right << std::setw(6) << std::hex << isize(cpu.getPC0());
+        os << "  ";
+        os << std::right << std::setw(1) << std::dec << isize(cpu.getIPL());
+        os << "  ";
+        os << sr;
+        os << "  " << instr;
+        os << std::endl;
+    }
 }
 
 void

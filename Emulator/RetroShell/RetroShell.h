@@ -44,9 +44,6 @@ class RetroShell : public SubComponent {
     
     // Input line
     string input;
-    
-    // Input prompt
-    string prompt = "vAmiga% ";
 
     // Cursor position
     isize cursor = 0;
@@ -110,7 +107,7 @@ private:
 public:
     
     // Returns the prompt
-    string getPrompt() { return prompt; }
+    const string &getPrompt();
     
     // Returns the contents of the whole storage as a single C string
     const char *text();
@@ -176,6 +173,9 @@ public:
     
     // Main entry point for executing commands that were typed in by the user
     void execUserCommand(const string &command);
+
+    // Called at the end of execUserCommand
+    void concludeUserCommand();
 
     // Executes a command
     void exec(const string &command) throws;

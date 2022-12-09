@@ -57,9 +57,17 @@ struct ScriptInterruption: util::Exception {
 
 class Interpreter: SubComponent
 {
-    // The registered instruction set
-    Command root;
-    
+    enum class Shell { Command, Debug };
+
+    // The currently active shell
+    Shell shell = Shell::Command;
+
+    // Commands of the command shell
+    Command commandShellRoot;
+
+    // Commands of the debug shell
+    Command debugShellRoot;
+
     
     //
     // Initializing
@@ -67,11 +75,13 @@ class Interpreter: SubComponent
 
 public:
     
-    Interpreter(Amiga &ref) : SubComponent(ref) { registerInstructions(); }
+    Interpreter(Amiga &ref);
 
 private:
     
-    void registerInstructions();
+    void initCommons(Command &root);
+    void initCommandShell(Command &root);
+    void initDebugShell(Command &root);
 
     
     //
@@ -122,13 +132,29 @@ private:
     // Auto-completes an argument list
     void autoComplete(Arguments &argv);
 
-    
+
+    //
+    // Managing the interpreter
+    //
+
+public:
+
+    // Returns the root node of the currently active instruction tree
+    Command &getRoot();
+
+    // Toggles between the command shell and the debug shell
+    void switchInterpreter();
+
+    bool inCommandShell() { return shell == Shell::Command; }
+    bool inDebugShell() { return shell == Shell::Debug; }
+
+
     //
     // Executing commands
     //
     
 public:
-    
+
     // Executes a single command
     void exec(const string& userInput, bool verbose = false) throws;
     void exec(const Arguments &argv, bool verbose = false) throws;
