@@ -79,10 +79,30 @@ RetroShell::operator<<(std::stringstream &stream)
 const string &
 RetroShell::getPrompt()
 {
-    static const string cmdPrompt = "vAmiga% ";
-    static const string debugPrompt = "debug% ";
+    return prompt;
+}
 
-    return interpreter.inCommandShell() ? cmdPrompt : debugPrompt;
+void
+RetroShell::updatePrompt()
+{
+    if (interpreter.inCommandShell()) {
+
+        prompt = "vAmiga% ";
+
+    } else {
+
+        std::stringstream ss;
+
+        ss << "(";
+        ss << std::right << std::setw(0) << std::dec << isize(agnus.pos.v);
+        ss << ",";
+        ss << std::right << std::setw(0) << std::dec << isize(agnus.pos.h);
+        ss << ") 0x";
+        ss << std::right << std::setw(6) << std::hex << isize(cpu.getPC0());
+        ss << ": ";
+
+        prompt = ss.str();
+    }
 }
 
 const char *
@@ -138,6 +158,19 @@ RetroShell::printHelp()
     storage.printHelp();
     remoteManager.rshServer << "Type 'help' for help.\n";
     needsDisplay();
+}
+
+void
+RetroShell::printState()
+{
+    if (interpreter.inDebugShell()) {
+
+        *this << '\n';
+        dump(amiga, Category::Summary);
+        *this << '\n';
+    }
+
+    updatePrompt();
 }
 
 void
@@ -297,8 +330,10 @@ RetroShell::cursorRel()
 void
 RetroShell::execUserCommand(const string &command)
 {
+    SUSPENDED
+
     if (!command.empty()) {
-        
+
         // Add the command to the history buffer
         history.back() = { command, (isize)command.size() };
         history.push_back( { "", 0 } );
@@ -307,23 +342,12 @@ RetroShell::execUserCommand(const string &command)
         // Execute the command
         try { exec(command); } catch (...) { };
 
-        concludeUserCommand();
-
     } else {
         
-        printHelp();
+        if (interpreter.inCommandShell()) printHelp();
     }
-}
 
-void
-RetroShell::concludeUserCommand()
-{
-    if (interpreter.inDebugShell()) {
-
-        *this << '\n';
-        dump(amiga, Category::Summary);
-        *this << '\n';
-    }
+    printState();
 }
 
 void

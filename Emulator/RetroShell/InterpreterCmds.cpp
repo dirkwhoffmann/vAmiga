@@ -35,11 +35,6 @@ Interpreter::initCommons(Command &root)
              &RetroShell::exec <Token::help>, {0, 1});
     root.seek("help")->hidden = true;
 
-    root.add({"."},
-             "command", "Enters or exits the debugger",
-             &RetroShell::exec <Token::debug>, 0);
-    root.seek(".")->hidden = true;
-
     root.add({"joshua"},
              "command", "",
              &RetroShell::exec <Token::easteregg>, 0);
@@ -48,17 +43,27 @@ Interpreter::initCommons(Command &root)
     root.add({"source"},
              "command", "Processes a command script",
              &RetroShell::exec <Token::source>, 1);
+    root.seek("source")->hidden = true;
 
     root.add({"wait"},
              "command", "Pauses the execution of a command script",
              &RetroShell::exec <Token::wait>, 2);
-
+    root.seek("wait")->hidden = true;
 }
 
 void
 Interpreter::initCommandShell(Command &root)
 {
     initCommons(root);
+
+    //
+    // General
+    //
+
+    root.add({"."},
+             "command", "Enters the debugger",
+             &RetroShell::exec <Token::debug>, 0);
+
 
     //
     // Regression testing
@@ -1260,56 +1265,6 @@ Interpreter::initCommandShell(Command &root)
              "command", "Inspects a specific Zorro board",
              &RetroShell::exec <Token::zorro, Token::inspect>, 1);
 
-    //
-    // OS Debugger
-    //
-
-    root.add({"os"},
-             "component", "AmigaOS debugger");
-
-    root.add({"os", "info"},
-             "command", "Displays basic system information",
-             &RetroShell::exec <Token::os, Token::info>, 0);
-
-    root.add({"os", "execbase"},
-             "command", "Displays information about the ExecBase struct",
-             &RetroShell::exec <Token::os, Token::execbase>, 0);
-
-    root.add({"os", "interrupts"},
-             "command", "Lists all interrupt handlers",
-             &RetroShell::exec <Token::os, Token::interrupts>, 0);
-
-    root.add({"os", "libraries"},
-             "command", "Lists all libraries",
-             &RetroShell::exec <Token::os, Token::libraries>, {0, 1});
-    
-    root.add({"os", "devices"},
-             "command", "Lists all devices",
-             &RetroShell::exec <Token::os, Token::devices>, {0, 1});
-
-    root.add({"os", "resources"},
-             "command", "Lists all resources",
-             &RetroShell::exec <Token::os, Token::resources>, {0, 1});
-
-    root.add({"os", "tasks"},
-             "command", "Lists all tasks",
-             &RetroShell::exec <Token::os, Token::tasks>, {0, 1});
-
-    root.add({"os", "processes"},
-             "command", "Lists all processes",
-             &RetroShell::exec <Token::os, Token::processes>, {0, 1});
-
-    root.add({"os", "catch"},
-             "command", "Pauses emulation on task launch",
-             &RetroShell::exec <Token::os, Token::cp>, 1);
-
-    root.add({"os", "set"},
-             "command", "Configures the component");
-
-    root.add({"os", "set", "diagboard" },
-             "command", "Attaches or detaches the debug expansion board",
-             &RetroShell::exec <Token::os, Token::set, Token::diagboard>, 1);
-
     
     //
     // Remote server
@@ -1413,6 +1368,15 @@ void
 Interpreter::initDebugShell(Command &root)
 {
     initCommons(root);
+
+
+    //
+    // General
+    //
+
+    root.add({"."},
+             "command", "Exits the debugger",
+             &RetroShell::exec <Token::debug>, 0);
 
 
     //
@@ -1520,12 +1484,68 @@ Interpreter::initDebugShell(Command &root)
 
 
     //
-    // Misc
+    // Software traps
     //
 
     root.add({"swtraps"},
              "command", "Lists all software traps",
              &RetroShell::exec <Token::cpu, Token::swtraps>, 0);
+
+
+    //
+    // OS Debugger
+    //
+
+    root.add({"os"},
+             "component", "AmigaOS debugger");
+
+    root.add({"os", "info"},
+             "command", "Displays basic system information",
+             &RetroShell::exec <Token::os, Token::info>, 0);
+
+    root.add({"os", "execbase"},
+             "command", "Displays information about the ExecBase struct",
+             &RetroShell::exec <Token::os, Token::execbase>, 0);
+
+    root.add({"os", "interrupts"},
+             "command", "Lists all interrupt handlers",
+             &RetroShell::exec <Token::os, Token::interrupts>, 0);
+
+    root.add({"os", "libraries"},
+             "command", "Lists all libraries",
+             &RetroShell::exec <Token::os, Token::libraries>, {0, 1});
+
+    root.add({"os", "devices"},
+             "command", "Lists all devices",
+             &RetroShell::exec <Token::os, Token::devices>, {0, 1});
+
+    root.add({"os", "resources"},
+             "command", "Lists all resources",
+             &RetroShell::exec <Token::os, Token::resources>, {0, 1});
+
+    root.add({"os", "tasks"},
+             "command", "Lists all tasks",
+             &RetroShell::exec <Token::os, Token::tasks>, {0, 1});
+
+    root.add({"os", "processes"},
+             "command", "Lists all processes",
+             &RetroShell::exec <Token::os, Token::processes>, {0, 1});
+
+    root.add({"os", "catch"},
+             "command", "Pauses emulation on task launch",
+             &RetroShell::exec <Token::os, Token::cp>, 1);
+
+    root.add({"os", "set"},
+             "command", "Configures the component");
+
+    root.add({"os", "set", "diagboard" },
+             "command", "Attaches or detaches the debug expansion board",
+             &RetroShell::exec <Token::os, Token::set, Token::diagboard>, 1);
+
+
+    //
+    // Misc
+    //
 
     root.add({"jump"},
              "command", "Jumps to the specified address",
