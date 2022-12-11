@@ -404,7 +404,7 @@
 - (MemorySource)memSrc:(Accessor)accessor addr:(NSInteger)addr;
 - (NSInteger)spypeek16:(Accessor)accessor addr:(NSInteger)addr;
 
-- (NSString *)ascii:(Accessor)accessor addr:(NSInteger)addr;
+- (NSString *)ascii:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes;
 - (NSString *)hex:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes;
 
 @end

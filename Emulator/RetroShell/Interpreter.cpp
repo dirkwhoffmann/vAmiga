@@ -98,6 +98,9 @@ Interpreter::getRoot()
 
         case Shell::Command: return commandShellRoot;
         case Shell::Debug: return debugShellRoot;
+
+        default:
+            fatalError;
     }
 }
 

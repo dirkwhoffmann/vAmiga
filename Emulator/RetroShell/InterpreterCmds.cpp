@@ -1400,7 +1400,15 @@ Interpreter::initDebugShell(Command &root)
              "command", "Steps over the next instruction",
              &RetroShell::exec <Token::step>, 0);
      */
-    
+
+    //
+    //
+    //
+
+    root.add({"memdump"},
+             "command", "Dumps a portion of memory",
+             &RetroShell::exec <Token::memdump>, 1);
+
 
     //
     // Breakpoints

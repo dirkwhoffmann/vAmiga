@@ -181,6 +181,8 @@ RetroShell::printState()
         cpu.disassembleRange(ss, cpu.getPC0(), 8);
         ss << "\n";
 
+        mem.memDump<ACCESSOR_CPU>(ss, 0);
+
         string line;
         while(std::getline(ss, line)) *this << line << '\n';
 

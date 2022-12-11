@@ -1862,4 +1862,20 @@ RetroShell::exec <Token::server, Token::list> (Arguments& argv, long param)
     dump(remoteManager, Category::State);
 }
 
+
+//
+// Debugger commands
+//
+
+template <> void
+RetroShell::exec <Token::memdump> (Arguments& argv, long param)
+{
+    std::stringstream ss;
+
+    mem.memDump<ACCESSOR_CPU>(ss, u32(util::parseNum(argv.front())));
+
+    string line;
+    while(std::getline(ss, line)) *this << line << '\n';
+}
+
 }

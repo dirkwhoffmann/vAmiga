@@ -2744,24 +2744,26 @@ Memory::regName(u32 addr)
 }
 
 template <Accessor A> const char *
-Memory::ascii(u32 addr)
+Memory::ascii(u32 addr, isize numBytes)
 {
-    for (isize i = 0; i < 16; i += 2) {
+    assert(numBytes < 256);
+
+    for (isize i = 0; i < numBytes; i += 2) {
         u16 word = spypeek16 <A> ((u32)(addr + i));
         str[i] = isprint(HI_BYTE(word)) ? HI_BYTE(word) : '.';
         str[i+1] = isprint(LO_BYTE(word)) ? LO_BYTE(word) : '.';
     }
-    str[16] = 0;
+    str[numBytes] = 0;
     return str;
 }
 
 template <Accessor A> const char *
-Memory::hex(u32 addr, isize bytes)
+Memory::hex(u32 addr, isize numBytes)
 {
-    assert(bytes % 2 == 0);
+    assert(numBytes % 2 == 0);
     char *p = str;
     
-    for (isize i = 0; i < bytes / 2; i += 2, p += 5) {
+    for (isize i = 0; i < numBytes; i += 2, p += 5) {
 
         u16 word = spypeek16 <A> ((u32)(addr + i));
         
@@ -2774,10 +2776,26 @@ Memory::hex(u32 addr, isize bytes)
         p[1] = digit2 < 10 ? '0' + digit2 : 'A' + digit2 - 10;
         p[2] = digit3 < 10 ? '0' + digit3 : 'A' + digit3 - 10;
         p[3] = digit4 < 10 ? '0' + digit4 : 'A' + digit4 - 10;
-        p[4] = i == bytes - 2 ? '0' : ' ';
+        p[4] = i == numBytes - 2 ? char(0) : ' ';
     }
 
     return str;
+}
+
+template <Accessor A> void
+Memory::memDump(std::ostream& os, u32 addr, isize numLines)
+{
+    addr &= ~0xF;
+
+    for (isize i = 0; i < numLines; i++, addr += 16) {
+
+        os << std::setfill('0') << std::hex << std::right << std::setw(6) << isize(addr);
+        os << ":  ";
+        os << hex<A>(addr, 16);
+        os << "  ";
+        os << ascii<A>(addr, 16);
+        os << std::endl;
+    }
 }
 
 std::vector <u32>
@@ -2817,10 +2835,13 @@ Memory::search(u64 pattern, isize bytes)
 template void Memory::pokeCustom16 <ACCESSOR_CPU> (u32 addr, u16 value);
 template void Memory::pokeCustom16 <ACCESSOR_AGNUS> (u32 addr, u16 value);
 
-template const char *Memory::ascii <ACCESSOR_CPU> (u32 addr);
-template const char *Memory::ascii <ACCESSOR_AGNUS> (u32 addr);
+template const char *Memory::ascii <ACCESSOR_CPU> (u32 addr, isize numBytes);
+template const char *Memory::ascii <ACCESSOR_AGNUS> (u32 addr, isize numBytes);
 
-template const char *Memory::hex <ACCESSOR_CPU> (u32 addr, isize bytes);
-template const char *Memory::hex <ACCESSOR_AGNUS> (u32 addr, isize bytes);
+template const char *Memory::hex <ACCESSOR_CPU> (u32 addr, isize numBytes);
+template const char *Memory::hex <ACCESSOR_AGNUS> (u32 addr, isize numBytes);
+
+template void Memory::memDump <ACCESSOR_CPU> (std::ostream& os, u32 addr, isize numLines);
+template void Memory::memDump <ACCESSOR_AGNUS> (std::ostream& os, u32 addr, isize numLines);
 
 }

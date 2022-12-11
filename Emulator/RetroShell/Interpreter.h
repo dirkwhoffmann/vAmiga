@@ -29,7 +29,7 @@ enum class Token
     execbase, extrom, extstart, fast, filename, filesystem, filter, fpu, gdb,
     geometry, help, hide, ignore, init, info, insert, inspect, interrupt,
     interrupts, joystick, jump, keyboard, keyset, layers, left, library,
-    libraries, list, load, lock, mechanics, memory, mmu, mode, model, monitor,
+    libraries, list, load, lock, mechanics, memdump, memory, mmu, mode, model, monitor,
     mouse, none, ntsc, off, on, opacity, open, os, overclocking, pal, palette,
     pan, partition, path, paula, pause, ptrdrops, poll, port, ports, power,
     press, process, processes, pull, pullup, raminitpattern, refresh,
