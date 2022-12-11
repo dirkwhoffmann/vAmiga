@@ -1917,6 +1917,11 @@ using namespace vamiga::moira;
     [self shell]->press(RSKEY_RETURN);
 }
 
+- (void)pressShiftReturn
+{
+    [self shell]->press(RSKEY_RETURN, true);
+}
+
 - (void)pressTab
 {
     [self shell]->press(RSKEY_TAB);

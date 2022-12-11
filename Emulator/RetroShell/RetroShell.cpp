@@ -34,6 +34,12 @@ RetroShell::_initialize()
     storage.welcome();
 }
 
+void
+RetroShell::_pause()
+{
+    printState();
+}
+
 RetroShell&
 RetroShell::operator<<(char value)
 {
@@ -165,16 +171,29 @@ RetroShell::printState()
 {
     if (interpreter.inDebugShell()) {
 
-        *this << '\n';
-        dump(amiga, Category::Summary);
-        *this << '\n';
-    }
+        std::stringstream ss;
 
-    updatePrompt();
+        ss << "\n";
+        cpu.dumpLogBuffer(ss, 8);
+        ss << "\n";
+        amiga.dump(Category::Summary, ss);
+        ss << "\n";
+        cpu.disassembleRange(ss, cpu.getPC0(), 8);
+        ss << "\n";
+
+        string line;
+        while(std::getline(ss, line)) *this << line << '\n';
+
+        updatePrompt();
+
+    } else {
+
+        updatePrompt();
+    }
 }
 
 void
-RetroShell::press(RetroShellKey key)
+RetroShell::press(RetroShellKey key, bool shift)
 {
     assert_enum(RetroShellKey, key);
     assert(ipos >= 0 && ipos < historyLength());
@@ -255,14 +274,21 @@ RetroShell::press(RetroShellKey key)
             break;
             
         case RSKEY_RETURN:
-            
-            *this << '\r' << getPrompt() << input << '\n';
-            execUserCommand(input);
-            input = "";
-            cursor = 0;
-            remoteManager.rshServer.send(getPrompt());
+
+            if (shift) {
+
+                interpreter.switchInterpreter();
+
+            } else {
+
+                *this << '\r' << getPrompt() << input << '\n';
+                execUserCommand(input);
+                input = "";
+                cursor = 0;
+                remoteManager.rshServer.send(getPrompt());
+            }
             break;
-            
+
         case RSKEY_CR:
             
             input = "";
@@ -330,9 +356,22 @@ RetroShell::cursorRel()
 void
 RetroShell::execUserCommand(const string &command)
 {
-    SUSPENDED
+    if (command.empty()) {
 
-    if (!command.empty()) {
+        if (interpreter.inCommandShell()) {
+
+            printHelp();
+
+        } else {
+
+            if (amiga.isRunning()) {
+                amiga.pause();
+            } else {
+                amiga.stepInto();
+            }
+        }
+
+    } else {
 
         // Add the command to the history buffer
         history.back() = { command, (isize)command.size() };
@@ -341,13 +380,7 @@ RetroShell::execUserCommand(const string &command)
         
         // Execute the command
         try { exec(command); } catch (...) { };
-
-    } else {
-        
-        if (interpreter.inCommandShell()) printHelp();
     }
-
-    printState();
 }
 
 void

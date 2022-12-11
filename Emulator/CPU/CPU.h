@@ -201,8 +201,15 @@ public:
     // Disassembles the currently executed instruction
     const char *disassembleInstr(isize *len);
     const char *disassembleWords(isize len);
-    
-    
+
+    // Dumps entries from the log buffer
+    void dumpLogBuffer(std::ostream& os, isize count);
+
+    // Disassembles a memory range
+    void disassembleRange(std::ostream& os, u32 addr, isize count);
+    void disassembleRange(std::ostream& os, std::pair<u32, u32> range, isize max = 255);
+
+
     //
     // Changing state
     //

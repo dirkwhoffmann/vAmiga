@@ -678,7 +678,9 @@ class Inspector: DialogController {
     
     func scrollToPC() {
 
-        scrollToPC(pc: Int(cpuInfo.pc0))
+        if cpuInfo != nil {
+            scrollToPC(pc: Int(cpuInfo.pc0))
+        }
     }
 
     func scrollToPC(pc: Int) {

@@ -105,6 +105,7 @@ void
 TextStorage::printHelp()
 {
     *this << "Type 'help' or press 'TAB' twice for help." << '\n';
+    *this << "Press SHIFT+RETURN to enter the debugger." << '\n';
 }
 
 }

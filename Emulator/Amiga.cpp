@@ -971,24 +971,23 @@ Amiga::_dump(Category category, std::ostream& os) const
         bool dmaen = dmacon & DMAEN;
         auto intreq = paula.intreq;
         auto intena = (paula.intena & 0x8000) ? paula.intena : 0;
+        auto fc = cpu.readFC();
         char empty = '.';
-
-        char instr[128];
-        (void)cpu.disassemble(cpu.getPC0(), instr);
 
         char sr[32];
         (void)cpu.disassembleSR(sr);
 
         os << std::setfill('0');
-        // os << "DMACON  INTERRUPTS       COPPC     SR               IPL  INSTRUCTION";
-        os << "DMACON  INTREQ / INTENA  COPPERPC  STATUS REGISTER  IPL"; //   INSTRUCTION";
-        os << std::endl;
+        os << "   DMACON  INTREQ / INTENA  STATUS REGISTER  IPL FCP" << std::endl;
+
+        os << "   ";
         os << ((dmacon & BPLEN) ? (dmaen ? 'B' : 'b') : empty);
         os << ((dmacon & COPEN) ? (dmaen ? 'C' : 'c') : empty);
         os << ((dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : empty);
         os << ((dmacon & SPREN) ? (dmaen ? 'S' : 's') : empty);
         os << ((dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : empty);
         os << ((dmacon & AUDEN) ? (dmaen ? 'A' : 'a') : empty);
+
         os << "  ";
         os << ((intena & 0x4000) ? '1' : '0');
         os << ((intreq & 0x2000) ? ((intena & 0x2000) ? 'E' : 'e') : empty);
@@ -1005,13 +1004,17 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << ((intreq & 0x0004) ? ((intena & 0x0004) ? 'S' : 's') : empty);
         os << ((intreq & 0x0002) ? ((intena & 0x0002) ? 'D' : 'd') : empty);
         os << ((intreq & 0x0001) ? ((intena & 0x0001) ? 'T' : 't') : empty);
-        os << "  0x";
-        os << std::right << std::setw(6) << std::hex << isize(agnus.copper.getCopPC0());
+
         os << "  ";
         os << sr;
+
         os << " [";
-        os << std::right << std::setw(1) << std::dec << isize(cpu.getIPL());
-        os << "] : " << instr;
+        os << std::right << std::setw(1) << std::dec << isize(cpu.getIPL()) << "]";
+
+        os << " ";
+        os << ((fc & 0b100) ? '1' : '0');
+        os << ((fc & 0b010) ? '1' : '0');
+        os << ((fc & 0b001) ? '1' : '0');
         os << std::endl;
     }
 }

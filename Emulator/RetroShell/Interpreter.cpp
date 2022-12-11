@@ -8,8 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Interpreter.h"
-#include "RetroShell.h"
+#include "Amiga.h"
+// #include "Interpreter.h"
+// #include "RetroShell.h"
 #include <sstream>
 
 namespace vamiga {
@@ -103,7 +104,17 @@ Interpreter::getRoot()
 void
 Interpreter::switchInterpreter()
 {
-    shell = inCommandShell() ? Shell::Debug : Shell::Command;
+    if (inCommandShell()) {
+
+        shell = Shell::Debug;
+        amiga.debugOn();
+
+    } else {
+
+        shell = Shell::Command;
+    }
+
+    retroShell.updatePrompt();
 }
 
 void

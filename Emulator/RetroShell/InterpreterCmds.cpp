@@ -1380,6 +1380,29 @@ Interpreter::initDebugShell(Command &root)
 
 
     //
+    // State control
+    //
+
+    root.add({"pause"},
+             "command", "Pauses emulation",
+             &RetroShell::exec <Token::amiga, Token::pause>, 0);
+
+    root.add({"run"},
+             "command", "Continues emulation",
+             &RetroShell::exec <Token::amiga, Token::run>, 0);
+
+    root.add({"reset"},
+             "command", "Performs a hard reset",
+             &RetroShell::exec <Token::amiga, Token::reset>, 0);
+
+    /*
+    root.add({"stepover"},
+             "command", "Steps over the next instruction",
+             &RetroShell::exec <Token::step>, 0);
+     */
+    
+
+    //
     // Breakpoints
     //
 

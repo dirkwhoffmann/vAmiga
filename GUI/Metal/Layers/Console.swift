@@ -103,7 +103,8 @@ class Console: Layer {
     func keyDown(with event: NSEvent) {
         
         let macKey = MacKey(event: event)
-        
+        let shift  = macKey.modifierFlags.contains(.shift)
+
         switch macKey.keyCode {
         
         case kVK_UpArrow: amiga.retroShell.pressUp()
@@ -114,7 +115,7 @@ class Console: Layer {
         case kVK_End: amiga.retroShell.pressEnd()
         case kVK_Delete: amiga.retroShell.pressBackspace()
         case kVK_ForwardDelete: amiga.retroShell.pressDelete()
-        case kVK_Return: amiga.retroShell.pressReturn()
+        case kVK_Return: shift ? amiga.retroShell.pressShiftReturn() : amiga.retroShell.pressReturn()
         case kVK_Tab: amiga.retroShell.pressTab()
         case kVK_Escape: close()
         

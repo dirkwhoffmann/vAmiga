@@ -32,13 +32,7 @@ RetroShell::exec <Token::clear> (Arguments &argv, long param)
 template <> void
 RetroShell::exec <Token::close> (Arguments &argv, long param)
 {
-    if (interpreter.inDebugShell()) {
-        printf("Switching back to command mode\n");
-        interpreter.switchInterpreter();
-    } else {
-        printf("Closing RetroShell\n");
-        msgQueue.put(MSG_CLOSE_CONSOLE);
-    }
+    msgQueue.put(MSG_CLOSE_CONSOLE);
 }
 
 template <> void

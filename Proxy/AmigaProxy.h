@@ -786,6 +786,7 @@
 - (void)pressBackspace;
 - (void)pressDelete;
 - (void)pressReturn;
+- (void)pressShiftReturn;
 - (void)pressTab;
 - (void)pressKey:(char)c;
 

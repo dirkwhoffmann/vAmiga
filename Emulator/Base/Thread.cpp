@@ -155,13 +155,13 @@ Thread::main()
 
             } else if (state == EXEC_RUNNING && newState == EXEC_OFF) {
                 
-                AmigaComponent::pause();
                 state = EXEC_PAUSED;
+                AmigaComponent::pause();
 
             } else if (state == EXEC_RUNNING && newState == EXEC_PAUSED) {
                 
-                AmigaComponent::pause();
                 state = EXEC_PAUSED;
+                AmigaComponent::pause();
 
             } else if (state == EXEC_RUNNING && newState == EXEC_SUSPENDED) {
                 

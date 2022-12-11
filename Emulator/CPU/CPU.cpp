@@ -723,6 +723,72 @@ CPU::disassembleWords(isize len)
 }
 
 void
+CPU::dumpLogBuffer(std::ostream& os, isize count)
+{
+    isize numBytes = 0;
+    isize num = debugger.loggedInstructions();
+
+    for (isize i = num - count - 2; i < num - 2; i++) {
+
+        if (i >= 0) {
+
+            auto pc = disassembleRecordedPC(i);
+            auto instr = disassembleRecordedInstr(i, &numBytes);
+            auto flags = disassembleRecordedFlags(i);
+
+            os << std::setfill('0');
+            os << "   ";
+            os << std::right << std::setw(6) << pc;
+            os << "  ";
+            os << flags;
+            os << "  ";
+            os << instr;
+            os << std::endl;
+        }
+    }
+}
+
+void
+CPU::disassembleRange(std::ostream& os, u32 addr, isize count)
+{
+    disassembleRange(os, std::pair<u32, u32>(addr, UINT32_MAX), count);
+}
+
+void
+CPU::disassembleRange(std::ostream& os, std::pair<u32, u32> range, isize max)
+{
+    u32 addr = range.first;
+    isize numBytes = 0;
+
+    for (isize i = 0; i < max && addr <= range.second; i++, addr += numBytes) {
+
+        auto pc = disassembleAddr(addr);
+        auto instr = disassembleInstr(addr, &numBytes);
+        auto data = disassembleWords(addr, numBytes / 2);
+
+        os << std::setfill(' ');
+
+        os << (i == 0 ? " * " : "   ");
+        /*
+        if (debugger.breakpoints.isDisabledAt(addr)) {
+            os << "b";
+        } else if (debugger.breakpoints.isSetAt(addr)) {
+            os << "B";
+        } else {
+            os << " ";
+        }
+        os << " ";
+        */
+        os << std::right << std::setw(6) << pc;
+        os << "  ";
+        os << std::left << std::setw(15) << data;
+        os << "   ";
+        os << instr;
+        os << std::endl;
+    }
+}
+
+void
 CPU::jump(u32 addr)
 {
     {   SUSPENDED

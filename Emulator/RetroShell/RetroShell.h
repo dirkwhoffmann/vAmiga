@@ -96,7 +96,7 @@ private:
     
     void _initialize() override;
     void _reset(bool hard) override { }
-    
+    void _pause() override;
     isize _size() override { return 0; }
     u64 _checksum() override { return 0; }
     isize _load(const u8 *buffer) override {return 0; }
@@ -156,7 +156,7 @@ public:
     isize inputLength() { return (isize)input.length(); }
     
     // Presses a key or a series of keys
-    void press(RetroShellKey key);
+    void press(RetroShellKey key, bool shift = false);
     void press(char c);
     void press(const string &s);
     
