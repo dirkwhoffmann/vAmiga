@@ -238,29 +238,53 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"amiga"},
              "component", "Inspects the Amiga",
+             &RetroShell::exec <Token::amiga, Token::info>, 0);
+
+    /*
+    root.add({"amiga", "state"},
+             "component", "Inspects the internal state",
              &RetroShell::exec <Token::amiga, Token::state>, 0);
+    */
 
     root.add({"cpu"},
              "component", "Inspects the CPU",
+             &RetroShell::exec <Token::cpu, Token::info>, 0);
+
+    root.add({"cpu", "state"},
+             "component", "Inspects the internal state",
              &RetroShell::exec <Token::cpu, Token::state>, 0);
 
     root.add({"cia"},
              "component", "Inspects the CIA",
+             &RetroShell::exec <Token::cia, Token::info>, 0);
+
+    root.add({"cia", "state"},
+             "component", "Inspects the internal state",
              &RetroShell::exec <Token::cia, Token::state>, 0);
 
     root.add({"agnus"},
              "component", "Inspects Agnus",
+             &RetroShell::exec <Token::agnus, Token::info>, 0);
+
+    root.add({"agnus", "state"},
+             "component", "Inspects the internal state",
              &RetroShell::exec <Token::agnus, Token::state>, 0);
 
     root.add({"paula"},
              "component", "Inspects Paula",
+             &RetroShell::exec <Token::paula, Token::info>, 0);
+
+    root.add({"paula", "state"},
+             "component", "Inspects the internal state",
              &RetroShell::exec <Token::paula, Token::state>, 0);
 
     root.add({"denise"},
              "component", "Inspects Denise",
+             &RetroShell::exec <Token::denise, Token::info>, 0);
+
+    root.add({"denise", "state"},
+             "component", "Inspects the internal state",
              &RetroShell::exec <Token::denise, Token::state>, 0);
-
-
 }
 
 

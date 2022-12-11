@@ -493,7 +493,107 @@ Agnus::_dump(Category category, std::ostream& os) const
     }
 
     if (category == Category::Registers) {
-        
+
+        os << "DMACON:  " << hex(dmacon);
+        os << "   BPL0PT: " << hex(bplpt[0]);
+        os << "   SPR0PT: " << hex(sprpt[0]);
+        os << "   AUD0PT: " << hex(audpt[0]);
+        os << std::endl;
+
+        os << "BPLCON0: " << hex(bplcon0);
+        os << "   BPL1PT: " << hex(bplpt[1]);
+        os << "   SPR1PT: " << hex(sprpt[1]);
+        os << "   AUD1PT: " << hex(audpt[1]);
+        os << std::endl;
+
+        os << "         " << "      ";
+        os << "   BPL2PT: " << hex(bplpt[2]);
+        os << "   SPR2PT: " << hex(sprpt[2]);
+        os << "   AUD2PT: " << hex(audpt[2]);
+        os << std::endl;
+
+        os << "DDFSTRT: " << hex(sequencer.ddfstrt);
+        os << "   BPL3PT: " << hex(bplpt[3]);
+        os << "   SPR3PT: " << hex(sprpt[3]);
+        os << "   AUD3PT: " << hex(audpt[3]);
+        os << std::endl;
+
+        os << "DDFSTOP: " << hex(sequencer.ddfstop);
+        os << "   BPL4PT: " << hex(bplpt[4]);
+        os << "   SPR4PT: " << hex(sprpt[4]);
+        os << "   AUD0LC: " << hex(audlc[0]);
+        os << std::endl;
+
+        os << "         " << "      ";
+        os << "   BPL5PT: " << hex(bplpt[5]);
+        os << "   SPR5PT: " << hex(sprpt[5]);
+        os << "   AUD1LC: " << hex(audlc[1]);
+        os << std::endl;
+
+        os << "DIWSTRT: " << hex(sequencer.diwstrt);
+        os << "           " << "          ";
+        os << "   SPR6PT: " << hex(sprpt[6]);
+        os << "   AUD2LC: " << hex(audlc[2]);
+        os << std::endl;
+
+        os << "DIWSTOP: " << hex(sequencer.diwstop);
+        os << "   DSKPT:  " << hex(dskpt);
+        os << "   SPR7PT: " << hex(sprpt[7]);
+        os << "   AUD3LC: " << hex(audlc[3]);
+        os << std::endl;
+
+        /*
+        os << "BPL0PT: " << hex(bplpt[0]);
+        os << "  SPR0PT: " << hex(sprpt[0]);
+        os << "  AUD0PT: " << hex(audpt[0]);
+        os << "  BLTAPT: " << hex(blitter.bltapt);
+        os << std::endl;
+
+        os << "BPL1PT: " << hex(bplpt[1]);
+        os << "  SPR1PT: " << hex(sprpt[1]);
+        os << "  AUD1PT: " << hex(audpt[1]);
+        os << "  BLTBPT: " << hex(blitter.bltbpt);
+        os << std::endl;
+
+        os << "BPL2PT: " << hex(bplpt[2]);
+        os << "  SPR2PT: " << hex(sprpt[2]);
+        os << "  AUD2PT: " << hex(audpt[2]);
+        os << "  BLTCPT: " << hex(blitter.bltcpt);
+        os << std::endl;
+
+        os << "BPL3PT: " << hex(bplpt[3]);
+        os << "  SPR3PT: " << hex(sprpt[3]);
+        os << "  AUD3PT: " << hex(audpt[3]);
+        os << "  BLTDPT: " << hex(blitter.bltdpt);
+        os << std::endl;
+
+        os << "BPL4PT: " << hex(bplpt[4]);
+        os << "  SPR4PT: " << hex(sprpt[4]);
+        os << "  AUD0LC: " << hex(audlc[0]);
+        os << "  ";
+        os << std::endl;
+
+        os << "BPL5PT: " << hex(bplpt[5]);
+        os << "  SPR5PT: " << hex(sprpt[5]);
+        os << "  AUD1LC: " << hex(audpt[1]);
+        os << "  ";
+        os << std::endl;
+
+        os << "        " << "        ";
+        os << "  SPR6PT: " << hex(sprpt[6]);
+        os << "  AUD2LC: " << hex(audpt[2]);
+        os << "  ";
+        os << std::endl;
+
+        os << "        " << "        ";
+        os << "  SPR7PT: " << hex(sprpt[7]);
+        os << "  AUD3LC: " << hex(audpt[3]);
+        os << "  ";
+        os << std::endl;
+        */
+
+
+        /*
         sequencer.dump(Category::Registers, os);
         
         os << tab("DMACON");
@@ -525,6 +625,7 @@ Agnus::_dump(Category category, std::ostream& os) const
         
         os << tab("DSKPT");
         os << hex(dskpt) << std::endl;
+        */
     }
     
     if (category == Category::Bus) {

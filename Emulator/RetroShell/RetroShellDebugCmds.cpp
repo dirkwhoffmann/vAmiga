@@ -26,8 +26,13 @@ RetroShell::exec <Token::memdump> (Arguments& argv, long param)
 
     mem.memDump<ACCESSOR_CPU>(ss, u32(util::parseNum(argv.front())));
 
-    string line;
-    while(std::getline(ss, line)) *this << line << '\n';
+    *this << '\n' << ss << '\n';
+}
+
+template <> void
+RetroShell::exec <Token::amiga, Token::info> (Arguments &argv, long param)
+{
+    dump(amiga, Category::Info);
 }
 
 template <> void
@@ -37,9 +42,22 @@ RetroShell::exec <Token::amiga, Token::state> (Arguments &argv, long param)
 }
 
 template <> void
+RetroShell::exec <Token::cpu, Token::info> (Arguments &argv, long param)
+{
+    dump(cpu, Category::Info);
+}
+
+template <> void
 RetroShell::exec <Token::cpu, Token::state> (Arguments &argv, long param)
 {
     dump(cpu, Category::State);
+}
+
+template <> void
+RetroShell::exec <Token::cia, Token::info> (Arguments &argv, long param)
+{
+    dump(ciaa, Category::Info);
+    dump(ciab, Category::Info);
 }
 
 template <> void
@@ -50,15 +68,33 @@ RetroShell::exec <Token::cia, Token::state> (Arguments &argv, long param)
 }
 
 template <> void
+RetroShell::exec <Token::agnus, Token::info> (Arguments &argv, long param)
+{
+    dump(agnus, Category::Info);
+}
+
+template <> void
 RetroShell::exec <Token::agnus, Token::state> (Arguments &argv, long param)
 {
     dump(agnus, Category::State);
 }
 
 template <> void
+RetroShell::exec <Token::paula, Token::info> (Arguments &argv, long param)
+{
+    dump(paula, Category::Info);
+}
+
+template <> void
 RetroShell::exec <Token::paula, Token::state> (Arguments &argv, long param)
 {
     dump(paula, Category::State);
+}
+
+template <> void
+RetroShell::exec <Token::denise, Token::info> (Arguments &argv, long param)
+{
+    dump(denise, Category::Info);
 }
 
 template <> void

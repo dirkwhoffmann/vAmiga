@@ -181,10 +181,7 @@ RetroShell::printState()
         cpu.disassembleRange(ss, cpu.getPC0(), 8);
         ss << "\n";
 
-        mem.memDump<ACCESSOR_CPU>(ss, 0);
-
-        string line;
-        while(std::getline(ss, line)) *this << line << '\n';
+        *this << ss << '\n';
 
         updatePrompt();
 
@@ -521,14 +518,14 @@ RetroShell::help(const string &command)
 void
 RetroShell::dump(AmigaObject &component, Category category)
 {
-    std::stringstream ss; string line;
+    std::stringstream ss;
     
     {   SUSPENDED
         
         component.dump(category, ss);
     }
-    
-    while(std::getline(ss, line)) *this << line << '\n';
+
+    *this << '\n' << ss << '\n';
 }
 
 void

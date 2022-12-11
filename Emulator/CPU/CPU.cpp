@@ -453,18 +453,8 @@ CPU::_dump(Category category, std::ostream& os) const
         os << util::tab("Register reset value");
         os << util::hex(config.regResetVal) << std::endl;
     }
-    
-    if (category == Category::State) {
-        
-        os << util::tab("Clock");
-        os << util::dec(clock) << std::endl;
-        os << util::tab("Control flags");
-        os << util::hex((u16)flags) << std::endl;
-        os << util::tab("Last exception");
-        os << util::dec(exception);
-    }
 
-    if (category == Category::Registers) {
+    if (category == Category::Info) {
         
         os << util::tab("PC");
         os << util::hex(reg.pc0) << std::endl;
@@ -505,6 +495,37 @@ CPU::_dump(Category category, std::ostream& os) const
         os << (reg.sr.z ? 'Z' : 'z');
         os << (reg.sr.v ? 'V' : 'v');
         os << (reg.sr.c ? 'C' : 'c') << std::endl;
+    }
+
+    if (category == Category::State) {
+
+        os << util::tab("Clock");
+        os << util::dec(clock) << std::endl;
+        os << util::tab("Flags");
+        os << util::hex((u16)flags) << std::endl;
+
+        if (flags) {
+
+            os << std::endl;
+            if (flags & moira::CPU_IS_HALTED) os << util::tab("") << "CPU_IS_HALTED" << std::endl;
+            if (flags & moira::CPU_IS_STOPPED) os << util::tab("") << "CPU_IS_STOPPED" << std::endl;
+            if (flags & moira::CPU_IS_LOOPING) os << util::tab("") << "CPU_IS_LOOPING" << std::endl;
+            if (flags & moira::CPU_LOG_INSTRUCTION) os << util::tab("") << "CPU_LOG_INSTRUCTION" << std::endl;
+            if (flags & moira::CPU_CHECK_IRQ) os << util::tab("") << "CPU_CHECK_IRQ" << std::endl;
+            if (flags & moira::CPU_TRACE_EXCEPTION) os << util::tab("") << "CPU_TRACE_EXCEPTION" << std::endl;
+            if (flags & moira::CPU_TRACE_FLAG) os << util::tab("") << "CPU_TRACE_FLAG" << std::endl;
+            if (flags & moira::CPU_CHECK_BP) os << util::tab("") << "CPU_CHECK_BP" << std::endl;
+            if (flags & moira::CPU_CHECK_WP) os << util::tab("") << "CPU_CHECK_WP" << std::endl;
+            if (flags & moira::CPU_CHECK_CP) os << util::tab("") << "CPU_CHECK_CP" << std::endl;
+            os << std::endl;
+        }
+
+        os << util::tab("Read buffer");
+        os << util::hex(readBuffer) << std::endl;
+        os << util::tab("Write buffer");
+        os << util::hex(readBuffer) << std::endl;
+        os << util::tab("Last exception");
+        os << util::dec(exception);
     }
 
     if (category == Category::Fpu) {
@@ -728,7 +749,7 @@ CPU::dumpLogBuffer(std::ostream& os, isize count)
     isize numBytes = 0;
     isize num = debugger.loggedInstructions();
 
-    for (isize i = num - count - 2; i < num - 2; i++) {
+    for (isize i = num - count; i < num ; i++) {
 
         if (i >= 0) {
 

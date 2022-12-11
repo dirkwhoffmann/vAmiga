@@ -90,6 +90,14 @@ TextStorage::operator<<(const string &s)
     return *this;
 }
 
+TextStorage &
+TextStorage::operator<<(std::stringstream &ss)
+{
+    string line;
+    while(std::getline(ss, line)) *this << line << '\n';
+    return *this;
+}
+
 void
 TextStorage::welcome()
 {

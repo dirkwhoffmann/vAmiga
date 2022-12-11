@@ -35,7 +35,7 @@ Folder::init(const string &path)
     volume.makeBootable(BB_AMIGADOS_13);
     
     // Check the file system for errors
-    volume.dump(Category::Summary);
+    volume.dump(Category::Info);
     volume.printDirectory(true);
 
     // Check the file system for consistency
