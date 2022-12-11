@@ -96,6 +96,10 @@
 		50627FD5286EBACA00F2A835 /* FrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50627FD1286EBA7300F2A835 /* FrameBuffer.cpp */; };
 		5062DB1224370FE400ACEEE2 /* MyControllerSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */; };
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
+		50672CBD29460FF9004113F5 /* RetroShellDebugCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50672CBC29460FF9004113F5 /* RetroShellDebugCmds.cpp */; };
+		50672CBE29460FF9004113F5 /* RetroShellDebugCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50672CBC29460FF9004113F5 /* RetroShellDebugCmds.cpp */; };
+		50672CC02946100F004113F5 /* InterpreterDebugCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50672CBF2946100F004113F5 /* InterpreterDebugCmds.cpp */; };
+		50672CC12946100F004113F5 /* InterpreterDebugCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50672CBF2946100F004113F5 /* InterpreterDebugCmds.cpp */; };
 		506ACE44279AC75100BA7877 /* SequencerDas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506ACE43279AC75100BA7877 /* SequencerDas.cpp */; };
 		506ACE46279AC76700BA7877 /* SequencerBpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506ACE45279AC76700BA7877 /* SequencerBpl.cpp */; };
 		506B47182562E06A009FEFC3 /* VolumeInspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 506B47172562E06A009FEFC3 /* VolumeInspector.xib */; };
@@ -597,6 +601,8 @@
 		5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerSnapshots.swift; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* Memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Memory.cpp; sourceTree = "<group>"; };
 		5064851021EC7A1700FC4AC3 /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
+		50672CBC29460FF9004113F5 /* RetroShellDebugCmds.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RetroShellDebugCmds.cpp; sourceTree = "<group>"; };
+		50672CBF2946100F004113F5 /* InterpreterDebugCmds.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InterpreterDebugCmds.cpp; sourceTree = "<group>"; };
 		506ACE43279AC75100BA7877 /* SequencerDas.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerDas.cpp; sourceTree = "<group>"; };
 		506ACE45279AC76700BA7877 /* SequencerBpl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerBpl.cpp; sourceTree = "<group>"; };
 		506B47172562E06A009FEFC3 /* VolumeInspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VolumeInspector.xib; sourceTree = "<group>"; };
@@ -1747,6 +1753,7 @@
 				50B9C427260942D000A86C31 /* RetroShell.h */,
 				50B9C426260942D000A86C31 /* RetroShell.cpp */,
 				509C3667260B3ED0004F160A /* RetroShellCmds.cpp */,
+				50672CBC29460FF9004113F5 /* RetroShellDebugCmds.cpp */,
 				50AD904A276E104E0011ECCB /* TextStorage.h */,
 				50AD904C276E10660011ECCB /* TextStorage.cpp */,
 				509C3659260B1766004F160A /* Command.h */,
@@ -1754,6 +1761,7 @@
 				509C365D260B177E004F160A /* Interpreter.h */,
 				509C365C260B177E004F160A /* Interpreter.cpp */,
 				509C3662260B1D95004F160A /* InterpreterCmds.cpp */,
+				50672CBF2946100F004113F5 /* InterpreterDebugCmds.cpp */,
 			);
 			path = RetroShell;
 			sourceTree = "<group>";
@@ -2163,6 +2171,7 @@
 				50C8C44A2607396200F4E012 /* Layer.swift in Sources */,
 				5004C3AA27BD520400A9161A /* HardDrive.cpp in Sources */,
 				50B14C1021EB410B002E32A6 /* Amiga.cpp in Sources */,
+				50672CBD29460FF9004113F5 /* RetroShellDebugCmds.cpp in Sources */,
 				50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */,
 				50AE6EDD24D93DC4000AA367 /* CopperRegs.cpp in Sources */,
 				50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */,
@@ -2243,6 +2252,7 @@
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
 				50FC08AD27819CD100F0C567 /* AgnusInfo.cpp in Sources */,
 				50AE6F8525D71FBE0004AFBC /* Error.cpp in Sources */,
+				50672CC02946100F004113F5 /* InterpreterDebugCmds.cpp in Sources */,
 				5057E4C5243DF10A004005EB /* Primitives.swift in Sources */,
 				50826F7827F0B2AD005FBF3B /* DiagBoard.cpp in Sources */,
 				507957AC244AD25B007B8B8D /* Configuration.swift in Sources */,
@@ -2350,6 +2360,7 @@
 				50FC049D27DA197500C3E566 /* AgnusRegs.cpp in Sources */,
 				50FC04FB27DA1AA200C3E566 /* DiskControllerRegs.cpp in Sources */,
 				50FC04BE27DA19C900C3E566 /* Joystick.cpp in Sources */,
+				50672CC12946100F004113F5 /* InterpreterDebugCmds.cpp in Sources */,
 				50FC04F627DA1A8F00C3E566 /* Muxer.cpp in Sources */,
 				50FC04DA27DA1A0000C3E566 /* Interpreter.cpp in Sources */,
 				50FC04C927DA19E900C3E566 /* EXTFile.cpp in Sources */,
@@ -2364,6 +2375,7 @@
 				50FC04A727DA198100C3E566 /* CopperDebugger.cpp in Sources */,
 				50FC04A027DA197A00C3E566 /* Sequencer.cpp in Sources */,
 				50FC048F27DA195D00C3E566 /* PaulaEvents.cpp in Sources */,
+				50672CBE29460FF9004113F5 /* RetroShellDebugCmds.cpp in Sources */,
 				50FC049827DA196C00C3E566 /* Recorder.cpp in Sources */,
 				50FC04CF27DA19F600C3E566 /* FSDescriptors.cpp in Sources */,
 				50FC04BF27DA19CE00C3E566 /* KeyboardEvents.cpp in Sources */,

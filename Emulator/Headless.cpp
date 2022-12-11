@@ -20,9 +20,9 @@ int main(int argc, char *argv[])
 {
     try {
         
-        Headless().main(argc, argv);
+        vamiga::Headless().main(argc, argv);
         
-    } catch (SyntaxError &e) {
+    } catch (vamiga::SyntaxError &e) {
         
         std::cout << "Usage: ";
         std::cout << "vAmigaCore [-vm] <script>" << std::endl;
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
         
         return 1;
 
-    } catch (VAError &e) {
+    } catch (vamiga::VAError &e) {
 
         std::cout << "VAError: " << std::endl;
         std::cout << e.what() << std::endl;
@@ -57,6 +57,8 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+namespace vamiga {
+
 void
 Headless::main(int argc, char *argv[])
 {
@@ -73,7 +75,7 @@ Headless::main(int argc, char *argv[])
     Script script(keys["arg1"]);
     
     // Register message receiver
-    amiga.msgQueue.setListener(this, ::process);
+    amiga.msgQueue.setListener(this, vamiga::process);
     
     // Execute the script
     barrier.lock();
@@ -159,7 +161,7 @@ Headless::checkArguments()
     if (keys.find("arg2") != keys.end()) {
         throw SyntaxError("More than one script file is given");
     }
-        
+
     // The input file must exist
     if (!util::fileExists(keys["arg1"])) {
         throw SyntaxError("File " + keys["arg1"] + " does not exist");
@@ -183,7 +185,7 @@ Headless::process(long type, i32 d1, i32 d2, i32 d3, i32 d4)
         std::cout << "(" << d1 << ", " << d2 << ", " << d3 << ", " << d4 << ")";
         std::cout << std::endl;
     }
-        
+
     switch (type) {
             
         case MSG_SCRIPT_DONE:
@@ -197,8 +199,10 @@ Headless::process(long type, i32 d1, i32 d2, i32 d3, i32 d4)
 
             barrier.unlock();
             break;
- 
+
         default:
             break;
     }
+}
+
 }
