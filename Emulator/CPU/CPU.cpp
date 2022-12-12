@@ -780,17 +780,18 @@ CPU::disassembleRange(std::ostream& os, std::pair<u32, u32> range, isize max)
 {
     u32 addr = range.first;
     isize numBytes = 0;
+    auto pc = cpu.getPC0();
 
     for (isize i = 0; i < max && addr <= range.second; i++, addr += numBytes) {
 
-        auto pc = disassembleAddr(addr);
+        // auto pc = disassembleAddr(addr);
         auto instr = disassembleInstr(addr, &numBytes);
         auto data = disassembleWords(addr, numBytes / 2);
 
         os << std::setfill(' ');
 
-        os << (i == 0 ? " * " : "   ");
-        /*
+        os << (addr == pc ? "->" : "  ");
+
         if (debugger.breakpoints.isDisabledAt(addr)) {
             os << "b";
         } else if (debugger.breakpoints.isSetAt(addr)) {
@@ -798,9 +799,8 @@ CPU::disassembleRange(std::ostream& os, std::pair<u32, u32> range, isize max)
         } else {
             os << " ";
         }
-        os << " ";
-        */
-        os << std::right << std::setw(6) << pc;
+
+        os << std::right << std::setw(6) << disassembleAddr(addr);
         os << "  ";
         os << std::left << std::setw(15) << data;
         os << "   ";

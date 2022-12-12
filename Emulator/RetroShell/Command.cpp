@@ -13,6 +13,14 @@
 
 namespace vamiga {
 
+std::vector<string> Command::groups;
+
+void
+Command::addGroup(const string &description)
+{
+    groups.push_back(description);
+}
+
 void
 Command::add(const std::vector<string> &tokens,
              const string &type,
@@ -26,7 +34,8 @@ Command::add(const std::vector<string> &tokens,
              const string &type,
              const string &help,
              void (RetroShell::*action)(Arguments&, long),
-             isize numArgs, long param)
+             isize numArgs,
+             long param)
 {
     add(tokens, type, help, action, { numArgs, numArgs }, param);
 }
@@ -45,10 +54,11 @@ Command::add(const std::vector<string> &tokens,
     Command *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() - 1 });
     assert(cmd != nullptr);
     
-    // Create instruction
+    // Create the instruction
     Command d;
     d.parent = this;
     d.token = tokens.back();
+    d.group = groups.size() - 1;
     d.type = type;
     d.info = help;
     d.action = action;
@@ -56,7 +66,7 @@ Command::add(const std::vector<string> &tokens,
     d.maxArgs = numArgs.second;
     d.param = param;
     
-    // Register instruction
+    // Register the instruction
     cmd->args.push_back(d);
 }
 

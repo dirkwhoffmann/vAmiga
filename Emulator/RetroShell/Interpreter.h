@@ -21,16 +21,16 @@ enum class Token
 {
     about, accuracy, agnus, amiga, at, attach, audiate, audio, autofire,
     autosync, bankmap, beam, bitplanes, blitter, bp, brightness, bullets,
-    callstack, channel, checksums, chip, cia, clear, close, clxsprspr,
+    callstack, channel, checksums, chip, cia, ciaa, ciab, clear, close, clxsprspr,
     clxsprplf, clxplfplf, color, config, connect, contrast, controlport,
     copper, cp, cpu, cutout, dc, debug, defaults, delay, del, denise, detach,
-    device, devices, dfn, diagboard, down, hdn, disable, disconnect, disk, dma,
+    device, devices, dfn, diagboard, disassemble, down, hdn, disable, disconnect, disk, dma,
     dmadebugger, drive, dsksync, easteregg, eject, enable, esync, events,
     execbase, extrom, extstart, fast, filename, filesystem, filter, fpu, gdb,
     geometry, help, hide, ignore, init, info, insert, inspect, interrupt,
     interrupts, joystick, jump, keyboard, keyset, layers, left, library,
     libraries, list, load, lock, mechanics, memdump, memory, mmu, mode, model, monitor,
-    mouse, none, ntsc, off, on, opacity, open, os, overclocking, pal, palette,
+    mouse, next, none, ntsc, off, on, opacity, open, os, overclocking, pal, palette,
     pan, partition, path, paula, pause, ptrdrops, poll, port, ports, power,
     press, process, processes, pull, pullup, raminitpattern, refresh,
     registers, regreset, regression, release, reset, resource, resources,
@@ -38,8 +38,8 @@ enum class Token
     saveroms, screenshot, searchpath, serial, server, set, setup, shakedetector,
     show, slow, slowramdelay, slowrammirror, source, speed, sprites, start,
     state, status, step, stop, swapdelay, swtraps, task, tasks, tod, todbug,
-    tracking, translate, trap, unmappingtype, unpress, up, vector, verbose,
-    velocity, volume, volumes, vsync, wait, watch, watchpoint, wom, wp, xaxis,
+    tracking, translate, trap, unmappingtype, unpress, up, vector, vectors, verbose,
+    velocity, volume, volumes, vsync, wait, watch, watchpoint, wom, wp, write, xaxis,
     yaxis, zorro
 };
 

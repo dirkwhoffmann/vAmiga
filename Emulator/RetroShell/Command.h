@@ -19,14 +19,19 @@ class RetroShell;
 typedef std::vector<string> Arguments;
 
 struct Command {
-    
+
+    static std::vector<string> groups;
+
     // Pointer to the parent command
     Command *parent = nullptr;
     
-    // The token string (e.g., "agnus" or "set")
+    // The token string (e.g., "agnus" or "eject")
     string token;
-    
-    // A string describing the token type (e.g., "component or "command")
+
+    // The command group this command belongs to
+    isize group;
+
+    // A string describing the token type (DEPRECATED)
     string type;
     
     // The help string for this command
@@ -47,6 +52,9 @@ struct Command {
     
     // Indicates if this command appears in the help descriptions
     bool hidden = false;
+
+    // Creates a new command group
+    void addGroup(const string &description);
 
     // Creates a new node in the command tree
     void add(const std::vector<string> &tokens,

@@ -9,8 +9,6 @@
 
 #include "config.h"
 #include "Amiga.h"
-// #include "Interpreter.h"
-// #include "RetroShell.h"
 #include <sstream>
 
 namespace vamiga {
@@ -180,7 +178,7 @@ Interpreter::exec(const Arguments &argv, bool verbose)
 void
 Interpreter::usage(const Command& current)
 {
-    retroShell << "Usage: " << current.usage() << '\n' << '\n';
+    retroShell << "Usage: " << current.usage() << '\n'; //  << '\n';
 }
 
 void
@@ -212,7 +210,7 @@ Interpreter::help(const Arguments &argv)
 void
 Interpreter::help(const Command& current)
 {
-    retroShell << '\n';
+    // retroShell << '\n';
     
     // Print the usage string
     usage(current);
@@ -224,10 +222,36 @@ Interpreter::help(const Command& current)
     isize tab = 0;
     for (auto &it : current.args) {
         tab = std::max(tab, (isize)it.token.length());
-        tab = std::max(tab, 2 + (isize)it.type.length());
+        // tab = std::max(tab, 2 + (isize)it.type.length());
     }
     tab += 5;
-    
+
+    isize group = -1;
+
+    for (auto &it : current.args) {
+
+        // Only proceed if the command is visible
+        if (it.hidden) continue;
+
+        // Print group description (when a new group begins)
+        if (group != it.group) {
+
+            group = it.group;
+            retroShell << '\n' << Command::groups[group] << '\n' << '\n';
+        }
+
+        // Print command descriptioon
+        string name = it.token == "" ? "<>" : it.token;
+        retroShell.tab(tab + 2 - (isize)name.length());
+        retroShell << name;
+        retroShell << " : ";
+        retroShell << it.info;
+        retroShell << '\n';
+    }
+    retroShell << '\n';
+
+
+    /*
     for (auto &it : types) {
         
         auto opts = current.filterType(it);
@@ -249,6 +273,7 @@ Interpreter::help(const Command& current)
         }
         retroShell << '\n';
     }
+    */
 }
 
 }

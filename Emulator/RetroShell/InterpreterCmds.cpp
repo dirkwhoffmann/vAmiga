@@ -20,20 +20,22 @@ Interpreter::initCommons(Command &root)
     // Common commands
     //
 
+    root.addGroup("Controlling the shell...");
+
     root.add({"clear"},
              "command", "Clears the console window",
              &RetroShell::exec <Token::clear>, 0);
-    root.seek("clear")->hidden = true;
+    // root.seek("clear")->hidden = true;
 
     root.add({"close"},
              "command", "Hides the console window",
              &RetroShell::exec <Token::close>, 0);
-    root.seek("close")->hidden = true;
+    // root.seek("close")->hidden = true;
 
     root.add({"help"},
              "command", "Prints usage information",
              &RetroShell::exec <Token::help>, {0, 1});
-    root.seek("help")->hidden = true;
+    // root.seek("help")->hidden = true;
 
     root.add({"joshua"},
              "command", "",
@@ -43,7 +45,7 @@ Interpreter::initCommons(Command &root)
     root.add({"source"},
              "command", "Processes a command script",
              &RetroShell::exec <Token::source>, 1);
-    root.seek("source")->hidden = true;
+    // root.seek("source")->hidden = true;
 
     root.add({"wait"},
              "command", "Pauses the execution of a command script",
@@ -68,7 +70,9 @@ Interpreter::initCommandShell(Command &root)
     //
     // Regression testing
     //
-    
+
+    root.addGroup("Miscellaneous");
+
     root.add({"regression"},
              "component", "");
     root.seek("regression")->hidden = true;
