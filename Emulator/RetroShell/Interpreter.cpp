@@ -164,12 +164,13 @@ Interpreter::exec(const Arguments &argv, bool verbose)
         throw util::ParseError(args.front());
     }
     if (current->action == nullptr && args.empty()) {
-        throw TooFewArgumentsError(current->tokens());
+        throw TooFewArgumentsError(current->tokenList);
     }
     
     // Check the argument count
-    if ((isize)args.size() < current->minArgs) throw TooFewArgumentsError(current->tokens());
-    if ((isize)args.size() > current->maxArgs) throw TooManyArgumentsError(current->tokens());
+    printf("current = %p\n", (void *)current); 
+    if ((isize)args.size() < current->minArgs) throw TooFewArgumentsError(current->tokenList);
+    if ((isize)args.size() > current->maxArgs) throw TooManyArgumentsError(current->tokenList);
     
     // Call the command handler
     (retroShell.*(current->action))(args, current->param);
@@ -210,7 +211,7 @@ Interpreter::help(const Arguments &argv)
 void
 Interpreter::help(const Command& current)
 {
-    auto tokens = current.tokens();
+    // auto tokens = current.tokens();
     // auto length = tokens.size();
     auto indent = string("    ");
 
@@ -223,10 +224,10 @@ Interpreter::help(const Command& current)
     // Determine tabular positions to align the output
     isize tab = 0;
     for (auto &it : current.args) {
-        tab = std::max(tab, (isize)it.token.length());
+        tab = std::max(tab, (isize)it.tokenList.length());
         // tab = std::max(tab, 2 + (isize)it.type.length());
     }
-    tab += indent.size() + tokens.size() + 1;
+    tab += indent.size();
 
     isize group = -1;
 
@@ -239,15 +240,17 @@ Interpreter::help(const Command& current)
         if (group != it.group) {
 
             group = it.group;
-            retroShell << '\n' << Command::groups[group] << '\n' << '\n';
+            retroShell << '\n';
+
+            if (!Command::groups[group].empty()) {
+                retroShell << Command::groups[group] << '\n' << '\n';
+            }
         }
 
         // Print command descriptioon
-        // string name = it.token == "" ? "<>" : it.token;
-        string name = tokens + " " + it.token;
-        // retroShell.tab(tab + 2 - (isize)name.length());
+        // string name = token + " " + it.token;
         retroShell << indent;
-        retroShell << name;
+        retroShell << it.tokenList;
         retroShell.tab(tab);
         retroShell << " : ";
         retroShell << it.info;

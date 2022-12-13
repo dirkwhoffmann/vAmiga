@@ -63,6 +63,7 @@ Command::add(const std::vector<string> &tokens,
     Command d;
     d.parent = this;
     d.token = tokens.back();
+    d.tokenList = (cmd->tokenList.empty() ? "" : cmd->tokenList + " ") + tokens.back();
     d.group = groups.size() - 1;
     d.type = type;
     d.info = help;
@@ -172,22 +173,15 @@ Command::autoComplete(const string& token)
 }
 
 string
-Command::tokens() const
-{
-    string result = this->parent ? this->parent->tokens() : "";
-    return result == "" ? token : result + " " + token;
-}
-
-string
 Command::usage() const
 {
     string arguments;
 
     if (args.empty()) {
 
-        arguments = minArgs == 0 ? "" : minArgs == 1 ? "value" : "values";
-        if (maxArgs - minArgs == 1) arguments += " [value]";
-        if (maxArgs - minArgs >= 2) arguments += " [values]";
+        arguments = minArgs == 0 ? "" : minArgs == 1 ? "<value>" : "<values>";
+        if (maxArgs - minArgs == 1) arguments += " [ <value> ]";
+        if (maxArgs - minArgs >= 2) arguments += " [ <values> ]";
         if (arguments == "") arguments = "<no arguments>";
 
     } else {
@@ -195,40 +189,7 @@ Command::usage() const
         arguments = action ? "[ <command> ]" : "<command>";
     }
 
-    return tokens() + " " + arguments;
-
-    /*
-    string firstArg, otherArgs;
-    
-    if (args.empty()) {
-
-        firstArg = maxArgs == 0 ? "" : maxArgs == 1 ? "<value>" : "<values>";
-        if (minArgs == 0) firstArg = "[" + firstArg + "]";
-        
-    } else {
-        
-        // Collect all argument types
-        auto t = types();
-        
-        // Describe the first argument
-        for (usize i = 0; i < t.size(); i++) {
-            firstArg += (i == 0 ? "" : "|") + t[i];
-        }
-        firstArg = "<" + firstArg + ">";
-        
-        // Describe the remaining arguments (if any)
-        bool printArg = false, printOpt = false;
-        for (auto &it : args) {
-            if (it.action != nullptr && it.minArgs == 0) printOpt = true;
-            if (it.maxArgs > 0 || !it.args.empty()) printArg = true;
-        }
-        if (printArg) {
-            otherArgs = printOpt ? "[<arguments>]" : "<arguments>";
-        }
-    }
-    
-    return tokens() + " " + firstArg + " " + otherArgs;
-    */
+    return tokenList + " " + arguments;
 }
 
 }

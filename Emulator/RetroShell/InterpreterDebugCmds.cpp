@@ -50,8 +50,13 @@ Interpreter::initDebugShell(Command &root)
 
     // Breakpoints
 
+    root.addGroup("");
+
     root.add({"break"},
-             "command", "Manages breakpoints",
+             "command", "Manages breakpoints");
+
+    root.add({"break", ""},
+             "command", "Lists all breakpoints",
              &RetroShell::exec <Token::bp>, 0);
 
     root.add({"break", "at"},
@@ -77,7 +82,10 @@ Interpreter::initDebugShell(Command &root)
     // Watchpoints
 
     root.add({"watch"},
-             "command", "Manages watchpoints",
+             "command", "Manages watchpoints");
+
+    root.add({"watch", ""},
+             "command", "Lists all watchpoints",
              &RetroShell::exec <Token::wp>, 0);
 
     root.add({"watch", "at"},
@@ -103,7 +111,10 @@ Interpreter::initDebugShell(Command &root)
     // Catchpoints
 
     root.add({"catch"},
-             "command", "Manages catchpoints",
+             "command", "Manages catchpoints");
+
+    root.add({"catch", ""},
+             "command", "Lists all catchpoints",
              &RetroShell::exec <Token::cp>, 0);
 
     root.add({"catch", "vector"},

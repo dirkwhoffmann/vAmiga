@@ -25,8 +25,11 @@ struct Command {
     // Pointer to the parent command
     Command *parent = nullptr;
     
-    // The token string (e.g., "agnus" or "eject")
+    // Command name (e.g., "eject")
     string token;
+
+    // Full command name (e.g., "df0 eject")
+    string tokenList;
 
     // The command group this command belongs to
     isize group;
@@ -91,10 +94,7 @@ struct Command {
 
     // Automatically completes a partial token string
     string autoComplete(const string& token);
-    
-    // Returns the full command string for this command
-    string tokens() const;
-    
+        
     // Returns a syntax string for this command
     string usage() const;
 };
