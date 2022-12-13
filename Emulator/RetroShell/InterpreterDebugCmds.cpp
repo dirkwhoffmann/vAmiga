@@ -146,7 +146,10 @@ Interpreter::initDebugShell(Command &root)
              &RetroShell::exec <Token::amiga>, 0);
 
     root.add({"memory"},
-             "component", "RAM and ROM",
+             "component", "RAM and ROM");
+
+    root.add({"memory", ""},
+             "component", "Lorem ipsum",
              &RetroShell::exec <Token::memory>, 0);
 
     root.add({"memory", "dump"},

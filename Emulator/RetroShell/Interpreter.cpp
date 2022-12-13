@@ -212,6 +212,7 @@ Interpreter::help(const Command& current)
 {
     auto tokens = current.tokens();
     // auto length = tokens.size();
+    auto indent = string("    ");
 
     // Print the usage string
     usage(current);
@@ -225,7 +226,7 @@ Interpreter::help(const Command& current)
         tab = std::max(tab, (isize)it.token.length());
         // tab = std::max(tab, 2 + (isize)it.type.length());
     }
-    tab += tokens.size() + 5;
+    tab += indent.size() + tokens.size() + 1;
 
     isize group = -1;
 
@@ -244,8 +245,10 @@ Interpreter::help(const Command& current)
         // Print command descriptioon
         // string name = it.token == "" ? "<>" : it.token;
         string name = tokens + " " + it.token;
-        retroShell.tab(tab + 2 - (isize)name.length());
+        // retroShell.tab(tab + 2 - (isize)name.length());
+        retroShell << indent;
         retroShell << name;
+        retroShell.tab(tab);
         retroShell << " : ";
         retroShell << it.info;
         retroShell << '\n';

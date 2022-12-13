@@ -54,6 +54,11 @@ Command::add(const std::vector<string> &tokens,
     Command *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() - 1 });
     assert(cmd != nullptr);
 
+    // EXPERIMENTAL
+    if (tokens.back() == "") {
+        cmd->action = action;
+    }
+
     // Create the instruction
     Command d;
     d.parent = this;
