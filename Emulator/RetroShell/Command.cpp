@@ -23,26 +23,23 @@ Command::addGroup(const string &description)
 
 void
 Command::add(const std::vector<string> &tokens,
-             const string &type,
              const string &help)
 {
-    add(tokens, type, help, nullptr, 0);
+    add(tokens, help, nullptr, 0);
 }
 
 void
 Command::add(const std::vector<string> &tokens,
-             const string &type,
              const string &help,
              void (RetroShell::*action)(Arguments&, long),
              isize numArgs,
              long param)
 {
-    add(tokens, type, help, action, { numArgs, numArgs }, param);
+    add(tokens, help, action, { numArgs, numArgs }, param);
 }
 
 void
 Command::add(const std::vector<string> &tokens,
-             const string &type,
              const string &help,
              void (RetroShell::*action)(Arguments&, long),
              std::pair <isize,isize> numArgs,

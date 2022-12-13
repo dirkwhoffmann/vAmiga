@@ -59,18 +59,15 @@ struct Command {
 
     // Creates a new node in the command tree
     void add(const std::vector<string> &tokens,
-             const string &type,
              const string &help);
     
     void add(const std::vector<string> &tokens,
-             const string &type,
              const string &help,
              void (RetroShell::*action)(Arguments&, long),
              isize numArgs,
              long param = 0);
     
     void add(const std::vector<string> &tokens,
-             const string &type,
              const string &help,
              void (RetroShell::*action)(Arguments&, long),
              std::pair <isize,isize> numArgs,
