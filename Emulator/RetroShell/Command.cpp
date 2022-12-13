@@ -53,7 +53,7 @@ Command::add(const std::vector<string> &tokens,
     // Traverse the node tree
     Command *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() - 1 });
     assert(cmd != nullptr);
-    
+
     // Create the instruction
     Command d;
     d.parent = this;
@@ -176,6 +176,23 @@ Command::tokens() const
 string
 Command::usage() const
 {
+    string arguments;
+
+    if (args.empty()) {
+
+        arguments = minArgs == 0 ? "" : minArgs == 1 ? "value" : "values";
+        if (maxArgs - minArgs == 1) arguments += " [value]";
+        if (maxArgs - minArgs >= 2) arguments += " [values]";
+        if (arguments == "") arguments = "<no arguments>";
+
+    } else {
+
+        arguments = action ? "[ <command> ]" : "<command>";
+    }
+
+    return tokens() + " " + arguments;
+
+    /*
     string firstArg, otherArgs;
     
     if (args.empty()) {
@@ -206,6 +223,7 @@ Command::usage() const
     }
     
     return tokens() + " " + firstArg + " " + otherArgs;
+    */
 }
 
 }

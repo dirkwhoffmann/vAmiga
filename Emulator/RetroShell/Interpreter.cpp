@@ -178,7 +178,7 @@ Interpreter::exec(const Arguments &argv, bool verbose)
 void
 Interpreter::usage(const Command& current)
 {
-    retroShell << "Usage: " << current.usage() << '\n'; //  << '\n';
+    retroShell << "Usage: " << current.usage() << '\n';
 }
 
 void
@@ -210,8 +210,9 @@ Interpreter::help(const Arguments &argv)
 void
 Interpreter::help(const Command& current)
 {
-    // retroShell << '\n';
-    
+    auto tokens = current.tokens();
+    // auto length = tokens.size();
+
     // Print the usage string
     usage(current);
     
@@ -224,7 +225,7 @@ Interpreter::help(const Command& current)
         tab = std::max(tab, (isize)it.token.length());
         // tab = std::max(tab, 2 + (isize)it.type.length());
     }
-    tab += 5;
+    tab += tokens.size() + 5;
 
     isize group = -1;
 
@@ -241,7 +242,8 @@ Interpreter::help(const Command& current)
         }
 
         // Print command descriptioon
-        string name = it.token == "" ? "<>" : it.token;
+        // string name = it.token == "" ? "<>" : it.token;
+        string name = tokens + " " + it.token;
         retroShell.tab(tab + 2 - (isize)name.length());
         retroShell << name;
         retroShell << " : ";

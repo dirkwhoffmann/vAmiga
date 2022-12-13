@@ -548,59 +548,87 @@ CPU::_dump(Category category, std::ostream& os) const
     }
     
     if (category == Category::Breakpoints) {
-        
-        for (int i = 0; i < debugger.breakpoints.elements(); i++) {
-            
-            auto bp = debugger.breakpoints.guardNr(i);
-            auto nr = "Breakpoint " + std::to_string(i);
-            
-            os << util::tab(nr);
-            os << util::hex(bp->addr);
 
-            if (!bp->enabled) os << " (Disabled)";
-            else if (bp->ignore) os << " (Disabled for " << bp->ignore << " hits)";
-            os << std::endl;
+        if (debugger.breakpoints.elements()) {
+
+            for (int i = 0; i < debugger.breakpoints.elements(); i++) {
+
+                auto bp = debugger.breakpoints.guardNr(i);
+                auto nr = "Breakpoint " + std::to_string(i);
+
+                os << util::tab(nr);
+                os << util::hex(bp->addr);
+
+                if (!bp->enabled) os << " (Disabled)";
+                else if (bp->ignore) os << " (Disabled for " << bp->ignore << " hits)";
+                os << std::endl;
+            }
+
+        } else {
+
+            os << "No breakpoints set" << std::endl;
         }
     }
-    
+
     if (category == Category::Watchpoints) {
-        
-        for (int i = 0; i < debugger.watchpoints.elements(); i++) {
-            
-            auto wp = debugger.watchpoints.guardNr(i);
-            auto nr = "Watchpoint " + std::to_string(i);
-            
-            os << util::tab(nr);
-            os << util::hex(wp->addr);
-            if (!wp->enabled) os << " (Disabled)";
-            else if (wp->ignore) os << " (Disabled for " << wp->ignore << " hits)";
-            os << std::endl;
+
+        if (debugger.watchpoints.elements()) {
+
+            for (int i = 0; i < debugger.watchpoints.elements(); i++) {
+
+                auto wp = debugger.watchpoints.guardNr(i);
+                auto nr = "Watchpoint " + std::to_string(i);
+
+                os << util::tab(nr);
+                os << util::hex(wp->addr);
+                if (!wp->enabled) os << " (Disabled)";
+                else if (wp->ignore) os << " (Disabled for " << wp->ignore << " hits)";
+                os << std::endl;
+            }
+
+        } else {
+
+            os << "No watchpoints set" << std::endl;
         }
     }
     
     if (category == Category::Catchpoints) {
-        
-        for (int i = 0; i < debugger.catchpoints.elements(); i++) {
-            
-            auto wp = debugger.catchpoints.guardNr(i);
-            auto nr = "Catchpoint " + std::to_string(i);
 
-            os << util::tab(nr);
-            os << "Vector " << util::dec(wp->addr);
-            os << " (" << cpu.debugger.vectorName(u8(wp->addr)) << ")";
-            if (!wp->enabled) os << " (Disabled)";
-            else if (wp->ignore) os << " (Disabled for " << wp->ignore << " hits)";
-            os << std::endl;
+        if (debugger.catchpoints.elements()) {
+
+            for (int i = 0; i < debugger.catchpoints.elements(); i++) {
+
+                auto wp = debugger.catchpoints.guardNr(i);
+                auto nr = "Catchpoint " + std::to_string(i);
+
+                os << util::tab(nr);
+                os << "Vector " << util::dec(wp->addr);
+                os << " (" << cpu.debugger.vectorName(u8(wp->addr)) << ")";
+                if (!wp->enabled) os << " (Disabled)";
+                else if (wp->ignore) os << " (Disabled for " << wp->ignore << " hits)";
+                os << std::endl;
+            }
+
+        } else {
+
+            os << "No catchpoints set" << std::endl;
         }
     }
 
     if (category == Category::SwTraps) {
 
-        for (auto &trap : debugger.swTraps.traps) {
+        if (!debugger.swTraps.traps.empty()) {
 
-            os << util::tab("0x" + util::hexstr <4> (trap.first));
-            os << "Replaced by 0x" << util::hexstr <4> (trap.second.instruction);
-            os << std::endl;
+            for (auto &trap : debugger.swTraps.traps) {
+
+                os << util::tab("0x" + util::hexstr <4> (trap.first));
+                os << "Replaced by 0x" << util::hexstr <4> (trap.second.instruction);
+                os << std::endl;
+            }
+
+        } else {
+
+            os << "No software traps set" << std::endl;
         }
     }
 

@@ -51,11 +51,8 @@ Interpreter::initDebugShell(Command &root)
     // Breakpoints
 
     root.add({"break"},
-             "command", "Manages breakpoints");
-
-    root.add({"break", "info"},
-             "command", "Lists all breakpoints",
-             &RetroShell::exec <Token::bp, Token::info>, 0);
+             "command", "Manages breakpoints",
+             &RetroShell::exec <Token::bp>, 0);
 
     root.add({"break", "at"},
              "command", "Sets a breakpoint at the specified address",
@@ -80,11 +77,8 @@ Interpreter::initDebugShell(Command &root)
     // Watchpoints
 
     root.add({"watch"},
-             "command", "Manages watchpoints");
-
-    root.add({"watch", "info"},
-             "command", "Lists all watchpoints",
-             &RetroShell::exec <Token::wp, Token::info>, 0);
+             "command", "Manages watchpoints",
+             &RetroShell::exec <Token::wp>, 0);
 
     root.add({"watch", "at"},
              "command", "Sets a watchpoint at the specified address",
@@ -109,11 +103,8 @@ Interpreter::initDebugShell(Command &root)
     // Catchpoints
 
     root.add({"catch"},
-             "command", "Manages catchpoints");
-
-    root.add({"catch", "info"},
-             "command", "Lists all catchpoints",
-             &RetroShell::exec <Token::cp, Token::info>, 0);
+             "command", "Manages catchpoints",
+             &RetroShell::exec <Token::cp>, 0);
 
     root.add({"catch", "vector"},
              "command", "Catches an exception vector",
@@ -142,12 +133,6 @@ Interpreter::initDebugShell(Command &root)
     root.add({"catch", "ignore"},
              "command", "Ignores a catchpoint a certain number of times",
              &RetroShell::exec <Token::cp, Token::ignore>, 2);
-
-    // Software traps
-
-    root.add({"swtraps"},
-             "command", "Lists all software traps",
-             &RetroShell::exec <Token::swtraps>, 0);
 
 
     //

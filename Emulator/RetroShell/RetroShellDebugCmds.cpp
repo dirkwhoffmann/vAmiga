@@ -65,7 +65,7 @@ RetroShell::exec <Token::disassemble> (Arguments& argv, long param)
 }
 
 template <> void
-RetroShell::exec <Token::bp, Token::info> (Arguments& argv, long param)
+RetroShell::exec <Token::bp> (Arguments& argv, long param)
 {
     dump(amiga.cpu, Category::Breakpoints);
 }
@@ -101,7 +101,7 @@ RetroShell::exec <Token::bp, Token::ignore> (Arguments& argv, long param)
 }
 
 template <> void
-RetroShell::exec <Token::wp, Token::info> (Arguments& argv, long param)
+RetroShell::exec <Token::wp> (Arguments& argv, long param)
 {
     dump(amiga.cpu, Category::Watchpoints);
 }
@@ -137,7 +137,7 @@ RetroShell::exec <Token::wp, Token::ignore> (Arguments& argv, long param)
 }
 
 template <> void
-RetroShell::exec <Token::cp, Token::info> (Arguments& argv, long param)
+RetroShell::exec <Token::cp> (Arguments& argv, long param)
 {
     dump(amiga.cpu, Category::Catchpoints);
 }
@@ -188,18 +188,6 @@ template <> void
 RetroShell::exec <Token::cp, Token::ignore> (Arguments& argv, long param)
 {
     amiga.cpu.ignoreCatchpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
-}
-
-template <> void
-RetroShell::exec <Token::cp> (Arguments& argv, long param)
-{
-    amiga.cpu.ignoreCatchpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
-}
-
-template <> void
-RetroShell::exec <Token::swtraps> (Arguments &argv, long param)
-{
-    dump(amiga.cpu, Category::SwTraps);
 }
 
 
