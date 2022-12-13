@@ -20,28 +20,26 @@ typedef std::vector<string> Arguments;
 
 struct Command {
 
+    //Textual descriptions of all command groups
     static std::vector<string> groups;
 
-    // Pointer to the parent command
-    Command *parent = nullptr;
-    
-    // Command name (e.g., "eject")
-    string token;
+    // Name of this command (e.g., "eject")
+    string name;
 
-    // Full command name (e.g., "df0 eject")
-    string tokenList;
+    // Full name of this command (e.g., "df0 eject")
+    string fullName;
 
-    // The command group this command belongs to
+    // Command group of this command
     isize group;
 
-    // A string describing the token type (DEPRECATED)
-    string type;
+    // String describing the token type (DEPRECATED)
+    // string type;
     
-    // The help string for this command
+    // Help string
     string info;
     
-    // The sub commands of this command
-    std::vector<Command> args;
+    // Sub commands
+    std::vector<Command> subCommands;
     
     // Command handler
     void (RetroShell::*action)(Arguments&, long) = nullptr;
@@ -50,7 +48,7 @@ struct Command {
     isize minArgs = 0;
     isize maxArgs = 0;
     
-    // An additional paramter passed to the command handler
+    // Additional paramter passed to the command handler
     long param = 0;
     
     // Indicates if this command appears in the help descriptions
@@ -84,12 +82,8 @@ struct Command {
     // Seeks a command object inside the command object tree
     Command *seek(const string& token);
     Command *seek(const std::vector<string> &tokens);
-    
-    // Collects the type descriptions in the args vector
-    std::vector<string> types() const;
-    
+        
     // Filters the argument list
-    std::vector<const Command *> filterType(const string& type) const;
     std::vector<const Command *> filterPrefix(const string& prefix) const;
 
     // Automatically completes a partial token string

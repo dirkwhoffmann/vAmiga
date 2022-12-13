@@ -54,18 +54,15 @@ Command::add(const std::vector<string> &tokens,
     Command *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() - 1 });
     assert(cmd != nullptr);
 
-    // EXPERIMENTAL
-    if (tokens.back() == "") {
-        cmd->action = action;
-    }
+    // Install the action handler in the parent node if this is no sub-command
+    if (tokens.back() == "") cmd->action = action;
 
     // Create the instruction
     Command d;
-    d.parent = this;
-    d.token = tokens.back();
-    d.tokenList = (cmd->tokenList.empty() ? "" : cmd->tokenList + " ") + tokens.back();
+    d.name = tokens.back();
+    d.fullName = (cmd->fullName.empty() ? "" : cmd->fullName + " ") + tokens.back();
     d.group = groups.size() - 1;
-    d.type = type;
+    // d.type = type;
     d.info = help;
     d.action = action;
     d.minArgs = numArgs.first;
@@ -73,22 +70,22 @@ Command::add(const std::vector<string> &tokens,
     d.param = param;
     
     // Register the instruction
-    cmd->args.push_back(d);
+    cmd->subCommands.push_back(d);
 }
 
 void
 Command::remove(const string& token)
 {
-    for(auto it = std::begin(args); it != std::end(args); ++it) {
-        if (it->token == token) { args.erase(it); return; }
+    for(auto it = std::begin(subCommands); it != std::end(subCommands); ++it) {
+        if (it->name == token) { subCommands.erase(it); return; }
     }
 }
 
 Command *
 Command::seek(const string& token)
 {
-    for (auto &it : args) {
-        if (it.token == token) return &it;
+    for (auto &it : subCommands) {
+        if (it.name == token) return &it;
     }
     return nullptr;
 }
@@ -105,46 +102,15 @@ Command::seek(const std::vector<string> &tokens)
     return result;
 }
 
-std::vector<string>
-Command::types() const
-{
-    std::vector<string> result;
-    
-    for (auto &it : args) {
-        
-        if (it.hidden) continue;
-        
-        if (std::find(result.begin(), result.end(), it.type) == result.end()) {
-            result.push_back(it.type);
-        }
-    }
-    
-    return result;
-}
-
-std::vector<const Command *>
-Command::filterType(const string& type) const
-{
-    std::vector<const Command *> result;
-    
-    for (auto &it : args) {
-        
-        if (it.hidden) continue;
-        if (it.type == type) result.push_back(&it);
-    }
-    
-    return result;
-}
-
 std::vector<const Command *>
 Command::filterPrefix(const string& prefix) const
 {
     std::vector<const Command *> result;
     
-    for (auto &it : args) {
+    for (auto &it : subCommands) {
         
         if (it.hidden) continue;
-        if (it.token.substr(0, prefix.size()) == prefix) result.push_back(&it);
+        if (it.name.substr(0, prefix.size()) == prefix) result.push_back(&it);
     }
 
     return result;
@@ -159,14 +125,14 @@ Command::autoComplete(const string& token)
     if (!matches.empty()) {
         
         const Command *first = matches.front();
-        for (auto i = token.size(); i < first->token.size(); i++) {
+        for (auto i = token.size(); i < first->name.size(); i++) {
             
             for (auto m: matches) {
-                if (m->token.size() <= i || m->token[i] != first->token[i]) {
+                if (m->name.size() <= i || m->name[i] != first->name[i]) {
                     return result;
                 }
             }
-            result += first->token[i];
+            result += first->name[i];
         }
     }
     return result;
@@ -177,7 +143,7 @@ Command::usage() const
 {
     string arguments;
 
-    if (args.empty()) {
+    if (subCommands.empty()) {
 
         arguments = minArgs == 0 ? "" : minArgs == 1 ? "<value>" : "<values>";
         if (maxArgs - minArgs == 1) arguments += " [ <value> ]";
@@ -189,7 +155,7 @@ Command::usage() const
         arguments = action ? "[ <command> ]" : "<command>";
     }
 
-    return tokenList + " " + arguments;
+    return fullName + " " + arguments;
 }
 
 }

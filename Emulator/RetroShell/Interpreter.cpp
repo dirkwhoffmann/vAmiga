@@ -164,13 +164,13 @@ Interpreter::exec(const Arguments &argv, bool verbose)
         throw util::ParseError(args.front());
     }
     if (current->action == nullptr && args.empty()) {
-        throw TooFewArgumentsError(current->tokenList);
+        throw TooFewArgumentsError(current->fullName);
     }
     
     // Check the argument count
     printf("current = %p\n", (void *)current); 
-    if ((isize)args.size() < current->minArgs) throw TooFewArgumentsError(current->tokenList);
-    if ((isize)args.size() > current->maxArgs) throw TooManyArgumentsError(current->tokenList);
+    if ((isize)args.size() < current->minArgs) throw TooFewArgumentsError(current->fullName);
+    if ((isize)args.size() > current->maxArgs) throw TooManyArgumentsError(current->fullName);
     
     // Call the command handler
     (retroShell.*(current->action))(args, current->param);
@@ -218,20 +218,17 @@ Interpreter::help(const Command& current)
     // Print the usage string
     usage(current);
     
-    // Collect all argument types
-    auto types = current.types();
-
     // Determine tabular positions to align the output
     isize tab = 0;
-    for (auto &it : current.args) {
-        tab = std::max(tab, (isize)it.tokenList.length());
+    for (auto &it : current.subCommands) {
+        tab = std::max(tab, (isize)it.fullName.length());
         // tab = std::max(tab, 2 + (isize)it.type.length());
     }
     tab += indent.size();
 
     isize group = -1;
 
-    for (auto &it : current.args) {
+    for (auto &it : current.subCommands) {
 
         // Only proceed if the command is visible
         if (it.hidden) continue;
@@ -250,7 +247,7 @@ Interpreter::help(const Command& current)
         // Print command descriptioon
         // string name = token + " " + it.token;
         retroShell << indent;
-        retroShell << it.tokenList;
+        retroShell << it.fullName;
         retroShell.tab(tab);
         retroShell << " : ";
         retroShell << it.info;
