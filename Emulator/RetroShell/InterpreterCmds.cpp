@@ -58,20 +58,12 @@ Interpreter::initCommandShell(Command &root)
 {
     initCommons(root);
 
-    //
-    // General
-    //
-
-    root.add({"."},
-             "command", "Enters the debugger",
-             &RetroShell::exec <Token::debug>, 0);
-
 
     //
     // Regression testing
     //
 
-    root.addGroup("Miscellaneous");
+    root.addGroup("Regression testing");
 
     root.add({"regression"},
              "component", "");
@@ -108,7 +100,9 @@ Interpreter::initCommandShell(Command &root)
     //
     // Amiga
     //
-    
+
+    root.addGroup("Controlling components...");
+
     root.add({"amiga"},
              "component", "The virtual Amiga");
 
@@ -153,41 +147,15 @@ Interpreter::initCommandShell(Command &root)
              "state", "Switches the Amiga off",
              &RetroShell::exec <Token::amiga, Token::power, Token::off>, 0);
 
-    root.add({"amiga", "debug"},
-             "command", "Switches debug mode on or off");
-    
-    root.add({"amiga", "debug", "on"},
-             "state", "Switches debug mode on",
-             &RetroShell::exec <Token::amiga, Token::debug, Token::on>, 0);
-
-    root.add({"amiga", "debug", "off"},
-             "state", "Switches debug mode off",
-             &RetroShell::exec <Token::amiga, Token::debug, Token::off>, 0);
-
-    root.add({"amiga", "run"},
-             "command", "Starts the emulator thread",
-             &RetroShell::exec <Token::amiga, Token::run>, 0);
-    
-    root.add({"amiga", "pause"},
-             "command", "Halts the emulator thread",
-             &RetroShell::exec <Token::amiga, Token::pause>, 0);
-    
     root.add({"amiga", "reset"},
              "command", "Performs a hard reset",
              &RetroShell::exec <Token::amiga, Token::reset>, 0);
-    
-    root.add({"amiga", "inspect"},
-             "command", "Displays the component state");
 
-    root.add({"amiga", "inspect", "state"},
-             "command", "Displays the current state",
-             &RetroShell::exec <Token::amiga, Token::inspect, Token::state>, 0);
-
-    root.add({"amiga", "inspect", "defaults"},
+    root.add({"amiga", "defaults"},
              "command", "Displays the user defaults storage",
-             &RetroShell::exec <Token::amiga, Token::inspect, Token::defaults>, 0);
-    
-    
+             &RetroShell::exec <Token::amiga, Token::defaults>, 0);
+
+
     //
     // Memory
     //
@@ -249,21 +217,6 @@ Interpreter::initCommandShell(Command &root)
              "command", "Installs a Rom extension",
              &RetroShell::exec <Token::memory, Token::load, Token::extrom>, 1);
 
-    root.add({"memory", "inspect"},
-             "command", "Displays the component state");
-
-    root.add({"memory", "inspect", "state"},
-             "command", "Displays the current state",
-             &RetroShell::exec <Token::memory, Token::inspect, Token::state>, 0);
-
-    root.add({"memory", "inspect", "bankmap"},
-             "command", "Displays the bank map",
-             &RetroShell::exec <Token::memory, Token::inspect, Token::bankmap>, 0);
-
-    root.add({"memory", "inspect", "checksum"},
-             "command", "Computes memory checksums",
-             &RetroShell::exec <Token::memory, Token::inspect, Token::checksums>, 0);
-
     
     //
     // CPU
@@ -291,19 +244,8 @@ Interpreter::initCommandShell(Command &root)
              "key", "Selects the reset value of data and address registers",
              &RetroShell::exec <Token::cpu, Token::set, Token::regreset>, 1);
 
-    root.add({"cpu", "inspect"},
-             "command", "Displays the component state");
-
-    root.add({"cpu", "inspect", "state"},
-             "command", "Displays the current state",
-             &RetroShell::exec <Token::cpu, Token::inspect, Token::state>, 0);
-
-    root.add({"cpu", "inspect", "registers"},
-             "command", "Displays the current register values",
-             &RetroShell::exec <Token::cpu, Token::inspect, Token::registers>, 0);
-    
     root.add({"cpu", "callstack" },
-             "command", "Prints recorded subroutine calls",
+             "command", "Prints recorded subroutine calls (DEPRECATED)",
              &RetroShell::exec <Token::cpu, Token::callstack>, 0);
 
     //
@@ -364,7 +306,8 @@ Interpreter::initCommandShell(Command &root)
         root.add({cia, "set", "esync"},
                  "key", "Turns E-clock syncing on or off",
                  &RetroShell::exec <Token::cia, Token::set, Token::esync>, 1, i);
-        
+
+        /*
         root.add({cia, "inspect"},
                  "command", "Displays the component state", 0, i);
         
@@ -379,6 +322,7 @@ Interpreter::initCommandShell(Command &root)
         root.add({cia, "inspect", "tod"},
                  "category", "Displays the state of the 24-bit counter",
                  &RetroShell::exec <Token::cia, Token::inspect, Token::tod>, 0, i);
+         */
     }
     
     
@@ -408,6 +352,7 @@ Interpreter::initCommandShell(Command &root)
              "key", "Emulate dropped register writes",
              &RetroShell::exec <Token::agnus, Token::set, Token::ptrdrops>, 1);
 
+    /*
     root.add({"agnus", "inspect"},
              "command", "Displays the internal state");
 
@@ -430,7 +375,8 @@ Interpreter::initCommandShell(Command &root)
     root.add({"agnus", "inspect", "events"},
              "category", "Displays all scheduled events",
              &RetroShell::exec <Token::agnus, Token::inspect, Token::events>, 0);
-    
+    */
+
     
     //
     // Blitter
@@ -450,6 +396,7 @@ Interpreter::initCommandShell(Command &root)
              "level", "Selects the emulation accuracy level",
              &RetroShell::exec <Token::blitter, Token::set, Token::accuracy>, 1);
 
+    /*
     root.add({"blitter", "inspect"},
              "command", "Displays the internal state");
 
@@ -460,15 +407,17 @@ Interpreter::initCommandShell(Command &root)
     root.add({"blitter", "inspect", "registers"},
              "category", "Displays the current register value",
              &RetroShell::exec <Token::blitter, Token::inspect, Token::registers>, 0);
+    */
 
-    
+
     //
     // Copper
     //
     
     root.add({"copper"},
              "component", "Custom Chip (Agnus)");
-    
+
+    /*
     root.add({"copper", "inspect"},
              "command", "Displays the internal state");
 
@@ -483,6 +432,7 @@ Interpreter::initCommandShell(Command &root)
     root.add({"copper", "list"},
              "command", "Disassembles a Copper list",
              &RetroShell::exec <Token::copper, Token::list>, 1);
+    */
 
     root.add({"copper", "break"},
              "command", "Manages breakpoints");

@@ -157,7 +157,7 @@ Interpreter::initDebugShell(Command &root)
     root.addGroup("Exploring components...");
 
     root.add({"amiga"},
-             "component", "Amiga",
+             "component", "The virtual Amiga",
              &RetroShell::exec <Token::amiga>, 0);
 
     root.add({"memory"},
@@ -170,16 +170,14 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"memory", "banks"},
              "command", "Dumps the memory bank map",
-             &RetroShell::exec <Token::memory, Token::bankmap>, 1);
+             &RetroShell::exec <Token::memory, Token::bankmap>, 0);
 
-    /*
-    root.add({"memory", "write"},
-             "command", "Writes a word into memory",
-             &RetroShell::exec <Token::memory, Token::bankmap>, 2);
-    */
+    root.add({"memory", "checksum"},
+             "command", "Computes memory checksums",
+             &RetroShell::exec <Token::memory, Token::checksums>, 0);
 
     root.add({"cpu"},
-             "component", "Centeral Processing Unit",
+             "component", "Motorola 68k CPU",
              &RetroShell::exec <Token::cpu>, 0);
 
     root.add({"cpu", "state"},
@@ -190,21 +188,30 @@ Interpreter::initDebugShell(Command &root)
              "component", "Dumps the vector table",
              &RetroShell::exec <Token::cpu, Token::vectors>, 0);
 
+    //
+    // CIA
+    //
+
     root.add({"ciaa"},
              "component", "Complex Interface Adapter A",
-             &RetroShell::exec <Token::ciaa>, 0);
-
-    root.add({"ciaa", "state"},
-             "component", "Inspects the internal state",
-             &RetroShell::exec <Token::ciaa, Token::state>, 0);
+             &RetroShell::exec <Token::cia>, 0, 0);
 
     root.add({"ciab"},
              "component", "Complex Interface Adapter B",
-             &RetroShell::exec <Token::ciab>, 0);
+             &RetroShell::exec <Token::cia>, 0, 1);
 
-    root.add({"ciab", "state"},
-             "component", "Inspects the internal state",
-             &RetroShell::exec <Token::ciab, Token::state>, 0);
+    for (isize i = 0; i < 2; i++) {
+
+        string cia = (i == 0) ? "ciaa" : "ciab";
+
+        root.add({cia, "state"},
+                 "component", "Displays the internal state",
+                 &RetroShell::exec <Token::cia>, 0, i);
+
+        root.add({cia, "tod"},
+                 "category", "Displays the state of the 24-bit counter",
+                 &RetroShell::exec <Token::cia, Token::tod>, 0, i);
+    }
 
     root.add({"agnus"},
              "component", "Custom Chipset",
@@ -213,6 +220,10 @@ Interpreter::initDebugShell(Command &root)
     root.add({"agnus", "state"},
              "component", "Inspects the internal state",
              &RetroShell::exec <Token::agnus, Token::state>, 0);
+
+    root.add({"agnus", "beam"},
+             "category", "Displays the current beam position",
+             &RetroShell::exec <Token::agnus, Token::beam>, 0);
 
     root.add({"agnus", "dma"},
              "component", "Prints all scheduled DMA events",
@@ -237,6 +248,10 @@ Interpreter::initDebugShell(Command &root)
     root.add({"copper", "state"},
              "component", "Inspects the internal state",
              &RetroShell::exec <Token::copper, Token::state>, 0);
+
+    root.add({"copper", "list"},
+             "component", "Inspects the internal state",
+             &RetroShell::exec <Token::copper, Token::list>, 0);
 
     root.add({"paula"},
              "component", "Custom Chipset",

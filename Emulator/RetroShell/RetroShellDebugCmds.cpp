@@ -26,25 +26,25 @@ namespace vamiga {
 template <> void
 RetroShell::exec <Token::pause> (Arguments& argv, long param)
 {
-    *this << "TODO" << '\n';
+    amiga.pause();
 }
 
 template <> void
 RetroShell::exec <Token::run> (Arguments& argv, long param)
 {
-    *this << "TODO" << '\n';
+    amiga.run();
 }
 
 template <> void
 RetroShell::exec <Token::step> (Arguments& argv, long param)
 {
-    *this << "TODO" << '\n';
+    amiga.stepInto();
 }
 
 template <> void
 RetroShell::exec <Token::next> (Arguments& argv, long param)
 {
-    *this << "TODO" << '\n';
+    amiga.stepOver();
 }
 
 template <> void
@@ -238,13 +238,13 @@ RetroShell::exec <Token::memory, Token::memdump> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::memory, Token::bankmap> (Arguments& argv, long param)
 {
-    *this << "TODO" << '\n';
+    dump(amiga, Category::BankMap);
 }
 
 template <> void
-RetroShell::exec <Token::memory, Token::write> (Arguments& argv, long param)
+RetroShell::exec <Token::memory, Token::checksums> (Arguments& argv, long param)
 {
-    *this << "TODO" << '\n';
+    dump(amiga.mem, Category::Checksums);
 }
 
 template <> void
@@ -262,31 +262,37 @@ RetroShell::exec <Token::cpu, Token::state> (Arguments &argv, long param)
 template <> void
 RetroShell::exec <Token::cpu, Token::vectors> (Arguments& argv, long param)
 {
-    *this << "TODO" << '\n';
+    dump(cpu, Category::Vectors);
 }
 
 template <> void
-RetroShell::exec <Token::ciaa> (Arguments &argv, long param)
+RetroShell::exec <Token::cia> (Arguments &argv, long param)
 {
-    dump(ciaa, Category::Info);
+    if (param == 0) {
+        dump(ciaa, Category::Info);
+    } else {
+        dump(ciab, Category::Info);
+    }
 }
 
 template <> void
-RetroShell::exec <Token::ciaa, Token::state> (Arguments &argv, long param)
+RetroShell::exec <Token::cia, Token::state> (Arguments &argv, long param)
 {
-    dump(ciaa, Category::State);
+    if (param == 0) {
+        dump(ciaa, Category::State);
+    } else {
+        dump(ciab, Category::State);
+    }
 }
 
 template <> void
-RetroShell::exec <Token::ciab> (Arguments &argv, long param)
+RetroShell::exec <Token::cia, Token::tod> (Arguments &argv, long param)
 {
-    dump(ciab, Category::Info);
-}
-
-template <> void
-RetroShell::exec <Token::ciab, Token::state> (Arguments &argv, long param)
-{
-    dump(ciab, Category::State);
+    if (param == 0) {
+        dump(ciaa, Category::Tod);
+    } else {
+        dump(ciab, Category::Tod);
+    }
 }
 
 template <> void
@@ -302,39 +308,57 @@ RetroShell::exec <Token::agnus, Token::state> (Arguments &argv, long param)
 }
 
 template <> void
+RetroShell::exec <Token::agnus, Token::beam> (Arguments &argv, long param)
+{
+    dump(amiga.agnus, Category::Beam);
+}
+
+template <> void
 RetroShell::exec <Token::agnus, Token::dma> (Arguments &argv, long param)
 {
-    assert(false);
+    dump(amiga.agnus, Category::Dma);
 }
 
 template <> void
 RetroShell::exec <Token::agnus, Token::events> (Arguments &argv, long param)
 {
-    assert(false);
+    dump(amiga.agnus, Category::Events);
 }
 
 template <> void
 RetroShell::exec <Token::blitter> (Arguments &argv, long param)
 {
-    assert(false);
+    dump(amiga.agnus.blitter, Category::Info);
 }
 
 template <> void
 RetroShell::exec <Token::blitter, Token::state> (Arguments &argv, long param)
 {
-    assert(false);
+    dump(amiga.agnus.blitter, Category::State);
 }
 
 template <> void
 RetroShell::exec <Token::copper> (Arguments &argv, long param)
 {
-    assert(false);
+    dump(amiga.agnus.copper, Category::Info);
 }
 
 template <> void
 RetroShell::exec <Token::copper, Token::state> (Arguments &argv, long param)
 {
-    assert(false);
+    dump(amiga.agnus.copper, Category::State);
+}
+
+template <> void
+RetroShell::exec <Token::copper, Token::list> (Arguments& argv, long param)
+{
+    auto value = util::parseNum(argv.front());
+
+    switch (value) {
+        case 1: dump(amiga.agnus.copper, Category::List1); break;
+        case 2: dump(amiga.agnus.copper, Category::List2); break;
+        default: throw VAError(ERROR_OPT_INVARG, "1 or 2");
+    }
 }
 
 template <> void
