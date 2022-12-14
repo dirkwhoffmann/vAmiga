@@ -1428,6 +1428,12 @@ RetroShell::exec <Token::zorro, Token::inspect> (Arguments& argv, long param)
 //
 
 template <> void
+RetroShell::exec <Token::server> (Arguments& argv, long param)
+{
+    dump(remoteManager, Category::Status);
+}
+
+template <> void
 RetroShell::exec <Token::server, Token::serial, Token::set, Token::port> (Arguments& argv, long param)
 {
     remoteManager.serServer.setConfigItem(OPT_SRV_PORT, util::parseNum(argv.front()));
@@ -1527,12 +1533,6 @@ template <> void
 RetroShell::exec <Token::server, Token::gdb, Token::inspect> (Arguments& argv, long param)
 {
     dump(remoteManager.gdbServer, Category::State);
-}
-
-template <> void
-RetroShell::exec <Token::server, Token::list> (Arguments& argv, long param)
-{
-    dump(remoteManager, Category::State);
 }
 
 }

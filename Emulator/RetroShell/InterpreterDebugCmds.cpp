@@ -19,10 +19,10 @@ Interpreter::initDebugShell(Command &root)
     initCommons(root);
 
     //
-    // Instruction Stream
+    // Top-level commands
     //
 
-    root.addGroup("Managing the instruction stream...");
+    root.newGroup("Controlling the instruction stream");
 
     root.add({"pause"},
              "Pauses emulation",
@@ -48,12 +48,60 @@ Interpreter::initDebugShell(Command &root)
              "Runs disassembler",
              &RetroShell::exec <Token::disassemble>, 1);
 
-    // Breakpoints
 
-    root.addGroup("");
+    root.newGroup("Guarding the program execution");
 
     root.add({"break"},
              "Manages breakpoints");
+
+    root.add({"watch"},
+             "Manages watchpoints");
+
+    root.add({"catch"},
+             "Manages catchpoints");
+
+
+    root.newGroup("Exploring components");
+
+    root.add({"amiga"},
+             "Main computer");
+
+    root.add({"memory"},
+             "RAM and ROM");
+
+    root.add({"cpu"},
+             "Motorola 68k CPU");
+
+    root.add({"ciaa"},
+             "Complex Interface Adapter A");
+
+    root.add({"ciab"},
+             "Complex Interface Adapter B");
+
+    root.add({"agnus"},
+             "Custom Chipset");
+
+    root.add({"blitter"},
+             "Coprocessor");
+
+    root.add({"copper"},
+             "Coprocessor");
+
+    root.add({"paula"},
+             "Custom Chipset");
+
+    root.add({"denise"},
+             "Custom Chipset");
+
+    root.add({"os"},
+             "AmigaOS debugger");
+
+    
+    //
+    // Breakpoints
+    //
+
+    root.newGroup("");
 
     root.add({"break", ""},
              "Lists all breakpoints",
@@ -79,10 +127,11 @@ Interpreter::initDebugShell(Command &root)
              "Ignores a breakpoint a certain number of times",
              &RetroShell::exec <Token::bp, Token::ignore>, 2);
 
+    //
     // Watchpoints
+    //
 
-    root.add({"watch"},
-             "Manages watchpoints");
+    root.newGroup("");
 
     root.add({"watch", ""},
              "Lists all watchpoints",
@@ -108,10 +157,11 @@ Interpreter::initDebugShell(Command &root)
              "Ignores a watchpoint a certain number of times",
              &RetroShell::exec <Token::wp, Token::ignore>, 2);
 
+    //
     // Catchpoints
+    //
 
-    root.add({"catch"},
-             "Manages catchpoints");
+    root.newGroup("");
 
     root.add({"catch", ""},
              "Lists all catchpoints",
@@ -150,14 +200,11 @@ Interpreter::initDebugShell(Command &root)
     // Components
     //
 
-    root.addGroup("Exploring components...");
+    root.newGroup("");
 
-    root.add({"amiga"},
-             "The virtual Amiga",
+    root.add({"amiga", ""},
+             "Lorem ipsum",
              &RetroShell::exec <Token::amiga>, 0);
-
-    root.add({"memory"},
-             "RAM and ROM");
 
     root.add({"memory", ""},
              "Lorem ipsum",
@@ -175,8 +222,8 @@ Interpreter::initDebugShell(Command &root)
              "Computes memory checksums",
              &RetroShell::exec <Token::memory, Token::checksums>, 0);
 
-    root.add({"cpu"},
-             "Motorola 68k CPU",
+    root.add({"cpu", ""},
+             "Lorem ipsum",
              &RetroShell::exec <Token::cpu>, 0);
 
     root.add({"cpu", "state"},
@@ -187,33 +234,25 @@ Interpreter::initDebugShell(Command &root)
              "Dumps the vector table",
              &RetroShell::exec <Token::cpu, Token::vectors>, 0);
 
-    //
-    // CIA
-    //
-
-    root.add({"ciaa"},
-             "Complex Interface Adapter A",
-             &RetroShell::exec <Token::cia>, 0, 0);
-
-    root.add({"ciab"},
-             "Complex Interface Adapter B",
-             &RetroShell::exec <Token::cia>, 0, 1);
-
     for (isize i = 0; i < 2; i++) {
 
         string cia = (i == 0) ? "ciaa" : "ciab";
 
-        root.add({cia, "state"},
+        root.add({cia, ""},
                  "Displays the internal state",
                  &RetroShell::exec <Token::cia>, 0, i);
+
+        root.add({cia, "state"},
+                 "Displays the internal state",
+                 &RetroShell::exec <Token::cia, Token::state>, 0, i);
 
         root.add({cia, "tod"},
                  "Displays the state of the 24-bit counter",
                  &RetroShell::exec <Token::cia, Token::tod>, 0, i);
     }
 
-    root.add({"agnus"},
-             "Custom Chipset",
+    root.add({"agnus", ""},
+             "Lorem ipsum",
              &RetroShell::exec <Token::agnus>, 0);
 
     root.add({"agnus", "state"},
@@ -232,16 +271,16 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the event scheduler",
              &RetroShell::exec <Token::agnus, Token::events>, 0);
 
-    root.add({"blitter"},
-             "Custom Chipset",
+    root.add({"blitter", ""},
+             "Lorem ipsum",
              &RetroShell::exec <Token::blitter>, 0);
 
     root.add({"blitter", "state"},
              "Inspects the internal state",
              &RetroShell::exec <Token::blitter, Token::state>, 0);
 
-    root.add({"copper"},
-             "Custom Chipset",
+    root.add({"copper", ""},
+             "Lorem ipsum",
              &RetroShell::exec <Token::copper>, 0);
 
     root.add({"copper", "state"},
@@ -252,7 +291,7 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              &RetroShell::exec <Token::copper, Token::list>, 0);
 
-    root.add({"paula"},
+    root.add({"paula", ""},
              "Custom Chipset",
              &RetroShell::exec <Token::paula>, 0);
 
@@ -260,18 +299,13 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              &RetroShell::exec <Token::paula, Token::state>, 0);
 
-    root.add({"denise"},
-             "Custom Chipset",
+    root.add({"denise", ""},
+             "Lorem ipsum",
              &RetroShell::exec <Token::denise>, 0);
 
     root.add({"denise", "state"},
              "Inspects the internal state",
              &RetroShell::exec <Token::denise, Token::state>, 0);
-
-    // OS Debugger
-
-    root.add({"os"},
-             "AmigaOS debugger");
 
     root.add({"os", "info"},
              "Displays basic system information",

@@ -23,39 +23,41 @@ struct Command {
     //Textual descriptions of all command groups
     static std::vector<string> groups;
 
+    // Command group of this command
+    isize group;
+
     // Name of this command (e.g., "eject")
     string name;
 
     // Full name of this command (e.g., "df0 eject")
     string fullName;
 
-    // Command group of this command
-    isize group;
-
-    // String describing the token type (DEPRECATED)
-    // string type;
-    
     // Help string
-    string info;
+    string help;
     
-    // Sub commands
+    // List of sub-commands
     std::vector<Command> subCommands;
     
     // Command handler
     void (RetroShell::*action)(Arguments&, long) = nullptr;
     
-    // Minimum and maximum number of arguments expected by the command handler
+    // Minimum and maximum number of arguments accepted by the command handler
     isize minArgs = 0;
     isize maxArgs = 0;
     
-    // Additional paramter passed to the command handler
+    // Additional parameter passed to the command handler
     long param = 0;
     
     // Indicates if this command appears in the help descriptions
     bool hidden = false;
 
+    
+    //
+    // Methods
+    //
+
     // Creates a new command group
-    void addGroup(const string &description);
+    void newGroup(const string &description, const string &postfix = ":");
 
     // Creates a new node in the command tree
     void add(const std::vector<string> &tokens,

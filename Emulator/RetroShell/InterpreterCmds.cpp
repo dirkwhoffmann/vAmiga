@@ -20,7 +20,7 @@ Interpreter::initCommons(Command &root)
     // Common commands
     //
 
-    root.addGroup("Controlling the shell...");
+    root.newGroup("Controlling the shell");
 
     root.add({"clear"},
              "Clears the console window",
@@ -58,16 +58,141 @@ Interpreter::initCommandShell(Command &root)
 {
     initCommons(root);
 
+    //
+    // Top-level commands
+    //
+
+    root.newGroup("Regression testing");
+
+    root.add({"regression"},
+             "Runs the regression tester");
+    root.seek("regression")->hidden = true;
+
+
+    root.newGroup("Managing components");
+
+    root.add({"amiga"},
+             "The virtual Amiga");
+
+    root.add({"memory"},
+             "Ram and Rom");
+
+    root.add({"cpu"},
+             "Motorola 68k CPU");
+
+    root.add({"ciaa"},
+             "Complex Interface Adapter A");
+
+    root.add({"ciab"},
+             "Complex Interface Adapter B");
+
+    root.add({"agnus"},
+             "Custom chip");
+
+    root.add({"blitter"},
+             "Coprocessor");
+
+    root.add({"copper"},
+             "Coprocessor");
+
+    /*
+    root.add({"paula"},
+             "Custom chip");
+    */
+
+    root.add({"denise"},
+             "Custom chip");
+
+    root.add({"diskcontroller"},
+             "Disk Controller");
+
+    root.add({"rtc"},
+             "Real-time clock");
+
+    root.add({"controlport1"},
+             "Control port 1");
+
+    root.add({"controlport2"},
+             "Control port 2");
+
+    root.add({"serial"},
+             "Serial port");
+
+    root.add({"zorro"},
+             "Expansion boards");
+
+    root.add({"dmadebugger"},
+             "DMA Debugger");
+
+
+    root.newGroup("Managing peripherals");
+
+    root.add({"keyboard"},
+             "Keyboard");
+
+    root.add({"mouse1"},
+             "Port 1 mouse");
+
+    root.add({"mouse2"},
+             "Port 2 mouse");
+
+    root.add({"joystick1"},
+             "Port 1 joystick");
+
+    root.add({"joystick2"},
+             "Port 2 joystick");
+
+    root.add({"df0"},
+             "Floppy drive 0");
+
+    root.add({"df1"},
+             "Floppy drive 1");
+
+    root.add({"df2"},
+             "Floppy drive 2");
+
+    root.add({"df3"},
+             "Floppy drive 3");
+
+    root.add({"dfn"},
+             "All connected drives");
+
+    root.add({"hd0"},
+             "Hard drive 0");
+
+    root.add({"hd1"},
+             "Hard drive 1");
+
+    root.add({"hd2"},
+             "Hard drive 2");
+
+    root.add({"hd3"},
+             "Hard drive 3");
+
+    root.add({"hdn"},
+             "All connected hard drives");
+
+
+    root.newGroup("Configuring audio and video");
+
+    root.add({"monitor"},
+             "Amiga monitor");
+
+    root.add({"audio"},
+             "Audio Unit (Paula)");
+
+
+    root.newGroup("Miscellaneous");
+
+    root.add({"server"},
+             "Remote connections");
+
 
     //
     // Regression testing
     //
 
-    root.addGroup("Regression testing");
-
-    root.add({"regression"},
-             "");
-    root.seek("regression")->hidden = true;
+    root.newGroup("");
 
     root.add({"regression", "setup"},
              "Initializes the test environment",
@@ -101,12 +226,9 @@ Interpreter::initCommandShell(Command &root)
     // Amiga
     //
 
-    root.addGroup("Controlling components...");
+    root.newGroup("");
 
-    root.add({"amiga"},
-             "The virtual Amiga");
-
-    root.add({"amiga", "config"},
+    root.add({"amiga", ""},
              "Displays the current configuration",
              &RetroShell::exec <Token::amiga, Token::config>, 0);
 
@@ -159,11 +281,10 @@ Interpreter::initCommandShell(Command &root)
     //
     // Memory
     //
-    
-    root.add({"memory"},
-             "Ram and Rom");
-    
-    root.add({"memory", "config"},
+
+    root.newGroup("");
+
+    root.add({"memory", ""},
              "Displays the current configuration",
              &RetroShell::exec <Token::memory, Token::config>, 0);
 
@@ -221,11 +342,10 @@ Interpreter::initCommandShell(Command &root)
     //
     // CPU
     //
-    
-    root.add({"cpu"},
-             "Motorola 68k CPU");
-    
-    root.add({"cpu", "config"},
+
+    root.newGroup("");
+
+    root.add({"cpu", ""},
              "Displays the current configuration",
              &RetroShell::exec <Token::cpu, Token::config>, 0);
 
@@ -277,18 +397,14 @@ Interpreter::initCommandShell(Command &root)
     //
     // CIA
     //
-    
-    root.add({"ciaa"},
-             "Complex Interface Adapter A");
 
-    root.add({"ciab"},
-             "Complex Interface Adapter B");
+    root.newGroup("");
 
     for (isize i = 0; i < 2; i++) {
         
         string cia = (i == 0) ? "ciaa" : "ciab";
         
-        root.add({cia, "config"},
+        root.add({cia, ""},
                  "Displays the current configuration",
                  &RetroShell::exec <Token::cia, Token::config>, 0, i);
         
@@ -306,23 +422,6 @@ Interpreter::initCommandShell(Command &root)
         root.add({cia, "set", "esync"},
                  "Turns E-clock syncing on or off",
                  &RetroShell::exec <Token::cia, Token::set, Token::esync>, 1, i);
-
-        /*
-        root.add({cia, "inspect"},
-                 "Displays the component state", 0, i);
-        
-        root.add({cia, "inspect", "state"},
-                 "Displays the current state",
-                 &RetroShell::exec <Token::cia, Token::inspect, Token::state>, 0, i);
-        
-        root.add({cia, "inspect", "registers"},
-                 "Displays the current register values",
-                 &RetroShell::exec <Token::cia, Token::inspect, Token::registers>, 0, i);
-        
-        root.add({cia, "inspect", "tod"},
-                 "Displays the state of the 24-bit counter",
-                 &RetroShell::exec <Token::cia, Token::inspect, Token::tod>, 0, i);
-         */
     }
     
     
@@ -330,10 +429,9 @@ Interpreter::initCommandShell(Command &root)
     // Agnus
     //
 
-    root.add({"agnus"},
-             "Custom chip");
+    root.newGroup("");
 
-    root.add({"agnus", "config"},
+    root.add({"agnus", ""},
              "Displays the current configuration",
              &RetroShell::exec <Token::agnus, Token::config>, 0);
     
@@ -352,40 +450,14 @@ Interpreter::initCommandShell(Command &root)
              "Emulate dropped register writes",
              &RetroShell::exec <Token::agnus, Token::set, Token::ptrdrops>, 1);
 
-    /*
-    root.add({"agnus", "inspect"},
-             "Displays the internal state");
-
-    root.add({"agnus", "inspect", "state"},
-             "Displays the current state",
-             &RetroShell::exec <Token::agnus, Token::inspect, Token::state>, 0);
-
-    root.add({"agnus", "inspect", "beam"},
-             "Displays the current beam position",
-             &RetroShell::exec <Token::agnus, Token::inspect, Token::beam>, 0);
-
-    root.add({"agnus", "inspect", "registers"},
-             "Displays the current register values",
-             &RetroShell::exec <Token::agnus, Token::inspect, Token::registers>, 0);
-
-    root.add({"agnus", "inspect", "dma"},
-             "Displays the scheduled DMA transfers",
-             &RetroShell::exec <Token::agnus, Token::inspect, Token::dma>, 0);
-
-    root.add({"agnus", "inspect", "events"},
-             "Displays all scheduled events",
-             &RetroShell::exec <Token::agnus, Token::inspect, Token::events>, 0);
-    */
-
     
     //
     // Blitter
     //
-    
-    root.add({"blitter"},
-             "Custom Chip (Agnus)");
-    
-    root.add({"blitter", "config"},
+
+    root.newGroup("");
+
+    root.add({"blitter", ""},
              "Displays the current configuration",
              &RetroShell::exec <Token::blitter, Token::config>, 0);
     
@@ -400,9 +472,6 @@ Interpreter::initCommandShell(Command &root)
     //
     // Copper
     //
-    
-    root.add({"copper"},
-             "Custom Chip (Agnus)");
 
     // TODO: MOVE TO DEBUG SHELL
     root.add({"copper", "break"},
@@ -463,11 +532,10 @@ Interpreter::initCommandShell(Command &root)
     //
     // Denise
     //
-    
-    root.add({"denise"},
-             "Custom chip");
-    
-    root.add({"denise", "config"},
+
+    root.newGroup("");
+
+    root.add({"denise", ""},
              "Displays the current configuration",
              &RetroShell::exec <Token::denise, Token::config>, 0);
 
@@ -524,9 +592,6 @@ Interpreter::initCommandShell(Command &root)
     //
     // DMA Debugger
     //
-
-    root.add({"dmadebugger"},
-             "DMA Debugger");
 
     root.add({"dmadebugger", "open"},
              "Opens the DMA debugger",
@@ -611,9 +676,6 @@ Interpreter::initCommandShell(Command &root)
     // Monitor
     //
 
-    root.add({"monitor"},
-             "Amiga monitor");
-
     root.add({"monitor", "set"},
              "Configures the component");
 
@@ -637,11 +699,10 @@ Interpreter::initCommandShell(Command &root)
     //
     // Audio
     //
-    
-    root.add({"audio"},
-             "Audio Unit (Paula)");
-    
-    root.add({"audio", "config"},
+
+    root.newGroup("");
+
+    root.add({"audio", ""},
              "Displays the current configuration",
              &RetroShell::exec <Token::audio, Token::config>, 0);
 
@@ -717,10 +778,8 @@ Interpreter::initCommandShell(Command &root)
     //
     // Paula
     //
-    
-    root.add({"paula"},
-             "Custom chip");
 
+    /*
     root.add({"paula", "inspect"},
              "Displays the internal state");
 
@@ -731,16 +790,16 @@ Interpreter::initCommandShell(Command &root)
     root.add({"paula", "inspect", "registers"},
              "Displays the current register value",
              &RetroShell::exec <Token::paula, Token::inspect, Token::registers>, 0);
+    */
 
-    
+
     //
     // RTC
     //
 
-    root.add({"rtc"},
-             "Real-time clock");
+    root.newGroup("");
 
-    root.add({"rtc", "config"},
+    root.add({"rtc", ""},
              "Displays the current configuration",
              &RetroShell::exec <Token::rtc, Token::config>, 0);
 
@@ -762,18 +821,14 @@ Interpreter::initCommandShell(Command &root)
     //
     // Control port
     //
-    
-    root.add({"controlport1"},
-             "Control port 1");
-    
-    root.add({"controlport2"},
-             "Control port 2");
+
+    root.newGroup("");
 
     for (isize i = 0; i < 2; i++) {
 
         string port = (i == 0) ? "controlport1" : "controlport2";
         
-        root.add({port, "config"},
+        root.add({port, ""},
                  "Displays the current configuration",
                  &RetroShell::exec <Token::controlport, Token::config>, 0, i);
         
@@ -787,10 +842,9 @@ Interpreter::initCommandShell(Command &root)
     // Keyboard
     //
 
-    root.add({"keyboard"},
-             "Keyboard");
+    root.newGroup("");
 
-    root.add({"keyboard", "config"},
+    root.add({"keyboard", ""},
              "Displays the current configuration",
              &RetroShell::exec <Token::keyboard, Token::config>, 0);
     
@@ -814,17 +868,13 @@ Interpreter::initCommandShell(Command &root)
     // Mouse
     //
 
-    root.add({"mouse1"},
-             "Port 1 mouse");
-
-    root.add({"mouse2"},
-             "Port 2 mouse");
+    root.newGroup("");
 
     for (isize i = 0; i < 2; i++) {
 
         string mouse = (i == 0) ? "mouse1" : "mouse2";
         
-        root.add({mouse, "config"},
+        root.add({mouse, ""},
                  "Displays the current configuration",
                  &RetroShell::exec <Token::mouse, Token::config>, 0, i);
         
@@ -864,17 +914,13 @@ Interpreter::initCommandShell(Command &root)
     // Joystick
     //
 
-    root.add({"joystick1"},
-             "Port 1 joystick");
-
-    root.add({"joystick2"},
-             "Port 2 joystick");
+    root.newGroup("");
 
     for (isize i = 0; i < 2; i++) {
 
         string joystick = (i == 0) ? "joystick1" : "joystick2";
         
-        root.add({joystick, "config"},
+        root.add({joystick, ""},
                  "Displays the current configuration",
                  &RetroShell::exec <Token::joystick, Token::config>, 0, i);
         
@@ -940,11 +986,10 @@ Interpreter::initCommandShell(Command &root)
     //
     // Serial port
     //
-    
-    root.add({"serial"},
-             "Serial port");
 
-    root.add({"serial", "config"},
+    root.newGroup("");
+
+    root.add({"serial", ""},
              "Displays the current configuration",
              &RetroShell::exec <Token::serial, Token::config>, 0);
 
@@ -963,11 +1008,10 @@ Interpreter::initCommandShell(Command &root)
     //
     // Disk controller
     //
-    
-    root.add({"diskcontroller"},
-             "Disk Controller");
 
-    root.add({"diskcontroller", "config"},
+    root.newGroup("");
+
+    root.add({"diskcontroller", ""},
              "Displays the current configuration",
              &RetroShell::exec <Token::dc, Token::config>, 0);
 
@@ -997,27 +1041,14 @@ Interpreter::initCommandShell(Command &root)
     //
     // Df0, Df1, Df2, Df3
     //
-    
-    root.add({"df0"},
-             "Floppy drive 0");
 
-    root.add({"df1"},
-             "Floppy drive 1");
-
-    root.add({"df2"},
-             "Floppy drive 2");
-
-    root.add({"df3"},
-             "Floppy drive 3");
-
-    root.add({"dfn"},
-             "All connected drives");
+    root.newGroup("");
 
     for (isize i = 0; i < 4; i++) {
 
         string df = "df" + std::to_string(i);
 
-        root.add({df, "config"},
+        root.add({df, ""},
                  "Displays the current configuration",
                  &RetroShell::exec <Token::dfn, Token::config>, 0, i);
         
@@ -1103,27 +1134,14 @@ Interpreter::initCommandShell(Command &root)
     //
     // Hd0, Hd1, Hd2, Hd3
     //
-    
-    root.add({"hd0"},
-             "Hard drive 0");
 
-    root.add({"hd1"},
-             "Hard drive 1");
-
-    root.add({"hd2"},
-             "Hard drive 2");
-
-    root.add({"hd3"},
-             "Hard drive 3");
-
-    root.add({"hdn"},
-             "All connected hard drives");
+    root.newGroup("");
 
     for (isize i = 0; i < 4; i++) {
         
         string hd = "hd" + std::to_string(i);
 
-        root.add({hd, "config"},
+        root.add({hd, ""},
                  "Displays the current configuration",
                  &RetroShell::exec <Token::hdn, Token::config>, 0, i);
     }
@@ -1178,9 +1196,6 @@ Interpreter::initCommandShell(Command &root)
     //
     // Zorro boards
     //
-    
-    root.add({"zorro"},
-             "Expansion boards");
 
     root.add({"zorro", "list"},
              "Lists all connected boards",
@@ -1194,9 +1209,12 @@ Interpreter::initCommandShell(Command &root)
     //
     // Remote server
     //
-    
-    root.add({"server"},
-             "Remote connections");
+
+    root.newGroup("");
+
+    root.add({"server", ""},
+             "Displays a server status summary",
+             &RetroShell::exec <Token::server>, 0);
 
     root.add({"server", "serial"},
              "Serial port server");
@@ -1283,10 +1301,6 @@ Interpreter::initCommandShell(Command &root)
     root.add({"server", "gdb", "inspect"},
              "Displays the internal state",
              &RetroShell::exec <Token::server, Token::gdb, Token::inspect>, 0);
-
-    root.add({"server", "list"},
-             "Displays a server status summary",
-             &RetroShell::exec <Token::server, Token::list>, 0);
 }
 
 }

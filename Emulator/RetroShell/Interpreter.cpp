@@ -168,7 +168,6 @@ Interpreter::exec(const Arguments &argv, bool verbose)
     }
     
     // Check the argument count
-    printf("current = %p\n", (void *)current); 
     if ((isize)args.size() < current->minArgs) throw TooFewArgumentsError(current->fullName);
     if ((isize)args.size() > current->maxArgs) throw TooManyArgumentsError(current->fullName);
     
@@ -250,7 +249,7 @@ Interpreter::help(const Command& current)
         retroShell << it.fullName;
         retroShell.tab(tab);
         retroShell << " : ";
-        retroShell << it.info;
+        retroShell << it.help;
         retroShell << '\n';
     }
     retroShell << '\n';

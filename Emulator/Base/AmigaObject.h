@@ -49,7 +49,8 @@ enum class Category
     BankMap, Beam, Blocks, Breakpoints, Bus, Callstack, Catchpoints, Checksums,
     Config, Defaults, Dma, Drive, Events, FileSystem, Fpu, Geometry, Hunks,
     Info, List1, List2, Parameters, Partitions, Properties, Registers, Sections,
-    Segments, Signals, State, Stats, Summary, SwTraps, Tod, Vectors, Volumes, Watchpoints
+    Segments, Signals, State, Stats, Status, Summary, SwTraps, Tod, Vectors,
+    Volumes, Watchpoints
 };
 
 class AmigaObject {

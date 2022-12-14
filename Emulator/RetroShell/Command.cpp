@@ -16,9 +16,9 @@ namespace vamiga {
 std::vector<string> Command::groups;
 
 void
-Command::addGroup(const string &description)
+Command::newGroup(const string &description, const string &postfix)
 {
-    groups.push_back(description);
+    groups.push_back(description + postfix);
 }
 
 void
@@ -59,8 +59,7 @@ Command::add(const std::vector<string> &tokens,
     d.name = tokens.back();
     d.fullName = (cmd->fullName.empty() ? "" : cmd->fullName + " ") + tokens.back();
     d.group = groups.size() - 1;
-    // d.type = type;
-    d.info = help;
+    d.help = help;
     d.action = action;
     d.minArgs = numArgs.first;
     d.maxArgs = numArgs.second;
