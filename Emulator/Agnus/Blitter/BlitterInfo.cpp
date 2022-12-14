@@ -22,34 +22,9 @@ Blitter::_dump(Category category, std::ostream& os) const
         
         os << tab("Accuracy level") << config.accuracy << std::endl;
     }
-    
-    if (category == Category::State) {
-        
-        os << tab("Iteration") << dec(iteration) << std::endl;
-        os << tab("Micro instruction PC") << dec(bltpc) << std::endl;
-        os << tab("X counter") << dec(xCounter) << std::endl;
-        os << tab("Y counter") << dec(yCounter) << std::endl;
-        os << tab("A channel counter") << dec(cntA) << std::endl;
-        os << tab("B channel counter") << dec(cntB) << std::endl;
-        os << tab("C channel counter") << dec(cntC) << std::endl;
-        os << tab("D channel counter") << dec(cntD) << std::endl;
-        os << tab("D channel lock") << bol(lockD) << std::endl;
-        os << tab("Fill carry") << dec(fillCarry) << std::endl;
-        os << tab("Mask") << hex(mask) << std::endl;
-        os << std::endl;
-        os << tab("ANEW") << hex(anew) << std::endl;
-        os << tab("BNEW") << hex(bnew) << std::endl;
-        os << tab("AHOLD") << hex(ahold) << std::endl;
-        os << tab("BHOLD") << hex(bhold) << std::endl;
-        os << tab("CHOLD") << hex(chold) << std::endl;
-        os << tab("DHOLD") << hex(dhold) << std::endl;
-        os << tab("SHIFT") << hex(ashift) << std::endl;
-        os << tab("BBUSY") << bol(bbusy) << std::endl;
-        os << tab("BZERO") << bol(bzero) << std::endl;
-    }
-    
-    if (category == Category::Registers) {
-        
+
+    if (category == Category::Info) {
+
         os << tab("BLTCON0") << hex(bltcon0) << std::endl;
         os << tab("ASH") << hex(bltconASH()) << std::endl;
         os << tab("USEA") << bol(bltconUSEA()) << std::endl;
@@ -78,6 +53,31 @@ Blitter::_dump(Category category, std::ostream& os) const
         os << tab("BLTBMOD") << dec(bltbmod) << std::endl;
         os << tab("BLTCMOD") << dec(bltcmod) << std::endl;
         os << tab("BLTDMOD") << dec(bltdmod) << std::endl;
+    }
+
+    if (category == Category::State) {
+        
+        os << tab("Iteration") << dec(iteration) << std::endl;
+        os << tab("Micro instruction PC") << dec(bltpc) << std::endl;
+        os << tab("X counter") << dec(xCounter) << std::endl;
+        os << tab("Y counter") << dec(yCounter) << std::endl;
+        os << tab("A channel counter") << dec(cntA) << std::endl;
+        os << tab("B channel counter") << dec(cntB) << std::endl;
+        os << tab("C channel counter") << dec(cntC) << std::endl;
+        os << tab("D channel counter") << dec(cntD) << std::endl;
+        os << tab("D channel lock") << bol(lockD) << std::endl;
+        os << tab("Fill carry") << dec(fillCarry) << std::endl;
+        os << tab("Mask") << hex(mask) << std::endl;
+        os << std::endl;
+        os << tab("ANEW") << hex(anew) << std::endl;
+        os << tab("BNEW") << hex(bnew) << std::endl;
+        os << tab("AHOLD") << hex(ahold) << std::endl;
+        os << tab("BHOLD") << hex(bhold) << std::endl;
+        os << tab("CHOLD") << hex(chold) << std::endl;
+        os << tab("DHOLD") << hex(dhold) << std::endl;
+        os << tab("SHIFT") << hex(ashift) << std::endl;
+        os << tab("BBUSY") << bol(bbusy) << std::endl;
+        os << tab("BZERO") << bol(bzero) << std::endl;
     }
 }
 

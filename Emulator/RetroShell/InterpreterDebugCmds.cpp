@@ -46,19 +46,25 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"disassemble"},
              "Runs disassembler",
-             &RetroShell::exec <Token::disassemble>, 1);
+             &RetroShell::exec <Token::disassemble>, {0, 1});
 
 
     root.newGroup("Guarding the program execution");
 
     root.add({"break"},
-             "Manages breakpoints");
+             "Manages CPU breakpoints");
 
     root.add({"watch"},
-             "Manages watchpoints");
+             "Manages CPU watchpoints");
 
     root.add({"catch"},
-             "Manages catchpoints");
+             "Manages CPU catchpoints");
+
+    root.add({"cbreak"},
+             "Manages Copper breakpoints");
+
+    root.add({"cwatch"},
+             "Manages Copper watchpoints");
 
 
     root.newGroup("Exploring components");
@@ -197,6 +203,64 @@ Interpreter::initDebugShell(Command &root)
 
 
     //
+    // Copper breakpoints
+    //
+
+    root.add({"cbreak", ""},
+             "Lists all breakpoints",
+             &RetroShell::exec <Token::cbp>, 0);
+
+    root.add({"cbreak", "at"},
+             "Sets a breakpoint at the specified address",
+             &RetroShell::exec <Token::cbp, Token::at>, 1);
+
+    root.add({"cbreak", "delete"},
+             "Deletes a breakpoint",
+             &RetroShell::exec <Token::cbp, Token::del>, 1);
+
+    root.add({"cbreak", "enable"},
+             "Enables a breakpoint",
+             &RetroShell::exec <Token::cbp, Token::enable>, 1);
+
+    root.add({"cbreak", "disable"},
+             "Disables a breakpoint",
+             &RetroShell::exec <Token::cbp, Token::disable>, 1);
+
+    root.add({"cbreak", "ignore"},
+             "Ignores a breakpoint a certain number of times",
+             &RetroShell::exec <Token::cbp, Token::ignore>, 2);
+
+
+    //
+    // Copper watchpoints
+    //
+
+    root.add({"cwatch", ""},
+             "Lists all watchpoints",
+             &RetroShell::exec <Token::cwp>, 0);
+
+    root.add({"cwatch", "at"},
+             "Sets a watchpoint at the specified address",
+             &RetroShell::exec <Token::cwp, Token::at>, 1);
+
+    root.add({"cwatch", "delete"},
+             "Deletes a watchpoint",
+             &RetroShell::exec <Token::cwp, Token::del>, 1);
+
+    root.add({"cwatch", "enable"},
+             "Enables a watchpoint",
+             &RetroShell::exec <Token::cwp, Token::enable>, 1);
+
+    root.add({"cwatch", "disable"},
+             "Disables a watchpoint",
+             &RetroShell::exec <Token::cwp, Token::disable>, 1);
+
+    root.add({"cwatch", "ignore"},
+             "Ignores a watchpoint a certain number of times",
+             &RetroShell::exec <Token::cwp, Token::ignore>, 2);
+
+
+    //
     // Components
     //
 
@@ -288,8 +352,8 @@ Interpreter::initDebugShell(Command &root)
              &RetroShell::exec <Token::copper, Token::state>, 0);
 
     root.add({"copper", "list"},
-             "Inspects the internal state",
-             &RetroShell::exec <Token::copper, Token::list>, 0);
+             "Prints the Copper list",
+             &RetroShell::exec <Token::copper, Token::list>, 1);
 
     root.add({"paula", ""},
              "Custom Chipset",

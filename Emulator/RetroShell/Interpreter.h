@@ -21,9 +21,9 @@ enum class Token
 {
     about, accuracy, agnus, amiga, at, attach, audiate, audio, autofire,
     autosync, bankmap, beam, bitplanes, blitter, bp, brightness, bullets,
-    callstack, channel, checksums, chip, cia, ciaa, ciab, clear, close, clxsprspr,
+    callstack, cbp, channel, checksums, chip, cia, ciaa, ciab, clear, close, clxsprspr,
     clxsprplf, clxplfplf, color, config, connect, contrast, controlport,
-    copper, cp, cpu, cutout, dc, debug, defaults, delay, del, denise, detach,
+    copper, cp, cpu, cutout, cwp, dc, debug, defaults, delay, del, denise, detach,
     device, devices, dfn, diagboard, disassemble, down, hdn, disable, disconnect, disk, dma,
     dmadebugger, drive, dsksync, easteregg, eject, enable, esync, events,
     execbase, extrom, extstart, fast, filename, filesystem, filter, fpu, gdb,

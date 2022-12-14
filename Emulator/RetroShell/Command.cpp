@@ -25,7 +25,7 @@ void
 Command::add(const std::vector<string> &tokens,
              const string &help)
 {
-    add(tokens, help, nullptr, 0);
+    add(tokens, help, nullptr, 0, 0);
 }
 
 void
@@ -64,9 +64,18 @@ Command::add(const std::vector<string> &tokens,
     d.minArgs = numArgs.first;
     d.maxArgs = numArgs.second;
     d.param = param;
-    
+
     // Register the instruction
     cmd->subCommands.push_back(d);
+}
+
+void
+Command::hide(const std::vector<string> &tokens)
+{
+    Command *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() });
+    assert(cmd != nullptr);
+
+    cmd->hidden = true;
 }
 
 void

@@ -177,19 +177,8 @@ CIA::_dump(Category category, std::ostream& os) const
         os << tab("Sync with E-clock");
         os << bol(config.eClockSyncing) << std::endl;
     }
-    
-    if (category == Category::State) {
-        
-        os << tab("Clock") << dec(clock) << std::endl;
-        os << tab("Sleeping") << bol(sleeping) << std::endl;
-        os << tab("Tiredness") << (isize)tiredness << std::endl;
-        os << tab("Sleep cycle") << dec(sleepCycle) << std::endl;
-        os << tab("Wakeup cycle") << dec(wakeUpCycle) << std::endl;
-        os << tab("CNT") << bol(cnt) << std::endl;
-        os << tab("INT") << bol(irq) << std::endl;
-    }
-    
-    if (category == Category::Registers) {
+
+    if (category == Category::Info) {
         
         os << std::endl;
         os << tab("Counter A") << hex(counterA) << std::endl;
@@ -214,7 +203,18 @@ CIA::_dump(Category category, std::ostream& os) const
         os << tab("serCounter") << dec(serCounter) << std::endl;
         os << std::endl;
     }
-    
+
+    if (category == Category::State) {
+
+        os << tab("Clock") << dec(clock) << std::endl;
+        os << tab("Sleeping") << bol(sleeping) << std::endl;
+        os << tab("Tiredness") << (isize)tiredness << std::endl;
+        os << tab("Sleep cycle") << dec(sleepCycle) << std::endl;
+        os << tab("Wakeup cycle") << dec(wakeUpCycle) << std::endl;
+        os << tab("CNT") << bol(cnt) << std::endl;
+        os << tab("INT") << bol(irq) << std::endl;
+    }
+
     if (category == Category::Tod) {
         
         tod.dump(Category::State, os);

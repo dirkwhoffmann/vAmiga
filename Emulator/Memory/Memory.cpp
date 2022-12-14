@@ -41,7 +41,7 @@ Memory::_dump(Category category, std::ostream& os) const
         os << util::dec(config.womSize / 1024) << " KB" << std::endl;
         os << util::tab("Rom extension");
         os << util::dec(config.extSize / 1024) << " KB";
-        os << " at " << util::hex(config.extStart) << "0000" << std::endl;
+        if (config.extSize) os << " at " << util::hex(config.extStart) << "0000";
         os << std::endl;
         os << util::tab("Save Roms in snapshots");
         os << util::bol(config.saveRoms) << std::endl;

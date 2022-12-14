@@ -75,6 +75,9 @@ struct Command {
              std::pair <isize,isize> numArgs,
              long param = 0);
 
+    // Marks a command as hidden
+    void hide(const std::vector<string> &tokens);
+
     // Removes a registered command
     void remove(const string& token);
     

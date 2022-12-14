@@ -938,8 +938,41 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << bol(config.vsync) << std::endl;
     }
 
+    if (category == Category::Info) {
+
+        os << tab("Thread state");
+        os << ExecutionStateEnum::key(state) << std::endl;
+        os << tab("Sync mode");
+        os << (getSyncMode() == SyncMode::Periodic ? "PERIODIC" : "PULSED") << std::endl;
+        os << std::endl;
+        os << tab("Current frame");
+        os << dec(agnus.pos.frame) << std::endl;
+        os << tab("CPU progress");
+        os << dec(cpu.getCpuClock()) << " CPU cycles" << std::endl;
+        os << tab("");
+        os << dec(cpu.getMasterClock()) << " Master cycles" << std::endl;
+        os << tab("Agnus progress");
+        os << dec(agnus.clock) << " DMA cycles" << std::endl;
+        os << tab("");
+        os << dec(DMA_CYCLES(agnus.clock)) << " Master cycles" << std::endl;
+        os << tab("CIA A progress");
+        os << dec(ciaA.getClock()) << " CIA cycles" << std::endl;
+        os << tab("");
+        os << dec(CIA_CYCLES(ciaA.getClock())) << " Master cycles" << std::endl;
+        os << tab("CIA B progress");
+        os << dec(ciaB.getClock()) << " CIA cycles" << std::endl;
+        os << tab("");
+        os << dec(CIA_CYCLES(ciaA.getClock())) << " Master cycles" << std::endl;
+    }
+
     if (category == Category::State) {
-        
+
+        os << tab("Master clock frequency");
+        os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
+        os << tab("Amiga refresh rate");
+        os << flt(float(refreshRate())) << " Hz" << std::endl;
+        os << tab("Host refresh rate");
+        os << flt(float(host.refreshRate)) << " Hz" << std::endl;
         os << tab("Power");
         os << bol(isPoweredOn()) << std::endl;
         os << tab("Running");
@@ -950,14 +983,6 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << bol(inWarpMode()) << std::endl;
         os << tab("Debug mode");
         os << bol(inDebugMode()) << std::endl;
-        os << tab("Sync mode");
-        os << (getSyncMode() == SyncMode::Periodic ? "PERIODIC" : "PULSED") << std::endl;
-        os << tab("Master clock frequency");
-        os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
-        os << tab("Amiga refresh rate");
-        os << flt(float(refreshRate())) << " Hz" << std::endl;
-        os << tab("Host refresh rate");
-        os << flt(float(host.refreshRate)) << " Hz" << std::endl;
     }
     
     if (category == Category::Defaults) {

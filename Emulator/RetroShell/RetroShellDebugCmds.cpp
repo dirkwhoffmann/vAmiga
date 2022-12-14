@@ -59,7 +59,8 @@ RetroShell::exec <Token::disassemble> (Arguments& argv, long param)
 {
     std::stringstream ss;
 
-    cpu.disassembleRange(ss, u32(util::parseNum(argv.front())), 16);
+    auto addr = argv.empty() ? cpu.getPC0() : u32(util::parseNum(argv.front()));
+    cpu.disassembleRange(ss, addr, 16);
 
     *this << '\n' << ss << '\n';
 }
@@ -190,6 +191,78 @@ RetroShell::exec <Token::cp, Token::ignore> (Arguments& argv, long param)
     amiga.cpu.ignoreCatchpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
 }
 
+template <> void
+RetroShell::exec <Token::cbp> (Arguments& argv, long param)
+{
+    dump(copper.debugger, Category::Breakpoints);
+}
+
+template <> void
+RetroShell::exec <Token::cbp, Token::at> (Arguments& argv, long param)
+{
+    copper.debugger.setBreakpoint(u32(util::parseNum(argv.front())));
+}
+
+template <> void
+RetroShell::exec <Token::cbp, Token::del> (Arguments& argv, long param)
+{
+    copper.debugger.deleteBreakpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::cbp, Token::enable> (Arguments& argv, long param)
+{
+    copper.debugger.enableBreakpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::cbp, Token::disable> (Arguments& argv, long param)
+{
+    copper.debugger.disableBreakpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::cbp, Token::ignore> (Arguments& argv, long param)
+{
+    copper.debugger.ignoreBreakpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
+}
+
+template <> void
+RetroShell::exec <Token::cwp> (Arguments& argv, long param)
+{
+    dump(copper.debugger, Category::Watchpoints);
+}
+
+template <> void
+RetroShell::exec <Token::cwp, Token::at> (Arguments& argv, long param)
+{
+    copper.debugger.setWatchpoint(u32(util::parseNum(argv.front())));
+}
+
+template <> void
+RetroShell::exec <Token::cwp, Token::del> (Arguments& argv, long param)
+{
+    copper.debugger.deleteWatchpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::cwp, Token::enable> (Arguments& argv, long param)
+{
+    copper.debugger.enableWatchpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::cwp, Token::disable> (Arguments& argv, long param)
+{
+    copper.debugger.disableWatchpoint(util::parseNum(argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::cwp, Token::ignore> (Arguments& argv, long param)
+{
+    copper.debugger.ignoreWatchpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
+}
+
 
 //
 // Components
@@ -210,7 +283,7 @@ RetroShell::exec <Token::amiga, Token::state> (Arguments &argv, long param)
 template <> void
 RetroShell::exec <Token::memory> (Arguments &argv, long param)
 {
-    dump(amiga, Category::State);
+    dump(mem, Category::BankMap);
 }
 
 template <> void
@@ -343,9 +416,12 @@ RetroShell::exec <Token::copper, Token::list> (Arguments& argv, long param)
     auto value = util::parseNum(argv.front());
 
     switch (value) {
+
         case 1: dump(amiga.agnus.copper, Category::List1); break;
         case 2: dump(amiga.agnus.copper, Category::List2); break;
-        default: throw VAError(ERROR_OPT_INVARG, "1 or 2");
+
+        default:
+            throw VAError(ERROR_OPT_INVARG, "1 or 2");
     }
 }
 

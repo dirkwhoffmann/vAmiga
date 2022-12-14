@@ -25,32 +25,29 @@ Interpreter::initCommons(Command &root)
     root.add({"clear"},
              "Clears the console window",
              &RetroShell::exec <Token::clear>, 0);
-    // root.seek("clear")->hidden = true;
 
     root.add({"close"},
              "Hides the console window",
              &RetroShell::exec <Token::close>, 0);
-    // root.seek("close")->hidden = true;
 
     root.add({"help"},
              "Prints usage information",
              &RetroShell::exec <Token::help>, {0, 1});
-    // root.seek("help")->hidden = true;
 
     root.add({"joshua"},
              "",
              &RetroShell::exec <Token::easteregg>, 0);
-    root.seek("joshua")->hidden = true;
 
     root.add({"source"},
              "Processes a command script",
              &RetroShell::exec <Token::source>, 1);
-    // root.seek("source")->hidden = true;
 
     root.add({"wait"},
              "Pauses the execution of a command script",
              &RetroShell::exec <Token::wait>, 2);
-    root.seek("wait")->hidden = true;
+
+    root.hide({"joshua"});
+    root.hide({"wait"});
 }
 
 void
@@ -66,8 +63,6 @@ Interpreter::initCommandShell(Command &root)
 
     root.add({"regression"},
              "Runs the regression tester");
-    root.seek("regression")->hidden = true;
-
 
     root.newGroup("Managing components");
 
@@ -92,13 +87,14 @@ Interpreter::initCommandShell(Command &root)
     root.add({"blitter"},
              "Coprocessor");
 
-    root.add({"copper"},
-             "Coprocessor");
-
     /*
-    root.add({"paula"},
-             "Custom chip");
-    */
+     root.add({"copper"},
+     "Coprocessor");
+     */
+    /*
+     root.add({"paula"},
+     "Custom chip");
+     */
 
     root.add({"denise"},
              "Custom chip");
@@ -155,7 +151,7 @@ Interpreter::initCommandShell(Command &root)
              "Floppy drive 3");
 
     root.add({"dfn"},
-             "All connected drives");
+             "Floppy drive (df0, df1, df2, df3, dfn)");
 
     root.add({"hd0"},
              "Hard drive 0");
@@ -170,7 +166,7 @@ Interpreter::initCommandShell(Command &root)
              "Hard drive 3");
 
     root.add({"hdn"},
-             "All connected hard drives");
+             "Hard drive (hd0, hd1, hd2, hd3, hdn)");
 
 
     root.newGroup("Configuring audio and video");
@@ -204,8 +200,7 @@ Interpreter::initCommandShell(Command &root)
     
     root.add({"screenshot"},
              "Manages regression tests");
-    root.seek("screenshot")->hidden = true;
-    
+
     root.add({"screenshot", "set"},
              "Configures the regression test");
 
@@ -472,61 +467,6 @@ Interpreter::initCommandShell(Command &root)
     //
     // Copper
     //
-
-    // TODO: MOVE TO DEBUG SHELL
-    root.add({"copper", "break"},
-             "Manages breakpoints");
-
-    root.add({"copper", "break", "info"},
-             "Lists all breakpoints",
-             &RetroShell::exec <Token::copper, Token::bp, Token::info>, 0);
-
-    root.add({"copper", "break", "at"},
-             "Sets a breakpoint at the specified address",
-             &RetroShell::exec <Token::copper, Token::bp, Token::at>, 1);
-
-    root.add({"copper", "break", "delete"},
-             "Deletes a breakpoint",
-             &RetroShell::exec <Token::copper, Token::bp, Token::del>, 1);
-
-    root.add({"copper", "break", "enable"},
-             "Enables a breakpoint",
-             &RetroShell::exec <Token::copper, Token::bp, Token::enable>, 1);
-
-    root.add({"copper", "break", "disable"},
-             "Disables a breakpoint",
-             &RetroShell::exec <Token::copper, Token::bp, Token::disable>, 1);
-
-    root.add({"copper", "break", "ignore"},
-             "Ignores a breakpoint a certain number of times",
-             &RetroShell::exec <Token::copper, Token::bp, Token::ignore>, 2);
-
-    root.add({"copper", "watch"},
-             "Manages watchpoints");
-
-    root.add({"copper", "watch", "info"},
-             "Lists all watchpoints",
-             &RetroShell::exec <Token::copper, Token::wp, Token::info>, 0);
-
-    root.add({"copper", "watch", "at"},
-             "Sets a watchpoint at the specified address",
-             &RetroShell::exec <Token::copper, Token::wp, Token::at>, 1);
-
-    root.add({"copper", "watch", "delete"},
-             "Deletes a watchpoint",
-             &RetroShell::exec <Token::copper, Token::wp, Token::del>, 1);
-
-    root.add({"copper", "watch", "enable"},
-             "Enables a watchpoint",
-             &RetroShell::exec <Token::copper, Token::wp, Token::enable>, 1);
-
-    root.add({"copper", "watch", "disable"},
-             "Disables a watchpoint",
-             &RetroShell::exec <Token::copper, Token::wp, Token::disable>, 1);
-
-    root.add({"copper", "watch", "ignore"},
-             "Ignores a watchpoint a certain number of times",
-             &RetroShell::exec <Token::copper, Token::wp, Token::ignore>, 2);
     
     
     //
@@ -780,17 +720,17 @@ Interpreter::initCommandShell(Command &root)
     //
 
     /*
-    root.add({"paula", "inspect"},
-             "Displays the internal state");
+     root.add({"paula", "inspect"},
+     "Displays the internal state");
 
-    root.add({"paula", "inspect", "state"},
-             "Displays the current register value",
-             &RetroShell::exec <Token::paula, Token::inspect, Token::state>, 0);
+     root.add({"paula", "inspect", "state"},
+     "Displays the current register value",
+     &RetroShell::exec <Token::paula, Token::inspect, Token::state>, 0);
 
-    root.add({"paula", "inspect", "registers"},
-             "Displays the current register value",
-             &RetroShell::exec <Token::paula, Token::inspect, Token::registers>, 0);
-    */
+     root.add({"paula", "inspect", "registers"},
+     "Displays the current register value",
+     &RetroShell::exec <Token::paula, Token::inspect, Token::registers>, 0);
+     */
 
 
     //
@@ -1301,6 +1241,18 @@ Interpreter::initCommandShell(Command &root)
     root.add({"server", "gdb", "inspect"},
              "Displays the internal state",
              &RetroShell::exec <Token::server, Token::gdb, Token::inspect>, 0);
+
+    // Hide some commands
+    root.hide({"regression"});
+    root.hide({"screenshot"});
+    root.hide({"df0"});
+    root.hide({"df1"});
+    root.hide({"df2"});
+    root.hide({"df3"});
+    root.hide({"hd0"});
+    root.hide({"hd1"});
+    root.hide({"hd2"});
+    root.hide({"hd3"});
 }
 
 }
