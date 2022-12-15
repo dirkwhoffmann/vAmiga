@@ -22,6 +22,10 @@ Interpreter::initCommons(Command &root)
 
     root.newGroup("Controlling the shell");
 
+    root.add({"."},
+             "Enters or exists the debugger",
+             &RetroShell::exec <Token::debug>, 0);
+
     root.add({"clear"},
              "Clears the console window",
              &RetroShell::exec <Token::clear>, 0);

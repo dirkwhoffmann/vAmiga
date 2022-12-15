@@ -32,6 +32,9 @@ struct Command {
     // Full name of this command (e.g., "df0 eject")
     string fullName;
 
+    // Parameter description (e.g., "<percentage>");
+    string parameters;
+    
     // Help string
     string help;
     
@@ -68,8 +71,22 @@ struct Command {
              void (RetroShell::*action)(Arguments&, long),
              isize numArgs,
              long param = 0);
-    
+
     void add(const std::vector<string> &tokens,
+             const string &parameters,
+             const string &help,
+             void (RetroShell::*action)(Arguments&, long),
+             isize numArgs,
+             long param = 0);
+
+    void add(const std::vector<string> &tokens,
+             const string &help,
+             void (RetroShell::*action)(Arguments&, long),
+             std::pair <isize,isize> numArgs,
+             long param = 0);
+
+    void add(const std::vector<string> &tokens,
+             const string &parameters,
              const string &help,
              void (RetroShell::*action)(Arguments&, long),
              std::pair <isize,isize> numArgs,

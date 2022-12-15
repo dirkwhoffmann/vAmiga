@@ -103,7 +103,7 @@ RetroShell::updatePrompt()
         ss << std::right << std::setw(0) << std::dec << isize(agnus.pos.v);
         ss << ",";
         ss << std::right << std::setw(0) << std::dec << isize(agnus.pos.h);
-        ss << ") 0x";
+        ss << ") $";
         ss << std::right << std::setw(6) << std::hex << isize(cpu.getPC0());
         ss << ": ";
 
@@ -163,6 +163,8 @@ RetroShell::printHelp()
 {
     storage.printHelp();
     remoteManager.rshServer << "Type 'help' for help.\n";
+    remoteManager.rshServer << "Type '.' to enter the debugger.\n";
+
     needsDisplay();
 }
 

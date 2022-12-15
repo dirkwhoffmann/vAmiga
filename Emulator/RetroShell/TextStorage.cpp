@@ -102,6 +102,7 @@ void
 TextStorage::welcome()
 {
     *this << "vAmiga Retro Shell " << Amiga::build() << '\n';
+    *this << '\n';
     *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
     *this << "Licensed under the GNU General Public License v3" << '\n';
     *this << '\n';
@@ -113,7 +114,7 @@ void
 TextStorage::printHelp()
 {
     *this << "Type 'help' or press 'TAB' twice for help." << '\n';
-    *this << "Press SHIFT+RETURN to enter the debugger." << '\n';
+    *this << "Type '.' or press 'SHIFT+RETURN' to enter the debugger." << '\n';
 }
 
 }

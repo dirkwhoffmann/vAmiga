@@ -35,11 +35,35 @@ Command::add(const std::vector<string> &tokens,
              isize numArgs,
              long param)
 {
-    add(tokens, help, action, { numArgs, numArgs }, param);
+    add(tokens, "", help, action, { numArgs, numArgs }, param);
 }
 
 void
 Command::add(const std::vector<string> &tokens,
+             const string &parameters,
+             const string &help,
+             void (RetroShell::*action)(Arguments&, long),
+             isize numArgs,
+             long param)
+{
+    add(tokens, parameters, help, action, { numArgs, numArgs }, param);
+}
+
+void
+Command::add(const std::vector<string> &tokens,
+             const string &help,
+             void (RetroShell::*action)(Arguments&, long),
+             std::pair <isize,isize> numArgs,
+             long param)
+{
+    assert(!tokens.empty());
+
+    add(tokens, "", help, action, numArgs, param);
+}
+
+void
+Command::add(const std::vector<string> &tokens,
+             const string &parameters,
              const string &help,
              void (RetroShell::*action)(Arguments&, long),
              std::pair <isize,isize> numArgs,
@@ -59,6 +83,7 @@ Command::add(const std::vector<string> &tokens,
     d.name = tokens.back();
     d.fullName = (cmd->fullName.empty() ? "" : cmd->fullName + " ") + tokens.back();
     d.group = groups.size() - 1;
+    d.parameters = parameters;
     d.help = help;
     d.action = action;
     d.minArgs = numArgs.first;
@@ -150,14 +175,20 @@ Command::usage() const
 
     if (subCommands.empty()) {
 
+        if (minArgs == 0 && maxArgs == 0) arguments = "<no arguments>";
+        if (minArgs == 0 && maxArgs >= 1) arguments = "[ " + parameters + " ]";
+        if (minArgs >= 1) arguments = parameters;
+
+        /*
         arguments = minArgs == 0 ? "" : minArgs == 1 ? "<value>" : "<values>";
         if (maxArgs - minArgs == 1) arguments += " [ <value> ]";
         if (maxArgs - minArgs >= 2) arguments += " [ <values> ]";
         if (arguments == "") arguments = "<no arguments>";
+        */
 
     } else {
 
-        arguments = action ? "[ <command> ]" : "<command>";
+        arguments = action ? "[ <command> ]" : "<command> ...";
     }
 
     return fullName + " " + arguments;
