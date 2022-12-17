@@ -359,12 +359,12 @@ Memory::didLoadFromBuffer(const u8 *buffer)
     << slowSize
     << fastSize;
     
-    // Check the integrity of the new values before we allocate memory
+    // Check the integrity of the new values before allocating memory
     if (romSize > KB(512)) throw VAError(ERROR_SNAP_CORRUPTED);
     if (womSize > KB(256)) throw VAError(ERROR_SNAP_CORRUPTED);
     if (extSize > KB(512)) throw VAError(ERROR_SNAP_CORRUPTED);
     if (chipSize > MB(2)) throw VAError(ERROR_SNAP_CORRUPTED);
-    if (slowSize > KB(512)) throw VAError(ERROR_SNAP_CORRUPTED);
+    if (slowSize > KB(1792)) throw VAError(ERROR_SNAP_CORRUPTED);
     if (fastSize > MB(8)) throw VAError(ERROR_SNAP_CORRUPTED);
 
     // Allocate ROM space (only if Roms are included in the snapshot)
