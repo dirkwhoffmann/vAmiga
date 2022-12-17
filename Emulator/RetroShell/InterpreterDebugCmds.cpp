@@ -270,6 +270,10 @@ Interpreter::initDebugShell(Command &root)
              "Lorem ipsum",
              &RetroShell::exec <Token::amiga>, 0);
 
+    root.add({"amiga", "state"},
+             "Lorem ipsum",
+             &RetroShell::exec <Token::amiga, Token::state>, 0);
+
     root.add({"memory", ""},
              "Lorem ipsum",
              &RetroShell::exec <Token::memory>, 0);

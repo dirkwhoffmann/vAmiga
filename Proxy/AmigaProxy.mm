@@ -930,6 +930,26 @@ using namespace vamiga::moira;
     return [self recorder]->getDuration().asSeconds();
 }
 
+- (NSInteger)x1
+{
+    return [self recorder]->cutout.x1;
+}
+
+- (NSInteger)x2
+{
+    return [self recorder]->cutout.x2;
+}
+
+- (NSInteger)y1
+{
+    return [self recorder]->cutout.y1;
+}
+
+- (NSInteger)y2
+{
+    return [self recorder]->cutout.y2;
+}
+
 - (NSInteger)frameRate
 {
     return [self recorder]->getFrameRate();
@@ -943,6 +963,11 @@ using namespace vamiga::moira;
 - (NSInteger)sampleRate
 {
     return [self recorder]->getSampleRate();
+}
+
+- (u32 *)getGpuData:(NSSize)size
+{
+    return [self recorder]->getGpuData((isize)size.width, (isize)size.height);
 }
 
 - (void)startRecording:(NSRect)rect
@@ -2756,6 +2781,17 @@ using namespace vamiga::moira;
 - (NSInteger)hostRefreshRate
 {
     return (NSInteger)[self amiga]->getHostRefreshRate();
+}
+
+- (NSSize)frameBufferSize
+{
+    auto size = [self amiga]->getFrameBufferSize();
+    return NSMakeSize((CGFloat)size.first, (CGFloat)size.second);
+}
+
+- (void)setFrameBufferSize:(NSSize)size
+{
+    [self amiga]->setFrameBufferSize(std::pair<isize, isize>(size.width, size.height));
 }
 
 - (void)setHostRefreshRate:(NSInteger)value

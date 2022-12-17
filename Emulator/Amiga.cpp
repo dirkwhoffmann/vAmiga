@@ -845,6 +845,19 @@ Amiga::setHostRefreshRate(double refreshRate)
     }
 }
 
+std::pair<isize, isize>
+Amiga::getFrameBufferSize()
+{
+    return std::pair<isize, isize>(host.frameBufferWidth, host.frameBufferHeight);
+}
+
+void
+Amiga::setFrameBufferSize(std::pair<isize, isize> size)
+{
+    host.frameBufferWidth = size.first;
+    host.frameBufferHeight = size.second;
+}
+
 i64
 Amiga::overrideOption(Option option, i64 value)
 {
@@ -942,8 +955,6 @@ Amiga::_dump(Category category, std::ostream& os) const
 
         os << tab("Thread state");
         os << ExecutionStateEnum::key(state) << std::endl;
-        os << tab("Sync mode");
-        os << (getSyncMode() == SyncMode::Periodic ? "PERIODIC" : "PULSED") << std::endl;
         os << std::endl;
         os << tab("Current frame");
         os << dec(agnus.pos.frame) << std::endl;
@@ -967,6 +978,12 @@ Amiga::_dump(Category category, std::ostream& os) const
 
     if (category == Category::State) {
 
+        os << tab("Thread state");
+        os << ExecutionStateEnum::key(state) << std::endl;
+        os << tab("Sync mode");
+        os << (getSyncMode() == SyncMode::Periodic ? "PERIODIC" : "PULSED") << std::endl;
+
+        os << std::endl;
         os << tab("Master clock frequency");
         os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
         os << tab("Amiga refresh rate");
@@ -983,6 +1000,10 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << bol(inWarpMode()) << std::endl;
         os << tab("Debug mode");
         os << bol(inDebugMode()) << std::endl;
+
+        os << std::endl;
+        os << tab("Frame buffer");
+        os << dec(host.frameBufferWidth) << " x " << dec(host.frameBufferHeight) << std::endl;
     }
     
     if (category == Category::Defaults) {

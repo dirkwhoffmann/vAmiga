@@ -67,18 +67,30 @@ class Recorder : public SubComponent {
 
     // Sound samples per frame
     isize samplesPerFrame = 0;
-    
+
+public:
+
     // The texture cutout that is going to be recorded
     struct { isize x1; isize y1; isize x2; isize y2; } cutout;
 
+private:
+    
     // Time stamps
     util::Time recStart;
     util::Time recStop;
-    
+
+
+    //
+    // Buffers
+    //
+
+    // GPU data
+    // Buffer<u32> gpuData;
+
     // Temporary storage for audio and video data
     Buffer<u32> videoData;
     Buffer<float> audioData;
-    
+
     
     //
     // Initializing
@@ -132,7 +144,7 @@ private:
     string videoStreamPath();
     string audioStreamPath();
 
-    //Returns the log level passed to FFmpef
+    //Returns the log level passed to FFmpeg
     const string loglevel() { return REC_DEBUG ? "verbose" : "warning"; }
 
     
@@ -146,7 +158,10 @@ public:
     isize getFrameRate() const { return frameRate; }
     isize getBitRate() const { return bitRate; }
     isize getSampleRate() const { return sampleRate; }
-    
+
+    // Called by the GUI to request a video data buffer
+    u32 *getGpuData(isize width, isize height);
+
 
     //
     // Starting and stopping a video capture

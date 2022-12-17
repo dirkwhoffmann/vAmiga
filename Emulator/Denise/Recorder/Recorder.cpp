@@ -83,13 +83,31 @@ Recorder::getDuration() const
     return (isRecording() ? util::Time::now() : recStop) - recStart;
 }
 
+u32 *
+Recorder::getGpuData(isize width, isize height)
+{
+    auto size = width * height;
+
+    // Resize the buffer if it is too small
+    if (videoData.size < size) videoData.alloc(size);
+
+    return videoData.ptr;
+}
+
 void
 Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
                          isize bitRate,
                          isize aspectX, isize aspectY)
 {
+    debug(REC_DEBUG, "startRecording()");
+
     SYNCHRONIZED
-    
+
+    x1 = 0;
+    x2 = amiga.getFrameBufferSize().first;
+    y1 = 0;
+    y2 = amiga.getFrameBufferSize().second;
+
     debug(REC_DEBUG, "startRecording(%ld,%ld,%ld,%ld,%ld,%ld,%ld)\n",
           x1, y1, x2, y2, bitRate, aspectX, aspectY);
     
@@ -132,8 +150,8 @@ Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
     
     // Create temporary buffers
     debug(REC_DEBUG, "Creating buffers...\n");
-    
-    videoData.alloc((x2 - x1) * (y2 - y1));
+
+    // videoData.alloc((x2 - x1) * (y2 - y1));
     audioData.alloc(2 * samplesPerFrame);
     
     //
@@ -169,7 +187,7 @@ Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
     // Aspect ratio
     cmd1 += " -bsf:v ";
     cmd1 += "\"h264_metadata=sample_aspect_ratio=";
-    cmd1 += std::to_string(aspectX) + "/" + std::to_string(2*aspectY) + "\"";
+    cmd1 += std::to_string(aspectX) + "/" + std::to_string(aspectY) + "\"";
     
     // Output file
     cmd1 += " -y " + videoStreamPath();
@@ -256,6 +274,8 @@ Recorder::stopRecording()
 bool
 Recorder::exportAs(const string &path)
 {
+    debug(REC_DEBUG, "exportAs()\n");
+
     if (isRecording()) return false;
     
     //
@@ -313,6 +333,8 @@ Recorder::vsyncHandler(Cycle target)
 void
 Recorder::prepare()
 {
+    debug(REC_DEBUG, "prepare()\n");
+
     state = State::record;
     audioClock = 0;
     recStart = util::Time::now();
@@ -334,23 +356,16 @@ Recorder::record(Cycle target)
 void
 Recorder::recordVideo(Cycle target)
 {
-    auto *buffer = denise.pixelEngine.stablePtr();
-    
-    isize width = sizeof(u32) * (cutout.x2 - cutout.x1);
-    isize height = cutout.y2 - cutout.y1;
-    isize offset = cutout.y1 * HPIXELS + cutout.x1;
-    u8 *src = (u8 *)(buffer + offset);
-    u8 *dst = (u8 *)videoData.ptr;
-    
-    for (isize y = 0; y < height; y++, src += sizeof(u32) * HPIXELS, dst += width) {
-        std::memcpy(dst, src, width);
-    }
-    
-    // Feed the video pipe
     assert(videoPipe.isOpen());
-    isize length = width * height;
+
+    // Feed the video pipe
+
+    // EXPERIMENTAL
+    // printf("recordVideo: %d %d\n", amiga.host.frameBufferWidth, amiga.host.frameBufferHeight);
+
+    isize length = videoData.size * sizeof(u32);
     isize written = videoPipe.write((u8 *)videoData.ptr, length);
-    
+
     if (written != length || FORCE_RECORDING_ERROR) {
         state = State::abort;
     }
@@ -359,7 +374,6 @@ Recorder::recordVideo(Cycle target)
 void
 Recorder::recordAudio(Cycle target)
 {
-    
     // Clone Paula's muxer contents
     muxer.sampler[0] = paula.muxer.sampler[0];
     muxer.sampler[1] = paula.muxer.sampler[1];
@@ -390,7 +404,9 @@ Recorder::recordAudio(Cycle target)
 
 void
 Recorder::finalize()
-{    
+{
+    debug(REC_DEBUG, "finalize()\n");
+
     // Close pipes
     videoPipe.close();
     audioPipe.close();
@@ -402,12 +418,16 @@ Recorder::finalize()
     // Switch state and inform the GUI
     state = State::wait;
     recStop = util::Time::now();
+    debug(REC_DEBUG, "finalize() done\n");
+
     msgQueue.put(MSG_RECORDING_STOPPED);
 }
 
 void
 Recorder::abort()
 {
+    debug(REC_DEBUG, "abort()\n");
+
     finalize();
     msgQueue.put(MSG_RECORDING_ABORTED);
 }

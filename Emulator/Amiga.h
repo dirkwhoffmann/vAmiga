@@ -57,6 +57,8 @@ class Amiga : public Thread {
      */
     mutable AmigaInfo info = {};
 
+// public:
+    
     // Information about the host system
     HostInfo host = { .refreshRate = 60 };
 
@@ -280,6 +282,9 @@ public:
     // Gets or sets host parameters
     double getHostRefreshRate() const { return host.refreshRate; }
     void setHostRefreshRate(double refreshRate);
+    std::pair<isize, isize> getFrameBufferSize();
+    void setFrameBufferSize(std::pair<isize, isize> size);
+
     
 private:
     

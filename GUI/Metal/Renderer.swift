@@ -215,7 +215,11 @@ class Renderer: NSObject, MTKViewDelegate {
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
 
         reshape(withSize: size)
+
+        parent.amiga.frameBufferSize = size // NSSize(swidth: CGFloat(texture.width),
     }
+
+    var theDrawable: CAMetalDrawable? 
 
     func draw(in view: MTKView) {
         
@@ -228,11 +232,13 @@ class Renderer: NSObject, MTKViewDelegate {
         
         if let drawable = metalLayer.nextDrawable() {
 
+            theDrawable = drawable
+
             // Create the command buffer
             let buffer = makeCommandBuffer()
             
             // Create the command encoder
-            guard let encoder = makeCommandEncoder(drawable, buffer) else {
+            guard let encoder = makeCommandEncoder(theDrawable!, buffer) else {
                 semaphore.signal()
                 return
             }

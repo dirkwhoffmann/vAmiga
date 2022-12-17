@@ -199,6 +199,7 @@
 @property BOOL warpMode;
 @property BOOL debugMode;
 @property NSInteger hostRefreshRate;
+@property NSSize frameBufferSize;
 @property (readonly) NSInteger masterFrequency;
 @property (readonly) NSInteger cpuLoad;
 @property InspectionTarget inspectionTarget;
@@ -500,9 +501,14 @@
 @property (readonly) BOOL hasFFmpeg;
 @property (readonly) BOOL recording;
 @property (readonly) double duration;
+@property (readonly) NSInteger x1;
+@property (readonly) NSInteger y1;
+@property (readonly) NSInteger x2;
+@property (readonly) NSInteger y2;
 @property (readonly) NSInteger frameRate;
 @property (readonly) NSInteger bitRate;
 @property (readonly) NSInteger sampleRate;
+- (u32 *)getGpuData:(NSSize)size;
 
 - (void)startRecording:(NSRect)rect
                bitRate:(NSInteger)rate

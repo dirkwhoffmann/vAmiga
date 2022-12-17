@@ -85,6 +85,9 @@ class Canvas: Layer {
      */
     var finalTexture: MTLTexture! = nil
 
+    // EXPERIMENTAL
+    var framebufTexture: MTLTexture! = nil
+
     // Part of the texture that is currently visible
     var textureRect = CGRect() { didSet { buildVertexBuffers() } }
 
@@ -172,6 +175,12 @@ class Canvas: Layer {
                              "The upscaling texture could not be allocated.")
         renderer.metalAssert(scanlineTexture != nil,
                              "The scanline texture could not be allocated.")
+
+        // EXPERIMENTAL
+        framebufTexture = device.makeTexture(size: MTLSizeMake(4096, 4096, 0), usage: rwtp)
+        renderer.metalAssert(framebufTexture != nil,
+                             "Framebuf texture could not be allocated.")
+
     }
 
     //
@@ -210,6 +219,18 @@ class Canvas: Layer {
         return NSImage.make(texture: texture, rect: rect)
     }
 
+    func blitTexture(texture: MTLTexture) {
+
+        // Use the blitter to copy the texture data back from the GPU
+        let queue = texture.device.makeCommandQueue()!
+        let commandBuffer = queue.makeCommandBuffer()!
+        let blitEncoder = commandBuffer.makeBlitCommandEncoder()!
+        blitEncoder.synchronize(texture: texture, slice: 0, level: 0)
+        blitEncoder.endEncoding()
+        commandBuffer.commit()
+        commandBuffer.waitUntilCompleted()
+    }
+
     //
     // Updating
     //
@@ -218,7 +239,39 @@ class Canvas: Layer {
             
         super.update(frames: frames)
     }
-    
+
+    // EXPERIMENTAL
+    func grabFrameBuffer() {
+
+        if let frameBuffer = renderer.theDrawable?.texture {
+
+            let width = frameBuffer.width
+            let height = frameBuffer.height
+
+            let size = NSSize(width: CGFloat(width), height: CGFloat(height))
+            if let gpuData = amiga.recorder.getGpuData(size) {
+
+                /*
+                 let width = framebufTexture.width
+                 let height = framebufTexture.height
+                 */
+
+                // print("Copying frame buffer back (%d, %d)", width, height)
+
+                let origin = MTLOrigin(x: 0, y: 0, z: 0)
+                let size = MTLSize(width: width, height: height, depth: 1)
+
+                blitTexture(texture: framebufTexture)
+                framebufTexture.getBytes(UnsafeMutableRawPointer(mutating: gpuData),
+                                         bytesPerRow: width * 4,
+                                         bytesPerImage: width * height * 4,
+                                         from: MTLRegion(origin: origin, size: size),
+                                         mipmapLevel: 0,
+                                         slice: 0)
+            }
+        }
+    }
+
     func updateTexture() {
         
         precondition(lfTexture != nil)
@@ -259,7 +312,10 @@ class Canvas: Layer {
             // Determine if the new texture is a long frame or a short frame
             prevLOF = currLOF
             currLOF = amiga.denise.longFrame
-            
+
+            // Experimental (copy GPU texture back to emulator)
+             grabFrameBuffer()
+
             // Update the GPU texture
             if currLOF {
                 lfTexture.replace(w: Int(TPP * HPIXELS), h: Int(VPIXELS), buffer: buffer)
@@ -381,6 +437,7 @@ class Canvas: Layer {
         encoder.setFragmentTexture(bloomTextureG, index: 2)
         encoder.setFragmentTexture(bloomTextureB, index: 3)
         encoder.setFragmentTexture(ressourceManager.dotMask, index: 4)
+        encoder.setFragmentTexture(framebufTexture, index: 5)
 
         // Select the texture sampler
         if renderer.shaderOptions.blur > 0 {

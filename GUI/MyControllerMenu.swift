@@ -275,7 +275,6 @@ extension MyController: NSMenuItemValidation {
         if amiga.recorder.recording {
             
             amiga.recorder.stopRecording()
-            exportVideoAction(self)
             return
         }
         

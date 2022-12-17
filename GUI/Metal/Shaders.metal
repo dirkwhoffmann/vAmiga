@@ -141,6 +141,7 @@ fragment half4 fragment_main(ProjectedVertex vert [[ stage_in ]],
                              texture2d<float, access::sample> bloomTextureG [[ texture(2) ]],
                              texture2d<float, access::sample> bloomTextureB [[ texture(3) ]],
                              texture2d<float, access::sample> dotMask [[ texture(4) ]],
+                             texture2d<half, access::write> output [[ texture(5) ]],
                              constant ShaderOptions &options [[ buffer(0) ]],
                              constant FragmentUniforms &uniforms [[ buffer(1) ]],
                              sampler texSampler [[ sampler(0) ]])
@@ -193,6 +194,8 @@ fragment half4 fragment_main(ProjectedVertex vert [[ stage_in ]],
     }
     
     color = mix(color, float4(1.0, 1.0, 1.0, 1.0), uniforms.white);
+
+    output.write(half4(color.r, color.g, color.b, color.a * uniforms.alpha), uint2(x,y));
     return half4(color.r, color.g, color.b, color.a * uniforms.alpha);
 }
 

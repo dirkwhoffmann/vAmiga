@@ -598,11 +598,14 @@ extension MyController {
             
         case .RECORDING_STARTED:
             window?.backgroundColor = .warningColor
+            window?.styleMask.remove(.resizable)
             refreshStatusBar()
             
         case .RECORDING_STOPPED:
             window?.backgroundColor = .windowBackgroundColor
+            window?.styleMask.insert(.resizable)
             refreshStatusBar()
+            exportVideoAction(self)
 
         case .RECORDING_ABORTED:
             refreshStatusBar()
