@@ -287,25 +287,9 @@ extension MyController: NSMenuItemValidation {
             }
             return
         }
-        
-        var rect: CGRect
-        if pref.captureSource == .emulatorTexture {
 
-            rect = CGRect(x: 0,
-                          y: 0,
-                          width: renderer.canvas.mergeTexture.width,
-                          height: renderer.canvas.mergeTexture.height)
-
-        } else {
-
-            rect = CGRect(x: 0,
-                          y: 0,
-                          width: min(renderer.canvas.framebufTexture.width, Int(renderer.drawableSize.width)),
-                          height: min(renderer.canvas.framebufTexture.height, Int(renderer.drawableSize.height)))
-        }
-        
         do {
-            try amiga.recorder.startRecording(rect: rect,
+            try amiga.recorder.startRecording(rect: renderer.recordingRect,
                                               rate: pref.bitRate,
                                               ax: pref.aspectX,
                                               ay: pref.aspectY)

@@ -251,13 +251,28 @@ class Canvas: Layer {
             let width = Int(rect.width)
             let height = Int(rect.height)
 
-            blitTexture(texture: framebufTexture) // TODO: DO WE NEED THIS?
-            framebufTexture.getBytes(UnsafeMutableRawPointer(mutating: gpuData),
-                                     bytesPerRow: width * 4,
-                                     bytesPerImage: width * height * 4,
-                                     from: MTLRegionMake2D(0, 0, width, height),
-                                     mipmapLevel: 0,
-                                     slice: 0)
+            switch renderer.prefs.captureSource {
+
+            case .emulatorTexture:
+
+                // blitTexture(texture: mergeTexture) // NOT NEEDED
+                mergeTexture.getBytes(UnsafeMutableRawPointer(mutating: gpuData),
+                                      bytesPerRow: width * 4,
+                                      bytesPerImage: width * height * 4,
+                                      from: MTLRegionMake2D(0, 0, width, height),
+                                      mipmapLevel: 0,
+                                      slice: 0)
+
+            case .frambufferTexture:
+
+                blitTexture(texture: framebufTexture) // NOT NEEDED
+                framebufTexture.getBytes(UnsafeMutableRawPointer(mutating: gpuData),
+                                         bytesPerRow: width * 4,
+                                         bytesPerImage: width * height * 4,
+                                         from: MTLRegionMake2D(0, 0, width, height),
+                                         mipmapLevel: 0,
+                                         slice: 0)
+            }
         }
     }
 
