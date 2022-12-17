@@ -38,7 +38,7 @@ extension PreferencesController {
         let hasFFmpeg = amiga.recorder.hasFFmpeg
         genFFmpegPath.stringValue = amiga.recorder.path
         genFFmpegPath.textColor = hasFFmpeg ? .textColor : .warningColor
-        genSource.selectItem(withTag: pref.captureSource)
+        genSource.selectItem(withTag: pref.captureSourceIntValue)
         genBitRate.stringValue = "\(pref.bitRate)"
         genAspectX.integerValue = pref.aspectX
         genAspectY.integerValue = pref.aspectY
@@ -120,7 +120,7 @@ extension PreferencesController {
         
     @IBAction func capSourceAction(_ sender: NSPopUpButton!) {
         
-        pref.captureSource = sender.selectedTag()
+        pref.captureSourceIntValue = sender.selectedTag()
         refresh()
     }
 

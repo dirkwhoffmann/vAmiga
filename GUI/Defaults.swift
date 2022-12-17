@@ -399,7 +399,7 @@ extension Preferences {
         defaults.set(Keys.Gen.screenshotTarget, screenshotTargetIntValue)
         
         defaults.set(Keys.Gen.ffmpegPath, ffmpegPath)
-        defaults.set(Keys.Gen.captureSource, captureSource)
+        defaults.set(Keys.Gen.captureSource, captureSourceIntValue)
         defaults.set(Keys.Gen.bitRate, bitRate)
         defaults.set(Keys.Gen.aspectX, aspectX)
         defaults.set(Keys.Gen.aspectY, aspectY)
@@ -429,7 +429,7 @@ extension Preferences {
         screenshotTargetIntValue = defaults.int(Keys.Gen.screenshotTarget)
         
         ffmpegPath = defaults.string(Keys.Gen.ffmpegPath)
-        captureSource = defaults.int(Keys.Gen.captureSource)
+        captureSourceIntValue = defaults.int(Keys.Gen.captureSource)
         bitRate = defaults.int(Keys.Gen.bitRate)
         aspectX = defaults.int(Keys.Gen.aspectX)
         aspectY = defaults.int(Keys.Gen.aspectY)

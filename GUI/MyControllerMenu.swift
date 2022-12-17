@@ -289,10 +289,19 @@ extension MyController: NSMenuItemValidation {
         }
         
         var rect: CGRect
-        if pref.captureSource == 0 {
-            rect = renderer.canvas.textureRectAbs
+        if pref.captureSource == .emulatorTexture {
+
+            rect = CGRect(x: 0,
+                          y: 0,
+                          width: renderer.canvas.mergeTexture.width,
+                          height: renderer.canvas.mergeTexture.height)
+
         } else {
-            rect = renderer.canvas.entire
+
+            rect = CGRect(x: 0,
+                          y: 0,
+                          width: min(renderer.canvas.framebufTexture.width, Int(renderer.drawableSize.width)),
+                          height: min(renderer.canvas.framebufTexture.height, Int(renderer.drawableSize.height)))
         }
         
         do {

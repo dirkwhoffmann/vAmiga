@@ -85,7 +85,7 @@ class Canvas: Layer {
      */
     var finalTexture: MTLTexture! = nil
 
-    // EXPERIMENTAL
+    // Framebuffer backup (needed by the screen recorder)
     var framebufTexture: MTLTexture! = nil
 
     // Part of the texture that is currently visible
@@ -179,7 +179,7 @@ class Canvas: Layer {
         // EXPERIMENTAL
         framebufTexture = device.makeTexture(size: MTLSizeMake(4096, 4096, 0), usage: rwtp)
         renderer.metalAssert(framebufTexture != nil,
-                             "Framebuf texture could not be allocated.")
+                             "Framebuffer texture could not be allocated.")
 
     }
 
@@ -243,32 +243,21 @@ class Canvas: Layer {
     // EXPERIMENTAL
     func grabFrameBuffer() {
 
-        if let frameBuffer = renderer.theDrawable?.texture {
+        let rect = renderer.recordingRect
+        let size = NSSize(width: rect.width, height: rect.height)
 
-            let width = frameBuffer.width
-            let height = frameBuffer.height
+        if let gpuData = amiga.recorder.getGpuData(size) {
 
-            let size = NSSize(width: CGFloat(width), height: CGFloat(height))
-            if let gpuData = amiga.recorder.getGpuData(size) {
+            let width = Int(rect.width)
+            let height = Int(rect.height)
 
-                /*
-                 let width = framebufTexture.width
-                 let height = framebufTexture.height
-                 */
-
-                // print("Copying frame buffer back (%d, %d)", width, height)
-
-                let origin = MTLOrigin(x: 0, y: 0, z: 0)
-                let size = MTLSize(width: width, height: height, depth: 1)
-
-                blitTexture(texture: framebufTexture)
-                framebufTexture.getBytes(UnsafeMutableRawPointer(mutating: gpuData),
-                                         bytesPerRow: width * 4,
-                                         bytesPerImage: width * height * 4,
-                                         from: MTLRegion(origin: origin, size: size),
-                                         mipmapLevel: 0,
-                                         slice: 0)
-            }
+            blitTexture(texture: framebufTexture) // TODO: DO WE NEED THIS?
+            framebufTexture.getBytes(UnsafeMutableRawPointer(mutating: gpuData),
+                                     bytesPerRow: width * 4,
+                                     bytesPerImage: width * height * 4,
+                                     from: MTLRegionMake2D(0, 0, width, height),
+                                     mipmapLevel: 0,
+                                     slice: 0)
         }
     }
 

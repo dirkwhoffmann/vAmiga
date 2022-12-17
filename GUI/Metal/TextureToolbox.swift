@@ -179,7 +179,12 @@ extension UnsafeMutablePointer where Pointee == UInt32 {
 //
 
 extension MTLTexture {
-    
+
+    var size: MTLSize {
+
+        return MTLSize(width: width, height: height, depth: 1)
+    }
+
     func replace(region: MTLRegion, buffer: UnsafeMutablePointer<UInt32>?) {
         
         if buffer != nil {

@@ -103,11 +103,6 @@ Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
 
     SYNCHRONIZED
 
-    x1 = 0;
-    x2 = amiga.getFrameBufferSize().first;
-    y1 = 0;
-    y2 = amiga.getFrameBufferSize().second;
-
     debug(REC_DEBUG, "startRecording(%ld,%ld,%ld,%ld,%ld,%ld,%ld)\n",
           x1, y1, x2, y2, bitRate, aspectX, aspectY);
     

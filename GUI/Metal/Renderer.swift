@@ -26,10 +26,13 @@ class Renderer: NSObject, MTKViewDelegate {
     var prefs: Preferences { return parent.pref }
     var config: Configuration { return parent.config }
 
+    // The current size of framebuffer
+    var drawableSize = CGSize()
+
     // Number of drawn frames since power up
     var frames: Int64 = 0
 
-    // The current frame GPU frame rate
+    // The current GPU frame rate
     var fps = 60
 
     // Time stamp used for auto-detecting the frame rate
@@ -166,7 +169,38 @@ class Renderer: NSObject, MTKViewDelegate {
         // Rebuild depth buffer
         ressourceManager.buildDepthBuffer()
     }
-    
+
+    var recordingRect: CGRect {
+
+        var x, y, w, h: Int
+
+        switch prefs.captureSource {
+
+        case .emulatorTexture:
+
+            x = 0
+            y = 0
+            w = canvas.mergeTexture.width
+            h = canvas.mergeTexture.height
+
+        case .frambufferTexture:
+
+            x = 0
+            y = 0
+            w = Int(canvas.renderer.drawableSize.width)
+            h = Int(canvas.renderer.drawableSize.height)
+
+            if x > canvas.framebufTexture.width { x = canvas.framebufTexture.width }
+            if y > canvas.framebufTexture.height { y = canvas.framebufTexture.height }
+        }
+
+        // Make sure the screen dimensions are even
+        if w % 2 == 1 { w -= 1 }
+        if h % 2 == 1 { h -= 1 }
+
+        return CGRect(x: CGFloat(x), y: CGFloat(y), width: CGFloat(w), height: CGFloat(h))
+    }
+
     //
     //  Drawing
     //
@@ -214,9 +248,24 @@ class Renderer: NSObject, MTKViewDelegate {
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
 
+        drawableSize = size
+        parent.amiga.frameBufferSize = size
         reshape(withSize: size)
 
-        parent.amiga.frameBufferSize = size // NSSize(swidth: CGFloat(texture.width),
+        /*
+        let rwtp: MTLTextureUsage = [ .shaderRead, .shaderWrite, .renderTarget, .pixelFormatView ] // TODO: Are all needed?
+
+        let oldWidth = canvas.framebufTexture.width
+        let oldHeight = canvas.framebufTexture.height
+        let newWidth = Int(size.width)
+        let newHeight = Int(size.height)
+
+        if newWidth > oldWidth || newHeight > oldHeight {
+
+            print("Resizing framebuffer texture to (\(newWidth), \(newHeight))")
+            canvas.framebufTexture = device.makeTexture(size: MTLSizeMake(newWidth, newHeight, 0), usage: rwtp)
+        }
+        */
     }
 
     var theDrawable: CAMetalDrawable? 

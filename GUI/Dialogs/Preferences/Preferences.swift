@@ -16,6 +16,12 @@ import Carbon.HIToolbox
  * See class "Configuration" for instance specific settings.
  */
 
+public enum CaptureSource: Int {
+
+    case emulatorTexture = 0
+    case frambufferTexture = 1
+}
+
 class Preferences {
     
     //
@@ -46,7 +52,12 @@ class Preferences {
             }
         }
     }
-    var captureSource = 0
+    var captureSource: CaptureSource = .emulatorTexture
+    var captureSourceIntValue: Int {
+        get { return Int(captureSource.rawValue) }
+        set { captureSource = CaptureSource(rawValue: Int(newValue)) ?? .emulatorTexture }
+    }
+
     var bitRate = 512 {
         didSet {
             if bitRate < 64 { bitRate = 64 }
