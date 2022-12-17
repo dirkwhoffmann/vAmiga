@@ -359,37 +359,6 @@ RetroShell::exec <Token::cia, Token::set, Token::esync> (Arguments &argv, long p
     amiga.configure(OPT_ECLOCK_SYNCING, param, value);
 }
 
-/*
-template <> void
-RetroShell::exec <Token::cia, Token::inspect, Token::state> (Arguments& argv, long param)
-{
-    if (param == 0) {
-        dump(amiga.ciaA, Category::State);
-    } else {
-        dump(amiga.ciaB, Category::State);
-    }
-}
-
-template <> void
-RetroShell::exec <Token::cia, Token::inspect, Token::registers> (Arguments& argv, long param)
-{
-    if (param == 0) {
-        dump(amiga.ciaA, Category::Registers);
-    } else {
-        dump(amiga.ciaB, Category::Registers);
-    }
-}
-
-template <> void
-RetroShell::exec <Token::cia, Token::inspect, Token::tod> (Arguments& argv, long param)
-{
-    if (param == 0) {
-        dump(amiga.ciaA, Category::Tod);
-    } else {
-        dump(amiga.ciaB, Category::Tod);
-    }
-}
-*/
 
 //
 // Agnus
@@ -576,7 +545,7 @@ RetroShell::exec <Token::denise, Token::hide, Token::layers> (Arguments &argv, l
 template <> void
 RetroShell::exec <Token::denise, Token::inspect, Token::state> (Arguments& argv, long param)
 {
-    dump(amiga.denise, Category::State);
+    dump(amiga.denise, Category::Details);
 }
 
 template <> void
@@ -776,7 +745,7 @@ RetroShell::exec <Token::audio, Token::set, Token::pan> (Arguments& argv, long p
 template <> void
 RetroShell::exec <Token::audio, Token::inspect, Token::state> (Arguments& argv, long param)
 {
-    dump(amiga.paula.muxer, Category::State);
+    dump(amiga.paula.muxer, Category::Details);
 }
 
 template <> void
@@ -793,7 +762,7 @@ RetroShell::exec <Token::audio, Token::inspect, Token::registers> (Arguments& ar
 template <> void
 RetroShell::exec <Token::paula, Token::inspect, Token::state> (Arguments& argv, long param)
 {
-    dump(amiga.paula, Category::State);
+    dump(amiga.paula, Category::Details);
 }
 
 template <> void
@@ -839,7 +808,7 @@ RetroShell::exec <Token::controlport, Token::config> (Arguments& argv, long para
 template <> void
 RetroShell::exec <Token::controlport, Token::inspect> (Arguments& argv, long param)
 {
-    dump(param == 0 ? amiga.controlPort1 : amiga.controlPort2, Category::State);
+    dump(param == 0 ? amiga.controlPort1 : amiga.controlPort2, Category::Details);
 }
 
 
@@ -862,7 +831,7 @@ RetroShell::exec <Token::keyboard, Token::set, Token::accuracy> (Arguments &argv
 template <> void
 RetroShell::exec <Token::keyboard, Token::inspect> (Arguments& argv, long param)
 {
-    dump(amiga.keyboard, Category::State);
+    dump(amiga.keyboard, Category::Details);
 }
 
 template <> void
@@ -909,7 +878,7 @@ template <> void
 RetroShell::exec <Token::mouse, Token::inspect> (Arguments& argv, long param)
 {
     auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
-    dump(port.mouse, Category::State);
+    dump(port.mouse, Category::Details);
 }
 
 template <> void
@@ -963,7 +932,7 @@ template <> void
 RetroShell::exec <Token::joystick, Token::inspect> (Arguments& argv, long param)
 {
     auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
-    dump(port.joystick, Category::State);
+    dump(port.joystick, Category::Details);
 }
 
 template <> void
@@ -1062,7 +1031,7 @@ RetroShell::exec <Token::serial, Token::set, Token::device> (Arguments &argv, lo
 template <> void
 RetroShell::exec <Token::serial, Token::inspect> (Arguments& argv, long param)
 {
-    dump(amiga.serialPort, Category::State);
+    dump(amiga.serialPort, Category::Details);
 }
 
 
@@ -1079,7 +1048,7 @@ RetroShell::exec <Token::dc, Token::config> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::dc, Token::inspect> (Arguments& argv, long param)
 {
-    dump(amiga.paula.diskController, Category::State);
+    dump(amiga.paula.diskController, Category::Details);
 }
 
 template <> void
@@ -1248,7 +1217,7 @@ RetroShell::exec <Token::dfn, Token::set, Token::swapdelay> (Arguments& argv, lo
 template <> void
 RetroShell::exec <Token::dfn, Token::inspect> (Arguments& argv, long param)
 {
-    dump(*amiga.df[param], Category::State);
+    dump(*amiga.df[param], Category::Details);
 }
 
 template <> void
@@ -1314,7 +1283,7 @@ RetroShell::exec <Token::hdn, Token::inspect, Token::partition> (Arguments& argv
 template <> void
 RetroShell::exec <Token::hdn, Token::inspect, Token::state> (Arguments& argv, long param)
 {
-    dump(*amiga.hd[param], Category::State);
+    dump(*amiga.hd[param], Category::Details);
 }
 
 template <> void
@@ -1334,7 +1303,7 @@ RetroShell::exec <Token::hdn, Token::geometry> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::zorro, Token::list> (Arguments& argv, long param)
 {
-    dump(zorro, Category::State);
+    dump(zorro, Category::Details);
 }
 
 template <> void
@@ -1345,7 +1314,7 @@ RetroShell::exec <Token::zorro, Token::inspect> (Arguments& argv, long param)
     if (auto board = zorro.getBoard(value); board != nullptr) {
 
         dump(*board, Category::Properties);
-        dump(*board, Category::State);
+        dump(*board, Category::Details);
         dump(*board, Category::Stats);
     }
 }
@@ -1382,7 +1351,7 @@ RetroShell::exec <Token::server, Token::serial, Token::config> (Arguments& argv,
 template <> void
 RetroShell::exec <Token::server, Token::serial, Token::inspect> (Arguments& argv, long param)
 {
-    dump(remoteManager.serServer, Category::State);
+    dump(remoteManager.serServer, Category::Details);
 }
 
 template <> void
@@ -1424,7 +1393,7 @@ RetroShell::exec <Token::server, Token::rshell, Token::config> (Arguments& argv,
 template <> void
 RetroShell::exec <Token::server, Token::rshell, Token::inspect> (Arguments& argv, long param)
 {
-    dump(remoteManager.rshServer, Category::State);
+    dump(remoteManager.rshServer, Category::Details);
 }
 
 template <> void
@@ -1460,7 +1429,7 @@ RetroShell::exec <Token::server, Token::gdb, Token::config> (Arguments& argv, lo
 template <> void
 RetroShell::exec <Token::server, Token::gdb, Token::inspect> (Arguments& argv, long param)
 {
-    dump(remoteManager.gdbServer, Category::State);
+    dump(remoteManager.gdbServer, Category::Details);
 }
 
 }

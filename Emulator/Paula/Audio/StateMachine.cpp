@@ -25,7 +25,7 @@ StateMachine<nr>::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == Category::State) {
+    if (category == Category::Details) {
         
         os << tab("State") << dec(state) << std::endl;
         os << tab("AUDxIP") << bol(AUDxIP()) << std::endl;

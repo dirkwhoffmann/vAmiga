@@ -178,7 +178,7 @@ CIA::_dump(Category category, std::ostream& os) const
         os << bol(config.eClockSyncing) << std::endl;
     }
 
-    if (category == Category::Info) {
+    if (category == Category::Summary) {
         
         os << std::endl;
         os << tab("Counter A") << hex(counterA) << std::endl;
@@ -204,7 +204,7 @@ CIA::_dump(Category category, std::ostream& os) const
         os << std::endl;
     }
 
-    if (category == Category::State) {
+    if (category == Category::Details) {
 
         os << tab("Clock") << dec(clock) << std::endl;
         os << tab("Sleeping") << bol(sleeping) << std::endl;
@@ -217,7 +217,7 @@ CIA::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Tod) {
         
-        tod.dump(Category::State, os);
+        tod.dump(Category::Details, os);
     }
 }
 

@@ -75,7 +75,7 @@ Denise::_dump(Category category, std::ostream& os) const
         os << bol(config.clxSprSpr) << std::endl;
     }
 
-    if (category == Category::State) {
+    if (category == Category::Details) {
 
         os << tab("Resolution");
         os << ResolutionEnum::key(res) << std::endl;

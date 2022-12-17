@@ -951,7 +951,7 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << bol(config.vsync) << std::endl;
     }
 
-    if (category == Category::Info) {
+    if (category == Category::Summary) {
 
         os << tab("Thread state");
         os << ExecutionStateEnum::key(state) << std::endl;
@@ -976,7 +976,7 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << dec(CIA_CYCLES(ciaA.getClock())) << " Master cycles" << std::endl;
     }
 
-    if (category == Category::State) {
+    if (category == Category::Details) {
 
         os << tab("Thread state");
         os << ExecutionStateEnum::key(state) << std::endl;

@@ -24,7 +24,7 @@ ZorroManager::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == Category::State) {
+    if (category == Category::Details) {
         
         for (isize i = 0; i < slotCount; i++) {
             

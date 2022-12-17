@@ -34,7 +34,7 @@ Paula::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == Category::State) {
+    if (category == Category::Details) {
         
         os << tab("potCntX0") << dec(potCntX0) << std::endl;
         os << tab("potCntY0") << dec(potCntY0) << std::endl;
