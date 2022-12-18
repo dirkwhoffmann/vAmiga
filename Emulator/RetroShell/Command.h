@@ -18,6 +18,21 @@ class RetroShell;
 
 typedef std::vector<string> Arguments;
 
+enum class Arg {
+
+    address,
+    argument,
+    boolean,
+    command,
+    onoff,
+    model,
+    path,
+    revision,
+    unit,
+    value,
+    volume
+};
+
 struct Command {
 
     //Textual descriptions of all command groups
@@ -32,9 +47,12 @@ struct Command {
     // Full name of this command (e.g., "df0 eject")
     string fullName;
 
-    // Parameter description (e.g., "<percentage>");
-    string parameters;
-    
+    // List of required arguments
+    std::vector<Arg> reqArgs;
+
+    // List of additional optional arguments
+    std::vector<Arg> optArgs;
+
     // Help string
     string help;
     
@@ -65,32 +83,22 @@ struct Command {
     // Creates a new node in the command tree
     void add(const std::vector<string> &tokens,
              const string &help);
-    
-    void add(const std::vector<string> &tokens,
-             const string &help,
-             void (RetroShell::*action)(Arguments&, long),
-             isize numArgs,
-             long param = 0);
-
-    void add(const std::vector<string> &tokens,
-             const string &parameters,
-             const string &help,
-             void (RetroShell::*action)(Arguments&, long),
-             isize numArgs,
-             long param = 0);
 
     void add(const std::vector<string> &tokens,
              const string &help,
-             void (RetroShell::*action)(Arguments&, long),
-             std::pair <isize,isize> numArgs,
-             long param = 0);
+             void (RetroShell::*action)(Arguments&, long), long param = 0);
 
     void add(const std::vector<string> &tokens,
-             const string &parameters,
+             const std::vector<Arg> &args,
              const string &help,
-             void (RetroShell::*action)(Arguments&, long),
-             std::pair <isize,isize> numArgs,
-             long param = 0);
+             void (RetroShell::*action)(Arguments&, long), long param = 0);
+
+
+    void add(const std::vector<string> &tokens,
+             const std::vector<Arg> &requiredArgs,
+             const std::vector<Arg> &optionalArgs,
+             const string &help,
+             void (RetroShell::*action)(Arguments&, long), long param = 0);
 
     // Marks a command as hidden
     void hide(const std::vector<string> &tokens);

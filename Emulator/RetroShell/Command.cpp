@@ -18,56 +18,39 @@ std::vector<string> Command::groups;
 void
 Command::newGroup(const string &description, const string &postfix)
 {
-    groups.push_back(description + postfix);
+    groups.push_back(description.empty() ? "" : description + postfix);
 }
 
 void
 Command::add(const std::vector<string> &tokens,
              const string &help)
 {
-    add(tokens, help, nullptr, 0, 0);
+    add(tokens, help, nullptr);
 }
 
 void
 Command::add(const std::vector<string> &tokens,
              const string &help,
-             void (RetroShell::*action)(Arguments&, long),
-             isize numArgs,
-             long param)
+             void (RetroShell::*action)(Arguments&, long), long param)
 {
-    add(tokens, "", help, action, { numArgs, numArgs }, param);
+    add(tokens, { }, { }, help, action, param);
 }
 
 void
 Command::add(const std::vector<string> &tokens,
-             const string &parameters,
+             const std::vector<Arg> &arguments,
              const string &help,
-             void (RetroShell::*action)(Arguments&, long),
-             isize numArgs,
-             long param)
+             void (RetroShell::*action)(Arguments&, long), long param)
 {
-    add(tokens, parameters, help, action, { numArgs, numArgs }, param);
+    add(tokens, arguments, { }, help, action, param);
 }
 
 void
 Command::add(const std::vector<string> &tokens,
+             const std::vector<Arg> &requiredArgs,
+             const std::vector<Arg> &optionalArgs,
              const string &help,
-             void (RetroShell::*action)(Arguments&, long),
-             std::pair <isize,isize> numArgs,
-             long param)
-{
-    assert(!tokens.empty());
-
-    add(tokens, "", help, action, numArgs, param);
-}
-
-void
-Command::add(const std::vector<string> &tokens,
-             const string &parameters,
-             const string &help,
-             void (RetroShell::*action)(Arguments&, long),
-             std::pair <isize,isize> numArgs,
-             long param)
+             void (RetroShell::*action)(Arguments&, long), long param)
 {
     assert(!tokens.empty());
     
@@ -83,11 +66,12 @@ Command::add(const std::vector<string> &tokens,
     d.name = tokens.back();
     d.fullName = (cmd->fullName.empty() ? "" : cmd->fullName + " ") + tokens.back();
     d.group = groups.size() - 1;
-    d.parameters = parameters;
+    d.reqArgs = requiredArgs;
+    d.optArgs = optionalArgs;
+    d.minArgs = requiredArgs.size();
+    d.maxArgs = requiredArgs.size() + optionalArgs.size();
     d.help = help;
     d.action = action;
-    d.minArgs = numArgs.first;
-    d.maxArgs = numArgs.second;
     d.param = param;
 
     // Register the instruction
@@ -171,24 +155,65 @@ Command::autoComplete(const string& token)
 string
 Command::usage() const
 {
+    printf("parameters.size() = %ld maxArgs = %ld\n", isize(reqArgs.size()), maxArgs);
+    assert(isize(reqArgs.size()) == maxArgs); // TODO: MOVE TO REGISTER FUNCTION
+
     string arguments;
+
+    auto name = [&](const Arg &arg) {
+
+        switch (arg) {
+
+            case Arg::address:  return "<address>";
+            case Arg::argument: return "<argument>";
+            case Arg::boolean:  return "{ true | false }";
+            case Arg::command:  return "<command>";
+            case Arg::onoff:    return "{ on | off }";
+            case Arg::model:    return "<model>";
+            case Arg::path:     return "<path>";
+            case Arg::revision: return "<revision>";
+            case Arg::unit:     return "<unit>";
+            case Arg::value:    return "<value>";
+            case Arg::volume:   return "<volume>";
+
+            default:
+                fatalError;
+        }
+    };
 
     if (subCommands.empty()) {
 
-        if (minArgs == 0 && maxArgs == 0) arguments = "<no arguments>";
-        if (minArgs == 0 && maxArgs >= 1) arguments = "[ " + parameters + " ]";
-        if (minArgs >= 1) arguments = parameters;
+        string required;
+        string optional;
+        for (isize i = 0; i < minArgs; i++) {
 
-        /*
-        arguments = minArgs == 0 ? "" : minArgs == 1 ? "<value>" : "<values>";
-        if (maxArgs - minArgs == 1) arguments += " [ <value> ]";
-        if (maxArgs - minArgs >= 2) arguments += " [ <values> ]";
-        if (arguments == "") arguments = "<no arguments>";
-        */
+            if (i) required += " ";
+            required += name(reqArgs[i]);
+        }
+        for (isize i = minArgs; i < maxArgs; i++) {
+
+            if (i) optional + " ";
+            optional += name(reqArgs[i]);
+        }
+
+        arguments = required;
+        if (arguments != "") arguments += " ";
+        if (optional != "") arguments += "[ " + required + " ]";
+        // if (arguments == "") arguments = "<no arguments>";
 
     } else {
 
-        arguments = action ? "[ <command> ]" : "<command> ...";
+        // Collect all sub-commands
+        for (auto &it : subCommands) {
+
+            if (arguments != "") arguments += " | ";
+            arguments += it.name;
+        }
+        if (action) {
+            arguments = "[ {" + arguments + "} ]";
+        } else {
+            arguments = "{ " + arguments + " }";
+        }
     }
 
     return fullName + " " + arguments;

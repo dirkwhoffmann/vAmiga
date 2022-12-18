@@ -495,7 +495,14 @@ RetroShell::describe(const std::exception &e)
         *this << '\n';
         return;
     }
-    
+
+    if (auto err = dynamic_cast<const util::ParseOnOffError *>(&e)) {
+
+        *this << err->token << " must be on or off";
+        *this << '\n';
+        return;
+    }
+
     if (auto err = dynamic_cast<const util::ParseError *>(&e)) {
 
         *this << err->what() << ": Syntax error";

@@ -170,16 +170,17 @@ RetroShell::exec <Token::amiga, Token::init> (Arguments &argv, long param)
 }
 
 template <> void
-RetroShell::exec <Token::amiga, Token::power, Token::on> (Arguments &argv, long param)
+RetroShell::exec <Token::amiga, Token::power> (Arguments &argv, long param)
 {
-    amiga.powerOn();
-    amiga.run();
-}
+    if (util::parseOnOff(argv.front())) {
 
-template <> void
-RetroShell::exec <Token::amiga, Token::power, Token::off> (Arguments &argv, long param)
-{
-    amiga.powerOff();
+        amiga.powerOn();
+        amiga.run();
+
+    } else {
+
+        amiga.powerOff();
+    }
 }
 
 template <> void

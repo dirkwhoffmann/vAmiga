@@ -26,27 +26,27 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"pause"},
              "Pauses emulation",
-             &RetroShell::exec <Token::pause>, 0);
+             &RetroShell::exec <Token::pause>);
 
     root.add({"run"},
              "Continues emulation",
-             &RetroShell::exec <Token::run>, 0);
+             &RetroShell::exec <Token::run>);
 
     root.add({"step"},
              "Steps into the next instruction",
-             &RetroShell::exec <Token::step>, 0);
+             &RetroShell::exec <Token::step>);
 
     root.add({"next"},
              "Steps over the next instruction",
-             &RetroShell::exec <Token::next>, 0);
+             &RetroShell::exec <Token::next>);
 
-    root.add({"goto"},
+    root.add({"goto"}, { Arg::address },
              "Redirects the program counter",
-             &RetroShell::exec <Token::jump>, 1);
+             &RetroShell::exec <Token::jump>);
 
-    root.add({"disassemble"},
+    root.add({"disassemble"}, { Arg::address },
              "Runs disassembler",
-             &RetroShell::exec <Token::disassemble>, {0, 1});
+             &RetroShell::exec <Token::disassemble>);
 
 
     root.newGroup("Guarding the program execution");
@@ -111,27 +111,27 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"break", ""},
              "Lists all breakpoints",
-             &RetroShell::exec <Token::bp>, 0);
+             &RetroShell::exec <Token::bp>);
 
-    root.add({"break", "at"},
+    root.add({"break", "at"}, { Arg::address },
              "Sets a breakpoint at the specified address",
-             &RetroShell::exec <Token::bp, Token::at>, 1);
+             &RetroShell::exec <Token::bp, Token::at>);
 
-    root.add({"break", "delete"},
+    root.add({"break", "delete"}, { Arg::address },
              "Deletes a breakpoint",
-             &RetroShell::exec <Token::bp, Token::del>, 1);
+             &RetroShell::exec <Token::bp, Token::del>);
 
-    root.add({"break", "enable"},
+    root.add({"break", "enable"}, { Arg::address },
              "Enables a breakpoint",
-             &RetroShell::exec <Token::bp, Token::enable>, 1);
+             &RetroShell::exec <Token::bp, Token::enable>);
 
-    root.add({"break", "disable"},
+    root.add({"break", "disable"}, { Arg::address },
              "Disables a breakpoint",
-             &RetroShell::exec <Token::bp, Token::disable>, 1);
+             &RetroShell::exec <Token::bp, Token::disable>);
 
-    root.add({"break", "ignore"},
+    root.add({"break", "ignore"}, { Arg::address, Arg::value },
              "Ignores a breakpoint a certain number of times",
-             &RetroShell::exec <Token::bp, Token::ignore>, 2);
+             &RetroShell::exec <Token::bp, Token::ignore>);
 
     //
     // Watchpoints
@@ -141,27 +141,27 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"watch", ""},
              "Lists all watchpoints",
-             &RetroShell::exec <Token::wp>, 0);
+             &RetroShell::exec <Token::wp>);
 
-    root.add({"watch", "at"},
+    root.add({"watch", "at"}, { Arg::address },
              "Sets a watchpoint at the specified address",
-             &RetroShell::exec <Token::wp, Token::at>, 1);
+             &RetroShell::exec <Token::wp, Token::at>);
 
-    root.add({"watch", "delete"},
+    root.add({"watch", "delete"}, { Arg::address },
              "Deletes a watchpoint",
-             &RetroShell::exec <Token::wp, Token::del>, 1);
+             &RetroShell::exec <Token::wp, Token::del>);
 
-    root.add({"watch", "enable"},
+    root.add({"watch", "enable"}, { Arg::address },
              "Enables a watchpoint",
-             &RetroShell::exec <Token::wp, Token::enable>, 1);
+             &RetroShell::exec <Token::wp, Token::enable>);
 
-    root.add({"watch", "disable"},
+    root.add({"watch", "disable"}, { Arg::address },
              "Disables a watchpoint",
-             &RetroShell::exec <Token::wp, Token::disable>, 1);
+             &RetroShell::exec <Token::wp, Token::disable>);
 
-    root.add({"watch", "ignore"},
+    root.add({"watch", "ignore"}, { Arg::address, Arg::value },
              "Ignores a watchpoint a certain number of times",
-             &RetroShell::exec <Token::wp, Token::ignore>, 2);
+             &RetroShell::exec <Token::wp, Token::ignore>);
 
     //
     // Catchpoints
@@ -171,35 +171,35 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"catch", ""},
              "Lists all catchpoints",
-             &RetroShell::exec <Token::cp>, 0);
+             &RetroShell::exec <Token::cp>);
 
-    root.add({"catch", "vector"},
+    root.add({"catch", "vector"}, { Arg::value },
              "Catches an exception vector",
-             &RetroShell::exec <Token::cp, Token::vector>, 1);
+             &RetroShell::exec <Token::cp, Token::vector>);
 
-    root.add({"catch", "interrupt"},
+    root.add({"catch", "interrupt"}, { Arg::value },
              "Catches an interrupt",
-             &RetroShell::exec <Token::cp, Token::interrupt>, 1);
+             &RetroShell::exec <Token::cp, Token::interrupt>);
 
-    root.add({"catch", "trap"},
+    root.add({"catch", "trap"}, { Arg::value },
              "Catches a trap instruction",
-             &RetroShell::exec <Token::cp, Token::trap>, 1);
+             &RetroShell::exec <Token::cp, Token::trap>);
 
-    root.add({"catch", "delete"},
+    root.add({"catch", "delete"}, { Arg::value },
              "Deletes a catchpoint",
-             &RetroShell::exec <Token::cp, Token::del>, 1);
+             &RetroShell::exec <Token::cp, Token::del>);
 
-    root.add({"catch", "enable"},
+    root.add({"catch", "enable"}, { Arg::value },
              "Enables a catchpoint",
-             &RetroShell::exec <Token::cp, Token::enable>, 1);
+             &RetroShell::exec <Token::cp, Token::enable>);
 
-    root.add({"catch", "disable"},
+    root.add({"catch", "disable"}, { Arg::value },
              "Disables a catchpoint",
-             &RetroShell::exec <Token::cp, Token::disable>, 1);
+             &RetroShell::exec <Token::cp, Token::disable>);
 
-    root.add({"catch", "ignore"},
+    root.add({"catch", "ignore"}, { Arg::value, Arg::value },
              "Ignores a catchpoint a certain number of times",
-             &RetroShell::exec <Token::cp, Token::ignore>, 2);
+             &RetroShell::exec <Token::cp, Token::ignore>);
 
 
     //
@@ -208,27 +208,27 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"cbreak", ""},
              "Lists all breakpoints",
-             &RetroShell::exec <Token::cbp>, 0);
+             &RetroShell::exec <Token::cbp>);
 
-    root.add({"cbreak", "at"},
+    root.add({"cbreak", "at"}, { Arg::value },
              "Sets a breakpoint at the specified address",
-             &RetroShell::exec <Token::cbp, Token::at>, 1);
+             &RetroShell::exec <Token::cbp, Token::at>);
 
-    root.add({"cbreak", "delete"},
+    root.add({"cbreak", "delete"}, { Arg::value },
              "Deletes a breakpoint",
-             &RetroShell::exec <Token::cbp, Token::del>, 1);
+             &RetroShell::exec <Token::cbp, Token::del>);
 
-    root.add({"cbreak", "enable"},
+    root.add({"cbreak", "enable"}, { Arg::value },
              "Enables a breakpoint",
-             &RetroShell::exec <Token::cbp, Token::enable>, 1);
+             &RetroShell::exec <Token::cbp, Token::enable>);
 
-    root.add({"cbreak", "disable"},
+    root.add({"cbreak", "disable"}, { Arg::value },
              "Disables a breakpoint",
-             &RetroShell::exec <Token::cbp, Token::disable>, 1);
+             &RetroShell::exec <Token::cbp, Token::disable>);
 
-    root.add({"cbreak", "ignore"},
+    root.add({"cbreak", "ignore"}, { Arg::value, Arg::value },
              "Ignores a breakpoint a certain number of times",
-             &RetroShell::exec <Token::cbp, Token::ignore>, 2);
+             &RetroShell::exec <Token::cbp, Token::ignore>);
 
 
     //
@@ -237,27 +237,27 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"cwatch", ""},
              "Lists all watchpoints",
-             &RetroShell::exec <Token::cwp>, 0);
+             &RetroShell::exec <Token::cwp>);
 
-    root.add({"cwatch", "at"},
+    root.add({"cwatch", "at"}, { Arg::value },
              "Sets a watchpoint at the specified address",
-             &RetroShell::exec <Token::cwp, Token::at>, 1);
+             &RetroShell::exec <Token::cwp, Token::at>);
 
-    root.add({"cwatch", "delete"},
+    root.add({"cwatch", "delete"}, { Arg::value },
              "Deletes a watchpoint",
-             &RetroShell::exec <Token::cwp, Token::del>, 1);
+             &RetroShell::exec <Token::cwp, Token::del>);
 
-    root.add({"cwatch", "enable"},
+    root.add({"cwatch", "enable"}, { Arg::value },
              "Enables a watchpoint",
-             &RetroShell::exec <Token::cwp, Token::enable>, 1);
+             &RetroShell::exec <Token::cwp, Token::enable>);
 
-    root.add({"cwatch", "disable"},
+    root.add({"cwatch", "disable"}, { Arg::value },
              "Disables a watchpoint",
-             &RetroShell::exec <Token::cwp, Token::disable>, 1);
+             &RetroShell::exec <Token::cwp, Token::disable>);
 
-    root.add({"cwatch", "ignore"},
+    root.add({"cwatch", "ignore"}, { Arg::value, Arg::value },
              "Ignores a watchpoint a certain number of times",
-             &RetroShell::exec <Token::cwp, Token::ignore>, 2);
+             &RetroShell::exec <Token::cwp, Token::ignore>);
 
 
     //
@@ -268,39 +268,39 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"amiga", ""},
              "Lorem ipsum",
-             &RetroShell::exec <Token::amiga>, 0);
+             &RetroShell::exec <Token::amiga>);
 
     root.add({"amiga", "state"},
              "Lorem ipsum",
-             &RetroShell::exec <Token::amiga, Token::state>, 0);
+             &RetroShell::exec <Token::amiga, Token::state>);
 
     root.add({"memory", ""},
              "Lorem ipsum",
-             &RetroShell::exec <Token::memory>, 0);
+             &RetroShell::exec <Token::memory>);
 
-    root.add({"memory", "dump"},
+    root.add({"memory", "dump"}, { Arg::address },
              "Generates a memory hexdump",
-             &RetroShell::exec <Token::memory, Token::memdump>, 1);
+             &RetroShell::exec <Token::memory, Token::memdump>);
 
     root.add({"memory", "banks"},
              "Dumps the memory bank map",
-             &RetroShell::exec <Token::memory, Token::bankmap>, 0);
+             &RetroShell::exec <Token::memory, Token::bankmap>);
 
     root.add({"memory", "checksum"},
              "Computes memory checksums",
-             &RetroShell::exec <Token::memory, Token::checksums>, 0);
+             &RetroShell::exec <Token::memory, Token::checksums>);
 
     root.add({"cpu", ""},
              "Lorem ipsum",
-             &RetroShell::exec <Token::cpu>, 0);
+             &RetroShell::exec <Token::cpu>);
 
     root.add({"cpu", "state"},
              "Inspects the internal state",
-             &RetroShell::exec <Token::cpu, Token::state>, 0);
+             &RetroShell::exec <Token::cpu, Token::state>);
 
     root.add({"cpu", "vectors"},
              "Dumps the vector table",
-             &RetroShell::exec <Token::cpu, Token::vectors>, 0);
+             &RetroShell::exec <Token::cpu, Token::vectors>);
 
     for (isize i = 0; i < 2; i++) {
 
@@ -308,115 +308,115 @@ Interpreter::initDebugShell(Command &root)
 
         root.add({cia, ""},
                  "Displays the internal state",
-                 &RetroShell::exec <Token::cia>, 0, i);
+                 &RetroShell::exec <Token::cia>, i);
 
         root.add({cia, "state"},
                  "Displays the internal state",
-                 &RetroShell::exec <Token::cia, Token::state>, 0, i);
+                 &RetroShell::exec <Token::cia, Token::state>, i);
 
         root.add({cia, "tod"},
                  "Displays the state of the 24-bit counter",
-                 &RetroShell::exec <Token::cia, Token::tod>, 0, i);
+                 &RetroShell::exec <Token::cia, Token::tod>, i);
     }
 
     root.add({"agnus", ""},
              "Lorem ipsum",
-             &RetroShell::exec <Token::agnus>, 0);
+             &RetroShell::exec <Token::agnus>);
 
     root.add({"agnus", "state"},
              "Inspects the internal state",
-             &RetroShell::exec <Token::agnus, Token::state>, 0);
+             &RetroShell::exec <Token::agnus, Token::state>);
 
     root.add({"agnus", "beam"},
              "Displays the current beam position",
-             &RetroShell::exec <Token::agnus, Token::beam>, 0);
+             &RetroShell::exec <Token::agnus, Token::beam>);
 
     root.add({"agnus", "dma"},
              "Prints all scheduled DMA events",
-             &RetroShell::exec <Token::agnus, Token::dma>, 0);
+             &RetroShell::exec <Token::agnus, Token::dma>);
 
     root.add({"agnus", "events"},
              "Inspects the event scheduler",
-             &RetroShell::exec <Token::agnus, Token::events>, 0);
+             &RetroShell::exec <Token::agnus, Token::events>);
 
     root.add({"blitter", ""},
              "Lorem ipsum",
-             &RetroShell::exec <Token::blitter>, 0);
+             &RetroShell::exec <Token::blitter>);
 
     root.add({"blitter", "state"},
              "Inspects the internal state",
-             &RetroShell::exec <Token::blitter, Token::state>, 0);
+             &RetroShell::exec <Token::blitter, Token::state>);
 
     root.add({"copper", ""},
              "Lorem ipsum",
-             &RetroShell::exec <Token::copper>, 0);
+             &RetroShell::exec <Token::copper>);
 
     root.add({"copper", "state"},
              "Inspects the internal state",
-             &RetroShell::exec <Token::copper, Token::state>, 0);
+             &RetroShell::exec <Token::copper, Token::state>);
 
-    root.add({"copper", "list"},
+    root.add({"copper", "list"}, { Arg::value },
              "Prints the Copper list",
-             &RetroShell::exec <Token::copper, Token::list>, 1);
+             &RetroShell::exec <Token::copper, Token::list>);
 
     root.add({"paula", ""},
              "Custom Chipset",
-             &RetroShell::exec <Token::paula>, 0);
+             &RetroShell::exec <Token::paula>);
 
     root.add({"paula", "state"},
              "Inspects the internal state",
-             &RetroShell::exec <Token::paula, Token::state>, 0);
+             &RetroShell::exec <Token::paula, Token::state>);
 
     root.add({"denise", ""},
              "Lorem ipsum",
-             &RetroShell::exec <Token::denise>, 0);
+             &RetroShell::exec <Token::denise>);
 
     root.add({"denise", "state"},
              "Inspects the internal state",
-             &RetroShell::exec <Token::denise, Token::state>, 0);
+             &RetroShell::exec <Token::denise, Token::state>);
 
     root.add({"os", "info"},
              "Displays basic system information",
-             &RetroShell::exec <Token::os, Token::info>, 0);
+             &RetroShell::exec <Token::os, Token::info>);
 
     root.add({"os", "execbase"},
              "Displays information about the ExecBase struct",
-             &RetroShell::exec <Token::os, Token::execbase>, 0);
+             &RetroShell::exec <Token::os, Token::execbase>);
 
     root.add({"os", "interrupts"},
              "Lists all interrupt handlers",
-             &RetroShell::exec <Token::os, Token::interrupts>, 0);
+             &RetroShell::exec <Token::os, Token::interrupts>);
 
-    root.add({"os", "libraries"},
+    root.add({"os", "libraries"}, { }, { Arg::argument },
              "Lists all libraries",
-             &RetroShell::exec <Token::os, Token::libraries>, {0, 1});
+             &RetroShell::exec <Token::os, Token::libraries>);
 
-    root.add({"os", "devices"},
+    root.add({"os", "devices"}, { }, { Arg::argument },
              "Lists all devices",
-             &RetroShell::exec <Token::os, Token::devices>, {0, 1});
+             &RetroShell::exec <Token::os, Token::devices>);
 
-    root.add({"os", "resources"},
+    root.add({"os", "resources"}, { }, { Arg::argument },
              "Lists all resources",
-             &RetroShell::exec <Token::os, Token::resources>, {0, 1});
+             &RetroShell::exec <Token::os, Token::resources>);
 
-    root.add({"os", "tasks"},
+    root.add({"os", "tasks"}, { }, { Arg::argument },
              "Lists all tasks",
-             &RetroShell::exec <Token::os, Token::tasks>, {0, 1});
+             &RetroShell::exec <Token::os, Token::tasks>);
 
-    root.add({"os", "processes"},
+    root.add({"os", "processes"}, { }, { Arg::argument },
              "Lists all processes",
-             &RetroShell::exec <Token::os, Token::processes>, {0, 1});
+             &RetroShell::exec <Token::os, Token::processes>);
 
-    root.add({"os", "catch"},
+    root.add({"os", "catch"}, { Arg::argument },
              "Pauses emulation on task launch",
-             &RetroShell::exec <Token::os, Token::cp>, 1);
+             &RetroShell::exec <Token::os, Token::cp>);
 
     root.add({"os", "set"},
              "Configures the component");
 
-    root.add({"os", "set", "diagboard" },
+    root.add({"os", "set", "diagboard" }, { Arg::boolean },
              "Attaches or detaches the debug expansion board",
-             &RetroShell::exec <Token::os, Token::set, Token::diagboard>, 1);
+             &RetroShell::exec <Token::os, Token::set, Token::diagboard>);
 }
 
 }
