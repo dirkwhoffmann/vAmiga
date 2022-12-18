@@ -471,7 +471,7 @@ FloppyDrive::driveStatusFlags() const
 }
 
 double
-FloppyDrive::motorSpeed()const
+FloppyDrive::motorSpeed() const
 {
     // Quick exit if mechanics is not emulated
     if (!config.mechanicalDelays) return motor ? 100.0 : 0.0;
@@ -552,7 +552,7 @@ FloppyDrive::readByte() const
 
     // Case 2: A step operation is in progress
     if (config.mechanicalDelays && (agnus.clock - stepCycle) < config.stepDelay) {
-        return (u8)rand(); // 0xFF;
+        return u8(rand() & 0x55);
     }
     
     // Case 3: Normal operation
