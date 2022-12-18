@@ -18,19 +18,20 @@ class RetroShell;
 
 typedef std::vector<string> Arguments;
 
-enum class Arg {
+namespace Arg {
 
-    address,
-    argument,
-    boolean,
-    command,
-    onoff,
-    model,
-    path,
-    revision,
-    unit,
-    value,
-    volume
+static const std::string address    = "<address>";
+static const std::string argument   = "<argument>";         // DEPRECATED
+static const std::string boolean    = "{ true | false }";
+static const std::string command    = "<command>";
+static const std::string onoff      = "{ on | off }";
+static const std::string model      = "<model>";            // DEPRECATED
+static const std::string path       = "<path>";
+[[deprecated]] static const std::string revision   = "<revision>";         // DEPRECATED
+static const std::string unit       = "<unit>";             // DEPRECATED
+static const std::string value      = "<value>";
+static const std::string volume     = "<volume>";
+
 };
 
 struct Command {
@@ -48,10 +49,10 @@ struct Command {
     string fullName;
 
     // List of required arguments
-    std::vector<Arg> reqArgs;
+    std::vector<string> requiredArgs;
 
     // List of additional optional arguments
-    std::vector<Arg> optArgs;
+    std::vector<string> optionalArgs;
 
     // Help string
     string help;
@@ -61,11 +62,7 @@ struct Command {
     
     // Command handler
     void (RetroShell::*action)(Arguments&, long) = nullptr;
-    
-    // Minimum and maximum number of arguments accepted by the command handler
-    isize minArgs = 0;
-    isize maxArgs = 0;
-    
+
     // Additional parameter passed to the command handler
     long param = 0;
     
@@ -89,14 +86,14 @@ struct Command {
              void (RetroShell::*action)(Arguments&, long), long param = 0);
 
     void add(const std::vector<string> &tokens,
-             const std::vector<Arg> &args,
+             const std::vector<string> &args,
              const string &help,
              void (RetroShell::*action)(Arguments&, long), long param = 0);
 
 
     void add(const std::vector<string> &tokens,
-             const std::vector<Arg> &requiredArgs,
-             const std::vector<Arg> &optionalArgs,
+             const std::vector<string> &requiredArgs,
+             const std::vector<string> &optionalArgs,
              const string &help,
              void (RetroShell::*action)(Arguments&, long), long param = 0);
 
@@ -105,7 +102,12 @@ struct Command {
 
     // Removes a registered command
     void remove(const string& token);
-    
+
+    // Returns arguments counts
+    isize minArgs() const { return requiredArgs.size(); }
+    isize optArgs() const { return optionalArgs.size(); }
+    isize maxArgs() const { return minArgs() + optArgs(); }
+
     // Seeks a command object inside the command object tree
     Command *seek(const string& token);
     Command *seek(const std::vector<string> &tokens);

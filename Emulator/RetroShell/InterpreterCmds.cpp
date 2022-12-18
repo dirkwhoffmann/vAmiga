@@ -10,6 +10,7 @@
 #include "config.h"
 #include "Interpreter.h"
 #include "RetroShell.h"
+#include "Amiga.h"
 
 namespace vamiga {
 
@@ -344,7 +345,7 @@ Interpreter::initCommandShell(Command &root)
     root.add({"cpu", "set"},
              "Configures the component");
 
-    root.add({"cpu", "set", "revision"}, { Arg::revision },
+    root.add({"cpu", "set", "revision"}, { CPURevisionEnum::argList() },
              "Selects the emulated chip model",
              &RetroShell::exec <Token::cpu, Token::set, Token::revision>);
 

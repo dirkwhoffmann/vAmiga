@@ -38,7 +38,7 @@ Command::add(const std::vector<string> &tokens,
 
 void
 Command::add(const std::vector<string> &tokens,
-             const std::vector<Arg> &arguments,
+             const std::vector<string> &arguments,
              const string &help,
              void (RetroShell::*action)(Arguments&, long), long param)
 {
@@ -47,8 +47,8 @@ Command::add(const std::vector<string> &tokens,
 
 void
 Command::add(const std::vector<string> &tokens,
-             const std::vector<Arg> &requiredArgs,
-             const std::vector<Arg> &optionalArgs,
+             const std::vector<string> &requiredArgs,
+             const std::vector<string> &optionalArgs,
              const string &help,
              void (RetroShell::*action)(Arguments&, long), long param)
 {
@@ -66,10 +66,8 @@ Command::add(const std::vector<string> &tokens,
     d.name = tokens.back();
     d.fullName = (cmd->fullName.empty() ? "" : cmd->fullName + " ") + tokens.back();
     d.group = groups.size() - 1;
-    d.reqArgs = requiredArgs;
-    d.optArgs = optionalArgs;
-    d.minArgs = requiredArgs.size();
-    d.maxArgs = requiredArgs.size() + optionalArgs.size();
+    d.requiredArgs = requiredArgs;
+    d.optionalArgs = optionalArgs;
     d.help = help;
     d.action = action;
     d.param = param;
@@ -155,45 +153,21 @@ Command::autoComplete(const string& token)
 string
 Command::usage() const
 {
-    printf("parameters.size() = %ld maxArgs = %ld\n", isize(reqArgs.size()), maxArgs);
-    assert(isize(reqArgs.size()) == maxArgs); // TODO: MOVE TO REGISTER FUNCTION
-
     string arguments;
-
-    auto name = [&](const Arg &arg) {
-
-        switch (arg) {
-
-            case Arg::address:  return "<address>";
-            case Arg::argument: return "<argument>";
-            case Arg::boolean:  return "{ true | false }";
-            case Arg::command:  return "<command>";
-            case Arg::onoff:    return "{ on | off }";
-            case Arg::model:    return "<model>";
-            case Arg::path:     return "<path>";
-            case Arg::revision: return "<revision>";
-            case Arg::unit:     return "<unit>";
-            case Arg::value:    return "<value>";
-            case Arg::volume:   return "<volume>";
-
-            default:
-                fatalError;
-        }
-    };
 
     if (subCommands.empty()) {
 
         string required;
         string optional;
-        for (isize i = 0; i < minArgs; i++) {
+        for (isize i = 0; i < minArgs(); i++) {
 
             if (i) required += " ";
-            required += name(reqArgs[i]);
+            required += requiredArgs[i];
         }
-        for (isize i = minArgs; i < maxArgs; i++) {
+        for (isize i = 0; i < optArgs(); i++) {
 
             if (i) optional + " ";
-            optional += name(reqArgs[i]);
+            optional += optionalArgs[i];
         }
 
         arguments = required;

@@ -168,8 +168,8 @@ Interpreter::exec(const Arguments &argv, bool verbose)
     }
     
     // Check the argument count
-    if ((isize)args.size() < current->minArgs) throw TooFewArgumentsError(current->fullName);
-    if ((isize)args.size() > current->maxArgs) throw TooManyArgumentsError(current->fullName);
+    if ((isize)args.size() < current->minArgs()) throw TooFewArgumentsError(current->fullName);
+    if ((isize)args.size() > current->maxArgs()) throw TooManyArgumentsError(current->fullName);
     
     // Call the command handler
     (retroShell.*(current->action))(args, current->param);
