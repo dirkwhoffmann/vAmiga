@@ -159,21 +159,20 @@ Command::usage() const
 
         string required;
         string optional;
+
         for (isize i = 0; i < minArgs(); i++) {
 
-            if (i) required += " ";
             required += requiredArgs[i];
+            required += " ";
         }
         for (isize i = 0; i < optArgs(); i++) {
 
-            if (i) optional + " ";
             optional += optionalArgs[i];
+            optional + " ";
         }
+        if (optional != "") optional = "[ " + optional + "]";
 
-        arguments = required;
-        if (arguments != "") arguments += " ";
-        if (optional != "") arguments += "[ " + required + " ]";
-        // if (arguments == "") arguments = "<no arguments>";
+        arguments = required + optional;
 
     } else {
 

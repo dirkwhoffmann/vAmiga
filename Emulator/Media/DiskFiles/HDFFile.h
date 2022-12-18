@@ -159,7 +159,7 @@ private:
     FSVolumeType dos(isize nr) const;
     
     // Returns a loadable device drive
-    [[deprecated]] void readDriver(isize nr, Buffer<u8> &driver);
+    // [[deprecated]] void readDriver(isize nr, Buffer<u8> &driver);
 
     
     //

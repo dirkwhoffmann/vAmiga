@@ -21,14 +21,12 @@ typedef std::vector<string> Arguments;
 namespace Arg {
 
 static const std::string address    = "<address>";
-static const std::string argument   = "<argument>";         // DEPRECATED
 static const std::string boolean    = "{ true | false }";
 static const std::string command    = "<command>";
 static const std::string onoff      = "{ on | off }";
-static const std::string model      = "<model>";            // DEPRECATED
 static const std::string path       = "<path>";
-[[deprecated]] static const std::string revision   = "<revision>";         // DEPRECATED
-static const std::string unit       = "<unit>";             // DEPRECATED
+static const std::string process    = "<process>";
+static const std::string seconds    = "<seconds>";
 static const std::string value      = "<value>";
 static const std::string volume     = "<volume>";
 

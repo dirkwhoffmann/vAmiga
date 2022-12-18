@@ -47,7 +47,7 @@ Interpreter::initCommons(Command &root)
              "Processes a command script",
              &RetroShell::exec <Token::source>);
 
-    root.add({"wait"}, {Arg::value, Arg::unit},
+    root.add({"wait"}, {Arg::value, Arg::seconds},
              "Pauses the execution of a command script",
              &RetroShell::exec <Token::wait>);
 
@@ -195,11 +195,11 @@ Interpreter::initCommandShell(Command &root)
 
     root.newGroup("");
 
-    root.add({"regression", "setup"}, { Arg::argument, Arg::argument }, { Arg::argument },
+    root.add({"regression", "setup"}, { ConfigSchemeEnum::argList(), Arg::path }, { Arg::path },
              "Initializes the test environment",
              &RetroShell::exec <Token::regression, Token::setup>);
 
-    root.add({"regression", "run"}, { Arg::argument },
+    root.add({"regression", "run"}, { Arg::path },
              "Launches a regression test",
              &RetroShell::exec <Token::regression, Token::run>);
     
@@ -254,7 +254,7 @@ Interpreter::initCommandShell(Command &root)
              "Turns VSYNC off",
              &RetroShell::exec <Token::amiga, Token::vsync, Token::off>);
 
-    root.add({"amiga", "init"}, { Arg::argument },
+    root.add({"amiga", "init"}, { ConfigSchemeEnum::argList() },
              "Initializes the Amiga with a predefined scheme",
              &RetroShell::exec <Token::amiga, Token::init>);
 
@@ -308,15 +308,15 @@ Interpreter::initCommandShell(Command &root)
              "Enables or disables slow Ram bus delays",
              &RetroShell::exec <Token::memory, Token::set, Token::slowramdelay>);
 
-    root.add({"memory", "set", "bankmap"}, { Arg::argument },
+    root.add({"memory", "set", "bankmap"}, { BankMapEnum::argList() },
              "Selects the bank mapping scheme",
              &RetroShell::exec <Token::memory, Token::set, Token::bankmap>);
 
-    root.add({"memory", "set", "unmapped"}, { Arg::argument },
+    root.add({"memory", "set", "unmapped"}, { UnmappedMemoryEnum::argList() },
              "Determines the behaviour of unmapped memory",
              &RetroShell::exec <Token::memory, Token::set, Token::unmappingtype>);
 
-    root.add({"memory", "set", "raminit"}, { Arg::argument },
+    root.add({"memory", "set", "raminit"}, { RamInitPatternEnum::argList() },
              "Determines how Ram is initialized on startup",
              &RetroShell::exec <Token::memory, Token::set, Token::raminitpattern>);
     
@@ -353,7 +353,7 @@ Interpreter::initCommandShell(Command &root)
              "Overclocks the CPU by the specified factor",
              &RetroShell::exec <Token::cpu, Token::set, Token::overclocking>);
 
-    root.add({"cpu", "set", "regreset"}, { Arg::argument },
+    root.add({"cpu", "set", "regreset"}, { Arg::value },
              "Selects the reset value of data and address registers",
              &RetroShell::exec <Token::cpu, Token::set, Token::regreset>);
 
@@ -379,7 +379,7 @@ Interpreter::initCommandShell(Command &root)
         root.add({cia, "set"},
                  "Configures the component");
         
-        root.add({cia, "set", "revision"}, { Arg::revision },
+        root.add({cia, "set", "revision"}, { CIARevisionEnum::argList() },
                  "Selects the emulated chip model",
                  &RetroShell::exec <Token::cia, Token::set, Token::revision>, i);
         
@@ -406,7 +406,7 @@ Interpreter::initCommandShell(Command &root)
     root.add({"agnus", "set"},
              "Configures the component");
 
-    root.add({"agnus", "set", "revision"}, { Arg::revision },
+    root.add({"agnus", "set", "revision"}, { AgnusRevisionEnum::argList() },
              "Selects the emulated chip model",
              &RetroShell::exec <Token::agnus, Token::set, Token::revision>);
 
@@ -455,7 +455,7 @@ Interpreter::initCommandShell(Command &root)
     root.add({"denise", "set"},
              "Configures the component");
 
-    root.add({"denise", "set", "revision"}, { Arg::revision },
+    root.add({"denise", "set", "revision"}, { DeniseRevisionEnum::argList() },
              "Selects the emulated chip model",
              &RetroShell::exec <Token::denise, Token::set, Token::revision>);
 
@@ -592,7 +592,7 @@ Interpreter::initCommandShell(Command &root)
     root.add({"monitor", "set"},
              "Configures the component");
 
-    root.add({"monitor", "set", "palette"}, { Arg::argument },
+    root.add({"monitor", "set", "palette"}, { PaletteEnum::argList() },
              "Selects the color palette",
              &RetroShell::exec <Token::monitor, Token::set, Token::palette>);
 
@@ -622,11 +622,11 @@ Interpreter::initCommandShell(Command &root)
     root.add({"audio", "set"},
              "Configures the component");
 
-    root.add({"audio", "set", "sampling"}, { Arg::argument },
+    root.add({"audio", "set", "sampling"}, { SamplingMethodEnum::argList() },
              "Selects the sampling method",
              &RetroShell::exec <Token::audio, Token::set, Token::sampling>);
 
-    root.add({"audio", "set", "filter"}, { Arg::argument },
+    root.add({"audio", "set", "filter"}, { FilterTypeEnum::argList() },
              "Configures the audio filter",
              &RetroShell::exec <Token::audio, Token::set, Token::filter>);
     
@@ -706,7 +706,7 @@ Interpreter::initCommandShell(Command &root)
     root.add({"rtc", "set"},
              "Configures the component");
 
-    root.add({"rtc", "set", "revision"}, { Arg::revision },
+    root.add({"rtc", "set", "revision"}, { RTCRevisionEnum::argList() },
              "Selects the emulated chip model",
              &RetroShell::exec <Token::rtc, Token::set, Token::revision>);
 
@@ -896,7 +896,7 @@ Interpreter::initCommandShell(Command &root)
     root.add({"serial", "set"},
              "Configures the component");
 
-    root.add({"serial", "set", "device"}, { Arg::argument },
+    root.add({"serial", "set", "device"}, { SerialPortDeviceEnum::argList() },
              "Connects a device",
              &RetroShell::exec <Token::serial, Token::set, Token::device>);
 
@@ -918,7 +918,7 @@ Interpreter::initCommandShell(Command &root)
     root.add({"diskcontroller", "set"},
              "Configures the component");
 
-    root.add({"diskcontroller", "set", "speed"}, { Arg::argument },
+    root.add({"diskcontroller", "set", "speed"}, { Arg::value },
              "Configures the drive speed",
              &RetroShell::exec <Token::dc, Token::speed>);
 
@@ -978,7 +978,7 @@ Interpreter::initCommandShell(Command &root)
         root.add({df, "set"},
                  "Configures the component");
         
-        root.add({df, "set", "model"}, { Arg::model },
+        root.add({df, "set", "model"}, { FloppyDriveTypeEnum::argList() },
                  "Selects the drive model",
                  &RetroShell::exec <Token::dfn, Token::set, Token::model>, i);
         
@@ -1026,7 +1026,7 @@ Interpreter::initCommandShell(Command &root)
                  "Displays the component state",
                  &RetroShell::exec <Token::dfn, Token::inspect>);
 
-        root.add({df, "catch"}, { Arg::argument },
+        root.add({df, "catch"}, { Arg::path },
                  "Creates a catchpoint for the specfied file",
                  &RetroShell::exec <Token::dfn, Token::cp>);
     }
@@ -1175,7 +1175,7 @@ Interpreter::initCommandShell(Command &root)
     root.add({"server", "gdb"},
              "GDB server");
 
-    root.add({"server", "gdb", "attach"}, { Arg::argument },
+    root.add({"server", "gdb", "attach"}, { Arg::process },
              "Attaches the GDB server to a process",
              &RetroShell::exec <Token::server, Token::gdb, Token::attach>);
 

@@ -453,6 +453,7 @@ HDFFile::dos(isize blockNr) const
     return FS_NODOS;
 }
 
+/*
 void
 HDFFile::readDriver(isize nr, Buffer<u8> &driver)
 {
@@ -471,6 +472,7 @@ HDFFile::readDriver(isize nr, Buffer<u8> &driver)
         offset += bytesPerBlock;
     }
 }
+*/
 
 isize
 HDFFile::writePartitionToFile(const string &path, isize nr)

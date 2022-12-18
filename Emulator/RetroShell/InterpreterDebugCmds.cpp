@@ -387,27 +387,27 @@ Interpreter::initDebugShell(Command &root)
              "Lists all interrupt handlers",
              &RetroShell::exec <Token::os, Token::interrupts>);
 
-    root.add({"os", "libraries"}, { }, { Arg::argument },
+    root.add({"os", "libraries"}, { }, {"<library>"},
              "Lists all libraries",
              &RetroShell::exec <Token::os, Token::libraries>);
 
-    root.add({"os", "devices"}, { }, { Arg::argument },
+    root.add({"os", "devices"}, { }, {"<device>"},
              "Lists all devices",
              &RetroShell::exec <Token::os, Token::devices>);
 
-    root.add({"os", "resources"}, { }, { Arg::argument },
+    root.add({"os", "resources"}, { }, {"<resource>"},
              "Lists all resources",
              &RetroShell::exec <Token::os, Token::resources>);
 
-    root.add({"os", "tasks"}, { }, { Arg::argument },
+    root.add({"os", "tasks"}, { }, {"<task>"},
              "Lists all tasks",
              &RetroShell::exec <Token::os, Token::tasks>);
 
-    root.add({"os", "processes"}, { }, { Arg::argument },
+    root.add({"os", "processes"}, { }, {"<process>"},
              "Lists all processes",
              &RetroShell::exec <Token::os, Token::processes>);
 
-    root.add({"os", "catch"}, { Arg::argument },
+    root.add({"os", "catch"}, {"<task>"},
              "Pauses emulation on task launch",
              &RetroShell::exec <Token::os, Token::cp>);
 
