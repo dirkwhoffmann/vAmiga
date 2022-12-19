@@ -36,7 +36,7 @@ Copper::_dump(Category category, std::ostream& os) const
         os << bol(cdang) << std::endl;
     }
 
-    if (category == Category::Details) {
+    if (category == Category::State) {
         
         os << tab("Active Copper list");
         os << dec(copList) << std::endl;

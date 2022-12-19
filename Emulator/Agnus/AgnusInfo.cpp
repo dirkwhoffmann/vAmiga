@@ -458,7 +458,7 @@ Agnus::_dump(Category category, std::ostream& os) const
         os << bol(config.ptrDrops) << std::endl;
     }
     
-    if (category == Category::Details) {
+    if (category == Category::State) {
         
         os << tab("Clock");
         os << dec(clock) << std::endl;
@@ -471,7 +471,7 @@ Agnus::_dump(Category category, std::ostream& os) const
         os << tab("BLS signal");
         os << bol(bls) << std::endl;
         
-        sequencer.dump(Category::Details, os);
+        sequencer.dump(Category::State, os);
     }
 
     if (category == Category::Beam) {

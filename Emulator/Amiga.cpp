@@ -976,7 +976,7 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << dec(CIA_CYCLES(ciaA.getClock())) << " Master cycles" << std::endl;
     }
 
-    if (category == Category::Details) {
+    if (category == Category::State) {
 
         os << tab("Thread state");
         os << ExecutionStateEnum::key(state) << std::endl;

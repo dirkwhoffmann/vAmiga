@@ -404,7 +404,7 @@ HardDrive::_dump(Category category, std::ostream& os) const
         }
     }
     
-    if (category == Category::Details) {
+    if (category == Category::State) {
         
         os << tab("Nr");
         os << dec(nr) << std::endl;

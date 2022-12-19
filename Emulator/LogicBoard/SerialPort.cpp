@@ -88,7 +88,7 @@ SerialPort::_dump(Category category, std::ostream& os) const
         os << SerialPortDeviceEnum::key(config.device) << std::endl;
     }
     
-    if (category == Category::Details) {
+    if (category == Category::State) {
         
         os << tab("port");
         os << hex(port);

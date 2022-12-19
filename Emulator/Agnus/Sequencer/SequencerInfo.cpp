@@ -19,7 +19,7 @@ Sequencer::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == Category::Details) {
+    if (category == Category::State) {
         
         os << tab("BPV");
         os << bol(ddf.bpv) << " (" << bol(ddfInitial.bpv) << ")" << std::endl;

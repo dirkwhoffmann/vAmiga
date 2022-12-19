@@ -291,11 +291,11 @@ Interpreter::initDebugShell(Command &root)
              &RetroShell::exec <Token::memory, Token::checksums>);
 
     root.add({"cpu", ""},
-             "Lorem ipsum",
+             "Inspects the internal state",
              &RetroShell::exec <Token::cpu>);
 
     root.add({"cpu", "state"},
-             "Inspects the internal state",
+             "Displays additional debug information",
              &RetroShell::exec <Token::cpu, Token::state>);
 
     root.add({"cpu", "vectors"},
@@ -311,7 +311,7 @@ Interpreter::initDebugShell(Command &root)
                  &RetroShell::exec <Token::cia>, i);
 
         root.add({cia, "state"},
-                 "Displays the internal state",
+                 "Displays additional debug information",
                  &RetroShell::exec <Token::cia, Token::state>, i);
 
         root.add({cia, "tod"},
@@ -320,11 +320,11 @@ Interpreter::initDebugShell(Command &root)
     }
 
     root.add({"agnus", ""},
-             "Lorem ipsum",
+             "Inspects the internal state",
              &RetroShell::exec <Token::agnus>);
 
     root.add({"agnus", "state"},
-             "Inspects the internal state",
+             "Displays additional debug information",
              &RetroShell::exec <Token::agnus, Token::state>);
 
     root.add({"agnus", "beam"},
@@ -360,19 +360,30 @@ Interpreter::initDebugShell(Command &root)
              &RetroShell::exec <Token::copper, Token::list>);
 
     root.add({"paula", ""},
-             "Custom Chipset",
+             "Inspects the internal state",
              &RetroShell::exec <Token::paula>);
 
     root.add({"paula", "state"},
-             "Inspects the internal state",
+             "Displays additional debug information",
              &RetroShell::exec <Token::paula, Token::state>);
 
+    root.add({"paula", "audio"},
+             "Audio Unit");
+
+    root.add({"paula", "audio", ""},
+             "Inspects the internal state",
+             &RetroShell::exec <Token::paula, Token::audio>);
+
+    root.add({"paula", "audio", "state"},
+             "Displays additional debug information",
+             &RetroShell::exec <Token::paula, Token::audio, Token::state>);
+
     root.add({"denise", ""},
-             "Lorem ipsum",
+             "Inspects the internal state",
              &RetroShell::exec <Token::denise>);
 
     root.add({"denise", "state"},
-             "Inspects the internal state",
+             "Displays additional debug information",
              &RetroShell::exec <Token::denise, Token::state>);
 
     root.add({"os", "info"},

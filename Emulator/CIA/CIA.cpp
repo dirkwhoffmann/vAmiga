@@ -204,7 +204,7 @@ CIA::_dump(Category category, std::ostream& os) const
         os << std::endl;
     }
 
-    if (category == Category::Details) {
+    if (category == Category::State) {
 
         os << tab("Clock") << dec(clock) << std::endl;
         os << tab("Sleeping") << bol(sleeping) << std::endl;
@@ -217,7 +217,7 @@ CIA::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Tod) {
         
-        tod.dump(Category::Details, os);
+        tod.dump(Category::State, os);
     }
 }
 

@@ -432,11 +432,6 @@ Interpreter::initCommandShell(Command &root)
              "Selects the emulation accuracy level",
              &RetroShell::exec <Token::blitter, Token::set, Token::accuracy>);
 
-
-    //
-    // Copper
-    //
-    
     
     //
     // Denise
@@ -460,42 +455,31 @@ Interpreter::initCommandShell(Command &root)
              &RetroShell::exec <Token::denise, Token::set, Token::tracking>);
 
     root.add({"denise", "set", "clxsprspr"}, { Arg::boolean },
-             "Enables or disables sprite-sprite collision detection",
+             "Switches sprite-sprite collision detection on or off",
              &RetroShell::exec <Token::denise, Token::set, Token::clxsprspr>);
 
     root.add({"denise", "set", "clxsprplf"}, { Arg::boolean },
-             "Enables or disables sprite-playfield collision detection",
+             "Switches sprite-playfield collision detection on or off",
              &RetroShell::exec <Token::denise, Token::set, Token::clxsprplf>);
 
     root.add({"denise", "set", "clxplfplf"}, { Arg::boolean },
-             "Enables or disables playfield-playfield collision detection",
+             "Switches playfield-playfield collision detection on or off",
              &RetroShell::exec <Token::denise, Token::set, Token::clxplfplf>);
     
-    root.add({"denise", "hide"},
+    root.add({"denise", "set", "hidden"},
              "Hides bitplanes, sprites, or layers");
 
-    root.add({"denise", "hide", "bitplanes"}, { Arg::value },
+    root.add({"denise", "set", "hidden", "bitplanes"}, { Arg::value },
              "Wipes out certain bitplane data",
-             &RetroShell::exec <Token::denise, Token::hide, Token::bitplanes>);
+             &RetroShell::exec <Token::denise, Token::set, Token::hide, Token::bitplanes>);
 
-    root.add({"denise", "hide", "sprites"}, { Arg::value },
+    root.add({"denise", "set", "hidden", "sprites"}, { Arg::value },
              "Wipes out certain sprite data",
-             &RetroShell::exec <Token::denise, Token::hide, Token::sprites>);
+             &RetroShell::exec <Token::denise, Token::set, Token::hide, Token::sprites>);
 
-    root.add({"denise", "hide", "sprites"}, { Arg::value },
+    root.add({"denise", "set", "hidden", "layers"}, { Arg::value },
              "Makes certain drawing layers transparent",
-             &RetroShell::exec <Token::denise, Token::hide, Token::layers>);
-
-    root.add({"denise", "inspect"},
-             "Displays the internal state");
-
-    root.add({"denise", "inspect", "state"},
-             "Displays the current state",
-             &RetroShell::exec <Token::denise, Token::inspect, Token::state>);
-
-    root.add({"denise", "inspect", "registers"},
-             "Displays the current register value",
-             &RetroShell::exec <Token::denise, Token::inspect, Token::registers>);
+             &RetroShell::exec <Token::denise, Token::set, Token::hide, Token::layers>);
 
     
     //
@@ -510,80 +494,46 @@ Interpreter::initCommandShell(Command &root)
              "Closes the DMA debugger",
              &RetroShell::exec <Token::dmadebugger, Token::close>);
 
-    root.add({"dmadebugger", "show"},
-             "Enables the debugger for a certain DMA channel");
+    root.add({"dmadebugger", "copper"}, { Arg::onoff },
+             "Turns Copper DMA visualization on or off",
+             &RetroShell::exec <Token::dmadebugger, Token::copper>);
 
-    root.add({"dmadebugger", "show", "copper"},
-             "Visualizes Copper DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::show, Token::copper>);
+    root.add({"dmadebugger", "blitter"}, { Arg::onoff },
+             "Turns Blitter DMA visualization on or off",
+             &RetroShell::exec <Token::dmadebugger, Token::blitter>);
 
-    root.add({"dmadebugger", "show", "blitter"},
-             "Visualizes Blitter DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::show, Token::blitter>);
+    root.add({"dmadebugger", "disk"}, { Arg::onoff },
+             "Turns Disk DMA visualization on or off",
+             &RetroShell::exec <Token::dmadebugger, Token::disk>);
 
-    root.add({"dmadebugger", "show", "disk"},
-             "Visualizes Disk DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::show, Token::disk>);
+    root.add({"dmadebugger", "audio"}, { Arg::onoff },
+             "Turns Audio DMA visualization on or off",
+             &RetroShell::exec <Token::dmadebugger, Token::audio>);
 
-    root.add({"dmadebugger", "show", "audio"},
-             "Visualizes Audio DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::show, Token::audio>);
+    root.add({"dmadebugger", "sprites"}, { Arg::onoff },
+             "Turns Sprite DMA visualization on or off",
+             &RetroShell::exec <Token::dmadebugger, Token::sprites>);
 
-    root.add({"dmadebugger", "show", "sprites"},
-             "Visualizes Sprite DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::show, Token::sprites>);
+    root.add({"dmadebugger", "bitplanes"}, { Arg::onoff },
+             "Turns Bitplane DMA visualization on or off",
+             &RetroShell::exec <Token::dmadebugger, Token::bitplanes>);
 
-    root.add({"dmadebugger", "show", "bitplanes"},
-             "Visualizes Bitplane DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::show, Token::bitplanes>);
+    root.add({"dmadebugger", "cpu"}, { Arg::onoff },
+             "Turns CPU bus usage visualization on or off",
+             &RetroShell::exec <Token::dmadebugger, Token::cpu>);
 
-    root.add({"dmadebugger", "show", "cpu"},
-             "Visualizes CPU accesses",
-             &RetroShell::exec <Token::dmadebugger, Token::show, Token::cpu>);
+    root.add({"dmadebugger", "refresh"}, { Arg::onoff },
+             "Turn memory refresh visualization on or off",
+             &RetroShell::exec <Token::dmadebugger, Token::refresh>);
 
-    root.add({"dmadebugger", "show", "refresh"},
-             "Visualizes memory refresh cycles",
-             &RetroShell::exec <Token::dmadebugger, Token::show, Token::refresh>);
 
-    root.add({"dmadebugger", "hide"},
-             "Disables the debugger for a certain DMA channel");
-
-    root.add({"dmadebugger", "hide", "copper"},
-             "Hides Copper DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::copper>);
-
-    root.add({"dmadebugger", "hide", "blitter"},
-             "Hides Blitter DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::blitter>);
-
-    root.add({"dmadebugger", "hide", "disk"},
-             "Hides Disk DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::disk>);
-
-    root.add({"dmadebugger", "hide", "audio"},
-             "Hides Audio DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::audio>);
-
-    root.add({"dmadebugger", "hide", "sprites"},
-             "Hides Sprite DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::sprites>);
-
-    root.add({"dmadebugger", "hide", "bitplanes"},
-             "Hides Bitplane DMA",
-             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::bitplanes>);
-
-    root.add({"dmadebugger", "hide", "cpu"},
-             "Hides CPU accesses",
-             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::cpu>);
-
-    root.add({"dmadebugger", "hide", "refresh"},
-             "Hides memory refresh cycles",
-             &RetroShell::exec <Token::dmadebugger, Token::hide, Token::refresh>);
-
-    
     //
     // Monitor
     //
+
+    root.add({"monitor", ""},
+             "Displays the current configuration",
+             &RetroShell::exec <Token::monitor, Token::config>);
 
     root.add({"monitor", "set"},
              "Configures the component");
@@ -672,18 +622,7 @@ Interpreter::initCommandShell(Command &root)
              "Sets the pan for audio channel 3",
              &RetroShell::exec <Token::audio, Token::set, Token::pan>, 3);
 
-    root.add({"audio", "inspect"},
-             "Displays the internal state");
 
-    root.add({"audio", "inspect", "state"},
-             "Displays the current state",
-             &RetroShell::exec <Token::audio, Token::inspect, Token::state>);
-
-    root.add({"audio", "inspect", "registers"},
-             "Displays the current register value",
-             &RetroShell::exec <Token::audio, Token::inspect, Token::registers>);
-    
-    
     //
     // Paula
     //

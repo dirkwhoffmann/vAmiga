@@ -75,14 +75,7 @@ Denise::_dump(Category category, std::ostream& os) const
         os << bol(config.clxSprSpr) << std::endl;
     }
 
-    if (category == Category::Details) {
-
-        os << tab("Resolution");
-        os << ResolutionEnum::key(res) << std::endl;
-
-    }
-
-    if (category == Category::Registers) {
+    if (category == Category::Summary) {
         
         os << tab("BPLCON0");
         os << hex(bplcon0) << std::endl;
@@ -110,6 +103,13 @@ Denise::_dump(Category category, std::ostream& os) const
         os << tab("SPRxCTL");
         for (isize i = 0; i < 8; i++) os << hex(sprctl[i]) << ' ';
         os << std::endl;
+    }
+
+    if (category == Category::State) {
+
+        os << tab("Resolution");
+        os << ResolutionEnum::key(res) << std::endl;
+
     }
 }
 

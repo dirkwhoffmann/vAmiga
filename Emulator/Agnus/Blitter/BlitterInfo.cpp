@@ -55,7 +55,7 @@ Blitter::_dump(Category category, std::ostream& os) const
         os << tab("BLTDMOD") << dec(bltdmod) << std::endl;
     }
 
-    if (category == Category::Details) {
+    if (category == Category::State) {
         
         os << tab("Iteration") << dec(iteration) << std::endl;
         os << tab("Micro instruction PC") << dec(bltpc) << std::endl;

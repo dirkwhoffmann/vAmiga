@@ -47,9 +47,9 @@ namespace vamiga {
 enum class Category
 {    
     BankMap, Beam, Blocks, Breakpoints, Bus, Callstack, Catchpoints, Checksums,
-    Config, Defaults, Details, Dma, Drive, Events, FileSystem, Fpu, Geometry,
-    Hunks, List1, List2, Parameters, Partitions, Properties, Registers,
-    Sections, Segments, Signals, Stats, Status, Summary, SwTraps, Tod, Vectors,
+    Config, Defaults, Dma, Drive, Events, FileSystem, Fpu, Geometry, Hunks,
+    List1, List2, Parameters, Partitions, Properties, Registers, Sections,
+    Segments, Signals, State, Stats, Status, Summary, SwTraps, Tod, Vectors,
     Volumes, Watchpoints
 };
 

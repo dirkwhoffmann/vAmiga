@@ -39,7 +39,7 @@ ZorroBoard::_dump(Category category, std::ostream& os) const
         os << hex(flags())<< std::endl;
     }
     
-    if (category == Category::Details) {
+    if (category == Category::State) {
         
         auto first = u8(firstPage());
         auto last = u8(lastPage());

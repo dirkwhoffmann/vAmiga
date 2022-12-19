@@ -183,7 +183,7 @@ DiskController::_dump(Category category, std::ostream& os) const
         os << bol(config.autoDskSync) << std::endl;
     }
 
-    if (category == Category::Details) {
+    if (category == Category::State) {
         
         os << tab("selected");
         os << dec(selected) << std::endl;

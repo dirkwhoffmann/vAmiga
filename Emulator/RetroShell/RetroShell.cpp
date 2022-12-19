@@ -577,7 +577,7 @@ RetroShell::dumpSummary(AmigaObject &component)
 void
 RetroShell::dumpDetails(AmigaObject &component)
 {
-    dump(component, Category::Details);
+    dump(component, Category::State);
 }
 
 void

@@ -223,7 +223,7 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         os << "\"" << searchPath << "\"" << std::endl;
     }
     
-    if (category == Category::Details) {
+    if (category == Category::State) {
         
         os << tab("Nr");
         os << dec(nr) << std::endl;

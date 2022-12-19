@@ -426,6 +426,19 @@ RetroShell::exec <Token::paula, Token::state> (Arguments &argv, long param)
 }
 
 template <> void
+RetroShell::exec <Token::paula, Token::audio> (Arguments& argv, long param)
+{
+    dumpSummary(amiga.paula.muxer);
+}
+
+template <> void
+RetroShell::exec <Token::paula, Token::audio, Token::state> (Arguments& argv, long param)
+{
+    dumpDetails(amiga.paula.muxer);
+}
+
+
+template <> void
 RetroShell::exec <Token::denise> (Arguments &argv, long param)
 {
     dumpSummary(denise);

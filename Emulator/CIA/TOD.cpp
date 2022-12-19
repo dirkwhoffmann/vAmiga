@@ -54,7 +54,7 @@ TOD::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == Category::Details) {
+    if (category == Category::State) {
         
         os << tab("Counter");
         os << hex(tod.hi) << ":" << hex(tod.mid) << ":" << hex(tod.lo) << std::endl;
