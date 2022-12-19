@@ -444,10 +444,12 @@ CPU::_dump(Category category, std::ostream& os) const
 {
     if (category == Category::Config) {
 
-        os << util::tab("CPU model");
+        os << util::tab("CPU revision");
         os << CPURevisionEnum::key(config.revision) << std::endl;
-        os << util::tab("Disassembler");
-        os << CPURevisionEnum::key(config.dasmRevision) << std::endl;
+        os << util::tab("DASM revision");
+        os << DasmRevisionEnum::key(config.dasmRevision) << std::endl;
+        os << util::tab("DASM syntax");
+        os << DasmSyntaxEnum::key(config.dasmSyntax) << std::endl;
         os << util::tab("Overclocking");
         os << util::dec(config.overclocking) << std::endl;
         os << util::tab("Register reset value");
@@ -629,20 +631,6 @@ CPU::_dump(Category category, std::ostream& os) const
         } else {
 
             os << "No software traps set" << std::endl;
-        }
-    }
-
-    if (category == Category::Callstack) {
-
-        isize nr = 0;
-        for (isize i = callstack.begin(); i != callstack.end(); i = callstack.next(i)) {
-
-            auto &entry = callstack.elements[i];
-            string instr = HI_BYTE(entry.opcode) == 0b01100001 ? "BSR " : "JSR ";
-            
-            os << util::tab("#" + std::to_string(nr++));
-            os << util::hex(entry.oldPC) << ": " << instr << util::hex(entry.newPC);
-            os << std::endl;
         }
     }
 }

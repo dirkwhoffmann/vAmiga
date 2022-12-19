@@ -562,6 +562,25 @@ RetroShell::dump(AmigaObject &component, Category category)
 }
 
 void
+RetroShell::dumpConfig(AmigaObject &component)
+{
+    *this << '\n' << "Current configuration:" << '\n';
+    dump(component, Category::Config);
+}
+
+void
+RetroShell::dumpSummary(AmigaObject &component)
+{
+    dump(component, Category::Summary);
+}
+
+void
+RetroShell::dumpDetails(AmigaObject &component)
+{
+    dump(component, Category::Details);
+}
+
+void
 RetroShell::eofHandler()
 {
     if (agnus.clock >= wakeUp) {

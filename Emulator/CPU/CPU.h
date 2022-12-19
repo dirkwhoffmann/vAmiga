@@ -26,9 +26,6 @@ class CPU : public moira::Moira {
     // Result of the latest inspection
     mutable CPUInfo info = {};
 
-    // Recorded call stack
-    CallstackRecorder callstack;
-
 
     //
     // Overclocking

@@ -945,9 +945,9 @@ Amiga::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Config) {
 
-        os << tab("Video format");
+        os << tab("Machine type");
         os << VideoFormatEnum::key(config.type) << std::endl;
-        os << tab("VSYNC");
+        os << tab("Vertical sync");
         os << bol(config.vsync) << std::endl;
     }
 

@@ -23,6 +23,7 @@ namespace Arg {
 static const std::string address    = "<address>";
 static const std::string boolean    = "{ true | false }";
 static const std::string command    = "<command>";
+static const std::string kb         = "<kb>";
 static const std::string onoff      = "{ on | off }";
 static const std::string path       = "<path>";
 static const std::string process    = "<process>";

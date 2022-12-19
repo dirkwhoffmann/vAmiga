@@ -135,19 +135,13 @@ RetroShell::exec <Token::screenshot, Token::save> (Arguments &argv, long param)
 template <> void
 RetroShell::exec <Token::amiga, Token::config> (Arguments& argv, long param)
 {
-    dump(amiga, Category::Config);
+    dumpConfig(amiga);
 }
 
 template <> void
-RetroShell::exec <Token::amiga, Token::set, Token::pal> (Arguments& argv, long param)
+RetroShell::exec <Token::amiga, Token::set, Token::type> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_VIDEO_FORMAT, PAL);
-}
-
-template <> void
-RetroShell::exec <Token::amiga, Token::set, Token::ntsc> (Arguments& argv, long param)
-{
-    amiga.configure(OPT_VIDEO_FORMAT, NTSC);
+    amiga.configure(OPT_VIDEO_FORMAT, util::parseEnum <VideoFormatEnum> (argv.front()));
 }
 
 template <> void
@@ -199,7 +193,7 @@ RetroShell::exec <Token::amiga, Token::defaults> (Arguments &argv, long param)
 template <> void
 RetroShell::exec <Token::memory, Token::config> (Arguments& argv, long param)
 {
-    dump(amiga.mem, Category::Config);
+    dumpConfig(amiga.mem);
 }
 
 template <> void
@@ -278,7 +272,7 @@ RetroShell::exec <Token::memory, Token::load, Token::extrom> (Arguments& argv, l
 template <> void
 RetroShell::exec <Token::cpu, Token::config> (Arguments &argv, long param)
 {
-    dump(amiga.cpu, Category::Config);
+    dumpConfig(amiga.cpu);
 }
 
 template <> void
@@ -286,6 +280,20 @@ RetroShell::exec <Token::cpu, Token::set, Token::revision> (Arguments &argv, lon
 {
     auto value = util::parseEnum <CPURevisionEnum> (argv.front());
     amiga.configure(OPT_CPU_REVISION, value);
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::set, Token::dasm, Token::revision> (Arguments &argv, long param)
+{
+    auto value = util::parseEnum <DasmRevisionEnum> (argv.front());
+    amiga.configure(OPT_CPU_DASM_REVISION, value);
+}
+
+template <> void
+RetroShell::exec <Token::cpu, Token::set, Token::dasm, Token::syntax> (Arguments &argv, long param)
+{
+    auto value = util::parseEnum <DasmSyntaxEnum> (argv.front());
+    amiga.configure(OPT_CPU_DASM_SYNTAX, value);
 }
 
 template <> void
@@ -300,13 +308,6 @@ RetroShell::exec <Token::cpu, Token::set, Token::regreset> (Arguments &argv, lon
 {
     auto value = util::parseNum(argv.front());
     amiga.configure(OPT_CPU_RESET_VAL, value);
-}
-
-template <> void
-RetroShell::exec <Token::cpu, Token::callstack> (Arguments &argv, long param)
-{
-    if (!amiga.inDebugMode()) throw VAError(ERROR_DEBUG_OFF);
-    dump(amiga.cpu, Category::Callstack);
 }
 
 
@@ -328,11 +329,7 @@ RetroShell::exec <Token::fpu, Token::inspect> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::cia, Token::config> (Arguments &argv, long param)
 {
-    if (param == 0) {
-        dump(amiga.ciaA, Category::Config);
-    } else {
-        dump(amiga.ciaB, Category::Config);
-    }
+    param == 0 ? dumpConfig(amiga.ciaA) : dumpConfig(amiga.ciaB);
 }
 
 template <> void
@@ -364,7 +361,7 @@ RetroShell::exec <Token::cia, Token::set, Token::esync> (Arguments &argv, long p
 template <> void
 RetroShell::exec <Token::agnus, Token::config> (Arguments &argv, long param)
 {
-    dump(amiga.agnus, Category::Config);
+    dumpConfig(amiga.agnus);
 }
 
 template <> void
@@ -426,7 +423,7 @@ RetroShell::exec <Token::agnus, Token::inspect, Token::events> (Arguments &argv,
 template <> void
 RetroShell::exec <Token::blitter, Token::config> (Arguments& argv, long param)
 {
-    dump(amiga.agnus.blitter, Category::Config);
+    dumpConfig(amiga.agnus.blitter);
 }
 
 template <> void
@@ -488,7 +485,7 @@ RetroShell::exec <Token::copper, Token::list> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::denise, Token::config> (Arguments& argv, long param)
 {
-    dump(amiga.denise, Category::Config);
+    dumpConfig(amiga.denise);
 }
 
 template <> void
@@ -542,7 +539,7 @@ RetroShell::exec <Token::denise, Token::hide, Token::layers> (Arguments &argv, l
 template <> void
 RetroShell::exec <Token::denise, Token::inspect, Token::state> (Arguments& argv, long param)
 {
-    dump(amiga.denise, Category::Details);
+    dumpDetails(amiga.denise);
 }
 
 template <> void
@@ -701,7 +698,7 @@ RetroShell::exec <Token::monitor, Token::set, Token::saturation> (Arguments& arg
 template <> void
 RetroShell::exec <Token::audio, Token::config> (Arguments& argv, long param)
 {
-    dump(amiga.paula.muxer, Category::Config);
+    dumpConfig(amiga.paula.muxer);
 }
 
 template <> void
@@ -742,7 +739,7 @@ RetroShell::exec <Token::audio, Token::set, Token::pan> (Arguments& argv, long p
 template <> void
 RetroShell::exec <Token::audio, Token::inspect, Token::state> (Arguments& argv, long param)
 {
-    dump(amiga.paula.muxer, Category::Details);
+    dumpDetails(amiga.paula.muxer);
 }
 
 template <> void
@@ -759,7 +756,7 @@ RetroShell::exec <Token::audio, Token::inspect, Token::registers> (Arguments& ar
 template <> void
 RetroShell::exec <Token::paula, Token::inspect, Token::state> (Arguments& argv, long param)
 {
-    dump(amiga.paula, Category::Details);
+    dumpDetails(amiga.paula);
 }
 
 template <> void
@@ -776,7 +773,7 @@ RetroShell::exec <Token::paula, Token::inspect, Token::registers> (Arguments& ar
 template <> void
 RetroShell::exec <Token::rtc, Token::config> (Arguments& argv, long param)
 {
-    dump(amiga.rtc, Category::Config);
+    dumpConfig(amiga.rtc);
 }
 
 template <> void
@@ -799,13 +796,13 @@ RetroShell::exec <Token::rtc, Token::set, Token::revision> (Arguments &argv, lon
 template <> void
 RetroShell::exec <Token::controlport, Token::config> (Arguments& argv, long param)
 {
-    dump(param == 0 ? amiga.controlPort1 : amiga.controlPort2, Category::Config);
+    dumpConfig(param == 0 ? amiga.controlPort1 : amiga.controlPort2);
 }
 
 template <> void
 RetroShell::exec <Token::controlport, Token::inspect> (Arguments& argv, long param)
 {
-    dump(param == 0 ? amiga.controlPort1 : amiga.controlPort2, Category::Details);
+    dumpDetails(param == 0 ? amiga.controlPort1 : amiga.controlPort2);
 }
 
 
@@ -816,7 +813,7 @@ RetroShell::exec <Token::controlport, Token::inspect> (Arguments& argv, long par
 template <> void
 RetroShell::exec <Token::keyboard, Token::config> (Arguments& argv, long param)
 {
-    dump(amiga.keyboard, Category::Config);
+    dumpConfig(amiga.keyboard);
 }
 
 template <> void
@@ -828,7 +825,7 @@ RetroShell::exec <Token::keyboard, Token::set, Token::accuracy> (Arguments &argv
 template <> void
 RetroShell::exec <Token::keyboard, Token::inspect> (Arguments& argv, long param)
 {
-    dump(amiga.keyboard, Category::Details);
+    dumpDetails(amiga.keyboard);
 }
 
 template <> void
@@ -847,7 +844,7 @@ template <> void
 RetroShell::exec <Token::mouse, Token::config> (Arguments& argv, long param)
 {
     auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
-    dump(port.mouse, Category::Config);
+    dumpConfig(port.mouse);
 }
 
 template <> void
@@ -875,7 +872,7 @@ template <> void
 RetroShell::exec <Token::mouse, Token::inspect> (Arguments& argv, long param)
 {
     auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
-    dump(port.mouse, Category::Details);
+    dumpDetails(port.mouse);
 }
 
 template <> void
@@ -901,7 +898,7 @@ template <> void
 RetroShell::exec <Token::joystick, Token::config> (Arguments& argv, long param)
 {
     auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
-    dump(port.joystick, Category::Config);
+    dumpConfig(port.joystick);
 }
 
 template <> void
@@ -929,7 +926,7 @@ template <> void
 RetroShell::exec <Token::joystick, Token::inspect> (Arguments& argv, long param)
 {
     auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
-    dump(port.joystick, Category::Details);
+    dumpDetails(port.joystick);
 }
 
 template <> void
@@ -1016,7 +1013,7 @@ RetroShell::exec <Token::joystick, Token::release, Token::yaxis> (Arguments& arg
 template <> void
 RetroShell::exec <Token::serial, Token::config> (Arguments& argv, long param)
 {
-    dump(amiga.serialPort, Category::Config);
+    dumpConfig(amiga.serialPort);
 }
 
 template <> void
@@ -1028,7 +1025,7 @@ RetroShell::exec <Token::serial, Token::set, Token::device> (Arguments &argv, lo
 template <> void
 RetroShell::exec <Token::serial, Token::inspect> (Arguments& argv, long param)
 {
-    dump(amiga.serialPort, Category::Details);
+    dumpDetails(amiga.serialPort);
 }
 
 
@@ -1039,13 +1036,13 @@ RetroShell::exec <Token::serial, Token::inspect> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::dc, Token::config> (Arguments& argv, long param)
 {
-    dump(amiga.paula.diskController, Category::Config);
+    dumpConfig(amiga.paula.diskController);
 }
 
 template <> void
 RetroShell::exec <Token::dc, Token::inspect> (Arguments& argv, long param)
 {
-    dump(amiga.paula.diskController, Category::Details);
+    dumpConfig(amiga.paula.diskController);
 }
 
 template <> void
@@ -1074,7 +1071,7 @@ RetroShell::exec <Token::dc, Token::dsksync, Token::lock> (Arguments& argv, long
 template <> void
 RetroShell::exec <Token::dfn, Token::config> (Arguments& argv, long param)
 {
-    dump(*amiga.df[param], Category::Config);
+    dumpConfig(*amiga.df[param]);
 }
 
 template <> void
@@ -1214,7 +1211,7 @@ RetroShell::exec <Token::dfn, Token::set, Token::swapdelay> (Arguments& argv, lo
 template <> void
 RetroShell::exec <Token::dfn, Token::inspect> (Arguments& argv, long param)
 {
-    dump(*amiga.df[param], Category::Details);
+    dumpDetails(*amiga.df[param]);
 }
 
 template <> void
@@ -1232,7 +1229,7 @@ RetroShell::exec <Token::dfn, Token::cp> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::hdn, Token::config> (Arguments& argv, long param)
 {
-    dump(*amiga.hd[param], Category::Config);
+    dumpConfig(*amiga.hd[param]);
 }
 
 template <> void
@@ -1280,7 +1277,7 @@ RetroShell::exec <Token::hdn, Token::inspect, Token::partition> (Arguments& argv
 template <> void
 RetroShell::exec <Token::hdn, Token::inspect, Token::state> (Arguments& argv, long param)
 {
-    dump(*amiga.hd[param], Category::Details);
+    dumpDetails(*amiga.hd[param]);
 }
 
 template <> void
@@ -1300,7 +1297,7 @@ RetroShell::exec <Token::hdn, Token::geometry> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::zorro, Token::list> (Arguments& argv, long param)
 {
-    dump(zorro, Category::Details);
+    dumpDetails(zorro);
 }
 
 template <> void
@@ -1311,7 +1308,7 @@ RetroShell::exec <Token::zorro, Token::inspect> (Arguments& argv, long param)
     if (auto board = zorro.getBoard(value); board != nullptr) {
 
         dump(*board, Category::Properties);
-        dump(*board, Category::Details);
+        dumpDetails(*board);
         dump(*board, Category::Stats);
     }
 }
@@ -1342,13 +1339,13 @@ RetroShell::exec <Token::server, Token::serial, Token::set, Token::verbose> (Arg
 template <> void
 RetroShell::exec <Token::server, Token::serial, Token::config> (Arguments& argv, long param)
 {
-    dump(remoteManager.serServer, Category::Config);
+    dumpConfig(remoteManager.serServer);
 }
 
 template <> void
 RetroShell::exec <Token::server, Token::serial, Token::inspect> (Arguments& argv, long param)
 {
-    dump(remoteManager.serServer, Category::Details);
+    dumpDetails(remoteManager.serServer);
 }
 
 template <> void
@@ -1384,13 +1381,13 @@ RetroShell::exec <Token::server, Token::rshell, Token::set, Token::verbose> (Arg
 template <> void
 RetroShell::exec <Token::server, Token::rshell, Token::config> (Arguments& argv, long param)
 {
-    dump(remoteManager.rshServer, Category::Config);
+    dumpConfig(remoteManager.rshServer);
 }
 
 template <> void
 RetroShell::exec <Token::server, Token::rshell, Token::inspect> (Arguments& argv, long param)
 {
-    dump(remoteManager.rshServer, Category::Details);
+    dumpDetails(remoteManager.rshServer);
 }
 
 template <> void
@@ -1420,13 +1417,13 @@ RetroShell::exec <Token::server, Token::gdb, Token::set, Token::verbose> (Argume
 template <> void
 RetroShell::exec <Token::server, Token::gdb, Token::config> (Arguments& argv, long param)
 {
-    dump(remoteManager.gdbServer, Category::Config);
+    dumpConfig(remoteManager.gdbServer);
 }
 
 template <> void
 RetroShell::exec <Token::server, Token::gdb, Token::inspect> (Arguments& argv, long param)
 {
-    dump(remoteManager.gdbServer, Category::Details);
+    dumpDetails(remoteManager.gdbServer);
 }
 
 }

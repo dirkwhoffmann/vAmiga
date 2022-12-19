@@ -221,6 +221,9 @@ public:
     void exec(Arguments& argv, long param) throws;
 
     void dump(AmigaObject &component, Category category);
+    void dumpConfig(AmigaObject &component);
+    void dumpSummary(AmigaObject &component);
+    void dumpDetails(AmigaObject &component);
 
     
     //

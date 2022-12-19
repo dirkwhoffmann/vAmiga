@@ -235,15 +235,11 @@ Interpreter::initCommandShell(Command &root)
     root.add({"amiga", "set"},
              "Configures the component");
 
-    root.add({"amiga", "set", "pal"},
-             "Emulates a PAL machine",
-             &RetroShell::exec <Token::amiga, Token::set, Token::pal>);
+    root.add({"amiga", "set", "type"}, { VideoFormatEnum::argList() },
+             "Sets the video standard to PAL or NTSC",
+             &RetroShell::exec <Token::amiga, Token::set, Token::type>);
 
-    root.add({"amiga", "set", "ntsc"},
-             "Emulates a NTSC machine",
-             &RetroShell::exec <Token::amiga, Token::set, Token::ntsc>);
-
-    root.add({"amiga", "vsync"}, { Arg::onoff },
+    root.add({"amiga", "set", "vsync"}, { Arg::onoff },
              "Turns VSYNC on or off",
              &RetroShell::exec <Token::amiga, Token::vsync>);
 
@@ -277,19 +273,19 @@ Interpreter::initCommandShell(Command &root)
     root.add({"memory", "set"},
              "Configures the component");
 
-    root.add({"memory", "set", "chip"}, { Arg::value },
+    root.add({"memory", "set", "chip"}, { Arg::kb },
              "Configures the amouts of chip memory",
              &RetroShell::exec <Token::memory, Token::set, Token::chip>);
 
-    root.add({"memory", "set", "slow"},  { Arg::value },
+    root.add({"memory", "set", "slow"},  { Arg::kb },
              "Configures the amouts of slow memory",
              &RetroShell::exec <Token::memory, Token::set, Token::slow>);
 
-    root.add({"memory", "set", "fast"}, { Arg::value },
+    root.add({"memory", "set", "fast"}, { Arg::kb },
              "Configures the amouts of flow memory",
              &RetroShell::exec <Token::memory, Token::set, Token::fast>);
 
-    root.add({"memory", "set", "extstart"}, { Arg::value },
+    root.add({"memory", "set", "extstart"}, { Arg::address },
              "Sets the start address for Rom extensions",
              &RetroShell::exec <Token::memory, Token::set, Token::extstart>);
 
@@ -305,14 +301,14 @@ Interpreter::initCommandShell(Command &root)
              "Selects the bank mapping scheme",
              &RetroShell::exec <Token::memory, Token::set, Token::bankmap>);
 
+    root.add({"memory", "set", "raminit"}, { RamInitPatternEnum::argList() },
+             "Determines how Ram is initialized on startup",
+             &RetroShell::exec <Token::memory, Token::set, Token::raminitpattern>);
+
     root.add({"memory", "set", "unmapped"}, { UnmappedMemoryEnum::argList() },
              "Determines the behaviour of unmapped memory",
              &RetroShell::exec <Token::memory, Token::set, Token::unmappingtype>);
 
-    root.add({"memory", "set", "raminit"}, { RamInitPatternEnum::argList() },
-             "Determines how Ram is initialized on startup",
-             &RetroShell::exec <Token::memory, Token::set, Token::raminitpattern>);
-    
     root.add({"memory", "load"},
              "Installs a Rom image");
 
@@ -320,7 +316,7 @@ Interpreter::initCommandShell(Command &root)
              "Installs a Kickstart Rom",
              &RetroShell::exec <Token::memory, Token::load, Token::rom>);
 
-    root.add({"memory", "load", "extrom"},
+    root.add({"memory", "load", "extrom"}, { Arg::path },
              "Installs a Rom extension",
              &RetroShell::exec <Token::memory, Token::load, Token::extrom>);
 
@@ -342,6 +338,17 @@ Interpreter::initCommandShell(Command &root)
              "Selects the emulated chip model",
              &RetroShell::exec <Token::cpu, Token::set, Token::revision>);
 
+    root.add({"cpu", "set", "dasm"},
+             "Configures the disassembler");
+
+    root.add({"cpu", "set", "dasm", "revision"}, { DasmRevisionEnum::argList() },
+             "Selects the disassembler instruction set",
+             &RetroShell::exec <Token::cpu, Token::set, Token::dasm, Token::revision>);
+
+    root.add({"cpu", "set", "dasm", "syntax"}, {  DasmSyntaxEnum::argList() },
+             "Selects the disassembler syntax style",
+             &RetroShell::exec <Token::cpu, Token::set, Token::dasm, Token::syntax>);
+
     root.add({"cpu", "set", "overclocking"}, { Arg::value },
              "Overclocks the CPU by the specified factor",
              &RetroShell::exec <Token::cpu, Token::set, Token::overclocking>);
@@ -349,10 +356,6 @@ Interpreter::initCommandShell(Command &root)
     root.add({"cpu", "set", "regreset"}, { Arg::value },
              "Selects the reset value of data and address registers",
              &RetroShell::exec <Token::cpu, Token::set, Token::regreset>);
-
-    root.add({"cpu", "callstack" },
-             "Prints recorded subroutine calls (DEPRECATED)",
-             &RetroShell::exec <Token::cpu, Token::callstack>);
 
 
     //

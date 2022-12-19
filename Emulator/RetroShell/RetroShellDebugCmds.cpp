@@ -271,13 +271,13 @@ RetroShell::exec <Token::cwp, Token::ignore> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::amiga> (Arguments &argv, long param)
 {
-    dump(amiga, Category::Summary);
+    dumpSummary(amiga);
 }
 
 template <> void
 RetroShell::exec <Token::amiga, Token::state> (Arguments &argv, long param)
 {
-    dump(amiga, Category::Details);
+    dumpDetails(amiga);
 }
 
 template <> void
@@ -311,13 +311,13 @@ RetroShell::exec <Token::memory, Token::checksums> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::cpu> (Arguments &argv, long param)
 {
-    dump(cpu, Category::Summary);
+    dumpSummary(cpu);
 }
 
 template <> void
 RetroShell::exec <Token::cpu, Token::state> (Arguments &argv, long param)
 {
-    dump(cpu, Category::Details);
+    dumpDetails(cpu);
 }
 
 template <> void
@@ -329,43 +329,31 @@ RetroShell::exec <Token::cpu, Token::vectors> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::cia> (Arguments &argv, long param)
 {
-    if (param == 0) {
-        dump(ciaa, Category::Summary);
-    } else {
-        dump(ciab, Category::Summary);
-    }
+    param == 0 ? dumpSummary(ciaa) : dumpSummary(ciab);
 }
 
 template <> void
 RetroShell::exec <Token::cia, Token::state> (Arguments &argv, long param)
 {
-    if (param == 0) {
-        dump(ciaa, Category::Details);
-    } else {
-        dump(ciab, Category::Details);
-    }
+    param == 0 ? dumpDetails(ciaa) : dumpDetails(ciab);
 }
 
 template <> void
 RetroShell::exec <Token::cia, Token::tod> (Arguments &argv, long param)
 {
-    if (param == 0) {
-        dump(ciaa, Category::Tod);
-    } else {
-        dump(ciab, Category::Tod);
-    }
+    param == 0 ? dump(ciaa, Category::Tod) : dump(ciab, Category::Tod);
 }
 
 template <> void
 RetroShell::exec <Token::agnus> (Arguments &argv, long param)
 {
-    dump(agnus, Category::Summary);
+    dumpSummary(agnus);
 }
 
 template <> void
 RetroShell::exec <Token::agnus, Token::state> (Arguments &argv, long param)
 {
-    dump(agnus, Category::Details);
+    dumpDetails(agnus);
 }
 
 template <> void
@@ -389,25 +377,25 @@ RetroShell::exec <Token::agnus, Token::events> (Arguments &argv, long param)
 template <> void
 RetroShell::exec <Token::blitter> (Arguments &argv, long param)
 {
-    dump(amiga.agnus.blitter, Category::Summary);
+    dumpSummary(amiga.agnus.blitter);
 }
 
 template <> void
 RetroShell::exec <Token::blitter, Token::state> (Arguments &argv, long param)
 {
-    dump(amiga.agnus.blitter, Category::Details);
+    dumpDetails(amiga.agnus.blitter);
 }
 
 template <> void
 RetroShell::exec <Token::copper> (Arguments &argv, long param)
 {
-    dump(amiga.agnus.copper, Category::Summary);
+    dumpSummary(amiga.agnus.copper);
 }
 
 template <> void
 RetroShell::exec <Token::copper, Token::state> (Arguments &argv, long param)
 {
-    dump(amiga.agnus.copper, Category::Details);
+    dumpDetails(amiga.agnus.copper);
 }
 
 template <> void
@@ -428,25 +416,25 @@ RetroShell::exec <Token::copper, Token::list> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::paula> (Arguments &argv, long param)
 {
-    dump(paula, Category::Summary);
+    dumpSummary(paula);
 }
 
 template <> void
 RetroShell::exec <Token::paula, Token::state> (Arguments &argv, long param)
 {
-    dump(paula, Category::Details);
+    dumpDetails(paula);
 }
 
 template <> void
 RetroShell::exec <Token::denise> (Arguments &argv, long param)
 {
-    dump(denise, Category::Summary);
+    dumpSummary(denise);
 }
 
 template <> void
 RetroShell::exec <Token::denise, Token::state> (Arguments &argv, long param)
 {
-    dump(denise, Category::Details);
+    dumpDetails(denise);
 }
 
 

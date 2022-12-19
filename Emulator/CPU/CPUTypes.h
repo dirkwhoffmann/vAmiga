@@ -162,34 +162,3 @@ typedef struct
     bool halt;
 }
 CPUInfo;
-
-#ifdef __cplusplus
-struct CallStackEntry
-{
-    // Opcode of the branch instruction
-    u16 opcode;
-    
-    // Program counter and subroutine address
-    u32 oldPC;
-    u32 newPC;
-    
-    // Register contents
-    u32 d[8];
-    u32 a[8];
-
-    template <class W>
-    void operator<<(W& worker)
-    {
-        worker << opcode << oldPC << newPC << d << a;
-    }
-};
-
-struct CallstackRecorder : public util::SortedRingBuffer<CallStackEntry, 64>
-{
-    template <class W>
-    void operator<<(W& worker)
-    {
-        worker >> this->elements << this->r << this->w << this->keys;
-    }
-};
-#endif
