@@ -98,6 +98,7 @@ TextStorage::operator<<(std::stringstream &ss)
     return *this;
 }
 
+/*
 void
 TextStorage::welcome()
 {
@@ -116,5 +117,5 @@ TextStorage::printHelp()
     *this << "Type 'help' or press 'TAB' twice for help." << '\n';
     *this << "Type '.' or press 'SHIFT+RETURN' to enter the debugger." << '\n';
 }
-
+*/
 }

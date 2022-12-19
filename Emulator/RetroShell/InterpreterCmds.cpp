@@ -243,16 +243,9 @@ Interpreter::initCommandShell(Command &root)
              "Emulates a NTSC machine",
              &RetroShell::exec <Token::amiga, Token::set, Token::ntsc>);
 
-    root.add({"amiga", "vsync"},
-             "Turns VSYNC on or off");
-
-    root.add({"amiga", "vsync", "on"},
-             "Turns VSYNC on",
-             &RetroShell::exec <Token::amiga, Token::vsync, Token::on>);
-
-    root.add({"amiga", "vsync", "off"},
-             "Turns VSYNC off",
-             &RetroShell::exec <Token::amiga, Token::vsync, Token::off>);
+    root.add({"amiga", "vsync"}, { Arg::onoff },
+             "Turns VSYNC on or off",
+             &RetroShell::exec <Token::amiga, Token::vsync>);
 
     root.add({"amiga", "init"}, { ConfigSchemeEnum::argList() },
              "Initializes the Amiga with a predefined scheme",

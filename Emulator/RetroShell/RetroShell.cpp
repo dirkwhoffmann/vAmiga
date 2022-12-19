@@ -31,7 +31,7 @@ RetroShell::_initialize()
     history.push_back( { "", 0 } );
     
     // Print the startup message and the input prompt
-    storage.welcome();
+    welcome();
 }
 
 void
@@ -109,6 +109,8 @@ RetroShell::updatePrompt()
 
         prompt = ss.str();
     }
+
+    needsDisplay();
 }
 
 const char *
@@ -159,13 +161,35 @@ RetroShell::clear()
 }
 
 void
+RetroShell::welcome()
+{
+    string name = interpreter.inDebugShell() ? "Debug Shell" : "Retro Shell";
+
+    if (interpreter.inCommandShell()) {
+
+        *this << "vAmiga " << name << " " << Amiga::build() << '\n';
+        *this << '\n';
+        *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
+        *this << "Licensed under the GNU General Public License v3" << '\n';
+        *this << '\n';
+    }
+
+    printHelp();
+    *this << '\n';
+}
+
+void
 RetroShell::printHelp()
 {
-    storage.printHelp();
-    remoteManager.rshServer << "Type 'help' for help.\n";
-    remoteManager.rshServer << "Type '.' to enter the debugger.\n";
+    string action = interpreter.inDebugShell() ? "exit" : "enter";
 
-    needsDisplay();
+    storage << "Type 'help' or press 'TAB' twice for help.\n";
+    storage << "Type '.' or press 'SHIFT+RETURN' to " << action << " debug mode.";
+
+    remoteManager.rshServer << "Type 'help' for help.\n";
+    remoteManager.rshServer << "Type '.' to " << action << " debug mode.";
+
+    *this << '\n';
 }
 
 void
@@ -491,14 +515,14 @@ RetroShell::describe(const std::exception &e)
     
     if (auto err = dynamic_cast<const util::ParseBoolError *>(&e)) {
 
-        *this << err->token << " must be true or false";
+        *this << "'" << err->token << "' must be true or false";
         *this << '\n';
         return;
     }
 
     if (auto err = dynamic_cast<const util::ParseOnOffError *>(&e)) {
 
-        *this << err->token << " must be on or off";
+        *this << "'" << err->token << "' must be on or off";
         *this << '\n';
         return;
     }

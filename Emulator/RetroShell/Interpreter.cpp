@@ -244,7 +244,6 @@ Interpreter::help(const Command& current)
         }
 
         // Print command descriptioon
-        // string name = token + " " + it.token;
         retroShell << indent;
         retroShell << it.fullName;
         retroShell.tab(tab);
@@ -252,32 +251,8 @@ Interpreter::help(const Command& current)
         retroShell << it.help;
         retroShell << '\n';
     }
+
     retroShell << '\n';
-
-
-    /*
-    for (auto &it : types) {
-        
-        auto opts = current.filterType(it);
-        int size = (int)it.length();
-
-        retroShell.tab(tab - size);
-        retroShell << "<" << it << "> : ";
-        retroShell << (isize)opts.size() << (opts.size() == 1 ? " choice" : " choices");
-        retroShell << '\n' << '\n';
-        
-        for (auto &opt : opts) {
-
-            string name = opt->token == "" ? "<>" : opt->token;
-            retroShell.tab(tab + 2 - (isize)name.length());
-            retroShell << name;
-            retroShell << " : ";
-            retroShell << opt->info;
-            retroShell << '\n';
-        }
-        retroShell << '\n';
-    }
-    */
 }
 
 }

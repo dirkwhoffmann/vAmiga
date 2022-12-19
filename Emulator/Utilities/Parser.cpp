@@ -27,7 +27,7 @@ parseOnOff(string& token)
     if (token == "on") return true;
     if (token == "off") return false;
 
-    throw ParseOnOffError("");
+    throw ParseOnOffError(token);
 }
 
 long

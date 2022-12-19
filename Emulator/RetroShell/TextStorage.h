@@ -68,11 +68,13 @@ public:
     TextStorage &operator<<(const string &s);
     TextStorage &operator<<(std::stringstream &ss);
 
+    /*
     // Prints the welcome message
     void welcome();
     
     // Prints the help line
     void printHelp();
+    */
 };
 
 }

@@ -138,8 +138,11 @@ private:
     
     // Clears the console window
     void clear();
-    
-    // Prints a help line
+
+    // Prints the welcome message
+    void welcome();
+
+    // Prints the help line
     void printHelp();
 
     // Prints a state summary (used by the debugger only)

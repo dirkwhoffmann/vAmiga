@@ -26,7 +26,9 @@ namespace vamiga {
 template <> void
 RetroShell::exec <Token::debug> (Arguments &argv, long param)
 {
+    clear();
     interpreter.switchInterpreter();
+    welcome();
 }
 
 template <> void
@@ -149,15 +151,9 @@ RetroShell::exec <Token::amiga, Token::set, Token::ntsc> (Arguments& argv, long 
 }
 
 template <> void
-RetroShell::exec <Token::amiga, Token::vsync, Token::on> (Arguments &argv, long param)
+RetroShell::exec <Token::amiga, Token::vsync> (Arguments &argv, long param)
 {
-    amiga.configure(OPT_VSYNC, true);
-}
-
-template <> void
-RetroShell::exec <Token::amiga, Token::vsync, Token::off> (Arguments &argv, long param)
-{
-    amiga.configure(OPT_VSYNC, false);
+    amiga.configure(OPT_VSYNC, util::parseOnOff(argv.front()));
 }
 
 template <> void

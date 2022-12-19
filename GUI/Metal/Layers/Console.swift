@@ -67,8 +67,11 @@ class Console: Layer {
                                     value: cursorColor,
                                     range: NSRange(location: string.length + cpos, length: 1))
                 textView.textStorage?.setAttributedString(string)
+
+            } else {
+                fatalError()
             }
-            
+
             textView.scrollToEndOfDocument(self)
             isDirty = false
         }
