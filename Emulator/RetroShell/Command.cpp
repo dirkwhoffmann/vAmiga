@@ -59,7 +59,7 @@ Command::add(const std::vector<string> &tokens,
     assert(cmd != nullptr);
 
     // Install the action handler in the parent node if this is no sub-command
-    if (tokens.back() == "") cmd->action = action;
+    if (tokens.back() == "") { cmd->action = action; cmd->param = param; }
 
     // Create the instruction
     Command d;

@@ -102,8 +102,20 @@ Interpreter::initDebugShell(Command &root)
     root.add({"rtc"},
              "Real-time clock");
 
-    root.add({"controlports"},
+    root.add({"controlport"},
              "Control ports");
+
+    root.add({"serial"},
+             "Serial port");
+
+    root.add({"keyboard"},
+             "Keyboard");
+
+    root.add({"mouse"},
+             "Mouse");
+
+    root.add({"joystick"},
+             "Joystick");
 
     root.add({"os"},
              "AmigaOS debugger");
@@ -451,13 +463,68 @@ Interpreter::initDebugShell(Command &root)
     // Controlports
     //
 
-    root.add({"controlports", ""},
-             "Inspects the internal state",
-             &RetroShell::exec <Token::controlport>);
+    for (isize i = 1; i <= 2; i++) {
 
-    root.add({"controlports", "state"},
+        string nr = (i == 1) ? "1" : "2";
+
+        root.add({"controlport", nr},
+                 "Control port " + nr);
+
+        root.add({"controlport", nr, ""},
+                 "Inspects the internal state",
+                 &RetroShell::exec <Token::controlport>, i);
+
+        root.add({"controlport", nr, "state"},
+                 "Displays additional debug information",
+                 &RetroShell::exec <Token::controlport, Token::state>, i);
+    }
+
+
+    //
+    // Serial port
+    //
+
+    root.add({"serial"},
+             "Displays the internal state",
+             &RetroShell::exec <Token::serial>);
+
+
+    //
+    // Keyboard, Mice, Joystick
+    //
+
+    root.add({"keyboard", ""},
+             "Inspects the internal state",
+             &RetroShell::exec <Token::keyboard>);
+
+    /*
+    root.add({"keyboard", "state"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::controlport, Token::state>);
+             &RetroShell::exec <Token::keyboard, Token::state>);
+    */
+
+    for (isize i = 1; i <= 2; i++) {
+
+        string nr = (i == 1) ? "1" : "2";
+
+        root.add({"mouse", nr},
+                 "Mouse in port " + nr);
+
+        root.add({"mouse", nr, ""},
+                 "Inspects the internal state",
+                 &RetroShell::exec <Token::mouse>, i);
+
+        root.add({"mouse", nr, "state"},
+                 "Displays additional debug information",
+                 &RetroShell::exec <Token::mouse, Token::state>, i);
+
+        root.add({"joystick", nr},
+                 "Joystick in port " + nr);
+
+        root.add({"joystick", nr, ""},
+                 "Inspects the internal state",
+                 &RetroShell::exec <Token::joystick>, i);
+    }
 
 
     //

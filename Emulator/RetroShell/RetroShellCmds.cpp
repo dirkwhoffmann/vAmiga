@@ -741,12 +741,6 @@ RetroShell::exec <Token::keyboard, Token::set, Token::accuracy> (Arguments &argv
 }
 
 template <> void
-RetroShell::exec <Token::keyboard, Token::inspect> (Arguments& argv, long param)
-{
-    dumpDetails(amiga.keyboard);
-}
-
-template <> void
 RetroShell::exec <Token::keyboard, Token::press> (Arguments& argv, long param)
 {
     auto keycode = util::parseNum(argv.front());
@@ -841,13 +835,6 @@ RetroShell::exec <Token::joystick, Token::set, Token::delay> (Arguments &argv, l
 }
 
 template <> void
-RetroShell::exec <Token::joystick, Token::inspect> (Arguments& argv, long param)
-{
-    auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
-    dumpDetails(port.joystick);
-}
-
-template <> void
 RetroShell::exec <Token::joystick, Token::press> (Arguments& argv, long param)
 {
     auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
@@ -938,12 +925,6 @@ template <> void
 RetroShell::exec <Token::serial, Token::set, Token::device> (Arguments &argv, long param)
 {
     amiga.configure(OPT_SERIAL_DEVICE, util::parseEnum <SerialPortDeviceEnum> (argv.front()));
-}
-
-template <> void
-RetroShell::exec <Token::serial, Token::inspect> (Arguments& argv, long param)
-{
-    dumpDetails(amiga.serialPort);
 }
 
 

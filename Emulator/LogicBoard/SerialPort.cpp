@@ -88,10 +88,26 @@ SerialPort::_dump(Category category, std::ostream& os) const
         os << SerialPortDeviceEnum::key(config.device) << std::endl;
     }
     
-    if (category == Category::State) {
+    if (category == Category::Summary) {
         
-        os << tab("port");
+        os << tab("Port pins");
         os << hex(port);
+        os << tab("TXD");
+        os << dec(getTXD());
+        os << tab("RXD");
+        os << dec(getRXD());
+        os << tab("RTS");
+        os << dec(getRTS());
+        os << tab("CTS");
+        os << dec(getCTS());
+        os << tab("DSR");
+        os << dec(getDSR());
+        os << tab("CD");
+        os << dec(getCD());
+        os << tab("DTR");
+        os << dec(getDTR());
+        os << tab("RI");
+        os << dec(getRI());
     }
 }
 

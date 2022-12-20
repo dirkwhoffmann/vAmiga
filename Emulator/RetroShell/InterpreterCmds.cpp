@@ -110,14 +110,6 @@ Interpreter::initCommandShell(Command &root)
     root.add({"rtc"},
              "Real-time clock");
 
-    /*
-    root.add({"controlport1"},
-             "Control port 1");
-
-    root.add({"controlport2"},
-             "Control port 2");
-    */
-
     root.add({"serial"},
              "Serial port");
 
@@ -133,17 +125,11 @@ Interpreter::initCommandShell(Command &root)
     root.add({"keyboard"},
              "Keyboard");
 
-    root.add({"mouse1"},
-             "Port 1 mouse");
+    root.add({"mouse"},
+             "Mouse");
 
-    root.add({"mouse2"},
-             "Port 2 mouse");
-
-    root.add({"joystick1"},
-             "Port 1 joystick");
-
-    root.add({"joystick2"},
-             "Port 2 joystick");
+    root.add({"joystick"},
+             "Joystick");
 
     root.add({"df0"},
              "Floppy drive 0");
@@ -676,10 +662,6 @@ Interpreter::initCommandShell(Command &root)
              "Determines the emulation accuracy level",
              &RetroShell::exec <Token::keyboard, Token::set, Token::accuracy>);
 
-    root.add({"keyboard", "inspect"},
-             "Displays the internal state",
-             &RetroShell::exec <Token::keyboard, Token::inspect>);
-
     root.add({"keyboard", "press"}, { Arg::value },
              "Sends a keycode to the keyboard",
              &RetroShell::exec <Token::keyboard, Token::press>);
@@ -691,41 +673,40 @@ Interpreter::initCommandShell(Command &root)
 
     root.newGroup("");
 
-    for (isize i = 0; i < 2; i++) {
+    for (isize i = 1; i <= 2; i++) {
 
-        string mouse = (i == 0) ? "mouse1" : "mouse2";
-        
-        root.add({mouse, ""},
+        string nr = (i == 1) ? "1" : "2";
+
+        root.add({"mouse", nr},
+                 "Mouse in port " + nr);
+
+        root.add({"mouse", nr, ""},
                  "Displays the current configuration",
                  &RetroShell::exec <Token::mouse, Token::config>, i);
         
-        root.add({mouse, "set"},
+        root.add({"mouse", nr, "set"},
                  "Configures the component");
         
-        root.add({mouse, "set", "pullup"}, { Arg::boolean },
-                 "Enables or disables the emulation of pull-up resistors",
+        root.add({"mouse", nr, "set", "pullup"}, { Arg::boolean },
+                 "Enables or disables pull-up resistors",
                  &RetroShell::exec <Token::mouse, Token::set, Token::pullup>, i);
         
-        root.add({mouse, "set", "shakedetector"}, { Arg::boolean },
+        root.add({"mouse", nr, "set", "shakedetector"}, { Arg::boolean },
                  "Enables or disables the shake detector",
                  &RetroShell::exec <Token::mouse, Token::set, Token::shakedetector>, i);
         
-        root.add({mouse, "set", "velocity"}, { Arg::value },
+        root.add({"mouse", nr, "set", "velocity"}, { Arg::value },
                  "Sets the horizontal and vertical mouse velocity",
                  &RetroShell::exec <Token::mouse, Token::set, Token::velocity>, i);
         
-        root.add({mouse, "inspect"},
-                 "Displays the internal state",
-                 &RetroShell::exec <Token::mouse, Token::inspect>, i);
-
-        root.add({mouse, "press"},
+        root.add({"mouse", nr, "press"},
                  "Presses a mouse button");
 
-        root.add({mouse, "press", "left"},
+        root.add({"mouse", nr, "press", "left"},
                  "Presses the left mouse button",
                  &RetroShell::exec <Token::mouse, Token::press, Token::left>, i);
         
-        root.add({mouse, "press", "right"},
+        root.add({"mouse", nr, "press", "right"},
                  "Presses the right mouse button",
                  &RetroShell::exec <Token::mouse, Token::press, Token::right>, i);
     }
@@ -737,68 +718,67 @@ Interpreter::initCommandShell(Command &root)
 
     root.newGroup("");
 
-    for (isize i = 0; i < 2; i++) {
+    for (isize i = 1; i <= 2; i++) {
 
-        string joystick = (i == 0) ? "joystick1" : "joystick2";
-        
-        root.add({joystick, ""},
+        string nr = (i == 1) ? "1" : "2";
+
+        root.add({"joystick", nr},
+                 "Joystick in port " + nr);
+
+        root.add({"joystick", nr, ""},
                  "Displays the current configuration",
                  &RetroShell::exec <Token::joystick, Token::config>, i);
         
-        root.add({joystick, "set"},
+        root.add({"joystick", nr, "set"},
                  "Configures the component");
         
-        root.add({joystick, "set", "autofire"}, { Arg::boolean },
+        root.add({"joystick", nr, "set", "autofire"}, { Arg::boolean },
                  "Enables or disables auto-fire mode",
                  &RetroShell::exec <Token::joystick, Token::set, Token::autofire>, i);
         
-        root.add({joystick, "set", "bullets"},  { Arg::value },
+        root.add({"joystick", nr, "set", "bullets"},  { Arg::value },
                  "Sets the number of bullets per auto-fire shot",
                  &RetroShell::exec <Token::joystick, Token::set, Token::bullets>, i);
         
-        root.add({joystick, "set", "velocity"}, { Arg::value },
+        root.add({"joystick", nr, "set", "velocity"}, { Arg::value },
                  "Configures the auto-fire delay",
                  &RetroShell::exec <Token::joystick, Token::set, Token::delay>, i);
-        
-        root.add({joystick, "inspect"},
-                 "Displays the internal state",
-                 &RetroShell::exec <Token::joystick, Token::inspect>, i);
 
-        root.add({joystick, "press"}, { Arg::value },
+        root.add({"joystick", nr, "press"}, { Arg::value },
                  "Presses a joystick button",
                  &RetroShell::exec <Token::joystick, Token::press>, i);
 
-        root.add({joystick, "unpress"}, { Arg::value },
+        root.add({"joystick", nr, "unpress"}, { Arg::value },
                  "Releases a joystick button",
                  &RetroShell::exec <Token::joystick, Token::unpress>, i);
 
-        root.add({joystick, "pull"},
+        root.add({"joystick", nr, "pull"},
                  "Pulls the joystick");
 
-        root.add({joystick, "pull", "left"},
+        root.add({"joystick", nr, "pull", "left"},
                  "Pulls the joystick left",
                  &RetroShell::exec <Token::joystick, Token::pull, Token::left>, i);
         
-        root.add({joystick, "pull", "right"},
+        root.add({"joystick", nr, "pull", "right"},
                  "Pulls the joystick right",
                  &RetroShell::exec <Token::joystick, Token::pull, Token::right>, i);
 
-        root.add({joystick, "pull", "up"},
+        root.add({"joystick", nr, "pull", "up"},
                  "Pulls the joystick up",
                  &RetroShell::exec <Token::joystick, Token::pull, Token::up>, i);
 
-        root.add({joystick, "pull", "down"},
+        root.add({"joystick", nr, "pull", "down"},
                  "Pulls the joystick down",
                  &RetroShell::exec <Token::joystick, Token::pull, Token::down>, i);
 
-        root.add({joystick, "release"},
+        root.add({"joystick", nr, "release"},
                  "Release a joystick axis");
 
-        root.add({joystick, "release", "x"},
+        root.add({"joystick", nr, "release", "x"},
                  "Releases the x-axis",
                  &RetroShell::exec <Token::joystick, Token::release, Token::xaxis>, i);
 
-        root.add({joystick, "release", "y"},
+        root.add({"joystick", nr, "release", "y"},
                  "Releases the y-axis",
                  &RetroShell::exec <Token::joystick, Token::release, Token::yaxis>, i);
     }
@@ -820,10 +800,6 @@ Interpreter::initCommandShell(Command &root)
     root.add({"serial", "set", "device"}, { SerialPortDeviceEnum::argList() },
              "Connects a device",
              &RetroShell::exec <Token::serial, Token::set, Token::device>);
-
-    root.add({"serial", "inspect"},
-             "Displays the internal state",
-             &RetroShell::exec <Token::serial, Token::inspect>);
 
     
     //

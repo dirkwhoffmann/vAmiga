@@ -533,31 +533,64 @@ RetroShell::exec <Token::rtc, Token::state> (Arguments &argv, long param)
 
 
 //
-// Control port
+// Control ports
 //
 
 template <> void
 RetroShell::exec <Token::controlport> (Arguments& argv, long param)
 {
-    *this << '\n';
-
-    *this << "Control port 1:" << '\n';
-    dumpSummary(amiga.controlPort1);
-
-    *this << "Control port 2:" << '\n';
-    dumpSummary(amiga.controlPort2);
+    if (param == 1) dumpSummary(amiga.controlPort1);
+    if (param == 2) dumpSummary(amiga.controlPort2);
 }
 
 template <> void
 RetroShell::exec <Token::controlport, Token::state> (Arguments& argv, long param)
 {
-    *this << '\n';
+    if (param == 1) dumpDetails(amiga.controlPort1);
+    if (param == 2) dumpDetails(amiga.controlPort2);
+}
 
-    *this << "Control port 1:" << '\n';
-    dumpDetails(amiga.controlPort1);
 
-    *this << "Control port 2:" << '\n';
-    dumpDetails(amiga.controlPort2);
+//
+// Serial port
+//
+
+template <> void
+RetroShell::exec <Token::serial> (Arguments& argv, long param)
+{
+    dumpSummary(amiga.serialPort);
+}
+
+
+//
+// Keyboard, Mice, Joysticks
+//
+
+template <> void
+RetroShell::exec <Token::keyboard> (Arguments& argv, long param)
+{
+    dumpSummary(amiga.keyboard);
+}
+
+template <> void
+RetroShell::exec <Token::mouse> (Arguments& argv, long param)
+{
+    if (param == 1) dumpSummary(amiga.controlPort1.mouse);
+    if (param == 2) dumpSummary(amiga.controlPort2.mouse);
+}
+
+template <> void
+RetroShell::exec <Token::mouse, Token::state> (Arguments& argv, long param)
+{
+    if (param == 1) dumpDetails(amiga.controlPort1.mouse);
+    if (param == 2) dumpDetails(amiga.controlPort2.mouse);
+}
+
+template <> void
+RetroShell::exec <Token::joystick> (Arguments& argv, long param)
+{
+    if (param == 1) dumpSummary(amiga.controlPort1.joystick);
+    if (param == 2) dumpSummary(amiga.controlPort2.joystick);
 }
 
 
