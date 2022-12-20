@@ -88,7 +88,7 @@ SerialPort::_dump(Category category, std::ostream& os) const
         os << SerialPortDeviceEnum::key(config.device) << std::endl;
     }
     
-    if (category == Category::Summary) {
+    if (category == Category::Inspection) {
         
         os << tab("Port pins");
         os << hex(port);

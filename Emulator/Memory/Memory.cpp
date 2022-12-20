@@ -55,7 +55,7 @@ Memory::_dump(Category category, std::ostream& os) const
         os << UnmappedMemoryEnum::key(config.unmappingType) << std::endl;
     }
     
-    if (category == Category::State) {
+    if (category == Category::Debug) {
         
         os << util::tab("Data bus");
         os << util::hex(dataBus) << std::endl;

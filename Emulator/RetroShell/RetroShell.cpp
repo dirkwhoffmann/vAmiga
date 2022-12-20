@@ -202,7 +202,7 @@ RetroShell::printState()
         ss << "\n";
         cpu.dumpLogBuffer(ss, 8);
         ss << "\n";
-        amiga.dump(Category::Summary, ss);
+        amiga.dump(Category::Current, ss);
         ss << "\n";
         cpu.disassembleRange(ss, cpu.getPC0(), 8);
         ss << "\n";
@@ -571,13 +571,13 @@ RetroShell::dumpConfig(AmigaObject &component)
 void
 RetroShell::dumpSummary(AmigaObject &component)
 {
-    dump(component, Category::Summary);
+    dump(component, Category::Inspection);
 }
 
 void
 RetroShell::dumpDetails(AmigaObject &component)
 {
-    dump(component, Category::State);
+    dump(component, Category::Debug);
 }
 
 void

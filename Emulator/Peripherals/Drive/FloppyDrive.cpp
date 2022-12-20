@@ -223,7 +223,7 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         os << "\"" << searchPath << "\"" << std::endl;
     }
     
-    if (category == Category::Summary) {
+    if (category == Category::Inspection) {
         
         os << tab("Nr");
         os << dec(nr) << std::endl;
@@ -243,7 +243,7 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         os << bol(hasModifiedDisk()) << std::endl;
     }
 
-    if (category == Category::State) {
+    if (category == Category::Debug) {
 
         os << tab("Nr");
         os << dec(nr) << std::endl;

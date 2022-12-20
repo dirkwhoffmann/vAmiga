@@ -47,10 +47,10 @@ namespace vamiga {
 enum class Category
 {    
     BankMap, Beam, Blocks, Breakpoints, Bus, Callstack, Catchpoints, Checksums,
-    Config, Defaults, Dma, Drive, Events, FileSystem, Fpu, Geometry, Hunks,
-    List1, List2, Parameters, Partitions, Properties, Registers, Sections,
-    Segments, Signals, State, Stats, Status, Summary, SwTraps, Tod, Vectors,
-    Volumes, Watchpoints
+    Config, Current, Debug, Defaults, Dma, Drive, Events, FileSystem, Fpu,
+    Geometry, Host, Hunks, Inspection, List1, List2, Parameters, Partitions,
+    Properties, Registers, Sections, Segments, Signals, Stats, Status, SwTraps,
+    Tod, Vectors, Volumes, Watchpoints
 };
 
 class AmigaObject {

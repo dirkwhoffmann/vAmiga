@@ -56,13 +56,18 @@ ControlPort::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == Category::Summary) {
+    if (category == Category::Inspection) {
         
+        os << tab("Control port");
+        os << dec(nr) << std::endl;
         os << tab("Detected device type");
         os << ControlPortDeviceEnum::key(device) << std::endl;
     }
 
-    if (category == Category::State) {
+    if (category == Category::Debug) {
+
+        os << tab("Control port");
+        os << dec(nr) << std::endl;
 
         if (nr == PORT1) {
 

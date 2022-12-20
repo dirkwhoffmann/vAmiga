@@ -300,6 +300,12 @@ RetroShell::exec <Token::amiga> (Arguments &argv, long param)
 }
 
 template <> void
+RetroShell::exec <Token::amiga, Token::host> (Arguments &argv, long param)
+{
+    dump(amiga, Category::Host);
+}
+
+template <> void
 RetroShell::exec <Token::amiga, Token::state> (Arguments &argv, long param)
 {
     dumpDetails(amiga);
@@ -626,6 +632,35 @@ template <> void
 RetroShell::exec <Token::dfn, Token::state> (Arguments& argv, long param)
 {
     dumpDetails(*amiga.df[param]);
+}
+
+
+//
+// Hd0, Hd1, Hd2, Hd3
+//
+
+template <> void
+RetroShell::exec <Token::hdn, Token::drive> (Arguments& argv, long param)
+{
+    dump(*amiga.hd[param], Category::Drive);
+}
+
+template <> void
+RetroShell::exec <Token::hdn, Token::volumes> (Arguments& argv, long param)
+{
+    dump(*amiga.hd[param], Category::Volumes);
+}
+
+template <> void
+RetroShell::exec <Token::hdn, Token::partition> (Arguments& argv, long param)
+{
+    dump(*amiga.hd[param], Category::Partitions);
+}
+
+template <> void
+RetroShell::exec <Token::hdn, Token::state> (Arguments& argv, long param)
+{
+    dumpDetails(*amiga.hd[param]);
 }
 
 

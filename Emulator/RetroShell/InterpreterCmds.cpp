@@ -66,86 +66,43 @@ Interpreter::initCommandShell(Command &root)
 
     root.newGroup("Regression testing");
 
-    root.add({"regression"},
-             "Runs the regression tester");
+    root.add({"regression"},    "Runs the regression tester");
 
-    root.newGroup("Managing components");
+    root.newGroup("Controlling components");
 
-    root.add({"amiga"},
-             "The virtual Amiga");
+    root.add({"amiga"},         "The virtual Amiga");
+    root.add({"memory"},        "Ram and Rom");
+    root.add({"cpu"},           "Motorola 68k CPU");
+    root.add({"ciaa"},          "Complex Interface Adapter A");
+    root.add({"ciab"},          "Complex Interface Adapter B");
+    root.add({"agnus"},         "Custom chip");
+    root.add({"blitter"},       "Coprocessor");
+    root.add({"denise"},        "Custom chip");
+    root.add({"paula"},         "Custom chip");
+    root.add({"rtc"},           "Real-time clock");
+    root.add({"serial"},        "Serial port");
+    root.add({"dmadebugger"},   "DMA Debugger");
 
-    root.add({"memory"},
-             "Ram and Rom");
+    root.newGroup("Controlling peripherals");
 
-    root.add({"cpu"},
-             "Motorola 68k CPU");
-
-    root.add({"ciaa"},
-             "Complex Interface Adapter A");
-
-    root.add({"ciab"},
-             "Complex Interface Adapter B");
-
-    root.add({"agnus"},
-             "Custom chip");
-
-    root.add({"blitter"},
-             "Coprocessor");
-
-    root.add({"denise"},
-             "Custom chip");
-
-    root.add({"paula"},
-             "Custom chip");
-
-    root.add({"rtc"},
-             "Real-time clock");
-
-    root.add({"serial"},
-             "Serial port");
-
-    root.add({"zorro"},
-             "Expansion boards");
-
-    root.add({"dmadebugger"},
-             "DMA Debugger");
-
-    root.newGroup("Managing peripherals");
-
-    root.add({"keyboard"},
-             "Keyboard");
-
-    root.add({"mouse"},
-             "Mouse");
-
-    root.add({"joystick"},
-             "Joystick");
-
-    for (isize i = 0; i < 4; i++) {
-
-        root.add({"df" + std::to_string(i) },
-                 "Floppy drive " + std::to_string(i));
-    }
-
-    root.add({"dfn"},
-             "Floppy drive (df0, df1, df2, df3, dfn)");
-
-    for (isize i = 0; i < 4; i++) {
-
-        root.add({"hd" + std::to_string(i) },
-                 "Hard drive " + std::to_string(i));
-    }
-
-    root.add({"hdn"},
-             "Hard drive (hd0, hd1, hd2, hd3, hdn)");
-
-    root.add({"monitor"},
-             "Amiga monitor");
+    root.add({"monitor"},       "Amiga monitor");
+    root.add({"keyboard"},      "Keyboard");
+    root.add({"mouse"},         "Mouse");
+    root.add({"joystick"},      "Joystick");
+    root.add({"dfn"},           "All floppy drives");
+    root.add({"df0"},           "Floppy drive 0");
+    root.add({"df1"},           "Floppy drive 1");
+    root.add({"df2"},           "Floppy drive 2");
+    root.add({"df3"},           "Floppy drive 3");
+    root.add({"hdn"},           "All hard drives");
+    root.add({"hd0"},           "Hard drive 0");
+    root.add({"hd1"},           "Hard drive 1");
+    root.add({"hd2"},           "Hard drive 2");
+    root.add({"hd3"},           "Hard drive 3");
 
     root.newGroup("Miscellaneous");
 
-    root.add({"server"},
-             "Remote connections");
+    root.add({"server"},        "Remote connections");
 
 
     //
@@ -919,44 +876,13 @@ Interpreter::initCommandShell(Command &root)
     for (isize i = 0; i < 4; i++) {
 
         string hd = "hd" + std::to_string(i);
-        
-        root.add({hd, "inspect"},
-                 "Displays the component state");
 
-        root.add({hd, "inspect", "drive"},
-                 "Displays hard drive parameters",
-                 &RetroShell::exec <Token::hdn, Token::inspect, Token::drive>, i);
-
-        root.add({hd, "inspect", "volumes"},
-                 "Displays summarized volume information",
-                 &RetroShell::exec <Token::hdn, Token::inspect, Token::volumes>, i);
-
-        root.add({hd, "inspect", "partitions"},
-                 "Displays information about all partitions",
-                 &RetroShell::exec <Token::hdn, Token::inspect, Token::partition>, i);
-
-        root.add({hd, "inspect", "state"},
-                 "Displays the internal state",
-                 &RetroShell::exec <Token::hdn, Token::inspect, Token::state>, i);
-
-        root.add({hd, "geometry"},  { Arg::value, Arg::value, Arg::value },
+        root.add({hd, "set", "geometry"},  { Arg::value, Arg::value, Arg::value },
                  "Changes the disk geometry",
                  &RetroShell::exec <Token::hdn, Token::geometry>, i);
     }
-    
-    //
-    // Zorro boards
-    //
 
-    root.add({"zorro", "list"},
-             "Lists all connected boards",
-             &RetroShell::exec <Token::zorro, Token::list>);
 
-    root.add({"zorro", "inspect"}, { Arg::value },
-             "Inspects a specific Zorro board",
-             &RetroShell::exec <Token::zorro, Token::inspect>);
-
-    
     //
     // Remote server
     //
@@ -1056,6 +982,7 @@ Interpreter::initCommandShell(Command &root)
     // Hide some commands
     root.hide({"regression"});
     root.hide({"screenshot"});
+    /*
     root.hide({"df0"});
     root.hide({"df1"});
     root.hide({"df2"});
@@ -1064,6 +991,7 @@ Interpreter::initCommandShell(Command &root)
     root.hide({"hd1"});
     root.hide({"hd2"});
     root.hide({"hd3"});
+    */
 }
 
 }

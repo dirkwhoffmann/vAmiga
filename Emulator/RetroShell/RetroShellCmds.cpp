@@ -376,7 +376,7 @@ RetroShell::exec <Token::agnus, Token::set, Token::ptrdrops> (Arguments &argv, l
 template <> void
 RetroShell::exec <Token::agnus, Token::inspect, Token::state> (Arguments &argv, long param)
 {
-    dump(amiga.agnus, Category::State);
+    dump(amiga.agnus, Category::Debug);
 }
 
 template <> void
@@ -425,7 +425,7 @@ RetroShell::exec <Token::blitter, Token::set, Token::accuracy> (Arguments &argv,
 template <> void
 RetroShell::exec <Token::blitter, Token::inspect, Token::state> (Arguments& argv, long param)
 {
-    dump(amiga.agnus.blitter, Category::State);
+    dump(amiga.agnus.blitter, Category::Debug);
 }
 
 template <> void
@@ -444,7 +444,7 @@ RetroShell::exec <Token::blitter, Token::inspect, Token::registers> (Arguments& 
 template <> void
 RetroShell::exec <Token::copper, Token::inspect, Token::state> (Arguments& argv, long param)
 {
-    dump(amiga.agnus.copper, Category::State);
+    dump(amiga.agnus.copper, Category::Debug);
 }
 
 template <> void
@@ -1113,21 +1113,6 @@ RetroShell::exec <Token::dfn, Token::set, Token::swapdelay> (Arguments& argv, lo
     }
 }
 
-/*
-template <> void
-RetroShell::exec <Token::dfn, Token::inspect> (Arguments& argv, long param)
-{
-    dumpDetails(*amiga.df[param]);
-}
-
-template <> void
-RetroShell::exec <Token::dfn, Token::cp> (Arguments& argv, long param)
-{
-    assert(param >= 0 && param <= 3);
-    df[param]->catchFile(argv.front());
-}
-*/
-
 
 //
 // Hd0, Hd1, Hd2, Hd3
@@ -1161,30 +1146,6 @@ RetroShell::exec <Token::hdn, Token::audiate, Token::step> (Arguments& argv, lon
     } else {
         amiga.configure(OPT_HDR_STEP_VOLUME, num);
     }
-}
-
-template <> void
-RetroShell::exec <Token::hdn, Token::inspect, Token::drive> (Arguments& argv, long param)
-{
-    dump(*amiga.hd[param], Category::Drive);
-}
-
-template <> void
-RetroShell::exec <Token::hdn, Token::inspect, Token::volumes> (Arguments& argv, long param)
-{
-    dump(*amiga.hd[param], Category::Volumes);
-}
-
-template <> void
-RetroShell::exec <Token::hdn, Token::inspect, Token::partition> (Arguments& argv, long param)
-{
-    dump(*amiga.hd[param], Category::Partitions);
-}
-
-template <> void
-RetroShell::exec <Token::hdn, Token::inspect, Token::state> (Arguments& argv, long param)
-{
-    dumpDetails(*amiga.hd[param]);
 }
 
 template <> void

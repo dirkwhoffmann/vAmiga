@@ -951,7 +951,7 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << bol(config.vsync) << std::endl;
     }
 
-    if (category == Category::Summary) {
+    if (category == Category::Inspection) {
 
         os << tab("Thread state");
         os << ExecutionStateEnum::key(state) << std::endl;
@@ -976,7 +976,7 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << dec(CIA_CYCLES(ciaA.getClock())) << " Master cycles" << std::endl;
     }
 
-    if (category == Category::State) {
+    if (category == Category::Debug) {
 
         os << tab("Thread state");
         os << ExecutionStateEnum::key(state) << std::endl;
@@ -988,8 +988,6 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
         os << tab("Amiga refresh rate");
         os << flt(float(refreshRate())) << " Hz" << std::endl;
-        os << tab("Host refresh rate");
-        os << flt(float(host.refreshRate)) << " Hz" << std::endl;
         os << tab("Power");
         os << bol(isPoweredOn()) << std::endl;
         os << tab("Running");
@@ -1001,17 +999,22 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << tab("Debug mode");
         os << bol(inDebugMode()) << std::endl;
 
-        os << std::endl;
-        os << tab("Frame buffer");
+    }
+
+    if (category == Category::Host) {
+
+        os << tab("Monitor refresh rate");
+        os << flt(float(host.refreshRate)) << " Hz" << std::endl;
+        os << tab("Frame buffer size");
         os << dec(host.frameBufferWidth) << " x " << dec(host.frameBufferHeight) << std::endl;
     }
-    
+
     if (category == Category::Defaults) {
         
         defaults.dump(category, os);
     }
 
-    if (category == Category::Summary) {
+    if (category == Category::Current) {
 
         auto dmacon = agnus.dmacon;
         bool dmaen = dmacon & DMAEN;

@@ -57,7 +57,7 @@ FloppyDisk::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == Category::State) {
+    if (category == Category::Debug) {
         
         os << tab("Type");
         os << DiameterEnum::key(diameter) << std::endl;

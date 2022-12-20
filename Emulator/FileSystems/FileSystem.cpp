@@ -114,7 +114,7 @@ FileSystem::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == Category::Summary) {
+    if (category == Category::Inspection) {
         
         auto total = numBlocks();
         auto used = usedBlocks();

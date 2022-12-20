@@ -23,7 +23,7 @@ Blitter::_dump(Category category, std::ostream& os) const
         os << tab("Accuracy level") << config.accuracy << std::endl;
     }
 
-    if (category == Category::Summary) {
+    if (category == Category::Inspection) {
 
         os << tab("BLTCON0") << hex(bltcon0) << std::endl;
         os << tab("ASH") << hex(bltconASH()) << std::endl;
@@ -55,7 +55,7 @@ Blitter::_dump(Category category, std::ostream& os) const
         os << tab("BLTDMOD") << dec(bltdmod) << std::endl;
     }
 
-    if (category == Category::State) {
+    if (category == Category::Debug) {
         
         os << tab("Iteration") << dec(iteration) << std::endl;
         os << tab("Micro instruction PC") << dec(bltpc) << std::endl;

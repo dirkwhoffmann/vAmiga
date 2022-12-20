@@ -42,7 +42,7 @@ Recorder::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == Category::Summary) {
+    if (category == Category::Inspection) {
         
         os << tab("FFmpeg path");
         os << FFmpeg::getExecPath() << std::endl;
@@ -121,7 +121,7 @@ Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
     }
     
     debug(REC_DEBUG, "Pipes created\n");
-    dump(Category::Summary);
+    dump(Category::Inspection);
     
     debug(REC_DEBUG, "startRecording(%ld,%ld,%ld,%ld,%ld,%ld,%ld)\n",
           x1, y1, x2, y2, bitRate, aspectX, aspectY);

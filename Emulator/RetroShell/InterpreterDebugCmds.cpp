@@ -51,90 +51,46 @@ Interpreter::initDebugShell(Command &root)
 
     root.newGroup("Guarding the program execution");
 
-    root.add({"break"},
-             "Manages CPU breakpoints");
-
-    root.add({"watch"},
-             "Manages CPU watchpoints");
-
-    root.add({"catch"},
-             "Manages CPU catchpoints");
-
-    root.add({"cbreak"},
-             "Manages Copper breakpoints");
-
-    root.add({"cwatch"},
-             "Manages Copper watchpoints");
-
+    root.add({"break"},     "Manages CPU breakpoints");
+    root.add({"watch"},     "Manages CPU watchpoints");
+    root.add({"catch"},     "Manages CPU catchpoints");
+    root.add({"cbreak"},    "Manages Copper breakpoints");
+    root.add({"cwatch"},    "Manages Copper watchpoints");
 
     root.newGroup("Debugging components");
 
-    root.add({"amiga"},
-             "Main computer");
-
-    root.add({"memory"},
-             "RAM and ROM");
-
-    root.add({"cpu"},
-             "Motorola 68k CPU");
-
-    root.add({"ciaa"},
-             "Complex Interface Adapter A");
-
-    root.add({"ciab"},
-             "Complex Interface Adapter B");
-
-    root.add({"agnus"},
-             "Custom Chipset");
-
-    root.add({"blitter"},
-             "Coprocessor");
-
-    root.add({"copper"},
-             "Coprocessor");
-
-    root.add({"paula"},
-             "Custom Chipset");
-
-    root.add({"denise"},
-             "Custom Chipset");
-
-    root.add({"rtc"},
-             "Real-time clock");
-
-    root.add({"controlport"},
-             "Control ports");
-
-    root.add({"serial"},
-             "Serial port");
+    root.add({"amiga"},         "Main computer");
+    root.add({"memory"},        "RAM and ROM");
+    root.add({"cpu"},           "Motorola 68k CPU");
+    root.add({"ciaa"},          "Complex Interface Adapter A");
+    root.add({"ciab"},          "Complex Interface Adapter B");
+    root.add({"agnus"},         "Custom Chipset");
+    root.add({"blitter"},       "Coprocessor");
+    root.add({"copper"},        "Coprocessor");
+    root.add({"paula"},         "Custom Chipset");
+    root.add({"denise"},        "Custom Chipset");
+    root.add({"rtc"},           "Real-time clock");
+    root.add({"zorro"},         "Expansion boards");
+    root.add({"controlport"},   "Control ports");
+    root.add({"serial"},        "Serial port");
 
     root.newGroup("Debugging peripherals");
 
-    root.add({"keyboard"},
-             "Keyboard");
-
-    root.add({"mouse"},
-             "Mouse");
-
-    root.add({"joystick"},
-             "Joystick");
-
-    for (isize i = 0; i < 4; i++) {
-
-        root.add({"df" + std::to_string(i) },
-                 "Floppy drive " + std::to_string(i));
-    }
-
-    for (isize i = 0; i < 4; i++) {
-
-        root.add({"hd" + std::to_string(i) },
-                 "Hard drive " + std::to_string(i));
-    }
+    root.add({"keyboard"},      "Keyboard");
+    root.add({"mouse"},         "Mouse");
+    root.add({"joystick"},      "Joystick");
+    root.add({"df0"},           "Floppy drive 0");
+    root.add({"df1"},           "Floppy drive 1");
+    root.add({"df2"},           "Floppy drive 2");
+    root.add({"df3"},           "Floppy drive 3");
+    root.add({"hd0"},           "Hard drive 0");
+    root.add({"hd1"},           "Hard drive 1");
+    root.add({"hd2"},           "Hard drive 2");
+    root.add({"hd3"},           "Hard drive 3");
 
     root.newGroup("Miscellaneous");
 
-    root.add({"os"},
-             "AmigaOS debugger");
+    root.add({"os"},            "AmigaOS debugger");
 
     
     //
@@ -303,6 +259,10 @@ Interpreter::initDebugShell(Command &root)
     root.add({"amiga", ""},
              "Inspects the internal state",
              &RetroShell::exec <Token::amiga>);
+
+    root.add({"amiga", "host"},
+             "Displays information about the host machine",
+             &RetroShell::exec <Token::amiga, Token::host>);
 
     root.add({"amiga", "state"},
              "Displays additional debug information",
@@ -490,7 +450,20 @@ Interpreter::initDebugShell(Command &root)
 
 
     //
-    // Controlports
+    // Zorro boards
+    //
+
+    root.add({"zorro", ""},
+             "Lists all connected boards",
+             &RetroShell::exec <Token::zorro, Token::list>);
+
+    root.add({"zorro", "inspect"}, { Arg::value },
+             "Inspects a specific Zorro board",
+             &RetroShell::exec <Token::zorro, Token::inspect>);
+
+
+    //
+    // Control ports
     //
 
     for (isize i = 1; i <= 2; i++) {
@@ -576,6 +549,34 @@ Interpreter::initDebugShell(Command &root)
         root.add({df, "state"},
                  "Displays additional debug information",
                  &RetroShell::exec <Token::dfn, Token::state>, i);
+    }
+
+    //
+    // Hd0, Hd1, Hd2, Hd3
+    //
+
+    for (isize i = 0; i < 4; i++) {
+
+        string hd = "hd" + std::to_string(i);
+
+        root.add({hd, ""},
+                 "Inspects the internal state");
+
+        root.add({hd, "drive"},
+                 "Displays hard drive parameters",
+                 &RetroShell::exec <Token::hdn, Token::drive>, i);
+
+        root.add({hd, "volumes"},
+                 "Displays summarized volume information",
+                 &RetroShell::exec <Token::hdn, Token::volumes>, i);
+
+        root.add({hd, "partitions"},
+                 "Displays information about all partitions",
+                 &RetroShell::exec <Token::hdn, Token::partition>, i);
+
+        root.add({hd, "state"},
+                 "Displays the internal state",
+                 &RetroShell::exec <Token::hdn, Token::state>, i);
     }
 
 

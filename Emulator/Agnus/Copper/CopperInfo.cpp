@@ -18,7 +18,7 @@ Copper::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
 
-    if (category == Category::Summary) {
+    if (category == Category::Inspection) {
 
         auto deltaPC = coppc - coppc0;
 
@@ -36,7 +36,7 @@ Copper::_dump(Category category, std::ostream& os) const
         os << bol(cdang) << std::endl;
     }
 
-    if (category == Category::State) {
+    if (category == Category::Debug) {
         
         os << tab("Active Copper list");
         os << dec(copList) << std::endl;

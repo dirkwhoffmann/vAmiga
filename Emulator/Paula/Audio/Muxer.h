@@ -44,7 +44,6 @@ namespace vamiga {
 class Muxer : public SubComponent {
 
     friend class Paula;
-    // friend class AudioFilter;
     
     // Current configuration
     MuxerConfig config = {};

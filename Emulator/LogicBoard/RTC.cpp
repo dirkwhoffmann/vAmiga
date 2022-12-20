@@ -99,7 +99,7 @@ RTC::_dump(Category category, std::ostream& os) const
         os << RTCRevisionEnum::key(config.model) << std::endl;
     }
     
-    if (category == Category::Summary) {
+    if (category == Category::Inspection) {
         
         for (isize i = 0; i < 16; i++) {
             os << "    " << hex((u8)i) << " : ";

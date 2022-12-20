@@ -81,7 +81,7 @@ EXEFile::finalizeRead()
 
     // Print some debug information about the volume
     if constexpr (FS_DEBUG) {
-        volume.dump(Category::Summary);
+        volume.dump(Category::Inspection);
         volume.printDirectory(true);
     }
     

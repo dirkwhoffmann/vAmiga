@@ -75,7 +75,7 @@ Denise::_dump(Category category, std::ostream& os) const
         os << bol(config.clxSprSpr) << std::endl;
     }
 
-    if (category == Category::Summary) {
+    if (category == Category::Inspection) {
         
         os << tab("BPLCON0");
         os << hex(bplcon0) << std::endl;
@@ -105,7 +105,7 @@ Denise::_dump(Category category, std::ostream& os) const
         os << std::endl;
     }
 
-    if (category == Category::State) {
+    if (category == Category::Debug) {
 
         os << tab("Resolution");
         os << ResolutionEnum::key(res) << std::endl;
