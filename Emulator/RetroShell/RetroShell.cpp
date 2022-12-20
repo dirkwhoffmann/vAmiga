@@ -207,7 +207,7 @@ RetroShell::printState()
         cpu.disassembleRange(ss, cpu.getPC0(), 8);
         ss << "\n";
 
-        *this << ss << '\n';
+        *this << ss;
 
         updatePrompt();
 

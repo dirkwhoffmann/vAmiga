@@ -264,9 +264,9 @@ Interpreter::initDebugShell(Command &root)
              "Displays information about the host machine",
              &RetroShell::exec <Token::amiga, Token::host>);
 
-    root.add({"amiga", "state"},
+    root.add({"amiga", "details"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::amiga, Token::state>);
+             &RetroShell::exec <Token::amiga, Token::details>);
 
 
     //
@@ -298,9 +298,9 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              &RetroShell::exec <Token::cpu>);
 
-    root.add({"cpu", "state"},
+    root.add({"cpu", "details"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::cpu, Token::state>);
+             &RetroShell::exec <Token::cpu, Token::details>);
 
     root.add({"cpu", "vectors"},
              "Dumps the vector table",
@@ -319,9 +319,9 @@ Interpreter::initDebugShell(Command &root)
                  "Inspects the internal state",
                  &RetroShell::exec <Token::cia>, i);
 
-        root.add({cia, "state"},
+        root.add({cia, "details"},
                  "Displays additional debug information",
-                 &RetroShell::exec <Token::cia, Token::state>, i);
+                 &RetroShell::exec <Token::cia, Token::details>, i);
 
         root.add({cia, "tod"},
                  "Displays the state of the 24-bit counter",
@@ -337,9 +337,9 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              &RetroShell::exec <Token::agnus>);
 
-    root.add({"agnus", "state"},
+    root.add({"agnus", "details"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::agnus, Token::state>);
+             &RetroShell::exec <Token::agnus, Token::details>);
 
     root.add({"agnus", "beam"},
              "Displays the current beam position",
@@ -362,9 +362,9 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              &RetroShell::exec <Token::blitter>);
 
-    root.add({"blitter", "state"},
+    root.add({"blitter", "details"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::blitter, Token::state>);
+             &RetroShell::exec <Token::blitter, Token::details>);
 
 
     //
@@ -375,9 +375,9 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              &RetroShell::exec <Token::copper>);
 
-    root.add({"copper", "state"},
+    root.add({"copper", "details"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::copper, Token::state>);
+             &RetroShell::exec <Token::copper, Token::details>);
 
     root.add({"copper", "list"}, { Arg::value },
              "Prints the Copper list",
@@ -405,17 +405,17 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              &RetroShell::exec <Token::paula, Token::audio>);
 
-    root.add({"paula", "audio", "state"},
+    root.add({"paula", "audio", "details"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::paula, Token::audio, Token::state>);
+             &RetroShell::exec <Token::paula, Token::audio, Token::details>);
 
     root.add({"paula", "dc", ""},
              "Inspects the internal state",
              &RetroShell::exec <Token::paula, Token::dc>);
 
-    root.add({"paula", "dc", "state"},
+    root.add({"paula", "dc", "details"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::paula, Token::dc, Token::state>);
+             &RetroShell::exec <Token::paula, Token::dc, Token::details>);
 
     root.add({"paula", "uart", ""},
              "Inspects the internal state",
@@ -430,9 +430,9 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              &RetroShell::exec <Token::denise>);
 
-    root.add({"denise", "state"},
+    root.add({"denise", "details"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::denise, Token::state>);
+             &RetroShell::exec <Token::denise, Token::details>);
 
 
 
@@ -444,9 +444,9 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              &RetroShell::exec <Token::rtc>);
 
-    root.add({"rtc", "state"},
+    root.add({"rtc", "details"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::rtc, Token::state>);
+             &RetroShell::exec <Token::rtc, Token::details>);
 
 
     //
@@ -477,9 +477,9 @@ Interpreter::initDebugShell(Command &root)
                  "Inspects the internal state",
                  &RetroShell::exec <Token::controlport>, i);
 
-        root.add({"controlport", nr, "state"},
+        root.add({"controlport", nr, "details"},
                  "Displays additional debug information",
-                 &RetroShell::exec <Token::controlport, Token::state>, i);
+                 &RetroShell::exec <Token::controlport, Token::details>, i);
     }
 
 
@@ -500,12 +500,6 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              &RetroShell::exec <Token::keyboard>);
 
-    /*
-    root.add({"keyboard", "state"},
-             "Displays additional debug information",
-             &RetroShell::exec <Token::keyboard, Token::state>);
-    */
-
     for (isize i = 1; i <= 2; i++) {
 
         string nr = (i == 1) ? "1" : "2";
@@ -517,9 +511,9 @@ Interpreter::initDebugShell(Command &root)
                  "Inspects the internal state",
                  &RetroShell::exec <Token::mouse>, i);
 
-        root.add({"mouse", nr, "state"},
+        root.add({"mouse", nr, "details"},
                  "Displays additional debug information",
-                 &RetroShell::exec <Token::mouse, Token::state>, i);
+                 &RetroShell::exec <Token::mouse, Token::details>, i);
 
         root.add({"joystick", nr},
                  "Joystick in port " + nr);
@@ -546,9 +540,9 @@ Interpreter::initDebugShell(Command &root)
                  "Inspects the internal state",
                  &RetroShell::exec <Token::dfn>, i);
 
-        root.add({df, "state"},
+        root.add({df, "details"},
                  "Displays additional debug information",
-                 &RetroShell::exec <Token::dfn, Token::state>, i);
+                 &RetroShell::exec <Token::dfn, Token::details>, i);
     }
 
     //
@@ -574,9 +568,9 @@ Interpreter::initDebugShell(Command &root)
                  "Displays information about all partitions",
                  &RetroShell::exec <Token::hdn, Token::partition>, i);
 
-        root.add({hd, "state"},
+        root.add({hd, "details"},
                  "Displays the internal state",
-                 &RetroShell::exec <Token::hdn, Token::state>, i);
+                 &RetroShell::exec <Token::hdn, Token::details>, i);
     }
 
 
