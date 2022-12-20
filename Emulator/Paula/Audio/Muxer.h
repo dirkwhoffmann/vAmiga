@@ -44,7 +44,8 @@ namespace vamiga {
 class Muxer : public SubComponent {
 
     friend class Paula;
-
+    friend class AudioFilter;
+    
     // Current configuration
     MuxerConfig config = {};
     
@@ -135,7 +136,7 @@ private:
         
         << config.samplingMethod
         << config.filterType
-        << config.filterAlwaysOn
+        << config.filterActivation
         << config.pan
         << config.vol
         << config.volL

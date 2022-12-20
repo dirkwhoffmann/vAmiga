@@ -91,6 +91,9 @@ private:
     // Sets the sample rate (only to be called by the Muxer)
     void setSampleRate(double sampleRate);
     
+    // Returns the activation status of this filter
+    bool isEnabled();
+
 
     //
     // Using

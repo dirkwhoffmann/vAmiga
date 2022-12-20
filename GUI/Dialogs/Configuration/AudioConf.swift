@@ -42,8 +42,8 @@ extension ConfigurationController {
 
         // Audio filter
         audFilterType.selectItem(withTag: config.filterType)
-        audFilterAlwaysOn.state = config.filterAlwaysOn ? .on : .off
-        audFilterAlwaysOn.isEnabled = config.filterType != FilterType.NONE.rawValue
+        audFilterActivation.selectItem(withTag: config.filterActivation)
+        audFilterActivation.isEnabled = config.filterType != FilterType.NONE.rawValue
 
         // Buttons
         audPowerButton.isHidden = !bootable
@@ -169,9 +169,9 @@ extension ConfigurationController {
         refresh()
     }
 
-    @IBAction func audFilterAlwaysOnAction(_ sender: NSButton!) {
+    @IBAction func audFilterActivationAction(_ sender: NSPopUpButton!) {
 
-        config.filterAlwaysOn = sender.state == .on
+        config.filterActivation = sender.selectedTag()
         refresh()
     }
 

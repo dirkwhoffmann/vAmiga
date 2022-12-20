@@ -8,7 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "AudioFilter.h"
+//#include "AudioFilter.h"
+#include "Paula.h"
+#include "CIA.h"
 #include <cmath>
 
 namespace vamiga {
@@ -37,6 +39,20 @@ AudioFilter::setSampleRate(double sampleRate)
     b2 = b0;
     a1 = 2.0 * (ita * ita - 1.0) * b0;
     a2 = -(1.0 - q * ita + ita * ita) * b0;
+}
+
+bool
+AudioFilter::isEnabled()
+{
+    switch (paula.muxer.config.filterActivation) {
+
+        case FILTER_AUTO_ENABLE:    return ciaa.powerLED();
+        case FILTER_ALWAYS_ON:      return true;
+        case FILTER_ALWAYS_OFF:     return false;
+
+        default:
+            fatalError;
+    }
 }
 
 void

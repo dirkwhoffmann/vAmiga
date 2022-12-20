@@ -13,7 +13,7 @@
                 <outlet property="audDf2Pan" destination="mvo-7n-WJE" id="VpV-uf-1qB"/>
                 <outlet property="audDf3Pan" destination="xv1-LD-POJ" id="dkZ-PG-Eln"/>
                 <outlet property="audEjectVolume" destination="Zfe-Gi-erN" id="gzM-FU-dRM"/>
-                <outlet property="audFilterAlwaysOn" destination="WkV-Ro-0ST" id="FQr-FP-l4r"/>
+                <outlet property="audFilterActivation" destination="BSF-rI-TFS" id="HM3-Ay-fSX"/>
                 <outlet property="audFilterType" destination="4Xn-MU-GRM" id="cdb-eV-HWy"/>
                 <outlet property="audHd0Pan" destination="7pt-2B-4fg" id="gAx-lc-j5t"/>
                 <outlet property="audHd1Pan" destination="k6D-g1-Uhb" id="sEl-qE-T7Z"/>
@@ -2265,16 +2265,16 @@ DQ
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5U1-9z-n24">
-                                                        <rect key="frame" x="52" y="106" width="44" height="16"/>
+                                                        <rect key="frame" x="50" y="107" width="44" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Right:" id="ipc-lG-wPW">
+                                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Right:" id="ipc-lG-wPW">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
                                                     <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="txj-Ww-WLR" userLabel="System">
-                                                        <rect key="frame" x="95" y="67" width="122" height="25"/>
+                                                        <rect key="frame" x="97" y="67" width="122" height="25"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                         <popUpButtonCell key="cell" type="push" title="Off" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Urv-50-9KA" id="1j5-Ya-rxt" userLabel="System">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2294,7 +2294,7 @@ DQ
                                                         </connections>
                                                     </popUpButton>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9cK-6H-rMm">
-                                                        <rect key="frame" x="9" y="76" width="85" height="17"/>
+                                                        <rect key="frame" x="9" y="73" width="85" height="17"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Interpolation:" id="NfU-ht-d5I">
                                                             <font key="font" metaFont="system"/>
@@ -2303,7 +2303,7 @@ DQ
                                                         </textFieldCell>
                                                     </textField>
                                                     <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Xn-MU-GRM" userLabel="System">
-                                                        <rect key="frame" x="95" y="36" width="122" height="25"/>
+                                                        <rect key="frame" x="97" y="37" width="122" height="25"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                         <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="gHv-BR-E6q" id="z7l-EV-wgb" userLabel="System">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2322,7 +2322,7 @@ DQ
                                                         </connections>
                                                     </popUpButton>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GUn-vV-9V8">
-                                                        <rect key="frame" x="17" y="44" width="77" height="17"/>
+                                                        <rect key="frame" x="17" y="43" width="77" height="17"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Filter type:" id="RdO-WV-CKj">
                                                             <font key="font" metaFont="system"/>
@@ -2330,17 +2330,6 @@ DQ
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WkV-Ro-0ST">
-                                                        <rect key="frame" x="98" y="13" width="83" height="18"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="Always on" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="6us-lW-E8A">
-                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="audFilterAlwaysOnAction:" target="-2" id="DX3-ql-JNl"/>
-                                                        </connections>
-                                                    </button>
                                                     <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6hQ-P9-A08">
                                                         <rect key="frame" x="98" y="130" width="119" height="28"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2358,14 +2347,45 @@ DQ
                                                         </connections>
                                                     </slider>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qgf-dK-iSC">
-                                                        <rect key="frame" x="58" y="138" width="36" height="16"/>
+                                                        <rect key="frame" x="58" y="139" width="36" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Left:" id="qiH-ke-Wd4">
+                                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Left:" id="qiH-ke-Wd4">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qk0-tt-ZlS">
+                                                        <rect key="frame" x="-7" y="13" width="101" height="17"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Filter enable:" id="Rhf-Ba-s7h">
+                                                            <font key="font" metaFont="system"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BSF-rI-TFS" userLabel="System">
+                                                        <rect key="frame" x="97" y="7" width="122" height="25"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                                        <popUpButtonCell key="cell" type="push" title="Automatic" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="9p4-6a-sda" id="BdU-iU-Ue2" userLabel="System">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="menu"/>
+                                                            <menu key="menu" id="thS-ac-EYf">
+                                                                <items>
+                                                                    <menuItem title="Automatic" state="on" id="9p4-6a-sda"/>
+                                                                    <menuItem title="Always" tag="1" id="8Tn-bO-bAx">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="Never" tag="2" id="e2t-Qe-8xh">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                </items>
+                                                            </menu>
+                                                        </popUpButtonCell>
+                                                        <connections>
+                                                            <action selector="audFilterActivationAction:" target="-2" id="5dc-LK-uCH"/>
+                                                        </connections>
+                                                    </popUpButton>
                                                 </subviews>
                                             </view>
                                         </box>

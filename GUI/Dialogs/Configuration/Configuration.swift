@@ -71,9 +71,9 @@ class Configuration {
         get { return amiga.getConfig(.FILTER_TYPE) }
         set { amiga.configure(.FILTER_TYPE, value: newValue) }
     }
-    var filterAlwaysOn: Bool {
-        get { return amiga.getConfig(.FILTER_ALWAYS_ON) != 0}
-        set { amiga.configure(.FILTER_ALWAYS_ON, enable: newValue) }
+    var filterActivation: Int {
+        get { return amiga.getConfig(.FILTER_ACTIVATION) }
+        set { amiga.configure(.FILTER_ACTIVATION, value: newValue) }
     }
     var chipRam: Int {
         get { return amiga.getConfig(.CHIP_RAM) }

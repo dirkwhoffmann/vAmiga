@@ -25,8 +25,8 @@ typedef struct
     // The selected audio filter
     FilterType filterType;
 
-    // If set to true, the Amiga can't deactivate the filter
-    bool filterAlwaysOn;
+    // Filter activation mode
+    FilterActivation filterActivation;
 
     // Master volume (left and right channel)
     i64 volL;

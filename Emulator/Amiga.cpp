@@ -283,7 +283,7 @@ Amiga::getConfigItem(Option option) const
             
         case OPT_SAMPLING_METHOD:
         case OPT_FILTER_TYPE:
-        case OPT_FILTER_ALWAYS_ON:
+        case OPT_FILTER_ACTIVATION:
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
             
@@ -560,7 +560,7 @@ Amiga::configure(Option option, i64 value)
 
         case OPT_SAMPLING_METHOD:
         case OPT_FILTER_TYPE:
-        case OPT_FILTER_ALWAYS_ON:
+        case OPT_FILTER_ACTIVATION:
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
             

@@ -40,8 +40,8 @@ Muxer::_dump(Category category, std::ostream& os) const
         os << SamplingMethodEnum::key(config.samplingMethod) << std::endl;
         os << tab("Filter type");
         os << FilterTypeEnum::key(config.filterType) << std::endl;
-        os << tab("Filter always on");
-        os << bol(config.filterAlwaysOn) << std::endl;
+        os << tab("Filter activation");
+        os << FilterActivationEnum::key(config.filterActivation) << std::endl;
         os << tab("Channel 1 pan");
         os << dec(config.pan[0]) << std::endl;
         os << tab("Channel 2 pan");
@@ -108,7 +108,7 @@ Muxer::resetConfig()
         
         OPT_SAMPLING_METHOD,
         OPT_FILTER_TYPE,
-        OPT_FILTER_ALWAYS_ON,
+        OPT_FILTER_ACTIVATION,
         OPT_AUDVOLL,
         OPT_AUDVOLR
     };
@@ -143,8 +143,8 @@ Muxer::getConfigItem(Option option) const
             assert(filterR.type == config.filterType);
             return config.filterType;
 
-        case OPT_FILTER_ALWAYS_ON:
-            return config.filterAlwaysOn;
+        case OPT_FILTER_ACTIVATION:
+            return config.filterActivation;
 
         case OPT_AUDVOLL:
             return config.volL;
@@ -200,9 +200,9 @@ Muxer::setConfigItem(Option option, i64 value)
             filterR.type = ((FilterType)value);
             return;
 
-        case OPT_FILTER_ALWAYS_ON:
+        case OPT_FILTER_ACTIVATION:
 
-            config.filterAlwaysOn = value;
+            config.filterActivation = (FilterActivation)value;
             return;
 
         case OPT_AUDVOLL:
@@ -381,7 +381,8 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
     if (stream.count() + count >= stream.cap()) handleBufferOverflow();
 
     double cycle = (double)clock;
-    bool filter = ciaa.powerLED() || config.filterAlwaysOn;
+    bool doFilterL = filterL.isEnabled();
+    bool doFilterR = filterR.isEnabled();
 
     for (long i = 0; i < count; i++) {
 
@@ -401,7 +402,8 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
         ch2 * pan[2] + ch3 * pan[3];
 
         // Apply audio filter
-        if (filter) { l = filterL.apply(l); r = filterR.apply(r); }
+        if (doFilterL) l = filterL.apply(l);
+        if (doFilterR) r = filterR.apply(r);
         
         // Apply master volume
         l *= volL;
