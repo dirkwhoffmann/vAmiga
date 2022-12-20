@@ -67,7 +67,7 @@ Interpreter::initDebugShell(Command &root)
              "Manages Copper watchpoints");
 
 
-    root.newGroup("Exploring components");
+    root.newGroup("Debugging components");
 
     root.add({"amiga"},
              "Main computer");
@@ -108,6 +108,8 @@ Interpreter::initDebugShell(Command &root)
     root.add({"serial"},
              "Serial port");
 
+    root.newGroup("Debugging peripherals");
+
     root.add({"keyboard"},
              "Keyboard");
 
@@ -116,6 +118,20 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"joystick"},
              "Joystick");
+
+    for (isize i = 0; i < 4; i++) {
+
+        root.add({"df" + std::to_string(i) },
+                 "Floppy drive " + std::to_string(i));
+    }
+
+    for (isize i = 0; i < 4; i++) {
+
+        root.add({"hd" + std::to_string(i) },
+                 "Hard drive " + std::to_string(i));
+    }
+
+    root.newGroup("Miscellaneous");
 
     root.add({"os"},
              "AmigaOS debugger");
@@ -498,7 +514,7 @@ Interpreter::initDebugShell(Command &root)
     // Serial port
     //
 
-    root.add({"serial"},
+    root.add({"serial", ""},
              "Displays the internal state",
              &RetroShell::exec <Token::serial>);
 
@@ -538,6 +554,28 @@ Interpreter::initDebugShell(Command &root)
         root.add({"joystick", nr, ""},
                  "Inspects the internal state",
                  &RetroShell::exec <Token::joystick>, i);
+    }
+
+    //
+    // Df0, Df1, Df2, Df3
+    //
+
+    for (isize i = 0; i < 4; i++) {
+
+        string df = "df" + std::to_string(i);
+
+        /*
+        root.add({"df" + std::to_string(i)},
+                 "Floppy drive " + std::to_string(i));
+        */
+
+        root.add({df, ""},
+                 "Inspects the internal state",
+                 &RetroShell::exec <Token::dfn>, i);
+
+        root.add({df, "state"},
+                 "Displays additional debug information",
+                 &RetroShell::exec <Token::dfn, Token::state>, i);
     }
 
 

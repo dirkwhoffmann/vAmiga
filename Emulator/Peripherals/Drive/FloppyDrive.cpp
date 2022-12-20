@@ -223,8 +223,28 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         os << "\"" << searchPath << "\"" << std::endl;
     }
     
-    if (category == Category::State) {
+    if (category == Category::Summary) {
         
+        os << tab("Nr");
+        os << dec(nr) << std::endl;
+        os << tab("dskchange");
+        os << dec(dskchange) << std::endl;
+        os << tab("dsklen");
+        os << dec(dsklen) << std::endl;
+        os << tab("prb");
+        os << hex(prb) << std::endl;
+        os << tab("Drive head");
+        os << dec(head.cylinder) << ":";
+        os << dec(head.head) << ":";
+        os << dec(head.offset) << std::endl;
+        os << tab("Disk");
+        os << bol(disk != nullptr) << std::endl;
+        os << tab("Modified");
+        os << bol(hasModifiedDisk()) << std::endl;
+    }
+
+    if (category == Category::State) {
+
         os << tab("Nr");
         os << dec(nr) << std::endl;
         os << tab("Id count");
@@ -243,22 +263,8 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         os << bol(motorSlowingDown()) << std::endl;
         os << tab("motorStopped()");
         os << bol(motorStopped()) << std::endl;
-        os << tab("dskchange");
-        os << dec(dskchange) << std::endl;
-        os << tab("dsklen");
-        os << dec(dsklen) << std::endl;
-        os << tab("prb");
-        os << hex(prb) << std::endl;
-        os << tab("Drive head");
-        os << dec(head.cylinder) << ":";
-        os << dec(head.head) << ":";
-        os << dec(head.offset) << std::endl;
         os << tab("cylinderHistory");
         os << hex(cylinderHistory) << std::endl;
-        os << tab("Disk");
-        os << bol(disk != nullptr) << std::endl;
-        os << tab("Modified");
-        os << bol(hasModifiedDisk()) << std::endl;
     }
 }
 

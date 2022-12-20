@@ -655,13 +655,13 @@ RetroShell::exec <Token::audio, Token::set, Token::sampling> (Arguments& argv, l
 }
 
 template <> void
-RetroShell::exec <Token::audio, Token::set, Token::filter, Token::type> (Arguments& argv, long param)
+RetroShell::exec <Token::audio, Token::filter, Token::set, Token::type> (Arguments& argv, long param)
 {
     amiga.configure(OPT_FILTER_TYPE, util::parseEnum <FilterTypeEnum> (argv.front()));
 }
 
 template <> void
-RetroShell::exec <Token::audio, Token::set, Token::filter, Token::activation> (Arguments& argv, long param)
+RetroShell::exec <Token::audio, Token::filter, Token::set, Token::activation> (Arguments& argv, long param)
 {
     amiga.configure(OPT_FILTER_ACTIVATION, util::parseEnum <FilterActivationEnum> (argv.front()));
 }
@@ -694,6 +694,7 @@ RetroShell::exec <Token::audio, Token::set, Token::pan> (Arguments& argv, long p
 // Paula
 //
 
+/*
 template <> void
 RetroShell::exec <Token::paula, Token::inspect, Token::state> (Arguments& argv, long param)
 {
@@ -705,6 +706,7 @@ RetroShell::exec <Token::paula, Token::inspect, Token::registers> (Arguments& ar
 {
     dump(amiga.paula, Category::Registers);
 }
+*/
 
 
 //
@@ -780,12 +782,14 @@ RetroShell::exec <Token::mouse, Token::set, Token::velocity> (Arguments &argv, l
     amiga.configure(OPT_MOUSE_VELOCITY, port, util::parseNum(argv.front()));
 }
 
+/*
 template <> void
 RetroShell::exec <Token::mouse, Token::inspect> (Arguments& argv, long param)
 {
     auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
     dumpDetails(port.mouse);
 }
+*/
 
 template <> void
 RetroShell::exec <Token::mouse, Token::press, Token::left> (Arguments& argv, long param)
@@ -938,11 +942,13 @@ RetroShell::exec <Token::dc, Token::config> (Arguments& argv, long param)
     dumpConfig(amiga.paula.diskController);
 }
 
+/*
 template <> void
 RetroShell::exec <Token::dc, Token::inspect> (Arguments& argv, long param)
 {
     dumpConfig(amiga.paula.diskController);
 }
+*/
 
 template <> void
 RetroShell::exec <Token::dc, Token::speed> (Arguments& argv, long param)
@@ -1107,6 +1113,7 @@ RetroShell::exec <Token::dfn, Token::set, Token::swapdelay> (Arguments& argv, lo
     }
 }
 
+/*
 template <> void
 RetroShell::exec <Token::dfn, Token::inspect> (Arguments& argv, long param)
 {
@@ -1119,6 +1126,7 @@ RetroShell::exec <Token::dfn, Token::cp> (Arguments& argv, long param)
     assert(param >= 0 && param <= 3);
     df[param]->catchFile(argv.front());
 }
+*/
 
 
 //

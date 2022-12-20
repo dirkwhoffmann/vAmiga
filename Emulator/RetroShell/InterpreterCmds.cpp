@@ -110,7 +110,6 @@ Interpreter::initCommandShell(Command &root)
     root.add({"dmadebugger"},
              "DMA Debugger");
 
-
     root.newGroup("Managing peripherals");
 
     root.add({"keyboard"},
@@ -122,32 +121,20 @@ Interpreter::initCommandShell(Command &root)
     root.add({"joystick"},
              "Joystick");
 
-    root.add({"df0"},
-             "Floppy drive 0");
+    for (isize i = 0; i < 4; i++) {
 
-    root.add({"df1"},
-             "Floppy drive 1");
-
-    root.add({"df2"},
-             "Floppy drive 2");
-
-    root.add({"df3"},
-             "Floppy drive 3");
+        root.add({"df" + std::to_string(i) },
+                 "Floppy drive " + std::to_string(i));
+    }
 
     root.add({"dfn"},
              "Floppy drive (df0, df1, df2, df3, dfn)");
 
-    root.add({"hd0"},
-             "Hard drive 0");
+    for (isize i = 0; i < 4; i++) {
 
-    root.add({"hd1"},
-             "Hard drive 1");
-
-    root.add({"hd2"},
-             "Hard drive 2");
-
-    root.add({"hd3"},
-             "Hard drive 3");
+        root.add({"hd" + std::to_string(i) },
+                 "Hard drive " + std::to_string(i));
+    }
 
     root.add({"hdn"},
              "Hard drive (hd0, hd1, hd2, hd3, hdn)");
@@ -400,7 +387,7 @@ Interpreter::initCommandShell(Command &root)
     root.add({"blitter", "set"},
              "Configures the component");
 
-    root.add({"blitter", "set", "accuracy"}, { Arg::value },
+    root.add({"blitter", "set", "accuracy"}, { "1..3" },
              "Selects the emulation accuracy level",
              &RetroShell::exec <Token::blitter, Token::set, Token::accuracy>);
 
@@ -543,24 +530,24 @@ Interpreter::initCommandShell(Command &root)
     root.add({"paula", "audio", "filter"},
              "Displays the current filter configuration",
              &RetroShell::exec <Token::audio, Token::filter, Token::config>);
-    
+
+    root.add({"paula", "audio", "filter", "set"},
+             "Configures the audio filter");
+
+    root.add({"paula", "audio", "filter", "set", "type"}, { FilterTypeEnum::argList() },
+             "Configures the audio filter type",
+             &RetroShell::exec <Token::audio, Token::filter, Token::set, Token::type>);
+
+    root.add({"paula", "audio", "filter", "set", "activation"}, { FilterActivationEnum::argList() },
+             "Selects the filter activation condition",
+             &RetroShell::exec <Token::audio, Token::filter, Token::set, Token::activation>);
+
     root.add({"paula", "audio", "set"},
              "Configures the component");
 
     root.add({"paula", "audio", "set", "sampling"}, { SamplingMethodEnum::argList() },
              "Selects the sampling method",
              &RetroShell::exec <Token::audio, Token::set, Token::sampling>);
-
-    root.add({"paula", "audio", "set", "filter"},
-             "Configures the audio filter");
-
-    root.add({"paula", "audio", "set", "filter", "type"}, { FilterTypeEnum::argList() },
-             "Configures the audio filter type",
-             &RetroShell::exec <Token::audio, Token::set, Token::filter, Token::type>);
-
-    root.add({"paula", "audio", "set", "filter", "activation"}, { FilterActivationEnum::argList() },
-             "Selects the filter activation condition",
-             &RetroShell::exec <Token::audio, Token::set, Token::filter, Token::activation>);
 
     root.add({"paula", "audio", "set", "volume"},
              "Sets the volume");
@@ -893,19 +880,7 @@ Interpreter::initCommandShell(Command &root)
                  "Makes polling clicks audible",
                  &RetroShell::exec <Token::dfn, Token::audiate, Token::poll>, i);
     }
-    
-    for (isize i = 0; i < 4; i++) {
 
-        string df = "df" + std::to_string(i);
-        
-        root.add({df, "inspect"},
-                 "Displays the component state",
-                 &RetroShell::exec <Token::dfn, Token::inspect>);
-
-        root.add({df, "catch"}, { Arg::path },
-                 "Creates a catchpoint for the specfied file",
-                 &RetroShell::exec <Token::dfn, Token::cp>);
-    }
 
     //
     // Hd0, Hd1, Hd2, Hd3

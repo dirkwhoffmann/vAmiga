@@ -180,9 +180,11 @@ Command::usage() const
         isize count = 0;
         for (auto &it : subCommands) {
 
-            if (arguments != "" && it.name != "") arguments += " | ";
-            arguments += it.name;
-            count++;
+            if (it.name != "") {
+
+                if (count++) arguments += " | ";
+                arguments += it.name;
+            }
         }
         if (count > 1) {
             arguments = "{" + arguments + "}";

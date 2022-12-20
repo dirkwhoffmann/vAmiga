@@ -613,6 +613,23 @@ RetroShell::exec <Token::joystick> (Arguments& argv, long param)
 
 
 //
+// Df0, Df1, Df2, Df3
+//
+
+template <> void
+RetroShell::exec <Token::dfn> (Arguments& argv, long param)
+{
+    dumpSummary(*amiga.df[param]);
+}
+
+template <> void
+RetroShell::exec <Token::dfn, Token::state> (Arguments& argv, long param)
+{
+    dumpDetails(*amiga.df[param]);
+}
+
+
+//
 // OSDebugger
 //
 
