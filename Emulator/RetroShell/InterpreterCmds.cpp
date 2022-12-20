@@ -567,6 +567,10 @@ Interpreter::initCommandShell(Command &root)
              "Displays the current configuration",
              &RetroShell::exec <Token::audio, Token::config>);
 
+    root.add({"audio", "filter"},
+             "Displays the current filter configuration",
+             &RetroShell::exec <Token::audio, Token::filter, Token::config>);
+    
     root.add({"audio", "set"},
              "Configures the component");
 
@@ -574,10 +578,17 @@ Interpreter::initCommandShell(Command &root)
              "Selects the sampling method",
              &RetroShell::exec <Token::audio, Token::set, Token::sampling>);
 
-    root.add({"audio", "set", "filter"}, { FilterTypeEnum::argList() },
-             "Configures the audio filter",
-             &RetroShell::exec <Token::audio, Token::set, Token::filter>);
-    
+    root.add({"audio", "set", "filter"},
+             "Configures the audio filter");
+
+    root.add({"audio", "set", "filter", "type"}, { FilterTypeEnum::argList() },
+             "Configures the audio filter type",
+             &RetroShell::exec <Token::audio, Token::set, Token::filter, Token::type>);
+
+    root.add({"audio", "set", "filter", "activation"}, { FilterActivationEnum::argList() },
+             "Selects the filter activation condition",
+             &RetroShell::exec <Token::audio, Token::set, Token::filter, Token::activation>);
+
     root.add({"audio", "set", "volume"},
              "Sets the volume");
 

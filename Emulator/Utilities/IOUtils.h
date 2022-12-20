@@ -108,9 +108,10 @@ struct hex {
 
 struct flt {
     
-    float value;
+    double value;
     
-    flt(float v) : value(v) { };
+    flt(double v) : value(v) { };
+    flt(float v) : value(double(v)) { };
     std::ostream &operator()(std::ostream &os) const;
 };
 

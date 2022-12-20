@@ -71,3 +71,18 @@ struct FilterActivationEnum : util::Reflection<FilterActivationEnum, FilterActiv
     }
 };
 #endif
+
+
+//
+// Structures
+//
+
+typedef struct
+{
+    // The selected audio filter type
+    FilterType filterType;
+
+    // Filter activation mode
+    FilterActivation filterActivation;
+}
+AudioFilterConfig;

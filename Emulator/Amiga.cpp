@@ -282,8 +282,6 @@ Amiga::getConfigItem(Option option) const
             return mem.getConfigItem(option);
             
         case OPT_SAMPLING_METHOD:
-        case OPT_FILTER_TYPE:
-        case OPT_FILTER_ACTIVATION:
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
             
@@ -334,7 +332,9 @@ Amiga::getConfigItem(Option option, long id) const
 
         case OPT_AUDPAN:
         case OPT_AUDVOL:
-            
+        case OPT_FILTER_TYPE:
+        case OPT_FILTER_ACTIVATION:
+
             return paula.muxer.getConfigItem(option, id);
 
         case OPT_DRIVE_CONNECT:

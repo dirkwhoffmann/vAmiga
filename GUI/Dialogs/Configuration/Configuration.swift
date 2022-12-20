@@ -68,11 +68,11 @@ class Configuration {
         set { amiga.configure(.RTC_MODEL, value: newValue) }
     }
     var filterType: Int {
-        get { return amiga.getConfig(.FILTER_TYPE) }
+        get { return amiga.getConfig(.FILTER_TYPE, id: 0) }
         set { amiga.configure(.FILTER_TYPE, value: newValue) }
     }
     var filterActivation: Int {
-        get { return amiga.getConfig(.FILTER_ACTIVATION) }
+        get { return amiga.getConfig(.FILTER_ACTIVATION, id: 0) }
         set { amiga.configure(.FILTER_ACTIVATION, value: newValue) }
     }
     var chipRam: Int {

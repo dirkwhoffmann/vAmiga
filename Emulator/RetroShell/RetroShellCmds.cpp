@@ -637,15 +637,33 @@ RetroShell::exec <Token::audio, Token::config> (Arguments& argv, long param)
 }
 
 template <> void
+RetroShell::exec <Token::audio, Token::filter, Token::config> (Arguments& argv, long param)
+{
+    *this << '\n';
+
+    *this << "Left channel:" << '\n';
+    dumpConfig(paula.muxer.filterL);
+
+    *this << "Right channel:" << '\n';
+    dumpConfig(paula.muxer.filterR);
+}
+
+template <> void
 RetroShell::exec <Token::audio, Token::set, Token::sampling> (Arguments& argv, long param)
 {
     amiga.configure(OPT_SAMPLING_METHOD, util::parseEnum <SamplingMethodEnum> (argv.front()));
 }
 
 template <> void
-RetroShell::exec <Token::audio, Token::set, Token::filter> (Arguments& argv, long param)
+RetroShell::exec <Token::audio, Token::set, Token::filter, Token::type> (Arguments& argv, long param)
 {
     amiga.configure(OPT_FILTER_TYPE, util::parseEnum <FilterTypeEnum> (argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::audio, Token::set, Token::filter, Token::activation> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_FILTER_ACTIVATION, util::parseEnum <FilterActivationEnum> (argv.front()));
 }
 
 template <> void

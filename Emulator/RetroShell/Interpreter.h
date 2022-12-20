@@ -19,7 +19,7 @@ namespace vamiga {
 
 enum class Token
 {
-    about, accuracy, agnus, amiga, at, attach, audiate, audio, autofire,
+    about, accuracy, activation, agnus, amiga, at, attach, audiate, audio, autofire,
     autosync, bankmap, beam, bitplanes, blitter, bp, brightness, bullets,
     cbp, channel, checksums, chip, cia, ciaa, ciab, clear, close, clxsprspr,
     clxsprplf, clxplfplf, color, config, connect, contrast, controlport,

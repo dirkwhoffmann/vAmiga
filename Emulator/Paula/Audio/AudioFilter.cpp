@@ -8,12 +8,103 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-//#include "AudioFilter.h"
-#include "Paula.h"
+#include "Amiga.h"
 #include "CIA.h"
 #include <cmath>
 
 namespace vamiga {
+
+void
+AudioFilter::_dump(Category category, std::ostream& os) const
+{
+    using namespace util;
+
+    if (category == Category::Config) {
+
+        os << tab("Filter type");
+        os << FilterTypeEnum::key(config.filterType) << std::endl;
+        os << tab("Filter activation");
+        os << FilterActivationEnum::key(config.filterActivation) << std::endl;
+    }
+
+    if (category == Category::Summary) {
+
+        os << tab("Active");
+        os << bol(isEnabled()) << std::endl;
+    }
+    
+    if (category == Category::State) {
+
+        os << tab("Coefficient a1");
+        os << flt(a1) << std::endl;
+        os << tab("Coefficient a2");
+        os << flt(a2) << std::endl;
+        os << tab("Coefficient b0");
+        os << flt(b0) << std::endl;
+        os << tab("Coefficient b1");
+        os << flt(b1) << std::endl;
+        os << tab("Coefficient b2");
+        os << flt(b2) << std::endl;
+    }
+}
+
+void
+AudioFilter::resetConfig()
+{
+    assert(isPoweredOff());
+    auto &defaults = amiga.defaults;
+
+    std::vector <Option> options = {
+
+        OPT_FILTER_TYPE,
+        OPT_FILTER_ACTIVATION
+    };
+
+    for (auto &option : options) {
+        setConfigItem(option, defaults.get(option));
+    }
+}
+
+i64
+AudioFilter::getConfigItem(Option option) const
+{
+    switch (option) {
+
+        case OPT_FILTER_TYPE:       return config.filterType;
+        case OPT_FILTER_ACTIVATION: return config.filterActivation;
+
+        default:
+            fatalError;
+    }
+}
+
+void
+AudioFilter::setConfigItem(Option option, i64 value)
+{
+    switch (option) {
+
+        case OPT_FILTER_TYPE:
+
+            if (!FilterTypeEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, FilterTypeEnum::keyList());
+            }
+
+            config.filterType = (FilterType)value;
+            return;
+
+        case OPT_FILTER_ACTIVATION:
+
+            if (!FilterActivationEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, FilterActivationEnum::keyList());
+            }
+
+            config.filterActivation = (FilterActivation)value;
+            return;
+
+        default:
+            fatalError;
+    }
+}
 
 void
 AudioFilter::setSampleRate(double sampleRate)
@@ -42,9 +133,9 @@ AudioFilter::setSampleRate(double sampleRate)
 }
 
 bool
-AudioFilter::isEnabled()
+AudioFilter::isEnabled() const
 {
-    switch (paula.muxer.config.filterActivation) {
+    switch (config.filterActivation) {
 
         case FILTER_AUTO_ENABLE:    return ciaa.powerLED();
         case FILTER_ALWAYS_ON:      return true;
@@ -64,10 +155,10 @@ AudioFilter::clear()
 float
 AudioFilter::apply(float sample)
 {
-    if (type == FILTER_NONE) return sample;
+    if (config.filterType == FILTER_NONE) return sample;
     
     // Apply butterworth filter
-    assert(type == FILTER_BUTTERWORTH);
+    assert(config.filterType == FILTER_BUTTERWORTH);
     
     // Run pipeline
     double x0 = (double)sample;

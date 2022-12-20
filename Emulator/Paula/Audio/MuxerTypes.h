@@ -22,12 +22,6 @@ typedef struct
     // Selects how the audio buffer is resampled to match the target frequency
     SamplingMethod samplingMethod;
 
-    // The selected audio filter
-    FilterType filterType;
-
-    // Filter activation mode
-    FilterActivation filterActivation;
-
     // Master volume (left and right channel)
     i64 volL;
     i64 volR;

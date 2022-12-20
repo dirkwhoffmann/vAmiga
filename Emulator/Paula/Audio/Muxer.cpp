@@ -38,10 +38,6 @@ Muxer::_dump(Category category, std::ostream& os) const
         
         os << tab("Sampling method");
         os << SamplingMethodEnum::key(config.samplingMethod) << std::endl;
-        os << tab("Filter type");
-        os << FilterTypeEnum::key(config.filterType) << std::endl;
-        os << tab("Filter activation");
-        os << FilterActivationEnum::key(config.filterActivation) << std::endl;
         os << tab("Channel 1 pan");
         os << dec(config.pan[0]) << std::endl;
         os << tab("Channel 2 pan");
@@ -107,8 +103,6 @@ Muxer::resetConfig()
     std::vector <Option> options = {
         
         OPT_SAMPLING_METHOD,
-        OPT_FILTER_TYPE,
-        OPT_FILTER_ACTIVATION,
         OPT_AUDVOLL,
         OPT_AUDVOLR
     };
@@ -138,14 +132,6 @@ Muxer::getConfigItem(Option option) const
         case OPT_SAMPLING_METHOD:
             return config.samplingMethod;
             
-        case OPT_FILTER_TYPE:
-            assert(filterL.type == config.filterType);
-            assert(filterR.type == config.filterType);
-            return config.filterType;
-
-        case OPT_FILTER_ACTIVATION:
-            return config.filterActivation;
-
         case OPT_AUDVOLL:
             return config.volL;
 
@@ -167,7 +153,11 @@ Muxer::getConfigItem(Option option, long id) const
 
         case OPT_AUDPAN:
             return config.pan[id];
-            
+
+        case OPT_FILTER_TYPE:
+        case OPT_FILTER_ACTIVATION:
+            return id == 0 ? filterL.getConfigItem(option) : filterR.getConfigItem(option);
+
         default:
             fatalError;
     }
@@ -189,22 +179,6 @@ Muxer::setConfigItem(Option option, i64 value)
             config.samplingMethod = (SamplingMethod)value;
             return;
             
-        case OPT_FILTER_TYPE:
-            
-            if (!FilterTypeEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, FilterTypeEnum::keyList());
-            }
-
-            config.filterType = (FilterType)value;
-            filterL.type = ((FilterType)value);
-            filterR.type = ((FilterType)value);
-            return;
-
-        case OPT_FILTER_ACTIVATION:
-
-            config.filterActivation = (FilterActivation)value;
-            return;
-
         case OPT_AUDVOLL:
             
             config.volL = std::clamp(value, 0LL, 100LL);
@@ -222,7 +196,14 @@ Muxer::setConfigItem(Option option, i64 value)
             if (wasMuted != isMuted())
                 msgQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
             return;
-            
+
+        case OPT_FILTER_TYPE:
+        case OPT_FILTER_ACTIVATION:
+
+            filterL.setConfigItem(option, value);
+            filterR.setConfigItem(option, value);
+            return;
+
         default:
             fatalError;
     }
