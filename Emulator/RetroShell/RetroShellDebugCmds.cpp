@@ -65,6 +65,11 @@ RetroShell::exec <Token::disassemble> (Arguments& argv, long param)
     *this << '\n' << ss << '\n';
 }
 
+
+//
+// Breakpoints
+//
+
 template <> void
 RetroShell::exec <Token::bp> (Arguments& argv, long param)
 {
@@ -101,6 +106,11 @@ RetroShell::exec <Token::bp, Token::ignore> (Arguments& argv, long param)
     amiga.cpu.ignoreBreakpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
 }
 
+
+//
+// Watchpoints
+//
+
 template <> void
 RetroShell::exec <Token::wp> (Arguments& argv, long param)
 {
@@ -136,6 +146,11 @@ RetroShell::exec <Token::wp, Token::ignore> (Arguments& argv, long param)
 {
     amiga.cpu.ignoreWatchpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
 }
+
+
+//
+// Catchpoints
+//
 
 template <> void
 RetroShell::exec <Token::cp> (Arguments& argv, long param)
@@ -191,6 +206,11 @@ RetroShell::exec <Token::cp, Token::ignore> (Arguments& argv, long param)
     amiga.cpu.ignoreCatchpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
 }
 
+
+//
+// Copper breakpoints
+//
+
 template <> void
 RetroShell::exec <Token::cbp> (Arguments& argv, long param)
 {
@@ -226,6 +246,11 @@ RetroShell::exec <Token::cbp, Token::ignore> (Arguments& argv, long param)
 {
     copper.debugger.ignoreBreakpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
 }
+
+
+//
+// Copper watchpoints
+//
 
 template <> void
 RetroShell::exec <Token::cwp> (Arguments& argv, long param)
@@ -265,7 +290,7 @@ RetroShell::exec <Token::cwp, Token::ignore> (Arguments& argv, long param)
 
 
 //
-// Components
+// Amiga
 //
 
 template <> void
@@ -279,6 +304,11 @@ RetroShell::exec <Token::amiga, Token::state> (Arguments &argv, long param)
 {
     dumpDetails(amiga);
 }
+
+
+//
+// Memory
+//
 
 template <> void
 RetroShell::exec <Token::memory> (Arguments &argv, long param)
@@ -308,6 +338,11 @@ RetroShell::exec <Token::memory, Token::checksums> (Arguments& argv, long param)
     dump(amiga.mem, Category::Checksums);
 }
 
+
+//
+// CPU
+//
+
 template <> void
 RetroShell::exec <Token::cpu> (Arguments &argv, long param)
 {
@@ -326,6 +361,11 @@ RetroShell::exec <Token::cpu, Token::vectors> (Arguments& argv, long param)
     dump(cpu, Category::Vectors);
 }
 
+
+//
+// CIA
+//
+
 template <> void
 RetroShell::exec <Token::cia> (Arguments &argv, long param)
 {
@@ -343,6 +383,11 @@ RetroShell::exec <Token::cia, Token::tod> (Arguments &argv, long param)
 {
     param == 0 ? dump(ciaa, Category::Tod) : dump(ciab, Category::Tod);
 }
+
+
+//
+// Agnus
+//
 
 template <> void
 RetroShell::exec <Token::agnus> (Arguments &argv, long param)
@@ -374,6 +419,11 @@ RetroShell::exec <Token::agnus, Token::events> (Arguments &argv, long param)
     dump(amiga.agnus, Category::Events);
 }
 
+
+//
+// Blitter
+//
+
 template <> void
 RetroShell::exec <Token::blitter> (Arguments &argv, long param)
 {
@@ -385,6 +435,11 @@ RetroShell::exec <Token::blitter, Token::state> (Arguments &argv, long param)
 {
     dumpDetails(amiga.agnus.blitter);
 }
+
+
+//
+// Copper
+//
 
 template <> void
 RetroShell::exec <Token::copper> (Arguments &argv, long param)
@@ -413,6 +468,11 @@ RetroShell::exec <Token::copper, Token::list> (Arguments& argv, long param)
     }
 }
 
+
+//
+// Paula
+//
+
 template <> void
 RetroShell::exec <Token::paula> (Arguments &argv, long param)
 {
@@ -438,6 +498,10 @@ RetroShell::exec <Token::paula, Token::audio, Token::state> (Arguments& argv, lo
 }
 
 
+//
+// Denise
+//
+
 template <> void
 RetroShell::exec <Token::denise> (Arguments &argv, long param)
 {
@@ -448,6 +512,52 @@ template <> void
 RetroShell::exec <Token::denise, Token::state> (Arguments &argv, long param)
 {
     dumpDetails(denise);
+}
+
+
+//
+// RTC
+//
+
+template <> void
+RetroShell::exec <Token::rtc> (Arguments &argv, long param)
+{
+    dumpSummary(rtc);
+}
+
+template <> void
+RetroShell::exec <Token::rtc, Token::state> (Arguments &argv, long param)
+{
+    dumpDetails(rtc);
+}
+
+
+//
+// Control port
+//
+
+template <> void
+RetroShell::exec <Token::controlport> (Arguments& argv, long param)
+{
+    *this << '\n';
+
+    *this << "Control port 1:" << '\n';
+    dumpSummary(amiga.controlPort1);
+
+    *this << "Control port 2:" << '\n';
+    dumpSummary(amiga.controlPort2);
+}
+
+template <> void
+RetroShell::exec <Token::controlport, Token::state> (Arguments& argv, long param)
+{
+    *this << '\n';
+
+    *this << "Control port 1:" << '\n';
+    dumpDetails(amiga.controlPort1);
+
+    *this << "Control port 2:" << '\n';
+    dumpDetails(amiga.controlPort2);
 }
 
 

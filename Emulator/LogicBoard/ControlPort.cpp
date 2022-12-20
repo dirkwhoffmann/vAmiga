@@ -56,11 +56,14 @@ ControlPort::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == Category::State) {
+    if (category == Category::Summary) {
         
         os << tab("Detected device type");
-        os << ControlPortDeviceEnum::key(device);
-        os << std::endl;
+        os << ControlPortDeviceEnum::key(device) << std::endl;
+    }
+
+    if (category == Category::State) {
+
         os << tab("Mouse X counter");
         os << dec(mouseCounterX) << std::endl;
         os << tab("Mouse Y counter");

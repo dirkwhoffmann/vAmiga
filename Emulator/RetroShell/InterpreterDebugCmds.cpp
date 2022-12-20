@@ -99,6 +99,12 @@ Interpreter::initDebugShell(Command &root)
     root.add({"denise"},
              "Custom Chipset");
 
+    root.add({"rtc"},
+             "Real-time clock");
+
+    root.add({"controlports"},
+             "Control ports");
+
     root.add({"os"},
              "AmigaOS debugger");
 
@@ -261,21 +267,26 @@ Interpreter::initDebugShell(Command &root)
 
 
     //
-    // Components
+    // Amiga
     //
 
     root.newGroup("");
 
     root.add({"amiga", ""},
-             "Lorem ipsum",
+             "Inspects the internal state",
              &RetroShell::exec <Token::amiga>);
 
     root.add({"amiga", "state"},
-             "Lorem ipsum",
+             "Displays additional debug information",
              &RetroShell::exec <Token::amiga, Token::state>);
 
+
+    //
+    // Memory
+    //
+
     root.add({"memory", ""},
-             "Lorem ipsum",
+             "Inspects the internal state",
              &RetroShell::exec <Token::memory>);
 
     root.add({"memory", "dump"}, { Arg::address },
@@ -290,6 +301,11 @@ Interpreter::initDebugShell(Command &root)
              "Computes memory checksums",
              &RetroShell::exec <Token::memory, Token::checksums>);
 
+
+    //
+    // CPU
+    //
+
     root.add({"cpu", ""},
              "Inspects the internal state",
              &RetroShell::exec <Token::cpu>);
@@ -302,12 +318,17 @@ Interpreter::initDebugShell(Command &root)
              "Dumps the vector table",
              &RetroShell::exec <Token::cpu, Token::vectors>);
 
+
+    //
+    // CIA
+    //
+
     for (isize i = 0; i < 2; i++) {
 
         string cia = (i == 0) ? "ciaa" : "ciab";
 
         root.add({cia, ""},
-                 "Displays the internal state",
+                 "Inspects the internal state",
                  &RetroShell::exec <Token::cia>, i);
 
         root.add({cia, "state"},
@@ -318,6 +339,11 @@ Interpreter::initDebugShell(Command &root)
                  "Displays the state of the 24-bit counter",
                  &RetroShell::exec <Token::cia, Token::tod>, i);
     }
+
+
+    //
+    // Agnus
+    //
 
     root.add({"agnus", ""},
              "Inspects the internal state",
@@ -339,25 +365,40 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the event scheduler",
              &RetroShell::exec <Token::agnus, Token::events>);
 
+
+    //
+    // Blitter
+    //
+
     root.add({"blitter", ""},
-             "Lorem ipsum",
+             "Inspects the internal state",
              &RetroShell::exec <Token::blitter>);
 
     root.add({"blitter", "state"},
-             "Inspects the internal state",
+             "Displays additional debug information",
              &RetroShell::exec <Token::blitter, Token::state>);
 
+
+    //
+    // Copper
+    //
+
     root.add({"copper", ""},
-             "Lorem ipsum",
+             "Inspects the internal state",
              &RetroShell::exec <Token::copper>);
 
     root.add({"copper", "state"},
-             "Inspects the internal state",
+             "Displays additional debug information",
              &RetroShell::exec <Token::copper, Token::state>);
 
     root.add({"copper", "list"}, { Arg::value },
              "Prints the Copper list",
              &RetroShell::exec <Token::copper, Token::list>);
+
+
+    //
+    // Paula
+    //
 
     root.add({"paula", ""},
              "Inspects the internal state",
@@ -378,6 +419,11 @@ Interpreter::initDebugShell(Command &root)
              "Displays additional debug information",
              &RetroShell::exec <Token::paula, Token::audio, Token::state>);
 
+
+    //
+    // Denise
+    //
+
     root.add({"denise", ""},
              "Inspects the internal state",
              &RetroShell::exec <Token::denise>);
@@ -385,6 +431,38 @@ Interpreter::initDebugShell(Command &root)
     root.add({"denise", "state"},
              "Displays additional debug information",
              &RetroShell::exec <Token::denise, Token::state>);
+
+
+
+    //
+    // RTC
+    //
+
+    root.add({"rtc", ""},
+             "Inspects the internal state",
+             &RetroShell::exec <Token::rtc>);
+
+    root.add({"rtc", "state"},
+             "Displays additional debug information",
+             &RetroShell::exec <Token::rtc, Token::state>);
+
+
+    //
+    // Controlports
+    //
+
+    root.add({"controlports", ""},
+             "Inspects the internal state",
+             &RetroShell::exec <Token::controlport>);
+
+    root.add({"controlports", "state"},
+             "Displays additional debug information",
+             &RetroShell::exec <Token::controlport, Token::state>);
+
+
+    //
+    // OSDebugger
+    //
 
     root.add({"os", "info"},
              "Displays basic system information",

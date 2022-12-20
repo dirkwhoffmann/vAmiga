@@ -700,32 +700,9 @@ RetroShell::exec <Token::rtc, Token::config> (Arguments& argv, long param)
 }
 
 template <> void
-RetroShell::exec <Token::rtc, Token::inspect, Token::registers> (Arguments& argv, long param)
-{
-    dump(amiga.rtc, Category::Registers);
-}
-
-template <> void
 RetroShell::exec <Token::rtc, Token::set, Token::revision> (Arguments &argv, long param)
 {
     amiga.configure(OPT_RTC_MODEL, util::parseEnum <RTCRevisionEnum> (argv.front()));
-}
-
-
-//
-// Control port
-//
-
-template <> void
-RetroShell::exec <Token::controlport, Token::config> (Arguments& argv, long param)
-{
-    dumpConfig(param == 0 ? amiga.controlPort1 : amiga.controlPort2);
-}
-
-template <> void
-RetroShell::exec <Token::controlport, Token::inspect> (Arguments& argv, long param)
-{
-    dumpDetails(param == 0 ? amiga.controlPort1 : amiga.controlPort2);
 }
 
 

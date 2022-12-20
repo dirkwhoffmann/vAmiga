@@ -564,7 +564,7 @@ RetroShell::dump(AmigaObject &component, Category category)
 void
 RetroShell::dumpConfig(AmigaObject &component)
 {
-    *this << '\n' << "Current configuration:" << '\n';
+    // *this << '\n' << "Current configuration:" << '\n';
     dump(component, Category::Config);
 }
 

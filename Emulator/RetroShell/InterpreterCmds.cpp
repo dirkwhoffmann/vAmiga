@@ -110,11 +110,13 @@ Interpreter::initCommandShell(Command &root)
     root.add({"rtc"},
              "Real-time clock");
 
+    /*
     root.add({"controlport1"},
              "Control port 1");
 
     root.add({"controlport2"},
              "Control port 2");
+    */
 
     root.add({"serial"},
              "Serial port");
@@ -644,33 +646,6 @@ Interpreter::initCommandShell(Command &root)
     root.add({"rtc", "set", "revision"}, { RTCRevisionEnum::argList() },
              "Selects the emulated chip model",
              &RetroShell::exec <Token::rtc, Token::set, Token::revision>);
-
-    root.add({"rtc", "inspect"},
-             "Displays the internal state");
-
-    root.add({"rtc", "inspect", "registers"},
-             "Displays the current register value",
-             &RetroShell::exec <Token::rtc, Token::inspect, Token::registers>);
-
-    
-    //
-    // Control port
-    //
-
-    root.newGroup("");
-
-    for (isize i = 0; i < 2; i++) {
-
-        string port = (i == 0) ? "controlport1" : "controlport2";
-        
-        root.add({port, ""},
-                 "Displays the current configuration",
-                 &RetroShell::exec <Token::controlport, Token::config>, i);
-        
-        root.add({port, "inspect"},
-                 "Displays the internal state",
-                 &RetroShell::exec <Token::controlport, Token::inspect>, i);
-    }
 
 
     //
