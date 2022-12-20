@@ -84,8 +84,8 @@ public:
     // Logic board
     RTC rtc = RTC(*this);
     ZorroManager zorro = ZorroManager(*this);
-    ControlPort controlPort1 = ControlPort(*this, PORT_1);
-    ControlPort controlPort2 = ControlPort(*this, PORT_2);
+    ControlPort controlPort1 = ControlPort(*this, ControlPort::PORT1);
+    ControlPort controlPort2 = ControlPort(*this, ControlPort::PORT2);
     SerialPort serialPort = SerialPort(*this);
 
     // Floppy drives

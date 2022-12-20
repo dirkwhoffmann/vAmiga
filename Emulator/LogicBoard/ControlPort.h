@@ -17,6 +17,13 @@
 namespace vamiga {
 
 class ControlPort : public SubComponent {
+
+public:
+
+    static constexpr isize PORT1 = 1;
+    static constexpr isize PORT2 = 2;
+
+private:
     
     // The represented control port
     isize nr;
@@ -109,8 +116,8 @@ public:
     
     ControlPortInfo getInfo() const { return AmigaComponent::getInfo(info); }
 
-    bool isPort1() const { return nr == PORT_1; }
-    bool isPort2() const { return nr == PORT_2; }
+    bool isPort1() const { return nr == PORT1; }
+    bool isPort2() const { return nr == PORT2; }
 
     
     //

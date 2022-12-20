@@ -368,16 +368,16 @@ Amiga::getConfigItem(Option option, long id) const
         case OPT_PULLUP_RESISTORS:
         case OPT_MOUSE_VELOCITY:
             
-            if (id == PORT_1) return controlPort1.mouse.getConfigItem(option);
-            if (id == PORT_2) return controlPort2.mouse.getConfigItem(option);
+            if (id == ControlPort::PORT1) return controlPort1.mouse.getConfigItem(option);
+            if (id == ControlPort::PORT2) return controlPort2.mouse.getConfigItem(option);
             fatalError;
             
         case OPT_AUTOFIRE:
         case OPT_AUTOFIRE_BULLETS:
         case OPT_AUTOFIRE_DELAY:
             
-            if (id == PORT_1) return controlPort1.joystick.getConfigItem(option);
-            if (id == PORT_2) return controlPort2.joystick.getConfigItem(option);
+            if (id == ControlPort::PORT1) return controlPort1.joystick.getConfigItem(option);
+            if (id == ControlPort::PORT2) return controlPort2.joystick.getConfigItem(option);
             fatalError;
             
         case OPT_SRV_PORT:
@@ -729,17 +729,17 @@ Amiga::configure(Option option, long id, i64 value)
         case OPT_PULLUP_RESISTORS:
         case OPT_MOUSE_VELOCITY:
             
-            assert(id == PORT_1 || id == PORT_2);
-            if (id == PORT_1) controlPort1.mouse.setConfigItem(option, value);
-            if (id == PORT_2) controlPort2.mouse.setConfigItem(option, value);
+            assert(id == ControlPort::PORT1 || id == ControlPort::PORT2);
+            if (id == ControlPort::PORT1) controlPort1.mouse.setConfigItem(option, value);
+            if (id == ControlPort::PORT2) controlPort2.mouse.setConfigItem(option, value);
             break;
             
         case OPT_AUTOFIRE:
         case OPT_AUTOFIRE_BULLETS:
         case OPT_AUTOFIRE_DELAY:
             
-            if (id == PORT_1) controlPort1.joystick.setConfigItem(option, value);
-            if (id == PORT_2) controlPort2.joystick.setConfigItem(option, value);
+            if (id == ControlPort::PORT1) controlPort1.joystick.setConfigItem(option, value);
+            if (id == ControlPort::PORT2) controlPort2.joystick.setConfigItem(option, value);
             break;
 
         case OPT_SRV_PORT:

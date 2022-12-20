@@ -762,21 +762,21 @@ RetroShell::exec <Token::mouse, Token::config> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::mouse, Token::set, Token::pullup> (Arguments &argv, long param)
 {
-    auto port = (param == 0) ? PORT_1 : PORT_2;
+    auto port = (param == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
     amiga.configure(OPT_PULLUP_RESISTORS, port, util::parseBool(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::mouse, Token::set, Token::shakedetector> (Arguments &argv, long param)
 {
-    auto port = (param == 0) ? PORT_1 : PORT_2;
+    auto port = (param == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
     amiga.configure(OPT_SHAKE_DETECTION, port, util::parseBool(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::mouse, Token::set, Token::velocity> (Arguments &argv, long param)
 {
-    auto port = (param == 0) ? PORT_1 : PORT_2;
+    auto port = (param == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
     amiga.configure(OPT_MOUSE_VELOCITY, port, util::parseNum(argv.front()));
 }
 
@@ -816,21 +816,21 @@ RetroShell::exec <Token::joystick, Token::config> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::joystick, Token::set, Token::autofire> (Arguments &argv, long param)
 {
-    auto port = (param == 0) ? PORT_1 : PORT_2;
+    auto port = (param == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
     amiga.configure(OPT_AUTOFIRE, port, util::parseBool(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::joystick, Token::set, Token::bullets> (Arguments &argv, long param)
 {
-    auto port = (param == 0) ? PORT_1 : PORT_2;
+    auto port = (param == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
     amiga.configure(OPT_AUTOFIRE_BULLETS, port, util::parseNum(argv.front()));
 }
 
 template <> void
 RetroShell::exec <Token::joystick, Token::set, Token::delay> (Arguments &argv, long param)
 {
-    auto port = (param == 0) ? PORT_1 : PORT_2;
+    auto port = (param == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
     amiga.configure(OPT_AUTOFIRE_DELAY, port, util::parseNum(argv.front()));
 }
 
