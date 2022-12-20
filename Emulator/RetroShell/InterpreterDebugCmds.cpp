@@ -416,12 +416,14 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              &RetroShell::exec <Token::paula>);
 
-    root.add({"paula", "state"},
-             "Displays additional debug information",
-             &RetroShell::exec <Token::paula, Token::state>);
-
     root.add({"paula", "audio"},
-             "Audio Unit");
+             "Audio unit");
+
+    root.add({"paula", "dc"},
+             "Disk controller");
+
+    root.add({"paula", "uart"},
+             "Universal Asynchronous Receiver Transmitter");
 
     root.add({"paula", "audio", ""},
              "Inspects the internal state",
@@ -430,6 +432,18 @@ Interpreter::initDebugShell(Command &root)
     root.add({"paula", "audio", "state"},
              "Displays additional debug information",
              &RetroShell::exec <Token::paula, Token::audio, Token::state>);
+
+    root.add({"paula", "dc", ""},
+             "Inspects the internal state",
+             &RetroShell::exec <Token::paula, Token::dc>);
+
+    root.add({"paula", "dc", "state"},
+             "Displays additional debug information",
+             &RetroShell::exec <Token::paula, Token::dc, Token::state>);
+
+    root.add({"paula", "uart", ""},
+             "Inspects the internal state",
+             &RetroShell::exec <Token::paula, Token::uart>);
 
 
     //

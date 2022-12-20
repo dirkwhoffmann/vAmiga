@@ -177,15 +177,18 @@ Command::usage() const
     } else {
 
         // Collect all sub-commands
+        isize count = 0;
         for (auto &it : subCommands) {
 
-            if (arguments != "") arguments += " | ";
+            if (arguments != "" && it.name != "") arguments += " | ";
             arguments += it.name;
+            count++;
         }
-        if (action) {
-            arguments = "[ {" + arguments + "} ]";
-        } else {
-            arguments = "{ " + arguments + " }";
+        if (count > 1) {
+            arguments = "{" + arguments + "}";
+        }
+        if (action && arguments != "") {
+            arguments = "[ " + arguments + " ]";
         }
     }
 

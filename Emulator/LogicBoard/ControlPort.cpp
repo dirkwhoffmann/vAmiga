@@ -64,6 +64,25 @@ ControlPort::_dump(Category category, std::ostream& os) const
 
     if (category == Category::State) {
 
+        if (nr == PORT_1) {
+
+            os << tab("potCntX0") << dec(paula.potCntX0) << std::endl;
+            os << tab("potCntY0") << dec(paula.potCntY0) << std::endl;
+            os << tab("chargeX0") << flt(paula.chargeX0) << std::endl;
+            os << tab("chargeY0") << flt(paula.chargeY0) << std::endl;
+        }
+        if (nr == PORT_2) {
+
+            os << tab("potCntX1") << dec(paula.potCntX1) << std::endl;
+            os << tab("potCntY1") << dec(paula.potCntY1) << std::endl;
+            os << tab("chargeX1") << flt(paula.chargeX1) << std::endl;
+            os << tab("chargeY1") << flt(paula.chargeY1) << std::endl;
+        }
+        os << tab("Charge DX");
+        os << flt(chargeDX) << std::endl;
+        os << tab("Charge DY");
+        os << flt(chargeDY) << std::endl;
+
         os << tab("Mouse X counter");
         os << dec(mouseCounterX) << std::endl;
         os << tab("Mouse Y counter");

@@ -38,7 +38,7 @@ enum class Token
     saveroms, screenshot, searchpath, serial, server, set, setup, shakedetector,
     show, slow, slowramdelay, slowrammirror, source, speed, sprites, start,
     state, status, step, stop, swapdelay, swtraps, syntax, task, tasks, tod, todbug,
-    tracking, translate, trap, type, unmappingtype, unpress, up, vector, vectors, verbose,
+    tracking, translate, trap, type, uart, unmappingtype, unpress, up, vector, vectors, verbose,
     velocity, volume, volumes, vsync, wait, watch, watchpoint, wom, wp, write, xaxis,
     yaxis, zorro
 };

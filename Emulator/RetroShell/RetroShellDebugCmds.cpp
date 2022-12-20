@@ -497,6 +497,24 @@ RetroShell::exec <Token::paula, Token::audio, Token::state> (Arguments& argv, lo
     dumpDetails(amiga.paula.muxer);
 }
 
+template <> void
+RetroShell::exec <Token::paula, Token::dc> (Arguments& argv, long param)
+{
+    dumpSummary(amiga.paula.diskController);
+}
+
+template <> void
+RetroShell::exec <Token::paula, Token::dc, Token::state> (Arguments& argv, long param)
+{
+    dumpDetails(amiga.paula.diskController);
+}
+
+template <> void
+RetroShell::exec <Token::paula, Token::uart> (Arguments& argv, long param)
+{
+    dumpSummary(amiga.paula.uart);
+}
+
 
 //
 // Denise

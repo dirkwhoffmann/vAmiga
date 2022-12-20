@@ -221,7 +221,6 @@ Interpreter::help(const Command& current)
     isize tab = 0;
     for (auto &it : current.subCommands) {
         tab = std::max(tab, (isize)it.fullName.length());
-        // tab = std::max(tab, 2 + (isize)it.type.length());
     }
     tab += indent.size();
 

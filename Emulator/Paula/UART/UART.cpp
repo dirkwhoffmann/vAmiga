@@ -44,10 +44,24 @@ UART::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == Category::State) {
+    if (category == Category::Summary) {
         
         os << tab("Serper");
         os << hex(serper) << std::endl;
+        os << tab("Receive buffer");
+        os << hex(receiveBuffer) << std::endl;
+        os << tab("Receive shift register");
+        os << hex(receiveShiftReg) << std::endl;
+        os << tab("Transmit buffer");
+        os << hex(transmitBuffer) << std::endl;
+        os << tab("Transmit shift register");
+        os << hex(transmitShiftReg) << std::endl;
+        os << tab("TXD line");
+        os << dec(outBit) << std::endl;
+        os << tab("Overrun bit");
+        os << dec(ovrun) << std::endl;
+        os << tab("Bit reception counter");
+        os << dec(recCnt) << std::endl;
     }
 }
 

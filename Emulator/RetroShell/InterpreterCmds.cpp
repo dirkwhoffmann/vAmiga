@@ -92,20 +92,11 @@ Interpreter::initCommandShell(Command &root)
     root.add({"blitter"},
              "Coprocessor");
 
-    /*
-     root.add({"copper"},
-     "Coprocessor");
-     */
-    /*
-     root.add({"paula"},
-     "Custom chip");
-     */
-
     root.add({"denise"},
              "Custom chip");
 
-    root.add({"diskcontroller"},
-             "Disk Controller");
+    root.add({"paula"},
+             "Custom chip");
 
     root.add({"rtc"},
              "Real-time clock");
@@ -161,15 +152,8 @@ Interpreter::initCommandShell(Command &root)
     root.add({"hdn"},
              "Hard drive (hd0, hd1, hd2, hd3, hdn)");
 
-
-    root.newGroup("Configuring audio and video");
-
     root.add({"monitor"},
              "Amiga monitor");
-
-    root.add({"audio"},
-             "Audio Unit (Paula)");
-
 
     root.newGroup("Miscellaneous");
 
@@ -544,87 +528,115 @@ Interpreter::initCommandShell(Command &root)
 
     
     //
-    // Audio
+    // Paula (Audio)
     //
 
     root.newGroup("");
 
-    root.add({"audio", ""},
+    root.add({"paula", "audio"},
+             "Audio unit");
+
+    root.add({"paula", "audio", ""},
              "Displays the current configuration",
              &RetroShell::exec <Token::audio, Token::config>);
 
-    root.add({"audio", "filter"},
+    root.add({"paula", "audio", "filter"},
              "Displays the current filter configuration",
              &RetroShell::exec <Token::audio, Token::filter, Token::config>);
     
-    root.add({"audio", "set"},
+    root.add({"paula", "audio", "set"},
              "Configures the component");
 
-    root.add({"audio", "set", "sampling"}, { SamplingMethodEnum::argList() },
+    root.add({"paula", "audio", "set", "sampling"}, { SamplingMethodEnum::argList() },
              "Selects the sampling method",
              &RetroShell::exec <Token::audio, Token::set, Token::sampling>);
 
-    root.add({"audio", "set", "filter"},
+    root.add({"paula", "audio", "set", "filter"},
              "Configures the audio filter");
 
-    root.add({"audio", "set", "filter", "type"}, { FilterTypeEnum::argList() },
+    root.add({"paula", "audio", "set", "filter", "type"}, { FilterTypeEnum::argList() },
              "Configures the audio filter type",
              &RetroShell::exec <Token::audio, Token::set, Token::filter, Token::type>);
 
-    root.add({"audio", "set", "filter", "activation"}, { FilterActivationEnum::argList() },
+    root.add({"paula", "audio", "set", "filter", "activation"}, { FilterActivationEnum::argList() },
              "Selects the filter activation condition",
              &RetroShell::exec <Token::audio, Token::set, Token::filter, Token::activation>);
 
-    root.add({"audio", "set", "volume"},
+    root.add({"paula", "audio", "set", "volume"},
              "Sets the volume");
 
-    root.add({"audio", "set", "volume", "channel0"}, { Arg::volume },
+    root.add({"paula", "audio", "set", "volume", "channel0"}, { Arg::volume },
              "Sets the volume for audio channel 0",
              &RetroShell::exec <Token::audio, Token::set, Token::volume>, 0);
     
-    root.add({"audio", "set", "volume", "channel1"}, { Arg::volume },
+    root.add({"paula", "audio", "set", "volume", "channel1"}, { Arg::volume },
              "Sets the volume for audio channel 1",
              &RetroShell::exec <Token::audio, Token::set, Token::volume>, 1);
     
-    root.add({"audio", "set", "volume", "channel2"}, { Arg::volume },
+    root.add({"paula", "audio", "set", "volume", "channel2"}, { Arg::volume },
              "Sets the volume for audio channel 2",
              &RetroShell::exec <Token::audio, Token::set, Token::volume>, 2);
     
-    root.add({"audio", "set", "volume", "channel3"}, { Arg::volume },
+    root.add({"paula", "audio", "set", "volume", "channel3"}, { Arg::volume },
              "Sets the volume for audio channel 3",
              &RetroShell::exec <Token::audio, Token::set, Token::volume>, 3);
     
-    root.add({"audio", "set", "volume", "left"}, { Arg::volume },
+    root.add({"paula", "audio", "set", "volume", "left"}, { Arg::volume },
              "Sets the master volume for the left speaker",
              &RetroShell::exec <Token::audio, Token::set, Token::volume>, 4);
     
-    root.add({"audio", "set", "volume", "right"}, { Arg::volume },
+    root.add({"paula", "audio", "set", "volume", "right"}, { Arg::volume },
              "Sets the master volume for the right speaker",
              &RetroShell::exec <Token::audio, Token::set, Token::volume>, 5);
 
-    root.add({"audio", "set", "pan"},
+    root.add({"paula", "audio", "set", "pan"},
              "Sets the pan for one of the four audio channels");
     
-    root.add({"audio", "set", "pan", "channel0"}, { Arg::value },
+    root.add({"paula", "audio", "set", "pan", "channel0"}, { Arg::value },
              "Sets the pan for audio channel 0",
              &RetroShell::exec <Token::audio, Token::set, Token::pan>, 0);
     
-    root.add({"audio", "set", "pan", "channel1"}, { Arg::value },
+    root.add({"paula", "audio", "set", "pan", "channel1"}, { Arg::value },
              "Sets the pan for audio channel 1",
              &RetroShell::exec <Token::audio, Token::set, Token::pan>, 1);
     
-    root.add({"audio", "set", "pan", "channel2"}, { Arg::value },
+    root.add({"paula", "audio", "set", "pan", "channel2"}, { Arg::value },
              "Sets the pan for audio channel 2",
              &RetroShell::exec <Token::audio, Token::set, Token::pan>, 2);
     
-    root.add({"audio", "set", "pan", "channel3"}, { Arg::value },
+    root.add({"paula", "audio", "set", "pan", "channel3"}, { Arg::value },
              "Sets the pan for audio channel 3",
              &RetroShell::exec <Token::audio, Token::set, Token::pan>, 3);
 
 
     //
-    // Paula
+    // Paula (Disk controller)
     //
+
+    root.add({"paula", "dc"},
+             "Disk controller");
+
+    root.add({"paula", "dc", ""},
+             "Displays the current configuration",
+             &RetroShell::exec <Token::dc, Token::config>);
+
+    root.add({"paula", "dc", "set"},
+             "Configures the component");
+
+    root.add({"paula", "dc", "set", "speed"}, { Arg::value },
+             "Configures the drive speed",
+             &RetroShell::exec <Token::dc, Token::speed>);
+
+    root.add({"paula", "dc", "dsksync"},
+             "Secures the DSKSYNC register");
+
+    root.add({"paula", "dc", "dsksync", "auto"}, { Arg::boolean },
+             "Always receive a SYNC signal",
+             &RetroShell::exec <Token::dc, Token::dsksync, Token::autosync>);
+
+    root.add({"paula", "dc", "dsksync", "lock"}, { Arg::boolean },
+             "Prevents writes to DSKSYNC",
+             &RetroShell::exec <Token::dc, Token::dsksync, Token::lock>);
 
 
     //
@@ -800,39 +812,6 @@ Interpreter::initCommandShell(Command &root)
     root.add({"serial", "set", "device"}, { SerialPortDeviceEnum::argList() },
              "Connects a device",
              &RetroShell::exec <Token::serial, Token::set, Token::device>);
-
-    
-    //
-    // Disk controller
-    //
-
-    root.newGroup("");
-
-    root.add({"diskcontroller", ""},
-             "Displays the current configuration",
-             &RetroShell::exec <Token::dc, Token::config>);
-
-    root.add({"diskcontroller", "set"},
-             "Configures the component");
-
-    root.add({"diskcontroller", "set", "speed"}, { Arg::value },
-             "Configures the drive speed",
-             &RetroShell::exec <Token::dc, Token::speed>);
-
-    root.add({"diskcontroller", "dsksync"},
-             "Secures the DSKSYNC register");
-
-    root.add({"diskcontroller", "dsksync", "auto"}, { Arg::boolean },
-             "Always receive a SYNC signal",
-             &RetroShell::exec <Token::dc, Token::dsksync, Token::autosync>);
-
-    root.add({"diskcontroller", "dsksync", "lock"}, { Arg::boolean },
-             "Prevents writes to DSKSYNC",
-             &RetroShell::exec <Token::dc, Token::dsksync, Token::lock>);
-
-    root.add({"diskcontroller", "inspect"},
-             "Displays the internal state",
-             &RetroShell::exec <Token::dc, Token::inspect>);
 
 
     //
