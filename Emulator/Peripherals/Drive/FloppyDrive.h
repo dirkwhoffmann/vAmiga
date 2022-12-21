@@ -48,8 +48,10 @@ class FloppyDrive : public Drive {
     // Value of the currently transmitted identification bit
     bool idBit;
 
-    // Time stamp indicating when the head started to step to another cylinder
-    Cycle stepCycle;
+    // Time stamps of the most recent head step
+    Cycle latestStepUp;
+    Cycle latestStepDown;
+    Cycle latestStep;
     
     /* Disk change status. This variable controls the /CHNG bit in the CIA A
      * PRA register. Note that the variable only changes it's value under
@@ -139,7 +141,9 @@ private:
             << switchSpeed
             << idCount
             << idBit
-            << stepCycle
+            << latestStepUp
+            << latestStepDown
+            << latestStep
             << dskchange
             << dsklen
             << prb
@@ -271,8 +275,9 @@ public:
 public:
     
     // Returns wheather the drive is ready to accept a stepping pulse
-    bool readyToStep() const;
-    
+    bool readyToStepUp() const;
+    bool readyToStepDown() const;
+
     // Moves the drive head (0 = inwards, 1 = outwards).
     void step(isize dir);
 

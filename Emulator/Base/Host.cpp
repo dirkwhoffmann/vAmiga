@@ -42,8 +42,6 @@ Host::getHostRefreshRate() const
 void
 Host::setHostRefreshRate(double fps)
 {
-    printf("setHostRefreshRate %d\n", i16(fps));
-
     switch (i16(fps)) {
 
         case 50: case 60: case 100: case 120: case 200: case 240:

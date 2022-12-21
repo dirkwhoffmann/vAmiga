@@ -557,7 +557,8 @@ FloppyDrive::readByte() const
     }
 
     // Case 2: A step operation is in progress
-    if (config.mechanicalDelays && (agnus.clock - stepCycle) < config.stepDelay) {
+    if (config.mechanicalDelays && (agnus.clock - latestStep) < MSEC(3)) {
+    // if (config.mechanicalDelays && (agnus.clock - latestStep) < config.stepDelay) {
         return u8(rand() & 0x55);
     }
     
@@ -635,13 +636,39 @@ FloppyDrive::findSyncMark()
 }
 
 bool
-FloppyDrive::readyToStep() const
+FloppyDrive::readyToStepUp() const
 {
-    if (config.mechanicalDelays) {
-        return agnus.clock - stepCycle > 1060;
-    } else {
-        return true;
+    // Always succeed if no mechanical delays are emulated
+    if (!config.mechanicalDelays) return true;
+
+    // When reversing directions, a minimum of 18 milliseconds delay is required from the last step pulse
+    if (agnus.clock - latestStepDown < MSEC(18)) {
+
+        debug(DSK_CHECKSUM,
+              "readyToStepUp: REVERSING DIRECTION TOO QUICKLY (%lld).\n",
+              AS_USEC(agnus.clock - latestStepDown));
+        // return false;
     }
+
+    return agnus.clock - latestStep > 1060;
+}
+
+bool
+FloppyDrive::readyToStepDown() const
+{
+    // Always succeed if no mechanical delays are emulated
+    if (!config.mechanicalDelays) return true;
+
+    // When reversing directions, a minimum of 18 milliseconds delay is required from the last step pulse
+    if (agnus.clock - latestStepUp < MSEC(18)) {
+
+        debug(DSK_CHECKSUM,
+              "readyToStepDown: REVERSING DIRECTION TOO QUICKLY (%lld).\n",
+              AS_USEC(agnus.clock - latestStepUp));
+        // return false;
+    }
+
+    return agnus.clock - latestStep > 1060;
 }
 
 void
@@ -650,25 +677,38 @@ FloppyDrive::step(isize dir)
     // Update the disk change signal
     if (hasDisk()) dskchange = true;
 
-    // Only proceed if the last head step was a while ago
-    if (!readyToStep()) return;
-    
     if (dir) {
-        
+
+        // Only proceed if the last head step was a while ago
+        if (!readyToStepDown()) return;
+
         // Move drive head outwards (towards the lower tracks)
         if (head.cylinder > 0) {
+
             head.cylinder--;
             recordCylinder(head.cylinder);
+
+            // Remember the step cycle
+            latestStep = latestStepDown = agnus.clock;
         }
+
         debug(DSK_CHECKSUM, "Stepping down to cylinder %ld\n", head.cylinder);
 
     } else {
-        
+
+        // Only proceed if the last head step was a while ago
+        if (!readyToStepUp()) return;
+
         // Move drive head inwards (towards the upper tracks)
         if (head.cylinder < 83) {
+
             head.cylinder++;
             recordCylinder(head.cylinder);
+
+            // Remember the step cycle
+            latestStep = latestStepUp = agnus.clock;
         }
+
         debug(DSK_CHECKSUM, "Stepping up to cylinder %ld\n", head.cylinder);
     }
     
@@ -686,9 +726,6 @@ FloppyDrive::step(isize dir)
         msgQueue.put(MSG_DRIVE_STEP,
                      i16(nr), i16(head.cylinder), config.stepVolume, config.pan);
     }
-
-    // Remember when we've performed the step
-    stepCycle = agnus.clock;
 }
 
 void
