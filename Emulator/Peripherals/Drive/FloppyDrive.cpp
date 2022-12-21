@@ -251,6 +251,16 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         os << dec(idCount) << std::endl;
         os << tab("Id bit");
         os << dec(idBit) << std::endl;
+        os << tab("latestStepUp");
+        os << dec(latestStepUp) << std::endl;
+        os << tab("latestStepDown");
+        os << dec(latestStepDown) << std::endl;
+        os << tab("latestStep");
+        os << dec(latestStep) << std::endl;
+        os << tab("cylinderHistory");
+        os << hex(cylinderHistory) << std::endl;
+
+        os << std::endl;
         os << tab("motorSpeed()");
         os << motorSpeed() << std::endl;
         os << tab("getMotor()");
@@ -263,8 +273,10 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         os << bol(motorSlowingDown()) << std::endl;
         os << tab("motorStopped()");
         os << bol(motorStopped()) << std::endl;
-        os << tab("cylinderHistory");
-        os << hex(cylinderHistory) << std::endl;
+        os << tab("readyToStepUp()");
+        os << bol(readyToStepUp()) << std::endl;
+        os << tab("readyToStepDown()");
+        os << bol(readyToStepDown()) << std::endl;
     }
 }
 

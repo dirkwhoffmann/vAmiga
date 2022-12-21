@@ -103,8 +103,8 @@ struct Command {
     void remove(const string& token);
 
     // Returns arguments counts
-    isize minArgs() const { return requiredArgs.size(); }
-    isize optArgs() const { return optionalArgs.size(); }
+    isize minArgs() const { return isize(requiredArgs.size()); }
+    isize optArgs() const { return isize(optionalArgs.size()); }
     isize maxArgs() const { return minArgs() + optArgs(); }
 
     // Seeks a command object inside the command object tree
