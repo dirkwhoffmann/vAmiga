@@ -29,6 +29,7 @@ class DmaDebugger;
 class FloppyDrive;
 class HardDrive;
 class HdController;
+class Host;
 class GdbServer;
 class Joystick;
 class Keyboard;
@@ -79,6 +80,7 @@ protected:
     HdController &hd1con;
     HdController &hd2con;
     HdController &hd3con;
+    Host &host;
     Keyboard &keyboard;
     Memory &mem;
     MsgQueue &msgQueue;

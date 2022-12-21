@@ -49,6 +49,8 @@
 		502023ED27B6BE7200820DB6 /* RamExpansion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502023EB27B6BE7200820DB6 /* RamExpansion.cpp */; };
 		5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17B21EF121E00B9E80E /* Agnus.cpp */; };
 		5020B18021EF136100B9E80E /* Denise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17E21EF136100B9E80E /* Denise.cpp */; };
+		5020B38E295336E5009732AC /* Host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B38C295336E5009732AC /* Host.cpp */; };
+		5020B38F295336E5009732AC /* Host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B38C295336E5009732AC /* Host.cpp */; };
 		50210B2027CB6A41001193AA /* Drive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50210B1E27CB6A41001193AA /* Drive.cpp */; };
 		5023519024485BBF00F6C088 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5023518F24485BBF00F6C088 /* Preferences.swift */; };
 		5026EDBF2608DC8E00D90CE1 /* Console.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5026EDBE2608DC8E00D90CE1 /* Console.swift */; };
@@ -521,6 +523,8 @@
 		5020B17C21EF121E00B9E80E /* Agnus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Agnus.h; sourceTree = "<group>"; };
 		5020B17E21EF136100B9E80E /* Denise.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Denise.cpp; sourceTree = "<group>"; };
 		5020B17F21EF136100B9E80E /* Denise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Denise.h; sourceTree = "<group>"; };
+		5020B38C295336E5009732AC /* Host.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Host.cpp; sourceTree = "<group>"; };
+		5020B38D295336E5009732AC /* Host.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Host.h; sourceTree = "<group>"; };
 		50210B1E27CB6A41001193AA /* Drive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Drive.cpp; sourceTree = "<group>"; };
 		50210B1F27CB6A41001193AA /* Drive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Drive.h; sourceTree = "<group>"; };
 		5023518F24485BBF00F6C088 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
@@ -1078,6 +1082,8 @@
 				508FDEF521EA1FBC0043D0E9 /* MsgQueue.cpp */,
 				50E5B9BE2807E65800502787 /* Defaults.h */,
 				50E5B9BD2807E65800502787 /* Defaults.cpp */,
+				5020B38D295336E5009732AC /* Host.h */,
+				5020B38C295336E5009732AC /* Host.cpp */,
 				508C6BCF23F7E77500D8938F /* ChangeRecorder.h */,
 			);
 			path = Base;
@@ -2326,6 +2332,7 @@
 				50AEBEDC24D3D8170037082D /* UARTEvents.cpp in Sources */,
 				508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */,
 				508FDF8721EA1FBC0043D0E9 /* MsgQueue.cpp in Sources */,
+				5020B38E295336E5009732AC /* Host.cpp in Sources */,
 				50BF1CC8276D174200386540 /* GdbServer.cpp in Sources */,
 				500A0A2A262305BE0019F013 /* MemUtils.cpp in Sources */,
 				50AFEBBA278EF5FD00F422D5 /* Sequencer.cpp in Sources */,
@@ -2408,6 +2415,7 @@
 				50FC04B927DA19B200C3E566 /* Drive.cpp in Sources */,
 				50FC04EE27DA1A4500C3E566 /* GdbServer.cpp in Sources */,
 				50FC04C227DA19DA00C3E566 /* Script.cpp in Sources */,
+				5020B38F295336E5009732AC /* Host.cpp in Sources */,
 				50FC04CB27DA19E900C3E566 /* FloppyFile.cpp in Sources */,
 				50FC04B627DA19A900C3E566 /* RamExpansion.cpp in Sources */,
 				50FC04A327DA197A00C3E566 /* SequencerRegs.cpp in Sources */,

@@ -266,7 +266,7 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"amiga", "details"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::amiga, Token::details>);
+             &RetroShell::exec <Token::amiga, Token::debug>);
 
 
     //
@@ -300,7 +300,7 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"cpu", "details"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::cpu, Token::details>);
+             &RetroShell::exec <Token::cpu, Token::debug>);
 
     root.add({"cpu", "vectors"},
              "Dumps the vector table",
@@ -321,7 +321,7 @@ Interpreter::initDebugShell(Command &root)
 
         root.add({cia, "details"},
                  "Displays additional debug information",
-                 &RetroShell::exec <Token::cia, Token::details>, i);
+                 &RetroShell::exec <Token::cia, Token::debug>, i);
 
         root.add({cia, "tod"},
                  "Displays the state of the 24-bit counter",
@@ -339,7 +339,7 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"agnus", "details"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::agnus, Token::details>);
+             &RetroShell::exec <Token::agnus, Token::debug>);
 
     root.add({"agnus", "beam"},
              "Displays the current beam position",
@@ -364,7 +364,7 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"blitter", "details"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::blitter, Token::details>);
+             &RetroShell::exec <Token::blitter, Token::debug>);
 
 
     //
@@ -377,7 +377,7 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"copper", "details"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::copper, Token::details>);
+             &RetroShell::exec <Token::copper, Token::debug>);
 
     root.add({"copper", "list"}, { Arg::value },
              "Prints the Copper list",
@@ -407,7 +407,7 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"paula", "audio", "details"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::paula, Token::audio, Token::details>);
+             &RetroShell::exec <Token::paula, Token::audio, Token::debug>);
 
     root.add({"paula", "dc", ""},
              "Inspects the internal state",
@@ -415,7 +415,7 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"paula", "dc", "details"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::paula, Token::dc, Token::details>);
+             &RetroShell::exec <Token::paula, Token::dc, Token::debug>);
 
     root.add({"paula", "uart", ""},
              "Inspects the internal state",
@@ -432,7 +432,7 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"denise", "details"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::denise, Token::details>);
+             &RetroShell::exec <Token::denise, Token::debug>);
 
 
 
@@ -446,7 +446,7 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"rtc", "details"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::rtc, Token::details>);
+             &RetroShell::exec <Token::rtc, Token::debug>);
 
 
     //
@@ -479,7 +479,7 @@ Interpreter::initDebugShell(Command &root)
 
         root.add({"controlport", nr, "details"},
                  "Displays additional debug information",
-                 &RetroShell::exec <Token::controlport, Token::details>, i);
+                 &RetroShell::exec <Token::controlport, Token::debug>, i);
     }
 
 
@@ -513,7 +513,7 @@ Interpreter::initDebugShell(Command &root)
 
         root.add({"mouse", nr, "details"},
                  "Displays additional debug information",
-                 &RetroShell::exec <Token::mouse, Token::details>, i);
+                 &RetroShell::exec <Token::mouse, Token::debug>, i);
 
         root.add({"joystick", nr},
                  "Joystick in port " + nr);
@@ -542,7 +542,7 @@ Interpreter::initDebugShell(Command &root)
 
         root.add({df, "details"},
                  "Displays additional debug information",
-                 &RetroShell::exec <Token::dfn, Token::details>, i);
+                 &RetroShell::exec <Token::dfn, Token::debug>, i);
     }
 
     //
@@ -570,7 +570,7 @@ Interpreter::initDebugShell(Command &root)
 
         root.add({hd, "details"},
                  "Displays the internal state",
-                 &RetroShell::exec <Token::hdn, Token::details>, i);
+                 &RetroShell::exec <Token::hdn, Token::debug>, i);
     }
 
 

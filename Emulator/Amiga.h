@@ -19,6 +19,7 @@
 #include "FloppyDrive.h"
 #include "GdbServer.h"
 #include "HardDrive.h"
+#include "Host.h"
 #include "Keyboard.h"
 #include "Memory.h"
 #include "MsgQueue.h"
@@ -57,11 +58,6 @@ class Amiga : public Thread {
      */
     mutable AmigaInfo info = {};
 
-// public:
-    
-    // Information about the host system
-    HostInfo host = { .refreshRate = 60 };
-
 
     //
     // Sub components
@@ -71,6 +67,9 @@ public:
 
     // User settings
     static Defaults defaults;
+
+    // Information about the host system
+    Host host = Host(*this);
 
     // Core components
     CPU cpu = CPU(*this);
@@ -278,12 +277,6 @@ public:
 
     // Reverts to factory settings
     void revertToFactorySettings();
-
-    // Gets or sets host parameters
-    double getHostRefreshRate() const { return host.refreshRate; }
-    void setHostRefreshRate(double refreshRate);
-    std::pair<isize, isize> getFrameBufferSize();
-    void setFrameBufferSize(std::pair<isize, isize> size);
 
     
 private:

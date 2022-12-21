@@ -48,7 +48,7 @@ enum class Category
 {    
     BankMap, Beam, Blocks, Breakpoints, Bus, Callstack, Catchpoints, Checksums,
     Config, Current, Debug, Defaults, Dma, Drive, Events, FileSystem, Fpu,
-    Geometry, Host, Hunks, Inspection, List1, List2, Parameters, Partitions,
+    Geometry, Hunks, Inspection, List1, List2, Parameters, Partitions,
     Properties, Registers, Sections, Segments, Signals, Stats, Status, SwTraps,
     Tod, Vectors, Volumes, Watchpoints
 };

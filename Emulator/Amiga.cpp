@@ -824,40 +824,6 @@ Amiga::revertToFactorySettings()
     initialize();
 }
 
-void
-Amiga::setHostRefreshRate(double refreshRate)
-{
-    // printf("setHostRefreshRate(%f)\n", refreshRate);
-
-    switch (i16(refreshRate)) {
-
-        case 50: case 60: case 100: case 120: case 200: case 240:
-
-            host.refreshRate = refreshRate;
-            paula.muxer.adjustSpeed();
-            break;
-
-        default:
-
-            // We keep the old value because the new value is likely the result
-            // of a wrong measurement.
-            break;
-    }
-}
-
-std::pair<isize, isize>
-Amiga::getFrameBufferSize()
-{
-    return std::pair<isize, isize>(host.frameBufferWidth, host.frameBufferHeight);
-}
-
-void
-Amiga::setFrameBufferSize(std::pair<isize, isize> size)
-{
-    host.frameBufferWidth = size.first;
-    host.frameBufferHeight = size.second;
-}
-
 i64
 Amiga::overrideOption(Option option, i64 value)
 {
@@ -999,14 +965,6 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << tab("Debug mode");
         os << bol(inDebugMode()) << std::endl;
 
-    }
-
-    if (category == Category::Host) {
-
-        os << tab("Monitor refresh rate");
-        os << flt(float(host.refreshRate)) << " Hz" << std::endl;
-        os << tab("Frame buffer size");
-        os << dec(host.frameBufferWidth) << " x " << dec(host.frameBufferHeight) << std::endl;
     }
 
     if (category == Category::Defaults) {
@@ -1313,7 +1271,7 @@ Amiga::refreshRate() const
 {
     switch (getSyncMode()) {
 
-        case SyncMode::Pulsed:      return host.refreshRate;
+        case SyncMode::Pulsed:      return host.getHostRefreshRate();
         case SyncMode::Periodic:    return config.type == PAL ? 50.0 : 60.0;
 
         default:

@@ -2780,23 +2780,23 @@ using namespace vamiga::moira;
 
 - (NSInteger)hostRefreshRate
 {
-    return (NSInteger)[self amiga]->getHostRefreshRate();
+    return (NSInteger)[self amiga]->host.getHostRefreshRate();
 }
 
 - (NSSize)frameBufferSize
 {
-    auto size = [self amiga]->getFrameBufferSize();
+    auto size = [self amiga]->host.getFrameBufferSize();
     return NSMakeSize((CGFloat)size.first, (CGFloat)size.second);
 }
 
 - (void)setFrameBufferSize:(NSSize)size
 {
-    [self amiga]->setFrameBufferSize(std::pair<isize, isize>(size.width, size.height));
+    [self amiga]->host.setFrameBufferSize(std::pair<isize, isize>(size.width, size.height));
 }
 
 - (void)setHostRefreshRate:(NSInteger)value
 {
-    [self amiga]->setHostRefreshRate((double)value);
+    [self amiga]->host.setHostRefreshRate((double)value);
 }
 
 - (NSInteger)masterFrequency
