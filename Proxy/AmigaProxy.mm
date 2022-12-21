@@ -930,6 +930,7 @@ using namespace vamiga::moira;
     return [self recorder]->getDuration().asSeconds();
 }
 
+/*
 - (NSInteger)x1
 {
     return [self recorder]->cutout.x1;
@@ -949,6 +950,7 @@ using namespace vamiga::moira;
 {
     return [self recorder]->cutout.y2;
 }
+*/
 
 - (NSInteger)frameRate
 {
@@ -965,10 +967,12 @@ using namespace vamiga::moira;
     return [self recorder]->getSampleRate();
 }
 
+/*
 - (u32 *)getGpuData:(NSSize)size
 {
     return [self recorder]->getGpuData((isize)size.width, (isize)size.height);
 }
+*/
 
 - (void)startRecording:(NSRect)rect
                bitRate:(NSInteger)rate

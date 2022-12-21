@@ -86,7 +86,7 @@ class Canvas: Layer {
     var finalTexture: MTLTexture! = nil
 
     // Framebuffer backup (needed by the screen recorder)
-    var framebufTexture: MTLTexture! = nil
+    // var framebufTexture: MTLTexture! = nil
 
     // Part of the texture that is currently visible
     var textureRect = CGRect() { didSet { buildVertexBuffers() } }
@@ -177,9 +177,11 @@ class Canvas: Layer {
                              "The scanline texture could not be allocated.")
 
         // EXPERIMENTAL
+        /*
         framebufTexture = device.makeTexture(size: MTLSizeMake(4096, 4096, 0), usage: rwtp)
         renderer.metalAssert(framebufTexture != nil,
                              "Framebuffer texture could not be allocated.")
+        */
 
     }
 
@@ -241,6 +243,7 @@ class Canvas: Layer {
     }
 
     // EXPERIMENTAL
+    /*
     func grabFrameBuffer() {
 
         let rect = renderer.recordingRect
@@ -275,6 +278,7 @@ class Canvas: Layer {
             }
         }
     }
+    */
 
     func updateTexture() {
         
@@ -318,7 +322,7 @@ class Canvas: Layer {
             currLOF = amiga.denise.longFrame
 
             // Experimental (copy GPU texture back to emulator)
-             grabFrameBuffer()
+            // grabFrameBuffer()
 
             // Update the GPU texture
             if currLOF {
@@ -441,7 +445,7 @@ class Canvas: Layer {
         encoder.setFragmentTexture(bloomTextureG, index: 2)
         encoder.setFragmentTexture(bloomTextureB, index: 3)
         encoder.setFragmentTexture(ressourceManager.dotMask, index: 4)
-        encoder.setFragmentTexture(framebufTexture, index: 5)
+        // encoder.setFragmentTexture(framebufTexture, index: 5)
 
         // Select the texture sampler
         if renderer.shaderOptions.blur > 0 {

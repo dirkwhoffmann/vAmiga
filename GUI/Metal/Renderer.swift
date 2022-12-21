@@ -172,33 +172,19 @@ class Renderer: NSObject, MTKViewDelegate {
 
     var recordingRect: CGRect {
 
-        var x, y, w, h: Int
+        var result: CGRect
 
         switch prefs.captureSource {
 
-        case .emulatorTexture:
-
-            x = 0
-            y = 0
-            w = canvas.mergeTexture.width
-            h = canvas.mergeTexture.height
-
-        case .frambufferTexture:
-
-            x = 0
-            y = 0
-            w = Int(canvas.renderer.drawableSize.width)
-            h = Int(canvas.renderer.drawableSize.height)
-
-            if x > canvas.framebufTexture.width { x = canvas.framebufTexture.width }
-            if y > canvas.framebufTexture.height { y = canvas.framebufTexture.height }
+        case .visible:  result = canvas.textureRectAbs
+        case .entire:   result = canvas.entire
         }
 
         // Make sure the screen dimensions are even
-        if w % 2 == 1 { w -= 1 }
-        if h % 2 == 1 { h -= 1 }
+        if Int(result.size.width) % 2 == 1 { result.size.width -= 1 }
+        if Int(result.size.height) % 2 == 1 { result.size.height -= 1 }
 
-        return CGRect(x: CGFloat(x), y: CGFloat(y), width: CGFloat(w), height: CGFloat(h))
+        return result
     }
 
     //

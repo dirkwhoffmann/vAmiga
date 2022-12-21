@@ -83,17 +83,6 @@ Recorder::getDuration() const
     return (isRecording() ? util::Time::now() : recStop) - recStart;
 }
 
-u32 *
-Recorder::getGpuData(isize width, isize height)
-{
-    auto size = width * height;
-
-    // Resize the buffer if it is too small
-    if (videoData.size < size) videoData.alloc(size);
-
-    return videoData.ptr;
-}
-
 void
 Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
                          isize bitRate,
@@ -146,6 +135,7 @@ Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
     // Create temporary buffers
     debug(REC_DEBUG, "Creating buffers...\n");
 
+    videoData.alloc((x2 - x1) * (y2 - y1));
     audioData.alloc(2 * samplesPerFrame);
     
     //
@@ -181,7 +171,7 @@ Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
     // Aspect ratio
     cmd1 += " -bsf:v ";
     cmd1 += "\"h264_metadata=sample_aspect_ratio=";
-    cmd1 += std::to_string(aspectX) + "/" + std::to_string(aspectY) + "\"";
+    cmd1 += std::to_string(aspectX) + "/" + std::to_string(2*aspectY) + "\"";
     
     // Output file
     cmd1 += " -y " + videoStreamPath();
@@ -350,14 +340,21 @@ Recorder::record(Cycle target)
 void
 Recorder::recordVideo(Cycle target)
 {
-    assert(videoPipe.isOpen());
+    auto *buffer = denise.pixelEngine.stablePtr();
+
+    isize width = sizeof(u32) * (cutout.x2 - cutout.x1);
+    isize height = cutout.y2 - cutout.y1;
+    isize offset = cutout.y1 * HPIXELS + cutout.x1;
+    u8 *src = (u8 *)(buffer + offset);
+    u8 *dst = (u8 *)videoData.ptr;
+
+    for (isize y = 0; y < height; y++, src += sizeof(u32) * HPIXELS, dst += width) {
+        std::memcpy(dst, src, width);
+    }
 
     // Feed the video pipe
-
-    // EXPERIMENTAL
-    // printf("recordVideo: %d %d\n", amiga.host.frameBufferWidth, amiga.host.frameBufferHeight);
-
-    isize length = videoData.size * sizeof(u32);
+    assert(videoPipe.isOpen());
+    isize length = width * height;
     isize written = videoPipe.write((u8 *)videoData.ptr, length);
 
     if (written != length || FORCE_RECORDING_ERROR) {
@@ -368,6 +365,7 @@ Recorder::recordVideo(Cycle target)
 void
 Recorder::recordAudio(Cycle target)
 {
+    
     // Clone Paula's muxer contents
     muxer.sampler[0] = paula.muxer.sampler[0];
     muxer.sampler[1] = paula.muxer.sampler[1];

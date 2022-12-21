@@ -422,15 +422,15 @@
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="etB-PX-kNT">
                                             <rect key="frame" x="88" y="147" width="198" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Emulator Texture" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="dd1-rv-WCT" id="MOQ-mo-kbo">
+                                            <popUpButtonCell key="cell" type="push" title="Visible Texture" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="dd1-rv-WCT" id="MOQ-mo-kbo">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" title="OtherViews" autoenablesItems="NO" id="S3E-fV-Bay">
                                                     <items>
-                                                        <menuItem title="Emulator Texture" state="on" id="dd1-rv-WCT">
+                                                        <menuItem title="Visible Texture" state="on" id="dd1-rv-WCT">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Framebuffer" tag="1" id="cZC-Cu-eij">
+                                                        <menuItem title="Entire Texture" tag="1" id="cZC-Cu-eij">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>

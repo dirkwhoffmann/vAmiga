@@ -18,8 +18,8 @@ import Carbon.HIToolbox
 
 public enum CaptureSource: Int {
 
-    case emulatorTexture = 0
-    case frambufferTexture = 1
+    case visible = 0
+    case entire = 1
 }
 
 class Preferences {
@@ -52,10 +52,10 @@ class Preferences {
             }
         }
     }
-    var captureSource: CaptureSource = .emulatorTexture
+    var captureSource: CaptureSource = .visible
     var captureSourceIntValue: Int {
         get { return Int(captureSource.rawValue) }
-        set { captureSource = CaptureSource(rawValue: Int(newValue)) ?? .emulatorTexture }
+        set { captureSource = CaptureSource(rawValue: Int(newValue)) ?? .visible }
     }
 
     var bitRate = 512 {
