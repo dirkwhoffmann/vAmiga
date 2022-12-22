@@ -319,64 +319,81 @@ DiskController::compareFifo(u16 word) const
 }
 
 void
-DiskController::executeFifo()
+DiskController::transferByte()
 {
-    // Only proceed if a drive is selected
-    FloppyDrive *drive = getSelectedDrive();
-    
     switch (state) {
             
         case DRIVE_DMA_OFF:
         case DRIVE_DMA_WAIT:
         case DRIVE_DMA_READ:
-            
-            // Read a byte from the drive
-            incoming = drive ? drive->readByteAndRotate() : 0;
-            
-            // Write byte into the FIFO buffer
-            writeFifo((u8)incoming);
-            incoming |= 0x8000;
-            
-            // Check if we've reached a SYNC mark
-            if (compareFifo(dsksync) ||
-                (config.autoDskSync && syncCounter++ > 20000)) {
-                
-                // Save time stamp
-                syncCycle = agnus.clock;
-                
-                // Trigger a word SYNC interrupt
-                trace(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);
-                paula.raiseIrq(INT_DSKSYN);
-                
-                // Enable DMA if the controller was waiting for it
-                if (state == DRIVE_DMA_WAIT)
-                {
-                    setState(DRIVE_DMA_READ);
-                    clearFifo();
-                }
-                
-                // Reset the watchdog counter
-                syncCounter = 0;
-            }
+
+            readByte();
             break;
-            
+
         case DRIVE_DMA_WRITE:
         case DRIVE_DMA_FLUSH:
 
-            if (fifoIsEmpty()) {
-                
-                // Switch off DMA if the last byte has been flushed out
-                if (state == DRIVE_DMA_FLUSH) setState(DRIVE_DMA_OFF);
-                
-            } else {
-                
-                // Read the outgoing byte from the FIFO buffer
-                u8 outgoing = readFifo();
-                
-                // Write byte to disk
-                if (drive) drive->writeByteAndRotate(outgoing);
-            }
+            writeByte();
             break;
+
+        default:
+            fatalError;
+
+    }
+}
+
+void
+DiskController::readByte()
+{
+    FloppyDrive *drive = getSelectedDrive();
+
+    // Read a byte from the drive
+    incoming = drive ? drive->readByteAndRotate() : 0;
+
+    // Write byte into the FIFO buffer
+    writeFifo((u8)incoming);
+    incoming |= 0x8000;
+
+    // Check if we've reached a SYNC mark
+    if (compareFifo(dsksync) ||
+        (config.autoDskSync && syncCounter++ > 20000)) {
+
+        // Save time stamp
+        syncCycle = agnus.clock;
+
+        // Trigger a word SYNC interrupt
+        trace(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);
+        paula.raiseIrq(INT_DSKSYN);
+
+        // Enable DMA if the controller was waiting for it
+        if (state == DRIVE_DMA_WAIT)
+        {
+            setState(DRIVE_DMA_READ);
+            clearFifo();
+        }
+
+        // Reset the watchdog counter
+        syncCounter = 0;
+    }
+}
+
+void
+DiskController::writeByte()
+{
+    FloppyDrive *drive = getSelectedDrive();
+
+    if (fifoIsEmpty()) {
+
+        // Switch off DMA if the last byte has been flushed out
+        if (state == DRIVE_DMA_FLUSH) setState(DRIVE_DMA_OFF);
+
+    } else {
+
+        // Read the outgoing byte from the FIFO buffer
+        u8 outgoing = readFifo();
+
+        // Write byte to disk
+        if (drive) drive->writeByteAndRotate(outgoing);
     }
 }
 
@@ -447,8 +464,8 @@ DiskController::performDMARead(FloppyDrive *drive, u32 remaining)
         // If the loop repeats, fill the Fifo with new data
         if (--remaining) {
             
-            executeFifo();
-            executeFifo();
+            transferByte();
+            transferByte();
         }
         
     }
@@ -512,8 +529,8 @@ DiskController::performDMAWrite(FloppyDrive *drive, u32 remaining)
         // If the loop repeats, do what the event handler would do in between.
         if (--remaining) {
             
-            executeFifo();
-            executeFifo();
+            transferByte();
+            transferByte();
             assert(fifoCanStoreWord());
         }
         

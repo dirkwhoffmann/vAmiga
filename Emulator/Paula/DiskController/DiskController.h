@@ -51,6 +51,12 @@ class DiskController : public SubComponent
     // The latest incoming byte (value shows up in DSKBYTER)
     u16 incoming;
 
+    // Data register
+    // TODO u16 dataReg;
+
+    // Number of bits in the data register
+    // TODO isize dataRegBits;
+
     /* The drive controller's FIFO buffer. On each DSK_ROTATE event, a byte is
      * read from the selected drive and put into this buffer. Each Disk DMA
      * operation will read two bytes from the buffer and stores them at the
@@ -279,14 +285,18 @@ private:
 
     /* Emulates a data transfert between the selected drive and the FIFO
      * buffer. This function is executed periodically in serviceDiskEvent().
-     * The exact operation is dependent of the current DMA state. If DMA is
-     * off, no action is taken. If a read mode is active, the FIFO is filled
-     * with data from the drive. If a write mode is active, data from the FIFO
-     * is written to the drive head.
+     * The exact operation is dependent of the current DMA state.
      */
-    void executeFifo();
+    void transferByte();
 
-    
+    // Called inside transferByte, depending on the current DMA state.
+    void readByte();
+    void writeByte();
+    /*
+    void readBit(bool bit);
+    */
+
+
     //
     // Performing DMA
     //

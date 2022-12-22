@@ -19,7 +19,7 @@ void
 DiskController::serviceDiskEvent()
 {        
     // Receive next byte from the selected drive
-    executeFifo();
+    transferByte();
     
     // Schedule next event
     scheduleNextDiskEvent();
