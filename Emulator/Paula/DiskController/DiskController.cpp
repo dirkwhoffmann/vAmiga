@@ -193,6 +193,8 @@ DiskController::_dump(Category category, std::ostream& os) const
         os << dec(syncCycle) << std::endl;
         os << tab("incoming");
         os << hex(incoming) << std::endl;
+        os << tab("dataReg");
+        os << hex(dataReg) << " (" << dec(dataRegCount) << ")" << std::endl;
         os << tab("fifo");
         os << hex(fifo) << " (" << dec(fifoCount) << ")" << std::endl;
         os << tab("dsklen");
@@ -306,18 +308,6 @@ DiskController::writeFifo(u8 byte)
     fifoCount++;
 }
 
-bool
-DiskController::compareFifo(u16 word) const
-{
-    if (fifoHasWord()) {
-        
-        for (isize i = 0; i < 8; i++) {
-            if ((fifo >> i & 0xFFFF) == word) return true;
-        }
-    }
-    return false;
-}
-
 void
 DiskController::transferByte()
 {
@@ -350,13 +340,27 @@ DiskController::readByte()
     // Read a byte from the drive
     incoming = drive ? drive->readByteAndRotate() : 0;
 
-    // Write byte into the FIFO buffer
-    writeFifo((u8)incoming);
+    // Set the byte ready flag (shows up in DSKBYT)
     incoming |= 0x8000;
 
+    // Process all bits
+    for (isize i = 7; i >= 0; i--) readBit(GET_BIT(incoming, i));
+}
+
+void
+DiskController::readBit(bool bit)
+{
+    dataReg = (u16)((u32)dataReg << 1 | bit);
+
+    // Fill the FIFO if we've received an entire byte
+    if (++dataRegCount == 8) {
+
+        writeFifo((u8)dataReg);
+        dataRegCount = 0;
+    }
+
     // Check if we've reached a SYNC mark
-    if (compareFifo(dsksync) ||
-        (config.autoDskSync && syncCounter++ > 20000)) {
+    if (dataReg == dsksync || (config.autoDskSync && syncCounter++ > 8*20000)) {
 
         // Save time stamp
         syncCycle = agnus.clock;
@@ -366,10 +370,11 @@ DiskController::readByte()
         paula.raiseIrq(INT_DSKSYN);
 
         // Enable DMA if the controller was waiting for it
-        if (state == DRIVE_DMA_WAIT)
-        {
-            setState(DRIVE_DMA_READ);
+        if (state == DRIVE_DMA_WAIT) {
+
+            dataRegCount = 0;
             clearFifo();
+            setState(DRIVE_DMA_READ);
         }
 
         // Reset the watchdog counter

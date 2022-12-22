@@ -38,7 +38,7 @@ class DiskController : public SubComponent
      * implement the auto DSKSYNC feature which forces the DSKSYNC interrupt to
      * trigger even if no SYNC mark is present.
      */
-    i16 syncCounter = 0;
+    isize syncCounter = 0;
     
     // Used to synchronize the schedulign of the DSK_ROTATE event
     double dskEventDelay = 0;
@@ -52,10 +52,10 @@ class DiskController : public SubComponent
     u16 incoming;
 
     // Data register
-    // TODO u16 dataReg;
+    u16 dataReg;
 
-    // Number of bits in the data register
-    // TODO isize dataRegBits;
+    // Number of bits stored in the data register
+    u8 dataRegCount;
 
     /* The drive controller's FIFO buffer. On each DSK_ROTATE event, a byte is
      * read from the selected drive and put into this buffer. Each Disk DMA
@@ -137,6 +137,8 @@ private:
         << syncCounter
         << dskEventDelay
         << incoming
+        << dataReg
+        << dataRegCount
         << fifo
         << fifoCount
         << dsklen
@@ -279,22 +281,16 @@ private:
     // Writes a word into the FIFO buffer
     void writeFifo(u8 byte);
 
-    
-    // Returns true if the next word to read matches the specified value
-    bool compareFifo(u16 word) const;
-
     /* Emulates a data transfert between the selected drive and the FIFO
      * buffer. This function is executed periodically in serviceDiskEvent().
      * The exact operation is dependent of the current DMA state.
      */
     void transferByte();
 
-    // Called inside transferByte, depending on the current DMA state.
+    // Called inside transferByte, depending on the current DMA state
     void readByte();
     void writeByte();
-    /*
     void readBit(bool bit);
-    */
 
 
     //
