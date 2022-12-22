@@ -51,8 +51,16 @@ struct FloppyDriveTypeEnum : util::Reflection<FloppyDriveTypeEnum, FloppyDriveTy
 
 typedef struct
 {
+    // The drive model
     FloppyDriveType type;
-    
+
+    /* Revolutions per minute. A standard Amiga drive rotates with 300 rpm.
+     * Rotation speed can be measured with AmigaTestKit which analyzes the
+     * delay between consecutive index pulses. 300 rpm corresponds to an index
+     * pulse delay of 200 ms.
+     */
+    isize rpm;
+
     // Indicates whether mechanical delays should be emulated
     bool mechanicalDelays;
 

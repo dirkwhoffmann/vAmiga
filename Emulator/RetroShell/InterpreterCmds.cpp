@@ -568,7 +568,7 @@ Interpreter::initCommandShell(Command &root)
              "Configures the component");
 
     root.add({"paula", "dc", "set", "speed"}, { Arg::value },
-             "Configures the drive speed",
+             "Configures the data transfer speed",
              &RetroShell::exec <Token::dc, Token::speed>);
 
     root.add({"paula", "dc", "dsksync"},
@@ -801,7 +801,11 @@ Interpreter::initCommandShell(Command &root)
         root.add({df, "set", "model"}, { FloppyDriveTypeEnum::argList() },
                  "Selects the drive model",
                  &RetroShell::exec <Token::dfn, Token::set, Token::model>, i);
-        
+
+        root.add({df, "set", "rpm"}, { "rpm" },
+                 "Sets the disk rotation speed",
+                 &RetroShell::exec <Token::dc, Token::set, Token::rpm>);
+
         root.add({df, "set", "mechanics"}, { Arg::boolean },
                  "Enables or disables the emulation of mechanical delays",
                  &RetroShell::exec <Token::dfn, Token::set, Token::mechanics>, i);

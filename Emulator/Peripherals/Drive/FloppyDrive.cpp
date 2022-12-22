@@ -66,6 +66,7 @@ FloppyDrive::resetConfig()
     std::vector <Option> options = {
         
         OPT_DRIVE_TYPE,
+        OPT_DRIVE_RPM,
         OPT_EMULATE_MECHANICS,
         OPT_START_DELAY,
         OPT_STOP_DELAY,
@@ -89,6 +90,7 @@ FloppyDrive::getConfigItem(Option option) const
     switch (option) {
             
         case OPT_DRIVE_TYPE:          return (long)config.type;
+        case OPT_DRIVE_RPM:           return (long)config.rpm;
         case OPT_EMULATE_MECHANICS:   return (long)config.mechanicalDelays;
         case OPT_START_DELAY:         return (long)config.startDelay;
         case OPT_STOP_DELAY:          return (long)config.stopDelay;
@@ -120,6 +122,11 @@ FloppyDrive::setConfigItem(Option option, i64 value)
             }
             
             config.type = (FloppyDriveType)value;
+            return;
+
+        case OPT_DRIVE_RPM:
+
+            config.rpm = value;
             return;
 
         case OPT_EMULATE_MECHANICS:
@@ -201,6 +208,8 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         os << FloppyDriveTypeEnum::key(config.type) << std::endl;
         os << tab("Emulate mechanics");
         os << bol(config.mechanicalDelays) << std::endl;
+        os << tab("Revolutions per minute");
+        os << dec(config.rpm) << std::endl;
         os << tab("Start delay");
         os << dec(config.startDelay) << std::endl;
         os << tab("Stop delay");

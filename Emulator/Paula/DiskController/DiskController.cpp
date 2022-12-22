@@ -102,6 +102,7 @@ DiskController::setConfigItem(Option option, i64 value)
             scheduleFirstDiskEvent();
             return;
         }
+
         case OPT_AUTO_DSKSYNC:
             
             config.autoDskSync = value;

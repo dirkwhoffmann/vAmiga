@@ -523,6 +523,7 @@ Amiga::configure(Option option, i64 value)
             break;
 
         case OPT_DRIVE_TYPE:
+        case OPT_DRIVE_RPM:
         case OPT_EMULATE_MECHANICS:
         case OPT_START_DELAY:
         case OPT_STOP_DELAY:
@@ -688,6 +689,7 @@ Amiga::configure(Option option, long id, i64 value)
             break;
 
         case OPT_DRIVE_TYPE:
+        case OPT_DRIVE_RPM:
         case OPT_EMULATE_MECHANICS:
         case OPT_START_DELAY:
         case OPT_STOP_DELAY:

@@ -40,11 +40,46 @@ DiskController::scheduleFirstDiskEvent()
 void
 DiskController::scheduleNextDiskEvent()
 {
-    /* Advance the delay counter to achieve a disk rotation speed of 300rpm.
-     * Rotation speed can be measured with AmigaTestKit.adf which calculates
-     * the delay between consecutive index pulses. 300rpm corresponds to a
-     * index pulse delay of 200ms.
-     */
+    static constexpr double bytesPerTrack = 12668.0;
+
+    // How many revolutions per minute are we supposed to achieve?
+    FloppyDrive *drive = getSelectedDrive();
+    isize rpm = drive ? drive->config.rpm : 300;
+
+    // Compute the time span between two incoming bytes
+    double delay;
+
+    if (rpm) {
+
+        // Calculate the delay according to the desired rpm
+        delay = (SEC(1) * 60.0) / (double)rpm / bytesPerTrack;
+
+    } else {
+
+        // Use the value that was hard-coded in vAmiga up to version v2.2
+        delay = 8 * 55.98;
+    }
+
+    dskEventDelay += delay;
+    double rounded = round(dskEventDelay);
+    dskEventDelay -= rounded;
+
+    if (turboMode()) {
+        agnus.cancel<SLOT_DSK>();
+    } else {
+        agnus.scheduleRel<SLOT_DSK>(Cycle(rounded), DSK_ROTATE);
+    }
+}
+
+/*
+void
+DiskController::scheduleNextDiskEvent()
+{
+    // Advance the delay counter to achieve a disk rotation speed of 300rpm.
+    // Rotation speed can be measured with AmigaTestKit.adf which calculates
+    // the delay between consecutive index pulses. 300rpm corresponds to a
+    // index pulse delay of 200ms.
+
     dskEventDelay += 55.98;
     DMACycle rounded = DMACycle(round(dskEventDelay));
     dskEventDelay -= rounded;
@@ -55,5 +90,6 @@ DiskController::scheduleNextDiskEvent()
         agnus.scheduleRel<SLOT_DSK>(DMA_CYCLES(rounded), DSK_ROTATE);
     }
 }
+*/
 
 }

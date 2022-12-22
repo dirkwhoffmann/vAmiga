@@ -82,6 +82,7 @@ Defaults::Defaults()
     setFallback(OPT_LOCK_DSKSYNC, false);
     setFallback(OPT_AUTO_DSKSYNC, false);
     setFallback(OPT_DRIVE_TYPE, { 0, 1, 2, 3 }, DRIVE_DD_35);
+    setFallback(OPT_DRIVE_RPM, { 0, 1, 2, 3 }, 300);
     setFallback(OPT_EMULATE_MECHANICS, { 0, 1, 2, 3 }, true);
     setFallback(OPT_START_DELAY, { 0, 1, 2, 3 }, MSEC(380));
     setFallback(OPT_STOP_DELAY, { 0, 1, 2, 3 }, MSEC(80));

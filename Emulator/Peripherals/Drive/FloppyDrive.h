@@ -121,6 +121,7 @@ private:
         worker
 
         << config.type
+        << config.rpm
         << config.startDelay
         << config.stopDelay
         << config.stepDelay;

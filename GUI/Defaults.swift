@@ -845,6 +845,7 @@ extension DefaultsProxy {
         
         remove(.DRIVE_CONNECT, [0, 1, 2, 3])
         remove(.DRIVE_TYPE, [0, 1, 2, 3])
+        remove(.DRIVE_RPM, [0, 1, 2, 3])
         remove(.HDC_CONNECT, [0, 1, 2, 3])
         remove(.HDR_TYPE, [0, 1, 2, 3])
         remove(.SERIAL_DEVICE)
@@ -872,6 +873,11 @@ extension Configuration {
         defaults.set(.DRIVE_TYPE, 1, df1Type)
         defaults.set(.DRIVE_TYPE, 2, df2Type)
         defaults.set(.DRIVE_TYPE, 3, df3Type)
+
+        defaults.set(.DRIVE_RPM, 0, df0Rpm)
+        defaults.set(.DRIVE_RPM, 1, df1Rpm)
+        defaults.set(.DRIVE_RPM, 2, df2Rpm)
+        defaults.set(.DRIVE_RPM, 3, df3Rpm)
 
         defaults.set(.HDC_CONNECT, 0, hd0Connected)
         defaults.set(.HDC_CONNECT, 1, hd1Connected)
@@ -910,6 +916,11 @@ extension Configuration {
         df1Type = defaults.get(.DRIVE_TYPE, 1)
         df2Type = defaults.get(.DRIVE_TYPE, 2)
         df3Type = defaults.get(.DRIVE_TYPE, 3)
+
+        df0Rpm = defaults.get(.DRIVE_RPM, 0)
+        df1Rpm = defaults.get(.DRIVE_RPM, 1)
+        df2Rpm = defaults.get(.DRIVE_RPM, 2)
+        df3Rpm = defaults.get(.DRIVE_RPM, 3)
 
         hd0Connected = defaults.get(.HDC_CONNECT, 0) != 0
         hd1Connected = defaults.get(.HDC_CONNECT, 1) != 0

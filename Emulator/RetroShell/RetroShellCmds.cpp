@@ -942,14 +942,6 @@ RetroShell::exec <Token::dc, Token::config> (Arguments& argv, long param)
     dumpConfig(amiga.paula.diskController);
 }
 
-/*
-template <> void
-RetroShell::exec <Token::dc, Token::inspect> (Arguments& argv, long param)
-{
-    dumpConfig(amiga.paula.diskController);
-}
-*/
-
 template <> void
 RetroShell::exec <Token::dc, Token::speed> (Arguments& argv, long param)
 {
@@ -1063,6 +1055,18 @@ RetroShell::exec <Token::dfn, Token::set, Token::model> (Arguments& argv, long p
         amiga.configure(OPT_DRIVE_TYPE, param, num);
     } else {
         amiga.configure(OPT_DRIVE_TYPE, num);
+    }
+}
+
+template <> void
+RetroShell::exec <Token::dc, Token::set, Token::rpm> (Arguments& argv, long param)
+{
+    long num = util::parseNum(argv.front());
+
+    if (param >= 0 && param <= 3) {
+        amiga.configure(OPT_DRIVE_RPM, param, num);
+    } else {
+        amiga.configure(OPT_DRIVE_RPM, num);
     }
 }
 

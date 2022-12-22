@@ -34,7 +34,7 @@ enum class Token
     opacity, open, os, overclocking, palette, pan, partition, path,
     paula, pause, ptrdrops, poll, port, ports, power, press, process,
     processes, pull, pullup, raminitpattern, refresh, registers, regreset,
-    regression, release, reset, resource, resources, revision, right, rom,
+    regression, release, reset, resource, resources, revision, right, rom, rpm,
     rshell, rtc, run, sampling, saturation, save, saveroms, screenshot,
     searchpath, serial, server, set, setup, shakedetector, show, slow,
     slowramdelay, slowrammirror, source, speed, sprites, start, status, step,

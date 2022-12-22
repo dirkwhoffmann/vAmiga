@@ -73,6 +73,7 @@ enum_long(OPT)
 
     // Floppy Drives
     OPT_DRIVE_TYPE,
+    OPT_DRIVE_RPM,
     OPT_EMULATE_MECHANICS,
     OPT_START_DELAY,
     OPT_STOP_DELAY,
@@ -200,6 +201,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_AUTO_DSKSYNC:          return "AUTO_DSKSYNC";
 
             case OPT_DRIVE_TYPE:            return "DRIVE_TYPE";
+            case OPT_DRIVE_RPM:             return "DRIVE_RPM";
             case OPT_EMULATE_MECHANICS:     return "EMULATE_MECHANICS";
             case OPT_START_DELAY:           return "START_DELAY";
             case OPT_STOP_DELAY:            return "STOP_DELAY";
