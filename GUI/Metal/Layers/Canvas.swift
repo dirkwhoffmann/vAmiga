@@ -445,7 +445,6 @@ class Canvas: Layer {
         encoder.setFragmentTexture(bloomTextureG, index: 2)
         encoder.setFragmentTexture(bloomTextureB, index: 3)
         encoder.setFragmentTexture(ressourceManager.dotMask, index: 4)
-        // encoder.setFragmentTexture(framebufTexture, index: 5)
 
         // Select the texture sampler
         if renderer.shaderOptions.blur > 0 {

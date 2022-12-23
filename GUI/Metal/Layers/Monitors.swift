@@ -174,7 +174,7 @@ class Monitors: Layer {
     //
     
     func render(_ encoder: MTLRenderCommandEncoder) {
-        
+
         for i in 0 ..< monitors.count {
             
             if !amiga.paused { monitors[i].animate() }

@@ -357,19 +357,52 @@ class BarChart: ActivityMonitor {
             updateBars()
         }
     }
+
+    func setupFragmentShader(encoder: MTLRenderCommandEncoder) {
+
+        var shaderOptions = ShaderOptions(
+
+            blur: 0,
+            blurRadius: 0,
+            bloom: 0,
+            bloomRadius: 0,
+            bloomBrightness: 0,
+            bloomWeight: 0,
+            flicker: 0,
+            flickerWeight: 0,
+            dotMask: 0,
+            dotMaskBrightness: 0,
+            scanlines: 0,
+            scanlineBrightness: 0,
+            scanlineWeight: 0,
+            disalignment: 0,
+            disalignmentH: 0,
+            disalignmentV: 0
+        )
+
+        // Setup textures
+        encoder.setFragmentTexture(bgTexture, index: 0)
+
+        // Setup uniforms
+        encoder.setFragmentBytes(&shaderOptions,
+                                 length: MemoryLayout<ShaderOptions>.stride,
+                                 index: 0)
+    }
     
     override func draw(_ encoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) {
                 
         if hidden { return }
 
         let shift = Renderer.translationMatrix(x: xOffset, y: 0.0, z: 0.0)
-        
+
+        // Configure the fragment shader
+        setupFragmentShader(encoder: encoder)
+
         // Draw background
         var uniforms = VertexUniforms(mvp: matrix * self.matrix)
         encoder.setVertexBytes(&uniforms,
                                length: MemoryLayout<VertexUniforms>.stride,
                                index: 1)
-        encoder.setFragmentTexture(bgTexture, index: 0)
         bgRect!.drawPrimitives(encoder)
         
         // Draw bars
