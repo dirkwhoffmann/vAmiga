@@ -253,6 +253,12 @@
                                     <action selector="stepOverAction:" target="-1" id="WJR-b6-K0I"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="Nni-8k-nVh"/>
+                            <menuItem title="Toggle Warp Mode" keyEquivalent="W" id="UwY-4X-reL">
+                                <connections>
+                                    <action selector="warpAction:" target="-1" id="Oh0-IU-v3E"/>
+                                </connections>
+                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>

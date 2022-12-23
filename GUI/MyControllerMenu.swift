@@ -360,6 +360,18 @@ extension MyController: NSMenuItemValidation {
         }
     }
 
+    @IBAction func warpAction(_ sender: Any!) {
+
+        switch pref.warpMode {
+        case .auto: pref.warpMode = .off
+        case .off: pref.warpMode = .on
+        case .on: pref.warpMode = .auto
+        }
+
+        refreshStatusBar()
+        myAppDelegate.prefController?.refresh()
+    }
+    
     //
     // Action methods (View menu)
     //

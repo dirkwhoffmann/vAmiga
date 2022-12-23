@@ -266,17 +266,6 @@ extension MyController {
     //
     // Action methods
     //
-    
-    @IBAction func warpAction(_ sender: Any!) {
-                
-        switch pref.warpMode {
-        case .auto: pref.warpMode = .off
-        case .off: pref.warpMode = .on
-        case .on: pref.warpMode = .auto
-        }
-        
-        refreshStatusBar()
-    }
 
     @IBAction func activityTypeAction(_ sender: NSPopUpButton!) {
         
