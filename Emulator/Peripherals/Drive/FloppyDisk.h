@@ -152,6 +152,11 @@ private:
     bool isValidHeadPos(Track t, isize offset) const;
     bool isValidHeadPos(Cylinder c, Head h, isize offset) const;
 
+    // Computes a debug checksum for a single track or the entire disk
+    u64 checksum() const;
+    u64 checksum(Track t) const;
+    u64 checksum(Cylinder c, Head h) const;
+
 
     //
     // Accessing disk parameters
@@ -197,7 +202,7 @@ public:
     
     
     //
-    // Erasing disks
+    // Erasing
     //
     
 public:

@@ -92,6 +92,30 @@ FloppyDisk::isValidHeadPos(Cylinder c, Head h, isize offset) const
     return isValidCylinderNr(c) && isValidHeadNr(h) && offset >= 0 && offset < 8 * length.cylinder[c][h];
 }
 
+u64
+FloppyDisk::checksum() const
+{
+    auto result = util::fnvInit64();
+
+    for (Track t = 0; t < numTracks(); t++) {
+        result = util::fnvIt64(result, checksum(t));
+    }
+
+    return result;
+}
+
+u64
+FloppyDisk::checksum(Track t) const
+{
+    return util::fnv64(data.track[t], length.track[t]);
+}
+
+u64
+FloppyDisk::checksum(Cylinder c, Head h) const
+{
+    return checksum(c * numHeads() + h);
+}
+
 u8
 FloppyDisk::readBit(Track t, isize offset) const
 {

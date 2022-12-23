@@ -737,26 +737,6 @@ HardDrive::moveHead(isize c, isize h, isize s)
     }
 }
 
-/*
- bool
- HardDrive::persistDisk() throws
- {
- if (!backup.empty()) try {
-
- auto hdf = HDFFile(*this);
- hdf.writeToFile(backup);
- msg("HD%ld persisted at %s\n", nr, backup.c_str());
-
- } catch (...) {
-
- warn("Failed to persist HD%ld at %s\n", nr, backup.c_str());
- return false;
- }
-
- return true;
- }
- */
-
 void
 HardDrive::writeToFile(const string &path) throws
 {
