@@ -342,6 +342,7 @@ Amiga::getConfigItem(Option option, long id) const
             return paula.diskController.getConfigItem(option, id);
             
         case OPT_DRIVE_TYPE:
+        case OPT_DRIVE_RPM:
         case OPT_EMULATE_MECHANICS:
         case OPT_START_DELAY:
         case OPT_STOP_DELAY:
