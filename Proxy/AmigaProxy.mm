@@ -1358,10 +1358,12 @@ using namespace vamiga::moira;
     return [self drive]->currentOffset();
 }
 
+/*
 - (u64)fnv
 {
     return [self drive]->fnv();
 }
+*/
 
 - (BOOL)hasDisk
 {

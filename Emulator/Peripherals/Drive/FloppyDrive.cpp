@@ -287,6 +287,20 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         os << tab("readyToStepDown()");
         os << bol(readyToStepDown()) << std::endl;
     }
+
+    if (category == Category::Disk) {
+
+        if (hasDisk()) {
+
+            disk->_dump(Category::Inspection, os);
+            os << std::endl;
+            disk->_dump(Category::Debug, os);
+
+        } else {
+
+            os << "No disk in drive" << std::endl;
+        }
+    }
 }
 
 isize
@@ -371,12 +385,6 @@ bool
 FloppyDrive::isConnected() const
 {
     return diskController.getConfigItem(OPT_DRIVE_CONNECT, nr);
-}
-
-u64
-FloppyDrive::fnv() const
-{
-    return disk ? disk->getFnv() : 0;
 }
 
 bool

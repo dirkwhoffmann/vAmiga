@@ -634,6 +634,12 @@ RetroShell::exec <Token::dfn, Token::debug> (Arguments& argv, long param)
     dumpDetails(*amiga.df[param]);
 }
 
+template <> void
+RetroShell::exec <Token::dfn, Token::disk> (Arguments& argv, long param)
+{
+    dump(*amiga.df[param], Category::Disk);
+}
+
 
 //
 // Hd0, Hd1, Hd2, Hd3

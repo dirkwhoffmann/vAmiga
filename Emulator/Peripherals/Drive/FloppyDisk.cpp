@@ -57,7 +57,7 @@ FloppyDisk::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == Category::Debug) {
+    if (category == Category::Inspection) {
         
         os << tab("Type");
         os << DiameterEnum::key(diameter) << std::endl;
@@ -69,14 +69,29 @@ FloppyDisk::_dump(Category category, std::ostream& os) const
         os << dec(numHeads()) << std::endl;
         os << tab("numTracks()");
         os << dec(numTracks()) << std::endl;
-        os << tab("Track 0 length");
-        os << dec(length.track[0]) << std::endl;
         os << tab("Write protected");
         os << bol(writeProtected) << std::endl;
         os << tab("Modified");
         os << bol(modified) << std::endl;
-        os << tab("FNV checksum");
-        os << hex(fnv) << " / " << dec(fnv) << std::endl;
+    }
+
+    if (category == Category::Debug) {
+
+        isize oldlen = length.track[0];
+
+        for (isize i = 0, oldi = 0; i <= numTracks(); i++) {
+
+            isize newlen = i < numTracks() ? length.track[i] : -1;
+
+            if (oldlen != newlen) {
+
+                os << tab("Track " + std::to_string(oldi) + " - " + std::to_string(i));
+                os << dec(oldlen) << " Bytes" << std::endl;
+
+                oldlen = newlen;
+                oldi = i;
+            }
+        }
     }
 }
 

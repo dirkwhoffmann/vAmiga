@@ -170,7 +170,6 @@ public:
     Head currentHead() const override { return head.head; }
     isize currentOffset() const override { return head.offset; }
 
-    u64 fnv() const override;
     bool hasDisk() const override;
     bool hasModifiedDisk() const override;
     bool hasProtectedDisk() const override;

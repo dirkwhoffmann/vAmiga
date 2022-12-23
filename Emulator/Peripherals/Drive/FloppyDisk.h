@@ -137,8 +137,7 @@ private:
         << density
         << data.raw
         << writeProtected
-        << modified
-        << fnv;
+        << modified;
     }
     
 
@@ -176,9 +175,7 @@ public:
     
     bool isModified() const { return modified; }
     void setModified(bool value) { modified = value; }
-    
-    u64 getFnv() const { return fnv; }
-    
+        
     
     //
     // Reading and writing

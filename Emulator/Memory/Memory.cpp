@@ -94,7 +94,9 @@ Memory::_dump(Category category, std::ostream& os) const
                 os << util::hex((u8)(oldi)) << "0000" << " - ";
                 os << util::hex((u8)(i - 1)) << "ffff : ";
                 os << MemorySourceEnum::key(oldsrc) << std::endl;
-                oldsrc = newsrc; oldi = i;
+
+                oldsrc = newsrc;
+                oldi = i;
             }
         }
     }

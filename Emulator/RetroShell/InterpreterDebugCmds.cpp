@@ -531,11 +531,6 @@ Interpreter::initDebugShell(Command &root)
 
         string df = "df" + std::to_string(i);
 
-        /*
-        root.add({"df" + std::to_string(i)},
-                 "Floppy drive " + std::to_string(i));
-        */
-
         root.add({df, ""},
                  "Inspects the internal state",
                  &RetroShell::exec <Token::dfn>, i);
@@ -543,6 +538,10 @@ Interpreter::initDebugShell(Command &root)
         root.add({df, "debug"},
                  "Displays additional debug information",
                  &RetroShell::exec <Token::dfn, Token::debug>, i);
+
+        root.add({df, "disk"},
+                 "Inspects the inserted disk",
+                 &RetroShell::exec <Token::dfn, Token::disk>, i);
     }
 
     //

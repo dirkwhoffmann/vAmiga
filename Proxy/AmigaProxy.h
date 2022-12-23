@@ -501,16 +501,9 @@
 @property (readonly) BOOL hasFFmpeg;
 @property (readonly) BOOL recording;
 @property (readonly) double duration;
-/*
-@property (readonly) NSInteger x1;
-@property (readonly) NSInteger y1;
-@property (readonly) NSInteger x2;
-@property (readonly) NSInteger y2;
-*/
 @property (readonly) NSInteger frameRate;
 @property (readonly) NSInteger bitRate;
 @property (readonly) NSInteger sampleRate;
-// - (u32 *)getGpuData:(NSSize)size;
 
 - (void)startRecording:(NSRect)rect
                bitRate:(NSInteger)rate
@@ -662,7 +655,6 @@
 @property (readonly) NSInteger currentCyl;
 @property (readonly) NSInteger currentHead;
 @property (readonly) NSInteger currentOffset;
-@property (readonly) u64 fnv;
 
 @property (readonly) BOOL hasDisk;
 @property (readonly) BOOL hasModifiedDisk;
