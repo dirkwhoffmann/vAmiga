@@ -10,14 +10,7 @@
 import Foundation
 
 class DropZone: Layer {
-    
-    class func createImage(_ name: String, label: String) -> NSImage {
-        
-        let img = NSImage(named: name)!.copy() as! NSImage
-        img.imprint(text: label, x: 235, y: 330, fontSize: 100, tint: "black")
-        return img
-    }
-    
+
     let controller: MyController
     
     var window: NSWindow { return controller.window! }
@@ -26,6 +19,7 @@ class DropZone: Layer {
     var mydocument: MyDocument { return controller.mydocument! }
     
     var zones = [NSImageView(), NSImageView(), NSImageView(), NSImageView()]
+    var labels = [NSImageView(), NSImageView(), NSImageView(), NSImageView()]
     var ul = [NSPoint(x: 0, y: 0), NSPoint(x: 0, y: 0),
               NSPoint(x: 0, y: 0), NSPoint(x: 0, y: 0)]
     var lr = [NSPoint(x: 0, y: 0), NSPoint(x: 0, y: 0),
@@ -45,53 +39,14 @@ class DropZone: Layer {
     var type: FileType?
     
     // Image pool
-    var dfDisabled: [NSImage] =
-    [ createImage("dropZoneDisabled", label: "DF0"),
-      createImage("dropZoneDisabled", label: "DF1"),
-      createImage("dropZoneDisabled", label: "DF2"),
-      createImage("dropZoneDisabled", label: "DF3") ]
-    
-    var dfEmpty: [NSImage] =
-    [ createImage("dropZoneEmpty", label: "DF0"),
-      createImage("dropZoneEmpty", label: "DF1"),
-      createImage("dropZoneEmpty", label: "DF2"),
-      createImage("dropZoneEmpty", label: "DF3") ]
-
-    var dfInUse: [NSImage] =
-    [ createImage("dropZoneFloppy1", label: "DF0"),
-      createImage("dropZoneFloppy1", label: "DF1"),
-      createImage("dropZoneFloppy1", label: "DF2"),
-      createImage("dropZoneFloppy1", label: "DF3") ]
-
-    var dfSelected: [NSImage] =
-    [ createImage("dropZoneFloppy2", label: "DF0"),
-      createImage("dropZoneFloppy2", label: "DF1"),
-      createImage("dropZoneFloppy2", label: "DF2"),
-      createImage("dropZoneFloppy2", label: "DF3") ]
-
-    var hdDisabled: [NSImage] =
-    [ createImage("dropZoneDisabled", label: "HD0"),
-      createImage("dropZoneDisabled", label: "HD1"),
-      createImage("dropZoneDisabled", label: "HD2"),
-      createImage("dropZoneDisabled", label: "HD3") ]
-        
-    var hdEmpty: [NSImage] =
-    [ createImage("dropZoneEmpty", label: "HD0"),
-      createImage("dropZoneEmpty", label: "HD1"),
-      createImage("dropZoneEmpty", label: "HD2"),
-      createImage("dropZoneEmpty", label: "HD3") ]
-
-    var hdInUse: [NSImage] =
-    [ createImage("dropZoneHdr1", label: "HD0"),
-      createImage("dropZoneHdr1", label: "HD1"),
-      createImage("dropZoneHdr1", label: "HD2"),
-      createImage("dropZoneHdr1", label: "HD3") ]
-
-    var hdSelected: [NSImage] =
-    [ createImage("dropZoneHdr2", label: "HD0"),
-      createImage("dropZoneHdr2", label: "HD1"),
-      createImage("dropZoneHdr2", label: "HD2"),
-      createImage("dropZoneHdr2", label: "HD3") ]
+    var dfDisabled: NSImage { return NSImage(named: "dropZoneDisabled")! }
+    var dfEmpty: NSImage { return NSImage(named: "dropZoneEmpty")! }
+    var dfInUse: NSImage { return NSImage(named: "dropZoneFloppy1")! }
+    var dfSelected: NSImage { return NSImage(named: "dropZoneFloppy2")! }
+    var hdDisabled: NSImage { return NSImage(named: "dropZoneDisabled")! }
+    var hdEmpty: NSImage { return NSImage(named: "dropZoneEmpty")! }
+    var hdInUse: NSImage { return NSImage(named: "dropZoneHdr1")! }
+    var hdSelected: NSImage { return NSImage(named: "dropZoneHdr2")! }
 
     //
     // Initializing
@@ -102,21 +57,30 @@ class DropZone: Layer {
         controller = renderer.parent
         
         for i in 0...3 { zones[i].unregisterDraggedTypes() }
+        for i in 0...3 { labels[i].unregisterDraggedTypes() }
         super.init(renderer: renderer)
         resize()
     }
 
-    private func image(zone: Int) -> NSImage {
+    private func zoneImage(zone: Int) -> NSImage? {
 
         if !enabled[zone] {
-            return type == .HDF ? hdDisabled[zone] : dfDisabled[zone]
+            return type == .HDF ? hdDisabled : dfDisabled
         } else if amiga.df(zone)!.hasDisk {
-            return type == .HDF ? hdInUse[zone] : dfInUse[zone]
+            return type == .HDF ? hdInUse : dfInUse
         } else {
-            return type == .HDF ? hdEmpty[zone] : dfEmpty[zone]
+            return type == .HDF ? hdEmpty : dfEmpty
         }
     }
-    
+
+    private func labelImage(zone: Int) -> NSImage? {
+
+        var name = "drop" + (type == .HDF ? "Hd" : "Df") + "\(zone)"
+        if !enabled[zone] { name += "_disabled" }
+
+        return NSImage(named: name)!
+    }
+
     func open(type: FileType, delay: Double) {
 
         self.type = type
@@ -135,8 +99,9 @@ class DropZone: Layer {
         }
                 
         // Assign zone images
-        for i in 0...3 { zones[i].image = image(zone: i) }
-        
+        for i in 0...3 { zones[i].image = zoneImage(zone: i) }
+        for i in 0...3 { labels[i].image = labelImage(zone: i) }
+
         // Hide all drop zones if none is enabled
         hideAll = !enabled[0] && !enabled[1] && !enabled[2] && !enabled[3]
         
@@ -178,14 +143,14 @@ class DropZone: Layer {
             if isIn && !inside[i] {
                 
                 inside[i] = true
-                zones[i].image = type == .HDF ? hdSelected[i] : dfSelected[i]
+                zones[i].image = type == .HDF ? hdSelected : dfSelected
                 targetAlpha[i] = DropZone.selected
             }
 
             if !isIn && inside[i] {
                 
                 inside[i] = false
-                zones[i].image = image(zone: i)
+                zones[i].image = zoneImage(zone: i)
                 targetAlpha[i] = DropZone.unselected
             }
         }
@@ -201,9 +166,11 @@ class DropZone: Layer {
         
             if alpha.current > 0 && zones[i].superview == nil {
                 contentView.addSubview(zones[i])
+                contentView.addSubview(labels[i])
             }
             if alpha.current == 0 && zones[i].superview != nil {
                 zones[i].removeFromSuperview()
+                labels[i].removeFromSuperview()
             }
         }
         
@@ -251,38 +218,52 @@ class DropZone: Layer {
                 
                 currentAlpha[i] += delta
                 zones[i].alphaValue = CGFloat(currentAlpha[i])
+                labels[i].alphaValue = CGFloat(currentAlpha[i])
             }
         }
     }
     
     func resize() {
-                          
+
         let size = controller.metal.frame.size
         let origin = controller.metal.frame.origin
         let midx = origin.x + (size.width / 2)
 
-        let w = size.width / 6
-        let h = w * 1.2
-        let y = size.height + origin.y - 24 - h * CGFloat(alpha.current)
-        let margin = w / 8
-        let iconSize = NSSize(width: w, height: h)
+        // Compute the drop zone size
+        let zw = size.width / 6
+        let zh = zw * 0.9
+        let zy = size.height + origin.y - 24 - zh * CGFloat(alpha.current)
+        let margin = zw / 8
+        let zoneSize = NSSize(width: zw, height: zh)
 
-        ul[0] = CGPoint(x: midx - 2 * w - 1.5 * margin, y: y)
-        lr[0] = CGPoint(x: ul[0].x + w, y: ul[0].y + h)
+        // Compute the drop label size
+        let lw = zw
+        let lh = lw / 4
+        let ly = zy - lh - 0.5 * margin
+        let labelSize = NSSize(width: lw, height: lh)
 
-        ul[1] = CGPoint(x: midx - w - 0.5 * margin, y: y)
-        lr[1] = CGPoint(x: ul[1].x + w, y: ul[1].y + h)
+        // Compute the drop zone bounding boxes
+        ul[0] = CGPoint(x: midx - 2 * zw - 1.5 * margin, y: zy)
+        lr[0] = CGPoint(x: ul[0].x + zw, y: ul[0].y + zh)
 
-        ul[2] = CGPoint(x: midx + 0.5 * margin, y: y)
-        lr[2] = CGPoint(x: ul[2].x + w, y: ul[2].y + h)
+        ul[1] = CGPoint(x: midx - zw - 0.5 * margin, y: zy)
+        lr[1] = CGPoint(x: ul[1].x + zw, y: ul[1].y + zh)
 
-        ul[3] = CGPoint(x: midx + w + 1.5 * margin, y: y)
-        lr[3] = CGPoint(x: ul[3].x + w, y: ul[3].y + h)
+        ul[2] = CGPoint(x: midx + 0.5 * margin, y: zy)
+        lr[2] = CGPoint(x: ul[2].x + zw, y: ul[2].y + zh)
+
+        ul[3] = CGPoint(x: midx + zw + 1.5 * margin, y: zy)
+        lr[3] = CGPoint(x: ul[3].x + zw, y: ul[3].y + zh)
 
         for i in 0...3 {
 
-            zones[i].setFrameSize(iconSize)
+            zones[i].imageScaling = .scaleAxesIndependently
+            zones[i].setFrameSize(zoneSize)
             zones[i].frame.origin = ul[i]
+
+            labels[i].imageScaling = .scaleAxesIndependently
+            labels[i].setFrameSize(labelSize)
+            labels[i].frame.origin = CGPoint(x: ul[i].x, y: ly)
         }
     }
 }
