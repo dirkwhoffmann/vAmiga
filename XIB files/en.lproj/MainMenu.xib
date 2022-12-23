@@ -315,6 +315,13 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="i1a-9I-H6M"/>
+                            <menuItem title="Control Warp Mode with Caps Lock Key" id="QzJ-1p-Opa">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="mapCapsLockWarpAction:" target="-1" id="vaE-LH-iP0"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="uWl-cD-ldc"/>
                             <menuItem title="Reset Keyboard Handler" id="8aX-Ro-7wg">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>

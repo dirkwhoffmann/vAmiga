@@ -74,6 +74,9 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.mapRightCmdKeyAction(_:)):
             item.state = myAppDelegate.mapRightCmdKey ? .on : .off
             return true
+        case #selector(MyController.mapCapsLockWarpAction(_:)):
+            item.state = myAppDelegate.mapCapsLockWarp ? .on : .off
+            return true
 
             // Df<n> menu
         case #selector(MyController.insertRecentDiskAction(_:)):
@@ -412,6 +415,12 @@ extension MyController: NSMenuItemValidation {
     @IBAction func mapRightCmdKeyAction(_ sender: NSMenuItem!) {
 
         myAppDelegate.mapRightCmdKey = !myAppDelegate.mapRightCmdKey
+        refreshStatusBar()
+    }
+
+    @IBAction func mapCapsLockWarpAction(_ sender: NSMenuItem!) {
+
+        myAppDelegate.mapCapsLockWarp = !myAppDelegate.mapCapsLockWarp
         refreshStatusBar()
     }
 

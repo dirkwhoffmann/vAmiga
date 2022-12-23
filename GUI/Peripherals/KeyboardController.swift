@@ -24,7 +24,8 @@ class KeyboardController: NSObject {
     var leftControl = false, rightControl = false
     var leftOption  = false, rightOption  = false
     var leftCommand = false, rightCommand = false
-    
+    var capsLock    = false
+
     // Mapping from Unicode scalars to keycodes (used for auto-typing)
     var symKeyMap: [UnicodeScalar: UInt16] = [:]
     var symKeyMapShifted: [UnicodeScalar: UInt16] = [:]
@@ -86,7 +87,7 @@ class KeyboardController: NSObject {
 
         // Determine the pressed or released key
         switch Int(event.keyCode) {
-            
+
         case kVK_Shift:
             leftShift = event.modifierFlags.contains(.shift) ? !leftShift : false
             leftShift ? keyDown(with: MacKey.shift) : keyUp(with: MacKey.shift)
@@ -120,6 +121,10 @@ class KeyboardController: NSObject {
             rightCommand = event.modifierFlags.contains(.command) ? !rightCommand : false
             myApp.disableCmdKey = rightCommand
             rightCommand ? keyDown(with: MacKey.rightCommand) : keyUp(with: MacKey.rightCommand)
+
+        case kVK_CapsLock where myAppDelegate.mapCapsLockWarp:
+            capsLock = event.modifierFlags.contains(.capsLock)
+            capsLock ? capsLockDown() : capsLockUp()
 
         default:
             break
@@ -166,6 +171,19 @@ class KeyboardController: NSObject {
         let macKey = MacKey(keyCode: keyCode)
         if let amigaKey = macKey.amigaKeyCode { keyboard.releaseKey(amigaKey) }
         parent.virtualKeyboard?.refreshIfVisible()
+    }
+
+    func capsLockDown() {
+
+        print("Caps lock pressed")
+        // parent.amiga.warpMode = true
+        pref.warpMode = .on
+    }
+
+    func capsLockUp() {
+
+        print("Caps lock released")
+        pref.warpMode = .off
     }
 
     func autoTypeAsync(_ string: String, completion: (() -> Void)? = nil) {

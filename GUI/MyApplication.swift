@@ -74,9 +74,12 @@ class MyApplication: NSApplication {
     // Replace the old document controller by instantiating a custom controller
     let myDocumentController = MyDocumentController()
 
-    // Indicates if Cmd keys should be mapped to Amiga keys
+    // Indicates if the Command keys should be mapped to the Amiga keys
     var mapLeftCmdKey = false
     var mapRightCmdKey = false
+
+    // Indicates if the CapsLock key should control warp mode
+    var mapCapsLockWarp = false
 
     // Preferences
     var pref: Preferences!

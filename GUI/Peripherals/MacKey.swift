@@ -267,4 +267,5 @@ extension MacKey {
     static let rightControl = MacKey(keyCode: kVK_RightControl)
     static let command      = MacKey(keyCode: kVK_Command)
     static let rightCommand = MacKey(keyCode: kVK_RightCommand)
+    static let capsLock     = MacKey(keyCode: kVK_CapsLock)
 }
