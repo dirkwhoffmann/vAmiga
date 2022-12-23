@@ -608,7 +608,7 @@ void
 FloppyDrive::writeByte(u8 value)
 {
     if (disk) {
-        disk->writeByte(value, head.cylinder, head.head, head.offset);
+        disk->writeByte(head.cylinder, head.head, head.offset, value);
     }
 }
 

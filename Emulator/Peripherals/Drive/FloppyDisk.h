@@ -141,7 +141,18 @@ private:
         << fnv;
     }
     
-    
+
+    //
+    // Performing sanity checks
+    //
+
+    static bool isValidTrackNr(isize value) { return value >= 0 && value < 168; }
+    static bool isValidCylinderNr(isize value) { return value >= 0 && value < 84; }
+    static bool isValidHeadNr(isize value) { return value >= 0 && value < 2; }
+    bool isValidHeadPos(Track t, isize offset) const;
+    bool isValidHeadPos(Cylinder c, Head h, isize offset) const;
+
+
     //
     // Accessing disk parameters
     //
@@ -167,14 +178,22 @@ public:
     //
     // Reading and writing
     //
-    
+
+    // Reads a bit from disk
+    u8 readBit(Track t, isize offset) const;
+    u8 readBit(Cylinder c, Head h, isize offset) const;
+
+    // Writes a bit to disk
+    void writeBit(Track t, isize offset, bool value);
+    void writeBit(Cylinder c, Head h, isize offset, bool value);
+
     // Reads a byte from disk
     u8 readByte(Track t, isize offset) const;
     u8 readByte(Cylinder c, Head h, isize offset) const;
     
     // Writes a byte to disk
-    void writeByte(u8 value, Track t, isize offset);
-    void writeByte(u8 value, Cylinder c, Head h, isize offset);
+    void writeByte(Track t, isize offset, u8 value);
+    void writeByte(Cylinder c, Head h, isize offset, u8 value);
     
     
     //

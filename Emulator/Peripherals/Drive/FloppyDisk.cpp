@@ -80,6 +80,58 @@ FloppyDisk::_dump(Category category, std::ostream& os) const
     }
 }
 
+bool
+FloppyDisk::isValidHeadPos(Track t, isize offset) const
+{
+    return isValidTrackNr(t) && offset >= 0 && offset < 8 * length.track[t];
+}
+
+bool
+FloppyDisk::isValidHeadPos(Cylinder c, Head h, isize offset) const
+{
+    return isValidCylinderNr(c) && isValidHeadNr(h) && offset >= 0 && offset < 8 * length.cylinder[c][h];
+}
+
+u8
+FloppyDisk::readBit(Track t, isize offset) const
+{
+    assert(isValidHeadPos(t, offset));
+
+    return (data.track[t][offset / 8] & (0x80 >> (offset & 7))) != 0;
+}
+
+u8
+FloppyDisk::readBit(Cylinder c, Head h, isize offset) const
+{
+    assert(isValidHeadPos(c, h, offset));
+
+    return (data.cylinder[c][h][offset / 8] & (0x80 >> (offset & 7))) != 0;
+}
+
+void
+FloppyDisk::writeBit(Track t, isize offset, bool value) {
+
+    assert(isValidHeadPos(t, offset));
+
+    if (value) {
+        data.track[t][offset / 8] |= (0x0080 >> (offset & 7));
+    } else {
+        data.track[t][offset / 8] &= (0xFF7F >> (offset & 7));
+    }
+}
+
+void
+FloppyDisk::writeBit(Cylinder c, Head h, isize offset, bool value) {
+
+    assert(isValidHeadPos(c, h, offset));
+
+    if (value) {
+        data.cylinder[h][c][offset / 8] |= (0x0080 >> (offset & 7));
+    } else {
+        data.cylinder[h][c][offset / 8] &= (0xFF7F >> (offset & 7));
+    }
+}
+
 u8
 FloppyDisk::readByte(Track t, isize offset) const
 {
@@ -100,7 +152,7 @@ FloppyDisk::readByte(Cylinder c, Head h, isize offset) const
 }
 
 void
-FloppyDisk::writeByte(u8 value, Track t, isize offset)
+FloppyDisk::writeByte(Track t, isize offset, u8 value)
 {
     assert(t < numTracks());
     assert(offset < length.track[t]);
@@ -110,7 +162,7 @@ FloppyDisk::writeByte(u8 value, Track t, isize offset)
 }
 
 void
-FloppyDisk::writeByte(u8 value, Cylinder c, Head h, isize offset)
+FloppyDisk::writeByte(Cylinder c, Head h, isize offset, u8 value)
 {
     assert(c < numCyls());
     assert(h < numHeads());
