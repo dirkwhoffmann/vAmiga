@@ -251,7 +251,6 @@ Muxer::setSampleRate(double hz)
 {
     trace(AUD_DEBUG, "setSampleRate(%f)\n", hz);
 
-    sampleRate = hz;
     adjustSpeed();
 
     filterL.setSampleRate(hz);
@@ -261,7 +260,7 @@ Muxer::setSampleRate(double hz)
 void
 Muxer::adjustSpeed()
 {
-    cyclesPerSample = double(amiga.masterClockFrequency()) / sampleRate;
+    cyclesPerSample = double(amiga.masterClockFrequency()) / host.getSampleRate();
     assert(cyclesPerSample > 0);
 }
 
@@ -435,7 +434,7 @@ Muxer::handleBufferUnderflow()
         
         // Increase the sample rate based on what we've measured
         auto offPerSec = (stream.cap() / 2) / elapsedTime.asSeconds();
-        setSampleRate(getSampleRate() + (isize)offPerSec);
+        setSampleRate(host.getSampleRate() + (isize)offPerSec);
     }
 }
 
@@ -463,10 +462,7 @@ Muxer::handleBufferOverflow()
         
         // Decrease the sample rate based on what we've measured
         auto offPerSec = (stream.cap() / 2) / elapsedTime.asSeconds();
-        double newSampleRate = getSampleRate() - (isize)offPerSec;
-
-        debug(AUDBUF_DEBUG, "Changing sample rate to %f\n", newSampleRate);
-        setSampleRate(newSampleRate);
+        setSampleRate(host.getSampleRate() - (isize)offPerSec);
     }
 }
 

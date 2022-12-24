@@ -50,9 +50,6 @@ class Muxer : public SubComponent {
     
     // Underflow and overflow counters
     MuxerStats stats = {};
-
-    // Sample rate in Hz
-    double sampleRate = 0.0;
     
     // Master clock cycles per audio sample
     double cyclesPerSample = 0.0;
@@ -171,7 +168,7 @@ public:
     void setConfigItem(Option option, i64 value);
     void setConfigItem(Option option, long id, i64 value);
 
-    double getSampleRate() const { return sampleRate; }
+    // double getSampleRate() const { return sampleRate; }
     void setSampleRate(double hz);
 
     // Needs to be called when the sampling rate or the CPU speed changes
