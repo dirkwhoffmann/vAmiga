@@ -50,6 +50,7 @@
 #import <Cocoa/Cocoa.h>
 #import <MetalKit/MetalKit.h>
 
+
 //
 // Forward declarations
 //
@@ -75,6 +76,7 @@
 @class GuardsProxy;
 @class HardDriveProxy;
 @class HDFFileProxy;
+@class HostProxy;
 @class IMGFileProxy;
 @class JoystickProxy;
 @class KeyboardProxy;
@@ -91,6 +93,7 @@
 @class SerialPortProxy;
 @class SnapshotProxy;
 
+
 //
 // Exception wrapper
 //
@@ -105,6 +108,7 @@
 @property NSString *what;
 
 @end
+
 
 //
 // Base proxies
@@ -121,6 +125,21 @@
 @interface AmigaComponentProxy : Proxy { }
 
 @end
+
+
+//
+// Host
+//
+
+@interface HostProxy : AmigaComponentProxy {
+}
+
+@property double sampleRate;
+@property NSInteger refreshRate;
+@property NSSize frameBufferSize;
+
+@end
+
 
 //
 // Amiga
@@ -148,6 +167,7 @@
     HardDriveProxy *hd1;
     HardDriveProxy *hd2;
     HardDriveProxy *hd3;
+    HostProxy *host;
     KeyboardProxy *keyboard;
     MemProxy *mem;
     PaulaProxy *paula;
@@ -181,6 +201,7 @@
 @property (readonly, strong) HardDriveProxy *hd1;
 @property (readonly, strong) HardDriveProxy *hd2;
 @property (readonly, strong) HardDriveProxy *hd3;
+@property (readonly, strong) HostProxy *host;
 @property (readonly, strong) KeyboardProxy *keyboard;
 @property (readonly, strong) MemProxy *mem;
 @property (readonly, strong) PaulaProxy *paula;
@@ -198,8 +219,6 @@
 @property (readonly) AmigaInfo info;
 @property BOOL warpMode;
 @property BOOL debugMode;
-@property NSInteger hostRefreshRate;
-@property NSSize frameBufferSize;
 @property (readonly) NSInteger masterFrequency;
 @property (readonly) NSInteger cpuLoad;
 @property InspectionTarget inspectionTarget;
@@ -530,8 +549,10 @@
 @property (readonly) UARTInfo uartInfo;
 @property (readonly) MuxerStats muxerStats;
 
+/*
 - (double)sampleRate;
 - (void)setSampleRate:(double)rate;
+*/
 
 - (void)readMonoSamples:(float *)target size:(NSInteger)n;
 - (void)readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n;

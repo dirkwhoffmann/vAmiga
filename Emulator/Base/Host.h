@@ -18,6 +18,9 @@ namespace vamiga {
  */
 class Host : public SubComponent {
 
+    // Audio sample rate
+    double sampleRate = 44100.0;
+
     // Video refresh rate of the host monitor
     double refreshRate = 60.0;
 
@@ -64,7 +67,10 @@ private:
 
 public:
 
-    double getHostRefreshRate() const;
+    double getSampleRate() const { return sampleRate; }
+    void setSampleRate(double hz);
+
+    double getHostRefreshRate() const { return refreshRate; }
     void setHostRefreshRate(double fps);
 
     std::pair<isize, isize> getFrameBufferSize() const;

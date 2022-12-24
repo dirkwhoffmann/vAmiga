@@ -26,6 +26,8 @@ Host::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Inspection) {
 
+        os << tab("Audio sample rate");
+        os << flt(sampleRate) << " Hz" << std::endl;
         os << tab("Monitor refresh rate");
         os << flt(refreshRate) << " Hz" << std::endl;
         os << tab("Frame buffer size");
@@ -33,10 +35,11 @@ Host::_dump(Category category, std::ostream& os) const
     }
 }
 
-double
-Host::getHostRefreshRate() const
+void
+Host::setSampleRate(double hz)
 {
-    return refreshRate;
+    sampleRate = hz;
+    paula.muxer.setSampleRate(hz);
 }
 
 void

@@ -1048,6 +1048,7 @@ using namespace vamiga::moira;
     return [self paula]->muxer.getStats();
 }
 
+/*
 - (double)sampleRate
 {
     return [self paula]->muxer.getSampleRate();
@@ -1057,6 +1058,7 @@ using namespace vamiga::moira;
 {
     [self paula]->muxer.setSampleRate(rate);
 }
+*/
 
 - (void)readMonoSamples:(float *)target size:(NSInteger)n
 {
@@ -2648,6 +2650,56 @@ using namespace vamiga::moira;
 
 
 //
+// HostProxy
+//
+
+@implementation HostProxy
+
+- (Host *)host
+{
+    return (Host *)obj;
+}
+
++ (instancetype)make:(Host *)file
+{
+    return file ? [[self alloc] initWith:file] : nil;
+}
+
+- (double)sampleRate
+{
+    return [self host]->getSampleRate();
+}
+
+- (void)setSampleRate:(double)hz
+{
+    [self host]->setSampleRate(hz);
+}
+
+- (NSInteger)refreshRate
+{
+    return (NSInteger)[self host]->getHostRefreshRate();
+}
+
+- (void)setRefreshRate:(NSInteger)value
+{
+    [self host]->setHostRefreshRate((double)value);
+}
+
+- (NSSize)frameBufferSize
+{
+    auto size = [self host]->getFrameBufferSize();
+    return NSMakeSize((CGFloat)size.first, (CGFloat)size.second);
+}
+
+- (void)setFrameBufferSize:(NSSize)size
+{
+    [self host]->setFrameBufferSize(std::pair<isize, isize>(size.width, size.height));
+}
+
+@end
+
+
+//
 // AmigaProxy
 //
 
@@ -2672,6 +2724,7 @@ using namespace vamiga::moira;
 @synthesize hd1;
 @synthesize hd2;
 @synthesize hd3;
+@synthesize host;
 @synthesize diskController;
 @synthesize dmaDebugger;
 @synthesize keyboard;
@@ -2712,6 +2765,7 @@ using namespace vamiga::moira;
     hd1 = [[HardDriveProxy alloc] initWith:&amiga->hd1];
     hd2 = [[HardDriveProxy alloc] initWith:&amiga->hd2];
     hd3 = [[HardDriveProxy alloc] initWith:&amiga->hd3];
+    host = [[HostProxy alloc] initWith:&amiga->host];
     diskController = [[DiskControllerProxy alloc] initWith:&amiga->paula.diskController];
     dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&amiga->agnus.dmaDebugger];
     keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];
@@ -2782,27 +2836,6 @@ using namespace vamiga::moira;
     } else {
         [self amiga]->debugOff();
     }
-}
-
-- (NSInteger)hostRefreshRate
-{
-    return (NSInteger)[self amiga]->host.getHostRefreshRate();
-}
-
-- (NSSize)frameBufferSize
-{
-    auto size = [self amiga]->host.getFrameBufferSize();
-    return NSMakeSize((CGFloat)size.first, (CGFloat)size.second);
-}
-
-- (void)setFrameBufferSize:(NSSize)size
-{
-    [self amiga]->host.setFrameBufferSize(std::pair<isize, isize>(size.width, size.height));
-}
-
-- (void)setHostRefreshRate:(NSInteger)value
-{
-    [self amiga]->host.setHostRefreshRate((double)value);
 }
 
 - (NSInteger)masterFrequency

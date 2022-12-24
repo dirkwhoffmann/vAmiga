@@ -235,23 +235,8 @@ class Renderer: NSObject, MTKViewDelegate {
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
 
         drawableSize = size
-        parent.amiga.frameBufferSize = size
+        parent.amiga.host.frameBufferSize = size
         reshape(withSize: size)
-
-        /*
-        let rwtp: MTLTextureUsage = [ .shaderRead, .shaderWrite, .renderTarget, .pixelFormatView ] // TODO: Are all needed?
-
-        let oldWidth = canvas.framebufTexture.width
-        let oldHeight = canvas.framebufTexture.height
-        let newWidth = Int(size.width)
-        let newHeight = Int(size.height)
-
-        if newWidth > oldWidth || newHeight > oldHeight {
-
-            print("Resizing framebuffer texture to (\(newWidth), \(newHeight))")
-            canvas.framebufTexture = device.makeTexture(size: MTLSizeMake(newWidth, newHeight, 0), usage: rwtp)
-        }
-        */
     }
 
     var theDrawable: CAMetalDrawable? 
@@ -305,7 +290,7 @@ class Renderer: NSObject, MTKViewDelegate {
                 if newfps != fps {
 
                     fps = newfps
-                    parent.amiga.hostRefreshRate = Int(fps)
+                    parent.amiga.host.refreshRate = Int(fps)
                     debug(.vsync, "New GPU frame rate: \(fps)")
                 }
             }

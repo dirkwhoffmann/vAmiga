@@ -21,7 +21,7 @@ public class MacAudio: NSObject {
     
     var parent: MyController!
     var audiounit: AUAudioUnit!
-    var paula: PaulaProxy!
+    var amiga: AmigaProxy!
 
     var prefs: Preferences { return parent.pref }
     
@@ -42,7 +42,7 @@ public class MacAudio: NSObject {
     
         self.init()
         parent = controller
-        paula = controller.amiga.paula
+        amiga = controller.amiga
         
         // Setup component description for AudioUnit
         let compDesc = AudioComponentDescription(
@@ -74,9 +74,9 @@ public class MacAudio: NSObject {
             return
         }
         
-        // Inform Paula about the sample rate
-        paula.setSampleRate(sampleRate)
-        
+        // Inform the emulator about the sample rate
+        amiga.host.sampleRate = sampleRate
+
         // Register render callback
         if stereo {
             audiounit.outputProvider = { ( // AURenderPullInputBlock
@@ -138,7 +138,7 @@ public class MacAudio: NSObject {
     func shutDown() {
 
         stopPlayback()
-        paula = nil
+        amiga = nil
     }
 
     private func renderMono(inputDataList: UnsafeMutablePointer<AudioBufferList>,
@@ -148,7 +148,7 @@ public class MacAudio: NSObject {
         assert(bufferList.count == 1)
         
         let ptr = bufferList[0].mData!.assumingMemoryBound(to: Float.self)
-        paula.readMonoSamples(ptr, size: Int(frameCount))
+        amiga.paula.readMonoSamples(ptr, size: Int(frameCount))
     }
 
     private func renderStereo(inputDataList: UnsafeMutablePointer<AudioBufferList>,
@@ -160,7 +160,7 @@ public class MacAudio: NSObject {
         
         let ptr1 = bufferList[0].mData!.assumingMemoryBound(to: Float.self)
         let ptr2 = bufferList[1].mData!.assumingMemoryBound(to: Float.self)
-        paula.readStereoSamples(ptr1, buffer2: ptr2, size: Int(frameCount))
+        amiga.paula.readStereoSamples(ptr1, buffer2: ptr2, size: Int(frameCount))
     }
     
     // Connects Paula to the audio backend
