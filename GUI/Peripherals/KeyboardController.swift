@@ -175,14 +175,11 @@ class KeyboardController: NSObject {
 
     func capsLockDown() {
 
-        print("Caps lock pressed")
-        // parent.amiga.warpMode = true
         pref.warpMode = .on
     }
 
     func capsLockUp() {
 
-        print("Caps lock released")
         pref.warpMode = .off
     }
 

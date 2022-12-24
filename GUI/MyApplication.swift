@@ -79,7 +79,7 @@ class MyApplication: NSApplication {
     var mapRightCmdKey = false
 
     // Indicates if the CapsLock key should control warp mode
-    var mapCapsLockWarp = false
+    var mapCapsLockWarp = true
 
     // Preferences
     var pref: Preferences!
