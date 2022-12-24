@@ -66,11 +66,8 @@ FloppyDrive::resetConfig()
     std::vector <Option> options = {
         
         OPT_DRIVE_TYPE,
+        OPT_DRIVE_MECHANICS,
         OPT_DRIVE_RPM,
-        OPT_EMULATE_MECHANICS,
-        OPT_START_DELAY,
-        OPT_STOP_DELAY,
-        OPT_STEP_DELAY,
         OPT_DISK_SWAP_DELAY,
         OPT_DRIVE_PAN,
         OPT_STEP_VOLUME,
@@ -90,11 +87,8 @@ FloppyDrive::getConfigItem(Option option) const
     switch (option) {
             
         case OPT_DRIVE_TYPE:          return (long)config.type;
+        case OPT_DRIVE_MECHANICS:     return (long)config.mechanics;
         case OPT_DRIVE_RPM:           return (long)config.rpm;
-        case OPT_EMULATE_MECHANICS:   return (long)config.mechanicalDelays;
-        case OPT_START_DELAY:         return (long)config.startDelay;
-        case OPT_STOP_DELAY:          return (long)config.stopDelay;
-        case OPT_STEP_DELAY:          return (long)config.stepDelay;
         case OPT_DISK_SWAP_DELAY:     return (long)config.diskSwapDelay;
         case OPT_DRIVE_PAN:           return (long)config.pan;
         case OPT_STEP_VOLUME:         return (long)config.stepVolume;
@@ -124,29 +118,18 @@ FloppyDrive::setConfigItem(Option option, i64 value)
             config.type = (FloppyDriveType)value;
             return;
 
+        case OPT_DRIVE_MECHANICS:
+
+            if (!DriveMechanicsEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, DriveMechanicsEnum::keyList());
+            }
+
+            config.mechanics = (DriveMechanics)value;
+            return;
+
         case OPT_DRIVE_RPM:
 
             config.rpm = value;
-            return;
-
-        case OPT_EMULATE_MECHANICS:
-
-            config.mechanicalDelays = value;
-            return;
-
-        case OPT_START_DELAY:
-
-            config.startDelay = value;
-            return;
-
-        case OPT_STOP_DELAY:
-
-            config.stopDelay = value;
-            return;
-
-        case OPT_STEP_DELAY:
-
-            config.stepDelay = value;
             return;
 
         case OPT_DISK_SWAP_DELAY:
@@ -206,16 +189,10 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         os << dec(nr) << std::endl;
         os << tab("Type");
         os << FloppyDriveTypeEnum::key(config.type) << std::endl;
-        os << tab("Emulate mechanics");
-        os << bol(config.mechanicalDelays) << std::endl;
+        os << tab("Mechanics");
+        os << DriveMechanicsEnum::key(config.mechanics) << std::endl;
         os << tab("Revolutions per minute");
         os << dec(config.rpm) << std::endl;
-        os << tab("Start delay");
-        os << dec(config.startDelay) << std::endl;
-        os << tab("Stop delay");
-        os << dec(config.stopDelay) << std::endl;
-        os << tab("Step delay");
-        os << dec(config.stepDelay) << std::endl;
         os << tab("Disk swap delay");
         os << dec(config.diskSwapDelay) << std::endl;
         os << tab("Insert volume");
@@ -230,6 +207,20 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         os << dec(config.pan) << std::endl;
         os << tab("Search path");
         os << "\"" << searchPath << "\"" << std::endl;
+
+        os << std::endl;
+        os << tab("Start delay");
+        os << dec(AS_MSEC(getStartDelay())) << " msec" << std::endl;
+        os << tab("Stop delay");
+        os << dec(AS_MSEC(getStopDelay())) << " msec" << std::endl;
+        os << tab("Step pulse delay");
+        os << dec(AS_USEC(getStepPulseDelay())) << " usec" << std::endl;
+        os << tab("Reverse step pulse delay");
+        os << dec(AS_USEC(getRevStepPulseDelay())) << " usec" << std::endl;
+        os << tab("Step read delay");
+        os << dec(AS_MSEC(getStepReadDelay())) << " msec" << std::endl;
+        os << tab("Reverse step read delay");
+        os << dec(AS_MSEC(getRevStepReadDelay())) << " msec" << std::endl;
     }
     
     if (category == Category::Inspection) {
@@ -266,6 +257,8 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         os << dec(latestStepDown) << std::endl;
         os << tab("latestStep");
         os << dec(latestStep) << std::endl;
+        os << tab("latestStepCompleted");
+        os << dec(latestStepCompleted) << std::endl;
         os << tab("cylinderHistory");
         os << hex(cylinderHistory) << std::endl;
 
@@ -474,6 +467,84 @@ FloppyDrive::isWriting() const
     return motor && isSelected() && diskController.getState() == DRIVE_DMA_WRITE;
 }
 
+Cycle
+FloppyDrive::getStartDelay() const
+{
+    switch (config.mechanics) {
+
+        case MECHANICS_NONE:    return 0;
+        case MECHANICS_A1010:   return MSEC(380);
+
+        default:
+            fatalError;
+    }
+}
+
+Cycle
+FloppyDrive::getStopDelay() const
+{
+    switch (config.mechanics) {
+
+        case MECHANICS_NONE:    return 0;
+        case MECHANICS_A1010:   return MSEC(80);
+
+        default:
+            fatalError;
+    }
+}
+
+Cycle
+FloppyDrive::getStepPulseDelay() const
+{
+    switch (config.mechanics) {
+
+        case MECHANICS_NONE:    return 0;
+        case MECHANICS_A1010:   return 1060;
+
+        default:
+            fatalError;
+    }
+}
+
+Cycle
+FloppyDrive::getRevStepPulseDelay() const
+{
+    switch (config.mechanics) {
+
+        case MECHANICS_NONE:    return 0;
+        case MECHANICS_A1010:   return 1060;
+
+        default:
+            fatalError;
+    }
+}
+
+Cycle
+FloppyDrive::getStepReadDelay() const
+{
+    switch (config.mechanics) {
+
+        case MECHANICS_NONE:    return 0;
+        case MECHANICS_A1010:   return MSEC(8);
+
+        default:
+            fatalError;
+    }
+}
+
+Cycle
+FloppyDrive::getRevStepReadDelay() const
+{
+    switch (config.mechanics) {
+
+        case MECHANICS_NONE:    return 0;
+        case MECHANICS_A1010:   return MSEC(8);
+
+        default:
+            fatalError;
+    }
+}
+
 u8
 FloppyDrive::driveStatusFlags() const
 {
@@ -508,20 +579,25 @@ FloppyDrive::driveStatusFlags() const
 double
 FloppyDrive::motorSpeed() const
 {
-    // Quick exit if mechanics is not emulated
-    if (!config.mechanicalDelays) return motor ? 100.0 : 0.0;
-    
-    // Determine the elapsed cycles since the last motor change
-    Cycle elapsed = agnus.clock - switchCycle;
-    if (agnus.clock >= 0) assert(elapsed >= 0);
-    
-    // Compute the current speed
     if (motor) {
-        if (config.startDelay == 0) return 100.0;
-        return std::min(switchSpeed + 100.0 * (elapsed / config.startDelay), 100.0);
+
+        // Case 1: Motor speeds up
+
+        auto startDelay = getStartDelay();
+        if (startDelay == 0) return 100.0;
+
+        Cycle elapsed = agnus.clock - switchCycle;
+        return std::min(switchSpeed + 100.0 * (elapsed / startDelay), 100.0);
+
     } else {
-        if (config.stopDelay == 0) return 0.0;
-        return std::max(switchSpeed - 100.0 * (elapsed / config.stopDelay), 0.0);
+
+        // Case 2: Motor slows down
+
+        auto stopDelay = getStopDelay();
+        if (stopDelay == 0) return 0.0;
+
+        Cycle elapsed = agnus.clock - switchCycle;
+        return std::max(switchSpeed - 100.0 * (elapsed / stopDelay), 0.0);
     }
 }
 
@@ -581,15 +657,10 @@ u8
 FloppyDrive::readByte() const
 {
     // Case 1: No disk is inserted
-    if (!disk) {
-        return 0xFF;
-    }
+    if (!disk) return 0xFF;
 
     // Case 2: A step operation is in progress
-    if (config.mechanicalDelays && (agnus.clock - latestStep) < MSEC(3)) {
-    // if (config.mechanicalDelays && (agnus.clock - latestStep) < config.stepDelay) {
-        return u8(rand() & 0x55);
-    }
+    if (agnus.clock < latestStepCompleted) return u8(rand() & 0x55);
     
     // Case 3: Normal operation
     return disk->readByte(head.cylinder, head.head, head.offset);
@@ -667,37 +738,41 @@ FloppyDrive::findSyncMark()
 bool
 FloppyDrive::readyToStepUp() const
 {
-    // Always succeed if no mechanical delays are emulated
-    if (!config.mechanicalDelays) return true;
+    // Check step delay
+    if (agnus.clock - latestStep < getStepPulseDelay()) {
 
-    // When reversing directions, a minimum of 18 milliseconds delay is required from the last step pulse
-    if (agnus.clock - latestStepDown < MSEC(18)) {
-
-        debug(DSK_CHECKSUM,
-              "readyToStepUp: REVERSING DIRECTION TOO QUICKLY (%lld).\n",
-              AS_USEC(agnus.clock - latestStepDown));
-        // return false;
+        debug(DSK_CHECKSUM, "Ignoring head step\n");
+        return false;
     }
 
-    return agnus.clock - latestStep > 1060;
+    // If the step direction reverses, some extra-time is needed (?)
+    if (agnus.clock - latestStepDown < getRevStepPulseDelay()) {
+
+        debug(DSK_CHECKSUM, "Ignoring reverse head step\n");
+        return false;
+    }
+
+    return true;
 }
 
 bool
 FloppyDrive::readyToStepDown() const
 {
-    // Always succeed if no mechanical delays are emulated
-    if (!config.mechanicalDelays) return true;
+    // Check step delay
+    if (agnus.clock - latestStep < getStepPulseDelay()) {
 
-    // When reversing directions, a minimum of 18 milliseconds delay is required from the last step pulse
-    if (agnus.clock - latestStepUp < MSEC(18)) {
-
-        debug(DSK_CHECKSUM,
-              "readyToStepDown: REVERSING DIRECTION TOO QUICKLY (%lld).\n",
-              AS_USEC(agnus.clock - latestStepUp));
-        // return false;
+        debug(DSK_CHECKSUM, "Ignoring head step\n");
+        return false;
     }
 
-    return agnus.clock - latestStep > 1060;
+    // If the step direction reverses, some extra-time is needed (?)
+    if (agnus.clock - latestStepUp < getRevStepPulseDelay()) {
+
+        debug(DSK_CHECKSUM, "Ignoring reverse head step\n");
+        return false;
+    }
+
+    return true;
 }
 
 void
@@ -717,6 +792,13 @@ FloppyDrive::step(isize dir)
             head.cylinder--;
             recordCylinder(head.cylinder);
 
+            // Determine when the step will be completed
+            if (latestStep == latestStepDown) {
+                latestStepCompleted = agnus.clock + getStepReadDelay();
+            } else {
+                latestStepCompleted = agnus.clock + getRevStepReadDelay();
+            }
+
             // Remember the step cycle
             latestStep = latestStepDown = agnus.clock;
         }
@@ -733,6 +815,13 @@ FloppyDrive::step(isize dir)
 
             head.cylinder++;
             recordCylinder(head.cylinder);
+
+            // Determine when the step will be completed
+            if (latestStep == latestStepUp) {
+                latestStepCompleted = agnus.clock + getStepReadDelay();
+            } else {
+                latestStepCompleted = agnus.clock + getRevStepReadDelay();
+            }
 
             // Remember the step cycle
             latestStep = latestStepUp = agnus.clock;

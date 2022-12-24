@@ -965,7 +965,7 @@ extension DefaultsProxy {
         remove(.CLX_SPR_PLF)
         remove(.CLX_PLF_PLF)
         remove(.DRIVE_SPEED)
-        remove(.EMULATE_MECHANICS, [ 0, 1, 2, 3])
+        remove(.DRIVE_MECHANICS, [ 0, 1, 2, 3])
         remove(.LOCK_DSKSYNC)
         remove(.AUTO_DSKSYNC)
         remove(.ACCURATE_KEYBOARD)
@@ -988,7 +988,7 @@ extension Configuration {
         defaults.set(.CLX_SPR_PLF, clxSprPlf)
         defaults.set(.CLX_PLF_PLF, clxPlfPlf)
         defaults.set(.DRIVE_SPEED, driveSpeed)
-        defaults.set(.EMULATE_MECHANICS, [0, 1, 2, 3], mechanicalDelays)
+        defaults.set(.DRIVE_MECHANICS, [0, 1, 2, 3], driveMechanics)
         defaults.set(.LOCK_DSKSYNC, lockDskSync)
         defaults.set(.AUTO_DSKSYNC, autoDskSync)
         defaults.set(.ACCURATE_KEYBOARD, accurateKeyboard)
@@ -1011,7 +1011,7 @@ extension Configuration {
         clxSprPlf = defaults.get(.CLX_SPR_PLF) != 0
         clxPlfPlf = defaults.get(.CLX_PLF_PLF) != 0
         driveSpeed = defaults.get(.DRIVE_SPEED)
-        mechanicalDelays = defaults.get(.EMULATE_MECHANICS, 0) != 0
+        driveMechanics = defaults.get(.DRIVE_MECHANICS, 0)
         lockDskSync = defaults.get(.LOCK_DSKSYNC) != 0
         autoDskSync = defaults.get(.AUTO_DSKSYNC) != 0
         accurateKeyboard = defaults.get(.ACCURATE_KEYBOARD) != 0

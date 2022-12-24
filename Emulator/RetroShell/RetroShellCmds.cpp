@@ -1085,12 +1085,12 @@ RetroShell::exec <Token::dfn, Token::set, Token::pan> (Arguments& argv, long par
 template <> void
 RetroShell::exec <Token::dfn, Token::set, Token::mechanics> (Arguments& argv, long param)
 {
-    long num = util::parseBool(argv.front());
-    
+    auto scheme = util::parseEnum<DriveMechanicsEnum>(argv[0]);
+
     if (param >= 0 && param <= 3) {
-        amiga.configure(OPT_EMULATE_MECHANICS, param, num);
+        amiga.configure(OPT_DRIVE_MECHANICS, param, scheme);
     } else {
-        amiga.configure(OPT_EMULATE_MECHANICS, num);
+        amiga.configure(OPT_DRIVE_MECHANICS, scheme);
     }
 }
 

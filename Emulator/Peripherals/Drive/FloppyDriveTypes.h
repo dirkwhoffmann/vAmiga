@@ -44,6 +44,33 @@ struct FloppyDriveTypeEnum : util::Reflection<FloppyDriveTypeEnum, FloppyDriveTy
 };
 #endif
 
+enum_long(DRIVE_MECHANICS)
+{
+    MECHANICS_NONE,
+    MECHANICS_A1010
+};
+typedef DRIVE_MECHANICS DriveMechanics;
+
+#ifdef __cplusplus
+struct DriveMechanicsEnum : util::Reflection<DriveMechanicsEnum, DriveMechanics>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = MECHANICS_A1010;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
+
+    static const char *prefix() { return "DMECHANICS"; }
+    static const char *key(DriveMechanics value)
+    {
+        switch (value) {
+
+            case MECHANICS_NONE:    return "NONE";
+            case MECHANICS_A1010:   return "A1010";
+        }
+        return "???";
+    }
+};
+#endif
+
 
 //
 // Structures
@@ -51,8 +78,11 @@ struct FloppyDriveTypeEnum : util::Reflection<FloppyDriveTypeEnum, FloppyDriveTy
 
 typedef struct
 {
-    // The drive model
+    // Drive model
     FloppyDriveType type;
+
+    // Drive mechanics
+    DriveMechanics mechanics;
 
     /* Revolutions per minute. A standard Amiga drive rotates with 300 rpm.
      * Rotation speed can be measured with AmigaTestKit which analyzes the
@@ -61,18 +91,17 @@ typedef struct
      */
     isize rpm;
 
-    // Indicates whether mechanical delays should be emulated
-    bool mechanicalDelays;
-
     /* Mechanical delays. The start and stop delays specify the number of
      * cycles that pass between switching the drive motor on or off until the
      * drive motor runs at full speed or came to rest, respectively. The step
      * delay specifies the number of cycle needed by the drive head to move to
      * another cylinder. During this time, the FIFO is filled with garbage data.
      */
+    /*
     Cycle startDelay;
     Cycle stopDelay;
     Cycle stepDelay;
+    */
     
     // Delay between ejecting an old disk and inserting a new one
     Cycle diskSwapDelay;

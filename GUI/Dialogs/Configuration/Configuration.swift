@@ -308,13 +308,13 @@ class Configuration {
         get { return amiga.getConfig(.DRIVE_SPEED) }
         set { amiga.configure(.DRIVE_SPEED, value: newValue) }
     }
-    var mechanicalDelays: Bool {
-        get { return amiga.getConfig(.EMULATE_MECHANICS, drive: 0) != 0 }
+    var driveMechanics: Int {
+        get { return amiga.getConfig(.DRIVE_MECHANICS, drive: 0) }
         set {
-            amiga.configure(.EMULATE_MECHANICS, drive: 0, enable: newValue)
-            amiga.configure(.EMULATE_MECHANICS, drive: 1, enable: newValue)
-            amiga.configure(.EMULATE_MECHANICS, drive: 2, enable: newValue)
-            amiga.configure(.EMULATE_MECHANICS, drive: 3, enable: newValue)
+            amiga.configure(.DRIVE_MECHANICS, drive: 0, value: newValue)
+            amiga.configure(.DRIVE_MECHANICS, drive: 1, value: newValue)
+            amiga.configure(.DRIVE_MECHANICS, drive: 2, value: newValue)
+            amiga.configure(.DRIVE_MECHANICS, drive: 3, value: newValue)
         }
     }
     var lockDskSync: Bool {

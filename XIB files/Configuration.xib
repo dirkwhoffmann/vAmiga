@@ -46,7 +46,7 @@
                 <outlet property="compDriveSpeed" destination="4Ny-q7-06h" id="TAF-pD-4dp"/>
                 <outlet property="compEClockSyncing" destination="TR3-l4-fWR" id="1FH-oB-0HJ"/>
                 <outlet property="compLockDskSync" destination="z9Z-9Z-AmZ" id="52g-mi-sUD"/>
-                <outlet property="compMechanicalDelays" destination="gyp-kk-PwN" id="YvX-xg-lxM"/>
+                <outlet property="compMechanics" destination="gyp-kk-PwN" id="YvX-xg-lxM"/>
                 <outlet property="compOKButton" destination="XEX-Bs-kpl" id="NgB-R0-ldR"/>
                 <outlet property="compPowerButton" destination="56p-by-mEB" id="HVb-hA-04o"/>
                 <outlet property="compPtrDrops" destination="fpb-wN-mwG" id="PCa-Yv-jcU"/>
@@ -1997,7 +1997,7 @@ DQ
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="compMechanicalDelaysAction:" target="-2" id="LuN-yi-1vz"/>
+                                                <action selector="compMechanicsAction:" target="-2" id="uwH-LA-zly"/>
                                             </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SM8-ef-Qsp">

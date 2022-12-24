@@ -41,7 +41,7 @@ class FloppyDrive : public Drive {
     
     // Recorded motor speed at 'switchCycle' in percent
     double switchSpeed;
-    
+
     // Position of the currently transmitted identification bit
     u8 idCount;
 
@@ -52,7 +52,8 @@ class FloppyDrive : public Drive {
     Cycle latestStepUp;
     Cycle latestStepDown;
     Cycle latestStep;
-    
+    Cycle latestStepCompleted;
+
     /* Disk change status. This variable controls the /CHNG bit in the CIA A
      * PRA register. Note that the variable only changes it's value under
      * certain conditions. If a head movement pulse is send and no disk is
@@ -121,10 +122,8 @@ private:
         worker
 
         << config.type
-        << config.rpm
-        << config.startDelay
-        << config.stopDelay
-        << config.stepDelay;
+        << config.mechanics
+        << config.rpm;
     }
 
     template <class T>
@@ -210,8 +209,27 @@ public:
 
     // Checks whether a write operation is in progress
     bool isWriting() const;
-    
-    
+
+
+    //
+    // Querying mechanical delays
+    //
+
+    // Returns the ramp-up time of the drive motor
+    Cycle getStartDelay() const;
+
+    // Returns the ramp-down time of the drive motor
+    Cycle getStopDelay() const;
+
+    // Returns the minimum delay required between two step pulses
+    Cycle getStepPulseDelay() const;
+    Cycle getRevStepPulseDelay() const;
+
+    // Returns the time span in which only garbage is read after a head step
+    Cycle getStepReadDelay() const;
+    Cycle getRevStepReadDelay() const;
+
+
     //
     // Handling the drive status register flags
     //

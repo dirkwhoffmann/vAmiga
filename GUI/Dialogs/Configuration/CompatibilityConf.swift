@@ -28,8 +28,8 @@ extension ConfigurationController {
 
         // Floppy drives
         let speed = config.driveSpeed
-        compDriveSpeed.selectItem(withTag: Int(speed))
-        compMechanicalDelays.state = config.mechanicalDelays ? .on : .off
+        compDriveSpeed.selectItem(withTag: speed)
+        compMechanics.state = config.driveMechanics != 0 ? .on : .off
         compLockDskSync.state = config.lockDskSync ? .on : .off
         compAutoDskSync.state = config.autoDskSync ? .on : .off
 
@@ -85,9 +85,9 @@ extension ConfigurationController {
         refresh()
     }
 
-    @IBAction func compMechanicalDelaysAction(_ sender: NSButton!) {
+    @IBAction func compMechanicsAction(_ sender: NSButton!) {
 
-        config.mechanicalDelays = sender.state == .on
+        config.driveMechanics = sender.state == .on ? 1 : 0
         refresh()
     }
 
@@ -142,7 +142,7 @@ extension ConfigurationController {
             // Accelerated
             defaults.set(.BLITTER_ACCURACY, 0)
             defaults.set(.DRIVE_SPEED, -1)
-            defaults.set(.EMULATE_MECHANICS, [0, 1, 2, 3], false)
+            defaults.set(.DRIVE_MECHANICS, [0, 1, 2, 3], 1)
             defaults.set(.ACCURATE_KEYBOARD, false)
             defaults.set(.ECLOCK_SYNCING, false)
             
