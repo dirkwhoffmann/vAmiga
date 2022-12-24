@@ -19,6 +19,8 @@
 namespace vamiga {
 
 class RetroShell : public SubComponent {
+
+    friend class RshServer;
     
     // Interpreter for commands typed into the console window
     Interpreter interpreter;

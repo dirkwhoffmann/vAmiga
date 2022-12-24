@@ -38,6 +38,8 @@ void
 RetroShell::_pause()
 {
     printState();
+    remoteManager.rshServer.send(getPrompt());
+    
 }
 
 RetroShell&
@@ -167,7 +169,11 @@ RetroShell::welcome()
 
     if (interpreter.inCommandShell()) {
 
-        *this << "vAmiga " << name << " " << Amiga::build() << '\n';
+        storage << "vAmiga " << name << " ";
+        remoteManager.rshServer << "vAmiga " << name << " Remote Server ";
+        *this << Amiga::build() << '\n';
+
+        // *this << "vAmiga " << name << " " << Amiga::build() << '\n';
         *this << '\n';
         *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
         *this << "Licensed under the GNU General Public License v3" << '\n';
