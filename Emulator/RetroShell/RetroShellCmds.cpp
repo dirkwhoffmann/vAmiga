@@ -691,25 +691,6 @@ RetroShell::exec <Token::audio, Token::set, Token::pan> (Arguments& argv, long p
 
 
 //
-// Paula
-//
-
-/*
-template <> void
-RetroShell::exec <Token::paula, Token::inspect, Token::state> (Arguments& argv, long param)
-{
-    dumpDetails(amiga.paula);
-}
-
-template <> void
-RetroShell::exec <Token::paula, Token::inspect, Token::registers> (Arguments& argv, long param)
-{
-    dump(amiga.paula, Category::Registers);
-}
-*/
-
-
-//
 // RTC
 //
 
@@ -1169,7 +1150,7 @@ RetroShell::exec <Token::hdn, Token::geometry> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::zorro, Token::list> (Arguments& argv, long param)
 {
-    dumpDetails(zorro);
+    dumpDebug(zorro);
 }
 
 template <> void
@@ -1180,7 +1161,7 @@ RetroShell::exec <Token::zorro, Token::inspect> (Arguments& argv, long param)
     if (auto board = zorro.getBoard(value); board != nullptr) {
 
         dump(*board, Category::Properties);
-        dumpDetails(*board);
+        dumpDebug(*board);
         dump(*board, Category::Stats);
     }
 }
@@ -1217,7 +1198,7 @@ RetroShell::exec <Token::server, Token::serial, Token::config> (Arguments& argv,
 template <> void
 RetroShell::exec <Token::server, Token::serial, Token::inspect> (Arguments& argv, long param)
 {
-    dumpDetails(remoteManager.serServer);
+    dumpDebug(remoteManager.serServer);
 }
 
 template <> void
@@ -1259,7 +1240,7 @@ RetroShell::exec <Token::server, Token::rshell, Token::config> (Arguments& argv,
 template <> void
 RetroShell::exec <Token::server, Token::rshell, Token::inspect> (Arguments& argv, long param)
 {
-    dumpDetails(remoteManager.rshServer);
+    dumpDebug(remoteManager.rshServer);
 }
 
 template <> void
@@ -1295,7 +1276,7 @@ RetroShell::exec <Token::server, Token::gdb, Token::config> (Arguments& argv, lo
 template <> void
 RetroShell::exec <Token::server, Token::gdb, Token::inspect> (Arguments& argv, long param)
 {
-    dumpDetails(remoteManager.gdbServer);
+    dumpDebug(remoteManager.gdbServer);
 }
 
 }

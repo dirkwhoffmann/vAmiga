@@ -50,22 +50,22 @@ struct Command {
     // List of required arguments
     std::vector<string> requiredArgs;
 
-    // List of additional optional arguments
+    // List of optional arguments
     std::vector<string> optionalArgs;
 
-    // Help string
+    // Help message for this command
     string help;
     
-    // List of sub-commands
+    // List of subcommands
     std::vector<Command> subCommands;
     
     // Command handler
     void (RetroShell::*action)(Arguments&, long) = nullptr;
 
-    // Additional parameter passed to the command handler
+    // Additional argument passed to the command handler
     long param = 0;
     
-    // Indicates if this command appears in the help descriptions
+    // Indicates if this command appears in help descriptions
     bool hidden = false;
 
     
@@ -111,7 +111,7 @@ struct Command {
     Command *seek(const string& token);
     Command *seek(const std::vector<string> &tokens);
         
-    // Filters the argument list
+    // Filters the argument list (used by auto-completion)
     std::vector<const Command *> filterPrefix(const string& prefix) const;
 
     // Automatically completes a partial token string

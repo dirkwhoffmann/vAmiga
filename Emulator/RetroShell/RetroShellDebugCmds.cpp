@@ -352,13 +352,13 @@ RetroShell::exec <Token::memory, Token::checksums> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::cpu> (Arguments &argv, long param)
 {
-    dumpSummary(cpu);
+    dumpInspection(cpu);
 }
 
 template <> void
 RetroShell::exec <Token::cpu, Token::debug> (Arguments &argv, long param)
 {
-    dumpDetails(cpu);
+    dumpDebug(cpu);
 }
 
 template <> void
@@ -375,13 +375,13 @@ RetroShell::exec <Token::cpu, Token::vectors> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::cia> (Arguments &argv, long param)
 {
-    param == 0 ? dumpSummary(ciaa) : dumpSummary(ciab);
+    param == 0 ? dumpInspection(ciaa) : dumpInspection(ciab);
 }
 
 template <> void
 RetroShell::exec <Token::cia, Token::debug> (Arguments &argv, long param)
 {
-    param == 0 ? dumpDetails(ciaa) : dumpDetails(ciab);
+    param == 0 ? dumpDebug(ciaa) : dumpDebug(ciab);
 }
 
 template <> void
@@ -398,13 +398,13 @@ RetroShell::exec <Token::cia, Token::tod> (Arguments &argv, long param)
 template <> void
 RetroShell::exec <Token::agnus> (Arguments &argv, long param)
 {
-    dumpSummary(agnus);
+    dumpInspection(agnus);
 }
 
 template <> void
 RetroShell::exec <Token::agnus, Token::debug> (Arguments &argv, long param)
 {
-    dumpDetails(agnus);
+    dumpDebug(agnus);
 }
 
 template <> void
@@ -433,13 +433,13 @@ RetroShell::exec <Token::agnus, Token::events> (Arguments &argv, long param)
 template <> void
 RetroShell::exec <Token::blitter> (Arguments &argv, long param)
 {
-    dumpSummary(amiga.agnus.blitter);
+    dumpInspection(amiga.agnus.blitter);
 }
 
 template <> void
 RetroShell::exec <Token::blitter, Token::debug> (Arguments &argv, long param)
 {
-    dumpDetails(amiga.agnus.blitter);
+    dumpDebug(amiga.agnus.blitter);
 }
 
 
@@ -450,13 +450,13 @@ RetroShell::exec <Token::blitter, Token::debug> (Arguments &argv, long param)
 template <> void
 RetroShell::exec <Token::copper> (Arguments &argv, long param)
 {
-    dumpSummary(amiga.agnus.copper);
+    dumpInspection(amiga.agnus.copper);
 }
 
 template <> void
 RetroShell::exec <Token::copper, Token::debug> (Arguments &argv, long param)
 {
-    dumpDetails(amiga.agnus.copper);
+    dumpDebug(amiga.agnus.copper);
 }
 
 template <> void
@@ -482,43 +482,43 @@ RetroShell::exec <Token::copper, Token::list> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::paula> (Arguments &argv, long param)
 {
-    dumpSummary(paula);
+    dumpInspection(paula);
 }
 
 template <> void
 RetroShell::exec <Token::paula, Token::debug> (Arguments &argv, long param)
 {
-    dumpDetails(paula);
+    dumpDebug(paula);
 }
 
 template <> void
 RetroShell::exec <Token::paula, Token::audio> (Arguments& argv, long param)
 {
-    dumpSummary(amiga.paula.muxer);
+    dumpInspection(amiga.paula.muxer);
 }
 
 template <> void
 RetroShell::exec <Token::paula, Token::audio, Token::debug> (Arguments& argv, long param)
 {
-    dumpDetails(amiga.paula.muxer);
+    dumpDebug(amiga.paula.muxer);
 }
 
 template <> void
 RetroShell::exec <Token::paula, Token::dc> (Arguments& argv, long param)
 {
-    dumpSummary(amiga.paula.diskController);
+    dumpInspection(amiga.paula.diskController);
 }
 
 template <> void
 RetroShell::exec <Token::paula, Token::dc, Token::debug> (Arguments& argv, long param)
 {
-    dumpDetails(amiga.paula.diskController);
+    dumpDebug(amiga.paula.diskController);
 }
 
 template <> void
 RetroShell::exec <Token::paula, Token::uart> (Arguments& argv, long param)
 {
-    dumpSummary(amiga.paula.uart);
+    dumpInspection(amiga.paula.uart);
 }
 
 
@@ -529,13 +529,13 @@ RetroShell::exec <Token::paula, Token::uart> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::denise> (Arguments &argv, long param)
 {
-    dumpSummary(denise);
+    dumpInspection(denise);
 }
 
 template <> void
 RetroShell::exec <Token::denise, Token::debug> (Arguments &argv, long param)
 {
-    dumpDetails(denise);
+    dumpDebug(denise);
 }
 
 
@@ -546,13 +546,13 @@ RetroShell::exec <Token::denise, Token::debug> (Arguments &argv, long param)
 template <> void
 RetroShell::exec <Token::rtc> (Arguments &argv, long param)
 {
-    dumpSummary(rtc);
+    dumpInspection(rtc);
 }
 
 template <> void
 RetroShell::exec <Token::rtc, Token::debug> (Arguments &argv, long param)
 {
-    dumpDetails(rtc);
+    dumpDebug(rtc);
 }
 
 
@@ -563,15 +563,15 @@ RetroShell::exec <Token::rtc, Token::debug> (Arguments &argv, long param)
 template <> void
 RetroShell::exec <Token::controlport> (Arguments& argv, long param)
 {
-    if (param == 1) dumpSummary(amiga.controlPort1);
-    if (param == 2) dumpSummary(amiga.controlPort2);
+    if (param == 1) dumpInspection(amiga.controlPort1);
+    if (param == 2) dumpInspection(amiga.controlPort2);
 }
 
 template <> void
 RetroShell::exec <Token::controlport, Token::debug> (Arguments& argv, long param)
 {
-    if (param == 1) dumpDetails(amiga.controlPort1);
-    if (param == 2) dumpDetails(amiga.controlPort2);
+    if (param == 1) dumpDebug(amiga.controlPort1);
+    if (param == 2) dumpDebug(amiga.controlPort2);
 }
 
 
@@ -582,7 +582,7 @@ RetroShell::exec <Token::controlport, Token::debug> (Arguments& argv, long param
 template <> void
 RetroShell::exec <Token::serial> (Arguments& argv, long param)
 {
-    dumpSummary(amiga.serialPort);
+    dumpInspection(amiga.serialPort);
 }
 
 
@@ -593,28 +593,28 @@ RetroShell::exec <Token::serial> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::keyboard> (Arguments& argv, long param)
 {
-    dumpSummary(amiga.keyboard);
+    dumpInspection(amiga.keyboard);
 }
 
 template <> void
 RetroShell::exec <Token::mouse> (Arguments& argv, long param)
 {
-    if (param == 1) dumpSummary(amiga.controlPort1.mouse);
-    if (param == 2) dumpSummary(amiga.controlPort2.mouse);
+    if (param == 1) dumpInspection(amiga.controlPort1.mouse);
+    if (param == 2) dumpInspection(amiga.controlPort2.mouse);
 }
 
 template <> void
 RetroShell::exec <Token::mouse, Token::debug> (Arguments& argv, long param)
 {
-    if (param == 1) dumpDetails(amiga.controlPort1.mouse);
-    if (param == 2) dumpDetails(amiga.controlPort2.mouse);
+    if (param == 1) dumpDebug(amiga.controlPort1.mouse);
+    if (param == 2) dumpDebug(amiga.controlPort2.mouse);
 }
 
 template <> void
 RetroShell::exec <Token::joystick> (Arguments& argv, long param)
 {
-    if (param == 1) dumpSummary(amiga.controlPort1.joystick);
-    if (param == 2) dumpSummary(amiga.controlPort2.joystick);
+    if (param == 1) dumpInspection(amiga.controlPort1.joystick);
+    if (param == 2) dumpInspection(amiga.controlPort2.joystick);
 }
 
 
@@ -625,13 +625,13 @@ RetroShell::exec <Token::joystick> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::dfn> (Arguments& argv, long param)
 {
-    dumpSummary(*amiga.df[param]);
+    dumpInspection(*amiga.df[param]);
 }
 
 template <> void
 RetroShell::exec <Token::dfn, Token::debug> (Arguments& argv, long param)
 {
-    dumpDetails(*amiga.df[param]);
+    dumpDebug(*amiga.df[param]);
 }
 
 template <> void
@@ -666,7 +666,7 @@ RetroShell::exec <Token::hdn, Token::partition> (Arguments& argv, long param)
 template <> void
 RetroShell::exec <Token::hdn, Token::debug> (Arguments& argv, long param)
 {
-    dumpDetails(*amiga.hd[param]);
+    dumpDebug(*amiga.hd[param]);
 }
 
 

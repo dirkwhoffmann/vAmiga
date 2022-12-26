@@ -158,6 +158,7 @@ Interpreter::exec(const Arguments &argv, bool verbose)
         current = current->seek(args.front());
         args.erase(args.begin());
     }
+    if ((next = current->seek(""))) current = next;
 
     // Error out if no command handler is present
     if (current->action == nullptr && !args.empty()) {

@@ -58,9 +58,6 @@ Command::add(const std::vector<string> &tokens,
     Command *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() - 1 });
     assert(cmd != nullptr);
 
-    // Install the action handler in the parent node if this is no sub-command
-    if (tokens.back() == "") { cmd->action = action; cmd->param = param; }
-
     // Create the instruction
     Command d;
     d.name = tokens.back();

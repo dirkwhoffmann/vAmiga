@@ -172,8 +172,6 @@ RetroShell::welcome()
         storage << "vAmiga " << name << " ";
         remoteManager.rshServer << "vAmiga " << name << " Remote Server ";
         *this << Amiga::build() << '\n';
-
-        // *this << "vAmiga " << name << " " << Amiga::build() << '\n';
         *this << '\n';
         *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
         *this << "Licensed under the GNU General Public License v3" << '\n';
@@ -581,13 +579,13 @@ RetroShell::dumpConfig(AmigaObject &component)
 }
 
 void
-RetroShell::dumpSummary(AmigaObject &component)
+RetroShell::dumpInspection(AmigaObject &component)
 {
     dump(component, Category::Inspection);
 }
 
 void
-RetroShell::dumpDetails(AmigaObject &component)
+RetroShell::dumpDebug(AmigaObject &component)
 {
     dump(component, Category::Debug);
 }

@@ -22,7 +22,7 @@ class RetroShell : public SubComponent {
 
     friend class RshServer;
     
-    // Interpreter for commands typed into the console window
+    // The command interpreter (parses commands typed into the console window)
     Interpreter interpreter;
 
     
@@ -110,7 +110,14 @@ private:
     //
 
 public:
-    
+
+    // Prints a message
+    RetroShell &operator<<(char value);
+    RetroShell &operator<<(const string &value);
+    RetroShell &operator<<(int value);
+    RetroShell &operator<<(long value);
+    RetroShell &operator<<(std::stringstream &stream);
+
     // Returns the prompt
     const string &getPrompt();
 
@@ -123,13 +130,6 @@ public:
     // Moves the cursor forward to a certain column
     void tab(isize pos);
 
-    // Prints a message
-    RetroShell &operator<<(char value);
-    RetroShell &operator<<(const string &value);
-    RetroShell &operator<<(int value);
-    RetroShell &operator<<(long value);
-    RetroShell &operator<<(std::stringstream &stream);
-    
     // Assigns an additional output stream
     void setStream(std::ostream &os);
 
@@ -147,7 +147,7 @@ private:
     // Prints the help line
     void printHelp();
 
-    // Prints a state summary (used by the debugger only)
+    // Prints a state summary (used by the debug shell)
     void printState();
 
     
@@ -203,7 +203,7 @@ private:
     // Prints a textual description of an error in the console
     void describe(const std::exception &exception);
 
-    // Prints help messages for a given command string
+    // Prints a help message for a given command string
     void help(const string &command);
     
     
@@ -224,8 +224,8 @@ public:
 
     void dump(AmigaObject &component, Category category);
     void dumpConfig(AmigaObject &component);
-    void dumpSummary(AmigaObject &component);
-    void dumpDetails(AmigaObject &component);
+    void dumpInspection(AmigaObject &component);
+    void dumpDebug(AmigaObject &component);
 
     
     //
