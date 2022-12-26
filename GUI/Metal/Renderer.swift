@@ -26,9 +26,6 @@ class Renderer: NSObject, MTKViewDelegate {
     var prefs: Preferences { return parent.pref }
     var config: Configuration { return parent.config }
 
-    // The current size of framebuffer
-    var drawableSize = CGSize()
-
     // Number of drawn frames since power up
     var frames: Int64 = 0
 
@@ -226,15 +223,37 @@ class Renderer: NSObject, MTKViewDelegate {
         console.update(frames: frames)
         canvas.update(frames: frames)
         monitors.update(frames: frames)
+        parent.update(frames: frames)
+
+        measureFps(frames: frames)
     }
-    
+
+    func measureFps(frames: Int64) {
+
+        let interval = Int64(10)
+
+        if frames % interval == 0 {
+
+            let now = CACurrentMediaTime()
+            let elapsed = now - timestamp
+            timestamp = now
+
+            let newfps = Int(round(Double(interval) / elapsed))
+            if newfps != fps {
+
+                fps = newfps
+                parent.amiga.host.refreshRate = Int(fps)
+                debug(.vsync, "New GPU frame rate: \(fps)")
+            }
+        }
+    }
+
     //
     // Methods from MTKViewDelegate
     //
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
 
-        drawableSize = size
         parent.amiga.host.frameBufferSize = size
         reshape(withSize: size)
     }
@@ -273,27 +292,6 @@ class Renderer: NSObject, MTKViewDelegate {
             buffer.addCompletedHandler { _ in self.semaphore.signal() }
             buffer.present(drawable)
             buffer.commit()
-        }
-        
-        // Perform periodic events inside the controller
-        if frames % 5 == 0 {
-
-            parent.timerFunc()
-
-            if frames % 10 == 0 {
-
-                let now = CACurrentMediaTime()
-                let elapsed = now - timestamp
-                timestamp = now
-
-                let newfps = Int(round(10.0 / elapsed))
-                if newfps != fps {
-
-                    fps = newfps
-                    parent.amiga.host.refreshRate = Int(fps)
-                    debug(.vsync, "New GPU frame rate: \(fps)")
-                }
-            }
         }
     }
 }

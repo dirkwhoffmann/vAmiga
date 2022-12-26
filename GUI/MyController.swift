@@ -67,7 +67,7 @@ class MyController: NSWindowController, MessageReceiver {
     var speedometer: Speedometer!
     
     // Used inside the timer function to fine tune timed events
-    var animationCounter = 0
+    // var animationCounter = 0
     
     // Remembers if audio is muted (master volume of both channels is 0)
     var muted = false
@@ -273,22 +273,25 @@ extension MyController {
     // Timer and message processing
     //
     
-    func timerFunc() {
+    func update(frames: Int64) {
         
-        animationCounter += 1
+        // animationCounter += 1
         
-        // Animate the inspector
-        if inspector?.window?.isVisible == true { inspector!.continuousRefresh() }
+        if frames % 5 == 0 {
+
+            // Animate the inspector
+            if inspector?.window?.isVisible == true { inspector!.continuousRefresh() }
+        }
         
         // Do less times...
-        if (animationCounter % 3) == 0 {
+        if frames % 16 == 0 {
             
             updateSpeedometer()
             updateMonitoringPanels()
         }
         
         // Do lesser times...
-        if (animationCounter % 32) == 0 {
+        if frames % 160 == 0 {
             
             // Let the cursor disappear in fullscreen mode
             if renderer.fullscreen &&
