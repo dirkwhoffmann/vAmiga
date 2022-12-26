@@ -271,7 +271,14 @@ RetroShell::press(RetroShellKey key, bool shift)
                 input.erase(input.begin() + cursor);
             }
             break;
-            
+
+        case RSKEY_CUT:
+
+            if (cursor < inputLength()) {
+                input.erase(input.begin() + cursor, input.end());
+            }
+            break;
+
         case RSKEY_BACKSPACE:
             
             if (cursor > 0) {

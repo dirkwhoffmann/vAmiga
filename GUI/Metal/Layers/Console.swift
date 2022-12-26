@@ -107,9 +107,13 @@ class Console: Layer {
         
         let macKey = MacKey(event: event)
         let shift  = macKey.modifierFlags.contains(.shift)
+        let ctrl   = macKey.modifierFlags.contains(.control)
 
         switch macKey.keyCode {
-        
+
+        case kVK_ANSI_A where ctrl: amiga.retroShell.pressHome()
+        case kVK_ANSI_E where ctrl: amiga.retroShell.pressEnd()
+        case kVK_ANSI_K where ctrl: amiga.retroShell.pressCut()
         case kVK_UpArrow: amiga.retroShell.pressUp()
         case kVK_DownArrow: amiga.retroShell.pressDown()
         case kVK_LeftArrow: amiga.retroShell.pressLeft()

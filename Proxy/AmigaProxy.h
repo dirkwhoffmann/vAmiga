@@ -806,6 +806,7 @@
 - (void)pressEnd;
 - (void)pressBackspace;
 - (void)pressDelete;
+- (void)pressCut;
 - (void)pressReturn;
 - (void)pressShiftReturn;
 - (void)pressTab;

@@ -1945,6 +1945,11 @@ using namespace vamiga::moira;
     [self shell]->press(RSKEY_DEL);
 }
 
+- (void)pressCut
+{
+    [self shell]->press(RSKEY_CUT);
+}
+
 - (void)pressReturn
 {
     [self shell]->press(RSKEY_RETURN);
