@@ -344,6 +344,17 @@ RetroShell::exec <Token::memory, Token::checksums> (Arguments& argv, long param)
     dump(amiga.mem, Category::Checksums);
 }
 
+template <> void
+RetroShell::exec <Token::memory, Token::write> (Arguments& argv, long param)
+{
+    auto addr = (u32)util::parseNum(argv[0]);
+    auto val = (u16)util::parseNum(argv[1]);
+
+    printf("Writing %x to %x\n", val, addr);
+
+    mem.patch(addr, val);
+}
+
 
 //
 // CPU

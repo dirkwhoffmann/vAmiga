@@ -289,6 +289,10 @@ Interpreter::initDebugShell(Command &root)
              "Computes memory checksums",
              &RetroShell::exec <Token::memory, Token::checksums>);
 
+    root.add({"memory", "write"}, { Arg::value, Arg::value },
+             "Writes a word into memory",
+             &RetroShell::exec <Token::memory, Token::write>);
+
 
     //
     // CPU

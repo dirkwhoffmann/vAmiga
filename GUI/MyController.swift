@@ -65,10 +65,7 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Speedometer to measure clock frequence and frames per second
     var speedometer: Speedometer!
-    
-    // Used inside the timer function to fine tune timed events
-    // var animationCounter = 0
-    
+
     // Remembers if audio is muted (master volume of both channels is 0)
     var muted = false
     
@@ -274,9 +271,7 @@ extension MyController {
     //
     
     func update(frames: Int64) {
-        
-        // animationCounter += 1
-        
+
         if frames % 5 == 0 {
 
             // Animate the inspector
