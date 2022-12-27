@@ -413,7 +413,6 @@ Amiga::setConfigItem(Option option, i64 value)
                 SUSPENDED
 
                 config.vsync = bool(value);
-                paula.muxer.adjustSpeed();
             }
             return;
 

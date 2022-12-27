@@ -50,7 +50,6 @@ Host::setHostRefreshRate(double fps)
         case 50: case 60: case 100: case 120: case 200: case 240:
 
             refreshRate = fps;
-            paula.muxer.adjustSpeed();
             break;
 
         default:

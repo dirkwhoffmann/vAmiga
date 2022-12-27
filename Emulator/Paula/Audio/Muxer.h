@@ -52,7 +52,7 @@ class Muxer : public SubComponent {
     MuxerStats stats = {};
     
     // Master clock cycles per audio sample
-    double cyclesPerSample = 0.0;
+    // double cyclesPerSample = 0.0;
 
     // Fraction of a sample that hadn't been generated in synthesize
     double fraction = 0.0;
@@ -170,9 +170,6 @@ public:
 
     // double getSampleRate() const { return sampleRate; }
     void setSampleRate(double hz);
-
-    // Needs to be called when the sampling rate or the CPU speed changes
-    void adjustSpeed();
 
 
     //
