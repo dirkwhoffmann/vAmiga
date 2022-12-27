@@ -286,7 +286,7 @@ extension MyController {
         }
         
         // Do lesser times...
-        if frames % 160 == 0 {
+        if frames % 256 == 0 {
             
             // Let the cursor disappear in fullscreen mode
             if renderer.fullscreen &&

@@ -208,8 +208,11 @@ public:
     //
     
 public:
-    
+
+    // Entry point for the screen recorder
     void synthesize(Cycle clock, Cycle target, long count);
+
+    // Entry point for the core emulator
     void synthesize(Cycle clock, Cycle target);
 
 private:

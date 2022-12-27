@@ -25,6 +25,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     var prefs: Preferences { return parent.pref }
     var config: Configuration { return parent.config }
+    var amiga: AmigaProxy { return parent.amiga }
 
     // Number of drawn frames since power up
     var frames: Int64 = 0
@@ -258,26 +259,22 @@ class Renderer: NSObject, MTKViewDelegate {
         reshape(withSize: size)
     }
 
-    var theDrawable: CAMetalDrawable? 
-
     func draw(in view: MTKView) {
         
         frames += 1
         update(frames: frames)
 
         semaphore.wait()
-        canvas.updateTexture()
         parent.amiga.wakeUp()
         
         if let drawable = metalLayer.nextDrawable() {
-
-            theDrawable = drawable
 
             // Create the command buffer
             let buffer = makeCommandBuffer()
             
             // Create the command encoder
-            guard let encoder = makeCommandEncoder(theDrawable!, buffer) else {
+            guard let encoder = makeCommandEncoder(drawable, buffer) else {
+
                 semaphore.signal()
                 return
             }

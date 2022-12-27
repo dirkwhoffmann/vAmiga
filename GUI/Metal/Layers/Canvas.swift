@@ -240,45 +240,8 @@ class Canvas: Layer {
     override func update(frames: Int64) {
             
         super.update(frames: frames)
+        updateTexture()
     }
-
-    // EXPERIMENTAL
-    /*
-    func grabFrameBuffer() {
-
-        let rect = renderer.recordingRect
-        let size = NSSize(width: rect.width, height: rect.height)
-
-        if let gpuData = amiga.recorder.getGpuData(size) {
-
-            let width = Int(rect.width)
-            let height = Int(rect.height)
-
-            switch renderer.prefs.captureSource {
-
-            case .emulatorTexture:
-
-                // blitTexture(texture: mergeTexture) // NOT NEEDED
-                mergeTexture.getBytes(UnsafeMutableRawPointer(mutating: gpuData),
-                                      bytesPerRow: width * 4,
-                                      bytesPerImage: width * height * 4,
-                                      from: MTLRegionMake2D(0, 0, width, height),
-                                      mipmapLevel: 0,
-                                      slice: 0)
-
-            case .frambufferTexture:
-
-                blitTexture(texture: framebufTexture) // NOT NEEDED
-                framebufTexture.getBytes(UnsafeMutableRawPointer(mutating: gpuData),
-                                         bytesPerRow: width * 4,
-                                         bytesPerImage: width * height * 4,
-                                         from: MTLRegionMake2D(0, 0, width, height),
-                                         mipmapLevel: 0,
-                                         slice: 0)
-            }
-        }
-    }
-    */
 
     func updateTexture() {
         
