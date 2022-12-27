@@ -152,12 +152,16 @@ Interpreter::initCommandShell(Command &root)
              "Configures the component");
 
     root.add({"amiga", "set", "type"}, { VideoFormatEnum::argList() },
-             "Sets the video standard to PAL or NTSC",
+             "Selects the video standard",
              &RetroShell::exec <Token::amiga, Token::set, Token::type>);
 
-    root.add({"amiga", "set", "vsync"}, { Arg::onoff },
-             "Turns VSYNC on or off",
-             &RetroShell::exec <Token::amiga, Token::vsync>);
+    root.add({"amiga", "set", "fpsmode"}, { FpsModeEnum::argList() },
+             "Selects the frame mode",
+             &RetroShell::exec <Token::amiga, Token::set, Token::fpsmode>);
+
+    root.add({"amiga", "set", "fps"}, { Arg::value },
+             "Sets the frames per seconds",
+             &RetroShell::exec <Token::amiga, Token::set, Token::fps>);
 
     root.add({"amiga", "init"}, { ConfigSchemeEnum::argList() },
              "Initializes the Amiga with a predefined scheme",

@@ -145,9 +145,16 @@ RetroShell::exec <Token::amiga, Token::set, Token::type> (Arguments& argv, long 
 }
 
 template <> void
-RetroShell::exec <Token::amiga, Token::vsync> (Arguments &argv, long param)
+RetroShell::exec <Token::amiga, Token::set, Token::fpsmode> (Arguments& argv, long param)
 {
-    amiga.configure(OPT_VSYNC, util::parseOnOff(argv.front()));
+    amiga.configure(OPT_FPS_MODE, util::parseEnum <FpsModeEnum> (argv.front()));
+}
+
+template <> void
+RetroShell::exec <Token::amiga, Token::set, Token::fps> (Arguments& argv, long param)
+{
+    amiga.configure(OPT_FPS, util::parseNum(argv.front()));
+    amiga.configure(OPT_FPS_MODE, FPS_CUSTOM);
 }
 
 template <> void

@@ -58,7 +58,7 @@ extension ConfigurationController {
         vidVCenterLabel.textColor = config.center == 0 ? .labelColor : .disabledControlTextColor
 
         // Vsync
-        vidVsync.state = config.vsync ? .on : .off
+        vidVsync.state = config.fpsMode == 2 ? .on : .off
 
         // Upscalers
         vidEnhancerPopUp.selectItem(withTag: config.enhancer)
@@ -192,7 +192,7 @@ extension ConfigurationController {
 
     @IBAction func vidVsyncAction(_ sender: NSButton!) {
 
-        config.vsync = sender.state == .on
+        config.fpsMode = sender.state == .on ? 2 : 0
         refresh()
     }
 

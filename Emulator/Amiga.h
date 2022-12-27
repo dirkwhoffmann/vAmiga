@@ -217,7 +217,8 @@ private:
         worker
 
         << config.type
-        << config.vsync;
+        << config.fpsMode
+        << config.fps;
     }
 
     template <class T>

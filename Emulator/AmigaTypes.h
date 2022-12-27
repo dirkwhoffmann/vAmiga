@@ -43,6 +43,35 @@ struct VideoFormatEnum : util::Reflection<VideoFormatEnum, VideoFormat>
 };
 #endif
 
+enum_long(FPS_MODE)
+{
+    FPS_NATIVE,
+    FPS_CUSTOM,
+    FPS_VSYNC
+};
+typedef FPS_MODE FpsMode;
+
+#ifdef __cplusplus
+struct FpsModeEnum : util::Reflection<FpsModeEnum, FpsMode>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = FPS_VSYNC;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
+
+    static const char *prefix() { return "FPS"; }
+    static const char *key(FpsMode value)
+    {
+        switch (value) {
+
+            case FPS_NATIVE:    return "NATIVE";
+            case FPS_CUSTOM:    return "CUSTOM";
+            case FPS_VSYNC:     return "VSYNC";
+        }
+        return "???";
+    }
+};
+#endif
+
 enum_long(CONFIG_SCHEME)
 {
     CONFIG_A1000_OCS_1MB,
@@ -287,7 +316,9 @@ struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
 typedef struct
 {
     VideoFormat type;
-    bool vsync;
+    FpsMode fpsMode;
+    isize fps;
+    // bool vsync;
 }
 AmigaConfig;
 
