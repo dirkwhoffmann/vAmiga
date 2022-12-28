@@ -267,8 +267,9 @@ class Canvas: Layer {
         } else {
 
             // Get the emulator texture
-            let buffer = amiga.denise.stableBuffer!
-            let nr = amiga.denise.frameNr
+            var buffer: UnsafeMutablePointer<u32>!
+            var nr = 0
+            amiga.denise.getStableBuffer(&buffer, nr: &nr, lof: &currLOF, prevlof: &prevLOF)
 
             // Check for duplicate frames or frame drops
             if nr != prevNr + 1 {
@@ -279,13 +280,6 @@ class Canvas: Layer {
                 if nr == prevNr { return }
             }
             prevNr = nr
-
-            // Determine if the new texture is a long frame or a short frame
-            prevLOF = currLOF
-            currLOF = amiga.denise.longFrame
-
-            // Experimental (copy GPU texture back to emulator)
-            // grabFrameBuffer()
 
             // Update the GPU texture
             if currLOF {
