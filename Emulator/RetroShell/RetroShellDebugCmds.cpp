@@ -23,6 +23,7 @@ namespace vamiga {
 // Instruction Stream
 //
 
+/*
 template <> void
 RetroShell::exec <Token::pause> (Arguments& argv, long param)
 {
@@ -64,12 +65,14 @@ RetroShell::exec <Token::disassemble> (Arguments& argv, long param)
 
     *this << '\n' << ss << '\n';
 }
+*/
 
 
 //
 // Breakpoints
 //
 
+/*
 template <> void
 RetroShell::exec <Token::bp> (Arguments& argv, long param)
 {
@@ -105,12 +108,13 @@ RetroShell::exec <Token::bp, Token::ignore> (Arguments& argv, long param)
 {
     amiga.cpu.ignoreBreakpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
 }
-
+*/
 
 //
 // Watchpoints
 //
 
+/*
 template <> void
 RetroShell::exec <Token::wp> (Arguments& argv, long param)
 {
@@ -146,12 +150,13 @@ RetroShell::exec <Token::wp, Token::ignore> (Arguments& argv, long param)
 {
     amiga.cpu.ignoreWatchpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
 }
-
+*/
 
 //
 // Catchpoints
 //
 
+/*
 template <> void
 RetroShell::exec <Token::cp> (Arguments& argv, long param)
 {
@@ -205,12 +210,13 @@ RetroShell::exec <Token::cp, Token::ignore> (Arguments& argv, long param)
 {
     amiga.cpu.ignoreCatchpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
 }
-
+*/
 
 //
 // Copper breakpoints
 //
 
+/*
 template <> void
 RetroShell::exec <Token::cbp> (Arguments& argv, long param)
 {
@@ -246,12 +252,13 @@ RetroShell::exec <Token::cbp, Token::ignore> (Arguments& argv, long param)
 {
     copper.debugger.ignoreBreakpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
 }
-
+*/
 
 //
 // Copper watchpoints
 //
 
+/*
 template <> void
 RetroShell::exec <Token::cwp> (Arguments& argv, long param)
 {
@@ -287,12 +294,13 @@ RetroShell::exec <Token::cwp, Token::ignore> (Arguments& argv, long param)
 {
     copper.debugger.ignoreWatchpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
 }
-
+*/
 
 //
 // Amiga
 //
 
+/*
 template <> void
 RetroShell::exec <Token::amiga> (Arguments &argv, long param)
 {
@@ -310,12 +318,13 @@ RetroShell::exec <Token::amiga, Token::debug> (Arguments &argv, long param)
 {
     dump(amiga, Category::Debug);
 }
-
+*/
 
 //
 // Memory
 //
 
+/*
 template <> void
 RetroShell::exec <Token::memory> (Arguments &argv, long param)
 {
@@ -326,9 +335,7 @@ template <> void
 RetroShell::exec <Token::memory, Token::memdump> (Arguments& argv, long param)
 {
     std::stringstream ss;
-
     mem.memDump<ACCESSOR_CPU>(ss, u32(util::parseNum(argv.front())));
-
     *this << '\n' << ss << '\n';
 }
 
@@ -349,12 +356,9 @@ RetroShell::exec <Token::memory, Token::write> (Arguments& argv, long param)
 {
     auto addr = (u32)util::parseNum(argv[0]);
     auto val = (u16)util::parseNum(argv[1]);
-
-    printf("Writing %x to %x\n", val, addr);
-
     mem.patch(addr, val);
 }
-
+*/
 
 //
 // CPU

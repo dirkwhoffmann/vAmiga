@@ -174,11 +174,8 @@ Interpreter::exec(const Arguments &argv, bool verbose)
     
     // Call the command handler
     if (current->callback) {
-        printf("New style callback found\n");
         current->callback(args, current->param);
-        printf("Called\n");
     } else {
-        printf("Standard action\n");
         (retroShell.*(current->action))(args, current->param);
     }
 }

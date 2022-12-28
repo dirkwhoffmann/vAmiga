@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "Interpreter.h"
-// #include "RetroShell.h"
 #include "Amiga.h"
 
 namespace vamiga {
@@ -25,29 +24,52 @@ Interpreter::initDebugShell(Command &root)
 
     root.newGroup("Controlling the instruction stream");
 
-    root.oldadd({"pause"},
+    root.add({"pause"},
              "Pauses emulation",
-             &RetroShell::exec <Token::pause>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"continue"},
+        amiga.pause();
+    });
+
+    root.add({"continue"},
              "Continues emulation",
-             &RetroShell::exec <Token::run>);
+                [this](Arguments& argv, long value) {
 
-    root.oldadd({"step"},
+        amiga.run();
+    });
+
+    root.add({"step"},
              "Steps into the next instruction",
-             &RetroShell::exec <Token::step>);
+                [this](Arguments& argv, long value) {
 
-    root.oldadd({"next"},
+        amiga.stepInto();
+    });
+
+    root.add({"next"},
              "Steps over the next instruction",
-             &RetroShell::exec <Token::next>);
+                [this](Arguments& argv, long value) {
 
-    root.oldadd({"goto"}, { Arg::address },
+        amiga.stepOver();
+    });
+
+    root.add({"goto"}, { Arg::address },
              "Redirects the program counter",
-             &RetroShell::exec <Token::jump>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"disassemble"}, { Arg::address },
+        amiga.cpu.jump((u32)util::parseNum(argv.front()));
+    });
+
+    root.add({"disassemble"}, { }, { Arg::address },
              "Runs disassembler",
-             &RetroShell::exec <Token::disassemble>);
+             [this](Arguments& argv, long value) {
+
+        std::stringstream ss;
+
+        auto addr = argv.empty() ? cpu.getPC0() : u32(util::parseNum(argv.front()));
+        cpu.disassembleRange(ss, addr, 16);
+
+        retroShell << '\n' << ss << '\n';
+    });
 
 
     root.newGroup("Guarding the program execution");
@@ -100,59 +122,97 @@ Interpreter::initDebugShell(Command &root)
 
     root.newGroup("");
 
-    root.oldadd({"break", ""},
+    root.add({"break", ""},
              "Lists all breakpoints",
-             &RetroShell::exec <Token::bp>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"break", "at"}, { Arg::address },
+        retroShell.dump(amiga.cpu, Category::Breakpoints);
+    });
+
+    root.add({"break", "at"}, { Arg::address },
              "Sets a breakpoint at the specified address",
-             &RetroShell::exec <Token::bp, Token::at>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"break", "delete"}, { Arg::address },
+        cpu.setBreakpoint(u32(util::parseNum(argv.front())));
+    });
+
+    root.add({"break", "delete"}, { Arg::address },
              "Deletes a breakpoint",
-             &RetroShell::exec <Token::bp, Token::del>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"break", "enable"}, { Arg::address },
+        cpu.deleteBreakpoint(util::parseNum(argv.front()));
+    });
+
+    root.add({"break", "enable"}, { Arg::address },
              "Enables a breakpoint",
-             &RetroShell::exec <Token::bp, Token::enable>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"break", "disable"}, { Arg::address },
+        cpu.enableBreakpoint(util::parseNum(argv.front()));
+    });
+
+    root.add({"break", "disable"}, { Arg::address },
              "Disables a breakpoint",
-             &RetroShell::exec <Token::bp, Token::disable>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"break", "ignore"}, { Arg::address, Arg::value },
+        cpu.disableBreakpoint(util::parseNum(argv.front()));
+    });
+
+    root.add({"break", "ignore"}, { Arg::address, Arg::value },
              "Ignores a breakpoint a certain number of times",
-             &RetroShell::exec <Token::bp, Token::ignore>);
+             [this](Arguments& argv, long value) {
 
+        cpu.ignoreBreakpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
+    });
+
+    
     //
     // Watchpoints
     //
 
     root.newGroup("");
 
-    root.oldadd({"watch", ""},
+    root.add({"watch", ""},
              "Lists all watchpoints",
-             &RetroShell::exec <Token::wp>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"watch", "at"}, { Arg::address },
+        retroShell.dump(amiga.cpu, Category::Watchpoints);
+    });
+
+    root.add({"watch", "at"}, { Arg::address },
              "Sets a watchpoint at the specified address",
-             &RetroShell::exec <Token::wp, Token::at>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"watch", "delete"}, { Arg::address },
+        cpu.setWatchpoint(u32(util::parseNum(argv.front())));
+    });
+
+    root.add({"watch", "delete"}, { Arg::address },
              "Deletes a watchpoint",
-             &RetroShell::exec <Token::wp, Token::del>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"watch", "enable"}, { Arg::address },
+        cpu.deleteWatchpoint(util::parseNum(argv.front()));
+    });
+
+    root.add({"watch", "enable"}, { Arg::address },
              "Enables a watchpoint",
-             &RetroShell::exec <Token::wp, Token::enable>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"watch", "disable"}, { Arg::address },
+        cpu.enableWatchpoint(util::parseNum(argv.front()));
+    });
+
+    root.add({"watch", "disable"}, { Arg::address },
              "Disables a watchpoint",
-             &RetroShell::exec <Token::wp, Token::disable>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"watch", "ignore"}, { Arg::address, Arg::value },
+        cpu.disableWatchpoint(util::parseNum(argv.front()));
+    });
+
+    root.add({"watch", "ignore"}, { Arg::address, Arg::value },
              "Ignores a watchpoint a certain number of times",
-             &RetroShell::exec <Token::wp, Token::ignore>);
+             [this](Arguments& argv, long value) {
+
+        cpu.ignoreWatchpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
+    });
+
 
     //
     // Catchpoints
@@ -160,95 +220,161 @@ Interpreter::initDebugShell(Command &root)
 
     root.newGroup("");
 
-    root.oldadd({"catch", ""},
+    root.add({"catch", ""},
              "Lists all catchpoints",
-             &RetroShell::exec <Token::cp>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"catch", "vector"}, { Arg::value },
+        retroShell.dump(amiga.cpu, Category::Catchpoints);
+    });
+
+    root.add({"catch", "vector"}, { Arg::value },
              "Catches an exception vector",
-             &RetroShell::exec <Token::cp, Token::vector>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"catch", "interrupt"}, { Arg::value },
+        auto nr = util::parseNum(argv.front());
+        if (nr < 0 || nr > 255) throw VAError(ERROR_OPT_INVARG, "0...255");
+        cpu.setCatchpoint(u8(nr));
+    });
+
+    root.add({"catch", "interrupt"}, { Arg::value },
              "Catches an interrupt",
-             &RetroShell::exec <Token::cp, Token::interrupt>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"catch", "trap"}, { Arg::value },
+        auto nr = util::parseNum(argv.front());
+        if (nr < 1 || nr > 7) throw VAError(ERROR_OPT_INVARG, "1...7");
+        cpu.setCatchpoint(u8(nr + 24));
+    });
+
+    root.add({"catch", "trap"}, { Arg::value },
              "Catches a trap instruction",
-             &RetroShell::exec <Token::cp, Token::trap>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"catch", "delete"}, { Arg::value },
+        auto nr = util::parseNum(argv.front());
+        if (nr < 0 || nr > 15) throw VAError(ERROR_OPT_INVARG, "0...15");
+        cpu.setCatchpoint(u8(nr + 32));
+    });
+
+    root.add({"catch", "delete"}, { Arg::value },
              "Deletes a catchpoint",
-             &RetroShell::exec <Token::cp, Token::del>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"catch", "enable"}, { Arg::value },
+        cpu.deleteCatchpoint(util::parseNum(argv.front()));
+    });
+
+    root.add({"catch", "enable"}, { Arg::value },
              "Enables a catchpoint",
-             &RetroShell::exec <Token::cp, Token::enable>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"catch", "disable"}, { Arg::value },
+        cpu.enableCatchpoint(util::parseNum(argv.front()));
+    });
+
+    root.add({"catch", "disable"}, { Arg::value },
              "Disables a catchpoint",
-             &RetroShell::exec <Token::cp, Token::disable>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"catch", "ignore"}, { Arg::value, Arg::value },
+        cpu.disableCatchpoint(util::parseNum(argv.front()));
+    });
+
+    root.add({"catch", "ignore"}, { Arg::value, Arg::value },
              "Ignores a catchpoint a certain number of times",
-             &RetroShell::exec <Token::cp, Token::ignore>);
+             [this](Arguments& argv, long value) {
+
+        cpu.ignoreCatchpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
+    });
 
 
     //
     // Copper breakpoints
     //
 
-    root.oldadd({"cbreak", ""},
+    root.add({"cbreak", ""},
              "Lists all breakpoints",
-             &RetroShell::exec <Token::cbp>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"cbreak", "at"}, { Arg::value },
+        retroShell.dump(copper.debugger, Category::Breakpoints);
+    });
+
+    root.add({"cbreak", "at"}, { Arg::value },
              "Sets a breakpoint at the specified address",
-             &RetroShell::exec <Token::cbp, Token::at>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"cbreak", "delete"}, { Arg::value },
+        copper.debugger.setBreakpoint(u32(util::parseNum(argv.front())));
+    });
+
+    root.add({"cbreak", "delete"}, { Arg::value },
              "Deletes a breakpoint",
-             &RetroShell::exec <Token::cbp, Token::del>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"cbreak", "enable"}, { Arg::value },
+        copper.debugger.deleteBreakpoint(util::parseNum(argv.front()));
+    });
+
+    root.add({"cbreak", "enable"}, { Arg::value },
              "Enables a breakpoint",
-             &RetroShell::exec <Token::cbp, Token::enable>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"cbreak", "disable"}, { Arg::value },
+        copper.debugger.enableBreakpoint(util::parseNum(argv.front()));
+    });
+
+    root.add({"cbreak", "disable"}, { Arg::value },
              "Disables a breakpoint",
-             &RetroShell::exec <Token::cbp, Token::disable>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"cbreak", "ignore"}, { Arg::value, Arg::value },
+        copper.debugger.disableBreakpoint(util::parseNum(argv.front()));
+    });
+
+    root.add({"cbreak", "ignore"}, { Arg::value, Arg::value },
              "Ignores a breakpoint a certain number of times",
-             &RetroShell::exec <Token::cbp, Token::ignore>);
+             [this](Arguments& argv, long value) {
+
+        copper.debugger.ignoreBreakpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
+    });
 
 
     //
     // Copper watchpoints
     //
 
-    root.oldadd({"cwatch", ""},
+    root.add({"cwatch", ""},
              "Lists all watchpoints",
-             &RetroShell::exec <Token::cwp>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"cwatch", "at"}, { Arg::value },
+        retroShell.dump(copper.debugger, Category::Watchpoints);
+    });
+
+    root.add({"cwatch", "at"}, { Arg::value },
              "Sets a watchpoint at the specified address",
-             &RetroShell::exec <Token::cwp, Token::at>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"cwatch", "delete"}, { Arg::value },
+        copper.debugger.setWatchpoint(u32(util::parseNum(argv.front())));
+    });
+
+    root.add({"cwatch", "delete"}, { Arg::value },
              "Deletes a watchpoint",
-             &RetroShell::exec <Token::cwp, Token::del>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"cwatch", "enable"}, { Arg::value },
+        copper.debugger.deleteWatchpoint(util::parseNum(argv.front()));
+    });
+
+    root.add({"cwatch", "enable"}, { Arg::value },
              "Enables a watchpoint",
-             &RetroShell::exec <Token::cwp, Token::enable>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"cwatch", "disable"}, { Arg::value },
+        copper.debugger.enableWatchpoint(util::parseNum(argv.front()));
+    });
+
+    root.add({"cwatch", "disable"}, { Arg::value },
              "Disables a watchpoint",
-             &RetroShell::exec <Token::cwp, Token::disable>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"cwatch", "ignore"}, { Arg::value, Arg::value },
+        copper.debugger.disableWatchpoint(util::parseNum(argv.front()));
+    });
+
+    root.add({"cwatch", "ignore"}, { Arg::value, Arg::value },
              "Ignores a watchpoint a certain number of times",
-             &RetroShell::exec <Token::cwp, Token::ignore>);
+             [this](Arguments& argv, long value) {
+
+        copper.debugger.ignoreWatchpoint(util::parseNum(argv[0]), util::parseNum(argv[1]));
+    });
 
 
     //
@@ -257,42 +383,70 @@ Interpreter::initDebugShell(Command &root)
 
     root.newGroup("");
 
-    root.oldadd({"amiga", ""},
+    root.add({"amiga", ""},
              "Inspects the internal state",
-             &RetroShell::exec <Token::amiga>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"amiga", "host"},
+        retroShell.dump(amiga, Category::Inspection);
+    });
+
+    root.add({"amiga", "host"},
              "Displays information about the host machine",
-             &RetroShell::exec <Token::amiga, Token::host>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"amiga", "debug"},
+        retroShell.dump(host, Category::Inspection);
+    });
+
+    root.add({"amiga", "debug"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::amiga, Token::debug>);
+             [this](Arguments& argv, long value) {
+
+        retroShell.dump(amiga, Category::Debug);
+    });
 
 
     //
     // Memory
     //
 
-    root.oldadd({"memory", ""},
+    root.add({"memory", ""},
              "Inspects the internal state",
-             &RetroShell::exec <Token::memory>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"memory", "dump"}, { Arg::address },
+        retroShell.dump(mem, Category::BankMap);
+    });
+
+    root.add({"memory", "dump"}, { Arg::address },
              "Generates a memory hexdump",
-             &RetroShell::exec <Token::memory, Token::memdump>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"memory", "banks"},
+        std::stringstream ss;
+        mem.memDump<ACCESSOR_CPU>(ss, u32(util::parseNum(argv.front())));
+        retroShell << '\n' << ss << '\n';
+    });
+
+    root.add({"memory", "banks"},
              "Dumps the memory bank map",
-             &RetroShell::exec <Token::memory, Token::bankmap>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"memory", "checksum"},
+        retroShell.dump(amiga, Category::BankMap);
+    });
+
+    root.add({"memory", "checksum"},
              "Computes memory checksums",
-             &RetroShell::exec <Token::memory, Token::checksums>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"memory", "write"}, { Arg::value, Arg::value },
+        retroShell.dump(amiga.mem, Category::Checksums);
+    });
+
+    root.add({"memory", "write"}, { Arg::value, Arg::value },
              "Writes a word into memory",
-             &RetroShell::exec <Token::memory, Token::write>);
+             [this](Arguments& argv, long value) {
+
+        auto addr = (u32)util::parseNum(argv[0]);
+        auto val = (u16)util::parseNum(argv[1]);
+        mem.patch(addr, val);
+    });
 
 
     //
@@ -445,26 +599,16 @@ Interpreter::initDebugShell(Command &root)
     // RTC
     //
 
-    /*
-    root.oldadd({"rtc", ""},
-             "Inspects the internal state",
-             &RetroShell::exec <Token::rtc>);
-     */
     root.add({"rtc", ""},
              "Inspects the internal state",
-             [this](Arguments& args, long value) {
+             [this](Arguments& argv, long value) {
 
         retroShell.dumpInspection(rtc);
     });
 
-    /*
     root.add({"rtc", "debug"},
              "Displays additional debug information",
-     &RetroShell::exec <Token::rtc, Token::debug>);
-     */
-    root.add({"rtc", "debug"},
-             "Displays additional debug information",
-             [this](Arguments& args, long value) {
+             [this](Arguments& argv, long value) {
 
         retroShell.dumpDebug(rtc);
     });
