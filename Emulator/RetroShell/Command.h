@@ -11,6 +11,7 @@
 
 #include "Aliases.h"
 #include <vector>
+#include <functional>
 
 namespace vamiga {
 
