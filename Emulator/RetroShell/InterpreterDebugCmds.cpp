@@ -453,17 +453,26 @@ Interpreter::initDebugShell(Command &root)
     // CPU
     //
 
-    root.oldadd({"cpu", ""},
+    root.add({"cpu", ""},
              "Inspects the internal state",
-             &RetroShell::exec <Token::cpu>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"cpu", "debug"},
+        retroShell.dumpInspection(cpu);
+    });
+
+    root.add({"cpu", "debug"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::cpu, Token::debug>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"cpu", "vectors"},
+        retroShell.dumpDebug(cpu);
+    });
+
+    root.add({"cpu", "vectors"},
              "Dumps the vector table",
-             &RetroShell::exec <Token::cpu, Token::vectors>);
+             [this](Arguments& argv, long value) {
+
+        retroShell.dump(cpu, Category::Vectors);
+    });
 
 
     //
@@ -474,17 +483,26 @@ Interpreter::initDebugShell(Command &root)
 
         string cia = (i == 0) ? "ciaa" : "ciab";
 
-        root.oldadd({cia, ""},
+        root.add({cia, ""},
                  "Inspects the internal state",
-                 &RetroShell::exec <Token::cia>, i);
+                 [this](Arguments& argv, long value) {
 
-        root.oldadd({cia, "debug"},
+            value == 0 ? retroShell.dumpInspection(ciaa) : retroShell.dumpInspection(ciab);
+        }, i);
+
+        root.add({cia, "debug"},
                  "Displays additional debug information",
-                 &RetroShell::exec <Token::cia, Token::debug>, i);
+                 [this](Arguments& argv, long value) {
 
-        root.oldadd({cia, "tod"},
+            value == 0 ? retroShell.dumpDebug(ciaa) : retroShell.dumpDebug(ciab);
+        }, i);
+
+        root.add({cia, "tod"},
                  "Displays the state of the 24-bit counter",
-                 &RetroShell::exec <Token::cia, Token::tod>, i);
+                 [this](Arguments& argv, long value) {
+
+            value == 0 ? retroShell.dump(ciaa, Category::Tod) : retroShell.dump(ciab, Category::Tod);
+        }, i);
     }
 
 
@@ -492,64 +510,113 @@ Interpreter::initDebugShell(Command &root)
     // Agnus
     //
 
-    root.oldadd({"agnus", ""},
+    root.add({"agnus", ""},
              "Inspects the internal state",
-             &RetroShell::exec <Token::agnus>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"agnus", "debug"},
+        retroShell.dumpInspection(agnus);
+    });
+
+    root.add({"agnus", "debug"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::agnus, Token::debug>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"agnus", "beam"},
+        retroShell.dumpDebug(agnus);
+    });
+
+    root.add({"agnus", "beam"},
              "Displays the current beam position",
-             &RetroShell::exec <Token::agnus, Token::beam>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"agnus", "dma"},
+        retroShell.dump(amiga.agnus, Category::Beam);
+    });
+
+    root.add({"agnus", "dma"},
              "Prints all scheduled DMA events",
-             &RetroShell::exec <Token::agnus, Token::dma>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"agnus", "events"},
+        retroShell.dump(amiga.agnus, Category::Dma);
+    });
+
+    root.add({"agnus", "events"},
              "Inspects the event scheduler",
-             &RetroShell::exec <Token::agnus, Token::events>);
+             [this](Arguments& argv, long value) {
+
+        retroShell.dump(amiga.agnus, Category::Events);
+    });
 
 
     //
     // Blitter
     //
 
-    root.oldadd({"blitter", ""},
+    root.add({"blitter", ""},
              "Inspects the internal state",
-             &RetroShell::exec <Token::blitter>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"blitter", "debug"},
+        retroShell.dumpInspection(amiga.agnus.blitter);
+    });
+
+    root.add({"blitter", "debug"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::blitter, Token::debug>);
+             [this](Arguments& argv, long value) {
+
+        retroShell.dumpDebug(amiga.agnus.blitter);
+    });
 
 
     //
     // Copper
     //
 
-    root.oldadd({"copper", ""},
+    root.add({"copper", ""},
              "Inspects the internal state",
-             &RetroShell::exec <Token::copper>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"copper", "debug"},
+        retroShell.dumpInspection(amiga.agnus.copper);
+    });
+
+    root.add({"copper", "debug"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::copper, Token::debug>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"copper", "list"}, { Arg::value },
+        retroShell.dumpDebug(amiga.agnus.copper);
+    });
+
+    root.add({"copper", "list"}, { Arg::value },
              "Prints the Copper list",
-             &RetroShell::exec <Token::copper, Token::list>);
+             [this](Arguments& argv, long value) {
+
+        auto nr = util::parseNum(argv.front());
+
+        switch (nr) {
+
+            case 1: retroShell.dump(amiga.agnus.copper, Category::List1); break;
+            case 2: retroShell.dump(amiga.agnus.copper, Category::List2); break;
+
+            default:
+                throw VAError(ERROR_OPT_INVARG, "1 or 2");
+        }
+    });
 
 
     //
     // Paula
     //
 
-    root.oldadd({"paula", ""},
+    root.add({"paula", ""},
              "Inspects the internal state",
-             &RetroShell::exec <Token::paula>);
+             [this](Arguments& argv, long value) {
+
+        retroShell.dumpInspection(paula);
+    });
+
+    root.add({"paula", "debug"},
+             "Inspects the internal state",
+             [this](Arguments& argv, long value) {
+
+        retroShell.dumpDebug(paula);
+    });
 
     root.add({"paula", "audio"},
              "Audio unit");
@@ -560,39 +627,59 @@ Interpreter::initDebugShell(Command &root)
     root.add({"paula", "uart"},
              "Universal Asynchronous Receiver Transmitter");
 
-    root.oldadd({"paula", "audio", ""},
+    root.add({"paula", "audio", ""},
              "Inspects the internal state",
-             &RetroShell::exec <Token::paula, Token::audio>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"paula", "audio", "debug"},
+        retroShell.dumpInspection(amiga.paula.muxer);
+    });
+
+    root.add({"paula", "audio", "debug"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::paula, Token::audio, Token::debug>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"paula", "dc", ""},
+        retroShell.dumpDebug(amiga.paula.muxer);
+    });
+
+    root.add({"paula", "dc", ""},
              "Inspects the internal state",
-             &RetroShell::exec <Token::paula, Token::dc>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"paula", "dc", "debug"},
+        retroShell.dumpInspection(amiga.paula.diskController);
+    });
+
+    root.add({"paula", "dc", "debug"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::paula, Token::dc, Token::debug>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"paula", "uart", ""},
+        retroShell.dumpDebug(amiga.paula.diskController);
+    });
+
+    root.add({"paula", "uart", ""},
              "Inspects the internal state",
-             &RetroShell::exec <Token::paula, Token::uart>);
+             [this](Arguments& argv, long value) {
+
+        retroShell.dumpInspection(amiga.paula.uart);
+    });
 
 
     //
     // Denise
     //
 
-    root.oldadd({"denise", ""},
+    root.add({"denise", ""},
              "Inspects the internal state",
-             &RetroShell::exec <Token::denise>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"denise", "debug"},
+        retroShell.dumpInspection(denise);
+    });
+
+    root.add({"denise", "debug"},
              "Displays additional debug information",
-             &RetroShell::exec <Token::denise, Token::debug>);
+             [this](Arguments& argv, long value) {
 
+        retroShell.dumpDebug(denise);
+    });
 
 
     //
@@ -613,17 +700,31 @@ Interpreter::initDebugShell(Command &root)
         retroShell.dumpDebug(rtc);
     });
 
+
     //
     // Zorro boards
     //
 
-    root.oldadd({"zorro", ""},
+    root.add({"zorro", ""},
              "Lists all connected boards",
-             &RetroShell::exec <Token::zorro, Token::list>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"zorro", "inspect"}, { Arg::value },
+        retroShell.dumpDebug(zorro);
+    });
+
+    root.add({"zorro", "inspect"}, { Arg::value },
              "Inspects a specific Zorro board",
-             &RetroShell::exec <Token::zorro, Token::inspect>);
+             [this](Arguments& argv, long value) {
+
+        auto nr = util::parseNum(argv.front());
+
+        if (auto board = zorro.getBoard(nr); board != nullptr) {
+
+            retroShell.dump(*board, Category::Properties);
+            retroShell.dumpDebug(*board);
+            retroShell.dump(*board, Category::Stats);
+        }
+    });
 
 
     //
@@ -637,13 +738,23 @@ Interpreter::initDebugShell(Command &root)
         root.add({"controlport", nr},
                  "Control port " + nr);
 
-        root.oldadd({"controlport", nr, ""},
+        root.add({"controlport", nr, ""},
                  "Inspects the internal state",
-                 &RetroShell::exec <Token::controlport>, i);
+                 [this](Arguments& argv, long value) {
 
-        root.oldadd({"controlport", nr, "debug"},
+            if (value == 1) retroShell.dumpInspection(controlPort1);
+            if (value == 2) retroShell.dumpInspection(controlPort2);
+
+        }, i);
+
+        root.add({"controlport", nr, "debug"},
                  "Displays additional debug information",
-                 &RetroShell::exec <Token::controlport, Token::debug>, i);
+                 [this](Arguments& argv, long value) {
+
+            if (value == 1) retroShell.dumpDebug(controlPort1);
+            if (value == 2) retroShell.dumpDebug(controlPort2);
+
+        }, i);
     }
 
 
@@ -651,18 +762,24 @@ Interpreter::initDebugShell(Command &root)
     // Serial port
     //
 
-    root.oldadd({"serial", ""},
+    root.add({"serial", ""},
              "Displays the internal state",
-             &RetroShell::exec <Token::serial>);
+             [this](Arguments& argv, long value) {
+
+        retroShell.dumpInspection(serialPort);
+    });
 
 
     //
     // Keyboard, Mice, Joystick
     //
 
-    root.oldadd({"keyboard", ""},
+    root.add({"keyboard", ""},
              "Inspects the internal state",
-             &RetroShell::exec <Token::keyboard>);
+             [this](Arguments& argv, long value) {
+
+        retroShell.dumpInspection(keyboard);
+    });
 
     for (isize i = 1; i <= 2; i++) {
 
@@ -671,20 +788,35 @@ Interpreter::initDebugShell(Command &root)
         root.add({"mouse", nr},
                  "Mouse in port " + nr);
 
-        root.oldadd({"mouse", nr, ""},
+        root.add({"mouse", nr, ""},
                  "Inspects the internal state",
-                 &RetroShell::exec <Token::mouse>, i);
+                 [this](Arguments& argv, long value) {
 
-        root.oldadd({"mouse", nr, "debug"},
+            if (value == 1) retroShell.dumpInspection(controlPort1.mouse);
+            if (value == 2) retroShell.dumpInspection(controlPort2.mouse);
+
+        }, i);
+
+        root.add({"mouse", nr, "debug"},
                  "Displays additional debug information",
-                 &RetroShell::exec <Token::mouse, Token::debug>, i);
+                 [this](Arguments& argv, long value) {
+
+            if (value == 1) retroShell.dumpDebug(controlPort1.mouse);
+            if (value == 2) retroShell.dumpDebug(controlPort2.mouse);
+
+        }, i);
 
         root.add({"joystick", nr},
                  "Joystick in port " + nr);
 
-        root.oldadd({"joystick", nr, ""},
+        root.add({"joystick", nr, ""},
                  "Inspects the internal state",
-                 &RetroShell::exec <Token::joystick>, i);
+                 [this](Arguments& argv, long value) {
+
+            if (value == 1) retroShell.dumpInspection(controlPort1.joystick);
+            if (value == 2) retroShell.dumpInspection(controlPort2.joystick);
+
+        }, i);
     }
 
     //
@@ -695,17 +827,29 @@ Interpreter::initDebugShell(Command &root)
 
         string df = "df" + std::to_string(i);
 
-        root.oldadd({df, ""},
+        root.add({df, ""},
                  "Inspects the internal state",
-                 &RetroShell::exec <Token::dfn>, i);
+                 [this](Arguments& argv, long value) {
 
-        root.oldadd({df, "debug"},
+            retroShell.dumpInspection(*amiga.df[value]);
+
+        }, i);
+
+        root.add({df, "debug"},
                  "Displays additional debug information",
-                 &RetroShell::exec <Token::dfn, Token::debug>, i);
+                 [this](Arguments& argv, long value) {
 
-        root.oldadd({df, "disk"},
+            retroShell.dumpDebug(*amiga.df[value]);
+
+        }, i);
+
+        root.add({df, "disk"},
                  "Inspects the inserted disk",
-                 &RetroShell::exec <Token::dfn, Token::disk>, i);
+                 [this](Arguments& argv, long value) {
+
+            retroShell.dump(*amiga.df[value], Category::Disk);
+
+        }, i);
     }
 
     //
@@ -719,21 +863,37 @@ Interpreter::initDebugShell(Command &root)
         root.add({hd, ""},
                  "Inspects the internal state");
 
-        root.oldadd({hd, "drive"},
+        root.add({hd, "drive"},
                  "Displays hard drive parameters",
-                 &RetroShell::exec <Token::hdn, Token::drive>, i);
+                 [this](Arguments& argv, long value) {
 
-        root.oldadd({hd, "volumes"},
+            retroShell.dump(*amiga.df[value], Category::Drive);
+
+        }, i);
+
+        root.add({hd, "volumes"},
                  "Displays summarized volume information",
-                 &RetroShell::exec <Token::hdn, Token::volumes>, i);
+                 [this](Arguments& argv, long value) {
 
-        root.oldadd({hd, "partitions"},
+            retroShell.dump(*amiga.df[value], Category::Volumes);
+
+        }, i);
+
+        root.add({hd, "partitions"},
                  "Displays information about all partitions",
-                 &RetroShell::exec <Token::hdn, Token::partition>, i);
+                 [this](Arguments& argv, long value) {
 
-        root.oldadd({hd, "debug"},
+            retroShell.dump(*amiga.df[value], Category::Partitions);
+
+        }, i);
+
+        root.add({hd, "debug"},
                  "Displays the internal state",
-                 &RetroShell::exec <Token::hdn, Token::debug>, i);
+                 [this](Arguments& argv, long value) {
+
+            retroShell.dumpDebug(*amiga.hd[value]);
+
+        }, i);
     }
 
 
@@ -741,48 +901,140 @@ Interpreter::initDebugShell(Command &root)
     // OSDebugger
     //
 
-    root.oldadd({"os", "info"},
+    root.add({"os", "info"},
              "Displays basic system information",
-             &RetroShell::exec <Token::os, Token::info>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"os", "execbase"},
+        std::stringstream ss;
+        osDebugger.dumpInfo(ss);
+        retroShell << ss;
+    });
+
+    root.add({"os", "execbase"},
              "Displays information about the ExecBase struct",
-             &RetroShell::exec <Token::os, Token::execbase>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"os", "interrupts"},
+        std::stringstream ss;
+        osDebugger.dumpExecBase(ss);
+        retroShell << ss;
+    });
+
+    root.add({"os", "interrupts"},
              "Lists all interrupt handlers",
-             &RetroShell::exec <Token::os, Token::interrupts>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"os", "libraries"}, { }, {"<library>"},
+        std::stringstream ss;
+        osDebugger.dumpIntVectors(ss);
+        retroShell << ss;
+    });
+
+    root.add({"os", "libraries"}, { }, {"<library>"},
              "Lists all libraries",
-             &RetroShell::exec <Token::os, Token::libraries>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"os", "devices"}, { }, {"<device>"},
+        std::stringstream ss;
+        isize num;
+
+        if (argv.empty()) {
+            osDebugger.dumpLibraries(ss);
+        } else if (util::parseHex(argv.front(), &num)) {
+            osDebugger.dumpLibrary(ss, (u32)num);
+        } else {
+            osDebugger.dumpLibrary(ss, argv.front());
+        }
+
+        retroShell << ss;
+    });
+
+    root.add({"os", "devices"}, { }, {"<device>"},
              "Lists all devices",
-             &RetroShell::exec <Token::os, Token::devices>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"os", "resources"}, { }, {"<resource>"},
+        std::stringstream ss;
+        isize num;
+
+        if (argv.empty()) {
+            osDebugger.dumpDevices(ss);
+        } else if (util::parseHex(argv.front(), &num)) {
+            osDebugger.dumpDevice(ss, (u32)num);
+        } else {
+            osDebugger.dumpDevice(ss, argv.front());
+        }
+
+        retroShell << ss;
+    });
+
+    root.add({"os", "resources"}, { }, {"<resource>"},
              "Lists all resources",
-             &RetroShell::exec <Token::os, Token::resources>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"os", "tasks"}, { }, {"<task>"},
+        std::stringstream ss;
+        isize num;
+
+        if (argv.empty()) {
+            osDebugger.dumpResources(ss);
+        } else if (util::parseHex(argv.front(), &num)) {
+            osDebugger.dumpResource(ss, (u32)num);
+        } else {
+            osDebugger.dumpResource(ss, argv.front());
+        }
+
+        retroShell << ss;
+    });
+
+    root.add({"os", "tasks"}, { }, {"<task>"},
              "Lists all tasks",
-             &RetroShell::exec <Token::os, Token::tasks>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"os", "processes"}, { }, {"<process>"},
+        std::stringstream ss;
+        isize num;
+
+        if (argv.empty()) {
+            osDebugger.dumpTasks(ss);
+        } else if (util::parseHex(argv.front(), &num)) {
+            osDebugger.dumpTask(ss, (u32)num);
+        } else {
+            osDebugger.dumpTask(ss, argv.front());
+        }
+
+        retroShell << ss;
+    });
+
+    root.add({"os", "processes"}, { }, {"<process>"},
              "Lists all processes",
-             &RetroShell::exec <Token::os, Token::processes>);
+             [this](Arguments& argv, long value) {
 
-    root.oldadd({"os", "catch"}, {"<task>"},
+        std::stringstream ss;
+        isize num;
+
+        if (argv.empty()) {
+            osDebugger.dumpProcesses(ss);
+        } else if (util::parseHex(argv.front(), &num)) {
+            osDebugger.dumpProcess(ss, (u32)num);
+        } else {
+            osDebugger.dumpProcess(ss, argv.front());
+        }
+
+        retroShell << ss;
+    });
+
+    root.add({"os", "catch"}, {"<task>"},
              "Pauses emulation on task launch",
-             &RetroShell::exec <Token::os, Token::cp>);
+             [this](Arguments& argv, long value) {
+
+        diagBoard.catchTask(argv.back());
+        retroShell << "Waiting for task '" << argv.back() << "' to start...\n";
+    });
 
     root.add({"os", "set"},
              "Configures the component");
 
-    root.oldadd({"os", "set", "diagboard" }, { Arg::boolean },
+    root.add({"os", "set", "diagboard" }, { Arg::boolean },
              "Attaches or detaches the debug expansion board",
-             &RetroShell::exec <Token::os, Token::set, Token::diagboard>);
+             [this](Arguments& argv, long value) {
+
+        diagBoard.setConfigItem(OPT_DIAG_BOARD, util::parseBool(argv.front()));
+    });
 }
 
 }

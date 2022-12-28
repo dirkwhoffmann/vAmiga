@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+/*
 #include "config.h"
 #include "RetroShell.h"
 #include "Amiga.h"
@@ -18,6 +19,7 @@
 #include <sstream>
 
 namespace vamiga {
+*/
 
 //
 // Instruction Stream
@@ -364,6 +366,7 @@ RetroShell::exec <Token::memory, Token::write> (Arguments& argv, long param)
 // CPU
 //
 
+/*
 template <> void
 RetroShell::exec <Token::cpu> (Arguments &argv, long param)
 {
@@ -381,12 +384,13 @@ RetroShell::exec <Token::cpu, Token::vectors> (Arguments& argv, long param)
 {
     dump(cpu, Category::Vectors);
 }
-
+*/
 
 //
 // CIA
 //
 
+/*
 template <> void
 RetroShell::exec <Token::cia> (Arguments &argv, long param)
 {
@@ -404,12 +408,13 @@ RetroShell::exec <Token::cia, Token::tod> (Arguments &argv, long param)
 {
     param == 0 ? dump(ciaa, Category::Tod) : dump(ciab, Category::Tod);
 }
-
+*/
 
 //
 // Agnus
 //
 
+/*
 template <> void
 RetroShell::exec <Token::agnus> (Arguments &argv, long param)
 {
@@ -439,12 +444,13 @@ RetroShell::exec <Token::agnus, Token::events> (Arguments &argv, long param)
 {
     dump(amiga.agnus, Category::Events);
 }
-
+*/
 
 //
 // Blitter
 //
 
+/*
 template <> void
 RetroShell::exec <Token::blitter> (Arguments &argv, long param)
 {
@@ -456,12 +462,13 @@ RetroShell::exec <Token::blitter, Token::debug> (Arguments &argv, long param)
 {
     dumpDebug(amiga.agnus.blitter);
 }
-
+*/
 
 //
 // Copper
 //
 
+/*
 template <> void
 RetroShell::exec <Token::copper> (Arguments &argv, long param)
 {
@@ -488,12 +495,13 @@ RetroShell::exec <Token::copper, Token::list> (Arguments& argv, long param)
             throw VAError(ERROR_OPT_INVARG, "1 or 2");
     }
 }
-
+*/
 
 //
 // Paula
 //
 
+/*
 template <> void
 RetroShell::exec <Token::paula> (Arguments &argv, long param)
 {
@@ -535,12 +543,13 @@ RetroShell::exec <Token::paula, Token::uart> (Arguments& argv, long param)
 {
     dumpInspection(amiga.paula.uart);
 }
-
+*/
 
 //
 // Denise
 //
 
+/*
 template <> void
 RetroShell::exec <Token::denise> (Arguments &argv, long param)
 {
@@ -552,7 +561,7 @@ RetroShell::exec <Token::denise, Token::debug> (Arguments &argv, long param)
 {
     dumpDebug(denise);
 }
-
+*/
 
 //
 // RTC
@@ -578,6 +587,7 @@ RetroShell::exec <Token::rtc, Token::debug> (Arguments &argv, long param)
 // Control ports
 //
 
+/*
 template <> void
 RetroShell::exec <Token::controlport> (Arguments& argv, long param)
 {
@@ -591,23 +601,25 @@ RetroShell::exec <Token::controlport, Token::debug> (Arguments& argv, long param
     if (param == 1) dumpDebug(amiga.controlPort1);
     if (param == 2) dumpDebug(amiga.controlPort2);
 }
-
+*/
 
 //
 // Serial port
 //
 
+/*
 template <> void
 RetroShell::exec <Token::serial> (Arguments& argv, long param)
 {
     dumpInspection(amiga.serialPort);
 }
-
+*/
 
 //
 // Keyboard, Mice, Joysticks
 //
 
+/*
 template <> void
 RetroShell::exec <Token::keyboard> (Arguments& argv, long param)
 {
@@ -634,12 +646,13 @@ RetroShell::exec <Token::joystick> (Arguments& argv, long param)
     if (param == 1) dumpInspection(amiga.controlPort1.joystick);
     if (param == 2) dumpInspection(amiga.controlPort2.joystick);
 }
-
+*/
 
 //
 // Df0, Df1, Df2, Df3
 //
 
+/*
 template <> void
 RetroShell::exec <Token::dfn> (Arguments& argv, long param)
 {
@@ -657,12 +670,13 @@ RetroShell::exec <Token::dfn, Token::disk> (Arguments& argv, long param)
 {
     dump(*amiga.df[param], Category::Disk);
 }
-
+*/
 
 //
 // Hd0, Hd1, Hd2, Hd3
 //
 
+/*
 template <> void
 RetroShell::exec <Token::hdn, Token::drive> (Arguments& argv, long param)
 {
@@ -686,12 +700,13 @@ RetroShell::exec <Token::hdn, Token::debug> (Arguments& argv, long param)
 {
     dumpDebug(*amiga.hd[param]);
 }
-
+*/
 
 //
 // OSDebugger
 //
 
+/*
 template <> void
 RetroShell::exec <Token::os, Token::info> (Arguments& argv, long param)
 {
@@ -818,3 +833,4 @@ RetroShell::exec <Token::os, Token::set, Token::diagboard> (Arguments& argv, lon
 }
 
 }
+*/

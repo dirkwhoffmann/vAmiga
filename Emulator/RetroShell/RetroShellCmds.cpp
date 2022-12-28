@@ -1146,6 +1146,7 @@ RetroShell::exec <Token::hdn, Token::geometry> (Arguments& argv, long param)
 // Zorro boards
 //
 
+/*
 template <> void
 RetroShell::exec <Token::zorro, Token::list> (Arguments& argv, long param)
 {
@@ -1164,7 +1165,7 @@ RetroShell::exec <Token::zorro, Token::inspect> (Arguments& argv, long param)
         dump(*board, Category::Stats);
     }
 }
-
+*/
 
 //
 // Remote servers
