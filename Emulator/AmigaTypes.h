@@ -309,6 +309,7 @@ struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
 };
 #endif
 
+
 //
 // Structures
 //
@@ -318,7 +319,6 @@ typedef struct
     VideoFormat type;
     FpsMode fpsMode;
     isize fps;
-    // bool vsync;
 }
 AmigaConfig;
 

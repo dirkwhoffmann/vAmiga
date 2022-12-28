@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "Interpreter.h"
-#include "RetroShell.h"
 #include "Amiga.h"
 
 namespace vamiga {
@@ -67,6 +66,7 @@ Interpreter::initCommandShell(Command &root)
     root.newGroup("Regression testing");
 
     root.add({"regression"},    "Runs the regression tester");
+    root.add({"screenshot"},    "Manages screenshots");
 
     root.newGroup("Controlling components");
 
@@ -118,12 +118,9 @@ Interpreter::initCommandShell(Command &root)
     root.add({"regression", "run"}, { Arg::path },
              "Launches a regression test",
              &RetroShell::exec <Token::regression, Token::run>);
-    
-    root.add({"screenshot"},
-             "Manages regression tests");
 
     root.add({"screenshot", "set"},
-             "Configures the regression test");
+             "Configures the screenshot");
 
     root.add({"screenshot", "set", "filename"}, { Arg::path },
              "Assigns the screen shot filename",

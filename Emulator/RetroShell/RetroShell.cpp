@@ -39,7 +39,6 @@ RetroShell::_pause()
 {
     printState();
     remoteManager.rshServer.send(getPrompt());
-    
 }
 
 RetroShell&

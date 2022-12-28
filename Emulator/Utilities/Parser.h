@@ -58,12 +58,4 @@ template <typename Enum> long parseEnum(const string& key)
     return it->second;
 }
 
-/*
- template <typename Enum> long parseEnum(const std::vector<string>& keys)
- {
- assert(keys.size() == 1);
- return parseEnum<Enum>(keys.front());
- }
- */
-
 }

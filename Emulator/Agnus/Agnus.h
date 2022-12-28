@@ -673,14 +673,6 @@ public:
         scheduleAbs<s>(clock + cycle, id, data);
     }
 
-    /*
-     template<EventSlot s> void schedulePos(Beam target, EventID id, i64 data) {
-
-     assert(target.v > pos.v || (target.v == pos.v && target.h >= pos.h));
-     scheduleRel<s>(DMA_CYCLES(pos.diff(target.v, target.h)), id, data);
-     }
-     */
-
     template<EventSlot s> void schedulePos(isize vpos, isize hpos, EventID id) {
 
         assert(vpos > pos.v || (vpos == pos.v && hpos >= pos.h));
@@ -696,12 +688,6 @@ public:
     template<EventSlot s> void rescheduleRel(Cycle cycle) {
         rescheduleAbs<s>(clock + cycle);
     }
-
-    /*
-     template<EventSlot s> void reschedulePos(Beam pos) {
-     rescheduleAbs<s>(beamToCycle(pos));
-     }
-     */
 
     template<EventSlot s> void reschedulePos(i16 vpos, i16 hpos) {
 

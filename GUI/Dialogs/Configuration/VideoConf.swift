@@ -193,7 +193,7 @@ extension ConfigurationController {
     }
 
     //
-    // Action methods (Display)
+    // Action methods (Refresh rate)
     //
 
     @IBAction func vidFpsModeAction(_ sender: NSPopUpButton!) {

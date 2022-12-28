@@ -28,7 +28,7 @@ Interpreter::initDebugShell(Command &root)
              "Pauses emulation",
              &RetroShell::exec <Token::pause>);
 
-    root.add({"run"},
+    root.add({"continue"},
              "Continues emulation",
              &RetroShell::exec <Token::run>);
 

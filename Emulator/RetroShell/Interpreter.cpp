@@ -211,8 +211,6 @@ Interpreter::help(const Arguments &argv)
 void
 Interpreter::help(const Command& current)
 {
-    // auto tokens = current.tokens();
-    // auto length = tokens.size();
     auto indent = string("    ");
 
     // Print the usage string

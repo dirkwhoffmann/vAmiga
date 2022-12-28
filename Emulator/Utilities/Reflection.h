@@ -56,7 +56,6 @@ template <class T, typename E> struct Reflection {
 
         return "{ " + keyList(prefix, " | ") + " }";
     }
-
 };
 
 }
