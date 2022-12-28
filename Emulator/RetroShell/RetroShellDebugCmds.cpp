@@ -554,18 +554,21 @@ RetroShell::exec <Token::denise, Token::debug> (Arguments &argv, long param)
 // RTC
 //
 
+/*
 template <> void
 RetroShell::exec <Token::rtc> (Arguments &argv, long param)
 {
     dumpInspection(rtc);
 }
+*/
 
+/*
 template <> void
 RetroShell::exec <Token::rtc, Token::debug> (Arguments &argv, long param)
 {
     dumpDebug(rtc);
 }
-
+*/
 
 //
 // Control ports

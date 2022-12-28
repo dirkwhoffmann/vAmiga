@@ -312,7 +312,6 @@ void
 Muxer::synthesize(Cycle clock, Cycle target)
 {
     assert(target > clock);
-    assert(cyclesPerSample > 0);
 
     // Determine the number of elapsed cycles per audio sample
     double cps = double(amiga.masterClockFrequency()) / host.getSampleRate();
