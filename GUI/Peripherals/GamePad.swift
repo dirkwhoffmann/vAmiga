@@ -128,49 +128,6 @@ class GamePad {
         lScheme = db.left(vendorID: vendorID, productID: productID)
         rScheme = db.right(vendorID: vendorID, productID: productID)
         hScheme = db.hatSwitch(vendorID: vendorID, productID: productID)
-                        
-        /*
-        for i in 0...14 {
-            pressActions[i] = [.PRESS_FIRE]
-            releaseActions[i] = [.RELEASE_FIRE]
-        }
-
-        switch lScheme { // Left stick
-        case 1:
-            lxAxis = kHIDUsage_GD_Y
-            lyAxis = kHIDUsage_GD_X
-        default:
-            lxAxis = kHIDUsage_GD_X
-            lyAxis = kHIDUsage_GD_Y
-        }
-        
-        switch rScheme { // Right stick
-        case 1:
-            rxAxis = kHIDUsage_GD_Z
-            ryAxis = kHIDUsage_GD_Rz
-        default:
-            rxAxis = kHIDUsage_GD_Rz
-            ryAxis = kHIDUsage_GD_Z
-        }
-
-        switch hScheme { // Hat switch
-        case 1:
-            hShift = 1
-        case 2:
-            hShift = 0
-            pressActions[11] = [.PULL_UP]
-            releaseActions[11] = [.RELEASE_Y]
-            pressActions[12] = [.PULL_DOWN]
-            releaseActions[12] = [.RELEASE_Y]
-            pressActions[13] = [.PULL_LEFT]
-            releaseActions[13] = [.RELEASE_X]
-            pressActions[14] = [.PULL_RIGHT]
-            releaseActions[14] = [.RELEASE_X]
-
-        default:
-            hShift = 0
-        }
-        */
     }
         
     func setIcon(name: String) {
@@ -485,8 +442,7 @@ class GamePad {
                 }
 
             default:
-                // track("Unknown HID usage: \(usage)")")
-                break
+                debug(.hid, "Unknown HID usage: \(usage)")
             }
         }
         

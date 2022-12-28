@@ -35,7 +35,6 @@
                                     <action selector="orderFrontStandardAboutPanel:" target="-2" id="142"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Check for Updates..." hidden="YES" keyEquivalent="u" id="412"/>
                             <menuItem isSeparatorItem="YES" id="202">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
@@ -123,25 +122,11 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="aWt-rp-gig"/>
-                            <menuItem title="Hardware" id="J9m-QD-9VI">
+                            <menuItem title="Configure..." keyEquivalent="" id="Y6J-U9-htE" userLabel="Configure...">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Hardware" id="k7j-8d-ksq">
-                                    <items>
-                                        <menuItem title="Configure..." keyEquivalent="" id="Y6J-U9-htE" userLabel="Configure...">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="configureAction:" target="-1" id="63m-54-OYh"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="Dr6-F8-vOV"/>
-                                        <menuItem title="Restore Factory Settings" id="TX7-U7-EG7">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="factorySettingsAction:" target="-1" id="eUA-v2-Mow"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
+                                <connections>
+                                    <action selector="configureAction:" target="-1" id="63m-54-OYh"/>
+                                </connections>
                             </menuItem>
                             <menuItem title="Inspector..." keyEquivalent="" id="jIT-6f-DxM" userLabel="Inspector...">
                                 <modifierMask key="keyEquivalentModifierMask" shift="YES"/>
@@ -155,13 +140,19 @@
                                     <action selector="monitorAction:" target="-1" id="hps-FK-7Yl"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Console..." keyEquivalent="^" id="x3U-7k-jeR" userLabel="Monitor...">
+                            <menuItem title="Console..." keyEquivalent="^" id="x3U-7k-jeR">
                                 <connections>
                                     <action selector="consoleAction:" target="-1" id="Nx9-Xz-OIt"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Restore Factory Settings" id="TX7-U7-EG7">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="factorySettingsAction:" target="-1" id="eUA-v2-Mow"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="bDU-dO-xxe"/>
-                            <menuItem title="Take Snapshot" keyEquivalent="t" id="BX4-y5-PoI" userLabel="Take Snapshot">
+                            <menuItem title="Take Snapshot" keyEquivalent="T" id="BX4-y5-PoI" userLabel="Take Snapshot">
                                 <connections>
                                     <action selector="takeSnapshotAction:" target="-1" id="eOH-IU-76n"/>
                                 </connections>
@@ -226,12 +217,13 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="qq8-Qm-VmD"/>
-                            <menuItem title="Pause" keyEquivalent="p" id="430">
+                            <menuItem title="Pause" keyEquivalent="P" id="430">
                                 <connections>
                                     <action selector="stopAndGoAction:" target="-1" id="MO3-RA-MNi"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Reset" keyEquivalent="r" id="432">
+                            <menuItem title="Reset" id="432">
+                                <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
                                 <connections>
                                     <action selector="resetAction:" target="-1" id="SV8-EZ-6HI"/>
                                 </connections>
@@ -278,7 +270,7 @@
                                     <action selector="runToolbarCustomizationPalette:" target="-1" id="BLv-4t-F3C"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Show Status Bar" keyEquivalent="b" id="nZ5-yO-Ch3">
+                            <menuItem title="Show Status Bar" keyEquivalent="B" id="nZ5-yO-Ch3">
                                 <connections>
                                     <action selector="toggleStatusBarAction:" target="-1" id="XV7-PD-saG"/>
                                 </connections>
@@ -314,7 +306,6 @@
                                     <action selector="mapRightCmdKeyAction:" target="-1" id="Z3K-od-06m"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="i1a-9I-H6M"/>
                             <menuItem title="Control Warp Mode with Caps Lock Key" id="QzJ-1p-Opa">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>

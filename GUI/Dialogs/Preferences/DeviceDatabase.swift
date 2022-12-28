@@ -62,16 +62,16 @@ class DeviceDatabase {
         if let obj = defaults.object(forKey: Keys.Dev.schemes) as? DeviceDescription {
             custom = obj
         }
-        
-        // track("\(custom)")
     }
     
     func save() {
         
+        debug(.hid)
+        
         let defaults = UserDefaults.standard
         defaults.set(custom, forKey: Keys.Dev.schemes)
         
-        // track("\(custom)")
+        debug(.hid, "\(custom)")
     }
     
     //
@@ -157,18 +157,15 @@ class DeviceDatabase {
     func setLeft(vendorID: String, productID: String, _ value: String?) {
         
         replace(vendorID, productID, "L", value)
-        // track("\(custom)")
     }
 
     func setRight(vendorID: String, productID: String, _ value: String?) {
         
         replace(vendorID, productID, "R", value)
-        // track("\(custom)")
     }
 
     func setHatSwitch(vendorID: String, productID: String, _ value: String?) {
         
         replace(vendorID, productID, "H", value)
-        // track("\(custom)")
     }
 }

@@ -37,7 +37,7 @@ class GamePadManager {
     var lock = NSLock()
 
     //
-    // Initialization
+    // Initializing
     //
     
     init(parent: MyController) {
@@ -108,6 +108,8 @@ class GamePadManager {
     
     func shutDown() {
         
+        debug(.shutdown)
+        
         // Terminate communication with all connected HID devices
         for (_, pad) in gamePads { pad.device?.close() }
 
@@ -119,8 +121,8 @@ class GamePadManager {
     }
 
     deinit {
-
-        debug(.hid)
+        
+        debug(.shutdown)
     }
         
     //
@@ -140,7 +142,7 @@ class GamePadManager {
         // We support up to 5 devices
         if nr < 5 { return nr }
         
-        warn("Maximum number of devices reached.")
+        warn("Maximum number of devices reached")
         return nil
     }
     
@@ -172,11 +174,12 @@ class GamePadManager {
                         device: IOHIDDevice) {
     
         lock.lock(); defer { lock.unlock() }
+
+        debug(.hid)
+        // device.listProperties()
                 
         // Ignore internal devices
         if device.isInternalDevice { return }
-        
-        device.listProperties()
         
         // Find a free slot for the new device
         guard let slot = findFreeSlot() else { return }
