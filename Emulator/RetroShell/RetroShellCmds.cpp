@@ -23,6 +23,7 @@ namespace vamiga {
 // Top-level commands
 //
 
+/*
 template <> void
 RetroShell::exec <Token::debug> (Arguments &argv, long param)
 {
@@ -77,11 +78,13 @@ RetroShell::exec <Token::wait> (Arguments &argv, long param)
     throw ScriptInterruption("");
 }
 
+*/
 
 //
-// Rgression testing
+// Regression testing
 //
 
+/*
 template <> void
 RetroShell::exec <Token::regression, Token::setup> (Arguments &argv, long param)
 {
@@ -126,12 +129,13 @@ RetroShell::exec <Token::screenshot, Token::save> (Arguments &argv, long param)
 {
     amiga.regressionTester.dumpTexture(amiga, argv.front());
 }
-
+*/
 
 //
 // Amiga
 //
 
+/*
 template <> void
 RetroShell::exec <Token::amiga, Token::config> (Arguments& argv, long param)
 {
@@ -183,12 +187,13 @@ RetroShell::exec <Token::amiga, Token::defaults> (Arguments &argv, long param)
 {
     dump(amiga, Category::Defaults);
 }
-
+*/
 
 //
 // Memory
 //
 
+/*
 template <> void
 RetroShell::exec <Token::memory, Token::config> (Arguments& argv, long param)
 {
@@ -262,12 +267,13 @@ RetroShell::exec <Token::memory, Token::load, Token::extrom> (Arguments& argv, l
     auto path = argv.front();
     amiga.mem.loadExt(path.c_str());
 }
-
+*/
 
 //
 // CPU
 //
 
+/*
 template <> void
 RetroShell::exec <Token::cpu, Token::config> (Arguments &argv, long param)
 {
@@ -308,12 +314,13 @@ RetroShell::exec <Token::cpu, Token::set, Token::regreset> (Arguments &argv, lon
     auto value = util::parseNum(argv.front());
     amiga.configure(OPT_CPU_RESET_VAL, value);
 }
-
+*/
 
 //
 // CIA
 //
 
+/*
 template <> void
 RetroShell::exec <Token::cia, Token::config> (Arguments &argv, long param)
 {
@@ -340,7 +347,7 @@ RetroShell::exec <Token::cia, Token::set, Token::esync> (Arguments &argv, long p
     auto value = util::parseBool(argv.front());
     amiga.configure(OPT_ECLOCK_SYNCING, param, value);
 }
-
+*/
 
 //
 // Agnus
@@ -371,38 +378,6 @@ RetroShell::exec <Token::agnus, Token::set, Token::ptrdrops> (Arguments &argv, l
     amiga.configure(OPT_PTR_DROPS, value);
 }
 
-/*
-template <> void
-RetroShell::exec <Token::agnus, Token::inspect, Token::state> (Arguments &argv, long param)
-{
-    dump(amiga.agnus, Category::Debug);
-}
-
-template <> void
-RetroShell::exec <Token::agnus, Token::inspect, Token::beam> (Arguments &argv, long param)
-{
-    dump(amiga.agnus, Category::Beam);
-}
-
-template <> void
-RetroShell::exec <Token::agnus, Token::inspect, Token::registers> (Arguments &argv, long param)
-{
-    dump(amiga.agnus, Category::Registers);
-}
-
-template <> void
-RetroShell::exec <Token::agnus, Token::inspect, Token::dma> (Arguments &argv, long param)
-{
-    dump(amiga.agnus, Category::Dma);
-}
-
-template <> void
-RetroShell::exec <Token::agnus, Token::inspect, Token::events> (Arguments &argv, long param)
-{
-    dump(amiga.agnus, Category::Events);
-}
-*/
-
 
 //
 // Blitter
@@ -420,56 +395,19 @@ RetroShell::exec <Token::blitter, Token::set, Token::accuracy> (Arguments &argv,
     amiga.configure(OPT_BLITTER_ACCURACY, util::parseNum(argv.front()));
 }
 
-/*
-template <> void
-RetroShell::exec <Token::blitter, Token::inspect, Token::state> (Arguments& argv, long param)
-{
-    dump(amiga.agnus.blitter, Category::Debug);
-}
-
-template <> void
-RetroShell::exec <Token::blitter, Token::inspect, Token::registers> (Arguments& argv, long param)
-{
-    dump(amiga.agnus.blitter, Category::Registers);
-}
-*/
 
 
 //
 // Copper
 //
 
-/*
-template <> void
-RetroShell::exec <Token::copper, Token::inspect, Token::state> (Arguments& argv, long param)
-{
-    dump(amiga.agnus.copper, Category::Debug);
-}
-
-template <> void
-RetroShell::exec <Token::copper, Token::inspect, Token::registers> (Arguments& argv, long param)
-{
-    dump(amiga.agnus.copper, Category::Registers);
-}
-
-template <> void
-RetroShell::exec <Token::copper, Token::list> (Arguments& argv, long param)
-{
-    auto value = util::parseNum(argv.front());
-    
-    switch (value) {
-        case 1: dump(amiga.agnus.copper, Category::List1); break;
-        case 2: dump(amiga.agnus.copper, Category::List2); break;
-        default: throw VAError(ERROR_OPT_INVARG, "1 or 2");
-    }
-}
-*/
 
 
 //
 // Denise
 //
 
+/*
 template <> void
 RetroShell::exec <Token::denise, Token::config> (Arguments& argv, long param)
 {
@@ -523,12 +461,13 @@ RetroShell::exec <Token::denise, Token::set, Token::hide, Token::layers> (Argume
 {
     amiga.configure(OPT_HIDDEN_LAYERS, util::parseNum(argv.front()));
 }
-
+*/
 
 //
 // DMA Debugger
 //
 
+/*
 template <> void
 RetroShell::exec <Token::dmadebugger, Token::open> (Arguments& argv, long param)
 {
@@ -588,12 +527,13 @@ RetroShell::exec <Token::dmadebugger, Token::refresh> (Arguments& argv, long par
 {
     amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_REFRESH, util::parseBool(argv.front()));
 }
-
+*/
 
 //
 // Monitor
 //
 
+/*
 template <> void
 RetroShell::exec <Token::monitor, Token::config> (Arguments& argv, long param)
 {
@@ -623,12 +563,13 @@ RetroShell::exec <Token::monitor, Token::set, Token::saturation> (Arguments& arg
 {
     amiga.configure(OPT_SATURATION, util::parseNum(argv.front()));
 }
-
+*/
 
 //
 // Audio
 //
 
+/*
 template <> void
 RetroShell::exec <Token::audio, Token::config> (Arguments& argv, long param)
 {
@@ -687,12 +628,13 @@ RetroShell::exec <Token::audio, Token::set, Token::pan> (Arguments& argv, long p
 {
     amiga.configure(OPT_AUDPAN, param, util::parseNum(argv.front()));
 }
-
+*/
 
 //
 // RTC
 //
 
+/*
 template <> void
 RetroShell::exec <Token::rtc, Token::config> (Arguments& argv, long param)
 {
@@ -704,12 +646,13 @@ RetroShell::exec <Token::rtc, Token::set, Token::revision> (Arguments &argv, lon
 {
     amiga.configure(OPT_RTC_MODEL, util::parseEnum <RTCRevisionEnum> (argv.front()));
 }
-
+*/
 
 //
 // Keyboard
 //
 
+/*
 template <> void
 RetroShell::exec <Token::keyboard, Token::config> (Arguments& argv, long param)
 {
@@ -728,12 +671,13 @@ RetroShell::exec <Token::keyboard, Token::press> (Arguments& argv, long param)
     auto keycode = util::parseNum(argv.front());
     keyboard.autoType(KeyCode(keycode));
 }
-
+*/
 
 //
 // Mouse
 //
 
+/*
 template <> void
 RetroShell::exec <Token::mouse, Token::config> (Arguments& argv, long param)
 {
@@ -762,15 +706,6 @@ RetroShell::exec <Token::mouse, Token::set, Token::velocity> (Arguments &argv, l
     amiga.configure(OPT_MOUSE_VELOCITY, port, util::parseNum(argv.front()));
 }
 
-/*
-template <> void
-RetroShell::exec <Token::mouse, Token::inspect> (Arguments& argv, long param)
-{
-    auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
-    dumpDetails(port.mouse);
-}
-*/
-
 template <> void
 RetroShell::exec <Token::mouse, Token::press, Token::left> (Arguments& argv, long param)
 {
@@ -784,12 +719,13 @@ RetroShell::exec <Token::mouse, Token::press, Token::right> (Arguments& argv, lo
     auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
     port.mouse.pressAndReleaseRight();
 }
-
+*/
 
 //
 // Joystick
 //
 
+/*
 template <> void
 RetroShell::exec <Token::joystick, Token::config> (Arguments& argv, long param)
 {
@@ -893,12 +829,13 @@ RetroShell::exec <Token::joystick, Token::release, Token::yaxis> (Arguments& arg
     auto &port = (param == 0) ? amiga.controlPort1 : amiga.controlPort2;
     port.joystick.trigger(RELEASE_Y);
 }
-
+*/
 
 //
 // Serial port
 //
 
+/*
 template <> void
 RetroShell::exec <Token::serial, Token::config> (Arguments& argv, long param)
 {
@@ -910,12 +847,13 @@ RetroShell::exec <Token::serial, Token::set, Token::device> (Arguments &argv, lo
 {
     amiga.configure(OPT_SERIAL_DEVICE, util::parseEnum <SerialPortDeviceEnum> (argv.front()));
 }
-
+*/
 
 //
 // Disk controller
 //
 
+/*
 template <> void
 RetroShell::exec <Token::dc, Token::config> (Arguments& argv, long param)
 {
@@ -939,12 +877,13 @@ RetroShell::exec <Token::dc, Token::dsksync, Token::lock> (Arguments& argv, long
 {
     amiga.configure(OPT_LOCK_DSKSYNC, util::parseBool(argv.front()));
 }
-
+*/
 
 //
 // Df0, Df1, Df2, Df3
 //
 
+/*
 template <> void
 RetroShell::exec <Token::dfn, Token::config> (Arguments& argv, long param)
 {
@@ -1096,12 +1035,13 @@ RetroShell::exec <Token::dfn, Token::set, Token::swapdelay> (Arguments& argv, lo
         amiga.configure(OPT_DISK_SWAP_DELAY, num);
     }
 }
-
+*/
 
 //
 // Hd0, Hd1, Hd2, Hd3
 //
 
+/*
 template <> void
 RetroShell::exec <Token::hdn, Token::config> (Arguments& argv, long param)
 {
@@ -1141,6 +1081,7 @@ RetroShell::exec <Token::hdn, Token::geometry> (Arguments& argv, long param)
 
     amiga.hd[param]->changeGeometry(c, h, s);
 }
+*/
 
 //
 // Zorro boards

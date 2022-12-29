@@ -21,6 +21,7 @@ namespace vamiga {
 class RetroShell : public SubComponent {
 
     friend class RshServer;
+    friend class Interpreter;
     
     // The command interpreter (parses commands typed into the console window)
     Interpreter interpreter;
@@ -133,11 +134,6 @@ public:
     // Assigns an additional output stream
     void setStream(std::ostream &os);
 
-private:
-    
-    // Marks the text storage as dirty
-    void needsDisplay();
-    
     // Clears the console window
     void clear();
 
@@ -149,6 +145,11 @@ private:
 
     // Prints a state summary (used by the debug shell)
     void printState();
+
+private:
+
+    // Marks the text storage as dirty
+    void needsDisplay();
 
     
     //
