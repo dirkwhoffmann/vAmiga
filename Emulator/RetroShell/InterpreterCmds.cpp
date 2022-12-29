@@ -56,9 +56,9 @@ Interpreter::initCommons(Command &root)
              "",
              [this](Arguments& argv, long value) {
 
-        retroShell << "GREETINGS PROFESSOR HOFFMANN." << '\n' << '\n';
-        retroShell << "THE ONLY WINNING MOVE IS NOT TO PLAY." << '\n' << '\n';
-        retroShell << "HOW ABOUT A NICE GAME OF CHESS?" << '\n';
+        retroShell << "\nGREETINGS PROFESSOR HOFFMANN.\n";
+        retroShell << "THE ONLY WINNING MOVE IS NOT TO PLAY.\n";
+        retroShell << "HOW ABOUT A NICE GAME OF CHESS?\n\n";
     });
 
     root.add({"source"}, {Arg::path},
@@ -74,7 +74,7 @@ Interpreter::initCommons(Command &root)
              "Pauses the execution of a command script",
              [this](Arguments& argv, long value) {
 
-        retroShell.wakeUp = agnus.clock + SEC(util::parseNum(argv.front()));
+        retroShell.wakeUp = agnus.clock + SEC(parseNum(argv));
         throw ScriptInterruption("");
     });
 }
@@ -140,7 +140,7 @@ Interpreter::initCommandShell(Command &root)
              "Initializes the test environment",
              [this](Arguments& argv, long value) {
 
-        auto scheme = util::parseEnum <ConfigSchemeEnum> (argv[0]);
+        auto scheme = parseEnum<ConfigSchemeEnum>(argv);
         auto rom = argv[1];
         auto ext = argv.size() > 2 ? argv[2] : "";
 
@@ -168,12 +168,18 @@ Interpreter::initCommandShell(Command &root)
              "Adjusts the texture cutout",
              [this](Arguments& argv, long value) {
 
+        /*
         std::vector<string> vec(argv.begin(), argv.end());
 
         isize x1 = util::parseNum(vec[0]);
         isize y1 = util::parseNum(vec[1]);
         isize x2 = util::parseNum(vec[2]);
         isize y2 = util::parseNum(vec[3]);
+        */
+        isize x1 = parseNum(argv, 0);
+        isize y1 = parseNum(argv, 1);
+        isize x2 = parseNum(argv, 2);
+        isize y2 = parseNum(argv, 3);
 
         amiga.regressionTester.x1 = x1;
         amiga.regressionTester.y1 = y1;
@@ -209,21 +215,21 @@ Interpreter::initCommandShell(Command &root)
              "Selects the video standard",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_VIDEO_FORMAT, util::parseEnum <VideoFormatEnum> (argv.front()));
+        amiga.configure(OPT_VIDEO_FORMAT, parseEnum <VideoFormatEnum> (argv));
     });
 
     root.add({"amiga", "set", "fpsmode"}, { FpsModeEnum::argList() },
              "Selects the frame mode",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_FPS_MODE, util::parseEnum <FpsModeEnum> (argv.front()));
+        amiga.configure(OPT_FPS_MODE, parseEnum <FpsModeEnum> (argv));
     });
 
     root.add({"amiga", "set", "fps"}, { Arg::value },
              "Sets the frames per seconds",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_FPS, util::parseNum(argv.front()));
+        amiga.configure(OPT_FPS, parseNum(argv));
         amiga.configure(OPT_FPS_MODE, FPS_CUSTOM);
     });
 
@@ -231,7 +237,7 @@ Interpreter::initCommandShell(Command &root)
              "Initializes the Amiga with a predefined scheme",
              [this](Arguments& argv, long value) {
 
-        auto scheme = util::parseEnum <ConfigSchemeEnum> (argv.front());
+        auto scheme = parseEnum <ConfigSchemeEnum> (argv);
 
         amiga.revertToFactorySettings();
         amiga.configure(scheme);
@@ -241,7 +247,7 @@ Interpreter::initCommandShell(Command &root)
              "Switches the Amiga on or off",
              [this](Arguments& argv, long value) {
 
-        util::parseOnOff(argv.front()) ? amiga.run() : amiga.powerOff();
+        parseOnOff(argv) ? amiga.run() : amiga.powerOff();
     });
 
     root.add({"amiga", "reset"},
@@ -279,63 +285,63 @@ Interpreter::initCommandShell(Command &root)
              "Configures the amouts of chip memory",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CHIP_RAM, util::parseNum(argv.front()));
+        amiga.configure(OPT_CHIP_RAM, parseNum(argv));
     });
 
     root.add({"memory", "set", "slow"},  { Arg::kb },
              "Configures the amouts of slow memory",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_SLOW_RAM, util::parseNum(argv.front()));
+        amiga.configure(OPT_SLOW_RAM, parseNum(argv));
     });
 
     root.add({"memory", "set", "fast"}, { Arg::kb },
              "Configures the amouts of flow memory",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_FAST_RAM, util::parseNum(argv.front()));
+        amiga.configure(OPT_FAST_RAM, parseNum(argv));
     });
 
     root.add({"memory", "set", "extstart"}, { Arg::address },
              "Sets the start address for Rom extensions",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_EXT_START, util::parseNum(argv.front()));
+        amiga.configure(OPT_EXT_START, parseNum(argv));
     });
 
     root.add({"memory", "set", "saveroms"}, { Arg::boolean },
              "Determines whether Roms should be stored in snapshots",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_SAVE_ROMS, util::parseBool(argv.front()));
+        amiga.configure(OPT_SAVE_ROMS, parseBool(argv));
     });
 
     root.add({"memory", "set", "slowramdelay"}, { Arg::boolean },
              "Enables or disables slow Ram bus delays",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_SLOW_RAM_DELAY, util::parseBool(argv.front()));
+        amiga.configure(OPT_SLOW_RAM_DELAY, parseBool(argv));
     });
 
     root.add({"memory", "set", "bankmap"}, { BankMapEnum::argList() },
              "Selects the bank mapping scheme",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_BANKMAP, util::parseEnum <BankMapEnum> (argv.front()));
+        amiga.configure(OPT_BANKMAP, parseEnum <BankMapEnum> (argv));
     });
 
     root.add({"memory", "set", "raminit"}, { RamInitPatternEnum::argList() },
              "Determines how Ram is initialized on startup",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_RAM_INIT_PATTERN, util::parseEnum <RamInitPatternEnum> (argv.front()));
+        amiga.configure(OPT_RAM_INIT_PATTERN, parseEnum <RamInitPatternEnum> (argv));
     });
 
     root.add({"memory", "set", "unmapped"}, { UnmappedMemoryEnum::argList() },
              "Determines the behaviour of unmapped memory",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_UNMAPPING_TYPE, util::parseEnum <UnmappedMemoryEnum> (argv.front()));
+        amiga.configure(OPT_UNMAPPING_TYPE, parseEnum <UnmappedMemoryEnum> (argv));
     });
 
     root.add({"memory", "load"},
@@ -376,7 +382,7 @@ Interpreter::initCommandShell(Command &root)
              "Selects the emulated chip model",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CPU_REVISION, util::parseEnum <CPURevisionEnum> (argv.front()));
+        amiga.configure(OPT_CPU_REVISION, parseEnum <CPURevisionEnum> (argv));
     });
 
     root.add({"cpu", "set", "dasm"},
@@ -386,28 +392,28 @@ Interpreter::initCommandShell(Command &root)
              "Selects the disassembler instruction set",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CPU_DASM_REVISION, util::parseEnum <DasmRevisionEnum> (argv.front()));
+        amiga.configure(OPT_CPU_DASM_REVISION, parseEnum <DasmRevisionEnum> (argv));
     });
 
     root.add({"cpu", "set", "dasm", "syntax"}, {  DasmSyntaxEnum::argList() },
              "Selects the disassembler syntax style",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CPU_DASM_SYNTAX, util::parseEnum <DasmSyntaxEnum> (argv.front()));
+        amiga.configure(OPT_CPU_DASM_SYNTAX, parseEnum <DasmSyntaxEnum> (argv));
     });
 
     root.add({"cpu", "set", "overclocking"}, { Arg::value },
              "Overclocks the CPU by the specified factor",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CPU_OVERCLOCKING, util::parseNum(argv.front()));
+        amiga.configure(OPT_CPU_OVERCLOCKING, parseNum(argv));
     });
 
     root.add({"cpu", "set", "regreset"}, { Arg::value },
              "Selects the reset value of data and address registers",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CPU_RESET_VAL, util::parseNum(argv.front()));
+        amiga.configure(OPT_CPU_RESET_VAL, parseNum(argv));
     });
 
 
@@ -437,7 +443,7 @@ Interpreter::initCommandShell(Command &root)
                  "Selects the emulated chip model",
                  [this](Arguments& argv, long value) {
 
-            auto parsed = util::parseEnum <CIARevisionEnum> (argv.front());
+            auto parsed = parseEnum <CIARevisionEnum> (argv);
             amiga.configure(OPT_CIA_REVISION, value, parsed);
 
         }, i);
@@ -446,7 +452,7 @@ Interpreter::initCommandShell(Command &root)
                  "Enables or disables the TOD hardware bug",
                  [this](Arguments& argv, long value) {
 
-            auto parsed = util::parseBool(argv.front());
+            auto parsed = parseBool(argv);
             amiga.configure(OPT_TODBUG, value, parsed);
 
         }, i);
@@ -455,7 +461,7 @@ Interpreter::initCommandShell(Command &root)
                  "Turns E-clock syncing on or off",
                  [this](Arguments& argv, long value) {
 
-            auto parsed = util::parseBool(argv.front());
+            auto parsed = parseBool(argv);
             amiga.configure(OPT_ECLOCK_SYNCING, value, parsed);
 
         }, i);
@@ -482,21 +488,21 @@ Interpreter::initCommandShell(Command &root)
              "Selects the emulated chip model",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AGNUS_REVISION, util::parseEnum <AgnusRevisionEnum> (argv.front()));
+        amiga.configure(OPT_AGNUS_REVISION, parseEnum <AgnusRevisionEnum> (argv));
     });
 
     root.add({"agnus", "set", "slowrammirror"}, { Arg::boolean },
              "Enables or disables ECS Slow Ram mirroring",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_SLOW_RAM_MIRROR, util::parseBool(argv.front()));
+        amiga.configure(OPT_SLOW_RAM_MIRROR, parseBool(argv));
     });
 
     root.add({"agnus", "set", "ptrdrops"}, { Arg::boolean },
              "Emulate dropped register writes",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_PTR_DROPS, util::parseBool(argv.front()));
+        amiga.configure(OPT_PTR_DROPS, parseBool(argv));
     });
 
     
@@ -520,7 +526,7 @@ Interpreter::initCommandShell(Command &root)
              "Selects the emulation accuracy level",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_BLITTER_ACCURACY, util::parseNum(argv.front()));
+        amiga.configure(OPT_BLITTER_ACCURACY, parseNum(argv));
     });
 
     
@@ -544,35 +550,35 @@ Interpreter::initCommandShell(Command &root)
              "Selects the emulated chip model",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DENISE_REVISION, util::parseEnum <DeniseRevisionEnum> (argv.front()));
+        amiga.configure(OPT_DENISE_REVISION, parseEnum <DeniseRevisionEnum> (argv));
     });
 
     root.add({"denise", "set", "tracking"}, { Arg::boolean },
              "Enables or disables viewport tracking",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_VIEWPORT_TRACKING, util::parseBool(argv.front()));
+        amiga.configure(OPT_VIEWPORT_TRACKING, parseBool(argv));
     });
 
     root.add({"denise", "set", "clxsprspr"}, { Arg::boolean },
              "Switches sprite-sprite collision detection on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CLX_SPR_SPR, util::parseBool(argv.front()));
+        amiga.configure(OPT_CLX_SPR_SPR, parseBool(argv));
     });
 
     root.add({"denise", "set", "clxsprplf"}, { Arg::boolean },
              "Switches sprite-playfield collision detection on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CLX_SPR_PLF, util::parseBool(argv.front()));
+        amiga.configure(OPT_CLX_SPR_PLF, parseBool(argv));
     });
 
     root.add({"denise", "set", "clxplfplf"}, { Arg::boolean },
              "Switches playfield-playfield collision detection on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CLX_PLF_PLF, util::parseBool(argv.front()));
+        amiga.configure(OPT_CLX_PLF_PLF, parseBool(argv));
     });
 
     root.add({"denise", "set", "hidden"},
@@ -582,21 +588,21 @@ Interpreter::initCommandShell(Command &root)
              "Wipes out certain bitplane data",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_HIDDEN_BITPLANES, util::parseNum(argv.front()));
+        amiga.configure(OPT_HIDDEN_BITPLANES, parseNum(argv));
     });
 
     root.add({"denise", "set", "hidden", "sprites"}, { Arg::value },
              "Wipes out certain sprite data",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_HIDDEN_SPRITES, util::parseNum(argv.front()));
+        amiga.configure(OPT_HIDDEN_SPRITES, parseNum(argv));
     });
 
     root.add({"denise", "set", "hidden", "layers"}, { Arg::value },
              "Makes certain drawing layers transparent",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_HIDDEN_LAYERS, util::parseNum(argv.front()));
+        amiga.configure(OPT_HIDDEN_LAYERS, parseNum(argv));
     });
 
     
@@ -622,56 +628,56 @@ Interpreter::initCommandShell(Command &root)
              "Turns Copper DMA visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_COPPER, util::parseBool(argv.front()));
+        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_COPPER, parseBool(argv));
     });
 
     root.add({"dmadebugger", "blitter"}, { Arg::onoff },
              "Turns Blitter DMA visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_BLITTER, util::parseBool(argv.front()));
+        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_BLITTER, parseBool(argv));
     });
 
     root.add({"dmadebugger", "disk"}, { Arg::onoff },
              "Turns Disk DMA visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_DISK, util::parseBool(argv.front()));
+        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_DISK, parseBool(argv));
     });
 
     root.add({"dmadebugger", "audio"}, { Arg::onoff },
              "Turns Audio DMA visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_AUDIO, util::parseBool(argv.front()));
+        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_AUDIO, parseBool(argv));
     });
 
     root.add({"dmadebugger", "sprites"}, { Arg::onoff },
              "Turns Sprite DMA visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_SPRITE, util::parseBool(argv.front()));
+        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_SPRITE, parseBool(argv));
     });
 
     root.add({"dmadebugger", "bitplanes"}, { Arg::onoff },
              "Turns Bitplane DMA visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_BITPLANE, util::parseBool(argv.front()));
+        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_BITPLANE, parseBool(argv));
     });
 
     root.add({"dmadebugger", "cpu"}, { Arg::onoff },
              "Turns CPU bus usage visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_CPU, util::parseBool(argv.front()));
+        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_CPU, parseBool(argv));
     });
 
     root.add({"dmadebugger", "refresh"}, { Arg::onoff },
              "Turn memory refresh visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_REFRESH, util::parseBool(argv.front()));
+        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_REFRESH, parseBool(argv));
     });
 
 
@@ -693,28 +699,28 @@ Interpreter::initCommandShell(Command &root)
              "Selects the color palette",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_PALETTE, util::parseEnum <PaletteEnum> (argv.front()));
+        amiga.configure(OPT_PALETTE, parseEnum <PaletteEnum> (argv));
     });
 
     root.add({"monitor", "set", "brightness"}, { Arg::value },
              "Adjusts the brightness of the Amiga texture",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_BRIGHTNESS, util::parseNum(argv.front()));
+        amiga.configure(OPT_BRIGHTNESS, parseNum(argv));
     });
 
     root.add({"monitor", "set", "contrast"}, { Arg::value },
              "Adjusts the contrast of the Amiga texture",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CONTRAST, util::parseNum(argv.front()));
+        amiga.configure(OPT_CONTRAST, parseNum(argv));
     });
 
     root.add({"monitor", "set", "saturation"}, { Arg::value },
              "Adjusts the saturation of the Amiga texture",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_SATURATION, util::parseNum(argv.front()));
+        amiga.configure(OPT_SATURATION, parseNum(argv));
     });
 
     
@@ -754,14 +760,14 @@ Interpreter::initCommandShell(Command &root)
              "Configures the audio filter type",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_FILTER_TYPE, util::parseEnum <FilterTypeEnum> (argv.front()));
+        amiga.configure(OPT_FILTER_TYPE, parseEnum <FilterTypeEnum> (argv));
     });
 
     root.add({"paula", "audio", "filter", "set", "activation"}, { FilterActivationEnum::argList() },
              "Selects the filter activation condition",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_FILTER_ACTIVATION, util::parseEnum <FilterActivationEnum> (argv.front()));
+        amiga.configure(OPT_FILTER_ACTIVATION, parseEnum <FilterActivationEnum> (argv));
     });
 
     root.add({"paula", "audio", "set"},
@@ -771,7 +777,7 @@ Interpreter::initCommandShell(Command &root)
              "Selects the sampling method",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_SAMPLING_METHOD, util::parseEnum <SamplingMethodEnum> (argv.front()));
+        amiga.configure(OPT_SAMPLING_METHOD, parseEnum <SamplingMethodEnum> (argv));
     });
 
     root.add({"paula", "audio", "set", "volume"},
@@ -781,42 +787,42 @@ Interpreter::initCommandShell(Command &root)
              "Sets the volume for audio channel 0",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDVOL, 0, util::parseNum(argv.front()));
+        amiga.configure(OPT_AUDVOL, 0, parseNum(argv));
     });
 
     root.add({"paula", "audio", "set", "volume", "channel1"}, { Arg::volume },
              "Sets the volume for audio channel 1",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDVOL, 1, util::parseNum(argv.front()));
+        amiga.configure(OPT_AUDVOL, 1, parseNum(argv));
     });
 
     root.add({"paula", "audio", "set", "volume", "channel2"}, { Arg::volume },
              "Sets the volume for audio channel 2",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDVOL, 2, util::parseNum(argv.front()));
+        amiga.configure(OPT_AUDVOL, 2, parseNum(argv));
     });
 
     root.add({"paula", "audio", "set", "volume", "channel3"}, { Arg::volume },
              "Sets the volume for audio channel 3",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDVOL, 3, util::parseNum(argv.front()));
+        amiga.configure(OPT_AUDVOL, 3, parseNum(argv));
     });
 
     root.add({"paula", "audio", "set", "volume", "left"}, { Arg::volume },
              "Sets the master volume for the left speaker",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDVOLL, util::parseNum(argv.front()));
+        amiga.configure(OPT_AUDVOLL, parseNum(argv));
     });
 
     root.add({"paula", "audio", "set", "volume", "right"}, { Arg::volume },
              "Sets the master volume for the right speaker",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDVOLR, util::parseNum(argv.front()));
+        amiga.configure(OPT_AUDVOLR, parseNum(argv));
     });
 
     root.add({"paula", "audio", "set", "pan"},
@@ -826,28 +832,28 @@ Interpreter::initCommandShell(Command &root)
              "Sets the pan for audio channel 0",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDPAN, 0, util::parseNum(argv.front()));
+        amiga.configure(OPT_AUDPAN, 0, parseNum(argv));
     });
 
     root.add({"paula", "audio", "set", "pan", "channel1"}, { Arg::value },
              "Sets the pan for audio channel 1",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDPAN, 1, util::parseNum(argv.front()));
+        amiga.configure(OPT_AUDPAN, 1, parseNum(argv));
     });
 
     root.add({"paula", "audio", "set", "pan", "channel2"}, { Arg::value },
              "Sets the pan for audio channel 2",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDPAN, 2, util::parseNum(argv.front()));
+        amiga.configure(OPT_AUDPAN, 2, parseNum(argv));
     });
 
     root.add({"paula", "audio", "set", "pan", "channel3"}, { Arg::value },
              "Sets the pan for audio channel 3",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDPAN, 3, util::parseNum(argv.front()));
+        amiga.configure(OPT_AUDPAN, 3, parseNum(argv));
     });
 
 
@@ -872,7 +878,7 @@ Interpreter::initCommandShell(Command &root)
              "Configures the data transfer speed",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DRIVE_SPEED, util::parseNum(argv.front()));
+        amiga.configure(OPT_DRIVE_SPEED, parseNum(argv));
     });
 
     root.add({"paula", "dc", "dsksync"},
@@ -882,14 +888,14 @@ Interpreter::initCommandShell(Command &root)
              "Always receive a SYNC signal",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUTO_DSKSYNC, util::parseBool(argv.front()));
+        amiga.configure(OPT_AUTO_DSKSYNC, parseBool(argv));
     });
 
     root.add({"paula", "dc", "dsksync", "lock"}, { Arg::boolean },
              "Prevents writes to DSKSYNC",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_LOCK_DSKSYNC, util::parseBool(argv.front()));
+        amiga.configure(OPT_LOCK_DSKSYNC, parseBool(argv));
     });
 
 
@@ -913,7 +919,7 @@ Interpreter::initCommandShell(Command &root)
              "Selects the emulated chip model",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_RTC_MODEL, util::parseEnum <RTCRevisionEnum> (argv.front()));
+        amiga.configure(OPT_RTC_MODEL, parseEnum <RTCRevisionEnum> (argv));
     });
 
 
@@ -937,14 +943,14 @@ Interpreter::initCommandShell(Command &root)
              "Determines the emulation accuracy level",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_ACCURATE_KEYBOARD, util::parseBool(argv.front()));
+        amiga.configure(OPT_ACCURATE_KEYBOARD, parseBool(argv));
     });
 
     root.add({"keyboard", "press"}, { Arg::value },
              "Sends a keycode to the keyboard",
              [this](Arguments& argv, long value) {
 
-        keyboard.autoType(KeyCode(util::parseNum(argv.front())));
+        keyboard.autoType(KeyCode(parseNum(argv)));
     });
 
     
@@ -978,7 +984,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto port = (value == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
-            amiga.configure(OPT_PULLUP_RESISTORS, port, util::parseBool(argv.front()));
+            amiga.configure(OPT_PULLUP_RESISTORS, port, parseBool(argv));
 
         }, i);
 
@@ -987,7 +993,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto port = (value == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
-            amiga.configure(OPT_SHAKE_DETECTION, port, util::parseBool(argv.front()));
+            amiga.configure(OPT_SHAKE_DETECTION, port, parseBool(argv));
 
         }, i);
 
@@ -996,7 +1002,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto port = (value == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
-            amiga.configure(OPT_MOUSE_VELOCITY, port, util::parseNum(argv.front()));
+            amiga.configure(OPT_MOUSE_VELOCITY, port, parseNum(argv));
 
         }, i);
 
@@ -1053,7 +1059,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto port = (value == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
-            amiga.configure(OPT_AUTOFIRE, port, util::parseBool(argv.front()));
+            amiga.configure(OPT_AUTOFIRE, port, parseBool(argv));
 
         }, i);
 
@@ -1062,7 +1068,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto port = (value == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
-            amiga.configure(OPT_AUTOFIRE_BULLETS, port, util::parseNum(argv.front()));
+            amiga.configure(OPT_AUTOFIRE_BULLETS, port, parseNum(argv));
 
         }, i);
 
@@ -1071,7 +1077,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto port = (value == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
-            amiga.configure(OPT_AUTOFIRE_DELAY, port, util::parseNum(argv.front()));
+            amiga.configure(OPT_AUTOFIRE_DELAY, port, parseNum(argv));
 
         }, i);
 
@@ -1080,7 +1086,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-            auto nr = util::parseNum(argv.front());
+            auto nr = parseNum(argv);
 
             switch (nr) {
 
@@ -1099,7 +1105,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-            auto nr = util::parseNum(argv.front());
+            auto nr = parseNum(argv);
 
             switch (nr) {
 
@@ -1195,7 +1201,7 @@ Interpreter::initCommandShell(Command &root)
              "Connects a device",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_SERIAL_DEVICE, util::parseEnum <SerialPortDeviceEnum> (argv.front()));
+        amiga.configure(OPT_SERIAL_DEVICE, parseEnum <SerialPortDeviceEnum> (argv));
     });
 
 
@@ -1262,7 +1268,7 @@ Interpreter::initCommandShell(Command &root)
                      "Selects the drive model",
                      [this](Arguments& argv, long value) {
 
-                long model = util::parseEnum <FloppyDriveTypeEnum> (argv.front());
+                long model = parseEnum <FloppyDriveTypeEnum> (argv);
 
                 if (value == 0 || value > 3) amiga.configure(OPT_DRIVE_TYPE, 0, model);
                 if (value == 1 || value > 3) amiga.configure(OPT_DRIVE_TYPE, 1, model);
@@ -1275,7 +1281,7 @@ Interpreter::initCommandShell(Command &root)
                      "Sets the disk rotation speed",
                      [this](Arguments& argv, long value) {
 
-                long rpm = util::parseNum(argv.front());
+                long rpm = parseNum(argv);
 
                 if (value == 0 || value > 3) amiga.configure(OPT_DRIVE_RPM, 0, rpm);
                 if (value == 1 || value > 3) amiga.configure(OPT_DRIVE_RPM, 1, rpm);
@@ -1288,7 +1294,7 @@ Interpreter::initCommandShell(Command &root)
                      "Enables or disables the emulation of mechanical delays",
                      [this](Arguments& argv, long value) {
 
-                auto scheme = util::parseEnum<DriveMechanicsEnum>(argv[0]);
+                auto scheme = parseEnum<DriveMechanicsEnum>(argv);
 
                 if (value == 0 || value > 3) amiga.configure(OPT_DRIVE_MECHANICS, 0, scheme);
                 if (value == 1 || value > 3) amiga.configure(OPT_DRIVE_MECHANICS, 1, scheme);
@@ -1314,7 +1320,7 @@ Interpreter::initCommandShell(Command &root)
                      "Sets the disk change delay",
                      [this](Arguments& argv, long value) {
 
-                long delay = util::parseNum(argv.front());
+                long delay = parseNum(argv);
 
                 if (value == 0 || value > 3) amiga.configure(OPT_DISK_SWAP_DELAY, 0, delay);
                 if (value == 1 || value > 3) amiga.configure(OPT_DISK_SWAP_DELAY, 1, delay);
@@ -1327,7 +1333,7 @@ Interpreter::initCommandShell(Command &root)
                      "Sets the pan for drive sounds",
                      [this](Arguments& argv, long value) {
 
-                long pan = util::parseNum(argv.front());
+                long pan = parseNum(argv);
 
                 if (value == 0 || value > 3) amiga.configure(OPT_DRIVE_PAN, 0, pan);
                 if (value == 1 || value > 3) amiga.configure(OPT_DRIVE_PAN, 1, pan);
@@ -1343,7 +1349,7 @@ Interpreter::initCommandShell(Command &root)
                      "Makes disk insertions audible",
                      [this](Arguments& argv, long value) {
 
-                long volume = util::parseNum(argv.front());
+                long volume = parseNum(argv);
 
                 if (value == 0 || value > 3) amiga.configure(OPT_INSERT_VOLUME, 0, volume);
                 if (value == 1 || value > 3) amiga.configure(OPT_INSERT_VOLUME, 1, volume);
@@ -1356,7 +1362,7 @@ Interpreter::initCommandShell(Command &root)
                      "Makes disk ejections audible",
                      [this](Arguments& argv, long value) {
 
-                long volume = util::parseNum(argv.front());
+                long volume = parseNum(argv);
 
                 if (value == 0 || value > 3) amiga.configure(OPT_EJECT_VOLUME, 0, volume);
                 if (value == 1 || value > 3) amiga.configure(OPT_EJECT_VOLUME, 1, volume);
@@ -1369,7 +1375,7 @@ Interpreter::initCommandShell(Command &root)
                      "Makes head steps audible",
                      [this](Arguments& argv, long value) {
 
-                long volume = util::parseNum(argv.front());
+                long volume = parseNum(argv);
 
                 if (value == 0 || value > 3) amiga.configure(OPT_STEP_VOLUME, 0, volume);
                 if (value == 1 || value > 3) amiga.configure(OPT_STEP_VOLUME, 1, volume);
@@ -1382,7 +1388,7 @@ Interpreter::initCommandShell(Command &root)
                      "Makes polling clicks audible",
                      [this](Arguments& argv, long value) {
 
-                long volume = util::parseNum(argv.front());
+                long volume = parseNum(argv);
 
                 if (value == 0 || value > 3) amiga.configure(OPT_POLL_VOLUME, 0, volume);
                 if (value == 1 || value > 3) amiga.configure(OPT_POLL_VOLUME, 1, volume);
@@ -1422,7 +1428,7 @@ Interpreter::initCommandShell(Command &root)
                  "Sets the pan for drive sounds",
                  [this](Arguments& argv, long value) {
 
-            long pan = util::parseNum(argv.front());
+            long pan = parseNum(argv);
 
             if (value == 0 || value > 3) amiga.configure(OPT_HDR_PAN, 0, pan);
             if (value == 1 || value > 3) amiga.configure(OPT_HDR_PAN, 1, pan);
@@ -1438,7 +1444,7 @@ Interpreter::initCommandShell(Command &root)
                  "Makes head steps audible",
                  [this](Arguments& argv, long value) {
 
-            long volume = util::parseNum(argv.front());
+            long volume = parseNum(argv);
 
             if (value == 0 || value > 3) amiga.configure(OPT_HDR_STEP_VOLUME, 0, volume);
             if (value == 1 || value > 3) amiga.configure(OPT_HDR_STEP_VOLUME, 1, volume);
@@ -1494,14 +1500,14 @@ Interpreter::initCommandShell(Command &root)
              "Assigns the port number",
              [this](Arguments& argv, long value) {
 
-        remoteManager.serServer.setConfigItem(OPT_SRV_PORT, util::parseNum(argv.front()));
+        remoteManager.serServer.setConfigItem(OPT_SRV_PORT, parseNum(argv));
     });
 
     root.add({"server", "serial", "set", "verbose"}, { Arg::boolean },
              "Switches verbose mode on or off",
              [this](Arguments& argv, long value) {
 
-        remoteManager.rshServer.setConfigItem(OPT_SRV_VERBOSE, util::parseBool(argv.front()));
+        remoteManager.rshServer.setConfigItem(OPT_SRV_VERBOSE, parseBool(argv));
     });
 
     root.add({"server", "serial", "inspect"},
@@ -1549,14 +1555,14 @@ Interpreter::initCommandShell(Command &root)
              "Assigns the port number",
              [this](Arguments& argv, long value) {
 
-        remoteManager.rshServer.setConfigItem(OPT_SRV_PORT, util::parseNum(argv.front()));
+        remoteManager.rshServer.setConfigItem(OPT_SRV_PORT, parseNum(argv));
     });
 
     root.add({"server", "serial", "set", "verbose"}, { Arg::boolean },
              "Switches verbose mode on or off",
              [this](Arguments& argv, long value) {
 
-        remoteManager.rshServer.setConfigItem(OPT_SRV_PORT, util::parseBool(argv.front()));
+        remoteManager.rshServer.setConfigItem(OPT_SRV_PORT, parseBool(argv));
     });
 
     root.add({"server", "rshell", "inspect"},
@@ -1597,14 +1603,14 @@ Interpreter::initCommandShell(Command &root)
              "Assigns the port number",
              [this](Arguments& argv, long value) {
 
-        remoteManager.gdbServer.setConfigItem(OPT_SRV_PORT, util::parseNum(argv.front()));
+        remoteManager.gdbServer.setConfigItem(OPT_SRV_PORT, parseNum(argv));
     });
 
     root.add({"server", "gdb", "set", "verbose"}, { Arg::boolean },
              "Switches verbose mode on or off",
              [this](Arguments& argv, long value) {
 
-        remoteManager.gdbServer.setConfigItem(OPT_SRV_VERBOSE, util::parseBool(argv.front()));
+        remoteManager.gdbServer.setConfigItem(OPT_SRV_VERBOSE, parseBool(argv));
     });
 
     root.add({"server", "gdb", "inspect"},
@@ -1613,11 +1619,6 @@ Interpreter::initCommandShell(Command &root)
 
         retroShell.dumpDebug(remoteManager.gdbServer);
     });
-
-    // Hide some commands
-    root.hide({"regression"});
-    root.hide({"screenshot"});
-
 }
 
 }

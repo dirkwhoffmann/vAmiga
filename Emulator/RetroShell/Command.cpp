@@ -68,26 +68,10 @@ Command::add(const std::vector<string> &tokens,
     d.help = help;
     d.callback = func;
     d.param = param;
+    d.hidden = help.empty() || help.at(0) == '*';
 
     // Register the instruction
     cmd->subCommands.push_back(d);
-}
-
-void
-Command::hide(const std::vector<string> &tokens)
-{
-    Command *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() });
-    assert(cmd != nullptr);
-
-    cmd->hidden = true;
-}
-
-void
-Command::remove(const string& token)
-{
-    for(auto it = std::begin(subCommands); it != std::end(subCommands); ++it) {
-        if (it->name == token) { subCommands.erase(it); return; }
-    }
 }
 
 Command *

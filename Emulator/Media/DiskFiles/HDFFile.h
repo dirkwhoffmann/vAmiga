@@ -157,9 +157,6 @@ private:
 
     // Extracts the DOS revision number from a certain block
     FSVolumeType dos(isize nr) const;
-    
-    // Returns a loadable device drive
-    // [[deprecated]] void readDriver(isize nr, Buffer<u8> &driver);
 
     
     //

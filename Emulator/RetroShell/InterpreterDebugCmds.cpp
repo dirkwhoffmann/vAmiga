@@ -56,7 +56,7 @@ Interpreter::initDebugShell(Command &root)
              "Redirects the program counter",
              [this](Arguments& argv, long value) {
 
-        amiga.cpu.jump((u32)util::parseNum(argv.front()));
+        amiga.cpu.jump((u32)parseNum(argv));
     });
 
     root.add({"disassemble"}, { }, { Arg::address },
@@ -65,7 +65,7 @@ Interpreter::initDebugShell(Command &root)
 
         std::stringstream ss;
 
-        auto addr = argv.empty() ? cpu.getPC0() : u32(util::parseNum(argv.front()));
+        auto addr = argv.empty() ? cpu.getPC0() : u32(parseNum(argv));
         cpu.disassembleRange(ss, addr, 16);
 
         retroShell << '\n' << ss << '\n';
@@ -133,28 +133,28 @@ Interpreter::initDebugShell(Command &root)
              "Sets a breakpoint at the specified address",
              [this](Arguments& argv, long value) {
 
-        cpu.setBreakpoint(u32(util::parseNum(argv.front())));
+        cpu.setBreakpoint(u32(parseNum(argv)));
     });
 
     root.add({"break", "delete"}, { Arg::address },
              "Deletes a breakpoint",
              [this](Arguments& argv, long value) {
 
-        cpu.deleteBreakpoint(util::parseNum(argv.front()));
+        cpu.deleteBreakpoint(parseNum(argv));
     });
 
     root.add({"break", "enable"}, { Arg::address },
              "Enables a breakpoint",
              [this](Arguments& argv, long value) {
 
-        cpu.enableBreakpoint(util::parseNum(argv.front()));
+        cpu.enableBreakpoint(parseNum(argv));
     });
 
     root.add({"break", "disable"}, { Arg::address },
              "Disables a breakpoint",
              [this](Arguments& argv, long value) {
 
-        cpu.disableBreakpoint(util::parseNum(argv.front()));
+        cpu.disableBreakpoint(parseNum(argv));
     });
 
     root.add({"break", "ignore"}, { Arg::address, Arg::value },
@@ -182,28 +182,28 @@ Interpreter::initDebugShell(Command &root)
              "Sets a watchpoint at the specified address",
              [this](Arguments& argv, long value) {
 
-        cpu.setWatchpoint(u32(util::parseNum(argv.front())));
+        cpu.setWatchpoint(u32(parseNum(argv)));
     });
 
     root.add({"watch", "delete"}, { Arg::address },
              "Deletes a watchpoint",
              [this](Arguments& argv, long value) {
 
-        cpu.deleteWatchpoint(util::parseNum(argv.front()));
+        cpu.deleteWatchpoint(parseNum(argv));
     });
 
     root.add({"watch", "enable"}, { Arg::address },
              "Enables a watchpoint",
              [this](Arguments& argv, long value) {
 
-        cpu.enableWatchpoint(util::parseNum(argv.front()));
+        cpu.enableWatchpoint(parseNum(argv));
     });
 
     root.add({"watch", "disable"}, { Arg::address },
              "Disables a watchpoint",
              [this](Arguments& argv, long value) {
 
-        cpu.disableWatchpoint(util::parseNum(argv.front()));
+        cpu.disableWatchpoint(parseNum(argv));
     });
 
     root.add({"watch", "ignore"}, { Arg::address, Arg::value },
@@ -231,7 +231,7 @@ Interpreter::initDebugShell(Command &root)
              "Catches an exception vector",
              [this](Arguments& argv, long value) {
 
-        auto nr = util::parseNum(argv.front());
+        auto nr = parseNum(argv);
         if (nr < 0 || nr > 255) throw VAError(ERROR_OPT_INVARG, "0...255");
         cpu.setCatchpoint(u8(nr));
     });
@@ -240,7 +240,7 @@ Interpreter::initDebugShell(Command &root)
              "Catches an interrupt",
              [this](Arguments& argv, long value) {
 
-        auto nr = util::parseNum(argv.front());
+        auto nr = parseNum(argv);
         if (nr < 1 || nr > 7) throw VAError(ERROR_OPT_INVARG, "1...7");
         cpu.setCatchpoint(u8(nr + 24));
     });
@@ -249,7 +249,7 @@ Interpreter::initDebugShell(Command &root)
              "Catches a trap instruction",
              [this](Arguments& argv, long value) {
 
-        auto nr = util::parseNum(argv.front());
+        auto nr = parseNum(argv);
         if (nr < 0 || nr > 15) throw VAError(ERROR_OPT_INVARG, "0...15");
         cpu.setCatchpoint(u8(nr + 32));
     });
@@ -258,21 +258,21 @@ Interpreter::initDebugShell(Command &root)
              "Deletes a catchpoint",
              [this](Arguments& argv, long value) {
 
-        cpu.deleteCatchpoint(util::parseNum(argv.front()));
+        cpu.deleteCatchpoint(parseNum(argv));
     });
 
     root.add({"catch", "enable"}, { Arg::value },
              "Enables a catchpoint",
              [this](Arguments& argv, long value) {
 
-        cpu.enableCatchpoint(util::parseNum(argv.front()));
+        cpu.enableCatchpoint(parseNum(argv));
     });
 
     root.add({"catch", "disable"}, { Arg::value },
              "Disables a catchpoint",
              [this](Arguments& argv, long value) {
 
-        cpu.disableCatchpoint(util::parseNum(argv.front()));
+        cpu.disableCatchpoint(parseNum(argv));
     });
 
     root.add({"catch", "ignore"}, { Arg::value, Arg::value },
@@ -298,28 +298,28 @@ Interpreter::initDebugShell(Command &root)
              "Sets a breakpoint at the specified address",
              [this](Arguments& argv, long value) {
 
-        copper.debugger.setBreakpoint(u32(util::parseNum(argv.front())));
+        copper.debugger.setBreakpoint(u32(parseNum(argv)));
     });
 
     root.add({"cbreak", "delete"}, { Arg::value },
              "Deletes a breakpoint",
              [this](Arguments& argv, long value) {
 
-        copper.debugger.deleteBreakpoint(util::parseNum(argv.front()));
+        copper.debugger.deleteBreakpoint(parseNum(argv));
     });
 
     root.add({"cbreak", "enable"}, { Arg::value },
              "Enables a breakpoint",
              [this](Arguments& argv, long value) {
 
-        copper.debugger.enableBreakpoint(util::parseNum(argv.front()));
+        copper.debugger.enableBreakpoint(parseNum(argv));
     });
 
     root.add({"cbreak", "disable"}, { Arg::value },
              "Disables a breakpoint",
              [this](Arguments& argv, long value) {
 
-        copper.debugger.disableBreakpoint(util::parseNum(argv.front()));
+        copper.debugger.disableBreakpoint(parseNum(argv));
     });
 
     root.add({"cbreak", "ignore"}, { Arg::value, Arg::value },
@@ -345,28 +345,28 @@ Interpreter::initDebugShell(Command &root)
              "Sets a watchpoint at the specified address",
              [this](Arguments& argv, long value) {
 
-        copper.debugger.setWatchpoint(u32(util::parseNum(argv.front())));
+        copper.debugger.setWatchpoint(u32(parseNum(argv)));
     });
 
     root.add({"cwatch", "delete"}, { Arg::value },
              "Deletes a watchpoint",
              [this](Arguments& argv, long value) {
 
-        copper.debugger.deleteWatchpoint(util::parseNum(argv.front()));
+        copper.debugger.deleteWatchpoint(parseNum(argv));
     });
 
     root.add({"cwatch", "enable"}, { Arg::value },
              "Enables a watchpoint",
              [this](Arguments& argv, long value) {
 
-        copper.debugger.enableWatchpoint(util::parseNum(argv.front()));
+        copper.debugger.enableWatchpoint(parseNum(argv));
     });
 
     root.add({"cwatch", "disable"}, { Arg::value },
              "Disables a watchpoint",
              [this](Arguments& argv, long value) {
 
-        copper.debugger.disableWatchpoint(util::parseNum(argv.front()));
+        copper.debugger.disableWatchpoint(parseNum(argv));
     });
 
     root.add({"cwatch", "ignore"}, { Arg::value, Arg::value },
@@ -421,7 +421,7 @@ Interpreter::initDebugShell(Command &root)
              [this](Arguments& argv, long value) {
 
         std::stringstream ss;
-        mem.memDump<ACCESSOR_CPU>(ss, u32(util::parseNum(argv.front())));
+        mem.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv)));
         retroShell << '\n' << ss << '\n';
     });
 
@@ -587,7 +587,7 @@ Interpreter::initDebugShell(Command &root)
              "Prints the Copper list",
              [this](Arguments& argv, long value) {
 
-        auto nr = util::parseNum(argv.front());
+        auto nr = parseNum(argv);
 
         switch (nr) {
 
@@ -716,7 +716,7 @@ Interpreter::initDebugShell(Command &root)
              "Inspects a specific Zorro board",
              [this](Arguments& argv, long value) {
 
-        auto nr = util::parseNum(argv.front());
+        auto nr = parseNum(argv);
 
         if (auto board = zorro.getBoard(nr); board != nullptr) {
 
@@ -1033,7 +1033,7 @@ Interpreter::initDebugShell(Command &root)
              "Attaches or detaches the debug expansion board",
              [this](Arguments& argv, long value) {
 
-        diagBoard.setConfigItem(OPT_DIAG_BOARD, util::parseBool(argv.front()));
+        diagBoard.setConfigItem(OPT_DIAG_BOARD, parseBool(argv));
     });
 }
 

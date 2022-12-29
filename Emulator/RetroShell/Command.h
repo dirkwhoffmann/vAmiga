@@ -96,12 +96,6 @@ struct Command {
              const string &help,
              std::function<void (Arguments&, long)> func, long param = 0);
 
-    // Marks a command as hidden
-    void hide(const std::vector<string> &tokens);
-
-    // Removes a registered command
-    void remove(const string& token);
-
     // Returns arguments counts
     isize minArgs() const { return isize(requiredArgs.size()); }
     isize optArgs() const { return isize(optionalArgs.size()); }
