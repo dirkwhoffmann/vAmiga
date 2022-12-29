@@ -1617,16 +1617,7 @@ Interpreter::initCommandShell(Command &root)
     // Hide some commands
     root.hide({"regression"});
     root.hide({"screenshot"});
-    /*
-    root.hide({"df0"});
-    root.hide({"df1"});
-    root.hide({"df2"});
-    root.hide({"df3"});
-    root.hide({"hd0"});
-    root.hide({"hd1"});
-    root.hide({"hd2"});
-    root.hide({"hd3"});
-    */
+
 }
 
 }

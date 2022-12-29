@@ -66,53 +66,7 @@ Command::add(const std::vector<string> &tokens,
     d.requiredArgs = requiredArgs;
     d.optionalArgs = optionalArgs;
     d.help = help;
-    d.action = nullptr;
-    d.callback = func; 
-    d.param = param;
-
-    // Register the instruction
-    cmd->subCommands.push_back(d);
-}
-
-void
-Command::oldadd(const std::vector<string> &tokens,
-                const string &help,
-                void (RetroShell::*action)(Arguments&, long), long param)
-{
-    oldadd(tokens, { }, { }, help, action, param);
-}
-
-void
-Command::oldadd(const std::vector<string> &tokens,
-                const std::vector<string> &arguments,
-                const string &help,
-                void (RetroShell::*action)(Arguments&, long), long param)
-{
-    oldadd(tokens, arguments, { }, help, action, param);
-}
-
-void
-Command::oldadd(const std::vector<string> &tokens,
-                const std::vector<string> &requiredArgs,
-                const std::vector<string> &optionalArgs,
-                const string &help,
-                void (RetroShell::*action)(Arguments&, long), long param)
-{
-    assert(!tokens.empty());
-
-    // Traverse the node tree
-    Command *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() - 1 });
-    assert(cmd != nullptr);
-
-    // Create the instruction
-    Command d;
-    d.name = tokens.back();
-    d.fullName = (cmd->fullName.empty() ? "" : cmd->fullName + " ") + tokens.back();
-    d.group = isize(groups.size()) - 1;
-    d.requiredArgs = requiredArgs;
-    d.optionalArgs = optionalArgs;
-    d.help = help;
-    d.action = action;
+    d.callback = func;
     d.param = param;
 
     // Register the instruction
@@ -232,7 +186,7 @@ Command::usage() const
         if (count > 1) {
             arguments = "{" + arguments + "}";
         }
-        if ((action || callback) && arguments != "") {
+        if (callback && arguments != "") {
             arguments = "[ " + arguments + " ]";
         }
     }
