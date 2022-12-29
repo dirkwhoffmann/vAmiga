@@ -284,6 +284,23 @@ FloppyDisk::encodeDisk(const FloppyFile &file)
 
     // Call the MFM encoder
     file.encodeDisk(*this);
+
+    // shiftTracks(0);
+}
+
+void
+FloppyDisk::shiftTracks(isize offset)
+{
+    u8 spare[2 * 32768];
+
+    for (Track t = 0; t < 168; t++) {
+
+        isize len = length.track[t];
+
+        memcpy(spare, data.track[t], len);
+        memcpy(spare + len, data.track[t], len);
+        memcpy(data.track[t], spare + (len + t * offset) % len, len);
+    }
 }
 
 void

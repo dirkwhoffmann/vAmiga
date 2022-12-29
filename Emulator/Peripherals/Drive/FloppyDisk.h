@@ -224,7 +224,10 @@ public:
     
     // Encodes a disk
     void encodeDisk(const class FloppyFile &file);
-    
+
+    // Shifts the tracks agains each other
+    void shiftTracks(isize offset);
+
     
     //
     // Working with MFM encoded data streams
