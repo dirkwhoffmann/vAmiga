@@ -90,8 +90,8 @@ Interpreter::initCommandShell(Command &root)
 
     root.newGroup("Regression testing");
 
-    root.add({"regression"},    "* Runs the regression tester");
-    root.add({"screenshot"},    "* Manages screenshots");
+    root.add({"regression"},    "Runs the regression tester");
+    root.add({"screenshot"},    "Manages screenshots");
 
     root.newGroup("Controlling components");
 

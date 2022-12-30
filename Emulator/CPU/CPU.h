@@ -198,9 +198,11 @@ public:
     // Disassembles the currently executed instruction
     const char *disassembleInstr(isize *len);
     const char *disassembleWords(isize len);
+    const char *disassemblePC();
 
-    // Dumps entries from the log buffer
+    // Dumps a portion of the log buffer
     void dumpLogBuffer(std::ostream& os, isize count);
+    void dumpLogBuffer(std::ostream& os);
 
     // Disassembles a memory range
     void disassembleRange(std::ostream& os, u32 addr, isize count);

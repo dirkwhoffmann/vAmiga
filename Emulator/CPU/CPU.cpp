@@ -743,7 +743,7 @@ CPU::disassembleAddr(u32 addr)
 {
     static char result[16];
 
-    disassemblePC(addr, result);
+    Moira::disassemblePC(addr, result);
     return result;
 }
 
@@ -757,6 +757,12 @@ const char *
 CPU::disassembleWords(isize len)
 {
     return disassembleWords(reg.pc0, len);
+}
+
+const char *
+CPU::disassemblePC()
+{
+    return disassembleAddr(reg.pc0);
 }
 
 void
@@ -783,6 +789,12 @@ CPU::dumpLogBuffer(std::ostream& os, isize count)
             os << std::endl;
         }
     }
+}
+
+void
+CPU::dumpLogBuffer(std::ostream& os)
+{
+    dumpLogBuffer(os, debugger.loggedInstructions());
 }
 
 void

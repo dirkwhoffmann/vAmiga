@@ -344,22 +344,29 @@ Moira::processException(const std::exception &exc)
 template <Core C> void
 Moira::processException(const std::exception &exc)
 {
-    auto ae = dynamic_cast<const AddressError *>(&exc);
-    if (ae) {
+    try {
 
-        execAddressError<C>(ae->stackFrame);
-        return;
-    }
+        auto ae = dynamic_cast<const AddressError *>(&exc);
+        if (ae) {
 
-    auto be = dynamic_cast<const BusErrorException *>(&exc);
-    if (be) {
+            execAddressError<C>(ae->stackFrame);
+            return;
+        }
 
-        execException(EXC_BUS_ERROR);
-        return;
-    }
+        auto be = dynamic_cast<const BusErrorException *>(&exc);
+        if (be) {
 
-    auto df = dynamic_cast<const DoubleFault *>(&exc);
-    if (df) {
+            execException(EXC_BUS_ERROR);
+            return;
+        }
+
+        auto df = dynamic_cast<const DoubleFault *>(&exc);
+        if (df) {
+
+            throw df;
+        }
+
+    } catch (DoubleFault & df) {
 
         halt();
         return;
