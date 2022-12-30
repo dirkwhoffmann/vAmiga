@@ -321,23 +321,88 @@
 									It is also possible to embed vAmigaWeb as a web player as you can see right here:
 								</p>
 								<p>
-								<div id="emuview0" class="emulator_view"><a href="#" ontouchstart="touched=true"
-										onclick="
-								let touch=(typeof touched!='undefined')?touched:false;touched=false;
-								let config={
-									touch:touch,
-									AROS:true,
-									warpto:2000,
-									navbar:false,
-									wide:true,
-									display:'standard',
-									url:'https://vamigaweb.github.io/doc/media/Rink_a_Dink-REDUX_by_Lemon-Point_(final).adf'
-								}; 
-								vAmigaWeb_player.load(this,encodeURIComponent(JSON.stringify(config)));
-								return false;" style="border-bottom: none">
-										<img src="images/rinkadink.png" class="teaser_img">
+
+								<div id="emuview0" class="emulator_view">
+									<a href="#" ontouchstart="touched=true" style="border-bottom: none" onclick="										let config={
+										AROS:true,warpto:250,
+										navbar:false,
+										wide:true,
+										gpu:true,
+										display:'standard',
+										startup_script: `df_mount_list=['Batman_Rises_disk1.adf','Batman_Rises_disk2.adf']`,
+										url:'https://vamigaweb.github.io/doc/media/batman_rises.zip'
+									}; 
+									vAmigaWeb_player.load(this,encodeURIComponent(JSON.stringify(config)));
+									return false;" 
+									>
+									<img src="images/arrow.png" class="teaser_img" style="background-size: 100% 100%;background-image:url(images/batman_rises.jpg);">
 									</a>
 								</div>
+
+								<div id="emuview1" class="emulator_view" style="display: none;">
+									<a href="#" ontouchstart="touched=true" style="border-bottom: none" onclick="
+										let touch=(typeof touched!='undefined')?touched:false;touched=false;
+										let config={
+											touch:touch,
+											AROS:true,
+											warpto:2000,
+											navbar:false,
+											wide:true,
+											display:'standard',
+											url:'https://vamigaweb.github.io/doc/media/Rink_a_Dink-REDUX_by_Lemon-Point_(final).adf'
+										}; 
+										vAmigaWeb_player.load(this,encodeURIComponent(JSON.stringify(config)));
+										return false;" 
+									>
+									<img src="images/rinkadink.png" class="teaser_img">
+									</a>
+								</div>
+
+								<div id="emuview2" class="emulator_view" style="display: none;">
+									<a href="#" ontouchstart="touched=true" style="border-bottom: none" onclick="
+										let touch=(typeof touched!='undefined')?touched:false;touched=false;
+										let config={
+											touch:touch,
+											mouse:true,
+											AROS:true,
+											warpto:2000,
+											navbar:false,
+											wide:true,
+											display:'standard',
+											url:'https://vamigaweb.github.io/doc/media/SysInfo4.4.adf'
+										}; 
+										vAmigaWeb_player.load(this,encodeURIComponent(JSON.stringify(config)));
+										return false;" 
+									>
+									<img src="images/arrow.png" class="teaser_img" style="background-size: 100% 100%;background-image:url(images/sysinfo.jpg);">
+
+									</a>
+								</div>
+
+
+<style>
+	.chooser li {
+		margin:0.2em;
+		font-size:xx-large;
+		color: #dddddd;
+	}
+	.chooser li:hover {
+		color: #aaaaaa;
+	}	
+</style>
+<script>
+function activate(li,id){
+	document.querySelectorAll(".emulator_view").forEach((e)=>e.style='display:none');
+	document.getElementById(id).style='display:unset';
+	document.querySelectorAll(".chooser li").forEach((e)=>e.style.color='');	
+	li.style.color="#555555";
+}
+</script>
+<ul class="chooser" style="display:flex;justify-content: center;width:100%;margin-left: 17px;">
+	<li style="color: #555555" onclick="activate(this,'emuview0')"></li>
+	<li onclick="activate(this,'emuview1')"></li>
+	<li onclick="activate(this,'emuview2')"></li></ul>
+							
 								</p>
 								<footer><a href="https://vamigaweb.github.io/doc/about.html" class="button">Learn
 										More</a></footer>
