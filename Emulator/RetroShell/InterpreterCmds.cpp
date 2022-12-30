@@ -218,8 +218,8 @@ Interpreter::initCommandShell(Command &root)
         amiga.configure(OPT_VIDEO_FORMAT, parseEnum <VideoFormatEnum> (argv));
     });
 
-    root.add({"amiga", "set", "fpsmode"}, { SyncModeEnum::argList() },
-             "Selects the frame mode",
+    root.add({"amiga", "set", "syncmode"}, { SyncModeEnum::argList() },
+             "Selects the synchronization mode",
              [this](Arguments& argv, long value) {
 
         amiga.configure(OPT_SYNC_MODE, parseEnum <SyncModeEnum> (argv));

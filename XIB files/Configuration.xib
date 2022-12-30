@@ -158,7 +158,6 @@
                 <outlet property="vidFlickerWeightSlider" destination="0Y9-Rh-mXL" id="8gm-Gx-bTX"/>
                 <outlet property="vidFpsMax" destination="GEA-mo-NHg" id="tgE-Gz-JsX"/>
                 <outlet property="vidFpsMin" destination="di0-Dy-L25" id="QxA-PR-PxZ"/>
-                <outlet property="vidFpsMode" destination="XmN-Gl-r9d" id="1AQ-7r-6LU"/>
                 <outlet property="vidFpsSlider" destination="50n-LK-F7k" id="Qbg-7i-wDf"/>
                 <outlet property="vidHCenter" destination="Bja-RZ-tTr" id="UsT-3X-hqJ"/>
                 <outlet property="vidHCenterLabel" destination="h8h-Mj-laT" id="rd5-HH-i2q"/>
@@ -174,6 +173,7 @@
                 <outlet property="vidScanlineBrightnessSlider" destination="AWg-ot-BhE" id="1qA-Id-w4m"/>
                 <outlet property="vidScanlineWeightSlider" destination="EYN-fQ-glL" id="REw-5A-5bs"/>
                 <outlet property="vidScanlinesPopUp" destination="s55-1G-JzC" id="iAh-DE-q3Q"/>
+                <outlet property="vidSyncMode" destination="XmN-Gl-r9d" id="1AQ-7r-6LU"/>
                 <outlet property="vidUpscalerPopUp" destination="WHl-5V-2c2" id="UXA-lC-U2g"/>
                 <outlet property="vidVCenter" destination="jms-qV-MhZ" id="kYm-Lx-wMS"/>
                 <outlet property="vidVCenterLabel" destination="zP8-79-N2H" id="kxP-zk-puP"/>
@@ -3374,7 +3374,7 @@ DQ
                                                                     </menu>
                                                                 </popUpButtonCell>
                                                                 <connections>
-                                                                    <action selector="vidFpsModeAction:" target="-2" id="FAH-2n-h3C"/>
+                                                                    <action selector="vidSyncModeAction:" target="-2" id="P9T-s8-FSN"/>
                                                                 </connections>
                                                             </popUpButton>
                                                             <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jms-qV-MhZ">

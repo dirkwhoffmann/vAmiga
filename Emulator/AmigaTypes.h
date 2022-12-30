@@ -58,7 +58,7 @@ struct SyncModeEnum : util::Reflection<SyncModeEnum, SyncMode>
     static constexpr long maxVal = SYNC_VSYNC;
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
-    static const char *prefix() { return "FPS"; }
+    static const char *prefix() { return "SYNC"; }
     static const char *key(SyncMode value)
     {
         switch (value) {
