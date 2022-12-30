@@ -2830,11 +2830,6 @@ using namespace vamiga::moira;
     }
 }
 
-- (NSInteger)masterFrequency
-{
-    return [self amiga]->masterClockFrequency();
-}
-
 - (NSInteger)cpuLoad
 {
     double load = [self amiga]->getCpuLoad();

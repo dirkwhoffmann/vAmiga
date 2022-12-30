@@ -217,8 +217,8 @@ private:
         worker
 
         << config.type
-        << config.fpsMode
-        << config.fps;
+        << config.syncMode
+        << config.proposedFps;
     }
 
     template <class T>
@@ -246,7 +246,7 @@ private:
     
 private:
     
-    SyncMode getSyncMode() const override;
+    ThreadMode getThreadMode() const override;
     void execute() override;
 
 public:

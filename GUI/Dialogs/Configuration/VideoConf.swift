@@ -58,8 +58,8 @@ extension ConfigurationController {
         vidVCenterLabel.textColor = config.center == 0 ? .labelColor : .disabledControlTextColor
 
         // Frame rate
-        let fpsMode = config.fpsMode
-        let fps = config.fps
+        let fpsMode = config.syncMode
+        let fps = config.proposedFps
         vidFpsMode.item(at: 1)?.title = "Custom (\(fps) fps)"
         vidFpsMode.selectItem(withTag: fpsMode)
         vidFpsSlider.integerValue = fps
@@ -198,13 +198,13 @@ extension ConfigurationController {
 
     @IBAction func vidFpsModeAction(_ sender: NSPopUpButton!) {
 
-        config.fpsMode = sender.selectedTag()
+        config.syncMode = sender.selectedTag()
         refresh()
     }
 
     @IBAction func vidFpsAction(_ sender: NSSlider!) {
 
-        config.fps = sender.integerValue
+        config.proposedFps = sender.integerValue
         refresh()
     }
 

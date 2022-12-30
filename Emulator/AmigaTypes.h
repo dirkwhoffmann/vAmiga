@@ -43,29 +43,29 @@ struct VideoFormatEnum : util::Reflection<VideoFormatEnum, VideoFormat>
 };
 #endif
 
-enum_long(FPS_MODE)
+enum_long(SYNC_MODE)
 {
-    FPS_NATIVE,
-    FPS_CUSTOM,
-    FPS_VSYNC
+    SYNC_NATIVE_FPS,
+    SYNC_FIXED_FPS,
+    SYNC_VSYNC
 };
-typedef FPS_MODE FpsMode;
+typedef SYNC_MODE SyncMode;
 
 #ifdef __cplusplus
-struct FpsModeEnum : util::Reflection<FpsModeEnum, FpsMode>
+struct SyncModeEnum : util::Reflection<SyncModeEnum, SyncMode>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = FPS_VSYNC;
+    static constexpr long maxVal = SYNC_VSYNC;
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "FPS"; }
-    static const char *key(FpsMode value)
+    static const char *key(SyncMode value)
     {
         switch (value) {
 
-            case FPS_NATIVE:    return "NATIVE";
-            case FPS_CUSTOM:    return "CUSTOM";
-            case FPS_VSYNC:     return "VSYNC";
+            case SYNC_NATIVE_FPS:   return "NATIVE_FPS";
+            case SYNC_FIXED_FPS:    return "FIXED_FPS";
+            case SYNC_VSYNC:        return "VSYNC";
         }
         return "???";
     }
@@ -317,8 +317,8 @@ struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
 typedef struct
 {
     VideoFormat type;
-    FpsMode fpsMode;
-    isize fps;
+    SyncMode syncMode;
+    isize proposedFps;
 }
 AmigaConfig;
 

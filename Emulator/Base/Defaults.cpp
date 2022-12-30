@@ -32,8 +32,8 @@ namespace vamiga {
 Defaults::Defaults()
 {
     setFallback(OPT_VIDEO_FORMAT, PAL);
-    setFallback(OPT_FPS_MODE, FPS_NATIVE);
-    setFallback(OPT_FPS, 60);
+    setFallback(OPT_SYNC_MODE, SYNC_NATIVE_FPS);
+    setFallback(OPT_PROPOSED_FPS, 60);
     setFallback(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
     setFallback(OPT_SLOW_RAM_MIRROR, true);
     setFallback(OPT_PTR_DROPS, true);

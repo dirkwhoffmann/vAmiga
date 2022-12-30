@@ -218,19 +218,19 @@ Interpreter::initCommandShell(Command &root)
         amiga.configure(OPT_VIDEO_FORMAT, parseEnum <VideoFormatEnum> (argv));
     });
 
-    root.add({"amiga", "set", "fpsmode"}, { FpsModeEnum::argList() },
+    root.add({"amiga", "set", "fpsmode"}, { SyncModeEnum::argList() },
              "Selects the frame mode",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_FPS_MODE, parseEnum <FpsModeEnum> (argv));
+        amiga.configure(OPT_SYNC_MODE, parseEnum <SyncModeEnum> (argv));
     });
 
     root.add({"amiga", "set", "fps"}, { Arg::value },
              "Sets the frames per seconds",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_FPS, parseNum(argv));
-        amiga.configure(OPT_FPS_MODE, FPS_CUSTOM);
+        amiga.configure(OPT_PROPOSED_FPS, parseNum(argv));
+        amiga.configure(OPT_SYNC_MODE, SYNC_FIXED_FPS);
     });
 
     root.add({"amiga", "init"}, { ConfigSchemeEnum::argList() },

@@ -205,8 +205,8 @@ Amiga::resetConfig()
     std::vector <Option> options = {
 
         OPT_VIDEO_FORMAT,
-        OPT_FPS_MODE,
-        OPT_FPS
+        OPT_SYNC_MODE,
+        OPT_PROPOSED_FPS
     };
 
     for (auto &option : options) {
@@ -223,13 +223,13 @@ Amiga::getConfigItem(Option option) const
 
             return config.type;
 
-        case OPT_FPS_MODE:
+        case OPT_SYNC_MODE:
 
-            return config.fpsMode;
+            return config.syncMode;
 
-        case OPT_FPS:
+        case OPT_PROPOSED_FPS:
 
-            return config.fps;
+            return config.proposedFps;
 
         case OPT_AGNUS_REVISION:
         case OPT_SLOW_RAM_MIRROR:
@@ -415,22 +415,22 @@ Amiga::setConfigItem(Option option, i64 value)
             }
             return;
 
-        case OPT_FPS_MODE:
+        case OPT_SYNC_MODE:
 
-            if (!FpsModeEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, FpsModeEnum::keyList());
+            if (!SyncModeEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, SyncModeEnum::keyList());
             }
 
-            config.fpsMode = FpsMode(value);
+            config.syncMode = SyncMode(value);
             return;
 
-        case OPT_FPS:
+        case OPT_PROPOSED_FPS:
 
             if (value < 25 || value > 120) {
                 throw VAError(ERROR_OPT_INVARG, "25...120");
             }
 
-            config.fps = value;
+            config.proposedFps = value;
             return;
 
         default:
@@ -469,8 +469,8 @@ Amiga::configure(Option option, i64 value)
     switch (option) {
 
         case OPT_VIDEO_FORMAT:
-        case OPT_FPS_MODE:
-        case OPT_FPS:
+        case OPT_SYNC_MODE:
+        case OPT_PROPOSED_FPS:
             
             setConfigItem(option, value);
             break;
@@ -924,9 +924,9 @@ Amiga::_dump(Category category, std::ostream& os) const
 
         os << tab("Machine type");
         os << VideoFormatEnum::key(config.type) << std::endl;
-        os << tab("FPS mode");
-        os << FpsModeEnum::key(config.fpsMode);
-        if (config.fpsMode == FPS_CUSTOM) os << " (" << config.fps << " fps)";
+        os << tab("Sync mode");
+        os << SyncModeEnum::key(config.syncMode);
+        if (config.syncMode == SYNC_FIXED_FPS) os << " (" << config.proposedFps << " fps)";
         os << std::endl;
     }
 
@@ -960,7 +960,7 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << tab("Thread state");
         os << ExecutionStateEnum::key(state) << std::endl;
         os << tab("Sync mode");
-        os << (getSyncMode() == SyncMode::Periodic ? "PERIODIC" : "PULSED") << std::endl;
+        os << (getThreadMode() == ThreadMode::Periodic ? "PERIODIC" : "PULSED") << std::endl;
 
         os << std::endl;
         os << tab("Master clock frequency");
@@ -1160,10 +1160,10 @@ Amiga::save(u8 *buffer)
     return result;
 }
 
-Amiga::SyncMode
-Amiga::getSyncMode() const
+Amiga::ThreadMode
+Amiga::getThreadMode() const
 {
-    return config.fpsMode == FPS_VSYNC ? SyncMode::Pulsed : SyncMode::Periodic;
+    return config.syncMode == SYNC_VSYNC ? ThreadMode::Pulsed : ThreadMode::Periodic;
 }
 
 void
@@ -1285,11 +1285,11 @@ Amiga::execute()
 double
 Amiga::refreshRate() const
 {
-    switch (config.fpsMode) {
+    switch (config.syncMode) {
 
-        case FPS_NATIVE:        return config.type == PAL ? 50.0 : 60.0;
-        case FPS_CUSTOM:        return config.fps;
-        case FPS_VSYNC:         return host.getHostRefreshRate();
+        case SYNC_NATIVE_FPS:        return config.type == PAL ? 50.0 : 60.0;
+        case SYNC_FIXED_FPS:         return config.proposedFps;
+        case SYNC_VSYNC:         return host.getHostRefreshRate();
 
         default:
             fatalError;
