@@ -390,6 +390,13 @@ Interpreter::initDebugShell(Command &root)
         retroShell.dump(amiga, Category::Inspection);
     });
 
+    root.add({"amiga", "progress"},
+             "Displays clocks and the frame counter",
+             [this](Arguments& argv, long value) {
+
+        retroShell.dump(amiga, Category::Progress);
+    });
+
     root.add({"amiga", "host"},
              "Displays information about the host machine",
              [this](Arguments& argv, long value) {

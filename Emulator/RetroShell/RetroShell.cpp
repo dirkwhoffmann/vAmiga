@@ -564,7 +564,15 @@ RetroShell::dump(AmigaObject &component, Category category)
     std::stringstream ss;
     
     {   SUSPENDED
-        
+
+        switch (category) {
+
+            case Category::Config: ss << "Current configuration:\n\n"; break;
+
+            default:
+                break;
+        }
+
         component.dump(category, ss);
     }
 

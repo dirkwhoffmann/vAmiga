@@ -932,41 +932,6 @@ Amiga::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Inspection) {
 
-        os << tab("Thread state");
-        os << ExecutionStateEnum::key(state) << std::endl;
-        os << std::endl;
-        os << tab("Current frame");
-        os << dec(agnus.pos.frame) << std::endl;
-        os << tab("CPU progress");
-        os << dec(cpu.getCpuClock()) << " CPU cycles" << std::endl;
-        os << tab("");
-        os << dec(cpu.getMasterClock()) << " Master cycles" << std::endl;
-        os << tab("Agnus progress");
-        os << dec(agnus.clock) << " DMA cycles" << std::endl;
-        os << tab("");
-        os << dec(DMA_CYCLES(agnus.clock)) << " Master cycles" << std::endl;
-        os << tab("CIA A progress");
-        os << dec(ciaA.getClock()) << " CIA cycles" << std::endl;
-        os << tab("");
-        os << dec(CIA_CYCLES(ciaA.getClock())) << " Master cycles" << std::endl;
-        os << tab("CIA B progress");
-        os << dec(ciaB.getClock()) << " CIA cycles" << std::endl;
-        os << tab("");
-        os << dec(CIA_CYCLES(ciaA.getClock())) << " Master cycles" << std::endl;
-    }
-
-    if (category == Category::Debug) {
-
-        os << tab("Thread state");
-        os << ExecutionStateEnum::key(state) << std::endl;
-        os << tab("Sync mode");
-        os << (getThreadMode() == ThreadMode::Periodic ? "PERIODIC" : "PULSED") << std::endl;
-
-        os << std::endl;
-        os << tab("Master clock frequency");
-        os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
-        os << tab("Amiga refresh rate");
-        os << flt(float(refreshRate())) << " Hz" << std::endl;
         os << tab("Power");
         os << bol(isPoweredOn()) << std::endl;
         os << tab("Running");
@@ -977,7 +942,37 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << bol(inWarpMode()) << std::endl;
         os << tab("Debug mode");
         os << bol(inDebugMode()) << std::endl;
+        os << std::endl;
+        os << tab("Refresh rate");
+        os << dec(isize(refreshRate())) << " Fps" << std::endl;
+    }
 
+    if (category == Category::Progress) {
+
+        os << tab("Frame");
+        os << dec(agnus.pos.frame) << std::endl;
+        os << tab("CPU progress");
+        os << dec(cpu.getMasterClock()) << " Master cycles (";
+        os << dec(cpu.getCpuClock()) << " CPU cycles)" << std::endl;
+        os << tab("Agnus progress");
+        os << dec(agnus.clock) << " Master cycles (";
+        os << dec(AS_DMA_CYCLES(agnus.clock)) << " DMA cycles)" << std::endl;
+        os << tab("CIA A progress");
+        os << dec(ciaA.getClock()) << " Master cycles (";
+        os << dec(AS_CIA_CYCLES(ciaA.getClock())) << " CIA cycles)" << std::endl;
+        os << tab("CIA B progress");
+        os << dec(ciaB.getClock()) << " Master cycles (";
+        os << dec(AS_CIA_CYCLES(ciaA.getClock())) << " CIA cycles)" << std::endl;
+    }
+
+    if (category == Category::Debug) {
+
+        os << tab("Thread state");
+        os << ExecutionStateEnum::key(state) << std::endl;
+        os << tab("Thread mode");
+        os << (getThreadMode() == ThreadMode::Periodic ? "PERIODIC" : "PULSED") << std::endl;
+        os << tab("Master clock frequency");
+        os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
     }
 
     if (category == Category::Defaults) {
@@ -1287,9 +1282,9 @@ Amiga::refreshRate() const
 {
     switch (config.syncMode) {
 
-        case SYNC_NATIVE_FPS:        return config.type == PAL ? 50.0 : 60.0;
-        case SYNC_FIXED_FPS:         return config.proposedFps;
-        case SYNC_VSYNC:         return host.getHostRefreshRate();
+        case SYNC_NATIVE_FPS:   return config.type == PAL ? 50.0 : 60.0;
+        case SYNC_FIXED_FPS:    return config.proposedFps;
+        case SYNC_VSYNC:        return host.getHostRefreshRate();
 
         default:
             fatalError;
