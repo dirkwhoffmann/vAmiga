@@ -285,12 +285,28 @@ FloppyDisk::encodeDisk(const FloppyFile &file)
     // Call the MFM encoder
     file.encodeDisk(*this);
 
-    // shiftTracks(0);
+    // Rectify the track alignment
+
+    /* By default, all tracks are arranged to start at the same offset position.
+     * Some disks, however, are known to require a different alignment to work
+     * in vAmiga. We check for these disks and align the tracks accordingly.
+     */
+    switch (file.crc32()) {
+
+        case 0x4db280dd:    // T2 - The Arcade Game (1993)(Virgin)[cr FLT].adf
+        case 0xb41e9935:    // T2 - The Arcade Game (1993)(Virgin)[cr FLT](Disk 1 of 2).adf
+        case 0x889f7bbe:    // T2 - The Arcade Game (1993)(Virgin)[cr FLT](Disk 1 of 2)[t +4 MST].adf
+
+            shiftTracks(20);
+            break;
+    }
 }
 
 void
 FloppyDisk::shiftTracks(isize offset)
 {
+    debug(true, "Shifting tracks by %zd bytes against each other\n", offset);
+
     u8 spare[2 * 32768];
 
     for (Track t = 0; t < 168; t++) {

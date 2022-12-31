@@ -525,7 +525,7 @@ FloppyDrive::getStepReadDelay() const
     switch (config.mechanics) {
 
         case MECHANICS_NONE:    return 0;
-        case MECHANICS_A1010:   return MSEC(8);
+        case MECHANICS_A1010:   return MSEC(2);
 
         default:
             fatalError;
@@ -538,7 +538,7 @@ FloppyDrive::getRevStepReadDelay() const
     switch (config.mechanics) {
 
         case MECHANICS_NONE:    return 0;
-        case MECHANICS_A1010:   return MSEC(8);
+        case MECHANICS_A1010:   return MSEC(2);
 
         default:
             fatalError;

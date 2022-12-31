@@ -1347,13 +1347,6 @@ using namespace vamiga::moira;
     return [self drive]->currentOffset();
 }
 
-/*
-- (u64)fnv
-{
-    return [self drive]->fnv();
-}
-*/
-
 - (BOOL)hasDisk
 {
     return [self drive]->hasDisk();
@@ -2034,7 +2027,7 @@ using namespace vamiga::moira;
 
 - (u64)fnv
 {
-    return [self file]->fnv();
+    return [self file]->fnv64();
 }
 
 - (void)setPath:(NSString *)path

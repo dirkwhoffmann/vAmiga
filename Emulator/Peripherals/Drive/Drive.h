@@ -63,9 +63,6 @@ public:
     // Managing disks
     //
     
-    // Returns a fingerprint for the current disk or 0 if there is none
-    // virtual u64 fnv() const = 0;
-
     // Checks whether the drive contains a disk of a certain kind
     virtual bool hasDisk() const = 0;
     virtual bool hasModifiedDisk() const = 0;
