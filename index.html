@@ -66,7 +66,7 @@
 		margin-right: 15px;
 		cursor: grab;
 	}
-
+/*
 	[player="on"] .style1 {
 		background-color: #555555;
 		color: #999999;
@@ -130,6 +130,7 @@
 		}
 
 	}
+	*/
 </style>
 <script src="https://vamigaweb.github.io/js/vAmigaWeb_player.js"></script>
 <script>
@@ -153,7 +154,7 @@
 </script>
 <!-- web emulator view stuff end-->
 
-<body class="is-preload"> <!-- onload="switch_cinema_display()" -->
+<body class="is-preload" onload="switch_cinema_display()">
 	<div id="page-wrapper">
 
 		<!-- Header -->
@@ -320,7 +321,7 @@
 									app.
 									It is also possible to embed vAmigaWeb as a web player as you can see right here:
 								</p>
-								<p>
+								<div id="player_swipe_view">
 
 								<div id="emuview0" class="emulator_view">
 									<a href="#" ontouchstart="touched=true" style="border-bottom: none" onclick="										let config={
@@ -382,7 +383,7 @@
 
 <style>
 	.chooser li {
-		font-size: large;
+		font-size: medium;
 		color: #dddddd;
 		cursor: pointer;
 		padding: 0;
@@ -390,6 +391,9 @@
 	.chooser li:hover {
 		color: #aaaaaa;
 	}	
+	[player="on"] .chooser li{
+		display: none;
+	}
 </style>
 <script>
 function activate(li,id){
@@ -398,15 +402,43 @@ function activate(li,id){
 	document.querySelectorAll(".chooser li").forEach((e)=>e.style.color='');	
 	li.style.color="#555555";
 }
+
+let touchstartX = 0;
+let touchendX = 0;
+let touchstartY = 0;
+let touchendY = 0;   
+let visible_emuview=0; let emuview_count=3;
+function checkDirection() {
+    let difX = touchstartX - touchendX;
+    let difY = touchstartY - touchendY;
+	if (Math.abs(difX) > Math.abs(difY)) {
+		if (touchendX < touchstartX) {/*swipe left*/ visible_emuview--;}
+		if (touchendX > touchstartX) {/*swipe right*/ visible_emuview++;}
+		if(visible_emuview<0) visible_emuview=emuview_count-1;
+		else if(visible_emuview>=emuview_count) visible_emuview=0; 
+		console.log(visible_emuview);
+		activate(document.getElementById('dot'+visible_emuview),'emuview'+visible_emuview);
+	}
+};
+document.getElementById('player_swipe_view').addEventListener('touchstart', e => {
+    touchstartX = e.changedTouches[0].screenX;
+    touchstartY = e.changedTouches[0].screenY;
+});
+
+document.getElementById('player_swipe_view').addEventListener('touchend', e => {
+    touchendX = e.changedTouches[0].screenX;
+    touchendY = e.changedTouches[0].screenY;
+    checkDirection();
+});
 </script>
 <div style="display:flex;justify-content: center;">
-	<ul class="chooser" style="display:flex;justify-content: space-evenly;padding:0;width:55%;list-style: none;">
-		<li style="color: #555555" onclick="activate(this,'emuview0')">&#11044;</li>
-		<li onclick="activate(this,'emuview1')">&#11044;</li>
-		<li onclick="activate(this,'emuview2')">&#11044;</li>
+	<ul class="chooser" style="display:flex;justify-content: space-evenly;padding:0;width:40%;list-style: none;">
+		<li id="dot0" onclick="activate(this,'emuview0')" style="color: #555555">&#11044;</li>
+		<li id="dot1" onclick="activate(this,'emuview1')">&#11044;</li>
+		<li id="dot2" onclick="activate(this,'emuview2')">&#11044;</li>
 	</ul>
 </div>							
-								</p>
+								</div>
 								<footer><a href="https://vamigaweb.github.io/doc/about.html" class="button">Learn
 										More</a></footer>
 							</div>
