@@ -67,6 +67,11 @@
 		cursor: grab;
 	}
 
+	[player="on"] #titleBar{
+		position: absolute; /* otherwise fixed and on small devices sticks over the running player*/ 
+	}
+	
+
 	[player="on"] .style1,
 	[player="on"] .style2,
 	[player="on"] #header, [player="on"] #footer {
