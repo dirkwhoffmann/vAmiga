@@ -52,7 +52,7 @@ class Canvas: Layer {
     var mergeTexture: MTLTexture! = nil
 
     /* Bloom textures to emulate blooming (512 x 512)
-     * To emulate a bloom effect, the C64 texture is first split into it's
+     * To emulate a bloom effect, the emulator texture is first split into it's
      * R, G, and B parts. Each texture is then run through a Gaussian blur
      * filter with a large radius. These blurred textures are passed into
      * the fragment shader as secondary textures where they are recomposed
