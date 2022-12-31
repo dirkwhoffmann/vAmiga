@@ -499,7 +499,7 @@ FloppyDrive::getStepPulseDelay() const
     switch (config.mechanics) {
 
         case MECHANICS_NONE:    return 0;
-        case MECHANICS_A1010:   return 1060;
+        case MECHANICS_A1010:   return USEC(40);
 
         default:
             fatalError;
@@ -512,7 +512,7 @@ FloppyDrive::getRevStepPulseDelay() const
     switch (config.mechanics) {
 
         case MECHANICS_NONE:    return 0;
-        case MECHANICS_A1010:   return 1060;
+        case MECHANICS_A1010:   return USEC(40);
 
         default:
             fatalError;
