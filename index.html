@@ -66,14 +66,18 @@
 		margin-right: 15px;
 		cursor: grab;
 	}
-/*
-	[player="on"] .style1 {
+
+	[player="on"] .style1,
+	[player="on"] .style2,
+	[player="on"] #header, [player="on"] #footer {
 		background-color: #555555;
 		color: #999999;
 		animation: go_dark 2s ease-out;
 	}
 
-	[player="off"] .style1 {
+	[player="off"] .style1,
+	[player="off"] .style2,
+	[player="on"] #header, [player="on"] #footer {
 		animation: go_light 1s ease-in;
 	}
 
@@ -130,7 +134,7 @@
 		}
 
 	}
-	*/
+	
 </style>
 <script src="https://vamigaweb.github.io/js/vAmigaWeb_player.js"></script>
 <script>
@@ -383,7 +387,7 @@
 
 <style>
 	.chooser li {
-		font-size: medium;
+		font-size: small;
 		color: #dddddd;
 		cursor: pointer;
 		padding: 0;
@@ -416,7 +420,6 @@ function checkDirection() {
 		if (touchendX > touchstartX) {/*swipe right*/ visible_emuview++;}
 		if(visible_emuview<0) visible_emuview=emuview_count-1;
 		else if(visible_emuview>=emuview_count) visible_emuview=0; 
-		console.log(visible_emuview);
 		activate(document.getElementById('dot'+visible_emuview),'emuview'+visible_emuview);
 	}
 };
@@ -432,7 +435,7 @@ document.getElementById('player_swipe_view').addEventListener('touchend', e => {
 });
 </script>
 <div style="display:flex;justify-content: center;">
-	<ul class="chooser" style="display:flex;justify-content: space-evenly;padding:0;width:40%;list-style: none;">
+	<ul class="chooser" style="display:flex;justify-content: space-evenly;padding:0;width:30%;list-style: none;">
 		<li id="dot0" onclick="activate(this,'emuview0')" style="color: #555555">&#11044;</li>
 		<li id="dot1" onclick="activate(this,'emuview1')">&#11044;</li>
 		<li id="dot2" onclick="activate(this,'emuview2')">&#11044;</li>
