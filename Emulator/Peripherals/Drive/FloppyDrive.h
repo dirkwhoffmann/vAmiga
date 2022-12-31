@@ -225,9 +225,11 @@ public:
     Cycle getStepPulseDelay() const;
     Cycle getRevStepPulseDelay() const;
 
-    // Returns the time span in which only garbage is read after a head step
-    Cycle getStepReadDelay() const;
-    Cycle getRevStepReadDelay() const;
+    // Returns the duration of a head step
+    Cycle getTrackToTrackDelay() const;
+
+    // Returns how long garbabe is read after a head step
+    Cycle getHeadSettleTime() const;
 
 
     //

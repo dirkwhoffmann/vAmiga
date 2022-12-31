@@ -291,6 +291,7 @@ FloppyDisk::encodeDisk(const FloppyFile &file)
      * Some disks, however, are known to require a different alignment to work
      * in vAmiga. We check for these disks and align the tracks accordingly.
      */
+    /*
     switch (file.crc32()) {
 
         case 0x4db280dd:    // T2 - The Arcade Game (1993)(Virgin)[cr FLT].adf
@@ -300,6 +301,7 @@ FloppyDisk::encodeDisk(const FloppyFile &file)
             shiftTracks(20);
             break;
     }
+    */
 }
 
 void
