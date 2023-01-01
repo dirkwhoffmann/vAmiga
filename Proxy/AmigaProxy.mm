@@ -2726,10 +2726,14 @@ using namespace vamiga::moira;
 {
     if (!(self = [super init]))
         return self;
-    
+
+    // Create the emulator instance
     Amiga *amiga = new Amiga();
     obj = amiga;
-    
+
+    // Launch the emulator thread
+    amiga->launch();
+
     // Create sub proxys
     agnus = [[AgnusProxy alloc] initWith:&amiga->agnus];
     blitter = [[BlitterProxy alloc] initWith:&amiga->agnus.blitter];

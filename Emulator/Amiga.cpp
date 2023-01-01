@@ -103,10 +103,7 @@ Amiga::Amiga()
 
     // Initialize the sync timer
     targetTime = util::Time::now();
-    
-    // Start the thread and enter the main function
-    thread = std::thread(&Thread::main, this);
-    
+
     // Print some debug information
     if constexpr (SNP_DEBUG) {
         
@@ -140,6 +137,16 @@ Amiga::~Amiga()
 {
     debug(RUN_DEBUG, "Destroying emulator instance\n");
     if (thread.joinable()) { halt(); }
+}
+
+void
+Amiga::launch()
+{
+    if (!thread.joinable()) {
+
+        thread = std::thread(&Thread::main, this);
+        assert(thread.joinable());
+    }
 }
 
 void

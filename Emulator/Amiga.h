@@ -172,6 +172,9 @@ public:
     Amiga();
     ~Amiga();
 
+    // Launches the emulator thread
+    void launch();
+
     
     //
     // Methods from AmigaObject
