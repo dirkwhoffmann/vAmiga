@@ -27,14 +27,14 @@
 		background-color: gray;
 		border-radius: 10px;
 		box-shadow: inset 0 0 0.1em black, 1em 1em 2em #2a2a2a;
-		animation: player_launch 10s ease-in;
+		animation: player_launch 0.5s ease-in;
 	}
 
 	@keyframes player_launch {
 		0% {
 			box-shadow: inset 0 0 0.1em black, 0 0 0.2em gray;
 		}
-
+/*
 		20% {
 			box-shadow: inset 0 0 0.1em black, 0 0 2em #cccccc;
 		}
@@ -42,7 +42,7 @@
 		80% {
 			box-shadow: inset 0 0 0.1em black, 0 0 2em #cccccc;
 		}
-
+*/
 		100% {
 			box-shadow: inset 0 0 0.1em black, 1em 1em 2em #222222;
 		}
@@ -72,26 +72,28 @@
 	}
 	
 
-	[player="on"] .style1,
-	[player="on"] .style2,
-	[player="on"] #header, [player="on"] #footer {
+	[player_expanded="on"] .style1,
+	[player_expanded="on"] .style2,
+	[player_expanded="on"] #header, 
+	[player_expanded="on"] #footer {
 		background-color: #555555;
 		color: #999999;
 		animation: go_dark 5s ease-out;
 	}
 
-	[player="off"] .style1,
-	[player="off"] .style2,
-	[player="off"] #header, [player="off"] #footer {
+	[player_expanded="off"] .style1,
+	[player_expanded="off"] .style2,
+	[player_expanded="off"] #header, 
+	[player_expanded="off"] #footer {
 		animation: go_light 1s ease-in;
 	}
 
-	[player="on"] a {
+	[player_expanded="on"] a {
 		color: #cccccc;
 		animation: a_go_dark 2s ease-out;
 	}
 
-	[player="off"] a {
+	[player_expanded="off"] a {
 		animation: a_go_light 1s ease-in;
 	}
 
