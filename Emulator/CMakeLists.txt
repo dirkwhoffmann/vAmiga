@@ -13,7 +13,7 @@ if(NOT CMAKE_BUILD_TYPE)
 #  set(CMAKE_BUILD_TYPE Release)
 endif()
 
-# Add emulator library
+# Add the emulator library
 add_library(vAmigaCore Amiga.cpp)
 
 # Add the console app (vAmiga Headless)

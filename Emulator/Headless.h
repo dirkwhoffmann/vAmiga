@@ -31,7 +31,7 @@ class Headless {
     // The emulator instance
     Amiga amiga;
 
-    // Barrier for syncing the script execution
+    // Barrier for syncing script execution
     util::Mutex barrier;
 
     // Exit flag

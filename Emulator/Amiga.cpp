@@ -138,7 +138,7 @@ Amiga::Amiga()
 
 Amiga::~Amiga()
 {
-    debug(RUN_DEBUG, "Destroying Amiga\n");
+    debug(RUN_DEBUG, "Destroying emulator instance\n");
     if (thread.joinable()) { halt(); }
 }
 
