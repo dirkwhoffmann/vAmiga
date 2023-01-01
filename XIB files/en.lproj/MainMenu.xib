@@ -152,15 +152,20 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="bDU-dO-xxe"/>
-                            <menuItem title="Take Snapshot" keyEquivalent="T" id="BX4-y5-PoI" userLabel="Take Snapshot">
+                            <menuItem title="Take Snapshot" keyEquivalent="+" id="BX4-y5-PoI" userLabel="Take Snapshot">
                                 <connections>
                                     <action selector="takeSnapshotAction:" target="-1" id="eOH-IU-76n"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Browse Snapshots..." id="NXb-gr-Vem" userLabel="Browse Snapshots...">
+                            <menuItem title="Restore Latest Snapshot" keyEquivalent="-" id="NXb-gr-Vem" userLabel="Browse Snapshots...">
+                                <connections>
+                                    <action selector="restoreSnapshotAction:" target="-1" id="FOP-1l-x9L"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Browse Snapshots..." id="1Qj-mi-C7u" userLabel="Browse Snapshots...">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="browseSnapshotsAction:" target="-1" id="3RJ-Yf-Aab"/>
+                                    <action selector="browseSnapshotsAction:" target="-1" id="GRh-zJ-bZz"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="5uV-Cr-Apb"/>
@@ -217,13 +222,14 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="qq8-Qm-VmD"/>
-                            <menuItem title="Pause" keyEquivalent="P" id="430">
+                            <menuItem title="Pause" keyEquivalent="y" id="430">
+                                <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                 <connections>
                                     <action selector="stopAndGoAction:" target="-1" id="MO3-RA-MNi"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Reset" id="432">
-                                <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
+                            <menuItem title="Reset" keyEquivalent="r" id="432">
+                                <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                 <connections>
                                     <action selector="resetAction:" target="-1" id="SV8-EZ-6HI"/>
                                 </connections>
@@ -235,18 +241,24 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="2Hk-Nm-Uix"/>
-                            <menuItem title="Step Into" keyEquivalent="I" id="429">
-                                <connections>
-                                    <action selector="stepIntoAction:" target="-1" id="i9e-j1-AG9"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Step Over" keyEquivalent="O" id="428">
+                            <menuItem title="Step Over" keyEquivalent="" id="428">
+                                <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="stepOverAction:" target="-1" id="WJR-b6-K0I"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Step Into" keyEquivalent="" id="429">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="stepIntoAction:" target="-1" id="i9e-j1-AG9"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="Nni-8k-nVh"/>
-                            <menuItem title="Toggle Warp Mode" keyEquivalent="W" id="UwY-4X-reL">
+                            <menuItem title="Toggle Warp Mode" id="UwY-4X-reL">
+                                <string key="keyEquivalent" base64-UTF8="YES">
+CQ
+</string>
+                                <modifierMask key="keyEquivalentModifierMask" control="YES"/>
                                 <connections>
                                     <action selector="warpAction:" target="-1" id="Oh0-IU-v3E"/>
                                 </connections>
@@ -270,7 +282,8 @@
                                     <action selector="runToolbarCustomizationPalette:" target="-1" id="BLv-4t-F3C"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Show Status Bar" keyEquivalent="B" id="nZ5-yO-Ch3">
+                            <menuItem title="Show Status Bar" keyEquivalent="b" id="nZ5-yO-Ch3">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
                                     <action selector="toggleStatusBarAction:" target="-1" id="XV7-PD-saG"/>
                                 </connections>
@@ -1585,21 +1598,5 @@
             </items>
             <point key="canvasLocation" x="139" y="154"/>
         </menu>
-        <menuItem title="Narrow style" id="hwU-hm-b10">
-            <modifierMask key="keyEquivalentModifierMask"/>
-        </menuItem>
-        <menuItem isSeparatorItem="YES" id="GUM-Ys-uP8"/>
-        <menuItem title="Inspect..." id="R2o-he-i46">
-            <modifierMask key="keyEquivalentModifierMask"/>
-            <connections>
-                <action selector="inspectDiskAction:" target="-1" id="Kb0-1S-5CK"/>
-            </connections>
-        </menuItem>
-        <menuItem title="Inspect Disk..." tag="2" id="RMP-E9-ph4">
-            <modifierMask key="keyEquivalentModifierMask"/>
-            <connections>
-                <action selector="inspectDiskAction:" target="-1" id="Cwr-H3-1cp"/>
-            </connections>
-        </menuItem>
     </objects>
 </document>
