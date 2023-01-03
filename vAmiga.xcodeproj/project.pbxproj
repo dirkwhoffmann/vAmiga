@@ -494,6 +494,7 @@
 		501A9936243A07A100D269B2 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		501B821B2262FFB200042871 /* RTC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RTC.cpp; sourceTree = "<group>"; };
 		501B821C2262FFB200042871 /* RTC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTC.h; sourceTree = "<group>"; };
+		501C46BA296413C100C4B27B /* SelfTestScript.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SelfTestScript.h; sourceTree = "<group>"; };
 		501C513A27C0084200DF1DD5 /* HardDiskConfigurator.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HardDiskConfigurator.xib; sourceTree = "<group>"; };
 		501C513E27C0C63A00DF1DD5 /* HardDiskConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardDiskConfigurator.swift; sourceTree = "<group>"; };
 		501C514027C0CE6600DF1DD5 /* DriveDescriptors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DriveDescriptors.cpp; sourceTree = "<group>"; };
@@ -1407,6 +1408,7 @@
 				50D661862282BE1800D67D88 /* AmigaTypes.h */,
 				50B14C0F21EB410B002E32A6 /* Amiga.h */,
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
+				501C46BA296413C100C4B27B /* SelfTestScript.h */,
 				50FC050027DA205D00C3E566 /* Headless.h */,
 				50FC047427DA108500C3E566 /* Headless.cpp */,
 				50B14C0421EB212E002E32A6 /* Utilities */,

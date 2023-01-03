@@ -34,8 +34,8 @@ class Headless {
     // Barrier for syncing script execution
     util::Mutex barrier;
 
-    // Exit flag
-    bool halt = false;
+    // Return code
+    std::optional<int> returnCode;
 
     
     //
@@ -45,7 +45,7 @@ class Headless {
 public:
 
     // Main entry point
-    void main(int argc, char *argv[]);
+    int main(int argc, char *argv[]);
 
 private:
 
@@ -55,7 +55,10 @@ private:
     // Checks all command line arguments for conistency
     void checkArguments() throws;
 
-    
+    // Returns the path to the self-test script
+    string selfTestScript();
+
+
     //
     // Running
     //

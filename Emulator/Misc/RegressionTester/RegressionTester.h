@@ -79,7 +79,7 @@ private:
 public:
 
     // Reverts to factory settings
-    void prepare(ConfigScheme scheme, string rom, string ext = "");
+    void prepare(ConfigScheme scheme, string rom = "", string ext = "");
     
     // Runs a test case
     void run(string adf);

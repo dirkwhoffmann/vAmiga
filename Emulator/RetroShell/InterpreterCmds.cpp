@@ -136,12 +136,12 @@ Interpreter::initCommandShell(Command &root)
 
     root.newGroup("");
 
-    root.add({"regression", "setup"}, { ConfigSchemeEnum::argList(), Arg::path }, { Arg::path },
+    root.add({"regression", "setup"}, { ConfigSchemeEnum::argList() }, { Arg::path, Arg::path },
              "Initializes the test environment",
              [this](Arguments& argv, long value) {
 
         auto scheme = parseEnum<ConfigSchemeEnum>(argv);
-        auto rom = argv[1];
+        auto rom = argv.size() > 1 ? argv[1] : "";
         auto ext = argv.size() > 2 ? argv[2] : "";
 
         amiga.regressionTester.prepare(scheme, rom, ext);
@@ -208,6 +208,13 @@ Interpreter::initCommandShell(Command &root)
         retroShell.dumpConfig(amiga);
     });
 
+    root.add({"amiga", "defaults"},
+             "Displays the user defaults storage",
+             [this](Arguments& argv, long value) {
+
+        retroShell.dump(amiga, Category::Defaults);
+    });
+
     root.add({"amiga", "set"},
              "Configures the component");
 
@@ -255,13 +262,6 @@ Interpreter::initCommandShell(Command &root)
              [this](Arguments& argv, long value) {
 
         amiga.reset(true);
-    });
-
-    root.add({"amiga", "defaults"},
-             "Displays the user defaults storage",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dump(amiga, Category::Defaults);
     });
 
 

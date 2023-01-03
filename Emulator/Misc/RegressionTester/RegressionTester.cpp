@@ -30,7 +30,7 @@ RegressionTester::prepare(ConfigScheme scheme, string rom, string ext)
     amiga.configure(scheme);
 
     // Load Kickstart Rom
-    amiga.mem.loadRom(rom.c_str());
+    if (rom != "") amiga.mem.loadRom(rom.c_str());
     
     // Load Extension Rom (if provided)
     if (ext != "") amiga.mem.loadExt(ext.c_str());

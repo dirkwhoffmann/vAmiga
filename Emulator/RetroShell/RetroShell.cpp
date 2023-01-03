@@ -429,7 +429,7 @@ RetroShell::exec(const string &command)
     try {
         // Check if the command marked with 'try'
         ignoreError = command.rfind("try", 0) == 0;
-        
+
         // Call the interpreter
         interpreter.exec(command);
         
