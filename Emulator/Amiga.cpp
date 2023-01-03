@@ -745,8 +745,9 @@ Amiga::configure(Option option, long id, i64 value)
             break;
             
         case OPT_PULLUP_RESISTORS:
+        case OPT_SHAKE_DETECTION:
         case OPT_MOUSE_VELOCITY:
-            
+
             assert(id == ControlPort::PORT1 || id == ControlPort::PORT2);
             if (id == ControlPort::PORT1) controlPort1.mouse.setConfigItem(option, value);
             if (id == ControlPort::PORT2) controlPort2.mouse.setConfigItem(option, value);

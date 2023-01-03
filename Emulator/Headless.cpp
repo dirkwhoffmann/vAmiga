@@ -12,6 +12,8 @@
 #include "Script.h"
 #include "SelfTestScript.h"
 #include <filesystem>
+#include <chrono>
+
 #ifndef _WIN32
 #include <getopt.h>
 #endif
@@ -98,7 +100,9 @@ Headless::main(int argc, char *argv[])
 void
 Headless::parseArguments(int argc, char *argv[])
 {
-    keys["arg1"] = util::makeAbsolutePath("default.ini");
+    keys["selftest"] = "1";
+    keys["verbose"] = "1";
+    keys["arg1"] = selfTestScript();
 }
 
 #else
@@ -235,8 +239,9 @@ Headless::process(long type, i32 d1, i32 d2, i32 d3, i32 d4)
             returnCode = 1;
             break;
 
-        case MSG_SCRIPT_WAKEUP:
+        case MSG_SCRIPT_PAUSE:
 
+            std::this_thread::sleep_for(std::chrono::seconds(d2));
             break;
 
         default:

@@ -74,8 +74,9 @@ Interpreter::initCommons(Command &root)
              "Pauses the execution of a command script",
              [this](Arguments& argv, long value) {
 
-        retroShell.wakeUp = agnus.clock + SEC(parseNum(argv));
-        throw ScriptInterruption("");
+        auto seconds = parseNum(argv);
+        retroShell.wakeUp = agnus.clock + SEC(seconds);
+        throw ScriptInterruption(seconds);
     });
 }
 
@@ -1018,6 +1019,15 @@ Interpreter::initCommandShell(Command &root)
 
         }, i);
 
+        root.add({"mouse", nr, "press", "middle"},
+                 "Presses the middle mouse button",
+                 [this](Arguments& argv, long value) {
+
+            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+            port.mouse.pressAndReleaseMiddle();
+
+        }, i);
+
         root.add({"mouse", nr, "press", "right"},
                  "Presses the right mouse button",
                  [this](Arguments& argv, long value) {
@@ -1242,24 +1252,23 @@ Interpreter::initCommandShell(Command &root)
                     amiga.configure(OPT_DRIVE_CONNECT, value, false);
 
                 }, i);
-
-                root.add({df, "eject"},
-                         "Ejects a floppy disk",
-                         [this](Arguments& argv, long value) {
-
-                    amiga.df[value]->ejectDisk();
-
-                }, i);
-
-                root.add({df, "insert"}, { Arg::path },
-                         "Inserts a floppy disk",
-                         [this](Arguments& argv, long value) {
-
-                    auto path = argv.front();
-                    amiga.df[value]->swapDisk(path);
-
-                }, i);
             }
+            root.add({df, "eject"},
+                     "Ejects a floppy disk",
+                     [this](Arguments& argv, long value) {
+
+                amiga.df[value]->ejectDisk();
+
+            }, i);
+
+            root.add({df, "insert"}, { Arg::path },
+                     "Inserts a floppy disk",
+                     [this](Arguments& argv, long value) {
+                
+                auto path = argv.front();
+                amiga.df[value]->swapDisk(path);
+
+            }, i);
 
             root.add({df, "set"},
                      "Configures the component");
@@ -1419,6 +1428,23 @@ Interpreter::initCommandShell(Command &root)
                 retroShell.dumpConfig(*amiga.hd[value]);
 
             }, i);
+
+            root.add({hd, "connect"},
+                     "Connects the hard drive",
+                     [this](Arguments& argv, long value) {
+
+                amiga.configure(OPT_HDC_CONNECT, value, true);
+
+            }, i);
+
+            root.add({hd, "disconnect"},
+                     "Disconnects the hard drive",
+                     [this](Arguments& argv, long value) {
+
+                amiga.configure(OPT_HDC_CONNECT, value, false);
+
+            }, i);
+
         }
 
         root.add({hd, "set"},
@@ -1455,7 +1481,7 @@ Interpreter::initCommandShell(Command &root)
 
         if (i != 4) {
 
-            root.add({hd, "set", "geometry"},  { Arg::value, Arg::value, Arg::value },
+            root.add({hd, "set", "geometry"},  { "<cylinders>", "<heads>", "<sectors>" },
                      "Changes the disk geometry",
                      [this](Arguments& argv, long value) {
 
@@ -1486,7 +1512,7 @@ Interpreter::initCommandShell(Command &root)
     root.add({"server", "serial"},
              "Serial port server");
 
-    root.add({"server", "serial", "config"},
+    root.add({"server", "serial", ""},
              "Displays the current configuration",
              [this](Arguments& argv, long value) {
 
@@ -1541,7 +1567,7 @@ Interpreter::initCommandShell(Command &root)
         remoteManager.rshServer.disconnect();
     });
 
-    root.add({"server", "rshell", "config"},
+    root.add({"server", "rshell", ""},
              "Displays the current configuration",
              [this](Arguments& argv, long value) {
 
@@ -1558,7 +1584,7 @@ Interpreter::initCommandShell(Command &root)
         remoteManager.rshServer.setConfigItem(OPT_SRV_PORT, parseNum(argv));
     });
 
-    root.add({"server", "serial", "set", "verbose"}, { Arg::boolean },
+    root.add({"server", "rshell", "set", "verbose"}, { Arg::boolean },
              "Switches verbose mode on or off",
              [this](Arguments& argv, long value) {
 
@@ -1589,7 +1615,7 @@ Interpreter::initCommandShell(Command &root)
         remoteManager.gdbServer.detach();
     });
 
-    root.add({"server", "gdb", "config"},
+    root.add({"server", "gdb", ""},
              "Displays the current configuration",
              [this](Arguments& argv, long value) {
 

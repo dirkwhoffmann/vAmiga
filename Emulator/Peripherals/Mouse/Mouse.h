@@ -201,8 +201,9 @@ public:
     
 public:
     
-    // Simulates a complete press-and-release cycle for the left or right button
+    // Simulates a complete press-and-release cycle for a button
     void pressAndReleaseLeft(Cycle duration = SEC(0.5), Cycle delay = 0);
+    void pressAndReleaseMiddle(Cycle duration = SEC(0.5), Cycle delay = 0);
     void pressAndReleaseRight(Cycle duration = SEC(0.5), Cycle delay = 0);
 
     template <EventSlot s> void serviceMouseEvent();
