@@ -113,8 +113,8 @@ Interpreter::initCommandShell(Command &root)
 
     root.add({"monitor"},       "Amiga monitor");
     root.add({"keyboard"},      "Keyboard");
-    root.add({"mouse"},         "Mouse");
     root.add({"joystick"},      "Joystick");
+    root.add({"mouse"},         "Mouse");
     root.add({"dfn"},           "All floppy drives");
     root.add({"df0"},           "Floppy drive 0");
     root.add({"df1"},           "Floppy drive 1");
@@ -954,91 +954,7 @@ Interpreter::initCommandShell(Command &root)
         keyboard.autoType(KeyCode(parseNum(argv)));
     });
 
-    
-    //
-    // Mouse
-    //
 
-    root.newGroup("");
-
-    for (isize i = 1; i <= 2; i++) {
-
-        string nr = (i == 1) ? "1" : "2";
-
-        root.add({"mouse", nr},
-                 "Mouse in port " + nr);
-
-        root.add({"mouse", nr, ""},
-                 "Displays the current configuration",
-                 [this](Arguments& argv, long value) {
-
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-            retroShell.dumpConfig(port.mouse);
-
-        }, i);
-
-        root.add({"mouse", nr, "set"},
-                 "Configures the component");
-        
-        root.add({"mouse", nr, "set", "pullup"}, { Arg::boolean },
-                 "Enables or disables pull-up resistors",
-                 [this](Arguments& argv, long value) {
-
-            auto port = (value == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
-            amiga.configure(OPT_PULLUP_RESISTORS, port, parseBool(argv));
-
-        }, i);
-
-        root.add({"mouse", nr, "set", "shakedetector"}, { Arg::boolean },
-                 "Enables or disables the shake detector",
-                 [this](Arguments& argv, long value) {
-
-            auto port = (value == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
-            amiga.configure(OPT_SHAKE_DETECTION, port, parseBool(argv));
-
-        }, i);
-
-        root.add({"mouse", nr, "set", "velocity"}, { Arg::value },
-                 "Sets the horizontal and vertical mouse velocity",
-                 [this](Arguments& argv, long value) {
-
-            auto port = (value == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
-            amiga.configure(OPT_MOUSE_VELOCITY, port, parseNum(argv));
-
-        }, i);
-
-        root.add({"mouse", nr, "press"},
-                 "Presses a mouse button");
-
-        root.add({"mouse", nr, "press", "left"},
-                 "Presses the left mouse button",
-                 [this](Arguments& argv, long value) {
-
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-            port.mouse.pressAndReleaseLeft();
-
-        }, i);
-
-        root.add({"mouse", nr, "press", "middle"},
-                 "Presses the middle mouse button",
-                 [this](Arguments& argv, long value) {
-
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-            port.mouse.pressAndReleaseMiddle();
-
-        }, i);
-
-        root.add({"mouse", nr, "press", "right"},
-                 "Presses the right mouse button",
-                 [this](Arguments& argv, long value) {
-
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-            port.mouse.pressAndReleaseRight();
-
-        }, i);
-    }
-
-    
     //
     // Joystick
     //
@@ -1082,7 +998,7 @@ Interpreter::initCommandShell(Command &root)
 
         }, i);
 
-        root.add({"joystick", nr, "set", "velocity"}, { Arg::value },
+        root.add({"joystick", nr, "set", "delay"}, { Arg::value },
                  "Configures the auto-fire delay",
                  [this](Arguments& argv, long value) {
 
@@ -1189,8 +1105,92 @@ Interpreter::initCommandShell(Command &root)
 
         }, i);
     }
-    
-    
+
+
+    //
+    // Mouse
+    //
+
+    root.newGroup("");
+
+    for (isize i = 1; i <= 2; i++) {
+
+        string nr = (i == 1) ? "1" : "2";
+
+        root.add({"mouse", nr},
+                 "Mouse in port " + nr);
+
+        root.add({"mouse", nr, ""},
+                 "Displays the current configuration",
+                 [this](Arguments& argv, long value) {
+
+            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+            retroShell.dumpConfig(port.mouse);
+
+        }, i);
+
+        root.add({"mouse", nr, "set"},
+                 "Configures the component");
+
+        root.add({"mouse", nr, "set", "pullup"}, { Arg::boolean },
+                 "Enables or disables pull-up resistors",
+                 [this](Arguments& argv, long value) {
+
+            auto port = (value == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
+            amiga.configure(OPT_PULLUP_RESISTORS, port, parseBool(argv));
+
+        }, i);
+
+        root.add({"mouse", nr, "set", "shakedetector"}, { Arg::boolean },
+                 "Enables or disables the shake detector",
+                 [this](Arguments& argv, long value) {
+
+            auto port = (value == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
+            amiga.configure(OPT_SHAKE_DETECTION, port, parseBool(argv));
+
+        }, i);
+
+        root.add({"mouse", nr, "set", "velocity"}, { Arg::value },
+                 "Sets the horizontal and vertical mouse velocity",
+                 [this](Arguments& argv, long value) {
+
+            auto port = (value == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
+            amiga.configure(OPT_MOUSE_VELOCITY, port, parseNum(argv));
+
+        }, i);
+
+        root.add({"mouse", nr, "press"},
+                 "Presses a mouse button");
+
+        root.add({"mouse", nr, "press", "left"},
+                 "Presses the left mouse button",
+                 [this](Arguments& argv, long value) {
+
+            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+            port.mouse.pressAndReleaseLeft();
+
+        }, i);
+
+        root.add({"mouse", nr, "press", "middle"},
+                 "Presses the middle mouse button",
+                 [this](Arguments& argv, long value) {
+
+            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+            port.mouse.pressAndReleaseMiddle();
+
+        }, i);
+
+        root.add({"mouse", nr, "press", "right"},
+                 "Presses the right mouse button",
+                 [this](Arguments& argv, long value) {
+
+            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+            port.mouse.pressAndReleaseRight();
+
+        }, i);
+    }
+
+
     //
     // Serial port
     //
