@@ -40,6 +40,22 @@ CopperDebugger::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
 
+    auto print = [&](const string &name, const moira::Guards &guards) {
+
+        for (int i = 0; i < guards.elements(); i++) {
+
+            auto bp =  guards.guardNr(i);
+            auto nr = name + std::to_string(i);
+
+            os << tab(nr);
+            os << hex(bp->addr);
+
+            if (!bp->enabled) os << " (Disabled)";
+            else if (bp->ignore) os << " (Disabled for " << dec(bp->ignore) << " hits)";
+            os << std::endl;
+        }
+    };
+
     if (!amiga.inDebugMode()) {
         
         os << "No recorded data. Debug mode is off." << std::endl;
@@ -63,18 +79,20 @@ CopperDebugger::_dump(Category category, std::ostream& os) const
     }
     
     if (category == Category::Breakpoints) {
-        
-        for (int i = 0; i < breakpoints.elements(); i++) {
-            
-            auto bp = breakpoints.guardNr(i);
-            auto nr = "Breakpoint " + std::to_string(i);
-            
-            os << util::tab(nr);
-            os << util::hex(bp->addr);
 
-            if (!bp->enabled) os << " (Disabled)";
-            else if (bp->ignore) os << " (Disabled for " << bp->ignore << " hits)";
-            os << std::endl;
+        if (breakpoints.elements()) {
+            print("Breakpoint", breakpoints);
+        } else {
+            os << "No breakpoints set" << std::endl;
+        }
+    }
+
+    if (category == Category::Watchpoints) {
+
+        if (watchpoints.elements()) {
+            print("Watchpoint", watchpoints);
+        } else {
+            os << "No watchpoints set" << std::endl;
         }
     }
 }

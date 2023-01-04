@@ -2707,7 +2707,7 @@ Memory::patch(u32 addr, u8 value)
         case MEM_EXT:           patch <MEM_EXT>      (addr, value); return;
             
         default:
-            fatalError;
+            break;
     }
 }
 
