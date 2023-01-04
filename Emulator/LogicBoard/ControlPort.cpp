@@ -19,7 +19,7 @@ ControlPort::ControlPort(Amiga& ref, isize nr) : SubComponent(ref), nr(nr)
 {
     assert(nr == PORT1 || nr == PORT2);
 
-    subComponents = std::vector<AmigaComponent *> { &mouse, &joystick };
+    subComponents = std::vector<CoreComponent *> { &mouse, &joystick };
 }
 
 const char *

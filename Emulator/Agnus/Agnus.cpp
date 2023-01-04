@@ -15,7 +15,7 @@ namespace vamiga {
 
 Agnus::Agnus(Amiga& ref) : SubComponent(ref)
 {    
-    subComponents = std::vector<AmigaComponent *> {
+    subComponents = std::vector<CoreComponent *> {
         
         &sequencer,
         &copper,

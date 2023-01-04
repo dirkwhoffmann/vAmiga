@@ -177,7 +177,7 @@ public:
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 public:
@@ -191,7 +191,7 @@ private:
 
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
     
 public:
@@ -295,7 +295,7 @@ private:
     
 public:
     
-    AmigaInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    AmigaInfo getInfo() const { return CoreComponent::getInfo(info); }
     
     InspectionTarget getInspectionTarget() const;
     void setInspectionTarget(InspectionTarget target, Cycle trigger = 0);

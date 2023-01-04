@@ -54,7 +54,7 @@ public:
     
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -64,7 +64,7 @@ private:
 
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
     
 private:
@@ -105,7 +105,7 @@ private:
 
 public:
 
-    UARTInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    UARTInfo getInfo() const { return CoreComponent::getInfo(info); }
 
 
     //

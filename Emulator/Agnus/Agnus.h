@@ -208,7 +208,7 @@ public:
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -218,7 +218,7 @@ private:
 
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
     
 private:
@@ -341,8 +341,8 @@ public:
     
 public:
     
-    AgnusInfo getInfo() const { return AmigaComponent::getInfo(info); }
-    EventInfo getEventInfo() const { return AmigaComponent::getInfo(eventInfo); }
+    AgnusInfo getInfo() const { return CoreComponent::getInfo(info); }
+    EventInfo getEventInfo() const { return CoreComponent::getInfo(eventInfo); }
     EventSlotInfo getSlotInfo(isize nr) const;
     const AgnusStats &getStats() { return stats; }
     

@@ -119,14 +119,14 @@ Thread::main()
         // Are we requested to enter or exit warp mode?
         if (newWarpMode != warpMode) {
             
-            AmigaComponent::warpOnOff(newWarpMode);
+            CoreComponent::warpOnOff(newWarpMode);
             warpMode = newWarpMode;
         }
 
         // Are we requested to enter or exit warp mode?
         if (newDebugMode != debugMode) {
             
-            AmigaComponent::debugOnOff(newDebugMode);
+            CoreComponent::debugOnOff(newDebugMode);
             debugMode = newDebugMode;
         }
 
@@ -135,33 +135,33 @@ Thread::main()
             
             if (state == EXEC_OFF && newState == EXEC_PAUSED) {
                 
-                AmigaComponent::powerOn();
+                CoreComponent::powerOn();
                 state = EXEC_PAUSED;
 
             } else if (state == EXEC_OFF && newState == EXEC_RUNNING) {
 
-                AmigaComponent::powerOn();
+                CoreComponent::powerOn();
                 state = EXEC_PAUSED;
 
             } else if (state == EXEC_PAUSED && newState == EXEC_OFF) {
                 
-                AmigaComponent::powerOff();
+                CoreComponent::powerOff();
                 state = EXEC_OFF;
 
             } else if (state == EXEC_PAUSED && newState == EXEC_RUNNING) {
                 
-                AmigaComponent::run();
+                CoreComponent::run();
                 state = EXEC_RUNNING;
 
             } else if (state == EXEC_RUNNING && newState == EXEC_OFF) {
                 
                 state = EXEC_PAUSED;
-                AmigaComponent::pause();
+                CoreComponent::pause();
 
             } else if (state == EXEC_RUNNING && newState == EXEC_PAUSED) {
                 
                 state = EXEC_PAUSED;
-                AmigaComponent::pause();
+                CoreComponent::pause();
 
             } else if (state == EXEC_RUNNING && newState == EXEC_SUSPENDED) {
                 
@@ -173,7 +173,7 @@ Thread::main()
 
             } else if (newState == EXEC_HALTED) {
                 
-                AmigaComponent::halt();
+                CoreComponent::halt();
                 state = EXEC_HALTED;
                 return;
 

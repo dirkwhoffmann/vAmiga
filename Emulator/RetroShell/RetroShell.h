@@ -82,7 +82,7 @@ public:
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -92,7 +92,7 @@ private:
     
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
     
 private:
@@ -214,10 +214,10 @@ private:
     
 public:
     
-    void dump(AmigaObject &component, Category category);
-    void dumpConfig(AmigaObject &component);
-    void dumpInspection(AmigaObject &component);
-    void dumpDebug(AmigaObject &component);
+    void dump(CoreObject &component, Category category);
+    void dumpConfig(CoreObject &component);
+    void dumpInspection(CoreObject &component);
+    void dumpDebug(CoreObject &component);
 
     
     //

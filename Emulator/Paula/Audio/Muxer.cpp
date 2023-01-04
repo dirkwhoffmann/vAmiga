@@ -20,7 +20,7 @@ namespace vamiga {
 
 Muxer::Muxer(Amiga& ref) : SubComponent(ref)
 {
-    subComponents = std::vector<AmigaComponent *> {
+    subComponents = std::vector<CoreComponent *> {
 
         &filterL,
         &filterR

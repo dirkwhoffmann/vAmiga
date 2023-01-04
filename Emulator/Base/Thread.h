@@ -10,7 +10,7 @@
 #pragma once
 
 #include "ThreadTypes.h"
-#include "AmigaComponent.h"
+#include "CoreComponent.h"
 #include "Chrono.h"
 #include "Concurrency.h"
 
@@ -118,7 +118,7 @@ namespace vamiga {
  * the recorded information in a trace buffer.
  */
 
-class Thread : public AmigaComponent, util::Wakeable {
+class Thread : public CoreComponent, util::Wakeable {
     
 protected:
     
@@ -257,8 +257,8 @@ private:
 
 struct AutoResume {
 
-    AmigaComponent *c;
-    AutoResume(AmigaComponent *c) : c(c) { c->suspend(); }
+    CoreComponent *c;
+    AutoResume(CoreComponent *c) : c(c) { c->suspend(); }
     ~AutoResume() { c->resume(); }
 };
 

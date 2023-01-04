@@ -22,7 +22,7 @@ RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
 void
 RetroShell::_initialize()
 {
-    AmigaComponent::_initialize();
+    CoreComponent::_initialize();
 
     // Initialize the text storage
     clear();
@@ -559,7 +559,7 @@ RetroShell::help(const string &command)
 }
 
 void
-RetroShell::dump(AmigaObject &component, Category category)
+RetroShell::dump(CoreObject &component, Category category)
 {
     std::stringstream ss;
     
@@ -580,19 +580,19 @@ RetroShell::dump(AmigaObject &component, Category category)
 }
 
 void
-RetroShell::dumpConfig(AmigaObject &component)
+RetroShell::dumpConfig(CoreObject &component)
 {
     dump(component, Category::Config);
 }
 
 void
-RetroShell::dumpInspection(AmigaObject &component)
+RetroShell::dumpInspection(CoreObject &component)
 {
     dump(component, Category::Inspection);
 }
 
 void
-RetroShell::dumpDebug(AmigaObject &component)
+RetroShell::dumpDebug(CoreObject &component)
 {
     dump(component, Category::Debug);
 }

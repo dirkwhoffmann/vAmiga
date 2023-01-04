@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "AmigaObject.h"
+#include "CoreObject.h"
 #include "Buffer.h"
 #include <vector>
 

@@ -43,7 +43,7 @@ public:
     
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 protected:
@@ -53,7 +53,7 @@ protected:
     
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
     
 private:

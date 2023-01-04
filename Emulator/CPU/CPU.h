@@ -50,7 +50,7 @@ public:
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -60,7 +60,7 @@ private:
 
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
     
 private:
@@ -158,7 +158,7 @@ public:
     
 public:
     
-    CPUInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    CPUInfo getInfo() const { return CoreComponent::getInfo(info); }
 
 
     //

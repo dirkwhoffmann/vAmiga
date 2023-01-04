@@ -10,7 +10,7 @@
 #pragma once
 
 #include "AmigaFileTypes.h"
-#include "AmigaObject.h"
+#include "CoreObject.h"
 #include "Checksum.h"
 #include "IOUtils.h"
 #include "Buffer.h"
@@ -60,7 +60,7 @@ namespace vamiga {
  *   ---------   ---------   ---------   ---------    ---------  ---------
  */
 
-class AmigaFile : public AmigaObject {
+class AmigaFile : public CoreObject {
     
 public:
     
@@ -90,7 +90,7 @@ public:
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:

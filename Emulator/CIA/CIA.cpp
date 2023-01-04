@@ -23,13 +23,13 @@ namespace vamiga {
 
 CIA::CIA(int n, Amiga& ref) : SubComponent(ref), nr(n)
 {    
-    subComponents = std::vector<AmigaComponent *> { &tod };
+    subComponents = std::vector<CoreComponent *> { &tod };
 }
 
 void
 CIA::_initialize()
 {
-    AmigaComponent::_initialize();
+    CoreComponent::_initialize();
 
     pa = 0xFF;
     pb = 0xFF;

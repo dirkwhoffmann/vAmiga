@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "AmigaObject.h"
+#include "CoreObject.h"
 
 #ifdef _WIN32
 
@@ -32,7 +32,7 @@ namespace vamiga { typedef int SOCKET; }
 
 namespace vamiga {
 
-class Socket : public AmigaObject {
+class Socket : public CoreObject {
 
     SOCKET socket;
 
@@ -60,7 +60,7 @@ public:
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:

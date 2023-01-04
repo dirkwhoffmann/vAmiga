@@ -109,7 +109,7 @@ public:
     
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -119,7 +119,7 @@ private:
 
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
 
 private:
@@ -178,8 +178,7 @@ private:
     
 public:
     
-    PaulaInfo getInfo() const { return AmigaComponent::getInfo(info); }
-    // AudioInfo getAudioInfo() const { return AmigaComponent::getInfo(audioInfo); }
+    PaulaInfo getInfo() const { return CoreComponent::getInfo(info); }
 
 
     //

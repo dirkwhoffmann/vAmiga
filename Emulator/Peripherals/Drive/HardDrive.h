@@ -98,7 +98,7 @@ private:
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -108,7 +108,7 @@ private:
     
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
     
 private:
@@ -210,7 +210,7 @@ private:
 public:
 
     // Returns information about the disk or one of its partitions
-    HardDriveInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    HardDriveInfo getInfo() const { return CoreComponent::getInfo(info); }
     const PartitionDescriptor &getPartitionInfo(isize nr);
     
     // Returns the disk geometry

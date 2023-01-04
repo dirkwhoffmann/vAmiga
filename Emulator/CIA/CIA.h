@@ -270,7 +270,7 @@ public:
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -279,7 +279,7 @@ private:
     
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
 
     void _initialize() override;
@@ -364,7 +364,7 @@ public:
     
 public:
     
-    CIAInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    CIAInfo getInfo() const { return CoreComponent::getInfo(info); }
     Cycle getClock() const { return clock; }
     
 protected:

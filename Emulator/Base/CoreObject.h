@@ -16,11 +16,11 @@ namespace vamiga {
 /* Object model:
  *
  * ------------------
- * |  AmigaObject   |
+ * |   CoreObject   |
  * ------------------
  *         |
  * ------------------
- * | AmigaComponent |
+ * | CoreComponent  |
  * ------------------
  *         |
  *         |   ------------------   ----------------
@@ -30,18 +30,18 @@ namespace vamiga {
  *         |-->|  SubComponent  |
  *             ------------------
  *
- * AmigaObject is the base class for all Amiga related classes. It provides a
+ * CoreObject is the base class for all Amiga related classes. It provides a
  * a textual description for the object as well as various functions for
  * printing debug information.
  *
- * AmigaComponent defines the base functionality of all hardware components. It
+ * CoreComponent defines the base functionality of all hardware components. It
  * comprises functions for initializing, configuring, and serializing the
  * object, as well as functions for powering up and down, running and
  * pausing. Furthermore, a 'SYNCHRONIZED' macro is provided to prevent mutual
- * execution of certain code components.
+ * execution of particular code sections.
  *
  * Thread adds the ability to run the component asynchroneously. It implements
- * the emulator's state model (off, paused, running).
+ * the emulator's state model (off, paused, running, suspended).
  */
 
 enum class Category
@@ -53,7 +53,7 @@ enum class Category
     SwTraps, Tod, Vectors, Volumes, Watchpoints
 };
 
-class AmigaObject {
+class CoreObject {
 
 protected:
     
@@ -65,7 +65,7 @@ protected:
 
 public:
 
-    virtual ~AmigaObject() { };
+    virtual ~CoreObject() { };
     
     
     //

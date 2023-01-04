@@ -105,7 +105,7 @@ Memory::_dump(Category category, std::ostream& os) const
 void
 Memory::_initialize()
 {
-    AmigaComponent::_initialize();
+    CoreComponent::_initialize();
     
     if (auto romPath = Amiga::defaults.getString("ROM_PATH"); romPath != "") {
 

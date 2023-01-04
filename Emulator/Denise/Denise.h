@@ -318,7 +318,7 @@ public:
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -328,7 +328,7 @@ private:
     
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
     
 private:
@@ -440,7 +440,7 @@ public:
 
 public:
     
-    DeniseInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    DeniseInfo getInfo() const { return CoreComponent::getInfo(info); }
 
     
     //

@@ -68,14 +68,14 @@ using namespace vamiga::moira;
 @end
 
 //
-// AmigaComponent proxy
+// CoreComponent proxy
 //
 
-@implementation AmigaComponentProxy
+@implementation CoreComponentProxy
 
--(AmigaComponent *)component
+-(CoreComponent *)component
 {
-    return (AmigaComponent *)obj;
+    return (CoreComponent *)obj;
 }
 
 @end

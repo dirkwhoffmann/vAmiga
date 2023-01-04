@@ -12,7 +12,7 @@
 #import "Constants.h"
 #import "config.h"
 #import "AgnusTypes.h"
-#import "AmigaComponentTypes.h"
+#import "CoreComponentTypes.h"
 #import "AmigaTypes.h"
 #import "AmigaFileTypes.h"
 #import "BlitterTypes.h"
@@ -122,7 +122,7 @@
 
 @end
 
-@interface AmigaComponentProxy : Proxy { }
+@interface CoreComponentProxy : Proxy { }
 
 @end
 
@@ -131,7 +131,7 @@
 // Host
 //
 
-@interface HostProxy : AmigaComponentProxy {
+@interface HostProxy : CoreComponentProxy {
 }
 
 @property double sampleRate;
@@ -145,7 +145,7 @@
 // Amiga
 //
 
-@interface AmigaProxy : AmigaComponentProxy {
+@interface AmigaProxy : CoreComponentProxy {
         
     AgnusProxy *agnus;
     CIAProxy *ciaA;
@@ -332,7 +332,7 @@
 // CPU
 //
 
-@interface CPUProxy : AmigaComponentProxy { }
+@interface CPUProxy : CoreComponentProxy { }
     
 @property (readonly) CPUInfo info;
 @property (readonly) i64 clock;
@@ -359,7 +359,7 @@
 // CIA
 //
 
-@interface CIAProxy : AmigaComponentProxy { }
+@interface CIAProxy : CoreComponentProxy { }
  
 @property (readonly) CIAInfo info;
 
@@ -370,7 +370,7 @@
 // Memory
 //
 
-@interface MemProxy : AmigaComponentProxy { }
+@interface MemProxy : CoreComponentProxy { }
 
 @property (readonly) MemoryConfig config;
 
@@ -433,7 +433,7 @@
 // Agnus
 //
 
-@interface AgnusProxy : AmigaComponentProxy { }
+@interface AgnusProxy : CoreComponentProxy { }
 
 @property (readonly) NSInteger chipRamLimit;
 @property (readonly) AgnusInfo info;
@@ -453,7 +453,7 @@
 // Copper
 //
 
-@interface CopperProxy : AmigaComponentProxy { }
+@interface CopperProxy : CoreComponentProxy { }
 
 @property (readonly) CopperInfo info;
 
@@ -468,7 +468,7 @@
 // Blitter
 //
 
-@interface BlitterProxy : AmigaComponentProxy { }
+@interface BlitterProxy : CoreComponentProxy { }
 
 @property (readonly) BlitterInfo info;
 
@@ -489,7 +489,7 @@
 // Denise
 //
 
-@interface DeniseProxy : AmigaComponentProxy { }
+@interface DeniseProxy : CoreComponentProxy { }
 
 @property (readonly) DeniseInfo info;
 - (SpriteInfo)getSpriteInfo:(NSInteger)nr;
@@ -534,7 +534,7 @@
 // Paula
 //
 
-@interface PaulaProxy : AmigaComponentProxy { }
+@interface PaulaProxy : CoreComponentProxy { }
 
 @property (readonly) PaulaInfo info;
 @property (readonly) StateMachineInfo audioInfo0;
@@ -568,7 +568,7 @@
 // RTC
 //
 
-@interface RtcProxy : AmigaComponentProxy { }
+@interface RtcProxy : CoreComponentProxy { }
 
 - (void)update;
 
@@ -579,7 +579,7 @@
 // ControlPort
 //
 
-@interface ControlPortProxy : AmigaComponentProxy {
+@interface ControlPortProxy : CoreComponentProxy {
         
     MouseProxy *mouse;
     JoystickProxy *joystick;
@@ -597,7 +597,7 @@
 // SerialPort
 //
 
-@interface SerialPortProxy : AmigaComponentProxy { }
+@interface SerialPortProxy : CoreComponentProxy { }
 
 @property (readonly) SerialPortInfo info;
 
@@ -608,7 +608,7 @@
 // Mouse
 //
 
-@interface MouseProxy : AmigaComponentProxy { }
+@interface MouseProxy : CoreComponentProxy { }
 
 - (BOOL)detectShakeAbs:(NSPoint)pos;
 - (BOOL)detectShakeRel:(NSPoint)pos;
@@ -623,7 +623,7 @@
 // Joystick
 //
 
-@interface JoystickProxy : AmigaComponentProxy { }
+@interface JoystickProxy : CoreComponentProxy { }
 
 - (void)trigger:(GamePadAction)event;
 
@@ -634,7 +634,7 @@
 // Keyboard
 //
 
-@interface KeyboardProxy : AmigaComponentProxy { }
+@interface KeyboardProxy : CoreComponentProxy { }
 
 - (BOOL)keyIsPressed:(NSInteger)keycode;
 - (void)pressKey:(NSInteger)keycode;
@@ -649,7 +649,7 @@
 // DiskController
 //
 
-@interface DiskControllerProxy : AmigaComponentProxy { }
+@interface DiskControllerProxy : CoreComponentProxy { }
 
 - (DiskControllerConfig)getConfig;
 @property (readonly) DiskControllerInfo info;
@@ -664,7 +664,7 @@
 // DriveProxy
 //
 
-@interface DriveProxy : AmigaComponentProxy { }
+@interface DriveProxy : CoreComponentProxy { }
 
 @property (readonly) NSInteger nr;
 @property (readonly) BOOL isConnected;

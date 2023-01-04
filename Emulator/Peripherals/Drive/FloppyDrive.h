@@ -98,7 +98,7 @@ public:
     
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -108,7 +108,7 @@ private:
     
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
     
 private:
@@ -199,7 +199,7 @@ public:
 public:
     
     // Returns the result of the latest inspection
-    FloppyDriveInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    FloppyDriveInfo getInfo() const { return CoreComponent::getInfo(info); }
 
     // Return the identification pattern of this drive
     u32 getDriveId() const;

@@ -62,7 +62,7 @@ Amiga::Amiga()
      * - Memory must preceed the CPU, because it contains the CPU reset vector.
      */
     
-    subComponents = std::vector<AmigaComponent *> {
+    subComponents = std::vector<CoreComponent *> {
 
         &agnus,
         &rtc,
@@ -187,7 +187,7 @@ Amiga::reset(bool hard)
     df3.serviceDiskChangeEvent <SLOT_DC3> ();
     
     // Execute the standard reset routine
-    AmigaComponent::reset(hard);
+    CoreComponent::reset(hard);
     
     if (!isEmulatorThread()) resume();
 
@@ -1148,8 +1148,8 @@ Amiga::_debugOff()
 isize
 Amiga::load(const u8 *buffer)
 {
-    auto result = AmigaComponent::load(buffer);
-    AmigaComponent::didLoad();
+    auto result = CoreComponent::load(buffer);
+    CoreComponent::didLoad();
     
     return result;
 }
@@ -1157,8 +1157,8 @@ Amiga::load(const u8 *buffer)
 isize
 Amiga::save(u8 *buffer)
 {
-    auto result = AmigaComponent::save(buffer);
-    AmigaComponent::didSave();
+    auto result = CoreComponent::save(buffer);
+    CoreComponent::didSave();
     
     return result;
 }
@@ -1268,12 +1268,12 @@ Amiga::execute()
             // Are we requested to enter or exit warp mode?
             if (flags & RL::WARP_ON) {
                 clearFlag(RL::WARP_ON);
-                AmigaComponent::warpOn();
+                CoreComponent::warpOn();
             }
 
             if (flags & RL::WARP_OFF) {
                 clearFlag(RL::WARP_OFF);
-                AmigaComponent::warpOff();
+                CoreComponent::warpOff();
             }
             
             // Are we requested to synchronize the thread?
