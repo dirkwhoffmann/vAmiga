@@ -35,10 +35,10 @@ protected:
     Model dasmModel = M68000;
 
     // Visual style for disassembled instructions
-    DasmStyle style;
+    DasmStyle instrStyle;
 
     // Visual style for data dumps
-    DasmNumberFormat dataNumberFormat;
+    DasmStyle dataStyle;
 
 
     //
@@ -150,11 +150,19 @@ public:
     void setModel(Model cpuModel, Model dasmModel);
     void setModel(Model model) { setModel(model, model); }
 
-    // Configures the disassembler
+    // Configures the visual appearance of disassembled instructions
     void setDasmSyntax(DasmSyntax value);
-    void setDasmNumberFormat(DasmNumberFormat value);
+    void setDasmNumberFormat(DasmNumberFormat value) { setNumberFormat(instrStyle, value); }
     void setDasmLetterCase(DasmLetterCase value);
-    void setDasmIndentation(int value);
+    void setDasmIndentation(int value) { instrStyle.tab = value; }
+
+    // Configures the visual appearance of data dumps
+    void setDumpNumberFormat(DasmNumberFormat value) { setNumberFormat(instrStyle, value); }
+    void setDumpIndentation(int value) { dataStyle.tab = value; }
+
+private:
+
+    void setNumberFormat(DasmStyle &style, const DasmNumberFormat &value);
 
 
     //

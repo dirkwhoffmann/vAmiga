@@ -152,11 +152,11 @@
             continueAfterRunningActions = "No"
             filePath = "Emulator/CPU/Moira/Moira.h"
             startingColumnNumber = "10"
-            endingColumnNumber = "27"
-            startingLineNumber = "159"
-            endingLineNumber = "159"
-            landmarkName = "setDasmLetterCase(value)"
-            landmarkType = "6">
+            endingColumnNumber = "10"
+            startingLineNumber = "167"
+            endingLineNumber = "167"
+            landmarkName = "Moira"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

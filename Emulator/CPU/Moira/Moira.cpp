@@ -34,7 +34,7 @@ Moira::Moira(Amiga &ref) : SubComponent(ref)
 
     createJumpTable(cpuModel, dasmModel);
 
-    style = DasmStyle {
+    instrStyle = DasmStyle {
 
         .syntax         = DASM_MOIRA,
         .letterCase     = DASM_MIXED_CASE,
@@ -42,7 +42,13 @@ Moira::Moira(Amiga &ref) : SubComponent(ref)
         .tab            = 8
     };
 
-    dataNumberFormat = { .prefix = "", .radix = 16, .upperCase = false, .plainZero = false };
+    dataStyle = DasmStyle {
+
+        .syntax         = DASM_MOIRA,
+        .letterCase     = DASM_MIXED_CASE,
+        .numberFormat   = { .prefix = "", .radix = 16, .upperCase = false, .plainZero = false },
+        .tab            = 1
+    };
 }
 
 Moira::~Moira()
@@ -69,11 +75,17 @@ Moira::setModel(Model cpuModel, Model dasmModel)
 void
 Moira::setDasmSyntax(DasmSyntax value)
 {
-    style.syntax = value;
+    instrStyle.syntax = value;
 }
 
 void
-Moira::setDasmNumberFormat(DasmNumberFormat value)
+Moira::setDasmLetterCase(DasmLetterCase value)
+{
+    instrStyle.letterCase = value;
+}
+
+void
+Moira::setNumberFormat(DasmStyle &style, const DasmNumberFormat &value)
 {
     auto validPrefix = [&](DasmNumberFormat fmt) { return fmt.prefix != nullptr; };
     auto validRadix = [&](DasmNumberFormat fmt) { return fmt.radix == 10 || fmt.radix == 16; };
@@ -86,22 +98,6 @@ Moira::setDasmNumberFormat(DasmNumberFormat value)
     }
 
     style.numberFormat = value;
-
-    // Adapt some options for the data style
-    dataNumberFormat.upperCase = style.numberFormat.upperCase;
-    dataNumberFormat.radix = style.numberFormat.radix;
-}
-
-void
-Moira::setDasmLetterCase(DasmLetterCase value)
-{
-    style.letterCase = value;
-}
-
-void
-Moira::setDasmIndentation(int value)
-{
-    style.tab = value;
 }
 
 bool

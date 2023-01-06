@@ -15,13 +15,13 @@ Moira::disassemble(u32 addr, char *str) const
     u32 pc = addr;
     u16 opcode = read16Dasm(pc);
 
-    StrWriter writer(str, style);
+    StrWriter writer(str, instrStyle);
 
     (this->*dasm[opcode])(writer, pc, opcode);
     writer << Finish{};
 
     // Post process disassembler output
-    switch (style.letterCase) {
+    switch (instrStyle.letterCase) {
 
         case DASM_MIXED_CASE:
 
@@ -70,15 +70,7 @@ Moira::disassembleSR(const StatusRegister &sr, char *str) const
 void
 Moira::disassembleWord(u32 value, char *str) const
 {
-    if (dataNumberFormat.radix == 16) {
-
-        sprintx(str, u16(value), dataNumberFormat, 4);
-
-    } else {
-
-        sprintd(str, u16(value), 5);
-    }
-    *str = 0;
+    StrWriter(str, dataStyle) << UInt32{u32(value)} << Finish{};
 }
 
 void
@@ -86,37 +78,19 @@ Moira::disassembleMemory(u32 addr, int cnt, char *str) const
 {
     U32_DEC(addr, 2); // Because dasmRead increases addr first
 
-    if (dataNumberFormat.radix == 16) {
+    StrWriter writer(str, dataStyle);
 
-        for (int i = 0; i < cnt; i++) {
+    for (int i = 0; i < cnt; i++) {
 
-            if (i) *str++ = ' ';
-            sprintx(str, u16(dasmRead<Word>(addr)), dataNumberFormat, 4);
-        }
-
-    } else {
-
-        for (int i = 0; i < cnt; i++) {
-
-            if (i) *str++ = ' ';
-            sprintd(str, u16(dasmRead<Word>(addr)), 5);
-        }
+        for (isize j = 0; i && j < dataStyle.tab; j++) writer << ' ';
+        writer << UInt16{u16(dasmRead<Word>(addr))} << Finish{};
     }
-    *str = 0;
 }
 
 void
 Moira::disassemblePC(u32 pc, char *str) const
 {
-    if (dataNumberFormat.radix == 16) {
-
-        sprintx(str, pc, dataNumberFormat, 6);
-
-    } else {
-
-        sprintd(str, pc, 8);
-    }
-    *str = 0;
+    StrWriter(str, dataStyle) << UInt24{pc} << Finish{};
 }
 
 template <Size S> u32
@@ -176,7 +150,7 @@ Moira::Op(u16 reg, u32 &pc) const
                 result.ow = u8(outerDispWords((u16)result.ext1));
 
                 // Compensate Musashi bug (?)
-                if (style.syntax == DASM_MUSASHI && (result.ext1 & 0x47) >= 0x44) {
+                if (instrStyle.syntax == DASM_MUSASHI && (result.ext1 & 0x47) >= 0x44) {
 
                     result.ow = 0;
                 }

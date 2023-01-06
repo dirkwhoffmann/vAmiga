@@ -198,6 +198,17 @@ StrWriter::operator<<(UInt16 u)
 }
 
 StrWriter&
+StrWriter::operator<<(UInt24 u)
+{
+    if (style.numberFormat.radix == 16) {
+        sprintx(ptr, u.raw, style.numberFormat, 6);
+    } else {
+        sprintd(ptr, u.raw, 8);
+    }
+    return *this;
+}
+
+StrWriter&
 StrWriter::operator<<(UInt32 u)
 {
     if (style.numberFormat.radix == 16) {
