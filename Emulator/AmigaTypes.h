@@ -43,6 +43,35 @@ struct VideoFormatEnum : util::Reflection<VideoFormatEnum, VideoFormat>
 };
 #endif
 
+enum_long(SYNC_MODE)
+{
+    SYNC_NATIVE_FPS,
+    SYNC_FIXED_FPS,
+    SYNC_VSYNC
+};
+typedef SYNC_MODE SyncMode;
+
+#ifdef __cplusplus
+struct SyncModeEnum : util::Reflection<SyncModeEnum, SyncMode>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = SYNC_VSYNC;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
+
+    static const char *prefix() { return "SYNC"; }
+    static const char *key(SyncMode value)
+    {
+        switch (value) {
+
+            case SYNC_NATIVE_FPS:   return "NATIVE_FPS";
+            case SYNC_FIXED_FPS:    return "FIXED_FPS";
+            case SYNC_VSYNC:        return "VSYNC";
+        }
+        return "???";
+    }
+};
+#endif
+
 enum_long(CONFIG_SCHEME)
 {
     CONFIG_A1000_OCS_1MB,
@@ -280,6 +309,7 @@ struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
 };
 #endif
 
+
 //
 // Structures
 //
@@ -287,7 +317,8 @@ struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
 typedef struct
 {
     VideoFormat type;
-    bool vsync;
+    SyncMode syncMode;
+    isize proposedFps;
 }
 AmigaConfig;
 
@@ -302,16 +333,6 @@ typedef struct
     long hpos;
 }
 AmigaInfo;
-
-/*
-typedef struct
-{
-    double refreshRate;
-    isize frameBufferWidth;
-    isize frameBufferHeight;
-}
-HostInfo;
-*/
 
 
 //

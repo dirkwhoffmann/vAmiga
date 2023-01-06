@@ -8,28 +8,28 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "AmigaObject.h"
+#include "CoreObject.h"
 #include <iostream>
 
 namespace vamiga {
 
 bool
-AmigaObject::verbose = true;
+CoreObject::verbose = true;
 
 void
-AmigaObject::prefix() const
+CoreObject::prefix() const
 {
     fprintf(stderr, "%s: ", getDescription());
 }
 
 void
-AmigaObject::dump(Category category, std::ostream& ss) const
+CoreObject::dump(Category category, std::ostream& ss) const
 {
     _dump(category, ss);
 }
 
 void
-AmigaObject::dump(Category category) const
+CoreObject::dump(Category category) const
 {
     dump(category, std::cout);
 }

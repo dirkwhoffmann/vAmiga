@@ -22,7 +22,7 @@ RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
 void
 RetroShell::_initialize()
 {
-    AmigaComponent::_initialize();
+    CoreComponent::_initialize();
 
     // Initialize the text storage
     clear();
@@ -39,7 +39,6 @@ RetroShell::_pause()
 {
     printState();
     remoteManager.rshServer.send(getPrompt());
-    
 }
 
 RetroShell&
@@ -172,8 +171,6 @@ RetroShell::welcome()
         storage << "vAmiga " << name << " ";
         remoteManager.rshServer << "vAmiga " << name << " Remote Server ";
         *this << Amiga::build() << '\n';
-
-        // *this << "vAmiga " << name << " " << Amiga::build() << '\n';
         *this << '\n';
         *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
         *this << "Licensed under the GNU General Public License v3" << '\n';
@@ -271,7 +268,14 @@ RetroShell::press(RetroShellKey key, bool shift)
                 input.erase(input.begin() + cursor);
             }
             break;
-            
+
+        case RSKEY_CUT:
+
+            if (cursor < inputLength()) {
+                input.erase(input.begin() + cursor, input.end());
+            }
+            break;
+
         case RSKEY_BACKSPACE:
             
             if (cursor > 0) {
@@ -425,7 +429,7 @@ RetroShell::exec(const string &command)
     try {
         // Check if the command marked with 'try'
         ignoreError = command.rfind("try", 0) == 0;
-        
+
         // Call the interpreter
         interpreter.exec(command);
         
@@ -470,9 +474,9 @@ RetroShell::continueScript()
         try {
             exec(command);
             
-        } catch (ScriptInterruption &) {
+        } catch (ScriptInterruption &exc) {
             
-            msgQueue.put(MSG_SCRIPT_PAUSE, scriptLine);
+            msgQueue.put(MSG_SCRIPT_PAUSE, scriptLine, exc.data);
             return;
 
         } catch (std::exception &) {
@@ -555,12 +559,20 @@ RetroShell::help(const string &command)
 }
 
 void
-RetroShell::dump(AmigaObject &component, Category category)
+RetroShell::dump(CoreObject &component, Category category)
 {
     std::stringstream ss;
     
     {   SUSPENDED
-        
+
+        switch (category) {
+
+            case Category::Config: ss << "Current configuration:\n\n"; break;
+
+            default:
+                break;
+        }
+
         component.dump(category, ss);
     }
 
@@ -568,19 +580,19 @@ RetroShell::dump(AmigaObject &component, Category category)
 }
 
 void
-RetroShell::dumpConfig(AmigaObject &component)
+RetroShell::dumpConfig(CoreObject &component)
 {
     dump(component, Category::Config);
 }
 
 void
-RetroShell::dumpSummary(AmigaObject &component)
+RetroShell::dumpInspection(CoreObject &component)
 {
     dump(component, Category::Inspection);
 }
 
 void
-RetroShell::dumpDetails(AmigaObject &component)
+RetroShell::dumpDebug(CoreObject &component)
 {
     dump(component, Category::Debug);
 }

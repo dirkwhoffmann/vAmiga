@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "AmigaComponent.h"
+#include "CoreComponent.h"
 
 namespace vamiga {
 
@@ -48,10 +48,10 @@ class SerialPort;
 class UART;
 class ZorroManager;
 
-/* This class extends the AmigaComponent class with references to all components
+/* This class extends the CoreComponent class with references to all components
  * that are part of the Amiga class.
  */
-class SubComponent : public AmigaComponent {
+class SubComponent : public CoreComponent {
 
 protected:
 

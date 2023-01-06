@@ -432,14 +432,6 @@ HardDrive::isConnected() const
     return amiga.hdcon[nr]->getConfigItem(OPT_HDC_CONNECT);
 }
 
-/*
-u64
-HardDrive::fnv() const
-{
-    return hasDisk() ? util::fnv64(data.ptr, geometry.numBytes()) : 0;
-}
-*/
-
 bool
 HardDrive::hasDisk() const
 {

@@ -217,10 +217,10 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         os << dec(AS_USEC(getStepPulseDelay())) << " usec" << std::endl;
         os << tab("Reverse step pulse delay");
         os << dec(AS_USEC(getRevStepPulseDelay())) << " usec" << std::endl;
-        os << tab("Step read delay");
-        os << dec(AS_MSEC(getStepReadDelay())) << " msec" << std::endl;
-        os << tab("Reverse step read delay");
-        os << dec(AS_MSEC(getRevStepReadDelay())) << " msec" << std::endl;
+        os << tab("Track to track delay");
+        os << dec(AS_MSEC(getTrackToTrackDelay())) << " msec" << std::endl;
+        os << tab("Head settle time");
+        os << dec(AS_MSEC(getHeadSettleTime())) << " msec" << std::endl;
     }
     
     if (category == Category::Inspection) {
@@ -499,7 +499,7 @@ FloppyDrive::getStepPulseDelay() const
     switch (config.mechanics) {
 
         case MECHANICS_NONE:    return 0;
-        case MECHANICS_A1010:   return 1060;
+        case MECHANICS_A1010:   return USEC(40);
 
         default:
             fatalError;
@@ -512,7 +512,7 @@ FloppyDrive::getRevStepPulseDelay() const
     switch (config.mechanics) {
 
         case MECHANICS_NONE:    return 0;
-        case MECHANICS_A1010:   return 1060;
+        case MECHANICS_A1010:   return USEC(40);
 
         default:
             fatalError;
@@ -520,12 +520,12 @@ FloppyDrive::getRevStepPulseDelay() const
 }
 
 Cycle
-FloppyDrive::getStepReadDelay() const
+FloppyDrive::getTrackToTrackDelay() const
 {
     switch (config.mechanics) {
 
         case MECHANICS_NONE:    return 0;
-        case MECHANICS_A1010:   return MSEC(8);
+        case MECHANICS_A1010:   return MSEC(3);
 
         default:
             fatalError;
@@ -533,12 +533,12 @@ FloppyDrive::getStepReadDelay() const
 }
 
 Cycle
-FloppyDrive::getRevStepReadDelay() const
+FloppyDrive::getHeadSettleTime() const
 {
     switch (config.mechanics) {
 
         case MECHANICS_NONE:    return 0;
-        case MECHANICS_A1010:   return MSEC(8);
+        case MECHANICS_A1010:   return MSEC(9);
 
         default:
             fatalError;
@@ -793,11 +793,7 @@ FloppyDrive::step(isize dir)
             recordCylinder(head.cylinder);
 
             // Determine when the step will be completed
-            if (latestStep == latestStepDown) {
-                latestStepCompleted = agnus.clock + getStepReadDelay();
-            } else {
-                latestStepCompleted = agnus.clock + getRevStepReadDelay();
-            }
+            latestStepCompleted = agnus.clock + getTrackToTrackDelay() + getHeadSettleTime();
 
             // Remember the step cycle
             latestStep = latestStepDown = agnus.clock;
@@ -817,11 +813,7 @@ FloppyDrive::step(isize dir)
             recordCylinder(head.cylinder);
 
             // Determine when the step will be completed
-            if (latestStep == latestStepUp) {
-                latestStepCompleted = agnus.clock + getStepReadDelay();
-            } else {
-                latestStepCompleted = agnus.clock + getRevStepReadDelay();
-            }
+            latestStepCompleted = agnus.clock + getTrackToTrackDelay() + getHeadSettleTime();
 
             // Remember the step cycle
             latestStep = latestStepUp = agnus.clock;

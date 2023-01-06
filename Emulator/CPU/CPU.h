@@ -50,7 +50,7 @@ public:
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -60,7 +60,7 @@ private:
 
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
     
 private:
@@ -158,7 +158,7 @@ public:
     
 public:
     
-    CPUInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    CPUInfo getInfo() const { return CoreComponent::getInfo(info); }
 
 
     //
@@ -191,16 +191,19 @@ public:
     const char *disassembleRecordedPC(isize i);
 
     // Disassembles the instruction at the specified address
+    const char *disassembleWord(u16 value);
+    const char *disassembleAddr(u32 addr);
     const char *disassembleInstr(u32 addr, isize *len);
     const char *disassembleWords(u32 addr, isize len);
-    const char *disassembleAddr(u32 addr);
 
     // Disassembles the currently executed instruction
     const char *disassembleInstr(isize *len);
     const char *disassembleWords(isize len);
+    const char *disassemblePC();
 
-    // Dumps entries from the log buffer
+    // Dumps a portion of the log buffer
     void dumpLogBuffer(std::ostream& os, isize count);
+    void dumpLogBuffer(std::ostream& os);
 
     // Disassembles a memory range
     void disassembleRange(std::ostream& os, u32 addr, isize count);

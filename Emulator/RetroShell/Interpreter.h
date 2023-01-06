@@ -17,33 +17,6 @@
 
 namespace vamiga {
 
-enum class Token
-{
-    about, accuracy, activation, agnus, amiga, at, attach, audiate, audio,
-    autofire, autosync, bankmap, beam, bitplanes, blitter, bp, brightness,
-    bullets, cbp, channel, checksums, chip, cia, ciaa, ciab, clear, close,
-    clxsprspr, clxsprplf, clxplfplf, color, config, connect, contrast,
-    controlport, copper, cp, cpu, cutout, cwp, dasm, dc, debug, defaults,
-    delay, del, denise, detach, device, devices, dfn, diagboard, disassemble,
-    down, disable, disconnect, disk, dma, dmadebugger, drive, dsksync,
-    easteregg, eject, enable, esync, events, execbase, extrom, extstart, fast,
-    filename, filesystem, filter, fpu, gdb, geometry, hdn, help, hide, host,
-    ignore, init, info, insert, inspect, interrupt, interrupts, joystick, jump,
-    keyboard, keyset, layers, left, library, libraries, list, load, lock,
-    mechanics, memdump, memory, mmu, mode, model, monitor, mouse, next, none,
-    opacity, open, os, overclocking, palette, pan, partition, path,
-    paula, pause, ptrdrops, poll, port, ports, power, press, process,
-    processes, pull, pullup, raminitpattern, refresh, registers, regreset,
-    regression, release, reset, resource, resources, revision, right, rom, rpm,
-    rshell, rtc, run, sampling, saturation, save, saveroms, screenshot,
-    searchpath, serial, server, set, setup, shakedetector, show, slow,
-    slowramdelay, slowrammirror, source, speed, sprites, start, status, step,
-    stop, swapdelay, swtraps, syntax, task, tasks, tod, todbug, tracking,
-    translate, trap, type, uart, unmappingtype, unpress, up, vector, vectors,
-    verbose, velocity, volume, volumes, vsync, wait, watch, watchpoint, wom,
-    wp, write, xaxis, yaxis, zorro
-};
-
 struct TooFewArgumentsError : public util::ParseError {
     using ParseError::ParseError;
 };
@@ -86,7 +59,7 @@ private:
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -96,7 +69,7 @@ private:
 
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
     
 private:
@@ -132,6 +105,12 @@ private:
 
     // Auto-completes an argument list
     void autoComplete(Arguments &argv);
+
+    // Parses an argument of a certain type
+    bool parseBool(Arguments &argv, isize n = 0) { return util::parseBool(argv[n]); }
+    bool parseOnOff(Arguments &argv, isize n = 0) { return util::parseOnOff(argv[n]); }
+    long parseNum(Arguments &argv, isize n = 0) { return util::parseNum(argv[n]); }
+    template <typename T> long parseEnum(Arguments &argv, isize n = 0) { return util::parseEnum<T>(argv[n]); }
 
 
     //

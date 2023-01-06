@@ -55,7 +55,7 @@ PixelEngine::_dump(Category category, std::ostream& os) const
 void
 PixelEngine::_initialize()
 {
-    AmigaComponent::_initialize();
+    CoreComponent::_initialize();
 
     // Setup ECS BRDRBLNK color
     palette[64] = TEXEL(GpuColor(0x00, 0x00, 0x00).rawValue);
@@ -73,10 +73,10 @@ PixelEngine::_reset(bool hard)
     
     if (hard) {
         
-        emuTexture[0].longFrame = true;
-        emuTexture[1].longFrame = true;
         emuTexture[0].nr = 0;
+        emuTexture[0].lof = emuTexture[0].prevlof = true;
         emuTexture[1].nr = 0;
+        emuTexture[1].lof = emuTexture[1].prevlof = true;
     }
 
     activeBuffer = 0;
@@ -327,9 +327,14 @@ PixelEngine::stablePtr(isize row, isize col)
 void
 PixelEngine::swapBuffers()
 {
-    activeBuffer = !activeBuffer;
-    emuTexture[activeBuffer].nr = agnus.pos.frame;
-    emuTexture[activeBuffer].longFrame = agnus.pos.lof;
+    isize oldActiveBuffer = activeBuffer;
+    isize newActiveBuffer = !oldActiveBuffer;
+
+    emuTexture[newActiveBuffer].nr = agnus.pos.frame;
+    emuTexture[newActiveBuffer].lof = agnus.pos.lof;
+    emuTexture[newActiveBuffer].prevlof = emuTexture[oldActiveBuffer].lof;
+
+    activeBuffer = newActiveBuffer;
 }
 
 Texel *

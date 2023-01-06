@@ -442,6 +442,22 @@ CPU::_inspect() const
 void
 CPU::_dump(Category category, std::ostream& os) const
 {
+    auto print = [&](const string &name, const moira::Guards &guards) {
+
+        for (int i = 0; i < guards.elements(); i++) {
+
+            auto bp =  guards.guardNr(i);
+            auto nr = name + std::to_string(i);
+
+            os << util::tab(nr);
+            os << util::hex(bp->addr);
+
+            if (!bp->enabled) os << " (Disabled)";
+            else if (bp->ignore) os << " (Disabled for " << util::dec(bp->ignore) << " hits)";
+            os << std::endl;
+        }
+    };
+
     if (category == Category::Config) {
 
         os << util::tab("CPU revision");
@@ -552,22 +568,8 @@ CPU::_dump(Category category, std::ostream& os) const
     if (category == Category::Breakpoints) {
 
         if (debugger.breakpoints.elements()) {
-
-            for (int i = 0; i < debugger.breakpoints.elements(); i++) {
-
-                auto bp = debugger.breakpoints.guardNr(i);
-                auto nr = "Breakpoint " + std::to_string(i);
-
-                os << util::tab(nr);
-                os << util::hex(bp->addr);
-
-                if (!bp->enabled) os << " (Disabled)";
-                else if (bp->ignore) os << " (Disabled for " << bp->ignore << " hits)";
-                os << std::endl;
-            }
-
+            print("Breakpoint", debugger.breakpoints);
         } else {
-
             os << "No breakpoints set" << std::endl;
         }
     }
@@ -575,21 +577,8 @@ CPU::_dump(Category category, std::ostream& os) const
     if (category == Category::Watchpoints) {
 
         if (debugger.watchpoints.elements()) {
-
-            for (int i = 0; i < debugger.watchpoints.elements(); i++) {
-
-                auto wp = debugger.watchpoints.guardNr(i);
-                auto nr = "Watchpoint " + std::to_string(i);
-
-                os << util::tab(nr);
-                os << util::hex(wp->addr);
-                if (!wp->enabled) os << " (Disabled)";
-                else if (wp->ignore) os << " (Disabled for " << wp->ignore << " hits)";
-                os << std::endl;
-            }
-
+            print("Watchpoint", debugger.watchpoints);
         } else {
-
             os << "No watchpoints set" << std::endl;
         }
     }
@@ -705,7 +694,7 @@ CPU::disassembleRecordedFlags(isize i)
 {
     static char result[18];
     
-    disassembleSR(debugger.logEntryAbs((int)i).sr, result);
+    disassembleSR(result, debugger.logEntryAbs((int)i).sr);
     return result;
 }
 
@@ -713,8 +702,26 @@ const char *
 CPU::disassembleRecordedPC(isize i)
 {
     static char result[16];
-    
-    Moira::disassemblePC(debugger.logEntryAbs((int)i).pc0, result);
+
+    Moira::dump24(result, debugger.logEntryAbs((int)i).pc0);
+    return result;
+}
+
+const char *
+CPU::disassembleAddr(u32 addr)
+{
+    static char result[16];
+
+    Moira::dump24(result, addr);
+    return result;
+}
+
+const char *
+CPU::disassembleWord(u16 value)
+{
+    static char result[16];
+
+    Moira::dump16(result, value);
     return result;
 }
 
@@ -723,7 +730,7 @@ CPU::disassembleInstr(u32 addr, isize *len)
 {
     static char result[128];
 
-    int l = disassemble(addr, result);
+    int l = disassemble(result, addr);
 
     if (len) *len = (isize)l;
     return result;
@@ -734,16 +741,7 @@ CPU::disassembleWords(u32 addr, isize len)
 {
     static char result[64];
 
-    disassembleMemory(addr, (int)len, result);
-    return result;
-}
-
-const char *
-CPU::disassembleAddr(u32 addr)
-{
-    static char result[16];
-
-    disassemblePC(addr, result);
+    dump16(result, addr, len);
     return result;
 }
 
@@ -757,6 +755,12 @@ const char *
 CPU::disassembleWords(isize len)
 {
     return disassembleWords(reg.pc0, len);
+}
+
+const char *
+CPU::disassemblePC()
+{
+    return disassembleAddr(reg.pc0);
 }
 
 void
@@ -783,6 +787,12 @@ CPU::dumpLogBuffer(std::ostream& os, isize count)
             os << std::endl;
         }
     }
+}
+
+void
+CPU::dumpLogBuffer(std::ostream& os)
+{
+    dumpLogBuffer(os, debugger.loggedInstructions());
 }
 
 void

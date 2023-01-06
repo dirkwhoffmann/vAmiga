@@ -380,6 +380,16 @@ Mouse::pressAndReleaseLeft(Cycle duration, Cycle delay)
 }
 
 void
+Mouse::pressAndReleaseMiddle(Cycle duration, Cycle delay)
+{
+    if (port.isPort1()) {
+        agnus.scheduleRel <SLOT_MSE1> (delay, MSE_PUSH_MIDDLE, duration);
+    } else {
+        agnus.scheduleRel <SLOT_MSE2> (delay, MSE_PUSH_MIDDLE, duration);
+    }
+}
+
+void
 Mouse::pressAndReleaseRight(Cycle duration, Cycle delay)
 {
     if (port.isPort1()) {

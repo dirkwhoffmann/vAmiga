@@ -20,7 +20,7 @@ namespace vamiga {
 
 Muxer::Muxer(Amiga& ref) : SubComponent(ref)
 {
-    subComponents = std::vector<AmigaComponent *> {
+    subComponents = std::vector<CoreComponent *> {
 
         &filterL,
         &filterR
@@ -251,17 +251,8 @@ Muxer::setSampleRate(double hz)
 {
     trace(AUD_DEBUG, "setSampleRate(%f)\n", hz);
 
-    adjustSpeed();
-
     filterL.setSampleRate(hz);
     filterR.setSampleRate(hz);
-}
-
-void
-Muxer::adjustSpeed()
-{
-    cyclesPerSample = double(amiga.masterClockFrequency()) / host.getSampleRate();
-    assert(cyclesPerSample > 0);
 }
 
 isize
@@ -304,24 +295,13 @@ Muxer::synthesize(Cycle clock, Cycle target, long count)
     assert(count > 0);
 
     // Determine the number of elapsed cycles per audio sample
-    double cyclesPerSample = (double)(target - clock) / (double)count;
+    double cps = (double)(target - clock) / (double)count;
 
     switch (config.samplingMethod) {
             
-        case SMP_NONE:
-            
-            synthesize<SMP_NONE>(clock, count, cyclesPerSample);
-            break;
-            
-        case SMP_NEAREST:
-            
-            synthesize<SMP_NEAREST>(clock, count, cyclesPerSample);
-            break;
-            
-        case SMP_LINEAR:
-            
-            synthesize<SMP_LINEAR>(clock, count, cyclesPerSample);
-            break;
+        case SMP_NONE:      synthesize<SMP_NONE>(clock, count, cps); break;
+        case SMP_NEAREST:   synthesize<SMP_NEAREST>(clock, count, cps); break;
+        case SMP_LINEAR:    synthesize<SMP_LINEAR>(clock, count, cps); break;
             
         default:
             fatalError;
@@ -332,28 +312,21 @@ void
 Muxer::synthesize(Cycle clock, Cycle target)
 {
     assert(target > clock);
-    assert(cyclesPerSample > 0);
-    
+
+    // Determine the number of elapsed cycles per audio sample
+    double cps = double(amiga.masterClockFrequency()) / host.getSampleRate();
+
     // Determine how many samples we need to produce
-    double exact = (double)(target - clock) / cyclesPerSample + fraction;
-    long count = (long)exact;
-    fraction = exact - (double)count;
+    double exact = (double)(target - clock) / cps + fraction;
+
+    // Extract the integer part and remember the rest
+    double count; fraction = std::modf(exact, &count);
 
     switch (config.samplingMethod) {
-        case SMP_NONE:
-            
-            synthesize<SMP_NONE>(clock, count, cyclesPerSample);
-            break;
-            
-        case SMP_NEAREST:
-            
-            synthesize<SMP_NEAREST>(clock, count, cyclesPerSample);
-            break;
-            
-        case SMP_LINEAR:
-            
-            synthesize<SMP_LINEAR>(clock, count, cyclesPerSample);
-            break;
+
+        case SMP_NONE:      synthesize<SMP_NONE>(clock, long(count), cps); break;
+        case SMP_NEAREST:   synthesize<SMP_NEAREST>(clock, long(count), cps); break;
+        case SMP_LINEAR:    synthesize<SMP_LINEAR>(clock, long(count), cps); break;
             
         default:
             fatalError;

@@ -57,8 +57,15 @@ extension ConfigurationController {
         vidHCenterLabel.textColor = config.center == 0 ? .labelColor : .disabledControlTextColor
         vidVCenterLabel.textColor = config.center == 0 ? .labelColor : .disabledControlTextColor
 
-        // Vsync
-        vidVsync.state = config.vsync ? .on : .off
+        // Frame rate
+        let syncMode = config.syncMode
+        let fps = config.proposedFps
+        vidSyncMode.item(at: 1)?.title = "Fixed (\(fps) fps)"
+        vidSyncMode.selectItem(withTag: syncMode)
+        vidFpsSlider.integerValue = fps
+        vidFpsSlider.isHidden = syncMode != 1
+        vidFpsMin.isHidden = syncMode != 1
+        vidFpsMax.isHidden = syncMode != 1
 
         // Upscalers
         vidEnhancerPopUp.selectItem(withTag: config.enhancer)
@@ -180,19 +187,24 @@ extension ConfigurationController {
     @IBAction func vidVCenterAction(_ sender: NSSlider!) {
 
         let value = sender.floatValue / 1000
-        debug(.config, "vCenter = \(value)")
 
         config.vCenter = value
         refresh()
     }
 
     //
-    // Action methods (Display)
+    // Action methods (Refresh rate)
     //
 
-    @IBAction func vidVsyncAction(_ sender: NSButton!) {
+    @IBAction func vidSyncModeAction(_ sender: NSPopUpButton!) {
 
-        config.vsync = sender.state == .on
+        config.syncMode = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func vidFpsAction(_ sender: NSSlider!) {
+
+        config.proposedFps = sender.integerValue
         refresh()
     }
 

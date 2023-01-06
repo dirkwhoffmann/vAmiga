@@ -10,7 +10,7 @@
 #pragma once
 
 #include "ThreadTypes.h"
-#include "AmigaComponent.h"
+#include "CoreComponent.h"
 #include "Chrono.h"
 #include "Concurrency.h"
 
@@ -118,7 +118,7 @@ namespace vamiga {
  * the recorded information in a trace buffer.
  */
 
-class Thread : public AmigaComponent, util::Wakeable {
+class Thread : public CoreComponent, util::Wakeable {
     
 protected:
     
@@ -128,7 +128,7 @@ protected:
     std::thread thread;
 
     // The current synchronization mode
-    enum class SyncMode { Periodic, Pulsed };
+    enum class ThreadMode { Periodic, Pulsed };
     
     // The current thread state and a change request
     volatile ExecutionState state = EXEC_OFF;
@@ -175,8 +175,8 @@ public:
 
 private:
     
-    template <SyncMode M> void execute();
-    template <SyncMode M> void sleep();
+    template <ThreadMode M> void execute();
+    template <ThreadMode M> void sleep();
 
     // The main entry point (called when the thread is created)
     void main();
@@ -244,7 +244,7 @@ protected:
 public:
 
     // Provides the current sync mode
-    virtual SyncMode getSyncMode() const = 0;
+    virtual ThreadMode getThreadMode() const = 0;
 
     // Awakes the thread if it runs in pulse mode
     void wakeUp();
@@ -257,8 +257,8 @@ private:
 
 struct AutoResume {
 
-    AmigaComponent *c;
-    AutoResume(AmigaComponent *c) : c(c) { c->suspend(); }
+    CoreComponent *c;
+    AutoResume(CoreComponent *c) : c(c) { c->suspend(); }
     ~AutoResume() { c->resume(); }
 };
 

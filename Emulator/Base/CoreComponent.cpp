@@ -8,17 +8,17 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "AmigaComponent.h"
+#include "CoreComponent.h"
 #include "Checksum.h"
 
 namespace vamiga {
 
 void
-AmigaComponent::initialize()
+CoreComponent::initialize()
 {
     try {
         
-        for (AmigaComponent *c : subComponents) { c->initialize(); }
+        for (CoreComponent *c : subComponents) { c->initialize(); }
         _initialize();
         
     } catch (std::exception &e) {
@@ -29,38 +29,38 @@ AmigaComponent::initialize()
 }
 
 void
-AmigaComponent::reset(bool hard)
+CoreComponent::reset(bool hard)
 {
-    for (AmigaComponent *c : subComponents) { c->reset(hard); }
+    for (CoreComponent *c : subComponents) { c->reset(hard); }
     _reset(hard);
 }
 
 void
-AmigaComponent::inspect() const
+CoreComponent::inspect() const
 {
-    for (AmigaComponent *c : subComponents) { c->inspect(); }
+    for (CoreComponent *c : subComponents) { c->inspect(); }
     _inspect();
 }
 
 isize
-AmigaComponent::size()
+CoreComponent::size()
 {
     isize result = _size();
     
     // Add 8 bytes for the checksum
     result += 8;
     
-    for (AmigaComponent *c : subComponents) { result += c->size(); }
+    for (CoreComponent *c : subComponents) { result += c->size(); }
     return result;
 }
 
 u64
-AmigaComponent::checksum()
+CoreComponent::checksum()
 {
     u64 result = _checksum();
     
     // Compute checksums for all subcomponents
-    for (AmigaComponent *c : subComponents) {
+    for (CoreComponent *c : subComponents) {
         result = util::fnvIt64(result, c->checksum());
     }
     
@@ -68,7 +68,7 @@ AmigaComponent::checksum()
 }
 
 isize
-AmigaComponent::load(const u8 *buffer)
+CoreComponent::load(const u8 *buffer)
 {
     assert(!isRunning());
     
@@ -78,7 +78,7 @@ AmigaComponent::load(const u8 *buffer)
     ptr += willLoadFromBuffer(ptr);
 
     // Load internal state of all subcomponents
-    for (AmigaComponent *c : subComponents) {
+    for (CoreComponent *c : subComponents) {
         ptr += c->load(ptr);
     }
 
@@ -102,11 +102,11 @@ AmigaComponent::load(const u8 *buffer)
 }
 
 void
-AmigaComponent::didLoad()
+CoreComponent::didLoad()
 {
     assert(!isRunning());
 
-    for (AmigaComponent *c : subComponents) {
+    for (CoreComponent *c : subComponents) {
         c->didLoad();
     }
 
@@ -114,7 +114,7 @@ AmigaComponent::didLoad()
 }
 
 isize
-AmigaComponent::save(u8 *buffer)
+CoreComponent::save(u8 *buffer)
 {
     u8 *ptr = buffer;
     
@@ -122,7 +122,7 @@ AmigaComponent::save(u8 *buffer)
     ptr += willSaveToBuffer(ptr);
     
     // Save internal state of all subcomponents
-    for (AmigaComponent *c : subComponents) {
+    for (CoreComponent *c : subComponents) {
         ptr += c->save(ptr);
     }
 
@@ -143,9 +143,9 @@ AmigaComponent::save(u8 *buffer)
 }
 
 void
-AmigaComponent::didSave()
+CoreComponent::didSave()
 {        
-    for (AmigaComponent *c : subComponents) {
+    for (CoreComponent *c : subComponents) {
         c->didSave();
     }
 
@@ -153,70 +153,70 @@ AmigaComponent::didSave()
 }
 
 void
-AmigaComponent::isReady() const
+CoreComponent::isReady() const
 {
     for (auto c : subComponents) { c->isReady(); }
     _isReady();
 }
 
 void
-AmigaComponent::powerOn()
+CoreComponent::powerOn()
 {
     for (auto c : subComponents) { c->powerOn(); }
     _powerOn();
 }
 
 void
-AmigaComponent::powerOff()
+CoreComponent::powerOff()
 {
     for (auto c : subComponents) { c->powerOff(); }
     _powerOff();
 }
 
 void
-AmigaComponent::run()
+CoreComponent::run()
 {
     for (auto c : subComponents) { c->run(); }
     _run();
 }
 
 void
-AmigaComponent::pause()
+CoreComponent::pause()
 {
     for (auto c : subComponents) { c->pause(); }
     _pause();
 }
 
 void
-AmigaComponent::halt()
+CoreComponent::halt()
 {
     for (auto c : subComponents) { c->halt(); }
     _halt();
 }
 
 void
-AmigaComponent::warpOn()
+CoreComponent::warpOn()
 {
     for (auto c : subComponents) { c->warpOn(); }
     _warpOn();
 }
 
 void
-AmigaComponent::warpOff()
+CoreComponent::warpOff()
 {
     for (auto c : subComponents) { c->warpOff(); }
     _warpOff();
 }
 
 void
-AmigaComponent::debugOn()
+CoreComponent::debugOn()
 {    
     for (auto c : subComponents) { c->debugOn(); }
     _debugOn();
 }
 
 void
-AmigaComponent::debugOff()
+CoreComponent::debugOff()
 {
     for (auto c : subComponents) { c->debugOff(); }
     _debugOff();

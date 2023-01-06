@@ -47,8 +47,8 @@ class Preferences {
     // Screen captures
     var ffmpegPath = "" {
         didSet {
-            for amiga in myAppDelegate.proxies {
-                amiga.recorder.path = ffmpegPath
+            for proxy in myAppDelegate.proxies {
+                proxy.recorder.path = ffmpegPath
             }
         }
     }

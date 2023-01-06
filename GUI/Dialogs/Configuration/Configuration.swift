@@ -433,9 +433,13 @@ class Configuration {
     // Video settings
     //
 
-    var vsync: Bool {
-        get { return amiga.getConfig(.VSYNC) != 0 }
-        set { amiga.configure(.VSYNC, enable: newValue) }
+    var syncMode: Int {
+        get { return amiga.getConfig(.SYNC_MODE) }
+        set { amiga.configure(.SYNC_MODE, value: newValue) }
+    }
+    var proposedFps: Int {
+        get { return amiga.getConfig(.PROPOSED_FPS) }
+        set { amiga.configure(.PROPOSED_FPS, value: newValue) }
     }
     var palette: Int {
         get { return amiga.getConfig(.PALETTE) }

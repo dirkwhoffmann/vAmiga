@@ -16,7 +16,7 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var prefTabView: NSTabView!
         
     //
-    // Rom preferences
+    // Roms
     //
         
     // Rom info
@@ -52,7 +52,7 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var romPowerButton: NSButton!
 
     //
-    // Chipset preferences
+    // Chipset
     //
     
     // CPU
@@ -94,7 +94,7 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var csPowerButton: NSButton!
 
     //
-    // Memory preferences
+    // Memory
     //
     
     // RAM
@@ -125,7 +125,7 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var memPowerButton: NSButton!
 
     //
-    // Peripherals preferences
+    // Peripherals
     //
 
     // Flopp drives
@@ -165,7 +165,7 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var perPowerButton: NSButton!
 
     //
-    // Compatibility preferences
+    // Compatibility
     //
 
     // Graphics
@@ -199,7 +199,7 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var compPowerButton: NSButton!
     
     //
-    // Audio preferences
+    // Audio
     //
     
     // In
@@ -240,7 +240,7 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var audPowerButton: NSButton!
 
     //
-    // Video preferences
+    // Video
     //
     
     // Palette
@@ -261,8 +261,11 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var vidHCenterLabel: NSTextField!
     @IBOutlet weak var vidVCenterLabel: NSTextField!
 
-    // Oscillator
-    @IBOutlet weak var vidVsync: NSButton!
+    // Frame rate
+    @IBOutlet weak var vidSyncMode: NSPopUpButton!
+    @IBOutlet weak var vidFpsSlider: NSSlider!
+    @IBOutlet weak var vidFpsMin: NSTextField!
+    @IBOutlet weak var vidFpsMax: NSTextField!
 
     // Effects
     @IBOutlet weak var vidEnhancerPopUp: NSPopUpButton!

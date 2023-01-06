@@ -17,7 +17,7 @@ namespace vamiga {
 
 class RegressionTester : public SubComponent {
 
-    // Pixel area that is written to the test image
+    // Pixel area ritten to the test image
     static constexpr isize X1 = 4 * 0x31;
     static constexpr isize Y1 = VBLANK_MAX + 1;
     static constexpr isize X2 = HPIXELS;
@@ -28,7 +28,7 @@ public:
     // Filename of the test image
     string dumpTexturePath = "texture";
 
-    // Pixel area that is used for regression testing
+    // Pixel ares observed by this regression test
     isize x1 = X1;
     isize y1 = Y1;
     isize x2 = X2;
@@ -50,7 +50,7 @@ public:
     
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -60,18 +60,12 @@ private:
 
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
 
 private:
     
     void _reset(bool hard) override { };
-    
-    
-    //
-    // Serializing
-    //
-    
     isize _size() override { return 0; }
     u64 _checksum() override { return 0; }
     isize _load(const u8 *buffer) override { return 0; }
@@ -84,8 +78,8 @@ private:
 
 public:
 
-    // Reverts everything to factory settings
-    void prepare(ConfigScheme scheme, string rom, string ext = "");
+    // Reverts to factory settings
+    void prepare(ConfigScheme scheme, string rom = "", string ext = "");
     
     // Runs a test case
     void run(string adf);

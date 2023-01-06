@@ -31,7 +31,8 @@ Host::_dump(Category category, std::ostream& os) const
         os << tab("Monitor refresh rate");
         os << flt(refreshRate) << " Hz" << std::endl;
         os << tab("Frame buffer size");
-        os << dec(frameBufferWidth) << " x " << dec(frameBufferHeight) << std::endl;
+        os << dec(frameBufferWidth) << " x ";
+        os << dec(frameBufferHeight) << " Texels" << std::endl;
     }
 }
 
@@ -50,7 +51,6 @@ Host::setHostRefreshRate(double fps)
         case 50: case 60: case 100: case 120: case 200: case 240:
 
             refreshRate = fps;
-            paula.muxer.adjustSpeed();
             break;
 
         default:

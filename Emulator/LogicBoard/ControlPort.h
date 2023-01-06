@@ -67,7 +67,7 @@ public:
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -77,7 +77,7 @@ private:
     
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
     
 private:
@@ -114,7 +114,7 @@ private:
 
 public:
     
-    ControlPortInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    ControlPortInfo getInfo() const { return CoreComponent::getInfo(info); }
 
     bool isPort1() const { return nr == PORT1; }
     bool isPort2() const { return nr == PORT2; }

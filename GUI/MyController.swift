@@ -65,10 +65,7 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Speedometer to measure clock frequence and frames per second
     var speedometer: Speedometer!
-    
-    // Used inside the timer function to fine tune timed events
-    var animationCounter = 0
-    
+
     // Remembers if audio is muted (master volume of both channels is 0)
     var muted = false
     
@@ -273,22 +270,23 @@ extension MyController {
     // Timer and message processing
     //
     
-    func timerFunc() {
-        
-        animationCounter += 1
-        
-        // Animate the inspector
-        if inspector?.window?.isVisible == true { inspector!.continuousRefresh() }
+    func update(frames: Int64) {
+
+        if frames % 5 == 0 {
+
+            // Animate the inspector
+            if inspector?.window?.isVisible == true { inspector!.continuousRefresh() }
+        }
         
         // Do less times...
-        if (animationCounter % 3) == 0 {
+        if frames % 16 == 0 {
             
             updateSpeedometer()
             updateMonitoringPanels()
         }
         
         // Do lesser times...
-        if (animationCounter % 32) == 0 {
+        if frames % 256 == 0 {
             
             // Let the cursor disappear in fullscreen mode
             if renderer.fullscreen &&
@@ -469,8 +467,8 @@ extension MyController {
 
         case .OVERCLOCKING:
             speedometer.acceleration = acceleration
-            activityBar.maxValue = 140.0 * acceleration
-            activityBar.warningValue = 77.0 * acceleration
+            activityBar.maxValue = 140.0 * acceleration // TODO: REMOVE??
+            activityBar.warningValue = 77.0 * acceleration 
             activityBar.criticalValue = 105.0 * acceleration
 
         case .BREAKPOINT_UPDATED, .WATCHPOINT_UPDATED, .CATCHPOINT_UPDATED,

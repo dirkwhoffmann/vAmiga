@@ -384,12 +384,14 @@ enum_i8(EventID)
     INS_EVENT_COUNT
 };
 
+/*
 static inline bool isRegEvent(EventID id) { return id < REG_EVENT_COUNT; }
 static inline bool isCiaEvent(EventID id) { return id < CIA_EVENT_COUNT; }
 static inline bool isBplEvent(EventID id) { return id < BPL_EVENT_COUNT; }
 static inline bool isDasEvent(EventID id) { return id < DAS_EVENT_COUNT; }
 static inline bool isCopEvent(EventID id) { return id < COP_EVENT_COUNT; }
 static inline bool isBltEvent(EventID id) { return id < BLT_EVENT_COUNT; }
+*/
 
 static inline bool isBplxEvent(EventID id, int x)
 {

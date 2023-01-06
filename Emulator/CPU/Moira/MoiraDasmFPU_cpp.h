@@ -12,7 +12,7 @@
 template <Instr I, Mode M, Size S> void
 Moira::dasmFGen(StrWriter &str, u32 &addr, u16 op) const
 {
-    auto ext  = dasmRead<Word>(addr);
+    auto ext  = dasmIncRead<Word>(addr);
     auto cod  = xxx_____________(ext);
     auto cmd  = _________xxxxxxx(ext);
     addr -= 2;
@@ -128,7 +128,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmFBcc(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
-    auto ext = dasmRead<S>(addr);
+    auto ext = dasmIncRead<S>(addr);
     auto cnd = ___________xxxxx (op);
 
     // Check for special FNOP opcode
@@ -152,7 +152,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmFDbcc(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
-    auto ext = dasmRead(addr);
+    auto ext = dasmIncRead(addr);
     auto src = _____________xxx (op);
     auto cnd = ___________xxxxx (ext);
 
@@ -165,7 +165,7 @@ Moira::dasmFDbcc(StrWriter &str, u32 &addr, u16 op) const
     }
 
     auto dst = addr + 2;
-    U32_INC(dst, SEXT<S>(dasmRead<S>(addr)));
+    U32_INC(dst, SEXT<S>(dasmIncRead<S>(addr)));
 
     str << Ins<I>{} << Fcc{cnd} << str.tab << Dn{src} << Sep{} << UInt(dst);
 }
@@ -197,7 +197,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmFScc(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
-    auto ext = dasmRead(addr);
+    auto ext = dasmIncRead(addr);
     auto reg = _____________xxx (op);
     auto cnd = __________xxxxxx (ext);
 
@@ -216,7 +216,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmFTrapcc(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
-    auto ext = dasmRead(addr);
+    auto ext = dasmIncRead(addr);
     auto cnd = __________xxxxxx (ext);
 
     // Catch illegal extension words
@@ -237,7 +237,7 @@ Moira::dasmFTrapcc(StrWriter &str, u32 &addr, u16 op) const
         case Word:
         case Long:
 
-            str << Ins<I>{} << Fcc{cnd} << Sz<S>{} << str.tab << Ims<S>(dasmRead<S>(addr));
+            str << Ins<I>{} << Fcc{cnd} << Sz<S>{} << str.tab << Ims<S>(dasmIncRead<S>(addr));
             break;
     }
 }
@@ -245,7 +245,7 @@ Moira::dasmFTrapcc(StrWriter &str, u32 &addr, u16 op) const
 template <Instr I, Mode M, Size S> void
 Moira::dasmFGeneric(StrWriter &str, u32 &addr, u16 op) const
 {
-    auto ext = dasmRead(addr);
+    auto ext = dasmIncRead(addr);
     auto reg = _____________xxx (op);
     auto src = ___xxx__________ (ext);
     auto dst = ______xxx_______ (ext);
@@ -260,34 +260,34 @@ Moira::dasmFGeneric(StrWriter &str, u32 &addr, u16 op) const
 
                 case 0: // Long-Word Integer
 
-                    val = dasmRead<Long>(addr);
+                    val = dasmIncRead<Long>(addr);
                     str << Ins<I>{} << Ffmt{src} << str.tab << Ims<Long>(u32(val));
                     break;
 
                 case 1: // Single precision
 
-                    val = dasmRead<Long>(addr);
+                    val = dasmIncRead<Long>(addr);
                     str << Ins<I>{} << Ffmt{src} << str.tab << "#<fixme>";
                     break;
 
                 case 2: // Double precision
                 case 3: // Packed-Decimal Real
 
-                    val = dasmRead<Long>(addr);
-                    dasmRead<Long>(addr);
-                    dasmRead<Long>(addr); // Why???
+                    val = dasmIncRead<Long>(addr);
+                    dasmIncRead<Long>(addr);
+                    dasmIncRead<Long>(addr); // Why???
                     str << Ins<I>{} << Ffmt{src} << str.tab << "#<fixme>";
                     break;
 
                 case 5: // Double-precision real
 
-                    val = dasmRead<Long>(addr);
-                    dasmRead<Long>(addr);
+                    val = dasmIncRead<Long>(addr);
+                    dasmIncRead<Long>(addr);
                     str << Ins<I>{} << Ffmt{src} << str.tab << "#<fixme>";
                     break;
 
                 case 6: // Byte Integer
-                    val = dasmRead<Word>(addr);
+                    val = dasmIncRead<Word>(addr);
                     str << Ins<I>{} << Ffmt{src} << str.tab << Ims<Byte>(u32(val));
                     break;
 
@@ -308,7 +308,7 @@ Moira::dasmFGeneric(StrWriter &str, u32 &addr, u16 op) const
 template <Instr I, Mode M, Size S> void
 Moira::dasmFGeneric2(StrWriter &str, u32 &addr, u16 op) const
 {
-    auto ext = dasmRead(addr);
+    auto ext = dasmIncRead(addr);
     auto reg = _____________xxx (op);
     auto src = ___xxx__________ (ext);
     auto dst = ______xxx_______ (ext);
@@ -326,35 +326,35 @@ Moira::dasmFGeneric2(StrWriter &str, u32 &addr, u16 op) const
 
                 case 0: // Long-Word Integer
 
-                    val = dasmRead<Long>(addr);
+                    val = dasmIncRead<Long>(addr);
                     str << Ims<Long>(u32(val));
                     break;
 
                 case 1: // Single precision
 
-                    val = dasmRead<Long>(addr);
+                    val = dasmIncRead<Long>(addr);
                     str << "#<fixme>";
                     break;
 
                 case 2: // Double precision
                 case 3: // Packed-Decimal Real
 
-                    val = dasmRead<Long>(addr);
-                    dasmRead<Long>(addr);
-                    dasmRead<Long>(addr); // Why???
+                    val = dasmIncRead<Long>(addr);
+                    dasmIncRead<Long>(addr);
+                    dasmIncRead<Long>(addr); // Why???
                     str << "#<fixme>";
                     break;
 
                 case 5: // Double-precision real
 
-                    val = dasmRead<Long>(addr);
-                    dasmRead<Long>(addr);
+                    val = dasmIncRead<Long>(addr);
+                    dasmIncRead<Long>(addr);
                     str << "#<fixme>";
                     break;
 
                 case 6: // Byte Integer
 
-                    val = dasmRead<Word>(addr);
+                    val = dasmIncRead<Word>(addr);
                     str << Ims<Byte>(u32(val));
                     break;
 
@@ -375,7 +375,7 @@ Moira::dasmFGeneric2(StrWriter &str, u32 &addr, u16 op) const
 template <Instr I, Mode M, Size S> void
 Moira::dasmFGeneric3(StrWriter &str, u32 &addr, u16 op) const
 {
-    auto ext = dasmRead(addr);
+    auto ext = dasmIncRead(addr);
     auto reg = _____________xxx (op);
     auto src = ___xxx__________ (ext);
 
@@ -389,35 +389,35 @@ Moira::dasmFGeneric3(StrWriter &str, u32 &addr, u16 op) const
 
                 case 0: // Long-Word Integer
 
-                    val = dasmRead<Long>(addr);
+                    val = dasmIncRead<Long>(addr);
                     str << Ins<I>{} << Ffmt{src} << str.tab << Ims<Long>(u32(val));
                     break;
 
                 case 1: // Single precision
 
-                    val = dasmRead<Long>(addr);
+                    val = dasmIncRead<Long>(addr);
                     str << Ins<I>{} << Ffmt{src} << str.tab << "#<fixme>";
                     break;
 
                 case 2: // Double precision
                 case 3: // Packed-Decimal Real
 
-                    val = dasmRead<Long>(addr);
-                    dasmRead<Long>(addr);
-                    dasmRead<Long>(addr); // Why???
+                    val = dasmIncRead<Long>(addr);
+                    dasmIncRead<Long>(addr);
+                    dasmIncRead<Long>(addr); // Why???
                     str << Ins<I>{} << Ffmt{src} << str.tab << "#<fixme>";
                     break;
 
                 case 5: // Double-precision real
 
-                    val = dasmRead<Long>(addr);
-                    dasmRead<Long>(addr);
+                    val = dasmIncRead<Long>(addr);
+                    dasmIncRead<Long>(addr);
                     str << Ins<I>{} << Ffmt{src} << str.tab << "#<fixme>";
                     break;
 
                 case 6: // Byte Integer
 
-                    val = dasmRead<Word>(addr);
+                    val = dasmIncRead<Word>(addr);
                     str << Ins<I>{} << Ffmt{src} << str.tab << Ims<Byte>(u32(val));
                     break;
 
@@ -437,7 +437,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmFMove(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
-    auto ext = dasmRead(addr);
+    auto ext = dasmIncRead(addr);
     auto reg = _____________xxx (op);
     auto cod = xxx_____________ (ext);
     auto src = ___xxx__________ (ext);
@@ -479,34 +479,34 @@ Moira::dasmFMove(StrWriter &str, u32 &addr, u16 op) const
                 switch (src) {
 
                     case 0: // Long-Word Integer
-                        val = dasmRead<Long>(addr);
+                        val = dasmIncRead<Long>(addr);
                         str << str.tab << Ims<Long>(u32(val)) << Sep{} << Fp(dst);
                         break;
 
                     case 1: // Single precision
 
-                        val = dasmRead<Long>(addr);
+                        val = dasmIncRead<Long>(addr);
                         str << str.tab << "#<fixme>" << Sep{} << Fp(dst);
                         break;
 
                     case 2: // Double precision
                     case 3: // Packed-Decimal Real
 
-                        val = dasmRead<Long>(addr);
-                        dasmRead<Long>(addr);
-                        dasmRead<Long>(addr); // Why???
+                        val = dasmIncRead<Long>(addr);
+                        dasmIncRead<Long>(addr);
+                        dasmIncRead<Long>(addr); // Why???
                         str << str.tab << "#<fixme>" << Sep{} << Fp(dst);
                         break;
 
                     case 5: // Double-precision real
 
-                        val = dasmRead<Long>(addr);
-                        dasmRead<Long>(addr);
+                        val = dasmIncRead<Long>(addr);
+                        dasmIncRead<Long>(addr);
                         str << str.tab << "#<fixme>" << Sep{} << Fp(dst);
                         break;
 
                     case 6: // Byte Integer
-                        val = dasmRead<Word>(addr);
+                        val = dasmIncRead<Word>(addr);
                         str << str.tab << Ims<Byte>(u32(val)) << Sep{} << Fp(dst);
                         break;
 
@@ -547,7 +547,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmFMovecr(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
-    auto ext = dasmRead(addr);
+    auto ext = dasmIncRead(addr);
     auto dst = ______xxx_______ (ext);
     auto ofs = _________xxxxxxx (ext);
 
@@ -569,7 +569,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
-    auto ext = dasmRead(addr);
+    auto ext = dasmIncRead(addr);
     auto reg = _____________xxx (op);
     auto cod = xxx_____________ (ext);
     auto mod = ___xx___________ (ext);

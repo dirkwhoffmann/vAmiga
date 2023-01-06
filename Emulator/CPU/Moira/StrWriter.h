@@ -20,6 +20,7 @@ struct Int { i32 raw; Int(i32 v) : raw(v) { } };
 struct UInt { u32 raw; UInt(u32 v) : raw(v) { } };
 struct UInt8 { u8 raw; UInt8(u8 v) : raw(v) { } };
 struct UInt16 { u16 raw; UInt16(u16 v) : raw(v) { } };
+struct UInt24 { u32 raw; UInt24(u32 v) : raw(v) { } };
 struct UInt32 { u32 raw; UInt32(u32 v) : raw(v) { } };
 
 // Immediate operands
@@ -120,6 +121,7 @@ public:
     StrWriter& operator<<(UInt);
     StrWriter& operator<<(UInt8);
     StrWriter& operator<<(UInt16);
+    StrWriter& operator<<(UInt24);
     StrWriter& operator<<(UInt32);
 
     StrWriter& operator<<(Imu);

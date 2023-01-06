@@ -20,8 +20,8 @@ class MyApplication: NSApplication {
      *
      * Like for all other secondary keys (Control, Option, etc.), function
      * 'flagsChanged' is invoked when the Command key is pressed or released.
-     * However, this method is called too late in the command chain to intercept,
-     * i.e., menu actions will already be carried out.
+     * However, this method is called too late in the command chain to
+     * intercept, i.e., menu actions will already be carried out.
      *
      * The solution taken here is to override function sendEvent in the
      * Application class. This delegation function is called early enough in

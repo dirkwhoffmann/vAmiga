@@ -9,12 +9,12 @@
 
 #pragma once
 
-#include "AmigaComponent.h"
+#include "CoreComponent.h"
 #include "IOUtils.h"
 
 namespace vamiga {
 
-class Defaults : public AmigaObject {
+class Defaults : public CoreObject {
 
     mutable util::ReentrantMutex mutex;
     
@@ -37,7 +37,7 @@ public:
     
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
 
 private:

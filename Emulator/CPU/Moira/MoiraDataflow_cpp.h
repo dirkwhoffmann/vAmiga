@@ -605,9 +605,11 @@ Moira::jumpToVector(int nr)
     // Check for address error
     if (misaligned<C>(reg.pc)) {
 
-        assert(nr != 3);
-
-        if (C == C68000) {
+        if (nr == 3) {
+            
+            throw DoubleFault();
+            
+        } else if (C == C68000) {
 
             throw AddressError(makeFrame<F|AE_PROG>(reg.pc, vectorAddr));
 

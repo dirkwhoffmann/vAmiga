@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 # Set the project name
 project(vAmigaCore)
 
+# Enable testing
+enable_testing()
+
 # Specify the C++ standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -13,7 +16,7 @@ if(NOT CMAKE_BUILD_TYPE)
 #  set(CMAKE_BUILD_TYPE Release)
 endif()
 
-# Add emulator library
+# Add the emulator library
 add_library(vAmigaCore Amiga.cpp)
 
 # Add the console app (vAmiga Headless)
@@ -105,3 +108,6 @@ add_subdirectory(CPU/Moira/softfloat)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 target_link_libraries(vAmigaCore xdms softfloat Threads::Threads)
+
+# Add tests
+add_test(NAME SelfTest COMMAND vAmigaConsole --selftest)

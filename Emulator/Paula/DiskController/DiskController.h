@@ -102,7 +102,7 @@ public:
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -176,7 +176,7 @@ public:
     
 public:
     
-    DiskControllerInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    DiskControllerInfo getInfo() const { return CoreComponent::getInfo(info); }
 
 
     //

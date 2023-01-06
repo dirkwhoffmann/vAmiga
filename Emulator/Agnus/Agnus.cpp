@@ -15,7 +15,7 @@ namespace vamiga {
 
 Agnus::Agnus(Amiga& ref) : SubComponent(ref)
 {    
-    subComponents = std::vector<AmigaComponent *> {
+    subComponents = std::vector<CoreComponent *> {
         
         &sequencer,
         &copper,
@@ -150,9 +150,6 @@ Agnus::setVideoFormat(VideoFormat newFormat)
     
     // Clear frame buffers
     denise.pixelEngine.clearAll();
-
-    // Let the audio engine know about the speed change
-    paula.muxer.adjustSpeed();
 
     // Inform the GUI
     msgQueue.put(MSG_VIDEO_FORMAT, newFormat);

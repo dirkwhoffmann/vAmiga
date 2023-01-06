@@ -807,16 +807,16 @@ extension Inspector: NSTabViewDelegate {
 
             switch id {
 
-            case "CPU":     parent?.amiga.inspectionTarget = .CPU
-            case "CIA":     parent?.amiga.inspectionTarget = .CIA
-            case "Memory":  parent?.amiga.inspectionTarget = .MEM
-            case "Agnus":   parent?.amiga.inspectionTarget = .AGNUS
-            case "Copper":  parent?.amiga.inspectionTarget = .AGNUS
-            case "Blitter": parent?.amiga.inspectionTarget = .AGNUS
-            case "Denise":  parent?.amiga.inspectionTarget = .DENISE
-            case "Paula":   parent?.amiga.inspectionTarget = .PAULA
-            case "Ports":   parent?.amiga.inspectionTarget = .PORTS
-            case "Events":  parent?.amiga.inspectionTarget = .EVENTS
+            case "CPU":     amiga.inspectionTarget = .CPU
+            case "CIA":     amiga.inspectionTarget = .CIA
+            case "Memory":  amiga.inspectionTarget = .MEM
+            case "Agnus":   amiga.inspectionTarget = .AGNUS
+            case "Copper":  amiga.inspectionTarget = .AGNUS
+            case "Blitter": amiga.inspectionTarget = .AGNUS
+            case "Denise":  amiga.inspectionTarget = .DENISE
+            case "Paula":   amiga.inspectionTarget = .PAULA
+            case "Ports":   amiga.inspectionTarget = .PORTS
+            case "Events":  amiga.inspectionTarget = .EVENTS
             default:        break
             }
             

@@ -10,7 +10,7 @@
 template <Instr I, Mode M, Size S> void
 Moira::dasmPGen(StrWriter &str, u32 &addr, u16 op) const
 {
-    auto ext = dasmRead<Word>(addr);
+    auto ext = dasmIncRead<Word>(addr);
     addr -= 2;
 
     // PLOAD: 0010 00x0 000x xxxx
@@ -55,7 +55,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmPFlush(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old  = addr;
-    auto ext  = dasmRead<Word>(addr);
+    auto ext  = dasmIncRead<Word>(addr);
     auto reg  = _____________xxx (op);
     auto mode = ___xxx__________ (ext);
     auto mask = _______xxxx_____ (ext);
@@ -84,7 +84,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmPFlusha(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
-    auto ext = dasmRead<Word>(addr);
+    auto ext = dasmIncRead<Word>(addr);
 
     // Catch illegal extension words
     if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
@@ -119,7 +119,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmPLoad(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
-    auto ext = dasmRead<Word>(addr);
+    auto ext = dasmIncRead<Word>(addr);
     auto ea  = Op <M,S> ( _____________xxx(op), addr );
 
     // Catch illegal extension words
@@ -141,7 +141,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmPMove(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old  = addr;
-    auto ext  = dasmRead<Word>(addr);
+    auto ext  = dasmIncRead<Word>(addr);
     auto reg  = _____________xxx (op);
     auto fmt  = xxx_____________ (ext);
     auto preg = ___xxx__________ (ext);
@@ -223,7 +223,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmPTest(StrWriter &str, u32 &addr, u16 op) const
 {
     auto old = addr;
-    auto ext = dasmRead<Word>(addr);
+    auto ext = dasmIncRead<Word>(addr);
     auto reg = _____________xxx (op);
     auto lev = ___xxx__________ (ext);
     auto rw  = ______x_________ (ext);

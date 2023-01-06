@@ -646,13 +646,15 @@ Agnus::_dump(Category category, std::ostream& os) const
     }
     
     if (category == Category::Events) {
+
+        inspect();
         
         os << std::left << std::setw(10) << "Slot";
         os << std::left << std::setw(14) << "Event";
         os << std::left << std::setw(18) << "Trigger position";
         os << std::left << std::setw(16) << "Trigger cycle" << std::endl;
         
-        for (isize i = 0; i < 23; i++) {
+        for (isize i = 0; i < SLOT_COUNT; i++) {
             
             EventSlotInfo &info = slotInfo[i];
             
@@ -762,7 +764,7 @@ Agnus::inspectSlot(EventSlot nr) const
     info.hpos = beam.h;
     info.frameRel = long(beam.frame - pos.frame);
 
-    info.eventName = agnus.eventName((EventSlot)nr, id[nr]);
+    info.eventName = eventName((EventSlot)nr, id[nr]);
 }
 
 EventSlotInfo

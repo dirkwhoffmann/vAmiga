@@ -1292,7 +1292,8 @@ extension Configuration {
 
         amiga.suspend()
 
-        defaults.set(.VSYNC, vsync)
+        defaults.set(.SYNC_MODE, syncMode)
+        defaults.set(.PROPOSED_FPS, proposedFps)
 
         saveColorUserDefaults()
         saveGeometryUserDefaults()

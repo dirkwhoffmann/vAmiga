@@ -19,7 +19,7 @@ namespace vamiga {
 
 Copper::Copper(Amiga& ref) : SubComponent(ref)
 {
-    subComponents = std::vector<AmigaComponent *> {
+    subComponents = std::vector<CoreComponent *> {
         
         &debugger
     };

@@ -34,14 +34,11 @@ protected:
     // Instruction set used by the disassembler
     Model dasmModel = M68000;
 
-    // Disassembler styleh
-    DasmStyle style = {
+    // Visual style for disassembled instructions
+    DasmStyle instrStyle;
 
-        .syntax         = DASM_MOIRA,
-        .letterCase     = DASM_MIXED_CASE,
-        .numberFormat   = { .prefix = "$", .radix = 16 },
-        .tab            = 8
-    };
+    // Visual style for data dumps
+    DasmStyle dataStyle;
 
 
     //
@@ -153,11 +150,19 @@ public:
     void setModel(Model cpuModel, Model dasmModel);
     void setModel(Model model) { setModel(model, model); }
 
-    // Configures the disassembler
+    // Configures the visual appearance of disassembled instructions
     void setDasmSyntax(DasmSyntax value);
-    void setDasmNumberFormat(DasmNumberFormat value);
+    void setDasmNumberFormat(DasmNumberFormat value) { setNumberFormat(instrStyle, value); }
     void setDasmLetterCase(DasmLetterCase value);
-    void setDasmIndentation(int value);
+    void setDasmIndentation(int value) { instrStyle.tab = value; }
+
+    // Configures the visual appearance of data dumps
+    void setDumpNumberFormat(DasmNumberFormat value) { setNumberFormat(instrStyle, value); }
+    void setDumpIndentation(int value) { dataStyle.tab = value; }
+
+private:
+
+    void setNumberFormat(DasmStyle &style, const DasmNumberFormat &value);
 
 
     //
@@ -225,21 +230,21 @@ private:
 public:
 
     // Disassembles a single instruction and returns the instruction size
-    int disassemble(u32 addr, char *str) const;
+    int disassemble(char *str, u32 addr) const;
 
-    // Returns a textual representation for a single word
-    void disassembleWord(u32 value, char *str) const;
+    // Creates a textual representation for the status register
+    void disassembleSR(char *str) const { disassembleSR(str, reg.sr); }
+    void disassembleSR(char *str, const StatusRegister &sr) const;
 
-    // Returns a textual representation for one or more words from memory
-    void disassembleMemory(u32 addr, int cnt, char *str) const;
+    // Creates a textual representation for a single data value
+    void dump8(char *str, u8 value) const;
+    void dump16(char *str, u16 value) const;
+    void dump24(char *str, u32 value) const;
+    void dump32(char *str, u32 value) const;
 
-    // Returns a textual representation for the program counter
-    void disassemblePC(char *str) const { disassemblePC(reg.pc, str); }
-    void disassemblePC(u32 pc, char *str) const;
-
-    // Returns a textual representation for the status register
-    void disassembleSR(char *str) const { disassembleSR(reg.sr, str); }
-    void disassembleSR(const StatusRegister &sr, char *str) const;
+    // Creates a textual representation for multiple data values
+    void dump16(char *str, u16 values[], isize cnt) const;
+    void dump16(char *str, u32 addr, isize cnt) const;
 
     // Return an info struct for a certain opcode
     InstrInfo getInfo(u16 op) const;

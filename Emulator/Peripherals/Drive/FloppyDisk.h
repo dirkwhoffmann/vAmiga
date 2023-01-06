@@ -10,7 +10,7 @@
 #pragma once
 
 #include "FloppyDiskTypes.h"
-#include "AmigaComponent.h"
+#include "CoreComponent.h"
 
 namespace vamiga {
 
@@ -51,7 +51,7 @@ class FloppyFile;
  *    - a disk usually occupies 84 * 2 * 12.664 =  2.127.552 MFM bytes
  */
 
-class FloppyDisk : public AmigaObject {
+class FloppyDisk : public CoreObject {
     
     friend class FloppyDrive;
     friend class ADFFile;
@@ -113,7 +113,7 @@ private:
     
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -224,7 +224,10 @@ public:
     
     // Encodes a disk
     void encodeDisk(const class FloppyFile &file);
-    
+
+    // Shifts the tracks agains each other
+    void shiftTracks(isize offset);
+
     
     //
     // Working with MFM encoded data streams

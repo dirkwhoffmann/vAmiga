@@ -340,8 +340,8 @@ ADFFile::encodeSector(FloppyDisk &disk, Track t, Sector s) const
     //     Data checksum       56      8     Odd/Even encoded
     
     // Determine the start of this sector
-    u8 *p = disk.data.track[t] + 700 + (s * 1088);
-    
+    u8 *p = disk.data.track[t] + (s * 1088);
+
     // Bytes before SYNC
     p[0] = (p[-1] & 1) ? 0x2A : 0xAA;
     p[1] = 0xAA;

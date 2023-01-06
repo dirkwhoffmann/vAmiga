@@ -80,7 +80,7 @@ public:
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -90,7 +90,7 @@ private:
 
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
     
 private:
@@ -130,7 +130,7 @@ private:
     
 public:
     
-    TODInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    TODInfo getInfo() const { return CoreComponent::getInfo(info); }
 
     void _inspect() const override;
 

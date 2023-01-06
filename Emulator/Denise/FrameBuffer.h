@@ -37,10 +37,18 @@ struct FrameBuffer {
     static constexpr Texel hblank   = grey4;    // HBLANK area
     static constexpr Texel cb1      = grey2;    // Checkerboard color 1
     static constexpr Texel cb2      = grey4;    // Checkerboard color 2
-    
-    Buffer <Texel> pixels;
+
+    // Frame number
     i64 nr;
-    bool longFrame;
+
+    // Pixel buffer
+    Buffer <Texel> pixels;
+
+    // The long-frame bit of this frame
+    bool lof;
+
+    // The long-frame bit of the previous frame
+    bool prevlof;
 
     FrameBuffer();
 

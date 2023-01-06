@@ -79,7 +79,7 @@ public class MacAudio: NSObject {
 
         // Register render callback
         if stereo {
-            audiounit.outputProvider = { ( // AURenderPullInputBlock
+            audiounit.outputProvider = { (
                 actionFlags,
                 timestamp,
                 frameCount,
@@ -90,7 +90,7 @@ public class MacAudio: NSObject {
                 return 0
             }
         } else {
-            audiounit.outputProvider = { ( // AURenderPullInputBlock
+            audiounit.outputProvider = { (
                 actionFlags,
                 timestamp,
                 frameCount,

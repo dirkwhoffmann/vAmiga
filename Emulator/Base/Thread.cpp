@@ -26,7 +26,7 @@ Thread::~Thread()
 }
 
 template <> void
-Thread::execute<Thread::SyncMode::Periodic>()
+Thread::execute<Thread::ThreadMode::Periodic>()
 {
     loadClock.go();
     execute();
@@ -34,7 +34,7 @@ Thread::execute<Thread::SyncMode::Periodic>()
 }
 
 template <> void
-Thread::execute<Thread::SyncMode::Pulsed>()
+Thread::execute<Thread::ThreadMode::Pulsed>()
 {
     loadClock.go();
     execute();
@@ -43,7 +43,7 @@ Thread::execute<Thread::SyncMode::Pulsed>()
 }
 
 template <> void
-Thread::sleep<Thread::SyncMode::Periodic>()
+Thread::sleep<Thread::ThreadMode::Periodic>()
 {
     auto now = util::Time::now();
 
@@ -82,7 +82,7 @@ Thread::sleep<Thread::SyncMode::Periodic>()
 }
 
 template <> void
-Thread::sleep<Thread::SyncMode::Pulsed>()
+Thread::sleep<Thread::ThreadMode::Pulsed>()
 {
     // Set a timeout to prevent the thread from stalling
     auto timeout = util::Time(i64(2000000000.0 / refreshRate()));
@@ -100,33 +100,33 @@ Thread::main()
 
         if (isRunning()) {
 
-            switch (getSyncMode()) {
+            switch (getThreadMode()) {
 
-                case SyncMode::Periodic: execute<SyncMode::Periodic>(); break;
-                case SyncMode::Pulsed: execute<SyncMode::Pulsed>(); break;
+                case ThreadMode::Periodic: execute<ThreadMode::Periodic>(); break;
+                case ThreadMode::Pulsed: execute<ThreadMode::Pulsed>(); break;
             }
         }
 
         if (!warpMode || !isRunning()) {
             
-            switch (getSyncMode()) {
+            switch (getThreadMode()) {
 
-                case SyncMode::Periodic: sleep<SyncMode::Periodic>(); break;
-                case SyncMode::Pulsed: sleep<SyncMode::Pulsed>(); break;
+                case ThreadMode::Periodic: sleep<ThreadMode::Periodic>(); break;
+                case ThreadMode::Pulsed: sleep<ThreadMode::Pulsed>(); break;
             }
         }
         
         // Are we requested to enter or exit warp mode?
         if (newWarpMode != warpMode) {
             
-            AmigaComponent::warpOnOff(newWarpMode);
+            CoreComponent::warpOnOff(newWarpMode);
             warpMode = newWarpMode;
         }
 
         // Are we requested to enter or exit warp mode?
         if (newDebugMode != debugMode) {
             
-            AmigaComponent::debugOnOff(newDebugMode);
+            CoreComponent::debugOnOff(newDebugMode);
             debugMode = newDebugMode;
         }
 
@@ -135,33 +135,33 @@ Thread::main()
             
             if (state == EXEC_OFF && newState == EXEC_PAUSED) {
                 
-                AmigaComponent::powerOn();
+                CoreComponent::powerOn();
                 state = EXEC_PAUSED;
 
             } else if (state == EXEC_OFF && newState == EXEC_RUNNING) {
 
-                AmigaComponent::powerOn();
+                CoreComponent::powerOn();
                 state = EXEC_PAUSED;
 
             } else if (state == EXEC_PAUSED && newState == EXEC_OFF) {
                 
-                AmigaComponent::powerOff();
+                CoreComponent::powerOff();
                 state = EXEC_OFF;
 
             } else if (state == EXEC_PAUSED && newState == EXEC_RUNNING) {
                 
-                AmigaComponent::run();
+                CoreComponent::run();
                 state = EXEC_RUNNING;
 
             } else if (state == EXEC_RUNNING && newState == EXEC_OFF) {
                 
                 state = EXEC_PAUSED;
-                AmigaComponent::pause();
+                CoreComponent::pause();
 
             } else if (state == EXEC_RUNNING && newState == EXEC_PAUSED) {
                 
                 state = EXEC_PAUSED;
-                AmigaComponent::pause();
+                CoreComponent::pause();
 
             } else if (state == EXEC_RUNNING && newState == EXEC_SUSPENDED) {
                 
@@ -173,7 +173,7 @@ Thread::main()
 
             } else if (newState == EXEC_HALTED) {
                 
-                AmigaComponent::halt();
+                CoreComponent::halt();
                 state = EXEC_HALTED;
                 return;
 
@@ -327,7 +327,7 @@ Thread::changeDebugTo(u8 value, bool blocking)
 void
 Thread::wakeUp()
 {
-    if (getSyncMode() == SyncMode::Pulsed) util::Wakeable::wakeUp();
+    if (getThreadMode() == ThreadMode::Pulsed) util::Wakeable::wakeUp();
 }
 
 void

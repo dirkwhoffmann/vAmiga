@@ -9,7 +9,6 @@
 
 import Carbon.HIToolbox
 
-// Keyboard event handler
 class KeyboardController: NSObject {
 
     // var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }

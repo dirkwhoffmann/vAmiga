@@ -33,7 +33,7 @@ class HardDrive;
  *
  * See also: MutableFileSystem
  */
-class FileSystem : public AmigaObject {
+class FileSystem : public CoreObject {
     
     friend struct FSBlock;
     friend struct FSHashTable;
@@ -89,7 +89,7 @@ protected:
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 protected:

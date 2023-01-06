@@ -33,6 +33,22 @@ Moira::Moira(Amiga &ref) : SubComponent(ref)
     if (ENABLE_DASM) dasm = new DasmPtr[65536];
 
     createJumpTable(cpuModel, dasmModel);
+
+    instrStyle = DasmStyle {
+
+        .syntax         = DASM_MOIRA,
+        .letterCase     = DASM_MIXED_CASE,
+        .numberFormat   = { .prefix = "$", .radix = 16, .upperCase = false, .plainZero = false },
+        .tab            = 8
+    };
+
+    dataStyle = DasmStyle {
+
+        .syntax         = DASM_MOIRA,
+        .letterCase     = DASM_MIXED_CASE,
+        .numberFormat   = { .prefix = "", .radix = 16, .upperCase = false, .plainZero = false },
+        .tab            = 1
+    };
 }
 
 Moira::~Moira()
@@ -59,32 +75,29 @@ Moira::setModel(Model cpuModel, Model dasmModel)
 void
 Moira::setDasmSyntax(DasmSyntax value)
 {
-    style.syntax = value;
-}
-
-void
-Moira::setDasmNumberFormat(DasmNumberFormat value)
-{
-    if (value.prefix == nullptr) {
-        throw std::runtime_error("prefix must not be NULL");
-    }
-    if (value.radix != 10 && value.radix != 16) {
-        throw std::runtime_error("Invalid radix: " + std::to_string(value.radix));
-    }
-
-    style.numberFormat = value;
+    instrStyle.syntax = value;
 }
 
 void
 Moira::setDasmLetterCase(DasmLetterCase value)
 {
-    style.letterCase = value;
+    instrStyle.letterCase = value;
 }
 
 void
-Moira::setDasmIndentation(int value)
+Moira::setNumberFormat(DasmStyle &style, const DasmNumberFormat &value)
 {
-    style.tab = value;
+    auto validPrefix = [&](DasmNumberFormat fmt) { return fmt.prefix != nullptr; };
+    auto validRadix = [&](DasmNumberFormat fmt) { return fmt.radix == 10 || fmt.radix == 16; };
+
+    if (!validPrefix(value)) {
+        throw std::runtime_error("prefix must not be NULL");
+    }
+    if (!validRadix(value)) {
+        throw std::runtime_error("radix must be 10 or 16");
+    }
+
+    style.numberFormat = value;
 }
 
 bool
@@ -344,22 +357,29 @@ Moira::processException(const std::exception &exc)
 template <Core C> void
 Moira::processException(const std::exception &exc)
 {
-    auto ae = dynamic_cast<const AddressError *>(&exc);
-    if (ae) {
+    try {
 
-        execAddressError<C>(ae->stackFrame);
-        return;
-    }
+        auto ae = dynamic_cast<const AddressError *>(&exc);
+        if (ae) {
 
-    auto be = dynamic_cast<const BusErrorException *>(&exc);
-    if (be) {
+            execAddressError<C>(ae->stackFrame);
+            return;
+        }
 
-        execException(EXC_BUS_ERROR);
-        return;
-    }
+        auto be = dynamic_cast<const BusErrorException *>(&exc);
+        if (be) {
 
-    auto df = dynamic_cast<const DoubleFault *>(&exc);
-    if (df) {
+            execException(EXC_BUS_ERROR);
+            return;
+        }
+
+        auto df = dynamic_cast<const DoubleFault *>(&exc);
+        if (df) {
+
+            throw df;
+        }
+
+    } catch (DoubleFault & df) {
 
         halt();
         return;

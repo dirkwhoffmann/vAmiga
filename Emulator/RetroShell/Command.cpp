@@ -10,6 +10,7 @@
 #include "config.h"
 #include "Command.h"
 #include <algorithm>
+#include <utility>
 
 namespace vamiga {
 
@@ -31,18 +32,18 @@ Command::add(const std::vector<string> &tokens,
 void
 Command::add(const std::vector<string> &tokens,
              const string &help,
-             void (RetroShell::*action)(Arguments&, long), long param)
+             std::function<void (Arguments&, long)> func, long param)
 {
-    add(tokens, { }, { }, help, action, param);
+    add(tokens, { }, { }, help, func, param);
 }
 
 void
 Command::add(const std::vector<string> &tokens,
              const std::vector<string> &arguments,
              const string &help,
-             void (RetroShell::*action)(Arguments&, long), long param)
+             std::function<void (Arguments&, long)> func, long param)
 {
-    add(tokens, arguments, { }, help, action, param);
+    add(tokens, arguments, { }, help, func, param);
 }
 
 void
@@ -50,51 +51,32 @@ Command::add(const std::vector<string> &tokens,
              const std::vector<string> &requiredArgs,
              const std::vector<string> &optionalArgs,
              const string &help,
-             void (RetroShell::*action)(Arguments&, long), long param)
+             std::function<void (Arguments&, long)> func, long param)
 {
     assert(!tokens.empty());
-    
+
     // Traverse the node tree
     Command *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() - 1 });
     assert(cmd != nullptr);
-
-    // Install the action handler in the parent node if this is no sub-command
-    if (tokens.back() == "") { cmd->action = action; cmd->param = param; }
 
     // Create the instruction
     Command d;
     d.name = tokens.back();
     d.fullName = (cmd->fullName.empty() ? "" : cmd->fullName + " ") + tokens.back();
-    d.group = groups.size() - 1;
+    d.group = isize(groups.size()) - 1;
     d.requiredArgs = requiredArgs;
     d.optionalArgs = optionalArgs;
     d.help = help;
-    d.action = action;
+    d.callback = func;
     d.param = param;
+    d.hidden = help.empty() || help.at(0) == '*';
 
     // Register the instruction
     cmd->subCommands.push_back(d);
 }
 
-void
-Command::hide(const std::vector<string> &tokens)
-{
-    Command *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() });
-    assert(cmd != nullptr);
-
-    cmd->hidden = true;
-}
-
-void
-Command::remove(const string& token)
-{
-    for(auto it = std::begin(subCommands); it != std::end(subCommands); ++it) {
-        if (it->name == token) { subCommands.erase(it); return; }
-    }
-}
-
-Command *
-Command::seek(const string& token)
+const Command *
+Command::seek(const string& token) const
 {
     for (auto &it : subCommands) {
         if (it.name == token) return &it;
@@ -103,15 +85,27 @@ Command::seek(const string& token)
 }
 
 Command *
-Command::seek(const std::vector<string> &tokens)
+Command::seek(const string& token)
 {
-    Command *result = this;
+    return const_cast<Command *>(std::as_const(*this).seek(token));
+}
+
+const Command *
+Command::seek(const std::vector<string> &tokens) const
+{
+    const Command *result = this;
     
     for (auto &it : tokens) {
         if ((result = result->seek(it)) == nullptr) break;
     }
     
     return result;
+}
+
+Command *
+Command::seek(const std::vector<string> &tokens)
+{
+    return const_cast<Command *>(std::as_const(*this).seek(tokens));
 }
 
 std::vector<const Command *>
@@ -189,7 +183,7 @@ Command::usage() const
         if (count > 1) {
             arguments = "{" + arguments + "}";
         }
-        if (action && arguments != "") {
+        if (seek("") && arguments != "") {
             arguments = "[ " + arguments + " ]";
         }
     }

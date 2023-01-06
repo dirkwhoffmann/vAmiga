@@ -21,8 +21,9 @@ namespace vamiga {
 class RetroShell : public SubComponent {
 
     friend class RshServer;
+    friend class Interpreter;
     
-    // Interpreter for commands typed into the console window
+    // The command interpreter (parses commands typed into the console window)
     Interpreter interpreter;
 
     
@@ -81,7 +82,7 @@ public:
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -91,7 +92,7 @@ private:
     
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
     
 private:
@@ -110,7 +111,14 @@ private:
     //
 
 public:
-    
+
+    // Prints a message
+    RetroShell &operator<<(char value);
+    RetroShell &operator<<(const string &value);
+    RetroShell &operator<<(int value);
+    RetroShell &operator<<(long value);
+    RetroShell &operator<<(std::stringstream &stream);
+
     // Returns the prompt
     const string &getPrompt();
 
@@ -123,21 +131,9 @@ public:
     // Moves the cursor forward to a certain column
     void tab(isize pos);
 
-    // Prints a message
-    RetroShell &operator<<(char value);
-    RetroShell &operator<<(const string &value);
-    RetroShell &operator<<(int value);
-    RetroShell &operator<<(long value);
-    RetroShell &operator<<(std::stringstream &stream);
-    
     // Assigns an additional output stream
     void setStream(std::ostream &os);
 
-private:
-    
-    // Marks the text storage as dirty
-    void needsDisplay();
-    
     // Clears the console window
     void clear();
 
@@ -147,8 +143,13 @@ private:
     // Prints the help line
     void printHelp();
 
-    // Prints a state summary (used by the debugger only)
+    // Prints a state summary (used by the debug shell)
     void printState();
+
+private:
+
+    // Marks the text storage as dirty
+    void needsDisplay();
 
     
     //
@@ -203,7 +204,7 @@ private:
     // Prints a textual description of an error in the console
     void describe(const std::exception &exception);
 
-    // Prints help messages for a given command string
+    // Prints a help message for a given command string
     void help(const string &command);
     
     
@@ -213,19 +214,10 @@ private:
     
 public:
     
-    template <Token t1>
-    void exec(Arguments& argv, long param) throws;
-    template <Token t1, Token t2>
-    void exec(Arguments& argv, long param) throws;
-    template <Token t1, Token t2, Token t3>
-    void exec(Arguments& argv, long param) throws;
-    template <Token t1, Token t2, Token t3, Token t4>
-    void exec(Arguments& argv, long param) throws;
-
-    void dump(AmigaObject &component, Category category);
-    void dumpConfig(AmigaObject &component);
-    void dumpSummary(AmigaObject &component);
-    void dumpDetails(AmigaObject &component);
+    void dump(CoreObject &component, Category category);
+    void dumpConfig(CoreObject &component);
+    void dumpInspection(CoreObject &component);
+    void dumpDebug(CoreObject &component);
 
     
     //

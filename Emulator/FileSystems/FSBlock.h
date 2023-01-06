@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "AmigaObject.h"
+#include "CoreObject.h"
 #include "FSTypes.h"
 #include "FSObjects.h"
 #include "Buffer.h"
@@ -21,7 +21,7 @@ using util::Buffer;
 
 namespace vamiga {
 
-struct FSBlock : AmigaObject {
+struct FSBlock : CoreObject {
 
     // The device this block belongs to
     class FileSystem &device;
@@ -49,7 +49,7 @@ struct FSBlock : AmigaObject {
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 protected:

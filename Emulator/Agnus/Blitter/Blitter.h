@@ -191,7 +191,7 @@ private:
     
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -201,7 +201,7 @@ private:
     
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
     
 private:
@@ -301,7 +301,7 @@ public:
     
 public:
     
-    BlitterInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    BlitterInfo getInfo() const { return CoreComponent::getInfo(info); }
     
     
     //

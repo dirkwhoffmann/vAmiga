@@ -85,7 +85,7 @@ public:
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -95,7 +95,7 @@ private:
 
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
     
 private:
@@ -149,7 +149,7 @@ private:
     
 public:
     
-    StateMachineInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    StateMachineInfo getInfo() const { return CoreComponent::getInfo(info); }
 
     
     //

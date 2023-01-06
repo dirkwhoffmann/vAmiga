@@ -68,14 +68,14 @@ using namespace vamiga::moira;
 @end
 
 //
-// AmigaComponent proxy
+// CoreComponent proxy
 //
 
-@implementation AmigaComponentProxy
+@implementation CoreComponentProxy
 
--(AmigaComponent *)component
+-(CoreComponent *)component
 {
-    return (AmigaComponent *)obj;
+    return (CoreComponent *)obj;
 }
 
 @end
@@ -328,6 +328,18 @@ using namespace vamiga::moira;
     return str ? @(str) : nullptr;
 }
 
+- (NSString *)disassembleWord:(NSInteger)value
+{
+    const char *str = [self cpu]->disassembleWord((u16)value);
+    return str ? @(str) : nullptr;
+}
+
+- (NSString *)disassembleAddr:(NSInteger)addr
+{
+    const char *str = [self cpu]->disassembleAddr((u32)addr);
+    return str ? @(str) : nullptr;
+}
+
 - (NSString *)disassembleInstr:(NSInteger)addr length:(NSInteger *)len
 {
     isize result;
@@ -340,12 +352,6 @@ using namespace vamiga::moira;
 - (NSString *)disassembleWords:(NSInteger)addr length:(NSInteger)len
 {
     const char *str = [self cpu]->disassembleWords((u32)addr, len);
-    return str ? @(str) : nullptr;
-}
-
-- (NSString *)disassembleAddr:(NSInteger)addr
-{
-    const char *str = [self cpu]->disassembleAddr((u32)addr);
     return str ? @(str) : nullptr;
 }
 
@@ -849,31 +855,18 @@ using namespace vamiga::moira;
     return [self denise]->debugger.getSpriteColor(nr, reg);
 }
 
-- (NSInteger)frameNr
-{
-    return [self denise]->pixelEngine.getStableBuffer().nr;
-}
-
-- (BOOL)longFrame
-{
-    return [self denise]->pixelEngine.getStableBuffer().longFrame;
-}
-
-- (u32 *)stableBuffer
-{
-    return (u32 *)([self denise]->pixelEngine.stablePtr());
-}
-
 - (u32 *)noise
 {
     return (u32 *)([self denise]->pixelEngine.getNoise());
 }
 
-- (void)getStableBuffer:(u32 **)ptr nr:(i64 *)nr
+- (void)getStableBuffer:(u32 **)ptr nr:(NSInteger *)nr lof:(bool *)lof prevlof:(bool *)prevlof
 {
     auto &frameBuffer = [self denise]->pixelEngine.getStableBuffer();
     *ptr = frameBuffer.pixels.ptr;
-    *nr = frameBuffer.nr;
+    *nr = NSInteger(frameBuffer.nr);
+    *lof = frameBuffer.lof;
+    *prevlof = frameBuffer.prevlof;
 }
 
 
@@ -1359,13 +1352,6 @@ using namespace vamiga::moira;
 {
     return [self drive]->currentOffset();
 }
-
-/*
-- (u64)fnv
-{
-    return [self drive]->fnv();
-}
-*/
 
 - (BOOL)hasDisk
 {
@@ -1945,6 +1931,11 @@ using namespace vamiga::moira;
     [self shell]->press(RSKEY_DEL);
 }
 
+- (void)pressCut
+{
+    [self shell]->press(RSKEY_CUT);
+}
+
 - (void)pressReturn
 {
     [self shell]->press(RSKEY_RETURN);
@@ -2042,7 +2033,7 @@ using namespace vamiga::moira;
 
 - (u64)fnv
 {
-    return [self file]->fnv();
+    return [self file]->fnv64();
 }
 
 - (void)setPath:(NSString *)path
@@ -2741,10 +2732,14 @@ using namespace vamiga::moira;
 {
     if (!(self = [super init]))
         return self;
-    
+
+    // Create the emulator instance
     Amiga *amiga = new Amiga();
     obj = amiga;
-    
+
+    // Launch the emulator thread
+    amiga->launch();
+
     // Create sub proxys
     agnus = [[AgnusProxy alloc] initWith:&amiga->agnus];
     blitter = [[BlitterProxy alloc] initWith:&amiga->agnus.blitter];
@@ -2836,11 +2831,6 @@ using namespace vamiga::moira;
     } else {
         [self amiga]->debugOff();
     }
-}
-
-- (NSInteger)masterFrequency
-{
-    return [self amiga]->masterClockFrequency();
 }
 
 - (NSInteger)cpuLoad

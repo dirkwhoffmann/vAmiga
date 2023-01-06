@@ -18,7 +18,7 @@ namespace vamiga {
 
 Denise::Denise(Amiga& ref) : SubComponent(ref)
 {    
-    subComponents = std::vector<AmigaComponent *> {
+    subComponents = std::vector<CoreComponent *> {
         
         &pixelEngine,
         &screenRecorder

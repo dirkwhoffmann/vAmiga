@@ -109,7 +109,7 @@ public:
     
     // Other Peripherals
     Keyboard keyboard = Keyboard(*this);
-    
+
     // Shortcuts
     FloppyDrive *df[4] = { &df0, &df1, &df2, &df3 };
     HardDrive *hd[4] = { &hd0, &hd1, &hd2, &hd3 };
@@ -172,9 +172,12 @@ public:
     Amiga();
     ~Amiga();
 
+    // Launches the emulator thread
+    void launch();
+
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 public:
@@ -188,7 +191,7 @@ private:
 
     
     //
-    // Methods from AmigaComponent
+    // Methods from CoreComponent
     //
     
 public:
@@ -217,7 +220,8 @@ private:
         worker
 
         << config.type
-        << config.vsync;
+        << config.syncMode
+        << config.proposedFps;
     }
 
     template <class T>
@@ -245,7 +249,7 @@ private:
     
 private:
     
-    SyncMode getSyncMode() const override;
+    ThreadMode getThreadMode() const override;
     void execute() override;
 
 public:
@@ -291,7 +295,7 @@ private:
     
 public:
     
-    AmigaInfo getInfo() const { return AmigaComponent::getInfo(info); }
+    AmigaInfo getInfo() const { return CoreComponent::getInfo(info); }
     
     InspectionTarget getInspectionTarget() const;
     void setInspectionTarget(InspectionTarget target, Cycle trigger = 0);

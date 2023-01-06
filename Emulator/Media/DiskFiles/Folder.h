@@ -35,7 +35,7 @@ private:
     
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 public:
@@ -50,7 +50,7 @@ public:
     bool isCompatiblePath(const string &path) const override { return isCompatible(path); }
     bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
     FileType type() const override { return FILETYPE_DIR; }
-    u64 fnv() const override { return adf->fnv(); }
+    u64 fnv64() const override { return adf->fnv64(); }
     
     
     //

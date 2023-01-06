@@ -11,6 +11,7 @@
 
 #include "Aliases.h"
 #include <vector>
+#include <functional>
 
 namespace vamiga {
 
@@ -50,22 +51,22 @@ struct Command {
     // List of required arguments
     std::vector<string> requiredArgs;
 
-    // List of additional optional arguments
+    // List of optional arguments
     std::vector<string> optionalArgs;
 
-    // Help string
+    // Help message for this command
     string help;
     
-    // List of sub-commands
+    // List of subcommands
     std::vector<Command> subCommands;
     
     // Command handler
-    void (RetroShell::*action)(Arguments&, long) = nullptr;
+    std::function<void (Arguments&, long)> callback = nullptr;
 
-    // Additional parameter passed to the command handler
+    // Additional argument passed to the command handler
     long param = 0;
     
-    // Indicates if this command appears in the help descriptions
+    // Indicates if this command appears in help descriptions
     bool hidden = false;
 
     
@@ -82,25 +83,18 @@ struct Command {
 
     void add(const std::vector<string> &tokens,
              const string &help,
-             void (RetroShell::*action)(Arguments&, long), long param = 0);
+             std::function<void (Arguments&, long)> func, long param = 0);
 
     void add(const std::vector<string> &tokens,
              const std::vector<string> &args,
              const string &help,
-             void (RetroShell::*action)(Arguments&, long), long param = 0);
-
+             std::function<void (Arguments&, long)> func, long param = 0);
 
     void add(const std::vector<string> &tokens,
              const std::vector<string> &requiredArgs,
              const std::vector<string> &optionalArgs,
              const string &help,
-             void (RetroShell::*action)(Arguments&, long), long param = 0);
-
-    // Marks a command as hidden
-    void hide(const std::vector<string> &tokens);
-
-    // Removes a registered command
-    void remove(const string& token);
+             std::function<void (Arguments&, long)> func, long param = 0);
 
     // Returns arguments counts
     isize minArgs() const { return isize(requiredArgs.size()); }
@@ -108,10 +102,12 @@ struct Command {
     isize maxArgs() const { return minArgs() + optArgs(); }
 
     // Seeks a command object inside the command object tree
+    const Command *seek(const string& token) const;
     Command *seek(const string& token);
+    const Command *seek(const std::vector<string> &tokens) const;
     Command *seek(const std::vector<string> &tokens);
-        
-    // Filters the argument list
+
+    // Filters the argument list (used by auto-completion)
     std::vector<const Command *> filterPrefix(const string& prefix) const;
 
     // Automatically completes a partial token string

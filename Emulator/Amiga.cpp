@@ -62,7 +62,7 @@ Amiga::Amiga()
      * - Memory must preceed the CPU, because it contains the CPU reset vector.
      */
     
-    subComponents = std::vector<AmigaComponent *> {
+    subComponents = std::vector<CoreComponent *> {
 
         &agnus,
         &rtc,
@@ -103,10 +103,7 @@ Amiga::Amiga()
 
     // Initialize the sync timer
     targetTime = util::Time::now();
-    
-    // Start the thread and enter the main function
-    thread = std::thread(&Thread::main, this);
-    
+
     // Print some debug information
     if constexpr (SNP_DEBUG) {
         
@@ -138,8 +135,18 @@ Amiga::Amiga()
 
 Amiga::~Amiga()
 {
-    debug(RUN_DEBUG, "Destroying Amiga\n");
+    debug(RUN_DEBUG, "Destroying emulator instance\n");
     if (thread.joinable()) { halt(); }
+}
+
+void
+Amiga::launch()
+{
+    if (!thread.joinable()) {
+
+        thread = std::thread(&Thread::main, this);
+        assert(thread.joinable());
+    }
 }
 
 void
@@ -180,7 +187,7 @@ Amiga::reset(bool hard)
     df3.serviceDiskChangeEvent <SLOT_DC3> ();
     
     // Execute the standard reset routine
-    AmigaComponent::reset(hard);
+    CoreComponent::reset(hard);
     
     if (!isEmulatorThread()) resume();
 
@@ -205,7 +212,8 @@ Amiga::resetConfig()
     std::vector <Option> options = {
 
         OPT_VIDEO_FORMAT,
-        OPT_VSYNC
+        OPT_SYNC_MODE,
+        OPT_PROPOSED_FPS
     };
 
     for (auto &option : options) {
@@ -222,9 +230,13 @@ Amiga::getConfigItem(Option option) const
 
             return config.type;
 
-        case OPT_VSYNC:
+        case OPT_SYNC_MODE:
 
-            return config.vsync;
+            return config.syncMode;
+
+        case OPT_PROPOSED_FPS:
+
+            return config.proposedFps;
 
         case OPT_AGNUS_REVISION:
         case OPT_SLOW_RAM_MIRROR:
@@ -397,6 +409,10 @@ Amiga::setConfigItem(Option option, i64 value)
 
         case OPT_VIDEO_FORMAT:
 
+            if (!VideoFormatEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, VideoFormatEnum::keyList());
+            }
+
             if (value != config.type) {
 
                 SUSPENDED
@@ -406,15 +422,22 @@ Amiga::setConfigItem(Option option, i64 value)
             }
             return;
 
-        case OPT_VSYNC:
+        case OPT_SYNC_MODE:
 
-            if (bool(value) != config.vsync) {
-
-                SUSPENDED
-
-                config.vsync = bool(value);
-                paula.muxer.adjustSpeed();
+            if (!SyncModeEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, SyncModeEnum::keyList());
             }
+
+            config.syncMode = SyncMode(value);
+            return;
+
+        case OPT_PROPOSED_FPS:
+
+            if (value < 25 || value > 120) {
+                throw VAError(ERROR_OPT_INVARG, "25...120");
+            }
+
+            config.proposedFps = value;
             return;
 
         default:
@@ -453,7 +476,8 @@ Amiga::configure(Option option, i64 value)
     switch (option) {
 
         case OPT_VIDEO_FORMAT:
-        case OPT_VSYNC:
+        case OPT_SYNC_MODE:
+        case OPT_PROPOSED_FPS:
             
             setConfigItem(option, value);
             break;
@@ -721,8 +745,9 @@ Amiga::configure(Option option, long id, i64 value)
             break;
             
         case OPT_PULLUP_RESISTORS:
+        case OPT_SHAKE_DETECTION:
         case OPT_MOUSE_VELOCITY:
-            
+
             assert(id == ControlPort::PORT1 || id == ControlPort::PORT2);
             if (id == ControlPort::PORT1) controlPort1.mouse.setConfigItem(option, value);
             if (id == ControlPort::PORT2) controlPort2.mouse.setConfigItem(option, value);
@@ -907,47 +932,14 @@ Amiga::_dump(Category category, std::ostream& os) const
 
         os << tab("Machine type");
         os << VideoFormatEnum::key(config.type) << std::endl;
-        os << tab("Vertical sync");
-        os << bol(config.vsync) << std::endl;
+        os << tab("Sync mode");
+        os << SyncModeEnum::key(config.syncMode);
+        if (config.syncMode == SYNC_FIXED_FPS) os << " (" << config.proposedFps << " fps)";
+        os << std::endl;
     }
 
     if (category == Category::Inspection) {
 
-        os << tab("Thread state");
-        os << ExecutionStateEnum::key(state) << std::endl;
-        os << std::endl;
-        os << tab("Current frame");
-        os << dec(agnus.pos.frame) << std::endl;
-        os << tab("CPU progress");
-        os << dec(cpu.getCpuClock()) << " CPU cycles" << std::endl;
-        os << tab("");
-        os << dec(cpu.getMasterClock()) << " Master cycles" << std::endl;
-        os << tab("Agnus progress");
-        os << dec(agnus.clock) << " DMA cycles" << std::endl;
-        os << tab("");
-        os << dec(DMA_CYCLES(agnus.clock)) << " Master cycles" << std::endl;
-        os << tab("CIA A progress");
-        os << dec(ciaA.getClock()) << " CIA cycles" << std::endl;
-        os << tab("");
-        os << dec(CIA_CYCLES(ciaA.getClock())) << " Master cycles" << std::endl;
-        os << tab("CIA B progress");
-        os << dec(ciaB.getClock()) << " CIA cycles" << std::endl;
-        os << tab("");
-        os << dec(CIA_CYCLES(ciaA.getClock())) << " Master cycles" << std::endl;
-    }
-
-    if (category == Category::Debug) {
-
-        os << tab("Thread state");
-        os << ExecutionStateEnum::key(state) << std::endl;
-        os << tab("Sync mode");
-        os << (getSyncMode() == SyncMode::Periodic ? "PERIODIC" : "PULSED") << std::endl;
-
-        os << std::endl;
-        os << tab("Master clock frequency");
-        os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
-        os << tab("Amiga refresh rate");
-        os << flt(float(refreshRate())) << " Hz" << std::endl;
         os << tab("Power");
         os << bol(isPoweredOn()) << std::endl;
         os << tab("Running");
@@ -958,7 +950,37 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << bol(inWarpMode()) << std::endl;
         os << tab("Debug mode");
         os << bol(inDebugMode()) << std::endl;
+        os << std::endl;
+        os << tab("Refresh rate");
+        os << dec(isize(refreshRate())) << " Fps" << std::endl;
+    }
 
+    if (category == Category::Progress) {
+
+        os << tab("Frame");
+        os << dec(agnus.pos.frame) << std::endl;
+        os << tab("CPU progress");
+        os << dec(cpu.getMasterClock()) << " Master cycles (";
+        os << dec(cpu.getCpuClock()) << " CPU cycles)" << std::endl;
+        os << tab("Agnus progress");
+        os << dec(agnus.clock) << " Master cycles (";
+        os << dec(AS_DMA_CYCLES(agnus.clock)) << " DMA cycles)" << std::endl;
+        os << tab("CIA A progress");
+        os << dec(ciaA.getClock()) << " Master cycles (";
+        os << dec(AS_CIA_CYCLES(ciaA.getClock())) << " CIA cycles)" << std::endl;
+        os << tab("CIA B progress");
+        os << dec(ciaB.getClock()) << " Master cycles (";
+        os << dec(AS_CIA_CYCLES(ciaA.getClock())) << " CIA cycles)" << std::endl;
+    }
+
+    if (category == Category::Debug) {
+
+        os << tab("Thread state");
+        os << ExecutionStateEnum::key(state) << std::endl;
+        os << tab("Thread mode");
+        os << (getThreadMode() == ThreadMode::Periodic ? "PERIODIC" : "PULSED") << std::endl;
+        os << tab("Master clock frequency");
+        os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
     }
 
     if (category == Category::Defaults) {
@@ -1076,7 +1098,10 @@ Amiga::_pause()
     debug(RUN_DEBUG, "_pause\n");
 
     remoteManager.gdbServer.breakpointReached();
+
+    // Update the recorded debug information
     inspect();
+
     msgQueue.put(MSG_PAUSE);
 }
 
@@ -1123,8 +1148,8 @@ Amiga::_debugOff()
 isize
 Amiga::load(const u8 *buffer)
 {
-    auto result = AmigaComponent::load(buffer);
-    AmigaComponent::didLoad();
+    auto result = CoreComponent::load(buffer);
+    CoreComponent::didLoad();
     
     return result;
 }
@@ -1132,16 +1157,16 @@ Amiga::load(const u8 *buffer)
 isize
 Amiga::save(u8 *buffer)
 {
-    auto result = AmigaComponent::save(buffer);
-    AmigaComponent::didSave();
+    auto result = CoreComponent::save(buffer);
+    CoreComponent::didSave();
     
     return result;
 }
 
-Amiga::SyncMode
-Amiga::getSyncMode() const
+Amiga::ThreadMode
+Amiga::getThreadMode() const
 {
-    return config.vsync ? SyncMode::Pulsed : SyncMode::Periodic;
+    return config.syncMode == SYNC_VSYNC ? ThreadMode::Pulsed : ThreadMode::Periodic;
 }
 
 void
@@ -1243,12 +1268,12 @@ Amiga::execute()
             // Are we requested to enter or exit warp mode?
             if (flags & RL::WARP_ON) {
                 clearFlag(RL::WARP_ON);
-                AmigaComponent::warpOn();
+                CoreComponent::warpOn();
             }
 
             if (flags & RL::WARP_OFF) {
                 clearFlag(RL::WARP_OFF);
-                AmigaComponent::warpOff();
+                CoreComponent::warpOff();
             }
             
             // Are we requested to synchronize the thread?
@@ -1263,10 +1288,11 @@ Amiga::execute()
 double
 Amiga::refreshRate() const
 {
-    switch (getSyncMode()) {
+    switch (config.syncMode) {
 
-        case SyncMode::Pulsed:      return host.getHostRefreshRate();
-        case SyncMode::Periodic:    return config.type == PAL ? 50.0 : 60.0;
+        case SYNC_NATIVE_FPS:   return config.type == PAL ? 50.0 : 60.0;
+        case SYNC_FIXED_FPS:    return config.proposedFps;
+        case SYNC_VSYNC:        return host.getHostRefreshRate();
 
         default:
             fatalError;

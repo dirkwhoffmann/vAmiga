@@ -105,7 +105,7 @@ Memory::_dump(Category category, std::ostream& os) const
 void
 Memory::_initialize()
 {
-    AmigaComponent::_initialize();
+    CoreComponent::_initialize();
     
     if (auto romPath = Amiga::defaults.getString("ROM_PATH"); romPath != "") {
 
@@ -2707,7 +2707,7 @@ Memory::patch(u32 addr, u8 value)
         case MEM_EXT:           patch <MEM_EXT>      (addr, value); return;
             
         default:
-            fatalError;
+            break;
     }
 }
 

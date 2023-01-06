@@ -10,7 +10,7 @@
 #pragma once
 
 #include "AmigaFileTypes.h"
-#include "AmigaObject.h"
+#include "CoreObject.h"
 #include "Checksum.h"
 #include "IOUtils.h"
 #include "Buffer.h"
@@ -60,7 +60,7 @@ namespace vamiga {
  *   ---------   ---------   ---------   ---------    ---------  ---------
  */
 
-class AmigaFile : public AmigaObject {
+class AmigaFile : public CoreObject {
     
 public:
     
@@ -90,7 +90,7 @@ public:
 
     
     //
-    // Methods from AmigaObject
+    // Methods from CoreObject
     //
     
 private:
@@ -114,7 +114,8 @@ public:
     virtual string sizeAsString();
     
     // Returns a fingerprint (hash value) for this file
-    virtual u64 fnv() const { return data.fnv64(); }
+    virtual u64 fnv64() const { return data.fnv64(); }
+    virtual u32 crc32() const { return data.crc32(); }
 
     
     //

@@ -15,7 +15,7 @@ namespace vamiga {
 
 Recorder::Recorder(Amiga& ref) : SubComponent(ref)
 {
-    subComponents = std::vector<AmigaComponent *> {
+    subComponents = std::vector<CoreComponent *> {
         
         &muxer
     };
@@ -24,7 +24,7 @@ Recorder::Recorder(Amiga& ref) : SubComponent(ref)
 void
 Recorder::_initialize()
 {
-    AmigaComponent::_initialize();
+    CoreComponent::_initialize();
 
     FFmpeg::init();
 }

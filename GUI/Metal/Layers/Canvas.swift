@@ -52,7 +52,7 @@ class Canvas: Layer {
     var mergeTexture: MTLTexture! = nil
 
     /* Bloom textures to emulate blooming (512 x 512)
-     * To emulate a bloom effect, the C64 texture is first split into it's
+     * To emulate a bloom effect, the emulator texture is first split into it's
      * R, G, and B parts. Each texture is then run through a Gaussian blur
      * filter with a large radius. These blurred textures are passed into
      * the fragment shader as secondary textures where they are recomposed
@@ -240,45 +240,8 @@ class Canvas: Layer {
     override func update(frames: Int64) {
             
         super.update(frames: frames)
+        updateTexture()
     }
-
-    // EXPERIMENTAL
-    /*
-    func grabFrameBuffer() {
-
-        let rect = renderer.recordingRect
-        let size = NSSize(width: rect.width, height: rect.height)
-
-        if let gpuData = amiga.recorder.getGpuData(size) {
-
-            let width = Int(rect.width)
-            let height = Int(rect.height)
-
-            switch renderer.prefs.captureSource {
-
-            case .emulatorTexture:
-
-                // blitTexture(texture: mergeTexture) // NOT NEEDED
-                mergeTexture.getBytes(UnsafeMutableRawPointer(mutating: gpuData),
-                                      bytesPerRow: width * 4,
-                                      bytesPerImage: width * height * 4,
-                                      from: MTLRegionMake2D(0, 0, width, height),
-                                      mipmapLevel: 0,
-                                      slice: 0)
-
-            case .frambufferTexture:
-
-                blitTexture(texture: framebufTexture) // NOT NEEDED
-                framebufTexture.getBytes(UnsafeMutableRawPointer(mutating: gpuData),
-                                         bytesPerRow: width * 4,
-                                         bytesPerImage: width * height * 4,
-                                         from: MTLRegionMake2D(0, 0, width, height),
-                                         mipmapLevel: 0,
-                                         slice: 0)
-            }
-        }
-    }
-    */
 
     func updateTexture() {
         
@@ -304,8 +267,9 @@ class Canvas: Layer {
         } else {
 
             // Get the emulator texture
-            let buffer = amiga.denise.stableBuffer!
-            let nr = amiga.denise.frameNr
+            var buffer: UnsafeMutablePointer<u32>!
+            var nr = 0
+            amiga.denise.getStableBuffer(&buffer, nr: &nr, lof: &currLOF, prevlof: &prevLOF)
 
             // Check for duplicate frames or frame drops
             if nr != prevNr + 1 {
@@ -316,13 +280,6 @@ class Canvas: Layer {
                 if nr == prevNr { return }
             }
             prevNr = nr
-
-            // Determine if the new texture is a long frame or a short frame
-            prevLOF = currLOF
-            currLOF = amiga.denise.longFrame
-
-            // Experimental (copy GPU texture back to emulator)
-            // grabFrameBuffer()
 
             // Update the GPU texture
             if currLOF {
