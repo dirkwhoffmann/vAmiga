@@ -230,21 +230,21 @@ private:
 public:
 
     // Disassembles a single instruction and returns the instruction size
-    int disassemble(u32 addr, char *str) const;
+    int disassemble(char *str, u32 addr) const;
 
     // Creates a textual representation for the status register
-    void disassembleSR(char *str) const { disassembleSR(reg.sr, str); }
-    void disassembleSR(const StatusRegister &sr, char *str) const;
+    void disassembleSR(char *str) const { disassembleSR(str, reg.sr); }
+    void disassembleSR(char *str, const StatusRegister &sr) const;
 
-    // Returns a textual representation for a single word
-    void disassembleWord(u32 value, char *str) const;
+    // Creates a textual representation for a single data value
+    void dump8(char *str, u8 value) const;
+    void dump16(char *str, u16 value) const;
+    void dump24(char *str, u32 value) const;
+    void dump32(char *str, u32 value) const;
 
-    // Returns a textual representation for one or more words from memory
-    void disassembleMemory(u32 addr, int cnt, char *str) const;
-
-    // Returns a textual representation for the program counter
-    void disassemblePC(char *str) const { disassemblePC(reg.pc, str); }
-    void disassemblePC(u32 pc, char *str) const;
+    // Creates a textual representation for multiple data values
+    void dump16(char *str, u16 values[], isize cnt) const;
+    void dump16(char *str, u32 addr, isize cnt) const;
 
     // Return an info struct for a certain opcode
     InstrInfo getInfo(u16 op) const;

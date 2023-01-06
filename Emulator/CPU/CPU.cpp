@@ -694,7 +694,7 @@ CPU::disassembleRecordedFlags(isize i)
 {
     static char result[18];
     
-    disassembleSR(debugger.logEntryAbs((int)i).sr, result);
+    disassembleSR(result, debugger.logEntryAbs((int)i).sr);
     return result;
 }
 
@@ -702,8 +702,8 @@ const char *
 CPU::disassembleRecordedPC(isize i)
 {
     static char result[16];
-    
-    Moira::disassemblePC(debugger.logEntryAbs((int)i).pc0, result);
+
+    Moira::dump24(result, debugger.logEntryAbs((int)i).pc0);
     return result;
 }
 
@@ -712,7 +712,7 @@ CPU::disassembleAddr(u32 addr)
 {
     static char result[16];
 
-    Moira::disassemblePC(addr, result);
+    Moira::dump24(result, addr);
     return result;
 }
 
@@ -721,7 +721,7 @@ CPU::disassembleWord(u16 value)
 {
     static char result[16];
 
-    Moira::disassembleWord(value, result);
+    Moira::dump16(result, value);
     return result;
 }
 
@@ -730,7 +730,7 @@ CPU::disassembleInstr(u32 addr, isize *len)
 {
     static char result[128];
 
-    int l = disassemble(addr, result);
+    int l = disassemble(result, addr);
 
     if (len) *len = (isize)l;
     return result;
@@ -741,7 +741,7 @@ CPU::disassembleWords(u32 addr, isize len)
 {
     static char result[64];
 
-    disassembleMemory(addr, (int)len, result);
+    dump16(result, addr, len);
     return result;
 }
 
