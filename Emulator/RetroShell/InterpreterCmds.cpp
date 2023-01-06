@@ -169,14 +169,6 @@ Interpreter::initCommandShell(Command &root)
              "Adjusts the texture cutout",
              [this](Arguments& argv, long value) {
 
-        /*
-        std::vector<string> vec(argv.begin(), argv.end());
-
-        isize x1 = util::parseNum(vec[0]);
-        isize y1 = util::parseNum(vec[1]);
-        isize x2 = util::parseNum(vec[2]);
-        isize y2 = util::parseNum(vec[3]);
-        */
         isize x1 = parseNum(argv, 0);
         isize y1 = parseNum(argv, 1);
         isize x2 = parseNum(argv, 2);
@@ -961,9 +953,9 @@ Interpreter::initCommandShell(Command &root)
 
     root.newGroup("");
 
-    for (isize i = 1; i <= 2; i++) {
+    for (isize i = ControlPort::PORT1; i <= ControlPort::PORT2; i++) {
 
-        string nr = (i == 1) ? "1" : "2";
+        string nr = (i == ControlPort::PORT1) ? "1" : "2";
 
         root.add({"joystick", nr},
                  "Joystick in port " + nr);
@@ -972,7 +964,7 @@ Interpreter::initCommandShell(Command &root)
                  "Displays the current configuration",
                  [this](Arguments& argv, long value) {
 
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+            auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
             retroShell.dumpConfig(port.joystick);
 
         }, i);
@@ -984,7 +976,7 @@ Interpreter::initCommandShell(Command &root)
                  "Enables or disables auto-fire mode",
                  [this](Arguments& argv, long value) {
 
-            auto port = (value == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
+            auto port = (value == ControlPort::PORT1) ? ControlPort::PORT1 : ControlPort::PORT2;
             amiga.configure(OPT_AUTOFIRE, port, parseBool(argv));
 
         }, i);
@@ -993,7 +985,7 @@ Interpreter::initCommandShell(Command &root)
                  "Sets the number of bullets per auto-fire shot",
                  [this](Arguments& argv, long value) {
 
-            auto port = (value == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
+            auto port = (value == ControlPort::PORT1) ? ControlPort::PORT1 : ControlPort::PORT2;
             amiga.configure(OPT_AUTOFIRE_BULLETS, port, parseNum(argv));
 
         }, i);
@@ -1002,7 +994,7 @@ Interpreter::initCommandShell(Command &root)
                  "Configures the auto-fire delay",
                  [this](Arguments& argv, long value) {
 
-            auto port = (value == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
+            auto port = (value == ControlPort::PORT1) ? ControlPort::PORT1 : ControlPort::PORT2;
             amiga.configure(OPT_AUTOFIRE_DELAY, port, parseNum(argv));
 
         }, i);
@@ -1011,7 +1003,7 @@ Interpreter::initCommandShell(Command &root)
                  "Presses a joystick button",
                  [this](Arguments& argv, long value) {
 
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+            auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
             auto nr = parseNum(argv);
 
             switch (nr) {
@@ -1030,7 +1022,7 @@ Interpreter::initCommandShell(Command &root)
                  "Releases a joystick button",
                  [this](Arguments& argv, long value) {
 
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+            auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
             auto nr = parseNum(argv);
 
             switch (nr) {
@@ -1052,7 +1044,7 @@ Interpreter::initCommandShell(Command &root)
                  "Pulls the joystick left",
                  [this](Arguments& argv, long value) {
 
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+            auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
             port.joystick.trigger(PULL_LEFT);
 
         }, i);
@@ -1061,7 +1053,7 @@ Interpreter::initCommandShell(Command &root)
                  "Pulls the joystick right",
                  [this](Arguments& argv, long value) {
 
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+            auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
             port.joystick.trigger(PULL_RIGHT);
 
         }, i);
@@ -1070,7 +1062,7 @@ Interpreter::initCommandShell(Command &root)
                  "Pulls the joystick up",
                  [this](Arguments& argv, long value) {
 
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+            auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
             port.joystick.trigger(PULL_UP);
 
         }, i);
@@ -1079,7 +1071,7 @@ Interpreter::initCommandShell(Command &root)
                  "Pulls the joystick down",
                  [this](Arguments& argv, long value) {
 
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+            auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
             port.joystick.trigger(PULL_DOWN);
 
         }, i);
@@ -1091,7 +1083,7 @@ Interpreter::initCommandShell(Command &root)
                  "Releases the x-axis",
                  [this](Arguments& argv, long value) {
 
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+            auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
             port.joystick.trigger(RELEASE_X);
 
         }, i);
@@ -1100,7 +1092,7 @@ Interpreter::initCommandShell(Command &root)
                  "Releases the y-axis",
                  [this](Arguments& argv, long value) {
 
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+            auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
             port.joystick.trigger(RELEASE_Y);
 
         }, i);
@@ -1113,9 +1105,9 @@ Interpreter::initCommandShell(Command &root)
 
     root.newGroup("");
 
-    for (isize i = 1; i <= 2; i++) {
+    for (isize i = ControlPort::PORT1; i <= ControlPort::PORT2; i++) {
 
-        string nr = (i == 1) ? "1" : "2";
+        string nr = (i == ControlPort::PORT1) ? "1" : "2";
 
         root.add({"mouse", nr},
                  "Mouse in port " + nr);
@@ -1124,7 +1116,7 @@ Interpreter::initCommandShell(Command &root)
                  "Displays the current configuration",
                  [this](Arguments& argv, long value) {
 
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+            auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
             retroShell.dumpConfig(port.mouse);
 
         }, i);
@@ -1136,7 +1128,7 @@ Interpreter::initCommandShell(Command &root)
                  "Enables or disables pull-up resistors",
                  [this](Arguments& argv, long value) {
 
-            auto port = (value == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
+            auto port = (value == ControlPort::PORT1) ? ControlPort::PORT1 : ControlPort::PORT2;
             amiga.configure(OPT_PULLUP_RESISTORS, port, parseBool(argv));
 
         }, i);
@@ -1145,7 +1137,7 @@ Interpreter::initCommandShell(Command &root)
                  "Enables or disables the shake detector",
                  [this](Arguments& argv, long value) {
 
-            auto port = (value == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
+            auto port = (value == ControlPort::PORT1) ? ControlPort::PORT1 : ControlPort::PORT2;
             amiga.configure(OPT_SHAKE_DETECTION, port, parseBool(argv));
 
         }, i);
@@ -1154,7 +1146,7 @@ Interpreter::initCommandShell(Command &root)
                  "Sets the horizontal and vertical mouse velocity",
                  [this](Arguments& argv, long value) {
 
-            auto port = (value == 0) ? ControlPort::PORT1 : ControlPort::PORT2;
+            auto port = (value == ControlPort::PORT1) ? ControlPort::PORT1 : ControlPort::PORT2;
             amiga.configure(OPT_MOUSE_VELOCITY, port, parseNum(argv));
 
         }, i);
@@ -1166,7 +1158,7 @@ Interpreter::initCommandShell(Command &root)
                  "Presses the left mouse button",
                  [this](Arguments& argv, long value) {
 
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+            auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
             port.mouse.pressAndReleaseLeft();
 
         }, i);
@@ -1175,7 +1167,7 @@ Interpreter::initCommandShell(Command &root)
                  "Presses the middle mouse button",
                  [this](Arguments& argv, long value) {
 
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+            auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
             port.mouse.pressAndReleaseMiddle();
 
         }, i);
@@ -1184,7 +1176,7 @@ Interpreter::initCommandShell(Command &root)
                  "Presses the right mouse button",
                  [this](Arguments& argv, long value) {
 
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+            auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
             port.mouse.pressAndReleaseRight();
 
         }, i);
