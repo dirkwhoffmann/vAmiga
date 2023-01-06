@@ -328,6 +328,18 @@ using namespace vamiga::moira;
     return str ? @(str) : nullptr;
 }
 
+- (NSString *)disassembleWord:(NSInteger)value
+{
+    const char *str = [self cpu]->disassembleWord((u16)value);
+    return str ? @(str) : nullptr;
+}
+
+- (NSString *)disassembleAddr:(NSInteger)addr
+{
+    const char *str = [self cpu]->disassembleAddr((u32)addr);
+    return str ? @(str) : nullptr;
+}
+
 - (NSString *)disassembleInstr:(NSInteger)addr length:(NSInteger *)len
 {
     isize result;
@@ -340,12 +352,6 @@ using namespace vamiga::moira;
 - (NSString *)disassembleWords:(NSInteger)addr length:(NSInteger)len
 {
     const char *str = [self cpu]->disassembleWords((u32)addr, len);
-    return str ? @(str) : nullptr;
-}
-
-- (NSString *)disassembleAddr:(NSInteger)addr
-{
-    const char *str = [self cpu]->disassembleAddr((u32)addr);
     return str ? @(str) : nullptr;
 }
 

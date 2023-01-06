@@ -46,30 +46,6 @@ Moira::disassemble(u32 addr, char *str) const
 }
 
 void
-Moira::disassembleWord(u32 value, char *str) const
-{
-    sprintx(str, value, { .prefix = "", .radix = 16, .upperCase = true }, 4);
-}
-
-void
-Moira::disassembleMemory(u32 addr, int cnt, char *str) const
-{
-    U32_DEC(addr, 2); // Because dasmRead increases addr first
-
-    for (int i = 0; i < cnt; i++) {
-        u32 value = dasmRead<Word>(addr);
-        sprintx(str, value, { .prefix = "", .radix = 16, .upperCase = true }, 4);
-        *str++ = (i == cnt - 1) ? 0 : ' ';
-    }
-}
-
-void
-Moira::disassemblePC(u32 pc, char *str) const
-{
-    sprintx(str, pc, { .prefix = "", .radix = 16, .upperCase = true }, 6);
-}
-
-void
 Moira::disassembleSR(const StatusRegister &sr, char *str) const
 {
     str[0]  = sr.t1 ? 'T' : 't';
@@ -89,6 +65,58 @@ Moira::disassembleSR(const StatusRegister &sr, char *str) const
     str[14] = sr.v ? 'V' : 'v';
     str[15] = sr.c ? 'C' : 'c';
     str[16] = 0;
+}
+
+void
+Moira::disassembleWord(u32 value, char *str) const
+{
+    if (dataNumberFormat.radix == 16) {
+
+        sprintx(str, u16(value), dataNumberFormat, 4);
+
+    } else {
+
+        sprintd(str, u16(value), 5);
+    }
+    *str = 0;
+}
+
+void
+Moira::disassembleMemory(u32 addr, int cnt, char *str) const
+{
+    U32_DEC(addr, 2); // Because dasmRead increases addr first
+
+    if (dataNumberFormat.radix == 16) {
+
+        for (int i = 0; i < cnt; i++) {
+
+            if (i) *str++ = ' ';
+            sprintx(str, u16(dasmRead<Word>(addr)), dataNumberFormat, 4);
+        }
+
+    } else {
+
+        for (int i = 0; i < cnt; i++) {
+
+            if (i) *str++ = ' ';
+            sprintd(str, u16(dasmRead<Word>(addr)), 5);
+        }
+    }
+    *str = 0;
+}
+
+void
+Moira::disassemblePC(u32 pc, char *str) const
+{
+    if (dataNumberFormat.radix == 16) {
+
+        sprintx(str, pc, dataNumberFormat, 6);
+
+    } else {
+
+        sprintd(str, pc, 8);
+    }
+    *str = 0;
 }
 
 template <Size S> u32

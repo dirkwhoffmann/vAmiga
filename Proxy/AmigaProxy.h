@@ -346,9 +346,10 @@
 - (NSString *)disassembleRecordedFlags:(NSInteger)i;
 - (NSString *)disassembleRecordedPC:(NSInteger)i;
 
+- (NSString *)disassembleWord:(NSInteger)value;
+- (NSString *)disassembleAddr:(NSInteger)addr;
 - (NSString *)disassembleInstr:(NSInteger)addr length:(NSInteger *)len;
 - (NSString *)disassembleWords:(NSInteger)addr length:(NSInteger)len;
-- (NSString *)disassembleAddr:(NSInteger)addr;
 
 - (NSString *)vectorName:(NSInteger)nr;
 

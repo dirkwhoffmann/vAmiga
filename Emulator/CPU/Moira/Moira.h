@@ -34,14 +34,11 @@ protected:
     // Instruction set used by the disassembler
     Model dasmModel = M68000;
 
-    // Disassembler styleh
-    DasmStyle style = {
+    // Visual style for disassembled instructions
+    DasmStyle style;
 
-        .syntax         = DASM_MOIRA,
-        .letterCase     = DASM_MIXED_CASE,
-        .numberFormat   = { .prefix = "$", .radix = 16 },
-        .tab            = 8
-    };
+    // Visual style for data dumps
+    DasmNumberFormat dataNumberFormat;
 
 
     //
@@ -227,6 +224,10 @@ public:
     // Disassembles a single instruction and returns the instruction size
     int disassemble(u32 addr, char *str) const;
 
+    // Creates a textual representation for the status register
+    void disassembleSR(char *str) const { disassembleSR(reg.sr, str); }
+    void disassembleSR(const StatusRegister &sr, char *str) const;
+
     // Returns a textual representation for a single word
     void disassembleWord(u32 value, char *str) const;
 
@@ -236,10 +237,6 @@ public:
     // Returns a textual representation for the program counter
     void disassemblePC(char *str) const { disassemblePC(reg.pc, str); }
     void disassemblePC(u32 pc, char *str) const;
-
-    // Returns a textual representation for the status register
-    void disassembleSR(char *str) const { disassembleSR(reg.sr, str); }
-    void disassembleSR(const StatusRegister &sr, char *str) const;
 
     // Return an info struct for a certain opcode
     InstrInfo getInfo(u16 op) const;

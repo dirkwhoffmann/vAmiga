@@ -708,6 +708,24 @@ CPU::disassembleRecordedPC(isize i)
 }
 
 const char *
+CPU::disassembleAddr(u32 addr)
+{
+    static char result[16];
+
+    Moira::disassemblePC(addr, result);
+    return result;
+}
+
+const char *
+CPU::disassembleWord(u16 value)
+{
+    static char result[16];
+
+    Moira::disassembleWord(value, result);
+    return result;
+}
+
+const char *
 CPU::disassembleInstr(u32 addr, isize *len)
 {
     static char result[128];
@@ -724,15 +742,6 @@ CPU::disassembleWords(u32 addr, isize len)
     static char result[64];
 
     disassembleMemory(addr, (int)len, result);
-    return result;
-}
-
-const char *
-CPU::disassembleAddr(u32 addr)
-{
-    static char result[16];
-
-    Moira::disassemblePC(addr, result);
     return result;
 }
 

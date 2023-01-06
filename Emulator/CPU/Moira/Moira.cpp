@@ -33,6 +33,16 @@ Moira::Moira(Amiga &ref) : SubComponent(ref)
     if (ENABLE_DASM) dasm = new DasmPtr[65536];
 
     createJumpTable(cpuModel, dasmModel);
+
+    style = DasmStyle {
+
+        .syntax         = DASM_MOIRA,
+        .letterCase     = DASM_MIXED_CASE,
+        .numberFormat   = { .prefix = "$", .radix = 16, .upperCase = false, .plainZero = false },
+        .tab            = 8
+    };
+
+    dataNumberFormat = { .prefix = "", .radix = 16, .upperCase = false, .plainZero = false };
 }
 
 Moira::~Moira()
@@ -65,14 +75,21 @@ Moira::setDasmSyntax(DasmSyntax value)
 void
 Moira::setDasmNumberFormat(DasmNumberFormat value)
 {
-    if (value.prefix == nullptr) {
+    auto validPrefix = [&](DasmNumberFormat fmt) { return fmt.prefix != nullptr; };
+    auto validRadix = [&](DasmNumberFormat fmt) { return fmt.radix == 10 || fmt.radix == 16; };
+
+    if (!validPrefix(value)) {
         throw std::runtime_error("prefix must not be NULL");
     }
-    if (value.radix != 10 && value.radix != 16) {
-        throw std::runtime_error("Invalid radix: " + std::to_string(value.radix));
+    if (!validRadix(value)) {
+        throw std::runtime_error("radix must be 10 or 16");
     }
 
     style.numberFormat = value;
+
+    // Adapt some options for the data style
+    dataNumberFormat.upperCase = style.numberFormat.upperCase;
+    dataNumberFormat.radix = style.numberFormat.radix;
 }
 
 void

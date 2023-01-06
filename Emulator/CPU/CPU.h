@@ -191,9 +191,10 @@ public:
     const char *disassembleRecordedPC(isize i);
 
     // Disassembles the instruction at the specified address
+    const char *disassembleWord(u16 value);
+    const char *disassembleAddr(u32 addr);
     const char *disassembleInstr(u32 addr, isize *len);
     const char *disassembleWords(u32 addr, isize len);
-    const char *disassembleAddr(u32 addr);
 
     // Disassembles the currently executed instruction
     const char *disassembleInstr(isize *len);

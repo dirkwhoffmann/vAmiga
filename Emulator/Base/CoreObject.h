@@ -38,7 +38,7 @@ namespace vamiga {
  * comprises functions for initializing, configuring, and serializing the
  * object, as well as functions for powering up and down, running and
  * pausing. Furthermore, a 'SYNCHRONIZED' macro is provided to prevent mutual
- * execution of particular code sections.
+ * execution of particular code blocks.
  *
  * Thread adds the ability to run the component asynchroneously. It implements
  * the emulator's state model (off, paused, running, suspended).

@@ -143,5 +143,21 @@
             stopOnStyle = "0">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3DE81FC2-E3FF-4F75-A06A-E68785CE3B08"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Emulator/CPU/Moira/Moira.h"
+            startingColumnNumber = "10"
+            endingColumnNumber = "27"
+            startingLineNumber = "159"
+            endingLineNumber = "159"
+            landmarkName = "setDasmLetterCase(value)"
+            landmarkType = "6">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
