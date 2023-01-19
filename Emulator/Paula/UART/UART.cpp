@@ -177,8 +177,6 @@ UART::copyToTransmitShiftRegister()
 void
 UART::copyFromReceiveShiftRegister()
 {
-    static int count = 0;
-
     trace(SER_DEBUG, "Copying %X into receive buffer\n", receiveShiftReg);
     
     receiveBuffer = receiveShiftReg;
@@ -186,8 +184,6 @@ UART::copyFromReceiveShiftRegister()
 
     // Inform the GUI about the incoming data
     msgQueue.put(MSG_SER_IN, receiveBuffer);
-
-    count++;
 
     // Update the overrun bit
     ovrun = GET_BIT(paula.intreq, 11);

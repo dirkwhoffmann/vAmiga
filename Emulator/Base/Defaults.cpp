@@ -254,7 +254,9 @@ Defaults::load(std::stringstream &stream)
             throw VAError(ERROR_SYNTAX, line);
         }
 
-        debug(DEF_DEBUG, "%ld keys accepted, %ld ignored\n", accepted, skipped);
+        if (accepted || skipped) {
+            debug(DEF_DEBUG, "%ld keys accepted, %ld ignored\n", accepted, skipped);
+        }
     }
 }
 

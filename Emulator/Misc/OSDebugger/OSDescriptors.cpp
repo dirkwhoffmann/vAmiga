@@ -157,8 +157,8 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
         hunks.push_back(descr);
     }
 
-    // Scan sections (s) of all hunks (h)
-    for (isize h = 0, s = 0; h < numHunks; s++) {
+    // Scan sections of all hunks
+    for (isize h = 0; h < numHunks; ) {
         
         // Read type
         auto type = read() & 0x3FFFFFFF;
