@@ -220,7 +220,10 @@ extension MyController {
                 self.configurator!.installAros()
             }
         }
-        
+
+        // REMOVE ASAP
+        // amiga.agnus.scheduleGUITimerAbs(10000, payload: 42)
+
         // Create speed monitor
         speedometer = Speedometer()
         
@@ -620,7 +623,10 @@ extension MyController {
             
         case .SRV_RECEIVE, .SRV_SEND:
             break
-            
+
+        case .GUI_EVENT:
+            break
+
         default:
             warn("Unknown message: \(msg)")
             fatalError()

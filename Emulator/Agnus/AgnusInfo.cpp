@@ -419,7 +419,17 @@ Agnus::eventName(EventSlot slot, EventID id)
                 default:                return "*** INVALID ***";
             }
             break;
-            
+
+        case SLOT_GUI:
+
+            switch (id) {
+
+                case EVENT_NONE:    return "none";
+                case GUI_TRIGGER:   return "GUI_TRIGGER";
+                default:            return "*** INVALID ***";
+            }
+            break;
+
         case SLOT_INS:
 
             switch (id) {

@@ -178,6 +178,24 @@ Agnus::scheduleStrobe2Event()
 }
 
 void
+Agnus::scheduleGUITimerAbs(isize cycle, u32 payload)
+{
+    {   SUSPENDED
+
+        scheduleAbs<SLOT_GUI>(cycle, GUI_TRIGGER, payload);
+    }
+}
+
+void
+Agnus::scheduleGUITimerRel(isize cycle, u32 payload)
+{
+    {   SUSPENDED
+
+        scheduleRel<SLOT_GUI>(cycle, GUI_TRIGGER, payload);
+    }
+}
+
+void
 Agnus::serviceREGEvent(Cycle until)
 {
     assert(pos.type != PAL || pos.h <= HPOS_CNT_PAL);
@@ -801,6 +819,13 @@ Agnus::serviceINSEvent(EventID id)
 
     // Reschedule event
     rescheduleRel<SLOT_INS>((Cycle)(inspectionInterval * 28000000));
+}
+
+void
+Agnus::serviceGUIEvent()
+{
+    msgQueue.put(MSG_GUI_EVENT, id[SLOT_GUI], data[SLOT_GUI]);
+    cancel<SLOT_GUI>();
 }
 
 }

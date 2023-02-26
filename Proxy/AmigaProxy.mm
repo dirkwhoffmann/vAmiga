@@ -742,6 +742,16 @@ using namespace vamiga::moira;
     return [self agnus]->getStats();
 }
 
+- (void)scheduleGUITimerAbs:(NSInteger)cycle payload:(NSInteger)value
+{
+    [self agnus]->scheduleGUITimerAbs(cycle, (u32)value);
+}
+
+- (void)scheduleGUITimerRel:(NSInteger)cycle payload:(NSInteger)value
+{
+    [self agnus]->scheduleGUITimerRel(cycle, (u32)value);
+}
+
 @end
 
 

@@ -109,6 +109,7 @@ enum_long(SLOT)
     SLOT_KEY,                       // Auto-typing
     SLOT_SRV,                       // Remote server manager
     SLOT_SER,                       // Serial remote server
+    SLOT_GUI,                       // GUI events
     SLOT_INS,                       // Handles periodic calls to inspect()
 
     SLOT_COUNT
@@ -163,6 +164,7 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
             case SLOT_KEY:   return "KEY";
             case SLOT_SRV:   return "SRV";
             case SLOT_SER:   return "SER";
+            case SLOT_GUI:   return "GUI";
             case SLOT_INS:   return "INS";
 
             case SLOT_COUNT: return "???";
@@ -370,7 +372,11 @@ enum_i8(EventID)
     // Serial remote server
     SER_RECEIVE         = 1,
     SER_EVENT_COUNT,
-    
+
+    // GUI event slot
+    GUI_TRIGGER         = 1,
+    GUI_EVENT_COUNT,
+
     // Inspector slot
     INS_AMIGA           = 1,
     INS_CPU,

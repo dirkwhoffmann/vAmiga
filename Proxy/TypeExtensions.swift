@@ -49,6 +49,7 @@ extension EventSlot: CustomStringConvertible {
         case .KEY:      return "Auto typing"
         case .SRV:      return "Server daemon"
         case .SER:      return "Null modem cable"
+        case .GUI:      return "GUI events"
         case .INS:      return "Inspector"
 
         case .COUNT:    return "???"

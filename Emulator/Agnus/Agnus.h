@@ -747,7 +747,11 @@ public:
     void scheduleStrobe1Event();
     void scheduleStrobe2Event();
 
-    
+    // Schedules a GUI event in the GUI slot
+    void scheduleGUITimerAbs(isize cycle, u32 payload);
+    void scheduleGUITimerRel(isize cycle, u32 payload);
+
+
     //
     // Servicing events (AgnusEvents.cpp)
     //
@@ -774,6 +778,9 @@ public:
     
     // Services an inspection event
     void serviceINSEvent(EventID id);
+
+    // Services a GUI event
+    void serviceGUIEvent();
 };
 
 }

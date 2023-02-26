@@ -134,7 +134,10 @@ enum_long(MSG_TYPE)
     // Remote server
     MSG_SRV_STATE,
     MSG_SRV_RECEIVE,
-    MSG_SRV_SEND
+    MSG_SRV_SEND,
+
+    // GUI
+    MSG_GUI_EVENT
 };
 typedef MSG_TYPE MsgType;
 
@@ -142,7 +145,7 @@ typedef MSG_TYPE MsgType;
 struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = MSG_SRV_SEND;
+    static constexpr long maxVal = MSG_GUI_EVENT;
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "MSG"; }
@@ -248,6 +251,8 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
             case MSG_SRV_STATE:             return "SRV_STATE";
             case MSG_SRV_RECEIVE:           return "SRV_RECEIVE";
             case MSG_SRV_SEND:              return "SRV_SEND";
+
+            case MSG_GUI_EVENT:             return "GUI_EVENT";
         }
         return "???";
     }

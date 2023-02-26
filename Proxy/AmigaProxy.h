@@ -446,6 +446,8 @@
 @property (readonly) BOOL isNTSC;
 @property (readonly) NSInteger frameCount;
 - (AgnusStats)getStats;
+- (void)scheduleGUITimerAbs:(NSInteger)cycle payload:(NSInteger)value;
+- (void)scheduleGUITimerRel:(NSInteger)cycle payload:(NSInteger)value;
 
 @end
 
@@ -709,6 +711,7 @@
 
 @end
 
+
 //
 // HardDrive
 //
@@ -740,6 +743,7 @@
 - (void)disableWriteThrough;
 
 @end
+
 
 //
 // FileSystem
