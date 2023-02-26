@@ -69,10 +69,10 @@ Denise::_dump(Category category, std::ostream& os) const
         os << dec(config.hiddenLayerAlpha) << std::endl;
         os << tab("clxSprSpr");
         os << bol(config.clxSprSpr) << std::endl;
-        os << tab("clxSprSpr");
-        os << bol(config.clxSprSpr) << std::endl;
-        os << tab("clxSprSpr");
-        os << bol(config.clxSprSpr) << std::endl;
+        os << tab("clxSprPlf");
+        os << bol(config.clxSprPlf) << std::endl;
+        os << tab("clxPlfPlf");
+        os << bol(config.clxPlfPlf) << std::endl;
     }
 
     if (category == Category::Inspection) {

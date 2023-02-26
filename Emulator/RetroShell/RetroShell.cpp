@@ -105,7 +105,7 @@ RetroShell::updatePrompt()
         ss << ",";
         ss << std::right << std::setw(0) << std::dec << isize(agnus.pos.h);
         ss << ") $";
-        ss << std::right << std::setw(6) << std::hex << isize(cpu.getPC0());
+        ss << std::right << std::setw(6) << std::hex << std::setfill('0') << isize(cpu.getPC0());
         ss << ": ";
 
         prompt = ss.str();

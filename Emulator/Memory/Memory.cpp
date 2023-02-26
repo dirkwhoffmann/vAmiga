@@ -64,19 +64,26 @@ Memory::_dump(Category category, std::ostream& os) const
     }
     
     if (category == Category::Checksums) {
-        
-        os << util::tab("Rom checksum");
-        os << util::hex(util::fnv32(rom, config.romSize)) << std::endl;
-        os << util::tab("Wom checksum");
-        os << util::hex(util::fnv32(wom, config.womSize)) << std::endl;
-        os << util::tab("Extended Rom checksum");
-        os << util::hex(util::fnv32(ext, config.extSize)) << std::endl;
-        os << util::tab("Chip Ram checksum");
-        os << util::hex(util::fnv32(chip, config.chipSize)) << std::endl;
-        os << util::tab("Slow Ram checksum");
-        os << util::hex(util::fnv32(slow, config.slowSize)) << std::endl;
-        os << util::tab("Fast Ram checksum");
-        os << util::hex(util::fnv32(fast, config.fastSize)) << std::endl;
+
+        u32 romcrc = util::crc32(rom, config.romSize);
+        u32 womcrc = util::crc32(wom, config.womSize);
+        u32 extcrc = util::crc32(ext, config.extSize);
+        u32 chipcrc = util::crc32(chip, config.chipSize);
+        u32 slowcrc = util::crc32(slow, config.slowSize);
+        u32 fastcrc = util::crc32(fast, config.fastSize);
+
+        os << util::tab("Rom CRC32");
+        os << util::hex(romcrc) << " (" << util::dec(romcrc) << ")" << std::endl;
+        os << util::tab("Wom CRC32");
+        os << util::hex(womcrc) << " (" << util::dec(womcrc) << ")" << std::endl;
+        os << util::tab("Extended Rom CRC32");
+        os << util::hex(extcrc) << " (" << util::dec(extcrc) << ")" << std::endl;
+        os << util::tab("Chip Ram CRC32");
+        os << util::hex(chipcrc) << " (" << util::dec(chipcrc) << ")" << std::endl;
+        os << util::tab("Slow Ram CRC32");
+        os << util::hex(slowcrc) << " (" << util::dec(slowcrc) << ")" << std::endl;
+        os << util::tab("Fast Ram CRC32");
+        os << util::hex(fastcrc) << " (" << util::dec(fastcrc) << ")" << std::endl;
     }
     
     if (category == Category::BankMap) {

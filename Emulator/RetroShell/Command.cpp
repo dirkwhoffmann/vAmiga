@@ -174,6 +174,8 @@ Command::usage() const
         isize count = 0;
         for (auto &it : subCommands) {
 
+            if (it.hidden) continue;
+
             if (it.name != "") {
 
                 if (count++) arguments += " | ";

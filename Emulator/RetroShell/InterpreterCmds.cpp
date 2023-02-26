@@ -621,56 +621,56 @@ Interpreter::initCommandShell(Command &root)
              "Turns Copper DMA visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_COPPER, parseBool(argv));
+        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_COPPER, parseOnOff(argv));
     });
 
     root.add({"dmadebugger", "blitter"}, { Arg::onoff },
              "Turns Blitter DMA visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_BLITTER, parseBool(argv));
+        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_BLITTER, parseOnOff(argv));
     });
 
     root.add({"dmadebugger", "disk"}, { Arg::onoff },
              "Turns Disk DMA visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_DISK, parseBool(argv));
+        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_DISK, parseOnOff(argv));
     });
 
     root.add({"dmadebugger", "audio"}, { Arg::onoff },
              "Turns Audio DMA visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_AUDIO, parseBool(argv));
+        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_AUDIO, parseOnOff(argv));
     });
 
     root.add({"dmadebugger", "sprites"}, { Arg::onoff },
              "Turns Sprite DMA visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_SPRITE, parseBool(argv));
+        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_SPRITE, parseOnOff(argv));
     });
 
     root.add({"dmadebugger", "bitplanes"}, { Arg::onoff },
              "Turns Bitplane DMA visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_BITPLANE, parseBool(argv));
+        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_BITPLANE, parseOnOff(argv));
     });
 
     root.add({"dmadebugger", "cpu"}, { Arg::onoff },
              "Turns CPU bus usage visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_CPU, parseBool(argv));
+        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_CPU, parseOnOff(argv));
     });
 
     root.add({"dmadebugger", "refresh"}, { Arg::onoff },
              "Turn memory refresh visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_REFRESH, parseBool(argv));
+        amiga.configure(OPT_DMA_DEBUG_CHANNEL, DMA_CHANNEL_REFRESH, parseOnOff(argv));
     });
 
 
