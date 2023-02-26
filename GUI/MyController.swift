@@ -429,7 +429,7 @@ extension MyController {
         case .SCRIPT_WAKEUP:
             amiga.continueScript()
             
-        case .HALT:
+        case .SHUTDOWN:
             shutDown()
             
         case .ABORT:
