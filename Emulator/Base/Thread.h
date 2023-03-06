@@ -131,16 +131,19 @@ protected:
     enum class ThreadMode { Periodic, Pulsed };
     
     // The current thread state and a change request
-    volatile ExecutionState state = EXEC_OFF;
-    volatile ExecutionState newState = EXEC_OFF;
+    ExecutionState state = EXEC_OFF;
+    ExecutionState newState = EXEC_OFF;
+    std::atomic_flag stateChangeRequest {};
 
     // The current warp state and a change request
-    volatile u8 warpMode = 0;
-    volatile u8 newWarpMode = 0;
+    u8 warpMode = 0;
+    u8 newWarpMode = 0;
+    std::atomic_flag warpChangeRequest {};
 
     // The current debug state and a change request
-    volatile u8 debugMode = 0;
-    volatile u8 newDebugMode = 0;
+    u8 debugMode = 0;
+    u8 newDebugMode = 0;
+    std::atomic_flag debugChangeRequest {};
 
     // Counters
     isize loopCounter = 0;
@@ -232,7 +235,7 @@ public:
 
 protected:
 
-    void changeStateTo(ExecutionState requestedState, bool blocking);
+    void changeStateTo(ExecutionState requestedState, bool blocking = true);
     void changeWarpTo(u8 value, bool blocking = true);
     void changeDebugTo(u8 value, bool blocking = true);
     

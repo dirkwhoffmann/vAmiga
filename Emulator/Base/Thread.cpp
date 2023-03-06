@@ -117,75 +117,93 @@ Thread::main()
         }
         
         // Are we requested to enter or exit warp mode?
-        if (newWarpMode != warpMode) {
-            
-            CoreComponent::warpOnOff(newWarpMode);
-            warpMode = newWarpMode;
+        if (warpChangeRequest.test()) {
+
+            if (newWarpMode != warpMode) {
+
+                CoreComponent::warpOnOff(newWarpMode);
+                warpMode = newWarpMode;
+            }
+
+            warpChangeRequest.clear();
+            warpChangeRequest.notify_one();
         }
 
-        // Are we requested to enter or exit warp mode?
-        if (newDebugMode != debugMode) {
-            
-            CoreComponent::debugOnOff(newDebugMode);
-            debugMode = newDebugMode;
+        // Are we requested to enter or exit debug mode?
+        if (debugChangeRequest.test()) {
+
+            if (newDebugMode != debugMode) {
+
+                CoreComponent::debugOnOff(newDebugMode);
+                debugMode = newDebugMode;
+            }
+
+            debugChangeRequest.clear();
+            debugChangeRequest.notify_one();
         }
 
         // Are we requested to change state?
-        while (newState != state) {
-            
-            if (state == EXEC_OFF && newState == EXEC_PAUSED) {
-                
-                CoreComponent::powerOn();
-                state = EXEC_PAUSED;
+        if (stateChangeRequest.test()) {
 
-            } else if (state == EXEC_OFF && newState == EXEC_RUNNING) {
+            while (newState != state) {
 
-                CoreComponent::powerOn();
-                state = EXEC_PAUSED;
+                if (state == EXEC_OFF && newState == EXEC_PAUSED) {
 
-            } else if (state == EXEC_PAUSED && newState == EXEC_OFF) {
-                
-                CoreComponent::powerOff();
-                state = EXEC_OFF;
+                    CoreComponent::powerOn();
+                    state = EXEC_PAUSED;
 
-            } else if (state == EXEC_PAUSED && newState == EXEC_RUNNING) {
-                
-                CoreComponent::run();
-                state = EXEC_RUNNING;
+                } else if (state == EXEC_OFF && newState == EXEC_RUNNING) {
 
-            } else if (state == EXEC_RUNNING && newState == EXEC_OFF) {
-                
-                state = EXEC_PAUSED;
-                CoreComponent::pause();
+                    CoreComponent::powerOn();
+                    state = EXEC_PAUSED;
 
-            } else if (state == EXEC_RUNNING && newState == EXEC_PAUSED) {
-                
-                state = EXEC_PAUSED;
-                CoreComponent::pause();
+                } else if (state == EXEC_PAUSED && newState == EXEC_OFF) {
 
-            } else if (state == EXEC_RUNNING && newState == EXEC_SUSPENDED) {
-                
-                state = EXEC_SUSPENDED;
+                    CoreComponent::powerOff();
+                    state = EXEC_OFF;
 
-            } else if (state == EXEC_SUSPENDED && newState == EXEC_RUNNING) {
-                
-                state = EXEC_RUNNING;
+                } else if (state == EXEC_PAUSED && newState == EXEC_RUNNING) {
 
-            } else if (newState == EXEC_HALTED) {
-                
-                CoreComponent::halt();
-                state = EXEC_HALTED;
-                return;
+                    CoreComponent::run();
+                    state = EXEC_RUNNING;
 
-            } else {
-                
-                // Invalid state transition
-                fatalError;
+                } else if (state == EXEC_RUNNING && newState == EXEC_OFF) {
+
+                    state = EXEC_PAUSED;
+                    CoreComponent::pause();
+
+                } else if (state == EXEC_RUNNING && newState == EXEC_PAUSED) {
+
+                    state = EXEC_PAUSED;
+                    CoreComponent::pause();
+
+                } else if (state == EXEC_RUNNING && newState == EXEC_SUSPENDED) {
+
+                    state = EXEC_SUSPENDED;
+
+                } else if (state == EXEC_SUSPENDED && newState == EXEC_RUNNING) {
+
+                    state = EXEC_RUNNING;
+
+                } else if (newState == EXEC_HALTED) {
+
+                    CoreComponent::halt();
+                    state = EXEC_HALTED;
+                    return;
+
+                } else {
+
+                    // Invalid state transition
+                    fatalError;
+                }
+
+                debug(true, "Changed state to %s\n", ExecutionStateEnum::key(state));
             }
-            
-            debug(RUN_DEBUG, "Changed state to %s\n", ExecutionStateEnum::key(state));
+
+            stateChangeRequest.clear();
+            stateChangeRequest.notify_one();
         }
-        
+
         // Compute the CPU load once in a while
         if (loopCounter % 32 == 0) {
             
@@ -304,24 +322,51 @@ Thread::debugOff(isize source)
 }
 
 void
-Thread::changeStateTo(ExecutionState requestedState, bool blocking)
+Thread::changeStateTo(ExecutionState requestedState, bool blocking) // TODO: REMOVE deprecated blocking
 {
+    assert(blocking == true);
+    assert(stateChangeRequest.test() == false);
+
+    // Assign new state
     newState = requestedState;
-    if (blocking) while (state != requestedState) { };
+
+    // Request the change
+    stateChangeRequest.test_and_set();
+
+    // Wait until the change has been performed
+    stateChangeRequest.wait(true);
 }
 
 void
-Thread::changeWarpTo(u8 value, bool blocking)
+Thread::changeWarpTo(u8 value, bool blocking) // TODO: REMOVE deprecated blocking
 {
+    assert(blocking == true);
+    assert(warpChangeRequest.test() == false);
+
+    // Assign new state
     newWarpMode = value;
-    if (blocking) while (warpMode != newWarpMode) { };
+
+    // Request the change
+    warpChangeRequest.test_and_set();
+
+    // Wait until the change has been performed
+    warpChangeRequest.wait(true);
 }
 
 void
-Thread::changeDebugTo(u8 value, bool blocking)
+Thread::changeDebugTo(u8 value, bool blocking) // TODO: REMOVE deprecated blocking
 {
+    assert(blocking == true);
+    assert(debugChangeRequest.test() == false);
+
+    // Assign new state
     newDebugMode = value;
-    if (blocking) while (debugMode != newDebugMode) { };
+
+    // Request the change
+    debugChangeRequest.test_and_set();
+
+    // Wait until the change has been performed
+    debugChangeRequest.wait(true);
 }
 
 void
@@ -339,7 +384,7 @@ Thread::suspend()
 
         suspendCounter++;
         assert(state == EXEC_RUNNING || state == EXEC_SUSPENDED);
-        changeStateTo(EXEC_SUSPENDED, true);
+        changeStateTo(EXEC_SUSPENDED);
     }
 }
 
@@ -351,7 +396,7 @@ Thread::resume()
     if (suspendCounter && --suspendCounter == 0) {
         
         assert(state == EXEC_SUSPENDED);
-        changeStateTo(EXEC_RUNNING, true);
+        changeStateTo(EXEC_RUNNING);
         run();
     }
 }
