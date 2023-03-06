@@ -178,7 +178,7 @@ Agnus::scheduleStrobe2Event()
 }
 
 void
-Agnus::scheduleGUITimerAbs(isize cycle, u32 payload)
+Agnus::scheduleGUITimerAbs(Cycle cycle, u32 payload)
 {
     {   SUSPENDED
 
@@ -187,7 +187,7 @@ Agnus::scheduleGUITimerAbs(isize cycle, u32 payload)
 }
 
 void
-Agnus::scheduleGUITimerRel(isize cycle, u32 payload)
+Agnus::scheduleGUITimerRel(Cycle cycle, u32 payload)
 {
     {   SUSPENDED
 

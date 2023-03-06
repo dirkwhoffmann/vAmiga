@@ -748,8 +748,8 @@ public:
     void scheduleStrobe2Event();
 
     // Schedules a GUI event in the GUI slot
-    void scheduleGUITimerAbs(isize cycle, u32 payload);
-    void scheduleGUITimerRel(isize cycle, u32 payload);
+    void scheduleGUITimerAbs(Cycle cycle, u32 payload);
+    void scheduleGUITimerRel(Cycle cycle, u32 payload);
 
 
     //
