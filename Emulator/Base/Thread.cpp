@@ -197,7 +197,7 @@ Thread::main()
                     fatalError;
                 }
 
-                debug(true, "Changed state to %s\n", ExecutionStateEnum::key(state));
+                debug(RUN_DEBUG, "Changed state to %s\n", ExecutionStateEnum::key(state));
             }
 
             stateChangeRequest.clear();
@@ -220,7 +220,7 @@ Thread::main()
 }
 
 void
-Thread::powerOn(bool blocking)
+Thread::powerOn()
 {
     debug(RUN_DEBUG, "powerOn()\n");
 
@@ -230,12 +230,12 @@ Thread::powerOn(bool blocking)
     if (isPoweredOff()) {
         
         // Request a state change and wait until the new state has been reached
-        changeStateTo(EXEC_PAUSED, blocking);
+        changeStateTo(EXEC_PAUSED);
     }
 }
 
 void
-Thread::powerOff(bool blocking)
+Thread::powerOff()
 {
     debug(RUN_DEBUG, "powerOff()\n");
 
@@ -245,12 +245,12 @@ Thread::powerOff(bool blocking)
     if (!isPoweredOff()) {
 
         // Request a state change and wait until the new state has been reached
-        changeStateTo(EXEC_OFF, blocking);
+        changeStateTo(EXEC_OFF);
     }
 }
 
 void
-Thread::run(bool blocking)
+Thread::run()
 {
     debug(RUN_DEBUG, "run()\n");
 
@@ -263,12 +263,12 @@ Thread::run(bool blocking)
         isReady();
         
         // Request a state change and wait until the new state has been reached
-        changeStateTo(EXEC_RUNNING, blocking);
+        changeStateTo(EXEC_RUNNING);
     }
 }
 
 void
-Thread::pause(bool blocking)
+Thread::pause()
 {
     debug(RUN_DEBUG, "pause()\n");
 
@@ -278,16 +278,16 @@ Thread::pause(bool blocking)
     if (isRunning()) {
 
         // Request a state change and wait until the new state has been reached
-        changeStateTo(EXEC_PAUSED, blocking);
+        changeStateTo(EXEC_PAUSED);
     }
 }
 
 void
-Thread::halt(bool blocking)
+Thread::halt()
 {
     assert(!isEmulatorThread());
     
-    changeStateTo(EXEC_HALTED, blocking);
+    changeStateTo(EXEC_HALTED);
     join();
 }
 
@@ -322,9 +322,8 @@ Thread::debugOff(isize source)
 }
 
 void
-Thread::changeStateTo(ExecutionState requestedState, bool blocking) // TODO: REMOVE deprecated blocking
+Thread::changeStateTo(ExecutionState requestedState)
 {
-    assert(blocking == true);
     assert(stateChangeRequest.test() == false);
 
     // Assign new state
@@ -332,15 +331,16 @@ Thread::changeStateTo(ExecutionState requestedState, bool blocking) // TODO: REM
 
     // Request the change
     stateChangeRequest.test_and_set();
+    assert(stateChangeRequest.test() == true);
 
     // Wait until the change has been performed
     stateChangeRequest.wait(true);
+    assert(stateChangeRequest.test() == false);
 }
 
 void
-Thread::changeWarpTo(u8 value, bool blocking) // TODO: REMOVE deprecated blocking
+Thread::changeWarpTo(u8 value)
 {
-    assert(blocking == true);
     assert(warpChangeRequest.test() == false);
 
     // Assign new state
@@ -348,15 +348,16 @@ Thread::changeWarpTo(u8 value, bool blocking) // TODO: REMOVE deprecated blockin
 
     // Request the change
     warpChangeRequest.test_and_set();
+    assert(warpChangeRequest.test() == true);
 
     // Wait until the change has been performed
     warpChangeRequest.wait(true);
+    assert(warpChangeRequest.test() == false);
 }
 
 void
-Thread::changeDebugTo(u8 value, bool blocking) // TODO: REMOVE deprecated blocking
+Thread::changeDebugTo(u8 value)
 {
-    assert(blocking == true);
     assert(debugChangeRequest.test() == false);
 
     // Assign new state
@@ -364,9 +365,11 @@ Thread::changeDebugTo(u8 value, bool blocking) // TODO: REMOVE deprecated blocki
 
     // Request the change
     debugChangeRequest.test_and_set();
+    assert(debugChangeRequest.test() == true);
 
     // Wait until the change has been performed
     debugChangeRequest.wait(true);
+    assert(debugChangeRequest.test() == false);
 }
 
 void

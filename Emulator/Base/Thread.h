@@ -219,11 +219,11 @@ public:
     void suspend() override;
     void resume() override;
 
-    void powerOn(bool blocking = true);
-    void powerOff(bool blocking = true);
-    void run(bool blocking = true) throws;
-    void pause(bool blocking = true);
-    void halt(bool blocking = true);
+    void powerOn();
+    void powerOff();
+    void run() throws;
+    void pause();
+    void halt();
 
     bool inWarpMode() const { return warpMode != 0; }
     void warpOn(isize source = 0);
@@ -235,9 +235,9 @@ public:
 
 protected:
 
-    void changeStateTo(ExecutionState requestedState, bool blocking = true);
-    void changeWarpTo(u8 value, bool blocking = true);
-    void changeDebugTo(u8 value, bool blocking = true);
+    void changeStateTo(ExecutionState requestedState);
+    void changeWarpTo(u8 value);
+    void changeDebugTo(u8 value);
     
     
     //
