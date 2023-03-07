@@ -68,9 +68,7 @@ public:
 
     // Sends a message
     void put(const Message &msg);
-    void put(MsgType type, i64 = 0);
-    void put(MsgType type, i32, i32);
-    void put(MsgType type, i16, i16, i16, i16);
+    void put(MsgType type, i64 = 0, i64 = 0, i64 = 0, i64 = 0);
 
     // Reads a message
     bool get(Message &msg);

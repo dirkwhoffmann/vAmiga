@@ -365,16 +365,16 @@ extension MyController {
     
     func processMessage(_ msg: Message) {
 
-        var data1: Int { return Int(msg.word1) }
-        var data2: Int { return Int(msg.word2) }
-        var data3: Int { return Int(msg.word3) }
-        var data4: Int { return Int(msg.word4) }
+        var data1: Int { return Int(msg.data1) }
+        var data2: Int { return Int(msg.data2) }
+        var data3: Int { return Int(msg.data3) }
+        var data4: Int { return Int(msg.data4) }
 
         var nr: Int { return data1 }
         var cyl: Int { return data2 }
         var volume: Int { return data3 }
         var pan: Int { return data4 }
-        var pc: Int { return Int(UInt16(bitPattern: msg.word1)) }
+        var pc: Int { return data1 }
         var vector: Int { return data2 }
         var acceleration: Double { return Double(data1 == 0 ? 1 : data1) }
 
@@ -435,8 +435,8 @@ extension MyController {
             shutDown()
             
         case .ABORT:
-            debug(.shutdown, "Aborting with exit code \(msg.word1)")
-            exit(Int32(msg.word1))
+            debug(.shutdown, "Aborting with exit code \(data1)")
+            exit(Int32(data1))
             
         case .MUTE_ON:
             muted = true

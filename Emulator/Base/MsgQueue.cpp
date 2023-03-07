@@ -36,7 +36,9 @@ MsgQueue::put(const Message &msg)
 {
     {   SYNCHRONIZED
 
-        debug(QUEUE_DEBUG, "%s [%llx]\n", MsgTypeEnum::key(msg.type), msg.payload);
+        debug(QUEUE_DEBUG, "%s [%llx %llx %llx %llx]\n",
+              MsgTypeEnum::key(msg.type),
+              msg.data1, msg.data2, msg.data3, msg.data4);
 
         // Send the message immediately if a lister has been registered
         if (listener) { callback(listener, msg); return; }
@@ -47,23 +49,9 @@ MsgQueue::put(const Message &msg)
 }
 
 void
-MsgQueue::put(MsgType type, i64 data)
+MsgQueue::put(MsgType type, i64 d1, i64 d2, i64 d3, i64 d4)
 {
-    Message msg = { .type = type, .payload = data };
-    put(msg);
-}
-
-void
-MsgQueue::put(MsgType type, i32 d1, i32 d2)
-{
-    Message msg = { .type = type, .long1 = d1, .long2 = d2 };
-    put(msg);
-}
-
-void
-MsgQueue::put(MsgType type, i16 d1, i16 d2, i16 d3, i16 d4)
-{
-    Message msg = { .type = type, .word1 = d1, .word2 = d2, .word3 = d3, .word4 = d4 };
+    Message msg = { .type = type, .data1 = d1, .data2 = d2, .data3 = d3, .data4 = d4 };
     put(msg);
 }
 
