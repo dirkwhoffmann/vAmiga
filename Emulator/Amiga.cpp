@@ -1196,6 +1196,7 @@ Amiga::execute()
                 clearFlag(RL::SOFTSTOP_REACHED);
                 inspect();
                 newState = EXEC_PAUSED;
+                stateChangeRequest.test_and_set();
                 break;
             }
 
@@ -1206,6 +1207,7 @@ Amiga::execute()
                 auto addr = isize(cpu.debugger.breakpoints.hit->addr);
                 msgQueue.put(MSG_BREAKPOINT_REACHED, addr);
                 newState = EXEC_PAUSED;
+                stateChangeRequest.test_and_set();
                 break;
             }
 
@@ -1216,6 +1218,7 @@ Amiga::execute()
                 auto addr = isize(cpu.debugger.watchpoints.hit->addr);
                 msgQueue.put(MSG_WATCHPOINT_REACHED, addr);
                 newState = EXEC_PAUSED;
+                stateChangeRequest.test_and_set();
                 break;
             }
 
@@ -1226,6 +1229,7 @@ Amiga::execute()
                 auto vector = u8(cpu.debugger.catchpoints.hit->addr);
                 msgQueue.put(MSG_CATCHPOINT_REACHED, cpu.getPC0(), vector);
                 newState = EXEC_PAUSED;
+                stateChangeRequest.test_and_set();
                 break;
             }
 
@@ -1235,6 +1239,7 @@ Amiga::execute()
                 inspect();
                 msgQueue.put(MSG_SWTRAP_REACHED, cpu.getPC0());
                 newState = EXEC_PAUSED;
+                stateChangeRequest.test_and_set();
                 break;
             }
 
@@ -1245,6 +1250,7 @@ Amiga::execute()
                 auto addr = u8(agnus.copper.debugger.breakpoints.hit->addr);
                 msgQueue.put(MSG_COPPERBP_REACHED, addr);
                 newState = EXEC_PAUSED;
+                stateChangeRequest.test_and_set();
                 break;
             }
 
@@ -1255,6 +1261,7 @@ Amiga::execute()
                 auto addr = u8(agnus.copper.debugger.watchpoints.hit->addr);
                 msgQueue.put(MSG_COPPERWP_REACHED, addr);
                 newState = EXEC_PAUSED;
+                stateChangeRequest.test_and_set();
                 break;
             }
 
@@ -1262,6 +1269,7 @@ Amiga::execute()
             if (flags & RL::STOP) {
                 clearFlag(RL::STOP);
                 newState = EXEC_PAUSED;
+                stateChangeRequest.test_and_set();
                 break;
             }
 
