@@ -53,4 +53,22 @@ MsgQueue::put(MsgType type, isize d1, isize d2, isize d3, isize d4)
     }
 }
 
+bool
+MsgQueue::get(MsgType &type, isize &d1, isize &d2, isize &d3, isize &d4)
+{
+    {   SYNCHRONIZED
+
+        if (queue.isEmpty()) return false;
+
+        Message &msg = queue.read();
+        type = msg.type;
+        d1 = msg.data1;
+        d2 = msg.data2;
+        d3 = msg.data3;
+        d4 = msg.data4;
+
+        return true;
+    }
+}
+
 }
