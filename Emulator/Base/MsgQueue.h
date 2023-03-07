@@ -70,7 +70,7 @@ public:
     void put(MsgType type, isize = 0, isize = 0, isize = 0, isize = 0);
 
     // Reads a message
-    bool get(MsgType &type, isize &, isize &, isize &, isize &);
+    bool get(MsgType &type, i32 &, i32 &, i32 &, i32 &);
 };
 
 }

@@ -54,7 +54,7 @@ MsgQueue::put(MsgType type, isize d1, isize d2, isize d3, isize d4)
 }
 
 bool
-MsgQueue::get(MsgType &type, isize &d1, isize &d2, isize &d3, isize &d4)
+MsgQueue::get(MsgType &type, i32 &d1, i32 &d2, i32 &d3, i32 &d4)
 {
     {   SYNCHRONIZED
 
