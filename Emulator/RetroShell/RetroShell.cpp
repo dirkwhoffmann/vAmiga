@@ -476,7 +476,7 @@ RetroShell::continueScript()
             
         } catch (ScriptInterruption &exc) {
             
-            msgQueue.put(MSG_SCRIPT_PAUSE, scriptLine, exc.data);
+            msgQueue.put(MSG_SCRIPT_PAUSE, i16(scriptLine), i16(exc.data));
             return;
 
         } catch (std::exception &) {

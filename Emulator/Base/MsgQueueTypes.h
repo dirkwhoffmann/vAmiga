@@ -268,14 +268,11 @@ typedef struct
 {
     MsgType type;
 
-    /* The payload of a message consists of up to four (signed) 32-bit values.
-     * We avoid the usage of 64-bit types inside this structure to make it
-     * easily processable by JavaScript (web ports).
-     */
-    i32 data1;
-    i32 data2;
-    i32 data3;
-    i32 data4;
+    union {
+        struct { i64 payload; };
+        struct { i32 long1; i32 long2; };
+        struct { i16 word1; i16 word2; i16 word3; i16 word4; };
+    };
 }
 Message;
 
@@ -284,4 +281,5 @@ Message;
 // Signatures
 //
 
-typedef void Callback(const void *, long, i32, i32, i32, i32);
+// typedef void Callback(const void *, long, i32, i32, i32, i32);
+typedef void Callback(const void *, Message);

@@ -824,7 +824,7 @@ Agnus::serviceINSEvent(EventID id)
 void
 Agnus::serviceGUIEvent()
 {
-    msgQueue.put(MSG_GUI_EVENT, id[SLOT_GUI], data[SLOT_GUI]);
+    msgQueue.put(MSG_GUI_EVENT, i32(id[SLOT_GUI]), i32(data[SLOT_GUI]));
     cancel<SLOT_GUI>();
 }
 

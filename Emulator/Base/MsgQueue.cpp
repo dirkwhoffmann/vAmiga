@@ -24,8 +24,7 @@ MsgQueue::setListener(const void *listener, Callback *callback)
         while (!queue.isEmpty()) {
 
             Message &msg = queue.read();
-            callback(listener,
-                     msg.type, msg.data1, msg.data2, msg.data3, msg.data4);
+            callback(listener, msg);
         }
         
         put(MSG_REGISTER);
@@ -33,40 +32,49 @@ MsgQueue::setListener(const void *listener, Callback *callback)
 }
 
 void
-MsgQueue::put(MsgType type, isize d1, isize d2, isize d3, isize d4)
+MsgQueue::put(const Message &msg)
 {
     {   SYNCHRONIZED
-        
-        auto i1 = i32(d1);
-        auto i2 = i32(d2);
-        auto i3 = i32(d3);
-        auto i4 = i32(d4);
 
-        debug(QUEUE_DEBUG,
-              "%s [%d:%d:%d:%d]\n", MsgTypeEnum::key(type), i1, i2, i3, i4);
-        
+        debug(QUEUE_DEBUG, "%s [%llx]\n", MsgTypeEnum::key(msg.type), msg.payload);
+
         // Send the message immediately if a lister has been registered
-        if (listener) { callback(listener, type, i1, i2, i3, i4); return; }
-        
+        if (listener) { callback(listener, msg); return; }
+
         // Otherwise, store it in the ring buffer
-        Message msg = { type, i1, i2, i3, i4 }; queue.write(msg);
+        queue.write(msg);
     }
 }
 
+void
+MsgQueue::put(MsgType type, i64 data)
+{
+    Message msg = { .type = type, .payload = data };
+    put(msg);
+}
+
+void
+MsgQueue::put(MsgType type, i32 d1, i32 d2)
+{
+    Message msg = { .type = type, .long1 = d1, .long2 = d2 };
+    put(msg);
+}
+
+void
+MsgQueue::put(MsgType type, i16 d1, i16 d2, i16 d3, i16 d4)
+{
+    Message msg = { .type = type, .word1 = d1, .word2 = d2, .word3 = d3, .word4 = d4 };
+    put(msg);
+}
+
 bool
-MsgQueue::get(MsgType &type, i32 &d1, i32 &d2, i32 &d3, i32 &d4)
+MsgQueue::get(Message &msg)
 {
     {   SYNCHRONIZED
 
         if (queue.isEmpty()) return false;
 
-        Message &msg = queue.read();
-        type = msg.type;
-        d1 = msg.data1;
-        d2 = msg.data2;
-        d3 = msg.data3;
-        d4 = msg.data4;
-
+        msg = queue.read();
         return true;
     }
 }

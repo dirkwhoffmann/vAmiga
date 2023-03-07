@@ -67,10 +67,13 @@ public:
     void setListener(const void *listener, Callback *func);
 
     // Sends a message
-    void put(MsgType type, isize = 0, isize = 0, isize = 0, isize = 0);
+    void put(const Message &msg);
+    void put(MsgType type, i64 = 0);
+    void put(MsgType type, i32, i32);
+    void put(MsgType type, i16, i16, i16, i16);
 
     // Reads a message
-    bool get(MsgType &type, i32 &, i32 &, i32 &, i32 &);
+    bool get(Message &msg);
 };
 
 }

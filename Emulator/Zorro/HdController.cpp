@@ -205,7 +205,7 @@ void
 HdController::resetHdcState()
 {
     hdcState = HDC_UNDETECTED;
-    msgQueue.put(MSG_HDC_STATE, nr, hdcState);
+    msgQueue.put(MSG_HDC_STATE, i16(nr), i16(hdcState));
 }
 
 void
@@ -216,7 +216,7 @@ HdController::changeHdcState(HdcState newState)
         debug(HDR_DEBUG, "Changing state to %s\n", HdcStateEnum::key(newState));
         
         hdcState = newState;
-        msgQueue.put(MSG_HDC_STATE, nr, hdcState);
+        msgQueue.put(MSG_HDC_STATE, i16(nr), i16(hdcState));
     }
 }
 
