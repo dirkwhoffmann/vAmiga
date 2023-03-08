@@ -137,12 +137,12 @@ protected:
 
     // The current warp state and a change request
     u8 warp = 0;
-    u8 newWarp = 0;
+    struct { bool state; u8 source; } newWarp;
     std::atomic_flag warpChangeRequest {};
 
     // The current track state and a change request
     u8 track = 0;
-    u8 newTrack = 0;
+    struct { bool state; u8 source; } newTrack;
     std::atomic_flag trackChangeRequest {};
 
     // Counters
@@ -195,8 +195,8 @@ private:
 
     // Performs a state change
     void switchState(ExecutionState newState);
-    void switchWarp(u8 newState);
-    void switchDebug(u8 newState);
+    void switchWarp(bool state, u8 source);
+    void switchDebug(bool state, u8 source);
 
 
     //
@@ -241,8 +241,8 @@ public:
 protected:
 
     void changeStateTo(ExecutionState requestedState);
-    void changeWarpTo(u8 value);
-    void changeDebugTo(u8 value);
+    void changeWarpTo(bool newState, u8 source);
+    void changeDebugTo(bool newState, u8 source);
     
     
     //
