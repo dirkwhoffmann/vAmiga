@@ -1196,10 +1196,6 @@ Amiga::execute()
                 clearFlag(RL::SOFTSTOP_REACHED);
                 inspect();
                 switchState(EXEC_PAUSED);
-                /*
-                newState = EXEC_PAUSED;
-                stateChangeRequest.test_and_set();
-                */
                 break;
             }
 
@@ -1210,10 +1206,6 @@ Amiga::execute()
                 auto addr = cpu.debugger.breakpoints.hit->addr;
                 msgQueue.put(MSG_BREAKPOINT_REACHED, CpuMsg { addr, 0});
                 switchState(EXEC_PAUSED);
-                /*
-                newState = EXEC_PAUSED;
-                stateChangeRequest.test_and_set();
-                */
                 break;
             }
 
@@ -1224,10 +1216,6 @@ Amiga::execute()
                 auto addr = cpu.debugger.watchpoints.hit->addr;
                 msgQueue.put(MSG_WATCHPOINT_REACHED, CpuMsg {addr, 0});
                 switchState(EXEC_PAUSED);
-                /*
-                newState = EXEC_PAUSED;
-                stateChangeRequest.test_and_set();
-                */
                 break;
             }
 
@@ -1238,10 +1226,6 @@ Amiga::execute()
                 auto vector = u8(cpu.debugger.catchpoints.hit->addr);
                 msgQueue.put(MSG_CATCHPOINT_REACHED, CpuMsg {cpu.getPC0(), vector});
                 switchState(EXEC_PAUSED);
-                /*
-                newState = EXEC_PAUSED;
-                stateChangeRequest.test_and_set();
-                */
                 break;
             }
 
@@ -1251,10 +1235,6 @@ Amiga::execute()
                 inspect();
                 msgQueue.put(MSG_SWTRAP_REACHED, CpuMsg {cpu.getPC0(), 0});
                 switchState(EXEC_PAUSED);
-                /*
-                newState = EXEC_PAUSED;
-                stateChangeRequest.test_and_set();
-                */
                 break;
             }
 
@@ -1265,10 +1245,6 @@ Amiga::execute()
                 auto addr = u8(agnus.copper.debugger.breakpoints.hit->addr);
                 msgQueue.put(MSG_COPPERBP_REACHED, CpuMsg { addr, 0 });
                 switchState(EXEC_PAUSED);
-                /*
-                newState = EXEC_PAUSED;
-                stateChangeRequest.test_and_set();
-                */
                 break;
             }
 
@@ -1279,10 +1255,6 @@ Amiga::execute()
                 auto addr = u8(agnus.copper.debugger.watchpoints.hit->addr);
                 msgQueue.put(MSG_COPPERWP_REACHED, CpuMsg { addr, 0 });
                 switchState(EXEC_PAUSED);
-                /*
-                newState = EXEC_PAUSED;
-                stateChangeRequest.test_and_set();
-                */
                 break;
             }
 
@@ -1290,25 +1262,8 @@ Amiga::execute()
             if (flags & RL::STOP) {
                 clearFlag(RL::STOP);
                 switchState(EXEC_PAUSED);
-                /*
-                newState = EXEC_PAUSED;
-                stateChangeRequest.test_and_set();
-                */
                 break;
             }
-
-            // Are we requested to enter or exit warp mode? DEPRECATEDS
-            /*
-            if (flags & RL::WARP_ON) {
-                clearFlag(RL::WARP_ON);
-                CoreComponent::warpOn();
-            }
-
-            if (flags & RL::WARP_OFF) {
-                clearFlag(RL::WARP_OFF);
-                CoreComponent::warpOff();
-            }
-            */
 
             // Are we requested to synchronize the thread?
             if (flags & RL::SYNC_THREAD) {

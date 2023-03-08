@@ -316,8 +316,6 @@ public:
     
     // Convenience wrappers
     void signalStop() { setFlag(RL::STOP); }
-    // void signalWarpOn() { setFlag(RL::WARP_ON); }
-    // void signalWarpOff() { setFlag(RL::WARP_OFF); }
     void signalAutoSnapshot() { setFlag(RL::AUTO_SNAPSHOT); }
     void signalUserSnapshot() { setFlag(RL::USER_SNAPSHOT); }
     
