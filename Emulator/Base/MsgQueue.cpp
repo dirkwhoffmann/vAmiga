@@ -36,9 +36,7 @@ MsgQueue::put(const Message &msg)
 {
     {   SYNCHRONIZED
 
-        debug(QUEUE_DEBUG, "%s [%llx %llx %llx %llx]\n",
-              MsgTypeEnum::key(msg.type),
-              msg.data1, msg.data2, msg.data3, msg.data4);
+        debug(QUEUE_DEBUG, "%s [%llx]\n", MsgTypeEnum::key(msg.type), msg.value);
 
         // Send the message immediately if a lister has been registered
         if (listener) { callback(listener, msg); return; }
@@ -49,10 +47,39 @@ MsgQueue::put(const Message &msg)
 }
 
 void
-MsgQueue::put(MsgType type, i64 d1, i64 d2, i64 d3, i64 d4)
+MsgQueue::put(MsgType type, i64 payload)
 {
-    Message msg = { .type = type, .data1 = d1, .data2 = d2, .data3 = d3, .data4 = d4 };
-    put(msg);
+    put( Message { .type = type, .value = payload } );
+}
+
+void
+MsgQueue::put(MsgType type, CpuMsg payload)
+{
+    put( Message { .type = type, .cpu = payload } );
+}
+
+void
+MsgQueue::put(MsgType type, DriveMsg payload)
+{
+    put( Message { .type = type, .drive = payload } );
+}
+
+void
+MsgQueue::put(MsgType type, HdcMsg payload)
+{
+    put( Message { .type = type, .hdc = payload } );
+}
+
+void
+MsgQueue::put(MsgType type, ScriptMsg payload)
+{
+    put( Message { .type = type, .script = payload } );
+}
+
+void
+MsgQueue::put(MsgType type, ViewportMsg payload)
+{
+    put( Message { .type = type, .viewport = payload } );
 }
 
 bool

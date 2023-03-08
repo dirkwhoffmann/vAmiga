@@ -476,20 +476,20 @@ RetroShell::continueScript()
             
         } catch (ScriptInterruption &exc) {
             
-            msgQueue.put(MSG_SCRIPT_PAUSE, scriptLine, exc.data);
+            msgQueue.put(MSG_SCRIPT_PAUSE, ScriptMsg { scriptLine });
             return;
 
         } catch (std::exception &) {
             
             *this << "Aborted in line " << scriptLine << '\n';
-            msgQueue.put(MSG_SCRIPT_ABORT, scriptLine);
+            msgQueue.put(MSG_SCRIPT_ABORT, ScriptMsg { scriptLine });
             return;
         }
 
         scriptLine++;
     }
     
-    msgQueue.put(MSG_SCRIPT_DONE, scriptLine);
+    msgQueue.put(MSG_SCRIPT_DONE, ScriptMsg { scriptLine });
 }
 
 void
@@ -602,7 +602,7 @@ RetroShell::eofHandler()
 {
     if (agnus.clock >= wakeUp) {
         
-        msgQueue.put(MSG_SCRIPT_WAKEUP);
+        msgQueue.put(MSG_SCRIPT_WAKEUP, ScriptMsg { scriptLine });
         wakeUp = INT64_MAX;
     }
 }

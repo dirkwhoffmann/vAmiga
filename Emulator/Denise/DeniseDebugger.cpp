@@ -169,11 +169,12 @@ DeniseDebugger::vsyncHandler()
             // Notify the GUI if the last message was sent a while ago
             if (abs(agnus.clock - vpMsgSent) > MSEC(200)) {
 
-                msgQueue.put(MSG_VIEWPORT,
-                             i16(latchedMaxViewPort.hstrt),
-                             i16(latchedMaxViewPort.vstrt),
-                             i16(latchedMaxViewPort.hstop),
-                             i16(latchedMaxViewPort.vstop));
+                msgQueue.put(MSG_VIEWPORT, ViewportMsg {
+                    i16(latchedMaxViewPort.hstrt),
+                    i16(latchedMaxViewPort.vstrt),
+                    i16(latchedMaxViewPort.hstop),
+                    i16(latchedMaxViewPort.vstop)
+                });
                 
                 vpMsgSent = agnus.clock;
                 vpChanged = false;

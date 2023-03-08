@@ -1204,8 +1204,8 @@ Amiga::execute()
             if (flags & RL::BREAKPOINT_REACHED) {
                 clearFlag(RL::BREAKPOINT_REACHED);
                 inspect();
-                auto addr = isize(cpu.debugger.breakpoints.hit->addr);
-                msgQueue.put(MSG_BREAKPOINT_REACHED, addr);
+                auto addr = cpu.debugger.breakpoints.hit->addr;
+                msgQueue.put(MSG_BREAKPOINT_REACHED, CpuMsg { addr, 0});
                 newState = EXEC_PAUSED;
                 stateChangeRequest.test_and_set();
                 break;
@@ -1215,8 +1215,8 @@ Amiga::execute()
             if (flags & RL::WATCHPOINT_REACHED) {
                 clearFlag(RL::WATCHPOINT_REACHED);
                 inspect();
-                auto addr = isize(cpu.debugger.watchpoints.hit->addr);
-                msgQueue.put(MSG_WATCHPOINT_REACHED, addr);
+                auto addr = cpu.debugger.watchpoints.hit->addr;
+                msgQueue.put(MSG_WATCHPOINT_REACHED, CpuMsg {addr, 0});
                 newState = EXEC_PAUSED;
                 stateChangeRequest.test_and_set();
                 break;
@@ -1227,7 +1227,7 @@ Amiga::execute()
                 clearFlag(RL::CATCHPOINT_REACHED);
                 inspect();
                 auto vector = u8(cpu.debugger.catchpoints.hit->addr);
-                msgQueue.put(MSG_CATCHPOINT_REACHED, cpu.getPC0(), vector);
+                msgQueue.put(MSG_CATCHPOINT_REACHED, CpuMsg {cpu.getPC0(), vector});
                 newState = EXEC_PAUSED;
                 stateChangeRequest.test_and_set();
                 break;
@@ -1237,7 +1237,7 @@ Amiga::execute()
             if (flags & RL::SWTRAP_REACHED) {
                 clearFlag(RL::SWTRAP_REACHED);
                 inspect();
-                msgQueue.put(MSG_SWTRAP_REACHED, cpu.getPC0());
+                msgQueue.put(MSG_SWTRAP_REACHED, CpuMsg {cpu.getPC0(), 0});
                 newState = EXEC_PAUSED;
                 stateChangeRequest.test_and_set();
                 break;
@@ -1248,7 +1248,7 @@ Amiga::execute()
                 clearFlag(RL::COPPERBP_REACHED);
                 inspect();
                 auto addr = u8(agnus.copper.debugger.breakpoints.hit->addr);
-                msgQueue.put(MSG_COPPERBP_REACHED, addr);
+                msgQueue.put(MSG_COPPERBP_REACHED, CpuMsg { addr, 0 });
                 newState = EXEC_PAUSED;
                 stateChangeRequest.test_and_set();
                 break;
@@ -1259,7 +1259,7 @@ Amiga::execute()
                 clearFlag(RL::COPPERWP_REACHED);
                 inspect();
                 auto addr = u8(agnus.copper.debugger.watchpoints.hit->addr);
-                msgQueue.put(MSG_COPPERWP_REACHED, addr);
+                msgQueue.put(MSG_COPPERWP_REACHED, CpuMsg { addr, 0 });
                 newState = EXEC_PAUSED;
                 stateChangeRequest.test_and_set();
                 break;

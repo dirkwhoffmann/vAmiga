@@ -828,13 +828,15 @@ FloppyDrive::step(isize dir)
     // Notify the GUI
     if (pollsForDisk()) {
         
-        msgQueue.put(MSG_DRIVE_POLL,
-                     i16(nr), i16(head.cylinder), config.pollVolume, config.pan);
+        msgQueue.put(MSG_DRIVE_POLL, DriveMsg {
+            i16(nr), i16(head.cylinder), config.pollVolume, config.pan
+        });
         
     } else {
 
-        msgQueue.put(MSG_DRIVE_STEP,
-                     i16(nr), i16(head.cylinder), config.stepVolume, config.pan);
+        msgQueue.put(MSG_DRIVE_STEP, DriveMsg {
+            i16(nr), i16(head.cylinder), config.stepVolume, config.pan
+        });
     }
 }
 
@@ -1097,7 +1099,11 @@ FloppyDrive::serviceDiskChangeEvent()
             
             // Notify the GUI
             msgQueue.put(MSG_DISK_EJECT,
+                         DriveMsg { i16(nr), 0, config.ejectVolume, config.pan });
+            /*
+            msgQueue.put(MSG_DISK_EJECT,
                          i16(nr), 0, config.ejectVolume, config.pan);
+             */
         }
     }
     
@@ -1113,8 +1119,9 @@ FloppyDrive::serviceDiskChangeEvent()
             head.offset = 0;
             
             // Notify the GUI
-            msgQueue.put(MSG_DISK_INSERT,
-                         i16(nr), 0, config.insertVolume, config.pan);
+            msgQueue.put(MSG_DISK_INSERT, DriveMsg {
+                i16(nr), 0, config.insertVolume, config.pan
+            });
         }
     }
 

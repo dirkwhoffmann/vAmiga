@@ -365,18 +365,14 @@ extension MyController {
     
     func processMessage(_ msg: Message) {
 
-        var data1: Int { return Int(msg.data1) }
-        var data2: Int { return Int(msg.data2) }
-        var data3: Int { return Int(msg.data3) }
-        var data4: Int { return Int(msg.data4) }
-
-        var nr: Int { return data1 }
-        var cyl: Int { return data2 }
-        var volume: Int { return data3 }
-        var pan: Int { return data4 }
-        var pc: Int { return data1 }
-        var vector: Int { return data2 }
-        var acceleration: Double { return Double(data1 == 0 ? 1 : data1) }
+        var value: Int { return Int(msg.value) }
+        var nr: Int { return Int(msg.drive.nr) }
+        var cyl: Int { return Int(msg.drive.cylinder) }
+        var pc: Int { return Int(msg.cpu.pc) }
+        var vector: Int { return Int(msg.cpu.vector) }
+        var volume: Int { return Int(msg.drive.volume) }
+        var pan: Int { return Int(msg.drive.pan) }
+        var acceleration: Double { return Double(msg.value == 0 ? 1 : msg.value) }
 
         // Only proceed if the proxy object is still alive
         if amiga == nil { return }
@@ -435,8 +431,8 @@ extension MyController {
             shutDown()
             
         case .ABORT:
-            debug(.shutdown, "Aborting with exit code \(data1)")
-            exit(Int32(data1))
+            debug(.shutdown, "Aborting with exit code \(value)")
+            exit(Int32(value))
             
         case .MUTE_ON:
             muted = true
@@ -499,10 +495,10 @@ extension MyController {
             refreshStatusBar()
             
         case .VIEWPORT:
-            renderer.canvas.updateTextureRect(hstrt: data1,
-                                              vstrt: data2,
-                                              hstop: data3,
-                                              vstop: data4)
+            renderer.canvas.updateTextureRect(hstrt: Int(msg.viewport.hstrt),
+                                              vstrt: Int(msg.viewport.vstrt),
+                                              hstop: Int(msg.viewport.hstop),
+                                              vstop: Int(msg.viewport.vstop))
 
         case .MEM_LAYOUT:
             inspector?.fullRefresh()
@@ -576,10 +572,10 @@ extension MyController {
             resetAction(self)
             
         case .SER_IN:
-            serialIn += String(UnicodeScalar(data1 & 0xFF)!)
+            serialIn += String(UnicodeScalar(value & 0xFF)!)
             
         case .SER_OUT:
-            serialOut += String(UnicodeScalar(data1 & 0xFF)!)
+            serialOut += String(UnicodeScalar(value & 0xFF)!)
             
         case .AUTO_SNAPSHOT_TAKEN:
             mydocument.snapshots.append(amiga.latestAutoSnapshot)
@@ -589,7 +585,6 @@ extension MyController {
             renderer.flash()
             
         case .SNAPSHOT_RESTORED:
-            // renderer.blend(steps: 50)
             renderer.flash(steps: 60)
             hideOrShowDriveMenus()
             assignSlots()
