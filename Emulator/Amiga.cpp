@@ -949,7 +949,7 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << tab("Warp mode");
         os << bol(inWarpMode()) << std::endl;
         os << tab("Debug mode");
-        os << bol(inDebugMode()) << std::endl;
+        os << bol(inTrackMode()) << std::endl;
         os << std::endl;
         os << tab("Refresh rate");
         os << dec(isize(refreshRate())) << " Fps" << std::endl;

@@ -2831,7 +2831,7 @@ using namespace vamiga::moira;
 
 - (BOOL)debugMode
 {
-    return [self amiga]->inDebugMode();
+    return [self amiga]->inTrackMode();
 }
 
 - (void)setDebugMode:(BOOL)value

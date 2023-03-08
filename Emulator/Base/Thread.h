@@ -234,7 +234,7 @@ public:
     void warpOn(isize source = 0);
     void warpOff(isize source = 0);
 
-    bool inDebugMode() const { return trackMode != 0; }
+    bool inTrackMode() const { return trackMode != 0; }
     void trackOn(isize source = 0);
     void trackOff(isize source = 0);
 
