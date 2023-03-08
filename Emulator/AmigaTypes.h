@@ -346,8 +346,8 @@ typedef u32 RunLoopFlags;
 namespace RL
 {
 constexpr u32 STOP               = (1 << 0);
-constexpr u32 WARP_ON            = (1 << 1);
-constexpr u32 WARP_OFF           = (1 << 2);
+// constexpr u32 WARP_ON            = (1 << 1);
+// constexpr u32 WARP_OFF           = (1 << 2);
 constexpr u32 SOFTSTOP_REACHED   = (1 << 3);
 constexpr u32 BREAKPOINT_REACHED = (1 << 4);
 constexpr u32 WATCHPOINT_REACHED = (1 << 5);

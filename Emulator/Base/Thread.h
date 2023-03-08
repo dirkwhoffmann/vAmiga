@@ -193,6 +193,11 @@ private:
     // Returns true if this functions is called from within the emulator thread
     bool isEmulatorThread() { return std::this_thread::get_id() == thread.get_id(); }
 
+    // Performs a state change
+    void switchState(ExecutionState newState);
+    void switchWarp(u8 newState);
+    void switchDebug(u8 newState);
+
 
     //
     // Analyzing

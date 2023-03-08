@@ -119,12 +119,7 @@ Thread::main()
         // Are we requested to enter or exit warp mode?
         if (warpChangeRequest.test()) {
 
-            if (newWarpMode != warpMode) {
-
-                CoreComponent::warpOnOff(newWarpMode);
-                warpMode = newWarpMode;
-            }
-
+            switchWarp(newWarpMode);
             warpChangeRequest.clear();
             warpChangeRequest.notify_one();
         }
@@ -132,12 +127,7 @@ Thread::main()
         // Are we requested to enter or exit debug mode?
         if (debugChangeRequest.test()) {
 
-            if (newDebugMode != debugMode) {
-
-                CoreComponent::debugOnOff(newDebugMode);
-                debugMode = newDebugMode;
-            }
-
+            switchDebug(newDebugMode);
             debugChangeRequest.clear();
             debugChangeRequest.notify_one();
         }
@@ -145,61 +135,7 @@ Thread::main()
         // Are we requested to change state?
         if (stateChangeRequest.test()) {
 
-            while (newState != state) {
-
-                if (state == EXEC_OFF && newState == EXEC_PAUSED) {
-
-                    CoreComponent::powerOn();
-                    state = EXEC_PAUSED;
-
-                } else if (state == EXEC_OFF && newState == EXEC_RUNNING) {
-
-                    CoreComponent::powerOn();
-                    state = EXEC_PAUSED;
-
-                } else if (state == EXEC_PAUSED && newState == EXEC_OFF) {
-
-                    CoreComponent::powerOff();
-                    state = EXEC_OFF;
-
-                } else if (state == EXEC_PAUSED && newState == EXEC_RUNNING) {
-
-                    CoreComponent::run();
-                    state = EXEC_RUNNING;
-
-                } else if (state == EXEC_RUNNING && newState == EXEC_OFF) {
-
-                    state = EXEC_PAUSED;
-                    CoreComponent::pause();
-
-                } else if (state == EXEC_RUNNING && newState == EXEC_PAUSED) {
-
-                    state = EXEC_PAUSED;
-                    CoreComponent::pause();
-
-                } else if (state == EXEC_RUNNING && newState == EXEC_SUSPENDED) {
-
-                    state = EXEC_SUSPENDED;
-
-                } else if (state == EXEC_SUSPENDED && newState == EXEC_RUNNING) {
-
-                    state = EXEC_RUNNING;
-
-                } else if (newState == EXEC_HALTED) {
-
-                    CoreComponent::halt();
-                    state = EXEC_HALTED;
-                    return;
-
-                } else {
-
-                    // Invalid state transition
-                    fatalError;
-                }
-
-                debug(RUN_DEBUG, "Changed state to %s\n", ExecutionStateEnum::key(state));
-            }
-
+            switchState(newState);
             stateChangeRequest.clear();
             stateChangeRequest.notify_one();
         }
@@ -217,6 +153,83 @@ Thread::main()
             nonstopClock.restart();
         }
     }
+}
+
+void
+Thread::switchState(ExecutionState newState)
+{
+    while (newState != state) {
+
+        if (state == EXEC_OFF && newState == EXEC_PAUSED) {
+
+            CoreComponent::powerOn();
+            state = EXEC_PAUSED;
+
+        } else if (state == EXEC_OFF && newState == EXEC_RUNNING) {
+
+            CoreComponent::powerOn();
+            state = EXEC_PAUSED;
+
+        } else if (state == EXEC_PAUSED && newState == EXEC_OFF) {
+
+            CoreComponent::powerOff();
+            state = EXEC_OFF;
+
+        } else if (state == EXEC_PAUSED && newState == EXEC_RUNNING) {
+
+            CoreComponent::run();
+            state = EXEC_RUNNING;
+
+        } else if (state == EXEC_RUNNING && newState == EXEC_OFF) {
+
+            state = EXEC_PAUSED;
+            CoreComponent::pause();
+
+        } else if (state == EXEC_RUNNING && newState == EXEC_PAUSED) {
+
+            state = EXEC_PAUSED;
+            CoreComponent::pause();
+
+        } else if (state == EXEC_RUNNING && newState == EXEC_SUSPENDED) {
+
+            state = EXEC_SUSPENDED;
+
+        } else if (state == EXEC_SUSPENDED && newState == EXEC_RUNNING) {
+
+            state = EXEC_RUNNING;
+
+        } else if (newState == EXEC_HALTED) {
+
+            CoreComponent::halt();
+            state = EXEC_HALTED;
+            return;
+
+        } else {
+
+            // Invalid state transition
+            fatalError;
+        }
+
+        debug(RUN_DEBUG, "Changed state to %s\n", ExecutionStateEnum::key(state));
+    }
+}
+
+void
+Thread::switchWarp(u8 newState)
+{
+    if (bool(newState) != bool(warpMode)) {
+        CoreComponent::warpOnOff(newState);
+    }
+    warpMode = newState;
+}
+
+void
+Thread::switchDebug(u8 newState)
+{
+    if (bool(newState) != bool(debugMode)) {
+        CoreComponent::debugOnOff(newState);
+    }
+    debugMode = newState;
 }
 
 void
