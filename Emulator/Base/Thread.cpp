@@ -125,11 +125,11 @@ Thread::main()
         }
 
         // Are we requested to enter or exit debug mode?
-        if (debugChangeRequest.test()) {
+        if (trackChangeRequest.test()) {
 
-            switchDebug(newDebugMode);
-            debugChangeRequest.clear();
-            debugChangeRequest.notify_one();
+            switchDebug(newTrackMode);
+            trackChangeRequest.clear();
+            trackChangeRequest.notify_one();
         }
 
         // Are we requested to change state?
@@ -226,10 +226,10 @@ Thread::switchWarp(u8 newState)
 void
 Thread::switchDebug(u8 newState)
 {
-    if (bool(newState) != bool(debugMode)) {
-        CoreComponent::debugOnOff(newState);
+    if (bool(newState) != bool(trackMode)) {
+        CoreComponent::trackOnOff(newState);
     }
-    debugMode = newState;
+    trackMode = newState;
 }
 
 void
@@ -321,17 +321,17 @@ Thread::warpOff(isize source)
 }
 
 void
-Thread::debugOn(isize source)
+Thread::trackOn(isize source)
 {
     assert(source >= 0 && source < 8);
     
-    changeDebugTo(debugMode | (u8)(1 << source));
+    changeDebugTo(trackMode | (u8)(1 << source));
 }
 
 void
-Thread::debugOff(isize source)
+Thread::trackOff(isize source)
 {
-    changeDebugTo(debugMode & ~(u8)(1 << source));
+    changeDebugTo(trackMode & ~(u8)(1 << source));
 }
 
 void
@@ -371,18 +371,18 @@ Thread::changeWarpTo(u8 value)
 void
 Thread::changeDebugTo(u8 value)
 {
-    assert(debugChangeRequest.test() == false);
+    assert(trackChangeRequest.test() == false);
 
     // Assign new state
-    newDebugMode = value;
+    newTrackMode = value;
 
     // Request the change
-    debugChangeRequest.test_and_set();
-    assert(debugChangeRequest.test() == true);
+    trackChangeRequest.test_and_set();
+    assert(trackChangeRequest.test() == true);
 
     // Wait until the change has been performed
-    debugChangeRequest.wait(true);
-    assert(debugChangeRequest.test() == false);
+    trackChangeRequest.wait(true);
+    assert(trackChangeRequest.test() == false);
 }
 
 void

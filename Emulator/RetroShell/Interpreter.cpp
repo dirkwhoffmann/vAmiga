@@ -108,12 +108,12 @@ Interpreter::switchInterpreter()
     if (inCommandShell()) {
 
         shell = Shell::Debug;
-        amiga.debugOn(1);
+        amiga.trackOn(1);
 
     } else {
 
         shell = Shell::Command;
-        amiga.debugOff(1);
+        amiga.trackOff(1);
     }
 
     retroShell.updatePrompt();

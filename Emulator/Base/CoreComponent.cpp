@@ -209,17 +209,17 @@ CoreComponent::warpOff()
 }
 
 void
-CoreComponent::debugOn()
+CoreComponent::trackOn()
 {    
-    for (auto c : subComponents) { c->debugOn(); }
-    _debugOn();
+    for (auto c : subComponents) { c->trackOn(); }
+    _trackOn();
 }
 
 void
-CoreComponent::debugOff()
+CoreComponent::trackOff()
 {
-    for (auto c : subComponents) { c->debugOff(); }
-    _debugOff();
+    for (auto c : subComponents) { c->trackOff(); }
+    _trackOff();
 }
 
 }

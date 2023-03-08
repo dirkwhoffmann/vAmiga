@@ -1061,7 +1061,7 @@ Amiga::_powerOn()
     for (auto &bp : std::vector <u32> (INITIAL_BREAKPOINTS)) {
         
         cpu.debugger.breakpoints.setAt(bp);
-        debugMode = true;
+        trackMode = true;
     }
     
     // Update the recorded debug information
@@ -1087,7 +1087,7 @@ Amiga::_run()
     debug(RUN_DEBUG, "_run\n");
 
     // Enable or disable CPU debugging
-    debugMode ? cpu.debugger.enableLogging() : cpu.debugger.disableLogging();
+    trackMode ? cpu.debugger.enableLogging() : cpu.debugger.disableLogging();
 
     msgQueue.put(MSG_RUN);
 }
@@ -1130,17 +1130,17 @@ Amiga::_warpOff()
 }
 
 void
-Amiga::_debugOn()
+Amiga::_trackOn()
 {
-    debug(RUN_DEBUG, "_debugOn\n");
+    debug(RUN_DEBUG, "_trackOn\n");
 
     msgQueue.put(MSG_DEBUG_ON);
 }
 
 void
-Amiga::_debugOff()
+Amiga::_trackOff()
 {
-    debug(RUN_DEBUG, "_debugOff\n");
+    debug(RUN_DEBUG, "_trackOff\n");
 
     msgQueue.put(MSG_DEBUG_OFF);
 }

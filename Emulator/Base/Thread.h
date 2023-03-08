@@ -111,9 +111,9 @@ namespace vamiga {
  * into warp mode. In this mode, timing synchronization is disabled causing the
  * emulator to run as fast as possible.
  *
- * Similar to warp mode, the emulator may be put into debug mode. This mode is
+ * Similar to warp mode, the emulator may be put into track mode. This mode is
  * enabled when the GUI debugger is opend and disabled when the debugger is
- * closed. In debug mode, several time-consuming tasks are performed that are
+ * closed. In track mode, several time-consuming tasks are performed that are
  * usually left out. E.g., the CPU tracks all executed instructions and stores
  * the recorded information in a trace buffer.
  */
@@ -141,9 +141,9 @@ protected:
     std::atomic_flag warpChangeRequest {};
 
     // The current debug state and a change request
-    u8 debugMode = 0;
-    u8 newDebugMode = 0;
-    std::atomic_flag debugChangeRequest {};
+    u8 trackMode = 0;
+    u8 newTrackMode = 0;
+    std::atomic_flag trackChangeRequest {};
 
     // Counters
     isize loopCounter = 0;
@@ -234,9 +234,9 @@ public:
     void warpOn(isize source = 0);
     void warpOff(isize source = 0);
 
-    bool inDebugMode() const { return debugMode != 0; }
-    void debugOn(isize source = 0);
-    void debugOff(isize source = 0);
+    bool inDebugMode() const { return trackMode != 0; }
+    void trackOn(isize source = 0);
+    void trackOff(isize source = 0);
 
 protected:
 
