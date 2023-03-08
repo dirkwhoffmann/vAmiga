@@ -56,7 +56,7 @@ CopperDebugger::_dump(Category category, std::ostream& os) const
         }
     };
 
-    if (!amiga.inTrackMode()) {
+    if (!amiga.isTracking()) {
         
         os << "No recorded data. Debug mode is off." << std::endl;
         return;

@@ -136,13 +136,13 @@ protected:
     std::atomic_flag stateChangeRequest {};
 
     // The current warp state and a change request
-    u8 warpMode = 0;
-    u8 newWarpMode = 0;
+    u8 warp = 0;
+    u8 newWarp = 0;
     std::atomic_flag warpChangeRequest {};
 
-    // The current debug state and a change request
-    u8 trackMode = 0;
-    u8 newTrackMode = 0;
+    // The current track state and a change request
+    u8 track = 0;
+    u8 newTrack = 0;
     std::atomic_flag trackChangeRequest {};
 
     // Counters
@@ -230,11 +230,11 @@ public:
     void pause();
     void halt();
 
-    bool inWarpMode() const { return warpMode != 0; }
+    bool isWarping() const { return warp != 0; }
     void warpOn(isize source = 0);
     void warpOff(isize source = 0);
 
-    bool inTrackMode() const { return trackMode != 0; }
+    bool isTracking() const { return track != 0; }
     void trackOn(isize source = 0);
     void trackOff(isize source = 0);
 

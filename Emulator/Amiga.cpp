@@ -946,10 +946,10 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << bol(isRunning()) << std::endl;
         os << tab("Suspended");
         os << bol(isSuspended()) << std::endl;
-        os << tab("Warp mode");
-        os << bol(inWarpMode()) << std::endl;
-        os << tab("Debug mode");
-        os << bol(inTrackMode()) << std::endl;
+        os << tab("Warping");
+        os << bol(isWarping()) << std::endl;
+        os << tab("Tracking");
+        os << bol(isTracking()) << std::endl;
         os << std::endl;
         os << tab("Refresh rate");
         os << dec(isize(refreshRate())) << " Fps" << std::endl;
@@ -1061,7 +1061,7 @@ Amiga::_powerOn()
     for (auto &bp : std::vector <u32> (INITIAL_BREAKPOINTS)) {
         
         cpu.debugger.breakpoints.setAt(bp);
-        trackMode = true;
+        track = true;
     }
     
     // Update the recorded debug information
@@ -1087,7 +1087,7 @@ Amiga::_run()
     debug(RUN_DEBUG, "_run\n");
 
     // Enable or disable CPU debugging
-    trackMode ? cpu.debugger.enableLogging() : cpu.debugger.disableLogging();
+    track ? cpu.debugger.enableLogging() : cpu.debugger.disableLogging();
 
     msgQueue.put(MSG_RUN);
 }

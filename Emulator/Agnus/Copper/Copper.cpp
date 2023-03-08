@@ -37,7 +37,7 @@ Copper::setPC(u32 addr)
     coppc = addr;
 
     // Notify the debugger
-    if (amiga.inTrackMode()) { debugger.jumped(); }
+    if (amiga.isTracking()) { debugger.jumped(); }
 }
 
 void
@@ -46,7 +46,7 @@ Copper::advancePC()
     coppc += 2;
 
     // Notify the debugger
-    if (amiga.inTrackMode()) { debugger.advanced(); }
+    if (amiga.isTracking()) { debugger.advanced(); }
 }
 
 void

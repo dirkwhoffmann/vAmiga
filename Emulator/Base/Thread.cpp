@@ -48,7 +48,7 @@ Thread::sleep<Thread::ThreadMode::Periodic>()
     auto now = util::Time::now();
 
     // Only proceed if we're not running in warp mode
-    if (warpMode) return;
+    if (warp) return;
 
     // Check if we're running too slow...
     if (now > targetTime) {
@@ -88,7 +88,7 @@ Thread::sleep<Thread::ThreadMode::Pulsed>()
     auto timeout = util::Time(i64(2000000000.0 / refreshRate()));
 
     // Wait for the next pulse
-    if (!warpMode) waitForWakeUp(timeout);
+    if (!warp) waitForWakeUp(timeout);
 }
 
 void
@@ -107,7 +107,7 @@ Thread::main()
             }
         }
 
-        if (!warpMode || !isRunning()) {
+        if (!warp || !isRunning()) {
             
             switch (getThreadMode()) {
 
@@ -119,7 +119,7 @@ Thread::main()
         // Are we requested to enter or exit warp mode?
         if (warpChangeRequest.test()) {
 
-            switchWarp(newWarpMode);
+            switchWarp(newWarp);
             warpChangeRequest.clear();
             warpChangeRequest.notify_one();
         }
@@ -127,7 +127,7 @@ Thread::main()
         // Are we requested to enter or exit debug mode?
         if (trackChangeRequest.test()) {
 
-            switchDebug(newTrackMode);
+            switchDebug(newTrack);
             trackChangeRequest.clear();
             trackChangeRequest.notify_one();
         }
@@ -158,6 +158,8 @@ Thread::main()
 void
 Thread::switchState(ExecutionState newState)
 {
+    assert(isEmulatorThread());
+
     while (newState != state) {
 
         if (state == EXEC_OFF && newState == EXEC_PAUSED) {
@@ -217,19 +219,23 @@ Thread::switchState(ExecutionState newState)
 void
 Thread::switchWarp(u8 newState)
 {
-    if (bool(newState) != bool(warpMode)) {
+    assert(isEmulatorThread());
+
+    if (bool(newState) != bool(warp)) {
         CoreComponent::warpOnOff(newState);
     }
-    warpMode = newState;
+    warp = newState;
 }
 
 void
 Thread::switchDebug(u8 newState)
 {
-    if (bool(newState) != bool(trackMode)) {
+    assert(isEmulatorThread());
+
+    if (bool(newState) != bool(track)) {
         CoreComponent::trackOnOff(newState);
     }
-    trackMode = newState;
+    track = newState;
 }
 
 void
@@ -308,8 +314,8 @@ void
 Thread::warpOn(isize source)
 {
     assert(source >= 0 && source < 8);
-    
-    changeWarpTo(warpMode | (u8)(1 << source));
+
+    changeWarpTo(warp | (u8)(1 << source));
 }
 
 void
@@ -317,7 +323,7 @@ Thread::warpOff(isize source)
 {
     assert(source >= 0 && source < 8);
     
-    changeWarpTo(warpMode & ~(u8)(1 << source));
+    changeWarpTo(warp & ~(u8)(1 << source));
 }
 
 void
@@ -325,18 +331,19 @@ Thread::trackOn(isize source)
 {
     assert(source >= 0 && source < 8);
     
-    changeDebugTo(trackMode | (u8)(1 << source));
+    changeDebugTo(track | (u8)(1 << source));
 }
 
 void
 Thread::trackOff(isize source)
 {
-    changeDebugTo(trackMode & ~(u8)(1 << source));
+    changeDebugTo(track & ~(u8)(1 << source));
 }
 
 void
 Thread::changeStateTo(ExecutionState requestedState)
 {
+    assert(!isEmulatorThread());
     assert(stateChangeRequest.test() == false);
 
     // Assign new state
@@ -354,10 +361,11 @@ Thread::changeStateTo(ExecutionState requestedState)
 void
 Thread::changeWarpTo(u8 value)
 {
-    assert(warpChangeRequest.test() == false);
+    assert(!isEmulatorThread());
+   assert(warpChangeRequest.test() == false);
 
     // Assign new state
-    newWarpMode = value;
+    newWarp = value;
 
     // Request the change
     warpChangeRequest.test_and_set();
@@ -371,10 +379,11 @@ Thread::changeWarpTo(u8 value)
 void
 Thread::changeDebugTo(u8 value)
 {
+    assert(!isEmulatorThread());
     assert(trackChangeRequest.test() == false);
 
     // Assign new state
-    newTrackMode = value;
+    newTrack = value;
 
     // Request the change
     trackChangeRequest.test_and_set();

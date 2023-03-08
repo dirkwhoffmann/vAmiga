@@ -190,7 +190,7 @@ DeniseDebugger::vsyncHandler()
     // Sprite tracking
     //
     
-    if (amiga.inTrackMode()) {
+    if (amiga.isTracking()) {
         
         // Latch recorded sprite data
         for (isize i = 0; i < 8; i++) {

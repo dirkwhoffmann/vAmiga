@@ -2817,7 +2817,7 @@ using namespace vamiga::moira;
 
 - (BOOL)warpMode
 {
-    return [self amiga]->inWarpMode();
+    return [self amiga]->isWarping();
 }
 
 - (void)setWarpMode:(BOOL)value
@@ -2831,7 +2831,7 @@ using namespace vamiga::moira;
 
 - (BOOL)debugMode
 {
-    return [self amiga]->inTrackMode();
+    return [self amiga]->isTracking();
 }
 
 - (void)setDebugMode:(BOOL)value
