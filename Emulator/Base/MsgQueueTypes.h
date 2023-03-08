@@ -269,7 +269,7 @@ typedef struct { u32 pc; u8 vector; } CpuMsg;
 typedef struct { i16 nr; i16 cylinder; i16 volume; i16 pan; } DriveMsg;
 typedef struct { i16 nr; HdcState state; } HdcMsg;
 typedef struct { i16 hstrt; i16 vstrt; i16 hstop; i16 vstop; } ViewportMsg;
-typedef struct { isize line; } ScriptMsg;
+typedef struct { isize line; i16 delay; } ScriptMsg;
 
 typedef struct
 {
