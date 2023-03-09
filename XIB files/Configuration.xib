@@ -75,6 +75,7 @@
                 <outlet property="csRtcInfo1" destination="Wyd-E9-HnG" id="wAR-lm-wUh"/>
                 <outlet property="csRtcInfo2" destination="kSc-45-2Mv" id="0cI-t4-2PT"/>
                 <outlet property="csRtcRevision" destination="3nw-g4-iBc" id="eLp-VK-MiT"/>
+                <outlet property="csWarpMode" destination="mlb-hy-SiN" id="RID-tb-7j0"/>
                 <outlet property="extDeleteButton" destination="N41-Es-BhJ" id="XfO-xN-5fP"/>
                 <outlet property="extDropView" destination="TLP-ux-x2T" id="EfY-MO-d6h"/>
                 <outlet property="extMapAddr" destination="qIa-E2-clP" id="cKw-J3-1en"/>
@@ -739,7 +740,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M5c-fi-zMW" userLabel="System">
-                                            <rect key="frame" x="395" y="253" width="152" height="25"/>
+                                            <rect key="frame" x="395" y="253" width="156" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="OCS" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="6ZC-38-juZ" id="mxV-ez-x7L" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -774,7 +775,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3nw-g4-iBc" userLabel="System">
-                                            <rect key="frame" x="395" y="133" width="152" height="25"/>
+                                            <rect key="frame" x="395" y="133" width="156" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="aJJ-Yq-h7E" id="HpG-tg-azQ" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -962,6 +963,39 @@ DQ
                                             </popUpButtonCell>
                                             <connections>
                                                 <action selector="csMachineTypeAction:" target="-2" id="1m5-Pq-L63"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vQq-lq-GBL">
+                                            <rect key="frame" x="314" y="376" width="81" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="Warp:" id="Uqi-eB-NVQ">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mlb-hy-SiN">
+                                            <rect key="frame" x="395" y="373" width="156" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="During disk activity" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="j7d-Ss-CIa" id="wju-3N-8cG">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" title="OtherViews" autoenablesItems="NO" id="dXq-tn-f9p">
+                                                    <items>
+                                                        <menuItem title="During disk activity" state="on" id="j7d-Ss-CIa">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Never" tag="1" id="PQc-pj-I70">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Always" tag="2" id="noo-uJ-hf6">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="csWarpModeAction:" target="-2" id="JQd-LI-1Go"/>
                                             </connections>
                                         </popUpButton>
                                     </subviews>

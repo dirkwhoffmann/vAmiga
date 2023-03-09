@@ -80,6 +80,8 @@ extension MyController: NSWindowDelegate {
         
         debug(.shutdown, "Shutting down the emulator...")
         amiga.halt()
+
+        debug(.shutdown, "Shut down completed.")
     }
     
     func shutDown() {

@@ -365,11 +365,11 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func warpAction(_ sender: Any!) {
 
-        switch pref.warpMode {
+        switch WarpMode(rawValue: config.warpMode) {
 
-        case WarpMode.AUTO.rawValue: pref.warpMode = WarpMode.NEVER.rawValue
-        case WarpMode.NEVER.rawValue: pref.warpMode = WarpMode.ALWAYS.rawValue
-        case WarpMode.ALWAYS.rawValue: pref.warpMode = WarpMode.AUTO.rawValue
+        case .AUTO: config.warpMode = WarpMode.NEVER.rawValue
+        case .NEVER: config.warpMode = WarpMode.ALWAYS.rawValue
+        case .ALWAYS: config.warpMode = WarpMode.AUTO.rawValue
 
         default:
             fatalError()

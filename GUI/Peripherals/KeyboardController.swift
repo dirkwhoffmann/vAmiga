@@ -174,12 +174,12 @@ class KeyboardController: NSObject {
 
     func capsLockDown() {
 
-        pref.warpMode = WarpMode.ALWAYS.rawValue
+        parent.config.warpMode = WarpMode.ALWAYS.rawValue
     }
 
     func capsLockUp() {
 
-        pref.warpMode = WarpMode.NEVER.rawValue
+        parent.config.warpMode = WarpMode.NEVER.rawValue
     }
 
     func autoTypeAsync(_ string: String, completion: (() -> Void)? = nil) {

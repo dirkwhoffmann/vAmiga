@@ -16,7 +16,7 @@ extension MyController {
 
     var hourglassIcon: NSImage? {
         
-        switch WarpMode(rawValue: pref.warpMode) {
+        switch WarpMode(rawValue: config.warpMode) {
         case .AUTO where amiga.warpMode:
             return NSImage(named: "hourglass3Template")
         case .AUTO:

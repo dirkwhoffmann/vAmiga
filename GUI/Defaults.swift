@@ -307,10 +307,7 @@ struct Keys {
         // Fullscreen
         static let keepAspectRatio        = "General.FullscreenKeepAspectRatio"
         static let exitOnEsc              = "General.FullscreenExitOnEsc"
-        
-        // Warp mode
-        static let warpMode               = "General.WarpMode"
-        
+
         // Miscellaneous
         static let ejectWithoutAsking     = "General.EjectWithoutAsking"
         static let detachWithoutAsking    = "General.DetachWithoutAsking"
@@ -343,10 +340,7 @@ extension DefaultsProxy {
         // Fullscreen
         register(Keys.Gen.keepAspectRatio, false)
         register(Keys.Gen.exitOnEsc, true)
-        
-        // Warp mode
-        register(Keys.Gen.warpMode, WarpMode.NEVER.rawValue)
-        
+
         // Misc
         register(Keys.Gen.ejectWithoutAsking, false)
         register(Keys.Gen.detachWithoutAsking, false)
@@ -372,9 +366,7 @@ extension DefaultsProxy {
                      
                      Keys.Gen.keepAspectRatio,
                      Keys.Gen.exitOnEsc,
-                     
-                     Keys.Gen.warpMode,
-                     
+
                      Keys.Gen.ejectWithoutAsking,
                      Keys.Gen.detachWithoutAsking,
                      Keys.Gen.closeWithoutAsking,
@@ -406,9 +398,7 @@ extension Preferences {
         
         defaults.set(Keys.Gen.keepAspectRatio, keepAspectRatio)
         defaults.set(Keys.Gen.exitOnEsc, exitOnEsc)
-        
-        defaults.set(Keys.Gen.warpMode, warpMode)
-        
+
         defaults.set(Keys.Gen.ejectWithoutAsking, ejectWithoutAsking)
         defaults.set(Keys.Gen.detachWithoutAsking, detachWithoutAsking)
         defaults.set(Keys.Gen.closeWithoutAsking, closeWithoutAsking)
@@ -436,9 +426,7 @@ extension Preferences {
         
         keepAspectRatio = defaults.bool(Keys.Gen.keepAspectRatio)
         exitOnEsc = defaults.bool(Keys.Gen.exitOnEsc)
-        
-        warpMode = defaults.int(Keys.Gen.warpMode)
-        
+
         ejectWithoutAsking = defaults.bool(Keys.Gen.ejectWithoutAsking)
         detachWithoutAsking = defaults.bool(Keys.Gen.detachWithoutAsking)
         closeWithoutAsking = defaults.bool(Keys.Gen.closeWithoutAsking)
@@ -698,6 +686,7 @@ extension DefaultsProxy {
         remove(.VIDEO_FORMAT)
         remove(.CPU_REVISION)
         remove(.CPU_OVERCLOCKING)
+        remove(.WARP_MODE)
         remove(.AGNUS_REVISION)
         remove(.DENISE_REVISION)
         remove(.CIA_REVISION)
@@ -717,6 +706,7 @@ extension Configuration {
         machineType = defaults.get(.VIDEO_FORMAT)
         cpuRev = defaults.get(.CPU_REVISION)
         cpuSpeed = defaults.get(.CPU_OVERCLOCKING)
+        warpMode = defaults.get(.WARP_MODE)
         agnusRev = defaults.get(.AGNUS_REVISION)
         deniseRev = defaults.get(.DENISE_REVISION)
         ciaRev = defaults.get(.CIA_REVISION)
@@ -735,6 +725,7 @@ extension Configuration {
         defaults.set(.VIDEO_FORMAT, machineType)
         defaults.set(.CPU_REVISION, cpuRev)
         defaults.set(.CPU_OVERCLOCKING, cpuSpeed)
+        defaults.set(.WARP_MODE, warpMode)
         defaults.set(.AGNUS_REVISION, agnusRev)
         defaults.set(.DENISE_REVISION, deniseRev)
         defaults.set(.CIA_REVISION, ciaRev)

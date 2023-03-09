@@ -138,6 +138,8 @@ Thread::main()
             switchState(newState);
             stateChangeRequest.clear();
             stateChangeRequest.notify_one();
+
+            if (state == EXEC_HALTED) return;
         }
 
         // Compute the CPU load once in a while
@@ -204,7 +206,6 @@ Thread::switchState(ExecutionState newState)
 
             CoreComponent::halt();
             state = EXEC_HALTED;
-            return;
 
         } else {
 
@@ -305,7 +306,7 @@ void
 Thread::halt()
 {
     assert(!isEmulatorThread());
-    
+
     changeStateTo(EXEC_HALTED);
     join();
 }

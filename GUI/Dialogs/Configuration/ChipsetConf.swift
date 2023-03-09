@@ -62,6 +62,9 @@ extension ConfigurationController {
             csCpuInfo2.stringValue = ""
         }
 
+        // Warp
+        csWarpMode.selectItem(withTag: config.warpMode)
+
         // Agnus
         csMachineType.selectItem(withTag: config.machineType)
         csAgnusRevision.selectItem(withTag: config.agnusRev)
@@ -173,6 +176,12 @@ extension ConfigurationController {
     @IBAction func csCpuSpeedAction(_ sender: NSPopUpButton!) {
 
         config.cpuSpeed = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func csWarpModeAction(_ sender: NSPopUpButton!) {
+
+        config.warpMode = sender.selectedTag()
         refresh()
     }
 

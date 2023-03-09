@@ -51,6 +51,10 @@ class Configuration {
         get { return amiga.getConfig(.CPU_OVERCLOCKING) }
         set { amiga.configure(.CPU_OVERCLOCKING, value: newValue) }
     }
+    var warpMode: Int {
+        get { amiga.getConfig(.WARP_MODE) }
+        set { amiga.configure(.WARP_MODE, value: newValue) }
+    }
     var agnusRev: Int {
         get { return amiga.getConfig(.AGNUS_REVISION) }
         set { amiga.configure(.AGNUS_REVISION, value: newValue) }

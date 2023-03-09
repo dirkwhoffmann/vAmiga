@@ -794,8 +794,8 @@ extension Inspector {
         super.windowWillClose(notification)
 
         // Leave debug mode
-        amiga.trackMode = false
-        amiga.removeInspectionTarget()
+        amiga?.trackMode = false
+        amiga?.removeInspectionTarget()
     }
 }
 

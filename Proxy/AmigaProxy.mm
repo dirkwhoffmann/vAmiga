@@ -2820,6 +2820,7 @@ using namespace vamiga::moira;
     return [self amiga]->isWarping();
 }
 
+/*
 - (void)setWarpMode:(BOOL)value
 {
     if (value) {
@@ -2828,6 +2829,7 @@ using namespace vamiga::moira;
         [self amiga]->warpOff();
     }
 }
+*/
 
 - (BOOL)trackMode
 {

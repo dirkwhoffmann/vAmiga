@@ -80,12 +80,6 @@ class Preferences {
     // Fullscreen
     var keepAspectRatio = false
     var exitOnEsc = false
-            
-    // Warp mode
-    var warpMode: Int {
-        get { for c in myAppDelegate.controllers { return c.amiga.getConfig(.WARP_MODE) }; return 0 }
-        set { for c in myAppDelegate.controllers { c.amiga.configure(.WARP_MODE, value: newValue) } }
-    }
 
     // Misc
     var ejectWithoutAsking = false

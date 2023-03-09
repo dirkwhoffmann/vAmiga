@@ -51,9 +51,6 @@ extension PreferencesController {
         genAspectRatioButton.state = pref.keepAspectRatio ? .on : .off
         genExitOnEscButton.state = pref.exitOnEsc ? .on : .off
                 
-        // Warp mode
-        genWarpMode.selectItem(withTag: pref.warpMode)
-
         // Miscellaneous
         genEjectWithoutAskingButton.state = pref.ejectWithoutAsking ? .on : .off
         genDetachWithoutAskingButton.state = pref.detachWithoutAsking ? .on : .off
@@ -160,17 +157,6 @@ extension PreferencesController {
     @IBAction func genExitOnEscAction(_ sender: NSButton!) {
         
         pref.exitOnEsc = (sender.state == .on)
-        refresh()
-    }
-
-    //
-    // Action methods (Warp mode)
-    //
-
-    @IBAction func genWarpModeAction(_ sender: NSPopUpButton!) {
-        
-        pref.warpMode = sender.selectedTag()
-        parent.refreshStatusBar()
         refresh()
     }
     
