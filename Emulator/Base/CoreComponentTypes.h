@@ -20,6 +20,7 @@ enum_long(OPT)
 {
     // Amiga
     OPT_VIDEO_FORMAT,
+    OPT_WARP_MODE,
     OPT_SYNC_MODE,
     OPT_PROPOSED_FPS,
     
@@ -157,6 +158,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
         switch (value) {
 
             case OPT_VIDEO_FORMAT:          return "VIDEO_FORMAT";
+            case OPT_WARP_MODE:             return "WARP_MODE";
             case OPT_SYNC_MODE:             return "SYNC_MODE";
             case OPT_PROPOSED_FPS:          return "PROPOSED_FPS";
 

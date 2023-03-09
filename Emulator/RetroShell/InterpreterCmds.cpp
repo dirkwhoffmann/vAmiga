@@ -218,6 +218,13 @@ Interpreter::initCommandShell(Command &root)
         amiga.configure(OPT_VIDEO_FORMAT, parseEnum <VideoFormatEnum> (argv));
     });
 
+    root.add({"amiga", "set", "warpmode"}, { WarpModeEnum::argList() },
+             "Selects the warp mode",
+             [this](Arguments& argv, long value) {
+
+        amiga.configure(OPT_WARP_MODE, parseEnum <WarpModeEnum> (argv));
+    });
+
     root.add({"amiga", "set", "syncmode"}, { SyncModeEnum::argList() },
              "Selects the synchronization mode",
              [this](Arguments& argv, long value) {

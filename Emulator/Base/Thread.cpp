@@ -219,8 +219,6 @@ Thread::switchState(ExecutionState newState)
 void
 Thread::switchWarp(bool state, u8 source)
 {
-    assert(isEmulatorThread());
-
     u8 old = warp;
     state ? SET_BIT(warp, source) : CLR_BIT(warp, source);
 
@@ -232,8 +230,6 @@ Thread::switchWarp(bool state, u8 source)
 void
 Thread::switchDebug(bool state, u8 source)
 {
-    assert(isEmulatorThread());
-
     u8 old = track;
     state ? SET_BIT(track, source) : CLR_BIT(track, source);
 

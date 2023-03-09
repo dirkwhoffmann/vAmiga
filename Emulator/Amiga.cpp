@@ -212,6 +212,7 @@ Amiga::resetConfig()
     std::vector <Option> options = {
 
         OPT_VIDEO_FORMAT,
+        OPT_WARP_MODE,
         OPT_SYNC_MODE,
         OPT_PROPOSED_FPS
     };
@@ -229,6 +230,10 @@ Amiga::getConfigItem(Option option) const
         case OPT_VIDEO_FORMAT:
 
             return config.type;
+
+        case OPT_WARP_MODE:
+
+            return config.warpMode;
 
         case OPT_SYNC_MODE:
 
@@ -422,6 +427,25 @@ Amiga::setConfigItem(Option option, i64 value)
             }
             return;
 
+        case OPT_WARP_MODE:
+
+            if (!WarpModeEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, WarpModeEnum::keyList());
+            }
+
+            config.warpMode = WarpMode(value);
+
+            switch (config.warpMode) {
+
+                case WARP_AUTO:     switchWarp(paula.diskController.spinning()); break;
+                case WARP_NEVER:    switchWarp(false); break;
+                case WARP_ALWAYS:   switchWarp(true); break;
+
+                default:
+                    fatalError;
+            }
+            return;
+
         case OPT_SYNC_MODE:
 
             if (!SyncModeEnum::isValid(value)) {
@@ -476,6 +500,7 @@ Amiga::configure(Option option, i64 value)
     switch (option) {
 
         case OPT_VIDEO_FORMAT:
+        case OPT_WARP_MODE:
         case OPT_SYNC_MODE:
         case OPT_PROPOSED_FPS:
             
@@ -932,6 +957,8 @@ Amiga::_dump(Category category, std::ostream& os) const
 
         os << tab("Machine type");
         os << VideoFormatEnum::key(config.type) << std::endl;
+        os << tab("Warp mode");
+        os << WarpModeEnum::key(config.warpMode);
         os << tab("Sync mode");
         os << SyncModeEnum::key(config.syncMode);
         if (config.syncMode == SYNC_FIXED_FPS) os << " (" << config.proposedFps << " fps)";

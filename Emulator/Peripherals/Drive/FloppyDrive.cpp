@@ -618,7 +618,12 @@ FloppyDrive::setMotor(bool value)
     // Inform the GUI
     msgQueue.put(value ? MSG_DRIVE_LED_ON : MSG_DRIVE_LED_OFF, nr);
     msgQueue.put(value ? MSG_DRIVE_MOTOR_ON : MSG_DRIVE_MOTOR_OFF, nr);
-    
+
+    // Enable or disable warp mode if applicable
+    if (amiga.getConfig().warpMode == WARP_AUTO) {
+        amiga.switchWarp(paula.diskController.spinning());
+    }
+
     debug(DSK_DEBUG, "Motor %s [%d]\n", motor ? "on" : "off", idCount);
 }
 
