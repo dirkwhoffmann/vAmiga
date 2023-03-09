@@ -116,22 +116,6 @@ Thread::main()
             }
         }
         
-        // Are we requested to enter or exit warp mode?
-        if (warpChangeRequest.test()) {
-
-            switchWarp(newWarp.state, newWarp.source);
-            warpChangeRequest.clear();
-            warpChangeRequest.notify_one();
-        }
-
-        // Are we requested to enter or exit debug mode?
-        if (trackChangeRequest.test()) {
-
-            switchDebug(newTrack.state, newTrack.source);
-            trackChangeRequest.clear();
-            trackChangeRequest.notify_one();
-        }
-
         // Are we requested to change state?
         if (stateChangeRequest.test()) {
 
@@ -220,6 +204,9 @@ Thread::switchState(ExecutionState newState)
 void
 Thread::switchWarp(bool state, u8 source)
 {
+    assert(source >= 0 && source < 8);
+    assert(isEmulatorThread() || !isRunning());
+
     u8 old = warp;
     state ? SET_BIT(warp, source) : CLR_BIT(warp, source);
 
@@ -229,8 +216,11 @@ Thread::switchWarp(bool state, u8 source)
 }
 
 void
-Thread::switchDebug(bool state, u8 source)
+Thread::switchTrack(bool state, u8 source)
 {
+    assert(source >= 0 && source < 8);
+    assert(isEmulatorThread() || !isRunning());
+
     u8 old = track;
     state ? SET_BIT(track, source) : CLR_BIT(track, source);
 
@@ -314,29 +304,25 @@ Thread::halt()
 void
 Thread::warpOn(isize source)
 {
-    assert(source >= 0 && source < 8);
-    changeWarpTo(true, (u8)source);
+    SUSPENDED switchWarp(true, u8(source));
 }
 
 void
 Thread::warpOff(isize source)
 {
-    assert(source >= 0 && source < 8);
-    changeWarpTo(false, (u8)source);
+    SUSPENDED switchWarp(false, u8(source));
 }
 
 void
 Thread::trackOn(isize source)
 {
-    assert(source >= 0 && source < 8);
-    changeDebugTo(true, (u8)source);
+    SUSPENDED switchTrack(true, u8(source));
 }
 
 void
 Thread::trackOff(isize source)
 {
-    assert(source >= 0 && source < 8);
-    changeDebugTo(false, (u8)source);
+    SUSPENDED switchTrack(false, u8(source));
 }
 
 void
@@ -355,42 +341,6 @@ Thread::changeStateTo(ExecutionState requestedState)
     // Wait until the change has been performed
     stateChangeRequest.wait(true);
     assert(stateChangeRequest.test() == false);
-}
-
-void
-Thread::changeWarpTo(bool newState, u8 source)
-{
-    assert(!isEmulatorThread());
-   assert(warpChangeRequest.test() == false);
-
-    // Assign new state
-    newWarp = { newState, source };
-
-    // Request the change
-    warpChangeRequest.test_and_set();
-    assert(warpChangeRequest.test() == true);
-
-    // Wait until the change has been performed
-    warpChangeRequest.wait(true);
-    assert(warpChangeRequest.test() == false);
-}
-
-void
-Thread::changeDebugTo(bool newState, u8 source)
-{
-    assert(!isEmulatorThread());
-    assert(trackChangeRequest.test() == false);
-
-    // Assign new state
-    newTrack = { newState, source };
-
-    // Request the change
-    trackChangeRequest.test_and_set();
-    assert(trackChangeRequest.test() == true);
-
-    // Wait until the change has been performed
-    trackChangeRequest.wait(true);
-    assert(trackChangeRequest.test() == false);
 }
 
 void

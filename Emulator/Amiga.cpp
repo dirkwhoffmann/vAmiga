@@ -437,9 +437,9 @@ Amiga::setConfigItem(Option option, i64 value)
 
             switch (config.warpMode) {
 
-                case WARP_AUTO:     switchWarp(paula.diskController.spinning()); break;
-                case WARP_NEVER:    switchWarp(false); break;
-                case WARP_ALWAYS:   switchWarp(true); break;
+                case WARP_AUTO:     paula.diskController.spinning() ? warpOn() : warpOff(); break;
+                case WARP_NEVER:    warpOff(); break;
+                case WARP_ALWAYS:   warpOn(); break;
 
                 default:
                     fatalError;
