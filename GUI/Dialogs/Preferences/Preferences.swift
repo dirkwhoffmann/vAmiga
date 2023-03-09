@@ -82,14 +82,11 @@ class Preferences {
     var exitOnEsc = false
             
     // Warp mode
-    var warpMode = WarpMode.off {
-        didSet { for c in myAppDelegate.controllers { c.updateWarp() } }
+    var warpMode: Int {
+        get { for c in myAppDelegate.controllers { return c.amiga.getConfig(.WARP_MODE) }; return 0 }
+        set { for c in myAppDelegate.controllers { c.amiga.configure(.WARP_MODE, value: newValue) } }
     }
-    var warpModeIntValue: Int {
-        get { return Int(warpMode.rawValue) }
-        set { warpMode = WarpMode(rawValue: newValue)! }
-    }
-    
+
     // Misc
     var ejectWithoutAsking = false
     var detachWithoutAsking = false

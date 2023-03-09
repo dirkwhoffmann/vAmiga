@@ -345,7 +345,7 @@ extension DefaultsProxy {
         register(Keys.Gen.exitOnEsc, true)
         
         // Warp mode
-        register(Keys.Gen.warpMode, WarpMode.off.rawValue)
+        register(Keys.Gen.warpMode, WarpMode.NEVER.rawValue)
         
         // Misc
         register(Keys.Gen.ejectWithoutAsking, false)
@@ -407,7 +407,7 @@ extension Preferences {
         defaults.set(Keys.Gen.keepAspectRatio, keepAspectRatio)
         defaults.set(Keys.Gen.exitOnEsc, exitOnEsc)
         
-        defaults.set(Keys.Gen.warpMode, warpModeIntValue)
+        defaults.set(Keys.Gen.warpMode, warpMode)
         
         defaults.set(Keys.Gen.ejectWithoutAsking, ejectWithoutAsking)
         defaults.set(Keys.Gen.detachWithoutAsking, detachWithoutAsking)
@@ -437,7 +437,7 @@ extension Preferences {
         keepAspectRatio = defaults.bool(Keys.Gen.keepAspectRatio)
         exitOnEsc = defaults.bool(Keys.Gen.exitOnEsc)
         
-        warpModeIntValue = defaults.int(Keys.Gen.warpMode)
+        warpMode = defaults.int(Keys.Gen.warpMode)
         
         ejectWithoutAsking = defaults.bool(Keys.Gen.ejectWithoutAsking)
         detachWithoutAsking = defaults.bool(Keys.Gen.detachWithoutAsking)

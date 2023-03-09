@@ -366,9 +366,13 @@ extension MyController: NSMenuItemValidation {
     @IBAction func warpAction(_ sender: Any!) {
 
         switch pref.warpMode {
-        case .auto: pref.warpMode = .off
-        case .off: pref.warpMode = .on
-        case .on: pref.warpMode = .auto
+
+        case WarpMode.AUTO.rawValue: pref.warpMode = WarpMode.NEVER.rawValue
+        case WarpMode.NEVER.rawValue: pref.warpMode = WarpMode.ALWAYS.rawValue
+        case WarpMode.ALWAYS.rawValue: pref.warpMode = WarpMode.AUTO.rawValue
+
+        default:
+            fatalError()
         }
 
         refreshStatusBar()

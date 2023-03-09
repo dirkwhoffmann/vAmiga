@@ -2829,12 +2829,12 @@ using namespace vamiga::moira;
     }
 }
 
-- (BOOL)debugMode
+- (BOOL)trackMode
 {
     return [self amiga]->isTracking();
 }
 
-- (void)setDebugMode:(BOOL)value
+- (void)setTrackMode:(BOOL)value
 {
     if (value) {
         [self amiga]->trackOn();

@@ -606,7 +606,7 @@ class Inspector: DialogController {
     override func showWindow(_ sender: Any?) {
 
         super.showWindow(self)
-        amiga.debugMode = true
+        amiga.trackMode = true
         updateInspectionTarget()
     }
 
@@ -794,8 +794,8 @@ extension Inspector {
         super.windowWillClose(notification)
 
         // Leave debug mode
-        amiga?.debugMode = false
-        amiga?.removeInspectionTarget()
+        amiga.trackMode = false
+        amiga.removeInspectionTarget()
     }
 }
 

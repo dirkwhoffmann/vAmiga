@@ -218,7 +218,7 @@
 
 @property (readonly) AmigaInfo info;
 @property BOOL warpMode;
-@property BOOL debugMode;
+@property BOOL trackMode;
 @property (readonly) NSInteger cpuLoad;
 @property InspectionTarget inspectionTarget;
 - (void) removeInspectionTarget;

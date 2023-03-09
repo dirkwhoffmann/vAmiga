@@ -52,7 +52,7 @@ extension PreferencesController {
         genExitOnEscButton.state = pref.exitOnEsc ? .on : .off
                 
         // Warp mode
-        genWarpMode.selectItem(withTag: pref.warpModeIntValue)
+        genWarpMode.selectItem(withTag: pref.warpMode)
 
         // Miscellaneous
         genEjectWithoutAskingButton.state = pref.ejectWithoutAsking ? .on : .off
@@ -169,7 +169,7 @@ extension PreferencesController {
 
     @IBAction func genWarpModeAction(_ sender: NSPopUpButton!) {
         
-        pref.warpMode = WarpMode(rawValue: sender.selectedTag())!
+        pref.warpMode = sender.selectedTag()
         parent.refreshStatusBar()
         refresh()
     }

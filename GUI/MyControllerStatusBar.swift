@@ -16,15 +16,17 @@ extension MyController {
 
     var hourglassIcon: NSImage? {
         
-        switch pref.warpMode {
-        case .auto where amiga.warpMode:
+        switch WarpMode(rawValue: pref.warpMode) {
+        case .AUTO where amiga.warpMode:
             return NSImage(named: "hourglass3Template")
-        case .auto:
+        case .AUTO:
             return NSImage(named: "hourglass1Template")
-        case .off:
+        case .NEVER:
             return NSImage(named: "warpOffTemplate")
-        case .on:
+        case .ALWAYS:
             return NSImage(named: "warpOnTemplate")
+        default:
+            fatalError()
         }
     }
     

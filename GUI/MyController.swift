@@ -9,12 +9,14 @@
 
 import AVFoundation
 
+/*
 enum WarpMode: Int {
     
     case auto
     case off
     case on
 }
+*/
 
 protocol MessageReceiver {
     func processMessage(_ msg: Message)
@@ -300,7 +302,8 @@ extension MyController {
     }
     
     func updateWarp() {
-        
+
+        /*
         var warp: Bool
         
         switch pref.warpMode {
@@ -310,6 +313,7 @@ extension MyController {
         }
         
         if warp != amiga.warpMode { amiga.warpMode = warp }
+        */
     }
     
     func addValue(_ nr: Int, _ v: Float) {
