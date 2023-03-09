@@ -453,7 +453,7 @@ Agnus::executeUntil(Cycle cycle) {
                 remoteManager.serServer.serviceSerEvent();
             }
             if (isDue<SLOT_GUI>(cycle)) {
-                serviceGUIEvent();
+                amiga.serviceAlarmEvent();
             }
             if (isDue<SLOT_INS>(cycle)) {
                 agnus.serviceINSEvent(id[SLOT_INS]);

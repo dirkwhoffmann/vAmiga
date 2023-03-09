@@ -742,16 +742,6 @@ using namespace vamiga::moira;
     return [self agnus]->getStats();
 }
 
-- (void)scheduleGUITimerAbs:(NSInteger)cycle payload:(NSInteger)value
-{
-    [self agnus]->scheduleGUITimerAbs(cycle, (u32)value);
-}
-
-- (void)scheduleGUITimerRel:(NSInteger)cycle payload:(NSInteger)value
-{
-    [self agnus]->scheduleGUITimerRel(cycle, (u32)value);
-}
-
 @end
 
 
@@ -2820,17 +2810,6 @@ using namespace vamiga::moira;
     return [self amiga]->isWarping();
 }
 
-/*
-- (void)setWarpMode:(BOOL)value
-{
-    if (value) {
-        [self amiga]->warpOn();
-    } else {
-        [self amiga]->warpOff();
-    }
-}
-*/
-
 - (BOOL)trackMode
 {
     return [self amiga]->isTracking();
@@ -3069,6 +3048,16 @@ using namespace vamiga::moira;
 - (void)setListener:(const void *)sender function:(Callback *)func
 {
     [self amiga]->msgQueue.setListener(sender, func);
+}
+
+- (void)setAlarmAbs:(NSInteger)cycle payload:(NSInteger)value
+{
+    [self amiga]->setAlarmAbs(cycle, value);
+}
+
+- (void)setAlarmRel:(NSInteger)cycle payload:(NSInteger)value
+{
+    [self amiga]->setAlarmRel(cycle, value);
 }
 
 @end

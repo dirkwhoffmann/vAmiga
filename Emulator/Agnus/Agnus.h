@@ -778,9 +778,6 @@ public:
     
     // Services an inspection event
     void serviceINSEvent(EventID id);
-
-    // Services a GUI event
-    void serviceGUIEvent();
 };
 
 }

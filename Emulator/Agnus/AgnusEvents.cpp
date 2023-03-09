@@ -821,11 +821,4 @@ Agnus::serviceINSEvent(EventID id)
     rescheduleRel<SLOT_INS>((Cycle)(inspectionInterval * 28000000));
 }
 
-void
-Agnus::serviceGUIEvent()
-{
-    msgQueue.put(MSG_GUI_EVENT, data[SLOT_GUI]);
-    cancel<SLOT_GUI>();
-}
-
 }

@@ -266,6 +266,9 @@
 
 - (void)setListener:(const void *)sender function:(Callback *)func;
 
+- (void)setAlarmAbs:(NSInteger)cycle payload:(NSInteger)value;
+- (void)setAlarmRel:(NSInteger)cycle payload:(NSInteger)value;
+
 @end
 
 
@@ -446,8 +449,6 @@
 @property (readonly) BOOL isNTSC;
 @property (readonly) NSInteger frameCount;
 - (AgnusStats)getStats;
-- (void)scheduleGUITimerAbs:(NSInteger)cycle payload:(NSInteger)value;
-- (void)scheduleGUITimerRel:(NSInteger)cycle payload:(NSInteger)value;
 
 @end
 

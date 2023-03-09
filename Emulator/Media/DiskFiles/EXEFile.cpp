@@ -36,21 +36,7 @@ EXEFile::isCompatible(std::istream &stream)
 
 void
 EXEFile::finalizeRead()
-{
-    // REMOVE ASAP
-    // ProgramUnitDescriptor descr(data.ptr, data.size);
-    // descr.dump(Category::Sections);
-
-    /*
-     auto offset = descr.seek(HUNK_CODE);
-     if (offset) {
-
-     // Replace first instruction by TRAP #8 (0x4E48)
-     data[*offset + 8] = 0x4E;
-     data[*offset + 9] = 0x48;
-     }
-     */
-    
+{    
     // Check if this file requires a high-density disk
     bool hd = data.size > 853000;
 

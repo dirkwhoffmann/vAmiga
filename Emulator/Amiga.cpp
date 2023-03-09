@@ -1480,6 +1480,57 @@ Amiga::takeUserSnapshot()
     msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
 }
 
+void
+Amiga::setAlarmAbs(Cycle trigger, i64 payload)
+{
+    {   SUSPENDED
+
+        alarms.push_back(Alarm { trigger, payload });
+        scheduleNextAlarm();
+    }
+}
+
+void
+Amiga::setAlarmRel(Cycle trigger, i64 payload)
+{
+    {   SUSPENDED
+
+        alarms.push_back(Alarm { agnus.clock + trigger, payload });
+        scheduleNextAlarm();
+    }
+}
+
+void
+Amiga::serviceAlarmEvent()
+{
+    for (auto it = alarms.begin(); it != alarms.end(); ) {
+
+        if (it->trigger <= agnus.clock) {
+            msgQueue.put(MSG_GUI_EVENT, it->payload);
+            it = alarms.erase(it);
+        } else {
+            it++;
+        }
+    }
+    scheduleNextAlarm();
+}
+
+void
+Amiga::scheduleNextAlarm()
+{
+    Cycle trigger = INT64_MAX;
+
+    agnus.cancel<SLOT_GUI>();
+
+    for(Alarm alarm : alarms) {
+
+        if (alarm.trigger < trigger) {
+            agnus.scheduleAbs<SLOT_GUI>(alarm.trigger, GUI_TRIGGER);
+            trigger = alarm.trigger;
+        }
+    }
+}
+
 fs::path
 Amiga::tmp()
 {

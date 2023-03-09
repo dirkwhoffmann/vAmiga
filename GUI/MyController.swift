@@ -223,9 +223,6 @@ extension MyController {
             }
         }
 
-        // REMOVE ASAP
-        // amiga.agnus.scheduleGUITimerAbs(10000, payload: 42)
-
         // Create speed monitor
         speedometer = Speedometer()
         
@@ -623,7 +620,7 @@ extension MyController {
             break
 
         case .GUI_EVENT:
-            break
+            debug(.events, "Received Alarm \(msg.value)")
 
         default:
             warn("Unknown message: \(msg)")
