@@ -182,7 +182,7 @@ Agnus::scheduleGUITimerAbs(Cycle cycle, u32 payload)
 {
     {   SUSPENDED
 
-        scheduleAbs<SLOT_GUI>(cycle, GUI_TRIGGER, payload);
+        scheduleAbs<SLOT_ALA>(cycle, ALA_TRIGGER, payload);
     }
 }
 
@@ -191,7 +191,7 @@ Agnus::scheduleGUITimerRel(Cycle cycle, u32 payload)
 {
     {   SUSPENDED
 
-        scheduleRel<SLOT_GUI>(cycle, GUI_TRIGGER, payload);
+        scheduleRel<SLOT_ALA>(cycle, ALA_TRIGGER, payload);
     }
 }
 

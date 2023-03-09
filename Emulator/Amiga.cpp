@@ -1520,12 +1520,12 @@ Amiga::scheduleNextAlarm()
 {
     Cycle trigger = INT64_MAX;
 
-    agnus.cancel<SLOT_GUI>();
+    agnus.cancel<SLOT_ALA>();
 
     for(Alarm alarm : alarms) {
 
         if (alarm.trigger < trigger) {
-            agnus.scheduleAbs<SLOT_GUI>(alarm.trigger, GUI_TRIGGER);
+            agnus.scheduleAbs<SLOT_ALA>(alarm.trigger, ALA_TRIGGER);
             trigger = alarm.trigger;
         }
     }

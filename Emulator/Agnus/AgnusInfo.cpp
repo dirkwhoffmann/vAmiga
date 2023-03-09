@@ -420,12 +420,12 @@ Agnus::eventName(EventSlot slot, EventID id)
             }
             break;
 
-        case SLOT_GUI:
+        case SLOT_ALA:
 
             switch (id) {
 
                 case EVENT_NONE:    return "none";
-                case GUI_TRIGGER:   return "GUI_TRIGGER";
+                case ALA_TRIGGER:   return "ALA_TRIGGER";
                 default:            return "*** INVALID ***";
             }
             break;
