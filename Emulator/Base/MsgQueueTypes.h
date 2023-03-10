@@ -38,8 +38,9 @@ enum_long(MSG_TYPE)
     MSG_POWER_LED_OFF,
 
     // Retro shell
-    MSG_CLOSE_CONSOLE,
-    MSG_UPDATE_CONSOLE,
+    MSG_CONSOLE_CLOSE,
+    MSG_CONSOLE_UPDATE,
+    MSG_CONSOLE_DEBUGGER,
     MSG_SCRIPT_DONE,
     MSG_SCRIPT_PAUSE,
     MSG_SCRIPT_ABORT,
@@ -156,8 +157,9 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
             case MSG_POWER_LED_DIM:         return "POWER_LED_DIM";
             case MSG_POWER_LED_OFF:         return "POWER_LED_OFF";
 
-            case MSG_CLOSE_CONSOLE:         return "CLOSE_CONSOLE";
-            case MSG_UPDATE_CONSOLE:        return "UPDATE_CONSOLE";
+            case MSG_CONSOLE_CLOSE:         return "CONSOLE_CLOSE";
+            case MSG_CONSOLE_UPDATE:        return "CONSOLE_UPDATE";
+            case MSG_CONSOLE_DEBUGGER:      return "CONSOLE_DEBUGGER";
             case MSG_SCRIPT_DONE:           return "SCRIPT_DONE";
             case MSG_SCRIPT_PAUSE:          return "SCRIPT_PAUSE";
             case MSG_SCRIPT_ABORT:          return "SCRIPT_ABORT";

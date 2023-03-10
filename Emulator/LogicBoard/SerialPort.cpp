@@ -100,23 +100,23 @@ SerialPort::_dump(Category category, std::ostream& os) const
     if (category == Category::Inspection) {
         
         os << tab("Port pins");
-        os << hex(port);
+        os << hex(port) << std::endl;
         os << tab("TXD");
-        os << dec(getTXD());
+        os << dec(getTXD()) << std::endl;
         os << tab("RXD");
-        os << dec(getRXD());
+        os << dec(getRXD()) << std::endl;
         os << tab("RTS");
-        os << dec(getRTS());
+        os << dec(getRTS()) << std::endl;
         os << tab("CTS");
-        os << dec(getCTS());
+        os << dec(getCTS()) << std::endl;
         os << tab("DSR");
-        os << dec(getDSR());
+        os << dec(getDSR()) << std::endl;
         os << tab("CD");
-        os << dec(getCD());
+        os << dec(getCD()) << std::endl;
         os << tab("DTR");
-        os << dec(getDTR());
+        os << dec(getDTR()) << std::endl;
         os << tab("RI");
-        os << dec(getRI());
+        os << dec(getRI()) << std::endl;
     }
 }
 

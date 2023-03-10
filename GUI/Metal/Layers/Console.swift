@@ -19,7 +19,7 @@ class Console: Layer {
     
     let scrollView = NSTextView.scrollableTextView()
     var textView: NSTextView
-        
+
     var isDirty = false
         
     //
@@ -33,7 +33,7 @@ class Console: Layer {
         textView = (scrollView.documentView as? NSTextView)!
         textView.isEditable = false
         textView.backgroundColor = NSColor(r: 0x80, g: 0x80, b: 0x80, a: 0x80)
-        
+
         super.init(renderer: renderer)
         
         resize()
@@ -47,7 +47,7 @@ class Console: Layer {
     }
 
     override func update(frames: Int64) {
-        
+
         super.update(frames: frames)
 
         if isDirty {

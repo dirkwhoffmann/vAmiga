@@ -109,11 +109,13 @@ Interpreter::switchInterpreter()
 
         shell = Shell::Debug;
         amiga.trackOn(1);
+        msgQueue.put(MSG_CONSOLE_DEBUGGER, true);
 
     } else {
 
         shell = Shell::Command;
         amiga.trackOff(1);
+        msgQueue.put(MSG_CONSOLE_DEBUGGER, false);
     }
 
     retroShell.updatePrompt();

@@ -402,11 +402,14 @@ extension MyController {
         case .RESET:
             inspector?.reset()
 
-        case .CLOSE_CONSOLE:
+        case .CONSOLE_CLOSE:
             renderer.console.close(delay: 0.25)
             
-        case .UPDATE_CONSOLE:
+        case .CONSOLE_UPDATE:
             renderer.console.isDirty = true
+
+        case .CONSOLE_DEBUGGER:
+            break
 
         case .SCRIPT_DONE, .SCRIPT_PAUSE, .SCRIPT_ABORT:
             break
