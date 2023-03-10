@@ -26,18 +26,15 @@ enum_long(MSG_TYPE)
     
     // Emulator state
     MSG_CONFIG,
-    MSG_POWER_ON,           // Replace by MSG_POWER
-    MSG_POWER_OFF,          // Replace by MSG_POWER
+    MSG_POWER,
     MSG_RUN,
     MSG_PAUSE,
     MSG_STEP,
     MSG_RESET,
     MSG_SHUTDOWN,
     MSG_ABORT,
-    MSG_WARP_ON,            // Replace by MSG_WARP
-    MSG_WARP_OFF,           // Replace by MSG_WARP
-    MSG_DEBUG_ON,           // Replace by MSG_TRACK
-    MSG_DEBUG_OFF,          // Replace by MSG_TRACK
+    MSG_WARP,
+    MSG_TRACK,
     MSG_MUTE_ON,            // Replace by MSG_MUTE
     MSG_MUTE_OFF,           // Replace by MSG_MUTE
     MSG_POWER_LED_ON,       // Replace by MSG_LED (payload 1)
@@ -158,18 +155,15 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
             case MSG_REGISTER:              return "REGISTER";
 
             case MSG_CONFIG:                return "CONFIG";
-            case MSG_POWER_ON:              return "POWER_ON";
-            case MSG_POWER_OFF:             return "POWER_OFF";
+            case MSG_POWER:                 return "POWER";
             case MSG_RUN:                   return "RUN";
             case MSG_PAUSE:                 return "PAUSE";
             case MSG_STEP:                  return "STEP";
             case MSG_RESET:                 return "RESET";
             case MSG_SHUTDOWN:              return "SHUTDOWN";
             case MSG_ABORT:                 return "ABORT";
-            case MSG_WARP_ON:               return "WARP_ON";
-            case MSG_WARP_OFF:              return "WARP_OFF";
-            case MSG_DEBUG_ON:              return "DEBUG_ON";
-            case MSG_DEBUG_OFF:             return "DEBUG_OFF";
+            case MSG_WARP:                  return "WARP";
+            case MSG_TRACK:                 return "TRACK";
             case MSG_MUTE_ON:               return "MUTE_ON";
             case MSG_MUTE_OFF:              return "MUTE_OFF";
             case MSG_POWER_LED_ON:          return "POWER_LED_ON";

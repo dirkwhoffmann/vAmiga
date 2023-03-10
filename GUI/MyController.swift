@@ -386,17 +386,22 @@ extension MyController {
         case .CONFIG:
             inspector?.fullRefresh()
             
-        case .POWER_ON:
-            renderer.canvas.open(delay: 1.5)
-            serialIn = ""
-            serialOut = ""
-            toolbar.updateToolbar()
-            inspector?.powerOn()
-            
-        case .POWER_OFF:
-            toolbar.updateToolbar()
-            inspector?.powerOff()
-            
+        case .POWER:
+
+            if value != 0 {
+
+                renderer.canvas.open(delay: 1.5)
+                serialIn = ""
+                serialOut = ""
+                toolbar.updateToolbar()
+                inspector?.powerOn()
+
+            } else {
+
+                toolbar.updateToolbar()
+                inspector?.powerOff()
+            }
+
         case .RUN:
             needsSaving = true
             toolbar.updateToolbar()
@@ -443,7 +448,7 @@ extension MyController {
             muted = false
             refreshStatusBar()
             
-        case .WARP_ON, .WARP_OFF, .DEBUG_ON, .DEBUG_OFF:
+        case .WARP, .TRACK:
             refreshStatusBar()
             
         case .POWER_LED_ON:
