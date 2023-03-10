@@ -134,13 +134,13 @@ HdController::setConfigItem(Option option, i64 value)
                 
                 config.connected = true;
                 drive.connect();
-                msgQueue.put(MSG_HDC_CONNECT, nr);
+                msgQueue.put(MSG_HDC_CONNECT, DriveMsg { i16(nr), true, 0, 0 } );
 
             } else {
                 
                 config.connected = false;
                 drive.disconnect();
-                msgQueue.put(MSG_HDC_DISCONNECT, nr);
+                msgQueue.put(MSG_HDC_CONNECT, DriveMsg { i16(nr), false, 0, 0 } );
             }
             return;
 

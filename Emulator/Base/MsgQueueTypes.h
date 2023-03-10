@@ -85,14 +85,10 @@ enum_long(MSG_TYPE)
     MSG_DRIVE_POLL,
     MSG_DISK_INSERT,
     MSG_DISK_EJECT,
-    MSG_DISK_SAVED,             // Replace by MSG_MODIFIED (payload 0)
-    MSG_DISK_UNSAVED,           // Replace by MSG_MODIFIED (payload 1)
-    MSG_DISK_PROTECT,           // Replace by MSG_PROTECTED (payload 1)
-    MSG_DISK_UNPROTECT,         // Replace by MSG_PROTECTED (payload 0)
+    MSG_DISK_PROTECTED,
 
     // Hard drive controllers
-    MSG_HDC_CONNECT,            // Replace by MSG_HDC_CONNECT
-    MSG_HDC_DISCONNECT,         // Replace by MSG_HDC_CONNECT
+    MSG_HDC_CONNECT,
     MSG_HDC_STATE,
     
     // Hard drives
@@ -203,13 +199,9 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
             case MSG_DRIVE_POLL:            return "DRIVE_POLL";
             case MSG_DISK_INSERT:           return "DISK_INSERT";
             case MSG_DISK_EJECT:            return "DISK_EJECT";
-            case MSG_DISK_SAVED:            return "DISK_SAVED";
-            case MSG_DISK_UNSAVED:          return "DISK_UNSAVED";
-            case MSG_DISK_PROTECT:          return "DISK_PROTECT";
-            case MSG_DISK_UNPROTECT:        return "DISK_UNPROTECT";
+            case MSG_DISK_PROTECTED:        return "DISK_PROTECTED";
 
             case MSG_HDC_CONNECT:           return "HDC_CONNECT";
-            case MSG_HDC_DISCONNECT:        return "HDC_DISCONNECT";
             case MSG_HDC_STATE:             return "HDC_STATE";
                 
             case MSG_HDR_STEP:              return "HDR_STEP";

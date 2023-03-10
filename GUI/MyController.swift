@@ -535,18 +535,23 @@ extension MyController {
             macAudio.playSound(MacAudio.Sounds.eject, volume: volume, pan: pan)
             refreshStatusBar()
             
-        case .DISK_UNSAVED, .DISK_SAVED, .DISK_PROTECT, .DISK_UNPROTECT:
+        case .DISK_PROTECTED:
             refreshStatusBar()
 
         case .HDC_CONNECT:
-            hideOrShowDriveMenus()
-            assignSlots()
-            refreshStatusBar()
-            
-        case .HDC_DISCONNECT:
-            hideOrShowDriveMenus()
-            assignSlots()
-            refreshStatusBar()
+
+            if msg.value != 0 {
+
+                hideOrShowDriveMenus()
+                assignSlots()
+                refreshStatusBar()
+
+            } else {
+
+                hideOrShowDriveMenus()
+                assignSlots()
+                refreshStatusBar()
+            }
 
         case .HDC_STATE:
             refreshStatusBar()

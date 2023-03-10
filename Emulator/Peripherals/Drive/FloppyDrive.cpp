@@ -412,12 +412,12 @@ FloppyDrive::setProtectionFlag(bool value)
         if (value && !disk->isWriteProtected()) {
             
             disk->setWriteProtection(true);
-            msgQueue.put(MSG_DISK_PROTECT);
+            msgQueue.put(MSG_DISK_PROTECTED, true);
         }
         if (!value && disk->isWriteProtected()) {
             
             disk->setWriteProtection(false);
-            msgQueue.put(MSG_DISK_UNPROTECT);
+            msgQueue.put(MSG_DISK_PROTECTED, false);
         }
     }
 }
