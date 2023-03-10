@@ -314,7 +314,8 @@ Amiga::getConfigItem(Option option) const
             
             return paula.diskController.getConfigItem(option);
             
-        case OPT_SERIAL_DEVICE:
+        case OPT_SER_DEVICE:
+        case OPT_SER_VERBOSE:
 
             return serialPort.getConfigItem(option);
 
@@ -633,8 +634,9 @@ Amiga::configure(Option option, i64 value)
             paula.diskController.setConfigItem(option, value);
             break;
 
-        case OPT_SERIAL_DEVICE:
-            
+        case OPT_SER_DEVICE:
+        case OPT_SER_VERBOSE:
+
             serialPort.setConfigItem(option, value);
             break;
 

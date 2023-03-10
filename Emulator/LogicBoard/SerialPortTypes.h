@@ -52,6 +52,7 @@ struct SerialPortDeviceEnum : util::Reflection<SerialPortDeviceEnum, SerialPortD
 typedef struct
 {
     SerialPortDevice device;
+    bool verbose;
 }
 SerialPortConfig;
 

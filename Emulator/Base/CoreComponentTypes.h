@@ -93,7 +93,8 @@ enum_long(OPT)
     OPT_HDR_STEP_VOLUME,
     
     // Ports
-    OPT_SERIAL_DEVICE,
+    OPT_SER_DEVICE,
+    OPT_SER_VERBOSE,
 
     // Compatibility
     OPT_HIDDEN_BITPLANES,
@@ -218,7 +219,8 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_HDR_PAN:               return "HDR_PAN";
             case OPT_HDR_STEP_VOLUME:       return "HDR_STEP_VOLUME";
 
-            case OPT_SERIAL_DEVICE:         return "SERIAL_DEVICE";
+            case OPT_SER_DEVICE:            return "SER_DEVICE";
+            case OPT_SER_VERBOSE:           return "SER_VERBOSE";
 
             case OPT_HIDDEN_BITPLANES:      return "HIDDEN_BITPLANES";
             case OPT_HIDDEN_SPRITES:        return "HIDDEN_SPRITES";

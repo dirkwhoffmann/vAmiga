@@ -159,6 +159,14 @@ public:
     // Called when the RXD port pin changes it's value
     void rxdHasChanged(bool value);
 
+private:
+
+    // Called when a byte has been received
+    void recordIncomingByte(u8 byte);
+
+    // Called when a byte has been sent
+    void recordOutgoingByte(u8 byte);
+
 
     //
     // Serving events (UARTEvents.cpp)

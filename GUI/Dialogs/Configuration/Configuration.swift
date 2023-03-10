@@ -260,8 +260,8 @@ class Configuration {
         }
     }
     var serialDevice: Int {
-        get { return amiga.getConfig(.SERIAL_DEVICE) }
-        set { amiga.configure(.SERIAL_DEVICE, value: newValue) }
+        get { return amiga.getConfig(.SER_DEVICE) }
+        set { amiga.configure(.SER_DEVICE, value: newValue) }
     }
     var serialDevicePort: Int {
         get { return amiga.getConfig(.SRV_PORT, id: ServerType.SER.rawValue) }

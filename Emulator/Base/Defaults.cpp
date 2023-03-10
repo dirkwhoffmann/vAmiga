@@ -99,7 +99,8 @@ Defaults::Defaults()
     setFallback(OPT_HDR_PAN, { 0, 2 }, 300);
     setFallback(OPT_HDR_PAN, { 1, 3 }, 100);
     setFallback(OPT_HDR_STEP_VOLUME, { 0, 1, 2, 3 }, 50);
-    setFallback(OPT_SERIAL_DEVICE, SPD_NONE);
+    setFallback(OPT_SER_DEVICE, SPD_NONE);
+    setFallback(OPT_SER_VERBOSE, 0);
     setFallback(OPT_HIDDEN_BITPLANES, 0);
     setFallback(OPT_HIDDEN_SPRITES, 0);
     setFallback(OPT_HIDDEN_LAYERS, 0);

@@ -66,7 +66,7 @@ SerServer::resetConfig()
 bool
 SerServer::shouldRun()
 {
-    return serialPort.getConfigItem(OPT_SERIAL_DEVICE) == SPD_NULLMODEM;
+    return serialPort.getConfigItem(OPT_SER_DEVICE) == SPD_NULLMODEM;
 }
 
 string

@@ -154,14 +154,16 @@ UART::copyToTransmitShiftRegister()
     assert(transmitShiftReg == 0);
     assert(transmitBuffer != 0);
 
+    // Record the outgoing byte
+    auto byte = u8(transmitBuffer & 0xFF);
+    recordOutgoingByte(byte);
+
     // Send the byte to the null modem cable
-    auto byte = (char)(transmitBuffer & 0xFF);
-    remoteManager.serServer << byte;
+    remoteManager.serServer << char(byte);
     
     // Inform the GUI about the outgoing data
     msgQueue.put(MSG_SER_OUT, transmitBuffer);
-    trace(SER_DEBUG, "transmitBuffer: %X ('%c')\n", byte, byte);
-    
+
     // Move the contents of the transmit buffer into the shift register
     transmitShiftReg = transmitBuffer;
     transmitBuffer = 0;
@@ -181,6 +183,10 @@ UART::copyFromReceiveShiftRegister()
     
     receiveBuffer = receiveShiftReg;
     receiveShiftReg = 0;
+
+    // Record the incoming byte
+    auto byte = u8(receiveBuffer & 0xFF);
+    recordIncomingByte(byte);
 
     // Inform the GUI about the incoming data
     msgQueue.put(MSG_SER_IN, receiveBuffer);
@@ -219,6 +225,18 @@ UART::rxdHasChanged(bool value)
         // Schedule the event
         agnus.scheduleRel<SLOT_RXD>(delay, RXD_BIT);
     }
+}
+
+void
+UART::recordIncomingByte(u8 byte)
+{
+    serialPort.recordIncomingByte(byte);
+}
+
+void
+UART::recordOutgoingByte(u8 byte)
+{
+    serialPort.recordOutgoingByte(byte);
 }
 
 }

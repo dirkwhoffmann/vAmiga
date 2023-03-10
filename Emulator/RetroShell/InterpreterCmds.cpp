@@ -1210,7 +1210,14 @@ Interpreter::initCommandShell(Command &root)
              "Connects a device",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_SERIAL_DEVICE, parseEnum <SerialPortDeviceEnum> (argv));
+        amiga.configure(OPT_SER_DEVICE, parseEnum <SerialPortDeviceEnum> (argv));
+    });
+
+    root.add({"serial", "set", "verbose"}, { Arg::boolean },
+             "Enables or disables communication tracking",
+             [this](Arguments& argv, long value) {
+
+        amiga.configure(OPT_SER_VERBOSE, parseBool(argv));
     });
 
 

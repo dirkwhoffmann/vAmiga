@@ -22,7 +22,8 @@ SerialPort::resetConfig()
 
     std::vector <Option> options = {
         
-        OPT_SERIAL_DEVICE
+        OPT_SER_DEVICE,
+        OPT_SER_VERBOSE
     };
 
     for (auto &option : options) {
@@ -35,7 +36,8 @@ SerialPort::getConfigItem(Option option) const
 {
     switch (option) {
             
-        case OPT_SERIAL_DEVICE:  return (i64)config.device;
+        case OPT_SER_DEVICE:    return (i64)config.device;
+        case OPT_SER_VERBOSE:   return (i64)config.verbose;
 
         default:
             fatalError;
@@ -47,13 +49,18 @@ SerialPort::setConfigItem(Option option, i64 value)
 {
     switch (option) {
             
-        case OPT_SERIAL_DEVICE:
+        case OPT_SER_DEVICE:
             
             if (!SerialPortDeviceEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVARG, SerialPortDeviceEnum::keyList());
             }
             
             config.device = (SerialPortDevice)value;
+            return;
+
+        case OPT_SER_VERBOSE:
+
+            config.verbose = bool(value);
             return;
 
         default:
@@ -84,8 +91,10 @@ SerialPort::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Config) {
         
-        os << tab("device");
+        os << tab("Connected device");
         os << SerialPortDeviceEnum::key(config.device) << std::endl;
+        os << tab("Verbose");
+        os << bol(config.verbose) << std::endl;
     }
     
     if (category == Category::Inspection) {
@@ -158,6 +167,28 @@ SerialPort::setPort(u32 mask, bool value)
 
     // Inform the UART if RXD has changed
     if ((oldPort ^ port) & RXD_MASK) uart.rxdHasChanged(value);
+}
+
+void
+SerialPort::recordIncomingByte(u8 byte)
+{
+    trace(SER_DEBUG, "Incoming: %02X ('%c')\n", byte, isprint(byte) ? char(byte) : '?');
+    if (config.verbose) dumpByte(byte);
+}
+
+void
+SerialPort::recordOutgoingByte(u8 byte)
+{
+    trace(SER_DEBUG, "Outgoing: %02X ('%c')\n", byte, isprint(byte) ? char(byte) : '?');
+    if (config.verbose) dumpByte(byte);
+}
+
+void
+SerialPort::dumpByte(u8 byte)
+{
+    if (isprint(byte) || byte == '\n') {
+        retroShell << (char)byte;
+    }
 }
 
 }

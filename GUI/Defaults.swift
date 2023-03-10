@@ -839,7 +839,7 @@ extension DefaultsProxy {
         remove(.DRIVE_RPM, [0, 1, 2, 3])
         remove(.HDC_CONNECT, [0, 1, 2, 3])
         remove(.HDR_TYPE, [0, 1, 2, 3])
-        remove(.SERIAL_DEVICE)
+        remove(.SER_DEVICE)
         remove(.SRV_PORT, nr: ServerType.SER.rawValue)
         removeKey(Keys.Per.gameDevice1)
         removeKey(Keys.Per.gameDevice2)
@@ -880,7 +880,7 @@ extension Configuration {
         defaults.set(.HDR_TYPE, 2, hd2Type)
         defaults.set(.HDR_TYPE, 3, hd3Type)
 
-        defaults.set(.SERIAL_DEVICE, serialDevice)
+        defaults.set(.SER_DEVICE, serialDevice)
         defaults.set(.SRV_PORT, ServerType.SER.rawValue, serialDevicePort)
 
         defaults.set(Keys.Per.gameDevice1, gameDevice1)
@@ -923,7 +923,7 @@ extension Configuration {
         hd2Type = defaults.get(.HDR_TYPE, 2)
         hd3Type = defaults.get(.HDR_TYPE, 3)
 
-        serialDevice = defaults.get(.SERIAL_DEVICE)
+        serialDevice = defaults.get(.SER_DEVICE)
         serialDevicePort = defaults.get(.SRV_PORT, ServerType.SER.rawValue)
 
         gameDevice1 = defaults.int(Keys.Per.gameDevice1)
