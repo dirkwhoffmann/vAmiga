@@ -616,8 +616,8 @@ FloppyDrive::setMotor(bool value)
     idCount = 0;
     
     // Inform the GUI
-    msgQueue.put(value ? MSG_DRIVE_LED_ON : MSG_DRIVE_LED_OFF, nr);
-    msgQueue.put(value ? MSG_DRIVE_MOTOR_ON : MSG_DRIVE_MOTOR_OFF, nr);
+    msgQueue.put(MSG_DRIVE_LED, DriveMsg { i16(nr), value, 0, 0 });
+    msgQueue.put(MSG_DRIVE_MOTOR, DriveMsg { i16(nr), value, 0, 0 });
 
     // Enable or disable warp mode if applicable
     if (amiga.getConfig().warpMode == WARP_AUTO) {

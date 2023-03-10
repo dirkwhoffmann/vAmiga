@@ -35,8 +35,7 @@ enum_long(MSG_TYPE)
     MSG_ABORT,
     MSG_WARP,
     MSG_TRACK,
-    MSG_MUTE_ON,            // Replace by MSG_MUTE
-    MSG_MUTE_OFF,           // Replace by MSG_MUTE
+    MSG_MUTE,
     MSG_POWER_LED_ON,       // Replace by MSG_LED (payload 1)
     MSG_POWER_LED_DIM,      // Replace by MSG_LED (payload 2)
     MSG_POWER_LED_OFF,      // Replace by MSG_LED (payload 0)
@@ -76,15 +75,12 @@ enum_long(MSG_TYPE)
     MSG_MEM_LAYOUT,
         
     // Floppy drives
-    MSG_DRIVE_CONNECT,          // Replace by MSG_CONNECT (payload 1)
-    MSG_DRIVE_DISCONNECT,       // Replace by MSG_CONNECT (payload 0)
+    MSG_DRIVE_CONNECT,
     MSG_DRIVE_SELECT,
     MSG_DRIVE_READ,
     MSG_DRIVE_WRITE,
-    MSG_DRIVE_LED_ON,           // Replace by MSG_LED
-    MSG_DRIVE_LED_OFF,          // Replace by MSG_LED
-    MSG_DRIVE_MOTOR_ON,         // Replace by MSG_MOTOR
-    MSG_DRIVE_MOTOR_OFF,        // Replace by MSG_MOTOR
+    MSG_DRIVE_LED,
+    MSG_DRIVE_MOTOR,
     MSG_DRIVE_STEP,
     MSG_DRIVE_POLL,
     MSG_DISK_INSERT,
@@ -164,8 +160,7 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
             case MSG_ABORT:                 return "ABORT";
             case MSG_WARP:                  return "WARP";
             case MSG_TRACK:                 return "TRACK";
-            case MSG_MUTE_ON:               return "MUTE_ON";
-            case MSG_MUTE_OFF:              return "MUTE_OFF";
+            case MSG_MUTE:                  return "MUTE";
             case MSG_POWER_LED_ON:          return "POWER_LED_ON";
             case MSG_POWER_LED_DIM:         return "POWER_LED_DIM";
             case MSG_POWER_LED_OFF:         return "POWER_LED_OFF";
@@ -199,14 +194,11 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
             case MSG_MEM_LAYOUT:            return "MEM_LAYOUT";
                     
             case MSG_DRIVE_CONNECT:         return "DRIVE_CONNECT";
-            case MSG_DRIVE_DISCONNECT:      return "DRIVE_DISCONNECT";
             case MSG_DRIVE_SELECT:          return "DRIVE_SELECT";
             case MSG_DRIVE_READ:            return "DRIVE_READ";
             case MSG_DRIVE_WRITE:           return "DRIVE_WRITE";
-            case MSG_DRIVE_LED_ON:          return "DRIVE_LED_ON";
-            case MSG_DRIVE_LED_OFF:         return "DRIVE_LED_OFF";
-            case MSG_DRIVE_MOTOR_ON:        return "DRIVE_MOTOR_ON";
-            case MSG_DRIVE_MOTOR_OFF:       return "DRIVE_MOTOR_OFF";
+            case MSG_DRIVE_LED:             return "DRIVE_LED";
+            case MSG_DRIVE_MOTOR:           return "DRIVE_MOTOR";
             case MSG_DRIVE_STEP:            return "DRIVE_STEP";
             case MSG_DRIVE_POLL:            return "DRIVE_POLL";
             case MSG_DISK_INSERT:           return "DISK_INSERT";
@@ -260,7 +252,7 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
 //
 
 typedef struct { u32 pc; u8 vector; } CpuMsg;
-typedef struct { i16 nr; i16 cylinder; i16 volume; i16 pan; } DriveMsg;
+typedef struct { i16 nr; i16 value; i16 volume; i16 pan; } DriveMsg;
 typedef struct { i16 nr; HdcState state; } HdcMsg;
 typedef struct { i16 hstrt; i16 vstrt; i16 hstop; i16 vstop; } ViewportMsg;
 typedef struct { isize line; i16 delay; } ScriptMsg;

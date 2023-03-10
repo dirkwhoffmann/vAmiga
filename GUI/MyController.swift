@@ -297,22 +297,7 @@ extension MyController {
             }
         }
     }
-    
-    func updateWarp() {
 
-        /*
-        var warp: Bool
-        
-        switch pref.warpMode {
-        case .auto: warp = amiga.diskController.isSpinning
-        case .off: warp = false
-        case .on: warp = true
-        }
-        
-        if warp != amiga.warpMode { amiga.warpMode = warp }
-        */
-    }
-    
     func addValue(_ nr: Int, _ v: Float) {
         if let monitor = renderer.monitors.monitors[nr] as? BarChart {
             monitor.addValue(v)
@@ -368,7 +353,7 @@ extension MyController {
 
         var value: Int { return Int(msg.value) }
         var nr: Int { return Int(msg.drive.nr) }
-        var cyl: Int { return Int(msg.drive.cylinder) }
+        var cyl: Int { return Int(msg.drive.value) }
         var pc: Int { return Int(msg.cpu.pc) }
         var vector: Int { return Int(msg.cpu.vector) }
         var volume: Int { return Int(msg.drive.volume) }
@@ -419,8 +404,7 @@ extension MyController {
             
         case .RESET:
             inspector?.reset()
-            updateWarp()
-            
+
         case .CLOSE_CONSOLE:
             renderer.console.close(delay: 0.25)
             
@@ -440,14 +424,10 @@ extension MyController {
             debug(.shutdown, "Aborting with exit code \(value)")
             exit(Int32(value))
             
-        case .MUTE_ON:
-            muted = true
+        case .MUTE:
+            muted = value != 0
             refreshStatusBar()
-            
-        case .MUTE_OFF:
-            muted = false
-            refreshStatusBar()
-            
+
         case .WARP, .TRACK:
             refreshStatusBar()
             
@@ -510,15 +490,20 @@ extension MyController {
             inspector?.fullRefresh()
             
         case .DRIVE_CONNECT:
-            hideOrShowDriveMenus()
-            assignSlots()
-            refreshStatusBar()
-            
-        case .DRIVE_DISCONNECT:
-            hideOrShowDriveMenus()
-            assignSlots()
-            refreshStatusBar()
-            
+
+            if msg.value != 0 {
+
+                hideOrShowDriveMenus()
+                assignSlots()
+                refreshStatusBar()
+
+            } else {
+
+                hideOrShowDriveMenus()
+                assignSlots()
+                refreshStatusBar()
+            }
+
         case .DRIVE_SELECT:
             refreshStatusBar(writing: nil)
             
@@ -528,13 +513,12 @@ extension MyController {
         case .DRIVE_WRITE:
             refreshStatusBar(writing: true)
             
-        case .DRIVE_LED_ON, .DRIVE_LED_OFF:
+        case .DRIVE_LED:
             refreshStatusBar()
             
-        case .DRIVE_MOTOR_ON, .DRIVE_MOTOR_OFF:
+        case .DRIVE_MOTOR:
             refreshStatusBar()
-            updateWarp()
-            
+
         case .DRIVE_STEP:
             macAudio.playSound(MacAudio.Sounds.step, volume: volume, pan: pan)
             refreshStatusBar(drive: nr, cylinder: cyl)
@@ -594,7 +578,6 @@ extension MyController {
             renderer.flash(steps: 60)
             hideOrShowDriveMenus()
             assignSlots()
-            updateWarp()
             refreshStatusBar()
             
         case .RECORDING_STARTED:

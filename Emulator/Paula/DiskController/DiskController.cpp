@@ -134,7 +134,7 @@ DiskController::setConfigItem(Option option, long id, i64 value)
             config.connected[id] = value;
             
             // Inform the GUI
-            msgQueue.put(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, id);
+            msgQueue.put(MSG_DRIVE_CONNECT, DriveMsg { i16(id), i16(value), 0, 0 } );
             return;
             
         default:

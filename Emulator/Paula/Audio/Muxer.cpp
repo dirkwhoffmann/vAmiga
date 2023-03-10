@@ -196,7 +196,7 @@ Muxer::setConfigItem(Option option, i64 value)
             volL = powf((float)value / 50, 1.4f);
 
             if (wasMuted != isMuted())
-                msgQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
+                msgQueue.put(MSG_MUTE, isMuted());
             return;
             
         case OPT_AUDVOLR:
@@ -205,7 +205,7 @@ Muxer::setConfigItem(Option option, i64 value)
             volR = powf((float)value / 50, 1.4f);
 
             if (wasMuted != isMuted())
-                msgQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
+                msgQueue.put(MSG_MUTE, isMuted());
             return;
 
         case OPT_FILTER_TYPE:
