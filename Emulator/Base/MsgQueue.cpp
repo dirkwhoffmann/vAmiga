@@ -25,9 +25,7 @@ MsgQueue::setListener(const void *listener, Callback *callback)
 
             Message &msg = queue.read();
             callback(listener, msg);
-        }
-        
-        put(MSG_REGISTER);
+        }        
     }
 }
 

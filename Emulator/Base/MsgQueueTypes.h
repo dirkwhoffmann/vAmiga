@@ -21,9 +21,6 @@ enum_long(MSG_TYPE)
 {
     MSG_NONE = 0,
     
-    // Message queue
-    MSG_REGISTER,           // DEPRECATED
-    
     // Emulator state
     MSG_CONFIG,
     MSG_POWER,
@@ -36,9 +33,9 @@ enum_long(MSG_TYPE)
     MSG_WARP,
     MSG_TRACK,
     MSG_MUTE,
-    MSG_POWER_LED_ON,       // Replace by MSG_LED (payload 1)
-    MSG_POWER_LED_DIM,      // Replace by MSG_LED (payload 2)
-    MSG_POWER_LED_OFF,      // Replace by MSG_LED (payload 0)
+    MSG_POWER_LED_ON,
+    MSG_POWER_LED_DIM,
+    MSG_POWER_LED_OFF,
 
     // Retro shell
     MSG_CLOSE_CONSOLE,
@@ -118,8 +115,7 @@ enum_long(MSG_TYPE)
     MSG_RECORDING_ABORTED,
         
     // DMA Debugging
-    MSG_DMA_DEBUG_ON,           // Replace by MSG_DMA_DEBUG
-    MSG_DMA_DEBUG_OFF,          // Replace by MSG_DMA_DEBUG
+    MSG_DMA_DEBUG,
 
     // Remote server
     MSG_SRV_STATE,
@@ -127,7 +123,7 @@ enum_long(MSG_TYPE)
     MSG_SRV_SEND,
 
     // Scheduled alarms
-    MSG_GUI_EVENT               // Replace by MSG_ALARM
+    MSG_ALARM
 };
 typedef MSG_TYPE MsgType;
 
@@ -135,7 +131,7 @@ typedef MSG_TYPE MsgType;
 struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = MSG_GUI_EVENT;
+    static constexpr long maxVal = MSG_ALARM;
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "MSG"; }
@@ -144,7 +140,6 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
         switch (value) {
                 
             case MSG_NONE:                  return "NONE";
-            case MSG_REGISTER:              return "REGISTER";
 
             case MSG_CONFIG:                return "CONFIG";
             case MSG_POWER:                 return "POWER";
@@ -224,14 +219,13 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
             case MSG_RECORDING_STOPPED:     return "RECORDING_STOPPED";
             case MSG_RECORDING_ABORTED:     return "RECORDING_ABORTED";
                                 
-            case MSG_DMA_DEBUG_ON:          return "DMA_DEBUG_ON";
-            case MSG_DMA_DEBUG_OFF:         return "DMA_DEBUG_OFF";
+            case MSG_DMA_DEBUG:             return "DMA_DEBUG";
                                 
             case MSG_SRV_STATE:             return "SRV_STATE";
             case MSG_SRV_RECEIVE:           return "SRV_RECEIVE";
             case MSG_SRV_SEND:              return "SRV_SEND";
 
-            case MSG_GUI_EVENT:             return "GUI_EVENT";
+            case MSG_ALARM:                 return "ALARM";
         }
         return "???";
     }

@@ -1508,7 +1508,7 @@ Amiga::serviceAlarmEvent()
     for (auto it = alarms.begin(); it != alarms.end(); ) {
 
         if (it->trigger <= agnus.clock) {
-            msgQueue.put(MSG_GUI_EVENT, it->payload);
+            msgQueue.put(MSG_ALARM, it->payload);
             it = alarms.erase(it);
         } else {
             it++;

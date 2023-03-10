@@ -364,10 +364,7 @@ extension MyController {
         if amiga == nil { return }
         
         switch msg.type {
-            
-        case .REGISTER:
-            debug(.lifetime, "Successfully connected to message queue")
-            
+                        
         case .CONFIG:
             inspector?.fullRefresh()
             
@@ -440,11 +437,9 @@ extension MyController {
         case .POWER_LED_OFF:
             powerLED.image = NSImage(named: "ledGrey")
                         
-        case .DMA_DEBUG_ON:
-            renderer.zoomTextureOut()
+        case .DMA_DEBUG:
 
-        case .DMA_DEBUG_OFF:
-            renderer.zoomTextureIn()
+            msg.value != 0 ? renderer.zoomTextureOut() : renderer.zoomTextureIn()
 
         case .VIDEO_FORMAT:
             renderer.canvas.updateTextureRect()
@@ -612,7 +607,7 @@ extension MyController {
         case .SRV_RECEIVE, .SRV_SEND:
             break
 
-        case .GUI_EVENT:
+        case .ALARM:
             debug(.events, "Received Alarm \(msg.value)")
 
         default:
