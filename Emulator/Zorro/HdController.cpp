@@ -399,7 +399,7 @@ HdController::processCmd(u32 ptr)
             
         default:
             
-            warn("Unsupported cmd: %ld (%s)\n", cmd, IoCommandEnum::key(cmd));
+            debug(HDR_DEBUG, "Unsupported cmd: %ld (%s)\n", cmd, IoCommandEnum::key(cmd));
             error = u8(IOERR_NOCMD);
     }
     

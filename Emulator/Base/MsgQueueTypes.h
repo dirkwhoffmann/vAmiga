@@ -22,27 +22,27 @@ enum_long(MSG_TYPE)
     MSG_NONE = 0,
     
     // Message queue
-    MSG_REGISTER,
+    MSG_REGISTER,           // DEPRECATED
     
     // Emulator state
     MSG_CONFIG,
-    MSG_POWER_ON,
-    MSG_POWER_OFF,
+    MSG_POWER_ON,           // Replace by MSG_POWER
+    MSG_POWER_OFF,          // Replace by MSG_POWER
     MSG_RUN,
     MSG_PAUSE,
     MSG_STEP,
     MSG_RESET,
     MSG_SHUTDOWN,
     MSG_ABORT,
-    MSG_WARP_ON,
-    MSG_WARP_OFF,
-    MSG_DEBUG_ON,
-    MSG_DEBUG_OFF,
-    MSG_MUTE_ON,
-    MSG_MUTE_OFF,
-    MSG_POWER_LED_ON,
-    MSG_POWER_LED_DIM,
-    MSG_POWER_LED_OFF,
+    MSG_WARP_ON,            // Replace by MSG_WARP
+    MSG_WARP_OFF,           // Replace by MSG_WARP
+    MSG_DEBUG_ON,           // Replace by MSG_TRACK
+    MSG_DEBUG_OFF,          // Replace by MSG_TRACK
+    MSG_MUTE_ON,            // Replace by MSG_MUTE
+    MSG_MUTE_OFF,           // Replace by MSG_MUTE
+    MSG_POWER_LED_ON,       // Replace by MSG_LED (payload 1)
+    MSG_POWER_LED_DIM,      // Replace by MSG_LED (payload 2)
+    MSG_POWER_LED_OFF,      // Replace by MSG_LED (payload 0)
 
     // Retro shell
     MSG_CLOSE_CONSOLE,
@@ -79,27 +79,27 @@ enum_long(MSG_TYPE)
     MSG_MEM_LAYOUT,
         
     // Floppy drives
-    MSG_DRIVE_CONNECT,
-    MSG_DRIVE_DISCONNECT,
+    MSG_DRIVE_CONNECT,          // Replace by MSG_CONNECT (payload 1)
+    MSG_DRIVE_DISCONNECT,       // Replace by MSG_CONNECT (payload 0)
     MSG_DRIVE_SELECT,
     MSG_DRIVE_READ,
     MSG_DRIVE_WRITE,
-    MSG_DRIVE_LED_ON,
-    MSG_DRIVE_LED_OFF,
-    MSG_DRIVE_MOTOR_ON,
-    MSG_DRIVE_MOTOR_OFF,
+    MSG_DRIVE_LED_ON,           // Replace by MSG_LED
+    MSG_DRIVE_LED_OFF,          // Replace by MSG_LED
+    MSG_DRIVE_MOTOR_ON,         // Replace by MSG_MOTOR
+    MSG_DRIVE_MOTOR_OFF,        // Replace by MSG_MOTOR
     MSG_DRIVE_STEP,
     MSG_DRIVE_POLL,
     MSG_DISK_INSERT,
     MSG_DISK_EJECT,
-    MSG_DISK_SAVED,
-    MSG_DISK_UNSAVED,
-    MSG_DISK_PROTECT,
-    MSG_DISK_UNPROTECT,
+    MSG_DISK_SAVED,             // Replace by MSG_MODIFIED (payload 0)
+    MSG_DISK_UNSAVED,           // Replace by MSG_MODIFIED (payload 1)
+    MSG_DISK_PROTECT,           // Replace by MSG_PROTECTED (payload 1)
+    MSG_DISK_UNPROTECT,         // Replace by MSG_PROTECTED (payload 0)
 
     // Hard drive controllers
-    MSG_HDC_CONNECT,
-    MSG_HDC_DISCONNECT,
+    MSG_HDC_CONNECT,            // Replace by MSG_HDC_CONNECT
+    MSG_HDC_DISCONNECT,         // Replace by MSG_HDC_CONNECT
     MSG_HDC_STATE,
     
     // Hard drives
@@ -129,16 +129,16 @@ enum_long(MSG_TYPE)
     MSG_RECORDING_ABORTED,
         
     // DMA Debugging
-    MSG_DMA_DEBUG_ON,
-    MSG_DMA_DEBUG_OFF,
+    MSG_DMA_DEBUG_ON,           // Replace by MSG_DMA_DEBUG
+    MSG_DMA_DEBUG_OFF,          // Replace by MSG_DMA_DEBUG
 
     // Remote server
     MSG_SRV_STATE,
     MSG_SRV_RECEIVE,
     MSG_SRV_SEND,
 
-    // GUI
-    MSG_GUI_EVENT
+    // Scheduled alarms
+    MSG_GUI_EVENT               // Replace by MSG_ALARM
 };
 typedef MSG_TYPE MsgType;
 
