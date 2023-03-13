@@ -18,7 +18,7 @@ namespace vamiga {
 class MsgQueue : public SubComponent {
 
     // Ring buffer storing all pending messages
-    util::RingBuffer <Message, 128> queue;
+    util::RingBuffer <Message, 512> queue;
 
     // The registered listener
     const void *listener = nullptr;

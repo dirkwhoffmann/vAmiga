@@ -36,11 +36,16 @@ MsgQueue::put(const Message &msg)
 
         debug(QUEUE_DEBUG, "%s [%llx]\n", MsgTypeEnum::key(msg.type), msg.value);
 
-        // Send the message immediately if a lister has been registered
-        if (listener) { callback(listener, msg); return; }
+        if (listener) {
 
-        // Otherwise, store it in the ring buffer
-        queue.write(msg);
+            // Send the message immediately if a lister has been registered
+            callback(listener, msg); return;
+
+        } else {
+
+            // Otherwise, store it in the ring buffer
+            queue.write(msg);
+        }
     }
 }
 

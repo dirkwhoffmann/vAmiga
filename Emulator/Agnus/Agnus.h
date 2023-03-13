@@ -747,10 +747,6 @@ public:
     void scheduleStrobe1Event();
     void scheduleStrobe2Event();
 
-    // Schedules a GUI event in the GUI slot
-    void scheduleGUITimerAbs(Cycle cycle, u32 payload);
-    void scheduleGUITimerRel(Cycle cycle, u32 payload);
-
 
     //
     // Servicing events (AgnusEvents.cpp)

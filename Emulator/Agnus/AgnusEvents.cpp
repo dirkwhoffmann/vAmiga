@@ -178,24 +178,6 @@ Agnus::scheduleStrobe2Event()
 }
 
 void
-Agnus::scheduleGUITimerAbs(Cycle cycle, u32 payload)
-{
-    {   SUSPENDED
-
-        scheduleAbs<SLOT_ALA>(cycle, ALA_TRIGGER, payload);
-    }
-}
-
-void
-Agnus::scheduleGUITimerRel(Cycle cycle, u32 payload)
-{
-    {   SUSPENDED
-
-        scheduleRel<SLOT_ALA>(cycle, ALA_TRIGGER, payload);
-    }
-}
-
-void
 Agnus::serviceREGEvent(Cycle until)
 {
     assert(pos.type != PAL || pos.h <= HPOS_CNT_PAL);
