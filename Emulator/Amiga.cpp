@@ -1113,6 +1113,9 @@ Amiga::_powerOff()
 {
     debug(RUN_DEBUG, "_powerOff\n");
 
+    // Perform a reset
+    hardReset();
+
     // Update the recorded debug information
     inspect();
     
