@@ -97,8 +97,27 @@ Amiga::Amiga()
         &msgQueue
     };
 
-    // Set up the initial state
     initialize();
+}
+
+Amiga::~Amiga()
+{
+    debug(RUN_DEBUG, "Destroying emulator instance\n");
+    if (thread.joinable()) { halt(); }
+}
+
+void
+Amiga::launch(const void *listener, Callback *func)
+{
+    msgQueue.setListener(listener, func);
+
+    launch();
+}
+
+void
+Amiga::launch()
+{
+    // Reset the emulator
     hardReset();
 
     // Initialize the sync timer
@@ -106,7 +125,7 @@ Amiga::Amiga()
 
     // Print some debug information
     if constexpr (SNP_DEBUG) {
-        
+
         msg("             Agnus : %zu bytes\n", sizeof(Agnus));
         msg("       AudioFilter : %zu bytes\n", sizeof(AudioFilter));
         msg("               CIA : %zu bytes\n", sizeof(CIA));
@@ -131,17 +150,7 @@ Amiga::Amiga()
         msg("             Zorro : %zu bytes\n", sizeof(ZorroManager));
         msg("\n");
     }
-}
 
-Amiga::~Amiga()
-{
-    debug(RUN_DEBUG, "Destroying emulator instance\n");
-    if (thread.joinable()) { halt(); }
-}
-
-void
-Amiga::launch()
-{
     if (!thread.joinable()) {
 
         thread = std::thread(&Thread::main, this);

@@ -196,9 +196,9 @@ extension MyController {
 
         // Setup window
         configureWindow()
-                                
-        // Enable message processing
-        registerAsListener()
+
+        // Launch the emulator
+        launch()
 
         // Add media file (if provided on startup)
         mydocument.addMedia()
@@ -249,13 +249,13 @@ extension MyController {
         // Enable fullscreen mode
         window?.collectionBehavior = .fullScreenPrimary
     }
-    
-    func registerAsListener() {
-        
+
+    func launch() {
+
         // Convert 'self' to a void pointer
         let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
-        
-        amiga.setListener(myself) { (ptr, msg: Message) in
+
+        amiga.launch(myself) { (ptr, msg: Message) in
 
             // Convert void pointer back to 'self'
             let myself = Unmanaged<MyController>.fromOpaque(ptr!).takeUnretainedValue()
@@ -266,7 +266,7 @@ extension MyController {
             }
         }
     }
-    
+
     //
     // Timer and message processing
     //

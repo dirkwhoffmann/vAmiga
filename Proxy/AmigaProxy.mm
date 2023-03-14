@@ -2737,9 +2737,6 @@ using namespace vamiga::moira;
     Amiga *amiga = new Amiga();
     obj = amiga;
 
-    // Launch the emulator thread
-    amiga->launch();
-
     // Create sub proxys
     agnus = [[AgnusProxy alloc] initWith:&amiga->agnus];
     blitter = [[BlitterProxy alloc] initWith:&amiga->agnus.blitter];
@@ -2843,6 +2840,11 @@ using namespace vamiga::moira;
 - (void) removeInspectionTarget
 {
     [self amiga]->removeInspectionTarget();
+}
+
+- (void)launch:(const void *)listener function:(Callback *)func
+{
+    [self amiga]->launch(listener, func);
 }
 
 - (void)hardReset

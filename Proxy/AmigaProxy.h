@@ -223,6 +223,8 @@
 @property InspectionTarget inspectionTarget;
 - (void) removeInspectionTarget;
 
+- (void)launch:(const void *)listener function:(Callback *)func;
+
 - (void)hardReset;
 - (void)softReset;
 
