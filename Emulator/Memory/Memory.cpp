@@ -63,27 +63,34 @@ Memory::_dump(Category category, std::ostream& os) const
         os << util::bol(womIsLocked) << std::endl;
     }
     
-    if (category == Category::Checksums) {
+    if (category == Category::Inspection) {
 
-        u32 romcrc = util::crc32(rom, config.romSize);
-        u32 womcrc = util::crc32(wom, config.womSize);
-        u32 extcrc = util::crc32(ext, config.extSize);
-        u32 chipcrc = util::crc32(chip, config.chipSize);
-        u32 slowcrc = util::crc32(slow, config.slowSize);
-        u32 fastcrc = util::crc32(fast, config.fastSize);
+        auto romcrc = util::crc32(rom, config.romSize);
+        auto womcrc = util::crc32(wom, config.womSize);
+        auto extcrc = util::crc32(ext, config.extSize);
+        auto chipcrc = util::crc32(chip, config.chipSize);
+        auto slowcrc = util::crc32(slow, config.slowSize);
+        auto fastcrc = util::crc32(fast, config.fastSize);
 
-        os << util::tab("Rom CRC32");
-        os << util::hex(romcrc) << " (" << util::dec(romcrc) << ")" << std::endl;
-        os << util::tab("Wom CRC32");
-        os << util::hex(womcrc) << " (" << util::dec(womcrc) << ")" << std::endl;
-        os << util::tab("Extended Rom CRC32");
-        os << util::hex(extcrc) << " (" << util::dec(extcrc) << ")" << std::endl;
-        os << util::tab("Chip Ram CRC32");
-        os << util::hex(chipcrc) << " (" << util::dec(chipcrc) << ")" << std::endl;
-        os << util::tab("Slow Ram CRC32");
-        os << util::hex(slowcrc) << " (" << util::dec(slowcrc) << ")" << std::endl;
-        os << util::tab("Fast Ram CRC32");
-        os << util::hex(fastcrc) << " (" << util::dec(fastcrc) << ")" << std::endl;
+        auto rom = RomFile::identifier(romcrc);
+        auto wom = RomFile::identifier(womcrc);
+        auto ext = RomFile::identifier(extcrc);
+
+        os << util::tab("Rom");
+        os << util::hex(romcrc) << " (CRC32)  ";
+        os << RomFile::title(rom) << " " << RomFile::version(rom) << std::endl;
+        os << util::tab("Wom");
+        os << util::hex(womcrc) << " (CRC32)  ";
+        os << RomFile::title(wom) << " " << RomFile::version(wom) << std::endl;
+        os << util::tab("Extended Rom");
+        os << util::hex(extcrc) << " (CRC32)  ";
+        os << RomFile::title(ext) << " " << RomFile::version(ext) << std::endl;
+        os << util::tab("Chip Ram");
+        os << util::hex(chipcrc) << " (CRC32)  " << std::endl;
+        os << util::tab("Slow Ram");
+        os << util::hex(slowcrc) << " (CRC32)  " << std::endl;
+        os << util::tab("Fast Ram");
+        os << util::hex(fastcrc) << " (CRC32)  " << std::endl;
     }
     
     if (category == Category::BankMap) {

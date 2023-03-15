@@ -1083,43 +1083,13 @@ Amiga::_dump(Category category, std::ostream& os) const
 void
 Amiga::_powerOn()
 {
-    debug(RUN_DEBUG, "_powerOn\n");
 
-    // Perform a reset
-    hardReset();
-
-    // Start from a snapshot if requested
-    if (string(INITIAL_SNAPSHOT) != "") {
-
-        Snapshot snapshot(INITIAL_SNAPSHOT);
-        loadSnapshot(snapshot);
-    }
-
-    // Set initial breakpoints
-    for (auto &bp : std::vector <u32> (INITIAL_BREAKPOINTS)) {
-        
-        cpu.debugger.breakpoints.setAt(bp);
-        track = true;
-    }
-    
-    // Update the recorded debug information
-    inspect();
-
-    msgQueue.put(MSG_POWER, 1);
 }
 
 void
 Amiga::_powerOff()
 {
-    debug(RUN_DEBUG, "_powerOff\n");
 
-    // Perform a reset
-    hardReset();
-
-    // Update the recorded debug information
-    inspect();
-    
-    msgQueue.put(MSG_POWER, 0);
 }
 
 void
@@ -1202,6 +1172,54 @@ Amiga::save(u8 *buffer)
     CoreComponent::didSave();
     
     return result;
+}
+
+void
+Amiga::powerOn()
+{
+    debug(RUN_DEBUG, "powerOn\n");
+
+    // Perform a reset
+    hardReset();
+
+    // Power on all subcomponents
+    CoreComponent::powerOn();
+
+    // Load a snapshot if requested
+    if (string(INITIAL_SNAPSHOT) != "") {
+
+        Snapshot snapshot(INITIAL_SNAPSHOT);
+        loadSnapshot(snapshot);
+    }
+
+    // Set initial breakpoints
+    for (auto &bp : std::vector <u32> (INITIAL_BREAKPOINTS)) {
+
+        cpu.debugger.breakpoints.setAt(bp);
+        track = true;
+    }
+
+    // Update the recorded debug information
+    inspect();
+
+    msgQueue.put(MSG_POWER, 1);
+}
+
+void
+Amiga::powerOff()
+{
+    debug(RUN_DEBUG, "powerOff\n");
+
+    // Power off all subcomponents
+    CoreComponent::powerOff();
+
+    // Perform a reset
+    hardReset();
+
+    // Update the recorded debug information
+    inspect();
+
+    msgQueue.put(MSG_POWER, 0);
 }
 
 Amiga::ThreadMode

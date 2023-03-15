@@ -420,7 +420,7 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
-        retroShell.dump(mem, Category::BankMap);
+        retroShell.dump(mem, Category::Inspection);
     });
 
     root.add({"memory", "dump"}, { Arg::address },
@@ -432,18 +432,11 @@ Interpreter::initDebugShell(Command &root)
         retroShell << '\n' << ss << '\n';
     });
 
-    root.add({"memory", "banks"},
+    root.add({"memory", "bankmap"},
              "Dumps the memory bank map",
              [this](Arguments& argv, long value) {
 
-        retroShell.dump(amiga, Category::BankMap);
-    });
-
-    root.add({"memory", "checksum"},
-             "Computes memory checksums",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dump(amiga.mem, Category::Checksums);
+        retroShell.dump(mem, Category::BankMap);
     });
 
     root.add({"memory", "write"}, { Arg::value, Arg::value },

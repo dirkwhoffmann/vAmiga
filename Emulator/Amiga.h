@@ -251,7 +251,12 @@ private:
     //
     // Methods from Thread
     //
-    
+
+public:
+
+    void powerOn();
+    void powerOff();
+
 private:
     
     ThreadMode getThreadMode() const override;

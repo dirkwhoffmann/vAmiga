@@ -46,7 +46,7 @@ namespace vamiga {
 
 enum class Category
 {    
-    BankMap, Beam, Blocks, Breakpoints, Bus, Callstack, Catchpoints, Checksums,
+    BankMap, Beam, Blocks, Breakpoints, Bus, Callstack, Catchpoints,
     Config, Current, Debug, Defaults, Disk, Dma, Drive, Events, FileSystem, Fpu,
     Geometry, Hunks, Inspection, List1, List2, Parameters, Partitions,
     Progress, Properties, Registers, Sections, Segments, Signals, Stats, Status,
