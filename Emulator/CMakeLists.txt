@@ -78,11 +78,11 @@ ${CMAKE_CURRENT_SOURCE_DIR}/Media
 ${CMAKE_CURRENT_SOURCE_DIR}/Media/RomFiles
 ${CMAKE_CURRENT_SOURCE_DIR}/Media/DiskFiles
 ${CMAKE_CURRENT_SOURCE_DIR}/FileSystems
-${CMAKE_CURRENT_SOURCE_DIR}/RetroShell
 ${CMAKE_CURRENT_SOURCE_DIR}/Misc
 ${CMAKE_CURRENT_SOURCE_DIR}/Misc/OSDebugger
-${CMAKE_CURRENT_SOURCE_DIR}/Misc/RemoteServers
 ${CMAKE_CURRENT_SOURCE_DIR}/Misc/RegressionTester
+${CMAKE_CURRENT_SOURCE_DIR}/Misc/RemoteServers
+${CMAKE_CURRENT_SOURCE_DIR}/Misc/RetroShell
 ${CMAKE_CURRENT_SOURCE_DIR}/xdms)
 
 # Add sub directories
@@ -99,7 +99,6 @@ add_subdirectory(Zorro)
 add_subdirectory(Peripherals)
 add_subdirectory(Media)
 add_subdirectory(FileSystems)
-add_subdirectory(RetroShell)
 add_subdirectory(Misc)
 add_subdirectory(xdms)
 add_subdirectory(CPU/Moira/softfloat)

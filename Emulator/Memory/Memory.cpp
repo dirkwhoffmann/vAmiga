@@ -123,19 +123,19 @@ Memory::_initialize()
     
     if (auto romPath = Amiga::defaults.getString("ROM_PATH"); romPath != "") {
 
-        msg("Trying to load Rom from %s...\n", romPath.c_str());
+        debug(CNF_DEBUG, "Trying to load Rom from %s...\n", romPath.c_str());
         
         try { loadRom(romPath); } catch (std::exception& e) {
-            warn("Error: %s\n", e.what());
+            debug(CNF_DEBUG, "Error: %s\n", e.what());
         }
     }
     
     if (auto extPath = Amiga::defaults.getString("EXT_PATH"); extPath != "") {
 
-        msg("Trying to load extension Rom from %s...\n", extPath.c_str());
+        debug(CNF_DEBUG, "Trying to load extension Rom from %s...\n", extPath.c_str());
         
         try { loadExt(extPath); } catch (std::exception& e) {
-            warn("Error: %s\n", e.what());
+            debug(CNF_DEBUG, "Error: %s\n", e.what());
         }
     }
 }
