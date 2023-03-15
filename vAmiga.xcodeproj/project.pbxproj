@@ -599,6 +599,7 @@
 		50627FD2286EBA7300F2A835 /* FrameBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameBuffer.h; sourceTree = "<group>"; };
 		50627FD4286EBAC000F2A835 /* FrameBufferTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameBufferTypes.h; sourceTree = "<group>"; };
 		5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerSnapshots.swift; sourceTree = "<group>"; };
+		506436E229C1D84D00768528 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* Memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Memory.cpp; sourceTree = "<group>"; };
 		5064851021EC7A1700FC4AC3 /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
 		50672CBF2946100F004113F5 /* InterpreterDebugCmds.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InterpreterDebugCmds.cpp; sourceTree = "<group>"; };
@@ -1204,6 +1205,15 @@
 			path = System;
 			sourceTree = "<group>";
 		};
+		506436E129C1D82500768528 /* ThirdParty */ = {
+			isa = PBXGroup;
+			children = (
+				506436E229C1D84D00768528 /* CMakeLists.txt */,
+				50F54B0B24B5D31D0078FDC9 /* xdms */,
+			);
+			path = ThirdParty;
+			sourceTree = "<group>";
+		};
 		508AC36527B7F634006AD2E7 /* Zorro */ = {
 			isa = PBXGroup;
 			children = (
@@ -1422,7 +1432,7 @@
 				50A2953C21FF12C20046BAA0 /* Peripherals */,
 				508FE06621EA31E50043D0E9 /* Media */,
 				5056506925440FDE00A79D27 /* FileSystems */,
-				50F54B0B24B5D31D0078FDC9 /* xdms */,
+				506436E129C1D82500768528 /* ThirdParty */,
 				50E98B52275A125700AA0CB9 /* Misc */,
 			);
 			path = Emulator;

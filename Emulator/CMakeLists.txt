@@ -83,7 +83,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/Misc/OSDebugger
 ${CMAKE_CURRENT_SOURCE_DIR}/Misc/RegressionTester
 ${CMAKE_CURRENT_SOURCE_DIR}/Misc/RemoteServers
 ${CMAKE_CURRENT_SOURCE_DIR}/Misc/RetroShell
-${CMAKE_CURRENT_SOURCE_DIR}/xdms)
+${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/xdms)
 
 # Add sub directories
 add_subdirectory(Utilities)
@@ -100,7 +100,7 @@ add_subdirectory(Peripherals)
 add_subdirectory(Media)
 add_subdirectory(FileSystems)
 add_subdirectory(Misc)
-add_subdirectory(xdms)
+add_subdirectory(ThirdParty)
 add_subdirectory(CPU/Moira/softfloat)
 
 # Add libraries
