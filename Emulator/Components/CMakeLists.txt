@@ -1,3 +1,5 @@
+target_include_directories(vAmigaCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
 add_subdirectory(Agnus)
 add_subdirectory(CPU)
 add_subdirectory(CIA)
