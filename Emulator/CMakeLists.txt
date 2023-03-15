@@ -17,7 +17,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Add the emulator library
-add_library(vAmigaCore Amiga.cpp)
+add_library(vAmigaCore Components/Amiga.cpp)
 
 # Add the console app (vAmiga Headless)
 add_executable(vAmigaConsole Headless.cpp)
@@ -51,6 +51,7 @@ target_include_directories(vAmigaCore PUBLIC
 ${CMAKE_CURRENT_SOURCE_DIR}/.
 ${CMAKE_CURRENT_SOURCE_DIR}/Utilities
 ${CMAKE_CURRENT_SOURCE_DIR}/Base
+${CMAKE_CURRENT_SOURCE_DIR}/Components
 ${CMAKE_CURRENT_SOURCE_DIR}/Components/CPU
 ${CMAKE_CURRENT_SOURCE_DIR}/Components/CPU/Moira
 ${CMAKE_CURRENT_SOURCE_DIR}/Components/CPU/Moira/softfloat

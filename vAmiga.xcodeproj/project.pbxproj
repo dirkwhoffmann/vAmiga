@@ -429,7 +429,6 @@
 		50FC04FC27DA1AA200C3E566 /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C0A542259402D000121CD /* DiskController.cpp */; };
 		50FC04FD27DA1AAB00C3E566 /* UARTEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEDB24D3D8170037082D /* UARTEvents.cpp */; };
 		50FC04FE27DA1AAB00C3E566 /* UART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F0BD2422AF883C001F4616 /* UART.cpp */; };
-		50FC04FF27DA1AB800C3E566 /* Amiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0E21EB410B002E32A6 /* Amiga.cpp */; };
 		50FC08AD27819CD100F0C567 /* AgnusInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08AC27819CD100F0C567 /* AgnusInfo.cpp */; };
 		50FC08AF27819E2400F0C567 /* CopperInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08AE27819E2400F0C567 /* CopperInfo.cpp */; };
 		50FC08B127819E4100F0C567 /* BlitterInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08B027819E4100F0C567 /* BlitterInfo.cpp */; };
@@ -1220,6 +1219,9 @@
 			isa = PBXGroup;
 			children = (
 				506436E429C1D92D00768528 /* CMakeLists.txt */,
+				50D661862282BE1800D67D88 /* AmigaTypes.h */,
+				50B14C0F21EB410B002E32A6 /* Amiga.h */,
+				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
 				508E7F962206CDC600F7D88C /* CPU */,
 				508FDF5621EA1FBC0043D0E9 /* CIA */,
 				50EE993D21FF4D42003BD74B /* Paula */,
@@ -1432,9 +1434,6 @@
 			children = (
 				50CF461C2620420500BB3B95 /* CMakeLists.txt */,
 				50B14C0921EB228E002E32A6 /* config.h */,
-				50D661862282BE1800D67D88 /* AmigaTypes.h */,
-				50B14C0F21EB410B002E32A6 /* Amiga.h */,
-				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
 				50FC050027DA205D00C3E566 /* Headless.h */,
 				50FC047427DA108500C3E566 /* Headless.cpp */,
 				50B14C0421EB212E002E32A6 /* Utilities */,
@@ -2449,7 +2448,6 @@
 				50FC049027DA196500C3E566 /* Denise.cpp in Sources */,
 				50FC04FC27DA1AA200C3E566 /* DiskController.cpp in Sources */,
 				50FC049527DA196C00C3E566 /* FFmpeg.cpp in Sources */,
-				50FC04FF27DA1AB800C3E566 /* Amiga.cpp in Sources */,
 				50FC04A127DA197A00C3E566 /* SequencerInfo.cpp in Sources */,
 				50FC04B827DA19B200C3E566 /* FloppyDrive.cpp in Sources */,
 				50FC049127DA196500C3E566 /* DeniseInfo.cpp in Sources */,
