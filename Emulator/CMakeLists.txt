@@ -51,24 +51,24 @@ target_include_directories(vAmigaCore PUBLIC
 ${CMAKE_CURRENT_SOURCE_DIR}/.
 ${CMAKE_CURRENT_SOURCE_DIR}/Utilities
 ${CMAKE_CURRENT_SOURCE_DIR}/Base
-${CMAKE_CURRENT_SOURCE_DIR}/CPU
-${CMAKE_CURRENT_SOURCE_DIR}/CPU/Moira
-${CMAKE_CURRENT_SOURCE_DIR}/CPU/Moira/softfloat
-${CMAKE_CURRENT_SOURCE_DIR}/CIA
-${CMAKE_CURRENT_SOURCE_DIR}/Paula
-${CMAKE_CURRENT_SOURCE_DIR}/Paula/Audio
-${CMAKE_CURRENT_SOURCE_DIR}/Paula/DiskController
-${CMAKE_CURRENT_SOURCE_DIR}/Paula/UART
-${CMAKE_CURRENT_SOURCE_DIR}/Denise
-${CMAKE_CURRENT_SOURCE_DIR}/Denise/Recorder
-${CMAKE_CURRENT_SOURCE_DIR}/Agnus
-${CMAKE_CURRENT_SOURCE_DIR}/Agnus/Sequencer
-${CMAKE_CURRENT_SOURCE_DIR}/Agnus/Copper
-${CMAKE_CURRENT_SOURCE_DIR}/Agnus/Blitter
-${CMAKE_CURRENT_SOURCE_DIR}/Agnus/DmaDebugger
-${CMAKE_CURRENT_SOURCE_DIR}/Memory
-${CMAKE_CURRENT_SOURCE_DIR}/LogicBoard
-${CMAKE_CURRENT_SOURCE_DIR}/Zorro
+${CMAKE_CURRENT_SOURCE_DIR}/Components/CPU
+${CMAKE_CURRENT_SOURCE_DIR}/Components/CPU/Moira
+${CMAKE_CURRENT_SOURCE_DIR}/Components/CPU/Moira/softfloat
+${CMAKE_CURRENT_SOURCE_DIR}/Components/CIA
+${CMAKE_CURRENT_SOURCE_DIR}/Components/Paula
+${CMAKE_CURRENT_SOURCE_DIR}/Components/Paula/Audio
+${CMAKE_CURRENT_SOURCE_DIR}/Components/Paula/DiskController
+${CMAKE_CURRENT_SOURCE_DIR}/Components/Paula/UART
+${CMAKE_CURRENT_SOURCE_DIR}/Components/Denise
+${CMAKE_CURRENT_SOURCE_DIR}/Components/Denise/Recorder
+${CMAKE_CURRENT_SOURCE_DIR}/Components/Agnus
+${CMAKE_CURRENT_SOURCE_DIR}/Components/Agnus/Sequencer
+${CMAKE_CURRENT_SOURCE_DIR}/Components/Agnus/Copper
+${CMAKE_CURRENT_SOURCE_DIR}/Components/Agnus/Blitter
+${CMAKE_CURRENT_SOURCE_DIR}/Components/Agnus/DmaDebugger
+${CMAKE_CURRENT_SOURCE_DIR}/Components/Memory
+${CMAKE_CURRENT_SOURCE_DIR}/Components/LogicBoard
+${CMAKE_CURRENT_SOURCE_DIR}/Components/Zorro
 ${CMAKE_CURRENT_SOURCE_DIR}/Peripherals
 ${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/Drive
 ${CMAKE_CURRENT_SOURCE_DIR}/Peripherals/Mouse
@@ -86,22 +86,15 @@ ${CMAKE_CURRENT_SOURCE_DIR}/Misc/RetroShell
 ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/xdms)
 
 # Add sub directories
-add_subdirectory(Utilities)
 add_subdirectory(Base)
-add_subdirectory(CPU)
-add_subdirectory(CIA)
-add_subdirectory(Paula)
-add_subdirectory(Denise)
-add_subdirectory(Agnus)
-add_subdirectory(Memory)
-add_subdirectory(LogicBoard)
-add_subdirectory(Zorro)
-add_subdirectory(Peripherals)
-add_subdirectory(Media)
+add_subdirectory(Components)
+add_subdirectory(Components/CPU/Moira/softfloat)
 add_subdirectory(FileSystems)
+add_subdirectory(Media)
 add_subdirectory(Misc)
+add_subdirectory(Peripherals)
 add_subdirectory(ThirdParty)
-add_subdirectory(CPU/Moira/softfloat)
+add_subdirectory(Utilities)
 
 # Add libraries
 set(THREADS_PREFER_PTHREAD_FLAG ON)

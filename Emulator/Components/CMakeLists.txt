@@ -1,0 +1,8 @@
+add_subdirectory(Agnus)
+add_subdirectory(CPU)
+add_subdirectory(CIA)
+add_subdirectory(Denise)
+add_subdirectory(LogicBoard)
+add_subdirectory(Memory)
+add_subdirectory(Paula)
+add_subdirectory(Zorro)

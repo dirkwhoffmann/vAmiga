@@ -97,6 +97,7 @@
 		50627FD3286EBA7300F2A835 /* FrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50627FD1286EBA7300F2A835 /* FrameBuffer.cpp */; };
 		50627FD5286EBACA00F2A835 /* FrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50627FD1286EBA7300F2A835 /* FrameBuffer.cpp */; };
 		5062DB1224370FE400ACEEE2 /* MyControllerSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */; };
+		506436E529C1D92D00768528 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 506436E429C1D92D00768528 /* CMakeLists.txt */; };
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
 		50672CC02946100F004113F5 /* InterpreterDebugCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50672CBF2946100F004113F5 /* InterpreterDebugCmds.cpp */; };
 		50672CC12946100F004113F5 /* InterpreterDebugCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50672CBF2946100F004113F5 /* InterpreterDebugCmds.cpp */; };
@@ -600,6 +601,7 @@
 		50627FD4286EBAC000F2A835 /* FrameBufferTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameBufferTypes.h; sourceTree = "<group>"; };
 		5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerSnapshots.swift; sourceTree = "<group>"; };
 		506436E229C1D84D00768528 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		506436E429C1D92D00768528 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* Memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Memory.cpp; sourceTree = "<group>"; };
 		5064851021EC7A1700FC4AC3 /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
 		50672CBF2946100F004113F5 /* InterpreterDebugCmds.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InterpreterDebugCmds.cpp; sourceTree = "<group>"; };
@@ -1214,6 +1216,22 @@
 			path = ThirdParty;
 			sourceTree = "<group>";
 		};
+		506436E329C1D90B00768528 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				506436E429C1D92D00768528 /* CMakeLists.txt */,
+				508E7F962206CDC600F7D88C /* CPU */,
+				508FDF5621EA1FBC0043D0E9 /* CIA */,
+				50EE993D21FF4D42003BD74B /* Paula */,
+				502F7DCF2221709700AEEC65 /* Denise */,
+				502F7DD0222170AE00AEEC65 /* Agnus */,
+				505B801C23FE626E002407FE /* Memory */,
+				505B801D23FE628F002407FE /* LogicBoard */,
+				508AC36527B7F634006AD2E7 /* Zorro */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		508AC36527B7F634006AD2E7 /* Zorro */ = {
 			isa = PBXGroup;
 			children = (
@@ -1421,14 +1439,7 @@
 				50FC047427DA108500C3E566 /* Headless.cpp */,
 				50B14C0421EB212E002E32A6 /* Utilities */,
 				50104E8825ECDAA30047A9AA /* Base */,
-				508E7F962206CDC600F7D88C /* CPU */,
-				508FDF5621EA1FBC0043D0E9 /* CIA */,
-				50EE993D21FF4D42003BD74B /* Paula */,
-				502F7DCF2221709700AEEC65 /* Denise */,
-				502F7DD0222170AE00AEEC65 /* Agnus */,
-				505B801C23FE626E002407FE /* Memory */,
-				505B801D23FE628F002407FE /* LogicBoard */,
-				508AC36527B7F634006AD2E7 /* Zorro */,
+				506436E329C1D90B00768528 /* Components */,
 				50A2953C21FF12C20046BAA0 /* Peripherals */,
 				508FE06621EA31E50043D0E9 /* Media */,
 				5056506925440FDE00A79D27 /* FileSystems */,
@@ -2056,6 +2067,7 @@
 				508FDFBE21EA1FF10043D0E9 /* MyDocument.xib in Resources */,
 				508FDFC521EA1FF10043D0E9 /* A500ISO.xib in Resources */,
 				50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */,
+				506436E529C1D92D00768528 /* CMakeLists.txt in Resources */,
 				50B14C2021EB8445002E32A6 /* drive_head.aiff in Resources */,
 				50AD904B276E104E0011ECCB /* TextStorage.h in Resources */,
 				5029C6E127CA2EAB002F6CCC /* DiskInspector.xib in Resources */,
