@@ -136,11 +136,8 @@ public:
     /* Parallel-to-serial shift registers. Denise transfers the current values
      * of the BPLDAT registers into these shift registers after BPLDAT1 is
      * written to. This is emulated in function fillShiftRegister().
-     *
-     * Note: The upper two array elements are dummy elements. We need them in
-     * order to pass the array as parameter to function transposeSSE().
      */
-    alignas(16) u16 shiftReg[8];
+    u16 shiftReg[6];
 
     // Flags indicating that the shift registers have been loaded
     bool armedOdd;

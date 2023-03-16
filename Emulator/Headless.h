@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Amiga.h"
-#include <map>
+#include "vamiga.h"
 
 using std::map;
 using std::vector;

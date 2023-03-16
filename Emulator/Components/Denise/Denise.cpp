@@ -12,7 +12,6 @@
 #include "Agnus.h"
 #include "Amiga.h"
 #include "IOUtils.h"
-#include "SSEUtils.h"
 
 namespace vamiga {
 
