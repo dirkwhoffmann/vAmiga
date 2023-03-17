@@ -205,7 +205,8 @@ void
 Thread::switchWarp(bool state, u8 source)
 {
     assert(source >= 0 && source < 8);
-    assert(isEmulatorThread() || !isRunning());
+
+    if (!isEmulatorThread()) suspend();
 
     u8 old = warp;
     state ? SET_BIT(warp, source) : CLR_BIT(warp, source);
@@ -213,6 +214,8 @@ Thread::switchWarp(bool state, u8 source)
     if (bool(old) != bool(warp)) {
         CoreComponent::warpOnOff(warp);
     }
+
+    if (!isEmulatorThread()) resume();
 }
 
 void

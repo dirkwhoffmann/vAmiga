@@ -209,6 +209,9 @@ Amiga::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
 
+    //
+    updateWarpState();
+    
     // Clear all runloop flags
     flags = 0;
 }
@@ -444,16 +447,7 @@ Amiga::setConfigItem(Option option, i64 value)
             }
 
             config.warpMode = WarpMode(value);
-
-            switch (config.warpMode) {
-
-                case WARP_AUTO:     paula.diskController.spinning() ? warpOn() : warpOff(); break;
-                case WARP_NEVER:    warpOff(); break;
-                case WARP_ALWAYS:   warpOn(); break;
-
-                default:
-                    fatalError;
-            }
+            updateWarpState();
             return;
 
         case OPT_SYNC_MODE:
@@ -1543,6 +1537,24 @@ Amiga::scheduleNextAlarm()
             trigger = alarm.trigger;
         }
     }
+}
+
+void
+Amiga::updateWarpState()
+{
+    bool newState;
+
+    switch (config.warpMode) {
+
+        case WARP_AUTO:     newState = paula.diskController.spinning() || !kickstartReady; break;
+        case WARP_NEVER:    newState = false; break;
+        case WARP_ALWAYS:   newState = true; break;
+
+        default:
+            fatalError;
+    }
+
+    switchWarp(newState);
 }
 
 fs::path
