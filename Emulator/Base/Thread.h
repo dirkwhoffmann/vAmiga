@@ -107,6 +107,31 @@ namespace vamiga {
  *       return or throw an exceptions as you like;
  *    }
  *
+ * The Thread class is also responsible for timing synchronization. I.e., it
+ * has to ensure that the proper amount of frames are executed per second.
+ * Three different synchronization modes are supported:
+ *
+ * - Periodic:
+ *
+ *   In periodic mode the thread puts itself to sleep and utilizes a timer to
+ *   schedule a wakeup call. In this mode, no further action has to be taken
+ *   by the GUI. This method was the default mode used by vAmiga up to version
+ *   2.3.
+ *
+ * - Pulsed:
+ *
+ *   In pulsed mode, the thread waits for an external wake-up signal that has
+ *   to be sent by the GUI. When the wake-up signal is received, a single frame
+ *   is computed. vAmiga uses this mode to implement VSYNC.
+ *
+ * - Adaptive:
+ *
+ *  In adaptive mode, the thread waits for an external wake-up signal just as
+ *  it does in pulsed mode. When the wake-up signal comes in, the thread
+ *  computes the number of missing frames based on the current time and the time
+ *  the thread had been lauchen. Then it executes all missing frames or
+ *  resynchronizes if the number of missing frames is way off.
+ *
  * To speed up emulation (e.g., during disk accesses), the emulator may be put
  * into warp mode. In this mode, timing synchronization is disabled causing the
  * emulator to run as fast as possible.
@@ -126,9 +151,6 @@ protected:
     
     // The thread object
     std::thread thread;
-
-    // The current synchronization mode
-    enum class ThreadMode { Periodic, Pulsed, Adaptive };
     
     // The current thread state and a change request
     ExecutionState state = EXEC_OFF;

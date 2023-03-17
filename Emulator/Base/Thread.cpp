@@ -26,7 +26,7 @@ Thread::~Thread()
 }
 
 template <> void
-Thread::execute<Thread::ThreadMode::Periodic>()
+Thread::execute<THREAD_PERIODIC>()
 {
     loadClock.go();
     execute();
@@ -34,7 +34,7 @@ Thread::execute<Thread::ThreadMode::Periodic>()
 }
 
 template <> void
-Thread::execute<Thread::ThreadMode::Pulsed>()
+Thread::execute<THREAD_PULSED>()
 {
     loadClock.go();
     execute();
@@ -43,7 +43,7 @@ Thread::execute<Thread::ThreadMode::Pulsed>()
 }
 
 template <> void
-Thread::execute<Thread::ThreadMode::Adaptive>()
+Thread::execute<THREAD_ADAPTIVE>()
 {
     loadClock.go();
 
@@ -65,7 +65,7 @@ Thread::execute<Thread::ThreadMode::Adaptive>()
 }
 
 template <> void
-Thread::sleep<Thread::ThreadMode::Periodic>()
+Thread::sleep<THREAD_PERIODIC>()
 {
     auto now = util::Time::now();
 
@@ -104,7 +104,7 @@ Thread::sleep<Thread::ThreadMode::Periodic>()
 }
 
 template <> void
-Thread::sleep<Thread::ThreadMode::Pulsed>()
+Thread::sleep<THREAD_PULSED>()
 {
     // Set a timeout to prevent the thread from stalling
     auto timeout = util::Time(i64(2000000000.0 / refreshRate()));
@@ -114,7 +114,7 @@ Thread::sleep<Thread::ThreadMode::Pulsed>()
 }
 
 template <> void
-Thread::sleep<Thread::ThreadMode::Adaptive>()
+Thread::sleep<THREAD_ADAPTIVE>()
 {
     // Set a timeout to prevent the thread from stalling
     auto timeout = util::Time(i64(2000000000.0 / refreshRate()));
@@ -136,9 +136,9 @@ Thread::main()
 
             switch (getThreadMode()) {
 
-                case ThreadMode::Periodic: execute<ThreadMode::Periodic>(); break;
-                case ThreadMode::Pulsed: execute<ThreadMode::Pulsed>(); break;
-                case ThreadMode::Adaptive: execute<ThreadMode::Adaptive>(); break;
+                case THREAD_PERIODIC:   execute<THREAD_PERIODIC>(); break;
+                case THREAD_PULSED:     execute<THREAD_PULSED>(); break;
+                case THREAD_ADAPTIVE:   execute<THREAD_ADAPTIVE>(); break;
             }
         }
 
@@ -146,9 +146,9 @@ Thread::main()
             
             switch (getThreadMode()) {
 
-                case ThreadMode::Periodic: sleep<ThreadMode::Periodic>(); break;
-                case ThreadMode::Pulsed: sleep<ThreadMode::Pulsed>(); break;
-                case ThreadMode::Adaptive: sleep<ThreadMode::Adaptive>(); break;
+                case THREAD_PERIODIC:   sleep<THREAD_PERIODIC>(); break;
+                case THREAD_PULSED:     sleep<THREAD_PULSED>(); break;
+                case THREAD_ADAPTIVE:   sleep<THREAD_ADAPTIVE>(); break;
             }
         }
         
@@ -385,17 +385,7 @@ Thread::changeStateTo(ExecutionState requestedState)
 void
 Thread::wakeUp()
 {
-    switch (getThreadMode()) {
-
-        case ThreadMode::Pulsed:
-        case ThreadMode::Adaptive:
-
-            util::Wakeable::wakeUp();
-            break;
-
-        default:
-            break;
-    }
+    if (getThreadMode() != THREAD_PERIODIC) util::Wakeable::wakeUp();
 }
 
 void

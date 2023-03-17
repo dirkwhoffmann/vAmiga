@@ -1023,9 +1023,7 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << tab("Thread state");
         os << ExecutionStateEnum::key(state) << std::endl;
         os << tab("Thread mode");
-        if (getThreadMode() == ThreadMode::Periodic) os << "PERIODIC" << std::endl;
-        if (getThreadMode() == ThreadMode::Pulsed) os << "PULSED" << std::endl;
-        if (getThreadMode() == ThreadMode::Adaptive) os << "ADAPTIVE" << std::endl;
+        os << ThreadModeEnum::key(state) << std::endl;
         os << tab("Master clock frequency");
         os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
     }
@@ -1213,10 +1211,10 @@ Amiga::save(u8 *buffer)
     return result;
 }
 
-Amiga::ThreadMode
+ThreadMode
 Amiga::getThreadMode() const
 {
-    return config.syncMode == SYNC_VSYNC ? ThreadMode::Pulsed : ThreadMode::Adaptive;
+    return config.syncMode == SYNC_VSYNC ? THREAD_PULSED : THREAD_ADAPTIVE;
 }
 
 void
