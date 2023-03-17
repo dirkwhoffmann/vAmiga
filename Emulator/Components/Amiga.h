@@ -260,6 +260,8 @@ private:
 public:
 
     double refreshRate() const override;
+    isize missingFrames(util::Time base) const override;
+
     i64 masterClockFrequency() const; // TODO: MOVE TO ANOTHER SECTION (NOT A THREAD METHOD)
 
 

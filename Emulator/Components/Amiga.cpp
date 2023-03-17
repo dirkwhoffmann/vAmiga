@@ -1023,7 +1023,9 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << tab("Thread state");
         os << ExecutionStateEnum::key(state) << std::endl;
         os << tab("Thread mode");
-        os << (getThreadMode() == ThreadMode::Periodic ? "PERIODIC" : "PULSED") << std::endl;
+        if (getThreadMode() == ThreadMode::Periodic) os << "PERIODIC" << std::endl;
+        if (getThreadMode() == ThreadMode::Pulsed) os << "PULSED" << std::endl;
+        if (getThreadMode() == ThreadMode::Adaptive) os << "ADAPTIVE" << std::endl;
         os << tab("Master clock frequency");
         os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
     }
@@ -1214,7 +1216,7 @@ Amiga::save(u8 *buffer)
 Amiga::ThreadMode
 Amiga::getThreadMode() const
 {
-    return config.syncMode == SYNC_VSYNC ? ThreadMode::Pulsed : ThreadMode::Periodic;
+    return config.syncMode == SYNC_VSYNC ? ThreadMode::Pulsed : ThreadMode::Adaptive;
 }
 
 void
@@ -1334,6 +1336,19 @@ Amiga::refreshRate() const
         default:
             fatalError;
     }
+}
+
+isize
+Amiga::missingFrames(util::Time base) const
+{
+    // Compute the elapsed time
+    auto elapsed = util::Time::now() - base;
+
+    // Compute which frame should have been reached by now
+    auto targetFrame = elapsed.asNanoseconds() * i64(refreshRate()) / 1000000000;
+
+    // Compute the number of missing frames
+    return isize(targetFrame - agnus.pos.frame);
 }
 
 i64

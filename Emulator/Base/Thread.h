@@ -128,7 +128,7 @@ protected:
     std::thread thread;
 
     // The current synchronization mode
-    enum class ThreadMode { Periodic, Pulsed };
+    enum class ThreadMode { Periodic, Pulsed, Adaptive };
     
     // The current thread state and a change request
     ExecutionState state = EXEC_OFF;
@@ -142,7 +142,10 @@ protected:
     // Counters
     isize loopCounter = 0;
     isize suspendCounter = 0;
-    
+
+    // Reference time stamp for adaptive sync
+    util::Time baseTime;
+
     // Time stamp for adjusting execution speed
     util::Time targetTime;
 
@@ -184,6 +187,9 @@ private:
     // Target frame rate of this thread (provided by the subclass)
     virtual double refreshRate() const = 0;
 
+    // Returns the number of frames to compute (provided by the subclass)
+    virtual isize missingFrames(util::Time base) const = 0;
+    
     // Returns true if this functions is called from within the emulator thread
     bool isEmulatorThread() { return std::this_thread::get_id() == thread.get_id(); }
 

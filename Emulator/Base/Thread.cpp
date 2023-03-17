@@ -43,6 +43,28 @@ Thread::execute<Thread::ThreadMode::Pulsed>()
 }
 
 template <> void
+Thread::execute<Thread::ThreadMode::Adaptive>()
+{
+    loadClock.go();
+
+    // Get the number of missing frames
+    isize missing = warp ? 1 : missingFrames(baseTime);
+
+    // Resync if necessary
+    if (missing < -5 || missing > 5) {
+
+        debug(RUN_DEBUG, "Adaptive sync: Resyncing %ld frames\n", missing);
+        baseTime += util::Time(missing * 1000000000 / i64(refreshRate()));
+        missing = 0;
+    }
+
+    // Compute all missing frames
+    for (isize i = 0; i < missing; i++) execute();
+
+    loadClock.stop();
+}
+
+template <> void
 Thread::sleep<Thread::ThreadMode::Periodic>()
 {
     auto now = util::Time::now();
@@ -52,7 +74,7 @@ Thread::sleep<Thread::ThreadMode::Periodic>()
 
     // Check if we're running too slow...
     if (now > targetTime) {
-        
+
         // Check if we're completely out of sync...
         if ((now - targetTime).asMilliseconds() > 200) {
 
@@ -62,13 +84,13 @@ Thread::sleep<Thread::ThreadMode::Periodic>()
             targetTime = util::Time::now();
         }
     }
-    
+
     // Check if we're running too fast...
     if (now < targetTime) {
-        
+
         // Check if we're completely out of sync...
         if ((targetTime - now).asMilliseconds() > 200) {
-            
+
             warn("Emulation is way too slow: %f\n",(targetTime - now).asSeconds());
 
             // Restart the sync timer
@@ -91,11 +113,23 @@ Thread::sleep<Thread::ThreadMode::Pulsed>()
     if (!warp) waitForWakeUp(timeout);
 }
 
+template <> void
+Thread::sleep<Thread::ThreadMode::Adaptive>()
+{
+    // Set a timeout to prevent the thread from stalling
+    auto timeout = util::Time(i64(2000000000.0 / refreshRate()));
+
+    // Wait for the next pulse
+    if (!warp) waitForWakeUp(timeout);
+}
+
 void
 Thread::main()
 {
     debug(RUN_DEBUG, "main()\n");
-    
+
+    baseTime = util::Time::now();
+
     while (++loopCounter) {
 
         if (isRunning()) {
@@ -104,6 +138,7 @@ Thread::main()
 
                 case ThreadMode::Periodic: execute<ThreadMode::Periodic>(); break;
                 case ThreadMode::Pulsed: execute<ThreadMode::Pulsed>(); break;
+                case ThreadMode::Adaptive: execute<ThreadMode::Adaptive>(); break;
             }
         }
 
@@ -113,6 +148,7 @@ Thread::main()
 
                 case ThreadMode::Periodic: sleep<ThreadMode::Periodic>(); break;
                 case ThreadMode::Pulsed: sleep<ThreadMode::Pulsed>(); break;
+                case ThreadMode::Adaptive: sleep<ThreadMode::Adaptive>(); break;
             }
         }
         
@@ -349,7 +385,17 @@ Thread::changeStateTo(ExecutionState requestedState)
 void
 Thread::wakeUp()
 {
-    if (getThreadMode() == ThreadMode::Pulsed) util::Wakeable::wakeUp();
+    switch (getThreadMode()) {
+
+        case ThreadMode::Pulsed:
+        case ThreadMode::Adaptive:
+
+            util::Wakeable::wakeUp();
+            break;
+
+        default:
+            break;
+    }
 }
 
 void

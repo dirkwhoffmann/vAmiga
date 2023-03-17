@@ -265,8 +265,7 @@ class Renderer: NSObject, MTKViewDelegate {
         update(frames: frames)
 
         semaphore.wait()
-        parent.amiga.wakeUp()
-        
+
         if let drawable = metalLayer.nextDrawable() {
 
             // Create the command buffer

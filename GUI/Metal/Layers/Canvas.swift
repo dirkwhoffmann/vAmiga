@@ -240,7 +240,12 @@ class Canvas: Layer {
     override func update(frames: Int64) {
             
         super.update(frames: frames)
+
+        // Grab the current texture
         updateTexture()
+
+        // Let the emulator compute the next frame
+        amiga.wakeUp()
     }
 
     func updateTexture() {
