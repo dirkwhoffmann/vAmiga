@@ -218,6 +218,13 @@ Interpreter::initCommandShell(Command &root)
         amiga.configure(OPT_VIDEO_FORMAT, parseEnum <VideoFormatEnum> (argv));
     });
 
+    root.add({"amiga", "set", "warpboot"}, { Arg::onoff },
+             "Enables or disables warp mode while Kickstart initializes",
+             [this](Arguments& argv, long value) {
+
+        amiga.configure(OPT_WARP_BOOT, parseBool(argv));
+    });
+
     root.add({"amiga", "set", "warpmode"}, { WarpModeEnum::argList() },
              "Selects the warp mode",
              [this](Arguments& argv, long value) {

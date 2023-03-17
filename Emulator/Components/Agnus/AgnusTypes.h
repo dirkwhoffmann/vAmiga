@@ -107,6 +107,7 @@ enum_long(SLOT)
     SLOT_MSE1,                      // Port 1 mouse
     SLOT_MSE2,                      // Port 2 mouse
     SLOT_KEY,                       // Auto-typing
+    SLOT_WBT,                       // Warp boot
     SLOT_SRV,                       // Remote server manager
     SLOT_SER,                       // Serial remote server
     SLOT_ALA,                       // Alarms (set by the GUI)
@@ -162,6 +163,7 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
             case SLOT_MSE1:  return "MSE1";
             case SLOT_MSE2:  return "MSE2";
             case SLOT_KEY:   return "KEY";
+            case SLOT_WBT:   return "WBT";
             case SLOT_SRV:   return "SRV";
             case SLOT_SER:   return "SER";
             case SLOT_ALA:   return "ALA";
@@ -364,7 +366,11 @@ enum_i8(EventID)
     KEY_PRESS           = 1,
     KEY_RELEASE,
     KEY_EVENT_COUNT,
-    
+
+    // Warp boot
+    WBT_DISABLE         = 1,
+    WBT_EVENT_COUNT,
+
     // Remote server manager
     SRV_LAUNCH_DAEMON   = 1,
     SRV_EVENT_COUNT,

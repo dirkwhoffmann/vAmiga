@@ -88,13 +88,13 @@ public:
     //
 
     // Agnus has been emulated up to this master clock cycle
-    Cycle clock;
+    Cycle clock = 0;
 
     // The current beam position
-    Beam pos;
+    Beam pos = { };
 
     // Latched beam position (recorded when BPLCON0::ERSY is set)
-    Beam latchedPos;
+    Beam latchedPos = { };
 
     
     //
@@ -102,36 +102,36 @@ public:
     //
 
     // Memory mask (determines the width of all DMA memory pointer registers)
-    u32 ptrMask;
+    u32 ptrMask = 0;
     
     // A copy of BPLCON0 and BPLCON1 (Denise has its own copies)
-    u16 bplcon0;
-    u16 bplcon0Initial;
-    u16 bplcon1;
-    u16 bplcon1Initial;
+    u16 bplcon0 = 0;
+    u16 bplcon0Initial = 0;
+    u16 bplcon1 = 0;
+    u16 bplcon1Initial = 0;
 
     // The DMA control register
-    u16 dmacon;
-    u16 dmaconInitial;
+    u16 dmacon = 0;
+    u16 dmaconInitial = 0;
     
     // The disk DMA pointer
-    u32 dskpt;
+    u32 dskpt = 0;
 
     // The audio DMA pointers and pointer latches
-    u32 audpt[4];
-    u32 audlc[4];
+    u32 audpt[4] = { };
+    u32 audlc[4] = { };
 
     // The bitplane DMA pointers
-    u32 bplpt[6];
+    u32 bplpt[6] = { };
 
     // The bitplane modulo registers for odd bitplanes
-    i16 bpl1mod;
+    i16 bpl1mod = 0;
 
     // The bitplane modulo registers for even bitplanes
-    i16 bpl2mod;
+    i16 bpl2mod = 0;
 
     // The sprite DMA pointers
-    u32 sprpt[8];
+    u32 sprpt[8] = { };
 
 
     //
@@ -139,11 +139,11 @@ public:
     //
 
     // Bitplane resolution (derived from bplcon0)
-    Resolution res;
+    Resolution res = 0;
 
     // Bitplane offsets (derived from bplcon1)
-    i8 scrollOdd;
-    i8 scrollEven;
+    i8 scrollOdd = 0;
+    i8 scrollEven = 0;
     
 
     //
@@ -153,10 +153,10 @@ public:
 public:
     
     // Recorded DMA values for all cycles in the current rasterline
-    u16 busValue[HPOS_CNT];
+    u16 busValue[HPOS_CNT] = { };
 
     // Recorded DMA usage for all cycles in the current rasterline
-    BusOwner busOwner[HPOS_CNT];
+    BusOwner busOwner[HPOS_CNT] = { };
 
     
     //
@@ -166,13 +166,13 @@ public:
 private:
 
     // DMA requests from Paula
-    bool audxDR[4];
-    bool audxDSR[4];
+    bool audxDR[4] = { };
+    bool audxDSR[4] = { };
     
     /* Blitter slow down. The BLS signal indicates that the CPU's request to
      * access the bus has been denied for three or more consecutive cycles.
      */
-    bool bls;
+    bool bls = false;
 
 
     //
@@ -184,11 +184,11 @@ public:
     /* The vertical trigger positions of all 8 sprites. Note that Agnus knows
      * nothing about the horizontal trigger positions (only Denise does).
      */
-    isize sprVStrt[8];
-    isize sprVStop[8];
+    isize sprVStrt[8] = { };
+    isize sprVStop[8] = { };
 
     // The current DMA states of all 8 sprites
-    SprDMAState sprDmaState[8];
+    SprDMAState sprDmaState[8] = { };
 
     
     //

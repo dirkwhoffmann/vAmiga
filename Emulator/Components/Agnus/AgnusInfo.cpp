@@ -400,6 +400,16 @@ Agnus::eventName(EventSlot slot, EventID id)
             }
             break;
 
+        case SLOT_WBT:
+
+            switch (id) {
+
+                case EVENT_NONE:        return "none";
+                case WBT_DISABLE:       return "WBT_DISABLE";
+                default:                return "*** INVALID ***";
+            }
+            break;
+
         case SLOT_SRV:
             
             switch (id) {

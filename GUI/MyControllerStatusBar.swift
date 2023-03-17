@@ -15,9 +15,18 @@ extension MyController {
     }
 
     var hourglassIcon: NSImage? {
-        
+
+        if WarpMode(rawValue: config.warpMode) == .AUTO {
+
+            return NSImage(named: amiga.isWarping ? "hourglass3Template" : "hourglass1Template")
+
+        } else {
+
+            return NSImage(named: amiga.isWarping ? "warpOnTemplate" : "warpOffTemplate")
+        }
+        /*
         switch WarpMode(rawValue: config.warpMode) {
-        case .AUTO where amiga.warpMode:
+        case .AUTO where amiga.isWarping:
             return NSImage(named: "hourglass3Template")
         case .AUTO:
             return NSImage(named: "hourglass1Template")
@@ -28,13 +37,14 @@ extension MyController {
         default:
             fatalError()
         }
+        */
     }
     
     func refreshStatusBar() {
         
         let running = amiga.running
         let halted = amiga.cpu.halted
-        let warp = amiga.warpMode
+        let warp = amiga.isWarping
 
         // Df0 - Df3
         for n in 0...3 where drv[n] != nil {

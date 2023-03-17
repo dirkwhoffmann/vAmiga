@@ -212,7 +212,7 @@ extension MyAppDelegate {
                 // Start playback
                 if !c.macAudio!.isRunning {
                     c.macAudio!.startPlayback()
-                    if !c.amiga.warpMode { c.amiga.paula.rampUpFromZero() }
+                    if !c.amiga.isWarping { c.amiga.paula.rampUpFromZero() }
                 }
                 
                 // Update the visibility of all drive menus

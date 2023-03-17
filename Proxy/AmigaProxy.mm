@@ -2802,7 +2802,7 @@ using namespace vamiga::moira;
     return [self amiga]->getInfo();
 }
 
-- (BOOL)warpMode
+- (BOOL)isWarping
 {
     return [self amiga]->isWarping();
 }

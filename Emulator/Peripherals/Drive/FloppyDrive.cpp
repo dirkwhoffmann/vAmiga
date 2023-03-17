@@ -841,10 +841,6 @@ FloppyDrive::step(isize dir)
             i16(nr), i16(head.cylinder), config.stepVolume, config.pan
         });
     }
-
-    // Indicate that Kickstart has finished initializing
-    amiga.kickstartReady = true;
-    amiga.updateWarpState();
 }
 
 void

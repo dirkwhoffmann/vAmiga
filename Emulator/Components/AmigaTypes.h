@@ -346,6 +346,7 @@ struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
 typedef struct
 {
     VideoFormat type;
+    isize warpBoot;
     WarpMode warpMode;
     SyncMode syncMode;
     isize proposedFps;

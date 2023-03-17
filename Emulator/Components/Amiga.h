@@ -155,16 +155,6 @@ private:
 
 
     //
-    // State
-    //
-
-public:
-
-    // Indicates if Kickstart has finished initializing
-    bool kickstartReady;
-
-    
-    //
     // Static methods
     //
     
@@ -242,9 +232,7 @@ private:
     template <class T>
     void applyToResetItems(T& worker, bool hard = true)
     {
-        worker
 
-        << kickstartReady;
     }
 
 public:
@@ -352,6 +340,19 @@ public:
      */
     void stepOver();
 
+
+    //
+    // Managing warp mode
+    //
+
+public:
+
+    // Updates the current warp state according to the selected warp mode
+    void updateWarpState();
+
+    // Services a warp boot event
+    void serviceWbtEvent();
+
     
     //
     // Handling snapshots
@@ -411,9 +412,6 @@ private:
     //
     
 public:
-
-    // Updates the current warp state according to the selected warp mode
-    void updateWarpState();
 
     // Returns a path to a temporary folder
     static fs::path tmp() throws;
