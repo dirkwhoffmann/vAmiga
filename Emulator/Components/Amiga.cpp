@@ -1023,7 +1023,7 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << tab("Thread state");
         os << ExecutionStateEnum::key(state) << std::endl;
         os << tab("Thread mode");
-        os << ThreadModeEnum::key(state) << std::endl;
+        os << ThreadModeEnum::key(getThreadMode()) << std::endl;
         os << tab("Master clock frequency");
         os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
     }

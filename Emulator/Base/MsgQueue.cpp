@@ -44,7 +44,11 @@ MsgQueue::put(const Message &msg)
         } else {
 
             // Otherwise, store it in the ring buffer
-            queue.write(msg);
+            if (!queue.isFull()) {
+                queue.write(msg);
+            } else {
+                warn("Message lost: %s [%llx]\n", MsgTypeEnum::key(msg.type), msg.value);
+            }
         }
     }
 }
