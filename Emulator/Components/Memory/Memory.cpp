@@ -72,19 +72,15 @@ Memory::_dump(Category category, std::ostream& os) const
         auto slowcrc = util::crc32(slow, config.slowSize);
         auto fastcrc = util::crc32(fast, config.fastSize);
 
-        auto rom = RomFile::identifier(romcrc);
-        auto wom = RomFile::identifier(womcrc);
-        auto ext = RomFile::identifier(extcrc);
-
         os << util::tab("Rom");
         os << util::hex(romcrc) << " (CRC32)  ";
-        os << RomFile::title(rom) << " " << RomFile::version(rom) << std::endl;
+        os << RomFile::title(romcrc) << " " << RomFile::version(romcrc) << std::endl;
         os << util::tab("Wom");
         os << util::hex(womcrc) << " (CRC32)  ";
-        os << RomFile::title(wom) << " " << RomFile::version(wom) << std::endl;
+        os << RomFile::title(womcrc) << " " << RomFile::version(womcrc) << std::endl;
         os << util::tab("Extended Rom");
         os << util::hex(extcrc) << " (CRC32)  ";
-        os << RomFile::title(ext) << " " << RomFile::version(ext) << std::endl;
+        os << RomFile::title(extcrc) << " " << RomFile::version(extcrc) << std::endl;
         os << util::tab("Chip Ram");
         os << util::hex(chipcrc) << " (CRC32)  " << std::endl;
         os << util::tab("Slow Ram");
