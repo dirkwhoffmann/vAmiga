@@ -23,11 +23,16 @@ public:
 public:
     
     static Time now();
+    static Time nanoseconds(i64 value) { return Time(value); }
+    static Time microseconds(i64 value) { return Time(value * 1000); }
+    static Time milliseconds(i64 value)  { return Time(value * 1000000); }
+    static Time seconds(i64 value) { return Time(value * 1000000000); }
+    static Time seconds(float value) { return Time(i64(value * 1000000000.f)); }
     static std::tm local(const std::time_t &time);
-    
+
     Time() { };
     Time(i64 value) : ticks(value) { };
-    
+
     i64 asNanoseconds()  const { return ticks; }
     i64 asMicroseconds() const { return ticks / 1000; }
     i64 asMilliseconds() const { return ticks / 1000000; }

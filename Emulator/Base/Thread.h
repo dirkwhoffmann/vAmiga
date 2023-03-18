@@ -126,11 +126,12 @@ namespace vamiga {
  *
  * - Adaptive:
  *
- *  In adaptive mode, the thread waits for an external wake-up signal just as
- *  it does in pulsed mode. When the wake-up signal comes in, the thread
- *  computes the number of missing frames based on the current time and the time
- *  the thread had been lauchen. Then it executes all missing frames or
- *  resynchronizes if the number of missing frames is way off.
+ *   In adaptive mode, the thread waits for an external wake-up signal just as
+ *   it does in pulsed mode. When the wake-up signal comes in, the thread
+ *   computes the number of missing frames based on the current time and the
+ *   time the thread had been lauchen. Then it executes all missing frames or
+ *   resynchronizes if the number of missing frames is way off. Adaptive mode
+ *   has been introduced in vAmiga 2.4 as a replacement for Pulsed mode.
  *
  * To speed up emulation (e.g., during disk accesses), the emulator may be put
  * into warp mode. In this mode, timing synchronization is disabled causing the
