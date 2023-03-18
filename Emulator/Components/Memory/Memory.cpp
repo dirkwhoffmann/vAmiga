@@ -599,18 +599,6 @@ Memory::extFingerprint() const
     return util::crc32(ext, config.extSize);
 }
 
-RomIdentifier
-Memory::romIdentifier() const
-{
-    return RomFile::identifier(romFingerprint());
-}
-
-RomIdentifier
-Memory::extIdentifier() const
-{
-    return RomFile::identifier(extFingerprint());
-}
-
 const char *
 Memory::romTitle()
 {

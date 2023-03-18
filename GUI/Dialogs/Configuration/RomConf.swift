@@ -199,17 +199,17 @@ extension ConfigurationController {
 
     func installAros() {
 
-        installAros(id: .AROS_55696)
+        installAros(crc32: CRC32_AROS_55696)
     }
 
-    func installAros(id: RomIdentifier) {
+    func installAros(crc32: UInt32) {
 
-        switch id {
+        switch crc32 {
 
-        case .AROS_54705: // Taken from UAE
+        case CRC32_AROS_54705: // Taken from UAE
             installAros(rom: "aros-svn54705-rom", ext: "aros-svn54705-ext")
 
-        case .AROS_55696: // Taken from SAE
+        case CRC32_AROS_55696: // Taken from SAE
             installAros(rom: "aros-svn55696-rom", ext: "aros-svn55696-ext")
 
         default:

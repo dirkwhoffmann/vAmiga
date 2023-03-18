@@ -348,10 +348,6 @@ public:
     u32 romFingerprint() const;
     u32 extFingerprint() const;
 
-    // Returns the ROM identifiers of the currently installed ROMs
-    [[deprecated]] RomIdentifier romIdentifier() const;
-    [[deprecated]] RomIdentifier extIdentifier() const;
-
     const char *romTitle();
     const char *romVersion();
     const char *romReleased();

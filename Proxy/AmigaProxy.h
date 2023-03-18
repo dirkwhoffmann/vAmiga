@@ -400,7 +400,6 @@
 - (void)loadRomFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 @property (readonly) BOOL isRelocated;
 @property (readonly) u32 romFingerprint;
-@property (readonly) RomIdentifier romIdentifier;
 @property (readonly, copy) NSString *romTitle;
 @property (readonly, copy) NSString *romVersion;
 @property (readonly, copy) NSString *romReleased;

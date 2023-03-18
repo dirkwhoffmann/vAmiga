@@ -434,11 +434,6 @@ using namespace vamiga::moira;
     return RomFile::isPatchedRom(crc32);
 }
 
-- (RomIdentifier) romIdentifierOf:(u64)fingerprint
-{
-    return RomFile::identifier(u32(fingerprint));
-}
-
 - (NSString *) romTitleOf:(u32)crc32
 {
     const char *str = RomFile::title(crc32);
