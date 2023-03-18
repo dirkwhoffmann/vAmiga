@@ -32,22 +32,37 @@ public:
     static bool isRomBuffer(const u8 *buf, isize len);
     static bool isRomFile(const string &path);
 
-    // Translates a CRC-32 checksum into a ROM identifier
+    // DEPRECATED
     static RomIdentifier identifier(u32 fingerprint);
+    static u32 crc32(RomIdentifier identifier);
 
     // Classifies a ROM identifier by type
-    static bool isBootRom(RomIdentifier rev);
-    static bool isArosRom(RomIdentifier rev);
-    static bool isDiagRom(RomIdentifier rev);
-    static bool isCommodoreRom(RomIdentifier rev);
-    static bool isHyperionRom(RomIdentifier rev);
-    static bool isPatchedRom(RomIdentifier rev);
+    static bool isBootRom(u32 crc32);
+    static bool isArosRom(u32 crc32);
+    static bool isDiagRom(u32 crc32);
+    static bool isCommodoreRom(u32 crc32);
+    static bool isHyperionRom(u32 crc32);
+    static bool isPatchedRom(u32 crc32);
+
+    // DEPRECATED
+    static bool isBootRom(RomIdentifier rev) { return isBootRom(crc32(rev)); }
+    static bool isArosRom(RomIdentifier rev)  { return isArosRom(crc32(rev)); }
+    static bool isDiagRom(RomIdentifier rev) { return isDiagRom(crc32(rev)); }
+    static bool isCommodoreRom(RomIdentifier rev) { return isCommodoreRom(crc32(rev)); }
+    static bool isHyperionRom(RomIdentifier rev) { return isHyperionRom(crc32(rev)); }
+    static bool isPatchedRom(RomIdentifier rev) { return isPatchedRom(crc32(rev)); }
 
     // Translates a ROM indentifier into a textual description
-    static const char *title(RomIdentifier rev);
-    static const char *version(RomIdentifier rev);
-    static const char *released(RomIdentifier rev);
-    static const char *model(RomIdentifier rev);
+    static const char *title(u32 crc32);
+    static const char *version(u32 crc32);
+    static const char *released(u32 crc32);
+    static const char *model(u32 crc32);
+
+    // DEPRECATED
+    static const char *title(RomIdentifier rev) { return title(crc32(rev)); }
+    static const char *version(RomIdentifier rev) { return version(crc32(rev)); }
+    static const char *released(RomIdentifier rev) { return released(crc32(rev)); }
+    static const char *model(RomIdentifier rev) { return model(crc32(rev)); }
 
 
     //
