@@ -193,6 +193,85 @@ RomFile::isPatchedRom(u32 crc32)
 }
 
 const char *
+RomFile::shortName(u32 crc32)
+{
+    static char str[32];
+
+    switch (crc32) {
+
+        case CRC32_MISSING:                 return "";
+
+        case CRC32_BOOT_A1000_8K:           return "A1000 Boot Rom 8KB";
+        case CRC32_BOOT_A1000_64K:          return "A1000 Boot Rom 64KB";
+
+        case CRC32_KICK07_27_003_BETA:      return "Kickstart 0.7 27.003 NTSC";
+        case CRC32_KICK10_30_NTSC:          return "Kickstart 1.0 30.000 NTSC";
+        case CRC32_KICK11_31_034_NTSC:      return "Kickstart 1.1 31.034 NTSC";
+        case CRC32_KICK11_32_034_PAL:       return "Kickstart 1.1 31.034 PAL";
+        case CRC32_KICK12_33_166:           return "Kickstart 1.2 33.166";
+        case CRC32_KICK12_33_180:           return "Kickstart 1.2 33.180";
+        case CRC32_KICK121_34_004:          return "Kickstart 1.21 34.004";
+        case CRC32_KICK13_34_005_A500:      return "Kickstart 1.3 34.005 A500";
+        case CRC32_KICK13_34_005_A3000:     return "Kickstart 1.3 34.005 A3000";
+
+        case CRC32_KICK12_33_180_MRAS:      return "Kickstart 1.2 33.180 MRAS";
+
+        case CRC32_KICK12_33_180_G11R:      return "Kickstart 1.2 33.180 G11R";
+        case CRC32_KICK13_34_005_G12R:      return "Kickstart 1.3 34.005 G12R";
+
+        case CRC32_KICK20_36_028:           return "Kickstart 2.0 36.028";
+        case CRC32_KICK202_36_207_A3000:    return "Kickstart 2.02 36.207 A3000";
+        case CRC32_KICK204_37_175_A500:     return "Kickstart 2.04 37.175 A500";
+        case CRC32_KICK204_37_175_A3000:    return "Kickstart 2.04 37.175 A3000";
+        case CRC32_KICK205_37_299_A600:     return "Kickstart 2.05 37.299 A600";
+        case CRC32_KICK205_37_300_A600HD:   return "Kickstart 2.04 37.300 A600";
+        case CRC32_KICK205_37_350_A600HD:   return "Kickstart 2.05 37.350 A600";
+
+        case CRC32_KICK30_39_106_A1200:     return "Kickstart 3.0 39.106 A1200";
+        case CRC32_KICK30_39_106_A4000:     return "Kickstart 3.0 39.106 A4000";
+        case CRC32_KICK31_40_063_A500:      return "Kickstart 3.1 40.063 A500";
+        case CRC32_KICK31_40_063_A500_R:    return "Kickstart 3.1 40.063 A500R";
+        case CRC32_KICK31_40_068_A1200:     return "Kickstart 3.1 40.068 A1200";
+        case CRC32_KICK31_40_068_A3000:     return "Kickstart 3.1 40.068 A3000";
+        case CRC32_KICK31_40_068_A4000:     return "Kickstart 3.1 40.068 A4000";
+        case CRC32_KICK31_40_070_A4000T:    return "Kickstart 3.1 40.070 A4000T";
+
+        case CRC32_HYP314_46_143_A500:      return "Hyperion 3.1.4 46.143 A500";
+        case CRC32_HYP314_46_143_A1200:     return "Hyperion 3.1.4 46.143 A1200";
+        case CRC32_HYP314_46_143_A2000:     return "Hyperion 3.1.4 46.143 A2000";
+        case CRC32_HYP314_46_143_A3000:     return "Hyperion 3.1.4 46.143 A3000";
+        case CRC32_HYP314_46_143_A4000:     return "Hyperion 3.1.4 46.143 A4000";
+        case CRC32_HYP314_46_143_A4000T:    return "Hyperion 3.1.4 46.143 A4000T";
+        case CRC32_HYP320_47_96_A500:       return "Hyperion 3.2 47.96 A500";
+        case CRC32_HYP320_47_96_A1200:      return "Hyperion 3.2 47.96 A1200";
+        case CRC32_HYP320_47_96_A3000:      return "Hyperion 3.2 47.96 A3000";
+        case CRC32_HYP320_47_96_A4000:      return "Hyperion 3.2 47.96 A4000";
+        case CRC32_HYP320_47_96_A4000T:     return "Hyperion 3.2 47.96 A4000T";
+        case CRC32_HYP321_47_102_A500:      return "Hyperion 3.2.1 47.102 A500";
+        case CRC32_HYP321_47_102_A1200:     return "Hyperion 3.2.1 47.102 A1200";
+        case CRC32_HYP321_47_102_A3000:     return "Hyperion 3.2.1 47.102 A3000";
+        case CRC32_HYP321_47_102_A4000:     return "Hyperion 3.2.1 47.102 A4000";
+        case CRC32_HYP321_47_102_A4000T:    return "Hyperion 3.2.1 47.102 A4000T";
+
+        case CRC32_AROS_54705:              return "AROS SVN 54705";
+        case CRC32_AROS_54705_EXT:          return "AROS SVN 54705 Extension";
+        case CRC32_AROS_55696:              return "AROS SVN 55696";
+        case CRC32_AROS_55696_EXT:          return "AROS SVN 55696 Extension";
+        case CRC32_AROS_1ED13DE6E3:         return "AROS 1ed13de6e3";
+        case CRC32_AROS_1ED13DE6E3_EXT:     return "AROS 1ed13de6e3 Extension";
+
+        case CRC32_DIAG11:                  return "DiagROM 1.1";
+        case CRC32_DIAG12:                  return "DiagROM 1.2";
+        case CRC32_DIAG121:                 return "DiagROM 1.2.1";
+        case CRC32_LOGICA20:                return "Logica Diagnostic 2.0";
+
+        default:
+            snprintf(str, sizeof(str), "CRC %x", crc32);
+            return str;
+    }
+}
+
+const char *
 RomFile::title(u32 crc32)
 {
     switch (crc32) {
@@ -280,7 +359,7 @@ RomFile::version(u32 crc32)
         case CRC32_BOOT_A1000_64K:          return "64KB";
 
         case CRC32_KICK07_27_003_BETA:      return "Rev 27.003 NTSC";
-        case CRC32_KICK10_30_NTSC:          return "Rev 30 NTSC";
+        case CRC32_KICK10_30_NTSC:          return "Rev 30.000 NTSC";
         case CRC32_KICK11_31_034_NTSC:      return "Rev 31.034 NTSC";
         case CRC32_KICK11_32_034_PAL:       return "Rev 32.034 PAL";
         case CRC32_KICK12_33_166:           return "Rev 33.166";
@@ -328,11 +407,11 @@ RomFile::version(u32 crc32)
         case CRC32_HYP321_47_102_A4000:
         case CRC32_HYP321_47_102_A4000T:    return "Rev 47.102";
 
-        case CRC32_AROS_54705:              return "SVN 54705";
+        case CRC32_AROS_54705:
         case CRC32_AROS_54705_EXT:          return "SVN 54705";
-        case CRC32_AROS_55696:              return "SVN 55696";
+        case CRC32_AROS_55696:
         case CRC32_AROS_55696_EXT:          return "SVN 55696";
-        case CRC32_AROS_1ED13DE6E3:         return "Version 1ed13de6e3";
+        case CRC32_AROS_1ED13DE6E3:
         case CRC32_AROS_1ED13DE6E3_EXT:     return "Version 1ed13de6e3";
 
         case CRC32_DIAG11:                  return "Version 1.1";

@@ -41,6 +41,7 @@ public:
     static bool isPatchedRom(u32 crc32);
 
     // Translates a ROM indentifier into a textual description
+    static const char *shortName(u32 crc32);
     static const char *title(u32 crc32);
     static const char *version(u32 crc32);
     static const char *released(u32 crc32);
