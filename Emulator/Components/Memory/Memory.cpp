@@ -614,69 +614,55 @@ Memory::extIdentifier() const
 const char *
 Memory::romTitle()
 {
-    return RomFile::title(romIdentifier());
+    return RomFile::title(romFingerprint());
 }
 
 const char *
 Memory::romVersion()
 {
-    static char str[32];
-
-    if (romIdentifier() == ROM_UNKNOWN) {
-        snprintf(str, sizeof(str), "CRC %x", romFingerprint());
-        return str;
-    }
-
-    return RomFile::version(romIdentifier());
+    return RomFile::version(romFingerprint());
 }
 
 const char *
 Memory::romReleased()
 {
-    return RomFile::released(romIdentifier());
+    return RomFile::released(romFingerprint());
 }
 
 const char *
 Memory::romModel()
 {
-    return RomFile::model(romIdentifier());
+    return RomFile::model(romFingerprint());
 }
 
 const char *
 Memory::extTitle()
 {
-    return RomFile::title(extIdentifier());
+    return RomFile::title(extFingerprint());
 }
 
 const char *
 Memory::extVersion()
 {
-    static char str[32];
-
-    if (extIdentifier() == ROM_UNKNOWN) {
-        snprintf(str, sizeof(str), "CRC %x", extFingerprint());
-        return str;
-    }
-
-    return RomFile::version(extIdentifier());
+    return RomFile::version(extFingerprint());
 }
 
 const char *
 Memory::extReleased()
 {
-    return RomFile::released(extIdentifier());
+    return RomFile::released(extFingerprint());
 }
 
 const char *
 Memory::extModel()
 {
-    return RomFile::model(extIdentifier());
+    return RomFile::model(extFingerprint());
 }
 
 bool
 Memory::hasArosRom() const
 {
-    return RomFile::isArosRom(romIdentifier());
+    return RomFile::isArosRom(romFingerprint());
 }
 
 void
@@ -771,12 +757,12 @@ Memory::patchExpansionLib()
     /* In Kickstart 1.2, function 'ConfigBoard' is broken. A patch needs to
      * be applied to make the debugger board compatible with this Rom.
      */
-    switch (romIdentifier()) {
+    switch (romFingerprint()) {
 
-        case ROM_KICK12_33_166:
-        case ROM_KICK12_33_180:
-        case ROM_KICK121_34_004:
-        case ROM_KICK12_33_180_G11R:
+        case CRC32_KICK12_33_166:
+        case CRC32_KICK12_33_180:
+        case CRC32_KICK121_34_004:
+        case CRC32_KICK12_33_180_G11R:
         {
             for (isize i = 0; i < KB(512) - 22; i += 2) {
                 

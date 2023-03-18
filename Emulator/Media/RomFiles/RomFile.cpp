@@ -422,6 +422,8 @@ RomFile::title(u32 crc32)
 const char *
 RomFile::version(u32 crc32)
 {
+    static char str[32];
+    
     switch (crc32) {
 
         case CRC32_MISSING:                 return "";
@@ -490,7 +492,9 @@ RomFile::version(u32 crc32)
         case CRC32_DIAG121:                 return "Version 1.2.1";
         case CRC32_LOGICA20:                return "Version 2.0";
 
-        default:                            return "";
+        default:
+            snprintf(str, sizeof(str), "CRC %x", crc32);
+            return str;
     }
 }
 
