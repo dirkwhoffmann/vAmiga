@@ -166,28 +166,28 @@ HdController::updateMemSrcTables()
 }
 
 bool
-HdController::isCompatible(RomIdentifier id)
+HdController::isCompatible(u32 crc32)
 {
-    switch (id) {
+    switch (crc32) {
             
-        case ROM_KICK13_34_005_A500:
-        case ROM_KICK13_34_005_A3000:
+        case CRC32_KICK13_34_005_A500:
+        case CRC32_KICK13_34_005_A3000:
             
-        case ROM_KICK20_36_028:
-        case ROM_KICK202_36_207_A3000:
-        case ROM_KICK204_37_175_A500:
-        case ROM_KICK204_37_175_A3000:
-        case ROM_KICK205_37_299_A600:
-        case ROM_KICK205_37_300_A600HD:
-        case ROM_KICK205_37_350_A600HD:
+        case CRC32_KICK20_36_028:
+        case CRC32_KICK202_36_207_A3000:
+        case CRC32_KICK204_37_175_A500:
+        case CRC32_KICK204_37_175_A3000:
+        case CRC32_KICK205_37_299_A600:
+        case CRC32_KICK205_37_300_A600HD:
+        case CRC32_KICK205_37_350_A600HD:
             
-        case ROM_KICK30_39_106_A1200:
-        case ROM_KICK30_39_106_A4000:
-        case ROM_KICK31_40_063_A500:
-        case ROM_KICK31_40_068_A1200:
-        case ROM_KICK31_40_068_A3000:
-        case ROM_KICK31_40_068_A4000:
-        case ROM_KICK31_40_070_A4000T:
+        case CRC32_KICK30_39_106_A1200:
+        case CRC32_KICK30_39_106_A4000:
+        case CRC32_KICK31_40_063_A500:
+        case CRC32_KICK31_40_068_A1200:
+        case CRC32_KICK31_40_068_A3000:
+        case CRC32_KICK31_40_068_A4000:
+        case CRC32_KICK31_40_070_A4000T:
             return true;
             
         default:
@@ -198,7 +198,7 @@ HdController::isCompatible(RomIdentifier id)
 bool
 HdController::isCompatible()
 {
-    return isCompatible(mem.romIdentifier());
+    return isCompatible(mem.romFingerprint());
 }
 
 void

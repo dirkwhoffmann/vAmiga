@@ -148,7 +148,7 @@ public:
     HdcState getHdcState() { return hdcState; }
     
     // Informs whether the controller is compatible with a certain Kickstart
-    bool isCompatible(RomIdentifier id);
+    bool isCompatible(u32 crc32);
     bool isCompatible();
 
 private:

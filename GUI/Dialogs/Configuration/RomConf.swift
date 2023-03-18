@@ -119,9 +119,9 @@ extension ConfigurationController {
 
         for item in romArosPopup.itemArray where item.tag != 0 {
 
-            switch amiga.mem.romIdentifier(of: u64(item.tag)) {
+            switch UInt32(item.tag) {
 
-            case .AROS_54705, .AROS_55696, .DIAG121:
+            case CRC32_AROS_54705, CRC32_AROS_55696, CRC32_DIAG121:
                 item.isEnabled = true
 
             default:
