@@ -404,34 +404,34 @@ using namespace vamiga::moira;
     return [self mem]->getStats();
 }
 
-- (BOOL)isBootRom:(RomIdentifier)rev
+- (BOOL)isBootRom:(u32)crc32
 {
-    return RomFile::isBootRom(rev);
+    return RomFile::isBootRom(crc32);
 }
 
-- (BOOL)isArosRom:(RomIdentifier)rev
+- (BOOL)isArosRom:(u32)crc32
 {
-    return RomFile::isArosRom(rev);
+    return RomFile::isArosRom(crc32);
 }
 
-- (BOOL)isDiagRom:(RomIdentifier)rev
+- (BOOL)isDiagRom:(u32)crc32
 {
-    return RomFile::isDiagRom(rev);
+    return RomFile::isDiagRom(crc32);
 }
 
-- (BOOL)isCommodoreRom:(RomIdentifier)rev
+- (BOOL)isCommodoreRom:(u32)crc32
 {
-    return RomFile::isCommodoreRom(rev);
+    return RomFile::isCommodoreRom(crc32);
 }
 
-- (BOOL)isHyperionRom:(RomIdentifier)rev
+- (BOOL)isHyperionRom:(u32)crc32
 {
-    return RomFile::isHyperionRom(rev);
+    return RomFile::isHyperionRom(crc32);
 }
 
-- (BOOL)isPatchedRom:(RomIdentifier)rev
+- (BOOL)isPatchedRom:(u32)crc32
 {
-    return RomFile::isPatchedRom(rev);
+    return RomFile::isPatchedRom(crc32);
 }
 
 - (RomIdentifier) romIdentifierOf:(u64)fingerprint
@@ -439,9 +439,9 @@ using namespace vamiga::moira;
     return RomFile::identifier(u32(fingerprint));
 }
 
-- (NSString *) romTitleOf:(RomIdentifier)rev
+- (NSString *) romTitleOf:(u32)crc32
 {
-    const char *str = RomFile::title(rev);
+    const char *str = RomFile::title(crc32);
     return str ? @(str) : nullptr;
 }
 
@@ -496,14 +496,9 @@ using namespace vamiga::moira;
     return [self mem]->isRelocated();
 }
 
-- (u64)romFingerprint
+- (u32)romFingerprint
 {
     return [self mem]->romFingerprint();
-}
-
-- (RomIdentifier)romIdentifier
-{
-    return [self mem]->romIdentifier();
 }
 
 - (NSString *)romTitle
@@ -571,14 +566,9 @@ using namespace vamiga::moira;
     catch (VAError &error) { [ex save:error]; }
 }
 
-- (u64)extFingerprint
+- (u32)extFingerprint
 {
     return [self mem]->extFingerprint();
-}
-
-- (RomIdentifier)extIdentifier
-{
-    return [self mem]->extIdentifier();
 }
 
 - (NSString *)extTitle

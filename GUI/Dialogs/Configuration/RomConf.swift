@@ -13,22 +13,22 @@ extension ConfigurationController {
 
         let poweredOff      = amiga.poweredOff
 
-        let romIdentifier   = amiga.mem.romIdentifier
-        let hasRom          = romIdentifier != .MISSING
-        let hasArosRom      = amiga.mem.isArosRom(romIdentifier)
-        let hasDiagRom      = amiga.mem.isDiagRom(romIdentifier)
-        let hasCommodoreRom = amiga.mem.isCommodoreRom(romIdentifier)
-        let hasHyperionRom  = amiga.mem.isHyperionRom(romIdentifier)
-        let hasPatchedRom   = amiga.mem.isPatchedRom(romIdentifier)
+        let romCrc          = amiga.mem.romFingerprint
+        let hasRom          = romCrc != CRC32_MISSING
+        let hasArosRom      = amiga.mem.isArosRom(romCrc)
+        let hasDiagRom      = amiga.mem.isDiagRom(romCrc)
+        let hasCommodoreRom = amiga.mem.isCommodoreRom(romCrc)
+        let hasHyperionRom  = amiga.mem.isHyperionRom(romCrc)
+        let hasPatchedRom   = amiga.mem.isPatchedRom(romCrc)
         let isRelocatedRom  = amiga.mem.isRelocated
 
-        let extIdentifier   = amiga.mem.extIdentifier
-        let hasExt          = extIdentifier != .MISSING
-        let hasArosExt      = amiga.mem.isArosRom(extIdentifier)
-        let hasDiagExt      = amiga.mem.isDiagRom(extIdentifier)
-        let hasCommodoreExt = amiga.mem.isCommodoreRom(extIdentifier)
-        let hasHyperionExt  = amiga.mem.isHyperionRom(extIdentifier)
-        let hasPatchedExt   = amiga.mem.isPatchedRom(extIdentifier)
+        let extCrc          = amiga.mem.extFingerprint
+        let hasExt          = extCrc != CRC32_MISSING
+        let hasArosExt      = amiga.mem.isArosRom(extCrc)
+        let hasDiagExt      = amiga.mem.isDiagRom(extCrc)
+        let hasCommodoreExt = amiga.mem.isCommodoreRom(extCrc)
+        let hasHyperionExt  = amiga.mem.isHyperionRom(extCrc)
+        let hasPatchedExt   = amiga.mem.isPatchedRom(extCrc)
 
         let romMissing      = NSImage(named: "rom_missing")
         let romOrig         = NSImage(named: "rom_original")
@@ -164,21 +164,20 @@ extension ConfigurationController {
 
     @IBAction func installRomAction(_ sender: NSButton!) {
 
-        let hash = sender.selectedTag()
-        let id = amiga.mem.romIdentifier(of: UInt64(hash))
+        let crc32 = sender.selectedTag()
 
-        switch id {
-        case .AROS_54705: // Taken from UAE
+        switch UInt32(crc32) {
+        case CRC32_AROS_54705: // Taken from UAE
             installAros(rom: "aros-svn54705-rom", ext: "aros-svn54705-ext")
 
-        case .AROS_55696: // Taken from SAE
+        case CRC32_AROS_55696: // Taken from SAE
             installAros(rom: "aros-svn55696-rom", ext: "aros-svn55696-ext")
 
-        case .DIAG121:
+        case CRC32_DIAG121:
             install(rom: "diagrom-121")
 
         default:
-            if let url = UserDefaults.romUrl(fingerprint: hash) {
+            if let url = UserDefaults.romUrl(fingerprint: crc32) {
                 try? amiga.mem.loadRom(url)
             }
         }

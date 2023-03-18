@@ -382,15 +382,13 @@
 
 - (MemoryStats) getStats;
 
-- (RomIdentifier) romIdentifierOf:(u64)fingerprint;
-
-- (BOOL) isBootRom:(RomIdentifier)rev;
-- (BOOL) isArosRom:(RomIdentifier)rev;
-- (BOOL) isDiagRom:(RomIdentifier)rev;
-- (BOOL) isCommodoreRom:(RomIdentifier)rev;
-- (BOOL) isHyperionRom:(RomIdentifier)rev;
-- (BOOL) isPatchedRom:(RomIdentifier)rev;
-- (NSString *) romTitleOf:(RomIdentifier)rev;
+- (BOOL) isBootRom:(u32)crc32;
+- (BOOL) isArosRom:(u32)crc32;
+- (BOOL) isDiagRom:(u32)crc32;
+- (BOOL) isCommodoreRom:(u32)crc32;
+- (BOOL) isHyperionRom:(u32)crc32;
+- (BOOL) isPatchedRom:(u32)crc32;
+- (NSString *) romTitleOf:(u32)crc32;
 
 @property (readonly) BOOL hasRom;
 @property (readonly) BOOL hasBootRom;
@@ -401,7 +399,7 @@
 - (void)loadRomFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)ex;
 - (void)loadRomFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 @property (readonly) BOOL isRelocated;
-@property (readonly) u64 romFingerprint;
+@property (readonly) u32 romFingerprint;
 @property (readonly) RomIdentifier romIdentifier;
 @property (readonly, copy) NSString *romTitle;
 @property (readonly, copy) NSString *romVersion;
@@ -414,8 +412,7 @@
 - (void)loadExt:(ExtendedRomFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void)loadExtFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)ex;
 - (void)loadExtFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
-@property (readonly) u64 extFingerprint;
-@property (readonly) RomIdentifier extIdentifier;
+@property (readonly) u32 extFingerprint;
 @property (readonly, copy) NSString *extTitle;
 @property (readonly, copy) NSString *extVersion;
 @property (readonly, copy) NSString *extReleased;
