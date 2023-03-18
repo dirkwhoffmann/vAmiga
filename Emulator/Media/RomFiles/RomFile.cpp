@@ -174,7 +174,12 @@ RomFile::isHyperionRom(u32 crc32)
         case CRC32_HYP321_47_102_A1200:
         case CRC32_HYP321_47_102_A3000:
         case CRC32_HYP321_47_102_A4000:
-        case CRC32_HYP321_47_102_A4000T: return true;
+        case CRC32_HYP321_47_102_A4000T:
+        case CRC32_HYP322_47_111_A500:
+        case CRC32_HYP322_47_111_A1200:
+        case CRC32_HYP322_47_111_A3000:
+        case CRC32_HYP322_47_111_A4000:
+        case CRC32_HYP322_47_111_A4000T: return true;
 
         default: return false;
     }
@@ -252,6 +257,11 @@ RomFile::shortName(u32 crc32)
         case CRC32_HYP321_47_102_A3000:     return "Hyperion 3.2.1 47.102 A3000";
         case CRC32_HYP321_47_102_A4000:     return "Hyperion 3.2.1 47.102 A4000";
         case CRC32_HYP321_47_102_A4000T:    return "Hyperion 3.2.1 47.102 A4000T";
+        case CRC32_HYP322_47_111_A500:      return "Hyperion 3.2.2 47.111 A500";
+        case CRC32_HYP322_47_111_A1200:     return "Hyperion 3.2.2 47.111 A1200";
+        case CRC32_HYP322_47_111_A3000:     return "Hyperion 3.2.2 47.111 A3000";
+        case CRC32_HYP322_47_111_A4000:     return "Hyperion 3.2.2 47.111 A4000";
+        case CRC32_HYP322_47_111_A4000T:    return "Hyperion 3.2.2 47.111 A4000T";
 
         case CRC32_AROS_54705:              return "AROS SVN 54705";
         case CRC32_AROS_54705_EXT:          return "AROS SVN 54705 Extension";
@@ -329,6 +339,11 @@ RomFile::title(u32 crc32)
         case CRC32_HYP321_47_102_A3000:
         case CRC32_HYP321_47_102_A4000:
         case CRC32_HYP321_47_102_A4000T:    return "Kickstart 3.2.1 (Hyperion)";
+        case CRC32_HYP322_47_111_A500:
+        case CRC32_HYP322_47_111_A1200:
+        case CRC32_HYP322_47_111_A3000:
+        case CRC32_HYP322_47_111_A4000:
+        case CRC32_HYP322_47_111_A4000T:    return "Kickstart 3.2.2 (Hyperion)";
 
         case CRC32_AROS_54705:
         case CRC32_AROS_55696:
@@ -406,6 +421,11 @@ RomFile::version(u32 crc32)
         case CRC32_HYP321_47_102_A3000:
         case CRC32_HYP321_47_102_A4000:
         case CRC32_HYP321_47_102_A4000T:    return "Rev 47.102";
+        case CRC32_HYP322_47_111_A500:
+        case CRC32_HYP322_47_111_A1200:
+        case CRC32_HYP322_47_111_A3000:
+        case CRC32_HYP322_47_111_A4000:
+        case CRC32_HYP322_47_111_A4000T:    return "Rev 47.111";
 
         case CRC32_AROS_54705:
         case CRC32_AROS_54705_EXT:          return "SVN 54705";
@@ -483,6 +503,11 @@ RomFile::released(u32 crc32)
         case CRC32_HYP321_47_102_A3000:
         case CRC32_HYP321_47_102_A4000:
         case CRC32_HYP321_47_102_A4000T:    return "December 2021";
+        case CRC32_HYP322_47_111_A500:
+        case CRC32_HYP322_47_111_A1200:
+        case CRC32_HYP322_47_111_A3000:
+        case CRC32_HYP322_47_111_A4000:
+        case CRC32_HYP322_47_111_A4000T:    return "March 2023";
 
         case CRC32_AROS_54705:              return "May 2017";
         case CRC32_AROS_54705_EXT:          return "May 2017";
@@ -558,6 +583,12 @@ RomFile::model(u32 crc32)
         case CRC32_HYP321_47_102_A3000:     return "A3000";
         case CRC32_HYP321_47_102_A4000:     return "A4000";
         case CRC32_HYP321_47_102_A4000T:    return "A4000T";
+        case CRC32_HYP322_47_111_A500:      return "A500, A600, A1000, A2000, CDTV";
+        case CRC32_HYP322_47_111_A1200:     return "A1200";
+        case CRC32_HYP322_47_111_A3000:     return "A3000";
+        case CRC32_HYP322_47_111_A4000:     return "A4000";
+        case CRC32_HYP322_47_111_A4000T:    return "A4000T";
+
 
         case CRC32_AROS_54705:              return "UAE version";
         case CRC32_AROS_54705_EXT:          return "UAE version";
