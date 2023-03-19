@@ -561,22 +561,44 @@ RetroShell::help(const string &command)
 void
 RetroShell::dump(CoreObject &component, Category category)
 {
-    std::stringstream ss;
-    
     {   SUSPENDED
 
-        switch (category) {
+        *this << '\n';
+        _dump(component, category);
+    }
+}
 
-            case Category::Config:      ss << "Configuration:\n\n"; break;
+void
+RetroShell::dump(CoreObject &component, std::vector <Category> categories)
+{
+    {   SUSPENDED
 
-            default:
-                break;
+        *this << '\n';
+
+        for(auto &category : categories) {
+            _dump(component, category);
         }
+    }
+}
 
-        component.dump(category, ss);
+void
+RetroShell::_dump(CoreObject &component, Category category)
+{
+    std::stringstream ss;
+
+    switch (category) {
+
+        case Category::Config:      ss << "Configuration:\n\n"; break;
+        case Category::Registers:   ss << "Registers:\n\n"; break;
+        case Category::State:       ss << "State:\n\n"; break;
+
+        default:
+            break;
     }
 
-    *this << '\n' << ss << '\n';
+    component.dump(category, ss);
+
+    *this << ss << '\n';
 }
 
 void

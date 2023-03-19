@@ -472,7 +472,7 @@ CPU::_dump(Category category, std::ostream& os) const
         os << util::hex(config.regResetVal) << std::endl;
     }
 
-    if (category == Category::State) {
+    if (category == Category::Registers) {
         
         os << util::tab("PC");
         os << util::hex(reg.pc0) << std::endl;
@@ -515,7 +515,7 @@ CPU::_dump(Category category, std::ostream& os) const
         os << (reg.sr.c ? 'C' : 'c') << std::endl;
     }
 
-    if (category == Category::Debug) {
+    if (category == Category::State) {
 
         os << util::tab("Clock");
         os << util::dec(clock) << std::endl;

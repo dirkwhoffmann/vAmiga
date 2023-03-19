@@ -445,14 +445,7 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpInspection(cpu);
-    });
-
-    root.add({"cpu", "debug"},
-             "Displays additional debug information",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dumpDebug(cpu);
+        retroShell.dump(cpu, { Category::Config, Category::State, Category::Registers } );
     });
 
     root.add({"cpu", "vectors"},
@@ -475,21 +468,22 @@ Interpreter::initDebugShell(Command &root)
                  "Inspects the internal state",
                  [this](Arguments& argv, long value) {
 
-            value == 0 ? retroShell.dumpInspection(ciaa) : retroShell.dumpInspection(ciab);
-        }, i);
-
-        root.add({cia, "debug"},
-                 "Displays additional debug information",
-                 [this](Arguments& argv, long value) {
-
-            value == 0 ? retroShell.dumpDebug(ciaa) : retroShell.dumpDebug(ciab);
+            if (value == 0) {
+                retroShell.dump(ciaa, { Category::Config, Category::State, Category::Registers } );
+            } else {
+                retroShell.dump(ciab, { Category::Config, Category::State, Category::Registers } );
+            }
         }, i);
 
         root.add({cia, "tod"},
                  "Displays the state of the 24-bit counter",
                  [this](Arguments& argv, long value) {
 
-            value == 0 ? retroShell.dump(ciaa, Category::Tod) : retroShell.dump(ciab, Category::Tod);
+            if (value == 0) {
+                retroShell.dump(ciaa.tod, Category::State );
+            } else {
+                retroShell.dump(ciab.tod, Category::State );
+            }
         }, i);
     }
 

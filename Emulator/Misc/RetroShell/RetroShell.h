@@ -214,7 +214,15 @@ private:
     
 public:
     
+    void dump(CoreObject &component, std::vector <Category> categories);
     void dump(CoreObject &component, Category category);
+
+private:
+
+    void _dump(CoreObject &component, Category category);
+
+public: // DEPRECATED
+
     void dumpConfig(CoreObject &component);
     void dumpInspection(CoreObject &component);
     void dumpDebug(CoreObject &component);

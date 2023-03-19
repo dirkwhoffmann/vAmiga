@@ -178,9 +178,8 @@ CIA::_dump(Category category, std::ostream& os) const
         os << bol(config.eClockSyncing) << std::endl;
     }
 
-    if (category == Category::State) {
+    if (category == Category::Registers) {
         
-        os << std::endl;
         os << tab("Counter A") << hex(counterA) << std::endl;
         os << tab("Latch A") << hex(latchA) << std::endl;
         os << tab("Data register A") << hex(pra) << std::endl;
@@ -201,10 +200,9 @@ CIA::_dump(Category category, std::ostream& os) const
         os << tab("SDR") << hex(sdr) << std::endl;
         os << tab("SSR") << hex(ssr) << std::endl;
         os << tab("serCounter") << dec(serCounter) << std::endl;
-        os << std::endl;
     }
 
-    if (category == Category::Debug) {
+    if (category == Category::State) {
 
         os << tab("Clock") << dec(clock) << std::endl;
         os << tab("Sleeping") << bol(sleeping) << std::endl;
