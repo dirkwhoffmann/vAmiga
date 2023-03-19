@@ -113,6 +113,7 @@ Interpreter::initDebugShell(Command &root)
 
     root.newGroup("Miscellaneous");
 
+    root.add({"host"},          "Host computer");
     root.add({"os"},            "AmigaOS debugger");
 
     
@@ -387,30 +388,17 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
-        retroShell.dump(amiga, Category::Inspection);
+        retroShell.dump(amiga, Category::State);
     });
 
-    root.add({"amiga", "progress"},
-             "Displays clocks and the frame counter",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dump(amiga, Category::Progress);
-    });
-
+    /*
     root.add({"amiga", "host"},
              "Displays information about the host machine",
              [this](Arguments& argv, long value) {
 
-        retroShell.dump(host, Category::Inspection);
+        retroShell.dump(host, Category::State);
     });
-
-    root.add({"amiga", "debug"},
-             "Displays additional debug information",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dump(amiga, Category::Debug);
-    });
-
+    */
 
     //
     // Memory
@@ -420,7 +408,7 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
-        retroShell.dump(mem, Category::Inspection);
+        retroShell.dump(mem, Category::State);
     });
 
     root.add({"memory", "dump"}, { Arg::address },
@@ -895,6 +883,18 @@ Interpreter::initDebugShell(Command &root)
 
         }, i);
     }
+
+
+    //
+    // Host computer
+    //
+
+    root.add({"host", ""},
+             "Displays information about the host machine",
+             [this](Arguments& argv, long value) {
+
+        retroShell.dump(host, Category::State);
+    });
 
 
     //

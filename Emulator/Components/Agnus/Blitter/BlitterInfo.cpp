@@ -23,7 +23,7 @@ Blitter::_dump(Category category, std::ostream& os) const
         os << tab("Accuracy level") << config.accuracy << std::endl;
     }
 
-    if (category == Category::Inspection) {
+    if (category == Category::State) {
 
         os << tab("BLTCON0") << hex(bltcon0) << std::endl;
         os << tab("ASH") << hex(bltconASH()) << std::endl;

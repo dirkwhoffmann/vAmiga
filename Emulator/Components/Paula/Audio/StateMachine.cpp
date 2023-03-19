@@ -25,7 +25,7 @@ StateMachine<nr>::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == Category::Inspection) {
+    if (category == Category::State) {
 
         os << tab("State machine") << dec(nr) << std::endl;
         os << tab("State") << dec(state) << std::endl;

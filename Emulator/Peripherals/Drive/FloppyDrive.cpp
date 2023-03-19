@@ -223,7 +223,7 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         os << dec(AS_MSEC(getHeadSettleTime())) << " msec" << std::endl;
     }
     
-    if (category == Category::Inspection) {
+    if (category == Category::State) {
         
         os << tab("Nr");
         os << dec(nr) << std::endl;
@@ -285,7 +285,7 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
 
         if (hasDisk()) {
 
-            disk->_dump(Category::Inspection, os);
+            disk->_dump(Category::State, os);
             os << std::endl;
             disk->_dump(Category::Debug, os);
 

@@ -378,7 +378,7 @@ HardDrive::_dump(Category category, std::ostream& os) const
         for (isize i = 0; i < isize(ptable.size()); i++) {
             
             auto fs = MutableFileSystem(*this, i);
-            fs.dump(Category::Inspection, os);
+            fs.dump(Category::State, os);
         }
         
         for (isize i = 0; i < isize(ptable.size()); i++) {

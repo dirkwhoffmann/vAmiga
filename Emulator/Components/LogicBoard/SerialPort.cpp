@@ -97,7 +97,7 @@ SerialPort::_dump(Category category, std::ostream& os) const
         os << bol(config.verbose) << std::endl;
     }
     
-    if (category == Category::Inspection) {
+    if (category == Category::State) {
         
         os << tab("Port pins");
         os << hex(port) << std::endl;

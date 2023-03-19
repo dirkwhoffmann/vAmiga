@@ -63,7 +63,7 @@ Memory::_dump(Category category, std::ostream& os) const
         os << util::bol(womIsLocked) << std::endl;
     }
     
-    if (category == Category::Inspection) {
+    if (category == Category::State) {
 
         auto romcrc = util::crc32(rom, config.romSize);
         auto womcrc = util::crc32(wom, config.womSize);

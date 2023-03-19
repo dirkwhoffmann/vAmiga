@@ -567,7 +567,7 @@ RetroShell::dump(CoreObject &component, Category category)
 
         switch (category) {
 
-            case Category::Config: ss << "Current configuration:\n\n"; break;
+            case Category::Config:      ss << "Configuration:\n\n"; break;
 
             default:
                 break;
@@ -588,7 +588,7 @@ RetroShell::dumpConfig(CoreObject &component)
 void
 RetroShell::dumpInspection(CoreObject &component)
 {
-    dump(component, Category::Inspection);
+    dump(component, Category::State);
 }
 
 void

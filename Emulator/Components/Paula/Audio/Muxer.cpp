@@ -60,7 +60,7 @@ Muxer::_dump(Category category, std::ostream& os) const
         os << dec(config.volR) << std::endl;
     }
 
-    if (category == Category::Inspection) {
+    if (category == Category::State) {
 
         paula.channel0.dump(category, os);
         os << std::endl;

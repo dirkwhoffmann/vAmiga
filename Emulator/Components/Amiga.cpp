@@ -983,7 +983,7 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << std::endl;
     }
 
-    if (category == Category::Inspection) {
+    if (category == Category::State) {
 
         os << tab("Power");
         os << bol(isPoweredOn()) << std::endl;
@@ -996,11 +996,16 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << tab("Tracking");
         os << bol(isTracking()) << std::endl;
         os << std::endl;
+
         os << tab("Refresh rate");
         os << dec(isize(refreshRate())) << " Fps" << std::endl;
-    }
-
-    if (category == Category::Progress) {
+        os << tab("Master clock frequency");
+        os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
+        os << tab("Thread state");
+        os << ExecutionStateEnum::key(state) << std::endl;
+        os << tab("Thread mode");
+        os << ThreadModeEnum::key(getThreadMode()) << std::endl;
+        os << std::endl;
 
         os << tab("Frame");
         os << dec(agnus.pos.frame) << std::endl;
@@ -1016,16 +1021,7 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << tab("CIA B progress");
         os << dec(ciaB.getClock()) << " Master cycles (";
         os << dec(AS_CIA_CYCLES(ciaA.getClock())) << " CIA cycles)" << std::endl;
-    }
-
-    if (category == Category::Debug) {
-
-        os << tab("Thread state");
-        os << ExecutionStateEnum::key(state) << std::endl;
-        os << tab("Thread mode");
-        os << ThreadModeEnum::key(getThreadMode()) << std::endl;
-        os << tab("Master clock frequency");
-        os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
+        os << std::endl;
     }
 
     if (category == Category::Defaults) {

@@ -472,7 +472,7 @@ CPU::_dump(Category category, std::ostream& os) const
         os << util::hex(config.regResetVal) << std::endl;
     }
 
-    if (category == Category::Inspection) {
+    if (category == Category::State) {
         
         os << util::tab("PC");
         os << util::hex(reg.pc0) << std::endl;

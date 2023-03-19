@@ -44,7 +44,7 @@ UART::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == Category::Inspection) {
+    if (category == Category::State) {
         
         os << tab("Serper");
         os << hex(serper) << std::endl;

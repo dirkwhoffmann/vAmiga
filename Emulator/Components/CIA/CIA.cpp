@@ -178,7 +178,7 @@ CIA::_dump(Category category, std::ostream& os) const
         os << bol(config.eClockSyncing) << std::endl;
     }
 
-    if (category == Category::Inspection) {
+    if (category == Category::State) {
         
         os << std::endl;
         os << tab("Counter A") << hex(counterA) << std::endl;
@@ -217,7 +217,7 @@ CIA::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Tod) {
         
-        tod.dump(Category::Inspection, os);
+        tod.dump(Category::State, os);
     }
 }
 

@@ -78,7 +78,7 @@ Keyboard::_dump(Category category, std::ostream& os) const
         os << bol(config.accurate) << std::endl;
     }
     
-    if (category == Category::Inspection) {
+    if (category == Category::State) {
         
         os << tab("State");
         os << KeyboardStateEnum::key(state) << std::endl;

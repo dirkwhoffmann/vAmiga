@@ -75,7 +75,7 @@ Denise::_dump(Category category, std::ostream& os) const
         os << bol(config.clxPlfPlf) << std::endl;
     }
 
-    if (category == Category::Inspection) {
+    if (category == Category::State) {
         
         os << tab("BPLCON0");
         os << hex(bplcon0) << std::endl;

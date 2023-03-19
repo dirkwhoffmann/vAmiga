@@ -106,7 +106,7 @@ Joystick::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
-    if (category == Category::Inspection) {
+    if (category == Category::State) {
         
         os << tab("Button 1 pressed") << bol(button) << std::endl;
         os << tab("Button 2 pressed") << bol(button2) << std::endl;

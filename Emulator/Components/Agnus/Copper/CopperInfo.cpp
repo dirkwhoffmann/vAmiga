@@ -18,7 +18,7 @@ Copper::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
 
-    if (category == Category::Inspection) {
+    if (category == Category::State) {
 
         auto deltaPC = coppc - coppc0;
 
