@@ -565,11 +565,19 @@ extension MyController {
             resetAction(self)
             
         case .SER_IN:
-            serialIn += String(UnicodeScalar(value & 0xFF)!)
-            
+            var c = amiga.serialPort.readIncomingPrintableByte()
+            while c != -1 {
+                serialIn += String(UnicodeScalar(UInt8(c)))
+                c = amiga.serialPort.readIncomingPrintableByte()
+            }
+
         case .SER_OUT:
-            serialOut += String(UnicodeScalar(value & 0xFF)!)
-            
+            var c = amiga.serialPort.readOutgoingPrintableByte()
+            while c != -1 {
+                serialOut += String(UnicodeScalar(UInt8(c)))
+                c = amiga.serialPort.readOutgoingPrintableByte()
+            }
+
         case .AUTO_SNAPSHOT_TAKEN:
             mydocument.snapshots.append(amiga.latestAutoSnapshot)
             

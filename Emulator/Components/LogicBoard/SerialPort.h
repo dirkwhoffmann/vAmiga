@@ -36,7 +36,11 @@ class SerialPort : public SubComponent {
     // The current values of the port pins
     u32 port = 0;
 
-    
+    // Temporary storage for incoming and outgoing bytes
+    string incoming;
+    string outgoing;
+
+
     //
     // Initializing
     //
@@ -62,7 +66,7 @@ private:
     
 private:
     
-    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) };
+    void _reset(bool hard) override;
     void _inspect() const override;
     
     template <class T>
@@ -110,7 +114,7 @@ public:
 
 
     //
-    // Accessing
+    // Accessing port pins
     //
 
 public:
@@ -143,6 +147,25 @@ public:
 private:
 
     void setPort(u32 mask, bool value);
+
+
+    //
+    // Accessing the byte buffers
+    //
+
+public:
+
+    // Reads and removes the contents of one of the record buffers
+    string readIncoming();
+    string readOutgoing();
+
+    // Reads and removes a single byte from one of the record buffers
+    int readIncomingByte();
+    int readOutgoingByte();
+    int readIncomingPrintableByte();
+    int readOutgoingPrintableByte();
+
+private:
 
     // Called by the UART when a byte has been received or sent
     void recordIncomingByte(u8 byte);

@@ -120,6 +120,15 @@ SerialPort::_dump(Category category, std::ostream& os) const
     }
 }
 
+void
+SerialPort::_reset(bool hard)
+{
+    RESET_SNAPSHOT_ITEMS(hard)
+
+    incoming = "";
+    outgoing = "";
+}
+
 bool
 SerialPort::getPin(isize nr) const
 {
@@ -169,18 +178,114 @@ SerialPort::setPort(u32 mask, bool value)
     if ((oldPort ^ port) & RXD_MASK) uart.rxdHasChanged(value);
 }
 
+string
+SerialPort::readIncoming()
+{
+    {   SYNCHRONIZED
+
+        string result = incoming;
+        incoming = "";
+        return result;
+    }
+}
+
+string
+SerialPort::readOutgoing()
+{
+    {   SYNCHRONIZED
+
+        string result = outgoing;
+        outgoing = "";
+        return result;
+    }
+}
+
+int
+SerialPort::readIncomingByte()
+{
+    {   SYNCHRONIZED
+
+        if (incoming.empty()) return -1;
+
+        int result = incoming[0];
+        incoming.erase(incoming.begin());
+        return result;
+    }
+}
+
+int
+SerialPort::readOutgoingByte()
+{
+    {   SYNCHRONIZED
+
+        if (outgoing.empty()) return -1;
+
+        int result = outgoing[0];
+        outgoing.erase(outgoing.begin());
+        return result;
+    }
+}
+
+int
+SerialPort::readIncomingPrintableByte()
+{
+    {   SYNCHRONIZED
+
+        while (1) {
+
+            auto byte = readIncomingByte();
+            if (byte == -1 || isprint(byte) || byte == '\n') return byte;
+        }
+    }
+}
+
+int
+SerialPort::readOutgoingPrintableByte()
+{
+    {   SYNCHRONIZED
+
+        while (1) {
+
+            auto byte = readOutgoingByte();
+            if (byte == -1 || isprint(byte) || byte == '\n') return byte;
+        }
+    }
+}
+
 void
 SerialPort::recordIncomingByte(u8 byte)
 {
-    trace(SER_DEBUG, "Incoming: %02X ('%c')\n", byte, isprint(byte) ? char(byte) : '?');
-    if (config.verbose) dumpByte(byte);
+    {   SYNCHRONIZED
+
+        trace(SER_DEBUG, "Incoming: %02X ('%c')\n", byte, isprint(byte) ? char(byte) : '?');
+
+        // Record the incoming byte
+        incoming += char(byte);
+
+        // Inform the GUI if the record buffer had been empty
+        if (incoming.length() == 1) msgQueue.put(MSG_SER_IN);
+
+        // Inform RetroShell
+        if (config.verbose) dumpByte(byte);
+    }
 }
 
 void
 SerialPort::recordOutgoingByte(u8 byte)
 {
-    trace(SER_DEBUG, "Outgoing: %02X ('%c')\n", byte, isprint(byte) ? char(byte) : '?');
-    if (config.verbose) dumpByte(byte);
+    {   SYNCHRONIZED
+
+        trace(SER_DEBUG, "Outgoing: %02X ('%c')\n", byte, isprint(byte) ? char(byte) : '?');
+
+        // Record the incoming byte
+        outgoing += char(byte);
+
+        // Inform the GUI if the record buffer had been empty
+        if (outgoing.length() == 1) msgQueue.put(MSG_SER_OUT);
+
+        // Inform RetroShell
+        if (config.verbose) dumpByte(byte);
+    }
 }
 
 void
