@@ -48,13 +48,13 @@ Thread::execute<THREAD_ADAPTIVE>()
     loadClock.go();
 
     // Get the number of missing frames
-    isize missing = warp ? 1 : missingFrames(baseTime);
+    i64 missing = warp ? 1 : missingFrames(baseTime);
 
     // Resync if necessary
     if (missing < -5 || missing > 5) {
 
-        debug(RUN_DEBUG, "Adaptive sync: Resyncing %ld frames\n", missing);
-        baseTime += util::Time(missing * 1000000000 / i64(refreshRate()));
+        debug(RUN_DEBUG, "Adaptive sync: Resyncing %lld frames\n", missing);
+        baseTime += util::Time(missing * 1000000000LL / i64(refreshRate()));
         missing = 0;
     }
 
