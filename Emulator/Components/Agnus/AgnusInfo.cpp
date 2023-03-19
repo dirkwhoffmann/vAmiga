@@ -478,7 +478,7 @@ Agnus::_dump(Category category, std::ostream& os) const
         os << bol(config.ptrDrops) << std::endl;
     }
     
-    if (category == Category::Debug) {
+    if (category == Category::State) {
         
         os << tab("Clock");
         os << dec(clock) << std::endl;

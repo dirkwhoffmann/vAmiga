@@ -34,7 +34,7 @@ Paula::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
 
-    if (category == Category::State) {
+    if (category == Category::Registers) {
         
         os << tab("INTENA") << hex(intena) << std::endl;
         os << tab("INTREQ") << hex(intreq) << std::endl;

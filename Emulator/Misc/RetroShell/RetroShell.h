@@ -223,9 +223,9 @@ private:
 
 public: // DEPRECATED
 
-    void dumpConfig(CoreObject &component);
-    void dumpInspection(CoreObject &component);
-    void dumpDebug(CoreObject &component);
+    [[deprecated]] void dumpConfig(CoreObject &component);
+    [[deprecated]] void dumpInspection(CoreObject &component);
+    [[deprecated]] void dumpDebug(CoreObject &component);
 
     
     //

@@ -198,7 +198,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the current configuration",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpConfig(amiga);
+        retroShell.dump(amiga, Category::Config);
     });
 
     root.add({"amiga", "defaults"},
@@ -282,7 +282,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the current configuration",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpConfig(amiga.mem);
+        retroShell.dump(mem, Category::Config);
     });
 
     root.add({"memory", "set"},
@@ -379,7 +379,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the current configuration",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpConfig(amiga.cpu);
+        retroShell.dump(amiga.cpu, Category::Config);
     });
 
     root.add({"cpu", "set"},
@@ -438,8 +438,8 @@ Interpreter::initCommandShell(Command &root)
                  "Displays the current configuration",
                  [this](Arguments& argv, long value) {
 
-            if (value == 0) retroShell.dumpConfig(amiga.ciaA);
-            if (value == 1) retroShell.dumpConfig(amiga.ciaB);
+            if (value == 0) retroShell.dump(ciaa, Category::Config);
+            if (value == 1) retroShell.dump(ciab, Category::Config);
 
         }, i);
 
@@ -485,7 +485,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the current configuration",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpConfig(agnus);
+        retroShell.dump(agnus, Category::Config);
     });
 
     root.add({"agnus", "set"},
@@ -523,7 +523,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the current configuration",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpConfig(blitter);
+        retroShell.dump(blitter, Category::Config);
     });
 
     root.add({"blitter", "set"},
@@ -547,7 +547,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the current configuration",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpConfig(amiga.denise);
+        retroShell.dump(denise, Category::Config);
     });
 
     root.add({"denise", "set"},
@@ -696,7 +696,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the current configuration",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpConfig(amiga.denise.pixelEngine);
+        retroShell.dump(pixelEngine, Category::Config);
     });
 
     root.add({"monitor", "set"},
@@ -744,7 +744,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the current configuration",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpConfig(amiga.paula.muxer);
+        retroShell.dump(paula.muxer, Category::Config);
     });
 
     root.add({"paula", "audio", "filter"},
@@ -754,10 +754,10 @@ Interpreter::initCommandShell(Command &root)
         retroShell << '\n';
 
         retroShell << "Left channel:" << '\n';
-        retroShell.dumpConfig(paula.muxer.filterL);
+        retroShell.dump(paula.muxer.filterL, Category::Config);
 
         retroShell << "Right channel:" << '\n';
-        retroShell.dumpConfig(paula.muxer.filterR);
+        retroShell.dump(paula.muxer.filterR, Category::Config);
     });
 
     root.add({"paula", "audio", "filter", "set"},
@@ -875,7 +875,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the current configuration",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpConfig(amiga.paula.diskController);
+        retroShell.dump(diskController, Category::Config);
     });
 
     root.add({"paula", "dc", "set"},
@@ -916,7 +916,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the current configuration",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpConfig(amiga.rtc);
+        retroShell.dump(rtc, Category::Config);
     });
 
     root.add({"rtc", "set"},
@@ -940,7 +940,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the current configuration",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpConfig(amiga.keyboard);
+        retroShell.dump(keyboard, Category::Config);
     });
 
     root.add({"keyboard", "set"},
@@ -979,7 +979,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
-            retroShell.dumpConfig(port.joystick);
+            retroShell.dump(port.joystick, Category::Config);
 
         }, i);
 
@@ -1131,7 +1131,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
-            retroShell.dumpConfig(port.mouse);
+            retroShell.dump(port.mouse, Category::Config);
 
         }, i);
 
@@ -1207,7 +1207,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the current configuration",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpConfig(amiga.serialPort);
+        retroShell.dump(serialPort, Category::Config);
     });
 
     root.add({"serial", "set"},
@@ -1244,7 +1244,7 @@ Interpreter::initCommandShell(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dumpConfig(*amiga.df[value]);
+                retroShell.dump(*amiga.df[value], Category::Config);
 
             }, i);
 
@@ -1438,7 +1438,7 @@ Interpreter::initCommandShell(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dumpConfig(*amiga.hd[value]);
+                retroShell.dump(*amiga.hd[value], Category::Config);
 
             }, i);
 
@@ -1553,7 +1553,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the internal state",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpDebug(remoteManager.rshServer);
+        retroShell.dump(remoteManager.rshServer, Category::Config);
     });
 
     root.add({"server", "rshell"},
@@ -1584,7 +1584,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the current configuration",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpConfig(remoteManager.rshServer);
+        retroShell.dump(remoteManager.rshServer, Category::Config);
     });
 
     root.add({"server", "rshell", "set"},
@@ -1608,7 +1608,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the internal state",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpDebug(remoteManager.rshServer);
+        retroShell.dump(remoteManager.rshServer, Category::State);
     });
 
     root.add({"server", "gdb"},
@@ -1632,7 +1632,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the current configuration",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpConfig(remoteManager.gdbServer);
+        retroShell.dump(remoteManager.gdbServer, Category::Config);
     });
 
     root.add({"server", "gdb", "set"},
@@ -1656,7 +1656,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the internal state",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpDebug(remoteManager.gdbServer);
+        retroShell.dump(remoteManager.gdbServer, Category::State);
     });
 }
 

@@ -496,14 +496,7 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpInspection(agnus);
-    });
-
-    root.add({"agnus", "debug"},
-             "Displays additional debug information",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dumpDebug(agnus);
+        retroShell.dump(agnus, { Category::Config, Category::State, Category::Registers } );
     });
 
     root.add({"agnus", "beam"},
@@ -536,14 +529,7 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpInspection(amiga.agnus.blitter);
-    });
-
-    root.add({"blitter", "debug"},
-             "Displays additional debug information",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dumpDebug(amiga.agnus.blitter);
+        retroShell.dump(blitter, { Category::Config, Category::State, Category::Registers } );
     });
 
 
@@ -555,14 +541,7 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpInspection(amiga.agnus.copper);
-    });
-
-    root.add({"copper", "debug"},
-             "Displays additional debug information",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dumpDebug(amiga.agnus.copper);
+        retroShell.dump(copper, { Category::Config, Category::State, Category::Registers } );
     });
 
     root.add({"copper", "list"}, { Arg::value },
@@ -590,14 +569,7 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpInspection(paula);
-    });
-
-    root.add({"paula", "debug"},
-             "Inspects the internal state",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dumpDebug(paula);
+        retroShell.dump(paula, Category::Registers);
     });
 
     root.add({"paula", "audio"},
@@ -613,14 +585,7 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpInspection(amiga.paula.muxer);
-    });
-
-    root.add({"paula", "audio", "debug"},
-             "Displays additional debug information",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dumpDebug(amiga.paula.muxer);
+        retroShell.dump(paula, { Category::Config, Category::State, Category::Registers } );
     });
 
     root.add({"paula", "dc", ""},
@@ -653,14 +618,7 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpInspection(denise);
-    });
-
-    root.add({"denise", "debug"},
-             "Displays additional debug information",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dumpDebug(denise);
+        retroShell.dump(denise, { Category::Config, Category::State, Category::Registers } );
     });
 
 
@@ -672,14 +630,7 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpInspection(rtc);
-    });
-
-    root.add({"rtc", "debug"},
-             "Displays additional debug information",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dumpDebug(rtc);
+        retroShell.dump(rtc, { Category::Config, Category::State, Category::Registers } );
     });
 
 
@@ -691,7 +642,7 @@ Interpreter::initDebugShell(Command &root)
              "Lists all connected boards",
              [this](Arguments& argv, long value) {
 
-        retroShell.dumpDebug(zorro);
+        retroShell.dump(zorro, Category::Slots);
     });
 
     root.add({"zorro", "inspect"}, { Arg::value },
@@ -703,7 +654,7 @@ Interpreter::initDebugShell(Command &root)
         if (auto board = zorro.getBoard(nr); board != nullptr) {
 
             retroShell.dump(*board, Category::Properties);
-            retroShell.dumpDebug(*board);
+            retroShell.dump(*board, Category::State);
             retroShell.dump(*board, Category::Stats);
         }
     });
