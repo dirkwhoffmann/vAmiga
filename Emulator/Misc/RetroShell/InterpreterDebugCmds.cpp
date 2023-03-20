@@ -391,14 +391,6 @@ Interpreter::initDebugShell(Command &root)
         retroShell.dump(amiga, Category::State);
     });
 
-    /*
-    root.add({"amiga", "host"},
-             "Displays information about the host machine",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dump(host, Category::State);
-    });
-    */
 
     //
     // Memory

@@ -470,9 +470,7 @@ static const char *script[] = {
 
     "",
     "amiga",
-    "amiga progress",
-    "amiga host",
-    "amiga debug",
+    "host",
 
     "",
     "memory",
@@ -482,52 +480,41 @@ static const char *script[] = {
 
     "",
     "cpu",
-    "cpu debug",
     "cpu vectors",
 
     "",
     "ciaa",
-    "ciaa debug",
     "ciaa tod",
 
     "",
     "ciab",
-    "ciab debug",
     "ciab tod",
 
     "",
     "agnus",
-    "agnus debug",
     "agnus beam",
     "agnus dma",
     "agnus events",
 
     "",
     "blitter",
-    "blitter debug",
 
     "",
     "copper",
-    "copper debug",
     "copper list 1",
     "copper list 2",
 
     "",
     "paula",
-    "paula debug",
     "paula audio",
-    "paula audio debug",
     "paula dc",
-    "paula dc debug",
     "paula uart",
 
     "",
     "denise",
-    "denise debug",
 
     "",
     "rtc",
-    "rtc debug",
 
     "",
     "zorro",
@@ -536,9 +523,7 @@ static const char *script[] = {
 
     "",
     "controlport 1",
-    "controlport 1 debug",
     "controlport 2",
-    "controlport 2 debug",
 
     "",
     "serial",
@@ -548,25 +533,19 @@ static const char *script[] = {
 
     "",
     "mouse 1",
-    "mouse 1 debug",
     "mouse 2",
-    "mouse 2 debug",
 
     "",
     "joystick 1",
     "joystick 2",
 
     "df0",
-    "df0 debug",
     "df0 disk",
     "df1",
-    "df1 debug",
     "df1 disk",
     "df2",
-    "df2 debug",
     "df2 disk",
     "df3",
-    "df3 debug",
     "df3 disk",
 };
 
