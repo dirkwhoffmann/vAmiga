@@ -31,10 +31,6 @@ AudioFilter::_dump(Category category, std::ostream& os) const
 
         os << tab("Active");
         os << bol(isEnabled()) << std::endl;
-    }
-    
-    if (category == Category::Debug) {
-
         os << tab("Coefficient a1");
         os << flt(a1) << std::endl;
         os << tab("Coefficient a2");

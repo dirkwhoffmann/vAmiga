@@ -69,9 +69,6 @@ Muxer::_dump(Category category, std::ostream& os) const
         paula.channel2.dump(category, os);
         os << std::endl;
         paula.channel3.dump(category, os);
-    }
-
-    if (category == Category::Debug) {
 
         os << tab("Fill level");
         os << fillLevelAsString(stream.fillLevel()) << std::endl;

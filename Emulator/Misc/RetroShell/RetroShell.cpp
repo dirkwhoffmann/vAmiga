@@ -605,24 +605,6 @@ RetroShell::_dump(CoreObject &component, Category category)
 }
 
 void
-RetroShell::dumpConfig(CoreObject &component)
-{
-    dump(component, Category::Config);
-}
-
-void
-RetroShell::dumpInspection(CoreObject &component)
-{
-    dump(component, Category::State);
-}
-
-void
-RetroShell::dumpDebug(CoreObject &component)
-{
-    dump(component, Category::Debug);
-}
-
-void
 RetroShell::eofHandler()
 {
     if (agnus.clock >= wakeUp) {

@@ -76,6 +76,13 @@ Denise::_dump(Category category, std::ostream& os) const
     }
 
     if (category == Category::State) {
+
+        os << tab("Resolution");
+        os << ResolutionEnum::key(res) << std::endl;
+
+    }
+
+    if (category == Category::Registers) {
         
         os << tab("BPLCON0");
         os << hex(bplcon0) << std::endl;
@@ -103,13 +110,6 @@ Denise::_dump(Category category, std::ostream& os) const
         os << tab("SPRxCTL");
         for (isize i = 0; i < 8; i++) os << hex(sprctl[i]) << ' ';
         os << std::endl;
-    }
-
-    if (category == Category::Debug) {
-
-        os << tab("Resolution");
-        os << ResolutionEnum::key(res) << std::endl;
-
     }
 }
 

@@ -221,12 +221,6 @@ private:
 
     void _dump(CoreObject &component, Category category);
 
-public: // DEPRECATED
-
-    [[deprecated]] void dumpConfig(CoreObject &component);
-    [[deprecated]] void dumpInspection(CoreObject &component);
-    [[deprecated]] void dumpDebug(CoreObject &component);
-
     
     //
     // Performing periodic events

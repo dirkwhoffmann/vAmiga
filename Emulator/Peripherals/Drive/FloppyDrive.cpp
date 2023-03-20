@@ -241,16 +241,12 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         os << bol(disk != nullptr) << std::endl;
         os << tab("Modified");
         os << bol(hasModifiedDisk()) << std::endl;
-    }
-
-    if (category == Category::Debug) {
-
-        os << tab("Nr");
-        os << dec(nr) << std::endl;
         os << tab("Id count");
         os << dec(idCount) << std::endl;
         os << tab("Id bit");
         os << dec(idBit) << std::endl;
+
+        os << std::endl;
         os << tab("latestStepUp");
         os << dec(latestStepUp) << std::endl;
         os << tab("latestStepDown");
@@ -286,8 +282,6 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         if (hasDisk()) {
 
             disk->_dump(Category::State, os);
-            os << std::endl;
-            disk->_dump(Category::Debug, os);
 
         } else {
 

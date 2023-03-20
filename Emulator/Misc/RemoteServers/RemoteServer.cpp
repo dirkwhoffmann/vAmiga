@@ -48,7 +48,7 @@ RemoteServer::_dump(Category category, std::ostream& os) const
         os << bol(config.verbose) << std::endl;
     }
     
-    if (category == Category::Debug) {
+    if (category == Category::State) {
         
         os << tab("State");
         os << SrvStateEnum::key(state) << std::endl;

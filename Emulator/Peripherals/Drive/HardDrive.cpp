@@ -347,13 +347,28 @@ HardDrive::_dump(Category category, std::ostream& os) const
         os << dec(config.pan) << std::endl;
     }
     
-    if (category == Category::Drive) {
+    if (category == Category::State) {
         
         auto cap1 = geometry.numBytes() / MB(1);
         auto cap2 = ((100 * geometry.numBytes()) / MB(1)) % 100;
         
         os << tab("Hard drive");
         os << dec(nr) << std::endl;
+        os << tab("Head");
+        os << dec(head.cylinder) << ":" << dec(head.head) << ":" << dec(head.offset);
+        os << std::endl;
+        os << tab("State");
+        os << HardDriveStateEnum::key(state) << std::endl;
+        os << tab("Modified");
+        os << bol(modified) << std::endl;
+        os << tab("Write protected");
+        os << bol(writeProtected) << std::endl;
+        os << tab("Bootable");
+        if (bootable) {
+            os << bol(*bootable) << std::endl;
+        } else {
+            os << "Unknown" << std::endl;
+        }
         os << tab("Capacity");
         os << dec(cap1) << "." << dec(cap2) << " MB" << std::endl;
         geometry.dump(os);
@@ -401,27 +416,6 @@ HardDrive::_dump(Category category, std::ostream& os) const
             os << tab("Partition");
             os << dec(i) << std::endl;
             part.dump(os);
-        }
-    }
-    
-    if (category == Category::Debug) {
-        
-        os << tab("Nr");
-        os << dec(nr) << std::endl;
-        os << tab("Drive head");
-        os << dec(head.cylinder) << ":" << dec(head.head) << ":" << dec(head.offset);
-        os << std::endl;
-        os << tab("State");
-        os << HardDriveStateEnum::key(state) << std::endl;
-        os << tab("Modified");
-        os << bol(modified) << std::endl;
-        os << tab("Write protected");
-        os << bol(writeProtected) << std::endl;
-        os << tab("Bootable");
-        if (bootable) {
-            os << bol(*bootable) << std::endl;
-        } else {
-            os << "Unknown" << std::endl;
         }
     }
 }

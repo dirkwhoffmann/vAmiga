@@ -73,12 +73,8 @@ FloppyDisk::_dump(Category category, std::ostream& os) const
         os << bol(writeProtected) << std::endl;
         os << tab("Modified");
         os << bol(modified) << std::endl;
-    }
-
-    if (category == Category::Debug) {
 
         isize oldlen = length.track[0];
-
         for (isize i = 0, oldi = 0; i <= numTracks(); i++) {
 
             isize newlen = i < numTracks() ? length.track[i] : -1;

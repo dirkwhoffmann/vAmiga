@@ -54,15 +54,7 @@ Memory::_dump(Category category, std::ostream& os) const
         os << util::tab("Unmapped memory");
         os << UnmappedMemoryEnum::key(config.unmappingType) << std::endl;
     }
-    
-    if (category == Category::Debug) {
-        
-        os << util::tab("Data bus");
-        os << util::hex(dataBus) << std::endl;
-        os << util::tab("Wom is locked");
-        os << util::bol(womIsLocked) << std::endl;
-    }
-    
+
     if (category == Category::State) {
 
         auto romcrc = util::crc32(rom, config.romSize);
@@ -87,6 +79,13 @@ Memory::_dump(Category category, std::ostream& os) const
         os << util::hex(slowcrc) << " (CRC32)  " << std::endl;
         os << util::tab("Fast Ram");
         os << util::hex(fastcrc) << " (CRC32)  " << std::endl;
+
+        os << std::endl;
+        os << util::tab("Data bus");
+        os << util::hex(dataBus) << std::endl;
+        os << util::tab("Wom is locked");
+        os << util::bol(womIsLocked) << std::endl;
+
     }
     
     if (category == Category::BankMap) {
