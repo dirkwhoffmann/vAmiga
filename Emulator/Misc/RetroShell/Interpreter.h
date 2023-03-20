@@ -37,10 +37,10 @@ class Interpreter: SubComponent
     Shell shell = Shell::Command;
 
     // Commands of the command shell
-    Command commandShellRoot;
+    Command *commandShellRoot = new Command();
 
     // Commands of the debug shell
-    Command debugShellRoot;
+    Command *debugShellRoot = new Command();
 
     
     //
