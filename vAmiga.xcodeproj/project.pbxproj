@@ -916,6 +916,7 @@
 		50EAD99F256E76A40053F9AC /* HDFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDFFile.cpp; sourceTree = "<group>"; };
 		50EB8CC925306E8E0053988A /* VideoExporter.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoExporter.xib; sourceTree = "<group>"; };
 		50EB8CCD2530710E0053988A /* VideoExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoExporter.swift; sourceTree = "<group>"; };
+		50EC7A2F29C9EC3900060CAA /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExtendedRomFile.cpp; sourceTree = "<group>"; };
 		50ECF98522B153FB007B3DE7 /* ExtendedRomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtendedRomFile.h; sourceTree = "<group>"; };
 		50EFC7DF22E840870036A3DF /* Serialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serialization.h; sourceTree = "<group>"; };
@@ -1175,13 +1176,10 @@
 			path = Memory;
 			sourceTree = "<group>";
 		};
-		505B801D23FE628F002407FE /* LogicBoard */ = {
+		505B801D23FE628F002407FE /* Ports */ = {
 			isa = PBXGroup;
 			children = (
 				50CF46222620427600BB3B95 /* CMakeLists.txt */,
-				50A493832374560D003ECD2C /* RTCTypes.h */,
-				501B821C2262FFB200042871 /* RTC.h */,
-				501B821B2262FFB200042871 /* RTC.cpp */,
 				50A61445260CF23D00A01428 /* ControlPortTypes.h */,
 				50A2953E21FF12EF0046BAA0 /* ControlPort.h */,
 				50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */,
@@ -1189,7 +1187,7 @@
 				50B35B6122B2382E001A9C17 /* SerialPort.h */,
 				50B35B6022B2382E001A9C17 /* SerialPort.cpp */,
 			);
-			path = LogicBoard;
+			path = Ports;
 			sourceTree = "<group>";
 		};
 		505B801E23FE6582002407FE /* System */ = {
@@ -1227,7 +1225,8 @@
 				502F7DCF2221709700AEEC65 /* Denise */,
 				502F7DD0222170AE00AEEC65 /* Agnus */,
 				505B801C23FE626E002407FE /* Memory */,
-				505B801D23FE628F002407FE /* LogicBoard */,
+				50EC7A2E29C9EC1000060CAA /* RTC */,
+				505B801D23FE628F002407FE /* Ports */,
 				508AC36527B7F634006AD2E7 /* Zorro */,
 			);
 			path = Components;
@@ -1910,6 +1909,17 @@
 				50AEBEDF24D3D9080037082D /* KeyboardEvents.cpp */,
 			);
 			path = Keyboard;
+			sourceTree = "<group>";
+		};
+		50EC7A2E29C9EC1000060CAA /* RTC */ = {
+			isa = PBXGroup;
+			children = (
+				50EC7A2F29C9EC3900060CAA /* CMakeLists.txt */,
+				50A493832374560D003ECD2C /* RTCTypes.h */,
+				501B821C2262FFB200042871 /* RTC.h */,
+				501B821B2262FFB200042871 /* RTC.cpp */,
+			);
+			path = RTC;
 			sourceTree = "<group>";
 		};
 		50EE993D21FF4D42003BD74B /* Paula */ = {
