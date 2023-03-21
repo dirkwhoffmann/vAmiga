@@ -264,9 +264,9 @@ class Canvas: Layer {
 
             // Update the GPU texture
             if currLOF {
-                lfTexture.replace(w: Int(TPP * HPIXELS), h: Int(VPIXELS), buffer: buffer)
+                lfTexture.replace(w: Int(TPP) * HPIXELS, h: VPIXELS, buffer: buffer)
             } else {
-                sfTexture.replace(w: Int(TPP * HPIXELS), h: Int(VPIXELS), buffer: buffer)
+                sfTexture.replace(w: Int(TPP) * HPIXELS, h: VPIXELS, buffer: buffer)
             }
 
         } else {
@@ -288,9 +288,9 @@ class Canvas: Layer {
 
             // Update the GPU texture
             if currLOF {
-                lfTexture.replace(w: Int(TPP * HPIXELS), h: Int(VPIXELS), buffer: buffer)
+                lfTexture.replace(w: Int(TPP) * HPIXELS, h: VPIXELS, buffer: buffer)
             } else {
-                sfTexture.replace(w: Int(TPP * HPIXELS), h: Int(VPIXELS), buffer: buffer)
+                sfTexture.replace(w: Int(TPP) * HPIXELS, h: VPIXELS, buffer: buffer)
             }
         }        
     }
