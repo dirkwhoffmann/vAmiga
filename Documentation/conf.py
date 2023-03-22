@@ -29,15 +29,16 @@ source_suffix = ['.rst', '.md']
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-#html_theme = 'karma_sphinx_theme'
+html_theme = 'karma_sphinx_theme'
 #html_theme = 'sphinx_rtd_theme'
 html_theme = 'sphinx_book_theme'
 html_theme_options = {
     "repository_url": "https://dirkwhoffmann.github.io/vAmiga/",
-    "use_repository_button": True,
-    "logo_only": True,
+    "repository_provider": "GitHub",
+#    "use_repository_button": True,
+#    "logo_only": True,
 }
 html_logo = "images/icon.png"
 html_title = "vAmiga 2.2"
 html_static_path = ["_static"]
-html_css_files = ["custom.css"]
+#html_css_files = ["custom.css"]
