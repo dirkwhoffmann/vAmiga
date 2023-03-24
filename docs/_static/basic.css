@@ -4,7 +4,7 @@
  *
  * Sphinx stylesheet -- basic theme.
  *
- * :copyright: Copyright 2007-2022 by the Sphinx team, see AUTHORS.
+ * :copyright: Copyright 2007-2023 by the Sphinx team, see AUTHORS.
  * :license: BSD, see LICENSE for details.
  *
  */
@@ -55,7 +55,7 @@ div.sphinxsidebarwrapper {
 
 div.sphinxsidebar {
     float: left;
-    width: 270px;
+    width: 19rem;
     margin-left: -100%;
     font-size: 90%;
     word-wrap: break-word;
@@ -222,8 +222,8 @@ table.modindextable td {
 /* -- general body styles --------------------------------------------------- */
 
 div.body {
-    min-width: 360px;
-    max-width: 800px;
+    min-width: unset;
+    max-width: 45rem;
 }
 
 div.body p, div.body dd, div.body li, div.body blockquote {
@@ -324,6 +324,7 @@ aside.sidebar {
 p.sidebar-title {
     font-weight: bold;
 }
+
 nav.contents,
 aside.topic,
 div.admonition, div.topic, blockquote {
@@ -331,6 +332,7 @@ div.admonition, div.topic, blockquote {
 }
 
 /* -- topics ---------------------------------------------------------------- */
+
 nav.contents,
 aside.topic,
 div.topic {
@@ -606,6 +608,7 @@ ol.simple p,
 ul.simple p {
     margin-bottom: 0;
 }
+
 aside.footnote > span,
 div.citation > span {
     float: left;

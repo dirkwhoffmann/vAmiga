@@ -1,0 +1,66 @@
+
+
+#ethical-ad-placement {
+    margin-top: auto;
+    padding-top: 3em;
+    min-height: 200px;
+}
+
+#readthedocs-embed-flyout, #duplicated-readthedocs-versions {
+    margin-left: -10px;
+    margin-right: -10px;
+}
+
+#duplicated-readthedocs-versions {
+    margin-bottom: -10px;
+}
+
+#duplicated-readthedocs-versions {
+    position: sticky;
+    width: auto;
+}
+
+#readthedocs-embed-flyout .rst-versions.rst-badge {
+    position: static;
+    max-width: none;
+}
+
+
+#readthedocs-embed-flyout .rst-versions.shift-up {
+    max-height: none;
+}
+
+/* We have duplicated this section, so we don't need the second instance: */
+#readthedocs-embed-flyout .rst-versions.rst-badge .rst-current-version {
+    display: none;
+}
+
+#duplicated-readthedocs-versions .rst-current-version {
+    font-size: 0.9rem;
+}
+
+#readthedocs-embed-flyout .rst-versions .rst-other-versions {
+    display: block;
+    font-size: 0.9rem;
+}
+
+#flyout-search-form input {
+    width: 100%;
+}
+
+#sidebar-checkbox:not(:checked) ~ .ethical-fixedfooter {
+    left: 0;
+    right: 0;
+    width: unset;
+}
+
+#sidebar-checkbox:checked ~ .ethical-fixedfooter {
+    left: var(--sidebar-width);
+    right: 0;
+    width: unset;
+}
+
+body:not(.sidebar-resizing) .ethical-fixedfooter {
+    transition: left 0.3s ease-out;
+}
+

@@ -27,7 +27,7 @@ The first seven slots comprise the so-called *primary event table*. The basic id
 
 - **Other DMA**
 
-  This slot is used to manage disk DMA, audio DMA and sprite DMA, as well as to perform some special actions that must be carried out at specific positions on a scanline. In the example shown above, the slot contains a scheduled `DAS_TICK` event. When this event is triggered, the 24-bit counter of CIA B is incremented by one. This counter is used by the Amiga to keep track of the currently processed scanline. 
+  This slot is used to manage disk DMA, audio DMA and sprite DMA, as well as to perform some special actions that must be carried out at specific positions in the processed scanline. In the example shown above, the slot contains a scheduled `DAS_TICK` event. When this event is triggered, the 24-bit counter of CIA B is incremented by one. This counter is used by the Amiga to keep track of the currently processed scanline. 
   
 - **Copper** and **Blitter**
 

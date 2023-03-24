@@ -6,574 +6,143 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Video Panel &#8212; vAmiga 2.2</title>
-    
-  <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-
-    
-  <link rel="stylesheet"
-    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
-
+    <title>Video Panel &#8212; vAmiga 2.4</title>
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    
-  <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+    <link rel="stylesheet" type="text/css" href="../../_static/insipid.css" />
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script defer src="../../_static/insipid.js"></script>
+    <script defer src="../../_static/insipid-sidebar.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Supported File Formats" href="../FileFormats.html" />
     <link rel="prev" title="Audio Panel" href="Audio.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="en">
-    
-
-    <!-- Google Analytics -->
-    
-  </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
-<!-- Checkboxes to toggle the left sidebar -->
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
-<label class="overlay overlay-navbar" for="__navigation">
-    <div class="visually-hidden">Toggle navigation sidebar</div>
-</label>
-<!-- Checkboxes to toggle the in-page toc -->
-<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
-<label class="overlay overlay-pagetoc" for="__page-toc">
-    <div class="visually-hidden">Toggle in-page Table of Contents</div>
-</label>
-<!-- Headers at the top -->
-<div class="announcement header-item noprint"></div>
-<div class="header header-item noprint"><img src="https://dirkwhoffmann.github.io/Moira/images/banner-va-2.jpg" width="100%" alt="Banner"></div>
-
-    
-    <div class="container-fluid" id="banner"></div>
-
-    
-
-    <div class="container-xl">
-      <div class="row">
-          
-<!-- Sidebar -->
-<div class="bd-sidebar noprint" id="site-navigation">
-    <div class="bd-sidebar__content">
-        <div class="bd-sidebar__top"><div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="../../index.html">
-      
-        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
-        
-      
-      
-      <img src="../../_static/icon.png" class="logo" alt="logo">
-      
-      
-    </a>
-</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item active">
-        <p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Overview
- </span>
-</p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../../Overview/About.html">
-   About
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Tutorials
- </span>
-</p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../../Tutorials/GettingStarted.html">
-   Getting Started
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../../Tutorials/Exploring.html">
-   Exploring the User Interface
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  How-to guides
- </span>
-</p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../../HowTo/MappingCmd.html">
-   Mapping the Command keys
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  References
- </span>
-</p>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../Preferences/index.html">
-   Emulator Settings
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../Preferences/General.html">
-     General Panel
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../Preferences/Controls.html">
-     Controls Panel
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../Preferences/Devices.html">
-     Devices Panel
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="index.html">
-   Virtual Machine Settings
-  </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2">
-    <a class="reference internal" href="Roms.html">
-     ROM Panel
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="Chipset.html">
-     Chipset Panel
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="Memory.html">
-     Memory Panel
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="Peripherals.html">
-     Peripherals Panel
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="Compatibility.html">
-     Compatibility Panel
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="Audio.html">
-     Audio Panel
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Video Panel
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../FileFormats.html">
-   Supported File Formats
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Developers Corner
- </span>
-</p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../../Developer/ClassHierarchy.html">
-   The Class Hierarchy
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../../Developer/ThreadClass.html">
-   The Thread Class
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../../Developer/RunLoop.html">
-   The Run Loop
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../../Developer/EventScheduler.html">
-   The Event Scheduler
-  </a>
- </li>
-</ul>
-
-    </div>
-</nav></div>
-        <div class="bd-sidebar__bottom">
-             <!-- To handle the deprecated key -->
-            
-            <div class="navbar_extra_footer">
-            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
-            </div>
-            
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+  </head><body>
+    <script type="text/javascript">
+        document.body.classList.add('js');
+    </script>
+    <input type="checkbox" id="sidebar-checkbox" style="display: none;">
+    <label id="overlay" for="sidebar-checkbox"></label>
+    <div class="sidebar-resize-handle"></div>
+    <script type="text/javascript">
+        try {
+            let sidebar = localStorage.getItem('sphinx-sidebar');
+            const sidebar_width = localStorage.getItem('sphinx-sidebar-width');
+            if (sidebar_width) {
+                document.documentElement.style.setProperty('--sidebar-width', sidebar_width);
+            }
+            // show sidebar on wide screen
+            if (!sidebar && window.matchMedia('(min-width: 0)').matches) {
+                sidebar = 'visible';
+                // NB: We don't store the value in localStorage!
+            }
+            if (sidebar === 'visible') {
+                document.getElementById('sidebar-checkbox').checked = true;
+            }
+        } catch(e) {
+            console.info(e);
+        }
+    </script>
+    <header id="topbar-placeholder">
+      <div id="topbar">
+        <div id="titlebar">
+          <div class="buttons">
+            <label for="sidebar-checkbox" id="sidebar-button" role="button" tabindex="0" aria-controls="sphinxsidebar" accesskey="M">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg>
+            </label>
+            <button id="search-button" type="button" title="Search" aria-label="Search" aria-expanded="false" aria-controls="search-form" accesskey="S">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+            </button>
+          </div>
+          <div class="title">
+            <a class="parent" href="index.html" accesskey="U">Virtual Machine Settings</a>
+            <a class="top" href="#">Video Panel</a>
+          </div>
+          <div class="buttons">
+            <button id="fullscreen-button" type="button" aria-hidden="true">
+              <span class="enable">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M212.686 315.314L120 408l32.922 31.029c15.12 15.12 4.412 40.971-16.97 40.971h-112C10.697 480 0 469.255 0 456V344c0-21.382 25.803-32.09 40.922-16.971L72 360l92.686-92.686c6.248-6.248 16.379-6.248 22.627 0l25.373 25.373c6.249 6.248 6.249 16.378 0 22.627zm22.628-118.628L328 104l-32.922-31.029C279.958 57.851 290.666 32 312.048 32h112C437.303 32 448 42.745 448 56v112c0 21.382-25.803 32.09-40.922 16.971L376 152l-92.686 92.686c-6.248 6.248-16.379 6.248-22.627 0l-25.373-25.373c-6.249-6.248-6.249-16.378 0-22.627z"/></svg>
+              </span>
+              <span class="disable">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M4.686 427.314L104 328l-32.922-31.029C55.958 281.851 66.666 256 88.048 256h112C213.303 256 224 266.745 224 280v112c0 21.382-25.803 32.09-40.922 16.971L152 376l-99.314 99.314c-6.248 6.248-16.379 6.248-22.627 0L4.686 449.941c-6.248-6.248-6.248-16.379 0-22.627zM443.314 84.686L344 184l32.922 31.029c15.12 15.12 4.412 40.971-16.97 40.971h-112C234.697 256 224 245.255 224 232V120c0-21.382 25.803-32.09 40.922-16.971L296 136l99.314-99.314c6.248-6.248 16.379-6.248 22.627 0l25.373 25.373c6.248 6.248 6.248 16.379 0 22.627z"/></svg>
+              </span>
+            </button>
+          </div>
         </div>
-    </div>
-    <div id="rtd-footer-container"></div>
-</div>
-
-
-          
-
-
-          
-<!-- A tiny helper pixel to detect if we've scrolled -->
-<div class="sbt-scroll-pixel-helper"></div>
-<!-- Main content -->
-<div class="col py-0 content-container">
-    
-    <div class="header-article row sticky-top noprint">
-        
-
-
-
-<div class="col py-1 d-flex header-article-main">
-    <div class="header-article__left">
-        
-        <label for="__navigation"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="right"
-title="Toggle navigation"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-bars"></i>
-  </span>
-
-</label>
-
-        
-    </div>
-    <div class="header-article__right">
-<button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-expand"></i>
-  </span>
-
-</button>
-<a href="https://dirkwhoffmann.github.io/vAmiga/"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="bottom"
-title="Source repository"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fab fa-github"></i>
-  </span>
-
-</a>
-
-<div class="menu-dropdown menu-dropdown-download-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Download this page">
-      <i class="fas fa-download"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="../../_sources/References/Configuration/Video.md.txt"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Download source file"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file"></i>
-  </span>
-<span class="headerbtn__text-container">.md</span>
-</a>
-
-      </li>
-      
-      <li>
-        
-<button onclick="printPdf(this)"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="left"
-title="Print to PDF"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-file-pdf"></i>
-  </span>
-<span class="headerbtn__text-container">.pdf</span>
-</button>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
-</label>
-
-    </div>
-</div>
-
-<!-- Table of contents -->
-<div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
-    </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#monitor">
-   Monitor
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#palette">
-     Palette
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#zoom">
-     Zoom
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#center">
-     Center
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#refresh">
-     Refresh
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#effects">
-   Effects
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#upscaling">
-     Upscaling
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#scanlines">
-     Scanlines
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dot-mask">
-     Dot Mask
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#flicker">
-     Flicker
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#blur">
-     Blur
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#bloom">
-     Bloom
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rays">
-     Rays
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
-
+        <div id="searchbox" role="search">
+          <form id="search-form" class="search" style="display: none" action="../../search.html" method="get">
+            <input type="search" name="q" placeholder="Search ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <button>Go</button>
+          </form>
+        </div>
+      </div>
+    </header>
+    <nav>
+      <a href="Audio.html" class="nav-icon previous" title="previous:&#13;Audio Panel" aria-label="Previous topic" accesskey="P" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"/></svg>
+      </a>
+      <a href="../FileFormats.html" class="nav-icon next" title="next:&#13;Supported File Formats" aria-label="Next topic" accesskey="N" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"/></svg>
+      </a>
     </nav>
-</div>
-    </div>
-    <div class="article row">
-        <div class="col pl-md-3 pl-lg-5 content-container">
-            <!-- Table of contents that is only displayed when printing the page -->
-            <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Video Panel</h1>
-                <!-- Table of contents -->
-                <div id="print-main-content">
-                    <div id="jb-print-toc">
-                        
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#monitor">
-   Monitor
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#palette">
-     Palette
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#zoom">
-     Zoom
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#center">
-     Center
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#refresh">
-     Refresh
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#effects">
-   Effects
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#upscaling">
-     Upscaling
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#scanlines">
-     Scanlines
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dot-mask">
-     Dot Mask
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#flicker">
-     Flicker
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#blur">
-     Blur
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#bloom">
-     Bloom
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rays">
-     Rays
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
 
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            <main id="main-content" role="main">
-                
-              <div>
-                
-  <section id="video-panel">
-<h1>Video Panel<a class="headerlink" href="#video-panel" title="Permalink to this heading">#</a></h1>
+    <nav class="relbar">
+      <a class="previous" href="Audio.html" aria-label="Previous topic" >
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M257.5 445.1l-22.2 22.2c-9.4 9.4-24.6 9.4-33.9 0L7 273c-9.4-9.4-9.4-24.6 0-33.9L201.4 44.7c9.4-9.4 24.6-9.4 33.9 0l22.2 22.2c9.5 9.5 9.3 25-.4 34.3L136.6 216H424c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24H136.6l120.5 114.8c9.8 9.3 10 24.8.4 34.3z"/></svg>
+        </div>
+        <div class="title">
+          <span class="text">
+            <span class="direction">previous</span>
+            Audio Panel
+          </span>
+        </div>
+      </a>
+      <a class="next" href="../FileFormats.html" aria-label="Next topic" >
+        <div class="title">
+          <span class="text">
+            <span class="direction">next</span>
+            Supported File Formats
+          </span>
+        </div>
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"/></svg>
+        </div>
+      </a>
+    </nav>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+<section id="video-panel">
+<h1>Video Panel<a class="headerlink" href="#video-panel" title="Permalink to this heading">¶</a></h1>
 <p>Use this panel to change the video settings. The Video panel is divided into two sub-panels: The <em>Screen panel</em> and the <em>Effects panel</em>. In the first one we can control basic image properties, the visible screen area and sync mode. The second panel allows us to fine-tune the shader pipeline. It allows us to configure various effects that try to mimic the look and feel of a CRT monitor from back in the day.</p>
 <section id="monitor">
-<h2>Monitor<a class="headerlink" href="#monitor" title="Permalink to this heading">#</a></h2>
+<h2>Monitor<a class="headerlink" href="#monitor" title="Permalink to this heading">¶</a></h2>
 <p><img alt="Video Panel" src="../../_images/videoPanel.png" /></p>
 <section id="palette">
-<h3>Palette<a class="headerlink" href="#palette" title="Permalink to this heading">#</a></h3>
+<h3>Palette<a class="headerlink" href="#palette" title="Permalink to this heading">¶</a></h3>
 <p>This option is used to select the monitor type. Besides emulating a color monitor, which is the default option, different types of monochrome monitors can be emulated, such as amber or green monitors. As with a real monitor from back in the day, you can set three parameters that affect the color palette: <em>brightness</em>, <em>contrast</em>, and <em>color</em>.</p>
 <p>The following screenshot shows how vAmiga looks on a monochrome monitor with a sepia color:</p>
 <p><img alt="Sepia" src="../../_images/sepia.png" /></p>
 </section>
 <section id="zoom">
-<h3>Zoom<a class="headerlink" href="#zoom" title="Permalink to this heading">#</a></h3>
+<h3>Zoom<a class="headerlink" href="#zoom" title="Permalink to this heading">¶</a></h3>
 <p>The zoom level defines the visible screen area and can be changed manually for the horizontal and vertical axis. The drop-down menu provides some predefined values from which you can choose.</p>
 </section>
 <section id="center">
-<h3>Center<a class="headerlink" href="#center" title="Permalink to this heading">#</a></h3>
+<h3>Center<a class="headerlink" href="#center" title="Permalink to this heading">¶</a></h3>
 <p>While the zoom level defines the dimensions of the visible screen area, the two centering parameters determine the position of the center point. Please note that changing these parameters has no effect if the zoom level is zero. In this case, the visible screen area corresponds to the entire texture, which makes it impossible to move the center point.</p>
 </section>
 <section id="refresh">
-<h3>Refresh<a class="headerlink" href="#refresh" title="Permalink to this heading">#</a></h3>
+<h3>Refresh<a class="headerlink" href="#refresh" title="Permalink to this heading">¶</a></h3>
 <p>vAmiga supports two methods for synchronizing the emulator thread. The default method is based on timers. In this mode the emulator puts itself to sleep after a single frame has been computed. When the thread wakes up, the next frame is computed and so on. This method is the most flexible, as it supports arbitrary frame rates. I.e. vAmiga computes 50 frames per second in PAL mode and 60 frames per second in NTSC mode. However, there is a problem associated with this method. Since the emulator thread is not synchronized with the graphic loop, it may happen that some frames are either dropped or displayed twice.</p>
 <p>In video games, a common workaround is to have the graphic loop trigger the image calculation. This method is usually called VSYNC because the image provider and the graphic loop no longer work independently. When VSYNC is enabled in vAmiga, something similar happens. The emulator thread no longer sets a timer to wake up the emulator thread. Instead, it waits for a wake-up signal from the graphic backend. The result is that the number of images requested exactly matches the number of images drawn. However, this method has its pitfalls, too. Since a modern TFT display normally updates at 60Hz, vAmiga is asked to calculate 60 frames per second. This is fine for NTSC, but not for PAL. If a PAL machine is emulated in this mode, it will run slightly faster than the original machine.</p>
 <p>However, with modern Macs, this problem is easily solved. With the introduction of ProMotion technology, Macs can be configured to operate at user-defined refresh rates. On such machines, the default refresh rate can be lowered to 50 Hz in the system settings. As a result, the Amiga runs at its original speed again.</p>
@@ -581,18 +150,18 @@ title="Print to PDF"
 </section>
 </section>
 <section id="effects">
-<h2>Effects<a class="headerlink" href="#effects" title="Permalink to this heading">#</a></h2>
+<h2>Effects<a class="headerlink" href="#effects" title="Permalink to this heading">¶</a></h2>
 <p>vAmiga utilizes a sophisticated graphic pipeline that allows the emulator texture to be manipulated in various ways.</p>
 <p><img alt="Effects Panel" src="../../_images/effectsPanel.png" /></p>
 <section id="upscaling">
-<h3>Upscaling<a class="headerlink" href="#upscaling" title="Permalink to this heading">#</a></h3>
+<h3>Upscaling<a class="headerlink" href="#upscaling" title="Permalink to this heading">¶</a></h3>
 <p>The GPU pipeline of vAmiga includes two pixel upscaling stages. In the first stage, in-texture upscaling is performed to all lores lines. In this stage, the texture size remains unchanged. The second stage is a more traditional upscaling stage where the texture size is doubled. The selected upscaling algorithm is applied to both lores and hires pixels.</p>
 <p>For each stage, the upscaling algorithm can be selected independently. Currently vAmiga supports the EPX and xBR upscaling algorithms. If upscaling is not desired, one or both stages can be disabled.</p>
 <p><img alt="Original image" src="../../_images/defenderOriginal.png" />
 <img alt="Upscaled image" src="../../_images/defenderUpscaled.png" /></p>
 </section>
 <section id="scanlines">
-<h3>Scanlines<a class="headerlink" href="#scanlines" title="Permalink to this heading">#</a></h3>
+<h3>Scanlines<a class="headerlink" href="#scanlines" title="Permalink to this heading">¶</a></h3>
 <p>Three scanline modes are supported: <em>None</em>, <em>Embedded</em> and <em>Superimposed</em>.</p>
 <ul>
 <li><p><strong>Embedded Scanline Mode</strong></p>
@@ -602,34 +171,30 @@ title="Print to PDF"
 <p>In this mode, scanlines are generated by the fragment shader. The fragment shader is applied very late in the graphic pipeline and already working on the final texture. As a result, Moiré effects are no longer possible. A disadvantage of this method is that the dimensions of the scanlines are now independent of the height of the emulator window. This means that the number of displayed scanlines does no longer match the number of scanline we would see on a real CRT monitor.</p>
 <p><img alt="Original image" src="../../_images/defenderOriginal.png" />
 <img alt="Scanlines" src="../../_images/defenderScanlines.png" /></p>
-</li>
-</ul>
-</section>
-<section id="dot-mask">
-<h3>Dot Mask<a class="headerlink" href="#dot-mask" title="Permalink to this heading">#</a></h3>
+<h3 class="rubric" id="dot-mask">Dot Mask</h3>
 <p>vAmiga can emulate various dot mask patterns to emulate the small red, green and blue dots used by a real CRT monitor to compose the image.</p>
 <p><img alt="Original image" src="../../_images/defenderOriginal.png" />
 <img alt="Dot Mask" src="../../_images/defenderDotMask.png" /></p>
-</section>
-<section id="flicker">
-<h3>Flicker<a class="headerlink" href="#flicker" title="Permalink to this heading">#</a></h3>
+<h3 class="rubric" id="flicker">Flicker</h3>
 <p>PAL or NTSC screens are designed to transmit the image in the form of 50 or 60 fields per second. A picture consists of two fields, one containing all even lines and the other containing all odd lines. This results in an output rate of 25 frames for PAL and 30 frames for NTSC. In the default display modes, the Amiga uses the same pixel information for both fields, resulting in a stable picture at 50 or 60 Hz. However, the Amiga had the ability to double the vertical resolution by using different images for both fields. These modes are called interlace modes. Since both images only repeat 25 or 30 times per second, the image flickers for the human eye. vAmiga is able to emulate flickering in different intensities.</p>
 <p>Back in the day, <em>Flicker Fixer</em> was a popular, albeit expensive, product. By buffering the video image, it managed to produce a smooth picture at twice the vertical resolution. To mimic what Flicker Fixer did back then, simply disable flicker emulation in vAmiga.</p>
+</li>
+</ul>
 </section>
 <section id="blur">
-<h3>Blur<a class="headerlink" href="#blur" title="Permalink to this heading">#</a></h3>
+<h3>Blur<a class="headerlink" href="#blur" title="Permalink to this heading">¶</a></h3>
 <p>When this option is enabled, vAmiga adds another stage to the graphics pipeline that applies a Gaussian blur filter to the upscaled image.</p>
 <p><img alt="Original image" src="../../_images/defenderOriginal.png" />
 <img alt="Blur" src="../../_images/defenderBlur.png" /></p>
 </section>
 <section id="bloom">
-<h3>Bloom<a class="headerlink" href="#bloom" title="Permalink to this heading">#</a></h3>
+<h3>Bloom<a class="headerlink" href="#bloom" title="Permalink to this heading">¶</a></h3>
 <p>When a bright object is displayed on a dark background, the white light spreads out a bit when displayed on a CRT monitor. As a result, the object looks as if it was slightly glowing. This effect is called <em>blooming</em>. By activating this option, vAmiga will try to reproduce this effect.</p>
 <p><img alt="Original image" src="../../_images/defenderOriginal.png" />
 <img alt="Bloom" src="../../_images/defenderBloom.png" /></p>
 </section>
 <section id="rays">
-<h3>Rays<a class="headerlink" href="#rays" title="Permalink to this heading">#</a></h3>
+<h3>Rays<a class="headerlink" href="#rays" title="Permalink to this heading">¶</a></h3>
 <p>A CRT tube uses three separate electron beams, one for each color channel. Each beam produces a separate image on the phosphor layer. When the electron beams are aligned, the color layers appear to be stacked precisely on top of each other and produce a crisp image. If the electron beams get misaligned, color artifacts occur because the three color layers are now shifted against each other. vAmiga can emulate this effect with varying intensity.</p>
 <p><img alt="Original image" src="../../_images/defenderOriginal.png" />
 <img alt="Misaligned" src="../../_images/defenderMisaligned.png" /></p>
@@ -637,51 +202,88 @@ title="Print to PDF"
 </section>
 </section>
 
-
-              </div>
-              
-            </main>
-            <footer class="footer-article noprint">
-                
-    <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="Audio.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Audio Panel</p>
+            <div class="clearer"></div>
+          </div>
         </div>
-    </a>
-    <a class='right-next' id="next-link" href="../FileFormats.html" title="next page">
-    <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Supported File Formats</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
-    </a>
-</div>
-            </footer>
-        </div>
-    </div>
-    <div class="footer-content row">
-        <footer class="col footer"><p>
-  
-    By Dirk W. Hoffmann<br/>
-  
-      &copy; Copyright 2022, Dirk W. Hoffmann.<br/>
-</p>
-        </footer>
-    </div>
-    
-</div>
-
-
       </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/icon.png" alt="Logo"/>
+            </a></p>
+          <div class="sidebar-resize-handle"></div>
+
+<h3><a href="../../index.html">Table of Contents</a></h3>
+<p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Overview/About.html">About</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Tutorials/GettingStarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Tutorials/Exploring.html">Exploring the User Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">How-to guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../HowTo/MappingCmd.html">Mapping the Command keys</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Preferences/index.html">Emulator Settings</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Virtual Machine Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FileFormats.html">Supported File Formats</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers Corner</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer/ClassHierarchy.html">The Class Hierarchy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer/ThreadClass.html">The Thread Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer/MessageQueue.html">The Message Queue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer/RunLoop.html">The Run Loop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer/EventScheduler.html">The Event Scheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer/SuperHires.html">SuperHires mode</a></li>
+</ul>
+
+<div><hr class="docutils"></div>
+<ul>
+  <li class="toctree-l1"><a class="reference internal" href="../../genindex.html" accesskey="I">General Index</a></li>
+</ul>
+<div id="ethical-ad-placement"></div>
+        </div>
+      </div>
+      <div class="clearer"></div>
     </div>
-  
-  <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
 
+    <nav class="relbar">
+      <a class="previous" href="Audio.html" aria-label="Previous topic" >
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M257.5 445.1l-22.2 22.2c-9.4 9.4-24.6 9.4-33.9 0L7 273c-9.4-9.4-9.4-24.6 0-33.9L201.4 44.7c9.4-9.4 24.6-9.4 33.9 0l22.2 22.2c9.5 9.5 9.3 25-.4 34.3L136.6 216H424c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24H136.6l120.5 114.8c9.8 9.3 10 24.8.4 34.3z"/></svg>
+        </div>
+        <div class="title">
+          <span class="text">
+            <span class="direction">previous</span>
+            Audio Panel
+          </span>
+        </div>
+      </a>
+      <a class="next" href="../FileFormats.html" aria-label="Next topic" >
+        <div class="title">
+          <span class="text">
+            <span class="direction">next</span>
+            Supported File Formats
+          </span>
+        </div>
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"/></svg>
+        </div>
+      </a>
+    </nav>
 
+    <footer role="contentinfo">
+      &#169; Copyright 2023, Dirk W. Hoffmann.
+      Created using <a class="reference external" href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+      <a class="reference external" href="https://insipid-sphinx-theme.readthedocs.io/">Insipid Theme</a>.
+<a class="reference internal" href="../../_sources/References/Configuration/Video.md.txt" rel="nofollow">Show Source</a>.
+    </footer>
   </body>
 </html>

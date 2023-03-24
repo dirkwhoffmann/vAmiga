@@ -31,4 +31,5 @@ With the help of a USB retro adapter you can also connect original Commodore joy
 - aJoy Retro Adapter
 - RetroFun! Joystick Adapter
 
-My personal recommendation is to invest in the Competition Pro SL-650212. It has lower latency than its predecessor, the SL-6602, and offers the best retro experience in my opinion. Also, I can recommend using an original Competition Pro from back in the day in combination with the RetroFun!
+My personal recommendation is to invest in the Competition Pro SL-650212. It has lower latency than its predecessor, the SL-6602, and offers the best retro experience in my opinion. Also, I can recommend using an original Competition Pro from back in the day in combination with the RetroFun! joystick adapter.
+
