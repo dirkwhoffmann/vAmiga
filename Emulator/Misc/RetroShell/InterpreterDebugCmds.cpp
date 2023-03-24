@@ -388,7 +388,7 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
-        retroShell.dump(amiga, Category::State);
+        retroShell.dump(amiga, { Category::Config, Category::State } );
     });
 
 
@@ -400,7 +400,7 @@ Interpreter::initDebugShell(Command &root)
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
-        retroShell.dump(mem, Category::State);
+        retroShell.dump(mem, { Category::Config, Category::State } );
     });
 
     root.add({"memory", "dump"}, { Arg::address },
@@ -645,9 +645,7 @@ Interpreter::initDebugShell(Command &root)
 
         if (auto board = zorro.getBoard(nr); board != nullptr) {
 
-            retroShell.dump(*board, Category::Properties);
-            retroShell.dump(*board, Category::State);
-            retroShell.dump(*board, Category::Stats);
+            retroShell.dump(*board, { Category::Properties, Category::State, Category::Stats } );
         }
     });
 
