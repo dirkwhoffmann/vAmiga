@@ -29,7 +29,7 @@ The two buttons in the *Preferences* section let us configure vAmiga. The left b
 
 ![Preferences](images/generalPanel.png "Preferences")
 
-All available options are described in a separate document. For the purpose of this tutorial, we do not need to change anything here and can proceed to the next point right away. 
+All available options are described in a separate document. For the purpose of this tutorial, we do not need to change anything here and can proceed to the next option right away. 
 
 The right button opens the Configuration window where the virtual machine is configured. The options are organized in tabs, similar to the emulator settings window. You are already familiar with the first tab if you have read the *Getting started* tutorial. It is the tab where the ROM of the Amiga is configured.
 
@@ -41,9 +41,9 @@ All available options are described in a separate document. Please note that all
 
 ![Toolbar](images/toolbar3.png "Toolbar")
 
-Although the Amiga is quite an aged computer by now, it already utilized a keyboard whose layout was quite similar to the ones used today. Therefore, in vAmiga you will be using the native Mac keyboard for typing, and for most Amiga keys you will find a perfect match on your native keyboard. However, there are exceptions. For example, the Amiga is equipped with a special help key that has no direct counterpart on the Mac keyboard. Also, some Mac keys are directly linked to operating system actions, which affects emulation. The most prominent examples are the two Command keys that are used to trigger operating system actions.
+Although the Amiga is quite an aged computer by now, it already utilized a keyboard whose layout was quite similar to the ones used today. Therefore, in vAmiga you will be using the native Mac keyboard for typing, and for most Amiga keys you will find a perfect match on your native keyboard. However, there are exceptions. For example, the Amiga is equipped with a special *Help* key that has no direct counterpart on the Mac keyboard. Also, some Mac keys are directly linked to operating system actions, which affects emulation. The most prominent examples are the two Command keys that are used to trigger operating system actions.
 
-In cases where you need to press a key that is not directly accessible from your native keyboard. If you click the corresponding icon in the toolbar, the virtual keyboard will open as a sheet on top of the emulator window:
+In cases where you need to press a key that is not directly accessible from your native keyboard, the virtual keyboard can be used. If you click the corresponding icon in the toolbar, the virtual keyboard will open as a sheet on top of the emulator window:
 
 ![Virtual keyboard](images/virtualKeyboard.png "Virtual keyboard")
 
@@ -77,7 +77,7 @@ The three toolbar icons in this section can be used to manage snapshots. Snapsho
 
 ![Toolbar](images/toolbar5.png "Toolbar")
 
-- The left button creates a snapshot and puts it in the snapshot storage.
+- The left button creates a snapshot and adds it to the snapshot storage.
 - The middle button reverts to the emulator state recorded in the most recent snapshot. 
 - The right button opens the snapshot browser.
 

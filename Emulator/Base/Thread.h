@@ -115,8 +115,8 @@ namespace vamiga {
  *
  *   In periodic mode the thread puts itself to sleep and utilizes a timer to
  *   schedule a wakeup call. In this mode, no further action has to be taken
- *   by the GUI. This method was the default mode used by vAmiga up to version
- *   2.3.
+ *   by the GUI. This method had been the default mode used by vAmiga up to
+ *   version 2.3.
  *
  * - Pulsed:
  *

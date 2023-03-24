@@ -1,10 +1,10 @@
 # The Run Loop
 
-In this document we will examine how vAmiga calculates a single frame. If you've studied the document about the `Thread` class, you already know that the calculation of a single frame is triggered within the threads main execution function. When the thread is running in *periodic* mode, the following function is executed:
+In this document we will examine how vAmiga calculates a single frame. If you've studied the document about the `Thread` class, you already know that the calculation of a single frame is triggered within the threads main execution function. E.g., when the thread is running in *pulsed* mode, the following function is executed:
 
 ```c++
 template <> void
-Thread::execute<Thread::SyncMode::Periodic>()
+Thread::execute<THREAD_PULSED>()
 {
     loadClock.go();
     execute();
@@ -12,7 +12,7 @@ Thread::execute<Thread::SyncMode::Periodic>()
 }
 ```
 
-The `loadClock` is used to measure the CPU load. All the action takes place in function `execute`, which is declared as a pure virtual function inside the `Thread` class:
+The `loadClock` object is used to measure the CPU load. All the action takes place in function `execute`, which is declared as a pure virtual function inside the `Thread` class:
 
 ```c++
 virtual void execute() = 0;
@@ -49,18 +49,16 @@ The function enters an infinite loop, which we refer to as the `run loop`. The i
 namespace RL
 {
 constexpr u32 STOP               = (1 << 0);
-constexpr u32 WARP_ON            = (1 << 1);
-constexpr u32 WARP_OFF           = (1 << 2);
-constexpr u32 SOFTSTOP_REACHED   = (1 << 3);
-constexpr u32 BREAKPOINT_REACHED = (1 << 4);
-constexpr u32 WATCHPOINT_REACHED = (1 << 5);
-constexpr u32 CATCHPOINT_REACHED = (1 << 6);
-constexpr u32 SWTRAP_REACHED     = (1 << 7);
-constexpr u32 COPPERBP_REACHED   = (1 << 8);
-constexpr u32 COPPERWP_REACHED   = (1 << 9);
-constexpr u32 AUTO_SNAPSHOT      = (1 << 10);
-constexpr u32 USER_SNAPSHOT      = (1 << 11);
-constexpr u32 SYNC_THREAD        = (1 << 12);
+constexpr u32 SOFTSTOP_REACHED   = (1 << 1);
+constexpr u32 BREAKPOINT_REACHED = (1 << 2);
+constexpr u32 WATCHPOINT_REACHED = (1 << 3);
+constexpr u32 CATCHPOINT_REACHED = (1 << 4);
+constexpr u32 SWTRAP_REACHED     = (1 << 5);
+constexpr u32 COPPERBP_REACHED   = (1 << 6);
+constexpr u32 COPPERWP_REACHED   = (1 << 7);
+constexpr u32 AUTO_SNAPSHOT      = (1 << 8);
+constexpr u32 USER_SNAPSHOT      = (1 << 9);
+constexpr u32 SYNC_THREAD        = (1 << 10);
 };
 ```
 

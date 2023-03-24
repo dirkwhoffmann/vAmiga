@@ -6,11 +6,11 @@ This document describes the basic software architecture of vAmiga. The emulator 
 
 The most prominent class is the `Amiga` class, as each instance of this class represents a complete virtual Amiga. The class inherits from three other classes: 
 
-- `AmigaObject`
+- `CoreObject`
 
   This class encapsulates some common functionalities that are useful for most classes in the vAmiga universe. For example, it provides the API functions for printing debug messages.
 
-- `AmigaComponent`
+- `CoreComponent`
 
   This class defines functionalities shared by all classes representing a hardware component. It includes functions to initialize, configure, and serialize objects, as well as functions to power on, power off, run, and pause.
 

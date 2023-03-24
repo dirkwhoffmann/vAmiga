@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'vAmiga'
-copyright = '2022, Dirk W. Hoffmann'
+copyright = '2023, Dirk W. Hoffmann'
 author = 'Dirk W. Hoffmann'
 
 # -- General configuration ---------------------------------------------------
@@ -29,16 +29,16 @@ source_suffix = ['.rst', '.md']
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'karma_sphinx_theme'
-#html_theme = 'sphinx_rtd_theme'
-html_theme = 'sphinx_book_theme'
+html_theme = 'insipid'
 html_theme_options = {
-    "repository_url": "https://dirkwhoffmann.github.io/vAmiga/",
-    "repository_provider": "GitHub",
-#    "use_repository_button": True,
-#    "logo_only": True,
+    'initial_sidebar_visibility_threshold': 0,
+    'breadcrumbs': False,
 }
+#html_sidebars = {
+#   '**': ['globaltoc.html', 'sourcelink.html', 'searchbox.html'],
+#   'using/windows': ['windowssidebar.html', 'searchbox.html'],
+#}
 html_logo = "images/icon.png"
-html_title = "vAmiga 2.2"
-html_static_path = ["_static"]
+html_title = "vAmiga 2.4"
+#html_static_path = ["_static"]
 #html_css_files = ["custom.css"]

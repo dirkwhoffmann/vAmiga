@@ -4,13 +4,17 @@ In this document we will take a closer look at the `Thread` class, which adds co
 
 ![Thread class](images/classHierarchyThread.png "Thread class")
 
-As soon as an instance of the `Amiga` class is created, an emulator thread is spawned in the constructor:
+Creating an emulator instance comprises two steps:
+
+- Creating an instance of the `Amiga` class.
+- Calling `Amiga::launch()`. 
+
+Inside `Amiga::launch()`, an emulator thread is spawned in the constructor:
 
 ```c++
-Amiga::Amiga()
+Amiga::launch()
 {
     ...
-    // Start the thread and enter the main function
     thread = std::thread(&Thread::main, this);
     ...
 }
@@ -26,40 +30,65 @@ After the thread has been created, it starts executing the `Thread::main` functi
 void
 Thread::main()
 {    
+    ...
     while (++loopCounter) {
 
         if (isRunning()) {
                         
-            switch (getSyncMode()) {
+            switch (getThreadMode()) {
 
-                case SyncMode::Periodic: execute<SyncMode::Periodic>(); break;
-                case SyncMode::Pulsed: execute<SyncMode::Pulsed>(); break;
+                case THREAD_PERIODIC:   execute<THREAD_PERIODIC>(); break;
+                case THREAD_PULSED:     execute<THREAD_PULSED>(); break;
+                case THREAD_ADAPTIVE:   execute<THREAD_ADAPTIVE>(); break;
             }
         }
                 
         if (!warpMode || !isRunning()) {
             
-            switch (getSyncMode()) {
+            switch (getThreadMode()) {
 
-                case SyncMode::Periodic: sleep<SyncMode::Periodic>(); break;
-                case SyncMode::Pulsed: sleep<SyncMode::Pulsed>(); break;
+                case THREAD_PERIODIC:   sleep<THREAD_PERIODIC>(); break;
+                case THREAD_PULSED:     sleep<THREAD_PULSED>(); break;
+                case THREAD_ADAPTIVE:   sleep<THREAD_ADAPTIVE>(); break;
             }
         } 
 
+        if (stateChangeRequest.test()) {
+
+            switchState(newState);
+            stateChangeRequest.clear();
+            stateChangeRequest.notify_one();
+
+            if (state == EXEC_HALTED) return;
+        }
         ...       
     }
 }
 ```
 
-Because the thread is never terminated, the loop is executed during the entire lifetime of the application. Within the loop body, two switch-case blocks can be spotted. The first one is executed as long as the emulator is running and calls one of two possible functions, depending on the operation mode of the thread. Both functions emulate the Amiga for a single frame. The second switch-case block is executed when the emulator is not running in warp mode. Within this block, one of two synchronization functions is called, again depending on the selected operation mode. The purpose of these functions is to keep the thread running at the right pace. That is, they ensure that the functions are called 50 times per second for PAL machines and 60 times per second for NTSC machines.
+Because the thread is never terminated, the loop is executed during the entire lifetime of the application. Within the loop body, two switch-case blocks can be spotted. The first one is executed as long as the emulator is running and calls one of three possible functions, depending on the operation mode of the thread. Both functions emulate the Amiga for a single frame. The second switch-case block is executed when the emulator is not running in warp mode. Within this block, one of three synchronization functions is called, again depending on the selected operation mode. The purpose of these functions is to keep the thread running at the right pace. That is, they ensure that the functions are called 50 times per second for PAL machines and 60 times per second for NTSC machines.
 
-Two synchronization modes are available: *Periodic* and *Pulsed*.
+Three synchronization modes are available: *Periodic*, *Pulsed*, and *Adaptive*.
 ```c++
-enum class SyncMode { Periodic, Pulsed };
+enum_long(THREAD_MODE)
+{
+    THREAD_PERIODIC,
+    THREAD_PULSED,
+    THREAD_ADAPTIVE
+};
+typedef THREAD_MODE ThreadMode;
 ```
-In *periodic mode* the thread puts itself to sleep and utilizes a timer to schedule a wakeup call. This method is the default mode for vAmiga, as it supports arbitrary frame rates. 
+- `THREAD_PERIODIC`:
+  
+  In periodic mode the thread puts itself to sleep and utilizes a timer to schedule a wakeup call. In this mode, no further action has to be taken by the GUI. This method had been the default mode used by vAmiga up to version 2.3.
 
-In *pulsed mode*, the synchronization function waits for an external wake-up signal. vAmiga uses this mode when VSYNC is enabled. In this case the external signal is sent from the graphics backend. 
+- `THREAD_PULSED`
+  
+  In pulsed mode, the thread waits for an external wake-up signal that has to be sent by the GUI. When the wake-up signal is received, a single frame is computed. vAmiga uses this mode to implement VSYNC.
+
+- `THREAD_ADAPTIVE`:
+  
+  In adaptive mode, the thread waits for an external wake-up signal just as it does in pulsed mode. When the wake-up signal comes in, the thread computes the number of missing frames based on the current time and the time the thread had been lauchen. Then it executes all missing frames or resynchronizes if the number of missing frames is way off. Adaptive mode has been introduced in vAmiga 2.4. It has become the new default mode since then.
 
 ## State model
 
@@ -103,38 +132,32 @@ It is safe to nest multiple suspend-resume blocks, but it is essential that each
 ```
 To speed up emulation, e.g. during disk accesses, the emulator may be put into *warp mode*, which is also handled by the `Thread` class. As you have seen in the code fragment of the `Thread::main()` function, neither of the two synchronization functions is called when warp mode is active.
 
-Similar to warp mode, the emulator can be put into *debug mode*. This mode is activated when the GUI debugger is opened and deactivated when the debugger is closed. In debug mode, several time-consuming tasks are performed that are normally skipped. For example, the CPU keeps track of all executed instructions and stores the recorded information in a trace buffer.
+Similar to warp mode, the emulator can be put into *track mode*. This mode is activated when the GUI debugger is opened and deactivated when the debugger is closed. In track mode, several time-consuming tasks are performed that are normally skipped. For example, the CPU keeps track of all executed instructions and stores the recorded information in a trace buffer.
 
-The `Thread` class provides several API functions for changing state such as `powerOn()`, `powerOff()`, `run()`, `pause()` or `halt()`. These functions request the thread to change state by assigning the new state to the variable `newState`. The `main` function checks this variable in each iteration of the `while` loop and performs a state change when necessary. The corresponding code is not visible in the code snippet above. It hides behind the three dots (`...`) and looks like this:
+The `Thread` class provides several API functions for changing state such as `powerOn()`, `powerOff()`, `run()`, `pause()` or `halt()`. These functions request the thread to change state by setting the following variable to `true`: 
+ ```c++
+ std::atomic_flag stateChangeRequest;
+ ```
+As you may have already seen in the code snippet above, the `main` function checks this variable in each iteration of the `while` loop and performs a state change when necessary. The implementation of function `switchState` looks like this:
 ```c++
-        // Are we requested to enter or exit warp mode?
-        if (newWarpMode != warpMode) {
-            
-            AmigaComponent::warpOnOff(newWarpMode);
-            warpMode = newWarpMode;
+    while (newState != state) {
+
+        if (state == EXEC_OFF && newState == EXEC_PAUSED) {
+
+            CoreComponent::powerOn();
+            state = EXEC_PAUSED;
+
+        } else if (state == EXEC_OFF && newState == EXEC_RUNNING) {
+
+            CoreComponent::powerOn();
+            state = EXEC_PAUSED;
+       
+        } ...
+        
+        } else if (newState == EXEC_HALTED) {
+
+            CoreComponent::halt();
+            state = EXEC_HALTED;
         }
-
-        // Are we requested to enter or exit warp mode?
-        if (newDebugMode != debugMode) {
-            
-            AmigaComponent::debugOnOff(newDebugMode);
-            debugMode = newDebugMode;
-        }
-
-        // Are we requested to change state?
-        while (newState != state) {
-            
-            if (state == EXEC_OFF && newState == EXEC_PAUSED) {
-                
-                AmigaComponent::powerOn();
-                state = EXEC_PAUSED;
-
-            } else if (state == EXEC_OFF && newState == EXEC_RUNNING) {
-
-                AmigaComponent::powerOn();
-                state = EXEC_PAUSED;
-            
-            }
-            ...
-        }
+    }
 ```

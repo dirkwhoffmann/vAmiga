@@ -6,7 +6,7 @@ The integration of SuperHires mode into vAmiga was driven by three design goals:
 
 - **Customizable texture size**
 
-  Early versions of vAmiga generated a GPU texture in Hires resolution, meaning that each Hires pixel on the Amiga side corresponded to a single texel on the GPU side. The term texel is a mixture of the words pixel and commonly used to describe a single pixel in a GPU texture. Since SuperHires mode doubles the horizontal resolution, I had to decide whether the horizontal GPU texture size should be doubled, too. I came to the conclusion that vAmiga should support two horizontal texture resolutions, because the emulator’s webports might have problems with a too large texture.
+  Early versions of vAmiga generated a GPU texture in Hires resolution, meaning that each Hires pixel on the Amiga side corresponded to a single texel on the GPU side. The term texel is a mixture of the words pixel and commonly used to describe a single pixel in a GPU texture. Since SuperHires mode doubles the horizontal resolution, I had to decide whether the horizontal GPU texture size should be doubled, too. I have come to the conclusion that vAmiga should support two horizontal texture resolutions to better suit backends that do not take advantage of the higher resolution.
 
 - **Low performance impact**
 
@@ -32,7 +32,7 @@ If TPP equals 2, each Hires pixel is mapped to two texels:
 
 In SuperHires mode, vAmiga performs a one-to-one mapping of SuperHires pixels to texels:
 
-![TPP 2 Super-Hires pixel stream](images/superHires3.png "Super-Hires pixel stream, TPP = 2")
+![TPP 2 Super-Hires pixel stream](images/superHires4.png "Super-Hires pixel stream, TPP = 2")
 
 Let us revisit the design goals mentioned above. To achieve the latter two, `TPP` had to be made a compile-time option. This means that it has to be decided in advance which texture format should be used.
 
@@ -58,6 +58,6 @@ In addition, there is a macro called `TEXEL` which converts an 32-bit RGBA value
 #endif
 ```
 
-The definition of this macro reveals the trick vAmiga uses to keep the performance penalty low. If `TPP` is equal 1, this macro is a direct mapping. In other words: If `TPP` is equal 1, a `Texel` is a 32-bit value. If `TPP` equals 2, the `TEXEL` macro repeats the RGBA pattern. This means that the generated 64-bit value will represent the same RGBA value twice in a row. Thus, when the emulator sets a single texel in the texture, it actually sets two texels because a texel is always 32-bit on the GPU side. Since writing a 64-bit value is about as fast as writing a 32-bit value, the actual `TPP` value has no relevant impact on vAmiga’s performance. Of course, we have to pay a price on the GPU side. Since the emulator texture has doubled in size, the GPU has to move around twice as much memory for each frame.
+The definition of this macro reveals the trick vAmiga uses to keep the performance penalty low. If `TPP` equals 1, this macro is a direct mapping. In other words: If `TPP` equals 1, a `Texel` is a 32-bit value. If `TPP` equals 2, the `TEXEL` macro repeats the RGBA pattern. This means that the generated 64-bit value will represent the same RGBA value twice in a row. Thus, when the emulator sets a single texel in the texture, it actually sets two texels because a texel is always 32-bit on the GPU side. Since writing a 64-bit value is about as fast as writing a 32-bit value, the actual `TPP` value has no relevant impact on vAmiga’s performance. Of course, we have to pay a price on the GPU side. Since the emulator texture has doubled in size, the GPU has to move around twice as much memory for each frame.
 
 Also, hiding the actual texture size in the `Texel` data type prevents the code quality to degrade. From the emulator side, the horizontal texture size appears to be independent of the `TPP` value, since everything is counted in texels. As a result, the same code can be used for both possible `TPP` values and there is no need to clutter the code with a large amount of `if` statements.

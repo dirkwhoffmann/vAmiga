@@ -76,10 +76,10 @@ Headless::main(int argc, char *argv[])
     Script script(keys["arg1"]);
     
     // Register message receiver
-    amiga.msgQueue.setListener(this, vamiga::process);
+    // amiga.msgQueue.setListener(this, vamiga::process);
 
     // Launch the emulator thread
-    amiga.launch();
+    amiga.launch(this, vamiga::process);
 
     // Execute the script
     barrier.lock();

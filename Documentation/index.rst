@@ -39,6 +39,7 @@ vAmiga User's Manual
 
    Developer/ClassHierarchy
    Developer/ThreadClass
+   Developer/MessageQueue
    Developer/RunLoop
    Developer/EventScheduler
    Developer/SuperHires

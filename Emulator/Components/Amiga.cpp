@@ -144,6 +144,7 @@ Amiga::launch()
         msg("       PixelEngine : %zu bytes\n", sizeof(PixelEngine));
         msg("     RemoteManager : %zu bytes\n", sizeof(RemoteManager));
         msg("               RTC : %zu bytes\n", sizeof(RTC));
+        msg("        RetroShell : %zu bytes\n", sizeof(RetroShell));
         msg("           Sampler : %zu bytes\n", sizeof(Sampler));
         msg("        SerialPort : %zu bytes\n", sizeof(SerialPort));
         msg("            Volume : %zu bytes\n", sizeof(Volume));

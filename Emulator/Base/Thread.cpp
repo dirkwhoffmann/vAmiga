@@ -39,7 +39,6 @@ Thread::execute<THREAD_PULSED>()
     loadClock.go();
     execute();
     loadClock.stop();
-    
 }
 
 template <> void

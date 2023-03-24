@@ -6,11 +6,11 @@ vAmiga supports the following file formats for floppy disks:
 
 - **ADF format**
 
-  Lorem ipsum 
+  ADF files contain a byte dump of all sectors of an Amiga diskette. The format is extremely simple in structure, since it does not store any header information. The ADF format is the most widely used format for Amiga floppy disks and almost all non-copy-protected titles are available in form of ADF files. 
 
 - **Extended ADF format** 
 
-  Lorem ipsum 
+  The extended ADF format has been created to store copy-protected disks or disks that were formatted in a non-standard format. It has a much more complicated structure than the standard ADF format and offers different methods to represent track data. For example, the format is able to store the uninterpreted MFM data stream of single tracks or the whole disk. 
 
 - **DMS Format**
 
@@ -26,10 +26,11 @@ vAmiga supports the following file formats for floppy disks:
 
 - **Folders**
 
-  Lorem ipsum
+  vAmiga allows directories of the host computer to be used in the form of floppy disks. When a directory is provided by drag-and-drop, the emulator tries to write all files of the directory to an empty floppy disk. If the floppy disk has sufficient space for all files, the disk can be used inside the emulator or exported, e.g., in form of an ADF file.
 
 ## Hard drives
 
 - **HDF Format** 
 
-  Lorem ipsum 
+  HDF files are the equivalent of ADF files for hard disks. An HDF file contains a byte dump of all sectors of a hard disk, just as an ADF file contains a byte dump of all sectors of a floppy disk.
+  
