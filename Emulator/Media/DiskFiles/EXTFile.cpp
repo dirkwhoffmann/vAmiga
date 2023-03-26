@@ -181,7 +181,7 @@ EXTFile::encodeDisk(class FloppyDisk &disk) const
     debug(MFM_DEBUG, "Encoding Amiga disk with %ld tracks\n", tracks);
 
     // Create an empty ADF
-    ADFFile adf(getDiameter(), getDensity());
+    ADFFile adf(*this);
 
     // Wipe out all data
     disk.clearDisk(0);

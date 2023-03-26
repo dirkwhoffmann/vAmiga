@@ -47,6 +47,13 @@ AmigaFile::init(std::istream &stream)
 }
 
 void
+AmigaFile::init(isize len)
+{
+    data.init(len);
+    data.clear();
+}
+
+void
 AmigaFile::init(const u8 *buf, isize len)
 {    
     assert(buf);
@@ -72,10 +79,8 @@ AmigaFile::init(FILE *file)
 
 AmigaFile::~AmigaFile()
 {
-    // if (data) delete[] data;
+
 }
-
-
 
 void
 AmigaFile::flash(u8 *buf, isize offset, isize len) const

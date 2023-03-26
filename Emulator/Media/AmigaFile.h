@@ -81,6 +81,7 @@ public:
 
     void init(std::istream &stream) throws;
     void init(const string &path, std::istream &stream) throws;
+    void init(isize len) throws;
     void init(const u8 *buf, isize len) throws;
     void init(const Buffer<u8> &buffer) throws;
     void init(const string &path) throws;

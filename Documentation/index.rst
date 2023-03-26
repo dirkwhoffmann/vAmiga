@@ -24,6 +24,7 @@ vAmiga User's Manual
    :caption: How-to guides
 
    HowTo/MappingCmd
+   HowTo/NullModemCable
 
 .. toctree::
    :maxdepth: 1
