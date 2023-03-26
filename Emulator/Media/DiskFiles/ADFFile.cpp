@@ -69,6 +69,38 @@ ADFFile::init(Diameter diameter, Density density)
 }
 
 void
+ADFFile::init(const FloppyDiskDescriptor &descr)
+{
+    if (descr.diameter != INCH_35) throw VAError(ERROR_DISK_INVALID_DIAMETER);
+
+    switch (descr.density) {
+
+        case DENSITY_DD:
+
+            switch (descr.cylinders) {
+
+                case 80: init(ADFSIZE_35_DD); break;
+                case 81: init(ADFSIZE_35_DD_81); break;
+                case 82: init(ADFSIZE_35_DD_82); break;
+                case 83: init(ADFSIZE_35_DD_83); break;
+                case 84: init(ADFSIZE_35_DD_84); break;
+
+                default:
+                    throw VAError(ERROR_DISK_INVALID_LAYOUT);
+            }
+            break;
+
+        case DENSITY_HD:
+
+            init(ADFSIZE_35_HD);
+            break;
+
+        default:
+            throw VAError(ERROR_DISK_INVALID_DENSITY);
+    }
+}
+
+void
 ADFFile::init(FloppyDisk &disk)
 {
     init(disk.getDiameter(), disk.getDensity());

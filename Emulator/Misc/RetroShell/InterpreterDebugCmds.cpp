@@ -115,6 +115,7 @@ Interpreter::initDebugShell(Command &root)
 
     root.add({"host"},          "Host computer");
     root.add({"os"},            "AmigaOS debugger");
+    root.add({"server"},        "Remote connections");
 
     
     //
@@ -940,6 +941,50 @@ Interpreter::initDebugShell(Command &root)
              [this](Arguments& argv, long value) {
 
         diagBoard.setConfigItem(OPT_DIAG_BOARD, parseBool(argv));
+    });
+
+
+    //
+    // Remote server
+    //
+
+    root.newGroup("");
+
+    root.add({"server", ""},
+             "Displays a server status summary",
+             [this](Arguments& argv, long value) {
+
+        retroShell.dump(remoteManager, Category::Status);
+    });
+
+    root.add({"server", "serial"},
+             "Serial port server");
+
+    root.add({"server", "serial", ""},
+             "Inspects the internal state",
+             [this](Arguments& argv, long value) {
+
+        retroShell.dump(remoteManager.serServer, { Category::Config, Category::State } );
+    });
+
+    root.add({"server", "rshell"},
+             "Retro shell server");
+
+    root.add({"server", "rshell", ""},
+             "Inspects the internal state",
+             [this](Arguments& argv, long value) {
+
+        retroShell.dump(remoteManager.rshServer, { Category::Config, Category::State } );
+    });
+
+    root.add({"server", "gdb"},
+             "GDB server");
+
+    root.add({"server", "gdb", ""},
+             "Inspects the internal state",
+             [this](Arguments& argv, long value) {
+
+        retroShell.dump(remoteManager.gdbServer, { Category::Config, Category::State } );
     });
 }
 

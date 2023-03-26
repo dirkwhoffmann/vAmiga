@@ -6,7 +6,7 @@ DiskFile.cpp
 FloppyFile.cpp
 HDFFile.cpp
 ADFFile.cpp
-EXTFile.cpp
+EADFFile.cpp
 IMGFile.cpp
 DMSFile.cpp
 EXEFile.cpp

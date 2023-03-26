@@ -48,6 +48,7 @@ public:
     // Informs about the disk type
     virtual Diameter getDiameter() const = 0;
     virtual Density getDensity() const = 0;
+    virtual FloppyDiskDescriptor getDescriptor() const;
     bool isSD() { return getDensity() == DENSITY_SD; }
     bool isDD() { return getDensity() == DENSITY_DD; }
     bool isHD() { return getDensity() == DENSITY_HD; }

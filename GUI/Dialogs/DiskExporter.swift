@@ -48,7 +48,7 @@ class DiskExporter: DialogController {
     // Results of the different decoders
     var hdf: HDFFileProxy?
     var adf: ADFFileProxy?
-    var ext: EXTFileProxy?
+    var ext: EADFFileProxy?
     var img: IMGFileProxy?
     var vol: FileSystemProxy?
     
@@ -60,7 +60,7 @@ class DiskExporter: DialogController {
         adf = try? ADFFileProxy.make(with: dfn!)
 
         // Run the extended ADF decoder
-        ext = try? EXTFileProxy.make(with: dfn!)
+        ext = try? EADFFileProxy.make(with: dfn!)
 
         // Run the DOS decoder
         img = try? IMGFileProxy.make(with: dfn!)

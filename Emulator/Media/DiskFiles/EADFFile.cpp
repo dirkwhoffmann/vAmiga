@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "EXTFile.h"
+#include "EADFFile.h"
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
 #include "MutableFileSystem.h"
@@ -16,20 +16,20 @@
 
 namespace vamiga {
 
-const std::vector<string> EXTFile::extAdfHeaders =
+const std::vector<string> EADFFile::extAdfHeaders =
 {
     "UAE--ADF",
     "UAE-1ADF"
 };
 
 bool
-EXTFile::isCompatible(const string &path)
+EADFFile::isCompatible(const string &path)
 {
     return true;
 }
 
 bool
-EXTFile::isCompatible(std::istream &stream)
+EADFFile::isCompatible(std::istream &stream)
 {
     for (auto &header : extAdfHeaders) {
         if (util::matchingStreamHeader(stream, header)) return true;
@@ -39,7 +39,7 @@ EXTFile::isCompatible(std::istream &stream)
 }
 
 void
-EXTFile::init(FloppyDisk &disk)
+EADFFile::init(FloppyDisk &disk)
 {
     auto numTracks = disk.numTracks();
     
@@ -57,32 +57,32 @@ EXTFile::init(FloppyDisk &disk)
 }
 
 void
-EXTFile::init(FloppyDrive &drive)
+EADFFile::init(FloppyDrive &drive)
 {
     if (drive.disk == nullptr) throw VAError(ERROR_DISK_MISSING);
     init(*drive.disk);
 }
 
 isize
-EXTFile::numCyls() const
+EADFFile::numCyls() const
 {
     return (storedTracks() + 1) / 2;
 }
 
 isize
-EXTFile::numHeads() const
+EADFFile::numHeads() const
 {
     return 2;
 }
 
 isize
-EXTFile::numSectors() const
+EADFFile::numSectors() const
 {
     return adf ? adf.numSectors() : 0;
 }
 
 void
-EXTFile::finalizeRead()
+EADFFile::finalizeRead()
 {
     isize numTracks = storedTracks();
     
@@ -143,25 +143,26 @@ EXTFile::finalizeRead()
         auto disk = FloppyDisk(*this);
 
         // Convert the disk to a standard ADF
-        adf.init(disk);
-        
+        adf.init(getDescriptor());
+        adf.decodeDisk(disk);
+
     } catch (...) { }
 }
 
 FSVolumeType
-EXTFile::getDos() const
+EADFFile::getDos() const
 {
     return adf ? adf.getDos() : FS_NODOS;
 }
 
 Diameter
-EXTFile::getDiameter() const
+EADFFile::getDiameter() const
 {
     return INCH_35;
 }
 
 Density
-EXTFile::getDensity() const
+EADFFile::getDensity() const
 {
     isize bitsInLargestTrack = 0;
     
@@ -173,7 +174,7 @@ EXTFile::getDensity() const
 }
 
 void
-EXTFile::encodeDisk(class FloppyDisk &disk) const
+EADFFile::encodeDisk(class FloppyDisk &disk) const
 {
     assert(!data.empty());
 
@@ -181,7 +182,7 @@ EXTFile::encodeDisk(class FloppyDisk &disk) const
     debug(MFM_DEBUG, "Encoding Amiga disk with %ld tracks\n", tracks);
 
     // Create an empty ADF
-    ADFFile adf(getDiameter(), getDensity());
+    ADFFile adf(getDescriptor());
 
     // Wipe out all data
     disk.clearDisk(0);
@@ -197,7 +198,7 @@ EXTFile::encodeDisk(class FloppyDisk &disk) const
 }
 
 void
-EXTFile::encodeStandardTrack(ADFFile &adf, Track t) const
+EADFFile::encodeStandardTrack(ADFFile &adf, Track t) const
 {
     if (typeOfTrack(t) == 0) {
 
@@ -212,7 +213,7 @@ EXTFile::encodeStandardTrack(ADFFile &adf, Track t) const
 }
 
 void
-EXTFile::encodeExtendedTrack(class FloppyDisk &disk, Track t) const
+EADFFile::encodeExtendedTrack(class FloppyDisk &disk, Track t) const
 {
     if (typeOfTrack(t) == 1) {
 
@@ -227,7 +228,7 @@ EXTFile::encodeExtendedTrack(class FloppyDisk &disk, Track t) const
 }
 
 void
-EXTFile::decodeDisk(FloppyDisk &disk)
+EADFFile::decodeDisk(FloppyDisk &disk)
 {
     assert(!data.empty());
     
@@ -289,7 +290,7 @@ EXTFile::decodeDisk(FloppyDisk &disk)
 }
 
 isize
-EXTFile::storedTracks() const
+EADFFile::storedTracks() const
 {
     assert(!data.empty());
 
@@ -297,7 +298,7 @@ EXTFile::storedTracks() const
 }
 
 isize
-EXTFile::typeOfTrack(isize nr) const
+EADFFile::typeOfTrack(isize nr) const
 {
     assert(!data.empty());
     
@@ -306,7 +307,7 @@ EXTFile::typeOfTrack(isize nr) const
 }
 
 isize
-EXTFile::availableBytesForTrack(isize nr) const
+EADFFile::availableBytesForTrack(isize nr) const
 {
     assert(!data.empty());
     
@@ -315,7 +316,7 @@ EXTFile::availableBytesForTrack(isize nr) const
 }
 
 isize
-EXTFile::usedBitsForTrack(isize nr) const
+EADFFile::usedBitsForTrack(isize nr) const
 {
     assert(!data.empty());
     
@@ -324,7 +325,7 @@ EXTFile::usedBitsForTrack(isize nr) const
 }
 
 isize
-EXTFile::proposedHeaderSize() const
+EADFFile::proposedHeaderSize() const
 {
     assert(!data.empty());
     
@@ -332,7 +333,7 @@ EXTFile::proposedHeaderSize() const
 }
 
 isize
-EXTFile::proposedFileSize() const
+EADFFile::proposedFileSize() const
 {
     assert(!data.empty());
 
@@ -346,7 +347,7 @@ EXTFile::proposedFileSize() const
 }
 
 u8 *
-EXTFile::trackData(isize nr) const
+EADFFile::trackData(isize nr) const
 {
     assert(!data.empty());
     

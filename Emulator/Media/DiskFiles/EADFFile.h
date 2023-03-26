@@ -38,7 +38,7 @@ namespace vamiga {
  * and won't be.
  */
 
-class EXTFile : public FloppyFile {
+class EADFFile : public FloppyFile {
 
     // Accepted header signatures
     static const std::vector<string> extAdfHeaders;
@@ -60,10 +60,10 @@ public:
 
     using AmigaFile::init;
     
-    EXTFile(const string &path) throws { init(path); }
-    EXTFile(const u8 *buf, isize len) throws { init(buf, len); }
-    EXTFile(class FloppyDisk &disk) throws { init(disk); }
-    EXTFile(class FloppyDrive &drive) throws { init(drive); }
+    EADFFile(const string &path) throws { init(path); }
+    EADFFile(const u8 *buf, isize len) throws { init(buf, len); }
+    EADFFile(class FloppyDisk &disk) throws { init(disk); }
+    EADFFile(class FloppyDrive &drive) throws { init(drive); }
 
     void init(FloppyDisk &disk) throws;
     void init(FloppyDrive &drive) throws;
@@ -75,7 +75,7 @@ public:
 
 public:
     
-    const char *getDescription() const override { return "EXT"; }
+    const char *getDescription() const override { return "EADF"; }
 
     
     //
@@ -84,7 +84,7 @@ public:
     
 public:
     
-    FileType type() const override { return FILETYPE_EXT; }
+    FileType type() const override { return FILETYPE_EADF; }
     bool isCompatiblePath(const string &path) const override { return isCompatible(path); }
     bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
     void finalizeRead() throws override;

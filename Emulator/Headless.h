@@ -392,19 +392,16 @@ static const char *script[] = {
     "server serial set port 8000",
     "server serial set verbose true",
     "server serial set verbose false",
-    "server serial inspect",
 
     "server rshell",
     "server rshell set port 8000",
     "server rshell set verbose true",
     "server rshell set verbose false",
-    "server rshell inspect",
 
     "server gdb",
     "server gdb set port 8000",
     "server gdb set verbose true",
     "server gdb set verbose false",
-    "server gdb inspect",
 
     "",
     "# Entering the debugger...",

@@ -22,8 +22,8 @@ enum_long(FILETYPE)
     FILETYPE_SNAPSHOT,
     FILETYPE_SCRIPT,
     FILETYPE_ADF,
+    FILETYPE_EADF,
     FILETYPE_HDF,
-    FILETYPE_EXT,
     FILETYPE_IMG,
     FILETYPE_DMS,
     FILETYPE_EXE,
@@ -49,8 +49,8 @@ struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType>
             case FILETYPE_SNAPSHOT:     return "SNAPSHOT";
             case FILETYPE_SCRIPT:       return "SCRIPT";
             case FILETYPE_ADF:          return "ADF";
+            case FILETYPE_EADF:         return "EADF";
             case FILETYPE_HDF:          return "HDF";
-            case FILETYPE_EXT:          return "EXT";
             case FILETYPE_IMG:          return "IMG";
             case FILETYPE_DMS:          return "DMS";
             case FILETYPE_EXE:          return "EXE";

@@ -91,7 +91,7 @@ class DiskInspector: DialogController {
         if decoder == nil {
             
             // Run the extended ADF decoder
-            decoder = try? EXTFileProxy.make(with: drive!)
+            decoder = try? EADFFileProxy.make(with: drive!)
         }
 
         let protected = drive!.hasProtectedDisk
@@ -149,9 +149,9 @@ class DiskInspector: DialogController {
             
         case is HDFFileProxy: subTitle1.stringValue = "Standard Hard Drive"
         case is ADFFileProxy: subTitle1.stringValue = "Amiga Floppy Disk"
+        case is EADFFileProxy: subTitle1.stringValue = "Amiga Floppy Disk (Ext)"
         case is IMGFileProxy: subTitle1.stringValue = "PC Disk"
-        case is EXTFileProxy: subTitle1.stringValue = "Amiga Floppy Disk (Ext)"
-            
+
         default:
             subTitle1.stringValue = "Raw MFM stream"
             subTitle2.stringValue = ""

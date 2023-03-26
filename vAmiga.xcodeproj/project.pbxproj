@@ -13,7 +13,7 @@
 		5002349728CC8DA100145D6E /* softfloat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5002349628CC8D9500145D6E /* softfloat.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		5002349828CC8DA200145D6E /* softfloat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5002349628CC8D9500145D6E /* softfloat.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		5004C3AA27BD520400A9161A /* HardDrive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5004C3A527BD516E00A9161A /* HardDrive.cpp */; };
-		5009B7FC2557051A0037288E /* EXTFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5009B7FA2557051A0037288E /* EXTFile.cpp */; };
+		5009B7FC2557051A0037288E /* EADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5009B7FA2557051A0037288E /* EADFFile.cpp */; };
 		500A0A2A262305BE0019F013 /* MemUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500A0A28262305BE0019F013 /* MemUtils.cpp */; };
 		500A4E9F24470713002A4DE1 /* disk_eject.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4E9D24470713002A4DE1 /* disk_eject.aiff */; };
 		500A4EA024470713002A4DE1 /* disk_insert.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4E9E24470713002A4DE1 /* disk_insert.aiff */; };
@@ -376,7 +376,7 @@
 		50FC04C627DA19E900C3E566 /* Folder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C66772551577D0028D497 /* Folder.cpp */; };
 		50FC04C727DA19E900C3E566 /* EXEFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5019B1EE254B292D00A7AB95 /* EXEFile.cpp */; };
 		50FC04C827DA19E900C3E566 /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
-		50FC04C927DA19E900C3E566 /* EXTFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5009B7FA2557051A0037288E /* EXTFile.cpp */; };
+		50FC04C927DA19E900C3E566 /* EADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5009B7FA2557051A0037288E /* EADFFile.cpp */; };
 		50FC04CA27DA19E900C3E566 /* DiskFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1B0A427CE7164005E41DA /* DiskFile.cpp */; };
 		50FC04CB27DA19E900C3E566 /* FloppyFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC77325160BBF00E47421 /* FloppyFile.cpp */; };
 		50FC04CC27DA19E900C3E566 /* DMSFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B3124B5DDAF0078FDC9 /* DMSFile.cpp */; };
@@ -464,8 +464,8 @@
 		5004C3A627BD516E00A9161A /* HardDrive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HardDrive.h; sourceTree = "<group>"; };
 		5004C3A727BD519400A9161A /* HardDriveTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HardDriveTypes.h; sourceTree = "<group>"; };
 		500770C1227C9FF3003A5F76 /* DriveTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriveTypes.h; sourceTree = "<group>"; };
-		5009B7FA2557051A0037288E /* EXTFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EXTFile.cpp; sourceTree = "<group>"; };
-		5009B7FB2557051A0037288E /* EXTFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXTFile.h; sourceTree = "<group>"; };
+		5009B7FA2557051A0037288E /* EADFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EADFFile.cpp; sourceTree = "<group>"; };
+		5009B7FB2557051A0037288E /* EADFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EADFFile.h; sourceTree = "<group>"; };
 		500A0A28262305BE0019F013 /* MemUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MemUtils.cpp; sourceTree = "<group>"; };
 		500A0A29262305BE0019F013 /* MemUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemUtils.h; sourceTree = "<group>"; };
 		500A4E9D24470713002A4DE1 /* disk_eject.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = disk_eject.aiff; sourceTree = "<group>"; };
@@ -1040,8 +1040,8 @@
 				50FAC77325160BBF00E47421 /* FloppyFile.cpp */,
 				508833ED21F0D21B009890EA /* ADFFile.h */,
 				508833EC21F0D21B009890EA /* ADFFile.cpp */,
-				5009B7FB2557051A0037288E /* EXTFile.h */,
-				5009B7FA2557051A0037288E /* EXTFile.cpp */,
+				5009B7FB2557051A0037288E /* EADFFile.h */,
+				5009B7FA2557051A0037288E /* EADFFile.cpp */,
 				50FAC76F2515EBED00E47421 /* IMGFile.h */,
 				50FAC76E2515EBED00E47421 /* IMGFile.cpp */,
 				50F54B3224B5DDAF0078FDC9 /* DMSFile.h */,
@@ -2247,7 +2247,7 @@
 				501FB3172762008C00D0A57B /* OSDebuggerRead.cpp in Sources */,
 				50C8C44F260740AC00F4E012 /* SplashScreen.swift in Sources */,
 				50F54B2924B5D31D0078FDC9 /* xdms.c in Sources */,
-				5009B7FC2557051A0037288E /* EXTFile.cpp in Sources */,
+				5009B7FC2557051A0037288E /* EADFFile.cpp in Sources */,
 				5056506C25440FFB00A79D27 /* MutableFileSystem.cpp in Sources */,
 				50927DAB24865F11008DF3B8 /* MoiraExceptions_cpp.h in Sources */,
 				50F54B2624B5D31D0078FDC9 /* tables.c in Sources */,
@@ -2389,7 +2389,7 @@
 				50672CC12946100F004113F5 /* InterpreterDebugCmds.cpp in Sources */,
 				50FC04F627DA1A8F00C3E566 /* Muxer.cpp in Sources */,
 				50FC04DA27DA1A0000C3E566 /* Interpreter.cpp in Sources */,
-				50FC04C927DA19E900C3E566 /* EXTFile.cpp in Sources */,
+				50FC04C927DA19E900C3E566 /* EADFFile.cpp in Sources */,
 				50FC04DF27DA1A1400C3E566 /* maketbl.c in Sources */,
 				50FC049327DA196500C3E566 /* Colors.cpp in Sources */,
 				50FC04E327DA1A1400C3E566 /* crc_csum.c in Sources */,

@@ -15,7 +15,7 @@
 #include "DiskFiles/DiskFile.h"
 #include "DiskFiles/DMSFile.h"
 #include "DiskFiles/EXEFile.h"
-#include "DiskFiles/EXTFile.h"
+#include "DiskFiles/EADFFile.h"
 #include "DiskFiles/FloppyFile.h"
 #include "DiskFiles/Folder.h"
 #include "DiskFiles/HDFFile.h"

@@ -67,7 +67,7 @@ extension FileType {
     }
 
     static var all: [FileType] {
-        return [ .SNAPSHOT, .SCRIPT, .ADF, .HDF, .EXT, .IMG, .DMS, .EXE, .DIR ]
+        return [ .SNAPSHOT, .SCRIPT, .ADF, .EADF, .HDF, .IMG, .DMS, .EXE, .DIR ]
     }
 }
 

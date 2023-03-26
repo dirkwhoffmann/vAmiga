@@ -72,3 +72,17 @@ struct DensityEnum : util::Reflection<DensityEnum, Density>
     }
 };
 #endif
+
+
+//
+// Structures
+//
+
+typedef struct
+{
+    Diameter diameter;
+    Density density;
+    isize sides;
+    isize cylinders;
+}
+FloppyDiskDescriptor;

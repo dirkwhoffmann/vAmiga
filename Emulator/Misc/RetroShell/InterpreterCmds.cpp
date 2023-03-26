@@ -1549,13 +1549,6 @@ Interpreter::initCommandShell(Command &root)
         remoteManager.rshServer.setConfigItem(OPT_SRV_VERBOSE, parseBool(argv));
     });
 
-    root.add({"server", "serial", "inspect"},
-             "Displays the internal state",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dump(remoteManager.rshServer, Category::Config);
-    });
-
     root.add({"server", "rshell"},
              "Retro shell server");
 
@@ -1604,13 +1597,6 @@ Interpreter::initCommandShell(Command &root)
         remoteManager.rshServer.setConfigItem(OPT_SRV_PORT, parseBool(argv));
     });
 
-    root.add({"server", "rshell", "inspect"},
-             "Displays the internal state",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dump(remoteManager.rshServer, Category::State);
-    });
-
     root.add({"server", "gdb"},
              "GDB server");
 
@@ -1650,13 +1636,6 @@ Interpreter::initCommandShell(Command &root)
              [this](Arguments& argv, long value) {
 
         remoteManager.gdbServer.setConfigItem(OPT_SRV_VERBOSE, parseBool(argv));
-    });
-
-    root.add({"server", "gdb", "inspect"},
-             "Displays the internal state",
-             [this](Arguments& argv, long value) {
-
-        retroShell.dump(remoteManager.gdbServer, Category::State);
     });
 }
 
