@@ -143,7 +143,7 @@ EXTFile::finalizeRead()
         auto disk = FloppyDisk(*this);
 
         // Convert the disk to a standard ADF
-        adf.init(*this);
+        adf.init(getDescriptor());
         adf.decodeDisk(disk);
 
     } catch (...) { }
@@ -182,7 +182,7 @@ EXTFile::encodeDisk(class FloppyDisk &disk) const
     debug(MFM_DEBUG, "Encoding Amiga disk with %ld tracks\n", tracks);
 
     // Create an empty ADF
-    ADFFile adf(*this);
+    ADFFile adf(getDescriptor());
 
     // Wipe out all data
     disk.clearDisk(0);

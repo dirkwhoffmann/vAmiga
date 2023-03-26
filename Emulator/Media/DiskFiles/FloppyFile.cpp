@@ -38,4 +38,16 @@ FloppyFile::make(const string &path)
     throw VAError(ERROR_FILE_TYPE_MISMATCH);
 }
 
+FloppyDiskDescriptor
+FloppyFile::getDescriptor() const
+{
+    return FloppyDiskDescriptor {
+
+        .diameter = getDiameter(),
+        .density = getDensity(),
+        .sides = numHeads(),
+        .cylinders = numCyls()
+    };
+}
+
 }

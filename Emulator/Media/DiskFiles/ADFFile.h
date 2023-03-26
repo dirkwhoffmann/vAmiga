@@ -49,13 +49,13 @@ public:
     ADFFile(const u8 *buf, isize len) throws { init(buf, len); }
     ADFFile(FILE *file) throws { init(file); }
     ADFFile(Diameter dia, Density den) throws { init(dia, den); }
-    ADFFile(const class FloppyFile &file) throws { init(file); }
+    ADFFile(const FloppyDiskDescriptor &descr) throws { init(descr); }
     ADFFile(class FloppyDisk &disk) throws { init(disk); }
     ADFFile(class FloppyDrive &drive) throws { init(drive); }
     ADFFile(MutableFileSystem &volume) throws { init(volume); }
     
     void init(Diameter dia, Density den) throws;
-    void init(const FloppyFile &file) throws;
+    void init(const FloppyDiskDescriptor &descr) throws;
     void init(FloppyDisk &disk) throws;
     void init(FloppyDrive &drive) throws;
     void init(MutableFileSystem &volume) throws;
