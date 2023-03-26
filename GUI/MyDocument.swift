@@ -86,8 +86,8 @@ class MyDocument: NSDocument {
                 case .ADF:
                     return try ADFFileProxy.make(with: newUrl)
                     
-                case .EXT:
-                    return try EXTFileProxy.make(with: newUrl)
+                case .EADF:
+                    return try EADFFileProxy.make(with: newUrl)
                     
                 case .IMG:
                     return try IMGFileProxy.make(with: newUrl)
@@ -129,7 +129,7 @@ class MyDocument: NSDocument {
         debug(.media)
 
         let types: [FileType] =
-        [ .SNAPSHOT, .SCRIPT, .ADF, .HDF, .EXT, .IMG, .DMS, .EXE, .DIR ]
+        [ .SNAPSHOT, .SCRIPT, .ADF, .EADF, .HDF, .IMG, .DMS, .EXE, .DIR ]
 
         do {
 

@@ -1017,10 +1017,10 @@
 
 
 //
-// EXTFileProxy
+// EADFFileProxy
 //
 
-@interface EXTFileProxy : FloppyFileProxy <MakeWithFile, MakeWithBuffer, MakeWithDrive> {
+@interface EADFFileProxy : FloppyFileProxy <MakeWithFile, MakeWithBuffer, MakeWithDrive> {
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;

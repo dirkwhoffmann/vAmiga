@@ -489,7 +489,7 @@ extension MyController: NSMenuItemValidation {
             if result == .OK, let url = openPanel.url {
                 
                 do {
-                    let types: [FileType] = [ .ADF, .EXT, .DMS, .EXE, .DIR ]
+                    let types: [FileType] = [ .ADF, .EADF, .DMS, .EXE, .DIR ]
                     try self.mydocument.addMedia(url: url,
                                                  allowedTypes: types,
                                                  df: sender.tag)
@@ -510,7 +510,7 @@ extension MyController: NSMenuItemValidation {
 
     func insertRecentDiskAction(drive: Int, slot: Int) {
         
-        let types: [FileType] = [ .ADF, .EXT, .DMS, .EXE, .DIR ]
+        let types: [FileType] = [ .ADF, .EADF, .DMS, .EXE, .DIR ]
 
         if let url = myAppDelegate.getRecentlyInsertedDiskURL(slot) {
 
@@ -660,7 +660,7 @@ extension MyController: NSMenuItemValidation {
         if let url = myAppDelegate.getRecentlyAttachedHdrURL(slot) {
             
             do {
-                let types: [FileType] = [ .ADF, .EXT, .DMS, .EXE, .DIR ]
+                let types: [FileType] = [ .ADF, .EADF, .DMS, .EXE, .DIR ]
                 try self.mydocument.addMedia(url: url,
                                              allowedTypes: types,
                                              hd: drive)

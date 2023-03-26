@@ -55,7 +55,7 @@ class FloppyDisk : public CoreObject {
     
     friend class FloppyDrive;
     friend class ADFFile;
-    friend class EXTFile;
+    friend class EADFFile;
     friend class IMGFile;
     
 public:

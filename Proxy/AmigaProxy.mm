@@ -14,7 +14,7 @@
 #import "DMSFile.h"
 #import "EXEFile.h"
 #import "ExtendedRomFile.h"
-#import "EXTFile.h"
+#import "EADFFile.h"
 #import "Folder.h"
 #import "MutableFileSystem.h"
 #import "IMGFile.h"
@@ -2480,36 +2480,36 @@ using namespace vamiga::moira;
 
 
 //
-// EXTFileProxy
+// EADFFileProxy
 //
 
-@implementation EXTFileProxy
+@implementation EADFFileProxy
 
-- (EXTFile *)ext
+- (EADFFile *)ext
 {
-    return (EXTFile *)obj;
+    return (EADFFile *)obj;
 }
 
-+ (instancetype)make:(EXTFile *)file
++ (instancetype)make:(EADFFile *)file
 {
     return file ? [[self alloc] initWith:file] : nil;
 }
 
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: new EXTFile([path fileSystemRepresentation])]; }
+    try { return [self make: new EADFFile([path fileSystemRepresentation])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: new EXTFile((const u8 *)buf, len)]; }
+    try { return [self make: new EADFFile((const u8 *)buf, len)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: new EXTFile(*[proxy drive])]; }
+    try { return [self make: new EADFFile(*[proxy drive])]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 

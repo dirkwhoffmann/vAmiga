@@ -87,7 +87,7 @@ class DropZone: Layer {
         
         switch type {
         
-        case .ADF, .EXT, .IMG, .DMS, .EXE, .DIR:
+        case .ADF, .EADF, .IMG, .DMS, .EXE, .DIR:
             let connected = amiga.diskController.getConfig().connected
             enabled = [ connected.0, connected.1, connected.2, connected.3 ]
                         
@@ -191,7 +191,7 @@ class DropZone: Layer {
                 try mydocument.addMedia(url: url,
                                         allowedTypes: [type])
                 
-            case .ADF, .HDF, .EXT, .IMG, .DMS, .EXE, .DIR:
+            case .ADF, .EADF, .HDF, .IMG, .DMS, .EXE, .DIR:
                 try mydocument.addMedia(url: url,
                                         allowedTypes: [type], df: n!, hd: n!)
             default:
