@@ -143,8 +143,9 @@ EXTFile::finalizeRead()
         auto disk = FloppyDisk(*this);
 
         // Convert the disk to a standard ADF
-        adf.init(disk);
-        
+        adf.init(*this);
+        adf.decodeDisk(disk);
+
     } catch (...) { }
 }
 
