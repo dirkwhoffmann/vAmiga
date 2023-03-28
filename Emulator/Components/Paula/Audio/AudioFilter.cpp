@@ -43,26 +43,6 @@ ButterworthFilter::setSampleRate(double sampleRate)
 }
 
 void
-ButterworthFilter::_dump(Category category, std::ostream& os) const
-{
-    using namespace util;
-
-    if (category == Category::State) {
-
-        os << tab("a1");
-        os << flt(a1) << std::endl;
-        os << tab("a2");
-        os << flt(a2) << std::endl;
-        os << tab("b0");
-        os << flt(b0) << std::endl;
-        os << tab("b1");
-        os << flt(b1) << std::endl;
-        os << tab("b2");
-        os << flt(b2) << std::endl;
-    }
-}
-
-void
 ButterworthFilter::clear()
 {
     x1 = x2 = y1 = y2 = 0.0;
@@ -88,21 +68,20 @@ ButterworthFilter::apply(float sample)
 //
 
 void
-OnePoleFilter::_dump(Category category, std::ostream& os) const
+OnePoleFilter::setup(double sampleRate, double R, double C)
 {
-    using namespace util;
-
-    if (category == Category::State) {
-
-    }
+    double cutoff = 1.0 / (2 * AudioFilter::pi * R * C);
+    setup(sampleRate, cutoff);
 }
 
 void
-OnePoleFilter::setup(double sampleRate, double cutOff)
+OnePoleFilter::setup(double sampleRate, double cutoff)
 {
-    if (cutOff >= sampleRate / 2.0) cutOff = (sampleRate / 2.0) - 1e-4;
+    if (cutoff >= sampleRate / 2.0) cutoff = (sampleRate / 2.0) - 1e-4;
 
-    const double a = 2.0 - std::cos((2.0 * AudioFilter::pi * cutOff) / sampleRate);
+    this->cutoff = cutoff;
+
+    const double a = 2.0 - std::cos((2.0 * AudioFilter::pi * cutoff) / sampleRate);
     const double b = a - std::sqrt((a * a) - 1.0);
 
     a1 = 1.0 - b;
@@ -131,21 +110,23 @@ OnePoleFilter::apply(double &l, double &r)
 //
 
 void
-TwoPoleFilter::_dump(Category category, std::ostream& os) const
+TwoPoleFilter::setup(double sampleRate, double R1, double R2, double C1, double C2)
 {
-    using namespace util;
+    double cutoff = 1.0 / (2 * AudioFilter::pi * std::sqrt(R1 * R2 * C1 * C2));
+    double qFactor = std::sqrt(R1 * R2 * C1 * C2) / (C2 * (R1 + R2));
 
-    if (category == Category::State) {
-
-    }
+    setup(sampleRate, cutoff, qFactor);
 }
 
 void
-TwoPoleFilter::setup(double sampleRate, double cutOff, double qFactor)
+TwoPoleFilter::setup(double sampleRate, double cutoff, double qFactor)
 {
-    if (cutOff >= sampleRate / 2.0) cutOff = (sampleRate / 2.0) - 1e-4;
+    if (cutoff >= sampleRate / 2.0) cutoff = (sampleRate / 2.0) - 1e-4;
 
-    const double a = 1.0 / std::tan((2.0 * AudioFilter::pi * cutOff) / sampleRate);
+    this->cutoff = cutoff;
+    this->qFactor = qFactor;
+
+    const double a = 1.0 / std::tan((2.0 * AudioFilter::pi * cutoff) / sampleRate);
     const double b = 1.0 / qFactor;
 
     a1 = 1.0 / (1.0 + b * a + a * a);
@@ -202,7 +183,24 @@ AudioFilter::_dump(Category category, std::ostream& os) const
 
     if (category == Category::State) {
 
-        os << "TODO" << std::endl;
+        os << tab("Low-pass filter");
+        os << bol(loFilterEnabled(), "enabled", "disabled") << std::endl;
+        os << tab("Cutoff");
+        os << flt(loFilter.cutoff) << " Hz" << std::endl;
+
+        os << std::endl;
+        os << tab("LED filter");
+        os << bol(ledFilterEnabled(), "enabled", "disabled") << std::endl;
+        os << tab("Cutoff");
+        os << flt(ledFilter.cutoff) << " Hz" << std::endl;
+        os << tab("Quality Factor");
+        os << flt(ledFilter.qFactor) << std::endl;
+
+        os << std::endl;
+        os << tab("High-pass filter");
+        os << bol(hiFilterEnabled(), "enabled", "disabled") << std::endl;
+        os << tab("Cutoff");
+        os << flt(hiFilter.cutoff) << " Hz" << std::endl;
     }
 }
 
@@ -271,53 +269,25 @@ AudioFilter::setup(double sampleRate)
 void
 AudioFilter::setupLoFilter(double sampleRate)
 {
-    double R, C, cutoff;
-
-    R = 360.0;                                      // R321 (360 ohm)
-    C = 1e-7;                                       // C321 (0.1uF)
-    cutoff = 1.0 / (2 * AudioFilter::pi * R * C);   // ~4420.971Hz
-    printf("Low-pass filter: cutoff = %f\n", cutoff);
-
     loFilter.clear();
-    loFilter.setup(sampleRate, cutoff);
+    loFilter.setup(sampleRate, 360.0, 1e-7);
 }
 
 void
 AudioFilter::setupLedFilter(double sampleRate)
 {
-    double R1 = 10000.0; // R322 (10K ohm)
-    double R2 = 10000.0; // R323 (10K ohm)
-    double C1 = 6.8e-9;  // C322 (6800pF)
-    double C2 = 3.9e-9;  // C323 (3900pF)
-    double cutoff = 1.0 / (2 * AudioFilter::pi * std::sqrt(R1 * R2 * C1 * C2)); // ~3090.533Hz
-    double qfactor = std::sqrt(R1 * R2 * C1 * C2) / (C2 * (R1 + R2));           // ~0.660225
-
-    printf("LED filter: cutoff = %f qFactor = %f\n", cutoff, qfactor);
-
     ledFilter.clear();
-    ledFilter.setup(sampleRate, cutoff, qfactor);
+    ledFilter.setup(sampleRate, 10000.0, 10000.0, 6.8e-9, 3.9e-9);
 }
 void
 AudioFilter::setupHiFilter(double sampleRate)
 {
-    double R, C, cutoff;
-
-    if (config.filterType == FILTER_A1200) {
-
-        R = 1360.0;     // R324 (1K ohm resistor) + R325 (360 ohm resistor)
-        C = 2.2e-5;     // C334 (22uF capacitor)
-
-    } else {
-
-        R = 1390.0;     // R324 (1K ohm) + R325 (390 ohm)
-        C = 2.233e-5;   // C334 (22uF) + C335 (0.33uF)
-    }
-
-    cutoff = 1.0 / (2 * AudioFilter::pi * R * C);
-    printf("High-pass filter: cutoff = %f\n", cutoff);
-
     hiFilter.clear();
-    hiFilter.setup(sampleRate, cutoff);
+    if (config.filterType == FILTER_A1200) {
+        hiFilter.setup(sampleRate, 1360.0, 2.2e-5);
+    } else {
+        hiFilter.setup(sampleRate, 1390.0, 2.233e-5);
+    }
 }
 
 bool

@@ -36,7 +36,7 @@ struct ButterworthFilter : CoreObject {
     void setSampleRate(double sampleRate);
 
     const char *getDescription() const override { return "Butterworth"; }
-    void _dump(Category category, std::ostream& os) const override;
+    void _dump(Category category, std::ostream& os) const override { };
 
     // Initializes the filter pipeline with zero elements
     void clear();
@@ -51,13 +51,23 @@ struct ButterworthFilter : CoreObject {
 
 struct OnePoleFilter : CoreObject {
 
-    double tmpL, tmpR, a1, a2;
+    // Filter properties
+    double cutoff;
+
+    // Filter coefficients
+    double a1;
+    double a2;
+
+    // Filter pipeline
+    double tmpL;
+    double tmpR;
 
     const char *getDescription() const override { return "OnePoleFilter"; }
-    void _dump(Category category, std::ostream& os) const override;
+    void _dump(Category category, std::ostream& os) const override { };
 
     // Initializes the filter coeeficients
-    void setup(double sampleRate, double cutOff);
+    void setup(double sampleRate, double R1, double C1);
+    void setup(double sampleRate, double cutoff);
 
     // Initializes the filter pipeline with zero elements
     void clear();
@@ -68,13 +78,26 @@ struct OnePoleFilter : CoreObject {
 
 struct TwoPoleFilter : CoreObject {
 
-    double tmpL[4], tmpR[4], a1, a2, b1, b2;
+    // Filter properties
+    double cutoff;
+    double qFactor;
+
+    // Filter coefficients
+    double a1;
+    double a2;
+    double b1;
+    double b2;
+
+    // Filter pipeline
+    double tmpL[4];
+    double tmpR[4];
 
     const char *getDescription() const override { return "TwoPoleFilter"; }
-    void _dump(Category category, std::ostream& os) const override;
+    void _dump(Category category, std::ostream& os) const override { };
 
     // Initializes the filter coeeficients
-    void setup(double sampleRate, double cutOff, double qFactor);
+    void setup(double sampleRate, double R1, double R2, double C1, double C2);
+    void setup(double sampleRate, double cutoff, double qFactor);
 
     // Initializes the filter pipeline with zero elements
     void clear();
