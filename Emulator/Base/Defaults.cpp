@@ -121,7 +121,7 @@ Defaults::Defaults()
     setFallback(OPT_AUTOFIRE_BULLETS, -3);
     setFallback(OPT_AUTOFIRE_DELAY, 125);
     setFallback(OPT_SAMPLING_METHOD, SMP_NONE);
-    setFallback(OPT_FILTER_TYPE, FILTER_BUTTERWORTH);
+    setFallback(OPT_FILTER_TYPE, FILTER_VAMIGA);
     setFallback(OPT_FILTER_ACTIVATION, FILTER_AUTO_ENABLE);
     setFallback(OPT_AUDPAN, { 0, 3 }, 50);
     setFallback(OPT_AUDPAN, { 1, 2 }, 350);

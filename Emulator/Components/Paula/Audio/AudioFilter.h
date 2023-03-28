@@ -14,8 +14,11 @@
 
 namespace vamiga {
 
-// DEPRECATED
-struct ButterwothFilter {
+//
+// Butterworth filter (used in vAmiga up to v2.3)
+//
+
+struct ButterworthFilter : CoreObject {
 
     // Coefficients of the butterworth filter
     double a1 = 0.0;
@@ -32,6 +35,9 @@ struct ButterwothFilter {
 
     void setSampleRate(double sampleRate);
 
+    const char *getDescription() const override { return "Butterworth"; }
+    void _dump(Category category, std::ostream& os) const override;
+
     // Initializes the filter pipeline with zero elements
     void clear();
 
@@ -39,16 +45,66 @@ struct ButterwothFilter {
     float apply(float sample);
 };
 
+//
+// OnePoleFilter (based on 8bitbubsy/pt2-clone)
+//
+
+struct OnePoleFilter : CoreObject {
+
+    double tmpL, tmpR, a1, a2;
+
+    const char *getDescription() const override { return "OnePoleFilter"; }
+    void _dump(Category category, std::ostream& os) const override;
+
+    // Initializes the filter coeeficients
+    void setup(double sampleRate, double cutOff);
+
+    // Initializes the filter pipeline with zero elements
+    void clear();
+
+    // Inserts a sample into the filter pipeline
+    void apply(double &l, double &r);
+};
+
+struct TwoPoleFilter : CoreObject {
+
+    double tmpL[4], tmpR[4], a1, a2, b1, b2;
+
+    const char *getDescription() const override { return "TwoPoleFilter"; }
+    void _dump(Category category, std::ostream& os) const override;
+
+    // Initializes the filter coeeficients
+    void setup(double sampleRate, double cutOff, double qFactor);
+
+    // Initializes the filter pipeline with zero elements
+    void clear();
+
+    // Inserts a sample into the filter pipeline
+    void apply(double &l, double &r);
+};
+
+
 class AudioFilter : public SubComponent {
     
     friend class Muxer;
 
+public:
+
+    static const double pi;
+
+private:
+
     // Current configuration
     AudioFilterConfig config = {};
 
-    // Filters
-    ButterwothFilter butterworthL; // Used in vAmiga up to 2.4b1 (left channel)
-    ButterwothFilter butterworthR; // Used in vAmiga up to 2.4b1 (right channel)
+    // The filter pipeline
+    OnePoleFilter loFilter;
+    TwoPoleFilter ledFilter;
+    OnePoleFilter hiFilter;
+
+    // Legacy filters (used up to vAmiga 2.4b1)
+    ButterworthFilter butterworthL;
+    ButterworthFilter butterworthR;
 
 
     //
@@ -113,11 +169,24 @@ public:
 
 private:
 
-    // Sets the sample rate (only to be called by the Muxer)
-    void setSampleRate(double sampleRate);
-    
-    // Returns the activation status of this filter
-    bool isEnabled() const;
+    // Call this function when the filter type or the sample rate changes
+    void setupCoefficients(double sampleRate);
+
+    void setupLoFilter(double sampleRate);
+    void setupLedFilter(double sampleRate);
+    void setupHiFilter(double sampleRate);
+
+    // Sets the sample rate (only to be called by the Muxer) (DEPRECATED)
+    // void setSampleRate(double sampleRate);
+
+    //
+    // Querying
+    //
+
+    [[deprecated]] bool isEnabled() const;
+    bool loFilterEnabled() const;
+    bool ledFilterEnabled() const;
+    bool hiFilterEnabled() const;
 
 
     //
@@ -128,9 +197,6 @@ public:
     
     // Initializes the filter pipeline with zero elements
     void clear();
-
-    // Inserts a sample into the filter pipeline
-    // float apply(float sample);
 };
 
 }

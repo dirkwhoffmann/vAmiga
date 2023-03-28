@@ -2348,7 +2348,29 @@ DQ
                                                             <menu key="menu" id="VBq-1M-0Zz">
                                                                 <items>
                                                                     <menuItem title="None" state="on" id="gHv-BR-E6q"/>
-                                                                    <menuItem title="Butterworth" tag="1" id="WPY-fe-89T">
+                                                                    <menuItem title="A500" tag="1" id="WPY-fe-89T">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="A1200" tag="2" id="4sj-mA-bOt">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="vAmiga" tag="3" id="bFh-BK-nnk">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem isSeparatorItem="YES" id="2pQ-uA-H7V"/>
+                                                                    <menuItem title="LP" tag="4" id="mgr-2A-3z7">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="LED" tag="5" id="cAB-8Y-ZDx">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="HI" tag="6" id="30D-YZ-qd6">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="LO + HI" tag="7" id="RBW-BY-rid">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="LO + LED + HI" tag="8" id="DcP-rV-7ZL">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
                                                                 </items>
@@ -2395,7 +2417,7 @@ DQ
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qk0-tt-ZlS">
                                                         <rect key="frame" x="-7" y="13" width="101" height="17"/>
                                                         <autoresizingMask key="autoresizingMask"/>
-                                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Filter enable:" id="Rhf-Ba-s7h">
+                                                        <textFieldCell key="cell" lineBreakMode="clipping" enabled="NO" alignment="right" title="Filter enable:" id="Rhf-Ba-s7h">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2404,7 +2426,7 @@ DQ
                                                     <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BSF-rI-TFS" userLabel="System">
                                                         <rect key="frame" x="97" y="7" width="122" height="25"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                                        <popUpButtonCell key="cell" type="push" title="Automatic" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="9p4-6a-sda" id="BdU-iU-Ue2" userLabel="System">
+                                                        <popUpButtonCell key="cell" type="push" title="Automatic" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="9p4-6a-sda" id="BdU-iU-Ue2" userLabel="System">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="menu"/>
                                                             <menu key="menu" id="thS-ac-EYf">
@@ -3918,6 +3940,9 @@ DQ
             <point key="canvasLocation" x="139" y="152"/>
         </window>
         <menuItem title="14 MHz" id="ERH-Ag-YZD"/>
+        <menuItem title="LED" tag="1" id="Y5W-5F-Kfb">
+            <modifierMask key="keyEquivalentModifierMask"/>
+        </menuItem>
     </objects>
     <resources>
         <image name="Lock" width="120" height="170"/>

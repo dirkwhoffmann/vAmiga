@@ -245,7 +245,7 @@ Muxer::setSampleRate(double hz)
 {
     trace(AUD_DEBUG, "setSampleRate(%f)\n", hz);
 
-    filter.setSampleRate(hz);
+    filter.setupCoefficients(hz);
 }
 
 isize
@@ -338,7 +338,10 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
     if (stream.count() + count >= stream.cap()) handleBufferOverflow();
 
     double cycle = (double)clock;
-    bool doButterworth = filter.isEnabled();
+    bool loEnabled = filter.loFilterEnabled();
+    bool ledEnabled = filter.ledFilterEnabled();
+    bool hiEnabled = filter.hiFilterEnabled();
+    bool bwEnabled = filter.config.filterType == FILTER_VAMIGA;
 
     for (long i = 0; i < count; i++) {
 
@@ -348,19 +351,24 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
         float ch3 = sampler[3].interpolate <method> ((Cycle)cycle) * vol[3];
         
         // Compute left channel output
-        float l =
+        double l =
         ch0 * (1 - pan[0]) + ch1 * (1 - pan[1]) +
         ch2 * (1 - pan[2]) + ch3 * (1 - pan[3]);
 
         // Compute right channel output
-        float r =
+        double r =
         ch0 * pan[0] + ch1 * pan[1] +
         ch2 * pan[2] + ch3 * pan[3];
 
-        // Apply audio filter
-        if (doButterworth) {
-            l = filter.butterworthL.apply(l);
-            r = filter.butterworthR.apply(r);
+        // Run the audio filter pipeline
+        if (loEnabled) filter.loFilter.apply(l, r);
+        if (ledEnabled) filter.ledFilter.apply(l, r);
+        if (hiEnabled) filter.hiFilter.apply(l, r);
+
+        // Apply the legacy filter if applicable
+        if (bwEnabled) {
+            l = filter.butterworthL.apply(float(l));
+            r = filter.butterworthR.apply(float(r));
         }
 
         // Apply master volume
@@ -368,7 +376,7 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
         r *= volR;
         
         // Write sample into ringbuffer
-        stream.add(l, r);
+        stream.add(float(l), float(r));
         stats.producedSamples++;
         
         cycle += cyclesPerSample;
@@ -400,8 +408,10 @@ Muxer::handleBufferUnderflow()
         stats.bufferUnderflows++;
         
         // Increase the sample rate based on what we've measured
+        /*
         auto offPerSec = (stream.cap() / 2) / elapsedTime.asSeconds();
         setSampleRate(host.getSampleRate() + (isize)offPerSec);
+        */
     }
 }
 
@@ -428,8 +438,10 @@ Muxer::handleBufferOverflow()
         stats.bufferOverflows++;
         
         // Decrease the sample rate based on what we've measured
+        /*
         auto offPerSec = (stream.cap() / 2) / elapsedTime.asSeconds();
         setSampleRate(host.getSampleRate() - (isize)offPerSec);
+        */
     }
 }
 
