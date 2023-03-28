@@ -361,7 +361,11 @@ AudioFilter::hiFilterEnabled() const
 bool
 AudioFilter::legacyFilterEnabled() const
 {
-    return config.filterType == FILTER_VAMIGA;
+    switch (config.filterType) {
+
+        case FILTER_VAMIGA:     return ciaa.powerLED();
+        default:                return false;
+    }
 }
 
 void
