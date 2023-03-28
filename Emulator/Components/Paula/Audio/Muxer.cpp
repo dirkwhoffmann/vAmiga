@@ -359,9 +359,9 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
         ch2 * pan[2] + ch3 * pan[3];
 
         // Run the audio filter pipeline
-        if (loEnabled) filter.loFilter.apply(l, r);
-        if (ledEnabled) filter.ledFilter.apply(l, r);
-        if (hiEnabled) filter.hiFilter.apply(l, r);
+        if (loEnabled) filter.loFilter.applyLP(l, r);
+        if (ledEnabled) filter.ledFilter.applyLP(l, r);
+        if (hiEnabled) filter.hiFilter.applyHP(l, r);
 
         // Apply the legacy filter if applicable
         if (legacyEnabled) {

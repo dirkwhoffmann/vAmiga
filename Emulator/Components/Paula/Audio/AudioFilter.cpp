@@ -95,13 +95,23 @@ OnePoleFilter::clear()
 }
 
 void
-OnePoleFilter::apply(double &l, double &r)
+OnePoleFilter::applyLP(double &l, double &r)
 {
     tmpL = (a1 * l) + (a2 * tmpL);
     l = tmpL;
 
     tmpR = (a1 * r) + (a2 * tmpR);
     r = tmpR;
+}
+
+void
+OnePoleFilter::applyHP(double &l, double &r)
+{
+    tmpL = (a1 * l) + (a2 * tmpL);
+    l = l - tmpL;
+
+    tmpR = (a1 * r) + (a2 * tmpR);
+    r = r - tmpR;
 }
 
 
@@ -143,7 +153,7 @@ TwoPoleFilter::clear()
 }
 
 void
-TwoPoleFilter::apply(double &l, double &r)
+TwoPoleFilter::applyLP(double &l, double &r)
 {
     auto inl = l;
     auto inr = r;
@@ -187,6 +197,10 @@ AudioFilter::_dump(Category category, std::ostream& os) const
         os << bol(loFilterEnabled(), "enabled", "disabled") << std::endl;
         os << tab("Cutoff");
         os << flt(loFilter.cutoff) << " Hz" << std::endl;
+        os << tab("a1");
+        os << flt(loFilter.a1) << std::endl;
+        os << tab("a2");
+        os << flt(loFilter.a2) << std::endl;
 
         os << std::endl;
         os << tab("LED filter");
@@ -195,12 +209,24 @@ AudioFilter::_dump(Category category, std::ostream& os) const
         os << flt(ledFilter.cutoff) << " Hz" << std::endl;
         os << tab("Quality Factor");
         os << flt(ledFilter.qFactor) << std::endl;
+        os << tab("a1");
+        os << flt(ledFilter.a1) << std::endl;
+        os << tab("a2");
+        os << flt(ledFilter.a2) << std::endl;
+        os << tab("b1");
+        os << flt(ledFilter.b1) << std::endl;
+        os << tab("b2");
+        os << flt(ledFilter.b2) << std::endl;
 
         os << std::endl;
         os << tab("High-pass filter");
         os << bol(hiFilterEnabled(), "enabled", "disabled") << std::endl;
         os << tab("Cutoff");
         os << flt(hiFilter.cutoff) << " Hz" << std::endl;
+        os << tab("a1");
+        os << flt(hiFilter.a1) << std::endl;
+        os << tab("a2");
+        os << flt(hiFilter.a2) << std::endl;
 
         os << std::endl;
         os << tab("Legacy filter");

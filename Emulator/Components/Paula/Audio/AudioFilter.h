@@ -72,8 +72,9 @@ struct OnePoleFilter : CoreObject {
     // Initializes the filter pipeline with zero elements
     void clear();
 
-    // Inserts a sample into the filter pipeline
-    void apply(double &l, double &r);
+    // Applies the filter to a sample pair as a low-pass or high-pass filter
+    void applyLP(double &l, double &r);
+    void applyHP(double &l, double &r);
 };
 
 struct TwoPoleFilter : CoreObject {
@@ -102,8 +103,8 @@ struct TwoPoleFilter : CoreObject {
     // Initializes the filter pipeline with zero elements
     void clear();
 
-    // Inserts a sample into the filter pipeline
-    void apply(double &l, double &r);
+    // Applies the filter to a sample pair as a low-pass filter
+    void applyLP(double &l, double &r);
 };
 
 
