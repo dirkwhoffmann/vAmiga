@@ -161,7 +161,7 @@ public:
      * inspection target via Amiga::setInspectionTarget().
      */
     void inspect() const;
-    virtual void _inspect() const { };
+    virtual void _inspect() const { }
 
     /* Base method for building the class specific getInfo() methods. When the
      * emulator is running, the result of the most recent inspection is

@@ -52,7 +52,7 @@ class Configuration {
         set { amiga.configure(.CPU_OVERCLOCKING, value: newValue) }
     }
     var warpMode: Int {
-        get { amiga.getConfig(.WARP_MODE) }
+        get { return amiga.getConfig(.WARP_MODE) }
         set { amiga.configure(.WARP_MODE, value: newValue) }
     }
     var agnusRev: Int {
