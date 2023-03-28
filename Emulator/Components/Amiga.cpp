@@ -319,7 +319,6 @@ Amiga::getConfigItem(Option option) const
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
         case OPT_FILTER_TYPE:
-        case OPT_FILTER_ACTIVATION:
 
             return paula.muxer.getConfigItem(option);
 
@@ -621,7 +620,6 @@ Amiga::configure(Option option, i64 value)
 
         case OPT_SAMPLING_METHOD:
         case OPT_FILTER_TYPE:
-        case OPT_FILTER_ACTIVATION:
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
             

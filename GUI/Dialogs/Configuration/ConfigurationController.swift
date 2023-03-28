@@ -236,7 +236,6 @@ class ConfigurationController: DialogController {
 
     // Filter
     @IBOutlet weak var audFilterType: NSPopUpButton!
-    @IBOutlet weak var audFilterActivation: NSPopUpButton!
 
     // Buttons
     @IBOutlet weak var audOKButton: NSButton!

@@ -198,8 +198,6 @@ AudioFilter::_dump(Category category, std::ostream& os) const
 
         os << tab("Filter type");
         os << FilterTypeEnum::key(config.filterType) << std::endl;
-        os << tab("Filter activation");
-        os << FilterActivationEnum::key(config.filterActivation) << std::endl;
     }
 
     if (category == Category::State) {
@@ -216,8 +214,7 @@ AudioFilter::resetConfig()
 
     std::vector <Option> options = {
 
-        OPT_FILTER_TYPE,
-        OPT_FILTER_ACTIVATION
+        OPT_FILTER_TYPE
     };
 
     for (auto &option : options) {
@@ -231,7 +228,6 @@ AudioFilter::getConfigItem(Option option) const
     switch (option) {
 
         case OPT_FILTER_TYPE:       return config.filterType;
-        case OPT_FILTER_ACTIVATION: return config.filterActivation;
 
         default:
             fatalError;
@@ -250,16 +246,7 @@ AudioFilter::setConfigItem(Option option, i64 value)
             }
 
             config.filterType = (FilterType)value;
-            setupCoefficients(host.getSampleRate());
-            return;
-
-        case OPT_FILTER_ACTIVATION:
-
-            if (!FilterActivationEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, FilterActivationEnum::keyList());
-            }
-
-            config.filterActivation = (FilterActivation)value;
+            setup(host.getSampleRate());
             return;
 
         default:
@@ -268,7 +255,7 @@ AudioFilter::setConfigItem(Option option, i64 value)
 }
 
 void
-AudioFilter::setupCoefficients(double sampleRate)
+AudioFilter::setup(double sampleRate)
 {
     trace(AUD_DEBUG, "Setting sample rate to %f Hz\n", sampleRate);
 
@@ -331,22 +318,6 @@ AudioFilter::setupHiFilter(double sampleRate)
 
     hiFilter.clear();
     hiFilter.setup(sampleRate, cutoff);
-}
-
-bool
-AudioFilter::isEnabled() const
-{
-    if (config.filterType == FILTER_NONE) return false;
-    
-    switch (config.filterActivation) {
-
-        case FILTER_AUTO_ENABLE:    return ciaa.powerLED();
-        case FILTER_ALWAYS_ON:      return true;
-        case FILTER_ALWAYS_OFF:     return false;
-
-        default:
-            fatalError;
-    }
 }
 
 bool

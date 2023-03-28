@@ -145,7 +145,6 @@ Muxer::getConfigItem(Option option) const
             return config.volR;
 
         case OPT_FILTER_TYPE:
-        case OPT_FILTER_ACTIVATION:
             return filter.getConfigItem(option);
 
         default:
@@ -204,7 +203,6 @@ Muxer::setConfigItem(Option option, i64 value)
             return;
 
         case OPT_FILTER_TYPE:
-        case OPT_FILTER_ACTIVATION:
 
             filter.setConfigItem(option, value);
             return;
@@ -245,7 +243,7 @@ Muxer::setSampleRate(double hz)
 {
     trace(AUD_DEBUG, "setSampleRate(%f)\n", hz);
 
-    filter.setupCoefficients(hz);
+    filter.setup(hz);
 }
 
 isize

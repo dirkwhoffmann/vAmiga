@@ -130,7 +130,6 @@ enum_long(OPT)
     // Paula audio
     OPT_SAMPLING_METHOD,
     OPT_FILTER_TYPE,
-    OPT_FILTER_ACTIVATION,
     OPT_AUDPAN,
     OPT_AUDVOL,
     OPT_AUDVOLL,
@@ -250,7 +249,6 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
 
             case OPT_SAMPLING_METHOD:       return "SAMPLING_METHOD";
             case OPT_FILTER_TYPE:           return "FILTER_TYPE";
-            case OPT_FILTER_ACTIVATION:     return "FILTER_ACTIVATION";
             case OPT_AUDPAN:                return "AUDPAN";
             case OPT_AUDVOL:                return "AUDVOL";
             case OPT_AUDVOLL:               return "AUDVOLL";

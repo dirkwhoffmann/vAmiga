@@ -764,13 +764,6 @@ Interpreter::initCommandShell(Command &root)
         amiga.configure(OPT_FILTER_TYPE, parseEnum <FilterTypeEnum> (argv));
     });
 
-    root.add({"paula", "audio", "filter", "set", "activation"}, { FilterActivationEnum::argList() },
-             "Selects the filter activation condition",
-             [this](Arguments& argv, long value) {
-
-        amiga.configure(OPT_FILTER_ACTIVATION, parseEnum <FilterActivationEnum> (argv));
-    });
-
     root.add({"paula", "audio", "set"},
              "Configures the component");
 

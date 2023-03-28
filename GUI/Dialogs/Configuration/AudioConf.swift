@@ -42,8 +42,6 @@ extension ConfigurationController {
 
         // Audio filter
         audFilterType.selectItem(withTag: config.filterType)
-        audFilterActivation.selectItem(withTag: config.filterActivation)
-        audFilterActivation.isEnabled = config.filterType != FilterType.NONE.rawValue
 
         // Buttons
         audPowerButton.isHidden = !bootable
@@ -166,12 +164,6 @@ extension ConfigurationController {
     @IBAction func audFilterTypeAction(_ sender: NSPopUpButton!) {
         
         config.filterType = sender.selectedTag()
-        refresh()
-    }
-
-    @IBAction func audFilterActivationAction(_ sender: NSPopUpButton!) {
-
-        config.filterActivation = sender.selectedTag()
         refresh()
     }
 

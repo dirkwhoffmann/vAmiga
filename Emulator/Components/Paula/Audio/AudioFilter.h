@@ -139,8 +139,7 @@ private:
     {
         worker
 
-        << config.filterType
-        << config.filterActivation;
+        << config.filterType;
     }
     
     template <class T>
@@ -169,21 +168,17 @@ public:
 
 private:
 
-    // Call this function when the filter type or the sample rate changes
-    void setupCoefficients(double sampleRate);
-
+    // Sets up the filter based on the current filter type and sample rate
+    void setup(double sampleRate);
     void setupLoFilter(double sampleRate);
     void setupLedFilter(double sampleRate);
     void setupHiFilter(double sampleRate);
 
-    // Sets the sample rate (only to be called by the Muxer) (DEPRECATED)
-    // void setSampleRate(double sampleRate);
-
+    
     //
     // Querying
     //
 
-    [[deprecated]] bool isEnabled() const;
     bool loFilterEnabled() const;
     bool ledFilterEnabled() const;
     bool hiFilterEnabled() const;

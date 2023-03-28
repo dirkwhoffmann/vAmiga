@@ -57,35 +57,6 @@ struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType>
 };
 #endif
 
-enum_long(FILTER_ACTIVATION)
-{
-    FILTER_AUTO_ENABLE,
-    FILTER_ALWAYS_ON,
-    FILTER_ALWAYS_OFF,
-};
-typedef FILTER_TYPE FilterActivation;
-
-#ifdef __cplusplus
-struct FilterActivationEnum : util::Reflection<FilterActivationEnum, FilterActivation>
-{
-    static constexpr long minVal = 0;
-    static constexpr long maxVal = FILTER_ALWAYS_OFF;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
-
-    static const char *prefix() { return "FILTER"; }
-    static const char *key(FilterType value)
-    {
-        switch (value) {
-
-            case FILTER_AUTO_ENABLE:    return "AUTO_ENABLE";
-            case FILTER_ALWAYS_ON:      return "ALWAYS_ON";
-            case FILTER_ALWAYS_OFF:     return "ALWAYS_OFF";
-        }
-        return "???";
-    }
-};
-#endif
-
 
 //
 // Structures
@@ -95,8 +66,5 @@ typedef struct
 {
     // The selected audio filter type
     FilterType filterType;
-
-    // Filter activation mode
-    FilterActivation filterActivation;
 }
 AudioFilterConfig;

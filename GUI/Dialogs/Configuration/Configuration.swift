@@ -75,10 +75,6 @@ class Configuration {
         get { return amiga.getConfig(.FILTER_TYPE) }
         set { amiga.configure(.FILTER_TYPE, value: newValue) }
     }
-    var filterActivation: Int {
-        get { return amiga.getConfig(.FILTER_ACTIVATION) }
-        set { amiga.configure(.FILTER_ACTIVATION, value: newValue) }
-    }
     var chipRam: Int {
         get { return amiga.getConfig(.CHIP_RAM) }
         set { amiga.configure(.CHIP_RAM, value: newValue) }
