@@ -14,12 +14,8 @@
 
 namespace vamiga {
 
-class AudioFilter : public SubComponent {
-    
-    friend class Muxer;
-
-    // Current configuration
-    AudioFilterConfig config = {};
+// DEPRECATED
+struct ButterwothFilter {
 
     // Coefficients of the butterworth filter
     double a1 = 0.0;
@@ -27,14 +23,34 @@ class AudioFilter : public SubComponent {
     double b0 = 0.0;
     double b1 = 0.0;
     double b2 = 0.0;
-    
+
     // The butterworth filter pipeline
     double x1 = 0.0;
     double x2 = 0.0;
     double y1 = 0.0;
     double y2 = 0.0;
+
+    void setSampleRate(double sampleRate);
+
+    // Initializes the filter pipeline with zero elements
+    void clear();
+
+    // Inserts a sample into the filter pipeline
+    float apply(float sample);
+};
+
+class AudioFilter : public SubComponent {
     
-    
+    friend class Muxer;
+
+    // Current configuration
+    AudioFilterConfig config = {};
+
+    // Filters
+    ButterwothFilter butterworthL; // Used in vAmiga up to 2.4b1 (left channel)
+    ButterwothFilter butterworthR; // Used in vAmiga up to 2.4b1 (right channel)
+
+
     //
     // Initializing
     //
@@ -114,7 +130,7 @@ public:
     void clear();
 
     // Inserts a sample into the filter pipeline
-    float apply(float sample);
+    // float apply(float sample);
 };
 
 }

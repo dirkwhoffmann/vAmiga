@@ -14,6 +14,59 @@
 
 namespace vamiga {
 
+//
+// Butterworth filter (DEPRECATED)
+//
+
+void
+ButterwothFilter::setSampleRate(double sampleRate)
+{
+    // Compute butterworth filter coefficients based on
+    // https://stackoverflow.com/questions/
+    //  20924868/calculate-coefficients-of-2nd-order-butterworth-low-pass-filter
+
+    // Cutoff frequency in Hz
+    const double f_cutoff = 4500;
+
+    // Frequency ratio
+    const double ff = f_cutoff / sampleRate;
+
+    // Compute coefficients
+    const double ita = 1.0/ tan(M_PI * ff);
+    const double q = sqrt(2.0);
+
+    b0 = 1.0 / (1.0 + q * ita + ita * ita);
+    b1 = 2 * b0;
+    b2 = b0;
+    a1 = 2.0 * (ita * ita - 1.0) * b0;
+    a2 = -(1.0 - q * ita + ita * ita) * b0;
+}
+
+void
+ButterwothFilter::clear()
+{
+    x1 = x2 = y1 = y2 = 0.0;
+}
+
+float
+ButterwothFilter::apply(float sample)
+{
+    // Run pipeline
+    double x0 = (double)sample;
+    double y0 = (b0 * x0) + (b1 * x1) + (b2 * x2) + (a1 * y1) + (a2 * y2);
+
+    // Shift pipeline
+    x2 = x1; x1 = x0;
+    y2 = y1; y1 = y0;
+
+    return (float)y0;
+}
+
+
+//
+// AudioFilter (filter pipeline)
+//
+
 void
 AudioFilter::_dump(Category category, std::ostream& os) const
 {
@@ -29,18 +82,7 @@ AudioFilter::_dump(Category category, std::ostream& os) const
 
     if (category == Category::State) {
 
-        os << tab("Active");
-        os << bol(isEnabled()) << std::endl;
-        os << tab("Coefficient a1");
-        os << flt(a1) << std::endl;
-        os << tab("Coefficient a2");
-        os << flt(a2) << std::endl;
-        os << tab("Coefficient b0");
-        os << flt(b0) << std::endl;
-        os << tab("Coefficient b1");
-        os << flt(b1) << std::endl;
-        os << tab("Coefficient b2");
-        os << flt(b2) << std::endl;
+        os << "TODO" << std::endl;
     }
 }
 
@@ -106,31 +148,16 @@ void
 AudioFilter::setSampleRate(double sampleRate)
 {
     trace(AUD_DEBUG, "Setting sample rate to %f Hz\n", sampleRate);
-    
-    // Compute butterworth filter coefficients based on
-    // https://stackoverflow.com/questions/
-    //  20924868/calculate-coefficients-of-2nd-order-butterworth-low-pass-filter
-    
-    // Cutoff frequency in Hz
-    const double f_cutoff = 4500;
 
-    // Frequency ratio
-    const double ff = f_cutoff / sampleRate;
-    
-    // Compute coefficients
-    const double ita = 1.0/ tan(M_PI * ff);
-    const double q = sqrt(2.0);
-    
-    b0 = 1.0 / (1.0 + q * ita + ita * ita);
-    b1 = 2 * b0;
-    b2 = b0;
-    a1 = 2.0 * (ita * ita - 1.0) * b0;
-    a2 = -(1.0 - q * ita + ita * ita) * b0;
+    butterworthL.setSampleRate(sampleRate);
+    butterworthR.setSampleRate(sampleRate);
 }
 
 bool
 AudioFilter::isEnabled() const
 {
+    if (config.filterType == FILTER_NONE) return false;
+    
     switch (config.filterActivation) {
 
         case FILTER_AUTO_ENABLE:    return ciaa.powerLED();
@@ -145,9 +172,11 @@ AudioFilter::isEnabled() const
 void
 AudioFilter::clear()
 {
-    x1 = x2 = y1 = y2 = 0.0;
+    butterworthL.clear();
+    butterworthR.clear();
 }
 
+/*
 float
 AudioFilter::apply(float sample)
 {
@@ -166,5 +195,6 @@ AudioFilter::apply(float sample)
     
     return (float)y0;
 }
+*/
 
 }

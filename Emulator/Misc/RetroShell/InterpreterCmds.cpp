@@ -751,13 +751,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the current filter configuration",
              [this](Arguments& argv, long value) {
 
-        retroShell << '\n';
-
-        retroShell << "Left channel:" << '\n';
-        retroShell.dump(paula.muxer.filterL, Category::Config);
-
-        retroShell << "Right channel:" << '\n';
-        retroShell.dump(paula.muxer.filterR, Category::Config);
+        retroShell.dump(paula.muxer.filter, Category::Config);
     });
 
     root.add({"paula", "audio", "filter", "set"},

@@ -22,8 +22,7 @@ Muxer::Muxer(Amiga& ref) : SubComponent(ref)
 {
     subComponents = std::vector<CoreComponent *> {
 
-        &filterL,
-        &filterR
+        &filter
     };
     
     setSampleRate(44100);
@@ -98,8 +97,7 @@ Muxer::clear()
     stream.unlock();
     
     // Wipe out the filter buffers
-    filterL.clear();
-    filterR.clear();
+    filter.clear();
 }
 
 void
@@ -146,6 +144,10 @@ Muxer::getConfigItem(Option option) const
         case OPT_AUDVOLR:
             return config.volR;
 
+        case OPT_FILTER_TYPE:
+        case OPT_FILTER_ACTIVATION:
+            return filter.getConfigItem(option);
+
         default:
             fatalError;
     }
@@ -161,10 +163,6 @@ Muxer::getConfigItem(Option option, long id) const
 
         case OPT_AUDPAN:
             return config.pan[id];
-
-        case OPT_FILTER_TYPE:
-        case OPT_FILTER_ACTIVATION:
-            return id == 0 ? filterL.getConfigItem(option) : filterR.getConfigItem(option);
 
         default:
             fatalError;
@@ -208,8 +206,7 @@ Muxer::setConfigItem(Option option, i64 value)
         case OPT_FILTER_TYPE:
         case OPT_FILTER_ACTIVATION:
 
-            filterL.setConfigItem(option, value);
-            filterR.setConfigItem(option, value);
+            filter.setConfigItem(option, value);
             return;
 
         default:
@@ -248,8 +245,7 @@ Muxer::setSampleRate(double hz)
 {
     trace(AUD_DEBUG, "setSampleRate(%f)\n", hz);
 
-    filterL.setSampleRate(hz);
-    filterR.setSampleRate(hz);
+    filter.setSampleRate(hz);
 }
 
 isize
@@ -342,8 +338,7 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
     if (stream.count() + count >= stream.cap()) handleBufferOverflow();
 
     double cycle = (double)clock;
-    bool doFilterL = filterL.isEnabled();
-    bool doFilterR = filterR.isEnabled();
+    bool doButterworth = filter.isEnabled();
 
     for (long i = 0; i < count; i++) {
 
@@ -363,9 +358,11 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
         ch2 * pan[2] + ch3 * pan[3];
 
         // Apply audio filter
-        if (doFilterL) l = filterL.apply(l);
-        if (doFilterR) r = filterR.apply(r);
-        
+        if (doButterworth) {
+            l = filter.butterworthL.apply(l);
+            r = filter.butterworthR.apply(r);
+        }
+
         // Apply master volume
         l *= volL;
         r *= volR;

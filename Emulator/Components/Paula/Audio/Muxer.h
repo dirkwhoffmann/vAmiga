@@ -90,9 +90,8 @@ public:
     // Output
     AudioStream<SAMPLE_T> stream;
     
-    // Audio filters
-    AudioFilter filterL = AudioFilter(amiga);
-    AudioFilter filterR = AudioFilter(amiga);
+    // The audio filter pipeline
+    AudioFilter filter = AudioFilter(amiga);
 
     
     //
