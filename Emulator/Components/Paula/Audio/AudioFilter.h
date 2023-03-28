@@ -205,6 +205,7 @@ private:
     bool loFilterEnabled() const;
     bool ledFilterEnabled() const;
     bool hiFilterEnabled() const;
+    bool legacyFilterEnabled() const;
 
 
     //

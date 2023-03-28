@@ -2350,26 +2350,23 @@ DQ
                                                                     <menuItem title="A500" tag="1" id="WPY-fe-89T">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
-                                                                    <menuItem title="A1200" tag="2" id="4sj-mA-bOt">
+                                                                    <menuItem title="A1000" tag="2" id="S4v-dW-UQu">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
-                                                                    <menuItem title="vAmiga" tag="3" id="bFh-BK-nnk">
+                                                                    <menuItem title="A1200" tag="3" id="4sj-mA-bOt">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                    </menuItem>
+                                                                    <menuItem title="vAmiga" tag="4" id="bFh-BK-nnk">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
                                                                     <menuItem isSeparatorItem="YES" id="2pQ-uA-H7V"/>
-                                                                    <menuItem title="LP" tag="4" id="mgr-2A-3z7">
+                                                                    <menuItem title="Low-Pass only" tag="5" id="mgr-2A-3z7">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
-                                                                    <menuItem title="LED" tag="5" id="cAB-8Y-ZDx">
+                                                                    <menuItem title="LED-Filter only" tag="6" id="cAB-8Y-ZDx">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
-                                                                    <menuItem title="HI" tag="6" id="30D-YZ-qd6">
-                                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                                    </menuItem>
-                                                                    <menuItem title="LO + HI" tag="7" id="RBW-BY-rid">
-                                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                                    </menuItem>
-                                                                    <menuItem title="LO + LED + HI" tag="8" id="DcP-rV-7ZL">
+                                                                    <menuItem title="High-Pass only" tag="7" id="30D-YZ-qd6">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
                                                                 </items>

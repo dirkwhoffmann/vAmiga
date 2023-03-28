@@ -201,6 +201,10 @@ AudioFilter::_dump(Category category, std::ostream& os) const
         os << bol(hiFilterEnabled(), "enabled", "disabled") << std::endl;
         os << tab("Cutoff");
         os << flt(hiFilter.cutoff) << " Hz" << std::endl;
+
+        os << std::endl;
+        os << tab("Legacy filter");
+        os << bol(legacyFilterEnabled(), "enabled", "disabled") << std::endl;
     }
 }
 
@@ -296,9 +300,8 @@ AudioFilter::loFilterEnabled() const
     switch (config.filterType) {
 
         case FILTER_A500:
-        case FILTER_LP:
-        case FILTER_LP_HP:
-        case FILTER_LP_LED_HP:  return true;
+        case FILTER_A1000:
+        case FILTER_LOW:        return true;
         default:                return false;
     }
 }
@@ -310,8 +313,8 @@ AudioFilter::ledFilterEnabled() const
 
         case FILTER_A500:
         case FILTER_A1200:      return ciaa.powerLED();
-        case FILTER_LED:        
-        case FILTER_LP_LED_HP:  return true;
+        case FILTER_A1000:
+        case FILTER_LED:        return true;
         default:                return false;
     }
 }
@@ -322,12 +325,17 @@ AudioFilter::hiFilterEnabled() const
     switch (config.filterType) {
 
         case FILTER_A500:
+        case FILTER_A1000:
         case FILTER_A1200:
-        case FILTER_HP:
-        case FILTER_LP_HP:
-        case FILTER_LP_LED_HP:  return true;
+        case FILTER_HIGH:       return true;
         default:                return false;
     }
+}
+
+bool
+AudioFilter::legacyFilterEnabled() const
+{
+    return config.filterType == FILTER_VAMIGA;
 }
 
 void
@@ -336,26 +344,5 @@ AudioFilter::clear()
     butterworthL.clear();
     butterworthR.clear();
 }
-
-/*
-float
-AudioFilter::apply(float sample)
-{
-    if (config.filterType == FILTER_NONE) return sample;
-    
-    // Apply butterworth filter
-    assert(config.filterType == FILTER_BUTTERWORTH);
-    
-    // Run pipeline
-    double x0 = (double)sample;
-    double y0 = (b0 * x0) + (b1 * x1) + (b2 * x2) + (a1 * y1) + (a2 * y2);
-    
-    // Shift pipeline
-    x2 = x1; x1 = x0;
-    y2 = y1; y1 = y0;
-    
-    return (float)y0;
-}
-*/
 
 }

@@ -20,13 +20,12 @@ enum_long(FILTER_TYPE)
 {
     FILTER_NONE,
     FILTER_A500,
+    FILTER_A1000,
     FILTER_A1200,
     FILTER_VAMIGA,
-    FILTER_LP,
+    FILTER_LOW,
     FILTER_LED,
-    FILTER_HP,
-    FILTER_LP_HP,
-    FILTER_LP_LED_HP
+    FILTER_HIGH
 };
 typedef FILTER_TYPE FilterType;
 
@@ -34,7 +33,7 @@ typedef FILTER_TYPE FilterType;
 struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = FILTER_LP_LED_HP;
+    static constexpr long maxVal = FILTER_HIGH;
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "FILTER"; }
@@ -44,13 +43,12 @@ struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType>
                 
             case FILTER_NONE:       return "NONE";
             case FILTER_A500:       return "A500";
+            case FILTER_A1000:      return "A1000";
             case FILTER_A1200:      return "A1200";
             case FILTER_VAMIGA:     return "VAMIGA";
-            case FILTER_LP:         return "LP";
+            case FILTER_LOW:        return "LOW";
             case FILTER_LED:        return "LED";
-            case FILTER_HP:         return "HP";
-            case FILTER_LP_HP:      return "LP_HP";
-            case FILTER_LP_LED_HP:  return "LP_LED_HP";
+            case FILTER_HIGH:       return "HIGH";
         }
         return "???";
     }

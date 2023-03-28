@@ -339,7 +339,7 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
     bool loEnabled = filter.loFilterEnabled();
     bool ledEnabled = filter.ledFilterEnabled();
     bool hiEnabled = filter.hiFilterEnabled();
-    bool bwEnabled = filter.config.filterType == FILTER_VAMIGA;
+    bool legacyEnabled = filter.legacyFilterEnabled();
 
     for (long i = 0; i < count; i++) {
 
@@ -364,7 +364,7 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
         if (hiEnabled) filter.hiFilter.apply(l, r);
 
         // Apply the legacy filter if applicable
-        if (bwEnabled) {
+        if (legacyEnabled) {
             l = filter.butterworthL.apply(float(l));
             r = filter.butterworthR.apply(float(r));
         }
