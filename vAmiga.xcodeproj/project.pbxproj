@@ -227,7 +227,6 @@
 		50B9354924347EF9000C78B8 /* SnapshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50B9354824347EF9000C78B8 /* SnapshotDialog.xib */; };
 		50B9354B243481AB000C78B8 /* SnapshotDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B9354A243481AB000C78B8 /* SnapshotDialog.swift */; };
 		50B9C428260942D000A86C31 /* RetroShell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B9C426260942D000A86C31 /* RetroShell.cpp */; };
-		50BBE08B21F5EB9B0099BBBB /* A1000ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */; };
 		50BE4B7424E815CA008F39C9 /* CIAEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */; };
 		50BF1CC8276D174200386540 /* GdbServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF1CC6276D174200386540 /* GdbServer.cpp */; };
 		50BF1CCE276DC7BB00386540 /* GdbServerCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF1CCD276DC7BB00386540 /* GdbServerCmds.cpp */; };
@@ -266,6 +265,7 @@
 		50E8199325B350DA00D2E3A5 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E8199225B350DA00D2E3A5 /* Errors.swift */; };
 		50E98B51275A124900AA0CB9 /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E98B4F275A124900AA0CB9 /* Socket.cpp */; };
 		50E98B55275A127F00AA0CB9 /* RemoteServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E98B53275A127F00AA0CB9 /* RemoteServer.cpp */; };
+		50EA98F929D4883500FE99B0 /* A1000ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50EA98F829D4883500FE99B0 /* A1000ANSI.xib */; };
 		50EAD99C256E76820053F9AC /* HDFFile.h in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99B256E76820053F9AC /* HDFFile.h */; };
 		50EAD9A0256E76A40053F9AC /* HDFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99F256E76A40053F9AC /* HDFFile.cpp */; };
 		50EB8CCA25306E8E0053988A /* VideoExporter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50EB8CC925306E8E0053988A /* VideoExporter.xib */; };
@@ -808,7 +808,6 @@
 		50B9354A243481AB000C78B8 /* SnapshotDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotDialog.swift; sourceTree = "<group>"; };
 		50B9C426260942D000A86C31 /* RetroShell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RetroShell.cpp; sourceTree = "<group>"; };
 		50B9C427260942D000A86C31 /* RetroShell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RetroShell.h; sourceTree = "<group>"; };
-		50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = A1000ANSI.xib; path = "XIB files/A1000ANSI.xib"; sourceTree = SOURCE_ROOT; };
 		50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CIAEvents.cpp; sourceTree = "<group>"; };
 		50BF1CC6276D174200386540 /* GdbServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServer.cpp; sourceTree = "<group>"; };
 		50BF1CC7276D174200386540 /* GdbServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GdbServer.h; sourceTree = "<group>"; };
@@ -909,6 +908,7 @@
 		50E98B50275A124900AA0CB9 /* Socket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = "<group>"; };
 		50E98B53275A127F00AA0CB9 /* RemoteServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RemoteServer.cpp; sourceTree = "<group>"; };
 		50E98B54275A127F00AA0CB9 /* RemoteServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteServer.h; sourceTree = "<group>"; };
+		50EA98F829D4883500FE99B0 /* A1000ANSI.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A1000ANSI.xib; sourceTree = "<group>"; };
 		50EAB95726C10B6C00BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EAB95926C10B8600BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EAB95B26C10B9400BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -1273,7 +1273,6 @@
 				508FE06021EA318D0043D0E9 /* Emulator */,
 				50B14C2421EB8F25002E32A6 /* Proxy */,
 				508FDFDC21EA20600043D0E9 /* GUI */,
-				508FDFAE21EA1FF10043D0E9 /* XIB files */,
 				508FDE6621EA1FA40043D0E9 /* Resources */,
 				508FDE6521EA1FA40043D0E9 /* Products */,
 				508FDFDD21EA214A0043D0E9 /* Frameworks */,
@@ -1335,7 +1334,7 @@
 				50EB8CC925306E8E0053988A /* VideoExporter.xib */,
 				50D263CB21F6377600FA167F /* A500ANSI.xib */,
 				508FDFB821EA1FF10043D0E9 /* A500ISO.xib */,
-				50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */,
+				50EA98F829D4883500FE99B0 /* A1000ANSI.xib */,
 				50D263CD21F6378000FA167F /* A1000ISO.xib */,
 				501C514B27C4248300DF1DD5 /* FloppyCreator.xib */,
 				5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */,
@@ -1385,6 +1384,7 @@
 				508FDFCB21EA20510043D0E9 /* Metal */,
 				508FE03921EA22CC0043D0E9 /* Dialogs */,
 				509F7F1621ED156100A530E4 /* Peripherals */,
+				508FDFAE21EA1FF10043D0E9 /* XIB files */,
 			);
 			path = GUI;
 			sourceTree = "<group>";
@@ -2058,7 +2058,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				500A4EAD2447364E002A4DE1 /* eject.aiff in Resources */,
-				50BBE08B21F5EB9B0099BBBB /* A1000ANSI.xib in Resources */,
 				5050EC3F27BE876F00394F4F /* HardDiskCreator.xib in Resources */,
 				50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */,
 				50D715A127CCA5AA0085C1AA /* PartitionSelector.xib in Resources */,
@@ -2089,6 +2088,7 @@
 				508FDFBF21EA1FF10043D0E9 /* MainMenu.xib in Resources */,
 				50B9354924347EF9000C78B8 /* SnapshotDialog.xib in Resources */,
 				500217B82449CF7000E1A096 /* Configuration.xib in Resources */,
+				50EA98F929D4883500FE99B0 /* A1000ANSI.xib in Resources */,
 				500A4EAE2447364E002A4DE1 /* insert.aiff in Resources */,
 				50DD1EE22525E3E1000180F6 /* Preferences.xib in Resources */,
 			);
