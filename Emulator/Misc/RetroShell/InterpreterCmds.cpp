@@ -75,7 +75,7 @@ Interpreter::initCommons(Command &root)
              [this](Arguments& argv, long value) {
 
         auto seconds = parseNum(argv);
-        retroShell.wakeUp = agnus.clock + SEC(seconds);
+        agnus.scheduleRel<SLOT_RSH>(SEC(seconds), RSH_WAKEUP);
         throw ScriptInterruption(seconds);
     });
 }
