@@ -123,16 +123,16 @@
             
 <section id="connecting-two-amigas">
 <h1>Connecting Two Amigas<a class="headerlink" href="#connecting-two-amigas" title="Permalink to this heading">¶</a></h1>
-<p>vAmiga supports two emulator instances to be connected with a null model cable, allowing the user to run multiplayer games. In this article we will walk through the necessary steps to connect two emulator instances running Battle Chess.</p>
+<p>vAmiga supports two emulator instances to be connected with a null modem cable, allowing the user to run multiplayer games. In this article we will walk through the necessary steps to connect two emulator instances running Battle Chess.</p>
 <p>First of all, launch vAmiga, open the configuration window and switch to the Peripherals tab. In this tab you can configure the serial interface:</p>
 <p><img alt="Peripherals Tab" src="../_images/battlechess1.png" /></p>
-<p>Now open the serial port popup menu and select <em>Null Model Cable</em> from the options list. This will connect one side of a null modem cable to the serial port of your virtual Amiga. Internally, the null modem cable is emulated using socket connections, which means that the connected Amigas must agree on a common port number to communicate. By default, vAmiga uses port  8080, but you can choose a different port if you like.</p>
+<p>Now open the serial port popup menu and select <em>Null Modem Cable</em> from the options list. This will connect one side of a null modem cable to the serial port of your virtual Amiga. Internally, the null modem cable is emulated using socket connections, which means that the connected Amigas must agree on a common port number to communicate. By default, vAmiga uses port  8080, but you can choose a different port if you like.</p>
 <p><img alt="Peripherals Tab" src="../_images/battlechess2.png" /></p>
 <p>As you can see in the screenshot above, a small icon has appeared in the status bar. This indicates that the socket server has been activated and is waiting for another emulator instance to connect.</p>
 <p>Now launch another instance of vAmiga and connect the null modem cable the same way.</p>
 <p><img alt="Peripherals Tab" src="../_images/battlechess3.png" /></p>
 <p>After the null modem cable has been selected in the second emulator instance, the status icon has changed its shape, indicating that the connection has been established. If the icon looks different on your computer, please check if both emulator instances are listening to the same socket port.</p>
-<p>Now it’s time to load Battle Chess on both Amigas. The configuration of the null model cable is quite simple in this game: The the <em>Settings</em> menu let’s you select the player type for each side of the board.</p>
+<p>Now it’s time to load Battle Chess on both Amigas. The configuration of the null modem cable is quite simple in this game: The the <em>Settings</em> menu let’s you select the player type for each side of the board.</p>
 <p>This is how I configured the first emulator instance. The Amiga controls the blue army, the connected computer controls the red army.</p>
 <p><img alt="Battle Chess Setup" src="../_images/battlechess4.png" /></p>
 <p>The second emulator instance is configured the other way around. The Amiga controls the red soldiers, the connected computer controls the blue ones. After selecting <em>New Game</em> from the menu in either emulator instance, it’s time to chill. Have fun with two vAmigas fighting each other.</p>

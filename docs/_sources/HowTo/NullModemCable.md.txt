@@ -1,12 +1,12 @@
 # Connecting Two Amigas
 
-vAmiga supports two emulator instances to be connected with a null model cable, allowing the user to run multiplayer games. In this article we will walk through the necessary steps to connect two emulator instances running Battle Chess.
+vAmiga supports two emulator instances to be connected with a null modem cable, allowing the user to run multiplayer games. In this article we will walk through the necessary steps to connect two emulator instances running Battle Chess.
 
 First of all, launch vAmiga, open the configuration window and switch to the Peripherals tab. In this tab you can configure the serial interface:
 
 ![Peripherals Tab](images/battlechess1.png "Peripherals Tab")
 
-Now open the serial port popup menu and select *Null Model Cable* from the options list. This will connect one side of a null modem cable to the serial port of your virtual Amiga. Internally, the null modem cable is emulated using socket connections, which means that the connected Amigas must agree on a common port number to communicate. By default, vAmiga uses port  8080, but you can choose a different port if you like.
+Now open the serial port popup menu and select *Null Modem Cable* from the options list. This will connect one side of a null modem cable to the serial port of your virtual Amiga. Internally, the null modem cable is emulated using socket connections, which means that the connected Amigas must agree on a common port number to communicate. By default, vAmiga uses port  8080, but you can choose a different port if you like.
 
 ![Peripherals Tab](images/battlechess2.png "Peripherals Tab")
 
@@ -18,7 +18,7 @@ Now launch another instance of vAmiga and connect the null modem cable the same 
 
 After the null modem cable has been selected in the second emulator instance, the status icon has changed its shape, indicating that the connection has been established. If the icon looks different on your computer, please check if both emulator instances are listening to the same socket port.
 
-Now it's time to load Battle Chess on both Amigas. The configuration of the null model cable is quite simple in this game: The the *Settings* menu let's you select the player type for each side of the board. 
+Now it's time to load Battle Chess on both Amigas. The configuration of the null modem cable is quite simple in this game: The the *Settings* menu let's you select the player type for each side of the board. 
 
 This is how I configured the first emulator instance. The Amiga controls the blue army, the connected computer controls the red army.
 
