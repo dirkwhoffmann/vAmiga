@@ -247,16 +247,6 @@ Interpreter::initCommandShell(Command &root)
         amiga.configure(OPT_SYNC_MODE, SYNC_FIXED_FPS);
     });
 
-    root.add({"amiga", "init"}, { ConfigSchemeEnum::argList() },
-             "Initializes the Amiga with a predefined scheme",
-             [this](Arguments& argv, long value) {
-
-        auto scheme = parseEnum <ConfigSchemeEnum> (argv);
-
-        amiga.revertToFactorySettings();
-        amiga.configure(scheme);
-    });
-
     root.add({"amiga", "power"}, { Arg::onoff },
              "Switches the Amiga on or off",
              [this](Arguments& argv, long value) {
@@ -268,7 +258,17 @@ Interpreter::initCommandShell(Command &root)
              "Performs a hard reset",
              [this](Arguments& argv, long value) {
 
-        amiga.reset(true);
+        amiga.hardReset();
+    });
+
+    root.add({"amiga", "init"}, { ConfigSchemeEnum::argList() },
+             "Initializes the Amiga with a predefined scheme",
+             [this](Arguments& argv, long value) {
+
+        auto scheme = parseEnum <ConfigSchemeEnum> (argv);
+
+        amiga.revertToFactorySettings();
+        amiga.configure(scheme);
     });
 
 

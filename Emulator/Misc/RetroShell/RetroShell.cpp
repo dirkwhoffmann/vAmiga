@@ -582,10 +582,8 @@ RetroShell::dump(CoreObject &component, std::vector <Category> categories)
     {   SUSPENDED
 
         *this << '\n';
+        for(auto &category : categories) _dump(component, category);
 
-        for(auto &category : categories) {
-            _dump(component, category);
-        }
     }
 }
 

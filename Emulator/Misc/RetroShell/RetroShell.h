@@ -131,6 +131,11 @@ public:
     // Assigns an additional output stream
     void setStream(std::ostream &os);
 
+private:
+
+    // Marks the text storage as dirty
+    void needsDisplay();
+
     // Clears the console window
     void clear();
 
@@ -142,11 +147,6 @@ public:
 
     // Prints a state summary (used by the debug shell)
     void printState();
-
-private:
-
-    // Marks the text storage as dirty
-    void needsDisplay();
 
     
     //
