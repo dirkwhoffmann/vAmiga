@@ -2729,7 +2729,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 230106;
+				CURRENT_PROJECT_VERSION = 230425;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3NG65ZLYW7;
 				ENABLE_APP_SANDBOX = NO;
@@ -2749,11 +2749,16 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.4b1;
+				MARKETING_VERSION = 2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmiga;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Proxy/Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				WARNING_CFLAGS = (
+					"-Wno-gnu-anonymous-struct",
+					"-Wno-gnu-zero-variadic-macro-arguments",
+					"-Wno-nested-anon-types",
+				);
 			};
 			name = Debug;
 		};
@@ -2768,7 +2773,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 230106;
+				CURRENT_PROJECT_VERSION = 230425;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 3NG65ZLYW7;
 				ENABLE_APP_SANDBOX = NO;
@@ -2786,11 +2791,16 @@
 				);
 				LLVM_LTO = YES_THIN;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.4b1;
+				MARKETING_VERSION = 2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmiga;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Proxy/Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				WARNING_CFLAGS = (
+					"-Wno-gnu-anonymous-struct",
+					"-Wno-gnu-zero-variadic-macro-arguments",
+					"-Wno-nested-anon-types",
+				);
 			};
 			name = Release;
 		};
