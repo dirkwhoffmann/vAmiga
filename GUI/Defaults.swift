@@ -1039,7 +1039,6 @@ extension DefaultsProxy {
         remove(.INSERT_VOLUME, [0, 1, 2, 3])
         remove(.EJECT_VOLUME, [0, 1, 2, 3])
         remove(.FILTER_TYPE)
-        remove(.FILTER_ACTIVATION)
     }
 }
 
@@ -1076,7 +1075,6 @@ extension Configuration {
         defaults.set(.INSERT_VOLUME, [0, 1, 2, 3], insertVolume)
         defaults.set(.EJECT_VOLUME, [0, 1, 2, 3], ejectVolume)
         defaults.set(.FILTER_TYPE, filterType)
-        defaults.set(.FILTER_ACTIVATION, filterActivation)
         defaults.save()
         
         amiga.resume()
@@ -1117,7 +1115,6 @@ extension Configuration {
         insertVolume = defaults.get(.INSERT_VOLUME, 0)
         ejectVolume = defaults.get(.EJECT_VOLUME, 0)
         filterType = defaults.get(.FILTER_TYPE)
-        filterActivation = defaults.get(.FILTER_ACTIVATION)
 
         amiga.resume()
     }

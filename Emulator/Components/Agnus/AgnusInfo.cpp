@@ -389,6 +389,16 @@ Agnus::eventName(EventSlot slot, EventID id)
             }
             break;
 
+        case SLOT_RSH:
+
+            switch (id) {
+
+                case EVENT_NONE:        return "none";
+                case RSH_WAKEUP:        return "RSH_WAKEUP";
+                default:                return "*** INVALID ***";
+            }
+            break;
+
         case SLOT_KEY:
             
             switch (id) {

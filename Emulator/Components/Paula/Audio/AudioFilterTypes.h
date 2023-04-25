@@ -19,7 +19,13 @@
 enum_long(FILTER_TYPE)
 {
     FILTER_NONE,
-    FILTER_BUTTERWORTH
+    FILTER_A500,
+    FILTER_A1000,
+    FILTER_A1200,
+    FILTER_VAMIGA,
+    FILTER_LOW,
+    FILTER_LED,
+    FILTER_HIGH
 };
 typedef FILTER_TYPE FilterType;
 
@@ -27,7 +33,7 @@ typedef FILTER_TYPE FilterType;
 struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = FILTER_BUTTERWORTH;
+    static constexpr long maxVal = FILTER_HIGH;
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "FILTER"; }
@@ -35,37 +41,14 @@ struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType>
     {
         switch (value) {
                 
-            case FILTER_NONE:         return "NONE";
-            case FILTER_BUTTERWORTH:  return "BUTTERWORTH";
-        }
-        return "???";
-    }
-};
-#endif
-
-enum_long(FILTER_ACTIVATION)
-{
-    FILTER_AUTO_ENABLE,
-    FILTER_ALWAYS_ON,
-    FILTER_ALWAYS_OFF,
-};
-typedef FILTER_TYPE FilterActivation;
-
-#ifdef __cplusplus
-struct FilterActivationEnum : util::Reflection<FilterActivationEnum, FilterActivation>
-{
-    static constexpr long minVal = 0;
-    static constexpr long maxVal = FILTER_ALWAYS_OFF;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
-
-    static const char *prefix() { return "FILTER"; }
-    static const char *key(FilterType value)
-    {
-        switch (value) {
-
-            case FILTER_AUTO_ENABLE:    return "AUTO_ENABLE";
-            case FILTER_ALWAYS_ON:      return "ALWAYS_ON";
-            case FILTER_ALWAYS_OFF:     return "ALWAYS_OFF";
+            case FILTER_NONE:       return "NONE";
+            case FILTER_A500:       return "A500";
+            case FILTER_A1000:      return "A1000";
+            case FILTER_A1200:      return "A1200";
+            case FILTER_VAMIGA:     return "VAMIGA";
+            case FILTER_LOW:        return "LOW";
+            case FILTER_LED:        return "LED";
+            case FILTER_HIGH:       return "HIGH";
         }
         return "???";
     }
@@ -81,8 +64,5 @@ typedef struct
 {
     // The selected audio filter type
     FilterType filterType;
-
-    // Filter activation mode
-    FilterActivation filterActivation;
 }
 AudioFilterConfig;

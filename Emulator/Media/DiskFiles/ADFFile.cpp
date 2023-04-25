@@ -31,18 +31,15 @@ bool
 ADFFile::isCompatible(std::istream &stream)
 {
     isize length = util::streamLength(stream);
-    
+
     // Some ADFs contain an additional byte at the end. Ignore it.
     length &= ~1;
-    
-    // There are no magic bytes. Hence, we only check the file size.
-    return
-    length == ADFSIZE_35_DD ||
-    length == ADFSIZE_35_DD_81 ||
-    length == ADFSIZE_35_DD_82 ||
-    length == ADFSIZE_35_DD_83 ||
-    length == ADFSIZE_35_DD_84 ||
-    length == ADFSIZE_35_HD;
+
+    // The size must be a multiple of the cylinder size
+    if (length % 11264) return false;
+
+    // Check some more limits
+    return length <= ADFSIZE_35_DD_84 || length == ADFSIZE_35_HD;
 }
 
 isize
@@ -136,6 +133,13 @@ ADFFile::init(MutableFileSystem &volume)
     }
 
     volume.exportVolume(data.ptr, data.size);
+}
+
+void
+ADFFile::finalizeRead()
+{
+    // Add some empty cylinders if the file contains less than 80
+    if (data.size < ADFSIZE_35_DD) data.resize(ADFSIZE_35_DD, 0);
 }
 
 isize

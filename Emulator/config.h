@@ -17,27 +17,16 @@
 #define VER_MAJOR 2
 #define VER_MINOR 4
 #define VER_SUBMINOR 0
-#define VER_BETA 1
+#define VER_BETA 0
 
 // Snapshot version number
 #define SNP_MAJOR 2
 #define SNP_MINOR 4
 #define SNP_SUBMINOR 0
-#define SNP_BETA 1
+#define SNP_BETA 0
 
 // Uncomment this setting in a release build
-// #define RELEASEBUILD
-
-
-//
-// Build settings
-//
-
-#if defined(__clang__)
-#pragma GCC diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"
-#pragma GCC diagnostic ignored "-Wgnu-anonymous-struct"
-#pragma GCC diagnostic ignored "-Wnested-anon-types"
-#endif
+#define RELEASEBUILD
 
 
 //

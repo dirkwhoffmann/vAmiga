@@ -75,7 +75,7 @@ Interpreter::initCommons(Command &root)
              [this](Arguments& argv, long value) {
 
         auto seconds = parseNum(argv);
-        retroShell.wakeUp = agnus.clock + SEC(seconds);
+        agnus.scheduleRel<SLOT_RSH>(SEC(seconds), RSH_WAKEUP);
         throw ScriptInterruption(seconds);
     });
 }
@@ -247,16 +247,6 @@ Interpreter::initCommandShell(Command &root)
         amiga.configure(OPT_SYNC_MODE, SYNC_FIXED_FPS);
     });
 
-    root.add({"amiga", "init"}, { ConfigSchemeEnum::argList() },
-             "Initializes the Amiga with a predefined scheme",
-             [this](Arguments& argv, long value) {
-
-        auto scheme = parseEnum <ConfigSchemeEnum> (argv);
-
-        amiga.revertToFactorySettings();
-        amiga.configure(scheme);
-    });
-
     root.add({"amiga", "power"}, { Arg::onoff },
              "Switches the Amiga on or off",
              [this](Arguments& argv, long value) {
@@ -268,7 +258,17 @@ Interpreter::initCommandShell(Command &root)
              "Performs a hard reset",
              [this](Arguments& argv, long value) {
 
-        amiga.reset(true);
+        amiga.hardReset();
+    });
+
+    root.add({"amiga", "init"}, { ConfigSchemeEnum::argList() },
+             "Initializes the Amiga with a predefined scheme",
+             [this](Arguments& argv, long value) {
+
+        auto scheme = parseEnum <ConfigSchemeEnum> (argv);
+
+        amiga.revertToFactorySettings();
+        amiga.configure(scheme);
     });
 
 
@@ -751,13 +751,7 @@ Interpreter::initCommandShell(Command &root)
              "Displays the current filter configuration",
              [this](Arguments& argv, long value) {
 
-        retroShell << '\n';
-
-        retroShell << "Left channel:" << '\n';
-        retroShell.dump(paula.muxer.filterL, Category::Config);
-
-        retroShell << "Right channel:" << '\n';
-        retroShell.dump(paula.muxer.filterR, Category::Config);
+        retroShell.dump(paula.muxer.filter, Category::Config);
     });
 
     root.add({"paula", "audio", "filter", "set"},
@@ -768,13 +762,6 @@ Interpreter::initCommandShell(Command &root)
              [this](Arguments& argv, long value) {
 
         amiga.configure(OPT_FILTER_TYPE, parseEnum <FilterTypeEnum> (argv));
-    });
-
-    root.add({"paula", "audio", "filter", "set", "activation"}, { FilterActivationEnum::argList() },
-             "Selects the filter activation condition",
-             [this](Arguments& argv, long value) {
-
-        amiga.configure(OPT_FILTER_ACTIVATION, parseEnum <FilterActivationEnum> (argv));
     });
 
     root.add({"paula", "audio", "set"},

@@ -24,20 +24,6 @@ extension MyController {
 
             return NSImage(named: amiga.isWarping ? "warpOnTemplate" : "warpOffTemplate")
         }
-        /*
-        switch WarpMode(rawValue: config.warpMode) {
-        case .AUTO where amiga.isWarping:
-            return NSImage(named: "hourglass3Template")
-        case .AUTO:
-            return NSImage(named: "hourglass1Template")
-        case .NEVER:
-            return NSImage(named: "warpOffTemplate")
-        case .ALWAYS:
-            return NSImage(named: "warpOnTemplate")
-        default:
-            fatalError()
-        }
-        */
     }
     
     func refreshStatusBar() {

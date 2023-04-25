@@ -52,7 +52,7 @@ class Configuration {
         set { amiga.configure(.CPU_OVERCLOCKING, value: newValue) }
     }
     var warpMode: Int {
-        get { amiga.getConfig(.WARP_MODE) }
+        get { return amiga.getConfig(.WARP_MODE) }
         set { amiga.configure(.WARP_MODE, value: newValue) }
     }
     var agnusRev: Int {
@@ -72,12 +72,8 @@ class Configuration {
         set { amiga.configure(.RTC_MODEL, value: newValue) }
     }
     var filterType: Int {
-        get { return amiga.getConfig(.FILTER_TYPE, id: 0) }
+        get { return amiga.getConfig(.FILTER_TYPE) }
         set { amiga.configure(.FILTER_TYPE, value: newValue) }
-    }
-    var filterActivation: Int {
-        get { return amiga.getConfig(.FILTER_ACTIVATION, id: 0) }
-        set { amiga.configure(.FILTER_ACTIVATION, value: newValue) }
     }
     var chipRam: Int {
         get { return amiga.getConfig(.CHIP_RAM) }

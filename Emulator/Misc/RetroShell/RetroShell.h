@@ -68,9 +68,6 @@ class RetroShell : public SubComponent {
     // The script line counter (first line = 1)
     isize scriptLine = 0;
 
-    // Wake up cycle for interrupted scripts
-    Cycle wakeUp = INT64_MAX;
-
     
     //
     // Initializing
@@ -134,6 +131,11 @@ public:
     // Assigns an additional output stream
     void setStream(std::ostream &os);
 
+private:
+
+    // Marks the text storage as dirty
+    void needsDisplay();
+
     // Clears the console window
     void clear();
 
@@ -145,11 +147,6 @@ public:
 
     // Prints a state summary (used by the debug shell)
     void printState();
-
-private:
-
-    // Marks the text storage as dirty
-    void needsDisplay();
 
     
     //
@@ -193,7 +190,8 @@ public:
     void exec(const string &command) throws;
 
     // Executes a shell script
-    void execScript(std::ifstream &fs) throws;
+    void execScript(const std::stringstream &ss) throws;
+    void execScript(const std::ifstream &fs) throws;
     void execScript(const string &contents) throws;
 
     // Continues a previously interrupted script
@@ -223,12 +221,12 @@ private:
 
     
     //
-    // Performing periodic events
+    // Servicing events
     //
     
 public:
-    
-    void eofHandler();
+
+    void serviceEvent();
 };
 
 }

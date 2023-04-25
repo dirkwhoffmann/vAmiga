@@ -588,6 +588,13 @@ Interpreter::initDebugShell(Command &root)
         retroShell.dump(paula, { Category::Config, Category::State, Category::Registers } );
     });
 
+    root.add({"paula", "audio", "filter"},
+             "Inspects the internal filter state",
+             [this](Arguments& argv, long value) {
+
+        retroShell.dump(paula.muxer.filter, { Category::Config, Category::State } );
+    });
+
     root.add({"paula", "dc", ""},
              "Inspects the internal state",
              [this](Arguments& argv, long value) {

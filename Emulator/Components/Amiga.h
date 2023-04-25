@@ -149,7 +149,6 @@ private:
     Snapshot *autoSnapshot = nullptr;
     Snapshot *userSnapshot = nullptr;
 
-
     typedef struct { Cycle trigger; i64 payload; } Alarm;
     std::vector<Alarm> alarms;
 

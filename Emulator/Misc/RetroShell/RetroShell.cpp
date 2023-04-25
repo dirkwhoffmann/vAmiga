@@ -444,21 +444,29 @@ RetroShell::exec(const string &command)
 }
 
 void
-RetroShell::execScript(std::ifstream &fs)
+RetroShell::execScript(const std::stringstream &ss)
 {
     script.str("");
-    script << fs.rdbuf();
+    script.clear();
+    script << ss.rdbuf();
     scriptLine = 1;
     continueScript();
 }
 
 void
+RetroShell::execScript(const std::ifstream &fs)
+{
+    std::stringstream ss;
+    ss << fs.rdbuf();
+    execScript(ss);
+}
+
+void
 RetroShell::execScript(const string &contents)
 {
-    script.str("");
-    script << contents;
-    scriptLine = 1;
-    continueScript();
+    std::stringstream ss;
+    ss << contents;
+    execScript(ss);
 }
 
 void
@@ -574,10 +582,8 @@ RetroShell::dump(CoreObject &component, std::vector <Category> categories)
     {   SUSPENDED
 
         *this << '\n';
+        for(auto &category : categories) _dump(component, category);
 
-        for(auto &category : categories) {
-            _dump(component, category);
-        }
     }
 }
 
@@ -605,13 +611,10 @@ RetroShell::_dump(CoreObject &component, Category category)
 }
 
 void
-RetroShell::eofHandler()
+RetroShell::serviceEvent()
 {
-    if (agnus.clock >= wakeUp) {
-        
-        msgQueue.put(MSG_SCRIPT_WAKEUP, ScriptMsg { scriptLine, 0 });
-        wakeUp = INT64_MAX;
-    }
+    msgQueue.put(MSG_SCRIPT_WAKEUP, ScriptMsg { scriptLine, 0 });
+    agnus.cancel<SLOT_RSH>();
 }
 
 }

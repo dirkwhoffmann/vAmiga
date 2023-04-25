@@ -85,9 +85,6 @@ class Canvas: Layer {
      */
     var finalTexture: MTLTexture! = nil
 
-    // Framebuffer backup (needed by the screen recorder)
-    // var framebufTexture: MTLTexture! = nil
-
     // Part of the texture that is currently visible
     var textureRect = CGRect() { didSet { buildVertexBuffers() } }
 
@@ -175,14 +172,6 @@ class Canvas: Layer {
                              "The upscaling texture could not be allocated.")
         renderer.metalAssert(scanlineTexture != nil,
                              "The scanline texture could not be allocated.")
-
-        // EXPERIMENTAL
-        /*
-        framebufTexture = device.makeTexture(size: MTLSizeMake(4096, 4096, 0), usage: rwtp)
-        renderer.metalAssert(framebufTexture != nil,
-                             "Framebuffer texture could not be allocated.")
-        */
-
     }
 
     //
@@ -208,16 +197,8 @@ class Canvas: Layer {
     }
 
     func screenshot(texture: MTLTexture, rect: CGRect) -> NSImage? {
-        
-        // Use the blitter to copy the texture data back from the GPU
-        let queue = texture.device.makeCommandQueue()!
-        let commandBuffer = queue.makeCommandBuffer()!
-        let blitEncoder = commandBuffer.makeBlitCommandEncoder()!
-        blitEncoder.synchronize(texture: texture, slice: 0, level: 0)
-        blitEncoder.endEncoding()
-        commandBuffer.commit()
-        commandBuffer.waitUntilCompleted()
-        
+
+        blitTexture(texture: texture)
         return NSImage.make(texture: texture, rect: rect)
     }
 

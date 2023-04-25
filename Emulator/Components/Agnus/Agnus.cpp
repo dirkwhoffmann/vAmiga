@@ -444,6 +444,9 @@ Agnus::executeUntil(Cycle cycle) {
             if (isDue<SLOT_MSE2>(cycle)) {
                 controlPort2.mouse.serviceMouseEvent <SLOT_MSE2> ();
             }
+            if (isDue<SLOT_RSH>(cycle)) {
+                retroShell.serviceEvent();
+            }
             if (isDue<SLOT_KEY>(cycle)) {
                 keyboard.serviceKeyEvent();
             }
@@ -662,7 +665,6 @@ Agnus::eofHandler()
     copper.eofHandler();
     controlPort1.joystick.eofHandler();
     controlPort2.joystick.eofHandler();
-    retroShell.eofHandler();
 
     // Update statistics
     updateStats();

@@ -318,7 +318,8 @@ Amiga::getConfigItem(Option option) const
         case OPT_SAMPLING_METHOD:
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
-            
+        case OPT_FILTER_TYPE:
+
             return paula.muxer.getConfigItem(option);
 
         case OPT_BLITTER_ACCURACY:
@@ -367,8 +368,6 @@ Amiga::getConfigItem(Option option, long id) const
 
         case OPT_AUDPAN:
         case OPT_AUDVOL:
-        case OPT_FILTER_TYPE:
-        case OPT_FILTER_ACTIVATION:
 
             return paula.muxer.getConfigItem(option, id);
 
@@ -621,7 +620,6 @@ Amiga::configure(Option option, i64 value)
 
         case OPT_SAMPLING_METHOD:
         case OPT_FILTER_TYPE:
-        case OPT_FILTER_ACTIVATION:
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
             
@@ -974,10 +972,10 @@ Amiga::_dump(Category category, std::ostream& os) const
 
         os << tab("Machine type");
         os << VideoFormatEnum::key(config.type) << std::endl;
-        os << tab("Warp boot");
-        os << dec(config.warpBoot) << " seconds" << std::endl;
         os << tab("Warp mode");
         os << WarpModeEnum::key(config.warpMode) << std::endl;
+        os << tab("Warp boot");
+        os << dec(config.warpBoot) << " seconds" << std::endl;
         os << tab("Sync mode");
         os << SyncModeEnum::key(config.syncMode);
         if (config.syncMode == SYNC_FIXED_FPS) os << " (" << config.proposedFps << " fps)";
