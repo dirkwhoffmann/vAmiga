@@ -213,8 +213,8 @@ GdbServer::bssSeg() const
 string
 GdbServer::computeChecksum(const string &s)
 {
-    uint8_t chk = 0;
-    for(auto &c : s) U8_INC(chk, c); // chk += (uint8_t)c;
+    u8 chk = 0;
+    for(auto &c : s) U8_INC(chk, c);
 
     return util::hexstr <2> (chk);
 }

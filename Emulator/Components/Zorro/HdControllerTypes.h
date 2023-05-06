@@ -19,21 +19,21 @@
 #ifdef __cplusplus
 
 // Constants from exec/errors.h
-constexpr int8_t    IOERR_OPENFAIL      = -1;
-constexpr int8_t    IOERR_ABORTED       = -2;
-constexpr int8_t    IOERR_NOCMD         = -3;
-constexpr int8_t    IOERR_BADLENGTH     = -4;
-constexpr int8_t    IOERR_BADADDRESS    = -5;
-constexpr int8_t    IOERR_UNITBUSY      = -6;
-constexpr int8_t    IOERR_SELFTEST      = -7;
+constexpr i8    IOERR_OPENFAIL      = -1;
+constexpr i8    IOERR_ABORTED       = -2;
+constexpr i8    IOERR_NOCMD         = -3;
+constexpr i8    IOERR_BADLENGTH     = -4;
+constexpr i8    IOERR_BADADDRESS    = -5;
+constexpr i8    IOERR_UNITBUSY      = -6;
+constexpr i8    IOERR_SELFTEST      = -7;
 
 // Offsets into the IOStdReq struct
-constexpr uint32_t  IO_COMMAND          = 0x1C;
-constexpr uint32_t  IO_ERROR            = 0x1F;
-constexpr uint32_t  IO_ACTUAL           = 0x20;
-constexpr uint32_t  IO_LENGTH           = 0x24;
-constexpr uint32_t  IO_DATA             = 0x28;
-constexpr uint32_t  IO_OFFSET           = 0x2C;
+constexpr u32   IO_COMMAND          = 0x1C;
+constexpr u32   IO_ERROR            = 0x1F;
+constexpr u32   IO_ACTUAL           = 0x20;
+constexpr u32   IO_LENGTH           = 0x24;
+constexpr u32   IO_DATA             = 0x28;
+constexpr u32   IO_OFFSET           = 0x2C;
 
 #endif
 
