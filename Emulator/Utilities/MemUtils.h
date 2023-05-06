@@ -34,7 +34,7 @@ namespace util {
 template<typename T> T bigEndian(T x);
 
 template<>
-inline uint16_t bigEndian(uint16_t x)
+inline u16 bigEndian(u16 x)
 {
     if constexpr (std::endian::native == std::endian::big) {
         return x;
@@ -44,7 +44,7 @@ inline uint16_t bigEndian(uint16_t x)
 }
 
 template<>
-inline uint32_t bigEndian(uint32_t x)
+inline u32 bigEndian(u32 x)
 {
     if constexpr (std::endian::native == std::endian::big) {
         return x;
@@ -54,7 +54,7 @@ inline uint32_t bigEndian(uint32_t x)
 }
 
 template<>
-inline uint64_t bigEndian(uint64_t x)
+inline u64 bigEndian(u64 x)
 {
     if constexpr (std::endian::native == std::endian::big) {
         return x;
