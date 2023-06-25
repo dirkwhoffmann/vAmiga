@@ -46,7 +46,7 @@ extension Inspector {
         let ptr = mask.bindMemory(to: UInt32.self, capacity: cap)
 
         // Create image data
-        for bank in 0..<256 {
+        for bank in 0...255 {
 
             var color: NSColor
             var mirror = false
@@ -85,12 +85,12 @@ extension Inspector {
                         r = Int(ciBgColor.red * CGFloat(255 - y*c))
                         g = Int(ciBgColor.green * CGFloat(255 - y*c))
                         b = Int(ciBgColor.blue * CGFloat(255 - y*c))
-                        a = Int(ciBgColor.alpha)
+                        a = Int(ciBgColor.alpha * CGFloat(255))
                     } else {
                         r = Int(ciColor.red * CGFloat(255 - y*c))
                         g = Int(ciColor.green * CGFloat(255 - y*c))
                         b = Int(ciColor.blue * CGFloat(255 - y*c))
-                        a = Int(ciColor.alpha)
+                        a = Int(ciColor.alpha * CGFloat(255))
                     }
                     let abgr = UInt32(r | g << 8 | b << 16 | a << 24)
                     ptr[y*width + dx] = abgr

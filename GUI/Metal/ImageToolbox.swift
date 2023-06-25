@@ -200,7 +200,7 @@ public extension NSImage {
     static func make(data: UnsafeMutableRawPointer, rect: CGSize) -> NSImage? {
         
         guard let cgImage = CGImage.make(data: data, size: rect) else {
-            warn("Failed to create CGImage.")
+            warn("Failed to create CGImage")
             return nil
         }
         
