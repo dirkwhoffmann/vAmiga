@@ -219,11 +219,11 @@ StrWriter::operator<<(UInt32 u)
     return *this;
 }
 
-StrWriter&
-StrWriter::operator<<(Imu im)
+template <Size S> StrWriter&
+StrWriter::operator<<(Imu<S> im)
 {
     *ptr++ = '#';
-    *this << UInt(im.raw);
+    *this << UInt(CLIP<S>(im.raw));
     return *this;
 }
 
@@ -1231,7 +1231,7 @@ StrWriter::operator<<(Im<M, S> wrapper)
 
         default:
 
-            *this << Imu(ea.ext1);
+            *this << Imu<S>(ea.ext1);
             break;
     }
 

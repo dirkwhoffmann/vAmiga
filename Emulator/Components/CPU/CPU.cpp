@@ -741,7 +741,7 @@ CPU::disassembleWords(u32 addr, isize len)
 {
     static char result[64];
 
-    dump16(result, addr, len);
+    dump16(result, addr, (int)len);
     return result;
 }
 

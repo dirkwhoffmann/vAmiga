@@ -243,8 +243,8 @@ public:
     void dump32(char *str, u32 value) const;
 
     // Creates a textual representation for multiple data values
-    void dump16(char *str, u16 values[], isize cnt) const;
-    void dump16(char *str, u32 addr, isize cnt) const;
+    void dump16(char *str, u16 values[], int cnt) const;
+    void dump16(char *str, u32 addr, int cnt) const;
 
     // Return an info struct for a certain opcode
     InstrInfo getInfo(u16 op) const;
