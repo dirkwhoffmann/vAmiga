@@ -171,8 +171,153 @@ Moira::execFTrapcc(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execFMove(u16 opcode)
 {
-    printf("execFMove\n");
-    execLineF<C, I, M, S>(opcode);
+    AVAILABILITY(C68000);
+
+    auto ext = readExt<C, Word>();
+    auto reg = _____________xxx (opcode);
+    auto cod = xxx_____________ (ext);
+    auto src = ___xxx__________ (ext);
+    auto dst = ______xxx_______ (ext);
+    auto fac = _________xxxxxxx (ext);
+
+    // Catch illegal extension words
+    if (!fpu.isValidExt(I, M, opcode, ext)) {
+
+        execLineF<C, I, M, S>(opcode);
+        return;
+    }
+
+    switch (cod) {
+
+        case 0b000:
+
+            printf("FMOVE: cod = 000\n");
+            /*
+             if (fac == 0x40) str << Ins<FSMOVE>{} << Ffmt{2};
+             else if (fac == 0x44) str << Ins<FDMOVE>{} << Ffmt{2};
+             else str << Ins<I>{} << Ffmt{2};
+
+             str << str.tab << Fp(src) << Sep{} << Fp(dst);
+             */
+            break;
+
+        case 0b010:
+
+            printf("FMOVE: cod = 010\n");
+            /*
+             if (fac == 0x40) str << Ins<FSMOVE>{} << Ffmt{src};
+             else if (fac == 0x44) str << Ins<FDMOVE>{} << Ffmt{src};
+             else str << Ins<I>{} << Ffmt{src};
+             */
+
+            if (M == MODE_IM) {
+
+                u64 val;
+
+                switch (src) {
+
+                    case 0: // Long-Word Integer
+
+                        printf("FMOVE IM: Long-Word Integer\n");
+                        /*
+                         val = dasmIncRead<Long>(addr);
+                         str << str.tab << Ims<Long>(u32(val)) << Sep{} << Fp(dst);
+                         */
+                        break;
+
+                    case 1: // Single precision
+
+                        printf("FMOVE IM: Single precision\n");
+                        /*
+                         val = dasmIncRead<Long>(addr);
+                         str << str.tab << "#<fixme>" << Sep{} << Fp(dst);
+                         */
+                        break;
+
+                    case 2: // Double precision
+
+                        printf("FMOVE IM: Double precision (fallthrough)\n");
+                        break;
+
+                    case 3: // Packed-Decimal Real
+
+                        printf("FMOVE IM: Single precision\n");
+                        /*
+                         val = dasmIncRead<Long>(addr);
+                         dasmIncRead<Long>(addr);
+                         dasmIncRead<Long>(addr); // Why???
+                         str << str.tab << "#<fixme>" << Sep{} << Fp(dst);
+                         */
+                        break;
+
+                    case 5: // Double-precision real
+
+                        printf("FMOVE IM: Double-precision real\n");
+                        /*
+                         val = dasmIncRead<Long>(addr);
+                         dasmIncRead<Long>(addr);
+                         str << str.tab << "#<fixme>" << Sep{} << Fp(dst);
+                         */
+                        break;
+
+                    case 6: // Byte Integer
+
+                        printf("FMOVE IM: Byte Integer\n");
+                        /*
+                         val = dasmIncRead<Word>(addr);
+                         str << str.tab << Ims<Byte>(u32(val)) << Sep{} << Fp(dst);
+                         */
+                        break;
+
+                    default:
+
+                        printf("FMOVE IM: Default\n");
+                }
+            } else {
+
+                printf("FMOVE (MODE != IM)\n");
+            }
+            break;
+
+        case 0b011:
+
+            switch (src) {
+
+                case 0b011:
+
+                    printf("FMOVE (0b011, 0b011)\n");
+                    /*
+                     str << Ins<I>{} << Ffmt{src} << str.tab << Fp(dst) << Sep{} << Op<M, Long>(reg, addr);
+                     str << "{" << Ims<Byte>(i8(fac << 1) >> 1) << "}";
+                     */
+                    break;
+
+                case 0b111:
+
+                    printf("FMOVE (0b011, 0b111)\n");
+                    /*
+                     str << Ins<I>{} << Ffmt{3} << str.tab << Fp{dst} << Sep{} << Op<M, Long>(reg, addr);
+                     str << Sep{} << Dn(fac >> 4);
+                     */
+                    break;
+
+                default:
+
+                    printf("FMOVE (0b011, default)\n");
+                    u32 data = softfloat::floatx80_to_int32(fpu.fpr[dst].raw);
+                    writeOp<C, M, Word>(reg, data);
+
+                    /*
+                     str << Ins<I>{} << Ffmt{src} << str.tab << Fp{dst} << Sep{} << Op<M, Long>(reg, addr);
+                     */
+                    break;
+            }
+            break;
+    }
+
+    prefetch<C>();
+
+    FINALIZE
 }
 
 template <Core C, Instr I, Mode M, Size S> void
@@ -214,7 +359,7 @@ Moira::execFMovecr(u16 opcode)
     }
 
     prefetch<C>();
-    
+
     FINALIZE
 }
 
@@ -267,7 +412,21 @@ Moira::execFMovem(u16 opcode)
         case 0b101: // Cntrl to Ea
 
             if (lll == 0 || lll == 1 || lll == 2 || lll == 4) {
-                printf("TODO: FMOVE Cntrl -> Ea\n");
+
+                printf("FMOVE Cntrl -> Ea\n");
+
+                (void)readExt<C,Word>();
+
+                u32 data = 0;
+                if (lll & 1) { data = fpu.fpiar; }
+                if (lll & 2) { data = fpu.fpsr; }
+                if (lll & 4) { data = fpu.fpcr; }
+
+                writeOp<C, M, Long>(reg, data);
+
+                prefetch<C>();
+                return;
+
             } else {
                 printf("TODO: FMOVEM Cntrl -> Ea\n");
             }

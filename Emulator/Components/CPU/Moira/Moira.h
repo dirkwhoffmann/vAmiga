@@ -12,6 +12,7 @@
 #include "MoiraFPU.h"
 #include "MoiraDebugger.h"
 #include "SubComponent.h"
+#include "softfloat.h"
 
 namespace vamiga::moira {
 
