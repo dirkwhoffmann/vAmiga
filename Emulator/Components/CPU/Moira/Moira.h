@@ -9,6 +9,7 @@
 
 #include "MoiraConfig.h"
 #include "MoiraTypes.h"
+#include "MoiraFPU.h"
 #include "MoiraDebugger.h"
 #include "SubComponent.h"
 
@@ -16,6 +17,7 @@ namespace vamiga::moira {
 
 class Moira : public SubComponent {
 
+    friend class FPU;
     friend class Debugger;
     friend class Breakpoints;
     friend class Watchpoints;
@@ -47,6 +49,9 @@ protected:
 
 public:
 
+    // Floating point unit (not supported yet)
+    FPU fpu = FPU(*this);
+
     // Breakpoints, watchpoints, catchpoints, instruction tracing
     Debugger debugger = Debugger(*this);
 
@@ -65,9 +70,6 @@ protected:
 
     // The prefetch queue
     PrefetchQueue queue;
-
-    // The floating point unit (not supported yet)
-    FPU fpu;
 
     // The interrupt mode of this CPU
     IrqMode irqMode = IRQ_AUTO;
@@ -150,6 +152,10 @@ public:
     void setModel(Model cpuModel, Model dasmModel);
     void setModel(Model model) { setModel(model, model); }
 
+    // Attaches or detaches a coprocessor
+    void attach6888x(int x);
+    void detach6888x();
+
     // Configures the visual appearance of disassembled instructions
     void setDasmSyntax(DasmSyntax value);
     void setDasmNumberFormat(DasmNumberFormat value) { setNumberFormat(instrStyle, value); }
@@ -172,19 +178,22 @@ private:
 public:
 
     // Checks if the emulated CPU model has a coprocessor interface
-    bool hasCPI();
+    bool hasCPI() const;
 
     // Checks if the emulated CPU model has a memory managenemt unit
-    bool hasMMU();
+    bool hasMMU() const;
 
     // Checks if the emulated CPU model has a floating point unit
-    bool hasFPU();
+    bool hasFPU() const;
 
     // Returns the cache register mask (accessible CACR bits)
     u32 cacrMask() const;
 
     // Returns the address bus mask (bus width)
     u32 addrMask() const;
+
+    // Checks if a floating-point coprocessor is attached
+    bool has6888x() const;
 
 protected:
 
@@ -464,7 +473,7 @@ private:
     // Checks the validity of the extension words
     bool isValidExt(Instr I, Mode M, u16 op, u32 ext) const;
     bool isValidExtMMU(Instr I, Mode M, u16 op, u32 ext) const;
-    bool isValidExtFPU(Instr I, Mode M, u16 op, u32 ext) const;
+    // bool isValidExtFPU(Instr I, Mode M, u16 op, u32 ext) const;
 
     // Returns an availability string (used by the disassembler)
     const char *availabilityString(Instr I, Mode M, Size S, u16 ext);

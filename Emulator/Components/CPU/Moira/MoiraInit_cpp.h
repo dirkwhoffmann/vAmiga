@@ -1891,6 +1891,40 @@ Moira::createJumpTable(Model model, bool regDasm)
     // Line-F area
     //
 
+    //
+    // Floating point unit
+    //
+
+    if (model == M68040 || has6888x()) {
+
+        opcode = parse("1111 0010 100- ----");
+        ___________XXXXX(opcode, FBcc, MODE_IP, Word, FBcc, CIMS)
+
+        opcode = parse("1111 0010 110- ----");
+        ___________XXXXX(opcode, FBcc, MODE_IP, Long, FBcc, CIMS)
+
+        opcode = parse("1111 0010 00-- ----");
+        __________XXXXXX(opcode, cpGEN, MODE_IP, Unsized, FGen, CIMS)
+        __________MMMXXX(opcode, cpGEN, 0b111111111111, Unsized, FGen, CIMS)
+
+        opcode = parse("1111 0011 01-- ----");
+        __________MMMXXX(opcode, FRESTORE, 0b001101111110, Word, FRestore, CIMS)
+
+        opcode = parse("1111 0011 00-- ----");
+        __________MMMXXX(opcode, FSAVE, 0b001011111000, Word, FSave, CIMS)
+
+        opcode = parse("1111 0010 0111 1---");
+        ________________(opcode | 0b010, FTRAPcc, MODE_IP, Word, FTrapcc, CIMS)
+        ________________(opcode | 0b011, FTRAPcc, MODE_IP, Long, FTrapcc, CIMS)
+        ________________(opcode | 0b100, FTRAPcc, MODE_IP, Unsized, FTrapcc, CIMS)
+
+        opcode = parse("1111 0010 01-- ----");
+        __________MMMXXX(opcode, FScc, 0b101111111000, Byte, FScc, CIMS)
+
+        opcode = parse("1111 0010 0100 1---");
+        _____________XXX(opcode, FDBcc, MODE_IP, Word, FDbcc, CIMS)
+    }
+
     if constexpr (C >= C68020) {
 
         //
@@ -1945,41 +1979,6 @@ Moira::createJumpTable(Model model, bool regDasm)
 
             opcode = parse("1111 0101 0110 1---");
             _____________XXX(opcode, PTEST, MODE_AI, Unsized, PTest40, CIMS)
-        }
-
-
-        //
-        // Floating point unit
-        //
-
-        if (model == M68040) {
-
-            opcode = parse("1111 0010 100- ----");
-            ___________XXXXX(opcode, FBcc, MODE_IP, Word, FBcc, CIMS)
-
-            opcode = parse("1111 0010 110- ----");
-            ___________XXXXX(opcode, FBcc, MODE_IP, Long, FBcc, CIMS)
-
-            opcode = parse("1111 0010 00-- ----");
-            __________XXXXXX(opcode, cpGEN, MODE_IP, Unsized, FGen, CIMS)
-            __________MMMXXX(opcode, cpGEN, 0b111111111111, Unsized, FGen, CIMS)
-
-            opcode = parse("1111 0011 01-- ----");
-            __________MMMXXX(opcode, FRESTORE, 0b001101111110, Word, FRestore, CIMS)
-
-            opcode = parse("1111 0011 00-- ----");
-            __________MMMXXX(opcode, FSAVE, 0b001011111000, Word, FSave, CIMS)
-
-            opcode = parse("1111 0010 0111 1---");
-            ________________(opcode | 0b010, FTRAPcc, MODE_IP, Word, FTrapcc, CIMS)
-            ________________(opcode | 0b011, FTRAPcc, MODE_IP, Long, FTrapcc, CIMS)
-            ________________(opcode | 0b100, FTRAPcc, MODE_IP, Unsized, FTrapcc, CIMS)
-
-            opcode = parse("1111 0010 01-- ----");
-            __________MMMXXX(opcode, FScc, 0b101111111000, Byte, FScc, CIMS)
-
-            opcode = parse("1111 0010 0100 1---");
-            _____________XXX(opcode, FDBcc, MODE_IP, Word, FDbcc, CIMS)
         }
 
 

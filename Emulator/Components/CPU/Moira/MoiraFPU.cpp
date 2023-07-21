@@ -5,9 +5,35 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
-/*
+#include "MoiraFPU.h"
+#include "Moira.h"
+#include "MoiraMacros.h"
+
+namespace vamiga::moira {
+
+void
+FPU::reset()
+{
+    for (int i = 0; i < 8; i++) {
+        fpr[i] = { };
+    }
+
+    fpiar = 0;
+    fpsr = 0;
+    fpcr = 0;
+}
+
+void
+FPU::setModel(FPUModel model)
+{
+    // Only proceed if the model changes
+    if (this->model == model) return;
+
+    this->model = model;
+}
+
 bool
-Moira::isValidExtFPU(Instr I, Mode M, u16 op, u32 ext) const
+FPU::isValidExt(Instr I, Mode M, u16 op, u32 ext) const
 {
     auto cod  = xxx_____________ (ext);
     auto mode = ___xx___________ (ext);
@@ -117,52 +143,5 @@ Moira::isValidExtFPU(Instr I, Mode M, u16 op, u32 ext) const
             fatalError;
     }
 }
-*/
 
-template <Core C, Instr I, Mode M, Size S> void
-Moira::execFBcc(u16 opcode)
-{
-    execLineF<C, I, M, S>(opcode);
-}
-
-template <Core C, Instr I, Mode M, Size S> void
-Moira::execFDbcc(u16 opcode)
-{
-    execLineF<C, I, M, S>(opcode);
-}
-
-template <Core C, Instr I, Mode M, Size S> void
-Moira::execFGen(u16 opcode)
-{
-    execLineF<C, I, M, S>(opcode);
-}
-
-template <Core C, Instr I, Mode M, Size S> void
-Moira::execFNop(u16 opcode)
-{
-    execLineF<C, I, M, S>(opcode);
-}
-
-template <Core C, Instr I, Mode M, Size S> void
-Moira::execFRestore(u16 opcode)
-{
-    execLineF<C, I, M, S>(opcode);
-}
-
-template <Core C, Instr I, Mode M, Size S> void
-Moira::execFSave(u16 opcode)
-{
-    execLineF<C, I, M, S>(opcode);
-}
-
-template <Core C, Instr I, Mode M, Size S> void
-Moira::execFScc(u16 opcode)
-{
-    execLineF<C, I, M, S>(opcode);
-}
-
-template <Core C, Instr I, Mode M, Size S> void
-Moira::execFTrapcc(u16 opcode)
-{
-    execLineF<C, I, M, S>(opcode);
 }

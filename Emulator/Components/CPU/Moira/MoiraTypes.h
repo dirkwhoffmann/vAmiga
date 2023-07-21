@@ -49,6 +49,15 @@ Model;
 
 typedef enum
 {
+    FPU_NONE,
+    FPU_68040,              // Unsupported
+    FPU_68881,              // Work in progress
+    FPU_68882               // Work in progress
+}
+FPUModel;
+
+typedef enum
+{
     C68000,                 // Used by M68000
     C68010,                 // Used by M68010
     C68020                  // Used by all others
@@ -333,19 +342,6 @@ struct PrefetchQueue {
 
     u16 irc;                // The most recent word prefetched from memory
     u16 ird;                // The instruction currently being executed
-};
-
-struct Float80 {
-
-    softfloat::floatx80 raw;
-};
-
-struct FPU {
-
-    Float80 fpr[8];
-    u32 fpiar;
-    u32 fpsr;
-    u32 fpcr;
 };
 
 struct InstrInfo

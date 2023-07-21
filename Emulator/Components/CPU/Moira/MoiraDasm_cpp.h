@@ -515,11 +515,14 @@ Moira::dasmBitFieldDn(StrWriter &str, u32 &addr, u16 op) const
     auto w   = ___________xxxxx(ext);
 
     // Catch illegal extension words
-    if ((str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) && !isValidExt(I, M, op, ext)) {
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        addr = old;
-        dasmIllegal<I, M, S>(str, addr, op);
-        return;
+        if (!isValidExt(I, M, op, ext)) {
+
+            addr = old;
+            dasmIllegal<I, M, S>(str, addr, op);
+            return;
+        }
     }
 
     str << Ins<I>{} << str.tab;
@@ -629,11 +632,14 @@ Moira::dasmCas(StrWriter &str, u32 &addr, u16 op) const
     auto dst = Op <M,S> ( _____________xxx(op), addr );
 
     // Catch illegal extension words
-    if ((str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) && !isValidExt(I, M, op, ext)) {
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        addr = old;
-        dasmIllegal<I, M, S>(str, addr, op);
-        return;
+        if (!isValidExt(I, M, op, ext)) {
+
+            addr = old;
+            dasmIllegal<I, M, S>(str, addr, op);
+            return;
+        }
     }
 
     str << Ins<I>{} << Sz<S>{} << str.tab << dc << Sep{} << du << Sep{} << dst;
@@ -653,11 +659,14 @@ Moira::dasmCas2(StrWriter &str, u32 &addr, u16 op) const
     auto rn2 = Rn ( (ext >> 12) & 0b1111 );
 
     // Catch illegal extension words (binutils only checks the first word)
-    if ((str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) && !isValidExt(I, M, op, u16(ext >> 16))) {
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        addr = old;
-        dasmIllegal<I, M, S>(str, addr, op);
-        return;
+        if (!isValidExt(I, M, op, u16(ext >> 16))) {
+
+            addr = old;
+            dasmIllegal<I, M, S>(str, addr, op);
+            return;
+        }
     }
 
     auto fill = str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT ? ',' : ':';
@@ -711,11 +720,14 @@ Moira::dasmChkCmp2(StrWriter &str, u32 &addr, u16 op) const
     auto dst = Rn       ( xxxx____________(ext)      );
 
     // Catch illegal extension words
-    if ((str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) && !isValidExt(I, M, op, ext)) {
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        addr = old;
-        dasmIllegal<I, M, S>(str, addr, op);
-        return;
+        if (!isValidExt(I, M, op, ext)) {
+            
+            addr = old;
+            dasmIllegal<I, M, S>(str, addr, op);
+            return;
+        }
     }
 
     if (ext & 0x0800) {
