@@ -274,7 +274,8 @@ namespace vamiga {
 
 CPU::CPU(Amiga& ref) : moira::Moira(ref)
 {
-    
+    // EXPERIMENTAL. REMOVE ASAP
+    attach6888x(2);
 }
 
 i64

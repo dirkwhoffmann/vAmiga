@@ -144,4 +144,22 @@ FPU::isValidExt(Instr I, Mode M, u16 op, u32 ext) const
     }
 }
 
+void
+FPU::setFPR(int n, u16 high, u64 low)
+{
+    assert(n >= 0 && n <= 7);
+
+    fpr[n].raw.high = high;
+    fpr[n].raw.low = low;
+}
+
+/*
+void
+FPU::execFMovecr(u16 op, u16 ext)
+{
+    printf("execFMovecr\n");
+    execLineF<C, I, M, S>(opcode);
+}
+*/
+
 }

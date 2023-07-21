@@ -1860,8 +1860,8 @@
 				50A6F50328C7AB51002F31EA /* MoiraDasmMMU_cpp.h */,
 				50E2BE26240D418500155AE4 /* MoiraDasm_cpp.h */,
 				50A6F50428C7AB6A002F31EA /* MoiraDasmFPU_cpp.h */,
-				50DD3AF52A6A8495008FC7CC /* MoiraFPU.cpp */,
 				50DD3AF62A6A8496008FC7CC /* MoiraFPU.h */,
+				50DD3AF52A6A8495008FC7CC /* MoiraFPU.cpp */,
 				50E2BE2B240D418500155AE4 /* MoiraDebugger.h */,
 				50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */,
 				50E2BE32240D418600155AE4 /* StrWriter.h */,
@@ -2024,8 +2024,9 @@
 		508FDE5C21EA1FA40043D0E9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 1400;
+				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = "Dirk Hoffmann";
 				TargetAttributes = {
 					508FDE6321EA1FA40043D0E9 = {
