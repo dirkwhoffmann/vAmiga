@@ -56,6 +56,23 @@ public:
 
 
     //
+    // Accessing registers
+    //
+
+    Float80 getFPR(int n) const;
+    void setFPR(int n, u16 high, u64 low);
+
+    u32 getFPCR() const { return fpcr; }
+    void setFPCR(u32 value);
+
+    u32 getFPSR() const { return fpsr; }
+    void setFPSR(u32 value);
+
+    u32 getFPIAR() const { return fpiar; }
+    void setFPIAR(u32 value);
+
+
+    //
     // Analyzing instructions
     //
 
@@ -63,13 +80,6 @@ public:
 
     // Checks the validity of the extension words
     bool isValidExt(Instr I, Mode M, u16 op, u32 ext) const;
-
-
-    //
-    // Accessing registers
-    //
-
-    void setFPR(int n, u16 high, u64 low);
 
 
     //

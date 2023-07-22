@@ -144,6 +144,13 @@ FPU::isValidExt(Instr I, Mode M, u16 op, u32 ext) const
     }
 }
 
+Float80
+FPU::getFPR(int n) const
+{
+    assert(n >= 0 && n <= 7);
+    return fpr[n];
+}
+
 void
 FPU::setFPR(int n, u16 high, u64 low)
 {
@@ -152,6 +159,26 @@ FPU::setFPR(int n, u16 high, u64 low)
     fpr[n].raw.high = high;
     fpr[n].raw.low = low;
 }
+
+void
+FPU::setFPCR(u32 value)
+{
+    fpcr = value;
+    softfloat::float_rounding_mode = (value & 0b110000) >> 4;
+}
+
+void
+FPU::setFPSR(u32 value)
+{
+    fpsr = value;
+}
+
+void
+FPU::setFPIAR(u32 value)
+{
+    fpiar = value;
+}
+
 
 /*
 void

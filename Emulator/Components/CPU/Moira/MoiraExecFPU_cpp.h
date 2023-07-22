@@ -399,9 +399,9 @@ Moira::execFMovem(u16 opcode)
                 u32 ea, data;
                 readOp<C, M, Long, STD_AE_FRAME>(reg, &ea, &data);
 
-                if (lll & 4) { fpu.fpcr = data; }
-                if (lll & 2) { fpu.fpsr = data; }
-                if (lll & 1) { fpu.fpiar = data; }
+                if (lll & 4) { fpu.setFPCR(data); }
+                if (lll & 2) { fpu.setFPSR(data); }
+                if (lll & 1) { fpu.setFPIAR(data); }
 
                 if (lll & 4) { printf("FPCR = %d\n", data); }
                 if (lll & 2) { printf("FPSR = %d\n", data); }
