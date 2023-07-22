@@ -72,39 +72,39 @@ Moira::execFGen(u16 opcode)
 
             switch (cmd) {
 
-                case 0x01: printf("TODO: FINT\n"); return; // dasmFGeneric<FINT, M, S>(str, addr, op); return;
-                case 0x02: printf("TODO: FSINH\n"); return; // dasmFGeneric<FSINH, M, S>(str, addr, op); return;
-                case 0x03: printf("TODO: FINTRZ\n"); return; // dasmFGeneric<FINTRZ, M, S>(str, addr, op); return;
-                case 0x04: printf("TODO: FSQRT\n"); return; // dasmFGeneric<FSQRT, M, S>(str, addr, op); return;
-                case 0x06: printf("TODO: FLOGNP1\n"); return; // dasmFGeneric<FLOGNP1, M, S>(str, addr, op); return;
-                case 0x08: printf("TODO: FETOXM1\n"); return; // dasmFGeneric<FETOXM1, M, S>(str, addr, op); return;
-                case 0x09: printf("TODO: FTANH\n"); return; // dasmFGeneric<FTANH, M, S>(str, addr, op); return;
-                case 0x0A: printf("TODO: FASIN\n"); return; // dasmFGeneric<FASIN, M, S>(str, addr, op); return;
-                case 0x0D: printf("TODO: FATANH\n"); return; // dasmFGeneric<FATANH, M, S>(str, addr, op); return;
-                case 0x0E: printf("TODO: FSIN\n"); return; // dasmFGeneric<FSIN, M, S>(str, addr, op); return;
-                case 0x0F: printf("TODO: FTAN\n"); return; // dasmFGeneric<FTAN, M, S>(str, addr, op); return;
-                case 0x10: printf("TODO: FETOX\n"); return; // dasmFGeneric<FETOX, M, S>(str, addr, op); return;
-                case 0x11: printf("TODO: FTWOTOX\n"); return; // dasmFGeneric<FTWOTOX, M, S>(str, addr, op); return;
-                case 0x12: printf("TODO: FTENTOX\n"); return; // dasmFGeneric<FTENTOX, M, S>(str, addr, op); return;
-                case 0x14: printf("TODO: FLOGN\n"); return; // dasmFGeneric<FLOGN, M, S>(str, addr, op); return;
-                case 0x15: printf("TODO: FLOG10\n"); return; // dasmFGeneric<FLOG10, M, S>(str, addr, op); return;
-                case 0x16: printf("TODO: FLOG2\n"); return; // dasmFGeneric<FLOG2, M, S>(str, addr, op); return;
-                case 0x18: printf("TODO: FABS\n"); return; // dasmFGeneric<FABS, M, S>(str, addr, op); return;
-                case 0x19: printf("TODO: FCOSH\n"); return; // dasmFGeneric<FCOSH, M, S>(str, addr, op); return;
-                case 0x1A: printf("TODO: FNEG\n"); return; // dasmFGeneric<FNEG, M, S>(str, addr, op); return;
-                case 0x1C: printf("TODO: FACOS\n"); return; // dasmFGeneric<FACOS, M, S>(str, addr, op); return;
-                case 0x1D: printf("TODO: FCOS\n"); return; // dasmFGeneric<FCOS, M, S>(str, addr, op); return;
-                case 0x1E: printf("TODO: FGETEXP\n"); return; // dasmFGeneric<FGETEXP, M, S>(str, addr, op); return;
-                case 0x1F: printf("TODO: FGETMAN\n"); return; // dasmFGeneric<FGETMAN, M, S>(str, addr, op); return;
-                case 0x20: printf("TODO: FDIV\n"); return; // dasmFGeneric<FDIV, M, S>(str, addr, op); return;
-                case 0x21: printf("TODO: FMOD\n"); return; // dasmFGeneric<FMOD, M, S>(str, addr, op); return;
-                case 0x22: printf("TODO: FADD\n"); return; // dasmFGeneric<FADD, M, S>(str, addr, op); return;
-                case 0x23: printf("TODO: FMUL\n"); return; // dasmFGeneric<FMUL, M, S>(str, addr, op); return;
-                case 0x24: printf("TODO: FSGLDIV\n"); return; // dasmFGeneric<FSGLDIV, M, S>(str, addr, op); return;
-                case 0x25: printf("TODO: FREM\n"); return; // dasmFGeneric<FREM, M, S>(str, addr, op); return;
-                case 0x26: printf("TODO: FSCAL\n"); return; // dasmFGeneric<FSCAL, M, S>(str, addr, op); return;
-                case 0x27: printf("TODO: FSGLMUL\n"); return; // dasmFGeneric<FSGLMUL, M, S>(str, addr, op); return;
-                case 0x28: printf("TODO: FSUB\n"); return; // dasmFGeneric<FSUB, M, S>(str, addr, op); return;
+                case 0x01: printf("TODO: FINT\n"); execFGeneric<C, FINT, M, S>(opcode); return;
+                case 0x02: printf("TODO: FSINH\n"); execFGeneric<C, FSINH, M, S>(opcode); return;
+                case 0x03: printf("TODO: FINTRZ\n"); execFGeneric<C, FINTRZ, M, S>(opcode); return;
+                case 0x04: printf("TODO: FSQRT\n"); execFGeneric<C, FSQRT, M, S>(opcode); return;
+                case 0x06: printf("TODO: FLOGNP1\n"); execFGeneric<C, FLOGNP1, M, S>(opcode); return;
+                case 0x08: printf("TODO: FETOXM1\n"); execFGeneric<C, FETOXM1, M, S>(opcode); return;
+                case 0x09: printf("TODO: FTANH\n"); execFGeneric<C, FTANH, M, S>(opcode); return;
+                case 0x0A: printf("TODO: FASIN\n"); execFGeneric<C, FASIN, M, S>(opcode); return;
+                case 0x0D: printf("TODO: FATANH\n"); execFGeneric<C, FATANH, M, S>(opcode); return;
+                case 0x0E: printf("TODO: FSIN\n"); execFGeneric<C, FSIN, M, S>(opcode); return;
+                case 0x0F: printf("TODO: FTAN\n"); execFGeneric<C, FTAN, M, S>(opcode); return;
+                case 0x10: printf("TODO: FETOX\n"); execFGeneric<C, FETOX, M, S>(opcode); return;
+                case 0x11: printf("TODO: FTWOTOX\n"); execFGeneric<C, FTWOTOX, M, S>(opcode); return;
+                case 0x12: printf("TODO: FTENTOX\n"); execFGeneric<C, FTENTOX, M, S>(opcode); return;
+                case 0x14: printf("TODO: FLOGN\n"); execFGeneric<C, FLOGN, M, S>(opcode); return;
+                case 0x15: printf("TODO: FLOG10\n"); execFGeneric<C, FLOG10, M, S>(opcode); return;
+                case 0x16: printf("TODO: FLOG2\n"); execFGeneric<C, FLOG2, M, S>(opcode); return;
+                case 0x18: printf("TODO: FABS\n"); execFGeneric<C, FABS, M, S>(opcode); return;
+                case 0x19: printf("TODO: FCOSH\n"); execFGeneric<C, FCOSH, M, S>(opcode); return;
+                case 0x1A: printf("TODO: FNEG\n"); execFGeneric<C, FNEG, M, S>(opcode); return;
+                case 0x1C: printf("TODO: FACOS\n"); execFGeneric<C, FACOS, M, S>(opcode); return;
+                case 0x1D: printf("TODO: FCOS\n"); execFGeneric<C, FCOS, M, S>(opcode); return;
+                case 0x1E: printf("TODO: FGETEXP\n"); execFGeneric<C, FGETEXP, M, S>(opcode); return;
+                case 0x1F: printf("TODO: FGETMAN\n"); execFGeneric<C, FGETMAN, M, S>(opcode); return;
+                case 0x20: printf("TODO: FDIV\n"); execFGeneric<C, FDIV, M, S>(opcode); return;
+                case 0x21: printf("TODO: FMOD\n"); execFGeneric<C, FMOD, M, S>(opcode); return;
+                case 0x22: printf("TODO: FADD\n"); execFGeneric<C, FADD, M, S>(opcode); return;
+                case 0x23: printf("TODO: FMUL\n"); execFGeneric<C, FMUL, M, S>(opcode); return;
+                case 0x24: printf("TODO: FSGLDIV\n"); execFGeneric<C, FSGLDIV, M, S>(opcode); return;
+                case 0x25: printf("TODO: FREM\n"); execFGeneric<C, FREM, M, S>(opcode); return;
+                case 0x26: printf("TODO: FSCAL\n"); execFGeneric<C, FSCAL, M, S>(opcode); return;
+                case 0x27: printf("TODO: FSGLMUL\n"); execFGeneric<C, FSGLMUL, M, S>(opcode); return;
+                case 0x28: printf("TODO: FSUB\n"); execFGeneric<C, FSUB, M, S>(opcode); return;
                 case 0x30: printf("TODO: FSINCOS\n"); return; // dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
                 case 0x31: printf("TODO: FSINCOS\n"); return; // dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
                 case 0x32: printf("TODO: FSINCOS\n"); return; // dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
@@ -113,22 +113,22 @@ Moira::execFGen(u16 opcode)
                 case 0x35: printf("TODO: FSINCOS\n"); return; // dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
                 case 0x36: printf("TODO: FSINCOS\n"); return; // dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
                 case 0x37: printf("TODO: FSINCOS\n"); return; // dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
-                case 0x38: printf("TODO: FCMP\n"); return; // dasmFGeneric<FCMP, M, S>(str, addr, op); return;
+                case 0x38: printf("TODO: FCMP\n"); execFGeneric<C, FCMP, M, S>(opcode); return;
                 case 0x3A: printf("TODO: FTST\n"); return; // dasmFGeneric3<FTST, M, S>(str, addr, op); return;
-                case 0x41: printf("TODO: FSSQRT\n"); return; // dasmFGeneric<FSSQRT, M, S>(str, addr, op); return;
-                case 0x45: printf("TODO: FDSQRT\n"); return; // dasmFGeneric<FDSQRT, M, S>(str, addr, op); return;
-                case 0x58: printf("TODO: FSABS\n"); return; // dasmFGeneric<FSABS, M, S>(str, addr, op); return;
-                case 0x5A: printf("TODO: FSNEG\n"); return; // dasmFGeneric<FSNEG, M, S>(str, addr, op); return;
-                case 0x5C: printf("TODO: FDABS\n"); return; // dasmFGeneric<FDABS, M, S>(str, addr, op); return;
-                case 0x5E: printf("TODO: FDNEG\n"); return; // dasmFGeneric<FDNEG, M, S>(str, addr, op); return;
-                case 0x60: printf("TODO: FSDIV\n"); return; // dasmFGeneric<FSDIV, M, S>(str, addr, op); return;
-                case 0x62: printf("TODO: FSADD\n"); return; // dasmFGeneric<FSADD, M, S>(str, addr, op); return;
-                case 0x63: printf("TODO: FSMUL\n"); return; // dasmFGeneric<FSMUL, M, S>(str, addr, op); return;
-                case 0x64: printf("TODO: FDDIV\n"); return; // dasmFGeneric<FDDIV, M, S>(str, addr, op); return;
-                case 0x66: printf("TODO: FDADD\n"); return; // dasmFGeneric<FDADD, M, S>(str, addr, op); return;
-                case 0x67: printf("TODO: FDMUL\n"); return; // dasmFGeneric<FDMUL, M, S>(str, addr, op); return;
-                case 0x68: printf("TODO: FSSUB\n"); return; // dasmFGeneric<FSSUB, M, S>(str, addr, op); return;
-                case 0x6C: printf("TODO: FDSUB\n"); return; // dasmFGeneric<FDSUB, M, S>(str, addr, op); return;
+                case 0x41: printf("TODO: FSSQRT\n"); execFGeneric<C, FSSQRT, M, S>(opcode); return;
+                case 0x45: printf("TODO: FDSQRT\n"); execFGeneric<C, FDSQRT, M, S>(opcode); return;
+                case 0x58: printf("TODO: FSABS\n"); execFGeneric<C, FSABS, M, S>(opcode); return;
+                case 0x5A: printf("TODO: FSNEG\n"); execFGeneric<C, FSNEG, M, S>(opcode); return;
+                case 0x5C: printf("TODO: FDABS\n"); execFGeneric<C, FDABS, M, S>(opcode); return;
+                case 0x5E: printf("TODO: FDNEG\n"); execFGeneric<C, FDNEG, M, S>(opcode); return;
+                case 0x60: printf("TODO: FSDIV\n"); execFGeneric<C, FSDIV, M, S>(opcode); return;
+                case 0x62: printf("TODO: FSADD\n"); execFGeneric<C, FSADD, M, S>(opcode); return;
+                case 0x63: printf("TODO: FSMUL\n"); execFGeneric<C, FSMUL, M, S>(opcode); return;
+                case 0x64: printf("TODO: FDDIV\n"); execFGeneric<C, FDDIV, M, S>(opcode); return;
+                case 0x66: printf("TODO: FDADD\n"); execFGeneric<C, FDADD, M, S>(opcode); return;
+                case 0x67: printf("TODO: FDMUL\n"); execFGeneric<C, FDMUL, M, S>(opcode); return;
+                case 0x68: printf("TODO: FSSUB\n"); execFGeneric<C, FSSUB, M, S>(opcode); return;
+                case 0x6C: printf("TODO: FDSUB\n"); execFGeneric<C, FDSUB, M, S>(opcode); return;
             }
             break;
     }
@@ -199,6 +199,7 @@ Moira::execFMove(u16 opcode)
 
              str << str.tab << Fp(src) << Sep{} << Fp(dst);
              */
+            CYCLES(4);
             break;
 
         case 0b010:
@@ -366,6 +367,8 @@ Moira::execFMovecr(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execFMovem(u16 opcode)
 {
+    AVAILABILITY(C68000);
+    
     // auto old = addr;
     auto ext = queue.irc; //  dasmIncRead(addr);
     auto reg = _____________xxx (opcode);
@@ -376,10 +379,13 @@ Moira::execFMovem(u16 opcode)
 
     printf("execFMovem\n");
 
-    if (!fpu.isValidExt(I, M, opcode, ext)) {
+    if (!MIMIC_MUSASHI) {
 
-        execLineF<C, I, M, S>(opcode);
-        return;
+        if (!fpu.isValidExt(I, M, opcode, ext)) {
+
+            execLineF<C, I, M, S>(opcode);
+            return;
+        }
     }
 
     switch (cod) {
@@ -393,19 +399,40 @@ Moira::execFMovem(u16 opcode)
                 u32 ea, data;
                 readOp<C, M, Long, STD_AE_FRAME>(reg, &ea, &data);
 
-                if (lll & 1) { fpu.fpiar = data; }
-                if (lll & 2) { fpu.fpsr = data; }
                 if (lll & 4) { fpu.fpcr = data; }
+                if (lll & 2) { fpu.fpsr = data; }
+                if (lll & 1) { fpu.fpiar = data; }
 
-                if (lll & 1) { printf("FPIAR = %d\n", data); }
-                if (lll & 2) { printf("FPSR = %d\n", data); }
                 if (lll & 4) { printf("FPCR = %d\n", data); }
+                if (lll & 2) { printf("FPSR = %d\n", data); }
+                if (lll & 1) { printf("FPIAR = %d\n", data); }
 
                 prefetch<C>();
                 return;
 
             } else {
-                printf("TODO: FMOVEM Ea -> Cntrl\n");
+
+                printf("Ea to Cntrl (lll = %d)\n", lll);
+
+                (void)readExt<C,Word>();
+
+                u32 ea, data;
+
+                if (lll & 4) {
+                    readOp<C, M, Long, STD_AE_FRAME>(reg, &ea, &data);
+                    fpu.fpcr = data;
+                }
+                if (lll & 2) {
+                    readOp<C, M, Long, STD_AE_FRAME>(reg, &ea, &data);
+                    fpu.fpsr = data;
+                }
+                if (lll & 1) {
+                    readOp<C, M, Long, STD_AE_FRAME>(reg, &ea, &data);
+                    fpu.fpiar = data;
+                }
+
+                prefetch<C>();
+                CYCLES(10);
             }
             break;
 
@@ -422,13 +449,18 @@ Moira::execFMovem(u16 opcode)
                 if (lll & 2) { data = fpu.fpsr; }
                 if (lll & 4) { data = fpu.fpcr; }
 
-                writeOp<C, M, Long>(reg, data);
+                if (M != MODE_IM && M != MODE_IP) {
+                    writeOp<C, M, Long>(reg, data);
+                }
 
                 prefetch<C>();
                 return;
 
             } else {
                 printf("TODO: FMOVEM Cntrl -> Ea\n");
+
+                (void)readExt<C,Word>();
+                prefetch<C>();
             }
             break;
 
@@ -470,6 +502,9 @@ Moira::execFMovem(u16 opcode)
                 case 0b01: // Dynamic list, predecrement addressing
 
                     printf("TODO: FPU -> MEM (Dynamic list, predecrement addressing)\n");
+
+                    (void)readExt<C,Word>();
+                    prefetch<C>();
                     break;
 
                 case 0b10: // Static list, postincrement addressing
@@ -485,5 +520,53 @@ Moira::execFMovem(u16 opcode)
             break;
     }
 
-    execLineF<C, I, M, S>(opcode);
+    // execLineF<C, I, M, S>(opcode);
+}
+
+template <Core C, Instr I, Mode M, Size S> void
+Moira::execFGeneric(u16 opcode)
+{
+    AVAILABILITY(C68000);
+
+    // Filter out unavailable instructions
+    if (fpu.model == FPU_68040) {
+
+        switch (I) {
+
+            case FACOS:
+            case FASIN:
+            case FATANH:
+            case FCOS:
+            case FCOSH:
+            case FETOX:
+            case FETOXM1:
+            case FGETEXP:
+            case FGETMAN:
+            // case FINT:
+            case FINTRZ:
+            case FLOG10:
+            case FLOG2:
+            case FLOGN:
+            case FLOGNP1:
+            case FMOD:
+            case FREM:
+            case FSCAL:
+            case FSIN:
+            case FSINCOS:
+            case FSINH:
+            case FTAN:
+            case FTANH:
+            case FTENTOX:
+            case FTWOTOX:
+
+                execLineF<C, I, M, S>(opcode);
+                FINALIZE
+                return;
+        }
+    }
+
+    // (void)readExt<C,Word>();
+    prefetch<C>();
+
+    FINALIZE
 }

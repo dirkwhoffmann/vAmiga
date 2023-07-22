@@ -99,21 +99,30 @@ Moira::dasmFGen(StrWriter &str, u32 &addr, u16 op) const
                 case 0x37: dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
                 case 0x38: dasmFGeneric<FCMP, M, S>(str, addr, op); return;
                 case 0x3A: dasmFGeneric3<FTST, M, S>(str, addr, op); return;
-                case 0x41: dasmFGeneric<FSSQRT, M, S>(str, addr, op); return;
-                case 0x45: dasmFGeneric<FDSQRT, M, S>(str, addr, op); return;
-                case 0x58: dasmFGeneric<FSABS, M, S>(str, addr, op); return;
-                case 0x5A: dasmFGeneric<FSNEG, M, S>(str, addr, op); return;
-                case 0x5C: dasmFGeneric<FDABS, M, S>(str, addr, op); return;
-                case 0x5E: dasmFGeneric<FDNEG, M, S>(str, addr, op); return;
-                case 0x60: dasmFGeneric<FSDIV, M, S>(str, addr, op); return;
-                case 0x62: dasmFGeneric<FSADD, M, S>(str, addr, op); return;
-                case 0x63: dasmFGeneric<FSMUL, M, S>(str, addr, op); return;
-                case 0x64: dasmFGeneric<FDDIV, M, S>(str, addr, op); return;
-                case 0x66: dasmFGeneric<FDADD, M, S>(str, addr, op); return;
-                case 0x67: dasmFGeneric<FDMUL, M, S>(str, addr, op); return;
-                case 0x68: dasmFGeneric<FSSUB, M, S>(str, addr, op); return;
-                case 0x6C: dasmFGeneric<FDSUB, M, S>(str, addr, op); return;
             }
+
+            // 68040 only instructions
+            if (hasFPU()) {
+
+                switch (cmd) {
+
+                    case 0x41: dasmFGeneric<FSSQRT, M, S>(str, addr, op); return;
+                    case 0x45: dasmFGeneric<FDSQRT, M, S>(str, addr, op); return;
+                    case 0x58: dasmFGeneric<FSABS, M, S>(str, addr, op); return;
+                    case 0x5A: dasmFGeneric<FSNEG, M, S>(str, addr, op); return;
+                    case 0x5C: dasmFGeneric<FDABS, M, S>(str, addr, op); return;
+                    case 0x5E: dasmFGeneric<FDNEG, M, S>(str, addr, op); return;
+                    case 0x60: dasmFGeneric<FSDIV, M, S>(str, addr, op); return;
+                    case 0x62: dasmFGeneric<FSADD, M, S>(str, addr, op); return;
+                    case 0x63: dasmFGeneric<FSMUL, M, S>(str, addr, op); return;
+                    case 0x64: dasmFGeneric<FDDIV, M, S>(str, addr, op); return;
+                    case 0x66: dasmFGeneric<FDADD, M, S>(str, addr, op); return;
+                    case 0x67: dasmFGeneric<FDMUL, M, S>(str, addr, op); return;
+                    case 0x68: dasmFGeneric<FSSUB, M, S>(str, addr, op); return;
+                    case 0x6C: dasmFGeneric<FDSUB, M, S>(str, addr, op); return;
+                }
+            }
+
             break;
     }
 
