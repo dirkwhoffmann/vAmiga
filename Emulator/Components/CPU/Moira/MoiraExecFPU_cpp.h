@@ -180,6 +180,8 @@ Moira::execFMove(u16 opcode)
     auto dst = ______xxx_______ (ext);
     auto fac = _________xxxxxxx (ext);
 
+    u32 data;
+
     // Catch illegal extension words
     if (!fpu.isValidExt(I, M, opcode, ext)) {
 
@@ -284,34 +286,98 @@ Moira::execFMove(u16 opcode)
 
             switch (src) {
 
-                case 0b011:
+                case 0b000:
+                    printf("FMOVE Reg -> Mem (L)\n");
+                    data = softfloat::floatx80_to_int32(fpu.fpr[dst].raw);
+                    writeOp<C, M, Long>(reg, data);
+                    break;
 
-                    printf("FMOVE (0b011, 0b011)\n");
-                    /*
-                     str << Ins<I>{} << Ffmt{src} << str.tab << Fp(dst) << Sep{} << Op<M, Long>(reg, addr);
-                     str << "{" << Ims<Byte>(i8(fac << 1) >> 1) << "}";
-                     */
+                case 0b001:
+                    printf("FMOVE Reg -> Mem (S)\n");
+                    data = softfloat::floatx80_to_float32(fpu.fpr[dst].raw);
+                    writeOp<C, M, Long>(reg, data);
+                    break;
+
+                case 0b010:
+                {
+                    softfloat::floatx80 data;
+                    data = fpu.fpr[dst].raw;
+
+                    if ((fpu.fpcr & 0b11000000) == 0b01000000) {
+                        data = softfloat::float32_to_floatx80(floatx80_to_float32(fpu.fpr[dst].raw));
+                    } else if ((fpu.fpcr & 0b11000000) == 0b10000000) {
+                        data = softfloat::float64_to_floatx80(floatx80_to_float64(fpu.fpr[dst].raw));
+                    } else {
+                        data = fpu.fpr[dst].raw;
+                    }
+
+                    printf("FMOVE Reg -> Mem (X)\n");
+                    auto ea = computeEA<C, M, Extended>(reg);
+                    writeM<C, M, Word>(ea, u32(data.high));
+                    writeM<C, M, Word>(U32_ADD(ea, 2), u32(0));
+                    writeM<C, M, Long>(U32_ADD(ea, 4), u32(data.low >> 32));
+                    writeM<C, M, Long>(U32_ADD(ea, 8), u32(data.low));
+                    updateAn<M, Quad>(reg);
+                    break;
+                }
+                case 0b011:
+                {
+                    printf("FMOVE Reg -> Mem (Packed{#k})\n");
+
+                    // Sign-extend k-factor
+                    int k = (fac & 0x40) ? (fac | 0xffffff80) : (fac & 0x7f);
+                    u32 dw1, dw2, dw3;
+                    fpu.pack(fpu.fpr[dst], k, dw1, dw2, dw3);
+                    auto ea = computeEA<C, M, Extended>(reg);
+                    writeM<C, M, Long>(ea, dw1);
+                    writeM<C, M, Long>(U32_ADD(ea, 4), dw2);
+                    writeM<C, M, Long>(U32_ADD(ea, 8), dw3);
+                    updateAn<M, Extended>(reg);
+                    break;
+                }
+                case 0b100:
+                    printf("FMOVE Reg -> Mem (W)\n");
+                    data = softfloat::floatx80_to_int32(fpu.fpr[dst].raw);
+                    writeOp<C, M, Word>(reg, u16(data));
+                    break;
+
+                case 0b101:
+                {
+                    softfloat::float64 data;
+                    if ((fpu.fpcr & 0b11000000) == 0b01000000) {
+                        data = softfloat::float32_to_float64(floatx80_to_float32(fpu.fpr[dst].raw));
+                    } else {
+                        data = softfloat::floatx80_to_float64(fpu.fpr[dst].raw);
+                    }
+
+                    printf("FMOVE Reg -> Mem (D) (%x)\n", data);
+                    auto ea = computeEA<C, M, Quad>(reg);
+                    writeM<C, M, Long>(ea, u32(data >> 32));
+                    writeM<C, M, Long>(U32_ADD(ea, Long), u32(data));
+                    updateAn<M, Quad>(reg);
+                    break;
+                }
+                case 0b110:
+                    printf("FMOVE Reg -> Mem (B)\n");
+                    data = softfloat::floatx80_to_int32(fpu.fpr[dst].raw);
+                    writeOp<C, M, Byte>(reg, u8(data));
                     break;
 
                 case 0b111:
+                {
+                    printf("FMOVE Reg -> Mem (Packed{Dn})\n");
 
-                    printf("FMOVE (0b011, 0b111)\n");
-                    /*
-                     str << Ins<I>{} << Ffmt{3} << str.tab << Fp{dst} << Sep{} << Op<M, Long>(reg, addr);
-                     str << Sep{} << Dn(fac >> 4);
-                     */
+                    int k = readD(fac >> 4);
+                    u32 dw1, dw2, dw3;
+                    fpu.pack(fpu.fpr[dst], k, dw1, dw2, dw3);
+                    auto ea = computeEA<C, M, Extended>(reg);
+                    writeM<C, M, Long>(ea, dw1);
+                    writeM<C, M, Long>(U32_ADD(ea, 4), dw2);
+                    writeM<C, M, Long>(U32_ADD(ea, 8), dw3);
+                    updateAn<M, Extended>(reg);
+
                     break;
-
-                default:
-
-                    printf("FMOVE (0b011, default)\n");
-                    u32 data = softfloat::floatx80_to_int32(fpu.fpr[dst].raw);
-                    writeOp<C, M, Word>(reg, data);
-
-                    /*
-                     str << Ins<I>{} << Ffmt{src} << str.tab << Fp{dst} << Sep{} << Op<M, Long>(reg, addr);
-                     */
-                    break;
+                }
             }
             break;
     }

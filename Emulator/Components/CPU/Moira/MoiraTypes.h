@@ -169,10 +169,13 @@ RegName;
 
 typedef enum
 {
-    Unsized = 0,
-    Byte    = 1,            // .b : Byte addressing
-    Word    = 2,            // .w : Word addressing
-    Long    = 4             // .l : Long word addressing
+    Unsized     = 0,
+    Byte        = 1,        // .b : Byte addressing
+    Word        = 2,        // .w : Word addressing
+    Long        = 4,        // .l : Long word addressing
+
+    Quad        = 8,        // FPU
+    Extended    = 12        // FPU
 }
 Size;
 
