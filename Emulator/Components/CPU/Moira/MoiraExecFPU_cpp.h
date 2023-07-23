@@ -215,7 +215,7 @@ Moira::execFMove(u16 opcode)
 
             if (M == MODE_IM) {
 
-                u64 val;
+                // u64 val;
 
                 switch (src) {
 
@@ -350,7 +350,7 @@ Moira::execFMove(u16 opcode)
                         data = softfloat::floatx80_to_float64(fpu.fpr[dst].raw);
                     }
 
-                    printf("FMOVE Reg -> Mem (D) (%x)\n", data);
+                    printf("FMOVE Reg -> Mem (D) (%llx)\n", data);
                     auto ea = computeEA<C, M, Quad>(reg);
                     writeM<C, M, Long>(ea, u32(data >> 32));
                     writeM<C, M, Long>(U32_ADD(ea, Long), u32(data));
@@ -440,7 +440,7 @@ Moira::execFMovem(u16 opcode)
     auto reg = _____________xxx (opcode);
     auto cod = xxx_____________ (ext);
     auto mod = ___xx___________ (ext);
-    auto rrr = _________xxx____ (ext);
+    // auto rrr = _________xxx____ (ext);
     auto lll = ___xxx__________ (ext);
 
     printf("execFMovem\n");
@@ -628,6 +628,9 @@ Moira::execFGeneric(u16 opcode)
                 execLineF<C, I, M, S>(opcode);
                 FINALIZE
                 return;
+
+            default:
+                break;
         }
     }
 

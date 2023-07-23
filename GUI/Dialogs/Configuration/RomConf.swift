@@ -121,7 +121,7 @@ extension ConfigurationController {
 
             switch UInt32(item.tag) {
 
-            case CRC32_AROS_54705, CRC32_AROS_55696, CRC32_DIAG121:
+            case CRC32_AROS_54705, CRC32_AROS_55696, CRC32_DIAG121, CRC32_DIAG13:
                 item.isEnabled = true
 
             default:
@@ -175,6 +175,9 @@ extension ConfigurationController {
 
         case CRC32_DIAG121:
             install(rom: "diagrom-121")
+
+        case CRC32_DIAG13:
+            install(rom: "diagrom-13")
 
         default:
             if let url = UserDefaults.romUrl(fingerprint: crc32) {
