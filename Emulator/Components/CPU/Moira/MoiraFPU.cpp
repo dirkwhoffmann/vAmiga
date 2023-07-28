@@ -23,6 +23,13 @@ Float80::asDouble()
     return *((double *)&value);
 }
 
+long
+Float80::asLong()
+{
+    auto value = softfloat::floatx80_to_int64(raw);
+    return (long)value;
+}
+
 void
 FPU::reset()
 {
@@ -164,12 +171,20 @@ FPU::getFPR(int n) const
 }
 
 void
+FPU::setFPR(int n, Float80 value)
+{
+    setFPR(n, value.raw.high, value.raw.low);
+}
+
+void
 FPU::setFPR(int n, u16 high, u64 low)
 {
     assert(n >= 0 && n <= 7);
 
     fpr[n].raw.high = high;
     fpr[n].raw.low = low;
+
+    setFlags(fpr[n]);
 }
 
 void
@@ -189,6 +204,56 @@ void
 FPU::setFPIAR(u32 value)
 {
     fpiar = value;
+}
+
+void
+FPU::setExcStatusBit(u32 mask)
+{
+    assert((mask & ~0xFF00) == 0);
+
+    fpsr |= mask;
+
+    // Set sticky bits (accrued exception byte)
+    if (fpsr & (FPEXP_SNAN | FPEXP_OPERR))                  SET_BIT(fpsr, 7);
+    if (fpsr & FPEXP_OVFL)                                  SET_BIT(fpsr, 6);
+    if ((fpsr & FPEXP_UNFL) && (fpsr & FPEXP_INEX2))        SET_BIT(fpsr, 5);
+    if (fpsr & FPEXP_DZ)                                    SET_BIT(fpsr, 4);
+    if (fpsr & (FPEXP_INEX1 | FPEXP_INEX2 | FPEXP_OVFL))    SET_BIT(fpsr, 3);
+}
+
+void
+FPU::clearExcStatusBit(u32 mask)
+{
+    assert((mask & ~0xFF00) == 0);
+
+    fpcr &= ~mask;
+}
+
+void
+FPU::clearExcStatusBits()
+{
+    clearExcStatusBit(0xFF00);
+}
+
+void
+FPU::setFlags(int reg)
+{
+    assert(reg >= 0 && reg <= 7);
+    setFlags(fpr[reg]);
+}
+
+void
+FPU::setFlags(const Float80 &value)
+{
+    bool n = value.raw.high & 0x8000;
+    bool z = (value.raw.high & 0x7fff) == 0 && (value.raw.low << 1) == 0;
+    bool i = (value.raw.high & 0x7fff) == 0x7fff && (value.raw.low << 1) == 0;
+    bool nan = softfloat::floatx80_is_nan(value.raw);
+
+    REPLACE_BIT(fpsr, 27, n);
+    REPLACE_BIT(fpsr, 26, z);
+    REPLACE_BIT(fpsr, 25, i);
+    REPLACE_BIT(fpsr, 24, nan);
 }
 
 void

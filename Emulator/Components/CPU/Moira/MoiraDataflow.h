@@ -63,6 +63,12 @@ template <Core C, Mode M, Size S, Flags F = 0> u32 computeEAfull(u32 an);
 template <Core C, Mode M, Size S = Word, Flags F = 0>
 void readOp(int n, u32 *ea, u32 *result);
 
+// Experimental
+template <Mode M, Flags F = 0> Float80 readFpuOp(int n, FltFormat fmt);
+template <Mode M, Flags F = 0> Float80 readFpuOpRg(int n, FltFormat fmt);
+template <Mode M, Flags F = 0> Float80 readFpuOpEa(int n, FltFormat fmt);
+template <Mode M, Flags F = 0> Float80 readFpuOpIm(FltFormat fmt);
+
 /* Writes an operand
  *
  * If parameter ea is omitted, the destination of the operand is determined
@@ -70,6 +76,7 @@ void readOp(int n, u32 *ea, u32 *result);
  */
 template <Core C, Mode M, Size S, Flags F = 0> void writeOp(int n, u32 val);
 template <Core C, Mode M, Size S, Flags F = 0> void writeOp(int n, u32 ea, u32 val);
+template <Mode M, Flags F = 0> void writeFpuOp(int n, u32 ea, Float80 val, FltFormat fmt, int k = 0);
 
 // Emulates the address register modification for modes (An)+, (An)-
 template <Mode M, Size S> void updateAn(int n);

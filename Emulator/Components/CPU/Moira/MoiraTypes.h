@@ -266,6 +266,18 @@ typedef enum
 }
 MemSpace;
 
+typedef enum
+{
+    FLT_LONG,
+    FLT_SINGLE,
+    FLT_EXTENDED,
+    FLT_PACKED,
+    FLT_WORD,
+    FLT_DOUBLE,
+    FLT_BYTE
+}
+FltFormat;
+
 /* TODO:
 
  typedef enum
@@ -380,6 +392,22 @@ static constexpr u8 FC_USER_DATA        = 1;
 static constexpr u8 FC_USER_PROG        = 2;
 static constexpr u8 FC_SUPERVISOR_DATA  = 5;
 static constexpr u8 FC_SUPERVISOR_PROG  = 6;
+
+// Floating-point condition codes
+static constexpr u32 FPCC_N             = 1 << 27;
+static constexpr u32 FPCC_Z             = 1 << 26;
+static constexpr u32 FPCC_I             = 1 << 25;
+static constexpr u32 FPCC_NAN           = 1 << 24;
+
+// Floating-point exception bits
+static constexpr u32 FPEXP_BSUN         = 1 << 15;
+static constexpr u32 FPEXP_SNAN         = 1 << 14;
+static constexpr u32 FPEXP_OPERR        = 1 << 13;
+static constexpr u32 FPEXP_OVFL         = 1 << 12;
+static constexpr u32 FPEXP_UNFL         = 1 << 11;
+static constexpr u32 FPEXP_DZ           = 1 << 10;
+static constexpr u32 FPEXP_INEX2        = 1 << 9;
+static constexpr u32 FPEXP_INEX1        = 1 << 8;
 
 // Availabilty masks
 static constexpr u16 AV_68000           = 1 << M68000;

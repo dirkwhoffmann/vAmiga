@@ -19,6 +19,14 @@ struct Float80 {
     Float80(double value);
 
     double asDouble();
+    long asLong();
+
+    inline bool operator==(const Float80 &other) const {
+
+        return raw.high == other.raw.high && raw.low == other.raw.low;
+    }
+
+
 };
 
 class FPU {
@@ -64,7 +72,10 @@ public:
     // Accessing registers
     //
 
+public:
+
     Float80 getFPR(int n) const;
+    void setFPR(int n, Float80 value);
     void setFPR(int n, u16 high, u64 low);
 
     u32 getFPCR() const { return fpcr; }
@@ -76,10 +87,19 @@ public:
     u32 getFPIAR() const { return fpiar; }
     void setFPIAR(u32 value);
 
+    void setExcStatusBit(u32 mask);
+    void clearExcStatusBit(u32 mask);
+    void clearExcStatusBits();
+
+    void setFlags(int reg);
+    void setFlags(const Float80 &value);
+
 
     //
     // Converting
     //
+
+public:
 
     // Converts the extended format into the packed decimal real format
     // ADAPTED FROM MUSASHI CPU CORE

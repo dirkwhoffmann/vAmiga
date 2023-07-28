@@ -228,6 +228,170 @@ Moira::readOp(int n, u32 *ea, u32 *result)
     }
 }
 
+template <Mode M, Flags F> Float80
+Moira::readFpuOp(int n, FltFormat fmt)
+{
+    Float80 result;
+
+    if constexpr (M == MODE_DN) return readFpuOpRg<M, F>(n, fmt);
+    if constexpr (M == MODE_IM) return readFpuOpIm<M, F>(fmt);
+
+    return readFpuOpEa<M>(n, fmt);
+}
+
+template <Mode M, Flags F> Float80
+Moira::readFpuOpRg(int n, FltFormat fmt)
+{
+    // TODO
+    return Float80();
+}
+
+template <Mode M, Flags F> Float80
+Moira::readFpuOpEa(int n, FltFormat fmt)
+{
+    Float80 result;
+
+    switch (fmt) {
+
+        case FLT_BYTE:
+        {
+            auto ea = computeEA<C68020, M, Byte>(n);
+            auto data = readM<C68020, M, Byte>(ea);
+            updateAn<M, Byte>(n);
+
+            result = softfloat::int32_to_floatx80(data);
+            break;
+        }
+        case FLT_WORD:
+        {
+            auto ea = computeEA<C68020, M, Word>(n);
+            auto data = readM<C68020, M, Word>(ea);
+            updateAn<M, Word>(n);
+
+            result = softfloat::int32_to_floatx80(data);
+            break;
+        }
+        case FLT_LONG:
+        {
+            auto ea = computeEA<C68020, M, Long>(n);
+            auto data = readM<C68020, M, Long>(ea);
+            updateAn<M, Long>(n);
+
+            result = softfloat::int32_to_floatx80(data);
+            break;
+        }
+        case FLT_SINGLE:
+        {
+            auto ea = computeEA<C68020, M, Long>(n);
+            auto data = readM<C68020, M, Long>(ea);
+            updateAn<M, Long>(n);
+
+            result = softfloat::float32_to_floatx80(data);
+            break;
+        }
+        case FLT_DOUBLE:
+        {
+            auto ea = computeEA<C68020, M, Quad>(n);
+            u64 data = readM<C68020, M, Long>(ea) << 32;
+            data |= readM<C68020, M, Long>(U32_ADD(ea, 4));
+            updateAn<M, Long>(n);
+
+            result.raw = softfloat::float64_to_floatx80(data);
+            break;
+        }
+        case FLT_EXTENDED:
+        {
+            auto ea = computeEA<C68020, M, Quad>(n);
+            u16 data1 = readM<C68020, M, Word>(ea);
+            u32 data2 = readM<C68020, M, Long>(U32_ADD(ea, 2));
+            u32 data3 = readM<C68020, M, Long>(U32_ADD(ea, 6));
+            updateAn<M, Long>(n);
+
+            result.raw.high = data1;
+            result.raw.low = ((u64)data2 << 32) | (data3 & 0xFFFFFFFF);
+            break;
+        }
+        case FLT_PACKED:
+        {
+
+            auto ea = computeEA<C68020, M, Quad>(n);
+            u16 data1 = readM<C68020, M, Long>(ea);
+            u32 data2 = readM<C68020, M, Long>(U32_ADD(ea, 4));
+            u32 data3 = readM<C68020, M, Long>(U32_ADD(ea, 8));
+            updateAn<M, Extended>(n);
+
+            fpu.unpack(data1, data2, data3, result);
+            break;
+        }
+        default:
+            assert(false);
+    }
+}
+
+template <Mode M, Flags F> Float80
+Moira::readFpuOpIm(FltFormat fmt)
+{
+    Float80 result;
+
+    switch (fmt) {
+
+        case FLT_LONG:
+        {
+            auto ext = readExt<C68020, Long>();
+            result = Float80(ext);
+            break;
+        }
+        case FLT_SINGLE:
+        {
+            u32 data = readExt<C68020, Long>();
+            result.raw = softfloat::float32_to_floatx80(data);
+            break;
+        }
+        case FLT_EXTENDED:
+        {
+            u32 high = readExt<C68020, Word>();
+            (void)readExt<C68020, Word>();
+            u64 low = (u64)readExt<C68020, Long>() << 32;
+            low |= readExt<C68020, Long>();
+            result.raw.high = u16(high);
+            result.raw.low = low;
+            break;
+        }
+        case FLT_PACKED:
+        {
+            u32 dw1 = readExt<C68020, Long>();
+            u32 dw2 = readExt<C68020, Long>();
+            u32 dw3 = readExt<C68020, Long>();
+            fpu.unpack(dw1, dw2, dw3, result);
+            break;
+        }
+        case FLT_WORD:
+        {
+            auto ext = readExt<C68020, Word>();
+            printf("FLT_WORD ext = %x\n", ext);
+            result = Float80(ext);
+            break;
+        }
+        case FLT_DOUBLE:
+        {
+            u64 data = (u64)readExt<C68020, Long>() << 32;
+            data |= readExt<C68020, Long>();
+            result.raw = softfloat::float64_to_floatx80(data);
+            break;
+        }
+        case FLT_BYTE:
+        {
+            auto ext = readExt<C68020, Byte>();
+            result = Float80(ext & 0xFF);
+            break;
+        }
+        default:
+            fatalError;
+    }
+
+    return result;
+}
+
 template <Core C, Mode M, Size S, Flags F> void
 Moira::writeOp(int n, u32 val)
 {
@@ -252,6 +416,95 @@ Moira::writeOp(int n, u32 val)
 
             // Emulate (An)+ register modification
             updateAnPI<M, S>(n);
+    }
+}
+
+template <Mode M, Flags F> void
+Moira::writeFpuOp(int n, u32 ea, Float80 val, FltFormat fmt, int k)
+{
+    switch (fmt) {
+
+        case FLT_BYTE:
+        {
+            auto data = u8(softfloat::floatx80_to_int32(val.raw));
+            writeM<C68020, M, Byte>(ea, data);
+            updateAn<M, Byte>(n);
+            break;
+        }
+        case FLT_WORD:
+        {
+            auto data = u16(softfloat::floatx80_to_int32(val.raw));
+            writeM<C68020, M, Word>(ea, data);
+            updateAn<M, Word>(n);
+            break;
+        }
+        case FLT_LONG:
+        {
+            auto data = u32(softfloat::floatx80_to_int32(val.raw));
+            writeM<C68020, M, Long>(ea, data);
+            updateAn<M, Long>(n);
+            break;
+        }
+        case FLT_SINGLE:
+        {
+            auto data = softfloat::floatx80_to_float32(val.raw);
+            writeM<C68020, M, Long>(ea, data);
+            updateAn<M, Long>(n);
+            break;
+        }
+        case FLT_DOUBLE:
+        {
+            softfloat::float64 data;
+            if ((fpu.fpcr & 0b11000000) == 0b01000000) {
+                data = softfloat::float32_to_float64(floatx80_to_float32(val.raw));
+            } else if ((fpu.fpcr & 0b11000000) == 0b10000000) {
+                data = softfloat::floatx80_to_float64(val.raw);
+            } else {
+                data = softfloat::floatx80_to_float64(val.raw);
+            }
+
+            writeM<C68020, M, Long>(ea, u32(data >> 32));
+            writeM<C68020, M, Long>(U32_ADD(ea, Long), u32(data));
+            updateAn<M, Quad>(n);
+            break;
+        }
+        case FLT_EXTENDED:
+        {
+            // Crop
+            if ((fpu.fpcr & 0b11000000) == 0b01000000) {
+                val.raw = softfloat::float32_to_floatx80(floatx80_to_float32(val.raw));
+            } else if ((fpu.fpcr & 0b11000000) == 0b10000000) {
+                val.raw = softfloat::float64_to_floatx80(floatx80_to_float64(val.raw));
+            }
+
+            writeM<C68020, M, Word>(ea, u32(val.raw.high));
+            writeM<C68020, M, Word>(U32_ADD(ea, 2), u32(0));
+            writeM<C68020, M, Long>(U32_ADD(ea, 4), u32(val.raw.low >> 32));
+            writeM<C68020, M, Long>(U32_ADD(ea, 8), u32(val.raw.low));
+            updateAn<M, Quad>(n);
+            break;
+        }
+        case FLT_PACKED:
+        {
+            // Crop
+            if ((fpu.fpcr & 0b11000000) == 0b01000000) {
+                val.raw = softfloat::float32_to_floatx80(floatx80_to_float32(val.raw));
+            } else if ((fpu.fpcr & 0b11000000) == 0b10000000) {
+                val.raw = softfloat::float64_to_floatx80(floatx80_to_float64(val.raw));
+            }
+
+            u32 dw1, dw2, dw3;
+            fpu.pack(val, k, dw1, dw2, dw3);
+            auto ea = computeEA<C68020, M, Extended>(n);
+            writeM<C68020, M, Long>(ea, dw1);
+            writeM<C68020, M, Long>(U32_ADD(ea, 4), dw2);
+            writeM<C68020, M, Long>(U32_ADD(ea, 8), dw3);
+            updateAn<M, Extended>(n);
+            break;
+        }
+
+        default:
+            fatalError;
     }
 }
 

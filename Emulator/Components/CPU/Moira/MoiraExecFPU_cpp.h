@@ -180,8 +180,6 @@ Moira::execFMove(u16 opcode)
     auto dst = ______xxx_______ (ext);
     auto fac = _________xxxxxxx (ext);
 
-    u32 data;
-
     // Catch illegal extension words
     if (!fpu.isValidExt(I, M, opcode, ext)) {
 
@@ -215,63 +213,50 @@ Moira::execFMove(u16 opcode)
 
             if (M == MODE_IM) {
 
-                // u64 val;
-
-                switch (src) {
+                switch (src) { // TODO: MERGE CASES
 
                     case 0: // Long-Word Integer
-
-                        printf("FMOVE IM: Long-Word Integer\n");
-                        /*
-                         val = dasmIncRead<Long>(addr);
-                         str << str.tab << Ims<Long>(u32(val)) << Sep{} << Fp(dst);
-                         */
+                    {
+                        auto value = readFpuOpIm<M>(FltFormat(src));
+                        fpu.setFPR(dst, value);
                         break;
-
+                    }
                     case 1: // Single precision
-
-                        printf("FMOVE IM: Single precision\n");
-                        /*
-                         val = dasmIncRead<Long>(addr);
-                         str << str.tab << "#<fixme>" << Sep{} << Fp(dst);
-                         */
+                    {
+                        auto value = readFpuOpIm<M>(FltFormat(src));
+                        fpu.setFPR(dst, value);
                         break;
-
+                    }
                     case 2: // Double precision
-
-                        printf("FMOVE IM: Double precision (fallthrough)\n");
+                    {
+                        auto value = readFpuOpIm<M>(FltFormat(src));
+                        fpu.setFPR(dst, value);
                         break;
-
+                    }
                     case 3: // Packed-Decimal Real
-
-                        printf("FMOVE IM: Single precision\n");
-                        /*
-                         val = dasmIncRead<Long>(addr);
-                         dasmIncRead<Long>(addr);
-                         dasmIncRead<Long>(addr); // Why???
-                         str << str.tab << "#<fixme>" << Sep{} << Fp(dst);
-                         */
+                    {
+                        auto value = readFpuOpIm<M>(FltFormat(src));
+                        fpu.setFPR(dst, value);
                         break;
-
+                    }
+                    case 4: // Word Integer
+                    {
+                        auto value = readFpuOpIm<M>(FltFormat(src));
+                        fpu.setFPR(dst, value);
+                        break;
+                    }
                     case 5: // Double-precision real
-
-                        printf("FMOVE IM: Double-precision real\n");
-                        /*
-                         val = dasmIncRead<Long>(addr);
-                         dasmIncRead<Long>(addr);
-                         str << str.tab << "#<fixme>" << Sep{} << Fp(dst);
-                         */
+                    {
+                        auto value = readFpuOpIm<M>(FltFormat(src));
+                        fpu.setFPR(dst, value);
                         break;
-
+                    }
                     case 6: // Byte Integer
-
-                        printf("FMOVE IM: Byte Integer\n");
-                        /*
-                         val = dasmIncRead<Word>(addr);
-                         str << str.tab << Ims<Byte>(u32(val)) << Sep{} << Fp(dst);
-                         */
+                    {
+                        auto value = readFpuOpIm<M>(FltFormat(src));
+                        fpu.setFPR(dst, value);
                         break;
-
+                    }
                     default:
 
                         printf("FMOVE IM: Default\n");
@@ -287,95 +272,63 @@ Moira::execFMove(u16 opcode)
             switch (src) {
 
                 case 0b000:
+                {
                     printf("FMOVE Reg -> Mem (L)\n");
-                    data = softfloat::floatx80_to_int32(fpu.fpr[dst].raw);
-                    writeOp<C, M, Long>(reg, data);
+                    auto ea = computeEA<C, M, Long>(reg);
+                    writeFpuOp<M>(reg, ea, fpu.fpr[dst], FLT_LONG);
                     break;
-
+                }
                 case 0b001:
+                {
                     printf("FMOVE Reg -> Mem (S)\n");
-                    data = softfloat::floatx80_to_float32(fpu.fpr[dst].raw);
-                    writeOp<C, M, Long>(reg, data);
+                    auto ea = computeEA<C, M, Long>(reg);
+                    writeFpuOp<M>(reg, ea, fpu.fpr[dst], FLT_SINGLE);
                     break;
-
+                }
                 case 0b010:
                 {
-                    softfloat::floatx80 data;
-                    data = fpu.fpr[dst].raw;
-
-                    if ((fpu.fpcr & 0b11000000) == 0b01000000) {
-                        data = softfloat::float32_to_floatx80(floatx80_to_float32(fpu.fpr[dst].raw));
-                    } else if ((fpu.fpcr & 0b11000000) == 0b10000000) {
-                        data = softfloat::float64_to_floatx80(floatx80_to_float64(fpu.fpr[dst].raw));
-                    } else {
-                        data = fpu.fpr[dst].raw;
-                    }
-
                     printf("FMOVE Reg -> Mem (X)\n");
                     auto ea = computeEA<C, M, Extended>(reg);
-                    writeM<C, M, Word>(ea, u32(data.high));
-                    writeM<C, M, Word>(U32_ADD(ea, 2), u32(0));
-                    writeM<C, M, Long>(U32_ADD(ea, 4), u32(data.low >> 32));
-                    writeM<C, M, Long>(U32_ADD(ea, 8), u32(data.low));
-                    updateAn<M, Quad>(reg);
+                    writeFpuOp<M>(reg, ea, fpu.fpr[dst], FLT_EXTENDED);
                     break;
                 }
                 case 0b011:
                 {
-                    printf("FMOVE Reg -> Mem (Packed{#k})\n");
-
                     // Sign-extend k-factor
-                    int k = (fac & 0x40) ? (fac | 0xffffff80) : (fac & 0x7f);
-                    u32 dw1, dw2, dw3;
-                    fpu.pack(fpu.fpr[dst], k, dw1, dw2, dw3);
                     auto ea = computeEA<C, M, Extended>(reg);
-                    writeM<C, M, Long>(ea, dw1);
-                    writeM<C, M, Long>(U32_ADD(ea, 4), dw2);
-                    writeM<C, M, Long>(U32_ADD(ea, 8), dw3);
-                    updateAn<M, Extended>(reg);
+                    int k = (fac & 0x40) ? (fac | 0xffffff80) : (fac & 0x7f);
+                    printf("FMOVE Reg -> Mem (Packed{#k = %d})\n", k);
+                    writeFpuOp<M>(reg, ea, fpu.fpr[dst], FLT_PACKED, k);
                     break;
                 }
                 case 0b100:
+                {
                     printf("FMOVE Reg -> Mem (W)\n");
-                    data = softfloat::floatx80_to_int32(fpu.fpr[dst].raw);
-                    writeOp<C, M, Word>(reg, u16(data));
+                    auto ea = computeEA<C, M, Word>(reg);
+                    writeFpuOp<M>(reg, ea, fpu.fpr[dst], FLT_WORD);
                     break;
-
+                }
                 case 0b101:
                 {
-                    softfloat::float64 data;
-                    if ((fpu.fpcr & 0b11000000) == 0b01000000) {
-                        data = softfloat::float32_to_float64(floatx80_to_float32(fpu.fpr[dst].raw));
-                    } else {
-                        data = softfloat::floatx80_to_float64(fpu.fpr[dst].raw);
-                    }
 
-                    printf("FMOVE Reg -> Mem (D) (%llx)\n", data);
-                    auto ea = computeEA<C, M, Quad>(reg);
-                    writeM<C, M, Long>(ea, u32(data >> 32));
-                    writeM<C, M, Long>(U32_ADD(ea, Long), u32(data));
-                    updateAn<M, Quad>(reg);
+                    printf("FMOVE Reg -> Mem (D)\n");
+                    auto ea = computeEA<C, M, Long>(reg);
+                    writeFpuOp<M>(reg, ea, fpu.fpr[dst], FLT_DOUBLE);
                     break;
                 }
                 case 0b110:
+                {
                     printf("FMOVE Reg -> Mem (B)\n");
-                    data = softfloat::floatx80_to_int32(fpu.fpr[dst].raw);
-                    writeOp<C, M, Byte>(reg, u8(data));
+                    auto ea = computeEA<C, M, Byte>(reg);
+                    writeFpuOp<M>(reg, ea, fpu.fpr[dst], FLT_BYTE);
                     break;
-
+                }
                 case 0b111:
                 {
                     printf("FMOVE Reg -> Mem (Packed{Dn})\n");
-
-                    int k = readD(fac >> 4);
-                    u32 dw1, dw2, dw3;
-                    fpu.pack(fpu.fpr[dst], k, dw1, dw2, dw3);
                     auto ea = computeEA<C, M, Extended>(reg);
-                    writeM<C, M, Long>(ea, dw1);
-                    writeM<C, M, Long>(U32_ADD(ea, 4), dw2);
-                    writeM<C, M, Long>(U32_ADD(ea, 8), dw3);
-                    updateAn<M, Extended>(reg);
-
+                    int k = readD(fac >> 4);
+                    writeFpuOp<M>(reg, ea, fpu.fpr[dst], FLT_PACKED, k);
                     break;
                 }
             }
@@ -634,8 +587,110 @@ Moira::execFGeneric(u16 opcode)
         }
     }
 
-    // (void)readExt<C,Word>();
-    prefetch<C>();
+    auto ext = queue.irc;
+    auto reg = _____________xxx (opcode);
+    auto src = ___xxx__________ (ext);
+    auto dst = ______xxx_______ (ext);
+    (void)readExt<C,Word>();
 
+    Float80 source;
+
+    printf("FPR[%d] = %d,%llu\n", src, fpu.fpr[src].raw.high, fpu.fpr[src].raw.low);
+
+    if (ext & 0x4000) {
+
+        if (M == MODE_IM) {
+
+            // u64 val;
+
+            switch (src) {
+
+                case 0: // Long-Word Integer
+
+                    /*
+                    val = dasmIncRead<Long>(addr);
+                    str << Ins<I>{} << Ffmt{src} << str.tab << Ims<Long>(u32(val));
+                    */
+                    printf("execFGeneric: Long-Word Integer: TODO\n");
+                    break;
+
+                case 1: // Single precision
+
+                    /*
+                    val = dasmIncRead<Long>(addr);
+                    str << Ins<I>{} << Ffmt{src} << str.tab << "#<fixme>";
+                    */
+                    printf("execFGeneric: Single precision: TODO\n");
+                    break;
+
+                case 2: // Double precision
+
+                    printf("execFGeneric: Double precision: TODO\n");
+                    break;
+
+                case 3: // Packed-Decimal Real
+
+                    /*
+                    val = dasmIncRead<Long>(addr);
+                    dasmIncRead<Long>(addr);
+                    dasmIncRead<Long>(addr); // Why???
+                    str << Ins<I>{} << Ffmt{src} << str.tab << "#<fixme>";
+                    */
+                    printf("execFGeneric: Packed-Decimal Real: TODO\n");
+                    break;
+
+                case 5: // Double-precision real
+
+                    /*
+                    val = dasmIncRead<Long>(addr);
+                    dasmIncRead<Long>(addr);
+                    str << Ins<I>{} << Ffmt{src} << str.tab << "#<fixme>";
+                    */
+                    printf("execFGeneric: Double-precision real: TODO\n");
+                    break;
+
+                case 6: // Byte Integer
+                    /*
+                    val = dasmIncRead<Word>(addr);
+                    str << Ins<I>{} << Ffmt{src} << str.tab << Ims<Byte>(u32(val));
+                    */
+                    printf("execFGeneric: Byte Integer: TODO\n");
+                    break;
+
+                default:
+
+                    /*
+                    str << Ins<I>{} << Ffmt{src} << str.tab << Op<M, Word>(reg, addr);
+                    */
+                    printf("execFGeneric: MODE_M Default: TODO\n");
+            }
+        } else {
+            /*
+            str << Ins<I>{} << Ffmt{src} << str.tab << Op<M, Long>(reg, addr);
+            */
+            printf("execFGeneric: ext & 0x4000 == 1: TODO\n");
+        }
+
+    } else {
+        // str << Ins<I>{} << Ffmt{2} << str.tab << Fp{src};
+        printf("execFGeneric: ext & 0x4000 == 0: TODO\n");
+        source = fpu.fpr[src];
+    }
+
+    switch (I) {
+
+        case FNEG:
+            printf("FNEG: reg: %d src: %d dst: %d TODO\n", reg, src, dst);
+            // source.raw.high ^= 0x8000; // TODO: Overload operator of Float80 class
+            source.raw = softfloat::floatx80_sub({0,0}, source.raw);
+            break;
+
+        default:
+            break;
+    }
+
+    prefetch<C>();
+    fpu.setFPR(dst, source);
+    printf("FPR[%d] = %d,%llu\n", dst, fpu.fpr[dst].raw.high, fpu.fpr[dst].raw.low);
     FINALIZE
 }
