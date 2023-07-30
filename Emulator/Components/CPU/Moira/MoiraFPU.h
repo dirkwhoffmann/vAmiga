@@ -16,7 +16,9 @@ struct Float80 {
     softfloat::floatx80 raw = { };
 
     Float80() { };
+    Float80(u32 value);
     Float80(double value);
+    Float80(long double value);
     Float80(bool mSign, i16 e, u64 m);
 
     double asDouble();
@@ -56,8 +58,7 @@ public: // REMOVE ASAP
 
 public:
 
-    FPU(Moira& ref) : moira(ref) { }
-
+    FPU(Moira& ref);
     void reset();
 
 

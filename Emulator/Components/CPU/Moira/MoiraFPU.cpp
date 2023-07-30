@@ -11,9 +11,40 @@
 
 namespace vamiga::moira {
 
+Float80::Float80(u32 value)
+{
+    softfloat::int64_to_floatx80(i64(value));
+}
+
 Float80::Float80(double value)
 {
     raw = softfloat::float64_to_floatx80(*((u64 *)&value));
+}
+
+Float80::Float80(long double value) //  : Float80(double(value))
+{
+    // Extract the sign bit
+    bool mSign = value < 0.0;
+    value = std::abs(value);
+
+    // Extract the exponent and the mantissa
+    int e; auto m = frexpl(value, &e);
+    e -= 1;
+
+    // Create the bit representation of the mantissa
+    u64 mbits = 0;
+    for (isize i = 63; i >= 0; i--) {
+        m *= 2.0;
+        if (m >= 1.0) {
+            mbits |= (1L << i);
+            m -= 1.0;
+        } else {
+            mbits &= ~(1L << i);
+        }
+    }
+
+    // Compose components
+    *this = Float80(mSign, (i16)e, mbits);
 }
 
 Float80::Float80(bool mSign, i16 e, u64 m)
@@ -54,6 +85,11 @@ Float80::normalize()
     }
 }
 
+FPU::FPU(Moira& ref) : moira(ref)
+{
+    static_assert(!REQUIRE_PRECISE_FPU || sizeof(long double) > 8,
+                  "No long double support. FPU inaccuracies may occur.");
+}
 
 void
 FPU::reset()
@@ -546,80 +582,35 @@ FPU::musashiUnpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 void
 FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 {
-    double mantissa = 0.0;
-    double exponent = 0.0;
-    u64 m = 0;
-
-    exponent = ((dw1 >> 24) & 0xF) * 100.0;
+    // Extract exponent
+    double exponent = ((dw1 >> 24) & 0xF) * 100.0;
     exponent += ((dw1 >> 20) & 0xF) * 10.0;
     exponent += ((dw1 >> 16) & 0xF);
 
-    double factor = 1.0;
-
-    mantissa += ((dw1 >> 0) & 0xF) * factor; factor /= 10.0;
+    // Extract mantissa
+    long double mantissa = ((dw1 >> 0) & 0xF);
+    long double factor = 0.1;
     mantissa += ((dw2 >> 28) & 0xF) * factor; factor /= 10.0;
     mantissa += ((dw2 >> 24) & 0xF) * factor; factor /= 10.0;
     mantissa += ((dw2 >> 20) & 0xF) * factor; factor /= 10.0;
     mantissa += ((dw2 >> 16) & 0xF) * factor; factor /= 10.0;
     mantissa += ((dw2 >> 12) & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw2 >> 8) & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw2 >> 4) & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw2 >> 0) & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw2 >> 8)  & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw2 >> 4)  & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw2 >> 0)  & 0xF) * factor; factor /= 10.0;
     mantissa += ((dw3 >> 28) & 0xF) * factor; factor /= 10.0;
     mantissa += ((dw3 >> 24) & 0xF) * factor; factor /= 10.0;
     mantissa += ((dw3 >> 20) & 0xF) * factor; factor /= 10.0;
     mantissa += ((dw3 >> 16) & 0xF) * factor; factor /= 10.0;
     mantissa += ((dw3 >> 12) & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw3 >> 8) & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw3 >> 4) & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw3 >> 0) & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw3 >> 8)  & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw3 >> 4)  & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw3 >> 0)  & 0xF) * factor; factor /= 10.0;
 
-    m = 10 * m + ((dw1 >> 0) & 0xF);
-    m = 10 * m + ((dw2 >> 28) & 0xF);
-    m = 10 * m + ((dw2 >> 24) & 0xF);
-    m = 10 * m + ((dw2 >> 20) & 0xF);
-    m = 10 * m + ((dw2 >> 16) & 0xF);
-    m = 10 * m + ((dw2 >> 12) & 0xF);
-    m = 10 * m + ((dw2 >> 8) & 0xF);
-    m = 10 * m + ((dw2 >> 4) & 0xF);
-    m = 10 * m + ((dw2 >> 0) & 0xF);
-    m = 10 * m + ((dw3 >> 28) & 0xF);
-    m = 10 * m + ((dw3 >> 24) & 0xF);
-    m = 10 * m + ((dw3 >> 20) & 0xF);
-    m = 10 * m + ((dw3 >> 16) & 0xF);
-    m = 10 * m + ((dw3 >> 12) & 0xF);
-    m = 10 * m + ((dw3 >> 8) & 0xF);
-    m = 10 * m + ((dw3 >> 4) & 0xF);
-    m = 10 * m + ((dw3 >> 0) & 0xF);
-
+    // Evaluate exponent sign bit
     if (dw1 & 0x80000000) exponent *= -1;
-    if (dw1 & 0x40000000) mantissa *= -1;
 
-    long double val = mantissa * powl(10.0, exponent);
-    printf("val = %f  m = %lld sizeof(val) = %zu\n", (double)val, m, sizeof(val));
-
-    int exponent2;
-
-    auto mantissa2 = frexpl(val, &exponent2);
-    printf("mantissa = %f mantissa2 = %f exponent2 = %d\n", mantissa, (double)mantissa2, exponent2);
-    exponent2 -= 1;
-
-    u64 mmm = 0;
-    for (isize i = 63; i >= 0; i--) {
-        mantissa2 *= 2.0;
-        if (mantissa2 >= 1.0) {
-            mmm |= (1L << i);
-            mantissa2 -= 1.0;
-        } else {
-            mmm &= ~(1L << i);
-        }
-    }
-
-    // double combined = std::pow(10.0, exponent) * mantissa;
-    // printf("            Exponent = %f Mantissa = %f (m = %lld mm = %llx mmm = %llx)\n", exponent, mantissa, m, mm, mmm);
-
-    result = Float80(dw1 & 0x40000000, (i16)exponent2, mmm);
-    result.normalize();
+    result = Float80(mantissa * powl(10.0, exponent));
 }
 
 }
