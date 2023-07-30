@@ -21,8 +21,15 @@ Float80::Float80(double value)
     raw = softfloat::float64_to_floatx80(*((u64 *)&value));
 }
 
-Float80::Float80(long double value) //  : Float80(double(value))
+Float80::Float80(long double value)
 {
+    // Handle some special cases
+    if (value == 0.0) {
+
+        raw = { };
+        return;
+    }
+
     // Extract the sign bit
     bool mSign = value < 0.0;
     value = std::abs(value);
@@ -582,6 +589,8 @@ FPU::musashiUnpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 void
 FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 {
+    // musashiUnpack(dw1, dw2, dw3, result); return;
+
     // Extract exponent
     double exponent = ((dw1 >> 24) & 0xF) * 100.0;
     exponent += ((dw1 >> 20) & 0xF) * 10.0;
@@ -608,7 +617,8 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
     mantissa += ((dw3 >> 0)  & 0xF) * factor; factor /= 10.0;
 
     // Evaluate exponent sign bit
-    if (dw1 & 0x80000000) exponent *= -1;
+    if (dw1 & 0x80000000) mantissa *= -1;
+    if (dw1 & 0x40000000) exponent *= -1;
 
     result = Float80(mantissa * powl(10.0, exponent));
 }
