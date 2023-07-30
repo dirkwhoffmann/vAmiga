@@ -338,7 +338,7 @@ Moira::readFpuOpIm(FltFormat fmt)
         case FLT_LONG:
         {
             auto ext = readExt<C68020, Long>();
-            result = Float80(ext);
+            result.raw = softfloat::int32_to_floatx80(ext);
             break;
         }
         case FLT_SINGLE:
@@ -355,6 +355,7 @@ Moira::readFpuOpIm(FltFormat fmt)
             low |= readExt<C68020, Long>();
             result.raw.high = u16(high);
             result.raw.low = low;
+            result.normalize();
             break;
         }
         case FLT_PACKED:
@@ -362,6 +363,7 @@ Moira::readFpuOpIm(FltFormat fmt)
             u32 dw1 = readExt<C68020, Long>();
             u32 dw2 = readExt<C68020, Long>();
             u32 dw3 = readExt<C68020, Long>();
+            printf("            %x %x %x\n", dw1, dw2, dw3);
             fpu.unpack(dw1, dw2, dw3, result);
             break;
         }
@@ -377,6 +379,8 @@ Moira::readFpuOpIm(FltFormat fmt)
             u64 data = (u64)readExt<C68020, Long>() << 32;
             data |= readExt<C68020, Long>();
             result.raw = softfloat::float64_to_floatx80(data);
+            printf("Loaded FLT_DOUBLE: %f (%llx, %x, %llx)\n", result.asDouble(), data, result.raw.high, result.raw.low);
+
             break;
         }
         case FLT_BYTE:
@@ -465,6 +469,7 @@ Moira::writeFpuOp(int n, u32 ea, Float80 val, FltFormat fmt, int k)
 
             writeM<C68020, M, Long>(ea, u32(data >> 32));
             writeM<C68020, M, Long>(U32_ADD(ea, Long), u32(data));
+            printf("Wrote FLT_DOUBLE: %x %x\n", u32(data >> 32), u32(data));
             updateAn<M, Quad>(n);
             break;
         }
@@ -481,7 +486,7 @@ Moira::writeFpuOp(int n, u32 ea, Float80 val, FltFormat fmt, int k)
             writeM<C68020, M, Word>(U32_ADD(ea, 2), u32(0));
             writeM<C68020, M, Long>(U32_ADD(ea, 4), u32(val.raw.low >> 32));
             writeM<C68020, M, Long>(U32_ADD(ea, 8), u32(val.raw.low));
-            updateAn<M, Quad>(n);
+            updateAn<M, Extended>(n);
             break;
         }
         case FLT_PACKED:

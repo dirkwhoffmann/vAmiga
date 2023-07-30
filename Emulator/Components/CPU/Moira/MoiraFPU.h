@@ -13,13 +13,17 @@ namespace vamiga::moira {
 
 struct Float80 {
 
-    softfloat::floatx80 raw;
+    softfloat::floatx80 raw = { };
 
-    Float80() { raw = { }; }
+    Float80() { };
     Float80(double value);
+    Float80(bool mSign, i16 e, u64 m);
 
     double asDouble();
     long asLong();
+
+    bool isNormalized();
+    void normalize();
 
     inline bool operator==(const Float80 &other) const {
 
@@ -102,11 +106,11 @@ public:
 public:
 
     // Converts the extended format into the packed decimal real format
-    // ADAPTED FROM MUSASHI CPU CORE
+    void musashiPack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3); // DEPRECATED
     void pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3);
 
     // Converts the extended format into the packed decimal real format
-    // ADAPTED FROM MUSASHI CPU CORE
+    void musashiUnpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result); // DEPRECATED
     void unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result);
 
 

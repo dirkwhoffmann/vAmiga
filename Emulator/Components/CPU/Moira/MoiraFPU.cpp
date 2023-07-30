@@ -16,6 +16,12 @@ Float80::Float80(double value)
     raw = softfloat::float64_to_floatx80(*((u64 *)&value));
 }
 
+Float80::Float80(bool mSign, i16 e, u64 m)
+{
+    raw.high = (mSign ? 0x8000 : 0x0000) | (u16(e + 0x3FFF) & 0x7FFF);
+    raw.low = m;
+}
+
 double
 Float80::asDouble()
 {
@@ -29,6 +35,25 @@ Float80::asLong()
     auto value = softfloat::floatx80_to_int64(raw);
     return (long)value;
 }
+
+bool
+Float80::isNormalized()
+{
+    if ((raw.high & 0x7F) == 0) return true;
+
+    return raw.low == 0 || (raw.low & (1L << 63)) != 0;
+}
+
+void
+Float80::normalize()
+{
+    while (!isNormalized()) {
+
+        raw.high -= 1;
+        raw.low <<= 1;
+    }
+}
+
 
 void
 FPU::reset()
@@ -257,7 +282,7 @@ FPU::setFlags(const Float80 &value)
 }
 
 void
-FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
+FPU::musashiPack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
 {
     static u32 pkmask2[18] =
     {
@@ -400,7 +425,83 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
 }
 
 void
-FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
+FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
+{
+    auto frexp10 = [](double arg, int *exp) {
+        *exp = (arg == 0) ? 0 : 1 + (int)std::floor(std::log10(std::fabs(arg) ) );
+        return arg * std::pow(10 , -(*exp));
+    };
+
+    if (k >= 18) {
+        // TODO: Sets the OPERR bit
+        k = 17;
+    }
+    char str[128] = { };
+    int e;
+    int eSgn = 0;
+    int mSgn = 0;
+
+    printf("FPU::pack(%f)\n", value.asDouble());
+
+    // Split value into exponent and mantissa
+    auto m = frexp10(value.asDouble(), &e);
+
+    // Lower the exponent by one, because the first digit is left of the comma
+    e -= 1;
+
+    // Get sign bits
+    if (m < 0.0) { mSgn = 1; m = std::abs(m); }
+    if (e < 0.0) { eSgn = 1; e = std::abs(e); }
+
+    printf("e = %d m = %f (%d %d) k = %d\n", e, m, eSgn, mSgn, k);
+
+    // Compute significant digits
+    long v;
+    if (k <= 0) {
+        v = long(std::round(m * pow(10.0, e - k)));
+    } else {
+        v = long(std::round(m * pow(10.0, k)));
+    }
+
+    printf("digits = %ld\n", v);
+
+    // Create a textual represention
+    snprintf(str, sizeof(str), "%ld", std::abs(v));
+
+    printf("digits (text) = %s\n", str);
+
+    // Set sign bits
+    dw1 = dw2 = dw3 = 0;
+    if (mSgn) dw1 |= 0x80000000;
+    if (eSgn) dw1 |= 0x40000000;
+
+    // Write exponent
+    dw1 |= ((e / 100) % 10) << 24;
+    dw1 |= ((e / 10) % 10) << 20;
+    dw1 |= (e % 10) << 24;
+
+    // Write mantissa
+    dw1 |= ((str[0] - '0') & 0xF) << 0;
+    dw2 |= ((str[1] - '0') & 0xF) << 28;
+    dw2 |= ((str[2] - '0') & 0xF) << 24;
+    dw2 |= ((str[3] - '0') & 0xF) << 20;
+    dw2 |= ((str[4] - '0') & 0xF) << 16;
+    dw2 |= ((str[5] - '0') & 0xF) << 12;
+    dw2 |= ((str[6] - '0') & 0xF) << 8;
+    dw2 |= ((str[7] - '0') & 0xF) << 4;
+    dw2 |= ((str[8] - '0') & 0xF) << 0;
+    dw3 |= ((str[9] - '0') & 0xF) << 28;
+    dw3 |= ((str[10] - '0') & 0xF) << 24;
+    dw3 |= ((str[11] - '0') & 0xF) << 20;
+    dw3 |= ((str[12] - '0') & 0xF) << 16;
+    dw3 |= ((str[13] - '0') & 0xF) << 12;
+    dw3 |= ((str[14] - '0') & 0xF) << 8;
+    dw3 |= ((str[15] - '0') & 0xF) << 4;
+    dw3 |= ((str[16] - '0') & 0xF) << 0;
+}
+
+void
+FPU::musashiUnpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 {
     double tmp;
     char str[128], *ch;
@@ -440,6 +541,85 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 
     sscanf(str, "%le", &tmp);
     result = tmp;
+}
+
+void
+FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
+{
+    double mantissa = 0.0;
+    double exponent = 0.0;
+    u64 m = 0;
+
+    exponent = ((dw1 >> 24) & 0xF) * 100.0;
+    exponent += ((dw1 >> 20) & 0xF) * 10.0;
+    exponent += ((dw1 >> 16) & 0xF);
+
+    double factor = 1.0;
+
+    mantissa += ((dw1 >> 0) & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw2 >> 28) & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw2 >> 24) & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw2 >> 20) & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw2 >> 16) & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw2 >> 12) & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw2 >> 8) & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw2 >> 4) & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw2 >> 0) & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw3 >> 28) & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw3 >> 24) & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw3 >> 20) & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw3 >> 16) & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw3 >> 12) & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw3 >> 8) & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw3 >> 4) & 0xF) * factor; factor /= 10.0;
+    mantissa += ((dw3 >> 0) & 0xF) * factor; factor /= 10.0;
+
+    m = 10 * m + ((dw1 >> 0) & 0xF);
+    m = 10 * m + ((dw2 >> 28) & 0xF);
+    m = 10 * m + ((dw2 >> 24) & 0xF);
+    m = 10 * m + ((dw2 >> 20) & 0xF);
+    m = 10 * m + ((dw2 >> 16) & 0xF);
+    m = 10 * m + ((dw2 >> 12) & 0xF);
+    m = 10 * m + ((dw2 >> 8) & 0xF);
+    m = 10 * m + ((dw2 >> 4) & 0xF);
+    m = 10 * m + ((dw2 >> 0) & 0xF);
+    m = 10 * m + ((dw3 >> 28) & 0xF);
+    m = 10 * m + ((dw3 >> 24) & 0xF);
+    m = 10 * m + ((dw3 >> 20) & 0xF);
+    m = 10 * m + ((dw3 >> 16) & 0xF);
+    m = 10 * m + ((dw3 >> 12) & 0xF);
+    m = 10 * m + ((dw3 >> 8) & 0xF);
+    m = 10 * m + ((dw3 >> 4) & 0xF);
+    m = 10 * m + ((dw3 >> 0) & 0xF);
+
+    if (dw1 & 0x80000000) exponent *= -1;
+    if (dw1 & 0x40000000) mantissa *= -1;
+
+    double val = mantissa * pow(10.0, exponent);
+    printf("val = %f  m = %lld sizeof(val) = %zu\n", val, m, sizeof(val));
+
+    int exponent2;
+
+    auto mantissa2 = frexp(val, &exponent2);
+    printf("mantissa = %f mantissa2 = %f exponent2 = %d\n", mantissa, mantissa2, exponent2);
+    exponent2 -= 1;
+
+    u64 mmm = 0;
+    for (isize i = 63; i >= 0; i--) {
+        mantissa2 *= 2.0;
+        if (mantissa2 >= 1.0) {
+            mmm |= (1L << i);
+            mantissa2 -= 1.0;
+        } else {
+            mmm &= ~(1L << i);
+        }
+    }
+
+    // double combined = std::pow(10.0, exponent) * mantissa;
+    // printf("            Exponent = %f Mantissa = %f (m = %lld mm = %llx mmm = %llx)\n", exponent, mantissa, m, mm, mmm);
+
+    result = Float80(dw1 & 0x40000000, (i16)exponent2, mmm);
+    result.normalize();
 }
 
 }

@@ -28,6 +28,8 @@ Moira::execFGen(u16 opcode)
 
     // readExt<C>();
 
+    printf("execFGen (I = %d M = %d S = %d)\n", I, M, S);
+
     if (M == MODE_AN) {
         if (ext & 0x4000) { execLineF<C, I, M, S>(opcode); return; }
     }
@@ -180,8 +182,12 @@ Moira::execFMove(u16 opcode)
     auto dst = ______xxx_______ (ext);
     auto fac = _________xxxxxxx (ext);
 
+    printf("execFMove(I = %d M = %d S = %d)\n", I, M, S);
+
     // Catch illegal extension words
     if (!fpu.isValidExt(I, M, opcode, ext)) {
+
+        printf("execFMove: ILLEGAL\n");
 
         execLineF<C, I, M, S>(opcode);
         return;
@@ -217,42 +223,50 @@ Moira::execFMove(u16 opcode)
 
                     case 0: // Long-Word Integer
                     {
+                        printf("FMOVE IM -> Reg (Long)\n");
                         auto value = readFpuOpIm<M>(FltFormat(src));
                         fpu.setFPR(dst, value);
                         break;
                     }
                     case 1: // Single precision
                     {
+                        printf("FMOVE IM -> Reg (Single)\n");
                         auto value = readFpuOpIm<M>(FltFormat(src));
                         fpu.setFPR(dst, value);
                         break;
                     }
-                    case 2: // Double precision
+                    case 2: // Extended precision
                     {
+                        printf("FMOVE IM -> Reg (Extended)\n");
                         auto value = readFpuOpIm<M>(FltFormat(src));
                         fpu.setFPR(dst, value);
                         break;
                     }
                     case 3: // Packed-Decimal Real
                     {
+                        printf("FMOVE IM -> Reg (Packed)\n");
                         auto value = readFpuOpIm<M>(FltFormat(src));
                         fpu.setFPR(dst, value);
+                        printf("            %x %llx\n", value.raw.high, value.raw.low);
                         break;
                     }
                     case 4: // Word Integer
                     {
+                        printf("FMOVE IM -> Reg (Word)\n");
                         auto value = readFpuOpIm<M>(FltFormat(src));
                         fpu.setFPR(dst, value);
                         break;
                     }
                     case 5: // Double-precision real
                     {
+                        printf("FMOVE IM -> Reg (Double)\n");
                         auto value = readFpuOpIm<M>(FltFormat(src));
                         fpu.setFPR(dst, value);
                         break;
                     }
                     case 6: // Byte Integer
                     {
+                        printf("FMOVE IM -> Reg (Byte)\n");
                         auto value = readFpuOpIm<M>(FltFormat(src));
                         fpu.setFPR(dst, value);
                         break;
@@ -294,10 +308,9 @@ Moira::execFMove(u16 opcode)
                 }
                 case 0b011:
                 {
-                    // Sign-extend k-factor
                     auto ea = computeEA<C, M, Extended>(reg);
                     int k = (fac & 0x40) ? (fac | 0xffffff80) : (fac & 0x7f);
-                    printf("FMOVE Reg -> Mem (Packed{#k = %d})\n", k);
+                    printf("FMOVE Reg -> Mem (Packed{#k = %d fac = %d})\n", k, fac);
                     writeFpuOp<M>(reg, ea, fpu.fpr[dst], FLT_PACKED, k);
                     break;
                 }
@@ -312,7 +325,7 @@ Moira::execFMove(u16 opcode)
                 {
 
                     printf("FMOVE Reg -> Mem (D)\n");
-                    auto ea = computeEA<C, M, Long>(reg);
+                    auto ea = computeEA<C, M, Quad>(reg);
                     writeFpuOp<M>(reg, ea, fpu.fpr[dst], FLT_DOUBLE);
                     break;
                 }

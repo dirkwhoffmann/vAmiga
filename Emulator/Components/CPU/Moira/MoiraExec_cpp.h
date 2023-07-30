@@ -2528,7 +2528,7 @@ template <Core C, Instr I, Mode M, Size S> void
 Moira::execLea(u16 opcode)
 {
     AVAILABILITY(C68000)
-
+    
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
