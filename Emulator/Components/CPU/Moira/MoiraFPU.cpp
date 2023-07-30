@@ -595,13 +595,13 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
     if (dw1 & 0x80000000) exponent *= -1;
     if (dw1 & 0x40000000) mantissa *= -1;
 
-    double val = mantissa * pow(10.0, exponent);
-    printf("val = %f  m = %lld sizeof(val) = %zu\n", val, m, sizeof(val));
+    long double val = mantissa * powl(10.0, exponent);
+    printf("val = %f  m = %lld sizeof(val) = %zu\n", (double)val, m, sizeof(val));
 
     int exponent2;
 
-    auto mantissa2 = frexp(val, &exponent2);
-    printf("mantissa = %f mantissa2 = %f exponent2 = %d\n", mantissa, mantissa2, exponent2);
+    auto mantissa2 = frexpl(val, &exponent2);
+    printf("mantissa = %f mantissa2 = %f exponent2 = %d\n", mantissa, (double)mantissa2, exponent2);
     exponent2 -= 1;
 
     u64 mmm = 0;
