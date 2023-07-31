@@ -54,6 +54,12 @@ Float80::Float80(long double value)
     *this = Float80(mSign, (i16)e, mbits);
 }
 
+Float80::Float80(u16 high, u64 low)
+{
+    raw.high = high;
+    raw.low = low;
+}
+
 Float80::Float80(bool mSign, i16 e, u64 m)
 {
     raw.high = (mSign ? 0x8000 : 0x0000) | (u16(e + 0x3FFF) & 0x7FFF);
@@ -470,6 +476,9 @@ FPU::musashiPack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
 void
 FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
 {
+    // musashiPack(value, k, dw1, dw2, dw3);
+    // return;
+
     auto frexp10 = [](double arg, int *exp) {
         *exp = (arg == 0) ? 0 : 1 + (int)std::floor(std::log10(std::fabs(arg) ) );
         return arg * std::pow(10 , -(*exp));
@@ -484,10 +493,9 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
     int eSgn = 0;
     int mSgn = 0;
 
-    printf("FPU::pack(%f)\n", value.asDouble());
-
     // Split value into exponent and mantissa
     auto m = frexp10(value.asDouble(), &e);
+    printf("frexp10: e = %d m = %f\n", e, m);
 
     // Lower the exponent by one, because the first digit is left of the comma
     e -= 1;
@@ -498,18 +506,16 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
 
     printf("e = %d m = %f (%d %d) k = %d\n", e, m, eSgn, mSgn, k);
 
-    // Compute significant digits
-    long v;
-    if (k <= 0) {
-        v = long(std::round(m * pow(10.0, e - k)));
-    } else {
-        v = long(std::round(m * pow(10.0, k)));
-    }
+    // Determine the number of digits
+    auto numDigits = std::min(17, k <= 0 ? e - k : k);
 
-    printf("digits = %ld\n", v);
+    // Compute the digits
+    long digits = long(std::round(m * pow(10.0, numDigits)));
+
+    printf("digits = %ld\n", digits);
 
     // Create a textual represention
-    snprintf(str, sizeof(str), "%ld", std::abs(v));
+    snprintf(str, sizeof(str), "%ld", std::abs(digits));
 
     printf("digits (text) = %s\n", str);
 
@@ -521,7 +527,7 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
     // Write exponent
     dw1 |= ((e / 100) % 10) << 24;
     dw1 |= ((e / 10) % 10) << 20;
-    dw1 |= (e % 10) << 24;
+    dw1 |= (e % 10) << 16;
 
     // Write mantissa
     dw1 |= ((str[0] - '0') & 0xF) << 0;
@@ -591,14 +597,44 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 {
     // musashiUnpack(dw1, dw2, dw3, result); return;
 
+    long double factor = 10.0;
+    long double exponent = 0.0;
+    long double mantissa = 0.0;
+    bool error = false;
+
+    auto digit = [&](u32 d) {
+        d &= 0xF; error |= d > 9; factor /= 10.0; return d * factor;
+    };
+
     // Extract exponent
-    double exponent = ((dw1 >> 24) & 0xF) * 100.0;
+    exponent += ((dw1 >> 24) & 0xF) * 100.0;
     exponent += ((dw1 >> 20) & 0xF) * 10.0;
     exponent += ((dw1 >> 16) & 0xF);
 
     // Extract mantissa
-    long double mantissa = ((dw1 >> 0) & 0xF);
-    long double factor = 0.1;
+    mantissa += digit(dw1 >> 0);
+    mantissa += digit(dw2 >> 28);
+    mantissa += digit(dw2 >> 24);
+    mantissa += digit(dw2 >> 20);
+    mantissa += digit(dw2 >> 16);
+    mantissa += digit(dw2 >> 12);
+    mantissa += digit(dw2 >> 8);
+    mantissa += digit(dw2 >> 4);
+    mantissa += digit(dw2 >> 0);
+    mantissa += digit(dw3 >> 28);
+    mantissa += digit(dw3 >> 24);
+    mantissa += digit(dw3 >> 20);
+    mantissa += digit(dw3 >> 16);
+    mantissa += digit(dw3 >> 12);
+    mantissa += digit(dw3 >> 8);
+    mantissa += digit(dw3 >> 4);
+    mantissa += digit(dw3 >> 0);
+
+
+     //long double
+    /*
+    factor = 0.1;
+     mantissa = ((dw1 >> 0) & 0xF);
     mantissa += ((dw2 >> 28) & 0xF) * factor; factor /= 10.0;
     mantissa += ((dw2 >> 24) & 0xF) * factor; factor /= 10.0;
     mantissa += ((dw2 >> 20) & 0xF) * factor; factor /= 10.0;
@@ -615,12 +651,17 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
     mantissa += ((dw3 >> 8)  & 0xF) * factor; factor /= 10.0;
     mantissa += ((dw3 >> 4)  & 0xF) * factor; factor /= 10.0;
     mantissa += ((dw3 >> 0)  & 0xF) * factor; factor /= 10.0;
+     */
 
     // Evaluate exponent sign bit
     if (dw1 & 0x80000000) mantissa *= -1;
     if (dw1 & 0x40000000) exponent *= -1;
 
-    result = Float80(mantissa * powl(10.0, exponent));
+    if (error) {
+        result = Float80(u16(dw1 >> 16), u64(dw2) << 32 | u64(dw3));
+    } else {
+        result = Float80(mantissa * powl(10.0, exponent));
+    }
 }
 
 }
