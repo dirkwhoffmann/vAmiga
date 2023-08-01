@@ -259,7 +259,7 @@ Moira::readFpuOpEa(int n, FltFormat fmt)
             auto data = readM<C68020, M, Byte>(ea);
             updateAn<M, Byte>(n);
 
-            result = softfloat::int32_to_floatx80(data);
+            result.raw = softfloat::int32_to_floatx80(data);
             break;
         }
         case FLT_WORD:
@@ -268,7 +268,7 @@ Moira::readFpuOpEa(int n, FltFormat fmt)
             auto data = readM<C68020, M, Word>(ea);
             updateAn<M, Word>(n);
 
-            result = softfloat::int32_to_floatx80(data);
+            result.raw = softfloat::int32_to_floatx80(data);
             break;
         }
         case FLT_LONG:
@@ -277,7 +277,7 @@ Moira::readFpuOpEa(int n, FltFormat fmt)
             auto data = readM<C68020, M, Long>(ea);
             updateAn<M, Long>(n);
 
-            result = softfloat::int32_to_floatx80(data);
+            result.raw = softfloat::int32_to_floatx80(data);
             break;
         }
         case FLT_SINGLE:
@@ -286,36 +286,37 @@ Moira::readFpuOpEa(int n, FltFormat fmt)
             auto data = readM<C68020, M, Long>(ea);
             updateAn<M, Long>(n);
 
-            result = softfloat::float32_to_floatx80(data);
+            result.raw = softfloat::float32_to_floatx80(data);
             break;
         }
         case FLT_DOUBLE:
         {
             auto ea = computeEA<C68020, M, Quad>(n);
-            u64 data = readM<C68020, M, Long>(ea) << 32;
+            u64 data = u64(readM<C68020, M, Long>(ea)) << 32;
             data |= readM<C68020, M, Long>(U32_ADD(ea, 4));
-            updateAn<M, Long>(n);
+            updateAn<M, Quad>(n);
 
             result.raw = softfloat::float64_to_floatx80(data);
             break;
         }
         case FLT_EXTENDED:
         {
-            auto ea = computeEA<C68020, M, Quad>(n);
-            u16 data1 = readM<C68020, M, Word>(ea);
-            u32 data2 = readM<C68020, M, Long>(U32_ADD(ea, 2));
-            u32 data3 = readM<C68020, M, Long>(U32_ADD(ea, 6));
-            updateAn<M, Long>(n);
+            auto ea = computeEA<C68020, M, Extended>(n);
+            u16 data1 = u16(readM<C68020, M, Word>(ea));
+            u32 data2 = readM<C68020, M, Long>(U32_ADD(ea, 4));
+            u32 data3 = readM<C68020, M, Long>(U32_ADD(ea, 8));
+            updateAn<M, Extended>(n);
 
             result.raw.high = data1;
             result.raw.low = ((u64)data2 << 32) | (data3 & 0xFFFFFFFF);
+            result.normalize();
             break;
         }
         case FLT_PACKED:
         {
 
             auto ea = computeEA<C68020, M, Quad>(n);
-            u16 data1 = readM<C68020, M, Long>(ea);
+            u16 data1 = u16(readM<C68020, M, Long>(ea));
             u32 data2 = readM<C68020, M, Long>(U32_ADD(ea, 4));
             u32 data3 = readM<C68020, M, Long>(U32_ADD(ea, 8));
             updateAn<M, Extended>(n);
@@ -324,8 +325,9 @@ Moira::readFpuOpEa(int n, FltFormat fmt)
             break;
         }
         default:
-            assert(false);
+            fatalError;
     }
+    return result;
 }
 
 template <Mode M, Flags F> Float80

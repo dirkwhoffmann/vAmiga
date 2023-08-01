@@ -8,6 +8,7 @@
 #include "MoiraFPU.h"
 #include "Moira.h"
 #include "MoiraMacros.h"
+#include "ExtendedDouble.h"
 
 namespace vamiga::moira {
 
@@ -37,7 +38,42 @@ Float80::Float80(long double value)
     // Extract the exponent and the mantissa
     int e; auto m = frexpl(value, &e);
     e -= 1;
+    printf("frexpl e = %d\n", e);
+    // Create the bit representation of the mantissa
+    u64 mbits = 0;
+    for (isize i = 63; i >= 0; i--) {
+        m *= 2.0;
+        if (m >= 1.0) {
+            mbits |= (1L << i);
+            m -= 1.0;
+        } else {
+            mbits &= ~(1L << i);
+        }
+    }
 
+    // Compose components
+    *this = Float80(mSign, (i16)e, mbits);
+}
+
+Float80::Float80(ExtendedDouble value)
+{
+    // Handle some special cases
+    if (value.mantissa == 0.0) {
+
+        raw = { };
+        return;
+    }
+
+    // Extract the sign bit
+    bool mSign = value < 0.0;
+    value = value.abs();
+
+    // Extract the exponent and the mantissa
+    // int e; auto m = frexpl(value, &e);
+    int e = (int)value.exponent;
+    auto m = value.mantissa;
+    e -= 1;
+    printf("frexpl e = %d\n", e);
     // Create the bit representation of the mantissa
     u64 mbits = 0;
     for (isize i = 63; i >= 0; i--) {
@@ -476,9 +512,6 @@ FPU::musashiPack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
 void
 FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
 {
-    // musashiPack(value, k, dw1, dw2, dw3);
-    // return;
-
     auto frexp10 = [](double arg, int *exp) {
         *exp = (arg == 0) ? 0 : 1 + (int)std::floor(std::log10(std::fabs(arg) ) );
         return arg * std::pow(10 , -(*exp));
@@ -592,11 +625,10 @@ FPU::musashiUnpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
     result = tmp;
 }
 
+/*
 void
 FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 {
-    // musashiUnpack(dw1, dw2, dw3, result); return;
-
     long double factor = 10.0;
     long double exponent = 0.0;
     long double mantissa = 0.0;
@@ -610,6 +642,8 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
     exponent += ((dw1 >> 24) & 0xF) * 100.0;
     exponent += ((dw1 >> 20) & 0xF) * 10.0;
     exponent += ((dw1 >> 16) & 0xF);
+
+    printf("dw1 = %x => exponent = %Lf\n", dw1, exponent);
 
     // Extract mantissa
     mantissa += digit(dw1 >> 0);
@@ -630,38 +664,64 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
     mantissa += digit(dw3 >> 4);
     mantissa += digit(dw3 >> 0);
 
-
-     //long double
-    /*
-    factor = 0.1;
-     mantissa = ((dw1 >> 0) & 0xF);
-    mantissa += ((dw2 >> 28) & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw2 >> 24) & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw2 >> 20) & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw2 >> 16) & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw2 >> 12) & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw2 >> 8)  & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw2 >> 4)  & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw2 >> 0)  & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw3 >> 28) & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw3 >> 24) & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw3 >> 20) & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw3 >> 16) & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw3 >> 12) & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw3 >> 8)  & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw3 >> 4)  & 0xF) * factor; factor /= 10.0;
-    mantissa += ((dw3 >> 0)  & 0xF) * factor; factor /= 10.0;
-     */
-
     // Evaluate exponent sign bit
     if (dw1 & 0x80000000) mantissa *= -1;
     if (dw1 & 0x40000000) exponent *= -1;
 
+    error = false;
+    
     if (error) {
         result = Float80(u16(dw1 >> 16), u64(dw2) << 32 | u64(dw3));
     } else {
         result = Float80(mantissa * powl(10.0, exponent));
     }
+}
+*/
+
+void
+FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
+{
+    long double factor = 10.0;
+    long double exponent = 0.0;
+    ExtendedDouble mantissa = 0.0;
+
+    auto digit = [&](u32 d) { d &= 0xF; factor /= 10.0; return d * factor; };
+
+    // Extract exponent
+    exponent += ((dw1 >> 24) & 0xF) * 100.0;
+    exponent += ((dw1 >> 20) & 0xF) * 10.0;
+    exponent += ((dw1 >> 16) & 0xF);
+
+    printf("dw1 = %x => exponent = %Lf\n", dw1, exponent);
+
+    // Extract mantissa
+    mantissa += digit(dw1 >> 0);
+    mantissa += digit(dw2 >> 28);
+    mantissa += digit(dw2 >> 24);
+    mantissa += digit(dw2 >> 20);
+    mantissa += digit(dw2 >> 16);
+    mantissa += digit(dw2 >> 12);
+    mantissa += digit(dw2 >> 8);
+    mantissa += digit(dw2 >> 4);
+    mantissa += digit(dw2 >> 0);
+    mantissa += digit(dw3 >> 28);
+    mantissa += digit(dw3 >> 24);
+    mantissa += digit(dw3 >> 20);
+    mantissa += digit(dw3 >> 16);
+    mantissa += digit(dw3 >> 12);
+    mantissa += digit(dw3 >> 8);
+    mantissa += digit(dw3 >> 4);
+    mantissa += digit(dw3 >> 0);
+
+    // Evaluate exponent sign bit
+    if (dw1 & 0x80000000) mantissa *= -1;
+    if (dw1 & 0x40000000) exponent *= -1;
+    mantissa.reduce();
+
+    mantissa = mantissa * ExtendedDouble::edpow(10.0, (long)exponent);
+    mantissa.reduce();
+
+    result = Float80(mantissa);
 }
 
 }

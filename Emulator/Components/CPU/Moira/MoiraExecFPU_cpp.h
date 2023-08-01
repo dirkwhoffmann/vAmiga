@@ -197,25 +197,12 @@ Moira::execFMove(u16 opcode)
 
         case 0b000:
 
-            printf("FMOVE: cod = 000\n");
-            /*
-             if (fac == 0x40) str << Ins<FSMOVE>{} << Ffmt{2};
-             else if (fac == 0x44) str << Ins<FDMOVE>{} << Ffmt{2};
-             else str << Ins<I>{} << Ffmt{2};
-
-             str << str.tab << Fp(src) << Sep{} << Fp(dst);
-             */
+            printf("FMOVE FP%d -> FP%d\n", src, dst);
+            fpu.setFPR(dst, fpu.getFPR(src));
             CYCLES(4);
             break;
 
         case 0b010:
-
-            printf("FMOVE: cod = 010\n");
-            /*
-             if (fac == 0x40) str << Ins<FSMOVE>{} << Ffmt{src};
-             else if (fac == 0x44) str << Ins<FDMOVE>{} << Ffmt{src};
-             else str << Ins<I>{} << Ffmt{src};
-             */
 
             if (M == MODE_IM) {
 
@@ -277,7 +264,9 @@ Moira::execFMove(u16 opcode)
                 }
             } else {
 
-                printf("FMOVE (MODE != IM)\n");
+                printf("FMOVE EA -> Reg\n");
+                auto value = readFpuOp<M>(reg, FltFormat(src));
+                fpu.setFPR(dst, value);
             }
             break;
 
@@ -369,8 +358,6 @@ Moira::execFMovecr(u16 opcode)
         return;
     }
 
-    printf("execFMovecr %x -> %d\n", ofs, dst);
-
     switch (ofs)
     {
         case 0x0:   fpu.setFPR(dst, 0x4000, 0xc90fdaa22168c235); break; // pi
@@ -379,14 +366,24 @@ Moira::execFMovecr(u16 opcode)
         case 0xd:   fpu.setFPR(dst, 0x3fff, 0xb8aa3b295c17f0bc); break; // log2(e)
         case 0xe:   fpu.setFPR(dst, 0x3ffd, 0xde5bd8a937287195); break; // log10(e)
         case 0xf:   fpu.setFPR(dst, 0x0000, 0x0000000000000000); break; // 0.0
-        case 0x30:  fpu.setFPR(dst, 0x3ffe, 0xb17217f7d1cf79ac); break;  // ln(2)
-        case 0x31:  fpu.setFPR(dst, 0x4000, 0x935d8dddaaa8ac17); break;   // ln(10)
-        case 0x32:  fpu.setFPR(dst, 0x0000, 0x0000000000000001); break;   // 10^0
-        case 0x33:  fpu.setFPR(dst, 0x0000, 0x000000000000000A); break;   // 10^1
-        case 0x34:  fpu.setFPR(dst, 0x0000, 0x0000000000000064); break;   // 10^2
+        case 0x30:  fpu.setFPR(dst, 0x3ffe, 0xb17217f7d1cf79ac); break; // ln(2)
+        case 0x31:  fpu.setFPR(dst, 0x4000, 0x935d8dddaaa8ac17); break; // ln(10)
+        case 0x32:  fpu.setFPR(dst, 0x3FFF, 0x8000000000000000); break; // 10^0
+        case 0x33:  fpu.setFPR(dst, 0x4002, 0xA000000000000000); break; // 10^1
+        case 0x34:  fpu.setFPR(dst, 0x4005, 0xC800000000000000); break; // 10^2
+        case 0x35:  fpu.setFPR(dst, 0x400C, 0x9C40000000000000); break; // 10^4
+        case 0x36:  fpu.setFPR(dst, 0x4019, 0xBEBC200000000000); break; // 10^8
+        case 0x37:  fpu.setFPR(dst, 0x4034, 0x8E1BC9BF04000000); break; // 10^16
+        case 0x38:  fpu.setFPR(dst, 0x4069, 0x9DC5ADA82B70B59E); break; // 10^32
+        case 0x39:  fpu.setFPR(dst, 0x40D3, 0xC2781F49FFCFA6D5); break; // 10^64
+        case 0x3A:  fpu.setFPR(dst, 0x41A8, 0x93BA47C980E98CE0); break; // 10^128
+        case 0x3B:  fpu.setFPR(dst, 0x4351, 0xAA7EEBFB9DF9DE8E); break; // 10^256
+        case 0x3C:  fpu.setFPR(dst, 0x46A3, 0xE319A0AEA60E91C7); break; // 10^512
+        case 0x3D:  fpu.setFPR(dst, 0x4D48, 0xC976758681750C17); break; // 10^1024
+        case 0x3E:  fpu.setFPR(dst, 0x5A92, 0x9E8B3B5DC53D5DE5); break; // 10^2048
+        case 0x3F:  fpu.setFPR(dst, 0x7525, 0xC46052028A20979B); break; // 10^4096
 
         default:
-            printf("Unknown FPU ROM constant (%02x)\n", ofs);
             fpu.setFPR(dst, 0, 0);
             break;
     }

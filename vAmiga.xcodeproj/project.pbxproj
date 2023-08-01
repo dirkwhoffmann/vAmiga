@@ -249,6 +249,8 @@
 		50DD33CC2756113300AE18B4 /* pfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 50DD33CB27560EE600AE18B4 /* pfile.c */; };
 		50DD3AF72A6A8590008FC7CC /* MoiraFPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DD3AF52A6A8495008FC7CC /* MoiraFPU.cpp */; };
 		50DD3AF82A6A8590008FC7CC /* MoiraFPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DD3AF52A6A8495008FC7CC /* MoiraFPU.cpp */; };
+		50DD3B0E2A7975E7008FC7CC /* ExtendedDouble.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DD3B0C2A7975E7008FC7CC /* ExtendedDouble.cpp */; };
+		50DD3B0F2A7975E7008FC7CC /* ExtendedDouble.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DD3B0C2A7975E7008FC7CC /* ExtendedDouble.cpp */; };
 		50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DED6AE2202EBA200B8195F /* Inspector.xib */; };
 		50DED6B12202EC3100B8195F /* Inspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DED6B02202EC3100B8195F /* Inspector.swift */; };
 		50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DF2C9F2269135800795256 /* SpriteTableView.swift */; };
@@ -866,6 +868,8 @@
 		50DD33CB27560EE600AE18B4 /* pfile.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = pfile.c; sourceTree = "<group>"; };
 		50DD3AF52A6A8495008FC7CC /* MoiraFPU.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MoiraFPU.cpp; sourceTree = "<group>"; };
 		50DD3AF62A6A8496008FC7CC /* MoiraFPU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraFPU.h; sourceTree = "<group>"; };
+		50DD3B0C2A7975E7008FC7CC /* ExtendedDouble.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExtendedDouble.cpp; sourceTree = "<group>"; };
+		50DD3B0D2A7975E7008FC7CC /* ExtendedDouble.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtendedDouble.h; sourceTree = "<group>"; };
 		50DED6AE2202EBA200B8195F /* Inspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Inspector.xib; sourceTree = "<group>"; };
 		50DED6B02202EC3100B8195F /* Inspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inspector.swift; sourceTree = "<group>"; };
 		50DF2C9E2268CFC000795256 /* AgnusTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgnusTypes.h; sourceTree = "<group>"; };
@@ -1862,6 +1866,8 @@
 				50A6F50428C7AB6A002F31EA /* MoiraDasmFPU_cpp.h */,
 				50DD3AF62A6A8496008FC7CC /* MoiraFPU.h */,
 				50DD3AF52A6A8495008FC7CC /* MoiraFPU.cpp */,
+				50DD3B0D2A7975E7008FC7CC /* ExtendedDouble.h */,
+				50DD3B0C2A7975E7008FC7CC /* ExtendedDouble.cpp */,
 				50E2BE2B240D418500155AE4 /* MoiraDebugger.h */,
 				50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */,
 				50E2BE32240D418600155AE4 /* StrWriter.h */,
@@ -2276,6 +2282,7 @@
 				50F0BD2622AF883C001F4616 /* UART.cpp in Sources */,
 				50357BB6239123B2007E7563 /* Renderer.swift in Sources */,
 				5078A5D52529E7FA00FCE384 /* Sampler.cpp in Sources */,
+				50DD3B0E2A7975E7008FC7CC /* ExtendedDouble.cpp in Sources */,
 				508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */,
 				5029C6E327CA2F66002F6CCC /* DiskInspector.swift in Sources */,
 				505C83F927739ED0001F8159 /* RemoteManager.cpp in Sources */,
@@ -2414,6 +2421,7 @@
 				50FC04BF27DA19CE00C3E566 /* KeyboardEvents.cpp in Sources */,
 				50FC04B727DA19A900C3E566 /* ZorroBoard.cpp in Sources */,
 				50FC04DE27DA1A1400C3E566 /* u_medium.c in Sources */,
+				50DD3B0F2A7975E7008FC7CC /* ExtendedDouble.cpp in Sources */,
 				50FC04C727DA19E900C3E566 /* EXEFile.cpp in Sources */,
 				50FC04C627DA19E900C3E566 /* Folder.cpp in Sources */,
 				50EF2237281595B800440C4D /* DiagBoard.cpp in Sources */,
