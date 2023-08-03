@@ -5,4 +5,5 @@ target_sources(vAmigaCore PRIVATE
 Moira.cpp
 MoiraFPU.cpp
 MoiraDebugger.cpp
+ExtendedDouble.cpp
 )

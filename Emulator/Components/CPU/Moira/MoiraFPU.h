@@ -85,10 +85,10 @@ public:
     void setFPR(int n, Float80 value);
     void setFPR(int n, u16 high, u64 low);
 
-    u32 getFPCR() const { return fpcr; }
+    u32 getFPCR() const { return fpcr & 0x0000FFF0; }
     void setFPCR(u32 value);
 
-    u32 getFPSR() const { return fpsr; }
+    u32 getFPSR() const { return fpsr & 0x0FFFFFF8; }
     void setFPSR(u32 value);
 
     u32 getFPIAR() const { return fpiar; }

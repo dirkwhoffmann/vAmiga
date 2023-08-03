@@ -360,14 +360,24 @@ Moira::execFMovecr(u16 opcode)
 
     switch (ofs)
     {
-        case 0x0:   fpu.setFPR(dst, 0x4000, 0xc90fdaa22168c235); break; // pi
-        case 0xb:   fpu.setFPR(dst, 0x3ffd, 0x9a209a84fbcff798); break; // log10(2)
-        case 0xc:   fpu.setFPR(dst, 0x4000, 0xadf85458a2bb4a9b); break; // e
-        case 0xd:   fpu.setFPR(dst, 0x3fff, 0xb8aa3b295c17f0bc); break; // log2(e)
-        case 0xe:   fpu.setFPR(dst, 0x3ffd, 0xde5bd8a937287195); break; // log10(e)
+        case 0x0:   fpu.setFPR(dst, 0x4000, 0xc90fdaa22168c235); break; // Pi
+        case 0x1:   fpu.setFPR(dst, 0x4001, 0xfe00068200000000); break; // Undocumented
+        case 0x2:   fpu.setFPR(dst, 0x4001, 0xffc0050380000000); break; // Undocumented
+        case 0x3:   fpu.setFPR(dst, 0x2000, 0x7FFFFFFF00000000); break; // Undocumented
+        case 0x4:   fpu.setFPR(dst, 0x0000, 0xFFFFFFFFFFFFFFFF); break; // Undocumented
+        case 0x5:   fpu.setFPR(dst, 0x3C00, 0xFFFFFFFFFFFFF800); break; // Undocumented
+        case 0x6:   fpu.setFPR(dst, 0x3F80, 0xFFFFFF0000000000); break; // Undocumented
+        case 0x7:   fpu.setFPR(dst, 0x0001, 0xF65D8D9C00000000); break; // Undocumented
+        case 0x8:   fpu.setFPR(dst, 0x7FFF, 0x401E000000000000); break; // Undocumented
+        case 0x9:   fpu.setFPR(dst, 0x43F3, 0xE000000000000000); break; // Undocumented
+        case 0xa:   fpu.setFPR(dst, 0x4072, 0xC000000000000000); break; // Undocumented
+        case 0xb:   fpu.setFPR(dst, 0x3ffd, 0x9a209a84fbcff798); break; // Log10(2)
+        case 0xc:   fpu.setFPR(dst, 0x4000, 0xadf85458a2bb4a9b); break; // E
+        case 0xd:   fpu.setFPR(dst, 0x3fff, 0xb8aa3b295c17f0bc); break; // Log2(e)
+        case 0xe:   fpu.setFPR(dst, 0x3ffd, 0xde5bd8a937287195); break; // Log10(e)
         case 0xf:   fpu.setFPR(dst, 0x0000, 0x0000000000000000); break; // 0.0
-        case 0x30:  fpu.setFPR(dst, 0x3ffe, 0xb17217f7d1cf79ac); break; // ln(2)
-        case 0x31:  fpu.setFPR(dst, 0x4000, 0x935d8dddaaa8ac17); break; // ln(10)
+        case 0x30:  fpu.setFPR(dst, 0x3ffe, 0xb17217f7d1cf79ac); break; // Ln(2)
+        case 0x31:  fpu.setFPR(dst, 0x4000, 0x935d8dddaaa8ac17); break; // Ln(10)
         case 0x32:  fpu.setFPR(dst, 0x3FFF, 0x8000000000000000); break; // 10^0
         case 0x33:  fpu.setFPR(dst, 0x4002, 0xA000000000000000); break; // 10^1
         case 0x34:  fpu.setFPR(dst, 0x4005, 0xC800000000000000); break; // 10^2
@@ -383,7 +393,14 @@ Moira::execFMovecr(u16 opcode)
         case 0x3E:  fpu.setFPR(dst, 0x5A92, 0x9E8B3B5DC53D5DE5); break; // 10^2048
         case 0x3F:  fpu.setFPR(dst, 0x7525, 0xC46052028A20979B); break; // 10^4096
 
+            // case  ... // Undocumented
+
         default:
+
+            if (ofs >= 0x40) {
+                // Values >= 0x40 seem to produce a Guru on the real machine
+            }
+
             fpu.setFPR(dst, 0, 0);
             break;
     }
@@ -432,36 +449,26 @@ Moira::execFMovem(u16 opcode)
                 if (lll & 2) { fpu.setFPSR(data); }
                 if (lll & 1) { fpu.setFPIAR(data); }
 
-                if (lll & 4) { printf("FPCR = %d\n", data); }
-                if (lll & 2) { printf("FPSR = %d\n", data); }
-                if (lll & 1) { printf("FPIAR = %d\n", data); }
-
                 prefetch<C>();
                 return;
 
             } else {
+
+                // DOES THE REAL MACHINE TRIGGER AN EXCEPTION IN THIS CASE?
 
                 printf("Ea to Cntrl (lll = %d)\n", lll);
 
                 (void)readExt<C,Word>();
 
                 u32 ea, data;
+                readOp<C, M, Long, STD_AE_FRAME>(reg, &ea, &data);
 
-                if (lll & 4) {
-                    readOp<C, M, Long, STD_AE_FRAME>(reg, &ea, &data);
-                    fpu.fpcr = data;
-                }
-                if (lll & 2) {
-                    readOp<C, M, Long, STD_AE_FRAME>(reg, &ea, &data);
-                    fpu.fpsr = data;
-                }
-                if (lll & 1) {
-                    readOp<C, M, Long, STD_AE_FRAME>(reg, &ea, &data);
-                    fpu.fpiar = data;
-                }
+                if (lll & 4) { fpu.setFPCR(data); }
+                if (lll & 2) { fpu.setFPSR(data); }
+                if (lll & 1) { fpu.setFPIAR(data); }
 
                 prefetch<C>();
-                CYCLES(10);
+                return;
             }
             break;
 
@@ -474,9 +481,9 @@ Moira::execFMovem(u16 opcode)
                 (void)readExt<C,Word>();
 
                 u32 data = 0;
-                if (lll & 1) { data = fpu.fpiar; }
-                if (lll & 2) { data = fpu.fpsr; }
-                if (lll & 4) { data = fpu.fpcr; }
+                if (lll & 1) { data = fpu.getFPIAR(); }
+                if (lll & 2) { data = fpu.getFPSR(); }
+                if (lll & 4) { data = fpu.getFPCR(); }
 
                 if (M != MODE_IM && M != MODE_IP) {
                     writeOp<C, M, Long>(reg, data);

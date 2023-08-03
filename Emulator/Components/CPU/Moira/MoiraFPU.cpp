@@ -300,14 +300,14 @@ FPU::setFPR(int n, u16 high, u64 low)
 void
 FPU::setFPCR(u32 value)
 {
-    fpcr = value;
+    fpcr = value & 0x0000FFF0;
     softfloat::float_rounding_mode = (value & 0b110000) >> 4;
 }
 
 void
 FPU::setFPSR(u32 value)
 {
-    fpsr = value;
+    fpsr = value & 0x0FFFFFF8;
 }
 
 void
@@ -625,7 +625,6 @@ FPU::musashiUnpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
     result = tmp;
 }
 
-/*
 void
 FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 {
@@ -676,8 +675,8 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
         result = Float80(mantissa * powl(10.0, exponent));
     }
 }
-*/
 
+/*
 void
 FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 {
@@ -723,5 +722,6 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 
     result = Float80(mantissa);
 }
+*/
 
 }
