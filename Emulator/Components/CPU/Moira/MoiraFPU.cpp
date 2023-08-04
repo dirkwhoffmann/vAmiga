@@ -294,6 +294,19 @@ FPU::setFPR(int n, u16 high, u64 low)
     fpr[n].raw.high = high;
     fpr[n].raw.low = low;
 
+    // Convert value to the correct precision
+    softfloat::float_exception_flags = 0;
+    Float80 cropped;
+    if ((fpcr & 0b11000000) == 0b01000000) {
+        fpr[n].raw = softfloat::float32_to_floatx80(floatx80_to_float32(fpr[n].raw));
+    } else if ((fpcr & 0b11000000) == 0b10000000) {
+        fpr[n].raw = softfloat::float64_to_floatx80(floatx80_to_float64(fpr[n].raw));
+    }
+    clearExcStatusBit(FPEXP_INEX2);
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        setExcStatusBit(FPEXP_INEX2);
+    }
+
     setFlags(fpr[n]);
 }
 
@@ -336,7 +349,7 @@ FPU::clearExcStatusBit(u32 mask)
 {
     assert((mask & ~0xFF00) == 0);
 
-    fpcr &= ~mask;
+    fpsr &= ~mask;
 }
 
 void
@@ -364,6 +377,106 @@ FPU::setFlags(const Float80 &value)
     REPLACE_BIT(fpsr, 26, z);
     REPLACE_BIT(fpsr, 25, i);
     REPLACE_BIT(fpsr, 24, nan);
+}
+
+Float80
+FPU::readCR(unsigned nr)
+{
+    Float80 result;
+
+    static constexpr struct { u16 hi; u64 lo; } rom1[] = {
+
+        { 0x4000, 0xc90fdaa22168c235 }, // 0x00: Pi
+        { 0x4001, 0xfe00068200000000 }, // 0x01: Undocumented
+        { 0x4001, 0xffc0050380000000 }, // 0x02: Undocumented
+        { 0x2000, 0x7FFFFFFF00000000 }, // 0x03: Undocumented
+        { 0x0000, 0xFFFFFFFFFFFFFFFF }, // 0x04: Undocumented
+        { 0x3C00, 0xFFFFFFFFFFFFF800 }, // 0x05: Undocumented
+        { 0x3F80, 0xFFFFFF0000000000 }, // 0x06: Undocumented
+        { 0x0001, 0xF65D8D9C00000000 }, // 0x07: Undocumented
+        { 0x7FFF, 0x401E000000000000 }, // 0x08: Undocumented
+        { 0x43F3, 0xE000000000000000 }, // 0x09: Undocumented
+        { 0x4072, 0xC000000000000000 }, // 0x0A: Undocumented
+        { 0x3ffd, 0x9a209a84fbcff798 }, // 0x0B: Log10(2)
+        { 0x4000, 0xadf85458a2bb4a9b }, // 0x0C: E
+        { 0x3fff, 0xb8aa3b295c17f0bc }, // 0x0D: Log2(e)
+        { 0x3ffd, 0xde5bd8a937287195 }, // 0x0E: Log10(e)
+        { 0x0000, 0x0000000000000000 }  // 0x0F: 0.0
+    };
+
+    static constexpr struct { u16 hi; u64 lo; } rom2[] = {
+
+        { 0x3ffe, 0xb17217f7d1cf79ac }, // 0x00: Ln(2)
+        { 0x4000, 0x935d8dddaaa8ac17 }, // 0x01: Ln(10)
+        { 0x3FFF, 0x8000000000000000 }, // 0x02: 10^0
+        { 0x4002, 0xA000000000000000 }, // 0x03: 10^1
+        { 0x4005, 0xC800000000000000 }, // 0x04: 10^2
+        { 0x400C, 0x9C40000000000000 }, // 0x05: 10^4
+        { 0x4019, 0xBEBC200000000000 }, // 0x06: 10^8
+        { 0x4034, 0x8E1BC9BF04000000 }, // 0x07: 10^16
+        { 0x4069, 0x9DC5ADA82B70B59E }, // 0x08: 10^32
+        { 0x40D3, 0xC2781F49FFCFA6D5 }, // 0x09: 10^64
+        { 0x41A8, 0x93BA47C980E98CE0 }, // 0x0A: 10^128
+        { 0x4351, 0xAA7EEBFB9DF9DE8E }, // 0x0B: 10^256
+        { 0x46A3, 0xE319A0AEA60E91C7 }, // 0x0C: 10^512
+        { 0x4D48, 0xC976758681750C17 }, // 0x0D: 10^1024
+        { 0x5A92, 0x9E8B3B5DC53D5DE5 }, // 0x0E: 10^2048
+        { 0x7525, 0xC46052028A20979B }  // 0x0F: 10^4096
+    };
+
+    if (nr >= 0x40) {
+        // Values in this range seem to produce a Guru on the real machine
+    }
+
+    if (nr >= 0x00 && nr <= 0x10) {
+
+        // Read value from Rom
+        result = Float80(rom1[nr].hi, rom1[nr].lo);
+
+        // Round if necessary
+        if (fpcr & 0b110000) {
+
+            if ((fpcr & 0b110000) == 0b110000) {
+
+                if (nr == 0x0B) result.raw.low++;
+
+            } else {
+
+                if (nr == 0x00) result.raw.low--;
+                if (nr == 0x0C) result.raw.low--;
+                if (nr == 0x0D) result.raw.low--;
+            }
+        }
+    }
+
+    if (nr >= 0x30 && nr <= 0x40) {
+
+        // Read value from Rom
+        result = Float80(rom2[nr - 0x30].hi, rom2[nr - 0x30].lo);
+
+        // Round if necessary
+        if (fpcr & 0b110000) {
+
+            if ((fpcr & 0b110000) == 0b110000) {
+
+                if (nr == 0x39) result.raw.low++;
+                if (nr == 0x3D) result.raw.low++;
+
+            } else {
+
+                if (nr == 0x30) result.raw.low--;
+                if (nr == 0x31) result.raw.low--;
+                if (nr == 0x38) result.raw.low--;
+                if (nr == 0x3A) result.raw.low--;
+                if (nr == 0x3B) result.raw.low--;
+                if (nr == 0x3C) result.raw.low--;
+                if (nr == 0x3E) result.raw.low--;
+                if (nr == 0x3F) result.raw.low--;
+            }
+        }
+    }
+
+    return result;
 }
 
 void
@@ -723,5 +836,74 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
     result = Float80(mantissa);
 }
 */
+
+u8
+FPU::roundB(const Float80 value)
+{
+    softfloat::float_exception_flags = 0;
+
+    auto result1 = softfloat::floatx80_to_int32(value.raw);
+    auto result2 = u8(result1);
+
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        setExcStatusBit(FPEXP_INEX2);
+    }
+
+    return result2;
+}
+
+u16
+FPU::roundW(const Float80 value)
+{
+    softfloat::float_exception_flags = 0;
+
+    auto result1 = softfloat::floatx80_to_int32(value.raw);
+    auto result2 = u16(result1);
+
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        setExcStatusBit(FPEXP_INEX2);
+    }
+
+    return result2;
+}
+
+u32
+FPU::roundL(const Float80 value)
+{
+    softfloat::float_exception_flags = 0;
+
+    auto result1 = softfloat::floatx80_to_int32(value.raw);
+    auto result2 = u32(result1);
+
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        setExcStatusBit(FPEXP_INEX2);
+    }
+
+    return result2;
+}
+
+u64
+FPU::roundD(const Float80 value)
+{
+    Float80 cropped;
+
+    if ((fpcr & 0b11000000) == 0b01000000) {
+        cropped.raw = softfloat::float32_to_floatx80(floatx80_to_float32(value.raw));
+    } else if ((fpcr & 0b11000000) == 0b10000000) {
+        cropped.raw = softfloat::float64_to_floatx80(floatx80_to_float64(value.raw));
+    } else {
+        cropped = value;
+    }
+
+    softfloat::float_exception_flags = 0;
+    u64 result = softfloat::floatx80_to_float64(cropped.raw);
+
+    clearExcStatusBit(FPEXP_INEX2);
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        setExcStatusBit(FPEXP_INEX2);
+    }
+
+    return result;
+}
 
 }

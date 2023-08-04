@@ -102,6 +102,15 @@ public:
     void setFlags(const Float80 &value);
 
 
+
+    //
+    // Accessing the constant Rom
+    //
+
+    // Reads a value from the constant Rom
+    Float80 readCR(unsigned nr);
+
+
     //
     // Converting
     //
@@ -115,6 +124,12 @@ public:
     // Converts the extended format into the packed decimal real format
     void musashiUnpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result); // DEPRECATED
     void unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result);
+
+    // Experimental
+    u8 roundB(const Float80 value);
+    u16 roundW(const Float80 value);
+    u32 roundL(const Float80 value);
+    u64 roundD(const Float80 value);
 
 
     //

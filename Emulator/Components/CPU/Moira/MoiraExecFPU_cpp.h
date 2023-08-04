@@ -358,53 +358,7 @@ Moira::execFMovecr(u16 opcode)
         return;
     }
 
-    switch (ofs)
-    {
-        case 0x0:   fpu.setFPR(dst, 0x4000, 0xc90fdaa22168c235); break; // Pi
-        case 0x1:   fpu.setFPR(dst, 0x4001, 0xfe00068200000000); break; // Undocumented
-        case 0x2:   fpu.setFPR(dst, 0x4001, 0xffc0050380000000); break; // Undocumented
-        case 0x3:   fpu.setFPR(dst, 0x2000, 0x7FFFFFFF00000000); break; // Undocumented
-        case 0x4:   fpu.setFPR(dst, 0x0000, 0xFFFFFFFFFFFFFFFF); break; // Undocumented
-        case 0x5:   fpu.setFPR(dst, 0x3C00, 0xFFFFFFFFFFFFF800); break; // Undocumented
-        case 0x6:   fpu.setFPR(dst, 0x3F80, 0xFFFFFF0000000000); break; // Undocumented
-        case 0x7:   fpu.setFPR(dst, 0x0001, 0xF65D8D9C00000000); break; // Undocumented
-        case 0x8:   fpu.setFPR(dst, 0x7FFF, 0x401E000000000000); break; // Undocumented
-        case 0x9:   fpu.setFPR(dst, 0x43F3, 0xE000000000000000); break; // Undocumented
-        case 0xa:   fpu.setFPR(dst, 0x4072, 0xC000000000000000); break; // Undocumented
-        case 0xb:   fpu.setFPR(dst, 0x3ffd, 0x9a209a84fbcff798); break; // Log10(2)
-        case 0xc:   fpu.setFPR(dst, 0x4000, 0xadf85458a2bb4a9b); break; // E
-        case 0xd:   fpu.setFPR(dst, 0x3fff, 0xb8aa3b295c17f0bc); break; // Log2(e)
-        case 0xe:   fpu.setFPR(dst, 0x3ffd, 0xde5bd8a937287195); break; // Log10(e)
-        case 0xf:   fpu.setFPR(dst, 0x0000, 0x0000000000000000); break; // 0.0
-        case 0x30:  fpu.setFPR(dst, 0x3ffe, 0xb17217f7d1cf79ac); break; // Ln(2)
-        case 0x31:  fpu.setFPR(dst, 0x4000, 0x935d8dddaaa8ac17); break; // Ln(10)
-        case 0x32:  fpu.setFPR(dst, 0x3FFF, 0x8000000000000000); break; // 10^0
-        case 0x33:  fpu.setFPR(dst, 0x4002, 0xA000000000000000); break; // 10^1
-        case 0x34:  fpu.setFPR(dst, 0x4005, 0xC800000000000000); break; // 10^2
-        case 0x35:  fpu.setFPR(dst, 0x400C, 0x9C40000000000000); break; // 10^4
-        case 0x36:  fpu.setFPR(dst, 0x4019, 0xBEBC200000000000); break; // 10^8
-        case 0x37:  fpu.setFPR(dst, 0x4034, 0x8E1BC9BF04000000); break; // 10^16
-        case 0x38:  fpu.setFPR(dst, 0x4069, 0x9DC5ADA82B70B59E); break; // 10^32
-        case 0x39:  fpu.setFPR(dst, 0x40D3, 0xC2781F49FFCFA6D5); break; // 10^64
-        case 0x3A:  fpu.setFPR(dst, 0x41A8, 0x93BA47C980E98CE0); break; // 10^128
-        case 0x3B:  fpu.setFPR(dst, 0x4351, 0xAA7EEBFB9DF9DE8E); break; // 10^256
-        case 0x3C:  fpu.setFPR(dst, 0x46A3, 0xE319A0AEA60E91C7); break; // 10^512
-        case 0x3D:  fpu.setFPR(dst, 0x4D48, 0xC976758681750C17); break; // 10^1024
-        case 0x3E:  fpu.setFPR(dst, 0x5A92, 0x9E8B3B5DC53D5DE5); break; // 10^2048
-        case 0x3F:  fpu.setFPR(dst, 0x7525, 0xC46052028A20979B); break; // 10^4096
-
-            // case  ... // Undocumented
-
-        default:
-
-            if (ofs >= 0x40) {
-                // Values >= 0x40 seem to produce a Guru on the real machine
-            }
-
-            fpu.setFPR(dst, 0, 0);
-            break;
-    }
-
+    fpu.setFPR(dst, fpu.readCR(ofs));
     prefetch<C>();
 
     FINALIZE

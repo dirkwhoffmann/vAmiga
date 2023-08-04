@@ -381,7 +381,7 @@ Moira::readFpuOpIm(FltFormat fmt)
             u64 data = (u64)readExt<C68020, Long>() << 32;
             data |= readExt<C68020, Long>();
             result.raw = softfloat::float64_to_floatx80(data);
-            printf("Loaded FLT_DOUBLE: %f (%llx, %x, %llx)\n", result.asDouble(), data, result.raw.high, result.raw.low);
+            printf("Loaded FLT_DOUBLE: %f\n", result.asDouble());
 
             break;
         }
@@ -432,21 +432,24 @@ Moira::writeFpuOp(int n, u32 ea, Float80 val, FltFormat fmt, int k)
 
         case FLT_BYTE:
         {
-            auto data = u8(softfloat::floatx80_to_int32(val.raw));
+            // auto data = u8(softfloat::floatx80_to_int32(val.raw));
+            u8 data = fpu.roundB(val);
             writeM<C68020, M, Byte>(ea, data);
             updateAn<M, Byte>(n);
             break;
         }
         case FLT_WORD:
         {
-            auto data = u16(softfloat::floatx80_to_int32(val.raw));
+            // auto data = u16(softfloat::floatx80_to_int32(val.raw));
+            u16 data = fpu.roundW(val);
             writeM<C68020, M, Word>(ea, data);
             updateAn<M, Word>(n);
             break;
         }
         case FLT_LONG:
         {
-            auto data = u32(softfloat::floatx80_to_int32(val.raw));
+            // auto data = u32(softfloat::floatx80_to_int32(val.raw));
+            u32 data = fpu.roundL(val);
             writeM<C68020, M, Long>(ea, data);
             updateAn<M, Long>(n);
             break;
@@ -460,6 +463,7 @@ Moira::writeFpuOp(int n, u32 ea, Float80 val, FltFormat fmt, int k)
         }
         case FLT_DOUBLE:
         {
+            /*
             softfloat::float64 data;
             if ((fpu.fpcr & 0b11000000) == 0b01000000) {
                 data = softfloat::float32_to_float64(floatx80_to_float32(val.raw));
@@ -468,6 +472,8 @@ Moira::writeFpuOp(int n, u32 ea, Float80 val, FltFormat fmt, int k)
             } else {
                 data = softfloat::floatx80_to_float64(val.raw);
             }
+            */
+            u64 data = fpu.roundD(val);
 
             writeM<C68020, M, Long>(ea, u32(data >> 32));
             writeM<C68020, M, Long>(U32_ADD(ea, Long), u32(data));
