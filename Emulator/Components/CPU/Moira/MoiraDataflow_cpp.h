@@ -456,23 +456,14 @@ Moira::writeFpuOp(int n, u32 ea, Float80 val, FltFormat fmt, int k)
         }
         case FLT_SINGLE:
         {
-            auto data = softfloat::floatx80_to_float32(val.raw);
+            // auto data = softfloat::floatx80_to_float32(fpu.round(val).raw);
+            auto data = fpu.roundS(fpu.round(val));
             writeM<C68020, M, Long>(ea, data);
             updateAn<M, Long>(n);
             break;
         }
         case FLT_DOUBLE:
         {
-            /*
-            softfloat::float64 data;
-            if ((fpu.fpcr & 0b11000000) == 0b01000000) {
-                data = softfloat::float32_to_float64(floatx80_to_float32(val.raw));
-            } else if ((fpu.fpcr & 0b11000000) == 0b10000000) {
-                data = softfloat::floatx80_to_float64(val.raw);
-            } else {
-                data = softfloat::floatx80_to_float64(val.raw);
-            }
-            */
             u64 data = fpu.roundD(val);
 
             writeM<C68020, M, Long>(ea, u32(data >> 32));

@@ -274,10 +274,26 @@ FPU::isValidExt(Instr I, Mode M, u16 op, u32 ext) const
 }
 
 Float80
-FPU::getFPR(int n) const
+FPU::getFPR(int n)
 {
     assert(n >= 0 && n <= 7);
-    return fpr[n];
+
+    Float80 result = fpr[n];
+
+    softfloat::float_exception_flags = 0;
+
+    if ((fpcr & 0b11000000) == 0b01000000) {
+        result.raw = softfloat::float32_to_floatx80(floatx80_to_float32(result.raw));
+    } else if ((fpcr & 0b11000000) == 0b10000000) {
+        result.raw = softfloat::float64_to_floatx80(floatx80_to_float64(result.raw));
+    }
+
+    clearExcStatusBit(FPEXP_INEX2);
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        setExcStatusBit(FPEXP_INEX2);
+    }
+
+    return result;
 }
 
 void
@@ -295,6 +311,8 @@ FPU::setFPR(int n, u16 high, u64 low)
     fpr[n].raw.low = low;
 
     // Convert value to the correct precision
+    fpr[n] = getFPR(n);
+    /*
     softfloat::float_exception_flags = 0;
     Float80 cropped;
     if ((fpcr & 0b11000000) == 0b01000000) {
@@ -302,10 +320,12 @@ FPU::setFPR(int n, u16 high, u64 low)
     } else if ((fpcr & 0b11000000) == 0b10000000) {
         fpr[n].raw = softfloat::float64_to_floatx80(floatx80_to_float64(fpr[n].raw));
     }
+
     clearExcStatusBit(FPEXP_INEX2);
     if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
         setExcStatusBit(FPEXP_INEX2);
     }
+    */
 
     setFlags(fpr[n]);
 }
@@ -352,11 +372,13 @@ FPU::clearExcStatusBit(u32 mask)
     fpsr &= ~mask;
 }
 
+/*
 void
 FPU::clearExcStatusBits()
 {
     clearExcStatusBit(0xFF00);
 }
+*/
 
 void
 FPU::setFlags(int reg)
@@ -837,6 +859,27 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 }
 */
 
+Float80
+FPU::round(const Float80 value)
+{
+    auto result = value;
+
+    softfloat::float_exception_flags = 0;
+
+    if ((fpcr & 0b11000000) == 0b01000000) {
+        result.raw = softfloat::float32_to_floatx80(floatx80_to_float32(result.raw));
+    } else if ((fpcr & 0b11000000) == 0b10000000) {
+        result.raw = softfloat::float64_to_floatx80(floatx80_to_float64(result.raw));
+    }
+
+    clearExcStatusBit(FPEXP_INEX2);
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        setExcStatusBit(FPEXP_INEX2);
+    }
+
+    return result;
+}
+
 u8
 FPU::roundB(const Float80 value)
 {
@@ -880,6 +923,20 @@ FPU::roundL(const Float80 value)
     }
 
     return result2;
+}
+
+u32
+FPU::roundS(const Float80 value)
+{
+    softfloat::float_exception_flags = 0;
+    u32 result = softfloat::floatx80_to_float32(value.raw);
+
+    clearExcStatusBit(FPEXP_INEX2);
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        setExcStatusBit(FPEXP_INEX2);
+    }
+
+    return result;
 }
 
 u64

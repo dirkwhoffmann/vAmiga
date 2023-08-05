@@ -81,13 +81,14 @@ public:
 
 public:
 
-    Float80 getFPR(int n) const;
+    Float80 getFPR(int n);
     void setFPR(int n, Float80 value);
     void setFPR(int n, u16 high, u64 low);
 
     u32 getFPCR() const { return fpcr & 0x0000FFF0; }
     void setFPCR(u32 value);
 
+    void clearFPSR() { fpsr &= 0x00FF00F8; }
     u32 getFPSR() const { return fpsr & 0x0FFFFFF8; }
     void setFPSR(u32 value);
 
@@ -96,7 +97,7 @@ public:
 
     void setExcStatusBit(u32 mask);
     void clearExcStatusBit(u32 mask);
-    void clearExcStatusBits();
+    // void clearExcStatusBits();
 
     void setFlags(int reg);
     void setFlags(const Float80 &value);
@@ -126,9 +127,11 @@ public:
     void unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result);
 
     // Experimental
+    Float80 round(const Float80 value);
     u8 roundB(const Float80 value);
     u16 roundW(const Float80 value);
     u32 roundL(const Float80 value);
+    u32 roundS(const Float80 value);
     u64 roundD(const Float80 value);
 
 

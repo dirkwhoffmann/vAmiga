@@ -8,12 +8,20 @@
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execFBcc(u16 opcode)
 {
+    AVAILABILITY(C68000)
+
+    fpu.clearFPSR();
+
     execLineF<C, I, M, S>(opcode);
 }
 
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execFDbcc(u16 opcode)
 {
+    AVAILABILITY(C68000)
+
+    fpu.clearFPSR();
+
     execLineF<C, I, M, S>(opcode);
 }
 
@@ -206,6 +214,8 @@ Moira::execFMove(u16 opcode)
 
             if (M == MODE_IM) {
 
+                fpu.clearFPSR();
+
                 switch (src) { // TODO: MERGE CASES
 
                     case 0: // Long-Word Integer
@@ -271,6 +281,8 @@ Moira::execFMove(u16 opcode)
             break;
 
         case 0b011:
+
+            fpu.clearFPSR();
 
             switch (src) {
 
@@ -358,6 +370,7 @@ Moira::execFMovecr(u16 opcode)
         return;
     }
 
+    fpu.clearFPSR();
     fpu.setFPR(dst, fpu.readCR(ofs));
     prefetch<C>();
 
@@ -456,6 +469,8 @@ Moira::execFMovem(u16 opcode)
 
         case 0b110: // Memory to FPU
 
+            fpu.clearFPSR();
+
             switch (mod) {
 
                 case 0b00: // Static list, predecrement addressing
@@ -481,6 +496,8 @@ Moira::execFMovem(u16 opcode)
             break;
 
         case 0b111: // FPU to memory
+
+            fpu.clearFPSR();
 
             switch (mod) {
 
@@ -565,8 +582,6 @@ Moira::execFGeneric(u16 opcode)
     (void)readExt<C,Word>();
 
     Float80 source;
-
-    printf("FPR[%d] = %d,%llu\n", src, fpu.fpr[src].raw.high, fpu.fpr[src].raw.low);
 
     if (ext & 0x4000) {
 
@@ -662,6 +677,6 @@ Moira::execFGeneric(u16 opcode)
 
     prefetch<C>();
     fpu.setFPR(dst, source);
-    printf("FPR[%d] = %d,%llu\n", dst, fpu.fpr[dst].raw.high, fpu.fpr[dst].raw.low);
+
     FINALIZE
 }
