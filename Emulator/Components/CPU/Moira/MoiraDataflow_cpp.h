@@ -256,7 +256,7 @@ Moira::readFpuOpEa(int n, FltFormat fmt)
         case FLT_BYTE:
         {
             auto ea = computeEA<C68020, M, Byte>(n);
-            auto data = readM<C68020, M, Byte>(ea);
+            auto data = i8(readM<C68020, M, Byte>(ea));
             updateAn<M, Byte>(n);
 
             result.raw = softfloat::int32_to_floatx80(data);
@@ -265,7 +265,7 @@ Moira::readFpuOpEa(int n, FltFormat fmt)
         case FLT_WORD:
         {
             auto ea = computeEA<C68020, M, Word>(n);
-            auto data = readM<C68020, M, Word>(ea);
+            auto data = i16(readM<C68020, M, Word>(ea));
             updateAn<M, Word>(n);
 
             result.raw = softfloat::int32_to_floatx80(data);
@@ -274,7 +274,7 @@ Moira::readFpuOpEa(int n, FltFormat fmt)
         case FLT_LONG:
         {
             auto ea = computeEA<C68020, M, Long>(n);
-            auto data = readM<C68020, M, Long>(ea);
+            auto data = i32(readM<C68020, M, Long>(ea));
             updateAn<M, Long>(n);
 
             result.raw = softfloat::int32_to_floatx80(data);
@@ -481,6 +481,7 @@ Moira::writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k)
         case FLT_PACKED:
         {
             Packed data = reg.asPacked(k);
+            printf("Packed = %x,%x,%x\n", data.data[0], data.data[1], data.data[2]);
             auto ea = computeEA<C68020, M, Extended>(n);
             writeM<C68020, M, Long>(ea, data.data[0]);
             writeM<C68020, M, Long>(U32_ADD(ea, 4), data.data[1]);

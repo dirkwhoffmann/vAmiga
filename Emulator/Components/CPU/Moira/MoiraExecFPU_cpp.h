@@ -373,6 +373,7 @@ Moira::execFMovecr(u16 opcode)
 
     fpu.clearFPSR();
     fpu.fpr[dst].set(fpu.readCR(ofs));
+
     prefetch<C>();
 
     FINALIZE
