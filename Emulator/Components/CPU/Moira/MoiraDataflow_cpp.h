@@ -380,15 +380,17 @@ Moira::readFpuOpIm(FltFormat fmt)
         {
             u64 data = (u64)readExt<C68020, Long>() << 32;
             data |= readExt<C68020, Long>();
-            result.raw = softfloat::float64_to_floatx80(data);
-            printf("Loaded FLT_DOUBLE: %f\n", result.asDouble());
 
+            softfloat::float_exception_flags = 0;
+            result.raw = softfloat::float64_to_floatx80(data);
+            printf("Loaded FLT_DOUBLE: %llx -> %x,%llx (flags = %x)\n", data, result.raw.high, result.raw.low, softfloat::float_exception_flags);
             break;
         }
         case FLT_BYTE:
         {
             auto ext = readExt<C68020, Byte>();
             result = Float80(ext & 0xFF);
+            printf("readFpuOpIm.B: ext = %x %f\n", ext, result.asDouble());
             break;
         }
         default:
@@ -426,83 +428,63 @@ Moira::writeOp(int n, u32 val)
 }
 
 template <Mode M, Flags F> void
-Moira::writeFpuOp(int n, u32 ea, Float80 val, FltFormat fmt, int k)
+Moira::writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k)
 {
     switch (fmt) {
 
         case FLT_BYTE:
         {
-            // auto data = u8(softfloat::floatx80_to_int32(val.raw));
-            u8 data = fpu.roundB(val);
+            u8 data = reg.asByte();
             writeM<C68020, M, Byte>(ea, data);
             updateAn<M, Byte>(n);
             break;
         }
         case FLT_WORD:
         {
-            // auto data = u16(softfloat::floatx80_to_int32(val.raw));
-            u16 data = fpu.roundW(val);
+            u16 data = reg.asWord();
             writeM<C68020, M, Word>(ea, data);
             updateAn<M, Word>(n);
             break;
         }
         case FLT_LONG:
         {
-            // auto data = u32(softfloat::floatx80_to_int32(val.raw));
-            u32 data = fpu.roundL(val);
+            u32 data = reg.asLong();
             writeM<C68020, M, Long>(ea, data);
             updateAn<M, Long>(n);
             break;
         }
         case FLT_SINGLE:
         {
-            // auto data = softfloat::floatx80_to_float32(fpu.round(val).raw);
-            auto data = fpu.roundS(fpu.round(val));
+            auto data = reg.asSingle();
             writeM<C68020, M, Long>(ea, data);
             updateAn<M, Long>(n);
             break;
         }
         case FLT_DOUBLE:
         {
-            u64 data = fpu.roundD(val);
-
+            u64 data = reg.asDouble();
             writeM<C68020, M, Long>(ea, u32(data >> 32));
             writeM<C68020, M, Long>(U32_ADD(ea, Long), u32(data));
-            printf("Wrote FLT_DOUBLE: %x %x\n", u32(data >> 32), u32(data));
             updateAn<M, Quad>(n);
             break;
         }
         case FLT_EXTENDED:
         {
-            // Crop
-            if ((fpu.fpcr & 0b11000000) == 0b01000000) {
-                val.raw = softfloat::float32_to_floatx80(floatx80_to_float32(val.raw));
-            } else if ((fpu.fpcr & 0b11000000) == 0b10000000) {
-                val.raw = softfloat::float64_to_floatx80(floatx80_to_float64(val.raw));
-            }
-
-            writeM<C68020, M, Word>(ea, u32(val.raw.high));
+            Float80 data = reg.asExtended();
+            writeM<C68020, M, Word>(ea, u32(data.raw.high));
             writeM<C68020, M, Word>(U32_ADD(ea, 2), u32(0));
-            writeM<C68020, M, Long>(U32_ADD(ea, 4), u32(val.raw.low >> 32));
-            writeM<C68020, M, Long>(U32_ADD(ea, 8), u32(val.raw.low));
+            writeM<C68020, M, Long>(U32_ADD(ea, 4), u32(data.raw.low >> 32));
+            writeM<C68020, M, Long>(U32_ADD(ea, 8), u32(data.raw.low));
             updateAn<M, Extended>(n);
             break;
         }
         case FLT_PACKED:
         {
-            // Crop
-            if ((fpu.fpcr & 0b11000000) == 0b01000000) {
-                val.raw = softfloat::float32_to_floatx80(floatx80_to_float32(val.raw));
-            } else if ((fpu.fpcr & 0b11000000) == 0b10000000) {
-                val.raw = softfloat::float64_to_floatx80(floatx80_to_float64(val.raw));
-            }
-
-            u32 dw1, dw2, dw3;
-            fpu.pack(val, k, dw1, dw2, dw3);
+            Packed data = reg.asPacked(k);
             auto ea = computeEA<C68020, M, Extended>(n);
-            writeM<C68020, M, Long>(ea, dw1);
-            writeM<C68020, M, Long>(U32_ADD(ea, 4), dw2);
-            writeM<C68020, M, Long>(U32_ADD(ea, 8), dw3);
+            writeM<C68020, M, Long>(ea, data.data[0]);
+            writeM<C68020, M, Long>(U32_ADD(ea, 4), data.data[1]);
+            writeM<C68020, M, Long>(U32_ADD(ea, 8), data.data[2]);
             updateAn<M, Extended>(n);
             break;
         }

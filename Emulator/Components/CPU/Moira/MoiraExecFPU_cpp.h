@@ -206,7 +206,7 @@ Moira::execFMove(u16 opcode)
         case 0b000:
 
             printf("FMOVE FP%d -> FP%d\n", src, dst);
-            fpu.setFPR(dst, fpu.getFPR(src));
+            fpu.fpr[dst].set(fpu.fpr[src].val);
             CYCLES(4);
             break;
 
@@ -222,50 +222,49 @@ Moira::execFMove(u16 opcode)
                     {
                         printf("FMOVE IM -> Reg (Long)\n");
                         auto value = readFpuOpIm<M>(FltFormat(src));
-                        fpu.setFPR(dst, value);
+                        fpu.fpr[dst].set(value);
                         break;
                     }
                     case 1: // Single precision
                     {
                         printf("FMOVE IM -> Reg (Single)\n");
                         auto value = readFpuOpIm<M>(FltFormat(src));
-                        fpu.setFPR(dst, value);
+                        fpu.fpr[dst].set(value);
                         break;
                     }
                     case 2: // Extended precision
                     {
                         printf("FMOVE IM -> Reg (Extended)\n");
                         auto value = readFpuOpIm<M>(FltFormat(src));
-                        fpu.setFPR(dst, value);
+                        fpu.fpr[dst].set(value);
                         break;
                     }
                     case 3: // Packed-Decimal Real
                     {
                         printf("FMOVE IM -> Reg (Packed)\n");
                         auto value = readFpuOpIm<M>(FltFormat(src));
-                        fpu.setFPR(dst, value);
-                        printf("            %x %llx\n", value.raw.high, value.raw.low);
+                        fpu.fpr[dst].set(value);
                         break;
                     }
                     case 4: // Word Integer
                     {
                         printf("FMOVE IM -> Reg (Word)\n");
                         auto value = readFpuOpIm<M>(FltFormat(src));
-                        fpu.setFPR(dst, value);
+                        fpu.fpr[dst].set(value);
                         break;
                     }
                     case 5: // Double-precision real
                     {
                         printf("FMOVE IM -> Reg (Double)\n");
                         auto value = readFpuOpIm<M>(FltFormat(src));
-                        fpu.setFPR(dst, value);
+                        fpu.fpr[dst].set(value);
                         break;
                     }
                     case 6: // Byte Integer
                     {
                         printf("FMOVE IM -> Reg (Byte)\n");
                         auto value = readFpuOpIm<M>(FltFormat(src));
-                        fpu.setFPR(dst, value);
+                        fpu.fpr[dst].set(value);
                         break;
                     }
                     default:
@@ -276,19 +275,21 @@ Moira::execFMove(u16 opcode)
 
                 printf("FMOVE EA -> Reg\n");
                 auto value = readFpuOp<M>(reg, FltFormat(src));
-                fpu.setFPR(dst, value);
+                fpu.fpr[dst].set(value);
             }
             break;
 
         case 0b011:
 
             fpu.clearFPSR();
+            // fpu.fpr[dst].move(fpu.tmp);
 
             switch (src) {
 
                 case 0b000:
                 {
                     printf("FMOVE Reg -> Mem (L)\n");
+
                     auto ea = computeEA<C, M, Long>(reg);
                     writeFpuOp<M>(reg, ea, fpu.fpr[dst], FLT_LONG);
                     break;
@@ -371,7 +372,7 @@ Moira::execFMovecr(u16 opcode)
     }
 
     fpu.clearFPSR();
-    fpu.setFPR(dst, fpu.readCR(ofs));
+    fpu.fpr[dst].set(fpu.readCR(ofs));
     prefetch<C>();
 
     FINALIZE
@@ -587,8 +588,6 @@ Moira::execFGeneric(u16 opcode)
 
         if (M == MODE_IM) {
 
-            // u64 val;
-
             switch (src) {
 
                 case 0: // Long-Word Integer
@@ -666,17 +665,18 @@ Moira::execFGeneric(u16 opcode)
     switch (I) {
 
         case FNEG:
+        {
             printf("FNEG: reg: %d src: %d dst: %d TODO\n", reg, src, dst);
             // source.raw.high ^= 0x8000; // TODO: Overload operator of Float80 class
             source.raw = softfloat::floatx80_sub({0,0}, source.raw);
             break;
-
+        }
         default:
             break;
     }
 
     prefetch<C>();
-    fpu.setFPR(dst, source);
+    fpu.fpr[dst].set(source);
 
     FINALIZE
 }

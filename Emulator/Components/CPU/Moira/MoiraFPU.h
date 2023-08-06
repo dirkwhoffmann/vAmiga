@@ -22,6 +22,7 @@ struct Float80 {
     Float80(class ExtendedDouble value);
     Float80(u16 high, u64 low);
     Float80(bool mSign, i16 e, u64 m);
+    Float80(const struct FPUReg &reg);
 
     double asDouble();
     long asLong();
@@ -33,9 +34,54 @@ struct Float80 {
 
         return raw.high == other.raw.high && raw.low == other.raw.low;
     }
-
-
 };
+
+struct Packed {
+
+    u32 data[3];
+};
+
+struct FPUReg {
+
+    // Reference to the FPU
+    class FPU &fpu;
+
+    // Register value
+    Float80 val;
+
+    FPUReg(FPU& fpu) : fpu(fpu) { }
+
+    void clear() { val.raw = { }; }
+    
+    // Getter
+    Float80 get();
+    u8 asByte();
+    u16 asWord();
+    u32 asLong();
+    u32 asSingle();
+    u64 asDouble();
+    Float80 asExtended();
+    Packed asPacked(int k = 0);
+
+    // Setter
+    void set(const Float80 other);
+    void move(FPUReg &dest);
+};
+
+/*
+struct FPUBitRep {
+
+    union {
+        u8 b;
+        u16 w;
+        u32 l;
+        u32 s;
+        u64 d;
+        Float80 e;
+        u32 p[3];
+    };
+};
+*/
 
 class FPU {
 
@@ -48,7 +94,12 @@ public: // REMOVE ASAP
     FPUModel model = FPU_NONE;
 
     // Registers
-    Float80 fpr[8];
+    FPUReg fpr[8] = {
+        FPUReg(*this), FPUReg(*this), FPUReg(*this), FPUReg(*this),
+        FPUReg(*this), FPUReg(*this), FPUReg(*this), FPUReg(*this)
+    };
+    FPUReg tmp = FPUReg(*this);
+
     u32 fpiar;
     u32 fpsr;
     u32 fpcr;
@@ -81,10 +132,6 @@ public:
 
 public:
 
-    Float80 getFPR(int n);
-    void setFPR(int n, Float80 value);
-    void setFPR(int n, u16 high, u64 low);
-
     u32 getFPCR() const { return fpcr & 0x0000FFF0; }
     void setFPCR(u32 value);
 
@@ -101,7 +148,6 @@ public:
 
     void setFlags(int reg);
     void setFlags(const Float80 &value);
-
 
 
     //
