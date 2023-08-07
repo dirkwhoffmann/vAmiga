@@ -470,7 +470,14 @@ Moira::writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k)
         }
         case FLT_EXTENDED:
         {
-            Float80 data = reg.asExtended();
+            Float80 data;
+
+            if constexpr (F & FPU_FMOVEM) {
+                data = reg.val;
+            } else {
+                data = reg.asExtended();
+            }
+            
             writeM<C68020, M, Word>(ea, u32(data.raw.high));
             writeM<C68020, M, Word>(U32_ADD(ea, 2), u32(0));
             writeM<C68020, M, Long>(U32_ADD(ea, 4), u32(data.raw.low >> 32));

@@ -76,6 +76,7 @@ template <Mode M, Flags F = 0> Float80 readFpuOpIm(FltFormat fmt);
  */
 template <Core C, Mode M, Size S, Flags F = 0> void writeOp(int n, u32 val);
 template <Core C, Mode M, Size S, Flags F = 0> void writeOp(int n, u32 ea, u32 val);
+
 template <Mode M, Flags F = 0> void writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k = 0);
 
 // Emulates the address register modification for modes (An)+, (An)-

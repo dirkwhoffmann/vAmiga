@@ -172,14 +172,6 @@ public:
     void musashiUnpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result); // DEPRECATED
     void unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result);
 
-    // Experimental
-    Float80 round(const Float80 value);
-    u8 roundB(const Float80 value);
-    u16 roundW(const Float80 value);
-    u32 roundL(const Float80 value);
-    u32 roundS(const Float80 value);
-    u64 roundD(const Float80 value);
-
 
     //
     // Analyzing instructions

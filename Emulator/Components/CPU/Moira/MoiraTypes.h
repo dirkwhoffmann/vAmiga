@@ -501,6 +501,9 @@ static constexpr u64 AE_SET_IF      = (1 << 13);  // Set bit 13 in the special s
 // Timing flags
 static constexpr u64 IMPL_DEC       = (1 << 14);  // Omit 2 cycle delay in -(An) mode
 
+// FPU
+static constexpr u64 FPU_FMOVEM     = (1 << 15);  // Experimental
+
 
 //
 // Exceptions
