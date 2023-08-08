@@ -353,20 +353,38 @@ Moira::execFMovem(u16 opcode)
 
         case 0b100: // Ea to Cntrl
         {
-            if (lll == 0 || lll == 1 || lll == 2 || lll == 4) {
+            // if (lll == 0 || lll == 1 || lll == 2 || lll == 4) {
 
                 (void)readExt<C,Word>();
 
                 u32 ea, data;
-                readOp<C, M, Long, STD_AE_FRAME>(reg, &ea, &data);
+                // readOp<C, M, Long, STD_AE_FRAME>(reg, &ea, &data);
 
-                if (lll & 4) { fpu.setFPCR(data); }
-                if (lll & 2) { fpu.setFPSR(data); }
-                if (lll & 1) { fpu.setFPIAR(data); }
+                if (lll & 4) {
+
+                    readOp<C, M, Long, STD_AE_FRAME>(reg, &ea, &data);
+                    U32_INC(ea, 4);
+                    printf("M = %d: %x -> FPCR fpsr = %x\n", M, data, fpu.fpsr);
+                    fpu.setFPCR(data);
+                }
+                if (lll & 2) {
+
+                    readOp<C, M, Long, STD_AE_FRAME>(reg, &ea, &data);
+                    U32_INC(ea, 4);
+                    printf("M = %d: %x -> FPSR fpsr = %x\n", M, data, fpu.fpsr);
+                    fpu.setFPSR(data);
+                    oldfpsr = fpu.getFPSR();
+                }
+                if (lll & 1) {
+                    readOp<C, M, Long, STD_AE_FRAME>(reg, &ea, &data);
+                    U32_INC(ea, 4);
+                    printf("M = %d: %x -> FPIAR fpsr = %x\n", M, data, fpu.fpsr);
+                    fpu.setFPIAR(data);
+                }
 
                 prefetch<C>();
-                return;
-
+                break;
+            /*
             } else {
 
                 // DOES THE REAL MACHINE TRIGGER AN EXCEPTION IN THIS CASE?
@@ -384,84 +402,70 @@ Moira::execFMovem(u16 opcode)
                 prefetch<C>();
                 return;
             }
+            */
             break;
         }
         case 0b101: // Cntrl to Ea
         {
-            if (lll == 0 || lll == 1 || lll == 2 || lll == 4) {
+            // DOES THE REAL MACHINE TRIGGER AN EXCEPTION IN THIS CASE?
+            printf("Cntrl to Ea, lll = %d fpsr = %x\n", lll, fpu.fpsr);
 
-                printf("FMOVE Cntrl -> Ea\n");
+            (void)readExt<C,Word>();
 
-                (void)readExt<C,Word>();
-
-                u32 data = 0;
-                if (lll & 1) { data = fpu.getFPIAR(); }
-                if (lll & 2) { data = fpu.getFPSR(); }
-                if (lll & 4) { data = fpu.getFPCR(); }
-
-                if (M != MODE_IM && M != MODE_IP) {
-                    writeOp<C, M, Long>(reg, data);
-                }
-
-                prefetch<C>();
-                return;
-
-            } else {
-
-                // DOES THE REAL MACHINE TRIGGER AN EXCEPTION IN THIS CASE?
-                printf("Cntrl to Ea, invalid lll %d\n", lll);
-
-                (void)readExt<C,Word>();
+            if constexpr (M == MODE_PD) {
 
                 u32 data = 0;
-                if (lll & 1) { data = fpu.getFPIAR(); }
-                if (lll & 2) { data = fpu.getFPSR(); }
-                if (lll & 4) { data = fpu.getFPCR(); }
-
-                if (M != MODE_IM && M != MODE_IP) {
-                    writeOp<C, M, Long>(reg, data);
+                auto ea = computeEA<C, M, Long>(reg);
+                if (lll & 1) {
+                    data = fpu.getFPIAR();
+                    printf("M = %d: FPIAR -> %x ea = %x\n", M, data, ea);
+                    writeOp<C, M, Long>(reg, ea, data);
+                    updateAn<M, Long>(reg);
+                    U32_DEC(ea, 4);
+                }
+                if (lll & 2) {
+                    data = oldfpsr; //  fpu.getFPSR();
+                    printf("M = %d: FPSR -> %x ea = %x\n", M, data, ea);
+                    writeOp<C, M, Long>(reg, ea, data);
+                    updateAn<M, Long>(reg);
+                    U32_DEC(ea, 4);
+                }
+                if (lll & 4) {
+                    data = fpu.getFPCR();
+                    printf("M = %d: FPCR -> %x ea = %x\n", M, data, ea);
+                    writeOp<C, M, Long>(reg, ea, data);
+                    updateAn<M, Long>(reg);
+                    U32_DEC(ea, 4);
                 }
 
-                prefetch<C>();
-                return;
+            } else if constexpr (M != MODE_IM && M != MODE_IP) {
+
+                u32 data = 0;
+                auto ea = computeEA<C, M, Long>(reg);
+                if (lll & 4) {
+                    data = fpu.getFPCR();
+                    printf("M = %d: FPCR -> %x ea = %x\n", M, data, ea);
+                    writeOp<C, M, Long>(reg, ea, data);
+                    updateAn<M, Long>(reg);
+                    U32_INC(ea, 4);
+                }
+                if (lll & 2) {
+                    data = oldfpsr; //  fpu.getFPSR();
+                    printf("M = %d: FPSR -> %x ea = %x\n", M, data, ea);
+                    writeOp<C, M, Long>(reg, ea, data);
+                    updateAn<M, Long>(reg);
+                    U32_INC(ea, 4);
+                }
+                if (lll & 1) {
+                    data = fpu.getFPIAR();
+                    printf("M = %d: FPIAR -> %x ea = %x\n", M, data, ea);
+                    writeOp<C, M, Long>(reg, ea, data);
+                    updateAn<M, Long>(reg);
+                    U32_INC(ea, 4);
+                }
             }
 
             prefetch<C>();
-
-            /*
-             if (lll == 0 || lll == 1 || lll == 2 || lll == 4) {
-
-             (void)readExt<C,Word>();
-
-             u32 data = 0;
-             if (lll & 1) { data = fpu.getFPIAR(); }
-             if (lll & 2) { data = fpu.getFPSR(); }
-             if (lll & 4) { data = fpu.getFPCR(); }
-
-             if (M != MODE_IM && M != MODE_IP) {
-             writeOp<C, M, Long>(reg, data);
-             }
-
-             prefetch<C>();
-
-             } else {
-
-             // DOES THE REAL MACHINE TRIGGER AN EXCEPTION IN THIS CASE?
-
-             (void)readExt<C,Word>();
-
-             u32 data = 0;
-             if (lll & 1) { data = fpu.getFPIAR(); }
-             if (lll & 2) { data = fpu.getFPSR(); }
-             if (lll & 4) { data = fpu.getFPCR(); }
-
-             if (M != MODE_IM && M != MODE_IP) {
-             writeOp<C, M, Long>(reg, data);
-             }
-
-             prefetch<C>();
-             }
-             */
             break;
         }
         case 0b110: // Memory to FPU
@@ -632,7 +636,7 @@ Moira::execFMovem(u16 opcode)
     }
 
     fpu.fpsr = oldfpsr;
-
+    printf("Restoring fpsr %x\n", fpu.fpsr);
     // execLineF<C, I, M, S>(opcode);
 }
 
