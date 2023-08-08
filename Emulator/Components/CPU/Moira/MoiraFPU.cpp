@@ -122,9 +122,28 @@ Float80::asLong()
 }
 
 bool
+Float80::isSignalingNaN()
+{
+    return (raw.high & 0x7FFF) == 0x7FFF && (raw.low & (1L << 62)) == 0 && raw.low != 0;
+}
+
+bool
+Float80::isNonsignalingNaN()
+{
+    return (raw.high & 0x7FFF) == 0x7FFF && (raw.low & (1L << 62)) != 0 && raw.low != 0;
+}
+
+bool
+Float80::isNaN()
+{
+    return (raw.high & 0x7FFF) == 0x7FFF && raw.low != 0;
+}
+
+bool
 Float80::isNormalized()
 {
-    if ((raw.high & 0x7F) == 0) return true;
+    if ((raw.high & 0x7FFF) == 0) return true;
+    if (isNaN()) return true;
 
     return raw.low == 0 || (raw.low & (1L << 63)) != 0;
 }
@@ -146,9 +165,6 @@ FPUReg::get()
 
     softfloat::float_exception_flags = 0;
 
-    // Set flags
-    fpu.setFlags(val);
-
     if ((fpu.fpcr & 0b11000000) == 0b01000000) {
         result.raw = softfloat::float32_to_floatx80(floatx80_to_float32(result.raw));
     } else if ((fpu.fpcr & 0b11000000) == 0b10000000) {
@@ -164,6 +180,14 @@ FPUReg::get()
     if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
         fpu.setExcStatusBit(FPEXP_UNFL);
     }
+
+    // Experimental
+    if ((val.raw.high & 0x7FFF) == 0 && val.raw.low != 0 && (val.raw.low & (1L << 63)) == 0) {
+        fpu.setExcStatusBit(FPEXP_UNFL);
+    }
+
+    // Set flags
+    fpu.setFlags(val);
 
     return result;
 }
@@ -258,7 +282,17 @@ FPUReg::set(const Float80 other)
     // Round to the correct precision
     val = get();
 
+    // Experimental
+    val.normalize();
+
+    // Experimental
+    if (val.isSignalingNaN()) {
+        val.raw.low |= (1L << 62); // Make nonsignaling
+        fpu.setExcStatusBit(FPEXP_SNAN);
+    }
+
     printf("FPUReg::set %x,%llx (%f) flags = %x\n", val.raw.high, val.raw.low, val.asDouble(), softfloat::float_exception_flags);
+
 
     // Set flags
     fpu.setFlags(val);
@@ -470,7 +504,8 @@ void
 FPU::setFlags(const Float80 &value)
 {
     bool n = value.raw.high & 0x8000;
-    bool z = (value.raw.high & 0x7fff) == 0 && (value.raw.low << 1) == 0;
+    // bool z = (value.raw.high & 0x7fff) == 0 && (value.raw.low << 1) == 0;
+    bool z = (value.raw.high & 0x7fff) == 0 && value.raw.low == 0;
     bool i = (value.raw.high & 0x7fff) == 0x7fff && (value.raw.low << 1) == 0;
     bool nan = softfloat::floatx80_is_nan(value.raw);
 

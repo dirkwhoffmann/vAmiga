@@ -27,6 +27,9 @@ struct Float80 {
     double asDouble();
     long asLong();
 
+    bool isSignalingNaN();
+    bool isNonsignalingNaN();
+    bool isNaN();
     bool isNormalized();
     void normalize();
 
