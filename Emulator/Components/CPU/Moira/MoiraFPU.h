@@ -24,6 +24,8 @@ struct Float80 {
     Float80(bool mSign, i16 e, u64 m);
     Float80(const struct FPUReg &reg);
 
+    static Float80 NaN() { return Float80(0x7FFF, 0xFFFFFFFFFFFFFFFF); }
+
     double asDouble();
     long asLong();
 
@@ -54,7 +56,7 @@ struct FPUReg {
 
     FPUReg(FPU& fpu) : fpu(fpu) { }
 
-    void clear() { val.raw = { }; }
+    void reset() { val = Float80::NaN(); }
     
     // Getter
     Float80 get();

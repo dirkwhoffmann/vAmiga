@@ -314,7 +314,7 @@ void
 FPU::reset()
 {
     for (int i = 0; i < 8; i++) {
-        fpr[i].clear();
+        fpr[i].reset();
     }
 
     fpiar = 0;
