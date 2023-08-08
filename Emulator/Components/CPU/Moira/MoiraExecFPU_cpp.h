@@ -347,10 +347,12 @@ Moira::execFMovem(u16 opcode)
         }
     }
 
+    auto oldfpsr = fpu.fpsr;
+
     switch (cod) {
 
         case 0b100: // Ea to Cntrl
-
+        {
             if (lll == 0 || lll == 1 || lll == 2 || lll == 4) {
 
                 (void)readExt<C,Word>();
@@ -383,9 +385,9 @@ Moira::execFMovem(u16 opcode)
                 return;
             }
             break;
-
+        }
         case 0b101: // Cntrl to Ea
-
+        {
             if (lll == 0 || lll == 1 || lll == 2 || lll == 4) {
 
                 printf("FMOVE Cntrl -> Ea\n");
@@ -423,33 +425,110 @@ Moira::execFMovem(u16 opcode)
                 prefetch<C>();
                 return;
             }
-            break;
 
+            prefetch<C>();
+
+            /*
+             if (lll == 0 || lll == 1 || lll == 2 || lll == 4) {
+
+             (void)readExt<C,Word>();
+
+             u32 data = 0;
+             if (lll & 1) { data = fpu.getFPIAR(); }
+             if (lll & 2) { data = fpu.getFPSR(); }
+             if (lll & 4) { data = fpu.getFPCR(); }
+
+             if (M != MODE_IM && M != MODE_IP) {
+             writeOp<C, M, Long>(reg, data);
+             }
+
+             prefetch<C>();
+
+             } else {
+
+             // DOES THE REAL MACHINE TRIGGER AN EXCEPTION IN THIS CASE?
+
+             (void)readExt<C,Word>();
+
+             u32 data = 0;
+             if (lll & 1) { data = fpu.getFPIAR(); }
+             if (lll & 2) { data = fpu.getFPSR(); }
+             if (lll & 4) { data = fpu.getFPCR(); }
+
+             if (M != MODE_IM && M != MODE_IP) {
+             writeOp<C, M, Long>(reg, data);
+             }
+
+             prefetch<C>();
+             }
+             */
+            break;
+        }
         case 0b110: // Memory to FPU
 
             fpu.clearFPSR();
 
             switch (mod) {
 
+                    /*
                 case 0b00: // Static list, predecrement addressing
 
                     printf("TODO: MEM -> FPU (Static list, predecrement addressing)\n");
+
                     break;
 
                 case 0b01: // Dynamic list, predecrement addressing
 
                     printf("TODO: MEM -> FPU (Dynamic list, predecrement addressing)\n");
                     break;
+                     */
 
                 case 0b10: // Static list, postincrement addressing
+                {
+                    printf("MEM -> FPU (Static list, postincrement addressing)\n");
+                    auto reglist = ________xxxxxxxx (ext);
+                    (void)readExt<C,Word>();
 
-                    printf("TODO: MEM -> FPU (Static list, postincrement addressing)\n");
+                    auto ea = computeEA<C, M, Extended>(reg);
+
+                    for (isize i = 0; i < 8; i++) {
+
+                        if (reglist & (0x80 >> i)) {
+
+                            auto val = readFpuOpEa<M>(reg, ea, FLT_EXTENDED);
+                            fpu.fpr[i].val = val;
+                            printf("Mem -> FP%ld (M = %d) %x, %llx\n", i, M, fpu.fpr[i].val.raw.high,fpu.fpr[i].val.raw.low);
+                            U32_INC(ea, 12);
+                        }
+                    }
+
+                    prefetch<C>();
                     break;
-
+                }
                 case 0b11: // Dynamic list, postincrement addressing
-
+                {
                     printf("TODO: MEM -> FPU (Dynamic list, postincrement addressing)\n");
+                    auto reglist = getD(_________xxx____ (ext)) ;
+                    (void)readExt<C,Word>();
+
+                    auto ea = computeEA<C, M, Extended>(reg);
+
+                    for (isize i = 0; i < 8; i++) {
+
+                        if (reglist & (0x80 >> i)) {
+
+                            auto val = readFpuOpEa<M>(reg, ea, FLT_EXTENDED);
+                            fpu.fpr[i].val = val;
+                            printf("FP%ld -> Mem (M = %d) %x, %llx\n", i, M, fpu.fpr[i].val.raw.high,fpu.fpr[i].val.raw.low);
+                            U32_INC(ea, 12);
+                        }
+                    }
+
+                    prefetch<C>();
                     break;
+                }
+                default:
+                    fatalError;
             }
             break;
 
@@ -487,21 +566,21 @@ Moira::execFMovem(u16 opcode)
                     printf("TODO: FPU -> MEM (Dynamic list, predecrement addressing)\n");
                     auto reglist = getD(_________xxx____ (ext)) ;
                     (void)readExt<C,Word>();
-                    
+
                     auto ea = computeEA<C, M, Extended>(reg);
-                    
+
                     for (isize i = 8; i >= 0; i--) {
-                        
+
                         if (reglist & (0x01 << i)) {
-                            
+
                             printf("ea = %x a%d = %x\n", ea, reg, getA(reg));
                             printf("FP%ld -> Mem (M = %d) %x, %llx\n", i, M, fpu.fpr[i].val.raw.high,fpu.fpr[i].val.raw.low);
-                            
+
                             writeFpuOp<M, FPU_FMOVEM>(reg, ea, fpu.fpr[i], FLT_EXTENDED);
                             U32_DEC(ea, 12);
                         }
                     }
-                    
+
                     prefetch<C>();
                     break;
                 }
@@ -512,7 +591,6 @@ Moira::execFMovem(u16 opcode)
                     (void)readExt<C,Word>();
 
                     auto ea = computeEA<C, M, Extended>(reg);
-                    auto oldfpsr = fpu.fpsr;
 
                     for (isize i = 0; i < 8; i++) {
 
@@ -520,11 +598,10 @@ Moira::execFMovem(u16 opcode)
 
                             printf("FP%ld -> Mem (M = %d) %x, %llx\n", i, M, fpu.fpr[i].val.raw.high,fpu.fpr[i].val.raw.low);
 
-                            writeFpuOp<M>(reg, ea, fpu.fpr[i], FLT_EXTENDED);
+                            writeFpuOp<M, FPU_FMOVEM>(reg, ea, fpu.fpr[i], FLT_EXTENDED);
                             U32_INC(ea, 12);
                         }
                     }
-                    fpu.fpsr = oldfpsr;
 
                     prefetch<C>();
                     break;
@@ -532,12 +609,10 @@ Moira::execFMovem(u16 opcode)
                 case 0b11: // Dynamic list, postincrement addressing
 
                     printf("FPU -> MEM (Dynamic list, postincrement addressing)\n");
-
                     auto reglist = getD(_________xxx____ (ext)) ;
                     (void)readExt<C,Word>();
 
                     auto ea = computeEA<C, M, Extended>(reg);
-                    auto oldfpsr = fpu.fpsr;
 
                     for (isize i = 0; i < 8; i++) {
 
@@ -545,17 +620,18 @@ Moira::execFMovem(u16 opcode)
 
                             printf("FP%ld -> Mem (M = %d) %x, %llx\n", i, M, fpu.fpr[i].val.raw.high,fpu.fpr[i].val.raw.low);
 
-                            writeFpuOp<M>(reg, ea, fpu.fpr[i], FLT_EXTENDED);
+                            writeFpuOp<M, FPU_FMOVEM>(reg, ea, fpu.fpr[i], FLT_EXTENDED);
                             U32_INC(ea, 12);
                         }
                     }
-                    fpu.fpsr = oldfpsr;
 
                     prefetch<C>();
                     break;
             }
             break;
     }
+
+    fpu.fpsr = oldfpsr;
 
     // execLineF<C, I, M, S>(opcode);
 }

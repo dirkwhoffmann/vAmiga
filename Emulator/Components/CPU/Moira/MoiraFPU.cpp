@@ -356,7 +356,7 @@ FPU::isValidExt(Instr I, Mode M, u16 op, u32 ext) const
             switch (cod) {
 
                 case 0b101:
-                {
+                { 
 
                     if (ext & 0x3FF) break;
 

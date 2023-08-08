@@ -67,6 +67,7 @@ void readOp(int n, u32 *ea, u32 *result);
 template <Mode M, Flags F = 0> Float80 readFpuOp(int n, FltFormat fmt);
 template <Mode M, Flags F = 0> Float80 readFpuOpRg(int n, FltFormat fmt);
 template <Mode M, Flags F = 0> Float80 readFpuOpEa(int n, FltFormat fmt);
+template <Mode M, Flags F = 0> Float80 readFpuOpEa(int n, u32 ea, FltFormat fmt);
 template <Mode M, Flags F = 0> Float80 readFpuOpIm(FltFormat fmt);
 
 /* Writes an operand
