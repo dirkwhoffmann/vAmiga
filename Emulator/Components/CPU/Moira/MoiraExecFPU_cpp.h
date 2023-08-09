@@ -68,9 +68,7 @@ Moira::execFGen(u16 opcode)
         case 0b110:
         case 0b111:
 
-            printf("Calling execFMovem\n");
             execFMovem<C, FMOVEM, M, S>(opcode);
-            // breakpointReached(reg.pc0);
             return;
     }
 
@@ -262,7 +260,8 @@ Moira::execFMove(u16 opcode)
                 case 0b011: // P{#k}
                 {
                     auto ea = computeEA<C, M, Extended>(reg);
-                    int k = (fac & 0x40) ? (fac | 0xffffff80) : (fac & 0x7f);
+                    int k = i8(fac | (fac & 0x40) << 1); // Sign-extend 7-bit value
+                    printf("P{#k} fac = %x, k = %d\n", fac, k);
                     writeFpuOp<M>(reg, ea, fpu.fpr[dst], FLT_PACKED, k);
                     break;
                 }
@@ -288,6 +287,8 @@ Moira::execFMove(u16 opcode)
                 {
                     auto ea = computeEA<C, M, Extended>(reg);
                     int k = readD(fac >> 4);
+                    k = i8(k | (k & 0x40) << 1); // Sign-extend 7-bit value
+                    printf("P{Dn} fac = %x, k = %d\n", fac, k);
                     writeFpuOp<M>(reg, ea, fpu.fpr[dst], FLT_PACKED, k);
                     break;
                 }
@@ -333,10 +334,7 @@ Moira::execFMovem(u16 opcode)
     auto reg = _____________xxx (opcode);
     auto cod = xxx_____________ (ext);
     auto mod = ___xx___________ (ext);
-    // auto rrr = _________xxx____ (ext);
     auto lll = ___xxx__________ (ext);
-
-    printf("execFMovem\n");
 
     if (!MIMIC_MUSASHI) {
 
@@ -418,21 +416,18 @@ Moira::execFMovem(u16 opcode)
                 auto ea = computeEA<C, M, Long>(reg);
                 if (lll & 1) {
                     data = fpu.getFPIAR();
-                    printf("M = %d: FPIAR -> %x ea = %x\n", M, data, ea);
                     writeOp<C, M, Long>(reg, ea, data);
                     updateAn<M, Long>(reg);
                     U32_DEC(ea, 4);
                 }
                 if (lll & 2) {
-                    data = oldfpsr; //  fpu.getFPSR();
-                    printf("M = %d: FPSR -> %x ea = %x\n", M, data, ea);
+                    data = oldfpsr;
                     writeOp<C, M, Long>(reg, ea, data);
                     updateAn<M, Long>(reg);
                     U32_DEC(ea, 4);
                 }
                 if (lll & 4) {
                     data = fpu.getFPCR();
-                    printf("M = %d: FPCR -> %x ea = %x\n", M, data, ea);
                     writeOp<C, M, Long>(reg, ea, data);
                     updateAn<M, Long>(reg);
                     U32_DEC(ea, 4);
@@ -444,21 +439,18 @@ Moira::execFMovem(u16 opcode)
                 auto ea = computeEA<C, M, Long>(reg);
                 if (lll & 4) {
                     data = fpu.getFPCR();
-                    printf("M = %d: FPCR -> %x ea = %x\n", M, data, ea);
                     writeOp<C, M, Long>(reg, ea, data);
                     updateAn<M, Long>(reg);
                     U32_INC(ea, 4);
                 }
                 if (lll & 2) {
                     data = oldfpsr; //  fpu.getFPSR();
-                    printf("M = %d: FPSR -> %x ea = %x\n", M, data, ea);
                     writeOp<C, M, Long>(reg, ea, data);
                     updateAn<M, Long>(reg);
                     U32_INC(ea, 4);
                 }
                 if (lll & 1) {
                     data = fpu.getFPIAR();
-                    printf("M = %d: FPIAR -> %x ea = %x\n", M, data, ea);
                     writeOp<C, M, Long>(reg, ea, data);
                     updateAn<M, Long>(reg);
                     U32_INC(ea, 4);
@@ -636,8 +628,6 @@ Moira::execFMovem(u16 opcode)
     }
 
     fpu.fpsr = oldfpsr;
-    printf("Restoring fpsr %x\n", fpu.fpsr);
-    // execLineF<C, I, M, S>(opcode);
 }
 
 template <Core C, Instr I, Mode M, Size S> void

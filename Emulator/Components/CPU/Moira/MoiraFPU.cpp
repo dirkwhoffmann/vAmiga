@@ -738,8 +738,24 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
         return arg * std::pow(10 , -(*exp));
     };
 
-    if (k >= 18) {
-        // TODO: Sets the OPERR bit
+    auto rounded = [this](double m, int digits) {
+        auto shifted = m * pow(10.0, digits);
+        double rounded;
+        switch (fpcr & 0x30) {
+            case 0x00: rounded = std::round(shifted); printf("round %f %f\n", m, rounded); break;
+            case 0x10: rounded = std::trunc(shifted); printf("trunc %f %f\n", m, rounded); break;
+            case 0x20: rounded = std::floor(shifted); printf("floor %f %f\n", m, rounded); break;
+            default:   rounded = std::ceil(shifted);  printf("ceil %f %f\n", m, rounded); break;
+        }
+        if (shifted != rounded) setExcStatusBit(FPEXP_INEX2);
+        return long(rounded);
+    };
+
+    printf("FPU::pack %x,%llx k = %d\n", value.raw.high, value.raw.low, k);
+
+    if (k > 17) {
+        setExcStatusBit(FPEXP_OPERR);
+        setExcStatusBit(FPEXP_INEX2);
         k = 17;
     }
     char str[128] = { };
@@ -758,13 +774,19 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
     if (m < 0.0) { mSgn = 1; m = std::abs(m); }
     if (e < 0.0) { eSgn = 1; e = std::abs(e); }
 
-    printf("e = %d m = %f (%d %d) k = %d\n", e, m, eSgn, mSgn, k);
-
     // Determine the number of digits
-    auto numDigits = std::min(17, k <= 0 ? e - k : k);
+    auto numDigits = std::min(17, k <= 0 ? e + 1 - k : k);
+
+    printf("e = %d m = %f (%d %d) k = %d numDigits = %d\n", e, m, eSgn, mSgn, k, numDigits);
 
     // Compute the digits
-    long digits = long(std::round(m * pow(10.0, numDigits)));
+    /*
+    auto shifted = m * pow(10.0, numDigits);
+    auto rounded = std::round(shifted);
+    if (shifted != rounded) setExcStatusBit(FPEXP_INEX2);
+    long digits = long(rounded);
+    */
+    long digits = rounded(m, numDigits);
 
     printf("digits = %ld\n", digits);
 
