@@ -170,7 +170,7 @@ FPUReg::get()
     } else if ((fpu.fpcr & 0b11000000) == 0b10000000) {
         result.raw = softfloat::float64_to_floatx80(floatx80_to_float64(result.raw));
     }
-    // fpu.clearExcStatusBit(FPEXP_INEX2);
+
     if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
         fpu.setExcStatusBit(FPEXP_INEX2);
     }
@@ -187,7 +187,7 @@ FPUReg::get()
     }
 
     // Set flags
-    fpu.setFlags(val);
+    // fpu.setFlags(val);
 
     return result;
 }
