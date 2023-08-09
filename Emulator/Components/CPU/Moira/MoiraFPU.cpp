@@ -187,7 +187,7 @@ FPUReg::get()
     }
 
     // Set flags
-    // fpu.setFlags(val);
+    fpu.setFlags(val);
 
     return result;
 }
@@ -747,7 +747,9 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
             case 0x20: rounded = std::floor(shifted); printf("floor %f %f\n", m, rounded); break;
             default:   rounded = std::ceil(shifted);  printf("ceil %f %f\n", m, rounded); break;
         }
-        if (shifted != rounded) setExcStatusBit(FPEXP_INEX2);
+        if (std::abs(m - rounded / pow(10.0, digits)) > 1e-10) {
+            setExcStatusBit(FPEXP_INEX2);
+        }
         return long(rounded);
     };
 
