@@ -440,9 +440,27 @@ FPU::readCR(unsigned nr)
     return result;
 }
 
+long
+FPU::roundmantissa(long double mantissa, int digits)
+{
+    auto shifted = mantissa * powl(10.0L, digits);
+    long double rounded;
+    switch (fpcr & 0x30) {
+        case 0x00: rounded = std::roundl(shifted); printf("    round %.20Lf %.20Lf\n", mantissa, rounded); break;
+        case 0x10: rounded = std::truncl(shifted); printf("    trunc %.20Lf %.20Lf\n", mantissa, rounded); break;
+        case 0x20: rounded = std::floorl(shifted); printf("    floor %.20Lf %.20Lf\n", mantissa, rounded); break;
+        default:   rounded = std::ceill(shifted);  printf("    ceil %.20Lf %.20Lf\n", mantissa, rounded); break;
+    }
+    if (std::abs(mantissa - rounded / powl(10.0L, digits)) > 1e-10) {
+        setExcStatusBit(FPEXP_INEX2);
+    }
+    return long(rounded);
+}
+
 void
 FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
 {
+    /*
     auto rounded = [this](double m, int digits) {
         auto shifted = m * pow(10.0, digits);
         double rounded;
@@ -457,6 +475,7 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
         }
         return long(rounded);
     };
+    */
 
     printf("FPU::pack %x,%llx k = %d\n", value.raw.high, value.raw.low, k);
 
@@ -488,19 +507,11 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
     printf("    e = %d m = %.20Lf (%d %d) k = %d numDigits = %d\n", e, m, eSgn, mSgn, k, numDigits);
 
     // Compute the digits
-    /*
-    auto shifted = m * pow(10.0, numDigits);
-    auto rounded = std::round(shifted);
-    if (shifted != rounded) setExcStatusBit(FPEXP_INEX2);
-    long digits = long(rounded);
-    */
-    long digits = rounded(m, numDigits);
-
+    long digits = roundmantissa(m, numDigits);
     printf("    digits = %ld\n", digits);
 
     // Create a textual represention
     snprintf(str, sizeof(str), "%ld", std::abs(digits));
-
     printf("    digits (text) = %s\n", str);
 
     // Set sign bits
@@ -578,10 +589,24 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 
     auto combined = mantissa * powl(10.0, exponent);
 
-    // Round
-    combined = ldexp(std::round(ldexp(combined, 63)), -63);
+    int e;
+    auto m = std::frexpl(combined, &e);
 
-    result = Float80(mantissa * powl(10.0, exponent));
+    // Round
+    m = std::ldexpl(m, 32);
+    long double rounded;
+    switch (fpcr & 0x30) {
+        case 0x00: rounded = std::roundl(m); printf("    round %.20Lf %.20Lf\n", m, rounded); break;
+        case 0x10: rounded = std::truncl(m); printf("    trunc %.20Lf %.20Lf\n", m, rounded); break;
+        case 0x20: rounded = std::floorl(m); printf("    floor %.20Lf %.20Lf\n", m, rounded); break;
+        default:   rounded = std::ceill(m);  printf("    ceil %.20Lf %.20Lf\n", m, rounded); break;
+    }
+    m = std::ldexpl(rounded, -32);
+
+
+    // Round
+
+    result = Float80(std::ldexpl(m, e));
 }
 
 }

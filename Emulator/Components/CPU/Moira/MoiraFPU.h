@@ -140,6 +140,9 @@ public:
 
 public:
 
+    // Rounds a long double (experimental)
+    long roundmantissa(long double value, int digits);
+
     // Converts the extended format into the packed decimal real format
     void pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3);
 
