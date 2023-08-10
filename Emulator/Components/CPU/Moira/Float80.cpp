@@ -82,7 +82,7 @@ Float80::asDouble() const
 long double
 Float80::asLongDouble() const
 {
-    auto result = std::pow((long double)man(), -(long double)exp() - 1);
+    auto result = std::ldexp((long double)man(), (int)exp() - 63);
     return sgn() ? -result : result;
 }
 
@@ -92,6 +92,19 @@ Float80::asLong() const
     auto value = softfloat::floatx80_to_int64(raw);
     return (long)value;
 }
+
+std::pair<int, long double>
+Float80::frexp10() const
+{
+    long double val = asLongDouble();
+    int e = isZero() ? 0 : 1 + (int)std::floor(std::log10(std::fabs(val)));
+    long double m = val * std::pow(10 , -e);
+
+    printf("    frexp10: val = %.20Lf e = %d m = %.20Lf\n", val, e, m);
+
+    return { e, m };
+};
+
 
 bool
 Float80::isNegative() const

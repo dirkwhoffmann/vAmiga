@@ -441,164 +441,16 @@ FPU::readCR(unsigned nr)
 }
 
 void
-FPU::musashiPack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
-{
-    static u32 pkmask2[18] =
-    {
-        0xffffffff, 0, 0xf0000000, 0xff000000, 0xfff00000, 0xffff0000,
-        0xfffff000, 0xffffff00, 0xfffffff0, 0xffffffff,
-        0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff,
-        0xffffffff, 0xffffffff, 0xffffffff
-    };
-
-    static u32 pkmask3[18] =
-    {
-        0xffffffff, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0xf0000000, 0xff000000, 0xfff00000, 0xffff0000,
-        0xfffff000, 0xffffff00, 0xfffffff0, 0xffffffff,
-    };
-
-    char str[128], *ch;
-    int i, j, exp;
-
-    dw1 = dw2 = dw3 = 0;
-    ch = &str[0];
-
-    snprintf(str, sizeof(str), "%.16e", value.asDouble());
-
-    if (*ch == '-')
-    {
-        ch++;
-        dw1 = 0x80000000;
-    }
-
-    if (*ch == '+')
-    {
-        ch++;
-    }
-
-    dw1 |= (*ch++ - '0');
-
-    if (*ch == '.')
-    {
-        ch++;
-    }
-
-    // handle negative k-factor here
-    if ((k <= 0) && (k >= -13))
-    {
-        exp = 0;
-        for (i = 0; i < 3; i++)
-        {
-            if (ch[18+i] >= '0' && ch[18+i] <= '9')
-            {
-                exp = (exp << 4) | (ch[18+i] - '0');
-            }
-        }
-
-        if (ch[17] == '-')
-        {
-            exp = -exp;
-        }
-
-        k = -k;
-        // last digit is (k + exponent - 1)
-        k += (exp - 1);
-
-        // round up the last significant mantissa digit
-        if (ch[k+1] >= '5')
-        {
-            ch[k]++;
-        }
-
-        // zero out the rest of the mantissa digits
-        for (j = (k+1); j < 16; j++)
-        {
-            ch[j] = '0';
-        }
-
-        // now zero out K to avoid tripping the positive K detection below
-        k = 0;
-    }
-
-    // crack 8 digits of the mantissa
-    for (i = 0; i < 8; i++)
-    {
-        dw2 <<= 4;
-        if (*ch >= '0' && *ch <= '9')
-        {
-            dw2 |= *ch++ - '0';
-        }
-    }
-
-    // next 8 digits of the mantissa
-    for (i = 0; i < 8; i++)
-    {
-        dw3 <<= 4;
-        if (*ch >= '0' && *ch <= '9')
-            dw3 |= *ch++ - '0';
-    }
-
-    // handle masking if k is positive
-    if (k >= 1)
-    {
-        if (k <= 17)
-        {
-            dw2 &= pkmask2[k];
-            dw3 &= pkmask3[k];
-        }
-        else
-        {
-            dw2 &= pkmask2[17];
-            dw3 &= pkmask3[17];
-            //            m68ki_cpu.fpcr |=  (need to set OPERR bit)
-        }
-    }
-
-    // finally, crack the exponent
-    if (*ch == 'e' || *ch == 'E')
-    {
-        ch++;
-        if (*ch == '-')
-        {
-            ch++;
-            dw1 |= 0x40000000;
-        }
-
-        if (*ch == '+')
-        {
-            ch++;
-        }
-
-        j = 0;
-        for (i = 0; i < 3; i++)
-        {
-            if (*ch >= '0' && *ch <= '9')
-            {
-                j = (j << 4) | (*ch++ - '0');
-            }
-        }
-
-        dw1 |= (j << 16);
-    }
-}
-
-void
 FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
 {
-    auto frexp10 = [](double arg, int *exp) {
-        *exp = (arg == 0) ? 0 : 1 + (int)std::floor(std::log10(std::fabs(arg) ) );
-        return arg * std::pow(10 , -(*exp));
-    };
-
     auto rounded = [this](double m, int digits) {
         auto shifted = m * pow(10.0, digits);
         double rounded;
         switch (fpcr & 0x30) {
-            case 0x00: rounded = std::round(shifted); printf("round %f %f\n", m, rounded); break;
-            case 0x10: rounded = std::trunc(shifted); printf("trunc %f %f\n", m, rounded); break;
-            case 0x20: rounded = std::floor(shifted); printf("floor %f %f\n", m, rounded); break;
-            default:   rounded = std::ceil(shifted);  printf("ceil %f %f\n", m, rounded); break;
+            case 0x00: rounded = std::round(shifted); printf("    round %f %f\n", m, rounded); break;
+            case 0x10: rounded = std::trunc(shifted); printf("    trunc %f %f\n", m, rounded); break;
+            case 0x20: rounded = std::floor(shifted); printf("    floor %f %f\n", m, rounded); break;
+            default:   rounded = std::ceil(shifted);  printf("    ceil %f %f\n", m, rounded); break;
         }
         if (std::abs(m - rounded / pow(10.0, digits)) > 1e-10) {
             setExcStatusBit(FPEXP_INEX2);
@@ -614,13 +466,14 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
         k = 17;
     }
     char str[128] = { };
-    int e;
     int eSgn = 0;
     int mSgn = 0;
 
     // Split value into exponent and mantissa
-    auto m = frexp10(value.asDouble(), &e);
-    printf("frexp10: e = %d m = %f\n", e, m);
+    auto split = value.frexp10();
+    auto e = split.first;
+    auto m = split.second;
+    printf("    frexp10: e = %d m = %Lf\n", e, m);
 
     // Lower the exponent by one, because the first digit is left of the comma
     e -= 1;
@@ -632,7 +485,7 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
     // Determine the number of digits
     auto numDigits = std::min(17, k <= 0 ? e + 1 - k : k);
 
-    printf("e = %d m = %f (%d %d) k = %d numDigits = %d\n", e, m, eSgn, mSgn, k, numDigits);
+    printf("    e = %d m = %.20Lf (%d %d) k = %d numDigits = %d\n", e, m, eSgn, mSgn, k, numDigits);
 
     // Compute the digits
     /*
@@ -643,12 +496,12 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
     */
     long digits = rounded(m, numDigits);
 
-    printf("digits = %ld\n", digits);
+    printf("    digits = %ld\n", digits);
 
     // Create a textual represention
     snprintf(str, sizeof(str), "%ld", std::abs(digits));
 
-    printf("digits (text) = %s\n", str);
+    printf("    digits (text) = %s\n", str);
 
     // Set sign bits
     dw1 = dw2 = dw3 = 0;
@@ -681,66 +534,22 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
 }
 
 void
-FPU::musashiUnpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
-{
-    double tmp;
-    char str[128], *ch;
-
-    ch = &str[0];
-    if (dw1 & 0x80000000)    // mantissa sign
-    {
-        *ch++ = '-';
-    }
-    *ch++ = (char)((dw1 & 0xf) + '0');
-    *ch++ = '.';
-    *ch++ = (char)(((dw2 >> 28) & 0xf) + '0');
-    *ch++ = (char)(((dw2 >> 24) & 0xf) + '0');
-    *ch++ = (char)(((dw2 >> 20) & 0xf) + '0');
-    *ch++ = (char)(((dw2 >> 16) & 0xf) + '0');
-    *ch++ = (char)(((dw2 >> 12) & 0xf) + '0');
-    *ch++ = (char)(((dw2 >> 8)  & 0xf) + '0');
-    *ch++ = (char)(((dw2 >> 4)  & 0xf) + '0');
-    *ch++ = (char)(((dw2 >> 0)  & 0xf) + '0');
-    *ch++ = (char)(((dw3 >> 28) & 0xf) + '0');
-    *ch++ = (char)(((dw3 >> 24) & 0xf) + '0');
-    *ch++ = (char)(((dw3 >> 20) & 0xf) + '0');
-    *ch++ = (char)(((dw3 >> 16) & 0xf) + '0');
-    *ch++ = (char)(((dw3 >> 12) & 0xf) + '0');
-    *ch++ = (char)(((dw3 >> 8)  & 0xf) + '0');
-    *ch++ = (char)(((dw3 >> 4)  & 0xf) + '0');
-    *ch++ = (char)(((dw3 >> 0)  & 0xf) + '0');
-    *ch++ = 'E';
-    if (dw1 & 0x40000000)    // exponent sign
-    {
-        *ch++ = '-';
-    }
-    *ch++ = (char)(((dw1 >> 24) & 0xf) + '0');
-    *ch++ = (char)(((dw1 >> 20) & 0xf) + '0');
-    *ch++ = (char)(((dw1 >> 16) & 0xf) + '0');
-    *ch = '\0';
-
-    sscanf(str, "%le", &tmp);
-    result = tmp;
-}
-
-void
 FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 {
     long double factor = 10.0;
     long double exponent = 0.0;
     long double mantissa = 0.0;
-    bool error = false;
 
     auto digit = [&](u32 d) {
-        d &= 0xF; error |= d > 9; factor /= 10.0; return d * factor;
+        d &= 0xF; factor /= 10.0; return d * factor;
     };
 
+    printf("FPU::unpack %x,%x,%x\n", dw1, dw2, dw3);
+
     // Extract exponent
     exponent += ((dw1 >> 24) & 0xF) * 100.0;
     exponent += ((dw1 >> 20) & 0xF) * 10.0;
     exponent += ((dw1 >> 16) & 0xF);
-
-    printf("dw1 = %x => exponent = %Lf\n", dw1, exponent);
 
     // Extract mantissa
     mantissa += digit(dw1 >> 0);
@@ -765,61 +574,14 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
     if (dw1 & 0x80000000) mantissa *= -1;
     if (dw1 & 0x40000000) exponent *= -1;
 
-    error = false;
-    
-    if (error) {
-        result = Float80(u16(dw1 >> 16), u64(dw2) << 32 | u64(dw3));
-    } else {
-        result = Float80(mantissa * powl(10.0, exponent));
-    }
+    printf("    exponent = %Lf mantissa = %.20Lf\n", exponent, mantissa);
+
+    auto combined = mantissa * powl(10.0, exponent);
+
+    // Round
+    combined = ldexp(std::round(ldexp(combined, 63)), -63);
+
+    result = Float80(mantissa * powl(10.0, exponent));
 }
-
-/*
-void
-FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
-{
-    long double factor = 10.0;
-    long double exponent = 0.0;
-    ExtendedDouble mantissa = 0.0;
-
-    auto digit = [&](u32 d) { d &= 0xF; factor /= 10.0; return d * factor; };
-
-    // Extract exponent
-    exponent += ((dw1 >> 24) & 0xF) * 100.0;
-    exponent += ((dw1 >> 20) & 0xF) * 10.0;
-    exponent += ((dw1 >> 16) & 0xF);
-
-    printf("dw1 = %x => exponent = %Lf\n", dw1, exponent);
-
-    // Extract mantissa
-    mantissa += digit(dw1 >> 0);
-    mantissa += digit(dw2 >> 28);
-    mantissa += digit(dw2 >> 24);
-    mantissa += digit(dw2 >> 20);
-    mantissa += digit(dw2 >> 16);
-    mantissa += digit(dw2 >> 12);
-    mantissa += digit(dw2 >> 8);
-    mantissa += digit(dw2 >> 4);
-    mantissa += digit(dw2 >> 0);
-    mantissa += digit(dw3 >> 28);
-    mantissa += digit(dw3 >> 24);
-    mantissa += digit(dw3 >> 20);
-    mantissa += digit(dw3 >> 16);
-    mantissa += digit(dw3 >> 12);
-    mantissa += digit(dw3 >> 8);
-    mantissa += digit(dw3 >> 4);
-    mantissa += digit(dw3 >> 0);
-
-    // Evaluate exponent sign bit
-    if (dw1 & 0x80000000) mantissa *= -1;
-    if (dw1 & 0x40000000) exponent *= -1;
-    mantissa.reduce();
-
-    mantissa = mantissa * ExtendedDouble::edpow(10.0, (long)exponent);
-    mantissa.reduce();
-
-    result = Float80(mantissa);
-}
-*/
 
 }

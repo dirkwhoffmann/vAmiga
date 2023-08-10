@@ -141,11 +141,9 @@ public:
 public:
 
     // Converts the extended format into the packed decimal real format
-    void musashiPack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3); // DEPRECATED
     void pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3);
 
     // Converts the extended format into the packed decimal real format
-    void musashiUnpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result); // DEPRECATED
     void unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result);
 
 

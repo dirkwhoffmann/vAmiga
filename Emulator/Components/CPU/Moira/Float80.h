@@ -49,6 +49,8 @@ public:
     i64 exp() const { return i64(raw.high & 0x7FFF) - bias; }
     u64 man() const { return raw.low; }
 
+    std::pair<int, long double> frexp10() const;
+
     bool isNegative() const;
     bool isZero() const;
     bool isInfinity() const;
