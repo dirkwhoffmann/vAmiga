@@ -36,8 +36,10 @@ Float80::Float80(long double value)
 
     // Extract the exponent and the mantissa
     int e; auto m = frexpl(value, &e);
+
+    // Subtract one, because the first digit is left of the comma
     e -= 1;
-    printf("frexpl e = %d\n", e);
+
     // Create the bit representation of the mantissa
     u64 mbits = 0;
     for (isize i = 63; i >= 0; i--) {
@@ -50,46 +52,8 @@ Float80::Float80(long double value)
         }
     }
 
-    // Compose components
     *this = Float80(mSign, (i16)e, mbits);
 }
-
-/*
-Float80::Float80(ExtendedDouble value)
-{
-    // Handle some special cases
-    if (value.mantissa == 0.0) {
-
-        raw = { };
-        return;
-    }
-
-    // Extract the sign bit
-    bool mSign = value < 0.0;
-    value = value.abs();
-
-    // Extract the exponent and the mantissa
-    // int e; auto m = frexpl(value, &e);
-    int e = (int)value.exponent;
-    auto m = value.mantissa;
-    e -= 1;
-    printf("frexpl e = %d\n", e);
-    // Create the bit representation of the mantissa
-    u64 mbits = 0;
-    for (isize i = 63; i >= 0; i--) {
-        m *= 2.0;
-        if (m >= 1.0) {
-            mbits |= (1L << i);
-            m -= 1.0;
-        } else {
-            mbits &= ~(1L << i);
-        }
-    }
-
-    // Compose components
-    *this = Float80(mSign, (i16)e, mbits);
-}
-*/
 
 Float80::Float80(u16 high, u64 low)
 {
@@ -109,39 +73,64 @@ Float80::Float80(const struct FPUReg &reg)
 }
 
 double
-Float80::asDouble()
+Float80::asDouble() const
 {
     auto value = softfloat::floatx80_to_float64(raw);
     return *((double *)&value);
 }
 
+long double
+Float80::asLongDouble() const
+{
+    auto result = std::pow((long double)man(), -(long double)exp() - 1);
+    return sgn() ? -result : result;
+}
+
 long
-Float80::asLong()
+Float80::asLong() const
 {
     auto value = softfloat::floatx80_to_int64(raw);
     return (long)value;
 }
 
 bool
-Float80::isSignalingNaN()
+Float80::isNegative() const
 {
-    return (raw.high & 0x7FFF) == 0x7FFF && (raw.low & (1L << 62)) == 0 && raw.low != 0;
+    return (raw.high & 0x8000);
 }
 
 bool
-Float80::isNonsignalingNaN()
+Float80::isZero() const
 {
-    return (raw.high & 0x7FFF) == 0x7FFF && (raw.low & (1L << 62)) != 0 && raw.low != 0;
+    return (raw.high & 0x7FFF) == 0 && raw.low == 0;
 }
 
 bool
-Float80::isNaN()
+Float80::isInfinity() const
+{
+    return (raw.high & 0x7FFF) == 0x7FFF && raw.low == 0;
+}
+
+bool
+Float80::isNaN() const
 {
     return (raw.high & 0x7FFF) == 0x7FFF && raw.low != 0;
 }
 
 bool
-Float80::isNormalized()
+Float80::isSignalingNaN() const
+{
+    return isNaN() && (raw.low & (1L << 62)) == 0;
+}
+
+bool
+Float80::isNonsignalingNaN() const
+{
+    return isNaN() && (raw.low & (1L << 62)) != 0;
+}
+
+bool
+Float80::isNormalized() const
 {
     if ((raw.high & 0x7FFF) == 0) return true;
     if (isNaN()) return true;
