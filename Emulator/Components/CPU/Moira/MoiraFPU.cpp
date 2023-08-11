@@ -506,6 +506,16 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
     // Get exponent
     auto e = value.frexp10().first - 1;
 
+    // Check k-factor
+    if (k > 17) {
+        setExcStatusBit(FPEXP_OPERR);
+        setExcStatusBit(FPEXP_INEX2);
+        k = 17;
+    }
+    if (k < -17) {
+        k = -17;
+    }
+    
     // Setup stringstream
     std::stringstream ss;
     long double test;

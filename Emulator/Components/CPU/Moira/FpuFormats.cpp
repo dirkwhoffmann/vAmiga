@@ -105,7 +105,7 @@ Float80::frexp10() const
 {
     long double val = asLongDouble();
     int e = isZero() ? 0 : 1 + (int)std::floor(std::log10(std::fabs(val)));
-    long double m = val * std::pow(10 , -e);
+    long double m = val * std::powl(10L, -e);
 
     printf("    frexp10: val = %.20Lf e = %d m = %.20Lf\n", val, e, m);
 
