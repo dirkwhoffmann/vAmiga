@@ -563,6 +563,7 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
 
     // Setup stringstream
     std::stringstream ss;
+    long double test;
     ss.setf(std::ios::scientific, std::ios::floatfield);
     ss.precision(k > 0 ? k - 1 : e - k);
 
@@ -570,15 +571,21 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
     auto ldval = value.asLongDouble();
     std::feclearexcept(FE_ALL_EXCEPT);
     printf("inexact1 = %d\n", std::fetestexcept(FE_INEXACT));
-    ss << -5.625; // ldval; // value.asLongDouble();
+    ss << ldval;
+    std::stringstream ss2(ss.str());
+    ss2 >> test;
     printf("inexact2 = %d\n", std::fetestexcept(FE_INEXACT));
+    printf("ldval = %Lf test = %Lf %d\n", ldval, test, ldval == test);
     printf("pack: %Lf (%x,%llx) -> %s\n", value.asLongDouble(), value.raw.high, value.raw.low, ss.str().c_str());
 
+    if (ldval != test) {
+        setExcStatusBit(FPEXP_INEX2);
+    }
     // Assemble exponent
     dw1 = e < 0 ? 0x40000000 : 0;
-    dw1 |= (e % 10) << 0; e /= 10;
-    dw1 |= (e % 10) << 4; e /= 10;
-    dw1 |= (e % 10) << 8;
+    dw1 |= (e % 10) << 16; e /= 10;
+    dw1 |= (e % 10) << 20; e /= 10;
+    dw1 |= (e % 10) << 24;
 
     // Assemble mantisse
     char c;
