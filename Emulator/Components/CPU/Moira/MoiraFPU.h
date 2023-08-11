@@ -139,11 +139,12 @@ public:
     long roundmantissa(long double value, int digits);
 
     // Converts the extended format into the packed decimal real format
+    void packOld(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3);
     void pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3);
 
     // Converts the extended format into the packed decimal real format
+    void unpackOld(u32 dw1, u32 dw2, u32 dw3, Float80 &result);
     void unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result);
-    void unpackMusashi(u32 dw1, u32 dw2, u32 dw3, Float80 &result);
 
 
     //

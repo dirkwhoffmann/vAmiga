@@ -8,7 +8,8 @@
 #include "MoiraFPU.h"
 #include "Moira.h"
 #include "MoiraMacros.h"
-#include <fenv.h>
+#include <cfenv>
+#include <sstream>
 
 namespace vamiga::moira {
 
@@ -459,7 +460,7 @@ FPU::roundmantissa(long double mantissa, int digits)
 }
 
 void
-FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
+FPU::packOld(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
 {
     /*
      auto rounded = [this](double m, int digits) {
@@ -546,9 +547,65 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
 }
 
 void
-FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
+FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
 {
-    unpackMusashi(dw1, dw2, dw3, result);
+    // Switch to the proper rounding mode
+    switch (fpcr & 0x30) {
+
+        case 0x00: fesetround(FE_TONEAREST); break;
+        case 0x10: fesetround(FE_TOWARDZERO); break;
+        case 0x20: fesetround(FE_DOWNWARD); break;
+        default:   fesetround(FE_UPWARD); break;
+    }
+
+    // Get exponent
+    auto e = value.frexp10().first - 1;
+
+    // Setup stringstream
+    std::stringstream ss;
+    ss.setf(std::ios::scientific, std::ios::floatfield);
+    ss.precision(k > 0 ? k - 1 : e - k);
+
+    // Create string representation
+    auto ldval = value.asLongDouble();
+    std::feclearexcept(FE_ALL_EXCEPT);
+    printf("inexact1 = %d\n", std::fetestexcept(FE_INEXACT));
+    ss << -5.625; // ldval; // value.asLongDouble();
+    printf("inexact2 = %d\n", std::fetestexcept(FE_INEXACT));
+    printf("pack: %Lf (%x,%llx) -> %s\n", value.asLongDouble(), value.raw.high, value.raw.low, ss.str().c_str());
+
+    // Assemble exponent
+    dw1 = e < 0 ? 0x40000000 : 0;
+    dw1 |= (e % 10) << 0; e /= 10;
+    dw1 |= (e % 10) << 4; e /= 10;
+    dw1 |= (e % 10) << 8;
+
+    // Assemble mantisse
+    char c;
+    int shift = 64;
+    dw2 = dw3 = 0;
+
+    while (ss.get(c)) {
+
+        if (c == '+') continue;
+        if (c == '-') dw1 |= 0x80000000;
+        if (c >= '0' && c <= '9') {
+            if (shift == 64) dw1 |= u32(c - '0');
+            else if (shift >= 32) dw2 |= u32(c - '0') << (shift - 32);
+            else if (shift >= 0)  dw3 |= u32(c - '0') << shift;
+            shift -= 4;
+        }
+        if (c == 'e' || c ==  'E') break;
+    }
+
+
+    printf("Packed: %04x : %04x : %04x\n", dw1, dw2, dw3);
+}
+
+void
+FPU::unpackOld(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
+{
+    unpack(dw1, dw2, dw3, result);
     /*
      long double factor = 10.0;
      long double exponent = 0.0;
@@ -614,13 +671,13 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 }
 
 void
-FPU::unpackMusashi(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
+FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 {
     long double tmp;
     char str[128], *ch;
 
     // Save old rounding mode
-    auto oldMode = fegetround();
+    // auto oldMode = fegetround();
 
     // Switch to the proper rounding mode
     switch (fpcr & 0x30) {
@@ -667,7 +724,7 @@ FPU::unpackMusashi(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
     sscanf(str, "%Le", &tmp);
 
     // Restore old rounding mode
-    fesetround(oldMode);
+    // fesetround(oldMode);
 
     result = Float80(tmp);
 
