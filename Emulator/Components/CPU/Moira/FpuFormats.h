@@ -30,6 +30,7 @@ public: // REMOVE ASAP
     Float80(long double value);
     Float80(u16 high, u64 low);
     Float80(bool mSign, i16 e, u64 m);
+    Float80(const string &s);
     Float80(const struct FPUReg &reg);
 
 

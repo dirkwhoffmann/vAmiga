@@ -39,21 +39,6 @@ struct FPUReg {
     void move(FPUReg &dest);
 };
 
-/*
-struct FPUBitRep {
-
-    union {
-        u8 b;
-        u16 w;
-        u32 l;
-        u32 s;
-        u64 d;
-        Float80 e;
-        u32 p[3];
-    };
-};
-*/
-
 class FPU {
 
 public: // REMOVE ASAP
@@ -96,6 +81,9 @@ public:
     void setModel(FPUModel model);
     FPUModel getModel() const { return model; }
 
+    FpuPrecision getPrecision() const;
+    FpuRoundingMode getRoundingMode() const;
+
 
     //
     // Accessing registers
@@ -115,7 +103,6 @@ public:
 
     void setExcStatusBit(u32 mask);
     void clearExcStatusBit(u32 mask);
-    // void clearExcStatusBits();
 
     void setFlags(int reg);
     void setFlags(const Float80 &value);
@@ -139,13 +126,12 @@ public:
     long roundmantissa(long double value, int digits);
 
     // Converts the extended format into the packed decimal real format
-    void packOld(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3);
     void pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3);
+    Packed pack(const Float80 &value, int k);
 
     // Converts the extended format into the packed decimal real format
-    void unpackOld(u32 dw1, u32 dw2, u32 dw3, Float80 &result);
     void unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result);
-
+    Float80 unpack(const Packed &packed);
 
     //
     // Analyzing instructions

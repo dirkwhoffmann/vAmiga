@@ -415,7 +415,8 @@ Moira::readFpuOpEa(int n, u32 ea, FltFormat fmt)
             u32 data3 = readM<C68020, M, Long>(U32_ADD(ea, 8));
             updateAn<M, Extended>(n);
 
-            fpu.unpack(data1, data2, data3, result);
+            result = fpu.unpack(Packed { data1, data2, data3 });
+            // fpu.unpack(data1, data2, data3, result);
             break;
         }
         default:

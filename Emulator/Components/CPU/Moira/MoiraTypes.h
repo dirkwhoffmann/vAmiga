@@ -278,13 +278,23 @@ typedef enum
 }
 FltFormat;
 
-/* TODO:
+typedef enum
+{
+    FPU_PREC_EXTENDED,
+    FPU_PREC_SINGLE,
+    FPU_PREC_DOUBLE,
+    FPU_PREC_UNDEFINED
+}
+FpuPrecision;
 
- typedef enum
- {
- }
- FSize;
- */
+typedef enum
+{
+    FPU_RND_NEAREST,
+    FPU_RND_ZERO,
+    FPU_RND_DOWNWARD,
+    FPU_RND_UPWARD
+}
+FpuRoundingMode;
 
 
 //

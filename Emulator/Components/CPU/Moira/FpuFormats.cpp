@@ -7,6 +7,7 @@
 
 #include "FpuFormats.h"
 #include "MoiraFPU.h"
+#include <sstream>
 #include <cmath>
 
 namespace vamiga::moira {
@@ -65,6 +66,12 @@ Float80::Float80(bool mSign, i16 e, u64 m)
 {
     raw.high = (mSign ? 0x8000 : 0x0000) | (u16(e + 0x3FFF) & 0x7FFF);
     raw.low = m;
+}
+
+Float80::Float80(const string &s)
+{
+    auto value = std::stold(s);
+    *this = Float80(value);
 }
 
 Float80::Float80(const struct FPUReg &reg)
