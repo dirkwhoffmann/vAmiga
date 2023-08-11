@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Types.h"
+#include "MoiraTypes.h"
 #include "softfloat.h"
 
 namespace vamiga::moira {
@@ -27,10 +27,10 @@ public: // REMOVE ASAP
     Float80() { };
     Float80(u32 value);
     Float80(double value);
-    Float80(long double value);
+    Float80(long double value, FpuRoundingMode mode);
     Float80(u16 high, u64 low);
     Float80(bool mSign, i16 e, u64 m);
-    Float80(const string &s);
+    Float80(const std::string &s, FpuRoundingMode mode);
     Float80(const struct FPUReg &reg);
 
 

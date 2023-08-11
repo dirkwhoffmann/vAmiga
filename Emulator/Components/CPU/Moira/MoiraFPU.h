@@ -131,6 +131,7 @@ public:
 
     // Converts the extended format into the packed decimal real format
     void unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result);
+    void unpack2(u32 dw1, u32 dw2, u32 dw3, Float80 &result);
     Float80 unpack(const Packed &packed);
 
     //

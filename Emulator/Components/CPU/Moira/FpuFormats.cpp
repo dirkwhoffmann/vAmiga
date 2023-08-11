@@ -22,7 +22,7 @@ Float80::Float80(double value)
     raw = softfloat::float64_to_floatx80(*((u64 *)&value));
 }
 
-Float80::Float80(long double value)
+Float80::Float80(long double value, FpuRoundingMode mode)
 {
     // Handle some special cases
     if (value == 0.0) {
@@ -38,12 +38,23 @@ Float80::Float80(long double value)
     // Extract the exponent and the mantissa
     int e; auto m = frexpl(value, &e);
 
+    printf("Float80(%.25Lf): %d %.25Lf\n", value, e, m);
+
     // Subtract one, because the first digit is left of the comma
     e -= 1;
 
+    u64 mbits2;
+    switch (mode) {
+        case FPU_RND_NEAREST:   mbits2 = (u64)std::roundl(std::ldexpl(m, 64)); break;
+        case FPU_RND_ZERO:      mbits2 = (u64)std::truncl(std::ldexpl(m, 64)); break;
+        case FPU_RND_UPWARD:    mbits2 = (u64)std::ceill(std::ldexpl(m, 64)); break;
+        default:                mbits2 = (u64)std::floorl(std::ldexpl(m, 64)); break;
+    }
+
+
     // Create the bit representation of the mantissa
     u64 mbits = 0;
-    for (isize i = 63; i >= 0; i--) {
+    for (int i = 63; i >= 0; i--) {
         m *= 2.0;
         if (m >= 1.0) {
             mbits |= (1L << i);
@@ -53,7 +64,9 @@ Float80::Float80(long double value)
         }
     }
 
-    *this = Float80(mSign, (i16)e, mbits);
+    printf("    mbits = %llx mbits2 = %llx\n", mbits, mbits2);
+
+    *this = Float80(mSign, (i16)e, mbits2);
 }
 
 Float80::Float80(u16 high, u64 low)
@@ -68,13 +81,13 @@ Float80::Float80(bool mSign, i16 e, u64 m)
     raw.low = m;
 }
 
-Float80::Float80(const string &s)
+Float80::Float80(const std::string &s, FpuRoundingMode mode)
 {
     long double value;
     sscanf(s.c_str(), "%Le", &value);
     // value = std::stold(s);
     printf("Float80::Float80(%s) -> %.20Lf\n", s.c_str(), value);
-    *this = Float80(value);
+    *this = Float80(value, mode);
     printf("    %x, %llx\n", raw.high, raw.low);
     normalize();
 }

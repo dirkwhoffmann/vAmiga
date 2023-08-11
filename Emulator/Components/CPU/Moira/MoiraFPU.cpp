@@ -572,6 +572,8 @@ FPU::unpack(const Packed &packed)
 void
 FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 {
+    unpack2(dw1, dw2, dw3, result);
+    /*
     char str[128], *ch = str;
 
     printf("unpack(%x,%x,%x)\n", dw1, dw2, dw3);
@@ -606,6 +608,44 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
     // sscanf(str, "%Le", &tmp);
     printf("    str = %s\n", str);
     result = Float80(str);
+    */
+}
+
+void
+FPU::unpack2(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
+{
+    char str[128], *ch = str;
+    long double mantissa = 0.0L;
+
+    printf("unpack(%x,%x,%x)\n", dw1, dw2, dw3);
+
+    mantissa = ((dw3 >> 0)  & 0xF);
+    mantissa = mantissa / 10.0L + ((dw3 >> 4)  & 0xF);
+    mantissa = mantissa / 10.0L + ((dw3 >> 8)  & 0xF);
+    mantissa = mantissa / 10.0L + ((dw3 >> 12) & 0xF);
+    mantissa = mantissa / 10.0L + ((dw3 >> 16) & 0xF);
+    mantissa = mantissa / 10.0L + ((dw3 >> 20) & 0xF);
+    mantissa = mantissa / 10.0L + ((dw3 >> 24) & 0xF);
+    mantissa = mantissa / 10.0L + ((dw3 >> 28) & 0xF);
+    mantissa = mantissa / 10.0L + ((dw2 >> 0) & 0xF);
+    mantissa = mantissa / 10.0L + ((dw2 >> 4) & 0xF);
+    mantissa = mantissa / 10.0L + ((dw2 >> 8) & 0xF);
+    mantissa = mantissa / 10.0L + ((dw2 >> 12) & 0xF);
+    mantissa = mantissa / 10.0L + ((dw2 >> 16) & 0xF);
+    mantissa = mantissa / 10.0L + ((dw2 >> 20) & 0xF);
+    mantissa = mantissa / 10.0L + ((dw2 >> 24) & 0xF);
+    mantissa = mantissa / 10.0L + ((dw2 >> 28) & 0xF);
+    mantissa = mantissa / 10.0L + ((dw1 >> 0) & 0xF);
+    if (dw1 & 0x80000000) mantissa = -mantissa;
+
+    int exponent = ((dw1 >> 24) & 0xF) * 100 + ((dw1 >> 20) & 0xF) * 10 + ((dw1 >> 16) & 0xF);
+    if (dw1 & 0x40000000) exponent = -exponent;
+
+    auto value = mantissa * std::powl(10.0, exponent);
+    printf("mantissa = %Lf exponen = %d value = %Lf\n", mantissa, exponent, value);
+
+    result = Float80(value, getRoundingMode());
+    printf("unpack2: %x,%llx\n", result.raw.high, result.raw.low);
 }
 
 }
