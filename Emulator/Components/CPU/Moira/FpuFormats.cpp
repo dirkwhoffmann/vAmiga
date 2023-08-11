@@ -70,8 +70,13 @@ Float80::Float80(bool mSign, i16 e, u64 m)
 
 Float80::Float80(const string &s)
 {
-    auto value = std::stold(s);
+    long double value;
+    sscanf(s.c_str(), "%Le", &value);
+    // value = std::stold(s);
+    printf("Float80::Float80(%s) -> %.20Lf\n", s.c_str(), value);
     *this = Float80(value);
+    printf("    %x, %llx\n", raw.high, raw.low);
+    normalize();
 }
 
 Float80::Float80(const struct FPUReg &reg)
@@ -161,6 +166,7 @@ Float80::isNormalized() const
 void
 Float80::normalize()
 {
+    printf("isNormalized = %d\n", isNormalized());
     while (!isNormalized()) {
 
         raw.high -= 1;

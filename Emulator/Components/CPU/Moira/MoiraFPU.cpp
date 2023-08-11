@@ -515,7 +515,7 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
     if (k < -17) {
         k = -17;
     }
-    
+
     // Setup stringstream
     std::stringstream ss;
     long double test;
@@ -574,6 +574,8 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 {
     char str[128], *ch = str;
 
+    printf("unpack(%x,%x,%x)\n", dw1, dw2, dw3);
+
     if (dw1 & 0x80000000) *ch++ = '-';
     *ch++ = (char)((dw1 & 0xF) + '0');
     *ch++ = '.';
@@ -586,6 +588,7 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
     *ch++ = (char)(((dw2 >> 4)  & 0xF) + '0');
     *ch++ = (char)(((dw2 >> 0)  & 0xF) + '0');
     *ch++ = (char)(((dw3 >> 28) & 0xF) + '0');
+    *ch++ = (char)(((dw3 >> 24) & 0xF) + '0');
     *ch++ = (char)(((dw3 >> 20) & 0xF) + '0');
     *ch++ = (char)(((dw3 >> 16) & 0xF) + '0');
     *ch++ = (char)(((dw3 >> 12) & 0xF) + '0');
@@ -601,7 +604,7 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
     *ch = '\0';
 
     // sscanf(str, "%Le", &tmp);
-
+    printf("    str = %s\n", str);
     result = Float80(str);
 }
 
