@@ -83,7 +83,7 @@ long double
 Float80::asLongDouble() const
 {
     auto result = std::ldexp((long double)man(), (int)exp() - 63);
-    return sgn() ? -result : result;
+    return result * sgn();
 }
 
 long

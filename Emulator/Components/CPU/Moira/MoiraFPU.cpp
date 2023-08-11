@@ -452,7 +452,7 @@ FPU::roundmantissa(long double mantissa, int digits)
         case 0x20: rounded = std::floorl(shifted); printf("    floor %.20Lf %.20Lf\n", mantissa, rounded); break;
         default:   rounded = std::ceill(shifted);  printf("    ceil %.20Lf %.20Lf\n", mantissa, rounded); break;
     }
-    if (std::abs(mantissa - rounded / powl(10.0L, digits)) > 1e-10) {
+    if (std::abs(mantissa - rounded / powl(10.0L, digits)) > 1e-20) {
         setExcStatusBit(FPEXP_INEX2);
     }
     return long(rounded);
