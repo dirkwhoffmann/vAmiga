@@ -5,7 +5,7 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
-#include "Float80.h"
+#include "FpuFormats.h"
 #include "MoiraFPU.h"
 #include <cmath>
 

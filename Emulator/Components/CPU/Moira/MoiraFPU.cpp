@@ -8,6 +8,7 @@
 #include "MoiraFPU.h"
 #include "Moira.h"
 #include "MoiraMacros.h"
+#include <fenv.h>
 
 namespace vamiga::moira {
 
@@ -243,7 +244,7 @@ FPU::isValidExt(Instr I, Mode M, u16 op, u32 ext) const
             switch (cod) {
 
                 case 0b101:
-                { 
+                {
 
                     if (ext & 0x3FF) break;
 
@@ -339,12 +340,12 @@ FPU::clearExcStatusBit(u32 mask)
 }
 
 /*
-void
-FPU::clearExcStatusBits()
-{
-    clearExcStatusBit(0xFF00);
-}
-*/
+ void
+ FPU::clearExcStatusBits()
+ {
+ clearExcStatusBit(0xFF00);
+ }
+ */
 
 void
 FPU::setFlags(int reg)
@@ -461,21 +462,21 @@ void
 FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
 {
     /*
-    auto rounded = [this](double m, int digits) {
-        auto shifted = m * pow(10.0, digits);
-        double rounded;
-        switch (fpcr & 0x30) {
-            case 0x00: rounded = std::round(shifted); printf("    round %f %f\n", m, rounded); break;
-            case 0x10: rounded = std::trunc(shifted); printf("    trunc %f %f\n", m, rounded); break;
-            case 0x20: rounded = std::floor(shifted); printf("    floor %f %f\n", m, rounded); break;
-            default:   rounded = std::ceil(shifted);  printf("    ceil %f %f\n", m, rounded); break;
-        }
-        if (std::abs(m - rounded / pow(10.0, digits)) > 1e-10) {
-            setExcStatusBit(FPEXP_INEX2);
-        }
-        return long(rounded);
-    };
-    */
+     auto rounded = [this](double m, int digits) {
+     auto shifted = m * pow(10.0, digits);
+     double rounded;
+     switch (fpcr & 0x30) {
+     case 0x00: rounded = std::round(shifted); printf("    round %f %f\n", m, rounded); break;
+     case 0x10: rounded = std::trunc(shifted); printf("    trunc %f %f\n", m, rounded); break;
+     case 0x20: rounded = std::floor(shifted); printf("    floor %f %f\n", m, rounded); break;
+     default:   rounded = std::ceil(shifted);  printf("    ceil %f %f\n", m, rounded); break;
+     }
+     if (std::abs(m - rounded / pow(10.0, digits)) > 1e-10) {
+     setExcStatusBit(FPEXP_INEX2);
+     }
+     return long(rounded);
+     };
+     */
 
     printf("FPU::pack %x,%llx k = %d\n", value.raw.high, value.raw.low, k);
 
@@ -547,66 +548,129 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
 void
 FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 {
-    long double factor = 10.0;
-    long double exponent = 0.0;
-    long double mantissa = 0.0;
+    unpackMusashi(dw1, dw2, dw3, result);
+    /*
+     long double factor = 10.0;
+     long double exponent = 0.0;
+     long double mantissa = 0.0;
 
-    auto digit = [&](u32 d) {
-        d &= 0xF; factor /= 10.0; return d * factor;
-    };
+     auto digit = [&](u32 d) {
+     d &= 0xF; factor /= 10.0; return d * factor;
+     };
 
-    printf("FPU::unpack %x,%x,%x\n", dw1, dw2, dw3);
+     printf("FPU::unpack %x,%x,%x\n", dw1, dw2, dw3);
 
-    // Extract exponent
-    exponent += ((dw1 >> 24) & 0xF) * 100.0;
-    exponent += ((dw1 >> 20) & 0xF) * 10.0;
-    exponent += ((dw1 >> 16) & 0xF);
+     // Extract exponent
+     exponent += ((dw1 >> 24) & 0xF) * 100.0;
+     exponent += ((dw1 >> 20) & 0xF) * 10.0;
+     exponent += ((dw1 >> 16) & 0xF);
 
-    // Extract mantissa
-    mantissa += digit(dw1 >> 0);
-    mantissa += digit(dw2 >> 28);
-    mantissa += digit(dw2 >> 24);
-    mantissa += digit(dw2 >> 20);
-    mantissa += digit(dw2 >> 16);
-    mantissa += digit(dw2 >> 12);
-    mantissa += digit(dw2 >> 8);
-    mantissa += digit(dw2 >> 4);
-    mantissa += digit(dw2 >> 0);
-    mantissa += digit(dw3 >> 28);
-    mantissa += digit(dw3 >> 24);
-    mantissa += digit(dw3 >> 20);
-    mantissa += digit(dw3 >> 16);
-    mantissa += digit(dw3 >> 12);
-    mantissa += digit(dw3 >> 8);
-    mantissa += digit(dw3 >> 4);
-    mantissa += digit(dw3 >> 0);
+     // Extract mantissa
+     mantissa += digit(dw1 >> 0);
+     mantissa += digit(dw2 >> 28);
+     mantissa += digit(dw2 >> 24);
+     mantissa += digit(dw2 >> 20);
+     mantissa += digit(dw2 >> 16);
+     mantissa += digit(dw2 >> 12);
+     mantissa += digit(dw2 >> 8);
+     mantissa += digit(dw2 >> 4);
+     mantissa += digit(dw2 >> 0);
+     mantissa += digit(dw3 >> 28);
+     mantissa += digit(dw3 >> 24);
+     mantissa += digit(dw3 >> 20);
+     mantissa += digit(dw3 >> 16);
+     mantissa += digit(dw3 >> 12);
+     mantissa += digit(dw3 >> 8);
+     mantissa += digit(dw3 >> 4);
+     mantissa += digit(dw3 >> 0);
 
-    // Evaluate exponent sign bit
-    if (dw1 & 0x80000000) mantissa *= -1;
-    if (dw1 & 0x40000000) exponent *= -1;
+     // Evaluate exponent sign bit
+     if (dw1 & 0x80000000) mantissa *= -1;
+     if (dw1 & 0x40000000) exponent *= -1;
 
-    printf("    exponent = %Lf mantissa = %.20Lf\n", exponent, mantissa);
+     printf("    exponent = %Lf mantissa = %.20Lf\n", exponent, mantissa);
 
-    auto combined = mantissa * powl(10.0, exponent);
+     auto combined = mantissa * powl(10.0, exponent);
 
-    int e;
-    auto m = std::frexpl(combined, &e);
+     int e;
+     auto m = std::frexpl(combined, &e);
 
-    // Round
-    m = std::ldexpl(m, 32);
-    long double rounded;
+     // Round
+     m = std::ldexpl(m, 32);
+     long double rounded;
+     switch (fpcr & 0x30) {
+     case 0x00: rounded = std::roundl(m); printf("    round %.20Lf %.20Lf\n", m, rounded); break;
+     case 0x10: rounded = std::truncl(m); printf("    trunc %.20Lf %.20Lf\n", m, rounded); break;
+     case 0x20: rounded = std::floorl(m); printf("    floor %.20Lf %.20Lf\n", m, rounded); break;
+     default:   rounded = std::ceill(m);  printf("    ceil %.20Lf %.20Lf\n", m, rounded); break;
+     }
+     m = std::ldexpl(rounded, -32);
+
+
+     // Round
+
+     result = Float80(std::ldexpl(m, e));
+     */
+}
+
+void
+FPU::unpackMusashi(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
+{
+    long double tmp;
+    char str[128], *ch;
+
+    // Save old rounding mode
+    auto oldMode = fegetround();
+
+    // Switch to the proper rounding mode
     switch (fpcr & 0x30) {
-        case 0x00: rounded = std::roundl(m); printf("    round %.20Lf %.20Lf\n", m, rounded); break;
-        case 0x10: rounded = std::truncl(m); printf("    trunc %.20Lf %.20Lf\n", m, rounded); break;
-        case 0x20: rounded = std::floorl(m); printf("    floor %.20Lf %.20Lf\n", m, rounded); break;
-        default:   rounded = std::ceill(m);  printf("    ceil %.20Lf %.20Lf\n", m, rounded); break;
+
+        case 0x00: fesetround(FE_TONEAREST); break;
+        case 0x10: fesetround(FE_TOWARDZERO); break;
+        case 0x20: fesetround(FE_DOWNWARD); break;
+        default:   fesetround(FE_UPWARD); break;
     }
-    m = std::ldexpl(rounded, -32);
 
+    ch = &str[0];
+    if (dw1 & 0x80000000)    // mantissa sign
+    {
+        *ch++ = '-';
+    }
+    *ch++ = (char)((dw1 & 0xf) + '0');
+    *ch++ = '.';
+    *ch++ = (char)(((dw2 >> 28) & 0xf) + '0');
+    *ch++ = (char)(((dw2 >> 24) & 0xf) + '0');
+    *ch++ = (char)(((dw2 >> 20) & 0xf) + '0');
+    *ch++ = (char)(((dw2 >> 16) & 0xf) + '0');
+    *ch++ = (char)(((dw2 >> 12) & 0xf) + '0');
+    *ch++ = (char)(((dw2 >> 8)  & 0xf) + '0');
+    *ch++ = (char)(((dw2 >> 4)  & 0xf) + '0');
+    *ch++ = (char)(((dw2 >> 0)  & 0xf) + '0');
+    *ch++ = (char)(((dw3 >> 28) & 0xf) + '0');
+    *ch++ = (char)(((dw3 >> 24) & 0xf) + '0');
+    *ch++ = (char)(((dw3 >> 20) & 0xf) + '0');
+    *ch++ = (char)(((dw3 >> 16) & 0xf) + '0');
+    *ch++ = (char)(((dw3 >> 12) & 0xf) + '0');
+    *ch++ = (char)(((dw3 >> 8)  & 0xf) + '0');
+    *ch++ = (char)(((dw3 >> 4)  & 0xf) + '0');
+    *ch++ = (char)(((dw3 >> 0)  & 0xf) + '0');
+    *ch++ = 'E';
+    if (dw1 & 0x40000000)    // exponent sign
+    {
+        *ch++ = '-';
+    }
+    *ch++ = (char)(((dw1 >> 24) & 0xf) + '0');
+    *ch++ = (char)(((dw1 >> 20) & 0xf) + '0');
+    *ch++ = (char)(((dw1 >> 16) & 0xf) + '0');
+    *ch = '\0';
 
-    // Round
+    sscanf(str, "%Le", &tmp);
 
-    result = Float80(std::ldexpl(m, e));
+    // Restore old rounding mode
+    fesetround(oldMode);
+
+    result = Float80(tmp);
+
 }
 
 }

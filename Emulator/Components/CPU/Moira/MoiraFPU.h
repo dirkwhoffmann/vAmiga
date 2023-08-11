@@ -8,14 +8,9 @@
 #pragma once
 
 #include "MoiraTypes.h"
-#include "Float80.h"
+#include "FpuFormats.h"
 
 namespace vamiga::moira {
-
-struct Packed {
-
-    u32 data[3];
-};
 
 struct FPUReg {
 
@@ -148,6 +143,7 @@ public:
 
     // Converts the extended format into the packed decimal real format
     void unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result);
+    void unpackMusashi(u32 dw1, u32 dw2, u32 dw3, Float80 &result);
 
 
     //

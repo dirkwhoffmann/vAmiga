@@ -14,7 +14,7 @@ namespace vamiga::moira {
 
 class Float80 {
 
-public:
+public: // REMOVE ASAP
 
     // TODO: Make this private. Afterwards, remove softfloat lib
     softfloat::floatx80 raw = { };
@@ -84,6 +84,13 @@ public:
 
         return raw.high == other.raw.high && raw.low == other.raw.low;
     }
+};
+
+class Packed {
+
+public: // REMOVE ASAP
+
+    u32 data[3];
 };
 
 }
