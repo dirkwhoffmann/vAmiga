@@ -211,6 +211,26 @@ FPU::getRoundingMode() const
     }
 }
 
+void
+FPU::pushRoundingMode(int mode)
+{
+    oldRoundingMode = fegetround();
+
+    switch (mode) {
+
+        case FPU_RND_NEAREST:   fesetround(FE_TONEAREST); break;
+        case FPU_RND_ZERO:      fesetround(FE_TOWARDZERO); break;
+        case FPU_RND_DOWNWARD:  fesetround(FE_DOWNWARD); break;
+        case FPU_RND_UPWARD:    fesetround(FE_UPWARD); break;
+    }
+}
+
+void
+FPU::popRoundingMode()
+{
+    fesetround(oldRoundingMode);
+}
+
 bool
 FPU::isValidExt(Instr I, Mode M, u16 op, u32 ext) const
 {
@@ -329,14 +349,6 @@ FPU::setFPCR(u32 value)
     fpcr = value & 0x0000FFF0;
 
     softfloat::float_rounding_mode = (value & 0b110000) >> 4;
-
-    switch (getRoundingMode()) {
-
-        case FPU_RND_NEAREST:   fesetround(FE_TONEAREST); break;
-        case FPU_RND_ZERO:      fesetround(FE_TOWARDZERO); break;
-        case FPU_RND_DOWNWARD:  fesetround(FE_DOWNWARD); break;
-        case FPU_RND_UPWARD:    fesetround(FE_UPWARD); break;
-    }
 }
 
 void
@@ -525,9 +537,11 @@ FPU::pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3)
 
     // Create string representation
     auto ldval = value.asLongDouble();
+    pushRoundingMode();
     ss << ldval;
     std::stringstream ss2(ss.str());
     ss2 >> test;
+    popRoundingMode();
     printf("ldval = %Lf test = %Lf %d\n", ldval, test, ldval == test);
     printf("pack: %Lf (%x,%llx) -> %s\n", value.asLongDouble(), value.raw.high, value.raw.low, ss.str().c_str());
 
@@ -573,103 +587,72 @@ FPU::unpack(const Packed &packed)
 void
 FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 {
-    unpack2(dw1, dw2, dw3, result);
-    /*
     char str[128], *ch = str;
+    i32 ex = 0; u64 mal = 0, mar = 0;
 
     printf("unpack(%x,%x,%x)\n", dw1, dw2, dw3);
 
+    ex = (char)((dw1 >> 24) & 0xF);
+    ex = ex * 10 + (char)((dw1 >> 20) & 0xF);
+    ex = ex * 10 + (char)((dw1 >> 16) & 0xF);
+
+    mar = (char)((dw2 >> 28) & 0xF);
+    mar = mar * 10 + (char)((dw2 >> 24) & 0xF);
+    mar = mar * 10 + (char)((dw2 >> 20) & 0xF);
+    mar = mar * 10 + (char)((dw2 >> 16) & 0xF);
+    mar = mar * 10 + (char)((dw2 >> 12) & 0xF);
+    mar = mar * 10 + (char)((dw2 >> 8)  & 0xF);
+    mar = mar * 10 + (char)((dw2 >> 4)  & 0xF);
+    mar = mar * 10 + (char)((dw2 >> 0)  & 0xF);
+    mar = mar * 10 + (char)((dw3 >> 28) & 0xF);
+    mar = mar * 10 + (char)((dw3 >> 24) & 0xF);
+    mar = mar * 10 + (char)((dw3 >> 20) & 0xF);
+    mar = mar * 10 + (char)((dw3 >> 16) & 0xF);
+    mar = mar * 10 + (char)((dw3 >> 12) & 0xF);
+    mar = mar * 10 + (char)((dw3 >> 8)  & 0xF);
+    mar = mar * 10 + (char)((dw3 >> 4)  & 0xF);
+    mar = mar * 10 + (char)((dw3 >> 0)  & 0xF);
+
+    mal = (char)((dw1 >> 0) & 0xF);
+    mal += mar / 10000000000000000;
+    mar %= 10000000000000000;
+
+    printf("mal = %llx mar = %llx\n", mal, mar);
+
     if (dw1 & 0x80000000) *ch++ = '-';
-    *ch++ = (char)((dw1 & 0xF) + '0');
+    for (isize i = 1; i >= 0; i--) {
+        ch[i] = (mal % 10) + '0'; mal /= 10;
+    }
+    ch += 2;
     *ch++ = '.';
-    *ch++ = (char)(((dw2 >> 28) & 0xF) + '0');
-    *ch++ = (char)(((dw2 >> 24) & 0xF) + '0');
-    *ch++ = (char)(((dw2 >> 20) & 0xF) + '0');
-    *ch++ = (char)(((dw2 >> 16) & 0xF) + '0');
-    *ch++ = (char)(((dw2 >> 12) & 0xF) + '0');
-    *ch++ = (char)(((dw2 >> 8)  & 0xF) + '0');
-    *ch++ = (char)(((dw2 >> 4)  & 0xF) + '0');
-    *ch++ = (char)(((dw2 >> 0)  & 0xF) + '0');
-    *ch++ = (char)(((dw3 >> 28) & 0xF) + '0');
-    *ch++ = (char)(((dw3 >> 24) & 0xF) + '0');
-    *ch++ = (char)(((dw3 >> 20) & 0xF) + '0');
-    *ch++ = (char)(((dw3 >> 16) & 0xF) + '0');
-    *ch++ = (char)(((dw3 >> 12) & 0xF) + '0');
-    *ch++ = (char)(((dw3 >> 8)  & 0xF) + '0');
-    *ch++ = (char)(((dw3 >> 4)  & 0xF) + '0');
-    *ch++ = (char)(((dw3 >> 0)  & 0xF) + '0');
+    for (isize i = 15; i >= 0; i--) {
+        ch[i] = (mar % 10) + '0'; mar /= 10;
+    }
+    ch += 16;
 
     *ch++ = 'E';
     if (dw1 & 0x40000000) *ch++ = '-';
-    *ch++ = (char)(((dw1 >> 24) & 0xF) + '0');
-    *ch++ = (char)(((dw1 >> 20) & 0xF) + '0');
-    *ch++ = (char)(((dw1 >> 16) & 0xF) + '0');
+    for (isize i = 2; i >= 0; i--) {
+        ch[i] = (ex % 10) + '0'; ex /= 10;
+    }
+    ch += 3;
+
+    if (dw1 & 0x40000000) ex = -ex;
+
     *ch = '\0';
 
-    // sscanf(str, "%Le", &tmp);
+    pushRoundingMode();
+    long double tmp;
+    sscanf(str, "%Le", &tmp);
+    popRoundingMode();
+
     printf("    str = %s\n", str);
-    result = Float80(str);
-    */
-}
-
-void
-FPU::unpack2(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
-{
-    long double mantissa = 0.0L;
-    xdb::XDouble<double> m;
-
-    printf("unpack2(%x,%x,%x)\n", dw1, dw2, dw3);
-
-    m = ((dw3 >> 0)  & 0xF);
-    m = m / 10.0L + double((dw3 >> 4)  & 0xF);
-    m = m / 10.0L + double((dw3 >> 8)  & 0xF);
-    m = m / 10.0L + double((dw3 >> 12) & 0xF);
-    m = m / 10.0L + double((dw3 >> 16) & 0xF);
-    m = m / 10.0L + double((dw3 >> 20) & 0xF);
-    m = m / 10.0L + double((dw3 >> 24) & 0xF);
-    m = m / 10.0L + double((dw3 >> 28) & 0xF);
-    m = m / 10.0L + double((dw2 >> 0)  & 0xF);
-    m = m / 10.0L + double((dw2 >> 4)  & 0xF);
-    m = m / 10.0L + double((dw2 >> 8)  & 0xF);
-    m = m / 10.0L + double((dw2 >> 12) & 0xF);
-    m = m / 10.0L + double((dw2 >> 16) & 0xF);
-    m = m / 10.0L + double((dw2 >> 20) & 0xF);
-    m = m / 10.0L + double((dw2 >> 24) & 0xF);
-    m = m / 10.0L + double((dw2 >> 28) & 0xF);
-    m = m / 10.0L + double((dw1 >> 0)  & 0xF);
-    if (dw1 & 0x80000000) m = -m;
-
-    mantissa = ((dw3 >> 0)  & 0xF);
-    mantissa = mantissa / 10.0L + ((dw3 >> 4)  & 0xF);
-    mantissa = mantissa / 10.0L + ((dw3 >> 8)  & 0xF);
-    mantissa = mantissa / 10.0L + ((dw3 >> 12) & 0xF);
-    mantissa = mantissa / 10.0L + ((dw3 >> 16) & 0xF);
-    mantissa = mantissa / 10.0L + ((dw3 >> 20) & 0xF);
-    mantissa = mantissa / 10.0L + ((dw3 >> 24) & 0xF);
-    mantissa = mantissa / 10.0L + ((dw3 >> 28) & 0xF);
-    mantissa = mantissa / 10.0L + ((dw2 >> 0) & 0xF);
-    mantissa = mantissa / 10.0L + ((dw2 >> 4) & 0xF);
-    mantissa = mantissa / 10.0L + ((dw2 >> 8) & 0xF);
-    mantissa = mantissa / 10.0L + ((dw2 >> 12) & 0xF);
-    mantissa = mantissa / 10.0L + ((dw2 >> 16) & 0xF);
-    mantissa = mantissa / 10.0L + ((dw2 >> 20) & 0xF);
-    mantissa = mantissa / 10.0L + ((dw2 >> 24) & 0xF);
-    mantissa = mantissa / 10.0L + ((dw2 >> 28) & 0xF);
-    mantissa = mantissa / 10.0L + ((dw1 >> 0) & 0xF);
-    if (dw1 & 0x80000000) mantissa = -mantissa;
-
-    int exponent = ((dw1 >> 24) & 0xF) * 100 + ((dw1 >> 20) & 0xF) * 10 + ((dw1 >> 16) & 0xF);
-    if (dw1 & 0x40000000) exponent = -exponent;
-
-    printf("unpack2: %s e%d\n", m.to_string(0, 30).c_str(), exponent);
-    auto value = mantissa * std::powl(10.0, exponent);
-    xdb::XDouble<double> val = m * xdb::XDouble<double>(10.0).pow(exponent);
-    printf("mantissa = %.20Lf exponent = %d value = %Lf\n", mantissa, exponent, value);
-    printf("m        = %.20Lf exponent = %d val   = %Lf\n", (long double)m, exponent, (long double)val);
-
-    // result = Float80(value, getRoundingMode());
-    result = Float80(val, getRoundingMode());
-    printf("unpack2: %x,%llx\n", result.raw.high, result.raw.low);
+    for (usize i = 0; i < sizeof(long double); i++) {
+        printf("%02X ", ((u8 *)&tmp)[i]);
+    }
+    printf("\n");
+    result = Float80(tmp, getRoundingMode());
+// #endif
 }
 
 }

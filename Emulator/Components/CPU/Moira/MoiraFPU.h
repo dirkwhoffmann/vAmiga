@@ -54,11 +54,13 @@ public: // REMOVE ASAP
         FPUReg(*this), FPUReg(*this), FPUReg(*this), FPUReg(*this),
         FPUReg(*this), FPUReg(*this), FPUReg(*this), FPUReg(*this)
     };
-    FPUReg tmp = FPUReg(*this);
 
     u32 fpiar;
     u32 fpsr;
     u32 fpcr;
+
+    // Experimental
+    int oldRoundingMode;
 
 
     //
@@ -83,6 +85,10 @@ public:
 
     FpuPrecision getPrecision() const;
     FpuRoundingMode getRoundingMode() const;
+
+    void pushRoundingMode(int mode);
+    void pushRoundingMode() { pushRoundingMode(getRoundingMode()); }
+    void popRoundingMode();
 
 
     //
@@ -131,9 +137,9 @@ public:
 
     // Converts the extended format into the packed decimal real format
     void unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result);
-    void unpack2(u32 dw1, u32 dw2, u32 dw3, Float80 &result);
     Float80 unpack(const Packed &packed);
 
+    
     //
     // Analyzing instructions
     //
