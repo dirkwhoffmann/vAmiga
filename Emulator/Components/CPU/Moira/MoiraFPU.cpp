@@ -230,6 +230,22 @@ FPU::popRoundingMode()
     fesetround(oldRoundingMode);
 }
 
+int
+FPU::setRoundingMode(int mode)
+{
+    auto oldMode = fegetround();
+
+    switch (mode) {
+
+        case FPU_RND_NEAREST:   fesetround(FE_TONEAREST); break;
+        case FPU_RND_ZERO:      fesetround(FE_TOWARDZERO); break;
+        case FPU_RND_DOWNWARD:  fesetround(FE_DOWNWARD); break;
+        case FPU_RND_UPWARD:    fesetround(FE_UPWARD); break;
+    }
+
+    return oldMode;
+}
+
 bool
 FPU::isValidExt(Instr I, Mode M, u16 op, u32 ext) const
 {
@@ -591,10 +607,12 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 
     printf("unpack(%x,%x,%x)\n", dw1, dw2, dw3);
 
+    // Compose the exponent
     ex = (char)((dw1 >> 24) & 0xF);
     ex = ex * 10 + (char)((dw1 >> 20) & 0xF);
     ex = ex * 10 + (char)((dw1 >> 16) & 0xF);
 
+    // Compose the fractional part of the mantissa
     mar = (char)((dw2 >> 28) & 0xF);
     mar = mar * 10 + (char)((dw2 >> 24) & 0xF);
     mar = mar * 10 + (char)((dw2 >> 20) & 0xF);
@@ -612,46 +630,31 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
     mar = mar * 10 + (char)((dw3 >> 4)  & 0xF);
     mar = mar * 10 + (char)((dw3 >> 0)  & 0xF);
 
+    // Compose the integer part of the mantissa
     mal = (char)((dw1 >> 0) & 0xF);
     mal += mar / 10000000000000000;
     mar %= 10000000000000000;
 
-    printf("mal = %llx mar = %llx\n", mal, mar);
-
+    // Write the integer part of the mantissa
     if (dw1 & 0x80000000) *ch++ = '-';
-    for (isize i = 1; i >= 0; i--) {
-        ch[i] = (mal % 10) + '0'; mal /= 10;
-    }
+    for (isize i = 1; i >= 0; i--) { ch[i] = (mal % 10) + '0'; mal /= 10; }
     ch += 2;
+
+    // Write the fractional part of the mantissa
     *ch++ = '.';
-    for (isize i = 15; i >= 0; i--) {
-        ch[i] = (mar % 10) + '0'; mar /= 10;
-    }
+    for (isize i = 15; i >= 0; i--) { ch[i] = (mar % 10) + '0'; mar /= 10; }
     ch += 16;
 
+    // Write the exponent
     *ch++ = 'E';
     if (dw1 & 0x40000000) *ch++ = '-';
-    for (isize i = 2; i >= 0; i--) {
-        ch[i] = (ex % 10) + '0'; ex /= 10;
-    }
-    ch += 3;
+    for (isize i = 3; i >= 0; i--) { ch[i] = (ex % 10) + '0'; ex /= 10; }
+    ch += 4;
 
-    if (dw1 & 0x40000000) ex = -ex;
+    // Terminate the string
+    *ch = 0;
 
-    *ch = '\0';
-
-    pushRoundingMode();
-    long double tmp;
-    sscanf(str, "%Le", &tmp);
-    popRoundingMode();
-
-    printf("    str = %s\n", str);
-    for (usize i = 0; i < sizeof(long double); i++) {
-        printf("%02X ", ((u8 *)&tmp)[i]);
-    }
-    printf("\n");
-    result = Float80(tmp, getRoundingMode());
-// #endif
+    result = Float80(str, getRoundingMode());
 }
 
 }

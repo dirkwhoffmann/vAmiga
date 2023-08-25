@@ -60,10 +60,12 @@ Float80::Float80(bool mSign, i16 e, u64 m)
 Float80::Float80(const std::string &s, FpuRoundingMode mode)
 {
     long double value;
+
+    auto old = FPU::setRoundingMode(mode);
     sscanf(s.c_str(), "%Le", &value);
-    printf("Float80::Float80(%s) -> %.20Lf\n", s.c_str(), value);
+    FPU::setRoundingMode(old);
+
     *this = Float80(value, mode);
-    printf("    %x, %llx\n", raw.high, raw.low);
     normalize();
 }
 

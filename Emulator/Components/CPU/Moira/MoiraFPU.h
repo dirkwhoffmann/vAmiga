@@ -86,9 +86,12 @@ public:
     FpuPrecision getPrecision() const;
     FpuRoundingMode getRoundingMode() const;
 
+    // DEPRECATED
     void pushRoundingMode(int mode);
     void pushRoundingMode() { pushRoundingMode(getRoundingMode()); }
     void popRoundingMode();
+
+    static int setRoundingMode(int mode);
 
 
     //
