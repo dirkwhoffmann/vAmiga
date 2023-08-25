@@ -9,7 +9,6 @@
 #include "MoiraFPU.h"
 #include <sstream>
 #include <cmath>
-#include "xdouble.h"
 
 namespace vamiga::moira {
 

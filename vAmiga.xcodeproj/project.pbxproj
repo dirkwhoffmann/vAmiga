@@ -866,7 +866,6 @@
 		50D715A227CCA84F0085C1AA /* PartitionSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartitionSelector.swift; sourceTree = "<group>"; };
 		50D7CDC22286E968002689F0 /* Joystick.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Joystick.cpp; sourceTree = "<group>"; };
 		50D7CDC32286E968002689F0 /* Joystick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Joystick.h; sourceTree = "<group>"; };
-		50DA80C92A977CBA009E7B2C /* xdouble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xdouble.h; sourceTree = "<group>"; };
 		50DD1EE12525E3E1000180F6 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 		50DD33CB27560EE600AE18B4 /* pfile.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = pfile.c; sourceTree = "<group>"; };
 		50DD3AF52A6A8495008FC7CC /* MoiraFPU.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MoiraFPU.cpp; sourceTree = "<group>"; };
@@ -1873,7 +1872,6 @@
 				50E2BE2D240D418500155AE4 /* StrWriter_cpp.h */,
 				504098DF2A84BE920062DD67 /* FpuFormats.h */,
 				504098DE2A84BE920062DD67 /* FpuFormats.cpp */,
-				50DA80C92A977CBA009E7B2C /* xdouble.h */,
 				5002348F28CC8D9500145D6E /* softfloat */,
 			);
 			path = Moira;

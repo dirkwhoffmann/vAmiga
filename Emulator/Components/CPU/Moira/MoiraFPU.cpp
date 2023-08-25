@@ -8,7 +8,6 @@
 #include "MoiraFPU.h"
 #include "Moira.h"
 #include "MoiraMacros.h"
-#include "xdouble.h"
 #include <cfenv>
 #include <sstream>
 
