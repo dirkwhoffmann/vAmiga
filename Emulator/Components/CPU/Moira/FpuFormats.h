@@ -10,6 +10,9 @@
 #include "MoiraTypes.h"
 #include "softfloat.h"
 
+namespace xdb {
+template <class T> class XDouble;
+}
 namespace vamiga::moira {
 
 class Float80 {
@@ -28,6 +31,7 @@ public: // REMOVE ASAP
     Float80(u32 value);
     Float80(double value);
     Float80(long double value, FpuRoundingMode mode);
+    Float80(xdb::XDouble<double> value, FpuRoundingMode mode);
     Float80(u16 high, u64 low);
     Float80(bool mSign, i16 e, u64 m);
     Float80(const std::string &s, FpuRoundingMode mode);

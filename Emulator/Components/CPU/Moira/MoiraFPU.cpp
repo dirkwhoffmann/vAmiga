@@ -8,6 +8,7 @@
 #include "MoiraFPU.h"
 #include "Moira.h"
 #include "MoiraMacros.h"
+#include "xdouble.h"
 #include <cfenv>
 #include <sstream>
 
@@ -614,10 +615,29 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 void
 FPU::unpack2(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 {
-    char str[128], *ch = str;
     long double mantissa = 0.0L;
+    xdb::XDouble<double> m;
 
-    printf("unpack(%x,%x,%x)\n", dw1, dw2, dw3);
+    printf("unpack2(%x,%x,%x)\n", dw1, dw2, dw3);
+
+    m = ((dw3 >> 0)  & 0xF);
+    m = m / 10.0L + double((dw3 >> 4)  & 0xF);
+    m = m / 10.0L + double((dw3 >> 8)  & 0xF);
+    m = m / 10.0L + double((dw3 >> 12) & 0xF);
+    m = m / 10.0L + double((dw3 >> 16) & 0xF);
+    m = m / 10.0L + double((dw3 >> 20) & 0xF);
+    m = m / 10.0L + double((dw3 >> 24) & 0xF);
+    m = m / 10.0L + double((dw3 >> 28) & 0xF);
+    m = m / 10.0L + double((dw2 >> 0)  & 0xF);
+    m = m / 10.0L + double((dw2 >> 4)  & 0xF);
+    m = m / 10.0L + double((dw2 >> 8)  & 0xF);
+    m = m / 10.0L + double((dw2 >> 12) & 0xF);
+    m = m / 10.0L + double((dw2 >> 16) & 0xF);
+    m = m / 10.0L + double((dw2 >> 20) & 0xF);
+    m = m / 10.0L + double((dw2 >> 24) & 0xF);
+    m = m / 10.0L + double((dw2 >> 28) & 0xF);
+    m = m / 10.0L + double((dw1 >> 0)  & 0xF);
+    if (dw1 & 0x80000000) m = -m;
 
     mantissa = ((dw3 >> 0)  & 0xF);
     mantissa = mantissa / 10.0L + ((dw3 >> 4)  & 0xF);
@@ -641,10 +661,14 @@ FPU::unpack2(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
     int exponent = ((dw1 >> 24) & 0xF) * 100 + ((dw1 >> 20) & 0xF) * 10 + ((dw1 >> 16) & 0xF);
     if (dw1 & 0x40000000) exponent = -exponent;
 
+    printf("unpack2: %s e%d\n", m.to_string(0, 30).c_str(), exponent);
     auto value = mantissa * std::powl(10.0, exponent);
-    printf("mantissa = %Lf exponen = %d value = %Lf\n", mantissa, exponent, value);
+    xdb::XDouble<double> val = m * xdb::XDouble<double>(10.0).pow(exponent);
+    printf("mantissa = %.20Lf exponent = %d value = %Lf\n", mantissa, exponent, value);
+    printf("m        = %.20Lf exponent = %d val   = %Lf\n", (long double)m, exponent, (long double)val);
 
-    result = Float80(value, getRoundingMode());
+    // result = Float80(value, getRoundingMode());
+    result = Float80(val, getRoundingMode());
     printf("unpack2: %x,%llx\n", result.raw.high, result.raw.low);
 }
 
