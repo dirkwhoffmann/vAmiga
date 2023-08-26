@@ -415,8 +415,7 @@ Moira::readFpuOpEa(int n, u32 ea, FltFormat fmt)
             u32 data3 = readM<C68020, M, Long>(U32_ADD(ea, 8));
             updateAn<M, Extended>(n);
 
-            result = fpu.unpack(Packed { data1, data2, data3 });
-            // fpu.unpack(data1, data2, data3, result);
+            result = Float80(Packed { data1, data2, data3 }, fpu.getRoundingMode());
             break;
         }
         default:
@@ -462,7 +461,7 @@ Moira::readFpuOpIm(FltFormat fmt)
             u32 dw2 = readExt<C68020, Long>();
             u32 dw3 = readExt<C68020, Long>();
             printf("            %x %x %x\n", dw1, dw2, dw3);
-            fpu.unpack(dw1, dw2, dw3, result);
+            result = Float80(Packed { dw1, dw2, dw3 }, fpu.getRoundingMode());
             break;
         }
         case FLT_WORD:

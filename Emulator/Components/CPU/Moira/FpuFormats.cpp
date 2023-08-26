@@ -69,6 +69,94 @@ Float80::Float80(const std::string &s, FpuRoundingMode mode)
     normalize();
 }
 
+Float80::Float80(const Packed &packed, FpuRoundingMode mode)
+{
+    char str[128], *ch = str;
+    i32 ex = 0; u64 mal = 0, mar = 0;
+
+    auto dw1 = packed.data[0];
+    auto dw2 = packed.data[1];
+    auto dw3 = packed.data[2];
+
+    // Extract the sign bits
+    auto msign = bool(dw1 & 0x80000000);
+    auto esign = bool(dw1 & 0x40000000);
+
+    // Compose the exponent
+    ex = (char)((dw1 >> 24) & 0xF);
+    ex = ex * 10 + (char)((dw1 >> 20) & 0xF);
+    ex = ex * 10 + (char)((dw1 >> 16) & 0xF);
+
+    // Compose the fractional part of the mantissa
+    mar = (char)((dw2 >> 28) & 0xF);
+    mar = mar * 10 + (char)((dw2 >> 24) & 0xF);
+    mar = mar * 10 + (char)((dw2 >> 20) & 0xF);
+    mar = mar * 10 + (char)((dw2 >> 16) & 0xF);
+    mar = mar * 10 + (char)((dw2 >> 12) & 0xF);
+    mar = mar * 10 + (char)((dw2 >> 8)  & 0xF);
+    mar = mar * 10 + (char)((dw2 >> 4)  & 0xF);
+    mar = mar * 10 + (char)((dw2 >> 0)  & 0xF);
+    mar = mar * 10 + (char)((dw3 >> 28) & 0xF);
+    mar = mar * 10 + (char)((dw3 >> 24) & 0xF);
+    mar = mar * 10 + (char)((dw3 >> 20) & 0xF);
+    mar = mar * 10 + (char)((dw3 >> 16) & 0xF);
+    mar = mar * 10 + (char)((dw3 >> 12) & 0xF);
+    mar = mar * 10 + (char)((dw3 >> 8)  & 0xF);
+    mar = mar * 10 + (char)((dw3 >> 4)  & 0xF);
+    mar = mar * 10 + (char)((dw3 >> 0)  & 0xF);
+
+    // Compose the integer part of the mantissa
+    mal = (char)((dw1 >> 0) & 0xF);
+    mal += mar / 10000000000000000;
+    mar %= 10000000000000000;
+
+    // Check for special cases
+    if (ex == 1665) {
+
+        if (mar == 0) {
+
+            if (((dw1 >> 28) & 0x7) == 0x7) {
+                *this = Float80(msign ? 0xFFFF : 0x7FFF, 0); // Infinity
+                return;
+            } else {
+                *this = Float80(msign ? 0x8000 : 0, 0); // ?
+                return;
+            }
+
+        } else {
+
+            if (((dw1 >> 28) & 0x7) == 0x7) {
+                *this = Float80(msign ? 0xFFFF : 0x7FFF, u64(dw2) << 32 | dw3); // NaN
+                return;
+            } else {
+                // *this = Float80(msign ? 0x8000 : 0, 0); // ?
+                // return;
+            }
+        }
+    }
+
+    // Write the integer part of the mantissa
+    if (msign) *ch++ = '-';
+    for (int i = 1; i >= 0; i--) { ch[i] = (mal % 10) + '0'; mal /= 10; }
+    ch += 2;
+
+    // Write the fractional part of the mantissa
+    *ch++ = '.';
+    for (int i = 15; i >= 0; i--) { ch[i] = (mar % 10) + '0'; mar /= 10; }
+    ch += 16;
+
+    // Write the exponent
+    *ch++ = 'E';
+    if (esign) *ch++ = '-';
+    for (int i = 3; i >= 0; i--) { ch[i] = (ex % 10) + '0'; ex /= 10; }
+    ch += 4;
+
+    // Terminate the string
+    *ch = 0;
+
+    *this = Float80(str, mode);
+}
+
 Float80::Float80(const struct FPUReg &reg)
 {
     *this = reg.val;
@@ -93,6 +181,67 @@ Float80::asLong() const
 {
     auto value = softfloat::floatx80_to_int64(raw);
     return (long)value;
+}
+
+Packed
+Float80::asPacked(int k, FpuRoundingMode mode, u32 *statusbits) const
+{
+    Packed result;
+
+    // Get exponent
+    auto e = frexp10().first - 1;
+
+    // Check k-factor
+    *statusbits = 0;
+   if (k > 17) {
+        *statusbits = FPEXP_OPERR | FPEXP_INEX2;
+        k = 17;
+    }
+    if (k < -17) {
+        k = -17;
+    }
+
+    // Setup stringstream
+    std::stringstream ss;
+    long double test;
+    ss.setf(std::ios::scientific, std::ios::floatfield);
+    ss.precision(k > 0 ? k - 1 : e - k);
+
+    // Create string representation
+    auto ldval = asLongDouble();
+    auto old = FPU::setRoundingMode(mode);
+    ss << ldval;
+    std::stringstream ss2(ss.str());
+    ss2 >> test;
+    FPU::setRoundingMode(old);
+
+    if (ldval != test) {
+        *statusbits |= FPEXP_INEX2;
+    }
+    // Assemble exponent
+    result.data[0] = e < 0 ? 0x40000000 : 0;
+    result.data[0] |= (e % 10) << 16; e /= 10;
+    result.data[0] |= (e % 10) << 20; e /= 10;
+    result.data[0] |= (e % 10) << 24;
+
+    // Assemble mantisse
+    char c;
+    int shift = 64;
+
+    while (ss.get(c)) {
+
+        if (c == '+') continue;
+        if (c == '-') result.data[0] |= 0x80000000;
+        if (c >= '0' && c <= '9') {
+            if (shift == 64) result.data[0] |= u32(c - '0');
+            else if (shift >= 32) result.data[1] |= u32(c - '0') << (shift - 32);
+            else if (shift >= 0)  result.data[2] |= u32(c - '0') << shift;
+            shift -= 4;
+        }
+        if (c == 'e' || c ==  'E') break;
+    }
+
+    return result;
 }
 
 std::pair<int, long double>

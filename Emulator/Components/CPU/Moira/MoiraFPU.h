@@ -149,24 +149,6 @@ public:
     // Reads a value from the constant Rom
     Float80 readCR(unsigned nr);
 
-
-    //
-    // Converting
-    //
-
-public:
-
-    // Rounds a long double (experimental)
-    long roundmantissa(long double value, int digits);
-
-    // Converts the extended format into the packed decimal real format
-    void pack(Float80 value, int k, u32 &dw1, u32 &dw2, u32 &dw3);
-    Packed pack(const Float80 &value, int k);
-
-    // Converts the extended format into the packed decimal real format
-    void unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result);
-    Float80 unpack(const Packed &packed);
-
     
     //
     // Analyzing instructions

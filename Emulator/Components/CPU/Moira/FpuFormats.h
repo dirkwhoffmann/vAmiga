@@ -33,6 +33,7 @@ public: // REMOVE ASAP
     Float80(long double value, FpuRoundingMode mode);
     Float80(u16 high, u64 low);
     Float80(bool mSign, i16 e, u64 m);
+    Float80(const struct Packed &packed, FpuRoundingMode mode);
     Float80(const std::string &s, FpuRoundingMode mode);
     Float80(const struct FPUReg &reg);
 
@@ -71,6 +72,7 @@ public: // REMOVE ASAP
     double asDouble() const;
     long double asLongDouble() const;
     long asLong() const;
+    struct Packed asPacked(int kfactor, FpuRoundingMode mode, u32 *statusbits) const;
 
 
     //
@@ -90,11 +92,9 @@ public: // REMOVE ASAP
     }
 };
 
-class Packed {
+struct Packed {
 
-public: // REMOVE ASAP
-
-    u32 data[3];
+    u32 data[3] = { };
 };
 
 }
