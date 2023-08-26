@@ -207,6 +207,7 @@ Moira::execFMove(u16 opcode)
 
             printf("FMOVE FpFp\n");
             fpu.fpr[dst].set(fpu.fpr[src].val);
+            fpu.setConditionCodes(src);
             break;
 
         case 0b010:
@@ -231,6 +232,7 @@ Moira::execFMove(u16 opcode)
                 auto value = readFpuOp<M>(reg, FltFormat(src));
                 fpu.fpr[dst].set(value);
             }
+            fpu.setConditionCodes(dst);
             break;
 
         case 0b011:

@@ -41,9 +41,6 @@ FPUReg::get()
         fpu.setExcStatusBit(FPEXP_UNFL);
     }
 
-    // Set flags
-    fpu.setConditionCodes(val);
-
     return result;
 }
 
@@ -147,10 +144,6 @@ FPUReg::set(const Float80 other)
     }
 
     printf("FPUReg::set %x,%llx (%f) flags = %x\n", val.raw.high, val.raw.low, val.asDouble(), softfloat::float_exception_flags);
-
-
-    // Set flags
-    fpu.setConditionCodes(val);
 }
 
 void

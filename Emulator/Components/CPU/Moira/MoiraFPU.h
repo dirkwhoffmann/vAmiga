@@ -103,7 +103,7 @@ public:
     u32 getFPCR() const { return fpcr & 0x0000FFF0; }
     void setFPCR(u32 value);
 
-    void clearFPSR() { fpsr &= 0x00FF00F8; }
+    void clearFPSR() { fpsr &= 0xFFFF00F8; }
     u32 getFPSR() const { return fpsr & 0x0FFFFFF8; }
     void setFPSR(u32 value);
 
