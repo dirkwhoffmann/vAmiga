@@ -12,9 +12,59 @@
 
 namespace vamiga::moira {
 
+Float32::Float32(const class Float80 &value, std::function<void(u32)>excHandler)
+{
+    u32 flags = 0;
+    softfloat::float_exception_flags = 0;
+
+    raw = floatx80_to_float32(value.raw);
+
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        flags |= FPEXP_INEX2;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+        flags |= FPEXP_OVFL;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+        flags |= FPEXP_UNFL;
+    }
+
+    excHandler(flags);
+}
+
+Float64::Float64(const class Float80 &value, std::function<void(u32)>excHandler)
+{
+    u32 flags = 0;
+    softfloat::float_exception_flags = 0;
+
+    raw = floatx80_to_float64(value.raw);
+
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        flags |= FPEXP_INEX2;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+        flags |= FPEXP_OVFL;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+        flags |= FPEXP_UNFL;
+    }
+
+    excHandler(flags);
+}
+
 Float80::Float80(u32 value)
 {
     raw = softfloat::int64_to_floatx80(i64(value));
+}
+
+Float80::Float80(const Float32 &value)
+{
+    raw = softfloat::float32_to_floatx80(value.raw);
+}
+
+Float80::Float80(const Float64 &value)
+{
+    raw = softfloat::float64_to_floatx80(value.raw);
 }
 
 Float80::Float80(double value)
@@ -160,6 +210,34 @@ Float80::Float80(const Packed &packed, FpuRoundingMode mode)
 Float80::Float80(const struct FPUReg &reg)
 {
     *this = reg.val;
+}
+
+u8
+Float80::asByte(ExceptionHandler handler) const
+{
+    u32 flags = 0;
+
+    auto result = u8(softfloat::floatx80_to_int32(raw));
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        flags |= FPEXP_INEX2;
+    }
+
+    handler(flags);
+    return result;
+}
+
+u16
+Float80::asWord(ExceptionHandler handler) const
+{
+    u32 flags = 0;
+
+    auto result = u16(softfloat::floatx80_to_int32(raw));
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        flags |= FPEXP_INEX2;
+    }
+
+    handler(flags);
+    return result;
 }
 
 double

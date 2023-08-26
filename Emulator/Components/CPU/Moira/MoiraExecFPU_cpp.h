@@ -321,7 +321,8 @@ Moira::execFMovecr(u16 opcode)
 
     fpu.clearFPSR();
     fpu.fpr[dst].set(fpu.readCR(ofs));
-
+    fpu.setConditionCodes(dst);
+    
     prefetch<C>();
 
     FINALIZE
@@ -778,6 +779,7 @@ Moira::execFGeneric(u16 opcode)
 
     prefetch<C>();
     fpu.fpr[dst].set(source);
+    fpu.setConditionCodes(dst);
 
     FINALIZE
 }

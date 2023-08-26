@@ -15,6 +15,31 @@ template <class T> class XDouble;
 }
 namespace vamiga::moira {
 
+class Float32;
+class Float64;
+class Float80;
+class Packed;
+
+typedef std::function<void(u32)> ExceptionHandler;
+
+struct Float32 {
+
+    u32 raw = 0;
+
+public:
+
+    Float32(const class Float80 &value, ExceptionHandler handler);
+};
+
+struct Float64 {
+
+    u64 raw = 0;
+
+public:
+
+    Float64(const class Float80 &value, ExceptionHandler handler);
+};
+
 class Float80 {
 
 public: // REMOVE ASAP
@@ -27,8 +52,12 @@ public: // REMOVE ASAP
     // Constructors
     //
 
+public:
+    
     Float80() { };
-    Float80(u32 value);
+    Float80(u32 value); // DEPRECATED
+    Float80(const Float32 &value);
+    Float80(const Float64 &value);
     Float80(double value);
     Float80(long double value, FpuRoundingMode mode);
     Float80(u16 high, u64 low);
@@ -68,6 +97,9 @@ public: // REMOVE ASAP
     //
     // Converters
     //
+
+    u8 asByte(ExceptionHandler handler) const;
+    u16 asWord(ExceptionHandler handler) const;
 
     double asDouble() const;
     long double asLongDouble() const;

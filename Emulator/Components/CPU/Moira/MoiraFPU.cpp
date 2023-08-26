@@ -23,26 +23,12 @@ FPUReg::get()
     if (fpu.getPrecision() != FPU_PREC_EXTENDED) {
 
         if (fpu.getPrecision() == FPU_PREC_SINGLE) {
-            result.raw = softfloat::float32_to_floatx80(floatx80_to_float32(result.raw));
+            result = Float32(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
         }
         if (fpu.getPrecision() == FPU_PREC_DOUBLE) {
-            result.raw = softfloat::float64_to_floatx80(floatx80_to_float64(result.raw));
-        }
-        if (softfloat::float_exception_flags) {
-
-            if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
-                fpu.setExcStatusBit(FPEXP_INEX2);
-            }
-            if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
-                fpu.setExcStatusBit(FPEXP_OVFL);
-            }
-            if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
-                fpu.setExcStatusBit(FPEXP_UNFL);
-            }
+            result = Float64(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
         }
     }
-    // Experimental
-    // if ((val.raw.high & 0x7FFF) == 0 && val.raw.low != 0 && (val.raw.low & (1L << 63)) == 0) {
     if (!isNormalized()) {
 
         fpu.setExcStatusBit(FPEXP_UNFL);
@@ -54,27 +40,13 @@ FPUReg::get()
 u8
 FPUReg::asByte()
 {
-    softfloat::float_exception_flags = 0;
-
-    auto result = (u8)softfloat::floatx80_to_int32(get().raw);
-    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
-        fpu.setExcStatusBit(FPEXP_INEX2);
-    }
-
-    return result;
+    return get().asByte([this](int flags) { fpu.setExcStatusBit(flags); });
 }
 
 u16
 FPUReg::asWord()
 {
-    softfloat::float_exception_flags = 0;
-
-    auto result = (u16)softfloat::floatx80_to_int32(get().raw);
-    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
-        fpu.setExcStatusBit(FPEXP_INEX2);
-    }
-
-    return result;
+    return get().asWord([this](int flags) { fpu.setExcStatusBit(flags); });
 }
 
 u32
