@@ -37,48 +37,6 @@ FPUReg::get()
     return result;
 }
 
-u32
-FPUReg::asSingle()
-{
-    softfloat::float_exception_flags = 0;
-
-    auto result = softfloat::floatx80_to_float32(get().raw);
-    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
-        fpu.setExcStatusBit(FPEXP_INEX2);
-    }
-
-    return result;
-}
-
-u64
-FPUReg::asDouble()
-{
-    softfloat::float_exception_flags = 0;
-
-    auto result = softfloat::floatx80_to_float64(get().raw);
-    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
-        fpu.setExcStatusBit(FPEXP_INEX2);
-    }
-
-    return result;
-}
-
-FpuExtended
-FPUReg::asExtended()
-{
-    return get();
-}
-
-FpuPacked
-FPUReg::asPacked(int k)
-{
-    u32 statusbits;
-
-    auto result = val.asPacked(k, fpu.getRoundingMode(), &statusbits);
-    fpu.setExcStatusBit(statusbits);
-    return result;
-}
-
 void
 FPUReg::set(const FpuExtended other)
 {

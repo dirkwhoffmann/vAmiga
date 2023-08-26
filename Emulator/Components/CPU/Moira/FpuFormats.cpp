@@ -386,51 +386,6 @@ FpuExtended::FpuExtended(bool mSign, i16 e, u64 m, ExceptionHandler handler)
     handler(0);
 }
 
-u8
-FpuExtended::asByte(ExceptionHandler handler) const
-{
-    u32 flags = 0;
-
-    softfloat::float_exception_flags = 0;
-    auto result = u8(softfloat::floatx80_to_int32(raw));
-    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
-        flags |= FPEXP_INEX2;
-    }
-
-    handler(flags);
-    return result;
-}
-
-u16
-FpuExtended::asWord(ExceptionHandler handler) const
-{
-    u32 flags = 0;
-
-    softfloat::float_exception_flags = 0;
-    auto result = u16(softfloat::floatx80_to_int32(raw));
-    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
-        flags |= FPEXP_INEX2;
-    }
-
-    handler(flags);
-    return result;
-}
-
-u32
-FpuExtended::asLong(ExceptionHandler handler) const
-{
-    u32 flags = 0;
-
-    softfloat::float_exception_flags = 0;
-    auto result = u32(softfloat::floatx80_to_int32(raw));
-    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
-        flags |= FPEXP_INEX2;
-    }
-
-    handler(flags);
-    return result;
-}
-
 double
 FpuExtended::asDouble() const
 {
@@ -445,67 +400,6 @@ FpuExtended::asLongDouble() const
     return result * sgn();
 }
 
-FpuPacked
-FpuExtended::asPacked(int k, FpuRoundingMode mode, u32 *statusbits) const
-{
-    FpuPacked result;
-
-    // Get exponent
-    auto e = frexp10().first - 1;
-
-    // Check k-factor
-    *statusbits = 0;
-   if (k > 17) {
-        *statusbits = FPEXP_OPERR | FPEXP_INEX2;
-        k = 17;
-    }
-    if (k < -17) {
-        k = -17;
-    }
-
-    // Setup stringstream
-    std::stringstream ss;
-    long double test;
-    ss.setf(std::ios::scientific, std::ios::floatfield);
-    ss.precision(k > 0 ? k - 1 : e - k);
-
-    // Create string representation
-    auto ldval = asLongDouble();
-    auto old = FPU::setRoundingMode(mode);
-    ss << ldval;
-    std::stringstream ss2(ss.str());
-    ss2 >> test;
-    FPU::setRoundingMode(old);
-
-    if (ldval != test) {
-        *statusbits |= FPEXP_INEX2;
-    }
-    // Assemble exponent
-    result.data[0] = e < 0 ? 0x40000000 : 0;
-    result.data[0] |= (e % 10) << 16; e /= 10;
-    result.data[0] |= (e % 10) << 20; e /= 10;
-    result.data[0] |= (e % 10) << 24;
-
-    // Assemble mantisse
-    char c;
-    int shift = 64;
-
-    while (ss.get(c)) {
-
-        if (c == '+') continue;
-        if (c == '-') result.data[0] |= 0x80000000;
-        if (c >= '0' && c <= '9') {
-            if (shift == 64) result.data[0] |= u32(c - '0');
-            else if (shift >= 32) result.data[1] |= u32(c - '0') << (shift - 32);
-            else if (shift >= 0)  result.data[2] |= u32(c - '0') << shift;
-            shift -= 4;
-        }
-        if (c == 'e' || c ==  'E') break;
-    }
-
-    return result;
-}
-
 std::pair<int, long double>
 FpuExtended::frexp10() const
 {
@@ -517,7 +411,6 @@ FpuExtended::frexp10() const
 
     return { e, m };
 };
-
 
 bool
 FpuExtended::isNegative() const
@@ -573,5 +466,72 @@ FpuExtended::normalize()
         raw.low <<= 1;
     }
 }
+
+
+//
+// FpuPacked
+//
+
+FpuPacked::FpuPacked(const FpuExtended &value, int k, FpuRoundingMode mode, ExceptionHandler handler)
+{
+    u32 statusbits = 0;
+
+    // Get exponent
+    auto e = value.frexp10().first - 1;
+
+    // Check k-factor
+    if (k > 17) {
+        statusbits = FPEXP_OPERR | FPEXP_INEX2;
+        k = 17;
+    }
+    if (k < -17) {
+        k = -17;
+    }
+
+    // Setup stringstream
+    std::stringstream ss;
+    long double test;
+    ss.setf(std::ios::scientific, std::ios::floatfield);
+    ss.precision(k > 0 ? k - 1 : e - k);
+
+    // Create string representation
+    auto ldval = value.asLongDouble();
+    auto old = FPU::setRoundingMode(mode);
+    ss << ldval;
+    std::stringstream ss2(ss.str());
+    ss2 >> test;
+    FPU::setRoundingMode(old);
+
+    if (ldval != test) {
+        statusbits |= FPEXP_INEX2;
+    }
+    // Assemble exponent
+    data[0] = e < 0 ? 0x40000000 : 0;
+    data[0] |= (e % 10) << 16; e /= 10;
+    data[0] |= (e % 10) << 20; e /= 10;
+    data[0] |= (e % 10) << 24;
+
+    // Assemble mantisse
+    char c;
+    int shift = 64;
+
+    while (ss.get(c)) {
+
+        if (c == '+') continue;
+        if (c == '-') data[0] |= 0x80000000;
+        if (c >= '0' && c <= '9') {
+            if (shift == 64) data[0] |= u32(c - '0');
+            else if (shift >= 32) data[1] |= u32(c - '0') << (shift - 32);
+            else if (shift >= 0) data[2] |= u32(c - '0') << shift;
+            shift -= 4;
+        }
+        if (c == 'e' || c ==  'E') break;
+    }
+
+    handler(statusbits);
+}
+
+FpuPacked::FpuPacked(const FPUReg &reg, int k, FpuRoundingMode mode,
+                     ExceptionHandler handler) : FpuPacked(reg.val, k, mode, handler) { }
 
 }

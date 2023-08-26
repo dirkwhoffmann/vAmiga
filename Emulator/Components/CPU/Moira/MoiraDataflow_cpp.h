@@ -415,7 +415,7 @@ Moira::readFpuOpEa(int n, u32 ea, FltFormat fmt)
             u32 data3 = readM<C68020, M, Long>(U32_ADD(ea, 8));
             updateAn<M, Extended>(n);
 
-            result = FpuExtended(FpuPacked { data1, data2, data3 }, fpu.getRoundingMode());
+            result = FpuExtended(FpuPacked(data1, data2, data3), fpu.getRoundingMode());
             break;
         }
         default:
@@ -555,14 +555,14 @@ Moira::writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k)
         }
         case FLT_SINGLE:
         {
-            auto data = reg.asSingle();
+            auto data = FpuSingle(reg, exceptionHandler).raw;
             writeM<C68020, M, Long>(ea, data);
             updateAn<M, Long>(n);
             break;
         }
         case FLT_DOUBLE:
         {
-            u64 data = reg.asDouble();
+            auto data = FpuDouble(reg, exceptionHandler).raw;
             writeM<C68020, M, Long>(ea, u32(data >> 32));
             writeM<C68020, M, Long>(U32_ADD(ea, Long), u32(data));
             updateAn<M, Quad>(n);
@@ -575,7 +575,7 @@ Moira::writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k)
             if constexpr (F & FPU_FMOVEM) {
                 data = reg.val;
             } else {
-                data = reg.asExtended();
+                data = reg.get();
             }
             
             writeM<C68020, M, Word>(ea, u32(data.raw.high));
@@ -587,8 +587,9 @@ Moira::writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k)
         }
         case FLT_PACKED:
         {
-            FpuPacked data = reg.asPacked(k);
-            printf("Packed = %x,%x,%x\n", data.data[0], data.data[1], data.data[2]);
+            auto data = FpuPacked(reg, k, fpu.getRoundingMode(), exceptionHandler);
+            // FpuPacked data = reg.asPacked(k);
+            // printf("Packed = %x,%x,%x\n", data.data[0], data.data[1], data.data[2]);
             auto ea = computeEA<C68020, M, Extended>(n);
             writeM<C68020, M, Long>(ea, data.data[0]);
             writeM<C68020, M, Long>(U32_ADD(ea, 4), data.data[1]);

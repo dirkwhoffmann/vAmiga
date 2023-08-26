@@ -9,6 +9,7 @@
 
 #include "MoiraTypes.h"
 #include "softfloat.h"
+#include <functional>
 
 namespace vamiga::moira {
 
@@ -169,15 +170,8 @@ struct FpuExtended {
     // Converters
     //
 
-    // DEPRECATED
-    [[deprecated]] u8 asByte(ExceptionHandler handler) const;
-    [[deprecated]] u16 asWord(ExceptionHandler handler) const;
-    [[deprecated]] u32 asLong(ExceptionHandler handler) const;
-
     double asDouble() const;
     long double asLongDouble() const;
-    long asLong() const;
-    struct FpuPacked asPacked(int kfactor, FpuRoundingMode mode, u32 *statusbits) const;
 
 
     //
@@ -206,7 +200,10 @@ struct FpuPacked {
 
     u32 data[3] = { };
 
-    // FpuPacked(const FpuExtended &value, int kfactor, FpuRoundingMode mode, ExceptionHandler handler);
+    FpuPacked() { }
+    FpuPacked(u32 dw1, u32 dw2, u32 dw3) { data[0] = dw1; data[1] = dw2; data[2] = dw3; }
+    FpuPacked(const FpuExtended &value, int kfactor, FpuRoundingMode mode, ExceptionHandler handler = [](auto&&...) {});
+    FpuPacked(const class FPUReg &value, int kfactor, FpuRoundingMode mode, ExceptionHandler handler = [](auto&&...) {});
 };
 
 }

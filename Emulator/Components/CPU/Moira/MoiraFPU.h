@@ -55,10 +55,8 @@ struct FPUReg {
     // Converting
     //
 
-    u32 asSingle();
-    u64 asDouble();
-    FpuExtended asExtended();
-    FpuPacked asPacked(int k = 0);
+    // [[deprecated]] FpuExtended asExtended();
+    // [[deprecated]] FpuPacked asPacked(int k = 0);
 };
 
 class FPU {
