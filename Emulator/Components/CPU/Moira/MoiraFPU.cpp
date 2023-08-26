@@ -20,24 +20,31 @@ FPUReg::get()
 
     softfloat::float_exception_flags = 0;
 
-    if ((fpu.fpcr & 0b11000000) == 0b01000000) {
-        result.raw = softfloat::float32_to_floatx80(floatx80_to_float32(result.raw));
-    } else if ((fpu.fpcr & 0b11000000) == 0b10000000) {
-        result.raw = softfloat::float64_to_floatx80(floatx80_to_float64(result.raw));
-    }
+    if (fpu.getPrecision() != FPU_PREC_EXTENDED) {
 
-    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
-        fpu.setExcStatusBit(FPEXP_INEX2);
-    }
-    if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
-        fpu.setExcStatusBit(FPEXP_OVFL);
-    }
-    if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
-        fpu.setExcStatusBit(FPEXP_UNFL);
-    }
+        if (fpu.getPrecision() == FPU_PREC_SINGLE) {
+            result.raw = softfloat::float32_to_floatx80(floatx80_to_float32(result.raw));
+        }
+        if (fpu.getPrecision() == FPU_PREC_DOUBLE) {
+            result.raw = softfloat::float64_to_floatx80(floatx80_to_float64(result.raw));
+        }
+        if (softfloat::float_exception_flags) {
 
+            if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+                fpu.setExcStatusBit(FPEXP_INEX2);
+            }
+            if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+                fpu.setExcStatusBit(FPEXP_OVFL);
+            }
+            if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+                fpu.setExcStatusBit(FPEXP_UNFL);
+            }
+        }
+    }
     // Experimental
-    if ((val.raw.high & 0x7FFF) == 0 && val.raw.low != 0 && (val.raw.low & (1L << 63)) == 0) {
+    // if ((val.raw.high & 0x7FFF) == 0 && val.raw.low != 0 && (val.raw.low & (1L << 63)) == 0) {
+    if (!isNormalized()) {
+
         fpu.setExcStatusBit(FPEXP_UNFL);
     }
 
@@ -107,7 +114,6 @@ FPUReg::asDouble()
         fpu.setExcStatusBit(FPEXP_INEX2);
     }
 
-    printf("FPUReg::asDouble: %x,%llx -> %llx flags = %x\n", val.raw.high, val.raw.low, result, softfloat::float_exception_flags);
     return result;
 }
 
@@ -121,8 +127,6 @@ Packed
 FPUReg::asPacked(int k)
 {
     Packed result = fpu.pack(get(), k);
-    // fpu.pack(get(), k, result.data[0], result.data[1], result.data[2]);
-    printf("Packing %x,%llx -> %x, %x, %x\n", val.raw.high, val.raw.low, result.data[0], result.data[1], result.data[2]);
     return result;
 }
 

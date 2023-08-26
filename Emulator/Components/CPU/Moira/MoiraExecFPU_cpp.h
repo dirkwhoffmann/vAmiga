@@ -638,7 +638,7 @@ Moira::execFGeneric(u16 opcode)
     AVAILABILITY(C68000);
 
     // Filter out unavailable instructions
-    if (fpu.model == FPU_68040) {
+    if (fpu.getModel() == FPU_68040) {
 
         switch (I) {
 

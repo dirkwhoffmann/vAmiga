@@ -20,12 +20,41 @@ struct FPUReg {
     // Register value
     Float80 val;
 
-    FPUReg(FPU& fpu) : fpu(fpu) { }
 
+    //
+    // Constructing
+    //
+
+    FPUReg(FPU& fpu) : fpu(fpu) { }
     void reset() { val = Float80::NaN(); }
-    
-    // Getter
+
+
+    //
+    // Getting and setting
+    //
+
     Float80 get();
+    void set(const Float80 other);
+    void move(FPUReg &dest);
+
+
+    //
+    // Classifying
+    //
+
+    bool isNegative() const { return val.isNegative(); }
+    bool isZero() const  { return val.isZero(); }
+    bool isInfinity() const { return val.isInfinity(); }
+    bool isNaN() const { return val.isNaN(); }
+    bool isSignalingNaN() const { return val.isSignalingNaN(); }
+    bool isNonsignalingNaN() const { return val.isNonsignalingNaN(); }
+    bool isNormalized() const { return val.isNormalized(); }
+
+
+    //
+    // Converting
+    //
+
     u8 asByte();
     u16 asWord();
     u32 asLong();
@@ -33,21 +62,17 @@ struct FPUReg {
     u64 asDouble();
     Float80 asExtended();
     Packed asPacked(int k = 0);
-
-    // Setter
-    void set(const Float80 other);
-    void move(FPUReg &dest);
 };
 
 class FPU {
-
-public: // REMOVE ASAP
     
     // Reference to the CPU
     class Moira &moira;
 
     // Emulated FPU model
     FPUModel model = FPU_NONE;
+
+public:
 
     // Registers
     FPUReg fpr[8] = {
