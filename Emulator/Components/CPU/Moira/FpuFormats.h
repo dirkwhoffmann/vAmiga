@@ -114,19 +114,18 @@ struct FpuExtended {
     softfloat::floatx80 raw;
 
     FpuExtended() { raw = { }; }
-    // FpuExtended(u32 value); // DEPRECATED
-    FpuExtended(const FpuByte &value, ExceptionHandler handler);
-    FpuExtended(const FpuWord &value, ExceptionHandler handler);
-    FpuExtended(const FpuLong &value, ExceptionHandler handler);
-    FpuExtended(const FpuSingle &value);
-    FpuExtended(const FpuDouble &value);
-    FpuExtended(double value);
-    FpuExtended(long double value, FpuRoundingMode mode);
-    FpuExtended(u16 high, u64 low);
-    FpuExtended(bool mSign, i16 e, u64 m);
-    FpuExtended(const struct FpuPacked &packed, FpuRoundingMode mode);
-    FpuExtended(const std::string &s, FpuRoundingMode mode);
-    FpuExtended(const struct FPUReg &reg);
+    FpuExtended(u16 high, u64 low) { raw.high = high; raw.low = low; }
+
+    FpuExtended(const FpuByte &value, ExceptionHandler handler = [](auto&&...) {});
+    FpuExtended(const FpuWord &value, ExceptionHandler handler = [](auto&&...) {});
+    FpuExtended(const FpuLong &value, ExceptionHandler handler = [](auto&&...) {});
+    FpuExtended(const FpuSingle &value, ExceptionHandler handler = [](auto&&...) {});
+    FpuExtended(const FpuDouble &value, ExceptionHandler handler = [](auto&&...) {});
+    FpuExtended(const FpuPacked &value, FpuRoundingMode mode, ExceptionHandler handler = [](auto&&...) {});
+
+    FpuExtended(const std::string &s, FpuRoundingMode mode, ExceptionHandler handler = [](auto&&...) {});
+    FpuExtended(long double value, FpuRoundingMode mode, ExceptionHandler handler = [](auto&&...) {});
+    FpuExtended(bool mSign, i16 e, u64 m, ExceptionHandler handler = [](auto&&...) {});
 
 
     //

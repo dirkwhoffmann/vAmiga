@@ -137,13 +137,6 @@ FpuDouble::FpuDouble(const class FpuExtended &value, ExceptionHandler handler)
 // FpuExtended
 //
 
-/*
-FpuExtended::FpuExtended(u32 value)
-{
-    raw = softfloat::int64_to_floatx80(i64(value));
-}
-*/
-
 FpuExtended::FpuExtended(const FpuByte &value, ExceptionHandler handler)
 {
     u32 flags = 0;
@@ -204,69 +197,51 @@ FpuExtended::FpuExtended(const FpuLong &value, ExceptionHandler handler)
     handler(flags);
 }
 
-FpuExtended::FpuExtended(const FpuSingle &value)
+FpuExtended::FpuExtended(const FpuSingle &value, ExceptionHandler handler)
 {
+    printf("FpuExtended::FpuExtended\n");
+    u32 flags = 0;
+    softfloat::float_exception_flags = 0;
+
     raw = softfloat::float32_to_floatx80(value.raw);
+
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        flags |= FPEXP_INEX2;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+        flags |= FPEXP_OVFL;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+        flags |= FPEXP_UNFL;
+    }
+    printf("FpuExtended::FpuExtended (handler)\n");
+
+    handler(flags);
+    printf("FpuExtended::FpuExtended (quit)\n");
+
 }
 
-FpuExtended::FpuExtended(const FpuDouble &value)
+FpuExtended::FpuExtended(const FpuDouble &value, ExceptionHandler handler)
 {
+    u32 flags = 0;
+    softfloat::float_exception_flags = 0;
+
     raw = softfloat::float64_to_floatx80(value.raw);
-}
 
-FpuExtended::FpuExtended(double value)
-{
-    raw = softfloat::float64_to_floatx80(*((u64 *)&value));
-}
-
-FpuExtended::FpuExtended(long double value, FpuRoundingMode mode)
-{
-    // Handle special cases
-    if (value == 0.0) { raw = { }; return; }
-
-    // Extract the exponent and the mantissa
-    int e; auto m = frexpl(value, &e);
-
-    // Subtract one, because the first digit is left of the comma
-    e -= 1;
-
-    // Round the mantissa
-    switch (mode) {
-        case FPU_RND_NEAREST:   m = std::round(std::ldexpl(m, 64)); break;
-        case FPU_RND_ZERO:      m = std::truncl(std::ldexpl(m, 64)); break;
-        case FPU_RND_UPWARD:    m = std::ceill(std::ldexpl(m, 64)); break;
-        default:                m = std::floorl(std::ldexpl(m, 64)); break;
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        flags |= FPEXP_INEX2;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+        flags |= FPEXP_OVFL;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+        flags |= FPEXP_UNFL;
     }
 
-    // Compose the result
-    *this = FpuExtended(value < 0.0, (i16)e, (u64)std::abs(m));
+    handler(flags);
 }
 
-FpuExtended::FpuExtended(u16 high, u64 low)
-{
-    raw.high = high;
-    raw.low = low;
-}
-
-FpuExtended::FpuExtended(bool mSign, i16 e, u64 m)
-{
-    raw.high = (mSign ? 0x8000 : 0x0000) | (u16(e + 0x3FFF) & 0x7FFF);
-    raw.low = m;
-}
-
-FpuExtended::FpuExtended(const std::string &s, FpuRoundingMode mode)
-{
-    long double value;
-
-    auto old = FPU::setRoundingMode(mode);
-    sscanf(s.c_str(), "%Le", &value);
-    FPU::setRoundingMode(old);
-
-    *this = FpuExtended(value, mode);
-    normalize();
-}
-
-FpuExtended::FpuExtended(const FpuPacked &packed, FpuRoundingMode mode)
+FpuExtended::FpuExtended(const FpuPacked &packed, FpuRoundingMode mode, ExceptionHandler handler)
 {
     char str[128], *ch = str;
     i32 ex = 0; u64 mal = 0, mar = 0;
@@ -351,12 +326,50 @@ FpuExtended::FpuExtended(const FpuPacked &packed, FpuRoundingMode mode)
     // Terminate the string
     *ch = 0;
 
-    *this = FpuExtended(str, mode);
+    *this = FpuExtended(str, mode, handler);
 }
 
-FpuExtended::FpuExtended(const struct FPUReg &reg)
+FpuExtended::FpuExtended(const std::string &s, FpuRoundingMode mode, ExceptionHandler handler)
 {
-    *this = reg.val;
+    long double value;
+
+    auto old = FPU::setRoundingMode(mode);
+    sscanf(s.c_str(), "%Le", &value);
+    FPU::setRoundingMode(old);
+
+    *this = FpuExtended(value, mode);
+    normalize();
+}
+
+FpuExtended::FpuExtended(long double value, FpuRoundingMode mode, ExceptionHandler handler)
+{
+    // Handle special cases
+    if (value == 0.0) { raw = { }; return; }
+
+    // Extract the exponent and the mantissa
+    int e; auto m = frexpl(value, &e);
+
+    // Subtract one, because the first digit is left of the comma
+    e -= 1;
+
+    // Round the mantissa
+    switch (mode) {
+        case FPU_RND_NEAREST:   m = std::round(std::ldexpl(m, 64)); break;
+        case FPU_RND_ZERO:      m = std::truncl(std::ldexpl(m, 64)); break;
+        case FPU_RND_UPWARD:    m = std::ceill(std::ldexpl(m, 64)); break;
+        default:                m = std::floorl(std::ldexpl(m, 64)); break;
+    }
+
+    // Compose the result
+    *this = FpuExtended(value < 0.0, (i16)e, (u64)std::abs(m));
+}
+
+FpuExtended::FpuExtended(bool mSign, i16 e, u64 m, ExceptionHandler handler)
+{
+    raw.high = (mSign ? 0x8000 : 0x0000) | (u16(e + 0x3FFF) & 0x7FFF);
+    raw.low = m;
+
+    handler(0);
 }
 
 u8

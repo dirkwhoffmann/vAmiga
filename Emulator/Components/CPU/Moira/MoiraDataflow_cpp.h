@@ -430,18 +430,20 @@ Moira::readFpuOpIm(FltFormat fmt)
 {
     FpuExtended result;
 
+    auto exceptionHandler = [this](int flags) { fpu.setExcStatusBit(flags); };
+
     switch (fmt) {
 
         case FLT_LONG:
         {
-            auto ext = readExt<C68020, Long>();
-            result = FpuExtended(FpuLong(u16(ext)), [this](int flags) { fpu.setExcStatusBit(flags); });
+            auto data = readExt<C68020, Long>();
+            result = FpuExtended(FpuLong(data), exceptionHandler);
             break;
         }
         case FLT_SINGLE:
         {
             u32 data = readExt<C68020, Long>();
-            result.raw = softfloat::float32_to_floatx80(data);
+            result = FpuExtended(FpuSingle(data), exceptionHandler);
             break;
         }
         case FLT_EXTENDED:
@@ -450,6 +452,9 @@ Moira::readFpuOpIm(FltFormat fmt)
             (void)readExt<C68020, Word>();
             u64 low = (u64)readExt<C68020, Long>() << 32;
             low |= readExt<C68020, Long>();
+
+            // result = FpuExtended(high, low, exceptionHandler);
+
             result.raw.high = u16(high);
             result.raw.low = low;
             result.normalize();
@@ -466,26 +471,21 @@ Moira::readFpuOpIm(FltFormat fmt)
         }
         case FLT_WORD:
         {
-            auto ext = readExt<C68020, Word>();
-            printf("FLT_WORD ext = %x\n", ext);
-            result = FpuExtended(FpuWord(u16(ext)), [this](int flags) { fpu.setExcStatusBit(flags); });
+            auto data = (u16)readExt<C68020, Word>();
+            result = FpuExtended(FpuWord(data), exceptionHandler);
             break;
         }
         case FLT_DOUBLE:
         {
             u64 data = (u64)readExt<C68020, Long>() << 32;
             data |= readExt<C68020, Long>();
-
-            softfloat::float_exception_flags = 0;
-            result.raw = softfloat::float64_to_floatx80(data);
-            printf("Loaded FLT_DOUBLE: %llx -> %x,%llx (flags = %x)\n", data, result.raw.high, result.raw.low, softfloat::float_exception_flags);
+            result = FpuExtended(FpuDouble(data), exceptionHandler);
             break;
         }
         case FLT_BYTE:
         {
-            auto ext = readExt<C68020, Byte>();
-            result = FpuExtended(FpuWord(u8(ext)), [this](int flags) { fpu.setExcStatusBit(flags); });
-            printf("readFpuOpIm.B: ext = %x %f\n", ext, result.asDouble());
+            auto data = (u8)readExt<C68020, Byte>();
+            result = FpuExtended(FpuByte(data), exceptionHandler);
             break;
         }
         default:

@@ -322,7 +322,7 @@ Moira::execFMovecr(u16 opcode)
     fpu.clearFPSR();
     fpu.fpr[dst].set(fpu.readCR(ofs));
     fpu.setConditionCodes(dst);
-    
+
     prefetch<C>();
 
     FINALIZE
@@ -332,7 +332,9 @@ template <Core C, Instr I, Mode M, Size S> void
 Moira::execFMovem(u16 opcode)
 {
     AVAILABILITY(C68000);
-    
+
+    printf("execFMovem(%d)\n", opcode);
+
     auto ext = queue.irc;
     auto reg = _____________xxx (opcode);
     auto cod = xxx_____________ (ext);
@@ -638,6 +640,8 @@ Moira::execFGeneric(u16 opcode)
 {
     AVAILABILITY(C68000);
 
+    printf("execFGeneric(%d)\n", opcode);
+
     // Filter out unavailable instructions
     if (fpu.getModel() == FPU_68040) {
 
@@ -761,7 +765,7 @@ Moira::execFGeneric(u16 opcode)
     } else {
         // str << Ins<I>{} << Ffmt{2} << str.tab << Fp{src};
         printf("execFGeneric: ext & 0x4000 == 0: TODO\n");
-        source = fpu.fpr[src];
+        source = fpu.fpr[src].val;
     }
 
     switch (I) {

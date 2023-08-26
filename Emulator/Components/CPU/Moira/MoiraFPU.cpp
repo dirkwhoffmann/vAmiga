@@ -345,6 +345,7 @@ FPU::setFPIAR(u32 value)
 void
 FPU::setExcStatusBit(u32 mask)
 {
+    printf("setExcStatusBit\n");
     assert((mask & ~0xFF00) == 0);
 
     fpsr |= mask;
@@ -369,7 +370,7 @@ void
 FPU::setConditionCodes(int reg)
 {
     assert(reg >= 0 && reg <= 7);
-    setConditionCodes(fpr[reg]);
+    setConditionCodes(fpr[reg].val);
 }
 
 void
