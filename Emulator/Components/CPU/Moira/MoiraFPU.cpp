@@ -42,7 +42,7 @@ FPUReg::get()
     }
 
     // Set flags
-    fpu.setFlags(val);
+    fpu.setConditionCodes(val);
 
     return result;
 }
@@ -150,7 +150,7 @@ FPUReg::set(const Float80 other)
 
 
     // Set flags
-    fpu.setFlags(val);
+    fpu.setConditionCodes(val);
 }
 
 void
@@ -401,26 +401,17 @@ FPU::clearExcStatusBit(u32 mask)
     fpsr &= ~mask;
 }
 
-/*
- void
- FPU::clearExcStatusBits()
- {
- clearExcStatusBit(0xFF00);
- }
- */
-
 void
-FPU::setFlags(int reg)
+FPU::setConditionCodes(int reg)
 {
     assert(reg >= 0 && reg <= 7);
-    setFlags(fpr[reg]);
+    setConditionCodes(fpr[reg]);
 }
 
 void
-FPU::setFlags(const Float80 &value)
+FPU::setConditionCodes(const Float80 &value)
 {
     bool n = value.raw.high & 0x8000;
-    // bool z = (value.raw.high & 0x7fff) == 0 && (value.raw.low << 1) == 0;
     bool z = (value.raw.high & 0x7fff) == 0 && value.raw.low == 0;
     bool i = (value.raw.high & 0x7fff) == 0x7fff && (value.raw.low << 1) == 0;
     bool nan = softfloat::floatx80_is_nan(value.raw);
@@ -607,6 +598,10 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 
     printf("unpack(%x,%x,%x)\n", dw1, dw2, dw3);
 
+    // Extract the sign bits
+    auto msign = bool(dw1 & 0x80000000);
+    auto esign = bool(dw1 & 0x40000000);
+
     // Compose the exponent
     ex = (char)((dw1 >> 24) & 0xF);
     ex = ex * 10 + (char)((dw1 >> 20) & 0xF);
@@ -635,8 +630,34 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
     mal += mar / 10000000000000000;
     mar %= 10000000000000000;
 
+    // Check for special cases (e == 'FFF', m = '000...000')
+    printf("ex == %d mal = %lld mar = %lld\n", ex, mal, mar);
+    if (ex == 1665) {
+
+        if (mar == 0) {
+
+            if (((dw1 >> 28) & 0x7) == 0x7) {
+                result = Float80(msign ? 0xFFFF : 0x7FFF, 0); // Infinity
+                return;
+            } else {
+                result = Float80(msign ? 0x8000 : 0, 0); // ?
+                return;
+            }
+
+        } else {
+
+            if (((dw1 >> 28) & 0x7) == 0x7) {
+                result = Float80(msign ? 0xFFFF : 0x7FFF, u64(dw2) << 32 | dw3); // NaN
+                return;
+            } else {
+                // result = Float80(msign ? 0x8000 : 0, 0); // ?
+                // return;
+            }
+        }
+    }
+
     // Write the integer part of the mantissa
-    if (dw1 & 0x80000000) *ch++ = '-';
+    if (msign) *ch++ = '-';
     for (isize i = 1; i >= 0; i--) { ch[i] = (mal % 10) + '0'; mal /= 10; }
     ch += 2;
 
@@ -647,7 +668,7 @@ FPU::unpack(u32 dw1, u32 dw2, u32 dw3, Float80 &result)
 
     // Write the exponent
     *ch++ = 'E';
-    if (dw1 & 0x40000000) *ch++ = '-';
+    if (esign) *ch++ = '-';
     for (isize i = 3; i >= 0; i--) { ch[i] = (ex % 10) + '0'; ex /= 10; }
     ch += 4;
 

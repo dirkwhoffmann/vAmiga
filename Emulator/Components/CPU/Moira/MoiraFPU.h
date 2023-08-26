@@ -113,8 +113,8 @@ public:
     void setExcStatusBit(u32 mask);
     void clearExcStatusBit(u32 mask);
 
-    void setFlags(int reg);
-    void setFlags(const Float80 &value);
+    void setConditionCodes(int reg);
+    void setConditionCodes(const Float80 &value);
 
 
     //
