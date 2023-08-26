@@ -12,11 +12,91 @@
 
 namespace vamiga::moira {
 
-Float32::Float32(const class Float80 &value, std::function<void(u32)>excHandler)
+
+//
+// FpuByte
+//
+
+FpuByte::FpuByte(const FpuExtended &value, ExceptionHandler handler)
 {
     u32 flags = 0;
-    softfloat::float_exception_flags = 0;
 
+    softfloat::float_exception_flags = 0;
+    raw = u8(softfloat::floatx80_to_int32(value.raw));
+
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        flags |= FPEXP_INEX2;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+        flags |= FPEXP_OVFL;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+        flags |= FPEXP_UNFL;
+    }
+
+    handler(flags);
+}
+
+
+//
+// FpuWord
+//
+
+FpuWord::FpuWord(const FpuExtended &value, ExceptionHandler handler)
+{
+    u32 flags = 0;
+
+    softfloat::float_exception_flags = 0;
+    raw = u16(softfloat::floatx80_to_int32(value.raw));
+
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        flags |= FPEXP_INEX2;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+        flags |= FPEXP_OVFL;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+        flags |= FPEXP_UNFL;
+    }
+
+    handler(flags);
+}
+
+
+//
+// FpuLong
+//
+
+FpuLong::FpuLong(const FpuExtended &value, ExceptionHandler handler)
+{
+    u32 flags = 0;
+
+    softfloat::float_exception_flags = 0;
+    raw = u16(softfloat::floatx80_to_int32(value.raw));
+
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        flags |= FPEXP_INEX2;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+        flags |= FPEXP_OVFL;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+        flags |= FPEXP_UNFL;
+    }
+
+    handler(flags);
+}
+
+
+//
+// FpuSingle
+//
+
+FpuSingle::FpuSingle(const class FpuExtended &value, ExceptionHandler handler)
+{
+    u32 flags = 0;
+
+    softfloat::float_exception_flags = 0;
     raw = floatx80_to_float32(value.raw);
 
     if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
@@ -29,10 +109,10 @@ Float32::Float32(const class Float80 &value, std::function<void(u32)>excHandler)
         flags |= FPEXP_UNFL;
     }
 
-    excHandler(flags);
+    handler(flags);
 }
 
-Float64::Float64(const class Float80 &value, std::function<void(u32)>excHandler)
+FpuDouble::FpuDouble(const class FpuExtended &value, ExceptionHandler handler)
 {
     u32 flags = 0;
     softfloat::float_exception_flags = 0;
@@ -49,30 +129,35 @@ Float64::Float64(const class Float80 &value, std::function<void(u32)>excHandler)
         flags |= FPEXP_UNFL;
     }
 
-    excHandler(flags);
+    handler(flags);
 }
 
-Float80::Float80(u32 value)
+
+//
+// FpuExtended
+//
+
+FpuExtended::FpuExtended(u32 value)
 {
     raw = softfloat::int64_to_floatx80(i64(value));
 }
 
-Float80::Float80(const Float32 &value)
+FpuExtended::FpuExtended(const FpuSingle &value)
 {
     raw = softfloat::float32_to_floatx80(value.raw);
 }
 
-Float80::Float80(const Float64 &value)
+FpuExtended::FpuExtended(const FpuDouble &value)
 {
     raw = softfloat::float64_to_floatx80(value.raw);
 }
 
-Float80::Float80(double value)
+FpuExtended::FpuExtended(double value)
 {
     raw = softfloat::float64_to_floatx80(*((u64 *)&value));
 }
 
-Float80::Float80(long double value, FpuRoundingMode mode)
+FpuExtended::FpuExtended(long double value, FpuRoundingMode mode)
 {
     // Handle special cases
     if (value == 0.0) { raw = { }; return; }
@@ -92,22 +177,22 @@ Float80::Float80(long double value, FpuRoundingMode mode)
     }
 
     // Compose the result
-    *this = Float80(value < 0.0, (i16)e, (u64)std::abs(m));
+    *this = FpuExtended(value < 0.0, (i16)e, (u64)std::abs(m));
 }
 
-Float80::Float80(u16 high, u64 low)
+FpuExtended::FpuExtended(u16 high, u64 low)
 {
     raw.high = high;
     raw.low = low;
 }
 
-Float80::Float80(bool mSign, i16 e, u64 m)
+FpuExtended::FpuExtended(bool mSign, i16 e, u64 m)
 {
     raw.high = (mSign ? 0x8000 : 0x0000) | (u16(e + 0x3FFF) & 0x7FFF);
     raw.low = m;
 }
 
-Float80::Float80(const std::string &s, FpuRoundingMode mode)
+FpuExtended::FpuExtended(const std::string &s, FpuRoundingMode mode)
 {
     long double value;
 
@@ -115,11 +200,11 @@ Float80::Float80(const std::string &s, FpuRoundingMode mode)
     sscanf(s.c_str(), "%Le", &value);
     FPU::setRoundingMode(old);
 
-    *this = Float80(value, mode);
+    *this = FpuExtended(value, mode);
     normalize();
 }
 
-Float80::Float80(const Packed &packed, FpuRoundingMode mode)
+FpuExtended::FpuExtended(const FpuPacked &packed, FpuRoundingMode mode)
 {
     char str[128], *ch = str;
     i32 ex = 0; u64 mal = 0, mar = 0;
@@ -166,17 +251,17 @@ Float80::Float80(const Packed &packed, FpuRoundingMode mode)
         if (mar == 0) {
 
             if (((dw1 >> 28) & 0x7) == 0x7) {
-                *this = Float80(msign ? 0xFFFF : 0x7FFF, 0); // Infinity
+                *this = FpuExtended(msign ? 0xFFFF : 0x7FFF, 0); // Infinity
                 return;
             } else {
-                *this = Float80(msign ? 0x8000 : 0, 0); // ?
+                *this = FpuExtended(msign ? 0x8000 : 0, 0); // ?
                 return;
             }
 
         } else {
 
             if (((dw1 >> 28) & 0x7) == 0x7) {
-                *this = Float80(msign ? 0xFFFF : 0x7FFF, u64(dw2) << 32 | dw3); // NaN
+                *this = FpuExtended(msign ? 0xFFFF : 0x7FFF, u64(dw2) << 32 | dw3); // NaN
                 return;
             } else {
                 // *this = Float80(msign ? 0x8000 : 0, 0); // ?
@@ -204,19 +289,20 @@ Float80::Float80(const Packed &packed, FpuRoundingMode mode)
     // Terminate the string
     *ch = 0;
 
-    *this = Float80(str, mode);
+    *this = FpuExtended(str, mode);
 }
 
-Float80::Float80(const struct FPUReg &reg)
+FpuExtended::FpuExtended(const struct FPUReg &reg)
 {
     *this = reg.val;
 }
 
 u8
-Float80::asByte(ExceptionHandler handler) const
+FpuExtended::asByte(ExceptionHandler handler) const
 {
     u32 flags = 0;
 
+    softfloat::float_exception_flags = 0;
     auto result = u8(softfloat::floatx80_to_int32(raw));
     if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
         flags |= FPEXP_INEX2;
@@ -227,10 +313,11 @@ Float80::asByte(ExceptionHandler handler) const
 }
 
 u16
-Float80::asWord(ExceptionHandler handler) const
+FpuExtended::asWord(ExceptionHandler handler) const
 {
     u32 flags = 0;
 
+    softfloat::float_exception_flags = 0;
     auto result = u16(softfloat::floatx80_to_int32(raw));
     if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
         flags |= FPEXP_INEX2;
@@ -240,31 +327,39 @@ Float80::asWord(ExceptionHandler handler) const
     return result;
 }
 
+u32
+FpuExtended::asLong(ExceptionHandler handler) const
+{
+    u32 flags = 0;
+
+    softfloat::float_exception_flags = 0;
+    auto result = u32(softfloat::floatx80_to_int32(raw));
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        flags |= FPEXP_INEX2;
+    }
+
+    handler(flags);
+    return result;
+}
+
 double
-Float80::asDouble() const
+FpuExtended::asDouble() const
 {
     auto value = softfloat::floatx80_to_float64(raw);
     return *((double *)&value);
 }
 
 long double
-Float80::asLongDouble() const
+FpuExtended::asLongDouble() const
 {
     auto result = std::ldexpl((long double)man(), (int)exp() - 63);
     return result * sgn();
 }
 
-long
-Float80::asLong() const
+FpuPacked
+FpuExtended::asPacked(int k, FpuRoundingMode mode, u32 *statusbits) const
 {
-    auto value = softfloat::floatx80_to_int64(raw);
-    return (long)value;
-}
-
-Packed
-Float80::asPacked(int k, FpuRoundingMode mode, u32 *statusbits) const
-{
-    Packed result;
+    FpuPacked result;
 
     // Get exponent
     auto e = frexp10().first - 1;
@@ -323,7 +418,7 @@ Float80::asPacked(int k, FpuRoundingMode mode, u32 *statusbits) const
 }
 
 std::pair<int, long double>
-Float80::frexp10() const
+FpuExtended::frexp10() const
 {
     long double val = asLongDouble();
     int e = isZero() ? 0 : 1 + (int)std::floor(std::log10(std::fabs(val)));
@@ -336,43 +431,43 @@ Float80::frexp10() const
 
 
 bool
-Float80::isNegative() const
+FpuExtended::isNegative() const
 {
     return (raw.high & 0x8000);
 }
 
 bool
-Float80::isZero() const
+FpuExtended::isZero() const
 {
     return (raw.high & 0x7FFF) == 0 && raw.low == 0;
 }
 
 bool
-Float80::isInfinity() const
+FpuExtended::isInfinity() const
 {
     return (raw.high & 0x7FFF) == 0x7FFF && raw.low == 0;
 }
 
 bool
-Float80::isNaN() const
+FpuExtended::isNaN() const
 {
     return (raw.high & 0x7FFF) == 0x7FFF && raw.low != 0;
 }
 
 bool
-Float80::isSignalingNaN() const
+FpuExtended::isSignalingNaN() const
 {
     return isNaN() && (raw.low & (1L << 62)) == 0;
 }
 
 bool
-Float80::isNonsignalingNaN() const
+FpuExtended::isNonsignalingNaN() const
 {
     return isNaN() && (raw.low & (1L << 62)) != 0;
 }
 
 bool
-Float80::isNormalized() const
+FpuExtended::isNormalized() const
 {
     if ((raw.high & 0x7FFF) == 0) return true;
     if (isNaN()) return true;
@@ -381,7 +476,7 @@ Float80::isNormalized() const
 }
 
 void
-Float80::normalize()
+FpuExtended::normalize()
 {
     while (!isNormalized()) {
 

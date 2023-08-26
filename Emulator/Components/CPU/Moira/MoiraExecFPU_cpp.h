@@ -684,7 +684,7 @@ Moira::execFGeneric(u16 opcode)
     auto dst = ______xxx_______ (ext);
     (void)readExt<C,Word>();
 
-    Float80 source;
+    FpuExtended source;
 
     if (ext & 0x4000) {
 

@@ -10,37 +10,106 @@
 #include "MoiraTypes.h"
 #include "softfloat.h"
 
-namespace xdb {
-template <class T> class XDouble;
-}
 namespace vamiga::moira {
 
-class Float32;
-class Float64;
-class Float80;
-class Packed;
+/* The Motorola floating-point unit supports seven data formats:
+ *
+ *    Byte Integer (B)
+ *    Word Integer (W)
+ *    Long Word Integer (L)
+ *    Single Precision Real (S)
+ *    Double Precision Real (D)
+ *    Extended Precision Real (X)
+ *    Packed Decimal String Real (P)
+ *
+ * Each of these formats is handled by a seperate struct.
+ */
+
+struct FpuByte;
+struct FpuWord;
+struct FpuLong;
+struct FpuSingle;
+struct FpuDouble;
+struct FpuExtended;
+struct FpuPacked;
 
 typedef std::function<void(u32)> ExceptionHandler;
 
-struct Float32 {
+
+//
+// FpuByte
+//
+
+struct FpuByte {
+
+    u8 raw;
+
+    FpuByte(u8 value) : raw(value) { };
+    FpuByte(const FpuExtended &value, ExceptionHandler handler); 
+};
+
+
+//
+// FpuWord
+//
+
+struct FpuWord {
+
+    u16 raw;
+
+    FpuWord(u16 value) : raw(value) { };
+    FpuWord(const FpuExtended &value, ExceptionHandler handler);
+};
+
+
+//
+// FpuLong
+//
+
+struct FpuLong {
+
+    u32 raw;
+
+    FpuLong(u32 value) : raw(value) { };
+    FpuLong(const FpuExtended &value, ExceptionHandler handler);
+};
+
+
+//
+// FpuSingle
+//
+
+struct FpuSingle {
 
     u32 raw = 0;
 
 public:
 
-    Float32(const class Float80 &value, ExceptionHandler handler);
+    FpuSingle(u32 value) : raw(value) { };
+    FpuSingle(const class FpuExtended &value, ExceptionHandler handler);
 };
 
-struct Float64 {
+
+//
+// FpuDouble
+//
+
+struct FpuDouble {
 
     u64 raw = 0;
 
 public:
 
-    Float64(const class Float80 &value, ExceptionHandler handler);
+    FpuDouble(u64 value) : raw(value) { };
+    FpuDouble(const class FpuExtended &value, ExceptionHandler handler);
 };
 
-class Float80 {
+
+//
+// FpuExtended
+//
+
+class FpuExtended {
 
 public: // REMOVE ASAP
 
@@ -54,24 +123,24 @@ public: // REMOVE ASAP
 
 public:
     
-    Float80() { };
-    Float80(u32 value); // DEPRECATED
-    Float80(const Float32 &value);
-    Float80(const Float64 &value);
-    Float80(double value);
-    Float80(long double value, FpuRoundingMode mode);
-    Float80(u16 high, u64 low);
-    Float80(bool mSign, i16 e, u64 m);
-    Float80(const struct Packed &packed, FpuRoundingMode mode);
-    Float80(const std::string &s, FpuRoundingMode mode);
-    Float80(const struct FPUReg &reg);
+    FpuExtended() { };
+    FpuExtended(u32 value); // DEPRECATED
+    FpuExtended(const FpuSingle &value);
+    FpuExtended(const FpuDouble &value);
+    FpuExtended(double value);
+    FpuExtended(long double value, FpuRoundingMode mode);
+    FpuExtended(u16 high, u64 low);
+    FpuExtended(bool mSign, i16 e, u64 m);
+    FpuExtended(const struct FpuPacked &packed, FpuRoundingMode mode);
+    FpuExtended(const std::string &s, FpuRoundingMode mode);
+    FpuExtended(const struct FPUReg &reg);
 
 
     //
     // Constants
     //
 
-    static Float80 NaN() { return Float80(0x7FFF, 0xFFFFFFFFFFFFFFFF); }
+    static FpuExtended NaN() { return FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF); }
     static constexpr i64 bias = 0x3FFF;
     
 
@@ -98,13 +167,15 @@ public:
     // Converters
     //
 
+    // DEPRECATED
     u8 asByte(ExceptionHandler handler) const;
     u16 asWord(ExceptionHandler handler) const;
+    u32 asLong(ExceptionHandler handler) const;
 
     double asDouble() const;
     long double asLongDouble() const;
     long asLong() const;
-    struct Packed asPacked(int kfactor, FpuRoundingMode mode, u32 *statusbits) const;
+    struct FpuPacked asPacked(int kfactor, FpuRoundingMode mode, u32 *statusbits) const;
 
 
     //
@@ -118,15 +189,22 @@ public:
     // Operators
     //
 
-    inline bool operator==(const Float80 &other) const {
+    inline bool operator==(const FpuExtended &other) const {
 
         return raw.high == other.raw.high && raw.low == other.raw.low;
     }
 };
 
-struct Packed {
+
+//
+// FpuPacked
+//
+
+struct FpuPacked {
 
     u32 data[3] = { };
+
+    // FpuPacked(const FpuExtended &value, int kfactor, FpuRoundingMode mode, ExceptionHandler handler);
 };
 
 }

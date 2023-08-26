@@ -13,20 +13,20 @@
 
 namespace vamiga::moira {
 
-Float80
+FpuExtended
 FPUReg::get()
 {
-    Float80 result = val;
+    FpuExtended result = val;
 
     softfloat::float_exception_flags = 0;
 
     if (fpu.getPrecision() != FPU_PREC_EXTENDED) {
 
         if (fpu.getPrecision() == FPU_PREC_SINGLE) {
-            result = Float32(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
+            result = FpuSingle(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
         }
         if (fpu.getPrecision() == FPU_PREC_DOUBLE) {
-            result = Float64(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
+            result = FpuDouble(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
         }
     }
     if (!isNormalized()) {
@@ -52,15 +52,7 @@ FPUReg::asWord()
 u32
 FPUReg::asLong()
 {
-    softfloat::float_exception_flags = 0;
-
-    auto result = (u32)softfloat::floatx80_to_int32(get().raw);
-    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
-        fpu.setExcStatusBit(FPEXP_INEX2);
-    }
-
-    return result;
-
+    return get().asLong([this](int flags) { fpu.setExcStatusBit(flags); });
 }
 
 u32
@@ -89,13 +81,13 @@ FPUReg::asDouble()
     return result;
 }
 
-Float80
+FpuExtended
 FPUReg::asExtended()
 {
     return get();
 }
 
-Packed
+FpuPacked
 FPUReg::asPacked(int k)
 {
     u32 statusbits;
@@ -106,7 +98,7 @@ FPUReg::asPacked(int k)
 }
 
 void
-FPUReg::set(const Float80 other)
+FPUReg::set(const FpuExtended other)
 {
     val = other;
 
@@ -381,7 +373,7 @@ FPU::setConditionCodes(int reg)
 }
 
 void
-FPU::setConditionCodes(const Float80 &value)
+FPU::setConditionCodes(const FpuExtended &value)
 {
     bool n = value.raw.high & 0x8000;
     bool z = (value.raw.high & 0x7fff) == 0 && value.raw.low == 0;
@@ -394,10 +386,10 @@ FPU::setConditionCodes(const Float80 &value)
     REPLACE_BIT(fpsr, 24, nan);
 }
 
-Float80
+FpuExtended
 FPU::readCR(unsigned nr)
 {
-    Float80 result;
+    FpuExtended result;
 
     typedef struct { u16 hi; u64 lo; i64 r1; i64 r2; bool inex; } RomEntry;
 
@@ -443,7 +435,7 @@ FPU::readCR(unsigned nr)
 
     auto readRom = [&](const RomEntry &entry) {
 
-        auto result = Float80(entry.hi, entry.lo);
+        auto result = FpuExtended(entry.hi, entry.lo);
 
         // Round if necessary
         if ((fpcr & 0b110000) == 0b010000) result.raw.low += entry.r1;

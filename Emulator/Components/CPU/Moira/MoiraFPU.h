@@ -18,7 +18,7 @@ struct FPUReg {
     class FPU &fpu;
 
     // Register value
-    Float80 val;
+    FpuExtended val;
 
 
     //
@@ -26,15 +26,15 @@ struct FPUReg {
     //
 
     FPUReg(FPU& fpu) : fpu(fpu) { }
-    void reset() { val = Float80::NaN(); }
+    void reset() { val = FpuExtended::NaN(); }
 
 
     //
     // Getting and setting
     //
 
-    Float80 get();
-    void set(const Float80 other);
+    FpuExtended get();
+    void set(const FpuExtended other);
     void move(FPUReg &dest);
 
 
@@ -60,8 +60,8 @@ struct FPUReg {
     u32 asLong();
     u32 asSingle();
     u64 asDouble();
-    Float80 asExtended();
-    Packed asPacked(int k = 0);
+    FpuExtended asExtended();
+    FpuPacked asPacked(int k = 0);
 };
 
 class FPU {
@@ -139,7 +139,7 @@ public:
     void clearExcStatusBit(u32 mask);
 
     void setConditionCodes(int reg);
-    void setConditionCodes(const Float80 &value);
+    void setConditionCodes(const FpuExtended &value);
 
 
     //
@@ -147,7 +147,7 @@ public:
     //
 
     // Reads a value from the constant Rom
-    Float80 readCR(unsigned nr);
+    FpuExtended readCR(unsigned nr);
 
     
     //

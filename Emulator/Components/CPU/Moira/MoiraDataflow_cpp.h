@@ -228,10 +228,10 @@ Moira::readOp(int n, u32 *ea, u32 *result)
     }
 }
 
-template <Mode M, Flags F> Float80
+template <Mode M, Flags F> FpuExtended
 Moira::readFpuOp(int n, FltFormat fmt)
 {
-    Float80 result;
+    FpuExtended result;
 
     if constexpr (M == MODE_DN) return readFpuOpRg<M, F>(n, fmt);
     if constexpr (M == MODE_IM) return readFpuOpIm<M, F>(fmt);
@@ -239,14 +239,14 @@ Moira::readFpuOp(int n, FltFormat fmt)
     return readFpuOpEa<M>(n, fmt);
 }
 
-template <Mode M, Flags F> Float80
+template <Mode M, Flags F> FpuExtended
 Moira::readFpuOpRg(int n, FltFormat fmt)
 {
     // TODO
-    return Float80();
+    return FpuExtended();
 }
 
-template <Mode M, Flags F> Float80
+template <Mode M, Flags F> FpuExtended
 Moira::readFpuOpEa(int n, FltFormat fmt)
 {
     // Float80 result;
@@ -348,10 +348,10 @@ Moira::readFpuOpEa(int n, FltFormat fmt)
     // return result;
 }
 
-template <Mode M, Flags F> Float80
+template <Mode M, Flags F> FpuExtended
 Moira::readFpuOpEa(int n, u32 ea, FltFormat fmt)
 {
-    Float80 result;
+    FpuExtended result;
 
     switch (fmt) {
 
@@ -415,7 +415,7 @@ Moira::readFpuOpEa(int n, u32 ea, FltFormat fmt)
             u32 data3 = readM<C68020, M, Long>(U32_ADD(ea, 8));
             updateAn<M, Extended>(n);
 
-            result = Float80(Packed { data1, data2, data3 }, fpu.getRoundingMode());
+            result = FpuExtended(FpuPacked { data1, data2, data3 }, fpu.getRoundingMode());
             break;
         }
         default:
@@ -425,10 +425,10 @@ Moira::readFpuOpEa(int n, u32 ea, FltFormat fmt)
 }
 
 
-template <Mode M, Flags F> Float80
+template <Mode M, Flags F> FpuExtended
 Moira::readFpuOpIm(FltFormat fmt)
 {
-    Float80 result;
+    FpuExtended result;
 
     switch (fmt) {
 
@@ -461,14 +461,14 @@ Moira::readFpuOpIm(FltFormat fmt)
             u32 dw2 = readExt<C68020, Long>();
             u32 dw3 = readExt<C68020, Long>();
             printf("            %x %x %x\n", dw1, dw2, dw3);
-            result = Float80(Packed { dw1, dw2, dw3 }, fpu.getRoundingMode());
+            result = FpuExtended(FpuPacked { dw1, dw2, dw3 }, fpu.getRoundingMode());
             break;
         }
         case FLT_WORD:
         {
             auto ext = readExt<C68020, Word>();
             printf("FLT_WORD ext = %x\n", ext);
-            result = Float80(ext);
+            result = FpuExtended(ext);
             break;
         }
         case FLT_DOUBLE:
@@ -484,7 +484,7 @@ Moira::readFpuOpIm(FltFormat fmt)
         case FLT_BYTE:
         {
             auto ext = readExt<C68020, Byte>();
-            result = Float80(ext & 0xFF);
+            result = FpuExtended(ext & 0xFF);
             printf("readFpuOpIm.B: ext = %x %f\n", ext, result.asDouble());
             break;
         }
@@ -565,7 +565,7 @@ Moira::writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k)
         }
         case FLT_EXTENDED:
         {
-            Float80 data;
+            FpuExtended data;
 
             if constexpr (F & FPU_FMOVEM) {
                 data = reg.val;
@@ -582,7 +582,7 @@ Moira::writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k)
         }
         case FLT_PACKED:
         {
-            Packed data = reg.asPacked(k);
+            FpuPacked data = reg.asPacked(k);
             printf("Packed = %x,%x,%x\n", data.data[0], data.data[1], data.data[2]);
             auto ea = computeEA<C68020, M, Extended>(n);
             writeM<C68020, M, Long>(ea, data.data[0]);

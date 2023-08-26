@@ -64,11 +64,11 @@ template <Core C, Mode M, Size S = Word, Flags F = 0>
 void readOp(int n, u32 *ea, u32 *result);
 
 // Experimental
-template <Mode M, Flags F = 0> Float80 readFpuOp(int n, FltFormat fmt);
-template <Mode M, Flags F = 0> Float80 readFpuOpRg(int n, FltFormat fmt);
-template <Mode M, Flags F = 0> Float80 readFpuOpEa(int n, FltFormat fmt);
-template <Mode M, Flags F = 0> Float80 readFpuOpEa(int n, u32 ea, FltFormat fmt);
-template <Mode M, Flags F = 0> Float80 readFpuOpIm(FltFormat fmt);
+template <Mode M, Flags F = 0> FpuExtended readFpuOp(int n, FltFormat fmt);
+template <Mode M, Flags F = 0> FpuExtended readFpuOpRg(int n, FltFormat fmt);
+template <Mode M, Flags F = 0> FpuExtended readFpuOpEa(int n, FltFormat fmt);
+template <Mode M, Flags F = 0> FpuExtended readFpuOpEa(int n, u32 ea, FltFormat fmt);
+template <Mode M, Flags F = 0> FpuExtended readFpuOpIm(FltFormat fmt);
 
 /* Writes an operand
  *
