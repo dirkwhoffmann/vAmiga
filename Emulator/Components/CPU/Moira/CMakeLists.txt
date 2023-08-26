@@ -5,5 +5,5 @@ target_sources(vAmigaCore PRIVATE
 Moira.cpp
 MoiraFPU.cpp
 MoiraDebugger.cpp
-Float80.cpp
+FpuFormats.cpp
 )

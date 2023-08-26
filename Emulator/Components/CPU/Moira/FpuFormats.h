@@ -42,10 +42,13 @@ typedef std::function<void(u32)> ExceptionHandler;
 
 struct FpuByte {
 
-    u8 raw = 0;
+    u8 raw;
 
+    FpuByte() : raw(0) { };
     FpuByte(u8 value) : raw(value) { };
-    FpuByte(const FpuExtended &value, ExceptionHandler handler); 
+
+    FpuByte(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
+    FpuByte(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
 };
 
 
@@ -59,7 +62,9 @@ struct FpuWord {
 
     FpuWord() : raw(0) { };
     FpuWord(u16 value) : raw(value) { };
-    FpuWord(const FpuExtended &value, ExceptionHandler handler);
+
+    FpuWord(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
+    FpuWord(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
 };
 
 
@@ -73,7 +78,9 @@ struct FpuLong {
 
     FpuLong() : raw(0) { };
     FpuLong(u32 value) : raw(value) { };
-    FpuLong(const FpuExtended &value, ExceptionHandler handler);
+
+    FpuLong(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
+    FpuLong(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
 };
 
 
@@ -87,7 +94,9 @@ struct FpuSingle {
 
     FpuSingle() : raw(0) { };
     FpuSingle(u32 value) : raw(value) { };
-    FpuSingle(const class FpuExtended &value, ExceptionHandler handler);
+
+    FpuSingle(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
+    FpuSingle(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
 };
 
 
@@ -101,7 +110,9 @@ struct FpuDouble {
 
     FpuDouble() : raw(0) { };
     FpuDouble(u64 value) : raw(value) { };
-    FpuDouble(const class FpuExtended &value, ExceptionHandler handler);
+
+    FpuDouble(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
+    FpuDouble(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
 };
 
 
@@ -122,7 +133,6 @@ struct FpuExtended {
     FpuExtended(const FpuSingle &value, ExceptionHandler handler = [](auto&&...) {});
     FpuExtended(const FpuDouble &value, ExceptionHandler handler = [](auto&&...) {});
     FpuExtended(const FpuPacked &value, FpuRoundingMode mode, ExceptionHandler handler = [](auto&&...) {});
-
     FpuExtended(const std::string &s, FpuRoundingMode mode, ExceptionHandler handler = [](auto&&...) {});
     FpuExtended(long double value, FpuRoundingMode mode, ExceptionHandler handler = [](auto&&...) {});
     FpuExtended(bool mSign, i16 e, u64 m, ExceptionHandler handler = [](auto&&...) {});
@@ -160,9 +170,9 @@ struct FpuExtended {
     //
 
     // DEPRECATED
-    u8 asByte(ExceptionHandler handler) const;
-    u16 asWord(ExceptionHandler handler) const;
-    u32 asLong(ExceptionHandler handler) const;
+    [[deprecated]] u8 asByte(ExceptionHandler handler) const;
+    [[deprecated]] u16 asWord(ExceptionHandler handler) const;
+    [[deprecated]] u32 asLong(ExceptionHandler handler) const;
 
     double asDouble() const;
     long double asLongDouble() const;

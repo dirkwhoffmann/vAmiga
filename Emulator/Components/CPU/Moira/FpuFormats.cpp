@@ -12,7 +12,6 @@
 
 namespace vamiga::moira {
 
-
 //
 // FpuByte
 //
@@ -36,6 +35,8 @@ FpuByte::FpuByte(const FpuExtended &value, ExceptionHandler handler)
 
     handler(flags);
 }
+
+FpuByte::FpuByte(const FPUReg &reg, ExceptionHandler handler) : FpuByte(reg.val, handler) { }
 
 
 //
@@ -62,6 +63,8 @@ FpuWord::FpuWord(const FpuExtended &value, ExceptionHandler handler)
     handler(flags);
 }
 
+FpuWord::FpuWord(const FPUReg &reg, ExceptionHandler handler) : FpuWord(reg.val, handler) { }
+
 
 //
 // FpuLong
@@ -86,6 +89,8 @@ FpuLong::FpuLong(const FpuExtended &value, ExceptionHandler handler)
 
     handler(flags);
 }
+
+FpuLong::FpuLong(const FPUReg &reg, ExceptionHandler handler) : FpuLong(reg.val, handler) { }
 
 
 //
@@ -112,6 +117,13 @@ FpuSingle::FpuSingle(const class FpuExtended &value, ExceptionHandler handler)
     handler(flags);
 }
 
+FpuSingle::FpuSingle(const FPUReg &reg, ExceptionHandler handler) : FpuSingle(reg.val, handler) { }
+
+
+//
+// FpuDouble
+//
+
 FpuDouble::FpuDouble(const class FpuExtended &value, ExceptionHandler handler)
 {
     u32 flags = 0;
@@ -131,6 +143,8 @@ FpuDouble::FpuDouble(const class FpuExtended &value, ExceptionHandler handler)
 
     handler(flags);
 }
+
+FpuDouble::FpuDouble(const FPUReg &reg, ExceptionHandler handler) : FpuDouble(reg.val, handler) { }
 
 
 //

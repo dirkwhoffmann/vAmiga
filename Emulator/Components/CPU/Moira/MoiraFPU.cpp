@@ -37,24 +37,6 @@ FPUReg::get()
     return result;
 }
 
-u8
-FPUReg::asByte()
-{
-    return get().asByte([this](int flags) { fpu.setExcStatusBit(flags); });
-}
-
-u16
-FPUReg::asWord()
-{
-    return get().asWord([this](int flags) { fpu.setExcStatusBit(flags); });
-}
-
-u32
-FPUReg::asLong()
-{
-    return get().asLong([this](int flags) { fpu.setExcStatusBit(flags); });
-}
-
 u32
 FPUReg::asSingle()
 {

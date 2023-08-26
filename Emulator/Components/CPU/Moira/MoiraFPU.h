@@ -55,9 +55,6 @@ struct FPUReg {
     // Converting
     //
 
-    u8 asByte();
-    u16 asWord();
-    u32 asLong();
     u32 asSingle();
     u64 asDouble();
     FpuExtended asExtended();

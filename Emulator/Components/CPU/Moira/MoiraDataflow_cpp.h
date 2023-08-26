@@ -525,25 +525,30 @@ Moira::writeOp(int n, u32 val)
 template <Mode M, Flags F> void
 Moira::writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k)
 {
+    auto exceptionHandler = [this](int flags) { fpu.setExcStatusBit(flags); };
+
     switch (fmt) {
 
         case FLT_BYTE:
         {
-            u8 data = reg.asByte();
+            auto data = FpuByte(reg, exceptionHandler).raw;
+            // u8 data = reg.asByte();
             writeM<C68020, M, Byte>(ea, data);
             updateAn<M, Byte>(n);
             break;
         }
         case FLT_WORD:
         {
-            u16 data = reg.asWord();
+            auto data = FpuWord(reg, exceptionHandler).raw;
+            // u16 data = reg.asWord();
             writeM<C68020, M, Word>(ea, data);
             updateAn<M, Word>(n);
             break;
         }
         case FLT_LONG:
         {
-            u32 data = reg.asLong();
+            auto data = FpuLong(reg, exceptionHandler).raw;
+            // u32 data = reg.asLong();
             writeM<C68020, M, Long>(ea, data);
             updateAn<M, Long>(n);
             break;
