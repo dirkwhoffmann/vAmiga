@@ -22,7 +22,7 @@ namespace vamiga::moira {
  *    Extended Precision Real (X)
  *    Packed Decimal String Real (P)
  *
- * Each of these formats is handled by a seperate struct.
+ * Each of these formats is managed by a seperate struct.
  */
 
 struct FpuByte;
@@ -42,7 +42,7 @@ typedef std::function<void(u32)> ExceptionHandler;
 
 struct FpuByte {
 
-    u8 raw;
+    u8 raw = 0;
 
     FpuByte(u8 value) : raw(value) { };
     FpuByte(const FpuExtended &value, ExceptionHandler handler); 
@@ -57,6 +57,7 @@ struct FpuWord {
 
     u16 raw;
 
+    FpuWord() : raw(0) { };
     FpuWord(u16 value) : raw(value) { };
     FpuWord(const FpuExtended &value, ExceptionHandler handler);
 };
@@ -70,6 +71,7 @@ struct FpuLong {
 
     u32 raw;
 
+    FpuLong() : raw(0) { };
     FpuLong(u32 value) : raw(value) { };
     FpuLong(const FpuExtended &value, ExceptionHandler handler);
 };
@@ -81,10 +83,9 @@ struct FpuLong {
 
 struct FpuSingle {
 
-    u32 raw = 0;
+    u32 raw;
 
-public:
-
+    FpuSingle() : raw(0) { };
     FpuSingle(u32 value) : raw(value) { };
     FpuSingle(const class FpuExtended &value, ExceptionHandler handler);
 };
@@ -96,10 +97,9 @@ public:
 
 struct FpuDouble {
 
-    u64 raw = 0;
+    u64 raw;
 
-public:
-
+    FpuDouble() : raw(0) { };
     FpuDouble(u64 value) : raw(value) { };
     FpuDouble(const class FpuExtended &value, ExceptionHandler handler);
 };
@@ -109,22 +109,15 @@ public:
 // FpuExtended
 //
 
-class FpuExtended {
+struct FpuExtended {
 
-public: // REMOVE ASAP
+    softfloat::floatx80 raw;
 
-    // TODO: Make this private. Afterwards, remove softfloat lib
-    softfloat::floatx80 raw = { };
-
-
-    //
-    // Constructors
-    //
-
-public:
-    
-    FpuExtended() { };
-    FpuExtended(u32 value); // DEPRECATED
+    FpuExtended() { raw = { }; }
+    // FpuExtended(u32 value); // DEPRECATED
+    FpuExtended(const FpuByte &value, ExceptionHandler handler);
+    FpuExtended(const FpuWord &value, ExceptionHandler handler);
+    FpuExtended(const FpuLong &value, ExceptionHandler handler);
     FpuExtended(const FpuSingle &value);
     FpuExtended(const FpuDouble &value);
     FpuExtended(double value);

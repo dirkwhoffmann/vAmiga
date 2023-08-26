@@ -137,9 +137,71 @@ FpuDouble::FpuDouble(const class FpuExtended &value, ExceptionHandler handler)
 // FpuExtended
 //
 
+/*
 FpuExtended::FpuExtended(u32 value)
 {
     raw = softfloat::int64_to_floatx80(i64(value));
+}
+*/
+
+FpuExtended::FpuExtended(const FpuByte &value, ExceptionHandler handler)
+{
+    u32 flags = 0;
+    softfloat::float_exception_flags = 0;
+
+    raw = softfloat::int64_to_floatx80(value.raw);
+
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        flags |= FPEXP_INEX2;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+        flags |= FPEXP_OVFL;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+        flags |= FPEXP_UNFL;
+    }
+
+    handler(flags);
+}
+
+FpuExtended::FpuExtended(const FpuWord &value, ExceptionHandler handler)
+{
+    u32 flags = 0;
+    softfloat::float_exception_flags = 0;
+
+    raw = softfloat::int64_to_floatx80(value.raw);
+
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        flags |= FPEXP_INEX2;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+        flags |= FPEXP_OVFL;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+        flags |= FPEXP_UNFL;
+    }
+
+    handler(flags);
+}
+
+FpuExtended::FpuExtended(const FpuLong &value, ExceptionHandler handler)
+{
+    u32 flags = 0;
+    softfloat::float_exception_flags = 0;
+
+    raw = softfloat::int64_to_floatx80(value.raw);
+
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        flags |= FPEXP_INEX2;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+        flags |= FPEXP_OVFL;
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+        flags |= FPEXP_UNFL;
+    }
+
+    handler(flags);
 }
 
 FpuExtended::FpuExtended(const FpuSingle &value)

@@ -435,7 +435,7 @@ Moira::readFpuOpIm(FltFormat fmt)
         case FLT_LONG:
         {
             auto ext = readExt<C68020, Long>();
-            result.raw = softfloat::int32_to_floatx80(ext);
+            result = FpuExtended(FpuLong(u16(ext)), [this](int flags) { fpu.setExcStatusBit(flags); });
             break;
         }
         case FLT_SINGLE:
@@ -468,7 +468,7 @@ Moira::readFpuOpIm(FltFormat fmt)
         {
             auto ext = readExt<C68020, Word>();
             printf("FLT_WORD ext = %x\n", ext);
-            result = FpuExtended(ext);
+            result = FpuExtended(FpuWord(u16(ext)), [this](int flags) { fpu.setExcStatusBit(flags); });
             break;
         }
         case FLT_DOUBLE:
@@ -484,7 +484,7 @@ Moira::readFpuOpIm(FltFormat fmt)
         case FLT_BYTE:
         {
             auto ext = readExt<C68020, Byte>();
-            result = FpuExtended(ext & 0xFF);
+            result = FpuExtended(FpuWord(u8(ext)), [this](int flags) { fpu.setExcStatusBit(flags); });
             printf("readFpuOpIm.B: ext = %x %f\n", ext, result.asDouble());
             break;
         }
