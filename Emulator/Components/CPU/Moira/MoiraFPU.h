@@ -28,7 +28,7 @@ public:
     //
 
     FPUReg(FPU& fpu) : fpu(fpu) { }
-    void reset() { val = FpuExtended::NaN(); }
+    void reset() { val = FpuExtended::nan; }
 
 
     //
@@ -150,10 +150,30 @@ public:
 
 
     //
+    // Managing the host FPU
+    //
+
+    // Clears the exception flags of the host FPU
+    void clearHostFpuFlags();
+
+    // Copies the exception flags of the host FPU into FPSR
+    void copyHostFpuFlags();
+
+
+    //
     // Executing instructions
     //
 
-    FpuExtended fsin(const FpuExtended &value); 
+    std::function<void(int)> exceptionHandler = [this](int flags) { setExcStatusBit(flags); };
+
+    FpuExtended fabs(const FpuExtended &value);
+    FpuExtended facos(const FpuExtended &value);
+    FpuExtended fasin(const FpuExtended &value);
+    FpuExtended fatan(const FpuExtended &value);
+
+    FpuExtended fneg(const FpuExtended &value);
+
+    FpuExtended fsin(const FpuExtended &value);
 
 };
 

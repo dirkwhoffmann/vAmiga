@@ -379,13 +379,90 @@ FPU::readCR(unsigned nr)
     return result;
 }
 
+void
+FPU::clearHostFpuFlags()
+{
+    feclearexcept(FE_ALL_EXCEPT);
+}
+
+void
+FPU::copyHostFpuFlags()
+{
+    if (fetestexcept(FE_INEXACT))   { setExcStatusBit(FPEXP_INEX2); }
+    if (fetestexcept(FE_UNDERFLOW)) { setExcStatusBit(FPEXP_UNFL); }
+    if (fetestexcept(FE_OVERFLOW))  { setExcStatusBit(FPEXP_OVFL); }
+    if (fetestexcept(FE_DIVBYZERO)) { setExcStatusBit(FPEXP_DZ); }
+    if (fetestexcept(FE_INVALID))   { }
+}
+
+FpuExtended
+FPU::fabs(const FpuExtended &value)
+{
+    printf("fabs(%Lf)\n", value.asLongDouble());
+
+    auto result = value;
+    result.raw.high &= 0x7FFF;
+
+    return result;
+}
+
+FpuExtended
+FPU::facos(const FpuExtended &value)
+{
+    printf("facos(%Lf)\n", value.asLongDouble());
+
+    clearHostFpuFlags();
+    auto result = std::acos(value.asLongDouble());
+    copyHostFpuFlags();
+
+    return FpuExtended(result, getRoundingMode(), exceptionHandler);
+}
+
+FpuExtended
+FPU::fasin(const FpuExtended &value)
+{
+    printf("fasin(%Lf)\n", value.asLongDouble());
+
+    clearHostFpuFlags();
+    auto result = std::asin(value.asLongDouble());
+    copyHostFpuFlags();
+
+    return FpuExtended(result, getRoundingMode(), exceptionHandler);
+}
+
+FpuExtended
+FPU::fatan(const FpuExtended &value)
+{
+    printf("fatan(%Lf)\n", value.asLongDouble());
+
+    clearHostFpuFlags();
+    auto result = std::atan(value.asLongDouble());
+    copyHostFpuFlags();
+
+    return FpuExtended(result, getRoundingMode(), exceptionHandler);
+}
+
+FpuExtended
+FPU::fneg(const FpuExtended &value)
+{
+    printf("fneg(%Lf)\n", value.asLongDouble());
+
+    auto result = value;
+    result.raw.high ^= 0x8000;
+
+    return result;
+}
+
 FpuExtended
 FPU::fsin(const FpuExtended &value)
 {
     printf("fsin(%Lf)\n", value.asLongDouble());
+
+    clearHostFpuFlags();
     auto result = std::sinl(value.asLongDouble());
-    printf("    result = %Lf\n", result);
-    return FpuExtended(result, getRoundingMode());
+    copyHostFpuFlags();
+
+    return FpuExtended(result, getRoundingMode(), exceptionHandler);
 }
 
 }

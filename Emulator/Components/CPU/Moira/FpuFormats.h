@@ -43,10 +43,11 @@ typedef std::function<void(u32)> ExceptionHandler;
 
 struct FpuByte {
 
-    u8 raw;
+    i8 raw;
 
     FpuByte() : raw(0) { };
-    FpuByte(u8 value) : raw(value) { };
+    FpuByte(i8 value) : raw(value) { };
+    FpuByte(u8 value) : raw((i8)value) { };
     FpuByte(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
     FpuByte(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
 };
@@ -58,10 +59,11 @@ struct FpuByte {
 
 struct FpuWord {
 
-    u16 raw;
+    i16 raw;
 
     FpuWord() : raw(0) { };
-    FpuWord(u16 value) : raw(value) { };
+    FpuWord(i16 value) : raw(value) { };
+    FpuWord(u16 value) : raw((i16)value) { };
     FpuWord(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
     FpuWord(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
 };
@@ -73,10 +75,11 @@ struct FpuWord {
 
 struct FpuLong {
 
-    u32 raw;
+    i32 raw;
 
     FpuLong() : raw(0) { };
-    FpuLong(u32 value) : raw(value) { };
+    FpuLong(i32 value) : raw(value) { };
+    FpuLong(u32 value) : raw((i32)value) { };
     FpuLong(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
     FpuLong(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
 };
@@ -133,7 +136,10 @@ struct FpuExtended {
     FpuExtended(bool mSign, i16 e, u64 m, ExceptionHandler handler = [](auto&&...) {});
 
     // Constants
-    static FpuExtended NaN() { return FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF); }
+    static FpuExtended nan;
+    static FpuExtended posZero;
+    static FpuExtended negZero;
+
     static constexpr i64 bias = 0x3FFF;
 
     // Analyzers

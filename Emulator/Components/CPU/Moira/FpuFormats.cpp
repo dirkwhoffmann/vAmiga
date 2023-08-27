@@ -355,7 +355,7 @@ FpuExtended::FpuExtended(const std::string &s, FpuRoundingMode mode, ExceptionHa
 FpuExtended::FpuExtended(long double value, FpuRoundingMode mode, ExceptionHandler handler)
 {
     // Handle special cases
-    if (value == 0.0) { raw = { }; return; }
+    if (value == 0.0) { *this = std::signbit(value) ? negZero : posZero; return; }
 
     // Extract the exponent and the mantissa
     int e; auto m = frexpl(value, &e);
@@ -382,6 +382,10 @@ FpuExtended::FpuExtended(bool mSign, i16 e, u64 m, ExceptionHandler handler)
 
     handler(0);
 }
+
+FpuExtended FpuExtended::nan     = FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
+FpuExtended FpuExtended::posZero = FpuExtended(0x0000, 0x0000000000000000);
+FpuExtended FpuExtended::negZero = FpuExtended(0x8000, 0x0000000000000000);
 
 double
 FpuExtended::asDouble() const

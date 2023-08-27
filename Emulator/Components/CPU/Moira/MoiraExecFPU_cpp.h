@@ -85,7 +85,7 @@ Moira::execFGen(u16 opcode)
                 case 0x06: printf("TODO: FLOGNP1\n"); execFGeneric<C, FLOGNP1, M, S>(opcode); return;
                 case 0x08: printf("TODO: FETOXM1\n"); execFGeneric<C, FETOXM1, M, S>(opcode); return;
                 case 0x09: printf("TODO: FTANH\n"); execFGeneric<C, FTANH, M, S>(opcode); return;
-                case 0x0A: printf("TODO: FASIN\n"); execFGeneric<C, FASIN, M, S>(opcode); return;
+                case 0x0A: printf("FASIN\n"); execFGeneric<C, FASIN, M, S>(opcode); return;
                 case 0x0D: printf("TODO: FATANH\n"); execFGeneric<C, FATANH, M, S>(opcode); return;
                 case 0x0E: printf("FSIN\n"); execFGeneric<C, FSIN, M, S>(opcode); return;
                 case 0x0F: printf("TODO: FTAN\n"); execFGeneric<C, FTAN, M, S>(opcode); return;
@@ -95,10 +95,10 @@ Moira::execFGen(u16 opcode)
                 case 0x14: printf("TODO: FLOGN\n"); execFGeneric<C, FLOGN, M, S>(opcode); return;
                 case 0x15: printf("TODO: FLOG10\n"); execFGeneric<C, FLOG10, M, S>(opcode); return;
                 case 0x16: printf("TODO: FLOG2\n"); execFGeneric<C, FLOG2, M, S>(opcode); return;
-                case 0x18: printf("TODO: FABS\n"); execFGeneric<C, FABS, M, S>(opcode); return;
+                case 0x18: printf("FABS\n"); execFGeneric<C, FABS, M, S>(opcode); return;
                 case 0x19: printf("TODO: FCOSH\n"); execFGeneric<C, FCOSH, M, S>(opcode); return;
                 case 0x1A: printf("FNEG\n"); execFGeneric<C, FNEG, M, S>(opcode); return;
-                case 0x1C: printf("TODO: FACOS\n"); execFGeneric<C, FACOS, M, S>(opcode); return;
+                case 0x1C: printf("FACOS\n"); execFGeneric<C, FACOS, M, S>(opcode); return;
                 case 0x1D: printf("TODO: FCOS\n"); execFGeneric<C, FCOS, M, S>(opcode); return;
                 case 0x1E: printf("TODO: FGETEXP\n"); execFGeneric<C, FGETEXP, M, S>(opcode); return;
                 case 0x1F: printf("TODO: FGETMAN\n"); execFGeneric<C, FGETMAN, M, S>(opcode); return;
@@ -569,7 +569,7 @@ Moira::execFGeneric(u16 opcode)
     auto dst = ______xxx_______ (ext);
     (void)readExt<C,Word>();
 
-    FpuExtended source;
+    FpuExtended source, result;
 
     if (ext & 0x4000) {
 
@@ -651,24 +651,21 @@ Moira::execFGeneric(u16 opcode)
 
     switch (I) {
 
-        case FNEG:
-        {
-            printf("FNEG: reg: %d src: %d dst: %d TODO\n", reg, src, dst);
-            // source.raw.high ^= 0x8000; // TODO: Overload operator of Float80 class
-            source.raw = softfloat::floatx80_sub({0,0}, source.raw);
-            break;
-        }
-        case FSIN:
-        {
-            printf("FSIN: reg: %d src: %d dst: %d TODO\n", reg, src, dst);
-            source = fpu.fsin(source);
-        }
+        case FABS:  result = fpu.fabs(source); break;
+        case FACOS: result = fpu.facos(source); break;
+        case FASIN: result = fpu.fasin(source); break;
+
+        case FNEG:  result = fpu.fneg(source); break;
+
+        case FSIN:  result = fpu.fsin(source); break;
+
         default:
+            result = source;
             break;
     }
 
     prefetch<C>();
-    fpu.fpr[dst].set(source);
+    fpu.fpr[dst].set(result);
     fpu.setConditionCodes(dst);
 
     FINALIZE
