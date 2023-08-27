@@ -247,105 +247,95 @@ Moira::readFpuOpRg(int n, FltFormat fmt)
 }
 
 template <Mode M, Flags F> FpuExtended
-Moira::readFpuOpEa(int n, FltFormat fmt)
+Moira::readFpuOpIm(FltFormat fmt)
 {
-    // Float80 result;
-    u32 ea;
+    FpuExtended result;
+
+    auto exceptionHandler = [this](int flags) { fpu.setExcStatusBit(flags); };
 
     switch (fmt) {
 
-        case FLT_BYTE:
-        {
-            ea = computeEA<C68020, M, Byte>(n);
-            /*
-            auto data = i8(readM<C68020, M, Byte>(ea));
-            updateAn<M, Byte>(n);
-
-            result.raw = softfloat::int32_to_floatx80(data);
-            */
-            break;
-        }
-        case FLT_WORD:
-        {
-            ea = computeEA<C68020, M, Word>(n);
-            /*
-            auto data = i16(readM<C68020, M, Word>(ea));
-            updateAn<M, Word>(n);
-
-            result.raw = softfloat::int32_to_floatx80(data);
-            */
-            break;
-        }
         case FLT_LONG:
         {
-            ea = computeEA<C68020, M, Long>(n);
-            /*
-            auto data = i32(readM<C68020, M, Long>(ea));
-            updateAn<M, Long>(n);
-
-            result.raw = softfloat::int32_to_floatx80(data);
-            */
+            auto data = readExt<C68020, Long>();
+            result = FpuExtended(FpuLong(data), exceptionHandler);
             break;
         }
         case FLT_SINGLE:
         {
-            ea = computeEA<C68020, M, Long>(n);
-            /*
-            auto data = readM<C68020, M, Long>(ea);
-            updateAn<M, Long>(n);
-
-            result.raw = softfloat::float32_to_floatx80(data);
-            */
-            break;
-        }
-        case FLT_DOUBLE:
-        {
-            ea = computeEA<C68020, M, Quad>(n);
-            /*
-            u64 data = u64(readM<C68020, M, Long>(ea)) << 32;
-            data |= readM<C68020, M, Long>(U32_ADD(ea, 4));
-            updateAn<M, Quad>(n);
-
-            result.raw = softfloat::float64_to_floatx80(data);
-            */
+            u32 data = readExt<C68020, Long>();
+            result = FpuExtended(FpuSingle(data), exceptionHandler);
             break;
         }
         case FLT_EXTENDED:
         {
-            ea = computeEA<C68020, M, Extended>(n);
-            /*
-            u16 data1 = u16(readM<C68020, M, Word>(ea));
-            u32 data2 = readM<C68020, M, Long>(U32_ADD(ea, 4));
-            u32 data3 = readM<C68020, M, Long>(U32_ADD(ea, 8));
-            updateAn<M, Extended>(n);
+            u32 high = readExt<C68020, Word>();
+            (void)readExt<C68020, Word>();
+            u64 low = (u64)readExt<C68020, Long>() << 32;
+            low |= readExt<C68020, Long>();
 
-            result.raw.high = data1;
-            result.raw.low = ((u64)data2 << 32) | (data3 & 0xFFFFFFFF);
+            // result = FpuExtended(high, low, exceptionHandler);
+
+            result.raw.high = u16(high);
+            result.raw.low = low;
             result.normalize();
-            */
             break;
         }
         case FLT_PACKED:
         {
-
-            ea = computeEA<C68020, M, Quad>(n);
-            /*
-            u16 data1 = u16(readM<C68020, M, Long>(ea));
-            u32 data2 = readM<C68020, M, Long>(U32_ADD(ea, 4));
-            u32 data3 = readM<C68020, M, Long>(U32_ADD(ea, 8));
-            updateAn<M, Extended>(n);
-
-            fpu.unpack(data1, data2, data3, result);
-            */
+            u32 dw1 = readExt<C68020, Long>();
+            u32 dw2 = readExt<C68020, Long>();
+            u32 dw3 = readExt<C68020, Long>();
+            printf("            %x %x %x\n", dw1, dw2, dw3);
+            result = FpuExtended(FpuPacked { dw1, dw2, dw3 }, fpu.getRoundingMode());
             break;
         }
+        case FLT_WORD:
+        {
+            auto data = (u16)readExt<C68020, Word>();
+            result = FpuExtended(FpuWord(data), exceptionHandler);
+            break;
+        }
+        case FLT_DOUBLE:
+        {
+            u64 data = (u64)readExt<C68020, Long>() << 32;
+            data |= readExt<C68020, Long>();
+            result = FpuExtended(FpuDouble(data), exceptionHandler);
+            break;
+        }
+        case FLT_BYTE:
+        {
+            auto data = (u8)readExt<C68020, Byte>();
+            result = FpuExtended(FpuByte(data), exceptionHandler);
+            break;
+        }
+        default:
+            fatalError;
+    }
+
+    return result;
+}
+
+template <Mode M, Flags F> FpuExtended
+Moira::readFpuOpEa(int n, FltFormat fmt)
+{
+    u32 ea;
+
+    switch (fmt) {
+
+        case FLT_BYTE:      ea = computeEA<C68020, M, Byte>(n); break;
+        case FLT_WORD:      ea = computeEA<C68020, M, Word>(n); break;
+        case FLT_LONG:      ea = computeEA<C68020, M, Long>(n); break;
+        case FLT_SINGLE:    ea = computeEA<C68020, M, Long>(n); break;
+        case FLT_DOUBLE:    ea = computeEA<C68020, M, Quad>(n); break;
+        case FLT_EXTENDED:  ea = computeEA<C68020, M, Extended>(n); break;
+        case FLT_PACKED:    ea = computeEA<C68020, M, Quad>(n); break;
 
         default:
             fatalError;
     }
 
     return readFpuOpEa<M,F>(n, ea, fmt);
-    // return result;
 }
 
 template <Mode M, Flags F> FpuExtended
@@ -424,77 +414,6 @@ Moira::readFpuOpEa(int n, u32 ea, FltFormat fmt)
     return result;
 }
 
-
-template <Mode M, Flags F> FpuExtended
-Moira::readFpuOpIm(FltFormat fmt)
-{
-    FpuExtended result;
-
-    auto exceptionHandler = [this](int flags) { fpu.setExcStatusBit(flags); };
-
-    switch (fmt) {
-
-        case FLT_LONG:
-        {
-            auto data = readExt<C68020, Long>();
-            result = FpuExtended(FpuLong(data), exceptionHandler);
-            break;
-        }
-        case FLT_SINGLE:
-        {
-            u32 data = readExt<C68020, Long>();
-            result = FpuExtended(FpuSingle(data), exceptionHandler);
-            break;
-        }
-        case FLT_EXTENDED:
-        {
-            u32 high = readExt<C68020, Word>();
-            (void)readExt<C68020, Word>();
-            u64 low = (u64)readExt<C68020, Long>() << 32;
-            low |= readExt<C68020, Long>();
-
-            // result = FpuExtended(high, low, exceptionHandler);
-
-            result.raw.high = u16(high);
-            result.raw.low = low;
-            result.normalize();
-            break;
-        }
-        case FLT_PACKED:
-        {
-            u32 dw1 = readExt<C68020, Long>();
-            u32 dw2 = readExt<C68020, Long>();
-            u32 dw3 = readExt<C68020, Long>();
-            printf("            %x %x %x\n", dw1, dw2, dw3);
-            result = FpuExtended(FpuPacked { dw1, dw2, dw3 }, fpu.getRoundingMode());
-            break;
-        }
-        case FLT_WORD:
-        {
-            auto data = (u16)readExt<C68020, Word>();
-            result = FpuExtended(FpuWord(data), exceptionHandler);
-            break;
-        }
-        case FLT_DOUBLE:
-        {
-            u64 data = (u64)readExt<C68020, Long>() << 32;
-            data |= readExt<C68020, Long>();
-            result = FpuExtended(FpuDouble(data), exceptionHandler);
-            break;
-        }
-        case FLT_BYTE:
-        {
-            auto data = (u8)readExt<C68020, Byte>();
-            result = FpuExtended(FpuByte(data), exceptionHandler);
-            break;
-        }
-        default:
-            fatalError;
-    }
-
-    return result;
-}
-
 template <Core C, Mode M, Size S, Flags F> void
 Moira::writeOp(int n, u32 val)
 {
@@ -522,6 +441,46 @@ Moira::writeOp(int n, u32 val)
     }
 }
 
+template <Core C, Mode M, Size S, Flags F> void
+Moira::writeOp(int n, u32 ea, u32 val)
+{
+    switch (M) {
+
+        case MODE_DN: writeD<S>(n, val); break;
+        case MODE_AN: writeA<S>(n, val); break;
+        case MODE_IM: fatalError;
+
+        default:
+
+            writeBuffer = (S == Long) ? u16(val >> 16) : u16(val & 0xFFFF);
+
+            // Write to effective address
+            writeM<C, M, S, F>(ea, val);
+    }
+}
+
+template <Mode M, Flags F> void
+Moira::writeFpuOp(int n, FPUReg &reg, FltFormat fmt, int k)
+{
+    u32 ea;
+
+    switch (fmt) {
+
+        case FLT_BYTE:      ea = computeEA<C68020, M, Byte>(n); break;
+        case FLT_WORD:      ea = computeEA<C68020, M, Word>(n); break;
+        case FLT_LONG:      ea = computeEA<C68020, M, Long>(n); break;
+        case FLT_SINGLE:    ea = computeEA<C68020, M, Long>(n); break;
+        case FLT_DOUBLE:    ea = computeEA<C68020, M, Quad>(n); break;
+        case FLT_EXTENDED:  ea = computeEA<C68020, M, Extended>(n); break;
+        case FLT_PACKED:    ea = computeEA<C68020, M, Quad>(n); break;
+
+        default:
+            fatalError;
+    }
+
+    writeFpuOp<M,F>(n, ea, reg, fmt, k);
+}
+
 template <Mode M, Flags F> void
 Moira::writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k)
 {
@@ -532,7 +491,6 @@ Moira::writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k)
         case FLT_BYTE:
         {
             auto data = FpuByte(reg, exceptionHandler).raw;
-            // u8 data = reg.asByte();
             writeM<C68020, M, Byte>(ea, data);
             updateAn<M, Byte>(n);
             break;
@@ -540,7 +498,6 @@ Moira::writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k)
         case FLT_WORD:
         {
             auto data = FpuWord(reg, exceptionHandler).raw;
-            // u16 data = reg.asWord();
             writeM<C68020, M, Word>(ea, data);
             updateAn<M, Word>(n);
             break;
@@ -548,7 +505,6 @@ Moira::writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k)
         case FLT_LONG:
         {
             auto data = FpuLong(reg, exceptionHandler).raw;
-            // u32 data = reg.asLong();
             writeM<C68020, M, Long>(ea, data);
             updateAn<M, Long>(n);
             break;
@@ -575,9 +531,9 @@ Moira::writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k)
             if constexpr (F & FPU_FMOVEM) {
                 data = reg.val;
             } else {
-                data = reg.get();
+                data = reg.asExtended();
             }
-            
+
             writeM<C68020, M, Word>(ea, u32(data.raw.high));
             writeM<C68020, M, Word>(U32_ADD(ea, 2), u32(0));
             writeM<C68020, M, Long>(U32_ADD(ea, 4), u32(data.raw.low >> 32));
@@ -588,8 +544,6 @@ Moira::writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k)
         case FLT_PACKED:
         {
             auto data = FpuPacked(reg, k, fpu.getRoundingMode(), exceptionHandler);
-            // FpuPacked data = reg.asPacked(k);
-            // printf("Packed = %x,%x,%x\n", data.data[0], data.data[1], data.data[2]);
             auto ea = computeEA<C68020, M, Extended>(n);
             writeM<C68020, M, Long>(ea, data.data[0]);
             writeM<C68020, M, Long>(U32_ADD(ea, 4), data.data[1]);
@@ -600,24 +554,6 @@ Moira::writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k)
 
         default:
             fatalError;
-    }
-}
-
-template <Core C, Mode M, Size S, Flags F> void
-Moira::writeOp(int n, u32 ea, u32 val)
-{
-    switch (M) {
-
-        case MODE_DN: writeD<S>(n, val); break;
-        case MODE_AN: writeA<S>(n, val); break;
-        case MODE_IM: fatalError;
-
-        default:
-
-            writeBuffer = (S == Long) ? u16(val >> 16) : u16(val & 0xFFFF);
-
-            // Write to effective address
-            writeM<C, M, S, F>(ea, val);
     }
 }
 

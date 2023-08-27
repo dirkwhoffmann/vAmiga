@@ -5,6 +5,7 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "MoiraFPU.h"
 #include "Moira.h"
 #include "MoiraMacros.h"
@@ -14,7 +15,7 @@
 namespace vamiga::moira {
 
 FpuExtended
-FPUReg::get()
+FPUReg::asExtended()
 {
     FpuExtended result = val;
 
@@ -43,24 +44,18 @@ FPUReg::set(const FpuExtended other)
     val = other;
 
     // Round to the correct precision
-    val = get();
+    val = asExtended();
 
     // Experimental
     val.normalize();
 
     // Experimental
     if (val.isSignalingNaN()) {
-        val.raw.low |= (1L << 62); // Make nonsignaling
+        val.raw.low |= (1LL << 62); // Make nonsignaling
         fpu.setExcStatusBit(FPEXP_SNAN);
     }
 
     printf("FPUReg::set %x,%llx (%f) flags = %x\n", val.raw.high, val.raw.low, val.asDouble(), softfloat::float_exception_flags);
-}
-
-void
-FPUReg::move(FPUReg &dest)
-{
-    dest.set(val);
 }
 
 FPU::FPU(Moira& ref) : moira(ref)
@@ -114,40 +109,26 @@ FPU::getRoundingMode() const
     }
 }
 
-void
-FPU::pushRoundingMode(int mode)
-{
-    oldRoundingMode = fegetround();
-
-    switch (mode) {
-
-        case FPU_RND_NEAREST:   fesetround(FE_TONEAREST); break;
-        case FPU_RND_ZERO:      fesetround(FE_TOWARDZERO); break;
-        case FPU_RND_DOWNWARD:  fesetround(FE_DOWNWARD); break;
-        case FPU_RND_UPWARD:    fesetround(FE_UPWARD); break;
-    }
-}
-
-void
-FPU::popRoundingMode()
-{
-    fesetround(oldRoundingMode);
-}
-
-int
-FPU::setRoundingMode(int mode)
+FpuRoundingMode
+FPU::fesetround(FpuRoundingMode mode)
 {
     auto oldMode = fegetround();
 
     switch (mode) {
 
-        case FPU_RND_NEAREST:   fesetround(FE_TONEAREST); break;
-        case FPU_RND_ZERO:      fesetround(FE_TOWARDZERO); break;
-        case FPU_RND_DOWNWARD:  fesetround(FE_DOWNWARD); break;
-        case FPU_RND_UPWARD:    fesetround(FE_UPWARD); break;
+        case FPU_RND_NEAREST:   ::fesetround(FE_TONEAREST); break;
+        case FPU_RND_ZERO:      ::fesetround(FE_TOWARDZERO); break;
+        case FPU_RND_DOWNWARD:  ::fesetround(FE_DOWNWARD); break;
+        default:                ::fesetround(FE_UPWARD); break;
     }
 
-    return oldMode;
+    switch (oldMode) {
+
+        case FE_TONEAREST:      return FPU_RND_NEAREST;
+        case FE_TOWARDZERO:     return FPU_RND_ZERO;
+        case FE_DOWNWARD:       return FPU_RND_DOWNWARD;
+        default:                return FPU_RND_UPWARD;
+    }
 }
 
 bool
@@ -277,15 +258,8 @@ FPU::setFPSR(u32 value)
 }
 
 void
-FPU::setFPIAR(u32 value)
-{
-    fpiar = value;
-}
-
-void
 FPU::setExcStatusBit(u32 mask)
 {
-    printf("setExcStatusBit\n");
     assert((mask & ~0xFF00) == 0);
 
     fpsr |= mask;
@@ -325,6 +299,12 @@ FPU::setConditionCodes(const FpuExtended &value)
     REPLACE_BIT(fpsr, 26, z);
     REPLACE_BIT(fpsr, 25, i);
     REPLACE_BIT(fpsr, 24, nan);
+}
+
+void
+FPU::setFPIAR(u32 value)
+{
+    fpiar = value;
 }
 
 FpuExtended
@@ -397,6 +377,15 @@ FPU::readCR(unsigned nr)
     if (nr >= 0x30 && nr < 0x40) result = readRom(rom2[nr - 0x30]);
 
     return result;
+}
+
+FpuExtended
+FPU::fsin(const FpuExtended &value)
+{
+    printf("fsin(%Lf)\n", value.asLongDouble());
+    auto result = std::sinl(value.asLongDouble());
+    printf("    result = %Lf\n", result);
+    return FpuExtended(result, getRoundingMode());
 }
 
 }

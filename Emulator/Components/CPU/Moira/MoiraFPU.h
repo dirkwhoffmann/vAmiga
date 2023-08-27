@@ -12,10 +12,12 @@
 
 namespace vamiga::moira {
 
-struct FPUReg {
+class FPUReg {
 
     // Reference to the FPU
     class FPU &fpu;
+
+public:
 
     // Register value
     FpuExtended val;
@@ -33,9 +35,9 @@ struct FPUReg {
     // Getting and setting
     //
 
-    FpuExtended get();
+    FpuExtended asExtended();
+    FpuExtended get() const { return val; }
     void set(const FpuExtended other);
-    void move(FPUReg &dest);
 
 
     //
@@ -49,14 +51,6 @@ struct FPUReg {
     bool isSignalingNaN() const { return val.isSignalingNaN(); }
     bool isNonsignalingNaN() const { return val.isNonsignalingNaN(); }
     bool isNormalized() const { return val.isNormalized(); }
-
-
-    //
-    // Converting
-    //
-
-    // [[deprecated]] FpuExtended asExtended();
-    // [[deprecated]] FpuPacked asPacked(int k = 0);
 };
 
 class FPU {
@@ -103,15 +97,12 @@ public:
     void setModel(FPUModel model);
     FPUModel getModel() const { return model; }
 
+    // Returns the precision and rounding mode, as specified in the FPCR
     FpuPrecision getPrecision() const;
     FpuRoundingMode getRoundingMode() const;
 
-    // DEPRECATED
-    void pushRoundingMode(int mode);
-    void pushRoundingMode() { pushRoundingMode(getRoundingMode()); }
-    void popRoundingMode();
-
-    static int setRoundingMode(int mode);
+    // Configures the rounding mode of the host FPU
+    static FpuRoundingMode fesetround(FpuRoundingMode mode);
 
 
     //
@@ -120,21 +111,24 @@ public:
 
 public:
 
+    // Accesses the control register
     u32 getFPCR() const { return fpcr & 0x0000FFF0; }
     void setFPCR(u32 value);
 
+    // Accesses the status register
     void clearFPSR() { fpsr &= 0xFFFF00F8; }
     u32 getFPSR() const { return fpsr & 0x0FFFFFF8; }
     void setFPSR(u32 value);
-
-    u32 getFPIAR() const { return fpiar; }
-    void setFPIAR(u32 value);
 
     void setExcStatusBit(u32 mask);
     void clearExcStatusBit(u32 mask);
 
     void setConditionCodes(int reg);
     void setConditionCodes(const FpuExtended &value);
+
+    // Accesses the instruction address register
+    u32 getFPIAR() const { return fpiar; }
+    void setFPIAR(u32 value);
 
 
     //
@@ -159,7 +153,7 @@ public:
     // Executing instructions
     //
 
-    // void execFMovecr(u16 op, u16 ext);
+    FpuExtended fsin(const FpuExtended &value); 
 
 };
 

@@ -1,10 +1,11 @@
-//// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // This file is part of Moira - A Motorola 68k emulator
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "FpuFormats.h"
 #include "MoiraFPU.h"
 #include <sstream>
@@ -213,7 +214,6 @@ FpuExtended::FpuExtended(const FpuLong &value, ExceptionHandler handler)
 
 FpuExtended::FpuExtended(const FpuSingle &value, ExceptionHandler handler)
 {
-    printf("FpuExtended::FpuExtended\n");
     u32 flags = 0;
     softfloat::float_exception_flags = 0;
 
@@ -228,11 +228,8 @@ FpuExtended::FpuExtended(const FpuSingle &value, ExceptionHandler handler)
     if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
         flags |= FPEXP_UNFL;
     }
-    printf("FpuExtended::FpuExtended (handler)\n");
 
     handler(flags);
-    printf("FpuExtended::FpuExtended (quit)\n");
-
 }
 
 FpuExtended::FpuExtended(const FpuDouble &value, ExceptionHandler handler)
@@ -347,9 +344,9 @@ FpuExtended::FpuExtended(const std::string &s, FpuRoundingMode mode, ExceptionHa
 {
     long double value;
 
-    auto old = FPU::setRoundingMode(mode);
+    auto old = FPU::fesetround(mode);
     sscanf(s.c_str(), "%Le", &value);
-    FPU::setRoundingMode(old);
+    FPU::fesetround(old);
 
     *this = FpuExtended(value, mode);
     normalize();
@@ -399,18 +396,6 @@ FpuExtended::asLongDouble() const
     auto result = std::ldexpl((long double)man(), (int)exp() - 63);
     return result * sgn();
 }
-
-std::pair<int, long double>
-FpuExtended::frexp10() const
-{
-    long double val = asLongDouble();
-    int e = isZero() ? 0 : 1 + (int)std::floor(std::log10(std::fabs(val)));
-    long double m = val * std::powl(10L, -e);
-
-    printf("    frexp10: val = %.20Lf e = %d m = %.20Lf\n", val, e, m);
-
-    return { e, m };
-};
 
 bool
 FpuExtended::isNegative() const
@@ -467,6 +452,16 @@ FpuExtended::normalize()
     }
 }
 
+std::pair<int, long double>
+FpuExtended::frexp10() const
+{
+    long double val = asLongDouble();
+    int e = isZero() ? 0 : 1 + (int)std::floor(std::log10(std::fabs(val)));
+    long double m = val * std::powl(10L, -e);
+
+    return { e, m };
+};
+
 
 //
 // FpuPacked
@@ -496,15 +491,16 @@ FpuPacked::FpuPacked(const FpuExtended &value, int k, FpuRoundingMode mode, Exce
 
     // Create string representation
     auto ldval = value.asLongDouble();
-    auto old = FPU::setRoundingMode(mode);
+    auto old = FPU::fesetround(mode);
     ss << ldval;
     std::stringstream ss2(ss.str());
     ss2 >> test;
-    FPU::setRoundingMode(old);
+    FPU::fesetround(old);
 
     if (ldval != test) {
         statusbits |= FPEXP_INEX2;
     }
+    
     // Assemble exponent
     data[0] = e < 0 ? 0x40000000 : 0;
     data[0] |= (e % 10) << 16; e /= 10;
