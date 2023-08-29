@@ -401,65 +401,20 @@ FpuExtended::asLongDouble() const
     return result * sgn();
 }
 
-bool
-FpuExtended::isNegative() const
+int
+FpuExtended::fpclassify() const
 {
-    return (raw.high & 0x8000);
-}
+    if (isinf()) return FP_INFINITE;
+    if (isnan()) return FP_NAN;
+    if (iszero()) return FP_ZERO;
+    if (issubnormal()) return FP_SUBNORMAL;
 
-bool
-FpuExtended::isZero() const
-{
-    return (raw.high & 0x7FFF) == 0 && raw.low == 0;
+    return FP_NORMAL;
 }
-
-/*
-bool
-FpuExtended::isfinite() const
-{
-    return !isnan() && !isinf();
-}
-*/
-
-bool
-FpuExtended::isinf() const
-{
-    return (raw.high & 0x7FFF) == 0x7FFF && raw.low == 0;
-}
-
-bool
-FpuExtended::isnan() const
-{
-    return (raw.high & 0x7FFF) == 0x7FFF && raw.low != 0;
-}
-
-bool
-FpuExtended::isSignalingNaN() const
-{
-    return isnan() && (raw.low & (1L << 62)) == 0;
-}
-
-bool
-FpuExtended::isNonsignalingNaN() const
-{
-    return isnan() && (raw.low & (1L << 62)) != 0;
-}
-
-/*
-bool
-FpuExtended::isnormal() const
-{
-    if ((raw.high & 0x7FFF) == 0) return true;
-    if (isnan()) return true;
-
-    return raw.low == 0 || (raw.low & (1L << 63)) != 0;
-}
-*/
 
 void
 FpuExtended::normalize()
 {
-    // while (!isnormal()) {
     while (issubnormal()) {
 
         raw.high -= 1;
@@ -471,7 +426,7 @@ std::pair<int, long double>
 FpuExtended::frexp10() const
 {
     long double val = asLongDouble();
-    int e = isZero() ? 0 : 1 + (int)std::floor(std::log10(std::fabs(val)));
+    int e = iszero() ? 0 : 1 + (int)std::floor(std::log10(std::fabs(val)));
     long double m = val * std::powl(10L, -e);
 
     return { e, m };

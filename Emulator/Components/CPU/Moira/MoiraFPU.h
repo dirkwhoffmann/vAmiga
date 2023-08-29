@@ -44,14 +44,19 @@ public:
     // Classifying
     //
 
-    bool isNegative() const { return val.isNegative(); }
-    bool isZero() const  { return val.isZero(); }
-    bool isInfinity() const { return val.isinf(); }
-    bool isNaN() const { return val.isnan(); }
+
+    int fpclassify() const { return val.fpclassify(); }
+    bool isfinite() const { return val.isfinite(); }
+    bool isinf() const { return val.isinf(); }
+    bool isnan() const { return val.isnan(); }
+    bool isnormal() const { return val.isnormal(); }
+    bool issubnormal() const { return val.issubnormal(); }
+    bool signbit() const { return val.signbit(); }
+
+    bool isNegative() const { return val.isnegative(); }
+    bool isZero() const  { return val.iszero(); }
     bool isSignalingNaN() const { return val.isSignalingNaN(); }
     bool isNonsignalingNaN() const { return val.isNonsignalingNaN(); }
-    bool isNormalized() const { return val.isnormal(); }
-    bool issubnormal() const { return val.issubnormal(); }
 
 };
 
