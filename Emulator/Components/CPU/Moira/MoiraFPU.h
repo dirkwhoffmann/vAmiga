@@ -180,6 +180,9 @@ public:
 
     std::function<void(int)> exceptionHandler = [this](int flags) { setExcStatusBit(flags); };
 
+    FpuExtended monadic(const FpuExtended &value, std::function<long double(long double)> func);
+
+
     FpuExtended fabs(const FpuExtended &value);
     FpuExtended facos(const FpuExtended &value);
     FpuExtended fasin(const FpuExtended &value);

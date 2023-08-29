@@ -410,6 +410,32 @@ FPU::makeNonsignalingNan(const FpuExtended &value)
 }
 
 FpuExtended
+FPU::monadic(const FpuExtended &value, std::function<long double(long double)> func)
+{
+    switch (value.fpclassify()) {
+
+        case FP_INFINITE:
+
+            setExcStatusBit(FPEXP_OPERR);
+            return FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
+
+        case FP_NAN:
+
+            return makeNonsignalingNan(value);
+
+        default:
+
+            clearHostFpuFlags();
+            auto result = func(value.asLongDouble());
+            copyHostFpuFlags();
+
+            printf("fsin(%Lf) = %Lf\n", value.asLongDouble(), result);
+
+            return FpuExtended(result, getRoundingMode(), exceptionHandler);
+    }
+}
+
+FpuExtended
 FPU::fabs(const FpuExtended &value)
 {
     printf("fabs(%Lf)\n", value.asLongDouble());
@@ -471,22 +497,7 @@ FpuExtended
 FPU::fsin(const FpuExtended &value)
 {
     printf("fsin %x %llx\n", value.raw.high, value.raw.low);
-
-    if (value.isinf()) {
-        setExcStatusBit(FPEXP_OPERR);
-        return FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
-    }
-    if (value.isnan()) {
-        return makeNonsignalingNan(value);
-    }
-
-    clearHostFpuFlags();
-    auto result = std::sinl(value.asLongDouble());
-    copyHostFpuFlags();
-
-    printf("fsin(%Lf) = %Lf\n", value.asLongDouble(), result);
-
-    return FpuExtended(result, getRoundingMode(), exceptionHandler);
+    return monadic(value, [&](long double x) { return std::sin(x); });
 }
 
 }
