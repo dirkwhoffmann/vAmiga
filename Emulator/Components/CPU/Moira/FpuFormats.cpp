@@ -413,20 +413,22 @@ FpuExtended::isZero() const
     return (raw.high & 0x7FFF) == 0 && raw.low == 0;
 }
 
+/*
 bool
 FpuExtended::isfinite() const
 {
-    return !isNaN() && !isInfinity();
+    return !isnan() && !isinf();
 }
+*/
 
 bool
-FpuExtended::isInfinity() const
+FpuExtended::isinf() const
 {
     return (raw.high & 0x7FFF) == 0x7FFF && raw.low == 0;
 }
 
 bool
-FpuExtended::isNaN() const
+FpuExtended::isnan() const
 {
     return (raw.high & 0x7FFF) == 0x7FFF && raw.low != 0;
 }
@@ -434,28 +436,31 @@ FpuExtended::isNaN() const
 bool
 FpuExtended::isSignalingNaN() const
 {
-    return isNaN() && (raw.low & (1L << 62)) == 0;
+    return isnan() && (raw.low & (1L << 62)) == 0;
 }
 
 bool
 FpuExtended::isNonsignalingNaN() const
 {
-    return isNaN() && (raw.low & (1L << 62)) != 0;
+    return isnan() && (raw.low & (1L << 62)) != 0;
 }
 
+/*
 bool
-FpuExtended::isNormalized() const
+FpuExtended::isnormal() const
 {
     if ((raw.high & 0x7FFF) == 0) return true;
-    if (isNaN()) return true;
+    if (isnan()) return true;
 
     return raw.low == 0 || (raw.low & (1L << 63)) != 0;
 }
+*/
 
 void
 FpuExtended::normalize()
 {
-    while (!isNormalized()) {
+    // while (!isnormal()) {
+    while (issubnormal()) {
 
         raw.high -= 1;
         raw.low <<= 1;

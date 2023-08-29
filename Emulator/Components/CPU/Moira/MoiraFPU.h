@@ -46,11 +46,13 @@ public:
 
     bool isNegative() const { return val.isNegative(); }
     bool isZero() const  { return val.isZero(); }
-    bool isInfinity() const { return val.isInfinity(); }
-    bool isNaN() const { return val.isNaN(); }
+    bool isInfinity() const { return val.isinf(); }
+    bool isNaN() const { return val.isnan(); }
     bool isSignalingNaN() const { return val.isSignalingNaN(); }
     bool isNonsignalingNaN() const { return val.isNonsignalingNaN(); }
-    bool isNormalized() const { return val.isNormalized(); }
+    bool isNormalized() const { return val.isnormal(); }
+    bool issubnormal() const { return val.issubnormal(); }
+
 };
 
 class FPU {

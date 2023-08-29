@@ -32,7 +32,7 @@ FPUReg::asExtended()
                 result = FpuDouble(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
             }
         }
-        if (!isNormalized()) {
+        if (issubnormal()) {
 
             fpu.setExcStatusBit(FPEXP_UNFL);
         }
@@ -472,11 +472,11 @@ FPU::fsin(const FpuExtended &value)
 {
     printf("fsin %x %llx\n", value.raw.high, value.raw.low);
 
-    if (value.isInfinity()) {
+    if (value.isinf()) {
         setExcStatusBit(FPEXP_OPERR);
         return FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
     }
-    if (value.isNaN()) {
+    if (value.isnan()) {
         return makeNonsignalingNan(value);
     }
 
