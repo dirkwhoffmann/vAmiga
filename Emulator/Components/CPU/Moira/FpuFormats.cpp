@@ -414,6 +414,12 @@ FpuExtended::isZero() const
 }
 
 bool
+FpuExtended::isfinite() const
+{
+    return !isNaN() && !isInfinity();
+}
+
+bool
 FpuExtended::isInfinity() const
 {
     return (raw.high & 0x7FFF) == 0x7FFF && raw.low == 0;

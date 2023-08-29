@@ -149,6 +149,7 @@ struct FpuExtended {
 
     bool isNegative() const;
     bool isZero() const;
+    bool isfinite() const;
     bool isInfinity() const;
     bool isNaN() const;
     bool isSignalingNaN() const;

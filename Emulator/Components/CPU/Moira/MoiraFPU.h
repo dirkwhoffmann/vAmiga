@@ -161,6 +161,13 @@ public:
 
 
     //
+    // Handling special values
+    //
+
+    static FpuExtended makeNonsignalingNan(const FpuExtended &value);
+
+
+    //
     // Executing instructions
     //
 

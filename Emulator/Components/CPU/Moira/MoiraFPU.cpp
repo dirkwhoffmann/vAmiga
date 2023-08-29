@@ -19,22 +19,24 @@ FPUReg::asExtended()
 {
     FpuExtended result = val;
 
-    softfloat::float_exception_flags = 0;
+    if (val.isfinite()) {
 
-    if (fpu.getPrecision() != FPU_PREC_EXTENDED) {
+        softfloat::float_exception_flags = 0;
 
-        if (fpu.getPrecision() == FPU_PREC_SINGLE) {
-            result = FpuSingle(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
+        if (fpu.getPrecision() != FPU_PREC_EXTENDED) {
+
+            if (fpu.getPrecision() == FPU_PREC_SINGLE) {
+                result = FpuSingle(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
+            }
+            if (fpu.getPrecision() == FPU_PREC_DOUBLE) {
+                result = FpuDouble(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
+            }
         }
-        if (fpu.getPrecision() == FPU_PREC_DOUBLE) {
-            result = FpuDouble(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
+        if (!isNormalized()) {
+
+            fpu.setExcStatusBit(FPEXP_UNFL);
         }
     }
-    if (!isNormalized()) {
-
-        fpu.setExcStatusBit(FPEXP_UNFL);
-    }
-
     return result;
 }
 
@@ -43,17 +45,23 @@ FPUReg::set(const FpuExtended other)
 {
     val = other;
 
+    printf("FPUReg (1): %x,%llx\n", val.raw.high, val.raw.low);
+
     // Round to the correct precision
     val = asExtended();
+
+    printf("FPUReg (2): %x,%llx\n", val.raw.high, val.raw.low);
 
     // Experimental
     val.normalize();
 
     // Experimental
+    /*
     if (val.isSignalingNaN()) {
         val.raw.low |= (1LL << 62); // Make nonsignaling
         fpu.setExcStatusBit(FPEXP_SNAN);
     }
+    */
 
     printf("FPUReg::set %x,%llx (%f) flags = %x\n", val.raw.high, val.raw.low, val.asDouble(), softfloat::float_exception_flags);
 }
@@ -396,6 +404,12 @@ FPU::copyHostFpuFlags()
 }
 
 FpuExtended
+FPU::makeNonsignalingNan(const FpuExtended &value)
+{
+    return FpuExtended(value.raw.high, value.raw.low | (1LL << 62));
+}
+
+FpuExtended
 FPU::fabs(const FpuExtended &value)
 {
     printf("fabs(%Lf)\n", value.asLongDouble());
@@ -456,11 +470,21 @@ FPU::fneg(const FpuExtended &value)
 FpuExtended
 FPU::fsin(const FpuExtended &value)
 {
-    printf("fsin(%Lf)\n", value.asLongDouble());
+    printf("fsin %x %llx\n", value.raw.high, value.raw.low);
+
+    if (value.isInfinity()) {
+        setExcStatusBit(FPEXP_OPERR);
+        return FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
+    }
+    if (value.isNaN()) {
+        return makeNonsignalingNan(value);
+    }
 
     clearHostFpuFlags();
     auto result = std::sinl(value.asLongDouble());
     copyHostFpuFlags();
+
+    printf("fsin(%Lf) = %Lf\n", value.asLongDouble(), result);
 
     return FpuExtended(result, getRoundingMode(), exceptionHandler);
 }
