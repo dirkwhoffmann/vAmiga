@@ -132,7 +132,7 @@ struct FpuExtended {
     FpuExtended(const FpuDouble &value, ExceptionHandler handler = [](auto&&...) {});
     FpuExtended(const FpuPacked &value, FpuRoundingMode mode, ExceptionHandler handler = [](auto&&...) {});
     FpuExtended(const std::string &s, FpuRoundingMode mode, ExceptionHandler handler = [](auto&&...) {});
-    FpuExtended(long double value, FpuRoundingMode mode, ExceptionHandler handler = [](auto&&...) {});
+    FpuExtended(long double value, FpuRoundingMode mode = FPU_RND_NEAREST, ExceptionHandler handler = [](auto&&...) {});
     FpuExtended(bool mSign, i16 e, u64 m, ExceptionHandler handler = [](auto&&...) {});
 
     // Constants
@@ -141,6 +141,14 @@ struct FpuExtended {
     static FpuExtended negZero;
 
     static constexpr i64 bias = 0x3FFF;
+
+    // Operators
+    bool operator==(const FpuExtended& rhs) const;
+    bool operator!=(const FpuExtended& rhs) const;
+    bool operator<=(const FpuExtended& rhs) const;
+    bool operator>=(const FpuExtended& rhs) const;
+    bool operator<(const FpuExtended& rhs) const;
+    bool operator>(const FpuExtended& rhs) const;
 
     // Analyzers
     i64 sgn() const { return (raw.high & 0x8000) ? -1 : 1; }

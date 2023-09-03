@@ -649,6 +649,8 @@ Moira::execFGeneric(u16 opcode)
         source = fpu.fpr[src].val;
     }
 
+    fpu.clearFPSR();
+
     switch (I) {
 
         case FABS:  result = fpu.fabs(source); break;

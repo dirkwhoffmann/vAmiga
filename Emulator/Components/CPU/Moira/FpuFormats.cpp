@@ -401,6 +401,42 @@ FpuExtended::asLongDouble() const
     return result * sgn();
 }
 
+bool
+FpuExtended::operator==(const FpuExtended& rhs) const
+{
+    return softfloat::floatx80_eq(this->raw, rhs.raw);
+}
+
+bool
+FpuExtended::operator!=(const FpuExtended& rhs) const
+{
+    return !softfloat::floatx80_eq(this->raw, rhs.raw);
+}
+
+bool
+FpuExtended::operator<=(const FpuExtended& rhs) const
+{
+    return softfloat::floatx80_le(this->raw, rhs.raw);
+}
+
+bool
+FpuExtended::operator>=(const FpuExtended& rhs) const
+{
+    return rhs <= *this;
+}
+
+bool
+FpuExtended::operator<(const FpuExtended& rhs) const
+{
+    return softfloat::floatx80_lt(this->raw, rhs.raw);
+}
+
+bool
+FpuExtended::operator>(const FpuExtended& rhs) const
+{
+    return rhs < *this; 
+}
+
 int
 FpuExtended::fpclassify() const
 {

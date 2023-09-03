@@ -56,12 +56,10 @@ FPUReg::set(const FpuExtended other)
     val.normalize();
 
     // Experimental
-    /*
     if (val.isSignalingNaN()) {
         val.raw.low |= (1LL << 62); // Make nonsignaling
         fpu.setExcStatusBit(FPEXP_SNAN);
     }
-    */
 
     printf("FPUReg::set %x,%llx (%f) flags = %x\n", val.raw.high, val.raw.low, val.asDouble(), softfloat::float_exception_flags);
 }
@@ -400,7 +398,7 @@ FPU::copyHostFpuFlags()
     if (fetestexcept(FE_UNDERFLOW)) { setExcStatusBit(FPEXP_UNFL); }
     if (fetestexcept(FE_OVERFLOW))  { setExcStatusBit(FPEXP_OVFL); }
     if (fetestexcept(FE_DIVBYZERO)) { setExcStatusBit(FPEXP_DZ); }
-    if (fetestexcept(FE_INVALID))   { }
+    if (fetestexcept(FE_INVALID))   { setExcStatusBit(FPEXP_OPERR); }
 }
 
 FpuExtended
@@ -429,7 +427,10 @@ FPU::monadic(const FpuExtended &value, std::function<long double(long double)> f
             auto result = func(value.asLongDouble());
             copyHostFpuFlags();
 
-            printf("fsin(%Lf) = %Lf\n", value.asLongDouble(), result);
+            // EXPERIMENTAL
+            if (std::isnan(result)) {
+                return FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
+            }
 
             return FpuExtended(result, getRoundingMode(), exceptionHandler);
     }
@@ -440,6 +441,8 @@ FPU::fabs(const FpuExtended &value)
 {
     printf("fabs(%Lf)\n", value.asLongDouble());
 
+    if (value.isnan()) { return makeNonsignalingNan(value); }
+
     auto result = value;
     result.raw.high &= 0x7FFF;
 
@@ -449,37 +452,30 @@ FPU::fabs(const FpuExtended &value)
 FpuExtended
 FPU::facos(const FpuExtended &value)
 {
-    printf("facos(%Lf)\n", value.asLongDouble());
+    printf("facos %x %llx\n", value.raw.high, value.raw.low);
 
-    clearHostFpuFlags();
-    auto result = std::acos(value.asLongDouble());
-    copyHostFpuFlags();
+    /*
+    if (value < -1.0 || value > 1.0) {
 
-    return FpuExtended(result, getRoundingMode(), exceptionHandler);
+        setExcStatusBit(FPEXP_OPERR);
+        return FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
+    }
+    */
+    return monadic(value, [&](long double x) { return std::acos(x); });
 }
 
 FpuExtended
 FPU::fasin(const FpuExtended &value)
 {
-    printf("fasin(%Lf)\n", value.asLongDouble());
-
-    clearHostFpuFlags();
-    auto result = std::asin(value.asLongDouble());
-    copyHostFpuFlags();
-
-    return FpuExtended(result, getRoundingMode(), exceptionHandler);
+    printf("fasin %x %llx\n", value.raw.high, value.raw.low);
+    return monadic(value, [&](long double x) { return std::asin(x); });
 }
 
 FpuExtended
 FPU::fatan(const FpuExtended &value)
 {
-    printf("fatan(%Lf)\n", value.asLongDouble());
-
-    clearHostFpuFlags();
-    auto result = std::atan(value.asLongDouble());
-    copyHostFpuFlags();
-
-    return FpuExtended(result, getRoundingMode(), exceptionHandler);
+    printf("fatan %x %llx\n", value.raw.high, value.raw.low);
+    return monadic(value, [&](long double x) { return std::atan(x); });
 }
 
 FpuExtended

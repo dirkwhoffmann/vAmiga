@@ -313,6 +313,12 @@ Moira::readFpuOpIm(FltFormat fmt)
             fatalError;
     }
 
+    /*
+    if (result.isnan()) {
+        fpu.setExcStatusBit(FPEXP_SNAN);
+        result = FPU::makeNonsignalingNan(result);
+    }
+    */
     return result;
 }
 
