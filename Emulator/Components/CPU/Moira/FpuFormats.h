@@ -172,7 +172,7 @@ struct FpuExtended {
     // Converters
     //
 
-    double asDouble() const;
+    // double asDouble() const;
     long double asLongDouble() const;
 
 

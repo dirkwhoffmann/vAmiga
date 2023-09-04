@@ -387,16 +387,25 @@ FpuExtended FpuExtended::nan     = FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
 FpuExtended FpuExtended::posZero = FpuExtended(0x0000, 0x0000000000000000);
 FpuExtended FpuExtended::negZero = FpuExtended(0x8000, 0x0000000000000000);
 
+/*
 double
 FpuExtended::asDouble() const
 {
     auto value = softfloat::floatx80_to_float64(raw);
     return *((double *)&value);
 }
+*/
 
 long double
 FpuExtended::asLongDouble() const
 {
+    if (isinf()) {
+        return std::copysignl(std::numeric_limits<long double>::infinity(), signbit() ? -1.0L : 1.0L);
+    }
+    if (isnan()) {
+        return std::copysignl(std::numeric_limits<long double>::quiet_NaN(), signbit() ? -1.0L : 1.0L);
+    }
+
     auto result = std::ldexpl((long double)man(), (int)exp() - 63);
     return result * sgn();
 }

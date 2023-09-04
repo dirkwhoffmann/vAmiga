@@ -61,7 +61,7 @@ FPUReg::set(const FpuExtended other)
         fpu.setExcStatusBit(FPEXP_SNAN);
     }
 
-    printf("FPUReg::set %x,%llx (%f) flags = %x\n", val.raw.high, val.raw.low, val.asDouble(), softfloat::float_exception_flags);
+    printf("FPUReg::set %x,%llx (%Lf) flags = %x\n", val.raw.high, val.raw.low, val.asLongDouble(), softfloat::float_exception_flags);
 }
 
 FPU::FPU(Moira& ref) : moira(ref)
@@ -412,13 +412,16 @@ FPU::monadic(const FpuExtended &value, std::function<long double(long double)> f
 {
     switch (value.fpclassify()) {
 
+            /*
         case FP_INFINITE:
 
             setExcStatusBit(FPEXP_OPERR);
             return FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
+             */
 
         case FP_NAN:
 
+            printf("monadic FP_NAN\n");
             return makeNonsignalingNan(value);
 
         default:
@@ -427,7 +430,11 @@ FPU::monadic(const FpuExtended &value, std::function<long double(long double)> f
             auto result = func(value.asLongDouble());
             copyHostFpuFlags();
 
+            printf("Monadic(%Lf) = %Lf\n", value.asLongDouble(), result);
             // EXPERIMENTAL
+            if (fetestexcept(FE_INVALID)) {
+                return FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
+            }
             if (std::isnan(result)) {
                 return FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
             }
@@ -454,13 +461,6 @@ FPU::facos(const FpuExtended &value)
 {
     printf("facos %x %llx\n", value.raw.high, value.raw.low);
 
-    /*
-    if (value < -1.0 || value > 1.0) {
-
-        setExcStatusBit(FPEXP_OPERR);
-        return FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
-    }
-    */
     return monadic(value, [&](long double x) { return std::acos(x); });
 }
 
@@ -476,6 +476,13 @@ FPU::fatan(const FpuExtended &value)
 {
     printf("fatan %x %llx\n", value.raw.high, value.raw.low);
     return monadic(value, [&](long double x) { return std::atan(x); });
+}
+
+FpuExtended
+FPU::fatanh(const FpuExtended &value)
+{
+    printf("fatanh %x %llx\n", value.raw.high, value.raw.low);
+    return monadic(value, [&](long double x) { return std::atanh(x); });
 }
 
 FpuExtended

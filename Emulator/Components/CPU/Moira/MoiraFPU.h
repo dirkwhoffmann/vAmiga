@@ -187,6 +187,7 @@ public:
     FpuExtended facos(const FpuExtended &value);
     FpuExtended fasin(const FpuExtended &value);
     FpuExtended fatan(const FpuExtended &value);
+    FpuExtended fatanh(const FpuExtended &value);
 
     FpuExtended fneg(const FpuExtended &value);
 

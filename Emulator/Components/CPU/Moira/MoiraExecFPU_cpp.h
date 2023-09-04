@@ -70,6 +70,8 @@ Moira::execFGen(u16 opcode)
             return;
     }
 
+    printf("Arithmetic: cmd = %d\n", cmd);
+
     // Catch all other instructions
     switch (cod) {
 
@@ -85,8 +87,9 @@ Moira::execFGen(u16 opcode)
                 case 0x06: printf("TODO: FLOGNP1\n"); execFGeneric<C, FLOGNP1, M, S>(opcode); return;
                 case 0x08: printf("TODO: FETOXM1\n"); execFGeneric<C, FETOXM1, M, S>(opcode); return;
                 case 0x09: printf("TODO: FTANH\n"); execFGeneric<C, FTANH, M, S>(opcode); return;
-                case 0x0A: printf("FASIN\n"); execFGeneric<C, FASIN, M, S>(opcode); return;
-                case 0x0D: printf("TODO: FATANH\n"); execFGeneric<C, FATANH, M, S>(opcode); return;
+                case 0x0A: printf("FATAN\n"); execFGeneric<C, FATAN, M, S>(opcode); return;
+                case 0x0C: printf("FASIN\n"); execFGeneric<C, FASIN, M, S>(opcode); return;
+                case 0x0D: printf("FATANH\n"); execFGeneric<C, FATANH, M, S>(opcode); return;
                 case 0x0E: printf("FSIN\n"); execFGeneric<C, FSIN, M, S>(opcode); return;
                 case 0x0F: printf("TODO: FTAN\n"); execFGeneric<C, FTAN, M, S>(opcode); return;
                 case 0x10: printf("TODO: FETOX\n"); execFGeneric<C, FETOX, M, S>(opcode); return;
@@ -564,7 +567,7 @@ Moira::execFGeneric(u16 opcode)
     }
 
     auto ext = queue.irc;
-    auto reg = _____________xxx (opcode);
+    // auto reg = _____________xxx (opcode);
     auto src = ___xxx__________ (ext);
     auto dst = ______xxx_______ (ext);
     (void)readExt<C,Word>();
@@ -651,11 +654,15 @@ Moira::execFGeneric(u16 opcode)
 
     fpu.clearFPSR();
 
+    printf("execFGeneric: I = %d (%Lf) -> FP%d\n", I, source.asLongDouble(), dst);
+
     switch (I) {
 
         case FABS:  result = fpu.fabs(source); break;
         case FACOS: result = fpu.facos(source); break;
         case FASIN: result = fpu.fasin(source); break;
+        case FATAN: result = fpu.fatan(source); break;
+        case FATANH: result = fpu.fatanh(source); break;
 
         case FNEG:  result = fpu.fneg(source); break;
 
