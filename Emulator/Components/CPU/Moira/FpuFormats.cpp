@@ -102,23 +102,70 @@ FpuSingle::FpuSingle(const class FpuExtended &value, ExceptionHandler handler)
 {
     u32 flags = 0;
 
-    softfloat::float_exception_flags = 0;
-    raw = floatx80_to_float32(value.raw);
+    long double ldv = value.asLongDouble();
 
-    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
-        flags |= FPEXP_INEX2;
-    }
-    if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
-        flags |= FPEXP_OVFL;
-    }
-    if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
-        flags |= FPEXP_UNFL;
-    }
+    printf("FpuSingle: ldv = %Lf %f\n", ldv, std::numeric_limits<float>::max());
 
+    if (ldv > std::numeric_limits<float>::max()) {
+
+        printf("Cropping (1)\n");
+
+        float posinf = std::copysign(std::numeric_limits<float>::infinity(), 1.0f);
+        flags |= FPEXP_INEX2 | FPEXP_OVFL;
+        raw = *((u32 *)&posinf);
+
+    } else if (ldv < std::numeric_limits<float>::lowest()) {
+
+        printf("Cropping (2)\n");
+
+        float neginf = std::copysign(std::numeric_limits<float>::infinity(), -1.0f);
+        flags |= FPEXP_INEX2 | FPEXP_OVFL;
+        raw = *((u32 *)&neginf);
+
+    } else {
+
+        softfloat::float_exception_flags = 0;
+        raw = floatx80_to_float32(value.raw);
+
+        if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+            flags |= FPEXP_INEX2;
+        }
+        if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+            flags |= FPEXP_OVFL;
+        }
+        if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+            flags |= FPEXP_UNFL;
+        }
+    }
     handler(flags);
 }
 
 FpuSingle::FpuSingle(const FPUReg &reg, ExceptionHandler handler) : FpuSingle(reg.val, handler) { }
+
+bool
+FpuSingle::signbit()
+{
+    return raw & (1 << 31);
+}
+
+bool
+FpuSingle::isinf()
+{
+    float fval = *((float *)&raw);
+    return std::isinf(fval);
+}
+
+bool
+FpuSingle::isposinf()
+{
+    return isinf() && !signbit();
+}
+
+bool
+FpuSingle::isneginf()
+{
+    return isinf() && signbit();
+}
 
 
 //
@@ -146,6 +193,31 @@ FpuDouble::FpuDouble(const class FpuExtended &value, ExceptionHandler handler)
 }
 
 FpuDouble::FpuDouble(const FPUReg &reg, ExceptionHandler handler) : FpuDouble(reg.val, handler) { }
+
+bool
+FpuDouble::signbit()
+{
+    return raw & (1L << 63);
+}
+
+bool
+FpuDouble::isinf()
+{
+    double dval = *((double *)&raw);
+    return std::isinf(dval);
+}
+
+bool
+FpuDouble::isposinf()
+{
+    return isinf() && !signbit();
+}
+
+bool
+FpuDouble::isneginf()
+{
+    return isinf() && signbit();
+}
 
 
 //
@@ -218,6 +290,14 @@ FpuExtended::FpuExtended(const FpuSingle &value, ExceptionHandler handler)
     softfloat::float_exception_flags = 0;
 
     raw = softfloat::float32_to_floatx80(value.raw);
+
+    /*
+    float d = *((float *)&value.raw);
+    printf("FpuSingle -> FpuExtended: %f\n", d);
+    if (std::isinf(d)) {
+        *this = signbit() ? negInf : posInf;
+    }
+    */
 
     if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
         flags |= FPEXP_INEX2;
@@ -355,7 +435,16 @@ FpuExtended::FpuExtended(const std::string &s, FpuRoundingMode mode, ExceptionHa
 FpuExtended::FpuExtended(long double value, FpuRoundingMode mode, ExceptionHandler handler)
 {
     // Handle special cases
-    if (value == 0.0) { *this = std::signbit(value) ? negZero : posZero; return; }
+    if (value == 0.0) {
+
+        *this = std::signbit(value) ? negZero : posZero;
+        return;
+    }
+    if (std::isinf(value)) {
+
+        *this = std::signbit(value) ? negInf : posInf;
+        return;
+    }
 
     // Extract the exponent and the mantissa
     int e; auto m = frexpl(value, &e);
@@ -370,6 +459,8 @@ FpuExtended::FpuExtended(long double value, FpuRoundingMode mode, ExceptionHandl
         case FPU_RND_UPWARD:    m = std::ceill(std::ldexpl(m, 64)); break;
         default:                m = std::floorl(std::ldexpl(m, 64)); break;
     }
+
+    printf("e = %d m = %Lf %llu\n", e, m, (u64)m);
 
     // Compose the result
     *this = FpuExtended(value < 0.0, (i16)e, (u64)std::abs(m));
@@ -386,6 +477,8 @@ FpuExtended::FpuExtended(bool mSign, i16 e, u64 m, ExceptionHandler handler)
 FpuExtended FpuExtended::nan     = FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
 FpuExtended FpuExtended::posZero = FpuExtended(0x0000, 0x0000000000000000);
 FpuExtended FpuExtended::negZero = FpuExtended(0x8000, 0x0000000000000000);
+FpuExtended FpuExtended::posInf  = FpuExtended(0x7FFF, 0x0000000000000000);
+FpuExtended FpuExtended::negInf  = FpuExtended(0xFFFF, 0x0000000000000000);
 
 /*
 double

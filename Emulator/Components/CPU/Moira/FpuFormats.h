@@ -97,6 +97,11 @@ struct FpuSingle {
     FpuSingle(u32 value) : raw(value) { };
     FpuSingle(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
     FpuSingle(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
+
+    bool signbit();
+    bool isinf();
+    bool isposinf();
+    bool isneginf();
 };
 
 
@@ -112,6 +117,11 @@ struct FpuDouble {
     FpuDouble(u64 value) : raw(value) { };
     FpuDouble(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
     FpuDouble(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
+
+    bool signbit();
+    bool isinf();
+    bool isposinf();
+    bool isneginf();
 };
 
 
@@ -139,6 +149,8 @@ struct FpuExtended {
     static FpuExtended nan;
     static FpuExtended posZero;
     static FpuExtended negZero;
+    static FpuExtended posInf;
+    static FpuExtended negInf;
 
     static constexpr i64 bias = 0x3FFF;
 

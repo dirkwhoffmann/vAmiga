@@ -85,7 +85,7 @@ Moira::execFGen(u16 opcode)
                 case 0x03: printf("TODO: FINTRZ\n"); execFGeneric<C, FINTRZ, M, S>(opcode); return;
                 case 0x04: printf("TODO: FSQRT\n"); execFGeneric<C, FSQRT, M, S>(opcode); return;
                 case 0x06: printf("TODO: FLOGNP1\n"); execFGeneric<C, FLOGNP1, M, S>(opcode); return;
-                case 0x08: printf("TODO: FETOXM1\n"); execFGeneric<C, FETOXM1, M, S>(opcode); return;
+                case 0x08: printf("FETOXM1\n"); execFGeneric<C, FETOXM1, M, S>(opcode); return;
                 case 0x09: printf("TODO: FTANH\n"); execFGeneric<C, FTANH, M, S>(opcode); return;
                 case 0x0A: printf("FATAN\n"); execFGeneric<C, FATAN, M, S>(opcode); return;
                 case 0x0C: printf("FASIN\n"); execFGeneric<C, FASIN, M, S>(opcode); return;
@@ -99,10 +99,10 @@ Moira::execFGen(u16 opcode)
                 case 0x15: printf("TODO: FLOG10\n"); execFGeneric<C, FLOG10, M, S>(opcode); return;
                 case 0x16: printf("TODO: FLOG2\n"); execFGeneric<C, FLOG2, M, S>(opcode); return;
                 case 0x18: printf("FABS\n"); execFGeneric<C, FABS, M, S>(opcode); return;
-                case 0x19: printf("TODO: FCOSH\n"); execFGeneric<C, FCOSH, M, S>(opcode); return;
+                case 0x19: printf("FCOSH\n"); execFGeneric<C, FCOSH, M, S>(opcode); return;
                 case 0x1A: printf("FNEG\n"); execFGeneric<C, FNEG, M, S>(opcode); return;
                 case 0x1C: printf("FACOS\n"); execFGeneric<C, FACOS, M, S>(opcode); return;
-                case 0x1D: printf("TODO: FCOS\n"); execFGeneric<C, FCOS, M, S>(opcode); return;
+                case 0x1D: printf("FCOS\n"); execFGeneric<C, FCOS, M, S>(opcode); return;
                 case 0x1E: printf("TODO: FGETEXP\n"); execFGeneric<C, FGETEXP, M, S>(opcode); return;
                 case 0x1F: printf("TODO: FGETMAN\n"); execFGeneric<C, FGETMAN, M, S>(opcode); return;
                 case 0x20: printf("TODO: FDIV\n"); execFGeneric<C, FDIV, M, S>(opcode); return;
@@ -663,7 +663,9 @@ Moira::execFGeneric(u16 opcode)
         case FASIN: result = fpu.fasin(source); break;
         case FATAN: result = fpu.fatan(source); break;
         case FATANH: result = fpu.fatanh(source); break;
-
+        case FCOSH: result = fpu.fcosh(source); break;
+        case FETOX: result = fpu.fetox(source); break;
+        case FETOXM1: result = fpu.fetoxm1(source); break;
         case FNEG:  result = fpu.fneg(source); break;
 
         case FSIN:  result = fpu.fsin(source); break;

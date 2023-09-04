@@ -26,10 +26,21 @@ FPUReg::asExtended()
         if (fpu.getPrecision() != FPU_PREC_EXTENDED) {
 
             if (fpu.getPrecision() == FPU_PREC_SINGLE) {
-                result = FpuSingle(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
+
+                auto val = FpuSingle(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
+
+                if (val.isposinf()) { result = FpuExtended::posInf; }
+                else if (val.isneginf()) { result = FpuExtended::negInf; }
+                else result = val;
             }
             if (fpu.getPrecision() == FPU_PREC_DOUBLE) {
-                result = FpuDouble(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
+
+                auto val = FpuDouble(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
+
+                if (val.isposinf()) { result = FpuExtended::posInf; }
+                else if (val.isneginf()) { result = FpuExtended::negInf; }
+                else result = val;
+
             }
         }
         if (issubnormal()) {
@@ -482,7 +493,41 @@ FpuExtended
 FPU::fatanh(const FpuExtended &value)
 {
     printf("fatanh %x %llx\n", value.raw.high, value.raw.low);
+    if (value == -1.0) {
+
+        setExcStatusBit(FPEXP_DZ);
+        return FpuExtended::negInf;
+    }
+    if (value == 1.0) {
+
+        setExcStatusBit(FPEXP_DZ);
+        return FpuExtended::posInf;
+    }
+
     return monadic(value, [&](long double x) { return std::atanh(x); });
+}
+
+FpuExtended
+FPU::fcosh(const FpuExtended &value)
+{
+    printf("fcosh %x %llx\n", value.raw.high, value.raw.low);
+    return monadic(value, [&](long double x) { return std::cosh(x); });
+}
+
+FpuExtended
+FPU::fetox(const FpuExtended &value)
+{
+    printf("fetox %x %llx\n", value.raw.high, value.raw.low);
+    return monadic(value, [&](long double x) { return std::expl(x); });
+}
+
+FpuExtended
+FPU::fetoxm1(const FpuExtended &value)
+{
+    printf("fetoxm1 %x %llx\n", value.raw.high, value.raw.low);
+    if (value.iszero()) { return value; }
+
+    return monadic(value, [&](long double x) { return std::expl(x) - 1.0L; });
 }
 
 FpuExtended
