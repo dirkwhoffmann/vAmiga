@@ -177,6 +177,7 @@ struct FpuExtended {
     bool issubnormal() const { return isfinite() && raw.low && !(raw.low & 1L << 63); }
     bool signbit() const { return raw.high & 0x8000; }
     bool isnegative() const { return signbit(); }
+    bool ispositive() const { return !signbit(); }
     bool iszero() const { return (raw.high & 0x7FFF) == 0 && raw.low == 0; }
 
 
@@ -200,12 +201,10 @@ struct FpuExtended {
     // Operators
     //
 
-    /*
-    inline bool operator==(const FpuExtended &other) const {
-
-        return raw.high == other.raw.high && raw.low == other.raw.low;
-    }
-    */
+    FpuExtended operator+(const FpuExtended &other) const;
+    FpuExtended operator-(const FpuExtended &other) const;
+    FpuExtended operator*(const FpuExtended &other) const;
+    FpuExtended operator/(const FpuExtended &other) const;
 };
 
 

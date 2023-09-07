@@ -18,33 +18,33 @@ FpuExtended
 FPUReg::asExtended()
 {
     FpuExtended result = val;
-
+    
     if (val.isfinite()) {
-
+        
         softfloat::float_exception_flags = 0;
-
+        
         if (fpu.getPrecision() != FPU_PREC_EXTENDED) {
-
+            
             if (fpu.getPrecision() == FPU_PREC_SINGLE) {
-
+                
                 auto val = FpuSingle(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
-
+                
                 if (val.isposinf()) { result = FpuExtended::posInf; }
                 else if (val.isneginf()) { result = FpuExtended::negInf; }
                 else result = val;
             }
             if (fpu.getPrecision() == FPU_PREC_DOUBLE) {
-
+                
                 auto val = FpuDouble(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
-
+                
                 if (val.isposinf()) { result = FpuExtended::posInf; }
                 else if (val.isneginf()) { result = FpuExtended::negInf; }
                 else result = val;
-
+                
             }
         }
         if (issubnormal()) {
-
+            
             fpu.setExcStatusBit(FPEXP_UNFL);
         }
     }
@@ -55,23 +55,23 @@ void
 FPUReg::set(const FpuExtended other)
 {
     val = other;
-
+    
     printf("FPUReg (1): %x,%llx\n", val.raw.high, val.raw.low);
-
+    
     // Round to the correct precision
     val = asExtended();
-
+    
     printf("FPUReg (2): %x,%llx\n", val.raw.high, val.raw.low);
-
+    
     // Experimental
     val.normalize();
-
+    
     // Experimental
     if (val.isSignalingNaN()) {
         val.raw.low |= (1LL << 62); // Make nonsignaling
         fpu.setExcStatusBit(FPEXP_SNAN);
     }
-
+    
     printf("FPUReg::set %x,%llx (%Lf) flags = %x\n", val.raw.high, val.raw.low, val.asLongDouble(), softfloat::float_exception_flags);
 }
 
@@ -87,7 +87,7 @@ FPU::reset()
     for (int i = 0; i < 8; i++) {
         fpr[i].reset();
     }
-
+    
     fpiar = 0;
     fpsr = 0;
     fpcr = 0;
@@ -98,7 +98,7 @@ FPU::setModel(FPUModel model)
 {
     // Only proceed if the model changes
     if (this->model == model) return;
-
+    
     this->model = model;
 }
 
@@ -106,7 +106,7 @@ FpuPrecision
 FPU::getPrecision() const
 {
     switch (fpcr & 0xC0) {
-
+            
         case 0x00:  return FPU_PREC_EXTENDED;
         case 0x40:  return FPU_PREC_SINGLE;
         case 0x80:  return FPU_PREC_DOUBLE;
@@ -118,7 +118,7 @@ FpuRoundingMode
 FPU::getRoundingMode() const
 {
     switch (fpcr & 0x30) {
-
+            
         case 0x00:  return FPU_RND_NEAREST;
         case 0x10:  return FPU_RND_ZERO;
         case 0x20:  return FPU_RND_DOWNWARD;
@@ -130,83 +130,23 @@ FpuRoundingMode
 FPU::fesetround(FpuRoundingMode mode)
 {
     auto oldMode = fegetround();
-
+    
     switch (mode) {
-
+            
         case FPU_RND_NEAREST:   ::fesetround(FE_TONEAREST); break;
         case FPU_RND_ZERO:      ::fesetround(FE_TOWARDZERO); break;
         case FPU_RND_DOWNWARD:  ::fesetround(FE_DOWNWARD); break;
         default:                ::fesetround(FE_UPWARD); break;
     }
-
+    
     switch (oldMode) {
-
+            
         case FE_TONEAREST:      return FPU_RND_NEAREST;
         case FE_TOWARDZERO:     return FPU_RND_ZERO;
         case FE_DOWNWARD:       return FPU_RND_DOWNWARD;
         default:                return FPU_RND_UPWARD;
     }
 }
-
-/*
-template <Instr I> bool
-FPU::isSupported(FPUModel model)
-{
-    switch (I) {
-            
-        case FACOS:     case FASIN:     case FATANH:    case FCOS:
-        case FCOSH:     case FETOX:     case FETOXM1:   case FGETEXP:
-        case FGETMAN:   case FINTRZ:    case FLOG10:    case FLOG2:
-        case FLOGN:     case FLOGNP1:   case FMOD:      case FREM:
-        case FSCAL:     case FSIN:      case FSINCOS:   case FSINH:
-        case FTAN:      case FTANH:     case FTENTOX:   case FTWOTOX:
-            
-            return model != FPU_68040;
-            
-        default:
-            
-            return true;
-    }
-}
-
-template <Instr I> bool
-FPU::isMonadic()
-{
-    switch (I) {
-            
-        case FABS:      case FACOS:     case FASIN:     case FATAN:
-        case FATANH:    case FCOS:      case FCOSH:     case FETOX:
-        case FETOXM1:   case FGETEXP:   case FGETMAN:   case FINT:
-        case FINTRZ:    case FLOG10:    case FLOG2:     case FLOGN:
-        case FLOGNP1:   case FNEG:      case FSIN:      case FSINCOS:
-        case FSINH:     case FSQRT:     case FTAN:      case FTANH:
-        case FTENTOX:   case FTST:      case FTWOTOX:
-            
-            return true;
-            
-        default:
-            
-            return false;
-    }
-}
-
-template <Instr I> bool
-FPU::isDyadic()
-{
-    switch (I) {
-            
-        case FADD:      case FCMP:      case FDIV:      case FMOD:
-        case FMUL:      case FREM:      case FSCAL:     case FSGLDIV:
-        case FSGLMUL:   case FSUB:
-            
-            return true;
-            
-        default:
-            
-            return false;
-    }
-}
-*/
 
 bool
 FPU::isValidExt(Instr I, Mode M, u16 op, u32 ext)
@@ -216,37 +156,37 @@ FPU::isValidExt(Instr I, Mode M, u16 op, u32 ext)
     auto fmt  = ___xxx__________ (ext);
     auto lst  = ___xxx__________ (ext);
     auto cmd  = _________xxxxxxx (ext);
-
+    
     switch (I) {
-
+            
         case FDBcc:
         case FScc:
         case FTRAPcc:
-
+            
             return (ext & 0xFFE0) == 0;
-
+            
         case FMOVECR:
-
+            
             return (op & 0x3F) == 0;
-
+            
         case FMOVE:
-
+            
             switch (cod) {
-
+                    
                 case 0b010:
-
+                    
                     if (M == MODE_IP) break;
                     return true;
-
+                    
                 case 0b000:
-
+                    
                     if (cmd == 0 && cod == 0 && (op & 0x3F)) break;
                     return true;
-
+                    
                 case 0b011:
-
+                    
                     if (fmt != 0b011 && fmt != 0b111 && (ext & 0x7F)) break;
-
+                    
                     if (M == MODE_DN) {
                         if (fmt == 0b010 || fmt == 0b011 || fmt == 0b101 || fmt == 0b111) break;
                     }
@@ -258,19 +198,19 @@ FPU::isValidExt(Instr I, Mode M, u16 op, u32 ext)
                     } else {
                         if (fmt == 0b111 && (ext & 0xF)) break;
                     }
-
+                    
                     return true;
             }
-
+            
         case FMOVEM:
-
+            
             switch (cod) {
-
+                    
                 case 0b101:
                 {
-
+                    
                     if (ext & 0x3FF) break;
-
+                    
                     if (M == MODE_DN || M == MODE_AN) {
                         if (lst != 0b000 && lst != 0b001 && lst != 0b010 && lst != 0b100) break;
                     }
@@ -280,17 +220,17 @@ FPU::isValidExt(Instr I, Mode M, u16 op, u32 ext)
                     return true;
                 }
                 case 0b100:
-
+                    
                     if (ext & 0x3FF) break;
                     if (M == MODE_IP) break;
                     return true;
-
+                    
                 case 0b110:
                 case 0b111:
-
+                    
                     if (ext & 0x0700) break;
                     if (mode == 3 && (ext & 0x8F)) break;
-
+                    
                     if (M == MODE_DN || M == MODE_AN) {
                         break;
                     }
@@ -314,7 +254,7 @@ FPU::isValidExt(Instr I, Mode M, u16 op, u32 ext)
                     return true;
             }
             return false;
-
+            
         default:
             fatalError;
     }
@@ -324,7 +264,7 @@ void
 FPU::setFPCR(u32 value)
 {
     fpcr = value & 0x0000FFF0;
-
+    
     softfloat::float_rounding_mode = (value & 0b110000) >> 4;
 }
 
@@ -338,9 +278,9 @@ void
 FPU::setExcStatusBit(u32 mask)
 {
     assert((mask & ~0xFF00) == 0);
-
+    
     fpsr |= mask;
-
+    
     // Set sticky bits (accrued exception byte)
     if (fpsr & (FPEXP_SNAN | FPEXP_OPERR))                  SET_BIT(fpsr, 7);
     if (fpsr & FPEXP_OVFL)                                  SET_BIT(fpsr, 6);
@@ -353,7 +293,7 @@ void
 FPU::clearExcStatusBit(u32 mask)
 {
     assert((mask & ~0xFF00) == 0);
-
+    
     fpsr &= ~mask;
 }
 
@@ -371,7 +311,7 @@ FPU::setConditionCodes(const FpuExtended &value)
     bool z = (value.raw.high & 0x7fff) == 0 && value.raw.low == 0;
     bool i = (value.raw.high & 0x7fff) == 0x7fff && (value.raw.low << 1) == 0;
     bool nan = softfloat::floatx80_is_nan(value.raw);
-
+    
     REPLACE_BIT(fpsr, 27, n);
     REPLACE_BIT(fpsr, 26, z);
     REPLACE_BIT(fpsr, 25, i);
@@ -388,11 +328,11 @@ FpuExtended
 FPU::readCR(unsigned nr)
 {
     FpuExtended result;
-
+    
     typedef struct { u16 hi; u64 lo; i64 r1; i64 r2; bool inex; } RomEntry;
-
+    
     static constexpr RomEntry rom1[] = {
-
+        
         { 0x4000, 0xc90fdaa22168c235, -1,  0,  1 }, // 0x00: Pi
         { 0x4001, 0xfe00068200000000,  0,  0,  0 }, // 0x01: Undocumented
         { 0x4001, 0xffc0050380000000,  0,  0,  0 }, // 0x02: Undocumented
@@ -410,9 +350,9 @@ FPU::readCR(unsigned nr)
         { 0x3ffd, 0xde5bd8a937287195,  0,  0,  0 }, // 0x0E: Log10(e)
         { 0x0000, 0x0000000000000000,  0,  0,  0 }  // 0x0F: 0.0
     };
-
+    
     static constexpr RomEntry rom2[] = {
-
+        
         { 0x3ffe, 0xb17217f7d1cf79ac, -1,  0,  1  }, // 0x00: Ln(2)
         { 0x4000, 0x935d8dddaaa8ac17, -1,  0,  1  }, // 0x01: Ln(10)
         { 0x3FFF, 0x8000000000000000,  0,  0,  0  }, // 0x02: 10^0
@@ -430,29 +370,29 @@ FPU::readCR(unsigned nr)
         { 0x5A92, 0x9E8B3B5DC53D5DE5, -1,  0,  1  }, // 0x0E: 10^2048
         { 0x7525, 0xC46052028A20979B, -1,  0,  1  }  // 0x0F: 10^4096
     };
-
+    
     auto readRom = [&](const RomEntry &entry) {
-
+        
         auto result = FpuExtended(entry.hi, entry.lo);
-
+        
         // Round if necessary
         if ((fpcr & 0b110000) == 0b010000) result.raw.low += entry.r1;
         if ((fpcr & 0b110000) == 0b100000) result.raw.low += entry.r1;
         if ((fpcr & 0b110000) == 0b110000) result.raw.low += entry.r2;
-
+        
         // Mark value as inexact if necessary
         if (entry.inex) setExcStatusBit(FPEXP_INEX2);
-
+        
         return result;
     };
-
+    
     if (nr >= 0x40) {
         // Values in this range seem to produce a Guru on the real machine
     }
-
+    
     if (nr >= 0x00 && nr < 0x10) result = readRom(rom1[nr]);
     if (nr >= 0x30 && nr < 0x40) result = readRom(rom2[nr - 0x30]);
-
+    
     return result;
 }
 
@@ -500,7 +440,7 @@ FPU::resolveNan(const FpuExtended &op1, const FpuExtended &op2)
      * operand to a one), and the operation continues as described in the
      * preceding section for non-signaling NANs.
      */
-
+    
     if (!op1.isnan() && !op2.isnan()) return {};
     
     auto o1 = op1;
@@ -516,7 +456,7 @@ FPU::resolveNan(const FpuExtended &op1, const FpuExtended &op2)
         o2.raw.low |= (1LL << 62);
         setExcStatusBit(FPEXP_SNAN);
     }
-
+    
     return o2.isnan() ? o2 : o1;
 }
 
@@ -540,25 +480,25 @@ FpuExtended
 FPU::monadic(const FpuExtended &value, std::function<long double(long double)> func)
 {
     switch (value.fpclassify()) {
-
+            
             /*
-        case FP_INFINITE:
-
-            setExcStatusBit(FPEXP_OPERR);
-            return FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
+             case FP_INFINITE:
+             
+             setExcStatusBit(FPEXP_OPERR);
+             return FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
              */
-
+            
         case FP_NAN:
-
+            
             printf("monadic FP_NAN\n");
             return makeNonsignalingNan(value);
-
+            
         default:
-
+            
             clearHostFpuFlags();
             auto result = func(value.asLongDouble());
             copyHostFpuFlags();
-
+            
             printf("Monadic(%Lf) = %Lf\n", value.asLongDouble(), result);
             // EXPERIMENTAL
             if (fetestexcept(FE_INVALID)) {
@@ -567,7 +507,7 @@ FPU::monadic(const FpuExtended &value, std::function<long double(long double)> f
             if (std::isnan(result)) {
                 return FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
             }
-
+            
             return FpuExtended(result, getRoundingMode(), exceptionHandler);
     }
 }
@@ -576,12 +516,12 @@ FpuExtended
 FPU::fabs(const FpuExtended &value)
 {
     printf("fabs(%Lf)\n", value.asLongDouble());
-
+    
     if (value.isnan()) { return makeNonsignalingNan(value); }
-
+    
     auto result = value;
     result.raw.high &= 0x7FFF;
-
+    
     return result;
 }
 
@@ -589,7 +529,7 @@ FpuExtended
 FPU::facos(const FpuExtended &value)
 {
     printf("facos %x %llx\n", value.raw.high, value.raw.low);
-
+    
     return monadic(value, [&](long double x) { return std::acos(x); });
 }
 
@@ -612,17 +552,24 @@ FPU::fatanh(const FpuExtended &value)
 {
     printf("fatanh %x %llx\n", value.raw.high, value.raw.low);
     if (value == -1.0) {
-
+        
         setExcStatusBit(FPEXP_DZ);
         return FpuExtended::negInf;
     }
     if (value == 1.0) {
-
+        
         setExcStatusBit(FPEXP_DZ);
         return FpuExtended::posInf;
     }
-
+    
     return monadic(value, [&](long double x) { return std::atanh(x); });
+}
+
+FpuExtended
+FPU::fcos(const FpuExtended &value)
+{
+    printf("fcos %x %llx\n", value.raw.high, value.raw.low);
+    return monadic(value, [&](long double x) { return std::cos(x); });
 }
 
 FpuExtended
@@ -643,8 +590,12 @@ FpuExtended
 FPU::fetoxm1(const FpuExtended &value)
 {
     printf("fetoxm1 %x %llx\n", value.raw.high, value.raw.low);
-    if (value.iszero()) { return value; }
-
+    
+    if (value.iszero()) {
+        
+        return value;
+    }
+    
     return monadic(value, [&](long double x) { return std::expl(x) - 1.0L; });
 }
 
@@ -652,16 +603,263 @@ FpuExtended
 FPU::fgetexp(const FpuExtended &value)
 {
     printf("fgetexp %x %llx\n", value.raw.high, value.raw.low);
-    if (value.iszero()) { return value; }
-    if (value.isinf()) { setExcStatusBit(FPEXP_OPERR); return FpuExtended::nan; }
-
-    long double ldval = value.asLongDouble();
-    int exp;
-    (void)std::frexpl(ldval, &exp);
-    exp -= 1;
     
-    printf("exp = %d\n", exp);
-    return FpuExtended(exp);
+    if (value.iszero()) {
+        
+        return value;
+    }
+    if (value.isinf()) {
+        
+        setExcStatusBit(FPEXP_OPERR);
+        return FpuExtended::nan;
+    }
+    
+    /*
+     long exp = (value.raw.high & 0x7FFF) - FpuExtended::bias;
+     return FpuExtended(exp);
+     */
+    return FpuExtended((value.raw.high & 0x7FFF) - FpuExtended::bias);
+}
+
+FpuExtended
+FPU::fgetman(const FpuExtended &value)
+{
+    printf("fgetexp %x %llx\n", value.raw.high, value.raw.low);
+    
+    if (value.iszero()) {
+        
+        return value;
+    }
+    if (value.isinf()) {
+        
+        setExcStatusBit(FPEXP_OPERR);
+        return FpuExtended::nan;
+    }
+    
+    /*
+     auto result = value;
+     result.raw.high = (result.raw.high & 0x8000) | 0x3FFF;
+     return result;
+     */
+    return FpuExtended((value.raw.high & 0x8000) | 0x3FFF, value.raw.low);
+}
+
+FpuExtended
+FPU::fint(const FpuExtended &value)
+{
+    if (value.iszero()) {
+        
+        return value;
+    }
+    if (value.isinf()) {
+        
+        return value;
+    }
+    
+    softfloat::float_exception_flags = 0;
+    auto rounded = softfloat::floatx80_round_to_int(value.raw);
+    
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        setExcStatusBit(FPEXP_INEX2);
+    }
+    /*
+     if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+     flags |= FPEXP_OVFL;
+     }
+     if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+     flags |= FPEXP_UNFL;
+     }
+     */
+    
+    return FpuExtended(rounded.high, rounded.low);
+}
+
+FpuExtended
+FPU::fintrz(const FpuExtended &value)
+{
+    if (value.iszero()) {
+        
+        return value;
+    }
+    if (value.isinf()) {
+        
+        return value;
+    }
+    
+    softfloat::float_exception_flags = 0;
+    auto oldmode = softfloat::float_rounding_mode;
+    softfloat::float_rounding_mode = 1;
+    auto rounded = softfloat::floatx80_round_to_int(value.raw);
+    softfloat::float_rounding_mode = oldmode;
+    
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        setExcStatusBit(FPEXP_INEX2);
+    }
+    /*
+     if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+     flags |= FPEXP_OVFL;
+     }
+     if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+     flags |= FPEXP_UNFL;
+     }
+     */
+    
+    return FpuExtended(rounded.high, rounded.low);
+}
+
+FpuExtended
+FPU::flog10(const FpuExtended &value)
+{
+    if (value.iszero()) {
+        
+        setExcStatusBit(FPEXP_DZ);
+        return FpuExtended::negInf;
+    }
+    if (value.isnegative()) {
+        
+        setExcStatusBit(FPEXP_OPERR);
+        return FpuExtended::nan;
+    }
+    if (value.isinf()) {
+        
+        if (value.ispositive()) {
+            
+            return FpuExtended::posInf;
+            
+        } else {
+            
+            setExcStatusBit(FPEXP_OPERR);
+            return FpuExtended::nan;
+        }
+    }
+    
+    return monadic(value, [&](long double x) { return std::log10(x); });
+}
+
+FpuExtended
+FPU::flog2(const FpuExtended &value)
+{
+    if (value.iszero()) {
+        
+        setExcStatusBit(FPEXP_DZ);
+        return FpuExtended::negInf;
+    }
+    if (value.isnegative()) {
+        
+        setExcStatusBit(FPEXP_OPERR);
+        return FpuExtended::nan;
+    }
+    if (value.isinf()) {
+        
+        if (value.ispositive()) {
+            
+            return FpuExtended::posInf;
+            
+        } else {
+            
+            setExcStatusBit(FPEXP_OPERR);
+            return FpuExtended::nan;
+        }
+    }
+    
+    return monadic(value, [&](long double x) { return std::log2(x); });
+}
+
+FpuExtended
+FPU::flogn(const FpuExtended &value)
+{
+    if (value.iszero()) {
+        
+        setExcStatusBit(FPEXP_DZ);
+        return FpuExtended::negInf;
+    }
+    if (value.isnegative()) {
+        
+        setExcStatusBit(FPEXP_OPERR);
+        return FpuExtended::nan;
+    }
+    if (value.isinf()) {
+        
+        if (value.ispositive()) {
+            
+            return FpuExtended::posInf;
+            
+        } else {
+            
+            setExcStatusBit(FPEXP_OPERR);
+            return FpuExtended::nan;
+        }
+    }
+    
+    return monadic(value, [&](long double x) { return std::log(x); });
+}
+
+FpuExtended
+FPU::flognp1(const FpuExtended &value)
+{
+    if (value.iszero()) {
+        
+        return value;
+    }
+    if (value == -1.0) {
+        
+        setExcStatusBit(FPEXP_DZ);
+        return FpuExtended::negInf;
+    }
+    if (value < -1.0) {
+        
+        setExcStatusBit(FPEXP_OPERR);
+        return FpuExtended::nan;
+    }
+    if (value.isinf()) {
+        
+        if (value.ispositive()) {
+            
+            return FpuExtended::posInf;
+            
+        } else {
+            
+            setExcStatusBit(FPEXP_OPERR);
+            return FpuExtended::nan;
+        }
+    }
+    
+    return monadic(value, [&](long double x) { return std::log(x + 1); });
+}
+
+FpuExtended
+FPU::fmod(const FpuExtended &op1, const FpuExtended &op2)
+{
+    printf("fmod op1: (%x, %llx) (%x, %llx)\n", op1.raw.high, op1.raw.low, op2.raw.high, op2.raw.low);
+    
+    long double modulus;
+    
+    if (op1.iszero() || op2.isinf()) {
+        
+        setExcStatusBit(FPEXP_OPERR);
+        return FpuExtended::nan;
+    }
+    if (op2.iszero()) {
+        
+        return op2;
+    }
+    if (op1.isinf()) {
+
+        modulus = op2.asLongDouble();
+
+    } else {
+        
+        clearHostFpuFlags();
+        modulus = std::fmodl(op2.asLongDouble(), op1.asLongDouble());
+        copyHostFpuFlags();
+    }
+    
+    auto result = FpuExtended(modulus, getRoundingMode(), exceptionHandler);
+    u32 quotientByte = (result.raw.low & 0xF);
+    if (op1.signbit() ^ op2.signbit()) quotientByte |= 0x80;
+    fpsr = (fpsr & 0xFF00FFFF) | quotientByte << 16;
+    
+    return result;
 }
 
 FpuExtended
@@ -681,6 +879,49 @@ FPU::fsin(const FpuExtended &value)
     printf("fsin %x %llx\n", value.raw.high, value.raw.low);
     return monadic(value, [&](long double x) { return std::sin(x); });
 }
+
+FpuExtended
+FPU::fsinh(const FpuExtended &value)
+{
+    printf("fsinh %x %llx\n", value.raw.high, value.raw.low);
+    return monadic(value, [&](long double x) { return std::sinh(x); });
+}
+
+FpuExtended
+FPU::fsqrt(const FpuExtended &value)
+{
+    printf("fsqrt %x %llx\n", value.raw.high, value.raw.low);
+    return monadic(value, [&](long double x) { return std::sqrt(x); });
+}
+
+FpuExtended
+FPU::ftan(const FpuExtended &value)
+{
+    printf("ftan %x %llx\n", value.raw.high, value.raw.low);
+    return monadic(value, [&](long double x) { return std::tan(x); });
+}
+
+FpuExtended
+FPU::ftanh(const FpuExtended &value)
+{
+    printf("ftanh %x %llx\n", value.raw.high, value.raw.low);
+    return monadic(value, [&](long double x) { return std::tanh(x); });
+}
+
+FpuExtended
+FPU::ftentox(const FpuExtended &value)
+{
+    printf("ftentox %x %llx\n", value.raw.high, value.raw.low);
+    return monadic(value, [&](long double x) { return std::powl(10.0L, x); });
+}
+
+FpuExtended
+FPU::ftwotox(const FpuExtended &value)
+{
+    printf("ftwotox %x %llx\n", value.raw.high, value.raw.low);
+    return monadic(value, [&](long double x) { return std::powl(2.0L, x); });
+}
+
 
 
 }

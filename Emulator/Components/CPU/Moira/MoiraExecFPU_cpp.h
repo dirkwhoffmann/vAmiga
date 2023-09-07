@@ -80,33 +80,33 @@ Moira::execFGen(u16 opcode)
 
             switch (cmd) {
 
-                case 0x01: printf("TODO: FINT\n"); execFGeneric<C, FINT, M, S>(opcode); return;
-                case 0x02: printf("TODO: FSINH\n"); execFGeneric<C, FSINH, M, S>(opcode); return;
-                case 0x03: printf("TODO: FINTRZ\n"); execFGeneric<C, FINTRZ, M, S>(opcode); return;
-                case 0x04: printf("TODO: FSQRT\n"); execFGeneric<C, FSQRT, M, S>(opcode); return;
-                case 0x06: printf("TODO: FLOGNP1\n"); execFGeneric<C, FLOGNP1, M, S>(opcode); return;
+                case 0x01: printf("FINT\n"); execFGeneric<C, FINT, M, S>(opcode); return;
+                case 0x02: printf("FSINH\n"); execFGeneric<C, FSINH, M, S>(opcode); return;
+                case 0x03: printf("FINTRZ\n"); execFGeneric<C, FINTRZ, M, S>(opcode); return;
+                case 0x04: printf("FSQRT\n"); execFGeneric<C, FSQRT, M, S>(opcode); return;
+                case 0x06: printf("FLOGNP1\n"); execFGeneric<C, FLOGNP1, M, S>(opcode); return;
                 case 0x08: printf("FETOXM1\n"); execFGeneric<C, FETOXM1, M, S>(opcode); return;
-                case 0x09: printf("TODO: FTANH\n"); execFGeneric<C, FTANH, M, S>(opcode); return;
+                case 0x09: printf("FTANH\n"); execFGeneric<C, FTANH, M, S>(opcode); return;
                 case 0x0A: printf("FATAN\n"); execFGeneric<C, FATAN, M, S>(opcode); return;
                 case 0x0C: printf("FASIN\n"); execFGeneric<C, FASIN, M, S>(opcode); return;
                 case 0x0D: printf("FATANH\n"); execFGeneric<C, FATANH, M, S>(opcode); return;
                 case 0x0E: printf("FSIN\n"); execFGeneric<C, FSIN, M, S>(opcode); return;
-                case 0x0F: printf("TODO: FTAN\n"); execFGeneric<C, FTAN, M, S>(opcode); return;
+                case 0x0F: printf("FTAN\n"); execFGeneric<C, FTAN, M, S>(opcode); return;
                 case 0x10: printf("TODO: FETOX\n"); execFGeneric<C, FETOX, M, S>(opcode); return;
-                case 0x11: printf("TODO: FTWOTOX\n"); execFGeneric<C, FTWOTOX, M, S>(opcode); return;
-                case 0x12: printf("TODO: FTENTOX\n"); execFGeneric<C, FTENTOX, M, S>(opcode); return;
-                case 0x14: printf("TODO: FLOGN\n"); execFGeneric<C, FLOGN, M, S>(opcode); return;
-                case 0x15: printf("TODO: FLOG10\n"); execFGeneric<C, FLOG10, M, S>(opcode); return;
-                case 0x16: printf("TODO: FLOG2\n"); execFGeneric<C, FLOG2, M, S>(opcode); return;
+                case 0x11: printf("FTWOTOX\n"); execFGeneric<C, FTWOTOX, M, S>(opcode); return;
+                case 0x12: printf("FTENTOX\n"); execFGeneric<C, FTENTOX, M, S>(opcode); return;
+                case 0x14: printf("FLOGN\n"); execFGeneric<C, FLOGN, M, S>(opcode); return;
+                case 0x15: printf("FLOG10\n"); execFGeneric<C, FLOG10, M, S>(opcode); return;
+                case 0x16: printf("FLOG2\n"); execFGeneric<C, FLOG2, M, S>(opcode); return;
                 case 0x18: printf("FABS\n"); execFGeneric<C, FABS, M, S>(opcode); return;
                 case 0x19: printf("FCOSH\n"); execFGeneric<C, FCOSH, M, S>(opcode); return;
                 case 0x1A: printf("FNEG\n"); execFGeneric<C, FNEG, M, S>(opcode); return;
                 case 0x1C: printf("FACOS\n"); execFGeneric<C, FACOS, M, S>(opcode); return;
                 case 0x1D: printf("FCOS\n"); execFGeneric<C, FCOS, M, S>(opcode); return;
                 case 0x1E: printf("FGETEXP\n"); execFGeneric<C, FGETEXP, M, S>(opcode); return;
-                case 0x1F: printf("TODO: FGETMAN\n"); execFGeneric<C, FGETMAN, M, S>(opcode); return;
+                case 0x1F: printf("FGETMAN\n"); execFGeneric<C, FGETMAN, M, S>(opcode); return;
                 case 0x20: printf("TODO: FDIV\n"); execFGeneric<C, FDIV, M, S>(opcode); return;
-                case 0x21: printf("TODO: FMOD\n"); execFGeneric<C, FMOD, M, S>(opcode); return;
+                case 0x21: printf("FMOD\n"); execFGeneric<C, FMOD, M, S>(opcode); return;
                 case 0x22: printf("TODO: FADD\n"); execFGeneric<C, FADD, M, S>(opcode); return;
                 case 0x23: printf("TODO: FMUL\n"); execFGeneric<C, FMUL, M, S>(opcode); return;
                 case 0x24: printf("TODO: FSGLDIV\n"); execFGeneric<C, FSGLDIV, M, S>(opcode); return;
@@ -114,16 +114,16 @@ Moira::execFGen(u16 opcode)
                 case 0x26: printf("TODO: FSCAL\n"); execFGeneric<C, FSCAL, M, S>(opcode); return;
                 case 0x27: printf("TODO: FSGLMUL\n"); execFGeneric<C, FSGLMUL, M, S>(opcode); return;
                 case 0x28: printf("TODO: FSUB\n"); execFGeneric<C, FSUB, M, S>(opcode); return;
-                case 0x30: printf("TODO: FSINCOS\n"); return; // dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
-                case 0x31: printf("TODO: FSINCOS\n"); return; // dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
-                case 0x32: printf("TODO: FSINCOS\n"); return; // dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
-                case 0x33: printf("TODO: FSINCOS\n"); return; // dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
-                case 0x34: printf("TODO: FSINCOS\n"); return; // dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
-                case 0x35: printf("TODO: FSINCOS\n"); return; // dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
-                case 0x36: printf("TODO: FSINCOS\n"); return; // dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
-                case 0x37: printf("TODO: FSINCOS\n"); return; // dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
+                case 0x30:
+                case 0x31:
+                case 0x32:
+                case 0x33:
+                case 0x34:
+                case 0x35:
+                case 0x36:
+                case 0x37: printf("FSINCOS\n"); execFGeneric<C, FSINCOS, M, S>(opcode); return;
                 case 0x38: printf("TODO: FCMP\n"); execFGeneric<C, FCMP, M, S>(opcode); return;
-                case 0x3A: printf("TODO: FTST\n"); return; // dasmFGeneric3<FTST, M, S>(str, addr, op); return;
+                case 0x3A: printf("FTST\n"); execFGeneric<C, FTST, M, S>(opcode); return;
                 case 0x41: printf("TODO: FSSQRT\n"); execFGeneric<C, FSSQRT, M, S>(opcode); return;
                 case 0x45: printf("TODO: FDSQRT\n"); execFGeneric<C, FDSQRT, M, S>(opcode); return;
                 case 0x58: printf("TODO: FSABS\n"); execFGeneric<C, FSABS, M, S>(opcode); return;
@@ -534,47 +534,6 @@ Moira::execFGeneric(u16 opcode)
         return;
     }
         
-    /*
-    if (fpu.getModel() == FPU_68040) {
-
-        switch (I) {
-
-            case FACOS:
-            case FASIN:
-            case FATANH:
-            case FCOS:
-            case FCOSH:
-            case FETOX:
-            case FETOXM1:
-            case FGETEXP:
-            case FGETMAN:
-            // case FINT:
-            case FINTRZ:
-            case FLOG10:
-            case FLOG2:
-            case FLOGN:
-            case FLOGNP1:
-            case FMOD:
-            case FREM:
-            case FSCAL:
-            case FSIN:
-            case FSINCOS:
-            case FSINH:
-            case FTAN:
-            case FTANH:
-            case FTENTOX:
-            case FTWOTOX:
-
-                execLineF<C, I, M, S>(opcode);
-                FINALIZE
-                return;
-
-            default:
-                break;
-        }
-    }
-    */
-        
     auto ext = queue.irc;
     // auto reg = _____________xxx (opcode);
     auto src = ___xxx__________ (ext);
@@ -665,30 +624,94 @@ Moira::execFGeneric(u16 opcode)
 
     printf("execFGeneric: I = %d (%Lf) -> FP%d\n", I, source.asLongDouble(), dst);
 
-    if (auto nan = fpu.resolveNan(source); nan) {
-
-        result = *nan;
+    if (I == FSINCOS) {
         
+        auto dst2 = _____________xxx (ext);
+        FpuExtended result2;
+        
+        if (auto nan = fpu.resolveNan(source); nan) {
+            
+            result2 = *nan;
+            result = *nan;
+            
+        } else {
+            
+            result2 = fpu.fcos(source);
+            result = fpu.fsin(source);
+        }
+        
+        prefetch<C>();
+        fpu.fpr[dst2].set(result2);
+        fpu.fpr[dst].set(result);
+        fpu.setConditionCodes(dst);
+        
+        FINALIZE
+        return;
+        
+    } else if (FPU::isMonadic<I>()) {
+        
+        if (auto nan = fpu.resolveNan(source); nan) {
+            
+            result = *nan;
+            
+        } else {
+            
+            switch (I) {
+                    
+                case FABS:  result = fpu.fabs(source); break;
+                case FACOS: result = fpu.facos(source); break;
+                case FASIN: result = fpu.fasin(source); break;
+                case FATAN: result = fpu.fatan(source); break;
+                case FATANH: result = fpu.fatanh(source); break;
+                case FCOSH: result = fpu.fcosh(source); break;
+                case FETOX: result = fpu.fetox(source); break;
+                case FETOXM1: result = fpu.fetoxm1(source); break;
+                case FGETEXP: result = fpu.fgetexp(source); break;
+                case FGETMAN: result = fpu.fgetman(source); break;
+                case FINT: result = fpu.fint(source); break;
+                case FINTRZ: result = fpu.fintrz(source); break;
+                case FLOG10: result = fpu.flog10(source); break;
+                case FLOG2: result = fpu.flog2(source); break;
+                case FLOGN: result = fpu.flogn(source); break;
+                case FLOGNP1: result = fpu.flognp1(source); break;
+                case FNEG:  result = fpu.fneg(source); break;
+                case FSIN:  result = fpu.fsin(source); break;
+                case FSINH:  result = fpu.fsinh(source); break;
+                case FSQRT:  result = fpu.fsqrt(source); break;
+                case FTAN:  result = fpu.ftan(source); break;
+                case FTANH:  result = fpu.ftanh(source); break;
+                case FTENTOX:  result = fpu.ftentox(source); break;
+                case FTST: result = source; dst = src; break;
+                case FTWOTOX:  result = fpu.ftwotox(source); break;
+                    
+                default:
+                    result = source;
+                    break;
+            }
+        }
+
     } else {
         
-        switch (I) {
-                
-            case FABS:  result = fpu.fabs(source); break;
-            case FACOS: result = fpu.facos(source); break;
-            case FASIN: result = fpu.fasin(source); break;
-            case FATAN: result = fpu.fatan(source); break;
-            case FATANH: result = fpu.fatanh(source); break;
-            case FCOSH: result = fpu.fcosh(source); break;
-            case FETOX: result = fpu.fetox(source); break;
-            case FETOXM1: result = fpu.fetoxm1(source); break;
-            case FGETEXP: result = fpu.fgetexp(source); break;
-            case FNEG:  result = fpu.fneg(source); break;
-                
-            case FSIN:  result = fpu.fsin(source); break;
-                
-            default:
-                result = source;
-                break;
+        printf("Dyadic\n");
+        auto dest = fpu.fpr[dst].val;
+        
+        if (auto nan = fpu.resolveNan(source, dest); nan) {
+            
+            printf("NaN resolved (dyadic)\n");
+            result = *nan;
+            
+        } else {
+            
+            printf("switch(I)\n");
+
+            switch (I) {
+                    
+                case FMOD: result = fpu.fmod(source, dest); break;
+                                        
+                default:
+                    result = source;
+                    break;
+            }
         }
     }
     

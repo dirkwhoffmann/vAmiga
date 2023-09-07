@@ -570,6 +570,34 @@ FpuExtended::frexp10() const
     return { e, m };
 };
 
+FpuExtended
+FpuExtended::operator+(const FpuExtended &other) const
+{
+    auto result = softfloat::floatx80_add(raw, other.raw);
+    return FpuExtended(result.high, result.low);
+}
+
+FpuExtended
+FpuExtended::operator-(const FpuExtended &other) const
+{
+    auto result = softfloat::floatx80_sub(raw, other.raw);
+    return FpuExtended(result.high, result.low);
+}
+
+FpuExtended
+FpuExtended::operator*(const FpuExtended &other) const
+{
+    auto result = softfloat::floatx80_mul(raw, other.raw);
+    return FpuExtended(result.high, result.low);
+}
+
+FpuExtended
+FpuExtended::operator/(const FpuExtended &other) const
+{
+    auto result = softfloat::floatx80_div(raw, other.raw);
+    return FpuExtended(result.high, result.low);
+}
+
 
 //
 // FpuPacked
