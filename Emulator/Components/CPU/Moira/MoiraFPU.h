@@ -152,8 +152,67 @@ public:
 
 public:
 
+    // Returns true iff instruction I is supported by a certain FPU model
+    template <Instr I> static bool isSupported(FPUModel model)
+    {
+        switch (I) {
+                
+            case FACOS:     case FASIN:     case FATANH:    case FCOS:
+            case FCOSH:     case FETOX:     case FETOXM1:   case FGETEXP:
+            case FGETMAN:   case FINTRZ:    case FLOG10:    case FLOG2:
+            case FLOGN:     case FLOGNP1:   case FMOD:      case FREM:
+            case FSCAL:     case FSIN:      case FSINCOS:   case FSINH:
+            case FTAN:      case FTANH:     case FTENTOX:   case FTWOTOX:
+                
+                return model != FPU_68040;
+                
+            default:
+                
+                return true;
+        }
+    }
+    template <Instr I> bool isSupported() { return isSupported<I>(model); }
+
+    // Returns true iff instruction I is a monadic arithmetic instruction
+    template <Instr I> static bool isMonadic()
+    {
+        switch (I) {
+                
+            case FABS:      case FACOS:     case FASIN:     case FATAN:
+            case FATANH:    case FCOS:      case FCOSH:     case FETOX:
+            case FETOXM1:   case FGETEXP:   case FGETMAN:   case FINT:
+            case FINTRZ:    case FLOG10:    case FLOG2:     case FLOGN:
+            case FLOGNP1:   case FNEG:      case FSIN:      case FSINCOS:
+            case FSINH:     case FSQRT:     case FTAN:      case FTANH:
+            case FTENTOX:   case FTST:      case FTWOTOX:
+                
+                return true;
+                
+            default:
+                
+                return false;
+        }
+    }
+
+    // Returns true iff instruction I is a dyadic arithmetic instruction
+    template <Instr I> static bool isDyadic()
+    {
+        switch (I) {
+                
+            case FADD:      case FCMP:      case FDIV:      case FMOD:
+            case FMUL:      case FREM:      case FSCAL:     case FSGLDIV:
+            case FSGLMUL:   case FSUB:
+                
+                return true;
+                
+            default:
+                
+                return false;
+        }
+    }
+
     // Checks the validity of the extension words
-    bool isValidExt(Instr I, Mode M, u16 op, u32 ext) const;
+    static bool isValidExt(Instr I, Mode M, u16 op, u32 ext);
 
 
     //
@@ -171,9 +230,13 @@ public:
     // Handling special values
     //
 
-    static FpuExtended makeNonsignalingNan(const FpuExtended &value);
+    static FpuExtended makeNonsignalingNan(const FpuExtended &value); // DEPRECATED
 
+    // Checks the arguments for NaNs and computes the result NaN if applicable
+    std::optional<FpuExtended> resolveNan(const FpuExtended &op1, const FpuExtended &op2);
+    std::optional<FpuExtended> resolveNan(const FpuExtended &op);
 
+    
     //
     // Executing instructions
     //
@@ -191,6 +254,7 @@ public:
     FpuExtended fcosh(const FpuExtended &value);
     FpuExtended fetox(const FpuExtended &value);
     FpuExtended fetoxm1(const FpuExtended &value);
+    FpuExtended fgetexp(const FpuExtended &value);
 
     FpuExtended fneg(const FpuExtended &value);
 

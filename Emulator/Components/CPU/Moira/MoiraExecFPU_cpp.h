@@ -103,7 +103,7 @@ Moira::execFGen(u16 opcode)
                 case 0x1A: printf("FNEG\n"); execFGeneric<C, FNEG, M, S>(opcode); return;
                 case 0x1C: printf("FACOS\n"); execFGeneric<C, FACOS, M, S>(opcode); return;
                 case 0x1D: printf("FCOS\n"); execFGeneric<C, FCOS, M, S>(opcode); return;
-                case 0x1E: printf("TODO: FGETEXP\n"); execFGeneric<C, FGETEXP, M, S>(opcode); return;
+                case 0x1E: printf("FGETEXP\n"); execFGeneric<C, FGETEXP, M, S>(opcode); return;
                 case 0x1F: printf("TODO: FGETMAN\n"); execFGeneric<C, FGETMAN, M, S>(opcode); return;
                 case 0x20: printf("TODO: FDIV\n"); execFGeneric<C, FDIV, M, S>(opcode); return;
                 case 0x21: printf("TODO: FMOD\n"); execFGeneric<C, FMOD, M, S>(opcode); return;
@@ -527,6 +527,14 @@ Moira::execFGeneric(u16 opcode)
     AVAILABILITY(C68000);
 
     // Filter out unavailable instructions
+    if (!fpu.isSupported<I>()) {
+     
+        execLineF<C, I, M, S>(opcode);
+        FINALIZE
+        return;
+    }
+        
+    /*
     if (fpu.getModel() == FPU_68040) {
 
         switch (I) {
@@ -565,7 +573,8 @@ Moira::execFGeneric(u16 opcode)
                 break;
         }
     }
-
+    */
+        
     auto ext = queue.irc;
     // auto reg = _____________xxx (opcode);
     auto src = ___xxx__________ (ext);
@@ -656,25 +665,33 @@ Moira::execFGeneric(u16 opcode)
 
     printf("execFGeneric: I = %d (%Lf) -> FP%d\n", I, source.asLongDouble(), dst);
 
-    switch (I) {
+    if (auto nan = fpu.resolveNan(source); nan) {
 
-        case FABS:  result = fpu.fabs(source); break;
-        case FACOS: result = fpu.facos(source); break;
-        case FASIN: result = fpu.fasin(source); break;
-        case FATAN: result = fpu.fatan(source); break;
-        case FATANH: result = fpu.fatanh(source); break;
-        case FCOSH: result = fpu.fcosh(source); break;
-        case FETOX: result = fpu.fetox(source); break;
-        case FETOXM1: result = fpu.fetoxm1(source); break;
-        case FNEG:  result = fpu.fneg(source); break;
-
-        case FSIN:  result = fpu.fsin(source); break;
-
-        default:
-            result = source;
-            break;
+        result = *nan;
+        
+    } else {
+        
+        switch (I) {
+                
+            case FABS:  result = fpu.fabs(source); break;
+            case FACOS: result = fpu.facos(source); break;
+            case FASIN: result = fpu.fasin(source); break;
+            case FATAN: result = fpu.fatan(source); break;
+            case FATANH: result = fpu.fatanh(source); break;
+            case FCOSH: result = fpu.fcosh(source); break;
+            case FETOX: result = fpu.fetox(source); break;
+            case FETOXM1: result = fpu.fetoxm1(source); break;
+            case FGETEXP: result = fpu.fgetexp(source); break;
+            case FNEG:  result = fpu.fneg(source); break;
+                
+            case FSIN:  result = fpu.fsin(source); break;
+                
+            default:
+                result = source;
+                break;
+        }
     }
-
+    
     prefetch<C>();
     fpu.fpr[dst].set(result);
     fpu.setConditionCodes(dst);

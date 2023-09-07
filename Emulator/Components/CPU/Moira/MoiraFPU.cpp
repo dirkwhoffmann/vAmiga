@@ -148,8 +148,68 @@ FPU::fesetround(FpuRoundingMode mode)
     }
 }
 
+/*
+template <Instr I> bool
+FPU::isSupported(FPUModel model)
+{
+    switch (I) {
+            
+        case FACOS:     case FASIN:     case FATANH:    case FCOS:
+        case FCOSH:     case FETOX:     case FETOXM1:   case FGETEXP:
+        case FGETMAN:   case FINTRZ:    case FLOG10:    case FLOG2:
+        case FLOGN:     case FLOGNP1:   case FMOD:      case FREM:
+        case FSCAL:     case FSIN:      case FSINCOS:   case FSINH:
+        case FTAN:      case FTANH:     case FTENTOX:   case FTWOTOX:
+            
+            return model != FPU_68040;
+            
+        default:
+            
+            return true;
+    }
+}
+
+template <Instr I> bool
+FPU::isMonadic()
+{
+    switch (I) {
+            
+        case FABS:      case FACOS:     case FASIN:     case FATAN:
+        case FATANH:    case FCOS:      case FCOSH:     case FETOX:
+        case FETOXM1:   case FGETEXP:   case FGETMAN:   case FINT:
+        case FINTRZ:    case FLOG10:    case FLOG2:     case FLOGN:
+        case FLOGNP1:   case FNEG:      case FSIN:      case FSINCOS:
+        case FSINH:     case FSQRT:     case FTAN:      case FTANH:
+        case FTENTOX:   case FTST:      case FTWOTOX:
+            
+            return true;
+            
+        default:
+            
+            return false;
+    }
+}
+
+template <Instr I> bool
+FPU::isDyadic()
+{
+    switch (I) {
+            
+        case FADD:      case FCMP:      case FDIV:      case FMOD:
+        case FMUL:      case FREM:      case FSCAL:     case FSGLDIV:
+        case FSGLMUL:   case FSUB:
+            
+            return true;
+            
+        default:
+            
+            return false;
+    }
+}
+*/
+
 bool
-FPU::isValidExt(Instr I, Mode M, u16 op, u32 ext) const
+FPU::isValidExt(Instr I, Mode M, u16 op, u32 ext)
 {
     auto cod  = xxx_____________ (ext);
     auto mode = ___xx___________ (ext);
@@ -418,6 +478,64 @@ FPU::makeNonsignalingNan(const FpuExtended &value)
     return FpuExtended(value.raw.high, value.raw.low | (1LL << 62));
 }
 
+std::optional<FpuExtended>
+FPU::resolveNan(const FpuExtended &op1, const FpuExtended &op2)
+{
+    /* MC68881/MC68882 Floating-Point Coprocessor User's Manual:
+     *
+     * 4.5.4.1 NON-SIGNALING NANS
+     *
+     * "If either, but not both, operand of an operation is a NAN, and it is a
+     *  non-signaling NAN, then that NAN is returned as the result. If both
+     *  operands are non-signaling NANs, then the destination operand
+     *  non-signaling NAN is returned as the result.
+     *
+     * 4.5.4.2 SIGNALING NANS
+     *
+     * If either operand to an operation is a signaling NAN (SNAN), then the
+     * SNAN bit is set in the FPSR EXC byte. If the SNAN trap enable bit is
+     * set in the FPCR ENABLE byte, then the trap is taken and the destination
+     * is not modified. If the SNAN trap enable bit is not set, then the SNAN
+     * is converted to a non-signaling NAN (by setting the SNAN bit in the
+     * operand to a one), and the operation continues as described in the
+     * preceding section for non-signaling NANs.
+     */
+
+    if (!op1.isnan() && !op2.isnan()) return {};
+    
+    auto o1 = op1;
+    auto o2 = op2;
+    
+    if (o1.isSignalingNaN()) {
+        
+        o1.raw.low |= (1LL << 62);
+        setExcStatusBit(FPEXP_SNAN);
+    }
+    if (o2.isSignalingNaN()) {
+        
+        o2.raw.low |= (1LL << 62);
+        setExcStatusBit(FPEXP_SNAN);
+    }
+
+    return o2.isnan() ? o2 : o1;
+}
+
+std::optional<FpuExtended>
+FPU::resolveNan(const FpuExtended &op)
+{
+    if (!op.isnan()) return {};
+    
+    auto o = op;
+    
+    if (o.isSignalingNaN()) {
+        
+        o.raw.low |= (1LL << 62);
+        setExcStatusBit(FPEXP_SNAN);
+    }
+    
+    return o;
+}
+
 FpuExtended
 FPU::monadic(const FpuExtended &value, std::function<long double(long double)> func)
 {
@@ -531,6 +649,22 @@ FPU::fetoxm1(const FpuExtended &value)
 }
 
 FpuExtended
+FPU::fgetexp(const FpuExtended &value)
+{
+    printf("fgetexp %x %llx\n", value.raw.high, value.raw.low);
+    if (value.iszero()) { return value; }
+    if (value.isinf()) { setExcStatusBit(FPEXP_OPERR); return FpuExtended::nan; }
+
+    long double ldval = value.asLongDouble();
+    int exp;
+    (void)std::frexpl(ldval, &exp);
+    exp -= 1;
+    
+    printf("exp = %d\n", exp);
+    return FpuExtended(exp);
+}
+
+FpuExtended
 FPU::fneg(const FpuExtended &value)
 {
     printf("fneg(%Lf)\n", value.asLongDouble());
@@ -547,5 +681,6 @@ FPU::fsin(const FpuExtended &value)
     printf("fsin %x %llx\n", value.raw.high, value.raw.low);
     return monadic(value, [&](long double x) { return std::sin(x); });
 }
+
 
 }
