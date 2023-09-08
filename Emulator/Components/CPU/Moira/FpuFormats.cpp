@@ -571,6 +571,14 @@ FpuExtended::frexp10() const
 };
 
 FpuExtended
+FpuExtended::operator-() const
+{
+    auto result = *this;
+    result.raw.high ^= 0x8000;
+    return result;
+}
+
+FpuExtended
 FpuExtended::operator+(const FpuExtended &other) const
 {
     auto result = softfloat::floatx80_add(raw, other.raw);

@@ -828,41 +828,6 @@ FPU::flognp1(const FpuExtended &value)
 }
 
 FpuExtended
-FPU::fmod(const FpuExtended &op1, const FpuExtended &op2)
-{
-    printf("fmod op1: (%x, %llx) (%x, %llx)\n", op1.raw.high, op1.raw.low, op2.raw.high, op2.raw.low);
-    
-    long double modulus;
-    
-    if (op1.iszero() || op2.isinf()) {
-        
-        setExcStatusBit(FPEXP_OPERR);
-        return FpuExtended::nan;
-    }
-    if (op2.iszero()) {
-        
-        return op2;
-    }
-    if (op1.isinf()) {
-
-        modulus = op2.asLongDouble();
-
-    } else {
-        
-        clearHostFpuFlags();
-        modulus = std::fmodl(op2.asLongDouble(), op1.asLongDouble());
-        copyHostFpuFlags();
-    }
-    
-    auto result = FpuExtended(modulus, getRoundingMode(), exceptionHandler);
-    u32 quotientByte = (result.raw.low & 0xF);
-    if (op1.signbit() ^ op2.signbit()) quotientByte |= 0x80;
-    fpsr = (fpsr & 0xFF00FFFF) | quotientByte << 16;
-    
-    return result;
-}
-
-FpuExtended
 FPU::fneg(const FpuExtended &value)
 {
     printf("fneg(%Lf)\n", value.asLongDouble());
@@ -922,6 +887,174 @@ FPU::ftwotox(const FpuExtended &value)
     return monadic(value, [&](long double x) { return std::powl(2.0L, x); });
 }
 
+FpuExtended
+FPU::fadd(const FpuExtended &op1, const FpuExtended &op2)
+{
+    if (op1.iszero() && op2.iszero()) {
+        
+        if (op1.signbit() == op2.signbit()) {
+            return op1;
+        } else if (getRoundingMode() == FPU_RND_DOWNWARD) {
+            return FpuExtended::negZero;
+        } else {
+            return FpuExtended::posZero;
+        }
+    }
+    if (op1.isinf() && op2.isinf() && op1.signbit() != op2.signbit()) {
+        
+        setExcStatusBit(FPEXP_OPERR);
+        return FpuExtended::nan;
+    }
+    if (op1.isinf()) {
+        
+        return op1;
+    }
+    if (op2.isinf()) {
+        
+        return op2;
+    }
+    
+    softfloat::float_exception_flags = 0;
+    
+    auto result = softfloat::floatx80_add(op1.raw, op2.raw);
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        setExcStatusBit(FPEXP_INEX2);
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+        setExcStatusBit(FPEXP_OVFL);
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+        setExcStatusBit(FPEXP_UNFL);
+    }
+    
+    return FpuExtended(result.high, result.low);
+}
 
+FpuExtended
+FPU::fcmp(const FpuExtended &op1, const FpuExtended &op2)
+{
+    printf("TODO\n");
+    return 0;
+}
+
+FpuExtended
+FPU::fdiv(const FpuExtended &op1, const FpuExtended &op2)
+{
+    printf("TODO\n");
+    return 0;
+}
+
+FpuExtended
+FPU::fmod(const FpuExtended &op1, const FpuExtended &op2)
+{
+    printf("fmod op1: (%x, %llx) (%x, %llx)\n", op1.raw.high, op1.raw.low, op2.raw.high, op2.raw.low);
+    
+    long double modulus;
+    
+    if (op1.iszero() || op2.isinf()) {
+        
+        setExcStatusBit(FPEXP_OPERR);
+        return FpuExtended::nan;
+    }
+    if (op2.iszero()) {
+        
+        return op2;
+    }
+    if (op1.isinf()) {
+
+        modulus = op2.asLongDouble();
+
+    } else {
+        
+        clearHostFpuFlags();
+        modulus = std::fmodl(op2.asLongDouble(), op1.asLongDouble());
+        copyHostFpuFlags();
+    }
+    
+    auto result = FpuExtended(modulus, getRoundingMode(), exceptionHandler);
+    u32 quotientByte = (result.raw.low & 0xF);
+    if (op1.signbit() ^ op2.signbit()) quotientByte |= 0x80;
+    fpsr = (fpsr & 0xFF00FFFF) | quotientByte << 16;
+    
+    return result;
+}
+
+FpuExtended
+FPU::fmul(const FpuExtended &op1, const FpuExtended &op2)
+{
+    printf("TODO\n");
+    return 0;
+}
+
+FpuExtended
+FPU::frem(const FpuExtended &op1, const FpuExtended &op2)
+{
+    printf("TODO\n");
+    return 0;
+}
+
+FpuExtended
+FPU::fscal(const FpuExtended &op1, const FpuExtended &op2)
+{
+    printf("TODO\n");
+    return 0;
+}
+
+FpuExtended
+FPU::fsgldiv(const FpuExtended &op1, const FpuExtended &op2)
+{
+    printf("TODO\n");
+    return 0;
+}
+
+FpuExtended
+FPU::fsglmul(const FpuExtended &op1, const FpuExtended &op2)
+{
+    printf("TODO\n");
+    return 0;
+}
+
+FpuExtended
+FPU::fsub(const FpuExtended &op1, const FpuExtended &op2)
+{
+    if (op1.iszero() && op2.iszero()) {
+        
+        if (op1.signbit() != op2.signbit()) {
+            return FpuExtended::negZero;
+        } else if (getRoundingMode() == FPU_RND_DOWNWARD) {
+            return FpuExtended::negZero;
+        } else {
+            return FpuExtended::posZero;
+        }
+    }
+    if (op1.isinf() && op2.isinf() && op1.signbit() == op2.signbit()) {
+        
+        setExcStatusBit(FPEXP_OPERR);
+        return FpuExtended::nan;
+    }
+    if (op1.isinf()) {
+        
+        return -op1;
+    }
+    if (op2.isinf()) {
+        
+        return op2;
+    }
+    
+    softfloat::float_exception_flags = 0;
+    
+    auto result = softfloat::floatx80_sub(op2.raw, op1.raw);
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        setExcStatusBit(FPEXP_INEX2);
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+        setExcStatusBit(FPEXP_OVFL);
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+        setExcStatusBit(FPEXP_UNFL);
+    }
+    
+    return FpuExtended(result.high, result.low);
+}
 
 }

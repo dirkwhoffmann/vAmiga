@@ -273,7 +273,16 @@ public:
     FpuExtended ftwotox(const FpuExtended &value);
 
     // Dyadic operations
-    FpuExtended fmod(const FpuExtended &op1, const FpuExtended &op2);    
+    FpuExtended fadd(const FpuExtended &op1, const FpuExtended &op2);
+    FpuExtended fcmp(const FpuExtended &op1, const FpuExtended &op2);
+    FpuExtended fdiv(const FpuExtended &op1, const FpuExtended &op2);
+    FpuExtended fmod(const FpuExtended &op1, const FpuExtended &op2);
+    FpuExtended fmul(const FpuExtended &op1, const FpuExtended &op2);
+    FpuExtended frem(const FpuExtended &op1, const FpuExtended &op2);
+    FpuExtended fscal(const FpuExtended &op1, const FpuExtended &op2);
+    FpuExtended fsgldiv(const FpuExtended &op1, const FpuExtended &op2);
+    FpuExtended fsglmul(const FpuExtended &op1, const FpuExtended &op2);
+    FpuExtended fsub(const FpuExtended &op1, const FpuExtended &op2);
 };
 
 }

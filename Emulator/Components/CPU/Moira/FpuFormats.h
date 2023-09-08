@@ -201,6 +201,7 @@ struct FpuExtended {
     // Operators
     //
 
+    FpuExtended operator-() const;
     FpuExtended operator+(const FpuExtended &other) const;
     FpuExtended operator-(const FpuExtended &other) const;
     FpuExtended operator*(const FpuExtended &other) const;

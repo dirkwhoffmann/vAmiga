@@ -92,7 +92,7 @@ Moira::execFGen(u16 opcode)
                 case 0x0D: printf("FATANH\n"); execFGeneric<C, FATANH, M, S>(opcode); return;
                 case 0x0E: printf("FSIN\n"); execFGeneric<C, FSIN, M, S>(opcode); return;
                 case 0x0F: printf("FTAN\n"); execFGeneric<C, FTAN, M, S>(opcode); return;
-                case 0x10: printf("TODO: FETOX\n"); execFGeneric<C, FETOX, M, S>(opcode); return;
+                case 0x10: printf("FETOX\n"); execFGeneric<C, FETOX, M, S>(opcode); return;
                 case 0x11: printf("FTWOTOX\n"); execFGeneric<C, FTWOTOX, M, S>(opcode); return;
                 case 0x12: printf("FTENTOX\n"); execFGeneric<C, FTENTOX, M, S>(opcode); return;
                 case 0x14: printf("FLOGN\n"); execFGeneric<C, FLOGN, M, S>(opcode); return;
@@ -107,13 +107,13 @@ Moira::execFGen(u16 opcode)
                 case 0x1F: printf("FGETMAN\n"); execFGeneric<C, FGETMAN, M, S>(opcode); return;
                 case 0x20: printf("TODO: FDIV\n"); execFGeneric<C, FDIV, M, S>(opcode); return;
                 case 0x21: printf("FMOD\n"); execFGeneric<C, FMOD, M, S>(opcode); return;
-                case 0x22: printf("TODO: FADD\n"); execFGeneric<C, FADD, M, S>(opcode); return;
+                case 0x22: printf("FADD\n"); execFGeneric<C, FADD, M, S>(opcode); return;
                 case 0x23: printf("TODO: FMUL\n"); execFGeneric<C, FMUL, M, S>(opcode); return;
                 case 0x24: printf("TODO: FSGLDIV\n"); execFGeneric<C, FSGLDIV, M, S>(opcode); return;
                 case 0x25: printf("TODO: FREM\n"); execFGeneric<C, FREM, M, S>(opcode); return;
                 case 0x26: printf("TODO: FSCAL\n"); execFGeneric<C, FSCAL, M, S>(opcode); return;
                 case 0x27: printf("TODO: FSGLMUL\n"); execFGeneric<C, FSGLMUL, M, S>(opcode); return;
-                case 0x28: printf("TODO: FSUB\n"); execFGeneric<C, FSUB, M, S>(opcode); return;
+                case 0x28: printf("FSUB\n"); execFGeneric<C, FSUB, M, S>(opcode); return;
                 case 0x30:
                 case 0x31:
                 case 0x32:
@@ -706,8 +706,17 @@ Moira::execFGeneric(u16 opcode)
 
             switch (I) {
                     
+                case FADD: result = fpu.fadd(source, dest); break;
+                case FCMP: result = fpu.fcmp(source, dest); break;
+                case FDIV: result = fpu.fdiv(source, dest); break;
                 case FMOD: result = fpu.fmod(source, dest); break;
-                                        
+                case FMUL: result = fpu.fmul(source, dest); break;
+                case FREM: result = fpu.frem(source, dest); break;
+                case FSCAL: result = fpu.fscal(source, dest); break;
+                case FSGLDIV: result = fpu.fsgldiv(source, dest); break;
+                case FSGLMUL: result = fpu.fsglmul(source, dest); break;
+                case FSUB: result = fpu.fsub(source, dest); break;
+                    
                 default:
                     result = source;
                     break;
