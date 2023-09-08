@@ -66,7 +66,7 @@ FPUReg::set(const FpuExtended other)
     // Experimental
     val.normalize();
     
-    // Experimental
+    // REMOVE THIS!
     if (val.isSignalingNaN()) {
         val.raw.low |= (1LL << 62); // Make nonsignaling
         fpu.setExcStatusBit(FPEXP_SNAN);
@@ -933,8 +933,42 @@ FPU::fadd(const FpuExtended &op1, const FpuExtended &op2)
 FpuExtended
 FPU::fcmp(const FpuExtended &op1, const FpuExtended &op2)
 {
-    printf("TODO\n");
-    return 0;
+    if (op1.iszero() && op2.iszero()) {
+        
+        return op2;
+    }
+    if (op1.iszero()) {
+        
+        return op2.signbit() ? -1 : 1;
+    }
+    if (op2.iszero()) {
+        
+        return op1.signbit() ? 1 : -1;
+    }
+    if (op1.isinf() && op2.isinf()) {
+        
+        if (op1.signbit() == 0 && op2.signbit() == 0) return FpuExtended::posZero;
+        if (op1.signbit() == 0 && op2.signbit() == 1) return -1;
+        if (op1.signbit() == 1 && op2.signbit() == 0) return 1;
+        if (op1.signbit() == 1 && op2.signbit() == 1) return FpuExtended::negZero;
+    }
+    if (op1.isinf()) {
+        
+        return op1.signbit() ? 1 : -1;
+    }
+    if (op2.isinf()) {
+        
+        return op2.signbit() ? -1 : 1;
+    }
+    if (op1 == op2) {
+        
+        return op1.signbit() ? FpuExtended::negZero : FpuExtended::posZero;
+    }
+    if (op2.ispositive()) {
+
+        return op1 > op2 ? -1.0 : 1.0;
+    }
+    return op1 < op2 ? 1.0 : -1.0;
 }
 
 FpuExtended
