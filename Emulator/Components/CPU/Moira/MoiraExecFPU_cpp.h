@@ -726,6 +726,6 @@ Moira::execFGeneric(u16 opcode)
     
     prefetch<C>();
     if (I != FCMP) fpu.fpr[dst].set(result);
-    fpu.setConditionCodes(result);
+    fpu.setConditionCodes(dst);
     FINALIZE
 }

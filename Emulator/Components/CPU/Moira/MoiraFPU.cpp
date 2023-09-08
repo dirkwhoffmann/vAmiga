@@ -307,6 +307,7 @@ FPU::setConditionCodes(int reg)
 void
 FPU::setConditionCodes(const FpuExtended &value)
 {
+    // TODO: Use FpuExtended API
     bool n = value.raw.high & 0x8000;
     bool z = (value.raw.high & 0x7fff) == 0 && value.raw.low == 0;
     bool i = (value.raw.high & 0x7fff) == 0x7fff && (value.raw.low << 1) == 0;
@@ -316,6 +317,19 @@ FPU::setConditionCodes(const FpuExtended &value)
     REPLACE_BIT(fpsr, 26, z);
     REPLACE_BIT(fpsr, 25, i);
     REPLACE_BIT(fpsr, 24, nan);
+}
+
+void
+FPU::setQuotientByte(u8 byte)
+{
+    fpsr &= 0xFF00FFFF;
+    fpsr |= byte << 16;
+}
+
+void
+FPU::setQuotientByte(u8 byte, bool sign)
+{
+    setQuotientByte((byte & 0x7F) | (sign ? 0x80 : 0x00));
 }
 
 void
@@ -974,8 +988,52 @@ FPU::fcmp(const FpuExtended &op1, const FpuExtended &op2)
 FpuExtended
 FPU::fdiv(const FpuExtended &op1, const FpuExtended &op2)
 {
-    printf("TODO\n");
-    return 0;
+    /*            |  In Range   |    Zero     |  Infinity   |
+     *            |   +    -    |   +     -   |   +     -   |
+     * ------------------------------------------------------
+     * In Range + |     y/x     | +inf1 -inf1 | +0.0  -0.0  |  1 : Set DZ
+     *          - |             | -inf1 +inf1 | -0.0  +0.0  |  2 : Set OPERR
+     * ------------------------------------------------------
+     * Zero     + | +0.0  -0.0  |  NaN2  NaN2 | +0.0  -0.0  |
+     *          - | -0.0  +0.0  |  NaN2  NaN2 | -0.0  +0.0  |
+     * ------------------------------------------------------
+     * Infinity + | +inf  -inf  | +inf  -inf  |  NaN   NaN  |
+     *          - | -inf  +inf  | -inf  +inf  |  NaN   NaN  |
+     * ------------------------------------------------------
+     */
+    if ((op1.iszero() && op2.iszero()) || (op1.isinf() && op2.isinf())) {
+        
+        setExcStatusBit(FPEXP_OPERR);
+        return FpuExtended::nan;
+    }
+    if (op1.isinf()) {
+        return op1.signbit() == op2.signbit() ? FpuExtended::posZero : FpuExtended::negZero;
+    }
+    if (op2.isinf()) {
+        return op1.signbit() == op2.signbit() ? FpuExtended::posInf : FpuExtended::negInf;
+    }
+    if (op1.iszero()) {
+        
+        setExcStatusBit(FPEXP_DZ);
+        return op1.signbit() == op2.signbit() ? FpuExtended::posInf : FpuExtended::negInf;
+    }
+    if (op2.iszero()) {
+        return op1.signbit() == op2.signbit() ? FpuExtended::posZero : FpuExtended::negZero;
+    }
+        
+    softfloat::float_exception_flags = 0;
+    auto result = softfloat::floatx80_div(op2.raw, op1.raw);
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        setExcStatusBit(FPEXP_INEX2);
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+        setExcStatusBit(FPEXP_OVFL);
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+        setExcStatusBit(FPEXP_UNFL);
+    }
+    
+    return FpuExtended(result.high, result.low);
 }
 
 FpuExtended
@@ -1016,22 +1074,139 @@ FPU::fmod(const FpuExtended &op1, const FpuExtended &op2)
 FpuExtended
 FPU::fmul(const FpuExtended &op1, const FpuExtended &op2)
 {
-    printf("TODO\n");
-    return 0;
+    /*            |  In Range   |    Zero     |  Infinity   |
+     *            |   +    -    |   +     -   |   +     -   |
+     * ------------------------------------------------------
+     * In Range + |    x * y    | +0.0  -0.0  | +inf  -inf  |  1 : Set OPERR
+     *          - |             | -0.0  +0.0  | -inf  +inf  |
+     * ------------------------------------------------------
+     * Zero     + | +0.0  -0.0  | +0.0  -0.0  |  NaN1  NaN1 |
+     *          - | -0.0  +0.0  | -0.0  +0.0  |  NaN1  NaN1 |
+     * ------------------------------------------------------
+     * Infinity + | +inf  -inf  |  NaN1  NaN1 | +inf  -inf  |
+     *          - | -inf  +inf  |  NaN1  NaN1 | -inf  +inf  |
+     * ------------------------------------------------------
+     */
+    
+    if (op1.isinf() || op2.isinf()) {
+        
+        if (op1.iszero() || op2.iszero()) {
+            
+            setExcStatusBit(FPEXP_OPERR);
+            return FpuExtended::nan;
+
+        } else {
+            
+            return FpuExtended::inf.copysign(op1.signbit() != op2.signbit());
+        }
+    }
+    if (op1.iszero() || op2.iszero()) {
+        
+        return FpuExtended::zero.copysign(op1.signbit() != op2.signbit());
+    }
+        
+    softfloat::float_exception_flags = 0;
+    auto result = softfloat::floatx80_mul(op1.raw, op2.raw);
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        setExcStatusBit(FPEXP_INEX2);
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+        setExcStatusBit(FPEXP_OVFL);
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+        setExcStatusBit(FPEXP_UNFL);
+    }
+    
+    return FpuExtended(result.high, result.low);
 }
 
 FpuExtended
 FPU::frem(const FpuExtended &op1, const FpuExtended &op2)
 {
-    printf("TODO\n");
-    return 0;
+    /*            |  In Range   |    Zero     |  Infinity   |
+     *            |   +    -    |   +     -   |   +     -   |
+     * ------------------------------------------------------
+     * In Range + |    IEEE     |  NaN1  NaN1 |  FPn   FPn  |  1 : Set OPERR
+     *          - |  Remainder  |  NaN1  NaN1 |  FPn   FPn  |
+     * ------------------------------------------------------
+     * Zero     + | +0.0  +0.0  |  NaN1  NaN1 | +0.0  +0.0  |
+     *          - | -0.0  -0.0  |  NaN1  NaN1 | -0.0  -0.0  |
+     * ------------------------------------------------------
+     * Infinity + |  NaN1  NaN1 |  NaN1  NaN1 |  NaN1  NaN1 |
+     *          - |  NaN1  NaN1 |  NaN1  NaN1 |  NaN1  NaN1 |
+     * ------------------------------------------------------
+     */
+    
+    if (op1.iszero() || op2.isinf()) {
+        
+        setExcStatusBit(FPEXP_OPERR);
+        return FpuExtended::nan;
+    }
+    if (op2.iszero()) {
+        
+        return op2;
+    }
+    if (op1.isinf()) {
+        
+        return op2;
+    }
+    
+    softfloat::float_exception_flags = 0;
+    auto remainder = softfloat::floatx80_rem(op2.raw, op1.raw);
+    if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+        setExcStatusBit(FPEXP_INEX2);
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+        setExcStatusBit(FPEXP_OVFL);
+    }
+    if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+        setExcStatusBit(FPEXP_UNFL);
+    }
+    
+    setQuotientByte((u8)remainder.low, op1.signbit() != op2.signbit());
+    return FpuExtended(remainder.high, remainder.low);
 }
 
 FpuExtended
 FPU::fscal(const FpuExtended &op1, const FpuExtended &op2)
 {
-    printf("TODO\n");
-    return 0;
+    /*            |  In Range   |    Zero     |  Infinity   |
+     *            |   +    -    |   +     -   |   +     -   |
+     * ------------------------------------------------------
+     * In Range + |    Scale    |     FPn     |  NaN   NaN  |
+     *          - |   Exponent  |     FPn     |  NaN   NaN  |
+     * ------------------------------------------------------
+     * Zero     + | +0.0  +0.0  | +0.0  +0.0  |  NaN   NaN  |
+     *          - | -0.0  -0.0  | -0.0  -0.0  |  NaN   NaN  |
+     * ------------------------------------------------------
+     * Infinity + | +inf  +inf  | +inf  +inf  |  NaN   NaN  |
+     *          - | -inf  -inf  | -inf  -inf  |  NaN   NaN  |
+     * ------------------------------------------------------
+     */
+
+    if (op1.isinf()) {
+        
+        setExcStatusBit(FPEXP_OPERR);
+        return FpuExtended::nan;
+    }
+    if (op2.isinf() || op2.iszero()) {
+        
+        return op2;
+    }
+    if (op1.iszero()) {
+        
+        return op2;
+    }
+
+    long offset = (long)op1.asLongDouble();
+    
+    printf("fscale: offset = %ld\n", offset);
+
+    auto sgn = op2.signbit();
+    auto man = op2.man();
+    auto exp = op2.exp();
+    
+    return FpuExtended(sgn, i16(exp + offset), man);
 }
 
 FpuExtended

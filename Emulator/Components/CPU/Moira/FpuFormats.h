@@ -147,8 +147,10 @@ struct FpuExtended {
 
     // Constants
     static FpuExtended nan;
+    static FpuExtended zero;
     static FpuExtended posZero;
     static FpuExtended negZero;
+    static FpuExtended inf;
     static FpuExtended posInf;
     static FpuExtended negInf;
 
@@ -195,8 +197,10 @@ struct FpuExtended {
 
     void normalize();
     std::pair<int, long double> frexp10() const;
+    FpuExtended copysign(bool sign);
+    FpuExtended copysign(const FpuExtended &other);
 
-
+    
     //
     // Operators
     //

@@ -111,7 +111,8 @@ FpuSingle::FpuSingle(const class FpuExtended &value, ExceptionHandler handler)
         printf("Cropping (1)\n");
 
         float posinf = std::copysign(std::numeric_limits<float>::infinity(), 1.0f);
-        flags |= FPEXP_INEX2 | FPEXP_OVFL;
+        // flags |= FPEXP_INEX2 | FPEXP_OVFL;
+        flags |= FPEXP_OVFL;
         raw = *((u32 *)&posinf);
 
     } else if (ldv < std::numeric_limits<float>::lowest()) {
@@ -119,7 +120,8 @@ FpuSingle::FpuSingle(const class FpuExtended &value, ExceptionHandler handler)
         printf("Cropping (2)\n");
 
         float neginf = std::copysign(std::numeric_limits<float>::infinity(), -1.0f);
-        flags |= FPEXP_INEX2 | FPEXP_OVFL;
+        // flags |= FPEXP_INEX2 | FPEXP_OVFL;
+        flags |= FPEXP_OVFL;
         raw = *((u32 *)&neginf);
 
     } else {
@@ -475,8 +477,10 @@ FpuExtended::FpuExtended(bool mSign, i16 e, u64 m, ExceptionHandler handler)
 }
 
 FpuExtended FpuExtended::nan     = FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
+FpuExtended FpuExtended::zero    = FpuExtended(0x0000, 0x0000000000000000);
 FpuExtended FpuExtended::posZero = FpuExtended(0x0000, 0x0000000000000000);
 FpuExtended FpuExtended::negZero = FpuExtended(0x8000, 0x0000000000000000);
+FpuExtended FpuExtended::inf     = FpuExtended(0x7FFF, 0x0000000000000000);
 FpuExtended FpuExtended::posInf  = FpuExtended(0x7FFF, 0x0000000000000000);
 FpuExtended FpuExtended::negInf  = FpuExtended(0xFFFF, 0x0000000000000000);
 
@@ -569,6 +573,22 @@ FpuExtended::frexp10() const
 
     return { e, m };
 };
+
+FpuExtended
+FpuExtended::copysign(bool sign)
+{
+    if (sign) {
+        return FpuExtended(raw.high | 0x8000, raw.low);
+    } else {
+        return FpuExtended(raw.high & 0x7FFF, raw.low);
+    }
+}
+
+FpuExtended
+FpuExtended::copysign(const FpuExtended &other)
+{
+    return copysign(other.signbit());
+}
 
 FpuExtended
 FpuExtended::operator-() const

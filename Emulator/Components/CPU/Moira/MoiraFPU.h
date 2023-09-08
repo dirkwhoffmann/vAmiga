@@ -126,13 +126,16 @@ public:
     void clearFPSR() { fpsr &= 0xFFFF00F8; }
     u32 getFPSR() const { return fpsr & 0x0FFFFFF8; }
     void setFPSR(u32 value);
-    
+
     void setExcStatusBit(u32 mask);
     void clearExcStatusBit(u32 mask);
     
     void setConditionCodes(int reg);
     void setConditionCodes(const FpuExtended &value);
     
+    void setQuotientByte(u8 byte);
+    void setQuotientByte(u8 byte, bool sign);
+
     // Accesses the instruction address register
     u32 getFPIAR() const { return fpiar; }
     void setFPIAR(u32 value);
