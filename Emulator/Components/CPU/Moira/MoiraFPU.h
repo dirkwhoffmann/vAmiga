@@ -273,6 +273,7 @@ public:
     FpuExtended ftan(const FpuExtended &value);
     FpuExtended ftanh(const FpuExtended &value);
     FpuExtended ftentox(const FpuExtended &value);
+    FpuExtended ftst(const FpuExtended &value);
     FpuExtended ftwotox(const FpuExtended &value);
 
     // Dyadic operations

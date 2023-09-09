@@ -1060,28 +1060,94 @@ FPU::fsqrt(const FpuExtended &value)
 FpuExtended
 FPU::ftan(const FpuExtended &value)
 {
-    printf("ftan %x %llx\n", value.raw.high, value.raw.low);
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |   tan(x)    | +0.0  -0.0  |  NaN   NaN  |
+    // -------------------------------------------
+
+    if (value.iszero()) {
+        
+        return value;
+    }
+    if (value.isinf()) {
+     
+        setExcStatusBit(FPEXP_OPERR);
+        return FpuExtended::nan;
+    }
+
     return monadic(value, [&](long double x) { return std::tan(x); });
 }
 
 FpuExtended
 FPU::ftanh(const FpuExtended &value)
 {
-    printf("ftanh %x %llx\n", value.raw.high, value.raw.low);
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |   tanh(x)   | +0.0  -0.0  | +1.0  -1.0  |
+    // -------------------------------------------
+
+    if (value.iszero()) {
+        
+        return value;
+    }
+    if (value.isinf()) {
+     
+        return value.ispositive() ? 1.0 : -1.0;
+    }
+
     return monadic(value, [&](long double x) { return std::tanh(x); });
 }
 
 FpuExtended
 FPU::ftentox(const FpuExtended &value)
 {
-    printf("ftentox %x %llx\n", value.raw.high, value.raw.low);
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |    10^x     | +1.0  +1.0  | +inf  +0.0  |
+    // -------------------------------------------
+
+    if (value.isinf()) {
+        
+        return value.ispositive() ? value : FpuExtended::posZero;
+    }
+
     return monadic(value, [&](long double x) { return std::powl(10.0L, x); });
+}
+
+FpuExtended
+FPU::ftst(const FpuExtended &value)
+{
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |  { }   N    |   Z     NZ  |   I     NI  |
+    // -------------------------------------------
+
+    return value;
 }
 
 FpuExtended
 FPU::ftwotox(const FpuExtended &value)
 {
-    printf("ftwotox %x %llx\n", value.raw.high, value.raw.low);
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |     2^x     | +1.0  +1.0  | +inf  +0.0  |
+    // -------------------------------------------
+
+    if (value.isinf()) {
+        
+        return value.ispositive() ? value : FpuExtended::posZero;
+    }
+
     return monadic(value, [&](long double x) { return std::powl(2.0L, x); });
 }
 
@@ -1092,8 +1158,8 @@ FPU::fadd(const FpuExtended &op1, const FpuExtended &op2)
     //            |  In Range   |    Zero     |  Infinity   |
     //            |   +    -    |   +     -   |   +     -   |
     // ------------------------------------------------------
-    // In Range + |  Addition   |  Addition   | +0.0  -0.0  | ? : +/- depends on
-    //          - |             |             | +0.0  -0.0  |     rounding mode
+    // In Range + |  Addition   |  Addition   | +0.0  -0.0  |
+    //          - |             |             | +0.0  -0.0  |
     // ------------------------------------------------------
     // Zero     + |  Addition   | +0.0  ?0.0  | +0.0  -0.0  |
     //          - |             | ?0.0  -0.0  | +0.0  -0.0  |
@@ -1101,7 +1167,8 @@ FPU::fadd(const FpuExtended &op1, const FpuExtended &op2)
     // Infinity + | +inf  +inf  | +inf  +inf  | +inf   NaN  |
     //          - | -inf  -inf  | -inf  -inf  |  NaN  -inf  |
     // ------------------------------------------------------
-
+    // ? : +/- sign depends on rounding mode
+    
     if (op1.iszero() && op2.iszero()) {
         
         if (op1.signbit() == op2.signbit()) {
@@ -1204,7 +1271,7 @@ FPU::fdiv(const FpuExtended &op1, const FpuExtended &op2)
     //            |  In Range   |    Zero     |  Infinity   |
     //            |   +    -    |   +     -   |   +     -   |
     // ------------------------------------------------------
-    // In Range + |     y/x     | +inf* -inf* | +0.0  -0.0  | * : Set DZ
+    // In Range + |     y/x     | +inf* -inf* | +0.0  -0.0  |
     //          - |             | -inf* +inf* | -0.0  +0.0  |
     // ------------------------------------------------------
     // Zero     + | +0.0  -0.0  |  NaN   NaN  | +0.0  -0.0  |
@@ -1213,6 +1280,7 @@ FPU::fdiv(const FpuExtended &op1, const FpuExtended &op2)
     // Infinity + | +inf  -inf  | +inf  -inf  |  NaN   NaN  |
     //          - | -inf  +inf  | -inf  +inf  |  NaN   NaN  |
     // ------------------------------------------------------
+    // * : Sets DZ flag
     
     if ((op1.iszero() && op2.iszero()) || (op1.isinf() && op2.isinf())) {
         
@@ -1438,7 +1506,7 @@ FPU::fsgldiv(const FpuExtended &op1, const FpuExtended &op2)
     //            |  In Range   |    Zero     |  Infinity   |
     //            |   +    -    |   +     -   |   +     -   |
     // ------------------------------------------------------
-    // In Range + |     y/x     | +inf* -inf* | +0.0  -0.0  | * : Set DZ
+    // In Range + |     y/x     | +inf* -inf* | +0.0  -0.0  |
     //          - |             | -inf* +inf* | -0.0  +0.0  |
     // ------------------------------------------------------
     // Zero     + | +0.0  -0.0  |  NaN   NaN  | +0.0  -0.0  |
@@ -1447,7 +1515,8 @@ FPU::fsgldiv(const FpuExtended &op1, const FpuExtended &op2)
     // Infinity + | +inf  -inf  | +inf  -inf  |  NaN   NaN  |
     //          - | -inf  +inf  | -inf  +inf  |  NaN   NaN  |
     // ------------------------------------------------------
-
+    //  * : Sets DZ flag
+    
     auto result = fdiv(op1, op2);
     
     // TODO: Round
@@ -1486,8 +1555,8 @@ FPU::fsub(const FpuExtended &op1, const FpuExtended &op2)
     //            |  In Range   |    Zero     |  Infinity   |
     //            |   +    -    |   +     -   |   +     -   |
     // ------------------------------------------------------
-    // In Range + |  Subtract   |  Subtract   | -inf  +inf  | ? : +/- depends on
-    //          - |             |             | -inf  +inf  |     rounding mode
+    // In Range + |  Subtract   |  Subtract   | -inf  +inf  |
+    //          - |             |             | -inf  +inf  |
     // ------------------------------------------------------
     // Zero     + |  Subtract   | ?0.0  -0.0  | -inf  +inf  |
     //          - |             | -0.0  ?0.0  | -inf  +inf  |
@@ -1495,7 +1564,8 @@ FPU::fsub(const FpuExtended &op1, const FpuExtended &op2)
     // Infinity + | +inf  +inf  | +inf  +inf  |  NaN  -inf  |
     //          - | -inf  -inf  | -inf  -inf  | -inf   NaN  |
     // ------------------------------------------------------
-
+    // ? : +/- sign depends on rounding mode
+    
     if (op1.iszero() && op2.iszero()) {
         
         if (op1.signbit() != op2.signbit()) {

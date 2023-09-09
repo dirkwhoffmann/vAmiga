@@ -80,40 +80,40 @@ Moira::execFGen(u16 opcode)
 
             switch (cmd) {
 
-                case 0x01: printf("FINT\n"); execFGeneric<C, FINT, M, S>(opcode); return;
-                case 0x02: printf("FSINH\n"); execFGeneric<C, FSINH, M, S>(opcode); return;
-                case 0x03: printf("FINTRZ\n"); execFGeneric<C, FINTRZ, M, S>(opcode); return;
-                case 0x04: printf("FSQRT\n"); execFGeneric<C, FSQRT, M, S>(opcode); return;
-                case 0x06: printf("FLOGNP1\n"); execFGeneric<C, FLOGNP1, M, S>(opcode); return;
-                case 0x08: printf("FETOXM1\n"); execFGeneric<C, FETOXM1, M, S>(opcode); return;
-                case 0x09: printf("FTANH\n"); execFGeneric<C, FTANH, M, S>(opcode); return;
-                case 0x0A: printf("FATAN\n"); execFGeneric<C, FATAN, M, S>(opcode); return;
-                case 0x0C: printf("FASIN\n"); execFGeneric<C, FASIN, M, S>(opcode); return;
-                case 0x0D: printf("FATANH\n"); execFGeneric<C, FATANH, M, S>(opcode); return;
-                case 0x0E: printf("FSIN\n"); execFGeneric<C, FSIN, M, S>(opcode); return;
-                case 0x0F: printf("FTAN\n"); execFGeneric<C, FTAN, M, S>(opcode); return;
-                case 0x10: printf("FETOX\n"); execFGeneric<C, FETOX, M, S>(opcode); return;
-                case 0x11: printf("FTWOTOX\n"); execFGeneric<C, FTWOTOX, M, S>(opcode); return;
-                case 0x12: printf("FTENTOX\n"); execFGeneric<C, FTENTOX, M, S>(opcode); return;
-                case 0x14: printf("FLOGN\n"); execFGeneric<C, FLOGN, M, S>(opcode); return;
-                case 0x15: printf("FLOG10\n"); execFGeneric<C, FLOG10, M, S>(opcode); return;
-                case 0x16: printf("FLOG2\n"); execFGeneric<C, FLOG2, M, S>(opcode); return;
-                case 0x18: printf("FABS\n"); execFGeneric<C, FABS, M, S>(opcode); return;
-                case 0x19: printf("FCOSH\n"); execFGeneric<C, FCOSH, M, S>(opcode); return;
-                case 0x1A: printf("FNEG\n"); execFGeneric<C, FNEG, M, S>(opcode); return;
-                case 0x1C: printf("FACOS\n"); execFGeneric<C, FACOS, M, S>(opcode); return;
-                case 0x1D: printf("FCOS\n"); execFGeneric<C, FCOS, M, S>(opcode); return;
-                case 0x1E: printf("FGETEXP\n"); execFGeneric<C, FGETEXP, M, S>(opcode); return;
-                case 0x1F: printf("FGETMAN\n"); execFGeneric<C, FGETMAN, M, S>(opcode); return;
-                case 0x20: printf("FDIV\n"); execFGeneric<C, FDIV, M, S>(opcode); return;
-                case 0x21: printf("FMOD\n"); execFGeneric<C, FMOD, M, S>(opcode); return;
-                case 0x22: printf("FADD\n"); execFGeneric<C, FADD, M, S>(opcode); return;
-                case 0x23: printf("FMUL\n"); execFGeneric<C, FMUL, M, S>(opcode); return;
-                case 0x24: printf("TODO: FSGLDIV\n"); execFGeneric<C, FSGLDIV, M, S>(opcode); return;
-                case 0x25: printf("TODO: FREM\n"); execFGeneric<C, FREM, M, S>(opcode); return;
-                case 0x26: printf("FSCAL\n"); execFGeneric<C, FSCAL, M, S>(opcode); return;
+                case 0x01: execFGeneric<C, FINT, M, S>(opcode); return;
+                case 0x02: execFGeneric<C, FSINH, M, S>(opcode); return;
+                case 0x03: execFGeneric<C, FINTRZ, M, S>(opcode); return;
+                case 0x04: execFGeneric<C, FSQRT, M, S>(opcode); return;
+                case 0x06: execFGeneric<C, FLOGNP1, M, S>(opcode); return;
+                case 0x08: execFGeneric<C, FETOXM1, M, S>(opcode); return;
+                case 0x09: execFGeneric<C, FTANH, M, S>(opcode); return;
+                case 0x0A: execFGeneric<C, FATAN, M, S>(opcode); return;
+                case 0x0C: execFGeneric<C, FASIN, M, S>(opcode); return;
+                case 0x0D: execFGeneric<C, FATANH, M, S>(opcode); return;
+                case 0x0E: execFGeneric<C, FSIN, M, S>(opcode); return;
+                case 0x0F: execFGeneric<C, FTAN, M, S>(opcode); return;
+                case 0x10: execFGeneric<C, FETOX, M, S>(opcode); return;
+                case 0x11: execFGeneric<C, FTWOTOX, M, S>(opcode); return;
+                case 0x12: execFGeneric<C, FTENTOX, M, S>(opcode); return;
+                case 0x14: execFGeneric<C, FLOGN, M, S>(opcode); return;
+                case 0x15: execFGeneric<C, FLOG10, M, S>(opcode); return;
+                case 0x16: execFGeneric<C, FLOG2, M, S>(opcode); return;
+                case 0x18: execFGeneric<C, FABS, M, S>(opcode); return;
+                case 0x19: execFGeneric<C, FCOSH, M, S>(opcode); return;
+                case 0x1A: execFGeneric<C, FNEG, M, S>(opcode); return;
+                case 0x1C: execFGeneric<C, FACOS, M, S>(opcode); return;
+                case 0x1D: execFGeneric<C, FCOS, M, S>(opcode); return;
+                case 0x1E: execFGeneric<C, FGETEXP, M, S>(opcode); return;
+                case 0x1F: execFGeneric<C, FGETMAN, M, S>(opcode); return;
+                case 0x20: execFGeneric<C, FDIV, M, S>(opcode); return;
+                case 0x21: execFGeneric<C, FMOD, M, S>(opcode); return;
+                case 0x22: execFGeneric<C, FADD, M, S>(opcode); return;
+                case 0x23: execFGeneric<C, FMUL, M, S>(opcode); return;
+                case 0x24: execFGeneric<C, FSGLDIV, M, S>(opcode); return;
+                case 0x25: execFGeneric<C, FREM, M, S>(opcode); return;
+                case 0x26: execFGeneric<C, FSCAL, M, S>(opcode); return;
                 case 0x27: printf("TODO: FSGLMUL\n"); execFGeneric<C, FSGLMUL, M, S>(opcode); return;
-                case 0x28: printf("FSUB\n"); execFGeneric<C, FSUB, M, S>(opcode); return;
+                case 0x28: execFGeneric<C, FSUB, M, S>(opcode); return;
                 case 0x30:
                 case 0x31:
                 case 0x32:
@@ -121,9 +121,9 @@ Moira::execFGen(u16 opcode)
                 case 0x34:
                 case 0x35:
                 case 0x36:
-                case 0x37: printf("FSINCOS\n"); execFGeneric<C, FSINCOS, M, S>(opcode); return;
-                case 0x38: printf("TODO: FCMP\n"); execFGeneric<C, FCMP, M, S>(opcode); return;
-                case 0x3A: printf("FTST\n"); execFGeneric<C, FTST, M, S>(opcode); return;
+                case 0x37: execFGeneric<C, FSINCOS, M, S>(opcode); return;
+                case 0x38: execFGeneric<C, FCMP, M, S>(opcode); return;
+                case 0x3A: execFGeneric<C, FTST, M, S>(opcode); return;
                 case 0x41: printf("TODO: FSSQRT\n"); execFGeneric<C, FSSQRT, M, S>(opcode); return;
                 case 0x45: printf("TODO: FDSQRT\n"); execFGeneric<C, FDSQRT, M, S>(opcode); return;
                 case 0x58: printf("TODO: FSABS\n"); execFGeneric<C, FSABS, M, S>(opcode); return;
@@ -681,7 +681,7 @@ Moira::execFGeneric(u16 opcode)
                 case FTAN:  result = fpu.ftan(source); break;
                 case FTANH:  result = fpu.ftanh(source); break;
                 case FTENTOX:  result = fpu.ftentox(source); break;
-                case FTST: result = source; dst = src; break;
+                case FTST: result = fpu.ftst(source); break;
                 case FTWOTOX:  result = fpu.ftwotox(source); break;
                     
                 default:
@@ -724,8 +724,16 @@ Moira::execFGeneric(u16 opcode)
         }
     }
     
+    if (I == FTST || I == FCMP) {
+        
+        fpu.setConditionCodes(result);
+        
+    } else {
+        
+        fpu.fpr[dst].set(result);
+        fpu.setConditionCodes(dst);
+    }
+
     prefetch<C>();
-    if (I != FCMP) fpu.fpr[dst].set(result);
-    fpu.setConditionCodes(dst);
     FINALIZE
 }
