@@ -677,18 +677,37 @@ FPU::fcosh(const FpuExtended &value)
 FpuExtended
 FPU::fetox(const FpuExtended &value)
 {
-    printf("fetox %x %llx\n", value.raw.high, value.raw.low);
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |     e^x     | +1.0  +1.0  | +inf  +0.0  |
+    // -------------------------------------------
+
+    if (value.isinf()) {
+        return value.ispositive() ? value : FpuExtended::posZero;
+    }
+    
     return monadic(value, [&](long double x) { return std::expl(x); });
 }
 
 FpuExtended
 FPU::fetoxm1(const FpuExtended &value)
 {
-    printf("fetoxm1 %x %llx\n", value.raw.high, value.raw.low);
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |   e^x - 1   | +0.0  -0.0  | +inf  -1.0  |
+    // -------------------------------------------
     
     if (value.iszero()) {
         
         return value;
+    }
+    if (value.isinf()) {
+        
+        return value.ispositive() ? value : -1.0;
     }
     
     return monadic(value, [&](long double x) { return std::expl(x) - 1.0L; });
@@ -697,7 +716,12 @@ FPU::fetoxm1(const FpuExtended &value)
 FpuExtended
 FPU::fgetexp(const FpuExtended &value)
 {
-    printf("fgetexp %x %llx\n", value.raw.high, value.raw.low);
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |   e^x - 1   | +0.0  -0.0  |  NaN   NaN  |
+    // -------------------------------------------
     
     if (value.iszero()) {
         
@@ -709,17 +733,18 @@ FPU::fgetexp(const FpuExtended &value)
         return FpuExtended::nan;
     }
     
-    /*
-     long exp = (value.raw.high & 0x7FFF) - FpuExtended::bias;
-     return FpuExtended(exp);
-     */
     return FpuExtended((value.raw.high & 0x7FFF) - FpuExtended::bias);
 }
 
 FpuExtended
 FPU::fgetman(const FpuExtended &value)
 {
-    printf("fgetexp %x %llx\n", value.raw.high, value.raw.low);
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |   Mantissa  | +0.0  -0.0  |  NaN   NaN  |
+    // -------------------------------------------
     
     if (value.iszero()) {
         
@@ -731,22 +756,20 @@ FPU::fgetman(const FpuExtended &value)
         return FpuExtended::nan;
     }
     
-    /*
-     auto result = value;
-     result.raw.high = (result.raw.high & 0x8000) | 0x3FFF;
-     return result;
-     */
     return FpuExtended((value.raw.high & 0x8000) | 0x3FFF, value.raw.low);
 }
 
 FpuExtended
 FPU::fint(const FpuExtended &value)
 {
-    if (value.iszero()) {
-        
-        return value;
-    }
-    if (value.isinf()) {
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |   Integer   | +0.0  -0.0  | +inf  -inf  |
+    // -------------------------------------------
+
+    if (value.iszero() || value.isinf()) {
         
         return value;
     }
@@ -772,11 +795,14 @@ FPU::fint(const FpuExtended &value)
 FpuExtended
 FPU::fintrz(const FpuExtended &value)
 {
-    if (value.iszero()) {
-        
-        return value;
-    }
-    if (value.isinf()) {
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |   Integer   | +0.0  -0.0  | +inf  -inf  |
+    // -------------------------------------------
+
+    if (value.iszero() || value.isinf()) {
         
         return value;
     }
@@ -805,6 +831,13 @@ FPU::fintrz(const FpuExtended &value)
 FpuExtended
 FPU::flog10(const FpuExtended &value)
 {
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |  log10(x)   | -inf  -inf  | +inf   NaN  |
+    // -------------------------------------------
+
     if (value.iszero()) {
         
         setExcStatusBit(FPEXP_DZ);
@@ -834,6 +867,13 @@ FPU::flog10(const FpuExtended &value)
 FpuExtended
 FPU::flog2(const FpuExtended &value)
 {
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |    ld(x)    | -inf  -inf  | +inf   NaN  |
+    // -------------------------------------------
+
     if (value.iszero()) {
         
         setExcStatusBit(FPEXP_DZ);
@@ -863,6 +903,13 @@ FPU::flog2(const FpuExtended &value)
 FpuExtended
 FPU::flogn(const FpuExtended &value)
 {
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |    ln(x)    | -inf  -inf  | +inf   NaN  |
+    // -------------------------------------------
+
     if (value.iszero()) {
         
         setExcStatusBit(FPEXP_DZ);
@@ -892,6 +939,14 @@ FPU::flogn(const FpuExtended &value)
 FpuExtended
 FPU::flognp1(const FpuExtended &value)
 {
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |  ln(x - 1)  | +0.0  -0.0  | +inf   NaN  |
+    // -------------------------------------------
+
+    
     if (value.iszero()) {
         
         return value;
@@ -925,32 +980,80 @@ FPU::flognp1(const FpuExtended &value)
 FpuExtended
 FPU::fneg(const FpuExtended &value)
 {
-    printf("fneg(%Lf)\n", value.asLongDouble());
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |     -x      | -0.0  +0.0  | -inf  +inf  |
+    // -------------------------------------------
 
-    auto result = value;
-    result.raw.high ^= 0x8000;
-
-    return result;
+    return FpuExtended(value.raw.high ^0x8000, value.raw.low);
 }
 
 FpuExtended
 FPU::fsin(const FpuExtended &value)
 {
-    printf("fsin %x %llx\n", value.raw.high, value.raw.low);
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |   sin(x)    | +0.0  -0.0  |  NaN   NaN  |
+    // -------------------------------------------
+
+    if (value.iszero()) {
+        
+        return value;
+    }
+    if (value.isinf()) {
+        
+        setExcStatusBit(FPEXP_OPERR);
+        return FpuExtended::nan;
+    }
     return monadic(value, [&](long double x) { return std::sin(x); });
 }
 
 FpuExtended
 FPU::fsinh(const FpuExtended &value)
 {
-    printf("fsinh %x %llx\n", value.raw.high, value.raw.low);
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |   sinh(x)   | +0.0  -0.0  | +inf  -inf  |
+    // -------------------------------------------
+
+    if (value.iszero() || value.isinf()) {
+        
+        return value;
+    }
+    
     return monadic(value, [&](long double x) { return std::sinh(x); });
 }
 
 FpuExtended
 FPU::fsqrt(const FpuExtended &value)
 {
-    printf("fsqrt %x %llx\n", value.raw.high, value.raw.low);
+    // -------------------------------------------
+    // |  In Range   |    Zero     |  Infinity   |
+    // |   +    -    |   +     -   |   +     -   |
+    // -------------------------------------------
+    // |   sqrt(x)   | +0.0  -0.0  | +inf   NaN  |
+    // -------------------------------------------
+
+    if (value.iszero()) {
+        
+        return value;
+    }
+    if (value.isnegative()) {
+     
+        setExcStatusBit(FPEXP_OPERR);
+        return FpuExtended::nan;
+    }
+    if (value.isinf()) {
+        
+        return value;
+    }
+
     return monadic(value, [&](long double x) { return std::sqrt(x); });
 }
 
