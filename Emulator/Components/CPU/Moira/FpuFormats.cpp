@@ -465,15 +465,28 @@ FpuExtended::FpuExtended(long double value, FpuRoundingMode mode, ExceptionHandl
     printf("e = %d m = %Lf %llu\n", e, m, (u64)m);
 
     // Compose the result
-    *this = FpuExtended(value < 0.0, (i16)e, (u64)std::abs(m));
+    *this = FpuExtended(value < 0.0, e, (u64)std::abs(m), handler);
 }
 
-FpuExtended::FpuExtended(bool mSign, i16 e, u64 m, ExceptionHandler handler)
+FpuExtended::FpuExtended(bool mSign, i64 e, u64 m, ExceptionHandler handler)
 {
+    if (e < -0x3FFF) {
+        
+        printf("UNDERFLOW e = %lld\n", e);
+        *this = zero;
+        handler(FPEXP_UNFL);
+        return;
+    }
+    if (e > 0x3FFF) {
+
+        printf("OVERFLOW e = %lld\n", e);
+        *this = inf.copysign(mSign);
+        handler(FPEXP_OVFL);
+        return;
+    }
+
     raw.high = (mSign ? 0x8000 : 0x0000) | (u16(e + 0x3FFF) & 0x7FFF);
     raw.low = m;
-
-    handler(0);
 }
 
 FpuExtended FpuExtended::nan     = FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);

@@ -143,7 +143,7 @@ struct FpuExtended {
     FpuExtended(const FpuPacked &value, FpuRoundingMode mode, ExceptionHandler handler = [](auto&&...) {});
     FpuExtended(const std::string &s, FpuRoundingMode mode, ExceptionHandler handler = [](auto&&...) {});
     FpuExtended(long double value, FpuRoundingMode mode = FPU_RND_NEAREST, ExceptionHandler handler = [](auto&&...) {});
-    FpuExtended(bool mSign, i16 e, u64 m, ExceptionHandler handler = [](auto&&...) {});
+    FpuExtended(bool mSign, i64 e, u64 m, ExceptionHandler handler = [](auto&&...) {});
 
     // Constants
     static FpuExtended nan;
