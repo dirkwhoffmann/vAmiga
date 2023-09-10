@@ -292,7 +292,7 @@ Moira::readFpuOpIm(FltFormat fmt)
         }
         case FLT_WORD:
         {
-            auto data = (u16)readExt<C68020, Word>();
+            auto data = readExt<C68020, Word>();
             result = FpuExtended(FpuWord(data), exceptionHandler);
             break;
         }
@@ -305,7 +305,7 @@ Moira::readFpuOpIm(FltFormat fmt)
         }
         case FLT_BYTE:
         {
-            auto data = (u8)readExt<C68020, Byte>();
+            auto data = readExt<C68020, Byte>();
             result = FpuExtended(FpuByte(data), exceptionHandler);
             break;
         }
@@ -353,65 +353,61 @@ Moira::readFpuOpEa(int n, u32 ea, FltFormat fmt)
 
         case FLT_BYTE:
         {
-            auto data = i8(readM<C68020, M, Byte>(ea));
+            auto data = FpuByte(readM<C68020, M, Byte>(ea));
             updateAn<M, Byte>(n);
 
-            result.raw = softfloat::int32_to_floatx80(data);
+            result = FpuExtended(data);
             break;
         }
         case FLT_WORD:
         {
-            auto data = i16(readM<C68020, M, Word>(ea));
+            auto data = FpuWord(readM<C68020, M, Word>(ea));
             updateAn<M, Word>(n);
 
-            result.raw = softfloat::int32_to_floatx80(data);
+            result = FpuExtended(data);
             break;
         }
         case FLT_LONG:
         {
-            auto data = i32(readM<C68020, M, Long>(ea));
+            auto data = FpuLong(readM<C68020, M, Long>(ea));
             updateAn<M, Long>(n);
-
-            result.raw = softfloat::int32_to_floatx80(data);
+            
+            result = FpuExtended(data);
             break;
         }
         case FLT_SINGLE:
         {
-            auto data = readM<C68020, M, Long>(ea);
+            auto data = FpuSingle(readM<C68020, M, Long>(ea));
             updateAn<M, Long>(n);
 
-            result.raw = softfloat::float32_to_floatx80(data);
+            result = FpuExtended(data);
             break;
         }
         case FLT_DOUBLE:
         {
-            u64 data = u64(readM<C68020, M, Long>(ea)) << 32;
-            data |= readM<C68020, M, Long>(U32_ADD(ea, 4));
+            auto data = FpuDouble(readM<C68020, M, Long>(ea),
+                                  readM<C68020, M, Long>(U32_ADD(ea, 4)));
             updateAn<M, Quad>(n);
 
-            result.raw = softfloat::float64_to_floatx80(data);
+            result = FpuExtended(data);
             break;
         }
         case FLT_EXTENDED:
         {
-            u16 data1 = u16(readM<C68020, M, Word>(ea));
-            u32 data2 = readM<C68020, M, Long>(U32_ADD(ea, 4));
-            u32 data3 = readM<C68020, M, Long>(U32_ADD(ea, 8));
-            updateAn<M, Extended>(n);
-
-            result.raw.high = data1;
-            result.raw.low = ((u64)data2 << 32) | (data3 & 0xFFFFFFFF);
+            result = FpuExtended(readM<C68020, M, Word>(ea),
+                                 readM<C68020, M, Long>(U32_ADD(ea, 4)),
+                                 readM<C68020, M, Long>(U32_ADD(ea, 8)));
             result.normalize();
+            updateAn<M, Extended>(n);
             break;
         }
         case FLT_PACKED:
         {
-            u16 data1 = u16(readM<C68020, M, Long>(ea));
-            u32 data2 = readM<C68020, M, Long>(U32_ADD(ea, 4));
-            u32 data3 = readM<C68020, M, Long>(U32_ADD(ea, 8));
+            auto data = FpuPacked(readM<C68020, M, Long>(ea),
+                                  readM<C68020, M, Long>(U32_ADD(ea, 4)),
+                                  readM<C68020, M, Long>(U32_ADD(ea, 8)));
             updateAn<M, Extended>(n);
-
-            result = FpuExtended(FpuPacked(data1, data2, data3), fpu.getRoundingMode());
+            result = FpuExtended(data, fpu.getRoundingMode());
             break;
         }
         default:

@@ -76,7 +76,7 @@ FpuLong::FpuLong(const FpuExtended &value, ExceptionHandler handler)
     u32 flags = 0;
 
     softfloat::float_exception_flags = 0;
-    raw = u16(softfloat::floatx80_to_int32(value.raw));
+    raw = u32(softfloat::floatx80_to_int32(value.raw));
 
     if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
         flags |= FPEXP_INEX2;
@@ -271,7 +271,7 @@ FpuExtended::FpuExtended(const FpuLong &value, ExceptionHandler handler)
     u32 flags = 0;
     softfloat::float_exception_flags = 0;
 
-    raw = softfloat::int64_to_floatx80(value.raw);
+    raw = softfloat::int32_to_floatx80(value.raw);
 
     if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
         flags |= FPEXP_INEX2;

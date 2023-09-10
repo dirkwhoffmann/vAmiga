@@ -47,7 +47,7 @@ struct FpuByte {
 
     FpuByte() : raw(0) { };
     FpuByte(i8 value) : raw(value) { };
-    FpuByte(u8 value) : raw((i8)value) { };
+    FpuByte(u32 value) : raw((i8)value) { };
     FpuByte(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
     FpuByte(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
 };
@@ -63,7 +63,7 @@ struct FpuWord {
 
     FpuWord() : raw(0) { };
     FpuWord(i16 value) : raw(value) { };
-    FpuWord(u16 value) : raw((i16)value) { };
+    FpuWord(u32 value) : raw((i16)value) { };
     FpuWord(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
     FpuWord(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
 };
@@ -115,6 +115,7 @@ struct FpuDouble {
 
     FpuDouble() : raw(0) { };
     FpuDouble(u64 value) : raw(value) { };
+    FpuDouble(u32 hi, u32 lo) : raw((u64)hi << 32 | lo) { };
     FpuDouble(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
     FpuDouble(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
 
@@ -134,7 +135,8 @@ struct FpuExtended {
     softfloat::floatx80 raw;
 
     FpuExtended() { raw = { }; }
-    FpuExtended(u16 high, u64 low) { raw.high = high; raw.low = low; }
+    FpuExtended(u16 hi, u64 lo) { raw.high = hi; raw.low = lo; }
+    FpuExtended(u32 hi, u32 lo1, u32 lo2) { raw.high = u16(hi); raw.low = u64(lo1) << 32 | lo2; }
     FpuExtended(const FpuByte &value, ExceptionHandler handler = [](auto&&...) {});
     FpuExtended(const FpuWord &value, ExceptionHandler handler = [](auto&&...) {});
     FpuExtended(const FpuLong &value, ExceptionHandler handler = [](auto&&...) {});
