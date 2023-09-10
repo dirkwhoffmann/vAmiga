@@ -98,10 +98,10 @@ struct FpuSingle {
     FpuSingle(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
     FpuSingle(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
 
-    bool signbit();
-    bool isinf();
-    bool isposinf();
-    bool isneginf();
+    bool signbit() const;
+    bool isinf() const;
+    bool isposinf() const;
+    bool isneginf() const;
 };
 
 
@@ -119,10 +119,10 @@ struct FpuDouble {
     FpuDouble(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
     FpuDouble(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
 
-    bool signbit();
-    bool isinf();
-    bool isposinf();
-    bool isneginf();
+    bool signbit() const;
+    bool isinf() const;
+    bool isposinf() const;
+    bool isneginf() const;
 };
 
 

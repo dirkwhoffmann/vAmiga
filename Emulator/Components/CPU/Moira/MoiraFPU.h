@@ -35,7 +35,7 @@ public:
     // Getting and setting
     //
 
-    FpuExtended asExtended();
+    FpuExtended round();
     FpuExtended get() const { return val; }
     void set(const FpuExtended other);
 

@@ -533,7 +533,7 @@ Moira::writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k)
             if constexpr (F & FPU_FMOVEM) {
                 data = reg.val;
             } else {
-                data = reg.asExtended();
+                data = reg.round();
             }
 
             writeM<C68020, M, Word>(ea, u32(data.raw.high));

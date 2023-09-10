@@ -145,26 +145,26 @@ FpuSingle::FpuSingle(const class FpuExtended &value, ExceptionHandler handler)
 FpuSingle::FpuSingle(const FPUReg &reg, ExceptionHandler handler) : FpuSingle(reg.val, handler) { }
 
 bool
-FpuSingle::signbit()
+FpuSingle::signbit() const
 {
     return raw & (1 << 31);
 }
 
 bool
-FpuSingle::isinf()
+FpuSingle::isinf() const
 {
     float fval = *((float *)&raw);
     return std::isinf(fval);
 }
 
 bool
-FpuSingle::isposinf()
+FpuSingle::isposinf() const
 {
     return isinf() && !signbit();
 }
 
 bool
-FpuSingle::isneginf()
+FpuSingle::isneginf() const
 {
     return isinf() && signbit();
 }
@@ -197,26 +197,26 @@ FpuDouble::FpuDouble(const class FpuExtended &value, ExceptionHandler handler)
 FpuDouble::FpuDouble(const FPUReg &reg, ExceptionHandler handler) : FpuDouble(reg.val, handler) { }
 
 bool
-FpuDouble::signbit()
+FpuDouble::signbit() const
 {
     return raw & (1L << 63);
 }
 
 bool
-FpuDouble::isinf()
+FpuDouble::isinf() const
 {
     double dval = *((double *)&raw);
     return std::isinf(dval);
 }
 
 bool
-FpuDouble::isposinf()
+FpuDouble::isposinf() const
 {
     return isinf() && !signbit();
 }
 
 bool
-FpuDouble::isneginf()
+FpuDouble::isneginf() const
 {
     return isinf() && signbit();
 }
@@ -288,18 +288,13 @@ FpuExtended::FpuExtended(const FpuLong &value, ExceptionHandler handler)
 
 FpuExtended::FpuExtended(const FpuSingle &value, ExceptionHandler handler)
 {
+    if (value.isposinf()) { *this = FpuExtended::posInf; return; }
+    if (value.isneginf()) { *this = FpuExtended::negInf; return; }
+
     u32 flags = 0;
     softfloat::float_exception_flags = 0;
-
+    
     raw = softfloat::float32_to_floatx80(value.raw);
-
-    /*
-    float d = *((float *)&value.raw);
-    printf("FpuSingle -> FpuExtended: %f\n", d);
-    if (std::isinf(d)) {
-        *this = signbit() ? negInf : posInf;
-    }
-    */
 
     if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
         flags |= FPEXP_INEX2;
@@ -316,6 +311,9 @@ FpuExtended::FpuExtended(const FpuSingle &value, ExceptionHandler handler)
 
 FpuExtended::FpuExtended(const FpuDouble &value, ExceptionHandler handler)
 {
+    if (value.isposinf()) { *this = FpuExtended::posInf; return; }
+    if (value.isneginf()) { *this = FpuExtended::negInf; return; }
+
     u32 flags = 0;
     softfloat::float_exception_flags = 0;
 

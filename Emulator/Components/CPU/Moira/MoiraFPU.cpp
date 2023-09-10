@@ -15,39 +15,26 @@
 namespace vamiga::moira {
 
 FpuExtended
-FPUReg::asExtended()
+FPUReg::round()
 {
     FpuExtended result = val;
     
     if (val.isfinite()) {
         
-        softfloat::float_exception_flags = 0;
-        
-        if (fpu.getPrecision() != FPU_PREC_EXTENDED) {
+        if (fpu.getPrecision() == FPU_PREC_SINGLE) {
             
-            if (fpu.getPrecision() == FPU_PREC_SINGLE) {
-                
-                auto val = FpuSingle(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
-                
-                if (val.isposinf()) { result = FpuExtended::posInf; }
-                else if (val.isneginf()) { result = FpuExtended::negInf; }
-                else result = val;
-            }
-            if (fpu.getPrecision() == FPU_PREC_DOUBLE) {
-                
-                auto val = FpuDouble(result, [this](int flags) { fpu.setExcStatusBit(flags); } );
-                
-                if (val.isposinf()) { result = FpuExtended::posInf; }
-                else if (val.isneginf()) { result = FpuExtended::negInf; }
-                else result = val;
-                
-            }
+            result = FpuSingle(result, fpu.exceptionHandler);
+        }
+        if (fpu.getPrecision() == FPU_PREC_DOUBLE) {
+            
+            result = FpuDouble(result, fpu.exceptionHandler);
         }
         if (issubnormal()) {
             
             fpu.setExcStatusBit(FPEXP_UNFL);
         }
     }
+    
     return result;
 }
 
@@ -55,24 +42,20 @@ void
 FPUReg::set(const FpuExtended other)
 {
     val = other;
-    
-    printf("FPUReg (1): %x,%llx\n", val.raw.high, val.raw.low);
-    
+        
     // Round to the correct precision
-    val = asExtended();
-    
-    printf("FPUReg (2): %x,%llx\n", val.raw.high, val.raw.low);
-    
-    // Experimental
+    val = round();
+        
+    // Should we do this here?
     val.normalize();
     
     // REMOVE THIS!
+    /*
     if (val.isSignalingNaN()) {
         val.raw.low |= (1LL << 62); // Make nonsignaling
         fpu.setExcStatusBit(FPEXP_SNAN);
     }
-    
-    printf("FPUReg::set %x,%llx (%Lf) flags = %x\n", val.raw.high, val.raw.low, val.asLongDouble(), softfloat::float_exception_flags);
+    */
 }
 
 FPU::FPU(Moira& ref) : moira(ref)
@@ -308,6 +291,7 @@ void
 FPU::setConditionCodes(const FpuExtended &value)
 {
     // TODO: Use FpuExtended API
+    /*
     bool n = value.raw.high & 0x8000;
     bool z = (value.raw.high & 0x7fff) == 0 && value.raw.low == 0;
     bool i = (value.raw.high & 0x7fff) == 0x7fff && (value.raw.low << 1) == 0;
@@ -317,6 +301,11 @@ FPU::setConditionCodes(const FpuExtended &value)
     REPLACE_BIT(fpsr, 26, z);
     REPLACE_BIT(fpsr, 25, i);
     REPLACE_BIT(fpsr, 24, nan);
+    */
+    REPLACE_BIT(fpsr, 27, value.isnegative());
+    REPLACE_BIT(fpsr, 26, value.iszero());
+    REPLACE_BIT(fpsr, 25, value.isinf());
+    REPLACE_BIT(fpsr, 24, value.isnan());
 }
 
 void
