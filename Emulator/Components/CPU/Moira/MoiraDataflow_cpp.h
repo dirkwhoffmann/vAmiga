@@ -251,20 +251,18 @@ Moira::readFpuOpIm(FltFormat fmt)
 {
     FpuExtended result;
 
-    auto exceptionHandler = [this](int flags) { fpu.setExcStatusBit(flags); };
-
     switch (fmt) {
 
         case FLT_LONG:
         {
-            auto data = readExt<C68020, Long>();
-            result = FpuExtended(FpuLong(data), exceptionHandler);
+            auto data = FpuLong(readExt<C68020, Long>());
+            result = FpuExtended(data, fpu.exceptionHandler);
             break;
         }
         case FLT_SINGLE:
         {
-            u32 data = readExt<C68020, Long>();
-            result = FpuExtended(FpuSingle(data), exceptionHandler);
+            auto data = FpuSingle(readExt<C68020, Long>());
+            result = FpuExtended(data, fpu.exceptionHandler);
             break;
         }
         case FLT_EXTENDED:
@@ -274,51 +272,41 @@ Moira::readFpuOpIm(FltFormat fmt)
             u64 low = (u64)readExt<C68020, Long>() << 32;
             low |= readExt<C68020, Long>();
 
-            // result = FpuExtended(high, low, exceptionHandler);
-
-            result.raw.high = u16(high);
-            result.raw.low = low;
+            result = FpuExtended(high, low);
             result.normalize();
             break;
         }
         case FLT_PACKED:
         {
-            u32 dw1 = readExt<C68020, Long>();
-            u32 dw2 = readExt<C68020, Long>();
-            u32 dw3 = readExt<C68020, Long>();
-            printf("            %x %x %x\n", dw1, dw2, dw3);
-            result = FpuExtended(FpuPacked { dw1, dw2, dw3 }, fpu.getRoundingMode());
+            auto data = FpuPacked(readExt<C68020, Long>(),
+                                  readExt<C68020, Long>(),
+                                  readExt<C68020, Long>());
+            result = FpuExtended(data, fpu.getRoundingMode());
             break;
         }
         case FLT_WORD:
         {
-            auto data = readExt<C68020, Word>();
-            result = FpuExtended(FpuWord(data), exceptionHandler);
+            auto data = FpuWord(readExt<C68020, Word>());
+            result = FpuExtended(data, fpu.exceptionHandler);
             break;
         }
         case FLT_DOUBLE:
         {
-            u64 data = (u64)readExt<C68020, Long>() << 32;
-            data |= readExt<C68020, Long>();
-            result = FpuExtended(FpuDouble(data), exceptionHandler);
+            auto data = FpuDouble(readExt<C68020, Long>(),
+                                  readExt<C68020, Long>());
+            result = FpuExtended(data, fpu.exceptionHandler);
             break;
         }
         case FLT_BYTE:
         {
-            auto data = readExt<C68020, Byte>();
-            result = FpuExtended(FpuByte(data), exceptionHandler);
+            auto data = FpuByte(readExt<C68020, Byte>());
+            result = FpuExtended(data, fpu.exceptionHandler);
             break;
         }
         default:
             fatalError;
     }
 
-    /*
-    if (result.isnan()) {
-        fpu.setExcStatusBit(FPEXP_SNAN);
-        result = FPU::makeNonsignalingNan(result);
-    }
-    */
     return result;
 }
 

@@ -290,18 +290,6 @@ FPU::setConditionCodes(int reg)
 void
 FPU::setConditionCodes(const FpuExtended &value)
 {
-    // TODO: Use FpuExtended API
-    /*
-    bool n = value.raw.high & 0x8000;
-    bool z = (value.raw.high & 0x7fff) == 0 && value.raw.low == 0;
-    bool i = (value.raw.high & 0x7fff) == 0x7fff && (value.raw.low << 1) == 0;
-    bool nan = softfloat::floatx80_is_nan(value.raw);
-    
-    REPLACE_BIT(fpsr, 27, n);
-    REPLACE_BIT(fpsr, 26, z);
-    REPLACE_BIT(fpsr, 25, i);
-    REPLACE_BIT(fpsr, 24, nan);
-    */
     REPLACE_BIT(fpsr, 27, value.isnegative());
     REPLACE_BIT(fpsr, 26, value.iszero());
     REPLACE_BIT(fpsr, 25, value.isinf());
