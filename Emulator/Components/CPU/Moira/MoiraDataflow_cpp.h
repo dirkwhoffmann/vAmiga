@@ -242,8 +242,40 @@ Moira::readFpuOp(int n, FltFormat fmt)
 template <Mode M, Flags F> FpuExtended
 Moira::readFpuOpRg(int n, FltFormat fmt)
 {
-    // TODO
-    return FpuExtended();
+    FpuExtended result;
+
+    switch (fmt) {
+
+        case FLT_LONG:
+        {
+            auto data = FpuLong(reg.d[n]);
+            printf("data = %x reg.d[%d] = %x\n", data.raw, n, reg.d[n]);
+            result = FpuExtended(data, fpu.exceptionHandler);
+            break;
+        }
+        case FLT_SINGLE:
+        {
+            auto data = FpuSingle(reg.d[n]);
+            result = FpuExtended(data, fpu.exceptionHandler);
+            break;
+        }
+        case FLT_WORD:
+        {
+            auto data = FpuWord(reg.d[n]);
+            result = FpuExtended(data, fpu.exceptionHandler);
+            break;
+        }
+        case FLT_BYTE:
+        {
+            auto data = FpuByte(reg.d[n]);
+            result = FpuExtended(data, fpu.exceptionHandler);
+            break;
+        }
+        default:
+            fatalError;
+    }
+
+    return result;
 }
 
 template <Mode M, Flags F> FpuExtended

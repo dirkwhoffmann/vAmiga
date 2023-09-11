@@ -34,7 +34,9 @@ struct FpuDouble;
 struct FpuExtended;
 struct FpuPacked;
 
-typedef std::function<void(u32)> ExceptionHandler;
+class FPUReg;
+
+typedef std::function<void(u32)> ExcHandler;
 
 
 //
@@ -48,8 +50,8 @@ struct FpuByte {
     FpuByte() : raw(0) { };
     FpuByte(i8 value) : raw(value) { };
     FpuByte(u32 value) : raw((i8)value) { };
-    FpuByte(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
-    FpuByte(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
+    FpuByte(const FpuExtended &value, ExcHandler handler = [](auto&&...) {});
+    FpuByte(const FPUReg &value, ExcHandler handler = [](auto&&...) {});
 };
 
 
@@ -64,8 +66,8 @@ struct FpuWord {
     FpuWord() : raw(0) { };
     FpuWord(i16 value) : raw(value) { };
     FpuWord(u32 value) : raw((i16)value) { };
-    FpuWord(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
-    FpuWord(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
+    FpuWord(const FpuExtended &value, ExcHandler handler = [](auto&&...) {});
+    FpuWord(const FPUReg &value, ExcHandler handler = [](auto&&...) {});
 };
 
 
@@ -80,8 +82,8 @@ struct FpuLong {
     FpuLong() : raw(0) { };
     FpuLong(i32 value) : raw(value) { };
     FpuLong(u32 value) : raw((i32)value) { };
-    FpuLong(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
-    FpuLong(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
+    FpuLong(const FpuExtended &value, ExcHandler handler = [](auto&&...) {});
+    FpuLong(const FPUReg &value, ExcHandler handler = [](auto&&...) {});
 };
 
 
@@ -95,8 +97,9 @@ struct FpuSingle {
 
     FpuSingle() : raw(0) { };
     FpuSingle(u32 value) : raw(value) { };
-    FpuSingle(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
-    FpuSingle(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
+    FpuSingle(float value);
+    FpuSingle(const FpuExtended &value, ExcHandler handler = [](auto&&...) {});
+    FpuSingle(const FPUReg &value, ExcHandler handler = [](auto&&...) {});
 
     bool signbit() const;
     bool isinf() const;
@@ -116,8 +119,9 @@ struct FpuDouble {
     FpuDouble() : raw(0) { };
     FpuDouble(u64 value) : raw(value) { };
     FpuDouble(u32 hi, u32 lo) : raw(u64(hi) << 32 | lo) { };
-    FpuDouble(const FpuExtended &value, ExceptionHandler handler = [](auto&&...) {});
-    FpuDouble(const class FPUReg &value, ExceptionHandler handler = [](auto&&...) {});
+    FpuDouble(double value);
+    FpuDouble(const FpuExtended &value, ExcHandler handler = [](auto&&...) {});
+    FpuDouble(const class FPUReg &value, ExcHandler handler = [](auto&&...) {});
 
     bool signbit() const;
     bool isinf() const;
@@ -134,20 +138,9 @@ struct FpuExtended {
 
     softfloat::floatx80 raw;
 
-    FpuExtended() { raw = { }; }
-    FpuExtended(u32 hi, u64 lo) { raw.high = u16(hi); raw.low = lo; }
-    FpuExtended(u32 hi, u32 lo1, u32 lo2) { raw.high = u16(hi); raw.low = u64(lo1) << 32 | lo2; }
-    FpuExtended(const FpuByte &value, ExceptionHandler handler = [](auto&&...) {});
-    FpuExtended(const FpuWord &value, ExceptionHandler handler = [](auto&&...) {});
-    FpuExtended(const FpuLong &value, ExceptionHandler handler = [](auto&&...) {});
-    FpuExtended(const FpuSingle &value, ExceptionHandler handler = [](auto&&...) {});
-    FpuExtended(const FpuDouble &value, ExceptionHandler handler = [](auto&&...) {});
-    FpuExtended(const FpuPacked &value, FpuRoundingMode mode, ExceptionHandler handler = [](auto&&...) {});
-    FpuExtended(const std::string &s, FpuRoundingMode mode, ExceptionHandler handler = [](auto&&...) {});
-    FpuExtended(long double value, FpuRoundingMode mode = FPU_RND_NEAREST, ExceptionHandler handler = [](auto&&...) {});
-    FpuExtended(bool mSign, i64 e, u64 m, ExceptionHandler handler = [](auto&&...) {});
-
     // Constants
+    static constexpr i64 bias = 0x3FFF;
+
     static FpuExtended nan;
     static FpuExtended zero;
     static FpuExtended posZero;
@@ -156,9 +149,25 @@ struct FpuExtended {
     static FpuExtended posInf;
     static FpuExtended negInf;
 
-    static constexpr i64 bias = 0x3FFF;
+    // Constructors
+    FpuExtended() { raw = { }; }
+    FpuExtended(u32 hi, u64 lo) { raw.high = u16(hi); raw.low = lo; }
+    FpuExtended(u32 hi, u32 lo1, u32 lo2) { raw.high = u16(hi); raw.low = u64(lo1) << 32 | lo2; }
+    FpuExtended(const FpuByte &value, ExcHandler handler = [](auto&&...) {});
+    FpuExtended(const FpuWord &value, ExcHandler handler = [](auto&&...) {});
+    FpuExtended(const FpuLong &value, ExcHandler handler = [](auto&&...) {});
+    FpuExtended(const FpuSingle &value, ExcHandler handler = [](auto&&...) {});
+    FpuExtended(const FpuDouble &value, ExcHandler handler = [](auto&&...) {});
+    FpuExtended(const FpuPacked &value, FpuRoundingMode mode, ExcHandler handler = [](auto&&...) {});
+    FpuExtended(const std::string &s, FpuRoundingMode mode, ExcHandler handler = [](auto&&...) {});
+    FpuExtended(long double value, FpuRoundingMode mode = FPU_RND_NEAREST, ExcHandler handler = [](auto&&...) {});
+    FpuExtended(bool mSign, i64 e, u64 m, ExcHandler handler = [](auto&&...) {});
+
+    // Converters
+    long double asLongDouble() const;
 
     // Operators
+    FpuExtended operator-() const;
     bool operator==(const FpuExtended& rhs) const;
     bool operator!=(const FpuExtended& rhs) const;
     bool operator<=(const FpuExtended& rhs) const;
@@ -167,7 +176,7 @@ struct FpuExtended {
     bool operator>(const FpuExtended& rhs) const;
 
     // Analyzers
-    i64 sgn() const { return (raw.high & 0x8000) ? -1 : 1; }
+    bool signbit() const { return raw.high & 0x8000; }
     i64 exp() const { return i64(raw.high & 0x7FFF) - bias; }
     u64 man() const { return raw.low; }
 
@@ -179,39 +188,15 @@ struct FpuExtended {
     bool isNonsignalingNaN() const { return isnan() && (raw.low & (1L << 62)); }
     bool isnormal() const { return isfinite() && (raw.low & 1L << 63); }
     bool issubnormal() const { return isfinite() && raw.low && !(raw.low & 1L << 63); }
-    bool signbit() const { return raw.high & 0x8000; }
     bool isnegative() const { return signbit(); }
     bool ispositive() const { return !signbit(); }
     bool iszero() const { return (raw.high & 0x7FFF) == 0 && raw.low == 0; }
 
-
-    //
-    // Converters
-    //
-
-    // double asDouble() const;
-    long double asLongDouble() const;
-
-
-    //
-    // Arithmetic
-    //
-
+    // Misc
     void normalize();
     std::pair<int, long double> frexp10() const;
     FpuExtended copysign(bool sign);
     FpuExtended copysign(const FpuExtended &other);
-
-    
-    //
-    // Operators
-    //
-
-    FpuExtended operator-() const;
-    FpuExtended operator+(const FpuExtended &other) const;
-    FpuExtended operator-(const FpuExtended &other) const;
-    FpuExtended operator*(const FpuExtended &other) const;
-    FpuExtended operator/(const FpuExtended &other) const;
 };
 
 
@@ -225,8 +210,8 @@ struct FpuPacked {
 
     FpuPacked() { }
     FpuPacked(u32 dw1, u32 dw2, u32 dw3) { data[0] = dw1; data[1] = dw2; data[2] = dw3; }
-    FpuPacked(const FpuExtended &value, int kfactor, FpuRoundingMode mode, ExceptionHandler handler = [](auto&&...) {});
-    FpuPacked(const class FPUReg &value, int kfactor, FpuRoundingMode mode, ExceptionHandler handler = [](auto&&...) {});
+    FpuPacked(const FpuExtended &value, int kfactor, FpuRoundingMode mode, ExcHandler handler = [](auto&&...) {});
+    FpuPacked(const class FPUReg &value, int kfactor, FpuRoundingMode mode, ExcHandler handler = [](auto&&...) {});
 };
 
 }
