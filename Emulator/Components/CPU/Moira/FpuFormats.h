@@ -179,6 +179,8 @@ struct FpuExtended {
     bool signbit() const { return raw.high & 0x8000; }
     i64 exp() const { return i64(raw.high & 0x7FFF) - bias; }
     u64 man() const { return raw.low; }
+    bool minexp() const { return (raw.high & 0x7FFF) == 0; }
+    bool maxexp() const { return (raw.high & 0x7FFF) == 0x7FFF; }
 
     int fpclassify() const;
     bool isfinite() const { return !isnan() && !isinf(); }
@@ -186,8 +188,8 @@ struct FpuExtended {
     bool isnan() const { return (raw.high & 0x7FFF) == 0x7FFF && raw.low != 0; }
     bool isSignalingNaN() const { return isnan() && !(raw.low & (1L << 62)); }
     bool isNonsignalingNaN() const { return isnan() && (raw.low & (1L << 62)); }
-    bool isnormal() const { return isfinite() && (raw.low & 1L << 63); }
-    bool issubnormal() const { return isfinite() && raw.low && !(raw.low & 1L << 63); }
+    bool isnormal() const { return !minexp() && !maxexp() && (man() & 1L << 63); }
+    bool issubnormal() const { return (raw.high & 0x7FFF) == 0 && raw.low; }
     bool isnegative() const { return signbit(); }
     bool ispositive() const { return !signbit(); }
     bool iszero() const { return (raw.high & 0x7FFF) == 0 && raw.low == 0; }

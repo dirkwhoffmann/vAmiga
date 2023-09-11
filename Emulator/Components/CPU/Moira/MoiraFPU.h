@@ -37,7 +37,8 @@ public:
 
     FpuExtended round();
     FpuExtended get() const { return val; }
-    void set(const FpuExtended other);
+    void set(const FpuExtended other) { val = other; }
+    void load(const FpuExtended other);
 
 
     //

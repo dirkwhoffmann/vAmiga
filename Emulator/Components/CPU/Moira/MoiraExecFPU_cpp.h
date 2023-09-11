@@ -203,7 +203,7 @@ Moira::execFMove(u16 opcode)
 
         case 0b000:                                 // FMOVE FpFp
 
-            fpu.fpr[dst].set(fpu.fpr[src].val);
+            fpu.fpr[dst].load(fpu.fpr[src].val);
             fpu.setConditionCodes(src);
             break;
 
@@ -214,13 +214,13 @@ Moira::execFMove(u16 opcode)
                 if (src >= 0 && src <= 6) {
 
                     auto value = readFpuOpIm<M>(FltFormat(src));
-                    fpu.fpr[dst].set(value);
+                    fpu.fpr[dst].load(value);
                 }
 
             } else {                                // FMOVE EaFp
 
                 auto value = readFpuOp<M>(reg, FltFormat(src));
-                fpu.fpr[dst].set(value);
+                fpu.fpr[dst].load(value);
             }
             fpu.setConditionCodes(dst);
             break;
@@ -267,7 +267,7 @@ Moira::execFMovecr(u16 opcode)
     // Clear the status register
     fpu.clearFPSR();
 
-    fpu.fpr[dst].set(fpu.readCR(ofs));
+    fpu.fpr[dst].load(fpu.readCR(ofs));
     fpu.setConditionCodes(dst);
 
     prefetch<C>();
@@ -641,8 +641,8 @@ Moira::execFGeneric(u16 opcode)
         }
         
         prefetch<C>();
-        fpu.fpr[dst2].set(result2);
-        fpu.fpr[dst].set(result);
+        fpu.fpr[dst2].load(result2);
+        fpu.fpr[dst].load(result);
         fpu.setConditionCodes(dst);
         
         FINALIZE
@@ -730,7 +730,7 @@ Moira::execFGeneric(u16 opcode)
         
     } else {
         
-        fpu.fpr[dst].set(result);
+        fpu.fpr[dst].load(result);
         fpu.setConditionCodes(dst);
     }
 

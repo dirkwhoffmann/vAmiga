@@ -39,23 +39,15 @@ FPUReg::round()
 }
 
 void
-FPUReg::set(const FpuExtended other)
+FPUReg::load(const FpuExtended other)
 {
     val = other;
         
     // Round to the correct precision
     val = round();
         
-    // Should we do this here?
+    // Normalize the result
     val.normalize();
-    
-    // REMOVE THIS!
-    /*
-    if (val.isSignalingNaN()) {
-        val.raw.low |= (1LL << 62); // Make nonsignaling
-        fpu.setExcStatusBit(FPEXP_SNAN);
-    }
-    */
 }
 
 FPU::FPU(Moira& ref) : moira(ref)

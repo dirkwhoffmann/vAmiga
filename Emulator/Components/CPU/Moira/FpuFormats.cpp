@@ -576,10 +576,13 @@ FpuExtended::fpclassify() const
 void
 FpuExtended::normalize()
 {
-    while (issubnormal()) {
-
-        raw.high -= 1;
-        raw.low <<= 1;
+    if (!minexp() && !maxexp() && man()) {
+        
+        while (!isnormal()) {
+            
+            raw.high -= 1;
+            raw.low <<= 1;
+        }
     }
 }
 
