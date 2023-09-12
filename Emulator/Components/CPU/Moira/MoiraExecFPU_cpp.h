@@ -10,9 +10,47 @@ Moira::execFBcc(u16 opcode)
 {
     AVAILABILITY(C68000)
 
+    auto cnd = ___________xxxxx (opcode);
+
+    u32 oldpc = reg.pc;
+        
+    static int cnt = 0;
+    printf("execFBcc %d: cnd = %x S = %d\n", cnt++, cnd, S);
+    
     fpu.clearFPSR();
 
-    execLineF<C, I, M, S>(opcode);
+    if (fpu.fpucond(cnd)) {
+
+        u32 disp = queue.irc;
+
+        if (S == Long) {
+
+            readExt<C>();
+            disp = disp << 16 | queue.irc;
+        }
+
+        printf("disp = %d\n", disp);
+
+        u32 newpc = U32_ADD(oldpc, SEXT<S>(disp));
+
+        // Check for address error
+        if (misaligned<C>(newpc)) {
+            throw AddressError(makeFrame(newpc));
+        }
+
+        // Take branch
+        reg.pc = newpc;
+        fullPrefetch<C, POLL>();
+
+    } else {
+
+        // Fall through to next instruction
+        readExt<C>();
+        if constexpr (S == Long) readExt<C>();
+        prefetch<C>();
+    }
+    
+    FINALIZE
 }
 
 template <Core C, Instr I, Mode M, Size S> void
@@ -214,14 +252,23 @@ Moira::execFMove(u16 opcode)
                 if (src >= 0 && src <= 6) {
 
                     auto value = readFpuOpIm<M>(FltFormat(src));
+                    
+                    if (auto nan = fpu.resolveNan(value); nan) {
+                        value = *nan;
+                    }
                     fpu.fpr[dst].load(value);
                 }
 
             } else {                                // FMOVE EaFp
 
                 auto value = readFpuOp<M>(reg, FltFormat(src));
+                
+                if (auto nan = fpu.resolveNan(value); nan) {
+                    value = *nan;
+                }
                 fpu.fpr[dst].load(value);
             }
+            
             fpu.setConditionCodes(dst);
             break;
 

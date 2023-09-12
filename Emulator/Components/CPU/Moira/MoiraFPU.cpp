@@ -42,10 +42,10 @@ void
 FPUReg::load(const FpuExtended other)
 {
     val = other;
-        
+    
     // Round to the correct precision
     val = round();
-        
+    
     // Normalize the result
     val.normalize();
 }
@@ -472,7 +472,7 @@ FPU::monadic(const FpuExtended &value, std::function<long double(long double)> f
     if (std::isnan(result)) {
         return FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
     }
-
+    
     return FpuExtended(result, getRoundingMode(), exceptionHandler);
 }
 
@@ -485,7 +485,7 @@ FPU::fabs(const FpuExtended &value)
     // -------------------------------------------
     // |   abs(x)    | +0.0  +0.0  | +inf  +inf  |
     // -------------------------------------------
-        
+    
     return FpuExtended(value.raw.high & 0x7FFF, value.raw.low);
 }
 
@@ -509,11 +509,11 @@ FPU::facos(const FpuExtended &value)
         return FpuExtended::nan;
     }
     if (value < -1.0 || value > 1.0) {
-                
+        
         setExcStatusBit(FPEXP_OPERR);
         return FpuExtended::nan;
     }
-
+    
     return monadic(value, [&](long double x) { return std::acos(x); });
 }
 
@@ -537,11 +537,11 @@ FPU::fasin(const FpuExtended &value)
         return FpuExtended::nan;
     }
     if (value < -1.0 || value > 1.0) {
-                
+        
         setExcStatusBit(FPEXP_OPERR);
         return FpuExtended::nan;
     }
-
+    
     return monadic(value, [&](long double x) { return std::asin(x); });
 }
 
@@ -615,7 +615,7 @@ FPU::fcos(const FpuExtended &value)
     // -------------------------------------------
     // |   cos(x)    | +1.0  +1.0  |  NaN   NaN  |
     // -------------------------------------------
-
+    
     if (value.isinf()) {
         
         setExcStatusBit(FPEXP_OPERR);
@@ -634,12 +634,12 @@ FPU::fcosh(const FpuExtended &value)
     // -------------------------------------------
     // |   cosh(x)   | +1.0  +1.0  | +inf  +inf  |
     // -------------------------------------------
-
+    
     if (value.isinf()) {
         
         return FpuExtended::posInf;
     }
-
+    
     return monadic(value, [&](long double x) { return std::cosh(x); });
 }
 
@@ -652,7 +652,7 @@ FPU::fetox(const FpuExtended &value)
     // -------------------------------------------
     // |     e^x     | +1.0  +1.0  | +inf  +0.0  |
     // -------------------------------------------
-
+    
     if (value.isinf()) {
         return value.ispositive() ? value : FpuExtended::posZero;
     }
@@ -737,7 +737,7 @@ FPU::fint(const FpuExtended &value)
     // -------------------------------------------
     // |   Integer   | +0.0  -0.0  | +inf  -inf  |
     // -------------------------------------------
-
+    
     if (value.iszero() || value.isinf()) {
         
         return value;
@@ -770,7 +770,7 @@ FPU::fintrz(const FpuExtended &value)
     // -------------------------------------------
     // |   Integer   | +0.0  -0.0  | +inf  -inf  |
     // -------------------------------------------
-
+    
     if (value.iszero() || value.isinf()) {
         
         return value;
@@ -806,7 +806,7 @@ FPU::flog10(const FpuExtended &value)
     // -------------------------------------------
     // |  log10(x)   | -inf  -inf  | +inf   NaN  |
     // -------------------------------------------
-
+    
     if (value.iszero()) {
         
         setExcStatusBit(FPEXP_DZ);
@@ -842,7 +842,7 @@ FPU::flog2(const FpuExtended &value)
     // -------------------------------------------
     // |    ld(x)    | -inf  -inf  | +inf   NaN  |
     // -------------------------------------------
-
+    
     if (value.iszero()) {
         
         setExcStatusBit(FPEXP_DZ);
@@ -878,7 +878,7 @@ FPU::flogn(const FpuExtended &value)
     // -------------------------------------------
     // |    ln(x)    | -inf  -inf  | +inf   NaN  |
     // -------------------------------------------
-
+    
     if (value.iszero()) {
         
         setExcStatusBit(FPEXP_DZ);
@@ -914,7 +914,7 @@ FPU::flognp1(const FpuExtended &value)
     // -------------------------------------------
     // |  ln(x - 1)  | +0.0  -0.0  | +inf   NaN  |
     // -------------------------------------------
-
+    
     
     if (value.iszero()) {
         
@@ -955,7 +955,7 @@ FPU::fneg(const FpuExtended &value)
     // -------------------------------------------
     // |     -x      | -0.0  +0.0  | -inf  +inf  |
     // -------------------------------------------
-
+    
     return FpuExtended(value.raw.high ^0x8000, value.raw.low);
 }
 
@@ -968,7 +968,7 @@ FPU::fsin(const FpuExtended &value)
     // -------------------------------------------
     // |   sin(x)    | +0.0  -0.0  |  NaN   NaN  |
     // -------------------------------------------
-
+    
     if (value.iszero()) {
         
         return value;
@@ -990,7 +990,7 @@ FPU::fsinh(const FpuExtended &value)
     // -------------------------------------------
     // |   sinh(x)   | +0.0  -0.0  | +inf  -inf  |
     // -------------------------------------------
-
+    
     if (value.iszero() || value.isinf()) {
         
         return value;
@@ -1008,13 +1008,13 @@ FPU::fsqrt(const FpuExtended &value)
     // -------------------------------------------
     // |   sqrt(x)   | +0.0  -0.0  | +inf   NaN  |
     // -------------------------------------------
-
+    
     if (value.iszero()) {
         
         return value;
     }
     if (value.isnegative()) {
-     
+        
         setExcStatusBit(FPEXP_OPERR);
         return FpuExtended::nan;
     }
@@ -1022,7 +1022,7 @@ FPU::fsqrt(const FpuExtended &value)
         
         return value;
     }
-
+    
     return monadic(value, [&](long double x) { return std::sqrt(x); });
 }
 
@@ -1035,17 +1035,17 @@ FPU::ftan(const FpuExtended &value)
     // -------------------------------------------
     // |   tan(x)    | +0.0  -0.0  |  NaN   NaN  |
     // -------------------------------------------
-
+    
     if (value.iszero()) {
         
         return value;
     }
     if (value.isinf()) {
-     
+        
         setExcStatusBit(FPEXP_OPERR);
         return FpuExtended::nan;
     }
-
+    
     return monadic(value, [&](long double x) { return std::tan(x); });
 }
 
@@ -1058,16 +1058,16 @@ FPU::ftanh(const FpuExtended &value)
     // -------------------------------------------
     // |   tanh(x)   | +0.0  -0.0  | +1.0  -1.0  |
     // -------------------------------------------
-
+    
     if (value.iszero()) {
         
         return value;
     }
     if (value.isinf()) {
-     
+        
         return value.ispositive() ? 1.0 : -1.0;
     }
-
+    
     return monadic(value, [&](long double x) { return std::tanh(x); });
 }
 
@@ -1080,12 +1080,12 @@ FPU::ftentox(const FpuExtended &value)
     // -------------------------------------------
     // |    10^x     | +1.0  +1.0  | +inf  +0.0  |
     // -------------------------------------------
-
+    
     if (value.isinf()) {
         
         return value.ispositive() ? value : FpuExtended::posZero;
     }
-
+    
     return monadic(value, [&](long double x) { return std::powl(10.0L, x); });
 }
 
@@ -1098,7 +1098,7 @@ FPU::ftst(const FpuExtended &value)
     // -------------------------------------------
     // |  { }   N    |   Z     NZ  |   I     NI  |
     // -------------------------------------------
-
+    
     return value;
 }
 
@@ -1111,12 +1111,12 @@ FPU::ftwotox(const FpuExtended &value)
     // -------------------------------------------
     // |     2^x     | +1.0  +1.0  | +inf  +0.0  |
     // -------------------------------------------
-
+    
     if (value.isinf()) {
         
         return value.ispositive() ? value : FpuExtended::posZero;
     }
-
+    
     return monadic(value, [&](long double x) { return std::powl(2.0L, x); });
 }
 
@@ -1194,7 +1194,7 @@ FPU::fcmp(const FpuExtended &op1, const FpuExtended &op2)
     // Infinity + |   -     -   |   -     -   |   Z     -   |
     //          - |   N     N   |   N     N   |   N    NZ   |
     // ------------------------------------------------------
-
+    
     if (op1.iszero() && op2.iszero()) {
         
         return op2;
@@ -1227,7 +1227,7 @@ FPU::fcmp(const FpuExtended &op1, const FpuExtended &op2)
         return op1.signbit() ? FpuExtended::negZero : FpuExtended::posZero;
     }
     if (op2.ispositive()) {
-
+        
         return op1 > op2 ? -1.0 : 1.0;
     }
     return op1 < op2 ? 1.0 : -1.0;
@@ -1270,7 +1270,7 @@ FPU::fdiv(const FpuExtended &op1, const FpuExtended &op2)
     if (op2.iszero()) {
         return op1.signbit() == op2.signbit() ? FpuExtended::posZero : FpuExtended::negZero;
     }
-        
+    
     softfloat::float_exception_flags = 0;
     auto result = softfloat::floatx80_div(op2.raw, op1.raw);
     if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
@@ -1315,9 +1315,9 @@ FPU::fmod(const FpuExtended &op1, const FpuExtended &op2)
         return op2;
     }
     if (op1.isinf()) {
-
+        
         modulus = op2.asLongDouble();
-
+        
     } else {
         
         clearHostFpuFlags();
@@ -1353,7 +1353,7 @@ FPU::fmul(const FpuExtended &op1, const FpuExtended &op2)
             
             setExcStatusBit(FPEXP_OPERR);
             return FpuExtended::nan;
-
+            
         } else {
             
             return FpuExtended::inf.copysign(op1.signbit() != op2.signbit());
@@ -1363,7 +1363,7 @@ FPU::fmul(const FpuExtended &op1, const FpuExtended &op2)
         
         return FpuExtended::zero.copysign(op1.signbit() != op2.signbit());
     }
-        
+    
     softfloat::float_exception_flags = 0;
     auto result = softfloat::floatx80_mul(op1.raw, op2.raw);
     if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
@@ -1442,7 +1442,7 @@ FPU::fscal(const FpuExtended &op1, const FpuExtended &op2)
     // Infinity + | +inf  +inf  | +inf  +inf  |  NaN   NaN  |
     //          - | -inf  -inf  | -inf  -inf  |  NaN   NaN  |
     // ------------------------------------------------------
-
+    
     if (op1.isinf()) {
         
         setExcStatusBit(FPEXP_OPERR);
@@ -1456,15 +1456,15 @@ FPU::fscal(const FpuExtended &op1, const FpuExtended &op2)
         
         return op2;
     }
-
+    
     long offset = (long)op1.asLongDouble();
     
     printf("fscale: op1 = %Lf offset = %ld\n", op1.asLongDouble(), offset);
-
+    
     auto sgn = op2.signbit();
     auto man = op2.man();
     auto exp = op2.exp();
-
+    
     return FpuExtended(sgn, exp + offset, man, exceptionHandler);
 }
 
@@ -1577,6 +1577,53 @@ FPU::fsub(const FpuExtended &op1, const FpuExtended &op2)
     }
     
     return FpuExtended(result.high, result.low);
+}
+
+bool
+FPU::fpucond(u8 condition) const
+{
+    bool n = fpsr & FPCC_N;
+    bool z = fpsr & FPCC_Z;
+    bool nan = fpsr & FPCC_NAN;
+    
+    switch (condition)
+    {
+        case 0x10:
+        case 0x00:  return false;
+        case 0x11:
+        case 0x01:  return z;
+        case 0x12:
+        case 0x02:  return !(nan || z || n);
+        case 0x13:
+        case 0x03:  return z || !(nan || n);
+        case 0x14:
+        case 0x04:  return n && !(nan || z);
+        case 0x15:
+        case 0x05:  return z || (n && !nan);
+        case 0x16:
+        case 0x06:  return !nan && !z;
+        case 0x17:
+        case 0x07:  return !nan || z;
+        case 0x18:
+        case 0x08:  return nan;
+        case 0x19:
+        case 0x09:  return nan || z;
+        case 0x1a:
+        case 0x0a:  return nan || !(n || z);
+        case 0x1b:
+        case 0x0b:  return nan || z || !n;
+        case 0x1c:
+        case 0x0c:  return nan || (n && !z);
+        case 0x1d:
+        case 0x0d:  return nan || z || n;
+        case 0x1e:
+        case 0x0e:  return nan || !z;
+        case 0x1f:
+        case 0x0f:  return true;
+            
+        default:
+            fatalError;
+    }
 }
 
 }

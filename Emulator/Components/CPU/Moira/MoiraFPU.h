@@ -288,6 +288,8 @@ public:
     FpuExtended fsgldiv(const FpuExtended &op1, const FpuExtended &op2);
     FpuExtended fsglmul(const FpuExtended &op1, const FpuExtended &op2);
     FpuExtended fsub(const FpuExtended &op1, const FpuExtended &op2);
+        
+    bool fpucond(u8 condition) const;
 };
 
 }
