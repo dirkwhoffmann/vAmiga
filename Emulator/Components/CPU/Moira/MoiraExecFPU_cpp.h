@@ -13,10 +13,7 @@ Moira::execFBcc(u16 opcode)
     auto cnd = ___________xxxxx (opcode);
 
     u32 oldpc = reg.pc;
-        
-    static int cnt = 0;
-    printf("execFBcc %d: cnd = %x S = %d\n", cnt++, cnd, S);
-    
+            
     fpu.clearFPSR();
 
     if (fpu.fpucond(cnd)) {
@@ -28,8 +25,6 @@ Moira::execFBcc(u16 opcode)
             readExt<C>();
             disp = disp << 16 | queue.irc;
         }
-
-        printf("disp = %d\n", disp);
 
         u32 newpc = U32_ADD(oldpc, SEXT<S>(disp));
 
@@ -58,9 +53,47 @@ Moira::execFDbcc(u16 opcode)
 {
     AVAILABILITY(C68000)
 
+    auto ext = readExt<C,Word>();
+    auto cnd = ___________xxxxx (ext);
+
     fpu.clearFPSR();
 
-    execLineF<C, I, M, S>(opcode);
+    if (!fpu.fpucond(cnd)) {
+
+        int dn = _____________xxx(opcode);
+        u32 newpc = U32_ADD(reg.pc, (i16)queue.irc);
+
+        bool takeBranch = readD<Word>(dn) != 0;
+
+        // Check for address error
+        if (misaligned<C, S>(newpc)) {
+            throw AddressError(makeFrame<AE_INC_PC>(newpc, newpc));
+        }
+
+        // Decrement loop counter
+        writeD<Word>(dn, U32_SUB(readD<Word>(dn), 1));
+
+        // Branch
+        if (takeBranch) {
+            
+            reg.pc = newpc;
+            fullPrefetch<C, POLL>();
+
+        } else {
+
+            (void)read<C, MEM_PROG, Word>(reg.pc + 2);
+            reg.pc += 2;
+            fullPrefetch<C, POLL>();
+        }
+
+    } else {
+
+        // Fall through to next instruction
+        reg.pc += 2;
+        fullPrefetch<C, POLL>();
+    }
+    
+    FINALIZE
 }
 
 template <Core C, Instr I, Mode M, Size S> void
@@ -107,8 +140,6 @@ Moira::execFGen(u16 opcode)
             execFMovem<C, FMOVEM, M, S>(opcode);
             return;
     }
-
-    printf("Arithmetic: cmd = %d\n", cmd);
 
     // Catch all other instructions
     switch (cod) {
@@ -188,7 +219,11 @@ Moira::execFGen(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execFNop(u16 opcode)
 {
-    execLineF<C, I, M, S>(opcode);
+    AVAILABILITY(C68000)
+
+    prefetch<C>();
+
+    FINALIZE
 }
 
 template <Core C, Instr I, Mode M, Size S> void
@@ -206,7 +241,20 @@ Moira::execFSave(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execFScc(u16 opcode)
 {
-    execLineF<C, I, M, S>(opcode);
+    AVAILABILITY(C68000);
+
+    auto ext = readExt<C, Word>();
+    auto reg = _____________xxx (opcode);
+    auto cnd = ___________xxxxx (ext);
+
+    auto ea = computeEA<C68020, M, Byte>(reg);
+    auto data = fpu.fpucond(cnd) ? 0xFF : 0x00;
+    writeM<C68020, M, Byte>(ea, data);
+    updateAn<M, Byte>(reg);
+
+    prefetch<C>();
+
+    FINALIZE
 }
 
 template <Core C, Instr I, Mode M, Size S> void
