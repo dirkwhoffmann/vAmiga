@@ -229,13 +229,66 @@ Moira::execFNop(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execFRestore(u16 opcode)
 {
-    execLineF<C, I, M, S>(opcode);
+    AVAILABILITY(C68000);
+
+    auto n   = _____________xxx (opcode);
+
+    auto ea = computeEA<C68020, M, S>(n);
+    auto val = u16(readM<C, M, Long>(ea));
+    
+    if (val == 0x0018) {
+        
+        // NULL
+        printf("RESTORE: NULL FRAME\n");
+        // TODO: Reset
+        
+    } else {
+            
+        // IDLE, UNIMP, BUSY
+        printf("RESTORE: other FRAME\n");
+    }
+    
+    if (M == MODE_PI) reg.r[n] += fpu.stateFrameSize(val);
+
+    FINALIZE
 }
 
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execFSave(u16 opcode)
 {
-    execLineF<C, I, M, S>(opcode);
+    AVAILABILITY(C68000);
+
+    auto n   = _____________xxx (opcode);
+
+    auto ea = computeEA<C68020, M, S>(n);
+    // updateAn<M, S>(n);
+
+    if (M == MODE_PD) U32_DEC(reg.r[n], 6*4);
+    if (M == MODE_PI) U32_INC(reg.r[n], 6*4);
+
+    if (M == MODE_PD) {
+        
+        writeM<C68020, M, Long>(ea, 0x70000000);
+        writeM<C68020, M, Long>(ea - 4, 0x0);
+        writeM<C68020, M, Long>(ea - 8, 0x0);
+        writeM<C68020, M, Long>(ea - 12, 0x0);
+        writeM<C68020, M, Long>(ea - 16, 0x0);
+        writeM<C68020, M, Long>(ea - 20, 0x0);
+        writeM<C68020, M, Long>(ea - 24, 0x1f180000);
+        
+    } else {
+
+        writeM<C68020, M, Long>(ea, 0x1f180000);
+        writeM<C68020, M, Long>(ea + 4, 0x0);
+        writeM<C68020, M, Long>(ea + 8, 0x0);
+        writeM<C68020, M, Long>(ea + 12, 0x0);
+        writeM<C68020, M, Long>(ea + 16, 0x0);
+        writeM<C68020, M, Long>(ea + 20, 0x0);
+        writeM<C68020, M, Long>(ea + 24, 0x70000000);
+    }
+    
+    prefetch<C>();
+    FINALIZE
 }
 
 template <Core C, Instr I, Mode M, Size S> void
@@ -251,7 +304,6 @@ Moira::execFScc(u16 opcode)
     auto data = fpu.fpucond(cnd) ? 0xFF : 0x00;
     writeM<C68020, M, Byte>(ea, data);
     updateAn<M, Byte>(reg);
-
     prefetch<C>();
 
     FINALIZE

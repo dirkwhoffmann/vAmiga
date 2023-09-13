@@ -123,6 +123,44 @@ FPU::fesetround(FpuRoundingMode mode)
     }
 }
 
+int
+FPU::stateFrameSize(u16 formatWord)
+{
+    // NULL frame
+    if (HI_BYTE(formatWord) == 0x00) {
+        
+        if (model == FPU_68040) return 4;
+        if (model == FPU_68881) return 4;
+        if (model == FPU_68882) return 4;
+    }
+    
+    // IDLE frame
+    if (LO_BYTE(formatWord) == 0x18) {
+
+        if (model == FPU_68040) return 4;
+        if (model == FPU_68881) return 28;
+        if (model == FPU_68882) return 60;
+    }
+
+    // UNIMP frame
+    if (LO_BYTE(formatWord) == 0x38) {
+
+        if (model == FPU_68040) return 48;
+        if (model == FPU_68881) return 0;
+        if (model == FPU_68882) return 0;
+    }
+
+    // BUSY frame
+    if (LO_BYTE(formatWord) == 0xB4) {
+
+        if (model == FPU_68040) return 96;
+        if (model == FPU_68881) return 184;
+        if (model == FPU_68882) return 216;
+    }
+    
+    return 0;
+}
+
 bool
 FPU::isValidExt(Instr I, Mode M, u16 op, u32 ext)
 {

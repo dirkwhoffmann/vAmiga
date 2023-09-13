@@ -45,7 +45,6 @@ public:
     // Classifying
     //
 
-
     int fpclassify() const { return val.fpclassify(); }
     bool isfinite() const { return val.isfinite(); }
     bool isinf() const { return val.isinf(); }
@@ -80,10 +79,7 @@ public:
     u32 fpiar;
     u32 fpsr;
     u32 fpcr;
-    
-    // Experimental
-    int oldRoundingMode;
-    
+        
     
     //
     // Constructing
@@ -111,6 +107,14 @@ public:
     
     // Configures the rounding mode of the host FPU
     static FpuRoundingMode fesetround(FpuRoundingMode mode);
+    
+    
+    //
+    // Querying properties
+    //
+    
+    // Returns the size of a certain state frame (varies between FPU models)
+    int stateFrameSize(u16 formatWord);
     
     
     //
