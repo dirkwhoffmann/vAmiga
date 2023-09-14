@@ -68,6 +68,16 @@ FPU::reset()
     fpcr = 0;
 }
 
+bool
+FPU::inResetState()
+{
+    for (int i = 0; i < 8; i++) {
+        if (fpr[i].val != FpuExtended::nan) return false;
+    }
+    
+    return fpiar == 0 && fpsr == 0 && fpcr == 0;
+}
+
 void
 FPU::setModel(FPUModel model)
 {
@@ -123,42 +133,48 @@ FPU::fesetround(FpuRoundingMode mode)
     }
 }
 
-int
-FPU::stateFrameSize(u16 formatWord)
+FpuFrameType
+FPU::typeOfFrame(u16 fmtWord)
 {
-    // NULL frame
-    if (HI_BYTE(formatWord) == 0x00) {
-        
-        if (model == FPU_68040) return 4;
-        if (model == FPU_68881) return 4;
-        if (model == FPU_68882) return 4;
-    }
+    if (HI_BYTE(fmtWord) == 0x00) return FPU_FRAME_NULL;
+    if (LO_BYTE(fmtWord) == 0x18) return FPU_FRAME_IDLE;
+    if (LO_BYTE(fmtWord) == 0x38) return FPU_FRAME_UNIMP;
+    if (LO_BYTE(fmtWord) == 0xB4) return FPU_FRAME_BUSY;
     
-    // IDLE frame
-    if (LO_BYTE(formatWord) == 0x18) {
+    return FPU_FRAME_INVALID;
+}
 
-        if (model == FPU_68040) return 4;
-        if (model == FPU_68881) return 28;
-        if (model == FPU_68882) return 60;
-    }
+int
+FPU::stateFrameSize(FpuFrameType type)
+{
+    switch (type) {
+            
+        case FPU_FRAME_NULL:
+            
+            return 4;
 
-    // UNIMP frame
-    if (LO_BYTE(formatWord) == 0x38) {
-
-        if (model == FPU_68040) return 48;
-        if (model == FPU_68881) return 0;
-        if (model == FPU_68882) return 0;
-    }
-
-    // BUSY frame
-    if (LO_BYTE(formatWord) == 0xB4) {
-
-        if (model == FPU_68040) return 96;
-        if (model == FPU_68881) return 184;
-        if (model == FPU_68882) return 216;
-    }
+        case FPU_FRAME_IDLE:
+            
+            if (model == FPU_68040) return 4;
+            if (model == FPU_68881) return 28;
+            if (model == FPU_68882) return 60;
     
-    return 0;
+        case FPU_FRAME_UNIMP:
+            
+            if (model == FPU_68040) return 48;
+            if (model == FPU_68881) return 0;
+            if (model == FPU_68882) return 0;
+
+        case FPU_FRAME_BUSY:
+            
+            if (model == FPU_68040) return 96;
+            if (model == FPU_68881) return 184;
+            if (model == FPU_68882) return 216;
+            
+        default:
+            
+            return 0;
+    }
 }
 
 bool

@@ -88,7 +88,12 @@ public:
 public:
     
     FPU(Moira& ref);
+    
+    // Initializes all registers with their reset value
     void reset();
+    
+    // Indicates whether the FPU is in its reset state
+    bool inResetState();
     
     
     //
@@ -114,7 +119,9 @@ public:
     //
     
     // Returns the size of a certain state frame (varies between FPU models)
-    int stateFrameSize(u16 formatWord);
+    int stateFrameSize(FpuFrameType type);
+    int stateFrameSize(u16 fmtWord) { return stateFrameSize(typeOfFrame(fmtWord)); }
+    FpuFrameType typeOfFrame(u16 fmtWord);
     
     
     //

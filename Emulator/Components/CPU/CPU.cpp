@@ -139,7 +139,14 @@ Moira::willExecute(const char *func, Instr I, Mode M, Size S, u16 opcode)
             break;
 
         default:
+        {
+            /*
+            char str[128];
+            disassemble(str, reg.pc0);
+            printf("%s\n", str);
             break;
+            */
+        }
     }
 }
 

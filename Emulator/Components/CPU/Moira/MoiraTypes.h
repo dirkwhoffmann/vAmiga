@@ -296,6 +296,16 @@ typedef enum
 }
 FpuRoundingMode;
 
+typedef enum
+{
+    FPU_FRAME_INVALID,
+    FPU_FRAME_NULL,
+    FPU_FRAME_IDLE,
+    FPU_FRAME_UNIMP,
+    FPU_FRAME_BUSY,
+}
+FpuFrameType;
+
 
 //
 // Structures

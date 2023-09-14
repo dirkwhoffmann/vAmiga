@@ -234,22 +234,31 @@ Moira::execFRestore(u16 opcode)
     auto n   = _____________xxx (opcode);
 
     auto ea = computeEA<C68020, M, S>(n);
-    auto val = u16(readM<C, M, Long>(ea));
+    auto type = fpu.typeOfFrame(u16(readM<C, M, Word>(ea)));
     
-    if (val == 0x0018) {
-        
-        // NULL
-        printf("RESTORE: NULL FRAME\n");
-        // TODO: Reset
-        
-    } else {
+    switch (type) {
+     
+        case FPU_FRAME_NULL:
             
-        // IDLE, UNIMP, BUSY
-        printf("RESTORE: other FRAME\n");
+            printf("RESTORE: NULL FRAME\n");
+            updateAn<M, Long>(n);
+            fpu.reset();
+            break;
+
+        case FPU_FRAME_IDLE:
+                
+            printf("RESTORE: IDLE FRAME\n");
+            break;
+            
+        default:
+
+            printf("RESTORE: OTHER FRAME\n");
+            break;
     }
     
-    if (M == MODE_PI) reg.r[n] += fpu.stateFrameSize(val);
-
+    if (M == MODE_PI) U32_INC(reg.r[n], fpu.stateFrameSize(type));
+    
+    prefetch<C>();
     FINALIZE
 }
 
@@ -260,31 +269,50 @@ Moira::execFSave(u16 opcode)
 
     auto n   = _____________xxx (opcode);
 
-    auto ea = computeEA<C68020, M, S>(n);
-    // updateAn<M, S>(n);
-
-    if (M == MODE_PD) U32_DEC(reg.r[n], 6*4);
-    if (M == MODE_PI) U32_INC(reg.r[n], 6*4);
-
-    if (M == MODE_PD) {
+    auto saveNullFrame = [&](u32 ea) {
         
+        printf("Saving NULL frame\n");
         writeM<C68020, M, Long>(ea, 0x70000000);
-        writeM<C68020, M, Long>(ea - 4, 0x0);
-        writeM<C68020, M, Long>(ea - 8, 0x0);
-        writeM<C68020, M, Long>(ea - 12, 0x0);
-        writeM<C68020, M, Long>(ea - 16, 0x0);
-        writeM<C68020, M, Long>(ea - 20, 0x0);
-        writeM<C68020, M, Long>(ea - 24, 0x1f180000);
-        
-    } else {
+        updateAn<M, Long>(n);
+    };
 
-        writeM<C68020, M, Long>(ea, 0x1f180000);
-        writeM<C68020, M, Long>(ea + 4, 0x0);
-        writeM<C68020, M, Long>(ea + 8, 0x0);
-        writeM<C68020, M, Long>(ea + 12, 0x0);
-        writeM<C68020, M, Long>(ea + 16, 0x0);
-        writeM<C68020, M, Long>(ea + 20, 0x0);
-        writeM<C68020, M, Long>(ea + 24, 0x70000000);
+    auto saveIdleFrame = [&](u32 ea) {
+        
+        auto size = fpu.stateFrameSize(FPU_FRAME_IDLE);
+
+        printf("Saving IDLE frame\n");
+
+        if (M == MODE_PD) U32_DEC(reg.r[n], size);
+        if (M == MODE_PI) U32_INC(reg.r[n], size);
+        
+        if (M == MODE_PD) {
+            
+            writeM<C68020, M, Long>(ea, 0x70000000);
+            for (isize i = 0; i < size - 2; i++) {
+                ea -= 4;
+                writeM<C68020, M, Long>(ea, 0x0);
+            }
+            ea -= 4;
+            writeM<C68020, M, Long>(ea, 0x1f180000);
+            
+        } else {
+         
+            writeM<C68020, M, Long>(ea, 0x70000000);
+            for (isize i = 0; i < size - 2; i++) {
+                ea -= 4;
+                writeM<C68020, M, Long>(ea, 0x0);
+            }
+            ea -= 4;
+            writeM<C68020, M, Long>(ea, 0x1f180000);
+        }
+    };
+    
+    auto ea = computeEA<C68020, M, S>(n);
+
+    if (fpu.inResetState()) {
+        saveNullFrame(ea);
+    } else {
+        saveIdleFrame(ea);
     }
     
     prefetch<C>();
@@ -312,7 +340,30 @@ Moira::execFScc(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execFTrapcc(u16 opcode)
 {
-    execLineF<C, I, M, S>(opcode);
+    AVAILABILITY(C68000)
+
+    auto mod = _____________xxx (opcode);
+    auto cnd = ___________xxxxx (queue.irc);
+                
+    fpu.clearFPSR();
+    
+    if (mod == 0b010) { readExt<C, Word>(); }
+    if (mod == 0b011) { readExt<C, Long>(); }
+
+    if (fpu.fpucond(cnd)) {
+
+        // Execute exception handler
+        readExt<C>();
+        execException<C>(EXC_TRAPV);
+
+    } else {
+
+        // Fall through to next instruction
+        readExt<C>();
+        prefetch<C>();
+    }
+    
+    FINALIZE
 }
 
 template <Core C, Instr I, Mode M, Size S> void
