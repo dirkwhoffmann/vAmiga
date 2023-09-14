@@ -105,8 +105,6 @@ Moira::execFGen(u16 opcode)
     auto cod  = xxx_____________(ext);
     auto cmd  = _________xxxxxxx(ext);
 
-    // printf("execFGen (I = %d M = %d S = %d)\n", I, M, S);
-
     if (M == MODE_AN) {
         if (ext & 0x4000) { execLineF<C, I, M, S>(opcode); return; }
     }
@@ -234,30 +232,11 @@ Moira::execFRestore(u16 opcode)
     auto n   = _____________xxx (opcode);
 
     auto ea = computeEA<C68020, M, S>(n);
-    auto type = fpu.typeOfFrame(u16(readM<C, M, Word>(ea)));
-    
-    switch (type) {
-     
-        case FPU_FRAME_NULL:
-            
-            printf("RESTORE: NULL FRAME\n");
-            updateAn<M, Long>(n);
-            fpu.reset();
-            break;
-
-        case FPU_FRAME_IDLE:
-                
-            printf("RESTORE: IDLE FRAME\n");
-            break;
-            
-        default:
-
-            printf("RESTORE: OTHER FRAME\n");
-            break;
-    }
-    
-    if (M == MODE_PI) U32_INC(reg.r[n], fpu.stateFrameSize(type));
-    
+    auto fmtWord = readM<C, M, Long>(ea);
+    auto type = fpu.typeOfFrame(fmtWord);
+    if (M == MODE_PI) U32_INC(reg.a[n], fpu.stateFrameSize(type) + 4);
+    if (type == FPU_FRAME_NULL) fpu.reset();
+        
     prefetch<C>();
     FINALIZE
 }
@@ -271,43 +250,39 @@ Moira::execFSave(u16 opcode)
 
     auto saveNullFrame = [&](u32 ea) {
         
-        printf("Saving NULL frame\n");
-        writeM<C68020, M, Long>(ea, 0x70000000);
+        writeM<C68020, M, Long>(ea, fpu.computeFormatWord(FPU_FRAME_NULL));
         updateAn<M, Long>(n);
     };
 
     auto saveIdleFrame = [&](u32 ea) {
         
         auto size = fpu.stateFrameSize(FPU_FRAME_IDLE);
-
-        printf("Saving IDLE frame\n");
-
-        if (M == MODE_PD) U32_DEC(reg.r[n], size);
-        if (M == MODE_PI) U32_INC(reg.r[n], size);
         
         if (M == MODE_PD) {
             
+            U32_DEC(reg.a[n], size + 4);
+
             writeM<C68020, M, Long>(ea, 0x70000000);
-            for (isize i = 0; i < size - 2; i++) {
-                ea -= 4;
-                writeM<C68020, M, Long>(ea, 0x0);
-            }
             ea -= 4;
-            writeM<C68020, M, Long>(ea, 0x1f180000);
+            for (isize i = 0; i < (size / 4) - 1; i++) {
+                writeM<C68020, M, Long>(ea, 0x0);
+                ea -= 4;
+            }
+            writeM<C68020, M, Long>(ea, fpu.computeFormatWord(FPU_FRAME_IDLE));
             
         } else {
          
-            writeM<C68020, M, Long>(ea, 0x70000000);
-            for (isize i = 0; i < size - 2; i++) {
-                ea -= 4;
+            writeM<C68020, M, Long>(ea, fpu.computeFormatWord(FPU_FRAME_IDLE));
+            ea += 4;
+            for (isize i = 0; i < (size / 4) - 1; i++) {
                 writeM<C68020, M, Long>(ea, 0x0);
+                ea += 4;
             }
-            ea -= 4;
-            writeM<C68020, M, Long>(ea, 0x1f180000);
+            writeM<C68020, M, Long>(ea, 0x70000000);
         }
     };
     
-    auto ea = computeEA<C68020, M, S>(n);
+    auto ea = computeEA<C68020, M, Long>(n);
 
     if (fpu.inResetState()) {
         saveNullFrame(ea);

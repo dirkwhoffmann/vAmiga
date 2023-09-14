@@ -115,14 +115,19 @@ public:
     
     
     //
-    // Querying properties
+    // Working with state frames (FSAVE, FRESTORE)
     //
     
-    // Returns the size of a certain state frame (varies between FPU models)
+    // Determines the size of a state frame (varies between FPU models)
     int stateFrameSize(FpuFrameType type);
-    int stateFrameSize(u16 fmtWord) { return stateFrameSize(typeOfFrame(fmtWord)); }
-    FpuFrameType typeOfFrame(u16 fmtWord);
+    int stateFrameSize(u32 fmtWord);
     
+    // Determines the type a state frame
+    FpuFrameType typeOfFrame(u32 fmtWord);
+
+    // Computes a format word for a fiven frame type
+    u32 computeFormatWord(FpuFrameType type);
+
     
     //
     // Accessing registers

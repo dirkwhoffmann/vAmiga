@@ -133,44 +133,65 @@ FPU::fesetround(FpuRoundingMode mode)
     }
 }
 
-FpuFrameType
-FPU::typeOfFrame(u16 fmtWord)
-{
-    if (HI_BYTE(fmtWord) == 0x00) return FPU_FRAME_NULL;
-    if (LO_BYTE(fmtWord) == 0x18) return FPU_FRAME_IDLE;
-    if (LO_BYTE(fmtWord) == 0x38) return FPU_FRAME_UNIMP;
-    if (LO_BYTE(fmtWord) == 0xB4) return FPU_FRAME_BUSY;
-    
-    return FPU_FRAME_INVALID;
-}
-
 int
 FPU::stateFrameSize(FpuFrameType type)
 {
     switch (type) {
             
-        case FPU_FRAME_NULL:
-            
-            return 4;
-
         case FPU_FRAME_IDLE:
             
-            if (model == FPU_68040) return 4;
-            if (model == FPU_68881) return 28;
-            if (model == FPU_68882) return 60;
+            if (model == FPU_68040) return 0;
+            if (model == FPU_68881) return 24;
+            if (model == FPU_68882) return 56;
     
         case FPU_FRAME_UNIMP:
             
-            if (model == FPU_68040) return 48;
+            if (model == FPU_68040) return 44;
             if (model == FPU_68881) return 0;
             if (model == FPU_68882) return 0;
 
         case FPU_FRAME_BUSY:
             
-            if (model == FPU_68040) return 96;
-            if (model == FPU_68881) return 184;
-            if (model == FPU_68882) return 216;
+            if (model == FPU_68040) return 92;
+            if (model == FPU_68881) return 180;
+            if (model == FPU_68882) return 212;
             
+        default:
+            
+            return 0;
+    }
+}
+
+int
+FPU::stateFrameSize(u32 fmtWord)
+{
+    return BYTE2(fmtWord);
+}
+
+FpuFrameType
+FPU::typeOfFrame(u32 fmtWord)
+{
+    isize size = stateFrameSize(fmtWord);
+    
+    if (size == stateFrameSize(FPU_FRAME_NULL)) return FPU_FRAME_NULL;
+    if (size == stateFrameSize(FPU_FRAME_IDLE)) return FPU_FRAME_IDLE;
+    if (size == stateFrameSize(FPU_FRAME_UNIMP)) return FPU_FRAME_UNIMP;
+    if (size == stateFrameSize(FPU_FRAME_BUSY)) return FPU_FRAME_BUSY;
+    
+    return FPU_FRAME_INVALID;
+}
+
+u32
+FPU::computeFormatWord(FpuFrameType type)
+{
+    switch (type) {
+            
+        case FPU_FRAME_IDLE:
+        case FPU_FRAME_UNIMP:
+        case FPU_FRAME_BUSY:
+            
+            return 0x1F000000 | stateFrameSize(type) << 16;
+                        
         default:
             
             return 0;
