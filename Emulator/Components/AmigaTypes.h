@@ -106,9 +106,7 @@ enum_long(CONFIG_SCHEME)
     CONFIG_A1000_OCS_1MB,
     CONFIG_A500_OCS_1MB,
     CONFIG_A500_ECS_1MB,
-    CONFIG_A500_PLUS_1MB,
-    CONFIG_68881_1MB,
-    CONFIG_68882_1MB,
+    CONFIG_A500_PLUS_1MB
 };
 typedef CONFIG_SCHEME ConfigScheme;
 
@@ -116,7 +114,7 @@ typedef CONFIG_SCHEME ConfigScheme;
 struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = CONFIG_68882_1MB;
+    static constexpr long maxVal = CONFIG_A500_PLUS_1MB;
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "CONFIG"; }
@@ -127,8 +125,6 @@ struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme>
             case CONFIG_A1000_OCS_1MB:  return "A1000_OCS_1MB";
             case CONFIG_A500_OCS_1MB:   return "A500_OCS_1MB";
             case CONFIG_A500_ECS_1MB:   return "A500_ECS_1MB";
-            case CONFIG_68881_1MB:      return "CONFIG_68881_1MB";
-            case CONFIG_68882_1MB:      return "CONFIG_68882_1MB";
         }
         return "???";
     }

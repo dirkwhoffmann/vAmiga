@@ -577,12 +577,20 @@ CPU::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Fpu) {
         
-        os << util::tab("FPIAR");
-        os << util::hex(fpu.fpiar) << std::endl;
-        os << util::tab("FPSR");
-        os << util::hex(fpu.fpsr) << std::endl;
         os << util::tab("FPCR");
         os << util::hex(fpu.fpcr) << std::endl;
+        os << util::tab("FPSR");
+        os << util::hex(fpu.fpsr) << std::endl;
+        os << util::tab("FPIAR");
+        os << util::hex(fpu.fpiar) << std::endl;
+        
+        for (isize i = 0; i < 8; i++) {
+            
+            os << util::tab("FP" + std::to_string(i));
+            // os << fpu.fpr[i] << std::endl;
+            os << util::hex(fpu.fpr[i].val.raw.high) << ":";
+            os << util::hex(fpu.fpr[i].val.raw.low) << std::endl;
+        }
     }
     
     if (category == Category::Breakpoints) {

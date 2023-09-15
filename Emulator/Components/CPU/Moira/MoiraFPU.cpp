@@ -50,6 +50,15 @@ FPUReg::load(const FpuExtended other)
     val.normalize();
 }
 
+std::ostream &
+FPUReg::operator<<(std::ostream &stream)
+{
+    stream << val.raw.high << ":" << val.raw.low;
+    stream << " (" << val.asLongDouble() << ")";
+    
+    return stream;
+}
+
 FPU::FPU(Moira& ref) : moira(ref)
 {
     static_assert(!REQUIRE_PRECISE_FPU || sizeof(long double) > 8,

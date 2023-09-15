@@ -872,28 +872,6 @@ Amiga::configure(ConfigScheme scheme)
                 configure(OPT_CHIP_RAM, 512);
                 configure(OPT_SLOW_RAM, 512);
                 break;
-
-            case CONFIG_68881_1MB:
-                
-                configure(OPT_CPU_REVISION, CPU_68EC020);
-                configure(OPT_FPU_REVISION, FPU_68881);
-                configure(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
-                configure(OPT_DENISE_REVISION, DENISE_OCS);
-                configure(OPT_VIDEO_FORMAT, PAL);
-                configure(OPT_CHIP_RAM, 512);
-                configure(OPT_SLOW_RAM, 512);
-                break;
-
-            case CONFIG_68882_1MB:
-                
-                configure(OPT_CPU_REVISION, CPU_68EC020);
-                configure(OPT_FPU_REVISION, FPU_68882);
-                configure(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
-                configure(OPT_DENISE_REVISION, DENISE_OCS);
-                configure(OPT_VIDEO_FORMAT, PAL);
-                configure(OPT_CHIP_RAM, 512);
-                configure(OPT_SLOW_RAM, 512);
-                break;
                 
             default:
                 fatalError;

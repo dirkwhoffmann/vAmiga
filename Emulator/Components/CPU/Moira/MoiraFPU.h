@@ -58,6 +58,7 @@ public:
     bool isSignalingNaN() const { return val.isSignalingNaN(); }
     bool isNonsignalingNaN() const { return val.isNonsignalingNaN(); }
 
+    std::ostream &operator<<(std::ostream &stream);
 };
 
 class FPU {
