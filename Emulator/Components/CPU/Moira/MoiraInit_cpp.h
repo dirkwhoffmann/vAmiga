@@ -1924,6 +1924,7 @@ Moira::createJumpTable(Model model, bool regDasm)
             ____XXX______XXX(opcode, cpDBcc, MODE_IP, (Size)0, CpDbcc, CIMS)
         }
 
+        
         //
         // Memory management unit
         //
@@ -1997,7 +1998,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     }
 
     //
-    // Floating point unit
+    // Floating-Point Unit
     //
 
     if (model == M68040 || has6888x()) {

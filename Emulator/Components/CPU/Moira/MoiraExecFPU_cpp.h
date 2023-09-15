@@ -710,7 +710,6 @@ Moira::execFGeneric(u16 opcode)
     }
         
     auto ext = queue.irc;
-    // auto reg = _____________xxx (opcode);
     auto src = ___xxx__________ (ext);
     auto dst = ______xxx_______ (ext);
     (void)readExt<C,Word>();
@@ -796,8 +795,6 @@ Moira::execFGeneric(u16 opcode)
     }
 
     fpu.clearFPSR();
-
-    printf("execFGeneric: I = %d (%Lf) -> FP%d\n", I, source.asLongDouble(), dst);
 
     if (I == FSINCOS) {
         

@@ -152,9 +152,12 @@ public:
     void setModel(Model cpuModel, Model dasmModel);
     void setModel(Model model) { setModel(model, model); }
 
+    // Selects the emulated FPU model
+    void setFpuModel(FPUModel fpuModel);
+
     // Attaches or detaches a floating-point coprocessor
-    void attach6888x(int x);
-    void detach6888x();
+    // [[deprecated]] void attach6888x(int x);
+    // [[deprecated]] void detach6888x();
 
     // Configures the visual appearance of disassembled instructions
     void setDasmSyntax(DasmSyntax value);

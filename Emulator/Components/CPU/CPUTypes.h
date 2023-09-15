@@ -54,7 +54,7 @@ struct CPURevisionEnum : util::Reflection<CPURevisionEnum, CPURevision>
 
 enum_long(FPU_REVISION)
 {
-    FPU_NONE,
+    FPU_INTERNAL,
     FPU_68881,
     FPU_68882
 };
@@ -72,9 +72,9 @@ struct FPURevisionEnum : util::Reflection<FPURevisionEnum, FPURevision>
     {
         switch (value) {
 
-            case FPU_NONE:  return "NONE";
-            case FPU_68881: return "68881";
-            case FPU_68882: return "68882";
+            case FPU_INTERNAL:  return "INTERNAL";
+            case FPU_68881:     return "68881";
+            case FPU_68882:     return "68882";
         }
         return "???";
     }

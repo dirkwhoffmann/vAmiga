@@ -66,7 +66,7 @@ class FPU {
     class Moira &moira;
     
     // Emulated FPU model
-    FPUModel model = NO_FPU;
+    FPUModel model = INTERNAL_FPU;
     
 public:
     
@@ -184,7 +184,7 @@ public:
             case FSCAL:     case FSIN:      case FSINCOS:   case FSINH:
             case FTAN:      case FTANH:     case FTENTOX:   case FTWOTOX:
                 
-                return model != INTERNAL_FPU;
+                return model == M68881 || model == M68882;
                 
             default:
                 

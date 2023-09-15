@@ -49,10 +49,9 @@ Model;
 
 typedef enum
 {
-    NO_FPU,
-    INTERNAL_FPU,           // Unsupported
-    M68881,                 // Work in progress
-    M68882                  // Work in progress
+    INTERNAL_FPU,           // Built-in FPU (in any)
+    M68881,                 // Floating-point coprocessor
+    M68882                  // Floating-point coprocessor
 }
 FPUModel;
 

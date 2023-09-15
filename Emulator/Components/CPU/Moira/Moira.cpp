@@ -60,21 +60,32 @@ Moira::~Moira()
 void
 Moira::setModel(Model cpuModel, Model dasmModel)
 {
-    // Only proceed if the model changes
-    if (this->cpuModel == cpuModel && this->dasmModel == dasmModel) return;
-
-    this->cpuModel = cpuModel;
-    this->dasmModel = dasmModel;
-
-    // Select the proper FPU core if no external co-processor is present
-    if (!has6888x()) fpu.setModel(hasFPU() ? INTERNAL_FPU : NO_FPU);
-
-    createJumpTable(cpuModel, dasmModel);
-
-    reg.cacr &= cacrMask();
-    flags &= ~CPU_IS_LOOPING;
+    if (this->cpuModel != cpuModel || this->dasmModel != dasmModel) {
+        
+        this->cpuModel = cpuModel;
+        this->dasmModel = dasmModel;
+        
+        // Reset the FPU core if no external co-processor is present
+        // if (!has6888x()) fpu.setModel(INTERNAL_FPU);
+        
+        createJumpTable(cpuModel, dasmModel);
+        
+        reg.cacr &= cacrMask();
+        flags &= ~CPU_IS_LOOPING;
+    }
 }
 
+void
+Moira::setFpuModel(FPUModel model)
+{
+    if (fpu.getModel() != model) {
+        
+        fpu.setModel(model);
+        createJumpTable(cpuModel, dasmModel);
+    }
+}
+
+/*
 void
 Moira::attach6888x(int x)
 {
@@ -100,6 +111,7 @@ Moira::detach6888x()
         createJumpTable(cpuModel, dasmModel);
     }
 }
+*/
 
 void
 Moira::setDasmSyntax(DasmSyntax value)

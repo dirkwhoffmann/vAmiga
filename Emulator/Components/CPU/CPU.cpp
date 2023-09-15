@@ -279,8 +279,7 @@ namespace vamiga {
 
 CPU::CPU(Amiga& ref) : moira::Moira(ref)
 {
-    // EXPERIMENTAL. REMOVE ASAP
-    attach6888x(2);
+    
 }
 
 i64
@@ -305,6 +304,7 @@ void
 CPU::setConfigItem(Option option, i64 value)
 {
     auto cpuModel = [&](CPURevision rev) { return moira::Model(rev); };
+    auto fpuModel = [&](FPURevision rev) { return moira::FPUModel(rev); };
     auto dasmModel = [&](DasmRevision rev) { return moira::Model(rev); };
     auto syntax = [&](DasmSyntax rev) { return moira::DasmSyntax(rev); };
 
@@ -319,6 +319,18 @@ CPU::setConfigItem(Option option, i64 value)
             suspend();
             config.revision = CPURevision(value);
             setModel(cpuModel(config.revision), dasmModel(config.dasmRevision));
+            resume();
+            return;
+
+        case OPT_FPU_REVISION:
+
+            if (!FPURevisionEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, FPURevisionEnum::keyList());
+            }
+
+            suspend();
+            config.fpuRevision = FPURevision(value);
+            fpu.setModel(fpuModel(config.fpuRevision));
             resume();
             return;
 
@@ -357,21 +369,6 @@ CPU::setConfigItem(Option option, i64 value)
         case OPT_CPU_RESET_VAL:
 
             config.regResetVal = u32(value);
-            return;
-
-        case OPT_FPU_REVISION:
-
-            printf("OPT_FPU_REVISION: %lld\n", value);
-            if (!FPURevisionEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, FPURevisionEnum::keyList());
-            }
-
-            suspend();
-            config.fpuRevision = FPURevision(value);
-            if (value == FPU_NONE) detach6888x();
-            if (value == FPU_68881) attach6888x(1);
-            if (value == FPU_68882) attach6888x(2);
-            resume();
             return;
 
         default:
@@ -487,8 +484,13 @@ CPU::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Config) {
 
+        string fputxt =
+        config.fpuRevision == FPU_INTERNAL ? " (none)" : " (external coprocessor)";
+        
         os << util::tab("CPU revision");
         os << CPURevisionEnum::key(config.revision) << std::endl;
+        os << util::tab("FPU revision");
+        os << FPURevisionEnum::key(config.fpuRevision) << fputxt << std::endl;
         os << util::tab("DASM revision");
         os << DasmRevisionEnum::key(config.dasmRevision) << std::endl;
         os << util::tab("DASM syntax");
