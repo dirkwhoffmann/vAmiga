@@ -234,9 +234,10 @@ Moira::execFRestore(u16 opcode)
     auto ea = computeEA<C68020, M, S>(n);
     auto fmtWord = readM<C, M, Long>(ea);
     auto type = fpu.typeOfFrame(fmtWord);
-    if (M == MODE_PI) U32_INC(reg.a[n], fpu.stateFrameSize(type) + 4);
+    // if (M == MODE_PI) U32_INC(reg.a[n], fpu.stateFrameSize(type) + 4);
     if (type == FPU_FRAME_NULL) fpu.reset();
         
+    updateAn(M, Size(fpu.stateFrameSize(type) + 4), n);
     prefetch<C>();
     FINALIZE
 }
@@ -246,50 +247,51 @@ Moira::execFSave(u16 opcode)
 {
     AVAILABILITY(C68000);
 
-    auto n   = _____________xxx (opcode);
+    auto rg = _____________xxx (opcode);
+    auto ea = computeEA<C68020, M, Long>(rg);
 
-    auto saveNullFrame = [&](u32 ea) {
-        
-        writeM<C68020, M, Long>(ea, fpu.computeFormatWord(FPU_FRAME_NULL));
-        updateAn<M, Long>(n);
-    };
+    // Depending on the current state, the FPU creates different frame types
+    FpuFrameType type = fpu.inResetState() ? FPU_FRAME_NULL : FPU_FRAME_IDLE;
+    auto size = fpu.stateFrameSize(type);
 
-    auto saveIdleFrame = [&](u32 ea) {
-        
-        auto size = fpu.stateFrameSize(FPU_FRAME_IDLE);
-        
-        if (M == MODE_PD) {
+    switch (type) {
             
-            U32_DEC(reg.a[n], size + 4);
+        case FPU_FRAME_NULL:
 
-            writeM<C68020, M, Long>(ea, 0x70000000);
-            ea -= 4;
-            for (isize i = 0; i < (size / 4) - 1; i++) {
-                writeM<C68020, M, Long>(ea, 0x0);
+            writeM<C68020, M, Long>(ea, fpu.computeFormatWord(FPU_FRAME_NULL));
+            updateAn(M, Long, rg);
+            break;
+            
+        case FPU_FRAME_IDLE:
+                        
+            if (M == MODE_PD) {
+                
+                updateAn(M, Size(size + 4), rg);
+
+                writeM<C68020, M, Long>(ea, 0x70000000);
                 ea -= 4;
-            }
-            writeM<C68020, M, Long>(ea, fpu.computeFormatWord(FPU_FRAME_IDLE));
-            
-        } else {
-         
-            writeM<C68020, M, Long>(ea, fpu.computeFormatWord(FPU_FRAME_IDLE));
-            ea += 4;
-            for (isize i = 0; i < (size / 4) - 1; i++) {
-                writeM<C68020, M, Long>(ea, 0x0);
+                for (isize i = 0; i < (size / 4) - 1; i++) {
+                    writeM<C68020, M, Long>(ea, 0x0);
+                    ea -= 4;
+                }
+                writeM<C68020, M, Long>(ea, fpu.computeFormatWord(FPU_FRAME_IDLE));
+                
+            } else {
+             
+                writeM<C68020, M, Long>(ea, fpu.computeFormatWord(FPU_FRAME_IDLE));
                 ea += 4;
+                for (isize i = 0; i < (size / 4) - 1; i++) {
+                    writeM<C68020, M, Long>(ea, 0x0);
+                    ea += 4;
+                }
+                writeM<C68020, M, Long>(ea, 0x70000000);
             }
-            writeM<C68020, M, Long>(ea, 0x70000000);
-        }
-    };
-    
-    auto ea = computeEA<C68020, M, Long>(n);
-
-    if (fpu.inResetState()) {
-        saveNullFrame(ea);
-    } else {
-        saveIdleFrame(ea);
+            break;
+            
+        default:
+            fatalError;
     }
-    
+            
     prefetch<C>();
     FINALIZE
 }

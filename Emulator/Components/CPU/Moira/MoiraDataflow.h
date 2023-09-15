@@ -81,13 +81,21 @@ template <Core C, Mode M, Size S, Flags F = 0> void writeOp(int n, u32 ea, u32 v
 template <Mode M, Flags F = 0> void writeFpuOp(int n, FPUReg &reg, FltFormat fmt, int k = 0);
 template <Mode M, Flags F = 0> void writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k = 0);
 
-// Emulates the address register modification for modes (An)+, (An)-
+// Emulates the address register modification for modes (An)+, (An)- (DEPRECATED)
 template <Mode M, Size S> void updateAn(int n);
 template <Mode M, Size S> void updateAnPI(int n);
 template <Mode M, Size S> void updateAnPD(int n);
 template <Mode M, Size S> void undoAn(int n);
 template <Mode M, Size S> void undoAnPI(int n);
 template <Mode M, Size S> void undoAnPD(int n);
+
+// Emulates the address register modification for modes (An)+, (An)-
+void updateAn(Mode M, Size S, int n);
+void updateAnPI(Mode M, Size S, int n);
+void updateAnPD(Mode M, Size S, int n);
+void undoAn(Mode M, Size S, int n);
+void undoAnPI(Mode M, Size S, int n);
+void undoAnPD(Mode M, Size S, int n);
 
 // Reads a value from program or data space, depending on the addressing mode
 template <Core C, Mode M, Size S, Flags F = 0> u32 readM(u32 addr);

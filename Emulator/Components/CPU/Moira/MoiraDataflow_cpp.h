@@ -580,6 +580,44 @@ Moira::writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k)
     }
 }
 
+void
+Moira::updateAn(Mode M, Size S, int n)
+{
+    if (M == 3) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+    if (M == 4) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+}
+
+void
+Moira::updateAnPI(Mode M, Size S, int n)
+{
+    if (M == 3) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+}
+
+void
+Moira::updateAnPD(Mode M, Size S, int n)
+{
+    if (M == 4) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+}
+
+void
+Moira::undoAn(Mode M, Size S, int n)
+{
+    if (M == 3) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+    if (M == 4) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+}
+
+void
+Moira::undoAnPI(Mode M, Size S, int n)
+{
+    if (M == 3) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+}
+
+void
+Moira::undoAnPD(Mode M, Size S, int n)
+{
+    if (M == 4) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+}
+
 template <Mode M, Size S> void
 Moira::updateAn(int n)
 {

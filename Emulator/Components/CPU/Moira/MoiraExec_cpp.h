@@ -1742,8 +1742,6 @@ Moira::execClr(u16 opcode)
         int dst = _____________xxx(opcode);
 
         u32 ea = computeEA<C, M, S>(dst);
-        // updateAnPD<M, S>(dst);
-        // if (!misaligned<C>(ea)) updateAnPI<M, S>(dst);
 
         switch (M) {
 
@@ -3666,11 +3664,6 @@ Moira::execMoveCcrEa(u16 opcode)
 
     // Emulate (An)+ register modification
     updateAnPI<M, S>(dst);
-
-    /*
-    writeOp<C, M, S, POLL>(dst, getCCR());
-    prefetch<C>();
-    */
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
