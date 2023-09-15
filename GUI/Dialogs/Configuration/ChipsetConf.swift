@@ -42,7 +42,7 @@ extension ConfigurationController {
 
         case ._68030:
             csCpuInfo1.stringValue = "Motorola MC68030"
-            csCpuInfo2.stringValue = ""
+            csCpuInfo2.stringValue = "A3000"
 
         case ._68EC040:
             csCpuInfo1.stringValue = "Motorola 68EC040"
@@ -62,6 +62,31 @@ extension ConfigurationController {
             csCpuInfo2.stringValue = ""
         }
 
+        // FPU
+        csFpuRevision.selectItem(withTag: config.fpuRev)
+        switch FPURevision(rawValue: config.fpuRev) {
+
+        case ._NONE:
+            csFpuInfo1.stringValue = ""
+            csFpuInfo2.stringValue = ""
+            csFpuIcon.isHidden = true
+            
+        case ._68881:
+            csFpuInfo1.stringValue = "Motorola MC68881"
+            csFpuInfo2.stringValue = "Floating-Point Coprocessor"
+            csFpuIcon.isHidden = false
+
+        case ._68882:
+            csFpuInfo1.stringValue = "Motorola MC68882"
+            csFpuInfo2.stringValue = "Floating-Point Coprocessor"
+            csFpuIcon.isHidden = false
+
+        default:
+            csFpuInfo1.stringValue = "Invalid"
+            csFpuInfo2.stringValue = ""
+            csFpuIcon.isHidden = false
+        }
+        
         // Warp
         csWarpMode.selectItem(withTag: config.warpMode)
 
@@ -176,6 +201,12 @@ extension ConfigurationController {
     @IBAction func csCpuSpeedAction(_ sender: NSPopUpButton!) {
 
         config.cpuSpeed = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func csFpuRevAction(_ sender: NSPopUpButton!) {
+
+        config.fpuRev = sender.selectedTag()
         refresh()
     }
 

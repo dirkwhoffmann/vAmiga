@@ -294,6 +294,8 @@ CPU::getConfigItem(Option option) const
         case OPT_CPU_OVERCLOCKING:  return (long)config.overclocking;
         case OPT_CPU_RESET_VAL:     return (long)config.regResetVal;
 
+        case OPT_FPU_REVISION:      return (long)config.fpuRevision;
+
         default:
             fatalError;
     }
@@ -357,6 +359,21 @@ CPU::setConfigItem(Option option, i64 value)
             config.regResetVal = u32(value);
             return;
 
+        case OPT_FPU_REVISION:
+
+            printf("OPT_FPU_REVISION: %lld\n", value);
+            if (!FPURevisionEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, FPURevisionEnum::keyList());
+            }
+
+            suspend();
+            config.fpuRevision = FPURevision(value);
+            if (value == FPU_NONE) detach6888x();
+            if (value == FPU_68881) attach6888x(1);
+            if (value == FPU_68882) attach6888x(2);
+            resume();
+            return;
+
         default:
             fatalError;
     }
@@ -371,8 +388,12 @@ CPU::resetConfig()
     std::vector <Option> options = {
 
         OPT_CPU_REVISION,
+        OPT_CPU_DASM_REVISION,
+        OPT_CPU_DASM_SYNTAX,
         OPT_CPU_OVERCLOCKING,
-        OPT_CPU_RESET_VAL
+        OPT_CPU_RESET_VAL,
+        
+        OPT_FPU_REVISION
     };
 
     for (auto &option : options) {

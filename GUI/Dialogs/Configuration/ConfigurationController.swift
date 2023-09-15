@@ -61,6 +61,12 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var csCpuInfo1: NSTextField!
     @IBOutlet weak var csCpuInfo2: NSTextField!
 
+    // FPU
+    @IBOutlet weak var csFpuRevision: NSPopUpButton!
+    @IBOutlet weak var csFpuInfo1: NSTextField!
+    @IBOutlet weak var csFpuInfo2: NSTextField!
+    @IBOutlet weak var csFpuIcon: NSButton!
+
     // Warp
     @IBOutlet weak var csWarpMode: NSPopUpButton!
 

@@ -78,15 +78,6 @@ FPU::inResetState()
     return fpiar == 0 && fpsr == 0 && fpcr == 0;
 }
 
-void
-FPU::setModel(FPUModel model)
-{
-    // Only proceed if the model changes
-    if (this->model == model) return;
-    
-    this->model = model;
-}
-
 FpuPrecision
 FPU::getPrecision() const
 {
@@ -140,21 +131,21 @@ FPU::stateFrameSize(FpuFrameType type)
             
         case FPU_FRAME_IDLE:
             
-            if (model == FPU_68040) return 0;
-            if (model == FPU_68881) return 24;
-            if (model == FPU_68882) return 56;
+            if (model == INTERNAL_FPU) return 0;
+            if (model == M68881) return 24;
+            if (model == M68882) return 56;
     
         case FPU_FRAME_UNIMP:
             
-            if (model == FPU_68040) return 44;
-            if (model == FPU_68881) return 0;
-            if (model == FPU_68882) return 0;
+            if (model == INTERNAL_FPU) return 44;
+            if (model == M68881) return 0;
+            if (model == M68882) return 0;
 
         case FPU_FRAME_BUSY:
             
-            if (model == FPU_68040) return 92;
-            if (model == FPU_68881) return 180;
-            if (model == FPU_68882) return 212;
+            if (model == INTERNAL_FPU) return 92;
+            if (model == M68881) return 180;
+            if (model == M68882) return 212;
             
         default:
             

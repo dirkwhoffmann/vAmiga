@@ -152,7 +152,7 @@ public:
     void setModel(Model cpuModel, Model dasmModel);
     void setModel(Model model) { setModel(model, model); }
 
-    // Attaches or detaches a coprocessor
+    // Attaches or detaches a floating-point coprocessor
     void attach6888x(int x);
     void detach6888x();
 

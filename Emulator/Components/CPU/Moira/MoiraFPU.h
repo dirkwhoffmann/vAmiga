@@ -66,7 +66,7 @@ class FPU {
     class Moira &moira;
     
     // Emulated FPU model
-    FPUModel model = FPU_NONE;
+    FPUModel model = NO_FPU;
     
 public:
     
@@ -103,7 +103,7 @@ public:
 public:
     
     // Selects the emulated CPU model
-    void setModel(FPUModel model);
+    void setModel(FPUModel model) { this->model = model; }
     FPUModel getModel() const { return model; }
     
     // Returns the precision and rounding mode, as specified in the FPCR
@@ -184,7 +184,7 @@ public:
             case FSCAL:     case FSIN:      case FSINCOS:   case FSINH:
             case FTAN:      case FTANH:     case FTENTOX:   case FTWOTOX:
                 
-                return model != FPU_68040;
+                return model != INTERNAL_FPU;
                 
             default:
                 

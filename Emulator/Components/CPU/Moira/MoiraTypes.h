@@ -49,10 +49,10 @@ Model;
 
 typedef enum
 {
-    FPU_NONE,
-    FPU_68040,              // Unsupported
-    FPU_68881,              // Work in progress
-    FPU_68882               // Work in progress
+    NO_FPU,
+    INTERNAL_FPU,           // Unsupported
+    M68881,                 // Work in progress
+    M68882                  // Work in progress
 }
 FPUModel;
 

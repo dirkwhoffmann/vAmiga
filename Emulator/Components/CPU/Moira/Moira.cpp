@@ -67,7 +67,7 @@ Moira::setModel(Model cpuModel, Model dasmModel)
     this->dasmModel = dasmModel;
 
     // Select the proper FPU core if no external co-processor is present
-    if (!has6888x()) fpu.setModel(hasFPU() ? FPU_68040 : FPU_NONE);
+    if (!has6888x()) fpu.setModel(hasFPU() ? INTERNAL_FPU : NO_FPU);
 
     createJumpTable(cpuModel, dasmModel);
 
@@ -80,7 +80,7 @@ Moira::attach6888x(int x)
 {
     assert(x == 1 || x == 2);
 
-    FPUModel model = x == 1 ? FPU_68881 : FPU_68882;
+    FPUModel model = x == 1 ? M68881 : M68882;
 
     if (fpu.getModel() != model) {
 
@@ -92,7 +92,7 @@ Moira::attach6888x(int x)
 void
 Moira::detach6888x()
 {
-    FPUModel model = hasFPU() ? FPU_68040 : FPU_NONE;
+    FPUModel model = hasFPU() ? INTERNAL_FPU : NO_FPU;
 
     if (fpu.getModel() != model) {
 
@@ -193,7 +193,7 @@ Moira::addrMask() const
 bool
 Moira::has6888x() const
 {
-    return fpu.getModel() == FPU_68881 || fpu.getModel() == FPU_68882;
+    return fpu.getModel() == M68881 || fpu.getModel() == M68882;
 }
 
 template <Core C> u32
