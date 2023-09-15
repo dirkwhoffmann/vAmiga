@@ -304,9 +304,7 @@ Moira::readFpuOpIm(FltFormat fmt)
             low |= readExt<C68020, Long>();
 
             result = FpuExtended(high, low);
-            printf("readFpuOpIm: %x,%llx\n", result.raw.high, result.raw.low);
             result.normalize();
-            printf("readFpuOpIm nrm: %x,%llx\n", result.raw.high, result.raw.low);
             break;
         }
         case FLT_PACKED:

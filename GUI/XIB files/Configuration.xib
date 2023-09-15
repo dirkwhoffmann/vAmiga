@@ -915,7 +915,7 @@ DQ
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k6x-1F-wwn">
                                             <rect key="frame" x="360" y="380" width="33" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="FPU:" id="9Nv-bH-f0V">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="CoP:" id="9Nv-bH-f0V">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

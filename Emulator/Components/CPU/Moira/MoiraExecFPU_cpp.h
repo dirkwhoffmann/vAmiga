@@ -708,89 +708,19 @@ Moira::execFGeneric(u16 opcode)
         FINALIZE
         return;
     }
-        
+    
     auto ext = queue.irc;
+    auto nr  = _____________xxx (opcode);
     auto src = ___xxx__________ (ext);
     auto dst = ______xxx_______ (ext);
+    
     (void)readExt<C,Word>();
 
     FpuExtended source, result;
 
     if (ext & 0x4000) {
-
-        if (M == MODE_IM) {
-
-            switch (src) {
-
-                case 0: // Long-Word Integer
-
-                    /*
-                    val = dasmIncRead<Long>(addr);
-                    str << Ins<I>{} << Ffmt{src} << str.tab << Ims<Long>(u32(val));
-                    */
-                    printf("execFGeneric: Long-Word Integer: TODO\n");
-                    break;
-
-                case 1: // Single precision
-
-                    /*
-                    val = dasmIncRead<Long>(addr);
-                    str << Ins<I>{} << Ffmt{src} << str.tab << "#<fixme>";
-                    */
-                    printf("execFGeneric: Single precision: TODO\n");
-                    break;
-
-                case 2: // Double precision
-
-                    printf("execFGeneric: Double precision: TODO\n");
-                    break;
-
-                case 3: // Packed-Decimal Real
-
-                    /*
-                    val = dasmIncRead<Long>(addr);
-                    dasmIncRead<Long>(addr);
-                    dasmIncRead<Long>(addr); // Why???
-                    str << Ins<I>{} << Ffmt{src} << str.tab << "#<fixme>";
-                    */
-                    printf("execFGeneric: Packed-Decimal Real: TODO\n");
-                    break;
-
-                case 5: // Double-precision real
-
-                    /*
-                    val = dasmIncRead<Long>(addr);
-                    dasmIncRead<Long>(addr);
-                    str << Ins<I>{} << Ffmt{src} << str.tab << "#<fixme>";
-                    */
-                    printf("execFGeneric: Double-precision real: TODO\n");
-                    break;
-
-                case 6: // Byte Integer
-                    /*
-                    val = dasmIncRead<Word>(addr);
-                    str << Ins<I>{} << Ffmt{src} << str.tab << Ims<Byte>(u32(val));
-                    */
-                    printf("execFGeneric: Byte Integer: TODO\n");
-                    break;
-
-                default:
-
-                    /*
-                    str << Ins<I>{} << Ffmt{src} << str.tab << Op<M, Word>(reg, addr);
-                    */
-                    printf("execFGeneric: MODE_M Default: TODO\n");
-            }
-        } else {
-            /*
-            str << Ins<I>{} << Ffmt{src} << str.tab << Op<M, Long>(reg, addr);
-            */
-            printf("execFGeneric: ext & 0x4000 == 1: TODO\n");
-        }
-
+        source = readFpuOp<M>(nr, FltFormat(src));
     } else {
-        // str << Ins<I>{} << Ffmt{2} << str.tab << Fp{src};
-        // printf("execFGeneric: ext & 0x4000 == 0: TODO\n");
         source = fpu.fpr[src].val;
     }
 
