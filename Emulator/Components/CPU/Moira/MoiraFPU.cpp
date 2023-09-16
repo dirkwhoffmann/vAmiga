@@ -470,12 +470,6 @@ FPU::copyHostFpuFlags()
     if (fetestexcept(FE_INVALID))   { setExcStatusBit(FPEXP_OPERR); }
 }
 
-FpuExtended
-FPU::makeNonsignalingNan(const FpuExtended &value)
-{
-    return FpuExtended(value.raw.high, value.raw.low | (1LL << 62));
-}
-
 std::optional<FpuExtended>
 FPU::resolveNan(const FpuExtended &op1, const FpuExtended &op2)
 {

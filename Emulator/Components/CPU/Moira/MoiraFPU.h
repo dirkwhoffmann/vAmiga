@@ -32,12 +32,17 @@ public:
 
 
     //
-    // Getting and setting
+    // Accessing
     //
 
-    FpuExtended round();
+    // Getter and setter
     FpuExtended get() const { return val; }
     void set(const FpuExtended other) { val = other; }
+
+    // Rounds the stored value according to the current rounding mode
+    FpuExtended round();
+    
+    // Same as set with additional rounding and normalization
     void load(const FpuExtended other);
 
 
@@ -71,16 +76,28 @@ class FPU {
     
 public:
     
-    // Registers
+    // Floating-point data registers FP0 to FP7
     FPUReg fpr[8] = {
-        FPUReg(*this), FPUReg(*this), FPUReg(*this), FPUReg(*this),
-        FPUReg(*this), FPUReg(*this), FPUReg(*this), FPUReg(*this)
+        
+        FPUReg(*this),
+        FPUReg(*this),
+        FPUReg(*this),
+        FPUReg(*this),
+        FPUReg(*this),
+        FPUReg(*this),
+        FPUReg(*this),
+        FPUReg(*this)
     };
     
-    u32 fpiar;
-    u32 fpsr;
+    // Control register
     u32 fpcr;
-        
+
+    // Status register
+    u32 fpsr;
+
+    // Instruction address register
+    u32 fpiar;
+
     
     //
     // Constructing
@@ -90,10 +107,10 @@ public:
     
     FPU(Moira& ref);
     
-    // Initializes all registers with their reset value
+    // Initializes all registers with their reset values
     void reset();
     
-    // Indicates whether the FPU is in its reset state
+    // Indicates whether the FPU is in reset state (used by FSAVE)
     bool inResetState();
     
     
@@ -102,10 +119,10 @@ public:
     //
     
 public:
-    
-    // Selects the emulated CPU model
-    void setModel(FPUModel model) { this->model = model; }
+
+    // Gets or sets the emulated CPU model
     FPUModel getModel() const { return model; }
+    void setModel(FPUModel newModel) { model = newModel; }
     
     // Returns the precision and rounding mode, as specified in the FPCR
     FpuPrecision getPrecision() const;
@@ -114,21 +131,6 @@ public:
     // Configures the rounding mode of the host FPU
     static FpuRoundingMode fesetround(FpuRoundingMode mode);
     
-    
-    //
-    // Working with state frames (FSAVE, FRESTORE)
-    //
-    
-    // Determines the size of a state frame (varies between FPU models)
-    int stateFrameSize(FpuFrameType type);
-    int stateFrameSize(u32 fmtWord);
-    
-    // Determines the type a state frame
-    FpuFrameType typeOfFrame(u32 fmtWord);
-
-    // Computes a format word for a fiven frame type
-    u32 computeFormatWord(FpuFrameType type);
-
     
     //
     // Accessing registers
@@ -237,6 +239,21 @@ public:
     
     
     //
+    // Working with state frames (FSAVE, FRESTORE)
+    //
+    
+    // Determines the size of a state frame (varies between FPU models)
+    int stateFrameSize(FpuFrameType type);
+    int stateFrameSize(u32 fmtWord);
+    
+    // Determines the type a state frame
+    FpuFrameType typeOfFrame(u32 fmtWord);
+
+    // Computes a format word for a fiven frame type
+    u32 computeFormatWord(FpuFrameType type);
+
+    
+    //
     // Managing the host FPU
     //
     
@@ -250,9 +267,7 @@ public:
     //
     // Handling special values
     //
-    
-    static FpuExtended makeNonsignalingNan(const FpuExtended &value); // DEPRECATED
-    
+        
     // Checks the arguments for NaNs and computes the result NaN if applicable
     std::optional<FpuExtended> resolveNan(const FpuExtended &op1, const FpuExtended &op2);
     std::optional<FpuExtended> resolveNan(const FpuExtended &op);
@@ -306,6 +321,7 @@ public:
     FpuExtended fsglmul(const FpuExtended &op1, const FpuExtended &op2);
     FpuExtended fsub(const FpuExtended &op1, const FpuExtended &op2);
         
+    // Performs a coprocessor condition test
     bool cpcc(u8 condition) const;
 };
 
