@@ -1655,7 +1655,7 @@ FPU::fsub(const FpuExtended &op1, const FpuExtended &op2)
 }
 
 bool
-FPU::fpucond(u8 condition) const
+FPU::cpcc(u8 condition) const
 {
     bool n = fpsr & FPCC_N;
     bool z = fpsr & FPCC_Z;

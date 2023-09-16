@@ -6,6 +6,55 @@
 // -----------------------------------------------------------------------------
 
 template <Instr I, Mode M, Size S> void
+Moira::dasmFBcc(StrWriter &str, u32 &addr, u16 op) const
+{
+    auto old = addr;
+    auto ext = dasmIncRead<S>(addr);
+    auto cnd = ___________xxxxx (op);
+
+    // Check for special FNOP opcode
+    if ((op & 0x7F) == 0 && ext == 0) {
+
+        dasmFNop<FNOP, M, S>(str, addr, op);
+        return;
+    }
+
+    auto dst = old + 2;
+    U32_INC(dst, SEXT<S>(ext));
+
+    if (S == Long) {
+        str << Ins<I>{} << Fcc{cnd} << Sz<S>{} << str.tab << UInt(dst);
+    } else {
+        str << Ins<I>{} << Fcc{cnd} << str.tab << UInt(dst);
+    }
+}
+
+template <Instr I, Mode M, Size S> void
+Moira::dasmFDbcc(StrWriter &str, u32 &addr, u16 op) const
+{
+    auto old = addr;
+    auto ext = dasmIncRead(addr);
+    auto src = _____________xxx (op);
+    auto cnd = ___________xxxxx (ext);
+
+    // Catch illegal extension words
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
+
+        if (!fpu.isValidExt(I, M, op, ext)) {
+
+            addr = old;
+            dasmIllegal<I, M, S>(str, addr, op);
+            return;
+        }
+    }
+
+    auto dst = addr + 2;
+    U32_INC(dst, SEXT<S>(dasmIncRead<S>(addr)));
+
+    str << Ins<I>{} << Fcc{cnd} << str.tab << Dn{src} << Sep{} << UInt(dst);
+}
+
+template <Instr I, Mode M, Size S> void
 Moira::dasmFGen(StrWriter &str, u32 &addr, u16 op) const
 {
     auto ext  = dasmIncRead<Word>(addr);
@@ -127,55 +176,6 @@ Moira::dasmFGen(StrWriter &str, u32 &addr, u16 op) const
     }
 
     dasmLineF<I, M, S>(str, addr, op);
-}
-
-template <Instr I, Mode M, Size S> void
-Moira::dasmFBcc(StrWriter &str, u32 &addr, u16 op) const
-{
-    auto old = addr;
-    auto ext = dasmIncRead<S>(addr);
-    auto cnd = ___________xxxxx (op);
-
-    // Check for special FNOP opcode
-    if ((op & 0x7F) == 0 && ext == 0) {
-
-        dasmFNop<FNOP, M, S>(str, addr, op);
-        return;
-    }
-
-    auto dst = old + 2;
-    U32_INC(dst, SEXT<S>(ext));
-
-    if (S == Long) {
-        str << Ins<I>{} << Fcc{cnd} << Sz<S>{} << str.tab << UInt(dst);
-    } else {
-        str << Ins<I>{} << Fcc{cnd} << str.tab << UInt(dst);
-    }
-}
-
-template <Instr I, Mode M, Size S> void
-Moira::dasmFDbcc(StrWriter &str, u32 &addr, u16 op) const
-{
-    auto old = addr;
-    auto ext = dasmIncRead(addr);
-    auto src = _____________xxx (op);
-    auto cnd = ___________xxxxx (ext);
-
-    // Catch illegal extension words
-    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
-
-        if (!fpu.isValidExt(I, M, op, ext)) {
-
-            addr = old;
-            dasmIllegal<I, M, S>(str, addr, op);
-            return;
-        }
-    }
-
-    auto dst = addr + 2;
-    U32_INC(dst, SEXT<S>(dasmIncRead<S>(addr)));
-
-    str << Ins<I>{} << Fcc{cnd} << str.tab << Dn{src} << Sep{} << UInt(dst);
 }
 
 template <Instr I, Mode M, Size S> void

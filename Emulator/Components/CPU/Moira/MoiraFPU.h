@@ -141,12 +141,12 @@ public:
     void setFPCR(u32 value);
     
     // Accesses the status register
-    void clearFPSR() { fpsr &= 0xFFFF00F8; }
     u32 getFPSR() const { return fpsr & 0x0FFFFFF8; }
     void setFPSR(u32 value);
 
-    void setExcStatusBit(u32 mask);
+    void clearExcStatusByte() { fpsr &= 0xFFFF00FF; }
     void clearExcStatusBit(u32 mask);
+    void setExcStatusBit(u32 mask);
     
     void setConditionCodes(int reg);
     void setConditionCodes(const FpuExtended &value);
@@ -306,7 +306,7 @@ public:
     FpuExtended fsglmul(const FpuExtended &op1, const FpuExtended &op2);
     FpuExtended fsub(const FpuExtended &op1, const FpuExtended &op2);
         
-    bool fpucond(u8 condition) const;
+    bool cpcc(u8 condition) const;
 };
 
 }

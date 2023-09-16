@@ -11,12 +11,9 @@ Moira::execFBcc(u16 opcode)
     AVAILABILITY(C68000)
 
     auto cnd = ___________xxxxx (opcode);
-
     u32 oldpc = reg.pc;
             
-    fpu.clearFPSR();
-
-    if (fpu.fpucond(cnd)) {
+    if (fpu.cpcc(cnd)) {
 
         u32 disp = queue.irc;
 
@@ -56,9 +53,7 @@ Moira::execFDbcc(u16 opcode)
     auto ext = readExt<C,Word>();
     auto cnd = ___________xxxxx (ext);
 
-    fpu.clearFPSR();
-
-    if (!fpu.fpucond(cnd)) {
+    if (!fpu.cpcc(cnd)) {
 
         int dn = _____________xxx(opcode);
         u32 newpc = U32_ADD(reg.pc, (i16)queue.irc);
@@ -306,7 +301,7 @@ Moira::execFScc(u16 opcode)
     auto cnd = ___________xxxxx (ext);
 
     auto ea = computeEA<C68020, M, Byte>(reg);
-    auto data = fpu.fpucond(cnd) ? 0xFF : 0x00;
+    auto data = fpu.cpcc(cnd) ? 0xFF : 0x00;
     writeM<C68020, M, Byte>(ea, data);
     updateAn<M, Byte>(reg);
     prefetch<C>();
@@ -321,13 +316,11 @@ Moira::execFTrapcc(u16 opcode)
 
     auto mod = _____________xxx (opcode);
     auto cnd = ___________xxxxx (queue.irc);
-                
-    fpu.clearFPSR();
-    
+                    
     if (mod == 0b010) { readExt<C, Word>(); }
     if (mod == 0b011) { readExt<C, Long>(); }
 
-    if (fpu.fpucond(cnd)) {
+    if (fpu.cpcc(cnd)) {
 
         // Execute exception handler
         readExt<C>();
@@ -363,7 +356,7 @@ Moira::execFMove(u16 opcode)
     }
 
     // Clear the status register
-    fpu.clearFPSR();
+    fpu.clearExcStatusByte();
 
     switch (cod) {
 
@@ -440,7 +433,7 @@ Moira::execFMovecr(u16 opcode)
     }
 
     // Clear the status register
-    fpu.clearFPSR();
+    fpu.clearExcStatusByte();
 
     fpu.fpr[dst].load(fpu.readCR(ofs));
     fpu.setConditionCodes(dst);
@@ -565,7 +558,7 @@ Moira::execFMovem(u16 opcode)
         }
         case 0b110:             // FMOVEM Ea,Fp
 
-            fpu.clearFPSR();
+            fpu.clearExcStatusByte();
 
             switch (mod) {
 
@@ -614,7 +607,7 @@ Moira::execFMovem(u16 opcode)
 
         case 0b111:             // FMOVEM Fp,Ea
 
-            fpu.clearFPSR();
+            fpu.clearExcStatusByte();
 
             switch (mod) {
 
@@ -724,7 +717,7 @@ Moira::execFGeneric(u16 opcode)
         source = fpu.fpr[src].val;
     }
 
-    fpu.clearFPSR();
+    fpu.clearExcStatusByte();
 
     if (I == FSINCOS) {
         
