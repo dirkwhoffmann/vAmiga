@@ -66,7 +66,7 @@ extension ConfigurationController {
         csFpuRevision.selectItem(withTag: config.fpuRev)
         switch FPURevision(rawValue: config.fpuRev) {
 
-        case ._NONE:
+        case ._INTERNAL:
             csFpuInfo1.stringValue = ""
             csFpuInfo2.stringValue = ""
             csFpuIcon.isHidden = true
