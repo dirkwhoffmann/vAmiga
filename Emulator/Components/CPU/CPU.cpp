@@ -330,7 +330,7 @@ CPU::setConfigItem(Option option, i64 value)
 
             suspend();
             config.fpuRevision = FPURevision(value);
-            fpu.setModel(fpuModel(config.fpuRevision));
+            cpu.setFpuModel(fpuModel(config.fpuRevision));
             resume();
             return;
 

@@ -504,7 +504,7 @@ Moira::execFMovem(u16 opcode)
                 u32 data = 0;
                 auto ea = computeEA<C, M, Long>(reg);
 
-                if (lll & 1) {  // -> FPCR
+                if (lll & 1) {  // -> FPIAR
 
                     data = fpu.getFPIAR();
                     writeOp<C, M, Long>(reg, ea, data);
@@ -518,7 +518,7 @@ Moira::execFMovem(u16 opcode)
                     updateAn<M, Long>(reg);
                     U32_DEC(ea, 4);
                 }
-                if (lll & 4) {  // -> FPIAR
+                if (lll & 4) {  // -> FPCR
 
                     data = fpu.getFPCR();
                     writeOp<C, M, Long>(reg, ea, data);
