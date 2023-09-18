@@ -58,7 +58,7 @@ Thread::execute<THREAD_ADAPTIVE>()
     }
 
     // Compute all missing frames
-    for (isize i = 0; i < missing; i++) execute();
+    for (isize i = 0; i < missing && isRunning(); i++) execute();
 
     loadClock.stop();
 }
