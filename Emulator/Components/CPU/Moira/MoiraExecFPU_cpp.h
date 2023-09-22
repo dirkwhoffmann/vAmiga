@@ -787,18 +787,14 @@ Moira::execFGeneric(u16 opcode)
 
     } else {
         
-        printf("Dyadic\n");
         auto dest = fpu.fpr[dst].val;
         
         if (auto nan = fpu.resolveNan(source, dest); nan) {
             
-            printf("NaN resolved (dyadic)\n");
             result = *nan;
             
         } else {
             
-            printf("switch(I)\n");
-
             switch (I) {
                     
                 case FADD: result = fpu.fadd(source, dest); break;

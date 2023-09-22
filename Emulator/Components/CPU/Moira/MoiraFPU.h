@@ -68,6 +68,8 @@ public:
 
 class FPU {
     
+public:
+    
     // Reference to the CPU
     class Moira &moira;
     

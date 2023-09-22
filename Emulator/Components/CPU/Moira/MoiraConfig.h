@@ -98,7 +98,71 @@
 /* The following macro appears at the beginning of each instruction handler.
  * Moira will call 'willExecute(...)' for all listed instructions.
  */
-#define WILL_EXECUTE    true
+#define WILL_EXECUTE \
+I == FABS || \
+I == FADD || \
+I == FBcc || \
+I == FCMP || \
+I == FDBcc || \
+I == FDIV || \
+I == FMOVE || \
+I == FMOVEM || \
+I == FMUL || \
+I == FNEG || \
+I == FNOP || \
+I == FRESTORE || \
+I == FSAVE || \
+I == FScc || \
+I == FSQRT || \
+I == FSUB || \
+I == FTRAPcc || \
+I == FTST || \
+I == FSABS || \
+I == FDABS || \
+I == FSADD || \
+I == FDADD || \
+I == FSDIV || \
+I == FDDIV || \
+I == FSMOVE || \
+I == FDMOVE || \
+I == FSMUL || \
+I == FDMUL || \
+I == FSNEG || \
+I == FDNEG || \
+I == FSSQRT || \
+I == FDSQRT || \
+I == FSSUB || \
+I == FDSUB || \
+I == FACOS || \
+I == FASIN || \
+I == FATAN || \
+I == FATANH || \
+I == FCOS || \
+I == FCOSH || \
+I == FETOX || \
+I == FETOXM1 || \
+I == FGETEXP || \
+I == FGETMAN || \
+I == FINT || \
+I == FINTRZ || \
+I == FLOG10 || \
+I == FLOG2 || \
+I == FLOGN || \
+I == FLOGNP1 || \
+I == FMOD || \
+I == FMOVECR || \
+I == FREM || \
+I == FSCAL || \
+I == FSGLDIV || \
+I == FSGLMUL || \
+I == FSIN || \
+I == FSINCOS || \
+I == FSINH || \
+I == FTAN || \
+I == FTANH || \
+I == FTENTOX || \
+I == FTWOTOX
+
 // I == STOP || I == TAS || I == BKPT
 
 /* The following macro appear at the end of each instruction handler.
