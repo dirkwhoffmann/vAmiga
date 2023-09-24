@@ -758,6 +758,7 @@ Moira::execFGeneric(u16 opcode)
                 case FASIN: result = fpu.fasin(source); break;
                 case FATAN: result = fpu.fatan(source); break;
                 case FATANH: result = fpu.fatanh(source); break;
+                case FCOS: result = fpu.fcos(source); break;
                 case FCOSH: result = fpu.fcosh(source); break;
                 case FETOX: result = fpu.fetox(source); break;
                 case FETOXM1: result = fpu.fetoxm1(source); break;

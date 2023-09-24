@@ -98,6 +98,8 @@
 /* The following macro appears at the beginning of each instruction handler.
  * Moira will call 'willExecute(...)' for all listed instructions.
  */
+#define WILL_EXECUTE I == STOP || I == TAS || I == BKPT
+/*
 #define WILL_EXECUTE \
 I == FABS || \
 I == FADD || \
@@ -162,7 +164,7 @@ I == FTAN || \
 I == FTANH || \
 I == FTENTOX || \
 I == FTWOTOX
-
+*/
 // I == STOP || I == TAS || I == BKPT
 
 /* The following macro appear at the end of each instruction handler.

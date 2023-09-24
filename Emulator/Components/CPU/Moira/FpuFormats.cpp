@@ -529,13 +529,15 @@ FpuExtended::operator-() const
 bool
 FpuExtended::operator==(const FpuExtended& rhs) const
 {
-    return softfloat::floatx80_eq(this->raw, rhs.raw);
+    // return softfloat::floatx80_eq(this->raw, rhs.raw);
+    return this->raw.high == rhs.raw.high && this->raw.low == rhs.raw.low;
 }
 
 bool
 FpuExtended::operator!=(const FpuExtended& rhs) const
 {
-    return !softfloat::floatx80_eq(this->raw, rhs.raw);
+    // return !softfloat::floatx80_eq(this->raw, rhs.raw);
+    return this->raw.high != rhs.raw.high || this->raw.low != rhs.raw.low;
 }
 
 bool
