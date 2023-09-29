@@ -100,7 +100,10 @@ public:
     // Instruction address register
     u32 fpiar;
 
-    
+    // Indicates whether the FPU is in reset state (affects FSAVE)
+    bool resetState;
+
+
     //
     // Constructing
     //

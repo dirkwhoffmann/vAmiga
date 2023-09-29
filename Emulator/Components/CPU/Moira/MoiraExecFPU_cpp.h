@@ -9,6 +9,7 @@ template <Core C, Instr I, Mode M, Size S> void
 Moira::execFBcc(u16 opcode)
 {
     AVAILABILITY(C68000)
+    fpu.resetState = false;
 
     auto cnd = ___________xxxxx (opcode);
     u32 oldpc = reg.pc;
@@ -49,6 +50,7 @@ template <Core C, Instr I, Mode M, Size S> void
 Moira::execFDbcc(u16 opcode)
 {
     AVAILABILITY(C68000)
+    fpu.resetState = false;
 
     auto ext = readExt<C,Word>();
     auto cnd = ___________xxxxx (ext);
@@ -95,6 +97,7 @@ template <Core C, Instr I, Mode M, Size S> void
 Moira::execFGen(u16 opcode)
 {
     AVAILABILITY(C68000)
+    fpu.resetState = false;
 
     auto ext = queue.irc;
     auto cod  = xxx_____________(ext);
@@ -213,6 +216,7 @@ template <Core C, Instr I, Mode M, Size S> void
 Moira::execFNop(u16 opcode)
 {
     AVAILABILITY(C68000)
+    fpu.resetState = false;
 
     prefetch<C>();
 
@@ -229,9 +233,19 @@ Moira::execFRestore(u16 opcode)
     auto ea = computeEA<C68020, M, S>(n);
     auto fmtWord = readM<C, M, Long>(ea);
     auto type = fpu.typeOfFrame(fmtWord);
-    // if (M == MODE_PI) U32_INC(reg.a[n], fpu.stateFrameSize(type) + 4);
-    if (type == FPU_FRAME_NULL) fpu.reset();
-        
+
+    switch (type) {
+
+        case FPU_FRAME_NULL:
+
+            fpu.reset();
+            break;
+
+        default:
+            
+            break;
+    }
+
     updateAn(M, Size(fpu.stateFrameSize(type) + 4), n);
     prefetch<C>();
     FINALIZE
@@ -295,6 +309,7 @@ template <Core C, Instr I, Mode M, Size S> void
 Moira::execFScc(u16 opcode)
 {
     AVAILABILITY(C68000);
+    fpu.resetState = false;
 
     auto ext = readExt<C, Word>();
     auto reg = _____________xxx (opcode);
@@ -313,6 +328,7 @@ template <Core C, Instr I, Mode M, Size S> void
 Moira::execFTrapcc(u16 opcode)
 {
     AVAILABILITY(C68000)
+    fpu.resetState = false;
 
     auto mod = _____________xxx (opcode);
     auto cnd = ___________xxxxx (queue.irc);
@@ -340,6 +356,7 @@ template <Core C, Instr I, Mode M, Size S> void
 Moira::execFMove(u16 opcode)
 {
     AVAILABILITY(C68000);
+    fpu.resetState = false;
 
     auto ext = readExt<C, Word>();
     auto reg = _____________xxx (opcode);
@@ -420,6 +437,7 @@ template <Core C, Instr I, Mode M, Size S> void
 Moira::execFMovecr(u16 opcode)
 {
     AVAILABILITY(C68000);
+    fpu.resetState = false;
 
     auto ext = readExt<C,Word>();
     auto dst = ______xxx_______ (ext);
@@ -447,6 +465,7 @@ template <Core C, Instr I, Mode M, Size S> void
 Moira::execFMovem(u16 opcode)
 {
     AVAILABILITY(C68000);
+    fpu.resetState = false;
 
     auto ext = queue.irc;
     auto reg = _____________xxx (opcode);
@@ -693,6 +712,7 @@ template <Core C, Instr I, Mode M, Size S> void
 Moira::execFGeneric(u16 opcode)
 {
     AVAILABILITY(C68000);
+    fpu.resetState = false;
 
     // Filter out unavailable instructions
     if (!fpu.isSupported<I>()) {

@@ -63,6 +63,8 @@ FPU::FPU(Moira& ref) : moira(ref)
 {
     static_assert(!REQUIRE_PRECISE_FPU || sizeof(long double) > 8,
                   "No long double support. FPU inaccuracies may occur.");
+
+    reset();
 }
 
 void
@@ -75,16 +77,21 @@ FPU::reset()
     fpiar = 0;
     fpsr = 0;
     fpcr = 0;
+
+    resetState = true;
 }
 
 bool
 FPU::inResetState()
 {
+    /*
     for (int i = 0; i < 8; i++) {
         if (fpr[i].val != FpuExtended::nan) return false;
     }
     
     return fpiar == 0 && fpsr == 0 && fpcr == 0;
+    */
+    return resetState;
 }
 
 FpuPrecision
