@@ -322,9 +322,8 @@ template <Core C> void
 Moira::execException(ExceptionType exc, int nr)
 {
     // printf("Moira::execException(%d, %d)\n", exc, nr);
-    if (exc == 11) {
-        debugger.stepInto();
-    }
+    // if (exc == 11) debugger.stepInto();
+
     u16 status = getSR();
 
     // Determine the exception vector number

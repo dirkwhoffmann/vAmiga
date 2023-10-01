@@ -227,6 +227,7 @@ template <Core C, Instr I, Mode M, Size S> void
 Moira::execFRestore(u16 opcode)
 {
     AVAILABILITY(C68000);
+    fpu.resetState = false;
 
     auto n   = _____________xxx (opcode);
 

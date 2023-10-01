@@ -683,6 +683,7 @@ CPU::_trackOff()
     debugger.disableLogging();
 }
 
+/*
 isize
 CPU::_load(const u8 *buffer)
 {
@@ -698,10 +699,19 @@ CPU::_load(const u8 *buffer)
 
     return isize(reader.ptr - buffer);
 }
+*/
 
 isize
 CPU::didLoadFromBuffer(const u8 *buffer)
 {
+    auto cpuModel = (moira::Model)config.revision;
+    auto fpuModel = (moira::FPUModel)config.fpuRevision;
+    auto dasmModel = (moira::Model)config.dasmRevision;
+
+    // Rectify the CPU and FPU type
+    setModel(cpuModel, dasmModel);
+    fpu.setModel(fpuModel);
+
     /* Because we don't save breakpoints and watchpoints in a snapshot, the
      * CPU flags for checking breakpoints and watchpoints can be in a corrupt
      * state after loading. These flags need to be updated according to the
