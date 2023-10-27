@@ -366,72 +366,82 @@ Moira::execFMove(u16 opcode)
     auto dst = ______xxx_______ (ext);
     auto fac = _________xxxxxxx (ext);
 
-    // Catch illegal extension words
-    if (!fpu.isValidExt(I, M, opcode, ext)) {
+    try {
 
-        execLineF<C, I, M, S>(opcode);
-        return;
-    }
+        // Catch illegal extension words
+        if (!fpu.isValidExt(I, M, opcode, ext)) throw IllegalInstruction();
+        /*
+        if (!fpu.isValidExt(I, M, opcode, ext)) {
 
-    // Clear the status register
-    fpu.clearExcStatusByte();
+            execLineF<C, I, M, S>(opcode);
+            return;
+        }
+        */
 
-    switch (cod) {
+        // Clear the status register
+        fpu.clearExcStatusByte();
 
-        case 0b000:                                 // FMOVE FpFp
+        switch (cod) {
 
-            fpu.fpr[dst].load(fpu.fpr[src].val);
-            fpu.setConditionCodes(src);
-            break;
+            case 0b000:                                 // FMOVE FpFp
 
-        case 0b010:
+                fpu.fpr[dst].load(fpu.fpr[src].val);
+                fpu.setConditionCodes(dst);
+                break;
 
-            if (M == MODE_IM) {                     // FMOVE ImFp
+            case 0b010:
 
-                if (src >= 0 && src <= 6) {
+                if (M == MODE_IM) {                     // FMOVE ImFp
 
-                    auto value = readFpuOpIm<M>(FltFormat(src));
-                    
+                    if (src >= 0 && src <= 6) {
+
+                        auto value = readFpuOpIm<M>(FltFormat(src));
+
+                        if (auto nan = fpu.resolveNan(value); nan) {
+                            value = *nan;
+                        }
+                        fpu.fpr[dst].load(value);
+                    }
+
+                } else {                                // FMOVE EaFp
+
+                    auto value = readFpuOp<M>(reg, FltFormat(src));
+
                     if (auto nan = fpu.resolveNan(value); nan) {
                         value = *nan;
                     }
                     fpu.fpr[dst].load(value);
                 }
 
-            } else {                                // FMOVE EaFp
-
-                auto value = readFpuOp<M>(reg, FltFormat(src));
-                
-                if (auto nan = fpu.resolveNan(value); nan) {
-                    value = *nan;
-                }
-                fpu.fpr[dst].load(value);
-            }
-            
-            fpu.setConditionCodes(dst);
-            break;
-
-        case 0b011:                                 // FMOVE FpEa
-
-            if (src == 0b011 || src == 0b111) {     // P{#k} || P{Dn}
-
-                // Get the k-factor, either directly or from a register
-                int k = (src == 0b011) ? fac : readD(fac >> 4);
-
-                // The k-factor is a sign-extended 7-bit value
-                k = i8(k | (k & 0x40) << 1);
-
-                writeFpuOp<M>(reg, fpu.fpr[dst], FLT_PACKED, k);
+                fpu.setConditionCodes(dst);
                 break;
-            }
 
-            writeFpuOp<M>(reg, fpu.fpr[dst], FltFormat(src));
-            break;
+            case 0b011:                                 // FMOVE FpEa
+
+                if (src == 0b011 || src == 0b111) {     // P{#k} || P{Dn}
+
+                    // Get the k-factor, either directly or from a register
+                    int k = (src == 0b011) ? fac : readD(fac >> 4);
+
+                    // The k-factor is a sign-extended 7-bit value
+                    k = i8(k | (k & 0x40) << 1);
+
+                    writeFpuOp<M>(reg, fpu.fpr[dst], FLT_PACKED, k);
+                    break;
+                }
+
+                writeFpuOp<M>(reg, fpu.fpr[dst], FltFormat(src));
+                break;
+        }
+
+        prefetch<C>();
+
+        FINALIZE
+
+    } catch (IllegalInstruction &exc) {
+
+        execLineF<C, I, M, S>(opcode);
     }
-
-    prefetch<C>();
-
-    FINALIZE
 }
 
 template <Core C, Instr I, Mode M, Size S> void
@@ -733,7 +743,13 @@ Moira::execFGeneric(u16 opcode)
     FpuExtended source, result;
 
     if (ext & 0x4000) {
-        source = readFpuOp<M>(nr, FltFormat(src));
+        try {
+            source = readFpuOp<M>(nr, FltFormat(src));
+        } catch (...) {
+            execLineF<C, I, M, S>(opcode);
+            FINALIZE
+            return;
+        }
     } else {
         source = fpu.fpr[src].val;
     }
@@ -768,10 +784,13 @@ Moira::execFGeneric(u16 opcode)
         
         if (auto nan = fpu.resolveNan(source); nan) {
             
+            printf("FPU::isMonadic NAN resolved\n");
             result = *nan;
             
         } else {
-            
+
+            printf("FPU::isMonadic\n");
+
             switch (I) {
                     
                 case FABS:  result = fpu.fabs(source); break;

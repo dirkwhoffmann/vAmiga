@@ -99,6 +99,7 @@ struct FpuSingle {
     FpuSingle(u32 value) : raw(value) { };
     FpuSingle(float value);
     FpuSingle(const FpuExtended &value, ExcHandler handler = [](auto&&...) {});
+    FpuSingle(const FpuExtended &value, FpuRoundingMode mode, ExcHandler handler = [](auto&&...) {});
     FpuSingle(const FPUReg &value, ExcHandler handler = [](auto&&...) {});
 
     bool signbit() const;

@@ -111,14 +111,69 @@ FpuSingle::FpuSingle(const class FpuExtended &value, ExcHandler handler)
     if (ldv > std::numeric_limits<float>::max()) {
 
         float posinf = std::copysign(std::numeric_limits<float>::infinity(), 1.0f);
-        flags |= FPEXP_OVFL;
+        flags |= FPEXP_OVFL | FPEXP_INEX2;
         raw = *((u32 *)&posinf);
 
     } else if (ldv < std::numeric_limits<float>::lowest()) {
 
         float neginf = std::copysign(std::numeric_limits<float>::infinity(), -1.0f);
-        flags |= FPEXP_OVFL;
+        flags |= FPEXP_OVFL | FPEXP_INEX2;
         raw = *((u32 *)&neginf);
+
+    } else {
+
+        softfloat::float_exception_flags = 0;
+        raw = floatx80_to_float32(value.raw);
+
+        if (softfloat::float_exception_flags & softfloat::float_flag_inexact) {
+            flags |= FPEXP_INEX2;
+        }
+        if (softfloat::float_exception_flags & softfloat::float_flag_overflow) {
+            flags |= FPEXP_OVFL;
+        }
+        if (softfloat::float_exception_flags & softfloat::float_flag_underflow) {
+            flags |= FPEXP_UNFL;
+        }
+    }
+    handler(flags);
+}
+
+FpuSingle::FpuSingle(const class FpuExtended &value, FpuRoundingMode mode, ExcHandler handler)
+{
+    const float maxflt = std::numeric_limits<float>::max();
+    const float minflt = std::numeric_limits<float>::min();
+    const float posinf = std::copysign(std::numeric_limits<float>::infinity(), 1.0f);
+    const float neginf = std::copysign(std::numeric_limits<float>::infinity(), -1.0f);
+
+    u32 flags = 0;
+
+    long double ldv = value.asLongDouble();
+
+    if (ldv > maxflt) {
+
+        if (mode == FPU_RND_ZERO || mode == FPU_RND_DOWNWARD) {
+
+            flags |= FPEXP_OVFL | FPEXP_INEX2;
+            raw = *((u32 *)&maxflt);
+
+        } else {
+
+            flags |= FPEXP_OVFL | FPEXP_INEX2;
+            raw = *((u32 *)&posinf);
+        }
+
+    } else if (ldv < minflt) {
+
+        if (mode == FPU_RND_ZERO || mode == FPU_RND_UPWARD) {
+
+            flags |= FPEXP_OVFL | FPEXP_INEX2;
+            raw = *((u32 *)&minflt);
+
+        } else {
+
+            flags |= FPEXP_OVFL | FPEXP_INEX2;
+            raw = *((u32 *)&neginf);
+        }
 
     } else {
 

@@ -534,6 +534,7 @@ struct AddressError : public std::exception {
     AddressError(const StackFrame frame) { stackFrame = frame; }
 };
 
+struct IllegalInstruction : public std::exception { };
 struct BusErrorException : public std::exception { };
 struct DoubleFault : public std::exception { };
 

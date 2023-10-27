@@ -23,7 +23,7 @@ FPUReg::round()
         
         if (fpu.getPrecision() == FPU_PREC_SINGLE) {
             
-            result = FpuSingle(result, fpu.exceptionHandler);
+            result = FpuSingle(result, fpu.getRoundingMode(), fpu.exceptionHandler);
         }
         if (fpu.getPrecision() == FPU_PREC_DOUBLE) {
             
@@ -101,8 +101,7 @@ FPU::getPrecision() const
             
         case 0x00:  return FPU_PREC_EXTENDED;
         case 0x40:  return FPU_PREC_SINGLE;
-        case 0x80:  return FPU_PREC_DOUBLE;
-        default:    return FPU_PREC_UNDEFINED;
+        default:    return FPU_PREC_DOUBLE;
     }
 }
 
@@ -364,6 +363,7 @@ FPU::setConditionCodes(int reg)
 void
 FPU::setConditionCodes(const FpuExtended &value)
 {
+    // printf("setConditionCodes: %x:%x %d %d %d %d\n", value.raw.high, value.raw.low, value.isnegative(), value.iszero(), value.isinf(), value.isnan());
     REPLACE_BIT(fpsr, 27, value.isnegative());
     REPLACE_BIT(fpsr, 26, value.iszero());
     REPLACE_BIT(fpsr, 25, value.isinf());
@@ -543,12 +543,15 @@ FPU::monadic(const FpuExtended &value, std::function<long double(long double)> f
     copyHostFpuFlags();
     
     if (fetestexcept(FE_INVALID)) {
-        return FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
+        // printf("FPU::monadic FE_INVALID\n");
+        return FpuExtended(0x7FFF, 0x7FFFFFFFFFFFFFFF);
     }
     if (std::isnan(result)) {
-        return FpuExtended(0x7FFF, 0xFFFFFFFFFFFFFFFF);
+        // printf("FPU::monadic is_nan\n");
+        return FpuExtended(0x7FFF, 0x7FFFFFFFFFFFFFFF);
     }
-    
+
+    // printf("FPU::monadic\n");
     return FpuExtended(result, getRoundingMode(), exceptionHandler);
 }
 

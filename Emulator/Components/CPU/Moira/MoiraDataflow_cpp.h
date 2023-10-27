@@ -246,6 +246,18 @@ Moira::readFpuOpRg(int n, FltFormat fmt)
 
     switch (fmt) {
 
+        case FLT_BYTE:
+        {
+            auto data = FpuByte(reg.d[n]);
+            result = FpuExtended(data, fpu.exceptionHandler);
+            break;
+        }
+        case FLT_WORD:
+        {
+            auto data = FpuWord(reg.d[n]);
+            result = FpuExtended(data, fpu.exceptionHandler);
+            break;
+        }
         case FLT_LONG:
         {
             auto data = FpuLong(reg.d[n]);
@@ -258,20 +270,10 @@ Moira::readFpuOpRg(int n, FltFormat fmt)
             result = FpuExtended(data, fpu.exceptionHandler);
             break;
         }
-        case FLT_WORD:
-        {
-            auto data = FpuWord(reg.d[n]);
-            result = FpuExtended(data, fpu.exceptionHandler);
-            break;
-        }
-        case FLT_BYTE:
-        {
-            auto data = FpuByte(reg.d[n]);
-            result = FpuExtended(data, fpu.exceptionHandler);
-            break;
-        }
         default:
-            fatalError;
+
+            // Invalid FPU format
+            throw IllegalInstruction();
     }
 
     return result;
