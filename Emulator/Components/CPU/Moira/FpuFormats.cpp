@@ -141,7 +141,7 @@ FpuSingle::FpuSingle(const class FpuExtended &value, ExcHandler handler)
 FpuSingle::FpuSingle(const class FpuExtended &value, FpuRoundingMode mode, ExcHandler handler)
 {
     const float maxflt = std::numeric_limits<float>::max();
-    const float minflt = std::numeric_limits<float>::min();
+    const float minflt = std::numeric_limits<float>::lowest();
     const float posinf = std::copysign(std::numeric_limits<float>::infinity(), 1.0f);
     const float neginf = std::copysign(std::numeric_limits<float>::infinity(), -1.0f);
 

@@ -103,6 +103,7 @@
 static const int NO_SEQ_FASTPATH = 0; // Disable sequencer fast path
 static const int NO_BPL_FASTPATH = 0; // Disable drawing fast path
 static const int DIAG_BOARD      = 0; // Plug in the diagnose board
+static const int FPU_SUPPORT     = 0; // Enable FPU (not working yet)
 
 
 //

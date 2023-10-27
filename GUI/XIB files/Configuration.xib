@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22155" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22155"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -67,6 +67,7 @@
                 <outlet property="csFpuIcon" destination="sge-VF-FP1" id="qma-cY-zSP"/>
                 <outlet property="csFpuInfo1" destination="1I6-WD-ast" id="vOl-VQ-vhD"/>
                 <outlet property="csFpuInfo2" destination="qV2-9l-eZm" id="c0B-B3-727"/>
+                <outlet property="csFpuLabel" destination="k6x-1F-wwn" id="6FW-0J-hKR"/>
                 <outlet property="csFpuRevision" destination="57X-NK-zUX" id="lg1-PW-sPn"/>
                 <outlet property="csLockImage" destination="nxr-43-cIJ" id="ElE-Ga-2uJ"/>
                 <outlet property="csLockInfo1" destination="DDQ-1d-Teh" id="ABA-0a-Oku"/>
@@ -193,7 +194,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="646" height="496"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1470" height="919"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1496" height="933"/>
             <value key="minSize" type="size" width="646" height="486"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="646" height="496"/>
@@ -1532,7 +1533,7 @@ DQ
                                                 <action selector="perDriveTypeAction:" target="-2" id="L5M-5b-LnE"/>
                                             </connections>
                                         </popUpButton>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="TI9-qi-cME">
+                                        <popUpButton tag="1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TI9-qi-cME">
                                             <rect key="frame" x="114" y="325" width="162" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="3.5&quot; DD" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="CMh-vG-3cz" id="aSu-Ar-nTk">
@@ -1556,7 +1557,7 @@ DQ
                                                 <action selector="perDriveTypeAction:" target="-2" id="UUg-YV-atk"/>
                                             </connections>
                                         </popUpButton>
-                                        <button fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="tD2-QB-Kdc">
+                                        <button tag="1" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tD2-QB-Kdc">
                                             <rect key="frame" x="58" y="330" width="49" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="DF1:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="cQH-Uk-hNH">
@@ -1593,7 +1594,7 @@ DQ
                                                 <action selector="perHdrConnectAction:" target="-2" id="tlz-k2-8TN"/>
                                             </connections>
                                         </button>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="l00-2q-mSl">
+                                        <popUpButton tag="1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l00-2q-mSl">
                                             <rect key="frame" x="114" y="173" width="162" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="Zorro board" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="spG-S1-nLS" id="9XM-JK-C2q">
@@ -1608,7 +1609,7 @@ DQ
                                                 </menu>
                                             </popUpButtonCell>
                                         </popUpButton>
-                                        <button fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="Mej-Fl-HiP">
+                                        <button tag="1" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mej-Fl-HiP">
                                             <rect key="frame" x="58" y="178" width="55" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="HD1:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="ZyW-KJ-JJl">
@@ -1619,7 +1620,7 @@ DQ
                                                 <action selector="perHdrConnectAction:" target="-2" id="TVh-dg-7ix"/>
                                             </connections>
                                         </button>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="kyk-3L-mrA">
+                                        <popUpButton tag="2" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kyk-3L-mrA">
                                             <rect key="frame" x="114" y="145" width="162" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="Zorro board" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="gp4-6Z-pek" id="R0Q-bF-OE3">
@@ -1634,7 +1635,7 @@ DQ
                                                 </menu>
                                             </popUpButtonCell>
                                         </popUpButton>
-                                        <button fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="3fY-Lr-qE1">
+                                        <button tag="2" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3fY-Lr-qE1">
                                             <rect key="frame" x="58" y="150" width="57" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="HD2:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="TMw-MW-0cl">
@@ -1645,7 +1646,7 @@ DQ
                                                 <action selector="perHdrConnectAction:" target="-2" id="8Yb-0K-Shc"/>
                                             </connections>
                                         </button>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="wqb-7F-ILE">
+                                        <popUpButton tag="3" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wqb-7F-ILE">
                                             <rect key="frame" x="114" y="116" width="162" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="Zorro board" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="M8p-fi-xc8" id="a6z-bk-NGQ">
@@ -1660,7 +1661,7 @@ DQ
                                                 </menu>
                                             </popUpButtonCell>
                                         </popUpButton>
-                                        <button fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="BJQ-gQ-ZtN">
+                                        <button tag="3" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BJQ-gQ-ZtN">
                                             <rect key="frame" x="58" y="121" width="57" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="HD3:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="AgR-DI-GRJ">
@@ -1671,7 +1672,7 @@ DQ
                                                 <action selector="perHdrConnectAction:" target="-2" id="U7s-Nw-yx2"/>
                                             </connections>
                                         </button>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="V0u-IE-VRg">
+                                        <popUpButton tag="2" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V0u-IE-VRg">
                                             <rect key="frame" x="114" y="295" width="162" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="3.5&quot; DD" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="yVH-t2-BX9" id="cTU-9a-xU9">
@@ -1695,7 +1696,7 @@ DQ
                                                 <action selector="perDriveTypeAction:" target="-2" id="1YK-9q-f7Q"/>
                                             </connections>
                                         </popUpButton>
-                                        <button fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="n4C-Su-UQM">
+                                        <button tag="2" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n4C-Su-UQM">
                                             <rect key="frame" x="56" y="300" width="51" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="DF2:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="lJN-DR-Wt6">
@@ -1706,7 +1707,7 @@ DQ
                                                 <action selector="perDriveConnectAction:" target="-2" id="OhV-9a-Vf0"/>
                                             </connections>
                                         </button>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="S32-51-0lU">
+                                        <popUpButton tag="3" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S32-51-0lU">
                                             <rect key="frame" x="114" y="265" width="162" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="3.5&quot; DD" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="qhQ-Cc-DkS" id="zBN-vm-21y">
@@ -1730,7 +1731,7 @@ DQ
                                                 <action selector="perDriveTypeAction:" target="-2" id="fmJ-cd-NBU"/>
                                             </connections>
                                         </popUpButton>
-                                        <button fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="5dd-PL-lVh">
+                                        <button tag="3" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5dd-PL-lVh">
                                             <rect key="frame" x="56" y="270" width="51" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="DF3:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="EF8-Id-xLv">
@@ -1759,7 +1760,7 @@ DQ
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="O2O-2C-ZMa">
+                                        <popUpButton tag="1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O2O-2C-ZMa">
                                             <rect key="frame" x="412" y="355" width="182" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Ofd-Kt-muY" id="Daj-hR-zEw">
@@ -1810,7 +1811,7 @@ DQ
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="TAX-DK-yR4">
+                                        <popUpButton tag="2" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TAX-DK-yR4">
                                             <rect key="frame" x="412" y="325" width="182" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="PNP-ut-z5R" id="XiY-0N-RIF">

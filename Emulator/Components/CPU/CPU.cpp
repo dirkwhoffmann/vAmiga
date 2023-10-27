@@ -323,6 +323,10 @@ CPU::setConfigItem(Option option, i64 value)
 
         case OPT_FPU_REVISION:
 
+            if (!amiga.fpuSupport()) {
+                throw VAError(ERROR_OPT_UNSUPPORTED);
+            }
+
             if (!FPURevisionEnum::isValid(value)) {
                 throw VAError(ERROR_OPT_INVARG, FPURevisionEnum::keyList());
             }

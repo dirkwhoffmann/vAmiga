@@ -220,6 +220,7 @@
 @property (readonly) BOOL isWarping;
 @property BOOL trackMode;
 @property (readonly) NSInteger cpuLoad;
+@property (readonly) BOOL fpuSupport;
 @property InspectionTarget inspectionTarget;
 - (void) removeInspectionTarget;
 
