@@ -685,7 +685,6 @@ extension DefaultsProxy {
 
         remove(.VIDEO_FORMAT)
         remove(.CPU_REVISION)
-        remove(.FPU_REVISION)
         remove(.CPU_OVERCLOCKING)
         remove(.WARP_MODE)
         remove(.AGNUS_REVISION)
@@ -706,7 +705,6 @@ extension Configuration {
 
         machineType = defaults.get(.VIDEO_FORMAT)
         cpuRev = defaults.get(.CPU_REVISION)
-        fpuRev = defaults.get(.FPU_REVISION)
         cpuSpeed = defaults.get(.CPU_OVERCLOCKING)
         warpMode = defaults.get(.WARP_MODE)
         agnusRev = defaults.get(.AGNUS_REVISION)
@@ -726,7 +724,6 @@ extension Configuration {
 
         defaults.set(.VIDEO_FORMAT, machineType)
         defaults.set(.CPU_REVISION, cpuRev)
-        defaults.set(.FPU_REVISION, fpuRev)
         defaults.set(.CPU_OVERCLOCKING, cpuSpeed)
         defaults.set(.WARP_MODE, warpMode)
         defaults.set(.AGNUS_REVISION, agnusRev)

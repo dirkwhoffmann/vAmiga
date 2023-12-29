@@ -179,12 +179,6 @@ extension ConfigurationController {
         refresh()
     }
 
-    @IBAction func csFpuRevAction(_ sender: NSPopUpButton!) {
-
-        config.fpuRev = sender.selectedTag()
-        refresh()
-    }
-
     @IBAction func csWarpModeAction(_ sender: NSPopUpButton!) {
 
         config.warpMode = sender.selectedTag()

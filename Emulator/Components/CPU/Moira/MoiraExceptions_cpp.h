@@ -8,8 +8,6 @@
 template <Core C> void
 Moira::writeStackFrameAEBE(StackFrame &frame)
 {
-    // assert(C == C68000);
-
     // Push PC
     push<C, Word>((u16)frame.pc);
     push<C, Word>(frame.pc >> 16);

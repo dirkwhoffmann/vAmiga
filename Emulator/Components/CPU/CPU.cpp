@@ -292,8 +292,6 @@ CPU::getConfigItem(Option option) const
         case OPT_CPU_OVERCLOCKING:  return (long)config.overclocking;
         case OPT_CPU_RESET_VAL:     return (long)config.regResetVal;
 
-        case OPT_FPU_REVISION:      return (long)config.fpuRevision;
-
         default:
             fatalError;
     }
@@ -303,7 +301,6 @@ void
 CPU::setConfigItem(Option option, i64 value)
 {
     auto cpuModel = [&](CPURevision rev) { return moira::Model(rev); };
-    auto fpuModel = [&](FPURevision rev) { return moira::FPUModel(rev); };
     auto dasmModel = [&](DasmRevision rev) { return moira::Model(rev); };
     auto syntax = [&](DasmSyntax rev) { return moira::DasmSyntax(rev); };
 
@@ -318,22 +315,6 @@ CPU::setConfigItem(Option option, i64 value)
             suspend();
             config.revision = CPURevision(value);
             setModel(cpuModel(config.revision), dasmModel(config.dasmRevision));
-            resume();
-            return;
-
-        case OPT_FPU_REVISION:
-
-            if (!amiga.fpuSupport()) {
-                throw VAError(ERROR_OPT_UNSUPPORTED);
-            }
-
-            if (!FPURevisionEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, FPURevisionEnum::keyList());
-            }
-
-            suspend();
-            config.fpuRevision = FPURevision(value);
-            cpu.setFpuModel(fpuModel(config.fpuRevision));
             resume();
             return;
 
@@ -391,9 +372,7 @@ CPU::resetConfig()
         OPT_CPU_DASM_REVISION,
         OPT_CPU_DASM_SYNTAX,
         OPT_CPU_OVERCLOCKING,
-        OPT_CPU_RESET_VAL,
-        
-        OPT_FPU_REVISION
+        OPT_CPU_RESET_VAL
     };
 
     for (auto &option : options) {
@@ -487,13 +466,8 @@ CPU::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Config) {
 
-        string fputxt =
-        config.fpuRevision == FPU_INTERNAL ? " (none)" : " (external coprocessor)";
-        
         os << util::tab("CPU revision");
         os << CPURevisionEnum::key(config.revision) << std::endl;
-        os << util::tab("FPU revision");
-        os << FPURevisionEnum::key(config.fpuRevision) << fputxt << std::endl;
         os << util::tab("DASM revision");
         os << DasmRevisionEnum::key(config.dasmRevision) << std::endl;
         os << util::tab("DASM syntax");
@@ -709,12 +683,10 @@ isize
 CPU::didLoadFromBuffer(const u8 *buffer)
 {
     auto cpuModel = (moira::Model)config.revision;
-    auto fpuModel = (moira::FPUModel)config.fpuRevision;
     auto dasmModel = (moira::Model)config.dasmRevision;
 
-    // Rectify the CPU and FPU type
+    // Rectify the CPU type
     setModel(cpuModel, dasmModel);
-    fpu.setModel(fpuModel);
 
     /* Because we don't save breakpoints and watchpoints in a snapshot, the
      * CPU flags for checking breakpoints and watchpoints can be in a corrupt

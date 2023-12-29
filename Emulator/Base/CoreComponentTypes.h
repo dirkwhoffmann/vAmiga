@@ -54,9 +54,6 @@ enum_long(OPT)
     OPT_CPU_OVERCLOCKING,
     OPT_CPU_RESET_VAL,
 
-    // FPU
-    OPT_FPU_REVISION,
-
     // Real-time clock
     OPT_RTC_MODEL,
 
@@ -189,8 +186,6 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_CPU_OVERCLOCKING:      return "CPU_OVERCLOCKING";
             case OPT_CPU_RESET_VAL:         return "CPU_RESET_VAL";
             case OPT_CPU_DASM_SYNTAX:       return "CPU_DASM_SYNTAX";
-
-            case OPT_FPU_REVISION:          return "FPU_REVISION";
 
             case OPT_RTC_MODEL:             return "RTC_MODEL";
 

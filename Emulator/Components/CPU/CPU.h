@@ -76,7 +76,6 @@ private:
         worker
 
         << config.revision
-        << config.fpuRevision
         << config.dasmRevision
         << config.overclocking
         << config.regResetVal;
