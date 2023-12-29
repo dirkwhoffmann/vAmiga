@@ -49,6 +49,14 @@ Model;
 
 typedef enum
 {
+    INTERNAL_FPU,           // Built-in FPU (in any)
+    M68881,                 // Floating-point coprocessor
+    M68882                  // Floating-point coprocessor
+}
+FPUModel;
+
+typedef enum
+{
     C68000,                 // Used by M68000
     C68010,                 // Used by M68010
     C68020                  // Used by all others
@@ -160,10 +168,13 @@ RegName;
 
 typedef enum
 {
-    Unsized = 0,
-    Byte    = 1,            // .b : Byte addressing
-    Word    = 2,            // .w : Word addressing
-    Long    = 4             // .l : Long word addressing
+    Unsized     = 0,
+    Byte        = 1,        // .b : Byte addressing
+    Word        = 2,        // .w : Word addressing
+    Long        = 4,        // .l : Long word addressing
+
+    Quad        = 8,        // FPU
+    Extended    = 12        // FPU
 }
 Size;
 
@@ -254,13 +265,45 @@ typedef enum
 }
 MemSpace;
 
-/* TODO:
+typedef enum
+{
+    FLT_LONG,
+    FLT_SINGLE,
+    FLT_EXTENDED,
+    FLT_PACKED,
+    FLT_WORD,
+    FLT_DOUBLE,
+    FLT_BYTE
+}
+FltFormat;
 
- typedef enum
- {
- }
- FSize;
- */
+typedef enum
+{
+    FPU_PREC_EXTENDED,
+    FPU_PREC_SINGLE,
+    FPU_PREC_DOUBLE,
+    FPU_PREC_UNDEFINED
+}
+FpuPrecision;
+
+typedef enum
+{
+    FPU_RND_NEAREST,
+    FPU_RND_ZERO,
+    FPU_RND_DOWNWARD,
+    FPU_RND_UPWARD
+}
+FpuRoundingMode;
+
+typedef enum
+{
+    FPU_FRAME_INVALID,
+    FPU_FRAME_NULL,
+    FPU_FRAME_IDLE,
+    FPU_FRAME_UNIMP,
+    FPU_FRAME_BUSY,
+}
+FpuFrameType;
 
 
 //
@@ -335,19 +378,6 @@ struct PrefetchQueue {
     u16 ird;                // The instruction currently being executed
 };
 
-struct Float80 {
-
-    softfloat::floatx80 raw;
-};
-
-struct FPU {
-
-    Float80 fpr[8];
-    u32 fpiar;
-    u32 fpsr;
-    u32 fpcr;
-};
-
 struct InstrInfo
 {
     Instr I;
@@ -381,6 +411,22 @@ static constexpr u8 FC_USER_DATA        = 1;
 static constexpr u8 FC_USER_PROG        = 2;
 static constexpr u8 FC_SUPERVISOR_DATA  = 5;
 static constexpr u8 FC_SUPERVISOR_PROG  = 6;
+
+// Floating-point condition codes
+static constexpr u32 FPCC_N             = 1 << 27;
+static constexpr u32 FPCC_Z             = 1 << 26;
+static constexpr u32 FPCC_I             = 1 << 25;
+static constexpr u32 FPCC_NAN           = 1 << 24;
+
+// Floating-point exception bits
+static constexpr u32 FPEXP_BSUN         = 1 << 15;
+static constexpr u32 FPEXP_SNAN         = 1 << 14;
+static constexpr u32 FPEXP_OPERR        = 1 << 13;
+static constexpr u32 FPEXP_OVFL         = 1 << 12;
+static constexpr u32 FPEXP_UNFL         = 1 << 11;
+static constexpr u32 FPEXP_DZ           = 1 << 10;
+static constexpr u32 FPEXP_INEX2        = 1 << 9;
+static constexpr u32 FPEXP_INEX1        = 1 << 8;
 
 // Availabilty masks
 static constexpr u16 AV_68000           = 1 << M68000;
@@ -474,6 +520,9 @@ static constexpr u64 AE_SET_IF      = (1 << 13);  // Set bit 13 in the special s
 // Timing flags
 static constexpr u64 IMPL_DEC       = (1 << 14);  // Omit 2 cycle delay in -(An) mode
 
+// FPU
+static constexpr u64 FPU_FMOVEM     = (1 << 15);  // Experimental
+
 
 //
 // Exceptions
@@ -485,6 +534,7 @@ struct AddressError : public std::exception {
     AddressError(const StackFrame frame) { stackFrame = frame; }
 };
 
+struct IllegalInstruction : public std::exception { };
 struct BusErrorException : public std::exception { };
 struct DoubleFault : public std::exception { };
 

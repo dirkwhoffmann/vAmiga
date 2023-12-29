@@ -296,6 +296,7 @@ Amiga::getConfigItem(Option option) const
         case OPT_CPU_DASM_SYNTAX:
         case OPT_CPU_OVERCLOCKING:
         case OPT_CPU_RESET_VAL:
+        case OPT_FPU_REVISION:
 
             return cpu.getConfigItem(option);
             
@@ -562,7 +563,8 @@ Amiga::configure(Option option, i64 value)
         case OPT_CPU_OVERCLOCKING:
         case OPT_CPU_RESET_VAL:
         case OPT_CPU_DASM_SYNTAX:
-            
+        case OPT_FPU_REVISION:
+
             cpu.setConfigItem(option, value);
             break;
             
@@ -830,6 +832,7 @@ Amiga::configure(ConfigScheme scheme)
             case CONFIG_A1000_OCS_1MB:
 
                 configure(OPT_CPU_REVISION, CPU_68000);
+                configure(OPT_FPU_REVISION, FPU_INTERNAL);
                 configure(OPT_AGNUS_REVISION, AGNUS_OCS_OLD);
                 configure(OPT_DENISE_REVISION, DENISE_OCS);
                 configure(OPT_VIDEO_FORMAT, PAL);
@@ -840,6 +843,7 @@ Amiga::configure(ConfigScheme scheme)
             case CONFIG_A500_OCS_1MB:
                 
                 configure(OPT_CPU_REVISION, CPU_68000);
+                configure(OPT_FPU_REVISION, FPU_INTERNAL);
                 configure(OPT_AGNUS_REVISION, AGNUS_OCS);
                 configure(OPT_DENISE_REVISION, DENISE_OCS);
                 configure(OPT_VIDEO_FORMAT, PAL);
@@ -850,6 +854,7 @@ Amiga::configure(ConfigScheme scheme)
             case CONFIG_A500_ECS_1MB:
                 
                 configure(OPT_CPU_REVISION, CPU_68000);
+                configure(OPT_FPU_REVISION, FPU_INTERNAL);
                 configure(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
                 configure(OPT_DENISE_REVISION, DENISE_OCS);
                 configure(OPT_VIDEO_FORMAT, PAL);
@@ -860,13 +865,14 @@ Amiga::configure(ConfigScheme scheme)
             case CONFIG_A500_PLUS_1MB:
 
                 configure(OPT_CPU_REVISION, CPU_68000);
+                configure(OPT_FPU_REVISION, FPU_INTERNAL);
                 configure(OPT_AGNUS_REVISION, AGNUS_ECS_2MB);
                 configure(OPT_DENISE_REVISION, DENISE_ECS);
                 configure(OPT_VIDEO_FORMAT, PAL);
                 configure(OPT_CHIP_RAM, 512);
                 configure(OPT_SLOW_RAM, 512);
                 break;
-
+                
             default:
                 fatalError;
         }

@@ -76,6 +76,7 @@ private:
         worker
 
         << config.revision
+        << config.fpuRevision
         << config.dasmRevision
         << config.overclocking
         << config.regResetVal;
@@ -128,13 +129,34 @@ private:
             << loopModeDelay
             << readBuffer
             << writeBuffer
-            << flags;
+            << flags
+            
+            // << fpu.model
+            << fpu.fpr[0].val.raw.high
+            << fpu.fpr[0].val.raw.low
+            << fpu.fpr[1].val.raw.high
+            << fpu.fpr[1].val.raw.low
+            << fpu.fpr[2].val.raw.high
+            << fpu.fpr[2].val.raw.low
+            << fpu.fpr[3].val.raw.high
+            << fpu.fpr[3].val.raw.low
+            << fpu.fpr[4].val.raw.high
+            << fpu.fpr[4].val.raw.low
+            << fpu.fpr[5].val.raw.high
+            << fpu.fpr[5].val.raw.low
+            << fpu.fpr[6].val.raw.high
+            << fpu.fpr[6].val.raw.low
+            << fpu.fpr[7].val.raw.high
+            << fpu.fpr[7].val.raw.low
+            << fpu.fpcr
+            << fpu.fpsr
+            << fpu.fpiar;
         }
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
-    isize _load(const u8 *buffer) override;
+    isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
     isize didLoadFromBuffer(const u8 *buffer) override;
     

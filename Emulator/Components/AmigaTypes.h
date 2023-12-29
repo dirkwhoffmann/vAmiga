@@ -125,7 +125,6 @@ struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme>
             case CONFIG_A1000_OCS_1MB:  return "A1000_OCS_1MB";
             case CONFIG_A500_OCS_1MB:   return "A500_OCS_1MB";
             case CONFIG_A500_ECS_1MB:   return "A500_ECS_1MB";
-            case CONFIG_A500_PLUS_1MB:  return "A500_PLUS_1MB";
         }
         return "???";
     }

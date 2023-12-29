@@ -12,6 +12,7 @@
 #include "Macros.h"
 #include "MemUtils.h"
 #include "Buffer.h"
+#include <cassert>
 #include <vector>
 
 namespace util {
@@ -95,7 +96,6 @@ inline void writeDouble(u8 *& buf, double value)
 inline void writeString(u8 *& buf, string value)
 {
     auto len = value.length();
-    assert(len < 256);
     write8(buf, u8(len));
     value.copy((char *)buf, len);
     buf += len;

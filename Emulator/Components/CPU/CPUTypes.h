@@ -52,6 +52,35 @@ struct CPURevisionEnum : util::Reflection<CPURevisionEnum, CPURevision>
 };
 #endif
 
+enum_long(FPU_REVISION)
+{
+    FPU_INTERNAL,
+    FPU_68881,
+    FPU_68882
+};
+typedef FPU_REVISION FPURevision;
+
+#ifdef __cplusplus
+struct FPURevisionEnum : util::Reflection<FPURevisionEnum, FPURevision>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = FPU_68882;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
+
+    static const char *prefix() { return "FPU"; }
+    static const char *key(CPURevision value)
+    {
+        switch (value) {
+
+            case FPU_INTERNAL:  return "INTERNAL";
+            case FPU_68881:     return "68881";
+            case FPU_68882:     return "68882";
+        }
+        return "???";
+    }
+};
+#endif
+
 enum_long(DASM_REVISION)
 {
     DASM_68000,
@@ -134,6 +163,7 @@ struct DasmSyntaxEnum : util::Reflection<DasmSyntaxEnum, DasmSyntax>
 typedef struct
 {
     CPURevision revision;
+    FPURevision fpuRevision;
     DasmRevision dasmRevision;
     DasmSyntax dasmSyntax;
     isize overclocking;

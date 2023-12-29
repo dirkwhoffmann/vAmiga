@@ -74,6 +74,18 @@
  */
 #define BUILD_INSTR_INFO_TABLE false
 
+/* Set to true to abort compilation on platforms with no long double support
+ *
+ * Some FPU functions make use of the "long double" type which is mapped to the
+ * standard "double" type on some platforms. On those platforms, the FPU can
+ * compute imprecise results, e.g., when reading a value in packed BCD format
+ * from memory. In practice, the implication of this imprecision will most
+ * likely be neglectable.
+ *
+ * Disable to allow small precision errors.
+ */
+#define REQUIRE_PRECISE_FPU false
+
 /* Set to true to run Moira in a special Musashi compatibility mode.
  *
  * The compatibility mode is used by the test runner application to compare
@@ -86,7 +98,74 @@
 /* The following macro appears at the beginning of each instruction handler.
  * Moira will call 'willExecute(...)' for all listed instructions.
  */
-#define WILL_EXECUTE    I == STOP || I == TAS || I == BKPT
+#define WILL_EXECUTE I == STOP || I == TAS || I == BKPT
+/*
+#define WILL_EXECUTE \
+I == FABS || \
+I == FADD || \
+I == FBcc || \
+I == FCMP || \
+I == FDBcc || \
+I == FDIV || \
+I == FMOVE || \
+I == FMOVEM || \
+I == FMUL || \
+I == FNEG || \
+I == FNOP || \
+I == FRESTORE || \
+I == FSAVE || \
+I == FScc || \
+I == FSQRT || \
+I == FSUB || \
+I == FTRAPcc || \
+I == FTST || \
+I == FSABS || \
+I == FDABS || \
+I == FSADD || \
+I == FDADD || \
+I == FSDIV || \
+I == FDDIV || \
+I == FSMOVE || \
+I == FDMOVE || \
+I == FSMUL || \
+I == FDMUL || \
+I == FSNEG || \
+I == FDNEG || \
+I == FSSQRT || \
+I == FDSQRT || \
+I == FSSUB || \
+I == FDSUB || \
+I == FACOS || \
+I == FASIN || \
+I == FATAN || \
+I == FATANH || \
+I == FCOS || \
+I == FCOSH || \
+I == FETOX || \
+I == FETOXM1 || \
+I == FGETEXP || \
+I == FGETMAN || \
+I == FINT || \
+I == FINTRZ || \
+I == FLOG10 || \
+I == FLOG2 || \
+I == FLOGN || \
+I == FLOGNP1 || \
+I == FMOD || \
+I == FMOVECR || \
+I == FREM || \
+I == FSCAL || \
+I == FSGLDIV || \
+I == FSGLMUL || \
+I == FSIN || \
+I == FSINCOS || \
+I == FSINH || \
+I == FTAN || \
+I == FTANH || \
+I == FTENTOX || \
+I == FTWOTOX
+*/
+// I == STOP || I == TAS || I == BKPT
 
 /* The following macro appear at the end of each instruction handler.
  * Moira will call 'didExecute(...)' for all listed instructions.

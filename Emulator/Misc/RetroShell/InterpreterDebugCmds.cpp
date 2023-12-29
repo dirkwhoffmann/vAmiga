@@ -85,6 +85,7 @@ Interpreter::initDebugShell(Command &root)
     root.add({"amiga"},         "Main computer");
     root.add({"memory"},        "RAM and ROM");
     root.add({"cpu"},           "Motorola 68k CPU");
+    if (amiga.fpuSupport()) root.add({"fpu"}, "Floating-point unit");
     root.add({"ciaa"},          "Complex Interface Adapter A");
     root.add({"ciab"},          "Complex Interface Adapter B");
     root.add({"agnus"},         "Custom Chipset");
@@ -448,6 +449,20 @@ Interpreter::initDebugShell(Command &root)
         retroShell.dump(cpu, Category::Vectors);
     });
 
+    
+    //
+    // FPU
+    //
+
+    if (amiga.fpuSupport()) {
+
+        root.add({"fpu", ""},
+                 "Inspects the internal state",
+                 [this](Arguments& argv, long value) {
+
+            retroShell.dump(cpu, Category::Fpu);
+        });
+    }
 
     //
     // CIA

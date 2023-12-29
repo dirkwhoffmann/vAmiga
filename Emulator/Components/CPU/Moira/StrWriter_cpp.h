@@ -2,9 +2,7 @@
 // This file is part of Moira - A Motorola 68k emulator
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
-// Licensed under the GNU General Public License v3
-//
-// See https://www.gnu.org for license information
+// Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
 #include <cmath>
@@ -219,11 +217,11 @@ StrWriter::operator<<(UInt32 u)
     return *this;
 }
 
-StrWriter&
-StrWriter::operator<<(Imu im)
+template <Size S> StrWriter&
+StrWriter::operator<<(Imu<S> im)
 {
     *ptr++ = '#';
-    *this << UInt(im.raw);
+    *this << UInt(CLIP<S>(im.raw));
     return *this;
 }
 
@@ -1231,7 +1229,7 @@ StrWriter::operator<<(Im<M, S> wrapper)
 
         default:
 
-            *this << Imu(ea.ext1);
+            *this << Imu<S>(ea.ext1);
             break;
     }
 
@@ -1358,7 +1356,7 @@ StrWriter::operator<<(Fp fp)
 StrWriter&
 StrWriter::operator<<(Ffmt ffmt)
 {
-    if (style.syntax != DASM_MOIRA_MIT && style.syntax != DASM_GNU_MIT) *ptr++ = '.';
+    if (style.syntax != DASM_GNU && style.syntax != DASM_GNU_MIT) *ptr++ = '.';
 
     switch (ffmt.raw) {
 

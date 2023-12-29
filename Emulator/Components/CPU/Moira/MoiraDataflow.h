@@ -63,6 +63,13 @@ template <Core C, Mode M, Size S, Flags F = 0> u32 computeEAfull(u32 an);
 template <Core C, Mode M, Size S = Word, Flags F = 0>
 void readOp(int n, u32 *ea, u32 *result);
 
+// Experimental
+template <Mode M, Flags F = 0> FpuExtended readFpuOp(int n, FltFormat fmt);
+template <Mode M, Flags F = 0> FpuExtended readFpuOpRg(int n, FltFormat fmt);
+template <Mode M, Flags F = 0> FpuExtended readFpuOpEa(int n, FltFormat fmt);
+template <Mode M, Flags F = 0> FpuExtended readFpuOpEa(int n, u32 ea, FltFormat fmt);
+template <Mode M, Flags F = 0> FpuExtended readFpuOpIm(FltFormat fmt);
+
 /* Writes an operand
  *
  * If parameter ea is omitted, the destination of the operand is determined
@@ -71,13 +78,24 @@ void readOp(int n, u32 *ea, u32 *result);
 template <Core C, Mode M, Size S, Flags F = 0> void writeOp(int n, u32 val);
 template <Core C, Mode M, Size S, Flags F = 0> void writeOp(int n, u32 ea, u32 val);
 
-// Emulates the address register modification for modes (An)+, (An)-
+template <Mode M, Flags F = 0> void writeFpuOp(int n, FPUReg &reg, FltFormat fmt, int k = 0);
+template <Mode M, Flags F = 0> void writeFpuOp(int n, u32 ea, FPUReg &reg, FltFormat fmt, int k = 0);
+
+// Emulates the address register modification for modes (An)+, (An)- (DEPRECATED)
 template <Mode M, Size S> void updateAn(int n);
 template <Mode M, Size S> void updateAnPI(int n);
 template <Mode M, Size S> void updateAnPD(int n);
 template <Mode M, Size S> void undoAn(int n);
 template <Mode M, Size S> void undoAnPI(int n);
 template <Mode M, Size S> void undoAnPD(int n);
+
+// Emulates the address register modification for modes (An)+, (An)-
+void updateAn(Mode M, Size S, int n);
+void updateAnPI(Mode M, Size S, int n);
+void updateAnPD(Mode M, Size S, int n);
+void undoAn(Mode M, Size S, int n);
+void undoAnPI(Mode M, Size S, int n);
+void undoAnPD(Mode M, Size S, int n);
 
 // Reads a value from program or data space, depending on the addressing mode
 template <Core C, Mode M, Size S, Flags F = 0> u32 readM(u32 addr);

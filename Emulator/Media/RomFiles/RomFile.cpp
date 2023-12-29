@@ -107,6 +107,7 @@ RomFile::isDiagRom(u32 crc32)
         case CRC32_DIAG11:
         case CRC32_DIAG12:
         case CRC32_DIAG121:
+        case CRC32_DIAG13:
         case CRC32_LOGICA20: return true;
 
         default: return false;
@@ -273,6 +274,7 @@ RomFile::shortName(u32 crc32)
         case CRC32_DIAG11:                  return "DiagROM 1.1";
         case CRC32_DIAG12:                  return "DiagROM 1.2";
         case CRC32_DIAG121:                 return "DiagROM 1.2.1";
+        case CRC32_DIAG13:                  return "DiagROM 1.3";
         case CRC32_LOGICA20:                return "Logica Diagnostic 2.0";
 
         default:
@@ -354,7 +356,8 @@ RomFile::title(u32 crc32)
 
         case CRC32_DIAG11:
         case CRC32_DIAG12:
-        case CRC32_DIAG121:                 return "Amiga DiagROM";
+        case CRC32_DIAG121:
+        case CRC32_DIAG13 :                 return "Amiga DiagROM";
         case CRC32_LOGICA20:                return "Logica Diagnostic";
 
         default:                            return "Unknown or patched Rom";
@@ -437,6 +440,7 @@ RomFile::version(u32 crc32)
         case CRC32_DIAG11:                  return "Version 1.1";
         case CRC32_DIAG12:                  return "Version 1.2";
         case CRC32_DIAG121:                 return "Version 1.2.1";
+        case CRC32_DIAG13:                  return "Version 1.3";
         case CRC32_LOGICA20:                return "Version 2.0";
 
         default:
@@ -519,6 +523,7 @@ RomFile::released(u32 crc32)
         case CRC32_DIAG11:                  return "October 2018";
         case CRC32_DIAG12:                  return "August 2019";
         case CRC32_DIAG121:                 return "July 2020";
+        case CRC32_DIAG13:                  return "April 2023";
         case CRC32_LOGICA20:                return "";
 
         default:                            return "";
@@ -600,6 +605,7 @@ RomFile::model(u32 crc32)
         case CRC32_DIAG11:                  return "";
         case CRC32_DIAG12:                  return "";
         case CRC32_DIAG121:                 return "";
+        case CRC32_DIAG13:                  return "";
         case CRC32_LOGICA20:                return "";
 
         default:                            return "";

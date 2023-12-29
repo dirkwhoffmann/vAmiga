@@ -60,17 +60,58 @@ Moira::~Moira()
 void
 Moira::setModel(Model cpuModel, Model dasmModel)
 {
-    // Only proceed if the model changes
-    if (this->cpuModel == cpuModel && this->dasmModel == dasmModel) return;
-
-    this->cpuModel = cpuModel;
-    this->dasmModel = dasmModel;
-
-    createJumpTable(cpuModel, dasmModel);
-
-    reg.cacr &= cacrMask();
-    flags &= ~CPU_IS_LOOPING;
+    if (this->cpuModel != cpuModel || this->dasmModel != dasmModel) {
+        
+        this->cpuModel = cpuModel;
+        this->dasmModel = dasmModel;
+        
+        // Reset the FPU core if no external co-processor is present
+        // if (!has6888x()) fpu.setModel(INTERNAL_FPU);
+        
+        createJumpTable(cpuModel, dasmModel);
+        
+        reg.cacr &= cacrMask();
+        flags &= ~CPU_IS_LOOPING;
+    }
 }
+
+void
+Moira::setFpuModel(FPUModel model)
+{
+    if (fpu.getModel() != model) {
+        
+        fpu.setModel(model);
+        createJumpTable(cpuModel, dasmModel);
+    }
+}
+
+/*
+void
+Moira::attach6888x(int x)
+{
+    assert(x == 1 || x == 2);
+
+    FPUModel model = x == 1 ? M68881 : M68882;
+
+    if (fpu.getModel() != model) {
+
+        fpu.setModel(model);
+        createJumpTable(cpuModel, dasmModel);
+    }
+}
+
+void
+Moira::detach6888x()
+{
+    FPUModel model = hasFPU() ? INTERNAL_FPU : NO_FPU;
+
+    if (fpu.getModel() != model) {
+
+        fpu.setModel(model);
+        createJumpTable(cpuModel, dasmModel);
+    }
+}
+*/
 
 void
 Moira::setDasmSyntax(DasmSyntax value)
@@ -101,7 +142,7 @@ Moira::setNumberFormat(DasmStyle &style, const DasmNumberFormat &value)
 }
 
 bool
-Moira::hasCPI()
+Moira::hasCPI() const
 {
     switch (cpuModel) {
 
@@ -114,7 +155,7 @@ Moira::hasCPI()
 }
 
 bool
-Moira::hasMMU()
+Moira::hasMMU() const
 {
     switch (cpuModel) {
 
@@ -127,7 +168,7 @@ Moira::hasMMU()
 }
 
 bool
-Moira::hasFPU()
+Moira::hasFPU() const
 {
     switch (cpuModel) {
 
@@ -159,6 +200,12 @@ Moira::addrMask() const
         case M68010:    return addrMask<C68010>();
         default:        return addrMask<C68020>();
     }
+}
+
+bool
+Moira::has6888x() const
+{
+    return fpu.getModel() == M68881 || fpu.getModel() == M68882;
 }
 
 template <Core C> u32
@@ -196,8 +243,6 @@ Moira::reset()
     fcl = 0;
     fcSource = 0;
 
-    fpu = { };
-
     SYNC(16);
 
     // Read the initial (supervisor) stack pointer from memory
@@ -216,6 +261,8 @@ Moira::reset()
     SYNC(2);
     prefetch<C>();
 
+    // Reset subcomponents
+    fpu.reset();
     debugger.reset();
 
     // Inform the delegate
@@ -379,7 +426,7 @@ Moira::processException(const std::exception &exc)
             throw df;
         }
 
-    } catch (DoubleFault & df) {
+    } catch (DoubleFault &df) {
 
         halt();
         return;

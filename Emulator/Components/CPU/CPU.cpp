@@ -14,12 +14,10 @@
 #include "IOUtils.h"
 #include "Memory.h"
 #include "MsgQueue.h"
-#include "softfloat.h"
 
 //
 // Moira
 //
-
 
 namespace vamiga::moira {
 
@@ -141,7 +139,13 @@ Moira::willExecute(const char *func, Instr I, Mode M, Size S, u16 opcode)
             break;
 
         default:
+        {
+            
+            char str[128];
+            disassemble(str, reg.pc0);
+            printf("%s\n", str);
             break;
+        }
     }
 }
 
@@ -288,6 +292,8 @@ CPU::getConfigItem(Option option) const
         case OPT_CPU_OVERCLOCKING:  return (long)config.overclocking;
         case OPT_CPU_RESET_VAL:     return (long)config.regResetVal;
 
+        case OPT_FPU_REVISION:      return (long)config.fpuRevision;
+
         default:
             fatalError;
     }
@@ -297,6 +303,7 @@ void
 CPU::setConfigItem(Option option, i64 value)
 {
     auto cpuModel = [&](CPURevision rev) { return moira::Model(rev); };
+    auto fpuModel = [&](FPURevision rev) { return moira::FPUModel(rev); };
     auto dasmModel = [&](DasmRevision rev) { return moira::Model(rev); };
     auto syntax = [&](DasmSyntax rev) { return moira::DasmSyntax(rev); };
 
@@ -311,6 +318,22 @@ CPU::setConfigItem(Option option, i64 value)
             suspend();
             config.revision = CPURevision(value);
             setModel(cpuModel(config.revision), dasmModel(config.dasmRevision));
+            resume();
+            return;
+
+        case OPT_FPU_REVISION:
+
+            if (!amiga.fpuSupport()) {
+                throw VAError(ERROR_OPT_UNSUPPORTED);
+            }
+
+            if (!FPURevisionEnum::isValid(value)) {
+                throw VAError(ERROR_OPT_INVARG, FPURevisionEnum::keyList());
+            }
+
+            suspend();
+            config.fpuRevision = FPURevision(value);
+            cpu.setFpuModel(fpuModel(config.fpuRevision));
             resume();
             return;
 
@@ -365,8 +388,12 @@ CPU::resetConfig()
     std::vector <Option> options = {
 
         OPT_CPU_REVISION,
+        OPT_CPU_DASM_REVISION,
+        OPT_CPU_DASM_SYNTAX,
         OPT_CPU_OVERCLOCKING,
-        OPT_CPU_RESET_VAL
+        OPT_CPU_RESET_VAL,
+        
+        OPT_FPU_REVISION
     };
 
     for (auto &option : options) {
@@ -460,8 +487,13 @@ CPU::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Config) {
 
+        string fputxt =
+        config.fpuRevision == FPU_INTERNAL ? " (none)" : " (external coprocessor)";
+        
         os << util::tab("CPU revision");
         os << CPURevisionEnum::key(config.revision) << std::endl;
+        os << util::tab("FPU revision");
+        os << FPURevisionEnum::key(config.fpuRevision) << fputxt << std::endl;
         os << util::tab("DASM revision");
         os << DasmRevisionEnum::key(config.dasmRevision) << std::endl;
         os << util::tab("DASM syntax");
@@ -547,22 +579,39 @@ CPU::_dump(Category category, std::ostream& os) const
     }
 
     if (category == Category::Fpu) {
-        
-        os << util::tab("FPIAR");
-        os << util::hex(fpu.fpiar) << std::endl;
-        os << util::tab("FPSR");
-        os << util::hex(fpu.fpsr) << std::endl;
+                
         os << util::tab("FPCR");
         os << util::hex(fpu.fpcr) << std::endl;
-
-        /*
-         for (isize i = 0; i < 8; i++) {
-
-         auto value = softfloat::floatx80_to_float32(fpu.fpr[i].raw);
-         os << util::tab("FP" + std::to_string(i));
-         os << util::hex(u32(value)) << std::endl;
-         }
-         */
+        os << util::tab("FPSR");
+        os << util::hex(fpu.fpsr) << std::endl;
+        os << util::tab("FPIAR");
+        os << util::hex(fpu.fpiar) << std::endl;
+        os << std::endl;
+        
+        os << util::tab("Rounding mode");
+        switch (fpu.getRoundingMode()) {
+            case moira::FPU_RND_NEAREST:    os << "NEAREST"; break;
+            case moira::FPU_RND_ZERO:       os << "ZERO"; break;
+            case moira::FPU_RND_DOWNWARD:   os << "DOWNWARD"; break;
+            case moira::FPU_RND_UPWARD:     os << "UPDWARD"; break;
+        }
+        os << std::endl;
+        os << util::tab("Precision");
+        switch (fpu.getPrecision()) {
+            case moira::FPU_PREC_EXTENDED:  os << "EXTENDED"; break;
+            case moira::FPU_PREC_SINGLE:    os << "SINGLE"; break;
+            case moira::FPU_PREC_DOUBLE:    os << "DOUBLE"; break;
+            case moira::FPU_PREC_UNDEFINED: os << "UNDEFINED"; break;
+        }
+        os << std::endl << std::endl;
+        
+        for (isize i = 0; i < 8; i++) {
+            
+            os << util::tab("FP" + std::to_string(i));
+            // os << fpu.fpr[i] << std::endl;
+            os << util::hex(fpu.fpr[i].val.raw.high) << ":";
+            os << util::hex(fpu.fpr[i].val.raw.low) << std::endl;
+        }
     }
     
     if (category == Category::Breakpoints) {
@@ -638,6 +687,7 @@ CPU::_trackOff()
     debugger.disableLogging();
 }
 
+/*
 isize
 CPU::_load(const u8 *buffer)
 {
@@ -653,10 +703,19 @@ CPU::_load(const u8 *buffer)
 
     return isize(reader.ptr - buffer);
 }
+*/
 
 isize
 CPU::didLoadFromBuffer(const u8 *buffer)
 {
+    auto cpuModel = (moira::Model)config.revision;
+    auto fpuModel = (moira::FPUModel)config.fpuRevision;
+    auto dasmModel = (moira::Model)config.dasmRevision;
+
+    // Rectify the CPU and FPU type
+    setModel(cpuModel, dasmModel);
+    fpu.setModel(fpuModel);
+
     /* Because we don't save breakpoints and watchpoints in a snapshot, the
      * CPU flags for checking breakpoints and watchpoints can be in a corrupt
      * state after loading. These flags need to be updated according to the
@@ -741,7 +800,7 @@ CPU::disassembleWords(u32 addr, isize len)
 {
     static char result[64];
 
-    dump16(result, addr, len);
+    dump16(result, addr, (int)len);
     return result;
 }
 

@@ -392,6 +392,16 @@ Interpreter::initCommandShell(Command &root)
         amiga.configure(OPT_CPU_REVISION, parseEnum <CPURevisionEnum> (argv));
     });
 
+    if (amiga.fpuSupport()) {
+
+        root.add({"cpu", "set", "fpu"}, { FPURevisionEnum::argList() },
+                 "Selects the emulated floating-point unit",
+                 [this](Arguments& argv, long value) {
+
+            amiga.configure(OPT_FPU_REVISION, parseEnum <FPURevisionEnum> (argv));
+        });
+    }
+
     root.add({"cpu", "set", "dasm"},
              "Configures the disassembler");
 

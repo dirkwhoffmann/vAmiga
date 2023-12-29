@@ -92,25 +92,25 @@ Moira::dump32(char *str, u32 value) const
 }
 
 void
-Moira::dump16(char *str, u16 values[], isize cnt) const
+Moira::dump16(char *str, u16 values[], int cnt) const
 {
     StrWriter writer(str, dataStyle);
 
     for (int i = 0; i < cnt; i++) {
 
-        for (isize j = 0; i && j < dataStyle.tab; j++) writer << ' ';
+        for (int j = 0; i && j < dataStyle.tab; j++) writer << ' ';
         writer << UInt16{values[i]} << Finish{};
     }
 }
 
 void
-Moira::dump16(char *str, u32 addr, isize cnt) const
+Moira::dump16(char *str, u32 addr, int cnt) const
 {
     StrWriter writer(str, dataStyle);
 
     for (int i = 0; i < cnt; i++) {
 
-        for (isize j = 0; i && j < dataStyle.tab; j++) writer << ' ';
+        for (int j = 0; i && j < dataStyle.tab; j++) writer << ' ';
         writer << UInt16{u16(dasmRead<Word>(addr))} << Finish{};
         U32_INC(addr, 2);
     }
@@ -462,7 +462,7 @@ Moira::dasmAndiRg(StrWriter &str, u32 &addr, u16 op) const
     auto dst = _____________xxx(op);
 
     if (str.style.syntax == DASM_MUSASHI) {
-        str << Ins<I>{} << Sz<S>{} << str.tab << Imu{src} << Sep{} << Dn{dst};
+        str << Ins<I>{} << Sz<S>{} << str.tab << Imu<S>{src} << Sep{} << Dn{dst};
     } else {
         str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>(src) << Sep{} << Dn{dst};
     }
@@ -475,7 +475,7 @@ Moira::dasmAndiEa(StrWriter &str, u32 &addr, u16 op) const
     auto dst = Op <M,S> ( _____________xxx(op), addr );
 
     if (str.style.syntax == DASM_MUSASHI) {
-        str << Ins<I>{} << Sz<S>{} << str.tab << Imu{src} << Sep{} << dst;
+        str << Ins<I>{} << Sz<S>{} << str.tab << Imu<S>{src} << Sep{} << dst;
     } else {
         str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>(src) << "," << dst;
     }
@@ -487,7 +487,7 @@ Moira::dasmAndiccr(StrWriter &str, u32 &addr, u16 op) const
     auto src = dasmIncRead<S>(addr);
 
     if (str.style.syntax == DASM_MUSASHI) {
-        str << Ins<I>{} << str.tab << Imu{src} << Sep{} << Ccr{};
+        str << Ins<I>{} << str.tab << Imu<S>{src} << Sep{} << Ccr{};
     } else {
         str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>(src) << Sep{} << Ccr{};
     }
@@ -515,11 +515,14 @@ Moira::dasmBitFieldDn(StrWriter &str, u32 &addr, u16 op) const
     auto w   = ___________xxxxx(ext);
 
     // Catch illegal extension words
-    if ((str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) && !isValidExt(I, M, op, ext)) {
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        addr = old;
-        dasmIllegal<I, M, S>(str, addr, op);
-        return;
+        if (!isValidExt(I, M, op, ext)) {
+
+            addr = old;
+            dasmIllegal<I, M, S>(str, addr, op);
+            return;
+        }
     }
 
     str << Ins<I>{} << str.tab;
@@ -629,11 +632,14 @@ Moira::dasmCas(StrWriter &str, u32 &addr, u16 op) const
     auto dst = Op <M,S> ( _____________xxx(op), addr );
 
     // Catch illegal extension words
-    if ((str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) && !isValidExt(I, M, op, ext)) {
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        addr = old;
-        dasmIllegal<I, M, S>(str, addr, op);
-        return;
+        if (!isValidExt(I, M, op, ext)) {
+
+            addr = old;
+            dasmIllegal<I, M, S>(str, addr, op);
+            return;
+        }
     }
 
     str << Ins<I>{} << Sz<S>{} << str.tab << dc << Sep{} << du << Sep{} << dst;
@@ -653,11 +659,14 @@ Moira::dasmCas2(StrWriter &str, u32 &addr, u16 op) const
     auto rn2 = Rn ( (ext >> 12) & 0b1111 );
 
     // Catch illegal extension words (binutils only checks the first word)
-    if ((str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) && !isValidExt(I, M, op, u16(ext >> 16))) {
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        addr = old;
-        dasmIllegal<I, M, S>(str, addr, op);
-        return;
+        if (!isValidExt(I, M, op, u16(ext >> 16))) {
+
+            addr = old;
+            dasmIllegal<I, M, S>(str, addr, op);
+            return;
+        }
     }
 
     auto fill = str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT ? ',' : ':';
@@ -711,11 +720,14 @@ Moira::dasmChkCmp2(StrWriter &str, u32 &addr, u16 op) const
     auto dst = Rn       ( xxxx____________(ext)      );
 
     // Catch illegal extension words
-    if ((str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) && !isValidExt(I, M, op, ext)) {
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        addr = old;
-        dasmIllegal<I, M, S>(str, addr, op);
-        return;
+        if (!isValidExt(I, M, op, ext)) {
+            
+            addr = old;
+            dasmIllegal<I, M, S>(str, addr, op);
+            return;
+        }
     }
 
     if (ext & 0x0800) {
@@ -1059,7 +1071,7 @@ Moira::dasmBitImDy(StrWriter &str, u32 &addr, u16 op) const
 
         default:
 
-            str << Ins<I>{} << str.tab << Imu(src) << Sep{} << dst;
+            str << Ins<I>{} << str.tab << Imu<S>(src) << Sep{} << dst;
     }
 }
 
@@ -1079,7 +1091,7 @@ Moira::dasmBitImEa(StrWriter &str, u32 &addr, u16 op) const
 
         default:
 
-            str << Ins<I>{} << str.tab << Imu(src) << Sep{} << dst;
+            str << Ins<I>{} << str.tab << Imu<S>(src) << Sep{} << dst;
     }
 }
 

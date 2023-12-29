@@ -41,6 +41,8 @@ these four paragraphs for those parts of this code that are retained.
 
 namespace softfloat {
 
+extern flag floatx80_is_nan( floatx80 a ); // DIRK: ADDED
+
 /*----------------------------------------------------------------------------
 | Software IEC/IEEE floating-point underflow tininess-detection mode.
 *----------------------------------------------------------------------------*/

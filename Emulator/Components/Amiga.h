@@ -288,7 +288,9 @@ public:
     // Reverts to factory settings
     void revertToFactorySettings();
 
-    
+    // Returns whether experimental FPU support should be enabled
+    bool fpuSupport() { return FPU_SUPPORT; }
+
 private:
     
     // Overrides a config option if the corresponding debug option is enabled

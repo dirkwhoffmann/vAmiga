@@ -2,12 +2,57 @@
 // This file is part of Moira - A Motorola 68k emulator
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
-// Licensed under the GNU General Public License v3
-//
-// See https://www.gnu.org for license information
+// Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
-// #include "softfloat.h"
+template <Instr I, Mode M, Size S> void
+Moira::dasmFBcc(StrWriter &str, u32 &addr, u16 op) const
+{
+    auto old = addr;
+    auto ext = dasmIncRead<S>(addr);
+    auto cnd = ___________xxxxx (op);
+
+    // Check for special FNOP opcode
+    if ((op & 0x7F) == 0 && ext == 0) {
+
+        dasmFNop<FNOP, M, S>(str, addr, op);
+        return;
+    }
+
+    auto dst = old + 2;
+    U32_INC(dst, SEXT<S>(ext));
+
+    if (S == Long) {
+        str << Ins<I>{} << Fcc{cnd} << Sz<S>{} << str.tab << UInt(dst);
+    } else {
+        str << Ins<I>{} << Fcc{cnd} << str.tab << UInt(dst);
+    }
+}
+
+template <Instr I, Mode M, Size S> void
+Moira::dasmFDbcc(StrWriter &str, u32 &addr, u16 op) const
+{
+    auto old = addr;
+    auto ext = dasmIncRead(addr);
+    auto src = _____________xxx (op);
+    auto cnd = ___________xxxxx (ext);
+
+    // Catch illegal extension words
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
+
+        if (!fpu.isValidExt(I, M, op, ext)) {
+
+            addr = old;
+            dasmIllegal<I, M, S>(str, addr, op);
+            return;
+        }
+    }
+
+    auto dst = addr + 2;
+    U32_INC(dst, SEXT<S>(dasmIncRead<S>(addr)));
+
+    str << Ins<I>{} << Fcc{cnd} << str.tab << Dn{src} << Sep{} << UInt(dst);
+}
 
 template <Instr I, Mode M, Size S> void
 Moira::dasmFGen(StrWriter &str, u32 &addr, u16 op) const
@@ -103,71 +148,34 @@ Moira::dasmFGen(StrWriter &str, u32 &addr, u16 op) const
                 case 0x37: dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
                 case 0x38: dasmFGeneric<FCMP, M, S>(str, addr, op); return;
                 case 0x3A: dasmFGeneric3<FTST, M, S>(str, addr, op); return;
-                case 0x41: dasmFGeneric<FSSQRT, M, S>(str, addr, op); return;
-                case 0x45: dasmFGeneric<FDSQRT, M, S>(str, addr, op); return;
-                case 0x58: dasmFGeneric<FSABS, M, S>(str, addr, op); return;
-                case 0x5A: dasmFGeneric<FSNEG, M, S>(str, addr, op); return;
-                case 0x5C: dasmFGeneric<FDABS, M, S>(str, addr, op); return;
-                case 0x5E: dasmFGeneric<FDNEG, M, S>(str, addr, op); return;
-                case 0x60: dasmFGeneric<FSDIV, M, S>(str, addr, op); return;
-                case 0x62: dasmFGeneric<FSADD, M, S>(str, addr, op); return;
-                case 0x63: dasmFGeneric<FSMUL, M, S>(str, addr, op); return;
-                case 0x64: dasmFGeneric<FDDIV, M, S>(str, addr, op); return;
-                case 0x66: dasmFGeneric<FDADD, M, S>(str, addr, op); return;
-                case 0x67: dasmFGeneric<FDMUL, M, S>(str, addr, op); return;
-                case 0x68: dasmFGeneric<FSSUB, M, S>(str, addr, op); return;
-                case 0x6C: dasmFGeneric<FDSUB, M, S>(str, addr, op); return;
             }
+
+            // 68040 only instructions
+            if (hasFPU()) {
+
+                switch (cmd) {
+
+                    case 0x41: dasmFGeneric<FSSQRT, M, S>(str, addr, op); return;
+                    case 0x45: dasmFGeneric<FDSQRT, M, S>(str, addr, op); return;
+                    case 0x58: dasmFGeneric<FSABS, M, S>(str, addr, op); return;
+                    case 0x5A: dasmFGeneric<FSNEG, M, S>(str, addr, op); return;
+                    case 0x5C: dasmFGeneric<FDABS, M, S>(str, addr, op); return;
+                    case 0x5E: dasmFGeneric<FDNEG, M, S>(str, addr, op); return;
+                    case 0x60: dasmFGeneric<FSDIV, M, S>(str, addr, op); return;
+                    case 0x62: dasmFGeneric<FSADD, M, S>(str, addr, op); return;
+                    case 0x63: dasmFGeneric<FSMUL, M, S>(str, addr, op); return;
+                    case 0x64: dasmFGeneric<FDDIV, M, S>(str, addr, op); return;
+                    case 0x66: dasmFGeneric<FDADD, M, S>(str, addr, op); return;
+                    case 0x67: dasmFGeneric<FDMUL, M, S>(str, addr, op); return;
+                    case 0x68: dasmFGeneric<FSSUB, M, S>(str, addr, op); return;
+                    case 0x6C: dasmFGeneric<FDSUB, M, S>(str, addr, op); return;
+                }
+            }
+
             break;
     }
 
     dasmLineF<I, M, S>(str, addr, op);
-}
-
-template <Instr I, Mode M, Size S> void
-Moira::dasmFBcc(StrWriter &str, u32 &addr, u16 op) const
-{
-    auto old = addr;
-    auto ext = dasmIncRead<S>(addr);
-    auto cnd = ___________xxxxx (op);
-
-    // Check for special FNOP opcode
-    if ((op & 0x7F) == 0 && ext == 0) {
-
-        dasmFNop<FNOP, M, S>(str, addr, op);
-        return;
-    }
-
-    auto dst = old + 2;
-    U32_INC(dst, SEXT<S>(ext));
-
-    if (S == Long) {
-        str << Ins<I>{} << Fcc{cnd} << Sz<S>{} << str.tab << UInt(dst);
-    } else {
-        str << Ins<I>{} << Fcc{cnd} << str.tab << UInt(dst);
-    }
-}
-
-template <Instr I, Mode M, Size S> void
-Moira::dasmFDbcc(StrWriter &str, u32 &addr, u16 op) const
-{
-    auto old = addr;
-    auto ext = dasmIncRead(addr);
-    auto src = _____________xxx (op);
-    auto cnd = ___________xxxxx (ext);
-
-    // Catch illegal extension words
-    if ((str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) && !isValidExtFPU(I, M, op, ext)) {
-
-        addr = old;
-        dasmIllegal<I, M, S>(str, addr, op);
-        return;
-    }
-
-    auto dst = addr + 2;
-    U32_INC(dst, SEXT<S>(dasmIncRead<S>(addr)));
-
-    str << Ins<I>{} << Fcc{cnd} << str.tab << Dn{src} << Sep{} << UInt(dst);
 }
 
 template <Instr I, Mode M, Size S> void
@@ -202,11 +210,14 @@ Moira::dasmFScc(StrWriter &str, u32 &addr, u16 op) const
     auto cnd = __________xxxxxx (ext);
 
     // Catch illegal extension words
-    if ((str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) && !isValidExtFPU(I, M, op, ext)) {
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        addr = old;
-        dasmIllegal<I, M, S>(str, addr, op);
-        return;
+        if (!fpu.isValidExt(I, M, op, ext)) {
+
+            addr = old;
+            dasmIllegal<I, M, S>(str, addr, op);
+            return;
+        }
     }
 
     str << Ins<I>{} << Fcc{cnd} << str.tab << Op<M, S>(reg, addr);
@@ -220,11 +231,14 @@ Moira::dasmFTrapcc(StrWriter &str, u32 &addr, u16 op) const
     auto cnd = __________xxxxxx (ext);
 
     // Catch illegal extension words
-    if ((str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) && !isValidExtFPU(I, M, op, ext)) {
+    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        addr = old;
-        dasmIllegal<I, M, S>(str, addr, op);
-        return;
+        if (!fpu.isValidExt(I, M, op, ext)) {
+
+            addr = old;
+            dasmIllegal<I, M, S>(str, addr, op);
+            return;
+        }
     }
 
     switch (S) {
@@ -447,7 +461,7 @@ Moira::dasmFMove(StrWriter &str, u32 &addr, u16 op) const
     // Catch illegal extension words
     if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        if (!isValidExtFPU(I, M, op, ext)) {
+        if (!fpu.isValidExt(I, M, op, ext)) {
 
             addr = old;
             dasmIllegal<I, M, S>(str, addr, op);
@@ -554,7 +568,7 @@ Moira::dasmFMovecr(StrWriter &str, u32 &addr, u16 op) const
     // Catch illegal extension words
     if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        if (!isValidExtFPU(I, M, op, ext)) {
+        if (!fpu.isValidExt(I, M, op, ext)) {
 
             addr = old;
             dasmIllegal<I, M, S>(str, addr, op);
@@ -579,7 +593,7 @@ Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op) const
     // Catch illegal extension words
     if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        if (!isValidExtFPU(I, M, op, ext)) {
+        if (!fpu.isValidExt(I, M, op, ext)) {
 
             addr = old;
             dasmIllegal<I, M, S>(str, addr, op);
@@ -613,7 +627,7 @@ Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op) const
 
                 if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-                    str << "fmovel" << str.tab << Sep{} << Op<M, Long>(reg, addr);
+                    str << Ins<FMOVE>{} << Ffmt{0} << str.tab << Sep{} << Op<M, Long>(reg, addr);
                     return;
                 }
             }

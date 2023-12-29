@@ -2,9 +2,7 @@
 // This file is part of Moira - A Motorola 68k emulator
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
-// Licensed under the GNU General Public License v3
-//
-// See https://www.gnu.org for license information
+// Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
 #pragma once
@@ -24,8 +22,8 @@ struct UInt24 { u32 raw; UInt24(u32 v) : raw(v) { } };
 struct UInt32 { u32 raw; UInt32(u32 v) : raw(v) { } };
 
 // Immediate operands
-struct Imu { u32 raw; Imu(u32 v) : raw(v) { } };
-template <Size S> struct Ims { i32 raw; Ims(i32 v) : raw(v) { } };
+template <Size S = Long> struct Imu { u32 raw; Imu(u32 v) : raw(v) { } };
+template <Size S = Long> struct Ims { i32 raw; Ims(i32 v) : raw(v) { } };
 struct Imd { u32 raw; Imd(u32 v) : raw(v) { } };
 
 // Mnemonics
@@ -124,7 +122,7 @@ public:
     StrWriter& operator<<(UInt24);
     StrWriter& operator<<(UInt32);
 
-    StrWriter& operator<<(Imu);
+    template <Size S> StrWriter& operator<<(Imu<S>);
     template <Size S> StrWriter& operator<<(Ims<S>);
     StrWriter& operator<<(Imd);
 
