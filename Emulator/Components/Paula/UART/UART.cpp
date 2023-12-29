@@ -222,13 +222,13 @@ UART::rxdHasChanged(bool value)
 }
 
 void
-UART::recordIncomingByte(u8 byte)
+UART::recordIncomingByte(int byte)
 {
     serialPort.recordIncomingByte(byte);
 }
 
 void
-UART::recordOutgoingByte(u8 byte)
+UART::recordOutgoingByte(int byte)
 {
     serialPort.recordOutgoingByte(byte);
 }

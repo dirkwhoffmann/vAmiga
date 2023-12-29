@@ -162,10 +162,10 @@ public:
 private:
 
     // Called when a byte has been received
-    void recordIncomingByte(u8 byte);
+    void recordIncomingByte(int byte);
 
     // Called when a byte has been sent
-    void recordOutgoingByte(u8 byte);
+    void recordOutgoingByte(int byte);
 
 
     //

@@ -125,8 +125,8 @@ SerialPort::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
 
-    incoming = "";
-    outgoing = "";
+    incoming.clear();
+    outgoing.clear();
 }
 
 bool
@@ -178,24 +178,24 @@ SerialPort::setPort(u32 mask, bool value)
     if ((oldPort ^ port) & RXD_MASK) uart.rxdHasChanged(value);
 }
 
-string
+std::u16string
 SerialPort::readIncoming()
 {
     {   SYNCHRONIZED
 
-        string result = incoming;
-        incoming = "";
+        auto result = incoming;
+        incoming.clear();
         return result;
     }
 }
 
-string
+std::u16string
 SerialPort::readOutgoing()
 {
     {   SYNCHRONIZED
 
-        string result = outgoing;
-        outgoing = "";
+        auto result = outgoing;
+        outgoing.clear();
         return result;
     }
 }

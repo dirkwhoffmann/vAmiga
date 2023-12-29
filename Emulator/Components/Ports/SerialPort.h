@@ -37,8 +37,8 @@ class SerialPort : public SubComponent {
     u32 port = 0;
 
     // Temporary storage for incoming and outgoing bytes
-    string incoming;
-    string outgoing;
+    std::u16string incoming;
+    std::u16string outgoing;
 
 
     //
@@ -156,8 +156,8 @@ private:
 public:
 
     // Reads and removes the contents of one of the record buffers
-    string readIncoming();
-    string readOutgoing();
+    std::u16string readIncoming();
+    std::u16string readOutgoing();
 
     // Reads and removes a single byte from one of the record buffers
     int readIncomingByte();
