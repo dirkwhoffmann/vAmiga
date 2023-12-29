@@ -62,42 +62,6 @@ extension ConfigurationController {
             csCpuInfo2.stringValue = ""
         }
 
-        // FPU
-        if amiga.fpuSupport {
-
-            csFpuRevision.selectItem(withTag: config.fpuRev)
-            switch FPURevision(rawValue: config.fpuRev) {
-
-            case ._INTERNAL:
-                csFpuInfo1.stringValue = ""
-                csFpuInfo2.stringValue = ""
-                csFpuIcon.isHidden = true
-
-            case ._68881:
-                csFpuInfo1.stringValue = "Motorola MC68881"
-                csFpuInfo2.stringValue = "Floating-Point Coprocessor"
-                csFpuIcon.isHidden = false
-
-            case ._68882:
-                csFpuInfo1.stringValue = "Motorola MC68882"
-                csFpuInfo2.stringValue = "Floating-Point Coprocessor"
-                csFpuIcon.isHidden = false
-
-            default:
-                csFpuInfo1.stringValue = "Invalid"
-                csFpuInfo2.stringValue = ""
-                csFpuIcon.isHidden = false
-            }
-
-        } else {
-
-            csFpuLabel.isHidden = true
-            csFpuRevision.isHidden = true
-            csFpuInfo1.isHidden = true
-            csFpuInfo2.isHidden = true
-            csFpuIcon.isHidden = true
-        }
-
         // Warp
         csWarpMode.selectItem(withTag: config.warpMode)
 
