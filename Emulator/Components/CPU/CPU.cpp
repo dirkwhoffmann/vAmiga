@@ -551,42 +551,6 @@ CPU::_dump(Category category, std::ostream& os) const
         os << util::tab("Last exception");
         os << util::dec(exception);
     }
-
-    if (category == Category::Fpu) {
-                
-        os << util::tab("FPCR");
-        os << util::hex(fpu.fpcr) << std::endl;
-        os << util::tab("FPSR");
-        os << util::hex(fpu.fpsr) << std::endl;
-        os << util::tab("FPIAR");
-        os << util::hex(fpu.fpiar) << std::endl;
-        os << std::endl;
-        
-        os << util::tab("Rounding mode");
-        switch (fpu.getRoundingMode()) {
-            case moira::FPU_RND_NEAREST:    os << "NEAREST"; break;
-            case moira::FPU_RND_ZERO:       os << "ZERO"; break;
-            case moira::FPU_RND_DOWNWARD:   os << "DOWNWARD"; break;
-            case moira::FPU_RND_UPWARD:     os << "UPDWARD"; break;
-        }
-        os << std::endl;
-        os << util::tab("Precision");
-        switch (fpu.getPrecision()) {
-            case moira::FPU_PREC_EXTENDED:  os << "EXTENDED"; break;
-            case moira::FPU_PREC_SINGLE:    os << "SINGLE"; break;
-            case moira::FPU_PREC_DOUBLE:    os << "DOUBLE"; break;
-            case moira::FPU_PREC_UNDEFINED: os << "UNDEFINED"; break;
-        }
-        os << std::endl << std::endl;
-        
-        for (isize i = 0; i < 8; i++) {
-            
-            os << util::tab("FP" + std::to_string(i));
-            // os << fpu.fpr[i] << std::endl;
-            os << util::hex(fpu.fpr[i].val.raw.high) << ":";
-            os << util::hex(fpu.fpr[i].val.raw.low) << std::endl;
-        }
-    }
     
     if (category == Category::Breakpoints) {
 

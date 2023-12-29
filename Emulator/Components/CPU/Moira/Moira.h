@@ -50,7 +50,7 @@ protected:
 public:
 
     // Floating point unit (not supported yet)
-    FPU fpu = FPU(*this);
+    // FPU fpu = FPU(*this);
 
     // Breakpoints, watchpoints, catchpoints, instruction tracing
     Debugger debugger = Debugger(*this);
@@ -152,13 +152,6 @@ public:
     void setModel(Model cpuModel, Model dasmModel);
     void setModel(Model model) { setModel(model, model); }
 
-    // Selects the emulated FPU model
-    void setFpuModel(FPUModel fpuModel);
-
-    // Attaches or detaches a floating-point coprocessor
-    // [[deprecated]] void attach6888x(int x);
-    // [[deprecated]] void detach6888x();
-
     // Configures the visual appearance of disassembled instructions
     void setDasmSyntax(DasmSyntax value);
     void setDasmNumberFormat(DasmNumberFormat value) { setNumberFormat(instrStyle, value); }
@@ -194,9 +187,6 @@ public:
 
     // Returns the address bus mask (bus width)
     u32 addrMask() const;
-
-    // Checks if a floating-point coprocessor is attached
-    bool has6888x() const;
 
 protected:
 

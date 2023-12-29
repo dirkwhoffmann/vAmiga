@@ -185,8 +185,8 @@
             filePath = "Emulator/Components/CPU/Moira/Moira.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "435"
-            endingLineNumber = "435"
+            startingLineNumber = "387"
+            endingLineNumber = "387"
             landmarkName = "Moira::processException(exc)"
             landmarkType = "7">
             <Locations>
@@ -368,6 +368,51 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "435"
                   endingLineNumber = "435"
+                  offsetFromSymbolStart = "536">
+               </Location>
+               <Location
+                  uuid = "9F889B32-39C8-498F-AFC3-14E8073A26C8 - bb4eac49597008cc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void vamiga::moira::Moira::processException&lt;(vamiga::moira::Core)0&gt;(std::exception const&amp;)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Emulator/Components/CPU/Moira/Moira.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "387"
+                  endingLineNumber = "387"
+                  offsetFromSymbolStart = "536">
+               </Location>
+               <Location
+                  uuid = "9F889B32-39C8-498F-AFC3-14E8073A26C8 - e9f68e62744430cd"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void vamiga::moira::Moira::processException&lt;(vamiga::moira::Core)1&gt;(std::exception const&amp;)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Emulator/Components/CPU/Moira/Moira.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "387"
+                  endingLineNumber = "387"
+                  offsetFromSymbolStart = "536">
+               </Location>
+               <Location
+                  uuid = "9F889B32-39C8-498F-AFC3-14E8073A26C8 - 161ee00767a8d8ce"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void vamiga::moira::Moira::processException&lt;(vamiga::moira::Core)2&gt;(std::exception const&amp;)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Emulator/Components/CPU/Moira/Moira.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "387"
+                  endingLineNumber = "387"
                   offsetFromSymbolStart = "536">
                </Location>
             </Locations>

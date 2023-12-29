@@ -2001,7 +2001,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     // Floating-Point Unit
     //
 
-    if (model == M68040 || has6888x()) {
+    if (model == M68040) {
 
         opcode = parse("1111 0010 100- ----");
         ___________XXXXX(opcode, FBcc, MODE_IP, Word, FBcc, CIMS)

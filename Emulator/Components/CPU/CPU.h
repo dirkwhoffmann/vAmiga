@@ -128,28 +128,7 @@ private:
             << loopModeDelay
             << readBuffer
             << writeBuffer
-            << flags
-            
-            // << fpu.model
-            << fpu.fpr[0].val.raw.high
-            << fpu.fpr[0].val.raw.low
-            << fpu.fpr[1].val.raw.high
-            << fpu.fpr[1].val.raw.low
-            << fpu.fpr[2].val.raw.high
-            << fpu.fpr[2].val.raw.low
-            << fpu.fpr[3].val.raw.high
-            << fpu.fpr[3].val.raw.low
-            << fpu.fpr[4].val.raw.high
-            << fpu.fpr[4].val.raw.low
-            << fpu.fpr[5].val.raw.high
-            << fpu.fpr[5].val.raw.low
-            << fpu.fpr[6].val.raw.high
-            << fpu.fpr[6].val.raw.low
-            << fpu.fpr[7].val.raw.high
-            << fpu.fpr[7].val.raw.low
-            << fpu.fpcr
-            << fpu.fpsr
-            << fpu.fpiar;
+            << flags;
         }
     }
 

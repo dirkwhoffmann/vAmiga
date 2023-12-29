@@ -47,10 +47,10 @@ namespace vamiga {
 enum class Category
 {    
     BankMap, Beam, Blocks, Breakpoints, Bus, Catchpoints, Config, Current,
-    Defaults, Disk, Dma, Drive, Events, FileSystem, Fpu, Geometry, Hunks,
-    List1, List2, Parameters, Partitions, Properties,
-    Registers, Sections, Segments, Signals, Slots, State, Stats, Status, SwTraps,
-    Tod, Vectors, Volumes, Watchpoints
+    Defaults, Disk, Dma, Drive, Events, FileSystem, Geometry, Hunks,
+    List1, List2, Parameters, Partitions, Properties, Registers, Sections,
+    Segments, Signals, Slots, State, Stats, Status, SwTraps, Tod, Vectors,
+    Volumes, Watchpoints
 };
 
 class CoreObject {

@@ -64,54 +64,13 @@ Moira::setModel(Model cpuModel, Model dasmModel)
         
         this->cpuModel = cpuModel;
         this->dasmModel = dasmModel;
-        
-        // Reset the FPU core if no external co-processor is present
-        // if (!has6888x()) fpu.setModel(INTERNAL_FPU);
-        
+
         createJumpTable(cpuModel, dasmModel);
         
         reg.cacr &= cacrMask();
         flags &= ~CPU_IS_LOOPING;
     }
 }
-
-void
-Moira::setFpuModel(FPUModel model)
-{
-    if (fpu.getModel() != model) {
-        
-        fpu.setModel(model);
-        createJumpTable(cpuModel, dasmModel);
-    }
-}
-
-/*
-void
-Moira::attach6888x(int x)
-{
-    assert(x == 1 || x == 2);
-
-    FPUModel model = x == 1 ? M68881 : M68882;
-
-    if (fpu.getModel() != model) {
-
-        fpu.setModel(model);
-        createJumpTable(cpuModel, dasmModel);
-    }
-}
-
-void
-Moira::detach6888x()
-{
-    FPUModel model = hasFPU() ? INTERNAL_FPU : NO_FPU;
-
-    if (fpu.getModel() != model) {
-
-        fpu.setModel(model);
-        createJumpTable(cpuModel, dasmModel);
-    }
-}
-*/
 
 void
 Moira::setDasmSyntax(DasmSyntax value)
@@ -202,12 +161,6 @@ Moira::addrMask() const
     }
 }
 
-bool
-Moira::has6888x() const
-{
-    return fpu.getModel() == M68881 || fpu.getModel() == M68882;
-}
-
 template <Core C> u32
 Moira::addrMask() const
 {
@@ -262,7 +215,6 @@ Moira::reset()
     prefetch<C>();
 
     // Reset subcomponents
-    fpu.reset();
     debugger.reset();
 
     // Inform the delegate
