@@ -2832,11 +2832,6 @@ using namespace vamiga::moira;
     return (NSInteger)(100 * load);
 }
 
-- (BOOL)fpuSupport
-{
-    return [self amiga]->fpuSupport();
-}
-
 - (InspectionTarget)inspectionTarget
 {
     return [self amiga]->getInspectionTarget();
