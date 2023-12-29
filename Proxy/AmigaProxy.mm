@@ -1221,16 +1221,6 @@ using namespace vamiga::moira;
     return [self serial]->getInfo();
 }
 
-- (NSString *)readIncoming
-{
-    return @([self serial]->readIncoming().c_str());
-}
-
-- (NSString *)readOutgoing
-{
-    return @([self serial]->readOutgoing().c_str());
-}
-
 - (NSInteger)readIncomingPrintableByte
 {
     return [self serial]->readIncomingPrintableByte();

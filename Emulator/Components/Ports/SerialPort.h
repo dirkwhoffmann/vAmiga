@@ -168,11 +168,11 @@ public:
 private:
 
     // Called by the UART when a byte has been received or sent
-    void recordIncomingByte(u8 byte);
-    void recordOutgoingByte(u8 byte);
+    void recordIncomingByte(int byte);
+    void recordOutgoingByte(int byte);
 
     // Dumps a byte to RetroShell
-    void dumpByte(u8 byte);
+    void dumpByte(int byte);
 };
 
 }

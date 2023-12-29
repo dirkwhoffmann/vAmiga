@@ -253,7 +253,7 @@ SerialPort::readOutgoingPrintableByte()
 }
 
 void
-SerialPort::recordIncomingByte(u8 byte)
+SerialPort::recordIncomingByte(int byte)
 {
     {   SYNCHRONIZED
 
@@ -271,7 +271,7 @@ SerialPort::recordIncomingByte(u8 byte)
 }
 
 void
-SerialPort::recordOutgoingByte(u8 byte)
+SerialPort::recordOutgoingByte(int byte)
 {
     {   SYNCHRONIZED
 
@@ -289,7 +289,7 @@ SerialPort::recordOutgoingByte(u8 byte)
 }
 
 void
-SerialPort::dumpByte(u8 byte)
+SerialPort::dumpByte(int byte)
 {
     if (isprint(byte) || byte == '\n') {
         retroShell << (char)byte;

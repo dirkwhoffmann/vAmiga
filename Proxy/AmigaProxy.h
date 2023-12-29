@@ -605,9 +605,6 @@
 
 @property (readonly) SerialPortInfo info;
 
-- (NSString *)readIncoming;
-- (NSString *)readOutgoing;
-
 - (NSInteger)readIncomingPrintableByte;
 - (NSInteger)readOutgoingPrintableByte;
 
