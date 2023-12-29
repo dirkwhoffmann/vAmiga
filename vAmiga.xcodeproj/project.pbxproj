@@ -10,8 +10,6 @@
 		50001C652593230200D1FC91 /* DeviceDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50001C642593230200D1FC91 /* DeviceDatabase.swift */; };
 		500217B82449CF7000E1A096 /* Configuration.xib in Resources */ = {isa = PBXBuildFile; fileRef = 500217B72449CF7000E1A096 /* Configuration.xib */; };
 		500217BA2449CFF500E1A096 /* ConfigurationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500217B92449CFF500E1A096 /* ConfigurationController.swift */; };
-		5002349728CC8DA100145D6E /* softfloat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5002349628CC8D9500145D6E /* softfloat.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
-		5002349828CC8DA200145D6E /* softfloat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5002349628CC8D9500145D6E /* softfloat.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		5004C3AA27BD520400A9161A /* HardDrive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5004C3A527BD516E00A9161A /* HardDrive.cpp */; };
 		5009B7FC2557051A0037288E /* EADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5009B7FA2557051A0037288E /* EADFFile.cpp */; };
 		500A0A2A262305BE0019F013 /* MemUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500A0A28262305BE0019F013 /* MemUtils.cpp */; };
@@ -73,8 +71,6 @@
 		50357BB823912929007E7563 /* RendererSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50357BB723912929007E7563 /* RendererSetup.swift */; };
 		50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* Snapshot.cpp */; };
 		5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5039924225B2164E0084B808 /* MyDocumentController.swift */; };
-		504098E02A84BE920062DD67 /* FpuFormats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504098DE2A84BE920062DD67 /* FpuFormats.cpp */; };
-		504098E12A84BE920062DD67 /* FpuFormats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504098DE2A84BE920062DD67 /* FpuFormats.cpp */; };
 		5041C6282791AF0800D3C494 /* SequencerRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5041C6272791AF0800D3C494 /* SequencerRegs.cpp */; };
 		5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5042F2DB26BE57E600126C05 /* Thread.cpp */; };
 		5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043F6C4221972F90047CC30 /* MyToolbar.swift */; };
@@ -249,8 +245,6 @@
 		50D7CDC42286E968002689F0 /* Joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D7CDC22286E968002689F0 /* Joystick.cpp */; };
 		50DD1EE22525E3E1000180F6 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DD1EE12525E3E1000180F6 /* Preferences.xib */; };
 		50DD33CC2756113300AE18B4 /* pfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 50DD33CB27560EE600AE18B4 /* pfile.c */; };
-		50DD3AF72A6A8590008FC7CC /* MoiraFPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DD3AF52A6A8495008FC7CC /* MoiraFPU.cpp */; };
-		50DD3AF82A6A8590008FC7CC /* MoiraFPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DD3AF52A6A8495008FC7CC /* MoiraFPU.cpp */; };
 		50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DED6AE2202EBA200B8195F /* Inspector.xib */; };
 		50DED6B12202EC3100B8195F /* Inspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DED6B02202EC3100B8195F /* Inspector.swift */; };
 		50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DF2C9F2269135800795256 /* SpriteTableView.swift */; };
@@ -456,13 +450,6 @@
 		50001C642593230200D1FC91 /* DeviceDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDatabase.swift; sourceTree = "<group>"; };
 		500217B72449CF7000E1A096 /* Configuration.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Configuration.xib; sourceTree = "<group>"; };
 		500217B92449CFF500E1A096 /* ConfigurationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationController.swift; sourceTree = "<group>"; };
-		5002349028CC8D9500145D6E /* softfloat-types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "softfloat-types.h"; sourceTree = "<group>"; };
-		5002349128CC8D9500145D6E /* softfloat-macros */ = {isa = PBXFileReference; lastKnownFileType = text; path = "softfloat-macros"; sourceTree = "<group>"; };
-		5002349228CC8D9500145D6E /* milieu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = milieu.h; sourceTree = "<group>"; };
-		5002349328CC8D9500145D6E /* README.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
-		5002349428CC8D9500145D6E /* softfloat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = softfloat.h; sourceTree = "<group>"; };
-		5002349528CC8D9500145D6E /* softfloat-specialize */ = {isa = PBXFileReference; lastKnownFileType = text; path = "softfloat-specialize"; sourceTree = "<group>"; };
-		5002349628CC8D9500145D6E /* softfloat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = softfloat.cpp; sourceTree = "<group>"; };
 		50045A5C2371D1A8008A2AB0 /* KeyboardTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardTypes.h; sourceTree = "<group>"; };
 		5004C3A527BD516E00A9161A /* HardDrive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HardDrive.cpp; sourceTree = "<group>"; };
 		5004C3A627BD516E00A9161A /* HardDrive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HardDrive.h; sourceTree = "<group>"; };
@@ -557,8 +544,6 @@
 		503990C522D8CCB600035783 /* Beam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beam.h; sourceTree = "<group>"; };
 		5039924225B2164E0084B808 /* MyDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDocumentController.swift; sourceTree = "<group>"; };
 		5039924625B219FC0084B808 /* Error.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
-		504098DE2A84BE920062DD67 /* FpuFormats.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FpuFormats.cpp; sourceTree = "<group>"; };
-		504098DF2A84BE920062DD67 /* FpuFormats.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FpuFormats.h; sourceTree = "<group>"; };
 		5041C6272791AF0800D3C494 /* SequencerRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerRegs.cpp; sourceTree = "<group>"; };
 		5042F2DB26BE57E600126C05 /* Thread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
 		5042F2DC26BE57E600126C05 /* Thread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
@@ -822,7 +807,6 @@
 		50C0B78125EC367000CDE1F2 /* IOUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOUtils.h; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
-		50C6653D29216423004C4213 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50C8C42C2605D51A00F4E012 /* Types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Types.h; sourceTree = "<group>"; };
 		50C8C4492607396200F4E012 /* Layer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layer.swift; sourceTree = "<group>"; };
 		50C8C44E260740AC00F4E012 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
@@ -868,8 +852,6 @@
 		50D7CDC32286E968002689F0 /* Joystick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Joystick.h; sourceTree = "<group>"; };
 		50DD1EE12525E3E1000180F6 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 		50DD33CB27560EE600AE18B4 /* pfile.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = pfile.c; sourceTree = "<group>"; };
-		50DD3AF52A6A8495008FC7CC /* MoiraFPU.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MoiraFPU.cpp; sourceTree = "<group>"; };
-		50DD3AF62A6A8496008FC7CC /* MoiraFPU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraFPU.h; sourceTree = "<group>"; };
 		50DED6AE2202EBA200B8195F /* Inspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Inspector.xib; sourceTree = "<group>"; };
 		50DED6B02202EC3100B8195F /* Inspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inspector.swift; sourceTree = "<group>"; };
 		50DF2C9E2268CFC000795256 /* AgnusTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgnusTypes.h; sourceTree = "<group>"; };
@@ -1008,21 +990,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5002348F28CC8D9500145D6E /* softfloat */ = {
-			isa = PBXGroup;
-			children = (
-				5002349028CC8D9500145D6E /* softfloat-types.h */,
-				5002349128CC8D9500145D6E /* softfloat-macros */,
-				5002349228CC8D9500145D6E /* milieu.h */,
-				5002349328CC8D9500145D6E /* README.txt */,
-				5002349428CC8D9500145D6E /* softfloat.h */,
-				5002349528CC8D9500145D6E /* softfloat-specialize */,
-				5002349628CC8D9500145D6E /* softfloat.cpp */,
-				50C6653D29216423004C4213 /* CMakeLists.txt */,
-			);
-			path = softfloat;
-			sourceTree = "<group>";
-		};
 		5009B7F5255702C00037288E /* RomFiles */ = {
 			isa = PBXGroup;
 			children = (
@@ -1864,15 +1831,10 @@
 				50A6F50328C7AB51002F31EA /* MoiraDasmMMU_cpp.h */,
 				50E2BE26240D418500155AE4 /* MoiraDasm_cpp.h */,
 				50A6F50428C7AB6A002F31EA /* MoiraDasmFPU_cpp.h */,
-				50DD3AF62A6A8496008FC7CC /* MoiraFPU.h */,
-				50DD3AF52A6A8495008FC7CC /* MoiraFPU.cpp */,
 				50E2BE2B240D418500155AE4 /* MoiraDebugger.h */,
 				50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */,
 				50E2BE32240D418600155AE4 /* StrWriter.h */,
 				50E2BE2D240D418500155AE4 /* StrWriter_cpp.h */,
-				504098DF2A84BE920062DD67 /* FpuFormats.h */,
-				504098DE2A84BE920062DD67 /* FpuFormats.cpp */,
-				5002348F28CC8D9500145D6E /* softfloat */,
 			);
 			path = Moira;
 			sourceTree = "<group>";
@@ -2176,7 +2138,6 @@
 				509C3663260B1D95004F160A /* InterpreterCmds.cpp in Sources */,
 				50AE6EDF24D93EDD000AA367 /* AgnusRegs.cpp in Sources */,
 				50AEBEE024D3D9080037082D /* KeyboardEvents.cpp in Sources */,
-				50DD3AF72A6A8590008FC7CC /* MoiraFPU.cpp in Sources */,
 				50FC08B127819E4100F0C567 /* BlitterInfo.cpp in Sources */,
 				5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */,
 				50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */,
@@ -2297,7 +2258,6 @@
 				507957AC244AD25B007B8B8D /* Configuration.swift in Sources */,
 				50F54B3024B5D31D0078FDC9 /* u_quick.c in Sources */,
 				50DD33CC2756113300AE18B4 /* pfile.c in Sources */,
-				504098E02A84BE920062DD67 /* FpuFormats.cpp in Sources */,
 				50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */,
 				50B70CAD252CE0BF006B5191 /* Muxer.cpp in Sources */,
 				501D686028085131000BB5E9 /* Defaults.cpp in Sources */,
@@ -2319,7 +2279,6 @@
 				50BE4B7424E815CA008F39C9 /* CIAEvents.cpp in Sources */,
 				507C9C4626076EF7006779B5 /* RessourceManager.swift in Sources */,
 				50FC046827DA02FD00C3E566 /* Buffer.cpp in Sources */,
-				5002349828CC8DA200145D6E /* softfloat.cpp in Sources */,
 				50B9354B243481AB000C78B8 /* SnapshotDialog.swift in Sources */,
 				501C514227C0CE6600DF1DD5 /* DriveDescriptors.cpp in Sources */,
 				509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */,
@@ -2434,7 +2393,6 @@
 				50FC04BC27DA19B200C3E566 /* DriveDescriptors.cpp in Sources */,
 				50FC049627DA196C00C3E566 /* DeniseDebugger.cpp in Sources */,
 				50FC04E727DA1A1400C3E566 /* u_deep.c in Sources */,
-				504098E12A84BE920062DD67 /* FpuFormats.cpp in Sources */,
 				50FC04C527DA19DE00C3E566 /* RomFile.cpp in Sources */,
 				50FC04EA27DA1A3900C3E566 /* OSDebuggerDump.cpp in Sources */,
 				50FC048C27DA195600C3E566 /* CIA.cpp in Sources */,
@@ -2455,7 +2413,6 @@
 				50FC04A327DA197A00C3E566 /* SequencerRegs.cpp in Sources */,
 				50FC04B227DA199C00C3E566 /* ControlPort.cpp in Sources */,
 				50CC209827ECCD6D00AEA010 /* OSDescriptors.cpp in Sources */,
-				5002349728CC8DA100145D6E /* softfloat.cpp in Sources */,
 				50FC04FE27DA1AAB00C3E566 /* UART.cpp in Sources */,
 				50FC048E27DA195D00C3E566 /* PaulaRegs.cpp in Sources */,
 				50FC048527DA190400C3E566 /* Error.cpp in Sources */,
@@ -2504,7 +2461,6 @@
 				50FC04F327DA1A8F00C3E566 /* AudioFilter.cpp in Sources */,
 				50FC04E627DA1A1400C3E566 /* pfile.c in Sources */,
 				50FC04AF27DA199200C3E566 /* DmaDebugger.cpp in Sources */,
-				50DD3AF82A6A8590008FC7CC /* MoiraFPU.cpp in Sources */,
 				50FC04ED27DA1A4500C3E566 /* Socket.cpp in Sources */,
 				50FC048827DA194200C3E566 /* Moira.cpp in Sources */,
 				50EF2236281595AA00440C4D /* Defaults.cpp in Sources */,

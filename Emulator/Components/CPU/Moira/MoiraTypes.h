@@ -10,7 +10,6 @@
 #include <cstdint>
 #include <string>
 #include <optional>
-#include "softfloat-types.h"
 
 namespace vamiga::moira {
 

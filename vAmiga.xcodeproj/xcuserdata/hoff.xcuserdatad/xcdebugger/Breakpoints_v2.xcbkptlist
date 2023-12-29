@@ -169,8 +169,8 @@
             filePath = "Emulator/Components/CPU/Moira/MoiraFPU.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "510"
-            endingLineNumber = "510"
+            startingLineNumber = "512"
+            endingLineNumber = "512"
             landmarkName = "FPU::resolveNan(op1, op2)"
             landmarkType = "7">
          </BreakpointContent>
