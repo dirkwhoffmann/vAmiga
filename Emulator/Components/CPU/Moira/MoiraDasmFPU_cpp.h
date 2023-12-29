@@ -40,7 +40,7 @@ Moira::dasmFDbcc(StrWriter &str, u32 &addr, u16 op) const
     // Catch illegal extension words
     if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        if (!fpu.isValidExt(I, M, op, ext)) {
+        if (!isValidExtFPU(I, M, op, ext)) {
 
             addr = old;
             dasmIllegal<I, M, S>(str, addr, op);
@@ -212,7 +212,7 @@ Moira::dasmFScc(StrWriter &str, u32 &addr, u16 op) const
     // Catch illegal extension words
     if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        if (!fpu.isValidExt(I, M, op, ext)) {
+        if (!isValidExtFPU(I, M, op, ext)) {
 
             addr = old;
             dasmIllegal<I, M, S>(str, addr, op);
@@ -233,7 +233,7 @@ Moira::dasmFTrapcc(StrWriter &str, u32 &addr, u16 op) const
     // Catch illegal extension words
     if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        if (!fpu.isValidExt(I, M, op, ext)) {
+        if (!isValidExtFPU(I, M, op, ext)) {
 
             addr = old;
             dasmIllegal<I, M, S>(str, addr, op);
@@ -461,7 +461,7 @@ Moira::dasmFMove(StrWriter &str, u32 &addr, u16 op) const
     // Catch illegal extension words
     if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        if (!fpu.isValidExt(I, M, op, ext)) {
+        if (!isValidExtFPU(I, M, op, ext)) {
 
             addr = old;
             dasmIllegal<I, M, S>(str, addr, op);
@@ -568,7 +568,7 @@ Moira::dasmFMovecr(StrWriter &str, u32 &addr, u16 op) const
     // Catch illegal extension words
     if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        if (!fpu.isValidExt(I, M, op, ext)) {
+        if (!isValidExtFPU(I, M, op, ext)) {
 
             addr = old;
             dasmIllegal<I, M, S>(str, addr, op);
@@ -593,7 +593,7 @@ Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op) const
     // Catch illegal extension words
     if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
 
-        if (!fpu.isValidExt(I, M, op, ext)) {
+        if (!isValidExtFPU(I, M, op, ext)) {
 
             addr = old;
             dasmIllegal<I, M, S>(str, addr, op);

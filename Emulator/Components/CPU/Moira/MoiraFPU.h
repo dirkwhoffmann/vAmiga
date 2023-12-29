@@ -240,7 +240,7 @@ public:
     }
     
     // Checks the validity of the extension words
-    static bool isValidExt(Instr I, Mode M, u16 op, u32 ext);
+    // static bool isValidExt(Instr I, Mode M, u16 op, u32 ext);
     
     
     //

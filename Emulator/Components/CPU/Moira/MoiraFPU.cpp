@@ -204,6 +204,7 @@ FPU::computeFormatWord(FpuFrameType type)
     }
 }
 
+/*
 bool
 FPU::isValidExt(Instr I, Mode M, u16 op, u32 ext)
 {
@@ -315,6 +316,7 @@ FPU::isValidExt(Instr I, Mode M, u16 op, u32 ext)
             fatalError;
     }
 }
+*/
 
 void
 FPU::setFPCR(u32 value)
