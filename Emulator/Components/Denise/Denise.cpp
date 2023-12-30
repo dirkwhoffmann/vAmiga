@@ -1030,7 +1030,7 @@ Denise::drawBorder()
     isize hblank = 4 * HBLANK_MIN;
 
     // EXPERIMENTAL
-
+    /*
     if (on && off && hflopOnPrev > hflopOffPrev) {
 
         if (!flop) {
@@ -1055,7 +1055,7 @@ Denise::drawBorder()
         }
         return;
     }
-    
+    */
 
     if (!flop && !on) {
 
