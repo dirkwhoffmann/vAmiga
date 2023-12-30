@@ -589,6 +589,14 @@ public:
     void setDIWSTOP(u16 value);
     void setDIWHIGH(u16 value);
 
+private:
+
+    // Called by setDIWSTRT, setDIWSTOP, setDIWHIGH
+    void setHSTRT(isize value);
+    void setHSTOP(isize value);
+
+public:
+
     u16 peekJOY0DATR() const;
     u16 peekJOY1DATR() const;
     void pokeJOYTEST(u16 value);

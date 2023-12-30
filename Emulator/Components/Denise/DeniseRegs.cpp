@@ -23,15 +23,47 @@ Denise::setDIWSTRT(u16 value)
     // -- -- -- -- -- -- -- -- H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0
     
     diwstrt = value;
-    isize newDiwHstrt = LO_BYTE(value);
+    setHSTRT(LO_BYTE(value));
+}
 
-    // Invalidate the horizontal coordinate if it is out of range
-    if (newDiwHstrt < 2) {
-        
-        trace(DIW_DEBUG, "newDiwHstrt is too small\n");
-        newDiwHstrt = INT16_MAX;
-    }
+void
+Denise::setDIWSTOP(u16 value)
+{
+    trace(DIW_DEBUG, "setDIWSTOP(%x)\n", value);
     
+    // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+    // -- -- -- -- -- -- -- -- H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1
+
+    diwstop = value;
+    setHSTOP(LO_BYTE(value) | 0x100);
+}
+
+void
+Denise::setDIWHIGH(u16 value)
+{
+    trace(DIW_DEBUG, "setDIWHIGH(%x)\n", value);
+
+    if (!isECS()) return;
+
+    // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+    // -- -- H8 -- -- -- -- -- -- -- H8 -- -- -- -- --
+    //     (stop)                  (strt)
+
+    diwhigh = value;
+    setHSTRT(LO_BYTE(diwstrt) | (GET_BIT(diwhigh,  5) ? 0x100 : 0x000));
+    setHSTOP(LO_BYTE(diwstop) | (GET_BIT(diwhigh, 13) ? 0x100 : 0x000));
+}
+
+void
+Denise::setHSTRT(isize val)
+{
+    // Invalidate the coordinate if it is out of range
+    if (val < 2 || val > 0x1C7) {
+
+        trace(DIW_DEBUG, "setHSTRT: %ld is out of range\n", val);
+        val = INT16_MAX;
+    }
+
     /* Check if the change takes effect in the current rasterline.
      *
      *     cur: Current coordinate
@@ -50,7 +82,6 @@ Denise::setDIWSTRT(u16 value)
 
     isize cur = 2 * agnus.pos.h;
     isize old = hflopOn;
-    isize val = newDiwHstrt;
 
     if (cur <= old) {
 
@@ -81,26 +112,17 @@ Denise::setDIWSTRT(u16 value)
 }
 
 void
-Denise::setDIWSTOP(u16 value)
+Denise::setHSTOP(isize val)
 {
-    trace(DIW_DEBUG, "setDIWSTOP(%x)\n", value);
-    
-    // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
-    // -- -- -- -- -- -- -- -- H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1
-
-    diwstop = value;
-    isize newDiwHstop = LO_BYTE(value) | 0x100;
-
     // Invalidate the coordinate if it is out of range
-    if (newDiwHstop > 0x1C7) {
+    if (val < 2 || val > 0x1C7) {
 
-        trace(DIW_DEBUG, "newDiwHstop is too large\n");
-        newDiwHstop = INT16_MAX;
+        trace(DIW_DEBUG, "setHSTRT: %ld is out of range\n", val);
+        val = INT16_MAX;
     }
 
     isize cur = 2 * agnus.pos.h;
     isize old = hflopOff;
-    isize val = newDiwHstop;
 
     if (cur <= old) {
 
@@ -125,29 +147,6 @@ Denise::setDIWSTOP(u16 value)
 
     hstop = val;
     trace(DIW_DEBUG, "hstop = %ld, hflopOff = %ld\n", hstop, hflopOff);
-
-    // Inform the debugger about the changed display window
-    debugger.updateDiwH(hstrt, hstop);
-}
-
-void
-Denise::setDIWHIGH(u16 value)
-{
-    trace(DIW_DEBUG, "setDIWHIGH(%x)\n", value);
-
-    if (!isECS()) return;
-
-    // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
-    // -- -- H8 -- -- -- -- -- -- -- H8 -- -- -- -- --
-    //     (stop)                  (strt)
-
-    diwhigh = value;
-
-    hstrt = LO_BYTE(diwstrt) | (GET_BIT(diwhigh,  5) ? 0x100 : 0x000);
-    hstop = LO_BYTE(diwstop) | (GET_BIT(diwhigh, 13) ? 0x100 : 0x000);
-
-    if (hstrt > 0x1C7) hstrt = INT16_MAX;
-    if (hstop > 0x1C7) hstop = INT16_MAX;
 
     // Inform the debugger about the changed display window
     debugger.updateDiwH(hstrt, hstop);
