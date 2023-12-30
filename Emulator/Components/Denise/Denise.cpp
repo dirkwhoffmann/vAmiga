@@ -1005,7 +1005,7 @@ Denise::updateBorderColor()
 void
 Denise::drawBorder()
 {
-    /* The following cases need to be distinguished:
+    /* The following cases must be distinguished:
      *
      * (1) No border                1 --------------------
      *     flop && !off             0
@@ -1026,6 +1026,36 @@ Denise::drawBorder()
     bool flop = hflopPrev;
     bool on = hflopOnPrev != INT16_MAX;
     bool off = hflopOffPrev != INT16_MAX;
+
+    isize hblank = 4 * HBLANK_MIN;
+
+    // EXPERIMENTAL
+
+    if (on && off && hflopOnPrev > hflopOffPrev) {
+
+        if (!flop) {
+
+            trace(true, "ECS feature (!flop): %ld %ld\n", hflopOnPrev, hflopOffPrev);
+            // Draw left border
+            auto end = std::min(2 * hflopOnPrev - hblank, isize(HPIXELS + 1));
+            for (isize i = 0; i < end; i++) {
+                bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
+            }
+
+        } else {
+
+            trace(true, "ECS feature (flop): %ld %ld\n", hflopOnPrev, hflopOffPrev);
+
+            // Draw border in the middle
+            auto start = std::max(2 * hflopOffPrev - hblank, isize(0));
+            auto end = std::min(2 * hflopOnPrev - hblank, isize(HPIXELS + 1));
+            for (isize i = start; i < end; i++) {
+                bBuffer[i] = iBuffer[i] = mBuffer[i] = 0;
+            }
+        }
+        return;
+    }
+    
 
     if (!flop && !on) {
 
@@ -1260,7 +1290,21 @@ Denise::eolHandler()
     hflopOffPrev = hflopOff;
 
     // Update the horizontal DIW flipflop
-    hflop = (hflopOff != INT16_MAX) ? false : (hflopOn != INT16_MAX) ? true : hflop;
+    //
+    //   hflopOn  | hflopOff | hFlop
+    //   ----------------------------------------
+    //   in range | in range | hflopOn > hflopOff
+    //   in range | inf      | true
+    //   inf      | in range | false
+    //   inf      | inf      | hflop
+    //
+    // hflop = (hflopOff != INT16_MAX) ? false : (hflopOn != INT16_MAX) ? true : hflop;
+    if (hflopOn != INT16_MAX) {
+        hflop = (hflopOff != INT16_MAX) ? (hflopOn > hflopOff) : true;
+    } else {
+        hflop = (hflopOff != INT16_MAX) ? hflop : false;
+    }
+
     hflopOn = denise.hstrt;
     hflopOff = denise.hstop;
 }

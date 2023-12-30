@@ -58,7 +58,7 @@ void
 Denise::setHSTRT(isize val)
 {
     // Invalidate the coordinate if it is out of range
-    if (val < 2 || val > 0x1C7) {
+    if ((val < 2 || val > 0x1C7) && agnus.pos.v > 8) {
 
         trace(DIW_DEBUG, "setHSTRT: %ld is out of range\n", val);
         val = INT16_MAX;
