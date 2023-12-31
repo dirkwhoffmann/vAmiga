@@ -24,6 +24,9 @@ Denise::setDIWSTRT(u16 value)
     
     diwstrt = value;
     setHSTRT(LO_BYTE(value));
+
+    // EXPERIMENTAL
+    denise.borderBufferIsDirty = 3;
 }
 
 void
@@ -36,6 +39,9 @@ Denise::setDIWSTOP(u16 value)
 
     diwstop = value;
     setHSTOP(LO_BYTE(value) | 0x100);
+
+    // EXPERIMENTAL
+    denise.borderBufferIsDirty = 3;
 }
 
 void
@@ -52,6 +58,9 @@ Denise::setDIWHIGH(u16 value)
     diwhigh = value;
     setHSTRT(LO_BYTE(diwstrt) | (GET_BIT(diwhigh,  5) ? 0x100 : 0x000));
     setHSTOP(LO_BYTE(diwstop) | (GET_BIT(diwhigh, 13) ? 0x100 : 0x000));
+
+    // EXPERIMENTAL
+    denise.borderBufferIsDirty = 3;
 }
 
 void

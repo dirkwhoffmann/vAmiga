@@ -29,6 +29,7 @@ Denise::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
     
+    std::memset(eBuffer, 0xFF, sizeof(eBuffer));
     std::memset(bBuffer, 0, sizeof(bBuffer));
     std::memset(iBuffer, 0, sizeof(iBuffer));
     std::memset(mBuffer, 0, sizeof(mBuffer));
@@ -1027,7 +1028,7 @@ Denise::drawBorder()
     bool on = hflopOnPrev != INT16_MAX;
     bool off = hflopOffPrev != INT16_MAX;
 
-    isize hblank = 4 * HBLANK_MIN;
+    // isize hblank = 4 * HBLANK_MIN;
 
     // EXPERIMENTAL
     /*
@@ -1083,6 +1084,51 @@ Denise::drawBorder()
             auto start = std::max(2 * hflopOffPrev - hblank, isize(0));
             for (isize i = start; i < HPIXELS; i++) {
                 bBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
+            }
+        }
+    }
+}
+
+void
+Denise::updateBorderBuffer()
+{
+    // Only proceed of the buffer is dirty
+    if (!borderBufferIsDirty) return;
+
+    denise.borderBufferIsDirty--;
+
+    bool flop = hflopPrev;
+    bool on = hflopOnPrev != INT16_MAX;
+    bool off = hflopOffPrev != INT16_MAX;
+
+    std::memset(eBuffer, 0xff, sizeof(eBuffer));
+
+    if (!flop && !on) {
+
+        // Draw blank line (2)
+        for (Pixel i = 0; i < HPIXELS; i++) {
+            eBuffer[i] = borderColor;
+        }
+
+    } else {
+
+        isize hblank = 4 * HBLANK_MIN;
+
+        if (!flop && on) {
+
+            // Draw left border (4,5)
+            auto end = std::min(2 * hflopOnPrev - hblank, isize(HPIXELS + 1));
+            for (isize i = 0; i < end; i++) {
+                eBuffer[i] = borderColor;
+            }
+        }
+
+        if (off) {
+
+            // Draw right border (3,4)
+            auto start = std::max(2 * hflopOffPrev - hblank, isize(0));
+            for (isize i = start; i < HPIXELS; i++) {
+                eBuffer[i] = borderColor;
             }
         }
     }
@@ -1208,6 +1254,7 @@ void
 Denise::vsyncHandler()
 {
     hflop = true;
+    borderBufferIsDirty = 3;
     pixelEngine.vsyncHandler();
     debugger.vsyncHandler();
 }
@@ -1235,7 +1282,8 @@ Denise::hsyncHandler(isize vpos)
         if (config.clxPlfPlf) checkP2PCollisions();
 
         // Draw horizontal border
-        drawBorder();
+        // drawBorder();
+        updateBorderBuffer();
 
         // Synthesize RGBA values and write the result into the frame buffer
         pixelEngine.colorize(vpos);

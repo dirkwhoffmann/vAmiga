@@ -439,10 +439,16 @@ PixelEngine::colorize(isize line)
 void
 PixelEngine::colorize(Texel *dst, Pixel from, Pixel to)
 {
-    u8 *mbuf = denise.mBuffer;
+    auto *mbuf = denise.mBuffer;
+    auto *ebuf = denise.eBuffer;
 
+    /*
     for (Pixel i = from; i < to; i++) {
         dst[i] = palette[mbuf[i]];
+    }
+    */
+    for (Pixel i = from; i < to; i++) {
+        dst[i] = palette[ebuf[i] == 0xFF ? mbuf[i] : ebuf[i]];
     }
 }
 
@@ -450,13 +456,14 @@ void
 PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
 {
     auto *mbuf = denise.mBuffer;
+    auto *ebuf = denise.eBuffer;
     auto *zbuf = denise.zBuffer;
 
     if constexpr (sizeof(Texel) == 4) {
 
         // Output two super-hires pixels as a single texel
         for (Pixel i = from; i < to; i++) {
-            dst[i] = palette[mbuf[i]];
+            dst[i] = palette[ebuf[i] == 0xFF ? mbuf[i] : ebuf[i]];
         }
 
     } else {
@@ -466,7 +473,12 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
 
             u32 *p = (u32 *)(dst + i);
 
-            if (Denise::isSpritePixel(zbuf[i])) {
+            if (ebuf[i] != 0xFF) {
+
+                p[0] =
+                p[1] = u32(palette[ebuf[i]]);
+
+            } else if (Denise::isSpritePixel(zbuf[i])) {
 
                 p[0] =
                 p[1] = u32(palette[mbuf[i]]);
@@ -483,11 +495,19 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
 void
 PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
 {
-    u8 *bbuf = denise.bBuffer;
-    u8 *ibuf = denise.iBuffer;
-    u8 *mbuf = denise.mBuffer;
+    auto *bbuf = denise.bBuffer;
+    auto *ibuf = denise.iBuffer;
+    auto *mbuf = denise.mBuffer;
+    auto *ebuf = denise.eBuffer;
 
     for (Pixel i = from; i < to; i++) {
+
+        // Check for border pixels
+        if (ebuf[i] != 0xFF) {
+
+            dst[i] = palette[ebuf[i]];
+            continue;
+        }
 
         u8 index = ibuf[i];
         assert(isPaletteIndex(index));

@@ -98,6 +98,9 @@ public:
     isize hflopOnPrev;
     isize hflopOffPrev;
 
+    // EXPERIMENTAL
+    isize borderBufferIsDirty;
+
     // Bitplane control registers
     u16 bplcon0;
     u16 bplcon1;
@@ -266,6 +269,9 @@ public:
     u8 mBuffer[HPIXELS + (4 * 16) + 8];
     u16 zBuffer[HPIXELS + (4 * 16) + 8];
 
+    // Experimental
+    u8 eBuffer[HPIXELS + (4 * 16) + 8];
+
     static constexpr u16 Z_0   = 0b10000000'00000000;
     static constexpr u16 Z_SP0 = 0b01000000'00000000;
     static constexpr u16 Z_SP1 = 0b00100000'00000000;
@@ -367,6 +373,7 @@ private:
         << hflopPrev
         << hflopOnPrev
         << hflopOffPrev
+        << borderBufferIsDirty
         << bplcon0
         << bplcon1
         << bplcon2
@@ -507,6 +514,9 @@ private:
 
     // Draws the horizontal border
     void drawBorder();
+
+    // Experimental
+    void updateBorderBuffer();
 
     
     //
