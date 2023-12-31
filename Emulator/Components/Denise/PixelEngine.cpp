@@ -440,7 +440,7 @@ void
 PixelEngine::colorize(Texel *dst, Pixel from, Pixel to)
 {
     auto *mbuf = denise.mBuffer;
-    auto *ebuf = denise.eBuffer;
+    auto *bbuf = denise.bBuffer;
 
     /*
     for (Pixel i = from; i < to; i++) {
@@ -448,7 +448,7 @@ PixelEngine::colorize(Texel *dst, Pixel from, Pixel to)
     }
     */
     for (Pixel i = from; i < to; i++) {
-        dst[i] = palette[ebuf[i] == 0xFF ? mbuf[i] : ebuf[i]];
+        dst[i] = palette[bbuf[i] == 0xFF ? mbuf[i] : bbuf[i]];
     }
 }
 
@@ -456,14 +456,14 @@ void
 PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
 {
     auto *mbuf = denise.mBuffer;
-    auto *ebuf = denise.eBuffer;
+    auto *bbuf = denise.bBuffer;
     auto *zbuf = denise.zBuffer;
 
     if constexpr (sizeof(Texel) == 4) {
 
         // Output two super-hires pixels as a single texel
         for (Pixel i = from; i < to; i++) {
-            dst[i] = palette[ebuf[i] == 0xFF ? mbuf[i] : ebuf[i]];
+            dst[i] = palette[bbuf[i] == 0xFF ? mbuf[i] : bbuf[i]];
         }
 
     } else {
@@ -473,10 +473,10 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
 
             u32 *p = (u32 *)(dst + i);
 
-            if (ebuf[i] != 0xFF) {
+            if (bbuf[i] != 0xFF) {
 
                 p[0] =
-                p[1] = u32(palette[ebuf[i]]);
+                p[1] = u32(palette[bbuf[i]]);
 
             } else if (Denise::isSpritePixel(zbuf[i])) {
 
@@ -495,24 +495,24 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
 void
 PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
 {
-    auto *bbuf = denise.bBuffer;
+    auto *dbuf = denise.dBuffer;
     auto *ibuf = denise.iBuffer;
     auto *mbuf = denise.mBuffer;
-    auto *ebuf = denise.eBuffer;
+    auto *bbuf = denise.bBuffer;
 
     for (Pixel i = from; i < to; i++) {
 
         // Check for border pixels
-        if (ebuf[i] != 0xFF) {
+        if (bbuf[i] != 0xFF) {
 
-            dst[i] = palette[ebuf[i]];
+            dst[i] = palette[bbuf[i]];
             continue;
         }
 
         u8 index = ibuf[i];
         assert(isPaletteIndex(index));
 
-        switch ((bbuf[i] >> 4) & 0b11) {
+        switch ((dbuf[i] >> 4) & 0b11) {
 
             case 0b00: // Get color from register
 

@@ -217,15 +217,22 @@ public:
     // Rasterline data
     //
 
-    /* Four important buffers are involved in the generation of pixel data:
+    /* Multiple buffers are involved in the generation of pixel data:
      *
-     * bBuffer: The bitplane data buffer
+     * dBuffer: Data buffer
      *
      * While emulating the DMA cycles of a single rasterline, Denise writes
      * the fetched bitplane data into this buffer. It contains the raw
      * bitplane bits coming out the 6 serial shift registers.
      *
-     * iBuffer: The color index buffer
+     * bBuffer: Border pixel buffer
+     *
+     * This buffer is used to determine whether a border pixel has to be drawn.
+     * If the buffer contains a value of 0xFF, border drawing is off for this
+     * pixel. Otherwise, the buffer contains the number of the color register
+     * storing the border color.
+     *
+     * iBuffer: Color index buffer
      *
      * At the end of each rasterline, Denise translates the fetched bitplane
      * data to color register indices. In single-playfield mode, this is a
@@ -233,14 +240,14 @@ public:
      * be split into two color indices. Only one of them is kept depending on
      * the playfield priority bit.
      *
-     * mBuffer: The multiplexed color index buffer
+     * mBuffer: Multiplexed color index buffer
      *
      * This buffer contains the data from the iBuffer, multiplexed with the
      * color index data coming from the sprite synthesizer.
      *
-     * zBuffer: The pixel depth buffer
+     * zBuffer: Pixel depth buffer
      *
-     * When the bBuffer is translated into the iBuffer, a depth buffer is build.
+     * When the dBuffer is translated into the iBuffer, a depth buffer is build.
      * This buffer serves multiple purposes.
      *
      * 1. The depth buffer is utilized to manage display priority. For example,
@@ -264,13 +271,11 @@ public:
      *  SPx : Set if the pixel is solid in sprite x.
      *  _x_ : Playfield priority derived from the current value in BPLCON2.
      */
+    u8 dBuffer[HPIXELS + (4 * 16) + 8];
     u8 bBuffer[HPIXELS + (4 * 16) + 8];
     u8 iBuffer[HPIXELS + (4 * 16) + 8];
     u8 mBuffer[HPIXELS + (4 * 16) + 8];
     u16 zBuffer[HPIXELS + (4 * 16) + 8];
-
-    // Experimental
-    u8 eBuffer[HPIXELS + (4 * 16) + 8];
 
     static constexpr u16 Z_0   = 0b10000000'00000000;
     static constexpr u16 Z_SP0 = 0b01000000'00000000;
