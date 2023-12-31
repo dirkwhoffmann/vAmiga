@@ -217,9 +217,9 @@
                     <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0go-7K-IPf">
                         <rect key="frame" x="676" y="2" width="26" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <popUpButtonCell key="cell" type="radio" title="Amiga Frequency" bezelStyle="regularSquare" imagePosition="left" lineBreakMode="truncatingTail" state="on" transparent="YES" inset="2" preferredEdge="minX" selectedItem="ebX-Qd-V1U" id="fbh-jz-zm9">
+                        <popUpButtonCell key="cell" type="bevel" title="Amiga Frequency" bezelStyle="regularSquare" imagePosition="left" lineBreakMode="truncatingTail" state="on" transparent="YES" inset="2" preferredEdge="minX" selectedItem="ebX-Qd-V1U" id="fbh-jz-zm9">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="menu"/>
                             <menu key="menu" id="VSY-08-JkF">
                                 <items>
                                     <menuItem title="Amiga Frequency" state="on" id="ebX-Qd-V1U"/>
