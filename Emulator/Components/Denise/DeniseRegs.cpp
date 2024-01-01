@@ -24,9 +24,6 @@ Denise::setDIWSTRT(u16 value)
     
     diwstrt = value;
     setHSTRT(LO_BYTE(value));
-
-    // EXPERIMENTAL
-    denise.borderBufferIsDirty = 3;
 }
 
 void
@@ -39,9 +36,6 @@ Denise::setDIWSTOP(u16 value)
 
     diwstop = value;
     setHSTOP(LO_BYTE(value) | 0x100);
-
-    // EXPERIMENTAL
-    denise.borderBufferIsDirty = 3;
 }
 
 void
@@ -58,14 +52,15 @@ Denise::setDIWHIGH(u16 value)
     diwhigh = value;
     setHSTRT(LO_BYTE(diwstrt) | (GET_BIT(diwhigh,  5) ? 0x100 : 0x000));
     setHSTOP(LO_BYTE(diwstop) | (GET_BIT(diwhigh, 13) ? 0x100 : 0x000));
-
-    // EXPERIMENTAL
-    denise.borderBufferIsDirty = 3;
 }
 
 void
 Denise::setHSTRT(isize val)
 {
+    // Record register change
+    diwChanges.insert(agnus.pos.h, RegChange { REG_DIWSTRT, (u16)val });
+    denise.borderBufferIsDirty = 3;
+
     // Invalidate the coordinate if it is out of range
     if (val < 2 || val > 0x1C7) {
 
@@ -123,10 +118,14 @@ Denise::setHSTRT(isize val)
 void
 Denise::setHSTOP(isize val)
 {
+    // Record register change
+    diwChanges.insert(agnus.pos.h, RegChange { REG_DIWSTOP, (u16)val });
+    denise.borderBufferIsDirty = 3;
+
     // Invalidate the coordinate if it is out of range
     if (val < 2 || val > 0x1C7) {
 
-        trace(DIW_DEBUG, "setHSTRT: %ld is out of range\n", val);
+        trace(DIW_DEBUG, "setHSTOP: %ld is out of range\n", val);
         val = INT16_MAX;
     }
 

@@ -1269,6 +1269,21 @@ Denise::hsyncHandler(isize vpos)
     // Finish the current line
     //
 
+    // EXPERIMENTAL
+    /*
+    for (isize i = 0, end = diwChanges.end(); i < end; i++) {
+
+        auto trigger = diwChanges.keys[i];
+        RegChange &change = diwChanges.elements[i];
+
+        trace(true, "DIW change %lld: %d -> %d\n", trigger, change.addr, change.value);
+    }
+    */
+    diwChanges.clear();
+
+    // Update border buffer if neccessary
+    updateBorderBuffer();
+
     // Check if we are below the VBLANK area
     if (vpos >= 26) {
 
@@ -1280,10 +1295,6 @@ Denise::hsyncHandler(isize vpos)
 
         // Perform playfield-playfield collision check (if enabled)
         if (config.clxPlfPlf) checkP2PCollisions();
-
-        // Draw horizontal border
-        // drawBorder();
-        updateBorderBuffer();
 
         // Synthesize RGBA values and write the result into the frame buffer
         pixelEngine.colorize(vpos);
@@ -1306,7 +1317,8 @@ Denise::hsyncHandler(isize vpos)
     assert(sprChanges[1].isEmpty());
     assert(sprChanges[2].isEmpty());
     assert(sprChanges[3].isEmpty());
-
+    assert(diwChanges.isEmpty());
+    
     // Clear the last pixel if this line was a short line
     if (agnus.pos.hLatched == HPOS_CNT_PAL) pixelEngine.getWorkingBuffer().clear(vpos, HPOS_MAX);
 

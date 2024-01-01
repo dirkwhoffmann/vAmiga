@@ -159,6 +159,9 @@ public:
     // Ringbuffers recording sprite register changes (one for each sprite pair)
     RegChangeRecorder<128> sprChanges[4];
 
+    // Ringbuffer recording DIW register changes
+    RegChangeRecorder<128> diwChanges;
+
 
     //
     // Sprites
@@ -399,6 +402,7 @@ private:
         << armedEven
         >> conChanges
         >> sprChanges
+        >> diwChanges
 
         << sprdata
         << sprdatb
