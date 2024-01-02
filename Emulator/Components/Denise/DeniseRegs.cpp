@@ -57,8 +57,10 @@ Denise::setDIWHIGH(u16 value)
 void
 Denise::setHSTRT(isize val)
 {
+    trace(DIW_DEBUG, "setHSTRT(%x)\n", val);
+
     // Record register change
-    diwChanges.insert(agnus.pos.h, RegChange { REG_DIWSTRT, (u16)val });
+    diwChanges.insert(agnus.pos.pixel(), RegChange { REG_DIWSTRT, (u16)val });
     denise.borderBufferIsDirty = 3;
 
     // Invalidate the coordinate if it is out of range
@@ -118,8 +120,10 @@ Denise::setHSTRT(isize val)
 void
 Denise::setHSTOP(isize val)
 {
+    trace(DIW_DEBUG, "setHSTOP(%x)\n", val);
+
     // Record register change
-    diwChanges.insert(agnus.pos.h, RegChange { REG_DIWSTOP, (u16)val });
+    diwChanges.insert(agnus.pos.pixel(), RegChange { REG_DIWSTOP, (u16)val });
     denise.borderBufferIsDirty = 3;
 
     // Invalidate the coordinate if it is out of range

@@ -1092,6 +1092,49 @@ Denise::drawBorder()
 void
 Denise::updateBorderBuffer()
 {
+    // Only proceed if the buffer is dirty
+    if (!borderBufferIsDirty) return;
+    denise.borderBufferIsDirty--;
+
+    isize trigger = diwChanges.trigger();
+    isize counter = HBLANK_MIN * 2;
+
+    trace(DIW_DEBUG, "updateBorderBuffer: %ld -- %ld\n", phstrt, phstop);
+
+    for (isize i = 0; i < isizeof(bBuffer); i++) {
+
+        // Update comparison values if needed
+        if (i == trigger) {
+
+            RegChange &r = diwChanges.read();
+            trigger = diwChanges.trigger();
+
+            switch (r.addr) {
+
+                case REG_DIWSTRT: phstrt = r.value; break;
+                case REG_DIWSTOP: phstop = r.value; break;
+
+                default:
+                    break;
+            }
+        }
+
+        if (counter == phstrt) newhflop = true;
+        if (counter == phstop) newhflop = false;
+
+        // Advance the horizontal counter
+        if (i % 2 == 1) counter = (counter == 0x1C7) ? 2 : (counter + 1) & 0x1FF;
+
+        bBuffer[i] = newhflop ? 0xFF : borderColor;
+    }
+
+    diwChanges.clear();
+}
+
+/*
+void
+Denise::updateBorderBuffer()
+{
     // Only proceed of the buffer is dirty
     if (!borderBufferIsDirty) return;
 
@@ -1133,6 +1176,7 @@ Denise::updateBorderBuffer()
         }
     }
 }
+*/
 
 template <int x> void
 Denise::checkS2SCollisions(Pixel start, Pixel end)
@@ -1279,7 +1323,6 @@ Denise::hsyncHandler(isize vpos)
         trace(true, "DIW change %lld: %d -> %d\n", trigger, change.addr, change.value);
     }
     */
-    diwChanges.clear();
 
     // Update border buffer if neccessary
     updateBorderBuffer();

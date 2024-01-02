@@ -229,6 +229,21 @@ Beam::pixel(isize hpos) const
     }
 }
 
+Pixel 
+Beam::diwPixel(isize hpos) const
+{
+    if (hpos >= 2 * HBLANK_MIN) {
+
+        // Every texture line starts with the HBLANK area
+        return 2 * hpos - 4 * HBLANK_MIN;
+
+    } else {
+
+        // Everything left to the HBLANK area belongs to the previous line
+        return 2 * hpos - 4 * HBLANK_MIN + 4 * hLatched;
+    }
+}
+
 void
 Beam::eol()
 {

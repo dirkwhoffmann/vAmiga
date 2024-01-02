@@ -68,6 +68,10 @@ public:
     isize hstrt;
     isize hstop;
     
+    // Display window coordinates (in pixel coordinate system) EXPERIMENTAL
+    isize phstrt;
+    isize phstop;
+
     /* Denise contains a flipflop controlling the horizontal display window.
      * It is cleared inside the border area and set inside the display area:
      *
@@ -83,6 +87,9 @@ public:
      * hFlopOn and hFlopOff need to be evaluated.
      */
     bool hflop;
+
+    // EXPERIMENTAL
+    bool newhflop;
 
     /* At the end of a DMA line, these variable conains the pixel coordinates
      * where the hpos counter matched diwHstrt or diwHstop, respectively. A
@@ -375,7 +382,10 @@ private:
         << diwhigh
         << hstrt
         << hstop
+        << phstrt
+        << phstop
         << hflop
+        << newhflop
         << hflopOn
         << hflopOff
         << hflopPrev
