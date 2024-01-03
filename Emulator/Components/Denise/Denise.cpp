@@ -1224,9 +1224,6 @@ Denise::hsyncHandler(isize vpos)
         drawSprites();
         pixelEngine.endOfVBlankLine();
         conChanges.clear();
-
-        // Emulate DIW bug (OCS Denise)
-        if (vpos == 8 && isOCS()) borderBufferIsDirty = 1;
     }
 
     assert(conChanges.isEmpty());
@@ -1262,36 +1259,16 @@ Denise::hsyncHandler(isize vpos)
 void
 Denise::eolHandler()
 {
-    /*
-    // Preserve the old DIW flipflop
-    hflopPrev = hflop;
-    hflopOnPrev = hflopOn;
-    hflopOffPrev = hflopOff;
 
-    // Update the horizontal DIW flipflop
-    //
-    //   hflopOn  | hflopOff | hFlop
-    //   ----------------------------------------
-    //   in range | in range | hflopOn > hflopOff
-    //   in range | inf      | true
-    //   inf      | in range | false
-    //   inf      | inf      | hflop
-    //
-    // hflop = (hflopOff != INT16_MAX) ? false : (hflopOn != INT16_MAX) ? true : hflop;
-    if (hflopOn != INT16_MAX) {
-        hflop = (hflopOff != INT16_MAX) ? (hflopOn > hflopOff) : true;
-    } else {
-        hflop = (hflopOff != INT16_MAX) ? hflop : false;
-    }
-
-    hflopOn = denise.hstrt;
-    hflopOff = denise.hstop;
-    */
 }
 
 void
 Denise::eofHandler()
 {
+    // OCS Denise does not reset the hpos counter in the first 9 scanlines.
+    // In this area, the border mask has to be rebuild in each line.
+    if (isOCS()) borderBufferIsDirty = 10;
+
     pixelEngine.eofHandler();
     debugger.eofHandler();
 }
