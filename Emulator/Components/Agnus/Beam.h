@@ -149,12 +149,6 @@ struct Beam
     Pixel pixel(isize h) const;
     Pixel pixel() const { return pixel(h); }
 
-    // Translates a DMA coordinate to a 
-    isize deniseCounter(isize v, isize h);
-
-    // Translates a DIW coordinate to a pixel position (EXPERIMENTAL)
-    Pixel diwPixel(isize h) const;
-
 
     //
     // Switching lines, frames, and video modes

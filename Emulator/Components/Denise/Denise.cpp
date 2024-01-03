@@ -1099,12 +1099,16 @@ Denise::updateBorderBuffer()
     isize trigger = diwChanges.trigger();
     isize counter = HBLANK_MIN * 2;
 
-    trace(DIW_DEBUG, "updateBorderBuffer: %ld -- %ld\n", phstrt, phstop);
+    if constexpr (DIW_DEBUG) {
+        
+        trace(true, "updateBorderBuffer\n");
+        diwChanges.dump();
+    }
 
     for (isize i = 0; i < isizeof(bBuffer); i++) {
 
         // Update comparison values if needed
-        if (i == trigger) {
+        while (i == trigger) {
 
             RegChange &r = diwChanges.read();
             trigger = diwChanges.trigger();

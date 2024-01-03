@@ -57,61 +57,11 @@ Denise::setDIWHIGH(u16 value)
 void
 Denise::setHSTRT(isize val)
 {
-    trace(DIW_DEBUG, "setHSTRT(%x)\n", val);
+    trace(DIW_DEBUG, "setHSTRT(%lx)\n", val);
 
     // Record register change
     diwChanges.insert(agnus.pos.pixel(), RegChange { REG_DIWSTRT, (u16)val });
     denise.borderBufferIsDirty = 3;
-
-    // Invalidate the coordinate if it is out of range
-    if (val < 2 || val > 0x1C7) {
-
-        trace(DIW_DEBUG, "setHSTRT: %ld is out of range\n", val);
-        val = INT16_MAX;
-    }
-
-    /* Check if the change takes effect in the current rasterline.
-     *
-     *     cur: Current coordinate
-     *     old: Old trigger coordinate
-     *     val: New trigger coordinate
-     *
-     * The following cases have to be taken into accout:
-     *
-     *    1) cur < old < val : Change takes effect in this rasterline
-     *    2) cur < val < old : Change takes effect in this rasterline
-     *    3) val < cur < old : No hit in this line
-     *    4) val < old < cur : Already triggered. Nothing to do
-     *    5) old < cur < val : Already triggered. Nothing to do
-     *    6) old < val < cur : Already triggered. Nothing to do
-     */
-
-    isize cur = 2 * agnus.pos.h;
-    isize old = hflopOn;
-
-    if (cur <= old) {
-
-        if (val < cur) {
-
-            // (3)
-            trace(DIW_DEBUG, "Won't trigger in this line\n");
-            hflopOn = INT16_MAX;
-
-        } else {
-
-            // (1) and (2)
-            trace(DIW_DEBUG, "Will trigger at %ld\n", val);
-            hflopOn = val;
-        }
-
-    } else {
-
-        // (4), (5), (6)
-        trace(DIW_DEBUG, "Already triggered at %ld\n", old);
-    }
-
-    hstrt = val;
-    trace(DIW_DEBUG, "hstrt = %ld, hflopOn = %ld\n", hstrt, hflopOn);
 
     // Inform the debugger about the changed display window
     debugger.updateDiwH(hstrt, hstop);
@@ -120,45 +70,11 @@ Denise::setHSTRT(isize val)
 void
 Denise::setHSTOP(isize val)
 {
-    trace(DIW_DEBUG, "setHSTOP(%x)\n", val);
+    trace(DIW_DEBUG, "setHSTOP(%lx)\n", val);
 
     // Record register change
     diwChanges.insert(agnus.pos.pixel(), RegChange { REG_DIWSTOP, (u16)val });
     denise.borderBufferIsDirty = 3;
-
-    // Invalidate the coordinate if it is out of range
-    if (val < 2 || val > 0x1C7) {
-
-        trace(DIW_DEBUG, "setHSTOP: %ld is out of range\n", val);
-        val = INT16_MAX;
-    }
-
-    isize cur = 2 * agnus.pos.h;
-    isize old = hflopOff;
-
-    if (cur <= old) {
-
-        if (val < cur) {
-
-            // (3)
-            trace(DIW_DEBUG, "Won't trigger in this line\n");
-            hflopOff = INT16_MAX;
-
-        } else {
-
-            // (1) and (2)
-            trace(DIW_DEBUG, "Will trigger at %ld\n", val);
-            hflopOff = val;
-        }
-
-    } else {
-
-        // (4), (5), (6)
-        trace(DIW_DEBUG, "Already triggered at %ld\n", old);
-    }
-
-    hstop = val;
-    trace(DIW_DEBUG, "hstop = %ld, hflopOff = %ld\n", hstop, hflopOff);
 
     // Inform the debugger about the changed display window
     debugger.updateDiwH(hstrt, hstop);

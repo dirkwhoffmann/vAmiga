@@ -11,6 +11,7 @@
 
 #include "RingBuffer.h"
 #include "AgnusTypes.h"
+#include "AmigaTypes.h"
 
 namespace vamiga {
 
@@ -170,6 +171,20 @@ struct RegChangeRecorder : public util::SortedRingBuffer<RegChange, capacity>
     
     Cycle trigger() {
         return this->isEmpty() ? NEVER : this->keys[this->r];
+    }
+
+    void apply(const std::function<void(i64 k, RegChange &e)> &func) {
+
+        for (auto i = this->r; i != this->w; i = this->next(i)) {
+            func(this->keys[i], this->elements[i]);
+        }
+    }
+
+    void dump() {
+
+        apply([this] (i64 k, RegChange &e) {
+            fprintf(stderr, "%lld: %s = %d\n", k, ChipsetRegEnum::key(e.addr), e.value);
+        });
     }
 };
 
