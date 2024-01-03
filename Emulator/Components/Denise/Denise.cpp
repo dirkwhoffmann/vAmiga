@@ -1021,7 +1021,7 @@ Denise::updateBorderBuffer()
     isize counter = HBLANK_MIN * 2;
     
     // OCS Denise does not reset the counter in lines 0 - 8
-    if (agnus.pos.v < 9 && isOCS()) counter += agnus.pos.v * 0x1C6;
+    if (agnus.pos.v < 9 && isOCS()) counter = (HBLANK_MIN * 2 + agnus.pos.v * 0x1C6) & 0x1FF;
 
     for (isize i = 0, trigger = diwChanges.trigger(); i < isizeof(bBuffer); i++) {
 
@@ -1051,7 +1051,7 @@ Denise::updateBorderBuffer()
             counter = (counter + 1) & 0x1FF;
 
             // Wrap over at the end of a line
-            if (counter == 0x1C7 && (agnus.pos.v < 9 && isECS())) counter = 2;
+            if (counter == 0x1C8 && (agnus.pos.v >= 9 || isECS())) counter = 2;
         }
 
         // Set the border mask (0xFF = no border)
@@ -1224,6 +1224,9 @@ Denise::hsyncHandler(isize vpos)
         drawSprites();
         pixelEngine.endOfVBlankLine();
         conChanges.clear();
+
+        // Emulate DIW bug (OCS Denise)
+        if (vpos == 8 && isOCS()) borderBufferIsDirty = 1;
     }
 
     assert(conChanges.isEmpty());
