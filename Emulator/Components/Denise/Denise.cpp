@@ -1017,10 +1017,13 @@ Denise::updateBorderBuffer()
         diwChanges.dump();
     }
 
-    isize trigger = diwChanges.trigger();
+    // Determine the initial value of Denise's horizontal counter
     isize counter = HBLANK_MIN * 2;
+    
+    // OCS Denise does not reset the counter in lines 0 - 8
+    if (agnus.pos.v < 9 && isOCS()) counter += agnus.pos.v * 0x1C6;
 
-    for (isize i = 0; i < isizeof(bBuffer); i++) {
+    for (isize i = 0, trigger = diwChanges.trigger(); i < isizeof(bBuffer); i++) {
 
         // Update comparison values if needed
         while (i == trigger) {
@@ -1042,8 +1045,14 @@ Denise::updateBorderBuffer()
         if (counter == hstrt) hflop = true;
         if (counter == hstop) hflop = false;
 
-        // Advance the horizontal counter
-        if (i % 2 == 1) counter = (counter == 0x1C7) ? 2 : (counter + 1) & 0x1FF;
+        if (i % 2 == 1) {
+
+            // Advance the horizontal counter
+            counter = (counter + 1) & 0x1FF;
+
+            // Wrap over at the end of a line
+            if (counter == 0x1C7 && (agnus.pos.v < 9 && isECS())) counter = 2;
+        }
 
         // Set the border mask (0xFF = no border)
         bBuffer[i] = hflop ? 0xFF : borderColor;
@@ -1171,7 +1180,7 @@ Denise::checkP2PCollisions()
 void
 Denise::vsyncHandler()
 {
-    hflop = true;
+    // hflop = true;
     borderBufferIsDirty = 3;
     pixelEngine.vsyncHandler();
     debugger.vsyncHandler();
@@ -1186,17 +1195,6 @@ Denise::hsyncHandler(isize vpos)
     //
     // Finish the current line
     //
-
-    // EXPERIMENTAL
-    /*
-    for (isize i = 0, end = diwChanges.end(); i < end; i++) {
-
-        auto trigger = diwChanges.keys[i];
-        RegChange &change = diwChanges.elements[i];
-
-        trace(true, "DIW change %lld: %d -> %d\n", trigger, change.addr, change.value);
-    }
-    */
 
     // Update border buffer if neccessary
     updateBorderBuffer();
