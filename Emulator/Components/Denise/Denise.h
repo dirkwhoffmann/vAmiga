@@ -75,35 +75,15 @@ public:
     /* Denise contains a flipflop controlling the horizontal display window.
      * It is cleared inside the border area and set inside the display area:
      *
-     *   1. When hpos matches the position in DIWSTRT, the flipflop is set.
-     *   2. When hpos matches the position in DIWSTOP, the flipflop is reset.
-     *   3. The smallest recognised value for DIWSTRT is $02.
-     *   4. The largest recognised value for DIWSTOP is $(1)C7.
+     *   - When hpos matches the position in DIWSTRT, the flipflop is set.
+     *   - When hpos matches the position in DIWSTOP, the flipflop is reset.
      *
-     * The value of this variable is updated at the beginning of each DMA line
-     * and cannot change thereafter. It stores the value of the horizontal DIW
-     * flipflop as it was at the beginning of the rasterline. To find out the
-     * value of the horizontal flipflop inside or at the end of a rasterline,
-     * hFlopOn and hFlopOff need to be evaluated.
+     * Because Denise counts $1C6,$1C7,$002,$003,...:
+     *
+     *   - The smallest recognised value for DIWSTRT is $002.
+     *   - The largest recognised value for DIWSTOP is $1C7.
      */
     bool hflop;
-
-    // EXPERIMENTAL
-    bool newhflop;
-
-    /* At the end of a DMA line, these variable conains the pixel coordinates
-     * where the hpos counter matched diwHstrt or diwHstop, respectively. A
-     * value of INT16_MAX indicates that no matching event took place.
-     */
-    isize hflopOn;
-    isize hflopOff;
-
-    /* At the end of a DMA line, the values of hflop, hflopOn, and hflopOff are
-     * preserved in these variables. Their values are used later on in function
-     * drawBorder() */
-    bool hflopPrev;
-    isize hflopOnPrev;
-    isize hflopOffPrev;
 
     // EXPERIMENTAL
     isize borderBufferIsDirty;
@@ -385,12 +365,6 @@ private:
         << phstrt
         << phstop
         << hflop
-        << newhflop
-        << hflopOn
-        << hflopOff
-        << hflopPrev
-        << hflopOnPrev
-        << hflopOffPrev
         << borderBufferIsDirty
         << bplcon0
         << bplcon1
@@ -531,10 +505,7 @@ private:
     // Determines the color register index for drawing the border
     void updateBorderColor();
 
-    // Draws the horizontal border
-    void drawBorder();
-
-    // Experimental
+    // Updates the border pixel mask (called by the hsync handler)
     void updateBorderBuffer();
 
     

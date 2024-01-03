@@ -1004,92 +1004,6 @@ Denise::updateBorderColor()
 }
 
 void
-Denise::drawBorder()
-{
-    /* The following cases must be distinguished:
-     *
-     * (1) No border                1 --------------------
-     *     flop && !off             0
-     *
-     * (2) Blank line               1
-     *     !flop && !on             0 --------------------
-     *
-     * (3) Right border only        1 ---------------
-     *     flop && off              0                -----
-     *
-     * (4) Left and right border    1      ----------
-     *     !flop && on && off       0 -----          -----
-     *
-     * (5) Left border only         1      ---------------
-     *     !flop && on && !off      0 -----
-     */
-
-    bool flop = hflopPrev;
-    bool on = hflopOnPrev != INT16_MAX;
-    bool off = hflopOffPrev != INT16_MAX;
-
-    // isize hblank = 4 * HBLANK_MIN;
-
-    // EXPERIMENTAL
-    /*
-    if (on && off && hflopOnPrev > hflopOffPrev) {
-
-        if (!flop) {
-
-            trace(true, "ECS feature (!flop): %ld %ld\n", hflopOnPrev, hflopOffPrev);
-            // Draw left border
-            auto end = std::min(2 * hflopOnPrev - hblank, isize(HPIXELS + 1));
-            for (isize i = 0; i < end; i++) {
-                dBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
-            }
-
-        } else {
-
-            trace(true, "ECS feature (flop): %ld %ld\n", hflopOnPrev, hflopOffPrev);
-
-            // Draw border in the middle
-            auto start = std::max(2 * hflopOffPrev - hblank, isize(0));
-            auto end = std::min(2 * hflopOnPrev - hblank, isize(HPIXELS + 1));
-            for (isize i = start; i < end; i++) {
-                dBuffer[i] = iBuffer[i] = mBuffer[i] = 0;
-            }
-        }
-        return;
-    }
-    */
-
-    if (!flop && !on) {
-
-        // Draw blank line (2)
-        for (Pixel i = 0; i < HPIXELS; i++) {
-            dBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
-        }
-
-    } else {
-
-        isize hblank = 4 * HBLANK_MIN;
-
-        if (!flop && on) {
-
-            // Draw left border (4,5)
-            auto end = std::min(2 * hflopOnPrev - hblank, isize(HPIXELS + 1));
-            for (isize i = 0; i < end; i++) {
-                dBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
-            }
-        }
-
-        if (off) {
-
-            // Draw right border (3,4)
-            auto start = std::max(2 * hflopOffPrev - hblank, isize(0));
-            for (isize i = start; i < HPIXELS; i++) {
-                dBuffer[i] = iBuffer[i] = mBuffer[i] = borderColor;
-            }
-        }
-    }
-}
-
-void
 Denise::updateBorderBuffer()
 {
     // Only proceed if the buffer is dirty
@@ -1123,13 +1037,13 @@ Denise::updateBorderBuffer()
             }
         }
 
-        if (counter == phstrt) newhflop = true;
-        if (counter == phstop) newhflop = false;
+        if (counter == phstrt) hflop = true;
+        if (counter == phstop) hflop = false;
 
         // Advance the horizontal counter
         if (i % 2 == 1) counter = (counter == 0x1C7) ? 2 : (counter + 1) & 0x1FF;
 
-        bBuffer[i] = newhflop ? 0xFF : borderColor;
+        bBuffer[i] = hflop ? 0xFF : borderColor;
     }
 
     diwChanges.clear();
@@ -1391,6 +1305,7 @@ Denise::hsyncHandler(isize vpos)
 void
 Denise::eolHandler()
 {
+    /*
     // Preserve the old DIW flipflop
     hflopPrev = hflop;
     hflopOnPrev = hflopOn;
@@ -1414,6 +1329,7 @@ Denise::eolHandler()
 
     hflopOn = denise.hstrt;
     hflopOff = denise.hstop;
+    */
 }
 
 void
