@@ -502,7 +502,10 @@ private:
     // Updates the border pixel mask (called by the hsync handler)
     void updateBorderBuffer();
 
-    
+    // Marks the border buffer dirty for a specific number of lines
+    void markBorderBufferAsDirty(isize lines);
+
+
     //
     // Drawing sprites
     //

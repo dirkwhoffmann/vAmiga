@@ -1061,6 +1061,12 @@ Denise::updateBorderBuffer()
     diwChanges.clear();
 }
 
+void 
+Denise::markBorderBufferAsDirty(isize lines)
+{
+    borderBufferIsDirty = std::max(borderBufferIsDirty, lines);
+}
+
 template <int x> void
 Denise::checkS2SCollisions(Pixel start, Pixel end)
 {
@@ -1180,8 +1186,8 @@ Denise::checkP2PCollisions()
 void
 Denise::vsyncHandler()
 {
-    // hflop = true;
-    borderBufferIsDirty = 3;
+    hflop = true; // ???
+    markBorderBufferAsDirty(3);
     pixelEngine.vsyncHandler();
     debugger.vsyncHandler();
 }
@@ -1267,7 +1273,7 @@ Denise::eofHandler()
 {
     // OCS Denise does not reset the hpos counter in the first 9 scanlines.
     // In this area, the border mask has to be rebuild in each line.
-    if (isOCS()) borderBufferIsDirty = 10;
+    if (isOCS()) markBorderBufferAsDirty(10);
 
     pixelEngine.eofHandler();
     debugger.eofHandler();
