@@ -1010,14 +1010,15 @@ Denise::updateBorderBuffer()
     if (!borderBufferIsDirty) return;
     denise.borderBufferIsDirty--;
 
-    isize trigger = diwChanges.trigger();
-    isize counter = HBLANK_MIN * 2;
-
+    // Print some debug info if requested
     if constexpr (DIW_DEBUG) {
-        
+
         trace(true, "updateBorderBuffer\n");
         diwChanges.dump();
     }
+
+    isize trigger = diwChanges.trigger();
+    isize counter = HBLANK_MIN * 2;
 
     for (isize i = 0; i < isizeof(bBuffer); i++) {
 
@@ -1029,72 +1030,27 @@ Denise::updateBorderBuffer()
 
             switch (r.addr) {
 
-                case REG_DIWSTRT: phstrt = r.value; break;
-                case REG_DIWSTOP: phstop = r.value; break;
+                case REG_DIWSTRT: hstrt = r.value; break;
+                case REG_DIWSTOP: hstop = r.value; break;
 
                 default:
                     break;
             }
         }
 
-        if (counter == phstrt) hflop = true;
-        if (counter == phstop) hflop = false;
+        // Set or clear the horizontal DIW flipflop
+        if (counter == hstrt) hflop = true;
+        if (counter == hstop) hflop = false;
 
         // Advance the horizontal counter
         if (i % 2 == 1) counter = (counter == 0x1C7) ? 2 : (counter + 1) & 0x1FF;
 
+        // Set the border mask (0xFF = no border)
         bBuffer[i] = hflop ? 0xFF : borderColor;
     }
 
     diwChanges.clear();
 }
-
-/*
-void
-Denise::updateBorderBuffer()
-{
-    // Only proceed of the buffer is dirty
-    if (!borderBufferIsDirty) return;
-
-    denise.borderBufferIsDirty--;
-
-    bool flop = hflopPrev;
-    bool on = hflopOnPrev != INT16_MAX;
-    bool off = hflopOffPrev != INT16_MAX;
-
-    std::memset(bBuffer, 0xff, sizeof(bBuffer));
-
-    if (!flop && !on) {
-
-        // Draw blank line (2)
-        for (Pixel i = 0; i < HPIXELS; i++) {
-            bBuffer[i] = borderColor;
-        }
-
-    } else {
-
-        isize hblank = 4 * HBLANK_MIN;
-
-        if (!flop && on) {
-
-            // Draw left border (4,5)
-            auto end = std::min(2 * hflopOnPrev - hblank, isize(HPIXELS + 1));
-            for (isize i = 0; i < end; i++) {
-                bBuffer[i] = borderColor;
-            }
-        }
-
-        if (off) {
-
-            // Draw right border (3,4)
-            auto start = std::max(2 * hflopOffPrev - hblank, isize(0));
-            for (isize i = start; i < HPIXELS; i++) {
-                bBuffer[i] = borderColor;
-            }
-        }
-    }
-}
-*/
 
 template <int x> void
 Denise::checkS2SCollisions(Pixel start, Pixel end)

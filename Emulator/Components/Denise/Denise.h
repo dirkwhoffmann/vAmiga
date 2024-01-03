@@ -64,28 +64,24 @@ public:
     u16 diwstop;
     u16 diwhigh;
 
-    // Display window coordinates (extracted from DIWSTRT and DIWSTOP)
+    // Display window coordinates (extracted from DIWSTRT, DIWSTOP, and DIWHIGH)
     isize hstrt;
     isize hstop;
     
-    // Display window coordinates (in pixel coordinate system) EXPERIMENTAL
-    isize phstrt;
-    isize phstop;
-
     /* Denise contains a flipflop controlling the horizontal display window.
      * It is cleared inside the border area and set inside the display area:
      *
      *   - When hpos matches the position in DIWSTRT, the flipflop is set.
      *   - When hpos matches the position in DIWSTOP, the flipflop is reset.
      *
-     * Because Denise counts $1C6,$1C7,$002,$003,...:
+     * Because Denise counts ... -> $1C6 -> $1C7 -> $002 -> $003 -> ...
      *
      *   - The smallest recognised value for DIWSTRT is $002.
      *   - The largest recognised value for DIWSTOP is $1C7.
      */
     bool hflop;
 
-    // EXPERIMENTAL
+    // Indicates whether the border mask needs an update
     isize borderBufferIsDirty;
 
     // Bitplane control registers
@@ -362,8 +358,6 @@ private:
         << diwhigh
         << hstrt
         << hstop
-        << phstrt
-        << phstop
         << hflop
         << borderBufferIsDirty
         << bplcon0
