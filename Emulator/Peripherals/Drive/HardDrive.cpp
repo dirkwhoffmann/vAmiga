@@ -166,7 +166,7 @@ HardDrive::init(const HDFFile &hdf)
     
     // Print some debug information
     debug(HDR_DEBUG, "%zu (needed) file system drivers\n", drivers.size());
-    if constexpr (HDR_DEBUG) {
+    if (HDR_DEBUG) {
         for (auto &driver : drivers) driver.dump();
     }
 }
@@ -190,7 +190,7 @@ HardDrive::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
     
-    if constexpr (FORCE_HDR_MODIFIED) { modified = true; }
+    if (FORCE_HDR_MODIFIED) { modified = true; }
 }
 
 void
@@ -531,7 +531,7 @@ HardDrive::defaultName(isize partition)
 void
 HardDrive::format(FSVolumeType fsType, string name)
 {
-    if constexpr (HDR_DEBUG) {
+    if (HDR_DEBUG) {
 
         msg("Formatting hard drive\n");
         msg("    File system : %s\n", FSVolumeTypeEnum::key(fsType));

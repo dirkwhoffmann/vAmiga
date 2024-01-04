@@ -1207,7 +1207,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr)
     ASSERT_AUTO_ADDR(addr);
     
     // Experimental code to match UAE output (for debugging)
-    if constexpr (MIMIC_UAE) {
+    if (MIMIC_UAE) {
         if (fastRamSize() == 0) {
             dataBus = (addr & 0b10) ? 0xE8 : 0x02;
             return (u8)dataBus;
@@ -1549,7 +1549,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_CHIP> (u32 addr, u8 value)
 {
     ASSERT_CHIP_ADDR(addr);
     
-    if constexpr (BLT_MEM_GUARD) {
+    if (BLT_MEM_GUARD) {
         if (blitter.checkMemguard(addr & mem.chipMask)) {
             trace(true, "CPU(8) OVERWRITES BLITTER AT ADDR %x\n", addr);
         }
@@ -1567,7 +1567,7 @@ Memory::poke16 <ACCESSOR_CPU, MEM_CHIP> (u32 addr, u16 value)
 {
     ASSERT_CHIP_ADDR(addr);
     
-    if constexpr (BLT_MEM_GUARD) {
+    if (BLT_MEM_GUARD) {
         if (blitter.checkMemguard(addr & mem.chipMask)) {
             trace(true, "CPU(16) OVERWRITES BLITTER AT ADDR %x\n", addr);
         }

@@ -45,7 +45,7 @@ namespace vamiga {
  */
 
 enum class Category
-{    
+{
     BankMap, Beam, Blocks, Breakpoints, Bus, Catchpoints, Config, Current,
     Defaults, Disk, Dma, Drive, Events, FileSystem, Geometry, Hunks,
     List1, List2, Parameters, Partitions, Properties, Registers, Sections,
@@ -56,9 +56,9 @@ enum class Category
 class CoreObject {
 
 protected:
-    
+
     static bool verbose;
-    
+
     //
     // Initializing
     //
@@ -66,18 +66,18 @@ protected:
 public:
 
     virtual ~CoreObject() { };
-    
-    
+
+
     //
     // Printing debug information
     //
-    
+
     // Returns the name for this component (e.g., "Agnus" or "Denise")
     virtual const char *getDescription() const = 0;
-    
+
     // Called by debug() and trace() to produce a detailed debug output
     virtual void prefix() const;
-    
+
     // Prints debug information about this component
     void dump(Category category, std::ostream& ss) const;
     void dump(Category category) const;
@@ -118,33 +118,22 @@ fprintf(stderr, "Warning: " format, ##__VA_ARGS__);
 #define fatal(format, ...) \
 { fprintf(stderr, "Fatal: " format, ##__VA_ARGS__); exit(1); }
 
-#ifndef NDEBUG
-
 #define debug(enable, format, ...) \
-if constexpr (enable) { if (verbose) { \
+if (enable) { if (verbose) { \
 fprintf(stderr, "%s:%d " format, getDescription(), __LINE__, ##__VA_ARGS__); }}
 
 #define plain(enable, format, ...) \
-if constexpr (enable) { if (verbose) { \
+if (enable) { if (verbose) { \
 fprintf(stderr, format, ##__VA_ARGS__); }}
 
 #define trace(enable, format, ...) \
-if constexpr (enable) { if (verbose) { \
+if (enable) { if (verbose) { \
 prefix(); \
 fprintf(stderr, "%s:%d " format, getDescription(), __LINE__, ##__VA_ARGS__); }}
 
 #define xfiles(format, ...) \
-if constexpr (XFILES) { if (verbose) { \
+if (XFILES) { if (verbose) { \
 prefix(); \
 fprintf(stderr, "XFILES: " format, ##__VA_ARGS__); }}
-
-#else
-
-#define debug(enable, format, ...)
-#define plain(enable, format, ...)
-#define trace(enable, format, ...)
-#define xfiles(format, ...)
-
-#endif
 
 }

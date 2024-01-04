@@ -108,7 +108,7 @@ StateMachine<nr>::AUDxIP() const
 template <isize nr> void
 StateMachine<nr>::AUDxIR() const
 {
-    if constexpr (DISABLE_AUDIRQ) return;
+    if (DISABLE_AUDIRQ) return;
     
     if constexpr (nr == 0) { paula.scheduleIrqRel(INT_AUD0, DMA_CYCLES(1)); }
     if constexpr (nr == 1) { paula.scheduleIrqRel(INT_AUD1, DMA_CYCLES(1)); }

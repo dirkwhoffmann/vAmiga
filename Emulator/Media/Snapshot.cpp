@@ -80,9 +80,9 @@ Snapshot::Snapshot(Amiga &amiga) : Snapshot(amiga.size())
 void
 Snapshot::finalizeRead()
 {
-    if constexpr (FORCE_SNAP_TOO_OLD) throw VAError(ERROR_SNAP_TOO_OLD);
-    if constexpr (FORCE_SNAP_TOO_NEW) throw VAError(ERROR_SNAP_TOO_NEW);
-    if constexpr (FORCE_SNAP_IS_BETA) throw VAError(ERROR_SNAP_IS_BETA);
+    if (FORCE_SNAP_TOO_OLD) throw VAError(ERROR_SNAP_TOO_OLD);
+    if (FORCE_SNAP_TOO_NEW) throw VAError(ERROR_SNAP_TOO_NEW);
+    if (FORCE_SNAP_IS_BETA) throw VAError(ERROR_SNAP_IS_BETA);
 
     if (isTooOld()) throw VAError(ERROR_SNAP_TOO_OLD);
     if (isTooNew()) throw VAError(ERROR_SNAP_TOO_NEW);

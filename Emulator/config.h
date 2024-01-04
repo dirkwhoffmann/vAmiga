@@ -110,167 +110,17 @@ static const int FPU_SUPPORT     = 0; // Enable FPU (not working yet)
 // Debug settings
 //
 
-// General
-static const int XFILES          = 0; // Report paranormal activity
-static const int CNF_DEBUG       = 0; // Configuration options
-static const int OBJ_DEBUG       = 0; // Object life-times
-static const int DEF_DEBUG       = 0; // User defaults
-static const int MIMIC_UAE       = 0; // Enable to compare debug logs with UAE
-
-// Runloop
-static const int RUN_DEBUG       = 0; // Run loop, component states
-static const int WARP_DEBUG      = 0; // Warp mode
-static const int QUEUE_DEBUG     = 0; // Message queue
-static const int SNP_DEBUG       = 0; // Serialization (snapshots)
-
-// CPU
-static const int CPU_DEBUG       = 0; // CPU
-static const int FPU_DEBUG       = 0; // Floating point unit
-static const int CST_DEBUG       = 0; // Call stack recording
-
-// Memory access
-static const int OCSREG_DEBUG    = 0; // General OCS register debugging
-static const int ECSREG_DEBUG    = 0; // Special ECS register debugging
-static const int INVREG_DEBUG    = 0; // Invalid register accesses
-static const int MEM_DEBUG       = 0; // Memory
-
-// Agnus
-static const int DMA_DEBUG       = 0; // DMA registers
-static const int DDF_DEBUG       = 0; // Display data fetch
-static const int SEQ_DEBUG       = 0; // Bitplane sequencer
-static const int NTSC_DEBUG      = 0; // NTSC mode
-
-// Copper
-static const int COP_CHECKSUM    = 0; // Compute Copper checksums
-static const int COPREG_DEBUG    = 0; // Copper registers
-static const int COP_DEBUG       = 0; // Copper execution
-
-// Blitter
-static const int BLT_CHECKSUM    = 0; // Compute Blitter checksums
-static const int BLTREG_DEBUG    = 0; // Blitter registers
-static const int BLT_REG_GUARD   = 0; // Guard registers while Blitter runs
-static const int BLT_MEM_GUARD   = 0; // Guard memory while Blitter runs
-static const int BLT_DEBUG       = 0; // Blitter execution
-static const int BLTTIM_DEBUG    = 0; // Blitter Timing
-static const int SLOW_BLT_DEBUG  = 0; // Execute micro-instructions in one chunk
-static const int OLD_LINE_BLIT   = 0; // Use the old line blitter implementation
-
-// Denise
-static const int BPLREG_DEBUG    = 0; // Bitplane registers
-static const int BPLDAT_DEBUG    = 0; // BPLxDAT registers
-static const int BPLMOD_DEBUG    = 0; // BPLxMOD registers
-static const int SPRREG_DEBUG    = 0; // Sprite registers
-static const int COLREG_DEBUG    = 0; // Color registers
-static const int CLXREG_DEBUG    = 0; // Collision detection registers
-static const int BPL_DEBUG       = 0; // Bitplane DMA
-static const int DIW_DEBUG       = 0; // Display window
-static const int SPR_DEBUG       = 0; // Sprites
-static const int CLX_DEBUG       = 0; // Collision detection
-static const int BORDER_DEBUG    = 0; // Draw the border in debug colors
-
-// Paula
-static const int INTREG_DEBUG    = 0; // Interrupt registers
-static const int INT_DEBUG       = 0; // Interrupt logic
-
-// CIAs
-static const int CIA_ON_STEROIDS = 0; // Keep the CIAs awake all the time
-static const int CIAREG_DEBUG    = 0; // CIA registers
-static const int CIASER_DEBUG    = 0; // CIA serial register
-static const int CIA_DEBUG       = 0; // CIA execution
-static const int TOD_DEBUG       = 0; // TODs (CIA 24-bit counters)
-
-// Floppy Drives
-static const int ALIGN_HEAD      = 0; // Make head movement deterministic
-static const int DSK_CHECKSUM    = 0; // Compute disk checksums
-static const int DSKREG_DEBUG    = 0; // Disk controller registers
-static const int DSK_DEBUG       = 0; // Disk controller execution
-static const int MFM_DEBUG       = 0; // Disk encoder / decoder
-static const int FS_DEBUG        = 0; // File System Classes (OFS / FFS)
-
-// Hard Drives
-static const int HDR_ACCEPT_ALL  = 0; // Disables hard drive layout checks
-static const int HDR_FS_LOAD_ALL = 0; // Don't filter out unneeded file systems
-static const int WT_DEBUG        = 0; // Write-through mode
-
-// Audio
-static const int AUDREG_DEBUG    = 0; // Audio registers
-static const int AUD_DEBUG       = 0; // Audio execution
-static const int AUDBUF_DEBUG    = 0; // Audio buffers
-static const int DISABLE_AUDIRQ  = 0; // Disable audio interrupts
-
-// Ports
-static const int POSREG_DEBUG    = 0; // POSxxx registers
-static const int JOYREG_DEBUG    = 0; // JOYxxx registers
-static const int POTREG_DEBUG    = 0; // POTxxx registers
-static const int PRT_DEBUG       = 0; // Control ports and connected devices
-static const int SER_DEBUG       = 0; // Serial interface
-static const int POT_DEBUG       = 0; // Potentiometer inputs
-static const int HOLD_MOUSE_L    = 0; // Hold down the left mouse button
-static const int HOLD_MOUSE_M    = 0; // Hold down the middle mouse button
-static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
-
-// Expansion boards
-static const int ZOR_DEBUG       = 0; // Zorro space
-static const int ACF_DEBUG       = 0; // Autoconfig
-static const int FAS_DEBUG       = 0; // FastRam
-static const int HDR_DEBUG       = 0; // HardDrive
-static const int DBD_DEBUG       = 0; // DebugBoard
-
-// Media types
-static const int ADF_DEBUG       = 0; // ADF and extended ADF files
-static const int DMS_DEBUG       = 0; // DMS files
-static const int IMG_DEBUG       = 0; // IMG files
-
-// Other components
-static const int RTC_DEBUG       = 0; // Real-time clock
-static const int KBD_DEBUG       = 0; // Keyboard
-
-// Misc
-static const int REC_DEBUG       = 0; // Screen recorder
-static const int SCK_DEBUG       = 0; // Sockets
-static const int SRV_DEBUG       = 0; // Remote server
-static const int GDB_DEBUG       = 0; // GDB server
-
-
-//
-// Forced error conditions
-//
-
-static const int FORCE_ROM_MISSING              = 0;
-static const int FORCE_CHIP_RAM_MISSING         = 0;
-static const int FORCE_AROS_NO_EXTROM           = 0;
-static const int FORCE_AROS_RAM_LIMIT           = 0;
-static const int FORCE_CHIP_RAM_LIMIT           = 0;
-static const int FORCE_SNAP_TOO_OLD             = 0;
-static const int FORCE_SNAP_TOO_NEW             = 0;
-static const int FORCE_SNAP_IS_BETA             = 0;
-static const int FORCE_SNAP_CORRUPTED           = 0;
-static const int FORCE_DISK_INVALID_LAYOUT      = 0;
-static const int FORCE_DISK_MODIFIED            = 0;
-static const int FORCE_HDR_TOO_LARGE            = 0;
-static const int FORCE_HDR_UNSUPPORTED_C        = 0;
-static const int FORCE_HDR_UNSUPPORTED_H        = 0;
-static const int FORCE_HDR_UNSUPPORTED_S        = 0;
-static const int FORCE_HDR_UNSUPPORTED_B        = 0;
-static const int FORCE_HDR_UNKNOWN_GEOMETRY     = 0;
-static const int FORCE_HDR_MODIFIED             = 0;
-static const int FORCE_FS_WRONG_BSIZE           = 0;
-static const int FORCE_FS_WRONG_CAPACITY        = 0;
-static const int FORCE_FS_WRONG_DOS_TYPE        = 0;
-static const int FORCE_DMS_CANT_CREATE          = 0;
-static const int FORCE_RECORDING_ERROR          = 0;
-static const int FORCE_NO_FFMPEG                = 0;
-
-
 #ifdef RELEASEBUILD
 #ifndef NDEBUG
 #define NDEBUG
 #endif
 static const bool releaseBuild = 1;
 static const bool debugBuild = 0;
+typedef const int debugflag;
 #else
 static const bool releaseBuild = 0;
 static const bool debugBuild = 1;
+typedef int debugflag;
 #endif
 
 #if VER_BETA == 0
@@ -278,5 +128,157 @@ static const bool betaRelease = 0;
 #else
 static const bool betaRelease = 1;
 #endif
+
+
+// General
+static debugflag XFILES          = 0; // Report paranormal activity
+static debugflag CNF_DEBUG       = 0; // Configuration options
+static debugflag OBJ_DEBUG       = 0; // Object life-times
+static debugflag DEF_DEBUG       = 0; // User defaults
+static debugflag MIMIC_UAE       = 0; // Enable to compare debug logs with UAE
+
+// Runloop
+static debugflag RUN_DEBUG       = 0; // Run loop, component states
+static debugflag WARP_DEBUG      = 0; // Warp mode
+static debugflag QUEUE_DEBUG     = 0; // Message queue
+static debugflag SNP_DEBUG       = 0; // Serialization (snapshots)
+
+// CPU
+static debugflag CPU_DEBUG       = 0; // CPU
+static debugflag FPU_DEBUG       = 0; // Floating point unit
+static debugflag CST_DEBUG       = 0; // Call stack recording
+
+// Memory access
+static debugflag OCSREG_DEBUG    = 0; // General OCS register debugging
+static debugflag ECSREG_DEBUG    = 0; // Special ECS register debugging
+static debugflag INVREG_DEBUG    = 0; // Invalid register accesses
+static debugflag MEM_DEBUG       = 0; // Memory
+
+// Agnus
+static debugflag DMA_DEBUG       = 0; // DMA registers
+static debugflag DDF_DEBUG       = 0; // Display data fetch
+static debugflag SEQ_DEBUG       = 0; // Bitplane sequencer
+static debugflag NTSC_DEBUG      = 0; // NTSC mode
+
+// Copper
+static debugflag COP_CHECKSUM    = 0; // Compute Copper checksums
+static debugflag COPREG_DEBUG    = 0; // Copper registers
+static debugflag COP_DEBUG       = 0; // Copper execution
+
+// Blitter
+static debugflag BLT_CHECKSUM    = 0; // Compute Blitter checksums
+static debugflag BLTREG_DEBUG    = 0; // Blitter registers
+static debugflag BLT_REG_GUARD   = 0; // Guard registers while Blitter runs
+static debugflag BLT_MEM_GUARD   = 0; // Guard memory while Blitter runs
+static debugflag BLT_DEBUG       = 0; // Blitter execution
+static debugflag BLTTIM_DEBUG    = 0; // Blitter Timing
+static debugflag SLOW_BLT_DEBUG  = 0; // Execute micro-instructions in one chunk
+static debugflag OLD_LINE_BLIT   = 0; // Use the old line blitter implementation
+
+// Denise
+static debugflag BPLREG_DEBUG    = 0; // Bitplane registers
+static debugflag BPLDAT_DEBUG    = 0; // BPLxDAT registers
+static debugflag BPLMOD_DEBUG    = 0; // BPLxMOD registers
+static debugflag SPRREG_DEBUG    = 0; // Sprite registers
+static debugflag COLREG_DEBUG    = 0; // Color registers
+static debugflag CLXREG_DEBUG    = 0; // Collision detection registers
+static debugflag BPL_DEBUG       = 0; // Bitplane DMA
+static debugflag DIW_DEBUG       = 0; // Display window
+static debugflag SPR_DEBUG       = 0; // Sprites
+static debugflag CLX_DEBUG       = 0; // Collision detection
+static debugflag BORDER_DEBUG    = 0; // Draw the border in debug colors
+
+// Paula
+static debugflag INTREG_DEBUG    = 0; // Interrupt registers
+static debugflag INT_DEBUG       = 0; // Interrupt logic
+
+// CIAs
+static debugflag CIA_ON_STEROIDS = 0; // Keep the CIAs awake all the time
+static debugflag CIAREG_DEBUG    = 0; // CIA registers
+static debugflag CIASER_DEBUG    = 0; // CIA serial register
+static debugflag CIA_DEBUG       = 0; // CIA execution
+static debugflag TOD_DEBUG       = 0; // TODs (CIA 24-bit counters)
+
+// Floppy Drives
+static debugflag ALIGN_HEAD      = 0; // Make head movement deterministic
+static debugflag DSK_CHECKSUM    = 0; // Compute disk checksums
+static debugflag DSKREG_DEBUG    = 0; // Disk controller registers
+static debugflag DSK_DEBUG       = 0; // Disk controller execution
+static debugflag MFM_DEBUG       = 0; // Disk encoder / decoder
+static debugflag FS_DEBUG        = 0; // File System Classes (OFS / FFS)
+
+// Hard Drives
+static debugflag HDR_ACCEPT_ALL  = 0; // Disables hard drive layout checks
+static debugflag HDR_FS_LOAD_ALL = 0; // Don't filter out unneeded file systems
+static debugflag WT_DEBUG        = 0; // Write-through mode
+
+// Audio
+static debugflag AUDREG_DEBUG    = 0; // Audio registers
+static debugflag AUD_DEBUG       = 0; // Audio execution
+static debugflag AUDBUF_DEBUG    = 0; // Audio buffers
+static debugflag DISABLE_AUDIRQ  = 0; // Disable audio interrupts
+
+// Ports
+static debugflag POSREG_DEBUG    = 0; // POSxxx registers
+static debugflag JOYREG_DEBUG    = 0; // JOYxxx registers
+static debugflag POTREG_DEBUG    = 0; // POTxxx registers
+static debugflag PRT_DEBUG       = 0; // Control ports and connected devices
+static debugflag SER_DEBUG       = 0; // Serial interface
+static debugflag POT_DEBUG       = 0; // Potentiometer inputs
+static debugflag HOLD_MOUSE_L    = 0; // Hold down the left mouse button
+static debugflag HOLD_MOUSE_M    = 0; // Hold down the middle mouse button
+static debugflag HOLD_MOUSE_R    = 0; // Hold down the right mouse button
+
+// Expansion boards
+static debugflag ZOR_DEBUG       = 0; // Zorro space
+static debugflag ACF_DEBUG       = 0; // Autoconfig
+static debugflag FAS_DEBUG       = 0; // FastRam
+static debugflag HDR_DEBUG       = 0; // HardDrive
+static debugflag DBD_DEBUG       = 0; // DebugBoard
+
+// Media types
+static debugflag ADF_DEBUG       = 0; // ADF and extended ADF files
+static debugflag DMS_DEBUG       = 0; // DMS files
+static debugflag IMG_DEBUG       = 0; // IMG files
+
+// Other components
+static debugflag RTC_DEBUG       = 0; // Real-time clock
+static debugflag KBD_DEBUG       = 0; // Keyboard
+
+// Misc
+static debugflag REC_DEBUG       = 0; // Screen recorder
+static debugflag SCK_DEBUG       = 0; // Sockets
+static debugflag SRV_DEBUG       = 0; // Remote server
+static debugflag GDB_DEBUG       = 0; // GDB server
+
+
+//
+// Forced error conditions
+//
+
+static debugflag FORCE_ROM_MISSING              = 0;
+static debugflag FORCE_CHIP_RAM_MISSING         = 0;
+static debugflag FORCE_AROS_NO_EXTROM           = 0;
+static debugflag FORCE_AROS_RAM_LIMIT           = 0;
+static debugflag FORCE_CHIP_RAM_LIMIT           = 0;
+static debugflag FORCE_SNAP_TOO_OLD             = 0;
+static debugflag FORCE_SNAP_TOO_NEW             = 0;
+static debugflag FORCE_SNAP_IS_BETA             = 0;
+static debugflag FORCE_SNAP_CORRUPTED           = 0;
+static debugflag FORCE_DISK_INVALID_LAYOUT      = 0;
+static debugflag FORCE_DISK_MODIFIED            = 0;
+static debugflag FORCE_HDR_TOO_LARGE            = 0;
+static debugflag FORCE_HDR_UNSUPPORTED_C        = 0;
+static debugflag FORCE_HDR_UNSUPPORTED_H        = 0;
+static debugflag FORCE_HDR_UNSUPPORTED_S        = 0;
+static debugflag FORCE_HDR_UNSUPPORTED_B        = 0;
+static debugflag FORCE_HDR_UNKNOWN_GEOMETRY     = 0;
+static debugflag FORCE_HDR_MODIFIED             = 0;
+static debugflag FORCE_FS_WRONG_BSIZE           = 0;
+static debugflag FORCE_FS_WRONG_CAPACITY        = 0;
+static debugflag FORCE_FS_WRONG_DOS_TYPE        = 0;
+static debugflag FORCE_DMS_CANT_CREATE          = 0;
+static debugflag FORCE_RECORDING_ERROR          = 0;
+static debugflag FORCE_NO_FFMPEG                = 0;
 
 #include "assert.h"

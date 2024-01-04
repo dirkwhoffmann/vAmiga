@@ -253,7 +253,7 @@ Blitter::doFastLineBlit()
     };
 
     // Fallback to the old implementation (WinFellow) if requested
-    if constexpr (OLD_LINE_BLIT) {
+    if (OLD_LINE_BLIT) {
         doLegacyFastLineBlit();
         return;
     }

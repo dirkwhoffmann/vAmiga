@@ -43,7 +43,7 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
     dsklen = newValue;
 
     // Initialize checksum (for debugging only)
-    if constexpr (DSK_CHECKSUM) {
+    if (DSK_CHECKSUM) {
         
         checkcnt = 0;
         check1 = util::fnvInit32();
@@ -68,7 +68,7 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
         if ((dsklen & 0x3FFF) == 0) { paula.raiseIrq(INT_DSKBLK); return; }
 
         // In debug mode, reset head position to generate reproducable results
-        if constexpr (ALIGN_HEAD) if (drive) drive->head.offset = 0;
+        if (ALIGN_HEAD) if (drive) drive->head.offset = 0;
 
         // Check if the WRITE bit (bit 14) also has been written twice
         if (oldValue & newValue & 0x4000) {

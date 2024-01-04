@@ -124,7 +124,7 @@ Amiga::launch()
     targetTime = util::Time::now();
 
     // Print some debug information
-    if constexpr (SNP_DEBUG) {
+    if (SNP_DEBUG) {
 
         msg("             Agnus : %zu bytes\n", sizeof(Agnus));
         msg("       AudioFilter : %zu bytes\n", sizeof(AudioFilter));

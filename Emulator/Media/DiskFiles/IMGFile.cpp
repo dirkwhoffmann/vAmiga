@@ -87,7 +87,7 @@ IMGFile::encodeDisk(FloppyDisk &disk) const
     for (Track t = 0; t < tracks; t++) encodeTrack(disk, t);
 
     // In debug mode, also run the decoder
-    if constexpr (IMG_DEBUG) {
+    if (IMG_DEBUG) {
         
         IMGFile tmp(disk);
         debug(IMG_DEBUG, "Saving image to /tmp/debug.img for debugging\n");

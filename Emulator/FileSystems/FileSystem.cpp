@@ -106,7 +106,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     
     // Print some debug information
     debug(FS_DEBUG, "Success\n");
-    if constexpr (FS_DEBUG) printDirectory(true);
+    if (FS_DEBUG) printDirectory(true);
 }
 
 void

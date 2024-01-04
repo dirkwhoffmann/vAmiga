@@ -33,8 +33,8 @@ MutableFileSystem::init(FileSystemDescriptor &layout)
 {
     init((isize)layout.numBlocks);
     
-    if constexpr (FS_DEBUG) { layout.dump(); }
-    
+    if (FS_DEBUG) { layout.dump(); }
+
     // Copy layout parameters
     dos         = layout.dos;
     bsize       = layout.bsize;
@@ -53,7 +53,7 @@ MutableFileSystem::init(FileSystemDescriptor &layout)
     for (isize i = 0; i < numBlocks(); i++) assert(blocks[i] != nullptr);
     
     // Print some debug information
-    if constexpr (FS_DEBUG) { dump(Category::State); }
+    if (FS_DEBUG) { dump(Category::State); }
 }
 
 void

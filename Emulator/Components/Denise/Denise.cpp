@@ -998,7 +998,7 @@ Denise::updateBorderColor()
     } else {
         borderColor = 0;  // Background color
     }
-    if constexpr (BORDER_DEBUG) {
+    if (BORDER_DEBUG) {
         borderColor = 65; // Debug color
     }
 }
@@ -1011,7 +1011,7 @@ Denise::updateBorderBuffer()
     denise.borderBufferIsDirty--;
 
     // Print some debug info if requested
-    if constexpr (DIW_DEBUG) {
+    if (DIW_DEBUG) {
 
         trace(true, "updateBorderBuffer\n");
         diwChanges.dump();
@@ -1098,7 +1098,7 @@ Denise::checkS2SCollisions(Pixel start, Pixel end)
         if ((z & comp01) && (z & comp45)) SET_BIT(clxdat, 10);
         if ((z & comp01) && (z & comp23)) SET_BIT(clxdat, 9);
         
-        if constexpr (CLX_DEBUG) {
+        if (CLX_DEBUG) {
             
             if ((z & comp45) && (z & comp67)) trace(true, "Coll: 45 and 67\n");
             if ((z & comp23) && (z & comp67)) trace(true, "Coll: 23 and 67\n");

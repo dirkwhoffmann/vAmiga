@@ -447,7 +447,7 @@ DiskController::performDMARead(FloppyDrive *drive, u32 remaining)
         u16 word = readFifo16();
         
         // Write word into memory
-        if constexpr (DSK_CHECKSUM) {
+        if (DSK_CHECKSUM) {
             
             checkcnt++;
             check1 = util::fnvIt32(check1, word);
@@ -487,13 +487,13 @@ DiskController::performDMAWrite(FloppyDrive *drive, u32 remaining)
     do {
 
         // Read next word from memory
-        if constexpr (DSK_CHECKSUM) {
+        if (DSK_CHECKSUM) {
             checkcnt++;
             check2 = util::fnvIt32(check2, agnus.dskpt & agnus.ptrMask);
         }
         u16 word = agnus.doDiskDmaRead();
         
-        if constexpr (DSK_CHECKSUM) {
+        if (DSK_CHECKSUM) {
             check1 = util::fnvIt32(check1, word);
         }
         
@@ -588,7 +588,7 @@ DiskController::performTurboRead(FloppyDrive *drive)
         u16 word = drive->readWordAndRotate();
         
         // Write word into memory
-        if constexpr (DSK_CHECKSUM) {
+        if (DSK_CHECKSUM) {
             
             checkcnt++;
             check1 = util::fnvIt32(check1, word);
@@ -616,7 +616,7 @@ DiskController::performTurboWrite(FloppyDrive *drive)
         // Read word from memory
         u16 word = mem.peek16 <ACCESSOR_AGNUS> (agnus.dskpt);
         
-        if constexpr (DSK_CHECKSUM) {
+        if (DSK_CHECKSUM) {
             
             checkcnt++;
             check1 = util::fnvIt32(check1, word);

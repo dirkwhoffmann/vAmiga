@@ -39,7 +39,7 @@ DMSFile::finalizeRead()
     
     if (extractDMS(data.ptr, (size_t)data.size, &adfData, &adfSize, DMS_DEBUG) == 0) {
 
-        if constexpr (!FORCE_DMS_CANT_CREATE) {
+        if (!FORCE_DMS_CANT_CREATE) {
             adf.init(adfData, isize(adfSize));
         }
     }

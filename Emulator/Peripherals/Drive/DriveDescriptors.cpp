@@ -111,7 +111,7 @@ GeometryDescriptor::dump(std::ostream& os) const
 void
 GeometryDescriptor::checkCompatibility() const
 {
-    if constexpr (HDR_ACCEPT_ALL) {
+    if (HDR_ACCEPT_ALL) {
         return;
     }
     if (cylinders == 0 || FORCE_HDR_UNKNOWN_GEOMETRY) {

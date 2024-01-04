@@ -319,7 +319,7 @@ ADFFile::encodeDisk(FloppyDisk &disk) const
     for (Track t = 0; t < tracks; t++) encodeTrack(disk, t);
 
     // In debug mode, also run the decoder
-    if constexpr (ADF_DEBUG) {
+    if (ADF_DEBUG) {
         
         ADFFile adf(disk);
         auto tmp = Amiga::tmp("debug.adf").string();

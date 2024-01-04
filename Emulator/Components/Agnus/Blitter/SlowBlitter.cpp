@@ -995,7 +995,7 @@ Blitter::beginSlowCopyBlit()
 
     // In debug mode, we execute the whole micro program immediately.
     // This let's us compare checksums with the FastBlitter.
-    if constexpr (SLOW_BLT_DEBUG) {
+    if (SLOW_BLT_DEBUG) {
 
         BusOwner owner = agnus.busOwner[agnus.pos.h];
         agnus.setBLS(false);
@@ -1052,7 +1052,7 @@ Blitter::beginSlowLineBlit()
 
     // In debug mode, we execute the whole micro program immediately.
     // This let's us compare checksums with the FastBlitter.
-    if constexpr (SLOW_BLT_DEBUG) {
+    if (SLOW_BLT_DEBUG) {
 
         BusOwner owner = agnus.busOwner[agnus.pos.h];
         agnus.setBLS(false);
@@ -1104,11 +1104,11 @@ Blitter::exec()
 
             agnus.doBlitterDmaWrite(bltdpt, dhold);
 
-            if constexpr (BLT_MEM_GUARD) {
+            if (BLT_MEM_GUARD) {
                 memguard[bltdpt & agnus.ptrMask & mem.chipMask] = blitcount;
             }
 
-            if constexpr (BLT_CHECKSUM) {
+            if (BLT_CHECKSUM) {
                 check1 = util::fnvIt32(check1, dhold);
                 check2 = util::fnvIt32(check2, bltdpt);
             }
@@ -1190,7 +1190,7 @@ Blitter::exec()
         // Run the minterm logic circuit
         dhold = doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF);
 
-        if constexpr (BLT_DEBUG) {
+        if (BLT_DEBUG) {
             assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
         }
 
@@ -1367,11 +1367,11 @@ Blitter::execLine()
 
             agnus.doBlitterDmaWrite(bltdpt, dhold);
 
-            if constexpr (BLT_MEM_GUARD) {
+            if (BLT_MEM_GUARD) {
                 memguard[bltdpt & agnus.ptrMask & mem.chipMask] = blitcount;
             }
 
-            if constexpr (BLT_CHECKSUM) {
+            if (BLT_CHECKSUM) {
                 check1 = util::fnvIt32(check1, dhold);
                 check2 = util::fnvIt32(check2, bltdpt);
             }
