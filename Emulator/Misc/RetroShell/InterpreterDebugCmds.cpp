@@ -800,6 +800,18 @@ Interpreter::initDebugShell(Command &root)
 
 
     //
+    // Debug variables
+    //
+
+    root.add({"set"}, { "<variable>", Arg::value },
+             "Sets an internal debug variable",
+             [this](Arguments& argv, long value) {
+
+        Amiga::setDebugVariable(argv[0], int(parseNum(argv, 1)));
+    });
+
+
+    //
     // Host computer
     //
 

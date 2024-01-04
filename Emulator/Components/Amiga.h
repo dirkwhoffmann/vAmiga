@@ -62,7 +62,7 @@ class Amiga : public Thread {
     //
     // Sub components
     //
-    
+
 public:
 
     // User settings
@@ -79,7 +79,7 @@ public:
     Agnus agnus = Agnus(*this);
     Denise denise = Denise(*this);
     Paula paula = Paula(*this);
-    
+
     // Logic board
     RTC rtc = RTC(*this);
     ZorroManager zorro = ZorroManager(*this);
@@ -106,7 +106,7 @@ public:
     HdController hd3con = HdController(*this, hd3);
     RamExpansion ramExpansion = RamExpansion(*this);
     DiagBoard diagBoard= DiagBoard(*this);
-    
+
     // Other Peripherals
     Keyboard keyboard = Keyboard(*this);
 
@@ -123,12 +123,12 @@ public:
     RemoteManager remoteManager = RemoteManager(*this);
     OSDebugger osDebugger = OSDebugger(*this);
     RegressionTester regressionTester = RegressionTester(*this);
-    
-    
+
+
     //
     // Emulator thread
     //
-    
+
 private:
 
     /* Run loop flags. This variable is checked at the end of each runloop
@@ -145,7 +145,7 @@ private:
     //
 
 private:
-    
+
     Snapshot *autoSnapshot = nullptr;
     Snapshot *userSnapshot = nullptr;
 
@@ -156,22 +156,22 @@ private:
     //
     // Static methods
     //
-    
+
 public:
-    
+
     // Returns a version string for this release
     static string version();
 
     // Returns a build number string for this release
     static string build();
 
-    
+
     //
     // Initializing
     //
-    
+
 public:
-    
+
     Amiga();
     ~Amiga();
 
@@ -179,33 +179,33 @@ public:
     void launch();
     void launch(const void *listener, Callback *func);
 
-    
+
     //
     // Methods from CoreObject
     //
-    
+
 public:
 
     void prefix() const override;
 
 private:
-    
+
     const char *getDescription() const override { return "Amiga"; }
     void _dump(Category category, std::ostream& os) const override;
 
-    
+
     //
     // Methods from CoreComponent
     //
-    
+
 public:
-    
+
     void reset(bool hard);
     void hardReset() { reset(true); }
     void softReset() { reset(false); }
-    
+
 private:
-    
+
     void _reset(bool hard) override;
     void _powerOn() override;
     void _powerOff() override;
@@ -235,24 +235,24 @@ private:
     }
 
 public:
-    
+
     isize load(const u8 *buffer) override;
     isize save(u8 *buffer) override;
 
 private:
-    
+
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM; }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-    
-    
+
+
     //
     // Methods from Thread
     //
 
 private:
-    
+
     ThreadMode getThreadMode() const override;
     void execute() override;
 
@@ -267,7 +267,7 @@ public:
     //
     // Configuring
     //
-    
+
 public:
 
     const AmigaConfig &getConfig() const { return config; }
@@ -281,7 +281,7 @@ public:
     void setConfigItem(Option option, i64 value);
     void configure(Option option, i64 value) throws;
     void configure(Option option, long id, i64 value) throws;
-    
+
     // Configures the Amiga with a predefined set of options
     void configure(ConfigScheme scheme);
 
@@ -289,7 +289,7 @@ public:
     void revertToFactorySettings();
 
 private:
-    
+
     // Overrides a config option if the corresponding debug option is enabled
     i64 overrideOption(Option option, i64 value);
 
@@ -297,11 +297,11 @@ private:
     //
     // Analyzing
     //
-    
+
 public:
-    
+
     AmigaInfo getInfo() const { return CoreComponent::getInfo(info); }
-    
+
     InspectionTarget getInspectionTarget() const;
     void setInspectionTarget(InspectionTarget target, Cycle trigger = 0);
     void removeInspectionTarget() { setInspectionTarget(INSPECTION_NONE); }
@@ -318,21 +318,21 @@ public:
      */
     void setFlag(u32 flags);
     void clearFlag(u32 flags);
-    
+
     // Convenience wrappers
     void signalStop() { setFlag(RL::STOP); }
     void signalAutoSnapshot() { setFlag(RL::AUTO_SNAPSHOT); }
     void signalUserSnapshot() { setFlag(RL::USER_SNAPSHOT); }
-    
+
     // Runs or pauses the emulator
     void stopAndGo();
-    
+
     /* Executes a single instruction. This function is used for single-stepping
      * through the code inside the debugger. It starts the execution thread and
      * terminates it after the next instruction has been executed.
      */
     void stepInto();
-    
+
     /* Runs the emulator until the instruction following the current one is
      * reached. This function is used for single-stepping through the code
      * inside the debugger. It sets a soft breakpoint to PC+n where n is the
@@ -353,13 +353,13 @@ public:
     // Services a warp boot event
     void serviceWbtEvent();
 
-    
+
     //
     // Handling snapshots
     //
-    
+
 public:
-    
+
     /* Requests a snapshot to be taken. Once the snapshot is ready, a message
      * is written into the message queue. The snapshot can then be picked up by
      * calling latestAutoSnapshot() or latestUserSnapshot(), depending on the
@@ -377,9 +377,9 @@ public:
 
     // Loads the current state from a snapshot file
     void loadSnapshot(const Snapshot &snapshot) throws;
-    
+
 private:
-    
+
     // Takes a snapshot of a certain kind
     void takeAutoSnapshot();
     void takeUserSnapshot();
@@ -406,18 +406,21 @@ private:
     // Schedules the next alarm event
     void scheduleNextAlarm();
 
-    
+
     //
     // Miscellaneous
     //
-    
+
 public:
 
     // Returns a path to a temporary folder
     static fs::path tmp() throws;
-    
+
     // Assembles a path to a temporary file
     static fs::path tmp(const string &name, bool unique = false) throws;
+
+    // Modifies an internal debug variable (only available in debug builds)
+    static void setDebugVariable(const string &name, int val);
 };
 
 }

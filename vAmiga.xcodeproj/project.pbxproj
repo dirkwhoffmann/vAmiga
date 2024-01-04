@@ -87,6 +87,8 @@
 		5057551025EAFF7900280977 /* Checksum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B3C44725EAFB5500651700 /* Checksum.cpp */; };
 		5057E4C5243DF10A004005EB /* Primitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5057E4C4243DF10A004005EB /* Primitives.swift */; };
 		505A215022869FF10016EA21 /* AudioFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A214E22869FF10016EA21 /* AudioFilter.cpp */; };
+		505B331F2B46D25700D3736F /* config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505B331E2B46D0CA00D3736F /* config.cpp */; };
+		505B33202B46D25700D3736F /* config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505B331E2B46D0CA00D3736F /* config.cpp */; };
 		505C010A2577A8C000F9E05C /* FSDescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C01082577A8C000F9E05C /* FSDescriptors.cpp */; };
 		505C83F927739ED0001F8159 /* RemoteManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C83F727739ED0001F8159 /* RemoteManager.cpp */; };
 		505C83FD2773C9BA001F8159 /* SerServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C83FB2773C9BA001F8159 /* SerServer.cpp */; };
@@ -575,6 +577,7 @@
 		505A214F22869FF10016EA21 /* AudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilter.h; sourceTree = "<group>"; };
 		505AD259224A67CD0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		505AD25A224A67CE0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MyDocument.xib; sourceTree = "<group>"; };
+		505B331E2B46D0CA00D3736F /* config.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = config.cpp; sourceTree = "<group>"; };
 		505C01082577A8C000F9E05C /* FSDescriptors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSDescriptors.cpp; sourceTree = "<group>"; };
 		505C01092577A8C000F9E05C /* FSDescriptors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSDescriptors.h; sourceTree = "<group>"; };
 		505C83F727739ED0001F8159 /* RemoteManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RemoteManager.cpp; sourceTree = "<group>"; };
@@ -1407,6 +1410,7 @@
 			children = (
 				50CF461C2620420500BB3B95 /* CMakeLists.txt */,
 				50B14C0921EB228E002E32A6 /* config.h */,
+				505B331E2B46D0CA00D3736F /* config.cpp */,
 				5099432B29C2116500867E8F /* vamiga.h */,
 				50FC050027DA205D00C3E566 /* Headless.h */,
 				50FC047427DA108500C3E566 /* Headless.cpp */,
@@ -2247,6 +2251,7 @@
 				5029C6E327CA2F66002F6CCC /* DiskInspector.swift in Sources */,
 				505C83F927739ED0001F8159 /* RemoteManager.cpp in Sources */,
 				50E79BE9232D123000D296FB /* SubComponent.cpp in Sources */,
+				505B331F2B46D25700D3736F /* config.cpp in Sources */,
 				50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */,
 				507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */,
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
@@ -2400,6 +2405,7 @@
 				50FC048627DA194200C3E566 /* MoiraDebugger.cpp in Sources */,
 				50FC04D227DA19F600C3E566 /* BootBlockImage.cpp in Sources */,
 				50FC04EC27DA1A4500C3E566 /* SerServer.cpp in Sources */,
+				505B33202B46D25700D3736F /* config.cpp in Sources */,
 				50FC04E027DA1A1400C3E566 /* xdms.c in Sources */,
 				50FC047A27DA12AB00C3E566 /* MemUtils.cpp in Sources */,
 				50FC04BD27DA19C200C3E566 /* Mouse.cpp in Sources */,
