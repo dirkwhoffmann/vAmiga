@@ -1646,8 +1646,6 @@ Amiga::setDebugVariable(const string &name, int val)
 
 #else
 
-    printf("setDebugVariable(%s, %d)\n", name.c_str(), val);
-
     if      (name == "XFILES")           XFILES          = val;
     else if (name == "CNF_DEBUG")        CNF_DEBUG       = val;
     else if (name == "OBJ_DEBUG")        OBJ_DEBUG       = val;
@@ -1755,7 +1753,6 @@ Amiga::setDebugVariable(const string &name, int val)
         throw VAError(ERROR_OPT_UNSUPPORTED, "Unknown debug variable: " + name);
     }
 
-    printf("COPREG_DEBUG = %d\n", COPREG_DEBUG);
 #endif
 }
 

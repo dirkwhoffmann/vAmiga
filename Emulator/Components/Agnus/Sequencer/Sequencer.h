@@ -159,7 +159,10 @@ public:
     DDFState ddfInitial;
     DDFState ddf;
 
-    
+    // Remembers the cycle when BPRUN goes up the first time
+    u16 bprunUp;
+
+
     //
     // Display Window (DIW)
     //
@@ -250,7 +253,8 @@ private:
         << ddfstop
         >> ddfInitial
         >> ddf
-        
+        << bprunUp
+
         << diwstrt
         << diwstop
         << diwhigh

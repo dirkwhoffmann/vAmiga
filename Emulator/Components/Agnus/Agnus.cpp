@@ -494,20 +494,22 @@ template <isize nr> void
 Agnus::executeFirstSpriteCycle()
 {
     trace(SPR_DEBUG, "executeFirstSpriteCycle<%ld>\n", nr);
-    
+    trace(SPR_DEBUG, "bprunUp = %d\n", sequencer.bprunUp);
+
     if (pos.v == sprVStop[nr]) {
 
         sprDmaState[nr] = SPR_DMA_IDLE;
 
-        if (busOwner[pos.h] == BUS_NONE) {
+        if (sequencer.bprunUp == 0 || sequencer.bprunUp > pos.h) {
+        // if (busOwner[pos.h] == BUS_NONE) {
 
             // Read in the next control word (POS part)
             if (sprdma()) {
-                
+
                 auto value = doSpriteDmaRead<nr>();
                 agnus.pokeSPRxPOS<nr>(value);
                 denise.pokeSPRxPOS<nr>(value);
-                
+
             } else {
 
                 busOwner[pos.h] = BUS_BLOCKED;
@@ -516,7 +518,8 @@ Agnus::executeFirstSpriteCycle()
 
     } else if (sprDmaState[nr] == SPR_DMA_ACTIVE) {
 
-        if (busOwner[pos.h] == BUS_NONE) {
+        if (sequencer.bprunUp == 0 || sequencer.bprunUp > pos.h) {
+        // if (busOwner[pos.h] == BUS_NONE) {
 
             // Read in the next data word (part A)
             if (sprdma()) {
@@ -541,7 +544,8 @@ Agnus::executeSecondSpriteCycle()
 
         sprDmaState[nr] = SPR_DMA_IDLE;
 
-        if (busOwner[pos.h] == BUS_NONE) {
+        if (sequencer.bprunUp == 0 || sequencer.bprunUp > pos.h) {
+        // if (busOwner[pos.h] == BUS_NONE) {
 
             if (sprdma()) {
                 
@@ -558,7 +562,8 @@ Agnus::executeSecondSpriteCycle()
 
     } else if (sprDmaState[nr] == SPR_DMA_ACTIVE) {
 
-        if (busOwner[pos.h] == BUS_NONE) {
+        if (sequencer.bprunUp == 0 || sequencer.bprunUp > pos.h) {
+        // if (busOwner[pos.h] == BUS_NONE) {
 
             if (sprdma()) {
                 
