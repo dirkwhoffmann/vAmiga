@@ -1039,23 +1039,31 @@ Denise::updateBorderBuffer()
                 default:
                     break;
             }
+
+            // Set or clear the horizontal DIW flipflop
+            if (counter == hstrt) {
+
+                trace(DIW_DEBUG, "hflop -> 1 at %ld (%lx)\n", counter, counter);
+                hflop = true;
+            }
+            if (counter == hstop) {
+
+                trace(DIW_DEBUG, "hflop -> 0 at %ld (%lx)\n", counter, counter);
+                hflop = false;
+            }
+
+            if (i % 2 == 1) {
+
+                // Advance the horizontal counter
+                counter = (counter + 1) & 0x1FF;
+
+                // Wrap over at the end of a line
+                if (counter == 0x1C8 && (agnus.pos.v >= 9 || isECS())) counter = 2;
+            }
+
+            // Set the border mask (0xFF = no border)
+            bBuffer[i] = hflop ? 0xFF : borderColor;
         }
-
-        // Set or clear the horizontal DIW flipflop
-        if (counter == hstrt) hflop = true;
-        if (counter == hstop) hflop = false;
-
-        if (i % 2 == 1) {
-
-            // Advance the horizontal counter
-            counter = (counter + 1) & 0x1FF;
-
-            // Wrap over at the end of a line
-            if (counter == 0x1C8 && (agnus.pos.v >= 9 || isECS())) counter = 2;
-        }
-
-        // Set the border mask (0xFF = no border)
-        bBuffer[i] = hflop ? 0xFF : borderColor;
     }
 
     diwChanges.clear();
@@ -1187,7 +1195,7 @@ void
 Denise::vsyncHandler()
 {
     hflop = true; // ???
-    markBorderBufferAsDirty(3);
+    markBorderBufferAsDirty(2);
     pixelEngine.vsyncHandler();
     debugger.vsyncHandler();
 }

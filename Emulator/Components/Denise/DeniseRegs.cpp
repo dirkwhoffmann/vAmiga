@@ -61,7 +61,7 @@ Denise::setHSTRT(isize val)
 
     // Record register change
     diwChanges.insert(agnus.pos.pixel(), RegChange { REG_DIWSTRT, (u16)val });
-    markBorderBufferAsDirty(3);
+    markBorderBufferAsDirty(2);
 
     // Inform the debugger about the changed display window
     debugger.updateDiwH(hstrt, hstop);
@@ -74,7 +74,7 @@ Denise::setHSTOP(isize val)
 
     // Record register change
     diwChanges.insert(agnus.pos.pixel(), RegChange { REG_DIWSTOP, (u16)val });
-    markBorderBufferAsDirty(3);
+    markBorderBufferAsDirty(2);
     
     // Inform the debugger about the changed display window
     debugger.updateDiwH(hstrt, hstop);
