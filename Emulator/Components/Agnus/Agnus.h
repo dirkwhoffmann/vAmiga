@@ -420,6 +420,9 @@ private:
     // Executes the second sprite DMA cycle
     template <isize nr> void executeSecondSpriteCycle();
 
+    // Checks whether the sprite DMA cycle is blocked by bitplane DMA
+    bool spriteCycleIsBlocked();
+
     // Updates the sprite DMA status in cycle 0xDF
     void updateSpriteDMA();
 

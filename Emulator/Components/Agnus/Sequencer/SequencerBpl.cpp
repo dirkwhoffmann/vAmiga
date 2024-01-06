@@ -90,7 +90,7 @@ Sequencer::computeBplEventsFast(const SigRecorder &sr, DDFState &state)
 
     // Erase all events
     for (isize i = 0; i < HPOS_CNT; i++) bplEvent[i] = EVENT_NONE;
-    bprunUp = 0;
+    bprunUp = NEVER;
 
     // Add drawing flags
     auto odd = agnus.scrollOdd;
@@ -155,8 +155,8 @@ Sequencer::computeBplEventsSlow(const SigRecorder &sr, DDFState &state)
 {
     trace(SEQ_DEBUG, "Slow path\n");
 
-    bprunUp = 0;
-    
+    bprunUp = NEVER;
+
     // Iterate over all recorder signals
     for (isize i = 0, cycle = 0;; i++) {
         
@@ -245,8 +245,8 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
 
         bplEvent[j] = id;
 
-        // Experimental
-        if (bprunUp == 0 && state.bprun) bprunUp = u16(j);
+        // Remember the first cycle where BPRUN went up
+        if (state.bprun) bprunUp = std::min(bprunUp, j);
     }
 }
 

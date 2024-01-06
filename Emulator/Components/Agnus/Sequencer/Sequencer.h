@@ -160,7 +160,7 @@ public:
     DDFState ddf;
 
     // Remembers the cycle when BPRUN goes up the first time
-    u16 bprunUp;
+    isize bprunUp;
 
 
     //
