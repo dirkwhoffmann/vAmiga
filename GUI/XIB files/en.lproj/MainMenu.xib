@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication"/>
@@ -145,10 +145,23 @@
                                     <action selector="consoleAction:" target="-1" id="Nx9-Xz-OIt"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Restore Factory Settings" id="TX7-U7-EG7">
+                            <menuItem isSeparatorItem="YES" id="MBQ-pb-t04"/>
+                            <menuItem title="Import configuration..." id="TX7-U7-EG7">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="factorySettingsAction:" target="-1" id="eUA-v2-Mow"/>
+                                    <action selector="importConfigAction:" target="-1" id="epr-TO-gZp"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Export configuration..." id="TkJ-0z-74d">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="exportConfigAction:" target="-1" id="RxH-Iq-fwJ"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Restore Factory Settings" id="I7G-yt-j3x">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="factorySettingsAction:" target="-1" id="XzW-D3-2Uc"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="bDU-dO-xxe"/>

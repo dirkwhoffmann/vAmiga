@@ -173,7 +173,73 @@ extension MyController: NSMenuItemValidation {
         amiga.powerOn()
         try? amiga.run()
     }
-    
+
+    @IBAction func importConfigAction(_ sender: Any!) {
+
+        let defaults = AmigaProxy.defaults!
+        let openPanel = NSOpenPanel()
+
+        let url = URL(string: "") // TODO
+
+        // Power off the emulator if the user doesn't object
+        if !askToPowerOff() { return }
+
+        // Show file panel
+        openPanel.allowsMultipleSelection = false
+        openPanel.canChooseDirectories = true
+        openPanel.canCreateDirectories = false
+        openPanel.canChooseFiles = true
+        openPanel.prompt = "Import"
+        openPanel.allowedFileTypes = ["ini"]
+        openPanel.beginSheetModal(for: window!, completionHandler: { result in
+
+            if result == .OK, let url = openPanel.url {
+
+                do {
+                    // Import settings
+                    try defaults.load(url: url)
+
+                    // Apply new settings
+                    self.config.applyUserDefaults()
+                    self.pref.applyUserDefaults()
+
+                    // Power on
+                    self.amiga.powerOn()
+                    try? self.amiga.run()
+
+                } catch {
+                    self.showAlert(.cantOpen(url: url), error: error, async: true)
+                }
+            }
+        })
+    }
+
+    @IBAction func exportConfigAction(_ sender: Any!) {
+
+        let defaults = AmigaProxy.defaults!
+        let savePanel = NSSavePanel()
+
+        // Show file panel
+        savePanel.prompt = "Export"
+        savePanel.title = "Export"
+        savePanel.nameFieldLabel = "Export As:"
+        savePanel.nameFieldStringValue = "vAmiga.ini"
+        savePanel.canCreateDirectories = true
+        savePanel.beginSheetModal(for: window!, completionHandler: { result in
+
+            if result == .OK, let url = savePanel.url {
+
+                do {
+                    // Export settings
+                    try defaults.save(url: url)
+
+                } catch {
+                    self.showAlert(.cantExport(url: url), error: error, async: true)
+                }
+            }
+        })
+    }
+
     //
     // Action methods (Machine menu)
     //

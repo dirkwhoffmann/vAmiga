@@ -31,7 +31,9 @@ extension DefaultsProxy {
 
         let exception = ExceptionWrapper()
         load(url, exception: exception)
-        if exception.errorCode != .OK { throw VAError(exception) }        
+        if exception.errorCode != .OK { throw VAError(exception) }     
+
+        debug(.defaults, "Successfully loaded user defaults from \(url)")
     }
 
     func load() {
@@ -44,7 +46,6 @@ extension DefaultsProxy {
             
             do {
                 try load(url: path)
-                debug(.defaults, "Successfully loaded user defaults from file \(path)")
             } catch {
                 warn("Failed to load user defaults from file \(path)")
             }
@@ -59,6 +60,8 @@ extension DefaultsProxy {
         let exception = ExceptionWrapper()
         save(url, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
+
+        debug(.defaults, "Successfully saved user defaults to \(url)")
     }
     
     func save() {
@@ -71,7 +74,6 @@ extension DefaultsProxy {
             
             do {
                 try save(url: path)
-                debug(.defaults, "Successfully saved user defaults to file \(path)")
             } catch {
                 warn("Failed to save user defaults file \(path)")
             }
