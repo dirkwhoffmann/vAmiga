@@ -129,13 +129,17 @@ extension Canvas {
 
     func updateTextureRect(hstrt: Int, vstrt: Int, hstop: Int, vstop: Int) {
 
-        debug(.metal, "updateTextureRect \(hstrt) \(vstrt) \(hstop) \(vstop)")
+        debug(.metal, "updateTextureRect(\(hstrt), \(vstrt), \(hstop), \(vstop))")
 
         // Convert to pixel coordinates
         x1 = CGFloat(2 * Int(TPP) * hstrt)
         x2 = CGFloat(2 * Int(TPP) * hstop)
         y1 = CGFloat(vstrt)
         y2 = CGFloat(vstop)
+
+        // Compensate the texture shift
+        x1 -= CGFloat(HBLANK_MIN) * CGFloat(TPP) * 4
+        x2 -= CGFloat(HBLANK_MIN) * CGFloat(TPP) * 4
 
         // Crop
         let max = largestVisible
@@ -144,12 +148,8 @@ extension Canvas {
         if x2 > max.maxX { x2 = max.maxX }
         if y2 > max.maxY { y2 = max.maxY }
 
-        debug(.metal, "(\(x1),\(y1)) - \(x2),\(y2))")
+        debug(.metal, "New texture rect = (\(x1),\(y1)) - (\(x2),\(y2))")
 
-        // Compensate the texture shift
-        x1 -= CGFloat(HBLANK_MIN) * CGFloat(TPP) * 4
-        x2 -= CGFloat(HBLANK_MIN) * CGFloat(TPP) * 4
-        
         updateTextureRect()
     }
     

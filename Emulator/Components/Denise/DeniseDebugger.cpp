@@ -81,6 +81,8 @@ DeniseDebugger::recordDiwH(isize hstrt, isize hstop)
 
         maxViewPort.hstrt = hstrt;
         maxViewPort.hstop = hstop;
+
+        trace(DIW_DEBUG, "recordDiwH: (%ld,%ld)\n", maxViewPort.hstrt, maxViewPort.hstop);
     }
 }
 
@@ -101,6 +103,8 @@ DeniseDebugger::updateDiwH(isize hstrt, isize hstop)
 
         maxViewPort.hstrt = std::min(maxViewPort.hstrt, hstrt);
         maxViewPort.hstop = std::max(maxViewPort.hstop, hstop);
+
+        trace(DIW_DEBUG, "updateDiwH: (%ld,%ld)\n", maxViewPort.hstrt, maxViewPort.hstop);
     }
 }
 
@@ -169,6 +173,11 @@ DeniseDebugger::vsyncHandler()
             // Notify the GUI if the last message was sent a while ago
             if (abs(agnus.clock - vpMsgSent) > MSEC(200)) {
 
+                printf("Sending viewport: %d %d %d %d\n", i16(latchedMaxViewPort.hstrt),
+                       i16(latchedMaxViewPort.vstrt),
+                       i16(latchedMaxViewPort.hstop),
+                       i16(latchedMaxViewPort.vstop));
+                
                 msgQueue.put(MSG_VIEWPORT, ViewportMsg {
                     i16(latchedMaxViewPort.hstrt),
                     i16(latchedMaxViewPort.vstrt),

@@ -1013,7 +1013,7 @@ Denise::updateBorderBuffer()
     // Print some debug info if requested
     if (DIW_DEBUG) {
 
-        trace(true, "updateBorderBuffer\n");
+        trace(true, "updateBorderBuffer (%ld,%ld)\n", hstrt, hstop);
         diwChanges.dump();
     }
 
@@ -1023,47 +1023,65 @@ Denise::updateBorderBuffer()
     // OCS Denise does not reset the counter in lines 0 - 8
     if (agnus.pos.v < 9 && isOCS()) counter = (HBLANK_MIN * 2 + agnus.pos.v * 0x1C6) & 0x1FF;
 
-    for (isize i = 0, trigger = diwChanges.trigger(); i < isizeof(bBuffer); i++) {
+    // Initialize trigger position (position of first register change if any)
+    auto trigger = diwChanges.trigger();
+
+    for (isize i = 0; i < isizeof(bBuffer); i++) {
 
         // Update comparison values if needed
-        while (i == trigger) {
+        if (i == trigger) {
 
-            RegChange &r = diwChanges.read();
-            trigger = diwChanges.trigger();
+            while (i == trigger) {
 
-            switch (r.addr) {
+                RegChange &r = diwChanges.read();
+                trigger = diwChanges.trigger();
 
-                case REG_DIWSTRT: hstrt = r.value; break;
-                case REG_DIWSTOP: hstop = r.value; break;
+                switch (r.addr) {
 
-                default:
-                    break;
+                    case REG_DIWSTRT:
+
+                        hstrt = r.value;
+                        trace(DIW_DEBUG, "hstrt -> %ld (%lx)\n", hstrt, hstrt);
+                        break;
+
+                    case REG_DIWSTOP:
+
+                        hstop = r.value;
+                        trace(DIW_DEBUG, "hstop -> %ld (%lx)\n", hstop, hstop);
+                        break;
+
+                    default:
+                        break;
+                }
+
+                // Inform the debugger about the changed display window
+                debugger.updateDiwH(hstrt, hstop);
             }
-
-            // Set or clear the horizontal DIW flipflop
-            if (counter == hstrt) {
-
-                trace(DIW_DEBUG, "hflop -> 1 at %ld (%lx)\n", counter, counter);
-                hflop = true;
-            }
-            if (counter == hstop) {
-
-                trace(DIW_DEBUG, "hflop -> 0 at %ld (%lx)\n", counter, counter);
-                hflop = false;
-            }
-
-            if (i % 2 == 1) {
-
-                // Advance the horizontal counter
-                counter = (counter + 1) & 0x1FF;
-
-                // Wrap over at the end of a line
-                if (counter == 0x1C8 && (agnus.pos.v >= 9 || isECS())) counter = 2;
-            }
-
-            // Set the border mask (0xFF = no border)
-            bBuffer[i] = hflop ? 0xFF : borderColor;
         }
+
+        // Set or clear the horizontal DIW flipflop
+        if (counter == hstrt) {
+
+            trace(DIW_DEBUG, "hflop -> 1 at %ld (%lx)\n", counter, counter);
+            hflop = true;
+        }
+        if (counter == hstop) {
+
+            trace(DIW_DEBUG, "hflop -> 0 at %ld (%lx)\n", counter, counter);
+            hflop = false;
+        }
+
+        if (i % 2 == 1) {
+
+            // Advance the horizontal counter
+            counter = (counter + 1) & 0x1FF;
+
+            // Wrap over at the end of a line
+            if (counter == 0x1C8 && (agnus.pos.v >= 9 || isECS())) counter = 2;
+        }
+
+        // Set the border mask (0xFF = no border)
+        bBuffer[i] = hflop ? 0xFF : borderColor;
     }
 
     diwChanges.clear();
