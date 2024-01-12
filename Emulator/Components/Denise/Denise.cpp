@@ -1010,6 +1010,9 @@ Denise::updateBorderBuffer()
     if (!borderBufferIsDirty) return;
     denise.borderBufferIsDirty--;
 
+    // Get the current value of the horizontal DIW flipflop
+    auto hf = hflop;
+
     // Print some debug info if requested
     if (DIW_DEBUG) {
 
@@ -1063,12 +1066,12 @@ Denise::updateBorderBuffer()
         if (counter == hstrt) {
 
             trace(DIW_DEBUG, "hflop -> 1 at %ld (%lx)\n", counter, counter);
-            hflop = true;
+            hf = true;
         }
         if (counter == hstop) {
 
             trace(DIW_DEBUG, "hflop -> 0 at %ld (%lx)\n", counter, counter);
-            hflop = false;
+            hf = false;
         }
 
         if (i % 2 == 1) {
@@ -1081,7 +1084,17 @@ Denise::updateBorderBuffer()
         }
 
         // Set the border mask (0xFF = no border)
-        bBuffer[i] = hflop ? 0xFF : borderColor;
+        bBuffer[i] = hf ? 0xFF : borderColor;
+    }
+
+    // Check if the hflop has a different value at the end of the line
+    if (hflop != hf) {
+
+        // Remember the new value
+        hflop = hf;
+
+        // Recalculate the mask in the next line
+        markBorderBufferAsDirty(1);
     }
 
     diwChanges.clear();
@@ -1213,7 +1226,7 @@ void
 Denise::vsyncHandler()
 {
     hflop = true; // ???
-    markBorderBufferAsDirty(2);
+    markBorderBufferAsDirty();
     pixelEngine.vsyncHandler();
     debugger.vsyncHandler();
 }

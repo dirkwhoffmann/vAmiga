@@ -61,7 +61,7 @@ Denise::setHSTRT(isize val)
 
     // Record register change
     diwChanges.insert(agnus.pos.pixel(), RegChange { REG_DIWSTRT, (u16)val });
-    markBorderBufferAsDirty(2);
+    markBorderBufferAsDirty();
 }
 
 void
@@ -71,7 +71,7 @@ Denise::setHSTOP(isize val)
 
     // Record register change
     diwChanges.insert(agnus.pos.pixel(), RegChange { REG_DIWSTOP, (u16)val });
-    markBorderBufferAsDirty(2);    
+    markBorderBufferAsDirty();    
 }
 
 u16

@@ -166,7 +166,7 @@ public:
     u16 ssra[8];
     u16 ssrb[8];
     
-    /* Indicates which sprites are curently armed. An armed sprite is a sprite
+    /* Indicates which sprites are currently armed. An armed sprite is a sprite
      * that will be drawn in this line.
      */
     u8 armed;
@@ -503,7 +503,7 @@ private:
     void updateBorderBuffer();
 
     // Marks the border buffer dirty for a specific number of lines
-    void markBorderBufferAsDirty(isize lines);
+    void markBorderBufferAsDirty(isize lines = 2);
 
 
     //
