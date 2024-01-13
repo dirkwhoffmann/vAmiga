@@ -441,6 +441,12 @@ Agnus::setBPL2MOD(u16 value)
 template <int x> void
 Agnus::pokeSPRxPOS(u16 value)
 {
+    setSPRxPOS<x>(value);
+}
+
+template <int x> void
+Agnus::setSPRxPOS(u16 value)
+{
     trace(SPRREG_DEBUG, "pokeSPR%dPOS(%04x)\n", x, value);
 
     // Compute the value of the vertical counter that is seen here
@@ -456,6 +462,12 @@ Agnus::pokeSPRxPOS(u16 value)
 
 template <int x> void
 Agnus::pokeSPRxCTL(u16 value)
+{
+    setSPRxCTL<x>(value);
+}
+
+template <int x> void
+Agnus::setSPRxCTL(u16 value)
 {
     trace(SPRREG_DEBUG, "pokeSPR%dCTL(%04x)\n", x, value);
 
@@ -672,158 +684,110 @@ Agnus::dropWrite(BusOwner owner)
     return false;
 }
 
-template void Agnus::pokeDSKPTH<ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeDSKPTH<ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeDSKPTL<ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeDSKPTL<ACCESSOR_AGNUS>(u16 value);
+//
+// Instantiate template functions
+//
 
-template void Agnus::pokeAUDxLCH<0,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeAUDxLCH<1,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeAUDxLCH<2,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeAUDxLCH<3,ACCESSOR_CPU>(u16 value);
+#define DECLARE(x) \
+template void Agnus::x<ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<ACCESSOR_AGNUS>(u16 value);
 
-template void Agnus::pokeAUDxLCH<0,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeAUDxLCH<1,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeAUDxLCH<2,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeAUDxLCH<3,ACCESSOR_AGNUS>(u16 value);
+DECLARE(pokeDSKPTH)
+DECLARE(pokeDSKPTL)
+DECLARE(pokeBPLCON0)
+DECLARE(pokeDMACON)
+DECLARE(pokeDIWSTRT)
+DECLARE(pokeDIWSTOP)
+DECLARE(pokeDIWHIGH)
 
-template void Agnus::pokeAUDxLCL<0,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeAUDxLCL<1,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeAUDxLCL<2,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeAUDxLCL<3,ACCESSOR_CPU>(u16 value);
+#undef DECLARE
 
-template void Agnus::pokeAUDxLCL<0,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeAUDxLCL<1,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeAUDxLCL<2,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeAUDxLCL<3,ACCESSOR_AGNUS>(u16 value);
+#define DECLARE(x) \
+template void Agnus::x<0,ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<1,ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<2,ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<3,ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<0,ACCESSOR_AGNUS>(u16 value); \
+template void Agnus::x<1,ACCESSOR_AGNUS>(u16 value); \
+template void Agnus::x<2,ACCESSOR_AGNUS>(u16 value); \
+template void Agnus::x<3,ACCESSOR_AGNUS>(u16 value);
 
-template void Agnus::pokeBPLxPTH<1,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeBPLxPTH<2,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeBPLxPTH<3,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeBPLxPTH<4,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeBPLxPTH<5,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeBPLxPTH<6,ACCESSOR_CPU>(u16 value);
+DECLARE(pokeAUDxLCH);
+DECLARE(pokeAUDxLCL);
 
-template void Agnus::pokeBPLxPTH<1,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeBPLxPTH<2,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeBPLxPTH<3,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeBPLxPTH<4,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeBPLxPTH<5,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeBPLxPTH<6,ACCESSOR_AGNUS>(u16 value);
+#undef DECLARE
 
-template void Agnus::setBPLxPTH<1>(u16 value);
-template void Agnus::setBPLxPTH<2>(u16 value);
-template void Agnus::setBPLxPTH<3>(u16 value);
-template void Agnus::setBPLxPTH<4>(u16 value);
-template void Agnus::setBPLxPTH<5>(u16 value);
-template void Agnus::setBPLxPTH<6>(u16 value);
+#define DECLARE(x) \
+template void Agnus::x<1,ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<2,ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<3,ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<4,ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<5,ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<6,ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<1,ACCESSOR_AGNUS>(u16 value); \
+template void Agnus::x<2,ACCESSOR_AGNUS>(u16 value); \
+template void Agnus::x<3,ACCESSOR_AGNUS>(u16 value); \
+template void Agnus::x<4,ACCESSOR_AGNUS>(u16 value); \
+template void Agnus::x<5,ACCESSOR_AGNUS>(u16 value); \
+template void Agnus::x<6,ACCESSOR_AGNUS>(u16 value);
 
-template void Agnus::pokeBPLxPTL<1,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeBPLxPTL<2,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeBPLxPTL<3,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeBPLxPTL<4,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeBPLxPTL<5,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeBPLxPTL<6,ACCESSOR_CPU>(u16 value);
+DECLARE(pokeBPLxPTH)
+DECLARE(pokeBPLxPTL)
 
-template void Agnus::pokeBPLxPTL<1,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeBPLxPTL<2,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeBPLxPTL<3,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeBPLxPTL<4,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeBPLxPTL<5,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeBPLxPTL<6,ACCESSOR_AGNUS>(u16 value);
+#undef DECLARE
 
-template void Agnus::setBPLxPTL<1>(u16 value);
-template void Agnus::setBPLxPTL<2>(u16 value);
-template void Agnus::setBPLxPTL<3>(u16 value);
-template void Agnus::setBPLxPTL<4>(u16 value);
-template void Agnus::setBPLxPTL<5>(u16 value);
-template void Agnus::setBPLxPTL<6>(u16 value);
+#define DECLARE(x) \
+template void Agnus::x<0,ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<1,ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<2,ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<3,ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<4,ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<5,ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<6,ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<7,ACCESSOR_CPU>(u16 value); \
+template void Agnus::x<0,ACCESSOR_AGNUS>(u16 value); \
+template void Agnus::x<1,ACCESSOR_AGNUS>(u16 value); \
+template void Agnus::x<2,ACCESSOR_AGNUS>(u16 value); \
+template void Agnus::x<3,ACCESSOR_AGNUS>(u16 value); \
+template void Agnus::x<4,ACCESSOR_AGNUS>(u16 value); \
+template void Agnus::x<5,ACCESSOR_AGNUS>(u16 value); \
+template void Agnus::x<6,ACCESSOR_AGNUS>(u16 value); \
+template void Agnus::x<7,ACCESSOR_AGNUS>(u16 value);
 
-template void Agnus::pokeSPRxPTH<0,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeSPRxPTH<1,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeSPRxPTH<2,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeSPRxPTH<3,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeSPRxPTH<4,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeSPRxPTH<5,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeSPRxPTH<6,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeSPRxPTH<7,ACCESSOR_CPU>(u16 value);
+DECLARE(pokeSPRxPTH)
+DECLARE(pokeSPRxPTL)
 
-template void Agnus::pokeSPRxPTH<0,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeSPRxPTH<1,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeSPRxPTH<2,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeSPRxPTH<3,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeSPRxPTH<4,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeSPRxPTH<5,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeSPRxPTH<6,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeSPRxPTH<7,ACCESSOR_AGNUS>(u16 value);
+#undef DECLARE
 
-template void Agnus::setSPRxPTH<0>(u16 value);
-template void Agnus::setSPRxPTH<1>(u16 value);
-template void Agnus::setSPRxPTH<2>(u16 value);
-template void Agnus::setSPRxPTH<3>(u16 value);
-template void Agnus::setSPRxPTH<4>(u16 value);
-template void Agnus::setSPRxPTH<5>(u16 value);
-template void Agnus::setSPRxPTH<6>(u16 value);
-template void Agnus::setSPRxPTH<7>(u16 value);
+#define DECLARE(x) \
+template void Agnus::x<1>(u16 value); \
+template void Agnus::x<2>(u16 value); \
+template void Agnus::x<3>(u16 value); \
+template void Agnus::x<4>(u16 value); \
+template void Agnus::x<5>(u16 value); \
+template void Agnus::x<6>(u16 value);
 
-template void Agnus::pokeSPRxPTL<0,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeSPRxPTL<1,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeSPRxPTL<2,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeSPRxPTL<3,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeSPRxPTL<4,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeSPRxPTL<5,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeSPRxPTL<6,ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeSPRxPTL<7,ACCESSOR_CPU>(u16 value);
+DECLARE(setBPLxPTH)
+DECLARE(setBPLxPTL)
 
-template void Agnus::pokeSPRxPTL<0,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeSPRxPTL<1,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeSPRxPTL<2,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeSPRxPTL<3,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeSPRxPTL<4,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeSPRxPTL<5,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeSPRxPTL<6,ACCESSOR_AGNUS>(u16 value);
-template void Agnus::pokeSPRxPTL<7,ACCESSOR_AGNUS>(u16 value);
+#undef DECLARE
 
-template void Agnus::setSPRxPTL<0>(u16 value);
-template void Agnus::setSPRxPTL<1>(u16 value);
-template void Agnus::setSPRxPTL<2>(u16 value);
-template void Agnus::setSPRxPTL<3>(u16 value);
-template void Agnus::setSPRxPTL<4>(u16 value);
-template void Agnus::setSPRxPTL<5>(u16 value);
-template void Agnus::setSPRxPTL<6>(u16 value);
-template void Agnus::setSPRxPTL<7>(u16 value);
+#define DECLARE(x) \
+template void Agnus::x<0>(u16 value); \
+template void Agnus::x<1>(u16 value); \
+template void Agnus::x<2>(u16 value); \
+template void Agnus::x<3>(u16 value); \
+template void Agnus::x<4>(u16 value); \
+template void Agnus::x<5>(u16 value); \
+template void Agnus::x<6>(u16 value); \
+template void Agnus::x<7>(u16 value);
 
-template void Agnus::pokeSPRxPOS<0>(u16 value);
-template void Agnus::pokeSPRxPOS<1>(u16 value);
-template void Agnus::pokeSPRxPOS<2>(u16 value);
-template void Agnus::pokeSPRxPOS<3>(u16 value);
-template void Agnus::pokeSPRxPOS<4>(u16 value);
-template void Agnus::pokeSPRxPOS<5>(u16 value);
-template void Agnus::pokeSPRxPOS<6>(u16 value);
-template void Agnus::pokeSPRxPOS<7>(u16 value);
+DECLARE(pokeSPRxPOS)
+DECLARE(pokeSPRxCTL)
 
-template void Agnus::pokeSPRxCTL<0>(u16 value);
-template void Agnus::pokeSPRxCTL<1>(u16 value);
-template void Agnus::pokeSPRxCTL<2>(u16 value);
-template void Agnus::pokeSPRxCTL<3>(u16 value);
-template void Agnus::pokeSPRxCTL<4>(u16 value);
-template void Agnus::pokeSPRxCTL<5>(u16 value);
-template void Agnus::pokeSPRxCTL<6>(u16 value);
-template void Agnus::pokeSPRxCTL<7>(u16 value);
-
-template void Agnus::pokeBPLCON0<ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeBPLCON0<ACCESSOR_AGNUS>(u16 value);
-
-template void Agnus::pokeDMACON<ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeDMACON<ACCESSOR_AGNUS>(u16 value);
-
-template void Agnus::pokeDIWSTRT<ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeDIWSTRT<ACCESSOR_AGNUS>(u16 value);
-
-template void Agnus::pokeDIWSTOP<ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeDIWSTOP<ACCESSOR_AGNUS>(u16 value);
-
-template void Agnus::pokeDIWHIGH<ACCESSOR_CPU>(u16 value);
-template void Agnus::pokeDIWHIGH<ACCESSOR_AGNUS>(u16 value);
+DECLARE(setSPRxPTH)
+DECLARE(setSPRxPTL)
+DECLARE(setSPRxPOS)
+DECLARE(setSPRxCTL)
 
 }
