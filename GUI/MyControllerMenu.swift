@@ -179,8 +179,6 @@ extension MyController: NSMenuItemValidation {
         let defaults = AmigaProxy.defaults!
         let openPanel = NSOpenPanel()
 
-        let url = URL(string: "") // TODO
-
         // Power off the emulator if the user doesn't object
         if !askToPowerOff() { return }
 

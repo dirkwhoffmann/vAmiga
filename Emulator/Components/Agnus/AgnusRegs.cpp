@@ -441,13 +441,14 @@ Agnus::setBPL2MOD(u16 value)
 template <int x> void
 Agnus::pokeSPRxPOS(u16 value)
 {
-    setSPRxPOS<x>(value);
+    trace(SPRREG_DEBUG, "pokeSPR%dPOS(%04x)\n", x, value);
+    recordRegisterChange(DMA_CYCLES(2), SET_SPR0POS + x, value);
 }
 
 template <int x> void
 Agnus::setSPRxPOS(u16 value)
 {
-    trace(SPRREG_DEBUG, "pokeSPR%dPOS(%04x)\n", x, value);
+    trace(SPRREG_DEBUG, "setSPR%dPOS(%04x)\n", x, value);
 
     // Compute the value of the vertical counter that is seen here
     i16 v = (i16)(pos.h < 0xDF ? pos.v : (pos.v + 1));
@@ -463,13 +464,14 @@ Agnus::setSPRxPOS(u16 value)
 template <int x> void
 Agnus::pokeSPRxCTL(u16 value)
 {
-    setSPRxCTL<x>(value);
+    trace(SPRREG_DEBUG, "pokeSPR%dCTL(%04x)\n", x, value);
+    recordRegisterChange(DMA_CYCLES(2), SET_SPR0CTL + x, value);
 }
 
 template <int x> void
 Agnus::setSPRxCTL(u16 value)
 {
-    trace(SPRREG_DEBUG, "pokeSPR%dCTL(%04x)\n", x, value);
+    trace(SPRREG_DEBUG, "setSPR%dCTL(%04x)\n", x, value);
 
     // Compute the value of the vertical counter that is seen here
     i16 v = (i16)(pos.h < 0xDF ? pos.v : (pos.v + 1));

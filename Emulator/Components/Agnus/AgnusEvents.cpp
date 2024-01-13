@@ -251,6 +251,24 @@ Agnus::serviceREGEvent(Cycle until)
             case SET_BPL5PTL: setBPLxPTL<5>(change.value); break;
             case SET_BPL6PTL: setBPLxPTL<6>(change.value); break;
 
+            case SET_SPR0POS: setSPRxPOS<0>(change.value); break;
+            case SET_SPR1POS: setSPRxPOS<1>(change.value); break;
+            case SET_SPR2POS: setSPRxPOS<2>(change.value); break;
+            case SET_SPR3POS: setSPRxPOS<3>(change.value); break;
+            case SET_SPR4POS: setSPRxPOS<4>(change.value); break;
+            case SET_SPR5POS: setSPRxPOS<5>(change.value); break;
+            case SET_SPR6POS: setSPRxPOS<6>(change.value); break;
+            case SET_SPR7POS: setSPRxPOS<7>(change.value); break;
+
+            case SET_SPR0CTL: setSPRxCTL<0>(change.value); break;
+            case SET_SPR1CTL: setSPRxCTL<1>(change.value); break;
+            case SET_SPR2CTL: setSPRxCTL<2>(change.value); break;
+            case SET_SPR3CTL: setSPRxCTL<3>(change.value); break;
+            case SET_SPR4CTL: setSPRxCTL<4>(change.value); break;
+            case SET_SPR5CTL: setSPRxCTL<5>(change.value); break;
+            case SET_SPR6CTL: setSPRxCTL<6>(change.value); break;
+            case SET_SPR7CTL: setSPRxCTL<7>(change.value); break;
+
             case SET_SPR0PTH: setSPRxPTH<0>(change.value); break;
             case SET_SPR1PTH: setSPRxPTH<1>(change.value); break;
             case SET_SPR2PTH: setSPRxPTH<2>(change.value); break;
