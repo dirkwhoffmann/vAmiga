@@ -158,7 +158,9 @@ public:
     // Recorded DMA usage for all cycles in the current rasterline
     BusOwner busOwner[HPOS_CNT] = { };
 
-    
+    // Remembers the last write to SPRxCTL (EXPERIMENTAL)
+    u8 lastCtlWrite[8] = { };
+
     //
     // Signals from other components
     //
@@ -277,7 +279,8 @@ private:
         
         << busValue
         << busOwner
-
+        << lastCtlWrite
+        
         << audxDR
         << audxDSR
         << bls
@@ -542,10 +545,10 @@ public:
     void pokeBPL2MOD(u16 value);
     void setBPL2MOD(u16 value);
     
-    template <int x> void pokeSPRxPOS(u16 value);
+    template <int x, Accessor> void pokeSPRxPOS(u16 value);
     template <int x> void setSPRxPOS(u16 value);
 
-    template <int x> void pokeSPRxCTL(u16 value);
+    template <int x, Accessor> void pokeSPRxCTL(u16 value);
     template <int x> void setSPRxCTL(u16 value);
 
     void pokeBEAMCON0(u16 value);

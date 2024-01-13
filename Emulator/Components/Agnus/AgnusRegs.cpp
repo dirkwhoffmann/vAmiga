@@ -438,10 +438,22 @@ Agnus::setBPL2MOD(u16 value)
     bpl2mod = (i16)(value & 0xFFFE);
 }
 
-template <int x> void
+template <int x, Accessor s> void
 Agnus::pokeSPRxPOS(u16 value)
 {
-    trace(SPRREG_DEBUG, "pokeSPR%dPOS(%04x)\n", x, value);
+    trace(SPRREG_DEBUG, "pokeSPR%dPOS<%s>(%04x)\n", x, AccessorEnum::key(s), value);
+
+    // setSPRxPOS<x>(value);
+    // return;
+
+    // Hypothesis (test cases Sprites/sprdma/intefere):
+    // DMA cycle is dropped when the register was written one cycle earlier.
+    if (lastCtlWrite[x] + 1 == pos.h && (pos.h % 2) == 1) {
+
+        xfiles("pokeSPR%dPOS(%04x) dropped\n", x, value);
+        return;
+    }
+
     recordRegisterChange(DMA_CYCLES(2), SET_SPR0POS + x, value);
 }
 
@@ -451,7 +463,8 @@ Agnus::setSPRxPOS(u16 value)
     trace(SPRREG_DEBUG, "setSPR%dPOS(%04x)\n", x, value);
 
     // Compute the value of the vertical counter that is seen here
-    i16 v = (i16)(pos.h < 0xDF ? pos.v : (pos.v + 1));
+    // i16 v = (i16)(pos.h < 0xDF ? pos.v : (pos.v + 1));
+    i16 v = (i16)(pos.h < 0xE1 ? pos.v : (pos.v + 1));
 
     // Compute the new vertical start position
     sprVStrt[x] = ((value & 0xFF00) >> 8) | (sprVStrt[x] & 0x0100);
@@ -461,10 +474,22 @@ Agnus::setSPRxPOS(u16 value)
     if (sprVStop[x] == v) sprDmaState[x] = SPR_DMA_IDLE;
 }
 
-template <int x> void
+template <int x, Accessor s> void
 Agnus::pokeSPRxCTL(u16 value)
 {
     trace(SPRREG_DEBUG, "pokeSPR%dCTL(%04x)\n", x, value);
+
+    // setSPRxCTL<x>(value);
+    // return;
+
+    // Hypothesis (test cases Sprites/sprdma/intefere):
+    // DMA cycle is dropped when the register was written one cycle earlier.
+    if (lastCtlWrite[x] + 1 == pos.h && (pos.h % 2) == 1) {
+
+        xfiles("pokeSPR%dCTL(%04x) dropped\n", x, value);
+        return;
+    }
+
     recordRegisterChange(DMA_CYCLES(2), SET_SPR0CTL + x, value);
 }
 
@@ -473,20 +498,26 @@ Agnus::setSPRxCTL(u16 value)
 {
     trace(SPRREG_DEBUG, "setSPR%dCTL(%04x)\n", x, value);
 
+    // Remember the write cycle (checked in pokeSPRxCTL)
+    lastCtlWrite[x] = u8(pos.h);
+
     // Compute the value of the vertical counter that is seen here
-    i16 v = (i16)(pos.h < 0xDF ? pos.v : (pos.v + 1));
+    // i16 v = (i16)(pos.h < 0xDF ? pos.v : (pos.v + 1));
+    i16 v = (i16)(pos.h < 0xE1 ? pos.v : (pos.v + 1));
 
     // Compute the new vertical start and stop position
     sprVStrt[x] = (i16)((value & 0b100) << 6 | (sprVStrt[x] & 0x00FF));
     sprVStop[x] = (i16)((value & 0b010) << 7 | (value >> 8));
 
-    // ECS Agnus supports an additional position bit (encoded in 'unused' area)
+    // ECS Agnus supports additional position bits (encoded in 'unused' area)
     if (GET_BIT(value, 6)) {
-        xfiles("pokeSPRxCTL: Extended VSTRT bit set\n");
+
+        xfiles("setSPR%dCTL: Extended VSTRT bit set\n", x);
         if (isECS()) sprVStrt[x] |= 0x0200;
     }
     if (GET_BIT(value, 5)) {
-        xfiles("pokeSPRxCTL: Extended VSTOP bit set\n");
+
+        xfiles("setSPR%dCTL: Extended VSTOP bit set\n", x);
         if (isECS()) sprVStop[x] |= 0x0200;
     }
 
@@ -691,8 +722,11 @@ Agnus::dropWrite(BusOwner owner)
 //
 
 #define DECLARE(x) \
-template void Agnus::x<ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<ACCESSOR_AGNUS>(u16 value);
+DECLAREA(x,ACCESSOR_CPU) \
+DECLAREA(x,ACCESSOR_AGNUS)
+
+#define DECLAREA(x,y) \
+template void Agnus::x<y>(u16 value);
 
 DECLARE(pokeDSKPTH)
 DECLARE(pokeDSKPTL)
@@ -702,63 +736,48 @@ DECLARE(pokeDIWSTRT)
 DECLARE(pokeDIWSTOP)
 DECLARE(pokeDIWHIGH)
 
-#undef DECLARE
+#undef DECLAREA
 
-#define DECLARE(x) \
-template void Agnus::x<0,ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<1,ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<2,ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<3,ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<0,ACCESSOR_AGNUS>(u16 value); \
-template void Agnus::x<1,ACCESSOR_AGNUS>(u16 value); \
-template void Agnus::x<2,ACCESSOR_AGNUS>(u16 value); \
-template void Agnus::x<3,ACCESSOR_AGNUS>(u16 value);
+#define DECLAREA(x,y) \
+template void Agnus::x<0,y>(u16 value); \
+template void Agnus::x<1,y>(u16 value); \
+template void Agnus::x<2,y>(u16 value); \
+template void Agnus::x<3,y>(u16 value);
 
 DECLARE(pokeAUDxLCH);
 DECLARE(pokeAUDxLCL);
 
-#undef DECLARE
+#undef DECLAREA
 
-#define DECLARE(x) \
-template void Agnus::x<1,ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<2,ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<3,ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<4,ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<5,ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<6,ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<1,ACCESSOR_AGNUS>(u16 value); \
-template void Agnus::x<2,ACCESSOR_AGNUS>(u16 value); \
-template void Agnus::x<3,ACCESSOR_AGNUS>(u16 value); \
-template void Agnus::x<4,ACCESSOR_AGNUS>(u16 value); \
-template void Agnus::x<5,ACCESSOR_AGNUS>(u16 value); \
-template void Agnus::x<6,ACCESSOR_AGNUS>(u16 value);
+#define DECLAREA(x,y) \
+template void Agnus::x<1,y>(u16 value); \
+template void Agnus::x<2,y>(u16 value); \
+template void Agnus::x<3,y>(u16 value); \
+template void Agnus::x<4,y>(u16 value); \
+template void Agnus::x<5,y>(u16 value); \
+template void Agnus::x<6,y>(u16 value);
 
 DECLARE(pokeBPLxPTH)
 DECLARE(pokeBPLxPTL)
 
-#undef DECLARE
+#undef DECLAREA
 
-#define DECLARE(x) \
-template void Agnus::x<0,ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<1,ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<2,ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<3,ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<4,ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<5,ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<6,ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<7,ACCESSOR_CPU>(u16 value); \
-template void Agnus::x<0,ACCESSOR_AGNUS>(u16 value); \
-template void Agnus::x<1,ACCESSOR_AGNUS>(u16 value); \
-template void Agnus::x<2,ACCESSOR_AGNUS>(u16 value); \
-template void Agnus::x<3,ACCESSOR_AGNUS>(u16 value); \
-template void Agnus::x<4,ACCESSOR_AGNUS>(u16 value); \
-template void Agnus::x<5,ACCESSOR_AGNUS>(u16 value); \
-template void Agnus::x<6,ACCESSOR_AGNUS>(u16 value); \
-template void Agnus::x<7,ACCESSOR_AGNUS>(u16 value);
+#define DECLAREA(x,y) \
+template void Agnus::x<0,y>(u16 value); \
+template void Agnus::x<1,y>(u16 value); \
+template void Agnus::x<2,y>(u16 value); \
+template void Agnus::x<3,y>(u16 value); \
+template void Agnus::x<4,y>(u16 value); \
+template void Agnus::x<5,y>(u16 value); \
+template void Agnus::x<6,y>(u16 value); \
+template void Agnus::x<7,y>(u16 value);
 
+DECLARE(pokeSPRxPOS)
+DECLARE(pokeSPRxCTL)
 DECLARE(pokeSPRxPTH)
 DECLARE(pokeSPRxPTL)
 
+#undef DECLAREA
 #undef DECLARE
 
 #define DECLARE(x) \
@@ -784,12 +803,10 @@ template void Agnus::x<5>(u16 value); \
 template void Agnus::x<6>(u16 value); \
 template void Agnus::x<7>(u16 value);
 
-DECLARE(pokeSPRxPOS)
-DECLARE(pokeSPRxCTL)
-
 DECLARE(setSPRxPTH)
 DECLARE(setSPRxPTL)
 DECLARE(setSPRxPOS)
 DECLARE(setSPRxCTL)
 
+#undef DECLARE
 }

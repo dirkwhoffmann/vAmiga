@@ -625,7 +625,7 @@ public:
     template <isize x> void pokeSPRxDATA(u16 value);
     template <isize x> void pokeSPRxDATB(u16 value);
     
-    template <Accessor s, isize xx> void pokeCOLORxx(u16 value);
+    template <isize xx, Accessor s> void pokeCOLORxx(u16 value);
     
     
     //

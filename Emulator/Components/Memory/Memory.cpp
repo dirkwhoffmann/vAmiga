@@ -2455,165 +2455,133 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x13E >> 1: // SPR7PTL
             agnus.pokeSPRxPTL<7,s>(value); return;
         case 0x140 >> 1: // SPR0POS
-            agnus.pokeSPRxPOS<0>(value);
-            denise.pokeSPRxPOS<0>(value);
-            return;
+            agnus.pokeSPRxPOS<0,s>(value); denise.pokeSPRxPOS<0>(value); return;
         case 0x142 >> 1: // SPR0CTL
-            agnus.pokeSPRxCTL<0>(value);
-            denise.pokeSPRxCTL<0>(value);
-            return;
+            agnus.pokeSPRxCTL<0,s>(value); denise.pokeSPRxCTL<0>(value); return;
         case 0x144 >> 1: // SPR0DATA
             denise.pokeSPRxDATA<0>(value); return;
         case 0x146 >> 1: // SPR0DATB
             denise.pokeSPRxDATB<0>(value); return;
         case 0x148 >> 1: // SPR1POS
-            agnus.pokeSPRxPOS<1>(value);
-            denise.pokeSPRxPOS<1>(value);
-            return;
+            agnus.pokeSPRxPOS<1,s>(value); denise.pokeSPRxPOS<1>(value); return;
         case 0x14A >> 1: // SPR1CTL
-            agnus.pokeSPRxCTL<1>(value);
-            denise.pokeSPRxCTL<1>(value);
-            return;
+            agnus.pokeSPRxCTL<1,s>(value); denise.pokeSPRxCTL<1>(value); return;
         case 0x14C >> 1: // SPR1DATA
             denise.pokeSPRxDATA<1>(value); return;
         case 0x14E >> 1: // SPR1DATB
             denise.pokeSPRxDATB<1>(value); return;
         case 0x150 >> 1: // SPR2POS
-            agnus.pokeSPRxPOS<2>(value);
-            denise.pokeSPRxPOS<2>(value);
-            return;
+            agnus.pokeSPRxPOS<2,s>(value); denise.pokeSPRxPOS<2>(value); return;
         case 0x152 >> 1: // SPR2CTL
-            agnus.pokeSPRxCTL<2>(value);
-            denise.pokeSPRxCTL<2>(value);
-            return;
+            agnus.pokeSPRxCTL<2,s>(value); denise.pokeSPRxCTL<2>(value); return;
         case 0x154 >> 1: // SPR2DATA
             denise.pokeSPRxDATA<2>(value); return;
         case 0x156 >> 1: // SPR2DATB
             denise.pokeSPRxDATB<2>(value); return;
         case 0x158 >> 1: // SPR3POS
-            agnus.pokeSPRxPOS<3>(value);
-            denise.pokeSPRxPOS<3>(value);
-            return;
+            agnus.pokeSPRxPOS<3,s>(value); denise.pokeSPRxPOS<3>(value); return;
         case 0x15A >> 1: // SPR3CTL
-            agnus.pokeSPRxCTL<3>(value);
-            denise.pokeSPRxCTL<3>(value);
-            return;
+            agnus.pokeSPRxCTL<3,s>(value); denise.pokeSPRxCTL<3>(value); return;
         case 0x15C >> 1: // SPR3DATA
             denise.pokeSPRxDATA<3>(value); return;
         case 0x15E >> 1: // SPR3DATB
             denise.pokeSPRxDATB<3>(value); return;
         case 0x160 >> 1: // SPR4POS
-            agnus.pokeSPRxPOS<4>(value);
-            denise.pokeSPRxPOS<4>(value);
-            return;
+            agnus.pokeSPRxPOS<4,s>(value); denise.pokeSPRxPOS<4>(value); return;
         case 0x162 >> 1: // SPR4CTL
-            agnus.pokeSPRxCTL<4>(value);
-            denise.pokeSPRxCTL<4>(value);
-            return;
+            agnus.pokeSPRxCTL<4,s>(value); denise.pokeSPRxCTL<4>(value); return;
         case 0x164 >> 1: // SPR4DATA
             denise.pokeSPRxDATA<4>(value); return;
         case 0x166 >> 1: // SPR4DATB
             denise.pokeSPRxDATB<4>(value); return;
         case 0x168 >> 1: // SPR5POS
-            agnus.pokeSPRxPOS<5>(value);
-            denise.pokeSPRxPOS<5>(value);
-            return;
+            agnus.pokeSPRxPOS<5,s>(value); denise.pokeSPRxPOS<5>(value); return;
         case 0x16A >> 1: // SPR5CTL
-            agnus.pokeSPRxCTL<5>(value);
-            denise.pokeSPRxCTL<5>(value);
-            return;
+            agnus.pokeSPRxCTL<5,s>(value); denise.pokeSPRxCTL<5>(value); return;
         case 0x16C >> 1: // SPR5DATA
             denise.pokeSPRxDATA<5>(value); return;
         case 0x16E >> 1: // SPR5DATB
             denise.pokeSPRxDATB<5>(value); return;
         case 0x170 >> 1: // SPR6POS
-            agnus.pokeSPRxPOS<6>(value);
-            denise.pokeSPRxPOS<6>(value);
-            return;
+            agnus.pokeSPRxPOS<6,s>(value); denise.pokeSPRxPOS<6>(value); return;
         case 0x172 >> 1: // SPR6CTL
-            agnus.pokeSPRxCTL<6>(value);
-            denise.pokeSPRxCTL<6>(value);
-            return;
+            agnus.pokeSPRxCTL<6,s>(value); denise.pokeSPRxCTL<6>(value); return;
         case 0x174 >> 1: // SPR6DATA
             denise.pokeSPRxDATA<6>(value); return;
         case 0x176 >> 1: // SPR6DATB
             denise.pokeSPRxDATB<6>(value); return;
         case 0x178 >> 1: // SPR7POS
-            agnus.pokeSPRxPOS<7>(value);
-            denise.pokeSPRxPOS<7>(value);
-            return;
+            agnus.pokeSPRxPOS<7,s>(value); denise.pokeSPRxPOS<7>(value); return;
         case 0x17A >> 1: // SPR7CTL
-            agnus.pokeSPRxCTL<7>(value);
-            denise.pokeSPRxCTL<7>(value);
-            return;
+            agnus.pokeSPRxCTL<7,s>(value); denise.pokeSPRxCTL<7>(value); return;
         case 0x17C >> 1: // SPR7DATA
             denise.pokeSPRxDATA<7>(value); return;
         case 0x17E >> 1: // SPR7DATB
             denise.pokeSPRxDATB<7>(value); return;
         case 0x180 >> 1: // COLOR00
-            denise.pokeCOLORxx<s,0>(value); return;
+            denise.pokeCOLORxx<0,s>(value); return;
         case 0x182 >> 1: // COLOR01
-            denise.pokeCOLORxx<s,1>(value); return;
+            denise.pokeCOLORxx<1,s>(value); return;
         case 0x184 >> 1: // COLOR02
-            denise.pokeCOLORxx<s,2>(value); return;
+            denise.pokeCOLORxx<2,s>(value); return;
         case 0x186 >> 1: // COLOR03
-            denise.pokeCOLORxx<s,3>(value); return;
+            denise.pokeCOLORxx<3,s>(value); return;
         case 0x188 >> 1: // COLOR04
-            denise.pokeCOLORxx<s,4>(value); return;
+            denise.pokeCOLORxx<4,s>(value); return;
         case 0x18A >> 1: // COLOR05
-            denise.pokeCOLORxx<s,5>(value); return;
+            denise.pokeCOLORxx<5,s>(value); return;
         case 0x18C >> 1: // COLOR06
-            denise.pokeCOLORxx<s,6>(value); return;
+            denise.pokeCOLORxx<6,s>(value); return;
         case 0x18E >> 1: // COLOR07
-            denise.pokeCOLORxx<s,7>(value); return;
+            denise.pokeCOLORxx<7,s>(value); return;
         case 0x190 >> 1: // COLOR08
-            denise.pokeCOLORxx<s,8>(value); return;
+            denise.pokeCOLORxx<8,s>(value); return;
         case 0x192 >> 1: // COLOR09
-            denise.pokeCOLORxx<s,9>(value); return;
+            denise.pokeCOLORxx<9,s>(value); return;
         case 0x194 >> 1: // COLOR10
-            denise.pokeCOLORxx<s,10>(value); return;
+            denise.pokeCOLORxx<10,s>(value); return;
         case 0x196 >> 1: // COLOR11
-            denise.pokeCOLORxx<s,11>(value); return;
+            denise.pokeCOLORxx<11,s>(value); return;
         case 0x198 >> 1: // COLOR12
-            denise.pokeCOLORxx<s,12>(value); return;
+            denise.pokeCOLORxx<12,s>(value); return;
         case 0x19A >> 1: // COLOR13
-            denise.pokeCOLORxx<s,13>(value); return;
+            denise.pokeCOLORxx<13,s>(value); return;
         case 0x19C >> 1: // COLOR14
-            denise.pokeCOLORxx<s,14>(value); return;
+            denise.pokeCOLORxx<14,s>(value); return;
         case 0x19E >> 1: // COLOR15
-            denise.pokeCOLORxx<s,15>(value); return;
+            denise.pokeCOLORxx<15,s>(value); return;
         case 0x1A0 >> 1: // COLOR16
-            denise.pokeCOLORxx<s,16>(value); return;
+            denise.pokeCOLORxx<16,s>(value); return;
         case 0x1A2 >> 1: // COLOR17
-            denise.pokeCOLORxx<s,17>(value); return;
+            denise.pokeCOLORxx<17,s>(value); return;
         case 0x1A4 >> 1: // COLOR18
-            denise.pokeCOLORxx<s,18>(value); return;
+            denise.pokeCOLORxx<18,s>(value); return;
         case 0x1A6 >> 1: // COLOR19
-            denise.pokeCOLORxx<s,19>(value); return;
+            denise.pokeCOLORxx<19,s>(value); return;
         case 0x1A8 >> 1: // COLOR20
-            denise.pokeCOLORxx<s,20>(value); return;
+            denise.pokeCOLORxx<20,s>(value); return;
         case 0x1AA >> 1: // COLOR21
-            denise.pokeCOLORxx<s,21>(value); return;
+            denise.pokeCOLORxx<21,s>(value); return;
         case 0x1AC >> 1: // COLOR22
-            denise.pokeCOLORxx<s,22>(value); return;
+            denise.pokeCOLORxx<22,s>(value); return;
         case 0x1AE >> 1: // COLOR23
-            denise.pokeCOLORxx<s,23>(value); return;
+            denise.pokeCOLORxx<23,s>(value); return;
         case 0x1B0 >> 1: // COLOR24
-            denise.pokeCOLORxx<s,24>(value); return;
+            denise.pokeCOLORxx<24,s>(value); return;
         case 0x1B2 >> 1: // COLOR25
-            denise.pokeCOLORxx<s,25>(value); return;
+            denise.pokeCOLORxx<25,s>(value); return;
         case 0x1B4 >> 1: // COLOR26
-            denise.pokeCOLORxx<s,26>(value); return;
+            denise.pokeCOLORxx<26,s>(value); return;
         case 0x1B6 >> 1: // COLOR27
-            denise.pokeCOLORxx<s,27>(value); return;
+            denise.pokeCOLORxx<27,s>(value); return;
         case 0x1B8 >> 1: // COLOR28
-            denise.pokeCOLORxx<s,28>(value); return;
+            denise.pokeCOLORxx<28,s>(value); return;
         case 0x1BA >> 1: // COLOR29
-            denise.pokeCOLORxx<s,29>(value); return;
+            denise.pokeCOLORxx<29,s>(value); return;
         case 0x1BC >> 1: // COLOR30
-            denise.pokeCOLORxx<s,30>(value); return;
+            denise.pokeCOLORxx<30,s>(value); return;
         case 0x1BE >> 1: // COLOR31
-            denise.pokeCOLORxx<s,31>(value); return;
+            denise.pokeCOLORxx<31,s>(value); return;
         case 0x1DC >> 1: // BEAMCON0
             agnus.pokeBEAMCON0(value); return;
         case 0x1E4 >> 1: // DIWHIGH (ECS)

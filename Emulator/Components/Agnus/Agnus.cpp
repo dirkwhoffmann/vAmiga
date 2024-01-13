@@ -505,7 +505,7 @@ Agnus::executeFirstSpriteCycle()
             if (sprdma()) {
 
                 auto value = doSpriteDmaRead<nr>();
-                agnus.pokeSPRxPOS<nr>(value);
+                agnus.pokeSPRxPOS<nr, ACCESSOR_AGNUS>(value);
                 denise.pokeSPRxPOS<nr>(value);
 
             } else {
@@ -547,7 +547,7 @@ Agnus::executeSecondSpriteCycle()
                 
                 // Read in the next control word (CTL part)
                 auto value = doSpriteDmaRead<nr>();
-                agnus.pokeSPRxCTL<nr>(value);
+                agnus.pokeSPRxCTL<nr, ACCESSOR_AGNUS>(value);
                 denise.pokeSPRxCTL<nr>(value);
                 
             } else {
@@ -647,6 +647,9 @@ Agnus::eolHandler()
 
     // Clear the bus usage table
     for (isize i = 0; i < HPOS_CNT; i++) busOwner[i] = BUS_NONE;
+
+    // Clear other variables
+    for (isize i = 0; i < 8; i++) lastCtlWrite[i] = 0xFF;
 
     // Schedule the first BPL and DAS events
     scheduleFirstBplEvent();
