@@ -12,6 +12,7 @@
 #include "RingBuffer.h"
 #include "AgnusTypes.h"
 #include "AmigaTypes.h"
+#include <functional>
 
 namespace vamiga {
 
