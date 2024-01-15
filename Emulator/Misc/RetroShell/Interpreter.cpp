@@ -19,8 +19,8 @@ Interpreter::_initialize()
     CoreComponent::_initialize();
 
     // Register commands
-    initCommandShell(*commandShellRoot);
-    initDebugShell(*debugShellRoot);
+    initCommandShell(commandShellRoot);
+    initDebugShell(debugShellRoot);
 }
 
 Arguments
@@ -98,8 +98,8 @@ Interpreter::getRoot()
 {
     switch (shell) {
 
-        case Shell::Command: return *commandShellRoot;
-        case Shell::Debug: return *debugShellRoot;
+        case Shell::Command: return commandShellRoot;
+        case Shell::Debug: return debugShellRoot;
 
         default:
             fatalError;
