@@ -18,11 +18,6 @@
 
 namespace vamiga {
 
-PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
-{
-
-}
-
 void
 PixelEngine::clearAll()
 {

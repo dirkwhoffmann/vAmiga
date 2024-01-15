@@ -91,7 +91,7 @@ public:
     
 public:
     
-    PixelEngine(Amiga& ref);
+    using SubComponent::SubComponent;
 
     // Initializes both frame buffers with a checkerboard pattern
     void clearAll();
