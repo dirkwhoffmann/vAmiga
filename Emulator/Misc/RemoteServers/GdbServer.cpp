@@ -20,11 +20,6 @@
 
 namespace vamiga {
 
-GdbServer::GdbServer(Amiga& ref) : RemoteServer(ref)
-{
-
-}
-
 void
 GdbServer::_dump(Category category, std::ostream& os) const
 {

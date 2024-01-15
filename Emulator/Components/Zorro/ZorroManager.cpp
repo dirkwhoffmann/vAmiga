@@ -14,11 +14,6 @@
 
 namespace vamiga {
 
-ZorroManager::ZorroManager(Amiga& ref) : SubComponent(ref)
-{
-
-}
-
 void
 ZorroManager::_dump(Category category, std::ostream& os) const
 {

@@ -20,11 +20,7 @@ namespace vamiga {
 
 PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
 {
-    // Create random background noise pattern
-    noise.alloc(2 * PIXELS);
-    for (isize i = 0; i < noise.size; i++) {
-        noise[i] = rand() % 2 ? FrameBuffer::black : FrameBuffer::white;
-    }
+
 }
 
 void
@@ -57,10 +53,16 @@ PixelEngine::_initialize()
 {
     CoreComponent::_initialize();
 
+    // Create a random noise pattern for the background
+    noise.alloc(2 * PIXELS);
+    for (isize i = 0; i < noise.size; i++) {
+        noise[i] = rand() % 2 ? FrameBuffer::black : FrameBuffer::white;
+    }
+
     // Setup ECS BRDRBLNK color
     palette[64] = TEXEL(GpuColor(0x00, 0x00, 0x00).rawValue);
     
-    // Setup some debug colors
+    // Setup debug colors
     palette[65] = TEXEL(GpuColor(0xD0, 0x00, 0x00).rawValue);
     palette[66] = TEXEL(GpuColor(0xA0, 0x00, 0x00).rawValue);
     palette[67] = TEXEL(GpuColor(0x90, 0x00, 0x00).rawValue);

@@ -15,6 +15,7 @@ namespace vamiga {
 
 DmaDebugger::DmaDebugger(Amiga &ref) : SubComponent(ref)
 {
+    
 }
 
 void

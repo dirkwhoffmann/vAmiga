@@ -21,25 +21,7 @@ namespace vamiga {
 
 FloppyDrive::FloppyDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 {
-    string path;
-    
-    if (nr == 0) path = INITIAL_DF0;
-    if (nr == 1) path = INITIAL_DF1;
-    if (nr == 2) path = INITIAL_DF2;
-    if (nr == 3) path = INITIAL_DF3;
-    
-    if (path != "") {
-        
-        try {
-            
-            auto adf = ADFFile(path);
-            disk = std::make_unique<FloppyDisk>(adf);
-            
-        } catch (...) {
-            
-            warn("Cannot open ADF file %s\n", path.c_str());
-        }
-    }
+
 }
 
 const char *
@@ -47,6 +29,32 @@ FloppyDrive::getDescription() const
 {
     assert(usize(nr) < 4);
     return nr == 0 ? "Df0" : nr == 1 ? "Df1" : nr == 2 ? "Df2" : "Df3";
+}
+
+void
+FloppyDrive::_initialize()
+{
+    CoreComponent::_initialize();
+
+    string path;
+
+    if (nr == 0) path = INITIAL_DF0;
+    if (nr == 1) path = INITIAL_DF1;
+    if (nr == 2) path = INITIAL_DF2;
+    if (nr == 3) path = INITIAL_DF3;
+
+    if (path != "") {
+
+        try {
+
+            auto adf = ADFFile(path);
+            disk = std::make_unique<FloppyDisk>(adf);
+
+        } catch (...) {
+
+            warn("Cannot open ADF file %s\n", path.c_str());
+        }
+    }
 }
 
 void

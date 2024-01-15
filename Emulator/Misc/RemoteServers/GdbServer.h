@@ -54,7 +54,7 @@ class GdbServer : public RemoteServer {
     
 public:
     
-    GdbServer(Amiga& ref);
+    using RemoteServer::RemoteServer;
     
     
     //

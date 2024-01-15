@@ -21,25 +21,7 @@ std::fstream HardDrive::wtStream[4];
 
 HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 {
-    string path;
-    
-    if (nr == 0) path = INITIAL_HD0;
-    if (nr == 1) path = INITIAL_HD1;
-    if (nr == 2) path = INITIAL_HD2;
-    if (nr == 3) path = INITIAL_HD3;
-    
-    if (path != "") {
 
-        try {
-            
-            auto hdf = HDFFile(path);
-            init(hdf);
-
-        } catch (...) {
-            
-            warn("Cannot open HDF file %s\n", path.c_str());
-        }
-    }
 }
 
 HardDrive::~HardDrive()
@@ -183,6 +165,32 @@ HardDrive::getDescription() const
 {
     assert(usize(nr) < 4);
     return nr == 0 ? "Hd0" : nr == 1 ? "Hd1" : nr == 2 ? "Hd2" : "Hd3";
+}
+
+void
+HardDrive::_initialize()
+{
+    CoreComponent::_initialize();
+
+    string path;
+
+    if (nr == 0) path = INITIAL_HD0;
+    if (nr == 1) path = INITIAL_HD1;
+    if (nr == 2) path = INITIAL_HD2;
+    if (nr == 3) path = INITIAL_HD3;
+
+    if (path != "") {
+
+        try {
+
+            auto hdf = HDFFile(path);
+            init(hdf);
+
+        } catch (...) {
+
+            warn("Cannot open HDF file %s\n", path.c_str());
+        }
+    }
 }
 
 void

@@ -96,8 +96,6 @@ Amiga::Amiga()
         &regressionTester,
         &msgQueue
     };
-
-    // initialize();
 }
 
 Amiga::~Amiga()
@@ -119,7 +117,7 @@ Amiga::launch()
 {
     // Initialize all components
     initialize();
-    
+
     // Reset the emulator
     hardReset();
 

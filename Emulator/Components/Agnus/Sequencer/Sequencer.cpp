@@ -15,6 +15,14 @@ namespace vamiga {
 
 Sequencer::Sequencer(Amiga& ref) : SubComponent(ref)
 {
+
+}
+
+void
+Sequencer::_initialize()
+{
+    CoreComponent::_initialize();
+
     initDasEventTable();
 }
 

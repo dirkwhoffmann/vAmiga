@@ -20,7 +20,7 @@ namespace vamiga {
 
 HdController::HdController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref), drive(hdr)
 {
-    nr = drive.getNr();
+
 }
 
 const char *
@@ -62,6 +62,14 @@ HdController::_dump(Category category, std::ostream& os) const
 }
 
 void
+HdController::_initialize()
+{
+    CoreComponent::_initialize();
+
+    nr = drive.getNr();
+}
+
+void
 HdController::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
@@ -93,6 +101,8 @@ HdController::resetConfig()
     assert(isPoweredOff());
     auto &defaults = amiga.defaults;
 
+    nr = drive.getNr();
+    
     std::vector <Option> options = {
         
         OPT_HDC_CONNECT

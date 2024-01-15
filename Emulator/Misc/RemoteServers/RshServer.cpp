@@ -15,11 +15,6 @@
 
 namespace vamiga {
 
-RshServer::RshServer(Amiga& ref) : RemoteServer(ref)
-{
-
-}
-
 void
 RshServer::_dump(Category category, std::ostream& os) const
 {

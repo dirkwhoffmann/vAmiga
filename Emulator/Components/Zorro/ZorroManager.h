@@ -43,7 +43,7 @@ private:
     
 public:
     
-    ZorroManager(Amiga& ref);
+    using SubComponent::SubComponent;
     
     
     //

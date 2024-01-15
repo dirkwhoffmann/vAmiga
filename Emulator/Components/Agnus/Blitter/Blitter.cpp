@@ -18,27 +18,7 @@ namespace vamiga {
 
 Blitter::Blitter(Amiga& ref) : SubComponent(ref)
 {
-    // Initialize the fill pattern tables
-    for (isize carryIn = 0; carryIn < 2; carryIn++) {
-        
-        for (isize byte = 0; byte < 256; byte++) {
-            
-            u8 carry = (u8)carryIn;
-            u8 inclPattern = (u8)byte;
-            u8 exclPattern = (u8)byte;
-            
-            for (isize bit = 0; bit < 8; bit++) {
-                
-                inclPattern |= carry << bit; // inclusive fill
-                exclPattern ^= carry << bit; // exclusive fill
-                
-                if (byte & (1 << bit)) carry = !carry;
-            }
-            fillPattern[0][carryIn][byte] = inclPattern;
-            fillPattern[1][carryIn][byte] = exclPattern;
-            nextCarryIn[carryIn][byte] = carry;
-        }
-    }
+
 }
 
 void
@@ -46,6 +26,28 @@ Blitter::_initialize()
 {
     CoreComponent::_initialize();
     
+    // Initialize the fill pattern tables
+    for (isize carryIn = 0; carryIn < 2; carryIn++) {
+
+        for (isize byte = 0; byte < 256; byte++) {
+
+            u8 carry = (u8)carryIn;
+            u8 inclPattern = (u8)byte;
+            u8 exclPattern = (u8)byte;
+
+            for (isize bit = 0; bit < 8; bit++) {
+
+                inclPattern |= carry << bit; // inclusive fill
+                exclPattern ^= carry << bit; // exclusive fill
+
+                if (byte & (1 << bit)) carry = !carry;
+            }
+            fillPattern[0][carryIn][byte] = inclPattern;
+            fillPattern[1][carryIn][byte] = exclPattern;
+            nextCarryIn[carryIn][byte] = carry;
+        }
+    }
+
     initFastBlitter();
     initSlowBlitter();
 }

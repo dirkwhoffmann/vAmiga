@@ -17,7 +17,7 @@ class RshServer : public RemoteServer {
 
 public:
     
-    RshServer(Amiga& ref);
+    using RemoteServer::RemoteServer;
 
     //
     // Methods from CoreObject

@@ -18,10 +18,6 @@
 
 namespace vamiga {
 
-SerServer::SerServer(Amiga& ref) : RemoteServer(ref)
-{
-}
-
 void
 SerServer::_dump(Category category, std::ostream& os) const
 {

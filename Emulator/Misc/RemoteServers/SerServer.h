@@ -41,8 +41,8 @@ class SerServer : public RemoteServer {
     
 public:
     
-    SerServer(Amiga& ref);
-    
+    using RemoteServer::RemoteServer;
+
 
     //
     // Methods from CoreObject

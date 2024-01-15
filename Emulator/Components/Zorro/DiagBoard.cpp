@@ -16,11 +16,6 @@
 
 namespace vamiga {
 
-DiagBoard::DiagBoard(Amiga& ref) : ZorroBoard(ref)
-{
-
-}
-
 void
 DiagBoard::_dump(Category category, std::ostream& os) const
 {

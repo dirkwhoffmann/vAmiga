@@ -13,11 +13,6 @@
 
 namespace vamiga {
 
-Interpreter::Interpreter(Amiga &ref) : SubComponent(ref)
-{
-
-}
-
 void
 Interpreter::_initialize()
 {

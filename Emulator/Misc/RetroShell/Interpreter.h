@@ -49,7 +49,7 @@ class Interpreter: public SubComponent
 
 public:
     
-    Interpreter(Amiga &ref);
+    using SubComponent::SubComponent;
 
 private:
     

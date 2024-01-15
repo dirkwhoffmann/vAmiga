@@ -40,7 +40,7 @@ class DiagBoard : public ZorroBoard {
     
 public:
     
-    DiagBoard(Amiga& ref);
+    using ZorroBoard::ZorroBoard;
 
 
     //
