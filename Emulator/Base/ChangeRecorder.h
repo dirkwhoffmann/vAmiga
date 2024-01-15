@@ -182,7 +182,7 @@ struct RegChangeRecorder : public util::SortedRingBuffer<RegChange, capacity>
 
     void dump() {
 
-        apply([this] (i64 k, RegChange &e) {
+        apply([] (i64 k, RegChange &e) {
             fprintf(stderr, "%lld: %s = %d\n", k, ChipsetRegEnum::key(e.addr), e.value);
         });
     }

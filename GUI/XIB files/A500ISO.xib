@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -24,7 +24,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="883" height="270"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="bQM-ju-Gza" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bQM-ju-Gza" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="74" y="164" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="J1v-Kz-Rmw">
@@ -35,7 +35,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="6Nw-kx-8Da"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="69" translatesAutoresizingMaskIntoConstraints="NO" id="dpz-27-k0a" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="69" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dpz-27-k0a" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="20" y="214" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="Wyk-Ri-Syp">
@@ -46,7 +46,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="6KZ-Ex-kuM"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="b5l-uu-GKu" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="2" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b5l-uu-GKu" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="110" y="164" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="MAc-PD-E4v">
@@ -57,7 +57,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="KyJ-bd-rS2"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="80" translatesAutoresizingMaskIntoConstraints="NO" id="zHG-A3-Exo" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="80" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zHG-A3-Exo" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="74" y="214" width="45" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="iQD-lv-nY0">
@@ -68,7 +68,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="zcw-LD-v1K"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="81" translatesAutoresizingMaskIntoConstraints="NO" id="YY4-Zk-KmY" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="81" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YY4-Zk-KmY" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="119" y="214" width="45" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="XKF-tk-Olh">
@@ -79,7 +79,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="fBt-pr-afo"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="82" translatesAutoresizingMaskIntoConstraints="NO" id="l4S-cc-I2r" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="82" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l4S-cc-I2r" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="164" y="214" width="45" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="VuB-6Y-HWn">
@@ -90,7 +90,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="Ena-I7-yfY"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="83" translatesAutoresizingMaskIntoConstraints="NO" id="V6h-Xs-K91" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="83" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V6h-Xs-K91" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="209" y="214" width="45" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="tE0-D2-h79">
@@ -101,7 +101,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="Vay-iW-pCh"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="84" translatesAutoresizingMaskIntoConstraints="NO" id="i1b-0K-03y" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="84" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i1b-0K-03y" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="254" y="214" width="45" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="jvY-KC-V1c">
@@ -112,7 +112,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="MFi-kK-7YE"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="85" translatesAutoresizingMaskIntoConstraints="NO" id="GEr-e4-qBK" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="85" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GEr-e4-qBK" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="317" y="214" width="45" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="tra-fw-lfA">
@@ -123,7 +123,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="Uez-3L-9cR"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="99" translatesAutoresizingMaskIntoConstraints="NO" id="zs6-kl-sbH" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="99" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zs6-kl-sbH" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="20" y="92" width="45" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="0kU-du-WF3">
@@ -134,7 +134,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="5zV-Wt-POx"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="102" translatesAutoresizingMaskIntoConstraints="NO" id="ikF-rU-ZQ5" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="102" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ikF-rU-ZQ5" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="93" y="20" width="45" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="vKT-kw-rIw">
@@ -145,7 +145,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="rEC-6g-bJM"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="64" translatesAutoresizingMaskIntoConstraints="NO" id="ILV-UT-Yji" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="64" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ILV-UT-Yji" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="137" y="20" width="324" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="8r4-2d-FsO">
@@ -156,7 +156,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="vTZ-Uy-bL3"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="100" translatesAutoresizingMaskIntoConstraints="NO" id="kjo-eg-mX9" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="100" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kjo-eg-mX9" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="48" y="20" width="45" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="PEI-aa-dhP">
@@ -167,7 +167,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="kcl-yi-PVb"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="103" translatesAutoresizingMaskIntoConstraints="NO" id="5al-RT-xwS" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="103" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5al-RT-xwS" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="460" y="20" width="45" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="WME-l2-Cbd">
@@ -178,7 +178,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="BPJ-BN-hbz"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="101" translatesAutoresizingMaskIntoConstraints="NO" id="Rqr-L4-AlL" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="101" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rqr-L4-AlL" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="505" y="20" width="45" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="jbg-G6-43q">
@@ -189,7 +189,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="4QC-YP-YEV"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="86" translatesAutoresizingMaskIntoConstraints="NO" id="q57-eb-06u" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="86" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q57-eb-06u" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="362" y="214" width="45" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="ZNd-qP-T92">
@@ -200,7 +200,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="Bce-9D-BVq"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="87" translatesAutoresizingMaskIntoConstraints="NO" id="GUh-sl-Ux2" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="87" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GUh-sl-Ux2" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="407" y="214" width="45" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="mBs-FM-COH">
@@ -211,7 +211,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="ZlC-yc-6gB"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="88" translatesAutoresizingMaskIntoConstraints="NO" id="Ram-DX-b3c" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="88" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ram-DX-b3c" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="452" y="214" width="45" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="zNO-A6-LGG">
@@ -222,7 +222,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="xy1-Rx-TKO"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="89" translatesAutoresizingMaskIntoConstraints="NO" id="27B-0h-slV" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="89" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="27B-0h-slV" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="497" y="214" width="45" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="z7s-Rw-Ngk">
@@ -233,7 +233,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="5N6-AI-rue"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="16" translatesAutoresizingMaskIntoConstraints="NO" id="iOC-P0-vTO" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="16" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iOC-P0-vTO" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="92" y="128" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="NQs-7y-jQ0">
@@ -244,7 +244,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="r4i-xf-2ug"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="HKQ-Gx-drB" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="3" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HKQ-Gx-drB" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="146" y="164" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="HvI-NT-at5">
@@ -255,7 +255,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="BtJ-mF-hgD"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="dyH-eH-m4m" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="4" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dyH-eH-m4m" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="182" y="164" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="YWS-RT-BOa">
@@ -266,7 +266,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="E4Y-Uz-Ree"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="17" translatesAutoresizingMaskIntoConstraints="NO" id="6x8-QE-Im1" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="17" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6x8-QE-Im1" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="128" y="128" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="Whu-6k-LvG">
@@ -277,7 +277,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="Ryj-3U-euE"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="18" translatesAutoresizingMaskIntoConstraints="NO" id="aQw-gl-Hwn" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="18" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aQw-gl-Hwn" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="164" y="128" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="Nli-hf-lXa">
@@ -288,7 +288,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="7fv-yG-weY"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="19" translatesAutoresizingMaskIntoConstraints="NO" id="kIh-nI-gGn" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="19" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kIh-nI-gGn" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="200" y="128" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="FiC-Fa-c2g">
@@ -299,7 +299,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="FbZ-JV-Za5"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="20" translatesAutoresizingMaskIntoConstraints="NO" id="c3q-FS-0nZ" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="20" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c3q-FS-0nZ" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="236" y="128" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="zA5-88-w7u">
@@ -310,7 +310,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="vqF-He-dF8"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="21" translatesAutoresizingMaskIntoConstraints="NO" id="KJv-eW-vz8" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="21" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KJv-eW-vz8" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="272" y="128" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="uCx-Sf-clA">
@@ -321,7 +321,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="8yV-bz-fAn"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="22" translatesAutoresizingMaskIntoConstraints="NO" id="m0n-BW-frL" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="22" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m0n-BW-frL" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="308" y="128" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="sMy-fc-x8x">
@@ -332,7 +332,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="6wV-fl-2cd"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="23" translatesAutoresizingMaskIntoConstraints="NO" id="YrI-0b-C0m" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="23" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YrI-0b-C0m" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="344" y="128" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="eWF-wj-Ahl">
@@ -343,7 +343,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="B5x-6J-qsR"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="24" translatesAutoresizingMaskIntoConstraints="NO" id="FES-8C-aKG" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="24" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FES-8C-aKG" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="380" y="128" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="YnQ-xH-yDx">
@@ -354,7 +354,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="Nza-np-z2E"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="25" translatesAutoresizingMaskIntoConstraints="NO" id="Qm7-ud-JlD" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="25" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qm7-ud-JlD" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="416" y="128" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="2x2-Eo-1ls">
@@ -365,7 +365,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="mjB-Zl-ok3"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="26" translatesAutoresizingMaskIntoConstraints="NO" id="a6K-Vh-MUH" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="26" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a6K-Vh-MUH" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="452" y="128" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="DVf-4t-sbt">
@@ -376,7 +376,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="CA8-EW-h3f"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="27" translatesAutoresizingMaskIntoConstraints="NO" id="0Np-Ra-a6d" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="27" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Np-Ra-a6d" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="488" y="128" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="Jsf-jv-IOa">
@@ -387,7 +387,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="zj8-rn-SZW"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="98" translatesAutoresizingMaskIntoConstraints="NO" id="9md-Pk-IBx" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="98" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9md-Pk-IBx" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="65" y="92" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="RgB-jS-aaS">
@@ -398,7 +398,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="o2Y-1u-NHM"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="32" translatesAutoresizingMaskIntoConstraints="NO" id="nOy-sU-2yx" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="32" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nOy-sU-2yx" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="101" y="92" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="Uti-Ve-leR">
@@ -409,7 +409,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="FYi-me-PmC"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="33" translatesAutoresizingMaskIntoConstraints="NO" id="aI1-7i-TMF" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="33" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aI1-7i-TMF" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="137" y="92" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="dxP-Nj-JIR">
@@ -420,7 +420,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="7CE-Wp-Y0X"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="34" translatesAutoresizingMaskIntoConstraints="NO" id="cff-S7-QCd" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="34" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cff-S7-QCd" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="173" y="92" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="yUI-7y-lmw">
@@ -431,7 +431,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="ggK-so-pmB"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="35" translatesAutoresizingMaskIntoConstraints="NO" id="g9G-d9-OMG" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="35" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g9G-d9-OMG" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="209" y="92" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="4Vq-3u-UUN">
@@ -442,7 +442,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="Rec-pk-VP4"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="36" translatesAutoresizingMaskIntoConstraints="NO" id="ohS-OJ-hW3" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="36" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ohS-OJ-hW3" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="245" y="92" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="Dg4-cz-f3h">
@@ -453,7 +453,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="kiu-GH-IbU"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="37" translatesAutoresizingMaskIntoConstraints="NO" id="zky-qi-U0T" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="37" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zky-qi-U0T" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="281" y="92" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="IDl-4X-0hh">
@@ -464,7 +464,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="3R6-uu-SYT"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="38" translatesAutoresizingMaskIntoConstraints="NO" id="clr-Zw-hKM" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="38" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="clr-Zw-hKM" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="317" y="92" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="9VK-hu-Wmz">
@@ -475,7 +475,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="zZ4-qF-eJD"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="39" translatesAutoresizingMaskIntoConstraints="NO" id="Lwd-aX-ygA" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="39" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lwd-aX-ygA" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="353" y="92" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="ClR-pc-h9c">
@@ -486,7 +486,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="wuW-K5-PJw"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="40" translatesAutoresizingMaskIntoConstraints="NO" id="D73-mP-xZJ" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="40" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D73-mP-xZJ" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="389" y="92" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="pFF-bQ-sLt">
@@ -497,7 +497,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="dyA-8x-BJ3"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="41" translatesAutoresizingMaskIntoConstraints="NO" id="36L-mN-lYd" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="41" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="36L-mN-lYd" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="425" y="92" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="wAa-TK-84q">
@@ -508,7 +508,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="4gR-uU-PD8"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="42" translatesAutoresizingMaskIntoConstraints="NO" id="EP4-Hy-g9y" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="42" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EP4-Hy-g9y" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="461" y="92" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="zlw-sZ-Riw">
@@ -519,7 +519,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="kQm-nj-2A7"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="96" translatesAutoresizingMaskIntoConstraints="NO" id="rnt-FT-NfL" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="96" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rnt-FT-NfL" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="20" y="56" width="63" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="OFW-JL-bo4">
@@ -530,7 +530,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="BpO-hf-mIa"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="97" translatesAutoresizingMaskIntoConstraints="NO" id="OSk-iq-5zP" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="97" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OSk-iq-5zP" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="479" y="56" width="99" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="kSd-sL-wsP">
@@ -541,7 +541,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="YPQ-pV-4id"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="49" translatesAutoresizingMaskIntoConstraints="NO" id="UsY-v2-2ll" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="49" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UsY-v2-2ll" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="119" y="56" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="9lL-cf-HnV">
@@ -552,7 +552,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="bLV-PM-ady"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="50" translatesAutoresizingMaskIntoConstraints="NO" id="87g-2G-TFg" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="50" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="87g-2G-TFg" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="155" y="56" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="KeN-of-ACg">
@@ -563,7 +563,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="Tot-s0-rxE"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="51" translatesAutoresizingMaskIntoConstraints="NO" id="Mde-g8-yuc" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="51" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mde-g8-yuc" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="191" y="56" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="9dl-o8-JJj">
@@ -574,7 +574,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="e6m-qB-y7U"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="52" translatesAutoresizingMaskIntoConstraints="NO" id="2vI-AH-Z7v" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="52" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2vI-AH-Z7v" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="227" y="56" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="vfY-Jl-zMF">
@@ -585,7 +585,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="gjR-sY-0Mz"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="53" translatesAutoresizingMaskIntoConstraints="NO" id="6zu-mv-B5x" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="53" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6zu-mv-B5x" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="263" y="56" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="RQ8-H5-iOD">
@@ -596,7 +596,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="NOA-iL-2JP"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="54" translatesAutoresizingMaskIntoConstraints="NO" id="xs5-Cr-ago" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="54" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xs5-Cr-ago" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="299" y="56" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="DFX-IJ-BYh">
@@ -607,7 +607,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="W9n-iE-F7j"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="55" translatesAutoresizingMaskIntoConstraints="NO" id="VBL-N8-WZe" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="55" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VBL-N8-WZe" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="335" y="56" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="KA0-fB-SVx">
@@ -618,7 +618,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="ket-69-bwV"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="56" translatesAutoresizingMaskIntoConstraints="NO" id="Kf7-nJ-VC4" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="56" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kf7-nJ-VC4" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="371" y="56" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="XkV-Wm-aZs">
@@ -629,7 +629,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="IPZ-kv-qU7"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="57" translatesAutoresizingMaskIntoConstraints="NO" id="u2y-BQ-8z4" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="57" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u2y-BQ-8z4" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="407" y="56" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="gsE-fU-gw5">
@@ -640,7 +640,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="fUz-eZ-nWb"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="58" translatesAutoresizingMaskIntoConstraints="NO" id="Ttz-d8-Um4" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="58" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ttz-d8-Um4" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="443" y="56" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="WDR-uv-B0M">
@@ -662,7 +662,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="oQU-u8-Ijg"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="66" translatesAutoresizingMaskIntoConstraints="NO" id="Cge-RS-wPd" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="66" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cge-RS-wPd" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="20" y="128" width="72" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="nqf-kR-vQI">
@@ -673,7 +673,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="87X-Kg-kJD"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="68" translatesAutoresizingMaskIntoConstraints="NO" id="MnK-44-KNg" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="68" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MnK-44-KNg" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="524" y="92" width="54" height="72"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="2aL-Ib-qmK">
@@ -684,7 +684,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="ikj-eB-Yfz"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="43" translatesAutoresizingMaskIntoConstraints="NO" id="Mcn-5Z-C9C" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="43" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mcn-5Z-C9C" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="497" y="92" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="j5v-4E-l2I">
@@ -695,7 +695,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="Lzy-4U-j1A"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="79" translatesAutoresizingMaskIntoConstraints="NO" id="s5d-zg-SZz" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="79" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s5d-zg-SZz" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="596" y="56" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="bDN-SA-iye">
@@ -706,7 +706,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="b3l-cb-foV"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="77" translatesAutoresizingMaskIntoConstraints="NO" id="vbi-UL-hAw" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="77" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vbi-UL-hAw" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="632" y="56" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="aht-Vs-QVo">
@@ -717,7 +717,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="uTP-Fm-SN6"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="76" translatesAutoresizingMaskIntoConstraints="NO" id="giD-nv-J1o" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="76" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="giD-nv-J1o" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="632" y="92" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="4wm-JI-BRu">
@@ -728,7 +728,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="jBx-Ek-Fdd"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="78" translatesAutoresizingMaskIntoConstraints="NO" id="5bF-FV-bvg" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="78" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5bF-FV-bvg" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="668" y="56" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="lvQ-2k-Rt0">
@@ -739,7 +739,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="8D4-wD-yr8"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="70" translatesAutoresizingMaskIntoConstraints="NO" id="sJy-9e-euB" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="70" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sJy-9e-euB" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="596" y="164" width="54" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="M5p-oj-ozh">
@@ -750,7 +750,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="nEU-v7-RT0"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="95" translatesAutoresizingMaskIntoConstraints="NO" id="vDM-aE-wyt" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="95" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vDM-aE-wyt" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="650" y="164" width="54" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="6IM-Sr-iP9">
@@ -761,7 +761,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="lyc-vb-zrd"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="90" translatesAutoresizingMaskIntoConstraints="NO" id="87f-dV-dCt" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="90" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="87f-dV-dCt" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="722" y="164" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="Kic-TG-9Tk">
@@ -772,7 +772,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="2zv-g2-PSN"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="91" translatesAutoresizingMaskIntoConstraints="NO" id="Mxj-Sb-4hw" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="91" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mxj-Sb-4hw" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="757" y="164" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="kGh-VG-OFg">
@@ -783,7 +783,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="D42-Wo-oKY"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="92" translatesAutoresizingMaskIntoConstraints="NO" id="vKu-hD-AqI" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="92" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vKu-hD-AqI" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="792" y="164" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="ai4-dB-fEJ">
@@ -794,7 +794,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="bx9-sP-v9k"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="93" translatesAutoresizingMaskIntoConstraints="NO" id="61b-3A-50t" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="93" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="61b-3A-50t" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="827" y="164" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="jNy-HH-gcV">
@@ -805,7 +805,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="t2N-iA-5u5"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="61" translatesAutoresizingMaskIntoConstraints="NO" id="TnQ-ph-4bx" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="61" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TnQ-ph-4bx" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="722" y="128" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="WcS-Dr-THq">
@@ -816,7 +816,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="Hy3-zY-h9N"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="62" translatesAutoresizingMaskIntoConstraints="NO" id="W2S-zd-bS0" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="62" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W2S-zd-bS0" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="757" y="128" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="zAB-Ba-KCA">
@@ -827,7 +827,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="lSc-sc-Ycl"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="63" translatesAutoresizingMaskIntoConstraints="NO" id="Efu-gg-mG6" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="63" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Efu-gg-mG6" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="792" y="128" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="VHA-xz-oG8">
@@ -838,7 +838,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="QnX-cm-DHN"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="74" translatesAutoresizingMaskIntoConstraints="NO" id="4BG-fk-CNn" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="74" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4BG-fk-CNn" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="827" y="128" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="Zvd-PC-VO5">
@@ -849,7 +849,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="bAn-y7-lMH"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="45" translatesAutoresizingMaskIntoConstraints="NO" id="jul-tC-HL0" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="45" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jul-tC-HL0" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="722" y="92" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="FFm-8I-4fa">
@@ -860,7 +860,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="geF-dA-N5R"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="46" translatesAutoresizingMaskIntoConstraints="NO" id="qtb-eC-f3q" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="46" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qtb-eC-f3q" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="757" y="92" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="sCy-i7-lI6">
@@ -871,7 +871,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="gw4-tc-aYA"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="47" translatesAutoresizingMaskIntoConstraints="NO" id="qZ0-jk-HWb" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="47" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qZ0-jk-HWb" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="792" y="92" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="fJk-Lj-9x6">
@@ -882,7 +882,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="kEI-x1-ksb"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="94" translatesAutoresizingMaskIntoConstraints="NO" id="cJC-fM-RF3" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="94" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cJC-fM-RF3" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="827" y="92" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="2Gu-eZ-NZ9">
@@ -893,7 +893,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="zOq-iE-DJu"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="29" translatesAutoresizingMaskIntoConstraints="NO" id="VcO-4h-kgT" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="29" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VcO-4h-kgT" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="722" y="56" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="GAE-r9-m6p">
@@ -904,7 +904,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="gB8-Ko-byU"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="30" translatesAutoresizingMaskIntoConstraints="NO" id="Fue-Iz-iGu" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="30" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fue-Iz-iGu" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="757" y="56" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="e2I-KL-nwb">
@@ -915,7 +915,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="r54-kT-GrW"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="31" translatesAutoresizingMaskIntoConstraints="NO" id="CzH-ah-BlQ" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="31" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CzH-ah-BlQ" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="792" y="56" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="9ed-Ar-7ns">
@@ -926,7 +926,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="cbi-jb-P0K"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="67" translatesAutoresizingMaskIntoConstraints="NO" id="nze-Rh-Icx" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="67" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nze-Rh-Icx" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="827" y="20" width="36" height="72"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="svB-Fv-iqN">
@@ -937,7 +937,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="f23-x7-Z7U"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="15" translatesAutoresizingMaskIntoConstraints="NO" id="GvB-Em-o6C" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="15" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GvB-Em-o6C" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="722" y="20" width="72" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="tGU-Gd-ACd">
@@ -948,7 +948,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="j50-ma-vsu"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="60" translatesAutoresizingMaskIntoConstraints="NO" id="CDi-BZ-Eou" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="60" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CDi-BZ-Eou" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="792" y="20" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="Mdc-Ta-XGc">
@@ -959,7 +959,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="NmQ-bp-2XP"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="48" translatesAutoresizingMaskIntoConstraints="NO" id="pze-Uc-Yl0" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="48" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pze-Uc-Yl0" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="83" y="56" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="cY4-fo-Jw3">
@@ -970,7 +970,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="HyT-Uz-V89"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="qzh-Di-WeL" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="5" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qzh-Di-WeL" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="218" y="164" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="82Q-kh-g9F">
@@ -981,7 +981,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="yKd-rt-LNc"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="6" translatesAutoresizingMaskIntoConstraints="NO" id="Xz2-d1-VLN" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="6" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xz2-d1-VLN" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="254" y="164" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="kZi-x4-WUJ">
@@ -992,7 +992,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="7C0-Fd-vOs"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="7" translatesAutoresizingMaskIntoConstraints="NO" id="Rnz-bK-Gfl" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="7" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rnz-bK-Gfl" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="290" y="164" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="IGR-ZD-sMb">
@@ -1003,7 +1003,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="lnI-Eo-v9t"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="8" translatesAutoresizingMaskIntoConstraints="NO" id="GoZ-fB-wBV" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="8" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GoZ-fB-wBV" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="326" y="164" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="ji5-gb-CZC">
@@ -1014,7 +1014,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="IEm-ZX-V1W"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="9" translatesAutoresizingMaskIntoConstraints="NO" id="jS0-kx-JmE" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="9" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jS0-kx-JmE" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="362" y="164" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="15B-Tq-gRS">
@@ -1025,7 +1025,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="n7E-xu-fda"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="JRM-Kn-CB4" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="10" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JRM-Kn-CB4" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="398" y="164" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="Edb-jf-D8y">
@@ -1036,7 +1036,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="gEu-2K-Y7a"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="cgB-ia-BuP" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="11" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cgB-ia-BuP" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="434" y="164" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="dkI-XT-hOj">
@@ -1047,7 +1047,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="rtf-xG-8in"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="12" translatesAutoresizingMaskIntoConstraints="NO" id="5qk-RD-my2" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="12" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5qk-RD-my2" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="470" y="164" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="aar-OD-ePf">
@@ -1058,7 +1058,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="mMZ-fz-Cgw"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="13" translatesAutoresizingMaskIntoConstraints="NO" id="G8m-As-A4T" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="13" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G8m-As-A4T" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="506" y="164" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="sfK-Ov-o7c">
@@ -1069,7 +1069,7 @@
                             <action selector="pressVirtualKey:" target="-2" id="lTJ-aC-oGf"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" tag="65" translatesAutoresizingMaskIntoConstraints="NO" id="PIn-pn-g9U" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
+                    <button tag="65" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PIn-pn-g9U" customClass="Keycap" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="542" y="164" width="36" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="key" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" imageScaling="axesIndependently" inset="2" id="vYN-X4-4n5">

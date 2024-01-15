@@ -17,10 +17,10 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Add the emulator library
-add_library(vAmigaCore Components/Amiga.cpp)
+add_library(vAmigaCore Components/Amiga.cpp config.cpp)
 
 # Add the console app (vAmiga Headless)
-add_executable(vAmigaConsole Headless.cpp)
+add_executable(vAmigaConsole Headless.cpp config.cpp)
 target_link_libraries(vAmigaConsole vAmigaCore)
 
 # Specify compile options
@@ -62,7 +62,7 @@ add_subdirectory(Utilities)
 # Add libraries
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-target_link_libraries(vAmigaCore xdms softfloat Threads::Threads)
+target_link_libraries(vAmigaCore xdms Threads::Threads)
 
 # Add tests
 add_test(NAME SelfTest COMMAND vAmigaConsole --selftest)

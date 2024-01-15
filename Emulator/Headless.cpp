@@ -78,6 +78,9 @@ Headless::main(int argc, char *argv[])
     // Register message receiver
     // amiga.msgQueue.setListener(this, vamiga::process);
 
+    // Initialize the emulator
+    amiga.initialize();
+    
     // Launch the emulator thread
     amiga.launch(this, vamiga::process);
 

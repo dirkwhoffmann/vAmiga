@@ -75,7 +75,7 @@ struct Command {
     //
 
     // Creates a new command group
-    void newGroup(const string &description, const string &postfix = ":");
+    static void newGroup(const string &description, const string &postfix = ":");
 
     // Creates a new node in the command tree
     void add(const std::vector<string> &tokens,

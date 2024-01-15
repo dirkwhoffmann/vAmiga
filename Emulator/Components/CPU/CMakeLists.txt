@@ -7,4 +7,3 @@ CPU.cpp
 )
 
 add_subdirectory(Moira)
-add_subdirectory(Moira/softfloat)

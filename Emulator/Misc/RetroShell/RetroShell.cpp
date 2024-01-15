@@ -14,9 +14,12 @@
 
 namespace vamiga {
 
-RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
+RetroShell::RetroShell(Amiga& ref) : SubComponent(ref)
 {    
+    subComponents = std::vector<CoreComponent *> {
 
+        &interpreter
+    };
 }
 
 void

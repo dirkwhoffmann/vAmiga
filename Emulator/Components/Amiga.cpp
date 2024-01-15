@@ -97,7 +97,7 @@ Amiga::Amiga()
         &msgQueue
     };
 
-    initialize();
+    // initialize();
 }
 
 Amiga::~Amiga()
@@ -117,6 +117,9 @@ Amiga::launch(const void *listener, Callback *func)
 void
 Amiga::launch()
 {
+    // Initialize all components
+    initialize();
+    
     // Reset the emulator
     hardReset();
 

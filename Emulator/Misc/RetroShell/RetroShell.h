@@ -23,8 +23,12 @@ class RetroShell : public SubComponent {
     friend class RshServer;
     friend class Interpreter;
     
+    //
+    // Sub components
+    //
+    
     // The command interpreter (parses commands typed into the console window)
-    Interpreter interpreter;
+    Interpreter interpreter = Interpreter(amiga);
 
     
     //

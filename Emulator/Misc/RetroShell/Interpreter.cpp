@@ -15,6 +15,15 @@ namespace vamiga {
 
 Interpreter::Interpreter(Amiga &ref) : SubComponent(ref)
 {
+
+}
+
+void
+Interpreter::_initialize()
+{
+    CoreComponent::_initialize();
+
+    // Register commands
     initCommandShell(*commandShellRoot);
     initDebugShell(*debugShellRoot);
 }

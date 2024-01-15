@@ -29,7 +29,7 @@ struct ScriptInterruption: util::Exception {
     using Exception::Exception;
 };
 
-class Interpreter: SubComponent
+class Interpreter: public SubComponent
 {
     enum class Shell { Command, Debug };
 
@@ -74,6 +74,7 @@ private:
     
 private:
     
+    void _initialize() override;
     void _reset(bool hard) override { }
     
     
