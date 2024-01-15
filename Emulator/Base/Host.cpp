@@ -14,11 +14,6 @@
 
 namespace vamiga {
 
-Host::Host(Amiga& ref) : SubComponent(ref)
-{
-
-}
-
 void
 Host::_dump(Category category, std::ostream& os) const
 {

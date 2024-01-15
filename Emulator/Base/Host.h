@@ -35,7 +35,7 @@ class Host : public SubComponent {
 
 public:
 
-    Host(Amiga& ref);
+    using SubComponent::SubComponent;
 
 
     //

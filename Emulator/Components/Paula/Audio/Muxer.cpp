@@ -24,8 +24,6 @@ Muxer::Muxer(Amiga& ref) : SubComponent(ref)
 
         &filter
     };
-    
-    setSampleRate(44100);
 }
 
 void
@@ -72,6 +70,14 @@ Muxer::_dump(Category category, std::ostream& os) const
         os << tab("Fill level");
         os << fillLevelAsString(stream.fillLevel()) << std::endl;
     }
+}
+
+void
+Muxer::_initialize()
+{
+    CoreComponent::_initialize();
+
+    setSampleRate(44100);
 }
 
 void
