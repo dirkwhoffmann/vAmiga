@@ -11,7 +11,7 @@
 
 #include "Macros.h"
 #include "MemUtils.h"
-#include "Buffer.h"
+// #include "Buffer.h"
 #include <cassert>
 #include <concepts>
 #include <vector>
@@ -143,14 +143,7 @@ public:
     COUNT64(const unsigned long long)
     COUNTD(const float)
     COUNTD(const double)
-       
-    template <class T>
-    auto& operator<<(Allocator<T> &a)
-    {
-        count += 8 + a.size;
-        return *this;
-    }
-    
+
     auto& operator<<(string &v)
     {
         auto len = v.length();
@@ -227,14 +220,7 @@ public:
     CHECK(const unsigned long long)
     CHECK(const float)
     CHECK(const double)
-       
-    template <class T>
-    auto& operator<<(Allocator<T> &a)
-    {
-        hash = util::fnvIt64(hash, a.fnv64());
-        return *this;
-    }
-        
+
     auto& operator<<(string &v)
     {
         auto len = v.length();
@@ -319,16 +305,6 @@ public:
     DESERIALIZE64(unsigned long long)
     DESERIALIZED(float)
     DESERIALIZED(double)
-
-    template <class T>
-    auto& operator<<(Allocator<T> &a)
-    {
-        i64 len;
-        *this << len;
-        a.init(ptr, isize(len));
-        ptr += len;
-        return *this;
-    }
 
     auto& operator<<(string &v)
     {
@@ -428,15 +404,6 @@ public:
     SERIALIZED(const float)
     SERIALIZED(const double)
 
-    template <class T>
-    auto& operator<<(Allocator<T> &a)
-    {
-        *this << i64(a.size);
-        a.copy(ptr);
-        ptr += a.size;
-        return *this;
-    }
-
     auto& operator<<(const string &v)
     {
         writeString(ptr, v);
@@ -520,13 +487,6 @@ public:
     RESET(unsigned long long)
     RESET(float)
     RESET(double)
-
-    template <class T>
-    auto& operator<<(Allocator<T> &a)
-    {
-        a.clear();
-        return *this;
-    }
 
     auto& operator<<(string &v)
     {

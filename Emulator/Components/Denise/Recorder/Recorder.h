@@ -10,6 +10,7 @@
 #pragma once
 
 #include "SubComponent.h"
+#include "Buffer.h"
 #include "Chrono.h"
 #include "FFmpeg.h"
 #include "Muxer.h"

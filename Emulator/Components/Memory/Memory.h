@@ -13,6 +13,7 @@
 #include "SubComponent.h"
 #include "RomFileTypes.h"
 #include "MemUtils.h"
+#include "Buffer.h"
 
 using util::Allocator;
 using util::Buffer;
