@@ -13,14 +13,12 @@
 #include "MemUtils.h"
 #include "Buffer.h"
 #include <cassert>
+#include <concepts>
 #include <vector>
 
 namespace util {
 
 class Serializable { };
-
-template<class T, class U>
-concept Derived = std::is_base_of<U, T>::value;
 
 //
 // Basic memory buffer I/O
@@ -187,7 +185,7 @@ public:
         return *this;
     }
 
-    template <Derived<Serializable> T>
+    template <std::derived_from<Serializable> T>
     SerCounter& operator<<(T &v)
     {
         v << *this;
@@ -272,7 +270,7 @@ public:
         return *this;
     }
 
-    template <Derived<Serializable> T>
+    template <std::derived_from<Serializable> T>
     SerChecker& operator<<(T &v)
     {
         v << *this;
@@ -380,7 +378,7 @@ public:
         ptr += n;
     }
 
-    template <Derived<Serializable> T>
+    template <std::derived_from<Serializable> T>
     SerReader& operator<<(T &v)
     {
         v << *this;
@@ -480,7 +478,7 @@ public:
         ptr += n;
     }
 
-    template <Derived<Serializable> T>
+    template <std::derived_from<Serializable> T>
     SerWriter& operator<<(T &v)
     {
         v << *this;
@@ -559,7 +557,7 @@ public:
         return *this;
     }
 
-    template <Derived<Serializable> T>
+    template <std::derived_from<Serializable> T>
     SerResetter& operator<<(T &v)
     {
         v << *this;
