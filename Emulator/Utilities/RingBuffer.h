@@ -31,7 +31,7 @@ namespace util {
 template <class T, isize capacity> struct Array : Serializable
 {
     // Element storage
-    T elements[capacity];
+    T *elements = new T[capacity];
 
     // Write pointer
     isize w;
@@ -42,7 +42,8 @@ template <class T, isize capacity> struct Array : Serializable
     //
 
     Array() { clear(); }
-    
+    ~Array() { delete[] elements; }
+
     void clear() { w = 0; }
     void clear(T t) { for (isize i = 0; i < capacity; i++) elements[i] = t; clear(); }
     void align(isize offset) { w = offset; }
@@ -99,8 +100,15 @@ template <class T, isize capacity>
 struct SortedArray : public Array<T, capacity>
 {
     // Key storage
-    i64 keys[capacity];
-    
+    i64 *keys = new i64[capacity];
+
+
+    //
+    // Initializing
+    //
+
+    ~SortedArray() { delete[] keys; }
+
 
     //
     // Serializing
@@ -157,7 +165,7 @@ struct SortedArray : public Array<T, capacity>
 template <class T, isize capacity> struct RingBuffer : Serializable
 {
     // Element storage
-    T elements[capacity];
+    T *elements = new T[capacity];
 
     // Read and write pointers
     isize r, w;
@@ -168,7 +176,8 @@ template <class T, isize capacity> struct RingBuffer : Serializable
     //
 
     RingBuffer() { clear(); }
-    
+    ~RingBuffer() { delete[] elements; }
+
     void clear() { r = w = 0; }
     void clear(T t) { for (isize i = 0; i < capacity; i++) elements[i] = t; clear(); }
     void align(isize offset) { w = (r + offset) % capacity; }
@@ -270,8 +279,16 @@ template <class T, isize capacity>
 struct SortedRingBuffer : public RingBuffer<T, capacity>
 {
     // Key storage
-    i64 keys[capacity];
+    i64 *keys = new i64[capacity];
  
+
+    //
+    // Initializing
+    //
+
+    ~SortedRingBuffer() { delete[] keys; }
+
+
     //
     // Serializing
     //

@@ -20,7 +20,7 @@ debugflag MIMIC_UAE       = 0; // Enable to compare debug logs with UAE
 debugflag RUN_DEBUG       = 0; // Run loop, component states
 debugflag WARP_DEBUG      = 0; // Warp mode
 debugflag QUEUE_DEBUG     = 0; // Message queue
-debugflag SNP_DEBUG       = 0; // Serialization (snapshots)
+debugflag SNP_DEBUG       = 1; // Serialization (snapshots)
 
 // CPU
 debugflag CPU_DEBUG       = 0; // CPU

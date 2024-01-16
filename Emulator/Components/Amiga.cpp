@@ -127,6 +127,7 @@ Amiga::launch()
     // Print some debug information
     if (SNP_DEBUG) {
 
+        msg("             Amiga : %zu bytes\n", sizeof(Amiga));
         msg("             Agnus : %zu bytes\n", sizeof(Agnus));
         msg("       AudioFilter : %zu bytes\n", sizeof(AudioFilter));
         msg("               CIA : %zu bytes\n", sizeof(CIA));
