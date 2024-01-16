@@ -202,12 +202,6 @@ struct SigRecorder : public util::SortedArray<u32, 256>
 {
     bool modified = false;
     
-    template <class W>
-    void operator<<(W& worker)
-    {
-        worker << this->modified << this->elements << this->w << this->keys;
-    }
-    
     void insert(i64 key, u32 signal) {
 
         modified = true;

@@ -55,7 +55,8 @@ template <class T, isize capacity> struct Array : Serializable
     template <class W>
     void operator<<(W& worker)
     {
-        worker << this->elements << this->w;
+        for (isize i = 0; i < capacity; i++) worker << elements[i];
+        worker << w;
     }
     
     
@@ -100,6 +101,23 @@ struct SortedArray : public Array<T, capacity>
     // Key storage
     i64 keys[capacity];
     
+
+    //
+    // Serializing
+    //
+
+    template <class W>
+    void operator<<(W& worker)
+    {
+        Array<T, capacity>::operator<<(worker);
+        for (isize i = 0; i < capacity; i++) worker << keys[i];
+    }
+
+
+    //
+    // Inserting
+    //
+
     // Inserts an element at the end
     void write(i64 key, T element)
     {
@@ -163,7 +181,8 @@ template <class T, isize capacity> struct RingBuffer : Serializable
     template <class W>
     void operator<<(W& worker)
     {
-        worker << this->r << this->w << this->elements;
+        for (isize i = 0; i < capacity; i++) worker << elements[i];
+        worker << this->r << this->w;
     }
     
     
@@ -253,11 +272,15 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
     // Key storage
     i64 keys[capacity];
  
+    //
     // Serializing
+    //
+
     template <class W>
     void operator<<(W& worker)
     {
-        worker << this->r << this->w << this->elements << this->keys;
+        RingBuffer<T, capacity>::operator<<(worker);
+        for (isize i = 0; i < capacity; i++) worker << keys[i];
     }
 
     // Inserts an element at the proper position
