@@ -131,9 +131,9 @@ private:
         << controllerVendor
         << controllerProduct
         << controllerRevision
-        >> geometry
-        >> ptable
-        >> drivers
+        << geometry
+        << ptable
+        << drivers
         << data
         << modified
         << writeProtected

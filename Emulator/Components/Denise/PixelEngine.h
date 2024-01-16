@@ -147,8 +147,8 @@ private:
     {
         worker
 
-        >> colChanges
-        >> color
+        << colChanges
+        << color
         << hamMode
         << shresMode;
     }

@@ -10,6 +10,7 @@
 #pragma once
 
 #include "RingBuffer.h"
+#include "Serialization.h"
 #include "AgnusTypes.h"
 #include "AmigaTypes.h"
 #include <functional>
@@ -144,7 +145,7 @@ enum RegChangeID : i32
     SET_SERDAT
 };
 
-struct RegChange
+struct RegChange : util::Serializable
 {
     u32 addr;
     u16 value;
@@ -164,12 +165,15 @@ struct RegChange
 template <isize capacity>
 struct RegChangeRecorder : public util::SortedRingBuffer<RegChange, capacity>
 {
+    /*
     template <class W>
     void operator<<(W& worker)
     {
-        worker >> this->elements << this->r << this->w << this->keys;
+        // worker >> this->elements << this->r << this->w << this->keys;
+        worker << this->elements << this->r << this->w << this->keys;
     }
-    
+    */
+
     Cycle trigger() {
         return this->isEmpty() ? NEVER : this->keys[this->r];
     }

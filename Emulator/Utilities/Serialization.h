@@ -17,6 +17,11 @@
 
 namespace util {
 
+class Serializable { };
+
+template<class T, class U>
+concept Derived = std::is_base_of<U, T>::value;
+
 //
 // Basic memory buffer I/O
 //
@@ -173,15 +178,6 @@ public:
         return *this;
     }
 
-    template <class T>
-    auto& operator>>(std::vector <T> &v)
-    {
-        auto len = v.size();
-        for(usize i = 0; i < len; i++) *this >> v[i];
-        count += 8;
-        return *this;
-    }
-
     template <class T, isize N>
     SerCounter& operator<<(T (&v)[N])
     {
@@ -190,20 +186,11 @@ public:
         }
         return *this;
     }
-        
-    template <class T>
-    SerCounter& operator>>(T &v)
+
+    template <Derived<Serializable> T>
+    SerCounter& operator<<(T &v)
     {
         v << *this;
-        return *this;
-    }
-    
-    template <class T, isize N>
-    SerCounter& operator>>(T (&v)[N])
-    {
-        for(isize i = 0; i < N; ++i) {
-            v[i] << *this;
-        }
         return *this;
     }
 };
@@ -276,16 +263,6 @@ public:
         return *this;
     }
 
-    template <class T>
-    auto& operator>>(std::vector <T> &v)
-    {
-        isize len = isize(v.size());
-        for (isize i = 0; i < len; i++) {
-            *this >> v[i];
-        }
-        return *this;
-    }
-
     template <class T, isize N>
     SerChecker& operator<<(T (&v)[N])
     {
@@ -294,20 +271,11 @@ public:
         }
         return *this;
     }
-    
-    template <class T>
-    SerChecker& operator>>(T &v)
+
+    template <Derived<Serializable> T>
+    SerChecker& operator<<(T &v)
     {
         v << *this;
-        return *this;
-    }
-    
-    template <class T, isize N>
-    SerChecker& operator>>(T (&v)[N])
-    {
-        for(isize i = 0; i < N; ++i) {
-            v[i] << *this;
-        }
         return *this;
     }
 };
@@ -396,21 +364,7 @@ public:
         }
         return *this;
     }
-    
-    template <class T>
-    auto& operator>>(std::vector <T> &v)
-    {
-        i64 len;
-        *this << len;
-        v.clear();
-        v.reserve(len);
-        for (isize i = 0; i < len; i++) {
-            v.push_back(T());
-            *this >> v.back();
-        }
-        return *this;
-    }
-    
+
     template <class T, isize N>
     SerReader& operator<<(T (&v)[N])
     {
@@ -419,27 +373,18 @@ public:
         }
         return *this;
     }
-    
-    template <class T>
-    SerReader& operator>>(T &v)
-    {
-        v << *this;
-        return *this;
-    }
-    
-    template <class T, isize N>
-    SerReader& operator>>(T (&v)[N])
-    {
-        for(isize i = 0; i < N; ++i) {
-            v[i] << *this;
-        }
-        return *this;
-    }
-    
+
     void copy(void *dst, isize n)
     {
         std::memcpy(dst, (void *)ptr, n);
         ptr += n;
+    }
+
+    template <Derived<Serializable> T>
+    SerReader& operator<<(T &v)
+    {
+        v << *this;
+        return *this;
     }
 };
 
@@ -520,17 +465,6 @@ public:
         return *this;
     }
 
-    template <class T>
-    auto& operator>>(std::vector <T> &v)
-    {
-        auto len = v.size();
-        *this << i64(len);
-        for (usize i = 0; i < len; i++) {
-            *this >> v[i];
-        }
-        return *this;
-    }
-    
     template <class T, isize N>
     SerWriter& operator<<(T (&v)[N])
     {
@@ -540,26 +474,17 @@ public:
         return *this;
     }
 
-    template <class T>
-    SerWriter& operator>>(T &v)
-    {
-        v << *this;
-        return *this;
-    }
-    
-    template <class T, isize N>
-    SerWriter& operator>>(T (&v)[N])
-    {
-        for(isize i = 0; i < N; ++i) {
-            v[i] << *this;
-        }
-        return *this;
-    }
-    
     void copy(const void *src, isize n)
     {
         std::memcpy((void *)ptr, src, n);
         ptr += n;
+    }
+
+    template <Derived<Serializable> T>
+    SerWriter& operator<<(T &v)
+    {
+        v << *this;
+        return *this;
     }
 };
 
@@ -625,13 +550,6 @@ public:
         return *this;
     }
 
-    template <class T>
-    auto& operator>>(std::vector <T> &v)
-    {
-        v.clear();
-        return *this;
-    }
-    
     template <class T, isize N>
     SerResetter& operator<<(T (&v)[N])
     {
@@ -641,19 +559,10 @@ public:
         return *this;
     }
 
-    template <class T>
-    SerResetter& operator>>(T &v)
+    template <Derived<Serializable> T>
+    SerResetter& operator<<(T &v)
     {
         v << *this;
-        return *this;
-    }
-    
-    template <class T, isize N>
-    SerResetter& operator>>(T (&v)[N])
-    {
-        for(isize i = 0; i < N; ++i) {
-            v[i] << *this;
-        }
         return *this;
     }
 };

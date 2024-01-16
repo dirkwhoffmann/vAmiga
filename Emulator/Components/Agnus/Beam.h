@@ -12,10 +12,11 @@
 #include "BeamTypes.h"
 #include "AmigaTypes.h"
 #include "Constants.h"
+#include "Serialization.h"
 
 namespace vamiga {
 
-struct Beam
+struct Beam : util::Serializable
 {
     // The vertical and horizontal beam position
     isize v = 0;

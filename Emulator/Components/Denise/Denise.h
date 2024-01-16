@@ -378,9 +378,9 @@ private:
         << shiftReg
         << armedOdd
         << armedEven
-        >> conChanges
-        >> sprChanges
-        >> diwChanges
+        << conChanges
+        << sprChanges
+        << diwChanges
 
         << sprdata
         << sprdatb

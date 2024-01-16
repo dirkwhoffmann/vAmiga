@@ -13,6 +13,8 @@
 
 #ifdef __cplusplus
 
+#include "Serialization.h"
+
 static constexpr u16 SIG_NONE           = 0b0000000000;
 static constexpr u16 SIG_CON            = 0b0000000001;
 static constexpr u16 SIG_BMAPEN_CLR     = 0b0000000010;
@@ -25,7 +27,7 @@ static constexpr u16 SIG_SHW            = 0b0010000000;
 static constexpr u16 SIG_RHW            = 0b0100000000;
 static constexpr u16 SIG_DONE           = 0b1000000000;
 
-struct DDFState
+struct DDFState : util::Serializable
 {
     bool bpv = false;
     bool bmapen = false;

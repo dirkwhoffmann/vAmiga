@@ -82,7 +82,7 @@ private:
         << shiftReg
         << spLow
         << spHigh
-        >> queue;
+        << queue;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

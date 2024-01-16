@@ -254,11 +254,11 @@ private:
         << id
         << data
         << nextTrigger
-        >> changeRecorder
+        << changeRecorder
         << syncEvent
         
-        >> pos
-        >> latchedPos
+        << pos
+        << latchedPos
         
         << bplcon0
         << bplcon0Initial

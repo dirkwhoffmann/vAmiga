@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Types.h"
+#include "Serialization.h"
 #include <utility>
 
 namespace util {
@@ -27,7 +28,7 @@ namespace util {
 // Array
 //
 
-template <class T, isize capacity> struct Array
+template <class T, isize capacity> struct Array : Serializable
 {
     // Element storage
     T elements[capacity];
@@ -135,7 +136,7 @@ struct SortedArray : public Array<T, capacity>
 // Ringbuffer
 //
 
-template <class T, isize capacity> struct RingBuffer
+template <class T, isize capacity> struct RingBuffer : Serializable
 {
     // Element storage
     T elements[capacity];
@@ -162,7 +163,7 @@ template <class T, isize capacity> struct RingBuffer
     template <class W>
     void operator<<(W& worker)
     {
-        worker << this->elements << this->r << this->w;
+        worker << this->r << this->w << this->elements;
     }
     
     
@@ -251,7 +252,14 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
 {
     // Key storage
     i64 keys[capacity];
-    
+ 
+    // Serializing
+    template <class W>
+    void operator<<(W& worker)
+    {
+        worker << this->r << this->w << this->elements << this->keys;
+    }
+
     // Inserts an element at the proper position
     void insert(i64 key, T element)
     {

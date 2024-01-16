@@ -252,8 +252,8 @@ private:
 
         << ddfstrt
         << ddfstop
-        >> ddfInitial
-        >> ddf
+        << ddfInitial
+        << ddf
         << bprunUp
 
         << diwstrt
@@ -262,7 +262,7 @@ private:
         << vstrt
         << vstop
 
-        >> sigRecorder
+        << sigRecorder
 
         << hsyncActions;
     }
