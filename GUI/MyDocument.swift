@@ -21,8 +21,8 @@ class MyDocument: NSDocument {
     var amiga: AmigaProxy!
 
     // Snapshots
-    private(set) var snapshots = ManagedArray<SnapshotProxy>(capacity: 32)
-        
+    private(set) var snapshots = ManagedArray<SnapshotProxy>(maxSize: 512 * 1024 * 1024)
+
     //
     // Initializing
     //
@@ -236,7 +236,7 @@ class MyDocument: NSDocument {
     func processSnapshotFile(_ proxy: SnapshotProxy, force: Bool = false) throws {
         
         try amiga.loadSnapshot(proxy)
-        snapshots.append(proxy)
+        snapshots.append(proxy, size: proxy.size)
     }
     
     //

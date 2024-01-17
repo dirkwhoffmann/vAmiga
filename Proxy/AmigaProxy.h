@@ -864,6 +864,7 @@
 + (FileType) typeOfUrl:(NSURL *)url;
 
 @property (readonly) FileType type;
+@property (readonly) NSInteger size;
 @property (readonly) NSString *sizeAsString;
 @property (readonly) u64 fnv;
 

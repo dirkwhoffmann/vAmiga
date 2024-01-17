@@ -2020,6 +2020,11 @@ using namespace vamiga::moira;
     return [self file]->type();
 }
 
+- (NSInteger)size
+{
+    return [self file]->size();
+}
+
 - (NSString *)sizeAsString
 {
     const string &str = [self file]->sizeAsString();

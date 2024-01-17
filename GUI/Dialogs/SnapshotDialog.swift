@@ -18,7 +18,10 @@ class SnapshotDialog: DialogController {
     @IBOutlet weak var nr: NSTextField!
     @IBOutlet weak var text1: NSTextField!
     @IBOutlet weak var text2: NSTextField!
-    
+    @IBOutlet weak var indicator: NSLevelIndicator!
+    @IBOutlet weak var indicatorText: NSTextField!
+    @IBOutlet weak var indicatorPercentage: NSTextField!
+
     // Computed variables
     var myDocument: MyDocument { return parent.mydocument! }
     var numItems: Int { return carousel.numberOfItems }
@@ -39,7 +42,8 @@ class SnapshotDialog: DialogController {
         
         parent.stopSnapshotTimer()
         updateLabels()
-        
+        updateCapacity()
+
         self.carousel.type = iCarouselType.timeMachine
         self.carousel.isHidden = false
         self.updateCarousel(goto: Int.max, animated: false)
@@ -68,6 +72,20 @@ class SnapshotDialog: DialogController {
         text2.isHidden = false
     }
       
+    func updateCapacity() {
+
+        let MB = 1024 * 1024
+        let fill = Int(myDocument.snapshots.fill.rounded())
+        let size = myDocument.snapshots.size / MB
+        let max = myDocument.snapshots.maxSize / MB
+
+        indicator.integerValue = fill
+        indicatorText.stringValue = "\(size) MB out of \(max) MB used"
+        indicatorText.isHidden = false
+        indicatorPercentage.stringValue = "\(fill)%"
+        indicatorPercentage.isHidden = false
+    }
+
     func updateCarousel(goto item: Int, animated: Bool) {
         
         carousel.reloadData()

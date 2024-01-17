@@ -579,10 +579,12 @@ extension MyController {
             }
 
         case .AUTO_SNAPSHOT_TAKEN:
-            mydocument.snapshots.append(amiga.latestAutoSnapshot)
-            
+            let latest = amiga.latestAutoSnapshot!
+            mydocument.snapshots.append(latest, size: latest.size)
+
         case .USER_SNAPSHOT_TAKEN:
-            mydocument.snapshots.append(amiga.latestUserSnapshot)
+            let latest = amiga.latestUserSnapshot!
+            mydocument.snapshots.append(latest, size: latest.size)
             renderer.flash()
             
         case .SNAPSHOT_RESTORED:

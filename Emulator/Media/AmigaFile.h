@@ -111,9 +111,10 @@ public:
     // Returns the type of this file
     virtual FileType type() const { return FILETYPE_UNKNOWN; }
 
-    // Returns a textual description of the file size
+    // Returns the file size
+    virtual isize size() { return data.size; }
     virtual string sizeAsString();
-    
+
     // Returns a fingerprint (hash value) for this file
     virtual u64 fnv64() const { return data.fnv64(); }
     virtual u32 crc32() const { return data.crc32(); }
