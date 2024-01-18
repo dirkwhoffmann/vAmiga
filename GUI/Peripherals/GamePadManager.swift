@@ -176,8 +176,8 @@ class GamePadManager {
         lock.lock(); defer { lock.unlock() }
 
         debug(.hid)
-        // device.listProperties()
-                
+        if (Int.hid != 0) { device.listProperties() }
+
         // Ignore internal devices
         if device.isInternalDevice { return }
         
@@ -195,7 +195,7 @@ class GamePadManager {
         parent.toolbar.validateVisibleItems()
         myAppDelegate.deviceAdded()
         
-        listDevices()
+        if Int.hid != 0 { listDevices() }
     }
     
     func addDevice(slot: Int, device: IOHIDDevice) {
@@ -242,7 +242,7 @@ class GamePadManager {
         parent.toolbar.validateVisibleItems()
         myAppDelegate.deviceAdded()
 
-        listDevices()
+        if Int.hid != 0 { listDevices() }
     }
     
     func listDevices() {

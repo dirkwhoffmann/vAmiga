@@ -281,7 +281,7 @@ HardDrive::connect()
 
         } catch (VAError &e) {
 
-            warn("Error: %s\n", e.what());
+            warn("%s\n", e.what());
         }
     }
     
