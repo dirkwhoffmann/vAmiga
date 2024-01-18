@@ -76,7 +76,7 @@ class SnapshotDialog: DialogController {
 
         let MB = 1024 * 1024
         let fill = Int(myDocument.snapshots.fill.rounded())
-        let size = myDocument.snapshots.size / MB
+        let size = myDocument.snapshots.used / MB
         let max = myDocument.snapshots.maxSize / MB
 
         indicator.integerValue = fill

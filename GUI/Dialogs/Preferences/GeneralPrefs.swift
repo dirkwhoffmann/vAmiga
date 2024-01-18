@@ -26,6 +26,7 @@ extension PreferencesController {
         }
         
         // Snapshots
+        genSnapshotStorage.integerValue = pref.snapshotStorage
         genAutoSnapshots.state = pref.autoSnapshots ? .on : .off
         genSnapshotInterval.integerValue = pref.snapshotInterval
         genSnapshotInterval.isEnabled = pref.autoSnapshots
@@ -67,13 +68,21 @@ extension PreferencesController {
     // Action methods (Snapshots)
     //
     
-    @IBAction func capAutoSnapshotAction(_ sender: NSButton!) {
-        
+    @IBAction func genSnapshotStorageAction(_ sender: NSTextField!) {
+
+        if sender.integerValue > 0 {
+            pref.snapshotStorage = sender.integerValue
+        }
+        refresh()
+    }
+
+    @IBAction func genAutoSnapshotAction(_ sender: NSButton!) {
+
         pref.autoSnapshots = sender.state == .on
         refresh()
     }
-    
-    @IBAction func capSnapshotIntervalAction(_ sender: NSTextField!) {
+
+    @IBAction func genSnapshotIntervalAction(_ sender: NSTextField!) {
         
         if sender.integerValue > 0 {
             pref.snapshotInterval = sender.integerValue
@@ -85,13 +94,13 @@ extension PreferencesController {
     // Action methods (Screenshots)
     //
 
-    @IBAction func capScreenshotSourceAction(_ sender: NSPopUpButton!) {
+    @IBAction func genScreenshotSourceAction(_ sender: NSPopUpButton!) {
         
         pref.screenshotSource = sender.selectedTag()
         refresh()
     }
     
-    @IBAction func capScreenshotTargetAction(_ sender: NSPopUpButton!) {
+    @IBAction func genScreenshotTargetAction(_ sender: NSPopUpButton!) {
         
         pref.screenshotTargetIntValue = sender.selectedTag()
         refresh()

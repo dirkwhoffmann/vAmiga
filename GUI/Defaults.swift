@@ -292,6 +292,7 @@ struct Keys {
     struct Gen {
                 
         // Snapshots
+        static let snapshotStorage        = "General.SnapshotStorage"
         static let autoSnapshots          = "General.AutoSnapshots"
         static let autoSnapshotInterval   = "General.ScreenshotInterval"
 
@@ -325,6 +326,7 @@ extension DefaultsProxy {
         debug(.defaults)
         
         // Snapshots
+        register(Keys.Gen.snapshotStorage, 512)
         register(Keys.Gen.autoSnapshots, false)
         register(Keys.Gen.autoSnapshotInterval, 20)
         
@@ -354,7 +356,8 @@ extension DefaultsProxy {
         
         debug(.defaults)
         
-        let keys = [ Keys.Gen.autoSnapshots,
+        let keys = [ Keys.Gen.snapshotStorage,
+                     Keys.Gen.autoSnapshots,
                      Keys.Gen.autoSnapshotInterval,
                      
                      Keys.Gen.screenshotSource,
@@ -386,6 +389,7 @@ extension Preferences {
         debug(.defaults)
         let defaults = AmigaProxy.defaults!
         
+        defaults.set(Keys.Gen.snapshotStorage, snapshotStorage)
         defaults.set(Keys.Gen.autoSnapshots, autoSnapshots)
         defaults.set(Keys.Gen.autoSnapshotInterval, snapshotInterval)
         
@@ -414,6 +418,7 @@ extension Preferences {
         debug(.defaults)
         let defaults = AmigaProxy.defaults!
         
+        snapshotStorage = defaults.int(Keys.Gen.snapshotStorage)
         autoSnapshots = defaults.bool(Keys.Gen.autoSnapshots)
         snapshotInterval = defaults.int(Keys.Gen.autoSnapshotInterval)
         

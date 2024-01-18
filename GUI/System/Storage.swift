@@ -30,8 +30,8 @@ class ManagedArray<Element> {
     }
     
     var count: Int { return elements.count }
-    var size: Int { return elements.reduce(0) { $0 + $1.1 } }
-    var fill: Double { return 100 * Double(size) / Double(maxSize) }
+    var used: Int { return elements.reduce(0) { $0 + $1.1 } }
+    var fill: Double { return min(100, 100 * Double(used) / Double(maxSize)) }
 
     func element(at index: Int) -> Element? {
         
@@ -46,12 +46,13 @@ class ManagedArray<Element> {
     func append(_ newElement: Element, size: Int = 0) {
 
         print("Appending size \(size)")
-        
+
         // Append the elements
         elements.append((newElement, size))
 
-        // Remove older elements until the capacity contraints are met again
-        while (count >= 1 && (count >= maxCount || size >= maxSize)) {
+        // Remove older elements until the capacity contraints are met again,
+        // but do not delete the new element.
+        while (count > 1 && (count > maxCount || used > maxSize)) {
 
             elements.remove(at: 0)
         }

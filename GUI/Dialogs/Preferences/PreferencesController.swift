@@ -22,6 +22,7 @@ class PreferencesController: DialogController {
     // Snapshots
     @IBOutlet weak var genAutoSnapshots: NSButton!
     @IBOutlet weak var genSnapshotInterval: NSTextField!
+    @IBOutlet weak var genSnapshotStorage: NSTextField!
 
     // Screenshots
     @IBOutlet weak var genScreenshotSourcePopup: NSPopUpButton!
@@ -244,7 +245,7 @@ extension PreferencesController: NSTextFieldDelegate {
             case genSnapshotInterval:
                 
                 if formatter?.number(from: view.stringValue) != nil {
-                    capSnapshotIntervalAction(view)
+                    genSnapshotIntervalAction(view)
                 }
                 
             case conAutofireBullets:

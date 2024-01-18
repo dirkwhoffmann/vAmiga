@@ -29,11 +29,20 @@ class Preferences {
     //
        
     // Snapshots
+    var snapshotStorage = 0 {
+        didSet { for c in myAppDelegate.controllers {
+            c.mydocument.snapshots.maxSize = snapshotStorage * 1024 * 1024 }
+        }
+    }
     var autoSnapshots = false {
-        didSet { for c in myAppDelegate.controllers { c.validateSnapshotTimer() } }
+        didSet { for c in myAppDelegate.controllers {
+            c.validateSnapshotTimer() }
+        }
     }
     var snapshotInterval = 0 {
-        didSet { for c in myAppDelegate.controllers { c.validateSnapshotTimer() } }
+        didSet { for c in myAppDelegate.controllers {
+            c.validateSnapshotTimer() }
+        }
     }
 
     // Screenshots
