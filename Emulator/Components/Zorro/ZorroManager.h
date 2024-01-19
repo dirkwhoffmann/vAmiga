@@ -65,8 +65,6 @@ private:
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
 
     template <class T>
-    void applyToPersistentItems(T& worker) { }
-    template <class T>
     void serialize(T& worker) { }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

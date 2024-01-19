@@ -315,7 +315,6 @@ Memory::_size()
     i32 slowSize = config.slowSize;
     i32 fastSize = config.fastSize;
 
-    applyToPersistentItems(counter);
     serialize(counter);
     
     counter
@@ -341,7 +340,6 @@ Memory::_checksum()
 {
     util::SerChecker checker;
     
-    applyToPersistentItems(checker);
     serialize(checker);
     
     if (config.chipSize) {

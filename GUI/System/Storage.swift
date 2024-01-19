@@ -45,8 +45,6 @@ class ManagedArray<Element> {
 
     func append(_ newElement: Element, size: Int = 0) {
 
-        print("Appending size \(size)")
-
         // Append the elements
         elements.append((newElement, size))
 
