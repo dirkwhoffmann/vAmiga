@@ -74,17 +74,19 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker
 
-        << config.port
-        << config.protocol
-        << config.verbose;
     }
 
     template <class T>
     void serialize(T& worker)
     {
-        
+        if (util::isResetter(worker)) return;
+
+        worker
+
+        << config.port
+        << config.protocol
+        << config.verbose;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

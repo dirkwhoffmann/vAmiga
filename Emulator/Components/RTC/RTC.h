@@ -72,24 +72,27 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker
 
-        << config.model;
     }
 
     template <class T>
     void serialize(T& worker)
     {
-        if (!util::isSoftResetter(worker)) {
-            
-            worker
-            
-            << timeDiff
-            << reg
-            << lastCall
-            << lastMeasure
-            << lastMeasuredValue;
-        }
+        if (util::isSoftResetter(worker)) return;
+
+        worker
+
+        << timeDiff
+        << reg
+        << lastCall
+        << lastMeasure
+        << lastMeasuredValue;
+
+        if (util::isResetter(worker)) return;
+
+        worker
+
+        << config.model;
     }
     
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

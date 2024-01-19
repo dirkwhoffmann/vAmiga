@@ -539,7 +539,7 @@ static constexpr bool isSoftResetter(T &worker) {
 
 template <class T>
 static constexpr bool isHardResetter(T &worker) {
-    return std::is_same_v<T, SerSoftResetter>;
+    return std::is_same_v<T, SerHardResetter>;
 }
 
 template <class T>

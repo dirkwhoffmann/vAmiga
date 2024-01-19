@@ -72,9 +72,7 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker
 
-        << config.device;
     }
 
     template <class T>
@@ -83,6 +81,12 @@ private:
         worker
 
         << port;
+
+        if (util::isResetter(worker)) return;
+
+        worker
+
+        << config.device;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

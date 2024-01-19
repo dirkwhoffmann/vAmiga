@@ -128,8 +128,17 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
+
+    }
+
+    template <class T>
+    void serialize(T& worker)
+    {
+     
+        if (util::isResetter(worker)) return;
+
         worker
-        
+
         << config.samplingMethod
         << config.pan
         << config.vol
@@ -139,12 +148,6 @@ private:
         << vol
         << volL
         << volR;
-    }
-
-    template <class T>
-    void serialize(T& worker)
-    {
-        
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

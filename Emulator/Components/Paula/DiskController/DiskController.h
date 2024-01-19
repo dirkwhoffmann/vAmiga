@@ -118,12 +118,7 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker
 
-        << config.connected
-        << config.speed
-        << config.lockDskSync
-        << config.autoDskSync;
     }
 
     template <class T>
@@ -144,6 +139,15 @@ private:
         << dsklen
         << dsksync
         << prb;
+
+        if (util::isResetter(worker)) return;
+
+        worker
+
+        << config.connected
+        << config.speed
+        << config.lockDskSync
+        << config.autoDskSync;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

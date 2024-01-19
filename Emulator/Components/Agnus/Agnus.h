@@ -231,23 +231,12 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker
 
-        << config.revision
-        << config.slowRamMirror
-        << ptrMask;
     }
 
     template <class T>
     void serialize(T& worker)
     {
-        if (!util::isSoftResetter(worker)) {
-            
-            worker
-
-            << clock;
-        }
-
         worker
         
         << trigger
@@ -288,6 +277,20 @@ private:
         << sprVStrt
         << sprVStop
         << sprDmaState;
+
+        if (util::isSoftResetter(worker)) return;
+
+        worker
+
+        << clock;
+
+        if (util::isResetter(worker)) return;
+
+        worker
+
+        << config.revision
+        << config.slowRamMirror
+        << ptrMask;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

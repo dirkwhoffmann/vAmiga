@@ -70,7 +70,6 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker << config.accurate;
     }
 
     template <class T>
@@ -83,6 +82,12 @@ private:
         << spLow
         << spHigh
         << queue;
+
+        if (util::isResetter(worker)) return;
+
+        worker 
+
+        << config.accurate;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

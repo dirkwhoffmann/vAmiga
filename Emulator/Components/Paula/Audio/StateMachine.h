@@ -112,13 +112,6 @@ private:
     template <class T>
     void serialize(T& worker)
     {
-        if (!util::isSoftResetter(worker)) {
-
-            worker
-            
-            << clock;
-        }
-
         worker
         
         << state
@@ -135,6 +128,12 @@ private:
         << intreq2
         << enablePenlo
         << enablePenhi;
+
+        if (util::isSoftResetter(worker)) return;
+
+        worker
+
+        << clock;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

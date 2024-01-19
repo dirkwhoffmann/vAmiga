@@ -120,8 +120,25 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
+
+    }
+
+    template <class T>
+    void serialize(T& worker)
+    {
+        if (util::isSoftResetter(worker)) return;
+
         worker
-        
+
+        << head.cylinder
+        << head.head
+        << head.offset
+        << state;
+
+        if (util::isResetter(worker)) return;
+
+        worker
+
         << config.type
         << config.pan
         << config.stepVolume
@@ -138,20 +155,6 @@ private:
         << modified
         << writeProtected
         << bootable;
-    }
-
-    template <class T>
-    void serialize(T& worker)
-    {
-        if (!util::isSoftResetter(worker)) {
-            
-            worker
-            
-            << head.cylinder
-            << head.head
-            << head.offset
-            << state;
-        }
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

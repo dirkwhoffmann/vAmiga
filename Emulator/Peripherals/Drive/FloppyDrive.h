@@ -120,36 +120,39 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker
 
-        << config.type
-        << config.mechanics
-        << config.rpm;
     }
 
     template <class T>
     void serialize(T& worker)
     {
-        if (!util::isSoftResetter(worker)) {
-            
-            worker
-            
-            << head.cylinder
-            << head.head
-            << head.offset
-            << motor
-            << switchCycle
-            << switchSpeed
-            << idCount
-            << idBit
-            << latestStepUp
-            << latestStepDown
-            << latestStep
-            << dskchange
-            << dsklen
-            << prb
-            << cylinderHistory;
-        }
+        if (util::isSoftResetter(worker)) return;
+
+        worker
+
+        << head.cylinder
+        << head.head
+        << head.offset
+        << motor
+        << switchCycle
+        << switchSpeed
+        << idCount
+        << idBit
+        << latestStepUp
+        << latestStepDown
+        << latestStep
+        << dskchange
+        << dsklen
+        << prb
+        << cylinderHistory;
+
+        if (util::isResetter(worker)) return;
+
+        worker
+
+        << config.type
+        << config.mechanics
+        << config.rpm;
     }
 
     isize _size() override;

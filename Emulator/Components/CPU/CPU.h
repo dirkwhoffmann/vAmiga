@@ -73,12 +73,7 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker
 
-        << config.revision
-        << config.dasmRevision
-        << config.overclocking
-        << config.regResetVal;
     }
 
     template <class T>
@@ -129,6 +124,16 @@ private:
         << readBuffer
         << writeBuffer
         << flags;
+
+        if (util::isResetter(worker)) return;
+
+        worker
+
+        // Persistent items
+        << config.revision
+        << config.dasmRevision
+        << config.overclocking
+        << config.regResetVal;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

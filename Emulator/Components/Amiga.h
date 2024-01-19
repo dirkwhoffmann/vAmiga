@@ -221,17 +221,19 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker
 
-        << config.type
-        << config.syncMode
-        << config.proposedFps;
     }
 
     template <class T>
     void serialize(T& worker)
     {
+        if (util::isResetter(worker)) return;
 
+        worker
+
+        << config.type
+        << config.syncMode
+        << config.proposedFps;
     }
 
 public:

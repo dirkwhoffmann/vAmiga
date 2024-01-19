@@ -51,13 +51,12 @@ private:
     template <class T>
     void serialize(T& worker)
     {
-        if (!util::isSoftResetter(worker)) {
-            
-            worker
-            
-            << state
-            << baseAddr;
-        }
+        if (util::isSoftResetter(worker)) return;
+
+        worker
+
+        << state
+        << baseAddr;
     }
     
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

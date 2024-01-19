@@ -333,24 +333,12 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker
 
-        << config.revision
-        << config.clxSprSpr
-        << config.clxSprPlf
-        << config.clxPlfPlf;
     }
 
     template <class T>
     void serialize(T& worker)
     {
-        if (!util::isSoftResetter(worker)) {
-            
-            worker
-            
-            << clock;
-        }
-
         worker
         
         << diwstrt
@@ -394,6 +382,21 @@ private:
         << wasArmed
         << spriteClipBegin
         << spriteClipEnd;
+
+        if (util::isSoftResetter(worker)) return;
+
+        worker
+
+        << clock;
+
+        if (util::isResetter(worker)) return;
+
+        worker
+
+        << config.revision
+        << config.clxSprSpr
+        << config.clxSprPlf
+        << config.clxPlfPlf;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

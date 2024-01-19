@@ -227,13 +227,7 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker
-        
-        << config.slowRamDelay
-        << config.bankMap
-        << config.ramInitPattern
-        << config.unmappingType
-        << config.extStart;
+
     }
 
     template <class T>
@@ -245,6 +239,16 @@ private:
         << cpuMemSrc
         << agnusMemSrc
         << dataBus;
+
+        if (util::isResetter(worker)) return;
+
+        worker
+
+        << config.slowRamDelay
+        << config.bankMap
+        << config.ramInitPattern
+        << config.unmappingType
+        << config.extStart;
     }
 
     isize _size() override;

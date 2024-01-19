@@ -74,26 +74,29 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker
-        
-        << config.connected;
+
     }
 
     template <class T>
     void serialize(T& worker)
     {
-        if (!util::isSoftResetter(worker)) {
-            
-            worker
-            
-            << baseAddr
-            << state
-            << hdcState
-            << numPartitions
-            << pointer;
-        }
+        if (util::isSoftResetter(worker)) return;
+
+        worker
+
+        << baseAddr
+        << state
+        << hdcState
+        << numPartitions
+        << pointer;
+
+        if (util::isResetter(worker)) return;
+
+        worker
+
+        << config.connected;
     }
-    
+
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }

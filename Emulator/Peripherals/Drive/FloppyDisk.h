@@ -131,19 +131,21 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
+
+    }
+
+    template <class T>
+    void serialize(T& worker)
+    {
+        if (util::isResetter(worker)) return;
+
         worker
-        
+
         << diameter
         << density
         << data.raw
         << writeProtected
         << modified;
-    }
-    
-    template <class T>
-    void serialize(T& worker)
-    {
-        
     }
 
     //

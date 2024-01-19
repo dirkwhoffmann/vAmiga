@@ -140,13 +140,6 @@ private:
     template <class T>
     void serialize(T& worker)
     {
-        if (!util::isSoftResetter(worker)) {
-
-            worker
-
-            << audioClock;
-        }
-
         worker
         
         << intreq
@@ -163,6 +156,12 @@ private:
         << chargeX1
         << chargeY1
         << adkcon;
+
+        if (util::isSoftResetter(worker)) return;
+
+        worker
+
+        << audioClock;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

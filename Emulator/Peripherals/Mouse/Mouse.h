@@ -117,13 +117,17 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker << config.pullUpResistors;
+
     }
 
     template <class T>
     void serialize(T& worker)
     {
-        
+        if (util::isResetter(worker)) return;
+
+        worker 
+
+        << config.pullUpResistors;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

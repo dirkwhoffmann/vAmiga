@@ -214,11 +214,9 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker
-        
-        << config.accuracy;
+
     }
-    
+
     template <class T>
     void serialize(T& worker)
     {
@@ -274,6 +272,12 @@ private:
         << birq
         
         << remaining;
+
+        if (util::isResetter(worker)) return;
+
+        worker
+
+        << config.accuracy;
     }
     
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

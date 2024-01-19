@@ -288,28 +288,12 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker
-        
-        << config.revision
-        << config.todBug
-        << config.eClockSyncing;
+
     }
 
     template <class T>
     void serialize(T& worker)
     {
-        if (!util::isSoftResetter(worker)) {
-
-            worker
-
-            << clock
-            << idleCycles
-            << tiredness
-            << sleeping
-            << sleepCycle
-            << wakeUpCycle;
-        }
-
         worker
         
         << delay
@@ -338,6 +322,25 @@ private:
         << sdr
         << ssr
         << serCounter;
+
+        if (util::isSoftResetter(worker)) return;
+
+        worker
+
+        << clock
+        << idleCycles
+        << tiredness
+        << sleeping
+        << sleepCycle
+        << wakeUpCycle;
+
+        if (util::isResetter(worker)) return;
+
+        worker
+
+        << config.revision
+        << config.todBug
+        << config.eClockSyncing;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
