@@ -11,7 +11,6 @@
 
 #include "Macros.h"
 #include "MemUtils.h"
-// #include "Buffer.h"
 #include <cassert>
 #include <concepts>
 #include <vector>
@@ -287,9 +286,7 @@ public:
 
     const u8 *ptr;
 
-    SerReader(const u8 *p) : ptr(p)
-    {
-    }
+    SerReader(const u8 *p) : ptr(p) { }
 
     DESERIALIZE8(bool)
     DESERIALIZE8(char)
@@ -385,9 +382,7 @@ public:
 
     u8 *ptr;
 
-    SerWriter(u8 *p) : ptr(p)
-    {
-    }
+    SerWriter(u8 *p) : ptr(p) { }
 
     SERIALIZE8(const bool)
     SERIALIZE8(const char)
@@ -467,11 +462,11 @@ return *this; \
 
 class SerResetter
 {
-public:
+protected:
 
-    SerResetter()
-    {
-    }
+    SerResetter() { };
+
+public:
 
     RESET(bool)
     RESET(char)
@@ -524,5 +519,32 @@ public:
         return *this;
     }
 };
+
+class SerSoftResetter : public SerResetter
+{
+public:
+    SerSoftResetter() { }
+};
+
+class SerHardResetter : public SerResetter
+{
+public:
+    SerHardResetter() { }
+};
+
+template <class T>
+static constexpr bool isSoftResetter(T &worker) {
+    return std::is_same_v<T, SerSoftResetter>;
+}
+
+template <class T>
+static constexpr bool isHardResetter(T &worker) {
+    return std::is_same_v<T, SerSoftResetter>;
+}
+
+template <class T>
+static constexpr bool isResetter(T &worker) {
+    return isSoftResetter(worker) || isHardResetter(worker);
+}
 
 }

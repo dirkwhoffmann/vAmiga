@@ -85,7 +85,7 @@ private:
     void applyToResetItems(T& worker, bool hard = true)
     {
         if (hard) {
-            
+
             worker
 
             // Items from CPU class

@@ -58,6 +58,7 @@ Blitter::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS(hard)
 
     if (hard) {
+        
         blitcount = 1;
         copycount = 0;
         linecount = 0;
