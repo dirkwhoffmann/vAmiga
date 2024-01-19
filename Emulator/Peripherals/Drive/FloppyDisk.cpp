@@ -303,7 +303,7 @@ FloppyDisk::encodeDisk(const FloppyFile &file)
 void
 FloppyDisk::shiftTracks(isize offset)
 {
-    debug(true, "Shifting tracks by %zd bytes against each other\n", offset);
+    debug(DSK_DEBUG, "Shifting tracks by %ld bytes against each other\n", offset);
 
     u8 spare[2 * 32768];
 
