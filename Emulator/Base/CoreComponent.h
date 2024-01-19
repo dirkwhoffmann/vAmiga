@@ -218,34 +218,34 @@ public:
 #define RESET_SNAPSHOT_ITEMS(hard) \
 if (hard) { \
 util::SerHardResetter resetter; \
-applyToResetItems(resetter); \
+serialize(resetter); \
 } else { \
 util::SerSoftResetter resetter; \
-applyToResetItems(resetter); \
+serialize(resetter); \
 }
 
 #define COMPUTE_SNAPSHOT_SIZE \
 util::SerCounter counter; \
 applyToPersistentItems(counter); \
-applyToResetItems(counter); \
+serialize(counter); \
 return counter.count;
 
 #define COMPUTE_SNAPSHOT_CHECKSUM \
 util::SerChecker checker; \
 applyToPersistentItems(checker); \
-applyToResetItems(checker); \
+serialize(checker); \
 return checker.hash;
 
 #define LOAD_SNAPSHOT_ITEMS \
 util::SerReader reader(buffer); \
 applyToPersistentItems(reader); \
-applyToResetItems(reader); \
+serialize(reader); \
 return (isize)(reader.ptr - buffer);
 
 #define SAVE_SNAPSHOT_ITEMS \
 util::SerWriter writer(buffer); \
 applyToPersistentItems(writer); \
-applyToResetItems(writer); \
+serialize(writer); \
 return (isize)(writer.ptr - buffer);
 
 }

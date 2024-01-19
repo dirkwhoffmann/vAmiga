@@ -316,7 +316,7 @@ Memory::_size()
     i32 fastSize = config.fastSize;
 
     applyToPersistentItems(counter);
-    applyToResetItems(counter);
+    serialize(counter);
     
     counter
     << romSize
@@ -342,7 +342,7 @@ Memory::_checksum()
     util::SerChecker checker;
     
     applyToPersistentItems(checker);
-    applyToResetItems(checker);
+    serialize(checker);
     
     if (config.chipSize) {
         for (isize i = 0; i < config.chipSize; i++) checker << chip[i];

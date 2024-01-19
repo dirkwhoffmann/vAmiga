@@ -67,7 +67,7 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker) { }
     template <class T>
-    void applyToResetItems(T& worker) { }
+    void serialize(T& worker) { }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }

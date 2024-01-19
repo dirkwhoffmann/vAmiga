@@ -121,7 +121,7 @@ private:
     }
 
     template <class T>
-    void applyToResetItems(T& worker)
+    void serialize(T& worker)
     {
         worker
 

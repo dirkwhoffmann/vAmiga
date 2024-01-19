@@ -304,7 +304,7 @@ FloppyDrive::_size()
     util::SerCounter counter;
 
     applyToPersistentItems(counter);
-    applyToResetItems(counter);
+    serialize(counter);
     
     // Add the size of the boolean indicating whether a disk is inserted
     counter.count += sizeof(bool);
@@ -314,7 +314,7 @@ FloppyDrive::_size()
         // Add the disk type and disk state
         counter << disk->getDiameter() << disk->getDensity();
         disk->applyToPersistentItems(counter);
-        disk->applyToResetItems(counter);
+        disk->serialize(counter);
     }
 
     return counter.count;
@@ -328,7 +328,7 @@ FloppyDrive::_load(const u8 *buffer)
     
     // Read own state
     applyToPersistentItems(reader);
-    applyToResetItems(reader);
+    serialize(reader);
 
     // Check if the snapshot includes a disk
     bool diskInSnapshot; reader << diskInSnapshot;
@@ -358,7 +358,7 @@ FloppyDrive::_save(u8 *buffer)
     
     // Write own state
     applyToPersistentItems(writer);
-    applyToResetItems(writer);
+    serialize(writer);
 
     // Indicate whether this drive has a disk is inserted
     writer << hasDisk();
@@ -370,7 +370,7 @@ FloppyDrive::_save(u8 *buffer)
 
         // Write the disk's state
         disk->applyToPersistentItems(writer);
-        disk->applyToResetItems(writer);
+        disk->serialize(writer);
     }
     
     result = (isize)(writer.ptr - buffer);
