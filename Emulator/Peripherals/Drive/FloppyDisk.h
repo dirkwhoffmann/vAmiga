@@ -140,6 +140,11 @@ private:
         << modified;
     }
     
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        
+    }
 
     //
     // Performing sanity checks

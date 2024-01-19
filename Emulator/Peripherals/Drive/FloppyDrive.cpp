@@ -314,6 +314,7 @@ FloppyDrive::_size()
         // Add the disk type and disk state
         counter << disk->getDiameter() << disk->getDensity();
         disk->applyToPersistentItems(counter);
+        disk->applyToResetItems(counter);
     }
 
     return counter.count;
@@ -369,6 +370,7 @@ FloppyDrive::_save(u8 *buffer)
 
         // Write the disk's state
         disk->applyToPersistentItems(writer);
+        disk->applyToResetItems(writer);
     }
     
     result = (isize)(writer.ptr - buffer);

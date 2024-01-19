@@ -45,6 +45,7 @@ FloppyDisk::init(util::SerReader &reader, Diameter dia, Density den)
 {
     init(dia, den);
     applyToPersistentItems(reader);
+    applyToResetItems(reader);
 }
 
 FloppyDisk::~FloppyDisk()
