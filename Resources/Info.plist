@@ -156,7 +156,7 @@
 	<key>NSAppleEventsUsageDescription</key>
 	<string></string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2023 Dirk Hoffmann. All rights reserved.</string>
+	<string>Copyright © 2024 Dirk Hoffmann. All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

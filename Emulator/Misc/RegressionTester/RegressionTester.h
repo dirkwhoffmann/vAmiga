@@ -17,7 +17,6 @@ namespace vamiga {
 
 class RegressionTester : public SubComponent {
 
-    // Pixel area ritten to the test image
     static constexpr isize X1 = 4 * 0x31;
     static constexpr isize Y1 = VBLANK_MAX + 1;
     static constexpr isize X2 = HPIXELS;
@@ -28,7 +27,7 @@ public:
     // Filename of the test image
     string dumpTexturePath = "texture";
 
-    // Pixel ares observed by this regression test
+    // Pixel area which is written to the test image
     isize x1 = X1;
     isize y1 = Y1;
     isize x2 = X2;
