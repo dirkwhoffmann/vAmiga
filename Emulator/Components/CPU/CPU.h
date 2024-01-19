@@ -82,54 +82,53 @@ private:
     }
 
     template <class T>
-    void applyToResetItems(T& worker, bool hard = true)
+    void applyToResetItems(T& worker)
     {
-        if (hard) {
+        if (util::isSoftResetter(worker)) return;
 
-            worker
+        worker
 
-            // Items from CPU class
-            << debt
-            << slowCycles
+        // Items from CPU class
+        << debt
+        << slowCycles
 
-            // Items from Moira class
-            << clock
-            << reg.pc
-            << reg.pc0
-            << reg.sr.t1
-            << reg.sr.t0
-            << reg.sr.s
-            << reg.sr.m
-            << reg.sr.x
-            << reg.sr.n
-            << reg.sr.z
-            << reg.sr.v
-            << reg.sr.c
-            << reg.sr.ipl
-            << reg.r
-            << reg.usp
-            << reg.isp
-            << reg.msp
-            << reg.ipl
-            << reg.vbr
-            << reg.sfc
-            << reg.dfc
-            << reg.cacr
-            << reg.caar
+        // Items from Moira class
+        << clock
+        << reg.pc
+        << reg.pc0
+        << reg.sr.t1
+        << reg.sr.t0
+        << reg.sr.s
+        << reg.sr.m
+        << reg.sr.x
+        << reg.sr.n
+        << reg.sr.z
+        << reg.sr.v
+        << reg.sr.c
+        << reg.sr.ipl
+        << reg.r
+        << reg.usp
+        << reg.isp
+        << reg.msp
+        << reg.ipl
+        << reg.vbr
+        << reg.sfc
+        << reg.dfc
+        << reg.cacr
+        << reg.caar
 
-            << queue.irc
-            << queue.ird
+        << queue.irc
+        << queue.ird
 
-            << ipl
-            << fcl
-            << fcSource
-            << exception
-            << cp
-            << loopModeDelay
-            << readBuffer
-            << writeBuffer
-            << flags;
-        }
+        << ipl
+        << fcl
+        << fcSource
+        << exception
+        << cp
+        << loopModeDelay
+        << readBuffer
+        << writeBuffer
+        << flags;
     }
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }

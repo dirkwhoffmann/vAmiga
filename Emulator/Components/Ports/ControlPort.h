@@ -92,7 +92,7 @@ private:
     }
 
     template <class T>
-    void applyToResetItems(T& worker, bool hard = true)
+    void applyToResetItems(T& worker)
     {
         worker
 
