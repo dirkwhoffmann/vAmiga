@@ -300,6 +300,7 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
         for (isize i = 0; i < capacity; i++) worker << keys[i];
     }
 
+    
     // Inserts an element at the proper position
     void insert(i64 key, T element)
     {

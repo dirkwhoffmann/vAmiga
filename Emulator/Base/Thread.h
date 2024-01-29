@@ -76,14 +76,10 @@ namespace vamiga {
  * ------------------------------------------------------------------------
  * halt()     | --        | halted    | _halt()
  *
- * When an instance of the Thread class has been created, a new thread is
- * started which executes the thread's main() function. This function executes
+ * When an instance of the Thread class is created, a new thread is started
+ * which executes the thread's main() function. This function executes
  * a loop which periodically calls function execute(). After each iteration,
- * the thread is put to sleep to synchronize timing. Two synchronization modes
- * are offered: Periodic or Pulsed. In periodic mode, the thread is put to
- * sleep for a certain amout of time and wakes up automatically. The second
- * mode puts the thread to sleep indefinitely and waits for an external signal
- * (a call to wakeUp()) to continue.
+ * the thread is put to sleep to synchronize timing.
  *
  * The Thread class provides a suspend-resume mechanism for pausing the thread
  * temporarily. This functionality is utilized frequently by the GUI to carry
