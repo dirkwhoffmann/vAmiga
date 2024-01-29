@@ -670,14 +670,6 @@ Agnus::eofHandler()
     // Synthesize sound samples
     paula.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT_PAL)); // MOVE TO Paula::eofHandler
 
-    if (paula.muxer.sampler[0].count() == 1 &&
-        paula.muxer.sampler[1].count() == 1 &&
-        paula.muxer.sampler[2].count() == 1 &&
-        paula.muxer.sampler[3].count() == 1) {
-        trace(true, "Samplers are empty\n");
-    }
-    // trace(true, "Sampler 0: %ld\n", paula.muxer.sampler[0].count());
-
     scheduleStrobe0Event();
 
     // Let other components do their own EOF stuff
