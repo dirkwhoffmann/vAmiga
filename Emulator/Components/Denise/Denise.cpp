@@ -1267,7 +1267,7 @@ Denise::hsyncHandler(isize vpos)
     } else {
         
         drawSprites();
-        pixelEngine.endOfVBlankLine();
+        pixelEngine.replayColRegChanges();
         conChanges.clear();
     }
 

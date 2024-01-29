@@ -355,7 +355,7 @@ PixelEngine::eofHandler()
 }
 
 void
-PixelEngine::endOfVBlankLine()
+PixelEngine::replayColRegChanges()
 {
     // Apply all color register changes that happened in this line
     for (isize i = 0, end = colChanges.end(); i < end; i++) {

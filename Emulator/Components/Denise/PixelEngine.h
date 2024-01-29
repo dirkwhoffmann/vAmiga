@@ -216,9 +216,6 @@ public:
     // Returns a pointer to randon noise
     Texel *getNoise() const;
 
-    // Called after each line in the VBLANK area
-    void endOfVBlankLine();
-
     // Called after each frame to switch the frame buffers
     void vsyncHandler();
 
@@ -231,7 +228,10 @@ public:
 
 public:
 
-    // Applies a register change
+    // Applies all recorded color register changes
+    void replayColRegChanges();
+
+    // Applies a single register change
     void applyRegisterChange(const RegChange &change);
 
 
