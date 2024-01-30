@@ -66,7 +66,7 @@
 		50300AF0258CF1F700D261E3 /* TypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50300AEF258CF1F700D261E3 /* TypeExtensions.swift */; };
 		5030891121EFA74600FEAD12 /* Paula.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5030890F21EFA74600FEAD12 /* Paula.cpp */; };
 		5030C2E0252A2E8400107E00 /* AudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5030C2DE252A2E8400107E00 /* AudioStream.cpp */; };
-		5031FFD3279F3D95002EF894 /* MemoryConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5031FFD2279F3D95002EF894 /* MemoryConf.swift */; };
+		5031FFD3279F3D95002EF894 /* PerformanceConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5031FFD2279F3D95002EF894 /* PerformanceConf.swift */; };
 		50357BB6239123B2007E7563 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50357BB5239123B2007E7563 /* Renderer.swift */; };
 		50357BB823912929007E7563 /* RendererSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50357BB723912929007E7563 /* RendererSetup.swift */; };
 		50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* Snapshot.cpp */; };
@@ -159,7 +159,7 @@
 		508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00E21EA227B0043D0E9 /* MacAudio.swift */; };
 		508FE04E21EA22CC0043D0E9 /* RomConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03B21EA22CC0043D0E9 /* RomConf.swift */; };
 		508FE04F21EA22CC0043D0E9 /* GeneralPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03C21EA22CC0043D0E9 /* GeneralPrefs.swift */; };
-		508FE05121EA22CC0043D0E9 /* ChipsetConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03E21EA22CC0043D0E9 /* ChipsetConf.swift */; };
+		508FE05121EA22CC0043D0E9 /* HardwareConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03E21EA22CC0043D0E9 /* HardwareConf.swift */; };
 		508FE05221EA22CC0043D0E9 /* RomDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03F21EA22CC0043D0E9 /* RomDropView.swift */; };
 		508FE05321EA22CC0043D0E9 /* VideoConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04021EA22CC0043D0E9 /* VideoConf.swift */; };
 		508FE05421EA22CC0043D0E9 /* ControlsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04121EA22CC0043D0E9 /* ControlsPrefs.swift */; };
@@ -537,7 +537,7 @@
 		5030891021EFA74600FEAD12 /* Paula.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Paula.h; sourceTree = "<group>"; };
 		5030C2DE252A2E8400107E00 /* AudioStream.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioStream.cpp; sourceTree = "<group>"; };
 		5030C2DF252A2E8400107E00 /* AudioStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioStream.h; sourceTree = "<group>"; };
-		5031FFD2279F3D95002EF894 /* MemoryConf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryConf.swift; sourceTree = "<group>"; };
+		5031FFD2279F3D95002EF894 /* PerformanceConf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceConf.swift; sourceTree = "<group>"; };
 		5034229628A6E2BE007018BB /* MoiraMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraMacros.h; sourceTree = "<group>"; };
 		50357BB5239123B2007E7563 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		50357BB723912929007E7563 /* RendererSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererSetup.swift; sourceTree = "<group>"; };
@@ -681,7 +681,7 @@
 		508FE00E21EA227B0043D0E9 /* MacAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacAudio.swift; sourceTree = "<group>"; };
 		508FE03B21EA22CC0043D0E9 /* RomConf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RomConf.swift; sourceTree = "<group>"; };
 		508FE03C21EA22CC0043D0E9 /* GeneralPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralPrefs.swift; sourceTree = "<group>"; };
-		508FE03E21EA22CC0043D0E9 /* ChipsetConf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChipsetConf.swift; sourceTree = "<group>"; };
+		508FE03E21EA22CC0043D0E9 /* HardwareConf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HardwareConf.swift; sourceTree = "<group>"; };
 		508FE03F21EA22CC0043D0E9 /* RomDropView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RomDropView.swift; sourceTree = "<group>"; };
 		508FE04021EA22CC0043D0E9 /* VideoConf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoConf.swift; sourceTree = "<group>"; };
 		508FE04121EA22CC0043D0E9 /* ControlsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlsPrefs.swift; sourceTree = "<group>"; };
@@ -1464,9 +1464,9 @@
 				507957AB244AD25B007B8B8D /* Configuration.swift */,
 				500217B92449CFF500E1A096 /* ConfigurationController.swift */,
 				508FE03B21EA22CC0043D0E9 /* RomConf.swift */,
-				508FE03E21EA22CC0043D0E9 /* ChipsetConf.swift */,
-				5031FFD2279F3D95002EF894 /* MemoryConf.swift */,
+				508FE03E21EA22CC0043D0E9 /* HardwareConf.swift */,
 				50A5969724F7F9ED008632C0 /* PeripheralsConf.swift */,
+				5031FFD2279F3D95002EF894 /* PerformanceConf.swift */,
 				502BB09D229C00C800A8DFCD /* CompatibilityConf.swift */,
 				5072CAF92456D1C800C8F606 /* AudioConf.swift */,
 				508FE04021EA22CC0043D0E9 /* VideoConf.swift */,
@@ -2192,7 +2192,7 @@
 				50AE6EE124D9407F000AA367 /* BlitterRegs.cpp in Sources */,
 				501B821D2262FFB200042871 /* RTC.cpp in Sources */,
 				50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */,
-				5031FFD3279F3D95002EF894 /* MemoryConf.swift in Sources */,
+				5031FFD3279F3D95002EF894 /* PerformanceConf.swift in Sources */,
 				508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */,
 				501FB312275E460100D0A57B /* OSDebugger.cpp in Sources */,
 				50FC08AF27819E2400F0C567 /* CopperInfo.cpp in Sources */,
@@ -2208,7 +2208,7 @@
 				50927DAB24865F11008DF3B8 /* MoiraExceptions_cpp.h in Sources */,
 				50F54B2624B5D31D0078FDC9 /* tables.c in Sources */,
 				50DED6B12202EC3100B8195F /* Inspector.swift in Sources */,
-				508FE05121EA22CC0043D0E9 /* ChipsetConf.swift in Sources */,
+				508FE05121EA22CC0043D0E9 /* HardwareConf.swift in Sources */,
 				50E2BE33240D418600155AE4 /* MoiraDebugger.cpp in Sources */,
 				509F41EA243B0FF700AD0FE4 /* ScreenshotDialog.swift in Sources */,
 				506D6AB2276C7B2D002C9711 /* StringUtils.cpp in Sources */,

@@ -52,7 +52,7 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var romPowerButton: NSButton!
 
     //
-    // Chipset
+    // Hardware (Chipset)
     //
     
     // CPU
@@ -97,7 +97,7 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var csPowerButton: NSButton!
 
     //
-    // Memory
+    // Hardware (Memory)
     //
     
     // RAM
@@ -333,9 +333,9 @@ class ConfigurationController: DialogController {
             
             switch id {
             case "Roms": refreshRomTab()
-            case "Chipset": refreshChipsetTab()
-            case "Memory": refreshMemoryTab()
+            case "Hardware": refreshHardwareTab()
             case "Peripherals": refreshPeripheralsTab()
+            case "Performance": refreshPerformanceTab()
             case "Compatibility": refreshCompatibilityTab()
             case "Audio": refreshAudioTab()
             case "Video": refreshVideoTab()
