@@ -41,7 +41,7 @@ Defaults::Defaults()
     setFallback(OPT_PTR_DROPS, true);
     setFallback(OPT_DENISE_REVISION, DENISE_OCS);
     setFallback(OPT_VIEWPORT_TRACKING, true);
-    setFallback(OPT_FRAME_SKIPPING, 0);
+    setFallback(OPT_FRAME_SKIPPING, 16);
     setFallback(OPT_PALETTE, PALETTE_COLOR);
     setFallback(OPT_BRIGHTNESS, 50);
     setFallback(OPT_CONTRAST, 100);

@@ -13,6 +13,26 @@ extension ConfigurationController {
 
         refreshChipsetTab()
         refreshMemoryTab()
+
+        // Lock
+        hwLockImage.isHidden = amiga.poweredOff
+        hwLockInfo1.isHidden = amiga.poweredOff
+        hwLockInfo2.isHidden = amiga.poweredOff
+
+        // Buttons
+        hwPowerButton.isHidden = !bootable
+    }
+
+    @IBAction func hwPresetAction(_ sender: NSPopUpButton!) {
+
+        csPresetAction(sender)
+        memPresetAction(sender)
+    }
+
+    @IBAction func hwDefaultsAction(_ sender: NSButton!) {
+
+        csDefaultsAction(sender)
+        memDefaultsAction(sender)
     }
 
     //
@@ -41,32 +61,6 @@ extension ConfigurationController {
             csCpuInfo1.stringValue = "Motorola 68EC020"
             csCpuInfo2.stringValue = "A1200, A2500"
 
-            /*
-        case ._68020:
-            csCpuInfo1.stringValue = "Motorola MC68020"
-            csCpuInfo2.stringValue = ""
-
-        case ._68EC030:
-            csCpuInfo1.stringValue = "Motorola 68EC030"
-            csCpuInfo2.stringValue = ""
-
-        case ._68030:
-            csCpuInfo1.stringValue = "Motorola MC68030"
-            csCpuInfo2.stringValue = "A3000"
-
-        case ._68EC040:
-            csCpuInfo1.stringValue = "Motorola 68EC040"
-            csCpuInfo2.stringValue = ""
-
-        case ._68LC040:
-            csCpuInfo1.stringValue = "Motorola 68LC040"
-            csCpuInfo2.stringValue = ""
-
-        case ._68040:
-            csCpuInfo1.stringValue = "Motorola 68040"
-            csCpuInfo2.stringValue = ""
-             */
-            
         default:
             csCpuInfo1.stringValue = "Invalid"
             csCpuInfo2.stringValue = ""
@@ -158,20 +152,11 @@ extension ConfigurationController {
         }
         
         // Disable some controls if emulator is powered on
-        // csCpuRevision.isEnabled = poweredOff
         csAgnusRevision.isEnabled = poweredOff
         csDeniseRevision.isEnabled = poweredOff
         csCiaRevision.isEnabled = poweredOff
         csRtcRevision.isEnabled = poweredOff
-        csFactorySettingsPopup.isEnabled = poweredOff
-
-        // Lock
-        csLockImage.isHidden = poweredOff
-        csLockInfo1.isHidden = poweredOff
-        csLockInfo2.isHidden = poweredOff
-
-        // Buttons
-        csPowerButton.isHidden = !bootable
+        hwFactorySettingsPopup.isEnabled = poweredOff
     }
 
     @IBAction func csCpuRevAction(_ sender: NSPopUpButton!) {
@@ -292,7 +277,6 @@ extension ConfigurationController {
         memRamInitPattern.isEnabled = poweredOff
         memBankMap.isEnabled = poweredOff
         memUnmappingType.isEnabled = poweredOff
-        memFactorySettingsPopup.isEnabled = poweredOff
 
         // Chipset features
         compSlowRamDelay.state = config.slowRamDelay ? .on : .off
@@ -308,14 +292,6 @@ extension ConfigurationController {
         memWarnImage.isHidden = !badAgnus
         memWarnInfo1.isHidden = !badAgnus
         memWarnInfo2.isHidden = !badAgnus
-
-        // Lock
-        memLockImage.isHidden = poweredOff
-        memLockInfo1.isHidden = poweredOff
-        memLockInfo2.isHidden = poweredOff
-
-        // Buttons
-        memPowerButton.isHidden = !bootable
     }
 
     @IBAction func memChipRamAction(_ sender: NSPopUpButton!) {
@@ -386,6 +362,13 @@ extension ConfigurationController {
             defaults.set(.CHIP_RAM, 1024)
             defaults.set(.SLOW_RAM, 0)
             defaults.set(.BANKMAP, BankMap.A2000B.rawValue)
+
+        case 3:
+
+            // Amiga 500+
+            defaults.set(.CHIP_RAM, 512)
+            defaults.set(.SLOW_RAM, 512)
+            defaults.set(.BANKMAP, BankMap.A500.rawValue)
 
         default:
             fatalError()

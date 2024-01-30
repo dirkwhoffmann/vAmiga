@@ -11,6 +11,8 @@ extension ConfigurationController {
 
     func refreshPerformanceTab() {
 
+        let poweredOff = amiga.poweredOff
+
         // Warp
         prfWarpMode.selectItem(withTag: config.warpMode)
         prfWarpBoot.integerValue = config.warpBoot
@@ -24,6 +26,14 @@ extension ConfigurationController {
         prfCiaIdleSleep.state = config.ciaIdleSleep ? .on : .off
         prfFrameSkipping.state = config.frameSkipping > 0 ? .on : .off
         prfAudioFastPath.state = config.audioFastPath ? .on : .off
+
+        // Lock
+        prfLockImage.isHidden = poweredOff
+        prfLockInfo1.isHidden = poweredOff
+        prfLockInfo2.isHidden = poweredOff
+
+        // Buttons
+        prfPowerButton.isHidden = !bootable
     }
 
     //
@@ -38,7 +48,7 @@ extension ConfigurationController {
 
     @IBAction func prfWarpBootAction(_ sender: NSTextField!) {
 
-        // config.warpBoot = sender.integerValue
+        config.warpBoot = sender.integerValue
         refresh()
     }
     
@@ -84,5 +94,26 @@ extension ConfigurationController {
 
         config.audioFastPath = sender.state == .on
         refresh()
+    }
+
+    @IBAction func prfPresetAction(_ sender: NSPopUpButton!) {
+
+        let defaults = AmigaProxy.defaults!
+
+        amiga.suspend()
+
+        // Revert to standard settings
+        AmigaProxy.defaults.removePerformanceUserDefaults()
+
+        // Update the configutation
+        config.applyPerformanceUserDefaults()
+
+        amiga.resume()
+        refresh()
+    }
+
+    @IBAction func prfDefaultsAction(_ sender: NSButton!) {
+
+        config.savePerformanceUserDefaults()
     }
 }

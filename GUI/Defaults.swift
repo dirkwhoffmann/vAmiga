@@ -274,9 +274,9 @@ extension Configuration {
     
         debug(.defaults)
         
-        applyChipsetUserDefaults()
-        applyMemoryUserDefaults()
+        applyHardwareUserDefaults()
         applyPeripheralsUserDefaults()
+        applyPerformanceUserDefaults()
         applyCompatibilityUserDefaults()
         applyAudioUserDefaults()
         applyVideoUserDefaults()
@@ -675,7 +675,41 @@ extension Configuration {
 }
 
 //
-// User defaults (Chipset)
+// User defaults (Hardware)
+//
+
+extension DefaultsProxy {
+
+    func registerHardwareUserDefaults() {
+
+        registerChipsetUserDefaults()
+        registerMemoryUserDefaults()
+    }
+
+    func removeHardwareUserDefaults() {
+
+        removeChipsetUserDefaults()
+        removeMemoryUserDefaults()
+    }
+}
+
+extension Configuration {
+
+    func applyHardwareUserDefaults() {
+
+        applyChipsetUserDefaults()
+        applyMemoryUserDefaults()
+    }
+
+    func saveHardwareUserDefaults() {
+
+        saveChipsetUserDefaults()
+        saveMemoryUserDefaults()
+    }
+}
+
+//
+// User defaults (Hardware::Chipset)
 //
 
 extension DefaultsProxy {
@@ -744,7 +778,7 @@ extension Configuration {
 }
 
 //
-// User defaults (Memory)
+// User defaults (Hardware::Memory)
 //
 
 extension DefaultsProxy {
@@ -941,6 +975,75 @@ extension Configuration {
 }
 
 //
+// User defaults (Performance)
+//
+
+extension DefaultsProxy {
+
+    func registerPerformanceUserDefaults() {
+
+        debug(.defaults)
+        // No GUI related items in this sections
+    }
+
+    func removePerformanceUserDefaults() {
+
+        debug(.defaults)
+
+        remove(.WARP_MODE)
+        remove(.WARP_BOOT)
+        remove(.CLX_SPR_SPR)
+        remove(.CLX_SPR_PLF)
+        remove(.CLX_PLF_PLF)
+        remove(.CIA_IDLE_SLEEP)
+        remove(.FRAME_SKIPPING)
+        remove(.AUD_FASTPATH)
+    }
+}
+
+extension Configuration {
+
+    func applyPerformanceUserDefaults() {
+
+        debug(.defaults)
+        let defaults = AmigaProxy.defaults!
+
+        amiga.suspend()
+
+        warpMode = defaults.get(.WARP_MODE)
+        warpBoot = defaults.get(.WARP_BOOT)
+        clxSprSpr = defaults.get(.CLX_SPR_SPR) != 0
+        clxSprPlf = defaults.get(.CLX_SPR_PLF) != 0
+        clxPlfPlf = defaults.get(.CLX_PLF_PLF) != 0
+        ciaIdleSleep = defaults.get(.CIA_IDLE_SLEEP) != 0
+        frameSkipping = defaults.get(.FRAME_SKIPPING)
+        audioFastPath = defaults.get(.AUD_FASTPATH) != 0
+
+        amiga.resume()
+    }
+
+    func savePerformanceUserDefaults() {
+
+        debug(.defaults)
+        let defaults = AmigaProxy.defaults!
+
+        amiga.suspend()
+
+        defaults.set(.WARP_MODE, warpMode)
+        defaults.set(.WARP_BOOT, warpBoot)
+        defaults.set(.CLX_SPR_SPR, clxSprSpr)
+        defaults.set(.CLX_SPR_PLF, clxSprPlf)
+        defaults.set(.CLX_PLF_PLF, clxPlfPlf)
+        defaults.set(.CIA_IDLE_SLEEP, ciaIdleSleep)
+        defaults.set(.FRAME_SKIPPING, frameSkipping)
+        defaults.set(.AUD_FASTPATH, audioFastPath)
+        defaults.save()
+
+        amiga.resume()
+    }
+}
+
+//
 // User defaults (Compatibility)
 //
 
@@ -959,9 +1062,6 @@ extension DefaultsProxy {
         remove(.BLITTER_ACCURACY)
         remove(.TODBUG)
         remove(.ECLOCK_SYNCING)
-        remove(.CLX_SPR_SPR)
-        remove(.CLX_SPR_PLF)
-        remove(.CLX_PLF_PLF)
         remove(.DRIVE_SPEED)
         remove(.DRIVE_MECHANICS, [ 0, 1, 2, 3])
         remove(.LOCK_DSKSYNC)
@@ -982,9 +1082,6 @@ extension Configuration {
         defaults.set(.BLITTER_ACCURACY, blitterAccuracy)
         defaults.set(.TODBUG, todBug)
         defaults.set(.ECLOCK_SYNCING, eClockSyncing)
-        defaults.set(.CLX_SPR_SPR, clxSprSpr)
-        defaults.set(.CLX_SPR_PLF, clxSprPlf)
-        defaults.set(.CLX_PLF_PLF, clxPlfPlf)
         defaults.set(.DRIVE_SPEED, driveSpeed)
         defaults.set(.DRIVE_MECHANICS, [0, 1, 2, 3], driveMechanics)
         defaults.set(.LOCK_DSKSYNC, lockDskSync)
@@ -1005,9 +1102,6 @@ extension Configuration {
         blitterAccuracy = defaults.get(.BLITTER_ACCURACY)
         todBug = defaults.get(.TODBUG) != 0
         eClockSyncing = defaults.get(.ECLOCK_SYNCING) != 0
-        clxSprSpr = defaults.get(.CLX_SPR_SPR) != 0
-        clxSprPlf = defaults.get(.CLX_SPR_PLF) != 0
-        clxPlfPlf = defaults.get(.CLX_PLF_PLF) != 0
         driveSpeed = defaults.get(.DRIVE_SPEED)
         driveMechanics = defaults.get(.DRIVE_MECHANICS, 0)
         lockDskSync = defaults.get(.LOCK_DSKSYNC) != 0
