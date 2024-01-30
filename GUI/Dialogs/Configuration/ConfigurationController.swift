@@ -175,6 +175,7 @@ class ConfigurationController: DialogController {
 
     // Boosters
     @IBOutlet weak var prfCiaIdleSleep: NSButton!
+    @IBOutlet weak var prfFrameSkipping: NSButton!
 
     //
     // Compatibility

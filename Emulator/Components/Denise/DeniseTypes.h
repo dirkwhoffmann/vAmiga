@@ -85,6 +85,9 @@ typedef struct
     // Informs the GUI about viewport changes
     bool viewportTracking;
 
+    // Number of frames to be skipped in warp mode
+    isize frameSkipping;
+
     // Hides certain bitplanes
     u8 hiddenBitplanes;
 

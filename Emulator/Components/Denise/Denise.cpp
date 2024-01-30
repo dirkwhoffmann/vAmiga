@@ -46,6 +46,7 @@ Denise::resetConfig()
         
         OPT_DENISE_REVISION,
         OPT_VIEWPORT_TRACKING,
+        OPT_FRAME_SKIPPING,
         OPT_HIDDEN_BITPLANES,
         OPT_HIDDEN_SPRITES,
         OPT_HIDDEN_LAYERS,
@@ -67,6 +68,7 @@ Denise::getConfigItem(Option option) const
             
         case OPT_DENISE_REVISION:     return config.revision;
         case OPT_VIEWPORT_TRACKING:   return config.viewportTracking;
+        case OPT_FRAME_SKIPPING:      return config.frameSkipping;
         case OPT_HIDDEN_BITPLANES:    return config.hiddenBitplanes;
         case OPT_HIDDEN_SPRITES:      return config.hiddenSprites;
         case OPT_HIDDEN_LAYERS:       return config.hiddenLayers;
@@ -98,6 +100,11 @@ Denise::setConfigItem(Option option, i64 value)
             
             config.viewportTracking = (bool)value;
             debugger.resetDIWTracker();
+            return;
+
+        case OPT_FRAME_SKIPPING:
+
+            config.frameSkipping = (isize)value;
             return;
 
         case OPT_HIDDEN_BITPLANES:
@@ -1317,13 +1324,15 @@ Denise::eofHandler()
     pixelEngine.eofHandler();
     debugger.eofHandler();
 
-    // Run the frame skip logic (OPT_WARP_FRAMES)
-    if (frameSkips) frameSkips--;
-
+    // Run the frame skip logic
     if (frameSkips == 0) {
 
         pixelEngine.swapBuffers();
-        frameSkips = amiga.isWarping() ? 16 : 0;
+        frameSkips = amiga.isWarping() ? config.frameSkipping : 0;
+
+    } else {
+
+        frameSkips--;
     }
 }
 

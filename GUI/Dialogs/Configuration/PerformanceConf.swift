@@ -22,6 +22,7 @@ extension ConfigurationController {
 
         // Boosters
         prfCiaIdleSleep.state = config.ciaIdleSleep ? .on : .off
+        prfFrameSkipping.state = config.frameSkipping > 0 ? .on : .off
     }
 
     //
@@ -69,6 +70,12 @@ extension ConfigurationController {
     @IBAction func prfCiaIdleSleepAction(_ sender: NSButton!) {
 
         config.ciaIdleSleep = sender.state == .on
+        refresh()
+    }
+
+    @IBAction func prfFrameSkippingAction(_ sender: NSButton!) {
+
+        config.frameSkipping = sender.state == .on ? 16 : 0
         refresh()
     }
 

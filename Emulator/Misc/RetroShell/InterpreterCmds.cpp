@@ -576,6 +576,13 @@ Interpreter::initCommandShell(Command &root)
         amiga.configure(OPT_VIEWPORT_TRACKING, parseBool(argv));
     });
 
+    root.add({"denise", "set", "frameskip"}, { Arg::value },
+             "Sets the number of skipped frames in warp mode",
+             [this](Arguments& argv, long value) {
+
+        amiga.configure(OPT_FRAME_SKIPPING, parseNum(argv));
+    });
+
     root.add({"denise", "set", "clxsprspr"}, { Arg::boolean },
              "Switches sprite-sprite collision detection on or off",
              [this](Arguments& argv, long value) {

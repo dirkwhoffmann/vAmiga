@@ -33,7 +33,7 @@ enum_long(OPT)
     // Denise
     OPT_DENISE_REVISION,
     OPT_VIEWPORT_TRACKING,
-    // OPT_FRAME_SKIPPING,
+    OPT_FRAME_SKIPPING,
 
     // Pixel engine
     OPT_PALETTE,
@@ -173,6 +173,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
                 
             case OPT_DENISE_REVISION:       return "DENISE_REVISION";
             case OPT_VIEWPORT_TRACKING:     return "VIEWPORT_TRACKING";
+            case OPT_FRAME_SKIPPING:        return "OPT_FRAME_SKIPPING";
                 
             case OPT_PALETTE:               return "PALETTE";
             case OPT_BRIGHTNESS:            return "BRIGHTNESS";

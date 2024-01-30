@@ -292,6 +292,10 @@ class Configuration {
         get { return amiga.getConfig(.CIA_IDLE_SLEEP) != 0 }
         set { amiga.configure(.CIA_IDLE_SLEEP, enable: newValue) }
     }
+    var frameSkipping: Int {
+        get { return amiga.getConfig(.FRAME_SKIPPING) }
+        set { amiga.configure(.FRAME_SKIPPING, value: newValue) }
+    }
     var slowRamDelay: Bool {
         get { return amiga.getConfig(.SLOW_RAM_DELAY) != 0 }
         set { amiga.configure(.SLOW_RAM_DELAY, enable: newValue) }

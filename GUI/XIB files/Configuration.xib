@@ -127,6 +127,7 @@
                 <outlet property="prfClxPlfPlf" destination="f5s-c0-sgf" id="2Bs-od-IiS"/>
                 <outlet property="prfClxSprPlf" destination="E5u-Sd-sVm" id="CBd-qo-PMS"/>
                 <outlet property="prfClxSprSpr" destination="8rr-Ej-BQE" id="82a-vJ-6Sx"/>
+                <outlet property="prfFrameSkipping" destination="qp0-pX-SbV" id="hsM-Kg-536"/>
                 <outlet property="prfWarpBoot" destination="X5X-QE-QMJ" id="2Nt-AL-Ka9"/>
                 <outlet property="prfWarpMode" destination="MSH-Uz-sGW" id="tk4-Q1-WNi"/>
                 <outlet property="romArosPopup" destination="b1E-it-StT" id="wif-eM-5JZ"/>
@@ -2048,6 +2049,9 @@ DQ
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="prfFrameSkippingAction:" target="-2" id="deE-VX-RQe"/>
+                                            </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mXS-g2-Oft">
                                             <rect key="frame" x="343" y="164" width="216" height="18"/>
