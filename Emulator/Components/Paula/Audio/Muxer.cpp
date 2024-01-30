@@ -55,6 +55,8 @@ Muxer::_dump(Category category, std::ostream& os) const
         os << dec(config.volL) << std::endl;
         os << tab("Right master volume");
         os << dec(config.volR) << std::endl;
+        os << tab("Idle fast path");
+        os << bol(config.idleFastPath) << std::endl;
     }
 
     if (category == Category::State) {
@@ -116,7 +118,8 @@ Muxer::resetConfig()
         
         OPT_SAMPLING_METHOD,
         OPT_AUDVOLL,
-        OPT_AUDVOLR
+        OPT_AUDVOLR,
+        OPT_AUD_FASTPATH
     };
 
     for (auto &option : options) {
@@ -149,6 +152,9 @@ Muxer::getConfigItem(Option option) const
 
         case OPT_AUDVOLR:
             return config.volR;
+
+        case OPT_AUD_FASTPATH:
+            return config.idleFastPath;
 
         case OPT_FILTER_TYPE:
             return filter.getConfigItem(option);
@@ -206,6 +212,11 @@ Muxer::setConfigItem(Option option, i64 value)
 
             if (wasMuted != isMuted())
                 msgQueue.put(MSG_MUTE, isMuted());
+            return;
+
+        case OPT_AUD_FASTPATH:
+
+            config.idleFastPath = (bool)value;
             return;
 
         case OPT_FILTER_TYPE:
@@ -341,51 +352,64 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
     // Check for a buffer overflow
     if (stream.count() + count >= stream.cap()) handleBufferOverflow();
 
-    double cycle = (double)clock;
-    bool loEnabled = filter.loFilterEnabled();
-    bool ledEnabled = filter.ledFilterEnabled();
-    bool hiEnabled = filter.hiFilterEnabled();
-    bool legacyEnabled = filter.legacyFilterEnabled();
+    // Check if we need to interpolate samples (audio is playing)
+    if (sampler[0].isActive() || sampler[1].isActive() ||
+        sampler[2].isActive() || sampler[3].isActive() || !config.idleFastPath) {
 
-    for (long i = 0; i < count; i++) {
+        double cycle = (double)clock;
+        bool loEnabled = filter.loFilterEnabled();
+        bool ledEnabled = filter.ledFilterEnabled();
+        bool hiEnabled = filter.hiFilterEnabled();
+        bool legacyEnabled = filter.legacyFilterEnabled();
 
-        float ch0 = sampler[0].interpolate <method> ((Cycle)cycle) * vol[0];
-        float ch1 = sampler[1].interpolate <method> ((Cycle)cycle) * vol[1];
-        float ch2 = sampler[2].interpolate <method> ((Cycle)cycle) * vol[2];
-        float ch3 = sampler[3].interpolate <method> ((Cycle)cycle) * vol[3];
+        for (isize i = 0; i < count; i++) {
 
-        // Compute left channel output
-        double l =
-        ch0 * (1 - pan[0]) + ch1 * (1 - pan[1]) +
-        ch2 * (1 - pan[2]) + ch3 * (1 - pan[3]);
+            float ch0 = sampler[0].interpolate <method> ((Cycle)cycle) * vol[0];
+            float ch1 = sampler[1].interpolate <method> ((Cycle)cycle) * vol[1];
+            float ch2 = sampler[2].interpolate <method> ((Cycle)cycle) * vol[2];
+            float ch3 = sampler[3].interpolate <method> ((Cycle)cycle) * vol[3];
 
-        // Compute right channel output
-        double r =
-        ch0 * pan[0] + ch1 * pan[1] +
-        ch2 * pan[2] + ch3 * pan[3];
+            // Compute left channel output
+            double l =
+            ch0 * (1 - pan[0]) + ch1 * (1 - pan[1]) +
+            ch2 * (1 - pan[2]) + ch3 * (1 - pan[3]);
 
-        // Run the audio filter pipeline
-        if (loEnabled) filter.loFilter.applyLP(l, r);
-        if (ledEnabled) filter.ledFilter.applyLP(l, r);
-        if (hiEnabled) filter.hiFilter.applyHP(l, r);
+            // Compute right channel output
+            double r =
+            ch0 * pan[0] + ch1 * pan[1] +
+            ch2 * pan[2] + ch3 * pan[3];
 
-        // Apply the legacy filter if applicable
-        if (legacyEnabled) {
-            l = filter.butterworthL.apply(float(l));
-            r = filter.butterworthR.apply(float(r));
+            // Run the audio filter pipeline
+            if (loEnabled) filter.loFilter.applyLP(l, r);
+            if (ledEnabled) filter.ledFilter.applyLP(l, r);
+            if (hiEnabled) filter.hiFilter.applyHP(l, r);
+
+            // Apply the legacy filter if applicable
+            if (legacyEnabled) {
+                l = filter.butterworthL.apply(float(l));
+                r = filter.butterworthR.apply(float(r));
+            }
+
+            // Apply master volume
+            l *= volL;
+            r *= volR;
+
+            // Write sample into ringbuffer
+            stream.add(float(l), float(r));
+
+            cycle += cyclesPerSample;
         }
+    } else {
 
-        // Apply master volume
-        l *= volL;
-        r *= volR;
-        
-        // Write sample into ringbuffer
-        stream.add(float(l), float(r));
-        stats.producedSamples++;
-        
-        cycle += cyclesPerSample;
+        // Fast path: Repeat the most recent sample
+        auto latest = stream.isEmpty() ? SAMPLE_T() : stream.latest();
+        for (isize i = 0; i < count; i++) {
+            stream.add(latest);
+        }
     }
-    
+
+    stats.producedSamples += count;
+
     stream.unlock();
 }
 

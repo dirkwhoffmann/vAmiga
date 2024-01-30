@@ -16,11 +16,11 @@
 
 namespace vamiga {
 
-/* This buffer type is used to temporarily store the sound samples produced by
- * the state machine. Keep in mind that the state machine doesn't output
- * at a constant sampling rate. Instead, a new sample is generated whenever the
- * period counter underflows. To preserve this timing information, each sample
- * is tagged by the cycle it was produced.
+/* This buffer type temporarily stores the sound samples produced by the state
+ * machine. The state machine doesn't output at a constant sampling rate.
+ * Instead, it generates a new sample whenever the period counter underflows.
+ * Each sample is tagged with the cycle in which the underflow occurred to
+ * preserve the timing information.
  */
 
 struct Sampler : util::SortedRingBuffer <i16, VPOS_CNT * HPOS_CNT_PAL> {
@@ -30,6 +30,9 @@ struct Sampler : util::SortedRingBuffer <i16, VPOS_CNT * HPOS_CNT_PAL> {
 
     // Interpolates a sound sample for the specified target cycle
     template <SamplingMethod method> i16 interpolate(Cycle clock);
+
+    // Returns true if there are at least two sound samples
+    bool isActive() { return count() != 1; }
 };
 
 }

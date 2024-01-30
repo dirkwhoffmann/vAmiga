@@ -123,6 +123,7 @@
                 <outlet property="perSerialPort" destination="Gxb-NC-mOX" id="V5A-IG-hhx"/>
                 <outlet property="perSerialPortText" destination="pod-he-ipL" id="Eb2-mW-4qo"/>
                 <outlet property="prefTabView" destination="IOZ-5e-6pS" id="tBY-5n-qBt"/>
+                <outlet property="prfAudioFastPath" destination="mXS-g2-Oft" id="neS-0b-4Yb"/>
                 <outlet property="prfCiaIdleSleep" destination="Qsk-tO-tiU" id="jHl-VB-aFn"/>
                 <outlet property="prfClxPlfPlf" destination="f5s-c0-sgf" id="2Bs-od-IiS"/>
                 <outlet property="prfClxSprPlf" destination="E5u-Sd-sVm" id="CBd-qo-PMS"/>
@@ -2060,6 +2061,9 @@ DQ
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="prfAudioFastPathAction:" target="-2" id="VpY-uu-274"/>
+                                            </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8rr-Ej-BQE">
                                             <rect key="frame" x="344" y="355" width="208" height="18"/>

@@ -51,10 +51,6 @@ class Configuration {
         get { return amiga.getConfig(.CPU_OVERCLOCKING) }
         set { amiga.configure(.CPU_OVERCLOCKING, value: newValue) }
     }
-    var warpMode: Int {
-        get { return amiga.getConfig(.WARP_MODE) }
-        set { amiga.configure(.WARP_MODE, value: newValue) }
-    }
     var agnusRev: Int {
         get { return amiga.getConfig(.AGNUS_REVISION) }
         set { amiga.configure(.AGNUS_REVISION, value: newValue) }
@@ -265,6 +261,43 @@ class Configuration {
     }
 
     //
+    // Performance
+    //
+
+    var warpMode: Int {
+        get { return amiga.getConfig(.WARP_MODE) }
+        set { amiga.configure(.WARP_MODE, value: newValue) }
+    }
+    var warpBoot: Int {
+        get { return amiga.getConfig(.WARP_BOOT) }
+        set { amiga.configure(.WARP_BOOT, value: newValue) }
+    }
+    var clxSprSpr: Bool {
+        get { return amiga.getConfig(.CLX_SPR_SPR) != 0 }
+        set { amiga.configure(.CLX_SPR_SPR, enable: newValue) }
+    }
+    var clxSprPlf: Bool {
+        get { return amiga.getConfig(.CLX_SPR_PLF) != 0 }
+        set { amiga.configure(.CLX_SPR_PLF, enable: newValue) }
+    }
+    var clxPlfPlf: Bool {
+        get { return amiga.getConfig(.CLX_PLF_PLF) != 0 }
+        set { amiga.configure(.CLX_PLF_PLF, enable: newValue) }
+    }
+    var ciaIdleSleep: Bool {
+        get { return amiga.getConfig(.CIA_IDLE_SLEEP) != 0 }
+        set { amiga.configure(.CIA_IDLE_SLEEP, enable: newValue) }
+    }
+    var frameSkipping: Int {
+        get { return amiga.getConfig(.FRAME_SKIPPING) }
+        set { amiga.configure(.FRAME_SKIPPING, value: newValue) }
+    }
+    var audioFastPath: Bool {
+        get { return amiga.getConfig(.AUD_FASTPATH) != 0 }
+        set { amiga.configure(.AUD_FASTPATH, enable: newValue) }
+    }
+
+    //
     // Compatibility
     //
 
@@ -288,29 +321,9 @@ class Configuration {
         get { return amiga.getConfig(.ECLOCK_SYNCING) != 0 }
         set { amiga.configure(.ECLOCK_SYNCING, enable: newValue) }
     }
-    var ciaIdleSleep: Bool {
-        get { return amiga.getConfig(.CIA_IDLE_SLEEP) != 0 }
-        set { amiga.configure(.CIA_IDLE_SLEEP, enable: newValue) }
-    }
-    var frameSkipping: Int {
-        get { return amiga.getConfig(.FRAME_SKIPPING) }
-        set { amiga.configure(.FRAME_SKIPPING, value: newValue) }
-    }
     var slowRamDelay: Bool {
         get { return amiga.getConfig(.SLOW_RAM_DELAY) != 0 }
         set { amiga.configure(.SLOW_RAM_DELAY, enable: newValue) }
-    }
-    var clxSprSpr: Bool {
-        get { return amiga.getConfig(.CLX_SPR_SPR) != 0 }
-        set { amiga.configure(.CLX_SPR_SPR, enable: newValue) }
-    }
-    var clxSprPlf: Bool {
-        get { return amiga.getConfig(.CLX_SPR_PLF) != 0 }
-        set { amiga.configure(.CLX_SPR_PLF, enable: newValue) }
-    }
-    var clxPlfPlf: Bool {
-        get { return amiga.getConfig(.CLX_PLF_PLF) != 0 }
-        set { amiga.configure(.CLX_PLF_PLF, enable: newValue) }
     }
     var driveSpeed: Int {
         get { return amiga.getConfig(.DRIVE_SPEED) }
@@ -337,7 +350,7 @@ class Configuration {
         get { return amiga.getConfig(.ACCURATE_KEYBOARD) != 0 }
         set { amiga.configure(.ACCURATE_KEYBOARD, enable: newValue) }
     }
-    
+
     //
     // Audio settings
     //

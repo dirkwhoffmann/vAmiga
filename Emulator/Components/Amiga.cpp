@@ -321,6 +321,7 @@ Amiga::getConfigItem(Option option) const
         case OPT_SAMPLING_METHOD:
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
+        case OPT_AUD_FASTPATH:
         case OPT_FILTER_TYPE:
 
             return paula.muxer.getConfigItem(option);
@@ -508,6 +509,7 @@ Amiga::configure(Option option, i64 value)
         OPT_HDR_STEP_VOLUME,
         OPT_AUDVOLL,
         OPT_AUDVOLR,
+        OPT_AUD_FASTPATH,
         OPT_AUDPAN,
         OPT_AUDVOL
     };
@@ -627,6 +629,7 @@ Amiga::configure(Option option, i64 value)
         case OPT_FILTER_TYPE:
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
+        case OPT_AUD_FASTPATH:
 
             paula.muxer.setConfigItem(option, value);
             break;

@@ -150,6 +150,7 @@ public:
     void wipeOut();
     
     // Adds a sample to the ring buffer
+    void add(const T &lr) { this->write(lr); }
     void add(float l, float r) { this->write(T(l,r)); }
 
     // Puts the write pointer somewhat ahead of the read pointer

@@ -200,12 +200,13 @@ template <class T, isize capacity> struct RingBuffer : Serializable
     //
 
     isize cap() const { return capacity; }
-    isize count() const { return (capacity + w - r) % capacity; }
+    isize oldcount() const { return (capacity + w - r) % capacity; }
+    isize count() const { assert(oldcount() == (r > w ? capacity - (r - w) : w - r)); return r > w ? capacity - (r - w) : w - r; }
     isize free() const { return capacity - count() - 1; }
     double fillLevel() const { return (double)count() / capacity; }
     bool isEmpty() const { return r == w; }
     bool isFull() const { return count() == capacity - 1; }
-
+    
     
     //
     // Working with indices
@@ -272,6 +273,11 @@ template <class T, isize capacity> struct RingBuffer : Serializable
     const T& current(isize offset) const
     {
         return elements[(r + offset) % capacity];
+    }
+
+    const T& latest() const
+    {
+        return elements[prev(w)];
     }
 };
 

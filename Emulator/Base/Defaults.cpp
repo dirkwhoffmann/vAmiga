@@ -129,6 +129,7 @@ Defaults::Defaults()
     setFallback(OPT_AUDVOL, { 0, 1, 2, 3 }, 100);
     setFallback(OPT_AUDVOLL, 50);
     setFallback(OPT_AUDVOLR, 50);
+    setFallback(OPT_AUD_FASTPATH, true);
     setFallback(OPT_DIAG_BOARD, false);
     setFallback(OPT_SRV_PORT, SERVER_SER, 8080);
     setFallback(OPT_SRV_PROTOCOL, SERVER_SER, SRVPROT_DEFAULT);

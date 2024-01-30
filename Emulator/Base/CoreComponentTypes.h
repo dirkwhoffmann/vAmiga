@@ -136,7 +136,7 @@ enum_long(OPT)
     OPT_AUDVOL,
     OPT_AUDVOLL,
     OPT_AUDVOLR,
-    // OPT_AUDIDLE,
+    OPT_AUD_FASTPATH,
 
     // Expansion boards
     OPT_DIAG_BOARD,
@@ -153,7 +153,7 @@ typedef OPT Option;
 struct OptionEnum : util::Reflection<OptionEnum, Option>
 {    
     static constexpr long minVal = 0;
-    static constexpr long maxVal = OPT_AUDVOLR;
+    static constexpr long maxVal = OPT_SRV_VERBOSE;
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "OPT"; }
@@ -259,6 +259,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_AUDVOL:                return "AUDVOL";
             case OPT_AUDVOLL:               return "AUDVOLL";
             case OPT_AUDVOLR:               return "AUDVOLR";
+            case OPT_AUD_FASTPATH:          return "AUD_FASTPATH";
 
             case OPT_DIAG_BOARD:            return "DIAG_BOARD";
 

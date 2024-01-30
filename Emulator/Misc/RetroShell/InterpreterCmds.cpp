@@ -866,6 +866,13 @@ Interpreter::initCommandShell(Command &root)
         amiga.configure(OPT_AUDPAN, 3, parseNum(argv));
     });
 
+    root.add({"paula", "audio", "set", "fastpath"}, { Arg::value },
+             "Enables or disables the fast path if no audio is playing",
+             [this](Arguments& argv, long value) {
+
+        amiga.configure(OPT_AUD_FASTPATH, parseBool(argv));
+    });
+
 
     //
     // Paula (Disk controller)

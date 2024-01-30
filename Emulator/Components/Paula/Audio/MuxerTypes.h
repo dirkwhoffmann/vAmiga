@@ -29,6 +29,9 @@ typedef struct
     // Channel volumes and pan factors
     i64 vol[4];
     i64 pan[4];
+
+    // Performance booster
+    bool idleFastPath;
 }
 MuxerConfig;
 

@@ -13,7 +13,7 @@ extension ConfigurationController {
 
         // Warp
         prfWarpMode.selectItem(withTag: config.warpMode)
-        // prfWarpBoot.integerValue = config.warpBoot
+        prfWarpBoot.integerValue = config.warpBoot
 
         // Collision detection
         prfClxSprSpr.state = config.clxSprSpr ? .on : .off
@@ -23,6 +23,7 @@ extension ConfigurationController {
         // Boosters
         prfCiaIdleSleep.state = config.ciaIdleSleep ? .on : .off
         prfFrameSkipping.state = config.frameSkipping > 0 ? .on : .off
+        prfAudioFastPath.state = config.audioFastPath ? .on : .off
     }
 
     //
@@ -79,4 +80,9 @@ extension ConfigurationController {
         refresh()
     }
 
+    @IBAction func prfAudioFastPathAction(_ sender: NSButton!) {
+
+        config.audioFastPath = sender.state == .on
+        refresh()
+    }
 }

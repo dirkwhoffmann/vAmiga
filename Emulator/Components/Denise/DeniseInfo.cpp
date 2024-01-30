@@ -59,6 +59,8 @@ Denise::_dump(Category category, std::ostream& os) const
         os << DeniseRevisionEnum::key(config.revision) << std::endl;
         os << tab("Viewport tracking");
         os << bol(config.viewportTracking) << std::endl;
+        os << tab("Frame skips in warp mode");
+        os << bol(config.frameSkipping) << std::endl;
         os << tab("Hidden bitplanes");
         os << hex(config.hiddenBitplanes) << std::endl;
         os << tab("Hidden sprites");
