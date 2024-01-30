@@ -727,7 +727,6 @@ extension DefaultsProxy {
         remove(.VIDEO_FORMAT)
         remove(.CPU_REVISION)
         remove(.CPU_OVERCLOCKING)
-        remove(.WARP_MODE)
         remove(.AGNUS_REVISION)
         remove(.DENISE_REVISION)
         remove(.CIA_REVISION)
@@ -747,7 +746,6 @@ extension Configuration {
         machineType = defaults.get(.VIDEO_FORMAT)
         cpuRev = defaults.get(.CPU_REVISION)
         cpuSpeed = defaults.get(.CPU_OVERCLOCKING)
-        warpMode = defaults.get(.WARP_MODE)
         agnusRev = defaults.get(.AGNUS_REVISION)
         deniseRev = defaults.get(.DENISE_REVISION)
         ciaRev = defaults.get(.CIA_REVISION)
@@ -766,7 +764,6 @@ extension Configuration {
         defaults.set(.VIDEO_FORMAT, machineType)
         defaults.set(.CPU_REVISION, cpuRev)
         defaults.set(.CPU_OVERCLOCKING, cpuSpeed)
-        defaults.set(.WARP_MODE, warpMode)
         defaults.set(.AGNUS_REVISION, agnusRev)
         defaults.set(.DENISE_REVISION, deniseRev)
         defaults.set(.CIA_REVISION, ciaRev)
@@ -998,6 +995,10 @@ extension DefaultsProxy {
         remove(.CIA_IDLE_SLEEP)
         remove(.FRAME_SKIPPING)
         remove(.AUD_FASTPATH)
+        remove(.SYNC_MODE)
+        remove(.VSYNC)
+        remove(.TIME_LAPSE)
+        remove(.TIME_SLICES)
     }
 }
 
@@ -1018,6 +1019,10 @@ extension Configuration {
         ciaIdleSleep = defaults.get(.CIA_IDLE_SLEEP) != 0
         frameSkipping = defaults.get(.FRAME_SKIPPING)
         audioFastPath = defaults.get(.AUD_FASTPATH) != 0
+        syncMode = defaults.get(.SYNC_MODE)
+        vsync = defaults.get(.VSYNC) != 0
+        timeLapse = defaults.get(.TIME_LAPSE)
+        timeSlices = defaults.get(.TIME_SLICES)
 
         amiga.resume()
     }
@@ -1037,6 +1042,10 @@ extension Configuration {
         defaults.set(.CIA_IDLE_SLEEP, ciaIdleSleep)
         defaults.set(.FRAME_SKIPPING, frameSkipping)
         defaults.set(.AUD_FASTPATH, audioFastPath)
+        defaults.set(.SYNC_MODE, syncMode)
+        defaults.set(.VSYNC, vsync)
+        defaults.set(.TIME_LAPSE, timeLapse)
+        defaults.set(.TIME_SLICES, timeSlices)
         defaults.save()
 
         amiga.resume()
@@ -1380,9 +1389,6 @@ extension Configuration {
         let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
-
-        defaults.set(.SYNC_MODE, syncMode)
-        defaults.set(.PROPOSED_FPS, proposedFps)
 
         saveColorUserDefaults()
         saveGeometryUserDefaults()

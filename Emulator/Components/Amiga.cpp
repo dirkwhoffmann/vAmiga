@@ -229,7 +229,9 @@ Amiga::resetConfig()
         OPT_WARP_BOOT,
         OPT_WARP_MODE,
         OPT_SYNC_MODE,
-        OPT_PROPOSED_FPS
+        OPT_VSYNC,
+        OPT_TIME_LAPSE,
+        OPT_TIME_SLICES
     };
 
     for (auto &option : options) {
@@ -258,9 +260,17 @@ Amiga::getConfigItem(Option option) const
 
             return config.syncMode;
 
-        case OPT_PROPOSED_FPS:
+        case OPT_VSYNC:
 
-            return config.proposedFps;
+            return config.vsync;
+
+        case OPT_TIME_LAPSE:
+
+            return config.timeLapse;
+
+        case OPT_TIME_SLICES:
+
+            return config.timeSlices;
 
         case OPT_AGNUS_REVISION:
         case OPT_SLOW_RAM_MIRROR:
@@ -474,13 +484,27 @@ Amiga::setConfigItem(Option option, i64 value)
             config.syncMode = SyncMode(value);
             return;
 
-        case OPT_PROPOSED_FPS:
+        case OPT_VSYNC:
 
-            if (value < 25 || value > 120) {
-                throw VAError(ERROR_OPT_INVARG, "25...120");
+            config.vsync = bool(value);
+            return;
+
+        case OPT_TIME_LAPSE:
+
+            if (value < 50 || value > 200) {
+                throw VAError(ERROR_OPT_INVARG, "50...200");
             }
 
-            config.proposedFps = isize(value);
+            config.timeLapse = isize(value);
+            return;
+
+        case OPT_TIME_SLICES:
+
+            if (value < 1 || value > 4) {
+                throw VAError(ERROR_OPT_INVARG, "1...4");
+            }
+
+            config.timeSlices = isize(value);
             return;
 
         default:
@@ -523,7 +547,9 @@ Amiga::configure(Option option, i64 value)
         case OPT_WARP_BOOT:
         case OPT_WARP_MODE:
         case OPT_SYNC_MODE:
-        case OPT_PROPOSED_FPS:
+        case OPT_VSYNC:
+        case OPT_TIME_LAPSE:
+        case OPT_TIME_SLICES:
 
             setConfigItem(option, value);
             break;
@@ -1346,7 +1372,7 @@ Amiga::refreshRate() const
 isize
 Amiga::slicesPerFrame() const
 {
-    return 1; // config.timeSlices;
+    return config.timeSlices;
 }
 
 util::Time

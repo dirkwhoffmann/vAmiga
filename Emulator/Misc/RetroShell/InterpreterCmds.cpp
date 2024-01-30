@@ -239,6 +239,27 @@ Interpreter::initCommandShell(Command &root)
         amiga.configure(OPT_SYNC_MODE, parseEnum <SyncModeEnum> (argv));
     });
 
+    root.add({"amiga", "set", "vsync"}, { Arg::onoff },
+             "Enables or disables VSYNC",
+             [this](Arguments& argv, long value) {
+
+        amiga.configure(OPT_VSYNC, parseBool(argv));
+    });
+
+    root.add({"amiga", "set", "timelapse"}, { Arg::value },
+             "Increases or decreases the native frame rate",
+             [this](Arguments& argv, long value) {
+
+        amiga.configure(OPT_TIME_LAPSE, parseNum(argv));
+    });
+
+    root.add({"amiga", "set", "timeslices"}, { Arg::value },
+             "Sets how often the thread starts and stops per frame",
+             [this](Arguments& argv, long value) {
+
+        amiga.configure(OPT_TIME_SLICES, parseNum(argv));
+    });
+
     root.add({"amiga", "power"}, { Arg::onoff },
              "Switches the Amiga on or off",
              [this](Arguments& argv, long value) {

@@ -226,8 +226,12 @@ private:
         worker
 
         << config.type
+        << config.warpMode
+        << config.warpBoot
         << config.syncMode
-        << config.proposedFps;
+        << config.vsync
+        << config.timeLapse
+        << config.timeSlices;
     }
 
 public:

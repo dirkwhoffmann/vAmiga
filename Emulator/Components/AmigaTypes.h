@@ -318,10 +318,12 @@ struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
 typedef struct
 {
     VideoFormat type;
-    isize warpBoot;
     WarpMode warpMode;
+    isize warpBoot;
     SyncMode syncMode;
-    isize proposedFps;
+    bool vsync;
+    isize timeLapse;
+    isize timeSlices;
 }
 AmigaConfig;
 

@@ -428,8 +428,8 @@
             filePath = "Emulator/Base/CoreComponentTypes.h"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "271"
-            endingLineNumber = "271"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
             landmarkName = "key(value)"
             landmarkType = "7">
             <Locations>
@@ -492,6 +492,21 @@
                   startingLineNumber = "271"
                   endingLineNumber = "271"
                   offsetFromSymbolStart = "1428">
+               </Location>
+               <Location
+                  uuid = "0930471A-4783-4DCC-BA0A-DA30FA7DC4E0 - d3adbd52d095b3fd"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "OptionEnum::key(long)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Emulator/Base/CoreComponentTypes.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "275"
+                  endingLineNumber = "275"
+                  offsetFromSymbolStart = "1460">
                </Location>
             </Locations>
          </BreakpointContent>

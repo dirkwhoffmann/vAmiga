@@ -296,6 +296,22 @@ class Configuration {
         get { return amiga.getConfig(.AUD_FASTPATH) != 0 }
         set { amiga.configure(.AUD_FASTPATH, enable: newValue) }
     }
+    var syncMode: Int {
+        get { return amiga.getConfig(.SYNC_MODE) }
+        set { amiga.configure(.SYNC_MODE, value: newValue) }
+    }
+    var vsync: Bool {
+        get { return amiga.getConfig(.VSYNC) != 0 }
+        set { amiga.configure(.VSYNC, enable: newValue) }
+    }
+    var timeLapse: Int {
+        get { return amiga.getConfig(.TIME_LAPSE) }
+        set { amiga.configure(.TIME_LAPSE, value: newValue) }
+    }
+    var timeSlices: Int {
+        get { return amiga.getConfig(.TIME_SLICES) }
+        set { amiga.configure(.TIME_SLICES, value: newValue) }
+    }
 
     //
     // Compatibility
@@ -454,14 +470,6 @@ class Configuration {
     // Video settings
     //
 
-    var syncMode: Int {
-        get { return amiga.getConfig(.SYNC_MODE) }
-        set { amiga.configure(.SYNC_MODE, value: newValue) }
-    }
-    var proposedFps: Int {
-        get { return amiga.getConfig(.PROPOSED_FPS) }
-        set { amiga.configure(.PROPOSED_FPS, value: newValue) }
-    }
     var palette: Int {
         get { return amiga.getConfig(.PALETTE) }
         set { amiga.configure(.PALETTE, value: newValue) }

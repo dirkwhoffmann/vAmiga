@@ -35,7 +35,9 @@ Defaults::Defaults()
     setFallback(OPT_WARP_BOOT, 0);
     setFallback(OPT_WARP_MODE, WARP_NEVER);
     setFallback(OPT_SYNC_MODE, SYNC_ADAPTIVE);
-    setFallback(OPT_PROPOSED_FPS, 60);
+    setFallback(OPT_VSYNC, false);
+    setFallback(OPT_TIME_LAPSE, 100);
+    setFallback(OPT_TIME_SLICES, 1);
     setFallback(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
     setFallback(OPT_SLOW_RAM_MIRROR, true);
     setFallback(OPT_PTR_DROPS, true);
