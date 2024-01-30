@@ -239,14 +239,6 @@ Interpreter::initCommandShell(Command &root)
         amiga.configure(OPT_SYNC_MODE, parseEnum <SyncModeEnum> (argv));
     });
 
-    root.add({"amiga", "set", "fps"}, { Arg::value },
-             "Sets the frames per seconds",
-             [this](Arguments& argv, long value) {
-
-        amiga.configure(OPT_PROPOSED_FPS, parseNum(argv));
-        amiga.configure(OPT_SYNC_MODE, SYNC_FIXED_FPS);
-    });
-
     root.add({"amiga", "power"}, { Arg::onoff },
              "Switches the Amiga on or off",
              [this](Arguments& argv, long value) {

@@ -138,6 +138,7 @@ extern debugflag MIMIC_UAE;
 
 // Runloop
 extern debugflag RUN_DEBUG;
+extern debugflag TIM_DEBUG;
 extern debugflag WARP_DEBUG;
 extern debugflag QUEUE_DEBUG;
 extern debugflag SNP_DEBUG;

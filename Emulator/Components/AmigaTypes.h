@@ -11,6 +11,7 @@
 
 #include "Aliases.h"
 #include "Reflection.h"
+#include "ThreadTypes.h"
 
 //
 // Enumerations
@@ -66,35 +67,6 @@ struct WarpModeEnum : util::Reflection<WarpModeEnum, WarpMode>
             case WARP_AUTO:     return "WARP_AUTO";
             case WARP_NEVER:    return "WARP_NEVER";
             case WARP_ALWAYS:   return "WARP_ALWAYS";
-        }
-        return "???";
-    }
-};
-#endif
-
-enum_long(SYNC_MODE)
-{
-    SYNC_NATIVE_FPS,
-    SYNC_FIXED_FPS,
-    SYNC_VSYNC
-};
-typedef SYNC_MODE SyncMode;
-
-#ifdef __cplusplus
-struct SyncModeEnum : util::Reflection<SyncModeEnum, SyncMode>
-{
-    static constexpr long minVal = 0;
-    static constexpr long maxVal = SYNC_VSYNC;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
-
-    static const char *prefix() { return "SYNC"; }
-    static const char *key(SyncMode value)
-    {
-        switch (value) {
-
-            case SYNC_NATIVE_FPS:   return "NATIVE_FPS";
-            case SYNC_FIXED_FPS:    return "FIXED_FPS";
-            case SYNC_VSYNC:        return "VSYNC";
         }
         return "???";
     }

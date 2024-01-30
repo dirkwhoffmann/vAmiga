@@ -249,13 +249,14 @@ private:
 
 private:
 
-    ThreadMode getThreadMode() const override;
+    SyncMode getSyncMode() const override;
     void execute() override;
 
 public:
 
     double refreshRate() const override;
-    isize missingFrames(util::Time base) const override;
+    isize slicesPerFrame() const override;
+    util::Time wakeupPeriod() const override;
 
     i64 masterClockFrequency() const; // TODO: MOVE TO ANOTHER SECTION (NOT A THREAD METHOD)
 

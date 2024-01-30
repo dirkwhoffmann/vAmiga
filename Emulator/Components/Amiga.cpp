@@ -987,8 +987,7 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << tab("Warp boot");
         os << dec(config.warpBoot) << " seconds" << std::endl;
         os << tab("Sync mode");
-        os << SyncModeEnum::key(config.syncMode);
-        if (config.syncMode == SYNC_FIXED_FPS) os << " (" << config.proposedFps << " fps)";
+        os << SyncModeEnum::key(config.syncMode) << std::endl;
         os << std::endl;
     }
 
@@ -1012,8 +1011,8 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
         os << tab("Thread state");
         os << ExecutionStateEnum::key(state) << std::endl;
-        os << tab("Thread mode");
-        os << ThreadModeEnum::key(getThreadMode()) << std::endl;
+        os << tab("Sync mode");
+        os << SyncModeEnum::key(getSyncMode()) << std::endl;
         os << std::endl;
 
         os << tab("Frame");
@@ -1216,10 +1215,10 @@ Amiga::save(u8 *buffer)
     return result;
 }
 
-ThreadMode
-Amiga::getThreadMode() const
+SyncMode
+Amiga::getSyncMode() const
 {
-    return config.syncMode == SYNC_VSYNC ? THREAD_PULSED : THREAD_ADAPTIVE;
+    return config.syncMode;
 }
 
 void
@@ -1330,6 +1329,8 @@ Amiga::execute()
 double
 Amiga::refreshRate() const
 {
+    return config.type == PAL ? 50.0 : 60.0;
+    /*
     switch (config.syncMode) {
 
         case SYNC_NATIVE_FPS:   return config.type == PAL ? 50.0 : 60.0;
@@ -1339,8 +1340,22 @@ Amiga::refreshRate() const
         default:
             fatalError;
     }
+    */
 }
 
+isize
+Amiga::slicesPerFrame() const
+{
+    return 1; // config.timeSlices;
+}
+
+util::Time
+Amiga::wakeupPeriod() const
+{
+    return util::Time(i64(1000000000.0 / host.getHostRefreshRate()));
+}
+
+/*
 isize
 Amiga::missingFrames(util::Time base) const
 {
@@ -1353,6 +1368,7 @@ Amiga::missingFrames(util::Time base) const
     // Compute the number of missing frames
     return isize(targetFrame - agnus.pos.frame);
 }
+*/
 
 i64
 Amiga::masterClockFrequency() const
@@ -1663,6 +1679,7 @@ Amiga::setDebugVariable(const string &name, int val)
     else if (name == "MIMIC_UAE")        MIMIC_UAE       = val;
 
     else if (name == "RUN_DEBUG")        RUN_DEBUG       = val;
+    else if (name == "TIM_DEBUG")        TIM_DEBUG       = val;
     else if (name == "WARP_DEBUG")       WARP_DEBUG      = val;
     else if (name == "QUEUE_DEBUG")      QUEUE_DEBUG     = val;
     else if (name == "SNP_DEBUG")        SNP_DEBUG       = val;
