@@ -1245,7 +1245,7 @@ Denise::hsyncHandler(isize vpos)
     updateBorderBuffer();
 
     // Check if we are below the VBLANK area
-    if (vpos >= 26) {
+    if (vpos >= 26 && !frameSkips) {
 
         // Translate bitplane data to color register indices
         translate();
@@ -1316,6 +1316,15 @@ Denise::eofHandler()
 
     pixelEngine.eofHandler();
     debugger.eofHandler();
+
+    // Run the frame skip logic (OPT_WARP_FRAMES)
+    if (frameSkips) frameSkips--;
+
+    if (frameSkips == 0) {
+
+        pixelEngine.swapBuffers();
+        frameSkips = amiga.isWarping() ? 16 : 0;
+    }
 }
 
 template void Denise::drawOdd<false>(Pixel offset);

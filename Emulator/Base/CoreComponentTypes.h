@@ -33,7 +33,8 @@ enum_long(OPT)
     // Denise
     OPT_DENISE_REVISION,
     OPT_VIEWPORT_TRACKING,
-    
+    // OPT_FRAME_SKIPPING,
+
     // Pixel engine
     OPT_PALETTE,
     OPT_BRIGHTNESS,
@@ -113,7 +114,8 @@ enum_long(OPT)
     OPT_CIA_REVISION,
     OPT_TODBUG,
     OPT_ECLOCK_SYNCING,
-    
+    // OPT_CIAIDLE,
+
     // Keyboard
     OPT_ACCURATE_KEYBOARD,
     
@@ -134,7 +136,8 @@ enum_long(OPT)
     OPT_AUDVOL,
     OPT_AUDVOLL,
     OPT_AUDVOLR,
-    
+    // OPT_AUDIDLE,
+
     // Expansion boards
     OPT_DIAG_BOARD,
     

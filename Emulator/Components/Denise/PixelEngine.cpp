@@ -350,7 +350,6 @@ PixelEngine::vsyncHandler()
 void
 PixelEngine::eofHandler()
 {
-    swapBuffers();
     dmaDebugger.eofHandler();
 }
 

@@ -54,6 +54,8 @@ public:
     // Denise has been executed up to this clock cycle
     Cycle clock = 0;
 
+    // Frame skip counter (activated in warp mode)
+    isize frameSkips = 0;
 
     //
     // Registers
