@@ -113,6 +113,7 @@ Defaults::Defaults()
     setFallback(OPT_CIA_REVISION, CIA_MOS_8520_DIP);
     setFallback(OPT_TODBUG, true);
     setFallback(OPT_ECLOCK_SYNCING, true);
+    setFallback(OPT_CIA_IDLE_SLEEP, true);
     setFallback(OPT_ACCURATE_KEYBOARD, true);
     setFallback(OPT_PULLUP_RESISTORS, true);
     setFallback(OPT_SHAKE_DETECTION, true);

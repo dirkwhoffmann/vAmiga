@@ -472,8 +472,17 @@ Interpreter::initCommandShell(Command &root)
             amiga.configure(OPT_ECLOCK_SYNCING, value, parsed);
 
         }, i);
+
+        root.add({cia, "set", "idling"}, { Arg::boolean },
+                 "Turns idle-logic on or off",
+                 [this](Arguments& argv, long value) {
+
+            auto parsed = parseBool(argv);
+            amiga.configure(OPT_CIA_IDLE_SLEEP, value, parsed);
+
+        }, i);
     }
-    
+
     
     //
     // Agnus

@@ -191,7 +191,6 @@ extern debugflag INTREG_DEBUG;
 extern debugflag INT_DEBUG;
 
 // CIAs
-extern debugflag CIA_ON_STEROIDS;
 extern debugflag CIAREG_DEBUG;
 extern debugflag CIASER_DEBUG;
 extern debugflag CIA_DEBUG;

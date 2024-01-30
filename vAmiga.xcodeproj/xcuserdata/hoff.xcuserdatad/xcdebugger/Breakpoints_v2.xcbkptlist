@@ -428,10 +428,42 @@
             filePath = "Emulator/Base/CoreComponentTypes.h"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "268"
-            endingLineNumber = "268"
+            startingLineNumber = "269"
+            endingLineNumber = "269"
             landmarkName = "key(value)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "0930471A-4783-4DCC-BA0A-DA30FA7DC4E0 - d3adbd52d095b2da"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "OptionEnum::key(long)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Emulator/Base/CoreComponentTypes.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "268"
+                  endingLineNumber = "268"
+                  offsetFromSymbolStart = "1380">
+               </Location>
+               <Location
+                  uuid = "0930471A-4783-4DCC-BA0A-DA30FA7DC4E0 - d3adbd52d095b2bb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "OptionEnum::key(long)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Emulator/Base/CoreComponentTypes.h"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "269"
+                  endingLineNumber = "269"
+                  offsetFromSymbolStart = "1396">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

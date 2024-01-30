@@ -342,6 +342,7 @@ Amiga::getConfigItem(Option option) const
         case OPT_CIA_REVISION:
         case OPT_TODBUG:
         case OPT_ECLOCK_SYNCING:
+        case OPT_CIA_IDLE_SLEEP:
 
             return ciaA.getConfigItem(option);
 
@@ -658,6 +659,7 @@ Amiga::configure(Option option, i64 value)
         case OPT_CIA_REVISION:
         case OPT_TODBUG:
         case OPT_ECLOCK_SYNCING:
+        case OPT_CIA_IDLE_SLEEP:
 
             ciaA.setConfigItem(option, value);
             ciaB.setConfigItem(option, value);
@@ -780,7 +782,8 @@ Amiga::configure(Option option, long id, i64 value)
         case OPT_CIA_REVISION:
         case OPT_TODBUG:
         case OPT_ECLOCK_SYNCING:
-
+        case OPT_CIA_IDLE_SLEEP:
+            
             assert(id == 0 || id == 1);
             if (id == 0) ciaA.setConfigItem(option, value);
             if (id == 1) ciaB.setConfigItem(option, value);
@@ -1700,7 +1703,6 @@ Amiga::setDebugVariable(const string &name, int val)
     else if (name == "INTREG_DEBUG")     INTREG_DEBUG    = val;
     else if (name == "INT_DEBUG")        INT_DEBUG       = val;
 
-    else if (name == "CIA_ON_STEROIDS")  CIA_ON_STEROIDS = val;
     else if (name == "CIAREG_DEBUG")     CIAREG_DEBUG    = val;
     else if (name == "CIASER_DEBUG")     CIASER_DEBUG    = val;
     else if (name == "CIA_DEBUG")        CIA_DEBUG       = val;

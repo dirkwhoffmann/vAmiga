@@ -73,7 +73,8 @@ CIA::resetConfig()
         
         OPT_CIA_REVISION,
         OPT_TODBUG,
-        OPT_ECLOCK_SYNCING
+        OPT_ECLOCK_SYNCING,
+        OPT_CIA_IDLE_SLEEP
     };
     
     for (auto &option : options) {
@@ -89,6 +90,7 @@ CIA::getConfigItem(Option option) const
         case OPT_CIA_REVISION:   return config.revision;
         case OPT_TODBUG:         return config.todBug;
         case OPT_ECLOCK_SYNCING: return config.eClockSyncing;
+        case OPT_CIA_IDLE_SLEEP: return config.idleSleep;
 
         default:
             fatalError;
@@ -117,6 +119,11 @@ CIA::setConfigItem(Option option, i64 value)
         case OPT_ECLOCK_SYNCING:
             
             config.eClockSyncing = value;
+            return;
+            
+        case OPT_CIA_IDLE_SLEEP:
+
+            config.idleSleep = value;
             return;
             
         default:
@@ -179,6 +186,8 @@ CIA::_dump(Category category, std::ostream& os) const
         os << bol(config.todBug) << std::endl;
         os << tab("Sync with E-clock");
         os << bol(config.eClockSyncing) << std::endl;
+        os << tab("Sleep when idle");
+        os << bol(config.idleSleep) << std::endl;
     }
 
     if (category == Category::Registers) {
@@ -671,7 +680,7 @@ CIA::executeOneCycle()
     this->delay = delay;
 
     // Sleep if threshold is reached
-    if (tiredness > 8 && !CIA_ON_STEROIDS) {
+    if (tiredness > 8 && config.idleSleep) {
         sleep();
         scheduleWakeUp();
     } else {

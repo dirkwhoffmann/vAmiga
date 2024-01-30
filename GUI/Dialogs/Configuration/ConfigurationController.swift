@@ -61,9 +61,6 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var csCpuInfo1: NSTextField!
     @IBOutlet weak var csCpuInfo2: NSTextField!
 
-    // Warp
-    @IBOutlet weak var csWarpMode: NSPopUpButton!
-
     // Agnus
     @IBOutlet weak var csAgnusRevision: NSPopUpButton!
     @IBOutlet weak var csMachineType: NSPopUpButton!
@@ -107,10 +104,6 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var memRamInitPattern: NSPopUpButton!
     @IBOutlet weak var memBankMap: NSPopUpButton!
     @IBOutlet weak var memUnmappingType: NSPopUpButton!
-    
-    // Chipset features
-    @IBOutlet weak var memSlowRamMirror: NSButton!
-    @IBOutlet weak var memSlowRamDelay: NSButton!
 
     // Warning
     @IBOutlet weak var memWarnImage: NSButton!
@@ -168,13 +161,24 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var perPowerButton: NSButton!
 
     //
-    // Compatibility
+    // Performance
     //
 
+    // Warp
+    @IBOutlet weak var prfWarpMode: NSPopUpButton!
+    @IBOutlet weak var prfWarpBoot: NSTextField!
+
     // Graphics
-    @IBOutlet weak var compClxSprSpr: NSButton!
-    @IBOutlet weak var compClxSprPlf: NSButton!
-    @IBOutlet weak var compClxPlfPlf: NSButton!
+    @IBOutlet weak var prfClxSprSpr: NSButton!
+    @IBOutlet weak var prfClxSprPlf: NSButton!
+    @IBOutlet weak var prfClxPlfPlf: NSButton!
+
+    // Boosters
+    @IBOutlet weak var prfCiaIdleSleep: NSButton!
+
+    //
+    // Compatibility
+    //
 
     // Blitter
     @IBOutlet weak var compBltAccuracy: NSSlider!
@@ -182,6 +186,9 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var compBltLevel1: NSTextField!
 
     // Chipset features
+    // Chipset features
+    @IBOutlet weak var compSlowRamMirror: NSButton!
+    @IBOutlet weak var compSlowRamDelay: NSButton!
     @IBOutlet weak var compTodBug: NSButton!
     @IBOutlet weak var compPtrDrops: NSButton!
 

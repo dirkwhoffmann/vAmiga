@@ -288,6 +288,10 @@ class Configuration {
         get { return amiga.getConfig(.ECLOCK_SYNCING) != 0 }
         set { amiga.configure(.ECLOCK_SYNCING, enable: newValue) }
     }
+    var ciaIdleSleep: Bool {
+        get { return amiga.getConfig(.CIA_IDLE_SLEEP) != 0 }
+        set { amiga.configure(.CIA_IDLE_SLEEP, enable: newValue) }
+    }
     var slowRamDelay: Bool {
         get { return amiga.getConfig(.SLOW_RAM_DELAY) != 0 }
         set { amiga.configure(.SLOW_RAM_DELAY, enable: newValue) }

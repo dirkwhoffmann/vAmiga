@@ -110,6 +110,7 @@ typedef struct
     CIARevision revision;
     bool todBug;
     bool eClockSyncing;
+    bool idleSleep;
 }
 CIAConfig;
 

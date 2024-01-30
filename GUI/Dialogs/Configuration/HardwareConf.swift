@@ -72,9 +72,6 @@ extension ConfigurationController {
             csCpuInfo2.stringValue = ""
         }
 
-        // Warp
-        csWarpMode.selectItem(withTag: config.warpMode)
-
         // Agnus
         csMachineType.selectItem(withTag: config.machineType)
         csAgnusRevision.selectItem(withTag: config.agnusRev)
@@ -189,12 +186,6 @@ extension ConfigurationController {
         refresh()
     }
 
-    @IBAction func csWarpModeAction(_ sender: NSPopUpButton!) {
-
-        config.warpMode = sender.selectedTag()
-        refresh()
-    }
-
     @IBAction func csAgnusRevAction(_ sender: NSPopUpButton!) {
 
         config.agnusRev = sender.selectedTag()
@@ -304,9 +295,9 @@ extension ConfigurationController {
         memFactorySettingsPopup.isEnabled = poweredOff
 
         // Chipset features
-        memSlowRamDelay.state = config.slowRamDelay ? .on : .off
-        memSlowRamMirror.state = config.slowRamMirror ? .on : .off
-        memSlowRamMirror.isEnabled = amiga.agnus.isECS
+        compSlowRamDelay.state = config.slowRamDelay ? .on : .off
+        compSlowRamMirror.state = config.slowRamMirror ? .on : .off
+        compSlowRamMirror.isEnabled = amiga.agnus.isECS
 
         // Warning
         let badAgnus = amiga.agnus.chipRamLimit < config.chipRam
@@ -360,18 +351,6 @@ extension ConfigurationController {
     @IBAction func memRamInitPatternAction(_ sender: NSPopUpButton!) {
 
         config.ramInitPattern = sender.selectedTag()
-        refresh()
-    }
-
-    @IBAction func memSlowRamDelayAction(_ sender: NSButton!) {
-
-        config.slowRamDelay = sender.state == .on
-        refresh()
-    }
-
-    @IBAction func memSlowRamMirrorAction(_ sender: NSButton!) {
-
-        config.slowRamMirror = sender.state == .on
         refresh()
     }
 

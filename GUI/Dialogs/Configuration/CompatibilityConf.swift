@@ -11,11 +11,6 @@ extension ConfigurationController {
 
     func refreshCompatibilityTab() {
 
-        // Graphics
-        compClxSprSpr.state = config.clxSprSpr ? .on : .off
-        compClxSprPlf.state = config.clxSprPlf ? .on : .off
-        compClxPlfPlf.state = config.clxPlfPlf ? .on : .off
-
         // Blitter
         let level = config.blitterAccuracy
         compBltAccuracy.integerValue = level
@@ -43,30 +38,24 @@ extension ConfigurationController {
         compPowerButton.isHidden = !bootable
     }
 
-    @IBAction func compClxSprSprAction(_ sender: NSButton!) {
-
-        config.clxSprSpr = sender.state == .on
-        refresh()
-    }
-
-    @IBAction func compClxSprPlfAction(_ sender: NSButton!) {
-
-        config.clxSprPlf = sender.state == .on
-        refresh()
-    }
-
-    @IBAction func compClxPlfPlfAction(_ sender: NSButton!) {
-
-        config.clxPlfPlf = sender.state == .on
-        refresh()
-    }
-
     @IBAction func compBltAccuracyAction(_ sender: NSSlider!) {
 
         config.blitterAccuracy = sender.integerValue
         refresh()
     }
         
+    @IBAction func compSlowRamDelayAction(_ sender: NSButton!) {
+
+        config.slowRamDelay = sender.state == .on
+        refresh()
+    }
+
+    @IBAction func compSlowRamMirrorAction(_ sender: NSButton!) {
+
+        config.slowRamMirror = sender.state == .on
+        refresh()
+    }
+
     @IBAction func compTodBugAction(_ sender: NSButton!) {
 
         config.todBug = sender.state == .on
