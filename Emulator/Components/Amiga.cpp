@@ -1028,7 +1028,7 @@ Amiga::nativeMasterClockFrequency() const
 double
 Amiga::refreshRate() const
 {
-    if (config.syncMode == SYNC_ADAPTIVE && config.vsync) {
+    if (config.syncMode == SYNC_PULSED && config.vsync) {
 
         return host.getHostRefreshRate();
 
@@ -1400,7 +1400,7 @@ Amiga::execute()
 util::Time
 Amiga::sliceDelay() const
 {
-    return util::Time::seconds(100.0) / nativeRefreshRate() / config.timeLapse;
+    return util::Time::seconds(100.0) / nativeRefreshRate() / config.timeLapse / config.timeSlices;
 }
 
 isize

@@ -25,20 +25,6 @@ Thread::~Thread()
     join();
 }
 
-/*
-util::Time
-Thread::frameDuration() const
-{
-    return util::Time(i64(1000000000.0 / refreshRate()));
-}
-
-util::Time
-Thread::sliceDuration() const
-{
-    return util::Time(i64(1000000000.0 / refreshRate() / slicesPerFrame()));
-}
-*/
-
 void
 Thread::resync()
 {
@@ -137,12 +123,6 @@ Thread::sleep<SYNC_PULSED>()
     }
 }
 
-template <> void
-Thread::sleep<SYNC_ADAPTIVE>()
-{
-    sleep<SYNC_PULSED>();
-}
-
 void
 Thread::main()
 {
@@ -158,7 +138,6 @@ Thread::main()
 
                 case SYNC_PERIODIC:   execute<SYNC_PERIODIC>(); break;
                 case SYNC_PULSED:     execute<SYNC_PULSED>(); break;
-                case SYNC_ADAPTIVE:   execute<SYNC_ADAPTIVE>(); break;
             }
         }
 
@@ -168,7 +147,6 @@ Thread::main()
 
                 case SYNC_PERIODIC:   sleep<SYNC_PERIODIC>(); break;
                 case SYNC_PULSED:     sleep<SYNC_PULSED>(); break;
-                case SYNC_ADAPTIVE:   sleep<SYNC_ADAPTIVE>(); break;
             }
         }
         

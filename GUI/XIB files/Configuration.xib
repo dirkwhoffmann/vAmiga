@@ -1980,7 +1980,7 @@ DQ
                                                         <menuItem title="Periodic" state="on" id="dOb-Lf-bhl">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Pulsed" tag="2" id="j7u-p7-u7V">
+                                                        <menuItem title="Pulsed" tag="1" id="j7u-p7-u7V">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>

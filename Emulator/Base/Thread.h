@@ -16,10 +16,9 @@
 
 namespace vamiga {
 
-/* This class manages the emulator thread that runs side by side with the GUI.
- * The thread exists during the lifetime of the emulator, but may not run the
- * emulator all the time. The exact behavior is controlled by the internal
- * state. 
+/* This class manages the emulator thread that runs alongside the GUI. The
+ * thread exists during the emulator's lifetime but, depending on the internal
+ * state may not always run the emulator.
  *
  * 1. Thread states:
  *
@@ -80,28 +79,27 @@ namespace vamiga {
  * ------------------------------------------------------------------------
  * halt()     | --        | halted    | _halt()
  *
- * When an instance of the Thread class is created, a new thread is started
- * which executes the thread's main() function. This function executes
- * a loop which periodically calls function execute(). After each iteration,
- * the thread is put to sleep to synchronize timing.
+ * Inside the main() function, the thread executes an infinite loop that
+ * periodically calls function execute(). After each iteration, the thread is
+ * put to sleep to synchronize timing.
  *
  * 2. Suspend / Resume:
  *
  * The Thread class provides a suspend-resume mechanism for pausing the thread
- * temporarily. This functionality is utilized frequently by the GUI to carry
- * out atomic operations that cannot be performed while the emulator is running.
- * To pause the emulator temporarily, the critical code section can be embedded
- * in a suspend/resume block like this:
+ * temporarily. The GUI utilizes this functionality to carry out atomic
+ * operations that must not be performed while the emulator runs. To pause the
+ * emulator temporarily, critical code sections can be embedded in a
+ * suspend/resume block like so:
  *
  *       suspend();
  *       do something with the internal state;
  *       resume();
  *
- * It it safe to nest multiple suspend/resume blocks, but it is essential
- * that each call to suspend() is followed by a call to resume(). As a result,
- * the critical code section must not be exited in the middle, e.g., by
- * throwing an exception. It is therefore recommended to use the SUSPENDED
- * macro which is exit-safe. It is used in the following way:
+ * It is safe to nest multiple suspend/resume blocks, but it is essential that
+ * each call to suspend() is followed by a call to resume(). As a result, the
+ * critical code section must not be exited in the middle, e.g., by throwing an
+ * exception. It is therefore recommended to use the exit-safe SUSPENDED macro.
+ * It is used in the following way:
  *
  *    {  SUSPENDED
  *
@@ -111,58 +109,47 @@ namespace vamiga {
  *
  * 3. Synchronization:
  *
- * The Thread class is also responsible for timing synchronization. I.e., it
- * has to ensure that the proper amount of frames are executed per second.
- * Three different synchronization modes are supported:
+ * The Thread class is responsible for timing synchronization. I.e., it has to
+ * ensure that the proper number of frames is executed per second. Two
+ * synchronization modes are supported:
  *
  * - Periodic:
  *
- *   In periodic mode the thread puts itself to sleep and utilizes a timer to
- *   schedule a wakeup call. In this mode, no further action has to be taken
- *   by the GUI. This method had been the default mode used by earlier versions
- *   of the emulator.
+ *   In periodic mode, the thread puts itself to sleep and utilizes a timer to
+ *   schedule a wakeup call. The GUI does not have to take further action. This
+ *   method was the default mode used by earlier versions of the emulator.
  *
  * - Pulsed:
  *
- *   In pulsed mode, the thread waits for an external wake-up signal that has
- *   to be sent by the GUI. When the wake-up signal is received, a single frame
- *   is computed. The emulator uses this mode to implement VSYNC.
- *
- * - Adaptive:
- *
- *   In adaptive mode, the thread waits for an external wake-up signal just as
- *   it does in pulsed mode. When the wake-up signal comes in, the thread
- *   computes the number of missing frames based on the current time and the
- *   time the thread had been lauchen. After that, it executes all missing
- *   frames or resynchronizes if the number of missing frames is way off.
- *
- * 4. Time slicing:
+ *   In pulsed mode, the thread waits for an external wakeup signal the GUI is
+ *   supposed to send after each VSYNC tick. When the signal is received, the
+ *   thread calls missingSlices(), which has to be provided by the subclass.
+ *   This function tells the thread the number of time slices it needs to
+ *   compute.
  *
  * The number of time slices per frame controls the size of a single
- * computation chunk. Per default, the emulator thread computes an entire frame
- * in a single chunk. That is, it computes a frame, sleeps, computes a frame,
- * sleeps, and so on. A frame can be time-sliced to make the emulator more
- * responsive and let it react faster to external events such as joystick
- * movements. For example, if two-time slices are chosen per frame, the thread
+ * computation chunk. Per default, the emulator computes an entire frame in a
+ * single chunk. That is, it computes a frame, sleeps, computes a frame, sleeps,
+ * and so on. A frame can be time-sliced to make the emulator more responsive
+ * and let it react faster to external events such as joystick movements. For
+ * example, if the number of time slices per frame is set to two, the thread
  * computes the first half of the current frame, sleeps, computes the second
- * half of the current frame, sleeps, and so on. Note that increasing the
- * number of time slices can increase CPU load and jitter, even in pulsed mode.
- * Jitter may increase because time slices are distributed equally between two
- * wake-up events. Hence, the later chunks will be computed close to the next
- * wake-up event and may, therefore, interfere with the VSYNC event of the host
- * computer.
+ * half of the current frame, sleeps, and so on. Note that an increased number
+ * of time slices increases CPU load and jitter, even in pulsed mode. Jitter
+ * may increase because time slices are distributed equally between two wake-up
+ * events. Hence, later chunks are computed closer to the next wake-up event
+ * and may, therefore, interfere with the VSYNC event of the host computer.
  *
- * 5. Warp mode:
+ * 4. Warp mode:
  *
- * To speed up emulation (e.g., during disk accesses), the emulator may be put
- * into warp mode. In this mode, timing synchronization is disabled causing the
- * emulator to run as fast as possible.
- *
- * Similar to warp mode, the emulator may be put into track mode. This mode is
- * enabled when the GUI debugger is opend and disabled when the debugger is
- * closed. In track mode, several time-consuming tasks are performed that are
- * usually left out. E.g., the CPU tracks all executed instructions and stores
- * the recorded information in a trace buffer.
+ * Emulation can be sped up by activating warp mode (e.g., during disk
+ * accesses). In this mode, timing synchronization is disabled, letting the
+ * emulator run as fast as possible. Similar to warp mode, the emulator can
+ * enter track mode. This mode is enabled when the user opens the GUI debugger
+ * and disabled when the debugger is closed. In track mode, several
+ * time-consuming tasks are performed that are usually left out. E.g., the CPU
+ * tracks all executed instructions and stores the recorded information in a
+ * trace buffer.
  */
 
 class Thread : public CoreComponent, util::Wakeable {
@@ -233,20 +220,6 @@ private:
 
     // Number of overdue time slices (used in pulsed sync mode)
     virtual isize missingSlices() const = 0;
-
-    // Target frame rate of this thread (provided by the subclass)
-    /*
-    [[deprecated]] virtual double refreshRate() const = 0;
-
-    // Number of thread syncs per frame (provided by the subclass)
-    [[deprecated]] virtual isize slicesPerFrame() const = 0;
-
-    // Time span between two wakeup calls (provided by the subclass)
-    [[deprecated]] virtual util::Time wakeupPeriod() const = 0;
-
-    // Computes the time span between two time slices
-    [[deprecated]] util::Time sliceDuration() const; // DEPRECATED
-    */
 
     // Rectifies an out-of-sync condition by resetting all counters and clocks
     void resync();

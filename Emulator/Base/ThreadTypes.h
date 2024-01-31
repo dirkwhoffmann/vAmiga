@@ -53,7 +53,6 @@ enum_long(SYNC_MODE)
 {
     SYNC_PERIODIC,
     SYNC_PULSED,
-    SYNC_ADAPTIVE
 };
 typedef SYNC_MODE SyncMode;
 
@@ -61,7 +60,7 @@ typedef SYNC_MODE SyncMode;
 struct SyncModeEnum : util::Reflection<SyncModeEnum, SyncMode>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = SYNC_ADAPTIVE;
+    static constexpr long maxVal = SYNC_PULSED;
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "SYNC"; }
@@ -71,7 +70,6 @@ struct SyncModeEnum : util::Reflection<SyncModeEnum, SyncMode>
 
             case SYNC_PERIODIC:   return "PERIODIC";
             case SYNC_PULSED:     return "PULSED";
-            case SYNC_ADAPTIVE:   return "ADAPTIVE";
         }
         return "???";
     }
