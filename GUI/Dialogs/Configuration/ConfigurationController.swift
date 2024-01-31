@@ -164,7 +164,15 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var prfWarpMode: NSPopUpButton!
     @IBOutlet weak var prfWarpBoot: NSTextField!
 
-    // Graphics
+    // Threading
+    @IBOutlet weak var prfSyncMode: NSPopUpButton!
+    @IBOutlet weak var prfVSync: NSButton!
+    @IBOutlet weak var prfTimeLapse: NSSlider!
+    @IBOutlet weak var prfTimeLapseInfo: NSTextField!
+    @IBOutlet weak var prfTimeSlices: NSSlider!
+    @IBOutlet weak var prfTimeSlicesInfo: NSTextField!
+
+    // Collision detection
     @IBOutlet weak var prfClxSprSpr: NSButton!
     @IBOutlet weak var prfClxSprPlf: NSButton!
     @IBOutlet weak var prfClxPlfPlf: NSButton!

@@ -258,11 +258,8 @@ private:
 
 public:
 
-    double refreshRate() const override;
-    isize slicesPerFrame() const override;
-    util::Time wakeupPeriod() const override;
-
-    i64 masterClockFrequency() const; // TODO: MOVE TO ANOTHER SECTION (NOT A THREAD METHOD)
+    util::Time sliceDelay() const override;
+    isize missingSlices() const override;
 
 
     //
@@ -307,7 +304,19 @@ public:
     void setInspectionTarget(InspectionTarget target, Cycle trigger = 0);
     void removeInspectionTarget() { setInspectionTarget(INSPECTION_NONE); }
 
+    // Returns the native refresh rate of the emulated Amiga (50Hz or 60Hz)
+    double nativeRefreshRate() const;
 
+    // Returns the native master clock frequency
+    i64 nativeMasterClockFrequency() const;
+
+    // Returns the emulated refresh rate
+    double refreshRate() const;
+
+    // Returns the master clock frequency based on the emulated refresh rate
+    i64 masterClockFrequency() const;
+
+    
     //
     // Running the emulator
     //

@@ -999,6 +999,51 @@ Amiga::_inspect() const
     }
 }
 
+double 
+Amiga::nativeRefreshRate() const
+{
+    switch (config.type) {
+
+        case PAL:   return 50.0;
+        case NTSC:  return 60.0;
+
+        default:
+            fatalError;
+    }
+}
+
+i64
+Amiga::nativeMasterClockFrequency() const
+{
+    switch (config.type) {
+
+        case PAL:   return CLK_FREQUENCY_PAL;
+        case NTSC:  return CLK_FREQUENCY_NTSC;
+
+        default:
+            fatalError;
+    }
+}
+
+double
+Amiga::refreshRate() const
+{
+    if (config.syncMode == SYNC_ADAPTIVE && config.vsync) {
+
+        return host.getHostRefreshRate();
+
+    } else {
+
+        return nativeRefreshRate() * config.timeLapse / 100.0;
+    }
+}
+
+i64
+Amiga::masterClockFrequency() const
+{
+    return nativeMasterClockFrequency() * config.timeLapse / 100;
+}
+
 void
 Amiga::_dump(Category category, std::ostream& os) const
 {
@@ -1352,23 +1397,29 @@ Amiga::execute()
     }
 }
 
-double
-Amiga::refreshRate() const
+util::Time
+Amiga::sliceDelay() const
 {
-    return config.type == PAL ? 50.0 : 60.0;
-    /*
-    switch (config.syncMode) {
-
-        case SYNC_NATIVE_FPS:   return config.type == PAL ? 50.0 : 60.0;
-        case SYNC_FIXED_FPS:    return config.proposedFps;
-        case SYNC_VSYNC:        return host.getHostRefreshRate();
-
-        default:
-            fatalError;
-    }
-    */
+    return util::Time::seconds(100.0) / nativeRefreshRate() / config.timeLapse;
 }
 
+isize
+Amiga::missingSlices() const
+{
+    // In VSYNC mode, compute exactly one frame per wakeup call
+    if (config.vsync) return config.timeSlices;
+
+    // Compute the elapsed time
+    auto elapsed = util::Time::now() - baseTime;
+
+    // Compute which slice should be reached by now
+    auto target = config.timeSlices * elapsed.asNanoseconds() * i64(refreshRate()) / 1000000000;
+
+    // Compute the number of missing slices
+    return isize(target - sliceCounter);
+}
+
+/*
 isize
 Amiga::slicesPerFrame() const
 {
@@ -1381,7 +1432,6 @@ Amiga::wakeupPeriod() const
     return util::Time(i64(1000000000.0 / host.getHostRefreshRate()));
 }
 
-/*
 isize
 Amiga::missingFrames(util::Time base) const
 {
@@ -1395,19 +1445,6 @@ Amiga::missingFrames(util::Time base) const
     return isize(targetFrame - agnus.pos.frame);
 }
 */
-
-i64
-Amiga::masterClockFrequency() const
-{
-    switch (config.type) {
-
-        case PAL:   return i64(CLK_FREQUENCY_PAL * (refreshRate() / 50.0));
-        case NTSC:  return i64(CLK_FREQUENCY_NTSC * (refreshRate() / 60.0));
-
-        default:
-            fatalError;
-    }
-}
 
 void
 Amiga::setFlag(u32 flag)

@@ -228,23 +228,25 @@ private:
     // The code to be executed in each iteration (implemented by the subclass)
     virtual void execute() = 0;
 
+    // Interval between two time slices (provided by the subclass)
+    virtual util::Time sliceDelay() const = 0;
+
+    // Number of overdue time slices (used in pulsed sync mode)
+    virtual isize missingSlices() const = 0;
+
     // Target frame rate of this thread (provided by the subclass)
-    virtual double refreshRate() const = 0;
+    /*
+    [[deprecated]] virtual double refreshRate() const = 0;
 
     // Number of thread syncs per frame (provided by the subclass)
-    virtual isize slicesPerFrame() const = 0;
+    [[deprecated]] virtual isize slicesPerFrame() const = 0;
 
     // Time span between two wakeup calls (provided by the subclass)
-    virtual util::Time wakeupPeriod() const = 0;
-
-    // Computes the time span between two frames
-    util::Time frameDuration() const;
+    [[deprecated]] virtual util::Time wakeupPeriod() const = 0;
 
     // Computes the time span between two time slices
-    util::Time sliceDuration() const;
-
-    // Computes the number of overdue time slices
-    isize missingSlices() const;
+    [[deprecated]] util::Time sliceDuration() const; // DEPRECATED
+    */
 
     // Rectifies an out-of-sync condition by resetting all counters and clocks
     void resync();

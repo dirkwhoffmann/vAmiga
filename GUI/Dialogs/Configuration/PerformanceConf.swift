@@ -17,6 +17,17 @@ extension ConfigurationController {
         prfWarpMode.selectItem(withTag: config.warpMode)
         prfWarpBoot.integerValue = config.warpBoot
 
+        // Threading
+        prfSyncMode.selectItem(withTag: config.syncMode)
+        prfVSync.state = config.vsync ? .on : .off
+        prfTimeLapse.integerValue = config.timeLapse
+        prfTimeLapseInfo.stringValue = "\(config.timeLapse) %"
+        prfTimeSlices.integerValue = config.timeSlices
+        prfTimeSlicesInfo.stringValue = "\(config.timeSlices) per frame"
+        prfVSync.isEnabled = config.syncMode != 0
+        prfTimeLapse.isEnabled = config.syncMode != 1 || !config.vsync
+        prfTimeSlices.isEnabled = config.syncMode != 1 || !config.vsync
+
         // Collision detection
         prfClxSprSpr.state = config.clxSprSpr ? .on : .off
         prfClxSprPlf.state = config.clxSprPlf ? .on : .off
@@ -52,6 +63,34 @@ extension ConfigurationController {
         refresh()
     }
     
+    //
+    // Action methods (threading)
+    //
+
+    @IBAction func prfSyncModeAction(_ sender: NSPopUpButton!) {
+
+        config.syncMode = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func prfVSyncAction(_ sender: NSButton!) {
+
+        config.vsync = sender.state == .on
+        refresh()
+    }
+
+    @IBAction func prfTimeLapseAction(_ sender: NSSlider!) {
+
+        config.timeLapse = sender.integerValue
+        refresh()
+    }
+
+    @IBAction func prfTimeSlicesAction(_ sender: NSSlider!) {
+
+        config.timeSlices = sender.integerValue
+        refresh()
+    }
+
     //
     // Action methods (collision detection)
     //
@@ -97,8 +136,6 @@ extension ConfigurationController {
     }
 
     @IBAction func prfPresetAction(_ sender: NSPopUpButton!) {
-
-        let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
 

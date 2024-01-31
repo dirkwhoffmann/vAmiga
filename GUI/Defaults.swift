@@ -1386,7 +1386,6 @@ extension Configuration {
     func saveVideoUserDefaults() {
         
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
 
         amiga.suspend()
 
