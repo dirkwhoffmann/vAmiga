@@ -534,13 +534,18 @@ Denise::translate()
         }
     }
     
+    // Initialize the mBuffer with a copy of the dBuffer
+    std::memcpy(mBuffer, dBuffer, sizeof(mBuffer));
+
     // Start with the playfield state as it was at the beginning of the line
     PFState state;
     state.zpf1 = zPF1(initialBplcon2);
     state.zpf2 = zPF2(initialBplcon2);
     state.prio = pf2pri(initialBplcon2);
     state.ham = ham(initialBplcon0);
+
     bool dual = dbplf(initialBplcon0);
+    bool hamLine = state.ham;
 
     // Add a dummy register change to ensure we draw until the line ends
     conChanges.insert(sizeof(dBuffer), RegChange { SET_NONE, 0 });
@@ -566,6 +571,7 @@ Denise::translate()
                 
                 dual = dbplf(bplcon0);
                 state.ham = ham(change.value);
+                hamLine |= state.ham;
                 break;
 
             case SET_BPLCON2:
@@ -584,6 +590,9 @@ Denise::translate()
 
     // Clear the history cache
     conChanges.clear();
+
+    // Create the iBuffer (only needed for lines with HAM mode enabled)
+    if (hamLine) std::memcpy(iBuffer, mBuffer, sizeof(iBuffer));
 }
 
 void
@@ -606,7 +615,7 @@ Denise::translateSPF(Pixel from, Pixel to, PFState &state)
             u8 s = dBuffer[i];
 
             assert(PixelEngine::isPaletteIndex(s));
-            iBuffer[i] = mBuffer[i] = (s & 0x10) ? (s & 0x30) : s;
+            mBuffer[i] = (s & 0x10) ? (s & 0x30) : s;
             zBuffer[i] = 0;
         }
         return;
@@ -618,7 +627,7 @@ Denise::translateSPF(Pixel from, Pixel to, PFState &state)
         u8 s = dBuffer[i];
         
         assert(PixelEngine::isPaletteIndex(s));
-        iBuffer[i] = mBuffer[i] = s;
+        // The mBuffer alread has the correct value ( mBuffer[i] = s; )
         zBuffer[i] = s ? state.zpf2 : 0;
     }
 }
@@ -656,17 +665,17 @@ Denise::translateDPF(Pixel from, Pixel to, PFState &state)
 
                 // PF1 is solid, PF2 is solid
                 if (prio) {
-                    iBuffer[i] = mBuffer[i] = (index2 | 0b1000) & mask2;
+                    mBuffer[i] = (index2 | 0b1000) & mask2;
                     zBuffer[i] = state.zpf2 | Z_DPF21;
                 } else {
-                    iBuffer[i] = mBuffer[i] = index1 & mask1;
+                    mBuffer[i] = index1 & mask1;
                     zBuffer[i] = state.zpf1 | Z_DPF12;
                 }
 
             } else {
 
                 // PF1 is solid, PF2 is transparent
-                iBuffer[i] = mBuffer[i] = index1 & mask1;
+                mBuffer[i] = index1 & mask1;
                 zBuffer[i] = state.zpf1 | Z_DPF1;
             }
 
@@ -675,13 +684,13 @@ Denise::translateDPF(Pixel from, Pixel to, PFState &state)
             if (index2) {
 
                 // PF1 is transparent, PF2 is solid
-                iBuffer[i] = mBuffer[i] = (index2 | 0b1000) & mask2;
+                mBuffer[i] = (index2 | 0b1000) & mask2;
                 zBuffer[i] = state.zpf2 | Z_DPF2;
 
             } else {
 
                 // PF1 is transparent, PF2 is transparent
-                iBuffer[i] = mBuffer[i] = 0;
+                mBuffer[i] = 0;
                 zBuffer[i] = Z_DPF;
             }
         }
