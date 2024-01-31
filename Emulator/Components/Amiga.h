@@ -396,10 +396,13 @@ private:
 
 
     //
-    // Handling alarms
+    // Managing events
     //
 
 public:
+
+    // End-of-line handler
+    void eolHandler();
 
     /* Alarms are scheduled notifications set by the client (GUI). Once the
      * trigger cycle of an alarm has been reached, the emulator sends a

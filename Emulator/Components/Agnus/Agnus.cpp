@@ -642,6 +642,7 @@ Agnus::eolHandler()
     bplcon1Initial = bplcon1;
 
     // Pass control to other components
+    amiga.eolHandler();
     sequencer.eolHandler();
     denise.eolHandler();
 
@@ -684,7 +685,7 @@ Agnus::eofHandler()
     mem.updateStats();
 
     // Let the thread synchronize
-    amiga.setFlag(RL::SYNC_THREAD);
+    // amiga.setFlag(RL::SYNC_THREAD);
 }
 
 void

@@ -1419,33 +1419,6 @@ Amiga::missingSlices() const
     return isize(target - sliceCounter);
 }
 
-/*
-isize
-Amiga::slicesPerFrame() const
-{
-    return config.timeSlices;
-}
-
-util::Time
-Amiga::wakeupPeriod() const
-{
-    return util::Time(i64(1000000000.0 / host.getHostRefreshRate()));
-}
-
-isize
-Amiga::missingFrames(util::Time base) const
-{
-    // Compute the elapsed time
-    auto elapsed = util::Time::now() - base;
-
-    // Compute which frame should have been reached by now
-    auto targetFrame = elapsed.asNanoseconds() * i64(refreshRate()) / 1000000000;
-
-    // Compute the number of missing frames
-    return isize(targetFrame - agnus.pos.frame);
-}
-*/
-
 void
 Amiga::setFlag(u32 flag)
 {
@@ -1625,6 +1598,19 @@ Amiga::takeUserSnapshot()
 
     userSnapshot = new Snapshot(*this);
     msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
+}
+
+void 
+Amiga::eolHandler()
+{
+    // Get the maximum number of rasterlines
+    auto lines = agnus.isPAL() ? VPOS_CNT_PAL : VPOS_CNT_NTSC;
+
+    // Check if we need to sync the thread
+    if (agnus.pos.v % ((lines / config.timeSlices) + 1) == 0) {
+
+        setFlag(RL::SYNC_THREAD);
+    }
 }
 
 void
