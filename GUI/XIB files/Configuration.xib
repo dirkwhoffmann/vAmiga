@@ -2002,7 +2002,7 @@ DQ
                                         <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8H2-RW-mQb">
                                             <rect key="frame" x="104" y="156" width="107" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <sliderCell key="cell" continuous="YES" state="on" alignment="left" minValue="55" maxValue="200" doubleValue="100" tickMarkPosition="above" numberOfTickMarks="7" sliderType="linear" id="E5C-ng-bB8"/>
+                                            <sliderCell key="cell" continuous="YES" state="on" alignment="left" minValue="50" maxValue="200" doubleValue="100" tickMarkPosition="above" numberOfTickMarks="4" sliderType="linear" id="E5C-ng-bB8"/>
                                             <connections>
                                                 <action selector="prfTimeLapseAction:" target="-2" id="nEi-sD-nI9"/>
                                             </connections>
