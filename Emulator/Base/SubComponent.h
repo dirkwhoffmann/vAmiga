@@ -22,6 +22,7 @@ class CIAA;
 class CIAB;
 class ControlPort;
 class Copper;
+class Debugger;
 class Denise;
 class DiagBoard;
 class DiskController;
@@ -64,6 +65,7 @@ protected:
     ControlPort &controlPort2;
     Copper &copper;
     CPU &cpu;
+    Debugger &debugger;
     Denise &denise;
     DiagBoard &diagBoard;
     DiskController &diskController;

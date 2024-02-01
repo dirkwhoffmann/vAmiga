@@ -14,6 +14,7 @@
 #include "ControlPort.h"
 #include "CIA.h"
 #include "CPU.h"
+#include "Debugger.h"
 #include "Defaults.h"
 #include "Denise.h"
 #include "FloppyDrive.h"
@@ -121,6 +122,7 @@ public:
     // Misc
     RetroShell retroShell = RetroShell(*this);
     RemoteManager remoteManager = RemoteManager(*this);
+    Debugger debugger = Debugger(*this);
     OSDebugger osDebugger = OSDebugger(*this);
     RegressionTester regressionTester = RegressionTester(*this);
 
@@ -334,6 +336,7 @@ public:
     void signalAutoSnapshot() { setFlag(RL::AUTO_SNAPSHOT); }
     void signalUserSnapshot() { setFlag(RL::USER_SNAPSHOT); }
 
+#if 0
     // Runs or pauses the emulator
     void stopAndGo();
 
@@ -349,7 +352,7 @@ public:
      * length bytes of the current instruction and starts the emulator thread.
      */
     void stepOver();
-
+#endif
 
     //
     // Managing warp mode

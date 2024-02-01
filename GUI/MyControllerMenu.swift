@@ -390,19 +390,19 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func stopAndGoAction(_ sender: Any!) {
         
-        amiga?.stopAndGo()
+        amiga?.debugger.stopAndGo()
     }
     
     @IBAction func stepIntoAction(_ sender: Any!) {
         
         needsSaving = true
-        amiga?.stepInto()
+        amiga?.debugger.stepInto()
     }
     
     @IBAction func stepOverAction(_ sender: Any!) {
         
         needsSaving = true
-        amiga?.stepOver()
+        amiga?.debugger.stepOver()
     }
     
     @IBAction func resetAction(_ sender: Any!) {

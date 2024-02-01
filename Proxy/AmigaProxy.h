@@ -63,6 +63,7 @@
 @class ControlPortProxy;
 @class CopperProxy;
 @class CPUProxy;
+@class DebuggerProxy;
 @class DeniseProxy;
 @class DiskControllerProxy;
 @class DiskFileProxy;
@@ -154,6 +155,7 @@
     ControlPortProxy *controlPort2;
     CopperProxy *copper;
     CPUProxy *cpu;
+    DebuggerProxy *debugger;
     DeniseProxy *denise;
     DiskControllerProxy *diskController;
     DmaDebuggerProxy *dmaDebugger;
@@ -187,6 +189,7 @@
 @property (readonly, strong) ControlPortProxy *controlPort2;
 @property (readonly, strong) CopperProxy *copper;
 @property (readonly, strong) CPUProxy *cpu;
+@property (readonly, strong) DebuggerProxy *debugger;
 @property (readonly, strong) DeniseProxy *denise;
 @property (readonly, strong) DiskControllerProxy *diskController;
 @property (readonly, strong) DmaDebuggerProxy *dmaDebugger;
@@ -242,10 +245,6 @@
 - (void)halt;
 
 - (void)wakeUp;
-
-- (void)stopAndGo;
-- (void)stepInto;
-- (void)stepOver;
 
 - (void)suspend;
 - (void)resume;
@@ -548,11 +547,6 @@
 @property (readonly) UARTInfo uartInfo;
 @property (readonly) MuxerStats muxerStats;
 
-/*
-- (double)sampleRate;
-- (void)setSampleRate:(double)rate;
-*/
-
 - (void)readMonoSamples:(float *)target size:(NSInteger)n;
 - (void)readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n;
 
@@ -789,6 +783,19 @@
 - (NSInteger)diagnoseImageSlice:(NSInteger)column;
 - (NSInteger)nextBlockOfType:(FSBlockType)type after:(NSInteger)after;
 - (NSInteger)nextCorruptedBlock:(NSInteger)after;
+
+@end
+
+
+//
+// Debugger
+//
+
+@interface DebuggerProxy : CoreComponentProxy { }
+
+- (void)stopAndGo;
+- (void)stepInto;
+- (void)stepOver;
 
 @end
 

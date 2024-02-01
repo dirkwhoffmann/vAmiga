@@ -1857,6 +1857,42 @@ using namespace vamiga::moira;
 @end
 
 //
+// Debugger proxy
+//
+
+@implementation DebuggerProxy
+
+- (vamiga::Debugger *)debugger
+{
+    return (vamiga::Debugger *)obj;
+}
+
++ (instancetype)make:(vamiga::Debugger *)object
+{
+    if (object == nullptr) { return nil; }
+
+    DebuggerProxy *proxy = [[self alloc] initWith: object];
+    return proxy;
+}
+
+- (void)stopAndGo
+{
+    [self debugger]->stopAndGo();
+}
+
+- (void)stepInto
+{
+    [self debugger]->stepInto();
+}
+
+- (void)stepOver
+{
+    [self debugger]->stepOver();
+}
+
+@end
+
+//
 // RetroShell proxy
 //
 
@@ -2706,18 +2742,19 @@ using namespace vamiga::moira;
 @synthesize copper;
 @synthesize copperBreakpoints;
 @synthesize cpu;
+@synthesize debugger;
 @synthesize denise;
 @synthesize df0;
 @synthesize df1;
 @synthesize df2;
 @synthesize df3;
+@synthesize diskController;
+@synthesize dmaDebugger;
 @synthesize hd0;
 @synthesize hd1;
 @synthesize hd2;
 @synthesize hd3;
 @synthesize host;
-@synthesize diskController;
-@synthesize dmaDebugger;
 @synthesize keyboard;
 @synthesize mem;
 @synthesize paula;
@@ -2748,7 +2785,10 @@ using namespace vamiga::moira;
     copper = [[CopperProxy alloc] initWith:&amiga->agnus.copper];
     copperBreakpoints = [[GuardsProxy alloc] initWith:&amiga->agnus.copper.debugger.breakpoints];
     cpu = [[CPUProxy alloc] initWith:&amiga->cpu];
+    debugger = [[DebuggerProxy alloc] initWith:&amiga->debugger];
     denise = [[DeniseProxy alloc] initWith:&amiga->denise];
+    diskController = [[DiskControllerProxy alloc] initWith:&amiga->paula.diskController];
+    dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&amiga->agnus.dmaDebugger];
     df0 = [[FloppyDriveProxy alloc] initWith:&amiga->df0];
     df1 = [[FloppyDriveProxy alloc] initWith:&amiga->df1];
     df2 = [[FloppyDriveProxy alloc] initWith:&amiga->df2];
@@ -2758,8 +2798,6 @@ using namespace vamiga::moira;
     hd2 = [[HardDriveProxy alloc] initWith:&amiga->hd2];
     hd3 = [[HardDriveProxy alloc] initWith:&amiga->hd3];
     host = [[HostProxy alloc] initWith:&amiga->host];
-    diskController = [[DiskControllerProxy alloc] initWith:&amiga->paula.diskController];
-    dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&amiga->agnus.dmaDebugger];
     keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];
     mem = [[MemProxy alloc] initWith:&amiga->mem];
     paula = [[PaulaProxy alloc] initWith:&amiga->paula];
@@ -2912,21 +2950,6 @@ using namespace vamiga::moira;
 - (void)wakeUp
 {
     [self amiga]->wakeUp();
-}
-
-- (void)stopAndGo
-{
-    [self amiga]->stopAndGo();
-}
-
-- (void)stepInto
-{
-    [self amiga]->stepInto();
-}
-
-- (void)stepOver
-{
-    [self amiga]->stepOver();
 }
 
 - (void)suspend

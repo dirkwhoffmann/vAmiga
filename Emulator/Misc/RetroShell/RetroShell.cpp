@@ -405,7 +405,7 @@ RetroShell::execUserCommand(const string &command)
             if (amiga.isRunning()) {
                 amiga.pause();
             } else {
-                amiga.stepInto();
+                debugger.stepInto();
             }
         }
 

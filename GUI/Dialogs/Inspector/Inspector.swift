@@ -773,17 +773,17 @@ class Inspector: DialogController {
     
     @IBAction func stopAndGoAction(_ sender: NSButton!) {
 
-        amiga.stopAndGo()
+        amiga.debugger.stopAndGo()
     }
     
     @IBAction func stepIntoAction(_ sender: NSButton!) {
 
-        amiga.stepInto()
+        amiga.debugger.stepInto()
     }
     
     @IBAction func stepOverAction(_ sender: NSButton!) {
 
-        amiga.stepOver()
+        amiga.debugger.stepOver()
     }
 }
 

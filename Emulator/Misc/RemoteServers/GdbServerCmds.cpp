@@ -127,7 +127,7 @@ GdbServer::process <'v', GdbCmd::Cont> (string arg)
     }
     if (arg == "s") {
         
-        amiga.stepInto();
+        debugger.stepInto();
         return;
     }
     

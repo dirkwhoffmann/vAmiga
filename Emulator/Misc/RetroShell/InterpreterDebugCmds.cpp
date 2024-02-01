@@ -42,14 +42,14 @@ Interpreter::initDebugShell(Command &root)
              "Steps into the next instruction",
                 [this](Arguments& argv, long value) {
 
-        amiga.stepInto();
+        debugger.stepInto();
     });
 
     root.add({"next"},
              "Steps over the next instruction",
                 [this](Arguments& argv, long value) {
 
-        amiga.stepOver();
+        debugger.stepOver();
     });
 
     root.add({"goto"}, { Arg::address },
@@ -60,7 +60,7 @@ Interpreter::initDebugShell(Command &root)
     });
 
     root.add({"disassemble"}, { }, { Arg::address },
-             "Runs disassembler",
+             "Runs the disassembler",
              [this](Arguments& argv, long value) {
 
         std::stringstream ss;
