@@ -10,14 +10,22 @@
 #pragma once
 
 #include "DebuggerTypes.h"
+#include "MemoryTypes.h"
 #include "SubComponent.h"
-// #include "Constants.h"
 
 namespace vamiga {
 
 class Debugger : public SubComponent {
 
-private:
+    //
+    // Static functions
+    //
+
+public:
+
+    // Returns the name of a chipset register
+    static const char *regName(u32 addr);
+
 
     //
     // Constructing
@@ -58,7 +66,7 @@ private:
 
 
     //
-    // Executing
+    // Controlling program execution
     //
 
 public:
@@ -71,6 +79,26 @@ public:
 
     // Executes to the instruction below the current PC
     void stepOver();
+
+    // Continues execution at the specified address
+    void jump(u32 addr);
+
+
+    //
+    // Managing memory
+    //
+
+    // Returns 16 bytes of memory as an ASCII string
+    template <Accessor A> const char *ascDump(u32 addr, isize numBytes) const;
+
+    // Returns a certain amount of bytes as a string containing hex words
+    template <Accessor A> const char *hexDump(u32 addr, isize numBytes) const;
+
+    // Creates a memory dump
+    template <Accessor A> void memDump(std::ostream& os, u32 addr, isize numLines = 16) const;
+
+    // Creates a memory dump
+    // void dumpMemory(std::ostream& os, u32 addr, isize fmt) const;
 
 
     //

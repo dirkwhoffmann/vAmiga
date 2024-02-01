@@ -19,6 +19,89 @@ Interpreter::initDebugShell(Command &root)
     initCommons(root);
 
     //
+    // Execution
+    //
+
+    root.newGroup("Controlling the instruction stream");
+
+    root.add({"g"}, { }, { Arg::value },
+             "Goto address",
+             [this](Arguments& argv, long value) {
+
+        std::stringstream ss;
+
+        if (argv.empty()) {
+            amiga.run();
+        } else {
+            debugger.jump(u32(parseNum(argv)));
+        }
+    });
+
+    root.add({"s"},
+             "Step into the next instruction",
+             [this](Arguments& argv, long value) {
+
+        debugger.stepInto();
+    });
+
+    root.add({"n"},
+             "Step over the next instruction",
+             [this](Arguments& argv, long value) {
+
+        debugger.stepOver();
+    });
+
+    //
+    //
+    //
+
+    root.newGroup("Debugging code and memory");
+
+    root.add({"d"}, { }, { Arg::address },
+             "Disassemble instructions",
+             [this](Arguments& argv, long value) {
+
+        std::stringstream ss;
+
+        auto addr = argv.empty() ? cpu.getPC0() : u32(parseNum(argv));
+        cpu.disassembleRange(ss, addr, 16);
+
+        retroShell << '\n' << ss << '\n';
+    });
+
+    root.add({"m"}, { }, { Arg::address },
+             "Examine memory",
+             [this](Arguments& argv, long value) {
+
+        std::stringstream ss;
+        // debugger.dumpMemory(ss, argv.empty() ?  workingAddr : u32(parseNum(argv)), 2);
+        retroShell << '\n' << ss << '\n';
+    });
+
+    root.newGroup("Analyzing components and modifying registers");
+
+
+    root.newGroup("Miscellaneous");
+
+    root.add({"?"}, { Arg::value },
+             "Convert a value into different formats",
+             [this](Arguments& argv, long value) {
+
+        std::stringstream ss;
+
+        if (isNum(argv)) {
+            debugger.convertNumeric(ss, parseNum(argv));
+        } else {
+            debugger.convertNumeric(ss, argv.front());
+        }
+
+        retroShell << '\n' << ss << '\n';
+    });
+
+
+
+
+    //
     // Top-level commands
     //
 
@@ -57,33 +140,6 @@ Interpreter::initDebugShell(Command &root)
              [this](Arguments& argv, long value) {
 
         amiga.cpu.jump((u32)parseNum(argv));
-    });
-
-    root.add({"disassemble"}, { }, { Arg::address },
-             "Runs the disassembler",
-             [this](Arguments& argv, long value) {
-
-        std::stringstream ss;
-
-        auto addr = argv.empty() ? cpu.getPC0() : u32(parseNum(argv));
-        cpu.disassembleRange(ss, addr, 16);
-
-        retroShell << '\n' << ss << '\n';
-    });
-
-    root.add({"?"}, { Arg::value },
-             "Converts a value into different formats",
-             [this](Arguments& argv, long value) {
-
-        std::stringstream ss;
-
-        if (isNum(argv)) {
-            debugger.convertNumeric(ss, parseNum(argv));
-        } else {
-            debugger.convertNumeric(ss, argv.front());
-        }
-
-        retroShell << '\n' << ss << '\n';
     });
 
     root.newGroup("Guarding the program execution");
@@ -423,7 +479,7 @@ Interpreter::initDebugShell(Command &root)
              [this](Arguments& argv, long value) {
 
         std::stringstream ss;
-        mem.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv)));
+        debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv)));
         retroShell << '\n' << ss << '\n';
     });
 

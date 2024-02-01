@@ -2090,7 +2090,7 @@ Memory::peekCustom16(u32 addr)
 
     }
 
-    trace(OCSREG_DEBUG, "peekCustom16(%X [%s]) = %X\n", addr, regName(addr), result);
+    trace(OCSREG_DEBUG, "peekCustom16(%X [%s]) = %X\n", addr, Debugger::regName(addr), result);
 
     dataBus = result;
     return result;
@@ -2169,7 +2169,7 @@ Memory::pokeCustom16(u32 addr, u16 value)
     if ((addr & 0xFFF) == 0x30) {
         trace(OCSREG_DEBUG, "pokeCustom16(SERDAT, '%c')\n", (char)value);
     } else {
-        trace(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n", addr, regName(addr), value);
+        trace(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n", addr, Debugger::regName(addr), value);
     }
 
     dataBus = value;
@@ -2590,10 +2590,10 @@ Memory::pokeCustom16(u32 addr, u16 value)
     
     if (addr <= 0x1E) {
         trace(INVREG_DEBUG,
-              "pokeCustom16(%X [%s]): READ-ONLY\n", addr, regName(addr));
+              "pokeCustom16(%X [%s]): READ-ONLY\n", addr, Debugger::regName(addr));
     } else {
         trace(INVREG_DEBUG,
-              "pokeCustom16(%X [%s]): NON-OCS\n", addr, regName(addr));
+              "pokeCustom16(%X [%s]): NON-OCS\n", addr, Debugger::regName(addr));
     }
 }
 
@@ -2688,67 +2688,6 @@ Memory::patch(u32 addr, u8 *buf, isize len)
     }
 }
 
-const char *
-Memory::regName(u32 addr)
-{
-    return ChipsetRegEnum::key((addr >> 1) & 0xFF);
-}
-
-template <Accessor A> const char *
-Memory::ascii(u32 addr, isize numBytes)
-{
-    assert(numBytes < 256);
-
-    for (isize i = 0; i < numBytes; i += 2) {
-        u16 word = spypeek16 <A> ((u32)(addr + i));
-        str[i] = isprint(HI_BYTE(word)) ? HI_BYTE(word) : '.';
-        str[i+1] = isprint(LO_BYTE(word)) ? LO_BYTE(word) : '.';
-    }
-    str[numBytes] = 0;
-    return str;
-}
-
-template <Accessor A> const char *
-Memory::hex(u32 addr, isize numBytes)
-{
-    assert(numBytes % 2 == 0);
-    char *p = str;
-    
-    for (isize i = 0; i < numBytes; i += 2, p += 5) {
-
-        u16 word = spypeek16 <A> ((u32)(addr + i));
-        
-        u8 digit1 = (word >> 12) & 0xF;
-        u8 digit2 = (word >> 8) & 0xF;
-        u8 digit3 = (word >> 4) & 0xF;
-        u8 digit4 = (word >> 0) & 0xF;
-        
-        p[0] = digit1 < 10 ? '0' + digit1 : 'A' + digit1 - 10;
-        p[1] = digit2 < 10 ? '0' + digit2 : 'A' + digit2 - 10;
-        p[2] = digit3 < 10 ? '0' + digit3 : 'A' + digit3 - 10;
-        p[3] = digit4 < 10 ? '0' + digit4 : 'A' + digit4 - 10;
-        p[4] = i == numBytes - 2 ? char(0) : ' ';
-    }
-
-    return str;
-}
-
-template <Accessor A> void
-Memory::memDump(std::ostream& os, u32 addr, isize numLines)
-{
-    addr &= ~0xF;
-
-    for (isize i = 0; i < numLines; i++, addr += 16) {
-
-        os << std::setfill('0') << std::hex << std::right << std::setw(6) << isize(addr);
-        os << ":  ";
-        os << hex<A>(addr, 16);
-        os << "  ";
-        os << ascii<A>(addr, 16);
-        os << std::endl;
-    }
-}
-
 std::vector <u32>
 Memory::search(u64 pattern, isize bytes)
 {
@@ -2785,14 +2724,5 @@ Memory::search(u64 pattern, isize bytes)
 
 template void Memory::pokeCustom16 <ACCESSOR_CPU> (u32 addr, u16 value);
 template void Memory::pokeCustom16 <ACCESSOR_AGNUS> (u32 addr, u16 value);
-
-template const char *Memory::ascii <ACCESSOR_CPU> (u32 addr, isize numBytes);
-template const char *Memory::ascii <ACCESSOR_AGNUS> (u32 addr, isize numBytes);
-
-template const char *Memory::hex <ACCESSOR_CPU> (u32 addr, isize numBytes);
-template const char *Memory::hex <ACCESSOR_AGNUS> (u32 addr, isize numBytes);
-
-template void Memory::memDump <ACCESSOR_CPU> (std::ostream& os, u32 addr, isize numLines);
-template void Memory::memDump <ACCESSOR_AGNUS> (std::ostream& os, u32 addr, isize numLines);
 
 }

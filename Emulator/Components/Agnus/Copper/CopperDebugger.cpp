@@ -192,7 +192,7 @@ CopperDebugger::disassemble(u32 addr, bool symbolic) const
         if (copper.isMoveCmd(addr)) {
             
             auto source = copper.getDW(addr);
-            auto target = Memory::regName(copper.getRA(addr));
+            auto target = Debugger::regName(copper.getRA(addr));
             snprintf(txt, sizeof(txt), "MOVE $%04X, %s", source, target);
             
             return string(txt);

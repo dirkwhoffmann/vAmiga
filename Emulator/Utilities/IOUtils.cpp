@@ -15,6 +15,7 @@
 #include <fstream>
 #include <algorithm>
 #include <iomanip>
+#include <bitset>
 
 namespace util {
 

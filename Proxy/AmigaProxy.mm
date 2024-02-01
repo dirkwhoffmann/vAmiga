@@ -635,34 +635,6 @@ using namespace vamiga::moira;
     }
 }
 
-- (NSString *)ascii:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes
-{
-    assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
-    const char *str;
-
-    if (accessor == ACCESSOR_CPU) {
-        str = [self mem]->ascii <ACCESSOR_CPU> ((u32)addr, bytes);
-    } else {
-        str = [self mem]->ascii <ACCESSOR_AGNUS> ((u32)addr, bytes);
-    }
-    
-    return str ? @(str) : nullptr;
-}
-
-- (NSString *)hex:(Accessor)accessor addr: (NSInteger)addr bytes:(NSInteger)bytes
-{
-    assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
-    const char *str;
-
-    if (accessor == ACCESSOR_CPU) {
-        str = [self mem]->hex <ACCESSOR_CPU> ((u32)addr, bytes);
-    } else {
-        str = [self mem]->hex <ACCESSOR_AGNUS> ((u32)addr, bytes);
-    }
-    
-    return str ? @(str) : nullptr;
-}
-
 @end
 
 
@@ -1888,6 +1860,34 @@ using namespace vamiga::moira;
 - (void)stepOver
 {
     [self debugger]->stepOver();
+}
+
+- (NSString *)ascDump:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes
+{
+    assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
+    const char *str;
+
+    if (accessor == ACCESSOR_CPU) {
+        str = [self debugger]->ascDump <ACCESSOR_CPU> ((u32)addr, bytes);
+    } else {
+        str = [self debugger]->ascDump <ACCESSOR_AGNUS> ((u32)addr, bytes);
+    }
+
+    return str ? @(str) : nullptr;
+}
+
+- (NSString *)hexDump:(Accessor)accessor addr: (NSInteger)addr bytes:(NSInteger)bytes
+{
+    assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
+    const char *str;
+
+    if (accessor == ACCESSOR_CPU) {
+        str = [self debugger]->hexDump <ACCESSOR_CPU> ((u32)addr, bytes);
+    } else {
+        str = [self debugger]->hexDump <ACCESSOR_AGNUS> ((u32)addr, bytes);
+    }
+
+    return str ? @(str) : nullptr;
 }
 
 @end

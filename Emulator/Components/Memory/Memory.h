@@ -496,18 +496,6 @@ public:
     //
     
 public:
-    
-    // Returns the name of a chipset register
-    static const char *regName(u32 addr);
-    
-    // Returns 16 bytes of memory as an ASCII string
-    template <Accessor A> const char *ascii(u32 addr, isize numBytes);
-    
-    // Returns a certain amount of bytes as a string containing hex words
-    template <Accessor A> const char *hex(u32 addr, isize numBytes);
-
-    // Creates a memory dump
-    template <Accessor A> void memDump(std::ostream& os, u32 addr, isize numLines = 16);
 
     // Searches RAM and ROM for a certain byte sequence
     std::vector <u32> search(u64 pattern, isize bytes);
