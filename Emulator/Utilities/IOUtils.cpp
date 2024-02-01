@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "Macros.h"
 #include "IOUtils.h"
 #include <assert.h>
 #include <vector>
@@ -267,6 +268,18 @@ std::ostream &
 hex::operator()(std::ostream &os) const
 {
     os << std::hex << "0x" << std::setw(digits) << std::setfill('0') << value;
+    return os;
+};
+
+std::ostream &
+bin::operator()(std::ostream &os) const
+{
+    std::bitset<8> x0(BYTE0(value));
+    std::bitset<8> x1(BYTE1(value));
+    std::bitset<8> x2(BYTE2(value));
+    std::bitset<8> x3(BYTE3(value));
+
+    os << "%" << x3 << "." << x2 << "." << x1 << "." << x0;
     return os;
 };
 

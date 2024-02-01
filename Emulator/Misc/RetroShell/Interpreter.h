@@ -107,7 +107,10 @@ private:
     // Auto-completes an argument list
     void autoComplete(Arguments &argv);
 
-    // Parses an argument of a certain type
+    // Checks or parses an argument of a certain type
+    bool isBool(Arguments &argv, isize n = 0) { return util::isBool(argv[n]); }
+    bool isOnOff(Arguments &argv, isize n = 0) { return util::isOnOff(argv[n]); }
+    long isNum(Arguments &argv, isize n = 0) { return util::isNum(argv[n]); }
     bool parseBool(Arguments &argv, isize n = 0) { return util::parseBool(argv[n]); }
     bool parseOnOff(Arguments &argv, isize n = 0) { return util::parseOnOff(argv[n]); }
     long parseNum(Arguments &argv, isize n = 0) { return util::parseNum(argv[n]); }

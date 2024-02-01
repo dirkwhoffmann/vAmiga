@@ -71,6 +71,20 @@ Interpreter::initDebugShell(Command &root)
         retroShell << '\n' << ss << '\n';
     });
 
+    root.add({"?"}, { Arg::value },
+             "Converts a value into different formats",
+             [this](Arguments& argv, long value) {
+
+        std::stringstream ss;
+
+        if (isNum(argv)) {
+            debugger.convertNumeric(ss, parseNum(argv));
+        } else {
+            debugger.convertNumeric(ss, argv.front());
+        }
+
+        retroShell << '\n' << ss << '\n';
+    });
 
     root.newGroup("Guarding the program execution");
 

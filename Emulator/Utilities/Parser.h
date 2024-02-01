@@ -41,6 +41,10 @@ struct EnumParseError : public ParseError {
     using ParseError::ParseError;
 };
 
+bool isBool(string& token);
+bool isOnOff(string& token);
+bool isNum(string& token);
+
 bool parseBool(string& token) throws;
 bool parseOnOff(string& token) throws;
 long parseNum(string& token) throws;

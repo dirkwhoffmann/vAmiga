@@ -62,22 +62,24 @@ private:
     //
 
 public:
-    
-    // Runs or pauses the emulator
+
+    // Pauses or continues the emulation
     void stopAndGo();
 
-    /* Executes a single instruction. This function is used for single-stepping
-     * through the code inside the debugger. It starts the execution thread and
-     * terminates it after the next instruction has been executed.
-     */
+    // Executes one CPU instruction
     void stepInto();
 
-    /* Runs the emulator until the instruction following the current one is
-     * reached. This function is used for single-stepping through the code
-     * inside the debugger. It sets a soft breakpoint to PC+n where n is the
-     * length bytes of the current instruction and starts the emulator thread.
-     */
+    // Executes to the instruction below the current PC
     void stepOver();
+
+
+    //
+    // Displaying expressions
+    //
+
+    // Displays a value in different number formats (hex, dec, bin, alpha)
+    void convertNumeric(std::ostream& os, isize value) const;
+    void convertNumeric(std::ostream& os, string value) const;
 };
 
 }
