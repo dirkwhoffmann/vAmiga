@@ -237,7 +237,7 @@ Interpreter::help(const Command& current)
         // Only proceed if the command is visible
         if (it.hidden) continue;
 
-        // Print group description (when a new group begins)
+        // Print group description when a new group begins
         if (group != it.group) {
 
             group = it.group;

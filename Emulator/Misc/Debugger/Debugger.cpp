@@ -89,9 +89,9 @@ Debugger::hexDump(u32 addr, isize bytes, isize sz) const
     static char str[256];
     char *p = str;
 
-    for (u32 i = 0; i < bytes; i++) {
+    for (isize i = 0; i < bytes; i++) {
 
-        u8 byte = mem.spypeek8 <A> (addr + i);
+        u8 byte = mem.spypeek8 <A> (u32(addr + i));
 
         u8 digit1 = HI_NIBBLE(byte);
         u8 digit2 = LO_NIBBLE(byte);
@@ -102,24 +102,6 @@ Debugger::hexDump(u32 addr, isize bytes, isize sz) const
         if ((i + 1) % sz == 0) *p++ = ' ';
     }
     *p = 0;
-
-    /*
-    for (isize i = 0; i < numBytes; i += 2, p += 5) {
-
-        u16 word = mem.spypeek16 <A> ((u32)(addr + i));
-
-        u8 digit1 = (word >> 12) & 0xF;
-        u8 digit2 = (word >> 8) & 0xF;
-        u8 digit3 = (word >> 4) & 0xF;
-        u8 digit4 = (word >> 0) & 0xF;
-
-        p[0] = digit1 < 10 ? '0' + digit1 : 'A' + digit1 - 10;
-        p[1] = digit2 < 10 ? '0' + digit2 : 'A' + digit2 - 10;
-        p[2] = digit3 < 10 ? '0' + digit3 : 'A' + digit3 - 10;
-        p[3] = digit4 < 10 ? '0' + digit4 : 'A' + digit4 - 10;
-        p[4] = i == numBytes - 2 ? char(0) : ' ';
-    }
-    */
 
     return str;
 }
@@ -146,7 +128,7 @@ Debugger::ascDump(std::ostream& os, u32 addr, isize lines)
 
         os << std::setfill('0') << std::hex << std::right << std::setw(6) << isize(addr);
         os << ":  ";
-        os << hexDump<A>(addr, 64);
+        os << ascDump<A>(addr, 64);
         os << std::endl;
     }
     current = addr;
