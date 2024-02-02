@@ -109,9 +109,13 @@ public:
     template <Accessor A> void hexDump(std::ostream& os, isize lines, isize sz) { hexDump<A>(os, current, lines, sz); }
     template <Accessor A> void memDump(std::ostream& os, isize lines, isize sz) { memDump<A>(os, current, lines, sz); }
 
+    // Searches a number sequence in memory
+    i64 memSearch(u32 *pattern, u32 addr, isize count, isize sz);
+    i64 memSearch(u32 *pattern, isize count, isize sz) { return memSearch(pattern, current, count, sz); }
+
 
     //
-    // Managing memory
+    // Handling registers
     //
 
     bool isUnused(ChipsetReg reg) const;

@@ -410,8 +410,8 @@ public:
     bool inFastRam(u32 addr);
     bool inRam(u32 addr);
     bool inRom(u32 addr);
+    bool isUnmapped(u32 addr);
 
-    
 private:
 
     void updateCpuMemSrcTable();

@@ -978,6 +978,14 @@ Memory::inRom(u32 addr)
     memSrc == MEM_EXT;
 }
 
+bool 
+Memory::isUnmapped(u32 addr)
+{
+    if (addr > 0xFFFFFF) return true;
+
+    return cpuMemSrc[addr >> 16] == MEM_NONE;
+}
+
 
 //
 // Peek (CPU)

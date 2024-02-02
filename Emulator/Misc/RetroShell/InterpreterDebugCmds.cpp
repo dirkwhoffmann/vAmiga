@@ -125,6 +125,33 @@ Interpreter::initDebugShell(Command &root)
         retroShell << '\n' << ss << '\n';
     });
 
+    root.add({"find"}, { Arg::value }, { Arg::value, Arg::value, Arg::value },
+             "Find a number sequence starting at the working address",
+             [this](Arguments& argv, long value) {
+
+        u32 values[4];
+        if (argv.size() > 0) values[0] = (u32)parseNum(argv, 0);
+        if (argv.size() > 1) values[1] = (u32)parseNum(argv, 1);
+        if (argv.size() > 2) values[2] = (u32)parseNum(argv, 2);
+        if (argv.size() > 3) values[3] = (u32)parseNum(argv, 3);
+
+        auto addr = debugger.memSearch(values, argv.size(), 1);
+
+        if (addr >= 0) {
+
+            std::stringstream ss;
+            debugger.memDump<ACCESSOR_CPU>(ss, u32(addr), 1, 1);
+            retroShell << ss;
+
+        } else {
+
+            std::stringstream ss;
+            ss << "Not found in the range ";
+            ss << util::hex(debugger.current) << " - " << util::hex(u32(0xFFFFFF)) << '\n';
+            retroShell << ss;
+        }
+    });
+
     root.add({"register"}, { ChipsetRegEnum::argList() }, { Arg::value },
              "Reads or modifies a custom chipset register",
              [this](Arguments& argv, long value) {
