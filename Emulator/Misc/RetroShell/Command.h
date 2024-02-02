@@ -36,8 +36,11 @@ static const std::string volume     = "<volume>";
 
 struct Command {
 
-    //Textual descriptions of all command groups
+    // Textual descriptions of all command groups
     static std::vector<string> groups;
+
+    // Currently selected group (used in command registration)
+    static isize currentGroup;
 
     // Command group of this command
     isize group;
@@ -75,7 +78,7 @@ struct Command {
     //
 
     // Creates a new command group
-    void newGroup(const string &description, const string &postfix = ":");
+    void setGroup(const string &description, const string &postfix = ":");
 
     // Creates a new node in the command tree
     void add(const std::vector<string> &tokens,

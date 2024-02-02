@@ -20,7 +20,7 @@ Interpreter::initCommons(Command &root)
     // Common commands
     //
 
-    root.newGroup("Controlling the shell");
+    root.setGroup("Shell commands");
 
     root.add({"."},
              "Enters or exists the debugger",
@@ -89,12 +89,12 @@ Interpreter::initCommandShell(Command &root)
     // Top-level commands
     //
 
-    root.newGroup("Regression testing");
+    root.setGroup("Regression testing");
 
     root.add({"regression"},    "Runs the regression tester");
     root.add({"screenshot"},    "Manages screenshots");
 
-    root.newGroup("Controlling components");
+    root.setGroup("Controlling components");
 
     root.add({"amiga"},         "The virtual Amiga");
     root.add({"memory"},        "Ram and Rom");
@@ -109,7 +109,7 @@ Interpreter::initCommandShell(Command &root)
     root.add({"serial"},        "Serial port");
     root.add({"dmadebugger"},   "DMA Debugger");
 
-    root.newGroup("Controlling peripherals");
+    root.setGroup("Controlling peripherals");
 
     root.add({"monitor"},       "Amiga monitor");
     root.add({"keyboard"},      "Keyboard");
@@ -126,7 +126,7 @@ Interpreter::initCommandShell(Command &root)
     root.add({"hd2"},           "Hard drive 2");
     root.add({"hd3"},           "Hard drive 3");
 
-    root.newGroup("Miscellaneous");
+    root.setGroup("Miscellaneous");
 
     root.add({"server"},        "Remote connections");
 
@@ -135,7 +135,7 @@ Interpreter::initCommandShell(Command &root)
     // Regression testing
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     root.add({"regression", "setup"}, { ConfigSchemeEnum::argList() }, { Arg::path, Arg::path },
              "Initializes the test environment",
@@ -192,7 +192,7 @@ Interpreter::initCommandShell(Command &root)
     // Amiga
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     root.add({"amiga", ""},
              "Displays the current configuration",
@@ -289,7 +289,7 @@ Interpreter::initCommandShell(Command &root)
     // Memory
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     root.add({"memory", ""},
              "Displays the current configuration",
@@ -386,7 +386,7 @@ Interpreter::initCommandShell(Command &root)
     // CPU
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     root.add({"cpu", ""},
              "Displays the current configuration",
@@ -441,7 +441,7 @@ Interpreter::initCommandShell(Command &root)
     // CIA
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     for (isize i = 0; i < 2; i++) {
         
@@ -501,7 +501,7 @@ Interpreter::initCommandShell(Command &root)
     // Agnus
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     root.add({"agnus", ""},
              "Displays the current configuration",
@@ -539,7 +539,7 @@ Interpreter::initCommandShell(Command &root)
     // Blitter
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     root.add({"blitter", ""},
              "Displays the current configuration",
@@ -563,7 +563,7 @@ Interpreter::initCommandShell(Command &root)
     // Denise
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     root.add({"denise", ""},
              "Displays the current configuration",
@@ -764,7 +764,7 @@ Interpreter::initCommandShell(Command &root)
     // Paula (Audio)
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     root.add({"paula", "audio"},
              "Audio unit");
@@ -933,7 +933,7 @@ Interpreter::initCommandShell(Command &root)
     // RTC
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     root.add({"rtc", ""},
              "Displays the current configuration",
@@ -957,7 +957,7 @@ Interpreter::initCommandShell(Command &root)
     // Keyboard
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     root.add({"keyboard", ""},
              "Displays the current configuration",
@@ -988,7 +988,7 @@ Interpreter::initCommandShell(Command &root)
     // Joystick
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     for (isize i = ControlPort::PORT1; i <= ControlPort::PORT2; i++) {
 
@@ -1140,7 +1140,7 @@ Interpreter::initCommandShell(Command &root)
     // Mouse
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     for (isize i = ControlPort::PORT1; i <= ControlPort::PORT2; i++) {
 
@@ -1224,7 +1224,7 @@ Interpreter::initCommandShell(Command &root)
     // Serial port
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     root.add({"serial", ""},
              "Displays the current configuration",
@@ -1255,7 +1255,7 @@ Interpreter::initCommandShell(Command &root)
     // Df0, Df1, Df2, Df3
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     for (isize i = 0; i <= 4; i++) {
 
@@ -1449,7 +1449,7 @@ Interpreter::initCommandShell(Command &root)
     // Hd0, Hd1, Hd2, Hd3
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     for (isize i = 0; i <= 4; i++) {
 
@@ -1536,7 +1536,7 @@ Interpreter::initCommandShell(Command &root)
     // Remote server
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     root.add({"server", ""},
              "Displays a server status summary",

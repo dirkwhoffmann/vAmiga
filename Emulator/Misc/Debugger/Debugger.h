@@ -17,6 +17,12 @@ namespace vamiga {
 
 class Debugger : public SubComponent {
 
+public:
+
+    // Last used address (current object location)
+    u32 current = 0;
+
+
     //
     // Static functions
     //
@@ -53,7 +59,8 @@ private:
 private:
 
     void _reset(bool hard) override { };
-
+    void _pause() override;
+    
 
     //
     // Serializing
@@ -88,17 +95,19 @@ public:
     // Managing memory
     //
 
-    // Returns 16 bytes of memory as an ASCII string
-    template <Accessor A> const char *ascDump(u32 addr, isize numBytes) const;
+    // Returns a memory dump in ASCII, hex, or both
+    template <Accessor A> const char *ascDump(u32 addr, isize bytes) const;
+    template <Accessor A> const char *hexDump(u32 addr, isize bytes, isize sz = 1) const;
+    template <Accessor A> const char *memDump(u32 addr, isize bytes, isize sz = 1) const;
 
-    // Returns a certain amount of bytes as a string containing hex words
-    template <Accessor A> const char *hexDump(u32 addr, isize numBytes) const;
+    // Writes a memory dump into a stream
+    template <Accessor A> void ascDump(std::ostream& os, u32 addr, isize lines);
+    template <Accessor A> void hexDump(std::ostream& os, u32 addr, isize lines, isize sz);
+    template <Accessor A> void memDump(std::ostream& os, u32 addr, isize lines, isize sz);
 
-    // Creates a memory dump
-    template <Accessor A> void memDump(std::ostream& os, u32 addr, isize numLines = 16) const;
-
-    // Creates a memory dump
-    // void dumpMemory(std::ostream& os, u32 addr, isize fmt) const;
+    template <Accessor A> void ascDump(std::ostream& os, isize lines) { ascDump<A>(os, current, lines); }
+    template <Accessor A> void hexDump(std::ostream& os, isize lines, isize sz) { hexDump<A>(os, current, lines, sz); }
+    template <Accessor A> void memDump(std::ostream& os, isize lines, isize sz) { memDump<A>(os, current, lines, sz); }
 
 
     //

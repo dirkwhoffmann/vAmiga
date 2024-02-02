@@ -222,7 +222,7 @@ Interpreter::help(const Command& current)
 
     // Print the usage string
     usage(current);
-    
+
     // Determine tabular positions to align the output
     isize tab = 0;
     for (auto &it : current.subCommands) {

@@ -1523,6 +1523,13 @@ Memory::spypeek16 <ACCESSOR_AGNUS> (u32 addr) const
     }
 }
 
+template<> u8
+Memory::spypeek8 <ACCESSOR_AGNUS> (u32 addr) const
+{
+    auto word = spypeek16 <ACCESSOR_AGNUS> (addr & ~1);
+    return IS_EVEN(addr) ? HI_BYTE(word) : LO_BYTE(word);
+}
+
 
 //
 // Poke (CPU)

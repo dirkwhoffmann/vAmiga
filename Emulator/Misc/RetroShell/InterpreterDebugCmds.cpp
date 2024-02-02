@@ -19,12 +19,12 @@ Interpreter::initDebugShell(Command &root)
     initCommons(root);
 
     //
-    // Execution
+    // Monitor
     //
 
-    root.newGroup("Controlling the instruction stream");
+    root.setGroup("Monitor commands");
 
-    root.add({"g"}, { }, { Arg::value },
+    root.add({"goto"}, { }, { Arg::value },
              "Goto address",
              [this](Arguments& argv, long value) {
 
@@ -37,14 +37,14 @@ Interpreter::initDebugShell(Command &root)
         }
     });
 
-    root.add({"s"},
+    root.add({"step"},
              "Step into the next instruction",
              [this](Arguments& argv, long value) {
 
         debugger.stepInto();
     });
 
-    root.add({"n"},
+    root.add({"next"},
              "Step over the next instruction",
              [this](Arguments& argv, long value) {
 
@@ -52,12 +52,31 @@ Interpreter::initDebugShell(Command &root)
     });
 
     //
+    // Inspect
+    //
+    root.add({"inspect"},
+             "Inspect component");
+
+    root.add({"inspect", "amiga"},         "Main computer");
+    root.add({"inspect", "memory"},        "RAM and ROM");
+    root.add({"inspect", "cpu"},           "Motorola 68k CPU");
+    root.add({"inspect", "ciaa"},          "Complex Interface Adapter A");
+    root.add({"inspect", "ciab"},          "Complex Interface Adapter B");
+    root.add({"inspect", "agnus"},         "Custom Chipset");
+    root.add({"inspect", "blitter"},       "Coprocessor");
+    root.add({"inspect", "copper"},        "Coprocessor");
+    root.add({"inspect", "paula"},         "Custom Chipset");
+    root.add({"inspect", "denise"},        "Custom Chipset");
+    root.add({"inspect", "rtc"},           "Real-time clock");
+    root.add({"inspect", "zorro"},         "Expansion boards");
+    root.add({"inspect", "controlport"},   "Control ports");
+    root.add({"inspect", "serial"},        "Serial port");
+
+    //
     //
     //
 
-    root.newGroup("Debugging code and memory");
-
-    root.add({"d"}, { }, { Arg::address },
+    root.add({"disassemble"}, { }, { Arg::address },
              "Disassemble instructions",
              [this](Arguments& argv, long value) {
 
@@ -69,19 +88,77 @@ Interpreter::initDebugShell(Command &root)
         retroShell << '\n' << ss << '\n';
     });
 
-    root.add({"m"}, { }, { Arg::address },
-             "Examine memory",
+    root.add({"dump"}, { }, { Arg::address },
+             "Dump memory",
              [this](Arguments& argv, long value) {
 
         std::stringstream ss;
-        // debugger.dumpMemory(ss, argv.empty() ?  workingAddr : u32(parseNum(argv)), 2);
+
+        argv.empty() ?
+        debugger.memDump<ACCESSOR_CPU>(ss, 16, 1) :
+        debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv)), 16, 1);
+
         retroShell << '\n' << ss << '\n';
     });
 
-    root.newGroup("Analyzing components and modifying registers");
+    root.add({"dump.b"}, { }, { Arg::address }, "",
+             [this](Arguments& argv, long value) {
+
+        std::stringstream ss;
+
+        argv.empty() ?
+        debugger.memDump<ACCESSOR_CPU>(ss, 16, 1) :
+        debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv)), 16, 1);
+
+        retroShell << '\n' << ss << '\n';
+    });
+
+    root.add({"dump.w"}, { }, { Arg::address }, "",
+             [this](Arguments& argv, long value) {
+
+        std::stringstream ss;
+
+        argv.empty() ?
+        debugger.memDump<ACCESSOR_CPU>(ss, 16, 2) :
+        debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv)), 16, 2);
+
+        retroShell << '\n' << ss << '\n';
+    });
+
+    root.add({"dump.l"}, { }, { Arg::address }, "",
+             [this](Arguments& argv, long value) {
+
+        std::stringstream ss;
+
+        argv.empty() ?
+        debugger.memDump<ACCESSOR_CPU>(ss, 16, 4) :
+        debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv)), 16, 4);
+
+        retroShell << '\n' << ss << '\n';
+    });
+
+    root.add({"register"}, { ChipsetRegEnum::argList() }, { Arg::value },
+             "Reads or modifies a custom chipset register",
+             [this](Arguments& argv, long value) {
+
+        auto addr = u32(2 * parseEnum<ChipsetRegEnum>(argv));
+        auto name = Debugger::regName(addr);
+        std::stringstream ss;
+
+        if (argv.size() == 1) {
+            ss << name << " = " << util::hex(mem.spypeekCustom16(addr));
+        } else {
+            mem.pokeCustom16 <ACCESSOR_CPU> (addr, u16(parseNum(argv, 1)));
+            ss << "Written " << util::hex(u16(parseNum(argv, 1))) << " to " << name;
+        }
+
+        retroShell << ss << '\n';
+    });
 
 
-    root.newGroup("Miscellaneous");
+
+
+    root.setGroup("Miscellaneous");
 
     root.add({"?"}, { Arg::value },
              "Convert a value into different formats",
@@ -101,48 +178,14 @@ Interpreter::initDebugShell(Command &root)
 
 
 
+
     //
     // Top-level commands
     //
 
-    root.newGroup("Controlling the instruction stream");
 
-    root.add({"pause"},
-             "Pauses emulation",
-             [this](Arguments& argv, long value) {
 
-        amiga.pause();
-    });
-
-    root.add({"continue"},
-             "Continues emulation",
-                [this](Arguments& argv, long value) {
-
-        amiga.run();
-    });
-
-    root.add({"step"},
-             "Steps into the next instruction",
-                [this](Arguments& argv, long value) {
-
-        debugger.stepInto();
-    });
-
-    root.add({"next"},
-             "Steps over the next instruction",
-                [this](Arguments& argv, long value) {
-
-        debugger.stepOver();
-    });
-
-    root.add({"goto"}, { Arg::address },
-             "Redirects the program counter",
-             [this](Arguments& argv, long value) {
-
-        amiga.cpu.jump((u32)parseNum(argv));
-    });
-
-    root.newGroup("Guarding the program execution");
+    root.setGroup("Guarding the program execution");
 
     root.add({"break"},     "Manages CPU breakpoints");
     root.add({"watch"},     "Manages CPU watchpoints");
@@ -150,7 +193,7 @@ Interpreter::initDebugShell(Command &root)
     root.add({"cbreak"},    "Manages Copper breakpoints");
     root.add({"cwatch"},    "Manages Copper watchpoints");
 
-    root.newGroup("Debugging components");
+    root.setGroup("Debugging components");
 
     root.add({"amiga"},         "Main computer");
     root.add({"memory"},        "RAM and ROM");
@@ -167,7 +210,7 @@ Interpreter::initDebugShell(Command &root)
     root.add({"controlport"},   "Control ports");
     root.add({"serial"},        "Serial port");
 
-    root.newGroup("Debugging peripherals");
+    root.setGroup("Debugging peripherals");
 
     root.add({"keyboard"},      "Keyboard");
     root.add({"mouse"},         "Mouse");
@@ -181,7 +224,7 @@ Interpreter::initDebugShell(Command &root)
     root.add({"hd2"},           "Hard drive 2");
     root.add({"hd3"},           "Hard drive 3");
 
-    root.newGroup("Miscellaneous");
+    root.setGroup("Miscellaneous");
 
     root.add({"host"},          "Host computer");
     root.add({"os"},            "AmigaOS debugger");
@@ -192,7 +235,7 @@ Interpreter::initDebugShell(Command &root)
     // Breakpoints
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     root.add({"break", ""},
              "Lists all breakpoints",
@@ -241,7 +284,7 @@ Interpreter::initDebugShell(Command &root)
     // Watchpoints
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     root.add({"watch", ""},
              "Lists all watchpoints",
@@ -290,7 +333,7 @@ Interpreter::initDebugShell(Command &root)
     // Catchpoints
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     root.add({"catch", ""},
              "Lists all catchpoints",
@@ -453,7 +496,7 @@ Interpreter::initDebugShell(Command &root)
     // Amiga
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     root.add({"amiga", ""},
              "Inspects the internal state",
@@ -479,7 +522,7 @@ Interpreter::initDebugShell(Command &root)
              [this](Arguments& argv, long value) {
 
         std::stringstream ss;
-        debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv)));
+        debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv)), 16, 2);
         retroShell << '\n' << ss << '\n';
     });
 
@@ -1037,7 +1080,7 @@ Interpreter::initDebugShell(Command &root)
     // Remote server
     //
 
-    root.newGroup("");
+    root.setGroup("");
 
     root.add({"server", ""},
              "Displays a server status summary",

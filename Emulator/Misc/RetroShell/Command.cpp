@@ -15,11 +15,18 @@
 namespace vamiga {
 
 std::vector<string> Command::groups;
+isize Command::currentGroup = 0;
 
 void
-Command::newGroup(const string &description, const string &postfix)
+Command::setGroup(const string &description, const string &postfix)
 {
-    groups.push_back(description.empty() ? "" : description + postfix);
+    auto name = description.empty() ? "" : description + postfix;
+
+    for (isize i = 0; i < isize(groups.size()); i++) {
+        if (name == groups[i]) { currentGroup = i; }
+    }
+    currentGroup = groups.size();
+    groups.push_back(name);
 }
 
 void
@@ -63,7 +70,7 @@ Command::add(const std::vector<string> &tokens,
     Command d;
     d.name = tokens.back();
     d.fullName = (cmd->fullName.empty() ? "" : cmd->fullName + " ") + tokens.back();
-    d.group = isize(groups.size()) - 1;
+    d.group = currentGroup - 1;
     d.requiredArgs = requiredArgs;
     d.optionalArgs = optionalArgs;
     d.help = help;

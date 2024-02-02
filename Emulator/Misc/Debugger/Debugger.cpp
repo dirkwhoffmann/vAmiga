@@ -22,6 +22,12 @@ Debugger::regName(u32 addr)
 }
 
 void
+Debugger::_pause()
+{
+
+}
+
+void
 Debugger::stopAndGo()
 {
     isRunning() ? amiga.pause() : amiga.run();
@@ -58,27 +64,46 @@ Debugger::jump(u32 addr)
 }
 
 template <Accessor A> const char *
-Debugger::ascDump(u32 addr, isize numBytes) const
+Debugger::ascDump(u32 addr, isize bytes) const
 {
-    assert(numBytes < 256);
+    assert(bytes < 256);
+
     static char str[256];
 
-    for (isize i = 0; i < numBytes; i += 2) {
+    for (isize i = 0; i < bytes; i += 2) {
+
         u16 word = mem.spypeek16 <A> ((u32)(addr + i));
         str[i] = isprint(HI_BYTE(word)) ? HI_BYTE(word) : '.';
         str[i+1] = isprint(LO_BYTE(word)) ? LO_BYTE(word) : '.';
     }
-    str[numBytes] = 0;
+    str[bytes] = 0;
     return str;
 }
 
 template <Accessor A> const char *
-Debugger::hexDump(u32 addr, isize numBytes) const
+Debugger::hexDump(u32 addr, isize bytes, isize sz) const
 {
-    assert(numBytes % 2 == 0);
+    assert(sz == 1 || bytes % 2 == 0);
+    assert(bytes <= 64);
+
     static char str[256];
     char *p = str;
 
+    for (u32 i = 0; i < bytes; i++) {
+
+        u8 byte = mem.spypeek8 <A> (addr + i);
+
+        u8 digit1 = HI_NIBBLE(byte);
+        u8 digit2 = LO_NIBBLE(byte);
+
+        *p++ = digit1 < 10 ? '0' + digit1 : 'A' + digit1 - 10;
+        *p++ = digit2 < 10 ? '0' + digit2 : 'A' + digit2 - 10;
+
+        if ((i + 1) % sz == 0) *p++ = ' ';
+    }
+    *p = 0;
+
+    /*
     for (isize i = 0; i < numBytes; i += 2, p += 5) {
 
         u16 word = mem.spypeek16 <A> ((u32)(addr + i));
@@ -94,24 +119,69 @@ Debugger::hexDump(u32 addr, isize numBytes) const
         p[3] = digit4 < 10 ? '0' + digit4 : 'A' + digit4 - 10;
         p[4] = i == numBytes - 2 ? char(0) : ' ';
     }
+    */
+
+    return str;
+}
+
+template <Accessor A> const char *
+Debugger::memDump(u32 addr, isize bytes, isize sz) const
+{
+    assert(sz == 1 || bytes % 2 == 0);
+    assert(bytes <= 32);
+    
+    static char str[256];
+
+    strcpy(str, hexDump<A>(addr, bytes, sz));
+    strcat(str, "  ");
+    strcat(str, ascDump<A>(addr, bytes));
 
     return str;
 }
 
 template <Accessor A> void
-Debugger::memDump(std::ostream& os, u32 addr, isize numLines) const
+Debugger::ascDump(std::ostream& os, u32 addr, isize lines)
 {
-    addr &= ~0xF;
+    for (isize i = 0; i < lines; i++, addr += 64) {
 
-    for (isize i = 0; i < numLines; i++, addr += 16) {
+        os << std::setfill('0') << std::hex << std::right << std::setw(6) << isize(addr);
+        os << ":  ";
+        os << hexDump<A>(addr, 64);
+        os << std::endl;
+    }
+    current = addr;
+}
+
+template <Accessor A> void
+Debugger::hexDump(std::ostream& os, u32 addr, isize lines, isize sz)
+{
+    if (sz != 1) addr &= ~0x1;
+
+    for (isize i = 0; i < lines; i++, addr += 16) {
 
         os << std::setfill('0') << std::hex << std::right << std::setw(6) << isize(addr);
         os << ":  ";
         os << hexDump<A>(addr, 16);
+        os << std::endl;
+    }
+    current = addr;
+}
+
+template <Accessor A> void
+Debugger::memDump(std::ostream& os, u32 addr, isize lines, isize sz)
+{
+    if (sz != 1) addr &= ~0x1;
+
+    for (isize i = 0; i < lines; i++, addr += 16) {
+
+        os << std::setfill('0') << std::hex << std::right << std::setw(6) << isize(addr);
+        os << ":  ";
+        os << hexDump<A>(addr, 16, sz);
         os << "  ";
         os << ascDump<A>(addr, 16);
         os << std::endl;
     }
+    current = addr;
 }
 
 void
@@ -143,12 +213,16 @@ Debugger::convertNumeric(std::ostream& os, string s) const
     convertNumeric(os, HI_HI_LO_LO(bytes[0], bytes[1], bytes[2], bytes[3]));
 }
 
- template const char *Debugger::ascDump <ACCESSOR_CPU> (u32 addr, isize numBytes) const;
- template const char *Debugger::ascDump <ACCESSOR_AGNUS> (u32 addr, isize numBytes) const;
-
- template const char *Debugger::hexDump <ACCESSOR_CPU> (u32 addr, isize numBytes) const;
- template const char *Debugger::hexDump <ACCESSOR_AGNUS> (u32 addr, isize numBytes) const;
-
- template void Debugger::memDump <ACCESSOR_CPU> (std::ostream& os, u32 addr, isize numLines) const;
- template void Debugger::memDump <ACCESSOR_AGNUS> (std::ostream& os, u32 addr, isize numLines) const;
+template const char *Debugger::ascDump <ACCESSOR_CPU> (u32, isize) const;
+template const char *Debugger::ascDump <ACCESSOR_AGNUS> (u32, isize) const;
+template const char *Debugger::hexDump <ACCESSOR_CPU> (u32, isize, isize) const;
+template const char *Debugger::hexDump <ACCESSOR_AGNUS> (u32, isize, isize) const;
+template const char *Debugger::memDump <ACCESSOR_CPU> (u32, isize, isize) const;
+template const char *Debugger::memDump <ACCESSOR_AGNUS> (u32, isize, isize) const;
+template void Debugger::ascDump <ACCESSOR_CPU> (std::ostream&, u32, isize);
+template void Debugger::ascDump <ACCESSOR_AGNUS> (std::ostream&, u32, isize);
+template void Debugger::hexDump <ACCESSOR_CPU> (std::ostream&, u32, isize, isize);
+template void Debugger::hexDump <ACCESSOR_AGNUS> (std::ostream&, u32, isize, isize);
+template void Debugger::memDump <ACCESSOR_CPU> (std::ostream&, u32, isize, isize);
+template void Debugger::memDump <ACCESSOR_AGNUS> (std::ostream&, u32, isize, isize);
 }
