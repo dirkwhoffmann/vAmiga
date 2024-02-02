@@ -141,22 +141,19 @@ Interpreter::initDebugShell(Command &root)
              "Reads or modifies a custom chipset register",
              [this](Arguments& argv, long value) {
 
-        auto addr = u32(2 * parseEnum<ChipsetRegEnum>(argv));
-        auto name = Debugger::regName(addr);
-        std::stringstream ss;
+        auto reg = parseEnum<ChipsetRegEnum>(argv);
 
         if (argv.size() == 1) {
-            ss << name << " = " << util::hex(mem.spypeekCustom16(addr));
+
+            std::stringstream ss;
+            ss << ChipsetRegEnum::key(reg) << " = " << util::hex(debugger.readCs(reg));
+            retroShell << ss;
+
         } else {
-            mem.pokeCustom16 <ACCESSOR_CPU> (addr, u16(parseNum(argv, 1)));
-            ss << "Written " << util::hex(u16(parseNum(argv, 1))) << " to " << name;
+
+            debugger.writeCs(reg, u16(parseNum(argv, 1)));
         }
-
-        retroShell << ss << '\n';
     });
-
-
-
 
     root.setGroup("Miscellaneous");
 

@@ -10,6 +10,7 @@
 #pragma once
 
 #include "DebuggerTypes.h"
+#include "AmigaTypes.h"
 #include "MemoryTypes.h"
 #include "SubComponent.h"
 
@@ -104,10 +105,21 @@ public:
     template <Accessor A> void ascDump(std::ostream& os, u32 addr, isize lines);
     template <Accessor A> void hexDump(std::ostream& os, u32 addr, isize lines, isize sz);
     template <Accessor A> void memDump(std::ostream& os, u32 addr, isize lines, isize sz);
-
     template <Accessor A> void ascDump(std::ostream& os, isize lines) { ascDump<A>(os, current, lines); }
     template <Accessor A> void hexDump(std::ostream& os, isize lines, isize sz) { hexDump<A>(os, current, lines, sz); }
     template <Accessor A> void memDump(std::ostream& os, isize lines, isize sz) { memDump<A>(os, current, lines, sz); }
+
+
+    //
+    // Managing memory
+    //
+
+    bool isUnused(ChipsetReg reg) const;
+    bool isReadable(ChipsetReg reg) const;
+    bool isWritable(ChipsetReg reg) const;
+
+    u16 readCs(ChipsetReg reg) const;
+    void writeCs(ChipsetReg reg, u16 value);
 
 
     //

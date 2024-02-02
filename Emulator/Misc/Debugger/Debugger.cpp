@@ -184,6 +184,127 @@ Debugger::memDump(std::ostream& os, u32 addr, isize lines, isize sz)
     current = addr;
 }
 
+bool
+Debugger::isReadable(ChipsetReg reg) const
+{
+    switch (reg) {
+
+        case REG_DMACONR:   case REG_VPOSR:     case REG_VHPOSR:    case REG_DSKDATR:
+        case REG_JOY0DAT:   case REG_JOY1DAT:   case REG_CLXDAT:    case REG_ADKCONR:
+        case REG_POT0DAT:   case REG_POT1DAT:   case REG_POTGOR:    case REG_SERDATR:
+        case REG_DSKBYTR:   case REG_INTENAR:   case REG_INTREQR:
+
+            return true;
+
+        case REG_DENISEID:
+
+            return denise.isECS();
+
+        default:
+
+            return false;
+    }
+}
+
+bool
+Debugger::isWritable(ChipsetReg reg) const
+{
+    switch (reg) {
+
+        case REG_DSKPTH:    case REG_DSKPTL:    case REG_DSKLEN:    case REG_DSKDAT:
+        case REG_REFPTR:    case REG_VPOSW:     case REG_VHPOSW:    case REG_COPCON:
+        case REG_SERDAT:    case REG_SERPER:    case REG_POTGO:     case REG_JOYTEST:
+        case REG_STREQU:    case REG_STRVBL:    case REG_STRHOR:    case REG_STRLONG:
+        case REG_BLTCON0:   case REG_BLTCON1:   case REG_BLTAFWM:   case REG_BLTALWM:
+        case REG_BLTCPTH:   case REG_BLTCPTL:   case REG_BLTBPTH:   case REG_BLTBPTL:
+        case REG_BLTAPTH:   case REG_BLTAPTL:   case REG_BLTDPTH:   case REG_BLTDPTL:
+        case REG_BLTSIZE:   case REG_BLTCMOD:   case REG_BLTBMOD:   case REG_BLTAMOD:
+        case REG_BLTDMOD:   case REG_BLTCDAT:   case REG_BLTBDAT:   case REG_BLTADAT:
+        case REG_DSKSYNC:   case REG_COP1LCH:   case REG_COP1LCL:   case REG_COP2LCH:
+        case REG_COP2LCL:   case REG_COPJMP1:   case REG_COPJMP2:   case REG_COPINS:
+        case REG_DIWSTRT:   case REG_DIWSTOP:   case REG_DDFSTRT:   case REG_DDFSTOP:
+        case REG_DMACON:    case REG_CLXCON:    case REG_INTENA:    case REG_INTREQ:
+        case REG_ADKCON:    case REG_AUD0LCH:   case REG_AUD0LCL:   case REG_AUD0LEN:
+        case REG_AUD0PER:   case REG_AUD0VOL:   case REG_AUD0DAT:   case REG_AUD1LCH:
+        case REG_AUD1LCL:   case REG_AUD1LEN:   case REG_AUD1PER:   case REG_AUD1VOL:
+        case REG_AUD1DAT:   case REG_AUD2LCH:   case REG_AUD2LCL:   case REG_AUD2LEN:
+        case REG_AUD2PER:   case REG_AUD2VOL:   case REG_AUD2DAT:   case REG_AUD3LCH:
+        case REG_AUD3LCL:   case REG_AUD3LEN:   case REG_AUD3PER:   case REG_AUD3VOL:
+        case REG_AUD3DAT:   case REG_BPL1PTH:   case REG_BPL1PTL:   case REG_BPL2PTH:
+        case REG_BPL2PTL:   case REG_BPL3PTH:   case REG_BPL3PTL:   case REG_BPL4PTH:
+        case REG_BPL4PTL:   case REG_BPL5PTH:   case REG_BPL5PTL:   case REG_BPL6PTH:
+        case REG_BPL6PTL:   case REG_BPLCON0:   case REG_BPLCON1:   case REG_BPLCON2:
+        case REG_BPL1MOD:   case REG_BPL2MOD:   case REG_BPL1DAT:   case REG_BPL2DAT:
+        case REG_BPL3DAT:   case REG_BPL4DAT:   case REG_BPL5DAT:   case REG_BPL6DAT:
+        case REG_SPR0PTH:   case REG_SPR0PTL:   case REG_SPR1PTH:   case REG_SPR1PTL:
+        case REG_SPR2PTH:   case REG_SPR2PTL:   case REG_SPR3PTH:   case REG_SPR3PTL:
+        case REG_SPR4PTH:   case REG_SPR4PTL:   case REG_SPR5PTH:   case REG_SPR5PTL:
+        case REG_SPR6PTH:   case REG_SPR6PTL:   case REG_SPR7PTH:   case REG_SPR7PTL:
+        case REG_SPR0POS:   case REG_SPR0CTL:   case REG_SPR0DATA:  case REG_SPR0DATB:
+        case REG_SPR1POS:   case REG_SPR1CTL:   case REG_SPR1DATA:  case REG_SPR1DATB:
+        case REG_SPR2POS:   case REG_SPR2CTL:   case REG_SPR2DATA:  case REG_SPR2DATB:
+        case REG_SPR3POS:   case REG_SPR3CTL:   case REG_SPR3DATA:  case REG_SPR3DATB:
+        case REG_SPR4POS:   case REG_SPR4CTL:   case REG_SPR4DATA:  case REG_SPR4DATB:
+        case REG_SPR5POS:   case REG_SPR5CTL:   case REG_SPR5DATA:  case REG_SPR5DATB:
+        case REG_SPR6POS:   case REG_SPR6CTL:   case REG_SPR6DATA:  case REG_SPR6DATB:
+        case REG_SPR7POS:   case REG_SPR7CTL:   case REG_SPR7DATA:  case REG_SPR7DATB:
+        case REG_COLOR00:   case REG_COLOR01:   case REG_COLOR02:   case REG_COLOR03:
+        case REG_COLOR04:   case REG_COLOR05:   case REG_COLOR06:   case REG_COLOR07:
+        case REG_COLOR08:   case REG_COLOR09:   case REG_COLOR10:   case REG_COLOR11:
+        case REG_COLOR12:   case REG_COLOR13:   case REG_COLOR14:   case REG_COLOR15:
+        case REG_COLOR16:   case REG_COLOR17:   case REG_COLOR18:   case REG_COLOR19:
+        case REG_COLOR20:   case REG_COLOR21:   case REG_COLOR22:   case REG_COLOR23:
+        case REG_COLOR24:   case REG_COLOR25:   case REG_COLOR26:   case REG_COLOR27:
+        case REG_COLOR28:   case REG_COLOR29:   case REG_COLOR30:   case REG_COLOR31:
+        case REG_NO_OP:
+
+            return true;
+
+        case REG_BLTCON0L:  case REG_BLTSIZV:   case REG_BLTSIZH:   case REG_SPRHDAT:
+        case REG_BPLCON3:   case REG_HTOTAL:    case REG_HSSTOP:    case REG_HBSTRT:
+        case REG_HBSTOP:    case REG_VTOTAL:    case REG_VSSTOP:    case REG_VBSTRT:
+        case REG_VBSTOP:    case REG_BEAMCON0:  case REG_HSSTRT:    case REG_VSSTRT:
+        case REG_HCENTER:
+
+            return agnus.isECS();
+
+        case REG_DENISEID:
+
+            return denise.isECS();
+
+        case REG_DIWHIGH:
+
+            return agnus.isECS() || denise.isECS();
+
+        default:
+
+            return false;
+    }
+}
+
+bool
+Debugger::isUnused(ChipsetReg reg) const
+{
+    return !isReadable(reg) && !isWritable(reg);
+}
+
+u16
+Debugger::readCs(ChipsetReg reg) const
+{
+    if (isUnused(reg)) throw VAError(ERROR_REG_UNUSED, ChipsetRegEnum::key(reg));
+    if (isWritable(reg)) throw VAError(ERROR_REG_WRITE_ONLY, ChipsetRegEnum::key(reg));
+
+    return mem.peekCustom16(u32(reg << 1));
+}
+void
+Debugger::writeCs(ChipsetReg reg, u16 value)
+{
+    if (isUnused(reg)) throw VAError(ERROR_REG_UNUSED, ChipsetRegEnum::key(reg));
+    if (isReadable(reg)) throw VAError(ERROR_REG_READ_ONLY, ChipsetRegEnum::key(reg));
+
+    return mem.pokeCustom16<ACCESSOR_CPU>(u32(reg << 1), value);
+}
+
 void
 Debugger::convertNumeric(std::ostream& os, isize value) const
 {

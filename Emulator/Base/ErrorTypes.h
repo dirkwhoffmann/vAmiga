@@ -116,6 +116,11 @@ enum_long(ERROR_CODE)
     // Recorder
     ERROR_REC_LAUNCH,
 
+    // Debugger
+    ERROR_REG_READ_ONLY,
+    ERROR_REG_WRITE_ONLY,
+    ERROR_REG_UNUSED,
+
     // OS Debugger
     ERROR_OSDB,
     ERROR_HUNK_BAD_COOKIE,
@@ -284,6 +289,10 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_INVALID_ROM_KEY:             return "INVALID_ROM_KEY";
                 
             case ERROR_REC_LAUNCH:                  return "REC_LAUNCH";
+
+            case ERROR_REG_READ_ONLY:               return "REG_READ_ONLY";
+            case ERROR_REG_WRITE_ONLY:              return "REG_WRITE_ONLY";
+            case ERROR_REG_UNUSED:                  return "REG_UNUSED";
 
             case ERROR_OSDB:                        return "OSDB";
             case ERROR_HUNK_BAD_COOKIE:             return "HUNK_BAD_COOKIE";
