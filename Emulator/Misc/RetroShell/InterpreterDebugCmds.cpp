@@ -125,6 +125,31 @@ Interpreter::initDebugShell(Command &root)
         retroShell << '\n' << ss << '\n';
     });
 
+    root.add({"write"}, { Arg::address, Arg::value }, { Arg::count },
+             "Modify memory",
+             [this](Arguments& argv, long value) {
+
+        execWrite(argv, 2);
+    });
+
+    root.add({"write.b"}, { Arg::address, Arg::value }, { Arg::count }, "",
+             [this](Arguments& argv, long value) {
+
+        execWrite(argv, 1);
+    });
+
+    root.add({"write.w"}, { Arg::address, Arg::value }, { Arg::count }, "",
+             [this](Arguments& argv, long value) {
+
+        execWrite(argv, 2);
+    });
+
+    root.add({"write.l"}, { Arg::address, Arg::value }, { Arg::count }, "",
+             [this](Arguments& argv, long value) {
+
+        execWrite(argv, 4);
+    });
+
     root.add({"find"}, { Arg::sequence }, { Arg::address },
              "Find a byte sequence in memory",
              [this](Arguments& argv, long value) {
@@ -1057,6 +1082,46 @@ Interpreter::initDebugShell(Command &root)
 
         retroShell << '\n' << ss << '\n';
     });
+}
+
+void
+Interpreter::execWrite(Arguments &argv, isize sz)
+{
+    auto addr = parseNum(argv, 0);
+    auto value = parseNum(argv, 1);
+    auto repeats = argv.size() > 2 ? parseNum(argv, 2) : 1;
+
+    printf("addr = %ld value = %ld repeats = %ld\n", addr, value, repeats);
+
+    // Check alignment
+    if (sz != 1 && IS_ODD(addr)) throw VAError(ERROR_ADDR_UNALIGNED);
+
+    for (isize i = 0, a = addr; i < repeats && a <= 0xFFFFFF; i++, a += sz) {
+
+        switch (sz) {
+
+            case 1: 
+                mem.poke8  <ACCESSOR_CPU> (u32(a), u8(value)); 
+                break;
+
+            case 2:
+                mem.poke16 <ACCESSOR_CPU> (u32(a), u16(value)); 
+                break;
+
+            case 4:
+                mem.poke16 <ACCESSOR_CPU> (u32(a), HI_WORD(value));
+                mem.poke16 <ACCESSOR_CPU> (u32(a + 2), LO_WORD(value)); 
+                break;
+
+            default:
+                fatalError;
+        }
+    }
+
+    // Show modified memory
+    std::stringstream ss;
+    debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv, 0)), 1, sz);
+    retroShell << ss;
 }
 
 void

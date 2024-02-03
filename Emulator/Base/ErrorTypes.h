@@ -120,6 +120,7 @@ enum_long(ERROR_CODE)
     ERROR_REG_READ_ONLY,
     ERROR_REG_WRITE_ONLY,
     ERROR_REG_UNUSED,
+    ERROR_ADDR_UNALIGNED,
 
     // OS Debugger
     ERROR_OSDB,
@@ -293,6 +294,7 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_REG_READ_ONLY:               return "REG_READ_ONLY";
             case ERROR_REG_WRITE_ONLY:              return "REG_WRITE_ONLY";
             case ERROR_REG_UNUSED:                  return "REG_UNUSED";
+            case ERROR_ADDR_UNALIGNED:              return "ADDR_UNALIGNED";
 
             case ERROR_OSDB:                        return "OSDB";
             case ERROR_HUNK_BAD_COOKIE:             return "HUNK_BAD_COOKIE";

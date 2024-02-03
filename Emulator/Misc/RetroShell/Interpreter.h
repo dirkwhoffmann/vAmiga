@@ -155,7 +155,8 @@ public:
 private:
 
     // Exec-handlers (debug shell)
-    void execFind(Arguments &argv, isize sz); 
+    void execWrite(Arguments &argv, isize sz); 
+    void execFind(Arguments &argv, isize sz);
 };
 
 }

@@ -327,6 +327,10 @@ VAError::VAError(ErrorCode code, const string &s)
             description = "Register " + s + " is unused";
             break;
 
+        case ERROR_ADDR_UNALIGNED:
+            description = "Address not aligned";
+            break;
+
         case ERROR_OSDB:
             description = "OS Debugger: " + s;
             break;
