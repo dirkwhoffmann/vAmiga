@@ -150,6 +150,31 @@ Interpreter::initDebugShell(Command &root)
         execWrite(argv, 4);
     });
 
+    root.add({"copy"}, { Arg::src, Arg::dst, Arg::count },
+             "Copy memory chunk",
+             [this](Arguments& argv, long value) {
+
+        execCopy(argv, 1);
+    });
+
+    root.add({"copy.b"}, { Arg::sequence }, { Arg::address }, "",
+             [this](Arguments& argv, long value) {
+
+        execCopy(argv, 1);
+    });
+
+    root.add({"copy.w"}, { Arg::sequence }, { Arg::address }, "",
+             [this](Arguments& argv, long value) {
+
+        execCopy(argv, 2);
+    });
+
+    root.add({"copy.l"}, { Arg::sequence }, { Arg::address }, "",
+             [this](Arguments& argv, long value) {
+
+        execCopy(argv, 4);
+    });
+
     root.add({"find"}, { Arg::sequence }, { Arg::address },
              "Find a byte sequence in memory",
              [this](Arguments& argv, long value) {
@@ -1091,57 +1116,83 @@ Interpreter::execWrite(Arguments &argv, isize sz)
     auto value = parseNum(argv, 1);
     auto repeats = argv.size() > 2 ? parseNum(argv, 2) : 1;
 
-    printf("addr = %ld value = %ld repeats = %ld\n", addr, value, repeats);
-
     // Check alignment
     if (sz != 1 && IS_ODD(addr)) throw VAError(ERROR_ADDR_UNALIGNED);
 
-    for (isize i = 0, a = addr; i < repeats && a <= 0xFFFFFF; i++, a += sz) {
+    {   SUSPENDED
 
-        switch (sz) {
+        for (isize i = 0, a = addr; i < repeats && a <= 0xFFFFFF; i++, a += sz) {
 
-            case 1: 
-                mem.poke8  <ACCESSOR_CPU> (u32(a), u8(value)); 
-                break;
+            switch (sz) {
 
-            case 2:
-                mem.poke16 <ACCESSOR_CPU> (u32(a), u16(value)); 
-                break;
+                case 1:
+                    mem.poke8  <ACCESSOR_CPU> (u32(a), u8(value));
+                    break;
 
-            case 4:
-                mem.poke16 <ACCESSOR_CPU> (u32(a), HI_WORD(value));
-                mem.poke16 <ACCESSOR_CPU> (u32(a + 2), LO_WORD(value)); 
-                break;
+                case 2:
+                    mem.poke16 <ACCESSOR_CPU> (u32(a), u16(value));
+                    break;
 
-            default:
-                fatalError;
+                case 4:
+                    mem.poke16 <ACCESSOR_CPU> (u32(a), HI_WORD(value));
+                    mem.poke16 <ACCESSOR_CPU> (u32(a + 2), LO_WORD(value));
+                    break;
+
+                default:
+                    fatalError;
+            }
+        }
+
+        // Show modified memory
+        std::stringstream ss;
+        debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv, 0)), 1, sz);
+        retroShell << ss;
+    }
+}
+
+void 
+Interpreter::execCopy(Arguments &argv, isize sz)
+{
+    auto src = parseNum(argv, 0);
+    auto dst = parseNum(argv, 1);
+    auto cnt = parseNum(argv, 2) * sz;
+
+    {   SUSPENDED
+
+        if (src < dst) {
+
+            for (isize i = cnt - 1; i >= 0; i--)
+                mem.poke8<ACCESSOR_CPU>(u32(dst + i), mem.spypeek8<ACCESSOR_CPU>(u32(src + i)));
+
+        } else {
+
+            for (isize i = 0; i <= cnt - 1; i++)
+                mem.poke8<ACCESSOR_CPU>(u32(dst + i), mem.spypeek8<ACCESSOR_CPU>(u32(src + i)));
         }
     }
-
-    // Show modified memory
-    std::stringstream ss;
-    debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv, 0)), 1, sz);
-    retroShell << ss;
 }
 
 void
 Interpreter::execFind(Arguments &argv, isize sz)
 {
-    auto addr = argv.size() == 1 ?
-    debugger.memSearch(parseSeq(argv, 0), sz == 1 ? 1 : 2) :
-    debugger.memSearch(parseSeq(argv, 0), u32(parseNum(argv, 1)), sz == 1 ? 1 : 2) ;
+    {   SUSPENDED
 
-    if (addr >= 0) {
+        auto addr = argv.size() == 1 ?
+        debugger.memSearch(parseSeq(argv, 0), sz == 1 ? 1 : 2) :
+        debugger.memSearch(parseSeq(argv, 0), u32(parseNum(argv, 1)), sz == 1 ? 1 : 2) ;
 
-        std::stringstream ss;
-        debugger.memDump<ACCESSOR_CPU>(ss, u32(addr), 1, sz);
-        retroShell << ss;
+        if (addr >= 0) {
 
-    } else {
+            std::stringstream ss;
+            debugger.memDump<ACCESSOR_CPU>(ss, u32(addr), 1, sz);
+            retroShell << ss;
 
-        std::stringstream ss;
-        ss << "Sequence not found";
-        retroShell << ss;
+        } else {
+
+            std::stringstream ss;
+            ss << "Sequence not found";
+            retroShell << ss;
+        }
     }
 }
 
