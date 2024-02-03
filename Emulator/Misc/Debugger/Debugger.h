@@ -110,10 +110,10 @@ public:
     template <Accessor A> void memDump(std::ostream& os, isize lines, isize sz) { memDump<A>(os, current, lines, sz); }
 
     // Searches a number sequence in memory
-    i64 memSearch(u32 *pattern, u32 addr, isize count, isize sz);
-    i64 memSearch(u32 *pattern, isize count, isize sz) { return memSearch(pattern, current, count, sz); }
+    i64 memSearch(const string &pattern, u32 addr, isize align);
+    i64 memSearch(const string &pattern, isize align) { return memSearch(pattern, current, align); }
 
-
+    
     //
     // Handling registers
     //

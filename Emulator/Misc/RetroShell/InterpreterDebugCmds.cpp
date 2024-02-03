@@ -125,31 +125,29 @@ Interpreter::initDebugShell(Command &root)
         retroShell << '\n' << ss << '\n';
     });
 
-    root.add({"find"}, { Arg::value }, { Arg::value, Arg::value, Arg::value },
-             "Find a number sequence starting at the working address",
+    root.add({"find"}, { Arg::sequence }, { Arg::address },
+             "Find a byte sequence in memory",
              [this](Arguments& argv, long value) {
 
-        u32 values[4];
-        if (argv.size() > 0) values[0] = (u32)parseNum(argv, 0);
-        if (argv.size() > 1) values[1] = (u32)parseNum(argv, 1);
-        if (argv.size() > 2) values[2] = (u32)parseNum(argv, 2);
-        if (argv.size() > 3) values[3] = (u32)parseNum(argv, 3);
+        execFind(argv, 1);
+    });
 
-        auto addr = debugger.memSearch(values, argv.size(), 1);
+    root.add({"find.b"}, { Arg::sequence }, { Arg::address }, "",
+             [this](Arguments& argv, long value) {
 
-        if (addr >= 0) {
+        execFind(argv, 1);
+    });
 
-            std::stringstream ss;
-            debugger.memDump<ACCESSOR_CPU>(ss, u32(addr), 1, 1);
-            retroShell << ss;
+    root.add({"find.w"}, { Arg::sequence }, { Arg::address }, "",
+             [this](Arguments& argv, long value) {
 
-        } else {
+        execFind(argv, 2);
+    });
 
-            std::stringstream ss;
-            ss << "Not found in the range ";
-            ss << util::hex(debugger.current) << " - " << util::hex(u32(0xFFFFFF)) << '\n';
-            retroShell << ss;
-        }
+    root.add({"find.l"}, { Arg::sequence }, { Arg::address }, "",
+             [this](Arguments& argv, long value) {
+
+        execFind(argv, 4);
     });
 
     root.add({"register"}, { ChipsetRegEnum::argList() }, { Arg::value },
@@ -1059,7 +1057,27 @@ Interpreter::initDebugShell(Command &root)
 
         retroShell << '\n' << ss << '\n';
     });
+}
 
+void
+Interpreter::execFind(Arguments &argv, isize sz)
+{
+    auto addr = argv.size() == 1 ?
+    debugger.memSearch(parseSeq(argv, 0), sz == 1 ? 1 : 2) :
+    debugger.memSearch(parseSeq(argv, 0), u32(parseNum(argv, 1)), sz == 1 ? 1 : 2) ;
+
+    if (addr >= 0) {
+
+        std::stringstream ss;
+        debugger.memDump<ACCESSOR_CPU>(ss, u32(addr), 1, sz);
+        retroShell << ss;
+
+    } else {
+
+        std::stringstream ss;
+        ss << "Sequence not found";
+        retroShell << ss;
+    }
 }
 
 }

@@ -30,6 +30,7 @@ static const std::string path       = "<path>";
 static const std::string process    = "<process>";
 static const std::string seconds    = "<seconds>";
 static const std::string value      = "<value>";
+static const std::string sequence   = "<byte sequence>";
 static const std::string volume     = "<volume>";
 
 };

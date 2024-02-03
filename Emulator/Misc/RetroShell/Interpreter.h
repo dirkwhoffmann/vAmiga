@@ -42,42 +42,42 @@ class Interpreter: public SubComponent
     // Commands of the debug shell
     Command debugShellRoot; //  = new Command();
 
-    
+
     //
     // Initializing
     //
 
 public:
-    
+
     using SubComponent::SubComponent;
 
 private:
-    
+
     void initCommons(Command &root);
     void initCommandShell(Command &root);
     void initDebugShell(Command &root);
 
-    
+
     //
     // Methods from CoreObject
     //
-    
+
 private:
-    
+
     const char *getDescription() const override { return "Interpreter"; }
     void _dump(Category category, std::ostream& os) const override { }
 
-    
+
     //
     // Methods from CoreComponent
     //
-    
+
 private:
-    
+
     void _initialize() override;
     void _reset(bool hard) override { }
-    
-    
+
+
     //
     // Serializing
     //
@@ -89,18 +89,18 @@ private:
     isize _load(const u8 *buffer) override {return 0; }
     isize _save(u8 *buffer) override { return 0; }
 
-    
+
     //
     // Parsing input
     //
-    
+
 public:
-    
+
     // Auto-completes a user command
     string autoComplete(const string& userInput);
-    
+
 private:
-    
+
     // Splits an input string into an argument list
     Arguments split(const string& userInput);
 
@@ -114,6 +114,7 @@ private:
     bool parseBool(Arguments &argv, isize n = 0) { return util::parseBool(argv[n]); }
     bool parseOnOff(Arguments &argv, isize n = 0) { return util::parseOnOff(argv[n]); }
     long parseNum(Arguments &argv, isize n = 0) { return util::parseNum(argv[n]); }
+    string parseSeq(Arguments &argv, isize n = 0) { return util::parseSeq(argv[n]); }
     template <typename T> long parseEnum(Arguments &argv, isize n = 0) { return util::parseEnum<T>(argv[n]); }
 
 
@@ -136,7 +137,7 @@ public:
     //
     // Executing commands
     //
-    
+
 public:
 
     // Executes a single command
@@ -145,12 +146,16 @@ public:
 
     // Prints a usage string for a command
     void usage(const Command &command);
-    
+
     // Displays a help text for a (partially typed in) command
     void help(const string &userInput);
     void help(const Arguments &argv);
     void help(const Command &command);
 
+private:
+
+    // Exec-handlers (debug shell)
+    void execFind(Arguments &argv, isize sz); 
 };
 
 }

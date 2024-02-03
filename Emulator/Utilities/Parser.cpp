@@ -69,4 +69,31 @@ parseNum(string& token)
     return result;
 }
 
+string
+parseSeq(string& token)
+{
+    string result;
+    bool hex = false;
+
+    // Remove prefixes
+    if (token.starts_with("$")) {hex = true; token = token.erase(0, 1); }
+    if (token.starts_with("0x")) { hex = true; token = token.erase(0, 2); }
+
+    // Don't do anything for standard strings
+    if (!hex) return token;
+
+    // Add a trailing '0' for odd-sized strings
+    if (token.length() % 2) token = '0' + token;
+
+    // Decode the byte sequence
+    for (unsigned int i = 0; i < token.length(); i += 2) {
+
+        std::string digits = token.substr(i, 2);
+        try { result.push_back((char)stol(digits, nullptr, 16)); }
+        catch (std::exception&) { throw ParseNumError(token); }
+    }
+
+    return result;
+}
+
 }

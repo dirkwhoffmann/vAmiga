@@ -167,29 +167,30 @@ Debugger::memDump(std::ostream& os, u32 addr, isize lines, isize sz)
 }
 
 i64
-Debugger::memSearch(u32 *pattern, u32 addr, isize count, isize sz)
+Debugger::memSearch(const string &pattern, u32 addr, isize align)
 {
-    assert(sz == 1 || sz == 2 || sz == 4);
+    // Align start address
+    addr -= (addr % align);
 
-    for (u32 i = addr & (sz == 1 ? ~0 : ~1); i < 0xFFFFFF; i += sz) {
+    if (isize length = isize(pattern.length()); length > 0) {
 
-        // Do a simple pattern match
-        for (isize j = 0;; j++) {
+        for (u32 i = addr; i < 0xFFFFFF; i += align) {
 
-            u32 val =
-            sz == 1 ? mem.spypeek8 <ACCESSOR_CPU>(u32(i + j)) :
-            sz == 2 ? mem.spypeek16<ACCESSOR_CPU>(u32(i + 2 * j)) :
-            sz == 4 ? mem.spypeek32<ACCESSOR_CPU>(u32(i + 4 * j)) : 0;
+            for (isize j = 0;; j++) {
 
-            // Stop searching if we find a mismatch
-            if (val != pattern[j]) break;
+                // Get a byte from memory
+                auto val = mem.spypeek8 <ACCESSOR_CPU>(u32(i + j));
 
-            // Return true if all values have matched
-            if (j == count - 1) { current = i; return i; }
+                // Stop searching if we find a mismatch
+                if (val != u8(pattern[j])) break;
+
+                // Return true if all values have matched
+                if (j == length - 1) { current = i; return i; }
+            }
+
+            // Skip unmapped memory pages
+            if (mem.isUnmapped(i)) { i = (i & 0xFFFF0000) + 0x010000; }
         }
-
-        // Skip unmapped memory pages
-        if (mem.isUnmapped(i)) { i = (i & 0xFFFF0000) + 0x010000; }
     }
 
     return -1;
