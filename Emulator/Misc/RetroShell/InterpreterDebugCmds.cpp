@@ -22,10 +22,10 @@ Interpreter::initDebugShell(Command &root)
 
     initCommons(root);
 
-    root.setGroup("Monitor commands");
+    root.setGroup("Program execution");
 
     root.add({"goto"}, { }, { Arg::value },
-             std::pair<string, string>("g[oto]", "Goto address"),
+             std::pair <string, string>("g[oto]", "Goto address"),
              [this](Arguments& argv, long value) {
 
         std::stringstream ss;
@@ -37,21 +37,35 @@ Interpreter::initDebugShell(Command &root)
         }
     });
 
-    root.add({"step"},
-             "Step into the next instruction",
+    root.clone("g", {"goto"});
+
+    root.add({"step"}, { }, { },
+             std::pair <string, string>("s[tep]", "Step into the next instruction"),
              [this](Arguments& argv, long value) {
 
         debugger.stepInto();
     });
 
-    root.add({"next"},
-             "Step over the next instruction",
+    root.clone("s", {"step"});
+
+    root.add({"next"}, { }, { },
+             std::pair <string, string>("n[next]", "Step over the next instruction"),
              [this](Arguments& argv, long value) {
 
         debugger.stepOver();
     });
 
-    root.add({"disassemble"}, { }, { Arg::address },
+    root.clone("n", {"next"});
+
+    root.add({"break"},     "Manage CPU breakpoints");
+    root.add({"watch"},     "Manage CPU watchpoints");
+    root.add({"catch"},     "Manage CPU catchpoints");
+    root.add({"cbreak"},    "Manage Copper breakpoints");
+    root.add({"cwatch"},    "Manage Copper watchpoints");
+
+    root.setGroup("Monitoring");
+
+    root.add({"d"}, { }, { Arg::address },
              "Disassemble instructions",
              [this](Arguments& argv, long value) {
 
@@ -63,7 +77,7 @@ Interpreter::initDebugShell(Command &root)
         retroShell << '\n' << ss << '\n';
     });
 
-    root.add({"ascii"}, { }, { Arg::address },
+    root.add({"a"}, { }, { Arg::address },
              "Dump memory in ASCII",
              [this](Arguments& argv, long value) {
 
@@ -76,7 +90,7 @@ Interpreter::initDebugShell(Command &root)
         retroShell << '\n' << ss << '\n';
     });
 
-    root.add({"memory"}, { }, { Arg::address },
+    root.add({"m"}, { }, { Arg::address },
              std::pair<string, string>("m[.b|.w|.l]", "Dump memory"),
              [this](Arguments& argv, long value) {
 
@@ -89,18 +103,12 @@ Interpreter::initDebugShell(Command &root)
         retroShell << '\n' << ss << '\n';
     }, 2);
 
-    root.clone("m",        {"memory"}, 1);
-    root.clone("m.b",      {"memory"}, 1);
-    root.clone("m.w",      {"memory"}, 2);
-    root.clone("m.l",      {"memory"}, 4);
-    /*
-    root.clone("memory.b", {"memory"}, 1);
-    root.clone("memory.w", {"memory"}, 2);
-    root.clone("memory.l", {"memory"}, 4);
-    */
+    root.clone("m.b",      {"m"}, 1);
+    root.clone("m.w",      {"m"}, 2);
+    root.clone("m.l",      {"m"}, 4);
 
-    root.add({"read"}, { Arg::address },
-             "Read from a register or memory",
+    root.add({"r"}, { Arg::address },
+             std::pair<string, string>("r[.b|.w|.l]", "Read from a register or memory"),
              [this](Arguments& argv, long value) {
 
         auto addr = u32(parseNum(argv, 0));
@@ -127,13 +135,12 @@ Interpreter::initDebugShell(Command &root)
 
     }, 2);
 
-    root.clone("r",   {"read"}, "", 2);
-    root.clone("r.b", {"read"}, "", 1);
-    root.clone("r.w", {"read"}, "", 2);
-    root.clone("r.l", {"read"}, "", 4);
+    root.clone("r.b", {"r"}, "", 1);
+    root.clone("r.w", {"r"}, "", 2);
+    root.clone("r.l", {"r"}, "", 4);
 
-    root.add({"write"}, { Arg::address, Arg::value }, { Arg::count },
-             "Modify memory",
+    root.add({"w"}, { Arg::address, Arg::value }, { Arg::count },
+             std::pair<string, string>("w[.b|.w|.l]", "Write into a register or memory"),
              [this](Arguments& argv, long value) {
 
         auto addr = parseNum(argv, 0);
@@ -174,13 +181,12 @@ Interpreter::initDebugShell(Command &root)
         }
     }, 2);
 
-    root.clone("w",   {"write"}, "", 2);
-    root.clone("w.b", {"write"}, "", 1);
-    root.clone("w.w", {"write"}, "", 2);
-    root.clone("w.l", {"write"}, "", 4);
+    root.clone("w.b", {"w"}, "", 1);
+    root.clone("w.w", {"w"}, "", 2);
+    root.clone("w.l", {"w"}, "", 4);
 
-    root.add({"copy"}, { Arg::src, Arg::dst, Arg::count },
-             "Copy memory chunk",
+    root.add({"c"}, { Arg::src, Arg::dst, Arg::count },
+             std::pair<string, string>("c[.b|.w|.l]", "Copy a chunk of memory"),
              [this](Arguments& argv, long value) {
 
         auto src = parseNum(argv, 0);
@@ -200,15 +206,14 @@ Interpreter::initDebugShell(Command &root)
                     mem.poke8<ACCESSOR_CPU>(u32(dst + i), mem.spypeek8<ACCESSOR_CPU>(u32(src + i)));
             }
         }
-    });
+    }, 1);
 
-    root.clone("c",   {"copy"}, "", 2);
-    root.clone("c.b", {"copy"}, "", 1);
-    root.clone("c.w", {"copy"}, "", 2);
-    root.clone("c.l", {"copy"}, "", 4);
+    root.clone("c.b", {"c"}, "", 1);
+    root.clone("c.w", {"c"}, "", 2);
+    root.clone("c.l", {"c"}, "", 4);
 
-    root.add({"find"}, { Arg::sequence }, { Arg::address },
-             "Find a byte sequence in memory",
+    root.add({"f"}, { Arg::sequence }, { Arg::address },
+             std::pair<string, string>("f[.b|.w|.l]", "Find a sequence in memory"),
              [this](Arguments& argv, long value) {
 
         {   SUSPENDED
@@ -232,11 +237,11 @@ Interpreter::initDebugShell(Command &root)
         }
     }, 1);
 
-    root.clone("f",   {"find"}, "", 1);
-    root.clone("f.b", {"find"}, "", 1);
-    root.clone("f.w", {"find"}, "", 2);
-    root.clone("f.l", {"find"}, "", 4);
+    root.clone("f.b", {"f"}, "", 1);
+    root.clone("f.w", {"f"}, "", 2);
+    root.clone("f.l", {"f"}, "", 4);
 
+    /*
     root.add({"register"}, { ChipsetRegEnum::argList() }, { Arg::value },
              "Reads or modifies a custom chipset register",
              [this](Arguments& argv, long value) {
@@ -254,9 +259,10 @@ Interpreter::initDebugShell(Command &root)
             debugger.writeCs(reg, u16(parseNum(argv, 1)));
         }
     });
+    */
 
-    root.add({"inspect"},
-             "Inspect component");
+    root.add({"i"},
+             "Inspect a component");
 
     root.add({"os"},
              "Runs the OS debugger");
@@ -267,39 +273,39 @@ Interpreter::initDebugShell(Command &root)
 
     root.setGroup("Inspecting components");
 
-    root.add({"inspect", "amiga"},         "Main computer");
-    root.add({"inspect", "memory"},        "RAM and ROM");
-    root.add({"inspect", "cpu"},           "Motorola 68k CPU");
-    root.add({"inspect", "ciaa"},          "Complex Interface Adapter A");
-    root.add({"inspect", "ciab"},          "Complex Interface Adapter B");
-    root.add({"inspect", "agnus"},         "Custom Chipset");
-    root.add({"inspect", "blitter"},       "Coprocessor");
-    root.add({"inspect", "copper"},        "Coprocessor");
-    root.add({"inspect", "paula"},         "Custom Chipset");
-    root.add({"inspect", "denise"},        "Custom Chipset");
-    root.add({"inspect", "rtc"},           "Real-time clock");
-    root.add({"inspect", "zorro"},         "Expansion boards");
-    root.add({"inspect", "controlport"},   "Control ports");
-    root.add({"inspect", "serial"},        "Serial port");
+    root.add({"i", "amiga"},         "Main computer");
+    root.add({"i", "memory"},        "RAM and ROM");
+    root.add({"i", "cpu"},           "Motorola 68k CPU");
+    root.add({"i", "ciaa"},          "Complex Interface Adapter A");
+    root.add({"i", "ciab"},          "Complex Interface Adapter B");
+    root.add({"i", "agnus"},         "Custom Chipset");
+    root.add({"i", "blitter"},       "Coprocessor");
+    root.add({"i", "copper"},        "Coprocessor");
+    root.add({"i", "paula"},         "Custom Chipset");
+    root.add({"i", "denise"},        "Custom Chipset");
+    root.add({"i", "rtc"},           "Real-time clock");
+    root.add({"i", "zorro"},         "Expansion boards");
+    root.add({"i", "controlport"},   "Control ports");
+    root.add({"i", "serial"},        "Serial port");
 
     root.setGroup("Inspecting peripherals");
 
-    root.add({"inspect", "keyboard"},      "Keyboard");
-    root.add({"inspect", "mouse"},         "Mouse");
-    root.add({"inspect", "joystick"},      "Joystick");
-    root.add({"inspect", "df0"},           "Floppy drive 0");
-    root.add({"inspect", "df1"},           "Floppy drive 1");
-    root.add({"inspect", "df2"},           "Floppy drive 2");
-    root.add({"inspect", "df3"},           "Floppy drive 3");
-    root.add({"inspect", "hd0"},           "Hard drive 0");
-    root.add({"inspect", "hd1"},           "Hard drive 1");
-    root.add({"inspect", "hd2"},           "Hard drive 2");
-    root.add({"inspect", "hd3"},           "Hard drive 3");
+    root.add({"i", "keyboard"},      "Keyboard");
+    root.add({"i", "mouse"},         "Mouse");
+    root.add({"i", "joystick"},      "Joystick");
+    root.add({"i", "df0"},           "Floppy drive 0");
+    root.add({"i", "df1"},           "Floppy drive 1");
+    root.add({"i", "df2"},           "Floppy drive 2");
+    root.add({"i", "df3"},           "Floppy drive 3");
+    root.add({"i", "hd0"},           "Hard drive 0");
+    root.add({"i", "hd1"},           "Hard drive 1");
+    root.add({"i", "hd2"},           "Hard drive 2");
+    root.add({"i", "hd3"},           "Hard drive 3");
 
     root.setGroup("Miscellaneous");
 
-    root.add({"inspect", "host"},          "Host machine");
-    root.add({"inspect", "server"},        "Remote server");
+    root.add({"i", "host"},          "Host machine");
+    root.add({"i", "server"},        "Remote server");
 
     //
     // Third-level commands
@@ -307,14 +313,14 @@ Interpreter::initDebugShell(Command &root)
 
     root.setGroup("");
 
-    root.add({"inspect", "cpu", ""},
+    root.add({"i", "cpu", ""},
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(cpu, { Category::Config, Category::State, Category::Registers } );
     });
 
-    root.add({"inspect", "cpu", "vectors"},
+    root.add({"i", "cpu", "vectors"},
              "Dumps the vector table",
              [this](Arguments& argv, long value) {
 
@@ -325,7 +331,7 @@ Interpreter::initDebugShell(Command &root)
 
         string cia = (i == 0) ? "ciaa" : "ciab";
 
-        root.add({"inspect", cia, ""},
+        root.add({"i", cia, ""},
                  "Inspects the internal state",
                  [this](Arguments& argv, long value) {
 
@@ -336,7 +342,7 @@ Interpreter::initDebugShell(Command &root)
             }
         }, i);
 
-        root.add({"inspect", cia, "tod"},
+        root.add({"i", cia, "tod"},
                  "Displays the state of the 24-bit counter",
                  [this](Arguments& argv, long value) {
 
@@ -348,56 +354,56 @@ Interpreter::initDebugShell(Command &root)
         }, i);
     }
 
-    root.add({"inspect", "agnus", ""},
+    root.add({"i", "agnus", ""},
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(agnus, { Category::Config, Category::State, Category::Registers } );
     });
 
-    root.add({"inspect", "agnus", "beam"},
+    root.add({"i", "agnus", "beam"},
              "Displays the current beam position",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(amiga.agnus, Category::Beam);
     });
 
-    root.add({"inspect", "agnus", "dma"},
+    root.add({"i", "agnus", "dma"},
              "Prints all scheduled DMA events",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(amiga.agnus, Category::Dma);
     });
 
-    root.add({"inspect", "agnus", "sequencer"},
+    root.add({"i", "agnus", "sequencer"},
              "Inspects the sequencer logic",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(amiga.agnus.sequencer, { Category::State, Category::Registers, Category::Signals } );
     });
 
-    root.add({"inspect", "agnus", "events"},
+    root.add({"i", "agnus", "events"},
              "Inspects the event scheduler",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(amiga.agnus, Category::Events);
     });
 
-    root.add({"inspect", "blitter", ""},
+    root.add({"i", "blitter", ""},
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(blitter, { Category::Config, Category::State, Category::Registers } );
     });
 
-    root.add({"inspect", "copper", ""},
+    root.add({"i", "copper", ""},
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(copper, { Category::Config, Category::State, Category::Registers } );
     });
 
-    root.add({"inspect", "copper", "list"}, { Arg::value },
+    root.add({"i", "copper", "list"}, { Arg::value },
              "Prints the Copper list",
              [this](Arguments& argv, long value) {
 
@@ -413,72 +419,72 @@ Interpreter::initDebugShell(Command &root)
         }
     });
 
-    root.add({"inspect", "paula", ""},
+    root.add({"i", "paula", ""},
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(paula, Category::Registers);
     });
 
-    root.add({"inspect", "paula", "audio"},
+    root.add({"i", "paula", "audio"},
              "Audio unit");
 
-    root.add({"inspect", "paula", "dc"},
+    root.add({"i", "paula", "dc"},
              "Disk controller");
 
-    root.add({"inspect", "paula", "uart"},
+    root.add({"i", "paula", "uart"},
              "Universal Asynchronous Receiver Transmitter");
 
-    root.add({"inspect", "paula", "audio", ""},
+    root.add({"i", "paula", "audio", ""},
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(paula, { Category::Config, Category::State, Category::Registers } );
     });
 
-    root.add({"inspect", "paula", "audio", "filter"},
+    root.add({"i", "paula", "audio", "filter"},
              "Inspects the internal filter state",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(paula.muxer.filter, { Category::Config, Category::State } );
     });
 
-    root.add({"inspect", "paula", "dc", ""},
+    root.add({"i", "paula", "dc", ""},
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(diskController, { Category::Config, Category::State } );
     });
 
-    root.add({"inspect", "paula", "uart", ""},
+    root.add({"i", "paula", "uart", ""},
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(uart, Category::State);
     });
 
-    root.add({"inspect", "denise", ""},
+    root.add({"i", "denise", ""},
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(denise, { Category::Config, Category::State, Category::Registers } );
     });
 
-    root.add({"inspect", "rtc", ""},
+    root.add({"i", "rtc", ""},
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(rtc, { Category::Config, Category::State, Category::Registers } );
     });
 
-    root.add({"inspect", "zorro", ""},
+    root.add({"i", "zorro", ""},
              "Lists all connected boards",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(zorro, Category::Slots);
     });
 
-    root.add({"inspect", "zorro", "inspect"}, { Arg::value },
+    root.add({"i", "zorro", "i"}, { Arg::value },
              "Inspects a specific Zorro board",
              [this](Arguments& argv, long value) {
 
@@ -494,10 +500,10 @@ Interpreter::initDebugShell(Command &root)
 
         string nr = (i == 1) ? "1" : "2";
 
-        root.add({"inspect", "controlport", nr},
+        root.add({"i", "controlport", nr},
                  "Control port " + nr);
 
-        root.add({"inspect", "controlport", nr, ""},
+        root.add({"i", "controlport", nr, ""},
                  "Inspects the internal state",
                  [this](Arguments& argv, long value) {
 
@@ -507,14 +513,14 @@ Interpreter::initDebugShell(Command &root)
         }, i);
     }
 
-    root.add({"inspect", "serial", ""},
+    root.add({"i", "serial", ""},
              "Displays the internal state",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(serialPort, { Category::Config, Category::State } );
     });
 
-    root.add({"inspect", "keyboard", ""},
+    root.add({"i", "keyboard", ""},
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
@@ -525,10 +531,10 @@ Interpreter::initDebugShell(Command &root)
 
         string nr = (i == 1) ? "1" : "2";
 
-        root.add({"inspect", "mouse", nr},
+        root.add({"i", "mouse", nr},
                  "Mouse in port " + nr);
 
-        root.add({"inspect", "mouse", nr, ""},
+        root.add({"i", "mouse", nr, ""},
                  "Inspects the internal state",
                  [this](Arguments& argv, long value) {
 
@@ -537,10 +543,10 @@ Interpreter::initDebugShell(Command &root)
 
         }, i);
 
-        root.add({"inspect", "joystick", nr},
+        root.add({"i", "joystick", nr},
                  "Joystick in port " + nr);
 
-        root.add({"inspect", "joystick", nr, ""},
+        root.add({"i", "joystick", nr, ""},
                  "Inspects the internal state",
                  [this](Arguments& argv, long value) {
 
@@ -554,7 +560,7 @@ Interpreter::initDebugShell(Command &root)
 
         string df = "df" + std::to_string(i);
 
-        root.add({"inspect", df, ""},
+        root.add({"i", df, ""},
                  "Inspects the internal state",
                  [this](Arguments& argv, long value) {
 
@@ -562,7 +568,7 @@ Interpreter::initDebugShell(Command &root)
 
         }, i);
 
-        root.add({"inspect", df, "disk"},
+        root.add({"i", df, "disk"},
                  "Inspects the inserted disk",
                  [this](Arguments& argv, long value) {
 
@@ -575,7 +581,7 @@ Interpreter::initDebugShell(Command &root)
 
         string hd = "hd" + std::to_string(i);
 
-        root.add({"inspect", hd, ""},
+        root.add({"i", hd, ""},
                  "Inspects the internal state",
                  [this](Arguments& argv, long value) {
 
@@ -583,7 +589,7 @@ Interpreter::initDebugShell(Command &root)
 
         }, i);
 
-        root.add({"inspect", hd, "drive"},
+        root.add({"i", hd, "drive"},
                  "Displays hard drive parameters",
                  [this](Arguments& argv, long value) {
 
@@ -591,7 +597,7 @@ Interpreter::initDebugShell(Command &root)
 
         }, i);
 
-        root.add({"inspect", hd, "volumes"},
+        root.add({"i", hd, "volumes"},
                  "Displays summarized volume information",
                  [this](Arguments& argv, long value) {
 
@@ -599,7 +605,7 @@ Interpreter::initDebugShell(Command &root)
 
         }, i);
 
-        root.add({"inspect", hd, "partitions"},
+        root.add({"i", hd, "partitions"},
                  "Displays information about all partitions",
                  [this](Arguments& argv, long value) {
 
@@ -608,7 +614,7 @@ Interpreter::initDebugShell(Command &root)
         }, i);
     }
 
-    root.add({"inspect", "host", ""},
+    root.add({"i", "host", ""},
              "Displays information about the host machine",
              [this](Arguments& argv, long value) {
 
@@ -617,37 +623,37 @@ Interpreter::initDebugShell(Command &root)
 
     // root.setGroup("");
 
-    root.add({"inspect", "server", ""},
+    root.add({"i", "server", ""},
              "Displays a server status summary",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(remoteManager, Category::Status);
     });
 
-    root.add({"inspect", "server", "serial"},
+    root.add({"i", "server", "serial"},
              "Serial port server");
 
-    root.add({"inspect", "server", "serial", ""},
+    root.add({"i", "server", "serial", ""},
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(remoteManager.serServer, { Category::Config, Category::State } );
     });
 
-    root.add({"inspect", "server", "rshell"},
+    root.add({"i", "server", "rshell"},
              "Retro shell server");
 
-    root.add({"inspect", "server", "rshell", ""},
+    root.add({"i", "server", "rshell", ""},
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
         retroShell.dump(remoteManager.rshServer, { Category::Config, Category::State } );
     });
 
-    root.add({"inspect", "server", "gdb"},
+    root.add({"i", "server", "gdb"},
              "GDB server");
 
-    root.add({"inspect", "server", "gdb", ""},
+    root.add({"i", "server", "gdb", ""},
              "Inspects the internal state",
              [this](Arguments& argv, long value) {
 
@@ -792,14 +798,6 @@ Interpreter::initDebugShell(Command &root)
 
         diagBoard.setConfigItem(OPT_DIAG_BOARD, parseBool(argv));
     });
-
-    root.setGroup("Guarding the program execution");
-
-    root.add({"break"},     "Manages CPU breakpoints");
-    root.add({"watch"},     "Manages CPU watchpoints");
-    root.add({"catch"},     "Manages CPU catchpoints");
-    root.add({"cbreak"},    "Manages Copper breakpoints");
-    root.add({"cwatch"},    "Manages Copper watchpoints");
 
 
     //

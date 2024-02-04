@@ -98,6 +98,11 @@ struct Command {
              std::function<void (Arguments&, long)> func, long param = 0);
 
     void add(const std::vector<string> &tokens,
+             const std::vector<string> &args,
+             std::pair<const string &, const string &> help,
+             std::function<void (Arguments&, long)> func, long param = 0);
+
+    void add(const std::vector<string> &tokens,
              const std::vector<string> &requiredArgs,
              const std::vector<string> &optionalArgs,
              const string &help,

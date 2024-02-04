@@ -23,7 +23,7 @@ Interpreter::initCommons(Command &root)
     root.setGroup("Shell commands");
 
     root.add({"."},
-             "Enters or exists the debugger",
+             "Enter or exit the debugger",
              [this](Arguments& argv, long value) {
 
         retroShell.clear();
@@ -32,21 +32,21 @@ Interpreter::initCommons(Command &root)
     });
 
     root.add({"clear"},
-             "Clears the console window",
+             "Clear the console window",
              [this](Arguments& argv, long value) {
 
         retroShell.clear();
     });
 
     root.add({"close"},
-             "Hides the console window",
+             "Hide the console window",
              [this](Arguments& argv, long value) {
 
         msgQueue.put(MSG_CONSOLE_CLOSE);
     });
 
     root.add({"help"}, { }, {Arg::command},
-             "Prints usage information",
+             "Print usage information",
              [this](Arguments& argv, long value) {
 
         retroShell.help(argv.empty() ? "" : argv.front());
@@ -62,7 +62,7 @@ Interpreter::initCommons(Command &root)
     });
 
     root.add({"source"}, {Arg::path},
-             "Processes a command script",
+             "Process a command script",
              [this](Arguments& argv, long value) {
 
         auto stream = std::ifstream(argv.front());
@@ -71,7 +71,7 @@ Interpreter::initCommons(Command &root)
     });
 
     root.add({"wait"}, {Arg::value, Arg::seconds},
-             "Pauses the execution of a command script",
+             "", // Pause the execution of a command script",
              [this](Arguments& argv, long value) {
 
         auto seconds = parseNum(argv);

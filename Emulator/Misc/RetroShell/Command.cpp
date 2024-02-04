@@ -55,6 +55,15 @@ Command::add(const std::vector<string> &tokens,
 
 void
 Command::add(const std::vector<string> &tokens,
+             const std::vector<string> &arguments,
+             std::pair<const string &, const string &> help,
+             std::function<void (Arguments&, long)> func, long param)
+{
+    add(tokens, arguments, { }, help, func, param);
+}
+
+void
+Command::add(const std::vector<string> &tokens,
              const std::vector<string> &requiredArgs,
              const std::vector<string> &optionalArgs,
              const string &help,
