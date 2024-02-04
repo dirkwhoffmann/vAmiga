@@ -83,147 +83,154 @@ Interpreter::initDebugShell(Command &root)
         std::stringstream ss;
 
         argv.empty() ?
-        debugger.memDump<ACCESSOR_CPU>(ss, 16, 1) :
-        debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv)), 16, 1);
+        debugger.memDump<ACCESSOR_CPU>(ss, 16, value) :
+        debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv)), 16, value);
 
         retroShell << '\n' << ss << '\n';
-    });
+    }, 2);
 
-    root.add({"memory.b"}, { }, { Arg::address }, "",
-             [this](Arguments& argv, long value) {
-
-        std::stringstream ss;
-
-        argv.empty() ?
-        debugger.memDump<ACCESSOR_CPU>(ss, 16, 1) :
-        debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv)), 16, 1);
-
-        retroShell << '\n' << ss << '\n';
-    });
-
-    root.add({"memory.w"}, { }, { Arg::address }, "",
-             [this](Arguments& argv, long value) {
-
-        std::stringstream ss;
-
-        argv.empty() ?
-        debugger.memDump<ACCESSOR_CPU>(ss, 16, 2) :
-        debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv)), 16, 2);
-
-        retroShell << '\n' << ss << '\n';
-    });
-
-    root.add({"memory.l"}, { }, { Arg::address }, "",
-             [this](Arguments& argv, long value) {
-
-        std::stringstream ss;
-
-        argv.empty() ?
-        debugger.memDump<ACCESSOR_CPU>(ss, 16, 4) :
-        debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv)), 16, 4);
-
-        retroShell << '\n' << ss << '\n';
-    });
+    root.clone("m",   {"memory"}, 1);
+    root.clone("m.b", {"memory"}, 1);
+    root.clone("m.w", {"memory"}, 2);
+    root.clone("m.l", {"memory"}, 4);
 
     root.add({"read"}, { Arg::address },
              "Read from a register or memory",
              [this](Arguments& argv, long value) {
 
-        execRead(argv, 2);
-    });
+        auto addr = u32(parseNum(argv, 0));
 
-    root.add({"read.b"}, { Arg::address }, "",
-             [this](Arguments& argv, long value) {
+        // Check alignment
+        if (value != 1 && IS_ODD(addr)) throw VAError(ERROR_ADDR_UNALIGNED);
 
-        execRead(argv, 1);
-    });
+        {   SUSPENDED
 
-    root.add({"read.w"}, { Arg::address }, "",
-             [this](Arguments& argv, long value) {
+            std::stringstream ss;
 
-        execRead(argv, 2);
-    });
+            switch (value) {
 
-    root.add({"read.l"}, { Arg::address }, "",
-             [this](Arguments& argv, long value) {
+                case 1: debugger.convertNumeric(ss, mem.spypeek8  <ACCESSOR_CPU> (addr)); break;
+                case 2: debugger.convertNumeric(ss, mem.spypeek16 <ACCESSOR_CPU> (addr)); break;
+                case 4: debugger.convertNumeric(ss, mem.spypeek32 <ACCESSOR_CPU> (addr)); break;
 
-        execRead(argv, 4);
-    });
+                default:
+                    fatalError;
+            }
+
+            retroShell << ss;
+        }
+
+    }, 2);
+
+    root.clone("r",   {"read"}, "", 2);
+    root.clone("r.b", {"read"}, "", 1);
+    root.clone("r.w", {"read"}, "", 2);
+    root.clone("r.l", {"read"}, "", 4);
 
     root.add({"write"}, { Arg::address, Arg::value }, { Arg::count },
              "Modify memory",
              [this](Arguments& argv, long value) {
 
-        execWrite(argv, 2);
-    });
+        auto addr = parseNum(argv, 0);
+        auto val = parseNum(argv, 1);
+        auto repeats = argv.size() > 2 ? parseNum(argv, 2) : 1;
 
-    root.add({"write.b"}, { Arg::address, Arg::value }, { Arg::count }, "",
-             [this](Arguments& argv, long value) {
+        // Check alignment
+        if (val != 1 && IS_ODD(addr)) throw VAError(ERROR_ADDR_UNALIGNED);
 
-        execWrite(argv, 1);
-    });
+        {   SUSPENDED
 
-    root.add({"write.w"}, { Arg::address, Arg::value }, { Arg::count }, "",
-             [this](Arguments& argv, long value) {
+            for (isize i = 0, a = addr; i < repeats && a <= 0xFFFFFF; i++, a += value) {
 
-        execWrite(argv, 2);
-    });
+                switch (value) {
 
-    root.add({"write.l"}, { Arg::address, Arg::value }, { Arg::count }, "",
-             [this](Arguments& argv, long value) {
+                    case 1:
+                        mem.poke8  <ACCESSOR_CPU> (u32(a), u8(val));
+                        break;
 
-        execWrite(argv, 4);
-    });
+                    case 2:
+                        mem.poke16 <ACCESSOR_CPU> (u32(a), u16(val));
+                        break;
+
+                    case 4:
+                        mem.poke16 <ACCESSOR_CPU> (u32(a), HI_WORD(val));
+                        mem.poke16 <ACCESSOR_CPU> (u32(a + 2), LO_WORD(val));
+                        break;
+
+                    default:
+                        fatalError;
+                }
+            }
+
+            // Show modified memory
+            std::stringstream ss;
+            debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv, 0)), 1, value);
+            retroShell << ss;
+        }
+    }, 2);
+
+    root.clone("w",   {"write"}, "", 2);
+    root.clone("w.b", {"write"}, "", 1);
+    root.clone("w.w", {"write"}, "", 2);
+    root.clone("w.l", {"write"}, "", 4);
 
     root.add({"copy"}, { Arg::src, Arg::dst, Arg::count },
              "Copy memory chunk",
              [this](Arguments& argv, long value) {
 
-        execCopy(argv, 1);
+        auto src = parseNum(argv, 0);
+        auto dst = parseNum(argv, 1);
+        auto cnt = parseNum(argv, 2) * value;
+
+        {   SUSPENDED
+
+            if (src < dst) {
+
+                for (isize i = cnt - 1; i >= 0; i--)
+                    mem.poke8<ACCESSOR_CPU>(u32(dst + i), mem.spypeek8<ACCESSOR_CPU>(u32(src + i)));
+
+            } else {
+
+                for (isize i = 0; i <= cnt - 1; i++)
+                    mem.poke8<ACCESSOR_CPU>(u32(dst + i), mem.spypeek8<ACCESSOR_CPU>(u32(src + i)));
+            }
+        }
     });
 
-    root.add({"copy.b"}, { Arg::sequence }, { Arg::address }, "",
-             [this](Arguments& argv, long value) {
-
-        execCopy(argv, 1);
-    });
-
-    root.add({"copy.w"}, { Arg::sequence }, { Arg::address }, "",
-             [this](Arguments& argv, long value) {
-
-        execCopy(argv, 2);
-    });
-
-    root.add({"copy.l"}, { Arg::sequence }, { Arg::address }, "",
-             [this](Arguments& argv, long value) {
-
-        execCopy(argv, 4);
-    });
+    root.clone("c",   {"copy"}, "", 2);
+    root.clone("c.b", {"copy"}, "", 1);
+    root.clone("c.w", {"copy"}, "", 2);
+    root.clone("c.l", {"copy"}, "", 4);
 
     root.add({"find"}, { Arg::sequence }, { Arg::address },
              "Find a byte sequence in memory",
              [this](Arguments& argv, long value) {
 
-        execFind(argv, 1);
-    });
+        {   SUSPENDED
 
-    root.add({"find.b"}, { Arg::sequence }, { Arg::address }, "",
-             [this](Arguments& argv, long value) {
+            auto addr = argv.size() == 1 ?
+            debugger.memSearch(parseSeq(argv, 0), value == 1 ? 1 : 2) :
+            debugger.memSearch(parseSeq(argv, 0), u32(parseNum(argv, 1)), value == 1 ? 1 : 2) ;
 
-        execFind(argv, 1);
-    });
+            if (addr >= 0) {
 
-    root.add({"find.w"}, { Arg::sequence }, { Arg::address }, "",
-             [this](Arguments& argv, long value) {
+                std::stringstream ss;
+                debugger.memDump<ACCESSOR_CPU>(ss, u32(addr), 1, value);
+                retroShell << ss;
 
-        execFind(argv, 2);
-    });
+            } else {
 
-    root.add({"find.l"}, { Arg::sequence }, { Arg::address }, "",
-             [this](Arguments& argv, long value) {
+                std::stringstream ss;
+                ss << "Sequence not found";
+                retroShell << ss;
+            }
+        }
+    }, 1);
 
-        execFind(argv, 4);
-    });
+    root.clone("f",   {"find"}, "", 1);
+    root.clone("f.b", {"find"}, "", 1);
+    root.clone("f.w", {"find"}, "", 2);
+    root.clone("f.l", {"find"}, "", 4);
 
     root.add({"register"}, { ChipsetRegEnum::argList() }, { Arg::value },
              "Reads or modifies a custom chipset register",
@@ -1134,6 +1141,7 @@ Interpreter::initDebugShell(Command &root)
     });
 }
 
+/*
 void
 Interpreter::execRead(Arguments &argv, isize sz)
 {
@@ -1159,7 +1167,9 @@ Interpreter::execRead(Arguments &argv, isize sz)
         retroShell << ss;
     }
 }
+*/
 
+/*
 void
 Interpreter::execWrite(Arguments &argv, isize sz)
 {
@@ -1200,8 +1210,9 @@ Interpreter::execWrite(Arguments &argv, isize sz)
         retroShell << ss;
     }
 }
-
-void 
+*/
+/*
+void
 Interpreter::execCopy(Arguments &argv, isize sz)
 {
     auto src = parseNum(argv, 0);
@@ -1222,7 +1233,8 @@ Interpreter::execCopy(Arguments &argv, isize sz)
         }
     }
 }
-
+*/
+/*
 void
 Interpreter::execFind(Arguments &argv, isize sz)
 {
@@ -1246,5 +1258,6 @@ Interpreter::execFind(Arguments &argv, isize sz)
         }
     }
 }
+*/
 
 }

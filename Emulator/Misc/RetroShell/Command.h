@@ -103,6 +103,15 @@ struct Command {
              const string &help,
              std::function<void (Arguments&, long)> func, long param = 0);
 
+    void clone(const string &alias,
+               const std::vector<string> &tokens,
+               long param = 0);
+
+    void clone(const string &alias,
+               const std::vector<string> &tokens,
+               const string &help,
+               long param = 0);
+
     // Returns arguments counts
     isize minArgs() const { return isize(requiredArgs.size()); }
     isize optArgs() const { return isize(optionalArgs.size()); }

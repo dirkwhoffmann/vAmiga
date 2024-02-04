@@ -76,10 +76,40 @@ Command::add(const std::vector<string> &tokens,
     d.help = help;
     d.callback = func;
     d.param = param;
-    d.hidden = help.empty() || help.at(0) == '*';
+    d.hidden = help.empty();
 
     // Register the instruction
     cmd->subCommands.push_back(d);
+}
+
+void 
+Command::clone(const string &alias,
+           const std::vector<string> &tokens,
+           long param)
+{
+    clone(alias, tokens, "", param);
+}
+
+void
+Command::clone(const string &alias, const std::vector<string> &tokens, const string &help, long param)
+{
+    assert(!tokens.empty());
+
+    // Find the command to clone
+    Command *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() });
+    assert(cmd != nullptr);
+
+    // Assemble the new token list
+    auto newTokens = std::vector<string> { tokens.begin(), tokens.end() - 1 };
+    newTokens.push_back(alias);
+
+    // Create the instruction
+    add(newTokens, 
+        cmd->requiredArgs,
+        cmd->optionalArgs,
+        help,
+        cmd->callback,
+        param);
 }
 
 const Command *
