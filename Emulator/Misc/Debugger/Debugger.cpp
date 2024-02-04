@@ -196,6 +196,40 @@ Debugger::memSearch(const string &pattern, u32 addr, isize align)
     return -1;
 }
 
+void 
+Debugger::write(u32 addr, u32 val, isize repeats, isize sz)
+{
+    // Check alignment
+    if (sz != 1 && IS_ODD(addr)) throw VAError(ERROR_ADDR_UNALIGNED);
+
+    {   SUSPENDED
+
+        for (isize i = 0, a = addr; i < repeats && a <= 0xFFFFFF; i++, a += sz) {
+
+            switch (sz) {
+
+                case 1:
+                    mem.poke8  <ACCESSOR_CPU> (u32(a), u8(val));
+                    break;
+
+                case 2:
+                    mem.poke16 <ACCESSOR_CPU> (u32(a), u16(val));
+                    break;
+
+                case 4:
+                    mem.poke16 <ACCESSOR_CPU> (u32(a), HI_WORD(val));
+                    mem.poke16 <ACCESSOR_CPU> (u32(a + 2), LO_WORD(val));
+                    break;
+
+                default:
+                    fatalError;
+            }
+        }
+
+        current = u32(addr + sz);
+    }
+}
+
 bool
 Debugger::isReadable(ChipsetReg reg) const
 {

@@ -108,14 +108,23 @@ private:
     void autoComplete(Arguments &argv);
 
     // Checks or parses an argument of a certain type
-    bool isBool(const string &argv) { return util::isBool(argv); }
-    bool isOnOff(const string  &argv) { return util::isOnOff(argv); }
-    long isNum(const string &argv) { return util::isNum(argv); }
-    bool parseBool(const string  &argv) { return util::parseBool(argv); }
-    bool parseOnOff(const string &argv) { return util::parseOnOff(argv); }
-    long parseNum(const string &argv) { return util::parseNum(argv); }
-    string parseSeq(const string &argv) { return util::parseSeq(argv); }
-    template <typename T> long parseEnum(const string &argv) { return util::parseEnum<T>(argv); }
+    bool isBool(const string &argv);
+    bool isOnOff(const string &argv);
+    long isNum(const string &argv);
+    bool parseBool(const string  &argv);
+    bool parseBool(const string  &argv, bool fallback);
+    bool parseOnOff(const string &argv);
+    bool parseOnOff(const string &argv, bool fallback);
+    long parseNum(const string &argv);
+    long parseNum(const string &argv, long fallback);
+    string parseSeq(const string &argv);
+    string parseSeq(const string &argv, const string &fallback);
+    template <typename T> long parseEnum(const string &argv) {
+        return util::parseEnum<T>(argv);
+    }
+    template <typename T> long parseEnum(const string &argv, long fallback) {
+        try { return util::parseEnum<T>(argv); } catch(...) { return fallback; }
+    }
 
 
     //

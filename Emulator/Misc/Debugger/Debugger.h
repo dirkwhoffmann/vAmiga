@@ -105,15 +105,14 @@ public:
     template <Accessor A> void ascDump(std::ostream& os, u32 addr, isize lines);
     template <Accessor A> void hexDump(std::ostream& os, u32 addr, isize lines, isize sz);
     template <Accessor A> void memDump(std::ostream& os, u32 addr, isize lines, isize sz);
-    template <Accessor A> void ascDump(std::ostream& os, isize lines) { ascDump<A>(os, current, lines); }
-    template <Accessor A> void hexDump(std::ostream& os, isize lines, isize sz) { hexDump<A>(os, current, lines, sz); }
-    template <Accessor A> void memDump(std::ostream& os, isize lines, isize sz) { memDump<A>(os, current, lines, sz); }
 
     // Searches a number sequence in memory
     i64 memSearch(const string &pattern, u32 addr, isize align);
-    i64 memSearch(const string &pattern, isize align) { return memSearch(pattern, current, align); }
 
-    
+    // Writes a value into memory (multiple times)
+    void write(u32 addr, u32 val, isize repeats, isize sz);
+
+
     //
     // Handling registers
     //

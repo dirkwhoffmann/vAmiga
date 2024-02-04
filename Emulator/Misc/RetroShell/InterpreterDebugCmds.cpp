@@ -28,13 +28,7 @@ Interpreter::initDebugShell(Command &root)
              std::pair <string, string>("g[oto]", "Goto address"),
              [this](Arguments& argv, long value) {
 
-        std::stringstream ss;
-
-        if (argv.empty()) {
-            amiga.run();
-        } else {
-            debugger.jump(u32(parseNum(argv[0])));
-        }
+        argv.empty() ? amiga.run() : debugger.jump(u32(parseNum(argv[0])));
     });
 
     root.clone("g", {"goto"});
@@ -70,10 +64,7 @@ Interpreter::initDebugShell(Command &root)
              [this](Arguments& argv, long value) {
 
         std::stringstream ss;
-
-        auto addr = argv.empty() ? cpu.getPC0() : u32(parseNum(argv[0]));
-        cpu.disassembleRange(ss, addr, 16);
-
+        cpu.disassembleRange(ss, u32(parseNum(argv[0], cpu.getPC0())), 16);
         retroShell << '\n' << ss << '\n';
     });
 
@@ -82,11 +73,7 @@ Interpreter::initDebugShell(Command &root)
              [this](Arguments& argv, long value) {
 
         std::stringstream ss;
-
-        argv.empty() ?
-        debugger.ascDump<ACCESSOR_CPU>(ss, 16) :
-        debugger.ascDump<ACCESSOR_CPU>(ss, u32(parseNum(argv[0])), 16);
-
+        debugger.ascDump<ACCESSOR_CPU>(ss, u32(parseNum(argv[0], debugger.current)), 16);
         retroShell << '\n' << ss << '\n';
     });
 
@@ -95,11 +82,7 @@ Interpreter::initDebugShell(Command &root)
              [this](Arguments& argv, long value) {
 
         std::stringstream ss;
-
-        argv.empty() ?
-        debugger.memDump<ACCESSOR_CPU>(ss, 16, value) :
-        debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv[0])), 16, value);
-
+        debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv[0], debugger.current)), 16, value);
         retroShell << '\n' << ss << '\n';
     }, 2);
 
@@ -139,46 +122,21 @@ Interpreter::initDebugShell(Command &root)
     root.clone("r.w", {"r"}, "", 2);
     root.clone("r.l", {"r"}, "", 4);
 
-    root.add({"w"}, { Arg::address, Arg::value }, { Arg::count },
+    root.add({"w"}, { Arg::value }, { "{ " + Arg::address + " | " + ChipsetRegEnum::argList() + " }" },
              std::pair<string, string>("w[.b|.w|.l]", "Write into a register or memory"),
              [this](Arguments& argv, long value) {
 
-        auto addr = parseNum(argv[0]);
-        auto val = parseNum(argv[1]);
-        auto repeats = argv.size() > 2 ? parseNum(argv[2]) : 1;
+        u32 addr = debugger.current;
 
-        // Check alignment
-        if (val != 1 && IS_ODD(addr)) throw VAError(ERROR_ADDR_UNALIGNED);
-
-        {   SUSPENDED
-
-            for (isize i = 0, a = addr; i < repeats && a <= 0xFFFFFF; i++, a += value) {
-
-                switch (value) {
-
-                    case 1:
-                        mem.poke8  <ACCESSOR_CPU> (u32(a), u8(val));
-                        break;
-
-                    case 2:
-                        mem.poke16 <ACCESSOR_CPU> (u32(a), u16(val));
-                        break;
-
-                    case 4:
-                        mem.poke16 <ACCESSOR_CPU> (u32(a), HI_WORD(val));
-                        mem.poke16 <ACCESSOR_CPU> (u32(a + 2), LO_WORD(val));
-                        break;
-
-                    default:
-                        fatalError;
-                }
-            }
-
-            // Show modified memory
-            std::stringstream ss;
-            debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv[0])), 1, value);
-            retroShell << ss;
+        if (argv.size() > 1) {
+            try {
+                addr = 0xDFF000 + u32(util::parseEnum<ChipsetRegEnum>(argv[1]) << 1);
+            } catch (...) {
+                addr = u32(util::parseNum(argv[1]));
+            };
         }
+
+        debugger.write(addr, u32(parseNum(argv[0])), 1, value);
     }, 2);
 
     root.clone("w.b", {"w"}, "", 1);
@@ -218,14 +176,14 @@ Interpreter::initDebugShell(Command &root)
 
         {   SUSPENDED
 
-            auto addr = argv.size() == 1 ?
-            debugger.memSearch(parseSeq(argv[0]), value == 1 ? 1 : 2) :
-            debugger.memSearch(parseSeq(argv[0]), u32(parseNum(argv[1])), value == 1 ? 1 : 2) ;
+            auto pattern = parseSeq(argv[0]);
+            auto addr = u32(parseNum(argv[1], debugger.current));
+            auto found = debugger.memSearch(pattern, addr, value == 1 ? 1 : 2);
 
-            if (addr >= 0) {
+            if (found >= 0) {
 
                 std::stringstream ss;
-                debugger.memDump<ACCESSOR_CPU>(ss, u32(addr), 1, value);
+                debugger.memDump<ACCESSOR_CPU>(ss, u32(found), 1, value);
                 retroShell << ss;
 
             } else {
