@@ -169,8 +169,8 @@ Debugger::memDump(std::ostream& os, u32 addr, isize lines, isize sz)
 i64
 Debugger::memSearch(const string &pattern, u32 addr, isize align)
 {
-    // Align start address
-    addr -= (addr % align);
+    // Check alignment
+    if (align != 1 && IS_ODD(addr)) throw VAError(ERROR_ADDR_UNALIGNED);
 
     if (isize length = isize(pattern.length()); length > 0) {
 
@@ -196,8 +196,37 @@ Debugger::memSearch(const string &pattern, u32 addr, isize align)
     return -1;
 }
 
-void 
-Debugger::write(u32 addr, u32 val, isize repeats, isize sz)
+u32 
+Debugger::read(u32 addr, isize sz)
+{
+    u32 result;
+
+    printf("sz = %ld addr = %d\n", sz, addr);
+
+    // Check alignment
+    if (sz != 1 && IS_ODD(addr)) throw VAError(ERROR_ADDR_UNALIGNED);
+
+    {   SUSPENDED
+
+        switch (sz) {
+
+            case 1: result = mem.spypeek8  <ACCESSOR_CPU> (addr); break;
+            case 2: result = mem.spypeek16 <ACCESSOR_CPU> (addr); break;
+            case 4: result = mem.spypeek32 <ACCESSOR_CPU> (addr); break;
+
+            default:
+                fatalError;
+        }
+
+        current = u32(addr + sz);
+    }
+
+    printf("result = %d\n", result); 
+    return result;
+}
+
+void
+Debugger::write(u32 addr, u32 val, isize sz, isize repeats)
 {
     // Check alignment
     if (sz != 1 && IS_ODD(addr)) throw VAError(ERROR_ADDR_UNALIGNED);

@@ -28,7 +28,7 @@ Interpreter::initDebugShell(Command &root)
              std::pair <string, string>("g[oto]", "Goto address"),
              [this](Arguments& argv, long value) {
 
-        argv.empty() ? amiga.run() : debugger.jump(u32(parseNum(argv[0])));
+        argv.empty() ? amiga.run() : debugger.jump(parseAddr(argv[0]));
     });
 
     root.clone("g", {"goto"});
@@ -64,7 +64,7 @@ Interpreter::initDebugShell(Command &root)
              [this](Arguments& argv, long value) {
 
         std::stringstream ss;
-        cpu.disassembleRange(ss, u32(parseNum(argv[0], cpu.getPC0())), 16);
+        cpu.disassembleRange(ss, parseAddr(argv[0], cpu.getPC0()), 16);
         retroShell << '\n' << ss << '\n';
     });
 
@@ -73,7 +73,7 @@ Interpreter::initDebugShell(Command &root)
              [this](Arguments& argv, long value) {
 
         std::stringstream ss;
-        debugger.ascDump<ACCESSOR_CPU>(ss, u32(parseNum(argv[0], debugger.current)), 16);
+        debugger.ascDump<ACCESSOR_CPU>(ss, parseAddr(argv[0], debugger.current), 16);
         retroShell << '\n' << ss << '\n';
     });
 
@@ -82,7 +82,7 @@ Interpreter::initDebugShell(Command &root)
              [this](Arguments& argv, long value) {
 
         std::stringstream ss;
-        debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv[0], debugger.current)), 16, value);
+        debugger.memDump<ACCESSOR_CPU>(ss, parseAddr(argv[0], debugger.current), 16, value);
         retroShell << '\n' << ss << '\n';
     }, 2);
 
@@ -90,32 +90,26 @@ Interpreter::initDebugShell(Command &root)
     root.clone("m.w",      {"m"}, 2);
     root.clone("m.l",      {"m"}, 4);
 
-    root.add({"r"}, { Arg::address },
+    root.add({"r"}, { }, { Arg::address },
              std::pair<string, string>("r[.b|.w|.l]", "Read from a register or memory"),
              [this](Arguments& argv, long value) {
 
-        auto addr = u32(parseNum(argv[0]));
+        // Resolve address
+        u32 addr = debugger.current;
 
-        // Check alignment
-        if (value != 1 && IS_ODD(addr)) throw VAError(ERROR_ADDR_UNALIGNED);
-
-        {   SUSPENDED
-
-            std::stringstream ss;
-
-            switch (value) {
-
-                case 1: debugger.convertNumeric(ss, mem.spypeek8  <ACCESSOR_CPU> (addr)); break;
-                case 2: debugger.convertNumeric(ss, mem.spypeek16 <ACCESSOR_CPU> (addr)); break;
-                case 4: debugger.convertNumeric(ss, mem.spypeek32 <ACCESSOR_CPU> (addr)); break;
-
-                default:
-                    fatalError;
-            }
-
-            retroShell << ss;
+        if (argv.size() > 0) {
+            try {
+                addr = 0xDFF000 + u32(parseEnum<ChipsetRegEnum>(argv[0]) << 1);
+            } catch (...) {
+                addr = parseAddr(argv[0]);
+            };
         }
 
+        // Access memory
+        std::stringstream ss;
+        ss << util::hex(2 * value, addr) << ": ";
+        ss << util::hex(2 * value, debugger.read(addr, value)) << '\n';
+        retroShell << ss;
     }, 2);
 
     root.clone("r.b", {"r"}, "", 1);
@@ -126,17 +120,19 @@ Interpreter::initDebugShell(Command &root)
              std::pair<string, string>("w[.b|.w|.l]", "Write into a register or memory"),
              [this](Arguments& argv, long value) {
 
+        // Resolve address
         u32 addr = debugger.current;
 
         if (argv.size() > 1) {
             try {
-                addr = 0xDFF000 + u32(util::parseEnum<ChipsetRegEnum>(argv[1]) << 1);
+                addr = 0xDFF000 + u32(parseEnum<ChipsetRegEnum>(argv[1]) << 1);
             } catch (...) {
-                addr = u32(util::parseNum(argv[1]));
+                addr = parseAddr(argv[1]);
             };
         }
 
-        debugger.write(addr, u32(parseNum(argv[0])), 1, value);
+        // Access memory
+        debugger.write(addr, parseAddr(argv[0]), value);
     }, 2);
 
     root.clone("w.b", {"w"}, "", 1);
@@ -189,7 +185,7 @@ Interpreter::initDebugShell(Command &root)
             } else {
 
                 std::stringstream ss;
-                ss << "Sequence not found";
+                ss << "Not found";
                 retroShell << ss;
             }
         }

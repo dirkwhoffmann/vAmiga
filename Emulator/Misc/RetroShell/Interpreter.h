@@ -117,6 +117,8 @@ private:
     bool parseOnOff(const string &argv, bool fallback);
     long parseNum(const string &argv);
     long parseNum(const string &argv, long fallback);
+    u32 parseAddr(const string &argv) { return (u32)parseNum(argv); }
+    u32 parseAddr(const string &argv, long fallback) { return (u32)parseNum(argv, fallback); }
     string parseSeq(const string &argv);
     string parseSeq(const string &argv, const string &fallback);
     template <typename T> long parseEnum(const string &argv) {

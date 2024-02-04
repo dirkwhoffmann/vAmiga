@@ -109,8 +109,11 @@ public:
     // Searches a number sequence in memory
     i64 memSearch(const string &pattern, u32 addr, isize align);
 
+    // Reads a value from memory
+    u32 read(u32 addr, isize sz);
+
     // Writes a value into memory (multiple times)
-    void write(u32 addr, u32 val, isize repeats, isize sz);
+    void write(u32 addr, u32 val, isize sz, isize repeats = 1);
 
 
     //
