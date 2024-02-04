@@ -46,7 +46,7 @@ struct Command {
     // Currently selected group (used in command registration)
     static isize currentGroup;
 
-    // Command group of this command
+    // Group of this command
     isize group;
 
     // Name of this command (e.g., "eject")
@@ -55,15 +55,15 @@ struct Command {
     // Full name of this command (e.g., "df0 eject")
     string fullName;
 
+    // Help description for this command
+    std::pair<string, string> help;
+
     // List of required arguments
     std::vector<string> requiredArgs;
 
     // List of optional arguments
     std::vector<string> optionalArgs;
 
-    // Help message for this command
-    string help;
-    
     // List of subcommands
     std::vector<Command> subCommands;
     
@@ -102,6 +102,13 @@ struct Command {
              const std::vector<string> &optionalArgs,
              const string &help,
              std::function<void (Arguments&, long)> func, long param = 0);
+
+    void add(const std::vector<string> &tokens,
+             const std::vector<string> &requiredArgs,
+             const std::vector<string> &optionalArgs,
+             std::pair<const string &, const string &> help,
+             std::function<void (Arguments&, long)> func, long param = 0);
+
 
     void clone(const string &alias,
                const std::vector<string> &tokens,

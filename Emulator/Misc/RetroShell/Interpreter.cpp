@@ -253,7 +253,7 @@ Interpreter::help(const Command& current)
         retroShell << it.fullName;
         retroShell.tab(tab);
         retroShell << " : ";
-        retroShell << it.help;
+        retroShell << it.help.second;
         retroShell << '\n';
     }
 

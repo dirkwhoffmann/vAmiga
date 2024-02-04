@@ -41,7 +41,7 @@ Command::add(const std::vector<string> &tokens,
              const string &help,
              std::function<void (Arguments&, long)> func, long param)
 {
-    add(tokens, { }, { }, help, func, param);
+    add(tokens, { }, { }, { tokens.back(), help }, func, param);
 }
 
 void
@@ -50,7 +50,7 @@ Command::add(const std::vector<string> &tokens,
              const string &help,
              std::function<void (Arguments&, long)> func, long param)
 {
-    add(tokens, arguments, { }, help, func, param);
+    add(tokens, arguments, { }, { tokens.back(), help }, func, param);
 }
 
 void
@@ -58,6 +58,16 @@ Command::add(const std::vector<string> &tokens,
              const std::vector<string> &requiredArgs,
              const std::vector<string> &optionalArgs,
              const string &help,
+             std::function<void (Arguments&, long)> func, long param)
+{
+    add(tokens, requiredArgs, optionalArgs, { tokens.back(), help }, func, param);
+}
+
+void
+Command::add(const std::vector<string> &tokens,
+             const std::vector<string> &requiredArgs,
+             const std::vector<string> &optionalArgs,
+             std::pair<const string &, const string &> help,
              std::function<void (Arguments&, long)> func, long param)
 {
     assert(!tokens.empty());
@@ -69,14 +79,15 @@ Command::add(const std::vector<string> &tokens,
     // Create the instruction
     Command d;
     d.name = tokens.back();
-    d.fullName = (cmd->fullName.empty() ? "" : cmd->fullName + " ") + tokens.back();
+    // d.fullName = (cmd->fullName.empty() ? "" : cmd->fullName + " ") + tokens.back();
+    d.fullName = (cmd->fullName.empty() ? "" : cmd->fullName + " ") + help.first;
     d.group = currentGroup;
     d.requiredArgs = requiredArgs;
     d.optionalArgs = optionalArgs;
     d.help = help;
     d.callback = func;
     d.param = param;
-    d.hidden = help.empty();
+    d.hidden = help.second.empty();
 
     // Register the instruction
     cmd->subCommands.push_back(d);

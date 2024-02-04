@@ -25,7 +25,7 @@ Interpreter::initDebugShell(Command &root)
     root.setGroup("Monitor commands");
 
     root.add({"goto"}, { }, { Arg::value },
-             "Goto address",
+             std::pair<string, string>("g[oto]", "Goto address"),
              [this](Arguments& argv, long value) {
 
         std::stringstream ss;
@@ -77,7 +77,7 @@ Interpreter::initDebugShell(Command &root)
     });
 
     root.add({"memory"}, { }, { Arg::address },
-             "Dump memory",
+             std::pair<string, string>("m[.b|.w|.l]", "Dump memory"),
              [this](Arguments& argv, long value) {
 
         std::stringstream ss;
@@ -89,10 +89,15 @@ Interpreter::initDebugShell(Command &root)
         retroShell << '\n' << ss << '\n';
     }, 2);
 
-    root.clone("m",   {"memory"}, 1);
-    root.clone("m.b", {"memory"}, 1);
-    root.clone("m.w", {"memory"}, 2);
-    root.clone("m.l", {"memory"}, 4);
+    root.clone("m",        {"memory"}, 1);
+    root.clone("m.b",      {"memory"}, 1);
+    root.clone("m.w",      {"memory"}, 2);
+    root.clone("m.l",      {"memory"}, 4);
+    /*
+    root.clone("memory.b", {"memory"}, 1);
+    root.clone("memory.w", {"memory"}, 2);
+    root.clone("memory.l", {"memory"}, 4);
+    */
 
     root.add({"read"}, { Arg::address },
              "Read from a register or memory",
