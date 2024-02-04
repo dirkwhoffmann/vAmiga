@@ -317,23 +317,77 @@ Debugger::writeCs(ChipsetReg reg, u16 value)
     return mem.pokeCustom16<ACCESSOR_CPU>(u32(reg << 1), value);
 }
 
+/*
 void
-Debugger::convertNumeric(std::ostream& os, isize value) const
+Debugger::convertNumeric(std::ostream& os, isize value, isize sz) const
 {
     using namespace util;
 
-    auto chr = [&](u8 v) { return std::isprint(v) ? (char)v : '.'; };
+    switch (sz) {
 
-    os << std::setw(10) << std::right << std::setfill(' ') << dec(u32(value)) << " | ";
-    os << hex(u32(value)) << " | ";
-    os << bin(u32(value)) << " | ";
-    os << "\"";
-    os << chr(BYTE3(value)) << chr(BYTE2(value)) << chr(BYTE1(value)) << chr(BYTE0(value));
-    os << "\"";
+        case 1:
+
+            os << std::setw(10) << std::right << std::setfill(' ') << dec(u8(value)) << " | ";
+            os << hex(u8(value)) << " | ";
+            os << bin(u8(value)) << " | ";
+            os << str(u8(value));
+            break;
+
+        case 2: 
+
+            os << std::setw(10) << std::right << std::setfill(' ') << dec(u16(value)) << " | ";
+            os << hex(u16(value)) << " | ";
+            os << bin(u16(value)) << " | ";
+            os << str(u16(value));
+            break;
+
+        case 4:
+
+            os << std::setw(10) << std::right << std::setfill(' ') << dec(u32(value)) << " | ";
+            os << hex(u32(value)) << " | ";
+            os << bin(u32(value)) << " | ";
+            os << str(u32(value));
+            break;
+    }
+
     os << std::endl;
 }
+*/
 
-void 
+void
+Debugger::convertNumeric(std::ostream& os, u8 value) const
+{
+    using namespace util;
+
+    os << std::setw(10) << std::right << std::setfill(' ') << dec(value) << " | ";
+    os << hex(value) << " | ";
+    os << bin(value) << " | ";
+    os << str(value);
+}
+
+void
+Debugger::convertNumeric(std::ostream& os, u16 value) const
+{
+    using namespace util;
+
+    os << std::setw(10) << std::right << std::setfill(' ') << dec(value) << " | ";
+    os << hex(value) << " | ";
+    os << bin(value) << " | ";
+    os << str(value);
+}
+
+void
+Debugger::convertNumeric(std::ostream& os, u32 value) const
+{
+    using namespace util;
+
+    os << std::setw(10) << std::right << std::setfill(' ') << dec(value) << " | ";
+    os << hex(value) << " | ";
+    os << bin(value) << " | ";
+    os << str(value);
+}
+
+void
 Debugger::convertNumeric(std::ostream& os, string s) const
 {
     u8 bytes[4];
@@ -343,7 +397,7 @@ Debugger::convertNumeric(std::ostream& os, string s) const
     bytes[2] = s.length() >= 2 ? (u8)s[s.length() - 3] : 0;
     bytes[3] = s.length() >= 1 ? (u8)s[s.length() - 4] : 0;
 
-    convertNumeric(os, HI_HI_LO_LO(bytes[0], bytes[1], bytes[2], bytes[3]));
+    convertNumeric(os, u32(HI_HI_LO_LO(bytes[0], bytes[1], bytes[2], bytes[3])));
 }
 
 template const char *Debugger::ascDump <ACCESSOR_CPU> (u32, isize) const;

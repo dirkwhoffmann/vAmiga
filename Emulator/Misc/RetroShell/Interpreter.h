@@ -155,6 +155,7 @@ public:
 private:
 
     // Execution handlers (debug shell)
+    void execRead(Arguments &argv, isize sz);
     void execWrite(Arguments &argv, isize sz);
     void execCopy(Arguments &argv, isize sz);
     void execFind(Arguments &argv, isize sz);

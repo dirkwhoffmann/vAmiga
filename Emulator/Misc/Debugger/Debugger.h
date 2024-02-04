@@ -131,7 +131,9 @@ public:
     //
 
     // Displays a value in different number formats (hex, dec, bin, alpha)
-    void convertNumeric(std::ostream& os, isize value) const;
+    void convertNumeric(std::ostream& os, u8 value) const;
+    void convertNumeric(std::ostream& os, u16 value) const;
+    void convertNumeric(std::ostream& os, u32 value) const;
     void convertNumeric(std::ostream& os, string value) const;
 };
 

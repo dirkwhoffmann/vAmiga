@@ -125,6 +125,31 @@ Interpreter::initDebugShell(Command &root)
         retroShell << '\n' << ss << '\n';
     });
 
+    root.add({"read"}, { Arg::address },
+             "Read from a register or memory",
+             [this](Arguments& argv, long value) {
+
+        execRead(argv, 2);
+    });
+
+    root.add({"read.b"}, { Arg::address }, "",
+             [this](Arguments& argv, long value) {
+
+        execRead(argv, 1);
+    });
+
+    root.add({"read.w"}, { Arg::address }, "",
+             [this](Arguments& argv, long value) {
+
+        execRead(argv, 2);
+    });
+
+    root.add({"read.l"}, { Arg::address }, "",
+             [this](Arguments& argv, long value) {
+
+        execRead(argv, 4);
+    });
+
     root.add({"write"}, { Arg::address, Arg::value }, { Arg::count },
              "Modify memory",
              [this](Arguments& argv, long value) {
@@ -1100,13 +1125,39 @@ Interpreter::initDebugShell(Command &root)
         std::stringstream ss;
 
         if (isNum(argv)) {
-            debugger.convertNumeric(ss, parseNum(argv));
+            debugger.convertNumeric(ss, u32(parseNum(argv)));
         } else {
             debugger.convertNumeric(ss, argv.front());
         }
 
         retroShell << '\n' << ss << '\n';
     });
+}
+
+void
+Interpreter::execRead(Arguments &argv, isize sz)
+{
+    auto addr = u32(parseNum(argv, 0));
+
+    // Check alignment
+    if (sz != 1 && IS_ODD(addr)) throw VAError(ERROR_ADDR_UNALIGNED);
+
+    {   SUSPENDED
+
+        std::stringstream ss;
+
+        switch (sz) {
+
+            case 1: debugger.convertNumeric(ss, mem.spypeek8  <ACCESSOR_CPU> (addr)); break;
+            case 2: debugger.convertNumeric(ss, mem.spypeek16 <ACCESSOR_CPU> (addr)); break;
+            case 4: debugger.convertNumeric(ss, mem.spypeek32 <ACCESSOR_CPU> (addr)); break;
+
+            default:
+                fatalError;
+        }
+
+        retroShell << ss;
+    }
 }
 
 void
