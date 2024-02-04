@@ -72,8 +72,12 @@ class Console: Layer {
                 fatalError()
             }
 
-            textView.needsDisplay = true
+            // Scrolling and updating a textView seems to be buggy in latest macOS
+            // textView.pageDown(self)
+            // textView.pageDown(self)
+            // textView.invalidateTextContainerOrigin()
             textView.scrollToEndOfDocument(self)
+            textView.needsDisplay = true
             isDirty = false
         }
     }

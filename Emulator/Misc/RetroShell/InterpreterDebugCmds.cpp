@@ -33,7 +33,7 @@ Interpreter::initDebugShell(Command &root)
         if (argv.empty()) {
             amiga.run();
         } else {
-            debugger.jump(u32(parseNum(argv)));
+            debugger.jump(u32(parseNum(argv[0])));
         }
     });
 
@@ -71,7 +71,7 @@ Interpreter::initDebugShell(Command &root)
 
         std::stringstream ss;
 
-        auto addr = argv.empty() ? cpu.getPC0() : u32(parseNum(argv));
+        auto addr = argv.empty() ? cpu.getPC0() : u32(parseNum(argv[0]));
         cpu.disassembleRange(ss, addr, 16);
 
         retroShell << '\n' << ss << '\n';
@@ -85,7 +85,7 @@ Interpreter::initDebugShell(Command &root)
 
         argv.empty() ?
         debugger.ascDump<ACCESSOR_CPU>(ss, 16) :
-        debugger.ascDump<ACCESSOR_CPU>(ss, u32(parseNum(argv)), 16);
+        debugger.ascDump<ACCESSOR_CPU>(ss, u32(parseNum(argv[0])), 16);
 
         retroShell << '\n' << ss << '\n';
     });
@@ -98,7 +98,7 @@ Interpreter::initDebugShell(Command &root)
 
         argv.empty() ?
         debugger.memDump<ACCESSOR_CPU>(ss, 16, value) :
-        debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv)), 16, value);
+        debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv[0])), 16, value);
 
         retroShell << '\n' << ss << '\n';
     }, 2);
@@ -111,7 +111,7 @@ Interpreter::initDebugShell(Command &root)
              std::pair<string, string>("r[.b|.w|.l]", "Read from a register or memory"),
              [this](Arguments& argv, long value) {
 
-        auto addr = u32(parseNum(argv, 0));
+        auto addr = u32(parseNum(argv[0]));
 
         // Check alignment
         if (value != 1 && IS_ODD(addr)) throw VAError(ERROR_ADDR_UNALIGNED);
@@ -143,9 +143,9 @@ Interpreter::initDebugShell(Command &root)
              std::pair<string, string>("w[.b|.w|.l]", "Write into a register or memory"),
              [this](Arguments& argv, long value) {
 
-        auto addr = parseNum(argv, 0);
-        auto val = parseNum(argv, 1);
-        auto repeats = argv.size() > 2 ? parseNum(argv, 2) : 1;
+        auto addr = parseNum(argv[0]);
+        auto val = parseNum(argv[1]);
+        auto repeats = argv.size() > 2 ? parseNum(argv[2]) : 1;
 
         // Check alignment
         if (val != 1 && IS_ODD(addr)) throw VAError(ERROR_ADDR_UNALIGNED);
@@ -176,7 +176,7 @@ Interpreter::initDebugShell(Command &root)
 
             // Show modified memory
             std::stringstream ss;
-            debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv, 0)), 1, value);
+            debugger.memDump<ACCESSOR_CPU>(ss, u32(parseNum(argv[0])), 1, value);
             retroShell << ss;
         }
     }, 2);
@@ -189,9 +189,9 @@ Interpreter::initDebugShell(Command &root)
              std::pair<string, string>("c[.b|.w|.l]", "Copy a chunk of memory"),
              [this](Arguments& argv, long value) {
 
-        auto src = parseNum(argv, 0);
-        auto dst = parseNum(argv, 1);
-        auto cnt = parseNum(argv, 2) * value;
+        auto src = parseNum(argv[0]);
+        auto dst = parseNum(argv[1]);
+        auto cnt = parseNum(argv[2]) * value;
 
         {   SUSPENDED
 
@@ -219,8 +219,8 @@ Interpreter::initDebugShell(Command &root)
         {   SUSPENDED
 
             auto addr = argv.size() == 1 ?
-            debugger.memSearch(parseSeq(argv, 0), value == 1 ? 1 : 2) :
-            debugger.memSearch(parseSeq(argv, 0), u32(parseNum(argv, 1)), value == 1 ? 1 : 2) ;
+            debugger.memSearch(parseSeq(argv[0]), value == 1 ? 1 : 2) :
+            debugger.memSearch(parseSeq(argv[0]), u32(parseNum(argv[1])), value == 1 ? 1 : 2) ;
 
             if (addr >= 0) {
 
@@ -407,7 +407,7 @@ Interpreter::initDebugShell(Command &root)
              "Prints the Copper list",
              [this](Arguments& argv, long value) {
 
-        auto nr = parseNum(argv);
+        auto nr = parseNum(argv[0]);
 
         switch (nr) {
 
@@ -488,7 +488,7 @@ Interpreter::initDebugShell(Command &root)
              "Inspects a specific Zorro board",
              [this](Arguments& argv, long value) {
 
-        auto nr = parseNum(argv);
+        auto nr = parseNum(argv[0]);
 
         if (auto board = zorro.getBoard(nr); board != nullptr) {
 
@@ -796,7 +796,7 @@ Interpreter::initDebugShell(Command &root)
              "Attaches or detaches the debug expansion board",
              [this](Arguments& argv, long value) {
 
-        diagBoard.setConfigItem(OPT_DIAG_BOARD, parseBool(argv));
+        diagBoard.setConfigItem(OPT_DIAG_BOARD, parseBool(argv[0]));
     });
 
 
@@ -817,28 +817,28 @@ Interpreter::initDebugShell(Command &root)
              "Sets a breakpoint at the specified address",
              [this](Arguments& argv, long value) {
 
-        cpu.setBreakpoint(u32(parseNum(argv)));
+        cpu.setBreakpoint(u32(parseNum(argv[0])));
     });
 
     root.add({"break", "delete"}, { Arg::address },
              "Deletes a breakpoint",
              [this](Arguments& argv, long value) {
 
-        cpu.deleteBreakpoint(parseNum(argv));
+        cpu.deleteBreakpoint(parseNum(argv[0]));
     });
 
     root.add({"break", "enable"}, { Arg::address },
              "Enables a breakpoint",
              [this](Arguments& argv, long value) {
 
-        cpu.enableBreakpoint(parseNum(argv));
+        cpu.enableBreakpoint(parseNum(argv[0]));
     });
 
     root.add({"break", "disable"}, { Arg::address },
              "Disables a breakpoint",
              [this](Arguments& argv, long value) {
 
-        cpu.disableBreakpoint(parseNum(argv));
+        cpu.disableBreakpoint(parseNum(argv[0]));
     });
 
     root.add({"break", "ignore"}, { Arg::address, Arg::value },
@@ -866,28 +866,28 @@ Interpreter::initDebugShell(Command &root)
              "Sets a watchpoint at the specified address",
              [this](Arguments& argv, long value) {
 
-        cpu.setWatchpoint(u32(parseNum(argv)));
+        cpu.setWatchpoint(u32(parseNum(argv[0])));
     });
 
     root.add({"watch", "delete"}, { Arg::address },
              "Deletes a watchpoint",
              [this](Arguments& argv, long value) {
 
-        cpu.deleteWatchpoint(parseNum(argv));
+        cpu.deleteWatchpoint(parseNum(argv[0]));
     });
 
     root.add({"watch", "enable"}, { Arg::address },
              "Enables a watchpoint",
              [this](Arguments& argv, long value) {
 
-        cpu.enableWatchpoint(parseNum(argv));
+        cpu.enableWatchpoint(parseNum(argv[0]));
     });
 
     root.add({"watch", "disable"}, { Arg::address },
              "Disables a watchpoint",
              [this](Arguments& argv, long value) {
 
-        cpu.disableWatchpoint(parseNum(argv));
+        cpu.disableWatchpoint(parseNum(argv[0]));
     });
 
     root.add({"watch", "ignore"}, { Arg::address, Arg::value },
@@ -915,7 +915,7 @@ Interpreter::initDebugShell(Command &root)
              "Catches an exception vector",
              [this](Arguments& argv, long value) {
 
-        auto nr = parseNum(argv);
+        auto nr = parseNum(argv[0]);
         if (nr < 0 || nr > 255) throw VAError(ERROR_OPT_INVARG, "0...255");
         cpu.setCatchpoint(u8(nr));
     });
@@ -924,7 +924,7 @@ Interpreter::initDebugShell(Command &root)
              "Catches an interrupt",
              [this](Arguments& argv, long value) {
 
-        auto nr = parseNum(argv);
+        auto nr = parseNum(argv[0]);
         if (nr < 1 || nr > 7) throw VAError(ERROR_OPT_INVARG, "1...7");
         cpu.setCatchpoint(u8(nr + 24));
     });
@@ -933,7 +933,7 @@ Interpreter::initDebugShell(Command &root)
              "Catches a trap instruction",
              [this](Arguments& argv, long value) {
 
-        auto nr = parseNum(argv);
+        auto nr = parseNum(argv[0]);
         if (nr < 0 || nr > 15) throw VAError(ERROR_OPT_INVARG, "0...15");
         cpu.setCatchpoint(u8(nr + 32));
     });
@@ -942,21 +942,21 @@ Interpreter::initDebugShell(Command &root)
              "Deletes a catchpoint",
              [this](Arguments& argv, long value) {
 
-        cpu.deleteCatchpoint(parseNum(argv));
+        cpu.deleteCatchpoint(parseNum(argv[0]));
     });
 
     root.add({"catch", "enable"}, { Arg::value },
              "Enables a catchpoint",
              [this](Arguments& argv, long value) {
 
-        cpu.enableCatchpoint(parseNum(argv));
+        cpu.enableCatchpoint(parseNum(argv[0]));
     });
 
     root.add({"catch", "disable"}, { Arg::value },
              "Disables a catchpoint",
              [this](Arguments& argv, long value) {
 
-        cpu.disableCatchpoint(parseNum(argv));
+        cpu.disableCatchpoint(parseNum(argv[0]));
     });
 
     root.add({"catch", "ignore"}, { Arg::value, Arg::value },
@@ -982,28 +982,28 @@ Interpreter::initDebugShell(Command &root)
              "Sets a breakpoint at the specified address",
              [this](Arguments& argv, long value) {
 
-        copper.debugger.setBreakpoint(u32(parseNum(argv)));
+        copper.debugger.setBreakpoint(u32(parseNum(argv[0])));
     });
 
     root.add({"cbreak", "delete"}, { Arg::value },
              "Deletes a breakpoint",
              [this](Arguments& argv, long value) {
 
-        copper.debugger.deleteBreakpoint(parseNum(argv));
+        copper.debugger.deleteBreakpoint(parseNum(argv[0]));
     });
 
     root.add({"cbreak", "enable"}, { Arg::value },
              "Enables a breakpoint",
              [this](Arguments& argv, long value) {
 
-        copper.debugger.enableBreakpoint(parseNum(argv));
+        copper.debugger.enableBreakpoint(parseNum(argv[0]));
     });
 
     root.add({"cbreak", "disable"}, { Arg::value },
              "Disables a breakpoint",
              [this](Arguments& argv, long value) {
 
-        copper.debugger.disableBreakpoint(parseNum(argv));
+        copper.debugger.disableBreakpoint(parseNum(argv[0]));
     });
 
     root.add({"cbreak", "ignore"}, { Arg::value, Arg::value },
@@ -1029,28 +1029,28 @@ Interpreter::initDebugShell(Command &root)
              "Sets a watchpoint at the specified address",
              [this](Arguments& argv, long value) {
 
-        copper.debugger.setWatchpoint(u32(parseNum(argv)));
+        copper.debugger.setWatchpoint(u32(parseNum(argv[0])));
     });
 
     root.add({"cwatch", "delete"}, { Arg::value },
              "Deletes a watchpoint",
              [this](Arguments& argv, long value) {
 
-        copper.debugger.deleteWatchpoint(parseNum(argv));
+        copper.debugger.deleteWatchpoint(parseNum(argv[0]));
     });
 
     root.add({"cwatch", "enable"}, { Arg::value },
              "Enables a watchpoint",
              [this](Arguments& argv, long value) {
 
-        copper.debugger.enableWatchpoint(parseNum(argv));
+        copper.debugger.enableWatchpoint(parseNum(argv[0]));
     });
 
     root.add({"cwatch", "disable"}, { Arg::value },
              "Disables a watchpoint",
              [this](Arguments& argv, long value) {
 
-        copper.debugger.disableWatchpoint(parseNum(argv));
+        copper.debugger.disableWatchpoint(parseNum(argv[0]));
     });
 
     root.add({"cwatch", "ignore"}, { Arg::value, Arg::value },
@@ -1125,7 +1125,7 @@ Interpreter::initDebugShell(Command &root)
              "Sets an internal debug variable",
              [this](Arguments& argv, long value) {
 
-        Amiga::setDebugVariable(argv[0], int(parseNum(argv, 1)));
+        Amiga::setDebugVariable(argv[0], int(parseNum(argv[1])));
     });
 
     root.add({"?"}, { Arg::value },
@@ -1134,8 +1134,8 @@ Interpreter::initDebugShell(Command &root)
 
         std::stringstream ss;
 
-        if (isNum(argv)) {
-            debugger.convertNumeric(ss, u32(parseNum(argv)));
+        if (isNum(argv[0])) {
+            debugger.convertNumeric(ss, u32(parseNum(argv[0])));
         } else {
             debugger.convertNumeric(ss, argv.front());
         }
