@@ -452,10 +452,9 @@ CPU::_dump(Category category, std::ostream& os) const
 
         for (int i = 0; i < guards.elements(); i++) {
 
-            auto bp =  guards.guardNr(i);
-            auto nr = name + std::to_string(i);
+            auto bp = guards.guardNr(i);
 
-            os << util::tab(nr);
+            os << util::tab(name + " " + std::to_string(i));
             os << util::hex(bp->addr);
 
             if (!bp->enabled) os << " (Disabled)";
@@ -822,11 +821,11 @@ CPU::jump(u32 addr)
 }
 
 void
-CPU::setBreakpoint(u32 addr)
+CPU::setBreakpoint(u32 addr, isize ignores)
 {
     if (debugger.breakpoints.isSetAt(addr)) throw VAError(ERROR_BP_ALREADY_SET, addr);
 
-    debugger.breakpoints.setAt(addr);
+    debugger.breakpoints.setAt(addr, ignores);
     msgQueue.put(MSG_BREAKPOINT_UPDATED);
 }
 
@@ -857,6 +856,12 @@ CPU::disableBreakpoint(isize nr)
     msgQueue.put(MSG_BREAKPOINT_UPDATED);
 }
 
+void 
+CPU::toggleBreakpoint(isize nr)
+{
+    debugger.breakpoints.isEnabled(nr) ? disableBreakpoint(nr) : enableBreakpoint(nr);
+}
+
 void
 CPU::ignoreBreakpoint(isize nr, isize count)
 {
@@ -867,11 +872,11 @@ CPU::ignoreBreakpoint(isize nr, isize count)
 }
 
 void
-CPU::setWatchpoint(u32 addr)
+CPU::setWatchpoint(u32 addr, isize ignores)
 {
     if (debugger.watchpoints.isSetAt(addr)) throw VAError(ERROR_WP_ALREADY_SET, addr);
 
-    debugger.watchpoints.setAt(addr);
+    debugger.watchpoints.setAt(addr, ignores);
     msgQueue.put(MSG_WATCHPOINT_UPDATED);
 }
 
@@ -903,6 +908,12 @@ CPU::disableWatchpoint(isize nr)
 }
 
 void
+CPU::toggleWatchpoint(isize nr)
+{
+    debugger.watchpoints.isEnabled(nr) ? disableWatchpoint(nr) : enableWatchpoint(nr);
+}
+
+void
 CPU::ignoreWatchpoint(isize nr, isize count)
 {
     if (!debugger.watchpoints.isSet(nr)) throw VAError(ERROR_WP_NOT_FOUND, nr);
@@ -912,11 +923,11 @@ CPU::ignoreWatchpoint(isize nr, isize count)
 }
 
 void
-CPU::setCatchpoint(u8 vector)
+CPU::setCatchpoint(u8 vector, isize ignores)
 {
     if (debugger.catchpoints.isSetAt(vector)) throw VAError(ERROR_CP_ALREADY_SET, vector);
 
-    debugger.catchpoints.setAt(vector);
+    debugger.catchpoints.setAt(vector, ignores);
     msgQueue.put(MSG_CATCHPOINT_UPDATED);
 }
 
@@ -945,6 +956,12 @@ CPU::disableCatchpoint(isize nr)
 
     debugger.catchpoints.disable(nr);
     msgQueue.put(MSG_CATCHPOINT_UPDATED);
+}
+
+void
+CPU::toggleCatchpoint(isize nr)
+{
+    debugger.catchpoints.isEnabled(nr) ? disableCatchpoint(nr) : enableCatchpoint(nr);
 }
 
 void

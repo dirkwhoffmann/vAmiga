@@ -115,7 +115,7 @@ public:
     // Writes a value into memory (multiple times)
     void write(u32 addr, u32 val, isize sz, isize repeats = 1);
 
-
+    
     //
     // Handling registers
     //

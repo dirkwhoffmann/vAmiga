@@ -231,25 +231,28 @@ public:
     //
     
     // Manages the breakpoint list
-    void setBreakpoint(u32 addr) throws;
+    void setBreakpoint(u32 addr, isize ignores = 0) throws;
     void deleteBreakpoint(isize nr) throws;
     void enableBreakpoint(isize nr) throws;
     void disableBreakpoint(isize nr) throws;
-    void ignoreBreakpoint(isize nr, isize count) throws;
+    void toggleBreakpoint(isize nr) throws;
+    void ignoreBreakpoint(isize nr, isize ignores) throws;
 
     // Manages the watchpoint list
-    void setWatchpoint(u32 addr) throws;
+    void setWatchpoint(u32 addr, isize ignores = 0) throws;
     void deleteWatchpoint(isize nr) throws;
     void enableWatchpoint(isize nr) throws;
     void disableWatchpoint(isize nr) throws;
-    void ignoreWatchpoint(isize nr, isize count) throws;
+    void toggleWatchpoint(isize nr) throws;
+    void ignoreWatchpoint(isize nr, isize ignores) throws;
 
     // Manages the catchpoint list
-    void setCatchpoint(u8 vector) throws;
+    void setCatchpoint(u8 vector, isize ignores = 0) throws;
     void deleteCatchpoint(isize nr) throws;
     void enableCatchpoint(isize nr) throws;
     void disableCatchpoint(isize nr) throws;
-    void ignoreCatchpoint(isize nr, isize count) throws;
+    void toggleCatchpoint(isize nr) throws;
+    void ignoreCatchpoint(isize nr, isize ignores) throws;
 };
 
 }

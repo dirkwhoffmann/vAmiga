@@ -66,7 +66,7 @@ Guards::guardAddr(long nr) const
 }
 
 void
-Guards::setAt(u32 addr)
+Guards::setAt(u32 addr, long ignores)
 {
     if (isSetAt(addr)) return;
 
@@ -79,7 +79,10 @@ Guards::setAt(u32 addr)
         capacity *= 2;
     }
 
-    guards[count++].addr = addr;
+    guards[count].addr = addr;
+    guards[count].ignore = ignores;
+    count++;
+
     setNeedsCheck(true);
 }
 

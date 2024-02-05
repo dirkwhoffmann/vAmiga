@@ -230,11 +230,11 @@ CopperDebugger::disassemble(u32 addr, bool symbolic) const
 }
 
 void
-CopperDebugger::setBreakpoint(u32 addr)
+CopperDebugger::setBreakpoint(u32 addr, isize ignores)
 {
     if (breakpoints.isSetAt(addr)) throw VAError(ERROR_BP_ALREADY_SET, addr);
 
-    breakpoints.setAt(addr);
+    breakpoints.setAt(addr, ignores);
     msgQueue.put(MSG_COPPERBP_UPDATED);
 }
 
@@ -266,6 +266,12 @@ CopperDebugger::disableBreakpoint(isize nr)
 }
 
 void
+CopperDebugger::toggleBreakpoint(isize nr)
+{
+    breakpoints.isEnabled(nr) ? disableBreakpoint(nr) : enableBreakpoint(nr);
+}
+
+void
 CopperDebugger::ignoreBreakpoint(isize nr, isize count)
 {
     if (!breakpoints.isSet(nr)) throw VAError(ERROR_BP_NOT_FOUND, nr);
@@ -275,11 +281,11 @@ CopperDebugger::ignoreBreakpoint(isize nr, isize count)
 }
 
 void
-CopperDebugger::setWatchpoint(u32 addr)
+CopperDebugger::setWatchpoint(u32 addr, isize ignores)
 {
     if (watchpoints.isSetAt(addr)) throw VAError(ERROR_WP_ALREADY_SET, addr);
 
-    watchpoints.setAt(addr);
+    watchpoints.setAt(addr, ignores);
     msgQueue.put(MSG_COPPERWP_UPDATED);
 }
 
@@ -299,6 +305,12 @@ CopperDebugger::enableWatchpoint(isize nr)
 
     watchpoints.enable(nr);
     msgQueue.put(MSG_COPPERWP_UPDATED);
+}
+
+void
+CopperDebugger::toggleWatchpoint(isize nr)
+{
+    watchpoints.isEnabled(nr) ? disableWatchpoint(nr) : enableWatchpoint(nr);
 }
 
 void

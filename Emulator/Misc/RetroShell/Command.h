@@ -22,10 +22,13 @@ typedef std::vector<string> Arguments;
 namespace Arg {
 
 static const std::string address    = "<address>";
+// static const std::string addressNr  = "<address | nr>";
 static const std::string boolean    = "{ true | false }";
 static const std::string command    = "<command>";
 static const std::string dst        = "<destination>";
+static const std::string ignores    = "<ignores>";
 static const std::string kb         = "<kb>";
+static const std::string nr         = "<nr>";
 static const std::string onoff      = "{ on | off }";
 static const std::string path       = "<path>";
 static const std::string process    = "<process>";

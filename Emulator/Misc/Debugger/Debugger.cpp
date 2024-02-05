@@ -221,7 +221,7 @@ Debugger::read(u32 addr, isize sz)
         current = u32(addr + sz);
     }
 
-    printf("result = %d\n", result); 
+    printf("result = %d\n", result);
     return result;
 }
 
@@ -255,7 +255,7 @@ Debugger::write(u32 addr, u32 val, isize sz, isize repeats)
             }
         }
 
-        current = u32(addr + sz);
+        current = u32(addr + sz * repeats);
     }
 }
 

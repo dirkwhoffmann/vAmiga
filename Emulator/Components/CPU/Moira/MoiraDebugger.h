@@ -88,7 +88,7 @@ public:
     bool isSet(long nr) const { return guardNr(nr) != nullptr; }
     bool isSetAt(u32 addr) const { return guardAt(addr) != nullptr; }
 
-    void setAt(u32 addr);
+    void setAt(u32 addr, long ignores = 0);
 
     void remove(long nr);
     void removeAt(u32 addr);
