@@ -88,7 +88,7 @@ EADFFile::finalizeRead()
     
     if (std::strcmp((char *)data.ptr, "UAE-1ADF") != 0) {
         
-        warn("UAE-1ADF files are not supported\n");
+        warn("Only UAE-1ADF files are supported\n");
         throw VAError(ERROR_EXT_FACTOR5);
     }
     
