@@ -89,33 +89,34 @@ struct Command {
 
     // Creates a new node in the command tree
     void add(const std::vector<string> &tokens,
-             const string &help);
+             const string &help,
+             std::function<void (Arguments&, long)> func = nullptr, long param = 0);
 
     void add(const std::vector<string> &tokens,
-             const string &help,
-             std::function<void (Arguments&, long)> func, long param = 0);
+             std::pair<const string &, const string &> help,
+             std::function<void (Arguments&, long)> func = nullptr, long param = 0);
 
     void add(const std::vector<string> &tokens,
              const std::vector<string> &args,
              const string &help,
-             std::function<void (Arguments&, long)> func, long param = 0);
+             std::function<void (Arguments&, long)> func = nullptr, long param = 0);
 
     void add(const std::vector<string> &tokens,
              const std::vector<string> &args,
              std::pair<const string &, const string &> help,
-             std::function<void (Arguments&, long)> func, long param = 0);
+             std::function<void (Arguments&, long)> func = nullptr, long param = 0);
 
     void add(const std::vector<string> &tokens,
              const std::vector<string> &requiredArgs,
              const std::vector<string> &optionalArgs,
              const string &help,
-             std::function<void (Arguments&, long)> func, long param = 0);
+             std::function<void (Arguments&, long)> func = nullptr, long param = 0);
 
     void add(const std::vector<string> &tokens,
              const std::vector<string> &requiredArgs,
              const std::vector<string> &optionalArgs,
              std::pair<const string &, const string &> help,
-             std::function<void (Arguments&, long)> func, long param = 0);
+             std::function<void (Arguments&, long)> func = nullptr, long param = 0);
 
 
     void clone(const string &alias,

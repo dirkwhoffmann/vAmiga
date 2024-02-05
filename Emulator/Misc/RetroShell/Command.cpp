@@ -31,17 +31,18 @@ Command::setGroup(const string &description, const string &postfix)
 
 void
 Command::add(const std::vector<string> &tokens,
-             const string &help)
-{
-    add(tokens, help, nullptr);
-}
-
-void
-Command::add(const std::vector<string> &tokens,
              const string &help,
              std::function<void (Arguments&, long)> func, long param)
 {
     add(tokens, { }, { }, { tokens.back(), help }, func, param);
+}
+
+void
+Command::add(const std::vector<string> &tokens,
+             std::pair<const string &, const string &> help,
+             std::function<void (Arguments&, long)> func, long param)
+{
+    add(tokens, { }, { }, help, func, param);
 }
 
 void

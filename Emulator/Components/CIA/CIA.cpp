@@ -191,21 +191,21 @@ CIA::_dump(Category category, std::ostream& os) const
     }
 
     if (category == Category::Registers) {
-        
-        os << tab("Counter A") << hex(counterA) << std::endl;
-        os << tab("Latch A") << hex(latchA) << std::endl;
-        os << tab("Data register A") << hex(pra) << std::endl;
-        os << tab("Data port direction A") << hex(ddra) << std::endl;
-        os << tab("Data port A") << hex(pa) << std::endl;
-        os << tab("Control register A") << hex(cra) << std::endl;
+
+        os << tab("Counter A");
+        os << hex(counterA) << "    B : " << hex(counterB) << std::endl;
+        os << tab("Latch A");
+        os << hex(latchA) << "    B : " << hex(latchB) << std::endl;
+        os << tab("Data register A");
+        os << hex(pra) << "      B : " << hex(prb) << std::endl;
+        os << tab("Data port direction A");
+        os << hex(ddra) << "      B : " << hex(ddrb) << std::endl;
+        os << tab("Data port A");
+        os << hex(pa) << "      B : " << hex(pb) << std::endl;
+        os << tab("Control register A");
+        os << hex(cra) << "      B : " << hex(crb) << std::endl;
         os << std::endl;
-        os << tab("Counter B") << hex(counterB) << std::endl;
-        os << tab("Latch B") << hex(latchB) << std::endl;
-        os << tab("Data register B") << hex(prb) << std::endl;
-        os << tab("Data port direction B") << hex(ddrb) << std::endl;
-        os << tab("Data port B") << hex(pb) << std::endl;
-        os << tab("Control register B") << hex(crb) << std::endl;
-        os << std::endl;
+
         os << tab("Interrupt control reg") << hex(icr) << std::endl;
         os << tab("Interrupt mask reg") << hex(imr) << std::endl;
         os << std::endl;

@@ -524,53 +524,31 @@ Agnus::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Registers) {
 
-        os << "DMACON:  " << hex(dmacon);
-        os << "   BPL0PT: " << hex(bplpt[0]);
-        os << "   SPR0PT: " << hex(sprpt[0]);
-        os << "   AUD0PT: " << hex(audpt[0]);
+        os << tab("DMACON") << hex(dmacon) << std::endl;
+        os << tab("BPLCON0") << hex(bplcon0) << std::endl;
         os << std::endl;
-
-        os << "BPLCON0: " << hex(bplcon0);
-        os << "   BPL1PT: " << hex(bplpt[1]);
-        os << "   SPR1PT: " << hex(sprpt[1]);
-        os << "   AUD1PT: " << hex(audpt[1]);
+        os << tab("DDFSTRT") << hex(sequencer.ddfstrt) << std::endl;
+        os << tab("DDFSTOP") << hex(sequencer.ddfstop) << std::endl;
         os << std::endl;
-
-        os << "         " << "      ";
-        os << "   BPL2PT: " << hex(bplpt[2]);
-        os << "   SPR2PT: " << hex(sprpt[2]);
-        os << "   AUD2PT: " << hex(audpt[2]);
+        os << tab("DIWSTRT") << hex(sequencer.diwstrt) << std::endl;
+        os << tab("DIWSTOP") << hex(sequencer.diwstop) << std::endl;
         os << std::endl;
-
-        os << "DDFSTRT: " << hex(sequencer.ddfstrt);
-        os << "   BPL3PT: " << hex(bplpt[3]);
-        os << "   SPR3PT: " << hex(sprpt[3]);
-        os << "   AUD3PT: " << hex(audpt[3]);
+        os << tab("DSKPT") << hex(dskpt) << std::endl;
         os << std::endl;
-
-        os << "DDFSTOP: " << hex(sequencer.ddfstop);
-        os << "   BPL4PT: " << hex(bplpt[4]);
-        os << "   SPR4PT: " << hex(sprpt[4]);
-        os << "   AUD0LC: " << hex(audlc[0]);
+        os << tab("BPL0PT") << hex(bplpt[0]) << "  BPL1PT : " << hex(bplpt[1]) << std::endl;
+        os << tab("BPL2PT") << hex(bplpt[2]) << "  BPL3PT : " << hex(bplpt[3]) << std::endl;
+        os << tab("BPL4PT") << hex(bplpt[4]) << "  BPL5PT : " << hex(bplpt[5]) << std::endl;
         os << std::endl;
-
-        os << "         " << "      ";
-        os << "   BPL5PT: " << hex(bplpt[5]);
-        os << "   SPR5PT: " << hex(sprpt[5]);
-        os << "   AUD1LC: " << hex(audlc[1]);
+        os << tab("SPR0PT") << hex(sprpt[0]) << "  SPR1PT : " << hex(sprpt[1]) << std::endl;
+        os << tab("SPR2PT") << hex(sprpt[2]) << "  SPR3PT : " << hex(sprpt[3]) << std::endl;
+        os << tab("SPR4PT") << hex(sprpt[4]) << "  SPR5PT : " << hex(sprpt[5]) << std::endl;
+        os << tab("SPR6PT") << hex(sprpt[6]) << "  SPR7PT : " << hex(sprpt[7]) << std::endl;
         os << std::endl;
-
-        os << "DIWSTRT: " << hex(sequencer.diwstrt);
-        os << "           " << "          ";
-        os << "   SPR6PT: " << hex(sprpt[6]);
-        os << "   AUD2LC: " << hex(audlc[2]);
+        os << tab("AUD0PT") << hex(audpt[0]) << "  AUD1PT : " << hex(audpt[1]) << std::endl;
+        os << tab("AUD2PT") << hex(audpt[2]) << "  AUD3PT : " << hex(audpt[3]) << std::endl;
         os << std::endl;
-
-        os << "DIWSTOP: " << hex(sequencer.diwstop);
-        os << "   DSKPT:  " << hex(dskpt);
-        os << "   SPR7PT: " << hex(sprpt[7]);
-        os << "   AUD3LC: " << hex(audlc[3]);
-        os << std::endl;
+        os << tab("AUD0LC") << hex(audlc[0]) << "  AUD1LC : " << hex(audlc[1]) << std::endl;
+        os << tab("AUD2LC") << hex(audlc[2]) << "  AUD3LC : " << hex(audlc[3]) << std::endl;
     }
     
     if (category == Category::Bus) {
