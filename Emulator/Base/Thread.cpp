@@ -393,26 +393,40 @@ Thread::wakeUp()
 void
 Thread::suspend()
 {
-    debug(RUN_DEBUG, "Suspending (%ld)...\n", suspendCounter);
-    
-    if (suspendCounter || isRunning()) {
+    if (!isEmulatorThread()) {
 
-        suspendCounter++;
-        assert(state == EXEC_RUNNING || state == EXEC_SUSPENDED);
-        changeStateTo(EXEC_SUSPENDED);
+        debug(RUN_DEBUG, "Suspending (%ld)...\n", suspendCounter);
+
+        if (suspendCounter || isRunning()) {
+
+            suspendCounter++;
+            assert(state == EXEC_RUNNING || state == EXEC_SUSPENDED);
+            changeStateTo(EXEC_SUSPENDED);
+        }
+
+    } else {
+
+        debug(RUN_DEBUG, "Skipping suspend (%ld)...\n", suspendCounter);
     }
 }
 
 void
 Thread::resume()
 {
-    debug(RUN_DEBUG, "Resuming (%ld)...\n", suspendCounter);
+    if (!isEmulatorThread()) {
 
-    if (suspendCounter && --suspendCounter == 0) {
+        debug(RUN_DEBUG, "Resuming (%ld)...\n", suspendCounter);
+
+        if (suspendCounter && --suspendCounter == 0) {
+
+            assert(state == EXEC_SUSPENDED);
+            changeStateTo(EXEC_RUNNING);
+            run();
+        }
         
-        assert(state == EXEC_SUSPENDED);
-        changeStateTo(EXEC_RUNNING);
-        run();
+    } else {
+
+        debug(RUN_DEBUG, "Skipping resume (%ld)...\n", suspendCounter);
     }
 }
 
