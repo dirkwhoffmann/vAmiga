@@ -284,15 +284,36 @@ SerialPort::recordOutgoingByte(int byte)
         if (outgoing.length() == 1) msgQueue.put(MSG_SER_OUT);
 
         // Inform RetroShell
-        if (config.verbose) dumpByte(byte);
+        if (config.device == SPD_RETROSHELL || config.device == SPD_COMMANDER) dumpByte(byte);
     }
 }
 
 void
 SerialPort::dumpByte(int byte)
 {
-    if (isprint(byte) || byte == '\n') {
-        retroShell << (char)byte;
+    char c = char(byte);
+
+    if (config.device == SPD_RETROSHELL) {
+
+        if (isprint(c) || c == '\n') {
+            retroShell << c;
+        }
+    }
+
+    if (config.device == SPD_COMMANDER) {
+
+        switch (c) {
+
+            case '\n':
+
+                retroShell.press(RSKEY_RETURN);
+                break;
+
+            default:
+
+                if (isprint(c)) retroShell.press(c);
+                break;
+        }
     }
 }
 

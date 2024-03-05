@@ -22,7 +22,6 @@ typedef std::vector<string> Arguments;
 namespace Arg {
 
 static const std::string address    = "<address>";
-// static const std::string addressNr  = "<address | nr>";
 static const std::string boolean    = "{ true | false }";
 static const std::string command    = "<command>";
 static const std::string dst        = "<destination>";

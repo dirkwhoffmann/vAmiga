@@ -345,6 +345,7 @@ static const char *script[] = {
     "serial set device NONE",
     "serial set device NULLMODEM",
     "serial set device LOOPBACK",
+    "serial set device RETROSHELL",
 
     "df0",
     "df0 eject",

@@ -1724,6 +1724,12 @@ DQ
                                                         <menuItem title="Loopback cable" image="devCableLoopTemplate" tag="2" id="LEF-Dx-kUM">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
+                                                        <menuItem title="RetroShell" image="devRetroShellTemplate" tag="3" id="TrD-f7-e8Q">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Commander" image="devCommanderTemplate" tag="4" id="hOb-gN-TJC">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -4049,12 +4055,14 @@ DQ
         <image name="chipTemplate" width="24" height="24"/>
         <image name="devCableLoopTemplate" width="24" height="24"/>
         <image name="devCableTemplate" width="24" height="24"/>
+        <image name="devCommanderTemplate" width="24" height="24"/>
         <image name="devGamepad1Template" width="20" height="21"/>
         <image name="devGamepad2Template" width="20" height="21"/>
         <image name="devKeys1Template" width="20" height="20"/>
         <image name="devKeys2Template" width="20" height="20"/>
         <image name="devMouseTemplate" width="20" height="20"/>
         <image name="devNoneTemplate" width="24" height="24"/>
+        <image name="devRetroShellTemplate" width="24" height="24"/>
         <image name="rom_medium" width="129" height="157"/>
         <image name="rom_missing" width="129" height="157"/>
         <image name="trashTemplate" width="174" height="214"/>

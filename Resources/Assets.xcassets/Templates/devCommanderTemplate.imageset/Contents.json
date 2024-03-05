@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "devCommanderTemplate.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

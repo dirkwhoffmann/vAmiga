@@ -72,7 +72,7 @@ class Console: Layer {
                 fatalError()
             }
 
-            // Scrolling to the end and update the text view
+            // Scroll to the end and update the text view
             textView.scrollToEndOfDocument(self)
             textView.layoutManager!.invalidateGlyphs(
                 forCharacterRange: NSRange(location: 0, length: textView.string.utf16.count),
