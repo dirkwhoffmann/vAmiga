@@ -82,6 +82,20 @@ UART::serviceRxdEvent(EventID id)
     // Check if this was the last bit to receive
     if (recCnt >= packetLength() + 2) {
 
+        if (!payload.empty()) {
+
+            SYNCHRONIZED
+
+            // Overwrite the shift register contents
+            receiveShiftReg = payload[0];
+
+            // Remove the character from the buffer
+            payload.erase(0, 1);
+
+            // Make sure to stop after the last character
+            rxd = payload.empty();
+        }
+
         // Copy shift register contents into the receive buffer
         copyFromReceiveShiftRegister();
         trace(SER_DEBUG, "Received packet %X\n", receiveBuffer);

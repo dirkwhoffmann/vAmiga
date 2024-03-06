@@ -253,6 +253,12 @@ SerialPort::readOutgoingPrintableByte()
 }
 
 void
+SerialPort::receiveText(const string &text)
+{
+    uart.receiveText(text);
+}
+
+void
 SerialPort::recordIncomingByte(int byte)
 {
     {   SYNCHRONIZED

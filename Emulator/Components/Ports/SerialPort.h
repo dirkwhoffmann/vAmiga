@@ -163,6 +163,9 @@ public:
     int readIncomingPrintableByte();
     int readOutgoingPrintableByte();
 
+    // Experimental
+    void receiveText(const string &text);
+    
 private:
 
     // Called by the UART when a byte has been received or sent

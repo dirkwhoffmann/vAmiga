@@ -219,6 +219,19 @@ UART::rxdHasChanged(bool value)
     }
 }
 
+void 
+UART::receiveText(const string &text)
+{
+    {   SYNCHRONIZED
+
+        // Add the text
+        payload += text;
+
+        // Start the reception process if needed
+        if (!agnus.hasEvent<SLOT_RXD>()) agnus.scheduleImm<SLOT_RXD>(RXD_BIT);
+    }
+}
+
 void
 UART::recordIncomingByte(int byte)
 {

@@ -1250,6 +1250,14 @@ Interpreter::initCommandShell(Command &root)
         amiga.configure(OPT_SER_VERBOSE, parseBool(argv[0]));
     });
 
+    root.add({"serial", "send"}, { "<text>" },
+             "Sends a text to the serial port",
+             [this](Arguments& argv, long value) {
+
+        printf("Sending %s\n", argv[0].c_str());
+        amiga.serialPort.receiveText(argv[0]);
+    });
+
 
     //
     // Df0, Df1, Df2, Df3
