@@ -1254,8 +1254,7 @@ Interpreter::initCommandShell(Command &root)
              "Sends a text to the serial port",
              [this](Arguments& argv, long value) {
 
-        printf("Sending %s\n", argv[0].c_str());
-        amiga.serialPort.receiveText(argv[0]);
+        amiga.serialPort << argv[0];
     });
 
 

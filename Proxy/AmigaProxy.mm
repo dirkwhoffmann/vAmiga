@@ -1203,10 +1203,12 @@ using namespace vamiga::moira;
     return [self serial]->readOutgoingPrintableByte();
 }
 
+/*
 - (void)receiveText:(NSString *)text
 {
-    [self serial]->receiveText([text UTF8String]);
+    *[self serial] << [text UTF8String];
 }
+*/
 
 @end
 

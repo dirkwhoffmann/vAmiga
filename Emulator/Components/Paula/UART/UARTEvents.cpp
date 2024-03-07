@@ -86,19 +86,21 @@ UART::serviceRxdEvent(EventID id)
 
             SYNCHRONIZED
 
+            auto c = payload[0];
+
             // Overwrite the shift register contents
-            receiveShiftReg = payload[0];
+            receiveShiftReg = c;
 
             // Remove the character from the buffer
             payload.erase(0, 1);
 
-            // Make sure to stop after the last character
+            // Send a stop bit if necessary
             rxd = payload.empty();
         }
 
         // Copy shift register contents into the receive buffer
         copyFromReceiveShiftRegister();
-        trace(SER_DEBUG, "Received packet %X\n", receiveBuffer);
+        trace(SER_DEBUG, "Received packet %X (%c) (%ld)\n", receiveBuffer, (char)receiveBuffer, packetLength());
 
         // Stop receiving if the last bit was a stop bit
         if (rxd) {

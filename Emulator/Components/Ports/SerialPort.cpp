@@ -252,10 +252,16 @@ SerialPort::readOutgoingPrintableByte()
     }
 }
 
-void
-SerialPort::receiveText(const string &text)
+void 
+SerialPort::operator<<(char c)
 {
-    uart.receiveText(text);
+    uart << c;
+}
+
+void
+SerialPort::operator<<(const string &text)
+{
+    uart << text;
 }
 
 void

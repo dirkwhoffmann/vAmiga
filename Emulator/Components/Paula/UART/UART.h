@@ -156,8 +156,9 @@ public:
     // Called when the RXD port pin changes it's value
     void rxdHasChanged(bool value);
 
-    // Experimental
-    void receiveText(const string &text);
+    // Feeds text into the UART
+    void operator<<(char c);
+    void operator<<(const string &s);
 
 private:
 

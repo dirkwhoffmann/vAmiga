@@ -49,8 +49,10 @@ RetroShell::operator<<(char value)
 {
     storage << value;
     remoteManager.rshServer << value;
+
     if (serialPort.getConfig().device == SPD_COMMANDER) {
-        serialPort.receiveText(string{value});
+
+        serialPort << value;
     }
     needsDisplay();
     return *this;
@@ -61,8 +63,10 @@ RetroShell::operator<<(const string& value)
 {
     storage << value;
     remoteManager.rshServer << value;
+
     if (serialPort.getConfig().device == SPD_COMMANDER) {
-        serialPort.receiveText(value);
+
+        serialPort << value;
     }
     needsDisplay();
     return *this;
