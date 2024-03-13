@@ -380,43 +380,6 @@ Debugger::writeCs(ChipsetReg reg, u16 value)
     return mem.pokeCustom16<ACCESSOR_CPU>(u32(reg << 1), value);
 }
 
-/*
-void
-Debugger::convertNumeric(std::ostream& os, isize value, isize sz) const
-{
-    using namespace util;
-
-    switch (sz) {
-
-        case 1:
-
-            os << std::setw(10) << std::right << std::setfill(' ') << dec(u8(value)) << " | ";
-            os << hex(u8(value)) << " | ";
-            os << bin(u8(value)) << " | ";
-            os << str(u8(value));
-            break;
-
-        case 2: 
-
-            os << std::setw(10) << std::right << std::setfill(' ') << dec(u16(value)) << " | ";
-            os << hex(u16(value)) << " | ";
-            os << bin(u16(value)) << " | ";
-            os << str(u16(value));
-            break;
-
-        case 4:
-
-            os << std::setw(10) << std::right << std::setfill(' ') << dec(u32(value)) << " | ";
-            os << hex(u32(value)) << " | ";
-            os << bin(u32(value)) << " | ";
-            os << str(u32(value));
-            break;
-    }
-
-    os << std::endl;
-}
-*/
-
 void
 Debugger::convertNumeric(std::ostream& os, u8 value) const
 {

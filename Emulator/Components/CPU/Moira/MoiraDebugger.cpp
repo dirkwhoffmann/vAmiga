@@ -43,7 +43,7 @@ Guards::~Guards()
 }
 
 Guard *
-Guards::guardNr(long nr)const
+Guards::guardNr(long nr) const
 {
     return nr < count ? &guards[nr] : nullptr;
 }

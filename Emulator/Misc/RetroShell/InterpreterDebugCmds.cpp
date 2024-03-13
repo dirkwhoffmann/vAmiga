@@ -73,7 +73,7 @@ Interpreter::initDebugShell(Command &root)
              [this](Arguments& argv, long value) {
 
         std::stringstream ss;
-        debugger.ascDump<ACCESSOR_CPU>(ss, parseAddr(argv[0], debugger.current), 16);
+        debugger.ascDump<ACCESSOR_CPU>(ss, parseAddr(argv, 0, debugger.current), 16);
         retroShell << '\n' << ss << '\n';
     });
 
@@ -82,7 +82,7 @@ Interpreter::initDebugShell(Command &root)
              [this](Arguments& argv, long value) {
 
         std::stringstream ss;
-        debugger.memDump<ACCESSOR_CPU>(ss, parseAddr(argv[0], debugger.current), 16, value);
+        debugger.memDump<ACCESSOR_CPU>(ss, parseAddr(argv, 0, debugger.current), 16, value);
         retroShell << '\n' << ss << '\n';
     }, 2);
 
@@ -210,7 +210,7 @@ Interpreter::initDebugShell(Command &root)
 
             auto addr = parseAddr(argv[0]);
             auto count = parseNum(argv[1]);
-            auto val = u32(parseNum(argv[2], 0));
+            auto val = u32(parseNum(argv, 2, 0));
 
             debugger.write(addr, val, value, count);
         }
@@ -871,7 +871,7 @@ Interpreter::initDebugShell(Command &root)
 
         auto addr = parseAddr(argv[0]);
         if (IS_ODD(addr)) throw VAError(ERROR_ADDR_UNALIGNED);
-        cpu.setBreakpoint(addr, parseNum(argv[1], 0));
+        cpu.setBreakpoint(addr, parseNum(argv, 1, 0));
     });
 
     root.add({"break", "delete"}, { Arg::nr },

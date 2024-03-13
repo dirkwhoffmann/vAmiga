@@ -599,8 +599,6 @@
 - (NSInteger)readIncomingPrintableByte;
 - (NSInteger)readOutgoingPrintableByte;
 
-// - (void)receiveText:(NSString *)text;
-
 @end
 
 

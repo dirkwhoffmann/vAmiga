@@ -32,7 +32,6 @@ public:
 
     // Returns true if the guard hits
     bool eval(u32 addr, Size S = Byte);
-
 };
 
 
@@ -89,12 +88,11 @@ public:
     bool isSetAt(u32 addr) const { return guardAt(addr) != nullptr; }
 
     void setAt(u32 addr, long ignores = 0);
+    void replace(long nr, u32 addr);
 
     void remove(long nr);
     void removeAt(u32 addr);
     void removeAll() { count = 0; setNeedsCheck(false); }
-
-    void replace(long nr, u32 addr);
 
 
     //
