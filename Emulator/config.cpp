@@ -117,7 +117,7 @@ debugflag DBD_DEBUG       = 0; // DebugBoard
 // Media types
 debugflag ADF_DEBUG       = 0; // ADF and extended ADF files
 debugflag DMS_DEBUG       = 0; // DMS files
-debugflag IMG_DEBUG       = 0; // IMG files
+debugflag IMG_DEBUG       = 0; // IMG files, ST files
 
 // Other components
 debugflag RTC_DEBUG       = 0; // Real-time clock

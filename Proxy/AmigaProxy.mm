@@ -21,6 +21,7 @@
 #import "RomFile.h"
 #import "Script.h"
 #import "Snapshot.h"
+#import "STFile.h"
 
 using namespace vamiga;
 using namespace vamiga::moira;
@@ -2590,6 +2591,43 @@ using namespace vamiga::moira;
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new IMGFile(*[proxy drive]->disk)]; }
+    catch (VAError &error) { [ex save:error]; return nil; }
+}
+
+@end
+
+
+//
+// STFileProxy
+//
+
+@implementation STFileProxy
+
+- (STFile *)img
+{
+    return (STFile *)obj;
+}
+
++ (instancetype)make:(STFile *)file
+{
+    return file ? [[self alloc] initWith:file] : nil;
+}
+
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
+{
+    try { return [self make: new STFile([path fileSystemRepresentation])]; }
+    catch (VAError &error) { [ex save:error]; return nil; }
+}
+
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
+{
+    try { return [self make: new STFile((const u8 *)buf, len)]; }
+    catch (VAError &error) { [ex save:error]; return nil; }
+}
+
++ (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex
+{
+    try { return [self make: new STFile(*[proxy drive]->disk)]; }
     catch (VAError &error) { [ex save:error]; return nil; }
 }
 

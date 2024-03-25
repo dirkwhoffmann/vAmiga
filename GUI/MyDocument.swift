@@ -91,7 +91,10 @@ class MyDocument: NSDocument {
                     
                 case .IMG:
                     return try IMGFileProxy.make(with: newUrl)
-                    
+
+                case .ST:
+                    return try STFileProxy.make(with: newUrl)
+
                 case .DMS:
                     return try DMSFileProxy.make(with: newUrl)
                     
@@ -129,7 +132,7 @@ class MyDocument: NSDocument {
         debug(.media)
 
         let types: [FileType] =
-        [ .SNAPSHOT, .SCRIPT, .ADF, .EADF, .HDF, .IMG, .DMS, .EXE, .DIR ]
+        [ .SNAPSHOT, .SCRIPT, .ADF, .EADF, .HDF, .IMG, .ST, .DMS, .EXE, .DIR ]
 
         do {
 

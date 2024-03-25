@@ -93,6 +93,7 @@
 @class ScriptProxy;
 @class SerialPortProxy;
 @class SnapshotProxy;
+@class STFileProxy;
 
 
 //
@@ -1047,6 +1048,19 @@
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex;
+
+@end
+
+
+//
+// STFileProxy
+//
+
+@interface STFileProxy : FloppyFileProxy <MakeWithFile, MakeWithBuffer> {
+}
+
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 
 @end
 

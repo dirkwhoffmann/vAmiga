@@ -57,7 +57,8 @@ class FloppyDisk : public CoreObject {
     friend class ADFFile;
     friend class EADFFile;
     friend class IMGFile;
-    
+    friend class STFile;
+
 public:
     
     // The form factor of this disk

@@ -132,7 +132,7 @@ public extension MetalView {
         case .SNAPSHOT, .SCRIPT:
             break
             
-        case .ADF, .EADF, .HDF, .IMG, .DMS, .EXE, .DIR:
+        case .ADF, .EADF, .HDF, .IMG, .ST, .DMS, .EXE, .DIR:
             if zone == nil { return false }
             
         default:

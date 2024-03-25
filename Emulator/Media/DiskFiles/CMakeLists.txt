@@ -8,6 +8,7 @@ HDFFile.cpp
 ADFFile.cpp
 EADFFile.cpp
 IMGFile.cpp
+STFile.cpp
 DMSFile.cpp
 EXEFile.cpp
 Folder.cpp

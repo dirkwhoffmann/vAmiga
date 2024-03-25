@@ -14,6 +14,7 @@
 #include "ExtendedRomFile.h"
 #include "EADFFile.h"
 #include "IMGFile.h"
+#include "STFile.h"
 #include "DMSFile.h"
 #include "EXEFile.h"
 #include "Folder.h"
@@ -125,7 +126,10 @@ AmigaFile::type(const string &path)
 
         if (IMGFile::isCompatible(path) &&
             IMGFile::isCompatible(stream)) return FILETYPE_IMG;
-        
+
+        if (STFile::isCompatible(path) &&
+            STFile::isCompatible(stream)) return FILETYPE_ST;
+
         if (DMSFile::isCompatible(path) &&
             DMSFile::isCompatible(stream)) return FILETYPE_DMS;
         
