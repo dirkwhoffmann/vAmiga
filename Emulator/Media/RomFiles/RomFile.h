@@ -38,6 +38,7 @@ public:
     static bool isDiagRom(u32 crc32);
     static bool isCommodoreRom(u32 crc32);
     static bool isHyperionRom(u32 crc32);
+    static bool isEmutosRom(u32 crc32);
     static bool isPatchedRom(u32 crc32);
 
     // Translates a ROM indentifier into a textual description

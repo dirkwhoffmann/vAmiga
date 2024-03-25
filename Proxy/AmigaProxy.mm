@@ -429,6 +429,11 @@ using namespace vamiga::moira;
     return RomFile::isHyperionRom(crc32);
 }
 
+- (BOOL) isEmutosRom:(u32)crc32
+{
+    return RomFile::isEmutosRom(crc32);
+}
+
 - (BOOL)isPatchedRom:(u32)crc32
 {
     return RomFile::isPatchedRom(crc32);

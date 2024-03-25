@@ -19,6 +19,7 @@ extension ConfigurationController {
         let hasDiagRom      = amiga.mem.isDiagRom(romCrc)
         let hasCommodoreRom = amiga.mem.isCommodoreRom(romCrc)
         let hasHyperionRom  = amiga.mem.isHyperionRom(romCrc)
+        let hasEmutosRom    = amiga.mem.isEmutosRom(romCrc)
         let hasPatchedRom   = amiga.mem.isPatchedRom(romCrc)
         let isRelocatedRom  = amiga.mem.isRelocated
 
@@ -33,6 +34,7 @@ extension ConfigurationController {
         let romMissing      = NSImage(named: "rom_missing")
         let romOrig         = NSImage(named: "rom_original")
         let romHyperion     = NSImage(named: "rom_hyp")
+        let romEmutos       = NSImage(named: "rom_emutos")
         let romAros         = NSImage(named: "rom_aros")
         let romDiag         = NSImage(named: "rom_diag")
         let romPatched      = NSImage(named: "rom_patched")
@@ -50,6 +52,7 @@ extension ConfigurationController {
         romDropView.image =
         isRelocatedRom  ? romRelocated :
         hasHyperionRom  ? romHyperion :
+        hasEmutosRom    ? romEmutos :
         hasArosRom      ? romAros :
         hasDiagRom      ? romDiag :
         hasCommodoreRom ? romOrig :
@@ -121,7 +124,7 @@ extension ConfigurationController {
 
             switch UInt32(item.tag) {
 
-            case CRC32_AROS_54705, CRC32_AROS_55696, CRC32_DIAG121, CRC32_DIAG13:
+            case CRC32_AROS_54705, CRC32_AROS_55696, CRC32_DIAG121, CRC32_DIAG13, CRC32_EMUTOS13:
                 item.isEnabled = true
 
             default:
@@ -172,6 +175,9 @@ extension ConfigurationController {
 
         case CRC32_AROS_55696: // Taken from SAE
             installAros(rom: "aros-svn55696-rom", ext: "aros-svn55696-ext")
+
+        case CRC32_EMUTOS13:
+            install(rom: "emutos-13")
 
         case CRC32_DIAG121:
             install(rom: "diagrom-121")

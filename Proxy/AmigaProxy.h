@@ -387,6 +387,7 @@
 - (BOOL) isDiagRom:(u32)crc32;
 - (BOOL) isCommodoreRom:(u32)crc32;
 - (BOOL) isHyperionRom:(u32)crc32;
+- (BOOL) isEmutosRom:(u32)crc32;
 - (BOOL) isPatchedRom:(u32)crc32;
 - (NSString *) romTitleOf:(u32)crc32;
 

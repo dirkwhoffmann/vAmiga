@@ -187,6 +187,17 @@ RomFile::isHyperionRom(u32 crc32)
 }
 
 bool
+RomFile::isEmutosRom(u32 crc32)
+{
+    switch (crc32) {
+
+        case CRC32_EMUTOS13:    return true;
+
+        default: return false;
+    }
+}
+
+bool
 RomFile::isPatchedRom(u32 crc32)
 {
     switch (crc32) {
@@ -263,6 +274,8 @@ RomFile::shortName(u32 crc32)
         case CRC32_HYP322_47_111_A3000:     return "Hyperion 3.2.2 47.111 A3000";
         case CRC32_HYP322_47_111_A4000:     return "Hyperion 3.2.2 47.111 A4000";
         case CRC32_HYP322_47_111_A4000T:    return "Hyperion 3.2.2 47.111 A4000T";
+
+        case CRC32_EMUTOS13:                return "EmuTOS 1.3";
 
         case CRC32_AROS_54705:              return "AROS SVN 54705";
         case CRC32_AROS_54705_EXT:          return "AROS SVN 54705 Extension";
@@ -347,6 +360,8 @@ RomFile::title(u32 crc32)
         case CRC32_HYP322_47_111_A4000:
         case CRC32_HYP322_47_111_A4000T:    return "Kickstart 3.2.2 (Hyperion)";
 
+        case CRC32_EMUTOS13:                return "EmuTOS Kickstart replacement";
+
         case CRC32_AROS_54705:
         case CRC32_AROS_55696:
         case CRC32_AROS_1ED13DE6E3:         return "AROS Kickstart replacement";
@@ -429,6 +444,8 @@ RomFile::version(u32 crc32)
         case CRC32_HYP322_47_111_A3000:
         case CRC32_HYP322_47_111_A4000:
         case CRC32_HYP322_47_111_A4000T:    return "Rev 47.111";
+
+        case CRC32_EMUTOS13:                return "Version 1.3";
 
         case CRC32_AROS_54705:
         case CRC32_AROS_54705_EXT:          return "SVN 54705";
@@ -513,6 +530,8 @@ RomFile::released(u32 crc32)
         case CRC32_HYP322_47_111_A4000:
         case CRC32_HYP322_47_111_A4000T:    return "March 2023";
 
+        case CRC32_EMUTOS13:                return "March 2024";
+
         case CRC32_AROS_54705:              return "May 2017";
         case CRC32_AROS_54705_EXT:          return "May 2017";
         case CRC32_AROS_55696:              return "February 2019";
@@ -594,6 +613,7 @@ RomFile::model(u32 crc32)
         case CRC32_HYP322_47_111_A4000:     return "A4000";
         case CRC32_HYP322_47_111_A4000T:    return "A4000T";
 
+        case CRC32_EMUTOS13:                return "";
 
         case CRC32_AROS_54705:              return "UAE version";
         case CRC32_AROS_54705_EXT:          return "UAE version";
