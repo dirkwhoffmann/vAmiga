@@ -129,7 +129,7 @@ STFile::encodeSector(FloppyDisk &disk, Track t, Sector s) const
 {
     u8 buf[60 + 512 + 2 + 109]; // Header + Data + CRC + Gap
 
-    debug(IMG_DEBUG, "  Encoding DOS sector %ld\n", s);
+    debug(IMG_DEBUG, "  Encoding AtariST sector %ld\n", s);
 
     // Write SYNC
     for (isize i = 0; i < 12; i++) { buf[i] = 0x00; }
@@ -175,7 +175,9 @@ STFile::encodeSector(FloppyDisk &disk, Track t, Sector s) const
     for (isize i = 574; i < isizeof(buf); i++) { buf[i] = 0x4E; }
 
     // Determine the start of this sector
-    u8 *p = disk.data.track[t] + 194 + s * 1300;
+    u8 *p = disk.data.track[t] + 194 + s * 2 * sizeof(buf);
+    // u8 *p = disk.data.track[t] + 194 + s * 1310;
+    debug(IMG_DEBUG, "  Range: %ld - %lu / %d\n", p - disk.data.track[t], p - disk.data.track[t] + 2*sizeof(buf), disk.length.track[t]);
 
     // Create the MFM data stream
     FloppyDisk::encodeMFM(p, buf, sizeof(buf));
