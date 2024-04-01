@@ -662,7 +662,7 @@ public:
         if constexpr (isTertiarySlot(s)) {
             if (cycle < trigger[SLOT_TER]) trigger[SLOT_TER] = cycle;
         }
-        if constexpr (isSecondarySlot(s)) {
+        if constexpr (isSecondarySlot(s) || isTertiarySlot(s)) {
             if (cycle < trigger[SLOT_SEC]) trigger[SLOT_SEC] = cycle;
         }
     }
