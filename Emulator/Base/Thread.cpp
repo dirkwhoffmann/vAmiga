@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-Thread::Thread()
+Thread::Thread(Emulator& ref) : CoreComponent(ref)
 {
 
 }

@@ -102,6 +102,7 @@ protected:
 public:
 
     SubComponent(Amiga& ref);
+    // SubComponent(Amiga& ref, isize id);
 
     virtual bool isPoweredOff() const override;
     virtual bool isPoweredOn() const override;

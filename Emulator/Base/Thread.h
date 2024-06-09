@@ -200,7 +200,7 @@ protected:
 
 public:
     
-    Thread();
+    Thread(class Emulator& ref);
     ~Thread();
     
     const char *getDescription() const override { return "Thread"; }

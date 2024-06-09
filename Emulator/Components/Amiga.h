@@ -174,7 +174,7 @@ public:
 
 public:
 
-    Amiga();
+    Amiga(class Emulator& ref);
     ~Amiga();
 
     // Launches the emulator thread

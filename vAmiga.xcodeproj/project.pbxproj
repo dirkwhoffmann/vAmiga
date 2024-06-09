@@ -247,6 +247,8 @@
 		50D715A127CCA5AA0085C1AA /* PartitionSelector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D715A027CCA5AA0085C1AA /* PartitionSelector.xib */; };
 		50D715A327CCA84F0085C1AA /* PartitionSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D715A227CCA84F0085C1AA /* PartitionSelector.swift */; };
 		50D7CDC42286E968002689F0 /* Joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D7CDC22286E968002689F0 /* Joystick.cpp */; };
+		50DA83E12C160DCA001209AA /* Emulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DA83DF2C160DCA001209AA /* Emulator.cpp */; };
+		50DA83E22C160DCA001209AA /* Emulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DA83DF2C160DCA001209AA /* Emulator.cpp */; };
 		50DD1EE22525E3E1000180F6 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DD1EE12525E3E1000180F6 /* Preferences.xib */; };
 		50DD33CC2756113300AE18B4 /* pfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 50DD33CB27560EE600AE18B4 /* pfile.c */; };
 		50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DED6AE2202EBA200B8195F /* Inspector.xib */; };
@@ -860,6 +862,8 @@
 		50D715A227CCA84F0085C1AA /* PartitionSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartitionSelector.swift; sourceTree = "<group>"; };
 		50D7CDC22286E968002689F0 /* Joystick.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Joystick.cpp; sourceTree = "<group>"; };
 		50D7CDC32286E968002689F0 /* Joystick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Joystick.h; sourceTree = "<group>"; };
+		50DA83DF2C160DCA001209AA /* Emulator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Emulator.cpp; sourceTree = "<group>"; };
+		50DA83E02C160DCA001209AA /* Emulator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Emulator.h; sourceTree = "<group>"; };
 		50DD1EE12525E3E1000180F6 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 		50DD33CB27560EE600AE18B4 /* pfile.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = pfile.c; sourceTree = "<group>"; };
 		50DED6AE2202EBA200B8195F /* Inspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Inspector.xib; sourceTree = "<group>"; };
@@ -1208,6 +1212,8 @@
 				50D661862282BE1800D67D88 /* AmigaTypes.h */,
 				50B14C0F21EB410B002E32A6 /* Amiga.h */,
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
+				50DA83E02C160DCA001209AA /* Emulator.h */,
+				50DA83DF2C160DCA001209AA /* Emulator.cpp */,
 				508E7F962206CDC600F7D88C /* CPU */,
 				508FDF5621EA1FBC0043D0E9 /* CIA */,
 				50EE993D21FF4D42003BD74B /* Paula */,
@@ -2163,6 +2169,7 @@
 				508FE01521EA227B0043D0E9 /* GamePad.swift in Sources */,
 				5054DB6827FE98B100DAF784 /* MyControllerMedia.swift in Sources */,
 				50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */,
+				50DA83E12C160DCA001209AA /* Emulator.cpp in Sources */,
 				5020B18021EF136100B9E80E /* Denise.cpp in Sources */,
 				505CEF5E26BD12430078FF52 /* DropZone.swift in Sources */,
 				50C8C44A2607396200F4E012 /* Layer.swift in Sources */,
@@ -2370,6 +2377,7 @@
 				50FC047D27DA12AB00C3E566 /* StringUtils.cpp in Sources */,
 				50FC04A227DA197A00C3E566 /* SequencerDas.cpp in Sources */,
 				50FC048927DA195600C3E566 /* TOD.cpp in Sources */,
+				50DA83E22C160DCA001209AA /* Emulator.cpp in Sources */,
 				50FC04FA27DA1AA200C3E566 /* DiskControllerEvents.cpp in Sources */,
 				50FC04A727DA198100C3E566 /* CopperDebugger.cpp in Sources */,
 				50FC04A027DA197A00C3E566 /* Sequencer.cpp in Sources */,

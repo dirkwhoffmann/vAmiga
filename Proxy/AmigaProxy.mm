@@ -22,6 +22,7 @@
 #import "Script.h"
 #import "Snapshot.h"
 #import "STFile.h"
+#import "Emulator.h"
 
 using namespace vamiga;
 using namespace vamiga::moira;
@@ -2821,7 +2822,7 @@ using namespace vamiga::moira;
         return self;
 
     // Create the emulator instance
-    Amiga *amiga = new Amiga();
+    Amiga *amiga = new Amiga(Emulator::dummyEmu);
     obj = amiga;
 
     // Create sub proxys

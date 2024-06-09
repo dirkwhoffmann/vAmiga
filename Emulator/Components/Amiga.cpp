@@ -47,7 +47,7 @@ Amiga::build()
     return version() + db + " (" + __DATE__ + " " + __TIME__ + ")";
 }
 
-Amiga::Amiga()
+Amiga::Amiga(class Emulator& ref) : Thread(ref)
 {
     /* The order of subcomponents is important here, because some components
      * are dependend on others during initialization. I.e.,

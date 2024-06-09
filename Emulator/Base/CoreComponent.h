@@ -44,13 +44,21 @@ struct NoAssign
 
 class CoreComponent : public CoreObject, NoCopy, NoAssign {
 
-protected:
+public:
     
-    // Set to false to silence all debug messages for this component
-    bool verbose = true;
+    // Reference to the emulator this instance belongs to
+    class Emulator &emulator;
+
+    // Object identifier (to distinguish instances of the same component)
+    const isize objid;
+
+protected:
 
     // Sub components
     std::vector<CoreComponent *> subComponents;
+
+    // Set to false to silence all debug messages for this component
+    bool verbose = true;
 
     /* Mutex for implementing the 'synchronized' macro. The macro can be used
      * to prevent multiple threads to enter the same code block. It mimics the
@@ -62,9 +70,12 @@ protected:
     //
     // Initializing
     //
-    
+
 public:
-    
+
+    CoreComponent(Emulator& ref) : emulator(ref), objid(0) { }
+    CoreComponent(Emulator& ref, isize id) : emulator(ref), objid(id) { }
+
     /* Initializes the component and it's subcomponents. The initialization
      * procedure is initiated once, in the constructor of the Amiga class. By
      * default, a component enters it's initial configuration. Custom actions

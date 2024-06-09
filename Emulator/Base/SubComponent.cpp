@@ -13,7 +13,7 @@
 
 namespace vamiga {
 
-SubComponent::SubComponent(Amiga& ref) :
+SubComponent::SubComponent(Amiga& ref) : CoreComponent(ref.emulator),
 agnus(ref.agnus),
 amiga(ref),
 blitter(ref.agnus.blitter),
