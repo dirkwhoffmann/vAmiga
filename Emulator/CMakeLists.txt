@@ -17,7 +17,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Add the emulator library
-add_library(vAmigaCore VirtualC64.cpp config.cpp)
+add_library(vAmigaCore VAmiga.cpp config.cpp)
 
 # Add the console app (vAmiga Headless)
 add_executable(vAmigaConsole Headless.cpp config.cpp)

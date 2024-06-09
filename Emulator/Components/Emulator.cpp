@@ -12,6 +12,5 @@
 
 namespace vamiga {
 
-Emulator Emulator::dummyEmu = Emulator();
 
 }

@@ -10,6 +10,8 @@
 #pragma once
 
 // #include "config.h"
+#include "VAmiga.h"
+#include "Emulator.h"
 #include "Amiga.h"
 #include "Media.h"
 
@@ -30,13 +32,25 @@ class Headless {
     map<string,string> keys;
 
     // The emulator instance
-    Amiga amiga;
+    VAmiga vamiga;
+
+    // Reference to the embedded Amiga
+    Amiga &amiga;
 
     // Barrier for syncing script execution
     util::Mutex barrier;
 
     // Return code
     std::optional<int> returnCode;
+
+
+    //
+    // Initializing
+    //
+
+public:
+
+    Headless();
 
     
     //

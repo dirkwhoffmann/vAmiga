@@ -60,6 +60,10 @@ int main(int argc, char *argv[])
 
 namespace vamiga {
 
+Headless::Headless() : amiga(vamiga.emu->main) {
+
+}
+
 int
 Headless::main(int argc, char *argv[])
 {

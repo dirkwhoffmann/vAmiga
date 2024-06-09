@@ -9,18 +9,17 @@
 
 #pragma once
 
+#include "Amiga.h"
+
 namespace vamiga {
 
 class Emulator {
 
 public:
-    
-    // REMOVE LATER
-    static Emulator dummyEmu; 
 
-    // The virtual C64
+    // The virtual Amiga
     // Amiga main = Amiga(*this, 0);
-    
+    Amiga main = Amiga(*this);
 };
 
 }

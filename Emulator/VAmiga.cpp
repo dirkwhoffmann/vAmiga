@@ -8,9 +8,39 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-// #include "VAmiga.h"
+#include "VAmiga.h"
 #include "Emulator.h"
 
-namespace vc64 {
+namespace vamiga {
+
+void
+API::suspend()
+{
+    // emu->suspend();
+}
+
+void
+API::resume()
+{
+    // emu->resume();
+}
+
+bool
+API::isUserThread() const
+{
+    // return !emu->isEmulatorThread();
+    return false;
+}
+
+VAmiga::VAmiga() {
+
+    emu = new Emulator();
+}
+
+VAmiga::~VAmiga()
+{
+    // emu->halt();
+    delete emu;
+}
 
 }
