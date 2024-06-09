@@ -118,9 +118,7 @@ Snapshot::isTooNew() const
 bool
 Snapshot::isBeta() const
 {
-    auto header = getHeader();
-
-    return header->beta != 0;
+    return getHeader()->beta != 0;
 }
 
 void

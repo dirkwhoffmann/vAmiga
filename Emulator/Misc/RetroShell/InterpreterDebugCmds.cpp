@@ -536,7 +536,7 @@ Interpreter::initDebugShell(Command &root)
         retroShell.dump(zorro, Category::Slots);
     });
 
-    root.add({"i", "zorro", "i"}, { Arg::value },
+    root.add({"i", "zorro", "board"}, { Arg::value },
              "Inspect a specific Zorro board",
              [this](Arguments& argv, long value) {
 

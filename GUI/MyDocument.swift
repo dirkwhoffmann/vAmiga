@@ -135,7 +135,6 @@ class MyDocument: NSDocument {
         [ .SNAPSHOT, .SCRIPT, .ADF, .EADF, .HDF, .IMG, .ST, .DMS, .EXE, .DIR ]
 
         do {
-
             try addMedia(url: url, allowedTypes: types)
             
         } catch let error as VAError {

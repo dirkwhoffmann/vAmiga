@@ -103,7 +103,6 @@ public:
 
 public:
 
-    // StrWriter(char *p, DasmSyntax s, DasmNumberFormat n) {
     StrWriter(char *p, const DasmStyle &style) : style(style) {
 
         comment[0] = 0;
