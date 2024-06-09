@@ -351,7 +351,7 @@ DiskController::readByte()
 void
 DiskController::readBit(bool bit)
 {
-    dataReg = (u16)((u32)dataReg << 1 | bit);
+    dataReg = (u16)((u32)dataReg << 1 | (u32)bit);
 
     // Fill the FIFO if we've received an entire byte
     if (++dataRegCount == 8) {

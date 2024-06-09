@@ -25,7 +25,7 @@ Command::setGroup(const string &description, const string &postfix)
     for (isize i = 0; i < isize(groups.size()); i++) {
         if (name == groups[i]) { currentGroup = i; }
     }
-    currentGroup = groups.size();
+    currentGroup = isize(groups.size());
     groups.push_back(name);
 }
 

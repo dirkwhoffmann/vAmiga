@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 
     } catch (vamiga::Error &e) {
 
-        std::cout << "VAError: " << std::endl;
+        std::cout << "Error: " << std::endl;
         std::cout << e.what() << std::endl;
         return 1;
         

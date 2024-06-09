@@ -167,9 +167,11 @@ Moira::addrMask() const
     if constexpr (C == C68020) {
 
         return cpuModel == M68EC020 ? 0x00FFFFFF : 0xFFFFFFFF;
-    }
 
-    return 0x00FFFFFF;
+    } else {
+
+        return 0x00FFFFFF;
+    }
 }
 
 void
@@ -826,7 +828,7 @@ Moira::getIrqVector(u8 level) const {
 InstrInfo
 Moira::getInfo(u16 op) const
 {
-    if (BUILD_INSTR_INFO_TABLE == false) {
+    if constexpr (BUILD_INSTR_INFO_TABLE == false) {
         throw std::runtime_error("This feature requires BUILD_INSTR_INFO_TABLE = true\n");
     }
 

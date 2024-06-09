@@ -137,12 +137,12 @@ FloppyDrive::setConfigItem(Option option, i64 value)
 
         case OPT_DRIVE_RPM:
 
-            config.rpm = value;
+            config.rpm = (isize)value;
             return;
 
         case OPT_DISK_SWAP_DELAY:
 
-            config.diskSwapDelay = value;
+            config.diskSwapDelay = (Cycle)value;
             return;
 
         case OPT_DRIVE_PAN:

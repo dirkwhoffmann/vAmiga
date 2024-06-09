@@ -175,8 +175,8 @@
             filePath = "Emulator/Components/CPU/Moira/Moira.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "387"
-            endingLineNumber = "387"
+            startingLineNumber = "389"
+            endingLineNumber = "389"
             landmarkName = "Moira::processException(exc)"
             landmarkType = "7">
          </BreakpointContent>

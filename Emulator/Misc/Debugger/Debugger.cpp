@@ -114,9 +114,9 @@ Debugger::memDump(u32 addr, isize bytes, isize sz) const
     
     static char str[256];
 
-    strcpy(str, hexDump<A>(addr, bytes, sz));
-    strcat(str, "  ");
-    strcat(str, ascDump<A>(addr, bytes));
+    strncpy(str, hexDump<A>(addr, bytes, sz), 126);
+    strncat(str, "  ", 2);
+    strncat(str, ascDump<A>(addr, bytes), 126);
 
     return str;
 }

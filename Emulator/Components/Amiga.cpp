@@ -1730,7 +1730,7 @@ Amiga::setDebugVariable(const string &name, int val)
 {
 #ifdef RELEASEBUILD
 
-    throw VAError(ERROR_OPT_UNSUPPORTED, "Debug variables can only be altered in debug builds.");
+    throw Error(ERROR_OPT_UNSUPPORTED, "Debug variables can only be altered in debug builds.");
 
 #else
 
