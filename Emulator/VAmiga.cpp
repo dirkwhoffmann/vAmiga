@@ -35,12 +35,53 @@ API::isUserThread() const
 VAmiga::VAmiga() {
 
     emu = new Emulator();
+
+    amiga.emu = emu;
+    amiga.amiga = &emu->main;
+
+    agnus.emu = emu;
+    agnus.agnus = &emu->main.agnus;
+
+    blitter.emu = emu;
+    blitter.blitter = &emu->main.agnus.blitter;
+
+    copper.emu = emu;
+    copper.copper = &emu->main.agnus.copper;
+
+    cpu.emu = emu;
+    cpu.cpu = &emu->main.cpu;
+
+    ciaA.emu = emu;
+    ciaA.cia = &emu->main.ciaA;
+
+    ciaB.emu = emu;
+    ciaB.cia = &emu->main.ciaB;
+
+    denise.emu = emu;
+    denise.denise = &emu->main.denise;
+
+    mem.emu = emu;
+    mem.mem = &emu->main.mem;
+
+
 }
 
 VAmiga::~VAmiga()
 {
     // emu->halt();
     delete emu;
+}
+
+string
+VAmiga::version()
+{
+    return Amiga::version();
+}
+
+string
+VAmiga::build()
+{
+    return Amiga::build();
 }
 
 }

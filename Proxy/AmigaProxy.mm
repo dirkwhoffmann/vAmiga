@@ -274,40 +274,40 @@ using namespace vamiga::moira;
 
 @implementation CPUProxy
 
-- (CPU *)cpu
+- (CPUAPI *)cpu
 {
-    return (CPU *)obj;
+    return (CPUAPI *)obj;
 }
 
 - (CPUInfo)info
 {
-    return [self cpu]->getInfo();
+    return [self cpu]->cpu->getInfo();
 }
 
 - (i64)clock
 {
-    return [self cpu]->getCpuClock();
+    return [self cpu]->cpu->getCpuClock();
 }
 
 - (BOOL)halted
 {
-    return [self cpu]->isHalted();
+    return [self cpu]->cpu->isHalted();
 }
 
 - (NSInteger)loggedInstructions
 {
-    return [self cpu]->debugger.loggedInstructions();
+    return [self cpu]->cpu->debugger.loggedInstructions();
 }
 
 - (void)clearLog
 {
-    return [self cpu]->debugger.clearLog();
+    return [self cpu]->cpu->debugger.clearLog();
 }
 
 - (NSString *)disassembleRecordedInstr:(NSInteger)i length:(NSInteger *)len
 {
     isize result;
-    const char *str = [self cpu]->disassembleRecordedInstr((int)i, &result);
+    const char *str = [self cpu]->cpu->disassembleRecordedInstr((int)i, &result);
     *len = (NSInteger)result;
     
     return str ? @(str) : nullptr;
@@ -315,38 +315,38 @@ using namespace vamiga::moira;
 
 - (NSString *)disassembleRecordedBytes:(NSInteger)i length:(NSInteger)len
 {
-    const char *str = [self cpu]->disassembleRecordedWords(i, len);
+    const char *str = [self cpu]->cpu->disassembleRecordedWords(i, len);
     return str ? @(str) : nullptr;
 }
 
 - (NSString *)disassembleRecordedFlags:(NSInteger)i
 {
-    const char *str = [self cpu]->disassembleRecordedFlags((int)i);
+    const char *str = [self cpu]->cpu->disassembleRecordedFlags((int)i);
     return str ? @(str) : nullptr;
 }
 
 - (NSString *)disassembleRecordedPC:(NSInteger)i
 {
-    const char *str = [self cpu]->disassembleRecordedPC((int)i);
+    const char *str = [self cpu]->cpu->disassembleRecordedPC((int)i);
     return str ? @(str) : nullptr;
 }
 
 - (NSString *)disassembleWord:(NSInteger)value
 {
-    const char *str = [self cpu]->disassembleWord((u16)value);
+    const char *str = [self cpu]->cpu->disassembleWord((u16)value);
     return str ? @(str) : nullptr;
 }
 
 - (NSString *)disassembleAddr:(NSInteger)addr
 {
-    const char *str = [self cpu]->disassembleAddr((u32)addr);
+    const char *str = [self cpu]->cpu->disassembleAddr((u32)addr);
     return str ? @(str) : nullptr;
 }
 
 - (NSString *)disassembleInstr:(NSInteger)addr length:(NSInteger *)len
 {
     isize result;
-    const char *str = [self cpu]->disassembleInstr((u32)addr, &result);
+    const char *str = [self cpu]->cpu->disassembleInstr((u32)addr, &result);
     *len = result;
     
     return str ? @(str) : nullptr;
@@ -354,13 +354,13 @@ using namespace vamiga::moira;
 
 - (NSString *)disassembleWords:(NSInteger)addr length:(NSInteger)len
 {
-    const char *str = [self cpu]->disassembleWords((u32)addr, len);
+    const char *str = [self cpu]->cpu->disassembleWords((u32)addr, len);
     return str ? @(str) : nullptr;
 }
 
 - (NSString *)vectorName:(NSInteger)nr
 {
-    auto name = [self cpu]->debugger.vectorName(u8(nr));
+    auto name = [self cpu]->cpu->debugger.vectorName(u8(nr));
     return @(name.c_str());
 }
 
@@ -373,14 +373,14 @@ using namespace vamiga::moira;
 
 @implementation CIAProxy
 
-- (CIA *)cia
+- (CIAAPI *)cia
 {
-    return (CIA *)obj;
+    return (CIAAPI *)obj;
 }
 
 - (CIAInfo)info
 {
-    return [self cia]->getInfo();
+    return [self cia]->cia->getInfo();
 }
 
 @end
@@ -392,19 +392,19 @@ using namespace vamiga::moira;
 
 @implementation MemProxy
 
-- (Memory *)mem
+- (MemoryAPI *)mem
 {
-    return (Memory *)obj;
+    return (MemoryAPI *)obj;
 }
 
 - (MemoryConfig)config
 {
-    return [self mem]->getConfig();
+    return [self mem]->mem->getConfig();
 }
 
 - (MemoryStats)getStats
 {
-    return [self mem]->getStats();
+    return [self mem]->mem->getStats();
 }
 
 - (BOOL)isBootRom:(u32)crc32
@@ -450,22 +450,22 @@ using namespace vamiga::moira;
 
 - (BOOL)hasRom
 {
-    return [self mem]->hasKickRom();
+    return [self mem]->mem->hasKickRom();
 }
 
 - (BOOL)hasBootRom
 {
-    return [self mem]->hasBootRom();
+    return [self mem]->mem->hasBootRom();
 }
 
 - (BOOL)hasKickRom
 {
-    return [self mem]->hasKickRom();
+    return [self mem]->mem->hasKickRom();
 }
 
 - (void)deleteRom
 {
-    [self mem]->deleteRom();
+    [self mem]->mem->deleteRom();
 }
 
 - (BOOL)isRom:(NSURL *)url
@@ -475,7 +475,7 @@ using namespace vamiga::moira;
 
 - (void)loadRom:(RomFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self mem]->loadRom(*(RomFile *)proxy->obj); }
+    try { return [self mem]->mem->loadRom(*(RomFile *)proxy->obj); }
     catch (Error &error) { [ex save:error]; }
 }
 
@@ -484,58 +484,58 @@ using namespace vamiga::moira;
     assert(data);
     const u8 *bytes = (const u8 *)[data bytes];
     
-    try { return [self mem]->loadRom(bytes, [data length]); }
+    try { return [self mem]->mem->loadRom(bytes, [data length]); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)loadRomFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
-    try { return [self mem]->loadRom([url fileSystemRepresentation]); }
+    try { return [self mem]->mem->loadRom([url fileSystemRepresentation]); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (BOOL)isRelocated
 {
-    return [self mem]->isRelocated();
+    return [self mem]->mem->isRelocated();
 }
 
 - (u32)romFingerprint
 {
-    return [self mem]->romFingerprint();
+    return [self mem]->mem->romFingerprint();
 }
 
 - (NSString *)romTitle
 {
-    const char *str = [self mem]->romTitle();
+    const char *str = [self mem]->mem->romTitle();
     return str ? @(str) : nullptr;
 }
 
 - (NSString *)romVersion
 {
-    const char *str = [self mem]->romVersion();
+    const char *str = [self mem]->mem->romVersion();
     return str ? @(str) : nullptr;
 }
 
 - (NSString *)romReleased
 {
-    const char *str = [self mem]->romReleased();
+    const char *str = [self mem]->mem->romReleased();
     return str ? @(str) : nullptr;
 }
 
 - (NSString *)romModel
 {
-    const char *str = [self mem]->romModel();
+    const char *str = [self mem]->mem->romModel();
     return str ? @(str) : nullptr;
 }
 
 - (BOOL)hasExt
 {
-    return [self mem]->hasExt();
+    return [self mem]->mem->hasExt();
 }
 
 - (void)deleteExt
 {
-    [self mem]->deleteExt();
+    [self mem]->mem->deleteExt();
 }
 
 - (BOOL)isExt:(NSURL *)url
@@ -545,12 +545,12 @@ using namespace vamiga::moira;
 
 - (void)loadExt:(ExtendedRomFileProxy *)proxy
 {
-    [self mem]->loadExt(*(ExtendedRomFile *)proxy->obj);
+    [self mem]->mem->loadExt(*(ExtendedRomFile *)proxy->obj);
 }
 
 - (void)loadExt:(ExtendedRomFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self mem]->loadExt(*(ExtendedRomFile *)proxy->obj); }
+    try { return [self mem]->mem->loadExt(*(ExtendedRomFile *)proxy->obj); }
     catch (Error &error) { [ex save:error]; }
 }
 
@@ -559,65 +559,65 @@ using namespace vamiga::moira;
     assert(data);
     const u8 *bytes = (const u8 *)[data bytes];
     
-    try { return [self mem]->loadExt(bytes, [data length]); }
+    try { return [self mem]->mem->loadExt(bytes, [data length]); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)loadExtFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
-    try { return [self mem]->loadExt([url fileSystemRepresentation]); }
+    try { return [self mem]->mem->loadExt([url fileSystemRepresentation]); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (u32)extFingerprint
 {
-    return [self mem]->extFingerprint();
+    return [self mem]->mem->extFingerprint();
 }
 
 - (NSString *)extTitle
 {
-    const char *str = [self mem]->extTitle();
+    const char *str = [self mem]->mem->extTitle();
     return str ? @(str) : nullptr;
 }
 
 - (NSString *)extVersion
 {
-    const char *str = [self mem]->extVersion();
+    const char *str = [self mem]->mem->extVersion();
     return str ? @(str) : nullptr;
 }
 
 - (NSString *)extReleased
 {
-    const char *str = [self mem]->extReleased();
+    const char *str = [self mem]->mem->extReleased();
     return str ? @(str) : nullptr;
 }
 
 - (NSString *)extModel
 {
-    const char *str = [self mem]->extModel();
+    const char *str = [self mem]->mem->extModel();
     return str ? @(str) : nullptr;
 }
 
 - (NSInteger)extStart
 {
-    return [self mem]->getConfigItem(OPT_EXT_START);
+    return [self mem]->mem->getConfigItem(OPT_EXT_START);
 }
 
 - (void)saveRom:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
-    try { return [self mem]->saveRom([url fileSystemRepresentation]); }
+    try { return [self mem]->mem->saveRom([url fileSystemRepresentation]); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)saveWom:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
-    try { return [self mem]->saveWom([url fileSystemRepresentation]); }
+    try { return [self mem]->mem->saveWom([url fileSystemRepresentation]); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)saveExt:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
-    try { return [self mem]->saveExt([url fileSystemRepresentation]); }
+    try { return [self mem]->mem->saveExt([url fileSystemRepresentation]); }
     catch (Error &error) { [ex save:error]; }
 }
 
@@ -626,9 +626,9 @@ using namespace vamiga::moira;
     assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
     
     if (accessor == ACCESSOR_CPU) {
-        return [self mem]->getMemSrc <ACCESSOR_CPU> ((u32)addr);
+        return [self mem]->mem->getMemSrc <ACCESSOR_CPU> ((u32)addr);
     } else {
-        return [self mem]->getMemSrc <ACCESSOR_AGNUS> ((u32)addr);
+        return [self mem]->mem->getMemSrc <ACCESSOR_AGNUS> ((u32)addr);
     }
 }
 
@@ -637,9 +637,9 @@ using namespace vamiga::moira;
     assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
     
     if (accessor == ACCESSOR_CPU) {
-        return [self mem]->spypeek16 <ACCESSOR_CPU> ((u32)addr);
+        return [self mem]->mem->spypeek16 <ACCESSOR_CPU> ((u32)addr);
     } else {
-        return [self mem]->spypeek16 <ACCESSOR_AGNUS> ((u32)addr);
+        return [self mem]->mem->spypeek16 <ACCESSOR_AGNUS> ((u32)addr);
     }
 }
 
@@ -652,59 +652,59 @@ using namespace vamiga::moira;
 
 @implementation AgnusProxy
 
-- (Agnus *)agnus
+- (AgnusAPI *)agnus
 {
-    return (Agnus *)obj;
+    return (AgnusAPI *)obj;
 }
 
 - (NSInteger)chipRamLimit
 {
-    return [self agnus]->chipRamLimit();
+    return [self agnus]->agnus->chipRamLimit();
 }
 
 - (AgnusInfo)info
 {
-    return [self agnus]->getInfo();
+    return [self agnus]->agnus->getInfo();
 }
 
 - (EventInfo)eventInfo
 {
-    return [self agnus]->getEventInfo();
+    return [self agnus]->agnus->getEventInfo();
 }
 
 - (EventSlotInfo)getEventSlotInfo:(NSInteger)slot
 {
-    return [self agnus]->getSlotInfo(slot);
+    return [self agnus]->agnus->getSlotInfo(slot);
 }
 
 - (BOOL)isOCS
 {
-    return [self agnus]->isOCS();
+    return [self agnus]->agnus->isOCS();
 }
 
 - (BOOL)isECS
 {
-    return [self agnus]->isECS();
+    return [self agnus]->agnus->isECS();
 }
 
 - (BOOL)isPAL
 {
-    return [self agnus]->isPAL();
+    return [self agnus]->agnus->isPAL();
 }
 
 - (BOOL)isNTSC
 {
-    return [self agnus]->isNTSC();
+    return [self agnus]->agnus->isNTSC();
 }
 
 - (NSInteger)frameCount
 {
-    return [self agnus]->pos.frame;
+    return [self agnus]->agnus->pos.frame;
 }
 
 - (AgnusStats)getStats
 {
-    return [self agnus]->getStats();
+    return [self agnus]->agnus->getStats();
 }
 
 @end
@@ -716,30 +716,30 @@ using namespace vamiga::moira;
 
 @implementation CopperProxy
 
-- (Copper *)copper
+- (CopperAPI *)copper
 {
-    return (Copper *)obj;
+    return (CopperAPI *)obj;
 }
 
 - (CopperInfo)info
 {
-    return [self copper]->getInfo();
+    return [self copper]->copper->getInfo();
 }
 
 - (BOOL)isIllegalInstr:(NSInteger)addr
 {
-    return [self copper]->isIllegalInstr((u32)addr);
+    return [self copper]->copper->isIllegalInstr((u32)addr);
 }
 
 - (NSString *)disassemble:(NSInteger)addr symbolic:(BOOL)sym
 {
-    string str = [self copper]->debugger.disassemble((u32)addr, sym);
+    string str = [self copper]->copper->debugger.disassemble((u32)addr, sym);
     return @(str.c_str());
 }
 
 - (NSString *)disassemble:(NSInteger)list instr:(NSInteger)offset symbolic:(BOOL)sym
 {
-    string str = [self copper]->debugger.disassemble(list, offset, sym);
+    string str = [self copper]->copper->debugger.disassemble(list, offset, sym);
     return @(str.c_str());
 }
 
@@ -752,14 +752,14 @@ using namespace vamiga::moira;
 
 @implementation BlitterProxy
 
-- (Blitter *)blitter
+- (BlitterAPI *)blitter
 {
-    return (Blitter *)obj;
+    return (BlitterAPI *)obj;
 }
 
 - (BlitterInfo)info
 {
-    return [self blitter]->getInfo();
+    return [self blitter]->blitter->getInfo();
 }
 
 @end
@@ -790,44 +790,44 @@ using namespace vamiga::moira;
 
 @implementation DeniseProxy
 
-- (Denise *)denise
+- (DeniseAPI *)denise
 {
-    return (Denise *)obj;
+    return (DeniseAPI *)obj;
 }
 
 - (DeniseInfo)info
 {
-    return [self denise]->getInfo();
+    return [self denise]->denise->getInfo();
 }
 
 - (SpriteInfo)getSpriteInfo:(NSInteger)nr
 {
-    return [self denise]->debugger.getSpriteInfo(nr);
+    return [self denise]->denise->debugger.getSpriteInfo(nr);
 }
 
 - (NSInteger)sprDataLines:(NSInteger)nr
 {
-    return [self denise]->debugger.getSpriteHeight(nr);
+    return [self denise]->denise->debugger.getSpriteHeight(nr);
 }
 
 - (u64)sprData:(NSInteger)nr line:(NSInteger)line
 {
-    return [self denise]->debugger.getSpriteData(nr, line);
+    return [self denise]->denise->debugger.getSpriteData(nr, line);
 }
 
 - (u16)sprColor:(NSInteger)nr reg:(NSInteger)reg
 {
-    return [self denise]->debugger.getSpriteColor(nr, reg);
+    return [self denise]->denise->debugger.getSpriteColor(nr, reg);
 }
 
 - (u32 *)noise
 {
-    return (u32 *)([self denise]->pixelEngine.getNoise());
+    return (u32 *)([self denise]->denise->pixelEngine.getNoise());
 }
 
 - (void)getStableBuffer:(u32 **)ptr nr:(NSInteger *)nr lof:(bool *)lof prevlof:(bool *)prevlof
 {
-    auto &frameBuffer = [self denise]->pixelEngine.getStableBuffer();
+    auto &frameBuffer = [self denise]->denise->pixelEngine.getStableBuffer();
     *ptr = frameBuffer.pixels.ptr;
     *nr = NSInteger(frameBuffer.nr);
     *lof = frameBuffer.lof;
@@ -2828,18 +2828,18 @@ using namespace vamiga::moira;
     obj = amiga;
 
     // Create sub proxys
-    agnus = [[AgnusProxy alloc] initWith:&amiga->agnus];
-    blitter = [[BlitterProxy alloc] initWith:&amiga->agnus.blitter];
+    agnus = [[AgnusProxy alloc] initWith:&vamiga->agnus];
+    blitter = [[BlitterProxy alloc] initWith:&vamiga->blitter];
     breakpoints = [[GuardsProxy alloc] initWith:&amiga->cpu.debugger.breakpoints];
-    ciaA = [[CIAProxy alloc] initWith:&amiga->ciaA];
-    ciaB = [[CIAProxy alloc] initWith:&amiga->ciaB];
+    ciaA = [[CIAProxy alloc] initWith:&vamiga->ciaA];
+    ciaB = [[CIAProxy alloc] initWith:&vamiga->ciaB];
     controlPort1 = [[ControlPortProxy alloc] initWith:&amiga->controlPort1];
     controlPort2 = [[ControlPortProxy alloc] initWith:&amiga->controlPort2];
-    copper = [[CopperProxy alloc] initWith:&amiga->agnus.copper];
+    copper = [[CopperProxy alloc] initWith:&vamiga->copper];
     copperBreakpoints = [[GuardsProxy alloc] initWith:&amiga->agnus.copper.debugger.breakpoints];
-    cpu = [[CPUProxy alloc] initWith:&amiga->cpu];
+    cpu = [[CPUProxy alloc] initWith:&vamiga->cpu];
     debugger = [[DebuggerProxy alloc] initWith:&amiga->debugger];
-    denise = [[DeniseProxy alloc] initWith:&amiga->denise];
+    denise = [[DeniseProxy alloc] initWith:&vamiga->denise];
     diskController = [[DiskControllerProxy alloc] initWith:&amiga->paula.diskController];
     dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&amiga->agnus.dmaDebugger];
     df0 = [[FloppyDriveProxy alloc] initWith:&amiga->df0];
@@ -2852,7 +2852,7 @@ using namespace vamiga::moira;
     hd3 = [[HardDriveProxy alloc] initWith:&amiga->hd3];
     host = [[HostProxy alloc] initWith:&amiga->host];
     keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];
-    mem = [[MemProxy alloc] initWith:&amiga->mem];
+    mem = [[MemProxy alloc] initWith:&vamiga->mem];
     paula = [[PaulaProxy alloc] initWith:&amiga->paula];
     retroShell = [[RetroShellProxy alloc] initWith:&amiga->retroShell];
     rtc = [[RtcProxy alloc] initWith:&amiga->rtc];
