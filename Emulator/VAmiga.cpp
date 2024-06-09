@@ -7,8 +7,10 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#pragma once
-
 #include "config.h"
-#include "Components/Amiga.h"
-#include "Media/Media.h"
+// #include "VAmiga.h"
+#include "Emulator.h"
+
+namespace vc64 {
+
+}

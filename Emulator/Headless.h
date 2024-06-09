@@ -9,7 +9,9 @@
 
 #pragma once
 
-#include "vamiga.h"
+// #include "config.h"
+#include "Amiga.h"
+#include "Media.h"
 
 using std::map;
 using std::vector;
