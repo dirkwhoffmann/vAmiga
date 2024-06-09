@@ -66,7 +66,7 @@ Interpreter::initCommons(Command &root)
              [this](Arguments& argv, long value) {
 
         auto stream = std::ifstream(argv.front());
-        if (!stream.is_open()) throw VAError(ERROR_FILE_NOT_FOUND, argv.front());
+        if (!stream.is_open()) throw Error(ERROR_FILE_NOT_FOUND, argv.front());
         retroShell.execScript(stream);
     });
 
@@ -1050,7 +1050,7 @@ Interpreter::initCommandShell(Command &root)
                 case 3: port.joystick.trigger(PRESS_FIRE3); break;
 
                 default:
-                    throw VAError(ERROR_OPT_INVARG, "1...3");
+                    throw Error(ERROR_OPT_INVARG, "1...3");
             }
 
         }, i);
@@ -1069,7 +1069,7 @@ Interpreter::initCommandShell(Command &root)
                 case 3: port.joystick.trigger(RELEASE_FIRE3); break;
 
                 default:
-                    throw VAError(ERROR_OPT_INVARG, "1...3");
+                    throw Error(ERROR_OPT_INVARG, "1...3");
             }
 
         }, i);

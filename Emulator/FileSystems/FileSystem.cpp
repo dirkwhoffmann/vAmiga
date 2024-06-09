@@ -76,7 +76,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     layout.checkCompatibility();
     
     // Only proceed if the volume is formatted
-    if (layout.dos == FS_NODOS) throw VAError(ERROR_FS_UNFORMATTED);
+    if (layout.dos == FS_NODOS) throw Error(ERROR_FS_UNFORMATTED);
 
     // Copy layout parameters
     dos         = layout.dos;
@@ -578,7 +578,7 @@ FileSystem::collectRefsWithSameHashValue(Block nr,
     for (FSBlock *b = hashableBlockPtr(nr); b; b = b->getNextHashBlock()) {
 
         // Only proceed if we haven't seen this block yet
-        if (visited.find(b->nr) != visited.end()) throw VAError(ERROR_FS_HAS_CYCLES);
+        if (visited.find(b->nr) != visited.end()) throw Error(ERROR_FS_HAS_CYCLES);
 
         visited.insert(b->nr);
         refs.push(b->nr);

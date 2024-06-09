@@ -41,7 +41,7 @@ using namespace vamiga::moira;
     return self;
 }
 
-- (void)save:(const VAError &)exception
+- (void)save:(const Error &)exception
 {
     errorCode = exception.data;
     what = @(exception.what());
@@ -95,13 +95,13 @@ using namespace vamiga::moira;
 - (void)load:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self props]->load([url fileSystemRepresentation]); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (void)save:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self props]->save([url fileSystemRepresentation]); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (void)register:(NSString *)key value:(NSString *)value
@@ -474,7 +474,7 @@ using namespace vamiga::moira;
 - (void)loadRom:(RomFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->loadRom(*(RomFile *)proxy->obj); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (void)loadRomFromBuffer:(NSData *)data exception:(ExceptionWrapper *)ex
@@ -483,13 +483,13 @@ using namespace vamiga::moira;
     const u8 *bytes = (const u8 *)[data bytes];
     
     try { return [self mem]->loadRom(bytes, [data length]); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (void)loadRomFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->loadRom([url fileSystemRepresentation]); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (BOOL)isRelocated
@@ -549,7 +549,7 @@ using namespace vamiga::moira;
 - (void)loadExt:(ExtendedRomFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->loadExt(*(ExtendedRomFile *)proxy->obj); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (void)loadExtFromBuffer:(NSData *)data exception:(ExceptionWrapper *)ex
@@ -558,13 +558,13 @@ using namespace vamiga::moira;
     const u8 *bytes = (const u8 *)[data bytes];
     
     try { return [self mem]->loadExt(bytes, [data length]); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (void)loadExtFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->loadExt([url fileSystemRepresentation]); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (u32)extFingerprint
@@ -604,19 +604,19 @@ using namespace vamiga::moira;
 - (void)saveRom:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->saveRom([url fileSystemRepresentation]); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (void)saveWom:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->saveWom([url fileSystemRepresentation]); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (void)saveExt:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->saveExt([url fileSystemRepresentation]); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (MemorySource)memSrc:(Accessor)accessor addr:(NSInteger)addr
@@ -942,7 +942,7 @@ using namespace vamiga::moira;
     auto y2 = isize(y1 + (int)rect.size.height);
     
     try { return [self recorder]->startRecording(x1, y1, x2, y2, rate, aspectX, aspectY); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (void)stopRecording
@@ -1415,13 +1415,13 @@ using namespace vamiga::moira;
 - (void)swap:(FloppyFileProxy *)fileProxy exception:(ExceptionWrapper *)ex
 {
     try { return [self drive]->swapDisk(*(FloppyFile *)fileProxy->obj); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (void)insertNew:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex
 {
     try { return [self drive]->insertNew(fs, bb, [name UTF8String]); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (BOOL)motor
@@ -1535,7 +1535,7 @@ using namespace vamiga::moira;
 {
     try {
         [self drive]->init([url fileSystemRepresentation]);
-    }  catch (VAError &error) {
+    }  catch (Error &error) {
         [ex save:error];
     }
 }
@@ -1544,7 +1544,7 @@ using namespace vamiga::moira;
 {
     try {
         [self drive]->init(*(HDFFile *)hdf->obj);
-    }  catch (VAError &error) {
+    }  catch (Error &error) {
         [ex save:error];
     }
 }
@@ -1560,7 +1560,7 @@ using namespace vamiga::moira;
     
     try {
         [self drive]->init(geometry);
-    }  catch (VAError &error) {
+    }  catch (Error &error) {
         [ex save:error];
     }
 }
@@ -1571,7 +1571,7 @@ using namespace vamiga::moira;
     
     try {
         [self drive]->format(fs, str);
-    }  catch (VAError &error) {
+    }  catch (Error &error) {
         [ex save:error];
     }
 }
@@ -1580,7 +1580,7 @@ using namespace vamiga::moira;
 {
     try {
         [self drive]->changeGeometry(c, h, s, b);
-    }  catch (VAError &error) {
+    }  catch (Error &error) {
         [ex save:error];
     }
 }
@@ -1604,13 +1604,13 @@ using namespace vamiga::moira;
 - (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self drive]->writeToFile([url fileSystemRepresentation]); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (void)enableWriteThrough:(ExceptionWrapper *)ex
 {
     try { return [self drive]->enableWriteThrough(); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (void)disableWriteThrough
@@ -1647,7 +1647,7 @@ using namespace vamiga::moira;
         auto dev = new MutableFileSystem(*adf);
         return [self make:dev];
         
-    }  catch (VAError &error) {
+    }  catch (Error &error) {
         
         [ex save:error];
         return nil;
@@ -1662,7 +1662,7 @@ using namespace vamiga::moira;
         auto dev = new MutableFileSystem(*hdf, nr);
         return [self make:dev];
                 
-    }  catch (VAError &error) {
+    }  catch (Error &error) {
         
         [ex save:error];
         return nil;
@@ -1816,7 +1816,7 @@ using namespace vamiga::moira;
 - (void)export:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self fs]->exportDirectory(string([path fileSystemRepresentation])); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (FSBlockType)getDisplayType:(NSInteger)column
@@ -2093,7 +2093,7 @@ using namespace vamiga::moira;
 - (NSInteger)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self file]->writeToFile([path fileSystemRepresentation]); }
-    catch (VAError &error) { [ex save:error]; return 0; }
+    catch (Error &error) { [ex save:error]; return 0; }
 }
 
 - (void)dealloc
@@ -2125,13 +2125,13 @@ using namespace vamiga::moira;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new Snapshot([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new Snapshot((u8 *)buf, len)]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithAmiga:(AmigaProxy *)proxy
@@ -2201,13 +2201,13 @@ using namespace vamiga::moira;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new Script([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new Script((const u8 *)buf, len)]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 - (void)execute:(AmigaProxy *)proxy
@@ -2234,13 +2234,13 @@ using namespace vamiga::moira;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new RomFile([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new RomFile((const u8 *)buf, len)]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 @end
@@ -2260,13 +2260,13 @@ using namespace vamiga::moira;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new ExtendedRomFile([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new ExtendedRomFile((const u8 *)buf, len)]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 @end
@@ -2435,25 +2435,25 @@ using namespace vamiga::moira;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new ADFFile([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new ADFFile((const u8 *)buf, len)]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new ADFFile(*[proxy drive])]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithDiameter:(Diameter)dia density:(Density)den exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new ADFFile(dia, den)]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 - (void)format:(FSVolumeType)fs bootBlock:(NSInteger)bb name:(NSString *)name
@@ -2484,19 +2484,19 @@ using namespace vamiga::moira;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new HDFFile([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new HDFFile((const u8 *)buf, len)]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithHardDrive:(HardDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new HDFFile(*[proxy drive])]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 - (BOOL)hasRDB
@@ -2517,7 +2517,7 @@ using namespace vamiga::moira;
 - (NSInteger)writeToFile:(NSString *)path partition:(NSInteger)nr exception:(ExceptionWrapper *)ex
 {
     try { return [self hdf]->writePartitionToFile([path fileSystemRepresentation], nr); }
-    catch (VAError &error) { [ex save:error]; return 0; }
+    catch (Error &error) { [ex save:error]; return 0; }
 }
 
 @end
@@ -2542,19 +2542,19 @@ using namespace vamiga::moira;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new EADFFile([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new EADFFile((const u8 *)buf, len)]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new EADFFile(*[proxy drive])]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 @end
@@ -2579,19 +2579,19 @@ using namespace vamiga::moira;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new IMGFile([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new IMGFile((const u8 *)buf, len)]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new IMGFile(*[proxy drive]->disk)]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 @end
@@ -2616,19 +2616,19 @@ using namespace vamiga::moira;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new STFile([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new STFile((const u8 *)buf, len)]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new STFile(*[proxy drive]->disk)]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 @end
@@ -2653,13 +2653,13 @@ using namespace vamiga::moira;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new DMSFile([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new DMSFile((const u8 *)buf, len)]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 @end
@@ -2684,13 +2684,13 @@ using namespace vamiga::moira;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new EXEFile([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new EXEFile((const u8 *)buf, len)]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 @end
@@ -2715,7 +2715,7 @@ using namespace vamiga::moira;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self make: new Folder([path fileSystemRepresentation])]; }
-    catch (VAError &error) { [ex save:error]; return nil; }
+    catch (Error &error) { [ex save:error]; return nil; }
 }
 
 - (ADFFileProxy *)adf
@@ -2968,7 +2968,7 @@ using namespace vamiga::moira;
 - (void)isReady:(ExceptionWrapper *)ex
 {
     try { [self amiga]->isReady(); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (void)powerOn
@@ -2984,7 +2984,7 @@ using namespace vamiga::moira;
 - (void)run:(ExceptionWrapper *)ex
 {
     try { [self amiga]->run(); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (void)pause
@@ -3042,7 +3042,7 @@ using namespace vamiga::moira;
 - (void)loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { [self amiga]->loadSnapshot(*[proxy snapshot]); }
-    catch (VAError &error) { [ex save:error]; }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (NSInteger)getConfig:(Option)opt
@@ -3065,7 +3065,7 @@ using namespace vamiga::moira;
     try {
         [self amiga]->configure(opt, val);
         return true;
-    } catch (VAError &exception) {
+    } catch (Error &exception) {
         return false;
     }
 }
@@ -3075,7 +3075,7 @@ using namespace vamiga::moira;
     try {
         [self amiga]->configure(opt, val ? 1 : 0);
         return true;
-    } catch (VAError &exception) {
+    } catch (Error &exception) {
         return false;
     }
 }
@@ -3085,7 +3085,7 @@ using namespace vamiga::moira;
     try {
         [self amiga]->configure(opt, id, val);
         return true;
-    } catch (VAError &exception) {
+    } catch (Error &exception) {
         return false;
     }
 }
@@ -3095,7 +3095,7 @@ using namespace vamiga::moira;
     try {
         [self amiga]->configure(opt, id, val ? 1 : 0);
         return true;
-    } catch (VAError &exception) {
+    } catch (Error &exception) {
         return false;
     }
 }
@@ -3105,7 +3105,7 @@ using namespace vamiga::moira;
     try {
         [self amiga]->configure(opt, (long)id, val);
         return true;
-    } catch (VAError &exception) {
+    } catch (Error &exception) {
         return false;
     }
 }
@@ -3115,7 +3115,7 @@ using namespace vamiga::moira;
     try {
         [self amiga]->configure(opt, (long)id, val ? 1 : 0);
         return true;
-    } catch (VAError &exception) {
+    } catch (Error &exception) {
         return false;
     }
 }

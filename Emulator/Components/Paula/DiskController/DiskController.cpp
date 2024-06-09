@@ -94,7 +94,7 @@ DiskController::setConfigItem(Option option, i64 value)
         case OPT_DRIVE_SPEED:
         {
             if (!isValidDriveSpeed((isize)value)) {
-                throw VAError(ERROR_OPT_INVARG, "-1, 1, 2, 4, 8");
+                throw Error(ERROR_OPT_INVARG, "-1, 1, 2, 4, 8");
             }
             
             SUSPENDED

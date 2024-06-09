@@ -100,7 +100,7 @@ FSBlock::make(FileSystem &ref, Block nr, FSBlockType type)
             return new FSBlock(ref, nr, type);
             
         default:
-            throw VAError(ERROR_FS_INVALID_BLOCK_TYPE);
+            throw Error(ERROR_FS_INVALID_BLOCK_TYPE);
     }
 }
 

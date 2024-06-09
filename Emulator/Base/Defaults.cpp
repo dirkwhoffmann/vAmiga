@@ -180,7 +180,7 @@ Defaults::load(const fs::path &path)
     auto fs = std::ifstream(path, std::ifstream::binary);
     
     if (!fs.is_open()) {
-        throw VAError(ERROR_FILE_NOT_FOUND);
+        throw Error(ERROR_FILE_NOT_FOUND);
     }
     
     debug(DEF_DEBUG, "Loading user defaults from %s...\n", path.string().c_str());
@@ -258,7 +258,7 @@ Defaults::load(std::stringstream &stream)
                 continue;
             }
             
-            throw VAError(ERROR_SYNTAX, line);
+            throw Error(ERROR_SYNTAX, line);
         }
 
         if (accepted || skipped) {
@@ -273,7 +273,7 @@ Defaults::save(const fs::path &path)
     auto fs = std::ofstream(path, std::ofstream::binary);
     
     if (!fs.is_open()) {
-        throw VAError(ERROR_FILE_CANT_WRITE);
+        throw Error(ERROR_FILE_CANT_WRITE);
     }
     
     save(fs);
@@ -344,7 +344,7 @@ Defaults::getString(const string &key)
 
     warn("Invalid key: %s\n", key.c_str());
     assert(false);
-    throw VAError(ERROR_INVALID_KEY, key);
+    throw Error(ERROR_INVALID_KEY, key);
 }
 
 i64
@@ -385,7 +385,7 @@ Defaults::getFallback(const string &key)
 
         warn("Invalid key: %s\n", key.c_str());
         assert(false);
-        throw VAError(ERROR_INVALID_KEY, key);
+        throw Error(ERROR_INVALID_KEY, key);
     }
     
     return fallbacks[key];
@@ -402,7 +402,7 @@ Defaults::setString(const string &key, const string &value)
 
             warn("Invalid key: %s\n", key.c_str());
             assert(false);
-            throw VAError(ERROR_INVALID_KEY, key);
+            throw Error(ERROR_INVALID_KEY, key);
         }
         
         values[key] = value;
@@ -495,7 +495,7 @@ Defaults::remove(const string &key)
 
             warn("Invalid key: %s\n", key.c_str());
             assert(false);
-            throw VAError(ERROR_INVALID_KEY, key);
+            throw Error(ERROR_INVALID_KEY, key);
         }
         if (values.contains(key)) {
             values.erase(key);

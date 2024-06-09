@@ -565,7 +565,7 @@ RetroShell::describe(const std::exception &e)
         return;
     }
     
-    if (auto err = dynamic_cast<const VAError *>(&e)) {
+    if (auto err = dynamic_cast<const Error *>(&e)) {
 
         *this << err->what();
         *this << '\n';

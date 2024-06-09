@@ -26,7 +26,7 @@ Folder::init(const string &path)
     debug(FS_DEBUG, "make(%s)\n", path.c_str());
 
     // Only proceed if the provided filename points to a directory
-    if (!isCompatiblePath(path)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
+    if (!isCompatiblePath(path)) throw Error(ERROR_FILE_TYPE_MISMATCH);
 
     // Create a file system and import the directory
     MutableFileSystem volume(FS_OFS, path.c_str());

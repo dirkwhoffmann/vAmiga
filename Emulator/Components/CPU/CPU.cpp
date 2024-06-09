@@ -309,7 +309,7 @@ CPU::setConfigItem(Option option, i64 value)
         case OPT_CPU_REVISION:
 
             if (!CPURevisionEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, CPURevisionEnum::keyList());
+                throw Error(ERROR_OPT_INVARG, CPURevisionEnum::keyList());
             }
 
             suspend();
@@ -321,7 +321,7 @@ CPU::setConfigItem(Option option, i64 value)
         case OPT_CPU_DASM_REVISION:
 
             if (!DasmRevisionEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, DasmRevisionEnum::keyList());
+                throw Error(ERROR_OPT_INVARG, DasmRevisionEnum::keyList());
             }
 
             suspend();
@@ -333,7 +333,7 @@ CPU::setConfigItem(Option option, i64 value)
         case OPT_CPU_DASM_SYNTAX:
 
             if (!DasmSyntaxEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, DasmSyntaxEnum::keyList());
+                throw Error(ERROR_OPT_INVARG, DasmSyntaxEnum::keyList());
             }
 
             suspend();
@@ -381,7 +381,7 @@ CPU::resetConfig()
 
             setConfigItem(option, defaults.get(option));
 
-        } catch (VAError &e) {
+        } catch (Error &e) {
 
             std::cout << "Config error: " << e.what() << std::endl;
         }
@@ -823,7 +823,7 @@ CPU::jump(u32 addr)
 void
 CPU::setBreakpoint(u32 addr, isize ignores)
 {
-    if (debugger.breakpoints.isSetAt(addr)) throw VAError(ERROR_BP_ALREADY_SET, addr);
+    if (debugger.breakpoints.isSetAt(addr)) throw Error(ERROR_BP_ALREADY_SET, addr);
 
     debugger.breakpoints.setAt(addr, ignores);
     msgQueue.put(MSG_BREAKPOINT_UPDATED);
@@ -832,7 +832,7 @@ CPU::setBreakpoint(u32 addr, isize ignores)
 void
 CPU::deleteBreakpoint(isize nr)
 {
-    if (!debugger.breakpoints.isSet(nr)) throw VAError(ERROR_BP_NOT_FOUND, nr);
+    if (!debugger.breakpoints.isSet(nr)) throw Error(ERROR_BP_NOT_FOUND, nr);
 
     debugger.breakpoints.remove(nr);
     msgQueue.put(MSG_BREAKPOINT_UPDATED);
@@ -841,7 +841,7 @@ CPU::deleteBreakpoint(isize nr)
 void
 CPU::enableBreakpoint(isize nr)
 {
-    if (!debugger.breakpoints.isSet(nr)) throw VAError(ERROR_BP_NOT_FOUND, nr);
+    if (!debugger.breakpoints.isSet(nr)) throw Error(ERROR_BP_NOT_FOUND, nr);
 
     debugger.breakpoints.enable(nr);
     msgQueue.put(MSG_BREAKPOINT_UPDATED);
@@ -850,7 +850,7 @@ CPU::enableBreakpoint(isize nr)
 void
 CPU::disableBreakpoint(isize nr)
 {
-    if (!debugger.breakpoints.isSet(nr)) throw VAError(ERROR_BP_NOT_FOUND, nr);
+    if (!debugger.breakpoints.isSet(nr)) throw Error(ERROR_BP_NOT_FOUND, nr);
 
     debugger.breakpoints.disable(nr);
     msgQueue.put(MSG_BREAKPOINT_UPDATED);
@@ -865,7 +865,7 @@ CPU::toggleBreakpoint(isize nr)
 void
 CPU::ignoreBreakpoint(isize nr, isize count)
 {
-    if (!debugger.breakpoints.isSet(nr)) throw VAError(ERROR_BP_NOT_FOUND, nr);
+    if (!debugger.breakpoints.isSet(nr)) throw Error(ERROR_BP_NOT_FOUND, nr);
 
     debugger.breakpoints.ignore(nr, count);
     msgQueue.put(MSG_BREAKPOINT_UPDATED);
@@ -874,7 +874,7 @@ CPU::ignoreBreakpoint(isize nr, isize count)
 void
 CPU::setWatchpoint(u32 addr, isize ignores)
 {
-    if (debugger.watchpoints.isSetAt(addr)) throw VAError(ERROR_WP_ALREADY_SET, addr);
+    if (debugger.watchpoints.isSetAt(addr)) throw Error(ERROR_WP_ALREADY_SET, addr);
 
     debugger.watchpoints.setAt(addr, ignores);
     msgQueue.put(MSG_WATCHPOINT_UPDATED);
@@ -883,7 +883,7 @@ CPU::setWatchpoint(u32 addr, isize ignores)
 void
 CPU::deleteWatchpoint(isize nr)
 {
-    if (!debugger.watchpoints.isSet(nr)) throw VAError(ERROR_WP_NOT_FOUND, nr);
+    if (!debugger.watchpoints.isSet(nr)) throw Error(ERROR_WP_NOT_FOUND, nr);
 
     debugger.watchpoints.remove(nr);
     msgQueue.put(MSG_WATCHPOINT_UPDATED);
@@ -892,7 +892,7 @@ CPU::deleteWatchpoint(isize nr)
 void
 CPU::enableWatchpoint(isize nr)
 {
-    if (!debugger.watchpoints.isSet(nr)) throw VAError(ERROR_WP_NOT_FOUND, nr);
+    if (!debugger.watchpoints.isSet(nr)) throw Error(ERROR_WP_NOT_FOUND, nr);
 
     debugger.watchpoints.enable(nr);
     msgQueue.put(MSG_WATCHPOINT_UPDATED);
@@ -901,7 +901,7 @@ CPU::enableWatchpoint(isize nr)
 void
 CPU::disableWatchpoint(isize nr)
 {
-    if (!debugger.watchpoints.isSet(nr)) throw VAError(ERROR_WP_NOT_FOUND, nr);
+    if (!debugger.watchpoints.isSet(nr)) throw Error(ERROR_WP_NOT_FOUND, nr);
 
     debugger.watchpoints.disable(nr);
     msgQueue.put(MSG_WATCHPOINT_UPDATED);
@@ -916,7 +916,7 @@ CPU::toggleWatchpoint(isize nr)
 void
 CPU::ignoreWatchpoint(isize nr, isize count)
 {
-    if (!debugger.watchpoints.isSet(nr)) throw VAError(ERROR_WP_NOT_FOUND, nr);
+    if (!debugger.watchpoints.isSet(nr)) throw Error(ERROR_WP_NOT_FOUND, nr);
 
     debugger.watchpoints.ignore(nr, count);
     msgQueue.put(MSG_WATCHPOINT_UPDATED);
@@ -925,7 +925,7 @@ CPU::ignoreWatchpoint(isize nr, isize count)
 void
 CPU::setCatchpoint(u8 vector, isize ignores)
 {
-    if (debugger.catchpoints.isSetAt(vector)) throw VAError(ERROR_CP_ALREADY_SET, vector);
+    if (debugger.catchpoints.isSetAt(vector)) throw Error(ERROR_CP_ALREADY_SET, vector);
 
     debugger.catchpoints.setAt(vector, ignores);
     msgQueue.put(MSG_CATCHPOINT_UPDATED);
@@ -934,7 +934,7 @@ CPU::setCatchpoint(u8 vector, isize ignores)
 void
 CPU::deleteCatchpoint(isize nr)
 {
-    if (!debugger.catchpoints.isSet(nr)) throw VAError(ERROR_CP_NOT_FOUND, nr);
+    if (!debugger.catchpoints.isSet(nr)) throw Error(ERROR_CP_NOT_FOUND, nr);
 
     debugger.catchpoints.remove(nr);
     msgQueue.put(MSG_CATCHPOINT_UPDATED);
@@ -943,7 +943,7 @@ CPU::deleteCatchpoint(isize nr)
 void
 CPU::enableCatchpoint(isize nr)
 {
-    if (!debugger.catchpoints.isSet(nr)) throw VAError(ERROR_CP_NOT_FOUND, nr);
+    if (!debugger.catchpoints.isSet(nr)) throw Error(ERROR_CP_NOT_FOUND, nr);
 
     debugger.catchpoints.enable(nr);
     msgQueue.put(MSG_CATCHPOINT_UPDATED);
@@ -952,7 +952,7 @@ CPU::enableCatchpoint(isize nr)
 void
 CPU::disableCatchpoint(isize nr)
 {
-    if (!debugger.catchpoints.isSet(nr)) throw VAError(ERROR_CP_NOT_FOUND, nr);
+    if (!debugger.catchpoints.isSet(nr)) throw Error(ERROR_CP_NOT_FOUND, nr);
 
     debugger.catchpoints.disable(nr);
     msgQueue.put(MSG_CATCHPOINT_UPDATED);
@@ -967,7 +967,7 @@ CPU::toggleCatchpoint(isize nr)
 void
 CPU::ignoreCatchpoint(isize nr, isize count)
 {
-    if (!debugger.catchpoints.isSet(nr)) throw VAError(ERROR_CP_NOT_FOUND, nr);
+    if (!debugger.catchpoints.isSet(nr)) throw Error(ERROR_CP_NOT_FOUND, nr);
 
     debugger.catchpoints.ignore(nr, count);
     msgQueue.put(MSG_CATCHPOINT_UPDATED);

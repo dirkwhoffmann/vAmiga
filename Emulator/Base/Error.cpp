@@ -13,7 +13,7 @@
 
 namespace vamiga {
 
-VAError::VAError(ErrorCode code, const string &s)
+Error::Error(ErrorCode code, const string &s)
 {
     data = code;
     
@@ -404,7 +404,7 @@ VAError::VAError(ErrorCode code, const string &s)
 }
 
 const char *
-VAError::what() const throw()
+Error::what() const throw()
 {
     return description.c_str();
 }

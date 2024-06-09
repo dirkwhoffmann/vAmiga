@@ -449,7 +449,7 @@ Amiga::setConfigItem(Option option, i64 value)
         case OPT_VIDEO_FORMAT:
 
             if (!VideoFormatEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, VideoFormatEnum::keyList());
+                throw Error(ERROR_OPT_INVARG, VideoFormatEnum::keyList());
             }
 
             if (value != config.type) {
@@ -470,7 +470,7 @@ Amiga::setConfigItem(Option option, i64 value)
         case OPT_WARP_MODE:
 
             if (!WarpModeEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, WarpModeEnum::keyList());
+                throw Error(ERROR_OPT_INVARG, WarpModeEnum::keyList());
             }
 
             config.warpMode = WarpMode(value);
@@ -480,7 +480,7 @@ Amiga::setConfigItem(Option option, i64 value)
         case OPT_SYNC_MODE:
 
             if (!SyncModeEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, SyncModeEnum::keyList());
+                throw Error(ERROR_OPT_INVARG, SyncModeEnum::keyList());
             }
 
             config.syncMode = SyncMode(value);
@@ -494,7 +494,7 @@ Amiga::setConfigItem(Option option, i64 value)
         case OPT_TIME_LAPSE:
 
             if (value < 50 || value > 200) {
-                throw VAError(ERROR_OPT_INVARG, "50...200");
+                throw Error(ERROR_OPT_INVARG, "50...200");
             }
 
             config.timeLapse = isize(value);
@@ -503,7 +503,7 @@ Amiga::setConfigItem(Option option, i64 value)
         case OPT_TIME_SLICES:
 
             if (value < 1 || value > 4) {
-                throw VAError(ERROR_OPT_INVARG, "1...4");
+                throw Error(ERROR_OPT_INVARG, "1...4");
             }
 
             config.timeSlices = isize(value);
@@ -1567,7 +1567,7 @@ Amiga::loadSnapshot(const Snapshot &snapshot)
             // Restore the saved state
             load(snapshot.getData());
 
-        } catch (VAError &error) {
+        } catch (Error &error) {
 
             /* If we reach this point, the emulator has been put into an
              * inconsistent state due to corrupted snapshot data. We cannot
@@ -1700,7 +1700,7 @@ Amiga::tmp()
 
             if (!logfile.is_open()) {
 
-                throw VAError(ERROR_DIR_NOT_FOUND);
+                throw Error(ERROR_DIR_NOT_FOUND);
             }
         }
 
@@ -1838,7 +1838,7 @@ Amiga::setDebugVariable(const string &name, int val)
 
     else {
 
-        throw VAError(ERROR_OPT_UNSUPPORTED, "Unknown debug variable: " + name);
+        throw Error(ERROR_OPT_UNSUPPORTED, "Unknown debug variable: " + name);
     }
 
 #endif

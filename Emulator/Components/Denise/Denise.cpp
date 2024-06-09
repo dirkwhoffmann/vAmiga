@@ -90,7 +90,7 @@ Denise::setConfigItem(Option option, i64 value)
         case OPT_DENISE_REVISION:
             
             if (!DeniseRevisionEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, DeniseRevisionEnum::keyList());
+                throw Error(ERROR_OPT_INVARG, DeniseRevisionEnum::keyList());
             }
             
             config.revision = (DeniseRevision)value;

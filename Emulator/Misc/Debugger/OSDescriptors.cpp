@@ -117,7 +117,7 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
     
     auto read = [&]() {
         
-        if (offset + 4 > len) throw VAError(ERROR_HUNK_CORRUPTED);
+        if (offset + 4 > len) throw Error(ERROR_HUNK_CORRUPTED);
         auto result = R32BE(buf + offset);
         offset += 4;
         return result;
@@ -126,7 +126,7 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
     auto cookie = read();
     
     // Check magic cookie
-    if (cookie != HUNK_HEADER) throw VAError(ERROR_HUNK_BAD_COOKIE);
+    if (cookie != HUNK_HEADER) throw Error(ERROR_HUNK_BAD_COOKIE);
     
     // Skip strings
     for (auto count = read(); count != 0; count = read()) {
@@ -136,11 +136,11 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
 
     // Read block count and range
     auto numHunks = isize(read());
-    if (numHunks == 0) throw VAError(ERROR_HUNK_NO_SECTIONS);
+    if (numHunks == 0) throw Error(ERROR_HUNK_NO_SECTIONS);
     auto first = isize(read());
-    if (first != 0) throw VAError(ERROR_HUNK_BAD_HEADER);
+    if (first != 0) throw Error(ERROR_HUNK_BAD_HEADER);
     auto last = isize(read());
-    if (last != numHunks - 1) throw VAError(ERROR_HUNK_BAD_HEADER);
+    if (last != numHunks - 1) throw Error(ERROR_HUNK_BAD_HEADER);
 
     // Read hunk sizes
     for (isize i = 0; i < numHunks; i++) {
@@ -193,7 +193,7 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
 
                     if (count > KB(64)) {
                         warn("Relocation section too large (%d)\n", count);
-                        throw VAError(ERROR_HUNK_CORRUPTED);
+                        throw Error(ERROR_HUNK_CORRUPTED);
                     }
 
                     section.size += 4 * count;
@@ -230,7 +230,7 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
             case HUNK_HEADER:
                 
                 // There cannot be a second header section
-                throw VAError(ERROR_HUNK_CORRUPTED);
+                throw Error(ERROR_HUNK_CORRUPTED);
                 break;
                 
             case HUNK_OVERLAY:
@@ -247,7 +247,7 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
 
             default:
                 
-                throw VAError(ERROR_HUNK_UNSUPPORTED, HunkTypeEnum::key(type));
+                throw Error(ERROR_HUNK_UNSUPPORTED, HunkTypeEnum::key(type));
         }
     }
 }

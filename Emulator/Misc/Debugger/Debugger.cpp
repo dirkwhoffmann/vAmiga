@@ -170,7 +170,7 @@ i64
 Debugger::memSearch(const string &pattern, u32 addr, isize align)
 {
     // Check alignment
-    if (align != 1 && IS_ODD(addr)) throw VAError(ERROR_ADDR_UNALIGNED);
+    if (align != 1 && IS_ODD(addr)) throw Error(ERROR_ADDR_UNALIGNED);
 
     if (isize length = isize(pattern.length()); length > 0) {
 
@@ -204,7 +204,7 @@ Debugger::read(u32 addr, isize sz)
     printf("sz = %ld addr = %d\n", sz, addr);
 
     // Check alignment
-    if (sz != 1 && IS_ODD(addr)) throw VAError(ERROR_ADDR_UNALIGNED);
+    if (sz != 1 && IS_ODD(addr)) throw Error(ERROR_ADDR_UNALIGNED);
 
     {   SUSPENDED
 
@@ -229,7 +229,7 @@ void
 Debugger::write(u32 addr, u32 val, isize sz, isize repeats)
 {
     // Check alignment
-    if (sz != 1 && IS_ODD(addr)) throw VAError(ERROR_ADDR_UNALIGNED);
+    if (sz != 1 && IS_ODD(addr)) throw Error(ERROR_ADDR_UNALIGNED);
 
     {   SUSPENDED
 
@@ -366,16 +366,16 @@ Debugger::isUnused(ChipsetReg reg) const
 u16
 Debugger::readCs(ChipsetReg reg) const
 {
-    if (isUnused(reg)) throw VAError(ERROR_REG_UNUSED, ChipsetRegEnum::key(reg));
-    if (isWritable(reg)) throw VAError(ERROR_REG_WRITE_ONLY, ChipsetRegEnum::key(reg));
+    if (isUnused(reg)) throw Error(ERROR_REG_UNUSED, ChipsetRegEnum::key(reg));
+    if (isWritable(reg)) throw Error(ERROR_REG_WRITE_ONLY, ChipsetRegEnum::key(reg));
 
     return mem.peekCustom16(u32(reg << 1));
 }
 void
 Debugger::writeCs(ChipsetReg reg, u16 value)
 {
-    if (isUnused(reg)) throw VAError(ERROR_REG_UNUSED, ChipsetRegEnum::key(reg));
-    if (isReadable(reg)) throw VAError(ERROR_REG_READ_ONLY, ChipsetRegEnum::key(reg));
+    if (isUnused(reg)) throw Error(ERROR_REG_UNUSED, ChipsetRegEnum::key(reg));
+    if (isReadable(reg)) throw Error(ERROR_REG_READ_ONLY, ChipsetRegEnum::key(reg));
 
     return mem.pokeCustom16<ACCESSOR_CPU>(u32(reg << 1), value);
 }

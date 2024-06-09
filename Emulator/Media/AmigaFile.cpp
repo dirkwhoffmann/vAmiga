@@ -28,14 +28,14 @@ void
 AmigaFile::init(const string &path)
 {
     std::ifstream stream(path, std::ifstream::binary);
-    if (!stream.is_open()) throw VAError(ERROR_FILE_NOT_FOUND, path);
+    if (!stream.is_open()) throw Error(ERROR_FILE_NOT_FOUND, path);
     init(path, stream);
 }
 
 void
 AmigaFile::init(const string &path, std::istream &stream)
 {
-    if (!isCompatiblePath(path)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
+    if (!isCompatiblePath(path)) throw Error(ERROR_FILE_TYPE_MISMATCH);
     init(stream);
     this->path = path;
 }
@@ -43,7 +43,7 @@ AmigaFile::init(const string &path, std::istream &stream)
 void
 AmigaFile::init(std::istream &stream)
 {
-    if (!isCompatibleStream(stream)) throw VAError(ERROR_FILE_TYPE_MISMATCH);
+    if (!isCompatibleStream(stream)) throw Error(ERROR_FILE_TYPE_MISMATCH);
     readFromStream(stream);
 }
 
@@ -177,7 +177,7 @@ AmigaFile::readFromFile(const string &path)
     std::ifstream stream(path, std::ifstream::binary);
 
     if (!stream.is_open()) {
-        throw VAError(ERROR_FILE_CANT_READ, path);
+        throw Error(ERROR_FILE_CANT_READ, path);
     }
 
     this->path = string(path);
@@ -225,13 +225,13 @@ isize
 AmigaFile::writeToFile(const string &path, isize offset, isize len)
 {
     if (util::isDirectory(path)) {
-        throw VAError(ERROR_FILE_IS_DIRECTORY);
+        throw Error(ERROR_FILE_IS_DIRECTORY);
     }
     
     std::ofstream stream(path, std::ofstream::binary);
 
     if (!stream.is_open()) {
-        throw VAError(ERROR_FILE_CANT_WRITE, path);
+        throw Error(ERROR_FILE_CANT_WRITE, path);
     }
     
     isize result = writeToStream(stream, offset, len);

@@ -52,7 +52,7 @@ SerialPort::setConfigItem(Option option, i64 value)
         case OPT_SER_DEVICE:
             
             if (!SerialPortDeviceEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, SerialPortDeviceEnum::keyList());
+                throw Error(ERROR_OPT_INVARG, SerialPortDeviceEnum::keyList());
             }
             
             config.device = (SerialPortDevice)value;

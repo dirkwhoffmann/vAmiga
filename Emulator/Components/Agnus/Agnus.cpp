@@ -104,10 +104,10 @@ Agnus::setConfigItem(Option option, i64 value)
         case OPT_AGNUS_REVISION:
 
             if (!isPoweredOff()) {
-                throw VAError(ERROR_OPT_LOCKED);
+                throw Error(ERROR_OPT_LOCKED);
             }
             if (!AgnusRevisionEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, AgnusRevisionEnum::keyList());
+                throw Error(ERROR_OPT_INVARG, AgnusRevisionEnum::keyList());
             }
 
             switch (config.revision = (AgnusRevision)value) {

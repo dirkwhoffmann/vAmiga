@@ -41,7 +41,7 @@ STFile::init(Diameter dia, Density den)
 
     } else {
 
-        throw VAError(ERROR_DISK_INVALID_LAYOUT);
+        throw Error(ERROR_DISK_INVALID_LAYOUT);
     }
 }
 
@@ -74,10 +74,10 @@ void
 STFile::encodeDisk(FloppyDisk &disk) const
 {
     if (disk.getDiameter() != getDiameter()) {
-        throw VAError(ERROR_DISK_INVALID_DIAMETER);
+        throw Error(ERROR_DISK_INVALID_DIAMETER);
     }
     if (disk.getDensity() != getDensity()) {
-        throw VAError(ERROR_DISK_INVALID_DENSITY);
+        throw Error(ERROR_DISK_INVALID_DENSITY);
     }
 
     isize tracks = numTracks();
@@ -177,7 +177,8 @@ STFile::encodeSector(FloppyDisk &disk, Track t, Sector s) const
     // Determine the start of this sector
     u8 *p = disk.data.track[t] + 194 + s * 2 * sizeof(buf);
     // u8 *p = disk.data.track[t] + 194 + s * 1310;
-    debug(IMG_DEBUG, "  Range: %ld - %lu / %d\n", p - disk.data.track[t], p - disk.data.track[t] + 2*sizeof(buf), disk.length.track[t]);
+    debug(IMG_DEBUG, "  Range: %ld - %lu / %d\n", 
+          isize(p - disk.data.track[t]), isize(p - disk.data.track[t] + 2*sizeof(buf)), disk.length.track[t]);
 
     // Create the MFM data stream
     FloppyDisk::encodeMFM(p, buf, sizeof(buf));
@@ -202,10 +203,10 @@ STFile::decodeDisk(FloppyDisk &disk)
     debug(IMG_DEBUG, "Decoding DOS disk (%ld tracks)\n", tracks);
 
     if (disk.getDiameter() != getDiameter()) {
-        throw VAError(ERROR_DISK_INVALID_DIAMETER);
+        throw Error(ERROR_DISK_INVALID_DIAMETER);
     }
     if (disk.getDensity() != getDensity()) {
-        throw VAError(ERROR_DISK_INVALID_DENSITY);
+        throw Error(ERROR_DISK_INVALID_DENSITY);
     }
 
     // Make the MFM stream scannable beyond the track end
@@ -259,12 +260,12 @@ STFile::decodeTrack(FloppyDisk &disk, Track t)
             cnt++;
 
         } else {
-            throw VAError(ERROR_DISK_INVALID_SECTOR_NUMBER);
+            throw Error(ERROR_DISK_INVALID_SECTOR_NUMBER);
         }
     }
 
     if (cnt != numSectors) {
-        throw VAError(ERROR_DISK_WRONG_SECTOR_COUNT);
+        throw Error(ERROR_DISK_WRONG_SECTOR_COUNT);
     }
 
     // Do some consistency checking

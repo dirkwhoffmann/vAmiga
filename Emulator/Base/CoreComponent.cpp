@@ -94,7 +94,7 @@ CoreComponent::load(const u8 *buffer)
 
     // Check integrity
     if (hash != _checksum() || FORCE_SNAP_CORRUPTED) {
-        throw VAError(ERROR_SNAP_CORRUPTED);
+        throw Error(ERROR_SNAP_CORRUPTED);
     }
     
     debug(SNP_DEBUG, "Loaded %ld bytes (expected %ld)\n", result, size());

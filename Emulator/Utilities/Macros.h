@@ -145,3 +145,6 @@
 #else
 #define NO_SANITIZE(x)
 #endif
+
+// Signed alternative for the sizeof keyword
+#define isizeof(x) (isize)(sizeof(x))

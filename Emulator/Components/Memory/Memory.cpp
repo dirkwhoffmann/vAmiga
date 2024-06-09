@@ -208,10 +208,10 @@ Memory::setConfigItem(Option option, i64 value)
         case OPT_CHIP_RAM:
             
             if (!isPoweredOff()) {
-                throw VAError(ERROR_OPT_LOCKED);
+                throw Error(ERROR_OPT_LOCKED);
             }
             if (value != 256 && value != 512 && value != 1024 && value != 2048) {
-                throw VAError(ERROR_OPT_INVARG, "256, 512, 1024, 2048");
+                throw Error(ERROR_OPT_INVARG, "256, 512, 1024, 2048");
             }
             
             mem.allocChip((i32)KB(value));
@@ -220,10 +220,10 @@ Memory::setConfigItem(Option option, i64 value)
         case OPT_SLOW_RAM:
             
             if (!isPoweredOff()) {
-                throw VAError(ERROR_OPT_LOCKED);
+                throw Error(ERROR_OPT_LOCKED);
             }
             if ((value % 256) != 0 || value > 1536) {
-                throw VAError(ERROR_OPT_INVARG, "0, 256, 512, ..., 1536");
+                throw Error(ERROR_OPT_INVARG, "0, 256, 512, ..., 1536");
             }
 
             mem.allocSlow((i32)KB(value));
@@ -232,10 +232,10 @@ Memory::setConfigItem(Option option, i64 value)
         case OPT_FAST_RAM:
             
             if (!isPoweredOff()) {
-                throw VAError(ERROR_OPT_LOCKED);
+                throw Error(ERROR_OPT_LOCKED);
             }
             if ((value % 64) != 0 || value > 8192) {
-                throw VAError(ERROR_OPT_INVARG, "0, 64, 128, ..., 8192");
+                throw Error(ERROR_OPT_INVARG, "0, 64, 128, ..., 8192");
             }
 
             mem.allocFast((i32)KB(value));
@@ -244,10 +244,10 @@ Memory::setConfigItem(Option option, i64 value)
         case OPT_EXT_START:
             
             if (!isPoweredOff()) {
-                throw VAError(ERROR_OPT_LOCKED);
+                throw Error(ERROR_OPT_LOCKED);
             }
             if (value != 0xE0 && value != 0xF0) {
-                throw VAError(ERROR_OPT_INVARG, "E0, F0");
+                throw Error(ERROR_OPT_INVARG, "E0, F0");
             }
             
             config.extStart = (u32)value;
@@ -269,7 +269,7 @@ Memory::setConfigItem(Option option, i64 value)
         case OPT_BANKMAP:
         {
             if (!BankMapEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, BankMapEnum::keyList());
+                throw Error(ERROR_OPT_INVARG, BankMapEnum::keyList());
             }
             
             SUSPENDED
@@ -280,7 +280,7 @@ Memory::setConfigItem(Option option, i64 value)
         case OPT_UNMAPPING_TYPE:
         {
             if (!UnmappedMemoryEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, UnmappedMemoryEnum::keyList());
+                throw Error(ERROR_OPT_INVARG, UnmappedMemoryEnum::keyList());
             }
             
             SUSPENDED
@@ -290,7 +290,7 @@ Memory::setConfigItem(Option option, i64 value)
         case OPT_RAM_INIT_PATTERN:
 
             if (!RamInitPatternEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, RamInitPatternEnum::keyList());
+                throw Error(ERROR_OPT_INVARG, RamInitPatternEnum::keyList());
             }
 
         { SUSPENDED config.ramInitPattern = (RamInitPattern)value; }
@@ -371,12 +371,12 @@ Memory::didLoadFromBuffer(const u8 *buffer)
     << fastSize;
     
     // Check the integrity of the new values before allocating memory
-    if (romSize > KB(512)) throw VAError(ERROR_SNAP_CORRUPTED);
-    if (womSize > KB(256)) throw VAError(ERROR_SNAP_CORRUPTED);
-    if (extSize > KB(512)) throw VAError(ERROR_SNAP_CORRUPTED);
-    if (chipSize > MB(2)) throw VAError(ERROR_SNAP_CORRUPTED);
-    if (slowSize > KB(1792)) throw VAError(ERROR_SNAP_CORRUPTED);
-    if (fastSize > MB(8)) throw VAError(ERROR_SNAP_CORRUPTED);
+    if (romSize > KB(512)) throw Error(ERROR_SNAP_CORRUPTED);
+    if (womSize > KB(256)) throw Error(ERROR_SNAP_CORRUPTED);
+    if (extSize > KB(512)) throw Error(ERROR_SNAP_CORRUPTED);
+    if (chipSize > MB(2)) throw Error(ERROR_SNAP_CORRUPTED);
+    if (slowSize > KB(1792)) throw Error(ERROR_SNAP_CORRUPTED);
+    if (fastSize > MB(8)) throw Error(ERROR_SNAP_CORRUPTED);
 
     // Allocate ROM space (only if Roms are included in the snapshot)
     if (romSize) allocRom(romSize, false);
@@ -436,16 +436,16 @@ void
 Memory::_isReady() const
 {    
     if (!hasRom() || FORCE_ROM_MISSING) {
-        throw VAError(ERROR_ROM_MISSING);
+        throw Error(ERROR_ROM_MISSING);
     }
     if (!hasChipRam() || FORCE_CHIP_RAM_MISSING) {
-        throw VAError(ERROR_CHIP_RAM_MISSING);
+        throw Error(ERROR_CHIP_RAM_MISSING);
     }
     if ((hasArosRom() && !hasExt()) || FORCE_AROS_NO_EXTROM) {
-        throw VAError(ERROR_AROS_NO_EXTROM);
+        throw Error(ERROR_AROS_NO_EXTROM);
     }
     if ((hasArosRom() && ramSize() < MB(1)) || FORCE_AROS_RAM_LIMIT) {
-        throw VAError(ERROR_AROS_RAM_LIMIT);
+        throw Error(ERROR_AROS_RAM_LIMIT);
     }
 }
 

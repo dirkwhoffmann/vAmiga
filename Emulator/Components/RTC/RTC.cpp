@@ -35,10 +35,10 @@ RTC::setConfigItem(Option option, i64 value)
         case OPT_RTC_MODEL:
 
             if (!isPoweredOff()) {
-                throw VAError(ERROR_OPT_LOCKED);
+                throw Error(ERROR_OPT_LOCKED);
             }
             if (!RTCRevisionEnum::isValid(value)) {
-                throw VAError(ERROR_OPT_INVARG, RTCRevisionEnum::keyList());
+                throw Error(ERROR_OPT_INVARG, RTCRevisionEnum::keyList());
             }
             
             config.model = (RTCRevision)value;

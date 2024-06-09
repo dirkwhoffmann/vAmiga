@@ -525,13 +525,13 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
     debug(FS_DEBUG, "Importing file system...\n");
 
     // Only proceed if the (predicted) block size matches
-    if (size % bsize != 0) throw VAError(ERROR_FS_WRONG_BSIZE);
+    if (size % bsize != 0) throw Error(ERROR_FS_WRONG_BSIZE);
 
     // Only proceed if the source buffer contains the right amount of data
-    if (numBytes() != size) throw VAError(ERROR_FS_WRONG_CAPACITY);
+    if (numBytes() != size) throw Error(ERROR_FS_WRONG_CAPACITY);
 
     // Only proceed if all partitions contain a valid file system
-    if (dos == FS_NODOS) throw VAError(ERROR_FS_UNSUPPORTED);
+    if (dos == FS_NODOS) throw Error(ERROR_FS_UNSUPPORTED);
 
     // Import all blocks
     for (isize i = 0; i < numBlocks(); i++) {
@@ -567,7 +567,7 @@ MutableFileSystem::importDirectory(const string &path, bool recursive)
     fs::directory_entry dir;
     
     try { dir = fs::directory_entry(path); }
-    catch (...) { throw VAError(ERROR_FILE_CANT_READ); }
+    catch (...) { throw Error(ERROR_FILE_CANT_READ); }
     
     importDirectory(dir, recursive);
 }
@@ -681,17 +681,17 @@ MutableFileSystem::exportDirectory(const string &path, bool createDir)
 {
     // Try to create the directory if it doesn't exist
     if (!util::isDirectory(path) && createDir && !util::createDirectory(path)) {
-        throw VAError(ERROR_FS_CANNOT_CREATE_DIR);
+        throw Error(ERROR_FS_CANNOT_CREATE_DIR);
     }
 
     // Only proceed if the directory exists
     if (!util::isDirectory(path)) {
-        throw VAError(ERROR_DIR_NOT_FOUND);
+        throw Error(ERROR_DIR_NOT_FOUND);
     }
     
     // Only proceed if path points to an empty directory
     if (util::numDirectoryItems(path) != 0) {
-        throw VAError(ERROR_FS_DIR_NOT_EMPTY);
+        throw Error(ERROR_FS_DIR_NOT_EMPTY);
     }
     
     // Collect all files and directories
@@ -702,7 +702,7 @@ MutableFileSystem::exportDirectory(const string &path, bool createDir)
     for (auto const& i : items) {
         
         if (ErrorCode error = blockPtr(i)->exportBlock(path.c_str()); error != ERROR_OK) {
-            throw VAError(error);
+            throw Error(error);
         }
     }
     
