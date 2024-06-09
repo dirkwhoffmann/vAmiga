@@ -112,13 +112,19 @@ Debugger::memDump(u32 addr, isize bytes, isize sz) const
     assert(sz == 1 || bytes % 2 == 0);
     assert(bytes <= 32);
     
+    static string str;
+    str = string(hexDump<A>(addr, bytes, sz)) + "  " + string(ascDump<A>(addr, bytes));
+    return str.c_str();
+
+    /*
     static char str[256];
 
     strncpy(str, hexDump<A>(addr, bytes, sz), 126);
-    strncat(str, "  ", 2);
+    strcat(str, "  ");
     strncat(str, ascDump<A>(addr, bytes), 126);
 
     return str;
+    */
 }
 
 template <Accessor A> void
