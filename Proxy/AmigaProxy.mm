@@ -175,95 +175,95 @@ using namespace vamiga::moira;
 
 @implementation GuardsProxy
 
-- (Guards *)guards
+- (GuardsAPI *)guards
 {
-    return (Guards *)obj;
+    return (GuardsAPI *)obj;
 }
 
 - (NSInteger)count
 {
-    return [self guards]->elements();
+    return [self guards]->guards->elements();
 }
 
 - (NSInteger)addr:(NSInteger)nr
 {
-    auto addr = [self guards]->guardAddr(nr);
+    auto addr = [self guards]->guards->guardAddr(nr);
     return addr ? *addr : 0;
 }
 
 - (BOOL)isSet:(NSInteger)nr
 {
-    return [self guards]->isSet(nr);
+    return [self guards]->guards->isSet(nr);
 }
 
 - (BOOL)isSetAt:(NSInteger)addr
 {
-    return [self guards]->isSetAt(u32(addr));
+    return [self guards]->guards->isSetAt(u32(addr));
 }
 
 - (void)setAt:(NSInteger)addr
 {
-    [self guards]->setAt((u32)addr);
+    [self guards]->guards->setAt((u32)addr);
 }
 
 - (void)remove:(NSInteger)nr
 {
-    return [self guards]->remove(nr);
+    return [self guards]->guards->remove(nr);
 }
 
 - (void)removeAt:(NSInteger)addr
 {
-    [self guards]->removeAt((u32)addr);
+    [self guards]->guards->removeAt((u32)addr);
 }
 
 - (void)removeAll
 {
-    return [self guards]->removeAll();
+    return [self guards]->guards->removeAll();
 }
 
 - (void)replace:(NSInteger)nr addr:(NSInteger)addr
 {
-    [self guards]->replace(nr, (u32)addr);
+    [self guards]->guards->replace(nr, (u32)addr);
 }
 
 - (BOOL)isEnabled:(NSInteger)nr
 {
-    return [self guards]->isEnabled(nr);
+    return [self guards]->guards->isEnabled(nr);
 }
 
 - (BOOL)isEnabledAt:(NSInteger)addr
 {
-    return [self guards]->isEnabledAt(u32(addr));
+    return [self guards]->guards->isEnabledAt(u32(addr));
 }
 
 - (BOOL)isDisabled:(NSInteger)nr
 {
-    return [self guards]->isDisabled(nr);
+    return [self guards]->guards->isDisabled(nr);
 }
 
 - (BOOL)isDisabledAt:(NSInteger)addr
 {
-    return [self guards]->isDisabledAt(u32(addr));
+    return [self guards]->guards->isDisabledAt(u32(addr));
 }
 
 - (void)enable:(NSInteger)nr
 {
-    [self guards]->enable(nr);
+    [self guards]->guards->enable(nr);
 }
 
 - (void)enableAt:(NSInteger)addr
 {
-    [self guards]->enableAt((u32)addr);
+    [self guards]->guards->enableAt((u32)addr);
 }
 
 - (void)disable:(NSInteger)nr
 {
-    [self guards]->disable(nr);
+    [self guards]->guards->disable(nr);
 }
 
 - (void)disableAt:(NSInteger)addr
 {
-    [self guards]->disableAt((u32)addr);
+    [self guards]->guards->disableAt((u32)addr);
 }
 
 @end
@@ -771,14 +771,14 @@ using namespace vamiga::moira;
 
 @implementation DmaDebuggerProxy
 
-- (DmaDebugger *)debugger
+- (DmaDebuggerAPI *)debugger
 {
-    return (DmaDebugger *)obj;
+    return (DmaDebuggerAPI *)obj;
 }
 
 - (DmaDebuggerInfo)info
 {
-    return [self debugger]->getInfo();
+    return [self debugger]->dmaDebugger->getInfo();
 }
 
 @end
@@ -844,9 +844,9 @@ using namespace vamiga::moira;
 
 @implementation RecorderProxy
 
-- (Recorder *)recorder
+- (RecorderAPI *)recorder
 {
-    return (Recorder *)obj;
+    return (RecorderAPI *)obj;
 }
 
 - (NSString *)path
@@ -880,57 +880,28 @@ using namespace vamiga::moira;
 
 - (BOOL)recording
 {
-    return [self recorder]->isRecording();
+    return [self recorder]->recorder->isRecording();
 }
 
 - (double)duration
 {
-    return [self recorder]->getDuration().asSeconds();
+    return [self recorder]->recorder->getDuration().asSeconds();
 }
-
-/*
-- (NSInteger)x1
-{
-    return [self recorder]->cutout.x1;
-}
-
-- (NSInteger)x2
-{
-    return [self recorder]->cutout.x2;
-}
-
-- (NSInteger)y1
-{
-    return [self recorder]->cutout.y1;
-}
-
-- (NSInteger)y2
-{
-    return [self recorder]->cutout.y2;
-}
-*/
 
 - (NSInteger)frameRate
 {
-    return [self recorder]->getFrameRate();
+    return [self recorder]->recorder->getFrameRate();
 }
 
 - (NSInteger)bitRate
 {
-    return [self recorder]->getBitRate();
+    return [self recorder]->recorder->getBitRate();
 }
 
 - (NSInteger)sampleRate
 {
-    return [self recorder]->getSampleRate();
+    return [self recorder]->recorder->getSampleRate();
 }
-
-/*
-- (u32 *)getGpuData:(NSSize)size
-{
-    return [self recorder]->getGpuData((isize)size.width, (isize)size.height);
-}
-*/
 
 - (void)startRecording:(NSRect)rect
                bitRate:(NSInteger)rate
@@ -943,18 +914,18 @@ using namespace vamiga::moira;
     auto x2 = isize(x1 + (int)rect.size.width);
     auto y2 = isize(y1 + (int)rect.size.height);
     
-    try { return [self recorder]->startRecording(x1, y1, x2, y2, rate, aspectX, aspectY); }
+    try { return [self recorder]->recorder->startRecording(x1, y1, x2, y2, rate, aspectX, aspectY); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)stopRecording
 {
-    [self recorder]->stopRecording();
+    [self recorder]->recorder->stopRecording();
 }
 
 - (BOOL)exportAs:(NSString *)path
 {
-    return [self recorder]->exportAs(string([path fileSystemRepresentation]));
+    return [self recorder]->recorder->exportAs(string([path fileSystemRepresentation]));
 }
 
 @end
@@ -966,86 +937,74 @@ using namespace vamiga::moira;
 
 @implementation PaulaProxy
 
-- (Paula *)paula
+- (PaulaAPI *)paula
 {
-    return (Paula *)obj;
+    return (PaulaAPI *)obj;
 }
 
 - (PaulaInfo)info
 {
-    return [self paula]->getInfo();
+    return [self paula]->paula->getInfo();
 }
 
 - (StateMachineInfo)audioInfo0
 {
-    return [self paula]->channel0.getInfo();
+    return [self paula]->paula->channel0.getInfo();
 }
 
 - (StateMachineInfo)audioInfo1
 {
-    return [self paula]->channel1.getInfo();
+    return [self paula]->paula->channel1.getInfo();
 }
 
 - (StateMachineInfo)audioInfo2
 {
-    return [self paula]->channel2.getInfo();
+    return [self paula]->paula->channel2.getInfo();
 }
 
 - (StateMachineInfo)audioInfo3
 {
-    return [self paula]->channel3.getInfo();
+    return [self paula]->paula->channel3.getInfo();
 }
 
 - (UARTInfo)uartInfo
 {
-    return [self paula]->uart.getInfo();
+    return [self paula]->paula->uart.getInfo();
 }
 
 - (MuxerStats)muxerStats
 {
-    return [self paula]->muxer.getStats();
+    return [self paula]->paula->muxer.getStats();
 }
-
-/*
-- (double)sampleRate
-{
-    return [self paula]->muxer.getSampleRate();
-}
-
-- (void)setSampleRate:(double)rate
-{
-    [self paula]->muxer.setSampleRate(rate);
-}
-*/
 
 - (void)readMonoSamples:(float *)target size:(NSInteger)n
 {
-    [self paula]->muxer.copy(target, n);
+    [self paula]->paula->muxer.copy(target, n);
 }
 
 - (void)readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n
 {
-    [self paula]->muxer.copy(target1, target2, n);
+    [self paula]->paula->muxer.copy(target1, target2, n);
 }
 
 - (void)rampUp
 {
-    [self paula]->muxer.rampUp();
+    [self paula]->paula->muxer.rampUp();
 }
 
 - (void)rampUpFromZero
 {
-    [self paula]->muxer.rampUpFromZero();
+    [self paula]->paula->muxer.rampUpFromZero();
 }
 
 - (void)rampDown
 {
-    [self paula]->muxer.rampDown();
+    [self paula]->paula->muxer.rampDown();
 }
 
 - (float)drawWaveformL:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c
 {
-    return [self paula]->muxer.stream.draw(buffer, w, h, true, s, c);
+    return [self paula]->paula->muxer.stream.draw(buffer, w, h, true, s, c);
 }
 
 - (float)drawWaveformL:(u32 *)buffer size:(NSSize)size scale:(float)s color:(u32)c
@@ -1059,7 +1018,7 @@ using namespace vamiga::moira;
 
 - (float)drawWaveformR:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c
 {
-    return [self paula]->muxer.stream.draw(buffer, w, h, false, s, c);
+    return [self paula]->paula->muxer.stream.draw(buffer, w, h, false, s, c);
 }
 
 - (float)drawWaveformR:(u32 *)buffer size:(NSSize)size scale:(float)s color:(u32)c
@@ -1080,14 +1039,14 @@ using namespace vamiga::moira;
 
 @implementation RtcProxy
 
-- (RTC *)rtc
+- (RtcAPI *)rtc
 {
-    return (RTC *)obj;
+    return (RtcAPI *)obj;
 }
 
 - (void)update
 {
-    [self rtc]->update();
+    [self rtc]->rtc->update();
 }
 
 @end
@@ -1099,34 +1058,34 @@ using namespace vamiga::moira;
 
 @implementation MouseProxy
 
-- (Mouse *)mouse
+- (MouseAPI *)mouse
 {
-    return (Mouse *)obj;
+    return (MouseAPI *)obj;
 }
 
 - (BOOL)detectShakeAbs:(NSPoint)pos
 {
-    return [self mouse]->detectShakeXY(pos.x, pos.y);
+    return [self mouse]->mouse->detectShakeXY(pos.x, pos.y);
 }
 
 - (BOOL)detectShakeRel:(NSPoint)pos
 {
-    return [self mouse]->detectShakeDxDy(pos.x, pos.y);
+    return [self mouse]->mouse->detectShakeDxDy(pos.x, pos.y);
 }
 
 - (void)setXY:(NSPoint)pos
 {
-    [self mouse]->setXY((double)pos.x, (double)pos.y);
+    [self mouse]->mouse->setXY((double)pos.x, (double)pos.y);
 }
 
 - (void)setDxDy:(NSPoint)pos
 {
-    [self mouse]->setDxDy((double)pos.x, (double)pos.y);
+    [self mouse]->mouse->setDxDy((double)pos.x, (double)pos.y);
 }
 
 - (void)trigger:(GamePadAction)event
 {
-    [self mouse]->trigger(event);
+    [self mouse]->mouse->trigger(event);
 }
 
 @end
@@ -1138,14 +1097,14 @@ using namespace vamiga::moira;
 
 @implementation JoystickProxy
 
-- (Joystick *)joystick
+- (JoystickAPI *)joystick
 {
-    return (Joystick *)obj;
+    return (JoystickAPI *)obj;
 }
 
 - (void)trigger:(GamePadAction)event
 {
-    [self joystick]->trigger(event);
+    [self joystick]->joystick->trigger(event);
 }
 
 @end
@@ -1164,7 +1123,7 @@ using namespace vamiga::moira;
 {
     if (self = [super init]) {
         
-        ControlPort *port = (ControlPort *)ref;
+        ControlPortAPI *port = (ControlPortAPI *)ref;
         obj = ref;
         joystick = [[JoystickProxy alloc] initWith:&port->joystick];
         mouse = [[MouseProxy alloc] initWith:&port->mouse];
@@ -1172,14 +1131,14 @@ using namespace vamiga::moira;
     return self;
 }
 
-- (ControlPort *)cp
+- (ControlPortAPI *)cp
 {
-    return (ControlPort *)obj;
+    return (ControlPortAPI *)obj;
 }
 
 - (ControlPortInfo)info
 {
-    return [self cp]->getInfo();
+    return [self cp]->controlPort->getInfo();
 }
 
 @end
@@ -1191,32 +1150,25 @@ using namespace vamiga::moira;
 
 @implementation SerialPortProxy
 
-- (SerialPort *)serial
+- (SerialPortAPI *)serial
 {
-    return (SerialPort *)obj;
+    return (SerialPortAPI *)obj;
 }
 
 - (SerialPortInfo)info
 {
-    return [self serial]->getInfo();
+    return [self serial]->serialPort->getInfo();
 }
 
 - (NSInteger)readIncomingPrintableByte
 {
-    return [self serial]->readIncomingPrintableByte();
+    return [self serial]->serialPort->readIncomingPrintableByte();
 }
 
 - (NSInteger)readOutgoingPrintableByte
 {
-    return [self serial]->readOutgoingPrintableByte();
+    return [self serial]->serialPort->readOutgoingPrintableByte();
 }
-
-/*
-- (void)receiveText:(NSString *)text
-{
-    *[self serial] << [text UTF8String];
-}
-*/
 
 @end
 
@@ -1227,34 +1179,34 @@ using namespace vamiga::moira;
 
 @implementation KeyboardProxy
 
-- (Keyboard *)kb
+- (KeyboardAPI *)kb
 {
-    return (Keyboard *)obj;
+    return (KeyboardAPI *)obj;
 }
 
 - (BOOL)keyIsPressed:(NSInteger)keycode
 {
-    return [self kb]->keyIsPressed((KeyCode)keycode);
+    return [self kb]->keyboard->keyIsPressed((KeyCode)keycode);
 }
 
 - (void)pressKey:(NSInteger)keycode
 {
-    [self kb]->pressKey((KeyCode)keycode);
+    [self kb]->keyboard->pressKey((KeyCode)keycode);
 }
 
 - (void)releaseKey:(NSInteger)keycode
 {
-    [self kb]->releaseKey((KeyCode)keycode);
+    [self kb]->keyboard->releaseKey((KeyCode)keycode);
 }
 
 - (void)toggleKey:(NSInteger)keycode
 {
-    [self kb]->toggleKey((KeyCode)keycode);
+    [self kb]->keyboard->toggleKey((KeyCode)keycode);
 }
 
 - (void)releaseAllKeys
 {
-    [self kb]->releaseAllKeys();
+    [self kb]->keyboard->releaseAllKeys();
 }
 
 @end
@@ -1266,123 +1218,34 @@ using namespace vamiga::moira;
 
 @implementation DiskControllerProxy
 
-- (DiskController *)dc
+- (DiskControllerAPI *)dc
 {
-    return (DiskController *)obj;
+    return (DiskControllerAPI *)obj;
 }
 
 - (DiskControllerConfig)getConfig
 {
-    return [self dc]->getConfig();
+    return [self dc]->diskController->getConfig();
 }
 
 - (DiskControllerInfo)info
 {
-    return [self dc]->getInfo();
+    return [self dc]->diskController->getInfo();
 }
 
 - (NSInteger)selectedDrive
 {
-    return [self dc]->getSelected();
+    return [self dc]->diskController->getSelected();
 }
 
 - (DriveState)state
 {
-    return [self dc]->getState();
+    return [self dc]->diskController->getState();
 }
 
 - (BOOL)isSpinning
 {
-    return [self dc]->spinning();
-}
-
-@end
-
-
-//
-// Drive proxy
-//
-
-@implementation DriveProxy
-
-- (Drive *)drive
-{
-    return (Drive *)obj;
-}
-
-- (NSInteger)nr
-{
-    return [self drive]->getNr();
-}
-
-- (BOOL)isConnected
-{
-    return [self drive]->isConnected();
-}
-
-- (NSInteger)currentCyl
-{
-    return [self drive]->currentCyl();
-}
-
-- (NSInteger)currentHead
-{
-    return [self drive]->currentHead();
-}
-
-- (NSInteger)currentOffset
-{
-    return [self drive]->currentOffset();
-}
-
-- (BOOL)hasDisk
-{
-    return [self drive]->hasDisk();
-}
-
-- (BOOL)hasModifiedDisk
-{
-    return [self drive]->hasModifiedDisk();
-}
-
-- (BOOL)hasProtectedDisk
-{
-    return [self drive]->hasProtectedDisk();
-}
-
-- (BOOL)hasUnmodifiedDisk
-{
-    return [self drive]->hasUnmodifiedDisk();
-}
-
-- (BOOL)hasUnprotectedDisk
-{
-    return [self drive]->hasUnprotectedDisk();
-}
-
-- (void)setModificationFlag:(BOOL)value
-{
-    [self drive]->setModificationFlag(value);
-}
-
-- (void)setProtectionFlag:(BOOL)value
-{
-    [self drive]->setProtectionFlag(value);
-}
-
-- (void)markDiskAsModified
-{
-    [self drive]->markDiskAsModified();
-}
-
-- (void)markDiskAsUnmodified
-{
-    [self drive]->markDiskAsUnmodified();
-}
-
-- (void)toggleWriteProtection
-{
-    [self drive]->toggleWriteProtection();
+    return [self dc]->diskController->spinning();
 }
 
 @end
@@ -1394,57 +1257,132 @@ using namespace vamiga::moira;
 
 @implementation FloppyDriveProxy
 
-- (FloppyDrive *)drive
+- (FloppyDriveAPI *)drive
 {
-    return (FloppyDrive *)obj;
+    return (FloppyDriveAPI *)obj;
+}
+
+- (NSInteger)nr
+{
+    return [self drive]->drive->getNr();
+}
+
+- (BOOL)isConnected
+{
+    return [self drive]->drive->isConnected();
+}
+
+- (NSInteger)currentCyl
+{
+    return [self drive]->drive->currentCyl();
+}
+
+- (NSInteger)currentHead
+{
+    return [self drive]->drive->currentHead();
+}
+
+- (NSInteger)currentOffset
+{
+    return [self drive]->drive->currentOffset();
+}
+
+- (BOOL)hasDisk
+{
+    return [self drive]->drive->hasDisk();
+}
+
+- (BOOL)hasModifiedDisk
+{
+    return [self drive]->drive->hasModifiedDisk();
+}
+
+- (BOOL)hasProtectedDisk
+{
+    return [self drive]->drive->hasProtectedDisk();
+}
+
+- (BOOL)hasUnmodifiedDisk
+{
+    return [self drive]->drive->hasUnmodifiedDisk();
+}
+
+- (BOOL)hasUnprotectedDisk
+{
+    return [self drive]->drive->hasUnprotectedDisk();
+}
+
+- (void)setModificationFlag:(BOOL)value
+{
+    [self drive]->drive->setModificationFlag(value);
+}
+
+- (void)setProtectionFlag:(BOOL)value
+{
+    [self drive]->drive->setProtectionFlag(value);
+}
+
+- (void)markDiskAsModified
+{
+    [self drive]->drive->markDiskAsModified();
+}
+
+- (void)markDiskAsUnmodified
+{
+    [self drive]->drive->markDiskAsUnmodified();
+}
+
+- (void)toggleWriteProtection
+{
+    [self drive]->drive->toggleWriteProtection();
 }
 
 - (FloppyDriveInfo)info
 {
-    return [self drive]->getInfo();
+    return [self drive]->drive->getInfo();
 }
 
 - (BOOL)isInsertable:(Diameter)type density:(Density)density
 {
-    return [self drive]->isInsertable(type, density);
+    return [self drive]->drive->isInsertable(type, density);
 }
 
 - (void)eject
 {
-    [self drive]->ejectDisk();
+    [self drive]->drive->ejectDisk();
 }
 
 - (void)swap:(FloppyFileProxy *)fileProxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self drive]->swapDisk(*(FloppyFile *)fileProxy->obj); }
+    try { return [self drive]->drive->swapDisk(*(FloppyFile *)fileProxy->obj); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)insertNew:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex
 {
-    try { return [self drive]->insertNew(fs, bb, [name UTF8String]); }
+    try { return [self drive]->drive->insertNew(fs, bb, [name UTF8String]); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (BOOL)motor
 {
-    return [self drive]->getMotor();
+    return [self drive]->drive->getMotor();
 }
 
 - (BOOL)selected
 {
-    return [self drive]->isSelected();
+    return [self drive]->drive->isSelected();
 }
 
 - (BOOL)writing
 {
-    return [self drive]->isWriting();
+    return [self drive]->drive->isWriting();
 }
 
 - (NSString *)readTrackBits:(NSInteger)track
 {
-    if (![self drive]->hasDisk()) return @("");
-    return @([self drive]->disk->readTrackBits(track).c_str());
+    if (![self drive]->drive->hasDisk()) return @("");
+    return @([self drive]->drive->disk->readTrackBits(track).c_str());
 }
 
 @end
@@ -1455,88 +1393,163 @@ using namespace vamiga::moira;
 
 @implementation HardDriveProxy
 
-- (HardDrive *)drive
+- (HardDriveAPI *)drive
 {
-    return (HardDrive *)obj;
+    return (HardDriveAPI *)obj;
+}
+
+- (NSInteger)nr
+{
+    return [self drive]->drive->getNr();
+}
+
+- (BOOL)isConnected
+{
+    return [self drive]->drive->isConnected();
+}
+
+- (NSInteger)currentCyl
+{
+    return [self drive]->drive->currentCyl();
+}
+
+- (NSInteger)currentHead
+{
+    return [self drive]->drive->currentHead();
+}
+
+- (NSInteger)currentOffset
+{
+    return [self drive]->drive->currentOffset();
+}
+
+- (BOOL)hasDisk
+{
+    return [self drive]->drive->hasDisk();
+}
+
+- (BOOL)hasModifiedDisk
+{
+    return [self drive]->drive->hasModifiedDisk();
+}
+
+- (BOOL)hasProtectedDisk
+{
+    return [self drive]->drive->hasProtectedDisk();
+}
+
+- (BOOL)hasUnmodifiedDisk
+{
+    return [self drive]->drive->hasUnmodifiedDisk();
+}
+
+- (BOOL)hasUnprotectedDisk
+{
+    return [self drive]->drive->hasUnprotectedDisk();
+}
+
+- (void)setModificationFlag:(BOOL)value
+{
+    [self drive]->drive->setModificationFlag(value);
+}
+
+- (void)setProtectionFlag:(BOOL)value
+{
+    [self drive]->drive->setProtectionFlag(value);
+}
+
+- (void)markDiskAsModified
+{
+    [self drive]->drive->markDiskAsModified();
+}
+
+- (void)markDiskAsUnmodified
+{
+    [self drive]->drive->markDiskAsUnmodified();
+}
+
+- (void)toggleWriteProtection
+{
+    [self drive]->drive->toggleWriteProtection();
 }
 
 - (HardDriveInfo)info
 {
-    return [self drive]->getInfo();
+    return [self drive]->drive->getInfo();
 }
 
 - (NSInteger)capacity
 {
-    return [self drive]->getGeometry().numBytes();
+    return [self drive]->drive->getGeometry().numBytes();
 }
 
 - (NSInteger)partitions
 {
-    return [self drive]->numPartitions();
+    return [self drive]->drive->numPartitions();
 }
 
 - (NSInteger)cylinders
 {
-    return [self drive]->getGeometry().cylinders;
+    return [self drive]->drive->getGeometry().cylinders;
 }
 
 - (NSInteger)heads
 {
-    return [self drive]->getGeometry().heads;
+    return [self drive]->drive->getGeometry().heads;
 }
 
 - (NSInteger)sectors
 {
-    return [self drive]->getGeometry().sectors;
+    return [self drive]->drive->getGeometry().sectors;
 }
 
 - (NSInteger)bsize
 {
-    return [self drive]->getGeometry().bsize;
+    return [self drive]->drive->getGeometry().bsize;
 }
 
 - (HdcState)hdcState
 {
-    return [self drive]->getHdcState();
+    return [self drive]->drive->getHdcState();
 }
 
 - (BOOL)isCompatible
 {
-    return [self drive]->isCompatible();
+    return [self drive]->drive->isCompatible();
 }
 
 - (BOOL)writeThroughEnabled
 {
-    return [self drive]->writeThroughEnabled();
+    return [self drive]->drive->writeThroughEnabled();
 }
 
 - (NSString *)nameOfPartition:(NSInteger)nr
 {
-    auto &info = [self drive]->getPartitionInfo(nr);
+    auto &info = [self drive]->drive->getPartitionInfo(nr);
     return @(info.name.c_str());
 }
 
 - (NSInteger)lowerCylOfPartition:(NSInteger)nr
 {
-    auto &info = [self drive]->getPartitionInfo(nr);
+    auto &info = [self drive]->drive->getPartitionInfo(nr);
     return info.lowCyl;
 }
 
 - (NSInteger)upperCylOfPartition:(NSInteger)nr
 {
-    auto &info = [self drive]->getPartitionInfo(nr);
+    auto &info = [self drive]->drive->getPartitionInfo(nr);
     return info.highCyl;
 }
 
 - (HardDriveState)state
 {
-    return [self drive]->getState();
+    return [self drive]->drive->getState();
 }
 
 - (void)attachFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try {
-        [self drive]->init([url fileSystemRepresentation]);
+        [self drive]->drive->init([url fileSystemRepresentation]);
     }  catch (Error &error) {
         [ex save:error];
     }
@@ -1545,7 +1558,7 @@ using namespace vamiga::moira;
 - (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex
 {
     try {
-        [self drive]->init(*(HDFFile *)hdf->obj);
+        [self drive]->drive->init(*(HDFFile *)hdf->obj);
     }  catch (Error &error) {
         [ex save:error];
     }
@@ -1561,7 +1574,7 @@ using namespace vamiga::moira;
     geometry.bsize = b;
     
     try {
-        [self drive]->init(geometry);
+        [self drive]->drive->init(geometry);
     }  catch (Error &error) {
         [ex save:error];
     }
@@ -1572,7 +1585,7 @@ using namespace vamiga::moira;
     auto str = string([name UTF8String]);
     
     try {
-        [self drive]->format(fs, str);
+        [self drive]->drive->format(fs, str);
     }  catch (Error &error) {
         [ex save:error];
     }
@@ -1581,7 +1594,7 @@ using namespace vamiga::moira;
 - (void)changeGeometry:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex
 {
     try {
-        [self drive]->changeGeometry(c, h, s, b);
+        [self drive]->drive->changeGeometry(c, h, s, b);
     }  catch (Error &error) {
         [ex save:error];
     }
@@ -1591,7 +1604,7 @@ using namespace vamiga::moira;
 {
     NSMutableArray *data = [[NSMutableArray alloc] init];
     
-    auto geometry = [self drive]->getGeometry();
+    auto geometry = [self drive]->drive->getGeometry();
     auto geometries = GeometryDescriptor::driveGeometries(geometry.numBlocks());
         
     for (auto &g : geometries) {
@@ -1605,19 +1618,19 @@ using namespace vamiga::moira;
 
 - (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
-    try { return [self drive]->writeToFile([url fileSystemRepresentation]); }
+    try { return [self drive]->drive->writeToFile([url fileSystemRepresentation]); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)enableWriteThrough:(ExceptionWrapper *)ex
 {
-    try { return [self drive]->enableWriteThrough(); }
+    try { return [self drive]->drive->enableWriteThrough(); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)disableWriteThrough
 {
-    [self drive]->disableWriteThrough();
+    [self drive]->drive->disableWriteThrough();
 }
 
 @end
@@ -1849,12 +1862,12 @@ using namespace vamiga::moira;
 
 @implementation DebuggerProxy
 
-- (vamiga::Debugger *)debugger
+- (vamiga::DebuggerAPI *)debugger
 {
-    return (vamiga::Debugger *)obj;
+    return (vamiga::DebuggerAPI *)obj;
 }
 
-+ (instancetype)make:(vamiga::Debugger *)object
++ (instancetype)make:(vamiga::DebuggerAPI *)object
 {
     if (object == nullptr) { return nil; }
 
@@ -1864,17 +1877,17 @@ using namespace vamiga::moira;
 
 - (void)stopAndGo
 {
-    [self debugger]->stopAndGo();
+    [self debugger]->debugger->stopAndGo();
 }
 
 - (void)stepInto
 {
-    [self debugger]->stepInto();
+    [self debugger]->debugger->stepInto();
 }
 
 - (void)stepOver
 {
-    [self debugger]->stepOver();
+    [self debugger]->debugger->stepOver();
 }
 
 - (NSString *)ascDump:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes
@@ -1883,9 +1896,9 @@ using namespace vamiga::moira;
     const char *str;
 
     if (accessor == ACCESSOR_CPU) {
-        str = [self debugger]->ascDump <ACCESSOR_CPU> ((u32)addr, bytes);
+        str = [self debugger]->debugger->ascDump <ACCESSOR_CPU> ((u32)addr, bytes);
     } else {
-        str = [self debugger]->ascDump <ACCESSOR_AGNUS> ((u32)addr, bytes);
+        str = [self debugger]->debugger->ascDump <ACCESSOR_AGNUS> ((u32)addr, bytes);
     }
 
     return str ? @(str) : nullptr;
@@ -1897,9 +1910,9 @@ using namespace vamiga::moira;
     const char *str;
 
     if (accessor == ACCESSOR_CPU) {
-        str = [self debugger]->hexDump <ACCESSOR_CPU> ((u32)addr, bytes);
+        str = [self debugger]->debugger->hexDump <ACCESSOR_CPU> ((u32)addr, bytes);
     } else {
-        str = [self debugger]->hexDump <ACCESSOR_AGNUS> ((u32)addr, bytes);
+        str = [self debugger]->debugger->hexDump <ACCESSOR_AGNUS> ((u32)addr, bytes);
     }
 
     return str ? @(str) : nullptr;
@@ -1913,12 +1926,12 @@ using namespace vamiga::moira;
 
 @implementation RetroShellProxy
 
-- (RetroShell *)shell
+- (RetroShellAPI *)shell
 {
-    return (RetroShell *)obj;
+    return (RetroShellAPI *)obj;
 }
 
-+ (instancetype)make:(RetroShell *)shell
++ (instancetype)make:(RetroShellAPI *)shell
 {
     if (shell == nullptr) { return nil; }
     
@@ -1928,78 +1941,78 @@ using namespace vamiga::moira;
 
 -(NSInteger)cursorRel
 {
-    return [self shell]->cursorRel();
+    return [self shell]->retroShell->cursorRel();
 }
 
 -(NSString *)getText
 {
-    const char *str = [self shell]->text();
+    const char *str = [self shell]->retroShell->text();
     return str ? @(str) : nullptr;
 }
 
 - (void)pressUp
 {
-    [self shell]->press(RSKEY_UP);
+    [self shell]->retroShell->press(RSKEY_UP);
 }
 
 - (void)pressDown
 {
-    [self shell]->press(RSKEY_DOWN);
+    [self shell]->retroShell->press(RSKEY_DOWN);
 }
 
 - (void)pressLeft
 {
-    [self shell]->press(RSKEY_LEFT);
+    [self shell]->retroShell->press(RSKEY_LEFT);
 }
 
 - (void)pressRight
 {
-    [self shell]->press(RSKEY_RIGHT);
+    [self shell]->retroShell->press(RSKEY_RIGHT);
 }
 
 - (void)pressHome
 {
-    [self shell]->press(RSKEY_HOME);
+    [self shell]->retroShell->press(RSKEY_HOME);
 }
 
 - (void)pressEnd
 {
-    [self shell]->press(RSKEY_END);
+    [self shell]->retroShell->press(RSKEY_END);
 }
 
 - (void)pressBackspace
 {
-    [self shell]->press(RSKEY_BACKSPACE);
+    [self shell]->retroShell->press(RSKEY_BACKSPACE);
 }
 
 - (void)pressDelete
 {
-    [self shell]->press(RSKEY_DEL);
+    [self shell]->retroShell->press(RSKEY_DEL);
 }
 
 - (void)pressCut
 {
-    [self shell]->press(RSKEY_CUT);
+    [self shell]->retroShell->press(RSKEY_CUT);
 }
 
 - (void)pressReturn
 {
-    [self shell]->press(RSKEY_RETURN);
+    [self shell]->retroShell->press(RSKEY_RETURN);
 }
 
 - (void)pressShiftReturn
 {
-    [self shell]->press(RSKEY_RETURN, true);
+    [self shell]->retroShell->press(RSKEY_RETURN, true);
 }
 
 - (void)pressTab
 {
-    [self shell]->press(RSKEY_TAB);
+    [self shell]->retroShell->press(RSKEY_TAB);
 }
 
 - (void)pressKey:(char)c
 {
-    [self shell]->press(c);
+    [self shell]->retroShell->press(c);
 }
 
 @end
@@ -2010,12 +2023,12 @@ using namespace vamiga::moira;
 
 @implementation RemoteManagerProxy
 
-- (RemoteManager *)manager
+- (RemoteManagerAPI *)manager
 {
-    return (RemoteManager *)obj;
+    return (RemoteManagerAPI *)obj;
 }
 
-+ (instancetype)make:(RemoteManager *)manager
++ (instancetype)make:(RemoteManagerAPI *)manager
 {
     if (manager == nullptr) { return nil; }
     
@@ -2025,22 +2038,22 @@ using namespace vamiga::moira;
 
 -(NSInteger)numLaunching
 {
-    return [self manager]->numLaunching();
+    return [self manager]->remoteManager->numLaunching();
 }
 
 -(NSInteger)numListening
 {
-    return [self manager]->numListening();
+    return [self manager]->remoteManager->numListening();
 }
 
 -(NSInteger)numConnected
 {
-    return [self manager]->numConnected();
+    return [self manager]->remoteManager->numConnected();
 }
 
 -(NSInteger)numErroneous
 {
-    return [self manager]->numErroneous();
+    return [self manager]->remoteManager->numErroneous();
 }
 
 @end
@@ -2448,7 +2461,7 @@ using namespace vamiga::moira;
 
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: new ADFFile(*[proxy drive])]; }
+    try { return [self make: new ADFFile(*[proxy drive]->drive)]; }
     catch (Error &error) { [ex save:error]; return nil; }
 }
 
@@ -2497,7 +2510,7 @@ using namespace vamiga::moira;
 
 + (instancetype)makeWithHardDrive:(HardDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: new HDFFile(*[proxy drive])]; }
+    try { return [self make: new HDFFile(*[proxy drive]->drive)]; }
     catch (Error &error) { [ex save:error]; return nil; }
 }
 
@@ -2555,7 +2568,7 @@ using namespace vamiga::moira;
 
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: new EADFFile(*[proxy drive])]; }
+    try { return [self make: new EADFFile(*[proxy drive]->drive)]; }
     catch (Error &error) { [ex save:error]; return nil; }
 }
 
@@ -2592,7 +2605,7 @@ using namespace vamiga::moira;
 
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: new IMGFile(*[proxy drive]->disk)]; }
+    try { return [self make: new IMGFile(*[proxy drive]->drive->disk)]; }
     catch (Error &error) { [ex save:error]; return nil; }
 }
 
@@ -2629,7 +2642,7 @@ using namespace vamiga::moira;
 
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: new STFile(*[proxy drive]->disk)]; }
+    try { return [self make: new STFile(*[proxy drive]->drive->disk)]; }
     catch (Error &error) { [ex save:error]; return nil; }
 }
 
@@ -2734,9 +2747,9 @@ using namespace vamiga::moira;
 
 @implementation HostProxy
 
-- (Host *)host
+- (HostAPI *)host
 {
-    return (Host *)obj;
+    return (HostAPI *)obj;
 }
 
 + (instancetype)make:(Host *)file
@@ -2746,33 +2759,33 @@ using namespace vamiga::moira;
 
 - (double)sampleRate
 {
-    return [self host]->getSampleRate();
+    return [self host]->host->getSampleRate();
 }
 
 - (void)setSampleRate:(double)hz
 {
-    [self host]->setSampleRate(hz);
+    [self host]->host->setSampleRate(hz);
 }
 
 - (NSInteger)refreshRate
 {
-    return (NSInteger)[self host]->getHostRefreshRate();
+    return (NSInteger)[self host]->host->getHostRefreshRate();
 }
 
 - (void)setRefreshRate:(NSInteger)value
 {
-    [self host]->setHostRefreshRate((double)value);
+    [self host]->host->setHostRefreshRate((double)value);
 }
 
 - (NSSize)frameBufferSize
 {
-    auto size = [self host]->getFrameBufferSize();
+    auto size = [self host]->host->getFrameBufferSize();
     return NSMakeSize((CGFloat)size.first, (CGFloat)size.second);
 }
 
 - (void)setFrameBufferSize:(NSSize)size
 {
-    [self host]->setFrameBufferSize(std::pair<isize, isize>(size.width, size.height));
+    [self host]->host->setFrameBufferSize(std::pair<isize, isize>(size.width, size.height));
 }
 
 @end
@@ -2830,36 +2843,36 @@ using namespace vamiga::moira;
     // Create sub proxys
     agnus = [[AgnusProxy alloc] initWith:&vamiga->agnus];
     blitter = [[BlitterProxy alloc] initWith:&vamiga->blitter];
-    breakpoints = [[GuardsProxy alloc] initWith:&amiga->cpu.debugger.breakpoints];
+    breakpoints = [[GuardsProxy alloc] initWith:&vamiga->breakpoints];
     ciaA = [[CIAProxy alloc] initWith:&vamiga->ciaA];
     ciaB = [[CIAProxy alloc] initWith:&vamiga->ciaB];
-    controlPort1 = [[ControlPortProxy alloc] initWith:&amiga->controlPort1];
-    controlPort2 = [[ControlPortProxy alloc] initWith:&amiga->controlPort2];
+    controlPort1 = [[ControlPortProxy alloc] initWith:&vamiga->controlPort1];
+    controlPort2 = [[ControlPortProxy alloc] initWith:&vamiga->controlPort2];
     copper = [[CopperProxy alloc] initWith:&vamiga->copper];
-    copperBreakpoints = [[GuardsProxy alloc] initWith:&amiga->agnus.copper.debugger.breakpoints];
+    copperBreakpoints = [[GuardsProxy alloc] initWith:&vamiga->copperBreakpoints];
     cpu = [[CPUProxy alloc] initWith:&vamiga->cpu];
-    debugger = [[DebuggerProxy alloc] initWith:&amiga->debugger];
+    debugger = [[DebuggerProxy alloc] initWith:&vamiga->debugger];
     denise = [[DeniseProxy alloc] initWith:&vamiga->denise];
-    diskController = [[DiskControllerProxy alloc] initWith:&amiga->paula.diskController];
-    dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&amiga->agnus.dmaDebugger];
-    df0 = [[FloppyDriveProxy alloc] initWith:&amiga->df0];
-    df1 = [[FloppyDriveProxy alloc] initWith:&amiga->df1];
-    df2 = [[FloppyDriveProxy alloc] initWith:&amiga->df2];
-    df3 = [[FloppyDriveProxy alloc] initWith:&amiga->df3];
-    hd0 = [[HardDriveProxy alloc] initWith:&amiga->hd0];
-    hd1 = [[HardDriveProxy alloc] initWith:&amiga->hd1];
-    hd2 = [[HardDriveProxy alloc] initWith:&amiga->hd2];
-    hd3 = [[HardDriveProxy alloc] initWith:&amiga->hd3];
-    host = [[HostProxy alloc] initWith:&amiga->host];
-    keyboard = [[KeyboardProxy alloc] initWith:&amiga->keyboard];
+    diskController = [[DiskControllerProxy alloc] initWith:&vamiga->diskController];
+    dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&vamiga->dmaDebugger];
+    df0 = [[FloppyDriveProxy alloc] initWith:&vamiga->df0];
+    df1 = [[FloppyDriveProxy alloc] initWith:&vamiga->df1];
+    df2 = [[FloppyDriveProxy alloc] initWith:&vamiga->df2];
+    df3 = [[FloppyDriveProxy alloc] initWith:&vamiga->df3];
+    hd0 = [[HardDriveProxy alloc] initWith:&vamiga->hd0];
+    hd1 = [[HardDriveProxy alloc] initWith:&vamiga->hd1];
+    hd2 = [[HardDriveProxy alloc] initWith:&vamiga->hd2];
+    hd3 = [[HardDriveProxy alloc] initWith:&vamiga->hd3];
+    host = [[HostProxy alloc] initWith:&vamiga->host];
+    keyboard = [[KeyboardProxy alloc] initWith:&vamiga->keyboard];
     mem = [[MemProxy alloc] initWith:&vamiga->mem];
-    paula = [[PaulaProxy alloc] initWith:&amiga->paula];
-    retroShell = [[RetroShellProxy alloc] initWith:&amiga->retroShell];
-    rtc = [[RtcProxy alloc] initWith:&amiga->rtc];
-    recorder = [[RecorderProxy alloc] initWith:&amiga->denise.screenRecorder];
-    remoteManager = [[RemoteManagerProxy alloc] initWith:&amiga->remoteManager];
-    serialPort = [[SerialPortProxy alloc] initWith:&amiga->serialPort];
-    watchpoints = [[GuardsProxy alloc] initWith:&amiga->cpu.debugger.watchpoints];
+    paula = [[PaulaProxy alloc] initWith:&vamiga->paula];
+    retroShell = [[RetroShellProxy alloc] initWith:&vamiga->retroShell];
+    rtc = [[RtcProxy alloc] initWith:&vamiga->rtc];
+    recorder = [[RecorderProxy alloc] initWith:&vamiga->recorder];
+    remoteManager = [[RemoteManagerProxy alloc] initWith:&vamiga->remoteManager];
+    serialPort = [[SerialPortProxy alloc] initWith:&vamiga->serialPort];
+    watchpoints = [[GuardsProxy alloc] initWith:&vamiga->watchpoints];
 
     return self;
 }
