@@ -48,31 +48,3 @@ struct ExecutionStateEnum : util::Reflection<ExecutionStateEnum, ExecutionState>
     }
 };
 #endif
-
-enum_long(SYNC_MODE)
-{
-    SYNC_PERIODIC,
-    SYNC_PULSED,
-};
-typedef SYNC_MODE SyncMode;
-
-#ifdef __cplusplus
-struct SyncModeEnum : util::Reflection<SyncModeEnum, SyncMode>
-{
-    static constexpr long minVal = 0;
-    static constexpr long maxVal = SYNC_PULSED;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
-
-    static const char *prefix() { return "SYNC"; }
-    static const char *key(SyncMode value)
-    {
-        switch (value) {
-
-            case SYNC_PERIODIC:   return "PERIODIC";
-            case SYNC_PULSED:     return "PULSED";
-        }
-        return "???";
-    }
-};
-
-#endif

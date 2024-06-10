@@ -35,7 +35,7 @@ Thread::resync()
     missing = 0;
 }
 
-template <SyncMode M> void
+void
 Thread::executeFrame()
 {
     if (missing > 0 || warp) {
@@ -52,36 +52,8 @@ Thread::executeFrame()
     }
 }
 
-template <> void
-Thread::sleepFrame<SYNC_PERIODIC>()
-{
-    fatalError;
-
-    /*
-    auto now = util::Time::now();
-
-    // Don't sleep in warp mode
-    if (warp) return;
-
-    // Make sure the emulator is still in sync
-    if ((now - targetTime).asMilliseconds() > 200) {
-        warn("Emulation is way too slow: %f sec behind\n", (now - targetTime).asSeconds());
-        resync();
-    }
-    if ((targetTime - now).asMilliseconds() > 200) {
-        warn("Emulation is way too fast: %f sec ahead\n", (targetTime - now).asSeconds());
-        resync();
-    }
-
-    // Sleep till the next sync point
-    targetTime += sliceDelay();
-    targetTime.sleepUntil();
-    missing = 1;
-    */
-}
-
-template <> void
-Thread::sleepFrame<SYNC_PULSED>()
+void
+Thread::sleepFrame()
 {
     // Only proceed if we're not running in warp mode
     if (warp) return;
@@ -137,20 +109,12 @@ Thread::main()
 
         if (isRunning()) {
 
-            switch (getSyncMode()) {
-
-                case SYNC_PERIODIC:   executeFrame<SYNC_PERIODIC>(); break;
-                case SYNC_PULSED:     executeFrame<SYNC_PULSED>(); break;
-            }
+            executeFrame();
         }
 
         if (!warp || !isRunning()) {
             
-            switch (getSyncMode()) {
-
-                case SYNC_PERIODIC:   sleepFrame<SYNC_PERIODIC>(); break;
-                case SYNC_PULSED:     sleepFrame<SYNC_PULSED>(); break;
-            }
+            sleepFrame();
         }
         
         // Are we requested to change state?
@@ -386,11 +350,8 @@ Thread::changeStateTo(ExecutionState requestedState)
 void
 Thread::wakeUp()
 {
-    if (getSyncMode() != SYNC_PERIODIC) {
-
-        trace(TIM_DEBUG, "wakeup: %lld us\n", wakeupClock.restart().asMicroseconds());
-        util::Wakeable::wakeUp();
-    }
+    trace(TIM_DEBUG, "wakeup: %lld us\n", wakeupClock.restart().asMicroseconds());
+    util::Wakeable::wakeUp();
 }
 
 void

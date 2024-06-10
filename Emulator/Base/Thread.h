@@ -225,10 +225,10 @@ private:
     void resync();
 
     // Executes a single time slice (if one is pending)
-    template <SyncMode M> void executeFrame();
+    void executeFrame();
 
     // Suspends the thread until the next time slice is due
-    template <SyncMode M> void sleepFrame();
+    void sleepFrame();
 
     // The main entry point (called when the thread is created)
     void main();
@@ -294,9 +294,6 @@ protected:
     //
 
 public:
-
-    // Provides the current sync mode
-    virtual SyncMode getSyncMode() const = 0;
 
     // Awakes the thread if it runs in pulse mode or adaptive mode
     void wakeUp();

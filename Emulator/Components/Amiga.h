@@ -253,7 +253,6 @@ private:
 
 private:
 
-    SyncMode getSyncMode() const override;
     void execute() override;
 
 public:

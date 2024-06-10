@@ -1263,13 +1263,6 @@ Amiga::save(u8 *buffer)
     return result;
 }
 
-SyncMode
-Amiga::getSyncMode() const
-{
-    return SYNC_PULSED;
-    // return config.syncMode;
-}
-
 void
 Amiga::execute()
 {
