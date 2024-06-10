@@ -230,10 +230,8 @@ private:
         << config.type
         << config.warpMode
         << config.warpBoot
-        << config.syncMode
         << config.vsync
-        << config.timeLapse
-        << config.timeSlices;
+        << config.timeLapse;
     }
 
 public:

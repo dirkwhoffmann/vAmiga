@@ -22,10 +22,8 @@ enum_long(OPT)
     OPT_VIDEO_FORMAT,
     OPT_WARP_BOOT,
     OPT_WARP_MODE,
-    OPT_SYNC_MODE,
     OPT_VSYNC,
     OPT_TIME_LAPSE,
-    OPT_TIME_SLICES,
 
     // Agnus
     OPT_AGNUS_REVISION,
@@ -166,10 +164,8 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_VIDEO_FORMAT:          return "VIDEO_FORMAT";
             case OPT_WARP_BOOT:             return "WARP_BOOT";
             case OPT_WARP_MODE:             return "WARP_MODE";
-            case OPT_SYNC_MODE:             return "SYNC_MODE";
             case OPT_VSYNC:                 return "VSYNC";
             case OPT_TIME_LAPSE:            return "TIME_LAPSE";
-            case OPT_TIME_SLICES:           return "TIME_SLICES";
 
             case OPT_AGNUS_REVISION:        return "AGNUS_REVISION";
             case OPT_SLOW_RAM_MIRROR:       return "SLOW_RAM_MIRROR";

@@ -232,13 +232,6 @@ Interpreter::initCommandShell(Command &root)
         amiga.configure(OPT_WARP_MODE, parseEnum <WarpModeEnum> (argv[0]));
     });
 
-    root.add({"amiga", "set", "syncmode"}, { SyncModeEnum::argList() },
-             "Selects the synchronization mode",
-             [this](Arguments& argv, long value) {
-
-        amiga.configure(OPT_SYNC_MODE, parseEnum <SyncModeEnum> (argv[0]));
-    });
-
     root.add({"amiga", "set", "vsync"}, { Arg::onoff },
              "Enables or disables VSYNC",
              [this](Arguments& argv, long value) {
@@ -251,13 +244,6 @@ Interpreter::initCommandShell(Command &root)
              [this](Arguments& argv, long value) {
 
         amiga.configure(OPT_TIME_LAPSE, parseNum(argv[0]));
-    });
-
-    root.add({"amiga", "set", "timeslices"}, { Arg::value },
-             "Sets how often the thread starts and stops per frame",
-             [this](Arguments& argv, long value) {
-
-        amiga.configure(OPT_TIME_SLICES, parseNum(argv[0]));
     });
 
     root.add({"amiga", "power"}, { Arg::onoff },

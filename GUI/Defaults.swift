@@ -995,10 +995,8 @@ extension DefaultsProxy {
         remove(.CIA_IDLE_SLEEP)
         remove(.FRAME_SKIPPING)
         remove(.AUD_FASTPATH)
-        remove(.SYNC_MODE)
         remove(.VSYNC)
         remove(.TIME_LAPSE)
-        remove(.TIME_SLICES)
     }
 }
 
@@ -1019,10 +1017,8 @@ extension Configuration {
         ciaIdleSleep = defaults.get(.CIA_IDLE_SLEEP) != 0
         frameSkipping = defaults.get(.FRAME_SKIPPING)
         audioFastPath = defaults.get(.AUD_FASTPATH) != 0
-        syncMode = defaults.get(.SYNC_MODE)
         vsync = defaults.get(.VSYNC) != 0
         timeLapse = defaults.get(.TIME_LAPSE)
-        timeSlices = defaults.get(.TIME_SLICES)
 
         amiga.resume()
     }
@@ -1042,10 +1038,8 @@ extension Configuration {
         defaults.set(.CIA_IDLE_SLEEP, ciaIdleSleep)
         defaults.set(.FRAME_SKIPPING, frameSkipping)
         defaults.set(.AUD_FASTPATH, audioFastPath)
-        defaults.set(.SYNC_MODE, syncMode)
         defaults.set(.VSYNC, vsync)
         defaults.set(.TIME_LAPSE, timeLapse)
-        defaults.set(.TIME_SLICES, timeSlices)
         defaults.save()
 
         amiga.resume()

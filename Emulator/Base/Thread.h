@@ -225,10 +225,10 @@ private:
     void resync();
 
     // Executes a single time slice (if one is pending)
-    template <SyncMode M> void execute();
+    template <SyncMode M> void executeFrame();
 
     // Suspends the thread until the next time slice is due
-    template <SyncMode M> void sleep();
+    template <SyncMode M> void sleepFrame();
 
     // The main entry point (called when the thread is created)
     void main();

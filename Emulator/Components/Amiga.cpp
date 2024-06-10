@@ -230,10 +230,8 @@ Amiga::resetConfig()
         OPT_VIDEO_FORMAT,
         OPT_WARP_BOOT,
         OPT_WARP_MODE,
-        OPT_SYNC_MODE,
         OPT_VSYNC,
-        OPT_TIME_LAPSE,
-        OPT_TIME_SLICES
+        OPT_TIME_LAPSE
     };
 
     for (auto &option : options) {
@@ -258,10 +256,6 @@ Amiga::getConfigItem(Option option) const
 
             return config.warpMode;
 
-        case OPT_SYNC_MODE:
-
-            return config.syncMode;
-
         case OPT_VSYNC:
 
             return config.vsync;
@@ -269,10 +263,6 @@ Amiga::getConfigItem(Option option) const
         case OPT_TIME_LAPSE:
 
             return config.timeLapse;
-
-        case OPT_TIME_SLICES:
-
-            return config.timeSlices;
 
         case OPT_AGNUS_REVISION:
         case OPT_SLOW_RAM_MIRROR:
@@ -477,15 +467,6 @@ Amiga::setConfigItem(Option option, i64 value)
             updateWarpState();
             return;
 
-        case OPT_SYNC_MODE:
-
-            if (!SyncModeEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INVARG, SyncModeEnum::keyList());
-            }
-
-            config.syncMode = SyncMode(value);
-            return;
-
         case OPT_VSYNC:
 
             config.vsync = bool(value);
@@ -498,15 +479,6 @@ Amiga::setConfigItem(Option option, i64 value)
             }
 
             config.timeLapse = isize(value);
-            return;
-
-        case OPT_TIME_SLICES:
-
-            if (value < 1 || value > 4) {
-                throw Error(ERROR_OPT_INVARG, "1...4");
-            }
-
-            config.timeSlices = isize(value);
             return;
 
         default:
@@ -548,10 +520,8 @@ Amiga::configure(Option option, i64 value)
         case OPT_VIDEO_FORMAT:
         case OPT_WARP_BOOT:
         case OPT_WARP_MODE:
-        case OPT_SYNC_MODE:
         case OPT_VSYNC:
         case OPT_TIME_LAPSE:
-        case OPT_TIME_SLICES:
 
             setConfigItem(option, value);
             break;
@@ -1030,7 +1000,7 @@ Amiga::nativeMasterClockFrequency() const
 double
 Amiga::refreshRate() const
 {
-    if (config.syncMode == SYNC_PULSED && config.vsync) {
+    if (config.vsync) {
 
         return host.getHostRefreshRate();
 
@@ -1059,14 +1029,10 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << WarpModeEnum::key(config.warpMode) << std::endl;
         os << tab("Warp boot");
         os << dec(config.warpBoot) << " seconds" << std::endl;
-        os << tab("Sync mode");
-        os << SyncModeEnum::key(config.syncMode) << std::endl;
         os << tab("VSYNC");
         os << bol(config.vsync) << std::endl;
         os << tab("Time lapse");
         os << dec(config.timeLapse) << "%" << std::endl;
-        os << tab("Time slices");
-        os << dec(config.timeSlices) << std::endl;
     }
 
     if (category == Category::State) {
@@ -1300,7 +1266,8 @@ Amiga::save(u8 *buffer)
 SyncMode
 Amiga::getSyncMode() const
 {
-    return config.syncMode;
+    return SYNC_PULSED;
+    // return config.syncMode;
 }
 
 void
@@ -1411,20 +1378,20 @@ Amiga::execute()
 util::Time
 Amiga::sliceDelay() const
 {
-    return util::Time::seconds(100.0) / nativeRefreshRate() / config.timeLapse / config.timeSlices;
+    return util::Time::seconds(100.0) / nativeRefreshRate() / config.timeLapse;
 }
 
 isize
 Amiga::missingSlices() const
 {
     // In VSYNC mode, compute exactly one frame per wakeup call
-    if (config.vsync) return config.timeSlices;
+    if (config.vsync) return 1;
 
     // Compute the elapsed time
     auto elapsed = util::Time::now() - baseTime;
 
     // Compute which slice should be reached by now
-    auto target = config.timeSlices * elapsed.asNanoseconds() * i64(refreshRate()) / 1000000000;
+    auto target = elapsed.asNanoseconds() * i64(refreshRate()) / 1000000000;
 
     // Compute the number of missing slices
     return isize(target - sliceCounter);
@@ -1445,38 +1412,6 @@ Amiga::clearFlag(u32 flag)
 
     flags &= ~flag;
 }
-
-/*
-void
-Amiga::stopAndGo()
-{
-    isRunning() ? pause() : run();
-}
-
-void
-Amiga::stepInto()
-{
-    if (isRunning()) return;
-
-    cpu.debugger.stepInto();
-    run();
-
-    // Inform the GUI
-    msgQueue.put(MSG_STEP);
-}
-
-void
-Amiga::stepOver()
-{
-    if (isRunning()) return;
-
-    cpu.debugger.stepOver();
-    run();
-
-    // Inform the GUI
-    msgQueue.put(MSG_STEP);
-}
-*/
 
 void
 Amiga::updateWarpState()
@@ -1620,7 +1555,7 @@ Amiga::eolHandler()
     auto lines = agnus.isPAL() ? VPOS_CNT_PAL : VPOS_CNT_NTSC;
 
     // Check if we need to sync the thread
-    if (agnus.pos.v % ((lines / config.timeSlices) + 1) == 0) {
+    if (agnus.pos.v % (lines + 1) == 0) {
 
         setFlag(RL::SYNC_THREAD);
     }

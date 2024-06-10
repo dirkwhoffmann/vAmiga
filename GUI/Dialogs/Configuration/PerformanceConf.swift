@@ -18,18 +18,12 @@ extension ConfigurationController {
         prfWarpBoot.integerValue = config.warpBoot
 
         // Threading
-        let vsync = config.syncMode == 1 && config.vsync
-        prfSyncMode.selectItem(withTag: config.syncMode)
+        let vsync = config.vsync
         prfVSync.state = config.vsync ? .on : .off
         prfTimeLapse.integerValue = config.timeLapse
         prfTimeLapseInfo.stringValue = "\(config.timeLapse) %"
-        prfTimeSlices.integerValue = config.timeSlices
-        prfTimeSlicesInfo.stringValue = "\(config.timeSlices) per frame"
-        prfVSync.isEnabled = config.syncMode == 1
         prfTimeLapse.isEnabled = !vsync
         prfTimeLapseInfo.textColor = vsync ? .tertiaryLabelColor : .labelColor
-        prfTimeSlices.isEnabled = !vsync
-        prfTimeSlicesInfo.textColor = vsync ? .tertiaryLabelColor : .labelColor
 
         // Collision detection
         prfClxSprSpr.state = config.clxSprSpr ? .on : .off
@@ -70,12 +64,6 @@ extension ConfigurationController {
     // Action methods (threading)
     //
 
-    @IBAction func prfSyncModeAction(_ sender: NSPopUpButton!) {
-
-        config.syncMode = sender.selectedTag()
-        refresh()
-    }
-
     @IBAction func prfVSyncAction(_ sender: NSButton!) {
 
         config.vsync = sender.state == .on
@@ -85,12 +73,6 @@ extension ConfigurationController {
     @IBAction func prfTimeLapseAction(_ sender: NSSlider!) {
 
         config.timeLapse = sender.integerValue
-        refresh()
-    }
-
-    @IBAction func prfTimeSlicesAction(_ sender: NSSlider!) {
-
-        config.timeSlices = sender.integerValue
         refresh()
     }
 

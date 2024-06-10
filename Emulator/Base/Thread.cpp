@@ -36,12 +36,11 @@ Thread::resync()
 }
 
 template <SyncMode M> void
-Thread::execute()
+Thread::executeFrame()
 {
     if (missing > 0 || warp) {
 
-        trace(TIM_DEBUG, "execute<%s>: %lld us\n", SyncModeEnum::key(M),
-              execClock.restart().asMicroseconds());
+        trace(TIM_DEBUG, "execute: %lld us\n", execClock.restart().asMicroseconds());
 
         loadClock.go();
 
@@ -54,8 +53,11 @@ Thread::execute()
 }
 
 template <> void
-Thread::sleep<SYNC_PERIODIC>()
+Thread::sleepFrame<SYNC_PERIODIC>()
 {
+    fatalError;
+
+    /*
     auto now = util::Time::now();
 
     // Don't sleep in warp mode
@@ -75,10 +77,11 @@ Thread::sleep<SYNC_PERIODIC>()
     targetTime += sliceDelay();
     targetTime.sleepUntil();
     missing = 1;
+    */
 }
 
 template <> void
-Thread::sleep<SYNC_PULSED>()
+Thread::sleepFrame<SYNC_PULSED>()
 {
     // Only proceed if we're not running in warp mode
     if (warp) return;
@@ -136,8 +139,8 @@ Thread::main()
 
             switch (getSyncMode()) {
 
-                case SYNC_PERIODIC:   execute<SYNC_PERIODIC>(); break;
-                case SYNC_PULSED:     execute<SYNC_PULSED>(); break;
+                case SYNC_PERIODIC:   executeFrame<SYNC_PERIODIC>(); break;
+                case SYNC_PULSED:     executeFrame<SYNC_PULSED>(); break;
             }
         }
 
@@ -145,8 +148,8 @@ Thread::main()
             
             switch (getSyncMode()) {
 
-                case SYNC_PERIODIC:   sleep<SYNC_PERIODIC>(); break;
-                case SYNC_PULSED:     sleep<SYNC_PULSED>(); break;
+                case SYNC_PERIODIC:   sleepFrame<SYNC_PERIODIC>(); break;
+                case SYNC_PULSED:     sleepFrame<SYNC_PULSED>(); break;
             }
         }
         

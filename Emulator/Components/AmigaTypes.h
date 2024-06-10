@@ -320,10 +320,8 @@ typedef struct
     VideoFormat type;
     WarpMode warpMode;
     isize warpBoot;
-    SyncMode syncMode;
     bool vsync;
     isize timeLapse;
-    isize timeSlices;
 }
 AmigaConfig;
 
