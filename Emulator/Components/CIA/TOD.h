@@ -28,6 +28,16 @@ Counter24;
 
 class TOD : public SubComponent {
     
+    Descriptions descriptions = {{
+
+        .name           = "TOD",
+        .description    = "Time-of-day Clock"
+    }};
+
+    ConfigOptions options = {
+
+    };
+
     friend CIA;
     
     // Reference to the connected CIA

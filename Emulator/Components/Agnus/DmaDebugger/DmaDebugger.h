@@ -19,6 +19,19 @@ namespace vamiga {
 
 class DmaDebugger : public SubComponent {
 
+    Descriptions descriptions = {{
+
+        .name           = "dmadebugger",
+        .description    = "DMA Debugger"
+    }};
+
+    ConfigOptions options = {
+
+        OPT_DMA_DEBUG_ENABLE,
+        OPT_DMA_DEBUG_MODE,
+        OPT_DMA_DEBUG_OPACITY
+    };
+
     // Current configuration
     DmaDebuggerConfig config = {};
 

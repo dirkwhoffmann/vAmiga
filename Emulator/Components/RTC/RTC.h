@@ -16,6 +16,17 @@ namespace vamiga {
 
 class RTC : public SubComponent {
 
+    Descriptions descriptions = {{
+
+        .name           = "rtc",
+        .description    = "Real-time Clock"
+    }};
+
+    ConfigOptions options = {
+
+        OPT_RTC_MODEL
+    };
+    
     // The current configuration
     RTCConfig config = {};
 

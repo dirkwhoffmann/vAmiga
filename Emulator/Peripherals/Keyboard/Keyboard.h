@@ -18,6 +18,17 @@ namespace vamiga {
 
 class Keyboard : public SubComponent {
 
+    Descriptions descriptions = {{
+
+        .name           = "Keyboard",
+        .description    = "Keyboard"
+    }};
+
+    ConfigOptions options = {
+
+        OPT_ACCURATE_KEYBOARD
+    };
+
     // Current configuration
     KeyboardConfig config;
 

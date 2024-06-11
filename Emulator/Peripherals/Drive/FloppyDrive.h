@@ -22,6 +22,38 @@ namespace vamiga {
 
 class FloppyDrive : public Drive {
     
+    Descriptions descriptions = {
+        {
+            .name           = "df0",
+            .description    = "Floppy Drive 0"
+        },
+        {
+            .name           = "df1",
+            .description    = "Floppy Drive 1"
+        },
+        {
+            .name           = "df2",
+            .description    = "Floppy Drive 2"
+        },
+        {
+            .name           = "df3",
+            .description    = "Floppy Drive 3"
+        }
+    };
+
+    ConfigOptions options = {
+
+        OPT_DRIVE_TYPE,
+        OPT_DRIVE_MECHANICS,
+        OPT_DRIVE_RPM,
+        OPT_DISK_SWAP_DELAY,
+        OPT_DRIVE_PAN,
+        OPT_STEP_VOLUME,
+        OPT_POLL_VOLUME,
+        OPT_INSERT_VOLUME,
+        OPT_EJECT_VOLUME
+    };
+
     friend class DiskController;
 
     // Current configuration

@@ -104,6 +104,25 @@ assert((x) >= 0xE80000 && (x) <= 0xE8FFFF);
 
 class Memory : public SubComponent {
 
+    Descriptions descriptions = {{
+
+        .name           = "mem",
+        .description    = "Memory"
+    }};
+
+    ConfigOptions options = {
+
+        OPT_CHIP_RAM,
+        OPT_SLOW_RAM,
+        OPT_FAST_RAM,
+        OPT_EXT_START,
+        OPT_SAVE_ROMS,
+        OPT_SLOW_RAM_DELAY,
+        OPT_BANKMAP,
+        OPT_UNMAPPING_TYPE,
+        OPT_RAM_INIT_PATTERN
+    };
+
     // Current configuration
     MemoryConfig config = {};
 

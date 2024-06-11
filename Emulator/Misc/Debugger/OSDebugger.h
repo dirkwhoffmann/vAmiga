@@ -17,6 +17,16 @@ namespace vamiga {
 
 class OSDebugger : public SubComponent {
     
+    Descriptions descriptions = {{
+
+        .name           = "OSDebugger",
+        .description    = "Operating System Debugger"
+    }};
+
+    ConfigOptions options = {
+
+    };
+
 private:
     
     //

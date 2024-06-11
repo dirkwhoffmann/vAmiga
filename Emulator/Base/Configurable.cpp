@@ -9,4 +9,9 @@
 
 #pragma once
 
-#include "Option.h"
+#include "config.h"
+#include "OptionTypes.h"
+#include "Reflection.h"
+#include "Defaults.h"
+#include <algorithm>
+

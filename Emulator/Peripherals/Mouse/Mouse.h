@@ -44,6 +44,24 @@ public:
 
 class Mouse : public SubComponent {
 
+    Descriptions descriptions = {
+        {
+            .name           = "Mouse1",
+            .description    = "Mouse in Port 1"
+        },
+        {
+            .name           = "Mouse2",
+            .description    = "Mouse in Port 2"
+        }
+    };
+
+    ConfigOptions options = {
+
+        OPT_PULLUP_RESISTORS,
+        OPT_SHAKE_DETECTION,
+        OPT_MOUSE_VELOCITY
+    };
+
     // Reference to the control port this device belongs to
     ControlPort &port;
     

@@ -32,6 +32,17 @@ namespace vamiga {
 
 class Blitter : public SubComponent
 {
+    Descriptions descriptions = {{
+
+        .name           = "blitter",
+        .description    = "Blitter"
+    }};
+
+    ConfigOptions options = {
+
+        OPT_BLITTER_ACCURACY
+    };
+
     friend class Agnus;
     
     // Current configuration

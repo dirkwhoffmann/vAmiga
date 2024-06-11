@@ -22,6 +22,16 @@ namespace vamiga {
 
 class Recorder : public SubComponent {
 
+    Descriptions descriptions = {{
+
+        .name           = "recorder",
+        .description    = "Video Recorder"
+    }};
+
+    ConfigOptions options = {
+
+    };
+
     //
     // Sub components
     //

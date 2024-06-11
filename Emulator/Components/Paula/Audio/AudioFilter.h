@@ -143,6 +143,17 @@ struct TwoPoleFilter : CoreObject {
 
 class AudioFilter : public SubComponent {
     
+    Descriptions descriptions = {{
+
+        .name           = "Filter",
+        .description    = "Audio Filter"
+    }};
+
+    ConfigOptions options = {
+
+        OPT_FILTER_TYPE
+    };
+
     friend class Muxer;
 
 public:

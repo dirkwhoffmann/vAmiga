@@ -9,4 +9,11 @@
 
 #pragma once
 
-#include "Option.h"
+#include "OptionTypes.h"
+#include <vector>
+
+namespace vamiga {
+
+typedef std::vector<Option> ConfigOptions;
+
+}

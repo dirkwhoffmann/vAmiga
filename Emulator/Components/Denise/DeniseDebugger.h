@@ -17,6 +17,16 @@ namespace vamiga {
 
 class DeniseDebugger: public SubComponent {
 
+    Descriptions descriptions = {{
+
+        .name           = "ddebugger",
+        .description    = "Denise Debugger"
+    }};
+
+    ConfigOptions options = {
+
+    };
+
     // Largest viewport seen in the current frame (constantly changing)
     ViewPortInfo maxViewPort = { };
 

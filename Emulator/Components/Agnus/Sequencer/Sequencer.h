@@ -117,6 +117,16 @@ static constexpr usize UPDATE_DAS_TABLE     = 0b100;
 
 class Sequencer : public SubComponent
 {
+    Descriptions descriptions = {{
+
+        .name           = "Sequencer",
+        .description    = "Agnus Sequencer"
+    }};
+
+    ConfigOptions options = {
+
+    };
+
     friend class Agnus;
     
     //

@@ -18,6 +18,16 @@ namespace vamiga {
 
 class Debugger : public SubComponent {
 
+    Descriptions descriptions = {{
+
+        .name           = "Debugger",
+        .description    = "Hardware Debugger"
+    }};
+
+    ConfigOptions options = {
+
+    };
+
 public:
 
     // Last used address (current object location)

@@ -18,6 +18,16 @@ namespace vamiga {
  */
 class Host : public SubComponent {
 
+    Descriptions descriptions = {{
+
+        .name           = "Host",
+        .description    = "Host Computer"
+    }};
+
+    ConfigOptions options = {
+
+    };
+    
     // Audio sample rate
     double sampleRate = 44100.0;
 

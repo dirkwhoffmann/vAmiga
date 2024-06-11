@@ -16,6 +16,24 @@ namespace vamiga {
 
 class Joystick : public SubComponent {
 
+    Descriptions descriptions = {
+        {
+            .name           = "Joystick1",
+            .description    = "Joystick in Port 1"
+        },
+        {
+            .name           = "Joystick2",
+            .description    = "Joystick in Port 2"
+        }
+    };
+
+    ConfigOptions options = {
+
+        OPT_AUTOFIRE,
+        OPT_AUTOFIRE_BULLETS,
+        OPT_AUTOFIRE_DELAY
+    };
+
     // Reference to control port this device belongs to
     ControlPort &port;
 

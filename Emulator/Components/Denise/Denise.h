@@ -22,6 +22,26 @@ namespace vamiga {
 
 class Denise : public SubComponent {
     
+    Descriptions descriptions = {{
+
+        .name           = "Denise",
+        .description    = "Graphics"
+    }};
+
+    ConfigOptions options = {
+
+        OPT_DENISE_REVISION,
+        OPT_VIEWPORT_TRACKING,
+        OPT_FRAME_SKIPPING,
+        OPT_HIDDEN_BITPLANES,
+        OPT_HIDDEN_SPRITES,
+        OPT_HIDDEN_LAYERS,
+        OPT_HIDDEN_LAYER_ALPHA,
+        OPT_CLX_SPR_SPR,
+        OPT_CLX_SPR_PLF,
+        OPT_CLX_PLF_PLF
+    };
+
     friend class DeniseDebugger;
     
     // Current configuration

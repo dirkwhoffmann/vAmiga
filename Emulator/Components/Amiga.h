@@ -10,6 +10,7 @@
 #pragma once
 
 #include "AmigaTypes.h"
+#include "CoreComponent.h"
 #include "Agnus.h"
 #include "ControlPort.h"
 #include "CIA.h"
@@ -48,6 +49,21 @@ namespace vamiga {
  */
 class Amiga : public Thread {
 
+    Descriptions descriptions = {{
+
+        .name           = "Amiga",
+        .description    = "Commodore Amiga"
+    }};
+
+    ConfigOptions options = {
+
+        OPT_VIDEO_FORMAT,
+        OPT_WARP_BOOT,
+        OPT_WARP_MODE,
+        OPT_VSYNC,
+        OPT_TIME_LAPSE
+    };
+    
     // The current configuration
     AmigaConfig config = {};
 

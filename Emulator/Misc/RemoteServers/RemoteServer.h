@@ -19,6 +19,20 @@ namespace vamiga {
 
 class RemoteServer : public SubComponent {
 
+    Descriptions descriptions = {{
+
+        .name           = "server",
+        .description    = "Remote Server"
+    }};
+
+    ConfigOptions options = {
+
+        OPT_SRV_PORT,
+        OPT_SRV_PROTOCOL,
+        OPT_SRV_AUTORUN,
+        OPT_SRV_VERBOSE
+    };
+
     friend class RemoteManager;
 
 protected:

@@ -18,6 +18,22 @@ namespace vamiga {
 
 class ControlPort : public SubComponent {
 
+    Descriptions descriptions = {
+        {
+            .name           = "Port1",
+            .description    = "Control Port 1"
+        },
+        {
+            .name           = "Port2",
+            .description    = "Control Port 2"
+        }
+    };
+
+
+    ConfigOptions options = {
+
+    };
+
 public:
 
     static constexpr isize PORT1 = 1;

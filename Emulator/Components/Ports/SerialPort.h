@@ -25,6 +25,18 @@ namespace vamiga {
 
 class SerialPort : public SubComponent {
 
+    Descriptions descriptions = {{
+
+        .name           = "Serial",
+        .description    = "Serial Port"
+    }};
+
+    ConfigOptions options = {
+
+        OPT_SER_DEVICE,
+        OPT_SER_VERBOSE
+    };
+
     friend class UART;
     
     // Current configuration

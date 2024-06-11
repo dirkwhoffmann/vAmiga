@@ -43,6 +43,21 @@ namespace vamiga {
 
 class Muxer : public SubComponent {
 
+    Descriptions descriptions = {{
+
+        .name           = "Muxer",
+        .description    = "Audio Muxer"
+    }};
+
+    ConfigOptions options = {
+
+        OPT_SAMPLING_METHOD,
+        OPT_AUDVOLL,
+        OPT_AUDVOLR,
+        OPT_AUD_FASTPATH,
+        OPT_FILTER_TYPE
+    };
+
     friend class Paula;
     
     // Current configuration

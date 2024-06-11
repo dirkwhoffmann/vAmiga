@@ -72,6 +72,25 @@ constexpr u64 CIADelayMask = ~CIALast
 
 class CIA : public SubComponent {
     
+    Descriptions descriptions = {
+        {
+            .name           = "CIAA",
+            .description    = "Complex Interface Adapter A"
+        },
+        {
+            .name           = "CIAB",
+            .description    = "Complex Interface Adapter B"
+        }
+    };
+
+    ConfigOptions options = {
+
+        OPT_CIA_REVISION,
+        OPT_TODBUG,
+        OPT_ECLOCK_SYNCING,
+        OPT_CIA_IDLE_SLEEP
+    };
+
     friend class TOD;
     
 protected:

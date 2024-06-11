@@ -20,6 +20,32 @@ namespace vamiga {
 
 class HardDrive : public Drive {
     
+    Descriptions descriptions = {
+        {
+            .name           = "hd0",
+            .description    = "Hard Drive 0"
+        },
+        {
+            .name           = "hd1",
+            .description    = "Hard Drive 1"
+        },
+        {
+            .name           = "hd2",
+            .description    = "Hard Drive 2"
+        },
+        {
+            .name           = "hd3",
+            .description    = "Hard Drive 3"
+        }
+    };
+
+    ConfigOptions options = {
+
+        OPT_HDR_TYPE,
+        OPT_HDR_PAN,
+        OPT_HDR_STEP_VOLUME
+    };
+    
     friend class HDFFile;
     friend class HdController;
 

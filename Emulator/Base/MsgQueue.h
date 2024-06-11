@@ -17,6 +17,16 @@ namespace vamiga {
 
 class MsgQueue : public SubComponent {
 
+    Descriptions descriptions = {{
+
+        .name           = "MsgQueue",
+        .description    = "Message Queue"
+    }};
+
+    ConfigOptions options = {
+
+    };
+
     // Ring buffer storing all pending messages
     util::RingBuffer <Message, 512> queue;
 

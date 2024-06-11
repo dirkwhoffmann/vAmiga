@@ -19,6 +19,29 @@ namespace vamiga {
 template <isize nr>
 class StateMachine : public SubComponent {
 
+    Descriptions descriptions = {
+        {
+            .name           = "StateMachine1",
+            .description    = "Audio State Machine 1"
+        },
+        {
+            .name           = "StateMachine2",
+            .description    = "Audio State Machine 2"
+        },
+        {
+            .name           = "StateMachine3",
+            .description    = "Audio State Machine 3"
+        },
+        {
+            .name           = "StateMachine4",
+            .description    = "Audio State Machine 4"
+        }
+    };
+
+    ConfigOptions options = {
+
+    };
+
     // Result of the latest inspection
     mutable StateMachineInfo info = {};
 

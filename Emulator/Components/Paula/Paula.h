@@ -23,6 +23,16 @@ namespace vamiga {
 
 class Paula : public SubComponent {
     
+    Descriptions descriptions = {{
+
+        .name           = "Paula",
+        .description    = "Audio, Interrupts, Disk Control"
+    }};
+
+    ConfigOptions options = {
+
+    };
+
 private:
 
     // Result of the latest inspection

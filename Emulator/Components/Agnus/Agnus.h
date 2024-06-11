@@ -34,6 +34,19 @@ static constexpr usize DRAW_BOTH = 0b011;
 
 class Agnus : public SubComponent {
 
+    Descriptions descriptions = {{
+
+        .name           = "Agnus",
+        .description    = "DMA Controller"
+    }};
+
+    ConfigOptions options = {
+
+        OPT_AGNUS_REVISION,
+        OPT_SLOW_RAM_MIRROR,
+        OPT_PTR_DROPS
+    };
+
     // Current configuration
     AgnusConfig config = {};
 

@@ -1,4 +1,4 @@
-/// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // This file is part of vAmiga
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
@@ -11,6 +11,7 @@
 
 #include "CoreComponentTypes.h"
 #include "CoreObject.h"
+#include "Configurable.h"
 #include "Serialization.h"
 #include "Concurrency.h"
 #include <vector>
@@ -42,9 +43,20 @@ struct NoAssign
     NoAssign& operator=(NoAssign const&) = delete;
 };
 
+struct Description {
+
+    const char *name;
+    const char *description;
+};
+
+typedef std::vector<Description> Descriptions;
+
 class CoreComponent : public CoreObject, NoCopy, NoAssign {
 
 public:
+    
+    // Dummy description
+    static Descriptions descriptions;
     
     // Reference to the emulator this instance belongs to
     class Emulator &emulator;

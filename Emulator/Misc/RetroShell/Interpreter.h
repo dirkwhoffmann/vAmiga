@@ -31,6 +31,16 @@ struct ScriptInterruption: util::Exception {
 
 class Interpreter: public SubComponent
 {
+    Descriptions descriptions = {{
+
+        .name           = "interpreter",
+        .description    = "Shell Command Interpreter"
+    }};
+
+    ConfigOptions options = {
+
+    };
+
     enum class Shell { Command, Debug };
 
     // The currently active shell

@@ -18,6 +18,16 @@ namespace vamiga {
 
 class UART : public SubComponent {
     
+    Descriptions descriptions = {{
+
+        .name           = "UART",
+        .description    = "Universal Asynchronous Receiver Transmitter"
+    }};
+
+    ConfigOptions options = {
+
+    };
+
     friend class SerServer;
     
     // Result of the latest inspection

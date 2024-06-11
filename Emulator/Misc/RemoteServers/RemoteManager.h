@@ -19,6 +19,19 @@ namespace vamiga {
 
 class RemoteManager : public SubComponent {
 
+    Descriptions descriptions = {{
+
+        .name           = "remote",
+        .description    = "Remote Manager"
+    }};
+
+    ConfigOptions options = {
+
+        SERVER_SER,
+        SERVER_RSH,
+        SERVER_GDB
+    };
+
 public:
     
     // The remote servers

@@ -281,6 +281,10 @@
 		50ECF98622B153FB007B3DE7 /* ExtendedRomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */; };
 		50EF2236281595AA00440C4D /* Defaults.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E5B9BD2807E65800502787 /* Defaults.cpp */; };
 		50EF2237281595B800440C4D /* DiagBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50826F7627F0B2AD005FBF3B /* DiagBoard.cpp */; };
+		50EFB0BA2C1811C90013B73C /* Configurable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0B82C1811C90013B73C /* Configurable.cpp */; };
+		50EFB0BB2C1811C90013B73C /* Configurable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0B82C1811C90013B73C /* Configurable.cpp */; };
+		50EFB0BE2C1812E20013B73C /* Option.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0BC2C1812E20013B73C /* Option.cpp */; };
+		50EFB0BF2C1812E20013B73C /* Option.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0BC2C1812E20013B73C /* Option.cpp */; };
 		50F0BD2622AF883C001F4616 /* UART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F0BD2422AF883C001F4616 /* UART.cpp */; };
 		50F31C292409322F008A54D8 /* CopperPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F31C282409322F008A54D8 /* CopperPanel.swift */; };
 		50F54B2524B5D31D0078FDC9 /* u_heavy.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B0C24B5D31D0078FDC9 /* u_heavy.c */; };
@@ -929,6 +933,11 @@
 		50EC7A2F29C9EC3900060CAA /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExtendedRomFile.cpp; sourceTree = "<group>"; };
 		50ECF98522B153FB007B3DE7 /* ExtendedRomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtendedRomFile.h; sourceTree = "<group>"; };
+		50EFB0B82C1811C90013B73C /* Configurable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Configurable.cpp; sourceTree = "<group>"; };
+		50EFB0B92C1811C90013B73C /* Configurable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Configurable.h; sourceTree = "<group>"; };
+		50EFB0BC2C1812E20013B73C /* Option.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Option.cpp; sourceTree = "<group>"; };
+		50EFB0BD2C1812E20013B73C /* Option.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Option.h; sourceTree = "<group>"; };
+		50EFB0C02C1812F50013B73C /* OptionTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OptionTypes.h; sourceTree = "<group>"; };
 		50EFC7DF22E840870036A3DF /* Serialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serialization.h; sourceTree = "<group>"; };
 		50EFF1E726E25A5D00296065 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50F0BD2422AF883C001F4616 /* UART.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UART.cpp; sourceTree = "<group>"; };
@@ -1060,6 +1069,11 @@
 				5039924625B219FC0084B808 /* Error.h */,
 				50AE6F8425D71FBE0004AFBC /* Error.cpp */,
 				507215B025EAF62B00787591 /* Aliases.h */,
+				50EFB0C02C1812F50013B73C /* OptionTypes.h */,
+				50EFB0BD2C1812E20013B73C /* Option.h */,
+				50EFB0BC2C1812E20013B73C /* Option.cpp */,
+				50EFB0B92C1811C90013B73C /* Configurable.h */,
+				50EFB0B82C1811C90013B73C /* Configurable.cpp */,
 				50B14C0621EB218E002E32A6 /* CoreObject.h */,
 				50B14C0521EB218E002E32A6 /* CoreObject.cpp */,
 				50A61468260DC2D700A01428 /* CoreComponentTypes.h */,
@@ -2117,6 +2131,7 @@
 				502023ED27B6BE7200820DB6 /* RamExpansion.cpp in Sources */,
 				507215A925EAB4AC00787591 /* Chrono.cpp in Sources */,
 				50FFA7D02440CB0300BEBA6B /* ActivityMonitor.swift in Sources */,
+				50EFB0BA2C1811C90013B73C /* Configurable.cpp in Sources */,
 				50BF1CCE276DC7BB00386540 /* GdbServerCmds.cpp in Sources */,
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
 				50984B65263A9E9C00E37184 /* RegressionTester.cpp in Sources */,
@@ -2314,6 +2329,7 @@
 				508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */,
 				50A5969824F7F9ED008632C0 /* PeripheralsConf.swift in Sources */,
 				508FE02221EA227B0043D0E9 /* MacKey.swift in Sources */,
+				50EFB0BE2C1812E20013B73C /* Option.cpp in Sources */,
 				501C514E27C4259F00DF1DD5 /* FloppyCreator.swift in Sources */,
 				50F54B2E24B5D31D0078FDC9 /* u_rle.c in Sources */,
 				50F6EEBE21F4F61F0091155D /* FloppyDrive.cpp in Sources */,
@@ -2410,6 +2426,7 @@
 				50FC04C527DA19DE00C3E566 /* RomFile.cpp in Sources */,
 				50FC04EA27DA1A3900C3E566 /* OSDebuggerDump.cpp in Sources */,
 				50FC048C27DA195600C3E566 /* CIA.cpp in Sources */,
+				50EFB0BB2C1811C90013B73C /* Configurable.cpp in Sources */,
 				50FC049927DA197500C3E566 /* AgnusEvents.cpp in Sources */,
 				50FC048627DA194200C3E566 /* MoiraDebugger.cpp in Sources */,
 				50FC04D227DA19F600C3E566 /* BootBlockImage.cpp in Sources */,
@@ -2488,6 +2505,7 @@
 				50FC04B327DA199C00C3E566 /* SerialPort.cpp in Sources */,
 				50FC049E27DA197500C3E566 /* AgnusDma.cpp in Sources */,
 				50FC047F27DA12AB00C3E566 /* Parser.cpp in Sources */,
+				50EFB0BF2C1812E20013B73C /* Option.cpp in Sources */,
 				50FC04E527DA1A1400C3E566 /* u_init.c in Sources */,
 				50FC049427DA196500C3E566 /* PixelEngine.cpp in Sources */,
 				50FC04CC27DA19E900C3E566 /* DMSFile.cpp in Sources */,
@@ -2723,7 +2741,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 240129;
+				CURRENT_PROJECT_VERSION = 240610;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = NO;
@@ -2743,7 +2761,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.5;
+				MARKETING_VERSION = 2.6;
 				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmiga;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2770,7 +2788,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 240129;
+				CURRENT_PROJECT_VERSION = 240610;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = NO;
@@ -2788,7 +2806,7 @@
 				);
 				LLVM_LTO = YES_THIN;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.5;
+				MARKETING_VERSION = 2.6;
 				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmiga;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

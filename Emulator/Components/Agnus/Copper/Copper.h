@@ -21,6 +21,16 @@ namespace vamiga {
 
 class Copper : public SubComponent
 {
+    Descriptions descriptions = {{
+
+        .name           = "Copper",
+        .description    = "Copper"
+    }};
+
+    ConfigOptions options = {
+
+    };
+
     friend class Agnus;
     friend class CopperDebugger;
     

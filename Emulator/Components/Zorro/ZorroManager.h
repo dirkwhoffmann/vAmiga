@@ -18,6 +18,16 @@ namespace vamiga {
 
 class ZorroManager : public SubComponent {
     
+    Descriptions descriptions = {{
+
+        .name           = "zorro",
+        .description    = "Zorro Manager"
+    }};
+
+    ConfigOptions options = {
+
+    };
+
 public:
 
     // Number of emulated Zorro slots

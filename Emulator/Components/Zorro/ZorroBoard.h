@@ -16,6 +16,16 @@ namespace vamiga {
 
 class ZorroBoard : public SubComponent {
     
+    Descriptions descriptions = {{
+
+        .name           = "Board",
+        .description    = "Zorro Board"
+    }};
+
+    ConfigOptions options = {
+
+    };
+
     friend class ZorroManager;
     
 protected:

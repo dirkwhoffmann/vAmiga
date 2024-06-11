@@ -18,6 +18,30 @@ namespace vamiga {
 
 class HdController : public ZorroBoard {
     
+    Descriptions descriptions = {
+        {
+            .name           = "hdc0",
+            .description    = "Hard Drive Controller 0"
+        },
+        {
+            .name           = "hdc1",
+            .description    = "Hard Drive Controller 1"
+        },
+        {
+            .name           = "hdc2",
+            .description    = "Hard Drive Controller 2"
+        },
+        {
+            .name           = "hcd3",
+            .description    = "Hard Drive Controller 3"
+        }
+    };
+
+    ConfigOptions options = {
+
+        OPT_HDC_CONNECT
+    };
+
     // Number of this controller
     isize nr;
 

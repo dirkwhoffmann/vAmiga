@@ -18,6 +18,19 @@ namespace vamiga {
 
 class DiskController : public SubComponent
 {
+    Descriptions descriptions = {{
+
+        .name           = "dc",
+        .description    = "Disk Controller"
+    }};
+
+    ConfigOptions options = {
+
+        OPT_DRIVE_SPEED,
+        OPT_AUTO_DSKSYNC,
+        OPT_LOCK_DSKSYNC
+    };
+
     // Current configuration
     DiskControllerConfig config = {};
 

@@ -18,8 +18,23 @@ namespace vamiga {
 
 class CPU : public moira::Moira {
 
+    Descriptions descriptions = {{
+
+        .name           = "CPU",
+        .description    = "Central Processing Unit"
+    }};
+
+    ConfigOptions options = {
+
+        OPT_CPU_REVISION,
+        OPT_CPU_DASM_REVISION,
+        OPT_CPU_DASM_SYNTAX,
+        OPT_CPU_OVERCLOCKING,
+        OPT_CPU_RESET_VAL
+    };
+
     friend class Moira;
-    
+
     // The current configuration
     CPUConfig config = {};
 

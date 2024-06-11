@@ -43,6 +43,16 @@ public:
 
 class CopperDebugger: public SubComponent {
 
+    Descriptions descriptions = {{
+
+        .name           = "cdebugger",
+        .description    = "Copper Debugger"
+    }};
+
+    ConfigOptions options = {
+
+    };
+
     friend class Amiga;
     friend class Copper;
     

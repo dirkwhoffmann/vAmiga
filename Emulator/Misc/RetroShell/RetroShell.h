@@ -20,6 +20,20 @@ namespace vamiga {
 
 class RetroShell : public SubComponent {
 
+    Descriptions descriptions = {{
+
+        .name           = "rshell",
+        .description    = "Retro Shell"
+    }};
+
+    ConfigOptions options = {
+
+        OPT_SRV_PORT,
+        OPT_SRV_PROTOCOL,
+        OPT_SRV_AUTORUN,
+        OPT_SRV_VERBOSE
+    };
+
     friend class RshServer;
     friend class Interpreter;
     

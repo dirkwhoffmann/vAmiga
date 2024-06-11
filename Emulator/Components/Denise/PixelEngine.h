@@ -19,6 +19,20 @@ namespace vamiga {
 
 class PixelEngine : public SubComponent {
 
+    Descriptions descriptions = {{
+
+        .name           = "pixelengine",
+        .description    = "Pixel Engine"
+    }};
+
+    ConfigOptions options = {
+
+        OPT_PALETTE,
+        OPT_BRIGHTNESS,
+        OPT_CONTRAST,
+        OPT_SATURATION
+    };
+
     friend class Denise;
 
     // Current configuration
