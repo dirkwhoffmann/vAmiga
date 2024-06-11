@@ -52,7 +52,9 @@ public:
 
     // Returns a reference to the description of this component
     virtual const Descriptions &getDescriptions() const = 0;
-
+    const char *objectName() const override;
+    const char *description() const override;
+    
     /* Initializes the component and it's subcomponents. The initialization
      * procedure is initiated once, in the constructor of the Amiga class. By
      * default, a component enters it's initial configuration. Custom actions

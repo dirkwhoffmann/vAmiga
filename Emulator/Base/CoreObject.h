@@ -73,8 +73,11 @@ public:
     //
 
     // Returns the name for this component (e.g., "Agnus" or "Denise")
-    virtual const char *getDescription() const = 0;
+    virtual const char *objectName() const = 0;
 
+    // Returns a textual description for this component
+    virtual const char *description() const { return ""; }
+    
     // Called by debug() and trace() to produce a detailed debug output
     virtual void prefix() const;
 
@@ -119,21 +122,21 @@ fprintf(stderr, "Warning: " format __VA_OPT__(,) __VA_ARGS__);
 { fprintf(stderr, "Fatal: " format __VA_OPT__(,) __VA_ARGS__); exit(1); }
 
 #define debug(enable, format, ...) \
-if (enable) { \
-fprintf(stderr, "%s:%d " format, getDescription(), __LINE__ __VA_OPT__(,) __VA_ARGS__); }
+if (enable) { if (verbose) { \
+fprintf(stderr, "%s:%d " format, objectName(), __LINE__ __VA_OPT__(,) __VA_ARGS__); }}
 
 #define plain(enable, format, ...) \
-if (enable) { \
-fprintf(stderr, format __VA_OPT__(,) __VA_ARGS__); }
+if (enable) { if (verbose) { \
+fprintf(stderr, format __VA_OPT__(,) __VA_ARGS__); }}
 
 #define trace(enable, format, ...) \
-if (enable) { \
+if (enable) { if (verbose) { \
 prefix(); \
-fprintf(stderr, "%s:%d " format, getDescription(), __LINE__ __VA_OPT__(,) __VA_ARGS__); }
+fprintf(stderr, "%s:%d " format, objectName(), __LINE__ __VA_OPT__(,) __VA_ARGS__); }}
 
 #define xfiles(format, ...) \
-if (XFILES) { \
+if (XFILES) { if (verbose) { \
 prefix(); \
-fprintf(stderr, "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }
+fprintf(stderr, "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }}
 
 }

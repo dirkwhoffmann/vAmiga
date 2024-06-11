@@ -54,7 +54,7 @@ struct FSBlock : CoreObject {
     
 protected:
     
-    const char *getDescription() const override;
+    const char *objectName() const override;
     void _dump(Category category, std::ostream& os) const override { }
     
     

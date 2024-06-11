@@ -94,7 +94,7 @@ protected:
     
 protected:
     
-    const char *getDescription() const override { return "FileSystem"; }
+    const char *objectName() const override { return "FileSystem"; }
     void _dump(Category category, std::ostream& os) const override;
 
     

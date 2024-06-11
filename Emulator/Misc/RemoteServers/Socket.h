@@ -65,7 +65,7 @@ public:
     
 private:
     
-    const char *getDescription() const override { return "Socket"; }
+    const char *objectName() const override { return "Socket"; }
     void _dump(Category category, std::ostream& os) const override { };
 
     

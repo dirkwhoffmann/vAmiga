@@ -203,7 +203,7 @@ public:
     Thread(class Emulator& ref);
     ~Thread();
     
-    const char *getDescription() const override { return "Thread"; }
+    const char *objectName() const override { return "Thread"; }
 
     
     //

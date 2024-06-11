@@ -339,7 +339,6 @@ public:
     
 private:
     
-    const char *getDescription() const override { return "Denise"; }
     void _dump(Category category, std::ostream& os) const override;
     
     

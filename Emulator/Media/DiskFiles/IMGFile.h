@@ -49,7 +49,7 @@ private:
     
 public:
     
-    const char *getDescription() const override { return "IMG"; }
+    const char *objectName() const override { return "IMG"; }
     
     
     //

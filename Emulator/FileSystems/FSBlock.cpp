@@ -105,7 +105,7 @@ FSBlock::make(FileSystem &ref, Block nr, FSBlockType type)
 }
 
 const char *
-FSBlock::getDescription() const
+FSBlock::objectName() const
 {
     switch (type) {
             

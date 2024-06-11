@@ -599,7 +599,7 @@ DiskController::performTurboRead(FloppyDrive *drive)
     }
     
     debug(DSK_CHECKSUM, "Turbo read %s: cyl: %ld side: %ld offset: %ld ",
-          drive->getDescription(),
+          drive->objectName(),
           drive->head.cylinder,
           drive->head.head,
           drive->head.offset);
@@ -631,7 +631,7 @@ DiskController::performTurboWrite(FloppyDrive *drive)
     
     debug(DSK_CHECKSUM,
           "Turbo write %s: checkcnt = %llu check1 = %x check2 = %x\n",
-          drive->getDescription(), checkcnt, check1, check2);
+          drive->objectName(), checkcnt, check1, check2);
 }
 
 }

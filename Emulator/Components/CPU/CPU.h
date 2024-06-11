@@ -70,7 +70,6 @@ public:
     
 private:
     
-    const char *getDescription() const override { return "CPU"; }
     void _dump(Category category, std::ostream& os) const override;
 
     

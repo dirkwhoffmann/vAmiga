@@ -35,7 +35,7 @@ public:
     EXEFile(const string &path, std::istream &stream) throws { init(path, stream); }
     EXEFile(const u8 *buf, isize len) throws { init(buf, len); }
     
-    const char *getDescription() const override { return "EXE"; }
+    const char *objectName() const override { return "EXE"; }
 
     
     //

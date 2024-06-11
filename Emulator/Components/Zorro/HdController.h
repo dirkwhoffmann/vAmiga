@@ -82,7 +82,6 @@ public:
     
 private:
     
-    const char *getDescription() const override;
     void _dump(Category category, std::ostream& os) const override;
 
     

@@ -112,7 +112,7 @@ makeUniquePath(const fs::path &path)
         auto index = std::to_string(nr);
         fs::path result = location / fs::path(name + index) / extension;
 
-        if (!util::fileExists(result)) return result;
+        if (!util::fileExists(result.string())) return result;
     }
 
     return path;

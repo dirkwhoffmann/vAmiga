@@ -35,7 +35,7 @@ public:
     DMSFile(const string &path, std::istream &stream) throws { init(path, stream); }
     DMSFile(const u8 *buf, isize len) throws { init(buf, len); }
     
-    const char *getDescription() const override { return "DMS"; }
+    const char *objectName() const override { return "DMS"; }
 
     
     //

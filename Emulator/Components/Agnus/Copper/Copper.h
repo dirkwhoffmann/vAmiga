@@ -111,7 +111,6 @@ public:
     
 private:
     
-    const char *getDescription() const override { return "Copper"; }
     void _dump(Category category, std::ostream& os) const override;
 
     

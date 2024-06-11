@@ -75,7 +75,7 @@ public:
 
 public:
     
-    const char *getDescription() const override { return "EADF"; }
+    const char *objectName() const override { return "EADF"; }
 
     
     //

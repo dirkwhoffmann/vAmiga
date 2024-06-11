@@ -13,6 +13,20 @@
 
 namespace vamiga {
 
+const char *
+CoreComponent::objectName() const
+{
+    assert(isize(getDescriptions().size()) > objid);
+    return getDescriptions().at(objid).name;
+}
+
+const char *
+CoreComponent::description() const
+{
+    assert(isize(getDescriptions().size()) > objid);
+    return getDescriptions().at(objid).description;
+}
+
 void
 CoreComponent::initialize()
 {

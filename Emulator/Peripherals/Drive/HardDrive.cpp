@@ -160,13 +160,6 @@ HardDrive::init(const string &path) throws
     init(hdf);
 }
 
-const char *
-HardDrive::getDescription() const
-{
-    assert(usize(nr) < 4);
-    return nr == 0 ? "Hd0" : nr == 1 ? "Hd1" : nr == 2 ? "Hd2" : "Hd3";
-}
-
 void
 HardDrive::_initialize()
 {

@@ -20,12 +20,6 @@ Mouse::Mouse(Amiga& ref, ControlPort& pref) : SubComponent(ref), port(pref)
 
 }
 
-const char *
-Mouse::getDescription() const
-{
-    return port.isPort1() ? "Mouse1" : "Mouse2";
-}
-
 void Mouse::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)

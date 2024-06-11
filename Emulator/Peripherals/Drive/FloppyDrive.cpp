@@ -24,13 +24,6 @@ FloppyDrive::FloppyDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 
 }
 
-const char *
-FloppyDrive::getDescription() const
-{
-    assert(usize(nr) < 4);
-    return nr == 0 ? "Df0" : nr == 1 ? "Df1" : nr == 2 ? "Df2" : "Df3";
-}
-
 void
 FloppyDrive::_initialize()
 {

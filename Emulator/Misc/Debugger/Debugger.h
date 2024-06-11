@@ -59,7 +59,6 @@ public:
 
 private:
 
-    const char *getDescription() const override { return "Debugger"; }
     void _dump(Category category, std::ostream& os) const override { }
 
 

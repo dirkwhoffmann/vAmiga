@@ -42,7 +42,7 @@ public:
 
 private:
     
-    const char *getDescription() const override { return "Properties"; }
+    const char *objectName() const override { return "Defaults"; }
     void _dump(Category category, std::ostream& os) const override;
 
     

@@ -62,7 +62,6 @@ public:
     
 private:
     
-    const char *getDescription() const override { return "ZorroManager"; }
     void _dump(Category category, std::ostream& os) const override;
 
     

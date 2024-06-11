@@ -64,7 +64,7 @@ public:
     Snapshot(isize capacity);
     Snapshot(Amiga &amiga);
     
-    const char *getDescription() const override { return "Snapshot"; }
+    const char *objectName() const override { return "Snapshot"; }
 
     
     //

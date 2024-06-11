@@ -36,7 +36,7 @@ RemoteManager::_dump(Category category, std::ostream& os) const
 
         for (auto server : servers) {
             
-            auto name = server->getDescription();
+            auto name = server->objectName();
             auto port = server->config.port;
             
             os << tab(string(name));

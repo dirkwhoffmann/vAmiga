@@ -68,7 +68,7 @@ struct ButterworthFilter : CoreObject {
 
     void setSampleRate(double sampleRate);
 
-    const char *getDescription() const override { return "Butterworth"; }
+    const char *objectName() const override { return "Butterworth"; }
     void _dump(Category category, std::ostream& os) const override { };
 
     // Initializes the filter pipeline with zero elements
@@ -95,7 +95,7 @@ struct OnePoleFilter : CoreObject {
     double tmpL;
     double tmpR;
 
-    const char *getDescription() const override { return "OnePoleFilter"; }
+    const char *objectName() const override { return "OnePoleFilter"; }
     void _dump(Category category, std::ostream& os) const override { };
 
     // Initializes the filter coeeficients
@@ -126,7 +126,7 @@ struct TwoPoleFilter : CoreObject {
     double tmpL[4];
     double tmpR[4];
 
-    const char *getDescription() const override { return "TwoPoleFilter"; }
+    const char *objectName() const override { return "TwoPoleFilter"; }
     void _dump(Category category, std::ostream& os) const override { };
 
     // Initializes the filter coeeficients
@@ -190,7 +190,6 @@ public:
     
 private:
     
-    const char *getDescription() const override { return "AudioFilter"; }
     void _dump(Category category, std::ostream& os) const override;
 
     

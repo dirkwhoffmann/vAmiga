@@ -50,7 +50,6 @@ class MsgQueue : public SubComponent {
     
 private:
     
-    const char *getDescription() const override { return "MsgQueue"; }
     void _dump(Category category, std::ostream& os) const override { }
     
     
@@ -70,7 +69,7 @@ public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
 
-    
+
     //
     // Managing the queue
     //

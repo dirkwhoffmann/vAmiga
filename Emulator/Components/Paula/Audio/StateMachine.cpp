@@ -34,15 +34,6 @@ StateMachine<nr>::_dump(Category category, std::ostream& os) const
     }
 }
 
-template <isize nr> const char *
-StateMachine<nr>::getDescription() const
-{
-    if constexpr (nr == 0) return "StateMachine 0";
-    if constexpr (nr == 1) return "StateMachine 1";
-    if constexpr (nr == 2) return "StateMachine 2";
-    if constexpr (nr == 3) return "StateMachine 3";
-}
-
 template <isize nr> void
 StateMachine<nr>::_reset(bool hard)
 {

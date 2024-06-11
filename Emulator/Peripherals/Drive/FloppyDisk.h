@@ -119,7 +119,7 @@ private:
     
 private:
     
-    const char *getDescription() const override { return "Disk"; }
+    const char *objectName() const override { return "Disk"; }
     void _dump(Category category, std::ostream& os) const override;
     
     

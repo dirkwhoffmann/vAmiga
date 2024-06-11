@@ -208,7 +208,6 @@ public:
 
 private:
 
-    const char *getDescription() const override { return "Amiga"; }
     void _dump(Category category, std::ostream& os) const override;
 
 

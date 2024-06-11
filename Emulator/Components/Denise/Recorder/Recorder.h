@@ -106,7 +106,6 @@ public:
     
 private:
     
-    const char *getDescription() const override { return "Recorder"; }
     void _dump(Category category, std::ostream& os) const override;
     
     

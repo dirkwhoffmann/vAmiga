@@ -54,7 +54,7 @@ public:
     void init(const u8 *buf, isize len) throws;
     void init(const class HardDrive &hdn) throws;
 
-    const char *getDescription() const override { return "HDF"; }
+    const char *objectName() const override { return "HDF"; }
 
     
     //

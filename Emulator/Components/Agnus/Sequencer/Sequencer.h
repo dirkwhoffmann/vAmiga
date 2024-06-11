@@ -228,7 +228,6 @@ private:
 
 private:
 
-    const char *getDescription() const override { return "Sequencer"; }
     void _dump(Category category, std::ostream& os) const override;
 
 

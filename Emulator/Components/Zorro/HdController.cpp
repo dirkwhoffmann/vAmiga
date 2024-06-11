@@ -23,21 +23,6 @@ HdController::HdController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref), drive(
 
 }
 
-const char *
-HdController::getDescription() const
-{
-    switch (nr) {
-            
-        case 0: return "Hd0Con";
-        case 1: return "Hd1Con";
-        case 2: return "Hd2Con";
-        case 3: return "Hd3Con";
-
-        default:
-            fatalError;
-    }
-}
-
 void
 HdController::_dump(Category category, std::ostream& os) const
 {

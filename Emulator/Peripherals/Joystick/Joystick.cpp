@@ -19,12 +19,6 @@ Joystick::Joystick(Amiga& ref, ControlPort& pref) : SubComponent(ref), port(pref
 
 };
 
-const char *
-Joystick::getDescription() const
-{
-    return port.isPort1() ? "Joystick1" : "Joystick2";
-}
-
 void
 Joystick::_reset(bool hard)
 {

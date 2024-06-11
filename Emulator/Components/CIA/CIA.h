@@ -568,8 +568,6 @@ public:
     CIAA(Amiga& ref) : CIA(0, ref) { };
     
 private:
-
-    const char *getDescription() const override { return "CIAA"; }
     
     void _powerOn() override;
     void _powerOff() override;
@@ -608,8 +606,6 @@ public:
     CIAB(Amiga& ref) : CIA(1, ref) { };
     
 private:
-
-    const char *getDescription() const override { return "CIAB"; }
 
     void pullDownInterruptLine() override;
     void releaseInterruptLine() override;

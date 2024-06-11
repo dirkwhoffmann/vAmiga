@@ -35,7 +35,7 @@ public:
     Script(const string &path) throws { init(path); }
     Script(const u8 *buf, isize len) throws { init(buf, len); }
 
-    const char *getDescription() const override { return "Script"; }
+    const char *objectName() const override { return "Script"; }
 
     
     //
