@@ -322,7 +322,8 @@ ADFFile::encodeDisk(FloppyDisk &disk) const
     if (ADF_DEBUG) {
         
         ADFFile adf(disk);
-        auto tmp = Amiga::tmp("debug.adf").string();
+        // auto tmp = Amiga::tmp("debug.adf").string();
+        string tmp = "/tmp/debug.adf";
         debug(ADF_DEBUG, "Saving image to %s for debugging\n", tmp.c_str());
         adf.writeToFile(tmp);
     }

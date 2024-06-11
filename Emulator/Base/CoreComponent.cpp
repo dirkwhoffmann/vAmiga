@@ -13,8 +13,6 @@
 
 namespace vamiga {
 
-Descriptions CoreComponent::descriptions = { };
-
 void
 CoreComponent::initialize()
 {

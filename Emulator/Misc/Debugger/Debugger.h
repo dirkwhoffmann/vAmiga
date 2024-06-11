@@ -72,6 +72,10 @@ private:
     void _reset(bool hard) override { };
     void _pause() override;
     
+public:
+
+    const Descriptions &getDescriptions() const override { return descriptions; }
+
 
     //
     // Serializing

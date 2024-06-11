@@ -47,7 +47,7 @@ bool isAbsolutePath(const string &path);
 string makeAbsolutePath(const string &path);
 
 // Makes a file name unique if a file with the provided name already exists
-string makeUniquePath(const string &path);
+fs::path makeUniquePath(const fs::path &path);
 
 
 //

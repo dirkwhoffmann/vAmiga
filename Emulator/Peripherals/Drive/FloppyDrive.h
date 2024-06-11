@@ -186,7 +186,11 @@ private:
     isize _load(const u8 *buffer) override;
     isize _save(u8 *buffer) override;
 
-    
+public:
+
+    const Descriptions &getDescriptions() const override { return descriptions; }
+
+
     //
     // Methods from Drive
     //

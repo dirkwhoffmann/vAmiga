@@ -23,7 +23,7 @@ RegressionTester::prepare(ConfigScheme scheme, string rom, string ext)
     if (!util::fileExists("/tmp")) throw Error(ERROR_DIR_NOT_FOUND, "/tmp");
 
     // Check if we've got write permissions
-    if (amiga.tmp() != "/tmp") throw Error(ERROR_DIR_ACCESS_DENIED, "/tmp");
+    if (host.tmp() != "/tmp") throw Error(ERROR_DIR_ACCESS_DENIED, "/tmp");
     
     // Initialize the emulator according to the specified scheme
     amiga.revertToFactorySettings();

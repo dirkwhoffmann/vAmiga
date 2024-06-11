@@ -78,6 +78,10 @@ private:
     
     void _reset(bool hard) override { }
 
+public:
+
+    const Descriptions &getDescriptions() const override { return descriptions; }
+
 
     //
     // Configuring

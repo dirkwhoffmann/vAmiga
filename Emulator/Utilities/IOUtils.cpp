@@ -100,18 +100,22 @@ string makeAbsolutePath(const string &path)
     }
 }
 
-string
-makeUniquePath(const string &path)
+fs::path
+makeUniquePath(const fs::path &path)
 {
-    auto prefix = stripSuffix(path);
-    auto suffix = "." + extractSuffix(path);
-    
-    string index = "";
-    for (isize nr = 2; util::fileExists(prefix + index + suffix); nr++) {
-        index = std::to_string(nr);
+    auto location = path.root_path() / path.relative_path();
+    auto name = path.stem().string();
+    auto extension = path.extension();
+
+    for (isize nr = 2;; nr++) {
+
+        auto index = std::to_string(nr);
+        fs::path result = location / fs::path(name + index) / extension;
+
+        if (!util::fileExists(result)) return result;
     }
 
-    return prefix + index + suffix;
+    return path;
 }
 
 bool

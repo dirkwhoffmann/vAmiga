@@ -11,37 +11,13 @@
 
 #include "CoreComponentTypes.h"
 #include "CoreObject.h"
+#include "Synchronizable.h"
 #include "Configurable.h"
 #include "Serialization.h"
 #include "Concurrency.h"
 #include <vector>
 
 namespace vamiga {
-
-/* The following macro can be utilized to prevent multiple threads to enter the
- * same code block. It mimics the behaviour of the well known Java construct
- * 'synchronized(this) { }'. To secure a code-block, use the following syntax:
- *
- *     { SYNCHRONIZED <commands> }
- *
- * To prevent concurrent execution of a single static function, use:
- *
- *     { STATIC_SYNCHRONIZED <commands> }
- */
-#define SYNCHRONIZED util::AutoMutex _am(mutex);
-#define STATIC_SYNCHRONIZED static std::mutex m; std::lock_guard<std::mutex> lock(m);
-
-struct NoCopy
-{
-    NoCopy() { };
-    NoCopy(NoCopy const&) = delete;
-};
-
-struct NoAssign
-{
-    NoAssign() { };
-    NoAssign& operator=(NoAssign const&) = delete;
-};
 
 struct Description {
 
@@ -51,12 +27,9 @@ struct Description {
 
 typedef std::vector<Description> Descriptions;
 
-class CoreComponent : public CoreObject, NoCopy, NoAssign {
+class CoreComponent : public CoreObject, public Synchronizable {
 
 public:
-    
-    // Dummy description
-    static Descriptions descriptions;
     
     // Reference to the emulator this instance belongs to
     class Emulator &emulator;
@@ -64,19 +37,8 @@ public:
     // Object identifier (to distinguish instances of the same component)
     const isize objid;
 
-protected:
-
     // Sub components
     std::vector<CoreComponent *> subComponents;
-
-    // Set to false to silence all debug messages for this component
-    bool verbose = true;
-
-    /* Mutex for implementing the 'synchronized' macro. The macro can be used
-     * to prevent multiple threads to enter the same code block. It mimics the
-     * behaviour of the well known Java construct 'synchronized(this) { }'.
-     */
-    mutable util::ReentrantMutex mutex;
 
 
     //
@@ -87,6 +49,9 @@ public:
 
     CoreComponent(Emulator& ref) : emulator(ref), objid(0) { }
     CoreComponent(Emulator& ref, isize id) : emulator(ref), objid(id) { }
+
+    // Returns a reference to the description of this component
+    virtual const Descriptions &getDescriptions() const = 0;
 
     /* Initializes the component and it's subcomponents. The initialization
      * procedure is initiated once, in the constructor of the Amiga class. By

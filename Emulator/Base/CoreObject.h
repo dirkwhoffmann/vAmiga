@@ -119,21 +119,21 @@ fprintf(stderr, "Warning: " format __VA_OPT__(,) __VA_ARGS__);
 { fprintf(stderr, "Fatal: " format __VA_OPT__(,) __VA_ARGS__); exit(1); }
 
 #define debug(enable, format, ...) \
-if (enable) { if (verbose) { \
-fprintf(stderr, "%s:%d " format, getDescription(), __LINE__ __VA_OPT__(,) __VA_ARGS__); }}
+if (enable) { \
+fprintf(stderr, "%s:%d " format, getDescription(), __LINE__ __VA_OPT__(,) __VA_ARGS__); }
 
 #define plain(enable, format, ...) \
-if (enable) { if (verbose) { \
-fprintf(stderr, format __VA_OPT__(,) __VA_ARGS__); }}
+if (enable) { \
+fprintf(stderr, format __VA_OPT__(,) __VA_ARGS__); }
 
 #define trace(enable, format, ...) \
-if (enable) { if (verbose) { \
+if (enable) { \
 prefix(); \
-fprintf(stderr, "%s:%d " format, getDescription(), __LINE__ __VA_OPT__(,) __VA_ARGS__); }}
+fprintf(stderr, "%s:%d " format, getDescription(), __LINE__ __VA_OPT__(,) __VA_ARGS__); }
 
 #define xfiles(format, ...) \
-if (XFILES) { if (verbose) { \
+if (XFILES) { \
 prefix(); \
-fprintf(stderr, "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }}
+fprintf(stderr, "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }
 
 }

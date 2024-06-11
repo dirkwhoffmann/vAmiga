@@ -10,6 +10,7 @@
 #pragma once
 
 #include "SubComponent.h"
+#include "IOUtils.h"
 
 namespace vamiga {
 
@@ -62,6 +63,10 @@ private:
     // Methods from CoreComponent
     //
 
+public:
+
+    const Descriptions &getDescriptions() const override { return descriptions; }
+
 private:
 
     void _reset(bool hard) override { };
@@ -86,6 +91,18 @@ public:
     std::pair<isize, isize> getFrameBufferSize() const;
     void setFrameBufferSize(std::pair<isize, isize> size);
 
+
+    //
+    // Working with temporary files and folders
+    //
+
+public:
+
+    // Returns a path to a temporary folder
+    fs::path tmp() const throws;
+
+    // Assembles a path to a temporary file
+    fs::path tmp(const string &name, bool unique = false) const throws;
 };
 
 }
