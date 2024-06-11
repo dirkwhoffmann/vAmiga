@@ -7,19 +7,24 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
-#include "CoreObject.h"
-#include <iostream>
+#pragma once
+
+#include "Concurrency.h"
 
 namespace vamiga {
 
-bool
-CoreObject::verbose = true;
-
-void
-CoreObject::prefix() const
+class Wakeable
 {
-    fprintf(stderr, "%s: ", objectName());
-}
+    static constexpr auto timeout = std::chrono::milliseconds(100);
+
+    std::mutex condMutex;
+    std::condition_variable condVar;
+    bool ready = false;
+
+public:
+
+    void waitForWakeUp(util::Time timeout);
+    void wakeUp();
+};
 
 }

@@ -11,6 +11,7 @@
 
 #include "CoreComponentTypes.h"
 #include "CoreObject.h"
+#include "Inspectable.h"
 #include "Synchronizable.h"
 #include "Configurable.h"
 #include "Serialization.h"

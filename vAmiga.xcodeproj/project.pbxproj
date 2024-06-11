@@ -285,6 +285,12 @@
 		50EFB0BB2C1811C90013B73C /* Configurable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0B82C1811C90013B73C /* Configurable.cpp */; };
 		50EFB0BE2C1812E20013B73C /* Option.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0BC2C1812E20013B73C /* Option.cpp */; };
 		50EFB0BF2C1812E20013B73C /* Option.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0BC2C1812E20013B73C /* Option.cpp */; };
+		50EFB0C82C18D72C0013B73C /* Dumpable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0C62C18D72B0013B73C /* Dumpable.cpp */; };
+		50EFB0C92C18D72C0013B73C /* Dumpable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0C62C18D72B0013B73C /* Dumpable.cpp */; };
+		50EFB0CC2C18D95B0013B73C /* Inspectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0CA2C18D95B0013B73C /* Inspectable.cpp */; };
+		50EFB0CD2C18D95B0013B73C /* Inspectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0CA2C18D95B0013B73C /* Inspectable.cpp */; };
+		50EFB0D02C18E01E0013B73C /* Wakeable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0CE2C18E01E0013B73C /* Wakeable.cpp */; };
+		50EFB0D12C18E01E0013B73C /* Wakeable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0CE2C18E01E0013B73C /* Wakeable.cpp */; };
 		50F0BD2622AF883C001F4616 /* UART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F0BD2422AF883C001F4616 /* UART.cpp */; };
 		50F31C292409322F008A54D8 /* CopperPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F31C282409322F008A54D8 /* CopperPanel.swift */; };
 		50F54B2524B5D31D0078FDC9 /* u_heavy.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B0C24B5D31D0078FDC9 /* u_heavy.c */; };
@@ -939,6 +945,12 @@
 		50EFB0BD2C1812E20013B73C /* Option.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Option.h; sourceTree = "<group>"; };
 		50EFB0C02C1812F50013B73C /* OptionTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OptionTypes.h; sourceTree = "<group>"; };
 		50EFB0C12C18A73F0013B73C /* Synchronizable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Synchronizable.h; sourceTree = "<group>"; };
+		50EFB0C62C18D72B0013B73C /* Dumpable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Dumpable.cpp; sourceTree = "<group>"; };
+		50EFB0C72C18D72B0013B73C /* Dumpable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Dumpable.h; sourceTree = "<group>"; };
+		50EFB0CA2C18D95B0013B73C /* Inspectable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Inspectable.cpp; sourceTree = "<group>"; };
+		50EFB0CB2C18D95B0013B73C /* Inspectable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Inspectable.h; sourceTree = "<group>"; };
+		50EFB0CE2C18E01E0013B73C /* Wakeable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Wakeable.cpp; sourceTree = "<group>"; };
+		50EFB0CF2C18E01E0013B73C /* Wakeable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Wakeable.h; sourceTree = "<group>"; };
 		50EFC7DF22E840870036A3DF /* Serialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serialization.h; sourceTree = "<group>"; };
 		50EFF1E726E25A5D00296065 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50F0BD2422AF883C001F4616 /* UART.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UART.cpp; sourceTree = "<group>"; };
@@ -1073,6 +1085,12 @@
 				50EFB0C02C1812F50013B73C /* OptionTypes.h */,
 				50EFB0BD2C1812E20013B73C /* Option.h */,
 				50EFB0BC2C1812E20013B73C /* Option.cpp */,
+				50EFB0C72C18D72B0013B73C /* Dumpable.h */,
+				50EFB0C62C18D72B0013B73C /* Dumpable.cpp */,
+				50EFB0CB2C18D95B0013B73C /* Inspectable.h */,
+				50EFB0CA2C18D95B0013B73C /* Inspectable.cpp */,
+				50EFB0CF2C18E01E0013B73C /* Wakeable.h */,
+				50EFB0CE2C18E01E0013B73C /* Wakeable.cpp */,
 				50EFB0B92C1811C90013B73C /* Configurable.h */,
 				50EFB0B82C1811C90013B73C /* Configurable.cpp */,
 				50EFB0C12C18A73F0013B73C /* Synchronizable.h */,
@@ -2224,6 +2242,7 @@
 				508FE02D21EA227B0043D0E9 /* MyApplication.swift in Sources */,
 				50F54B2F24B5D31D0078FDC9 /* getbits.c in Sources */,
 				50E5BF7F2BB1D2510004712B /* STFile.cpp in Sources */,
+				50EFB0D02C18E01E0013B73C /* Wakeable.cpp in Sources */,
 				50AD905A2771B2770011ECCB /* RshServer.cpp in Sources */,
 				508FE05221EA22CC0043D0E9 /* RomDropView.swift in Sources */,
 				508FDFD621EA20510043D0E9 /* DragAndDrop.swift in Sources */,
@@ -2236,6 +2255,7 @@
 				50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */,
 				50AE6EE124D9407F000AA367 /* BlitterRegs.cpp in Sources */,
 				501B821D2262FFB200042871 /* RTC.cpp in Sources */,
+				50EFB0C82C18D72C0013B73C /* Dumpable.cpp in Sources */,
 				50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */,
 				5031FFD3279F3D95002EF894 /* PerformanceConf.swift in Sources */,
 				508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */,
@@ -2365,6 +2385,7 @@
 				5030C2E0252A2E8400107E00 /* AudioStream.cpp in Sources */,
 				500C0A562259402D000121CD /* DiskController.cpp in Sources */,
 				5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */,
+				50EFB0CC2C18D95B0013B73C /* Inspectable.cpp in Sources */,
 				5010A78222B50B690041388B /* PortPanel.swift in Sources */,
 				506F30362B6BCAC70083EAEA /* Debugger.cpp in Sources */,
 				509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */,
@@ -2430,6 +2451,7 @@
 				50FC048C27DA195600C3E566 /* CIA.cpp in Sources */,
 				50EFB0BB2C1811C90013B73C /* Configurable.cpp in Sources */,
 				50FC049927DA197500C3E566 /* AgnusEvents.cpp in Sources */,
+				50EFB0C92C18D72C0013B73C /* Dumpable.cpp in Sources */,
 				50FC048627DA194200C3E566 /* MoiraDebugger.cpp in Sources */,
 				50FC04D227DA19F600C3E566 /* BootBlockImage.cpp in Sources */,
 				50FC04EC27DA1A4500C3E566 /* SerServer.cpp in Sources */,
@@ -2480,6 +2502,7 @@
 				50FC04CE27DA19E900C3E566 /* IMGFile.cpp in Sources */,
 				502B303928469CF600673377 /* Beam.cpp in Sources */,
 				50FC04F827DA1A8F00C3E566 /* StateMachineEvents.cpp in Sources */,
+				50EFB0D12C18E01E0013B73C /* Wakeable.cpp in Sources */,
 				50FC047627DA10AD00C3E566 /* Headless.cpp in Sources */,
 				50FC049227DA196500C3E566 /* DeniseRegs.cpp in Sources */,
 				50FC04F727DA1A8F00C3E566 /* StateMachine.cpp in Sources */,
@@ -2490,6 +2513,7 @@
 				50FC04C427DA19DE00C3E566 /* ExtendedRomFile.cpp in Sources */,
 				50DA83E62C161961001209AA /* VAmiga.cpp in Sources */,
 				50FC04D027DA19F600C3E566 /* FileSystem.cpp in Sources */,
+				50EFB0CD2C18D95B0013B73C /* Inspectable.cpp in Sources */,
 				50FC047727DA129800C3E566 /* Buffer.cpp in Sources */,
 				50FC049727DA196C00C3E566 /* NamedPipe.cpp in Sources */,
 				50FC04D827DA1A0000C3E566 /* RetroShell.cpp in Sources */,

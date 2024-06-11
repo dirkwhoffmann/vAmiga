@@ -12,7 +12,8 @@
 #include "ThreadTypes.h"
 #include "CoreComponent.h"
 #include "Chrono.h"
-#include "Concurrency.h"
+// #include "Concurrency.h"
+#include "Wakeable.h"
 
 namespace vamiga {
 
@@ -152,7 +153,7 @@ namespace vamiga {
  * trace buffer.
  */
 
-class Thread : public CoreComponent, util::Wakeable {
+class Thread : public CoreComponent, Wakeable {
     
 protected:
     

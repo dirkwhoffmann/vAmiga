@@ -7,19 +7,6 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
+#pragma once
+
 #include "config.h"
-#include "CoreObject.h"
-#include <iostream>
-
-namespace vamiga {
-
-bool
-CoreObject::verbose = true;
-
-void
-CoreObject::prefix() const
-{
-    fprintf(stderr, "%s: ", objectName());
-}
-
-}

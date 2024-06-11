@@ -8,18 +8,20 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "CoreObject.h"
-#include <iostream>
+#include "Dumpable.h"
 
 namespace vamiga {
 
-bool
-CoreObject::verbose = true;
+void
+Dumpable::dump(Category category, std::ostream& ss) const
+{
+    _dump(category, ss);
+}
 
 void
-CoreObject::prefix() const
+Dumpable::dump(Category category) const
 {
-    fprintf(stderr, "%s: ", objectName());
+    dump(category, std::cout);
 }
 
 }

@@ -351,7 +351,7 @@ void
 Thread::wakeUp()
 {
     trace(TIM_DEBUG, "wakeup: %lld us\n", wakeupClock.restart().asMicroseconds());
-    util::Wakeable::wakeUp();
+    Wakeable::wakeUp();
 }
 
 void

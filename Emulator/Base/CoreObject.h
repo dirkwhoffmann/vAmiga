@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Error.h"
+#include "Dumpable.h"
 
 namespace vamiga {
 
@@ -44,19 +45,11 @@ namespace vamiga {
  * the emulator's state model (off, paused, running, suspended).
  */
 
-enum class Category
-{
-    BankMap, Beam, Blocks, Breakpoints, Bus, Catchpoints, Config, Current,
-    Defaults, Disk, Dma, Drive, Events, FileSystem, Geometry, Hunks,
-    List1, List2, Parameters, Partitions, Properties, Registers, Sections,
-    Segments, Signals, Slots, State, Stats, Status, SwTraps, Tod, Vectors,
-    Volumes, Watchpoints
-};
-
-class CoreObject {
+class CoreObject : public Dumpable {
 
 protected:
 
+    // Set to false to disable all debug messages
     static bool verbose;
 
     //
@@ -65,12 +58,7 @@ protected:
 
 public:
 
-    virtual ~CoreObject() { };
-
-
-    //
-    // Printing debug information
-    //
+    virtual ~CoreObject() = default;
 
     // Returns the name for this component (e.g., "Agnus" or "Denise")
     virtual const char *objectName() const = 0;
@@ -80,11 +68,6 @@ public:
     
     // Called by debug() and trace() to produce a detailed debug output
     virtual void prefix() const;
-
-    // Prints debug information about this component
-    void dump(Category category, std::ostream& ss) const;
-    void dump(Category category) const;
-    virtual void _dump(Category category, std::ostream& ss) const = 0;
 };
 
 /* This file provides several macros for printing messages:

@@ -9,29 +9,7 @@
 
 #include "config.h"
 #include "Concurrency.h"
-#include "Chrono.h"
 
 namespace util {
-
-void
-Wakeable::waitForWakeUp(Time timeout)
-{
-    auto now = std::chrono::system_clock::now();
-    auto delay = std::chrono::nanoseconds(timeout.asNanoseconds());
-
-    std::unique_lock<std::mutex> lock(condMutex);
-    condVar.wait_until(lock, now + delay, [this]{ return ready; });
-    ready = false;
-}
-
-void
-Wakeable::wakeUp()
-{
-    {
-        std::lock_guard<std::mutex> lock(condMutex);
-        ready = true;
-    }
-    condVar.notify_one();
-}
 
 }
