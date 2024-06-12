@@ -270,12 +270,11 @@ private:
 private:
 
     void update() override;
-    void execute() override;
+    void computeFrame() override;
 
 public:
 
-    util::Time sliceDelay() const override;
-    isize missingSlices() const override;
+    isize missingFrames() const override;
 
 
     //

@@ -49,21 +49,18 @@ Thread::assertLaunched()
 void
 Thread::resync()
 {
-    targetTime = util::Time::now();
     baseTime = util::Time::now();
-    deltaTime = 0;
     frameCounter = 0;
-    missing = 0;
 }
 
 void
-Thread::executeFrame()
+Thread::execute()
 {
     // Only proceed if the emulator is running
     if (!isRunning()) return;
 
     // Determine the number of overdue frames
-    isize missing = warp ? 1 : missingSlices();
+    isize missing = warp ? 1 : missingFrames();
 
     if (std::abs(missing) <= 5) {
 
@@ -71,7 +68,7 @@ Thread::executeFrame()
         try {
 
             // Execute all missing frames
-            for (isize i = 0; i < missing; i++, frameCounter++) execute();
+            for (isize i = 0; i < missing; i++, frameCounter++) computeFrame();
 
         } catch (StateChangeException &exc) {
 
@@ -91,25 +88,10 @@ Thread::executeFrame()
 
         resync();
     }
-
-    /* OLD
-    if (missing > 0 || warp) {
-
-        trace(TIM_DEBUG, "execute: %lld us\n", execClock.restart().asMicroseconds());
-
-        loadClock.go();
-
-        execute();
-        frameCounter++;
-        missing--;
-
-        loadClock.stop();
-    }
-    */
 }
 
 void
-Thread::sleepFrame()
+Thread::sleep()
 {
     // Don't sleep if the emulator is running in warp mode
     if (warp && isRunning()) return;
@@ -134,7 +116,7 @@ Thread::runLoop()
         update();
 
         // Compute missing frames
-        executeFrame();
+        execute();
 
         // Are we requested to change state?
         if (stateChangeRequest.test()) {
@@ -145,13 +127,102 @@ Thread::runLoop()
         }
 
         // Synchronize timing
-        sleepFrame();
+        sleep();
 
         // Compute statistics
         computeStats();
     }
 }
 
+/*
+void
+Thread::switchState(ExecState newState)
+{
+    assert(isEmulatorThread());
+
+    auto invalid = [&]() {
+
+        assert(false);
+        fatal("Invalid state transition: %s -> %s\n",
+              ExecStateEnum::key(state), ExecStateEnum::key(newState));
+    };
+
+    debug(RUN_DEBUG,
+          "switchState: %s -> %s\n",
+          ExecStateEnum::key(state), ExecStateEnum::key(newState));
+
+    while (state != newState) {
+
+        switch (newState) {
+
+            case STATE_OFF:
+
+                switch (state) {
+
+                    case STATE_PAUSED:      state = STATE_OFF; _powerOff(); break;
+                    case STATE_RUNNING:
+                    case STATE_SUSPENDED:   state = STATE_PAUSED; _pause(); break;
+
+                    default:
+                        invalid();
+                }
+                break;
+
+            case STATE_PAUSED:
+
+                switch (state) {
+
+                    case STATE_OFF:         state = STATE_PAUSED; _powerOn(); break;
+                    case STATE_RUNNING:
+                    case STATE_SUSPENDED:   state = STATE_PAUSED; _pause(); break;
+
+                    default:
+                        invalid();
+                }
+                break;
+
+            case STATE_RUNNING:
+
+                switch (state) {
+
+                    case STATE_OFF:         state = STATE_PAUSED; _powerOn(); break;
+                    case STATE_PAUSED:      state = STATE_RUNNING; _run(); break;
+                    case STATE_SUSPENDED:   state = STATE_PAUSED; break;
+
+                    default:
+                        invalid();
+                }
+                break;
+
+            case STATE_SUSPENDED:
+
+                switch (state) {
+
+                    case STATE_RUNNING:     state = STATE_SUSPENDED; break;
+                    case STATE_PAUSED:      break;
+
+                    default:
+                        invalid();
+                }
+                break;
+
+            case STATE_HALTED:
+
+                switch (state) {
+
+                    case STATE_OFF:     state = STATE_HALTED; _halt(); break;
+                    case STATE_PAUSED:  state = STATE_OFF; _powerOff(); break;
+                    case STATE_RUNNING: state = STATE_PAUSED; _pause(); break;
+
+                    default:
+                        invalid();
+                }
+        }
+    }
+
+    debug(RUN_DEBUG, "switchState: %s\n", ExecStateEnum::key(state));
+}
+*/
 void
 Thread::switchState(ExecState newState)
 {

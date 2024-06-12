@@ -130,7 +130,7 @@ typedef util::Exception StateChangeException;
  *
  *   In pulsed mode, the thread waits for an external wakeup signal the GUI is
  *   supposed to send after each VSYNC tick. When the signal is received, the
- *   thread calls missingSlices(), which has to be provided by the subclass.
+ *   thread calls missingFrames(), which has to be provided by the subclass.
  *   This function tells the thread the number of time slices it needs to
  *   compute.
  *
@@ -182,13 +182,8 @@ protected:
     isize frameCounter = 0;
     isize statsCounter = 0;
 
-    // Time stamps for calculating wakeup times
+    // Time stamps
     util::Time baseTime;
-    util::Time deltaTime;
-    util::Time targetTime;
-
-    // Number of time slices that need to be computed
-    isize missing = 0;
     
     // Clocks for measuring the CPU load
     util::Clock nonstopClock;
@@ -200,7 +195,6 @@ protected:
     isize resyncs = 0;
 
     // Debug clocks
-    util::Clock execClock;
     util::Clock wakeupClock;
 
     
@@ -231,39 +225,39 @@ protected:
     // Executing
     //
 
+public:
+
+    // Returns true if this functions is called from within the emulator thread
+    bool isEmulatorThread() const { return std::this_thread::get_id() == thread.get_id(); }
+
+    // Performs a state change
+    void switchState(ExecState newState);
+
 private:
-    
-    // The code to be executed in each iteration (implemented by the subclass)
-    virtual void execute() = 0;
 
     // Updates the emulator state (implemented by the subclass)
     virtual void update() = 0;
 
-    // Interval between two time slices (provided by the subclass)
-    virtual util::Time sliceDelay() const = 0;
-
     // Number of overdue time slices (used in pulsed sync mode)
-    virtual isize missingSlices() const = 0;
+    virtual isize missingFrames() const = 0;
+
+    // The code to be executed in each iteration (implemented by the subclass)
+    virtual void computeFrame() = 0;
 
     // Rectifies an out-of-sync condition by resetting all counters and clocks
     void resync();
 
-    // Executes a single time slice (if one is pending)
-    void executeFrame();
-
-    // Suspends the thread until the next time slice is due
-    void sleepFrame();
-
     // The main entry point (called when the thread is created)
     void runLoop();
 
+    // Executes a single time slice (if one is pending)
+    void execute();
+
+    // Suspends the thread until the next time slice is due
+    void sleep();
+
 public:
 
-    // Returns true if this functions is called from within the emulator thread
-    bool isEmulatorThread() { return std::this_thread::get_id() == thread.get_id(); }
-    
-    // Performs a state change
-    void switchState(ExecState newState);
     void switchWarp(bool state, u8 source = 0);
     void switchTrack(bool state, u8 source = 0);
 
@@ -293,6 +287,8 @@ public:
     bool isRunning() const override { return state == STATE_RUNNING; }
     bool isSuspended() const override { return state == STATE_SUSPENDED; }
     bool isHalted() const override { return state == STATE_HALTED; }
+    bool isWarping() const { return warp != 0; }
+    bool isTracking() const { return track != 0; }
 
     void suspend() override;
     void resume() override;
@@ -303,11 +299,8 @@ public:
     void pause();
     void halt();
 
-    bool isWarping() const { return warp != 0; }
     void warpOn(isize source = 0);
     void warpOff(isize source = 0);
-
-    bool isTracking() const { return track != 0; }
     void trackOn(isize source = 0);
     void trackOff(isize source = 0);
 

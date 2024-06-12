@@ -118,9 +118,6 @@ Amiga::launch(const void *listener, Callback *func)
     // Reset the emulator
     hardReset();
 
-    // Initialize the sync timer
-    targetTime = util::Time::now();
-
     // Launch the emulator thread
     Thread::launch();
 }
@@ -1232,7 +1229,7 @@ Amiga::update()
 }
 
 void
-Amiga::execute()
+Amiga::computeFrame()
 {
     while (1) {
 
@@ -1336,14 +1333,8 @@ Amiga::execute()
     }
 }
 
-util::Time
-Amiga::sliceDelay() const
-{
-    return util::Time::seconds(100.0) / nativeRefreshRate() / config.timeLapse;
-}
-
 isize
-Amiga::missingSlices() const
+Amiga::missingFrames() const
 {
     // In VSYNC mode, compute exactly one frame per wakeup call
     if (config.vsync) return 1;
