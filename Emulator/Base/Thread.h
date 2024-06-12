@@ -12,10 +12,16 @@
 #include "ThreadTypes.h"
 #include "CoreComponent.h"
 #include "Chrono.h"
-// #include "Concurrency.h"
 #include "Wakeable.h"
 
 namespace vamiga {
+
+/** Requests a state change from within the emulator.
+ *  This exception is thrown inside the emulator core when the CPU stops
+ *  execution in the middle of frame. This happens when a breakpoint or
+ *  watchpoint is hit, or when the CPU halts due to the execution of a jamming
+ *  instruction */
+typedef util::Exception StateChangeException;
 
 /* This class manages the emulator thread that runs alongside the GUI. The
  * thread exists during the emulator's lifetime but, depending on the internal
@@ -163,8 +169,8 @@ protected:
     std::thread thread;
     
     // The current thread state and a change request
-    ExecutionState state = EXEC_OFF;
-    ExecutionState newState = EXEC_OFF;
+    ExecState state = STATE_OFF;
+    ExecState newState = STATE_OFF;
     std::atomic_flag stateChangeRequest {};
 
     // Warp state and track state
@@ -173,7 +179,7 @@ protected:
 
     // Counters
     isize suspendCounter = 0;
-    isize sliceCounter = 0;
+    isize frameCounter = 0;
     isize statsCounter = 0;
 
     // Time stamps for calculating wakeup times
@@ -257,7 +263,7 @@ public:
     bool isEmulatorThread() { return std::this_thread::get_id() == thread.get_id(); }
     
     // Performs a state change
-    void switchState(ExecutionState newState);
+    void switchState(ExecState newState);
     void switchWarp(bool state, u8 source = 0);
     void switchTrack(bool state, u8 source = 0);
 
@@ -281,12 +287,12 @@ private:
     
 public:
     
-    bool isPoweredOn() const override { return state != EXEC_OFF; }
-    bool isPoweredOff() const override { return state == EXEC_OFF; }
-    bool isPaused() const override { return state == EXEC_PAUSED; }
-    bool isRunning() const override { return state == EXEC_RUNNING; }
-    bool isSuspended() const override { return state == EXEC_SUSPENDED; }
-    bool isHalted() const override { return state == EXEC_HALTED; }
+    bool isPoweredOn() const override { return state != STATE_OFF; }
+    bool isPoweredOff() const override { return state == STATE_OFF; }
+    bool isPaused() const override { return state == STATE_PAUSED; }
+    bool isRunning() const override { return state == STATE_RUNNING; }
+    bool isSuspended() const override { return state == STATE_SUSPENDED; }
+    bool isHalted() const override { return state == STATE_HALTED; }
 
     void suspend() override;
     void resume() override;
@@ -308,7 +314,7 @@ public:
 protected:
 
     // Initiates a state change
-    void changeStateTo(ExecutionState requestedState);
+    void changeStateTo(ExecState requestedState);
 
     
     //

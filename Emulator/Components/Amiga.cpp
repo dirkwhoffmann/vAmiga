@@ -1012,7 +1012,7 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << std::endl;
 
         os << tab("Thread state");
-        os << ExecutionStateEnum::key(state) << std::endl;
+        os << ExecStateEnum::key(state) << std::endl;
         os << tab("Refresh rate");
         os << dec(isize(refreshRate())) << " Fps" << std::endl;
         os << tab("Native master clock");
@@ -1257,7 +1257,7 @@ Amiga::execute()
             if (flags & RL::SOFTSTOP_REACHED) {
                 clearFlag(RL::SOFTSTOP_REACHED);
                 inspect();
-                switchState(EXEC_PAUSED);
+                switchState(STATE_PAUSED);
                 break;
             }
 
@@ -1267,7 +1267,7 @@ Amiga::execute()
                 inspect();
                 auto addr = cpu.debugger.breakpoints.hit->addr;
                 msgQueue.put(MSG_BREAKPOINT_REACHED, CpuMsg { addr, 0});
-                switchState(EXEC_PAUSED);
+                switchState(STATE_PAUSED);
                 break;
             }
 
@@ -1277,7 +1277,7 @@ Amiga::execute()
                 inspect();
                 auto addr = cpu.debugger.watchpoints.hit->addr;
                 msgQueue.put(MSG_WATCHPOINT_REACHED, CpuMsg {addr, 0});
-                switchState(EXEC_PAUSED);
+                switchState(STATE_PAUSED);
                 break;
             }
 
@@ -1287,7 +1287,7 @@ Amiga::execute()
                 inspect();
                 auto vector = u8(cpu.debugger.catchpoints.hit->addr);
                 msgQueue.put(MSG_CATCHPOINT_REACHED, CpuMsg {cpu.getPC0(), vector});
-                switchState(EXEC_PAUSED);
+                switchState(STATE_PAUSED);
                 break;
             }
 
@@ -1296,7 +1296,7 @@ Amiga::execute()
                 clearFlag(RL::SWTRAP_REACHED);
                 inspect();
                 msgQueue.put(MSG_SWTRAP_REACHED, CpuMsg {cpu.getPC0(), 0});
-                switchState(EXEC_PAUSED);
+                switchState(STATE_PAUSED);
                 break;
             }
 
@@ -1306,7 +1306,7 @@ Amiga::execute()
                 inspect();
                 auto addr = u8(agnus.copper.debugger.breakpoints.hit->addr);
                 msgQueue.put(MSG_COPPERBP_REACHED, CpuMsg { addr, 0 });
-                switchState(EXEC_PAUSED);
+                switchState(STATE_PAUSED);
                 break;
             }
 
@@ -1316,14 +1316,14 @@ Amiga::execute()
                 inspect();
                 auto addr = u8(agnus.copper.debugger.watchpoints.hit->addr);
                 msgQueue.put(MSG_COPPERWP_REACHED, CpuMsg { addr, 0 });
-                switchState(EXEC_PAUSED);
+                switchState(STATE_PAUSED);
                 break;
             }
 
             // Are we requested to terminate the run loop?
             if (flags & RL::STOP) {
                 clearFlag(RL::STOP);
-                switchState(EXEC_PAUSED);
+                switchState(STATE_PAUSED);
                 break;
             }
 
@@ -1355,7 +1355,7 @@ Amiga::missingSlices() const
     auto target = elapsed.asNanoseconds() * i64(refreshRate()) / 1000000000;
 
     // Compute the number of missing slices
-    return isize(target - sliceCounter);
+    return isize(target - frameCounter);
 }
 
 void

@@ -11,6 +11,7 @@
 
 #include "Aliases.h"
 #include "Reflection.h"
+#include "Exception.h"
 
 //
 // Enumerations
@@ -18,31 +19,31 @@
 
 enum_long(EXEC_STATE)
 {
-    EXEC_OFF,
-    EXEC_PAUSED,
-    EXEC_RUNNING,
-    EXEC_SUSPENDED,
-    EXEC_HALTED
+    STATE_OFF,
+    STATE_PAUSED,
+    STATE_RUNNING,
+    STATE_SUSPENDED,
+    STATE_HALTED
 };
-typedef EXEC_STATE ExecutionState;
+typedef EXEC_STATE ExecState;
 
 #ifdef __cplusplus
-struct ExecutionStateEnum : util::Reflection<ExecutionStateEnum, ExecutionState>
+struct ExecStateEnum : util::Reflection<ExecStateEnum, ExecState>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = EXEC_HALTED;
+    static constexpr long maxVal = STATE_HALTED;
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
-    static const char *prefix() { return "EXEC"; }
-    static const char *key(ExecutionState value)
+    static const char *prefix() { return "STATE"; }
+    static const char *key(ExecState value)
     {
         switch (value) {
 
-            case EXEC_OFF:          return "OFF";
-            case EXEC_PAUSED:       return "PAUSED";
-            case EXEC_RUNNING:      return "RUNNING";
-            case EXEC_SUSPENDED:    return "SUSPENDED";
-            case EXEC_HALTED:       return "HALTED";
+            case STATE_OFF:          return "OFF";
+            case STATE_PAUSED:       return "PAUSED";
+            case STATE_RUNNING:      return "RUNNING";
+            case STATE_SUSPENDED:    return "SUSPENDED";
+            case STATE_HALTED:       return "HALTED";
         }
         return "???";
     }
