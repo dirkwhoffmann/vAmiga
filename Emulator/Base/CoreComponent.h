@@ -14,6 +14,7 @@
 #include "Inspectable.h"
 #include "Synchronizable.h"
 #include "Configurable.h"
+#include "Suspendable.h"
 #include "Serialization.h"
 #include "Concurrency.h"
 #include <vector>
@@ -28,7 +29,8 @@ struct Description {
 
 typedef std::vector<Description> Descriptions;
 
-class CoreComponent : public CoreObject, public Synchronizable {
+class CoreComponent : 
+public CoreObject, public Synchronizable, public Suspendable {
 
 public:
     
@@ -56,10 +58,12 @@ public:
     const char *objectName() const override;
     const char *description() const override;
     
-    /* Initializes the component and it's subcomponents. The initialization
-     * procedure is initiated once, in the constructor of the Amiga class. By
-     * default, a component enters it's initial configuration. Custom actions
-     * can be performed by implementing the _initialize() delegation function.
+    bool operator== (CoreComponent &other);
+    bool operator!= (CoreComponent &other) { return !(other == *this); }
+
+    /* This function is called inside the emulator's launch routine. It iterates
+     * through all components and calls the _initialize() delegate. By default
+     * the initial configuration is setup.
      */
     void initialize();
     virtual void _initialize() { resetConfig(); }
@@ -89,9 +93,6 @@ public:
     virtual bool isRunning() const = 0;
     virtual bool isSuspended() const = 0;
     virtual bool isHalted() const = 0;
-
-    virtual void suspend() = 0;
-    virtual void resume() = 0;
 
     // Throws an exception if the emulator is not ready to power on
     virtual void isReady() const throws;

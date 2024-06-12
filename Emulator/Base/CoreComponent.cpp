@@ -27,6 +27,12 @@ CoreComponent::description() const
     return getDescriptions().at(objid).description;
 }
 
+bool
+CoreComponent::operator== (CoreComponent &other)
+{
+    return checksum() == other.checksum();
+}
+
 void
 CoreComponent::initialize()
 {

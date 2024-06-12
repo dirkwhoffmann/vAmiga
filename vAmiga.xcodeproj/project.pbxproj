@@ -291,6 +291,8 @@
 		50EFB0CD2C18D95B0013B73C /* Inspectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0CA2C18D95B0013B73C /* Inspectable.cpp */; };
 		50EFB0D02C18E01E0013B73C /* Wakeable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0CE2C18E01E0013B73C /* Wakeable.cpp */; };
 		50EFB0D12C18E01E0013B73C /* Wakeable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0CE2C18E01E0013B73C /* Wakeable.cpp */; };
+		50EFB0D42C199C850013B73C /* Suspendable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0D22C199C850013B73C /* Suspendable.cpp */; };
+		50EFB0D52C199C850013B73C /* Suspendable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0D22C199C850013B73C /* Suspendable.cpp */; };
 		50F0BD2622AF883C001F4616 /* UART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F0BD2422AF883C001F4616 /* UART.cpp */; };
 		50F31C292409322F008A54D8 /* CopperPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F31C282409322F008A54D8 /* CopperPanel.swift */; };
 		50F54B2524B5D31D0078FDC9 /* u_heavy.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B0C24B5D31D0078FDC9 /* u_heavy.c */; };
@@ -951,6 +953,8 @@
 		50EFB0CB2C18D95B0013B73C /* Inspectable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Inspectable.h; sourceTree = "<group>"; };
 		50EFB0CE2C18E01E0013B73C /* Wakeable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Wakeable.cpp; sourceTree = "<group>"; };
 		50EFB0CF2C18E01E0013B73C /* Wakeable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Wakeable.h; sourceTree = "<group>"; };
+		50EFB0D22C199C850013B73C /* Suspendable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Suspendable.cpp; sourceTree = "<group>"; };
+		50EFB0D32C199C850013B73C /* Suspendable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Suspendable.h; sourceTree = "<group>"; };
 		50EFC7DF22E840870036A3DF /* Serialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serialization.h; sourceTree = "<group>"; };
 		50EFF1E726E25A5D00296065 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50F0BD2422AF883C001F4616 /* UART.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UART.cpp; sourceTree = "<group>"; };
@@ -1094,6 +1098,8 @@
 				50EFB0B92C1811C90013B73C /* Configurable.h */,
 				50EFB0B82C1811C90013B73C /* Configurable.cpp */,
 				50EFB0C12C18A73F0013B73C /* Synchronizable.h */,
+				50EFB0D32C199C850013B73C /* Suspendable.h */,
+				50EFB0D22C199C850013B73C /* Suspendable.cpp */,
 				50B14C0621EB218E002E32A6 /* CoreObject.h */,
 				50B14C0521EB218E002E32A6 /* CoreObject.cpp */,
 				50A61468260DC2D700A01428 /* CoreComponentTypes.h */,
@@ -2212,6 +2218,7 @@
 				50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */,
 				50DA83E12C160DCA001209AA /* Emulator.cpp in Sources */,
 				5020B18021EF136100B9E80E /* Denise.cpp in Sources */,
+				50EFB0D42C199C850013B73C /* Suspendable.cpp in Sources */,
 				505CEF5E26BD12430078FF52 /* DropZone.swift in Sources */,
 				50C8C44A2607396200F4E012 /* Layer.swift in Sources */,
 				5004C3AA27BD520400A9161A /* HardDrive.cpp in Sources */,
@@ -2486,6 +2493,7 @@
 				50FC049027DA196500C3E566 /* Denise.cpp in Sources */,
 				50FC04FC27DA1AA200C3E566 /* DiskController.cpp in Sources */,
 				506F30372B6BCAC70083EAEA /* Debugger.cpp in Sources */,
+				50EFB0D52C199C850013B73C /* Suspendable.cpp in Sources */,
 				50FC049527DA196C00C3E566 /* FFmpeg.cpp in Sources */,
 				50FC04A127DA197A00C3E566 /* SequencerInfo.cpp in Sources */,
 				50FC04B827DA19B200C3E566 /* FloppyDrive.cpp in Sources */,

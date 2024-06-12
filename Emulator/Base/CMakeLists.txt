@@ -11,6 +11,7 @@ Thread.cpp
 MsgQueue.cpp
 Defaults.cpp
 Host.cpp
+Suspendable.cpp
 Wakeable.cpp
 
 )

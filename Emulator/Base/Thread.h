@@ -305,13 +305,4 @@ private:
     void join() { if (thread.joinable()) thread.join(); }
 };
 
-struct AutoResume {
-
-    CoreComponent *c;
-    AutoResume(CoreComponent *c) : c(c) { c->suspend(); }
-    ~AutoResume() { c->resume(); }
-};
-
-#define SUSPENDED AutoResume _ar(this);
-
 }
