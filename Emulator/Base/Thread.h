@@ -174,6 +174,7 @@ protected:
     // Counters
     isize suspendCounter = 0;
     isize sliceCounter = 0;
+    isize statsCounter = 0;
 
     // Time stamps for calculating wakeup times
     util::Time baseTime;
@@ -189,6 +190,8 @@ protected:
 
     // The current CPU load in percent
     double cpuLoad = 0.0;
+    double fps = 0.0;
+    isize resyncs = 0;
 
     // Debug clocks
     util::Clock execClock;
@@ -206,7 +209,18 @@ public:
     
     const char *objectName() const override { return "Thread"; }
 
-    
+    // Checks the launch state
+    bool isLaunched() const { return thread.joinable(); }
+
+protected:
+
+    // Launches the emulator thread
+    void launch();
+
+    // Sanity check
+    void assertLaunched();
+
+
     //
     // Executing
     //
@@ -215,6 +229,9 @@ private:
     
     // The code to be executed in each iteration (implemented by the subclass)
     virtual void execute() = 0;
+
+    // Updates the emulator state (implemented by the subclass)
+    virtual void update() = 0;
 
     // Interval between two time slices (provided by the subclass)
     virtual util::Time sliceDelay() const = 0;
@@ -232,7 +249,7 @@ private:
     void sleepFrame();
 
     // The main entry point (called when the thread is created)
-    void main();
+    void runLoop();
 
 public:
 
@@ -253,7 +270,11 @@ public:
     
     double getCpuLoad() { return cpuLoad; }
     
-    
+private:
+
+    void computeStats();
+
+
     //
     // Managing states
     //

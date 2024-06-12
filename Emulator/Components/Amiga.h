@@ -194,7 +194,6 @@ public:
     ~Amiga();
 
     // Launches the emulator thread
-    void launch();
     void launch(const void *listener, Callback *func);
 
 
@@ -270,6 +269,7 @@ private:
 
 private:
 
+    void update() override;
     void execute() override;
 
 public:

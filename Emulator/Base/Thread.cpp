@@ -26,6 +26,27 @@ Thread::~Thread()
 }
 
 void
+Thread::launch()
+{
+    assert(!isLaunched());
+
+    // Start the thread and enter the main function
+    thread = std::thread(&Thread::runLoop, this);
+
+    assert(isLaunched());
+}
+
+void
+Thread::assertLaunched()
+{
+    if (!isLaunched()) {
+
+        throw std::runtime_error(string("The emulator thread hasn't been lauchend yet. "
+                                        "Missing call to launch()."));
+    }
+}
+
+void
 Thread::resync()
 {
     targetTime = util::Time::now();
@@ -38,6 +59,9 @@ Thread::resync()
 void
 Thread::executeFrame()
 {
+    // Only proceed if the emulator is running
+    if (!isRunning()) return;
+
     if (missing > 0 || warp) {
 
         trace(TIM_DEBUG, "execute: %lld us\n", execClock.restart().asMicroseconds());
@@ -55,8 +79,8 @@ Thread::executeFrame()
 void
 Thread::sleepFrame()
 {
-    // Only proceed if we're not running in warp mode
-    if (warp) return;
+    // Don't sleep if the emulator is running in warp mode
+    if (warp && isRunning()) return;
 
     if (missing > 0) {
 
@@ -99,46 +123,33 @@ Thread::sleepFrame()
 }
 
 void
-Thread::main()
+Thread::runLoop()
 {
     debug(RUN_DEBUG, "main()\n");
 
     baseTime = util::Time::now();
 
-    while (1) {
+    while (state != EXEC_HALTED) {
 
-        if (isRunning()) {
+        // Prepare for the next frame
+        update();
 
-            executeFrame();
-        }
+        // Compute missing frames
+        executeFrame();
 
-        if (!warp || !isRunning()) {
-            
-            sleepFrame();
-        }
-        
         // Are we requested to change state?
         if (stateChangeRequest.test()) {
 
             switchState(newState);
             stateChangeRequest.clear();
             stateChangeRequest.notify_one();
-
-            if (state == EXEC_HALTED) return;
         }
 
-        // Compute the CPU load once in a while
-        if (usize(sliceCounter) % 32 == 0) {
+        // Synchronize timing
+        sleepFrame();
 
-            auto used  = loadClock.getElapsedTime().asSeconds();
-            auto total = nonstopClock.getElapsedTime().asSeconds();
-
-            cpuLoad = used / total;
-
-            loadClock.restart();
-            loadClock.stop();
-            nonstopClock.restart();
-        }
+        // Compute statistics
+        computeStats();
     }
 }
 
@@ -230,6 +241,25 @@ Thread::switchTrack(bool state, u8 source)
 
     if (bool(old) != bool(track)) {
         CoreComponent::trackOnOff(track);
+    }
+}
+
+void
+Thread::computeStats()
+{
+    if (statsCounter++ == 32) {
+
+        auto used  = loadClock.getElapsedTime().asSeconds();
+        auto total = nonstopClock.getElapsedTime().asSeconds();
+
+        loadClock.restart();
+        loadClock.stop();
+        nonstopClock.restart();
+
+        cpuLoad = 0.3 * cpuLoad + 0.7 * used / total;
+        fps = 0.3 * fps + 0.7 * statsCounter / total;
+
+        statsCounter = 0;
     }
 }
 
@@ -332,19 +362,31 @@ Thread::trackOff(isize source)
 void
 Thread::changeStateTo(ExecutionState requestedState)
 {
-    assert(!isEmulatorThread());
-    assert(stateChangeRequest.test() == false);
+    assertLaunched();
 
-    // Assign new state
-    newState = requestedState;
+    if (isEmulatorThread()) {
 
-    // Request the change
-    stateChangeRequest.test_and_set();
-    assert(stateChangeRequest.test() == true);
+        // Switch immediately
+        switchState(requestedState);
+        assert(state == requestedState);
 
-    // Wait until the change has been performed
-    stateChangeRequest.wait(true);
-    assert(stateChangeRequest.test() == false);
+    } else {
+
+        // Remember the requested state
+        newState = requestedState;
+
+        // Request the change
+        assert(stateChangeRequest.test() == false);
+        stateChangeRequest.test_and_set();
+        assert(stateChangeRequest.test() == true);
+
+        if (!isEmulatorThread()) {
+
+            // Wait until the change has been performed
+            stateChangeRequest.wait(true);
+            assert(stateChangeRequest.test() == false);
+        }
+    }
 }
 
 void

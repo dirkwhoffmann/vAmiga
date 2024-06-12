@@ -109,16 +109,11 @@ Amiga::~Amiga()
 void
 Amiga::launch(const void *listener, Callback *func)
 {
-    msgQueue.setListener(listener, func);
-
-    launch();
-}
-
-void
-Amiga::launch()
-{
     // Initialize all components
     initialize();
+
+    // Connect the listener to the message queue of the main instance
+    msgQueue.setListener(listener, func);
 
     // Reset the emulator
     hardReset();
@@ -126,11 +121,8 @@ Amiga::launch()
     // Initialize the sync timer
     targetTime = util::Time::now();
 
-    if (!thread.joinable()) {
-
-        thread = std::thread(&Thread::main, this);
-        assert(thread.joinable());
-    }
+    // Launch the emulator thread
+    Thread::launch();
 }
 
 void
@@ -1231,6 +1223,12 @@ Amiga::save(u8 *buffer)
     CoreComponent::didSave();
 
     return result;
+}
+
+void
+Amiga::update()
+{
+
 }
 
 void
