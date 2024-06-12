@@ -7,6 +7,4 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#pragma once
-
 #include "config.h"

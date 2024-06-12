@@ -32,10 +32,10 @@ class Headless {
     map<string,string> keys;
 
     // The emulator instance
-    VAmiga vamiga;
+    // VAmiga vamiga;
 
     // Reference to the embedded Amiga
-    Amiga &amiga;
+    Amiga *amiga;
 
     // Barrier for syncing script execution
     util::Mutex barrier;
@@ -80,6 +80,9 @@ private:
 
 public:
     
+    // Reports size information
+    void reportSize();
+
     // Processes an incoming message
     void process(Message msg);
 };

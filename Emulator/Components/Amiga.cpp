@@ -126,36 +126,6 @@ Amiga::launch()
     // Initialize the sync timer
     targetTime = util::Time::now();
 
-    // Print some debug information
-    if (SNP_DEBUG) {
-
-        msg("             Amiga : %zu bytes\n", sizeof(Amiga));
-        msg("             Agnus : %zu bytes\n", sizeof(Agnus));
-        msg("       AudioFilter : %zu bytes\n", sizeof(AudioFilter));
-        msg("               CIA : %zu bytes\n", sizeof(CIA));
-        msg("       ControlPort : %zu bytes\n", sizeof(ControlPort));
-        msg("               CPU : %zu bytes\n", sizeof(CPU));
-        msg("            Denise : %zu bytes\n", sizeof(Denise));
-        msg("             Drive : %zu bytes\n", sizeof(FloppyDrive));
-        msg("          Keyboard : %zu bytes\n", sizeof(Keyboard));
-        msg("            Memory : %zu bytes\n", sizeof(Memory));
-        msg("moira::Breakpoints : %zu bytes\n", sizeof(moira::Breakpoints));
-        msg("moira::Watchpoints : %zu bytes\n", sizeof(moira::Watchpoints));
-        msg("   moira::Debugger : %zu bytes\n", sizeof(moira::Debugger));
-        msg("      moira::Moira : %zu bytes\n", sizeof(moira::Moira));
-        msg("             Muxer : %zu bytes\n", sizeof(Muxer));
-        msg("             Paula : %zu bytes\n", sizeof(Paula));
-        msg("       PixelEngine : %zu bytes\n", sizeof(PixelEngine));
-        msg("     RemoteManager : %zu bytes\n", sizeof(RemoteManager));
-        msg("               RTC : %zu bytes\n", sizeof(RTC));
-        msg("        RetroShell : %zu bytes\n", sizeof(RetroShell));
-        msg("           Sampler : %zu bytes\n", sizeof(Sampler));
-        msg("        SerialPort : %zu bytes\n", sizeof(SerialPort));
-        msg("            Volume : %zu bytes\n", sizeof(Volume));
-        msg("             Zorro : %zu bytes\n", sizeof(ZorroManager));
-        msg("\n");
-    }
-
     if (!thread.joinable()) {
 
         thread = std::thread(&Thread::main, this);
