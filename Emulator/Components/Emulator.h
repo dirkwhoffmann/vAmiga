@@ -20,6 +20,13 @@ public:
     // The virtual Amiga
     // Amiga main = Amiga(*this, 0);
     Amiga main = Amiga(*this);
+
+    //
+    // Warp mode
+    //
+
+    // Indicates if the emulator should run in warp mode
+    bool shouldWarp() const;
 };
 
 }

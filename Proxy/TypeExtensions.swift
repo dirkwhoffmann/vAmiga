@@ -48,7 +48,6 @@ extension EventSlot: CustomStringConvertible {
         case .MSE2:     return "Port 2 Mouse"
         case .RSH:      return "Retro Shell"
         case .KEY:      return "Auto Typing"
-        case .WBT:      return "Warp Boot"
         case .SRV:      return "Server Daemon"
         case .SER:      return "Null Modem Cable"
         case .ALA:      return "Alarms"

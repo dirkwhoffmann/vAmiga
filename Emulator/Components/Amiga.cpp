@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "Amiga.h"
+#include "Emulator.h"
 #include "Snapshot.h"
 #include "ADFFile.h"
 #include <algorithm>
@@ -175,8 +176,6 @@ Amiga::_reset(bool hard)
 
     // Clear all runloop flags
     flags = 0;
-
-    updateWarpState();
 }
 
 void
@@ -413,7 +412,6 @@ Amiga::setConfigItem(Option option, i64 value)
         case OPT_WARP_BOOT:
 
             config.warpBoot = isize(value);
-            updateWarpState();
             return;
 
         case OPT_WARP_MODE:
@@ -423,7 +421,6 @@ Amiga::setConfigItem(Option option, i64 value)
             }
 
             config.warpMode = WarpMode(value);
-            updateWarpState();
             return;
 
         case OPT_VSYNC:
@@ -1205,7 +1202,7 @@ Amiga::save(u8 *buffer)
 void
 Amiga::update()
 {
-
+    emulator.shouldWarp() ? warpOn() : warpOff();
 }
 
 void
@@ -1351,35 +1348,6 @@ Amiga::clearFlag(u32 flag)
     SYNCHRONIZED
 
     flags &= ~flag;
-}
-
-void
-Amiga::updateWarpState()
-{
-    if (agnus.clock < SEC(config.warpBoot)) {
-
-        switchWarp(true);
-        return;
-    }
-
-    switch (config.warpMode) {
-
-        case WARP_AUTO:     switchWarp(paula.diskController.spinning()); break;
-        case WARP_NEVER:    switchWarp(false); break;
-        case WARP_ALWAYS:   switchWarp(true); break;
-
-        default:
-            fatalError;
-    }
-}
-
-void
-Amiga::serviceWbtEvent()
-{
-    assert(agnus.id[SLOT_WBT] == WBT_DISABLE);
-
-    updateWarpState();
-    agnus.cancel <SLOT_WBT> ();
 }
 
 void

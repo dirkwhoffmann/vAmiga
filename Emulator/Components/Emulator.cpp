@@ -13,4 +13,25 @@
 namespace vamiga {
 
 
+bool
+Emulator::shouldWarp() const
+{
+    auto config = main.getConfig();
+
+    if (main.agnus.clock < SEC(config.warpBoot)) {
+
+        return true;
+    }
+
+    switch (config.warpMode) {
+
+        case WARP_AUTO:     return main.paula.diskController.spinning();
+        case WARP_NEVER:    return false;
+        case WARP_ALWAYS:   return true;
+
+        default:
+            fatalError;
+    }
+}
+
 }

@@ -611,9 +611,6 @@ FloppyDrive::setMotor(bool value)
     msgQueue.put(MSG_DRIVE_LED, DriveMsg { i16(nr), value, 0, 0 });
     msgQueue.put(MSG_DRIVE_MOTOR, DriveMsg { i16(nr), value, 0, 0 });
 
-    // Enable or disable warp mode if applicable
-    amiga.updateWarpState();
-
     debug(DSK_DEBUG, "Motor %s [%d]\n", motor ? "on" : "off", idCount);
 }
 
