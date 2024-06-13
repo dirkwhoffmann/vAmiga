@@ -1202,7 +1202,7 @@ Amiga::save(u8 *buffer)
 void
 Amiga::update()
 {
-    emulator.shouldWarp() ? warpOn() : warpOff();
+    emulator.shouldWarp() ? switchWarpOn() : switchWarpOff();
 }
 
 void

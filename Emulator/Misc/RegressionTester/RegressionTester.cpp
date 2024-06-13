@@ -39,7 +39,7 @@ RegressionTester::prepare(ConfigScheme scheme, string rom, string ext)
     constexpr isize warpSource = 1;
     
     // Run as fast as possible
-    amiga.warpOn(warpSource);
+    amiga.switchWarpOn(warpSource);
 }
 
 void

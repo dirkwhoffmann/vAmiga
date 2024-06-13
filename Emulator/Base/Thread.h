@@ -290,8 +290,8 @@ public:
     bool isWarping() const { return warp != 0; }
     bool isTracking() const { return track != 0; }
 
-    void suspend() override;
-    void resume() override;
+    void suspendThread();
+    void resumeThread();
 
     void powerOn();
     void powerOff();
@@ -299,10 +299,10 @@ public:
     void pause();
     void halt();
 
-    void warpOn(isize source = 0);
-    void warpOff(isize source = 0);
-    void trackOn(isize source = 0);
-    void trackOff(isize source = 0);
+    void switchWarpOn(isize source = 0);
+    void switchWarpOff(isize source = 0);
+    void switchTrackOn(isize source = 0);
+    void switchTrackOff(isize source = 0);
 
 protected:
 

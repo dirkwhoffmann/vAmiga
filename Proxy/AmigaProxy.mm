@@ -2964,9 +2964,9 @@ using namespace vamiga::moira;
 - (void)setTrackMode:(BOOL)value
 {
     if (value) {
-        [self amiga]->trackOn();
+        [self amiga]->switchTrackOn();
     } else {
-        [self amiga]->trackOff();
+        [self amiga]->switchTrackOff();
     }
 }
 

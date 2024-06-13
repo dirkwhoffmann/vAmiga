@@ -406,25 +406,25 @@ Thread::halt()
 }
 
 void
-Thread::warpOn(isize source)
+Thread::switchWarpOn(isize source)
 {
     SUSPENDED switchWarp(true, u8(source));
 }
 
 void
-Thread::warpOff(isize source)
+Thread::switchWarpOff(isize source)
 {
     SUSPENDED switchWarp(false, u8(source));
 }
 
 void
-Thread::trackOn(isize source)
+Thread::switchTrackOn(isize source)
 {
     SUSPENDED switchTrack(true, u8(source));
 }
 
 void
-Thread::trackOff(isize source)
+Thread::switchTrackOff(isize source)
 {
     SUSPENDED switchTrack(false, u8(source));
 }
@@ -467,7 +467,7 @@ Thread::wakeUp()
 }
 
 void
-Thread::suspend()
+Thread::suspendThread()
 {
     if (!isEmulatorThread()) {
 
@@ -487,7 +487,7 @@ Thread::suspend()
 }
 
 void
-Thread::resume()
+Thread::resumeThread()
 {
     if (!isEmulatorThread()) {
 
