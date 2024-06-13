@@ -17,7 +17,7 @@ extension Inspector {
 
     private func cachePaula() {
 
-        paulaInfo = amiga.paula.info
+        paulaInfo = amiga.paused ? amiga.paula.info : amiga.paula.cachedInfo
         audioInfo0 = amiga.paula.audioInfo0
         audioInfo1 = amiga.paula.audioInfo1
         audioInfo2 = amiga.paula.audioInfo2

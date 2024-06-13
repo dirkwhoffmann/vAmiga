@@ -11,7 +11,7 @@ extension Inspector {
 
     private func cacheAgnus() {
 
-        agnusInfo = amiga.agnus.info
+        agnusInfo = amiga.paused ? amiga.agnus.info : amiga.agnus.cachedInfo
     }
 
     func refreshAgnus(count: Int = 0, full: Bool = false) {

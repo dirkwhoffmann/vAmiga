@@ -160,6 +160,7 @@ public:
      * returned. If the emulator isn't running, the function first updates the
      * cached values in order to return up-to-date results.
      */
+    /*
     template<class T> T getInfo(T &cachedValues) const {
         
         {   SYNCHRONIZED
@@ -168,6 +169,7 @@ public:
             return cachedValues;
         }
     }
+    */
     
     //
     // Serializing

@@ -19,7 +19,7 @@
 
 namespace vamiga {
 
-class Copper : public SubComponent
+class Copper : public SubComponent, public Inspectable<CopperInfo>
 {
     Descriptions descriptions = {{
 
@@ -157,8 +157,8 @@ public:
 public:
     
     // Returns the result of the latest inspection
-    CopperInfo getInfo() const { return CoreComponent::getInfo(info); }
-
+    // CopperInfo getInfo() const { return CoreComponent::getInfo(info); }
+    void cacheInfo(CopperInfo &result) const override;
 
     //
     // Accessing

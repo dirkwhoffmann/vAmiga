@@ -35,6 +35,11 @@ TOD::_reset(bool hard)
 void
 TOD::_inspect() const
 {
+}
+
+void
+TOD::cacheInfo(TODInfo &info) const
+{
     {   SYNCHRONIZED
         
         info.value = tod.value;

@@ -284,6 +284,11 @@ using namespace vamiga::moira;
     return [self cpu]->cpu->getInfo();
 }
 
+- (CPUInfo)cachedInfo
+{
+    return [self cpu]->cpu->getCachedInfo();
+}
+
 - (i64)clock
 {
     return [self cpu]->cpu->getCpuClock();
@@ -381,6 +386,11 @@ using namespace vamiga::moira;
 - (CIAInfo)info
 {
     return [self cia]->cia->getInfo();
+}
+
+- (CIAInfo)cachedInfo
+{
+    return [self cia]->cia->getCachedInfo();
 }
 
 @end
@@ -667,6 +677,11 @@ using namespace vamiga::moira;
     return [self agnus]->agnus->getInfo();
 }
 
+- (AgnusInfo)cachedInfo
+{
+    return [self agnus]->agnus->getCachedInfo();
+}
+
 - (EventInfo)eventInfo
 {
     return [self agnus]->agnus->getEventInfo();
@@ -726,6 +741,11 @@ using namespace vamiga::moira;
     return [self copper]->copper->getInfo();
 }
 
+- (CopperInfo)cachedInfo
+{
+    return [self copper]->copper->getCachedInfo();
+}
+
 - (BOOL)isIllegalInstr:(NSInteger)addr
 {
     return [self copper]->copper->isIllegalInstr((u32)addr);
@@ -760,6 +780,11 @@ using namespace vamiga::moira;
 - (BlitterInfo)info
 {
     return [self blitter]->blitter->getInfo();
+}
+
+- (BlitterInfo)cachedInfo
+{
+    return [self blitter]->blitter->getCachedInfo();
 }
 
 @end
@@ -798,6 +823,11 @@ using namespace vamiga::moira;
 - (DeniseInfo)info
 {
     return [self denise]->denise->getInfo();
+}
+
+- (DeniseInfo)cachedInfo
+{
+    return [self denise]->denise->getCachedInfo();
 }
 
 - (SpriteInfo)getSpriteInfo:(NSInteger)nr
@@ -947,6 +977,11 @@ using namespace vamiga::moira;
     return [self paula]->paula->getInfo();
 }
 
+- (PaulaInfo)cachedInfo
+{
+    return [self paula]->paula->getCachedInfo();
+}
+
 - (StateMachineInfo)audioInfo0
 {
     return [self paula]->paula->channel0.getInfo();
@@ -970,6 +1005,11 @@ using namespace vamiga::moira;
 - (UARTInfo)uartInfo
 {
     return [self paula]->paula->uart.getInfo();
+}
+
+- (UARTInfo)cachedUartInfo
+{
+    return [self paula]->paula->uart.getCachedInfo();
 }
 
 - (MuxerStats)muxerStats
@@ -1141,6 +1181,11 @@ using namespace vamiga::moira;
     return [self cp]->controlPort->getInfo();
 }
 
+- (ControlPortInfo)cachedInfo
+{
+    return [self cp]->controlPort->getCachedInfo();
+}
+
 @end
 
 
@@ -1158,6 +1203,11 @@ using namespace vamiga::moira;
 - (SerialPortInfo)info
 {
     return [self serial]->serialPort->getInfo();
+}
+
+- (SerialPortInfo)cachedInfo
+{
+    return [self serial]->serialPort->getCachedInfo();
 }
 
 - (NSInteger)readIncomingPrintableByte

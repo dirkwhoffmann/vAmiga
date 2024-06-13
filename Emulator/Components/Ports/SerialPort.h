@@ -23,7 +23,7 @@ namespace vamiga {
 #define DTR_MASK (1 << 20)
 #define RI_MASK  (1 << 22)
 
-class SerialPort : public SubComponent {
+class SerialPort : public SubComponent, public Inspectable<SerialPortInfo> {
 
     Descriptions descriptions = {{
 
@@ -123,8 +123,8 @@ public:
     
 public:
 
-    SerialPortInfo getInfo() const { return CoreComponent::getInfo(info); }
-
+    // SerialPortInfo getInfo() const { return CoreComponent::getInfo(info); }
+    void cacheInfo(SerialPortInfo &info) const override;
 
     //
     // Accessing port pins

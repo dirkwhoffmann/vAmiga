@@ -53,6 +53,11 @@ Copper::_dump(Category category, std::ostream& os) const
 void
 Copper::_inspect() const
 {
+}
+
+void
+Copper::cacheInfo(CopperInfo &info) const
+{
     SYNCHRONIZED
     
     info.copList = copList;

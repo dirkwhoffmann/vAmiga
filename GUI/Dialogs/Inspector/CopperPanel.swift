@@ -14,7 +14,7 @@ extension Inspector {
 
     private func cacheCopper() {
 
-        copperInfo = amiga.copper.info
+        copperInfo = amiga.paused ? amiga.copper.info : amiga.copper.cachedInfo
     }
 
     func refreshCopper(count: Int = 0, full: Bool = false) {

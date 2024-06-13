@@ -25,6 +25,11 @@ ControlPort::ControlPort(Amiga& ref, isize nr) : SubComponent(ref), nr(nr)
 void
 ControlPort::_inspect() const
 {
+}
+
+void 
+ControlPort::cacheInfo(ControlPortInfo &info) const
+{
     {   SYNCHRONIZED
         
         info.joydat = joydat();

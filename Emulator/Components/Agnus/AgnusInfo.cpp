@@ -622,6 +622,10 @@ Agnus::_dump(Category category, std::ostream& os) const
 void
 Agnus::_inspect() const
 {
+}
+void
+Agnus::cacheInfo(AgnusInfo &info) const
+{
     SYNCHRONIZED
     
     info.vpos     = pos.v;
@@ -702,12 +706,13 @@ Agnus::getSlotInfo(isize nr) const
     }
 }
 
-
+/*
 void
 Agnus::clearStats()
 {
     stats = { };
 }
+*/
 
 void
 Agnus::updateStats()

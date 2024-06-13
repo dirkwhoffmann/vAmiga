@@ -84,6 +84,11 @@ Paula::_warpOff()
 void
 Paula::_inspect() const
 {
+}
+
+void 
+Paula::cacheInfo(PaulaInfo &info) const
+{
     {   SYNCHRONIZED
         
         info.intreq = intreq;

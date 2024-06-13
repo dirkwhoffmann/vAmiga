@@ -71,6 +71,11 @@ SerialPort::setConfigItem(Option option, i64 value)
 void
 SerialPort::_inspect() const
 {
+}
+
+void
+SerialPort::cacheInfo(SerialPortInfo &info) const
+{
     {   SYNCHRONIZED
         
         info.port = port;

@@ -341,6 +341,7 @@
 @interface CPUProxy : CoreComponentProxy { }
     
 @property (readonly) CPUInfo info;
+@property (readonly) CPUInfo cachedInfo;
 @property (readonly) i64 clock;
 @property (readonly) BOOL halted;
 
@@ -369,6 +370,7 @@
 @interface CIAProxy : CoreComponentProxy { }
  
 @property (readonly) CIAInfo info;
+@property (readonly) CIAInfo cachedInfo;
 
 @end
 
@@ -438,6 +440,7 @@
 
 @property (readonly) NSInteger chipRamLimit;
 @property (readonly) AgnusInfo info;
+@property (readonly) AgnusInfo cachedInfo;
 @property (readonly) EventInfo eventInfo;
 - (EventSlotInfo)getEventSlotInfo:(NSInteger)slot;
 @property (readonly) BOOL isOCS;
@@ -457,6 +460,7 @@
 @interface CopperProxy : CoreComponentProxy { }
 
 @property (readonly) CopperInfo info;
+@property (readonly) CopperInfo cachedInfo;
 
 - (BOOL)isIllegalInstr:(NSInteger)addr;
 - (NSString *)disassemble:(NSInteger)addr symbolic:(BOOL)sym;
@@ -472,6 +476,7 @@
 @interface BlitterProxy : CoreComponentProxy { }
 
 @property (readonly) BlitterInfo info;
+@property (readonly) BlitterInfo cachedInfo;
 
 @end
 
@@ -494,6 +499,7 @@
 @interface DeniseProxy : CoreComponentProxy { }
 
 @property (readonly) DeniseInfo info;
+@property (readonly) DeniseInfo cachedInfo;
 - (SpriteInfo)getSpriteInfo:(NSInteger)nr;
 
 - (NSInteger)sprDataLines:(NSInteger)nr;
@@ -539,11 +545,13 @@
 @interface PaulaProxy : CoreComponentProxy { }
 
 @property (readonly) PaulaInfo info;
+@property (readonly) PaulaInfo cachedInfo;
 @property (readonly) StateMachineInfo audioInfo0;
 @property (readonly) StateMachineInfo audioInfo1;
 @property (readonly) StateMachineInfo audioInfo2;
 @property (readonly) StateMachineInfo audioInfo3;
 @property (readonly) UARTInfo uartInfo;
+@property (readonly) UARTInfo cachedUartInfo;
 @property (readonly) MuxerStats muxerStats;
 
 - (void)readMonoSamples:(float *)target size:(NSInteger)n;
@@ -586,6 +594,7 @@
 @property (readonly, strong) JoystickProxy *joystick;
 
 @property (readonly) ControlPortInfo info;
+@property (readonly) ControlPortInfo cachedInfo;
 
 @end
 
@@ -597,6 +606,7 @@
 @interface SerialPortProxy : CoreComponentProxy { }
 
 @property (readonly) SerialPortInfo info;
+@property (readonly) SerialPortInfo cachedInfo;
 
 - (NSInteger)readIncomingPrintableByte;
 - (NSInteger)readOutgoingPrintableByte;

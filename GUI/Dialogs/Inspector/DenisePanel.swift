@@ -11,7 +11,7 @@ extension Inspector {
 
     private func cacheDenise() {
 
-        deniseInfo = amiga.denise.info
+        deniseInfo = amiga.paused ? amiga.denise.info : amiga.denise.cachedInfo
         spriteInfo = amiga.denise.getSpriteInfo(selectedSprite)
     }
 

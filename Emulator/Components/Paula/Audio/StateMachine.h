@@ -17,7 +17,7 @@
 namespace vamiga {
 
 template <isize nr>
-class StateMachine : public SubComponent {
+class StateMachine : public SubComponent, public Inspectable<StateMachineInfo> {
 
     Descriptions descriptions = {
         {
@@ -168,9 +168,9 @@ public:
     
 public:
     
-    StateMachineInfo getInfo() const { return CoreComponent::getInfo(info); }
+    // StateMachineInfo getInfo() const { return CoreComponent::getInfo(info); }
+    void cacheInfo(StateMachineInfo &result) const override;
 
-    
     //
     // Performing state machine actions
     //

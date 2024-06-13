@@ -1349,6 +1349,21 @@ Amiga::missingFrames() const
     return isize(target - frameCounter);
 }
 
+void 
+Amiga::cacheInfo(AmigaInfo &result) const
+{
+    {   SYNCHRONIZED
+
+        info.cpuClock = cpu.getMasterClock();
+        info.dmaClock = agnus.clock;
+        info.ciaAClock = ciaA.getClock();
+        info.ciaBClock = ciaB.getClock();
+        info.frame = agnus.pos.frame;
+        info.vpos = agnus.pos.v;
+        info.hpos = agnus.pos.h;
+    }
+}
+
 void
 Amiga::setFlag(u32 flag)
 {

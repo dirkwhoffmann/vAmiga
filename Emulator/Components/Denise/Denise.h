@@ -20,8 +20,8 @@
 
 namespace vamiga {
 
-class Denise : public SubComponent {
-    
+class Denise : public SubComponent, public Inspectable<DeniseInfo> {
+
     Descriptions descriptions = {{
 
         .name           = "Denise",
@@ -453,9 +453,10 @@ public:
 
 public:
     
-    DeniseInfo getInfo() const { return CoreComponent::getInfo(info); }
+    // DeniseInfo getInfo() const { return CoreComponent::getInfo(info); }
+    void cacheInfo(DeniseInfo &result) const override;
 
-    
+
     //
     // Working with the bitplane shift registers
     //

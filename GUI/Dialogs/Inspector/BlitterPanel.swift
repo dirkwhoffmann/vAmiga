@@ -11,7 +11,7 @@ extension Inspector {
 
     private func cacheBlitter() {
 
-        blitterInfo = amiga.blitter.info
+        blitterInfo = amiga.paused ? amiga.blitter.info : amiga.blitter.cachedInfo
     }
 
     func refreshBlitter(count: Int = 0, full: Bool = false) {

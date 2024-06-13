@@ -11,7 +11,6 @@
 
 #include "Aliases.h"
 #include "Reflection.h"
-#include "Exception.h"
 
 //
 // Enumerations

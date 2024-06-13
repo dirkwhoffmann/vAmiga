@@ -826,7 +826,7 @@ Moira::getIrqVector(u8 level) const {
 }
 
 InstrInfo
-Moira::getInfo(u16 op) const
+Moira::getInstrInfo(u16 op) const
 {
     if constexpr (BUILD_INSTR_INFO_TABLE == false) {
         throw std::runtime_error("This feature requires BUILD_INSTR_INFO_TABLE = true\n");

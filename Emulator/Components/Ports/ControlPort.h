@@ -16,7 +16,7 @@
 
 namespace vamiga {
 
-class ControlPort : public SubComponent {
+class ControlPort : public SubComponent, public Inspectable<ControlPortInfo> {
 
     Descriptions descriptions = {
         {
@@ -127,7 +127,8 @@ public:
 
 public:
     
-    ControlPortInfo getInfo() const { return CoreComponent::getInfo(info); }
+    // ControlPortInfo getInfo() const { return CoreComponent::getInfo(info); }
+    void cacheInfo(ControlPortInfo &result) const override;
 
     bool isPort1() const { return nr == PORT1; }
     bool isPort2() const { return nr == PORT2; }

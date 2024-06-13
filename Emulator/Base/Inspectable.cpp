@@ -8,3 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "Inspectable.h"
+
+namespace vamiga {
+
+}

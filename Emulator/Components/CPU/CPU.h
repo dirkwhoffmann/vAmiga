@@ -16,8 +16,8 @@
 
 namespace vamiga {
 
-class CPU : public moira::Moira {
-
+class CPU : public moira::Moira, public Inspectable<CPUInfo> 
+{
     Descriptions descriptions = {{
 
         .name           = "CPU",
@@ -179,8 +179,8 @@ public:
     
 public:
     
-    CPUInfo getInfo() const { return CoreComponent::getInfo(info); }
-
+    // CPUInfo getInfo() const { return CoreComponent::getInfo(info); }
+    void cacheInfo(CPUInfo &result) const override;
 
     //
     // Working with the clock

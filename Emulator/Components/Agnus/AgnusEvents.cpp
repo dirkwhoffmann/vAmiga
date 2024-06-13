@@ -766,12 +766,12 @@ Agnus::serviceINSEvent(EventID id)
 
         case INS_AMIGA:
             
-            amiga.inspect();
+            amiga.record();
             break;
             
         case INS_CPU:
             
-            cpu.inspect();
+            cpu.record();
             break;
             
         case INS_MEM:
@@ -781,36 +781,36 @@ Agnus::serviceINSEvent(EventID id)
             
         case INS_CIA:
             
-            ciaa.inspect();
-            ciab.inspect();
+            ciaa.record();
+            ciab.record();
             break;
             
         case INS_AGNUS:
             
-            inspect();
+            record();
             break;
             
         case INS_PAULA:
             
-            paula.inspect();
+            paula.record();
             break;
             
         case INS_DENISE:
             
-            denise.inspect();
+            denise.record();
             break;
             
         case INS_PORTS:
             
-            serialPort.inspect();
-            paula.uart.inspect();
-            controlPort1.inspect();
-            controlPort2.inspect();
+            serialPort.record();
+            paula.uart.record();
+            controlPort1.record();
+            controlPort2.record();
             break;
             
         case INS_EVENTS:
             
-            agnus.inspect();
+            agnus.record();
             break;
 
         default:

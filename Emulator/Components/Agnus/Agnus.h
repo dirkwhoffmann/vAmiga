@@ -32,7 +32,7 @@ static constexpr usize DRAW_ODD =  0b001;
 static constexpr usize DRAW_EVEN = 0b010;
 static constexpr usize DRAW_BOTH = 0b011;
 
-class Agnus : public SubComponent {
+class Agnus : public SubComponent, public Inspectable<AgnusInfo, AgnusStats> {
 
     Descriptions descriptions = {{
 
@@ -357,15 +357,16 @@ public:
     
 public:
     
-    AgnusInfo getInfo() const { return CoreComponent::getInfo(info); }
-    EventInfo getEventInfo() const { return CoreComponent::getInfo(eventInfo); }
+    // AgnusInfo getInfo() const { return CoreComponent::getInfo(info); }
+    void cacheInfo(AgnusInfo &result) const override;
+    EventInfo getEventInfo() const { return eventInfo; } //  CoreComponent::getInfo(eventInfo); }
     EventSlotInfo getSlotInfo(isize nr) const;
-    const AgnusStats &getStats() { return stats; }
-    
+    // const AgnusStats &getStats() { return stats; }
+
 private:
     
     void inspectSlot(EventSlot nr) const;
-    void clearStats();
+    // void clearStats();
     void updateStats();
 
 

@@ -26,8 +26,8 @@ typedef union
 }
 Counter24;
 
-class TOD : public SubComponent {
-    
+class TOD : public SubComponent, public Inspectable<TODInfo> {
+
     Descriptions descriptions = {{
 
         .name           = "TOD",
@@ -137,8 +137,8 @@ public:
     
 public:
     
-    TODInfo getInfo() const { return CoreComponent::getInfo(info); }
-
+    // TODInfo getInfo() const { return CoreComponent::getInfo(info); }
+    void cacheInfo(TODInfo &result) const override;
     void _inspect() const override;
 
 

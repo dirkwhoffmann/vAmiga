@@ -30,7 +30,7 @@ namespace vamiga {
  * Level 0 and 1 invoke the FastBlitter. Level 2 invokes the SlowBlitter.
  */
 
-class Blitter : public SubComponent
+class Blitter : public SubComponent, public Inspectable<BlitterInfo>
 {
     Descriptions descriptions = {{
 
@@ -313,9 +313,9 @@ public:
     
 public:
     
-    BlitterInfo getInfo() const { return CoreComponent::getInfo(info); }
-    
-    
+    // BlitterInfo getInfo() const { return CoreComponent::getInfo(info); }
+    void cacheInfo(BlitterInfo &result) const override;
+
     //
     // Accessing
     //

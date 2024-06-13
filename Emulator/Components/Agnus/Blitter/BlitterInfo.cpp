@@ -84,6 +84,11 @@ Blitter::_dump(Category category, std::ostream& os) const
 void
 Blitter::_inspect() const
 {
+}
+
+void
+Blitter::cacheInfo(BlitterInfo &info) const
+{
     SYNCHRONIZED
     
     auto minterm = bltconLF();

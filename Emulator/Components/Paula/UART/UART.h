@@ -16,8 +16,8 @@
 
 namespace vamiga {
 
-class UART : public SubComponent {
-    
+class UART : public SubComponent, public Inspectable<UARTInfo> {
+
     Descriptions descriptions = {{
 
         .name           = "UART",
@@ -115,8 +115,8 @@ public:
 
 public:
 
-    UARTInfo getInfo() const { return CoreComponent::getInfo(info); }
-
+    // UARTInfo getInfo() const { return CoreComponent::getInfo(info); }
+    void cacheInfo(UARTInfo &result) const override;
 
     //
     // Accessing

@@ -16,10 +16,21 @@ extension Inspector {
     private func cachePorts() {
 
         if amiga != nil {
-            port1Info = amiga.controlPort1.info
-            port2Info = amiga.controlPort2.info
-            serInfo   = amiga.serialPort.info
-            uartInfo  = amiga.paula.uartInfo
+
+            if amiga.paused {
+
+                port1Info = amiga.controlPort1.info
+                port2Info = amiga.controlPort2.info
+                serInfo   = amiga.serialPort.info
+                uartInfo  = amiga.paula.uartInfo
+
+            } else {
+
+                port1Info = amiga.controlPort1.cachedInfo
+                port2Info = amiga.controlPort2.cachedInfo
+                serInfo   = amiga.serialPort.cachedInfo
+                uartInfo  = amiga.paula.cachedUartInfo
+            }
         }
     }
 

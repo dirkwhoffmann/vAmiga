@@ -70,7 +70,7 @@ constexpr u64 CIADelayMask = ~CIALast
 & ~CIAReadIcr0 & ~CIAClearIcr0 & ~CIAAckIcr0 & ~CIASetIcr0 & ~CIATODInt0
 & ~CIASerInt0 & ~CIASdrToSsr0 & ~CIASsrToSdr0 & ~CIASerClk0;
 
-class CIA : public SubComponent {
+class CIA : public SubComponent, public Inspectable<CIAInfo> {
     
     Descriptions descriptions = {
         {
@@ -384,7 +384,8 @@ public:
     
 public:
     
-    CIAInfo getInfo() const { return CoreComponent::getInfo(info); }
+    // CIAInfo getInfo() const { return CoreComponent::getInfo(info); }
+    void cacheInfo(CIAInfo &result) const override;
     Cycle getClock() const { return clock; }
     
 protected:

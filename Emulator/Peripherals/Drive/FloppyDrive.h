@@ -20,8 +20,8 @@
 
 namespace vamiga {
 
-class FloppyDrive : public Drive {
-    
+class FloppyDrive : public Drive, public Inspectable<FloppyDriveInfo> {
+
     Descriptions descriptions = {
         {
             .name           = "df0",
@@ -232,7 +232,8 @@ public:
 public:
     
     // Returns the result of the latest inspection
-    FloppyDriveInfo getInfo() const { return CoreComponent::getInfo(info); }
+    // FloppyDriveInfo getInfo() const { return CoreComponent::getInfo(info); }
+    void cacheInfo(FloppyDriveInfo &info) const override;
 
     // Return the identification pattern of this drive
     u32 getDriveId() const;

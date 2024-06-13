@@ -16,7 +16,7 @@
 
 namespace vamiga {
 
-class DiskController : public SubComponent
+class DiskController : public SubComponent, public Inspectable<DiskControllerInfo>
 {
     Descriptions descriptions = {{
 
@@ -190,8 +190,8 @@ public:
     
 public:
     
-    DiskControllerInfo getInfo() const { return CoreComponent::getInfo(info); }
-
+    // DiskControllerInfo getInfo() const { return CoreComponent::getInfo(info); }
+    void cacheInfo(DiskControllerInfo &result) const override;
 
     //
     // Accessing

@@ -43,6 +43,11 @@ StateMachine<nr>::_reset(bool hard)
 template <isize nr> void
 StateMachine<nr>::_inspect() const
 {
+}
+
+template <isize nr> void
+StateMachine<nr>::cacheInfo(StateMachineInfo &info) const
+{
     {   SYNCHRONIZED
         
         info.state = state;
@@ -355,10 +360,10 @@ template StateMachine<1>::StateMachine(Amiga &ref);
 template StateMachine<2>::StateMachine(Amiga &ref);
 template StateMachine<3>::StateMachine(Amiga &ref);
 
-template StateMachineInfo StateMachine<0>::getInfo() const;
-template StateMachineInfo StateMachine<1>::getInfo() const;
-template StateMachineInfo StateMachine<2>::getInfo() const;
-template StateMachineInfo StateMachine<3>::getInfo() const;
+template void StateMachine<0>::cacheInfo(StateMachineInfo &result) const;
+template void StateMachine<1>::cacheInfo(StateMachineInfo &result) const;
+template void StateMachine<2>::cacheInfo(StateMachineInfo &result) const;
+template void StateMachine<3>::cacheInfo(StateMachineInfo &result) const;
 
 template void StateMachine<0>::enableDMA();
 template void StateMachine<1>::enableDMA();

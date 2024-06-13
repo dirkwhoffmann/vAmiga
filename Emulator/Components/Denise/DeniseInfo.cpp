@@ -18,6 +18,11 @@ namespace vamiga {
 void
 Denise::_inspect() const
 {
+}
+
+void 
+Denise::cacheInfo(DeniseInfo &info) const
+{
     {   SYNCHRONIZED
 
         info.ecs = isECS();

@@ -21,8 +21,8 @@
 
 namespace vamiga {
 
-class Paula : public SubComponent {
-    
+class Paula : public SubComponent, public Inspectable<PaulaInfo> {
+
     Descriptions descriptions = {{
 
         .name           = "Paula",
@@ -184,7 +184,8 @@ public:
     
 public:
     
-    PaulaInfo getInfo() const { return CoreComponent::getInfo(info); }
+    // PaulaInfo getInfo() const { return CoreComponent::getInfo(info); }
+    void cacheInfo(PaulaInfo &result) const override;
 
 
     //

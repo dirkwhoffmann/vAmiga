@@ -248,7 +248,7 @@ public:
     void dump16(char *str, u32 addr, int cnt) const;
 
     // Return an info struct for a certain opcode
-    InstrInfo getInfo(u16 op) const;
+    InstrInfo getInstrInfo(u16 op) const;
 
 
     //

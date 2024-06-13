@@ -47,7 +47,7 @@ namespace vamiga {
  * query information from Paula, you need to invoke a public method on
  * amiga.paula.
  */
-class Amiga : public Thread {
+class Amiga : public Thread, public Inspectable<AmigaInfo> {
 
     Descriptions descriptions = {{
 
@@ -278,6 +278,15 @@ public:
 
 
     //
+    // Methods from Inspectable
+    //
+
+public:
+
+    void cacheInfo(AmigaInfo &result) const override;
+
+
+    //
     // Configuring
     //
 
@@ -313,7 +322,7 @@ private:
 
 public:
 
-    AmigaInfo getInfo() const { return CoreComponent::getInfo(info); }
+    // AmigaInfo getInfo() const { return CoreComponent::getInfo(info); }
 
     InspectionTarget getInspectionTarget() const;
     void setInspectionTarget(InspectionTarget target, Cycle trigger = 0);
