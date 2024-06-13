@@ -441,8 +441,7 @@
 @property (readonly) NSInteger chipRamLimit;
 @property (readonly) AgnusInfo info;
 @property (readonly) AgnusInfo cachedInfo;
-@property (readonly) EventInfo eventInfo;
-- (EventSlotInfo)getEventSlotInfo:(NSInteger)slot;
+- (EventSlotInfo)cachedSlotInfo:(NSInteger)slot;
 @property (readonly) BOOL isOCS;
 @property (readonly) BOOL isECS;
 @property (readonly) BOOL isPAL;

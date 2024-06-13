@@ -682,14 +682,9 @@ using namespace vamiga::moira;
     return [self agnus]->agnus->getCachedInfo();
 }
 
-- (EventInfo)eventInfo
+- (EventSlotInfo)cachedSlotInfo:(NSInteger)slot
 {
-    return [self agnus]->agnus->getEventInfo();
-}
-
-- (EventSlotInfo)getEventSlotInfo:(NSInteger)slot
-{
-    return [self agnus]->agnus->getSlotInfo(slot);
+    return [self agnus]->agnus->getCachedInfo().slotInfo[slot];
 }
 
 - (BOOL)isOCS

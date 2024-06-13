@@ -11,21 +11,23 @@ extension Inspector {
 
     private func cacheEvents() {
 
-        eventInfo = amiga.agnus.eventInfo
+        // eventInfo = amiga.agnus.eventInfo
+        agnusInfo = amiga.paused ? amiga.agnus.info : amiga.agnus.cachedInfo
+        // eventInfo = agnusInfo.eventInfo
     }
 
     func refreshEvents(count: Int = 0, full: Bool = false) {
 
         cacheEvents()
 
-        evCpuProgress.integerValue = Int(eventInfo.cpuClock)
-        evCpuProgress2.integerValue = Int(eventInfo.cpuCycles)
-        evDmaProgress.integerValue = Int(eventInfo.dmaClock)
-        evDmaProgress2.integerValue = Int(eventInfo.dmaClock / 8)
-        evCiaAProgress.integerValue = Int(eventInfo.ciaAClock)
-        evCiaAProgress2.integerValue = Int(eventInfo.ciaAClock / 40)
-        evCiaBProgress.integerValue = Int(eventInfo.ciaBClock)
-        evCiaBProgress2.integerValue = Int(eventInfo.ciaBClock / 40)
+        evCpuProgress.integerValue = Int(agnusInfo.eventInfo.cpuClock)
+        evCpuProgress2.integerValue = Int(agnusInfo.eventInfo.cpuCycles)
+        evDmaProgress.integerValue = Int(agnusInfo.eventInfo.dmaClock)
+        evDmaProgress2.integerValue = Int(agnusInfo.eventInfo.dmaClock / 8)
+        evCiaAProgress.integerValue = Int(agnusInfo.eventInfo.ciaAClock)
+        evCiaAProgress2.integerValue = Int(agnusInfo.eventInfo.ciaAClock / 40)
+        evCiaBProgress.integerValue = Int(agnusInfo.eventInfo.ciaBClock)
+        evCiaBProgress2.integerValue = Int(agnusInfo.eventInfo.ciaBClock / 40)
 
         evTableView.refresh(count: count, full: full)
     }

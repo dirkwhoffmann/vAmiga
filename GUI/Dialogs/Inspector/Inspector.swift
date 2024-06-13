@@ -594,7 +594,7 @@ class Inspector: DialogController {
     var port2Info: ControlPortInfo!
     var serInfo: SerialPortInfo!
     var uartInfo: UARTInfo!
-    var eventInfo: EventInfo!
+    // var eventInfo: EventInfo!
     var isRunning = true
 
     // Returns the number of the currently inspected sprite

@@ -404,15 +404,6 @@ enum_i8(EventID)
     INS_EVENT_COUNT
 };
 
-/*
-static inline bool isRegEvent(EventID id) { return id < REG_EVENT_COUNT; }
-static inline bool isCiaEvent(EventID id) { return id < CIA_EVENT_COUNT; }
-static inline bool isBplEvent(EventID id) { return id < BPL_EVENT_COUNT; }
-static inline bool isDasEvent(EventID id) { return id < DAS_EVENT_COUNT; }
-static inline bool isCopEvent(EventID id) { return id < COP_EVENT_COUNT; }
-static inline bool isBltEvent(EventID id) { return id < BLT_EVENT_COUNT; }
-*/
-
 static inline bool isBplxEvent(EventID id, int x)
 {
     switch(id & ~0b11) {
@@ -471,38 +462,6 @@ AgnusConfig;
 
 typedef struct
 {
-    isize vpos;
-    isize hpos;
-
-    u16 dmacon;
-    u16 bplcon0;
-    u16 ddfstrt;
-    u16 ddfstop;
-    u16 diwstrt;
-    u16 diwstop;
-
-    u16 bpl1mod;
-    u16 bpl2mod;
-    u16 bltamod;
-    u16 bltbmod;
-    u16 bltcmod;
-    u16 bltdmod;
-    u16 bltcon0;
-    
-    u32 coppc0;
-    u32 dskpt;
-    u32 bplpt[6];
-    u32 audpt[4];
-    u32 audlc[4];
-    u32 bltpt[4];
-    u32 sprpt[8];
-
-    bool bls;
-}
-AgnusInfo;
-
-typedef struct
-{
     EventSlot slot;
     EventID eventId;
     const char *eventName;
@@ -532,6 +491,41 @@ typedef struct
     long hpos;
 }
 EventInfo;
+
+typedef struct
+{
+    isize vpos;
+    isize hpos;
+
+    u16 dmacon;
+    u16 bplcon0;
+    u16 ddfstrt;
+    u16 ddfstop;
+    u16 diwstrt;
+    u16 diwstop;
+
+    u16 bpl1mod;
+    u16 bpl2mod;
+    u16 bltamod;
+    u16 bltbmod;
+    u16 bltcmod;
+    u16 bltdmod;
+    u16 bltcon0;
+    
+    u32 coppc0;
+    u32 dskpt;
+    u32 bplpt[6];
+    u32 audpt[4];
+    u32 audlc[4];
+    u32 bltpt[4];
+    u32 sprpt[8];
+
+    bool bls;
+
+    EventInfo eventInfo;
+    EventSlotInfo slotInfo[SLOT_COUNT];
+}
+AgnusInfo;
 
 typedef struct
 {

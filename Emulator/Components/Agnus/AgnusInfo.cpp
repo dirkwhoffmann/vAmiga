@@ -625,6 +625,7 @@ void
 Agnus::_inspect() const
 {
 }
+
 void
 Agnus::cacheInfo(AgnusInfo &info) const
 {
@@ -669,52 +670,24 @@ Agnus::cacheInfo(AgnusInfo &info) const
     eventInfo.vpos = agnus.pos.v;
     eventInfo.hpos = agnus.pos.h;
     
+    info.eventInfo = eventInfo;
+
     for (EventSlot i = 0; i < SLOT_COUNT; i++) {
-        inspectSlot(i);
+
+        info.slotInfo[i].slot = i;
+        info.slotInfo[i].eventId = id[i];
+        info.slotInfo[i].trigger = trigger[i];
+        info.slotInfo[i].triggerRel = trigger[i] - agnus.clock;
+
+        auto beam = pos + isize(AS_DMA_CYCLES(trigger[i] - clock));
+
+        info.slotInfo[i].vpos = beam.v;
+        info.slotInfo[i].hpos = beam.h;
+        info.slotInfo[i].frameRel = long(beam.frame - pos.frame);
+
+        info.slotInfo[i].eventName = eventName((EventSlot)i, id[i]);
     }
 }
-
-void
-Agnus::inspectSlot(EventSlot nr) const
-{
-    assert_enum(EventSlot, nr);
-    
-    auto &info = slotInfo[nr];
-    auto cycle = trigger[nr];
-
-    info.slot = nr;
-    info.eventId = id[nr];
-    info.trigger = cycle;
-    info.triggerRel = cycle - agnus.clock;
-
-    auto beam = pos + isize(AS_DMA_CYCLES(cycle - clock));
-
-    info.vpos = beam.v;
-    info.hpos = beam.h;
-    info.frameRel = long(beam.frame - pos.frame);
-
-    info.eventName = eventName((EventSlot)nr, id[nr]);
-}
-
-EventSlotInfo
-Agnus::getSlotInfo(isize nr) const
-{
-    assert_enum(EventSlot, nr);
-    
-    {   SYNCHRONIZED
-        
-        if (!isRunning()) inspectSlot(nr);
-        return slotInfo[nr];
-    }
-}
-
-/*
-void
-Agnus::clearStats()
-{
-    stats = { };
-}
-*/
 
 void
 Agnus::updateStats()

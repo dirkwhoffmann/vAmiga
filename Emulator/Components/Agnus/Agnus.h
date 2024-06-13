@@ -357,16 +357,10 @@ public:
     
 public:
     
-    // AgnusInfo getInfo() const { return CoreComponent::getInfo(info); }
     void cacheInfo(AgnusInfo &result) const override;
-    EventInfo getEventInfo() const { return eventInfo; } //  CoreComponent::getInfo(eventInfo); }
-    EventSlotInfo getSlotInfo(isize nr) const;
-    // const AgnusStats &getStats() { return stats; }
 
 private:
     
-    void inspectSlot(EventSlot nr) const;
-    // void clearStats();
     void updateStats();
 
 
