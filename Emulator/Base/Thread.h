@@ -309,7 +309,18 @@ protected:
     // Initiates a state change
     void changeStateTo(ExecState requestedState);
 
-    
+    // Signals a state transition
+    virtual void didPowerOn() = 0;
+    virtual void didPowerOff() = 0;
+    virtual void didPause() = 0;
+    virtual void didRun() = 0;
+    virtual void didHalt() = 0;
+    virtual void didWarpOn() = 0;
+    virtual void didWarpOff() = 0;
+    virtual void didTrackOn() = 0;
+    virtual void didTrackOff() = 0;
+
+
     //
     // Synchronizing
     //

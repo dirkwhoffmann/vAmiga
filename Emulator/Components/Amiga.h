@@ -271,6 +271,16 @@ private:
     void update() override;
     void computeFrame() override;
 
+    void didPowerOn() override { CoreComponent::powerOn(); }
+    void didPowerOff() override { CoreComponent::powerOff(); }
+    void didPause() override { CoreComponent::pause(); }
+    void didRun() override { CoreComponent::run(); }
+    void didHalt() override { CoreComponent::halt(); }
+    void didWarpOn() override { CoreComponent::warpOn(); }
+    void didWarpOff() override { CoreComponent::warpOff(); }
+    void didTrackOn() override { CoreComponent::trackOn(); }
+    void didTrackOff() override { CoreComponent::trackOff(); }
+
 public:
 
     isize missingFrames() const override;
