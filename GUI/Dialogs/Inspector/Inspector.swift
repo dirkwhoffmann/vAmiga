@@ -811,8 +811,8 @@ extension Inspector: NSTabViewDelegate {
             case "CIA":     amiga.inspectionTarget = .CIA
             case "Memory":  amiga.inspectionTarget = .MEM
             case "Agnus":   amiga.inspectionTarget = .AGNUS
-            case "Copper":  amiga.inspectionTarget = .AGNUS
-            case "Blitter": amiga.inspectionTarget = .AGNUS
+            case "Copper":  amiga.inspectionTarget = .COPPER
+            case "Blitter": amiga.inspectionTarget = .BLITTER
             case "Denise":  amiga.inspectionTarget = .DENISE
             case "Paula":   amiga.inspectionTarget = .PAULA
             case "Ports":   amiga.inspectionTarget = .PORTS

@@ -789,7 +789,17 @@ Agnus::serviceINSEvent(EventID id)
             
             record();
             break;
-            
+
+        case INS_BLITTER:
+
+            blitter.record();
+            break;
+
+        case INS_COPPER:
+
+            copper.record();
+            break;
+
         case INS_PAULA:
             
             paula.record();

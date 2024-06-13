@@ -460,6 +460,8 @@ Agnus::eventName(EventSlot slot, EventID id)
                 case INS_MEM:       return "INS_MEM";
                 case INS_CIA:       return "INS_CIA";
                 case INS_AGNUS:     return "INS_AGNUS";
+                case INS_BLITTER:   return "INS_BLITTER";
+                case INS_COPPER:    return "INS_COPPER";
                 case INS_PAULA:     return "INS_PAULA";
                 case INS_DENISE:    return "INS_DENISE";
                 case INS_PORTS:     return "INS_PORTS";

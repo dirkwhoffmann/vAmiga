@@ -112,6 +112,8 @@ enum_long(INSPECTION_TARGET)
     INSPECTION_CIA,
     INSPECTION_MEM,
     INSPECTION_AGNUS,
+    INSPECTION_BLITTER,
+    INSPECTION_COPPER,
     INSPECTION_DENISE,
     INSPECTION_PAULA,
     INSPECTION_PORTS,
@@ -137,6 +139,8 @@ struct InspectionTargetEnum : util::Reflection<InspectionTargetEnum, InspectionT
             case INSPECTION_CIA:     return "CIA";
             case INSPECTION_MEM:     return "MEM";
             case INSPECTION_AGNUS:   return "AGNUS";
+            case INSPECTION_BLITTER: return "BLITTER";
+            case INSPECTION_COPPER:  return "COPPER";
             case INSPECTION_DENISE:  return "DENISE";
             case INSPECTION_PAULA:   return "PAULA";
             case INSPECTION_PORTS:   return "PORTS";

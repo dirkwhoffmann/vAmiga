@@ -875,6 +875,8 @@ Amiga::getInspectionTarget() const
         case INS_MEM:     return INSPECTION_MEM;
         case INS_CIA:     return INSPECTION_CIA;
         case INS_AGNUS:   return INSPECTION_AGNUS;
+        case INS_BLITTER: return INSPECTION_BLITTER;
+        case INS_COPPER:  return INSPECTION_COPPER;
         case INS_PAULA:   return INSPECTION_PAULA;
         case INS_DENISE:  return INSPECTION_DENISE;
         case INS_PORTS:   return INSPECTION_PORTS;
@@ -901,6 +903,8 @@ Amiga::setInspectionTarget(InspectionTarget target, Cycle trigger)
             case INSPECTION_MEM:     id = INS_MEM; break;
             case INSPECTION_CIA:     id = INS_CIA; break;
             case INSPECTION_AGNUS:   id = INS_AGNUS; break;
+            case INSPECTION_BLITTER: id = INS_BLITTER; break;
+            case INSPECTION_COPPER:  id = INS_COPPER; break;
             case INSPECTION_PAULA:   id = INS_PAULA; break;
             case INSPECTION_DENISE:  id = INS_DENISE; break;
             case INSPECTION_PORTS:   id = INS_PORTS; break;
