@@ -52,8 +52,8 @@ class Agnus : public SubComponent, public Inspectable<AgnusInfo, AgnusStats> {
 
     // Result of the latest inspection
     mutable AgnusInfo info = {};
-    mutable EventInfo eventInfo = {};
-    mutable EventSlotInfo slotInfo[SLOT_COUNT];
+    // mutable EventInfo eventInfo = {};
+    // mutable EventSlotInfo slotInfo[SLOT_COUNT];
 
     // Current workload
     AgnusStats stats = {};
@@ -238,7 +238,6 @@ private:
 private:
     
     void _reset(bool hard) override;
-    void _inspect() const override;
 
     template <class T>
     void serialize(T& worker)

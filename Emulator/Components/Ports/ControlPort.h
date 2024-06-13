@@ -98,7 +98,6 @@ private:
 private:
     
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
-    void _inspect() const override;
 
     template <class T>
     void serialize(T& worker)
@@ -126,8 +125,7 @@ public:
     //
 
 public:
-    
-    // ControlPortInfo getInfo() const { return CoreComponent::getInfo(info); }
+
     void cacheInfo(ControlPortInfo &result) const override;
 
     bool isPort1() const { return nr == PORT1; }

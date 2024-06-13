@@ -41,11 +41,6 @@ StateMachine<nr>::_reset(bool hard)
 }
 
 template <isize nr> void
-StateMachine<nr>::_inspect() const
-{
-}
-
-template <isize nr> void
 StateMachine<nr>::cacheInfo(StateMachineInfo &info) const
 {
     {   SYNCHRONIZED

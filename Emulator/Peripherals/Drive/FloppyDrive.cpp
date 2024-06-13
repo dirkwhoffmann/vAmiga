@@ -168,11 +168,6 @@ FloppyDrive::setConfigItem(Option option, i64 value)
     }
 }
 
-void
-FloppyDrive::_inspect() const
-{
-}
-
 void 
 FloppyDrive::cacheInfo(FloppyDriveInfo &info) const
 {

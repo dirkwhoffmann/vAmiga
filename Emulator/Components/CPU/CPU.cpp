@@ -418,11 +418,6 @@ CPU::_reset(bool hard)
 }
 
 void
-CPU::_inspect() const
-{
-}
-
-void
 CPU::cacheInfo(CPUInfo &info) const
 {
     {   SYNCHRONIZED

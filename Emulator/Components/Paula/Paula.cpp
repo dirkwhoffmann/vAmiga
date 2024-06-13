@@ -81,11 +81,6 @@ Paula::_warpOff()
     muxer.clear();
 }
 
-void
-Paula::_inspect() const
-{
-}
-
 void 
 Paula::cacheInfo(PaulaInfo &info) const
 {

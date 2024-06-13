@@ -234,7 +234,6 @@ private:
     void _warpOff() override;
     void _trackOn() override;
     void _trackOff() override;
-    void _inspect() const override;
 
     template <class T>
     void serialize(T& worker)

@@ -27,12 +27,6 @@ UART::_reset(bool hard)
 }
 
 void
-UART::_inspect() const
-{
-
-}
-
-void
 UART::cacheInfo(UARTInfo &info) const
 {
     SYNCHRONIZED

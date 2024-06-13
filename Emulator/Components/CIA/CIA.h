@@ -387,10 +387,6 @@ public:
     // CIAInfo getInfo() const { return CoreComponent::getInfo(info); }
     void cacheInfo(CIAInfo &result) const override;
     Cycle getClock() const { return clock; }
-    
-protected:
-    
-    void _inspect() const override;
 
     
     //

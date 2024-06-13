@@ -22,11 +22,6 @@ ControlPort::ControlPort(Amiga& ref, isize nr) : SubComponent(ref), nr(nr)
     subComponents = std::vector<CoreComponent *> { &mouse, &joystick };
 }
 
-void
-ControlPort::_inspect() const
-{
-}
-
 void 
 ControlPort::cacheInfo(ControlPortInfo &info) const
 {

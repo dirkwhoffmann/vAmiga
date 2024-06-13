@@ -131,11 +131,6 @@ CIA::setConfigItem(Option option, i64 value)
     }
 }
 
-void
-CIA::_inspect() const
-{
-}
-
 void 
 CIA::cacheInfo(CIAInfo &info) const
 {

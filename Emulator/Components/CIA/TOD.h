@@ -136,10 +136,8 @@ public:
     //
     
 public:
-    
-    // TODInfo getInfo() const { return CoreComponent::getInfo(info); }
+
     void cacheInfo(TODInfo &result) const override;
-    void _inspect() const override;
 
 
     //

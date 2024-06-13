@@ -776,7 +776,6 @@ Agnus::serviceINSEvent(EventID id)
             
         case INS_MEM:
             
-            mem.inspect();
             break;
             
         case INS_CIA:

@@ -142,11 +142,6 @@ DiskController::setConfigItem(Option option, long id, i64 value)
     }
 }
 
-void
-DiskController::_inspect() const
-{
-}
-
 void 
 DiskController::cacheInfo(DiskControllerInfo &result) const
 {

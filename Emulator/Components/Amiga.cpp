@@ -919,21 +919,6 @@ Amiga::setInspectionTarget(InspectionTarget target, Cycle trigger)
     }
 }
 
-void
-Amiga::_inspect() const
-{
-    {   SYNCHRONIZED
-
-        info.cpuClock = cpu.getMasterClock();
-        info.dmaClock = agnus.clock;
-        info.ciaAClock = ciaA.getClock();
-        info.ciaBClock = ciaB.getClock();
-        info.frame = agnus.pos.frame;
-        info.vpos = agnus.pos.v;
-        info.hpos = agnus.pos.h;
-    }
-}
-
 double 
 Amiga::nativeRefreshRate() const
 {
@@ -1124,9 +1109,6 @@ Amiga::_powerOn()
         track = true;
     }
 
-    // Update the recorded debug information
-    inspect();
-
     msgQueue.put(MSG_POWER, 1);
 }
 
@@ -1137,9 +1119,6 @@ Amiga::_powerOff()
 
     // Perform a reset
     hardReset();
-
-    // Update the recorded debug information
-    inspect();
 
     msgQueue.put(MSG_POWER, 0);
 }
@@ -1161,9 +1140,6 @@ Amiga::_pause()
     debug(RUN_DEBUG, "_pause\n");
 
     remoteManager.gdbServer.breakpointReached();
-
-    // Update the recorded debug information
-    inspect();
 
     msgQueue.put(MSG_PAUSE);
 }
@@ -1257,7 +1233,6 @@ Amiga::computeFrame()
             // Did we reach a soft breakpoint?
             if (flags & RL::SOFTSTOP_REACHED) {
                 clearFlag(RL::SOFTSTOP_REACHED);
-                inspect();
                 switchState(STATE_PAUSED);
                 break;
             }
@@ -1265,7 +1240,6 @@ Amiga::computeFrame()
             // Did we reach a breakpoint?
             if (flags & RL::BREAKPOINT_REACHED) {
                 clearFlag(RL::BREAKPOINT_REACHED);
-                inspect();
                 auto addr = cpu.debugger.breakpoints.hit->addr;
                 msgQueue.put(MSG_BREAKPOINT_REACHED, CpuMsg { addr, 0});
                 switchState(STATE_PAUSED);
@@ -1275,7 +1249,6 @@ Amiga::computeFrame()
             // Did we reach a watchpoint?
             if (flags & RL::WATCHPOINT_REACHED) {
                 clearFlag(RL::WATCHPOINT_REACHED);
-                inspect();
                 auto addr = cpu.debugger.watchpoints.hit->addr;
                 msgQueue.put(MSG_WATCHPOINT_REACHED, CpuMsg {addr, 0});
                 switchState(STATE_PAUSED);
@@ -1285,7 +1258,6 @@ Amiga::computeFrame()
             // Did we reach a catchpoint?
             if (flags & RL::CATCHPOINT_REACHED) {
                 clearFlag(RL::CATCHPOINT_REACHED);
-                inspect();
                 auto vector = u8(cpu.debugger.catchpoints.hit->addr);
                 msgQueue.put(MSG_CATCHPOINT_REACHED, CpuMsg {cpu.getPC0(), vector});
                 switchState(STATE_PAUSED);
@@ -1295,7 +1267,6 @@ Amiga::computeFrame()
             // Did we reach a software trap?
             if (flags & RL::SWTRAP_REACHED) {
                 clearFlag(RL::SWTRAP_REACHED);
-                inspect();
                 msgQueue.put(MSG_SWTRAP_REACHED, CpuMsg {cpu.getPC0(), 0});
                 switchState(STATE_PAUSED);
                 break;
@@ -1304,7 +1275,6 @@ Amiga::computeFrame()
             // Did we reach a Copper breakpoint?
             if (flags & RL::COPPERBP_REACHED) {
                 clearFlag(RL::COPPERBP_REACHED);
-                inspect();
                 auto addr = u8(agnus.copper.debugger.breakpoints.hit->addr);
                 msgQueue.put(MSG_COPPERBP_REACHED, CpuMsg { addr, 0 });
                 switchState(STATE_PAUSED);
@@ -1314,7 +1284,6 @@ Amiga::computeFrame()
             // Did we reach a Copper watchpoint?
             if (flags & RL::COPPERWP_REACHED) {
                 clearFlag(RL::COPPERWP_REACHED);
-                inspect();
                 auto addr = u8(agnus.copper.debugger.watchpoints.hit->addr);
                 msgQueue.put(MSG_COPPERWP_REACHED, CpuMsg { addr, 0 });
                 switchState(STATE_PAUSED);

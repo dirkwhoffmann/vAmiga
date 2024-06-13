@@ -572,8 +572,8 @@ Agnus::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Events) {
 
-        inspect();
-        
+        auto &info = getInfo();
+
         os << std::left << std::setw(10) << "Slot";
         os << std::left << std::setw(14) << "Event";
         os << std::left << std::setw(18) << "Trigger position";
@@ -581,28 +581,28 @@ Agnus::_dump(Category category, std::ostream& os) const
         
         for (isize i = 0; i < SLOT_COUNT; i++) {
             
-            EventSlotInfo &info = slotInfo[i];
+            EventSlotInfo &sinfo = info.slotInfo[i];
+
+            os << std::left << std::setw(10) << EventSlotEnum::key(sinfo.slot);
+            os << std::left << std::setw(14) << sinfo.eventName;
             
-            os << std::left << std::setw(10) << EventSlotEnum::key(info.slot);
-            os << std::left << std::setw(14) << info.eventName;
-            
-            if (info.trigger != NEVER) {
+            if (sinfo.trigger != NEVER) {
                 
-                if (info.frameRel < 0) {
+                if (sinfo.frameRel < 0) {
                     os << std::left << std::setw(18) << "previous frame";
-                } else if (info.frameRel > 0) {
+                } else if (sinfo.frameRel > 0) {
                     os << std::left << std::setw(18) << "upcoming frame";
                 } else {
-                    string vpos = std::to_string(info.vpos);
-                    string hpos = std::to_string(info.hpos);
+                    string vpos = std::to_string(sinfo.vpos);
+                    string hpos = std::to_string(sinfo.hpos);
                     string pos = "(" + vpos + "," + hpos + ")";
                     os << std::left << std::setw(18) << pos;
                 }
                 
-                if (info.triggerRel == 0) {
+                if (sinfo.triggerRel == 0) {
                     os << std::left << std::setw(16) << "due immediately";
                 } else {
-                    string cycle = std::to_string(info.triggerRel / 8);
+                    string cycle = std::to_string(sinfo.triggerRel / 8);
                     os << std::left << std::setw(16) << "due in " + cycle + " DMA cycles";
                 }
             }
@@ -619,11 +619,6 @@ Agnus::_dump(Category category, std::ostream& os) const
         
         sequencer.dump(Category::Signals, os);
     }
-}
-
-void
-Agnus::_inspect() const
-{
 }
 
 void
@@ -661,16 +656,14 @@ Agnus::cacheInfo(AgnusInfo &info) const
     for (isize i = 0; i < 4; i++) info.audlc[i] = audlc[i] & ptrMask;
     for (isize i = 0; i < 8; i++) info.sprpt[i] = sprpt[i] & ptrMask;
     
-    eventInfo.cpuClock = cpu.getMasterClock();
-    eventInfo.cpuCycles = cpu.getCpuClock();
-    eventInfo.dmaClock = agnus.clock;
-    eventInfo.ciaAClock = ciaa.getClock();
-    eventInfo.ciaBClock  = ciab.getClock();
-    eventInfo.frame = agnus.pos.frame;
-    eventInfo.vpos = agnus.pos.v;
-    eventInfo.hpos = agnus.pos.h;
-    
-    info.eventInfo = eventInfo;
+    info.eventInfo.cpuClock = cpu.getMasterClock();
+    info.eventInfo.cpuCycles = cpu.getCpuClock();
+    info.eventInfo.dmaClock = agnus.clock;
+    info.eventInfo.ciaAClock = ciaa.getClock();
+    info.eventInfo.ciaBClock  = ciab.getClock();
+    info.eventInfo.frame = agnus.pos.frame;
+    info.eventInfo.vpos = agnus.pos.v;
+    info.eventInfo.hpos = agnus.pos.h;
 
     for (EventSlot i = 0; i < SLOT_COUNT; i++) {
 

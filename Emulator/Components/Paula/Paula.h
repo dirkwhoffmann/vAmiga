@@ -138,7 +138,6 @@ private:
     void _pause() override;
     void _warpOn() override;
     void _warpOff() override;
-    void _inspect() const override;
 
     template <class T>
     void serialize(T& worker)

@@ -315,11 +315,6 @@ HardDrive::isCompatible()
 }
 
 void
-HardDrive::_inspect() const
-{
-}
-
-void
 HardDrive::cacheInfo(HardDriveInfo &info) const
 {
     {   SYNCHRONIZED

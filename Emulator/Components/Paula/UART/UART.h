@@ -82,7 +82,6 @@ private:
 private:
     
     void _reset(bool hard) override;
-    void _inspect() const override;
     
     template <class T>
     void serialize(T& worker)
