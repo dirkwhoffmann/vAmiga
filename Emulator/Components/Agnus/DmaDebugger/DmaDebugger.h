@@ -92,9 +92,7 @@ public:
     void resetConfig() override;
 
     i64 getConfigItem(Option option) const;
-    i64 getConfigItem(Option option, long id) const;
     void setConfigItem(Option option, i64 value);
-    void setConfigItem(Option option, long id, i64 value);
 
 private:
 

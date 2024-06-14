@@ -299,6 +299,25 @@ Amiga::getConfigItem(Option option) const
 
             return diagBoard.getConfigItem(option);
 
+        case OPT_DMA_DEBUG_CHANNEL0:
+        case OPT_DMA_DEBUG_CHANNEL1:
+        case OPT_DMA_DEBUG_CHANNEL2:
+        case OPT_DMA_DEBUG_CHANNEL3:
+        case OPT_DMA_DEBUG_CHANNEL4:
+        case OPT_DMA_DEBUG_CHANNEL5:
+        case OPT_DMA_DEBUG_CHANNEL6:
+        case OPT_DMA_DEBUG_CHANNEL7:
+        case OPT_DMA_DEBUG_COLOR0:
+        case OPT_DMA_DEBUG_COLOR1:
+        case OPT_DMA_DEBUG_COLOR2:
+        case OPT_DMA_DEBUG_COLOR3:
+        case OPT_DMA_DEBUG_COLOR4:
+        case OPT_DMA_DEBUG_COLOR5:
+        case OPT_DMA_DEBUG_COLOR6:
+        case OPT_DMA_DEBUG_COLOR7:
+
+            return agnus.dmaDebugger.getConfigItem(option);
+
         default:
             fatalError;
     }
@@ -308,11 +327,6 @@ i64
 Amiga::getConfigItem(Option option, long id) const
 {
     switch (option) {
-
-        case OPT_DMA_DEBUG_CHANNEL:
-        case OPT_DMA_DEBUG_COLOR:
-
-            return agnus.dmaDebugger.getConfigItem(option, id);
 
         case OPT_AUDPAN:
         case OPT_AUDVOL:
@@ -640,6 +654,26 @@ Amiga::configure(Option option, i64 value)
             remoteManager.setConfigItem(option, value);
             break;
 
+        case OPT_DMA_DEBUG_CHANNEL0:
+        case OPT_DMA_DEBUG_CHANNEL1:
+        case OPT_DMA_DEBUG_CHANNEL2:
+        case OPT_DMA_DEBUG_CHANNEL3:
+        case OPT_DMA_DEBUG_CHANNEL4:
+        case OPT_DMA_DEBUG_CHANNEL5:
+        case OPT_DMA_DEBUG_CHANNEL6:
+        case OPT_DMA_DEBUG_CHANNEL7:
+        case OPT_DMA_DEBUG_COLOR0:
+        case OPT_DMA_DEBUG_COLOR1:
+        case OPT_DMA_DEBUG_COLOR2:
+        case OPT_DMA_DEBUG_COLOR3:
+        case OPT_DMA_DEBUG_COLOR4:
+        case OPT_DMA_DEBUG_COLOR5:
+        case OPT_DMA_DEBUG_COLOR6:
+        case OPT_DMA_DEBUG_COLOR7:
+
+            agnus.dmaDebugger.setConfigItem(option, value);
+            break;
+
         default:
             fatalError;
     }
@@ -675,12 +709,6 @@ Amiga::configure(Option option, long id, i64 value)
     };
 
     switch (option) {
-
-        case OPT_DMA_DEBUG_CHANNEL:
-        case OPT_DMA_DEBUG_COLOR:
-
-            agnus.dmaDebugger.setConfigItem(option, id, value);
-            break;
 
         case OPT_AUDPAN:
         case OPT_AUDVOL:

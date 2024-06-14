@@ -21,7 +21,7 @@ OptionParser::create(Option opt, i64 arg)
     auto enumParser = [&]<typename T>() { return std::unique_ptr<EnumParser<T>>(new EnumParser<T>(opt, arg)); };
     auto boolParser = [&]() { return std::unique_ptr<BoolParser>(new BoolParser(opt, arg)); };
     auto numParser  = [&](string unit = "") { return std::unique_ptr<NumParser>(new NumParser(opt, arg, unit)); };
-    auto hexParser  = [&](string unit = "") { return std::unique_ptr<HexParser>(new HexParser(opt, arg, unit)); };
+    // auto hexParser  = [&](string unit = "") { return std::unique_ptr<HexParser>(new HexParser(opt, arg, unit)); };
 
     switch (opt) {
 
@@ -47,8 +47,22 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_DMA_DEBUG_ENABLE:      return boolParser();
         case OPT_DMA_DEBUG_MODE:        return enumParser.template operator()<DmaDisplayModeEnum>();
         case OPT_DMA_DEBUG_OPACITY:     return numParser("%");
-        case OPT_DMA_DEBUG_CHANNEL:     return numParser();
-        case OPT_DMA_DEBUG_COLOR:       return numParser();
+        case OPT_DMA_DEBUG_CHANNEL0:    return numParser();
+        case OPT_DMA_DEBUG_CHANNEL1:    return numParser();
+        case OPT_DMA_DEBUG_CHANNEL2:    return numParser();
+        case OPT_DMA_DEBUG_CHANNEL3:    return numParser();
+        case OPT_DMA_DEBUG_CHANNEL4:    return numParser();
+        case OPT_DMA_DEBUG_CHANNEL5:    return numParser();
+        case OPT_DMA_DEBUG_CHANNEL6:    return numParser();
+        case OPT_DMA_DEBUG_CHANNEL7:    return numParser();
+        case OPT_DMA_DEBUG_COLOR0:      return numParser();
+        case OPT_DMA_DEBUG_COLOR1:      return numParser();
+        case OPT_DMA_DEBUG_COLOR2:      return numParser();
+        case OPT_DMA_DEBUG_COLOR3:      return numParser();
+        case OPT_DMA_DEBUG_COLOR4:      return numParser();
+        case OPT_DMA_DEBUG_COLOR5:      return numParser();
+        case OPT_DMA_DEBUG_COLOR6:      return numParser();
+        case OPT_DMA_DEBUG_COLOR7:      return numParser();
 
         case OPT_CPU_REVISION:          return enumParser.template operator()<CPURevisionEnum>();
         case OPT_CPU_DASM_REVISION:     return enumParser.template operator()<DasmRevisionEnum>();

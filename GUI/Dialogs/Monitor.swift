@@ -225,11 +225,20 @@ class Monitor: DialogController {
         let b = Int(sender.color.blueComponent * 255.0)
         let rgb = (r << 24) | (g << 16) | (b << 8)
 
-        amiga.configure(.DMA_DEBUG_COLOR, id: sender.tag, value: rgb)
-                
+        switch sender.tag {
+        case 0:  amiga.configure(.DMA_DEBUG_COLOR0, value: rgb)
+        case 1:  amiga.configure(.DMA_DEBUG_COLOR1, value: rgb)
+        case 2:  amiga.configure(.DMA_DEBUG_COLOR2, value: rgb)
+        case 3:  amiga.configure(.DMA_DEBUG_COLOR3, value: rgb)
+        case 4:  amiga.configure(.DMA_DEBUG_COLOR4, value: rgb)
+        case 5:  amiga.configure(.DMA_DEBUG_COLOR5, value: rgb)
+        case 6:  amiga.configure(.DMA_DEBUG_COLOR6, value: rgb)
+        case 7:  amiga.configure(.DMA_DEBUG_COLOR7, value: rgb)
+        default: break
+        }
+
         let monitor = parent.renderer.monitors.monitors[sender.tag]
         monitor.setColor(sender.color)
-        
         refresh()
     }
 
@@ -241,7 +250,17 @@ class Monitor: DialogController {
     
     @IBAction func busDisplayAction(_ sender: NSButton!) {
         
-        amiga.configure(.DMA_DEBUG_CHANNEL, id: sender.tag, enable: sender.state == .on)
+        switch sender.tag {
+        case 0:  amiga.configure(.DMA_DEBUG_CHANNEL0, enable: sender.state == .on)
+        case 1:  amiga.configure(.DMA_DEBUG_CHANNEL1, enable: sender.state == .on)
+        case 2:  amiga.configure(.DMA_DEBUG_CHANNEL2, enable: sender.state == .on)
+        case 3:  amiga.configure(.DMA_DEBUG_CHANNEL3, enable: sender.state == .on)
+        case 4:  amiga.configure(.DMA_DEBUG_CHANNEL4, enable: sender.state == .on)
+        case 5:  amiga.configure(.DMA_DEBUG_CHANNEL5, enable: sender.state == .on)
+        case 6:  amiga.configure(.DMA_DEBUG_CHANNEL6, enable: sender.state == .on)
+        case 7:  amiga.configure(.DMA_DEBUG_CHANNEL7, enable: sender.state == .on)
+        default: break
+        }
         refresh()
     }
     

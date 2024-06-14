@@ -45,8 +45,22 @@ enum_long(OPT)
     OPT_DMA_DEBUG_ENABLE,
     OPT_DMA_DEBUG_MODE,
     OPT_DMA_DEBUG_OPACITY,
-    OPT_DMA_DEBUG_CHANNEL,
-    OPT_DMA_DEBUG_COLOR,
+    OPT_DMA_DEBUG_CHANNEL0,
+    OPT_DMA_DEBUG_CHANNEL1,
+    OPT_DMA_DEBUG_CHANNEL2,
+    OPT_DMA_DEBUG_CHANNEL3,
+    OPT_DMA_DEBUG_CHANNEL4,
+    OPT_DMA_DEBUG_CHANNEL5,
+    OPT_DMA_DEBUG_CHANNEL6,
+    OPT_DMA_DEBUG_CHANNEL7,
+    OPT_DMA_DEBUG_COLOR0,
+    OPT_DMA_DEBUG_COLOR1,
+    OPT_DMA_DEBUG_COLOR2,
+    OPT_DMA_DEBUG_COLOR3,
+    OPT_DMA_DEBUG_COLOR4,
+    OPT_DMA_DEBUG_COLOR5,
+    OPT_DMA_DEBUG_COLOR6,
+    OPT_DMA_DEBUG_COLOR7,
 
     // CPU
     OPT_CPU_REVISION,
@@ -183,8 +197,22 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_DMA_DEBUG_ENABLE:      return "DMA_DEBUG_ENABLE";
             case OPT_DMA_DEBUG_MODE:        return "DMA_DEBUG_MODE";
             case OPT_DMA_DEBUG_OPACITY:     return "DMA_DEBUG_OPACITY";
-            case OPT_DMA_DEBUG_CHANNEL:     return "DMA_DEBUG_CHANNEL";
-            case OPT_DMA_DEBUG_COLOR:       return "DMA_DEBUG_COLOR";
+            case OPT_DMA_DEBUG_CHANNEL0:    return "DMA_DEBUG_CHANNEL0";
+            case OPT_DMA_DEBUG_CHANNEL1:    return "DMA_DEBUG_CHANNEL1";
+            case OPT_DMA_DEBUG_CHANNEL2:    return "DMA_DEBUG_CHANNEL2";
+            case OPT_DMA_DEBUG_CHANNEL3:    return "DMA_DEBUG_CHANNEL3";
+            case OPT_DMA_DEBUG_CHANNEL4:    return "DMA_DEBUG_CHANNEL4";
+            case OPT_DMA_DEBUG_CHANNEL5:    return "DMA_DEBUG_CHANNEL5";
+            case OPT_DMA_DEBUG_CHANNEL6:    return "DMA_DEBUG_CHANNEL6";
+            case OPT_DMA_DEBUG_CHANNEL7:    return "DMA_DEBUG_CHANNEL7";
+            case OPT_DMA_DEBUG_COLOR0:      return "DMA_DEBUG_COLOR0";
+            case OPT_DMA_DEBUG_COLOR1:      return "DMA_DEBUG_COLOR1";
+            case OPT_DMA_DEBUG_COLOR2:      return "DMA_DEBUG_COLOR2";
+            case OPT_DMA_DEBUG_COLOR3:      return "DMA_DEBUG_COLOR3";
+            case OPT_DMA_DEBUG_COLOR4:      return "DMA_DEBUG_COLOR4";
+            case OPT_DMA_DEBUG_COLOR5:      return "DMA_DEBUG_COLOR5";
+            case OPT_DMA_DEBUG_COLOR6:      return "DMA_DEBUG_COLOR6";
+            case OPT_DMA_DEBUG_COLOR7:      return "DMA_DEBUG_COLOR7";
 
             case OPT_CPU_REVISION:          return "CPU_REVISION";
             case OPT_CPU_DASM_REVISION:     return "OPT_CPU_DASM_REVISION";
