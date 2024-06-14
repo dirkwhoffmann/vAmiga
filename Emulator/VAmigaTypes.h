@@ -10,3 +10,4 @@
 #pragma once
 
 #include "MsgQueueTypes.h"
+#include "CmdQueueTypes.h"

@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "CoreComponent.h"
+#include "Emulator.h"
 #include "Checksum.h"
 
 namespace vamiga {
@@ -163,6 +164,54 @@ CoreComponent::didSave()
     }
 
     _didSave();
+}
+
+bool
+CoreComponent::isPoweredOff() const
+{
+    return emulator.isPoweredOff();
+}
+
+bool
+CoreComponent::isPoweredOn() const
+{
+    return emulator.isPoweredOn();
+}
+
+bool
+CoreComponent::isPaused() const
+{
+    return emulator.isPaused();
+}
+
+bool
+CoreComponent::isRunning() const
+{
+    return emulator.isRunning();
+}
+
+bool
+CoreComponent::isSuspended() const
+{
+    return emulator.isSuspended();
+}
+
+bool
+CoreComponent::isHalted() const
+{
+    return emulator.isHalted();
+}
+
+void
+CoreComponent::suspend()
+{
+    return emulator.suspend();
+}
+
+void
+CoreComponent::resume()
+{
+    return emulator.resume();
 }
 
 void

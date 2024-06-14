@@ -9,4 +9,12 @@
 
 #pragma once
 
-#include "OptionTypes.h"
+#include "CmdQueueTypes.h"
+#include "CoreObject.h"
+#include "Synchronizable.h"
+#include "RingBuffer.h"
+#include <atomic>
+
+namespace vamiga {
+
+}

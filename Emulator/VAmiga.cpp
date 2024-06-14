@@ -16,19 +16,19 @@ namespace vamiga {
 void
 API::suspend()
 {
-    emu->suspendThread();
+    emu->suspend();
 }
 
 void
 API::resume()
 {
-    emu->resumeThread();
+    emu->resume();
 }
 
 bool
 API::isUserThread() const
 {
-    return !emu->main.isEmulatorThread();
+    return !emu->isEmulatorThread();
 }
 
 VAmiga::VAmiga() {
@@ -145,7 +145,7 @@ VAmiga::VAmiga() {
 
 VAmiga::~VAmiga()
 {
-    // emu->halt();
+    emu->halt();
     delete emu;
 }
 
@@ -200,85 +200,85 @@ VAmiga::isHalted()
 bool
 VAmiga::isWarping()
 {
-    return emu->main.isWarping();
+    return emu->isWarping();
 }
 
 bool
 VAmiga::isTracking()
 {
-    return emu->main.isTracking();
+    return emu->isTracking();
 }
 
 void
 VAmiga::isReady()
 {
-    return emu->main.isReady();
+    return emu->isReady();
 }
 
 void
 VAmiga::powerOn()
 {
-    emu->main.Thread::powerOn();
+    emu->Thread::powerOn();
 }
 
 void
 VAmiga::powerOff()
 {
-    emu->main.Thread::powerOff();
+    emu->Thread::powerOff();
 }
 
 void
 VAmiga::run()
 {
-    emu->main.run();
+    emu->run();
 }
 
 void
 VAmiga::pause()
 {
-    emu->main.pause();
+    emu->pause();
 }
 
 void
 VAmiga::halt()
 {
-    emu->main.halt();
+    emu->halt();
 }
 
 void
 VAmiga::suspend()
 {
-    emu->suspendThread();
+    emu->suspend();
 }
 
 void
 VAmiga::resume()
 {
-    emu->resumeThread();
+    emu->resume();
 }
 
 void
 VAmiga::warpOn(isize source)
 {
-    emu->main.switchWarpOn(source);
+    emu->warpOn(source);
 }
 
 void
 VAmiga::warpOff(isize source)
 {
-    emu->main.switchWarpOff(source);
+    emu->warpOff(source);
 }
 
 void
 VAmiga::trackOn(isize source)
 {
-    emu->main.switchTrackOn(source);
+    emu->trackOn(source);
 }
 
 void
 VAmiga::trackOff(isize source)
 {
-    emu->main.switchTrackOff(source);
+    emu->trackOff(source);
 }
 
 void
@@ -298,14 +298,14 @@ VAmiga::stepOver()
 void
 VAmiga::wakeUp()
 {
-    emu->main.wakeUp();
+    emu->wakeUp();
 }
 
 void
 VAmiga::launch(const void *listener, Callback *func)
 {
     assert(isUserThread());
-    emu->main.launch(listener, func);
+    emu->launch(listener, func);
 }
 
 }

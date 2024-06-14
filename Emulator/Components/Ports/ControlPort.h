@@ -43,9 +43,6 @@ private:
     
     // The represented control port
     isize nr;
-
-    // The result of the latest inspection
-    mutable ControlPortInfo info = {};
     
     // The connected device
     ControlPortDevice device = CPD_NONE;

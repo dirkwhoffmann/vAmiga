@@ -48,7 +48,7 @@ Amiga::build()
     return version() + db + " (" + __DATE__ + " " + __TIME__ + ")";
 }
 
-Amiga::Amiga(class Emulator& ref) : Thread(ref)
+Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)
 {
     /* The order of subcomponents is important here, because some components
      * are dependend on others during initialization. I.e.,
@@ -104,23 +104,6 @@ Amiga::Amiga(class Emulator& ref) : Thread(ref)
 Amiga::~Amiga()
 {
     debug(RUN_DEBUG, "Destroying emulator instance\n");
-    if (thread.joinable()) { halt(); }
-}
-
-void
-Amiga::launch(const void *listener, Callback *func)
-{
-    // Initialize all components
-    initialize();
-
-    // Connect the listener to the message queue of the main instance
-    msgQueue.setListener(listener, func);
-
-    // Reset the emulator
-    hardReset();
-
-    // Launch the emulator thread
-    Thread::launch();
 }
 
 void
@@ -152,7 +135,7 @@ Amiga::prefix() const
 void
 Amiga::reset(bool hard)
 {
-    if (!isEmulatorThread()) suspend();
+    suspend();
 
     // If a disk change is in progress, finish it
     df0.serviceDiskChangeEvent <SLOT_DC0> ();
@@ -163,7 +146,7 @@ Amiga::reset(bool hard)
     // Execute the standard reset routine
     CoreComponent::reset(hard);
 
-    if (!isEmulatorThread()) resume();
+    resume();
 
     // Inform the GUI
     if (hard) msgQueue.put(MSG_RESET);
@@ -988,14 +971,8 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << bol(isRunning()) << std::endl;
         os << tab("Suspended");
         os << bol(isSuspended()) << std::endl;
-        os << tab("Warping");
-        os << bol(isWarping()) << std::endl;
-        os << tab("Tracking");
-        os << bol(isTracking()) << std::endl;
         os << std::endl;
 
-        os << tab("Thread state");
-        os << ExecStateEnum::key(state) << std::endl;
         os << tab("Refresh rate");
         os << dec(isize(refreshRate())) << " Fps" << std::endl;
         os << tab("Native master clock");
@@ -1103,7 +1080,7 @@ Amiga::_powerOn()
     for (auto &bp : std::vector <u32> (INITIAL_BREAKPOINTS)) {
 
         cpu.debugger.breakpoints.setAt(bp);
-        track = true;
+        // track = true; // TODO: FIXME
     }
 
     msgQueue.put(MSG_POWER, 1);
@@ -1126,7 +1103,7 @@ Amiga::_run()
     debug(RUN_DEBUG, "_run\n");
 
     // Enable or disable CPU debugging
-    track ? cpu.debugger.enableLogging() : cpu.debugger.disableLogging();
+    // track ? cpu.debugger.enableLogging() : cpu.debugger.disableLogging(); // TODO: FIXME
 
     msgQueue.put(MSG_RUN);
 }
@@ -1199,11 +1176,6 @@ Amiga::save(u8 *buffer)
     return result;
 }
 
-void
-Amiga::update()
-{
-    emulator.shouldWarp() ? switchWarpOn() : switchWarpOff();
-}
 
 void
 Amiga::computeFrame()
@@ -1230,7 +1202,8 @@ Amiga::computeFrame()
             // Did we reach a soft breakpoint?
             if (flags & RL::SOFTSTOP_REACHED) {
                 clearFlag(RL::SOFTSTOP_REACHED);
-                switchState(STATE_PAUSED);
+                throw StateChangeException(STATE_PAUSED);
+                // emulator.switchState(STATE_PAUSED);
                 break;
             }
 
@@ -1239,7 +1212,8 @@ Amiga::computeFrame()
                 clearFlag(RL::BREAKPOINT_REACHED);
                 auto addr = cpu.debugger.breakpoints.hit->addr;
                 msgQueue.put(MSG_BREAKPOINT_REACHED, CpuMsg { addr, 0});
-                switchState(STATE_PAUSED);
+                throw StateChangeException(STATE_PAUSED);
+                // switchState(STATE_PAUSED);
                 break;
             }
 
@@ -1248,7 +1222,8 @@ Amiga::computeFrame()
                 clearFlag(RL::WATCHPOINT_REACHED);
                 auto addr = cpu.debugger.watchpoints.hit->addr;
                 msgQueue.put(MSG_WATCHPOINT_REACHED, CpuMsg {addr, 0});
-                switchState(STATE_PAUSED);
+                throw StateChangeException(STATE_PAUSED);
+                // switchState(STATE_PAUSED);
                 break;
             }
 
@@ -1257,7 +1232,8 @@ Amiga::computeFrame()
                 clearFlag(RL::CATCHPOINT_REACHED);
                 auto vector = u8(cpu.debugger.catchpoints.hit->addr);
                 msgQueue.put(MSG_CATCHPOINT_REACHED, CpuMsg {cpu.getPC0(), vector});
-                switchState(STATE_PAUSED);
+                throw StateChangeException(STATE_PAUSED);
+                // switchState(STATE_PAUSED);
                 break;
             }
 
@@ -1265,7 +1241,8 @@ Amiga::computeFrame()
             if (flags & RL::SWTRAP_REACHED) {
                 clearFlag(RL::SWTRAP_REACHED);
                 msgQueue.put(MSG_SWTRAP_REACHED, CpuMsg {cpu.getPC0(), 0});
-                switchState(STATE_PAUSED);
+                throw StateChangeException(STATE_PAUSED);
+                // switchState(STATE_PAUSED);
                 break;
             }
 
@@ -1274,7 +1251,8 @@ Amiga::computeFrame()
                 clearFlag(RL::COPPERBP_REACHED);
                 auto addr = u8(agnus.copper.debugger.breakpoints.hit->addr);
                 msgQueue.put(MSG_COPPERBP_REACHED, CpuMsg { addr, 0 });
-                switchState(STATE_PAUSED);
+                throw StateChangeException(STATE_PAUSED);
+                // switchState(STATE_PAUSED);
                 break;
             }
 
@@ -1283,14 +1261,16 @@ Amiga::computeFrame()
                 clearFlag(RL::COPPERWP_REACHED);
                 auto addr = u8(agnus.copper.debugger.watchpoints.hit->addr);
                 msgQueue.put(MSG_COPPERWP_REACHED, CpuMsg { addr, 0 });
-                switchState(STATE_PAUSED);
+                throw StateChangeException(STATE_PAUSED);
+                // switchState(STATE_PAUSED);
                 break;
             }
 
             // Are we requested to terminate the run loop?
             if (flags & RL::STOP) {
                 clearFlag(RL::STOP);
-                switchState(STATE_PAUSED);
+                throw StateChangeException(STATE_PAUSED);
+                // switchState(STATE_PAUSED);
                 break;
             }
 
@@ -1301,22 +1281,6 @@ Amiga::computeFrame()
             }
         }
     }
-}
-
-isize
-Amiga::missingFrames() const
-{
-    // In VSYNC mode, compute exactly one frame per wakeup call
-    if (config.vsync) return 1;
-
-    // Compute the elapsed time
-    auto elapsed = util::Time::now() - baseTime;
-
-    // Compute which slice should be reached by now
-    auto target = elapsed.asNanoseconds() * i64(refreshRate()) / 1000000000;
-
-    // Compute the number of missing slices
-    return isize(target - frameCounter);
 }
 
 void 

@@ -68,39 +68,22 @@ Headless::Headless() { // }: amiga(&vamiga.emu->main) {
 int
 Headless::main(int argc, char *argv[])
 {
-    std::cout << "vAmiga Headless v" << amiga->version();
+    std::cout << "vAmiga Headless v" << VAmiga::version();
     std::cout << " - (C)opyright Dirk W. Hoffmann" << std::endl << std::endl;
 
     // Parse all command line arguments
     parseArguments(argc, argv);
 
     // Check for the --size option
-    if (keys.find("size") != keys.end()) { reportSize(); return 0; }
+    if (keys.find("size") != keys.end()) {
 
-    // Create an emulator instance
-    VAmiga vamiga;
-    amiga = vamiga.amiga.amiga;
+        reportSize();
+        return 0;
 
-    // Redirect shell output to the console in verbose mode
-    if (keys.find("verbose") != keys.end()) amiga->retroShell.setStream(std::cout);
+    } else {
 
-    // Read the input script
-    Script script(keys["arg1"]);
-        
-    // Launch the emulator thread
-    amiga->launch(this, vamiga::process);
-
-    // Execute the script
-    barrier.lock();
-    script.execute(*amiga);
-
-    while (!returnCode) {
-        
-        barrier.lock();
-        amiga->retroShell.continueScript();
+        return execScript();
     }
-
-    return *returnCode;
 }
 
 #ifdef _WIN32
@@ -293,6 +276,34 @@ Headless::reportSize()
     msg("            Volume : %zu bytes\n", sizeof(Volume));
     msg("             Zorro : %zu bytes\n", sizeof(ZorroManager));
     msg("\n");
+}
+
+int
+Headless::execScript()
+{
+    // Create an emulator instance
+    VAmiga vamiga;
+    
+    // Redirect shell output to the console in verbose mode
+    if (keys.find("verbose") != keys.end()) vamiga.amiga.amiga->retroShell.setStream(std::cout);
+
+    // Read the input script
+    Script script(keys["arg1"]);
+
+    // Launch the emulator thread
+    vamiga.launch(this, vamiga::process);
+
+    // Execute the script
+    barrier.lock();
+    script.execute(*vamiga.amiga.amiga);
+
+    while (!returnCode) {
+
+        barrier.lock();
+        vamiga.amiga.amiga->retroShell.continueScript();
+    }
+
+    return *returnCode;
 }
 
 }

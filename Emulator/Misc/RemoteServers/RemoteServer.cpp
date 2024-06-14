@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "RemoteServer.h"
-#include "Amiga.h"
+#include "Emulator.h"
 #include "CPU.h"
 #include "IOUtils.h"
 #include "Memory.h"

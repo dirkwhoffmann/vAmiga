@@ -9,7 +9,7 @@
 
 #pragma once
 
-// #include "config.h"
+#include "config.h"
 #include "VAmiga.h"
 #include "Emulator.h"
 #include "Amiga.h"
@@ -30,12 +30,6 @@ class Headless {
 
     // Parsed command line arguments
     map<string,string> keys;
-
-    // The emulator instance
-    // VAmiga vamiga;
-
-    // Reference to the embedded Amiga
-    Amiga *amiga;
 
     // Barrier for syncing script execution
     util::Mutex barrier;
@@ -73,7 +67,10 @@ private:
     // Returns the path to the self-test script
     string selfTestScript();
 
+    // Executes the provided script
+    int execScript();
 
+    
     //
     // Running
     //

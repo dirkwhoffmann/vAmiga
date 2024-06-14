@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "Interpreter.h"
-#include "Amiga.h"
+#include "Emulator.h"
 
 namespace vamiga {
 
@@ -250,7 +250,7 @@ Interpreter::initCommandShell(Command &root)
              "Switches the Amiga on or off",
              [this](Arguments& argv, long value) {
 
-        parseOnOff(argv[0]) ? amiga.run() : amiga.powerOff();
+        parseOnOff(argv[0]) ? emulator.run() : emulator.powerOff();
     });
 
     root.add({"amiga", "reset"},

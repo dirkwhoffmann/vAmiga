@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "GdbServer.h"
-#include "Amiga.h"
+#include "Emulator.h"
 #include "CPU.h"
 #include "IOUtils.h"
 #include "Memory.h"
@@ -122,7 +122,7 @@ GdbServer::process <'v', GdbCmd::Cont> (string arg)
 {
     if (arg == "c") {
 
-        amiga.run();
+        emulator.run();
         return;
     }
     if (arg == "s") {

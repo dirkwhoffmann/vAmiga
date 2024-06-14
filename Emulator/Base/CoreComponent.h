@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include "CoreComponentTypes.h"
+#include "EmulatorTypes.h"
+#include "ThreadTypes.h"
 #include "CoreObject.h"
 #include "Inspectable.h"
 #include "Synchronizable.h"
@@ -87,13 +88,16 @@ public:
     
 public:
     
-    virtual bool isPoweredOff() const = 0;
-    virtual bool isPoweredOn() const = 0;
-    virtual bool isPaused() const = 0;
-    virtual bool isRunning() const = 0;
-    virtual bool isSuspended() const = 0;
-    virtual bool isHalted() const = 0;
+    virtual bool isPoweredOff() const;
+    virtual bool isPoweredOn() const;
+    virtual bool isPaused() const;
+    virtual bool isRunning() const;
+    virtual bool isSuspended() const;
+    virtual bool isHalted() const;
 
+    void suspend() override;
+    void resume() override;
+    
     // Throws an exception if the emulator is not ready to power on
     virtual void isReady() const throws;
 

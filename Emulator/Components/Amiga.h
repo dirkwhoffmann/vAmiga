@@ -47,7 +47,7 @@ namespace vamiga {
  * query information from Paula, you need to invoke a public method on
  * amiga.paula.
  */
-class Amiga : public Thread, public Inspectable<AmigaInfo> {
+class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
 
     friend class Emulator;
     
@@ -75,7 +75,7 @@ class Amiga : public Thread, public Inspectable<AmigaInfo> {
      * current state is recorded. When the GUI updates the inspector panels, it
      * displays the result of the latest inspection.
      */
-    mutable AmigaInfo info = {};
+    // mutable AmigaInfo info = {};
 
 
     //
@@ -192,11 +192,8 @@ public:
 
 public:
 
-    Amiga(class Emulator& ref);
+    Amiga(class Emulator& ref, isize id);
     ~Amiga();
-
-    // Launches the emulator thread
-    void launch(const void *listener, Callback *func);
 
 
     //
@@ -263,35 +260,6 @@ private:
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
-public:
-
-    void suspend() override { suspendThread(); }
-    void resume() override { resumeThread(); }
-
-
-    //
-    // Methods from Thread
-    //
-
-private:
-
-    void update() override;
-    void computeFrame() override;
-
-    void didPowerOn() override { CoreComponent::powerOn(); }
-    void didPowerOff() override { CoreComponent::powerOff(); }
-    void didPause() override { CoreComponent::pause(); }
-    void didRun() override { CoreComponent::run(); }
-    void didHalt() override { CoreComponent::halt(); }
-    void didWarpOn() override { CoreComponent::warpOn(); }
-    void didWarpOff() override { CoreComponent::warpOff(); }
-    void didTrackOn() override { CoreComponent::trackOn(); }
-    void didTrackOff() override { CoreComponent::trackOff(); }
-
-public:
-
-    isize missingFrames() const override;
-
 
     //
     // Methods from Inspectable
@@ -339,6 +307,8 @@ private:
 public:
 
     // AmigaInfo getInfo() const { return CoreComponent::getInfo(info); }
+
+    void computeFrame();
 
     InspectionTarget getInspectionTarget() const;
     void setInspectionTarget(InspectionTarget target, Cycle trigger = 0);

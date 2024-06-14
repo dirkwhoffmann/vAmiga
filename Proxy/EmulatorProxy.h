@@ -17,6 +17,7 @@
 #import "AmigaFileTypes.h"
 #import "BlitterTypes.h"
 #import "BootBlockImageTypes.h"
+#import "CmdQueueTypes.h"
 #import "ControlPortTypes.h"
 #import "CopperTypes.h"
 #import "CPUTypes.h"

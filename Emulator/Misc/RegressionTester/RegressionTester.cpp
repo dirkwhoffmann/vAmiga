@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "RegressionTester.h"
-#include "Amiga.h"
+#include "Emulator.h"
 #include "IOUtils.h"
 
 #include <fstream>
@@ -39,7 +39,7 @@ RegressionTester::prepare(ConfigScheme scheme, string rom, string ext)
     constexpr isize warpSource = 1;
     
     // Run as fast as possible
-    amiga.switchWarpOn(warpSource);
+    emulator.warpOn(warpSource);
 }
 
 void
@@ -49,8 +49,8 @@ RegressionTester::run(string adf)
     df0.swapDisk(adf);
 
     // Run the emulator
-    amiga.powerOn();
-    amiga.run();
+    emulator.powerOn();
+    emulator.run();
 }
 
 void

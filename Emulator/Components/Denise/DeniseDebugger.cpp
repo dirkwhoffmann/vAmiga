@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "DeniseDebugger.h"
-#include "Amiga.h"
+#include "Emulator.h"
 
 namespace vamiga {
 
@@ -194,7 +194,7 @@ DeniseDebugger::vsyncHandler()
     // Sprite tracking
     //
     
-    if (amiga.isTracking()) {
+    if (emulator.isTracking()) {
         
         // Latch recorded sprite data
         for (isize i = 0; i < 8; i++) {

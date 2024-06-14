@@ -2991,16 +2991,20 @@ using namespace vamiga::moira;
 - (void)setTrackMode:(BOOL)value
 {
     if (value) {
-        [self emu]->emu->main.switchTrackOn();
+        [self emu]->emu->trackOn();
     } else {
-        [self emu]->emu->main.switchTrackOff();
+        [self emu]->emu->trackOff();
     }
 }
 
 - (NSInteger)cpuLoad
 {
+    // TODO: FIXME
+    return 0;
+    /*
     double load = [self emu]->emu->main.getCpuLoad();
     return (NSInteger)(100 * load);
+    */
 }
 
 - (InspectionTarget)inspectionTarget

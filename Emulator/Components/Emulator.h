@@ -9,54 +9,123 @@
 
 #pragma once
 
+#include "EmulatorTypes.h"
+#include "Defaults.h"
 #include "Amiga.h"
+#include "Host.h"
+#include "Thread.h"
+#include "CmdQueue.h"
 
 namespace vamiga {
 
-class Emulator {
+class Emulator : public Thread, public Synchronizable {
+
+    friend class API;
+    friend class VAmiga;
 
 public:
 
     // The virtual Amiga
-    // Amiga main = Amiga(*this, 0);
-    Amiga main = Amiga(*this);
+    Amiga main = Amiga(*this, 0);
 
-    // Later, these functions will be inherited from Thread
-    void suspendThread() { main.suspendThread(); }
-    void resumeThread() { main.resumeThread(); }
+    bool initialized = false;
+    
+    //
+    // Methods
+    //
 
+public:
+
+    Emulator();
+    ~Emulator();
+
+    // Launches the emulator thread
+    void launch(const void *listener, Callback *func);
+
+    // Initializes all components
+    void initialize();
+
+    // Checks the initialization state
+    bool isInitialized() const;
+
+
+    //
+    // Methods from CoreComponent
+    //
+
+public:
+
+    const char *objectName() const override { return "Emulator"; }
+
+private:
+
+    void _dump(Category category, std::ostream& os) const override;
 
     //
     // Methods from Thread
     //
 
-    /*
 private:
 
     void update() override;
+    bool shouldWarp() const;
+    isize missingFrames() const override;
     void computeFrame() override;
+    void recreateRunAheadInstance();
 
-    void didPowerOn() override { CoreComponent::powerOn(); }
-    void didPowerOff() override { CoreComponent::powerOff(); }
-    void didPause() override { CoreComponent::pause(); }
-    void didRun() override { CoreComponent::run(); }
-    void didHalt() override { CoreComponent::halt(); }
-    void didWarpOn() override { CoreComponent::warpOn(); }
-    void didWarpOff() override { CoreComponent::warpOff(); }
-    void didTrackOn() override { CoreComponent::trackOn(); }
-    void didTrackOff() override { CoreComponent::trackOff(); }
+    void _powerOn() override { main.powerOn(); }
+    void _powerOff() override { main.powerOff(); }
+    void _pause() override { main.pause(); }
+    void _run() override { main.run(); }
+    void _halt() override { main.halt(); }
+    void _warpOn() override { main.warpOn(); }
+    void _warpOff() override { main.warpOff(); }
+    void _trackOn() override { main.trackOn(); }
+    void _trackOff() override { main.trackOff(); }
+
+    void isReady() override;
 
 public:
 
-    isize missingFrames() const override;
-*/
-    
+    double refreshRate() const override;
+
+
     //
-    // Warp mode
+    // Execution control
     //
 
-    // Indicates if the emulator should run in warp mode
-    bool shouldWarp() const;
+public:
+
+    void stepInto();
+    void stepOver();
+
+
+    /*
+
+    //
+    // Audio and Video
+    //
+
+    u32 *getTexture() const;
+    u32 *getDmaTexture() const;
+
+
+    //
+    // Command queue
+    //
+
+public:
+
+    // Feeds a command into the command queue
+    void put(const Cmd &cmd);
+    void put(CmdType type, i64 payload) { put (Cmd(type, payload)); }
+
+private:
+
+    // Processes a command from the command queue
+    void process(const Cmd &cmd);
+
+    */
 };
 
 }

@@ -31,6 +31,8 @@
 		5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5019B1EE254B292D00A7AB95 /* EXEFile.cpp */; };
 		501A9937243A07A100D269B2 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501A9936243A07A100D269B2 /* Storage.swift */; };
 		501B821D2262FFB200042871 /* RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B821B2262FFB200042871 /* RTC.cpp */; };
+		501C36322C1C17B1000FA274 /* CmdQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501C36302C1C17B1000FA274 /* CmdQueue.cpp */; };
+		501C36332C1C17B1000FA274 /* CmdQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501C36302C1C17B1000FA274 /* CmdQueue.cpp */; };
 		501C513B27C0084200DF1DD5 /* HardDiskConfigurator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501C513A27C0084200DF1DD5 /* HardDiskConfigurator.xib */; };
 		501C513F27C0C63A00DF1DD5 /* HardDiskConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C513E27C0C63A00DF1DD5 /* HardDiskConfigurator.swift */; };
 		501C514227C0CE6600DF1DD5 /* DriveDescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501C514027C0CE6600DF1DD5 /* DriveDescriptors.cpp */; };
@@ -506,6 +508,10 @@
 		501A9936243A07A100D269B2 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		501B821B2262FFB200042871 /* RTC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RTC.cpp; sourceTree = "<group>"; };
 		501B821C2262FFB200042871 /* RTC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTC.h; sourceTree = "<group>"; };
+		501C362F2C1C176C000FA274 /* EmulatorTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulatorTypes.h; sourceTree = "<group>"; };
+		501C36302C1C17B1000FA274 /* CmdQueue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CmdQueue.cpp; sourceTree = "<group>"; };
+		501C36312C1C17B1000FA274 /* CmdQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CmdQueue.h; sourceTree = "<group>"; };
+		501C36342C1C17CB000FA274 /* CmdQueueTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CmdQueueTypes.h; sourceTree = "<group>"; };
 		501C513A27C0084200DF1DD5 /* HardDiskConfigurator.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HardDiskConfigurator.xib; sourceTree = "<group>"; };
 		501C513E27C0C63A00DF1DD5 /* HardDiskConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardDiskConfigurator.swift; sourceTree = "<group>"; };
 		501C514027C0CE6600DF1DD5 /* DriveDescriptors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DriveDescriptors.cpp; sourceTree = "<group>"; };
@@ -1110,6 +1116,9 @@
 				5042F2DE26BE57F700126C05 /* ThreadTypes.h */,
 				5042F2DC26BE57E600126C05 /* Thread.h */,
 				5042F2DB26BE57E600126C05 /* Thread.cpp */,
+				501C36342C1C17CB000FA274 /* CmdQueueTypes.h */,
+				501C36312C1C17B1000FA274 /* CmdQueue.h */,
+				501C36302C1C17B1000FA274 /* CmdQueue.cpp */,
 				50D5244322787D3C00F8959D /* MsgQueueTypes.h */,
 				508FDEF821EA1FBC0043D0E9 /* MsgQueue.h */,
 				508FDEF521EA1FBC0043D0E9 /* MsgQueue.cpp */,
@@ -1256,6 +1265,7 @@
 				50D661862282BE1800D67D88 /* AmigaTypes.h */,
 				50B14C0F21EB410B002E32A6 /* Amiga.h */,
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
+				501C362F2C1C176C000FA274 /* EmulatorTypes.h */,
 				50DA83E02C160DCA001209AA /* Emulator.h */,
 				50DA83DF2C160DCA001209AA /* Emulator.cpp */,
 				508E7F962206CDC600F7D88C /* CPU */,
@@ -2295,6 +2305,7 @@
 				50B36395277760320030A50C /* BlitterPanel.swift in Sources */,
 				508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */,
 				50F0BD2622AF883C001F4616 /* UART.cpp in Sources */,
+				501C36322C1C17B1000FA274 /* CmdQueue.cpp in Sources */,
 				50357BB6239123B2007E7563 /* Renderer.swift in Sources */,
 				5078A5D52529E7FA00FCE384 /* Sampler.cpp in Sources */,
 				508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */,
@@ -2462,6 +2473,7 @@
 				50FC048627DA194200C3E566 /* MoiraDebugger.cpp in Sources */,
 				50FC04D227DA19F600C3E566 /* BootBlockImage.cpp in Sources */,
 				50FC04EC27DA1A4500C3E566 /* SerServer.cpp in Sources */,
+				501C36332C1C17B1000FA274 /* CmdQueue.cpp in Sources */,
 				505B33202B46D25700D3736F /* config.cpp in Sources */,
 				50FC04E027DA1A1400C3E566 /* xdms.c in Sources */,
 				50FC047A27DA12AB00C3E566 /* MemUtils.cpp in Sources */,

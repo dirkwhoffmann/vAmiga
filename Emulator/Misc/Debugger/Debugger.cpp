@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "Debugger.h"
-#include "Amiga.h"
+#include "Emulator.h"
 #include "IOUtils.h"
 #include <sstream>
 
@@ -30,7 +30,7 @@ Debugger::_pause()
 void
 Debugger::stopAndGo()
 {
-    isRunning() ? amiga.pause() : amiga.run();
+    isRunning() ? emulator.pause() : emulator.run();
 }
 
 void
@@ -39,7 +39,7 @@ Debugger::stepInto()
     if (isRunning()) return;
 
     cpu.debugger.stepInto();
-    amiga.run();
+    emulator.run();
 
     // Inform the GUI
     msgQueue.put(MSG_STEP);
@@ -51,7 +51,7 @@ Debugger::stepOver()
     if (isRunning()) return;
 
     cpu.debugger.stepOver();
-    amiga.run();
+    emulator.run();
 
     // Inform the GUI
     msgQueue.put(MSG_STEP);

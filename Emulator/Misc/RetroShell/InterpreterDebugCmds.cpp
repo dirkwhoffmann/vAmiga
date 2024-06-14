@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "Interpreter.h"
-#include "Amiga.h"
+#include "Emulator.h"
 
 namespace vamiga {
 
@@ -28,7 +28,7 @@ Interpreter::initDebugShell(Command &root)
              std::pair <string, string>("g[oto]", "Goto address"),
              [this](Arguments& argv, long value) {
 
-        argv.empty() ? amiga.run() : debugger.jump(parseAddr(argv[0]));
+        argv.empty() ? emulator.run() : debugger.jump(parseAddr(argv[0]));
     });
 
     root.clone("g", {"goto"});

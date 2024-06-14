@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "Copper.h"
-#include "Amiga.h"
+#include "Emulator.h"
 #include "CopperDebugger.h"
 #include "Checksum.h"
 #include "IOUtils.h"
@@ -37,7 +37,7 @@ Copper::setPC(u32 addr)
     coppc = addr;
 
     // Notify the debugger
-    if (amiga.isTracking()) { debugger.jumped(); }
+    if (emulator.isTracking()) { debugger.jumped(); }
 }
 
 void
@@ -46,7 +46,7 @@ Copper::advancePC()
     coppc += 2;
 
     // Notify the debugger
-    if (amiga.isTracking()) { debugger.advanced(); }
+    if (emulator.isTracking()) { debugger.advanced(); }
 }
 
 void

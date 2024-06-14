@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "RetroShell.h"
-#include "Amiga.h"
+#include "Emulator.h"
 #include "Parser.h"
 
 namespace vamiga {
@@ -412,8 +412,8 @@ RetroShell::execUserCommand(const string &command)
 
         } else {
 
-            if (amiga.isRunning()) {
-                amiga.pause();
+            if (emulator.isRunning()) {
+                emulator.pause();
             } else {
                 debugger.stepInto();
             }

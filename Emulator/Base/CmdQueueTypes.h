@@ -9,4 +9,10 @@
 
 #pragma once
 
-#include "OptionTypes.h"
+#include "Option.h"
+
+/*
+namespace vamiga {
+
+}
+*/

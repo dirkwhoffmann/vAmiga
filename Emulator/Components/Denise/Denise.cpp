@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "Emulator.h"
 #include "Denise.h"
 #include "Agnus.h"
 #include "Amiga.h"
@@ -714,7 +715,7 @@ Denise::drawSprites()
         if (wasArmed & 0b00000011) drawSpritePair<0, R>();
         
         // Record sprite data in debug mode
-        if (amiga.isTracking()) debugger.recordSprites(wasArmed);
+        if (emulator.isTracking()) debugger.recordSprites(wasArmed);
     }
     
     /* If a sprite was armed, the code above has been executed which means
@@ -1337,7 +1338,7 @@ Denise::eofHandler()
     if (frameSkips == 0) {
 
         pixelEngine.swapBuffers();
-        frameSkips = amiga.isWarping() ? config.frameSkipping : 0;
+        frameSkips = emulator.isWarping() ? config.frameSkipping : 0;
 
     } else {
 

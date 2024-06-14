@@ -12,6 +12,5 @@
 
 namespace vamiga {
 
-typedef std::vector<Option> ConfigOptions;
 
 }

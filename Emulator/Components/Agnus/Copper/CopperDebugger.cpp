@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "CopperDebugger.h"
-#include "Amiga.h"
+#include "Emulator.h"
 #include "Copper.h"
 #include "IOUtils.h"
 
@@ -56,8 +56,8 @@ CopperDebugger::_dump(Category category, std::ostream& os) const
         }
     };
 
-    if (!amiga.isTracking()) {
-        
+    if (!emulator.isTracking()) {
+
         os << "No recorded data. Debug mode is off." << std::endl;
         return;
     }

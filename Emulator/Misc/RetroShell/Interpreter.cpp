@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Amiga.h"
+#include "Emulator.h"
 #include <sstream>
 
 namespace vamiga {
@@ -196,13 +196,13 @@ Interpreter::switchInterpreter()
     if (inCommandShell()) {
 
         shell = Shell::Debug;
-        amiga.switchTrackOn(1);
+        emulator.trackOn(1);
         msgQueue.put(MSG_CONSOLE_DEBUGGER, true);
 
     } else {
 
         shell = Shell::Command;
-        amiga.switchTrackOff(1);
+        emulator.trackOff(1);
         msgQueue.put(MSG_CONSOLE_DEBUGGER, false);
     }
 

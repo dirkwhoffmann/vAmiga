@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "GdbServer.h"
-#include "Amiga.h"
+#include "Emulator.h"
 #include "CPU.h"
 #include "IOUtils.h"
 #include "Memory.h"
@@ -115,7 +115,7 @@ GdbServer::doProcess(const string &payload)
 void
 GdbServer::didStart()
 {
-    amiga.pause();
+    emulator.pause();
 }
 
 void
