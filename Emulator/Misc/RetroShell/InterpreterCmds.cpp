@@ -266,7 +266,11 @@ Interpreter::initCommandShell(Command &root)
 
         auto scheme = parseEnum <ConfigSchemeEnum> (argv[0]);
 
-        amiga.revertToFactorySettings();
+        // Don't call this function from within RetroShell. It'll call
+        // initialize() which will reinitialize RetroShell while it is running.
+        // This causes a crash on gcc.
+        // amiga.revertToFactorySettings();
+        emulator.powerOff();
         amiga.configure(scheme);
     });
 
