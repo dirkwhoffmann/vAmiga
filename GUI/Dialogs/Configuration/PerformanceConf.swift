@@ -125,7 +125,7 @@ extension ConfigurationController {
         amiga.suspend()
 
         // Revert to standard settings
-        AmigaProxy.defaults.removePerformanceUserDefaults()
+        EmulatorProxy.defaults.removePerformanceUserDefaults()
 
         // Update the configutation
         config.applyPerformanceUserDefaults()

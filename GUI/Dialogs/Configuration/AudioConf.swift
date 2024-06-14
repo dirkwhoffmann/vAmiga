@@ -172,7 +172,7 @@ extension ConfigurationController {
         amiga.suspend()
 
         // Revert to standard settings
-        AmigaProxy.defaults.removeAudioUserDefaults()
+        EmulatorProxy.defaults.removeAudioUserDefaults()
 
         // Update the configuration
         config.applyAudioUserDefaults()

@@ -12,6 +12,19 @@
 
 namespace vamiga {
 
+/*
+void
+Emulator::update()
+{
+    shouldWarp() ? switchWarpOn() : switchWarpOff();
+}
+
+void
+Emulator::computeFrame()
+{
+    main.computeFrame();
+}
+*/
 
 bool
 Emulator::shouldWarp() const

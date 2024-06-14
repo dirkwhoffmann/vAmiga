@@ -33,7 +33,7 @@ protocol DialogControllerDelegate: AnyObject {
 class DialogController: NSWindowController, DialogControllerDelegate {
 
     var parent: MyController!
-    var amiga: AmigaProxy!
+    var amiga: EmulatorProxy!
 
     // References to all open dialogs (to make ARC happy)
     static var active: [DialogController] = []

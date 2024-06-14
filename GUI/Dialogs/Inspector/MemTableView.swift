@@ -11,7 +11,7 @@ class MemTableView: NSTableView {
 
     @IBOutlet weak var inspector: Inspector!
 
-    var amiga: AmigaProxy { return inspector.amiga}
+    var amiga: EmulatorProxy { return inspector.amiga}
 
     // Displayed memory bank
     var bank = 0

@@ -16,20 +16,19 @@ namespace vamiga {
 void
 API::suspend()
 {
-    // emu->suspend();
+    emu->suspendThread();
 }
 
 void
 API::resume()
 {
-    // emu->resume();
+    emu->resumeThread();
 }
 
 bool
 API::isUserThread() const
 {
-    // return !emu->isEmulatorThread();
-    return false;
+    return !emu->main.isEmulatorThread();
 }
 
 VAmiga::VAmiga() {
@@ -160,6 +159,153 @@ string
 VAmiga::build()
 {
     return Amiga::build();
+}
+
+bool
+VAmiga::isPoweredOn()
+{
+    return emu->main.isPoweredOn();
+}
+
+bool
+VAmiga::isPoweredOff()
+{
+    return emu->main.isPoweredOff();
+}
+
+bool
+VAmiga::isPaused()
+{
+    return emu->main.isPaused();
+}
+
+bool
+VAmiga::isRunning()
+{
+    return emu->main.isRunning();
+}
+
+bool
+VAmiga::isSuspended()
+{
+    return emu->main.isSuspended();
+}
+
+bool
+VAmiga::isHalted()
+{
+    return emu->main.isHalted();
+}
+
+bool
+VAmiga::isWarping()
+{
+    return emu->main.isWarping();
+}
+
+bool
+VAmiga::isTracking()
+{
+    return emu->main.isTracking();
+}
+
+void
+VAmiga::isReady()
+{
+    return emu->main.isReady();
+}
+
+void
+VAmiga::powerOn()
+{
+    emu->main.Thread::powerOn();
+}
+
+void
+VAmiga::powerOff()
+{
+    emu->main.Thread::powerOff();
+}
+
+void
+VAmiga::run()
+{
+    emu->main.run();
+}
+
+void
+VAmiga::pause()
+{
+    emu->main.pause();
+}
+
+void
+VAmiga::halt()
+{
+    emu->main.halt();
+}
+
+void
+VAmiga::suspend()
+{
+    emu->suspendThread();
+}
+
+void
+VAmiga::resume()
+{
+    emu->resumeThread();
+}
+
+void
+VAmiga::warpOn(isize source)
+{
+    emu->main.switchWarpOn(source);
+}
+
+void
+VAmiga::warpOff(isize source)
+{
+    emu->main.switchWarpOff(source);
+}
+
+void
+VAmiga::trackOn(isize source)
+{
+    emu->main.switchTrackOn(source);
+}
+
+void
+VAmiga::trackOff(isize source)
+{
+    emu->main.switchTrackOff(source);
+}
+
+void
+VAmiga::stepInto()
+{
+    assert(isUserThread());
+    emu->main.debugger.stepInto();
+}
+
+void
+VAmiga::stepOver()
+{
+    assert(isUserThread());
+    emu->main.debugger.stepOver();
+}
+
+void
+VAmiga::wakeUp()
+{
+    emu->main.wakeUp();
+}
+
+void
+VAmiga::launch(const void *listener, Callback *func)
+{
+    assert(isUserThread());
+    emu->main.launch(listener, func);
 }
 
 }

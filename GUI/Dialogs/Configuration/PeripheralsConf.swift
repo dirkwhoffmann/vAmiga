@@ -146,7 +146,7 @@ extension ConfigurationController {
         amiga.suspend()
         
         // Revert to standard settings
-        AmigaProxy.defaults.removePeripheralsUserDefaults()
+        EmulatorProxy.defaults.removePeripheralsUserDefaults()
         
         // Update the configuration
         config.applyPeripheralsUserDefaults()

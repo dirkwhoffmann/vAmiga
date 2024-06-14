@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #import "config.h"
-#import "AmigaProxy.h"
+#import "EmulatorProxy.h"
 #import "Amiga.h"
 #import "vAmiga-Swift.h"
 #import "DMSFile.h"
@@ -168,6 +168,32 @@ using namespace vamiga::moira;
 }
 
 @end
+
+
+//
+// Amiga proxy
+//
+
+@implementation AmigaProxy
+
+- (AmigaAPI *)amiga
+{
+    return (AmigaAPI *)obj;
+}
+
+- (AmigaInfo)info
+{
+    return [self amiga]->amiga->getInfo();
+}
+/*
+- (AmigaInfo)cachedInfo
+{
+    return [self cia]->amiga->getCachedInfo();
+}
+*/
+
+@end
+
 
 //
 // Guards (Breakpoints, Watchpoints)
@@ -2194,7 +2220,7 @@ using namespace vamiga::moira;
     catch (Error &error) { [ex save:error]; return nil; }
 }
 
-+ (instancetype)makeWithAmiga:(AmigaProxy *)proxy
++ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy
 {
     Amiga *amiga = (Amiga *)proxy->obj;
     
@@ -2270,7 +2296,7 @@ using namespace vamiga::moira;
     catch (Error &error) { [ex save:error]; return nil; }
 }
 
-- (void)execute:(AmigaProxy *)proxy
+- (void)execute:(EmulatorProxy *)proxy
 {
     Amiga *amiga = (Amiga *)proxy->obj;
     
@@ -2837,12 +2863,13 @@ using namespace vamiga::moira;
 
 
 //
-// AmigaProxy
+// Emulator
 //
 
-@implementation AmigaProxy
+@implementation EmulatorProxy
 
 @synthesize agnus;
+@synthesize amiga;
 @synthesize blitter;
 @synthesize breakpoints;
 @synthesize ciaA;
@@ -2882,11 +2909,11 @@ using namespace vamiga::moira;
 
     // Create the emulator instance
     auto vamiga = new VAmiga();
-    Amiga *amiga = &vamiga->emu->main;
-    obj = amiga;
+    obj = vamiga;
 
     // Create sub proxys
     agnus = [[AgnusProxy alloc] initWith:&vamiga->agnus];
+    amiga = [[AmigaProxy alloc] initWith:&vamiga->amiga];
     blitter = [[BlitterProxy alloc] initWith:&vamiga->blitter];
     breakpoints = [[GuardsProxy alloc] initWith:&vamiga->breakpoints];
     ciaA = [[CIAProxy alloc] initWith:&vamiga->ciaA];
@@ -2922,9 +2949,9 @@ using namespace vamiga::moira;
     return self;
 }
 
-- (Amiga *)amiga
+- (VAmiga *)emu
 {
-    return (Amiga *)obj;
+    return (VAmiga *)obj;
 }
 
 + (DefaultsProxy *) defaults
@@ -2941,190 +2968,190 @@ using namespace vamiga::moira;
 {
     NSLog(@"kill");
     
-    assert([self amiga] != NULL);
-    delete [self amiga];
+    assert([self emu] != NULL);
+    delete [self emu];
     obj = NULL;
 }
 
 - (AmigaInfo)info
 {
-    return [self amiga]->getInfo();
+    return [self emu]->emu->main.getInfo();
 }
 
 - (BOOL)isWarping
 {
-    return [self amiga]->isWarping();
+    return [self emu]->isWarping();
 }
 
 - (BOOL)trackMode
 {
-    return [self amiga]->isTracking();
+    return [self emu]->isTracking();
 }
 
 - (void)setTrackMode:(BOOL)value
 {
     if (value) {
-        [self amiga]->switchTrackOn();
+        [self emu]->emu->main.switchTrackOn();
     } else {
-        [self amiga]->switchTrackOff();
+        [self emu]->emu->main.switchTrackOff();
     }
 }
 
 - (NSInteger)cpuLoad
 {
-    double load = [self amiga]->getCpuLoad();
+    double load = [self emu]->emu->main.getCpuLoad();
     return (NSInteger)(100 * load);
 }
 
 - (InspectionTarget)inspectionTarget
 {
-    return [self amiga]->getInspectionTarget();
+    return [self emu]->emu->main.getInspectionTarget();
 }
 
 - (void)setInspectionTarget:(InspectionTarget)target
 {
-    [self amiga]->setInspectionTarget(target);
+    [self emu]->emu->main.setInspectionTarget(target);
 }
 
 - (void) removeInspectionTarget
 {
-    [self amiga]->removeInspectionTarget();
+    [self emu]->emu->main.removeInspectionTarget();
 }
 
 - (void)launch:(const void *)listener function:(Callback *)func
 {
-    [self amiga]->launch(listener, func);
+    [self emu]->launch(listener, func);
 }
 
 - (void)hardReset
 {
-    [self amiga]->reset(true);
+    [self emu]->emu->main.reset(true);
 }
 
 - (void)softReset
 {
-    [self amiga]->reset(false);
+    [self emu]->emu->main.reset(false);
 }
 
 - (BOOL)poweredOn
 {
-    return [self amiga]->isPoweredOn();
+    return [self emu]->isPoweredOn();
 }
 
 - (BOOL)poweredOff
 {
-    return [self amiga]->isPoweredOff();
+    return [self emu]->isPoweredOff();
 }
 
 - (BOOL)running
 {
-    return [self amiga]->isRunning();
+    return [self emu]->isRunning();
 }
 
 - (BOOL)paused
 {
-    return [self amiga]->isPaused();
+    return [self emu]->isPaused();
 }
 
 - (void)isReady:(ExceptionWrapper *)ex
 {
-    try { [self amiga]->isReady(); }
+    try { [self emu]->isReady(); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)powerOn
 {
-    [self amiga]->powerOn();
+    [self emu]->powerOn();
 }
 
 - (void)powerOff
 {
-    [self amiga]->powerOff();
+    [self emu]->powerOff();
 }
 
 - (void)run:(ExceptionWrapper *)ex
 {
-    try { [self amiga]->run(); }
+    try { [self emu]->run(); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)pause
 {
-    [self amiga]->pause();
+    [self emu]->pause();
 }
 
 - (void)halt
 {
-    [self amiga]->halt();
+    [self emu]->halt();
 }
 
 - (void)wakeUp
 {
-    [self amiga]->wakeUp();
+    [self emu]->wakeUp();
 }
 
 - (void)suspend
 {
-    return [self amiga]->suspend();
+    return [self emu]->suspend();
 }
 
 - (void)resume
 {
-    return [self amiga]->resume();
+    return [self emu]->resume();
 }
 
 - (void)continueScript
 {
-    [self amiga]->retroShell.continueScript();
+    [self emu]->emu->main.retroShell.continueScript();
 }
 
 - (void)requestAutoSnapshot
 {
-    [self amiga]->requestAutoSnapshot();
+    [self emu]->emu->main.requestAutoSnapshot();
 }
 
 - (void)requestUserSnapshot
 {
-    [self amiga]->requestUserSnapshot();
+    [self emu]->emu->main.requestUserSnapshot();
 }
 
 - (SnapshotProxy *)latestAutoSnapshot
 {
-    Snapshot *snapshot = [self amiga]->latestAutoSnapshot();
+    Snapshot *snapshot = [self emu]->emu->main.latestAutoSnapshot();
     return [SnapshotProxy make:snapshot];
 }
 
 - (SnapshotProxy *)latestUserSnapshot
 {
-    Snapshot *snapshot = [self amiga]->latestUserSnapshot();
+    Snapshot *snapshot = [self emu]->emu->main.latestUserSnapshot();
     return [SnapshotProxy make:snapshot];
 }
 
 - (void)loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { [self amiga]->loadSnapshot(*[proxy snapshot]); }
+    try { [self emu]->emu->main.loadSnapshot(*[proxy snapshot]); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (NSInteger)getConfig:(Option)opt
 {
-    return [self amiga]->getConfigItem(opt);
+    return [self emu]->emu->main.getConfigItem(opt);
 }
 
 - (NSInteger)getConfig:(Option)opt id:(NSInteger)id
 {
-    return [self amiga]->getConfigItem(opt, id);
+    return [self emu]->emu->main.getConfigItem(opt, id);
 }
 
 - (NSInteger)getConfig:(Option)opt drive:(NSInteger)id
 {
-    return [self amiga]->getConfigItem(opt, (long)id);
+    return [self emu]->emu->main.getConfigItem(opt, (long)id);
 }
 
 - (BOOL)configure:(Option)opt value:(NSInteger)val
 {
     try {
-        [self amiga]->configure(opt, val);
+        [self emu]->emu->main.configure(opt, val);
         return true;
     } catch (Error &exception) {
         return false;
@@ -3134,7 +3161,7 @@ using namespace vamiga::moira;
 - (BOOL)configure:(Option)opt enable:(BOOL)val
 {
     try {
-        [self amiga]->configure(opt, val ? 1 : 0);
+        [self emu]->emu->main.configure(opt, val ? 1 : 0);
         return true;
     } catch (Error &exception) {
         return false;
@@ -3144,7 +3171,7 @@ using namespace vamiga::moira;
 - (BOOL)configure:(Option)opt id:(NSInteger)id value:(NSInteger)val
 {
     try {
-        [self amiga]->configure(opt, id, val);
+        [self emu]->emu->main.configure(opt, id, val);
         return true;
     } catch (Error &exception) {
         return false;
@@ -3154,7 +3181,7 @@ using namespace vamiga::moira;
 - (BOOL)configure:(Option)opt id:(NSInteger)id enable:(BOOL)val
 {
     try {
-        [self amiga]->configure(opt, id, val ? 1 : 0);
+        [self emu]->emu->main.configure(opt, id, val ? 1 : 0);
         return true;
     } catch (Error &exception) {
         return false;
@@ -3164,7 +3191,7 @@ using namespace vamiga::moira;
 - (BOOL)configure:(Option)opt drive:(NSInteger)id value:(NSInteger)val
 {
     try {
-        [self amiga]->configure(opt, (long)id, val);
+        [self emu]->emu->main.configure(opt, (long)id, val);
         return true;
     } catch (Error &exception) {
         return false;
@@ -3174,7 +3201,7 @@ using namespace vamiga::moira;
 - (BOOL)configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val
 {
     try {
-        [self amiga]->configure(opt, (long)id, val ? 1 : 0);
+        [self emu]->emu->main.configure(opt, (long)id, val ? 1 : 0);
         return true;
     } catch (Error &exception) {
         return false;
@@ -3183,17 +3210,17 @@ using namespace vamiga::moira;
 
 - (void)setListener:(const void *)sender function:(Callback *)func
 {
-    [self amiga]->msgQueue.setListener(sender, func);
+    [self emu]->emu->main.msgQueue.setListener(sender, func);
 }
 
 - (void)setAlarmAbs:(NSInteger)cycle payload:(NSInteger)value
 {
-    [self amiga]->setAlarmAbs(cycle, value);
+    [self emu]->emu->main.setAlarmAbs(cycle, value);
 }
 
 - (void)setAlarmRel:(NSInteger)cycle payload:(NSInteger)value
 {
-    [self amiga]->setAlarmRel(cycle, value);
+    [self emu]->emu->main.setAlarmRel(cycle, value);
 }
 
 @end

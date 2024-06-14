@@ -18,7 +18,7 @@ class CopperTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
     
-    var amiga: AmigaProxy { return inspector.amiga }
+    var amiga: EmulatorProxy { return inspector.amiga }
     var copper: CopperProxy { return amiga.copper }
     var breakpoints: GuardsProxy { return amiga.copperBreakpoints }
     

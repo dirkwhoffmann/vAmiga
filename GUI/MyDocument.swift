@@ -18,7 +18,7 @@ class MyDocument: NSDocument {
     var launchUrl: URL?
 
     // Gateway to the core emulator
-    var amiga: AmigaProxy!
+    var amiga: EmulatorProxy!
 
     // Snapshots
     private(set) var snapshots = ManagedArray<SnapshotProxy>(maxSize: 512 * 1024 * 1024)
@@ -42,13 +42,13 @@ class MyDocument: NSDocument {
         }
                 
         // Register all GUI related user defaults
-        AmigaProxy.defaults.registerUserDefaults()
+        EmulatorProxy.defaults.registerUserDefaults()
         
         // Load the user default settings
-        AmigaProxy.defaults.load()
+        EmulatorProxy.defaults.load()
         
         // Create an emulator instance
-        amiga = AmigaProxy()
+        amiga = EmulatorProxy()
     }
  
     override open func makeWindowControllers() {

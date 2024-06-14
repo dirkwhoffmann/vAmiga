@@ -10,7 +10,7 @@
 class GuardTableView: NSTableView {
 
     @IBOutlet weak var inspector: Inspector!
-    var amiga: AmigaProxy { return inspector.parent.amiga }
+    var amiga: EmulatorProxy { return inspector.parent.amiga }
 
     // Data caches
     var disabledCache: [Int: Bool] = [:]

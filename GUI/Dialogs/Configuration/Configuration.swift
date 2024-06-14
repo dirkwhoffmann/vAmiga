@@ -17,7 +17,7 @@
 class Configuration {
 
     var parent: MyController!
-    var amiga: AmigaProxy { return parent.amiga }
+    var amiga: EmulatorProxy { return parent.amiga }
     var renderer: Renderer { return parent.renderer }
     var gamePadManager: GamePadManager { return parent.gamePadManager }
     var ressourceManager: RessourceManager { return renderer.ressourceManager }

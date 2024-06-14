@@ -25,7 +25,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     var prefs: Preferences { return parent.pref }
     var config: Configuration { return parent.config }
-    var amiga: AmigaProxy { return parent.amiga }
+    var amiga: EmulatorProxy { return parent.amiga }
 
     // Number of drawn frames since power up
     var frames: Int64 = 0

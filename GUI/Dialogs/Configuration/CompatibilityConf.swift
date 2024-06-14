@@ -106,10 +106,10 @@ extension ConfigurationController {
 
     @IBAction func compPresetAction(_ sender: NSPopUpButton!) {
         
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
                 
         // Revert to standard settings
-        AmigaProxy.defaults.removeCompatibilityUserDefaults()
+        EmulatorProxy.defaults.removeCompatibilityUserDefaults()
                 
         // Override some options
         switch sender.selectedTag() {

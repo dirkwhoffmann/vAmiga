@@ -57,6 +57,7 @@
 
 @class ADFFileProxy;
 @class AgnusProxy;
+@class AmigaProxy;
 @class AmigaFileProxy;
 @class BlitterProxy;
 @class CIAProxy;
@@ -144,12 +145,13 @@
 
 
 //
-// Amiga
+// Emulator
 //
 
-@interface AmigaProxy : CoreComponentProxy {
+@interface EmulatorProxy : CoreComponentProxy {
         
     AgnusProxy *agnus;
+    AmigaProxy *amiga;
     CIAProxy *ciaA;
     CIAProxy *ciaB;
     ControlPortProxy *controlPort1;
@@ -183,6 +185,7 @@
 }
 
 @property (readonly, strong) AgnusProxy *agnus;
+@property (readonly, strong) AmigaProxy *amiga;
 @property (readonly, strong) BlitterProxy *blitter;
 @property (readonly, strong) CIAProxy *ciaA;
 @property (readonly, strong) CIAProxy *ciaB;
@@ -359,6 +362,18 @@
 - (NSString *)disassembleWords:(NSInteger)addr length:(NSInteger)len;
 
 - (NSString *)vectorName:(NSInteger)nr;
+
+@end
+
+
+//
+// Amiga
+//
+
+@interface AmigaProxy : CoreComponentProxy { }
+
+@property (readonly) AmigaInfo info;
+// @property (readonly) AmigaInfo cachedInfo;
 
 @end
 
@@ -911,7 +926,7 @@
 
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithAmiga:(AmigaProxy *)proxy;
++ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy;
 
 @property (readonly, strong) NSImage *previewImage;
 @property (readonly) time_t timeStamp;
@@ -928,7 +943,7 @@
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
  
-- (void)execute:(AmigaProxy *)proxy;
+- (void)execute:(EmulatorProxy *)proxy;
 
 @end
 

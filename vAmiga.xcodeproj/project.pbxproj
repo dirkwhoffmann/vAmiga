@@ -219,7 +219,7 @@
 		50B14C2021EB8445002E32A6 /* drive_head.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1821EB8445002E32A6 /* drive_head.aiff */; };
 		50B14C2221EB8445002E32A6 /* drive_snatch_uae.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1A21EB8445002E32A6 /* drive_snatch_uae.aiff */; };
 		50B14C2621EB905A002E32A6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C2521EB9059002E32A6 /* Credits.rtf */; };
-		50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */; };
+		50B14C2821EB97EC002E32A6 /* EmulatorProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C2721EB97EC002E32A6 /* EmulatorProxy.mm */; };
 		50B2BC8925EC3D590032EEFE /* IOUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C0B78025EC367000CDE1F2 /* IOUtils.cpp */; };
 		50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B35B6022B2382E001A9C17 /* SerialPort.cpp */; };
 		50B36395277760320030A50C /* BlitterPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B36394277760320030A50C /* BlitterPanel.swift */; };
@@ -810,8 +810,8 @@
 		50B14C1821EB8445002E32A6 /* drive_head.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = drive_head.aiff; sourceTree = "<group>"; };
 		50B14C1A21EB8445002E32A6 /* drive_snatch_uae.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = drive_snatch_uae.aiff; sourceTree = "<group>"; };
 		50B14C2521EB9059002E32A6 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
-		50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AmigaProxy.mm; sourceTree = "<group>"; };
-		50B14C2921EB9806002E32A6 /* AmigaProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaProxy.h; sourceTree = "<group>"; };
+		50B14C2721EB97EC002E32A6 /* EmulatorProxy.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulatorProxy.mm; sourceTree = "<group>"; };
+		50B14C2921EB9806002E32A6 /* EmulatorProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulatorProxy.h; sourceTree = "<group>"; };
 		50B35B6022B2382E001A9C17 /* SerialPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SerialPort.cpp; sourceTree = "<group>"; };
 		50B35B6122B2382E001A9C17 /* SerialPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SerialPort.h; sourceTree = "<group>"; };
 		50B36394277760320030A50C /* BlitterPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlitterPanel.swift; sourceTree = "<group>"; };
@@ -1799,8 +1799,8 @@
 			isa = PBXGroup;
 			children = (
 				508FDFFA21EA22790043D0E9 /* Bridging-Header.h */,
-				50B14C2921EB9806002E32A6 /* AmigaProxy.h */,
-				50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */,
+				50B14C2921EB9806002E32A6 /* EmulatorProxy.h */,
+				50B14C2721EB97EC002E32A6 /* EmulatorProxy.mm */,
 				50300AEF258CF1F700D261E3 /* TypeExtensions.swift */,
 				5085FE5821FB6856009753EF /* ProxyExtensions.swift */,
 			);
@@ -2271,7 +2271,7 @@
 				50E1905C277F69B300B8DBE2 /* FFmpeg.cpp in Sources */,
 				506ACE46279AC76700BA7877 /* SequencerBpl.cpp in Sources */,
 				50300AF0258CF1F700D261E3 /* TypeExtensions.swift in Sources */,
-				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
+				50B14C2821EB97EC002E32A6 /* EmulatorProxy.mm in Sources */,
 				501FB3172762008C00D0A57B /* OSDebuggerRead.cpp in Sources */,
 				50C8C44F260740AC00F4E012 /* SplashScreen.swift in Sources */,
 				50F54B2924B5D31D0078FDC9 /* xdms.c in Sources */,

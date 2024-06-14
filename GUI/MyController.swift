@@ -30,7 +30,7 @@ class MyController: NSWindowController, MessageReceiver {
     var mydocument: MyDocument!
     
     // Amiga proxy (bridge between the Swift frontend and the C++ backend)
-    var amiga: AmigaProxy!
+    var amiga: EmulatorProxy!
     
     // Inspector panel of this emulator instance
     var inspector: Inspector?

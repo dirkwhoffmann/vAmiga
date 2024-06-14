@@ -203,10 +203,10 @@ extension ConfigurationController {
     
     @IBAction func csPresetAction(_ sender: NSPopUpButton!) {
         
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
         
         // Revert to standard settings
-        AmigaProxy.defaults.removeChipsetUserDefaults() 
+        EmulatorProxy.defaults.removeChipsetUserDefaults() 
         
         // Modify some settings
         switch sender.selectedTag() {
@@ -332,12 +332,12 @@ extension ConfigurationController {
 
     @IBAction func memPresetAction(_ sender: NSPopUpButton!) {
 
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
 
         amiga.suspend()
 
         // Revert to standard settings
-        AmigaProxy.defaults.removeMemoryUserDefaults()
+        EmulatorProxy.defaults.removeMemoryUserDefaults()
 
         // Adjust some settings
         switch sender.selectedTag() {

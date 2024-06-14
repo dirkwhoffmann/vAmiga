@@ -387,7 +387,7 @@ extension Preferences {
     func saveGeneralUserDefaults() {
         
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
         
         defaults.set(Keys.Gen.snapshotStorage, snapshotStorage)
         defaults.set(Keys.Gen.autoSnapshots, autoSnapshots)
@@ -416,7 +416,7 @@ extension Preferences {
     func applyGeneralUserDefaults() {
         
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
         
         snapshotStorage = defaults.int(Keys.Gen.snapshotStorage)
         autoSnapshots = defaults.bool(Keys.Gen.autoSnapshots)
@@ -548,7 +548,7 @@ extension Preferences {
     func saveControlsUserDefaults() {
     
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
                 
         defaults.encode(Keys.Con.mouseKeyMap, keyMaps[0])
         defaults.encode(Keys.Con.joyKeyMap1, keyMaps[1])
@@ -573,7 +573,7 @@ extension Preferences {
     func applyControlsUserDefaults() {
            
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
         
         defaults.decode(Keys.Con.mouseKeyMap, &keyMaps[0])
         defaults.decode(Keys.Con.joyKeyMap1, &keyMaps[1])
@@ -622,7 +622,7 @@ extension Preferences {
     func saveDevicesUserDefaults() {
     
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
                         
         defaults.save()
     }
@@ -643,7 +643,7 @@ extension Configuration {
 
         debug(.defaults)
 
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
         let fm = FileManager.default
         var url: URL?
 
@@ -739,7 +739,7 @@ extension Configuration {
     func applyChipsetUserDefaults() {
         
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
 
         amiga.suspend()
 
@@ -757,7 +757,7 @@ extension Configuration {
     func saveChipsetUserDefaults() {
         
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
 
         amiga.suspend()
 
@@ -806,7 +806,7 @@ extension Configuration {
     func saveMemoryUserDefaults() {
         
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
         
         amiga.suspend()
         
@@ -826,7 +826,7 @@ extension Configuration {
     func applyMemoryUserDefaults() {
         
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
 
         amiga.suspend()
 
@@ -889,7 +889,7 @@ extension Configuration {
     func savePeripheralsUserDefaults() {
         
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
 
         amiga.suspend()
         
@@ -932,7 +932,7 @@ extension Configuration {
     func applyPeripheralsUserDefaults() {
         
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
 
         amiga.suspend()
 
@@ -1005,7 +1005,7 @@ extension Configuration {
     func applyPerformanceUserDefaults() {
 
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
 
         amiga.suspend()
 
@@ -1026,7 +1026,7 @@ extension Configuration {
     func savePerformanceUserDefaults() {
 
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
 
         amiga.suspend()
 
@@ -1078,7 +1078,7 @@ extension Configuration {
     func saveCompatibilityUserDefaults() {
         
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
         
         amiga.suspend()
         
@@ -1098,7 +1098,7 @@ extension Configuration {
     func applyCompatibilityUserDefaults() {
         
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
         
         amiga.suspend()
         
@@ -1151,7 +1151,7 @@ extension Configuration {
     func saveAudioUserDefaults() {
         
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
 
         amiga.suspend()
         
@@ -1187,7 +1187,7 @@ extension Configuration {
     func applyAudioUserDefaults() {
         
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
 
         amiga.suspend()
 
@@ -1393,7 +1393,7 @@ extension Configuration {
     func saveColorUserDefaults() {
 
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
         
         amiga.suspend()
         
@@ -1410,7 +1410,7 @@ extension Configuration {
     func saveGeometryUserDefaults() {
 
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
         
         amiga.suspend()
                 
@@ -1429,7 +1429,7 @@ extension Configuration {
     func saveShaderUserDefaults() {
 
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
         
         amiga.suspend()
                         
@@ -1469,7 +1469,7 @@ extension Configuration {
     func applyColorUserDefaults() {
     
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
         
         amiga.suspend()
         
@@ -1484,7 +1484,7 @@ extension Configuration {
     func applyGeometryUserDefaults() {
     
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
         
         amiga.suspend()
           
@@ -1501,7 +1501,7 @@ extension Configuration {
     func applyShaderUserDefaults() {
     
         debug(.defaults)
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
         
         amiga.suspend()
                         

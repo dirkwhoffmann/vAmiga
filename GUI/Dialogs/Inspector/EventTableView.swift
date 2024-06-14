@@ -10,7 +10,7 @@
 class EventTableView: NSTableView {
 
     @IBOutlet weak var inspector: Inspector!
-    var amiga: AmigaProxy!
+    var amiga: EmulatorProxy!
 
     var slotInfo = [EventSlotInfo?](repeating: nil, count: EventSlot.COUNT.rawValue)
 

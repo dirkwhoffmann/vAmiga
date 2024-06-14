@@ -300,22 +300,22 @@ extension ConfigurationController {
     
     @IBAction func vidPresetAction(_ sender: NSMenuItem!) {
               
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
 
         switch sender.tag {
             
         case 0: // Recommended settings (all)
             
-            AmigaProxy.defaults.removeVideoUserDefaults()
+            EmulatorProxy.defaults.removeVideoUserDefaults()
 
         case 10: // Recommended settings (geometry)
 
-            AmigaProxy.defaults.removeGeometryUserDefaults()
+            EmulatorProxy.defaults.removeGeometryUserDefaults()
 
         case 11: // My personal monitor (ViewSonic VP191b)
 
             debug(1, "ViewSonic VP191b")
-            AmigaProxy.defaults.removeGeometryUserDefaults()
+            EmulatorProxy.defaults.removeGeometryUserDefaults()
             defaults.set(Keys.Vid.zoom, 0)
             defaults.set(Keys.Vid.hZoom, 0.6763221)
             defaults.set(Keys.Vid.vZoom, 0.032)
@@ -325,18 +325,18 @@ extension ConfigurationController {
 
         case 20: // Recommended settings (colors + shader)
 
-            AmigaProxy.defaults.removeColorUserDefaults()
-            AmigaProxy.defaults.removeShaderUserDefaults()
+            EmulatorProxy.defaults.removeColorUserDefaults()
+            EmulatorProxy.defaults.removeShaderUserDefaults()
 
         case 21: // TFT monitor
 
-            AmigaProxy.defaults.removeColorUserDefaults()
-            AmigaProxy.defaults.removeShaderUserDefaults()
+            EmulatorProxy.defaults.removeColorUserDefaults()
+            EmulatorProxy.defaults.removeShaderUserDefaults()
 
         case 22: // CRT monitor
 
-            AmigaProxy.defaults.removeColorUserDefaults()
-            AmigaProxy.defaults.removeShaderUserDefaults()
+            EmulatorProxy.defaults.removeColorUserDefaults()
+            EmulatorProxy.defaults.removeShaderUserDefaults()
             defaults.set(Keys.Vid.blurRadius, 1.5)
             defaults.set(Keys.Vid.bloom, 1)
             defaults.set(Keys.Vid.dotMask, 1)

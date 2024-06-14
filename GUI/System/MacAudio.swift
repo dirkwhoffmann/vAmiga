@@ -21,7 +21,7 @@ public class MacAudio: NSObject {
     
     var parent: MyController!
     var audiounit: AUAudioUnit!
-    var amiga: AmigaProxy!
+    var amiga: EmulatorProxy!
 
     var prefs: Preferences { return parent.pref }
     

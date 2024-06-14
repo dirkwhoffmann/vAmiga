@@ -88,7 +88,7 @@ extension MakeWithFileSystem {
 // Exception passing
 //
 
-extension AmigaProxy {
+extension EmulatorProxy {
 
     func isReady() throws {
         
@@ -328,7 +328,7 @@ extension RecorderProxy {
 // Other extensions
 //
 
-public extension AmigaProxy {
+public extension EmulatorProxy {
     
     func df(_ nr: Int) -> FloppyDriveProxy? {
         

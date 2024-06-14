@@ -49,6 +49,8 @@ namespace vamiga {
  */
 class Amiga : public Thread, public Inspectable<AmigaInfo> {
 
+    friend class Emulator;
+    
     Descriptions descriptions = {{
 
         .name           = "Amiga",

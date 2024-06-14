@@ -155,7 +155,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func factorySettingsAction(_ sender: Any!) {
         
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
 
         // Power off the emulator if the user doesn't object
         if !askToPowerOff() { return }
@@ -176,7 +176,7 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func importConfigAction(_ sender: Any!) {
 
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
         let openPanel = NSOpenPanel()
 
         // Power off the emulator if the user doesn't object
@@ -214,7 +214,7 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func exportConfigAction(_ sender: Any!) {
 
-        let defaults = AmigaProxy.defaults!
+        let defaults = EmulatorProxy.defaults!
         let savePanel = NSSavePanel()
 
         // Show file panel

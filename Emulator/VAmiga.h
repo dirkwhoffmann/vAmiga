@@ -231,6 +231,203 @@ public:
     
     VAmiga();
     ~VAmiga();
+
+
+    /// @}
+    /// @name Querying the emulator state
+    /// @{
+
+    /** @brief  Returns true iff the emulator if the emulator is powered on.
+     */
+    bool isPoweredOn();
+
+    /** @brief  Returns true iff the emulator if the emulator is powered off.
+     */
+    bool isPoweredOff();
+
+    /** @brief  Returns true iff the emulator is in paused state.
+     */
+    bool isPaused();
+
+    /** @brief  Returns true iff the emulator is running.
+     */
+    bool isRunning();
+
+    /** @brief  Returns true iff the emulator has been suspended.
+     */
+    bool isSuspended();
+
+    /** @brief  Returns true iff the emulator has shut down.
+     */
+    bool isHalted();
+
+    /** @brief  Returns true iff warp mode is active.
+     */
+    bool isWarping();
+
+    /** @brief  Returns true iff the emulator runs in track mode.
+     */
+    bool isTracking();
+
+    /** @brief  Checks if the emulator is runnable.
+     *  The function checks if the necessary ROMs are installed to lauch the
+     *  emulator. On success, the functions returns. Otherwise, an exception
+     *  is thrown.
+     *
+     *  @throw  Error (ERROR_ROM_BASIC_MISSING)
+     *  @throw  Error (ERROR_ROM_CHAR_MISSING)
+     *  @throw  Error (ERROR_ROM_KERNAL_MISSING)
+     *  @throw  Error (ERROR_ROM_CHAR_MISSING)
+     *  @throw  Error (ERROR_ROM_MEGA65_MISMATCH)
+     */
+    void isReady();
+
+
+    /// @}
+    /// @name Controlling the emulator state
+    /// @{
+
+    /** @brief  Switches the emulator on
+     *
+     *  Powering on the emulator changes the interal state to #STATE\_PAUSED,
+     *  the same state that is entered when the user hits the pause button.
+     *  Calling this function on an already powered-on emulator has no effect.
+     *  */
+    void powerOn();
+
+    /** @brief  Switches the emulator off
+     *
+     *  Powering off the emulator changes the interal state of #STATE\_OFF.
+     *  Calling this function on an already powered-off emulator has no effect.
+     */
+    void powerOff();
+
+    /** @brief  Starts emulation
+     *
+     *  Running the emulator changes the internal state to #STATE\_RUNNING,
+     *  which is the normal operation state. Frames are computed at normal
+     *  pace, if warp mode is switched off, or as fast as possible, if warp
+     *  mode is switched on. If this function is called for a powere-off
+     *  emulator, an implicit call to powerOn() will be performed.
+     */
+    void run();
+
+    /** @brief   Pauses emulation
+     *
+     * Pausing the emulator changes the interal state from #STATE\_RUNNING
+     * to #STATE\_PAUSED after completing the curent frame. The emulator
+     * enteres a frozes state where no more frames are computed.
+     */
+    void pause();
+
+    /** @brief   Terminates the emulator thread
+     *
+     *  Halting the emulator changes the internal state to #STATE\_HALTED.
+     *  This state is part of the shutdown procedure and never entered during
+     *  normal operation.
+     */
+    void halt();
+
+    /** @brief   Suspends the emulator thread
+     *
+     *  See the \ref vc64::Suspendable "Suspendable" class for a detailes
+     *  description of the suspend-resume machanism.
+     */
+    void suspend();
+
+    /** @brief   Suspends the emulator thread
+     *
+     *  See the \ref vc64::Suspendable "Suspendable" class for a detailes
+     *  description of the suspend-resume machanism.
+     */
+    void resume();
+
+    /** @brief  Enables warp mode.
+     */
+    void warpOn(isize source = 0);
+
+    /** @brief  Disables warp mode.
+     */
+    void warpOff(isize source = 0);
+
+    /** @brief  Enables track mode.
+     */
+    void trackOn(isize source = 0);
+
+    /** @brief  Disables track mode.
+     */
+    void trackOff(isize source = 0);
+
+    
+    /// @}
+    /// @name Single-stepping
+    /// @{
+
+    /** @brief  Steps a single instruction
+     *
+     *  If the emulator is paused, calling this functions steps the CPU for
+     *  a single instruction. Otherwise, calling this function
+     *  has no effect. The CPU debugger utilizes this function to implement single
+     *  stepping.
+     */
+    void stepInto();
+
+    /** @brief  Steps over the current instruction
+     *
+     *  If the emulator is paused, calling this functions runs the emulator
+     *  until the instruction following the current
+     *  instruction has been reached. Otherwise, calling this function
+     *  has no effect. The CPU debugger utilizes this function to implement single
+     *  stepping.
+     *
+     *  stepOver() acts like stepInto() except for branching instructions.
+     *  For instance, if the current instruction is a `JSR` instruction, the
+     *  subroutine will be executed in a single chunk.
+     *
+     *  @note If the current instruction is a branch instruction which never
+     *  returns, the emulator will remain in running state. Calling this
+     *  function will then be equivalent to a calling run(), with the exception
+     *  of a small runtime overhead since the emulator will check after the
+     *  each instruction if the program counter has reached it's target
+     *  location.
+     */
+    void stepOver();
+
+
+    /// @}
+    /// @name Synchronizing the emulator thread
+    /// @{
+
+    /** @brief  Sends a wakeup signal to the emulator thread.
+     *
+     *  To compute frames at the proper pace, the emulator core expects the GUI
+     *  to send a wakeup signal on each VSYNC pulse. Once this signal is
+     *  received, the emulator thread starts computing all missing frames. To
+     *  minimize jitter, the wakeup signal should be sent right after the
+     *  current texture has been handed over to the GPU.
+     */
+    void wakeUp();
+
+
+    /// @}
+    /// @name Configuring the emulator
+    /// @{
+
+    /** @brief  Launches the emulator thread.
+     *
+     *  This function must be called in the initialization procedure of the
+     *  emulator. It launches the emulator thread and registers a callback
+     *  function to the message queue. The callback function is a message
+     *  receiver processing all incoming messages from the emulator.
+     *
+     *  @param  listener    An arbitrary pointer which will be passed to the
+     *  registered callback function as first argument. You can use the argument
+     *  to pass the address of an object into the callback function. Inside the
+     *  callback you can utilize the pointer to invoke a message processing
+     *  function on that object.
+     *  @param  func        The callback function.
+     */
+    void launch(const void *listener, Callback *func);
 };
 
 }

@@ -21,6 +21,36 @@ public:
     // Amiga main = Amiga(*this, 0);
     Amiga main = Amiga(*this);
 
+    // Later, these functions will be inherited from Thread
+    void suspendThread() { main.suspendThread(); }
+    void resumeThread() { main.resumeThread(); }
+
+
+    //
+    // Methods from Thread
+    //
+
+    /*
+private:
+
+    void update() override;
+    void computeFrame() override;
+
+    void didPowerOn() override { CoreComponent::powerOn(); }
+    void didPowerOff() override { CoreComponent::powerOff(); }
+    void didPause() override { CoreComponent::pause(); }
+    void didRun() override { CoreComponent::run(); }
+    void didHalt() override { CoreComponent::halt(); }
+    void didWarpOn() override { CoreComponent::warpOn(); }
+    void didWarpOff() override { CoreComponent::warpOff(); }
+    void didTrackOn() override { CoreComponent::trackOn(); }
+    void didTrackOff() override { CoreComponent::trackOff(); }
+
+public:
+
+    isize missingFrames() const override;
+*/
+    
     //
     // Warp mode
     //
