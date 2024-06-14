@@ -9,5 +9,20 @@
 
 #pragma once
 
+#include "AgnusTypes.h"
+#include "AmigaTypes.h"
+#include "AudioFilterTypes.h"
 #include "MsgQueueTypes.h"
+#include "CIATypes.h"
 #include "CmdQueueTypes.h"
+#include "CPUTypes.h"
+#include "DeniseTypes.h"
+#include "DmaDebuggerTypes.h"
+#include "FloppyDriveTypes.h"
+#include "HardDriveTypes.h"
+#include "MemoryTypes.h"
+#include "PaulaTypes.h"
+#include "PixelEngineTypes.h"
+#include "RemoteServerTypes.h"
+#include "RTCTypes.h"
+#include "SerialPortTypes.h"
