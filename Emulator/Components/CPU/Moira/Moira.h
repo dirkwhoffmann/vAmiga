@@ -107,10 +107,12 @@ private:
 
     // Jump table holding the instruction handlers
     typedef void (Moira::*ExecPtr)(u16);
-    ExecPtr exec[65536];
+    // ExecPtr exec[65536];
+    ExecPtr *exec = nullptr;
 
     // Jump table holding the loop mode instruction handlers (68010 only)
-    ExecPtr loop[65536];
+    // ExecPtr loop[65536];
+    ExecPtr *loop = nullptr;
 
     // Jump table holding the disassebler handlers
     typedef void (Moira::*DasmPtr)(StrWriter&, u32&, u16) const;

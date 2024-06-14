@@ -29,6 +29,8 @@ namespace vamiga::moira {
 
 Moira::Moira(Amiga &ref) : SubComponent(ref)
 {
+    exec = new ExecPtr[65536];
+    loop = new ExecPtr[65536];
     if (BUILD_INSTR_INFO_TABLE) info = new InstrInfo[65536];
     if (ENABLE_DASM) dasm = new DasmPtr[65536];
 
@@ -53,6 +55,8 @@ Moira::Moira(Amiga &ref) : SubComponent(ref)
 
 Moira::~Moira()
 {
+    if (exec) delete [] exec;
+    if (loop) delete [] loop;
     if (info) delete [] info;
     if (dasm) delete [] dasm;
 }
