@@ -84,12 +84,12 @@ enum_long(OPT)
     OPT_RAM_INIT_PATTERN,
 
     // Disk controller
-    OPT_DRIVE_CONNECT,
     OPT_DRIVE_SPEED,
     OPT_LOCK_DSKSYNC,
     OPT_AUTO_DSKSYNC,
 
     // Floppy Drives
+    OPT_DRIVE_CONNECT,
     OPT_DRIVE_TYPE,
     OPT_DRIVE_MECHANICS,
     OPT_DRIVE_RPM,
@@ -238,11 +238,11 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_UNMAPPING_TYPE:        return "UNMAPPING_TYPE";
             case OPT_RAM_INIT_PATTERN:      return "RAM_INIT_PATTERN";
 
-            case OPT_DRIVE_CONNECT:         return "DRIVE_CONNECT";
             case OPT_DRIVE_SPEED:           return "DRIVE_SPEED";
             case OPT_LOCK_DSKSYNC:          return "LOCK_DSKSYNC";
             case OPT_AUTO_DSKSYNC:          return "AUTO_DSKSYNC";
 
+            case OPT_DRIVE_CONNECT:         return "DRIVE_CONNECT";
             case OPT_DRIVE_TYPE:            return "DRIVE_TYPE";
             case OPT_DRIVE_MECHANICS:       return "DRIVE_MECHANICS";
             case OPT_DRIVE_RPM:             return "DRIVE_RPM";

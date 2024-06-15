@@ -166,10 +166,10 @@ DiskController::driveStatusFlags() const
 {
     u8 result = 0xFF;
     
-    if (config.connected[0]) result &= df[0]->driveStatusFlags();
-    if (config.connected[1]) result &= df[1]->driveStatusFlags();
-    if (config.connected[2]) result &= df[2]->driveStatusFlags();
-    if (config.connected[3]) result &= df[3]->driveStatusFlags();
+    result &= df[0]->driveStatusFlags();
+    result &= df[1]->driveStatusFlags();
+    result &= df[2]->driveStatusFlags();
+    result &= df[3]->driveStatusFlags();
     
     return result;
 }
@@ -185,12 +185,12 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
     
     // Iterate over all connected drives
     for (isize i = 0; i < 4; i++) {
-        if (!config.connected[i]) continue;
-        
-        // Inform the drive and determine the selected one
-        df[i]->PRBdidChange(oldValue, newValue);
-        if (df[i]->isSelected()) {
-            selected = i;
+
+        if (df[i]->isConnected()) {
+            
+            // Inform the drive and determine the selected one
+            df[i]->PRBdidChange(oldValue, newValue);
+            if (df[i]->isSelected()) selected = i;
         }
     }
 

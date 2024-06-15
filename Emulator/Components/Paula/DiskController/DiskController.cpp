@@ -47,17 +47,6 @@ DiskController::resetConfig()
     for (auto &option : options) {
         setConfigItem(option, defaults.get(option));
     }
-    
-    std::vector <Option> moreOptions = {
-        
-        OPT_DRIVE_CONNECT
-    };
-
-    for (auto &option : moreOptions) {
-        for (isize i = 0; i < 4; i++) {
-            setConfigItem(option, i, defaults.get(option, i));
-        }
-    }
 }
 
 i64
@@ -68,18 +57,6 @@ DiskController::getConfigItem(Option option) const
         case OPT_DRIVE_SPEED:   return config.speed;
         case OPT_AUTO_DSKSYNC:  return config.autoDskSync;
         case OPT_LOCK_DSKSYNC:  return config.lockDskSync;
-            
-        default:
-            fatalError;
-    }
-}
-
-i64
-DiskController::getConfigItem(Option option, long id) const
-{
-    switch (option) {
-            
-        case OPT_DRIVE_CONNECT:  return config.connected[id];
             
         default:
             fatalError;
@@ -118,30 +95,6 @@ DiskController::setConfigItem(Option option, i64 value)
     }
 }
 
-void
-DiskController::setConfigItem(Option option, long id, i64 value)
-{
-    switch (option)
-    {
-        case OPT_DRIVE_CONNECT:
-            
-            assert(id >= 0 && id <= 3);
-            
-            // We don't allow the internal drive (Df0) to be disconnected
-            if (id == 0 && value == false) return;
-            
-            // Connect or disconnect the drive
-            config.connected[id] = value;
-            
-            // Inform the GUI
-            msgQueue.put(MSG_DRIVE_CONNECT, DriveMsg { i16(id), i16(value), 0, 0 } );
-            return;
-            
-        default:
-            fatalError;
-    }
-}
-
 void 
 DiskController::cacheInfo(DiskControllerInfo &result) const
 {
@@ -168,14 +121,6 @@ DiskController::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Config) {
         
-        os << tab("Drive df0");
-        os << bol(config.connected[0], "connected", "disconnected") << std::endl;
-        os << tab("Drive df1");
-        os << bol(config.connected[1], "connected", "disconnected") << std::endl;
-        os << tab("Drive df2");
-        os << bol(config.connected[2], "connected", "disconnected") << std::endl;
-        os << tab("Drive df3");
-        os << bol(config.connected[3], "connected", "disconnected") << std::endl;
         os << tab("Drive speed");
         os << dec(config.speed) << std::endl;
         os << tab("lockDskSync");

@@ -82,11 +82,11 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_UNMAPPING_TYPE:        return enumParser.template operator()<UnmappedMemoryEnum>();
         case OPT_RAM_INIT_PATTERN:      return enumParser.template operator()<RamInitPatternEnum>();
 
-        case OPT_DRIVE_CONNECT:         return boolParser();
         case OPT_DRIVE_SPEED:           return numParser();
         case OPT_LOCK_DSKSYNC:          return boolParser();
         case OPT_AUTO_DSKSYNC:          return boolParser();
 
+        case OPT_DRIVE_CONNECT:         return boolParser();
         case OPT_DRIVE_TYPE:            return enumParser.template operator()<FloppyDriveTypeEnum>();
         case OPT_DRIVE_MECHANICS:       return boolParser();
         case OPT_DRIVE_RPM:             return numParser();

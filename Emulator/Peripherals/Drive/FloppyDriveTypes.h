@@ -78,6 +78,9 @@ struct DriveMechanicsEnum : util::Reflection<DriveMechanicsEnum, DriveMechanics>
 
 typedef struct
 {
+    // Connection status
+    bool connected;
+    
     // Drive model
     FloppyDriveType type;
 
@@ -91,18 +94,6 @@ typedef struct
      */
     isize rpm;
 
-    /* Mechanical delays. The start and stop delays specify the number of
-     * cycles that pass between switching the drive motor on or off until the
-     * drive motor runs at full speed or came to rest, respectively. The step
-     * delay specifies the number of cycle needed by the drive head to move to
-     * another cylinder. During this time, the FIFO is filled with garbage data.
-     */
-    /*
-    Cycle startDelay;
-    Cycle stopDelay;
-    Cycle stepDelay;
-    */
-    
     // Delay between ejecting an old disk and inserting a new one
     Cycle diskSwapDelay;
     

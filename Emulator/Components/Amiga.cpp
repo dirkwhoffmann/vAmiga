@@ -337,9 +337,6 @@ Amiga::getConfigItem(Option option, long id) const
     switch (option) {
 
         case OPT_DRIVE_CONNECT:
-
-            return paula.diskController.getConfigItem(option, id);
-
         case OPT_DRIVE_TYPE:
         case OPT_DRIVE_MECHANICS:
         case OPT_DRIVE_RPM:
@@ -715,10 +712,6 @@ Amiga::configure(Option option, long id, i64 value)
     switch (option) {
 
         case OPT_DRIVE_CONNECT:
-
-            paula.diskController.setConfigItem(option, id, value);
-            break;
-
         case OPT_DRIVE_TYPE:
         case OPT_DRIVE_MECHANICS:
         case OPT_DRIVE_RPM:

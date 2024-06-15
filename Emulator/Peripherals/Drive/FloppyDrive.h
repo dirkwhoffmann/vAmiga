@@ -43,6 +43,7 @@ class FloppyDrive : public Drive, public Inspectable<FloppyDriveInfo> {
 
     ConfigOptions options = {
 
+        OPT_DRIVE_CONNECT,
         OPT_DRIVE_TYPE,
         OPT_DRIVE_MECHANICS,
         OPT_DRIVE_RPM,
@@ -174,6 +175,7 @@ private:
 
         worker
 
+        << config.connected
         << config.type
         << config.mechanics
         << config.rpm;

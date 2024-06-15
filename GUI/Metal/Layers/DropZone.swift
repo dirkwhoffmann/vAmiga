@@ -88,9 +88,11 @@ class DropZone: Layer {
         switch type {
         
         case .ADF, .EADF, .IMG, .ST, .DMS, .EXE, .DIR:
-            let connected = amiga.diskController.getConfig().connected
-            enabled = [ connected.0, connected.1, connected.2, connected.3 ]
-                        
+            enabled = [ amiga.df0.isConnected,
+                        amiga.df1.isConnected,
+                        amiga.df2.isConnected,
+                        amiga.df3.isConnected ]
+
         case .HDF:
             enabled = [ true, true, true, true ]
             

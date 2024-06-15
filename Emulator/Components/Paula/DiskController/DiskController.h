@@ -149,7 +149,6 @@ private:
 
         worker
 
-        << config.connected
         << config.speed
         << config.lockDskSync
         << config.autoDskSync;
@@ -176,11 +175,8 @@ public:
     
     bool turboMode() const { return config.speed == -1; }
 
-    i64 getConfigItem(Option option) const;
-    i64 getConfigItem(Option option, long id) const;
-    
+    i64 getConfigItem(Option option) const;    
     void setConfigItem(Option option, i64 value);
-    void setConfigItem(Option option, long id, i64 value);
 
     
     //

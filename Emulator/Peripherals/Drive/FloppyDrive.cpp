@@ -66,6 +66,7 @@ FloppyDrive::resetConfig()
 
     std::vector <Option> options = {
         
+        OPT_DRIVE_CONNECT,
         OPT_DRIVE_TYPE,
         OPT_DRIVE_MECHANICS,
         OPT_DRIVE_RPM,
@@ -87,15 +88,16 @@ FloppyDrive::getConfigItem(Option option) const
 {
     switch (option) {
             
-        case OPT_DRIVE_TYPE:          return (long)config.type;
-        case OPT_DRIVE_MECHANICS:     return (long)config.mechanics;
-        case OPT_DRIVE_RPM:           return (long)config.rpm;
-        case OPT_DISK_SWAP_DELAY:     return (long)config.diskSwapDelay;
-        case OPT_DRIVE_PAN:           return (long)config.pan;
-        case OPT_STEP_VOLUME:         return (long)config.stepVolume;
-        case OPT_POLL_VOLUME:         return (long)config.pollVolume;
-        case OPT_INSERT_VOLUME:       return (long)config.insertVolume;
-        case OPT_EJECT_VOLUME:        return (long)config.ejectVolume;
+        case OPT_DRIVE_CONNECT:       return (i64)config.connected;
+        case OPT_DRIVE_TYPE:          return (i64)config.type;
+        case OPT_DRIVE_MECHANICS:     return (i64)config.mechanics;
+        case OPT_DRIVE_RPM:           return (i64)config.rpm;
+        case OPT_DISK_SWAP_DELAY:     return (i64)config.diskSwapDelay;
+        case OPT_DRIVE_PAN:           return (i64)config.pan;
+        case OPT_STEP_VOLUME:         return (i64)config.stepVolume;
+        case OPT_POLL_VOLUME:         return (i64)config.pollVolume;
+        case OPT_INSERT_VOLUME:       return (i64)config.insertVolume;
+        case OPT_EJECT_VOLUME:        return (i64)config.ejectVolume;
 
         default:
             fatalError;
@@ -107,6 +109,18 @@ FloppyDrive::setConfigItem(Option option, i64 value)
 {
     switch (option) {
 
+        case OPT_DRIVE_CONNECT:
+
+            // We don't allow the internal drive to be disconnected
+            if (objid == 0 && value == false) return;
+
+            // Connect or disconnect the drive
+            config.connected = value;
+
+            // Inform the GUI
+            msgQueue.put(MSG_DRIVE_CONNECT, DriveMsg { i16(objid), i16(value), 0, 0 } );
+            break;
+
         case OPT_DRIVE_TYPE:
             
             if (!FloppyDriveTypeEnum::isValid(value)) {
@@ -117,7 +131,7 @@ FloppyDrive::setConfigItem(Option option, i64 value)
             }
             
             config.type = (FloppyDriveType)value;
-            return;
+            break;
 
         case OPT_DRIVE_MECHANICS:
 
@@ -126,42 +140,42 @@ FloppyDrive::setConfigItem(Option option, i64 value)
             }
 
             config.mechanics = (DriveMechanics)value;
-            return;
+            break;
 
         case OPT_DRIVE_RPM:
 
             config.rpm = (isize)value;
-            return;
+            break;
 
         case OPT_DISK_SWAP_DELAY:
 
             config.diskSwapDelay = (Cycle)value;
-            return;
+            break;
 
         case OPT_DRIVE_PAN:
 
             config.pan = (i16)value;
-            return;
+            break;
 
         case OPT_STEP_VOLUME:
 
             config.stepVolume = (u8)value;
-            return;
+            break;
 
         case OPT_POLL_VOLUME:
 
             config.pollVolume = (u8)value;
-            return;
+            break;
 
         case OPT_EJECT_VOLUME:
 
             config.ejectVolume = (u8)value;
-            return;
+            break;
 
         case OPT_INSERT_VOLUME:
 
             config.insertVolume = (u8)value;
-            return;
+            break;
 
         default:
             fatalError;
@@ -188,6 +202,8 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         
         os << tab("Nr");
         os << dec(nr) << std::endl;
+        os << tab("Connected");
+        os << bol(config.connected) << std::endl;
         os << tab("Type");
         os << FloppyDriveTypeEnum::key(config.type) << std::endl;
         os << tab("Mechanics");
@@ -369,7 +385,7 @@ FloppyDrive::_save(u8 *buffer)
 bool
 FloppyDrive::isConnected() const
 {
-    return diskController.getConfigItem(OPT_DRIVE_CONNECT, nr);
+    return config.connected;
 }
 
 bool
@@ -542,8 +558,8 @@ FloppyDrive::driveStatusFlags() const
 {
     u8 result = 0xFF;
     
-    if (isSelected()) {
-        
+    if (isConnected() && isSelected()) {
+
         // PA5: /DSKRDY
         if (idMode()) {
             if (idBit) result &= 0b11011111;

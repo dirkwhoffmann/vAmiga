@@ -63,8 +63,6 @@ struct DriveStateEnum : util::Reflection<DriveStateEnum, DriveState>
 
 typedef struct
 {
-    bool connected[4];
-
     /* Acceleration factor. This value equals the number of words that get
      * transfered into memory during a single disk DMA cycle. This value must
      * be 1 to emulate a real Amiga. If it set to, e.g., 2, the drive loads
