@@ -340,10 +340,10 @@ Defaults::save(std::stringstream &stream)
 }
 
 string
-Defaults::getString(const string &key)
+Defaults::getString(const string &key) const
 {
-    if (values.contains(key)) return values[key];
-    if (fallbacks.contains(key)) return fallbacks[key];
+    if (values.contains(key)) return values.at(key);
+    if (fallbacks.contains(key)) return fallbacks.at(key);
 
     warn("Invalid key: %s\n", key.c_str());
     assert(false);
@@ -351,7 +351,7 @@ Defaults::getString(const string &key)
 }
 
 i64
-Defaults::getInt(const string &key)
+Defaults::getInt(const string &key) const
 {
     auto value = getString(key);
     i64 result = 0;
@@ -370,28 +370,55 @@ Defaults::getInt(const string &key)
 }
 
 i64
-Defaults::get(Option option)
+Defaults::get(Option option) const
 {
     return getInt(string(OptionEnum::key(option)));
 }
 
 i64
-Defaults::get(Option option, isize nr)
+Defaults::get(Option option, isize nr) const
 {
     return getInt(string(OptionEnum::key(option)) + std::to_string(nr));
 }
 
 string
-Defaults::getFallback(const string &key)
+Defaults::getFallbackString(const string &key) const
 {
-    if (!fallbacks.contains(key)) {
+    if (fallbacks.contains(key)) return fallbacks.at(key);
 
-        warn("Invalid key: %s\n", key.c_str());
-        assert(false);
-        throw Error(ERROR_INVALID_KEY, key);
+    warn("Invalid key: %s\n", key.c_str());
+    assert(false);
+    throw Error(ERROR_INVALID_KEY, key);
+}
+
+i64
+Defaults::getFallbackInt(const string &key) const
+{
+    auto value = getFallbackString(key);
+    i64 result = 0;
+
+    try {
+
+        result = i64(std::stoll(value));
+
+    } catch (...) {
+
+        warn("Can't parse value %s\n", key.c_str());
     }
-    
-    return fallbacks[key];
+
+    return result;
+}
+
+i64
+Defaults::getFallback(Option option) const
+{
+    return getFallbackInt(string(OptionEnum::key(option)));
+}
+
+i64
+Defaults::getFallback(Option option, isize nr) const
+{
+    return getFallbackInt(string(OptionEnum::key(option)) + (nr ? std::to_string(nr) : ""));
 }
 
 void

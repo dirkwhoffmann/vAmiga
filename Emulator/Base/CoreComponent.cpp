@@ -10,6 +10,7 @@
 #include "config.h"
 #include "CoreComponent.h"
 #include "Emulator.h"
+#include "Defaults.h"
 #include "Checksum.h"
 
 namespace vamiga {
@@ -54,6 +55,24 @@ CoreComponent::reset(bool hard)
 {
     for (CoreComponent *c : subComponents) { c->reset(hard); }
     _reset(hard);
+}
+
+void
+CoreComponent::resetConfig()
+{
+    for (CoreComponent *c : subComponents) { c->resetConfig(); }
+    Configurable::resetConfig(emulator.main.defaults, objid);
+}
+
+void
+CoreComponent::routeOption(Option opt, std::vector<Configurable *> &result)
+{
+    for (auto &o : getOptions()) {
+        if (o == opt) result.push_back(this);
+    }
+    for (auto &c : subComponents) {
+        c->routeOption(opt, result);
+    }
 }
 
 isize

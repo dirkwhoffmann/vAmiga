@@ -64,17 +64,27 @@ public:
 
     
     //
-    // Working with key-value pairs
+    // Reading key-value pairs
     //
 
 public:
     
-    string getString(const string &key) throws;
-    i64 getInt(const string &key) throws;
-    i64 get(Option option) throws;
-    i64 get(Option option, isize nr) throws;
+    // Queries a key-value pair
+    string getString(const string &key) const throws;
+    i64 getInt(const string &key) const throws;
+    i64 get(Option option) const throws;
+    i64 get(Option option, isize nr) const throws;
     
-    string getFallback(const string &key) throws;
+    // Queries a fallback key-value pair
+    string getFallbackString(const string &key) const;
+    i64 getFallbackInt(const string &key) const;
+    i64 getFallback(Option option) const;
+    i64 getFallback(Option option, isize nr) const;
+
+
+    //
+    // Writing key-value pairs
+    //
 
     void setString(const string &key, const string &value);
     void set(Option option, i64 value);

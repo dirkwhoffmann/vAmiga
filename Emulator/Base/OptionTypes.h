@@ -310,5 +310,10 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
         }
         return "???";
     }
+
+    static const char *help(Option value)
+    {
+        return "???";
+    }
 };
 #endif

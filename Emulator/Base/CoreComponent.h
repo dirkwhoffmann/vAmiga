@@ -31,7 +31,7 @@ struct Description {
 typedef std::vector<Description> Descriptions;
 
 class CoreComponent : 
-public CoreObject, public Synchronizable, public Suspendable {
+public CoreObject, public Synchronizable, public Suspendable, public Configurable {
 
 public:
     
@@ -81,7 +81,20 @@ public:
     void reset(bool hard);
     virtual void _reset(bool hard) = 0;
 
-    
+
+    //
+    // Configuring
+    //
+
+public:
+
+    // Initializes all configuration items with their default values
+    virtual void resetConfig();
+
+    // Returns the target components for a given configuration option
+    void routeOption(Option opt, std::vector<Configurable *> &result);
+
+
     //
     // Controlling the state (see Thread class for details)
     //
@@ -129,21 +142,13 @@ private:
     virtual void _warpOff() { }
     virtual void _trackOn() { }
     virtual void _trackOff() { }
-    
-    
-    //
-    // Configuring
-    //
-
-public:
-    
-    // Initializes all configuration items with their default values
-    virtual void resetConfig() { };
 
     
     //
     // Serializing
     //
+    
+public:
     
     // Returns the size of the internal state in bytes
     isize size();
