@@ -31,24 +31,24 @@ namespace vamiga {
 
 Defaults::Defaults()
 {
-    setFallback(OPT_VIDEO_FORMAT, PAL);
-    setFallback(OPT_WARP_BOOT, 0);
-    setFallback(OPT_WARP_MODE, WARP_NEVER);
-    setFallback(OPT_VSYNC, false);
-    setFallback(OPT_TIME_LAPSE, 100);
-    setFallback(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
-    setFallback(OPT_SLOW_RAM_MIRROR, true);
-    setFallback(OPT_PTR_DROPS, true);
-    setFallback(OPT_DENISE_REVISION, DENISE_OCS);
-    setFallback(OPT_VIEWPORT_TRACKING, true);
-    setFallback(OPT_FRAME_SKIPPING, 16);
-    setFallback(OPT_PALETTE, PALETTE_COLOR);
-    setFallback(OPT_BRIGHTNESS, 50);
-    setFallback(OPT_CONTRAST, 100);
-    setFallback(OPT_SATURATION, 50);
-    setFallback(OPT_DMA_DEBUG_ENABLE, false);
-    setFallback(OPT_DMA_DEBUG_MODE, DMA_DISPLAY_MODE_FG_LAYER);
-    setFallback(OPT_DMA_DEBUG_OPACITY, 50);
+    setFallback(OPT_VIDEO_FORMAT,       PAL);
+    setFallback(OPT_WARP_BOOT,          0);
+    setFallback(OPT_WARP_MODE,          WARP_NEVER);
+    setFallback(OPT_VSYNC,              false);
+    setFallback(OPT_TIME_LAPSE,         100);
+    setFallback(OPT_AGNUS_REVISION,     AGNUS_ECS_1MB);
+    setFallback(OPT_SLOW_RAM_MIRROR,    true);
+    setFallback(OPT_PTR_DROPS,          true);
+    setFallback(OPT_DENISE_REVISION,    DENISE_OCS);
+    setFallback(OPT_VIEWPORT_TRACKING,  true);
+    setFallback(OPT_FRAME_SKIPPING,     16);
+    setFallback(OPT_PALETTE,            PALETTE_COLOR);
+    setFallback(OPT_BRIGHTNESS,         50);
+    setFallback(OPT_CONTRAST,           100);
+    setFallback(OPT_SATURATION,         50);
+    setFallback(OPT_DMA_DEBUG_ENABLE,   false);
+    setFallback(OPT_DMA_DEBUG_MODE,     DMA_DISPLAY_MODE_FG_LAYER);
+    setFallback(OPT_DMA_DEBUG_OPACITY,  50);
     setFallback(OPT_DMA_DEBUG_CHANNEL0, true);
     setFallback(OPT_DMA_DEBUG_CHANNEL1, true);
     setFallback(OPT_DMA_DEBUG_CHANNEL2, true);
@@ -57,104 +57,104 @@ Defaults::Defaults()
     setFallback(OPT_DMA_DEBUG_CHANNEL5, true);
     setFallback(OPT_DMA_DEBUG_CHANNEL6, false);
     setFallback(OPT_DMA_DEBUG_CHANNEL7, true);
-    setFallback(OPT_DMA_DEBUG_COLOR0, 0xFFFF0000);
-    setFallback(OPT_DMA_DEBUG_COLOR1, 0xFFCC0000);
-    setFallback(OPT_DMA_DEBUG_COLOR2, 0x00FF0000);
-    setFallback(OPT_DMA_DEBUG_COLOR3, 0xFF00FF00);
-    setFallback(OPT_DMA_DEBUG_COLOR4, 0x0088FF00);
-    setFallback(OPT_DMA_DEBUG_COLOR5, 0x00FFFF00);
-    setFallback(OPT_DMA_DEBUG_COLOR6, 0xFFFFFF00);
-    setFallback(OPT_DMA_DEBUG_COLOR7, 0xFF000000);
-    setFallback(OPT_CPU_REVISION, CPU_68000);
-    setFallback(OPT_CPU_DASM_REVISION, CPU_68000);
-    setFallback(OPT_CPU_DASM_SYNTAX, DASM_SYNTAX_MOIRA);
-    setFallback(OPT_CPU_OVERCLOCKING, 0);
-    setFallback(OPT_CPU_RESET_VAL, 0);
-    setFallback(OPT_RTC_MODEL, RTC_OKI);
-    setFallback(OPT_CHIP_RAM, 512);
-    setFallback(OPT_SLOW_RAM, 512);
-    setFallback(OPT_FAST_RAM, 0);
-    setFallback(OPT_EXT_START, 0xE0);
-    setFallback(OPT_SAVE_ROMS, true);
-    setFallback(OPT_SLOW_RAM_DELAY, true);
-    setFallback(OPT_BANKMAP, BANK_MAP_A500);
-    setFallback(OPT_UNMAPPING_TYPE, RAM_INIT_ALL_ZEROES);
-    setFallback(OPT_RAM_INIT_PATTERN, UNMAPPED_FLOATING);
-    setFallback(OPT_DRIVE_CONNECT, 0, true);
-    setFallback(OPT_DRIVE_CONNECT, { 1, 2, 3 }, false);
-    setFallback(OPT_DRIVE_SPEED, 1);
-    setFallback(OPT_LOCK_DSKSYNC, false);
-    setFallback(OPT_AUTO_DSKSYNC, false);
-    setFallback(OPT_DRIVE_TYPE, { 0, 1, 2, 3 }, DRIVE_DD_35);
-    setFallback(OPT_DRIVE_MECHANICS, { 0, 1, 2, 3 }, MECHANICS_A1010);
-    setFallback(OPT_DRIVE_RPM, { 0, 1, 2, 3 }, 300);
-    setFallback(OPT_DISK_SWAP_DELAY, { 0, 1, 2, 3 }, SEC(1.8));
-    setFallback(OPT_DRIVE_PAN, { 0, 2 }, 100);
-    setFallback(OPT_DRIVE_PAN, { 1, 3 }, 300);
-    setFallback(OPT_STEP_VOLUME, { 0, 1, 2, 3 }, 50);
-    setFallback(OPT_POLL_VOLUME, { 0, 1, 2, 3 }, 0);
-    setFallback(OPT_INSERT_VOLUME, { 0, 1, 2, 3 }, 50);
-    setFallback(OPT_EJECT_VOLUME, { 0, 1, 2, 3 }, 50);
-    setFallback(OPT_HDC_CONNECT, 0, true);
-    setFallback(OPT_HDC_CONNECT, { 1, 2, 3 }, false);
-    setFallback(OPT_HDR_TYPE, { 0, 1, 2, 3 }, HDR_GENERIC);
-    setFallback(OPT_HDR_PAN, { 0, 2 }, 300);
-    setFallback(OPT_HDR_PAN, { 1, 3 }, 100);
-    setFallback(OPT_HDR_STEP_VOLUME, { 0, 1, 2, 3 }, 50);
-    setFallback(OPT_SER_DEVICE, SPD_NONE);
-    setFallback(OPT_SER_VERBOSE, 0);
-    setFallback(OPT_HIDDEN_BITPLANES, 0);
-    setFallback(OPT_HIDDEN_SPRITES, 0);
-    setFallback(OPT_HIDDEN_LAYERS, 0);
+    setFallback(OPT_DMA_DEBUG_COLOR0,   0xFFFF0000);
+    setFallback(OPT_DMA_DEBUG_COLOR1,   0xFFCC0000);
+    setFallback(OPT_DMA_DEBUG_COLOR2,   0x00FF0000);
+    setFallback(OPT_DMA_DEBUG_COLOR3,   0xFF00FF00);
+    setFallback(OPT_DMA_DEBUG_COLOR4,   0x0088FF00);
+    setFallback(OPT_DMA_DEBUG_COLOR5,   0x00FFFF00);
+    setFallback(OPT_DMA_DEBUG_COLOR6,   0xFFFFFF00);
+    setFallback(OPT_DMA_DEBUG_COLOR7,   0xFF000000);
+    setFallback(OPT_CPU_REVISION,       CPU_68000);
+    setFallback(OPT_CPU_DASM_REVISION,  CPU_68000);
+    setFallback(OPT_CPU_DASM_SYNTAX,    DASM_SYNTAX_MOIRA);
+    setFallback(OPT_CPU_OVERCLOCKING,   0);
+    setFallback(OPT_CPU_RESET_VAL,      0);
+    setFallback(OPT_RTC_MODEL,          RTC_OKI);
+    setFallback(OPT_CHIP_RAM,           512);
+    setFallback(OPT_SLOW_RAM,           512);
+    setFallback(OPT_FAST_RAM,           0);
+    setFallback(OPT_EXT_START,          0xE0);
+    setFallback(OPT_SAVE_ROMS,          true);
+    setFallback(OPT_SLOW_RAM_DELAY,     true);
+    setFallback(OPT_BANKMAP,            BANK_MAP_A500);
+    setFallback(OPT_UNMAPPING_TYPE,     RAM_INIT_ALL_ZEROES);
+    setFallback(OPT_RAM_INIT_PATTERN,   UNMAPPED_FLOATING);
+    setFallback(OPT_DRIVE_CONNECT,      true,                   0);
+    setFallback(OPT_DRIVE_CONNECT,      false,                  { 1, 2, 3 });
+    setFallback(OPT_DRIVE_SPEED,        1);
+    setFallback(OPT_LOCK_DSKSYNC,       false);
+    setFallback(OPT_AUTO_DSKSYNC,       false);
+    setFallback(OPT_DRIVE_TYPE,         DRIVE_DD_35,            { 0, 1, 2, 3 });
+    setFallback(OPT_DRIVE_MECHANICS,    MECHANICS_A1010,        { 0, 1, 2, 3 });
+    setFallback(OPT_DRIVE_RPM, 300,                             { 0, 1, 2, 3 });
+    setFallback(OPT_DISK_SWAP_DELAY,    SEC(1.8),               { 0, 1, 2, 3 });
+    setFallback(OPT_DRIVE_PAN,          100,                    { 0, 2 });
+    setFallback(OPT_DRIVE_PAN,          300,                    { 1, 3 });
+    setFallback(OPT_STEP_VOLUME,        50,                     { 0, 1, 2, 3 });
+    setFallback(OPT_POLL_VOLUME,        0,                      { 0, 1, 2, 3 });
+    setFallback(OPT_INSERT_VOLUME,      50,                     { 0, 1, 2, 3 });
+    setFallback(OPT_EJECT_VOLUME,       50,                     { 0, 1, 2, 3 });
+    setFallback(OPT_HDC_CONNECT,        true,                   0);
+    setFallback(OPT_HDC_CONNECT,        false,                  { 1, 2, 3 });
+    setFallback(OPT_HDR_TYPE,           HDR_GENERIC,            { 0, 1, 2, 3 });
+    setFallback(OPT_HDR_PAN,            300,                    { 0, 2 });
+    setFallback(OPT_HDR_PAN,            100,                    { 1, 3 });
+    setFallback(OPT_HDR_STEP_VOLUME,    50,                     { 0, 1, 2, 3 });
+    setFallback(OPT_SER_DEVICE,         SPD_NONE);
+    setFallback(OPT_SER_VERBOSE,        0);
+    setFallback(OPT_HIDDEN_BITPLANES,   0);
+    setFallback(OPT_HIDDEN_SPRITES,     0);
+    setFallback(OPT_HIDDEN_LAYERS,      0);
     setFallback(OPT_HIDDEN_LAYER_ALPHA, 128);
-    setFallback(OPT_CLX_SPR_SPR, false);
-    setFallback(OPT_CLX_SPR_PLF, false);
-    setFallback(OPT_CLX_PLF_PLF, false);
-    setFallback(OPT_BLITTER_ACCURACY, 2);
-    setFallback(OPT_CIA_REVISION, CIA_MOS_8520_DIP);
-    setFallback(OPT_TODBUG, true);
-    setFallback(OPT_ECLOCK_SYNCING, true);
-    setFallback(OPT_CIA_IDLE_SLEEP, true);
-    setFallback(OPT_ACCURATE_KEYBOARD, true);
-    setFallback(OPT_PULLUP_RESISTORS, true);
-    setFallback(OPT_SHAKE_DETECTION, true);
-    setFallback(OPT_MOUSE_VELOCITY, 100);
-    setFallback(OPT_AUTOFIRE, false);
-    setFallback(OPT_AUTOFIRE_BULLETS, -3);
-    setFallback(OPT_AUTOFIRE_DELAY, 125);
-    setFallback(OPT_SAMPLING_METHOD, SMP_NONE);
-    setFallback(OPT_FILTER_TYPE, FILTER_A500);
-    setFallback(OPT_AUDPAN0, 50);
-    setFallback(OPT_AUDPAN1, 350);
-    setFallback(OPT_AUDPAN2, 350);
-    setFallback(OPT_AUDPAN3, 50);
-    setFallback(OPT_AUDVOL0, 100);
-    setFallback(OPT_AUDVOL1, 100);
-    setFallback(OPT_AUDVOL2, 100);
-    setFallback(OPT_AUDVOL3, 100);
-    setFallback(OPT_AUDVOLL, 50);
-    setFallback(OPT_AUDVOLR, 50);
-    setFallback(OPT_AUD_FASTPATH, true);
-    setFallback(OPT_DIAG_BOARD, false);
-    setFallback(OPT_SRV_PORT, SERVER_SER, 8080);
-    setFallback(OPT_SRV_PROTOCOL, SERVER_SER, SRVPROT_DEFAULT);
-    setFallback(OPT_SRV_AUTORUN, SERVER_SER, true);
-    setFallback(OPT_SRV_VERBOSE, SERVER_SER, true);
-    setFallback(OPT_SRV_PORT, SERVER_RSH, 8081);
-    setFallback(OPT_SRV_PROTOCOL, SERVER_RSH, SRVPROT_DEFAULT);
-    setFallback(OPT_SRV_AUTORUN, SERVER_RSH, false);
-    setFallback(OPT_SRV_VERBOSE, SERVER_RSH, true);
-    setFallback(OPT_SRV_PORT, SERVER_GDB, 8082);
-    setFallback(OPT_SRV_PROTOCOL, SERVER_GDB, SRVPROT_DEFAULT);
-    setFallback(OPT_SRV_AUTORUN, SERVER_GDB, true);
-    setFallback(OPT_SRV_VERBOSE, SERVER_GDB, true);
+    setFallback(OPT_CLX_SPR_SPR,        false);
+    setFallback(OPT_CLX_SPR_PLF,        false);
+    setFallback(OPT_CLX_PLF_PLF,        false);
+    setFallback(OPT_BLITTER_ACCURACY,   2);
+    setFallback(OPT_CIA_REVISION,       CIA_MOS_8520_DIP);
+    setFallback(OPT_TODBUG,             true);
+    setFallback(OPT_ECLOCK_SYNCING,     true);
+    setFallback(OPT_CIA_IDLE_SLEEP,     true);
+    setFallback(OPT_ACCURATE_KEYBOARD,  true);
+    setFallback(OPT_PULLUP_RESISTORS,   true);
+    setFallback(OPT_SHAKE_DETECTION,    true);
+    setFallback(OPT_MOUSE_VELOCITY,     100);
+    setFallback(OPT_AUTOFIRE,           false);
+    setFallback(OPT_AUTOFIRE_BULLETS,   -3);
+    setFallback(OPT_AUTOFIRE_DELAY,     125);
+    setFallback(OPT_SAMPLING_METHOD,    SMP_NONE);
+    setFallback(OPT_FILTER_TYPE,        FILTER_A500);
+    setFallback(OPT_AUDPAN0,            50);
+    setFallback(OPT_AUDPAN1,            350);
+    setFallback(OPT_AUDPAN2,            350);
+    setFallback(OPT_AUDPAN3,            50);
+    setFallback(OPT_AUDVOL0,            100);
+    setFallback(OPT_AUDVOL1,            100);
+    setFallback(OPT_AUDVOL2,            100);
+    setFallback(OPT_AUDVOL3,            100);
+    setFallback(OPT_AUDVOLL,            50);
+    setFallback(OPT_AUDVOLR,            50);
+    setFallback(OPT_AUD_FASTPATH,       true);
+    setFallback(OPT_DIAG_BOARD,         false);
+    setFallback(OPT_SRV_PORT,           8080,                   SERVER_SER);
+    setFallback(OPT_SRV_PROTOCOL,       SRVPROT_DEFAULT,        SERVER_SER);
+    setFallback(OPT_SRV_AUTORUN,        true,                   SERVER_SER);
+    setFallback(OPT_SRV_VERBOSE,        true,                   SERVER_SER);
+    setFallback(OPT_SRV_PORT,           8081,                   SERVER_RSH);
+    setFallback(OPT_SRV_PROTOCOL,       SRVPROT_DEFAULT,        SERVER_RSH);
+    setFallback(OPT_SRV_AUTORUN,        false,                  SERVER_RSH);
+    setFallback(OPT_SRV_VERBOSE,        true,                   SERVER_RSH);
+    setFallback(OPT_SRV_PORT,           8082,                   SERVER_GDB);
+    setFallback(OPT_SRV_PROTOCOL,       SRVPROT_DEFAULT,        SERVER_GDB);
+    setFallback(OPT_SRV_AUTORUN,        true,                   SERVER_GDB);
+    setFallback(OPT_SRV_VERBOSE,        true,                   SERVER_GDB);
 
-    setFallback("ROM_PATH", "");
-    setFallback("EXT_PATH", "");
-    setFallback("HD0_PATH", "");
-    setFallback("HD1_PATH", "");
-    setFallback("HD2_PATH", "");
-    setFallback("HD3_PATH", "");
+    setFallback("ROM_PATH",             "");
+    setFallback("EXT_PATH",             "");
+    setFallback("HD0_PATH",             "");
+    setFallback("HD1_PATH",             "");
+    setFallback("HD2_PATH",             "");
+    setFallback("HD3_PATH",             "");
 }
 
 void
@@ -309,7 +309,7 @@ Defaults::save(std::stringstream &stream)
         for (const auto &it: fallbacks) {
 
             auto key = it.first;
-            auto value = getString(key);
+            auto value = getRaw(key);
 
             // Check if the key belongs to a group
             if (auto pos = key.find('.'); pos == std::string::npos) {
@@ -340,7 +340,7 @@ Defaults::save(std::stringstream &stream)
 }
 
 string
-Defaults::getString(const string &key) const
+Defaults::getRaw(const string &key) const
 {
     if (values.contains(key)) return values.at(key);
     if (fallbacks.contains(key)) return fallbacks.at(key);
@@ -353,7 +353,7 @@ Defaults::getString(const string &key) const
 i64
 Defaults::getInt(const string &key) const
 {
-    auto value = getString(key);
+    auto value = getRaw(key);
     i64 result = 0;
 
     try {
@@ -382,7 +382,7 @@ Defaults::get(Option option, isize nr) const
 }
 
 string
-Defaults::getFallbackString(const string &key) const
+Defaults::getFallbackRaw(const string &key) const
 {
     if (fallbacks.contains(key)) return fallbacks.at(key);
 
@@ -394,7 +394,7 @@ Defaults::getFallbackString(const string &key) const
 i64
 Defaults::getFallbackInt(const string &key) const
 {
-    auto value = getFallbackString(key);
+    auto value = getFallbackRaw(key);
     i64 result = 0;
 
     try {
@@ -422,7 +422,7 @@ Defaults::getFallback(Option option, isize nr) const
 }
 
 void
-Defaults::setString(const string &key, const string &value)
+Defaults::set(const string &key, const string &value)
 {
     {   SYNCHRONIZED
         
@@ -445,22 +445,22 @@ Defaults::set(Option option, i64 value)
     auto key = string(OptionEnum::key(option));
     auto val = std::to_string(value);
     
-    setString(key, val);
+    set(key, val);
 }
 
 void
-Defaults::set(Option option, isize nr, i64 value)
+Defaults::set(Option option, i64 value, isize objid)
 {
-    auto key = string(OptionEnum::key(option)) + std::to_string(nr);
+    auto key = string(OptionEnum::key(option)) + std::to_string(objid);
     auto val = std::to_string(value);
 
-    setString(key, val);
+    set(key, val);
 }
 
 void
-Defaults::set(Option option, std::vector <isize> nrs, i64 value)
+Defaults::set(Option option, i64 value, std::vector <isize> objids)
 {
-    for (auto &nr : nrs) set(option, nr, value);
+    for (auto &nr : objids) set(option, value, nr);
 }
 
 void
@@ -487,27 +487,27 @@ Defaults::setFallback(Option option, i64 value)
 }
 
 void
-Defaults::setFallback(Option option, isize nr, const string &value)
+Defaults::setFallback(Option option, const string &value, isize objid)
 {
-    setFallback(string(OptionEnum::key(option)) + std::to_string(nr), value);
+    setFallback(string(OptionEnum::key(option)) + std::to_string(objid), value);
 }
 
 void
-Defaults::setFallback(Option option, isize nr, i64 value)
+Defaults::setFallback(Option option, i64 value, isize objid)
 {
-    setFallback(option, nr, std::to_string(value));
+    setFallback(option, std::to_string(value), objid);
 }
 
 void
-Defaults::setFallback(Option option, std::vector <isize> nrs, const string &value)
+Defaults::setFallback(Option option, const string &value, std::vector <isize> objids)
 {
-    for (auto &nr : nrs) setFallback(option, nr, value);
+    for (auto &nr : objids) setFallback(option, value, nr);
 }
 
 void
-Defaults::setFallback(Option option, std::vector <isize> nrs, i64 value)
+Defaults::setFallback(Option option, i64 value, std::vector <isize> objids)
 {
-    setFallback(option, nrs, std::to_string(value));
+    setFallback(option, std::to_string(value), objids);
 }
 
 void

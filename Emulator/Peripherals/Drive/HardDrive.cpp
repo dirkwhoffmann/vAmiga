@@ -486,7 +486,7 @@ HardDrive::disableWriteThrough()
 string
 HardDrive::writeThroughPath()
 {
-    return Amiga::defaults.getString("HD" + std::to_string(nr) + "_PATH");
+    return Amiga::defaults.getRaw("HD" + std::to_string(nr) + "_PATH");
 }
 
 void

@@ -61,6 +61,18 @@ private:
 
     void _dump(Category category, std::ostream& os) const override;
 
+
+    //
+    // Configuring the emulator
+    //
+
+public:
+
+    // Returns the target component for an option
+    std::vector<Configurable *> routeOption(Option opt);
+    std::vector<const Configurable *> routeOption(Option opt) const;
+
+
     //
     // Methods from Thread
     //

@@ -69,6 +69,30 @@ Emulator::_dump(Category category, std::ostream& os) const
 
 }
 
+std::vector<const Configurable *>
+Emulator::routeOption(Option opt) const
+{
+    std::vector<const Configurable *> result;
+
+    for (const auto &target : const_cast<Emulator *>(this)->routeOption(opt)) {
+        result.push_back(const_cast<const Configurable *>(target));
+    }
+    return result;
+}
+
+std::vector<Configurable *>
+Emulator::routeOption(Option opt)
+{
+    std::vector<Configurable *> result;
+
+    // if (isValidOption(opt)) result.push_back(this);
+    // if (host.isValidOption(opt)) result.push_back(&host);
+    main.routeOption(opt, result);
+
+    assert(!result.empty());
+    return result;
+}
+
 void
 Emulator::update()
 {

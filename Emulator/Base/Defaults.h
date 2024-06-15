@@ -70,13 +70,13 @@ public:
 public:
     
     // Queries a key-value pair
-    string getString(const string &key) const throws;
+    string getRaw(const string &key) const throws;
     i64 getInt(const string &key) const throws;
     i64 get(Option option) const throws;
     i64 get(Option option, isize nr) const throws;
     
     // Queries a fallback key-value pair
-    string getFallbackString(const string &key) const;
+    string getFallbackRaw(const string &key) const;
     i64 getFallbackInt(const string &key) const;
     i64 getFallback(Option option) const;
     i64 getFallback(Option option, isize nr) const;
@@ -86,24 +86,24 @@ public:
     // Writing key-value pairs
     //
 
-    void setString(const string &key, const string &value);
+    void set(const string &key, const string &value);
     void set(Option option, i64 value);
-    void set(Option option, isize nr, i64 value);
-    void set(Option option, std::vector <isize> nrs, i64 value);
+    void set(Option option, i64 value, isize objid);
+    void set(Option option, i64 value, std::vector <isize> objids);
 
     void setFallback(const string &key, const string &value);
     void setFallback(Option option, const string &value);
     void setFallback(Option option, i64 value);
-    void setFallback(Option option, isize nr, const string &value);
-    void setFallback(Option option, isize nr, i64 value);
-    void setFallback(Option option, std::vector <isize> nrs, const string &value);
-    void setFallback(Option option, std::vector <isize> nrs, i64 value);
+    void setFallback(Option option, const string &value, isize objid);
+    void setFallback(Option option, i64 value, isize objid);
+    void setFallback(Option option, const string &value, std::vector <isize> objids);
+    void setFallback(Option option, i64 value, std::vector <isize> objids);
 
     void remove();
     void remove(const string &key) throws;
     void remove(Option option) throws;
-    void remove(Option option, isize nr) throws;
-    void remove(Option option, std::vector <isize> nrs) throws;
+    void remove(Option option, isize objid) throws;
+    void remove(Option option, std::vector <isize> objids) throws;
 };
 
 }
