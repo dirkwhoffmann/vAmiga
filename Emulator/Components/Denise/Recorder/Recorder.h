@@ -132,6 +132,15 @@ public:
 
 
     //
+    // Methods from Configurable
+    //
+
+public:
+
+    const ConfigOptions &getOptions() const override { return options; }
+
+
+    //
     // Querying locations and flags
     //
     

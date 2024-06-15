@@ -69,6 +69,12 @@ public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
 
+    //
+    // Methods from Configurable
+    //
+    
+    const ConfigOptions &getOptions() const override { return options; }
+
 
     //
     // Managing the queue

@@ -166,6 +166,7 @@ public:
 public:
     
     const CPUConfig &getConfig() const { return config; }
+    const ConfigOptions &getOptions() const override { return options; }
     void resetConfig() override;
     
     i64 getConfigItem(Option option) const;

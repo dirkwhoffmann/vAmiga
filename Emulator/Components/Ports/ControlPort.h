@@ -36,14 +36,15 @@ class ControlPort : public SubComponent, public Inspectable<ControlPortInfo> {
 
 public:
 
-    static constexpr isize PORT1 = 1;
-    static constexpr isize PORT2 = 2;
+    static constexpr isize PORT1 = 0;
+    static constexpr isize PORT2 = 1;
 
 private:
     
     // The represented control port
+    // DEPRECATED: USE objid
     isize nr;
-    
+
     // The connected device
     ControlPortDevice device = CPD_NONE;
     
@@ -117,6 +118,15 @@ public:
     const Descriptions &getDescriptions() const override { return descriptions; }
 
     
+    //
+    // Methods from Configurable
+    //
+
+public:
+
+    const ConfigOptions &getOptions() const override { return options; }
+
+
     //
     // Analyzing
     //

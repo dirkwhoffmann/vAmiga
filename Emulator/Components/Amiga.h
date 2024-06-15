@@ -277,6 +277,7 @@ public:
 public:
 
     const AmigaConfig &getConfig() const { return config; }
+    const ConfigOptions &getOptions() const override { return options; }
     void resetConfig() override;
 
     // Gets a single configuration item

@@ -114,6 +114,7 @@ public:
 public:
 
     const ServerConfig &getConfig() const { return config; }
+    const ConfigOptions &getOptions() const override { return options; }
     i64 getConfigItem(Option option) const;
     void setConfigItem(Option option, i64 value);
 

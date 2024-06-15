@@ -26,7 +26,7 @@ public:
     virtual ~Configurable() = default;
 
     // Returns the available config options
-    virtual const ConfigOptions &getOptions() const { return options; }
+    virtual const ConfigOptions &getOptions() const  = 0;
 
     // Returns true iff a specific option is available
     bool isValidOption(Option opt) const;

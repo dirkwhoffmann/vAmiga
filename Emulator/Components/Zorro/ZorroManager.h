@@ -84,7 +84,7 @@ private:
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
-
+    const ConfigOptions &getOptions() const override { return options; }
 
     //
     // Accessing

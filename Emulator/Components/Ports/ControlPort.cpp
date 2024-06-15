@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-ControlPort::ControlPort(Amiga& ref, isize nr) : SubComponent(ref), nr(nr)
+ControlPort::ControlPort(Amiga& ref, isize nr) : SubComponent(ref, nr), nr(nr)
 {
     assert(nr == PORT1 || nr == PORT2);
 

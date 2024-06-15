@@ -13,7 +13,7 @@
 
 namespace vamiga {
 
-SubComponent::SubComponent(Amiga& ref) : CoreComponent(ref.emulator),
+SubComponent::SubComponent(Amiga& ref, isize id) : CoreComponent(ref.emulator, id),
 agnus(ref.agnus),
 amiga(ref),
 blitter(ref.agnus.blitter),
@@ -56,6 +56,8 @@ uart(ref.paula.uart),
 zorro(ref.zorro)
 {
 };
+
+SubComponent::SubComponent(Amiga& ref) : SubComponent(ref, 0) { }
 
 bool
 SubComponent::isPoweredOff() const

@@ -80,12 +80,14 @@ public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
 
-    
+
     //
-    // Configuring
+    // Methods from Configurable
     //
-    
+
 public:
+
+    const ConfigOptions &getOptions() const override { return options; }
 
     i64 getConfigItem(Option option, long id) const;
     void setConfigItem(Option option, i64 value);

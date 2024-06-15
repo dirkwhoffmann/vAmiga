@@ -3155,7 +3155,7 @@ using namespace vamiga::moira;
 - (BOOL)configure:(Option)opt value:(NSInteger)val
 {
     try {
-        [self emu]->emu->main.configure(opt, val);
+        [self emu]->set(opt, val);
         return true;
     } catch (Error &exception) {
         return false;
@@ -3165,7 +3165,7 @@ using namespace vamiga::moira;
 - (BOOL)configure:(Option)opt enable:(BOOL)val
 {
     try {
-        [self emu]->emu->main.configure(opt, val ? 1 : 0);
+        [self emu]->set(opt, val ? 1 : 0);
         return true;
     } catch (Error &exception) {
         return false;
@@ -3175,7 +3175,7 @@ using namespace vamiga::moira;
 - (BOOL)configure:(Option)opt id:(NSInteger)id value:(NSInteger)val
 {
     try {
-        [self emu]->emu->main.configure(opt, id, val);
+        [self emu]->set(opt, val, id);
         return true;
     } catch (Error &exception) {
         return false;
@@ -3185,7 +3185,7 @@ using namespace vamiga::moira;
 - (BOOL)configure:(Option)opt id:(NSInteger)id enable:(BOOL)val
 {
     try {
-        [self emu]->emu->main.configure(opt, id, val ? 1 : 0);
+        [self emu]->set(opt, val ? 1 : 0, id);
         return true;
     } catch (Error &exception) {
         return false;
@@ -3195,7 +3195,7 @@ using namespace vamiga::moira;
 - (BOOL)configure:(Option)opt drive:(NSInteger)id value:(NSInteger)val
 {
     try {
-        [self emu]->emu->main.configure(opt, (long)id, val);
+        [self emu]->set(opt, val, (long)id);
         return true;
     } catch (Error &exception) {
         return false;
@@ -3205,7 +3205,7 @@ using namespace vamiga::moira;
 - (BOOL)configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val
 {
     try {
-        [self emu]->emu->main.configure(opt, (long)id, val ? 1 : 0);
+        [self emu]->set(opt, val ? 1 : 0, (long)id);
         return true;
     } catch (Error &exception) {
         return false;

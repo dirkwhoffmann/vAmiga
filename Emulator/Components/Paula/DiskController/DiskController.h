@@ -171,6 +171,7 @@ public:
 public:
     
     const DiskControllerConfig &getConfig() const { return config; }
+    const ConfigOptions &getOptions() const override { return options; }
     void resetConfig() override;
     
     bool turboMode() const { return config.speed == -1; }
