@@ -87,12 +87,12 @@ Blitter::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option));
+        setOption(option, defaults.get(option));
     }
 }
 
 i64
-Blitter::getConfigItem(Option option) const
+Blitter::getOption(Option option) const
 {
     switch (option) {
             
@@ -104,7 +104,7 @@ Blitter::getConfigItem(Option option) const
 }
 
 void
-Blitter::setConfigItem(Option option, i64 value)
+Blitter::setOption(Option option, i64 value)
 {
     switch (option) {
             

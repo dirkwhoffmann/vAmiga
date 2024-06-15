@@ -36,12 +36,12 @@ Keyboard::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option));
+        setOption(option, defaults.get(option));
     }
 }
 
 i64
-Keyboard::getConfigItem(Option option) const
+Keyboard::getOption(Option option) const
 {
     switch (option) {
             
@@ -53,7 +53,7 @@ Keyboard::getConfigItem(Option option) const
 }
 
 void
-Keyboard::setConfigItem(Option option, i64 value)
+Keyboard::setOption(Option option, i64 value)
 {
     switch (option) {
             

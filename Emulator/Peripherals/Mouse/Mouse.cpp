@@ -49,12 +49,12 @@ Mouse::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option));
+        setOption(option, defaults.get(option));
     }
 }
 
 i64
-Mouse::getConfigItem(Option option) const
+Mouse::getOption(Option option) const
 {
     switch (option) {
 
@@ -68,7 +68,7 @@ Mouse::getConfigItem(Option option) const
 }
 
 void
-Mouse::setConfigItem(Option option, i64 value)
+Mouse::setOption(Option option, i64 value)
 {
     switch (option) {
             

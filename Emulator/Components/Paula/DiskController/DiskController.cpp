@@ -45,12 +45,12 @@ DiskController::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option));
+        setOption(option, defaults.get(option));
     }
 }
 
 i64
-DiskController::getConfigItem(Option option) const
+DiskController::getOption(Option option) const
 {
     switch (option) {
             
@@ -64,7 +64,7 @@ DiskController::getConfigItem(Option option) const
 }
 
 void
-DiskController::setConfigItem(Option option, i64 value)
+DiskController::setOption(Option option, i64 value)
 {
     switch (option) {
             

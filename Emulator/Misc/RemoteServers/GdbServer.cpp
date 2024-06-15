@@ -50,7 +50,7 @@ GdbServer::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option, SERVER_GDB));
+        setOption(option, defaults.get(option, SERVER_GDB));
     }
 }
 

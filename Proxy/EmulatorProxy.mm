@@ -636,7 +636,7 @@ using namespace vamiga::moira;
 
 - (NSInteger)extStart
 {
-    return [self mem]->mem->getConfigItem(OPT_EXT_START);
+    return [self mem]->mem->getOption(OPT_EXT_START);
 }
 
 - (void)saveRom:(NSURL *)url exception:(ExceptionWrapper *)ex
@@ -3139,17 +3139,17 @@ using namespace vamiga::moira;
 
 - (NSInteger)getConfig:(Option)opt
 {
-    return [self emu]->emu->main.getConfigItem(opt);
+    return [self emu]->emu->get(opt);
 }
 
 - (NSInteger)getConfig:(Option)opt id:(NSInteger)id
 {
-    return [self emu]->emu->main.getConfigItem(opt, id);
+    return [self emu]->emu->get(opt, id);
 }
 
 - (NSInteger)getConfig:(Option)opt drive:(NSInteger)id
 {
-    return [self emu]->emu->main.getConfigItem(opt, (long)id);
+    return [self emu]->emu->get(opt, (long)id);
 }
 
 - (BOOL)configure:(Option)opt value:(NSInteger)val

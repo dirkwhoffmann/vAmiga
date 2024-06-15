@@ -58,12 +58,12 @@ Denise::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option));
+        setOption(option, defaults.get(option));
     }
 }
 
 i64
-Denise::getConfigItem(Option option) const
+Denise::getOption(Option option) const
 {
     switch (option) {
             
@@ -84,7 +84,7 @@ Denise::getConfigItem(Option option) const
 }
 
 void
-Denise::setConfigItem(Option option, i64 value)
+Denise::setOption(Option option, i64 value)
 {
     switch (option) {
             

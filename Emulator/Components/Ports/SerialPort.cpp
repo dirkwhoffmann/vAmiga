@@ -27,12 +27,12 @@ SerialPort::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option));
+        setOption(option, defaults.get(option));
     }
 }
 
 i64
-SerialPort::getConfigItem(Option option) const
+SerialPort::getOption(Option option) const
 {
     switch (option) {
             
@@ -45,7 +45,7 @@ SerialPort::getConfigItem(Option option) const
 }
 
 void
-SerialPort::setConfigItem(Option option, i64 value)
+SerialPort::setOption(Option option, i64 value)
 {
     switch (option) {
             

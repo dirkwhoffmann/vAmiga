@@ -282,7 +282,7 @@ CPU::CPU(Amiga& ref) : moira::Moira(ref)
 }
 
 i64
-CPU::getConfigItem(Option option) const
+CPU::getOption(Option option) const
 {
     switch (option) {
 
@@ -298,7 +298,7 @@ CPU::getConfigItem(Option option) const
 }
 
 void
-CPU::setConfigItem(Option option, i64 value)
+CPU::setOption(Option option, i64 value)
 {
     auto cpuModel = [&](CPURevision rev) { return moira::Model(rev); };
     auto dasmModel = [&](DasmRevision rev) { return moira::Model(rev); };
@@ -379,7 +379,7 @@ CPU::resetConfig()
 
         try {
 
-            setConfigItem(option, defaults.get(option));
+            setOption(option, defaults.get(option));
 
         } catch (Error &e) {
 

@@ -215,35 +215,35 @@ Interpreter::initCommandShell(Command &root)
              "Selects the video standard",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_VIDEO_FORMAT, parseEnum <VideoFormatEnum> (argv[0]));
+        emulator.set(OPT_VIDEO_FORMAT, parseEnum <VideoFormatEnum> (argv[0]));
     });
 
     root.add({"amiga", "set", "warpboot"}, { Arg::onoff },
              "Enables or disables warp mode while Kickstart initializes",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_WARP_BOOT, parseBool(argv[0]));
+        emulator.set(OPT_WARP_BOOT, parseBool(argv[0]));
     });
 
     root.add({"amiga", "set", "warpmode"}, { WarpModeEnum::argList() },
              "Selects the warp mode",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_WARP_MODE, parseEnum <WarpModeEnum> (argv[0]));
+        emulator.set(OPT_WARP_MODE, parseEnum <WarpModeEnum> (argv[0]));
     });
 
     root.add({"amiga", "set", "vsync"}, { Arg::onoff },
              "Enables or disables VSYNC",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_VSYNC, parseBool(argv[0]));
+        emulator.set(OPT_VSYNC, parseBool(argv[0]));
     });
 
     root.add({"amiga", "set", "timelapse"}, { Arg::value },
              "Increases or decreases the native frame rate",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_TIME_LAPSE, parseNum(argv[0]));
+        emulator.set(OPT_TIME_LAPSE, parseNum(argv[0]));
     });
 
     root.add({"amiga", "power"}, { Arg::onoff },
@@ -271,7 +271,7 @@ Interpreter::initCommandShell(Command &root)
         // This causes a crash on gcc.
         // amiga.revertToFactorySettings();
         emulator.powerOff();
-        amiga.configure(scheme);
+        emulator.set(scheme);
     });
 
 
@@ -295,63 +295,63 @@ Interpreter::initCommandShell(Command &root)
              "Configures the amouts of chip memory",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CHIP_RAM, parseNum(argv[0]));
+        emulator.set(OPT_CHIP_RAM, parseNum(argv[0]));
     });
 
     root.add({"memory", "set", "slow"},  { Arg::kb },
              "Configures the amouts of slow memory",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_SLOW_RAM, parseNum(argv[0]));
+        emulator.set(OPT_SLOW_RAM, parseNum(argv[0]));
     });
 
     root.add({"memory", "set", "fast"}, { Arg::kb },
              "Configures the amouts of flow memory",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_FAST_RAM, parseNum(argv[0]));
+        emulator.set(OPT_FAST_RAM, parseNum(argv[0]));
     });
 
     root.add({"memory", "set", "extstart"}, { Arg::address },
              "Sets the start address for Rom extensions",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_EXT_START, parseNum(argv[0]));
+        emulator.set(OPT_EXT_START, parseNum(argv[0]));
     });
 
     root.add({"memory", "set", "saveroms"}, { Arg::boolean },
              "Determines whether Roms should be stored in snapshots",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_SAVE_ROMS, parseBool(argv[0]));
+        emulator.set(OPT_SAVE_ROMS, parseBool(argv[0]));
     });
 
     root.add({"memory", "set", "slowramdelay"}, { Arg::boolean },
              "Enables or disables slow Ram bus delays",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_SLOW_RAM_DELAY, parseBool(argv[0]));
+        emulator.set(OPT_SLOW_RAM_DELAY, parseBool(argv[0]));
     });
 
     root.add({"memory", "set", "bankmap"}, { BankMapEnum::argList() },
              "Selects the bank mapping scheme",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_BANKMAP, parseEnum <BankMapEnum> (argv[0]));
+        emulator.set(OPT_BANKMAP, parseEnum <BankMapEnum> (argv[0]));
     });
 
     root.add({"memory", "set", "raminit"}, { RamInitPatternEnum::argList() },
              "Determines how Ram is initialized on startup",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_RAM_INIT_PATTERN, parseEnum <RamInitPatternEnum> (argv[0]));
+        emulator.set(OPT_RAM_INIT_PATTERN, parseEnum <RamInitPatternEnum> (argv[0]));
     });
 
     root.add({"memory", "set", "unmapped"}, { UnmappedMemoryEnum::argList() },
              "Determines the behaviour of unmapped memory",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_UNMAPPING_TYPE, parseEnum <UnmappedMemoryEnum> (argv[0]));
+        emulator.set(OPT_UNMAPPING_TYPE, parseEnum <UnmappedMemoryEnum> (argv[0]));
     });
 
     root.add({"memory", "load"},
@@ -392,7 +392,7 @@ Interpreter::initCommandShell(Command &root)
              "Selects the emulated chip model",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CPU_REVISION, parseEnum <CPURevisionEnum> (argv[0]));
+        emulator.set(OPT_CPU_REVISION, parseEnum <CPURevisionEnum> (argv[0]));
     });
 
     root.add({"cpu", "set", "dasm"},
@@ -402,28 +402,28 @@ Interpreter::initCommandShell(Command &root)
              "Selects the disassembler instruction set",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CPU_DASM_REVISION, parseEnum <DasmRevisionEnum> (argv[0]));
+        emulator.set(OPT_CPU_DASM_REVISION, parseEnum <DasmRevisionEnum> (argv[0]));
     });
 
     root.add({"cpu", "set", "dasm", "syntax"}, {  DasmSyntaxEnum::argList() },
              "Selects the disassembler syntax style",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CPU_DASM_SYNTAX, parseEnum <DasmSyntaxEnum> (argv[0]));
+        emulator.set(OPT_CPU_DASM_SYNTAX, parseEnum <DasmSyntaxEnum> (argv[0]));
     });
 
     root.add({"cpu", "set", "overclocking"}, { Arg::value },
              "Overclocks the CPU by the specified factor",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CPU_OVERCLOCKING, parseNum(argv[0]));
+        emulator.set(OPT_CPU_OVERCLOCKING, parseNum(argv[0]));
     });
 
     root.add({"cpu", "set", "regreset"}, { Arg::value },
              "Selects the reset value of data and address registers",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CPU_RESET_VAL, parseNum(argv[0]));
+        emulator.set(OPT_CPU_RESET_VAL, parseNum(argv[0]));
     });
 
 
@@ -454,7 +454,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto parsed = parseEnum <CIARevisionEnum> (argv[0]);
-            amiga.configure(OPT_CIA_REVISION, value, parsed);
+            emulator.set(OPT_CIA_REVISION, value, { parsed });
 
         }, i);
 
@@ -463,7 +463,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto parsed = parseBool(argv[0]);
-            amiga.configure(OPT_TODBUG, value, parsed);
+            emulator.set(OPT_TODBUG, value, { parsed });
 
         }, i);
 
@@ -472,7 +472,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto parsed = parseBool(argv[0]);
-            amiga.configure(OPT_ECLOCK_SYNCING, value, parsed);
+            emulator.set(OPT_ECLOCK_SYNCING, value, { parsed });
 
         }, i);
 
@@ -481,7 +481,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto parsed = parseBool(argv[0]);
-            amiga.configure(OPT_CIA_IDLE_SLEEP, value, parsed);
+            emulator.set(OPT_CIA_IDLE_SLEEP, value, { parsed });
 
         }, i);
     }
@@ -507,21 +507,21 @@ Interpreter::initCommandShell(Command &root)
              "Selects the emulated chip model",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AGNUS_REVISION, parseEnum <AgnusRevisionEnum> (argv[0]));
+        emulator.set(OPT_AGNUS_REVISION, parseEnum <AgnusRevisionEnum> (argv[0]));
     });
 
     root.add({"agnus", "set", "slowrammirror"}, { Arg::boolean },
              "Enables or disables ECS Slow Ram mirroring",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_SLOW_RAM_MIRROR, parseBool(argv[0]));
+        emulator.set(OPT_SLOW_RAM_MIRROR, parseBool(argv[0]));
     });
 
     root.add({"agnus", "set", "ptrdrops"}, { Arg::boolean },
              "Emulate dropped register writes",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_PTR_DROPS, parseBool(argv[0]));
+        emulator.set(OPT_PTR_DROPS, parseBool(argv[0]));
     });
 
     
@@ -545,7 +545,7 @@ Interpreter::initCommandShell(Command &root)
              "Selects the emulation accuracy level",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_BLITTER_ACCURACY, parseNum(argv[0]));
+        emulator.set(OPT_BLITTER_ACCURACY, parseNum(argv[0]));
     });
 
     
@@ -569,42 +569,42 @@ Interpreter::initCommandShell(Command &root)
              "Selects the emulated chip model",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DENISE_REVISION, parseEnum <DeniseRevisionEnum> (argv[0]));
+        emulator.set(OPT_DENISE_REVISION, parseEnum <DeniseRevisionEnum> (argv[0]));
     });
 
     root.add({"denise", "set", "tracking"}, { Arg::boolean },
              "Enables or disables viewport tracking",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_VIEWPORT_TRACKING, parseBool(argv[0]));
+        emulator.set(OPT_VIEWPORT_TRACKING, parseBool(argv[0]));
     });
 
     root.add({"denise", "set", "frameskip"}, { Arg::value },
              "Sets the number of skipped frames in warp mode",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_FRAME_SKIPPING, parseNum(argv[0]));
+        emulator.set(OPT_FRAME_SKIPPING, parseNum(argv[0]));
     });
 
     root.add({"denise", "set", "clxsprspr"}, { Arg::boolean },
              "Switches sprite-sprite collision detection on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CLX_SPR_SPR, parseBool(argv[0]));
+        emulator.set(OPT_CLX_SPR_SPR, parseBool(argv[0]));
     });
 
     root.add({"denise", "set", "clxsprplf"}, { Arg::boolean },
              "Switches sprite-playfield collision detection on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CLX_SPR_PLF, parseBool(argv[0]));
+        emulator.set(OPT_CLX_SPR_PLF, parseBool(argv[0]));
     });
 
     root.add({"denise", "set", "clxplfplf"}, { Arg::boolean },
              "Switches playfield-playfield collision detection on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CLX_PLF_PLF, parseBool(argv[0]));
+        emulator.set(OPT_CLX_PLF_PLF, parseBool(argv[0]));
     });
 
     root.add({"denise", "set", "hidden"},
@@ -614,21 +614,21 @@ Interpreter::initCommandShell(Command &root)
              "Wipes out certain bitplane data",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_HIDDEN_BITPLANES, parseNum(argv[0]));
+        emulator.set(OPT_HIDDEN_BITPLANES, parseNum(argv[0]));
     });
 
     root.add({"denise", "set", "hidden", "sprites"}, { Arg::value },
              "Wipes out certain sprite data",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_HIDDEN_SPRITES, parseNum(argv[0]));
+        emulator.set(OPT_HIDDEN_SPRITES, parseNum(argv[0]));
     });
 
     root.add({"denise", "set", "hidden", "layers"}, { Arg::value },
              "Makes certain drawing layers transparent",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_HIDDEN_LAYERS, parseNum(argv[0]));
+        emulator.set(OPT_HIDDEN_LAYERS, parseNum(argv[0]));
     });
 
     
@@ -640,70 +640,70 @@ Interpreter::initCommandShell(Command &root)
              "Opens the DMA debugger",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_ENABLE, true);
+        emulator.set(OPT_DMA_DEBUG_ENABLE, true);
     });
 
     root.add({"dmadebugger", "close"},
              "Closes the DMA debugger",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_ENABLE, false);
+        emulator.set(OPT_DMA_DEBUG_ENABLE, false);
     });
 
     root.add({"dmadebugger", "copper"}, { Arg::onoff },
              "Turns Copper DMA visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL0, parseOnOff(argv[0]));
+        emulator.set(OPT_DMA_DEBUG_CHANNEL0, parseOnOff(argv[0]));
     });
 
     root.add({"dmadebugger", "blitter"}, { Arg::onoff },
              "Turns Blitter DMA visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL1, parseOnOff(argv[0]));
+        emulator.set(OPT_DMA_DEBUG_CHANNEL1, parseOnOff(argv[0]));
     });
 
     root.add({"dmadebugger", "disk"}, { Arg::onoff },
              "Turns Disk DMA visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL2, parseOnOff(argv[0]));
+        emulator.set(OPT_DMA_DEBUG_CHANNEL2, parseOnOff(argv[0]));
     });
 
     root.add({"dmadebugger", "audio"}, { Arg::onoff },
              "Turns Audio DMA visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL3, parseOnOff(argv[0]));
+        emulator.set(OPT_DMA_DEBUG_CHANNEL3, parseOnOff(argv[0]));
     });
 
     root.add({"dmadebugger", "sprites"}, { Arg::onoff },
              "Turns Sprite DMA visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL4, parseOnOff(argv[0]));
+        emulator.set(OPT_DMA_DEBUG_CHANNEL4, parseOnOff(argv[0]));
     });
 
     root.add({"dmadebugger", "bitplanes"}, { Arg::onoff },
              "Turns Bitplane DMA visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL5, parseOnOff(argv[0]));
+        emulator.set(OPT_DMA_DEBUG_CHANNEL5, parseOnOff(argv[0]));
     });
 
     root.add({"dmadebugger", "cpu"}, { Arg::onoff },
              "Turns CPU bus usage visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL6, parseOnOff(argv[0]));
+        emulator.set(OPT_DMA_DEBUG_CHANNEL6, parseOnOff(argv[0]));
     });
 
     root.add({"dmadebugger", "refresh"}, { Arg::onoff },
              "Turn memory refresh visualization on or off",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DMA_DEBUG_CHANNEL7, parseOnOff(argv[0]));
+        emulator.set(OPT_DMA_DEBUG_CHANNEL7, parseOnOff(argv[0]));
     });
 
 
@@ -725,28 +725,28 @@ Interpreter::initCommandShell(Command &root)
              "Selects the color palette",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_PALETTE, parseEnum <PaletteEnum> (argv[0]));
+        emulator.set(OPT_PALETTE, parseEnum <PaletteEnum> (argv[0]));
     });
 
     root.add({"monitor", "set", "brightness"}, { Arg::value },
              "Adjusts the brightness of the Amiga texture",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_BRIGHTNESS, parseNum(argv[0]));
+        emulator.set(OPT_BRIGHTNESS, parseNum(argv[0]));
     });
 
     root.add({"monitor", "set", "contrast"}, { Arg::value },
              "Adjusts the contrast of the Amiga texture",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_CONTRAST, parseNum(argv[0]));
+        emulator.set(OPT_CONTRAST, parseNum(argv[0]));
     });
 
     root.add({"monitor", "set", "saturation"}, { Arg::value },
              "Adjusts the saturation of the Amiga texture",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_SATURATION, parseNum(argv[0]));
+        emulator.set(OPT_SATURATION, parseNum(argv[0]));
     });
 
     
@@ -780,7 +780,7 @@ Interpreter::initCommandShell(Command &root)
              "Configures the audio filter type",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_FILTER_TYPE, parseEnum <FilterTypeEnum> (argv[0]));
+        emulator.set(OPT_FILTER_TYPE, parseEnum <FilterTypeEnum> (argv[0]));
     });
 
     root.add({"paula", "audio", "set"},
@@ -790,7 +790,7 @@ Interpreter::initCommandShell(Command &root)
              "Selects the sampling method",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_SAMPLING_METHOD, parseEnum <SamplingMethodEnum> (argv[0]));
+        emulator.set(OPT_SAMPLING_METHOD, parseEnum <SamplingMethodEnum> (argv[0]));
     });
 
     root.add({"paula", "audio", "set", "volume"},
@@ -800,42 +800,42 @@ Interpreter::initCommandShell(Command &root)
              "Sets the volume for audio channel 0",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDVOL0, parseNum(argv[0]));
+        emulator.set(OPT_AUDVOL0, parseNum(argv[0]));
     });
 
     root.add({"paula", "audio", "set", "volume", "channel1"}, { Arg::volume },
              "Sets the volume for audio channel 1",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDVOL1, parseNum(argv[0]));
+        emulator.set(OPT_AUDVOL1, parseNum(argv[0]));
     });
 
     root.add({"paula", "audio", "set", "volume", "channel2"}, { Arg::volume },
              "Sets the volume for audio channel 2",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDVOL2, parseNum(argv[0]));
+        emulator.set(OPT_AUDVOL2, parseNum(argv[0]));
     });
 
     root.add({"paula", "audio", "set", "volume", "channel3"}, { Arg::volume },
              "Sets the volume for audio channel 3",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDVOL3, parseNum(argv[0]));
+        emulator.set(OPT_AUDVOL3, parseNum(argv[0]));
     });
 
     root.add({"paula", "audio", "set", "volume", "left"}, { Arg::volume },
              "Sets the master volume for the left speaker",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDVOLL, parseNum(argv[0]));
+        emulator.set(OPT_AUDVOLL, parseNum(argv[0]));
     });
 
     root.add({"paula", "audio", "set", "volume", "right"}, { Arg::volume },
              "Sets the master volume for the right speaker",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDVOLR, parseNum(argv[0]));
+        emulator.set(OPT_AUDVOLR, parseNum(argv[0]));
     });
 
     root.add({"paula", "audio", "set", "pan"},
@@ -845,35 +845,35 @@ Interpreter::initCommandShell(Command &root)
              "Sets the pan for audio channel 0",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDPAN0, parseNum(argv[0]));
+        emulator.set(OPT_AUDPAN0, parseNum(argv[0]));
     });
 
     root.add({"paula", "audio", "set", "pan", "channel1"}, { Arg::value },
              "Sets the pan for audio channel 1",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDPAN1, parseNum(argv[0]));
+        emulator.set(OPT_AUDPAN1, parseNum(argv[0]));
     });
 
     root.add({"paula", "audio", "set", "pan", "channel2"}, { Arg::value },
              "Sets the pan for audio channel 2",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDPAN2, parseNum(argv[0]));
+        emulator.set(OPT_AUDPAN2, parseNum(argv[0]));
     });
 
     root.add({"paula", "audio", "set", "pan", "channel3"}, { Arg::value },
              "Sets the pan for audio channel 3",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDPAN3, parseNum(argv[0]));
+        emulator.set(OPT_AUDPAN3, parseNum(argv[0]));
     });
 
     root.add({"paula", "audio", "set", "fastpath"}, { Arg::value },
              "Enables or disables the fast path if no audio is playing",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUD_FASTPATH, parseBool(argv[0]));
+        emulator.set(OPT_AUD_FASTPATH, parseBool(argv[0]));
     });
 
 
@@ -898,7 +898,7 @@ Interpreter::initCommandShell(Command &root)
              "Configures the data transfer speed",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_DRIVE_SPEED, parseNum(argv[0]));
+        emulator.set(OPT_DRIVE_SPEED, parseNum(argv[0]));
     });
 
     root.add({"paula", "dc", "dsksync"},
@@ -908,14 +908,14 @@ Interpreter::initCommandShell(Command &root)
              "Always receive a SYNC signal",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUTO_DSKSYNC, parseBool(argv[0]));
+        emulator.set(OPT_AUTO_DSKSYNC, parseBool(argv[0]));
     });
 
     root.add({"paula", "dc", "dsksync", "lock"}, { Arg::boolean },
              "Prevents writes to DSKSYNC",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_LOCK_DSKSYNC, parseBool(argv[0]));
+        emulator.set(OPT_LOCK_DSKSYNC, parseBool(argv[0]));
     });
 
 
@@ -939,7 +939,7 @@ Interpreter::initCommandShell(Command &root)
              "Selects the emulated chip model",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_RTC_MODEL, parseEnum <RTCRevisionEnum> (argv[0]));
+        emulator.set(OPT_RTC_MODEL, parseEnum <RTCRevisionEnum> (argv[0]));
     });
 
 
@@ -963,7 +963,7 @@ Interpreter::initCommandShell(Command &root)
              "Determines the emulation accuracy level",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_ACCURATE_KEYBOARD, parseBool(argv[0]));
+        emulator.set(OPT_ACCURATE_KEYBOARD, parseBool(argv[0]));
     });
 
     root.add({"keyboard", "press"}, { Arg::value },
@@ -1004,7 +1004,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto port = (value == ControlPort::PORT1) ? ControlPort::PORT1 : ControlPort::PORT2;
-            amiga.configure(OPT_AUTOFIRE, port, parseBool(argv[0]));
+            emulator.set(OPT_AUTOFIRE, port, { parseBool(argv[0]) });
 
         }, i);
 
@@ -1013,7 +1013,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto port = (value == ControlPort::PORT1) ? ControlPort::PORT1 : ControlPort::PORT2;
-            amiga.configure(OPT_AUTOFIRE_BULLETS, port, parseNum(argv[0]));
+            emulator.set(OPT_AUTOFIRE_BULLETS, port, { parseNum(argv[0]) });
 
         }, i);
 
@@ -1022,7 +1022,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto port = (value == ControlPort::PORT1) ? ControlPort::PORT1 : ControlPort::PORT2;
-            amiga.configure(OPT_AUTOFIRE_DELAY, port, parseNum(argv[0]));
+            emulator.set(OPT_AUTOFIRE_DELAY, port, { parseNum(argv[0]) });
 
         }, i);
 
@@ -1156,7 +1156,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto port = (value == ControlPort::PORT1) ? ControlPort::PORT1 : ControlPort::PORT2;
-            amiga.configure(OPT_PULLUP_RESISTORS, port, parseBool(argv[0]));
+            emulator.set(OPT_PULLUP_RESISTORS, port, { parseBool(argv[0]) });
 
         }, i);
 
@@ -1165,7 +1165,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto port = (value == ControlPort::PORT1) ? ControlPort::PORT1 : ControlPort::PORT2;
-            amiga.configure(OPT_SHAKE_DETECTION, port, parseBool(argv[0]));
+            emulator.set(OPT_SHAKE_DETECTION, port, { parseBool(argv[0]) });
 
         }, i);
 
@@ -1174,7 +1174,7 @@ Interpreter::initCommandShell(Command &root)
                  [this](Arguments& argv, long value) {
 
             auto port = (value == ControlPort::PORT1) ? ControlPort::PORT1 : ControlPort::PORT2;
-            amiga.configure(OPT_MOUSE_VELOCITY, port, parseNum(argv[0]));
+            emulator.set(OPT_MOUSE_VELOCITY, port, { parseNum(argv[0]) });
 
         }, i);
 
@@ -1230,14 +1230,14 @@ Interpreter::initCommandShell(Command &root)
              "Connects a device",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_SER_DEVICE, parseEnum <SerialPortDeviceEnum> (argv[0]));
+        emulator.set(OPT_SER_DEVICE, parseEnum <SerialPortDeviceEnum> (argv[0]));
     });
 
     root.add({"serial", "set", "verbose"}, { Arg::boolean },
              "Enables or disables communication tracking",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_SER_VERBOSE, parseBool(argv[0]));
+        emulator.set(OPT_SER_VERBOSE, parseBool(argv[0]));
     });
 
     root.add({"serial", "send"}, { "<text>" },
@@ -1274,7 +1274,7 @@ Interpreter::initCommandShell(Command &root)
                          "Connects the drive",
                          [this](Arguments& argv, long value) {
 
-                    amiga.configure(OPT_DRIVE_CONNECT, value, true);
+                    emulator.set(OPT_DRIVE_CONNECT, true, { value });
 
                 }, i);
 
@@ -1282,7 +1282,7 @@ Interpreter::initCommandShell(Command &root)
                          "Disconnects the drive",
                          [this](Arguments& argv, long value) {
 
-                    amiga.configure(OPT_DRIVE_CONNECT, value, false);
+                    emulator.set(OPT_DRIVE_CONNECT, false, { value });
 
                 }, i);
             }
@@ -1312,10 +1312,10 @@ Interpreter::initCommandShell(Command &root)
 
                 long model = parseEnum <FloppyDriveTypeEnum> (argv[0]);
 
-                if (value == 0 || value > 3) amiga.configure(OPT_DRIVE_TYPE, 0, model);
-                if (value == 1 || value > 3) amiga.configure(OPT_DRIVE_TYPE, 1, model);
-                if (value == 2 || value > 3) amiga.configure(OPT_DRIVE_TYPE, 2, model);
-                if (value == 3 || value > 3) amiga.configure(OPT_DRIVE_TYPE, 3, model);
+                if (value == 0 || value > 3) emulator.set(OPT_DRIVE_TYPE, model, {0});
+                if (value == 1 || value > 3) emulator.set(OPT_DRIVE_TYPE, model, {1});
+                if (value == 2 || value > 3) emulator.set(OPT_DRIVE_TYPE, model, {2});
+                if (value == 3 || value > 3) emulator.set(OPT_DRIVE_TYPE, model, {3});
 
             }, i);
 
@@ -1325,10 +1325,10 @@ Interpreter::initCommandShell(Command &root)
 
                 long rpm = parseNum(argv[0]);
 
-                if (value == 0 || value > 3) amiga.configure(OPT_DRIVE_RPM, 0, rpm);
-                if (value == 1 || value > 3) amiga.configure(OPT_DRIVE_RPM, 1, rpm);
-                if (value == 2 || value > 3) amiga.configure(OPT_DRIVE_RPM, 2, rpm);
-                if (value == 3 || value > 3) amiga.configure(OPT_DRIVE_RPM, 3, rpm);
+                if (value == 0 || value > 3) emulator.set(OPT_DRIVE_RPM, rpm, {0});
+                if (value == 1 || value > 3) emulator.set(OPT_DRIVE_RPM, rpm, {1});
+                if (value == 2 || value > 3) emulator.set(OPT_DRIVE_RPM, rpm, {2});
+                if (value == 3 || value > 3) emulator.set(OPT_DRIVE_RPM, rpm, {3});
 
             }, i);
 
@@ -1338,10 +1338,10 @@ Interpreter::initCommandShell(Command &root)
 
                 auto scheme = parseEnum<DriveMechanicsEnum>(argv[0]);
 
-                if (value == 0 || value > 3) amiga.configure(OPT_DRIVE_MECHANICS, 0, scheme);
-                if (value == 1 || value > 3) amiga.configure(OPT_DRIVE_MECHANICS, 1, scheme);
-                if (value == 2 || value > 3) amiga.configure(OPT_DRIVE_MECHANICS, 2, scheme);
-                if (value == 3 || value > 3) amiga.configure(OPT_DRIVE_MECHANICS, 3, scheme);
+                if (value == 0 || value > 3) emulator.set(OPT_DRIVE_MECHANICS, scheme, {0});
+                if (value == 1 || value > 3) emulator.set(OPT_DRIVE_MECHANICS, scheme, {1});
+                if (value == 2 || value > 3) emulator.set(OPT_DRIVE_MECHANICS, scheme, {2});
+                if (value == 3 || value > 3) emulator.set(OPT_DRIVE_MECHANICS, scheme, {3});
 
             }, i);
 
@@ -1364,10 +1364,10 @@ Interpreter::initCommandShell(Command &root)
 
                 long delay = parseNum(argv[0]);
 
-                if (value == 0 || value > 3) amiga.configure(OPT_DISK_SWAP_DELAY, 0, delay);
-                if (value == 1 || value > 3) amiga.configure(OPT_DISK_SWAP_DELAY, 1, delay);
-                if (value == 2 || value > 3) amiga.configure(OPT_DISK_SWAP_DELAY, 2, delay);
-                if (value == 3 || value > 3) amiga.configure(OPT_DISK_SWAP_DELAY, 3, delay);
+                if (value == 0 || value > 3) emulator.set(OPT_DISK_SWAP_DELAY, delay, {0});
+                if (value == 1 || value > 3) emulator.set(OPT_DISK_SWAP_DELAY, delay, {1});
+                if (value == 2 || value > 3) emulator.set(OPT_DISK_SWAP_DELAY, delay, {2});
+                if (value == 3 || value > 3) emulator.set(OPT_DISK_SWAP_DELAY, delay, {3});
 
             }, i);
 
@@ -1377,10 +1377,10 @@ Interpreter::initCommandShell(Command &root)
 
                 long pan = parseNum(argv[0]);
 
-                if (value == 0 || value > 3) amiga.configure(OPT_DRIVE_PAN, 0, pan);
-                if (value == 1 || value > 3) amiga.configure(OPT_DRIVE_PAN, 1, pan);
-                if (value == 2 || value > 3) amiga.configure(OPT_DRIVE_PAN, 2, pan);
-                if (value == 3 || value > 3) amiga.configure(OPT_DRIVE_PAN, 3, pan);
+                if (value == 0 || value > 3) emulator.set(OPT_DRIVE_PAN, pan, {0});
+                if (value == 1 || value > 3) emulator.set(OPT_DRIVE_PAN, pan, {1});
+                if (value == 2 || value > 3) emulator.set(OPT_DRIVE_PAN, pan, {2});
+                if (value == 3 || value > 3) emulator.set(OPT_DRIVE_PAN, pan, {3});
 
             }, i);
 
@@ -1393,10 +1393,10 @@ Interpreter::initCommandShell(Command &root)
 
                 long volume = parseNum(argv[0]);
 
-                if (value == 0 || value > 3) amiga.configure(OPT_INSERT_VOLUME, 0, volume);
-                if (value == 1 || value > 3) amiga.configure(OPT_INSERT_VOLUME, 1, volume);
-                if (value == 2 || value > 3) amiga.configure(OPT_INSERT_VOLUME, 2, volume);
-                if (value == 3 || value > 3) amiga.configure(OPT_INSERT_VOLUME, 3, volume);
+                if (value == 0 || value > 3) emulator.set(OPT_INSERT_VOLUME, volume, {0});
+                if (value == 1 || value > 3) emulator.set(OPT_INSERT_VOLUME, volume, {1});
+                if (value == 2 || value > 3) emulator.set(OPT_INSERT_VOLUME, volume, {2});
+                if (value == 3 || value > 3) emulator.set(OPT_INSERT_VOLUME, volume, {3});
 
             }, i);
 
@@ -1406,10 +1406,10 @@ Interpreter::initCommandShell(Command &root)
 
                 long volume = parseNum(argv[0]);
 
-                if (value == 0 || value > 3) amiga.configure(OPT_EJECT_VOLUME, 0, volume);
-                if (value == 1 || value > 3) amiga.configure(OPT_EJECT_VOLUME, 1, volume);
-                if (value == 2 || value > 3) amiga.configure(OPT_EJECT_VOLUME, 2, volume);
-                if (value == 3 || value > 3) amiga.configure(OPT_EJECT_VOLUME, 3, volume);
+                if (value == 0 || value > 3) emulator.set(OPT_EJECT_VOLUME, volume, {0});
+                if (value == 1 || value > 3) emulator.set(OPT_EJECT_VOLUME, volume, {1});
+                if (value == 2 || value > 3) emulator.set(OPT_EJECT_VOLUME, volume, {2});
+                if (value == 3 || value > 3) emulator.set(OPT_EJECT_VOLUME, volume, {3});
 
             }, i);
 
@@ -1419,10 +1419,10 @@ Interpreter::initCommandShell(Command &root)
 
                 long volume = parseNum(argv[0]);
 
-                if (value == 0 || value > 3) amiga.configure(OPT_STEP_VOLUME, 0, volume);
-                if (value == 1 || value > 3) amiga.configure(OPT_STEP_VOLUME, 1, volume);
-                if (value == 2 || value > 3) amiga.configure(OPT_STEP_VOLUME, 2, volume);
-                if (value == 3 || value > 3) amiga.configure(OPT_STEP_VOLUME, 3, volume);
+                if (value == 0 || value > 3) emulator.set(OPT_STEP_VOLUME, volume, {0});
+                if (value == 1 || value > 3) emulator.set(OPT_STEP_VOLUME, volume, {1});
+                if (value == 2 || value > 3) emulator.set(OPT_STEP_VOLUME, volume, {2});
+                if (value == 3 || value > 3) emulator.set(OPT_STEP_VOLUME, volume, {3});
 
             }, i);
 
@@ -1432,10 +1432,10 @@ Interpreter::initCommandShell(Command &root)
 
                 long volume = parseNum(argv[0]);
 
-                if (value == 0 || value > 3) amiga.configure(OPT_POLL_VOLUME, 0, volume);
-                if (value == 1 || value > 3) amiga.configure(OPT_POLL_VOLUME, 1, volume);
-                if (value == 2 || value > 3) amiga.configure(OPT_POLL_VOLUME, 2, volume);
-                if (value == 3 || value > 3) amiga.configure(OPT_POLL_VOLUME, 3, volume);
+                if (value == 0 || value > 3) emulator.set(OPT_POLL_VOLUME, volume, {0});
+                if (value == 1 || value > 3) emulator.set(OPT_POLL_VOLUME, volume, {1});
+                if (value == 2 || value > 3) emulator.set(OPT_POLL_VOLUME, volume, {2});
+                if (value == 3 || value > 3) emulator.set(OPT_POLL_VOLUME, volume, {3});
 
             }, i);
         }
@@ -1466,7 +1466,7 @@ Interpreter::initCommandShell(Command &root)
                      "Connects the hard drive",
                      [this](Arguments& argv, long value) {
 
-                amiga.configure(OPT_HDC_CONNECT, value, true);
+                emulator.set(OPT_HDC_CONNECT, true, {value});
 
             }, i);
 
@@ -1474,7 +1474,7 @@ Interpreter::initCommandShell(Command &root)
                      "Disconnects the hard drive",
                      [this](Arguments& argv, long value) {
 
-                amiga.configure(OPT_HDC_CONNECT, value, false);
+                emulator.set(OPT_HDC_CONNECT, false, {value});
 
             }, i);
 
@@ -1489,10 +1489,10 @@ Interpreter::initCommandShell(Command &root)
 
             long pan = parseNum(argv[0]);
 
-            if (value == 0 || value > 3) amiga.configure(OPT_HDR_PAN, 0, pan);
-            if (value == 1 || value > 3) amiga.configure(OPT_HDR_PAN, 1, pan);
-            if (value == 2 || value > 3) amiga.configure(OPT_HDR_PAN, 2, pan);
-            if (value == 3 || value > 3) amiga.configure(OPT_HDR_PAN, 3, pan);
+            if (value == 0 || value > 3) emulator.set(OPT_HDR_PAN, pan, {0});
+            if (value == 1 || value > 3) emulator.set(OPT_HDR_PAN, pan, {1});
+            if (value == 2 || value > 3) emulator.set(OPT_HDR_PAN, pan, {2});
+            if (value == 3 || value > 3) emulator.set(OPT_HDR_PAN, pan, {3});
 
         }, i);
 
@@ -1505,10 +1505,10 @@ Interpreter::initCommandShell(Command &root)
 
             long volume = parseNum(argv[0]);
 
-            if (value == 0 || value > 3) amiga.configure(OPT_HDR_STEP_VOLUME, 0, volume);
-            if (value == 1 || value > 3) amiga.configure(OPT_HDR_STEP_VOLUME, 1, volume);
-            if (value == 2 || value > 3) amiga.configure(OPT_HDR_STEP_VOLUME, 2, volume);
-            if (value == 3 || value > 3) amiga.configure(OPT_HDR_STEP_VOLUME, 3, volume);
+            if (value == 0 || value > 3) emulator.set(OPT_HDR_STEP_VOLUME, volume, {0});
+            if (value == 1 || value > 3) emulator.set(OPT_HDR_STEP_VOLUME, volume, {1});
+            if (value == 2 || value > 3) emulator.set(OPT_HDR_STEP_VOLUME, volume, {2});
+            if (value == 3 || value > 3) emulator.set(OPT_HDR_STEP_VOLUME, volume, {3});
 
         }, i);
 
@@ -1559,14 +1559,14 @@ Interpreter::initCommandShell(Command &root)
              "Assigns the port number",
              [this](Arguments& argv, long value) {
 
-        remoteManager.serServer.setConfigItem(OPT_SRV_PORT, parseNum(argv[0]));
+        remoteManager.serServer.setOption(OPT_SRV_PORT, parseNum(argv[0]));
     });
 
     root.add({"server", "serial", "set", "verbose"}, { Arg::boolean },
              "Switches verbose mode on or off",
              [this](Arguments& argv, long value) {
 
-        remoteManager.rshServer.setConfigItem(OPT_SRV_VERBOSE, parseBool(argv[0]));
+        remoteManager.rshServer.setOption(OPT_SRV_VERBOSE, parseBool(argv[0]));
     });
 
     root.add({"server", "rshell"},
@@ -1607,14 +1607,14 @@ Interpreter::initCommandShell(Command &root)
              "Assigns the port number",
              [this](Arguments& argv, long value) {
 
-        remoteManager.rshServer.setConfigItem(OPT_SRV_PORT, parseNum(argv[0]));
+        remoteManager.rshServer.setOption(OPT_SRV_PORT, parseNum(argv[0]));
     });
 
     root.add({"server", "rshell", "set", "verbose"}, { Arg::boolean },
              "Switches verbose mode on or off",
              [this](Arguments& argv, long value) {
 
-        remoteManager.rshServer.setConfigItem(OPT_SRV_PORT, parseBool(argv[0]));
+        remoteManager.rshServer.setOption(OPT_SRV_PORT, parseBool(argv[0]));
     });
 
     root.add({"server", "gdb"},
@@ -1648,14 +1648,14 @@ Interpreter::initCommandShell(Command &root)
              "Assigns the port number",
              [this](Arguments& argv, long value) {
 
-        remoteManager.gdbServer.setConfigItem(OPT_SRV_PORT, parseNum(argv[0]));
+        remoteManager.gdbServer.setOption(OPT_SRV_PORT, parseNum(argv[0]));
     });
 
     root.add({"server", "gdb", "set", "verbose"}, { Arg::boolean },
              "Switches verbose mode on or off",
              [this](Arguments& argv, long value) {
 
-        remoteManager.gdbServer.setConfigItem(OPT_SRV_VERBOSE, parseBool(argv[0]));
+        remoteManager.gdbServer.setOption(OPT_SRV_VERBOSE, parseBool(argv[0]));
     });
 }
 

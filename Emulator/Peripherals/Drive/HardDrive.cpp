@@ -208,12 +208,12 @@ HardDrive::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option, nr));
+        setOption(option, defaults.get(option, nr));
     }
 }
 
 i64
-HardDrive::getConfigItem(Option option) const
+HardDrive::getOption(Option option) const
 {
     switch (option) {
             
@@ -227,7 +227,7 @@ HardDrive::getConfigItem(Option option) const
 }
 
 void
-HardDrive::setConfigItem(Option option, i64 value)
+HardDrive::setOption(Option option, i64 value)
 {
     switch (option) {
 
@@ -424,7 +424,7 @@ HardDrive::_dump(Category category, std::ostream& os) const
 bool
 HardDrive::isConnected() const
 {
-    return amiga.hdcon[nr]->getConfigItem(OPT_HDC_CONNECT);
+    return amiga.hdcon[nr]->getOption(OPT_HDC_CONNECT);
 }
 
 bool

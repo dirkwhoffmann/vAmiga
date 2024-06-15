@@ -96,6 +96,16 @@ Emulator::check(Option opt, i64 value, const std::vector<isize> objids)
     // Determine all option providers
     auto targets = routeOption(opt);
 
+    // Check the components
+    for(isize i = 0; i < isize(targets.size()); i++){
+
+        if (objids.empty() || std::find(objids.begin(), objids.end(), i) != objids.end()) {
+
+            debug(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptionEnum::key(opt), value, i);
+            targets.at(i)->checkOption(opt, value);
+        }
+    }
+    /*
     for (auto &id: objids) {
 
         debug(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptionEnum::key(opt), value, id);
@@ -103,8 +113,9 @@ Emulator::check(Option opt, i64 value, const std::vector<isize> objids)
             throw Error(ERROR_OPT_INV_ID, "0..." + std::to_string(targets.size() - 1));
         }
 
-        targets.at(id)->checkOption(id, value);
+        targets.at(id)->checkOption(opt, value);
     }
+    */
 }
 
 void
@@ -116,15 +127,25 @@ Emulator::set(Option opt, i64 value, const std::vector<isize> objids)
     // Determine all option providers
     auto targets = routeOption(opt);
 
+    // Configure the components
+    for(isize i = 0; i < isize(targets.size()); i++){
+
+        if (objids.empty() || std::find(objids.begin(), objids.end(), i) != objids.end()) {
+
+            debug(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptionEnum::key(opt), value, i);
+            targets.at(i)->setOption(opt, value);
+        }
+    }
+    /*
     for (auto &id: objids) {
 
-        debug(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptionEnum::key(opt), value, id);
         if (usize(id) >= targets.size()) {
             throw Error(ERROR_OPT_INV_ID, "0..." + std::to_string(targets.size() - 1));
         }
 
-        targets.at(id)->setOption(id, value);
+        targets.at(id)->setOption(opt, value);
     }
+    */
 }
 
 void 
@@ -137,6 +158,61 @@ void
 Emulator::set(const string &opt, const string &value, const std::vector<isize> objids)
 {
     set(Option(util::parseEnum<OptionEnum>(opt)), value, objids);
+}
+
+void
+Emulator::set(ConfigScheme scheme)
+{
+    assert_enum(ConfigScheme, scheme);
+
+    {   SUSPENDED
+
+        switch(scheme) {
+
+            case CONFIG_A1000_OCS_1MB:
+
+                set(OPT_CPU_REVISION, CPU_68000);
+                set(OPT_AGNUS_REVISION, AGNUS_OCS_OLD);
+                set(OPT_DENISE_REVISION, DENISE_OCS);
+                set(OPT_VIDEO_FORMAT, PAL);
+                set(OPT_CHIP_RAM, 512);
+                set(OPT_SLOW_RAM, 512);
+                break;
+
+            case CONFIG_A500_OCS_1MB:
+
+                set(OPT_CPU_REVISION, CPU_68000);
+                set(OPT_AGNUS_REVISION, AGNUS_OCS);
+                set(OPT_DENISE_REVISION, DENISE_OCS);
+                set(OPT_VIDEO_FORMAT, PAL);
+                set(OPT_CHIP_RAM, 512);
+                set(OPT_SLOW_RAM, 512);
+                break;
+
+            case CONFIG_A500_ECS_1MB:
+
+                set(OPT_CPU_REVISION, CPU_68000);
+                set(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
+                set(OPT_DENISE_REVISION, DENISE_OCS);
+                set(OPT_VIDEO_FORMAT, PAL);
+                set(OPT_CHIP_RAM, 512);
+                set(OPT_SLOW_RAM, 512);
+                break;
+
+            case CONFIG_A500_PLUS_1MB:
+
+                set(OPT_CPU_REVISION, CPU_68000);
+                set(OPT_AGNUS_REVISION, AGNUS_ECS_2MB);
+                set(OPT_DENISE_REVISION, DENISE_ECS);
+                set(OPT_VIDEO_FORMAT, PAL);
+                set(OPT_CHIP_RAM, 512);
+                set(OPT_SLOW_RAM, 512);
+                break;
+
+            default:
+                fatalError;
+        }
+    }
 }
 
 std::vector<const Configurable *>

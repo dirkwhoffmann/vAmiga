@@ -54,12 +54,12 @@ DiagBoard::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option));
+        setOption(option, defaults.get(option));
     }
 }
 
 i64
-DiagBoard::getConfigItem(Option option) const
+DiagBoard::getOption(Option option) const
 {
     switch (option) {
             
@@ -71,7 +71,7 @@ DiagBoard::getConfigItem(Option option) const
 }
 
 void
-DiagBoard::setConfigItem(Option option, i64 value)
+DiagBoard::setOption(Option option, i64 value)
 {
     switch (option) {
             

@@ -27,9 +27,6 @@ class RemoteManager : public SubComponent {
 
     ConfigOptions options = {
 
-        SERVER_SER,
-        SERVER_RSH,
-        SERVER_GDB
     };
 
 public:
@@ -89,10 +86,11 @@ public:
 
     const ConfigOptions &getOptions() const override { return options; }
 
+    /*
     i64 getConfigItem(Option option, long id) const;
-    void setConfigItem(Option option, i64 value);
+    void setOption(Option option, i64 value) override;
     void setConfigItem(Option option, long id, i64 value);
-
+    */
     
     //
     // Managing connections

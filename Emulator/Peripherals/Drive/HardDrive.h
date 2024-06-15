@@ -213,17 +213,16 @@ public:
 
     
     //
-    // Configuring
+    // Methods from Configurable
     //
-    
+
 public:
     
     const HardDriveConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
     void resetConfig() override;
-    
-    i64 getConfigItem(Option option) const;
-    void setConfigItem(Option option, i64 value);
+    i64 getOption(Option option) const override;
+    void setOption(Option option, i64 value) override;
     
 private:
     

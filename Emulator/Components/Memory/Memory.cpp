@@ -176,12 +176,12 @@ Memory::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option));
+        setOption(option, defaults.get(option));
     }
 }
 
 i64
-Memory::getConfigItem(Option option) const
+Memory::getOption(Option option) const
 {
     switch (option) {
             
@@ -201,7 +201,7 @@ Memory::getConfigItem(Option option) const
 }
 
 void
-Memory::setConfigItem(Option option, i64 value)
+Memory::setOption(Option option, i64 value)
 {
     switch (option) {
             

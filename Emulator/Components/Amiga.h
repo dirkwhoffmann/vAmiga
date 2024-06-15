@@ -271,7 +271,7 @@ public:
 
 
     //
-    // Configuring
+    // Methods from Configurable
     //
 
 public:
@@ -280,17 +280,12 @@ public:
     const ConfigOptions &getOptions() const override { return options; }
     void resetConfig() override;
 
-    // Gets a single configuration item
-    i64 getConfigItem(Option option) const;
-    i64 getConfigItem(Option option, long id) const;
-
-    // Sets a single configuration item
-    void setConfigItem(Option option, i64 value);
-    void configure(Option option, i64 value) throws;
-    void configure(Option option, long id, i64 value) throws;
-
-    // Configures the Amiga with a predefined set of options
-    void configure(ConfigScheme scheme);
+    i64 getOption(Option option) const override;
+    // i64 getConfigItem(Option option, long id) const;
+    void setOption(Option option, i64 value) override;
+    // [[deprecated]] void configure(Option option, i64 value) throws;
+    // [[deprecated]] void configure(Option option, long id, i64 value) throws;
+    // [[deprecated]] void configure(ConfigScheme scheme);
 
     // Reverts to factory settings
     void revertToFactorySettings();

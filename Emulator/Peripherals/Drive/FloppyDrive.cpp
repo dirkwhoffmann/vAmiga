@@ -79,12 +79,12 @@ FloppyDrive::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option, nr));
+        setOption(option, defaults.get(option, nr));
     }
 }
 
 i64
-FloppyDrive::getConfigItem(Option option) const
+FloppyDrive::getOption(Option option) const
 {
     switch (option) {
             
@@ -105,7 +105,7 @@ FloppyDrive::getConfigItem(Option option) const
 }
 
 void
-FloppyDrive::setConfigItem(Option option, i64 value)
+FloppyDrive::setOption(Option option, i64 value)
 {
     switch (option) {
 

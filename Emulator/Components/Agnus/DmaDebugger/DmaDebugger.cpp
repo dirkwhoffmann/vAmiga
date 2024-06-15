@@ -32,7 +32,7 @@ DmaDebugger::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option));
+        setOption(option, defaults.get(option));
     }
     
     std::vector <Option> moreOptions = {
@@ -56,12 +56,12 @@ DmaDebugger::resetConfig()
     };
 
     for (auto &option : moreOptions) {
-        setConfigItem(option, defaults.get(option));
+        setOption(option, defaults.get(option));
     }
 }
 
 i64
-DmaDebugger::getConfigItem(Option option) const
+DmaDebugger::getOption(Option option) const
 {
     switch (option) {
             
@@ -93,7 +93,7 @@ DmaDebugger::getConfigItem(Option option) const
 }
 
 void
-DmaDebugger::setConfigItem(Option option, i64 value)
+DmaDebugger::setOption(Option option, i64 value)
 {
     switch (option) {
 

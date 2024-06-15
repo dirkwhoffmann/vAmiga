@@ -323,6 +323,14 @@ VAmiga::get(Option option, long id) const
 }
 
 void
+VAmiga::set(ConfigScheme model)
+{
+    assert(isUserThread());
+    emu->set(model);
+    // emu->main.markAsDirty();
+}
+
+void
 VAmiga::set(Option opt, i64 value) throws
 {
     assert(isUserThread());

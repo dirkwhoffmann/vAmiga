@@ -16,7 +16,7 @@
 namespace vamiga {
 
 i64
-RTC::getConfigItem(Option option) const
+RTC::getOption(Option option) const
 {
     switch (option) {
             
@@ -28,7 +28,7 @@ RTC::getConfigItem(Option option) const
 }
 
 void
-RTC::setConfigItem(Option option, i64 value)
+RTC::setOption(Option option, i64 value)
 {
     switch (option) {
             
@@ -84,7 +84,7 @@ RTC::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option));
+        setOption(option, defaults.get(option));
     }
 }
 

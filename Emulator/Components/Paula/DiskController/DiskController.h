@@ -165,21 +165,21 @@ public:
 
 
     //
-    // Configuring
+    // Methods from Configurable
     //
-    
+
 public:
     
+    void resetConfig() override;
+
     const DiskControllerConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
-    void resetConfig() override;
-    
+    i64 getOption(Option option) const override;
+    void setOption(Option option, i64 value) override;
+
     bool turboMode() const { return config.speed == -1; }
 
-    i64 getConfigItem(Option option) const;    
-    void setConfigItem(Option option, i64 value);
 
-    
     //
     // Analyzing
     //

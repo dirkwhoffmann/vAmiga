@@ -78,12 +78,12 @@ CIA::resetConfig()
     };
     
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option));
+        setOption(option, defaults.get(option));
     }
 }
 
 i64
-CIA::getConfigItem(Option option) const
+CIA::getOption(Option option) const
 {
     switch (option) {
             
@@ -98,7 +98,7 @@ CIA::getConfigItem(Option option) const
 }
 
 void
-CIA::setConfigItem(Option option, i64 value)
+CIA::setOption(Option option, i64 value)
 {
     switch (option) {
             

@@ -27,7 +27,7 @@ RegressionTester::prepare(ConfigScheme scheme, string rom, string ext)
     
     // Initialize the emulator according to the specified scheme
     amiga.revertToFactorySettings();
-    amiga.configure(scheme);
+    emulator.set(scheme);
 
     // Load Kickstart Rom
     if (rom != "") amiga.mem.loadRom(rom.c_str());

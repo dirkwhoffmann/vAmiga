@@ -108,12 +108,12 @@ PixelEngine::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option));
+        setOption(option, defaults.get(option));
     }
 }
 
 i64
-PixelEngine::getConfigItem(Option option) const
+PixelEngine::getOption(Option option) const
 {
     switch (option) {
             
@@ -128,7 +128,7 @@ PixelEngine::getConfigItem(Option option) const
 }
 
 void
-PixelEngine::setConfigItem(Option option, i64 value)
+PixelEngine::setOption(Option option, i64 value)
 {
     switch (option) {
             

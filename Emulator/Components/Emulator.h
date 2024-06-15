@@ -90,7 +90,10 @@ public:
     void set(Option opt, const string &value, const std::vector<isize> objids = { }) throws;
     void set(const string &opt, const string &value, const std::vector<isize> objids = { }) throws;
 
-public: // private::
+    // Configures the emulator to match a specific Amiga model
+    void set(ConfigScheme model);
+
+public: // private
 
     // Returns the target component for an option
     std::vector<Configurable *> routeOption(Option opt);
@@ -163,7 +166,7 @@ private:
 
     // Processes a command from the command queue
     void process(const Cmd &cmd);
-    
+
 };
 
 }

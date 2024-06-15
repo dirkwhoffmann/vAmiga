@@ -94,12 +94,12 @@ HdController::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option, nr));
+        setOption(option, defaults.get(option, nr));
     }
 }
 
 i64
-HdController::getConfigItem(Option option) const
+HdController::getOption(Option option) const
 {
     switch (option) {
             
@@ -111,7 +111,7 @@ HdController::getConfigItem(Option option) const
 }
 
 void
-HdController::setConfigItem(Option option, i64 value)
+HdController::setOption(Option option, i64 value)
 {
     switch (option) {
 

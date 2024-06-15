@@ -160,17 +160,17 @@ public:
     
 
     //
-    // Configuring
+    // Methods from Configurable
     //
-    
+
 public:
     
     const CPUConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
+    i64 getOption(Option opt) const override;
+    void setOption(Option opt, i64 value) override;
+
     void resetConfig() override;
-    
-    i64 getConfigItem(Option option) const;
-    void setConfigItem(Option option, i64 value);
 
     
     //

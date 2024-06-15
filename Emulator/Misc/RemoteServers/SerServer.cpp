@@ -55,14 +55,14 @@ SerServer::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option, SERVER_SER));
+        setOption(option, defaults.get(option, SERVER_SER));
     }
 }
 
 bool
 SerServer::shouldRun()
 {
-    return serialPort.getConfigItem(OPT_SER_DEVICE) == SPD_NULLMODEM;
+    return serialPort.getOption(OPT_SER_DEVICE) == SPD_NULLMODEM;
 }
 
 string

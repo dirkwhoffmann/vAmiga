@@ -367,7 +367,10 @@ extension MyController {
                         
         case .CONFIG:
             inspector?.fullRefresh()
-            
+            monitor?.refresh()
+            configurator?.refresh()
+            refreshStatusBar()
+
         case .POWER:
 
             if value != 0 {

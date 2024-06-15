@@ -246,12 +246,12 @@ AudioFilter::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option));
+        setOption(option, defaults.get(option));
     }
 }
 
 i64
-AudioFilter::getConfigItem(Option option) const
+AudioFilter::getOption(Option option) const
 {
     switch (option) {
 
@@ -263,7 +263,7 @@ AudioFilter::getConfigItem(Option option) const
 }
 
 void
-AudioFilter::setConfigItem(Option option, i64 value)
+AudioFilter::setOption(Option option, i64 value)
 {
     switch (option) {
 

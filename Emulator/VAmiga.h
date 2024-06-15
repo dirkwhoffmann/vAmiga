@@ -453,6 +453,12 @@ public:
      */
     i64 get(Option option, long id) const throws;
 
+    /** Configures the emulator to match a specific Amiga model
+     *
+     *  @param model    The Amiga model to emulate
+     */
+    void set(ConfigScheme model);
+
     /** @brief  Configures a component.
      *
      *  This is the main function to set an configuration option.

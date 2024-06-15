@@ -131,12 +131,12 @@ Muxer::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option));
+        setOption(option, defaults.get(option));
     }
 }
 
 i64
-Muxer::getConfigItem(Option option) const
+Muxer::getOption(Option option) const
 {
     switch (option) {
             
@@ -152,7 +152,7 @@ Muxer::getConfigItem(Option option) const
         case OPT_AUDVOLL:           return config.volL;
         case OPT_AUDVOLR:           return config.volR;
         case OPT_AUD_FASTPATH:      return config.idleFastPath;
-        case OPT_FILTER_TYPE:       return filter.getConfigItem(option);
+        case OPT_FILTER_TYPE:       return filter.getOption(option);
 
         default:
             fatalError;
@@ -160,7 +160,7 @@ Muxer::getConfigItem(Option option) const
 }
 
 void
-Muxer::setConfigItem(Option option, i64 value)
+Muxer::setOption(Option option, i64 value)
 {
     bool wasMuted = isMuted();
     isize id = 0;
@@ -219,7 +219,7 @@ Muxer::setConfigItem(Option option, i64 value)
 
         case OPT_FILTER_TYPE:
 
-            filter.setConfigItem(option, value);
+            filter.setOption(option, value);
             return;
 
         default:

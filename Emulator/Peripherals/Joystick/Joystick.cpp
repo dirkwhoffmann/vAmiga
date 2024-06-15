@@ -44,12 +44,12 @@ Joystick::resetConfig()
     };
 
     for (auto &option : options) {
-        setConfigItem(option, defaults.get(option));
+        setOption(option, defaults.get(option));
     }
 }
 
 i64
-Joystick::getConfigItem(Option option) const
+Joystick::getOption(Option option) const
 {
     switch (option) {
             
@@ -63,7 +63,7 @@ Joystick::getConfigItem(Option option) const
 }
 
 void
-Joystick::setConfigItem(Option option, i64 value)
+Joystick::setOption(Option option, i64 value)
 {
     switch (option) {
             

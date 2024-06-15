@@ -848,7 +848,7 @@ Interpreter::initDebugShell(Command &root)
              "Attach or detach the debug expansion board",
              [this](Arguments& argv, long value) {
 
-        diagBoard.setConfigItem(OPT_DIAG_BOARD, parseBool(argv[0]));
+        diagBoard.setOption(OPT_DIAG_BOARD, parseBool(argv[0]));
     });
 
 
