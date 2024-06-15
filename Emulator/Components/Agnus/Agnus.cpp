@@ -106,7 +106,7 @@ Agnus::setConfigItem(Option option, i64 value)
                 throw Error(ERROR_OPT_LOCKED);
             }
             if (!AgnusRevisionEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INVARG, AgnusRevisionEnum::keyList());
+                throw Error(ERROR_OPT_INV_ARG, AgnusRevisionEnum::keyList());
             }
 
             switch (config.revision = (AgnusRevision)value) {

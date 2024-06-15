@@ -303,4 +303,18 @@ CoreComponent::trackOff()
     _trackOff();
 }
 
+void
+CoreComponent::focus()
+{
+    for (auto c : subComponents) { c->focus(); }
+    _focus();
+}
+
+void
+CoreComponent::unfocus()
+{
+    for (auto c : subComponents) { c->unfocus(); }
+    _unfocus();
+}
+
 }

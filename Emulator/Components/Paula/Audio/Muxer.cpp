@@ -170,7 +170,7 @@ Muxer::setConfigItem(Option option, i64 value)
         case OPT_SAMPLING_METHOD:
             
             if (!SamplingMethodEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INVARG, SamplingMethodEnum::keyList());
+                throw Error(ERROR_OPT_INV_ARG, SamplingMethodEnum::keyList());
             }
             
             config.samplingMethod = (SamplingMethod)value;

@@ -234,7 +234,7 @@ HardDrive::setConfigItem(Option option, i64 value)
         case OPT_HDR_TYPE:
             
             if (!HardDriveTypeEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INVARG, HardDriveTypeEnum::keyList());
+                throw Error(ERROR_OPT_INV_ARG, HardDriveTypeEnum::keyList());
             }
             config.type = (HardDriveType)value;
             return;

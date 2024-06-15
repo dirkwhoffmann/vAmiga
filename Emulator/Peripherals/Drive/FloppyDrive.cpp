@@ -124,7 +124,7 @@ FloppyDrive::setConfigItem(Option option, i64 value)
         case OPT_DRIVE_TYPE:
             
             if (!FloppyDriveTypeEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INVARG, FloppyDriveTypeEnum::keyList());
+                throw Error(ERROR_OPT_INV_ARG, FloppyDriveTypeEnum::keyList());
             }
             if (value != DRIVE_DD_35 && value != DRIVE_HD_35) {
                 throw Error(ERROR_OPT_UNSUPPORTED);
@@ -136,7 +136,7 @@ FloppyDrive::setConfigItem(Option option, i64 value)
         case OPT_DRIVE_MECHANICS:
 
             if (!DriveMechanicsEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INVARG, DriveMechanicsEnum::keyList());
+                throw Error(ERROR_OPT_INV_ARG, DriveMechanicsEnum::keyList());
             }
 
             config.mechanics = (DriveMechanics)value;

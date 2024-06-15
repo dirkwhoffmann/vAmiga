@@ -28,8 +28,17 @@ public:
     // The virtual Amiga
     Amiga main = Amiga(*this, 0);
 
+private:
+
+    // Initialization status
     bool initialized = false;
-    
+
+public:
+
+    // External event queue
+    CmdQueue cmdQueue;
+
+
     //
     // Methods
     //
@@ -68,9 +77,27 @@ private:
 
 public:
 
+    // Queries an option
+    i64 get(Option opt, isize id = 0) const throws;
+
+    // Checks an option
+    void check(Option opt, i64 value, const std::vector<isize> objids = { }) throws;
+
+    // Sets an option
+    void set(Option opt, i64 value, const std::vector<isize> objids = { }) throws;
+
+    // Convenience wrappers
+    void set(Option opt, const string &value, const std::vector<isize> objids = { }) throws;
+    void set(const string &opt, const string &value, const std::vector<isize> objids = { }) throws;
+
+public: // private::
+
     // Returns the target component for an option
     std::vector<Configurable *> routeOption(Option opt);
     std::vector<const Configurable *> routeOption(Option opt) const;
+
+    // Overrides a config option if the corresponding debug option is enabled
+    i64 overrideOption(Option opt, i64 value) const;
 
 
     //
@@ -120,7 +147,7 @@ public:
 
     u32 *getTexture() const;
     u32 *getDmaTexture() const;
-
+    */
 
     //
     // Command queue
@@ -136,8 +163,7 @@ private:
 
     // Processes a command from the command queue
     void process(const Cmd &cmd);
-
-    */
+    
 };
 
 }

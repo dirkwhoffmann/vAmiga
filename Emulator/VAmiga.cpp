@@ -308,4 +308,45 @@ VAmiga::launch(const void *listener, Callback *func)
     emu->launch(listener, func);
 }
 
+i64
+VAmiga::get(Option option) const
+{
+    assert(isUserThread());
+    return emu->get(option);
+}
+
+i64
+VAmiga::get(Option option, long id) const
+{
+    assert(isUserThread());
+    return emu->get(option, id);
+}
+
+void
+VAmiga::set(Option opt, i64 value) throws
+{
+    assert(isUserThread());
+
+    emu->check(opt, value);
+    put(CMD_CONFIG_ALL, ConfigCmd { .option = opt, .value = value });
+    // emu->main.markAsDirty();
+}
+
+void
+VAmiga::set(Option opt, i64 value, long id)
+{
+    assert(isUserThread());
+
+    emu->check(opt, value, { id });
+    put(CMD_CONFIG, ConfigCmd { .option = opt, .value = value, .id = id });
+    // emu->main.markAsDirty();
+}
+
+void
+VAmiga::put(const Cmd &cmd)
+{
+    assert(isUserThread());
+    emu->put(cmd);
+}
+
 }

@@ -12,4 +12,33 @@
 
 namespace vamiga {
 
+void
+CmdQueue::put(const Cmd &cmd)
+{
+    {   SYNCHRONIZED
+
+        if (!queue.isFull()) {
+            queue.write(cmd);
+        } else {
+            warn("Command lost: %s [%llx]\n", CmdTypeEnum::key(cmd.type), cmd.value);
+        }
+
+        empty = false;
+    }
+}
+
+bool
+CmdQueue::poll(Cmd &cmd)
+{
+    if (empty) return false;
+
+    {   SYNCHRONIZED
+
+        cmd = queue.read();
+        empty = queue.isEmpty();
+
+        return true;
+    }
+}
+
 }

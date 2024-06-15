@@ -43,10 +43,14 @@ Error::Error(ErrorCode code, const string &s)
             description = s == "" ? "This option is not supported yet." : s;
             break;
             
-        case ERROR_OPT_INVARG:
+        case ERROR_OPT_INV_ARG:
             description = "Invalid argument. Expected: " + s;
             break;
-            
+
+        case ERROR_OPT_INV_ID:
+            description = "Invalid component ID. Expected: " + s;
+            break;
+
         case ERROR_OPT_LOCKED:
             description = "This option is locked because the Amiga is powered on.";
             break;

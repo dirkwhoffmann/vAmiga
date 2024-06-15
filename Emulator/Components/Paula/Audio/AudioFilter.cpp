@@ -270,7 +270,7 @@ AudioFilter::setConfigItem(Option option, i64 value)
         case OPT_FILTER_TYPE:
 
             if (!FilterTypeEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INVARG, FilterTypeEnum::keyList());
+                throw Error(ERROR_OPT_INV_ARG, FilterTypeEnum::keyList());
             }
 
             config.filterType = (FilterType)value;

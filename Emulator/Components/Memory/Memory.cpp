@@ -211,7 +211,7 @@ Memory::setConfigItem(Option option, i64 value)
                 throw Error(ERROR_OPT_LOCKED);
             }
             if (value != 256 && value != 512 && value != 1024 && value != 2048) {
-                throw Error(ERROR_OPT_INVARG, "256, 512, 1024, 2048");
+                throw Error(ERROR_OPT_INV_ARG, "256, 512, 1024, 2048");
             }
             
             mem.allocChip((i32)KB(value));
@@ -223,7 +223,7 @@ Memory::setConfigItem(Option option, i64 value)
                 throw Error(ERROR_OPT_LOCKED);
             }
             if ((value % 256) != 0 || value > 1536) {
-                throw Error(ERROR_OPT_INVARG, "0, 256, 512, ..., 1536");
+                throw Error(ERROR_OPT_INV_ARG, "0, 256, 512, ..., 1536");
             }
 
             mem.allocSlow((i32)KB(value));
@@ -235,7 +235,7 @@ Memory::setConfigItem(Option option, i64 value)
                 throw Error(ERROR_OPT_LOCKED);
             }
             if ((value % 64) != 0 || value > 8192) {
-                throw Error(ERROR_OPT_INVARG, "0, 64, 128, ..., 8192");
+                throw Error(ERROR_OPT_INV_ARG, "0, 64, 128, ..., 8192");
             }
 
             mem.allocFast((i32)KB(value));
@@ -247,7 +247,7 @@ Memory::setConfigItem(Option option, i64 value)
                 throw Error(ERROR_OPT_LOCKED);
             }
             if (value != 0xE0 && value != 0xF0) {
-                throw Error(ERROR_OPT_INVARG, "E0, F0");
+                throw Error(ERROR_OPT_INV_ARG, "E0, F0");
             }
             
             config.extStart = (u32)value;
@@ -269,7 +269,7 @@ Memory::setConfigItem(Option option, i64 value)
         case OPT_BANKMAP:
         {
             if (!BankMapEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INVARG, BankMapEnum::keyList());
+                throw Error(ERROR_OPT_INV_ARG, BankMapEnum::keyList());
             }
             
             SUSPENDED
@@ -280,7 +280,7 @@ Memory::setConfigItem(Option option, i64 value)
         case OPT_UNMAPPING_TYPE:
         {
             if (!UnmappedMemoryEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INVARG, UnmappedMemoryEnum::keyList());
+                throw Error(ERROR_OPT_INV_ARG, UnmappedMemoryEnum::keyList());
             }
             
             SUSPENDED
@@ -290,7 +290,7 @@ Memory::setConfigItem(Option option, i64 value)
         case OPT_RAM_INIT_PATTERN:
 
             if (!RamInitPatternEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INVARG, RamInitPatternEnum::keyList());
+                throw Error(ERROR_OPT_INV_ARG, RamInitPatternEnum::keyList());
             }
 
         { SUSPENDED config.ramInitPattern = (RamInitPattern)value; }

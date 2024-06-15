@@ -135,7 +135,7 @@ PixelEngine::setConfigItem(Option option, i64 value)
         case OPT_PALETTE:
             
             if (!PaletteEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INVARG, PaletteEnum::keyList());
+                throw Error(ERROR_OPT_INV_ARG, PaletteEnum::keyList());
             }
             
             config.palette = (Palette)value;
@@ -145,7 +145,7 @@ PixelEngine::setConfigItem(Option option, i64 value)
         case OPT_BRIGHTNESS:
             
             if (value < 0 || value > 100) {
-                throw Error(ERROR_OPT_INVARG, "0...100");
+                throw Error(ERROR_OPT_INV_ARG, "0...100");
             }
             
             config.brightness = (isize)value;
@@ -155,7 +155,7 @@ PixelEngine::setConfigItem(Option option, i64 value)
         case OPT_CONTRAST:
 
             if (value < 0 || value > 100) {
-                throw Error(ERROR_OPT_INVARG, "0...100");
+                throw Error(ERROR_OPT_INV_ARG, "0...100");
             }
             
             config.contrast = (isize)value;
@@ -165,7 +165,7 @@ PixelEngine::setConfigItem(Option option, i64 value)
         case OPT_SATURATION:
 
             if (value < 0 || value > 100) {
-                throw Error(ERROR_OPT_INVARG, "0...100");
+                throw Error(ERROR_OPT_INV_ARG, "0...100");
             }
             
             config.saturation = (isize)value;

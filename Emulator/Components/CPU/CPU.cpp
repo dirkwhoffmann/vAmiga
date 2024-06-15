@@ -309,7 +309,7 @@ CPU::setConfigItem(Option option, i64 value)
         case OPT_CPU_REVISION:
 
             if (!CPURevisionEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INVARG, CPURevisionEnum::keyList());
+                throw Error(ERROR_OPT_INV_ARG, CPURevisionEnum::keyList());
             }
 
             suspend();
@@ -321,7 +321,7 @@ CPU::setConfigItem(Option option, i64 value)
         case OPT_CPU_DASM_REVISION:
 
             if (!DasmRevisionEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INVARG, DasmRevisionEnum::keyList());
+                throw Error(ERROR_OPT_INV_ARG, DasmRevisionEnum::keyList());
             }
 
             suspend();
@@ -333,7 +333,7 @@ CPU::setConfigItem(Option option, i64 value)
         case OPT_CPU_DASM_SYNTAX:
 
             if (!DasmSyntaxEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INVARG, DasmSyntaxEnum::keyList());
+                throw Error(ERROR_OPT_INV_ARG, DasmSyntaxEnum::keyList());
             }
 
             suspend();

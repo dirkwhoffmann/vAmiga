@@ -428,6 +428,74 @@ public:
      *  @param  func        The callback function.
      */
     void launch(const void *listener, Callback *func);
+
+    /** @brief  Queries a configuration option.
+     *
+     *  This is the main function to query a configuration option.
+     *
+     *  @param option   The option to query
+     *
+     *  @note Some options require an additional parameter to uniquely
+     *  determine the configured component. For those options, this function
+     *  must not be called.
+     */
+    i64 get(Option option) const;
+
+    /** @brief  Queries a configuration option.
+     *
+     *  This is the main function to query a configuration option.
+     *
+     *  @param option   The option to query
+     *  @param id       The component to query
+     *
+     *  @note This function must only be called for those options that require
+     *  an additional parameter to uniquely determine the configured component.
+     */
+    i64 get(Option option, long id) const throws;
+
+    /** @brief  Configures a component.
+     *
+     *  This is the main function to set an configuration option.
+     *
+     *  @param opt      The option to set
+     *  @param value    The option's value
+     *
+     *  @note If this function is called for an options that applies to multiple
+     *  components, all components are configured with the specified value.
+     */
+    void set(Option opt, i64 value) throws;
+
+    /** @brief  Configures a component.
+     *
+     *  This is the main function to set an configuration option.
+     *
+     *  @param opt      The option to set
+     *  @param id       The component to configure
+     *  @param value    The option's value
+     *
+     *  @note This function must only be called for those options that require
+     *  an additional parameter to uniquely determine the configured component.
+     */
+    void set(Option opt, i64 value, long id) throws;
+
+
+    /// @}
+    /// @name Using the command queue
+    /// @{
+
+    /** @brief  Feeds a command into the command queue.
+     */
+    void put(const Cmd &cmd);
+    void put(CmdType type, i64 payload = 0, i64 payload2 = 0) { put(Cmd(type, payload, payload2)); }
+    void put(CmdType type, ConfigCmd payload)  { put(Cmd(type, payload)); }
+    /*
+    void put(CmdType type, KeyCmd payload)  { put(Cmd(type, payload)); }
+    void put(CmdType type, CoordCmd payload)  { put(Cmd(type, payload)); }
+    void put(CmdType type, GamePadCmd payload)  { put(Cmd(type, payload)); }
+    void put(CmdType type, TapeCmd payload)  { put(Cmd(type, payload)); }
+    void put(CmdType type, AlarmCmd payload)  { put(Cmd(type, payload)); }
+    */
+    /// @}
 };
 
 }

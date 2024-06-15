@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "Emulator.h"
+#include "Option.h"
 #include "Amiga.h"
 #include "Aliases.h"
 
@@ -69,6 +70,75 @@ Emulator::_dump(Category category, std::ostream& os) const
 
 }
 
+void
+Emulator::put(const Cmd &cmd)
+{
+    cmdQueue.put(cmd);
+}
+
+i64
+Emulator::get(Option opt, isize id) const
+{
+    auto targets = routeOption(opt);
+    
+    if (usize(id) >= targets.size()) {
+        throw Error(ERROR_OPT_INV_ID, "0..." + std::to_string(targets.size() - 1));
+    }
+    return targets.at(id)->getOption(opt);
+}
+
+void
+Emulator::check(Option opt, i64 value, const std::vector<isize> objids)
+{
+    // Check if this option is overridden for debugging
+    value = overrideOption(opt, value);
+
+    // Determine all option providers
+    auto targets = routeOption(opt);
+
+    for (auto &id: objids) {
+
+        debug(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptionEnum::key(opt), value, id);
+        if (usize(id) >= targets.size()) {
+            throw Error(ERROR_OPT_INV_ID, "0..." + std::to_string(targets.size() - 1));
+        }
+
+        targets.at(id)->checkOption(id, value);
+    }
+}
+
+void
+Emulator::set(Option opt, i64 value, const std::vector<isize> objids)
+{
+    // Check if this option is overridden for debugging
+    value = overrideOption(opt, value);
+
+    // Determine all option providers
+    auto targets = routeOption(opt);
+
+    for (auto &id: objids) {
+
+        debug(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptionEnum::key(opt), value, id);
+        if (usize(id) >= targets.size()) {
+            throw Error(ERROR_OPT_INV_ID, "0..." + std::to_string(targets.size() - 1));
+        }
+
+        targets.at(id)->setOption(id, value);
+    }
+}
+
+void 
+Emulator::set(Option opt, const string &value, const std::vector<isize> objids)
+{
+    set(opt, OptionParser::parse(opt, value), objids);
+}
+
+void
+Emulator::set(const string &opt, const string &value, const std::vector<isize> objids)
+{
+    set(Option(util::parseEnum<OptionEnum>(opt)), value, objids);
+}
+
 std::vector<const Configurable *>
 Emulator::routeOption(Option opt) const
 {
@@ -93,10 +163,57 @@ Emulator::routeOption(Option opt)
     return result;
 }
 
+i64
+Emulator::overrideOption(Option opt, i64 value) const
+{
+    static std::map<Option,i64> overrides = OVERRIDES;
+
+    if (overrides.find(opt) != overrides.end()) {
+
+        msg("Overriding option: %s = %lld\n", OptionEnum::key(opt), value);
+        return overrides[opt];
+    }
+
+    return value;
+}
+
 void
 Emulator::update()
 {
+    Cmd cmd;
+    bool cmdConfig = false;
+    
     shouldWarp() ? warpOn() : warpOff();
+
+    while (cmdQueue.poll(cmd)) {
+
+        switch (cmd.type) {
+
+            case CMD_CONFIG:
+
+                cmdConfig = true;
+                set(cmd.config.option, cmd.config.value, { cmd.config.id });
+                break;
+
+            case CMD_CONFIG_ALL:
+
+                cmdConfig = true;
+                set(cmd.config.option, cmd.config.value, { });
+                break;
+
+            case CMD_FOCUS:
+
+                cmd.value ? main.focus() : main.unfocus();
+                break;
+
+            default:
+                fatal("Unhandled command: %s\n", CmdTypeEnum::key(cmd.type));
+        }
+    }
+
+    if (cmdConfig) {
+        main.msgQueue.put(MSG_CONFIG);
+    }
 }
 
 bool

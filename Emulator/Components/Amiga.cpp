@@ -394,7 +394,7 @@ Amiga::setConfigItem(Option option, i64 value)
         case OPT_VIDEO_FORMAT:
 
             if (!VideoFormatEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INVARG, VideoFormatEnum::keyList());
+                throw Error(ERROR_OPT_INV_ARG, VideoFormatEnum::keyList());
             }
 
             if (value != config.type) {
@@ -414,7 +414,7 @@ Amiga::setConfigItem(Option option, i64 value)
         case OPT_WARP_MODE:
 
             if (!WarpModeEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INVARG, WarpModeEnum::keyList());
+                throw Error(ERROR_OPT_INV_ARG, WarpModeEnum::keyList());
             }
 
             config.warpMode = WarpMode(value);
@@ -428,7 +428,7 @@ Amiga::setConfigItem(Option option, i64 value)
         case OPT_TIME_LAPSE:
 
             if (value < 50 || value > 200) {
-                throw Error(ERROR_OPT_INVARG, "50...200");
+                throw Error(ERROR_OPT_INV_ARG, "50...200");
             }
 
             config.timeLapse = isize(value);

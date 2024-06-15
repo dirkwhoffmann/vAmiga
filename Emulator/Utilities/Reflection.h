@@ -12,6 +12,7 @@
 #ifdef __cplusplus
 
 #include "Types.h"
+#include <functional>
 #include <map>
 
 namespace util {

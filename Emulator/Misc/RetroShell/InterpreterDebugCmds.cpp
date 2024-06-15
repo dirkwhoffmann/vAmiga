@@ -465,7 +465,7 @@ Interpreter::initDebugShell(Command &root)
             case 2: retroShell.dump(amiga.agnus.copper, Category::List2); break;
 
             default:
-                throw Error(ERROR_OPT_INVARG, "1 or 2");
+                throw Error(ERROR_OPT_INV_ARG, "1 or 2");
         }
     });
 
@@ -931,7 +931,7 @@ Interpreter::initDebugShell(Command &root)
         } else {
 
             auto nr = parseNum(argv[0]);
-            if (nr < 0 || nr > 255) throw Error(ERROR_OPT_INVARG, "0...255");
+            if (nr < 0 || nr > 255) throw Error(ERROR_OPT_INV_ARG, "0...255");
             cpu.setCatchpoint(u8(nr), parseNum(argv[1], 0));
         }
     });
@@ -941,7 +941,7 @@ Interpreter::initDebugShell(Command &root)
              [this](Arguments& argv, long value) {
 
         auto nr = parseNum(argv[0]);
-        if (nr < 0 || nr > 255) throw Error(ERROR_OPT_INVARG, "0...255");
+        if (nr < 0 || nr > 255) throw Error(ERROR_OPT_INV_ARG, "0...255");
         cpu.setCatchpoint(u8(nr), parseNum(argv[1], 0));
     });
 
@@ -950,7 +950,7 @@ Interpreter::initDebugShell(Command &root)
              [this](Arguments& argv, long value) {
 
         auto nr = parseNum(argv[0]);
-        if (nr < 1 || nr > 7) throw Error(ERROR_OPT_INVARG, "1...7");
+        if (nr < 1 || nr > 7) throw Error(ERROR_OPT_INV_ARG, "1...7");
         cpu.setCatchpoint(u8(nr + 24), parseNum(argv[1], 0));
     });
 
@@ -959,7 +959,7 @@ Interpreter::initDebugShell(Command &root)
              [this](Arguments& argv, long value) {
 
         auto nr = parseNum(argv[0]);
-        if (nr < 0 || nr > 15) throw Error(ERROR_OPT_INVARG, "0...15");
+        if (nr < 0 || nr > 15) throw Error(ERROR_OPT_INV_ARG, "0...15");
         cpu.setCatchpoint(u8(nr + 32));
     });
 

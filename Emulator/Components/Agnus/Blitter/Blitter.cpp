@@ -111,7 +111,7 @@ Blitter::setConfigItem(Option option, i64 value)
         case OPT_BLITTER_ACCURACY:
         {
             if (value < 0 || value > 2) {
-                throw Error(ERROR_OPT_INVARG, "0, 1, 2");
+                throw Error(ERROR_OPT_INV_ARG, "0, 1, 2");
             }
             
             SUSPENDED

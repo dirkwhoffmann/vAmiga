@@ -85,16 +85,16 @@ public:
     //
 
     void set(const string &key, const string &value);
-    void set(Option option, const string &value, std::vector <isize> objids = { 0 });
-    void set(Option option, i64 value, std::vector <isize> objids = { 0 });
+    void set(Option option, const string &value, std::vector<isize> objids = { 0 });
+    void set(Option option, i64 value, std::vector<isize> objids = { 0 });
 
     void setFallback(const string &key, const string &value);
-    void setFallback(Option option, const string &value, std::vector <isize> objids = { 0 });
-    void setFallback(Option option, i64 value, std::vector <isize> objids = { 0 });
+    void setFallback(Option option, const string &value, std::vector<isize> objids = { 0 });
+    void setFallback(Option option, i64 value, std::vector<isize> objids = { 0 });
 
     void remove();
     void remove(const string &key) throws;
-    void remove(Option option, std::vector <isize> objids = { 0 }) throws;
+    void remove(Option option, std::vector<isize> objids = { 0 }) throws;
 };
 
 }

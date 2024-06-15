@@ -25,8 +25,9 @@ enum_long(ERROR_CODE)
 
     // Configuration
     ERROR_OPT_UNSUPPORTED,
-    ERROR_OPT_INVARG,
-    ERROR_OPT_LOCKED,               // DEPRECATED: Replace by ERROR_POWERED_ON
+    ERROR_OPT_INV_ARG,
+    ERROR_OPT_INV_ID,
+    ERROR_OPT_LOCKED,
 
     // Property storage
     ERROR_INVALID_KEY,
@@ -215,7 +216,8 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_RUNNING:                     return "RUNNING";
 
             case ERROR_OPT_UNSUPPORTED:             return "OPT_UNSUPPORTED";
-            case ERROR_OPT_INVARG:                  return "OPT_INVARG";
+            case ERROR_OPT_INV_ARG:                 return "OPT_INV_ARG";
+            case ERROR_OPT_INV_ID:                  return "OPT_INV_ID";
             case ERROR_OPT_LOCKED:                  return "OPT_LOCKED";
                 
             case ERROR_INVALID_KEY:                 return "INVALID_KEY";
