@@ -52,6 +52,14 @@ class Muxer : public SubComponent {
     ConfigOptions options = {
 
         OPT_SAMPLING_METHOD,
+        OPT_AUDPAN0,
+        OPT_AUDPAN1,
+        OPT_AUDPAN2,
+        OPT_AUDPAN3,
+        OPT_AUDVOL0,
+        OPT_AUDVOL1,
+        OPT_AUDVOL2,
+        OPT_AUDVOL3,
         OPT_AUDVOLL,
         OPT_AUDVOLR,
         OPT_AUD_FASTPATH,
@@ -179,11 +187,8 @@ public:
     void resetConfig() override;
     
     i64 getConfigItem(Option option) const;
-    i64 getConfigItem(Option option, long id) const;
     void setConfigItem(Option option, i64 value);
-    void setConfigItem(Option option, long id, i64 value);
 
-    // double getSampleRate() const { return sampleRate; }
     void setSampleRate(double hz);
 
 

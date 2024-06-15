@@ -800,28 +800,28 @@ Interpreter::initCommandShell(Command &root)
              "Sets the volume for audio channel 0",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDVOL, 0, parseNum(argv[0]));
+        amiga.configure(OPT_AUDVOL0, parseNum(argv[0]));
     });
 
     root.add({"paula", "audio", "set", "volume", "channel1"}, { Arg::volume },
              "Sets the volume for audio channel 1",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDVOL, 1, parseNum(argv[0]));
+        amiga.configure(OPT_AUDVOL1, parseNum(argv[0]));
     });
 
     root.add({"paula", "audio", "set", "volume", "channel2"}, { Arg::volume },
              "Sets the volume for audio channel 2",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDVOL, 2, parseNum(argv[0]));
+        amiga.configure(OPT_AUDVOL2, parseNum(argv[0]));
     });
 
     root.add({"paula", "audio", "set", "volume", "channel3"}, { Arg::volume },
              "Sets the volume for audio channel 3",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDVOL, 3, parseNum(argv[0]));
+        amiga.configure(OPT_AUDVOL3, parseNum(argv[0]));
     });
 
     root.add({"paula", "audio", "set", "volume", "left"}, { Arg::volume },
@@ -845,28 +845,28 @@ Interpreter::initCommandShell(Command &root)
              "Sets the pan for audio channel 0",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDPAN, 0, parseNum(argv[0]));
+        amiga.configure(OPT_AUDPAN0, parseNum(argv[0]));
     });
 
     root.add({"paula", "audio", "set", "pan", "channel1"}, { Arg::value },
              "Sets the pan for audio channel 1",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDPAN, 1, parseNum(argv[0]));
+        amiga.configure(OPT_AUDPAN1, parseNum(argv[0]));
     });
 
     root.add({"paula", "audio", "set", "pan", "channel2"}, { Arg::value },
              "Sets the pan for audio channel 2",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDPAN, 2, parseNum(argv[0]));
+        amiga.configure(OPT_AUDPAN2, parseNum(argv[0]));
     });
 
     root.add({"paula", "audio", "set", "pan", "channel3"}, { Arg::value },
              "Sets the pan for audio channel 3",
              [this](Arguments& argv, long value) {
 
-        amiga.configure(OPT_AUDPAN, 3, parseNum(argv[0]));
+        amiga.configure(OPT_AUDPAN3, parseNum(argv[0]));
     });
 
     root.add({"paula", "audio", "set", "fastpath"}, { Arg::value },

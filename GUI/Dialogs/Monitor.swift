@@ -220,7 +220,7 @@ class Monitor: DialogController {
     
     @IBAction func colorAction(_ sender: NSColorWell!) {
         
-        let r = Int(sender.color.redComponent * 255)
+        let r = Int(sender.color.redComponent * 255.0)
         let g = Int(sender.color.greenComponent * 255.0)
         let b = Int(sender.color.blueComponent * 255.0)
         let rgb = (r << 24) | (g << 16) | (b << 8)

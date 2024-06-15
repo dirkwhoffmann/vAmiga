@@ -262,6 +262,14 @@ Amiga::getConfigItem(Option option) const
             return mem.getConfigItem(option);
 
         case OPT_SAMPLING_METHOD:
+        case OPT_AUDPAN0:
+        case OPT_AUDPAN1:
+        case OPT_AUDPAN2:
+        case OPT_AUDPAN3:
+        case OPT_AUDVOL0:
+        case OPT_AUDVOL1:
+        case OPT_AUDVOL2:
+        case OPT_AUDVOL3:
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
         case OPT_AUD_FASTPATH:
@@ -327,11 +335,6 @@ i64
 Amiga::getConfigItem(Option option, long id) const
 {
     switch (option) {
-
-        case OPT_AUDPAN:
-        case OPT_AUDVOL:
-
-            return paula.muxer.getConfigItem(option, id);
 
         case OPT_DRIVE_CONNECT:
 
@@ -461,8 +464,14 @@ Amiga::configure(Option option, i64 value)
         OPT_AUDVOLL,
         OPT_AUDVOLR,
         OPT_AUD_FASTPATH,
-        OPT_AUDPAN,
-        OPT_AUDVOL
+        OPT_AUDPAN0,
+        OPT_AUDPAN1,
+        OPT_AUDPAN2,
+        OPT_AUDPAN3,
+        OPT_AUDVOL0,
+        OPT_AUDVOL1,
+        OPT_AUDVOL2,
+        OPT_AUDVOL3
     };
 
     // Check if this option has been locked for debugging
@@ -578,20 +587,19 @@ Amiga::configure(Option option, i64 value)
 
         case OPT_SAMPLING_METHOD:
         case OPT_FILTER_TYPE:
+        case OPT_AUDPAN0:
+        case OPT_AUDPAN1:
+        case OPT_AUDPAN2:
+        case OPT_AUDPAN3:
+        case OPT_AUDVOL0:
+        case OPT_AUDVOL1:
+        case OPT_AUDVOL2:
+        case OPT_AUDVOL3:
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
         case OPT_AUD_FASTPATH:
 
             paula.muxer.setConfigItem(option, value);
-            break;
-
-        case OPT_AUDPAN:
-        case OPT_AUDVOL:
-
-            paula.muxer.setConfigItem(option, 0, value);
-            paula.muxer.setConfigItem(option, 1, value);
-            paula.muxer.setConfigItem(option, 2, value);
-            paula.muxer.setConfigItem(option, 3, value);
             break;
 
         case OPT_BLITTER_ACCURACY:
@@ -701,20 +709,10 @@ Amiga::configure(Option option, long id, i64 value)
         OPT_EJECT_VOLUME,
         OPT_HDR_PAN,
         OPT_HDR_STEP_VOLUME,
-        OPT_AUDVOLL,
-        OPT_AUDVOLR,
-        OPT_AUDPAN,
-        OPT_AUDVOL,
         OPT_MOUSE_VELOCITY
     };
 
     switch (option) {
-
-        case OPT_AUDPAN:
-        case OPT_AUDVOL:
-
-            paula.muxer.setConfigItem(option, id, value);
-            break;
 
         case OPT_DRIVE_CONNECT:
 

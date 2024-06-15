@@ -92,23 +92,6 @@ DmaDebugger::getConfigItem(Option option) const
     }
 }
 
-/*
-i64
-DmaDebugger::getConfigItem(Option option, long id) const
-{
-    assert(id >= 0 && id < BUS_COUNT);
-    
-    switch (option) {
-            
-        case OPT_DMA_DEBUG_CHANNEL: return config.visualize[id];
-        case OPT_DMA_DEBUG_COLOR:   return config.debugColor[id];
-
-        default:
-            fatalError;
-    }
-}
-*/
-
 void
 DmaDebugger::setConfigItem(Option option, i64 value)
 {
@@ -289,9 +272,6 @@ DmaDebugger::getInfo()
         getColor(DMA_CHANNEL_BITPLANE, result.bitplaneColor);
         getColor(DMA_CHANNEL_CPU, result.cpuColor);
         getColor(DMA_CHANNEL_REFRESH, result.refreshColor);
-
-        // REMOVE ASAP
-        printf("%f %f %f\n", result.copperColor[0], result.copperColor[1], result.copperColor[2]);
     }
 
     return result;

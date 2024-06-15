@@ -133,8 +133,14 @@ OptionParser::create(Option opt, i64 arg)
 
         case OPT_SAMPLING_METHOD:       return enumParser.template operator()<CIARevisionEnum>();
         case OPT_FILTER_TYPE:           return enumParser.template operator()<FilterTypeEnum>();
-        case OPT_AUDPAN:                return numParser();
-        case OPT_AUDVOL:                return numParser("%");
+        case OPT_AUDPAN0:               return numParser();
+        case OPT_AUDPAN1:               return numParser();
+        case OPT_AUDPAN2:               return numParser();
+        case OPT_AUDPAN3:               return numParser();
+        case OPT_AUDVOL0:               return numParser("%");
+        case OPT_AUDVOL1:               return numParser("%");
+        case OPT_AUDVOL2:               return numParser("%");
+        case OPT_AUDVOL3:               return numParser("%");
         case OPT_AUDVOLL:               return numParser("%");
         case OPT_AUDVOLR:               return numParser("%");
         case OPT_AUD_FASTPATH:          return boolParser();

@@ -124,9 +124,14 @@ Defaults::Defaults()
     setFallback(OPT_AUTOFIRE_DELAY, 125);
     setFallback(OPT_SAMPLING_METHOD, SMP_NONE);
     setFallback(OPT_FILTER_TYPE, FILTER_A500);
-    setFallback(OPT_AUDPAN, { 0, 3 }, 50);
-    setFallback(OPT_AUDPAN, { 1, 2 }, 350);
-    setFallback(OPT_AUDVOL, { 0, 1, 2, 3 }, 100);
+    setFallback(OPT_AUDPAN0, 50);
+    setFallback(OPT_AUDPAN1, 350);
+    setFallback(OPT_AUDPAN2, 350);
+    setFallback(OPT_AUDPAN3, 50);
+    setFallback(OPT_AUDVOL0, 100);
+    setFallback(OPT_AUDVOL1, 100);
+    setFallback(OPT_AUDVOL2, 100);
+    setFallback(OPT_AUDVOL3, 100);
     setFallback(OPT_AUDVOLL, 50);
     setFallback(OPT_AUDVOLR, 50);
     setFallback(OPT_AUD_FASTPATH, true);

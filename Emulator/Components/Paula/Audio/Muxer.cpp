@@ -117,6 +117,14 @@ Muxer::resetConfig()
     std::vector <Option> options = {
         
         OPT_SAMPLING_METHOD,
+        OPT_AUDPAN0,
+        OPT_AUDPAN1,
+        OPT_AUDPAN2,
+        OPT_AUDPAN3,
+        OPT_AUDVOL0,
+        OPT_AUDVOL1,
+        OPT_AUDVOL2,
+        OPT_AUDVOL3,
         OPT_AUDVOLL,
         OPT_AUDVOLR,
         OPT_AUD_FASTPATH
@@ -125,18 +133,6 @@ Muxer::resetConfig()
     for (auto &option : options) {
         setConfigItem(option, defaults.get(option));
     }
-    
-    std::vector <Option> moreOptions = {
-        
-        OPT_AUDVOL,
-        OPT_AUDPAN,
-    };
-
-    for (auto &option : moreOptions) {
-        for (isize i = 0; i < 4; i++) {
-            setConfigItem(option, i, defaults.get(option, i));
-        }
-    }
 }
 
 i64
@@ -144,36 +140,19 @@ Muxer::getConfigItem(Option option) const
 {
     switch (option) {
             
-        case OPT_SAMPLING_METHOD:
-            return config.samplingMethod;
-            
-        case OPT_AUDVOLL:
-            return config.volL;
-
-        case OPT_AUDVOLR:
-            return config.volR;
-
-        case OPT_AUD_FASTPATH:
-            return config.idleFastPath;
-
-        case OPT_FILTER_TYPE:
-            return filter.getConfigItem(option);
-
-        default:
-            fatalError;
-    }
-}
-
-i64
-Muxer::getConfigItem(Option option, long id) const
-{
-    switch (option) {
-            
-        case OPT_AUDVOL:
-            return config.vol[id];
-
-        case OPT_AUDPAN:
-            return config.pan[id];
+        case OPT_SAMPLING_METHOD:   return config.samplingMethod;
+        case OPT_AUDPAN0:           return config.pan[0];
+        case OPT_AUDPAN1:           return config.pan[1];
+        case OPT_AUDPAN2:           return config.pan[2];
+        case OPT_AUDPAN3:           return config.pan[3];
+        case OPT_AUDVOL0:           return config.vol[0];
+        case OPT_AUDVOL1:           return config.vol[1];
+        case OPT_AUDVOL2:           return config.vol[2];
+        case OPT_AUDVOL3:           return config.vol[3];
+        case OPT_AUDVOLL:           return config.volL;
+        case OPT_AUDVOLR:           return config.volR;
+        case OPT_AUD_FASTPATH:      return config.idleFastPath;
+        case OPT_FILTER_TYPE:       return filter.getConfigItem(option);
 
         default:
             fatalError;
@@ -184,7 +163,8 @@ void
 Muxer::setConfigItem(Option option, i64 value)
 {
     bool wasMuted = isMuted();
-    
+    isize id = 0;
+
     switch (option) {
             
         case OPT_SAMPLING_METHOD:
@@ -196,6 +176,15 @@ Muxer::setConfigItem(Option option, i64 value)
             config.samplingMethod = (SamplingMethod)value;
             return;
             
+        case OPT_AUDVOL3: id++;
+        case OPT_AUDVOL2: id++;
+        case OPT_AUDVOL1: id++;
+        case OPT_AUDVOL0:
+
+            config.vol[id] = std::clamp(value, 0LL, 100LL);
+            vol[id] = powf((float)value / 100, 1.4f);
+            return;
+
         case OPT_AUDVOLL:
             
             config.volL = std::clamp(value, 0LL, 100LL);
@@ -205,6 +194,15 @@ Muxer::setConfigItem(Option option, i64 value)
                 msgQueue.put(MSG_MUTE, isMuted());
             return;
             
+        case OPT_AUDPAN3: id++;
+        case OPT_AUDPAN2: id++;
+        case OPT_AUDPAN1: id++;
+        case OPT_AUDPAN0:
+
+            config.pan[id] = value;
+            pan[id] = float(0.5 * (sin(config.pan[id] * M_PI / 200.0) + 1));
+            return;
+
         case OPT_AUDVOLR:
 
             config.volR = std::clamp(value, 0LL, 100LL);
@@ -222,32 +220,6 @@ Muxer::setConfigItem(Option option, i64 value)
         case OPT_FILTER_TYPE:
 
             filter.setConfigItem(option, value);
-            return;
-
-        default:
-            fatalError;
-    }
-}
-
-void
-Muxer::setConfigItem(Option option, long id, i64 value)
-{
-    switch (option) {
-
-        case OPT_AUDVOL:
-
-            assert(id >= 0 && id <= 3);
-
-            config.vol[id] = std::clamp(value, 0LL, 100LL);
-            vol[id] = powf((float)value / 100, 1.4f);
-            return;
-            
-        case OPT_AUDPAN:
-
-            assert(id >= 0 && id <= 3);
-
-            config.pan[id] = value;
-            pan[id] = float(0.5 * (sin(config.pan[id] * M_PI / 200.0) + 1));
             return;
 
         default:

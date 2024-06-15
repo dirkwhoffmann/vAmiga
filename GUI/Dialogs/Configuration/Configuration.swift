@@ -364,36 +364,36 @@ class Configuration {
     //
 
     var vol0: Int {
-        get { return amiga.getConfig(.AUDVOL, id: 0) }
-        set { amiga.configure(.AUDVOL, id: 0, value: newValue) }
+        get { return amiga.getConfig(.AUDVOL0) }
+        set { amiga.configure(.AUDVOL0, value: newValue) }
     }
     var vol1: Int {
-        get { return amiga.getConfig(.AUDVOL, id: 1) }
-        set { amiga.configure(.AUDVOL, id: 1, value: newValue) }
+        get { return amiga.getConfig(.AUDVOL1) }
+        set { amiga.configure(.AUDVOL1, value: newValue) }
     }
     var vol2: Int {
-        get { return amiga.getConfig(.AUDVOL, id: 2) }
-        set { amiga.configure(.AUDVOL, id: 2, value: newValue) }
+        get { return amiga.getConfig(.AUDVOL2) }
+        set { amiga.configure(.AUDVOL2, value: newValue) }
     }
     var vol3: Int {
-        get { return amiga.getConfig(.AUDVOL, id: 3) }
-        set { amiga.configure(.AUDVOL, id: 3, value: newValue) }
+        get { return amiga.getConfig(.AUDVOL3) }
+        set { amiga.configure(.AUDVOL3, value: newValue) }
     }
     var pan0: Int {
-        get { return amiga.getConfig(.AUDPAN, id: 0) }
-        set { amiga.configure(.AUDPAN, id: 0, value: newValue) }
+        get { return amiga.getConfig(.AUDPAN0) }
+        set { amiga.configure(.AUDPAN0, value: newValue) }
     }
     var pan1: Int {
-        get { return amiga.getConfig(.AUDPAN, id: 1) }
-        set { amiga.configure(.AUDPAN, id: 1, value: newValue) }
+        get { return amiga.getConfig(.AUDPAN1) }
+        set { amiga.configure(.AUDPAN1, value: newValue) }
     }
     var pan2: Int {
-        get { return amiga.getConfig(.AUDPAN, id: 2) }
-        set { amiga.configure(.AUDPAN, id: 2, value: newValue) }
+        get { return amiga.getConfig(.AUDPAN2) }
+        set { amiga.configure(.AUDPAN2, value: newValue) }
     }
     var pan3: Int {
-        get { return amiga.getConfig(.AUDPAN, id: 3) }
-        set { amiga.configure(.AUDPAN, id: 3, value: newValue) }
+        get { return amiga.getConfig(.AUDPAN3) }
+        set { amiga.configure(.AUDPAN3, value: newValue) }
     }
     var volL: Int {
         get { return amiga.getConfig(.AUDVOLL) }
