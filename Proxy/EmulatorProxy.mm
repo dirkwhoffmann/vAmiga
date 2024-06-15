@@ -119,7 +119,7 @@ using namespace vamiga::moira;
 
 - (NSInteger)getInt:(NSString *)key
 {
-    return [self props]->getInt([key UTF8String]);
+    return [self props]->get([key UTF8String]);
 }
 
 - (NSInteger)getOpt:(Option)option
@@ -144,7 +144,7 @@ using namespace vamiga::moira;
 
 - (void)setOpt:(Option)option nr:(NSInteger)nr value:(NSInteger)value
 {
-    [self props]->set(option, value, nr);
+    [self props]->set(option, value, { nr });
 }
 
 - (void)removeAll
@@ -164,7 +164,7 @@ using namespace vamiga::moira;
 
 - (void)remove:(Option) option nr:(NSInteger)nr
 {
-    [self props]->remove(option, nr);
+    [self props]->remove(option, { nr });
 }
 
 @end

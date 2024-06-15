@@ -80,7 +80,7 @@ Defaults::Defaults()
     setFallback(OPT_BANKMAP,            BANK_MAP_A500);
     setFallback(OPT_UNMAPPING_TYPE,     RAM_INIT_ALL_ZEROES);
     setFallback(OPT_RAM_INIT_PATTERN,   UNMAPPED_FLOATING);
-    setFallback(OPT_DRIVE_CONNECT,      true,                   0);
+    setFallback(OPT_DRIVE_CONNECT,      true,                   { 0 });
     setFallback(OPT_DRIVE_CONNECT,      false,                  { 1, 2, 3 });
     setFallback(OPT_DRIVE_SPEED,        1);
     setFallback(OPT_LOCK_DSKSYNC,       false);
@@ -95,7 +95,7 @@ Defaults::Defaults()
     setFallback(OPT_POLL_VOLUME,        0,                      { 0, 1, 2, 3 });
     setFallback(OPT_INSERT_VOLUME,      50,                     { 0, 1, 2, 3 });
     setFallback(OPT_EJECT_VOLUME,       50,                     { 0, 1, 2, 3 });
-    setFallback(OPT_HDC_CONNECT,        true,                   0);
+    setFallback(OPT_HDC_CONNECT,        true,                   { 0 });
     setFallback(OPT_HDC_CONNECT,        false,                  { 1, 2, 3 });
     setFallback(OPT_HDR_TYPE,           HDR_GENERIC,            { 0, 1, 2, 3 });
     setFallback(OPT_HDR_PAN,            300,                    { 0, 2 });
@@ -136,18 +136,18 @@ Defaults::Defaults()
     setFallback(OPT_AUDVOLR,            50);
     setFallback(OPT_AUD_FASTPATH,       true);
     setFallback(OPT_DIAG_BOARD,         false);
-    setFallback(OPT_SRV_PORT,           8080,                   SERVER_SER);
-    setFallback(OPT_SRV_PROTOCOL,       SRVPROT_DEFAULT,        SERVER_SER);
-    setFallback(OPT_SRV_AUTORUN,        true,                   SERVER_SER);
-    setFallback(OPT_SRV_VERBOSE,        true,                   SERVER_SER);
-    setFallback(OPT_SRV_PORT,           8081,                   SERVER_RSH);
-    setFallback(OPT_SRV_PROTOCOL,       SRVPROT_DEFAULT,        SERVER_RSH);
-    setFallback(OPT_SRV_AUTORUN,        false,                  SERVER_RSH);
-    setFallback(OPT_SRV_VERBOSE,        true,                   SERVER_RSH);
-    setFallback(OPT_SRV_PORT,           8082,                   SERVER_GDB);
-    setFallback(OPT_SRV_PROTOCOL,       SRVPROT_DEFAULT,        SERVER_GDB);
-    setFallback(OPT_SRV_AUTORUN,        true,                   SERVER_GDB);
-    setFallback(OPT_SRV_VERBOSE,        true,                   SERVER_GDB);
+    setFallback(OPT_SRV_PORT,           8080,                   { SERVER_SER });
+    setFallback(OPT_SRV_PROTOCOL,       SRVPROT_DEFAULT,        { SERVER_SER });
+    setFallback(OPT_SRV_AUTORUN,        true,                   { SERVER_SER });
+    setFallback(OPT_SRV_VERBOSE,        true,                   { SERVER_SER });
+    setFallback(OPT_SRV_PORT,           8081,                   { SERVER_RSH });
+    setFallback(OPT_SRV_PROTOCOL,       SRVPROT_DEFAULT,        { SERVER_RSH });
+    setFallback(OPT_SRV_AUTORUN,        false,                  { SERVER_RSH });
+    setFallback(OPT_SRV_VERBOSE,        true,                   { SERVER_RSH });
+    setFallback(OPT_SRV_PORT,           8082,                   { SERVER_GDB });
+    setFallback(OPT_SRV_PROTOCOL,       SRVPROT_DEFAULT,        { SERVER_GDB });
+    setFallback(OPT_SRV_AUTORUN,        true,                   { SERVER_GDB });
+    setFallback(OPT_SRV_VERBOSE,        true,                   { SERVER_GDB });
 
     setFallback("ROM_PATH",             "");
     setFallback("EXT_PATH",             "");
@@ -351,7 +351,7 @@ Defaults::getRaw(const string &key) const
 }
 
 i64
-Defaults::getInt(const string &key) const
+Defaults::get(const string &key) const
 {
     auto value = getRaw(key);
     i64 result = 0;
@@ -370,15 +370,9 @@ Defaults::getInt(const string &key) const
 }
 
 i64
-Defaults::get(Option option) const
+Defaults::get(Option option, isize objid) const
 {
-    return getInt(string(OptionEnum::key(option)));
-}
-
-i64
-Defaults::get(Option option, isize nr) const
-{
-    return getInt(string(OptionEnum::key(option)) + std::to_string(nr));
+    return get(string(OptionEnum::key(option)) + (objid ? std::to_string(objid) : ""));
 }
 
 string
@@ -392,7 +386,7 @@ Defaults::getFallbackRaw(const string &key) const
 }
 
 i64
-Defaults::getFallbackInt(const string &key) const
+Defaults::getFallback(const string &key) const
 {
     auto value = getFallbackRaw(key);
     i64 result = 0;
@@ -410,15 +404,9 @@ Defaults::getFallbackInt(const string &key) const
 }
 
 i64
-Defaults::getFallback(Option option) const
-{
-    return getFallbackInt(string(OptionEnum::key(option)));
-}
-
-i64
 Defaults::getFallback(Option option, isize nr) const
 {
-    return getFallbackInt(string(OptionEnum::key(option)) + (nr ? std::to_string(nr) : ""));
+    return getFallback(string(OptionEnum::key(option)) + (nr ? std::to_string(nr) : ""));
 }
 
 void
@@ -440,27 +428,19 @@ Defaults::set(const string &key, const string &value)
 }
 
 void
-Defaults::set(Option option, i64 value)
+Defaults::set(Option option, const string &value, std::vector <isize> objids)
 {
     auto key = string(OptionEnum::key(option));
-    auto val = std::to_string(value);
-    
-    set(key, val);
-}
 
-void
-Defaults::set(Option option, i64 value, isize objid)
-{
-    auto key = string(OptionEnum::key(option)) + std::to_string(objid);
-    auto val = std::to_string(value);
-
-    set(key, val);
+    for (auto &nr : objids) {
+        set(key + (nr ? std::to_string(nr) : ""), value);
+    }
 }
 
 void
 Defaults::set(Option option, i64 value, std::vector <isize> objids)
 {
-    for (auto &nr : objids) set(option, value, nr);
+    set(option, std::to_string(value), objids);
 }
 
 void
@@ -475,33 +455,13 @@ Defaults::setFallback(const string &key, const string &value)
 }
 
 void
-Defaults::setFallback(Option option, const string &value)
-{
-    setFallback(string(OptionEnum::key(option)), value);
-}
-
-void
-Defaults::setFallback(Option option, i64 value)
-{
-    setFallback(option, std::to_string(value));
-}
-
-void
-Defaults::setFallback(Option option, const string &value, isize objid)
-{
-    setFallback(string(OptionEnum::key(option)) + std::to_string(objid), value);
-}
-
-void
-Defaults::setFallback(Option option, i64 value, isize objid)
-{
-    setFallback(option, std::to_string(value), objid);
-}
-
-void
 Defaults::setFallback(Option option, const string &value, std::vector <isize> objids)
 {
-    for (auto &nr : objids) setFallback(option, value, nr);
+    auto key = string(OptionEnum::key(option));
+
+    for (auto &nr : objids) {
+        setFallback(key + (nr ? std::to_string(nr) : ""), value);
+    }
 }
 
 void
@@ -534,21 +494,13 @@ Defaults::remove(const string &key)
 }
 
 void
-Defaults::remove(Option option)
+Defaults::remove(Option option, std::vector <isize> objids)
 {
-    remove(string(OptionEnum::key(option)));
-}
+    auto key = string(OptionEnum::key(option));
 
-void
-Defaults::remove(Option option, isize nr)
-{
-    remove(string(OptionEnum::key(option)) + std::to_string(nr));
-}
-
-void
-Defaults::remove(Option option, std::vector <isize> nrs)
-{
-    for (auto &nr : nrs) remove(option, nr);
+    for (auto &nr : objids) {
+        remove(key + (nr ? std::to_string(nr) : ""));
+    }
 }
 
 }
