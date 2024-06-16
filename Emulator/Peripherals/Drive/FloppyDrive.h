@@ -271,7 +271,7 @@ public:
     //
     
     // Returns true if the drive is currently selected
-    bool isSelected() const { return (prb & (0b1000 << nr)) == 0; }
+    bool isSelected() const { return (prb & (0b1000 << objid)) == 0; }
     
     u8 driveStatusFlags() const;
     

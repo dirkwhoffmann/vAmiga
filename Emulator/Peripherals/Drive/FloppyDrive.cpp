@@ -31,10 +31,10 @@ FloppyDrive::_initialize()
 
     string path;
 
-    if (nr == 0) path = INITIAL_DF0;
-    if (nr == 1) path = INITIAL_DF1;
-    if (nr == 2) path = INITIAL_DF2;
-    if (nr == 3) path = INITIAL_DF3;
+    if (objid == 0) path = INITIAL_DF0;
+    if (objid == 1) path = INITIAL_DF1;
+    if (objid == 2) path = INITIAL_DF2;
+    if (objid == 3) path = INITIAL_DF3;
 
     if (path != "") {
 
@@ -176,7 +176,7 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
     if (category == Category::Config) {
         
         os << tab("Nr");
-        os << dec(nr) << std::endl;
+        os << dec(objid) << std::endl;
         os << tab("Connected");
         os << bol(config.connected) << std::endl;
         os << tab("Type");
@@ -218,7 +218,7 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
     if (category == Category::State) {
         
         os << tab("Nr");
-        os << dec(nr) << std::endl;
+        os << dec(objid) << std::endl;
         os << tab("dskchange");
         os << dec(dskchange) << std::endl;
         os << tab("dsklen");
@@ -408,7 +408,7 @@ FloppyDrive::setProtectionFlag(bool value)
 u32
 FloppyDrive::getDriveId() const
 {
-    if (nr > 0) {
+    if (objid > 0) {
         
         // External floopy drives identify themselve as follows:
         //
@@ -599,8 +599,8 @@ FloppyDrive::setMotor(bool value)
     idCount = 0;
     
     // Inform the GUI
-    msgQueue.put(MSG_DRIVE_LED, DriveMsg { i16(nr), value, 0, 0 });
-    msgQueue.put(MSG_DRIVE_MOTOR, DriveMsg { i16(nr), value, 0, 0 });
+    msgQueue.put(MSG_DRIVE_LED, DriveMsg { i16(objid), value, 0, 0 });
+    msgQueue.put(MSG_DRIVE_MOTOR, DriveMsg { i16(objid), value, 0, 0 });
 
     debug(DSK_DEBUG, "Motor %s [%d]\n", motor ? "on" : "off", idCount);
 }
@@ -812,13 +812,13 @@ FloppyDrive::step(isize dir)
     if (pollsForDisk()) {
         
         msgQueue.put(MSG_DRIVE_POLL, DriveMsg {
-            i16(nr), i16(head.cylinder), config.pollVolume, config.pan
+            i16(objid), i16(head.cylinder), config.pollVolume, config.pan
         });
         
     } else {
 
         msgQueue.put(MSG_DRIVE_STEP, DriveMsg {
-            i16(nr), i16(head.cylinder), config.stepVolume, config.pan
+            i16(objid), i16(head.cylinder), config.stepVolume, config.pan
         });
     }
 }
@@ -917,10 +917,10 @@ FloppyDrive::ejectDisk(Cycle delay)
 {
     debug(DSK_DEBUG, "ejectDisk(%lld)\n", delay);
     
-    if (nr == 0) ejectDisk <SLOT_DC0> (delay);
-    if (nr == 1) ejectDisk <SLOT_DC1> (delay);
-    if (nr == 2) ejectDisk <SLOT_DC2> (delay);
-    if (nr == 3) ejectDisk <SLOT_DC3> (delay);
+    if (objid == 0) ejectDisk <SLOT_DC0> (delay);
+    if (objid == 1) ejectDisk <SLOT_DC1> (delay);
+    if (objid == 2) ejectDisk <SLOT_DC2> (delay);
+    if (objid == 3) ejectDisk <SLOT_DC3> (delay);
 }
 
 template <EventSlot s> void
@@ -991,10 +991,10 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
 {
     debug(DSK_DEBUG, "insertDisk(%lld)\n", delay);
     
-    if (nr == 0) insertDisk <SLOT_DC0> (std::move(disk), delay);
-    if (nr == 1) insertDisk <SLOT_DC1> (std::move(disk), delay);
-    if (nr == 2) insertDisk <SLOT_DC2> (std::move(disk), delay);
-    if (nr == 3) insertDisk <SLOT_DC3> (std::move(disk), delay);
+    if (objid == 0) insertDisk <SLOT_DC0> (std::move(disk), delay);
+    if (objid == 1) insertDisk <SLOT_DC1> (std::move(disk), delay);
+    if (objid == 2) insertDisk <SLOT_DC2> (std::move(disk), delay);
+    if (objid == 3) insertDisk <SLOT_DC3> (std::move(disk), delay);
 }
 
 void
@@ -1082,10 +1082,10 @@ FloppyDrive::serviceDiskChangeEvent()
             
             // Notify the GUI
             msgQueue.put(MSG_DISK_EJECT,
-                         DriveMsg { i16(nr), 0, config.ejectVolume, config.pan });
+                         DriveMsg { i16(objid), 0, config.ejectVolume, config.pan });
             /*
             msgQueue.put(MSG_DISK_EJECT,
-                         i16(nr), 0, config.ejectVolume, config.pan);
+                         i16(objid), 0, config.ejectVolume, config.pan);
              */
         }
     }
@@ -1103,7 +1103,7 @@ FloppyDrive::serviceDiskChangeEvent()
             
             // Notify the GUI
             msgQueue.put(MSG_DISK_INSERT, DriveMsg {
-                i16(nr), 0, config.insertVolume, config.pan
+                i16(objid), 0, config.insertVolume, config.pan
             });
         }
     }
@@ -1120,11 +1120,11 @@ FloppyDrive::PRBdidChange(u8 oldValue, u8 newValue)
     // -----------------------------------------------------------------
 
     bool oldMtr = oldValue & 0x80;
-    bool oldSel = oldValue & (0b1000 << nr);
+    bool oldSel = oldValue & (0b1000 << objid);
     bool oldStep = oldValue & 0x01;
 
     bool newMtr = newValue & 0x80;
-    bool newSel = newValue & (0b1000 << nr);
+    bool newSel = newValue & (0b1000 << objid);
     bool newStep = newValue & 0x01;
     
     bool newDir = newValue & 0x02;
