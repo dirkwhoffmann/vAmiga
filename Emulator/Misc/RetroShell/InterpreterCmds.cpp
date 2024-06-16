@@ -13,9 +13,9 @@
 
 namespace vamiga {
 
-#define MACRO_CONCAT(x,y) x##y
-#define GROUP_NAME(x) MACRO_CONCAT(group_,x)
-#define GROUP(x) CommandGroup GROUP_NAME(__COUNTER__)(root,x);
+#define VAMIGA_CONCAT(x,y) x##y
+#define VAMIGA_GROUP_NAME(x) VAMIGA_CONCAT(group_,x)
+#define VAMIGA_GROUP(x) CommandGroup VAMIGA_GROUP_NAME(__COUNTER__)(root,x);
 
 void
 Interpreter::initCommons(Command &root)
@@ -24,7 +24,7 @@ Interpreter::initCommons(Command &root)
     // Common commands
     //
 
-    {   GROUP("Shell commands");
+    {   VAMIGA_GROUP("Shell commands");
 
         root.add({"."},
                  "Enter or exit the debugger",
@@ -90,11 +90,11 @@ Interpreter::initCommandShell(Command &root)
 {
     initCommons(root);
 
-    {   GROUP("Regression testing")
+    {   VAMIGA_GROUP("Regression testing")
 
         root.add({"regression"},    "Runs the regression tester");
 
-        {   GROUP("");
+        {   VAMIGA_GROUP("");
 
             root.add({"regression", "setup"}, { ConfigSchemeEnum::argList() }, { Arg::path, Arg::path },
                      "Initializes the test environment",
@@ -117,7 +117,7 @@ Interpreter::initCommandShell(Command &root)
 
         root.add({"screenshot"},    "Manages screenshots");
 
-        {   GROUP("")
+        {   VAMIGA_GROUP("")
 
             root.add({"screenshot", "set"},
                      "Configures the screenshot");
@@ -153,7 +153,7 @@ Interpreter::initCommandShell(Command &root)
         }
     }
 
-    {   GROUP("Controlling components")
+    {   VAMIGA_GROUP("Controlling components")
 
         //
         // Amiga
@@ -161,7 +161,7 @@ Interpreter::initCommandShell(Command &root)
 
         root.add({"amiga"},         "The virtual Amiga");
 
-        {   GROUP("")
+        {   VAMIGA_GROUP("")
 
             root.add({"amiga", ""},
                      "Displays the current configuration",
@@ -250,7 +250,7 @@ Interpreter::initCommandShell(Command &root)
 
         root.add({"memory"},        "Ram and Rom");
 
-        {   GROUP("")
+        {   VAMIGA_GROUP("")
 
             root.add({"memory", ""},
                      "Displays the current configuration",
@@ -349,7 +349,7 @@ Interpreter::initCommandShell(Command &root)
 
         root.add({"cpu"},           "Motorola 68k CPU");
 
-        {   GROUP("")
+        {   VAMIGA_GROUP("")
 
             root.add({"cpu", ""},
                      "Displays the current configuration",
@@ -410,7 +410,7 @@ Interpreter::initCommandShell(Command &root)
 
             root.add({cia}, "Complex Interface Adapter");
 
-            {   GROUP("")
+            {   VAMIGA_GROUP("")
 
                 root.add({cia, ""},
                          "Displays the current configuration",
@@ -468,7 +468,7 @@ Interpreter::initCommandShell(Command &root)
 
         root.add({"agnus"},         "Custom chip");
 
-        {   GROUP("")
+        {   VAMIGA_GROUP("")
 
             root.add({"agnus", ""},
                      "Displays the current configuration",
@@ -508,7 +508,7 @@ Interpreter::initCommandShell(Command &root)
 
         root.add({"blitter"},       "Coprocessor");
 
-        {   GROUP("")
+        {   VAMIGA_GROUP("")
 
             root.add({"blitter", ""},
                      "Displays the current configuration",
@@ -534,7 +534,7 @@ Interpreter::initCommandShell(Command &root)
 
         root.add({"denise"},        "Custom chip");
 
-        {   GROUP("")
+        {   VAMIGA_GROUP("")
 
             root.add({"denise", ""},
                      "Displays the current configuration",
@@ -619,7 +619,7 @@ Interpreter::initCommandShell(Command &root)
 
         root.add({"paula"},         "Custom chip");
 
-        {   GROUP("")
+        {   VAMIGA_GROUP("")
 
             root.add({"paula", "audio"},
                      "Audio unit");
@@ -785,7 +785,7 @@ Interpreter::initCommandShell(Command &root)
 
         root.add({"rtc"},           "Real-time clock");
 
-        {   GROUP("")
+        {   VAMIGA_GROUP("")
 
             root.add({"rtc", ""},
                      "Displays the current configuration",
@@ -811,7 +811,7 @@ Interpreter::initCommandShell(Command &root)
 
         root.add({"serial"},        "Serial port");
 
-        {   GROUP("")
+        {   VAMIGA_GROUP("")
 
             root.add({"serial", ""},
                      "Displays the current configuration",
@@ -851,7 +851,7 @@ Interpreter::initCommandShell(Command &root)
 
         root.add({"dmadebugger"},   "DMA Debugger");
 
-        {   GROUP("")
+        {   VAMIGA_GROUP("")
 
             root.add({"dmadebugger", "open"},
                      "Opens the DMA debugger",
@@ -925,7 +925,7 @@ Interpreter::initCommandShell(Command &root)
         }
     }
 
-    {   GROUP("Controlling peripherals")
+    {   VAMIGA_GROUP("Controlling peripherals")
 
         //
         // Monitor
@@ -933,7 +933,7 @@ Interpreter::initCommandShell(Command &root)
 
         root.add({"monitor"},       "Amiga monitor");
 
-        {   GROUP("")
+        {   VAMIGA_GROUP("")
 
             root.add({"monitor", ""},
                      "Displays the current configuration",
@@ -980,7 +980,7 @@ Interpreter::initCommandShell(Command &root)
 
         root.add({"keyboard"},      "Keyboard");
 
-        {   GROUP("")
+        {   VAMIGA_GROUP("")
 
             root.add({"keyboard", ""},
                      "Displays the current configuration",
@@ -1013,7 +1013,7 @@ Interpreter::initCommandShell(Command &root)
 
         root.add({"joystick"},      "Joystick");
 
-        {   GROUP("")
+        {   VAMIGA_GROUP("")
 
             for (isize i = ControlPort::PORT1; i <= ControlPort::PORT2; i++) {
 
@@ -1167,7 +1167,7 @@ Interpreter::initCommandShell(Command &root)
 
         root.add({"mouse"},         "Mouse");
 
-        {   GROUP("")
+        {   VAMIGA_GROUP("")
 
             for (isize i = ControlPort::PORT1; i <= ControlPort::PORT2; i++) {
 
@@ -1256,7 +1256,7 @@ Interpreter::initCommandShell(Command &root)
             string df = i == 4 ? "dfn" : "df" + std::to_string(i);
             root.add({df}, "Floppy drive");
 
-            {   GROUP("")
+            {   VAMIGA_GROUP("")
 
                 if (i >= 0 && i <= 3) {
 
@@ -1451,7 +1451,7 @@ Interpreter::initCommandShell(Command &root)
             string hd = i == 4 ? "hdn" : "hd" + std::to_string(i);
             root.add({hd}, "Floppy drive");
 
-            {   GROUP("")
+            {   VAMIGA_GROUP("")
 
                 if (i != 4) {
 
@@ -1531,7 +1531,7 @@ Interpreter::initCommandShell(Command &root)
         }
     }
 
-    {   GROUP("Miscellaneous")
+    {   VAMIGA_GROUP("Miscellaneous")
 
         //
         // Remote server
@@ -1539,7 +1539,7 @@ Interpreter::initCommandShell(Command &root)
 
         root.add({"server"},        "Remote connections");
 
-        {   GROUP("");
+        {   VAMIGA_GROUP("");
 
             root.add({"server", ""},
                      "Displays a server status summary",
