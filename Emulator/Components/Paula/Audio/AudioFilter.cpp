@@ -187,8 +187,7 @@ AudioFilter::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Config) {
 
-        os << tab("Filter type");
-        os << FilterTypeEnum::key(config.filterType) << std::endl;
+        dumpConfig(os);
     }
 
     if (category == Category::State) {

@@ -472,12 +472,7 @@ Agnus::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Config) {
 
-        os << tab("Chip Revison");
-        os << AgnusRevisionEnum::key(config.revision) << std::endl;
-        os << tab("Slow Ram mirror");
-        os << bol(config.slowRamMirror) << std::endl;
-        os << tab("Pointer drops");
-        os << bol(config.ptrDrops) << std::endl;
+        dumpConfig(os);
     }
     
     if (category == Category::State) {

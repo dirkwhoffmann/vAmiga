@@ -74,10 +74,7 @@ SerialPort::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Config) {
         
-        os << tab("Connected device");
-        os << SerialPortDeviceEnum::key(config.device) << std::endl;
-        os << tab("Verbose");
-        os << bol(config.verbose) << std::endl;
+        dumpConfig(os);
     }
     
     if (category == Category::State) {

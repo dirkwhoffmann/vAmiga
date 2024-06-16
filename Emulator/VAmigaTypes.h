@@ -25,4 +25,5 @@
 #include "PixelEngineTypes.h"
 #include "RemoteServerTypes.h"
 #include "RTCTypes.h"
+#include "SamplerTypes.h"
 #include "SerialPortTypes.h"

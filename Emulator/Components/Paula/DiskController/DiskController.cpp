@@ -103,12 +103,7 @@ DiskController::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Config) {
         
-        os << tab("Drive speed");
-        os << dec(config.speed) << std::endl;
-        os << tab("lockDskSync");
-        os << bol(config.lockDskSync) << std::endl;
-        os << tab("autoDskSync");
-        os << bol(config.autoDskSync) << std::endl;
+        dumpConfig(os);
     }
 
     if (category == Category::State) {

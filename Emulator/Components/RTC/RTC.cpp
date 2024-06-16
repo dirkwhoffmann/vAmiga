@@ -79,8 +79,7 @@ RTC::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Config) {
         
-        os << tab("Chip Model");
-        os << RTCRevisionEnum::key(config.model) << std::endl;
+        dumpConfig(os);
     }
     
     if (category == Category::State) {

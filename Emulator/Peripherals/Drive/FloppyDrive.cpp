@@ -175,28 +175,8 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Config) {
         
-        os << tab("Nr");
-        os << dec(objid) << std::endl;
-        os << tab("Connected");
-        os << bol(config.connected) << std::endl;
-        os << tab("Type");
-        os << FloppyDriveTypeEnum::key(config.type) << std::endl;
-        os << tab("Mechanics");
-        os << DriveMechanicsEnum::key(config.mechanics) << std::endl;
-        os << tab("Revolutions per minute");
-        os << dec(config.rpm) << std::endl;
-        os << tab("Disk swap delay");
-        os << dec(config.diskSwapDelay) << std::endl;
-        os << tab("Insert volume");
-        os << dec(config.insertVolume) << std::endl;
-        os << tab("Eject volume");
-        os << dec(config.ejectVolume) << std::endl;
-        os << tab("Step volume");
-        os << dec(config.stepVolume) << std::endl;
-        os << tab("Poll volume");
-        os << dec(config.pollVolume) << std::endl;
-        os << tab("Pan");
-        os << dec(config.pan) << std::endl;
+        dumpConfig(os);
+
         os << tab("Search path");
         os << "\"" << searchPath << "\"" << std::endl;
 

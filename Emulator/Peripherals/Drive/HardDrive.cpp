@@ -320,14 +320,7 @@ HardDrive::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Config) {
         
-        os << tab("Nr");
-        os << dec(objid) << std::endl;
-        os << tab("Type");
-        os << HardDriveTypeEnum::key(config.type) << std::endl;
-        os << tab("Step volume");
-        os << dec(config.stepVolume) << std::endl;
-        os << tab("Pan");
-        os << dec(config.pan) << std::endl;
+        dumpConfig(os);
     }
     
     if (category == Category::State) {

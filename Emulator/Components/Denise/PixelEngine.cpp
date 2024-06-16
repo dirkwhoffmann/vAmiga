@@ -32,14 +32,7 @@ PixelEngine::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Config) {
 
-        os << tab("Palette");
-        os << PaletteEnum::key(config.palette) << std::endl;
-        os << tab("Brightness");
-        os << dec(config.brightness) << std::endl;
-        os << tab("Contrast");
-        os << dec(config.contrast) << std::endl;
-        os << tab("Saturation");
-        os << dec(config.saturation) << std::endl;
+        dumpConfig(os);
     }
 }
 

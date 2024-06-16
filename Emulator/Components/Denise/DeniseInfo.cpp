@@ -55,26 +55,7 @@ Denise::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Config) {
         
-        os << tab("Chip revision");
-        os << DeniseRevisionEnum::key(config.revision) << std::endl;
-        os << tab("Viewport tracking");
-        os << bol(config.viewportTracking) << std::endl;
-        os << tab("Frame skips in warp mode");
-        os << bol(config.frameSkipping) << std::endl;
-        os << tab("Hidden bitplanes");
-        os << hex(config.hiddenBitplanes) << std::endl;
-        os << tab("Hidden sprites");
-        os << hex(config.hiddenSprites) << std::endl;
-        os << tab("Hidden layers");
-        os << hex(config.hiddenLayers) << std::endl;
-        os << tab("Hidden layer alpha");
-        os << dec(config.hiddenLayerAlpha) << std::endl;
-        os << tab("clxSprSpr");
-        os << bol(config.clxSprSpr) << std::endl;
-        os << tab("clxSprPlf");
-        os << bol(config.clxSprPlf) << std::endl;
-        os << tab("clxPlfPlf");
-        os << bol(config.clxPlfPlf) << std::endl;
+        dumpConfig(os);
     }
 
     if (category == Category::State) {

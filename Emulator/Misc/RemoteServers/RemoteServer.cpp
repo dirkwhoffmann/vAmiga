@@ -38,14 +38,7 @@ RemoteServer::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Config) {
         
-        os << tab("Port");
-        os << dec(config.port) << std::endl;
-        os << tab("Protocol");
-        os << ServerProtocolEnum::key(config.protocol) << std::endl;
-        os << tab("Auto run");
-        os << bol(config.autoRun) << std::endl;
-        os << tab("Verbose");
-        os << bol(config.verbose) << std::endl;
+        dumpConfig(os);
     }
     
     if (category == Category::State) {

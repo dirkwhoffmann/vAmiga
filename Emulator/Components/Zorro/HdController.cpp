@@ -32,8 +32,7 @@ HdController::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Config) {
         
-        os << tab("Connected");
-        os << bol(config.connected) << std::endl;
+        dumpConfig(os);
     }
     
     if (category == Category::Stats) {

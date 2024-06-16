@@ -161,14 +161,7 @@ CIA::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Config) {
         
-        os << tab("Revision");
-        os << CIARevisionEnum::key(config.revision) << std::endl;
-        os << tab("Emulate TOD bug");
-        os << bol(config.todBug) << std::endl;
-        os << tab("Sync with E-clock");
-        os << bol(config.eClockSyncing) << std::endl;
-        os << tab("Sleep when idle");
-        os << bol(config.idleSleep) << std::endl;
+        dumpConfig(os);
     }
 
     if (category == Category::Registers) {

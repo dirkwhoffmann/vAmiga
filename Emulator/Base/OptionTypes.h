@@ -313,6 +313,135 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
 
     static const char *help(Option value)
     {
+        switch (value) {
+
+            case OPT_VIDEO_FORMAT:          return "Video format";
+            case OPT_WARP_BOOT:             return "Warp-boot duration";
+            case OPT_WARP_MODE:             return "Warp activation";
+            case OPT_VSYNC:                 return "VSYNC mode";
+            case OPT_TIME_LAPSE:            return "Speed adjustment";
+
+            case OPT_AGNUS_REVISION:        return "Chip revision";
+            case OPT_SLOW_RAM_MIRROR:       return "ECS memory mirroring";
+            case OPT_PTR_DROPS:             return "Ignore certain register writes";
+
+            case OPT_DENISE_REVISION:       return "Chip revision";
+            case OPT_VIEWPORT_TRACKING:     return "Track the currently used viewport";
+            case OPT_FRAME_SKIPPING:        return "Reduce frame rate in warp mode";
+
+            case OPT_PALETTE:               return "Color palette";
+            case OPT_BRIGHTNESS:            return "Monitor brightness";
+            case OPT_CONTRAST:              return "Monitor contrast";
+            case OPT_SATURATION:            return "Monitor saturation";
+
+            case OPT_DMA_DEBUG_ENABLE:      return "DMA Debugger";
+            case OPT_DMA_DEBUG_MODE:        return "DMA Debugger style";
+            case OPT_DMA_DEBUG_OPACITY:     return "Opacity";
+            case OPT_DMA_DEBUG_CHANNEL0:    return "Copper DMA";
+            case OPT_DMA_DEBUG_CHANNEL1:    return "Blitter DMA";
+            case OPT_DMA_DEBUG_CHANNEL2:    return "Disk DMA";
+            case OPT_DMA_DEBUG_CHANNEL3:    return "Audio DMA";
+            case OPT_DMA_DEBUG_CHANNEL4:    return "Sprite DMA";
+            case OPT_DMA_DEBUG_CHANNEL5:    return "Bitplane DMA";
+            case OPT_DMA_DEBUG_CHANNEL6:    return "CPU DMA";
+            case OPT_DMA_DEBUG_CHANNEL7:    return "Memory Refresh DMA";
+            case OPT_DMA_DEBUG_COLOR0:      return "Copper color";
+            case OPT_DMA_DEBUG_COLOR1:      return "Blitter color";
+            case OPT_DMA_DEBUG_COLOR2:      return "Disk color";
+            case OPT_DMA_DEBUG_COLOR3:      return "Audio color";
+            case OPT_DMA_DEBUG_COLOR4:      return "Sprite color";
+            case OPT_DMA_DEBUG_COLOR5:      return "Bitplane color";
+            case OPT_DMA_DEBUG_COLOR6:      return "CPU color";
+            case OPT_DMA_DEBUG_COLOR7:      return "Memory refresh color";
+
+            case OPT_CPU_REVISION:          return "Chip revision";
+            case OPT_CPU_DASM_REVISION:     return "Chip revision (disassembler)";
+            case OPT_CPU_DASM_SYNTAX:       return "Disassembler syntax";
+            case OPT_CPU_OVERCLOCKING:      return "Overclocking factor";
+            case OPT_CPU_RESET_VAL:         return "Register reset value";
+
+            case OPT_RTC_MODEL:             return "Chip revision";
+
+            case OPT_CHIP_RAM:              return "Chip RAM size";
+            case OPT_SLOW_RAM:              return "Slow RAM size";
+            case OPT_FAST_RAM:              return "Fast RAM size";
+            case OPT_EXT_START:             return "Extension ROM location";
+            case OPT_SAVE_ROMS:             return "Include ROMs in snapshots";
+            case OPT_SLOW_RAM_DELAY:        return "Emulate slow RAM bus delays";
+            case OPT_BANKMAP:               return "Memory mapping scheme";
+            case OPT_UNMAPPING_TYPE:        return "Unmapped memory behavior";
+            case OPT_RAM_INIT_PATTERN:      return "RAM initialization pattern";
+
+            case OPT_DRIVE_SPEED:           return "Drive speed";
+            case OPT_LOCK_DSKSYNC:          return "Ignore writes to DSKSYNC";
+            case OPT_AUTO_DSKSYNC:          return "Always find a sync mark";
+
+            case OPT_DRIVE_CONNECT:         return "Connected";
+            case OPT_DRIVE_TYPE:            return "Drive model";
+            case OPT_DRIVE_MECHANICS:       return "Emulate drive mechanics";
+            case OPT_DRIVE_RPM:             return "Disk rotation speed";
+            case OPT_DISK_SWAP_DELAY:       return "Disk swap delay";
+            case OPT_DRIVE_PAN:             return "Pan";
+            case OPT_STEP_VOLUME:           return "Head step volume";
+            case OPT_POLL_VOLUME:           return "Disk polling step volume";
+            case OPT_INSERT_VOLUME:         return "Disk insertion volume";
+            case OPT_EJECT_VOLUME:          return "Disk ejection volume";
+
+            case OPT_HDC_CONNECT:           return "Connected";
+
+            case OPT_HDR_TYPE:              return "Drive model";
+            case OPT_HDR_PAN:               return "Pan";
+            case OPT_HDR_STEP_VOLUME:       return "Head step volume";
+
+            case OPT_SER_DEVICE:            return "Serial device type";
+            case OPT_SER_VERBOSE:           return "Verbose";
+
+            case OPT_HIDDEN_BITPLANES:      return "Hide bitplanes";
+            case OPT_HIDDEN_SPRITES:        return "Hide sprites";
+            case OPT_HIDDEN_LAYERS:         return "Hide playfields";
+            case OPT_HIDDEN_LAYER_ALPHA:    return "Hidden playfield opacity";
+            case OPT_CLX_SPR_SPR:           return "Detect sprite-sprite collisions";
+            case OPT_CLX_SPR_PLF:           return "Detect sprite-playfield collisions";
+            case OPT_CLX_PLF_PLF:           return "Detect playfield-playfield collisions";
+
+            case OPT_BLITTER_ACCURACY:      return "Blitter accuracy level";
+
+            case OPT_CIA_REVISION:          return "Chip revision";
+            case OPT_TODBUG:                return "Emulate TOD bug";
+            case OPT_ECLOCK_SYNCING:        return "Sync accesses with E-clock";
+            case OPT_CIA_IDLE_SLEEP:        return "Enter idle state while not in use";
+
+            case OPT_ACCURATE_KEYBOARD:     return "Keyboard emulation accuracy";
+
+            case OPT_PULLUP_RESISTORS:      return "Emulate pullup resistors";
+            case OPT_SHAKE_DETECTION:       return "Detect a shaked mouse";
+            case OPT_MOUSE_VELOCITY:        return "Mouse velocity";
+
+            case OPT_AUTOFIRE:              return "Autofire";
+            case OPT_AUTOFIRE_BULLETS:      return "Number of bullets per burst";
+            case OPT_AUTOFIRE_DELAY:        return "Autofire delay in frames";
+
+            case OPT_SAMPLING_METHOD:       return "Sampling method";
+            case OPT_FILTER_TYPE:           return "Audio filter type";
+            case OPT_AUDPAN0:               return "Channel 0 pan";
+            case OPT_AUDPAN1:               return "Channel 1 pan";
+            case OPT_AUDPAN2:               return "Channel 2 pan";
+            case OPT_AUDPAN3:               return "Channel 3 pan";
+            case OPT_AUDVOL0:               return "Channel 0 volume";
+            case OPT_AUDVOL1:               return "Channel 1 volume";
+            case OPT_AUDVOL2:               return "Channel 2 volume";
+            case OPT_AUDVOL3:               return "Channel 3 volume";
+            case OPT_AUDVOLL:               return "Master volume (left)";
+            case OPT_AUDVOLR:               return "Master volume (right)";
+            case OPT_AUD_FASTPATH:          return "Boost performance";
+
+            case OPT_DIAG_BOARD:            return "Diagnose board";
+
+            case OPT_SRV_PORT:              return "Server port";
+            case OPT_SRV_PROTOCOL:          return "Server protocol";
+            case OPT_SRV_AUTORUN:           return "Auto run";
+            case OPT_SRV_VERBOSE:           return "Verbose mode";
+        }
         return "???";
     }
 };

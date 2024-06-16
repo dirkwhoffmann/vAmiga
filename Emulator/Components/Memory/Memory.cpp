@@ -29,30 +29,7 @@ Memory::_dump(Category category, std::ostream& os) const
 {
     if (category == Category::Config) {
         
-        os << util::tab("Chip Ram");
-        os << util::dec(config.chipSize / 1024) << " KB" << std::endl;
-        os << util::tab("Slow Ram");
-        os << util::dec(config.slowSize / 1024) << " KB" << std::endl;
-        os << util::tab("Fast Ram");
-        os << util::dec(config.fastSize / 1024) << " KB" << std::endl;
-        os << util::tab("Rom");
-        os << util::dec(config.romSize / 1024) << " KB" << std::endl;
-        os << util::tab("Wom");
-        os << util::dec(config.womSize / 1024) << " KB" << std::endl;
-        os << util::tab("Rom extension");
-        os << util::dec(config.extSize / 1024) << " KB";
-        if (config.extSize) os << " at " << util::hex(config.extStart) << "0000";
-        os << std::endl;
-        os << util::tab("Save Roms in snapshots");
-        os << util::bol(config.saveRoms) << std::endl;
-        os << util::tab("Emulate Slow Ram delay");
-        os << util::bol(config.slowRamDelay) << std::endl;
-        os << util::tab("Bank mapping scheme");
-        os << BankMapEnum::key(config.bankMap) << std::endl;
-        os << util::tab("Ram init pattern");
-        os << RamInitPatternEnum::key(config.ramInitPattern) << std::endl;
-        os << util::tab("Unmapped memory");
-        os << UnmappedMemoryEnum::key(config.unmappingType) << std::endl;
+        dumpConfig(os);
     }
 
     if (category == Category::State) {

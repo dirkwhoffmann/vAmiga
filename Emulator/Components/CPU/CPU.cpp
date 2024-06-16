@@ -437,16 +437,7 @@ CPU::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Config) {
 
-        os << util::tab("CPU revision");
-        os << CPURevisionEnum::key(config.revision) << std::endl;
-        os << util::tab("DASM revision");
-        os << DasmRevisionEnum::key(config.dasmRevision) << std::endl;
-        os << util::tab("DASM syntax");
-        os << DasmSyntaxEnum::key(config.dasmSyntax) << std::endl;
-        os << util::tab("Overclocking");
-        os << util::dec(config.overclocking) << std::endl;
-        os << util::tab("Register reset value");
-        os << util::hex(config.regResetVal) << std::endl;
+        dumpConfig(os);
     }
 
     if (category == Category::Registers) {

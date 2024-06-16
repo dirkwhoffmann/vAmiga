@@ -92,12 +92,7 @@ Mouse::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Config) {
         
-        os << tab("Pull-up resistors");
-        os << bol(config.pullUpResistors) << std::endl;
-        os << tab("Shake detection");
-        os << bol(config.shakeDetection) << std::endl;
-        os << tab("Velocity");
-        os << dec(config.velocity) << std::endl;
+        dumpConfig(os);
     }
 
     if (category == Category::State) {

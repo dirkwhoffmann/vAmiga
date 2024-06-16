@@ -131,7 +131,7 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_AUTOFIRE_BULLETS:      return numParser();
         case OPT_AUTOFIRE_DELAY:        return numParser();
 
-        case OPT_SAMPLING_METHOD:       return enumParser.template operator()<CIARevisionEnum>();
+        case OPT_SAMPLING_METHOD:       return enumParser.template operator()<SamplingMethodEnum>();
         case OPT_FILTER_TYPE:           return enumParser.template operator()<FilterTypeEnum>();
         case OPT_AUDPAN0:               return numParser();
         case OPT_AUDPAN1:               return numParser();

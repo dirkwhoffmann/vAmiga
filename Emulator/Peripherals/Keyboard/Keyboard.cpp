@@ -58,8 +58,7 @@ Keyboard::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Config) {
         
-        os << tab("Accurate emulation");
-        os << bol(config.accurate) << std::endl;
+        dumpConfig(os);
     }
     
     if (category == Category::State) {
