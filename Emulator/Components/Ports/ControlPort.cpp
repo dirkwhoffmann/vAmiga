@@ -15,10 +15,9 @@
 
 namespace vamiga {
 
-ControlPort::ControlPort(Amiga& ref, isize nr) : SubComponent(ref, nr), nr(nr)
+ControlPort::ControlPort(Amiga& ref, isize nr) : SubComponent(ref, nr)
 {
-    assert(nr == PORT1 || nr == PORT2);
-
+    assert(nr >= 0 && nr <= 1);
     subComponents = std::vector<CoreComponent *> { &mouse, &joystick };
 }
 
@@ -41,7 +40,7 @@ ControlPort::cacheInfo(ControlPortInfo &info) const
         
         info.potgo = paula.potgo;
         info.potgor = paula.peekPOTGOR();
-        info.potdat = (nr == PORT1) ? paula.peekPOTxDAT<0>() : paula.peekPOTxDAT<1>();
+        info.potdat = (objid == PORT1) ? paula.peekPOTxDAT<0>() : paula.peekPOTxDAT<1>();
     }
 }
 
@@ -53,18 +52,18 @@ ControlPort::_dump(Category category, std::ostream& os) const
     if (category == Category::State) {
         
         os << tab("Control port");
-        os << dec(nr) << std::endl;
+        os << dec(objid) << std::endl;
         os << tab("Detected device type");
         os << ControlPortDeviceEnum::key(device) << std::endl;
 
-        if (nr == PORT1) {
+        if (objid == PORT1) {
 
             os << tab("potCntX0") << dec(paula.potCntX0) << std::endl;
             os << tab("potCntY0") << dec(paula.potCntY0) << std::endl;
             os << tab("chargeX0") << flt(paula.chargeX0) << std::endl;
             os << tab("chargeY0") << flt(paula.chargeY0) << std::endl;
         }
-        if (nr == PORT2) {
+        if (objid == PORT2) {
 
             os << tab("potCntX1") << dec(paula.potCntX1) << std::endl;
             os << tab("potCntY1") << dec(paula.potCntY1) << std::endl;

@@ -41,10 +41,6 @@ public:
 
 private:
     
-    // The represented control port
-    // DEPRECATED: USE objid
-    isize nr;
-
     // The connected device
     ControlPortDevice device = CPD_NONE;
     
@@ -135,8 +131,8 @@ public:
 
     void cacheInfo(ControlPortInfo &result) const override;
 
-    bool isPort1() const { return nr == PORT1; }
-    bool isPort2() const { return nr == PORT2; }
+    bool isPort1() const { return objid == PORT1; }
+    bool isPort2() const { return objid == PORT2; }
 
     
     //

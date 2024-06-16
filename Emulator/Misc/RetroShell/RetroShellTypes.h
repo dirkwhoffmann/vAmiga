@@ -16,7 +16,7 @@
 // Enumerations
 //
 
-enum_long(RETRO_SHELL_KEY)
+enum_long(RSKEY_KEY)
 {
     RSKEY_UP,
     RSKEY_DOWN,
@@ -31,7 +31,7 @@ enum_long(RETRO_SHELL_KEY)
     RSKEY_RETURN,
     RSKEY_CR
 };
-typedef RETRO_SHELL_KEY RetroShellKey;
+typedef RSKEY_KEY RetroShellKey;
 
 #ifdef __cplusplus
 struct RetroShellKeyEnum : util::Reflection<RetroShellKeyEnum, RetroShellKey>

@@ -20,6 +20,9 @@ namespace vamiga {
 
 class RetroShell : public SubComponent {
 
+    friend class RshServer;
+    friend class Interpreter;
+
     Descriptions descriptions = {{
 
         .name           = "rshell",
@@ -28,19 +31,8 @@ class RetroShell : public SubComponent {
 
     ConfigOptions options = {
 
-        OPT_SRV_PORT,
-        OPT_SRV_PROTOCOL,
-        OPT_SRV_AUTORUN,
-        OPT_SRV_VERBOSE
     };
 
-    friend class RshServer;
-    friend class Interpreter;
-    
-    //
-    // Sub components
-    //
-    
     // The command interpreter (parses commands typed into the console window)
     Interpreter interpreter = Interpreter(amiga);
 
@@ -109,6 +101,10 @@ private:
     // Methods from CoreComponent
     //
     
+public:
+
+    const Descriptions &getDescriptions() const override { return descriptions; }
+
 private:
     
     void _initialize() override;
@@ -118,10 +114,6 @@ private:
     u64 _checksum() override { return 0; }
     isize _load(const u8 *buffer) override {return 0; }
     isize _save(u8 *buffer) override { return 0; }
-
-public:
-
-    const Descriptions &getDescriptions() const override { return descriptions; }
 
 
     //
@@ -143,7 +135,11 @@ public:
     RetroShell &operator<<(char value);
     RetroShell &operator<<(const string &value);
     RetroShell &operator<<(int value);
+    RetroShell &operator<<(unsigned int value);
     RetroShell &operator<<(long value);
+    RetroShell &operator<<(unsigned long value);
+    RetroShell &operator<<(long long value);
+    RetroShell &operator<<(unsigned long long value);
     RetroShell &operator<<(std::stringstream &stream);
 
     // Returns the prompt
@@ -204,7 +200,6 @@ public:
 public:
     
     isize historyLength() { return (isize)history.size(); }
-
 
     
     //

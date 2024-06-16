@@ -22,7 +22,7 @@ Interpreter::initDebugShell(Command &root)
 
     initCommons(root);
 
-    root.setGroup("Program execution");
+    root.pushGroup("Program execution");
 
     root.add({"goto"}, { }, { Arg::value },
              std::pair <string, string>("g[oto]", "Goto address"),
@@ -57,7 +57,7 @@ Interpreter::initDebugShell(Command &root)
     root.add({"cbreak"},    "Manage Copper breakpoints");
     root.add({"cwatch"},    "Manage Copper watchpoints");
 
-    root.setGroup("Monitoring");
+    root.pushGroup("Monitoring");
 
     root.add({"d"}, { }, { Arg::address },
              "Disassemble instructions",
@@ -233,7 +233,7 @@ Interpreter::initDebugShell(Command &root)
     // Second-level commands
     //
 
-    root.setGroup("Components");
+    root.pushGroup("Components");
 
     root.add({"i", "amiga"},         "Main computer");
     root.add({"i", "memory"},        "RAM and ROM");
@@ -250,7 +250,7 @@ Interpreter::initDebugShell(Command &root)
     root.add({"i", "controlport"},   "Joystick ports");
     root.add({"i", "serial"},        "Serial port");
 
-    root.setGroup("Peripherals");
+    root.pushGroup("Peripherals");
 
     root.add({"i", "keyboard"},      "Keyboard");
     root.add({"i", "mouse"},         "Mouse");
@@ -264,12 +264,12 @@ Interpreter::initDebugShell(Command &root)
     root.add({"i", "hd2"},           "");
     root.add({"i", "hd3"},           "");
 
-    root.setGroup("Miscellaneous");
+    root.pushGroup("Miscellaneous");
 
     root.add({"i", "host"},          "Host machine");
     root.add({"i", "server"},        "Remote server");
 
-    root.setGroup("");
+    root.pushGroup("");
 
     root.add({"r", "cpu"},
              "Motorola CPU",
@@ -338,7 +338,7 @@ Interpreter::initDebugShell(Command &root)
     // Third-level commands
     //
 
-    root.setGroup("");
+    root.pushGroup("");
 
     root.add({"i", "amiga", ""},
              "Inspects the internal state",
@@ -856,7 +856,7 @@ Interpreter::initDebugShell(Command &root)
     // Breakpoints
     //
 
-    root.setGroup("");
+    root.pushGroup("");
 
     root.add({"break", ""},
              "List all breakpoints",
@@ -888,7 +888,7 @@ Interpreter::initDebugShell(Command &root)
         cpu.toggleBreakpoint(parseNum(argv[0]));
     });
 
-    root.setGroup("");
+    root.pushGroup("");
 
     root.add({"watch", ""},
              "Lists all watchpoints",
@@ -918,7 +918,7 @@ Interpreter::initDebugShell(Command &root)
         cpu.toggleWatchpoint(parseNum(argv[0]));
     });
 
-    root.setGroup("");
+    root.pushGroup("");
 
     root.add({"catch", ""},
              "List all catchpoints",
@@ -1041,7 +1041,7 @@ Interpreter::initDebugShell(Command &root)
     // Miscellaneous
     //
 
-    root.setGroup("Miscellaneous");
+    root.pushGroup("Miscellaneous");
 
     root.add({"set"}, { "<variable>", Arg::value },
              "Sets an internal debug variable",
