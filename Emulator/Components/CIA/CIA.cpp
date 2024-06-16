@@ -63,25 +63,6 @@ CIA::_reset(bool hard)
     mem.updateMemSrcTables();
 }
 
-void
-CIA::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-        
-        OPT_CIA_REVISION,
-        OPT_TODBUG,
-        OPT_ECLOCK_SYNCING,
-        OPT_CIA_IDLE_SLEEP
-    };
-    
-    for (auto &option : options) {
-        setOption(option, defaults.get(option));
-    }
-}
-
 i64
 CIA::getOption(Option option) const
 {

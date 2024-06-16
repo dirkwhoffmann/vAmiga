@@ -55,7 +55,16 @@ void
 Configurable::resetConfig(const Defaults &defaults, isize objid)
 {
     for (auto &option : getOptions()) {
-        setOption(option, defaults.get(option, objid));
+
+        try {
+
+            setOption(option, defaults.get(option, objid));
+
+        } catch (Error &e) {
+
+            std::cout << "Config error: " << e.what() << std::endl;
+            throw;
+        }
     }
 }
 

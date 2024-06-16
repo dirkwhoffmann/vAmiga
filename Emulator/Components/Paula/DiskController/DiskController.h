@@ -169,8 +169,6 @@ public:
     //
 
 public:
-    
-    void resetConfig() override;
 
     const DiskControllerConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }

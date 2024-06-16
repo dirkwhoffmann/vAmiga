@@ -162,43 +162,36 @@ extension ConfigurationController {
     @IBAction func csCpuRevAction(_ sender: NSPopUpButton!) {
 
         config.cpuRev = sender.selectedTag()
-        refresh()
     }
 
     @IBAction func csCpuSpeedAction(_ sender: NSPopUpButton!) {
 
         config.cpuSpeed = sender.selectedTag()
-        refresh()
     }
 
     @IBAction func csAgnusRevAction(_ sender: NSPopUpButton!) {
 
         config.agnusRev = sender.selectedTag()
-        refresh()
     }
 
     @IBAction func csMachineTypeAction(_ sender: NSPopUpButton!) {
 
         config.machineType = sender.selectedTag()
-        refresh()
     }
 
     @IBAction func csDeniseRevAction(_ sender: NSPopUpButton!) {
 
         config.deniseRev = sender.selectedTag()
-        refresh()
     }
     
     @IBAction func csCiaRevAction(_ sender: NSPopUpButton!) {
 
         config.ciaRev = sender.selectedTag()
-        refresh()
     }
 
     @IBAction func csRealTimeClockAction(_ sender: NSPopUpButton!) {
         
         config.rtClock = sender.selectedTag()
-        refresh()
     }
     
     @IBAction func csPresetAction(_ sender: NSPopUpButton!) {
@@ -245,8 +238,6 @@ extension ConfigurationController {
         
         // Update the configuration
         config.applyChipsetUserDefaults()
-
-        refresh()
     }
 
     @IBAction func csDefaultsAction(_ sender: NSButton!) {
@@ -297,37 +288,31 @@ extension ConfigurationController {
     @IBAction func memChipRamAction(_ sender: NSPopUpButton!) {
 
         config.chipRam = sender.selectedTag()
-        refresh()
     }
 
     @IBAction func memSlowRamAction(_ sender: NSPopUpButton!) {
 
         config.slowRam = sender.selectedTag()
-        refresh()
     }
 
     @IBAction func memFastRamAction(_ sender: NSPopUpButton!) {
 
         config.fastRam = sender.selectedTag()
-        refresh()
     }
 
     @IBAction func memBankMapAction(_ sender: NSPopUpButton!) {
 
         config.bankMap = sender.selectedTag()
-        refresh()
     }
 
     @IBAction func memUnmappingTypeAction(_ sender: NSPopUpButton!) {
 
         config.unmappingType = sender.selectedTag()
-        refresh()
     }
 
     @IBAction func memRamInitPatternAction(_ sender: NSPopUpButton!) {
 
         config.ramInitPattern = sender.selectedTag()
-        refresh()
     }
 
     @IBAction func memPresetAction(_ sender: NSPopUpButton!) {
@@ -378,7 +363,6 @@ extension ConfigurationController {
         config.applyMemoryUserDefaults()
 
         amiga.resume()
-        refresh()
     }
 
     @IBAction func memDefaultsAction(_ sender: NSButton!) {

@@ -18,10 +18,14 @@
 
 namespace vamiga {
 
-class Emulator : public Thread, public Synchronizable {
+class Emulator : public Thread, public Synchronizable, public Configurable {
 
     friend class API;
     friend class VAmiga;
+
+    ConfigOptions options = {
+
+    };
 
 public:
 
@@ -72,10 +76,25 @@ private:
 
 
     //
-    // Configuring the emulator
+    // Methods from Configurable
     //
 
 public:
+
+    const ConfigOptions &getOptions() const override { return options; }
+    i64 getOption(Option opt) const override;
+    void checkOption(Option opt, i64 value) override;
+    void setOption(Option opt, i64 value) override;
+
+
+    //
+    // Main API for configuring the emulator
+    //
+
+public:
+
+    // Resets all options
+    void resetConfig();
 
     // Queries an option
     i64 get(Option opt, isize id = 0) const throws;

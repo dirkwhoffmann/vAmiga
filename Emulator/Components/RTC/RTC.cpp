@@ -73,22 +73,6 @@ RTC::_reset(bool hard)
 }
 
 void
-RTC::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-        
-        OPT_RTC_MODEL
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option));
-    }
-}
-
-void
 RTC::_dump(Category category, std::ostream& os) const
 {
     using namespace util;

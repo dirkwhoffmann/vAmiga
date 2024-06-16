@@ -93,25 +93,6 @@ PixelEngine::_powerOn()
     clearAll();
 }
 
-void
-PixelEngine::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-        
-        OPT_PALETTE,
-        OPT_BRIGHTNESS,
-        OPT_CONTRAST,
-        OPT_SATURATION
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option));
-    }
-}
-
 i64
 PixelEngine::getOption(Option option) const
 {

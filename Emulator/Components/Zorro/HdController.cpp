@@ -80,24 +80,6 @@ HdController::_reset(bool hard)
     }
 }
 
-void
-HdController::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    nr = drive.getNr();
-    
-    std::vector <Option> options = {
-        
-        OPT_HDC_CONNECT
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option, nr));
-    }
-}
-
 i64
 HdController::getOption(Option option) const
 {

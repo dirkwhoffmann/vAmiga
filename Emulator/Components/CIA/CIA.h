@@ -372,7 +372,6 @@ public:
 
 public:
 
-    void resetConfig() override;
     const CIAConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
     i64 getOption(Option option) const override;

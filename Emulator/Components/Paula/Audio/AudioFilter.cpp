@@ -234,22 +234,6 @@ AudioFilter::_dump(Category category, std::ostream& os) const
     }
 }
 
-void
-AudioFilter::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-
-        OPT_FILTER_TYPE
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option));
-    }
-}
-
 i64
 AudioFilter::getOption(Option option) const
 {

@@ -18,48 +18,6 @@ DmaDebugger::DmaDebugger(Amiga &ref) : SubComponent(ref)
     
 }
 
-void
-DmaDebugger::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-        
-        OPT_DMA_DEBUG_ENABLE,
-        OPT_DMA_DEBUG_MODE,
-        OPT_DMA_DEBUG_OPACITY
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option));
-    }
-    
-    std::vector <Option> moreOptions = {
-        
-        OPT_DMA_DEBUG_CHANNEL0,
-        OPT_DMA_DEBUG_CHANNEL1,
-        OPT_DMA_DEBUG_CHANNEL2,
-        OPT_DMA_DEBUG_CHANNEL3,
-        OPT_DMA_DEBUG_CHANNEL4,
-        OPT_DMA_DEBUG_CHANNEL5,
-        OPT_DMA_DEBUG_CHANNEL6,
-        OPT_DMA_DEBUG_CHANNEL7,
-        OPT_DMA_DEBUG_COLOR0,
-        OPT_DMA_DEBUG_COLOR1,
-        OPT_DMA_DEBUG_COLOR2,
-        OPT_DMA_DEBUG_COLOR3,
-        OPT_DMA_DEBUG_COLOR4,
-        OPT_DMA_DEBUG_COLOR5,
-        OPT_DMA_DEBUG_COLOR6,
-        OPT_DMA_DEBUG_COLOR7
-    };
-
-    for (auto &option : moreOptions) {
-        setOption(option, defaults.get(option));
-    }
-}
-
 i64
 DmaDebugger::getOption(Option option) const
 {

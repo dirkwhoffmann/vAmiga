@@ -38,15 +38,16 @@ CoreComponent::operator== (CoreComponent &other)
 void
 CoreComponent::initialize()
 {
+    assert(!isRunning());
+
     try {
-        
+
         for (CoreComponent *c : subComponents) { c->initialize(); }
         _initialize();
-        
+
     } catch (std::exception &e) {
 
-        warn("Failed to initialize: %s\n", e.what());
-        fatalError;
+        warn("Initialization aborted: %s\n", e.what());
     }
 }
 

@@ -14,23 +14,6 @@
 
 namespace vamiga {
 
-void
-SerialPort::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-        
-        OPT_SER_DEVICE,
-        OPT_SER_VERBOSE
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option));
-    }
-}
-
 i64
 SerialPort::getOption(Option option) const
 {

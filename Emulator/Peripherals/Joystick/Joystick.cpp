@@ -30,24 +30,6 @@ Joystick::_reset(bool hard)
     axisY = 0;
 }
 
-void
-Joystick::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-        
-        OPT_AUTOFIRE,
-        OPT_AUTOFIRE_BULLETS,
-        OPT_AUTOFIRE_DELAY
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option));
-    }
-}
-
 i64
 Joystick::getOption(Option option) const
 {

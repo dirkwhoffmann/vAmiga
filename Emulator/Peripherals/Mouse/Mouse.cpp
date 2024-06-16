@@ -35,24 +35,6 @@ void Mouse::_reset(bool hard)
     targetY = 0;
 }
 
-void
-Mouse::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-        
-        OPT_PULLUP_RESISTORS,
-        OPT_SHAKE_DETECTION,
-        OPT_MOUSE_VELOCITY
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option));
-    }
-}
-
 i64
 Mouse::getOption(Option option) const
 {

@@ -161,25 +161,6 @@ Amiga::_reset(bool hard)
     flags = 0;
 }
 
-void
-Amiga::resetConfig()
-{
-    assert(isPoweredOff());
-
-    std::vector <Option> options = {
-
-        OPT_VIDEO_FORMAT,
-        OPT_WARP_BOOT,
-        OPT_WARP_MODE,
-        OPT_VSYNC,
-        OPT_TIME_LAPSE
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option));
-    }
-}
-
 i64
 Amiga::getOption(Option option) const
 {

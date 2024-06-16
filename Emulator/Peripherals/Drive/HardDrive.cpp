@@ -194,24 +194,6 @@ HardDrive::_reset(bool hard)
     if (FORCE_HDR_MODIFIED) { modified = true; }
 }
 
-void
-HardDrive::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-        
-        OPT_HDR_TYPE,
-        OPT_HDR_PAN,
-        OPT_HDR_STEP_VOLUME,
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option, nr));
-    }
-}
-
 i64
 HardDrive::getOption(Option option) const
 {

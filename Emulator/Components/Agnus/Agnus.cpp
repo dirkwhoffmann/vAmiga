@@ -63,24 +63,6 @@ Agnus::_reset(bool hard)
     if (insEvent) scheduleRel <SLOT_INS> (0, insEvent);
 }
 
-void
-Agnus::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-
-        OPT_AGNUS_REVISION,
-        OPT_SLOW_RAM_MIRROR,
-        OPT_PTR_DROPS
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option));
-    }
-}
-
 i64
 Agnus::getOption(Option option) const
 {

@@ -37,31 +37,6 @@ Denise::_reset(bool hard)
     std::memset(zBuffer, 0, sizeof(zBuffer));
 }
 
-void
-Denise::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-        
-        OPT_DENISE_REVISION,
-        OPT_VIEWPORT_TRACKING,
-        OPT_FRAME_SKIPPING,
-        OPT_HIDDEN_BITPLANES,
-        OPT_HIDDEN_SPRITES,
-        OPT_HIDDEN_LAYERS,
-        OPT_HIDDEN_LAYER_ALPHA,
-        OPT_CLX_SPR_SPR,
-        OPT_CLX_SPR_PLF,
-        OPT_CLX_PLF_PLF
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option));
-    }
-}
-
 i64
 Denise::getOption(Option option) const
 {

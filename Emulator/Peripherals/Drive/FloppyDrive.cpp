@@ -58,31 +58,6 @@ FloppyDrive::_reset(bool hard)
     if (hard) assert(diskToInsert == nullptr);
 }
 
-void
-FloppyDrive::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-        
-        OPT_DRIVE_CONNECT,
-        OPT_DRIVE_TYPE,
-        OPT_DRIVE_MECHANICS,
-        OPT_DRIVE_RPM,
-        OPT_DISK_SWAP_DELAY,
-        OPT_DRIVE_PAN,
-        OPT_STEP_VOLUME,
-        OPT_POLL_VOLUME,
-        OPT_INSERT_VOLUME,
-        OPT_EJECT_VOLUME
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option, nr));
-    }
-}
-
 i64
 FloppyDrive::getOption(Option option) const
 {

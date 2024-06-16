@@ -156,30 +156,6 @@ Memory::_reset(bool hard)
     clearStats();
 }
 
-void
-Memory::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-        
-        OPT_CHIP_RAM,
-        OPT_SLOW_RAM,
-        OPT_FAST_RAM,
-        OPT_EXT_START,
-        OPT_SAVE_ROMS,
-        OPT_SLOW_RAM_DELAY,
-        OPT_BANKMAP,
-        OPT_UNMAPPING_TYPE,
-        OPT_RAM_INIT_PATTERN
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option));
-    }
-}
-
 i64
 Memory::getOption(Option option) const
 {

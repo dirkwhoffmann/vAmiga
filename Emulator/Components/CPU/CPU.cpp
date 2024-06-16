@@ -361,34 +361,6 @@ CPU::setOption(Option option, i64 value)
 }
 
 void
-CPU::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-
-        OPT_CPU_REVISION,
-        OPT_CPU_DASM_REVISION,
-        OPT_CPU_DASM_SYNTAX,
-        OPT_CPU_OVERCLOCKING,
-        OPT_CPU_RESET_VAL
-    };
-
-    for (auto &option : options) {
-
-        try {
-
-            setOption(option, defaults.get(option));
-
-        } catch (Error &e) {
-
-            std::cout << "Config error: " << e.what() << std::endl;
-        }
-    }
-}
-
-void
 CPU::_reset(bool hard)
 {    
     RESET_SNAPSHOT_ITEMS(hard)

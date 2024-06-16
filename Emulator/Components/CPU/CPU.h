@@ -170,8 +170,6 @@ public:
     i64 getOption(Option opt) const override;
     void setOption(Option opt, i64 value) override;
 
-    void resetConfig() override;
-
     
     //
     // Analyzing

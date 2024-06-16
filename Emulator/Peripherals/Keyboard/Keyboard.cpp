@@ -24,22 +24,6 @@ Keyboard::_reset(bool hard)
     execute();
 }
 
-void
-Keyboard::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-        
-        OPT_ACCURATE_KEYBOARD
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option));
-    }
-}
-
 i64
 Keyboard::getOption(Option option) const
 {

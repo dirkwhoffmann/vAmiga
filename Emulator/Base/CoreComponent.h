@@ -63,11 +63,10 @@ public:
     bool operator!= (CoreComponent &other) { return !(other == *this); }
 
     /* This function is called inside the emulator's launch routine. It iterates
-     * through all components and calls the _initialize() delegate. By default
-     * the initial configuration is setup.
+     * through all components and calls the _initialize() delegate.
      */
     void initialize();
-    virtual void _initialize() { resetConfig(); }
+    virtual void _initialize() { }
     
     /* Resets the component and it's subcomponents. Two reset modes are
      * distinguished:

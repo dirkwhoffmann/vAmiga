@@ -52,14 +52,7 @@ protected:
     
     void _dump(Category category, std::ostream& os) const override;
 
-    
-    //
-    // Methods from CoreComponent
-    //
 
-    void resetConfig() override;
-
-    
     //
     // Methods from RemoteServer
     //

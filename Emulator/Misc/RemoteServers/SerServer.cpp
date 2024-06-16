@@ -40,25 +40,6 @@ SerServer::_dump(Category category, std::ostream& os) const
     }
 }
 
-void
-SerServer::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-        
-        OPT_SRV_PORT,
-        OPT_SRV_PROTOCOL,
-        OPT_SRV_AUTORUN,
-        OPT_SRV_VERBOSE
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option, SERVER_SER));
-    }
-}
-
 bool
 SerServer::shouldRun()
 {

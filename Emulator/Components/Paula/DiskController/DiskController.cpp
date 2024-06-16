@@ -31,24 +31,6 @@ DiskController::_reset(bool hard)
     dsksync = 0x4489;
 }
 
-void
-DiskController::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-        
-        OPT_DRIVE_SPEED,
-        OPT_AUTO_DSKSYNC,
-        OPT_LOCK_DSKSYNC
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option));
-    }
-}
-
 i64
 DiskController::getOption(Option option) const
 {

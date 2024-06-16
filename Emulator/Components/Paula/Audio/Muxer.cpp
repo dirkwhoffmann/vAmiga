@@ -108,33 +108,6 @@ Muxer::clear()
     filter.clear();
 }
 
-void
-Muxer::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-        
-        OPT_SAMPLING_METHOD,
-        OPT_AUDPAN0,
-        OPT_AUDPAN1,
-        OPT_AUDPAN2,
-        OPT_AUDPAN3,
-        OPT_AUDVOL0,
-        OPT_AUDVOL1,
-        OPT_AUDVOL2,
-        OPT_AUDVOL3,
-        OPT_AUDVOLL,
-        OPT_AUDVOLR,
-        OPT_AUD_FASTPATH
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option));
-    }
-}
-
 i64
 Muxer::getOption(Option option) const
 {

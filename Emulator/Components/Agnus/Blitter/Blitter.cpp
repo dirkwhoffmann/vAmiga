@@ -75,22 +75,6 @@ Blitter::_run()
     }
 }
 
-void
-Blitter::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-        
-        OPT_BLITTER_ACCURACY
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option));
-    }
-}
-
 i64
 Blitter::getOption(Option option) const
 {

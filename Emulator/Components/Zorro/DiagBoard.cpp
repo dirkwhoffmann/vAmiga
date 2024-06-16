@@ -42,22 +42,6 @@ DiagBoard::_reset(bool hard)
     }
 }
 
-void
-DiagBoard::resetConfig()
-{
-    assert(isPoweredOff());
-    auto &defaults = amiga.defaults;
-
-    std::vector <Option> options = {
-        
-        OPT_DIAG_BOARD
-    };
-
-    for (auto &option : options) {
-        setOption(option, defaults.get(option));
-    }
-}
-
 i64
 DiagBoard::getOption(Option option) const
 {
