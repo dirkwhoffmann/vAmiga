@@ -104,6 +104,13 @@ extension EmulatorProxy {
         if exception.errorCode != .OK { throw VAError(exception) }
     }
     
+    func exportConfig(url: URL) throws {
+
+        let exception = ExceptionWrapper()
+        exportConfig(url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
     func loadSnapshot(_ proxy: SnapshotProxy) throws {
 
         let exception = ExceptionWrapper()

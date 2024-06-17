@@ -20,7 +20,8 @@ class RegressionTester : public SubComponent {
     Descriptions descriptions = {{
 
         .name           = "Regression",
-        .description    = "Regression Tester"
+        .description    = "Regression Tester",
+        .shell          = ""
     }};
 
     ConfigOptions options = {

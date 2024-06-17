@@ -351,6 +351,20 @@ VAmiga::set(Option opt, i64 value, long id)
 }
 
 void
+VAmiga::exportConfig(const fs::path &path) const
+{
+    assert(isUserThread());
+    emu->main.exportConfig(path);
+}
+
+void
+VAmiga::exportConfig(std::ostream& stream) const
+{
+    assert(isUserThread());
+    emu->main.exportConfig(stream);
+}
+
+void
 VAmiga::put(const Cmd &cmd)
 {
     assert(isUserThread());

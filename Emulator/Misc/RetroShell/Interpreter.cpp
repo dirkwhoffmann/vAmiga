@@ -13,6 +13,12 @@
 
 namespace vamiga {
 
+string
+Interpreter::shellName(const CoreObject &object)
+{
+    return util::lowercased(object.objectName());
+}
+
 void
 Interpreter::_initialize()
 {

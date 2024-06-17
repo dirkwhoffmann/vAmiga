@@ -21,7 +21,8 @@ class Debugger : public SubComponent {
     Descriptions descriptions = {{
 
         .name           = "Debugger",
-        .description    = "Hardware Debugger"
+        .description    = "Hardware Debugger",
+        .shell          = ""
     }};
 
     ConfigOptions options = {

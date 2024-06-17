@@ -25,7 +25,8 @@ class Denise : public SubComponent, public Inspectable<DeniseInfo> {
     Descriptions descriptions = {{
 
         .name           = "Denise",
-        .description    = "Graphics"
+        .description    = "Graphics",
+        .shell          = "denise"
     }};
 
     ConfigOptions options = {

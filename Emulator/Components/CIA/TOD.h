@@ -31,7 +31,8 @@ class TOD : public SubComponent, public Inspectable<TODInfo> {
     Descriptions descriptions = {{
 
         .name           = "TOD",
-        .description    = "Time-of-day Clock"
+        .description    = "Time-of-day Clock",
+        .shell          = "tod"
     }};
 
     ConfigOptions options = {

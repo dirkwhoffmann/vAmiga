@@ -10,6 +10,7 @@
 #include "config.h"
 #include "Interpreter.h"
 #include "Emulator.h"
+#include "Option.h"
 
 namespace vamiga {
 
@@ -159,77 +160,54 @@ Interpreter::initCommandShell(Command &root)
         // Amiga
         //
 
-        root.add({"amiga"},         "The virtual Amiga");
+        auto cmd = amiga.shellName();
+        auto description = amiga.description();
+        root.add({cmd}, description);
 
         {   VAMIGA_GROUP("")
 
-            root.add({"amiga", ""},
+            root.add({cmd, ""},
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
                 retroShell.dump(amiga, Category::Config);
             });
 
-            root.add({"amiga", "defaults"},
+            root.add({cmd, "defaults"},
                      "Displays the user defaults storage",
                      [this](Arguments& argv, long value) {
 
                 retroShell.dump(amiga, Category::Defaults);
             });
 
-            root.add({"amiga", "set"},
-                     "Configures the component");
+            root.add({cmd, "set"}, "Configure the component");
+            for (auto &opt : amiga.getOptions()) {
 
-            root.add({"amiga", "set", "type"}, { VideoFormatEnum::argList() },
-                     "Selects the video standard",
-                     [this](Arguments& argv, long value) {
+                root.add({cmd, "set", OptionEnum::plainkey(opt)},
+                         {OptionParser::argList(opt)},
+                         OptionEnum::help(opt),
+                         [this](Arguments& argv, long opt) {
 
-                emulator.set(OPT_VIDEO_FORMAT, parseEnum <VideoFormatEnum> (argv[0]));
-            });
+                    emulator.set(Option(opt), argv[0]);
 
-            root.add({"amiga", "set", "warpboot"}, { Arg::onoff },
-                     "Enables or disables warp mode while Kickstart initializes",
-                     [this](Arguments& argv, long value) {
+                }, opt);
+            }
 
-                emulator.set(OPT_WARP_BOOT, parseBool(argv[0]));
-            });
-
-            root.add({"amiga", "set", "warpmode"}, { WarpModeEnum::argList() },
-                     "Selects the warp mode",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_WARP_MODE, parseEnum <WarpModeEnum> (argv[0]));
-            });
-
-            root.add({"amiga", "set", "vsync"}, { Arg::onoff },
-                     "Enables or disables VSYNC",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_VSYNC, parseBool(argv[0]));
-            });
-
-            root.add({"amiga", "set", "timelapse"}, { Arg::value },
-                     "Increases or decreases the native frame rate",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_TIME_LAPSE, parseNum(argv[0]));
-            });
-
-            root.add({"amiga", "power"}, { Arg::onoff },
+            root.add({cmd, "power"}, { Arg::onoff },
                      "Switches the Amiga on or off",
                      [this](Arguments& argv, long value) {
 
                 parseOnOff(argv[0]) ? emulator.run() : emulator.powerOff();
             });
 
-            root.add({"amiga", "reset"},
+            root.add({cmd, "reset"},
                      "Performs a hard reset",
                      [this](Arguments& argv, long value) {
 
                 amiga.hardReset();
             });
 
-            root.add({"amiga", "init"}, { ConfigSchemeEnum::argList() },
+            root.add({cmd, "init"}, { ConfigSchemeEnum::argList() },
                      "Initializes the Amiga with a predefined scheme",
                      [this](Arguments& argv, long value) {
 
@@ -248,94 +226,43 @@ Interpreter::initCommandShell(Command &root)
         // Memory
         //
 
-        root.add({"memory"},        "Ram and Rom");
+        cmd = mem.shellName();
+        description = mem.description();
+        root.add({cmd}, description);
 
         {   VAMIGA_GROUP("")
 
-            root.add({"memory", ""},
+            root.add({cmd, ""},
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
                 retroShell.dump(mem, Category::Config);
             });
 
-            root.add({"memory", "set"},
-                     "Configures the component");
+            root.add({cmd, "set"}, "Configure the component");
+            for (auto &opt : mem.getOptions()) {
 
-            root.add({"memory", "set", "chip"}, { Arg::kb },
-                     "Configures the amouts of chip memory",
-                     [this](Arguments& argv, long value) {
+                root.add({cmd, "set", OptionEnum::plainkey(opt)},
+                         {OptionParser::argList(opt)},
+                         OptionEnum::help(opt),
+                         [this](Arguments& argv, long opt) {
 
-                emulator.set(OPT_CHIP_RAM, parseNum(argv[0]));
-            });
+                    emulator.set(Option(opt), argv[0]);
 
-            root.add({"memory", "set", "slow"},  { Arg::kb },
-                     "Configures the amouts of slow memory",
-                     [this](Arguments& argv, long value) {
+                }, opt);
+            }
 
-                emulator.set(OPT_SLOW_RAM, parseNum(argv[0]));
-            });
-
-            root.add({"memory", "set", "fast"}, { Arg::kb },
-                     "Configures the amouts of flow memory",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_FAST_RAM, parseNum(argv[0]));
-            });
-
-            root.add({"memory", "set", "extstart"}, { Arg::address },
-                     "Sets the start address for Rom extensions",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_EXT_START, parseNum(argv[0]));
-            });
-
-            root.add({"memory", "set", "saveroms"}, { Arg::boolean },
-                     "Determines whether Roms should be stored in snapshots",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_SAVE_ROMS, parseBool(argv[0]));
-            });
-
-            root.add({"memory", "set", "slowramdelay"}, { Arg::boolean },
-                     "Enables or disables slow Ram bus delays",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_SLOW_RAM_DELAY, parseBool(argv[0]));
-            });
-
-            root.add({"memory", "set", "bankmap"}, { BankMapEnum::argList() },
-                     "Selects the bank mapping scheme",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_BANKMAP, parseEnum <BankMapEnum> (argv[0]));
-            });
-
-            root.add({"memory", "set", "raminit"}, { RamInitPatternEnum::argList() },
-                     "Determines how Ram is initialized on startup",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_RAM_INIT_PATTERN, parseEnum <RamInitPatternEnum> (argv[0]));
-            });
-
-            root.add({"memory", "set", "unmapped"}, { UnmappedMemoryEnum::argList() },
-                     "Determines the behaviour of unmapped memory",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_UNMAPPING_TYPE, parseEnum <UnmappedMemoryEnum> (argv[0]));
-            });
-
-            root.add({"memory", "load"},
+            root.add({cmd, "load"},
                      "Installs a Rom image");
 
-            root.add({"memory", "load", "rom"}, { Arg::path },
+            root.add({cmd, "load", "rom"}, { Arg::path },
                      "Installs a Kickstart Rom",
                      [this](Arguments& argv, long value) {
 
                 amiga.mem.loadRom(argv.front());
             });
 
-            root.add({"memory", "load", "extrom"}, { Arg::path },
+            root.add({cmd, "load", "extrom"}, { Arg::path },
                      "Installs a Rom extension",
                      [this](Arguments& argv, long value) {
 
@@ -347,57 +274,31 @@ Interpreter::initCommandShell(Command &root)
         // CPU
         //
 
-        root.add({"cpu"},           "Motorola 68k CPU");
+        cmd = cpu.shellName();
+        description = cpu.description();
+        root.add({cmd}, description);
 
         {   VAMIGA_GROUP("")
 
-            root.add({"cpu", ""},
+            root.add({cmd, ""},
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(amiga.cpu, Category::Config);
+                retroShell.dump(cpu, Category::Config);
             });
 
-            root.add({"cpu", "set"},
-                     "Configures the component");
+            root.add({cmd, "set"}, "Configure the component");
+            for (auto &opt : cpu.getOptions()) {
 
-            root.add({"cpu", "set", "revision"}, { CPURevisionEnum::argList() },
-                     "Selects the emulated chip model",
-                     [this](Arguments& argv, long value) {
+                root.add({cmd, "set", OptionEnum::plainkey(opt)},
+                         {OptionParser::argList(opt)},
+                         OptionEnum::help(opt),
+                         [this](Arguments& argv, long opt) {
 
-                emulator.set(OPT_CPU_REVISION, parseEnum <CPURevisionEnum> (argv[0]));
-            });
+                    emulator.set(Option(opt), argv[0]);
 
-            root.add({"cpu", "set", "dasm"},
-                     "Configures the disassembler");
-
-            root.add({"cpu", "set", "dasm", "revision"}, { DasmRevisionEnum::argList() },
-                     "Selects the disassembler instruction set",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_CPU_DASM_REVISION, parseEnum <DasmRevisionEnum> (argv[0]));
-            });
-
-            root.add({"cpu", "set", "dasm", "syntax"}, {  DasmSyntaxEnum::argList() },
-                     "Selects the disassembler syntax style",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_CPU_DASM_SYNTAX, parseEnum <DasmSyntaxEnum> (argv[0]));
-            });
-
-            root.add({"cpu", "set", "overclocking"}, { Arg::value },
-                     "Overclocks the CPU by the specified factor",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_CPU_OVERCLOCKING, parseNum(argv[0]));
-            });
-
-            root.add({"cpu", "set", "regreset"}, { Arg::value },
-                     "Selects the reset value of data and address registers",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_CPU_RESET_VAL, parseNum(argv[0]));
-            });
+                }, opt);
+            }
         }
 
         //
@@ -406,13 +307,13 @@ Interpreter::initCommandShell(Command &root)
 
         for (isize i = 0; i < 2; i++) {
 
-            string cia = (i == 0) ? "ciaa" : "ciab";
-
-            root.add({cia}, "Complex Interface Adapter");
+            auto cmd = (i == 0) ? ciaa.shellName() : ciab.shellName();
+            auto description = (i == 0) ? ciaa.description() : ciab.description();
+            root.add({cmd}, description);
 
             {   VAMIGA_GROUP("")
 
-                root.add({cia, ""},
+                root.add({cmd, ""},
                          "Displays the current configuration",
                          [this](Arguments& argv, long value) {
 
@@ -421,44 +322,19 @@ Interpreter::initCommandShell(Command &root)
 
                 }, i);
 
-                root.add({cia, "set"},
-                         "Configures the component");
+                root.add({cmd, "set"}, "Configures the component");
 
-                root.add({cia, "set", "revision"}, { CIARevisionEnum::argList() },
-                         "Selects the emulated chip model",
-                         [this](Arguments& argv, long value) {
+                for (auto &opt : ciaa.getOptions()) {
 
-                    auto parsed = parseEnum <CIARevisionEnum> (argv[0]);
-                    emulator.set(OPT_CIA_REVISION, value, { parsed });
+                    root.add({cmd, "set", OptionEnum::plainkey(opt)},
+                             {OptionParser::argList(opt)},
+                             OptionEnum::help(opt),
+                             [this](Arguments& argv, long value) {
 
-                }, i);
+                        emulator.set(Option(HI_WORD(value)), argv[0], { LO_WORD(value) });
 
-                root.add({cia, "set", "todbug"}, { Arg::boolean },
-                         "Enables or disables the TOD hardware bug",
-                         [this](Arguments& argv, long value) {
-
-                    auto parsed = parseBool(argv[0]);
-                    emulator.set(OPT_TODBUG, value, { parsed });
-
-                }, i);
-
-                root.add({cia, "set", "esync"}, { Arg::boolean },
-                         "Turns E-clock syncing on or off",
-                         [this](Arguments& argv, long value) {
-
-                    auto parsed = parseBool(argv[0]);
-                    emulator.set(OPT_ECLOCK_SYNCING, value, { parsed });
-
-                }, i);
-
-                root.add({cia, "set", "idling"}, { Arg::boolean },
-                         "Turns idle-logic on or off",
-                         [this](Arguments& argv, long value) {
-
-                    auto parsed = parseBool(argv[0]);
-                    emulator.set(OPT_CIA_IDLE_SLEEP, value, { parsed });
-
-                }, i);
+                    }, HI_W_LO_W(opt, i));
+                }
             }
         }
 
@@ -466,317 +342,170 @@ Interpreter::initCommandShell(Command &root)
         // Agnus
         //
 
-        root.add({"agnus"},         "Custom chip");
+        cmd = agnus.shellName();
+        description = agnus.description();
+        root.add({cmd}, description);
 
         {   VAMIGA_GROUP("")
 
-            root.add({"agnus", ""},
+            root.add({cmd, ""},
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
                 retroShell.dump(agnus, Category::Config);
             });
 
-            root.add({"agnus", "set"},
-                     "Configures the component");
+            root.add({cmd, "set"}, "Configure the component");
+            for (auto &opt : agnus.getOptions()) {
 
-            root.add({"agnus", "set", "revision"}, { AgnusRevisionEnum::argList() },
-                     "Selects the emulated chip model",
-                     [this](Arguments& argv, long value) {
+                root.add({cmd, "set", OptionEnum::plainkey(opt)},
+                         {OptionParser::argList(opt)},
+                         OptionEnum::help(opt),
+                         [this](Arguments& argv, long opt) {
 
-                emulator.set(OPT_AGNUS_REVISION, parseEnum <AgnusRevisionEnum> (argv[0]));
-            });
+                    emulator.set(Option(opt), argv[0]);
 
-            root.add({"agnus", "set", "slowrammirror"}, { Arg::boolean },
-                     "Enables or disables ECS Slow Ram mirroring",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_SLOW_RAM_MIRROR, parseBool(argv[0]));
-            });
-
-            root.add({"agnus", "set", "ptrdrops"}, { Arg::boolean },
-                     "Emulate dropped register writes",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_PTR_DROPS, parseBool(argv[0]));
-            });
+                }, opt);
+            }
         }
 
         //
         // Blitter
         //
 
-        root.add({"blitter"},       "Coprocessor");
+        cmd = blitter.shellName();
+        description = blitter.description();
+        root.add({cmd}, description);
 
         {   VAMIGA_GROUP("")
 
-            root.add({"blitter", ""},
+            root.add({cmd, ""},
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
                 retroShell.dump(blitter, Category::Config);
             });
 
-            root.add({"blitter", "set"},
-                     "Configures the component");
+            root.add({cmd, "set"}, "Configure the component");
+            for (auto &opt : blitter.getOptions()) {
 
-            root.add({"blitter", "set", "accuracy"}, { "1..3" },
-                     "Selects the emulation accuracy level",
-                     [this](Arguments& argv, long value) {
+                root.add({cmd, "set", OptionEnum::plainkey(opt)},
+                         {OptionParser::argList(opt)},
+                         OptionEnum::help(opt),
+                         [this](Arguments& argv, long opt) {
 
-                emulator.set(OPT_BLITTER_ACCURACY, parseNum(argv[0]));
-            });
+                    emulator.set(Option(opt), argv[0]);
+
+                }, opt);
+            }
         }
 
         //
         // Denise
         //
 
-        root.add({"denise"},        "Custom chip");
+        cmd = denise.shellName();
+        description = denise.description();
+        root.add({cmd}, description);
 
         {   VAMIGA_GROUP("")
 
-            root.add({"denise", ""},
+            root.add({cmd, ""},
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
                 retroShell.dump(denise, Category::Config);
             });
 
-            root.add({"denise", "set"},
-                     "Configures the component");
+            root.add({cmd, "set"}, "Configure the component");
+            for (auto &opt : denise.getOptions()) {
 
-            root.add({"denise", "set", "revision"}, { DeniseRevisionEnum::argList() },
-                     "Selects the emulated chip model",
-                     [this](Arguments& argv, long value) {
+                root.add({cmd, "set", OptionEnum::plainkey(opt)},
+                         {OptionParser::argList(opt)},
+                         OptionEnum::help(opt),
+                         [this](Arguments& argv, long opt) {
 
-                emulator.set(OPT_DENISE_REVISION, parseEnum <DeniseRevisionEnum> (argv[0]));
-            });
+                    emulator.set(Option(opt), argv[0]);
 
-            root.add({"denise", "set", "tracking"}, { Arg::boolean },
-                     "Enables or disables viewport tracking",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_VIEWPORT_TRACKING, parseBool(argv[0]));
-            });
-
-            root.add({"denise", "set", "frameskip"}, { Arg::value },
-                     "Sets the number of skipped frames in warp mode",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_FRAME_SKIPPING, parseNum(argv[0]));
-            });
-
-            root.add({"denise", "set", "clxsprspr"}, { Arg::boolean },
-                     "Switches sprite-sprite collision detection on or off",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_CLX_SPR_SPR, parseBool(argv[0]));
-            });
-
-            root.add({"denise", "set", "clxsprplf"}, { Arg::boolean },
-                     "Switches sprite-playfield collision detection on or off",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_CLX_SPR_PLF, parseBool(argv[0]));
-            });
-
-            root.add({"denise", "set", "clxplfplf"}, { Arg::boolean },
-                     "Switches playfield-playfield collision detection on or off",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_CLX_PLF_PLF, parseBool(argv[0]));
-            });
-
-            root.add({"denise", "set", "hidden"},
-                     "Hides bitplanes, sprites, or layers");
-
-            root.add({"denise", "set", "hidden", "bitplanes"}, { Arg::value },
-                     "Wipes out certain bitplane data",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_HIDDEN_BITPLANES, parseNum(argv[0]));
-            });
-
-            root.add({"denise", "set", "hidden", "sprites"}, { Arg::value },
-                     "Wipes out certain sprite data",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_HIDDEN_SPRITES, parseNum(argv[0]));
-            });
-
-            root.add({"denise", "set", "hidden", "layers"}, { Arg::value },
-                     "Makes certain drawing layers transparent",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_HIDDEN_LAYERS, parseNum(argv[0]));
-            });
+                }, opt);
+            }
         }
 
         //
         // Paula
         //
 
-        root.add({"paula"},         "Custom chip");
+        cmd = paula.shellName();
+        description = paula.description();
+        root.add({cmd}, description);
 
         {   VAMIGA_GROUP("")
 
-            root.add({"paula", "audio"},
+            root.add({cmd, "audio"},
                      "Audio unit");
 
-            root.add({"paula", "audio", ""},
+            root.add({cmd, "audio", ""},
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
                 retroShell.dump(paula.muxer, Category::Config);
             });
 
-            root.add({"paula", "audio", "filter"},
+            root.add({cmd, "audio", "filter"},
                      "Displays the current filter configuration",
                      [this](Arguments& argv, long value) {
 
                 retroShell.dump(paula.muxer.filter, Category::Config);
             });
 
-            root.add({"paula", "audio", "filter", "set"},
-                     "Configures the audio filter");
+            root.add({cmd, "audio", "filter", "set"}, "Configure the component");
+            for (auto &opt : paula.muxer.filter.getOptions()) {
 
-            root.add({"paula", "audio", "filter", "set", "type"}, { FilterTypeEnum::argList() },
-                     "Configures the audio filter type",
-                     [this](Arguments& argv, long value) {
+                root.add({cmd, "audio", "filter", "set", OptionEnum::plainkey(opt)},
+                         {OptionParser::argList(opt)},
+                         OptionEnum::help(opt),
+                         [this](Arguments& argv, long opt) {
 
-                emulator.set(OPT_FILTER_TYPE, parseEnum <FilterTypeEnum> (argv[0]));
-            });
+                    emulator.set(Option(opt), argv[0]);
 
-            root.add({"paula", "audio", "set"},
-                     "Configures the component");
+                }, opt);
+            }
 
-            root.add({"paula", "audio", "set", "sampling"}, { SamplingMethodEnum::argList() },
-                     "Selects the sampling method",
-                     [this](Arguments& argv, long value) {
+            root.add({cmd, "audio", "set"}, "Configure the component");
+            for (auto &opt : paula.muxer.getOptions()) {
 
-                emulator.set(OPT_SAMPLING_METHOD, parseEnum <SamplingMethodEnum> (argv[0]));
-            });
+                root.add({cmd, "audio", "set", OptionEnum::plainkey(opt)},
+                         {OptionParser::argList(opt)},
+                         OptionEnum::help(opt),
+                         [this](Arguments& argv, long opt) {
 
-            root.add({"paula", "audio", "set", "volume"},
-                     "Sets the volume");
+                    emulator.set(Option(opt), argv[0]);
 
-            root.add({"paula", "audio", "set", "volume", "channel0"}, { Arg::volume },
-                     "Sets the volume for audio channel 0",
-                     [this](Arguments& argv, long value) {
+                }, opt);
+            }
 
-                emulator.set(OPT_AUDVOL0, parseNum(argv[0]));
-            });
-
-            root.add({"paula", "audio", "set", "volume", "channel1"}, { Arg::volume },
-                     "Sets the volume for audio channel 1",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_AUDVOL1, parseNum(argv[0]));
-            });
-
-            root.add({"paula", "audio", "set", "volume", "channel2"}, { Arg::volume },
-                     "Sets the volume for audio channel 2",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_AUDVOL2, parseNum(argv[0]));
-            });
-
-            root.add({"paula", "audio", "set", "volume", "channel3"}, { Arg::volume },
-                     "Sets the volume for audio channel 3",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_AUDVOL3, parseNum(argv[0]));
-            });
-
-            root.add({"paula", "audio", "set", "volume", "left"}, { Arg::volume },
-                     "Sets the master volume for the left speaker",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_AUDVOLL, parseNum(argv[0]));
-            });
-
-            root.add({"paula", "audio", "set", "volume", "right"}, { Arg::volume },
-                     "Sets the master volume for the right speaker",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_AUDVOLR, parseNum(argv[0]));
-            });
-
-            root.add({"paula", "audio", "set", "pan"},
-                     "Sets the pan for one of the four audio channels");
-
-            root.add({"paula", "audio", "set", "pan", "channel0"}, { Arg::value },
-                     "Sets the pan for audio channel 0",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_AUDPAN0, parseNum(argv[0]));
-            });
-
-            root.add({"paula", "audio", "set", "pan", "channel1"}, { Arg::value },
-                     "Sets the pan for audio channel 1",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_AUDPAN1, parseNum(argv[0]));
-            });
-
-            root.add({"paula", "audio", "set", "pan", "channel2"}, { Arg::value },
-                     "Sets the pan for audio channel 2",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_AUDPAN2, parseNum(argv[0]));
-            });
-
-            root.add({"paula", "audio", "set", "pan", "channel3"}, { Arg::value },
-                     "Sets the pan for audio channel 3",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_AUDPAN3, parseNum(argv[0]));
-            });
-
-            root.add({"paula", "audio", "set", "fastpath"}, { Arg::value },
-                     "Enables or disables the fast path if no audio is playing",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_AUD_FASTPATH, parseBool(argv[0]));
-            });
-
-            root.add({"paula", "dc"},
+            root.add({cmd, "dc"},
                      "Disk controller");
 
-            root.add({"paula", "dc", ""},
+            root.add({cmd, "dc", ""},
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
                 retroShell.dump(diskController, Category::Config);
             });
 
-            root.add({"paula", "dc", "set"},
-                     "Configures the component");
+            root.add({cmd, "dc", "set"}, "Configure the component");
+            for (auto &opt : paula.diskController.getOptions()) {
 
-            root.add({"paula", "dc", "set", "speed"}, { Arg::value },
-                     "Configures the data transfer speed",
-                     [this](Arguments& argv, long value) {
+                root.add({cmd, "dc", "set", OptionEnum::plainkey(opt)},
+                         {OptionParser::argList(opt)},
+                         OptionEnum::help(opt),
+                         [this](Arguments& argv, long opt) {
 
-                emulator.set(OPT_DRIVE_SPEED, parseNum(argv[0]));
-            });
+                    emulator.set(Option(opt), argv[0]);
 
-            root.add({"paula", "dc", "dsksync"},
-                     "Secures the DSKSYNC register");
-
-            root.add({"paula", "dc", "dsksync", "auto"}, { Arg::boolean },
-                     "Always receive a SYNC signal",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_AUTO_DSKSYNC, parseBool(argv[0]));
-            });
-
-            root.add({"paula", "dc", "dsksync", "lock"}, { Arg::boolean },
-                     "Prevents writes to DSKSYNC",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_LOCK_DSKSYNC, parseBool(argv[0]));
-            });
+                }, opt);
+            }
         }
 
         //
@@ -1015,9 +744,9 @@ Interpreter::initCommandShell(Command &root)
 
         {   VAMIGA_GROUP("")
 
-            for (isize i = ControlPort::PORT1; i <= ControlPort::PORT2; i++) {
+            for (isize i = 0; i <= 1; i++) {
 
-                string nr = (i == ControlPort::PORT1) ? "1" : "2";
+                string nr = (i == 0) ? "1" : "2";
 
                 root.add({"joystick", nr},
                          "Joystick in port " + nr);
@@ -1026,7 +755,7 @@ Interpreter::initCommandShell(Command &root)
                          "Displays the current configuration",
                          [this](Arguments& argv, long value) {
 
-                    auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
+                    auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
                     retroShell.dump(port.joystick, Category::Config);
 
                 }, i);
@@ -1038,7 +767,7 @@ Interpreter::initCommandShell(Command &root)
                          "Enables or disables auto-fire mode",
                          [this](Arguments& argv, long value) {
 
-                    auto port = (value == ControlPort::PORT1) ? ControlPort::PORT1 : ControlPort::PORT2;
+                    auto port = (value == 0) ? 0 : 1;
                     emulator.set(OPT_AUTOFIRE, port, { parseBool(argv[0]) });
 
                 }, i);
@@ -1047,7 +776,7 @@ Interpreter::initCommandShell(Command &root)
                          "Sets the number of bullets per auto-fire shot",
                          [this](Arguments& argv, long value) {
 
-                    auto port = (value == ControlPort::PORT1) ? ControlPort::PORT1 : ControlPort::PORT2;
+                    auto port = (value == 0) ? 0 : 1;
                     emulator.set(OPT_AUTOFIRE_BULLETS, port, { parseNum(argv[0]) });
 
                 }, i);
@@ -1056,7 +785,7 @@ Interpreter::initCommandShell(Command &root)
                          "Configures the auto-fire delay",
                          [this](Arguments& argv, long value) {
 
-                    auto port = (value == ControlPort::PORT1) ? ControlPort::PORT1 : ControlPort::PORT2;
+                    auto port = (value == 0) ? 0 : 1;
                     emulator.set(OPT_AUTOFIRE_DELAY, port, { parseNum(argv[0]) });
 
                 }, i);
@@ -1065,7 +794,7 @@ Interpreter::initCommandShell(Command &root)
                          "Presses a joystick button",
                          [this](Arguments& argv, long value) {
 
-                    auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
+                    auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
                     auto nr = parseNum(argv[0]);
 
                     switch (nr) {
@@ -1084,7 +813,7 @@ Interpreter::initCommandShell(Command &root)
                          "Releases a joystick button",
                          [this](Arguments& argv, long value) {
 
-                    auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
+                    auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
                     auto nr = parseNum(argv[0]);
 
                     switch (nr) {
@@ -1106,7 +835,7 @@ Interpreter::initCommandShell(Command &root)
                          "Pulls the joystick left",
                          [this](Arguments& argv, long value) {
 
-                    auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
+                    auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
                     port.joystick.trigger(PULL_LEFT);
 
                 }, i);
@@ -1115,7 +844,7 @@ Interpreter::initCommandShell(Command &root)
                          "Pulls the joystick right",
                          [this](Arguments& argv, long value) {
 
-                    auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
+                    auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
                     port.joystick.trigger(PULL_RIGHT);
 
                 }, i);
@@ -1124,7 +853,7 @@ Interpreter::initCommandShell(Command &root)
                          "Pulls the joystick up",
                          [this](Arguments& argv, long value) {
 
-                    auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
+                    auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
                     port.joystick.trigger(PULL_UP);
 
                 }, i);
@@ -1133,7 +862,7 @@ Interpreter::initCommandShell(Command &root)
                          "Pulls the joystick down",
                          [this](Arguments& argv, long value) {
 
-                    auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
+                    auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
                     port.joystick.trigger(PULL_DOWN);
 
                 }, i);
@@ -1145,7 +874,7 @@ Interpreter::initCommandShell(Command &root)
                          "Releases the x-axis",
                          [this](Arguments& argv, long value) {
 
-                    auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
+                    auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
                     port.joystick.trigger(RELEASE_X);
 
                 }, i);
@@ -1154,7 +883,7 @@ Interpreter::initCommandShell(Command &root)
                          "Releases the y-axis",
                          [this](Arguments& argv, long value) {
 
-                    auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
+                    auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
                     port.joystick.trigger(RELEASE_Y);
 
                 }, i);
@@ -1169,9 +898,9 @@ Interpreter::initCommandShell(Command &root)
 
         {   VAMIGA_GROUP("")
 
-            for (isize i = ControlPort::PORT1; i <= ControlPort::PORT2; i++) {
+            for (isize i = 0; i <= 1; i++) {
 
-                string nr = (i == ControlPort::PORT1) ? "1" : "2";
+                string nr = (i == 0) ? "1" : "2";
 
                 root.add({"mouse", nr},
                          "Mouse in port " + nr);
@@ -1180,7 +909,7 @@ Interpreter::initCommandShell(Command &root)
                          "Displays the current configuration",
                          [this](Arguments& argv, long value) {
 
-                    auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
+                    auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
                     retroShell.dump(port.mouse, Category::Config);
 
                 }, i);
@@ -1192,7 +921,7 @@ Interpreter::initCommandShell(Command &root)
                          "Enables or disables pull-up resistors",
                          [this](Arguments& argv, long value) {
 
-                    auto port = (value == ControlPort::PORT1) ? ControlPort::PORT1 : ControlPort::PORT2;
+                    auto port = (value == 0) ? 0 : 1;
                     emulator.set(OPT_PULLUP_RESISTORS, port, { parseBool(argv[0]) });
 
                 }, i);
@@ -1201,7 +930,7 @@ Interpreter::initCommandShell(Command &root)
                          "Enables or disables the shake detector",
                          [this](Arguments& argv, long value) {
 
-                    auto port = (value == ControlPort::PORT1) ? ControlPort::PORT1 : ControlPort::PORT2;
+                    auto port = (value == 0) ? 0 : 1;
                     emulator.set(OPT_SHAKE_DETECTION, port, { parseBool(argv[0]) });
 
                 }, i);
@@ -1210,7 +939,7 @@ Interpreter::initCommandShell(Command &root)
                          "Sets the horizontal and vertical mouse velocity",
                          [this](Arguments& argv, long value) {
 
-                    auto port = (value == ControlPort::PORT1) ? ControlPort::PORT1 : ControlPort::PORT2;
+                    auto port = (value == 0) ? 0 : 1;
                     emulator.set(OPT_MOUSE_VELOCITY, port, { parseNum(argv[0]) });
 
                 }, i);
@@ -1222,7 +951,7 @@ Interpreter::initCommandShell(Command &root)
                          "Presses the left mouse button",
                          [this](Arguments& argv, long value) {
 
-                    auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
+                    auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
                     port.mouse.pressAndReleaseLeft();
 
                 }, i);
@@ -1231,7 +960,7 @@ Interpreter::initCommandShell(Command &root)
                          "Presses the middle mouse button",
                          [this](Arguments& argv, long value) {
 
-                    auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
+                    auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
                     port.mouse.pressAndReleaseMiddle();
 
                 }, i);
@@ -1240,7 +969,7 @@ Interpreter::initCommandShell(Command &root)
                          "Presses the right mouse button",
                          [this](Arguments& argv, long value) {
 
-                    auto &port = (value == ControlPort::PORT1) ? amiga.controlPort1 : amiga.controlPort2;
+                    auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
                     port.mouse.pressAndReleaseRight();
 
                 }, i);

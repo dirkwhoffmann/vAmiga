@@ -37,7 +37,8 @@ class Agnus : public SubComponent, public Inspectable<AgnusInfo, AgnusStats> {
     Descriptions descriptions = {{
 
         .name           = "Agnus",
-        .description    = "DMA Controller"
+        .description    = "DMA Controller",
+        .shell          = "agnus"
     }};
 
     ConfigOptions options = {

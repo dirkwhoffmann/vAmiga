@@ -54,7 +54,8 @@ class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
     Descriptions descriptions = {{
 
         .name           = "Amiga",
-        .description    = "Commodore Amiga"
+        .description    = "Commodore Amiga",
+        .shell          = "amiga"
     }};
 
     ConfigOptions options = {
@@ -102,8 +103,8 @@ public:
     // Logic board
     RTC rtc = RTC(*this);
     ZorroManager zorro = ZorroManager(*this);
-    ControlPort controlPort1 = ControlPort(*this, ControlPort::PORT1);
-    ControlPort controlPort2 = ControlPort(*this, ControlPort::PORT2);
+    ControlPort controlPort1 = ControlPort(*this, 0);
+    ControlPort controlPort2 = ControlPort(*this, 1);
     SerialPort serialPort = SerialPort(*this);
 
     // Floppy drives
@@ -281,6 +282,10 @@ public:
 
     i64 getOption(Option option) const override;
     void setOption(Option option, i64 value) override;
+
+    // Exports the current configuration to a script file
+    void exportConfig(const fs::path &path) const;
+    void exportConfig(std::ostream& stream) const;
 
     // Reverts to factory settings
     void revertToFactorySettings();

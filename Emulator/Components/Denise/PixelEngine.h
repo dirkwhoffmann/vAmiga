@@ -21,8 +21,9 @@ class PixelEngine : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .name           = "pixelengine",
-        .description    = "Pixel Engine"
+        .name           = "PixelEngine",
+        .description    = "Pixel Engine",
+        .shell          = "monitor"
     }};
 
     ConfigOptions options = {

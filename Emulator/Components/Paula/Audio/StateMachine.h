@@ -22,19 +22,23 @@ class StateMachine : public SubComponent, public Inspectable<StateMachineInfo> {
     Descriptions descriptions = {
         {
             .name           = "StateMachine1",
-            .description    = "Audio State Machine 1"
+            .description    = "Audio State Machine 1",
+            .shell          = ""
         },
         {
             .name           = "StateMachine2",
-            .description    = "Audio State Machine 2"
+            .description    = "Audio State Machine 2",
+            .shell          = ""
         },
         {
             .name           = "StateMachine3",
-            .description    = "Audio State Machine 3"
+            .description    = "Audio State Machine 3",
+            .shell          = ""
         },
         {
             .name           = "StateMachine4",
-            .description    = "Audio State Machine 4"
+            .description    = "Audio State Machine 4",
+            .shell          = ""
         }
     };
 

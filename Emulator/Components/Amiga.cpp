@@ -245,6 +245,29 @@ Amiga::setOption(Option option, i64 value)
 }
 
 void
+Amiga::exportConfig(const fs::path &path) const
+{
+    auto fs = std::ofstream(path, std::ofstream::binary);
+
+    if (!fs.is_open()) {
+        throw Error(ERROR_FILE_CANT_WRITE);
+    }
+
+    exportConfig(fs);
+}
+
+void
+Amiga::exportConfig(std::ostream &stream) const
+{
+    stream << "# vAmiga " << Amiga::build() << "\n";
+    stream << "\n";
+    stream << "amiga power off\n";
+    stream << "\n";
+    CoreComponent::exportConfig(stream);
+    stream << "amiga power on\n";
+}
+
+void
 Amiga::revertToFactorySettings()
 {
     // Switch the emulator off

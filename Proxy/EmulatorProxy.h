@@ -276,6 +276,8 @@
 - (void)setAlarmAbs:(NSInteger)cycle payload:(NSInteger)value;
 - (void)setAlarmRel:(NSInteger)cycle payload:(NSInteger)value;
 
+- (void)exportConfig:(NSURL *)url exception:(ExceptionWrapper *)ex;
+
 @end
 
 

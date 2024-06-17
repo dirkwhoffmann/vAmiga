@@ -15,6 +15,13 @@ namespace vamiga {
 
 class RshServer : public RemoteServer {
 
+    Descriptions descriptions = {{
+
+        .name           = "RshServer",
+        .description    = "Serial Port Server",
+        .shell          = "rshserver"
+    }};
+
 public:
     
     using RemoteServer::RemoteServer;
@@ -23,9 +30,13 @@ public:
     // Methods from CoreObject
     //
     
-protected:
-    
+private:
+
     void _dump(Category category, std::ostream& os) const override;
+
+public:
+
+    const Descriptions &getDescriptions() const override { return descriptions; }
 
 
     //

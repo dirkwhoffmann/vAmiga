@@ -26,7 +26,8 @@ class Paula : public SubComponent, public Inspectable<PaulaInfo> {
     Descriptions descriptions = {{
 
         .name           = "Paula",
-        .description    = "Audio, Interrupts, Disk Control"
+        .description    = "Audio, Interrupts, Disk Control",
+        .shell          = "paula"
     }};
 
     ConfigOptions options = {

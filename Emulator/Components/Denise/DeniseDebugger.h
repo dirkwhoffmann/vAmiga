@@ -19,8 +19,9 @@ class DeniseDebugger: public SubComponent {
 
     Descriptions descriptions = {{
 
-        .name           = "ddebugger",
-        .description    = "Denise Debugger"
+        .name           = "DeniseDebugger",
+        .description    = "Denise Debugger",
+        .shell          = ""
     }};
 
     ConfigOptions options = {

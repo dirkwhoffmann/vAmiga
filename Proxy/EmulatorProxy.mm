@@ -3227,4 +3227,10 @@ using namespace vamiga::moira;
     [self emu]->emu->main.setAlarmRel(cycle, value);
 }
 
+- (void)exportConfig:(NSURL *)url exception:(ExceptionWrapper *)ex
+{
+    try { [self emu]->exportConfig([url fileSystemRepresentation]); }
+    catch (Error &error) { [ex save:error]; }
+}
+
 @end

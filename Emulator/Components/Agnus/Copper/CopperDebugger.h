@@ -46,7 +46,8 @@ class CopperDebugger: public SubComponent {
     Descriptions descriptions = {{
 
         .name           = "cdebugger",
-        .description    = "Copper Debugger"
+        .description    = "Copper Debugger",
+        .shell          = ""
     }};
 
     ConfigOptions options = {

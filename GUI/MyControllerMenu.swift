@@ -174,9 +174,8 @@ extension MyController: NSMenuItemValidation {
         try? amiga.run()
     }
 
-    @IBAction func importConfigAction(_ sender: Any!) {
+    @IBAction func importScriptAction(_ sender: Any!) {
 
-        let defaults = EmulatorProxy.defaults!
         let openPanel = NSOpenPanel()
 
         // Power off the emulator if the user doesn't object
@@ -194,17 +193,7 @@ extension MyController: NSMenuItemValidation {
             if result == .OK, let url = openPanel.url {
 
                 do {
-                    // Import settings
-                    try defaults.load(url: url)
-
-                    // Apply new settings
-                    self.config.applyUserDefaults()
-                    self.pref.applyUserDefaults()
-
-                    // Power on
-                    self.amiga.powerOn()
-                    try? self.amiga.run()
-
+                    try self.mydocument.addMedia(url: url, allowedTypes: [.SCRIPT])
                 } catch {
                     self.showAlert(.cantOpen(url: url), error: error, async: true)
                 }
@@ -228,9 +217,7 @@ extension MyController: NSMenuItemValidation {
             if result == .OK, let url = savePanel.url {
 
                 do {
-                    // Export settings
-                    try defaults.save(url: url)
-
+                    try self.amiga.exportConfig(url: url)
                 } catch {
                     self.showAlert(.cantExport(url: url), error: error, async: true)
                 }

@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "Command.h"
+#include "CoreComponent.h"
 #include <algorithm>
 #include <utility>
 

@@ -34,8 +34,9 @@ class Blitter : public SubComponent, public Inspectable<BlitterInfo>
 {
     Descriptions descriptions = {{
 
-        .name           = "blitter",
-        .description    = "Blitter"
+        .name           = "Blitter",
+        .description    = "Blitter",
+        .shell          = "blitter"
     }};
 
     ConfigOptions options = {

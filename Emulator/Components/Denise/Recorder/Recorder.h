@@ -24,8 +24,10 @@ class Recorder : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .name           = "recorder",
-        .description    = "Video Recorder"
+        .name           = "Recorder",
+        .description    = "Video Recorder",
+        .shell          = ""
+
     }};
 
     ConfigOptions options = {

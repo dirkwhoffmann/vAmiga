@@ -75,11 +75,13 @@ class CIA : public SubComponent, public Inspectable<CIAInfo> {
     Descriptions descriptions = {
         {
             .name           = "CIAA",
-            .description    = "Complex Interface Adapter A"
+            .description    = "Complex Interface Adapter A",
+            .shell          = "ciaa"
         },
         {
             .name           = "CIAB",
-            .description    = "Complex Interface Adapter B"
+            .description    = "Complex Interface Adapter B",
+            .shell          = "ciab"
         }
     };
 
@@ -282,7 +284,7 @@ protected:
 
 public:
     
-    CIA(int n, Amiga& ref);
+    CIA(Amiga& ref, int n);
 
     bool isCIAA() const { return nr == 0; }
     bool isCIAB() const { return nr == 1; }
@@ -562,8 +564,8 @@ class CIAA : public CIA {
     
 public:
     
-    CIAA(Amiga& ref) : CIA(0, ref) { };
-    
+    CIAA(Amiga& ref) : CIA(ref, 0) { };
+
 private:
     
     void _powerOn() override;
@@ -600,8 +602,8 @@ class CIAB : public CIA {
     
 public:
     
-    CIAB(Amiga& ref) : CIA(1, ref) { };
-    
+    CIAB(Amiga& ref) : CIA(ref, 1) { };
+
 private:
 
     void pullDownInterruptLine() override;

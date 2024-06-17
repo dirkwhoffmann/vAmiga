@@ -46,7 +46,8 @@ class Muxer : public SubComponent {
     Descriptions descriptions = {{
 
         .name           = "Muxer",
-        .description    = "Audio Muxer"
+        .description    = "Audio Muxer",
+        .shell          = "audio"
     }};
 
     ConfigOptions options = {

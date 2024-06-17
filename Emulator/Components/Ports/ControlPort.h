@@ -20,12 +20,14 @@ class ControlPort : public SubComponent, public Inspectable<ControlPortInfo> {
 
     Descriptions descriptions = {
         {
-            .name           = "Port1",
-            .description    = "Control Port 1"
+            .name           = "ControlPort1",
+            .description    = "Control Port 1",
+            .shell          = "port1"
         },
         {
-            .name           = "Port2",
-            .description    = "Control Port 2"
+            .name           = "ControlPort2",
+            .description    = "Control Port 2",
+            .shell          = "port2"
         }
     };
 
@@ -36,8 +38,8 @@ class ControlPort : public SubComponent, public Inspectable<ControlPortInfo> {
 
 public:
 
-    static constexpr isize PORT1 = 0;
-    static constexpr isize PORT2 = 1;
+    [[deprecated]] static constexpr isize PORT1 = 0;
+    [[deprecated]] static constexpr isize PORT2 = 1;
 
 private:
     
@@ -131,8 +133,8 @@ public:
 
     void cacheInfo(ControlPortInfo &result) const override;
 
-    bool isPort1() const { return objid == PORT1; }
-    bool isPort2() const { return objid == PORT2; }
+    bool isPort1() const { return objid == 0; }
+    bool isPort2() const { return objid == 1; }
 
     
     //

@@ -20,7 +20,8 @@ class OSDebugger : public SubComponent {
     Descriptions descriptions = {{
 
         .name           = "OSDebugger",
-        .description    = "Operating System Debugger"
+        .description    = "Operating System Debugger",
+        .shell          = "os"
     }};
 
     ConfigOptions options = {

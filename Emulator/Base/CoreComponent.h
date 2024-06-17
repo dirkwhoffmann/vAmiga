@@ -24,8 +24,9 @@ namespace vamiga {
 
 struct Description {
 
-    const char *name;
-    const char *description;
+    const char *name;               //! Short name
+    const char *description;        //! Textual descripiton
+    const char *shell;              //! RetroShell access
 };
 
 typedef std::vector<Description> Descriptions;
@@ -58,7 +59,8 @@ public:
     virtual const Descriptions &getDescriptions() const = 0;
     const char *objectName() const override;
     const char *description() const override;
-    
+    const char *shellName() const;
+
     bool operator== (CoreComponent &other);
     bool operator!= (CoreComponent &other) { return !(other == *this); }
 
@@ -76,6 +78,14 @@ public:
      *
      *     soft: A soft reset emulates a reset inside the virtual Amiga. It is
      *           used to emulate the RESET instruction of the CPU.
+     */
+    // void hardReset();
+    // void softReset();
+
+public:
+
+    /* This function is called inside the C64 reset routines. It iterates
+     * through all components and calls the _reset() delegate.
      */
     void reset(bool hard);
     virtual void _reset(bool hard) = 0;
@@ -181,6 +191,19 @@ public:
     virtual isize didLoadFromBuffer(const u8 *buf) throws { return 0; }
     virtual isize willSaveToBuffer(u8 *buf) {return 0; }
     virtual isize didSaveToBuffer(u8 *buf) { return 0; }
+
+
+    //
+    // Misc
+    //
+
+public:
+
+    // Exports the current configuration to a script file
+    void exportConfig(std::ostream& ss, bool diff = false) const;
+
+    // Exports only those options that differ from the default config
+    void exportDiff(std::ostream& ss) const { exportConfig(ss, true); }
 };
 
 //

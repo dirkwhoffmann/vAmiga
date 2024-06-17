@@ -35,6 +35,13 @@ enum class GdbCmd
 
 class GdbServer : public RemoteServer {
     
+    Descriptions descriptions = {{
+
+        .name           = "GdbServer",
+        .description    = "GDB Remote Server",
+        .shell          = "gdbserver"
+    }};
+
     // The name of the process to be debugged
     string processName;
     
@@ -65,7 +72,11 @@ private:
     
     void _dump(Category category, std::ostream& os) const override;
     
+public:
 
+    const Descriptions &getDescriptions() const override { return descriptions; }
+
+    
     //
     // Methods from RemoteServer
     //

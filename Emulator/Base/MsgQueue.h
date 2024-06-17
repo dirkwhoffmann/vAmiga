@@ -20,7 +20,8 @@ class MsgQueue : public SubComponent {
     Descriptions descriptions = {{
 
         .name           = "MsgQueue",
-        .description    = "Message Queue"
+        .description    = "Message Queue",
+        .shell          = ""
     }};
 
     ConfigOptions options = {

@@ -21,8 +21,9 @@ class RemoteServer : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .name           = "server",
-        .description    = "Remote Server"
+        .name           = "RemoteServer",
+        .description    = "Remote Server",
+        .shell          = ""
     }};
 
     ConfigOptions options = {
@@ -70,11 +71,15 @@ public:
     // Methods from CoreObject
     //
     
-public:
-    
+protected:
+
     void _dump(Category category, std::ostream& os) const override;
     
-    
+public:
+
+    const Descriptions &getDescriptions() const override { return descriptions; }
+
+
     //
     // Methods from CoreComponent
     //
@@ -101,10 +106,6 @@ private:
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     void _didLoad() override;
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-
-public:
-
-    const Descriptions &getDescriptions() const override { return descriptions; }
 
 
     //

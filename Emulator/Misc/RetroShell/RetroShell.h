@@ -25,8 +25,9 @@ class RetroShell : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .name           = "rshell",
-        .description    = "Retro Shell"
+        .name           = "RetroShell",
+        .description    = "Retro Shell",
+        .shell          = ""
     }};
 
     ConfigOptions options = {

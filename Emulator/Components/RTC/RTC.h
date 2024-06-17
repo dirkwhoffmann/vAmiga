@@ -18,8 +18,9 @@ class RTC : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .name           = "rtc",
-        .description    = "Real-time Clock"
+        .name           = "RTC",
+        .description    = "Real-time Clock",
+        .shell          = "rtc"
     }};
 
     ConfigOptions options = {

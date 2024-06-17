@@ -20,8 +20,9 @@ protected:
     
     Descriptions descriptions = {{
 
-        .name           = "Board",
-        .description    = "Zorro Board"
+        .name           = "ZorroBoard",
+        .description    = "Zorro Board",
+        .shell          = ""
     }};
 
     ConfigOptions options = {

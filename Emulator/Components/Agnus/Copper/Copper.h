@@ -24,7 +24,8 @@ class Copper : public SubComponent, public Inspectable<CopperInfo>
     Descriptions descriptions = {{
 
         .name           = "Copper",
-        .description    = "Copper"
+        .description    = "Copper",
+        .shell          = "copper"
     }};
 
     ConfigOptions options = {

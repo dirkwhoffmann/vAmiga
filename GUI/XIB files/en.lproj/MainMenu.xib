@@ -122,7 +122,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="aWt-rp-gig"/>
-                            <menuItem title="Configure..." keyEquivalent="" id="Y6J-U9-htE" userLabel="Configure...">
+                            <menuItem title="Configurator..." keyEquivalent="" id="Y6J-U9-htE" userLabel="Configure...">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="configureAction:" target="-1" id="63m-54-OYh"/>
@@ -146,13 +146,13 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="MBQ-pb-t04"/>
-                            <menuItem title="Import configuration..." id="TX7-U7-EG7">
+                            <menuItem title="Import script..." id="TX7-U7-EG7">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="importConfigAction:" target="-1" id="epr-TO-gZp"/>
+                                    <action selector="importScriptAction:" target="-1" id="epr-TO-gZp"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Export configuration..." id="TkJ-0z-74d">
+                            <menuItem title="Export configuration script..." id="TkJ-0z-74d">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="exportConfigAction:" target="-1" id="RxH-Iq-fwJ"/>
@@ -194,7 +194,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="ESe-zb-coU"/>
-                            <menuItem title="Capture Screen" id="RH5-Pm-o1U">
+                            <menuItem title="Record video" id="RH5-Pm-o1U">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="captureScreenAction:" target="-1" id="1Q3-p1-pur"/>

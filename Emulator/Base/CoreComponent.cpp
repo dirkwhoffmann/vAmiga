@@ -12,6 +12,7 @@
 #include "Emulator.h"
 #include "Defaults.h"
 #include "Checksum.h"
+#include "Option.h"
 
 namespace vamiga {
 
@@ -27,6 +28,13 @@ CoreComponent::description() const
 {
     assert(isize(getDescriptions().size()) > objid);
     return getDescriptions().at(objid).description;
+}
+
+const char *
+CoreComponent::shellName() const
+{
+    assert(isize(getDescriptions().size()) > objid);
+    return getDescriptions().at(objid).shell;
 }
 
 bool
@@ -50,6 +58,20 @@ CoreComponent::initialize()
         warn("Initialization aborted: %s\n", e.what());
     }
 }
+
+/*
+void
+CoreComponent::hardReset()
+{
+    reset(true);
+}
+
+void 
+CoreComponent::softReset()
+{
+    reset(false);
+}
+*/
 
 void
 CoreComponent::reset(bool hard)
@@ -316,6 +338,43 @@ CoreComponent::unfocus()
 {
     for (auto c : subComponents) { c->unfocus(); }
     _unfocus();
+}
+
+void 
+CoreComponent::exportConfig(std::ostream& ss, bool diff) const
+{
+    bool first = true;
+
+    for (auto &opt: getOptions()) {
+
+        auto current = getOption(opt);
+        auto fallback = getFallback(opt);
+
+        if (!diff || current != fallback) {
+
+            if (first) {
+
+                ss << "# " << description() << std::endl << std::endl;
+                first = false;
+            }
+
+            auto cmd = "try " + string(shellName());
+            auto currentStr = OptionParser::asPlainString(opt, current);
+            auto fallbackStr = OptionParser::asPlainString(opt, fallback);
+
+            string line = cmd + " set " + OptionEnum::plainkey(opt) + " " + currentStr;
+            string comment = diff ? fallbackStr : OptionEnum::help(opt);
+
+            ss << std::setw(40) << std::left << line << " # " << comment << std::endl;
+        }
+    }
+
+    if (!first) ss << std::endl;
+
+    for (auto &sub: subComponents) {
+
+        sub->exportConfig(ss, diff);
+    }
 }
 
 }

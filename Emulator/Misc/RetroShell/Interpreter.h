@@ -33,8 +33,9 @@ class Interpreter: public SubComponent
 {
     Descriptions descriptions = {{
 
-        .name           = "interpreter",
-        .description    = "Shell Command Interpreter"
+        .name           = "Interpreter",
+        .description    = "Shell Command Interpreter",
+        .shell          = ""
     }};
 
     ConfigOptions options = {
@@ -54,7 +55,16 @@ class Interpreter: public SubComponent
 
 
     //
-    // Initializing
+    // Static methods
+    //
+
+public:
+
+    [[deprecated]] static string shellName(const CoreObject &object);
+
+
+    //
+    // Methods
     //
 
 public:

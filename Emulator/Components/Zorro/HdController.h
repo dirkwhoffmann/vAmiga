@@ -20,20 +20,24 @@ class HdController : public ZorroBoard {
     
     Descriptions descriptions = {
         {
-            .name           = "hdc0",
-            .description    = "Hard Drive Controller 0"
+            .name           = "HdController0",
+            .description    = "Hard Drive Controller 0",
+            .shell          = "hdc0"
         },
         {
-            .name           = "hdc1",
-            .description    = "Hard Drive Controller 1"
+            .name           = "HdController1",
+            .description    = "Hard Drive Controller 1",
+            .shell          = "hdc1"
         },
         {
-            .name           = "hdc2",
-            .description    = "Hard Drive Controller 2"
+            .name           = "HdController2",
+            .description    = "Hard Drive Controller 2",
+            .shell          = "hdc2"
         },
         {
-            .name           = "hcd3",
-            .description    = "Hard Drive Controller 3"
+            .name           = "HdController3",
+            .description    = "Hard Drive Controller 3",
+            .shell          = "hdc3"
         }
     };
 
@@ -84,7 +88,11 @@ private:
     
     void _dump(Category category, std::ostream& os) const override;
 
-    
+public:
+
+    const Descriptions &getDescriptions() const override { return descriptions; }
+
+
     //
     // Methods from CoreComponent
     //

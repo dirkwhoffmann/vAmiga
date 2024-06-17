@@ -20,8 +20,9 @@ class ZorroManager : public SubComponent {
     
     Descriptions descriptions = {{
 
-        .name           = "zorro",
-        .description    = "Zorro Manager"
+        .name           = "ZorroManager",
+        .description    = "Zorro Manager",
+        .shell          = "zorro"
     }};
 
     ConfigOptions options = {

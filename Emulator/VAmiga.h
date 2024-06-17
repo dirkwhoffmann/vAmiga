@@ -485,6 +485,15 @@ public:
     void set(Option opt, i64 value, long id) throws;
 
 
+    /** @brief  Exports the current configuration.
+     *
+     *  The current configuration is exported in form of a RetroShell script.
+     *  Reading in the script at a later point will restore the configuration.
+     */
+    void exportConfig(const std::filesystem::path &path) const;
+    void exportConfig(std::ostream& stream) const;
+
+
     /// @}
     /// @name Using the command queue
     /// @{

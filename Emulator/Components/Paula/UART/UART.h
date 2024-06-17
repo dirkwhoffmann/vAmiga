@@ -21,7 +21,8 @@ class UART : public SubComponent, public Inspectable<UARTInfo> {
     Descriptions descriptions = {{
 
         .name           = "UART",
-        .description    = "Universal Asynchronous Receiver Transmitter"
+        .description    = "Universal Asynchronous Receiver Transmitter",
+        .shell          = "uart"
     }};
 
     ConfigOptions options = {

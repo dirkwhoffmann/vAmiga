@@ -21,7 +21,8 @@ class Keyboard : public SubComponent {
     Descriptions descriptions = {{
 
         .name           = "Keyboard",
-        .description    = "Keyboard"
+        .description    = "Keyboard",
+        .shell          = "keyboard"
     }};
 
     ConfigOptions options = {

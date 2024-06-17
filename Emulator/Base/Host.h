@@ -22,7 +22,9 @@ class Host : public SubComponent {
     Descriptions descriptions = {{
 
         .name           = "Host",
-        .description    = "Host Computer"
+        .description    = "Host Computer",
+        .shell          = "host"
+
     }};
 
     ConfigOptions options = {

@@ -20,8 +20,9 @@ class DiskController : public SubComponent, public Inspectable<DiskControllerInf
 {
     Descriptions descriptions = {{
 
-        .name           = "dc",
-        .description    = "Disk Controller"
+        .name           = "DiskController",
+        .description    = "Disk Controller",
+        .shell          = "dc"
     }};
 
     ConfigOptions options = {

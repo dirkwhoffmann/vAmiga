@@ -120,7 +120,8 @@ class Sequencer : public SubComponent
     Descriptions descriptions = {{
 
         .name           = "Sequencer",
-        .description    = "Agnus Sequencer"
+        .description    = "Agnus Sequencer",
+        .shell          = ""
     }};
 
     ConfigOptions options = {

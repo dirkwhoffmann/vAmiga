@@ -21,8 +21,9 @@ class RemoteManager : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .name           = "remote",
-        .description    = "Remote Manager"
+        .name           = "RemoteManager",
+        .description    = "Remote Manager",
+        .shell          = "server"
     }};
 
     ConfigOptions options = {

@@ -106,8 +106,9 @@ class Memory : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .name           = "mem",
-        .description    = "Memory"
+        .name           = "Memory",
+        .description    = "Memory",
+        .shell          = "mem"
     }};
 
     ConfigOptions options = {
