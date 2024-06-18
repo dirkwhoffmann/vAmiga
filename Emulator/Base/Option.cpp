@@ -47,14 +47,14 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_DMA_DEBUG_ENABLE:      return boolParser();
         case OPT_DMA_DEBUG_MODE:        return enumParser.template operator()<DmaDisplayModeEnum>();
         case OPT_DMA_DEBUG_OPACITY:     return numParser("%");
-        case OPT_DMA_DEBUG_CHANNEL0:    return numParser();
-        case OPT_DMA_DEBUG_CHANNEL1:    return numParser();
-        case OPT_DMA_DEBUG_CHANNEL2:    return numParser();
-        case OPT_DMA_DEBUG_CHANNEL3:    return numParser();
-        case OPT_DMA_DEBUG_CHANNEL4:    return numParser();
-        case OPT_DMA_DEBUG_CHANNEL5:    return numParser();
-        case OPT_DMA_DEBUG_CHANNEL6:    return numParser();
-        case OPT_DMA_DEBUG_CHANNEL7:    return numParser();
+        case OPT_DMA_DEBUG_CHANNEL0:    return boolParser();
+        case OPT_DMA_DEBUG_CHANNEL1:    return boolParser();
+        case OPT_DMA_DEBUG_CHANNEL2:    return boolParser();
+        case OPT_DMA_DEBUG_CHANNEL3:    return boolParser();
+        case OPT_DMA_DEBUG_CHANNEL4:    return boolParser();
+        case OPT_DMA_DEBUG_CHANNEL5:    return boolParser();
+        case OPT_DMA_DEBUG_CHANNEL6:    return boolParser();
+        case OPT_DMA_DEBUG_CHANNEL7:    return boolParser();
         case OPT_DMA_DEBUG_COLOR0:      return numParser();
         case OPT_DMA_DEBUG_COLOR1:      return numParser();
         case OPT_DMA_DEBUG_COLOR2:      return numParser();
@@ -88,7 +88,7 @@ OptionParser::create(Option opt, i64 arg)
 
         case OPT_DRIVE_CONNECT:         return boolParser();
         case OPT_DRIVE_TYPE:            return enumParser.template operator()<FloppyDriveTypeEnum>();
-        case OPT_DRIVE_MECHANICS:       return boolParser();
+        case OPT_DRIVE_MECHANICS:       return enumParser.template operator()<DriveMechanicsEnum>();
         case OPT_DRIVE_RPM:             return numParser();
         case OPT_DISK_SWAP_DELAY:       return numParser();
         case OPT_DRIVE_PAN:             return numParser();

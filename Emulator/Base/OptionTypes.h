@@ -221,8 +221,8 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_DMA_DEBUG_COLOR7:      return "DMA_DEBUG_COLOR7";
 
             case OPT_CPU_REVISION:          return "CPU_REVISION";
-            case OPT_CPU_DASM_REVISION:     return "OPT_CPU_DASM_REVISION";
-            case OPT_CPU_DASM_SYNTAX:       return "OPT_CPU_DASM_SYNTAX";
+            case OPT_CPU_DASM_REVISION:     return "CPU_DASM_REVISION";
+            case OPT_CPU_DASM_SYNTAX:       return "CPU_DASM_SYNTAX";
             case OPT_CPU_OVERCLOCKING:      return "CPU_OVERCLOCKING";
             case OPT_CPU_RESET_VAL:         return "CPU_RESET_VAL";
 

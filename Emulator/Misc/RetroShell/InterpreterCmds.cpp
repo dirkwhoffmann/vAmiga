@@ -288,7 +288,7 @@ Interpreter::initCommandShell(Command &root)
                 retroShell.dump(cpu, Category::Config);
             });
 
-            initSetters(root, mem);
+            initSetters(root, cpu);
         }
 
         //
