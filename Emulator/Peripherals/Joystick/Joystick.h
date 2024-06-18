@@ -20,12 +20,12 @@ class Joystick : public SubComponent {
         {
             .name           = "Joystick1",
             .description    = "Joystick in Port 1",
-            .shell          = "joystick1"
+            .shell          = "joystick 1"
         },
         {
             .name           = "Joystick2",
             .description    = "Joystick in Port 2",
-            .shell          = "joystick2"
+            .shell          = "joystick 2"
         }
     };
 

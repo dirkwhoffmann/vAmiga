@@ -2298,9 +2298,10 @@ using namespace vamiga::moira;
 
 - (void)execute:(EmulatorProxy *)proxy
 {
-    Amiga *amiga = (Amiga *)proxy->obj;
-    
-    [self script]->execute(*amiga);
+    auto *am = [proxy amiga];
+    auto *amiga = (AmigaAPI *)am->obj;
+
+    [self script]->execute(*(amiga->amiga));
 }
 
 @end

@@ -13,11 +13,13 @@
 
 namespace vamiga {
 
+/*
 string
 Interpreter::shellName(const CoreObject &object)
 {
     return util::lowercased(object.objectName());
 }
+*/
 
 void
 Interpreter::_initialize()
@@ -43,6 +45,9 @@ Interpreter::split(const string& userInput)
 
         char c = userInput[i];
         
+        // Abort if a comment begins
+        if (c == '#') break;
+
         // Check for escape mode
         if (c == '\\') { esc = true; continue; }
 

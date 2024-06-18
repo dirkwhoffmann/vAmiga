@@ -48,10 +48,10 @@ class Interpreter: public SubComponent
     Shell shell = Shell::Command;
 
     // Commands of the command shell
-    Command commandShellRoot; //  = new Command();
+    Command commandShellRoot;
 
     // Commands of the debug shell
-    Command debugShellRoot; //  = new Command();
+    Command debugShellRoot;
 
 
     //
@@ -60,7 +60,7 @@ class Interpreter: public SubComponent
 
 public:
 
-    [[deprecated]] static string shellName(const CoreObject &object);
+    // [[deprecated]] static string shellName(const CoreObject &object);
 
 
     //
@@ -70,6 +70,7 @@ public:
 public:
 
     using SubComponent::SubComponent;
+    Interpreter& operator= (const Interpreter& other) { return *this; }
 
 private:
 
@@ -79,26 +80,18 @@ private:
 
 
     //
-    // Methods from CoreObject
-    //
-
-private:
-
-    void _dump(Category category, std::ostream& os) const override { }
-
-
-    //
     // Methods from CoreComponent
     //
-
-private:
-
-    void _initialize() override;
-    void _reset(bool hard) override { }
 
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
+
+private:
+
+    void _dump(Category category, std::ostream& os) const override { }
+    void _initialize() override;
+    void _reset(bool hard) override { }
 
 
     //

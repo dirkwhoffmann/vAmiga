@@ -38,8 +38,8 @@ class ControlPort : public SubComponent, public Inspectable<ControlPortInfo> {
 
 public:
 
-    [[deprecated]] static constexpr isize PORT1 = 0;
-    [[deprecated]] static constexpr isize PORT2 = 1;
+    // [[deprecated]] static constexpr isize PORT1 = 0;
+    // [[deprecated]] static constexpr isize PORT2 = 1;
 
 private:
     

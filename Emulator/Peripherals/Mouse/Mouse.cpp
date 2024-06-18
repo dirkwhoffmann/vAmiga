@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-Mouse::Mouse(Amiga& ref, ControlPort& pref) : SubComponent(ref), port(pref)
+Mouse::Mouse(Amiga& ref, ControlPort& pref) : SubComponent(ref, pref.objid), port(pref)
 {
 
 }

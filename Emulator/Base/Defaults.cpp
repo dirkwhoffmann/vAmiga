@@ -116,12 +116,12 @@ Defaults::Defaults()
     setFallback(OPT_ECLOCK_SYNCING,     true,                   { 0, 1} );
     setFallback(OPT_CIA_IDLE_SLEEP,     true,                   { 0, 1} );
     setFallback(OPT_ACCURATE_KEYBOARD,  true);
-    setFallback(OPT_PULLUP_RESISTORS,   true);
-    setFallback(OPT_SHAKE_DETECTION,    true);
-    setFallback(OPT_MOUSE_VELOCITY,     100);
-    setFallback(OPT_AUTOFIRE,           false);
-    setFallback(OPT_AUTOFIRE_BULLETS,   -3);
-    setFallback(OPT_AUTOFIRE_DELAY,     125);
+    setFallback(OPT_PULLUP_RESISTORS,   true,                   { 0, 1} );
+    setFallback(OPT_SHAKE_DETECTION,    true,                   { 0, 1} );
+    setFallback(OPT_MOUSE_VELOCITY,     100,                    { 0, 1} );
+    setFallback(OPT_AUTOFIRE,           false,                  { 0, 1} );
+    setFallback(OPT_AUTOFIRE_BULLETS,   -3,                     { 0, 1} );
+    setFallback(OPT_AUTOFIRE_DELAY,     125,                    { 0, 1} );
     setFallback(OPT_SAMPLING_METHOD,    SMP_NONE);
     setFallback(OPT_FILTER_TYPE,        FILTER_A500);
     setFallback(OPT_AUDPAN0,            50);

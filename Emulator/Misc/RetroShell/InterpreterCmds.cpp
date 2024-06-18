@@ -894,18 +894,21 @@ Interpreter::initCommandShell(Command &root)
         // Mouse
         //
 
-        root.add({"mouse"},         "Mouse");
+        root.add({"mouse"}, "Mouse");
 
         {   VAMIGA_GROUP("")
 
             for (isize i = 0; i <= 1; i++) {
 
+                auto cmd = (i == 0) ?
+                controlPort1.mouse.shellName() : controlPort2.mouse.shellName();
+
                 string nr = (i == 0) ? "1" : "2";
 
-                root.add({"mouse", nr},
+                root.add({cmd},
                          "Mouse in port " + nr);
 
-                root.add({"mouse", nr, ""},
+                root.add({cmd, ""},
                          "Displays the current configuration",
                          [this](Arguments& argv, long value) {
 
@@ -914,10 +917,10 @@ Interpreter::initCommandShell(Command &root)
 
                 }, i);
 
-                root.add({"mouse", nr, "set"},
+                root.add({cmd, "set"},
                          "Configures the component");
 
-                root.add({"mouse", nr, "set", "pullup"}, { Arg::boolean },
+                root.add({cmd, "set", "pullup"}, { Arg::boolean },
                          "Enables or disables pull-up resistors",
                          [this](Arguments& argv, long value) {
 
@@ -926,7 +929,7 @@ Interpreter::initCommandShell(Command &root)
 
                 }, i);
 
-                root.add({"mouse", nr, "set", "shakedetector"}, { Arg::boolean },
+                root.add({cmd, "set", "shakedetector"}, { Arg::boolean },
                          "Enables or disables the shake detector",
                          [this](Arguments& argv, long value) {
 
@@ -935,7 +938,7 @@ Interpreter::initCommandShell(Command &root)
 
                 }, i);
 
-                root.add({"mouse", nr, "set", "velocity"}, { Arg::value },
+                root.add({cmd, "set", "velocity"}, { Arg::value },
                          "Sets the horizontal and vertical mouse velocity",
                          [this](Arguments& argv, long value) {
 
@@ -944,10 +947,10 @@ Interpreter::initCommandShell(Command &root)
 
                 }, i);
 
-                root.add({"mouse", nr, "press"},
+                root.add({cmd, "press"},
                          "Presses a mouse button");
 
-                root.add({"mouse", nr, "press", "left"},
+                root.add({cmd, "press", "left"},
                          "Presses the left mouse button",
                          [this](Arguments& argv, long value) {
 
@@ -956,7 +959,7 @@ Interpreter::initCommandShell(Command &root)
 
                 }, i);
 
-                root.add({"mouse", nr, "press", "middle"},
+                root.add({cmd, "press", "middle"},
                          "Presses the middle mouse button",
                          [this](Arguments& argv, long value) {
 
@@ -965,7 +968,7 @@ Interpreter::initCommandShell(Command &root)
 
                 }, i);
 
-                root.add({"mouse", nr, "press", "right"},
+                root.add({cmd, "press", "right"},
                          "Presses the right mouse button",
                          [this](Arguments& argv, long value) {
 
