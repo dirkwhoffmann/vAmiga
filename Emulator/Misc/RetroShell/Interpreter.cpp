@@ -13,14 +13,6 @@
 
 namespace vamiga {
 
-/*
-string
-Interpreter::shellName(const CoreObject &object)
-{
-    return util::lowercased(object.objectName());
-}
-*/
-
 void
 Interpreter::_initialize()
 {
@@ -325,13 +317,22 @@ Interpreter::help(const Command& current)
     }
     tab += indent.size();
 
-    isize group = -1;
+    // isize group = -1;
+    isize newlines = 1;
 
     for (auto &it : current.subCommands) {
 
         // Only proceed if the command is visible
         if (it.hidden) continue;
 
+        // Print the group (if present)
+        if (!it.groupName.empty()) {
+
+            retroShell << '\n' << it.groupName << '\n';
+            newlines = 1;
+        }
+
+        /*
         // Print group description when a new group begins
         if (group != it.group) {
 
@@ -341,6 +342,12 @@ Interpreter::help(const Command& current)
             if (!Command::groups[group].empty()) {
                 retroShell << Command::groups[group] << '\n' << '\n';
             }
+        }
+        */
+
+        // Print newlines
+        for (; newlines > 0; newlines--) {
+            retroShell << '\n';
         }
 
         // Print command descriptioon

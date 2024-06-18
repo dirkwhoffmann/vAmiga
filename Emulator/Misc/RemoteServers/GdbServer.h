@@ -39,7 +39,7 @@ class GdbServer : public RemoteServer {
 
         .name           = "GdbServer",
         .description    = "GDB Remote Server",
-        .shell          = "gdbserver"
+        .shell          = "server gdb"
     }};
 
     // The name of the process to be debugged

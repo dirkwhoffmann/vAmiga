@@ -18,6 +18,7 @@ namespace vamiga {
 
 std::vector<string> Command::groups;
 std::stack<isize> Command::groupStack;
+string Command::currentGroup;
 
 void
 Command::pushGroup(const string &description, const string &postfix)
@@ -99,6 +100,7 @@ Command::add(const std::vector<string> &rawtokens,
     d.name = tokens.back();
     d.fullName = (cmd->fullName.empty() ? "" : cmd->fullName + " ") + help.first;
     d.group = groupStack.top();
+    d.groupName = currentGroup; currentGroup = "";
     d.requiredArgs = requiredArgs;
     d.optionalArgs = optionalArgs;
     d.help = help;

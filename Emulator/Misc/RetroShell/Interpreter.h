@@ -78,6 +78,8 @@ private:
     void initCommandShell(Command &root);
     void initDebugShell(Command &root);
 
+    void initSetters(Command &root, const CoreComponent &c);
+
 
     //
     // Methods from CoreComponent

@@ -39,8 +39,8 @@ class Recorder : public SubComponent {
     //
     
     // Audio muxer for synthesizing the audio track
-    Muxer muxer = Muxer(amiga);
-    
+    Muxer muxer = Muxer(amiga, 1);
+
 
     //
     // Handles

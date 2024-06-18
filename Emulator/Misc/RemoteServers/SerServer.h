@@ -20,7 +20,7 @@ class SerServer : public RemoteServer {
 
         .name           = "SerServer",
         .description    = "Serial Port Server",
-        .shell          = "serserver"
+        .shell          = "server serial"
     }};
 
     // A ringbuffer for buffering incoming bytes

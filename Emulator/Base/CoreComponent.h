@@ -199,6 +199,9 @@ public:
 
 public:
 
+    // Collects references to this components and all sub-components
+    void collectComponents(std::vector<CoreComponent *> &result);
+
     // Exports the current configuration to a script file
     void exportConfig(std::ostream& ss, bool diff = false) const;
 

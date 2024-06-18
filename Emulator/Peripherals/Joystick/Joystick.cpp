@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-Joystick::Joystick(Amiga& ref, ControlPort& pref) : SubComponent(ref), port(pref)
+Joystick::Joystick(Amiga& ref, ControlPort& pref) : SubComponent(ref, pref.objid), port(pref)
 {
 
 };

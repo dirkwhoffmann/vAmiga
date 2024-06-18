@@ -22,22 +22,22 @@ class HdController : public ZorroBoard {
         {
             .name           = "HdController0",
             .description    = "Hard Drive Controller 0",
-            .shell          = "hdc0"
+            .shell          = ""
         },
         {
             .name           = "HdController1",
             .description    = "Hard Drive Controller 1",
-            .shell          = "hdc1"
+            .shell          = ""
         },
         {
             .name           = "HdController2",
             .description    = "Hard Drive Controller 2",
-            .shell          = "hdc2"
+            .shell          = ""
         },
         {
             .name           = "HdController3",
             .description    = "Hard Drive Controller 3",
-            .shell          = "hdc3"
+            .shell          = ""
         }
     };
 

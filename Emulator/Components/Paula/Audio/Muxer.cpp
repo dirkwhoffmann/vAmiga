@@ -18,7 +18,7 @@
 
 namespace vamiga {
 
-Muxer::Muxer(Amiga& ref) : SubComponent(ref)
+Muxer::Muxer(Amiga& ref, isize id) : SubComponent(ref, id)
 {
     subComponents = std::vector<CoreComponent *> {
 

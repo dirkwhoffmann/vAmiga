@@ -340,7 +340,14 @@ CoreComponent::unfocus()
     _unfocus();
 }
 
-void 
+void
+CoreComponent::collectComponents(std::vector<CoreComponent *> &result)
+{
+    result.push_back(this);
+    for (auto &c : subComponents) c->collectComponents(result);
+}
+
+void
 CoreComponent::exportConfig(std::ostream& ss, bool diff) const
 {
     bool first = true;

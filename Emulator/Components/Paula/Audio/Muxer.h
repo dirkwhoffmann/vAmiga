@@ -43,12 +43,18 @@ namespace vamiga {
 
 class Muxer : public SubComponent {
 
-    Descriptions descriptions = {{
-
-        .name           = "Muxer",
-        .description    = "Audio Muxer",
-        .shell          = "audio"
-    }};
+    Descriptions descriptions = {
+        {
+            .name           = "Muxer",
+            .description    = "Audio Muxer",
+            .shell          = "paula audio"
+        },
+        {
+            .name           = "Muxer",
+            .description    = "Audio Muxer (Recorder)",
+            .shell          = ""
+        },
+    };
 
     ConfigOptions options = {
 
@@ -124,7 +130,7 @@ public:
     
 public:
     
-    Muxer(Amiga& ref);
+    Muxer(Amiga& ref, isize id = 0);
 
     // Resets the output buffer and the two audio filters
     void clear();

@@ -16,7 +16,7 @@ namespace vamiga {
 
 #define VAMIGA_CONCAT(x,y) x##y
 #define VAMIGA_GROUP_NAME(x) VAMIGA_CONCAT(group_,x)
-#define VAMIGA_GROUP(x) CommandGroup VAMIGA_GROUP_NAME(__COUNTER__)(root,x);
+#define VAMIGA_GROUP(x) CommandGroup VAMIGA_GROUP_NAME(__COUNTER__)(root,x); Command::currentGroup = x;
 
 void
 Interpreter::initCommons(Command &root)
@@ -83,6 +83,29 @@ Interpreter::initCommons(Command &root)
             agnus.scheduleRel<SLOT_RSH>(SEC(seconds), RSH_WAKEUP);
             throw ScriptInterruption(seconds);
         });
+    }
+}
+
+void
+Interpreter::initSetters(Command &root, const CoreComponent &c)
+{
+    if (auto cmd = string(c.shellName()); !cmd.empty()) {
+
+        if (auto &options = c.getOptions(); !options.empty()) {
+
+            root.add({cmd, "set"}, "Configure the component");
+            for (auto &opt : options) {
+
+                root.add({cmd, "set", OptionEnum::plainkey(opt)},
+                         {OptionParser::argList(opt)},
+                         OptionEnum::help(opt),
+                         [this](Arguments& argv, long value) {
+
+                    emulator.set(Option(HI_WORD(value)), argv[0], { LO_WORD(value) });
+
+                }, HI_W_LO_W(opt, c.objid));
+            }
+        }
     }
 }
 
@@ -180,18 +203,7 @@ Interpreter::initCommandShell(Command &root)
                 retroShell.dump(amiga, Category::Defaults);
             });
 
-            root.add({cmd, "set"}, "Configure the component");
-            for (auto &opt : amiga.getOptions()) {
-
-                root.add({cmd, "set", OptionEnum::plainkey(opt)},
-                         {OptionParser::argList(opt)},
-                         OptionEnum::help(opt),
-                         [this](Arguments& argv, long opt) {
-
-                    emulator.set(Option(opt), argv[0]);
-
-                }, opt);
-            }
+            initSetters(root, amiga);
 
             root.add({cmd, "power"}, { Arg::onoff },
                      "Switches the Amiga on or off",
@@ -239,18 +251,7 @@ Interpreter::initCommandShell(Command &root)
                 retroShell.dump(mem, Category::Config);
             });
 
-            root.add({cmd, "set"}, "Configure the component");
-            for (auto &opt : mem.getOptions()) {
-
-                root.add({cmd, "set", OptionEnum::plainkey(opt)},
-                         {OptionParser::argList(opt)},
-                         OptionEnum::help(opt),
-                         [this](Arguments& argv, long opt) {
-
-                    emulator.set(Option(opt), argv[0]);
-
-                }, opt);
-            }
+            initSetters(root, mem);
 
             root.add({cmd, "load"},
                      "Installs a Rom image");
@@ -287,18 +288,7 @@ Interpreter::initCommandShell(Command &root)
                 retroShell.dump(cpu, Category::Config);
             });
 
-            root.add({cmd, "set"}, "Configure the component");
-            for (auto &opt : cpu.getOptions()) {
-
-                root.add({cmd, "set", OptionEnum::plainkey(opt)},
-                         {OptionParser::argList(opt)},
-                         OptionEnum::help(opt),
-                         [this](Arguments& argv, long opt) {
-
-                    emulator.set(Option(opt), argv[0]);
-
-                }, opt);
-            }
+            initSetters(root, mem);
         }
 
         //
@@ -321,22 +311,12 @@ Interpreter::initCommandShell(Command &root)
                     if (value == 1) retroShell.dump(ciab, Category::Config);
 
                 }, i);
-
-                root.add({cmd, "set"}, "Configures the component");
-
-                for (auto &opt : ciaa.getOptions()) {
-
-                    root.add({cmd, "set", OptionEnum::plainkey(opt)},
-                             {OptionParser::argList(opt)},
-                             OptionEnum::help(opt),
-                             [this](Arguments& argv, long value) {
-
-                        emulator.set(Option(HI_WORD(value)), argv[0], { LO_WORD(value) });
-
-                    }, HI_W_LO_W(opt, i));
-                }
             }
         }
+        
+        initSetters(root, ciaa);
+        initSetters(root, ciab);
+
 
         //
         // Agnus
@@ -355,18 +335,7 @@ Interpreter::initCommandShell(Command &root)
                 retroShell.dump(agnus, Category::Config);
             });
 
-            root.add({cmd, "set"}, "Configure the component");
-            for (auto &opt : agnus.getOptions()) {
-
-                root.add({cmd, "set", OptionEnum::plainkey(opt)},
-                         {OptionParser::argList(opt)},
-                         OptionEnum::help(opt),
-                         [this](Arguments& argv, long opt) {
-
-                    emulator.set(Option(opt), argv[0]);
-
-                }, opt);
-            }
+            initSetters(root, agnus);
         }
 
         //
@@ -386,19 +355,9 @@ Interpreter::initCommandShell(Command &root)
                 retroShell.dump(blitter, Category::Config);
             });
 
-            root.add({cmd, "set"}, "Configure the component");
-            for (auto &opt : blitter.getOptions()) {
-
-                root.add({cmd, "set", OptionEnum::plainkey(opt)},
-                         {OptionParser::argList(opt)},
-                         OptionEnum::help(opt),
-                         [this](Arguments& argv, long opt) {
-
-                    emulator.set(Option(opt), argv[0]);
-
-                }, opt);
-            }
+            initSetters(root, blitter);
         }
+
 
         //
         // Denise
@@ -417,18 +376,7 @@ Interpreter::initCommandShell(Command &root)
                 retroShell.dump(denise, Category::Config);
             });
 
-            root.add({cmd, "set"}, "Configure the component");
-            for (auto &opt : denise.getOptions()) {
-
-                root.add({cmd, "set", OptionEnum::plainkey(opt)},
-                         {OptionParser::argList(opt)},
-                         OptionEnum::help(opt),
-                         [this](Arguments& argv, long opt) {
-
-                    emulator.set(Option(opt), argv[0]);
-
-                }, opt);
-            }
+            initSetters(root, denise);
         }
 
         //
@@ -451,38 +399,16 @@ Interpreter::initCommandShell(Command &root)
                 retroShell.dump(paula.muxer, Category::Config);
             });
 
+            initSetters(root, paula.muxer);
+
             root.add({cmd, "audio", "filter"},
-                     "Displays the current filter configuration",
+                     "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
                 retroShell.dump(paula.muxer.filter, Category::Config);
             });
 
-            root.add({cmd, "audio", "filter", "set"}, "Configure the component");
-            for (auto &opt : paula.muxer.filter.getOptions()) {
-
-                root.add({cmd, "audio", "filter", "set", OptionEnum::plainkey(opt)},
-                         {OptionParser::argList(opt)},
-                         OptionEnum::help(opt),
-                         [this](Arguments& argv, long opt) {
-
-                    emulator.set(Option(opt), argv[0]);
-
-                }, opt);
-            }
-
-            root.add({cmd, "audio", "set"}, "Configure the component");
-            for (auto &opt : paula.muxer.getOptions()) {
-
-                root.add({cmd, "audio", "set", OptionEnum::plainkey(opt)},
-                         {OptionParser::argList(opt)},
-                         OptionEnum::help(opt),
-                         [this](Arguments& argv, long opt) {
-
-                    emulator.set(Option(opt), argv[0]);
-
-                }, opt);
-            }
+            initSetters(root, paula.muxer.filter);
 
             root.add({cmd, "dc"},
                      "Disk controller");
@@ -494,18 +420,7 @@ Interpreter::initCommandShell(Command &root)
                 retroShell.dump(diskController, Category::Config);
             });
 
-            root.add({cmd, "dc", "set"}, "Configure the component");
-            for (auto &opt : paula.diskController.getOptions()) {
-
-                root.add({cmd, "dc", "set", OptionEnum::plainkey(opt)},
-                         {OptionParser::argList(opt)},
-                         OptionEnum::help(opt),
-                         [this](Arguments& argv, long opt) {
-
-                    emulator.set(Option(opt), argv[0]);
-
-                }, opt);
-            }
+            initSetters(root, diskController);
         }
 
         //
@@ -523,15 +438,7 @@ Interpreter::initCommandShell(Command &root)
                 retroShell.dump(rtc, Category::Config);
             });
 
-            root.add({"rtc", "set"},
-                     "Configures the component");
-
-            root.add({"rtc", "set", "revision"}, { RTCRevisionEnum::argList() },
-                     "Selects the emulated chip model",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_RTC_MODEL, parseEnum <RTCRevisionEnum> (argv[0]));
-            });
+            initSetters(root, rtc);
         }
 
         //
@@ -549,22 +456,7 @@ Interpreter::initCommandShell(Command &root)
                 retroShell.dump(serialPort, Category::Config);
             });
 
-            root.add({"serial", "set"},
-                     "Configures the component");
-
-            root.add({"serial", "set", "device"}, { SerialPortDeviceEnum::argList() },
-                     "Connects a device",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_SER_DEVICE, parseEnum <SerialPortDeviceEnum> (argv[0]));
-            });
-
-            root.add({"serial", "set", "verbose"}, { Arg::boolean },
-                     "Enables or disables communication tracking",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_SER_VERBOSE, parseBool(argv[0]));
-            });
+            initSetters(root, serialPort);
 
             root.add({"serial", "send"}, { "<text>" },
                      "Sends a text to the serial port",
@@ -596,61 +488,7 @@ Interpreter::initCommandShell(Command &root)
                 emulator.set(OPT_DMA_DEBUG_ENABLE, false);
             });
 
-            root.add({"dmadebugger", "copper"}, { Arg::onoff },
-                     "Turns Copper DMA visualization on or off",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_DMA_DEBUG_CHANNEL0, parseOnOff(argv[0]));
-            });
-
-            root.add({"dmadebugger", "blitter"}, { Arg::onoff },
-                     "Turns Blitter DMA visualization on or off",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_DMA_DEBUG_CHANNEL1, parseOnOff(argv[0]));
-            });
-
-            root.add({"dmadebugger", "disk"}, { Arg::onoff },
-                     "Turns Disk DMA visualization on or off",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_DMA_DEBUG_CHANNEL2, parseOnOff(argv[0]));
-            });
-
-            root.add({"dmadebugger", "audio"}, { Arg::onoff },
-                     "Turns Audio DMA visualization on or off",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_DMA_DEBUG_CHANNEL3, parseOnOff(argv[0]));
-            });
-
-            root.add({"dmadebugger", "sprites"}, { Arg::onoff },
-                     "Turns Sprite DMA visualization on or off",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_DMA_DEBUG_CHANNEL4, parseOnOff(argv[0]));
-            });
-
-            root.add({"dmadebugger", "bitplanes"}, { Arg::onoff },
-                     "Turns Bitplane DMA visualization on or off",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_DMA_DEBUG_CHANNEL5, parseOnOff(argv[0]));
-            });
-
-            root.add({"dmadebugger", "cpu"}, { Arg::onoff },
-                     "Turns CPU bus usage visualization on or off",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_DMA_DEBUG_CHANNEL6, parseOnOff(argv[0]));
-            });
-
-            root.add({"dmadebugger", "refresh"}, { Arg::onoff },
-                     "Turn memory refresh visualization on or off",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_DMA_DEBUG_CHANNEL7, parseOnOff(argv[0]));
-            });
+            initSetters(root, dmaDebugger);
         }
     }
 
@@ -671,36 +509,7 @@ Interpreter::initCommandShell(Command &root)
                 retroShell.dump(pixelEngine, Category::Config);
             });
 
-            root.add({"monitor", "set"},
-                     "Configures the component");
-
-            root.add({"monitor", "set", "palette"}, { PaletteEnum::argList() },
-                     "Selects the color palette",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_PALETTE, parseEnum <PaletteEnum> (argv[0]));
-            });
-
-            root.add({"monitor", "set", "brightness"}, { Arg::value },
-                     "Adjusts the brightness of the Amiga texture",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_BRIGHTNESS, parseNum(argv[0]));
-            });
-
-            root.add({"monitor", "set", "contrast"}, { Arg::value },
-                     "Adjusts the contrast of the Amiga texture",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_CONTRAST, parseNum(argv[0]));
-            });
-
-            root.add({"monitor", "set", "saturation"}, { Arg::value },
-                     "Adjusts the saturation of the Amiga texture",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_SATURATION, parseNum(argv[0]));
-            });
+            initSetters(root, pixelEngine);
         }
 
         //
@@ -718,15 +527,7 @@ Interpreter::initCommandShell(Command &root)
                 retroShell.dump(keyboard, Category::Config);
             });
 
-            root.add({"keyboard", "set"},
-                     "Configures the component");
-
-            root.add({"keyboard", "set", "accuracy"}, { Arg::value },
-                     "Determines the emulation accuracy level",
-                     [this](Arguments& argv, long value) {
-
-                emulator.set(OPT_ACCURATE_KEYBOARD, parseBool(argv[0]));
-            });
+            initSetters(root, keyboard);
 
             root.add({"keyboard", "press"}, { Arg::value },
                      "Sends a keycode to the keyboard",
@@ -757,36 +558,6 @@ Interpreter::initCommandShell(Command &root)
 
                     auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
                     retroShell.dump(port.joystick, Category::Config);
-
-                }, i);
-
-                root.add({"joystick", nr, "set"},
-                         "Configures the component");
-
-                root.add({"joystick", nr, "set", "autofire"}, { Arg::boolean },
-                         "Enables or disables auto-fire mode",
-                         [this](Arguments& argv, long value) {
-
-                    auto port = (value == 0) ? 0 : 1;
-                    emulator.set(OPT_AUTOFIRE, port, { parseBool(argv[0]) });
-
-                }, i);
-
-                root.add({"joystick", nr, "set", "bullets"},  { Arg::value },
-                         "Sets the number of bullets per auto-fire shot",
-                         [this](Arguments& argv, long value) {
-
-                    auto port = (value == 0) ? 0 : 1;
-                    emulator.set(OPT_AUTOFIRE_BULLETS, port, { parseNum(argv[0]) });
-
-                }, i);
-
-                root.add({"joystick", nr, "set", "delay"}, { Arg::value },
-                         "Configures the auto-fire delay",
-                         [this](Arguments& argv, long value) {
-
-                    auto port = (value == 0) ? 0 : 1;
-                    emulator.set(OPT_AUTOFIRE_DELAY, port, { parseNum(argv[0]) });
 
                 }, i);
 
@@ -888,6 +659,9 @@ Interpreter::initCommandShell(Command &root)
 
                 }, i);
             }
+
+            initSetters(root, controlPort1.joystick);
+            initSetters(root, controlPort2.joystick);
         }
 
         //
@@ -914,36 +688,6 @@ Interpreter::initCommandShell(Command &root)
 
                     auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
                     retroShell.dump(port.mouse, Category::Config);
-
-                }, i);
-
-                root.add({cmd, "set"},
-                         "Configures the component");
-
-                root.add({cmd, "set", "pullup"}, { Arg::boolean },
-                         "Enables or disables pull-up resistors",
-                         [this](Arguments& argv, long value) {
-
-                    auto port = (value == 0) ? 0 : 1;
-                    emulator.set(OPT_PULLUP_RESISTORS, port, { parseBool(argv[0]) });
-
-                }, i);
-
-                root.add({cmd, "set", "shakedetector"}, { Arg::boolean },
-                         "Enables or disables the shake detector",
-                         [this](Arguments& argv, long value) {
-
-                    auto port = (value == 0) ? 0 : 1;
-                    emulator.set(OPT_SHAKE_DETECTION, port, { parseBool(argv[0]) });
-
-                }, i);
-
-                root.add({cmd, "set", "velocity"}, { Arg::value },
-                         "Sets the horizontal and vertical mouse velocity",
-                         [this](Arguments& argv, long value) {
-
-                    auto port = (value == 0) ? 0 : 1;
-                    emulator.set(OPT_MOUSE_VELOCITY, port, { parseNum(argv[0]) });
 
                 }, i);
 
@@ -977,202 +721,84 @@ Interpreter::initCommandShell(Command &root)
 
                 }, i);
             }
+
+            initSetters(root, controlPort1.mouse);
+            initSetters(root, controlPort2.mouse);
         }
 
         //
         // Df0, Df1, Df2, Df3
         //
 
-        for (isize i = 0; i <= 4; i++) {
+        for (isize i = 0; i <= 3; i++) {
 
-            string df = i == 4 ? "dfn" : "df" + std::to_string(i);
+            string df = "df" + std::to_string(i);
             root.add({df}, "Floppy drive");
 
             {   VAMIGA_GROUP("")
 
-                if (i >= 0 && i <= 3) {
+                root.add({df, ""},
+                         "Displays the current configuration",
+                         [this](Arguments& argv, long value) {
 
-                    root.add({df, ""},
-                             "Displays the current configuration",
+                    retroShell.dump(*amiga.df[value], Category::Config);
+
+                }, i);
+
+                if (i >= 1 && i <= 3) {
+
+                    root.add({df, "connect"},
+                             "Connects the drive",
                              [this](Arguments& argv, long value) {
 
-                        retroShell.dump(*amiga.df[value], Category::Config);
+                        emulator.set(OPT_DRIVE_CONNECT, true, { value });
 
                     }, i);
 
-                    if (i >= 1 && i <= 3) {
-
-                        root.add({df, "connect"},
-                                 "Connects the drive",
-                                 [this](Arguments& argv, long value) {
-
-                            emulator.set(OPT_DRIVE_CONNECT, true, { value });
-
-                        }, i);
-
-                        root.add({df, "disconnect"},
-                                 "Disconnects the drive",
-                                 [this](Arguments& argv, long value) {
-
-                            emulator.set(OPT_DRIVE_CONNECT, false, { value });
-
-                        }, i);
-                    }
-                    root.add({df, "eject"},
-                             "Ejects a floppy disk",
+                    root.add({df, "disconnect"},
+                             "Disconnects the drive",
                              [this](Arguments& argv, long value) {
 
-                        amiga.df[value]->ejectDisk();
-
-                    }, i);
-
-                    root.add({df, "insert"}, { Arg::path },
-                             "Inserts a floppy disk",
-                             [this](Arguments& argv, long value) {
-
-                        auto path = argv.front();
-                        amiga.df[value]->swapDisk(path);
-
-                    }, i);
-
-                    root.add({df, "set"},
-                             "Configures the component");
-
-                    root.add({df, "set", "model"}, { FloppyDriveTypeEnum::argList() },
-                             "Selects the drive model",
-                             [this](Arguments& argv, long value) {
-
-                        long model = parseEnum <FloppyDriveTypeEnum> (argv[0]);
-
-                        if (value == 0 || value > 3) emulator.set(OPT_DRIVE_TYPE, model, {0});
-                        if (value == 1 || value > 3) emulator.set(OPT_DRIVE_TYPE, model, {1});
-                        if (value == 2 || value > 3) emulator.set(OPT_DRIVE_TYPE, model, {2});
-                        if (value == 3 || value > 3) emulator.set(OPT_DRIVE_TYPE, model, {3});
-
-                    }, i);
-
-                    root.add({df, "set", "rpm"}, { "rpm" },
-                             "Sets the disk rotation speed",
-                             [this](Arguments& argv, long value) {
-
-                        long rpm = parseNum(argv[0]);
-
-                        if (value == 0 || value > 3) emulator.set(OPT_DRIVE_RPM, rpm, {0});
-                        if (value == 1 || value > 3) emulator.set(OPT_DRIVE_RPM, rpm, {1});
-                        if (value == 2 || value > 3) emulator.set(OPT_DRIVE_RPM, rpm, {2});
-                        if (value == 3 || value > 3) emulator.set(OPT_DRIVE_RPM, rpm, {3});
-
-                    }, i);
-
-                    root.add({df, "set", "mechanics"}, { Arg::boolean },
-                             "Enables or disables the emulation of mechanical delays",
-                             [this](Arguments& argv, long value) {
-
-                        auto scheme = parseEnum<DriveMechanicsEnum>(argv[0]);
-
-                        if (value == 0 || value > 3) emulator.set(OPT_DRIVE_MECHANICS, scheme, {0});
-                        if (value == 1 || value > 3) emulator.set(OPT_DRIVE_MECHANICS, scheme, {1});
-                        if (value == 2 || value > 3) emulator.set(OPT_DRIVE_MECHANICS, scheme, {2});
-                        if (value == 3 || value > 3) emulator.set(OPT_DRIVE_MECHANICS, scheme, {3});
-
-                    }, i);
-
-                    root.add({df, "set", "searchpath"}, { Arg::path },
-                             "Sets the search path for media files",
-                             [this](Arguments& argv, long value) {
-
-                        string path = argv.front();
-
-                        if (value == 0 || value > 3) df0.setSearchPath(path);
-                        if (value == 1 || value > 3) df1.setSearchPath(path);
-                        if (value == 2 || value > 3) df2.setSearchPath(path);
-                        if (value == 3 || value > 3) df3.setSearchPath(path);
-
-                    }, i);
-
-                    root.add({df, "set", "swapdelay"}, { Arg::value },
-                             "Sets the disk change delay",
-                             [this](Arguments& argv, long value) {
-
-                        long delay = parseNum(argv[0]);
-
-                        if (value == 0 || value > 3) emulator.set(OPT_DISK_SWAP_DELAY, delay, {0});
-                        if (value == 1 || value > 3) emulator.set(OPT_DISK_SWAP_DELAY, delay, {1});
-                        if (value == 2 || value > 3) emulator.set(OPT_DISK_SWAP_DELAY, delay, {2});
-                        if (value == 3 || value > 3) emulator.set(OPT_DISK_SWAP_DELAY, delay, {3});
-
-                    }, i);
-
-                    root.add({df, "set", "pan"}, { Arg::value },
-                             "Sets the pan for drive sounds",
-                             [this](Arguments& argv, long value) {
-
-                        long pan = parseNum(argv[0]);
-
-                        if (value == 0 || value > 3) emulator.set(OPT_DRIVE_PAN, pan, {0});
-                        if (value == 1 || value > 3) emulator.set(OPT_DRIVE_PAN, pan, {1});
-                        if (value == 2 || value > 3) emulator.set(OPT_DRIVE_PAN, pan, {2});
-                        if (value == 3 || value > 3) emulator.set(OPT_DRIVE_PAN, pan, {3});
-
-                    }, i);
-
-                    root.add({df, "audiate"},
-                             "Sets the volume of drive sounds");
-
-                    root.add({df, "audiate", "insert"}, { Arg::volume },
-                             "Makes disk insertions audible",
-                             [this](Arguments& argv, long value) {
-
-                        long volume = parseNum(argv[0]);
-
-                        if (value == 0 || value > 3) emulator.set(OPT_INSERT_VOLUME, volume, {0});
-                        if (value == 1 || value > 3) emulator.set(OPT_INSERT_VOLUME, volume, {1});
-                        if (value == 2 || value > 3) emulator.set(OPT_INSERT_VOLUME, volume, {2});
-                        if (value == 3 || value > 3) emulator.set(OPT_INSERT_VOLUME, volume, {3});
-
-                    }, i);
-
-                    root.add({df, "audiate", "eject"}, { Arg::volume },
-                             "Makes disk ejections audible",
-                             [this](Arguments& argv, long value) {
-
-                        long volume = parseNum(argv[0]);
-
-                        if (value == 0 || value > 3) emulator.set(OPT_EJECT_VOLUME, volume, {0});
-                        if (value == 1 || value > 3) emulator.set(OPT_EJECT_VOLUME, volume, {1});
-                        if (value == 2 || value > 3) emulator.set(OPT_EJECT_VOLUME, volume, {2});
-                        if (value == 3 || value > 3) emulator.set(OPT_EJECT_VOLUME, volume, {3});
-
-                    }, i);
-
-                    root.add({df, "audiate", "step"},  { Arg::volume },
-                             "Makes head steps audible",
-                             [this](Arguments& argv, long value) {
-
-                        long volume = parseNum(argv[0]);
-
-                        if (value == 0 || value > 3) emulator.set(OPT_STEP_VOLUME, volume, {0});
-                        if (value == 1 || value > 3) emulator.set(OPT_STEP_VOLUME, volume, {1});
-                        if (value == 2 || value > 3) emulator.set(OPT_STEP_VOLUME, volume, {2});
-                        if (value == 3 || value > 3) emulator.set(OPT_STEP_VOLUME, volume, {3});
-
-                    }, i);
-
-                    root.add({df, "audiate", "poll"},  { Arg::volume },
-                             "Makes polling clicks audible",
-                             [this](Arguments& argv, long value) {
-
-                        long volume = parseNum(argv[0]);
-
-                        if (value == 0 || value > 3) emulator.set(OPT_POLL_VOLUME, volume, {0});
-                        if (value == 1 || value > 3) emulator.set(OPT_POLL_VOLUME, volume, {1});
-                        if (value == 2 || value > 3) emulator.set(OPT_POLL_VOLUME, volume, {2});
-                        if (value == 3 || value > 3) emulator.set(OPT_POLL_VOLUME, volume, {3});
+                        emulator.set(OPT_DRIVE_CONNECT, false, { value });
 
                     }, i);
                 }
+                root.add({df, "eject"},
+                         "Ejects a floppy disk",
+                         [this](Arguments& argv, long value) {
+
+                    amiga.df[value]->ejectDisk();
+
+                }, i);
+
+                root.add({df, "insert"}, { Arg::path },
+                         "Inserts a floppy disk",
+                         [this](Arguments& argv, long value) {
+
+                    auto path = argv.front();
+                    amiga.df[value]->swapDisk(path);
+
+                }, i);
+
+                root.add({df, "searchpath"}, { Arg::path },
+                         "Sets the search path for media files",
+                         [this](Arguments& argv, long value) {
+
+                    string path = argv.front();
+
+                    if (value == 0 || value > 3) df0.setSearchPath(path);
+                    if (value == 1 || value > 3) df1.setSearchPath(path);
+                    if (value == 2 || value > 3) df2.setSearchPath(path);
+                    if (value == 3 || value > 3) df3.setSearchPath(path);
+
+                }, i);
             }
         }
+
+        initSetters(root, df0);
+        initSetters(root, df1);
+        initSetters(root, df2);
+        initSetters(root, df3);
 
         //
         // Hd0, Hd1, Hd2, Hd3
@@ -1213,54 +839,24 @@ Interpreter::initCommandShell(Command &root)
 
                 }
 
-                root.add({hd, "set"},
-                         "Configures the component");
-
-                root.add({hd, "set", "pan"}, { Arg::value },
-                         "Sets the pan for drive sounds",
+                root.add({hd, "geometry"},  { "<cylinders>", "<heads>", "<sectors>" },
+                         "Changes the disk geometry",
                          [this](Arguments& argv, long value) {
 
-                    long pan = parseNum(argv[0]);
+                    auto c = util::parseNum(argv[0]);
+                    auto h = util::parseNum(argv[1]);
+                    auto s = util::parseNum(argv[2]);
 
-                    if (value == 0 || value > 3) emulator.set(OPT_HDR_PAN, pan, {0});
-                    if (value == 1 || value > 3) emulator.set(OPT_HDR_PAN, pan, {1});
-                    if (value == 2 || value > 3) emulator.set(OPT_HDR_PAN, pan, {2});
-                    if (value == 3 || value > 3) emulator.set(OPT_HDR_PAN, pan, {3});
-
-                }, i);
-
-                root.add({hd, "audiate"},
-                         "Sets the volume of drive sounds");
-
-                root.add({hd, "audiate", "step"}, { Arg::volume },
-                         "Makes head steps audible",
-                         [this](Arguments& argv, long value) {
-
-                    long volume = parseNum(argv[0]);
-
-                    if (value == 0 || value > 3) emulator.set(OPT_HDR_STEP_VOLUME, volume, {0});
-                    if (value == 1 || value > 3) emulator.set(OPT_HDR_STEP_VOLUME, volume, {1});
-                    if (value == 2 || value > 3) emulator.set(OPT_HDR_STEP_VOLUME, volume, {2});
-                    if (value == 3 || value > 3) emulator.set(OPT_HDR_STEP_VOLUME, volume, {3});
+                    amiga.hd[value]->changeGeometry(c, h, s);
 
                 }, i);
-
-                if (i != 4) {
-
-                    root.add({hd, "set", "geometry"},  { "<cylinders>", "<heads>", "<sectors>" },
-                             "Changes the disk geometry",
-                             [this](Arguments& argv, long value) {
-
-                        auto c = util::parseNum(argv[0]);
-                        auto h = util::parseNum(argv[1]);
-                        auto s = util::parseNum(argv[2]);
-
-                        amiga.hd[value]->changeGeometry(c, h, s);
-
-                    }, i);
-                }
             }
         }
+
+        initSetters(root, hd0);
+        initSetters(root, hd1);
+        initSetters(root, hd2);
+        initSetters(root, hd3);
     }
 
     {   VAMIGA_GROUP("Miscellaneous")
@@ -1290,22 +886,7 @@ Interpreter::initCommandShell(Command &root)
                 retroShell.dump(remoteManager, Category::Config);
             });
 
-            root.add({"server", "serial", "set"},
-                     "Configures the component");
-
-            root.add({"server", "serial", "set", "port"}, { Arg::value },
-                     "Assigns the port number",
-                     [this](Arguments& argv, long value) {
-
-                remoteManager.serServer.setOption(OPT_SRV_PORT, parseNum(argv[0]));
-            });
-
-            root.add({"server", "serial", "set", "verbose"}, { Arg::boolean },
-                     "Switches verbose mode on or off",
-                     [this](Arguments& argv, long value) {
-
-                remoteManager.rshServer.setOption(OPT_SRV_VERBOSE, parseBool(argv[0]));
-            });
+            initSetters(root, remoteManager.serServer);
 
             root.add({"server", "rshell"},
                      "Retro shell server");
@@ -1338,22 +919,7 @@ Interpreter::initCommandShell(Command &root)
                 retroShell.dump(remoteManager.rshServer, Category::Config);
             });
 
-            root.add({"server", "rshell", "set"},
-                     "Configures the component");
-
-            root.add({"server", "rshell", "set", "port"}, { Arg::value },
-                     "Assigns the port number",
-                     [this](Arguments& argv, long value) {
-
-                remoteManager.rshServer.setOption(OPT_SRV_PORT, parseNum(argv[0]));
-            });
-
-            root.add({"server", "rshell", "set", "verbose"}, { Arg::boolean },
-                     "Switches verbose mode on or off",
-                     [this](Arguments& argv, long value) {
-
-                remoteManager.rshServer.setOption(OPT_SRV_PORT, parseBool(argv[0]));
-            });
+            initSetters(root, remoteManager.rshServer);
 
             root.add({"server", "gdb"},
                      "GDB server");
@@ -1379,22 +945,7 @@ Interpreter::initCommandShell(Command &root)
                 retroShell.dump(remoteManager.gdbServer, Category::Config);
             });
 
-            root.add({"server", "gdb", "set"},
-                     "Configures the component");
-
-            root.add({"server", "gdb", "set", "port"}, { Arg::value },
-                     "Assigns the port number",
-                     [this](Arguments& argv, long value) {
-
-                remoteManager.gdbServer.setOption(OPT_SRV_PORT, parseNum(argv[0]));
-            });
-
-            root.add({"server", "gdb", "set", "verbose"}, { Arg::boolean },
-                     "Switches verbose mode on or off",
-                     [this](Arguments& argv, long value) {
-
-                remoteManager.gdbServer.setOption(OPT_SRV_VERBOSE, parseBool(argv[0]));
-            });
+            initSetters(root, remoteManager.gdbServer);
         }
     }
 }

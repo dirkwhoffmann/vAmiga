@@ -51,8 +51,12 @@ struct Command {
     // Group stack
     static std::stack<isize> groupStack;
 
+    //
+    static string currentGroup;
+
     // Group of this command
-    isize group;
+    isize group; // DEPRECATED
+    string groupName;
 
     // Name of this command (e.g., "eject")
     string name;

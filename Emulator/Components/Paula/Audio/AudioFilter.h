@@ -147,7 +147,7 @@ class AudioFilter : public SubComponent {
 
         .name           = "AudioFilter",
         .description    = "Audio Filter",
-        .shell          = "audio filter"
+        .shell          = "paula audio filter"
     }};
 
     ConfigOptions options = {

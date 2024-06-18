@@ -19,7 +19,7 @@ class RshServer : public RemoteServer {
 
         .name           = "RshServer",
         .description    = "Serial Port Server",
-        .shell          = "rshserver"
+        .shell          = "server rshell"
     }};
 
 public:
