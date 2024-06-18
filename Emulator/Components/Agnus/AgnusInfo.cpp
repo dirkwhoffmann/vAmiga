@@ -389,6 +389,16 @@ Agnus::eventName(EventSlot slot, EventID id)
             }
             break;
 
+        case SLOT_SNP:
+
+            switch (id) {
+
+                case EVENT_NONE:        return "none";
+                case SNP_TAKE:          return "SNP_TAKE";
+                default:                return "*** INVALID ***";
+            }
+            break;
+
         case SLOT_RSH:
 
             switch (id) {

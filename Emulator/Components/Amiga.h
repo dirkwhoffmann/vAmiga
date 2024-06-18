@@ -365,6 +365,27 @@ public:
 
 public:
 
+    // Takes a snapshot
+    Snapshot *takeSnapshot();
+
+    // Loads the current state from a snapshot file
+    void loadSnapshot(const Snapshot &snapshot) throws;
+
+    // Services a snapshot event
+    void serviceSnpEvent(EventID id);
+
+private:
+
+    // Schedules the next snapshot event
+    void scheduleNextSnpEvent();
+
+
+    //
+    // Handling snapshots
+    //
+
+public:
+
     /* Requests a snapshot to be taken. Once the snapshot is ready, a message
      * is written into the message queue. The snapshot can then be picked up by
      * calling latestAutoSnapshot() or latestUserSnapshot(), depending on the
@@ -381,7 +402,7 @@ public:
     Snapshot *latestUserSnapshot();
 
     // Loads the current state from a snapshot file
-    void loadSnapshot(const Snapshot &snapshot) throws;
+    // void loadSnapshot(const Snapshot &snapshot) throws;
 
 private:
 

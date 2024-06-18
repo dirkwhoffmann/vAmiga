@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "Agnus.h"
-#include "Amiga.h"
+#include "Emulator.h"
 
 namespace vamiga {
 
@@ -424,6 +424,9 @@ Agnus::executeUntil(Cycle cycle) {
             }
             if (isDue<SLOT_MSE2>(cycle)) {
                 controlPort2.mouse.serviceMouseEvent <SLOT_MSE2> ();
+            }
+            if (isDue<SLOT_SNP>(cycle)) {
+                amiga.serviceSnpEvent(id[SLOT_KEY]);
             }
             if (isDue<SLOT_RSH>(cycle)) {
                 retroShell.serviceEvent();

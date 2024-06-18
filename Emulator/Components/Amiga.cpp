@@ -752,6 +752,43 @@ Amiga::clearFlag(u32 flag)
     flags &= ~flag;
 }
 
+Snapshot *
+Amiga::takeSnapshot()
+{
+    {   SUSPENDED
+
+        return new Snapshot(*this);
+    }
+}
+
+void
+Amiga::serviceSnpEvent(EventID eventId)
+{
+    // Check for the main instance (ignore the run-ahead instance)
+    if (objid == 0) {
+
+        // Take snapshot and hand it over to GUI
+        autoSnapshot = new Snapshot(*this);
+        // msgQueue.put( Message { .type = MSG_SNAPSHOT_TAKEN, .snapshot = autoSnapshot } );
+    }
+
+    // Schedule the next event
+    scheduleNextSnpEvent();
+}
+
+void
+Amiga::scheduleNextSnpEvent()
+{
+    auto snapshots = emulator.get(OPT_EMU_SNAPSHOTS);
+    auto delay = emulator.get(OPT_EMU_SNAPSHOT_DELAY);
+
+    if (snapshots) {
+        agnus.scheduleRel<SLOT_SNP>(SEC(double(delay)), SNP_TAKE);
+    } else {
+        agnus.cancel<SLOT_SNP>();
+    }
+}
+
 void
 Amiga::requestAutoSnapshot()
 {

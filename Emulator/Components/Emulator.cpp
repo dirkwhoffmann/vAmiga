@@ -91,15 +91,9 @@ Emulator::getOption(Option opt) const
 {
     switch (opt) {
 
-            /*
-        case OPT_EMU_WARP_BOOT:         return config.warpBoot;
-        case OPT_EMU_WARP_MODE:         return config.warpMode;
-        case OPT_EMU_VSYNC:             return config.vsync;
-        case OPT_EMU_SPEED_ADJUST:      return config.speedAdjust;
         case OPT_EMU_SNAPSHOTS:         return config.snapshots;
         case OPT_EMU_SNAPSHOT_DELAY:    return config.snapshotDelay;
-             */
-            
+
         default:
             fatalError;
     }
@@ -109,29 +103,6 @@ void
 Emulator::checkOption(Option opt, i64 value)
 {
     switch (opt) {
-
-            /*
-        case OPT_EMU_WARP_BOOT:
-
-            return;
-
-        case OPT_EMU_WARP_MODE:
-
-            if (!WarpModeEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INV_ARG, WarpModeEnum::keyList());
-            }
-            return;
-
-        case OPT_EMU_VSYNC:
-
-            return;
-
-        case OPT_EMU_SPEED_ADJUST:
-
-            if (value < 50 || value > 200) {
-                throw Error(ERROR_OPT_INV_ARG, "50...200");
-            }
-            return;
 
         case OPT_EMU_SNAPSHOTS:
 
@@ -143,7 +114,6 @@ Emulator::checkOption(Option opt, i64 value)
                 throw Error(ERROR_OPT_INV_ARG, "10...3600");
             }
             return;
-             */
 
         default:
             throw Error(ERROR_OPT_UNSUPPORTED);
@@ -157,41 +127,17 @@ Emulator::setOption(Option opt, i64 value)
 
     switch (opt) {
 
-            /*
-        case OPT_EMU_WARP_BOOT:
-
-            config.warpBoot = isize(value);
-            return;
-
-        case OPT_EMU_WARP_MODE:
-
-            config.warpMode = WarpMode(value);
-            return;
-
-        case OPT_EMU_VSYNC:
-
-            config.vsync = bool(value);
-            return;
-
-        case OPT_EMU_SPEED_ADJUST:
-
-            config.speedAdjust = isize(value);
-            main.updateClockFrequency();
-            return;
-
         case OPT_EMU_SNAPSHOTS:
 
             config.snapshots = bool(value);
-            main.scheduleNextSNPEvent();
+            main.scheduleNextSnpEvent();
             return;
 
         case OPT_EMU_SNAPSHOT_DELAY:
 
             config.snapshotDelay = isize(value);
-            main.scheduleNextSNPEvent();
+            main.scheduleNextSnpEvent();
             return;
-
-             */
 
         default:
             fatalError;
@@ -353,7 +299,7 @@ Emulator::routeOption(Option opt)
 {
     std::vector<Configurable *> result;
 
-    // if (isValidOption(opt)) result.push_back(this);
+    if (isValidOption(opt)) result.push_back(this);
     // if (host.isValidOption(opt)) result.push_back(&host);
     main.routeOption(opt, result);
 

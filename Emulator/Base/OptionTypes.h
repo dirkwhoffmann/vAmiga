@@ -18,6 +18,10 @@
 
 enum_long(OPT)
 {
+    // Emulator
+    OPT_EMU_SNAPSHOTS,          ///< Take a snapshots once in a while
+    OPT_EMU_SNAPSHOT_DELAY,     ///< Delay between two snapshots in seconds
+
     // Amiga
     OPT_VIDEO_FORMAT,
     OPT_WARP_BOOT,
@@ -181,6 +185,9 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
     {
         switch (value) {
 
+            case OPT_EMU_SNAPSHOTS:         return "EMU_SNAPSHOTS";
+            case OPT_EMU_SNAPSHOT_DELAY:    return "EMU_SNAPSHOT_DELAY";
+
             case OPT_VIDEO_FORMAT:          return "VIDEO_FORMAT";
             case OPT_WARP_BOOT:             return "WARP_BOOT";
             case OPT_WARP_MODE:             return "WARP_MODE";
@@ -314,6 +321,9 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
     static const char *help(Option value)
     {
         switch (value) {
+
+            case OPT_EMU_SNAPSHOTS:         return "Take snapshots once in a while";
+            case OPT_EMU_SNAPSHOT_DELAY:    return "Time span between two snapshots";
 
             case OPT_VIDEO_FORMAT:          return "Video format";
             case OPT_WARP_BOOT:             return "Warp-boot duration";

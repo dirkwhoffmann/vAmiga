@@ -25,7 +25,11 @@ class Emulator : public Thread, public Synchronizable, public Configurable {
 
     ConfigOptions options = {
 
+        OPT_EMU_SNAPSHOTS,
+        OPT_EMU_SNAPSHOT_DELAY
     };
+
+    EmulatorConfig config = { };
 
 public:
 

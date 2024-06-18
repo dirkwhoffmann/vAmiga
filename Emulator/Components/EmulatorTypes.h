@@ -8,3 +8,20 @@
 // -----------------------------------------------------------------------------
 
 #pragma once
+
+#include "Reflection.h"
+
+//
+// Structures
+//
+
+//! The current emulator configuration
+typedef struct
+{
+    //! Enable auto-snapshots
+    bool snapshots;
+
+    //! Delay between two auto-snapshots in seconds
+    isize snapshotDelay;
+}
+EmulatorConfig;

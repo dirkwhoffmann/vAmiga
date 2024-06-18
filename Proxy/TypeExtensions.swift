@@ -46,6 +46,7 @@ extension EventSlot: CustomStringConvertible {
         case .HD3:      return "Hard Drive Hd3"
         case .MSE1:     return "Port 1 Mouse"
         case .MSE2:     return "Port 2 Mouse"
+        case .SNP:      return "Snapshots"
         case .RSH:      return "Retro Shell"
         case .KEY:      return "Auto Typing"
         case .SRV:      return "Server Daemon"

@@ -31,6 +31,9 @@ namespace vamiga {
 
 Defaults::Defaults()
 {
+    setFallback(OPT_EMU_SNAPSHOTS,      false);
+    setFallback(OPT_EMU_SNAPSHOT_DELAY, 10);
+
     setFallback(OPT_VIDEO_FORMAT,       PAL);
     setFallback(OPT_WARP_BOOT,          0);
     setFallback(OPT_WARP_MODE,          WARP_NEVER);
