@@ -203,7 +203,6 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func exportConfigAction(_ sender: Any!) {
 
-        let defaults = EmulatorProxy.defaults!
         let savePanel = NSSavePanel()
 
         // Show file panel
@@ -277,7 +276,9 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func takeSnapshotAction(_ sender: Any!) {
         
-        amiga.requestUserSnapshot()
+        // amiga.requestUserSnapshot()
+        mydocument.snapshots.append(amiga.amiga.takeSnapshot())
+        renderer.flash()
     }
     
     @IBAction func restoreSnapshotAction(_ sender: Any!) {

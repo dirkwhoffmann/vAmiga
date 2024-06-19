@@ -234,6 +234,16 @@
 
 - (void)launch:(const void *)listener function:(Callback *)func;
 
+- (NSInteger)get:(Option)opt;
+- (NSInteger)get:(Option)opt id:(NSInteger)id;
+- (NSInteger)get:(Option)opt drive:(NSInteger)id;
+- (BOOL)set:(Option)opt value:(NSInteger)val;
+- (BOOL)set:(Option)opt enable:(BOOL)val;
+- (BOOL)set:(Option)opt id:(NSInteger)id value:(NSInteger)val;
+- (BOOL)set:(Option)opt id:(NSInteger)id enable:(BOOL)val;
+- (BOOL)set:(Option)opt drive:(NSInteger)id value:(NSInteger)val;
+- (BOOL)set:(Option)opt drive:(NSInteger)id enable:(BOOL)val;
+
 - (void)hardReset;
 - (void)softReset;
 
@@ -255,11 +265,13 @@
 - (void)resume;
 - (void)continueScript;
 
+/*
 - (void)requestAutoSnapshot;
 - (void)requestUserSnapshot;
 @property (readonly) SnapshotProxy *latestAutoSnapshot;
 @property (readonly) SnapshotProxy *latestUserSnapshot;
-- (void) loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex;
+*/
+ - (void) loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex;
 
 - (NSInteger)getConfig:(Option)opt;
 - (NSInteger)getConfig:(Option)opt id:(NSInteger)id;
@@ -377,6 +389,8 @@
 
 @property (readonly) AmigaInfo info;
 // @property (readonly) AmigaInfo cachedInfo;
+
+- (SnapshotProxy *) takeSnapshot;
 
 @end
 
@@ -927,9 +941,10 @@
     NSImage *preview;
 }
 
++ (instancetype)make:(void *)file;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy;
++ (instancetype)makeWithAmiga:(AmigaProxy *)proxy;
 
 @property (readonly, strong) NSImage *previewImage;
 @property (readonly) time_t timeStamp;

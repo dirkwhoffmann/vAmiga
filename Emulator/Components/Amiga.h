@@ -168,7 +168,7 @@ private:
 private:
 
     Snapshot *autoSnapshot = nullptr;
-    Snapshot *userSnapshot = nullptr;
+    // Snapshot *userSnapshot = nullptr;
 
     typedef struct { Cycle trigger; i64 payload; } Alarm;
     std::vector<Alarm> alarms;
@@ -391,15 +391,15 @@ public:
      * calling latestAutoSnapshot() or latestUserSnapshot(), depending on the
      * requested snapshot type.
      */
-    void requestAutoSnapshot();
-    void requestUserSnapshot();
+    // void requestAutoSnapshot();
+    // void requestUserSnapshot();
 
     /* Returns the most recent snapshot or nullptr if none was taken. If a
      * snapshot was taken, the function hands over the ownership to the caller
      * and deletes the internal pointer.
      */
-    Snapshot *latestAutoSnapshot();
-    Snapshot *latestUserSnapshot();
+    // Snapshot *latestAutoSnapshot();
+    // Snapshot *latestUserSnapshot();
 
     // Loads the current state from a snapshot file
     // void loadSnapshot(const Snapshot &snapshot) throws;
@@ -407,9 +407,10 @@ public:
 private:
 
     // Takes a snapshot of a certain kind
+    /*
     void takeAutoSnapshot();
     void takeUserSnapshot();
-
+    */
 
     //
     // Managing events

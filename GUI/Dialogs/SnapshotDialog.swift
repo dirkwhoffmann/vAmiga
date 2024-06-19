@@ -40,7 +40,6 @@ class SnapshotDialog: DialogController {
 
         now = Date()
         
-        parent.stopSnapshotTimer()
         updateLabels()
         updateCapacity()
 
@@ -222,7 +221,6 @@ class SnapshotDialog: DialogController {
         ]
 
         hide()
-        parent.validateSnapshotTimer()
         for item in items { item.isHidden = true }
      }
 }

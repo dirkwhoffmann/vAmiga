@@ -157,6 +157,9 @@ Amiga::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
 
+    // Schedule initial events
+    scheduleNextSnpEvent();
+
     // Clear all runloop flags
     flags = 0;
 }
@@ -627,6 +630,7 @@ Amiga::computeFrame()
         if (flags) {
 
             // Are we requested to take a snapshot?
+            /*
             if (flags & RL::AUTO_SNAPSHOT) {
                 clearFlag(RL::AUTO_SNAPSHOT);
                 takeAutoSnapshot();
@@ -636,12 +640,12 @@ Amiga::computeFrame()
                 clearFlag(RL::USER_SNAPSHOT);
                 takeUserSnapshot();
             }
+            */
 
             // Did we reach a soft breakpoint?
             if (flags & RL::SOFTSTOP_REACHED) {
                 clearFlag(RL::SOFTSTOP_REACHED);
                 throw StateChangeException(STATE_PAUSED);
-                // emulator.switchState(STATE_PAUSED);
                 break;
             }
 
@@ -651,7 +655,6 @@ Amiga::computeFrame()
                 auto addr = cpu.debugger.breakpoints.hit->addr;
                 msgQueue.put(MSG_BREAKPOINT_REACHED, CpuMsg { addr, 0});
                 throw StateChangeException(STATE_PAUSED);
-                // switchState(STATE_PAUSED);
                 break;
             }
 
@@ -661,7 +664,6 @@ Amiga::computeFrame()
                 auto addr = cpu.debugger.watchpoints.hit->addr;
                 msgQueue.put(MSG_WATCHPOINT_REACHED, CpuMsg {addr, 0});
                 throw StateChangeException(STATE_PAUSED);
-                // switchState(STATE_PAUSED);
                 break;
             }
 
@@ -671,7 +673,6 @@ Amiga::computeFrame()
                 auto vector = u8(cpu.debugger.catchpoints.hit->addr);
                 msgQueue.put(MSG_CATCHPOINT_REACHED, CpuMsg {cpu.getPC0(), vector});
                 throw StateChangeException(STATE_PAUSED);
-                // switchState(STATE_PAUSED);
                 break;
             }
 
@@ -680,7 +681,6 @@ Amiga::computeFrame()
                 clearFlag(RL::SWTRAP_REACHED);
                 msgQueue.put(MSG_SWTRAP_REACHED, CpuMsg {cpu.getPC0(), 0});
                 throw StateChangeException(STATE_PAUSED);
-                // switchState(STATE_PAUSED);
                 break;
             }
 
@@ -690,7 +690,6 @@ Amiga::computeFrame()
                 auto addr = u8(agnus.copper.debugger.breakpoints.hit->addr);
                 msgQueue.put(MSG_COPPERBP_REACHED, CpuMsg { addr, 0 });
                 throw StateChangeException(STATE_PAUSED);
-                // switchState(STATE_PAUSED);
                 break;
             }
 
@@ -700,7 +699,6 @@ Amiga::computeFrame()
                 auto addr = u8(agnus.copper.debugger.watchpoints.hit->addr);
                 msgQueue.put(MSG_COPPERWP_REACHED, CpuMsg { addr, 0 });
                 throw StateChangeException(STATE_PAUSED);
-                // switchState(STATE_PAUSED);
                 break;
             }
 
@@ -708,7 +706,6 @@ Amiga::computeFrame()
             if (flags & RL::STOP) {
                 clearFlag(RL::STOP);
                 throw StateChangeException(STATE_PAUSED);
-                // switchState(STATE_PAUSED);
                 break;
             }
 
@@ -769,7 +766,7 @@ Amiga::serviceSnpEvent(EventID eventId)
 
         // Take snapshot and hand it over to GUI
         autoSnapshot = new Snapshot(*this);
-        // msgQueue.put( Message { .type = MSG_SNAPSHOT_TAKEN, .snapshot = autoSnapshot } );
+        msgQueue.put(MSG_SNAPSHOT_TAKEN, SnapshotMsg { .snapshot = autoSnapshot } );
     }
 
     // Schedule the next event
@@ -789,6 +786,7 @@ Amiga::scheduleNextSnpEvent()
     }
 }
 
+/*
 void
 Amiga::requestAutoSnapshot()
 {
@@ -834,6 +832,7 @@ Amiga::latestUserSnapshot()
     userSnapshot = nullptr;
     return result;
 }
+*/
 
 void
 Amiga::loadSnapshot(const Snapshot &snapshot)
@@ -869,6 +868,7 @@ Amiga::loadSnapshot(const Snapshot &snapshot)
     msgQueue.put(MSG_VIDEO_FORMAT, agnus.isPAL() ? PAL : NTSC);
 }
 
+/*
 void
 Amiga::takeAutoSnapshot()
 {
@@ -894,8 +894,9 @@ Amiga::takeUserSnapshot()
     userSnapshot = new Snapshot(*this);
     msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
 }
+*/
 
-void 
+void
 Amiga::eolHandler()
 {
     // Get the maximum number of rasterlines

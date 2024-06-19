@@ -169,7 +169,7 @@ class MyDocument: NSDocument {
         
         if typeName == "vAmiga" {
 
-            if let snapshot = SnapshotProxy.make(withAmiga: amiga) {
+            if let snapshot = SnapshotProxy.make(withAmiga: amiga.amiga) {
 
                 do {
                     try snapshot.writeToFile(url: url)

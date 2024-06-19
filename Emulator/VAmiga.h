@@ -13,6 +13,9 @@
 #include "Error.h"
 #include <filesystem>
 
+// REMOVE:
+#include "Media.h"
+
 namespace vamiga {
 
 namespace moira { class Guards; }
@@ -50,6 +53,25 @@ struct DefaultsAPI : API {
 struct AmigaAPI : API {
 
     class Amiga *amiga = nullptr;
+
+    /// @}
+    /// @name Handling snapshots
+    /// @{
+
+    /** @brief  Takes a snapshot
+     *
+     *  @return A pointer to the created Snapshot object.
+     *
+     *  @note   The function transfers the ownership to the caller. It is
+     *          his responsibility of the caller to free the object.
+     */
+    Snapshot *takeSnapshot();
+
+    /** @brief  Loads a snapshot into the emulator.
+     *
+     *  @param  snapshot    Reference to a snapshot.
+     */
+    void loadSnapshot(const Snapshot &snapshot);
 };
 
 struct AgnusAPI : API {

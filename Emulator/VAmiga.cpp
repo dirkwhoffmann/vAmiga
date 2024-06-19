@@ -371,4 +371,20 @@ VAmiga::put(const Cmd &cmd)
     emu->put(cmd);
 }
 
+//
+// AmigaAPI
+//
+
+Snapshot *
+AmigaAPI::takeSnapshot()
+{
+    return amiga->takeSnapshot();
+}
+
+void
+AmigaAPI::loadSnapshot(const Snapshot &snapshot)
+{
+    amiga->loadSnapshot(snapshot);
+}
+
 }

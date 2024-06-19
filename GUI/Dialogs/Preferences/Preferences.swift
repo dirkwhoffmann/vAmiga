@@ -27,13 +27,31 @@ class Preferences {
     //
     // General
     //
-       
+      
+    // Snapshots
+    var autoSnapshots = false {
+        didSet {
+            for emu in myAppDelegate.proxies {
+                emu.set(.EMU_SNAPSHOTS, enable: autoSnapshots)
+            }
+        }
+    }
+    var snapshotInterval = 0 {
+        didSet {
+            for emu in myAppDelegate.proxies {
+                emu.set(.EMU_SNAPSHOT_DELAY, value: snapshotInterval)
+            }
+        }
+    }
+
+
     // Snapshots
     var snapshotStorage = 0 {
         didSet { for c in myAppDelegate.controllers {
             c.mydocument.snapshots.maxSize = snapshotStorage * 1024 * 1024 }
         }
     }
+    /*
     var autoSnapshots = false {
         didSet { for c in myAppDelegate.controllers {
             c.validateSnapshotTimer() }
@@ -44,6 +62,7 @@ class Preferences {
             c.validateSnapshotTimer() }
         }
     }
+    */
 
     // Screenshots
     var screenshotSource = 0

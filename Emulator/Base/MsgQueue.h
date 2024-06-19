@@ -94,6 +94,7 @@ public:
     void put(MsgType type, HdcMsg payload);
     void put(MsgType type, ScriptMsg payload);
     void put(MsgType type, ViewportMsg payload);
+    void put(MsgType type, SnapshotMsg payload);
 
     // Reads a message
     bool get(Message &msg);

@@ -89,6 +89,12 @@ MsgQueue::put(MsgType type, ViewportMsg payload)
     put( Message { .type = type, .viewport = payload } );
 }
 
+void
+MsgQueue::put(MsgType type, SnapshotMsg payload)
+{
+    put( Message { .type = type, .snapshot = payload } );
+}
+
 bool
 MsgQueue::get(Message &msg)
 {

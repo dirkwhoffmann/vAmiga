@@ -61,10 +61,7 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Virtual keyboard
     var virtualKeyboard: VirtualKeyboardController?
-    
-    // Screenshot and snapshot timers
-    var snapshotTimer: Timer?
-    
+        
     // Speedometer to measure clock frequence and frames per second
     var speedometer: Speedometer!
 
@@ -581,15 +578,9 @@ extension MyController {
                 c = amiga.serialPort.readOutgoingPrintableByte()
             }
 
-        case .AUTO_SNAPSHOT_TAKEN:
-            let latest = amiga.latestAutoSnapshot!
-            mydocument.snapshots.append(latest, size: latest.size)
+        case .SNAPSHOT_TAKEN:
+            mydocument.snapshots.append(SnapshotProxy.make(msg.snapshot.snapshot))
 
-        case .USER_SNAPSHOT_TAKEN:
-            let latest = amiga.latestUserSnapshot!
-            mydocument.snapshots.append(latest, size: latest.size)
-            renderer.flash()
-            
         case .SNAPSHOT_RESTORED:
             renderer.flash(steps: 60)
             hideOrShowDriveMenus()

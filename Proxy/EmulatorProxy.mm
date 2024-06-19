@@ -192,6 +192,12 @@ using namespace vamiga::moira;
 }
 */
 
+- (SnapshotProxy *)takeSnapshot
+{
+    Snapshot *snapshot = [self amiga]->takeSnapshot();
+    return [SnapshotProxy make:snapshot];
+}
+
 @end
 
 
@@ -2201,7 +2207,7 @@ using namespace vamiga::moira;
     return (Snapshot *)obj;
 }
 
-+ (instancetype)make:(Snapshot *)snapshot
++ (instancetype)make:(void *)snapshot
 {
     SnapshotProxy *proxy = [[self alloc] initWith:snapshot];
     if (proxy) { proxy->preview = nullptr; }
@@ -2220,7 +2226,7 @@ using namespace vamiga::moira;
     catch (Error &error) { [ex save:error]; return nil; }
 }
 
-+ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy
++ (instancetype)makeWithAmiga:(AmigaProxy *)proxy
 {
     Amiga *amiga = (Amiga *)proxy->obj;
     
@@ -3023,9 +3029,91 @@ using namespace vamiga::moira;
     [self emu]->emu->main.removeInspectionTarget();
 }
 
+- (SnapshotProxy *)takeSnapshot
+{
+    Amiga *amiga = (Amiga *)[self amiga]->obj;
+    auto *snapshot = amiga->takeSnapshot();
+    return [SnapshotProxy make:snapshot];
+}
+
 - (void)launch:(const void *)listener function:(Callback *)func
 {
     [self emu]->launch(listener, func);
+}
+
+- (NSInteger)get:(Option)opt
+{
+    return [self emu]->get(opt);
+}
+
+- (NSInteger)get:(Option)opt id:(NSInteger)id
+{
+    return [self emu]->get(opt, id);
+}
+
+- (NSInteger)get:(Option)opt drive:(NSInteger)id
+{
+    return [self emu]->get(opt, (long)id);
+}
+
+- (BOOL)set:(Option)opt value:(NSInteger)val
+{
+    try {
+        [self emu]->set(opt, val);
+        return true;
+    } catch (Error &exception) {
+        return false;
+    }
+}
+
+- (BOOL)set:(Option)opt enable:(BOOL)val
+{
+    try {
+        [self emu]->set(opt, val ? 1 : 0);
+        return true;
+    } catch (Error &exception) {
+        return false;
+    }
+}
+
+- (BOOL)set:(Option)opt id:(NSInteger)id value:(NSInteger)val
+{
+    try {
+        [self emu]->set(opt, val, id);
+        return true;
+    } catch (Error &exception) {
+        return false;
+    }
+}
+
+- (BOOL)set:(Option)opt id:(NSInteger)id enable:(BOOL)val
+{
+    try {
+        [self emu]->set(opt, val ? 1 : 0, id);
+        return true;
+    } catch (Error &exception) {
+        return false;
+    }
+}
+
+- (BOOL)set:(Option)opt drive:(NSInteger)id value:(NSInteger)val
+{
+    try {
+        [self emu]->set(opt, val, (long)id);
+        return true;
+    } catch (Error &exception) {
+        return false;
+    }
+}
+
+- (BOOL)set:(Option)opt drive:(NSInteger)id enable:(BOOL)val
+{
+    try {
+        [self emu]->set(opt, val ? 1 : 0, (long)id);
+        return true;
+    } catch (Error &exception) {
+        return false;
+    }
 }
 
 - (void)hardReset
@@ -3110,6 +3198,7 @@ using namespace vamiga::moira;
     [self emu]->emu->main.retroShell.continueScript();
 }
 
+/*
 - (void)requestAutoSnapshot
 {
     [self emu]->emu->main.requestAutoSnapshot();
@@ -3131,6 +3220,7 @@ using namespace vamiga::moira;
     Snapshot *snapshot = [self emu]->emu->main.latestUserSnapshot();
     return [SnapshotProxy make:snapshot];
 }
+*/
 
 - (void)loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex
 {
