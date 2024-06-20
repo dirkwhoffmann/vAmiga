@@ -169,28 +169,51 @@ Amiga::getOption(Option option) const
 {
     switch (option) {
 
-        case OPT_VIDEO_FORMAT:
-
-            return config.type;
-
-        case OPT_WARP_BOOT:
-
-            return config.warpBoot;
-
-        case OPT_WARP_MODE:
-
-            return config.warpMode;
-
-        case OPT_VSYNC:
-
-            return config.vsync;
-
-        case OPT_TIME_LAPSE:
-
-            return config.timeLapse;
+        case OPT_VIDEO_FORMAT:          return config.type;
+        case OPT_EMU_WARP_BOOT:         return config.warpBoot;
+        case OPT_EMU_WARP_MODE:         return config.warpMode;
+        case OPT_VSYNC:                 return config.vsync;
+        case OPT_TIME_LAPSE:            return config.timeLapse;
+        case OPT_EMU_SNAPSHOTS:         return config.snapshots;
+        case OPT_EMU_SNAPSHOT_DELAY:    return config.snapshotDelay;
 
         default:
             fatalError;
+    }
+}
+
+void
+Amiga::checkOption(Option opt, i64 value)
+{
+    switch (opt) {
+
+        case OPT_VIDEO_FORMAT:
+        case OPT_EMU_WARP_BOOT:
+
+            return;
+
+        case OPT_EMU_WARP_MODE:
+
+            if (!WarpModeEnum::isValid(value)) {
+                throw Error(ERROR_OPT_INV_ARG, WarpModeEnum::keyList());
+            }
+            return;
+
+        case OPT_VSYNC:
+        case OPT_TIME_LAPSE:
+        case OPT_EMU_SNAPSHOTS:
+
+            return;
+
+        case OPT_EMU_SNAPSHOT_DELAY:
+
+            if (value < 10 || value > 3600) {
+                throw Error(ERROR_OPT_INV_ARG, "10...3600");
+            }
+            return;
+
+        default:
+            throw Error(ERROR_OPT_UNSUPPORTED);
     }
 }
 
@@ -214,12 +237,12 @@ Amiga::setOption(Option option, i64 value)
             }
             return;
 
-        case OPT_WARP_BOOT:
+        case OPT_EMU_WARP_BOOT:
 
             config.warpBoot = isize(value);
             return;
 
-        case OPT_WARP_MODE:
+        case OPT_EMU_WARP_MODE:
 
             if (!WarpModeEnum::isValid(value)) {
                 throw Error(ERROR_OPT_INV_ARG, WarpModeEnum::keyList());
@@ -240,6 +263,18 @@ Amiga::setOption(Option option, i64 value)
             }
 
             config.timeLapse = isize(value);
+            return;
+
+        case OPT_EMU_SNAPSHOTS:
+
+            config.snapshots = bool(value);
+            scheduleNextSnpEvent();
+            return;
+
+        case OPT_EMU_SNAPSHOT_DELAY:
+
+            config.snapshotDelay = isize(value);
+            scheduleNextSnpEvent();
             return;
 
         default:

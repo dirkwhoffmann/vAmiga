@@ -19,13 +19,13 @@
 enum_long(OPT)
 {
     // Emulator
+    OPT_EMU_WARP_BOOT,          ///< Warp-boot time in seconds
+    OPT_EMU_WARP_MODE,          ///< Warp activation mode
     OPT_EMU_SNAPSHOTS,          ///< Take a snapshots once in a while
     OPT_EMU_SNAPSHOT_DELAY,     ///< Delay between two snapshots in seconds
 
     // Amiga
     OPT_VIDEO_FORMAT,
-    OPT_WARP_BOOT,
-    OPT_WARP_MODE,
     OPT_VSYNC,
     OPT_TIME_LAPSE,
 
@@ -185,12 +185,12 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
     {
         switch (value) {
 
-            case OPT_EMU_SNAPSHOTS:         return "EMU_SNAPSHOTS";
-            case OPT_EMU_SNAPSHOT_DELAY:    return "EMU_SNAPSHOT_DELAY";
+            case OPT_EMU_WARP_BOOT:         return "EMU.WARP_BOOT";
+            case OPT_EMU_WARP_MODE:         return "EMU.WARP_MODE";
+            case OPT_EMU_SNAPSHOTS:         return "EMU.SNAPSHOTS";
+            case OPT_EMU_SNAPSHOT_DELAY:    return "EMU.SNAPSHOT_DELAY";
 
             case OPT_VIDEO_FORMAT:          return "VIDEO_FORMAT";
-            case OPT_WARP_BOOT:             return "WARP_BOOT";
-            case OPT_WARP_MODE:             return "WARP_MODE";
             case OPT_VSYNC:                 return "VSYNC";
             case OPT_TIME_LAPSE:            return "TIME_LAPSE";
 
@@ -322,12 +322,12 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
     {
         switch (value) {
 
+            case OPT_EMU_WARP_BOOT:         return "Warp-boot duration";
+            case OPT_EMU_WARP_MODE:         return "Warp activation";
             case OPT_EMU_SNAPSHOTS:         return "Take snapshots once in a while";
             case OPT_EMU_SNAPSHOT_DELAY:    return "Time span between two snapshots";
 
             case OPT_VIDEO_FORMAT:          return "Video format";
-            case OPT_WARP_BOOT:             return "Warp-boot duration";
-            case OPT_WARP_MODE:             return "Warp activation";
             case OPT_VSYNC:                 return "VSYNC mode";
             case OPT_TIME_LAPSE:            return "Speed adjustment";
 

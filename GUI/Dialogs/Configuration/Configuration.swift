@@ -265,12 +265,12 @@ class Configuration {
     //
 
     var warpMode: Int {
-        get { return amiga.getConfig(.WARP_MODE) }
-        set { amiga.configure(.WARP_MODE, value: newValue) }
+        get { return amiga.getConfig(.EMU_WARP_MODE) }
+        set { amiga.configure(.EMU_WARP_MODE, value: newValue) }
     }
     var warpBoot: Int {
-        get { return amiga.getConfig(.WARP_BOOT) }
-        set { amiga.configure(.WARP_BOOT, value: newValue) }
+        get { return amiga.getConfig(.EMU_WARP_BOOT) }
+        set { amiga.configure(.EMU_WARP_BOOT, value: newValue) }
     }
     var clxSprSpr: Bool {
         get { return amiga.getConfig(.CLX_SPR_SPR) != 0 }

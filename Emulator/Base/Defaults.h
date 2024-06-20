@@ -12,9 +12,10 @@
 #include "CoreObject.h"
 #include "OptionTypes.h"
 #include "Synchronizable.h"
-#include "IOUtils.h"
 
 namespace vamiga {
+
+namespace fs = ::std::filesystem;
 
 class Defaults : public CoreObject, public Synchronizable {
 
@@ -84,17 +85,32 @@ public:
     // Writing key-value pairs
     //
 
+    // Writes a key-value pair into the user storage
     void set(const string &key, const string &value);
-    void set(Option option, const string &value, std::vector<isize> objids = { 0 });
-    void set(Option option, i64 value, std::vector<isize> objids = { 0 });
+    void set(Option option, const string &value);
+    void set(Option option, const string &value, std::vector<isize> objids);
+    void set(Option option, i64 value);
+    void set(Option option, i64 value, std::vector<isize> objids);
 
+    // Writes a key-value pair into the fallback storage
     void setFallback(const string &key, const string &value);
-    void setFallback(Option option, const string &value, std::vector<isize> objids = { 0 });
-    void setFallback(Option option, i64 value, std::vector<isize> objids = { 0 });
+    void setFallback(Option option, const string &value);
+    void setFallback(Option option, const string &value, std::vector<isize> objids);
+    void setFallback(Option option, i64 value);
+    void setFallback(Option option, i64 value, std::vector<isize> objids);
 
+
+    //
+    // Deleting key-value pairs
+    //
+
+    // Deletes all key-value pairs
     void remove();
+
+    // Deletes selected key-value pairs
     void remove(const string &key) throws;
-    void remove(Option option, std::vector<isize> objids = { 0 }) throws;
+    void remove(Option option, isize nr = 0) throws;
+    void remove(Option option, std::vector <isize> objids) throws;
 };
 
 }

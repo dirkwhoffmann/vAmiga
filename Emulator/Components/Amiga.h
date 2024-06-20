@@ -61,10 +61,12 @@ class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
     ConfigOptions options = {
 
         OPT_VIDEO_FORMAT,
-        OPT_WARP_BOOT,
-        OPT_WARP_MODE,
+        OPT_EMU_WARP_BOOT,
+        OPT_EMU_WARP_MODE,
         OPT_VSYNC,
-        OPT_TIME_LAPSE
+        OPT_TIME_LAPSE,
+        OPT_EMU_SNAPSHOTS,
+        OPT_EMU_SNAPSHOT_DELAY
     };
     
     // The current configuration
@@ -281,6 +283,7 @@ public:
     const ConfigOptions &getOptions() const override { return options; }
 
     i64 getOption(Option option) const override;
+    void checkOption(Option opt, i64 value) override;
     void setOption(Option option, i64 value) override;
 
     // Exports the current configuration to a script file

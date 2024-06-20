@@ -321,11 +321,29 @@ struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
 
 typedef struct
 {
+    //! Machine type (PAL or NTSC)
     VideoFormat type;
-    WarpMode warpMode;
+
+    //! After a reset, the emulator runs in warp mode for this amout of seconds
     isize warpBoot;
+
+    //! Warp mode
+    WarpMode warpMode;
+
+    //! Emulator speed in percent (100 is native speed)
+    isize speedAdjust;
+
+    //! Vertical Synchronization
     bool vsync;
+
+    //! Emulator speed in percent (100 is native speed)
     isize timeLapse;
+
+    //! Enable auto-snapshots
+    bool snapshots;
+
+    //! Delay between two auto-snapshots in seconds
+    isize snapshotDelay;
 }
 AmigaConfig;
 

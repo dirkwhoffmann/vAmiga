@@ -18,18 +18,10 @@
 
 namespace vamiga {
 
-class Emulator : public Thread, public Synchronizable, public Configurable {
+class Emulator : public Thread, public Synchronizable {
 
     friend class API;
     friend class VAmiga;
-
-    ConfigOptions options = {
-
-        OPT_EMU_SNAPSHOTS,
-        OPT_EMU_SNAPSHOT_DELAY
-    };
-
-    EmulatorConfig config = { };
 
 public:
 
@@ -78,27 +70,12 @@ private:
 
     void _dump(Category category, std::ostream& os) const override;
 
-
-    //
-    // Methods from Configurable
-    //
-
-public:
-
-    const ConfigOptions &getOptions() const override { return options; }
-    i64 getOption(Option opt) const override;
-    void checkOption(Option opt, i64 value) override;
-    void setOption(Option opt, i64 value) override;
-
-
+    
     //
     // Main API for configuring the emulator
     //
 
 public:
-
-    // Resets all options
-    void resetConfig();
 
     // Queries an option
     i64 get(Option opt, isize id = 0) const throws;

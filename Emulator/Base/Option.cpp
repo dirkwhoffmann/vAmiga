@@ -25,12 +25,12 @@ OptionParser::create(Option opt, i64 arg)
 
     switch (opt) {
 
+        case OPT_EMU_WARP_MODE:         return enumParser.template operator()<WarpModeEnum>();
+        case OPT_EMU_WARP_BOOT:         return numParser(" sec");
         case OPT_EMU_SNAPSHOTS:         return boolParser();
         case OPT_EMU_SNAPSHOT_DELAY:    return numParser(" sec");
 
         case OPT_VIDEO_FORMAT:          return enumParser.template operator()<VideoFormatEnum>();
-        case OPT_WARP_BOOT:             return numParser(" sec");
-        case OPT_WARP_MODE:             return enumParser.template operator()<WarpModeEnum>();
         case OPT_VSYNC:                 return boolParser();
         case OPT_TIME_LAPSE:            return numParser("%");
 

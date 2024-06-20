@@ -26,17 +26,18 @@
 #include "SerialPortTypes.h"
 #include "RemoteManagerTypes.h"
 #include "RemoteServerTypes.h"
+#include "IOUtils.h"
 
 namespace vamiga {
 
 Defaults::Defaults()
 {
+    setFallback(OPT_EMU_WARP_BOOT,      0);
+    setFallback(OPT_EMU_WARP_MODE,      WARP_NEVER);
     setFallback(OPT_EMU_SNAPSHOTS,      false);
     setFallback(OPT_EMU_SNAPSHOT_DELAY, 10);
 
     setFallback(OPT_VIDEO_FORMAT,       PAL);
-    setFallback(OPT_WARP_BOOT,          0);
-    setFallback(OPT_WARP_MODE,          WARP_NEVER);
     setFallback(OPT_VSYNC,              false);
     setFallback(OPT_TIME_LAPSE,         100);
     setFallback(OPT_AGNUS_REVISION,     AGNUS_ECS_1MB);
@@ -348,8 +349,6 @@ Defaults::getRaw(const string &key) const
     if (values.contains(key)) return values.at(key);
     if (fallbacks.contains(key)) return fallbacks.at(key);
 
-    warn("Invalid key: %s\n", key.c_str());
-    assert(false);
     throw Error(ERROR_INVALID_KEY, key);
 }
 
@@ -357,25 +356,29 @@ i64
 Defaults::get(const string &key) const
 {
     auto value = getRaw(key);
-    i64 result = 0;
 
     try {
-        
-        result = i64(std::stoll(value));
-        debug(DEF_DEBUG, "get(%s) = %lld\n", key.c_str(), result);
-        
+
+        return i64(std::stoll(value));
+
     } catch (...) {
 
         warn("Can't parse value %s\n", key.c_str());
+        return 0;
     }
-
-    return result;
 }
 
 i64
-Defaults::get(Option option, isize objid) const
+Defaults::get(Option option, isize nr) const
 {
-    return get(string(OptionEnum::key(option)) + (objid ? std::to_string(objid) : ""));
+    try {
+
+        return get(string(OptionEnum::key(option)) + std::to_string(nr));
+
+    } catch (...) {
+
+        return get(string(OptionEnum::key(option)));
+    }
 }
 
 string
@@ -383,8 +386,6 @@ Defaults::getFallbackRaw(const string &key) const
 {
     if (fallbacks.contains(key)) return fallbacks.at(key);
 
-    warn("Invalid key: %s\n", key.c_str());
-    assert(false);
     throw Error(ERROR_INVALID_KEY, key);
 }
 
@@ -392,31 +393,36 @@ i64
 Defaults::getFallback(const string &key) const
 {
     auto value = getFallbackRaw(key);
-    i64 result = 0;
 
     try {
 
-        result = i64(std::stoll(value));
+        return i64(std::stoll(value));
 
     } catch (...) {
 
         warn("Can't parse value %s\n", key.c_str());
+        return 0;
     }
-
-    return result;
 }
 
 i64
 Defaults::getFallback(Option option, isize nr) const
 {
-    return getFallback(string(OptionEnum::key(option)) + (nr ? std::to_string(nr) : ""));
+    try {
+
+        return getFallback(string(OptionEnum::key(option)) + std::to_string(nr));
+
+    } catch (...) {
+
+        return getFallback(string(OptionEnum::key(option)));
+    }
 }
 
 void
 Defaults::set(const string &key, const string &value)
 {
     {   SYNCHRONIZED
-        
+
         debug(DEF_DEBUG, "%s = %s\n", key.c_str(), value.c_str());
 
         if (!fallbacks.contains(key)) {
@@ -425,9 +431,15 @@ Defaults::set(const string &key, const string &value)
             assert(false);
             throw Error(ERROR_INVALID_KEY, key);
         }
-        
+
         values[key] = value;
     }
+}
+
+void
+Defaults::set(Option option, const string &value)
+{
+    set(OptionEnum::key(option), value);
 }
 
 void
@@ -436,8 +448,14 @@ Defaults::set(Option option, const string &value, std::vector <isize> objids)
     auto key = string(OptionEnum::key(option));
 
     for (auto &nr : objids) {
-        set(key + (nr ? std::to_string(nr) : ""), value);
+        set(key + std::to_string(nr), value);
     }
+}
+
+void
+Defaults::set(Option option, i64 value)
+{
+    set(option, std::to_string(value));
 }
 
 void
@@ -450,11 +468,16 @@ void
 Defaults::setFallback(const string &key, const string &value)
 {
     {   SYNCHRONIZED
-        
+
         debug(DEF_DEBUG, "Fallback: %s = %s\n", key.c_str(), value.c_str());
-        
         fallbacks[key] = value;
     }
+}
+
+void
+Defaults::setFallback(Option option, const string &value)
+{
+    setFallback(OptionEnum::key(option), value);
 }
 
 void
@@ -463,8 +486,14 @@ Defaults::setFallback(Option option, const string &value, std::vector <isize> ob
     auto key = string(OptionEnum::key(option));
 
     for (auto &nr : objids) {
-        setFallback(key + (nr ? std::to_string(nr) : ""), value);
+        setFallback(key + std::to_string(nr), value);
     }
+}
+
+void
+Defaults::setFallback(Option option, i64 value)
+{
+    setFallback(option, std::to_string(value));
 }
 
 void
@@ -483,7 +512,7 @@ void
 Defaults::remove(const string &key)
 {
     {   SYNCHRONIZED
-        
+
         if (!fallbacks.contains(key)) {
 
             warn("Invalid key: %s\n", key.c_str());
@@ -497,13 +526,15 @@ Defaults::remove(const string &key)
 }
 
 void
-Defaults::remove(Option option, std::vector <isize> objids)
+Defaults::remove(Option option, isize nr)
 {
-    auto key = string(OptionEnum::key(option));
+    remove(string(OptionEnum::key(option)) + (nr ? std::to_string(nr) : ""));
+}
 
-    for (auto &nr : objids) {
-        remove(key + (nr ? std::to_string(nr) : ""));
-    }
+void
+Defaults::remove(Option option, std::vector <isize> nrs)
+{
+    for (auto &nr : nrs) remove(option, nr);
 }
 
 }

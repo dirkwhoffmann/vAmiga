@@ -51,7 +51,6 @@ Emulator::initialize()
     main.initialize();
 
     // Setup the default configuration
-    resetConfig();
     // host.resetConfig();
     main.resetConfig();
 
@@ -80,17 +79,14 @@ Emulator::put(const Cmd &cmd)
     cmdQueue.put(cmd);
 }
 
-void
-Emulator::resetConfig()
-{
-    Configurable::resetConfig(main.defaults);
-}
-
+/*
 i64
 Emulator::getOption(Option opt) const
 {
     switch (opt) {
 
+        case OPT_EMU_WARP_BOOT:         return config.warpBoot;
+        case OPT_EMU_WARP_MODE:         return config.warpMode;
         case OPT_EMU_SNAPSHOTS:         return config.snapshots;
         case OPT_EMU_SNAPSHOT_DELAY:    return config.snapshotDelay;
 
@@ -103,6 +99,17 @@ void
 Emulator::checkOption(Option opt, i64 value)
 {
     switch (opt) {
+
+        case OPT_EMU_WARP_BOOT:
+
+            return;
+
+        case OPT_EMU_WARP_MODE:
+
+            if (!WarpModeEnum::isValid(value)) {
+                throw Error(ERROR_OPT_INV_ARG, WarpModeEnum::keyList());
+            }
+            return;
 
         case OPT_EMU_SNAPSHOTS:
 
@@ -143,6 +150,7 @@ Emulator::setOption(Option opt, i64 value)
             fatalError;
     }
 }
+*/
 
 i64
 Emulator::get(Option opt, isize id) const
@@ -299,7 +307,6 @@ Emulator::routeOption(Option opt)
 {
     std::vector<Configurable *> result;
 
-    if (isValidOption(opt)) result.push_back(this);
     // if (host.isValidOption(opt)) result.push_back(&host);
     main.routeOption(opt, result);
 

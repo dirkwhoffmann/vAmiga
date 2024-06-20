@@ -70,6 +70,34 @@ using namespace vamiga::moira;
 
 @end
 
+
+//
+// Constants
+//
+
+@implementation Constants
+
++ (NSInteger)vpos_cnt_pal { return VPOS_CNT_PAL; }
++ (NSInteger)vpos_max_pal { return VPOS_MAX_PAL; }
+
++ (NSInteger)vpos_cnt_ntsc { return VPOS_CNT_NTSC; }
++ (NSInteger)vpos_max_ntsc { return VPOS_MAX_NTSC; }
+
++ (NSInteger)vpos_cnt { return VPOS_CNT; }
++ (NSInteger)vpos_max { return VPOS_MAX; }
+
++ (NSInteger)hpos_cnt_pal { return HPOS_CNT_PAL; }
++ (NSInteger)hpos_max_pal { return HPOS_MAX_PAL; }
+
++ (NSInteger)hpos_cnt_ntsc { return HPOS_CNT_NTSC; }
++ (NSInteger)hpos_max_ntsc { return HPOS_MAX_NTSC; }
+
++ (NSInteger)hpos_max { return HPOS_MAX; }
++ (NSInteger)hpos_cnt { return HPOS_CNT; }
+
+@end
+
+
 //
 // CoreComponent proxy
 //

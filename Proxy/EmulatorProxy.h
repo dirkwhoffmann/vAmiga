@@ -132,6 +132,35 @@
 
 
 //
+// Constants
+//
+
+@interface Constants : NSObject {
+
+}
+
+@property (class, readonly) NSInteger vpos_cnt_pal;
+@property (class, readonly) NSInteger vpos_max_pal;
+
+@property (class, readonly) NSInteger vpos_cnt_ntsc;
+@property (class, readonly) NSInteger vpos_max_ntsc;
+
+@property (class, readonly) NSInteger vpos_cnt;
+@property (class, readonly) NSInteger vpos_max;
+
+@property (class, readonly) NSInteger hpos_cnt_pal;
+@property (class, readonly) NSInteger hpos_max_pal;
+
+@property (class, readonly) NSInteger hpos_cnt_ntsc;
+@property (class, readonly) NSInteger hpos_max_ntsc;
+
+@property (class, readonly) NSInteger hpos_max;
+@property (class, readonly) NSInteger hpos_cnt;
+
+@end
+
+
+//
 // Host
 //
 

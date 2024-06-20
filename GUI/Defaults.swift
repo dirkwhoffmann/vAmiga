@@ -987,8 +987,8 @@ extension DefaultsProxy {
 
         debug(.defaults)
 
-        remove(.WARP_MODE)
-        remove(.WARP_BOOT)
+        remove(.EMU_WARP_MODE)
+        remove(.EMU_WARP_BOOT)
         remove(.CLX_SPR_SPR)
         remove(.CLX_SPR_PLF)
         remove(.CLX_PLF_PLF)
@@ -1009,8 +1009,8 @@ extension Configuration {
 
         amiga.suspend()
 
-        warpMode = defaults.get(.WARP_MODE)
-        warpBoot = defaults.get(.WARP_BOOT)
+        warpMode = defaults.get(.EMU_WARP_MODE)
+        warpBoot = defaults.get(.EMU_WARP_BOOT)
         clxSprSpr = defaults.get(.CLX_SPR_SPR) != 0
         clxSprPlf = defaults.get(.CLX_SPR_PLF) != 0
         clxPlfPlf = defaults.get(.CLX_PLF_PLF) != 0
@@ -1030,8 +1030,8 @@ extension Configuration {
 
         amiga.suspend()
 
-        defaults.set(.WARP_MODE, warpMode)
-        defaults.set(.WARP_BOOT, warpBoot)
+        defaults.set(.EMU_WARP_MODE, warpMode)
+        defaults.set(.EMU_WARP_BOOT, warpBoot)
         defaults.set(.CLX_SPR_SPR, clxSprSpr)
         defaults.set(.CLX_SPR_PLF, clxSprPlf)
         defaults.set(.CLX_PLF_PLF, clxPlfPlf)

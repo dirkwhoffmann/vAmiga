@@ -12,6 +12,7 @@
 #include "Option.h"
 #include "Reflection.h"
 #include "Defaults.h"
+#include "IOUtils.h"
 #include <algorithm>
 
 namespace vamiga {
