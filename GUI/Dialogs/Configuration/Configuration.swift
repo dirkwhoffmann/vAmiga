@@ -27,8 +27,8 @@ class Configuration {
     //
         
     var extStart: Int {
-        get { return amiga.getConfig(.EXT_START) }
-        set { amiga.configure(.EXT_START, value: newValue) }
+        get { return amiga.getConfig(.MEM_EXT_START) }
+        set { amiga.configure(.MEM_EXT_START, value: newValue) }
     }
 
     //
@@ -72,28 +72,28 @@ class Configuration {
         set { amiga.configure(.FILTER_TYPE, value: newValue) }
     }
     var chipRam: Int {
-        get { return amiga.getConfig(.CHIP_RAM) }
-        set { amiga.configure(.CHIP_RAM, value: newValue) }
+        get { return amiga.getConfig(.MEM_CHIP_RAM) }
+        set { amiga.configure(.MEM_CHIP_RAM, value: newValue) }
     }
     var slowRam: Int {
-        get { return amiga.getConfig(.SLOW_RAM) }
-        set { amiga.configure(.SLOW_RAM, value: newValue) }
+        get { return amiga.getConfig(.MEM_SLOW_RAM) }
+        set { amiga.configure(.MEM_SLOW_RAM, value: newValue) }
     }
     var fastRam: Int {
-        get { return amiga.getConfig(.FAST_RAM) }
-        set { amiga.configure(.FAST_RAM, value: newValue) }
+        get { return amiga.getConfig(.MEM_FAST_RAM) }
+        set { amiga.configure(.MEM_FAST_RAM, value: newValue) }
     }
     var bankMap: Int {
-        get { return amiga.getConfig(.BANKMAP) }
-        set { amiga.configure(.BANKMAP, value: newValue) }
+        get { return amiga.getConfig(.MEM_BANKMAP) }
+        set { amiga.configure(.MEM_BANKMAP, value: newValue) }
     }
     var ramInitPattern: Int {
-        get { return amiga.getConfig(.RAM_INIT_PATTERN) }
-        set { amiga.configure(.RAM_INIT_PATTERN, value: newValue) }
+        get { return amiga.getConfig(.MEM_RAM_INIT_PATTERN) }
+        set { amiga.configure(.MEM_RAM_INIT_PATTERN, value: newValue) }
     }
     var unmappingType: Int {
-        get { return amiga.getConfig(.UNMAPPING_TYPE) }
-        set { amiga.configure(.UNMAPPING_TYPE, value: newValue) }
+        get { return amiga.getConfig(.MEM_UNMAPPING_TYPE) }
+        set { amiga.configure(.MEM_UNMAPPING_TYPE, value: newValue) }
     }
 
     //
@@ -289,8 +289,8 @@ class Configuration {
         set { amiga.configure(.CIA_IDLE_SLEEP, enable: newValue) }
     }
     var frameSkipping: Int {
-        get { return amiga.getConfig(.FRAME_SKIPPING) }
-        set { amiga.configure(.FRAME_SKIPPING, value: newValue) }
+        get { return amiga.getConfig(.DENISE_FRAME_SKIPPING) }
+        set { amiga.configure(.DENISE_FRAME_SKIPPING, value: newValue) }
     }
     var audioFastPath: Bool {
         get { return amiga.getConfig(.AUD_FASTPATH) != 0 }
@@ -314,24 +314,24 @@ class Configuration {
         set { amiga.configure(.BLITTER_ACCURACY, value: newValue) }
     }
     var slowRamMirror: Bool {
-        get { return amiga.getConfig(.SLOW_RAM_MIRROR) != 0 }
-        set { amiga.configure(.SLOW_RAM_MIRROR, enable: newValue) }
+        get { return amiga.getConfig(.AGNUS_SLOW_RAM_MIRROR) != 0 }
+        set { amiga.configure(.AGNUS_SLOW_RAM_MIRROR, enable: newValue) }
     }
     var todBug: Bool {
         get { return amiga.getConfig(.TODBUG) != 0 }
         set { amiga.configure(.TODBUG, enable: newValue) }
     }
     var ptrDrops: Bool {
-        get { return amiga.getConfig(.PTR_DROPS) != 0 }
-        set { amiga.configure(.PTR_DROPS, enable: newValue) }
+        get { return amiga.getConfig(.AGNUS_PTR_DROPS) != 0 }
+        set { amiga.configure(.AGNUS_PTR_DROPS, enable: newValue) }
     }
     var eClockSyncing: Bool {
         get { return amiga.getConfig(.ECLOCK_SYNCING) != 0 }
         set { amiga.configure(.ECLOCK_SYNCING, enable: newValue) }
     }
     var slowRamDelay: Bool {
-        get { return amiga.getConfig(.SLOW_RAM_DELAY) != 0 }
-        set { amiga.configure(.SLOW_RAM_DELAY, enable: newValue) }
+        get { return amiga.getConfig(.MEM_SLOW_RAM_DELAY) != 0 }
+        set { amiga.configure(.MEM_SLOW_RAM_DELAY, enable: newValue) }
     }
     var driveSpeed: Int {
         get { return amiga.getConfig(.DRIVE_SPEED) }
@@ -463,20 +463,20 @@ class Configuration {
     //
 
     var palette: Int {
-        get { return amiga.getConfig(.PALETTE) }
-        set { amiga.configure(.PALETTE, value: newValue) }
+        get { return amiga.getConfig(.MON_PALETTE) }
+        set { amiga.configure(.MON_PALETTE, value: newValue) }
     }
     var brightness: Int {
-        get { return amiga.getConfig(.BRIGHTNESS) }
-        set { amiga.configure(.BRIGHTNESS, value: newValue) }
+        get { return amiga.getConfig(.MON_BRIGHTNESS) }
+        set { amiga.configure(.MON_BRIGHTNESS, value: newValue) }
     }
     var contrast: Int {
-        get { return amiga.getConfig(.CONTRAST) }
-        set { amiga.configure(.CONTRAST, value: newValue) }
+        get { return amiga.getConfig(.MON_CONTRAST) }
+        set { amiga.configure(.MON_CONTRAST, value: newValue) }
     }
     var saturation: Int {
-        get { return amiga.getConfig(.SATURATION) }
-        set { amiga.configure(.SATURATION, value: newValue) }
+        get { return amiga.getConfig(.MON_SATURATION) }
+        set { amiga.configure(.MON_SATURATION, value: newValue) }
     }
     var zoom: Int = 0 {
         didSet { renderer.canvas.updateTextureRect() }

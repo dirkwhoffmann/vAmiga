@@ -28,10 +28,10 @@ class PixelEngine : public SubComponent {
 
     ConfigOptions options = {
 
-        OPT_PALETTE,
-        OPT_BRIGHTNESS,
-        OPT_CONTRAST,
-        OPT_SATURATION
+        OPT_MON_PALETTE,
+        OPT_MON_BRIGHTNESS,
+        OPT_MON_CONTRAST,
+        OPT_MON_SATURATION
     };
 
     friend class Denise;

@@ -113,15 +113,15 @@ class Memory : public SubComponent {
 
     ConfigOptions options = {
 
-        OPT_CHIP_RAM,
-        OPT_SLOW_RAM,
-        OPT_FAST_RAM,
-        OPT_EXT_START,
-        OPT_SAVE_ROMS,
-        OPT_SLOW_RAM_DELAY,
-        OPT_BANKMAP,
-        OPT_UNMAPPING_TYPE,
-        OPT_RAM_INIT_PATTERN
+        OPT_MEM_CHIP_RAM,
+        OPT_MEM_SLOW_RAM,
+        OPT_MEM_FAST_RAM,
+        OPT_MEM_EXT_START,
+        OPT_MEM_SAVE_ROMS,
+        OPT_MEM_SLOW_RAM_DELAY,
+        OPT_MEM_BANKMAP,
+        OPT_MEM_UNMAPPING_TYPE,
+        OPT_MEM_RAM_INIT_PATTERN
     };
 
     // Current configuration

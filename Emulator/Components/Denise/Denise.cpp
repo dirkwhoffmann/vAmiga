@@ -43,8 +43,8 @@ Denise::getOption(Option option) const
     switch (option) {
             
         case OPT_DENISE_REVISION:     return config.revision;
-        case OPT_VIEWPORT_TRACKING:   return config.viewportTracking;
-        case OPT_FRAME_SKIPPING:      return config.frameSkipping;
+        case OPT_DENISE_VIEWPORT_TRACKING:   return config.viewportTracking;
+        case OPT_DENISE_FRAME_SKIPPING:      return config.frameSkipping;
         case OPT_HIDDEN_BITPLANES:    return config.hiddenBitplanes;
         case OPT_HIDDEN_SPRITES:      return config.hiddenSprites;
         case OPT_HIDDEN_LAYERS:       return config.hiddenLayers;
@@ -72,13 +72,13 @@ Denise::setOption(Option option, i64 value)
             config.revision = (DeniseRevision)value;
             return;
 
-        case OPT_VIEWPORT_TRACKING:
+        case OPT_DENISE_VIEWPORT_TRACKING:
             
             config.viewportTracking = (bool)value;
             debugger.resetDIWTracker();
             return;
 
-        case OPT_FRAME_SKIPPING:
+        case OPT_DENISE_FRAME_SKIPPING:
 
             config.frameSkipping = (isize)value;
             return;

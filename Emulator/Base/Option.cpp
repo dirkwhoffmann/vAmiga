@@ -25,69 +25,69 @@ OptionParser::create(Option opt, i64 arg)
 
     switch (opt) {
 
-        case OPT_HOST_SAMPLE_RATE:      return numParser(" Hz");
-        case OPT_HOST_REFRESH_RATE:     return numParser(" fps");
-        case OPT_HOST_FRAMEBUF_WIDTH:   return numParser(" pixels");
-        case OPT_HOST_FRAMEBUF_HEIGHT:  return numParser(" pixels");
+        case OPT_HOST_SAMPLE_RATE:          return numParser(" Hz");
+        case OPT_HOST_REFRESH_RATE:         return numParser(" fps");
+        case OPT_HOST_FRAMEBUF_WIDTH:       return numParser(" pixels");
+        case OPT_HOST_FRAMEBUF_HEIGHT:      return numParser(" pixels");
 
-        case OPT_AMIGA_VIDEO_FORMAT:    return enumParser.template operator()<VideoFormatEnum>();
-        case OPT_AMIGA_WARP_MODE:       return enumParser.template operator()<WarpModeEnum>();
-        case OPT_AMIGA_WARP_BOOT:       return numParser(" sec");
-        case OPT_AMIGA_VSYNC:           return boolParser();
-        case OPT_AMIGA_SPEED_BOOST:     return numParser("%");
-        case OPT_AMIGA_SNAPSHOTS:       return boolParser();
-        case OPT_AMIGA_SNAPSHOT_DELAY:  return numParser(" sec");
+        case OPT_AMIGA_VIDEO_FORMAT:        return enumParser.template operator()<VideoFormatEnum>();
+        case OPT_AMIGA_WARP_MODE:           return enumParser.template operator()<WarpModeEnum>();
+        case OPT_AMIGA_WARP_BOOT:           return numParser(" sec");
+        case OPT_AMIGA_VSYNC:               return boolParser();
+        case OPT_AMIGA_SPEED_BOOST:         return numParser("%");
+        case OPT_AMIGA_SNAPSHOTS:           return boolParser();
+        case OPT_AMIGA_SNAPSHOT_DELAY:      return numParser(" sec");
 
-        case OPT_AGNUS_REVISION:        return enumParser.template operator()<AgnusRevisionEnum>();
-        case OPT_SLOW_RAM_MIRROR:       return boolParser();
-        case OPT_PTR_DROPS:             return boolParser();
+        case OPT_AGNUS_REVISION:            return enumParser.template operator()<AgnusRevisionEnum>();
+        case OPT_AGNUS_SLOW_RAM_MIRROR:     return boolParser();
+        case OPT_AGNUS_PTR_DROPS:           return boolParser();
 
-        case OPT_DENISE_REVISION:       return enumParser.template operator()<DeniseRevisionEnum>();
-        case OPT_VIEWPORT_TRACKING:     return boolParser();
-        case OPT_FRAME_SKIPPING:        return boolParser();
+        case OPT_DENISE_REVISION:           return enumParser.template operator()<DeniseRevisionEnum>();
+        case OPT_DENISE_VIEWPORT_TRACKING:  return boolParser();
+        case OPT_DENISE_FRAME_SKIPPING:     return boolParser();
 
-        case OPT_PALETTE:               return enumParser.template operator()<PaletteEnum>();
-        case OPT_BRIGHTNESS:            return numParser("%");
-        case OPT_CONTRAST:              return numParser("%");
-        case OPT_SATURATION:            return numParser("%");
+        case OPT_MON_PALETTE:               return enumParser.template operator()<PaletteEnum>();
+        case OPT_MON_BRIGHTNESS:            return numParser("%");
+        case OPT_MON_CONTRAST:              return numParser("%");
+        case OPT_MON_SATURATION:            return numParser("%");
 
-        case OPT_DMA_DEBUG_ENABLE:      return boolParser();
-        case OPT_DMA_DEBUG_MODE:        return enumParser.template operator()<DmaDisplayModeEnum>();
-        case OPT_DMA_DEBUG_OPACITY:     return numParser("%");
-        case OPT_DMA_DEBUG_CHANNEL0:    return boolParser();
-        case OPT_DMA_DEBUG_CHANNEL1:    return boolParser();
-        case OPT_DMA_DEBUG_CHANNEL2:    return boolParser();
-        case OPT_DMA_DEBUG_CHANNEL3:    return boolParser();
-        case OPT_DMA_DEBUG_CHANNEL4:    return boolParser();
-        case OPT_DMA_DEBUG_CHANNEL5:    return boolParser();
-        case OPT_DMA_DEBUG_CHANNEL6:    return boolParser();
-        case OPT_DMA_DEBUG_CHANNEL7:    return boolParser();
-        case OPT_DMA_DEBUG_COLOR0:      return numParser();
-        case OPT_DMA_DEBUG_COLOR1:      return numParser();
-        case OPT_DMA_DEBUG_COLOR2:      return numParser();
-        case OPT_DMA_DEBUG_COLOR3:      return numParser();
-        case OPT_DMA_DEBUG_COLOR4:      return numParser();
-        case OPT_DMA_DEBUG_COLOR5:      return numParser();
-        case OPT_DMA_DEBUG_COLOR6:      return numParser();
-        case OPT_DMA_DEBUG_COLOR7:      return numParser();
+        case OPT_DMA_DEBUG_ENABLE:          return boolParser();
+        case OPT_DMA_DEBUG_MODE:            return enumParser.template operator()<DmaDisplayModeEnum>();
+        case OPT_DMA_DEBUG_OPACITY:         return numParser("%");
+        case OPT_DMA_DEBUG_CHANNEL0:        return boolParser();
+        case OPT_DMA_DEBUG_CHANNEL1:        return boolParser();
+        case OPT_DMA_DEBUG_CHANNEL2:        return boolParser();
+        case OPT_DMA_DEBUG_CHANNEL3:        return boolParser();
+        case OPT_DMA_DEBUG_CHANNEL4:        return boolParser();
+        case OPT_DMA_DEBUG_CHANNEL5:        return boolParser();
+        case OPT_DMA_DEBUG_CHANNEL6:        return boolParser();
+        case OPT_DMA_DEBUG_CHANNEL7:        return boolParser();
+        case OPT_DMA_DEBUG_COLOR0:          return numParser();
+        case OPT_DMA_DEBUG_COLOR1:          return numParser();
+        case OPT_DMA_DEBUG_COLOR2:          return numParser();
+        case OPT_DMA_DEBUG_COLOR3:          return numParser();
+        case OPT_DMA_DEBUG_COLOR4:          return numParser();
+        case OPT_DMA_DEBUG_COLOR5:          return numParser();
+        case OPT_DMA_DEBUG_COLOR6:          return numParser();
+        case OPT_DMA_DEBUG_COLOR7:          return numParser();
 
-        case OPT_CPU_REVISION:          return enumParser.template operator()<CPURevisionEnum>();
-        case OPT_CPU_DASM_REVISION:     return enumParser.template operator()<DasmRevisionEnum>();
-        case OPT_CPU_DASM_SYNTAX:       return enumParser.template operator()<DasmSyntaxEnum>();
-        case OPT_CPU_OVERCLOCKING:      return numParser("x");
-        case OPT_CPU_RESET_VAL:         return numParser();
+        case OPT_CPU_REVISION:              return enumParser.template operator()<CPURevisionEnum>();
+        case OPT_CPU_DASM_REVISION:         return enumParser.template operator()<DasmRevisionEnum>();
+        case OPT_CPU_DASM_SYNTAX:           return enumParser.template operator()<DasmSyntaxEnum>();
+        case OPT_CPU_OVERCLOCKING:          return numParser("x");
+        case OPT_CPU_RESET_VAL:             return numParser();
 
-        case OPT_RTC_MODEL:             return enumParser.template operator()<RTCRevisionEnum>();
+        case OPT_RTC_MODEL:                 return enumParser.template operator()<RTCRevisionEnum>();
 
-        case OPT_CHIP_RAM:              return numParser();
-        case OPT_SLOW_RAM:              return numParser();
-        case OPT_FAST_RAM:              return numParser();
-        case OPT_EXT_START:             return numParser();
-        case OPT_SAVE_ROMS:             return boolParser();
-        case OPT_SLOW_RAM_DELAY:        return boolParser();
-        case OPT_BANKMAP:               return enumParser.template operator()<BankMapEnum>();
-        case OPT_UNMAPPING_TYPE:        return enumParser.template operator()<UnmappedMemoryEnum>();
-        case OPT_RAM_INIT_PATTERN:      return enumParser.template operator()<RamInitPatternEnum>();
+        case OPT_MEM_CHIP_RAM:              return numParser();
+        case OPT_MEM_SLOW_RAM:              return numParser();
+        case OPT_MEM_FAST_RAM:              return numParser();
+        case OPT_MEM_EXT_START:             return numParser();
+        case OPT_MEM_SAVE_ROMS:             return boolParser();
+        case OPT_MEM_SLOW_RAM_DELAY:        return boolParser();
+        case OPT_MEM_BANKMAP:               return enumParser.template operator()<BankMapEnum>();
+        case OPT_MEM_UNMAPPING_TYPE:        return enumParser.template operator()<UnmappedMemoryEnum>();
+        case OPT_MEM_RAM_INIT_PATTERN:      return enumParser.template operator()<RamInitPatternEnum>();
 
         case OPT_DRIVE_SPEED:           return numParser();
         case OPT_LOCK_DSKSYNC:          return boolParser();

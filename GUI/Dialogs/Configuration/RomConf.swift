@@ -236,9 +236,9 @@ extension ConfigurationController {
         config.extStart = 0xE0
 
         // Make sure the machine has enough Ram to run Aros
-        let chip = amiga.getConfig(.CHIP_RAM)
-        let slow = amiga.getConfig(.SLOW_RAM)
-        let fast = amiga.getConfig(.FAST_RAM)
+        let chip = amiga.getConfig(.MEM_CHIP_RAM)
+        let slow = amiga.getConfig(.MEM_SLOW_RAM)
+        let fast = amiga.getConfig(.MEM_FAST_RAM)
         if chip + slow + fast < 1024*1024 { config.slowRam = 512 }
     }
 

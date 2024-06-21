@@ -138,15 +138,15 @@ Memory::getOption(Option option) const
 {
     switch (option) {
             
-        case OPT_CHIP_RAM:          return config.chipSize / KB(1);
-        case OPT_SLOW_RAM:          return config.slowSize / KB(1);
-        case OPT_FAST_RAM:          return config.fastSize / KB(1);
-        case OPT_EXT_START:         return config.extStart;
-        case OPT_SAVE_ROMS:         return config.saveRoms;
-        case OPT_SLOW_RAM_DELAY:    return config.slowRamDelay;
-        case OPT_BANKMAP:           return config.bankMap;
-        case OPT_UNMAPPING_TYPE:    return config.unmappingType;
-        case OPT_RAM_INIT_PATTERN:  return config.ramInitPattern;
+        case OPT_MEM_CHIP_RAM:          return config.chipSize / KB(1);
+        case OPT_MEM_SLOW_RAM:          return config.slowSize / KB(1);
+        case OPT_MEM_FAST_RAM:          return config.fastSize / KB(1);
+        case OPT_MEM_EXT_START:         return config.extStart;
+        case OPT_MEM_SAVE_ROMS:         return config.saveRoms;
+        case OPT_MEM_SLOW_RAM_DELAY:    return config.slowRamDelay;
+        case OPT_MEM_BANKMAP:           return config.bankMap;
+        case OPT_MEM_UNMAPPING_TYPE:    return config.unmappingType;
+        case OPT_MEM_RAM_INIT_PATTERN:  return config.ramInitPattern;
 
         default:
             fatalError;
@@ -158,7 +158,7 @@ Memory::setOption(Option option, i64 value)
 {
     switch (option) {
             
-        case OPT_CHIP_RAM:
+        case OPT_MEM_CHIP_RAM:
             
             if (!isPoweredOff()) {
                 throw Error(ERROR_OPT_LOCKED);
@@ -170,7 +170,7 @@ Memory::setOption(Option option, i64 value)
             mem.allocChip((i32)KB(value));
             return;
             
-        case OPT_SLOW_RAM:
+        case OPT_MEM_SLOW_RAM:
             
             if (!isPoweredOff()) {
                 throw Error(ERROR_OPT_LOCKED);
@@ -182,7 +182,7 @@ Memory::setOption(Option option, i64 value)
             mem.allocSlow((i32)KB(value));
             return;
             
-        case OPT_FAST_RAM:
+        case OPT_MEM_FAST_RAM:
             
             if (!isPoweredOff()) {
                 throw Error(ERROR_OPT_LOCKED);
@@ -194,7 +194,7 @@ Memory::setOption(Option option, i64 value)
             mem.allocFast((i32)KB(value));
             return;
             
-        case OPT_EXT_START:
+        case OPT_MEM_EXT_START:
             
             if (!isPoweredOff()) {
                 throw Error(ERROR_OPT_LOCKED);
@@ -207,19 +207,19 @@ Memory::setOption(Option option, i64 value)
             updateMemSrcTables();
             return;
             
-        case OPT_SAVE_ROMS:
+        case OPT_MEM_SAVE_ROMS:
         {
             SUSPENDED
             config.saveRoms = value;
             return;
         }
-        case OPT_SLOW_RAM_DELAY:
+        case OPT_MEM_SLOW_RAM_DELAY:
         {
             SUSPENDED
             config.slowRamDelay = value;
             return;
         }
-        case OPT_BANKMAP:
+        case OPT_MEM_BANKMAP:
         {
             if (!BankMapEnum::isValid(value)) {
                 throw Error(ERROR_OPT_INV_ARG, BankMapEnum::keyList());
@@ -230,7 +230,7 @@ Memory::setOption(Option option, i64 value)
             updateMemSrcTables();
             return;
         }
-        case OPT_UNMAPPING_TYPE:
+        case OPT_MEM_UNMAPPING_TYPE:
         {
             if (!UnmappedMemoryEnum::isValid(value)) {
                 throw Error(ERROR_OPT_INV_ARG, UnmappedMemoryEnum::keyList());
@@ -240,7 +240,7 @@ Memory::setOption(Option option, i64 value)
             config.unmappingType = (UnmappedMemory)value;
             return;
         }
-        case OPT_RAM_INIT_PATTERN:
+        case OPT_MEM_RAM_INIT_PATTERN:
 
             if (!RamInitPatternEnum::isValid(value)) {
                 throw Error(ERROR_OPT_INV_ARG, RamInitPatternEnum::keyList());

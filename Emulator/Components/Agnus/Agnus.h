@@ -44,8 +44,8 @@ class Agnus : public SubComponent, public Inspectable<AgnusInfo, AgnusStats> {
     ConfigOptions options = {
 
         OPT_AGNUS_REVISION,
-        OPT_SLOW_RAM_MIRROR,
-        OPT_PTR_DROPS
+        OPT_AGNUS_SLOW_RAM_MIRROR,
+        OPT_AGNUS_PTR_DROPS
     };
 
     // Current configuration

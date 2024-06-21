@@ -649,7 +649,7 @@ extension Configuration {
 
         amiga.suspend()
 
-        defaults.set(.EXT_START, extStart)
+        defaults.set(.MEM_EXT_START, extStart)
         defaults.save()
         
         do {
@@ -790,14 +790,14 @@ extension DefaultsProxy {
         
         debug(.defaults)
 
-        remove(.CHIP_RAM)
-        remove(.SLOW_RAM)
-        remove(.FAST_RAM)
-        remove(.RAM_INIT_PATTERN)
-        remove(.BANKMAP)
-        remove(.UNMAPPING_TYPE)
-        remove(.SLOW_RAM_DELAY)
-        remove(.SLOW_RAM_MIRROR)
+        remove(.MEM_CHIP_RAM)
+        remove(.MEM_SLOW_RAM)
+        remove(.MEM_FAST_RAM)
+        remove(.MEM_RAM_INIT_PATTERN)
+        remove(.MEM_BANKMAP)
+        remove(.MEM_UNMAPPING_TYPE)
+        remove(.MEM_SLOW_RAM_DELAY)
+        remove(.AGNUS_SLOW_RAM_MIRROR)
     }
 }
 
@@ -810,14 +810,14 @@ extension Configuration {
         
         amiga.suspend()
         
-        defaults.set(.CHIP_RAM, chipRam)
-        defaults.set(.SLOW_RAM, slowRam)
-        defaults.set(.FAST_RAM, fastRam)
-        defaults.set(.RAM_INIT_PATTERN, ramInitPattern)
-        defaults.set(.BANKMAP, bankMap)
-        defaults.set(.UNMAPPING_TYPE, unmappingType)
-        defaults.set(.SLOW_RAM_DELAY, slowRamDelay)
-        defaults.set(.SLOW_RAM_MIRROR, slowRamMirror)
+        defaults.set(.MEM_CHIP_RAM, chipRam)
+        defaults.set(.MEM_SLOW_RAM, slowRam)
+        defaults.set(.MEM_FAST_RAM, fastRam)
+        defaults.set(.MEM_RAM_INIT_PATTERN, ramInitPattern)
+        defaults.set(.MEM_BANKMAP, bankMap)
+        defaults.set(.MEM_UNMAPPING_TYPE, unmappingType)
+        defaults.set(.MEM_SLOW_RAM_DELAY, slowRamDelay)
+        defaults.set(.AGNUS_SLOW_RAM_MIRROR, slowRamMirror)
         defaults.save()
         
         amiga.resume()
@@ -830,15 +830,15 @@ extension Configuration {
 
         amiga.suspend()
 
-        chipRam = defaults.get(.CHIP_RAM)
-        slowRam = defaults.get(.SLOW_RAM)
-        fastRam = defaults.get(.FAST_RAM)
-        ramInitPattern = defaults.get(.RAM_INIT_PATTERN)
-        bankMap = defaults.get(.BANKMAP)
-        unmappingType = defaults.get(.UNMAPPING_TYPE)
-        slowRamDelay = defaults.get(.SLOW_RAM_DELAY) != 0
-        slowRamMirror = defaults.get(.SLOW_RAM_MIRROR) != 0
-        
+        chipRam = defaults.get(.MEM_CHIP_RAM)
+        slowRam = defaults.get(.MEM_SLOW_RAM)
+        fastRam = defaults.get(.MEM_FAST_RAM)
+        ramInitPattern = defaults.get(.MEM_RAM_INIT_PATTERN)
+        bankMap = defaults.get(.MEM_BANKMAP)
+        unmappingType = defaults.get(.MEM_UNMAPPING_TYPE)
+        slowRamDelay = defaults.get(.MEM_SLOW_RAM_DELAY) != 0
+        slowRamMirror = defaults.get(.AGNUS_SLOW_RAM_MIRROR) != 0
+
         amiga.resume()
     }
 }
@@ -993,7 +993,7 @@ extension DefaultsProxy {
         remove(.CLX_SPR_PLF)
         remove(.CLX_PLF_PLF)
         remove(.CIA_IDLE_SLEEP)
-        remove(.FRAME_SKIPPING)
+        remove(.DENISE_FRAME_SKIPPING)
         remove(.AUD_FASTPATH)
         remove(.AMIGA_VSYNC)
         remove(.AMIGA_SPEED_BOOST)
@@ -1015,7 +1015,7 @@ extension Configuration {
         clxSprPlf = defaults.get(.CLX_SPR_PLF) != 0
         clxPlfPlf = defaults.get(.CLX_PLF_PLF) != 0
         ciaIdleSleep = defaults.get(.CIA_IDLE_SLEEP) != 0
-        frameSkipping = defaults.get(.FRAME_SKIPPING)
+        frameSkipping = defaults.get(.DENISE_FRAME_SKIPPING)
         audioFastPath = defaults.get(.AUD_FASTPATH) != 0
         vsync = defaults.get(.AMIGA_VSYNC) != 0
         timeLapse = defaults.get(.AMIGA_SPEED_BOOST)
@@ -1036,7 +1036,7 @@ extension Configuration {
         defaults.set(.CLX_SPR_PLF, clxSprPlf)
         defaults.set(.CLX_PLF_PLF, clxPlfPlf)
         defaults.set(.CIA_IDLE_SLEEP, ciaIdleSleep)
-        defaults.set(.FRAME_SKIPPING, frameSkipping)
+        defaults.set(.DENISE_FRAME_SKIPPING, frameSkipping)
         defaults.set(.AUD_FASTPATH, audioFastPath)
         defaults.set(.AMIGA_VSYNC, vsync)
         defaults.set(.AMIGA_SPEED_BOOST, timeLapse)
@@ -1334,10 +1334,10 @@ extension DefaultsProxy {
 
         debug(.defaults)
 
-        remove(.PALETTE)
-        remove(.BRIGHTNESS)
-        remove(.CONTRAST)
-        remove(.SATURATION)
+        remove(.MON_PALETTE)
+        remove(.MON_BRIGHTNESS)
+        remove(.MON_CONTRAST)
+        remove(.MON_SATURATION)
     }
 
     func removeGeometryUserDefaults() {
@@ -1403,11 +1403,11 @@ extension Configuration {
         
         amiga.suspend()
         
-        defaults.set(.PALETTE, palette)
-        defaults.set(.BRIGHTNESS, brightness)
-        defaults.set(.CONTRAST, contrast)
-        defaults.set(.SATURATION, saturation)
-        
+        defaults.set(.MON_PALETTE, palette)
+        defaults.set(.MON_BRIGHTNESS, brightness)
+        defaults.set(.MON_CONTRAST, contrast)
+        defaults.set(.MON_SATURATION, saturation)
+
         defaults.save()
         
         amiga.resume()
@@ -1479,11 +1479,11 @@ extension Configuration {
         
         amiga.suspend()
         
-        palette = defaults.get(.PALETTE)
-        brightness = defaults.get(.BRIGHTNESS)
-        contrast = defaults.get(.CONTRAST)
-        saturation = defaults.get(.SATURATION)
-        
+        palette = defaults.get(.MON_PALETTE)
+        brightness = defaults.get(.MON_BRIGHTNESS)
+        contrast = defaults.get(.MON_CONTRAST)
+        saturation = defaults.get(.MON_SATURATION)
+
         amiga.resume()
     }
 

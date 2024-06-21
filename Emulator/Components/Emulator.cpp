@@ -251,8 +251,8 @@ Emulator::set(ConfigScheme scheme)
                 set(OPT_AGNUS_REVISION, AGNUS_OCS_OLD);
                 set(OPT_DENISE_REVISION, DENISE_OCS);
                 set(OPT_AMIGA_VIDEO_FORMAT, PAL);
-                set(OPT_CHIP_RAM, 512);
-                set(OPT_SLOW_RAM, 512);
+                set(OPT_MEM_CHIP_RAM, 512);
+                set(OPT_MEM_SLOW_RAM, 512);
                 break;
 
             case CONFIG_A500_OCS_1MB:
@@ -261,8 +261,8 @@ Emulator::set(ConfigScheme scheme)
                 set(OPT_AGNUS_REVISION, AGNUS_OCS);
                 set(OPT_DENISE_REVISION, DENISE_OCS);
                 set(OPT_AMIGA_VIDEO_FORMAT, PAL);
-                set(OPT_CHIP_RAM, 512);
-                set(OPT_SLOW_RAM, 512);
+                set(OPT_MEM_CHIP_RAM, 512);
+                set(OPT_MEM_SLOW_RAM, 512);
                 break;
 
             case CONFIG_A500_ECS_1MB:
@@ -271,8 +271,8 @@ Emulator::set(ConfigScheme scheme)
                 set(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
                 set(OPT_DENISE_REVISION, DENISE_OCS);
                 set(OPT_AMIGA_VIDEO_FORMAT, PAL);
-                set(OPT_CHIP_RAM, 512);
-                set(OPT_SLOW_RAM, 512);
+                set(OPT_MEM_CHIP_RAM, 512);
+                set(OPT_MEM_SLOW_RAM, 512);
                 break;
 
             case CONFIG_A500_PLUS_1MB:
@@ -281,8 +281,8 @@ Emulator::set(ConfigScheme scheme)
                 set(OPT_AGNUS_REVISION, AGNUS_ECS_2MB);
                 set(OPT_DENISE_REVISION, DENISE_ECS);
                 set(OPT_AMIGA_VIDEO_FORMAT, PAL);
-                set(OPT_CHIP_RAM, 512);
-                set(OPT_SLOW_RAM, 512);
+                set(OPT_MEM_CHIP_RAM, 512);
+                set(OPT_MEM_SLOW_RAM, 512);
                 break;
 
             default:

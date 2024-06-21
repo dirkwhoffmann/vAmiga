@@ -32,8 +32,8 @@ class Denise : public SubComponent, public Inspectable<DeniseInfo> {
     ConfigOptions options = {
 
         OPT_DENISE_REVISION,
-        OPT_VIEWPORT_TRACKING,
-        OPT_FRAME_SKIPPING,
+        OPT_DENISE_VIEWPORT_TRACKING,
+        OPT_DENISE_FRAME_SKIPPING,
         OPT_HIDDEN_BITPLANES,
         OPT_HIDDEN_SPRITES,
         OPT_HIDDEN_LAYERS,

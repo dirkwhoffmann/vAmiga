@@ -35,19 +35,19 @@ enum_long(OPT)
 
     // Agnus
     OPT_AGNUS_REVISION,
-    OPT_SLOW_RAM_MIRROR,
-    OPT_PTR_DROPS,
+    OPT_AGNUS_SLOW_RAM_MIRROR,
+    OPT_AGNUS_PTR_DROPS,
 
     // Denise
     OPT_DENISE_REVISION,
-    OPT_VIEWPORT_TRACKING,
-    OPT_FRAME_SKIPPING,
+    OPT_DENISE_VIEWPORT_TRACKING,
+    OPT_DENISE_FRAME_SKIPPING,
 
-    // Pixel engine
-    OPT_PALETTE,
-    OPT_BRIGHTNESS,
-    OPT_CONTRAST,
-    OPT_SATURATION,
+    // Monitor
+    OPT_MON_PALETTE,
+    OPT_MON_BRIGHTNESS,
+    OPT_MON_CONTRAST,
+    OPT_MON_SATURATION,
 
     // DMA Debugger
     OPT_DMA_DEBUG_ENABLE,
@@ -81,15 +81,15 @@ enum_long(OPT)
     OPT_RTC_MODEL,
 
     // Memory
-    OPT_CHIP_RAM,
-    OPT_SLOW_RAM,
-    OPT_FAST_RAM,
-    OPT_EXT_START,
-    OPT_SAVE_ROMS,
-    OPT_SLOW_RAM_DELAY,
-    OPT_BANKMAP,
-    OPT_UNMAPPING_TYPE,
-    OPT_RAM_INIT_PATTERN,
+    OPT_MEM_CHIP_RAM,
+    OPT_MEM_SLOW_RAM,
+    OPT_MEM_FAST_RAM,
+    OPT_MEM_EXT_START,
+    OPT_MEM_SAVE_ROMS,
+    OPT_MEM_SLOW_RAM_DELAY,
+    OPT_MEM_BANKMAP,
+    OPT_MEM_UNMAPPING_TYPE,
+    OPT_MEM_RAM_INIT_PATTERN,
 
     // Disk controller
     OPT_DRIVE_SPEED,
@@ -189,69 +189,69 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
     {
         switch (value) {
 
-            case OPT_HOST_REFRESH_RATE:     return "HOST.REFRESH_RATE";
-            case OPT_HOST_SAMPLE_RATE:      return "HOST.SAMPLE_RATE";
-            case OPT_HOST_FRAMEBUF_WIDTH:   return "HOST.FRAMEBUF_WIDTH";
-            case OPT_HOST_FRAMEBUF_HEIGHT:  return "HOST.FRAMEBUF_HEIGHT";
+            case OPT_HOST_REFRESH_RATE:         return "HOST.REFRESH_RATE";
+            case OPT_HOST_SAMPLE_RATE:          return "HOST.SAMPLE_RATE";
+            case OPT_HOST_FRAMEBUF_WIDTH:       return "HOST.FRAMEBUF_WIDTH";
+            case OPT_HOST_FRAMEBUF_HEIGHT:      return "HOST.FRAMEBUF_HEIGHT";
 
-            case OPT_AMIGA_VIDEO_FORMAT:    return "AMIGA.VIDEO_FORMAT";
-            case OPT_AMIGA_WARP_BOOT:       return "AMIGA.WARP_BOOT";
-            case OPT_AMIGA_WARP_MODE:       return "AMIGA.WARP_MODE";
-            case OPT_AMIGA_VSYNC:           return "AMIGA.VSYNC";
-            case OPT_AMIGA_SPEED_BOOST:     return "AMIGA.SPEED_BOOST";
-            case OPT_AMIGA_SNAPSHOTS:       return "AMIGA.SNAPSHOTS";
-            case OPT_AMIGA_SNAPSHOT_DELAY:  return "AMIGA.SNAPSHOT_DELAY";
+            case OPT_AMIGA_VIDEO_FORMAT:        return "AMIGA.VIDEO_FORMAT";
+            case OPT_AMIGA_WARP_BOOT:           return "AMIGA.WARP_BOOT";
+            case OPT_AMIGA_WARP_MODE:           return "AMIGA.WARP_MODE";
+            case OPT_AMIGA_VSYNC:               return "AMIGA.VSYNC";
+            case OPT_AMIGA_SPEED_BOOST:         return "AMIGA.SPEED_BOOST";
+            case OPT_AMIGA_SNAPSHOTS:           return "AMIGA.SNAPSHOTS";
+            case OPT_AMIGA_SNAPSHOT_DELAY:      return "AMIGA.SNAPSHOT_DELAY";
 
-            case OPT_AGNUS_REVISION:        return "AGNUS_REVISION";
-            case OPT_SLOW_RAM_MIRROR:       return "SLOW_RAM_MIRROR";
-            case OPT_PTR_DROPS:             return "PTR_DROPS";
+            case OPT_AGNUS_REVISION:            return "AGNUS.REVISION";
+            case OPT_AGNUS_SLOW_RAM_MIRROR:     return "AGNUS.SLOW_RAM_MIRROR";
+            case OPT_AGNUS_PTR_DROPS:           return "AGNUS.PTR_DROPS";
 
-            case OPT_DENISE_REVISION:       return "DENISE_REVISION";
-            case OPT_VIEWPORT_TRACKING:     return "VIEWPORT_TRACKING";
-            case OPT_FRAME_SKIPPING:        return "OPT_FRAME_SKIPPING";
+            case OPT_DENISE_REVISION:           return "DENISE.REVISION";
+            case OPT_DENISE_VIEWPORT_TRACKING:  return "DENISE.VIEWPORT_TRACKING";
+            case OPT_DENISE_FRAME_SKIPPING:     return "DENISE.FRAME_SKIPPING";
 
-            case OPT_PALETTE:               return "PALETTE";
-            case OPT_BRIGHTNESS:            return "BRIGHTNESS";
-            case OPT_CONTRAST:              return "CONTRAST";
-            case OPT_SATURATION:            return "SATURATION";
+            case OPT_MON_PALETTE:               return "MON.PALETTE";
+            case OPT_MON_BRIGHTNESS:            return "MON.BRIGHTNESS";
+            case OPT_MON_CONTRAST:              return "MON.CONTRAST";
+            case OPT_MON_SATURATION:            return "MON.SATURATION";
 
-            case OPT_DMA_DEBUG_ENABLE:      return "DMA_DEBUG_ENABLE";
-            case OPT_DMA_DEBUG_MODE:        return "DMA_DEBUG_MODE";
-            case OPT_DMA_DEBUG_OPACITY:     return "DMA_DEBUG_OPACITY";
-            case OPT_DMA_DEBUG_CHANNEL0:    return "DMA_DEBUG_CHANNEL0";
-            case OPT_DMA_DEBUG_CHANNEL1:    return "DMA_DEBUG_CHANNEL1";
-            case OPT_DMA_DEBUG_CHANNEL2:    return "DMA_DEBUG_CHANNEL2";
-            case OPT_DMA_DEBUG_CHANNEL3:    return "DMA_DEBUG_CHANNEL3";
-            case OPT_DMA_DEBUG_CHANNEL4:    return "DMA_DEBUG_CHANNEL4";
-            case OPT_DMA_DEBUG_CHANNEL5:    return "DMA_DEBUG_CHANNEL5";
-            case OPT_DMA_DEBUG_CHANNEL6:    return "DMA_DEBUG_CHANNEL6";
-            case OPT_DMA_DEBUG_CHANNEL7:    return "DMA_DEBUG_CHANNEL7";
-            case OPT_DMA_DEBUG_COLOR0:      return "DMA_DEBUG_COLOR0";
-            case OPT_DMA_DEBUG_COLOR1:      return "DMA_DEBUG_COLOR1";
-            case OPT_DMA_DEBUG_COLOR2:      return "DMA_DEBUG_COLOR2";
-            case OPT_DMA_DEBUG_COLOR3:      return "DMA_DEBUG_COLOR3";
-            case OPT_DMA_DEBUG_COLOR4:      return "DMA_DEBUG_COLOR4";
-            case OPT_DMA_DEBUG_COLOR5:      return "DMA_DEBUG_COLOR5";
-            case OPT_DMA_DEBUG_COLOR6:      return "DMA_DEBUG_COLOR6";
-            case OPT_DMA_DEBUG_COLOR7:      return "DMA_DEBUG_COLOR7";
+            case OPT_DMA_DEBUG_ENABLE:          return "DMA.DEBUG_ENABLE";
+            case OPT_DMA_DEBUG_MODE:            return "DMA.DEBUG_MODE";
+            case OPT_DMA_DEBUG_OPACITY:         return "DMA.DEBUG_OPACITY";
+            case OPT_DMA_DEBUG_CHANNEL0:        return "DMA.DEBUG_CHANNEL0";
+            case OPT_DMA_DEBUG_CHANNEL1:        return "DMA.DEBUG_CHANNEL1";
+            case OPT_DMA_DEBUG_CHANNEL2:        return "DMA.DEBUG_CHANNEL2";
+            case OPT_DMA_DEBUG_CHANNEL3:        return "DMA.DEBUG_CHANNEL3";
+            case OPT_DMA_DEBUG_CHANNEL4:        return "DMA.DEBUG_CHANNEL4";
+            case OPT_DMA_DEBUG_CHANNEL5:        return "DMA.DEBUG_CHANNEL5";
+            case OPT_DMA_DEBUG_CHANNEL6:        return "DMA.DEBUG_CHANNEL6";
+            case OPT_DMA_DEBUG_CHANNEL7:        return "DMA.DEBUG_CHANNEL7";
+            case OPT_DMA_DEBUG_COLOR0:          return "DMA.DEBUG_COLOR0";
+            case OPT_DMA_DEBUG_COLOR1:          return "DMA.DEBUG_COLOR1";
+            case OPT_DMA_DEBUG_COLOR2:          return "DMA.DEBUG_COLOR2";
+            case OPT_DMA_DEBUG_COLOR3:          return "DMA.DEBUG_COLOR3";
+            case OPT_DMA_DEBUG_COLOR4:          return "DMA.DEBUG_COLOR4";
+            case OPT_DMA_DEBUG_COLOR5:          return "DMA.DEBUG_COLOR5";
+            case OPT_DMA_DEBUG_COLOR6:          return "DMA.DEBUG_COLOR6";
+            case OPT_DMA_DEBUG_COLOR7:          return "DMA.DEBUG_COLOR7";
 
-            case OPT_CPU_REVISION:          return "CPU_REVISION";
-            case OPT_CPU_DASM_REVISION:     return "CPU_DASM_REVISION";
-            case OPT_CPU_DASM_SYNTAX:       return "CPU_DASM_SYNTAX";
-            case OPT_CPU_OVERCLOCKING:      return "CPU_OVERCLOCKING";
-            case OPT_CPU_RESET_VAL:         return "CPU_RESET_VAL";
+            case OPT_CPU_REVISION:              return "CPU.REVISION";
+            case OPT_CPU_DASM_REVISION:         return "CPU.DASM_REVISION";
+            case OPT_CPU_DASM_SYNTAX:           return "CPU.DASM_SYNTAX";
+            case OPT_CPU_OVERCLOCKING:          return "CPU.OVERCLOCKING";
+            case OPT_CPU_RESET_VAL:             return "CPU.RESET_VAL";
 
-            case OPT_RTC_MODEL:             return "RTC_MODEL";
+            case OPT_RTC_MODEL:                 return "RTC.MODEL";
 
-            case OPT_CHIP_RAM:              return "CHIP_RAM";
-            case OPT_SLOW_RAM:              return "SLOW_RAM";
-            case OPT_FAST_RAM:              return "FAST_RAM";
-            case OPT_EXT_START:             return "EXT_START";
-            case OPT_SAVE_ROMS:             return "SAVE_ROMS";
-            case OPT_SLOW_RAM_DELAY:        return "SLOW_RAM_DELAY";
-            case OPT_BANKMAP:               return "BANKMAP";
-            case OPT_UNMAPPING_TYPE:        return "UNMAPPING_TYPE";
-            case OPT_RAM_INIT_PATTERN:      return "RAM_INIT_PATTERN";
+            case OPT_MEM_CHIP_RAM:              return "MEM.CHIP_RAM";
+            case OPT_MEM_SLOW_RAM:              return "MEM.SLOW_RAM";
+            case OPT_MEM_FAST_RAM:              return "MEM.FAST_RAM";
+            case OPT_MEM_EXT_START:             return "MEM.EXT_START";
+            case OPT_MEM_SAVE_ROMS:             return "MEM.SAVE_ROMS";
+            case OPT_MEM_SLOW_RAM_DELAY:        return "MEM.SLOW_RAM_DELAY";
+            case OPT_MEM_BANKMAP:               return "MEM.BANKMAP";
+            case OPT_MEM_UNMAPPING_TYPE:        return "MEM.UNMAPPING_TYPE";
+            case OPT_MEM_RAM_INIT_PATTERN:      return "MEM.RAM_INIT_PATTERN";
 
             case OPT_DRIVE_SPEED:           return "DRIVE_SPEED";
             case OPT_LOCK_DSKSYNC:          return "LOCK_DSKSYNC";
@@ -330,69 +330,69 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
     {
         switch (value) {
 
-            case OPT_HOST_REFRESH_RATE:     return "Host video refresh rate";
-            case OPT_HOST_SAMPLE_RATE:      return "Host audio sample rate";
-            case OPT_HOST_FRAMEBUF_WIDTH:   return "Window width";
-            case OPT_HOST_FRAMEBUF_HEIGHT:  return "Window height";
+            case OPT_HOST_REFRESH_RATE:         return "Host video refresh rate";
+            case OPT_HOST_SAMPLE_RATE:          return "Host audio sample rate";
+            case OPT_HOST_FRAMEBUF_WIDTH:       return "Window width";
+            case OPT_HOST_FRAMEBUF_HEIGHT:      return "Window height";
 
-            case OPT_AMIGA_VIDEO_FORMAT:    return "Video format";
-            case OPT_AMIGA_WARP_BOOT:       return "Warp-boot duration";
-            case OPT_AMIGA_WARP_MODE:       return "Warp activation";
-            case OPT_AMIGA_VSYNC:           return "VSYNC mode";
-            case OPT_AMIGA_SPEED_BOOST:     return "Speed adjustment";
-            case OPT_AMIGA_SNAPSHOTS:       return "Automatically take snapshots";
-            case OPT_AMIGA_SNAPSHOT_DELAY:  return "Time span between two snapshots";
+            case OPT_AMIGA_VIDEO_FORMAT:        return "Video format";
+            case OPT_AMIGA_WARP_BOOT:           return "Warp-boot duration";
+            case OPT_AMIGA_WARP_MODE:           return "Warp activation";
+            case OPT_AMIGA_VSYNC:               return "VSYNC mode";
+            case OPT_AMIGA_SPEED_BOOST:         return "Speed adjustment";
+            case OPT_AMIGA_SNAPSHOTS:           return "Automatically take snapshots";
+            case OPT_AMIGA_SNAPSHOT_DELAY:      return "Time span between two snapshots";
 
-            case OPT_AGNUS_REVISION:        return "Chip revision";
-            case OPT_SLOW_RAM_MIRROR:       return "ECS memory mirroring";
-            case OPT_PTR_DROPS:             return "Ignore certain register writes";
+            case OPT_AGNUS_REVISION:            return "Chip revision";
+            case OPT_AGNUS_SLOW_RAM_MIRROR:     return "ECS memory mirroring";
+            case OPT_AGNUS_PTR_DROPS:           return "Ignore certain register writes";
 
-            case OPT_DENISE_REVISION:       return "Chip revision";
-            case OPT_VIEWPORT_TRACKING:     return "Track the currently used viewport";
-            case OPT_FRAME_SKIPPING:        return "Reduce frame rate in warp mode";
+            case OPT_DENISE_REVISION:           return "Chip revision";
+            case OPT_DENISE_VIEWPORT_TRACKING:  return "Track the currently used viewport";
+            case OPT_DENISE_FRAME_SKIPPING:     return "Reduce frame rate in warp mode";
 
-            case OPT_PALETTE:               return "Color palette";
-            case OPT_BRIGHTNESS:            return "Monitor brightness";
-            case OPT_CONTRAST:              return "Monitor contrast";
-            case OPT_SATURATION:            return "Monitor saturation";
+            case OPT_MON_PALETTE:               return "Color palette";
+            case OPT_MON_BRIGHTNESS:            return "Monitor brightness";
+            case OPT_MON_CONTRAST:              return "Monitor contrast";
+            case OPT_MON_SATURATION:            return "Monitor saturation";
 
-            case OPT_DMA_DEBUG_ENABLE:      return "DMA Debugger";
-            case OPT_DMA_DEBUG_MODE:        return "DMA Debugger style";
-            case OPT_DMA_DEBUG_OPACITY:     return "Opacity";
-            case OPT_DMA_DEBUG_CHANNEL0:    return "Copper DMA";
-            case OPT_DMA_DEBUG_CHANNEL1:    return "Blitter DMA";
-            case OPT_DMA_DEBUG_CHANNEL2:    return "Disk DMA";
-            case OPT_DMA_DEBUG_CHANNEL3:    return "Audio DMA";
-            case OPT_DMA_DEBUG_CHANNEL4:    return "Sprite DMA";
-            case OPT_DMA_DEBUG_CHANNEL5:    return "Bitplane DMA";
-            case OPT_DMA_DEBUG_CHANNEL6:    return "CPU DMA";
-            case OPT_DMA_DEBUG_CHANNEL7:    return "Memory Refresh DMA";
-            case OPT_DMA_DEBUG_COLOR0:      return "Copper color";
-            case OPT_DMA_DEBUG_COLOR1:      return "Blitter color";
-            case OPT_DMA_DEBUG_COLOR2:      return "Disk color";
-            case OPT_DMA_DEBUG_COLOR3:      return "Audio color";
-            case OPT_DMA_DEBUG_COLOR4:      return "Sprite color";
-            case OPT_DMA_DEBUG_COLOR5:      return "Bitplane color";
-            case OPT_DMA_DEBUG_COLOR6:      return "CPU color";
-            case OPT_DMA_DEBUG_COLOR7:      return "Memory refresh color";
+            case OPT_DMA_DEBUG_ENABLE:          return "DMA Debugger";
+            case OPT_DMA_DEBUG_MODE:            return "DMA Debugger style";
+            case OPT_DMA_DEBUG_OPACITY:         return "Opacity";
+            case OPT_DMA_DEBUG_CHANNEL0:        return "Copper DMA";
+            case OPT_DMA_DEBUG_CHANNEL1:        return "Blitter DMA";
+            case OPT_DMA_DEBUG_CHANNEL2:        return "Disk DMA";
+            case OPT_DMA_DEBUG_CHANNEL3:        return "Audio DMA";
+            case OPT_DMA_DEBUG_CHANNEL4:        return "Sprite DMA";
+            case OPT_DMA_DEBUG_CHANNEL5:        return "Bitplane DMA";
+            case OPT_DMA_DEBUG_CHANNEL6:        return "CPU DMA";
+            case OPT_DMA_DEBUG_CHANNEL7:        return "Memory Refresh DMA";
+            case OPT_DMA_DEBUG_COLOR0:          return "Copper color";
+            case OPT_DMA_DEBUG_COLOR1:          return "Blitter color";
+            case OPT_DMA_DEBUG_COLOR2:          return "Disk color";
+            case OPT_DMA_DEBUG_COLOR3:          return "Audio color";
+            case OPT_DMA_DEBUG_COLOR4:          return "Sprite color";
+            case OPT_DMA_DEBUG_COLOR5:          return "Bitplane color";
+            case OPT_DMA_DEBUG_COLOR6:          return "CPU color";
+            case OPT_DMA_DEBUG_COLOR7:          return "Memory refresh color";
 
-            case OPT_CPU_REVISION:          return "Chip revision";
-            case OPT_CPU_DASM_REVISION:     return "Chip revision (disassembler)";
-            case OPT_CPU_DASM_SYNTAX:       return "Disassembler syntax";
-            case OPT_CPU_OVERCLOCKING:      return "Overclocking factor";
-            case OPT_CPU_RESET_VAL:         return "Register reset value";
+            case OPT_CPU_REVISION:              return "Chip revision";
+            case OPT_CPU_DASM_REVISION:         return "Chip revision (disassembler)";
+            case OPT_CPU_DASM_SYNTAX:           return "Disassembler syntax";
+            case OPT_CPU_OVERCLOCKING:          return "Overclocking factor";
+            case OPT_CPU_RESET_VAL:             return "Register reset value";
 
-            case OPT_RTC_MODEL:             return "Chip revision";
+            case OPT_RTC_MODEL:                 return "Chip revision";
 
-            case OPT_CHIP_RAM:              return "Chip RAM size";
-            case OPT_SLOW_RAM:              return "Slow RAM size";
-            case OPT_FAST_RAM:              return "Fast RAM size";
-            case OPT_EXT_START:             return "Extension ROM location";
-            case OPT_SAVE_ROMS:             return "Include ROMs in snapshots";
-            case OPT_SLOW_RAM_DELAY:        return "Emulate slow RAM bus delays";
-            case OPT_BANKMAP:               return "Memory mapping scheme";
-            case OPT_UNMAPPING_TYPE:        return "Unmapped memory behavior";
-            case OPT_RAM_INIT_PATTERN:      return "RAM initialization pattern";
+            case OPT_MEM_CHIP_RAM:              return "Chip RAM size";
+            case OPT_MEM_SLOW_RAM:              return "Slow RAM size";
+            case OPT_MEM_FAST_RAM:              return "Fast RAM size";
+            case OPT_MEM_EXT_START:             return "Extension ROM location";
+            case OPT_MEM_SAVE_ROMS:             return "Include ROMs in snapshots";
+            case OPT_MEM_SLOW_RAM_DELAY:        return "Emulate slow RAM bus delays";
+            case OPT_MEM_BANKMAP:               return "Memory mapping scheme";
+            case OPT_MEM_UNMAPPING_TYPE:        return "Unmapped memory behavior";
+            case OPT_MEM_RAM_INIT_PATTERN:      return "RAM initialization pattern";
 
             case OPT_DRIVE_SPEED:           return "Drive speed";
             case OPT_LOCK_DSKSYNC:          return "Ignore writes to DSKSYNC";

@@ -670,7 +670,7 @@ using namespace vamiga::moira;
 
 - (NSInteger)extStart
 {
-    return [self mem]->mem->getOption(OPT_EXT_START);
+    return [self mem]->mem->getOption(OPT_MEM_EXT_START);
 }
 
 - (void)saveRom:(NSURL *)url exception:(ExceptionWrapper *)ex

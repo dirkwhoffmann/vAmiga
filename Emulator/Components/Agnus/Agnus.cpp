@@ -68,9 +68,9 @@ Agnus::getOption(Option option) const
 {
     switch (option) {
 
-        case OPT_AGNUS_REVISION:    return config.revision;
-        case OPT_SLOW_RAM_MIRROR:   return config.slowRamMirror;
-        case OPT_PTR_DROPS:         return config.ptrDrops;
+        case OPT_AGNUS_REVISION:        return config.revision;
+        case OPT_AGNUS_SLOW_RAM_MIRROR: return config.slowRamMirror;
+        case OPT_AGNUS_PTR_DROPS:       return config.ptrDrops;
             
         default:
             fatalError;
@@ -104,12 +104,12 @@ Agnus::setOption(Option option, i64 value)
             mem.updateMemSrcTables();
             return;
             
-        case OPT_SLOW_RAM_MIRROR:
+        case OPT_AGNUS_SLOW_RAM_MIRROR:
             
             config.slowRamMirror = value;
             return;
 
-        case OPT_PTR_DROPS:
+        case OPT_AGNUS_PTR_DROPS:
 
             config.ptrDrops = value;
             return;

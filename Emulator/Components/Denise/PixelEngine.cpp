@@ -91,10 +91,10 @@ PixelEngine::getOption(Option option) const
 {
     switch (option) {
             
-        case OPT_PALETTE:     return config.palette;
-        case OPT_BRIGHTNESS:  return config.brightness;
-        case OPT_CONTRAST:    return config.contrast;
-        case OPT_SATURATION:  return config.saturation;
+        case OPT_MON_PALETTE:     return config.palette;
+        case OPT_MON_BRIGHTNESS:  return config.brightness;
+        case OPT_MON_CONTRAST:    return config.contrast;
+        case OPT_MON_SATURATION:  return config.saturation;
 
         default:
             fatalError;
@@ -106,7 +106,7 @@ PixelEngine::setOption(Option option, i64 value)
 {
     switch (option) {
             
-        case OPT_PALETTE:
+        case OPT_MON_PALETTE:
             
             if (!PaletteEnum::isValid(value)) {
                 throw Error(ERROR_OPT_INV_ARG, PaletteEnum::keyList());
@@ -116,7 +116,7 @@ PixelEngine::setOption(Option option, i64 value)
             updateRGBA();
             return;
 
-        case OPT_BRIGHTNESS:
+        case OPT_MON_BRIGHTNESS:
             
             if (value < 0 || value > 100) {
                 throw Error(ERROR_OPT_INV_ARG, "0...100");
@@ -126,7 +126,7 @@ PixelEngine::setOption(Option option, i64 value)
             updateRGBA();
             return;
             
-        case OPT_CONTRAST:
+        case OPT_MON_CONTRAST:
 
             if (value < 0 || value > 100) {
                 throw Error(ERROR_OPT_INV_ARG, "0...100");
@@ -136,7 +136,7 @@ PixelEngine::setOption(Option option, i64 value)
             updateRGBA();
             return;
 
-        case OPT_SATURATION:
+        case OPT_MON_SATURATION:
 
             if (value < 0 || value > 100) {
                 throw Error(ERROR_OPT_INV_ARG, "0...100");
