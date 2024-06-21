@@ -11,6 +11,7 @@
 
 #include "Macros.h"
 #include "MemUtils.h"
+#include "Buffer.h"
 #include <cassert>
 #include <concepts>
 #include <vector>
@@ -143,6 +144,13 @@ public:
     COUNTD(const float)
     COUNTD(const double)
 
+    template <class T>
+    auto& operator<<(util::Allocator<T> &a)
+    {
+        count += 8 + a.size;
+        return *this;
+    }
+
     auto& operator<<(string &v)
     {
         auto len = v.length();
@@ -219,6 +227,13 @@ public:
     CHECK(const unsigned long long)
     CHECK(const float)
     CHECK(const double)
+
+    template <class T>
+    auto& operator<<(util::Allocator<T> &a)
+    {
+        hash = util::fnvIt64(hash, a.fnv64());
+        return *this;
+    }
 
     auto& operator<<(string &v)
     {
@@ -302,6 +317,16 @@ public:
     DESERIALIZE64(unsigned long long)
     DESERIALIZED(float)
     DESERIALIZED(double)
+
+    template <class T>
+    auto& operator<<(util::Allocator<T> &a)
+    {
+        i64 len;
+        *this << len;
+        a.init(ptr, isize(len));
+        ptr += len;
+        return *this;
+    }
 
     auto& operator<<(string &v)
     {
@@ -399,6 +424,15 @@ public:
     SERIALIZED(const float)
     SERIALIZED(const double)
 
+    template <class T>
+    auto& operator<<(util::Allocator<T> &a)
+    {
+        *this << i64(a.size);
+        a.copy(ptr);
+        ptr += a.size;
+        return *this;
+    }
+
     auto& operator<<(const string &v)
     {
         writeString(ptr, v);
@@ -483,6 +517,13 @@ public:
     RESET(float)
     RESET(double)
 
+    template <class T>
+    auto& operator<<(util::Allocator<T> &a)
+    {
+        a.clear();
+        return *this;
+    }
+
     auto& operator<<(string &v)
     {
         v = "";
@@ -533,18 +574,35 @@ public:
 };
 
 template <class T>
-static constexpr bool isSoftResetter(T &worker) {
-    return std::is_same_v<T, SerSoftResetter>;
+static constexpr bool isSoftResetter(T &worker) 
+{
+    auto &id = typeid(worker);
+    bool result = id == typeid(SerSoftResetter);
+
+    bool result2 = std::is_same_v<T, SerSoftResetter>;
+    assert(result == result2);
+    return result;
 }
 
 template <class T>
-static constexpr bool isHardResetter(T &worker) {
-    return std::is_same_v<T, SerHardResetter>;
+static constexpr bool isHardResetter(T &worker) 
+{
+    auto &id = typeid(worker);
+    bool result = id == typeid(SerHardResetter);
+
+    bool result2 = std::is_same_v<T, SerHardResetter>;
+    assert(result == result2);
+    return result;
 }
 
 template <class T>
 static constexpr bool isResetter(T &worker) {
     return isSoftResetter(worker) || isHardResetter(worker);
+}
+
+template <class T>
+static constexpr bool isChecker(T &worker) {
+    return typeid(worker) == typeid(SerChecker);
 }
 
 }
@@ -555,13 +613,6 @@ void operator << (SerCounter &worker) override { fn(worker); } \
 void operator << (SerResetter &worker) override { fn(worker); } \
 void operator << (SerReader &worker) override { fn(worker); } \
 void operator << (SerWriter &worker) override { fn(worker); }
-
-#define CARTRIDGE_SERIALIZERS(fn) \
-void operator << (SerChecker &worker) override { Cartridge::operator<<(worker); fn(worker); } \
-void operator << (SerCounter &worker) override { Cartridge::operator<<(worker); fn(worker); } \
-void operator << (SerResetter &worker) override { Cartridge::operator<<(worker); fn(worker); } \
-void operator << (SerReader &worker) override { Cartridge::operator<<(worker); fn(worker); } \
-void operator << (SerWriter &worker) override { Cartridge::operator<<(worker); fn(worker); }
 
 #define CLONE(x) x = other.x;
 #define CLONE_ARRAY(x) std::copy(std::begin(other.x), std::end(other.x), std::begin(x));

@@ -39,7 +39,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
                 // Put a bit from the shift register onto the SP line
                 ciaa.setSP(GET_BIT(shiftReg, 7 - nr));
                 agnus.scheduleRel<SLOT_KBD>(USEC(20), KBD_CLK0);
-                
+
             } else {
                 
                 // Put the SP line back to normal

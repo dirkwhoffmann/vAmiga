@@ -11,11 +11,10 @@
 
 #include "Types.h"
 #include "Checksum.h"
-#include "Serializable.h"
 
 namespace util {
 
-template <class T> struct Allocator : Serializable {
+template <class T> struct Allocator {
 
     static constexpr isize maxCapacity = 512 * 1024 * 1024;
     
@@ -26,38 +25,6 @@ template <class T> struct Allocator : Serializable {
     Allocator(const Allocator&) = delete;
     ~Allocator() { dealloc(); }
     
-    // Serialization
-    auto& operator<<(class SerCounter &s)
-    {
-        s.count += 8 + size;
-        return *this;
-    }
-    auto& operator<<(class SerChecker &s)
-    {
-        s.hash = util::fnvIt64(s.hash, fnv64());
-        return *this;
-    }
-    auto& operator<<(class SerReader &s)
-    {
-        i64 len;
-        s << len;
-        init(s.ptr, isize(len));
-        s.ptr += len;
-        return *this;
-    }
-    auto& operator<<(class SerWriter &s)
-    {
-        s << i64(size);
-        copy(s.ptr);
-        s.ptr += size;
-        return *this;
-    }
-    auto& operator<<(class SerResetter &s)
-    {
-        clear();
-        return *this;
-    }
-
     // Queries the buffer state
     isize bytesize() const { return size * sizeof(T); }
     bool empty() const { return size == 0; }

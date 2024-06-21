@@ -242,6 +242,8 @@
 		50C8C4552607524400F4E012 /* Monitors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C4542607524400F4E012 /* Monitors.swift */; };
 		50CC209727ECCD6D00AEA010 /* OSDescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50CC209527ECCD6D00AEA010 /* OSDescriptors.cpp */; };
 		50CC209827ECCD6D00AEA010 /* OSDescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50CC209527ECCD6D00AEA010 /* OSDescriptors.cpp */; };
+		50CFF56A2C259FB900A47ECC /* Serializable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50CFF5692C259FB900A47ECC /* Serializable.cpp */; };
+		50CFF56B2C259FB900A47ECC /* Serializable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50CFF5692C259FB900A47ECC /* Serializable.cpp */; };
 		50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CB21F6377600FA167F /* A500ANSI.xib */; };
 		50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CD21F6378000FA167F /* A1000ISO.xib */; };
 		50D2B85226D292B7008040E5 /* DeniseDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D2B85026D292B7008040E5 /* DeniseDebugger.cpp */; };
@@ -870,6 +872,7 @@
 		50CF465C262043C500BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50CF465F262043CF00BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50CFF5642C255B9800A47ECC /* HostTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HostTypes.h; sourceTree = "<group>"; };
+		50CFF5692C259FB900A47ECC /* Serializable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Serializable.cpp; sourceTree = "<group>"; };
 		50D263CB21F6377600FA167F /* A500ANSI.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A500ANSI.xib; sourceTree = "<group>"; };
 		50D263CD21F6378000FA167F /* A1000ISO.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A1000ISO.xib; sourceTree = "<group>"; };
 		50D2B85026D292B7008040E5 /* DeniseDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DeniseDebugger.cpp; sourceTree = "<group>"; };
@@ -1097,6 +1100,7 @@
 				50EFB0BD2C1812E20013B73C /* Option.h */,
 				50EFB0BC2C1812E20013B73C /* Option.cpp */,
 				50EFC7DF22E840870036A3DF /* Serializable.h */,
+				50CFF5692C259FB900A47ECC /* Serializable.cpp */,
 				50EFB0C72C18D72B0013B73C /* Dumpable.h */,
 				50EFB0C62C18D72B0013B73C /* Dumpable.cpp */,
 				50EFB0CB2C18D95B0013B73C /* Inspectable.h */,
@@ -2336,6 +2340,7 @@
 				50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */,
 				50F54B2B24B5D31D0078FDC9 /* maketbl.c in Sources */,
 				50F54B3324B5DDAF0078FDC9 /* DMSFile.cpp in Sources */,
+				50CFF56A2C259FB900A47ECC /* Serializable.cpp in Sources */,
 				50F54B2524B5D31D0078FDC9 /* u_heavy.c in Sources */,
 				502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */,
 				5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */,
@@ -2570,6 +2575,7 @@
 				50FC04EB27DA1A4500C3E566 /* RshServer.cpp in Sources */,
 				50FC04E827DA1A3500C3E566 /* OSDebugger.cpp in Sources */,
 				50FC04F427DA1A8F00C3E566 /* AudioStream.cpp in Sources */,
+				50CFF56B2C259FB900A47ECC /* Serializable.cpp in Sources */,
 				50FC04B427DA19A900C3E566 /* ZorroManager.cpp in Sources */,
 				50FC04B027DA199600C3E566 /* Memory.cpp in Sources */,
 				50FC04D527DA1A0000C3E566 /* InterpreterCmds.cpp in Sources */,

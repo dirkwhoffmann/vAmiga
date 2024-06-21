@@ -12,6 +12,7 @@ Dumpable.cpp
 Host.cpp
 MsgQueue.cpp
 Option.cpp
+Serializable.cpp
 SubComponent.cpp
 Suspendable.cpp
 Thread.cpp
