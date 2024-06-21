@@ -51,7 +51,7 @@ Emulator::initialize()
     main.initialize();
 
     // Setup the default configuration
-    // host.resetConfig();
+    host.resetConfig();
     main.resetConfig();
 
     // Perform a hard reset
@@ -250,7 +250,7 @@ Emulator::set(ConfigScheme scheme)
                 set(OPT_CPU_REVISION, CPU_68000);
                 set(OPT_AGNUS_REVISION, AGNUS_OCS_OLD);
                 set(OPT_DENISE_REVISION, DENISE_OCS);
-                set(OPT_VIDEO_FORMAT, PAL);
+                set(OPT_AMIGA_VIDEO_FORMAT, PAL);
                 set(OPT_CHIP_RAM, 512);
                 set(OPT_SLOW_RAM, 512);
                 break;
@@ -260,7 +260,7 @@ Emulator::set(ConfigScheme scheme)
                 set(OPT_CPU_REVISION, CPU_68000);
                 set(OPT_AGNUS_REVISION, AGNUS_OCS);
                 set(OPT_DENISE_REVISION, DENISE_OCS);
-                set(OPT_VIDEO_FORMAT, PAL);
+                set(OPT_AMIGA_VIDEO_FORMAT, PAL);
                 set(OPT_CHIP_RAM, 512);
                 set(OPT_SLOW_RAM, 512);
                 break;
@@ -270,7 +270,7 @@ Emulator::set(ConfigScheme scheme)
                 set(OPT_CPU_REVISION, CPU_68000);
                 set(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
                 set(OPT_DENISE_REVISION, DENISE_OCS);
-                set(OPT_VIDEO_FORMAT, PAL);
+                set(OPT_AMIGA_VIDEO_FORMAT, PAL);
                 set(OPT_CHIP_RAM, 512);
                 set(OPT_SLOW_RAM, 512);
                 break;
@@ -280,7 +280,7 @@ Emulator::set(ConfigScheme scheme)
                 set(OPT_CPU_REVISION, CPU_68000);
                 set(OPT_AGNUS_REVISION, AGNUS_ECS_2MB);
                 set(OPT_DENISE_REVISION, DENISE_ECS);
-                set(OPT_VIDEO_FORMAT, PAL);
+                set(OPT_AMIGA_VIDEO_FORMAT, PAL);
                 set(OPT_CHIP_RAM, 512);
                 set(OPT_SLOW_RAM, 512);
                 break;

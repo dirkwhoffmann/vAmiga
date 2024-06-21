@@ -39,10 +39,10 @@ class TOD : public SubComponent, public Inspectable<TODInfo> {
 
     };
 
-    friend CIA;
-    
+    friend class CIA;
+
     // Reference to the connected CIA
-    CIA &cia;
+    class CIA &cia;
 
     // Result of the latest inspection
     mutable TODInfo info = {};

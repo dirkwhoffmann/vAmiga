@@ -724,7 +724,7 @@ extension DefaultsProxy {
 
         debug(.defaults)
 
-        remove(.VIDEO_FORMAT)
+        remove(.AMIGA_VIDEO_FORMAT)
         remove(.CPU_REVISION)
         remove(.CPU_OVERCLOCKING)
         remove(.AGNUS_REVISION)
@@ -743,7 +743,7 @@ extension Configuration {
 
         amiga.suspend()
 
-        machineType = defaults.get(.VIDEO_FORMAT)
+        machineType = defaults.get(.AMIGA_VIDEO_FORMAT)
         cpuRev = defaults.get(.CPU_REVISION)
         cpuSpeed = defaults.get(.CPU_OVERCLOCKING)
         agnusRev = defaults.get(.AGNUS_REVISION)
@@ -761,7 +761,7 @@ extension Configuration {
 
         amiga.suspend()
 
-        defaults.set(.VIDEO_FORMAT, machineType)
+        defaults.set(.AMIGA_VIDEO_FORMAT, machineType)
         defaults.set(.CPU_REVISION, cpuRev)
         defaults.set(.CPU_OVERCLOCKING, cpuSpeed)
         defaults.set(.AGNUS_REVISION, agnusRev)
@@ -987,16 +987,16 @@ extension DefaultsProxy {
 
         debug(.defaults)
 
-        remove(.EMU_WARP_MODE)
-        remove(.EMU_WARP_BOOT)
+        remove(.AMIGA_WARP_MODE)
+        remove(.AMIGA_WARP_BOOT)
         remove(.CLX_SPR_SPR)
         remove(.CLX_SPR_PLF)
         remove(.CLX_PLF_PLF)
         remove(.CIA_IDLE_SLEEP)
         remove(.FRAME_SKIPPING)
         remove(.AUD_FASTPATH)
-        remove(.VSYNC)
-        remove(.TIME_LAPSE)
+        remove(.AMIGA_VSYNC)
+        remove(.AMIGA_SPEED_BOOST)
     }
 }
 
@@ -1009,16 +1009,16 @@ extension Configuration {
 
         amiga.suspend()
 
-        warpMode = defaults.get(.EMU_WARP_MODE)
-        warpBoot = defaults.get(.EMU_WARP_BOOT)
+        warpMode = defaults.get(.AMIGA_WARP_MODE)
+        warpBoot = defaults.get(.AMIGA_WARP_BOOT)
         clxSprSpr = defaults.get(.CLX_SPR_SPR) != 0
         clxSprPlf = defaults.get(.CLX_SPR_PLF) != 0
         clxPlfPlf = defaults.get(.CLX_PLF_PLF) != 0
         ciaIdleSleep = defaults.get(.CIA_IDLE_SLEEP) != 0
         frameSkipping = defaults.get(.FRAME_SKIPPING)
         audioFastPath = defaults.get(.AUD_FASTPATH) != 0
-        vsync = defaults.get(.VSYNC) != 0
-        timeLapse = defaults.get(.TIME_LAPSE)
+        vsync = defaults.get(.AMIGA_VSYNC) != 0
+        timeLapse = defaults.get(.AMIGA_SPEED_BOOST)
 
         amiga.resume()
     }
@@ -1030,16 +1030,16 @@ extension Configuration {
 
         amiga.suspend()
 
-        defaults.set(.EMU_WARP_MODE, warpMode)
-        defaults.set(.EMU_WARP_BOOT, warpBoot)
+        defaults.set(.AMIGA_WARP_MODE, warpMode)
+        defaults.set(.AMIGA_WARP_BOOT, warpBoot)
         defaults.set(.CLX_SPR_SPR, clxSprSpr)
         defaults.set(.CLX_SPR_PLF, clxSprPlf)
         defaults.set(.CLX_PLF_PLF, clxPlfPlf)
         defaults.set(.CIA_IDLE_SLEEP, ciaIdleSleep)
         defaults.set(.FRAME_SKIPPING, frameSkipping)
         defaults.set(.AUD_FASTPATH, audioFastPath)
-        defaults.set(.VSYNC, vsync)
-        defaults.set(.TIME_LAPSE, timeLapse)
+        defaults.set(.AMIGA_VSYNC, vsync)
+        defaults.set(.AMIGA_SPEED_BOOST, timeLapse)
         defaults.save()
 
         amiga.resume()

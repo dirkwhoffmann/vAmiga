@@ -32,14 +32,19 @@ namespace vamiga {
 
 Defaults::Defaults()
 {
-    setFallback(OPT_EMU_WARP_BOOT,      0);
-    setFallback(OPT_EMU_WARP_MODE,      WARP_NEVER);
-    setFallback(OPT_EMU_SNAPSHOTS,      false);
-    setFallback(OPT_EMU_SNAPSHOT_DELAY, 10);
+    setFallback(OPT_HOST_REFRESH_RATE,          60);
+    setFallback(OPT_HOST_SAMPLE_RATE,           44100);
+    setFallback(OPT_HOST_FRAMEBUF_WIDTH,        0);
+    setFallback(OPT_HOST_FRAMEBUF_HEIGHT,       0);
+    
+    setFallback(OPT_AMIGA_VIDEO_FORMAT,     PAL);
+    setFallback(OPT_AMIGA_WARP_BOOT,        0);
+    setFallback(OPT_AMIGA_WARP_MODE,        WARP_NEVER);
+    setFallback(OPT_AMIGA_VSYNC,            false);
+    setFallback(OPT_AMIGA_SPEED_BOOST,      100);
+    setFallback(OPT_AMIGA_SNAPSHOTS,        false);
+    setFallback(OPT_AMIGA_SNAPSHOT_DELAY,   10);
 
-    setFallback(OPT_VIDEO_FORMAT,       PAL);
-    setFallback(OPT_VSYNC,              false);
-    setFallback(OPT_TIME_LAPSE,         100);
     setFallback(OPT_AGNUS_REVISION,     AGNUS_ECS_1MB);
     setFallback(OPT_SLOW_RAM_MIRROR,    true);
     setFallback(OPT_PTR_DROPS,          true);
@@ -526,15 +531,17 @@ Defaults::remove(const string &key)
 }
 
 void
-Defaults::remove(Option option, isize nr)
+Defaults::remove(Option option)
 {
-    remove(string(OptionEnum::key(option)) + (nr ? std::to_string(nr) : ""));
+    remove(string(OptionEnum::key(option)));
 }
 
 void
 Defaults::remove(Option option, std::vector <isize> nrs)
 {
-    for (auto &nr : nrs) remove(option, nr);
+    for (auto &nr : nrs) {
+        remove(string(OptionEnum::key(option)) + std::to_string(nr));
+    }
 }
 
 }

@@ -109,7 +109,7 @@ public:
 
     // Deletes selected key-value pairs
     void remove(const string &key) throws;
-    void remove(Option option, isize nr = 0) throws;
+    void remove(Option option) throws;
     void remove(Option option, std::vector <isize> objids) throws;
 };
 

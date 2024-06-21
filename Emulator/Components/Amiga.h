@@ -60,13 +60,13 @@ class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
 
     ConfigOptions options = {
 
-        OPT_VIDEO_FORMAT,
-        OPT_EMU_WARP_BOOT,
-        OPT_EMU_WARP_MODE,
-        OPT_VSYNC,
-        OPT_TIME_LAPSE,
-        OPT_EMU_SNAPSHOTS,
-        OPT_EMU_SNAPSHOT_DELAY
+        OPT_AMIGA_VIDEO_FORMAT,
+        OPT_AMIGA_WARP_BOOT,
+        OPT_AMIGA_WARP_MODE,
+        OPT_AMIGA_VSYNC,
+        OPT_AMIGA_SPEED_BOOST,
+        OPT_AMIGA_SNAPSHOTS,
+        OPT_AMIGA_SNAPSHOT_DELAY
     };
     
     // The current configuration

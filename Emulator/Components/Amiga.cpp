@@ -169,13 +169,13 @@ Amiga::getOption(Option option) const
 {
     switch (option) {
 
-        case OPT_VIDEO_FORMAT:          return config.type;
-        case OPT_EMU_WARP_BOOT:         return config.warpBoot;
-        case OPT_EMU_WARP_MODE:         return config.warpMode;
-        case OPT_VSYNC:                 return config.vsync;
-        case OPT_TIME_LAPSE:            return config.timeLapse;
-        case OPT_EMU_SNAPSHOTS:         return config.snapshots;
-        case OPT_EMU_SNAPSHOT_DELAY:    return config.snapshotDelay;
+        case OPT_AMIGA_VIDEO_FORMAT:          return config.type;
+        case OPT_AMIGA_WARP_BOOT:         return config.warpBoot;
+        case OPT_AMIGA_WARP_MODE:         return config.warpMode;
+        case OPT_AMIGA_VSYNC:                 return config.vsync;
+        case OPT_AMIGA_SPEED_BOOST:            return config.timeLapse;
+        case OPT_AMIGA_SNAPSHOTS:         return config.snapshots;
+        case OPT_AMIGA_SNAPSHOT_DELAY:    return config.snapshotDelay;
 
         default:
             fatalError;
@@ -187,25 +187,25 @@ Amiga::checkOption(Option opt, i64 value)
 {
     switch (opt) {
 
-        case OPT_VIDEO_FORMAT:
-        case OPT_EMU_WARP_BOOT:
+        case OPT_AMIGA_VIDEO_FORMAT:
+        case OPT_AMIGA_WARP_BOOT:
 
             return;
 
-        case OPT_EMU_WARP_MODE:
+        case OPT_AMIGA_WARP_MODE:
 
             if (!WarpModeEnum::isValid(value)) {
                 throw Error(ERROR_OPT_INV_ARG, WarpModeEnum::keyList());
             }
             return;
 
-        case OPT_VSYNC:
-        case OPT_TIME_LAPSE:
-        case OPT_EMU_SNAPSHOTS:
+        case OPT_AMIGA_VSYNC:
+        case OPT_AMIGA_SPEED_BOOST:
+        case OPT_AMIGA_SNAPSHOTS:
 
             return;
 
-        case OPT_EMU_SNAPSHOT_DELAY:
+        case OPT_AMIGA_SNAPSHOT_DELAY:
 
             if (value < 10 || value > 3600) {
                 throw Error(ERROR_OPT_INV_ARG, "10...3600");
@@ -222,7 +222,7 @@ Amiga::setOption(Option option, i64 value)
 {
     switch (option) {
 
-        case OPT_VIDEO_FORMAT:
+        case OPT_AMIGA_VIDEO_FORMAT:
 
             if (!VideoFormatEnum::isValid(value)) {
                 throw Error(ERROR_OPT_INV_ARG, VideoFormatEnum::keyList());
@@ -237,12 +237,12 @@ Amiga::setOption(Option option, i64 value)
             }
             return;
 
-        case OPT_EMU_WARP_BOOT:
+        case OPT_AMIGA_WARP_BOOT:
 
             config.warpBoot = isize(value);
             return;
 
-        case OPT_EMU_WARP_MODE:
+        case OPT_AMIGA_WARP_MODE:
 
             if (!WarpModeEnum::isValid(value)) {
                 throw Error(ERROR_OPT_INV_ARG, WarpModeEnum::keyList());
@@ -251,12 +251,12 @@ Amiga::setOption(Option option, i64 value)
             config.warpMode = WarpMode(value);
             return;
 
-        case OPT_VSYNC:
+        case OPT_AMIGA_VSYNC:
 
             config.vsync = bool(value);
             return;
 
-        case OPT_TIME_LAPSE:
+        case OPT_AMIGA_SPEED_BOOST:
 
             if (value < 50 || value > 200) {
                 throw Error(ERROR_OPT_INV_ARG, "50...200");
@@ -265,13 +265,13 @@ Amiga::setOption(Option option, i64 value)
             config.timeLapse = isize(value);
             return;
 
-        case OPT_EMU_SNAPSHOTS:
+        case OPT_AMIGA_SNAPSHOTS:
 
             config.snapshots = bool(value);
             scheduleNextSnpEvent();
             return;
 
-        case OPT_EMU_SNAPSHOT_DELAY:
+        case OPT_AMIGA_SNAPSHOT_DELAY:
 
             config.snapshotDelay = isize(value);
             scheduleNextSnpEvent();
@@ -811,8 +811,8 @@ Amiga::serviceSnpEvent(EventID eventId)
 void
 Amiga::scheduleNextSnpEvent()
 {
-    auto snapshots = emulator.get(OPT_EMU_SNAPSHOTS);
-    auto delay = emulator.get(OPT_EMU_SNAPSHOT_DELAY);
+    auto snapshots = emulator.get(OPT_AMIGA_SNAPSHOTS);
+    auto delay = emulator.get(OPT_AMIGA_SNAPSHOT_DELAY);
 
     if (snapshots) {
         agnus.scheduleRel<SLOT_SNP>(SEC(double(delay)), SNP_TAKE);

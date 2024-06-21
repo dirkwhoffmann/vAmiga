@@ -30,14 +30,13 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_HOST_FRAMEBUF_WIDTH:   return numParser(" pixels");
         case OPT_HOST_FRAMEBUF_HEIGHT:  return numParser(" pixels");
 
-        case OPT_EMU_WARP_MODE:         return enumParser.template operator()<WarpModeEnum>();
-        case OPT_EMU_WARP_BOOT:         return numParser(" sec");
-        case OPT_EMU_SNAPSHOTS:         return boolParser();
-        case OPT_EMU_SNAPSHOT_DELAY:    return numParser(" sec");
-
-        case OPT_VIDEO_FORMAT:          return enumParser.template operator()<VideoFormatEnum>();
-        case OPT_VSYNC:                 return boolParser();
-        case OPT_TIME_LAPSE:            return numParser("%");
+        case OPT_AMIGA_VIDEO_FORMAT:    return enumParser.template operator()<VideoFormatEnum>();
+        case OPT_AMIGA_WARP_MODE:       return enumParser.template operator()<WarpModeEnum>();
+        case OPT_AMIGA_WARP_BOOT:       return numParser(" sec");
+        case OPT_AMIGA_VSYNC:           return boolParser();
+        case OPT_AMIGA_SPEED_BOOST:     return numParser("%");
+        case OPT_AMIGA_SNAPSHOTS:       return boolParser();
+        case OPT_AMIGA_SNAPSHOT_DELAY:  return numParser(" sec");
 
         case OPT_AGNUS_REVISION:        return enumParser.template operator()<AgnusRevisionEnum>();
         case OPT_SLOW_RAM_MIRROR:       return boolParser();

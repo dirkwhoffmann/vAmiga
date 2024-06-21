@@ -36,8 +36,8 @@ class Configuration {
     //
 
     var machineType: Int {
-        get { return amiga.getConfig(.VIDEO_FORMAT) }
-        set { amiga.configure(.VIDEO_FORMAT, value: newValue) }
+        get { return amiga.getConfig(.AMIGA_VIDEO_FORMAT) }
+        set { amiga.configure(.AMIGA_VIDEO_FORMAT, value: newValue) }
     }
     var cpuRev: Int {
         get { return amiga.getConfig(.CPU_REVISION) }
@@ -265,12 +265,12 @@ class Configuration {
     //
 
     var warpMode: Int {
-        get { return amiga.getConfig(.EMU_WARP_MODE) }
-        set { amiga.configure(.EMU_WARP_MODE, value: newValue) }
+        get { return amiga.getConfig(.AMIGA_WARP_MODE) }
+        set { amiga.configure(.AMIGA_WARP_MODE, value: newValue) }
     }
     var warpBoot: Int {
-        get { return amiga.getConfig(.EMU_WARP_BOOT) }
-        set { amiga.configure(.EMU_WARP_BOOT, value: newValue) }
+        get { return amiga.getConfig(.AMIGA_WARP_BOOT) }
+        set { amiga.configure(.AMIGA_WARP_BOOT, value: newValue) }
     }
     var clxSprSpr: Bool {
         get { return amiga.getConfig(.CLX_SPR_SPR) != 0 }
@@ -297,12 +297,12 @@ class Configuration {
         set { amiga.configure(.AUD_FASTPATH, enable: newValue) }
     }
     var vsync: Bool {
-        get { return amiga.getConfig(.VSYNC) != 0 }
-        set { amiga.configure(.VSYNC, enable: newValue) }
+        get { return amiga.getConfig(.AMIGA_VSYNC) != 0 }
+        set { amiga.configure(.AMIGA_VSYNC, enable: newValue) }
     }
     var timeLapse: Int {
-        get { return amiga.getConfig(.TIME_LAPSE) }
-        set { amiga.configure(.TIME_LAPSE, value: newValue) }
+        get { return amiga.getConfig(.AMIGA_SPEED_BOOST) }
+        set { amiga.configure(.AMIGA_SPEED_BOOST, value: newValue) }
     }
 
     //

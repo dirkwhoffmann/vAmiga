@@ -13,42 +13,6 @@
 
 namespace vamiga {
 
-class Agnus;
-class Amiga;
-class Blitter;
-class CPU;
-class CIA;
-class CIAA;
-class CIAB;
-class ControlPort;
-class Copper;
-class Debugger;
-class Denise;
-class DiagBoard;
-class DiskController;
-class DmaDebugger;
-class FloppyDrive;
-class HardDrive;
-class HdController;
-class Host;
-class GdbServer;
-class Joystick;
-class Keyboard;
-class Memory;
-class Mouse;
-class MsgQueue;
-class OSDebugger;
-class Paula;
-class PixelEngine;
-class RamExpansion;
-class RemoteManager;
-class RetroShell;
-class RshServer;
-class RTC;
-class SerialPort;
-class UART;
-class ZorroManager;
-
 class References {
 
 protected:
@@ -105,10 +69,11 @@ public:
 /* This class extends the CoreComponent class with references to all components
  * that are part of the Amiga class.
  */
-class SubComponent : public CoreComponent {
+class SubComponent : public CoreComponent, public References {
 
 protected:
 
+    /*
     Agnus &agnus;
     Amiga &amiga;
     Blitter &blitter;
@@ -151,6 +116,7 @@ protected:
     ZorroManager &zorro;
 
     FloppyDrive *df[4] = { &df0, &df1, &df2, &df3 };
+    */
 
 public:
 

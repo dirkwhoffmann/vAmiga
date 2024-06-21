@@ -24,16 +24,14 @@ enum_long(OPT)
     OPT_HOST_FRAMEBUF_WIDTH,    ///< Current width of the emulator window
     OPT_HOST_FRAMEBUF_HEIGHT,   ///< Current height of the emulator window
 
-    // Emulator
-    OPT_EMU_WARP_BOOT,          ///< Warp-boot time in seconds
-    OPT_EMU_WARP_MODE,          ///< Warp activation mode
-    OPT_EMU_SNAPSHOTS,          ///< Take a snapshots once in a while
-    OPT_EMU_SNAPSHOT_DELAY,     ///< Delay between two snapshots in seconds
-
     // Amiga
-    OPT_VIDEO_FORMAT,
-    OPT_VSYNC,
-    OPT_TIME_LAPSE,
+    OPT_AMIGA_VIDEO_FORMAT,     ///< Machine type (PAL or NTSC)
+    OPT_AMIGA_WARP_BOOT,        ///< Warp-boot time in seconds
+    OPT_AMIGA_WARP_MODE,        ///< Warp activation mode
+    OPT_AMIGA_VSYNC,            ///< Derive the frame rate to the VSYNC signal
+    OPT_AMIGA_SPEED_BOOST,      ///< Speed adjustment in percent
+    OPT_AMIGA_SNAPSHOTS,        ///< Automatically take a snapshots
+    OPT_AMIGA_SNAPSHOT_DELAY,   ///< Delay between two snapshots in seconds
 
     // Agnus
     OPT_AGNUS_REVISION,
@@ -196,14 +194,13 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_HOST_FRAMEBUF_WIDTH:   return "HOST.FRAMEBUF_WIDTH";
             case OPT_HOST_FRAMEBUF_HEIGHT:  return "HOST.FRAMEBUF_HEIGHT";
 
-            case OPT_EMU_WARP_BOOT:         return "EMU.WARP_BOOT";
-            case OPT_EMU_WARP_MODE:         return "EMU.WARP_MODE";
-            case OPT_EMU_SNAPSHOTS:         return "EMU.SNAPSHOTS";
-            case OPT_EMU_SNAPSHOT_DELAY:    return "EMU.SNAPSHOT_DELAY";
-
-            case OPT_VIDEO_FORMAT:          return "VIDEO_FORMAT";
-            case OPT_VSYNC:                 return "VSYNC";
-            case OPT_TIME_LAPSE:            return "TIME_LAPSE";
+            case OPT_AMIGA_VIDEO_FORMAT:    return "AMIGA.VIDEO_FORMAT";
+            case OPT_AMIGA_WARP_BOOT:       return "AMIGA.WARP_BOOT";
+            case OPT_AMIGA_WARP_MODE:       return "AMIGA.WARP_MODE";
+            case OPT_AMIGA_VSYNC:           return "AMIGA.VSYNC";
+            case OPT_AMIGA_SPEED_BOOST:     return "AMIGA.SPEED_BOOST";
+            case OPT_AMIGA_SNAPSHOTS:       return "AMIGA.SNAPSHOTS";
+            case OPT_AMIGA_SNAPSHOT_DELAY:  return "AMIGA.SNAPSHOT_DELAY";
 
             case OPT_AGNUS_REVISION:        return "AGNUS_REVISION";
             case OPT_SLOW_RAM_MIRROR:       return "SLOW_RAM_MIRROR";
@@ -338,14 +335,13 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_HOST_FRAMEBUF_WIDTH:   return "Window width";
             case OPT_HOST_FRAMEBUF_HEIGHT:  return "Window height";
 
-            case OPT_EMU_WARP_BOOT:         return "Warp-boot duration";
-            case OPT_EMU_WARP_MODE:         return "Warp activation";
-            case OPT_EMU_SNAPSHOTS:         return "Take snapshots once in a while";
-            case OPT_EMU_SNAPSHOT_DELAY:    return "Time span between two snapshots";
-
-            case OPT_VIDEO_FORMAT:          return "Video format";
-            case OPT_VSYNC:                 return "VSYNC mode";
-            case OPT_TIME_LAPSE:            return "Speed adjustment";
+            case OPT_AMIGA_VIDEO_FORMAT:    return "Video format";
+            case OPT_AMIGA_WARP_BOOT:       return "Warp-boot duration";
+            case OPT_AMIGA_WARP_MODE:       return "Warp activation";
+            case OPT_AMIGA_VSYNC:           return "VSYNC mode";
+            case OPT_AMIGA_SPEED_BOOST:     return "Speed adjustment";
+            case OPT_AMIGA_SNAPSHOTS:       return "Automatically take snapshots";
+            case OPT_AMIGA_SNAPSHOT_DELAY:  return "Time span between two snapshots";
 
             case OPT_AGNUS_REVISION:        return "Chip revision";
             case OPT_SLOW_RAM_MIRROR:       return "ECS memory mirroring";
