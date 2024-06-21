@@ -9,9 +9,54 @@
 
 #include "config.h"
 #include "SubComponent.h"
-#include "Amiga.h"  
+#include "Emulator.h"
 
 namespace vamiga {
+
+References::References(Amiga& ref) :
+
+agnus(ref.agnus),
+amiga(ref),
+blitter(ref.agnus.blitter),
+ciaa(ref.ciaA),
+ciab(ref.ciaB),
+controlPort1(ref.controlPort1),
+controlPort2(ref.controlPort2),
+copper(ref.agnus.copper),
+cpu(ref.cpu),
+debugger(ref.debugger),
+denise(ref.denise),
+diagBoard(ref.diagBoard),
+diskController(ref.paula.diskController),
+dmaDebugger(ref.agnus.dmaDebugger),
+df0(ref.df0),
+df1(ref.df1),
+df2(ref.df2),
+df3(ref.df3),
+hd0(ref.hd0),
+hd1(ref.hd1),
+hd2(ref.hd2),
+hd3(ref.hd3),
+hd0con(ref.hd0con),
+hd1con(ref.hd1con),
+hd2con(ref.hd2con),
+hd3con(ref.hd3con),
+host(ref.emulator.host),
+keyboard(ref.keyboard),
+mem(ref.mem),
+msgQueue(ref.msgQueue),
+osDebugger(ref.osDebugger),
+paula(ref.paula),
+pixelEngine(ref.denise.pixelEngine),
+ramExpansion(ref.ramExpansion),
+remoteManager(ref.remoteManager),
+retroShell(ref.retroShell),
+rtc(ref.rtc),
+serialPort(ref.serialPort),
+uart(ref.paula.uart),
+zorro(ref.zorro)
+{
+};
 
 SubComponent::SubComponent(Amiga& ref, isize id) : CoreComponent(ref.emulator, id),
 agnus(ref.agnus),
@@ -40,7 +85,7 @@ hd0con(ref.hd0con),
 hd1con(ref.hd1con),
 hd2con(ref.hd2con),
 hd3con(ref.hd3con),
-host(ref.host),
+host(ref.emulator.host),
 keyboard(ref.keyboard),
 mem(ref.mem),
 msgQueue(ref.msgQueue),

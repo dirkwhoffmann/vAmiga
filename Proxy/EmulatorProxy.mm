@@ -2848,56 +2848,6 @@ using namespace vamiga::moira;
 
 
 //
-// HostProxy
-//
-
-@implementation HostProxy
-
-- (HostAPI *)host
-{
-    return (HostAPI *)obj;
-}
-
-+ (instancetype)make:(Host *)file
-{
-    return file ? [[self alloc] initWith:file] : nil;
-}
-
-- (double)sampleRate
-{
-    return [self host]->host->getSampleRate();
-}
-
-- (void)setSampleRate:(double)hz
-{
-    [self host]->host->setSampleRate(hz);
-}
-
-- (NSInteger)refreshRate
-{
-    return (NSInteger)[self host]->host->getHostRefreshRate();
-}
-
-- (void)setRefreshRate:(NSInteger)value
-{
-    [self host]->host->setHostRefreshRate((double)value);
-}
-
-- (NSSize)frameBufferSize
-{
-    auto size = [self host]->host->getFrameBufferSize();
-    return NSMakeSize((CGFloat)size.first, (CGFloat)size.second);
-}
-
-- (void)setFrameBufferSize:(NSSize)size
-{
-    [self host]->host->setFrameBufferSize(std::pair<isize, isize>(size.width, size.height));
-}
-
-@end
-
-
-//
 // Emulator
 //
 
@@ -2926,7 +2876,6 @@ using namespace vamiga::moira;
 @synthesize hd1;
 @synthesize hd2;
 @synthesize hd3;
-@synthesize host;
 @synthesize keyboard;
 @synthesize mem;
 @synthesize paula;
@@ -2970,7 +2919,6 @@ using namespace vamiga::moira;
     hd1 = [[HardDriveProxy alloc] initWith:&vamiga->hd1];
     hd2 = [[HardDriveProxy alloc] initWith:&vamiga->hd2];
     hd3 = [[HardDriveProxy alloc] initWith:&vamiga->hd3];
-    host = [[HostProxy alloc] initWith:&vamiga->host];
     keyboard = [[KeyboardProxy alloc] initWith:&vamiga->keyboard];
     mem = [[MemProxy alloc] initWith:&vamiga->mem];
     paula = [[PaulaProxy alloc] initWith:&vamiga->paula];

@@ -415,7 +415,7 @@ Amiga::refreshRate() const
 {
     if (config.vsync) {
 
-        return host.getHostRefreshRate();
+        return double(emulator.host.getOption(OPT_HOST_REFRESH_RATE));
 
     } else {
 

@@ -548,3 +548,20 @@ static constexpr bool isResetter(T &worker) {
 }
 
 }
+
+#define SERIALIZERS(fn) \
+void operator << (SerChecker &worker) override { fn(worker); } \
+void operator << (SerCounter &worker) override { fn(worker); } \
+void operator << (SerResetter &worker) override { fn(worker); } \
+void operator << (SerReader &worker) override { fn(worker); } \
+void operator << (SerWriter &worker) override { fn(worker); }
+
+#define CARTRIDGE_SERIALIZERS(fn) \
+void operator << (SerChecker &worker) override { Cartridge::operator<<(worker); fn(worker); } \
+void operator << (SerCounter &worker) override { Cartridge::operator<<(worker); fn(worker); } \
+void operator << (SerResetter &worker) override { Cartridge::operator<<(worker); fn(worker); } \
+void operator << (SerReader &worker) override { Cartridge::operator<<(worker); fn(worker); } \
+void operator << (SerWriter &worker) override { Cartridge::operator<<(worker); fn(worker); }
+
+#define CLONE(x) x = other.x;
+#define CLONE_ARRAY(x) std::copy(std::begin(other.x), std::end(other.x), std::begin(x));

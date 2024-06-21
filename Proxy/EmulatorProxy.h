@@ -79,7 +79,6 @@
 @class GuardsProxy;
 @class HardDriveProxy;
 @class HDFFileProxy;
-@class HostProxy;
 @class IMGFileProxy;
 @class JoystickProxy;
 @class KeyboardProxy;
@@ -161,20 +160,6 @@
 
 
 //
-// Host
-//
-
-@interface HostProxy : CoreComponentProxy {
-}
-
-@property double sampleRate;
-@property NSInteger refreshRate;
-@property NSSize frameBufferSize;
-
-@end
-
-
-//
 // Emulator
 //
 
@@ -202,7 +187,6 @@
     HardDriveProxy *hd1;
     HardDriveProxy *hd2;
     HardDriveProxy *hd3;
-    HostProxy *host;
     KeyboardProxy *keyboard;
     MemProxy *mem;
     PaulaProxy *paula;
@@ -238,7 +222,6 @@
 @property (readonly, strong) HardDriveProxy *hd1;
 @property (readonly, strong) HardDriveProxy *hd2;
 @property (readonly, strong) HardDriveProxy *hd3;
-@property (readonly, strong) HostProxy *host;
 @property (readonly, strong) KeyboardProxy *keyboard;
 @property (readonly, strong) MemProxy *mem;
 @property (readonly, strong) PaulaProxy *paula;

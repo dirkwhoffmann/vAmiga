@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "Muxer.h"
-#include "Amiga.h"
+#include "Emulator.h"
 #include "CIA.h"
 #include "IOUtils.h"
 #include "MsgQueue.h"
@@ -244,7 +244,7 @@ Muxer::synthesize(Cycle clock, Cycle target)
     assert(target > clock);
 
     // Determine the number of elapsed cycles per audio sample
-    double cps = double(amiga.masterClockFrequency()) / host.getSampleRate();
+    double cps = double(amiga.masterClockFrequency()) / double(emulator.host.getOption(OPT_HOST_SAMPLE_RATE));
 
     // Determine how many samples we need to produce
     double exact = (double)(target - clock) / cps + fraction;

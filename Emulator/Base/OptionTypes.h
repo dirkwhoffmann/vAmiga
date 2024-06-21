@@ -18,6 +18,12 @@
 
 enum_long(OPT)
 {
+    // Host
+    OPT_HOST_REFRESH_RATE,      ///< Refresh rate of the host display
+    OPT_HOST_SAMPLE_RATE,       ///< Refresh rate of the host display
+    OPT_HOST_FRAMEBUF_WIDTH,    ///< Current width of the emulator window
+    OPT_HOST_FRAMEBUF_HEIGHT,   ///< Current height of the emulator window
+
     // Emulator
     OPT_EMU_WARP_BOOT,          ///< Warp-boot time in seconds
     OPT_EMU_WARP_MODE,          ///< Warp activation mode
@@ -185,6 +191,11 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
     {
         switch (value) {
 
+            case OPT_HOST_REFRESH_RATE:     return "HOST.REFRESH_RATE";
+            case OPT_HOST_SAMPLE_RATE:      return "HOST.SAMPLE_RATE";
+            case OPT_HOST_FRAMEBUF_WIDTH:   return "HOST.FRAMEBUF_WIDTH";
+            case OPT_HOST_FRAMEBUF_HEIGHT:  return "HOST.FRAMEBUF_HEIGHT";
+
             case OPT_EMU_WARP_BOOT:         return "EMU.WARP_BOOT";
             case OPT_EMU_WARP_MODE:         return "EMU.WARP_MODE";
             case OPT_EMU_SNAPSHOTS:         return "EMU.SNAPSHOTS";
@@ -321,6 +332,11 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
     static const char *help(Option value)
     {
         switch (value) {
+
+            case OPT_HOST_REFRESH_RATE:     return "Host video refresh rate";
+            case OPT_HOST_SAMPLE_RATE:      return "Host audio sample rate";
+            case OPT_HOST_FRAMEBUF_WIDTH:   return "Window width";
+            case OPT_HOST_FRAMEBUF_HEIGHT:  return "Window height";
 
             case OPT_EMU_WARP_BOOT:         return "Warp-boot duration";
             case OPT_EMU_WARP_MODE:         return "Warp activation";

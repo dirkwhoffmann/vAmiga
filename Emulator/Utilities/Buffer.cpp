@@ -11,7 +11,7 @@
 #include "Buffer.h"
 #include "IOUtils.h"
 #include "MemUtils.h"
-#include "Serialization.h"
+#include "Serializable.h"
 #include <fstream>
 
 namespace util {

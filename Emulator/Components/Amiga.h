@@ -90,9 +90,6 @@ public:
     // User settings
     static Defaults defaults;
 
-    // Information about the host system
-    Host host = Host(*this);
-
     // Core components
     CPU cpu = CPU(*this);
     CIAA ciaA = CIAA(*this);

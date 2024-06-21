@@ -231,7 +231,7 @@ class Renderer: NSObject, MTKViewDelegate {
 
     func measureFps(frames: Int64) {
 
-        let interval = Int64(10)
+        let interval = Int64(32)
 
         if frames % interval == 0 {
 
@@ -242,9 +242,14 @@ class Renderer: NSObject, MTKViewDelegate {
             let newfps = Int(round(Double(interval) / elapsed))
             if newfps != fps {
 
-                fps = newfps
-                parent.amiga.host.refreshRate = Int(fps)
-                debug(.vsync, "New GPU frame rate: \(fps)")
+                debug(.vsync, "Measured GPU frame rate: \(newfps)")
+
+                if [50, 60, 100, 120, 200, 240].contains(newfps) {
+
+                    fps = newfps
+                    amiga.set(.HOST_REFRESH_RATE, value: Int(fps))
+                    debug(.vsync, "New GPU frame rate: \(amiga.get(.HOST_REFRESH_RATE))")
+                }
             }
         }
     }
@@ -255,7 +260,8 @@ class Renderer: NSObject, MTKViewDelegate {
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
 
-        parent.amiga.host.frameBufferSize = size
+        amiga.set(.HOST_FRAMEBUF_WIDTH, value: Int(size.width))
+        amiga.set(.HOST_FRAMEBUF_HEIGHT, value: Int(size.height))
         reshape(withSize: size)
     }
 

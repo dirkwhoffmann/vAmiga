@@ -10,7 +10,7 @@
 #pragma once
 
 #include "Types.h"
-#include "Serialization.h"
+#include "Serializable.h"
 #include <utility>
 
 namespace util {

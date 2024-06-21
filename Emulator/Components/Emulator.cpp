@@ -307,7 +307,10 @@ Emulator::routeOption(Option opt)
 {
     std::vector<Configurable *> result;
 
-    // if (host.isValidOption(opt)) result.push_back(&host);
+    // Check global components
+    if (host.isValidOption(opt)) result.push_back(&host);
+
+    // Check components of the main instance
     main.routeOption(opt, result);
 
     assert(!result.empty());

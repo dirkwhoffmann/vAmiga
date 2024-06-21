@@ -9,64 +9,81 @@
 
 #include "config.h"
 #include "Host.h"
-#include "Paula.h"
+#include "Emulator.h"
 #include "IOUtils.h"
 
 namespace vamiga {
+
+i64
+Host::getOption(Option option) const
+{
+    switch (option) {
+
+        case OPT_HOST_REFRESH_RATE:     return i64(config.refreshRate);
+        case OPT_HOST_SAMPLE_RATE:      return i64(config.sampleRate);
+        case OPT_HOST_FRAMEBUF_WIDTH:   return i64(config.frameBufferWidth);
+        case OPT_HOST_FRAMEBUF_HEIGHT:  return i64(config.frameBufferHeight);
+
+        default:
+            fatalError;
+    }
+}
+
+void
+Host::checkOption(Option opt, i64 value)
+{
+    switch (opt) {
+
+        case OPT_HOST_REFRESH_RATE:
+        case OPT_HOST_SAMPLE_RATE:
+        case OPT_HOST_FRAMEBUF_WIDTH:
+        case OPT_HOST_FRAMEBUF_HEIGHT:
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
+    }
+}
+
+void
+Host::setOption(Option opt, i64 value)
+{
+    switch (opt) {
+
+        case OPT_HOST_REFRESH_RATE:
+
+            config.refreshRate = isize(value);
+            return;
+
+        case OPT_HOST_SAMPLE_RATE:
+
+            config.sampleRate = isize(value);
+            return;
+
+        case OPT_HOST_FRAMEBUF_WIDTH:
+
+            config.frameBufferWidth = isize(value);
+            return;
+
+        case OPT_HOST_FRAMEBUF_HEIGHT:
+
+            config.frameBufferHeight = isize(value);
+            return;
+
+        default:
+            fatalError;
+    }
+}
 
 void
 Host::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
 
-    if (category == Category::State) {
+    if (category == Category::Config) {
 
-        os << tab("Audio sample rate");
-        os << flt(sampleRate) << " Hz" << std::endl;
-        os << tab("Monitor refresh rate");
-        os << flt(refreshRate) << " Hz" << std::endl;
-        os << tab("Frame buffer size");
-        os << dec(frameBufferWidth) << " x ";
-        os << dec(frameBufferHeight) << " Texels" << std::endl;
+        dumpConfig(os);
     }
-}
-
-void
-Host::setSampleRate(double hz)
-{
-    sampleRate = hz;
-    paula.muxer.setSampleRate(hz);
-}
-
-void
-Host::setHostRefreshRate(double fps)
-{
-    switch (i16(fps)) {
-
-        case 50: case 60: case 100: case 120: case 200: case 240:
-
-            refreshRate = fps;
-            break;
-
-        default:
-
-            // We keep the old value because the new value is likely the result
-            // of a wrong measurement.
-            break;
-    }
-}
-
-std::pair<isize, isize>
-Host::getFrameBufferSize() const
-{
-    return std::pair<isize, isize>(frameBufferWidth, frameBufferHeight);
-}
-
-void
-Host::setFrameBufferSize(std::pair<isize, isize> size)
-{
-    frameBufferWidth = size.first;
-    frameBufferHeight = size.second;
 }
 
 fs::path

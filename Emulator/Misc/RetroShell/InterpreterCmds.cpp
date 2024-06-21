@@ -516,7 +516,7 @@ Interpreter::initCommandShell(Command &root)
         // Keyboard
         //
 
-        root.add({"keyboard"},      "Keyboard");
+        root.add({"keyboard"}, "Keyboard");
 
         {   VAMIGA_GROUP("")
 
@@ -860,6 +860,24 @@ Interpreter::initCommandShell(Command &root)
     }
 
     {   VAMIGA_GROUP("Miscellaneous")
+
+        //
+        // Miscellaneous (Host)
+        //
+
+        auto cmd = host.shellName();
+        auto description = host.description();
+        root.add({cmd}, description);
+
+        root.add({cmd, ""},
+                 "Displays the current configuration",
+                 [this](Arguments& argv, long value) {
+
+            retroShell.dump(host, Category::Config);
+        });
+
+        initSetters(root, host);
+
 
         //
         // Remote server

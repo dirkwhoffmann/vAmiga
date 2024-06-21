@@ -11,7 +11,7 @@
 
 #include "Types.h"
 #include "Checksum.h"
-#include "Serialization.h"
+#include "Serializable.h"
 
 namespace util {
 

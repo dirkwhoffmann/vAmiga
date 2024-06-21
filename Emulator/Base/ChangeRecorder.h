@@ -10,7 +10,7 @@
 #pragma once
 
 #include "RingBuffer.h"
-#include "Serialization.h"
+#include "Serializable.h"
 #include "AgnusTypes.h"
 #include "AmigaTypes.h"
 #include <functional>

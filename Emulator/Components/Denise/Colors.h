@@ -10,7 +10,7 @@
 #pragma once
 
 #include "Aliases.h"
-#include "Serialization.h"
+#include "Serializable.h"
 
 namespace vamiga {
 

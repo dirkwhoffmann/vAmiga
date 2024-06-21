@@ -12,7 +12,7 @@
 #include "BeamTypes.h"
 #include "AmigaTypes.h"
 #include "Constants.h"
-#include "Serialization.h"
+#include "Serializable.h"
 
 namespace vamiga {
 

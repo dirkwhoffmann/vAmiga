@@ -49,6 +49,59 @@ class SerialPort;
 class UART;
 class ZorroManager;
 
+class References {
+
+protected:
+
+    class Agnus &agnus;
+    class Amiga &amiga;
+    class Blitter &blitter;
+    class CIAA &ciaa;
+    class CIAB &ciab;
+    class ControlPort &controlPort1;
+    class ControlPort &controlPort2;
+    class Copper &copper;
+    class CPU &cpu;
+    class Debugger &debugger;
+    class Denise &denise;
+    class DiagBoard &diagBoard;
+    class DiskController &diskController;
+    class DmaDebugger &dmaDebugger;
+    class FloppyDrive &df0;
+    class FloppyDrive &df1;
+    class FloppyDrive &df2;
+    class FloppyDrive &df3;
+    class HardDrive &hd0;
+    class HardDrive &hd1;
+    class HardDrive &hd2;
+    class HardDrive &hd3;
+    class HdController &hd0con;
+    class HdController &hd1con;
+    class HdController &hd2con;
+    class HdController &hd3con;
+    class Host &host;
+    class Keyboard &keyboard;
+    class Memory &mem;
+    class MsgQueue &msgQueue;
+    class OSDebugger &osDebugger;
+    class Paula &paula;
+    class PixelEngine &pixelEngine;
+    class RamExpansion &ramExpansion;
+    class RemoteManager &remoteManager;
+    class RetroShell &retroShell;
+    class RTC &rtc;
+    class SerialPort &serialPort;
+    class UART &uart;
+    class ZorroManager &zorro;
+
+    class FloppyDrive *df[4] = { &df0, &df1, &df2, &df3 };
+
+public:
+
+    References(Amiga& ref);
+};
+
+
 /* This class extends the CoreComponent class with references to all components
  * that are part of the Amiga class.
  */

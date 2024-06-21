@@ -13,7 +13,7 @@
 
 #ifdef __cplusplus
 
-#include "Serialization.h"
+#include "Serializable.h"
 
 static constexpr u16 SIG_NONE           = 0b0000000000;
 static constexpr u16 SIG_CON            = 0b0000000001;

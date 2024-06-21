@@ -59,12 +59,15 @@ public class MacAudio: NSObject {
             return
         }
         
-        // Query AudioUnit
+        // Query parameters
         let hardwareFormat = audiounit.outputBusses[0].format
         let channels = hardwareFormat.channelCount
         let sampleRate = hardwareFormat.sampleRate
         let stereo = (channels > 1)
         
+        // Pass some host parameters to the emulator
+        amiga.set(.HOST_SAMPLE_RATE, value: Int(sampleRate))
+
         // Make input bus compatible with output bus
         let renderFormat = AVAudioFormat(standardFormatWithSampleRate: sampleRate,
                                          channels: (stereo ? 2 : 1))
@@ -74,9 +77,6 @@ public class MacAudio: NSObject {
             return
         }
         
-        // Inform the emulator about the sample rate
-        amiga.host.sampleRate = sampleRate
-
         // Register render callback
         if stereo {
             audiounit.outputProvider = { (

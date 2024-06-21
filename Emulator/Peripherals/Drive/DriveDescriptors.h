@@ -10,7 +10,7 @@
 #pragma once
 
 #include "Constants.h"
-#include "Serialization.h"
+#include "Serializable.h"
 #include "FloppyDiskTypes.h"
 #include <vector>
 

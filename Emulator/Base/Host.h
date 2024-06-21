@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include "SubComponent.h"
+#include "CoreComponent.h"
+#include "HostTypes.h"
 #include "IOUtils.h"
 
 namespace vamiga {
@@ -17,7 +18,7 @@ namespace vamiga {
 /* This class stores some information about the host system. The values have
  * are set the GUI on start and updated on-the-fly when a value changes.
  */
-class Host : public SubComponent {
+class Host : public CoreComponent {
 
     Descriptions descriptions = {{
 
@@ -29,17 +30,14 @@ class Host : public SubComponent {
 
     ConfigOptions options = {
 
+        OPT_HOST_REFRESH_RATE,
+        OPT_HOST_SAMPLE_RATE,
+        OPT_HOST_FRAMEBUF_WIDTH,
+        OPT_HOST_FRAMEBUF_HEIGHT
     };
-    
-    // Audio sample rate
-    double sampleRate = 44100.0;
 
-    // Video refresh rate of the host monitor
-    double refreshRate = 60.0;
-
-    // Framebuffer dimensions
-    isize frameBufferWidth = 0;
-    isize frameBufferHeight = 0;
+    // Current configuration
+    HostConfig config = { };
 
 
     //
@@ -48,16 +46,27 @@ class Host : public SubComponent {
 
 public:
 
-    using SubComponent::SubComponent;
+    using CoreComponent::CoreComponent;
+
+    Host& operator= (const Host& other) {
+
+        CLONE(config)
+        return *this;
+    }
 
 
     //
-    // Methods from CoreObject
+    // Methods from Serializable
     //
 
-private:
+public:
 
-    void _dump(Category category, std::ostream& os) const override;
+    // template <class T> void serialize(T& worker) { } SERIALIZERS(serialize);
+    void _reset(bool hard) override { };
+    isize _size() override { return 0; }
+    u64 _checksum() override { return 0; }
+    isize _load(const u8 *buffer) override { return 0; }
+    isize _save(u8 *buffer) override { return 0; }
 
 
     //
@@ -68,28 +77,33 @@ public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
 
+private:
+
+    void _dump(Category category, std::ostream& os) const override;
+
+
 
     //
-    // Methods from Configurable
+    // Methods from CoreObject
     //
 
 public:
 
+    const HostConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
+    i64 getOption(Option opt) const override;
+    void checkOption(Option opt, i64 value) override;
+    void setOption(Option opt, i64 value) override;
 
-private:
 
-    void _reset(bool hard) override { };
-    isize _size() override { return 0; }
-    u64 _checksum() override { return 0; }
-    isize _load(const u8 *buffer) override { return 0; }
-    isize _save(u8 *buffer) override { return 0; }
+
 
 
     //
     // Accessing properties
     //
 
+    /*
 public:
 
     double getSampleRate() const { return sampleRate; }
@@ -100,7 +114,7 @@ public:
 
     std::pair<isize, isize> getFrameBufferSize() const;
     void setFrameBufferSize(std::pair<isize, isize> size);
-
+    */
 
     //
     // Working with temporary files and folders
