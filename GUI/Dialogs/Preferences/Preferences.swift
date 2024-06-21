@@ -127,14 +127,14 @@ class Preferences {
     var autofire: Bool! {
         didSet {
             for amiga in myAppDelegate.proxies {
-                amiga.configure(.AUTOFIRE_ENABLE, enable: autofire)
+                amiga.configure(.JOY_AUTOFIRE, enable: autofire)
             }
         }
     }
     var autofireBullets: Int! {
         didSet {
             for amiga in myAppDelegate.proxies {
-                amiga.configure(.AUTOFIRE_BULLETS, value: autofireBullets)
+                amiga.configure(.JOY_AUTOFIRE_BULLETS, value: autofireBullets)
             }
         }
     }
@@ -143,7 +143,7 @@ class Preferences {
             autofireFrequency = autofireFrequency.clamped(1, 4)
             let autofireDelay = Int(50.0 / autofireFrequency)
             for amiga in myAppDelegate.proxies {
-                amiga.configure(.AUTOFIRE_DELAY, value: autofireDelay)
+                amiga.configure(.JOY_AUTOFIRE_DELAY, value: autofireDelay)
             }
         }
     }
