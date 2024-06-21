@@ -31,9 +31,9 @@ class Joystick : public SubComponent {
 
     ConfigOptions options = {
 
-        OPT_AUTOFIRE_ENABLE,
-        OPT_AUTOFIRE_BULLETS,
-        OPT_AUTOFIRE_DELAY
+        OPT_JOY_AUTOFIRE,
+        OPT_JOY_AUTOFIRE_BULLETS,
+        OPT_JOY_AUTOFIRE_DELAY
     };
 
     // Reference to control port this device belongs to

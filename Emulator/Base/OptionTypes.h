@@ -145,9 +145,9 @@ enum_long(OPT)
     OPT_MOUSE_VELOCITY,
 
     // Joystick
-    OPT_AUTOFIRE_ENABLE,
-    OPT_AUTOFIRE_BULLETS,
-    OPT_AUTOFIRE_DELAY,
+    OPT_JOY_AUTOFIRE,
+    OPT_JOY_AUTOFIRE_BULLETS,
+    OPT_JOY_AUTOFIRE_DELAY,
 
     // Paula audio
     OPT_AUD_SAMPLING_METHOD,
@@ -295,9 +295,9 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_MOUSE_SHAKE_DETECTION:     return "MOUSE.SHAKE_DETECTION";
             case OPT_MOUSE_VELOCITY:            return "MOUSE.VELOCITY";
 
-            case OPT_AUTOFIRE_ENABLE:           return "AUTOFIRE.ENABLE";
-            case OPT_AUTOFIRE_BULLETS:          return "AUTOFIRE.BULLETS";
-            case OPT_AUTOFIRE_DELAY:            return "AUTOFIRE.DELAY";
+            case OPT_JOY_AUTOFIRE:              return "JOY.AUTOFIRE";
+            case OPT_JOY_AUTOFIRE_BULLETS:      return "JOY.AUTOFIRE_BULLETS";
+            case OPT_JOY_AUTOFIRE_DELAY:        return "JOY.AUTOFIRE_DELAY";
 
             case OPT_AUD_SAMPLING_METHOD:       return "AUD.SAMPLING_METHOD";
             case OPT_AUD_FILTER_TYPE:           return "AUD.FILTER_TYPE";
@@ -435,9 +435,9 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_MOUSE_SHAKE_DETECTION:     return "Detect a shaked mouse";
             case OPT_MOUSE_VELOCITY:            return "Mouse velocity";
 
-            case OPT_AUTOFIRE_ENABLE:           return "Autofire";
-            case OPT_AUTOFIRE_BULLETS:          return "Number of bullets per burst";
-            case OPT_AUTOFIRE_DELAY:            return "Autofire delay in frames";
+            case OPT_JOY_AUTOFIRE:              return "Autofire";
+            case OPT_JOY_AUTOFIRE_BULLETS:      return "Number of bullets per burst";
+            case OPT_JOY_AUTOFIRE_DELAY:        return "Autofire delay in frames";
 
             case OPT_AUD_SAMPLING_METHOD:       return "Sampling method";
             case OPT_AUD_FILTER_TYPE:           return "Audio filter type";

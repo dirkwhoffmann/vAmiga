@@ -128,9 +128,9 @@ Defaults::Defaults()
     setFallback(OPT_MOUSE_PULLUP_RESISTORS,     true,                   { 0, 1} );
     setFallback(OPT_MOUSE_SHAKE_DETECTION,      true,                   { 0, 1} );
     setFallback(OPT_MOUSE_VELOCITY,             100,                    { 0, 1} );
-    setFallback(OPT_AUTOFIRE_ENABLE,            false,                  { 0, 1} );
-    setFallback(OPT_AUTOFIRE_BULLETS,           -3,                     { 0, 1} );
-    setFallback(OPT_AUTOFIRE_DELAY,             125,                    { 0, 1} );
+    setFallback(OPT_JOY_AUTOFIRE,               false,                  { 0, 1} );
+    setFallback(OPT_JOY_AUTOFIRE_BULLETS,       -3,                     { 0, 1} );
+    setFallback(OPT_JOY_AUTOFIRE_DELAY,         125,                    { 0, 1} );
     setFallback(OPT_AUD_SAMPLING_METHOD,        SMP_NONE,               { 0, 1} );
     setFallback(OPT_AUD_FILTER_TYPE,            FILTER_A500,            { 0, 1} );
     setFallback(OPT_AUD_PAN0,                   50,                     { 0, 1} );

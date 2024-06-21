@@ -133,9 +133,9 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_MOUSE_SHAKE_DETECTION:     return boolParser();
         case OPT_MOUSE_VELOCITY:            return numParser();
 
-        case OPT_AUTOFIRE_ENABLE:           return boolParser();
-        case OPT_AUTOFIRE_BULLETS:          return numParser();
-        case OPT_AUTOFIRE_DELAY:            return numParser();
+        case OPT_JOY_AUTOFIRE:              return boolParser();
+        case OPT_JOY_AUTOFIRE_BULLETS:      return numParser();
+        case OPT_JOY_AUTOFIRE_DELAY:        return numParser();
 
         case OPT_AUD_SAMPLING_METHOD:       return enumParser.template operator()<SamplingMethodEnum>();
         case OPT_AUD_FILTER_TYPE:           return enumParser.template operator()<FilterTypeEnum>();

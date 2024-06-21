@@ -35,9 +35,9 @@ Joystick::getOption(Option option) const
 {
     switch (option) {
             
-        case OPT_AUTOFIRE_ENABLE:            return (i64)config.autofire;
-        case OPT_AUTOFIRE_BULLETS:    return (i64)config.autofireBullets;
-        case OPT_AUTOFIRE_DELAY:      return (i64)config.autofireDelay;
+        case OPT_JOY_AUTOFIRE:            return (i64)config.autofire;
+        case OPT_JOY_AUTOFIRE_BULLETS:    return (i64)config.autofireBullets;
+        case OPT_JOY_AUTOFIRE_DELAY:      return (i64)config.autofireDelay;
 
         default:
             fatalError;
@@ -49,7 +49,7 @@ Joystick::setOption(Option option, i64 value)
 {
     switch (option) {
             
-        case OPT_AUTOFIRE_ENABLE:
+        case OPT_JOY_AUTOFIRE:
             
             config.autofire = bool(value);
 
@@ -58,7 +58,7 @@ Joystick::setOption(Option option, i64 value)
 
             return;
 
-        case OPT_AUTOFIRE_BULLETS:
+        case OPT_JOY_AUTOFIRE_BULLETS:
             
             config.autofireBullets = isize(value);
             
@@ -67,7 +67,7 @@ Joystick::setOption(Option option, i64 value)
 
             return;
 
-        case OPT_AUTOFIRE_DELAY:
+        case OPT_JOY_AUTOFIRE_DELAY:
             
             config.autofireDelay = isize(value);
             return;
