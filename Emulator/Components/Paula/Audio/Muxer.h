@@ -58,19 +58,19 @@ class Muxer : public SubComponent {
 
     ConfigOptions options = {
 
-        OPT_SAMPLING_METHOD,
-        OPT_AUDPAN0,
-        OPT_AUDPAN1,
-        OPT_AUDPAN2,
-        OPT_AUDPAN3,
-        OPT_AUDVOL0,
-        OPT_AUDVOL1,
-        OPT_AUDVOL2,
-        OPT_AUDVOL3,
-        OPT_AUDVOLL,
-        OPT_AUDVOLR,
+        OPT_AUD_SAMPLING_METHOD,
+        OPT_AUD_PAN0,
+        OPT_AUD_PAN1,
+        OPT_AUD_PAN2,
+        OPT_AUD_PAN3,
+        OPT_AUD_VOL0,
+        OPT_AUD_VOL1,
+        OPT_AUD_VOL2,
+        OPT_AUD_VOL3,
+        OPT_AUD_VOLL,
+        OPT_AUD_VOLR,
         OPT_AUD_FASTPATH,
-        OPT_FILTER_TYPE
+        OPT_AUD_FILTER_TYPE
     };
 
     friend class Paula;

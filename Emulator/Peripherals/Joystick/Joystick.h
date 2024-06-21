@@ -31,7 +31,7 @@ class Joystick : public SubComponent {
 
     ConfigOptions options = {
 
-        OPT_AUTOFIRE,
+        OPT_AUTOFIRE_ENABLE,
         OPT_AUTOFIRE_BULLETS,
         OPT_AUTOFIRE_DELAY
     };

@@ -69,8 +69,8 @@ CIA::getOption(Option option) const
     switch (option) {
             
         case OPT_CIA_REVISION:   return config.revision;
-        case OPT_TODBUG:         return config.todBug;
-        case OPT_ECLOCK_SYNCING: return config.eClockSyncing;
+        case OPT_CIA_TODBUG:         return config.todBug;
+        case OPT_CIA_ECLOCK_SYNCING: return config.eClockSyncing;
         case OPT_CIA_IDLE_SLEEP: return config.idleSleep;
 
         default:
@@ -92,12 +92,12 @@ CIA::setOption(Option option, i64 value)
             config.revision = (CIARevision)value;
             return;
 
-        case OPT_TODBUG:
+        case OPT_CIA_TODBUG:
 
             config.todBug = value;
             return;
             
-        case OPT_ECLOCK_SYNCING:
+        case OPT_CIA_ECLOCK_SYNCING:
             
             config.eClockSyncing = value;
             return;

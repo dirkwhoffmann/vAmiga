@@ -127,7 +127,7 @@ class Preferences {
     var autofire: Bool! {
         didSet {
             for amiga in myAppDelegate.proxies {
-                amiga.configure(.AUTOFIRE, enable: autofire)
+                amiga.configure(.AUTOFIRE_ENABLE, enable: autofire)
             }
         }
     }

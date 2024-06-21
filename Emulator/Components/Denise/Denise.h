@@ -34,13 +34,13 @@ class Denise : public SubComponent, public Inspectable<DeniseInfo> {
         OPT_DENISE_REVISION,
         OPT_DENISE_VIEWPORT_TRACKING,
         OPT_DENISE_FRAME_SKIPPING,
-        OPT_HIDDEN_BITPLANES,
-        OPT_HIDDEN_SPRITES,
-        OPT_HIDDEN_LAYERS,
-        OPT_HIDDEN_LAYER_ALPHA,
-        OPT_CLX_SPR_SPR,
-        OPT_CLX_SPR_PLF,
-        OPT_CLX_PLF_PLF
+        OPT_DENISE_HIDDEN_BITPLANES,
+        OPT_DENISE_HIDDEN_SPRITES,
+        OPT_DENISE_HIDDEN_LAYERS,
+        OPT_DENISE_HIDDEN_LAYER_ALPHA,
+        OPT_DENISE_CLX_SPR_SPR,
+        OPT_DENISE_CLX_SPR_PLF,
+        OPT_DENISE_CLX_PLF_PLF
     };
 
     friend class DeniseDebugger;

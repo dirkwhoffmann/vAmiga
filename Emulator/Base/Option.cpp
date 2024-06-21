@@ -45,6 +45,13 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_DENISE_REVISION:           return enumParser.template operator()<DeniseRevisionEnum>();
         case OPT_DENISE_VIEWPORT_TRACKING:  return boolParser();
         case OPT_DENISE_FRAME_SKIPPING:     return boolParser();
+        case OPT_DENISE_HIDDEN_BITPLANES:   return numParser();
+        case OPT_DENISE_HIDDEN_SPRITES:     return numParser();
+        case OPT_DENISE_HIDDEN_LAYERS:      return numParser();
+        case OPT_DENISE_HIDDEN_LAYER_ALPHA: return numParser();
+        case OPT_DENISE_CLX_SPR_SPR:        return boolParser();
+        case OPT_DENISE_CLX_SPR_PLF:        return boolParser();
+        case OPT_DENISE_CLX_PLF_PLF:        return boolParser();
 
         case OPT_MON_PALETTE:               return enumParser.template operator()<PaletteEnum>();
         case OPT_MON_BRIGHTNESS:            return numParser("%");
@@ -89,75 +96,67 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_MEM_UNMAPPING_TYPE:        return enumParser.template operator()<UnmappedMemoryEnum>();
         case OPT_MEM_RAM_INIT_PATTERN:      return enumParser.template operator()<RamInitPatternEnum>();
 
-        case OPT_DRIVE_SPEED:           return numParser();
-        case OPT_LOCK_DSKSYNC:          return boolParser();
-        case OPT_AUTO_DSKSYNC:          return boolParser();
+        case OPT_DC_SPEED:                  return numParser();
+        case OPT_DC_LOCK_DSKSYNC:           return boolParser();
+        case OPT_DC_AUTO_DSKSYNC:           return boolParser();
 
-        case OPT_DRIVE_CONNECT:         return boolParser();
-        case OPT_DRIVE_TYPE:            return enumParser.template operator()<FloppyDriveTypeEnum>();
-        case OPT_DRIVE_MECHANICS:       return enumParser.template operator()<DriveMechanicsEnum>();
-        case OPT_DRIVE_RPM:             return numParser();
-        case OPT_DISK_SWAP_DELAY:       return numParser();
-        case OPT_DRIVE_PAN:             return numParser();
-        case OPT_STEP_VOLUME:           return numParser("%");
-        case OPT_POLL_VOLUME:           return numParser("%");
-        case OPT_INSERT_VOLUME:         return numParser("%");
-        case OPT_EJECT_VOLUME:          return numParser("%");
+        case OPT_DRIVE_CONNECT:             return boolParser();
+        case OPT_DRIVE_TYPE:                return enumParser.template operator()<FloppyDriveTypeEnum>();
+        case OPT_DRIVE_MECHANICS:           return enumParser.template operator()<DriveMechanicsEnum>();
+        case OPT_DRIVE_RPM:                 return numParser();
+        case OPT_DRIVE_SWAP_DELAY:          return numParser();
+        case OPT_DRIVE_PAN:                 return numParser();
+        case OPT_DRIVE_STEP_VOLUME:         return numParser("%");
+        case OPT_DRIVE_POLL_VOLUME:         return numParser("%");
+        case OPT_DRIVE_INSERT_VOLUME:       return numParser("%");
+        case OPT_DRIVE_EJECT_VOLUME:        return numParser("%");
 
-        case OPT_HDC_CONNECT:           return boolParser();
+        case OPT_HDC_CONNECT:               return boolParser();
 
-        case OPT_HDR_TYPE:              return enumParser.template operator()<HardDriveTypeEnum>();
-        case OPT_HDR_PAN:               return numParser();
-        case OPT_HDR_STEP_VOLUME:       return numParser("%");
+        case OPT_HDR_TYPE:                  return enumParser.template operator()<HardDriveTypeEnum>();
+        case OPT_HDR_PAN:                   return numParser();
+        case OPT_HDR_STEP_VOLUME:           return numParser("%");
 
-        case OPT_SER_DEVICE:            return enumParser.template operator()<SerialPortDeviceEnum>();
-        case OPT_SER_VERBOSE:           return boolParser();
+        case OPT_SER_DEVICE:                return enumParser.template operator()<SerialPortDeviceEnum>();
+        case OPT_SER_VERBOSE:               return boolParser();
 
-        case OPT_HIDDEN_BITPLANES:      return numParser();
-        case OPT_HIDDEN_SPRITES:        return numParser();
-        case OPT_HIDDEN_LAYERS:         return numParser();
-        case OPT_HIDDEN_LAYER_ALPHA:    return numParser();
-        case OPT_CLX_SPR_SPR:           return boolParser();
-        case OPT_CLX_SPR_PLF:           return boolParser();
-        case OPT_CLX_PLF_PLF:           return boolParser();
+        case OPT_BLITTER_ACCURACY:          return numParser();
 
-        case OPT_BLITTER_ACCURACY:      return numParser();
+        case OPT_CIA_REVISION:              return enumParser.template operator()<CIARevisionEnum>();
+        case OPT_CIA_TODBUG:                return boolParser();
+        case OPT_CIA_ECLOCK_SYNCING:        return boolParser();
+        case OPT_CIA_IDLE_SLEEP:            return boolParser();
 
-        case OPT_CIA_REVISION:          return enumParser.template operator()<CIARevisionEnum>();
-        case OPT_TODBUG:                return boolParser();
-        case OPT_ECLOCK_SYNCING:        return boolParser();
-        case OPT_CIA_IDLE_SLEEP:        return boolParser();
+        case OPT_KBD_ACCURACY:              return boolParser();
 
-        case OPT_ACCURATE_KEYBOARD:     return boolParser();
+        case OPT_MOUSE_PULLUP_RESISTORS:    return boolParser();
+        case OPT_MOUSE_SHAKE_DETECTION:     return boolParser();
+        case OPT_MOUSE_VELOCITY:            return numParser();
 
-        case OPT_PULLUP_RESISTORS:      return boolParser();
-        case OPT_SHAKE_DETECTION:       return boolParser();
-        case OPT_MOUSE_VELOCITY:        return numParser();
+        case OPT_AUTOFIRE_ENABLE:           return boolParser();
+        case OPT_AUTOFIRE_BULLETS:          return numParser();
+        case OPT_AUTOFIRE_DELAY:            return numParser();
 
-        case OPT_AUTOFIRE:              return boolParser();
-        case OPT_AUTOFIRE_BULLETS:      return numParser();
-        case OPT_AUTOFIRE_DELAY:        return numParser();
+        case OPT_AUD_SAMPLING_METHOD:       return enumParser.template operator()<SamplingMethodEnum>();
+        case OPT_AUD_FILTER_TYPE:           return enumParser.template operator()<FilterTypeEnum>();
+        case OPT_AUD_PAN0:                  return numParser();
+        case OPT_AUD_PAN1:                  return numParser();
+        case OPT_AUD_PAN2:                  return numParser();
+        case OPT_AUD_PAN3:                  return numParser();
+        case OPT_AUD_VOL0:                  return numParser("%");
+        case OPT_AUD_VOL1:                  return numParser("%");
+        case OPT_AUD_VOL2:                  return numParser("%");
+        case OPT_AUD_VOL3:                  return numParser("%");
+        case OPT_AUD_VOLL:                  return numParser("%");
+        case OPT_AUD_VOLR:                  return numParser("%");
+        case OPT_AUD_FASTPATH:              return boolParser();
 
-        case OPT_SAMPLING_METHOD:       return enumParser.template operator()<SamplingMethodEnum>();
-        case OPT_FILTER_TYPE:           return enumParser.template operator()<FilterTypeEnum>();
-        case OPT_AUDPAN0:               return numParser();
-        case OPT_AUDPAN1:               return numParser();
-        case OPT_AUDPAN2:               return numParser();
-        case OPT_AUDPAN3:               return numParser();
-        case OPT_AUDVOL0:               return numParser("%");
-        case OPT_AUDVOL1:               return numParser("%");
-        case OPT_AUDVOL2:               return numParser("%");
-        case OPT_AUDVOL3:               return numParser("%");
-        case OPT_AUDVOLL:               return numParser("%");
-        case OPT_AUDVOLR:               return numParser("%");
-        case OPT_AUD_FASTPATH:          return boolParser();
+        case OPT_DIAG_BOARD:                return boolParser();
 
-        case OPT_DIAG_BOARD:            return boolParser();
-
-        case OPT_SRV_PORT:              return numParser();
-        case OPT_SRV_PROTOCOL:          return enumParser.template operator()<ServerProtocolEnum>();
-        case OPT_SRV_AUTORUN:           return boolParser();
-        case OPT_SRV_VERBOSE:           return boolParser();
+        case OPT_SRV_PORT:                  return numParser();
+        case OPT_SRV_PROTOCOL:              return enumParser.template operator()<ServerProtocolEnum>();
+        case OPT_SRV_AUTORUN:               return boolParser();
+        case OPT_SRV_VERBOSE:               return boolParser();
 
         default:
             fatalError;

@@ -27,9 +27,9 @@ class DiskController : public SubComponent, public Inspectable<DiskControllerInf
 
     ConfigOptions options = {
 
-        OPT_DRIVE_SPEED,
-        OPT_AUTO_DSKSYNC,
-        OPT_LOCK_DSKSYNC
+        OPT_DC_SPEED,
+        OPT_DC_AUTO_DSKSYNC,
+        OPT_DC_LOCK_DSKSYNC
     };
 
     // Current configuration

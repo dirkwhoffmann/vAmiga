@@ -36,10 +36,10 @@ DiskController::getOption(Option option) const
 {
     switch (option) {
             
-        case OPT_DRIVE_SPEED:   return config.speed;
-        case OPT_AUTO_DSKSYNC:  return config.autoDskSync;
-        case OPT_LOCK_DSKSYNC:  return config.lockDskSync;
-            
+        case OPT_DC_SPEED:          return config.speed;
+        case OPT_DC_AUTO_DSKSYNC:   return config.autoDskSync;
+        case OPT_DC_LOCK_DSKSYNC:   return config.lockDskSync;
+
         default:
             fatalError;
     }
@@ -50,7 +50,7 @@ DiskController::setOption(Option option, i64 value)
 {
     switch (option) {
             
-        case OPT_DRIVE_SPEED:
+        case OPT_DC_SPEED:
         {
             if (!isValidDriveSpeed((isize)value)) {
                 throw Error(ERROR_OPT_INV_ARG, "-1, 1, 2, 4, 8");
@@ -62,12 +62,12 @@ DiskController::setOption(Option option, i64 value)
             return;
         }
 
-        case OPT_AUTO_DSKSYNC:
+        case OPT_DC_AUTO_DSKSYNC:
             
             config.autoDskSync = value;
             return;
             
-        case OPT_LOCK_DSKSYNC:
+        case OPT_DC_LOCK_DSKSYNC:
             
             config.lockDskSync = value;
             return;

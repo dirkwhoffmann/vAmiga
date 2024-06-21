@@ -152,7 +152,7 @@ class AudioFilter : public SubComponent {
 
     ConfigOptions options = {
 
-        OPT_FILTER_TYPE
+        OPT_AUD_FILTER_TYPE
     };
 
     friend class Muxer;

@@ -88,8 +88,8 @@ class CIA : public SubComponent, public Inspectable<CIAInfo> {
     ConfigOptions options = {
 
         OPT_CIA_REVISION,
-        OPT_TODBUG,
-        OPT_ECLOCK_SYNCING,
+        OPT_CIA_TODBUG,
+        OPT_CIA_ECLOCK_SYNCING,
         OPT_CIA_IDLE_SLEEP
     };
 

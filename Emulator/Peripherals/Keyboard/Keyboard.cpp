@@ -29,7 +29,7 @@ Keyboard::getOption(Option option) const
 {
     switch (option) {
             
-        case OPT_ACCURATE_KEYBOARD:  return config.accurate;
+        case OPT_KBD_ACCURACY:  return config.accurate;
 
         default:
             fatalError;
@@ -41,7 +41,7 @@ Keyboard::setOption(Option option, i64 value)
 {
     switch (option) {
             
-        case OPT_ACCURATE_KEYBOARD:
+        case OPT_KBD_ACCURACY:
             
             config.accurate = value;
             return;

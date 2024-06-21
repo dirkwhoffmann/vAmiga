@@ -67,12 +67,12 @@ FloppyDrive::getOption(Option option) const
         case OPT_DRIVE_TYPE:          return (i64)config.type;
         case OPT_DRIVE_MECHANICS:     return (i64)config.mechanics;
         case OPT_DRIVE_RPM:           return (i64)config.rpm;
-        case OPT_DISK_SWAP_DELAY:     return (i64)config.diskSwapDelay;
+        case OPT_DRIVE_SWAP_DELAY:     return (i64)config.diskSwapDelay;
         case OPT_DRIVE_PAN:           return (i64)config.pan;
-        case OPT_STEP_VOLUME:         return (i64)config.stepVolume;
-        case OPT_POLL_VOLUME:         return (i64)config.pollVolume;
-        case OPT_INSERT_VOLUME:       return (i64)config.insertVolume;
-        case OPT_EJECT_VOLUME:        return (i64)config.ejectVolume;
+        case OPT_DRIVE_STEP_VOLUME:         return (i64)config.stepVolume;
+        case OPT_DRIVE_POLL_VOLUME:         return (i64)config.pollVolume;
+        case OPT_DRIVE_INSERT_VOLUME:       return (i64)config.insertVolume;
+        case OPT_DRIVE_EJECT_VOLUME:        return (i64)config.ejectVolume;
 
         default:
             fatalError;
@@ -122,7 +122,7 @@ FloppyDrive::setOption(Option option, i64 value)
             config.rpm = (isize)value;
             break;
 
-        case OPT_DISK_SWAP_DELAY:
+        case OPT_DRIVE_SWAP_DELAY:
 
             config.diskSwapDelay = (Cycle)value;
             break;
@@ -132,22 +132,22 @@ FloppyDrive::setOption(Option option, i64 value)
             config.pan = (i16)value;
             break;
 
-        case OPT_STEP_VOLUME:
+        case OPT_DRIVE_STEP_VOLUME:
 
             config.stepVolume = (u8)value;
             break;
 
-        case OPT_POLL_VOLUME:
+        case OPT_DRIVE_POLL_VOLUME:
 
             config.pollVolume = (u8)value;
             break;
 
-        case OPT_EJECT_VOLUME:
+        case OPT_DRIVE_EJECT_VOLUME:
 
             config.ejectVolume = (u8)value;
             break;
 
-        case OPT_INSERT_VOLUME:
+        case OPT_DRIVE_INSERT_VOLUME:
 
             config.insertVolume = (u8)value;
             break;

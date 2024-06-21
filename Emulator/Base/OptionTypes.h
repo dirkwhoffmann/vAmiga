@@ -42,6 +42,13 @@ enum_long(OPT)
     OPT_DENISE_REVISION,
     OPT_DENISE_VIEWPORT_TRACKING,
     OPT_DENISE_FRAME_SKIPPING,
+    OPT_DENISE_HIDDEN_BITPLANES,
+    OPT_DENISE_HIDDEN_SPRITES,
+    OPT_DENISE_HIDDEN_LAYERS,
+    OPT_DENISE_HIDDEN_LAYER_ALPHA,
+    OPT_DENISE_CLX_SPR_SPR,
+    OPT_DENISE_CLX_SPR_PLF,
+    OPT_DENISE_CLX_PLF_PLF,
 
     // Monitor
     OPT_MON_PALETTE,
@@ -92,21 +99,21 @@ enum_long(OPT)
     OPT_MEM_RAM_INIT_PATTERN,
 
     // Disk controller
-    OPT_DRIVE_SPEED,
-    OPT_LOCK_DSKSYNC,
-    OPT_AUTO_DSKSYNC,
+    OPT_DC_SPEED,
+    OPT_DC_LOCK_DSKSYNC,
+    OPT_DC_AUTO_DSKSYNC,
 
     // Floppy Drives
     OPT_DRIVE_CONNECT,
     OPT_DRIVE_TYPE,
     OPT_DRIVE_MECHANICS,
     OPT_DRIVE_RPM,
-    OPT_DISK_SWAP_DELAY,
+    OPT_DRIVE_SWAP_DELAY,
     OPT_DRIVE_PAN,
-    OPT_STEP_VOLUME,
-    OPT_POLL_VOLUME,
-    OPT_INSERT_VOLUME,
-    OPT_EJECT_VOLUME,
+    OPT_DRIVE_STEP_VOLUME,
+    OPT_DRIVE_POLL_VOLUME,
+    OPT_DRIVE_INSERT_VOLUME,
+    OPT_DRIVE_EJECT_VOLUME,
 
     // Hard drive controllers
     OPT_HDC_CONNECT,
@@ -120,50 +127,41 @@ enum_long(OPT)
     OPT_SER_DEVICE,
     OPT_SER_VERBOSE,
 
-    // Compatibility
-    OPT_HIDDEN_BITPLANES,
-    OPT_HIDDEN_SPRITES,
-    OPT_HIDDEN_LAYERS,
-    OPT_HIDDEN_LAYER_ALPHA,
-    OPT_CLX_SPR_SPR,
-    OPT_CLX_SPR_PLF,
-    OPT_CLX_PLF_PLF,
-
     // Blitter
     OPT_BLITTER_ACCURACY,
 
     // CIAs
     OPT_CIA_REVISION,
-    OPT_TODBUG,
-    OPT_ECLOCK_SYNCING,
+    OPT_CIA_TODBUG,
+    OPT_CIA_ECLOCK_SYNCING,
     OPT_CIA_IDLE_SLEEP,
 
     // Keyboard
-    OPT_ACCURATE_KEYBOARD,
+    OPT_KBD_ACCURACY,
 
     // Mouse
-    OPT_PULLUP_RESISTORS,
-    OPT_SHAKE_DETECTION,
+    OPT_MOUSE_PULLUP_RESISTORS,
+    OPT_MOUSE_SHAKE_DETECTION,
     OPT_MOUSE_VELOCITY,
 
     // Joystick
-    OPT_AUTOFIRE,
+    OPT_AUTOFIRE_ENABLE,
     OPT_AUTOFIRE_BULLETS,
     OPT_AUTOFIRE_DELAY,
 
     // Paula audio
-    OPT_SAMPLING_METHOD,
-    OPT_FILTER_TYPE,
-    OPT_AUDPAN0,
-    OPT_AUDPAN1,
-    OPT_AUDPAN2,
-    OPT_AUDPAN3,
-    OPT_AUDVOL0,
-    OPT_AUDVOL1,
-    OPT_AUDVOL2,
-    OPT_AUDVOL3,
-    OPT_AUDVOLL,
-    OPT_AUDVOLR,
+    OPT_AUD_SAMPLING_METHOD,
+    OPT_AUD_FILTER_TYPE,
+    OPT_AUD_PAN0,
+    OPT_AUD_PAN1,
+    OPT_AUD_PAN2,
+    OPT_AUD_PAN3,
+    OPT_AUD_VOL0,
+    OPT_AUD_VOL1,
+    OPT_AUD_VOL2,
+    OPT_AUD_VOL3,
+    OPT_AUD_VOLL,
+    OPT_AUD_VOLR,
     OPT_AUD_FASTPATH,
 
     // Expansion boards
@@ -209,6 +207,13 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_DENISE_REVISION:           return "DENISE.REVISION";
             case OPT_DENISE_VIEWPORT_TRACKING:  return "DENISE.VIEWPORT_TRACKING";
             case OPT_DENISE_FRAME_SKIPPING:     return "DENISE.FRAME_SKIPPING";
+            case OPT_DENISE_HIDDEN_BITPLANES:   return "HIDDEN_BITPLANES";
+            case OPT_DENISE_HIDDEN_SPRITES:     return "HIDDEN_SPRITES";
+            case OPT_DENISE_HIDDEN_LAYERS:      return "HIDDEN_LAYERS";
+            case OPT_DENISE_HIDDEN_LAYER_ALPHA: return "HIDDEN_LAYER_ALPHA";
+            case OPT_DENISE_CLX_SPR_SPR:        return "CLX_SPR_SPR";
+            case OPT_DENISE_CLX_SPR_PLF:        return "CLX_SPR_PLF";
+            case OPT_DENISE_CLX_PLF_PLF:        return "CLX_PLF_PLF";
 
             case OPT_MON_PALETTE:               return "MON.PALETTE";
             case OPT_MON_BRIGHTNESS:            return "MON.BRIGHTNESS";
@@ -253,75 +258,67 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_MEM_UNMAPPING_TYPE:        return "MEM.UNMAPPING_TYPE";
             case OPT_MEM_RAM_INIT_PATTERN:      return "MEM.RAM_INIT_PATTERN";
 
-            case OPT_DRIVE_SPEED:           return "DRIVE_SPEED";
-            case OPT_LOCK_DSKSYNC:          return "LOCK_DSKSYNC";
-            case OPT_AUTO_DSKSYNC:          return "AUTO_DSKSYNC";
+            case OPT_DC_SPEED:                  return "DC.SPEED";
+            case OPT_DC_LOCK_DSKSYNC:           return "DC.LOCK_DSKSYNC";
+            case OPT_DC_AUTO_DSKSYNC:           return "DC.AUTO_DSKSYNC";
 
-            case OPT_DRIVE_CONNECT:         return "DRIVE_CONNECT";
-            case OPT_DRIVE_TYPE:            return "DRIVE_TYPE";
-            case OPT_DRIVE_MECHANICS:       return "DRIVE_MECHANICS";
-            case OPT_DRIVE_RPM:             return "DRIVE_RPM";
-            case OPT_DISK_SWAP_DELAY:       return "DISK_SWAP_DELAY";
-            case OPT_DRIVE_PAN:             return "DRIVE_PAN";
-            case OPT_STEP_VOLUME:           return "STEP_VOLUME";
-            case OPT_POLL_VOLUME:           return "POLL_VOLUME";
-            case OPT_INSERT_VOLUME:         return "INSERT_VOLUME";
-            case OPT_EJECT_VOLUME:          return "EJECT_VOLUME";
+            case OPT_DRIVE_CONNECT:             return "DRIVE.CONNECT";
+            case OPT_DRIVE_TYPE:                return "DRIVE.TYPE";
+            case OPT_DRIVE_MECHANICS:           return "DRIVE.MECHANICS";
+            case OPT_DRIVE_RPM:                 return "DRIVE.RPM";
+            case OPT_DRIVE_SWAP_DELAY:          return "DRIVE.SWAP_DELAY";
+            case OPT_DRIVE_PAN:                 return "DRIVE.PAN";
+            case OPT_DRIVE_STEP_VOLUME:         return "DRIVE.STEP_VOLUME";
+            case OPT_DRIVE_POLL_VOLUME:         return "DRIVE.POLL_VOLUME";
+            case OPT_DRIVE_INSERT_VOLUME:       return "DRIVE.INSERT_VOLUME";
+            case OPT_DRIVE_EJECT_VOLUME:        return "DRIVE.EJECT_VOLUME";
 
-            case OPT_HDC_CONNECT:           return "HDC_CONNECT";
+            case OPT_HDC_CONNECT:               return "HDC.CONNECT";
 
-            case OPT_HDR_TYPE:              return "HDR_TYPE";
-            case OPT_HDR_PAN:               return "HDR_PAN";
-            case OPT_HDR_STEP_VOLUME:       return "HDR_STEP_VOLUME";
+            case OPT_HDR_TYPE:                  return "HDR.TYPE";
+            case OPT_HDR_PAN:                   return "HDR.PAN";
+            case OPT_HDR_STEP_VOLUME:           return "HDR.STEP_VOLUME";
 
-            case OPT_SER_DEVICE:            return "SER_DEVICE";
-            case OPT_SER_VERBOSE:           return "SER_VERBOSE";
+            case OPT_SER_DEVICE:                return "SER.DEVICE";
+            case OPT_SER_VERBOSE:               return "SER.VERBOSE";
 
-            case OPT_HIDDEN_BITPLANES:      return "HIDDEN_BITPLANES";
-            case OPT_HIDDEN_SPRITES:        return "HIDDEN_SPRITES";
-            case OPT_HIDDEN_LAYERS:         return "HIDDEN_LAYERS";
-            case OPT_HIDDEN_LAYER_ALPHA:    return "HIDDEN_LAYER_ALPHA";
-            case OPT_CLX_SPR_SPR:           return "CLX_SPR_SPR";
-            case OPT_CLX_SPR_PLF:           return "CLX_SPR_PLF";
-            case OPT_CLX_PLF_PLF:           return "CLX_PLF_PLF";
+            case OPT_BLITTER_ACCURACY:          return "BLITTER.ACCURACY";
 
-            case OPT_BLITTER_ACCURACY:      return "BLITTER_ACCURACY";
+            case OPT_CIA_REVISION:              return "CIA.REVISION";
+            case OPT_CIA_TODBUG:                return "CIA.TODBUG";
+            case OPT_CIA_ECLOCK_SYNCING:        return "CIA.ECLOCK_SYNCING";
+            case OPT_CIA_IDLE_SLEEP:            return "CIA.IDLE_SLEEP";
 
-            case OPT_CIA_REVISION:          return "CIA_REVISION";
-            case OPT_TODBUG:                return "TODBUG";
-            case OPT_ECLOCK_SYNCING:        return "ECLOCK_SYNCING";
-            case OPT_CIA_IDLE_SLEEP:        return "CIA_IDLE_SLEEP";
+            case OPT_KBD_ACCURACY:              return "KBD.ACCURACY";
 
-            case OPT_ACCURATE_KEYBOARD:     return "ACCURATE_KEYBOARD";
+            case OPT_MOUSE_PULLUP_RESISTORS:    return "MOUSE.PULLUP_RESISTORS";
+            case OPT_MOUSE_SHAKE_DETECTION:     return "MOUSE.SHAKE_DETECTION";
+            case OPT_MOUSE_VELOCITY:            return "MOUSE.VELOCITY";
 
-            case OPT_PULLUP_RESISTORS:      return "PULLUP_RESISTORS";
-            case OPT_SHAKE_DETECTION:       return "SHAKE_DETECTION";
-            case OPT_MOUSE_VELOCITY:        return "MOUSE_VELOCITY";
+            case OPT_AUTOFIRE_ENABLE:           return "AUTOFIRE.ENABLE";
+            case OPT_AUTOFIRE_BULLETS:          return "AUTOFIRE.BULLETS";
+            case OPT_AUTOFIRE_DELAY:            return "AUTOFIRE.DELAY";
 
-            case OPT_AUTOFIRE:              return "AUTOFIRE";
-            case OPT_AUTOFIRE_BULLETS:      return "AUTOFIRE_BULLETS";
-            case OPT_AUTOFIRE_DELAY:        return "AUTOFIRE_DELAY";
+            case OPT_AUD_SAMPLING_METHOD:       return "AUD.SAMPLING_METHOD";
+            case OPT_AUD_FILTER_TYPE:           return "AUD.FILTER_TYPE";
+            case OPT_AUD_PAN0:                  return "AUD.PAN0";
+            case OPT_AUD_PAN1:                  return "AUD.PAN1";
+            case OPT_AUD_PAN2:                  return "AUD.PAN2";
+            case OPT_AUD_PAN3:                  return "AUD.PAN3";
+            case OPT_AUD_VOL0:                  return "AUD.VOL0";
+            case OPT_AUD_VOL1:                  return "AUD.VOL1";
+            case OPT_AUD_VOL2:                  return "AUD.VOL2";
+            case OPT_AUD_VOL3:                  return "AUD.VOL3";
+            case OPT_AUD_VOLL:                  return "AUD.VOLL";
+            case OPT_AUD_VOLR:                  return "AUD.VOLR";
+            case OPT_AUD_FASTPATH:              return "AUD.FASTPATH";
 
-            case OPT_SAMPLING_METHOD:       return "SAMPLING_METHOD";
-            case OPT_FILTER_TYPE:           return "FILTER_TYPE";
-            case OPT_AUDPAN0:               return "AUDPAN0";
-            case OPT_AUDPAN1:               return "AUDPAN1";
-            case OPT_AUDPAN2:               return "AUDPAN2";
-            case OPT_AUDPAN3:               return "AUDPAN3";
-            case OPT_AUDVOL0:               return "AUDVOL0";
-            case OPT_AUDVOL1:               return "AUDVOL1";
-            case OPT_AUDVOL2:               return "AUDVOL2";
-            case OPT_AUDVOL3:               return "AUDVOL3";
-            case OPT_AUDVOLL:               return "AUDVOLL";
-            case OPT_AUDVOLR:               return "AUDVOLR";
-            case OPT_AUD_FASTPATH:          return "AUD_FASTPATH";
+            case OPT_DIAG_BOARD:                return "DIAG_BOARD";
 
-            case OPT_DIAG_BOARD:            return "DIAG_BOARD";
-
-            case OPT_SRV_PORT:              return "SRV_PORT";
-            case OPT_SRV_PROTOCOL:          return "SRV_PROTOCOL";
-            case OPT_SRV_AUTORUN:           return "SRV_AUTORUN";
-            case OPT_SRV_VERBOSE:           return "SRV_VERBOSE";
+            case OPT_SRV_PORT:                  return "SRV.PORT";
+            case OPT_SRV_PROTOCOL:              return "SRV.PROTOCOL";
+            case OPT_SRV_AUTORUN:               return "SRV.AUTORUN";
+            case OPT_SRV_VERBOSE:               return "SRV.VERBOSE";
         }
         return "???";
     }
@@ -350,6 +347,13 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_DENISE_REVISION:           return "Chip revision";
             case OPT_DENISE_VIEWPORT_TRACKING:  return "Track the currently used viewport";
             case OPT_DENISE_FRAME_SKIPPING:     return "Reduce frame rate in warp mode";
+            case OPT_DENISE_HIDDEN_BITPLANES:   return "Hide bitplanes";
+            case OPT_DENISE_HIDDEN_SPRITES:     return "Hide sprites";
+            case OPT_DENISE_HIDDEN_LAYERS:      return "Hide playfields";
+            case OPT_DENISE_HIDDEN_LAYER_ALPHA: return "Hidden playfield opacity";
+            case OPT_DENISE_CLX_SPR_SPR:        return "Detect sprite-sprite collisions";
+            case OPT_DENISE_CLX_SPR_PLF:        return "Detect sprite-playfield collisions";
+            case OPT_DENISE_CLX_PLF_PLF:        return "Detect playfield-playfield collisions";
 
             case OPT_MON_PALETTE:               return "Color palette";
             case OPT_MON_BRIGHTNESS:            return "Monitor brightness";
@@ -394,75 +398,67 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_MEM_UNMAPPING_TYPE:        return "Unmapped memory behavior";
             case OPT_MEM_RAM_INIT_PATTERN:      return "RAM initialization pattern";
 
-            case OPT_DRIVE_SPEED:           return "Drive speed";
-            case OPT_LOCK_DSKSYNC:          return "Ignore writes to DSKSYNC";
-            case OPT_AUTO_DSKSYNC:          return "Always find a sync mark";
+            case OPT_DC_SPEED:                  return "Drive speed";
+            case OPT_DC_LOCK_DSKSYNC:           return "Ignore writes to DSKSYNC";
+            case OPT_DC_AUTO_DSKSYNC:           return "Always find a sync mark";
 
-            case OPT_DRIVE_CONNECT:         return "Connected";
-            case OPT_DRIVE_TYPE:            return "Drive model";
-            case OPT_DRIVE_MECHANICS:       return "Emulate drive mechanics";
-            case OPT_DRIVE_RPM:             return "Disk rotation speed";
-            case OPT_DISK_SWAP_DELAY:       return "Disk swap delay";
-            case OPT_DRIVE_PAN:             return "Pan";
-            case OPT_STEP_VOLUME:           return "Head step volume";
-            case OPT_POLL_VOLUME:           return "Disk polling step volume";
-            case OPT_INSERT_VOLUME:         return "Disk insertion volume";
-            case OPT_EJECT_VOLUME:          return "Disk ejection volume";
+            case OPT_DRIVE_CONNECT:             return "Connected";
+            case OPT_DRIVE_TYPE:                return "Drive model";
+            case OPT_DRIVE_MECHANICS:           return "Emulate drive mechanics";
+            case OPT_DRIVE_RPM:                 return "Disk rotation speed";
+            case OPT_DRIVE_SWAP_DELAY:          return "Disk swap delay";
+            case OPT_DRIVE_PAN:                 return "Pan";
+            case OPT_DRIVE_STEP_VOLUME:         return "Head step volume";
+            case OPT_DRIVE_POLL_VOLUME:         return "Disk polling step volume";
+            case OPT_DRIVE_INSERT_VOLUME:       return "Disk insertion volume";
+            case OPT_DRIVE_EJECT_VOLUME:        return "Disk ejection volume";
 
-            case OPT_HDC_CONNECT:           return "Connected";
+            case OPT_HDC_CONNECT:               return "Connected";
 
-            case OPT_HDR_TYPE:              return "Drive model";
-            case OPT_HDR_PAN:               return "Pan";
-            case OPT_HDR_STEP_VOLUME:       return "Head step volume";
+            case OPT_HDR_TYPE:                  return "Drive model";
+            case OPT_HDR_PAN:                   return "Pan";
+            case OPT_HDR_STEP_VOLUME:           return "Head step volume";
 
-            case OPT_SER_DEVICE:            return "Serial device type";
-            case OPT_SER_VERBOSE:           return "Verbose";
+            case OPT_SER_DEVICE:                return "Serial device type";
+            case OPT_SER_VERBOSE:               return "Verbose";
 
-            case OPT_HIDDEN_BITPLANES:      return "Hide bitplanes";
-            case OPT_HIDDEN_SPRITES:        return "Hide sprites";
-            case OPT_HIDDEN_LAYERS:         return "Hide playfields";
-            case OPT_HIDDEN_LAYER_ALPHA:    return "Hidden playfield opacity";
-            case OPT_CLX_SPR_SPR:           return "Detect sprite-sprite collisions";
-            case OPT_CLX_SPR_PLF:           return "Detect sprite-playfield collisions";
-            case OPT_CLX_PLF_PLF:           return "Detect playfield-playfield collisions";
+            case OPT_BLITTER_ACCURACY:          return "Blitter accuracy level";
 
-            case OPT_BLITTER_ACCURACY:      return "Blitter accuracy level";
+            case OPT_CIA_REVISION:              return "Chip revision";
+            case OPT_CIA_TODBUG:                return "Emulate TOD bug";
+            case OPT_CIA_ECLOCK_SYNCING:        return "Sync accesses with E-clock";
+            case OPT_CIA_IDLE_SLEEP:            return "Enter idle state while not in use";
 
-            case OPT_CIA_REVISION:          return "Chip revision";
-            case OPT_TODBUG:                return "Emulate TOD bug";
-            case OPT_ECLOCK_SYNCING:        return "Sync accesses with E-clock";
-            case OPT_CIA_IDLE_SLEEP:        return "Enter idle state while not in use";
+            case OPT_KBD_ACCURACY:              return "Keyboard emulation accuracy";
 
-            case OPT_ACCURATE_KEYBOARD:     return "Keyboard emulation accuracy";
+            case OPT_MOUSE_PULLUP_RESISTORS:    return "Emulate pullup resistors";
+            case OPT_MOUSE_SHAKE_DETECTION:     return "Detect a shaked mouse";
+            case OPT_MOUSE_VELOCITY:            return "Mouse velocity";
 
-            case OPT_PULLUP_RESISTORS:      return "Emulate pullup resistors";
-            case OPT_SHAKE_DETECTION:       return "Detect a shaked mouse";
-            case OPT_MOUSE_VELOCITY:        return "Mouse velocity";
+            case OPT_AUTOFIRE_ENABLE:           return "Autofire";
+            case OPT_AUTOFIRE_BULLETS:          return "Number of bullets per burst";
+            case OPT_AUTOFIRE_DELAY:            return "Autofire delay in frames";
 
-            case OPT_AUTOFIRE:              return "Autofire";
-            case OPT_AUTOFIRE_BULLETS:      return "Number of bullets per burst";
-            case OPT_AUTOFIRE_DELAY:        return "Autofire delay in frames";
+            case OPT_AUD_SAMPLING_METHOD:       return "Sampling method";
+            case OPT_AUD_FILTER_TYPE:           return "Audio filter type";
+            case OPT_AUD_PAN0:                  return "Channel 0 pan";
+            case OPT_AUD_PAN1:                  return "Channel 1 pan";
+            case OPT_AUD_PAN2:                  return "Channel 2 pan";
+            case OPT_AUD_PAN3:                  return "Channel 3 pan";
+            case OPT_AUD_VOL0:                  return "Channel 0 volume";
+            case OPT_AUD_VOL1:                  return "Channel 1 volume";
+            case OPT_AUD_VOL2:                  return "Channel 2 volume";
+            case OPT_AUD_VOL3:                  return "Channel 3 volume";
+            case OPT_AUD_VOLL:                  return "Master volume (left)";
+            case OPT_AUD_VOLR:                  return "Master volume (right)";
+            case OPT_AUD_FASTPATH:              return "Boost performance";
 
-            case OPT_SAMPLING_METHOD:       return "Sampling method";
-            case OPT_FILTER_TYPE:           return "Audio filter type";
-            case OPT_AUDPAN0:               return "Channel 0 pan";
-            case OPT_AUDPAN1:               return "Channel 1 pan";
-            case OPT_AUDPAN2:               return "Channel 2 pan";
-            case OPT_AUDPAN3:               return "Channel 3 pan";
-            case OPT_AUDVOL0:               return "Channel 0 volume";
-            case OPT_AUDVOL1:               return "Channel 1 volume";
-            case OPT_AUDVOL2:               return "Channel 2 volume";
-            case OPT_AUDVOL3:               return "Channel 3 volume";
-            case OPT_AUDVOLL:               return "Master volume (left)";
-            case OPT_AUDVOLR:               return "Master volume (right)";
-            case OPT_AUD_FASTPATH:          return "Boost performance";
+            case OPT_DIAG_BOARD:                return "Diagnose board";
 
-            case OPT_DIAG_BOARD:            return "Diagnose board";
-
-            case OPT_SRV_PORT:              return "Server port";
-            case OPT_SRV_PROTOCOL:          return "Server protocol";
-            case OPT_SRV_AUTORUN:           return "Auto run";
-            case OPT_SRV_VERBOSE:           return "Verbose mode";
+            case OPT_SRV_PORT:                  return "Server port";
+            case OPT_SRV_PROTOCOL:              return "Server protocol";
+            case OPT_SRV_AUTORUN:               return "Auto run";
+            case OPT_SRV_VERBOSE:               return "Verbose mode";
         }
         return "???";
     }

@@ -27,7 +27,7 @@ class Keyboard : public SubComponent {
 
     ConfigOptions options = {
 
-        OPT_ACCURATE_KEYBOARD
+        OPT_KBD_ACCURACY
     };
 
     // Current configuration

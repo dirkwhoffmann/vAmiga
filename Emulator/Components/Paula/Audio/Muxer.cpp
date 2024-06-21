@@ -90,19 +90,19 @@ Muxer::getOption(Option option) const
 {
     switch (option) {
             
-        case OPT_SAMPLING_METHOD:   return config.samplingMethod;
-        case OPT_AUDPAN0:           return config.pan[0];
-        case OPT_AUDPAN1:           return config.pan[1];
-        case OPT_AUDPAN2:           return config.pan[2];
-        case OPT_AUDPAN3:           return config.pan[3];
-        case OPT_AUDVOL0:           return config.vol[0];
-        case OPT_AUDVOL1:           return config.vol[1];
-        case OPT_AUDVOL2:           return config.vol[2];
-        case OPT_AUDVOL3:           return config.vol[3];
-        case OPT_AUDVOLL:           return config.volL;
-        case OPT_AUDVOLR:           return config.volR;
+        case OPT_AUD_SAMPLING_METHOD:   return config.samplingMethod;
+        case OPT_AUD_PAN0:           return config.pan[0];
+        case OPT_AUD_PAN1:           return config.pan[1];
+        case OPT_AUD_PAN2:           return config.pan[2];
+        case OPT_AUD_PAN3:           return config.pan[3];
+        case OPT_AUD_VOL0:           return config.vol[0];
+        case OPT_AUD_VOL1:           return config.vol[1];
+        case OPT_AUD_VOL2:           return config.vol[2];
+        case OPT_AUD_VOL3:           return config.vol[3];
+        case OPT_AUD_VOLL:           return config.volL;
+        case OPT_AUD_VOLR:           return config.volR;
         case OPT_AUD_FASTPATH:      return config.idleFastPath;
-        case OPT_FILTER_TYPE:       return filter.getOption(option);
+        case OPT_AUD_FILTER_TYPE:       return filter.getOption(option);
 
         default:
             fatalError;
@@ -117,7 +117,7 @@ Muxer::setOption(Option option, i64 value)
 
     switch (option) {
             
-        case OPT_SAMPLING_METHOD:
+        case OPT_AUD_SAMPLING_METHOD:
             
             if (!SamplingMethodEnum::isValid(value)) {
                 throw Error(ERROR_OPT_INV_ARG, SamplingMethodEnum::keyList());
@@ -126,16 +126,16 @@ Muxer::setOption(Option option, i64 value)
             config.samplingMethod = (SamplingMethod)value;
             return;
             
-        case OPT_AUDVOL3: id++;
-        case OPT_AUDVOL2: id++;
-        case OPT_AUDVOL1: id++;
-        case OPT_AUDVOL0:
+        case OPT_AUD_VOL3: id++;
+        case OPT_AUD_VOL2: id++;
+        case OPT_AUD_VOL1: id++;
+        case OPT_AUD_VOL0:
 
             config.vol[id] = std::clamp(value, 0LL, 100LL);
             vol[id] = powf((float)value / 100, 1.4f);
             return;
 
-        case OPT_AUDVOLL:
+        case OPT_AUD_VOLL:
             
             config.volL = std::clamp(value, 0LL, 100LL);
             volL = powf((float)value / 50, 1.4f);
@@ -144,16 +144,16 @@ Muxer::setOption(Option option, i64 value)
                 msgQueue.put(MSG_MUTE, isMuted());
             return;
             
-        case OPT_AUDPAN3: id++;
-        case OPT_AUDPAN2: id++;
-        case OPT_AUDPAN1: id++;
-        case OPT_AUDPAN0:
+        case OPT_AUD_PAN3: id++;
+        case OPT_AUD_PAN2: id++;
+        case OPT_AUD_PAN1: id++;
+        case OPT_AUD_PAN0:
 
             config.pan[id] = value;
             pan[id] = float(0.5 * (sin(config.pan[id] * M_PI / 200.0) + 1));
             return;
 
-        case OPT_AUDVOLR:
+        case OPT_AUD_VOLR:
 
             config.volR = std::clamp(value, 0LL, 100LL);
             volR = powf((float)value / 50, 1.4f);
@@ -167,7 +167,7 @@ Muxer::setOption(Option option, i64 value)
             config.idleFastPath = (bool)value;
             return;
 
-        case OPT_FILTER_TYPE:
+        case OPT_AUD_FILTER_TYPE:
 
             filter.setOption(option, value);
             return;

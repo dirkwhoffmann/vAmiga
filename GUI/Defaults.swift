@@ -989,14 +989,14 @@ extension DefaultsProxy {
 
         remove(.AMIGA_WARP_MODE)
         remove(.AMIGA_WARP_BOOT)
-        remove(.CLX_SPR_SPR)
-        remove(.CLX_SPR_PLF)
-        remove(.CLX_PLF_PLF)
-        remove(.CIA_IDLE_SLEEP)
-        remove(.DENISE_FRAME_SKIPPING)
-        remove(.AUD_FASTPATH)
         remove(.AMIGA_VSYNC)
         remove(.AMIGA_SPEED_BOOST)
+        remove(.DENISE_CLX_SPR_SPR)
+        remove(.DENISE_CLX_SPR_PLF)
+        remove(.DENISE_CLX_PLF_PLF)
+        remove(.DENISE_FRAME_SKIPPING)
+        remove(.CIA_IDLE_SLEEP)
+        remove(.AUD_FASTPATH)
     }
 }
 
@@ -1011,14 +1011,14 @@ extension Configuration {
 
         warpMode = defaults.get(.AMIGA_WARP_MODE)
         warpBoot = defaults.get(.AMIGA_WARP_BOOT)
-        clxSprSpr = defaults.get(.CLX_SPR_SPR) != 0
-        clxSprPlf = defaults.get(.CLX_SPR_PLF) != 0
-        clxPlfPlf = defaults.get(.CLX_PLF_PLF) != 0
-        ciaIdleSleep = defaults.get(.CIA_IDLE_SLEEP) != 0
-        frameSkipping = defaults.get(.DENISE_FRAME_SKIPPING)
-        audioFastPath = defaults.get(.AUD_FASTPATH) != 0
         vsync = defaults.get(.AMIGA_VSYNC) != 0
         timeLapse = defaults.get(.AMIGA_SPEED_BOOST)
+        clxSprSpr = defaults.get(.DENISE_CLX_SPR_SPR) != 0
+        clxSprPlf = defaults.get(.DENISE_CLX_SPR_PLF) != 0
+        clxPlfPlf = defaults.get(.DENISE_CLX_PLF_PLF) != 0
+        frameSkipping = defaults.get(.DENISE_FRAME_SKIPPING)
+        ciaIdleSleep = defaults.get(.CIA_IDLE_SLEEP) != 0
+        audioFastPath = defaults.get(.AUD_FASTPATH) != 0
 
         amiga.resume()
     }
@@ -1032,14 +1032,14 @@ extension Configuration {
 
         defaults.set(.AMIGA_WARP_MODE, warpMode)
         defaults.set(.AMIGA_WARP_BOOT, warpBoot)
-        defaults.set(.CLX_SPR_SPR, clxSprSpr)
-        defaults.set(.CLX_SPR_PLF, clxSprPlf)
-        defaults.set(.CLX_PLF_PLF, clxPlfPlf)
-        defaults.set(.CIA_IDLE_SLEEP, ciaIdleSleep)
-        defaults.set(.DENISE_FRAME_SKIPPING, frameSkipping)
-        defaults.set(.AUD_FASTPATH, audioFastPath)
         defaults.set(.AMIGA_VSYNC, vsync)
         defaults.set(.AMIGA_SPEED_BOOST, timeLapse)
+        defaults.set(.DENISE_CLX_SPR_SPR, clxSprSpr)
+        defaults.set(.DENISE_CLX_SPR_PLF, clxSprPlf)
+        defaults.set(.DENISE_CLX_PLF_PLF, clxPlfPlf)
+        defaults.set(.DENISE_FRAME_SKIPPING, frameSkipping)
+        defaults.set(.CIA_IDLE_SLEEP, ciaIdleSleep)
+        defaults.set(.AUD_FASTPATH, audioFastPath)
         defaults.save()
 
         amiga.resume()
@@ -1063,13 +1063,13 @@ extension DefaultsProxy {
         debug(.defaults)
         
         remove(.BLITTER_ACCURACY)
-        remove(.TODBUG)
-        remove(.ECLOCK_SYNCING)
-        remove(.DRIVE_SPEED)
+        remove(.CIA_TODBUG)
+        remove(.CIA_ECLOCK_SYNCING)
+        remove(.DC_SPEED)
+        remove(.DC_LOCK_DSKSYNC)
+        remove(.DC_AUTO_DSKSYNC)
         remove(.DRIVE_MECHANICS, [ 0, 1, 2, 3])
-        remove(.LOCK_DSKSYNC)
-        remove(.AUTO_DSKSYNC)
-        remove(.ACCURATE_KEYBOARD)
+        remove(.KBD_ACCURACY)
     }
 }
 
@@ -1083,13 +1083,13 @@ extension Configuration {
         amiga.suspend()
         
         defaults.set(.BLITTER_ACCURACY, blitterAccuracy)
-        defaults.set(.TODBUG, todBug)
-        defaults.set(.ECLOCK_SYNCING, eClockSyncing)
-        defaults.set(.DRIVE_SPEED, driveSpeed)
+        defaults.set(.CIA_TODBUG, todBug)
+        defaults.set(.CIA_ECLOCK_SYNCING, eClockSyncing)
+        defaults.set(.DC_SPEED, driveSpeed)
+        defaults.set(.DC_LOCK_DSKSYNC, lockDskSync)
+        defaults.set(.DC_AUTO_DSKSYNC, autoDskSync)
         defaults.set(.DRIVE_MECHANICS, [0, 1, 2, 3], driveMechanics)
-        defaults.set(.LOCK_DSKSYNC, lockDskSync)
-        defaults.set(.AUTO_DSKSYNC, autoDskSync)
-        defaults.set(.ACCURATE_KEYBOARD, accurateKeyboard)
+        defaults.set(.KBD_ACCURACY, accurateKeyboard)
         defaults.save()
         
         amiga.resume()
@@ -1103,14 +1103,14 @@ extension Configuration {
         amiga.suspend()
         
         blitterAccuracy = defaults.get(.BLITTER_ACCURACY)
-        todBug = defaults.get(.TODBUG) != 0
-        eClockSyncing = defaults.get(.ECLOCK_SYNCING) != 0
-        driveSpeed = defaults.get(.DRIVE_SPEED)
+        todBug = defaults.get(.CIA_TODBUG) != 0
+        eClockSyncing = defaults.get(.CIA_ECLOCK_SYNCING) != 0
+        driveSpeed = defaults.get(.DC_SPEED)
+        lockDskSync = defaults.get(.DC_LOCK_DSKSYNC) != 0
+        autoDskSync = defaults.get(.DC_AUTO_DSKSYNC) != 0
         driveMechanics = defaults.get(.DRIVE_MECHANICS, 0)
-        lockDskSync = defaults.get(.LOCK_DSKSYNC) != 0
-        autoDskSync = defaults.get(.AUTO_DSKSYNC) != 0
-        accurateKeyboard = defaults.get(.ACCURATE_KEYBOARD) != 0
-        
+        accurateKeyboard = defaults.get(.KBD_ACCURACY) != 0
+
         amiga.resume()
     }
 }
@@ -1133,22 +1133,22 @@ extension DefaultsProxy {
             
         remove(.DRIVE_PAN, [0, 1, 2, 3])
         remove(.HDR_PAN, [0, 1, 2, 3])
-        remove(.AUDPAN0)
-        remove(.AUDPAN1)
-        remove(.AUDPAN2)
-        remove(.AUDPAN3)
-        remove(.AUDVOL0)
-        remove(.AUDVOL1)
-        remove(.AUDVOL2)
-        remove(.AUDVOL3)
-        remove(.AUDVOLL)
-        remove(.AUDVOLR)
-        remove(.SAMPLING_METHOD)
-        remove(.STEP_VOLUME, [0, 1, 2, 3])
-        remove(.POLL_VOLUME, [0, 1, 2, 3])
-        remove(.INSERT_VOLUME, [0, 1, 2, 3])
-        remove(.EJECT_VOLUME, [0, 1, 2, 3])
-        remove(.FILTER_TYPE)
+        remove(.AUD_PAN0)
+        remove(.AUD_PAN1)
+        remove(.AUD_PAN2)
+        remove(.AUD_PAN3)
+        remove(.AUD_VOL0)
+        remove(.AUD_VOL1)
+        remove(.AUD_VOL2)
+        remove(.AUD_VOL3)
+        remove(.AUD_VOLL)
+        remove(.AUD_VOLR)
+        remove(.AUD_SAMPLING_METHOD)
+        remove(.DRIVE_STEP_VOLUME, [0, 1, 2, 3])
+        remove(.DRIVE_POLL_VOLUME, [0, 1, 2, 3])
+        remove(.DRIVE_INSERT_VOLUME, [0, 1, 2, 3])
+        remove(.DRIVE_EJECT_VOLUME, [0, 1, 2, 3])
+        remove(.AUD_FILTER_TYPE)
     }
 }
 
@@ -1161,17 +1161,17 @@ extension Configuration {
 
         amiga.suspend()
         
-        defaults.set(.AUDVOL0, vol0)
-        defaults.set(.AUDVOL1, vol1)
-        defaults.set(.AUDVOL2, vol2)
-        defaults.set(.AUDVOL3, vol3)
-        defaults.set(.AUDPAN0, pan0)
-        defaults.set(.AUDPAN1, pan1)
-        defaults.set(.AUDPAN2, pan2)
-        defaults.set(.AUDPAN3, pan3)
-        defaults.set(.AUDVOLL, volL)
-        defaults.set(.AUDVOLR, volR)
-        defaults.set(.SAMPLING_METHOD, samplingMethod)
+        defaults.set(.AUD_VOL0, vol0)
+        defaults.set(.AUD_VOL1, vol1)
+        defaults.set(.AUD_VOL2, vol2)
+        defaults.set(.AUD_VOL3, vol3)
+        defaults.set(.AUD_PAN0, pan0)
+        defaults.set(.AUD_PAN1, pan1)
+        defaults.set(.AUD_PAN2, pan2)
+        defaults.set(.AUD_PAN3, pan3)
+        defaults.set(.AUD_VOLL, volL)
+        defaults.set(.AUD_VOLR, volR)
+        defaults.set(.AUD_SAMPLING_METHOD, samplingMethod)
         defaults.set(.DRIVE_PAN, 0, df0Pan)
         defaults.set(.DRIVE_PAN, 1, df1Pan)
         defaults.set(.DRIVE_PAN, 2, df2Pan)
@@ -1180,11 +1180,11 @@ extension Configuration {
         defaults.set(.HDR_PAN, 1, hd1Pan)
         defaults.set(.HDR_PAN, 2, hd2Pan)
         defaults.set(.HDR_PAN, 3, hd3Pan)
-        defaults.set(.STEP_VOLUME, [0, 1, 2, 3], stepVolume)
-        defaults.set(.POLL_VOLUME, [0, 1, 2, 3], pollVolume)
-        defaults.set(.INSERT_VOLUME, [0, 1, 2, 3], insertVolume)
-        defaults.set(.EJECT_VOLUME, [0, 1, 2, 3], ejectVolume)
-        defaults.set(.FILTER_TYPE, filterType)
+        defaults.set(.DRIVE_STEP_VOLUME, [0, 1, 2, 3], stepVolume)
+        defaults.set(.DRIVE_POLL_VOLUME, [0, 1, 2, 3], pollVolume)
+        defaults.set(.DRIVE_INSERT_VOLUME, [0, 1, 2, 3], insertVolume)
+        defaults.set(.DRIVE_EJECT_VOLUME, [0, 1, 2, 3], ejectVolume)
+        defaults.set(.AUD_FILTER_TYPE, filterType)
         defaults.save()
         
         amiga.resume()
@@ -1197,15 +1197,15 @@ extension Configuration {
 
         amiga.suspend()
 
-        vol0 = defaults.get(.AUDVOL0)
-        vol1 = defaults.get(.AUDVOL1)
-        vol2 = defaults.get(.AUDVOL2)
-        vol3 = defaults.get(.AUDVOL3)
+        vol0 = defaults.get(.AUD_VOL0)
+        vol1 = defaults.get(.AUD_VOL1)
+        vol2 = defaults.get(.AUD_VOL2)
+        vol3 = defaults.get(.AUD_VOL3)
 
-        pan0 = defaults.get(.AUDPAN0)
-        pan1 = defaults.get(.AUDPAN1)
-        pan2 = defaults.get(.AUDPAN2)
-        pan3 = defaults.get(.AUDPAN3)
+        pan0 = defaults.get(.AUD_PAN0)
+        pan1 = defaults.get(.AUD_PAN1)
+        pan2 = defaults.get(.AUD_PAN2)
+        pan3 = defaults.get(.AUD_PAN3)
 
         df0Pan = defaults.get(.DRIVE_PAN, 0)
         df1Pan = defaults.get(.DRIVE_PAN, 1)
@@ -1217,14 +1217,14 @@ extension Configuration {
         hd2Pan = defaults.get(.HDR_PAN, 2)
         hd3Pan = defaults.get(.HDR_PAN, 3)
 
-        volL = defaults.get(.AUDVOLL)
-        volR = defaults.get(.AUDVOLR)
-        samplingMethod = defaults.get(.SAMPLING_METHOD)
-        stepVolume = defaults.get(.STEP_VOLUME, 0)
-        pollVolume = defaults.get(.POLL_VOLUME, 0)
-        insertVolume = defaults.get(.INSERT_VOLUME, 0)
-        ejectVolume = defaults.get(.EJECT_VOLUME, 0)
-        filterType = defaults.get(.FILTER_TYPE)
+        volL = defaults.get(.AUD_VOLL)
+        volR = defaults.get(.AUD_VOLR)
+        samplingMethod = defaults.get(.AUD_SAMPLING_METHOD)
+        stepVolume = defaults.get(.DRIVE_STEP_VOLUME, 0)
+        pollVolume = defaults.get(.DRIVE_POLL_VOLUME, 0)
+        insertVolume = defaults.get(.DRIVE_INSERT_VOLUME, 0)
+        ejectVolume = defaults.get(.DRIVE_EJECT_VOLUME, 0)
+        filterType = defaults.get(.AUD_FILTER_TYPE)
 
         amiga.resume()
     }

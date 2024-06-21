@@ -45,13 +45,13 @@ Denise::getOption(Option option) const
         case OPT_DENISE_REVISION:     return config.revision;
         case OPT_DENISE_VIEWPORT_TRACKING:   return config.viewportTracking;
         case OPT_DENISE_FRAME_SKIPPING:      return config.frameSkipping;
-        case OPT_HIDDEN_BITPLANES:    return config.hiddenBitplanes;
-        case OPT_HIDDEN_SPRITES:      return config.hiddenSprites;
-        case OPT_HIDDEN_LAYERS:       return config.hiddenLayers;
-        case OPT_HIDDEN_LAYER_ALPHA:  return config.hiddenLayerAlpha;
-        case OPT_CLX_SPR_SPR:         return config.clxSprSpr;
-        case OPT_CLX_SPR_PLF:         return config.clxSprPlf;
-        case OPT_CLX_PLF_PLF:         return config.clxPlfPlf;
+        case OPT_DENISE_HIDDEN_BITPLANES:    return config.hiddenBitplanes;
+        case OPT_DENISE_HIDDEN_SPRITES:      return config.hiddenSprites;
+        case OPT_DENISE_HIDDEN_LAYERS:       return config.hiddenLayers;
+        case OPT_DENISE_HIDDEN_LAYER_ALPHA:  return config.hiddenLayerAlpha;
+        case OPT_DENISE_CLX_SPR_SPR:         return config.clxSprSpr;
+        case OPT_DENISE_CLX_SPR_PLF:         return config.clxSprPlf;
+        case OPT_DENISE_CLX_PLF_PLF:         return config.clxPlfPlf;
             
         default:
             fatalError;
@@ -83,37 +83,37 @@ Denise::setOption(Option option, i64 value)
             config.frameSkipping = (isize)value;
             return;
 
-        case OPT_HIDDEN_BITPLANES:
+        case OPT_DENISE_HIDDEN_BITPLANES:
             
             config.hiddenBitplanes = (u8)value;
             return;
 
-        case OPT_HIDDEN_SPRITES:
+        case OPT_DENISE_HIDDEN_SPRITES:
             
             config.hiddenSprites = (u8)value;
             return;
             
-        case OPT_HIDDEN_LAYERS:
+        case OPT_DENISE_HIDDEN_LAYERS:
             
             config.hiddenLayers = (u16)value;
             return;
             
-        case OPT_HIDDEN_LAYER_ALPHA:
+        case OPT_DENISE_HIDDEN_LAYER_ALPHA:
             
             config.hiddenLayerAlpha = (u8)value;
             return;
 
-        case OPT_CLX_SPR_SPR:
+        case OPT_DENISE_CLX_SPR_SPR:
             
             config.clxSprSpr = (bool)value;
             return;
             
-        case OPT_CLX_SPR_PLF:
+        case OPT_DENISE_CLX_SPR_PLF:
             
             config.clxSprPlf = (bool)value;
             return;
             
-        case OPT_CLX_PLF_PLF:
+        case OPT_DENISE_CLX_PLF_PLF:
             
             config.clxPlfPlf = (bool)value;
             return;

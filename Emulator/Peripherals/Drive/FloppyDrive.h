@@ -51,12 +51,12 @@ class FloppyDrive : public Drive, public Inspectable<FloppyDriveInfo> {
         OPT_DRIVE_TYPE,
         OPT_DRIVE_MECHANICS,
         OPT_DRIVE_RPM,
-        OPT_DISK_SWAP_DELAY,
+        OPT_DRIVE_SWAP_DELAY,
         OPT_DRIVE_PAN,
-        OPT_STEP_VOLUME,
-        OPT_POLL_VOLUME,
-        OPT_INSERT_VOLUME,
-        OPT_EJECT_VOLUME
+        OPT_DRIVE_STEP_VOLUME,
+        OPT_DRIVE_POLL_VOLUME,
+        OPT_DRIVE_INSERT_VOLUME,
+        OPT_DRIVE_EJECT_VOLUME
     };
 
     friend class DiskController;

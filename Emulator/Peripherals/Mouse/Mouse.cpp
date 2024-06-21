@@ -40,8 +40,8 @@ Mouse::getOption(Option option) const
 {
     switch (option) {
 
-        case OPT_PULLUP_RESISTORS:  return config.pullUpResistors;
-        case OPT_SHAKE_DETECTION:   return config.shakeDetection;
+        case OPT_MOUSE_PULLUP_RESISTORS:  return config.pullUpResistors;
+        case OPT_MOUSE_SHAKE_DETECTION:   return config.shakeDetection;
         case OPT_MOUSE_VELOCITY:    return config.velocity;
 
         default:
@@ -54,12 +54,12 @@ Mouse::setOption(Option option, i64 value)
 {
     switch (option) {
             
-        case OPT_PULLUP_RESISTORS:
+        case OPT_MOUSE_PULLUP_RESISTORS:
             
             config.pullUpResistors = value;
             return;
 
-        case OPT_SHAKE_DETECTION:
+        case OPT_MOUSE_SHAKE_DETECTION:
             
             config.shakeDetection = value;
             return;

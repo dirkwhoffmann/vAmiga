@@ -59,8 +59,8 @@ class Mouse : public SubComponent {
 
     ConfigOptions options = {
 
-        OPT_PULLUP_RESISTORS,
-        OPT_SHAKE_DETECTION,
+        OPT_MOUSE_PULLUP_RESISTORS,
+        OPT_MOUSE_SHAKE_DETECTION,
         OPT_MOUSE_VELOCITY
     };
 
