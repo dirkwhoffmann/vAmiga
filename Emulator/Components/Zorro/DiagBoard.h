@@ -66,8 +66,6 @@ private:
 
     } SERIALIZERS(serialize);
 
-    u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
-
     
     //
     // Methods from Configurable

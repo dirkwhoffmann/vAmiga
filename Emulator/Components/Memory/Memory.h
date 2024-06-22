@@ -270,7 +270,6 @@ private:
     void operator << (SerReader &worker) override  { serialize(worker); }
     void operator << (SerWriter &worker) override  { serialize(worker); }
 
-    u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
     isize didLoadFromBuffer(const u8 *buffer) override;
     isize didSaveToBuffer(u8 *buffer) override;
 

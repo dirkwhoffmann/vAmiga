@@ -112,6 +112,7 @@ CoreComponent::size()
     return result;
 }
 
+/*
 u64
 CoreComponent::checksum()
 {
@@ -126,6 +127,7 @@ CoreComponent::checksum()
     
     return result;
 }
+*/
 
 isize
 CoreComponent::load(const u8 *buffer)
@@ -156,7 +158,7 @@ CoreComponent::load(const u8 *buffer)
     isize result = (isize)(ptr - buffer);
 
     // Check integrity
-    if (hash != _checksum() || FORCE_SNAP_CORRUPTED) {
+    if (hash != checksum() || FORCE_SNAP_CORRUPTED) {
         throw Error(ERROR_SNAP_CORRUPTED);
     }
     
@@ -190,7 +192,7 @@ CoreComponent::save(u8 *buffer)
     }
 
     // Save the checksum for this component
-    write64(ptr, _checksum());
+    write64(ptr, checksum());
     
     // Save the internal state of this component
     SerWriter writer(ptr);
@@ -347,6 +349,34 @@ CoreComponent::unfocus()
 {
     for (auto c : subComponents) { c->unfocus(); }
     _unfocus();
+}
+
+void
+CoreComponent::preoderWalk(std::function<void(CoreComponent *)> func)
+{
+    func(this);
+    for (auto &c : subComponents) c->preoderWalk(func);
+}
+
+void
+CoreComponent::postorderWalk(std::function<void(CoreComponent *)> func)
+{
+    for (auto &c : subComponents) c->preoderWalk(func);
+    func(this);
+}
+
+u64 
+CoreComponent::checksum(bool recursive)
+{
+    SerChecker checker;
+
+    // Compute a checksum for the members of this component
+    *this << checker;
+
+    // Incoorporate subcomponents if requested
+    if (recursive) for (auto &c : subComponents) checker << c->checksum(recursive);
+
+    return checker.hash;
 }
 
 void

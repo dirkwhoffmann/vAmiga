@@ -75,9 +75,7 @@ public:
     //
     
     template <class T> void serialize(T& worker) { } SERIALIZERS(serialize);
-    
-    u64 _checksum() override { return 0; }
-    
+        
 
     //
     // Providing textual representations

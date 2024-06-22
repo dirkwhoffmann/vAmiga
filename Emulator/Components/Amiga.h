@@ -254,10 +254,6 @@ public:
     isize load(const u8 *buffer) override;
     isize save(u8 *buffer) override;
 
-private:
-
-    u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM; }
-
 
     //
     // Methods from Inspectable

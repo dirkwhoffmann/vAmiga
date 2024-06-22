@@ -161,7 +161,6 @@ private:
 
     } SERIALIZERS(serialize);
 
-    u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
     isize didLoadFromBuffer(const u8 *buffer) override;
 
 public:

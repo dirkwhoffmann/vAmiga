@@ -19,6 +19,7 @@
 #include "Serializable.h"
 #include "Concurrency.h"
 #include <vector>
+#include <functional>
 
 namespace vamiga {
 
@@ -165,11 +166,6 @@ public:
     
     // Returns the size of the internal state in bytes
     isize size();
-    // virtual isize _size() = 0;
-
-    // Computes a checksum for this component
-    u64 checksum();
-    virtual u64 _checksum() = 0;
 
     // Loads the internal state from a memory buffer
     virtual isize load(const u8 *buf) throws;
@@ -194,10 +190,21 @@ public:
 
 
     //
+    // Walking the component tree
+    //
+
+    void preoderWalk(std::function<void(CoreComponent *)> func);
+    void postorderWalk(std::function<void(CoreComponent *)> func);
+
+
+    //
     // Misc
     //
 
 public:
+
+    // Computes a checksum for this component
+    u64 checksum(bool recursive = false);
 
     // Collects references to this components and all sub-components
     void collectComponents(std::vector<CoreComponent *> &result);
@@ -210,7 +217,7 @@ public:
 };
 
 //
-// Standard implementations of _reset, _size, _checksum, _load, and _save
+// Standard implementations of _reset
 //
 
 #define RESET_SNAPSHOT_ITEMS(hard) \
@@ -221,29 +228,5 @@ SerResetter resetter(true); \
 SerResetter resetter(false); \
 *this << resetter; \
 }
-
-/*
-#define COMPUTE_SNAPSHOT_SIZE \
-SerCounter counter; \
-*this << counter; \
-return counter.count;
-*/
-
-#define COMPUTE_SNAPSHOT_CHECKSUM \
-SerChecker checker; \
-*this << checker; \
-return checker.hash;
-
-/*
-#define LOAD_SNAPSHOT_ITEMS \
-SerReader reader(buffer); \
-*this << reader; \
-return (isize)(reader.ptr - buffer);
-
-#define SAVE_SNAPSHOT_ITEMS \
-SerWriter writer(buffer); \
-*this << writer; \
-return (isize)(writer.ptr - buffer);
-*/
 
 }

@@ -100,9 +100,7 @@ private:
     void _reset(bool hard) override;
     
     template <class T> void serialize(T& worker) { } SERIALIZERS(serialize);
-    
-    u64 _checksum() override { return 0; }
-    
+        
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }

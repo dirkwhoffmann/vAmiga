@@ -191,8 +191,6 @@ private:
     void operator << (SerReader &worker) override;
     void operator << (SerWriter &worker) override;
 
-    u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
-
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }

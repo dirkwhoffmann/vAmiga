@@ -77,7 +77,6 @@ private:
     template <class T> void serialize(T& worker) { } SERIALIZERS(serialize);
     
     void _reset(bool hard) override { };
-    u64 _checksum() override { return 0; }
     
 public:
 

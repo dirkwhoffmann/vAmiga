@@ -300,63 +300,6 @@ Memory::operator << (SerCounter &worker)
     worker.count += fastSize;
 }
 
-/*
-isize
-Memory::_size()
-{
-    SerCounter counter;
-
-    // Determine memory size information
-    i32 romSize = config.saveRoms ? config.romSize : 0;
-    i32 womSize = config.saveRoms ? config.womSize : 0;
-    i32 extSize = config.saveRoms ? config.extSize : 0;
-    i32 chipSize = config.chipSize;
-    i32 slowSize = config.slowSize;
-    i32 fastSize = config.fastSize;
-
-    serialize(counter);
-    
-    counter
-    << romSize
-    << womSize
-    << extSize
-    << chipSize
-    << slowSize
-    << fastSize;
-    
-    counter.count += romSize;
-    counter.count += womSize;
-    counter.count += extSize;
-    counter.count += chipSize;
-    counter.count += slowSize;
-    counter.count += fastSize;
-
-    return counter.count;
-}
-*/
-
-/*
-u64
-Memory::_checksum()
-{
-    SerChecker checker;
-    
-    serialize(checker);
-    
-    if (config.chipSize) {
-        for (isize i = 0; i < config.chipSize; i++) checker << chip[i];
-    }
-    if (config.slowSize) {
-        for (isize i = 0; i < config.slowSize; i++) checker << slow[i];
-    }
-    if (config.fastSize) {
-        for (isize i = 0; i < config.fastSize; i++) checker << fast[i];
-    }
-    
-    return checker.hash;
-}
-*/
-
 isize
 Memory::didLoadFromBuffer(const u8 *buffer)
 {

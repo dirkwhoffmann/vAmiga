@@ -144,8 +144,6 @@ private:
 
     } SERIALIZERS(serialize);
 
-    u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
-
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
