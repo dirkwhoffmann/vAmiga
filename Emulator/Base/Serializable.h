@@ -645,11 +645,14 @@ return *this; \
 
 class SerResetter
 {
-protected:
-
-    SerResetter() { };
+    bool hard;
 
 public:
+
+    SerResetter(bool hard) : hard(hard) { };
+
+    bool isHard() { return hard; }
+    bool isSoft() { return !isHard(); }
 
     RESET(bool)
     RESET(char)
@@ -744,44 +747,14 @@ public:
     }
 };
 
-class SerSoftResetter : public SerResetter
-{
-public:
-    SerSoftResetter() { }
-};
-
-class SerHardResetter : public SerResetter
-{
-public:
-    SerHardResetter() { }
-};
-
-template <class T>
-static constexpr bool isSoftResetter(T &worker) 
-{
-    auto &id = typeid(worker);
-    return id == typeid(SerSoftResetter);
-}
-
-template <class T>
-static constexpr bool isHardResetter(T &worker) 
-{
-    auto &id = typeid(worker);
-    return id == typeid(SerHardResetter);
-}
-
-template <class T>
-static constexpr bool isResetter(T &worker) {
-    return isSoftResetter(worker) || isHardResetter(worker);
-}
-
-template <class T>
-static constexpr bool isChecker(T &worker) {
-    return typeid(worker) == typeid(SerChecker);
-}
+template <class T> inline bool isResetter(T &worker) { return false; }
+template <> inline bool isResetter(SerResetter &worker) { return true; }
+template <class T> inline bool isSoftResetter(T &worker) { return false; }
+template <> inline bool isSoftResetter(SerResetter &worker) { return worker.isSoft(); }
+template <class T> inline bool isHardResetter(T &worker) { return false; }
+template <> inline bool isHardResetter(SerResetter &worker) { return worker.isHard(); }
 
 }
-
 
 #define SERIALIZERS(fn) \
 void operator << (SerChecker &worker) override { fn(worker); } \
@@ -789,13 +762,6 @@ void operator << (SerCounter &worker) override { fn(worker); } \
 void operator << (SerResetter &worker) override { fn(worker); } \
 void operator << (SerReader &worker) override { fn(worker); } \
 void operator << (SerWriter &worker) override { fn(worker); }
-/*
-#define SERIALIZERS(fn) \
-void operator << (SerChecker &worker) { fn(worker); } \
-void operator << (SerCounter &worker) { fn(worker); } \
-void operator << (SerResetter &worker) { fn(worker); } \
-void operator << (SerReader &worker) { fn(worker); } \
-void operator << (SerWriter &worker) { fn(worker); }
-*/
+
 #define CLONE(x) x = other.x;
 #define CLONE_ARRAY(x) std::copy(std::begin(other.x), std::end(other.x), std::begin(x));

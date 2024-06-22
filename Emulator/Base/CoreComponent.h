@@ -213,33 +213,43 @@ public:
 // Standard implementations of _reset, _size, _checksum, _load, and _save
 //
 
+/*
 #define RESET_SNAPSHOT_ITEMS(hard) \
 if (hard) { \
-SerHardResetter resetter; \
+SerResetter resetter(true); \
 serialize(resetter); \
 } else { \
-SerSoftResetter resetter; \
+SerResetter resetter(false); \
 serialize(resetter); \
+}
+*/
+#define RESET_SNAPSHOT_ITEMS(hard) \
+if (hard) { \
+SerResetter resetter(true); \
+*this << resetter; \
+} else { \
+SerResetter resetter(false); \
+*this << resetter; \
 }
 
 #define COMPUTE_SNAPSHOT_SIZE \
 SerCounter counter; \
-serialize(counter); \
+*this << counter; \
 return counter.count;
 
 #define COMPUTE_SNAPSHOT_CHECKSUM \
 SerChecker checker; \
-serialize(checker); \
+*this << checker; \
 return checker.hash;
 
 #define LOAD_SNAPSHOT_ITEMS \
 SerReader reader(buffer); \
-serialize(reader); \
+*this << reader; \
 return (isize)(reader.ptr - buffer);
 
 #define SAVE_SNAPSHOT_ITEMS \
 SerWriter writer(buffer); \
-serialize(writer); \
+*this << writer; \
 return (isize)(writer.ptr - buffer);
 
 }
