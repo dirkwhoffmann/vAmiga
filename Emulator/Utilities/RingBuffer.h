@@ -10,7 +10,6 @@
 #pragma once
 
 #include "Types.h"
-#include "Serializable.h"
 #include <utility>
 
 namespace util {
@@ -28,7 +27,7 @@ namespace util {
 // Array
 //
 
-template <class T, isize capacity> struct Array : Serializable
+template <class T, isize capacity> struct Array
 {
     // Element storage
     T *elements = new T[capacity];
@@ -48,19 +47,7 @@ template <class T, isize capacity> struct Array : Serializable
     void clear(T t) { for (isize i = 0; i < capacity; i++) elements[i] = t; clear(); }
     void align(isize offset) { w = offset; }
 
-    
-    //
-    // Serializing
-    //
-    
-    template <class W>
-    void operator<<(W& worker)
-    {
-        for (isize i = 0; i < capacity; i++) worker << elements[i];
-        worker << w;
-    }
-    
-    
+
     //
     // Querying the fill status
     //
@@ -111,18 +98,6 @@ struct SortedArray : public Array<T, capacity>
 
 
     //
-    // Serializing
-    //
-
-    template <class W>
-    void operator<<(W& worker)
-    {
-        Array<T, capacity>::operator<<(worker);
-        for (isize i = 0; i < capacity; i++) worker << keys[i];
-    }
-
-
-    //
     // Inserting
     //
 
@@ -162,7 +137,7 @@ struct SortedArray : public Array<T, capacity>
 // Ringbuffer
 //
 
-template <class T, isize capacity> struct RingBuffer : Serializable
+template <class T, isize capacity> struct RingBuffer
 {
     // Element storage
     T *elements = new T[capacity];
@@ -182,19 +157,7 @@ template <class T, isize capacity> struct RingBuffer : Serializable
     void clear(T t) { for (isize i = 0; i < capacity; i++) elements[i] = t; clear(); }
     void align(isize offset) { w = (r + offset) % capacity; }
 
-    
-    //
-    // Serializing
-    //
-    
-    template <class W>
-    void operator<<(W& worker)
-    {
-        for (isize i = 0; i < capacity; i++) worker << elements[i];
-        worker << this->r << this->w;
-    }
-    
-    
+
     //
     // Querying the fill status
     //
@@ -293,18 +256,6 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
     //
 
     ~SortedRingBuffer() { delete[] keys; }
-
-
-    //
-    // Serializing
-    //
-
-    template <class W>
-    void operator<<(W& worker)
-    {
-        RingBuffer<T, capacity>::operator<<(worker);
-        for (isize i = 0; i < capacity; i++) worker << keys[i];
-    }
 
     
     // Inserts an element at the proper position

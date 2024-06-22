@@ -12,6 +12,7 @@
 #include "Macros.h"
 #include "MemUtils.h"
 #include "Buffer.h"
+#include "RingBuffer.h"
 #include <cassert>
 #include <concepts>
 #include <vector>
@@ -151,6 +152,40 @@ public:
         return *this;
     }
 
+    template <class T, isize N>
+    auto& operator<<(util::Array<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        *this << a.elements << a.w;
+        return *this;
+    }
+
+    template <class T, isize N>
+    auto& operator<<(util::SortedArray<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        for(isize i = 0; i < N; ++i) *this << a.keys[i];
+        *this << a.w;
+        return *this;
+    }
+
+    template <class T, isize N>
+    auto& operator<<(util::RingBuffer<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        *this << a.r << a.w;
+        return *this;
+    }
+
+    template <class T, isize N>
+    auto& operator<<(util::SortedRingBuffer<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        for(isize i = 0; i < N; ++i) *this << a.keys[i];
+        *this << a.r << a.w;
+        return *this;
+    }
+
     auto& operator<<(string &v)
     {
         auto len = v.length();
@@ -232,6 +267,40 @@ public:
     auto& operator<<(util::Allocator<T> &a)
     {
         hash = util::fnvIt64(hash, a.fnv64());
+        return *this;
+    }
+
+    template <class T, isize N>
+    auto& operator<<(util::Array<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        *this << a.elements << a.w;
+        return *this;
+    }
+
+    template <class T, isize N>
+    auto& operator<<(util::SortedArray<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        for(isize i = 0; i < N; ++i) *this << a.keys[i];
+        *this << a.w;
+        return *this;
+    }
+
+    template <class T, isize N>
+    auto& operator<<(util::RingBuffer<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        *this << a.r << a.w;
+        return *this;
+    }
+
+    template <class T, isize N>
+    auto& operator<<(util::SortedRingBuffer<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        for(isize i = 0; i < N; ++i) *this << a.keys[i];
+        *this << a.r << a.w;
         return *this;
     }
 
@@ -325,6 +394,40 @@ public:
         *this << len;
         a.init(ptr, isize(len));
         ptr += len;
+        return *this;
+    }
+
+    template <class T, isize N>
+    auto& operator<<(util::Array<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        *this << a.elements << a.w;
+        return *this;
+    }
+
+    template <class T, isize N>
+    auto& operator<<(util::SortedArray<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        for(isize i = 0; i < N; ++i) *this << a.keys[i];
+        *this << a.w;
+        return *this;
+    }
+
+    template <class T, isize N>
+    auto& operator<<(util::RingBuffer<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        *this << a.r << a.w;
+        return *this;
+    }
+
+    template <class T, isize N>
+    auto& operator<<(util::SortedRingBuffer<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        for(isize i = 0; i < N; ++i) *this << a.keys[i];
+        *this << a.r << a.w;
         return *this;
     }
 
@@ -433,6 +536,40 @@ public:
         return *this;
     }
 
+    template <class T, isize N>
+    auto& operator<<(util::Array<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        *this << a.elements << a.w;
+        return *this;
+    }
+
+    template <class T, isize N>
+    auto& operator<<(util::SortedArray<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        for(isize i = 0; i < N; ++i) *this << a.keys[i];
+        *this << a.w;
+        return *this;
+    }
+
+    template <class T, isize N>
+    auto& operator<<(util::RingBuffer<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        *this << a.r << a.w;
+        return *this;
+    }
+
+    template <class T, isize N>
+    auto& operator<<(util::SortedRingBuffer<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        for(isize i = 0; i < N; ++i) *this << a.keys[i];
+        *this << a.r << a.w;
+        return *this;
+    }
+
     auto& operator<<(const string &v)
     {
         writeString(ptr, v);
@@ -524,6 +661,40 @@ public:
         return *this;
     }
 
+    template <class T, isize N>
+    auto& operator<<(util::Array<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        *this << a.elements << a.w;
+        return *this;
+    }
+
+    template <class T, isize N>
+    auto& operator<<(util::SortedArray<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        for(isize i = 0; i < N; ++i) *this << a.keys[i];
+        *this << a.w;
+        return *this;
+    }
+
+    template <class T, isize N>
+    auto& operator<<(util::RingBuffer<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        *this << a.r << a.w;
+        return *this;
+    }
+
+    template <class T, isize N>
+    auto& operator<<(util::SortedRingBuffer<T, N> &a)
+    {
+        for(isize i = 0; i < N; ++i) *this << a.elements[i];
+        for(isize i = 0; i < N; ++i) *this << a.keys[i];
+        *this << a.r << a.w;
+        return *this;
+    }
+
     auto& operator<<(string &v)
     {
         v = "";
@@ -577,22 +748,14 @@ template <class T>
 static constexpr bool isSoftResetter(T &worker) 
 {
     auto &id = typeid(worker);
-    bool result = id == typeid(SerSoftResetter);
-
-    bool result2 = std::is_same_v<T, SerSoftResetter>;
-    assert(result == result2);
-    return result;
+    return id == typeid(SerSoftResetter);
 }
 
 template <class T>
 static constexpr bool isHardResetter(T &worker) 
 {
     auto &id = typeid(worker);
-    bool result = id == typeid(SerHardResetter);
-
-    bool result2 = std::is_same_v<T, SerHardResetter>;
-    assert(result == result2);
-    return result;
+    return id == typeid(SerHardResetter);
 }
 
 template <class T>
