@@ -60,12 +60,9 @@ Muxer::_initialize()
 }
 
 void
-Muxer::_reset(bool hard)
+Muxer::didReset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
-    
     stats = { };
-    
     for (isize i = 0; i < 4; i++) sampler[i].reset();
     clear();
 }

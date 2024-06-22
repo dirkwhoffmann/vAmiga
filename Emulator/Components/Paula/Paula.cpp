@@ -44,12 +44,13 @@ Paula::_dump(Category category, std::ostream& os) const
 }
 
 void
-Paula::_reset(bool hard)
+Paula::didReset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
-
     for (isize i = 0; i < 16; i++) setIntreq[i] = NEVER;
-    cpu.setIPL(0);
+
+    // This should not be needed...
+    // cpu.setIPL(0);
+    assert(cpu.getIPL() == 0);
 }
 
 void

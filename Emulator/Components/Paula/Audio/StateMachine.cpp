@@ -35,12 +35,6 @@ StateMachine<nr>::_dump(Category category, std::ostream& os) const
 }
 
 template <isize nr> void
-StateMachine<nr>::_reset(bool hard)
-{
-    RESET_SNAPSHOT_ITEMS(hard)
-}
-
-template <isize nr> void
 StateMachine<nr>::cacheInfo(StateMachineInfo &info) const
 {
     {   SYNCHRONIZED

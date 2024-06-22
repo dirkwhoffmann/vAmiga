@@ -134,7 +134,7 @@ private:
 
 private:
     
-    void _reset(bool hard) override;
+    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
     void _run() override;
     void _pause() override;
     void _warpOn() override;
@@ -172,6 +172,7 @@ private:
 
 public:
 
+    void didReset(bool hard) override;
     const Descriptions &getDescriptions() const override { return descriptions; }
 
 

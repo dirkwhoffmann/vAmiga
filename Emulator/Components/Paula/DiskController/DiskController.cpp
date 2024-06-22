@@ -22,10 +22,10 @@
 namespace vamiga {
 
 void
-DiskController::_reset(bool hard)
+DiskController::operator << (SerResetter &worker)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
-    
+    serialize(worker);
+
     prb = 0xFF;
     selected = -1;
     dsksync = 0x4489;

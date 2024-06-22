@@ -361,10 +361,8 @@ CPU::setOption(Option option, i64 value)
 }
 
 void
-CPU::_reset(bool hard)
-{    
-    RESET_SNAPSHOT_ITEMS(hard)
-
+CPU::didReset(bool hard)
+{
     if (hard) {
 
         // Reset the Moira core

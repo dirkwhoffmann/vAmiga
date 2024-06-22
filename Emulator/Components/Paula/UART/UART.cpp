@@ -20,9 +20,8 @@
 namespace vamiga {
 
 void
-UART::_reset(bool hard)
+UART::didReset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
     outBit = 1;
 }
 
