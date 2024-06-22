@@ -223,7 +223,7 @@ public:
 
 private:
 
-    void _reset(bool hard) override;
+    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
     void _powerOn() override;
     void _powerOff() override;
     void _run() override;
@@ -251,6 +251,8 @@ private:
 
 public:
 
+    void willReset(bool hard) override;
+    void didReset(bool hard) override;
     isize load(const u8 *buffer) override;
     isize save(u8 *buffer) override;
 

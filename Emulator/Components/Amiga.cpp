@@ -134,34 +134,35 @@ Amiga::prefix() const
 void
 Amiga::reset(bool hard)
 {
-    suspend();
+    {   SUSPENDED
 
-    // Call the pre-reset delegate
-    postorderWalk([hard](CoreComponent *c) { c->willReset(hard); });
+        // Call the pre-reset delegate
+        postorderWalk([hard](CoreComponent *c) { c->willReset(hard); });
 
-    // If a disk change is in progress, finish it
-    df0.serviceDiskChangeEvent <SLOT_DC0> ();
-    df1.serviceDiskChangeEvent <SLOT_DC1> ();
-    df2.serviceDiskChangeEvent <SLOT_DC2> ();
-    df3.serviceDiskChangeEvent <SLOT_DC3> ();
+        // Execute the standard reset routine
+        CoreComponent::reset(hard);
 
-    // Execute the standard reset routine
-    CoreComponent::reset(hard);
-
-    // Call the pre-reset delegate
-    postorderWalk([hard](CoreComponent *c) { c->didReset(hard); });
-
-    resume();
+        // Call the pre-reset delegate
+        postorderWalk([hard](CoreComponent *c) { c->didReset(hard); });
+    }
 
     // Inform the GUI
     if (hard) msgQueue.put(MSG_RESET);
 }
 
 void
-Amiga::_reset(bool hard)
+Amiga::willReset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
+    // If a disk change is in progress, finish it
+    df0.serviceDiskChangeEvent <SLOT_DC0> ();
+    df1.serviceDiskChangeEvent <SLOT_DC1> ();
+    df2.serviceDiskChangeEvent <SLOT_DC2> ();
+    df3.serviceDiskChangeEvent <SLOT_DC3> ();
+}
 
+void
+Amiga::didReset(bool hard)
+{
     // Schedule initial events
     scheduleNextSnpEvent();
 

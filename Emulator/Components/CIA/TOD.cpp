@@ -20,12 +20,12 @@ TOD::TOD(CIA &ciaref, Amiga& ref) : SubComponent(ref), cia(ciaref)
 }
 
 void
-TOD::_reset(bool hard)
+TOD::operator << (SerResetter &worker)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
-    
-    if (hard) {
-        
+    serialize(worker);
+
+    if (worker.isHard()) {
+
         stopped = true;
         matching = true;
         tod.hi = 0x1;
