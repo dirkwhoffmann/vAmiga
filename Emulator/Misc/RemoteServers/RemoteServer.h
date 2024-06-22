@@ -99,7 +99,8 @@ private:
         << config.port
         << config.protocol
         << config.verbose;
-    }
+
+    } SERIALIZERS(serialize);
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }

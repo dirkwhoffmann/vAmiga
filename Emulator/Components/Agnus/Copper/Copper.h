@@ -138,7 +138,8 @@ private:
         << coppc
         << coppc0
         << activeInThisFrame;
-    }
+   
+    } SERIALIZERS(serialize);
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }

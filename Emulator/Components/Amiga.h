@@ -135,7 +135,7 @@ public:
     HdController *hdcon[4] = { &hd0con, &hd1con, &hd2con, &hd3con };
 
     // Gateway to the GUI
-    MsgQueue msgQueue = MsgQueue(*this);
+    MsgQueue msgQueue = MsgQueue();
 
     // Misc
     RetroShell retroShell = RetroShell(*this);
@@ -246,7 +246,8 @@ private:
         << config.warpBoot
         << config.vsync
         << config.timeLapse;
-    }
+
+    } SERIALIZERS(serialize);
 
 public:
 

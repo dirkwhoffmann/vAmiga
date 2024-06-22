@@ -142,7 +142,8 @@ private:
         << config.dasmRevision
         << config.overclocking
         << config.regResetVal;
-    }
+
+    } SERIALIZERS(serialize);
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }

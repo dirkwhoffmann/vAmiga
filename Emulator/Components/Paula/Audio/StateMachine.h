@@ -132,7 +132,7 @@ private:
     void serialize(T& worker)
     {
         worker
-        
+
         << state
         << buffer
         << audlenLatch
@@ -153,7 +153,8 @@ private:
         worker
 
         << clock;
-    }
+
+    } SERIALIZERS(serialize);
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }

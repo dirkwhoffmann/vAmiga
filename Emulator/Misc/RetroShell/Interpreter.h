@@ -111,6 +111,8 @@ public:
 
 private:
 
+    template <class T> void serialize(T& worker) { } SERIALIZERS(serialize);
+    
     isize _size() override { return 0; }
     u64 _checksum() override { return 0; }
     isize _load(const u8 *buffer) override {return 0; }

@@ -96,8 +96,7 @@ Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)
         &retroShell,
         &debugger,
         &osDebugger,
-        &regressionTester,
-        &msgQueue
+        &regressionTester
     };
 }
 

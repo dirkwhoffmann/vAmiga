@@ -310,7 +310,7 @@ private:
     void serialize(T& worker)
     {
         worker
-        
+
         << delay
         << feed
         << counterA
@@ -356,7 +356,8 @@ private:
         << config.revision
         << config.todBug
         << config.eClockSyncing;
-    }
+
+    } SERIALIZERS(serialize);
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }

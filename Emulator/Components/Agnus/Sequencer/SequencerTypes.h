@@ -64,6 +64,7 @@ struct DDFState : Serializable
         return !(*this == rhs);
     }
 
+    /*
     template <class W>
     void operator<<(W& worker)
     {
@@ -81,6 +82,27 @@ struct DDFState : Serializable
         << bplcon0
         << cnt;
     }
+    */
+
+    template <class T>
+    void serialize(T& worker)
+    {
+        worker
+
+        << bpv
+        << bmapen
+        << shw
+        << rhw
+        << bphstart
+        << bphstop
+        << bprun
+        << lastFu
+        << stopreq
+        << bplcon0
+        << cnt;
+
+    } SERIALIZERS(serialize);
+
 };
 
 }

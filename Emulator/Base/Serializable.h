@@ -19,7 +19,19 @@
 
 namespace vamiga {
 
-class Serializable { };
+class Serializable {
+
+public:
+    
+    virtual ~Serializable() = default;
+
+    // Serializers (to be implemented by the subclass)
+    virtual void operator << (class SerCounter &worker) = 0;
+    virtual void operator << (class SerChecker &worker) = 0;
+    virtual void operator << (class SerResetter &worker) = 0;
+    virtual void operator << (class SerReader &worker) = 0;
+    virtual void operator << (class SerWriter &worker) = 0;
+};
 
 //
 // Basic memory buffer I/O
@@ -770,12 +782,20 @@ static constexpr bool isChecker(T &worker) {
 
 }
 
+
 #define SERIALIZERS(fn) \
 void operator << (SerChecker &worker) override { fn(worker); } \
 void operator << (SerCounter &worker) override { fn(worker); } \
 void operator << (SerResetter &worker) override { fn(worker); } \
 void operator << (SerReader &worker) override { fn(worker); } \
 void operator << (SerWriter &worker) override { fn(worker); }
-
+/*
+#define SERIALIZERS(fn) \
+void operator << (SerChecker &worker) { fn(worker); } \
+void operator << (SerCounter &worker) { fn(worker); } \
+void operator << (SerResetter &worker) { fn(worker); } \
+void operator << (SerReader &worker) { fn(worker); } \
+void operator << (SerWriter &worker) { fn(worker); }
+*/
 #define CLONE(x) x = other.x;
 #define CLONE_ARRAY(x) std::copy(std::begin(other.x), std::end(other.x), std::begin(x));

@@ -120,8 +120,7 @@ private:
     void _initialize() override;
     void _reset(bool hard) override;
 
-    template <class T>
-    void serialize(T& worker) { }
+    template <class T> void serialize(T& worker) { } SERIALIZERS(serialize);
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }

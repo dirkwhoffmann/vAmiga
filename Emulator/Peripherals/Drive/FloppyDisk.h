@@ -141,7 +141,8 @@ private:
         << data.raw
         << writeProtected
         << modified;
-    }
+
+    }; //  SERIALIZERS(serialize);
 
     //
     // Performing sanity checks

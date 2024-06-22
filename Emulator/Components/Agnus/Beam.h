@@ -40,6 +40,7 @@ struct Beam : Serializable
     // The type of the current line
     VideoFormat type;
 
+    /*
     template <class W>
     void operator<<(W& worker)
     {
@@ -54,6 +55,29 @@ struct Beam : Serializable
         << lolToggle
         << type;
     }
+    */
+
+    //
+    // Methods from Serializable
+    //
+
+public:
+
+    template <class T>
+    void serialize(T& worker)
+    {
+        worker
+
+        << v
+        << h
+        << frame
+        << lof
+        << lofToggle
+        << lol
+        << lolToggle
+        << type;
+
+    } SERIALIZERS(serialize);
 
 
     //

@@ -355,7 +355,7 @@ private:
     void serialize(T& worker)
     {
         worker
-        
+
         << diwstrt
         << diwstop
         << diwhigh
@@ -412,7 +412,8 @@ private:
         << config.clxSprSpr
         << config.clxSprPlf
         << config.clxPlfPlf;
-    }
+
+    } SERIALIZERS(serialize);
 
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }

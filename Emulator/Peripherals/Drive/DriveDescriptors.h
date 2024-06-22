@@ -34,6 +34,7 @@ struct GeometryDescriptor : Serializable {
     // Size of a sector in bytes
     isize bsize = 512;
     
+    /*
     template <class W>
     void operator<<(W& worker)
     {
@@ -44,7 +45,21 @@ struct GeometryDescriptor : Serializable {
         << sectors
         << bsize;
     }
-    
+    */
+
+    template <class T>
+    void serialize(T& worker)
+    {
+        worker
+
+        << cylinders
+        << heads
+        << sectors
+        << bsize;
+
+    } SERIALIZERS(serialize);
+
+
     // Returns a vector with compatible geometries for a given block count
     static std::vector<GeometryDescriptor> driveGeometries(isize numBlocks, isize bsize = 512);
 
@@ -96,6 +111,7 @@ struct PartitionDescriptor : Serializable {
     u32 bootPri = 0;
     u32 dosType = 0x444f5300;
     
+    /*
     template <class W>
     void operator<<(W& worker)
     {
@@ -117,7 +133,32 @@ struct PartitionDescriptor : Serializable {
         << bootPri
         << dosType;
     }
-    
+    */
+
+    template <class T>
+    void serialize(T& worker)
+    {
+        worker
+
+        << name
+        << flags
+        << sizeBlock
+        << heads
+        << sectors
+        << reserved
+        << interleave
+        << lowCyl
+        << highCyl
+        << numBuffers
+        << bufMemType
+        << maxTransfer
+        << mask
+        << bootPri
+        << dosType;
+
+    } SERIALIZERS(serialize);
+
+
     // Initializers
     PartitionDescriptor() { };
     PartitionDescriptor(const GeometryDescriptor &geo);
@@ -138,6 +179,7 @@ struct DriverDescriptor : Serializable {
     std::vector<u32> blocks;
     u32 segList = 0;
     
+    /*
     template <class W>
     void operator<<(W& worker)
     {
@@ -149,7 +191,22 @@ struct DriverDescriptor : Serializable {
         << blocks
         << segList;
     }
+    */
     
+    template <class T>
+    void serialize(T& worker)
+    {
+        worker
+
+        << dosType
+        << dosVersion
+        << patchFlags
+        << blocks
+        << segList;
+
+    } SERIALIZERS(serialize);
+
+
     // Initializers
     DriverDescriptor() { };
 

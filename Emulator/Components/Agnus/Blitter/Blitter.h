@@ -225,26 +225,26 @@ private:
     void serialize(T& worker)
     {
         worker
-        
+
         << bltcon0
         << bltcon1
-        
+
         << bltapt
         << bltbpt
         << bltcpt
         << bltdpt
-        
+
         << bltafwm
         << bltalwm
-        
+
         << bltsizeH
         << bltsizeV
-        
+
         << bltamod
         << bltbmod
         << bltcmod
         << bltdmod
-        
+
         << anew
         << bnew
         << aold
@@ -255,26 +255,26 @@ private:
         << dhold
         << ashift
         << bshift
-        
+
         << bltpc
         << iteration
-        
+
         << xCounter
         << yCounter
         << cntA
         << cntB
         << cntC
         << cntD
-        
+
         << fillCarry
         << mask
         << lockD
-        
+
         << running
         << bbusy
         << bzero
         << birq
-        
+
         << remaining;
 
         if (isResetter(worker)) return;
@@ -282,8 +282,9 @@ private:
         worker
 
         << config.accuracy;
-    }
-    
+
+    } SERIALIZERS(serialize);
+
     isize _size() override { COMPUTE_SNAPSHOT_SIZE }
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }

@@ -183,7 +183,8 @@ private:
         << config.type
         << config.mechanics
         << config.rpm;
-    }
+
+    } SERIALIZERS(serialize);
 
     isize _size() override;
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }

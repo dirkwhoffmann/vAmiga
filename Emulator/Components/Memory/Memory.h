@@ -262,7 +262,8 @@ private:
         << config.ramInitPattern
         << config.unmappingType
         << config.extStart;
-    }
+
+    } SERIALIZERS(serialize);
 
     isize _size() override;
     u64 _checksum() override;

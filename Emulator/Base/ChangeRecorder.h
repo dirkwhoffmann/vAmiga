@@ -151,12 +151,32 @@ struct RegChange : Serializable
     u16 value;
     u16 accessor;
     
+    /*
     template <class W>
     void operator<<(W& worker)
     {
         worker << addr << value << accessor;
     }
+    */
     
+    //
+    // Methods from Serializable
+    //
+
+public:
+
+    template <class T>
+    void serialize(T& worker)
+    {
+        worker
+
+        << addr
+        << value
+        << accessor;
+
+    } SERIALIZERS(serialize);
+
+
     RegChange() : addr(0), value(0), accessor(0) { }
     RegChange(u32 a, u16 v) : addr(a), value(v), accessor(0) { }
     RegChange(u32 a, u16 v, u16 ac) : addr(a), value(v), accessor(ac) { }
