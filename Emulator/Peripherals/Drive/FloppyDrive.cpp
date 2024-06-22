@@ -262,6 +262,34 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
     }
 }
 
+void
+FloppyDrive::operator << (SerChecker &worker)
+{
+    serialize(worker);
+
+    /*
+    if (hasDisk()) disk->serialize(worker);
+    if (diskToInsert) diskToInsert->serialize(worker);
+    */
+}
+
+void
+FloppyDrive::operator << (SerCounter &worker)
+{
+    serialize(worker);
+
+    // Add the size of a boolean indicating whether a disk is inserted
+    worker.count += sizeof(bool);
+
+    if (hasDisk()) {
+
+        // Add the disk type and disk state
+        worker << disk->getDiameter() << disk->getDensity();
+        disk->serialize(worker);
+    }
+}
+
+/*
 isize
 FloppyDrive::_size()
 {
@@ -281,7 +309,31 @@ FloppyDrive::_size()
 
     return counter.count;
 }
+*/
 
+void
+FloppyDrive::operator << (SerReader &worker)
+{
+    serialize(worker);
+
+    // Check if the snapshot includes a disk
+    bool diskInSnapshot; worker << diskInSnapshot;
+
+    // If yes, recreate the disk
+    if (diskInSnapshot) {
+
+        Diameter type;
+        Density density;
+        worker << type << density;
+        disk = std::make_unique<FloppyDisk>(worker, type, density);
+
+    } else {
+
+        disk = nullptr;
+    }
+}
+
+/*
 isize
 FloppyDrive::_load(const u8 *buffer) 
 {
@@ -310,7 +362,27 @@ FloppyDrive::_load(const u8 *buffer)
     trace(SNP_DEBUG, "Recreated from %ld bytes\n", result);
     return result;
 }
+*/
 
+void
+FloppyDrive::operator << (SerWriter &worker)
+{
+    serialize(worker);
+
+    // Indicate whether this drive has a disk is inserted
+    worker << hasDisk();
+
+    if (hasDisk()) {
+
+        // Write the disk type
+        worker << disk->getDiameter() << disk->getDensity();
+
+        // Write the disk's state
+        disk->serialize(worker);
+    }
+}
+
+/*
 isize
 FloppyDrive::_save(u8 *buffer)
 {
@@ -336,6 +408,7 @@ FloppyDrive::_save(u8 *buffer)
     trace(SNP_DEBUG, "Serialized to %ld bytes\n", result);
     return result;
 }
+*/
 
 bool
 FloppyDrive::isConnected() const
