@@ -300,6 +300,50 @@ Memory::operator << (SerCounter &worker)
     worker.count += fastSize;
 }
 
+void
+Memory::operator << (SerReader &worker)
+{
+    i32 romSize, womSize, extSize, chipSize, slowSize, fastSize;
+
+    serialize(worker);
+    
+    // Load memory size information
+    worker
+    << romSize
+    << womSize
+    << extSize
+    << chipSize
+    << slowSize
+    << fastSize;
+
+    // Check the integrity of the new values before allocating memory
+    if (romSize > KB(512)) throw Error(ERROR_SNAP_CORRUPTED);
+    if (womSize > KB(256)) throw Error(ERROR_SNAP_CORRUPTED);
+    if (extSize > KB(512)) throw Error(ERROR_SNAP_CORRUPTED);
+    if (chipSize > MB(2)) throw Error(ERROR_SNAP_CORRUPTED);
+    if (slowSize > KB(1792)) throw Error(ERROR_SNAP_CORRUPTED);
+    if (fastSize > MB(8)) throw Error(ERROR_SNAP_CORRUPTED);
+
+    // Allocate ROM space (only if Roms are included in the snapshot)
+    if (romSize) allocRom(romSize, false);
+    if (womSize) allocWom(womSize, false);
+    if (extSize) allocExt(extSize, false);
+
+    // Allocate RAM space
+    allocChip(chipSize, false);
+    allocSlow(slowSize, false);
+    allocFast(fastSize, false);
+
+    // Load memory contents
+    worker.copy(rom, romSize);
+    worker.copy(wom, womSize);
+    worker.copy(ext, extSize);
+    worker.copy(chip, chipSize);
+    worker.copy(slow, slowSize);
+    worker.copy(fast, fastSize);
+}
+
+/*
 isize
 Memory::didLoadFromBuffer(const u8 *buffer)
 {
@@ -343,7 +387,40 @@ Memory::didLoadFromBuffer(const u8 *buffer)
 
     return (isize)(reader.ptr - buffer);
 }
+*/
 
+void
+Memory::operator << (SerWriter &worker)
+{
+    serialize(worker);
+
+    // Determine memory size information
+    i32 romSize = config.saveRoms ? config.romSize : 0;
+    i32 womSize = config.saveRoms ? config.womSize : 0;
+    i32 extSize = config.saveRoms ? config.extSize : 0;
+    i32 chipSize = config.chipSize;
+    i32 slowSize = config.slowSize;
+    i32 fastSize = config.fastSize;
+
+    // Save memory size information
+    worker
+    << romSize
+    << womSize
+    << extSize
+    << chipSize
+    << slowSize
+    << fastSize;
+
+    // Save memory contents
+    worker.copy(rom, romSize);
+    worker.copy(wom, womSize);
+    worker.copy(ext, extSize);
+    worker.copy(chip, chipSize);
+    worker.copy(slow, slowSize);
+    worker.copy(fast, fastSize);
+}
+
+/*
 isize
 Memory::didSaveToBuffer(u8 *buffer)
 {
@@ -376,6 +453,7 @@ Memory::didSaveToBuffer(u8 *buffer)
     
     return (isize)(writer.ptr - buffer);
 }
+*/
 
 void
 Memory::_isReady() const

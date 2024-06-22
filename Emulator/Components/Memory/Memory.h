@@ -267,11 +267,8 @@ private:
     void operator << (SerResetter &worker) override { serialize(worker); }
     void operator << (SerChecker &worker) override;
     void operator << (SerCounter &worker) override;
-    void operator << (SerReader &worker) override  { serialize(worker); }
-    void operator << (SerWriter &worker) override  { serialize(worker); }
-
-    isize didLoadFromBuffer(const u8 *buffer) override;
-    isize didSaveToBuffer(u8 *buffer) override;
+    void operator << (SerReader &worker) override;
+    void operator << (SerWriter &worker) override;
 
 public:
 
