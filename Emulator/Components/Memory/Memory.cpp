@@ -258,7 +258,7 @@ Memory::setOption(Option option, i64 value)
 isize
 Memory::_size()
 {
-    util::SerCounter counter;
+    SerCounter counter;
 
     // Determine memory size information
     i32 romSize = config.saveRoms ? config.romSize : 0;
@@ -291,7 +291,7 @@ Memory::_size()
 u64
 Memory::_checksum()
 {
-    util::SerChecker checker;
+    SerChecker checker;
     
     serialize(checker);
     
@@ -311,7 +311,7 @@ Memory::_checksum()
 isize
 Memory::didLoadFromBuffer(const u8 *buffer)
 {
-    util::SerReader reader(buffer);
+    SerReader reader(buffer);
     i32 romSize, womSize, extSize, chipSize, slowSize, fastSize;
 
     // Load memory size information
@@ -355,7 +355,7 @@ Memory::didLoadFromBuffer(const u8 *buffer)
 isize
 Memory::didSaveToBuffer(u8 *buffer)
 {
-    util::SerWriter writer(buffer);
+    SerWriter writer(buffer);
 
     // Determine memory size information
     i32 romSize = config.saveRoms ? config.romSize : 0;

@@ -145,7 +145,7 @@ enum RegChangeID : i32
     SET_SERDAT
 };
 
-struct RegChange : util::Serializable
+struct RegChange : Serializable
 {
     u32 addr;
     u16 value;

@@ -160,7 +160,7 @@ private:
         << chargeY1
         << adkcon;
 
-        if (util::isSoftResetter(worker)) return;
+        if (isSoftResetter(worker)) return;
 
         worker
 

@@ -148,7 +148,7 @@ private:
         << enablePenlo
         << enablePenhi;
 
-        if (util::isSoftResetter(worker)) return;
+        if (isSoftResetter(worker)) return;
 
         worker
 

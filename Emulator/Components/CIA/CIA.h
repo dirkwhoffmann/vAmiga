@@ -338,7 +338,7 @@ private:
         << ssr
         << serCounter;
 
-        if (util::isSoftResetter(worker)) return;
+        if (isSoftResetter(worker)) return;
 
         worker
 
@@ -349,7 +349,7 @@ private:
         << sleepCycle
         << wakeUpCycle;
 
-        if (util::isResetter(worker)) return;
+        if (isResetter(worker)) return;
 
         worker
 

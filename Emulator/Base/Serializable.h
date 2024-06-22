@@ -17,7 +17,7 @@
 #include <concepts>
 #include <vector>
 
-namespace util {
+namespace vamiga {
 
 class Serializable { };
 
@@ -246,7 +246,7 @@ public:
 
     u64 hash;
 
-    SerChecker() { hash = fnvInit64(); }
+    SerChecker() { hash = util::fnvInit64(); }
 
     CHECK(const bool)
     CHECK(const char)

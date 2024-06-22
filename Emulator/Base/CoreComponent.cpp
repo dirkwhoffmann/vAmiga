@@ -139,7 +139,7 @@ CoreComponent::load(const u8 *buffer)
     }
 
     // Load the checksum for this component
-    auto hash = util::read64(ptr);
+    auto hash = read64(ptr);
 
     // Load internal state of this component
     ptr += _load(ptr);
@@ -183,7 +183,7 @@ CoreComponent::save(u8 *buffer)
     }
 
     // Save the checksum for this component
-    util::write64(ptr, _checksum());
+    write64(ptr, _checksum());
     
     // Save the internal state of this component
     ptr += _save(ptr);

@@ -87,7 +87,7 @@ private:
 
         << port;
 
-        if (util::isResetter(worker)) return;
+        if (isResetter(worker)) return;
 
         worker
 

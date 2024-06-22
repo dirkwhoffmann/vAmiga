@@ -102,7 +102,7 @@ public:
     FloppyDisk() = default;
     FloppyDisk(Diameter dia, Density den) throws { init(dia, den); }
     FloppyDisk(const FloppyFile &file) throws { init(file); }
-    FloppyDisk(util::SerReader &reader, Diameter dia, Density den) throws {
+    FloppyDisk(SerReader &reader, Diameter dia, Density den) throws {
         init(reader, dia, den); }
     ~FloppyDisk();
     
@@ -110,7 +110,7 @@ private:
     
     void init(Diameter dia, Density den) throws;
     void init(const class FloppyFile &file) throws;
-    void init(util::SerReader &reader, Diameter dia, Density den) throws;
+    void init(SerReader &reader, Diameter dia, Density den) throws;
     
     
     //
@@ -132,7 +132,7 @@ private:
     template <class T>
     void serialize(T& worker)
     {
-        if (util::isResetter(worker)) return;
+        if (isResetter(worker)) return;
 
         worker
 

@@ -265,7 +265,7 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
 isize
 FloppyDrive::_size()
 {
-    util::SerCounter counter;
+    SerCounter counter;
 
     serialize(counter);
     
@@ -285,7 +285,7 @@ FloppyDrive::_size()
 isize
 FloppyDrive::_load(const u8 *buffer) 
 {
-    util::SerReader reader(buffer);
+    SerReader reader(buffer);
     isize result;
     
     // Read own state
@@ -314,7 +314,7 @@ FloppyDrive::_load(const u8 *buffer)
 isize
 FloppyDrive::_save(u8 *buffer)
 {
-    util::SerWriter writer(buffer);
+    SerWriter writer(buffer);
     isize result;
     
     // Write own state

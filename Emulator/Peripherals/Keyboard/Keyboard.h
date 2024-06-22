@@ -89,7 +89,7 @@ private:
         << spHigh
         << queue;
 
-        if (util::isResetter(worker)) return;
+        if (isResetter(worker)) return;
 
         worker 
 

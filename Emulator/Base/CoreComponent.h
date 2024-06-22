@@ -215,30 +215,30 @@ public:
 
 #define RESET_SNAPSHOT_ITEMS(hard) \
 if (hard) { \
-util::SerHardResetter resetter; \
+SerHardResetter resetter; \
 serialize(resetter); \
 } else { \
-util::SerSoftResetter resetter; \
+SerSoftResetter resetter; \
 serialize(resetter); \
 }
 
 #define COMPUTE_SNAPSHOT_SIZE \
-util::SerCounter counter; \
+SerCounter counter; \
 serialize(counter); \
 return counter.count;
 
 #define COMPUTE_SNAPSHOT_CHECKSUM \
-util::SerChecker checker; \
+SerChecker checker; \
 serialize(checker); \
 return checker.hash;
 
 #define LOAD_SNAPSHOT_ITEMS \
-util::SerReader reader(buffer); \
+SerReader reader(buffer); \
 serialize(reader); \
 return (isize)(reader.ptr - buffer);
 
 #define SAVE_SNAPSHOT_ITEMS \
-util::SerWriter writer(buffer); \
+SerWriter writer(buffer); \
 serialize(writer); \
 return (isize)(writer.ptr - buffer);
 

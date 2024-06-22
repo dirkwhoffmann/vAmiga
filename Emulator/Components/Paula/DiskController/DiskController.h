@@ -146,7 +146,7 @@ private:
         << dsksync
         << prb;
 
-        if (util::isResetter(worker)) return;
+        if (isResetter(worker)) return;
 
         worker
 
