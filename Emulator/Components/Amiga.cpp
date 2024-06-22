@@ -637,7 +637,7 @@ isize
 Amiga::load(const u8 *buffer)
 {
     auto result = CoreComponent::load(buffer);
-    CoreComponent::didLoad();
+    postorderWalk([](CoreComponent *c) { c->_didLoad(); });
 
     return result;
 }
@@ -646,7 +646,7 @@ isize
 Amiga::save(u8 *buffer)
 {
     auto result = CoreComponent::save(buffer);
-    CoreComponent::didSave();
+    postorderWalk([](CoreComponent *c) { c->_didSave(); });
 
     return result;
 }

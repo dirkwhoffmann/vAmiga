@@ -169,14 +169,10 @@ public:
 
     // Loads the internal state from a memory buffer
     virtual isize load(const u8 *buf) throws;
-    // virtual isize _load(const u8 *buf) = 0;
-    virtual void didLoad();
     virtual void _didLoad() { };
 
     // Saves the internal state to a memory buffer
     virtual isize save(u8 *buf);
-    // virtual isize _save(u8 *buf) = 0;
-    virtual void didSave();
     virtual void _didSave() { };
 
     /* Delegation methods called inside load() or save(). Some components

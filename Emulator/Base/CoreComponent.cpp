@@ -112,23 +112,6 @@ CoreComponent::size()
     return result;
 }
 
-/*
-u64
-CoreComponent::checksum()
-{
-    SerChecker checker;
-    *this << checker;
-    isize result = checker.hash;
-
-    // Compute checksums for all subcomponents
-    for (CoreComponent *c : subComponents) {
-        result = util::fnvIt64(result, c->checksum());
-    }
-    
-    return result;
-}
-*/
-
 isize
 CoreComponent::load(const u8 *buffer)
 {
@@ -166,18 +149,6 @@ CoreComponent::load(const u8 *buffer)
     return result;
 }
 
-void
-CoreComponent::didLoad()
-{
-    assert(!isRunning());
-
-    for (CoreComponent *c : subComponents) {
-        c->didLoad();
-    }
-
-    _didLoad();
-}
-
 isize
 CoreComponent::save(u8 *buffer)
 {
@@ -207,16 +178,6 @@ CoreComponent::save(u8 *buffer)
     assert(result == size());
 
     return result;
-}
-
-void
-CoreComponent::didSave()
-{        
-    for (CoreComponent *c : subComponents) {
-        c->didSave();
-    }
-
-    _didSave();
 }
 
 bool
