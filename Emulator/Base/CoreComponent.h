@@ -165,21 +165,21 @@ public:
     
     // Returns the size of the internal state in bytes
     isize size();
-    virtual isize _size() = 0;
-    
+    // virtual isize _size() = 0;
+
     // Computes a checksum for this component
     u64 checksum();
     virtual u64 _checksum() = 0;
 
     // Loads the internal state from a memory buffer
     virtual isize load(const u8 *buf) throws;
-    virtual isize _load(const u8 *buf) = 0;
+    // virtual isize _load(const u8 *buf) = 0;
     virtual void didLoad();
     virtual void _didLoad() { };
 
     // Saves the internal state to a memory buffer
     virtual isize save(u8 *buf);
-    virtual isize _save(u8 *buf) = 0;
+    // virtual isize _save(u8 *buf) = 0;
     virtual void didSave();
     virtual void _didSave() { };
 
@@ -222,16 +222,19 @@ SerResetter resetter(false); \
 *this << resetter; \
 }
 
+/*
 #define COMPUTE_SNAPSHOT_SIZE \
 SerCounter counter; \
 *this << counter; \
 return counter.count;
+*/
 
 #define COMPUTE_SNAPSHOT_CHECKSUM \
 SerChecker checker; \
 *this << checker; \
 return checker.hash;
 
+/*
 #define LOAD_SNAPSHOT_ITEMS \
 SerReader reader(buffer); \
 *this << reader; \
@@ -241,5 +244,6 @@ return (isize)(reader.ptr - buffer);
 SerWriter writer(buffer); \
 *this << writer; \
 return (isize)(writer.ptr - buffer);
+*/
 
 }

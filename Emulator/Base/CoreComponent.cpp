@@ -193,7 +193,6 @@ CoreComponent::save(u8 *buffer)
     write64(ptr, _checksum());
     
     // Save the internal state of this component
-    // ptr += _save(ptr);
     SerWriter writer(ptr);
     *this << writer;
     ptr = writer.ptr;
