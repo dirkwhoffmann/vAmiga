@@ -213,16 +213,6 @@ public:
 // Standard implementations of _reset, _size, _checksum, _load, and _save
 //
 
-/*
-#define RESET_SNAPSHOT_ITEMS(hard) \
-if (hard) { \
-SerResetter resetter(true); \
-serialize(resetter); \
-} else { \
-SerResetter resetter(false); \
-serialize(resetter); \
-}
-*/
 #define RESET_SNAPSHOT_ITEMS(hard) \
 if (hard) { \
 SerResetter resetter(true); \

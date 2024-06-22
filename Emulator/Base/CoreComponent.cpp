@@ -101,8 +101,10 @@ CoreComponent::routeOption(Option opt, std::vector<Configurable *> &result)
 isize
 CoreComponent::size()
 {
-    isize result = _size();
-    
+    SerCounter counter;
+    *this << counter;
+    isize result = counter.count;
+
     // Add 8 bytes for the checksum
     result += 8;
     
@@ -113,8 +115,10 @@ CoreComponent::size()
 u64
 CoreComponent::checksum()
 {
-    u64 result = _checksum();
-    
+    SerChecker checker;
+    *this << checker;
+    isize result = checker.hash;
+
     // Compute checksums for all subcomponents
     for (CoreComponent *c : subComponents) {
         result = util::fnvIt64(result, c->checksum());
@@ -142,7 +146,10 @@ CoreComponent::load(const u8 *buffer)
     auto hash = read64(ptr);
 
     // Load internal state of this component
-    ptr += _load(ptr);
+    // ptr += _load(ptr);
+    SerReader reader(ptr);
+    *this << reader;
+    ptr = reader.ptr;
 
     // Call the delegate
     ptr += didLoadFromBuffer(ptr);
@@ -186,7 +193,10 @@ CoreComponent::save(u8 *buffer)
     write64(ptr, _checksum());
     
     // Save the internal state of this component
-    ptr += _save(ptr);
+    // ptr += _save(ptr);
+    SerWriter writer(ptr);
+    *this << writer;
+    ptr = writer.ptr;
 
     // Call the delegate
     ptr += didSaveToBuffer(ptr);
