@@ -38,29 +38,38 @@ CIA::_initialize()
     pb = 0xFF;
 }
 
-void
-CIA::_reset(bool hard)
+void 
+CIA::willReset(bool hard)
 {
     if (!hard) wakeUp();
+}
 
-    RESET_SNAPSHOT_ITEMS(hard)
-    
+void
+CIA::didReset(bool hard)
+{
+    // Update the memory layout because the OVL bit may have changed
+    // TODO: Do this in Memory class only
+    mem.updateMemSrcTables();
+}
+
+void
+CIA::operator << (SerResetter &worker)
+{
+    serialize(worker);
+
     cnt = true;
     irq = 1;
-    
+
     counterA = 0xFFFF;
     counterB = 0xFFFF;
     latchA = 0xFFFF;
     latchB = 0xFFFF;
-    
+
     // UAE initializes CRB with 4 (which I think is wrong)
     if (MIMIC_UAE) crb = 0x4;
 
     updatePA();
     updatePB();
-    
-    // Update the memory layout because the OVL bit may have changed
-    mem.updateMemSrcTables();
 }
 
 i64

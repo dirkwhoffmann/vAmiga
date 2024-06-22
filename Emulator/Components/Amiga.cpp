@@ -136,6 +136,9 @@ Amiga::reset(bool hard)
 {
     suspend();
 
+    // Call the pre-reset delegate
+    postorderWalk([hard](CoreComponent *c) { c->willReset(hard); });
+
     // If a disk change is in progress, finish it
     df0.serviceDiskChangeEvent <SLOT_DC0> ();
     df1.serviceDiskChangeEvent <SLOT_DC1> ();
@@ -144,6 +147,9 @@ Amiga::reset(bool hard)
 
     // Execute the standard reset routine
     CoreComponent::reset(hard);
+
+    // Call the pre-reset delegate
+    postorderWalk([hard](CoreComponent *c) { c->didReset(hard); });
 
     resume();
 
@@ -168,13 +174,13 @@ Amiga::getOption(Option option) const
 {
     switch (option) {
 
-        case OPT_AMIGA_VIDEO_FORMAT:          return config.type;
-        case OPT_AMIGA_WARP_BOOT:         return config.warpBoot;
-        case OPT_AMIGA_WARP_MODE:         return config.warpMode;
-        case OPT_AMIGA_VSYNC:                 return config.vsync;
-        case OPT_AMIGA_SPEED_BOOST:            return config.timeLapse;
-        case OPT_AMIGA_SNAPSHOTS:         return config.snapshots;
-        case OPT_AMIGA_SNAPSHOT_DELAY:    return config.snapshotDelay;
+        case OPT_AMIGA_VIDEO_FORMAT:    return config.type;
+        case OPT_AMIGA_WARP_BOOT:       return config.warpBoot;
+        case OPT_AMIGA_WARP_MODE:       return config.warpMode;
+        case OPT_AMIGA_VSYNC:           return config.vsync;
+        case OPT_AMIGA_SPEED_BOOST:     return config.timeLapse;
+        case OPT_AMIGA_SNAPSHOTS:       return config.snapshots;
+        case OPT_AMIGA_SNAPSHOT_DELAY:  return config.snapshotDelay;
 
         default:
             fatalError;

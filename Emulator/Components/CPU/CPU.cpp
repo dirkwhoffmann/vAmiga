@@ -198,13 +198,13 @@ Moira::didExecute(ExceptionType exc, u16 vector)
 }
 
 void
-Moira::didReset()
+Moira::cpuDidReset()
 {
 
 }
 
 void
-Moira::didHalt()
+Moira::cpuDidHalt()
 {
     msgQueue.put(MSG_CPU_HALT);
 }

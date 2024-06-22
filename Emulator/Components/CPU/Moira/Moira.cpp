@@ -224,7 +224,7 @@ Moira::reset()
     debugger.reset();
 
     // Inform the delegate
-    didReset();
+    cpuDidReset();
 }
 
 void
@@ -427,7 +427,7 @@ Moira::halt()
     reg.pc = reg.pc0;
 
     // Inform the delegate
-    didHalt();
+    cpuDidHalt();
 }
 
 u8

@@ -125,7 +125,7 @@ public:
     virtual void isReady() const throws;
 
 protected:
-    
+
     void powerOn();
     void powerOff();
     void run();
@@ -142,8 +142,13 @@ protected:
     void warpOnOff(bool value) { value ? warpOn() : warpOff(); }
     void trackOnOff(bool value) { value ? trackOn() : trackOff(); }
 
-private:
+public:
     
+    virtual void willReset(bool hard) { }
+    virtual void didReset(bool hard) { }
+
+private:
+
     virtual void _isReady() const throws { }
     virtual void _powerOn() { }
     virtual void _powerOff() { }
