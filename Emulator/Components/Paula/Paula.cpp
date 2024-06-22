@@ -92,11 +92,10 @@ Paula::cacheInfo(PaulaInfo &info) const
     }
 }
 
-isize
-Paula::didLoadFromBuffer(const u8 *buffer)
+void
+Paula::_didLoad()
 {
     muxer.clear();
-    return 0;
 }
 
 void

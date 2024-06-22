@@ -306,11 +306,10 @@ HardDrive::cacheInfo(HardDriveInfo &info) const
     }
 }
 
-isize
-HardDrive::didLoadFromBuffer(const u8 *buffer)
+void
+HardDrive::_didLoad()
 {
     disableWriteThrough();
-    return 0;
 }
 
 void

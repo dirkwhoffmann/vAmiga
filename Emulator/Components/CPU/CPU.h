@@ -145,8 +145,8 @@ private:
 
     } SERIALIZERS(serialize);
 
-    isize didLoadFromBuffer(const u8 *buffer) override;
-    
+    void _didLoad() override;
+
 
     //
     // Methods from CoreComponent

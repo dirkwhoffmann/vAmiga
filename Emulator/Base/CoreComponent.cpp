@@ -118,9 +118,6 @@ CoreComponent::load(const u8 *buffer)
     assert(!isRunning());
     
     const u8 *ptr = buffer;
-    
-    // Call the delegate
-    ptr += willLoadFromBuffer(ptr);
 
     // Load internal state of all subcomponents
     for (CoreComponent *c : subComponents) {
@@ -131,20 +128,16 @@ CoreComponent::load(const u8 *buffer)
     auto hash = read64(ptr);
 
     // Load internal state of this component
-    // ptr += _load(ptr);
     SerReader reader(ptr);
     *this << reader;
     ptr = reader.ptr;
-
-    // Call the delegate
-    ptr += didLoadFromBuffer(ptr);
-    isize result = (isize)(ptr - buffer);
 
     // Check integrity
     if (hash != checksum() || FORCE_SNAP_CORRUPTED) {
         throw Error(ERROR_SNAP_CORRUPTED);
     }
-    
+
+    isize result = (isize)(ptr - buffer);
     debug(SNP_DEBUG, "Loaded %ld bytes (expected %ld)\n", result, size());
     return result;
 }
@@ -153,10 +146,7 @@ isize
 CoreComponent::save(u8 *buffer)
 {
     u8 *ptr = buffer;
-    
-    // Call the delegate
-    ptr += willSaveToBuffer(ptr);
-    
+
     // Save internal state of all subcomponents
     for (CoreComponent *c : subComponents) {
         ptr += c->save(ptr);
@@ -170,13 +160,9 @@ CoreComponent::save(u8 *buffer)
     *this << writer;
     ptr = writer.ptr;
 
-    // Call the delegate
-    ptr += didSaveToBuffer(ptr);
     isize result = (isize)(ptr - buffer);
-    
     debug(SNP_DEBUG, "Saved %ld bytes (expected %ld)\n", result, size());
     assert(result == size());
-
     return result;
 }
 

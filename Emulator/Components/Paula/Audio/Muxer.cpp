@@ -185,11 +185,10 @@ Muxer::setSampleRate(double hz)
     filter.setup(hz);
 }
 
-isize
-Muxer::didLoadFromBuffer(const u8 *buffer)
+void
+Muxer::_didLoad()
 {
     for (isize i = 0; i < 4; i++) sampler[i].reset();
-    return 0;
 }
 
 void

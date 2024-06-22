@@ -92,15 +92,13 @@ Joystick::_dump(Category category, std::ostream& os) const
     }
 }
 
-isize
-Joystick::didLoadFromBuffer(const u8 *buffer)
+void
+Joystick::_didLoad()
 {
     // Discard any active joystick movements
     button = false;
     axisX = 0;
     axisY = 0;
-
-    return 0;
 }
 
 void

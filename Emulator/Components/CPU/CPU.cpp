@@ -587,8 +587,8 @@ CPU::_trackOff()
     debugger.disableLogging();
 }
 
-isize
-CPU::didLoadFromBuffer(const u8 *buffer)
+void
+CPU::_didLoad()
 {
     auto cpuModel = (moira::Model)config.revision;
     auto dasmModel = (moira::Model)config.dasmRevision;
@@ -603,7 +603,6 @@ CPU::didLoadFromBuffer(const u8 *buffer)
      */
     debugger.breakpoints.setNeedsCheck(debugger.breakpoints.elements() != 0);
     debugger.watchpoints.setNeedsCheck(debugger.watchpoints.elements() != 0);
-    return 0;
 }
 
 void

@@ -73,11 +73,10 @@ PixelEngine::_reset(bool hard)
     updateRGBA();
 }
 
-isize
-PixelEngine::didLoadFromBuffer(const u8 *buffer)
+void
+PixelEngine::_didLoad()
 {
     updateRGBA();
-    return 0;
 }
 
 void
