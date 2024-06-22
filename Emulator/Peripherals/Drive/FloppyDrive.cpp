@@ -63,16 +63,16 @@ FloppyDrive::getOption(Option option) const
 {
     switch (option) {
             
-        case OPT_DRIVE_CONNECT:       return (i64)config.connected;
-        case OPT_DRIVE_TYPE:          return (i64)config.type;
-        case OPT_DRIVE_MECHANICS:     return (i64)config.mechanics;
-        case OPT_DRIVE_RPM:           return (i64)config.rpm;
-        case OPT_DRIVE_SWAP_DELAY:     return (i64)config.diskSwapDelay;
-        case OPT_DRIVE_PAN:           return (i64)config.pan;
-        case OPT_DRIVE_STEP_VOLUME:         return (i64)config.stepVolume;
-        case OPT_DRIVE_POLL_VOLUME:         return (i64)config.pollVolume;
-        case OPT_DRIVE_INSERT_VOLUME:       return (i64)config.insertVolume;
-        case OPT_DRIVE_EJECT_VOLUME:        return (i64)config.ejectVolume;
+        case OPT_DRIVE_CONNECT:         return (i64)config.connected;
+        case OPT_DRIVE_TYPE:            return (i64)config.type;
+        case OPT_DRIVE_MECHANICS:       return (i64)config.mechanics;
+        case OPT_DRIVE_RPM:             return (i64)config.rpm;
+        case OPT_DRIVE_SWAP_DELAY:      return (i64)config.diskSwapDelay;
+        case OPT_DRIVE_PAN:             return (i64)config.pan;
+        case OPT_DRIVE_STEP_VOLUME:     return (i64)config.stepVolume;
+        case OPT_DRIVE_POLL_VOLUME:     return (i64)config.pollVolume;
+        case OPT_DRIVE_INSERT_VOLUME:   return (i64)config.insertVolume;
+        case OPT_DRIVE_EJECT_VOLUME:    return (i64)config.ejectVolume;
 
         default:
             fatalError;
@@ -267,10 +267,8 @@ FloppyDrive::operator << (SerChecker &worker)
 {
     serialize(worker);
 
-    /*
     if (hasDisk()) disk->serialize(worker);
     if (diskToInsert) diskToInsert->serialize(worker);
-    */
 }
 
 void
@@ -288,28 +286,6 @@ FloppyDrive::operator << (SerCounter &worker)
         disk->serialize(worker);
     }
 }
-
-/*
-isize
-FloppyDrive::_size()
-{
-    SerCounter counter;
-
-    serialize(counter);
-    
-    // Add the size of the boolean indicating whether a disk is inserted
-    counter.count += sizeof(bool);
-
-    if (hasDisk()) {
-
-        // Add the disk type and disk state
-        counter << disk->getDiameter() << disk->getDensity();
-        disk->serialize(counter);
-    }
-
-    return counter.count;
-}
-*/
 
 void
 FloppyDrive::operator << (SerReader &worker)
@@ -333,37 +309,6 @@ FloppyDrive::operator << (SerReader &worker)
     }
 }
 
-/*
-isize
-FloppyDrive::_load(const u8 *buffer) 
-{
-    SerReader reader(buffer);
-    isize result;
-    
-    // Read own state
-    serialize(reader);
-
-    // Check if the snapshot includes a disk
-    bool diskInSnapshot; reader << diskInSnapshot;
-    
-    if (diskInSnapshot) {
-        
-        Diameter type;
-        Density density;
-        reader << type << density;
-        disk = std::make_unique<FloppyDisk>(reader, type, density);
-
-    } else {
-        
-        disk = nullptr;
-    }
-
-    result = (isize)(reader.ptr - buffer);
-    trace(SNP_DEBUG, "Recreated from %ld bytes\n", result);
-    return result;
-}
-*/
-
 void
 FloppyDrive::operator << (SerWriter &worker)
 {
@@ -381,34 +326,6 @@ FloppyDrive::operator << (SerWriter &worker)
         disk->serialize(worker);
     }
 }
-
-/*
-isize
-FloppyDrive::_save(u8 *buffer)
-{
-    SerWriter writer(buffer);
-    isize result;
-    
-    // Write own state
-    serialize(writer);
-
-    // Indicate whether this drive has a disk is inserted
-    writer << hasDisk();
-
-    if (hasDisk()) {
-
-        // Write the disk type
-        writer << disk->getDiameter() << disk->getDensity();
-
-        // Write the disk's state
-        disk->serialize(writer);
-    }
-    
-    result = (isize)(writer.ptr - buffer);
-    trace(SNP_DEBUG, "Serialized to %ld bytes\n", result);
-    return result;
-}
-*/
 
 bool
 FloppyDrive::isConnected() const

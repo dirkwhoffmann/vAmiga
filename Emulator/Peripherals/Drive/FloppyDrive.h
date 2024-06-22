@@ -183,8 +183,7 @@ private:
         << config.type
         << config.mechanics
         << config.rpm;
-
-    } // SERIALIZERS(serialize);
+    }
 
     void operator << (SerResetter &worker) override { serialize(worker); };
     void operator << (SerChecker &worker) override;
@@ -196,12 +195,6 @@ private:
     u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
     isize _load(const u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     isize _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-    /*
-    isize _size() override;
-    u64 _checksum() override { COMPUTE_SNAPSHOT_CHECKSUM }
-    isize _load(const u8 *buffer) override;
-    isize _save(u8 *buffer) override;
-    */
 
 public:
 

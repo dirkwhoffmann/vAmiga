@@ -255,6 +255,52 @@ Memory::setOption(Option option, i64 value)
     }
 }
 
+void 
+Memory::operator << (SerChecker &worker)
+{
+    serialize(worker);
+
+    if (config.chipSize) {
+        for (isize i = 0; i < config.chipSize; i++) worker << chip[i];
+    }
+    if (config.slowSize) {
+        for (isize i = 0; i < config.slowSize; i++) worker << slow[i];
+    }
+    if (config.fastSize) {
+        for (isize i = 0; i < config.fastSize; i++) worker << fast[i];
+    }
+}
+
+void
+Memory::operator << (SerCounter &worker)
+{
+    // Determine memory size information
+    i32 romSize = config.saveRoms ? config.romSize : 0;
+    i32 womSize = config.saveRoms ? config.womSize : 0;
+    i32 extSize = config.saveRoms ? config.extSize : 0;
+    i32 chipSize = config.chipSize;
+    i32 slowSize = config.slowSize;
+    i32 fastSize = config.fastSize;
+
+    serialize(worker);
+
+    worker
+    << romSize
+    << womSize
+    << extSize
+    << chipSize
+    << slowSize
+    << fastSize;
+
+    worker.count += romSize;
+    worker.count += womSize;
+    worker.count += extSize;
+    worker.count += chipSize;
+    worker.count += slowSize;
+    worker.count += fastSize;
+}
+
+/*
 isize
 Memory::_size()
 {
@@ -287,7 +333,9 @@ Memory::_size()
 
     return counter.count;
 }
+*/
 
+/*
 u64
 Memory::_checksum()
 {
@@ -307,6 +355,7 @@ Memory::_checksum()
     
     return checker.hash;
 }
+*/
 
 isize
 Memory::didLoadFromBuffer(const u8 *buffer)
