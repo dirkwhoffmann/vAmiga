@@ -411,12 +411,9 @@ extension MyController {
         case .CONSOLE_DEBUGGER:
             break
 
-        case .SCRIPT_DONE, .SCRIPT_PAUSE, .SCRIPT_ABORT:
-            break
-            
-        case .SCRIPT_WAKEUP:
-            amiga.continueScript()
-            
+        case .SCRIPT_DONE, .SCRIPT_ABORT:
+            renderer.console.isDirty = true
+
         case .SHUTDOWN:
             shutDown()
             

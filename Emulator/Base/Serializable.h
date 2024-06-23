@@ -232,6 +232,13 @@ public:
         return *this;
     }
 
+    template <class E, class = std::enable_if_t<std::is_enum<E>{}>>
+    SerCounter& operator<<(E &v)
+    {
+        count += sizeof(u64);
+        return *this;
+    }
+
     template <std::derived_from<Serializable> T>
     SerCounter& operator<<(T &v)
     {
@@ -348,6 +355,13 @@ public:
         for(isize i = 0; i < N; ++i) {
             *this << v[i];
         }
+        return *this;
+    }
+
+    template <class E, class = std::enable_if_t<std::is_enum<E>{}>>
+    SerChecker& operator<<(E &v)
+    {
+        hash = util::fnvIt64(hash, v);
         return *this;
     }
 
@@ -491,6 +505,13 @@ public:
         ptr += n;
     }
 
+    template <class E, class = std::enable_if_t<std::is_enum<E>{}>>
+    SerReader& operator<<(E &v)
+    {
+        v = (E)read64(ptr);
+        return *this;
+    }
+
     template <std::derived_from<Serializable> T>
     SerReader& operator<<(T &v)
     {
@@ -623,6 +644,13 @@ public:
         ptr += n;
     }
 
+    template <class E, class = std::enable_if_t<std::is_enum<E>{}>>
+    SerWriter& operator<<(E &v)
+    {
+        write64(ptr, (long)v);
+        return *this;
+    }
+
     template <std::derived_from<Serializable> T>
     SerWriter& operator<<(T &v)
     {
@@ -739,6 +767,13 @@ public:
         return *this;
     }
 
+    template <class E, class = std::enable_if_t<std::is_enum<E>{}>>
+    SerResetter& operator<<(E &v)
+    {
+        v = (E)0;
+        return *this;
+    }
+    
     template <std::derived_from<Serializable> T>
     SerResetter& operator<<(T &v)
     {

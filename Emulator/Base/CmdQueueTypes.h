@@ -78,10 +78,10 @@ enum_long(CMD_TYPE)
     CMD_DSK_TOGGLE_WP,          ///< Toggle write-protection
     CMD_DSK_MODIFIED,           ///< Signal that the disk has been saved
     CMD_DSK_UNMODIFIED,         ///< Signan that the disk needs saving
+     */
 
     // RetroShell
     CMD_RSH_EXECUTE,            ///< Execute a script command
-    */
 
     // Host machine
     CMD_FOCUS                   ///< The emulator windows got or lost focus
@@ -149,9 +149,9 @@ struct CmdTypeEnum : util::Reflection<CmdType, CmdType> {
             case CMD_DSK_TOGGLE_WP:         return "DSK_TOGGLE_WP";
             case CMD_DSK_MODIFIED:          return "DSK_MODIFIED";
             case CMD_DSK_UNMODIFIED:        return "DSK_UNMODIFIED";
+             */
 
             case CMD_RSH_EXECUTE:           return "RSH_EXECUTE";
-            */
 
             case CMD_FOCUS:                 return "FOCUS";
 

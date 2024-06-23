@@ -3169,35 +3169,6 @@ using namespace vamiga::moira;
     return [self emu]->resume();
 }
 
-- (void)continueScript
-{
-    [self emu]->emu->main.retroShell.continueScript();
-}
-
-/*
-- (void)requestAutoSnapshot
-{
-    [self emu]->emu->main.requestAutoSnapshot();
-}
-
-- (void)requestUserSnapshot
-{
-    [self emu]->emu->main.requestUserSnapshot();
-}
-
-- (SnapshotProxy *)latestAutoSnapshot
-{
-    Snapshot *snapshot = [self emu]->emu->main.latestAutoSnapshot();
-    return [SnapshotProxy make:snapshot];
-}
-
-- (SnapshotProxy *)latestUserSnapshot
-{
-    Snapshot *snapshot = [self emu]->emu->main.latestUserSnapshot();
-    return [SnapshotProxy make:snapshot];
-}
-*/
-
 - (void)loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { [self emu]->emu->main.loadSnapshot(*[proxy snapshot]); }

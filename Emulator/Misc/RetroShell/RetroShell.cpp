@@ -11,10 +11,13 @@
 #include "RetroShell.h"
 #include "Emulator.h"
 #include "Parser.h"
+#include <istream>
+#include <sstream>
+#include <string>
 
 namespace vamiga {
 
-RetroShell::RetroShell(Amiga& ref) : SubComponent(ref)
+RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
 {    
     subComponents = std::vector<CoreComponent *> {
 
@@ -440,11 +443,7 @@ RetroShell::execUserCommand(const string &command)
 
         } else {
 
-            if (emulator.isRunning()) {
-                emulator.pause();
-            } else {
-                debugger.stepInto();
-            }
+            emulator.isRunning() ? emulator.pause() : debugger.stepInto();
         }
 
     } else {
@@ -454,44 +453,70 @@ RetroShell::execUserCommand(const string &command)
         history.push_back( { "", 0 } );
         ipos = (isize)history.size() - 1;
         
-        // Execute the command
-        try { exec(command); } catch (...) { };
+        // Feed the command into the command queue
+        commands.push_back({ 0, command});
+        emulator.put(Cmd(CMD_RSH_EXECUTE));
     }
 }
 
 void
-RetroShell::exec(const string &command)
+RetroShell::exec()
 {
-    bool ignoreError = false;
-    
-    // Skip comments
-    if (command[0] == '#') return;
-    
+    SYNCHRONIZED
+
+    std::pair<isize, string> cmd;
+
     try {
-        // Check if the command marked with 'try'
-        ignoreError = command.rfind("try", 0) == 0;
+
+        while (!commands.empty()) {
+
+            cmd = commands.front();
+            commands.erase(commands.begin());
+
+            exec(cmd.second, cmd.first);
+        }
+
+    } catch (...) { }
+}
+
+void
+RetroShell::exec(const string &command, isize line)
+{
+    try {
+
+        // Print the command if it comes from a script
+        if (line) *this << command << '\n';
 
         // Call the interpreter
         interpreter.exec(command);
-        
-    } catch (std::exception &err) {
-        
-        // Print error message
-        describe(err);
-        
+
+    } catch (ScriptInterruption &) {
+
         // Rethrow the exception
-        if (!ignoreError) throw;
+        throw;
+
+    } catch (std::exception &err) {
+
+        // Print error message
+        describe(err, line, command);
+
+        // Rethrow the exception if the command is not prefixed with 'try'
+        if (command.rfind("try", 0)) throw;
     }
 }
 
 void
-RetroShell::execScript(const std::stringstream &ss)
+RetroShell::execScript(std::stringstream &ss)
 {
-    script.str("");
-    script.clear();
-    script << ss.rdbuf();
-    scriptLine = 1;
-    continueScript();
+    std::string line;
+    isize nr = 1;
+
+    while (std::getline(ss, line)) {
+
+        commands.push_back({ nr++, line });
+    }
+
+    emulator.put(Cmd(CMD_RSH_EXECUTE));
 }
 
 void
@@ -510,6 +535,31 @@ RetroShell::execScript(const string &contents)
     execScript(ss);
 }
 
+/*
+void
+RetroShell::execScript(const MediaFile &file)
+{
+    if (file.type() != FILETYPE_SCRIPT) throw Error(ERROR_FILE_TYPE_MISMATCH);
+
+    string s((char *)file.getData(), file.getSize());
+    try { execScript(s); } catch (util::Exception &) { }
+}
+*/
+
+void
+RetroShell::abortScript()
+{
+    {   SYNCHRONIZED
+
+        if (!commands.empty()) {
+
+            commands.clear();
+            agnus.cancel<SLOT_RSH>();
+        }
+    }
+}
+
+/*
 void
 RetroShell::continueScript()
 {
@@ -540,41 +590,44 @@ RetroShell::continueScript()
     
     msgQueue.put(MSG_SCRIPT_DONE, ScriptMsg { scriptLine, 0 });
 }
+*/
 
 void
-RetroShell::describe(const std::exception &e)
+RetroShell::describe(const std::exception &e, isize line, const string &cmd)
 {
+    if (line) *this << "Line " << line << ": " << cmd << '\n';
+
     if (auto err = dynamic_cast<const TooFewArgumentsError *>(&e)) {
-        
+
         *this << err->what() << ": Too few arguments";
         *this << '\n';
         return;
     }
 
     if (auto err = dynamic_cast<const TooManyArgumentsError *>(&e)) {
-        
+
         *this << err->what() << ": Too many arguments";
         *this << '\n';
         return;
     }
-    
+
     if (auto err = dynamic_cast<const util::EnumParseError *>(&e)) {
-        
+
         *this << err->token << " is not a valid key" << '\n';
         *this << "Expected: " << err->expected << '\n';
         return;
     }
-    
+
     if (auto err = dynamic_cast<const util::ParseNumError *>(&e)) {
-        
+
         *this << err->token << " is not a number";
         *this << '\n';
         return;
     }
-    
+
     if (auto err = dynamic_cast<const util::ParseBoolError *>(&e)) {
 
-        *this << "'" << err->token << "' must be true or false";
+        *this << err->token << " must be true or false";
         *this << '\n';
         return;
     }
@@ -592,7 +645,7 @@ RetroShell::describe(const std::exception &e)
         *this << '\n';
         return;
     }
-    
+
     if (auto err = dynamic_cast<const Error *>(&e)) {
 
         *this << err->what();
@@ -610,27 +663,22 @@ RetroShell::help(const string &command)
 void
 RetroShell::dump(CoreObject &component, Category category)
 {
-    {   SUSPENDED
-
-        *this << '\n';
-        _dump(component, category);
-    }
+    *this << '\n';
+    _dump(component, category);
 }
 
 void
 RetroShell::dump(CoreObject &component, std::vector <Category> categories)
 {
-    {   SUSPENDED
-
-        *this << '\n';
-        for(auto &category : categories) _dump(component, category);
-
-    }
+    *this << '\n';
+    for(auto &category : categories) _dump(component, category);
 }
 
 void
 RetroShell::_dump(CoreObject &component, Category category)
 {
+    // assert(isEmulatorThread());
+
     std::stringstream ss;
 
     switch (category) {
@@ -654,7 +702,7 @@ RetroShell::_dump(CoreObject &component, Category category)
 void
 RetroShell::serviceEvent()
 {
-    msgQueue.put(MSG_SCRIPT_WAKEUP, ScriptMsg { scriptLine, 0 });
+    emulator.put(Cmd(CMD_RSH_EXECUTE));
     agnus.cancel<SLOT_RSH>();
 }
 

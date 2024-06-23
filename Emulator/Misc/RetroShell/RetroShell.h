@@ -35,7 +35,7 @@ class RetroShell : public SubComponent {
     };
 
     // The command interpreter (parses commands typed into the console window)
-    Interpreter interpreter = Interpreter(amiga);
+    Interpreter interpreter;
 
     
     //
@@ -58,6 +58,9 @@ class RetroShell : public SubComponent {
     
     // Input line
     string input;
+
+    // Command queue (stores all pending commands)
+    std::vector<std::pair<isize,string>> commands;
 
     // Input prompt
     string prompt = "vAmiga% ";
@@ -88,16 +91,18 @@ public:
     
     RetroShell(Amiga& ref);
 
-    
+    RetroShell& operator= (const RetroShell& other) { return *this; }
+
+
     //
-    // Methods from CoreObject
+    // Methods from Serializable
     //
-    
-private:
-    
-    void _dump(Category category, std::ostream& os) const override { }
-    
-    
+
+public:
+
+    template <class T> void serialize(T& worker) { } SERIALIZERS(serialize);
+
+
     //
     // Methods from CoreComponent
     //
@@ -107,11 +112,10 @@ public:
     const Descriptions &getDescriptions() const override { return descriptions; }
 
 private:
-    
+
+    void _dump(Category category, std::ostream& os) const override { }
     void _initialize() override;
     void _pause() override;
-
-    template <class T> void serialize(T& worker) { } SERIALIZERS(serialize);
 
 
     //
@@ -209,21 +213,26 @@ public:
     // Main entry point for executing commands that were typed in by the user
     void execUserCommand(const string &command);
 
-    // Executes a command
-    void exec(const string &command) throws;
+    // Executes all pending commands
+    void exec() throws;
+
+    // Executes a single command
+    void exec(const string &command, isize line = 0) throws;
 
     // Executes a shell script
-    void execScript(const std::stringstream &ss) throws;
+    void execScript(std::stringstream &ss) throws;
     void execScript(const std::ifstream &fs) throws;
     void execScript(const string &contents) throws;
+    // void execScript(const class MediaFile &script) throws;
+    void abortScript();
 
     // Continues a previously interrupted script
-    void continueScript() throws;
+    // [[deprecated]] void continueScript() throws;
 
 private:
 
     // Prints a textual description of an error in the console
-    void describe(const std::exception &exception);
+    void describe(const std::exception &exception, isize line = 0, const string &cmd = "");
 
     // Prints a help message for a given command string
     void help(const string &command);

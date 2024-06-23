@@ -274,14 +274,9 @@
 
 - (void)suspend;
 - (void)resume;
-- (void)continueScript;
 
-/*
-- (void)requestAutoSnapshot;
-- (void)requestUserSnapshot;
-@property (readonly) SnapshotProxy *latestAutoSnapshot;
-@property (readonly) SnapshotProxy *latestUserSnapshot;
-*/
+// - (void)continueScript;
+
  - (void) loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex;
 
 - (NSInteger)getConfig:(Option)opt;

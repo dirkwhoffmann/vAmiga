@@ -61,7 +61,11 @@ public:
 
     const char *objectName() const override { return "Emulator"; }
 
+private:
 
+    void _dump(Category category, std::ostream& os) const override;
+
+    
     //
     // Methods from Inspectable
     //
@@ -168,6 +172,16 @@ private:
     // Processes a command from the command queue
     void process(const Cmd &cmd);
 
+
+    //
+    // Debugging
+    //
+
+public:
+
+    // Gets or sets an internal debug variable (only available in debug builds)
+    static bool getDebugVariable(DebugFlag flag);
+    static void setDebugVariable(DebugFlag flag, bool val);
 };
 
 }
