@@ -25,9 +25,9 @@ namespace vamiga {
 
 struct Description {
 
-    const char *name;               //! Short name
-    const char *description;        //! Textual descripiton
-    const char *shell;              //! RetroShell access
+    const char *name;               // Short name
+    const char *description;        // Textual descripiton
+    const char *shell;              // RetroShell access
 };
 
 typedef std::vector<Description> Descriptions;
@@ -43,7 +43,7 @@ public:
     // Object identifier (to distinguish instances of the same component)
     const isize objid;
 
-    // Sub components
+    // Subcomponents
     std::vector<CoreComponent *> subComponents;
 
 
@@ -53,24 +53,31 @@ public:
 
 public:
 
-    CoreComponent(Emulator& ref) : emulator(ref), objid(0) { }
-    CoreComponent(Emulator& ref, isize id) : emulator(ref), objid(id) { }
+    CoreComponent(Emulator& ref, isize id = 0) : emulator(ref), objid(id) { }
 
-    // Returns a reference to the description of this component
+    /* This function is called inside the emulator's launch routine. It iterates
+     * through all components and calls the _initialize() delegate.
+     */
+    virtual void _initialize() { }
+
+
+    //
+    // Operators
+    //
+
+    bool operator== (CoreComponent &other);
+    bool operator!= (CoreComponent &other) { return !(other == *this); }
+
+
+    //
+    // Informing
+    //
+
     virtual const Descriptions &getDescriptions() const = 0;
     const char *objectName() const override;
     const char *description() const override;
     const char *shellName() const;
 
-    bool operator== (CoreComponent &other);
-    bool operator!= (CoreComponent &other) { return !(other == *this); }
-
-    /* This function is called inside the emulator's launch routine. It iterates
-     * through all components and calls the _initialize() delegate.
-     */
-    void initialize();
-    virtual void _initialize() { }
-    
 
     //
     // Configuring

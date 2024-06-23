@@ -35,7 +35,7 @@ class Recorder : public SubComponent {
     };
 
     //
-    // Sub components
+    // Subcomponents
     //
     
     // Audio muxer for synthesizing the audio track

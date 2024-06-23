@@ -82,7 +82,7 @@ class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
 
 
     //
-    // Sub components
+    // Subcomponents
     //
 
 public:
@@ -317,9 +317,16 @@ public:
     // Returns the master clock frequency based on the emulated refresh rate
     i64 masterClockFrequency() const;
 
-    
+
     //
-    // Running the emulator
+    // Controlling the state
+    //
+
+    void initialize();
+    
+
+    //
+    // Interacting with the run loop
     //
 
 public:
@@ -374,38 +381,6 @@ private:
     // Schedules the next snapshot event
     void scheduleNextSnpEvent();
 
-
-    //
-    // Handling snapshots
-    //
-
-public:
-
-    /* Requests a snapshot to be taken. Once the snapshot is ready, a message
-     * is written into the message queue. The snapshot can then be picked up by
-     * calling latestAutoSnapshot() or latestUserSnapshot(), depending on the
-     * requested snapshot type.
-     */
-    // void requestAutoSnapshot();
-    // void requestUserSnapshot();
-
-    /* Returns the most recent snapshot or nullptr if none was taken. If a
-     * snapshot was taken, the function hands over the ownership to the caller
-     * and deletes the internal pointer.
-     */
-    // Snapshot *latestAutoSnapshot();
-    // Snapshot *latestUserSnapshot();
-
-    // Loads the current state from a snapshot file
-    // void loadSnapshot(const Snapshot &snapshot) throws;
-
-private:
-
-    // Takes a snapshot of a certain kind
-    /*
-    void takeAutoSnapshot();
-    void takeUserSnapshot();
-    */
 
     //
     // Managing events

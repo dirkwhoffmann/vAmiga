@@ -18,19 +18,6 @@ namespace vamiga {
 
 class MsgQueue final : CoreObject, Synchronizable {
 
-    /*
-    Descriptions descriptions = {{
-
-        .name           = "MsgQueue",
-        .description    = "Message Queue",
-        .shell          = ""
-    }};
-
-    ConfigOptions options = {
-
-    };
-    */
-
     // Ring buffer storing all pending messages
     util::RingBuffer <Message, 512> queue;
 

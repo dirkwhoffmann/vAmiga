@@ -53,7 +53,7 @@ class Denise : public SubComponent, public Inspectable<DeniseInfo> {
     
     
     //
-    // Sub components
+    // Subcomponents
     //
     
 public:

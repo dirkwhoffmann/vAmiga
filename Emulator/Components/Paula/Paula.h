@@ -41,7 +41,7 @@ private:
 
     
     //
-    // Sub components
+    // Subcomponents
     //
     
 public:

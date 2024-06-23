@@ -108,7 +108,7 @@ protected:
 
 
     //
-    // Sub components
+    // Subcomponents
     //
 
 public:

@@ -61,7 +61,7 @@ class Agnus : public SubComponent, public Inspectable<AgnusInfo, AgnusStats> {
 
 
     //
-    // Sub components
+    // Subcomponents
     //
     
 public:

@@ -103,7 +103,7 @@ class Muxer : public SubComponent {
     
     
     //
-    // Sub components
+    // Subcomponents
     //
     
 public:

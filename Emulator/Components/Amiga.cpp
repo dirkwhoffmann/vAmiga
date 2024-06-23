@@ -777,6 +777,12 @@ Amiga::cacheInfo(AmigaInfo &result) const
 }
 
 void
+Amiga::initialize()
+{
+    postorderWalk([](CoreComponent *c) { c->_initialize(); });
+}
+
+void
 Amiga::setFlag(u32 flag)
 {
     SYNCHRONIZED

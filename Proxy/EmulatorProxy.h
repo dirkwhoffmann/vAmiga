@@ -12,7 +12,6 @@
 #import "Constants.h"
 #import "config.h"
 #import "AgnusTypes.h"
-#import "CoreComponentTypes.h"
 #import "AmigaTypes.h"
 #import "AmigaFileTypes.h"
 #import "BlitterTypes.h"

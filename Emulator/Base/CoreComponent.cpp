@@ -44,26 +44,16 @@ CoreComponent::operator== (CoreComponent &other)
 }
 
 void
-CoreComponent::initialize()
-{
-    assert(!isRunning());
-
-    try {
-
-        for (CoreComponent *c : subComponents) { c->initialize(); }
-        _initialize();
-
-    } catch (std::exception &e) {
-
-        warn("Initialization aborted: %s\n", e.what());
-    }
-}
-
-void
 CoreComponent::resetConfig()
 {
+    postorderWalk([this](CoreComponent *c) {
+        c->Configurable::resetConfig(emulator.main.defaults, c->objid);
+    });
+
+    /*
     for (CoreComponent *c : subComponents) { c->resetConfig(); }
     Configurable::resetConfig(emulator.main.defaults, objid);
+    */
 }
 
 void
