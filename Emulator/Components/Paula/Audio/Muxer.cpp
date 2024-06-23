@@ -60,7 +60,7 @@ Muxer::_initialize()
 }
 
 void
-Muxer::didReset(bool hard)
+Muxer::_didReset(bool hard)
 {
     stats = { };
     for (isize i = 0; i < 4; i++) sampler[i].reset();

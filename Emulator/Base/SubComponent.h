@@ -65,74 +65,14 @@ public:
     References(Amiga& ref);
 };
 
-
-/* This class extends the CoreComponent class with references to all components
- * that are part of the Amiga class.
- */
 class SubComponent : public CoreComponent, public References {
 
 protected:
 
-    /*
-    Agnus &agnus;
-    Amiga &amiga;
-    Blitter &blitter;
-    CIAA &ciaa;
-    CIAB &ciab;
-    ControlPort &controlPort1;
-    ControlPort &controlPort2;
-    Copper &copper;
-    CPU &cpu;
-    Debugger &debugger;
-    Denise &denise;
-    DiagBoard &diagBoard;
-    DiskController &diskController;
-    DmaDebugger &dmaDebugger;
-    FloppyDrive &df0;
-    FloppyDrive &df1;
-    FloppyDrive &df2;
-    FloppyDrive &df3;
-    HardDrive &hd0;
-    HardDrive &hd1;
-    HardDrive &hd2;
-    HardDrive &hd3;
-    HdController &hd0con;
-    HdController &hd1con;
-    HdController &hd2con;
-    HdController &hd3con;
-    Host &host;
-    Keyboard &keyboard;
-    Memory &mem;
-    MsgQueue &msgQueue;
-    OSDebugger &osDebugger;
-    Paula &paula;
-    PixelEngine &pixelEngine;
-    RamExpansion &ramExpansion;
-    RemoteManager &remoteManager;
-    RetroShell &retroShell;
-    RTC &rtc;
-    SerialPort &serialPort;
-    UART &uart;
-    ZorroManager &zorro;
-
-    FloppyDrive *df[4] = { &df0, &df1, &df2, &df3 };
-    */
-
 public:
 
-    SubComponent(Amiga& ref);
-    SubComponent(Amiga& ref, isize id);
+    SubComponent(Amiga& ref, isize id = 0);
 
-    virtual bool isPoweredOff() const override;
-    virtual bool isPoweredOn() const override;
-    virtual bool isPaused() const override;
-    virtual bool isRunning() const override;
-    virtual bool isSuspended() const override;
-    virtual bool isHalted() const override;
-
-    void suspend() override;
-    void resume() override;
-    
     void prefix() const override;
 };
 

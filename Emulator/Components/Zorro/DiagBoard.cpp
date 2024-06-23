@@ -25,7 +25,7 @@ DiagBoard::_dump(Category category, std::ostream& os) const
 }
 
 void
-DiagBoard::didReset(bool hard)
+DiagBoard::_didReset(bool hard)
 {    
     if (hard) {
         

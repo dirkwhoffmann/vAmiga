@@ -26,7 +26,7 @@ Denise::Denise(Amiga& ref) : SubComponent(ref)
 }
 
 void
-Denise::didReset(bool hard)
+Denise::_didReset(bool hard)
 {
     std::memset(bBuffer, 0xFF, sizeof(bBuffer));
     std::memset(dBuffer, 0, sizeof(dBuffer));

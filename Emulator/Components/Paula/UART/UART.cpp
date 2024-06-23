@@ -20,7 +20,7 @@
 namespace vamiga {
 
 void
-UART::didReset(bool hard)
+UART::_didReset(bool hard)
 {
     outBit = 1;
 }

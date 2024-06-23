@@ -98,7 +98,7 @@ private:
 private:
         
     template <class T> void serialize(T& worker) { } SERIALIZERS(serialize);
-    void didReset(bool hard) override;
+    void _didReset(bool hard) override;
 
 public:
 

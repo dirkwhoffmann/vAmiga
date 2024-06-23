@@ -369,8 +369,8 @@ private:
 
 public:
 
-    void willReset(bool hard) override;
-    void didReset(bool hard) override;
+    void _willReset(bool hard) override;
+    void _didReset(bool hard) override;
 
     const Descriptions &getDescriptions() const override { return descriptions; }
 

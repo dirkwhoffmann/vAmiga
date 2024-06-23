@@ -250,7 +250,7 @@ Memory::operator << (SerResetter &worker)
 }
 
 void
-Memory::didReset(bool hard)
+Memory::_didReset(bool hard)
 {
     // Set up the memory lookup table
     updateMemSrcTables();

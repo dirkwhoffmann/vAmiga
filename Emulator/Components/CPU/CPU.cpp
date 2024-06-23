@@ -361,7 +361,7 @@ CPU::setOption(Option option, i64 value)
 }
 
 void
-CPU::didReset(bool hard)
+CPU::_didReset(bool hard)
 {
     if (hard) {
 

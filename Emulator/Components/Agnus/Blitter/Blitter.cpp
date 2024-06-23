@@ -53,7 +53,7 @@ Blitter::_initialize()
 }
 
 void
-Blitter::didReset(bool hard)
+Blitter::_didReset(bool hard)
 {
     if (hard) {
         

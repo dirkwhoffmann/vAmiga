@@ -28,7 +28,7 @@ CopperWatchpoints::setNeedsCheck(bool value)
 }
 
 void
-CopperDebugger::didReset(bool hard)
+CopperDebugger::_didReset(bool hard)
 {
     cache.clear();
     current1 = nullptr;

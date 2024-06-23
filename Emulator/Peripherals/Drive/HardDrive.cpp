@@ -187,7 +187,7 @@ HardDrive::_initialize()
 }
 
 void
-HardDrive::didReset(bool hard)
+HardDrive::_didReset(bool hard)
 {
     if (FORCE_HDR_MODIFIED) { modified = true; }
 }

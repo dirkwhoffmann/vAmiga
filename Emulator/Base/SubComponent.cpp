@@ -58,56 +58,7 @@ zorro(ref.zorro)
 {
 };
 
-SubComponent::SubComponent(Amiga& ref) : CoreComponent(ref.emulator), References(ref) { };
 SubComponent::SubComponent(Amiga& ref, isize id) : CoreComponent(ref.emulator, id), References(ref) { };
-
-bool
-SubComponent::isPoweredOff() const
-{
-    return amiga.isPoweredOff();
-}
-
-bool
-SubComponent::isPoweredOn() const
-{
-    return amiga.isPoweredOn();
-}
-
-bool
-SubComponent::isPaused() const
-{
-    return amiga.isPaused();
-}
-
-bool
-SubComponent::isRunning() const
-{
-    return amiga.isRunning();
-}
-
-bool
-SubComponent::isSuspended() const
-{
-    return amiga.isSuspended();
-}
-
-bool
-SubComponent::isHalted() const
-{
-    return amiga.isHalted();
-}
-
-void
-SubComponent::suspend()
-{
-    amiga.suspend();
-}
-
-void
-SubComponent::resume()
-{
-    amiga.resume();
-}
 
 void
 SubComponent::prefix() const

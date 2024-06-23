@@ -139,13 +139,13 @@ Amiga::reset(bool hard)
     {   SUSPENDED
 
         // Call the pre-reset delegate
-        postorderWalk([hard](CoreComponent *c) { c->willReset(hard); });
+        postorderWalk([hard](CoreComponent *c) { c->_willReset(hard); });
 
         // Revert to a clean state
         postorderWalk([&resetter](CoreComponent *c) { *c << resetter; });
 
         // Call the post-reset delegate
-        postorderWalk([hard](CoreComponent *c) { c->didReset(hard); });
+        postorderWalk([hard](CoreComponent *c) { c->_didReset(hard); });
     }
 
     // Inform the GUI
@@ -153,7 +153,7 @@ Amiga::reset(bool hard)
 }
 
 void
-Amiga::willReset(bool hard)
+Amiga::_willReset(bool hard)
 {
     // If a disk change is in progress, finish it
     df0.serviceDiskChangeEvent <SLOT_DC0> ();
@@ -163,7 +163,7 @@ Amiga::willReset(bool hard)
 }
 
 void
-Amiga::didReset(bool hard)
+Amiga::_didReset(bool hard)
 {
     // Schedule initial events
     scheduleNextSnpEvent();

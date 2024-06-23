@@ -48,39 +48,59 @@ public:
 
 
     //
-    // Initializing
+    // Initializers
     //
 
 public:
 
     CoreComponent(Emulator& ref, isize id = 0) : emulator(ref), objid(id) { }
 
-    /* This function is called inside the emulator's launch routine. It iterates
-     * through all components and calls the _initialize() delegate.
-     */
-    virtual void _initialize() { }
-
 
     //
     // Operators
     //
+
+public:
 
     bool operator== (CoreComponent &other);
     bool operator!= (CoreComponent &other) { return !(other == *this); }
 
 
     //
-    // Informing
+    // Querying properties
     //
 
+public:
+
+    // Returns the description struct of this component
     virtual const Descriptions &getDescriptions() const = 0;
+
+    // Returns certain elements from the description struct
     const char *objectName() const override;
     const char *description() const override;
     const char *shellName() const;
 
+    // Computes a checksum
+    u64 checksum(bool recursive = false);
+
+    // State properties (see Thread class for details)
+    virtual bool isPoweredOff() const;
+    virtual bool isPoweredOn() const;
+    virtual bool isPaused() const;
+    virtual bool isRunning() const;
+    virtual bool isSuspended() const;
+    virtual bool isHalted() const;
+
+    // Suspends or resumes the emulator thread
+    void suspend() override;
+    void resume() override;
+
+    // Throws an exception if the emulator is not ready to power on
+    virtual void isReady() const throws;
+
 
     //
-    // Configuring
+    // Configurating
     //
 
 public:
@@ -93,28 +113,14 @@ public:
 
 
     //
-    // Controlling the state (see Thread class for details)
+    // Processing state changes
     //
-    
-public:
-    
-    virtual bool isPoweredOff() const;
-    virtual bool isPoweredOn() const;
-    virtual bool isPaused() const;
-    virtual bool isRunning() const;
-    virtual bool isSuspended() const;
-    virtual bool isHalted() const;
-
-    void suspend() override;
-    void resume() override;
-    
-    // Throws an exception if the emulator is not ready to power on
-    virtual void isReady() const throws;
 
 public:
     
-    virtual void willReset(bool hard) { }
-    virtual void didReset(bool hard) { }
+    virtual void _initialize() { }
+    virtual void _willReset(bool hard) { }
+    virtual void _didReset(bool hard) { }
     virtual void _isReady() const throws { }
     virtual void _powerOn() { }
     virtual void _powerOff() { }
@@ -148,9 +154,14 @@ public:
 
 
     //
-    // Walking the component tree
+    // Working with subcomponents
     //
 
+    // Collects references to this components and all subcomponents
+    std::vector<CoreComponent *> collectComponents();
+    void collectComponents(std::vector<CoreComponent *> &result);
+
+    // Traverses the component tree and applies a function
     void preoderWalk(std::function<void(CoreComponent *)> func);
     void postorderWalk(std::function<void(CoreComponent *)> func);
 
@@ -160,12 +171,6 @@ public:
     //
 
 public:
-
-    // Computes a checksum for this component
-    u64 checksum(bool recursive = false);
-
-    // Collects references to this components and all sub-components
-    void collectComponents(std::vector<CoreComponent *> &result);
 
     // Exports the current configuration to a script file
     void exportConfig(std::ostream& ss, bool diff = false) const;

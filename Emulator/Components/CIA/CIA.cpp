@@ -39,13 +39,13 @@ CIA::_initialize()
 }
 
 void 
-CIA::willReset(bool hard)
+CIA::_willReset(bool hard)
 {
     if (!hard) wakeUp();
 }
 
 void
-CIA::didReset(bool hard)
+CIA::_didReset(bool hard)
 {
     // Update the memory layout because the OVL bit may have changed
     // TODO: Do this in Memory class only

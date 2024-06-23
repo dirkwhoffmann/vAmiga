@@ -54,7 +54,7 @@ HdController::_initialize()
 }
 
 void
-HdController::didReset(bool hard)
+HdController::_didReset(bool hard)
 {    
     if (hard) {
         

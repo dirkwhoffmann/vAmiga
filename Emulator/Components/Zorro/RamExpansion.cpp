@@ -22,7 +22,7 @@ RamExpansion::_dump(Category category, std::ostream& os) const
 }
 
 void
-RamExpansion::didReset(bool hard)
+RamExpansion::_didReset(bool hard)
 {
     if (hard) {
 

@@ -15,7 +15,7 @@
 namespace vamiga {
 
 void
-Keyboard::didReset(bool hard)
+Keyboard::_didReset(bool hard)
 {    
     std::memset(keyDown, 0, sizeof(keyDown));
     state = KB_SELFTEST;

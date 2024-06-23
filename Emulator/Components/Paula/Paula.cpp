@@ -44,7 +44,7 @@ Paula::_dump(Category category, std::ostream& os) const
 }
 
 void
-Paula::didReset(bool hard)
+Paula::_didReset(bool hard)
 {
     for (isize i = 0; i < 16; i++) setIntreq[i] = NEVER;
 

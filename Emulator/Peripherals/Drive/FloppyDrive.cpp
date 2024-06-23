@@ -51,7 +51,7 @@ FloppyDrive::_initialize()
 }
 
 void
-FloppyDrive::didReset(bool hard)
+FloppyDrive::_didReset(bool hard)
 {    
     if (hard) assert(diskToInsert == nullptr);
 }

@@ -416,7 +416,7 @@ private:
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
-    void didReset(bool hard) override;
+    void _didReset(bool hard) override;
     
 
     //

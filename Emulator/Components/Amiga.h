@@ -250,8 +250,8 @@ private:
 
 public:
 
-    void willReset(bool hard) override;
-    void didReset(bool hard) override;
+    void _willReset(bool hard) override;
+    void _didReset(bool hard) override;
     isize load(const u8 *buffer) override;
     isize save(u8 *buffer) override;
 

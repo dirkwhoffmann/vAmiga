@@ -190,7 +190,7 @@ private:
     void operator << (SerReader &worker) override;
     void operator << (SerWriter &worker) override;
 
-    void didReset(bool hard) override;
+    void _didReset(bool hard) override;
     
 public:
 

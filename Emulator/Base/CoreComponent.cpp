@@ -16,6 +16,12 @@
 
 namespace vamiga {
 
+bool
+CoreComponent::operator== (CoreComponent &other)
+{
+    return checksum() == other.checksum();
+}
+
 const char *
 CoreComponent::objectName() const
 {
@@ -37,10 +43,73 @@ CoreComponent::shellName() const
     return getDescriptions().at(objid).shell;
 }
 
-bool
-CoreComponent::operator== (CoreComponent &other)
+u64
+CoreComponent::checksum(bool recursive)
 {
-    return checksum() == other.checksum();
+    SerChecker checker;
+
+    // Compute a checksum for the members of this component
+    *this << checker;
+
+    // Incoorporate subcomponents if requested
+    if (recursive) for (auto &c : subComponents) checker << c->checksum(recursive);
+
+    return checker.hash;
+}
+
+bool
+CoreComponent::isPoweredOff() const
+{
+    return emulator.isPoweredOff();
+}
+
+bool
+CoreComponent::isPoweredOn() const
+{
+    return emulator.isPoweredOn();
+}
+
+bool
+CoreComponent::isPaused() const
+{
+    return emulator.isPaused();
+}
+
+bool
+CoreComponent::isRunning() const
+{
+    return emulator.isRunning();
+}
+
+bool
+CoreComponent::isSuspended() const
+{
+    return emulator.isSuspended();
+}
+
+bool
+CoreComponent::isHalted() const
+{
+    return emulator.isHalted();
+}
+
+void
+CoreComponent::suspend()
+{
+    return emulator.suspend();
+}
+
+void
+CoreComponent::resume()
+{
+    return emulator.resume();
+}
+
+void
+CoreComponent::isReady() const
+{
+    for (auto c : subComponents) { c->isReady(); }
+    _isReady();
 }
 
 void
@@ -49,11 +118,6 @@ CoreComponent::resetConfig()
     postorderWalk([this](CoreComponent *c) {
         c->Configurable::resetConfig(emulator.main.defaults, c->objid);
     });
-
-    /*
-    for (CoreComponent *c : subComponents) { c->resetConfig(); }
-    Configurable::resetConfig(emulator.main.defaults, objid);
-    */
 }
 
 void
@@ -135,59 +199,19 @@ CoreComponent::save(u8 *buffer)
     return result;
 }
 
-bool
-CoreComponent::isPoweredOff() const
+std::vector<CoreComponent *> 
+CoreComponent::collectComponents()
 {
-    return emulator.isPoweredOff();
-}
-
-bool
-CoreComponent::isPoweredOn() const
-{
-    return emulator.isPoweredOn();
-}
-
-bool
-CoreComponent::isPaused() const
-{
-    return emulator.isPaused();
-}
-
-bool
-CoreComponent::isRunning() const
-{
-    return emulator.isRunning();
-}
-
-bool
-CoreComponent::isSuspended() const
-{
-    return emulator.isSuspended();
-}
-
-bool
-CoreComponent::isHalted() const
-{
-    return emulator.isHalted();
+    std::vector<CoreComponent *> result;
+    collectComponents(result);
+    return result;
 }
 
 void
-CoreComponent::suspend()
+CoreComponent::collectComponents(std::vector<CoreComponent *> &result)
 {
-    return emulator.suspend();
-}
-
-void
-CoreComponent::resume()
-{
-    return emulator.resume();
-}
-
-void
-CoreComponent::isReady() const
-{
-    for (auto c : subComponents) { c->isReady(); }
-    _isReady();
+    result.push_back(this);
+    for (auto &c : subComponents) c->collectComponents(result);
 }
 
 void
@@ -202,27 +226,6 @@ CoreComponent::postorderWalk(std::function<void(CoreComponent *)> func)
 {
     for (auto &c : subComponents) c->postorderWalk(func);
     func(this);
-}
-
-u64 
-CoreComponent::checksum(bool recursive)
-{
-    SerChecker checker;
-
-    // Compute a checksum for the members of this component
-    *this << checker;
-
-    // Incoorporate subcomponents if requested
-    if (recursive) for (auto &c : subComponents) checker << c->checksum(recursive);
-
-    return checker.hash;
-}
-
-void
-CoreComponent::collectComponents(std::vector<CoreComponent *> &result)
-{
-    result.push_back(this);
-    for (auto &c : subComponents) c->collectComponents(result);
 }
 
 void

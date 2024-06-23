@@ -95,7 +95,7 @@ private:
 
     } SERIALIZERS(serialize);
 
-    void didReset(bool hard) override;
+    void _didReset(bool hard) override;
     
 public:
 

@@ -57,7 +57,7 @@ PixelEngine::_initialize()
 }
 
 void
-PixelEngine::didReset(bool hard)
+PixelEngine::_didReset(bool hard)
 {
     if (hard) {
         
