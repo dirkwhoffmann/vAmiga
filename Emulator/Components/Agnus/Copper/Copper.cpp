@@ -26,12 +26,6 @@ Copper::Copper(Amiga& ref) : SubComponent(ref)
 }
 
 void
-Copper::_reset(bool hard)
-{
-    RESET_SNAPSHOT_ITEMS(hard)
-}
-
-void
 Copper::setPC(u32 addr)
 {
     coppc = addr;

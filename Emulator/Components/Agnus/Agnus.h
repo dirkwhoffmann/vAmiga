@@ -238,7 +238,7 @@ private:
     
 private:
     
-    void _reset(bool hard) override;
+    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
 
     template <class T>
     void serialize(T& worker)
@@ -297,8 +297,14 @@ private:
         << config.revision
         << config.slowRamMirror
         << ptrMask;
-    } SERIALIZERS(serialize);
-    
+    }
+
+    void operator << (SerResetter &worker) override;
+    void operator << (SerChecker &worker) override { serialize(worker); }
+    void operator << (SerCounter &worker) override { serialize(worker); }
+    void operator << (SerReader &worker) override { serialize(worker); }
+    void operator << (SerWriter &worker) override { serialize(worker); }
+
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }

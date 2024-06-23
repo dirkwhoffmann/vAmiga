@@ -241,8 +241,8 @@ private:
 private:
     
     void _initialize() override;
-    void _reset(bool hard) override;
-    
+    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
+
     template <class T>
     void serialize(T& worker)
     {
@@ -264,12 +264,13 @@ private:
         << config.extStart;
     }
 
-    void operator << (SerResetter &worker) override { serialize(worker); }
+    void operator << (SerResetter &worker) override;
     void operator << (SerChecker &worker) override;
     void operator << (SerCounter &worker) override;
     void operator << (SerReader &worker) override;
     void operator << (SerWriter &worker) override;
-
+    void didReset(bool hard) override;
+    
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }

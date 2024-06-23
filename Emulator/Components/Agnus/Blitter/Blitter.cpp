@@ -53,10 +53,8 @@ Blitter::_initialize()
 }
 
 void
-Blitter::_reset(bool hard)
+Blitter::didReset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
-
     if (hard) {
         
         blitcount = 1;

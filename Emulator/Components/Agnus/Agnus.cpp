@@ -25,12 +25,13 @@ Agnus::Agnus(Amiga& ref) : SubComponent(ref)
 }
 
 void
-Agnus::_reset(bool hard)
+Agnus::operator << (SerResetter &worker)
 {
+    // Remember some events
     auto insEvent = id[SLOT_INS];
 
-    RESET_SNAPSHOT_ITEMS(hard)
-    
+    serialize(worker);
+
     // Start with a long frame
     pos.lof = true;
 
@@ -47,10 +48,9 @@ Agnus::_reset(bool hard)
         id[i] = (EventID)0;
         data[i] = 0;
     }
-    
-    if (hard) assert(clock == 0);
 
     // Schedule initial events
+    if (isHardResetter(worker)) assert(clock == 0);
     scheduleAbs<SLOT_SEC>(NEVER, SEC_TRIGGER);
     scheduleAbs<SLOT_TER>(NEVER, TER_TRIGGER);
     scheduleAbs<SLOT_CIAA>(CIA_CYCLES(AS_CIA_CYCLES(clock)), CIA_EXECUTE);

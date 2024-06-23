@@ -51,23 +51,30 @@ RTC::setOption(Option option, i64 value)
 }
 
 void
-RTC::_reset(bool hard)
+RTC::operator << (SerResetter &worker)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
+    serialize(worker);
 
-    if (hard) {
-        
-        if (config.model == RTC_RICOH) {
-            
-            reg[0][0xD] = 0b1000;
-            reg[0][0xE] = 0b0000;
-            reg[0][0xF] = 0b0000;
-        }
-        if (config.model == RTC_OKI) {
-            
-            reg[0][0xD] = 0b0001;
-            reg[0][0xE] = 0b0000;
-            reg[0][0xF] = 0b0100;
+    if (isHardResetter(worker)) {
+
+        switch (config.model) {
+
+            case RTC_RICOH:
+
+                reg[0][0xD] = 0b1000;
+                reg[0][0xE] = 0b0000;
+                reg[0][0xF] = 0b0000;
+                break;
+
+            case RTC_OKI:
+
+                reg[0][0xD] = 0b0001;
+                reg[0][0xE] = 0b0000;
+                reg[0][0xF] = 0b0100;
+                break;
+
+            default:
+                break;
         }
     }
 }

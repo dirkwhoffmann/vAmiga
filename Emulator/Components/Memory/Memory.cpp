@@ -112,27 +112,6 @@ Memory::_initialize()
     }
 }
 
-void
-Memory::_reset(bool hard)
-{
-    if (hard) {
-
-        // Erase WOM (if any)
-        if (hasWom()) eraseWom();
-
-        // Fill RAM with the proper startup pattern
-        fillRamWithInitPattern();
-    }
-
-    RESET_SNAPSHOT_ITEMS(hard)
-    
-    // Set up the memory lookup table
-    updateMemSrcTables();
-    
-    // Initialize statistical counters
-    clearStats();
-}
-
 i64
 Memory::getOption(Option option) const
 {
@@ -255,7 +234,32 @@ Memory::setOption(Option option, i64 value)
     }
 }
 
-void 
+void
+Memory::operator << (SerResetter &worker)
+{
+    serialize(worker);
+
+    if (isHardResetter(worker)) {
+
+        // Erase WOM (if any)
+        if (hasWom()) eraseWom();
+
+        // Fill RAM with the proper startup pattern
+        fillRamWithInitPattern();
+    }
+}
+
+void
+Memory::didReset(bool hard)
+{
+    // Set up the memory lookup table
+    updateMemSrcTables();
+
+    // Initialize statistical counters
+    clearStats();
+}
+
+void
 Memory::operator << (SerChecker &worker)
 {
     serialize(worker);
