@@ -223,7 +223,6 @@ public:
 
 private:
 
-    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
     void _powerOn() override;
     void _powerOff() override;
     void _run() override;

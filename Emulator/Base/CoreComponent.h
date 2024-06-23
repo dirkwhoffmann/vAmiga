@@ -71,26 +71,6 @@ public:
     void initialize();
     virtual void _initialize() { }
     
-    /* Resets the component and it's subcomponents. Two reset modes are
-     * distinguished:
-     *
-     *     hard: A hard reset restores the initial state. It resets the Amiga
-     *           from an emulator point of view.
-     *
-     *     soft: A soft reset emulates a reset inside the virtual Amiga. It is
-     *           used to emulate the RESET instruction of the CPU.
-     */
-    // void hardReset();
-    // void softReset();
-
-public:
-
-    /* This function is called inside the C64 reset routines. It iterates
-     * through all components and calls the _reset() delegate.
-     */
-    void reset(bool hard);
-    virtual void _reset(bool hard) = 0;
-
 
     //
     // Configuring
@@ -207,18 +187,5 @@ public:
     // Exports only those options that differ from the default config
     void exportDiff(std::ostream& ss) const { exportConfig(ss, true); }
 };
-
-//
-// Standard implementations of _reset
-//
-
-#define RESET_SNAPSHOT_ITEMS(hard) \
-if (hard) { \
-SerResetter resetter(true); \
-*this << resetter; \
-} else { \
-SerResetter resetter(false); \
-*this << resetter; \
-}
 
 }

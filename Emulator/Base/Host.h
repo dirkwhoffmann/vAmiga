@@ -63,8 +63,6 @@ public:
 
     template <class T> void serialize(T& worker) { } SERIALIZERS(serialize);
     
-    void _reset(bool hard) override { };
-
 
     //
     // Methods from CoreComponent

@@ -86,7 +86,6 @@ public:
     
 private:
     
-    void _reset(bool hard) override { }
     void _powerOff() override;
 
     template <class T>

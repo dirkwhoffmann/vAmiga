@@ -124,9 +124,7 @@ private:
     void _dump(Category category, std::ostream& os) const override;
     
 private:
-    
-    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
-    
+        
     template <class T>
     void serialize(T& worker)
     {

@@ -69,7 +69,6 @@ private:
 
 private:
 
-    void _reset(bool hard) override { };
     void _pause() override;
     
 public:

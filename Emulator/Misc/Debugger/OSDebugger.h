@@ -51,10 +51,6 @@ private:
     //
     // Methods from CoreComponent
     //
-
-private:
-    
-    void _reset(bool hard) override { };
     
 public:
 

@@ -59,27 +59,6 @@ CoreComponent::initialize()
     }
 }
 
-/*
-void
-CoreComponent::hardReset()
-{
-    reset(true);
-}
-
-void 
-CoreComponent::softReset()
-{
-    reset(false);
-}
-*/
-
-void
-CoreComponent::reset(bool hard)
-{
-    for (CoreComponent *c : subComponents) { c->reset(hard); }
-    _reset(hard);
-}
-
 void
 CoreComponent::resetConfig()
 {

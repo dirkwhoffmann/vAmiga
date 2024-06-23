@@ -80,7 +80,6 @@ private:
     
 private:
     
-    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
     void _trackOn() override;
     void _trackOff() override;
     
