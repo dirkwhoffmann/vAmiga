@@ -23,12 +23,6 @@ DeniseDebugger::_initialize()
 }
 
 void
-DeniseDebugger::_reset(bool hard)
-{
-    
-}
-
-void
 DeniseDebugger::recordSprites(u8 armed)
 {
     for (isize i = 0; i < 8; i++) {

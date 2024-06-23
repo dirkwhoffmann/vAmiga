@@ -128,7 +128,7 @@ private:
 private:
     
     void _initialize() override;
-    void _reset(bool hard) override;
+    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
 
     
     //
@@ -166,7 +166,8 @@ private:
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
-
+    void didReset(bool hard) override;
+    
 
     //
     // Controlling

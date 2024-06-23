@@ -26,10 +26,8 @@ Denise::Denise(Amiga& ref) : SubComponent(ref)
 }
 
 void
-Denise::_reset(bool hard)
+Denise::didReset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
-    
     std::memset(bBuffer, 0xFF, sizeof(bBuffer));
     std::memset(dBuffer, 0, sizeof(dBuffer));
     std::memset(iBuffer, 0, sizeof(iBuffer));

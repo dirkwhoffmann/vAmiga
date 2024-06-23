@@ -30,14 +30,6 @@ Recorder::_initialize()
 }
 
 void
-Recorder::_reset(bool hard)
-{
-    RESET_SNAPSHOT_ITEMS(hard)
-
-    if (hard) audioClock = 0;
-}
-
-void
 Recorder::_dump(Category category, std::ostream& os) const
 {
     using namespace util;

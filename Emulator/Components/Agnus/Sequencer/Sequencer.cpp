@@ -27,10 +27,10 @@ Sequencer::_initialize()
 }
 
 void
-Sequencer::_reset(bool hard)
+Sequencer::operator << (SerResetter &worker)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
-    
+    serialize(worker);
+
     initBplEvents();
     initDasEvents();
 }

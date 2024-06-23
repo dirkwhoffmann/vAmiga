@@ -109,22 +109,38 @@ public:
 private:
     
     void _dump(Category category, std::ostream& os) const override;
+
+
+    //
+    // Methods from Serializable
+    //
+
+public:
+
+    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
     
-    
+    template <class T>
+    void serialize(T& worker)
+    {
+        if (isHardResetter(worker)) {
+
+            worker << audioClock;
+        }
+
+    } SERIALIZERS(serialize);
+
+
     //
     // Methods from CoreComponent
     //
-    
-private:
-
-    void _initialize() override;
-    void _reset(bool hard) override;
-
-    template <class T> void serialize(T& worker) { } SERIALIZERS(serialize);
 
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
+
+private:
+
+    void _initialize() override;
 
 
     //

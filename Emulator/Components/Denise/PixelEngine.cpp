@@ -57,10 +57,8 @@ PixelEngine::_initialize()
 }
 
 void
-PixelEngine::_reset(bool hard)
+PixelEngine::didReset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
-    
     if (hard) {
         
         emuTexture[0].nr = 0;
