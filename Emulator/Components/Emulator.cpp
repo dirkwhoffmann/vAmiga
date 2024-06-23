@@ -64,6 +64,34 @@ Emulator::initialize()
 }
 
 void
+Emulator::cacheInfo(EmulatorInfo &result) const
+{
+    {   SYNCHRONIZED
+
+        result.state = state;
+        result.refreshRate = isize(refreshRate());
+        result.powered = isPoweredOn();
+        result.paused = isPaused();
+        result.running = isRunning();
+        result.suspended = isSuspended();
+        result.warping = isWarping();
+        result.tracking = isTracking();
+    }
+}
+
+void
+Emulator::cacheStats(EmulatorStats &result) const
+{
+    {   SYNCHRONIZED
+
+        result.cpuLoad = cpuLoad;
+        result.fps = fps;
+        result.resyncs = resyncs;
+    }
+
+}
+
+void
 Emulator::put(const Cmd &cmd)
 {
     cmdQueue.put(cmd);

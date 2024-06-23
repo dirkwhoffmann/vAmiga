@@ -18,7 +18,7 @@
 
 namespace vamiga {
 
-class Emulator : public Thread, public Synchronizable {
+class Emulator : public Thread, public Synchronizable, public Inspectable<EmulatorInfo, EmulatorStats> {
 
     friend class API;
     friend class VAmiga;
@@ -61,11 +61,17 @@ public:
 
     const char *objectName() const override { return "Emulator"; }
 
-private:
 
-    // void _dump(Category category, std::ostream& os) const override;
+    //
+    // Methods from Inspectable
+    //
 
+public:
+
+    void cacheInfo(EmulatorInfo &result) const override;
+    void cacheStats(EmulatorStats &result) const override;
     
+
     //
     // Main API for configuring the emulator
     //
