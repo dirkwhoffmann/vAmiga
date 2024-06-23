@@ -134,15 +134,17 @@ Amiga::prefix() const
 void
 Amiga::reset(bool hard)
 {
+    SerResetter resetter(hard);
+
     {   SUSPENDED
 
         // Call the pre-reset delegate
         postorderWalk([hard](CoreComponent *c) { c->willReset(hard); });
 
-        // Execute the standard reset routine
-        CoreComponent::reset(hard);
+        // Revert to a clean state
+        postorderWalk([&resetter](CoreComponent *c) { *c << resetter; });
 
-        // Call the pre-reset delegate
+        // Call the post-reset delegate
         postorderWalk([hard](CoreComponent *c) { c->didReset(hard); });
     }
 

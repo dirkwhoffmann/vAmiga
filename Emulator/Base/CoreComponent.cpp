@@ -308,7 +308,7 @@ CoreComponent::preoderWalk(std::function<void(CoreComponent *)> func)
 void
 CoreComponent::postorderWalk(std::function<void(CoreComponent *)> func)
 {
-    for (auto &c : subComponents) c->preoderWalk(func);
+    for (auto &c : subComponents) c->postorderWalk(func);
     func(this);
 }
 
