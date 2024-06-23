@@ -22,10 +22,8 @@ RamExpansion::_dump(Category category, std::ostream& os) const
 }
 
 void
-RamExpansion::_reset(bool hard)
+RamExpansion::didReset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
-
     if (hard) {
 
         // Enter autoconfig state, if FastRam should be emulated

@@ -131,16 +131,31 @@ private:
 
 private:
     
-    void _reset(bool hard) override;
-    
+    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
+
     template <class T>
     void serialize(T& worker)
     {
-        if (isResetter(worker)) return;
+        if (isResetter(worker)) {
 
-        worker
+            worker 
 
-        << config.pullUpResistors;
+            << leftButton
+            << middleButton
+            << rightButton
+            << mouseX
+            << mouseY
+            << oldMouseX
+            << oldMouseY
+            << targetX
+            << targetY;
+
+        } else {
+
+            worker
+
+            << config.pullUpResistors;
+        }
 
     } SERIALIZERS(serialize);
 

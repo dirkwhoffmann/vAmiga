@@ -20,29 +20,14 @@ Mouse::Mouse(Amiga& ref, ControlPort& pref) : SubComponent(ref, pref.objid), por
 
 }
 
-void Mouse::_reset(bool hard)
-{
-    RESET_SNAPSHOT_ITEMS(hard)
-    
-    leftButton = false;
-    middleButton = false;
-    rightButton = false;
-    mouseX = 0;
-    mouseY = 0;
-    oldMouseX = 0;
-    oldMouseY = 0;
-    targetX = 0;
-    targetY = 0;
-}
-
 i64
 Mouse::getOption(Option option) const
 {
     switch (option) {
 
-        case OPT_MOUSE_PULLUP_RESISTORS:  return config.pullUpResistors;
-        case OPT_MOUSE_SHAKE_DETECTION:   return config.shakeDetection;
-        case OPT_MOUSE_VELOCITY:    return config.velocity;
+        case OPT_MOUSE_PULLUP_RESISTORS:    return config.pullUpResistors;
+        case OPT_MOUSE_SHAKE_DETECTION:     return config.shakeDetection;
+        case OPT_MOUSE_VELOCITY:            return config.velocity;
 
         default:
             fatalError;

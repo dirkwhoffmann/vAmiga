@@ -25,10 +25,8 @@ DiagBoard::_dump(Category category, std::ostream& os) const
 }
 
 void
-DiagBoard::_reset(bool hard)
-{
-    RESET_SNAPSHOT_ITEMS(hard)
-    
+DiagBoard::didReset(bool hard)
+{    
     if (hard) {
         
         // Burn Expansion Rom

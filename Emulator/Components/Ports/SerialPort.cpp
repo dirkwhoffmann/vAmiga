@@ -101,10 +101,8 @@ SerialPort::_dump(Category category, std::ostream& os) const
 }
 
 void
-SerialPort::_reset(bool hard)
+SerialPort::didReset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
-
     incoming.clear();
     outgoing.clear();
 }

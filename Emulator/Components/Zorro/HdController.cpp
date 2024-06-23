@@ -54,10 +54,8 @@ HdController::_initialize()
 }
 
 void
-HdController::_reset(bool hard)
-{
-    RESET_SNAPSHOT_ITEMS(hard)
-    
+HdController::didReset(bool hard)
+{    
     if (hard) {
         
         // Burn Expansion Rom

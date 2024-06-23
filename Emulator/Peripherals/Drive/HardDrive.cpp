@@ -187,10 +187,8 @@ HardDrive::_initialize()
 }
 
 void
-HardDrive::_reset(bool hard)
+HardDrive::didReset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
-    
     if (FORCE_HDR_MODIFIED) { modified = true; }
 }
 

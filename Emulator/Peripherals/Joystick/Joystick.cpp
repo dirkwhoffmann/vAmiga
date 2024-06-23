@@ -19,17 +19,6 @@ Joystick::Joystick(Amiga& ref, ControlPort& pref) : SubComponent(ref, pref.objid
 
 };
 
-void
-Joystick::_reset(bool hard)
-{
-    RESET_SNAPSHOT_ITEMS(hard)
-    
-    // Discard any active joystick movements
-    button = false;
-    axisX = 0;
-    axisY = 0;
-}
-
 i64
 Joystick::getOption(Option option) const
 {

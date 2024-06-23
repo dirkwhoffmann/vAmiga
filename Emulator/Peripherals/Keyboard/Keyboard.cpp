@@ -15,10 +15,8 @@
 namespace vamiga {
 
 void
-Keyboard::_reset(bool hard)
-{
-    RESET_SNAPSHOT_ITEMS(hard)
-    
+Keyboard::didReset(bool hard)
+{    
     std::memset(keyDown, 0, sizeof(keyDown));
     state = KB_SELFTEST;
     execute();
