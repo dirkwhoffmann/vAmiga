@@ -58,6 +58,12 @@ CoreComponent::checksum(bool recursive)
 }
 
 bool
+CoreComponent::isInitialized() const
+{
+    return emulator.isInitialized();
+}
+
+bool
 CoreComponent::isPoweredOff() const
 {
     return emulator.isPoweredOff();

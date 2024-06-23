@@ -28,11 +28,6 @@ public:
     // The virtual Amiga
     Amiga main = Amiga(*this, 0);
 
-private:
-
-    // Initialization status
-    bool initialized = false;
-
 public:
 
     // External event queue
@@ -57,9 +52,6 @@ public:
     // Initializes all components
     void initialize();
 
-    // Checks the initialization state
-    bool isInitialized() const;
-
 
     //
     // Methods from CoreComponent
@@ -71,7 +63,7 @@ public:
 
 private:
 
-    void _dump(Category category, std::ostream& os) const override;
+    // void _dump(Category category, std::ostream& os) const override;
 
     
     //
@@ -145,15 +137,15 @@ public:
     void stepOver();
 
 
-    /*
-
     //
     // Audio and Video
     //
 
+    /*
     u32 *getTexture() const;
     u32 *getDmaTexture() const;
     */
+    
 
     //
     // Command queue

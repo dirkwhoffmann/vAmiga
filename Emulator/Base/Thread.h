@@ -36,8 +36,8 @@ protected:
     std::thread thread;
     
     // The current thread state and a change request
-    ExecState state = STATE_OFF;
-    ExecState newState = STATE_OFF;
+    ExecState state = STATE_UNINIT;
+    ExecState newState = STATE_UNINIT;
     std::atomic_flag stateChangeRequest {};
 
     // Warp state and track state
@@ -71,8 +71,8 @@ protected:
 
 public:
     
-    Thread();
-    ~Thread();
+    Thread() { };
+    ~Thread() { };
     
     const char *objectName() const override { return "Thread"; }
 
@@ -155,8 +155,9 @@ public:
      */
     void resume() override;
 
-    bool isPoweredOn() const { return state != STATE_OFF; }
-    bool isPoweredOff() const { return state == STATE_OFF; }
+    bool isInitialized() const { return state != STATE_UNINIT; }
+    bool isPoweredOn() const { return state != STATE_UNINIT && state != STATE_OFF; }
+    bool isPoweredOff() const { return state == STATE_UNINIT || state == STATE_OFF; }
     bool isPaused() const { return state == STATE_PAUSED; }
     bool isRunning() const { return state == STATE_RUNNING; }
     bool isSuspended() const { return state == STATE_SUSPENDED; }

@@ -14,50 +14,53 @@
 
 enum_long(ERROR_CODE)
 {
-    ERROR_OK,
-    ERROR_UNKNOWN,
-    
+    ERROR_OK,                   ///< No error
+    ERROR_UNKNOWN,              ///< Unclassified error condition
+
     // Emulator state
-    ERROR_POWERED_OFF,
-    ERROR_POWERED_ON,
+    ERROR_LAUNCH,               ///< Launch error
+    ERROR_POWERED_OFF,          ///< The emulator is powered off
+    ERROR_POWERED_ON,           ///< The emulator is powered on
     ERROR_DEBUG_OFF,
-    ERROR_RUNNING,
+    ERROR_RUNNING,              ///< The emulator is running
 
     // Configuration
-    ERROR_OPT_UNSUPPORTED,
-    ERROR_OPT_INV_ARG,
-    ERROR_OPT_INV_ID,
-    ERROR_OPT_LOCKED,
+    ERROR_OPT_UNSUPPORTED,      ///< Unsupported configuration option
+    ERROR_OPT_INV_ARG,          ///< Invalid argument
+    ERROR_OPT_INV_ID,           ///< Invalid component id
+    ERROR_OPT_LOCKED,           ///< The option is temporarily locked
 
     // Property storage
-    ERROR_INVALID_KEY,
-    ERROR_SYNTAX,
+    ERROR_INVALID_KEY,          ///< Invalid property key
+    ERROR_SYNTAX,               ///< Syntax error
 
     // CPU
-    ERROR_CPU_UNSUPPORTED,
-    ERROR_BP_NOT_FOUND,
-    ERROR_BP_ALREADY_SET,
-    ERROR_WP_NOT_FOUND,
-    ERROR_WP_ALREADY_SET,
-    ERROR_CP_NOT_FOUND,
-    ERROR_CP_ALREADY_SET,
+    ERROR_CPU_UNSUPPORTED,      ///< Unsupported CPU model
+    ERROR_BP_NOT_FOUND,         ///< Breakpoint is not set
+    ERROR_BP_ALREADY_SET,       ///< Breakpoint is already set
+    ERROR_WP_NOT_FOUND,         ///< Watchpoint is not set
+    ERROR_WP_ALREADY_SET,       ///< Watchpoint is already set
+    ERROR_CP_NOT_FOUND,         ///< Catchpoint is not set
+    ERROR_CP_ALREADY_SET,       ///< Catchpoint is already set
     ERROR_CP_CANT_CATCH,
 
     // Memory
-    ERROR_OUT_OF_MEMORY,
+    ERROR_OUT_OF_MEMORY,        ///< Out of memory
 
     // General
-    ERROR_DIR_NOT_FOUND,
-    ERROR_DIR_ACCESS_DENIED,
-    ERROR_FILE_NOT_FOUND,
-    ERROR_FILE_EXISTS,
-    ERROR_FILE_IS_DIRECTORY,
-    ERROR_FILE_ACCESS_DENIED,
-    ERROR_FILE_TYPE_MISMATCH,
-    ERROR_FILE_TYPE_UNSUPPORTED,
-    ERROR_FILE_CANT_READ,
-    ERROR_FILE_CANT_WRITE,
-    ERROR_FILE_CANT_CREATE,
+    ERROR_DIR_NOT_FOUND,        ///< Directory does not exist
+    ERROR_DIR_ACCESS_DENIED,    ///< File access denied
+    ERROR_DIR_CANT_CREATE,      ///< Unable to create a directory
+    ERROR_DIR_NOT_EMPTY,        ///< Directory is not empty
+    ERROR_FILE_NOT_FOUND,       ///< File not found error
+    ERROR_FILE_EXISTS,          ///< File already exists
+    ERROR_FILE_IS_DIRECTORY,    ///< The file is a directory
+    ERROR_FILE_ACCESS_DENIED,   ///< File access denied
+    ERROR_FILE_TYPE_MISMATCH,   ///< File type mismatch
+    ERROR_FILE_TYPE_UNSUPPORTED,///< Unsupported file type
+    ERROR_FILE_CANT_READ,       ///< Can't read from file
+    ERROR_FILE_CANT_WRITE,      ///< Can't write to file
+    ERROR_FILE_CANT_CREATE,     ///< Can't create file
 
     // Ram
     ERROR_CHIP_RAM_MISSING,
@@ -99,11 +102,11 @@ enum_long(ERROR_CODE)
     ERROR_HDC_INIT,
 
     // Snapshots
-    ERROR_SNAP_TOO_OLD,
-    ERROR_SNAP_TOO_NEW,
-    ERROR_SNAP_IS_BETA,
-    ERROR_SNAP_CORRUPTED,
-    
+    ERROR_SNAP_TOO_OLD,         ///< Snapshot was created with an older version
+    ERROR_SNAP_TOO_NEW,         ///< Snapshot was created with a later version
+    ERROR_SNAP_IS_BETA,         ///< Snapshot was created with a beta release
+    ERROR_SNAP_CORRUPTED,       ///< Snapshot data is corrupted
+
     // Media files
     ERROR_DMS_CANT_CREATE,
     ERROR_EXT_FACTOR5,
@@ -210,6 +213,7 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_OK:                          return "OK";
             case ERROR_UNKNOWN:                     return "UNKNOWN";
                 
+            case ERROR_LAUNCH:                      return "LAUNCH";
             case ERROR_POWERED_OFF:                 return "POWERED_OFF";
             case ERROR_POWERED_ON:                  return "POWERED_ON";
             case ERROR_DEBUG_OFF:                   return "DEBUG_OFF";
@@ -236,6 +240,8 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
 
             case ERROR_DIR_NOT_FOUND:               return "DIR_NOT_FOUND";
             case ERROR_DIR_ACCESS_DENIED:           return "DIR_ACCESS_DENIED";
+            case ERROR_DIR_CANT_CREATE:             return "DIR_CANT_CREATE";
+            case ERROR_DIR_NOT_EMPTY:               return "DIR_NOT_EMPTY";
             case ERROR_FILE_NOT_FOUND:              return "FILE_NOT_FOUND";
             case ERROR_FILE_EXISTS:                 return "FILE_EXISTS";
             case ERROR_FILE_IS_DIRECTORY:           return "FILE_IS_DIRECtORY";

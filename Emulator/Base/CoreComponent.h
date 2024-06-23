@@ -84,6 +84,7 @@ public:
     u64 checksum(bool recursive = false);
 
     // State properties (see Thread class for details)
+    virtual bool isInitialized() const;
     virtual bool isPoweredOff() const;
     virtual bool isPoweredOn() const;
     virtual bool isPaused() const;

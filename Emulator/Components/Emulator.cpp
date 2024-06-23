@@ -45,7 +45,8 @@ Emulator::launch(const void *listener, Callback *func)
 void
 Emulator::initialize()
 {
-    assert(!isInitialized());
+    // Make sure this function is only called once
+    if (isInitialized()) throw Error(ERROR_LAUNCH, "The emulator is already initialized.");
 
     // Initialize all components
     main.initialize();
@@ -57,20 +58,9 @@ Emulator::initialize()
     // Perform a hard reset
     main.hardReset();
 
-    initialized = true;
-}
-
-bool
-Emulator::isInitialized() const
-{
-    return initialized;
-}
-
-void
-Emulator::_dump(Category category, std::ostream& os) const
-{
-    using namespace util;
-
+    // Switch state
+    state = newState = STATE_OFF;
+    assert(isInitialized());
 }
 
 void
@@ -78,79 +68,6 @@ Emulator::put(const Cmd &cmd)
 {
     cmdQueue.put(cmd);
 }
-
-/*
-i64
-Emulator::getOption(Option opt) const
-{
-    switch (opt) {
-
-        case OPT_EMU_WARP_BOOT:         return config.warpBoot;
-        case OPT_EMU_WARP_MODE:         return config.warpMode;
-        case OPT_EMU_SNAPSHOTS:         return config.snapshots;
-        case OPT_EMU_SNAPSHOT_DELAY:    return config.snapshotDelay;
-
-        default:
-            fatalError;
-    }
-}
-
-void
-Emulator::checkOption(Option opt, i64 value)
-{
-    switch (opt) {
-
-        case OPT_EMU_WARP_BOOT:
-
-            return;
-
-        case OPT_EMU_WARP_MODE:
-
-            if (!WarpModeEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INV_ARG, WarpModeEnum::keyList());
-            }
-            return;
-
-        case OPT_EMU_SNAPSHOTS:
-
-            return;
-
-        case OPT_EMU_SNAPSHOT_DELAY:
-
-            if (value < 10 || value > 3600) {
-                throw Error(ERROR_OPT_INV_ARG, "10...3600");
-            }
-            return;
-
-        default:
-            throw Error(ERROR_OPT_UNSUPPORTED);
-    }
-}
-
-void
-Emulator::setOption(Option opt, i64 value)
-{
-    checkOption(opt, value);
-
-    switch (opt) {
-
-        case OPT_EMU_SNAPSHOTS:
-
-            config.snapshots = bool(value);
-            main.scheduleNextSnpEvent();
-            return;
-
-        case OPT_EMU_SNAPSHOT_DELAY:
-
-            config.snapshotDelay = isize(value);
-            main.scheduleNextSnpEvent();
-            return;
-
-        default:
-            fatalError;
-    }
-}
-*/
 
 i64
 Emulator::get(Option opt, isize id) const
@@ -409,6 +326,24 @@ Emulator::missingFrames() const
     return isize(target - frameCounter);
 }
 
+/*
+u32 *
+Emulator::getTexture() const
+{
+    return main.config.runAhead && isRunning() ?
+    ahead.videoPort.getTexture() :
+    main.videoPort.getTexture();
+}
+
+u32 *
+Emulator::getDmaTexture() const
+{
+    return main.config.runAhead && isRunning() ?
+    ahead.videoPort.getDmaTexture() :
+    main.videoPort.getDmaTexture();
+}
+*/
+
 double
 Emulator::refreshRate() const
 {
@@ -416,7 +351,7 @@ Emulator::refreshRate() const
 
     if (config.vsync) {
 
-        return 60.0; // TODO: double(host.getOption(OPT_HOST_REFRESH_RATE));
+        return double(host.getOption(OPT_HOST_REFRESH_RATE));
 
     } else {
 

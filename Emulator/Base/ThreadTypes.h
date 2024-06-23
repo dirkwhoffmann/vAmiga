@@ -16,13 +16,15 @@
 // Enumerations
 //
 
+/// Execution state
 enum_long(EXEC_STATE)
 {
-    STATE_OFF,
-    STATE_PAUSED,
-    STATE_RUNNING,
-    STATE_SUSPENDED,
-    STATE_HALTED
+    STATE_UNINIT,       ///< Not yet initialized
+    STATE_OFF,          ///< Powered off
+    STATE_PAUSED,       ///< Powered on, but currently paused
+    STATE_RUNNING,      ///< Up and running
+    STATE_SUSPENDED,    ///< Shortly paused for an internal state change
+    STATE_HALTED        ///< Shut down
 };
 typedef EXEC_STATE ExecState;
 
@@ -38,6 +40,7 @@ struct ExecStateEnum : util::Reflection<ExecStateEnum, ExecState>
     {
         switch (value) {
 
+            case STATE_UNINIT:       return "UNINIT";
             case STATE_OFF:          return "OFF";
             case STATE_PAUSED:       return "PAUSED";
             case STATE_RUNNING:      return "RUNNING";
