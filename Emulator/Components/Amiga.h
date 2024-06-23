@@ -323,7 +323,22 @@ public:
     //
 
     void initialize();
-    
+    void powerOn();
+    void powerOff();
+    void run();
+    void pause();
+    void halt();
+    void warpOn();
+    void warpOff();
+    void trackOn();
+    void trackOff();
+    void focus();
+    void unfocus();
+
+    void powerOnOff(bool value) { value ? powerOn() : powerOff(); }
+    void warpOnOff(bool value) { value ? warpOn() : warpOff(); }
+    void trackOnOff(bool value) { value ? trackOn() : trackOff(); }
+
 
     //
     // Interacting with the run loop

@@ -111,31 +111,10 @@ public:
     // Throws an exception if the emulator is not ready to power on
     virtual void isReady() const throws;
 
-protected:
-
-    void powerOn();
-    void powerOff();
-    void run();
-    void pause();
-    void halt();
-    void warpOn();
-    void warpOff();
-    void trackOn();
-    void trackOff();
-    void focus();
-    void unfocus();
-
-    void powerOnOff(bool value) { value ? powerOn() : powerOff(); }
-    void warpOnOff(bool value) { value ? warpOn() : warpOff(); }
-    void trackOnOff(bool value) { value ? trackOn() : trackOff(); }
-
 public:
     
     virtual void willReset(bool hard) { }
     virtual void didReset(bool hard) { }
-
-private:
-
     virtual void _isReady() const throws { }
     virtual void _powerOn() { }
     virtual void _powerOff() { }

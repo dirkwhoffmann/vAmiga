@@ -783,6 +783,72 @@ Amiga::initialize()
 }
 
 void
+Amiga::powerOn()
+{
+    postorderWalk([](CoreComponent *c) { c->_powerOn(); });
+}
+
+void
+Amiga::powerOff()
+{
+    postorderWalk([](CoreComponent *c) { c->_powerOff(); });
+}
+
+void
+Amiga::run()
+{
+    postorderWalk([](CoreComponent *c) { c->_run(); });
+}
+
+void
+Amiga::pause()
+{
+    postorderWalk([](CoreComponent *c) { c->_pause(); });
+}
+
+void
+Amiga::halt()
+{
+    postorderWalk([](CoreComponent *c) { c->_halt(); });
+}
+
+void
+Amiga::warpOn()
+{
+    postorderWalk([](CoreComponent *c) { c->_warpOn(); });
+}
+
+void
+Amiga::warpOff()
+{
+    postorderWalk([](CoreComponent *c) { c->_warpOff(); });
+}
+
+void
+Amiga::trackOn()
+{
+    postorderWalk([](CoreComponent *c) { c->_trackOn(); });
+}
+
+void
+Amiga::trackOff()
+{
+    postorderWalk([](CoreComponent *c) { c->_trackOff(); });
+}
+
+void
+Amiga::focus()
+{
+    postorderWalk([](CoreComponent *c) { c->_focus(); });
+}
+
+void
+Amiga::unfocus()
+{
+    postorderWalk([](CoreComponent *c) { c->_unfocus(); });
+}
+
+void
 Amiga::setFlag(u32 flag)
 {
     SYNCHRONIZED
