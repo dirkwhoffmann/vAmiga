@@ -81,7 +81,7 @@ Interpreter::initCommons(Command &root)
 
             auto seconds = parseNum(argv[0]);
             agnus.scheduleRel<SLOT_RSH>(SEC(seconds), RSH_WAKEUP);
-            throw ScriptInterruption(seconds);
+            throw ScriptInterruption();
         });
     }
 }
@@ -297,8 +297,8 @@ Interpreter::initCommandShell(Command &root)
 
         for (isize i = 0; i < 2; i++) {
 
-            auto cmd = (i == 0) ? ciaa.shellName() : ciab.shellName();
-            auto description = (i == 0) ? ciaa.description() : ciab.description();
+            cmd = (i == 0) ? ciaa.shellName() : ciab.shellName();
+            description = (i == 0) ? ciaa.description() : ciab.description();
             root.add({cmd}, description);
 
             {   VAMIGA_GROUP("")

@@ -228,24 +228,19 @@ Headless::process(Message msg)
         case MSG_SCRIPT_DONE:
 
             returnCode = 0;
+            barrier.unlock();
             break;
 
         case MSG_SCRIPT_ABORT:
         case MSG_ABORT:
 
             returnCode = 1;
-            break;
-
-        case MSG_SCRIPT_PAUSE:
-
-            std::this_thread::sleep_for(std::chrono::seconds(msg.script.delay));
+            barrier.unlock();
             break;
 
         default:
             break;
     }
-
-    barrier.unlock();
 }
 
 void 
@@ -296,13 +291,7 @@ Headless::execScript()
     // Execute the script
     barrier.lock();
     script.execute(*vamiga.amiga.amiga);
-
-    while (!returnCode) {
-
-        barrier.lock();
-        vamiga.amiga.amiga->retroShell.continueScript();
-    }
-
+    
     return *returnCode;
 }
 

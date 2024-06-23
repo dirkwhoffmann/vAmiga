@@ -257,7 +257,7 @@ AudioFilter::setOption(Option option, i64 value)
             }
 
             config.filterType = (FilterType)value;
-            setup(emulator.get(OPT_HOST_SAMPLE_RATE));
+            setup(double(emulator.get(OPT_HOST_SAMPLE_RATE)));
             return;
 
         default:

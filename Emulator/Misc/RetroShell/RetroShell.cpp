@@ -559,39 +559,6 @@ RetroShell::abortScript()
     }
 }
 
-/*
-void
-RetroShell::continueScript()
-{
-    string command;
-    while(std::getline(script, command)) {
-
-        // Print the command
-        *this << command << '\n';
-        
-        // Execute the command
-        try {
-            exec(command);
-            
-        } catch (ScriptInterruption &exc) {
-            
-            msgQueue.put(MSG_SCRIPT_PAUSE, ScriptMsg { scriptLine, i16(exc.data) });
-            return;
-
-        } catch (std::exception &) {
-            
-            *this << "Aborted in line " << scriptLine << '\n';
-            msgQueue.put(MSG_SCRIPT_ABORT, ScriptMsg { scriptLine, 0 });
-            return;
-        }
-
-        scriptLine++;
-    }
-    
-    msgQueue.put(MSG_SCRIPT_DONE, ScriptMsg { scriptLine, 0 });
-}
-*/
-
 void
 RetroShell::describe(const std::exception &e, isize line, const string &cmd)
 {

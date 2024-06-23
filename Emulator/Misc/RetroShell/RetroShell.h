@@ -226,9 +226,6 @@ public:
     // void execScript(const class MediaFile &script) throws;
     void abortScript();
 
-    // Continues a previously interrupted script
-    // [[deprecated]] void continueScript() throws;
-
 private:
 
     // Prints a textual description of an error in the console

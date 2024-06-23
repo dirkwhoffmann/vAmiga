@@ -315,9 +315,8 @@ Interpreter::help(const Command& current)
     for (auto &it : current.subCommands) {
         tab = std::max(tab, (isize)it.fullName.length());
     }
-    tab += indent.size();
+    tab += (isize)indent.size();
 
-    // isize group = -1;
     isize newlines = 1;
 
     for (auto &it : current.subCommands) {
@@ -331,19 +330,6 @@ Interpreter::help(const Command& current)
             retroShell << '\n' << it.groupName << '\n';
             newlines = 1;
         }
-
-        /*
-        // Print group description when a new group begins
-        if (group != it.group) {
-
-            group = it.group;
-            retroShell << '\n';
-
-            if (!Command::groups[group].empty()) {
-                retroShell << Command::groups[group] << '\n' << '\n';
-            }
-        }
-        */
 
         // Print newlines
         for (; newlines > 0; newlines--) {
