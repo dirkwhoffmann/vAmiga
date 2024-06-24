@@ -35,7 +35,6 @@ enum_long(OPT)
 
     // Agnus
     OPT_AGNUS_REVISION,
-    OPT_AGNUS_SLOW_RAM_MIRROR,
     OPT_AGNUS_PTR_DROPS,
 
     // Denise
@@ -94,6 +93,7 @@ enum_long(OPT)
     OPT_MEM_EXT_START,
     OPT_MEM_SAVE_ROMS,
     OPT_MEM_SLOW_RAM_DELAY,
+    OPT_MEM_SLOW_RAM_MIRROR,
     OPT_MEM_BANKMAP,
     OPT_MEM_UNMAPPING_TYPE,
     OPT_MEM_RAM_INIT_PATTERN,
@@ -201,7 +201,6 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_AMIGA_SNAPSHOT_DELAY:      return "AMIGA.SNAPSHOT_DELAY";
 
             case OPT_AGNUS_REVISION:            return "AGNUS.REVISION";
-            case OPT_AGNUS_SLOW_RAM_MIRROR:     return "AGNUS.SLOW_RAM_MIRROR";
             case OPT_AGNUS_PTR_DROPS:           return "AGNUS.PTR_DROPS";
 
             case OPT_DENISE_REVISION:           return "DENISE.REVISION";
@@ -254,6 +253,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_MEM_EXT_START:             return "MEM.EXT_START";
             case OPT_MEM_SAVE_ROMS:             return "MEM.SAVE_ROMS";
             case OPT_MEM_SLOW_RAM_DELAY:        return "MEM.SLOW_RAM_DELAY";
+            case OPT_MEM_SLOW_RAM_MIRROR:       return "MEM.SLOW_RAM_MIRROR";
             case OPT_MEM_BANKMAP:               return "MEM.BANKMAP";
             case OPT_MEM_UNMAPPING_TYPE:        return "MEM.UNMAPPING_TYPE";
             case OPT_MEM_RAM_INIT_PATTERN:      return "MEM.RAM_INIT_PATTERN";
@@ -341,7 +341,6 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_AMIGA_SNAPSHOT_DELAY:      return "Time span between two snapshots";
 
             case OPT_AGNUS_REVISION:            return "Chip revision";
-            case OPT_AGNUS_SLOW_RAM_MIRROR:     return "ECS memory mirroring";
             case OPT_AGNUS_PTR_DROPS:           return "Ignore certain register writes";
 
             case OPT_DENISE_REVISION:           return "Chip revision";
@@ -394,6 +393,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_MEM_EXT_START:             return "Extension ROM location";
             case OPT_MEM_SAVE_ROMS:             return "Include ROMs in snapshots";
             case OPT_MEM_SLOW_RAM_DELAY:        return "Emulate slow RAM bus delays";
+            case OPT_MEM_SLOW_RAM_MIRROR:       return "ECS memory mirroring";
             case OPT_MEM_BANKMAP:               return "Memory mapping scheme";
             case OPT_MEM_UNMAPPING_TYPE:        return "Unmapped memory behavior";
             case OPT_MEM_RAM_INIT_PATTERN:      return "RAM initialization pattern";

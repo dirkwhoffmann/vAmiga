@@ -313,10 +313,6 @@ class Configuration {
         get { return amiga.getConfig(.BLITTER_ACCURACY) }
         set { amiga.configure(.BLITTER_ACCURACY, value: newValue) }
     }
-    var slowRamMirror: Bool {
-        get { return amiga.getConfig(.AGNUS_SLOW_RAM_MIRROR) != 0 }
-        set { amiga.configure(.AGNUS_SLOW_RAM_MIRROR, enable: newValue) }
-    }
     var todBug: Bool {
         get { return amiga.getConfig(.CIA_TODBUG) != 0 }
         set { amiga.configure(.CIA_TODBUG, enable: newValue) }
@@ -332,6 +328,10 @@ class Configuration {
     var slowRamDelay: Bool {
         get { return amiga.getConfig(.MEM_SLOW_RAM_DELAY) != 0 }
         set { amiga.configure(.MEM_SLOW_RAM_DELAY, enable: newValue) }
+    }
+    var slowRamMirror: Bool {
+        get { return amiga.getConfig(.MEM_SLOW_RAM_MIRROR) != 0 }
+        set { amiga.configure(.MEM_SLOW_RAM_MIRROR, enable: newValue) }
     }
     var driveSpeed: Int {
         get { return amiga.getConfig(.DC_SPEED) }

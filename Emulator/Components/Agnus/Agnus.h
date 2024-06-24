@@ -44,7 +44,6 @@ class Agnus : public SubComponent, public Inspectable<AgnusInfo, AgnusStats> {
     ConfigOptions options = {
 
         OPT_AGNUS_REVISION,
-        OPT_AGNUS_SLOW_RAM_MIRROR,
         OPT_AGNUS_PTR_DROPS
     };
 
@@ -293,7 +292,7 @@ private:
         worker
 
         << config.revision
-        << config.slowRamMirror
+        << config.ptrDrops
         << ptrMask;
     }
 
@@ -345,9 +344,6 @@ public:
     // Returns a bitmask indicating the used bits in DDFSTRT / DDFSTOP
     u16 ddfMask() const { return isOCS() ? 0xFC : 0xFE; }
     
-    // Checks whether Agnus is able to access Slow Ram
-    bool slowRamIsMirroredIn() const;
-
     
     //
     // Analyzing

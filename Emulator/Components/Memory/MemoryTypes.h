@@ -213,7 +213,10 @@ typedef struct
     
     // Indicates if slow Ram accesses need a free bus
     bool slowRamDelay;
-    
+
+    // Special ECS feature
+    bool slowRamMirror;
+
     // Memory layout
     BankMap bankMap;
     

@@ -797,7 +797,7 @@ extension DefaultsProxy {
         remove(.MEM_BANKMAP)
         remove(.MEM_UNMAPPING_TYPE)
         remove(.MEM_SLOW_RAM_DELAY)
-        remove(.AGNUS_SLOW_RAM_MIRROR)
+        remove(.MEM_SLOW_RAM_MIRROR)
     }
 }
 
@@ -817,7 +817,7 @@ extension Configuration {
         defaults.set(.MEM_BANKMAP, bankMap)
         defaults.set(.MEM_UNMAPPING_TYPE, unmappingType)
         defaults.set(.MEM_SLOW_RAM_DELAY, slowRamDelay)
-        defaults.set(.AGNUS_SLOW_RAM_MIRROR, slowRamMirror)
+        defaults.set(.MEM_SLOW_RAM_MIRROR, slowRamMirror)
         defaults.save()
         
         amiga.resume()
@@ -837,7 +837,7 @@ extension Configuration {
         bankMap = defaults.get(.MEM_BANKMAP)
         unmappingType = defaults.get(.MEM_UNMAPPING_TYPE)
         slowRamDelay = defaults.get(.MEM_SLOW_RAM_DELAY) != 0
-        slowRamMirror = defaults.get(.AGNUS_SLOW_RAM_MIRROR) != 0
+        slowRamMirror = defaults.get(.MEM_SLOW_RAM_MIRROR) != 0
 
         amiga.resume()
     }

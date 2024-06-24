@@ -69,7 +69,6 @@ Agnus::getOption(Option option) const
     switch (option) {
 
         case OPT_AGNUS_REVISION:        return config.revision;
-        case OPT_AGNUS_SLOW_RAM_MIRROR: return config.slowRamMirror;
         case OPT_AGNUS_PTR_DROPS:       return config.ptrDrops;
             
         default:
@@ -104,11 +103,6 @@ Agnus::setOption(Option option, i64 value)
             mem.updateMemSrcTables();
             return;
             
-        case OPT_AGNUS_SLOW_RAM_MIRROR:
-            
-            config.slowRamMirror = value;
-            return;
-
         case OPT_AGNUS_PTR_DROPS:
 
             config.ptrDrops = value;
@@ -168,23 +162,6 @@ Agnus::chipRamLimit() const
         case AGNUS_ECS_2MB: return 2048;
         case AGNUS_ECS_1MB: return 1024;
         default:            return 512;
-    }
-}
-
-bool
-Agnus::slowRamIsMirroredIn() const
-{
-
-    /* The ECS revision of Agnus has a special feature that makes Slow Ram
-     * accessible for DMA. In the 512 MB Chip Ram + 512 Slow Ram configuration,
-     * Slow Ram is mapped into the second Chip Ram segment. OCS Agnus does not
-     * have this feature. It is able to access Chip Ram, only.
-     */
-    
-    if (config.slowRamMirror && isECS()) {
-        return mem.chipRamSize() == KB(512) && mem.slowRamSize() == KB(512);
-    } else {
-        return false;
     }
 }
 

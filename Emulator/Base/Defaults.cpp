@@ -46,7 +46,6 @@ Defaults::Defaults()
     setFallback(OPT_AMIGA_SNAPSHOT_DELAY,       10);
 
     setFallback(OPT_AGNUS_REVISION,             AGNUS_ECS_1MB);
-    setFallback(OPT_AGNUS_SLOW_RAM_MIRROR,      true);
     setFallback(OPT_AGNUS_PTR_DROPS,            true);
     setFallback(OPT_DENISE_REVISION,            DENISE_OCS);
     setFallback(OPT_DENISE_VIEWPORT_TRACKING,   true);
@@ -86,6 +85,7 @@ Defaults::Defaults()
     setFallback(OPT_MEM_EXT_START,              0xE0);
     setFallback(OPT_MEM_SAVE_ROMS,              true);
     setFallback(OPT_MEM_SLOW_RAM_DELAY,         true);
+    setFallback(OPT_MEM_SLOW_RAM_MIRROR,        true);
     setFallback(OPT_MEM_BANKMAP,                BANK_MAP_A500);
     setFallback(OPT_MEM_UNMAPPING_TYPE,         RAM_INIT_ALL_ZEROES);
     setFallback(OPT_MEM_RAM_INIT_PATTERN,       UNMAPPED_FLOATING);

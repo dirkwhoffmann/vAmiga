@@ -39,7 +39,6 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_AMIGA_SNAPSHOT_DELAY:      return numParser(" sec");
 
         case OPT_AGNUS_REVISION:            return enumParser.template operator()<AgnusRevisionEnum>();
-        case OPT_AGNUS_SLOW_RAM_MIRROR:     return boolParser();
         case OPT_AGNUS_PTR_DROPS:           return boolParser();
 
         case OPT_DENISE_REVISION:           return enumParser.template operator()<DeniseRevisionEnum>();
@@ -92,6 +91,7 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_MEM_EXT_START:             return numParser();
         case OPT_MEM_SAVE_ROMS:             return boolParser();
         case OPT_MEM_SLOW_RAM_DELAY:        return boolParser();
+        case OPT_MEM_SLOW_RAM_MIRROR:       return boolParser();
         case OPT_MEM_BANKMAP:               return enumParser.template operator()<BankMapEnum>();
         case OPT_MEM_UNMAPPING_TYPE:        return enumParser.template operator()<UnmappedMemoryEnum>();
         case OPT_MEM_RAM_INIT_PATTERN:      return enumParser.template operator()<RamInitPatternEnum>();

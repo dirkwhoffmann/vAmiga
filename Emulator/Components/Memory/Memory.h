@@ -119,6 +119,7 @@ class Memory : public SubComponent {
         OPT_MEM_EXT_START,
         OPT_MEM_SAVE_ROMS,
         OPT_MEM_SLOW_RAM_DELAY,
+        OPT_MEM_SLOW_RAM_MIRROR,
         OPT_MEM_BANKMAP,
         OPT_MEM_UNMAPPING_TYPE,
         OPT_MEM_RAM_INIT_PATTERN
@@ -256,11 +257,12 @@ private:
 
         worker
 
+        << config.extStart
         << config.slowRamDelay
+        << config.slowRamMirror
         << config.bankMap
         << config.ramInitPattern
-        << config.unmappingType
-        << config.extStart;
+        << config.unmappingType;
     }
 
     void operator << (SerResetter &worker) override;
@@ -435,10 +437,14 @@ public:
 
 private:
 
+    // Called inside updateMemSrcTables()
     void updateCpuMemSrcTable();
     void updateAgnusMemSrcTable();
 
-    
+    // Checks whether Agnus is able to access Slow Ram
+    bool slowRamIsMirroredIn() const;
+
+
     //
     // Accessing memory
     //

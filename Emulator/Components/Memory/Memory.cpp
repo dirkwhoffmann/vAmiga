@@ -123,6 +123,7 @@ Memory::getOption(Option option) const
         case OPT_MEM_EXT_START:         return config.extStart;
         case OPT_MEM_SAVE_ROMS:         return config.saveRoms;
         case OPT_MEM_SLOW_RAM_DELAY:    return config.slowRamDelay;
+        case OPT_MEM_SLOW_RAM_MIRROR:   return config.slowRamMirror;
         case OPT_MEM_BANKMAP:           return config.bankMap;
         case OPT_MEM_UNMAPPING_TYPE:    return config.unmappingType;
         case OPT_MEM_RAM_INIT_PATTERN:  return config.ramInitPattern;
@@ -187,24 +188,27 @@ Memory::setOption(Option option, i64 value)
             return;
             
         case OPT_MEM_SAVE_ROMS:
-        {
-            SUSPENDED
+
             config.saveRoms = value;
             return;
-        }
+
         case OPT_MEM_SLOW_RAM_DELAY:
-        {
-            SUSPENDED
+
+
             config.slowRamDelay = value;
             return;
-        }
+
+        case OPT_MEM_SLOW_RAM_MIRROR:
+
+            config.slowRamMirror = value;
+            return;
+
         case OPT_MEM_BANKMAP:
         {
             if (!BankMapEnum::isValid(value)) {
                 throw Error(ERROR_OPT_INV_ARG, BankMapEnum::keyList());
             }
             
-            SUSPENDED
             config.bankMap = (BankMap)value;
             updateMemSrcTables();
             return;
@@ -215,7 +219,6 @@ Memory::setOption(Option option, i64 value)
                 throw Error(ERROR_OPT_INV_ARG, UnmappedMemoryEnum::keyList());
             }
             
-            SUSPENDED
             config.unmappingType = (UnmappedMemory)value;
             return;
         }
@@ -225,7 +228,7 @@ Memory::setOption(Option option, i64 value)
                 throw Error(ERROR_OPT_INV_ARG, RamInitPatternEnum::keyList());
             }
 
-        { SUSPENDED config.ramInitPattern = (RamInitPattern)value; }
+            config.ramInitPattern = (RamInitPattern)value;
             if (isPoweredOff()) fillRamWithInitPattern();
             return;
 
@@ -870,10 +873,27 @@ Memory::updateAgnusMemSrcTable()
     }
     
     // Slow Ram mirror
-    if (agnus.slowRamIsMirroredIn()) {
+    if (slowRamIsMirroredIn()) {
         for (isize i = 0x8; i <= 0xF; i++) {
             agnusMemSrc[i] = MEM_SLOW_MIRROR;
         }
+    }
+}
+
+bool
+Memory::slowRamIsMirroredIn() const
+{
+
+    /* The ECS revision of Agnus has a special feature that makes Slow Ram
+     * accessible for DMA. In the 512 MB Chip Ram + 512 Slow Ram configuration,
+     * Slow Ram is mapped into the second Chip Ram segment. OCS Agnus does not
+     * have this feature. It is able to access Chip Ram, only.
+     */
+
+    if (config.slowRamMirror && agnus.isECS()) {
+        return chipRamSize() == KB(512) && slowRamSize() == KB(512);
+    } else {
+        return false;
     }
 }
 
