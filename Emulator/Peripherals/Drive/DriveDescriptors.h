@@ -33,19 +33,6 @@ struct GeometryDescriptor : Serializable {
 
     // Size of a sector in bytes
     isize bsize = 512;
-    
-    /*
-    template <class W>
-    void operator<<(W& worker)
-    {
-        worker
-        
-        << cylinders
-        << heads
-        << sectors
-        << bsize;
-    }
-    */
 
     template <class T>
     void serialize(T& worker)
@@ -110,30 +97,6 @@ struct PartitionDescriptor : Serializable {
     u32 mask = 0xFFFFFFFE;
     u32 bootPri = 0;
     u32 dosType = 0x444f5300;
-    
-    /*
-    template <class W>
-    void operator<<(W& worker)
-    {
-        worker
-        
-        << name
-        << flags
-        << sizeBlock
-        << heads
-        << sectors
-        << reserved
-        << interleave
-        << lowCyl
-        << highCyl
-        << numBuffers
-        << bufMemType
-        << maxTransfer
-        << mask
-        << bootPri
-        << dosType;
-    }
-    */
 
     template <class T>
     void serialize(T& worker)
@@ -178,21 +141,7 @@ struct DriverDescriptor : Serializable {
     u32 patchFlags = 0;
     std::vector<u32> blocks;
     u32 segList = 0;
-    
-    /*
-    template <class W>
-    void operator<<(W& worker)
-    {
-        worker
-        
-        << dosType
-        << dosVersion
-        << patchFlags
-        << blocks
-        << segList;
-    }
-    */
-    
+
     template <class T>
     void serialize(T& worker)
     {

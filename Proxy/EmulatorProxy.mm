@@ -2982,12 +2982,8 @@ using namespace vamiga::moira;
 
 - (NSInteger)cpuLoad
 {
-    // TODO: FIXME
-    return 0;
-    /*
-    double load = [self emu]->emu->main.getCpuLoad();
+    double load = [self emu]->emu->getStats().cpuLoad;
     return (NSInteger)(100 * load);
-    */
 }
 
 - (InspectionTarget)inspectionTarget

@@ -98,7 +98,7 @@ class CIA : public SubComponent, public Inspectable<CIAInfo> {
 protected:
 
     // Identification number (0 = CIA A, 1 = CIA B)
-    const int nr;
+    // const int nr;
 
     // Current configuration
     CIAConfig config = {};
@@ -284,10 +284,10 @@ protected:
 
 public:
     
-    CIA(Amiga& ref, int n);
+    CIA(Amiga& ref, isize objid);
 
-    bool isCIAA() const { return nr == 0; }
-    bool isCIAB() const { return nr == 1; }
+    bool isCIAA() const { return objid == 0; }
+    bool isCIAB() const { return objid == 1; }
 
     
     //

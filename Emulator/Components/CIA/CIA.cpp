@@ -21,7 +21,7 @@
 
 namespace vamiga {
 
-CIA::CIA(Amiga& ref, int n) : SubComponent(ref, n), nr(n)
+CIA::CIA(Amiga& ref, isize objid) : SubComponent(ref, objid)
 {
     subComponents = std::vector<CoreComponent *> {
 
