@@ -30,10 +30,13 @@ public:
 
 public:
 
-    // External event queue
+    // User default settings
+    static Defaults defaults;
+
+    // Incoming external events
     CmdQueue cmdQueue;
 
-    // Information about the host system
+    // Host system information
     Host host = Host(*this);
 
 

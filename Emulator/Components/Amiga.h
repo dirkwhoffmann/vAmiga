@@ -87,9 +87,6 @@ class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
 
 public:
 
-    // User settings
-    static Defaults defaults;
-
     // Core components
     CPU cpu = CPU(*this);
     CIAA ciaA = CIAA(*this);

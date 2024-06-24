@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "Memory.h"
-#include "Amiga.h"
+#include "Emulator.h"
 #include "Agnus.h"
 #include "Checksum.h"
 #include "CIA.h"
@@ -93,7 +93,7 @@ Memory::_initialize()
 {
     CoreComponent::_initialize();
     
-    if (auto romPath = Amiga::defaults.getRaw("ROM_PATH"); romPath != "") {
+    if (auto romPath = Emulator::defaults.getRaw("ROM_PATH"); romPath != "") {
 
         debug(CNF_DEBUG, "Trying to load Rom from %s...\n", romPath.c_str());
         
@@ -102,7 +102,7 @@ Memory::_initialize()
         }
     }
     
-    if (auto extPath = Amiga::defaults.getRaw("EXT_PATH"); extPath != "") {
+    if (auto extPath = Emulator::defaults.getRaw("EXT_PATH"); extPath != "") {
 
         debug(CNF_DEBUG, "Trying to load extension Rom from %s...\n", extPath.c_str());
         

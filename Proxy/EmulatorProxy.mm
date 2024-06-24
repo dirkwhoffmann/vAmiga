@@ -2939,7 +2939,7 @@ using namespace vamiga::moira;
 
 + (DefaultsProxy *) defaults
 {
-    return [[DefaultsProxy alloc] initWith:&Amiga::defaults];
+    return [[DefaultsProxy alloc] initWith:&Emulator::defaults];
 }
 
 - (void)dealloc

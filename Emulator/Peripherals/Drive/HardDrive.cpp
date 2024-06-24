@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "HardDrive.h"
-#include "Amiga.h"
+#include "Emulator.h"
 #include "HdControllerTypes.h"
 #include "IOUtils.h"
 #include "Memory.h"
@@ -458,7 +458,7 @@ HardDrive::disableWriteThrough()
 string
 HardDrive::writeThroughPath()
 {
-    return Amiga::defaults.getRaw("HD" + std::to_string(objid) + "_PATH");
+    return Emulator::defaults.getRaw("HD" + std::to_string(objid) + "_PATH");
 }
 
 void
