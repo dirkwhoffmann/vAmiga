@@ -12,19 +12,4 @@
 
 namespace vamiga {
 
-/*
-template <class T>
-bool isSoftResetter(T &worker)
-{
-    auto &id = typeid(worker);
-    return id == typeid(SerSoftResetter);
-}
-
-template <>
-bool isSoftResetter(SerResetter &worker)
-{
-    return true;
-}
-*/
-
 }

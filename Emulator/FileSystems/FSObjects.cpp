@@ -11,6 +11,7 @@
 #include "FSObjects.h"
 #include "FSBlock.h"
 #include "Chrono.h"
+#include "Macros.h"
 #include <algorithm>
 #include <cstring>
 

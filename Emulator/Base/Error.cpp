@@ -10,6 +10,7 @@
 #include "config.h"
 #include "Error.h"
 #include "Constants.h"
+#include "Macros.h"
 
 namespace vamiga {
 

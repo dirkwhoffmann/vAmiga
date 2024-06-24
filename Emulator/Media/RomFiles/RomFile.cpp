@@ -11,6 +11,7 @@
 #include "RomFile.h"
 #include "IOUtils.h"
 #include "MemUtils.h"
+#include "Macros.h"
 
 namespace vamiga {
 

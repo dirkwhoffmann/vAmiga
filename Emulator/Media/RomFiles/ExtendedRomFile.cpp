@@ -10,6 +10,7 @@
 #include "config.h"
 #include "ExtendedRomFile.h"
 #include "IOUtils.h"
+#include "Macros.h"
 
 namespace vamiga {
 

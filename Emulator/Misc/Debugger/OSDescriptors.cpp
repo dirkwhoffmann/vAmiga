@@ -13,6 +13,7 @@
 #include "MemUtils.h"
 #include "IOUtils.h"
 #include "Error.h"
+#include "Macros.h"
 
 namespace vamiga {
 
