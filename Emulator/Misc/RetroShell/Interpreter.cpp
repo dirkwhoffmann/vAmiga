@@ -273,7 +273,7 @@ Interpreter::exec(const Arguments &argv, bool verbose)
 void
 Interpreter::usage(const Command& current)
 {
-    retroShell << "Usage: " << current.usage() << '\n';
+    retroShell << '\r' << "Usage: " << current.usage() << '\n';
 }
 
 void
@@ -287,6 +287,9 @@ Interpreter::help(const string& userInput)
 
     // Process the command
     help(tokens);
+
+    // Print prompt
+    retroShell << retroShell.getPrompt();
 }
 
 void

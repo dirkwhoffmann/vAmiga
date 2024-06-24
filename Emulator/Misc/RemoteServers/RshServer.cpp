@@ -27,6 +27,7 @@ void
 RshServer::didStart()
 {
     if (config.verbose) {
+
         retroShell << "Remote server is listening at port " << config.port << "\n";
     }
 }
@@ -39,7 +40,6 @@ RshServer::didConnect()
         try {
 
             retroShell.welcome();
-            send(retroShell.getPrompt());
 
         } catch (...) { };
     }

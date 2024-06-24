@@ -167,8 +167,9 @@ RetroShell::text()
     storage.text(all);
 
     // Add the input line
-    all += getPrompt() + input + " ";
-    
+    // all += getPrompt() + input + " ";
+    all += input + " ";
+
     return all.c_str();
 }
 
@@ -223,6 +224,7 @@ RetroShell::welcome()
 
     printHelp();
     *this << '\n';
+    *this << getPrompt();
 }
 
 void
@@ -360,11 +362,12 @@ RetroShell::press(RetroShellKey key, bool shift)
 
             } else {
 
+                // *this << '\r' << getPrompt() << input << '\n';
                 *this << '\r' << getPrompt() << input << '\n';
                 execUserCommand(input);
                 input = "";
                 cursor = 0;
-                remoteManager.rshServer.send(getPrompt());
+                // remoteManager.rshServer.send(getPrompt());
             }
             break;
 
@@ -464,6 +467,9 @@ RetroShell::exec()
 {
     SYNCHRONIZED
 
+    // Only proceed if there is anything to process
+    if (commands.empty()) return;
+
     std::pair<isize, string> cmd;
 
     try {
@@ -477,6 +483,9 @@ RetroShell::exec()
         }
 
     } catch (...) { }
+
+    // Print prompt
+    *this << getPrompt();
 }
 
 void
