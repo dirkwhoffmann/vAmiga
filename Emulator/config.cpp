@@ -126,7 +126,7 @@ debugflag KBD_DEBUG       = 0; // Keyboard
 // Misc
 debugflag REC_DEBUG       = 0; // Screen recorder
 debugflag SCK_DEBUG       = 0; // Sockets
-debugflag SRV_DEBUG       = 0; // Remote server
+debugflag SRV_DEBUG       = 1; // Remote server
 debugflag GDB_DEBUG       = 0; // GDB server
 
 

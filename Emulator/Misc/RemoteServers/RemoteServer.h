@@ -19,6 +19,8 @@ namespace vamiga {
 
 class RemoteServer : public SubComponent {
 
+    friend class RemoteManager;
+
     Descriptions descriptions = {{
 
         .name           = "RemoteServer",
@@ -33,8 +35,6 @@ class RemoteServer : public SubComponent {
         OPT_SRV_AUTORUN,
         OPT_SRV_VERBOSE
     };
-
-    friend class RemoteManager;
 
 protected:
     
@@ -157,12 +157,9 @@ protected:
     
 private:
     
-    // Used by the launch manager to determine if actions should be taken
+    // Used by the launch daemon to determine if actions should be taken
     virtual bool shouldRun() { return true; }
-    
-    // Indicates if the server is able to run
-    // virtual bool canRun() { return true; }
-    
+        
     
     //
     // Running the server

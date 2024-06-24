@@ -147,7 +147,7 @@ Defaults::Defaults()
     setFallback(OPT_DIAG_BOARD,                 false);
     setFallback(OPT_SRV_PORT,                   8080,                   { SERVER_SER });
     setFallback(OPT_SRV_PROTOCOL,               SRVPROT_DEFAULT,        { SERVER_SER });
-    setFallback(OPT_SRV_AUTORUN,                true,                   { SERVER_SER });
+    setFallback(OPT_SRV_AUTORUN,                false,                  { SERVER_SER });
     setFallback(OPT_SRV_VERBOSE,                true,                   { SERVER_SER });
     setFallback(OPT_SRV_PORT,                   8081,                   { SERVER_RSH });
     setFallback(OPT_SRV_PROTOCOL,               SRVPROT_DEFAULT,        { SERVER_RSH });
@@ -155,7 +155,7 @@ Defaults::Defaults()
     setFallback(OPT_SRV_VERBOSE,                true,                   { SERVER_RSH });
     setFallback(OPT_SRV_PORT,                   8082,                   { SERVER_GDB });
     setFallback(OPT_SRV_PROTOCOL,               SRVPROT_DEFAULT,        { SERVER_GDB });
-    setFallback(OPT_SRV_AUTORUN,                true,                   { SERVER_GDB });
+    setFallback(OPT_SRV_AUTORUN,                false,                  { SERVER_GDB });
     setFallback(OPT_SRV_VERBOSE,                true,                   { SERVER_GDB });
 
     setFallback("ROM_PATH",                     "");
