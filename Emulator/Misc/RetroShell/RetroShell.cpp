@@ -37,14 +37,14 @@ RetroShell::_initialize()
     history.push_back( { "", 0 } );
     
     // Print the startup message and the input prompt
-    execUserCommand("welcome");
+    asyncExec("welcome");
 }
 
 void
 RetroShell::_pause()
 {
     if (interpreter.inDebugShell()) {
-        execUserCommand("state");
+        asyncExec("state");
     }
 }
 
@@ -335,7 +335,7 @@ RetroShell::press(RetroShellKey key, bool shift)
             if (tabPressed) {
 
                 // TAB was pressed twice
-                execUserCommand("help " + input);
+                asyncExec("help " + input);
 
             } else {
                 
@@ -347,19 +347,7 @@ RetroShell::press(RetroShellKey key, bool shift)
             
         case RSKEY_RETURN:
 
-            if (shift) {
-
-                // Switch the interpreter
-                execUserCommand(".");
-
-            } else {
-
-                // Execute the command
-                *this << input << '\n';
-                execReturn(input);
-                input = "";
-                cursor = 0;
-            }
+            pressReturn(shift);
             break;
 
         case RSKEY_CR:
@@ -427,33 +415,48 @@ RetroShell::cursorRel()
 }
 
 void 
-RetroShell::execReturn(const string &command)
+RetroShell::pressReturn(bool shift)
 {
-    if (command.empty()) {
+    if (shift) {
 
-        if (interpreter.inCommandShell()) {
-
-            printHelp();
-
-        } else {
-
-            emulator.isRunning() ? emulator.pause() : debugger.stepInto();
-        }
+        // Switch the interpreter
+        asyncExec(".");
 
     } else {
 
-        // Add the command to the history buffer
-        history.back() = { command, (isize)command.size() };
-        history.push_back( { "", 0 } );
-        ipos = (isize)history.size() - 1;
+        // Execute the command
+        *this << input << '\n';
 
-        // Feed the command into the command queue
-        execUserCommand(command);
+        if (input.empty()) {
+
+            if (interpreter.inCommandShell()) {
+
+                printHelp();
+
+            } else {
+
+                emulator.isRunning() ? emulator.pause() : debugger.stepInto();
+            }
+
+        } else {
+
+            // Add the command to the history buffer
+            history.back() = { input, (isize)input.size() };
+            history.push_back( { "", 0 } );
+            ipos = (isize)history.size() - 1;
+
+            // Feed the command into the command queue
+            asyncExec(input);
+
+            // Clear the input line
+            input = "";
+            cursor = 0;
+        }
     }
 }
 
 void
-RetroShell::execUserCommand(const string &command)
+RetroShell::asyncExec(const string &command)
 {
     // Feed the command into the command queue
     commands.push_back({ 0, command});
@@ -477,7 +480,7 @@ RetroShell::exec()
             cmd = commands.front();
             commands.erase(commands.begin());
 
-            exec(cmd.second, cmd.first);
+            exec(cmd);
         }
 
     } catch (...) { }
@@ -487,8 +490,11 @@ RetroShell::exec()
 }
 
 void
-RetroShell::exec(const string &command, isize line)
+RetroShell::exec(QueuedCmd cmd)
 {
+    auto line = cmd.first;
+    auto command = cmd.second;
+
     try {
 
         // Print the command if it comes from a script
@@ -513,7 +519,7 @@ RetroShell::exec(const string &command, isize line)
 }
 
 void
-RetroShell::execScript(std::stringstream &ss)
+RetroShell::asyncExecScript(std::stringstream &ss)
 {
     std::string line;
     isize nr = 1;
@@ -527,19 +533,19 @@ RetroShell::execScript(std::stringstream &ss)
 }
 
 void
-RetroShell::execScript(const std::ifstream &fs)
+RetroShell::asyncExecScript(const std::ifstream &fs)
 {
     std::stringstream ss;
     ss << fs.rdbuf();
-    execScript(ss);
+    asyncExecScript(ss);
 }
 
 void
-RetroShell::execScript(const string &contents)
+RetroShell::asyncExecScript(const string &contents)
 {
     std::stringstream ss;
     ss << contents;
-    execScript(ss);
+    asyncExecScript(ss);
 }
 
 /*

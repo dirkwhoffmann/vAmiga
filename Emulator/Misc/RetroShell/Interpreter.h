@@ -31,6 +31,8 @@ struct ScriptInterruption: util::Exception {
 
 class Interpreter: public SubComponent
 {
+    friend class RetroShell;
+    
     Descriptions descriptions = {{
 
         .name           = "Interpreter",
@@ -52,15 +54,6 @@ class Interpreter: public SubComponent
 
     // Commands of the debug shell
     Command debugShellRoot;
-
-
-    //
-    // Static methods
-    //
-
-public:
-
-    // [[deprecated]] static string shellName(const CoreObject &object);
 
 
     //
@@ -181,7 +174,7 @@ public:
     // Executing commands
     //
 
-public:
+private:
 
     // Executes a single command
     void exec(const string& userInput, bool verbose = false) throws;
@@ -194,14 +187,6 @@ public:
     void help(const string &userInput);
     void help(const Arguments &argv);
     void help(const Command &command);
-
-private:
-
-    // Execution handlers (debug shell)
-    void execRead(Arguments &argv, isize sz);
-    void execWrite(Arguments &argv, isize sz);
-    void execCopy(Arguments &argv, isize sz);
-    void execFind(Arguments &argv, isize sz);
 };
 
 }

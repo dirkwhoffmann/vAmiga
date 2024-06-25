@@ -18,6 +18,8 @@
 
 namespace vamiga {
 
+typedef std::pair<isize, string> QueuedCmd;
+
 class RetroShell : public SubComponent {
 
     friend class RshServer;
@@ -60,7 +62,7 @@ class RetroShell : public SubComponent {
     string input;
 
     // Command queue (stores all pending commands)
-    std::vector<std::pair<isize,string>> commands;
+    std::vector<QueuedCmd> commands;
 
     // Input prompt
     string prompt = "vAmiga% ";
@@ -70,17 +72,6 @@ class RetroShell : public SubComponent {
     
     // Indicates if TAB was the most recently pressed key
     bool tabPressed = false;
-
-    
-    //
-    // Scripts
-    //
-    
-    // The currently processed script
-    std::stringstream script;
-    
-    // The script line counter (first line = 1)
-    isize scriptLine = 0;
 
     
     //
@@ -194,6 +185,10 @@ public:
     // Returns the cursor position relative to the line end
     isize cursorRel();
     
+private:
+
+    void pressReturn(bool shift);
+
 
     //
     // Working with the history buffer
@@ -210,24 +205,21 @@ public:
     
 public:
 
-    // Main entry point for executing commands that were typed in by the user
-    void execReturn(const string &command);
-
     // Feeds a command into the pending commands queue
-    void execUserCommand(const string &command);
+    void asyncExec(const string &command);
+
+    // Executes a shell script
+    void asyncExecScript(std::stringstream &ss) throws;
+    void asyncExecScript(const std::ifstream &fs) throws;
+    void asyncExecScript(const string &contents) throws;
+    // void asyncExecScript(const class MediaFile &script) throws;
+    void abortScript();
 
     // Executes all pending commands
     void exec() throws;
 
-    // Executes a single command
-    void exec(const string &command, isize line = 0) throws;
-
-    // Executes a shell script
-    void execScript(std::stringstream &ss) throws;
-    void execScript(const std::ifstream &fs) throws;
-    void execScript(const string &contents) throws;
-    // void execScript(const class MediaFile &script) throws;
-    void abortScript();
+    // Executes a pending command
+    void exec(QueuedCmd cmd) throws;
 
 private:
 

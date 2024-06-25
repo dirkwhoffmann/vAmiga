@@ -87,7 +87,7 @@ Interpreter::initCommons(Command &root)
 
             auto stream = std::ifstream(argv.front());
             if (!stream.is_open()) throw Error(ERROR_FILE_NOT_FOUND, argv.front());
-            retroShell.execScript(stream);
+            retroShell.asyncExecScript(stream);
         });
 
         root.add({"wait"}, {Arg::value, Arg::seconds},
