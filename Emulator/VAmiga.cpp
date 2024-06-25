@@ -426,26 +426,26 @@ RetroShellAPI::press(const string &s)
 void
 RetroShellAPI::execScript(std::stringstream &ss)
 {
-    retroShell->asyncExecScript(ss);
+    retroShell->execScript(ss);
 }
 
 void
 RetroShellAPI::execScript(const std::ifstream &fs)
 {
-    retroShell->asyncExecScript(fs);
+    retroShell->execScript(fs);
 }
 
 void
 RetroShellAPI::execScript(const string &contents)
 {
-    retroShell->asyncExecScript(contents);
+    retroShell->execScript(contents);
 }
 
 /*
 void
 RetroShellAPI::execScript(const MediaFile &file)
 {
-    retroShell->asyncExecScript(file);
+    retroShell->execScript(file);
 }
 */
 

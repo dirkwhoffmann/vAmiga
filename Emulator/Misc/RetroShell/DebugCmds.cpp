@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Interpreter.h"
+#include "Console.h"
 #include "Emulator.h"
 
 namespace vamiga {
@@ -18,7 +18,7 @@ namespace vamiga {
 #define VAMIGA_GROUP(x) CommandGroup VAMIGA_GROUP_NAME(__COUNTER__)(root,x);
 
 void
-RetroShell::initDebugShell(Command &root)
+Console::initDebugShell(Command &root)
 {
     //
     // Top-level commands
@@ -65,7 +65,7 @@ RetroShell::initDebugShell(Command &root)
                      "List all breakpoints",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(amiga.cpu, Category::Breakpoints);
+                dump(amiga.cpu, Category::Breakpoints);
             });
 
             root.add({"break", "at"}, { Arg::address }, { Arg::ignores },
@@ -100,7 +100,7 @@ RetroShell::initDebugShell(Command &root)
                      "Lists all watchpoints",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(amiga.cpu, Category::Watchpoints);
+                dump(amiga.cpu, Category::Watchpoints);
             });
 
             root.add({"watch", "at"}, { Arg::address }, { Arg::ignores },
@@ -135,7 +135,7 @@ RetroShell::initDebugShell(Command &root)
 
                 if (argv.empty()) {
 
-                    retroShell.dump(amiga.cpu, Category::Catchpoints);
+                    dump(amiga.cpu, Category::Catchpoints);
 
                 } else {
 
@@ -195,7 +195,7 @@ RetroShell::initDebugShell(Command &root)
                      "List all breakpoints",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(copper.debugger, Category::Breakpoints);
+                dump(copper.debugger, Category::Breakpoints);
             });
 
             root.add({"cbreak", "at"}, { Arg::value }, { Arg::ignores },
@@ -230,7 +230,7 @@ RetroShell::initDebugShell(Command &root)
                      "List all watchpoints",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(copper.debugger, Category::Watchpoints);
+                dump(copper.debugger, Category::Watchpoints);
             });
 
             root.add({"cwatch", "at"}, { Arg::value }, { Arg::ignores },
@@ -406,7 +406,7 @@ RetroShell::initDebugShell(Command &root)
                          "Inspects the internal state",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(amiga, { Category::Config, Category::State } );
+                    dump(amiga, { Category::Config, Category::State } );
                 });
             }
 
@@ -418,14 +418,14 @@ RetroShell::initDebugShell(Command &root)
                          "Inspects the internal state",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(mem, { Category::Config, Category::State } );
+                    dump(mem, { Category::Config, Category::State } );
                 });
 
                 root.add({"i", "memory", "bankmap"},
                          "Dumps the memory bank map",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(mem, Category::BankMap);
+                    dump(mem, Category::BankMap);
                 });
             }
 
@@ -437,7 +437,7 @@ RetroShell::initDebugShell(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(cpu, { Category::Config, Category::State } );
+                    dump(cpu, { Category::Config, Category::State } );
                 });
             }
 
@@ -453,9 +453,9 @@ RetroShell::initDebugShell(Command &root)
                              [this](Arguments& argv, long value) {
 
                         if (value == 0) {
-                            retroShell.dump(ciaa, { Category::Config, Category::State } );
+                            dump(ciaa, { Category::Config, Category::State } );
                         } else {
-                            retroShell.dump(ciab, { Category::Config, Category::State } );
+                            dump(ciab, { Category::Config, Category::State } );
                         }
                     }, i);
 
@@ -464,9 +464,9 @@ RetroShell::initDebugShell(Command &root)
                              [this](Arguments& argv, long value) {
 
                         if (value == 0) {
-                            retroShell.dump(ciaa.tod, Category::State );
+                            dump(ciaa.tod, Category::State );
                         } else {
-                            retroShell.dump(ciab.tod, Category::State );
+                            dump(ciab.tod, Category::State );
                         }
                     }, i);
                 }
@@ -480,35 +480,35 @@ RetroShell::initDebugShell(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(agnus, { Category::Config, Category::State } );
+                    dump(agnus, { Category::Config, Category::State } );
                 });
 
                 root.add({"i", "agnus", "beam"},
                          "Display the current beam position",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(amiga.agnus, Category::Beam);
+                    dump(amiga.agnus, Category::Beam);
                 });
 
                 root.add({"i", "agnus", "dma"},
                          "Print all scheduled DMA events",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(amiga.agnus, Category::Dma);
+                    dump(amiga.agnus, Category::Dma);
                 });
 
                 root.add({"i", "agnus", "sequencer"},
                          "Inspect the sequencer logic",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(amiga.agnus.sequencer, { Category::State, Category::Signals } );
+                    dump(amiga.agnus.sequencer, { Category::State, Category::Signals } );
                 });
 
                 root.add({"i", "agnus", "events"},
                          "Inspect the event scheduler",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(amiga.agnus, Category::Events);
+                    dump(amiga.agnus, Category::Events);
                 });
             }
 
@@ -520,7 +520,7 @@ RetroShell::initDebugShell(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(blitter, { Category::Config, Category::State } );
+                    dump(blitter, { Category::Config, Category::State } );
                 });
             }
 
@@ -532,7 +532,7 @@ RetroShell::initDebugShell(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(copper, { Category::Config, Category::State } );
+                    dump(copper, { Category::Config, Category::State } );
                 });
 
                 root.add({"i", "copper", "list"}, { Arg::value },
@@ -543,8 +543,8 @@ RetroShell::initDebugShell(Command &root)
 
                     switch (nr) {
 
-                        case 1: retroShell.dump(amiga.agnus.copper, Category::List1); break;
-                        case 2: retroShell.dump(amiga.agnus.copper, Category::List2); break;
+                        case 1: dump(amiga.agnus.copper, Category::List1); break;
+                        case 2: dump(amiga.agnus.copper, Category::List2); break;
 
                         default:
                             throw Error(ERROR_OPT_INV_ARG, "1 or 2");
@@ -569,28 +569,28 @@ RetroShell::initDebugShell(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(paula.muxer, { Category::Config, Category::State } );
+                    dump(paula.muxer, { Category::Config, Category::State } );
                 });
 
                 root.add({"i", "paula", "audio", "filter"},
                          "Inspect the internal filter state",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(paula.muxer.filter, { Category::Config, Category::State } );
+                    dump(paula.muxer.filter, { Category::Config, Category::State } );
                 });
 
                 root.add({"i", "paula", "dc", ""},
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(diskController, { Category::Config, Category::State } );
+                    dump(diskController, { Category::Config, Category::State } );
                 });
 
                 root.add({"i", "paula", "uart", ""},
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(uart, Category::State);
+                    dump(uart, Category::State);
                 });
             }
 
@@ -602,7 +602,7 @@ RetroShell::initDebugShell(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(denise, { Category::Config, Category::State } );
+                    dump(denise, { Category::Config, Category::State } );
                 });
             }
 
@@ -614,7 +614,7 @@ RetroShell::initDebugShell(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(rtc, { Category::Config, Category::State } );
+                    dump(rtc, { Category::Config, Category::State } );
                 });
             }
 
@@ -626,7 +626,7 @@ RetroShell::initDebugShell(Command &root)
                          "List all connected boards",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(zorro, Category::Slots);
+                    dump(zorro, Category::Slots);
                 });
 
                 root.add({"i", "zorro", "board"}, { Arg::value },
@@ -637,7 +637,7 @@ RetroShell::initDebugShell(Command &root)
 
                     if (auto board = zorro.getBoard(nr); board != nullptr) {
 
-                        retroShell.dump(*board, { Category::Properties, Category::State, Category::Stats } );
+                        dump(*board, { Category::Properties, Category::State, Category::Stats } );
                     }
                 });
             }
@@ -657,8 +657,8 @@ RetroShell::initDebugShell(Command &root)
                              "Inspect the internal state",
                              [this](Arguments& argv, long value) {
 
-                        if (value == 1) retroShell.dump(controlPort1, Category::State);
-                        if (value == 2) retroShell.dump(controlPort2, Category::State);
+                        if (value == 1) dump(controlPort1, Category::State);
+                        if (value == 2) dump(controlPort2, Category::State);
 
                     }, i);
                 }
@@ -672,7 +672,7 @@ RetroShell::initDebugShell(Command &root)
                          "Display the internal state",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(serialPort, { Category::Config, Category::State } );
+                    dump(serialPort, { Category::Config, Category::State } );
                 });
             }
         }
@@ -686,7 +686,7 @@ RetroShell::initDebugShell(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(keyboard, { Category::Config, Category::State } );
+                    dump(keyboard, { Category::Config, Category::State } );
                 });
             }
 
@@ -705,8 +705,8 @@ RetroShell::initDebugShell(Command &root)
                              "Inspect the internal state",
                              [this](Arguments& argv, long value) {
 
-                        if (value == 1) retroShell.dump(controlPort1.mouse, { Category::Config, Category::State } );
-                        if (value == 2) retroShell.dump(controlPort2.mouse, { Category::Config, Category::State } );
+                        if (value == 1) dump(controlPort1.mouse, { Category::Config, Category::State } );
+                        if (value == 2) dump(controlPort2.mouse, { Category::Config, Category::State } );
 
                     }, i);
                 }
@@ -727,8 +727,8 @@ RetroShell::initDebugShell(Command &root)
                              "Inspect the internal state",
                              [this](Arguments& argv, long value) {
 
-                        if (value == 1) retroShell.dump(controlPort1.joystick, Category::State);
-                        if (value == 2) retroShell.dump(controlPort2.joystick, Category::State);
+                        if (value == 1) dump(controlPort1.joystick, Category::State);
+                        if (value == 2) dump(controlPort2.joystick, Category::State);
 
                     }, i);
                 }
@@ -750,7 +750,7 @@ RetroShell::initDebugShell(Command &root)
                              "Inspect the internal state",
                              [this](Arguments& argv, long value) {
 
-                        retroShell.dump(*amiga.df[value], { Category::Config, Category::State } );
+                        dump(*amiga.df[value], { Category::Config, Category::State } );
 
                     }, i);
 
@@ -758,7 +758,7 @@ RetroShell::initDebugShell(Command &root)
                              "Inspect the inserted disk",
                              [this](Arguments& argv, long value) {
 
-                        retroShell.dump(*amiga.df[value], Category::Disk);
+                        dump(*amiga.df[value], Category::Disk);
 
                     }, i);
                 }
@@ -780,7 +780,7 @@ RetroShell::initDebugShell(Command &root)
                              "Inspect the internal state",
                              [this](Arguments& argv, long value) {
 
-                        retroShell.dump(*amiga.hd[value], { Category::Config, Category::State } );
+                        dump(*amiga.hd[value], { Category::Config, Category::State } );
 
                     }, i);
 
@@ -788,7 +788,7 @@ RetroShell::initDebugShell(Command &root)
                              "Display hard drive parameters",
                              [this](Arguments& argv, long value) {
 
-                        retroShell.dump(*amiga.df[value], Category::Drive);
+                        dump(*amiga.df[value], Category::Drive);
 
                     }, i);
 
@@ -796,7 +796,7 @@ RetroShell::initDebugShell(Command &root)
                              "Display summarized volume information",
                              [this](Arguments& argv, long value) {
 
-                        retroShell.dump(*amiga.df[value], Category::Volumes);
+                        dump(*amiga.df[value], Category::Volumes);
 
                     }, i);
 
@@ -804,7 +804,7 @@ RetroShell::initDebugShell(Command &root)
                              "Display information about all partitions",
                              [this](Arguments& argv, long value) {
 
-                        retroShell.dump(*amiga.hd[value], Category::Partitions);
+                        dump(*amiga.hd[value], Category::Partitions);
 
                     }, i);
                 }
@@ -820,7 +820,7 @@ RetroShell::initDebugShell(Command &root)
                          "Display information about the host machine",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(host, Category::State);
+                    dump(host, Category::State);
                 });
             }
 
@@ -832,7 +832,7 @@ RetroShell::initDebugShell(Command &root)
                          "Display a server status summary",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(remoteManager, Category::Status);
+                    dump(remoteManager, Category::Status);
                 });
 
                 root.add({"i", "server", "serial"},
@@ -842,7 +842,7 @@ RetroShell::initDebugShell(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(remoteManager.serServer, { Category::Config, Category::State } );
+                    dump(remoteManager.serServer, { Category::Config, Category::State } );
                 });
 
                 root.add({"i", "server", "rshell"},
@@ -852,7 +852,7 @@ RetroShell::initDebugShell(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(remoteManager.rshServer, { Category::Config, Category::State } );
+                    dump(remoteManager.rshServer, { Category::Config, Category::State } );
                 });
 
                 root.add({"i", "server", "gdb"},
@@ -862,7 +862,7 @@ RetroShell::initDebugShell(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(remoteManager.gdbServer, { Category::Config, Category::State } );
+                    dump(remoteManager.gdbServer, { Category::Config, Category::State } );
                 });
             }
         }
@@ -876,63 +876,63 @@ RetroShell::initDebugShell(Command &root)
                      "Motorola CPU",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(cpu, Category::Registers);
+                dump(cpu, Category::Registers);
             });
 
             root.add({"r", "ciaa"},
                      "Complex Interface Adapter A",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(ciaa, Category::Registers);
+                dump(ciaa, Category::Registers);
             });
 
             root.add({"r", "ciab"},
                      "Complex Interface Adapter B",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(ciab, Category::Registers);
+                dump(ciab, Category::Registers);
             });
 
             root.add({"r", "agnus"},
                      "Custom Chipset",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(agnus, Category::Registers);
+                dump(agnus, Category::Registers);
             });
 
             root.add({"r", "blitter"},
                      "Coprocessor",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(blitter, Category::Registers);
+                dump(blitter, Category::Registers);
             });
 
             root.add({"r", "copper"},
                      "Coprocessor",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(copper, Category::Registers);
+                dump(copper, Category::Registers);
             });
 
             root.add({"r", "paula"},
                      "Ports, Audio, Interrupts",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(paula, Category::Registers);
+                dump(paula, Category::Registers);
             });
 
             root.add({"r", "denise"},
                      "Graphics",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(denise, Category::Registers);
+                dump(denise, Category::Registers);
             });
 
             root.add({"r", "rtc"},
                      "Real-time clock",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(rtc, Category::Registers);
+                dump(rtc, Category::Registers);
             });
         }
 

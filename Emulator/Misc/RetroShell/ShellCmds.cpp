@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Interpreter.h"
+#include "Console.h"
 #include "Emulator.h"
 #include "Option.h"
 
@@ -19,7 +19,7 @@ namespace vamiga {
 #define VAMIGA_GROUP(x) CommandGroup VAMIGA_GROUP_NAME(__COUNTER__)(root,x); Command::currentGroup = x;
 
 void
-RetroShell::initCommons(Command &root)
+Console::initCommons(Command &root)
 {
     //
     // Common commands
@@ -31,23 +31,23 @@ RetroShell::initCommons(Command &root)
                  "", // Prints the welcome message
                  [this](Arguments& argv, long value) {
 
-            retroShell.welcome();
+            welcome();
         });
 
         root.add({"."},
                  "Enter or exit the debugger",
                  [this](Arguments& argv, long value) {
 
-            retroShell.clear();
+            clear();
             switchInterpreter();
-            retroShell.welcome();
+            welcome();
         });
 
         root.add({"clear"},
                  "Clear the console window",
                  [this](Arguments& argv, long value) {
 
-            retroShell.clear();
+            clear();
         });
 
         root.add({"close"},
@@ -61,14 +61,14 @@ RetroShell::initCommons(Command &root)
                  "Print usage information",
                  [this](Arguments& argv, long value) {
 
-            retroShell.help(argv.empty() ? "" : argv.front());
+            help(argv.empty() ? "" : argv.front());
         });
 
         root.add({"state"},
                  "", // Prints the welcome message
                  [this](Arguments& argv, long value) {
 
-            retroShell.printState();
+            printState();
         });
 
 
@@ -76,9 +76,9 @@ RetroShell::initCommons(Command &root)
                  "",
                  [this](Arguments& argv, long value) {
 
-            retroShell << "\nGREETINGS PROFESSOR HOFFMANN.\n";
-            retroShell << "THE ONLY WINNING MOVE IS NOT TO PLAY.\n";
-            retroShell << "HOW ABOUT A NICE GAME OF CHESS?\n\n";
+            *this << "\nGREETINGS PROFESSOR HOFFMANN.\n";
+            *this << "THE ONLY WINNING MOVE IS NOT TO PLAY.\n";
+            *this << "HOW ABOUT A NICE GAME OF CHESS?\n\n";
         });
 
         root.add({"source"}, {Arg::path},
@@ -87,7 +87,7 @@ RetroShell::initCommons(Command &root)
 
             auto stream = std::ifstream(argv.front());
             if (!stream.is_open()) throw Error(ERROR_FILE_NOT_FOUND, argv.front());
-            retroShell.asyncExecScript(stream);
+            asyncExecScript(stream);
         });
 
         root.add({"wait"}, {Arg::value, Arg::seconds},
@@ -102,7 +102,7 @@ RetroShell::initCommons(Command &root)
 }
 
 void
-RetroShell::initSetters(Command &root, const CoreComponent &c)
+Console::initSetters(Command &root, const CoreComponent &c)
 {
     if (auto cmd = string(c.shellName()); !cmd.empty()) {
 
@@ -125,7 +125,7 @@ RetroShell::initSetters(Command &root, const CoreComponent &c)
 }
 
 void
-RetroShell::initCommandShell(Command &root)
+Console::initCommandShell(Command &root)
 {
     initCommons(root);
 
@@ -208,14 +208,14 @@ RetroShell::initCommandShell(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(amiga, Category::Config);
+                dump(amiga, Category::Config);
             });
 
             root.add({cmd, "defaults"},
                      "Displays the user defaults storage",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(amiga, Category::Defaults);
+                dump(amiga, Category::Defaults);
             });
 
             initSetters(root, amiga);
@@ -263,7 +263,7 @@ RetroShell::initCommandShell(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(mem, Category::Config);
+                dump(mem, Category::Config);
             });
 
             initSetters(root, mem);
@@ -300,7 +300,7 @@ RetroShell::initCommandShell(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(cpu, Category::Config);
+                dump(cpu, Category::Config);
             });
 
             initSetters(root, cpu);
@@ -322,8 +322,8 @@ RetroShell::initCommandShell(Command &root)
                          "Displays the current configuration",
                          [this](Arguments& argv, long value) {
 
-                    if (value == 0) retroShell.dump(ciaa, Category::Config);
-                    if (value == 1) retroShell.dump(ciab, Category::Config);
+                    if (value == 0) dump(ciaa, Category::Config);
+                    if (value == 1) dump(ciab, Category::Config);
 
                 }, i);
             }
@@ -347,7 +347,7 @@ RetroShell::initCommandShell(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(agnus, Category::Config);
+                dump(agnus, Category::Config);
             });
 
             initSetters(root, agnus);
@@ -367,7 +367,7 @@ RetroShell::initCommandShell(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(blitter, Category::Config);
+                dump(blitter, Category::Config);
             });
 
             initSetters(root, blitter);
@@ -388,7 +388,7 @@ RetroShell::initCommandShell(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(denise, Category::Config);
+                dump(denise, Category::Config);
             });
 
             initSetters(root, denise);
@@ -411,7 +411,7 @@ RetroShell::initCommandShell(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(paula.muxer, Category::Config);
+                dump(paula.muxer, Category::Config);
             });
 
             initSetters(root, paula.muxer);
@@ -420,7 +420,7 @@ RetroShell::initCommandShell(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(paula.muxer.filter, Category::Config);
+                dump(paula.muxer.filter, Category::Config);
             });
 
             initSetters(root, paula.muxer.filter);
@@ -432,7 +432,7 @@ RetroShell::initCommandShell(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(diskController, Category::Config);
+                dump(diskController, Category::Config);
             });
 
             initSetters(root, diskController);
@@ -450,7 +450,7 @@ RetroShell::initCommandShell(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(rtc, Category::Config);
+                dump(rtc, Category::Config);
             });
 
             initSetters(root, rtc);
@@ -468,7 +468,7 @@ RetroShell::initCommandShell(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(serialPort, Category::Config);
+                dump(serialPort, Category::Config);
             });
 
             initSetters(root, serialPort);
@@ -521,7 +521,7 @@ RetroShell::initCommandShell(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(pixelEngine, Category::Config);
+                dump(pixelEngine, Category::Config);
             });
 
             initSetters(root, pixelEngine);
@@ -539,7 +539,7 @@ RetroShell::initCommandShell(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(keyboard, Category::Config);
+                dump(keyboard, Category::Config);
             });
 
             initSetters(root, keyboard);
@@ -572,7 +572,7 @@ RetroShell::initCommandShell(Command &root)
                          [this](Arguments& argv, long value) {
 
                     auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-                    retroShell.dump(port.joystick, Category::Config);
+                    dump(port.joystick, Category::Config);
 
                 }, i);
 
@@ -702,7 +702,7 @@ RetroShell::initCommandShell(Command &root)
                          [this](Arguments& argv, long value) {
 
                     auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-                    retroShell.dump(port.mouse, Category::Config);
+                    dump(port.mouse, Category::Config);
 
                 }, i);
 
@@ -756,7 +756,7 @@ RetroShell::initCommandShell(Command &root)
                          "Displays the current configuration",
                          [this](Arguments& argv, long value) {
 
-                    retroShell.dump(*amiga.df[value], Category::Config);
+                    dump(*amiga.df[value], Category::Config);
 
                 }, i);
 
@@ -832,7 +832,7 @@ RetroShell::initCommandShell(Command &root)
                              "Displays the current configuration",
                              [this](Arguments& argv, long value) {
 
-                        retroShell.dump(*amiga.hd[value], Category::Config);
+                        dump(*amiga.hd[value], Category::Config);
 
                     }, i);
 
@@ -888,7 +888,7 @@ RetroShell::initCommandShell(Command &root)
                  "Displays the current configuration",
                  [this](Arguments& argv, long value) {
 
-            retroShell.dump(host, Category::Config);
+            dump(host, Category::Config);
         });
 
         initSetters(root, host);
@@ -906,7 +906,7 @@ RetroShell::initCommandShell(Command &root)
                      "Displays a server status summary",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(remoteManager, Category::Status);
+                dump(remoteManager, Category::Status);
             });
 
             root.add({"server", "serial"},
@@ -916,7 +916,7 @@ RetroShell::initCommandShell(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(remoteManager, Category::Config);
+                dump(remoteManager, Category::Config);
             });
 
             initSetters(root, remoteManager.serServer);
@@ -949,7 +949,7 @@ RetroShell::initCommandShell(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(remoteManager.rshServer, Category::Config);
+                dump(remoteManager.rshServer, Category::Config);
             });
 
             initSetters(root, remoteManager.rshServer);
@@ -975,7 +975,7 @@ RetroShell::initCommandShell(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                retroShell.dump(remoteManager.gdbServer, Category::Config);
+                dump(remoteManager.gdbServer, Category::Config);
             });
 
             initSetters(root, remoteManager.gdbServer);
