@@ -17,12 +17,9 @@
 
 namespace vamiga {
 
-RetroShell::RetroShell(Amiga& ref) : SubComponent(ref), interpreter(ref)
-{    
-    subComponents = std::vector<CoreComponent *> {
+RetroShell::RetroShell(Amiga& ref) : SubComponent(ref)
+{
 
-        &interpreter
-    };
 }
 
 void
@@ -30,6 +27,10 @@ RetroShell::_initialize()
 {
     CoreComponent::_initialize();
 
+    // Register commands
+    initCommandShell(commandShellRoot);
+    initDebugShell(debugShellRoot);
+    
     // Initialize the text storage
     clear();
 
@@ -43,7 +44,7 @@ RetroShell::_initialize()
 void
 RetroShell::_pause()
 {
-    if (interpreter.inDebugShell()) {
+    if (inDebugShell()) {
         asyncExec("state");
     }
 }
@@ -137,7 +138,7 @@ RetroShell::getPrompt()
 void
 RetroShell::updatePrompt()
 {
-    if (interpreter.inCommandShell()) {
+    if (inCommandShell()) {
 
         prompt = "vAmiga% ";
 
@@ -209,9 +210,9 @@ RetroShell::clear()
 void
 RetroShell::welcome()
 {
-    string name = interpreter.inDebugShell() ? "Debug Shell" : "Retro Shell";
+    string name = inDebugShell() ? "Debug Shell" : "Retro Shell";
 
-    if (interpreter.inCommandShell()) {
+    if (inCommandShell()) {
 
         storage << "vAmiga " << name << " ";
         remoteManager.rshServer << "vAmiga " << name << " Remote Server ";
@@ -229,7 +230,7 @@ RetroShell::welcome()
 void
 RetroShell::printHelp()
 {
-    string action = interpreter.inDebugShell() ? "exit" : "enter";
+    string action = inDebugShell() ? "exit" : "enter";
 
     storage << "Type 'help' or press 'TAB' twice for help.\n";
     storage << "Type '.' or press 'SHIFT+RETURN' to " << action << " debug mode.";
@@ -340,7 +341,7 @@ RetroShell::press(RetroShellKey key, bool shift)
             } else {
                 
                 // Auto-complete the typed in command
-                input = interpreter.autoComplete(input);
+                input = autoComplete(input);
                 cursor = (isize)input.length();
             }
             break;
@@ -429,7 +430,7 @@ RetroShell::pressReturn(bool shift)
 
         if (input.empty()) {
 
-            if (interpreter.inCommandShell()) {
+            if (inCommandShell()) {
 
                 printHelp();
 
@@ -453,6 +454,195 @@ RetroShell::pressReturn(bool shift)
             cursor = 0;
         }
     }
+}
+
+Arguments
+RetroShell::split(const string& userInput)
+{
+    std::stringstream ss(userInput);
+    Arguments result;
+
+    string token;
+    bool str = false; // String mode
+    bool esc = false; // Escape mode
+
+    for (usize i = 0; i < userInput.size(); i++) {
+
+        char c = userInput[i];
+
+        // Abort if a comment begins
+        if (c == '#') break;
+
+        // Check for escape mode
+        if (c == '\\') { esc = true; continue; }
+
+        // Switch between string mode and non-string mode if '"' is detected
+        if (c == '"' && !esc) { str = !str; continue; }
+
+        // Check for special characters in escape mode
+        if (esc && c == 'n') c = '\n';
+
+        // Process character
+        if (c != ' ' || str) {
+            token += c;
+        } else {
+            if (!token.empty()) result.push_back(token);
+            token = "";
+        }
+        esc = false;
+    }
+    if (!token.empty()) result.push_back(token);
+
+    return result;
+}
+
+string
+RetroShell::autoComplete(const string& userInput)
+{
+    string result;
+
+    // Split input string
+    Arguments tokens = split(userInput);
+
+    // Complete all tokens
+    autoComplete(tokens);
+
+    // Recreate the command string
+    for (const auto &it : tokens) { result += (result == "" ? "" : " ") + it; }
+
+    // Add a space if the command has been fully completed
+    if (!tokens.empty() && getRoot().seek(tokens)) result += " ";
+
+    return result;
+}
+
+void
+RetroShell::autoComplete(Arguments &argv)
+{
+    Command *current = &getRoot();
+    string prefix, token;
+
+    for (auto it = argv.begin(); current && it != argv.end(); it++) {
+
+        *it = current->autoComplete(*it);
+        current = current->seek(*it);
+    }
+}
+
+bool
+RetroShell::isBool(const string &argv)
+{
+    return util::isBool(argv);
+}
+
+bool
+RetroShell::isOnOff(const string  &argv)
+{
+    return util::isOnOff(argv);
+}
+
+long
+RetroShell::isNum(const string &argv)
+{
+    return util::isNum(argv);
+}
+
+bool
+RetroShell::parseBool(const string &argv)
+{
+    return util::parseBool(argv);
+}
+
+bool
+RetroShell::parseBool(const string &argv, bool fallback)
+{
+    try { return parseBool(argv); } catch(...) { return fallback; }
+}
+
+bool
+RetroShell::parseBool(const Arguments &argv, long nr, long fallback)
+{
+    return nr < long(argv.size()) ? parseBool(argv[nr]) : fallback;
+}
+
+bool
+RetroShell::parseOnOff(const string &argv)
+{
+    return util::parseOnOff(argv);
+}
+
+bool
+RetroShell::parseOnOff(const string &argv, bool fallback)
+{
+    try { return parseOnOff(argv); } catch(...) { return fallback; }
+}
+
+bool
+RetroShell::parseOnOff(const Arguments &argv, long nr, long fallback)
+{
+    return nr < long(argv.size()) ? parseOnOff(argv[nr]) : fallback;
+}
+
+long
+RetroShell::parseNum(const string &argv)
+{
+    return util::parseNum(argv);
+}
+
+long
+RetroShell::parseNum(const string &argv, long fallback)
+{
+    try { return parseNum(argv); } catch(...) { return fallback; }
+}
+
+long
+RetroShell::parseNum(const Arguments &argv, long nr, long fallback)
+{
+    return nr < long(argv.size()) ? parseNum(argv[nr]) : fallback;
+}
+
+string
+RetroShell::parseSeq(const string &argv)
+{
+    return util::parseSeq(argv);
+}
+
+string
+RetroShell::parseSeq(const string &argv, const string &fallback)
+{
+    try { return parseSeq(argv); } catch(...) { return fallback; }
+}
+
+Command &
+RetroShell::getRoot()
+{
+    switch (shell) {
+
+        case Shell::Command: return commandShellRoot;
+        case Shell::Debug: return debugShellRoot;
+
+        default:
+            fatalError;
+    }
+}
+
+void
+RetroShell::switchInterpreter()
+{
+    if (inCommandShell()) {
+
+        shell = Shell::Debug;
+        emulator.trackOn(1);
+        msgQueue.put(MSG_CONSOLE_DEBUGGER, true);
+
+    } else {
+
+        shell = Shell::Command;
+        emulator.trackOff(1);
+        msgQueue.put(MSG_CONSOLE_DEBUGGER, false);
+    }
+
+    retroShell.updatePrompt();
 }
 
 void
@@ -501,7 +691,7 @@ RetroShell::exec(QueuedCmd cmd)
         if (line) *this << command << '\n';
 
         // Call the interpreter
-        interpreter.exec(command);
+        exec(command);
 
     } catch (ScriptInterruption &) {
 
@@ -550,7 +740,7 @@ RetroShell::asyncExecScript(const string &contents)
 
 /*
 void
-RetroShell::execScript(const MediaFile &file)
+RetroShell::asyncExecScript(const MediaFile &file)
 {
     if (file.type() != FILETYPE_SCRIPT) throw Error(ERROR_FILE_TYPE_MISMATCH);
 
@@ -570,6 +760,142 @@ RetroShell::abortScript()
             agnus.cancel<SLOT_RSH>();
         }
     }
+}
+
+void
+RetroShell::exec(const string& userInput, bool verbose)
+{
+    // Split the command string
+    Arguments tokens = split(userInput);
+
+    // Skip empty lines
+    if (tokens.empty()) return;
+
+    // Remove the 'try' keyword
+    if (tokens.front() == "try") tokens.erase(tokens.begin());
+
+    // Auto complete the token list
+    autoComplete(tokens);
+
+    // Process the command
+    exec(tokens, verbose);
+}
+
+void
+RetroShell::exec(const Arguments &argv, bool verbose)
+{
+    // In 'verbose' mode, print the token list
+    if (verbose) {
+        for (const auto &it : argv) retroShell << it << ' ';
+        retroShell << '\n';
+    }
+
+    // Skip empty lines
+    if (argv.empty()) return;
+
+    // Seek the command in the command tree
+    Command *current = &getRoot(), *next;
+    Arguments args = argv;
+
+    while (!args.empty() && ((next = current->seek(args.front())) != nullptr)) {
+
+        current = current->seek(args.front());
+        args.erase(args.begin());
+    }
+    if ((next = current->seek(""))) current = next;
+
+    // Error out if no command handler is present
+    if (!current->callback && !args.empty()) {
+        throw util::ParseError(args.front());
+    }
+    if (!current->callback && args.empty()) {
+        throw TooFewArgumentsError(current->fullName);
+    }
+
+    // Check the argument count
+    if ((isize)args.size() < current->minArgs()) throw TooFewArgumentsError(current->fullName);
+    if ((isize)args.size() > current->maxArgs()) throw TooManyArgumentsError(current->fullName);
+
+    // Call the command handler
+    current->callback(args, current->param);
+}
+
+void
+RetroShell::usage(const Command& current)
+{
+    retroShell << '\r' << "Usage: " << current.usage() << '\n';
+}
+
+void
+RetroShell::help(const string& userInput)
+{
+    // Split the command string
+    Arguments tokens = split(userInput);
+
+    // Auto complete the token list
+    autoComplete(tokens);
+
+    // Process the command
+    help(tokens);
+}
+
+void
+RetroShell::help(const Arguments &argv)
+{
+    Command *current = &getRoot();
+    string prefix, token;
+
+    for (auto &it : argv) {
+        if (current->seek(it) != nullptr) current = current->seek(it);
+    }
+
+    help(*current);
+}
+
+void
+RetroShell::help(const Command& current)
+{
+    auto indent = string("    ");
+
+    // Print the usage string
+    usage(current);
+
+    // Determine tabular positions to align the output
+    isize tab = 0;
+    for (auto &it : current.subCommands) {
+        tab = std::max(tab, (isize)it.fullName.length());
+    }
+    tab += (isize)indent.size();
+
+    isize newlines = 1;
+
+    for (auto &it : current.subCommands) {
+
+        // Only proceed if the command is visible
+        if (it.hidden) continue;
+
+        // Print the group (if present)
+        if (!it.groupName.empty()) {
+
+            retroShell << '\n' << it.groupName << '\n';
+            newlines = 1;
+        }
+
+        // Print newlines
+        for (; newlines > 0; newlines--) {
+            retroShell << '\n';
+        }
+
+        // Print command descriptioon
+        retroShell << indent;
+        retroShell << it.fullName;
+        retroShell.tab(tab);
+        retroShell << " : ";
+        retroShell << it.help.second;
+        retroShell << '\n';
+    }
+
+    retroShell << '\n';
 }
 
 void
@@ -632,12 +958,6 @@ RetroShell::describe(const std::exception &e, isize line, const string &cmd)
         *this << '\n';
         return;
     }
-}
-
-void
-RetroShell::help(const string &command)
-{
-    interpreter.help(command);
 }
 
 void

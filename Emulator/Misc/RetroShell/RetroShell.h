@@ -20,6 +20,18 @@ namespace vamiga {
 
 typedef std::pair<isize, string> QueuedCmd;
 
+struct TooFewArgumentsError : public util::ParseError {
+    using ParseError::ParseError;
+};
+
+struct TooManyArgumentsError : public util::ParseError {
+    using ParseError::ParseError;
+};
+
+struct ScriptInterruption: util::Exception {
+    using Exception::Exception;
+};
+
 class RetroShell : public SubComponent {
 
     friend class RshServer;
@@ -36,10 +48,18 @@ class RetroShell : public SubComponent {
 
     };
 
-    // The command interpreter (parses commands typed into the console window)
-    Interpreter interpreter;
+    enum class Shell { Command, Debug };
 
-    
+    // The currently active shell
+    Shell shell = Shell::Command;
+
+    // Commands of the command shell
+    Command commandShellRoot;
+
+    // Commands of the debug shell
+    Command debugShellRoot;
+
+
     //
     // Text storage
     //
@@ -81,8 +101,15 @@ class RetroShell : public SubComponent {
 public:
     
     RetroShell(Amiga& ref);
-
     RetroShell& operator= (const RetroShell& other) { return *this; }
+
+private:
+
+    void initCommons(Command &root);
+    void initCommandShell(Command &root);
+    void initDebugShell(Command &root);
+
+    void initSetters(Command &root, const CoreComponent &c);
 
 
     //
@@ -198,37 +225,112 @@ public:
     
     isize historyLength() { return (isize)history.size(); }
 
-    
+
+    //
+    // Parsing input
+    //
+
+public:
+
+    // Auto-completes a user command
+    string autoComplete(const string& userInput);
+
+private:
+
+    // Splits an input string into an argument list
+    Arguments split(const string& userInput);
+
+    // Auto-completes an argument list
+    void autoComplete(Arguments &argv);
+
+    // Checks or parses an argument of a certain type
+    bool isBool(const string &argv);
+    bool parseBool(const string  &argv);
+    bool parseBool(const string  &argv, bool fallback);
+    bool parseBool(const Arguments &argv, long nr, long fallback);
+
+    bool isOnOff(const string &argv);
+    bool parseOnOff(const string &argv);
+    bool parseOnOff(const string &argv, bool fallback);
+    bool parseOnOff(const Arguments &argv, long nr, long fallback);
+
+    long isNum(const string &argv);
+    long parseNum(const string &argv);
+    long parseNum(const string &argv, long fallback);
+    long parseNum(const Arguments &argv, long nr, long fallback);
+
+    u32 parseAddr(const string &argv) { return (u32)parseNum(argv); }
+    u32 parseAddr(const string &argv, long fallback) { return (u32)parseNum(argv, fallback); }
+    u32 parseAddr(const Arguments &argv, long nr, long fallback) { return (u32)parseNum(argv, nr, fallback); }
+
+    string parseSeq(const string &argv);
+    string parseSeq(const string &argv, const string &fallback);
+
+    template <typename T> long parseEnum(const string &argv) {
+        return util::parseEnum<T>(argv);
+    }
+    template <typename T> long parseEnum(const string &argv, long fallback) {
+        try { return util::parseEnum<T>(argv); } catch(...) { return fallback; }
+    }
+
+
+    //
+    // Managing the interpreter
+    //
+
+public:
+
+    // Returns the root node of the currently active instruction tree
+    Command &getRoot();
+
+    // Toggles between the command shell and the debug shell
+    void switchInterpreter();
+
+    bool inCommandShell() { return shell == Shell::Command; }
+    bool inDebugShell() { return shell == Shell::Debug; }
+
+
     //
     // Executing commands
     //
     
 public:
 
-    // Feeds a command into the pending commands queue
+    // Adds a command to the list of pending commands
     void asyncExec(const string &command);
 
-    // Executes a shell script
+    // Adds the commands of a shell script to the list of pending commands
     void asyncExecScript(std::stringstream &ss) throws;
     void asyncExecScript(const std::ifstream &fs) throws;
     void asyncExecScript(const string &contents) throws;
     // void asyncExecScript(const class MediaFile &script) throws;
+
+    // Aborts the execution of a script
     void abortScript();
 
     // Executes all pending commands
     void exec() throws;
 
-    // Executes a pending command
+    // Executes a single pending command
     void exec(QueuedCmd cmd) throws;
 
 private:
 
+    // Executes a single command
+    void exec(const string& userInput, bool verbose = false) throws;
+    void exec(const Arguments &argv, bool verbose = false) throws;
+
+    // Prints a usage string for a command
+    void usage(const Command &command);
+
+    // Displays a help text for a (partially typed in) command
+    void help(const string &command);
+    void help(const Arguments &argv);
+    void help(const Command &command);
+
     // Prints a textual description of an error in the console
     void describe(const std::exception &exception, isize line = 0, const string &cmd = "");
 
-    // Prints a help message for a given command string
-    void help(const string &command);
-    
     
     //
     // Command handlers

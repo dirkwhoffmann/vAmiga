@@ -18,7 +18,7 @@ namespace vamiga {
 #define VAMIGA_GROUP(x) CommandGroup VAMIGA_GROUP_NAME(__COUNTER__)(root,x);
 
 void
-Interpreter::initDebugShell(Command &root)
+RetroShell::initDebugShell(Command &root)
 {
     //
     // Top-level commands

@@ -19,7 +19,7 @@ namespace vamiga {
 #define VAMIGA_GROUP(x) CommandGroup VAMIGA_GROUP_NAME(__COUNTER__)(root,x); Command::currentGroup = x;
 
 void
-Interpreter::initCommons(Command &root)
+RetroShell::initCommons(Command &root)
 {
     //
     // Common commands
@@ -102,7 +102,7 @@ Interpreter::initCommons(Command &root)
 }
 
 void
-Interpreter::initSetters(Command &root, const CoreComponent &c)
+RetroShell::initSetters(Command &root, const CoreComponent &c)
 {
     if (auto cmd = string(c.shellName()); !cmd.empty()) {
 
@@ -125,7 +125,7 @@ Interpreter::initSetters(Command &root, const CoreComponent &c)
 }
 
 void
-Interpreter::initCommandShell(Command &root)
+RetroShell::initCommandShell(Command &root)
 {
     initCommons(root);
 
