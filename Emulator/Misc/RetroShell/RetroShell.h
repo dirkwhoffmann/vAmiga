@@ -209,8 +209,11 @@ public:
     //
     
 public:
-    
+
     // Main entry point for executing commands that were typed in by the user
+    void execReturn(const string &command);
+
+    // Feeds a command into the pending commands queue
     void execUserCommand(const string &command);
 
     // Executes all pending commands

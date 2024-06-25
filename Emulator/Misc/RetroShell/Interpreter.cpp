@@ -287,9 +287,6 @@ Interpreter::help(const string& userInput)
 
     // Process the command
     help(tokens);
-
-    // Print prompt
-    retroShell << retroShell.getPrompt();
 }
 
 void

@@ -37,14 +37,15 @@ RetroShell::_initialize()
     history.push_back( { "", 0 } );
     
     // Print the startup message and the input prompt
-    welcome();
+    execUserCommand("welcome");
 }
 
 void
 RetroShell::_pause()
 {
-    printState();
-    remoteManager.rshServer.send(getPrompt());
+    if (interpreter.inDebugShell()) {
+        execUserCommand("state");
+    }
 }
 
 RetroShell&
@@ -167,7 +168,6 @@ RetroShell::text()
     storage.text(all);
 
     // Add the input line
-    // all += getPrompt() + input + " ";
     all += input + " ";
 
     return all.c_str();
@@ -224,7 +224,6 @@ RetroShell::welcome()
 
     printHelp();
     *this << '\n';
-    *this << getPrompt();
 }
 
 void
@@ -244,26 +243,18 @@ RetroShell::printHelp()
 void
 RetroShell::printState()
 {
-    if (interpreter.inDebugShell()) {
+    std::stringstream ss;
 
-        std::stringstream ss;
+    ss << "\n";
+    cpu.dumpLogBuffer(ss, 8);
+    ss << "\n";
+    amiga.dump(Category::Current, ss);
+    ss << "\n";
+    cpu.disassembleRange(ss, cpu.getPC0(), 8);
+    ss << "\n";
 
-        ss << "\n";
-        cpu.dumpLogBuffer(ss, 8);
-        ss << "\n";
-        amiga.dump(Category::Current, ss);
-        ss << "\n";
-        cpu.disassembleRange(ss, cpu.getPC0(), 8);
-        ss << "\n";
-
-        *this << ss;
-
-        updatePrompt();
-
-    } else {
-
-        updatePrompt();
-    }
+    *this << ss;
+    updatePrompt();
 }
 
 void
@@ -344,7 +335,7 @@ RetroShell::press(RetroShellKey key, bool shift)
             if (tabPressed) {
 
                 // TAB was pressed twice
-                help(input);
+                execUserCommand("help " + input);
 
             } else {
                 
@@ -358,16 +349,16 @@ RetroShell::press(RetroShellKey key, bool shift)
 
             if (shift) {
 
-                interpreter.switchInterpreter();
+                // Switch the interpreter
+                execUserCommand(".");
 
             } else {
 
-                // *this << '\r' << getPrompt() << input << '\n';
-                *this << '\r' << getPrompt() << input << '\n';
-                execUserCommand(input);
+                // Execute the command
+                *this << input << '\n';
+                execReturn(input);
                 input = "";
                 cursor = 0;
-                // remoteManager.rshServer.send(getPrompt());
             }
             break;
 
@@ -435,8 +426,8 @@ RetroShell::cursorRel()
     return cursor - (isize)input.length();
 }
 
-void
-RetroShell::execUserCommand(const string &command)
+void 
+RetroShell::execReturn(const string &command)
 {
     if (command.empty()) {
 
@@ -455,11 +446,18 @@ RetroShell::execUserCommand(const string &command)
         history.back() = { command, (isize)command.size() };
         history.push_back( { "", 0 } );
         ipos = (isize)history.size() - 1;
-        
+
         // Feed the command into the command queue
-        commands.push_back({ 0, command});
-        emulator.put(Cmd(CMD_RSH_EXECUTE));
+        execUserCommand(command);
     }
+}
+
+void
+RetroShell::execUserCommand(const string &command)
+{
+    // Feed the command into the command queue
+    commands.push_back({ 0, command});
+    emulator.put(Cmd(CMD_RSH_EXECUTE));
 }
 
 void

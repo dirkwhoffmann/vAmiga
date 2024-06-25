@@ -27,6 +27,13 @@ Interpreter::initCommons(Command &root)
 
     {   VAMIGA_GROUP("Shell commands");
 
+        root.add({"welcome"},
+                 "", // Prints the welcome message
+                 [this](Arguments& argv, long value) {
+
+            retroShell.welcome();
+        });
+
         root.add({"."},
                  "Enter or exit the debugger",
                  [this](Arguments& argv, long value) {
@@ -56,6 +63,14 @@ Interpreter::initCommons(Command &root)
 
             retroShell.help(argv.empty() ? "" : argv.front());
         });
+
+        root.add({"state"},
+                 "", // Prints the welcome message
+                 [this](Arguments& argv, long value) {
+
+            retroShell.printState();
+        });
+
 
         root.add({"joshua"},
                  "",

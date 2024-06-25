@@ -39,7 +39,8 @@ RshServer::didConnect()
         
         try {
 
-            retroShell.welcome();
+            // retroShell.welcome();
+            retroShell.execUserCommand("welcome");
 
         } catch (...) { };
     }
