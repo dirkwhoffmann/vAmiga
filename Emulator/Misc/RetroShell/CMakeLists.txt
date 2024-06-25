@@ -4,8 +4,8 @@ target_sources(vAmigaCore PRIVATE
 
 Command.cpp
 Interpreter.cpp
-InterpreterCmds.cpp
-InterpreterDebugCmds.cpp
+ShellCmds.cpp
+DebugCmds.cpp
 RetroShell.cpp
 TextStorage.cpp
 

@@ -25,6 +25,7 @@
 #include "PaulaTypes.h"
 #include "PixelEngineTypes.h"
 #include "RemoteServerTypes.h"
+#include "RetroShellTypes.h"
 #include "RTCTypes.h"
 #include "SamplerTypes.h"
 #include "SerialPortTypes.h"

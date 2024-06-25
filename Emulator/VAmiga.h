@@ -164,9 +164,78 @@ struct PaulaAPI : API {
     class Paula *paula = nullptr;
 };
 
+/** RetroShell Public API
+ */
 struct RetroShellAPI : API {
 
     class RetroShell *retroShell = nullptr;
+    
+    /// @name Querying the console
+    /// @{
+    ///
+    /** @brief  Returns a pointer to the text buffer.
+     *  The text buffer contains the complete contents of the console. It
+     *  will be expanded when new output is generated. When the buffer
+     *  grows too large, old contents is cropped.
+     */
+    const char *text();
+
+    /** @brief  Returns the relative cursor position.
+     *  The returned value is relative to the end of the input line. A value
+     *  of 0 indicates that the cursor is at the rightmost position, that
+     *  is, one character after the last character of the input line. If the
+     *  cursor is at the front of the input line, the value matches the
+     *  length of the input line.
+     */
+    isize cursorRel();
+
+    /// @}
+    /// @name Typing characters and strings
+    /// @{
+
+    /** @brief  Informs RetroShell that a key has been typed.
+     *  @param  key     The pressed key
+     *  @param  shift   Status of the shift key
+     */
+    void press(RetroShellKey key, bool shift = false);
+
+    /** @brief  Informs RetroShell that a key has been typed.
+     *  @param  c       The pressed key
+     */
+    void press(char c);
+
+    /** @brief  Informs RetroShell that multiple keys have been typed.
+     *  @param  s       The typed text
+     */
+    void press(const string &s);
+
+    /// @}
+    /// @name Controlling the output stream
+    /// @{
+
+    /** @brief  Assign an additional output stream.
+     *  In addition to writing the RetroShell output into the text buffer,
+     *  RetroShell will write the output into the provides stream.
+     */
+    void setStream(std::ostream &os);
+
+    /// @}
+    /// @name Executing scripts
+    /// @{
+
+    /** @brief  Executes a script.
+     *  The script is executes asynchroneously. However, RetroShell will
+     *  send messages back to the GUI thread to inform about the execution
+     *  state. After the last script command has been executed,
+     *  MSG\_SCRIPT\_DONE is sent. If shell execution has been aborted due
+     *  to an error, MSG\_SCRIPT\_ABORT is sent.
+     */
+    void execScript(std::stringstream &ss);
+    void execScript(const std::ifstream &fs);
+    void execScript(const string &contents);
+    // void execScript(const MediaFile &file);
+
+    /// @}
 };
 
 struct RtcAPI : API {

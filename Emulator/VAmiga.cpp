@@ -371,6 +371,7 @@ VAmiga::put(const Cmd &cmd)
     emu->put(cmd);
 }
 
+
 //
 // AmigaAPI
 //
@@ -385,6 +386,73 @@ void
 AmigaAPI::loadSnapshot(const Snapshot &snapshot)
 {
     amiga->loadSnapshot(snapshot);
+}
+
+
+//
+// RetroShellAPI
+//
+
+const char *
+RetroShellAPI::text()
+{
+    return retroShell->text();
+}
+
+isize
+RetroShellAPI::cursorRel()
+{
+    return retroShell->cursorRel();
+}
+
+void
+RetroShellAPI::press(RetroShellKey key, bool shift)
+{
+    retroShell->press(key, shift);
+}
+
+void
+RetroShellAPI::press(char c)
+{
+    retroShell->press(c);
+}
+
+void
+RetroShellAPI::press(const string &s)
+{
+    retroShell->press(s);
+}
+
+void
+RetroShellAPI::execScript(std::stringstream &ss)
+{
+    retroShell->asyncExecScript(ss);
+}
+
+void
+RetroShellAPI::execScript(const std::ifstream &fs)
+{
+    retroShell->asyncExecScript(fs);
+}
+
+void
+RetroShellAPI::execScript(const string &contents)
+{
+    retroShell->asyncExecScript(contents);
+}
+
+/*
+void
+RetroShellAPI::execScript(const MediaFile &file)
+{
+    retroShell->asyncExecScript(file);
+}
+*/
+
+void
+RetroShellAPI::setStream(std::ostream &os)
+{
+    retroShell->setStream(os);
 }
 
 }

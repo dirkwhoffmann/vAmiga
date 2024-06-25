@@ -2046,78 +2046,78 @@ using namespace vamiga::moira;
 
 -(NSInteger)cursorRel
 {
-    return [self shell]->retroShell->cursorRel();
+    return [self shell]->cursorRel();
 }
 
 -(NSString *)getText
 {
-    const char *str = [self shell]->retroShell->text();
+    const char *str = [self shell]->text();
     return str ? @(str) : nullptr;
 }
 
 - (void)pressUp
 {
-    [self shell]->retroShell->press(RSKEY_UP);
+    [self shell]->press(RSKEY_UP);
 }
 
 - (void)pressDown
 {
-    [self shell]->retroShell->press(RSKEY_DOWN);
+    [self shell]->press(RSKEY_DOWN);
 }
 
 - (void)pressLeft
 {
-    [self shell]->retroShell->press(RSKEY_LEFT);
+    [self shell]->press(RSKEY_LEFT);
 }
 
 - (void)pressRight
 {
-    [self shell]->retroShell->press(RSKEY_RIGHT);
+    [self shell]->press(RSKEY_RIGHT);
 }
 
 - (void)pressHome
 {
-    [self shell]->retroShell->press(RSKEY_HOME);
+    [self shell]->press(RSKEY_HOME);
 }
 
 - (void)pressEnd
 {
-    [self shell]->retroShell->press(RSKEY_END);
+    [self shell]->press(RSKEY_END);
 }
 
 - (void)pressBackspace
 {
-    [self shell]->retroShell->press(RSKEY_BACKSPACE);
+    [self shell]->press(RSKEY_BACKSPACE);
 }
 
 - (void)pressDelete
 {
-    [self shell]->retroShell->press(RSKEY_DEL);
+    [self shell]->press(RSKEY_DEL);
 }
 
 - (void)pressCut
 {
-    [self shell]->retroShell->press(RSKEY_CUT);
+    [self shell]->press(RSKEY_CUT);
 }
 
 - (void)pressReturn
 {
-    [self shell]->retroShell->press(RSKEY_RETURN);
+    [self shell]->press(RSKEY_RETURN);
 }
 
 - (void)pressShiftReturn
 {
-    [self shell]->retroShell->press(RSKEY_RETURN, true);
+    [self shell]->press(RSKEY_RETURN, true);
 }
 
 - (void)pressTab
 {
-    [self shell]->retroShell->press(RSKEY_TAB);
+    [self shell]->press(RSKEY_TAB);
 }
 
 - (void)pressKey:(char)c
 {
-    [self shell]->retroShell->press(c);
+    [self shell]->press(c);
 }
 
 @end
