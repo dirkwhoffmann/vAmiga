@@ -256,7 +256,7 @@ Console::press(RetroShellKey key, bool shift)
             if (tabPressed) {
 
                 // TAB was pressed twice
-                asyncExec("help " + input);
+                asyncExec("help \"" + input + "\"");
 
             } else {
 

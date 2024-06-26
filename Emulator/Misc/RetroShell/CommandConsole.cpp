@@ -606,7 +606,7 @@ CommandConsole::initCommands(Command &root)
         // Joystick
         //
 
-        root.add({"joystick"},      "Joystick");
+        root.add({"joystick"}, "Joystick");
 
         {   VAMIGA_GROUP("")
 
