@@ -38,9 +38,7 @@ Console::initCommons(Command &root)
                  "Enter or exit the debugger",
                  [this](Arguments& argv, long value) {
 
-            clear();
-            switchInterpreter();
-            welcome();
+            retroShell.switchConsole();
         });
 
         root.add({"clear"},

@@ -17,13 +17,6 @@
 
 namespace vamiga {
 
-/*
-Console::Console(Amiga& ref) : SubComponent(ref)
-{
-
-}
-*/
-
 void
 Console::_initialize()
 {
@@ -40,7 +33,9 @@ Console::_initialize()
     history.push_back( { "", 0 } );
 
     // Print the startup message and the input prompt
-    asyncExec("welcome");
+    welcome();
+    *this << getPrompt();
+    // exec("welcome");
 }
 
 void
@@ -628,6 +623,7 @@ Console::getRoot()
     }
 }
 
+/*
 void
 Console::switchInterpreter()
 {
@@ -646,6 +642,7 @@ Console::switchInterpreter()
 
     updatePrompt();
 }
+*/
 
 void
 Console::asyncExec(const string &command)
@@ -999,13 +996,6 @@ Console::_dump(CoreObject &component, Category category)
     component.dump(category, ss);
 
     *this << ss << '\n';
-}
-
-void
-Console::serviceEvent()
-{
-    emulator.put(Cmd(CMD_RSH_EXECUTE));
-    agnus.cancel<SLOT_RSH>();
 }
 
 }

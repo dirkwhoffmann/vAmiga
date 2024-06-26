@@ -15,6 +15,22 @@
 #include "TextStorage.h"
 #include <sstream>
 #include <fstream>
+#include <functional>
+
+/* RetroShell is a text-based command shell capable of controlling the emulator.
+ * The shell's functionality is split among multiple consoles:
+ *
+ * 1. Commmand console:
+ *
+ *    This console is the default console and offers various command for
+ *    configuring the emulator and performing actions such as ejecting a disk.
+ *
+ * 2. Debug console:
+ *
+ *    This console offers multiple debug command similar to the ones found in
+ *    debug monitor. E.g., it is possible to inspect the registers of various
+ *    components or generating a memory dump.
+ */
 
 namespace vamiga {
 
@@ -41,6 +57,13 @@ class RetroShell : public SubComponent {
 
     // Consoles
     Console commander = Console(amiga);
+    Console debugger = Console(amiga);
+
+    // The currently active console
+    Console *current = &commander;
+
+    bool inCommandShell() { return current == &commander; }
+    bool inDebugShell() { return current == &debugger; }
 
 
     //
@@ -84,6 +107,13 @@ private:
 public:
 
     const ConfigOptions &getOptions() const override { return options; }
+
+
+    //
+    // Managing consoles
+    //
+
+    void switchConsole();
 
 
     //

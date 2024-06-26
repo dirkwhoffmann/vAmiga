@@ -49,11 +49,13 @@ class Console : public SubComponent {
 
     };
 
+public:
     enum class Shell { Command, Debug };
 
     // The currently active shell
     Shell shell = Shell::Command;
-
+private:
+    
     // Commands of the command shell
     Command commandShellRoot;
 
@@ -178,10 +180,10 @@ public:
     // Assigns an additional output stream
     void setStream(std::ostream &os);
 
-private:
-
     // Marks the text storage as dirty
     void needsDisplay();
+
+private:
 
     // Clears the console window
     void clear();
@@ -284,9 +286,6 @@ public:
     // Returns the root node of the currently active instruction tree
     Command &getRoot();
 
-    // Toggles between the command shell and the debug shell
-    void switchInterpreter();
-
     bool inCommandShell() { return shell == Shell::Command; }
     bool inDebugShell() { return shell == Shell::Debug; }
 
@@ -345,15 +344,6 @@ public:
 private:
 
     void _dump(CoreObject &component, Category category);
-
-
-    //
-    // Servicing events
-    //
-
-public:
-
-    void serviceEvent();
 };
 
 }
