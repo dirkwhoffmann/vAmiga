@@ -37,20 +37,11 @@ DebugConsole::getPrompt()
     ss << ": ";
 
     return ss.str();
-    // needsDisplay();
 }
 
 void
 DebugConsole::welcome()
 {
-    storage << "vAmiga RetroShell ";
-    remoteManager.rshServer << "vAmiga RetroShell Remote Server ";
-    *this << Amiga::build() << '\n';
-    *this << '\n';
-    *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
-    *this << "https://github.com/dirkwhoffmann/vAmiga" << '\n';
-    *this << '\n';
-
     printHelp();
     *this << '\n';
 }

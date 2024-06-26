@@ -1828,14 +1828,14 @@
 				50AD904E276F61C40011ECCB /* RetroShellTypes.h */,
 				50B9C427260942D000A86C31 /* RetroShell.h */,
 				50B9C426260942D000A86C31 /* RetroShell.cpp */,
-				50AD904A276E104E0011ECCB /* TextStorage.h */,
-				50AD904C276E10660011ECCB /* TextStorage.cpp */,
-				509C3659260B1766004F160A /* Command.h */,
-				509C3658260B1766004F160A /* Command.cpp */,
 				509C365D260B177E004F160A /* Console.h */,
 				509C365C260B177E004F160A /* Console.cpp */,
 				509C3662260B1D95004F160A /* CommandConsole.cpp */,
 				50672CBF2946100F004113F5 /* DebugConsole.cpp */,
+				50AD904A276E104E0011ECCB /* TextStorage.h */,
+				50AD904C276E10660011ECCB /* TextStorage.cpp */,
+				509C3659260B1766004F160A /* Command.h */,
+				509C3658260B1766004F160A /* Command.cpp */,
 			);
 			path = RetroShell;
 			sourceTree = "<group>";

@@ -152,7 +152,8 @@ RetroShell::setStream(std::ostream &os)
 void
 RetroShell::exec()
 {
-    current->exec();
+    commander.exec();
+    debugger.exec();
 }
 
 void

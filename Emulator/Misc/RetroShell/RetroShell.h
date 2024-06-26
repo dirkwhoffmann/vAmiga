@@ -50,11 +50,6 @@ class RetroShell : public SubComponent {
 
     };
 
-    enum class Shell { Command, Debug };
-
-    // The currently active shell
-    Shell shell = Shell::Command;
-
     // Consoles
     CommandConsole commander = CommandConsole(amiga);
     DebugConsole debugger = DebugConsole(amiga);
@@ -97,7 +92,6 @@ private:
 
     void _dump(Category category, std::ostream& os) const override { }
     void _initialize() override;
-    // void _pause() override;
 
 
     //

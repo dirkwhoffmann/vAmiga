@@ -32,9 +32,7 @@ Console::_initialize()
     history.push_back( { "", 0 } );
 
     // Print the startup message and the input prompt
-    welcome();
-    *this << getPrompt();
-    // exec("welcome");
+    asyncExec("welcome");
 }
 
 Console&
@@ -343,7 +341,7 @@ Console::pressReturn(bool shift)
     if (shift) {
 
         // Switch the interpreter
-        asyncExec(".");
+        retroShell.switchConsole();
 
     } else {
 
