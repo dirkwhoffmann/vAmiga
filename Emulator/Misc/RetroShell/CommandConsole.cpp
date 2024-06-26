@@ -19,7 +19,59 @@ namespace vamiga {
 #define VAMIGA_GROUP(x) CommandGroup VAMIGA_GROUP_NAME(__COUNTER__)(root,x); Command::currentGroup = x;
 
 void
-Console::initCommons(Command &root)
+CommandConsole::_pause()
+{
+
+}
+
+string
+CommandConsole::getPrompt()
+{
+    return "vAmiga% ";
+}
+
+void
+CommandConsole::welcome()
+{
+    storage << "vAmiga RetroShell ";
+    remoteManager.rshServer << "vAmiga RetroShell Remote Server ";
+    *this << Amiga::build() << '\n';
+    *this << '\n';
+    *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
+    *this << "https://github.com/dirkwhoffmann/vAmiga" << '\n';
+    *this << '\n';
+
+    printHelp();
+    *this << '\n';
+}
+
+void
+CommandConsole::printHelp()
+{
+    storage << "Type 'help' or press 'TAB' twice for help.\n";
+    storage << "Type '.' or press 'SHIFT+RETURN' to enter debug mode.";
+
+    remoteManager.rshServer << "Type 'help' for help.\n";
+    remoteManager.rshServer << "Type '.' to enter debug mode.";
+
+    *this << '\n';
+}
+
+void 
+CommandConsole::pressReturn(bool shift)
+{
+    if (!shift && input.empty()) {
+
+        printHelp();
+
+    } else {
+       
+        Console::pressReturn(shift);
+    }
+}
+
+void
+Console::initCommands(Command &root)
 {
     //
     // Common commands
@@ -123,9 +175,9 @@ Console::initSetters(Command &root, const CoreComponent &c)
 }
 
 void
-Console::initCommandShell(Command &root)
+CommandConsole::initCommands(Command &root)
 {
-    initCommons(root);
+    Console::initCommands(root);
 
     {   VAMIGA_GROUP("Regression testing")
 

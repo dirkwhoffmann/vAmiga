@@ -24,9 +24,6 @@ RetroShell::RetroShell(Amiga& ref) : SubComponent(ref)
         &commander,
         &debugger
     };
-
-    commander.shell = Console::Shell::Command;
-    debugger.shell = Console::Shell::Debug;
 }
 
 void

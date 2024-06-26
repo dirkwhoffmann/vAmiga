@@ -49,18 +49,10 @@ class Console : public SubComponent {
 
     };
 
-public:
-    enum class Shell { Command, Debug };
+protected:
 
-    // The currently active shell
-    Shell shell = Shell::Command;
-private:
-    
-    // Commands of the command shell
-    Command commandShellRoot;
-
-    // Commands of the debug shell
-    Command debugShellRoot;
+    // Root node of the command tree
+    Command root;
 
 
     //
@@ -87,9 +79,6 @@ private:
     // Command queue (stores all pending commands)
     std::vector<QueuedCmd> commands;
 
-    // Input prompt
-    string prompt = "vAmiga% ";
-
     // Cursor position
     isize cursor = 0;
 
@@ -106,11 +95,9 @@ public:
     using SubComponent::SubComponent;
     Console& operator= (const Console& other) { return *this; }
 
-private:
+protected:
 
-    void initCommons(Command &root);
-    void initCommandShell(Command &root);
-    void initDebugShell(Command &root);
+    virtual void initCommands(Command &root);
 
     void initSetters(Command &root, const CoreComponent &c);
 
@@ -132,11 +119,11 @@ public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
 
-private:
+protected:
 
     void _dump(Category category, std::ostream& os) const override { }
     void _initialize() override;
-    void _pause() override;
+    // void _pause() override;
 
 
     //
@@ -166,10 +153,7 @@ public:
     Console &operator<<(std::stringstream &stream);
 
     // Returns the prompt
-    const string &getPrompt();
-
-    // Updates the prompt according to the current shell mode
-    void updatePrompt();
+    virtual string getPrompt() = 0;
 
     // Returns the contents of the whole storage as a single C string
     const char *text();
@@ -183,16 +167,16 @@ public:
     // Marks the text storage as dirty
     void needsDisplay();
 
-private:
+protected:
 
     // Clears the console window
     void clear();
 
     // Prints the welcome message
-    void welcome();
+    virtual void welcome() = 0;
 
     // Prints the help line
-    void printHelp();
+    virtual void printHelp() = 0;
 
     // Prints a state summary (used by the debug shell)
     void printState();
@@ -215,9 +199,9 @@ public:
     // Returns the cursor position relative to the line end
     isize cursorRel();
 
-private:
+protected:
 
-    void pressReturn(bool shift);
+    virtual void pressReturn(bool shift);
 
 
     //
@@ -238,7 +222,7 @@ public:
     // Auto-completes a user command
     string autoComplete(const string& userInput);
 
-private:
+protected:
 
     // Splits an input string into an argument list
     Arguments split(const string& userInput);
@@ -286,9 +270,6 @@ public:
     // Returns the root node of the currently active instruction tree
     Command &getRoot();
 
-    bool inCommandShell() { return shell == Shell::Command; }
-    bool inDebugShell() { return shell == Shell::Debug; }
-
 
     //
     // Executing commands
@@ -314,7 +295,7 @@ public:
     // Executes a single pending command
     void exec(QueuedCmd cmd) throws;
 
-private:
+protected:
 
     // Executes a single command
     void exec(const string& userInput, bool verbose = false) throws;
@@ -341,9 +322,33 @@ public:
     void dump(CoreObject &component, std::vector <Category> categories);
     void dump(CoreObject &component, Category category);
 
-private:
+protected:
 
     void _dump(CoreObject &component, Category category);
+};
+
+class CommandConsole : public Console
+{
+    using Console::Console;
+
+    virtual void initCommands(Command &root) override;
+    void _pause() override;
+    string getPrompt() override;
+    void welcome() override;
+    void printHelp() override;
+    void pressReturn(bool shift) override;
+};
+
+class DebugConsole : public Console
+{
+    using Console::Console;
+
+    virtual void initCommands(Command &root) override;
+    void _pause() override;
+    string getPrompt() override;
+    void welcome() override;
+    void printHelp() override;
+    void pressReturn(bool shift) override;
 };
 
 }

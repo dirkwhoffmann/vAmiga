@@ -56,8 +56,8 @@ class RetroShell : public SubComponent {
     Shell shell = Shell::Command;
 
     // Consoles
-    Console commander = Console(amiga);
-    Console debugger = Console(amiga);
+    CommandConsole commander = CommandConsole(amiga);
+    DebugConsole debugger = DebugConsole(amiga);
 
     // The currently active console
     Console *current = &commander;

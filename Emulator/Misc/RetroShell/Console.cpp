@@ -23,8 +23,7 @@ Console::_initialize()
     CoreComponent::_initialize();
 
     // Register commands
-    initCommandShell(commandShellRoot);
-    initDebugShell(debugShellRoot);
+    initCommands(root);
 
     // Initialize the text storage
     clear();
@@ -36,14 +35,6 @@ Console::_initialize()
     welcome();
     *this << getPrompt();
     // exec("welcome");
-}
-
-void
-Console::_pause()
-{
-    if (inDebugShell()) {
-        asyncExec("state");
-    }
 }
 
 Console&
@@ -126,37 +117,6 @@ Console::operator<<(std::stringstream &stream)
     return *this;
 }
 
-const string &
-Console::getPrompt()
-{
-    return prompt;
-}
-
-void
-Console::updatePrompt()
-{
-    if (inCommandShell()) {
-
-        prompt = "vAmiga% ";
-
-    } else {
-
-        std::stringstream ss;
-
-        ss << "(";
-        ss << std::right << std::setw(0) << std::dec << isize(agnus.pos.v);
-        ss << ",";
-        ss << std::right << std::setw(0) << std::dec << isize(agnus.pos.h);
-        ss << ") $";
-        ss << std::right << std::setw(6) << std::hex << std::setfill('0') << isize(cpu.getPC0());
-        ss << ": ";
-
-        prompt = ss.str();
-    }
-
-    needsDisplay();
-}
-
 const char *
 Console::text()
 {
@@ -205,40 +165,6 @@ Console::clear()
 }
 
 void
-Console::welcome()
-{
-    string name = inDebugShell() ? "Debug Shell" : "Retro Shell";
-
-    if (inCommandShell()) {
-
-        storage << "vAmiga " << name << " ";
-        remoteManager.rshServer << "vAmiga " << name << " Remote Server ";
-        *this << Amiga::build() << '\n';
-        *this << '\n';
-        *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
-        *this << "https://github.com/dirkwhoffmann/vAmiga" << '\n';
-        *this << '\n';
-    }
-
-    printHelp();
-    *this << '\n';
-}
-
-void
-Console::printHelp()
-{
-    string action = inDebugShell() ? "exit" : "enter";
-
-    storage << "Type 'help' or press 'TAB' twice for help.\n";
-    storage << "Type '.' or press 'SHIFT+RETURN' to " << action << " debug mode.";
-
-    remoteManager.rshServer << "Type 'help' for help.\n";
-    remoteManager.rshServer << "Type '.' to " << action << " debug mode.";
-
-    *this << '\n';
-}
-
-void
 Console::printState()
 {
     std::stringstream ss;
@@ -252,7 +178,6 @@ Console::printState()
     ss << "\n";
 
     *this << ss;
-    updatePrompt();
 }
 
 void
@@ -422,34 +347,20 @@ Console::pressReturn(bool shift)
 
     } else {
 
-        // Execute the command
+        // Add the command to the text storage
         *this << input << '\n';
 
-        if (input.empty()) {
+        // Add the command to the history buffer
+        history.back() = { input, (isize)input.size() };
+        history.push_back( { "", 0 } );
+        ipos = (isize)history.size() - 1;
 
-            if (inCommandShell()) {
+        // Feed the command into the command queue
+        asyncExec(input);
 
-                printHelp();
-
-            } else {
-
-                emulator.isRunning() ? emulator.pause() : debugger.stepInto();
-            }
-
-        } else {
-
-            // Add the command to the history buffer
-            history.back() = { input, (isize)input.size() };
-            history.push_back( { "", 0 } );
-            ipos = (isize)history.size() - 1;
-
-            // Feed the command into the command queue
-            asyncExec(input);
-
-            // Clear the input line
-            input = "";
-            cursor = 0;
-        }
+        // Clear the input line
+        input = "";
+        cursor = 0;
     }
 }
 
@@ -613,36 +524,8 @@ Console::parseSeq(const string &argv, const string &fallback)
 Command &
 Console::getRoot()
 {
-    switch (shell) {
-
-        case Shell::Command: return commandShellRoot;
-        case Shell::Debug: return debugShellRoot;
-
-        default:
-            fatalError;
-    }
+    return root;
 }
-
-/*
-void
-Console::switchInterpreter()
-{
-    if (inCommandShell()) {
-
-        shell = Shell::Debug;
-        emulator.trackOn(1);
-        msgQueue.put(MSG_CONSOLE_DEBUGGER, true);
-
-    } else {
-
-        shell = Shell::Command;
-        emulator.trackOff(1);
-        msgQueue.put(MSG_CONSOLE_DEBUGGER, false);
-    }
-
-    updatePrompt();
-}
-*/
 
 void
 Console::asyncExec(const string &command)

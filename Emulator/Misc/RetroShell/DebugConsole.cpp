@@ -18,13 +18,76 @@ namespace vamiga {
 #define VAMIGA_GROUP(x) CommandGroup VAMIGA_GROUP_NAME(__COUNTER__)(root,x);
 
 void
-Console::initDebugShell(Command &root)
+DebugConsole::_pause()
 {
+    asyncExec("state");
+}
+
+string
+DebugConsole::getPrompt()
+{
+    std::stringstream ss;
+
+    ss << "(";
+    ss << std::right << std::setw(0) << std::dec << isize(agnus.pos.v);
+    ss << ",";
+    ss << std::right << std::setw(0) << std::dec << isize(agnus.pos.h);
+    ss << ") $";
+    ss << std::right << std::setw(6) << std::hex << std::setfill('0') << isize(cpu.getPC0());
+    ss << ": ";
+
+    return ss.str();
+    // needsDisplay();
+}
+
+void
+DebugConsole::welcome()
+{
+    storage << "vAmiga RetroShell ";
+    remoteManager.rshServer << "vAmiga RetroShell Remote Server ";
+    *this << Amiga::build() << '\n';
+    *this << '\n';
+    *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
+    *this << "https://github.com/dirkwhoffmann/vAmiga" << '\n';
+    *this << '\n';
+
+    printHelp();
+    *this << '\n';
+}
+
+void
+DebugConsole::printHelp()
+{
+    storage << "Type 'help' or press 'TAB' twice for help.\n";
+    storage << "Type '.' or press 'SHIFT+RETURN' to exit debug mode.";
+
+    remoteManager.rshServer << "Type 'help' for help.\n";
+    remoteManager.rshServer << "Type '.' to exit debug mode.";
+
+    *this << '\n';
+}
+
+void
+DebugConsole::pressReturn(bool shift)
+{
+    if (!shift && input.empty()) {
+
+        emulator.isRunning() ? emulator.pause() : debugger.stepInto();
+
+    } else {
+
+        Console::pressReturn(shift);
+    }
+}
+
+void
+DebugConsole::initCommands(Command &root)
+{
+    Console::initCommands(root);
+
     //
     // Top-level commands
     //
-
-    initCommons(root);
 
     {   VAMIGA_GROUP("Program execution")
 
