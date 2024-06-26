@@ -26,7 +26,7 @@ RegressionTester::prepare(ConfigScheme scheme, string rom, string ext)
     if (host.tmp() != "/tmp") throw Error(ERROR_DIR_ACCESS_DENIED, "/tmp");
     
     // Initialize the emulator according to the specified scheme
-    amiga.revertToFactorySettings();
+    emulator.powerOff();
     emulator.set(scheme);
 
     // Load Kickstart Rom
