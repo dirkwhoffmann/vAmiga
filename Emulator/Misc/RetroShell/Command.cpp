@@ -179,11 +179,13 @@ std::vector<const Command *>
 Command::filterPrefix(const string& prefix) const
 {
     std::vector<const Command *> result;
-    
+    auto uprefix = util::uppercased(prefix);
+
     for (auto &it : subCommands) {
         
         if (it.hidden) continue;
-        if (it.name.substr(0, prefix.size()) == prefix) result.push_back(&it);
+        auto substr = it.name.substr(0, prefix.size());
+        if (util::uppercased(substr) == uprefix) result.push_back(&it);
     }
 
     return result;
@@ -192,14 +194,14 @@ Command::filterPrefix(const string& prefix) const
 string
 Command::autoComplete(const string& token)
 {
-    string result = token;
-    
+    string result;
+
     auto matches = filterPrefix(token);
     if (!matches.empty()) {
         
         const Command *first = matches.front();
-        for (auto i = token.size(); i < first->name.size(); i++) {
-            
+        for (usize i = 0;; i++) {
+
             for (auto m: matches) {
                 if (m->name.size() <= i || m->name[i] != first->name[i]) {
                     return result;
@@ -208,7 +210,8 @@ Command::autoComplete(const string& token)
             result += first->name[i];
         }
     }
-    return result;
+
+    return result.size() >= token.size() ? result : token;
 }
 
 string

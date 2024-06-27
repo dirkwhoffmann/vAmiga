@@ -152,6 +152,9 @@ RetroShell::setStream(std::ostream &os)
 void
 RetroShell::exec()
 {
+    // Only proceed of the shell does not process a 'wait' command
+    if (agnus.hasEvent<SLOT_RSH>()) return;
+    
     commander.exec();
     debugger.exec();
 }
