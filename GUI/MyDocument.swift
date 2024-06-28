@@ -131,6 +131,9 @@ class MyDocument: NSDocument {
              
         debug(.media)
 
+        launchUrl = url
+        
+        /*
         let types: [FileType] =
         [ .SNAPSHOT, .SCRIPT, .ADF, .EADF, .HDF, .IMG, .ST, .DMS, .EXE, .DIR ]
 
@@ -141,6 +144,7 @@ class MyDocument: NSDocument {
             
             throw NSError(error: error)
         }
+        */
     }
     
     override open func revert(toContentsOf url: URL, ofType typeName: String) throws {
@@ -148,13 +152,10 @@ class MyDocument: NSDocument {
         debug(.media)
         
         do {
-            let proxy = try createFileProxy(from: url, allowedTypes: [.SNAPSHOT])
-            if let snapshot = proxy as? SnapshotProxy {
-                try processSnapshotFile(snapshot)
-            }
-            
+            try addMedia(url: url, allowedTypes: [.SNAPSHOT])
+
         } catch let error as VAError {
-            
+
             throw NSError(error: error)
         }
     }
@@ -185,13 +186,6 @@ class MyDocument: NSDocument {
     //
     // Handling media files
     //
-
-    func addMedia() {
-
-        if let url = launchUrl {
-            try? addMedia(url: url)
-        }
-    }
 
     func addMedia(url: URL,
                   allowedTypes types: [FileType] = FileType.all,
