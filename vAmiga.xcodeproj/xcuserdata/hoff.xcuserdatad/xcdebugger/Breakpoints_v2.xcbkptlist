@@ -184,17 +184,47 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "92566A9A-D682-40C2-BDEE-8D4A4ABAE319"
+            uuid = "FA4E6262-6A0C-4C1F-A83A-B86C42D59C09"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "GUI/MyDocument.swift"
+            filePath = "Emulator/Components/Amiga.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "138"
-            endingLineNumber = "138"
-            landmarkName = "read(from:ofType:)"
+            startingLineNumber = "130"
+            endingLineNumber = "130"
+            landmarkName = "Amiga::reset(hard)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "FA4E6262-6A0C-4C1F-A83A-B86C42D59C09 - 68f9eb612d69a278"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "vamiga::Amiga::reset(bool)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Emulator/Components/Amiga.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "130"
+                  endingLineNumber = "130">
+               </Location>
+               <Location
+                  uuid = "FA4E6262-6A0C-4C1F-A83A-B86C42D59C09 - 8e520e09464a4cea"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "vamiga::Amiga::reset(bool)::$_0::operator()(vamiga::CoreComponent*) const"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Emulator/Components/Amiga.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "130"
+                  endingLineNumber = "130">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

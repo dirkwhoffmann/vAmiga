@@ -935,11 +935,7 @@ Amiga::latestUserSnapshot()
 void
 Amiga::loadSnapshot(const Snapshot &snapshot)
 {
-    // bool wasPAL, isPAL;
-
     {   SUSPENDED
-
-        // wasPAL = agnus.isPAL();
 
         try {
 
@@ -957,8 +953,6 @@ Amiga::loadSnapshot(const Snapshot &snapshot)
             hardReset();
             throw error;
         }
-
-        // isPAL = agnus.isPAL();
     }
 
     // Inform the GUI

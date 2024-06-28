@@ -2256,10 +2256,10 @@ using namespace vamiga::moira;
 
 + (instancetype)makeWithAmiga:(AmigaProxy *)proxy
 {
-    Amiga *amiga = (Amiga *)proxy->obj;
-    
+    AmigaAPI *amiga = (AmigaAPI *)proxy->obj;
+
     amiga->suspend();
-    Snapshot *snapshot = new Snapshot(*amiga);
+    Snapshot *snapshot = new Snapshot(*(amiga->amiga));
     amiga->resume();
     
     return [self make:snapshot];
