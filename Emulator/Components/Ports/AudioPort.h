@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "MuxerTypes.h"
-
+#include "AudioPortTypes.h"
 #include "SubComponent.h"
 #include "AudioStream.h"
 #include "AudioFilter.h"
@@ -41,17 +40,17 @@ namespace vamiga {
  *           -----------------------------------------------------
  */
 
-class Muxer : public SubComponent {
+class AudioPort : public SubComponent {
 
     Descriptions descriptions = {
         {
-            .name           = "Muxer",
-            .description    = "Audio Muxer",
+            .name           = "AudioPort",
+            .description    = "Audio Port",
             .shell          = "paula audio"
         },
         {
-            .name           = "Muxer",
-            .description    = "Audio Muxer (Recorder)",
+            .name           = "AudioPort",
+            .description    = "Audio Port (Recorder)",
             .shell          = ""
         },
     };
@@ -76,13 +75,10 @@ class Muxer : public SubComponent {
     friend class Paula;
     
     // Current configuration
-    MuxerConfig config = {};
+    AudioPortConfig config = {};
     
     // Underflow and overflow counters
-    MuxerStats stats = {};
-    
-    // Master clock cycles per audio sample
-    // double cyclesPerSample = 0.0;
+    AudioPortStats stats = {};
 
     // Fraction of a sample that hadn't been generated in synthesize
     double fraction = 0.0;
@@ -130,7 +126,7 @@ public:
     
 public:
     
-    Muxer(Amiga& ref, isize id = 0);
+    AudioPort(Amiga& ref, isize id = 0);
 
     // Resets the output buffer and the two audio filters
     void clear();
@@ -187,7 +183,7 @@ private:
 
 public:
     
-    const MuxerConfig &getConfig() const { return config; }
+    const AudioPortConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
     i64 getOption(Option option) const override;
     void setOption(Option option, i64 value) override;
@@ -202,7 +198,7 @@ public:
 public:
     
     // Returns information about the gathered statistical information
-    const MuxerStats &getStats() const { return stats; }
+    const AudioPortStats &getStats() const { return stats; }
 
     // Returns true if the output volume is zero
     bool isMuted() const { return config.volL == 0 && config.volR == 0; }

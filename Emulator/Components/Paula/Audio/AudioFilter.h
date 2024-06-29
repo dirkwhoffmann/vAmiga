@@ -155,7 +155,7 @@ class AudioFilter : public SubComponent {
         OPT_AUD_FILTER_TYPE
     };
 
-    friend class Muxer;
+    friend class AudioPort;
 
 public:
 

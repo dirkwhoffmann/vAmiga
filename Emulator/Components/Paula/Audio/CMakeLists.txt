@@ -7,7 +7,6 @@ StateMachineRegs.cpp
 StateMachineEvents.cpp
 Sampler.cpp
 AudioFilter.cpp
-Muxer.cpp
 AudioStream.cpp
 
 )

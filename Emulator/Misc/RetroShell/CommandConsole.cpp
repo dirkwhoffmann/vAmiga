@@ -461,19 +461,19 @@ CommandConsole::initCommands(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                dump(paula.muxer, Category::Config);
+                dump(paula.audioPort, Category::Config);
             });
 
-            initSetters(root, paula.muxer);
+            initSetters(root, paula.audioPort);
 
             root.add({cmd, "audio", "filter"},
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                dump(paula.muxer.filter, Category::Config);
+                dump(paula.audioPort.filter, Category::Config);
             });
 
-            initSetters(root, paula.muxer.filter);
+            initSetters(root, paula.audioPort.filter);
 
             root.add({cmd, "dc"},
                      "Disk controller");

@@ -260,7 +260,7 @@ Headless::reportSize()
     msg("moira::Watchpoints : %zu bytes\n", sizeof(moira::Watchpoints));
     msg("   moira::Debugger : %zu bytes\n", sizeof(moira::Debugger));
     msg("      moira::Moira : %zu bytes\n", sizeof(moira::Moira));
-    msg("             Muxer : %zu bytes\n", sizeof(Muxer));
+    msg("         AudioPort : %zu bytes\n", sizeof(AudioPort));
     msg("             Paula : %zu bytes\n", sizeof(Paula));
     msg("       PixelEngine : %zu bytes\n", sizeof(PixelEngine));
     msg("     RemoteManager : %zu bytes\n", sizeof(RemoteManager));

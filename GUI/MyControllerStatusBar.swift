@@ -250,7 +250,7 @@ extension MyController {
             setColor(color: [.systemRed, .systemYellow, .systemGreen, .systemYellow, .systemRed])
 
         case 4:
-            let fill = amiga.paula.muxerStats.fillLevel * 100.0
+            let fill = amiga.paula.audioPortStats.fillLevel * 100.0
             activityBar.doubleValue = fill
             activityInfo.stringValue = String(format: "Fill level %d%%", Int(fill))
             setColor(color: [.systemRed, .systemYellow, .systemGreen, .systemYellow, .systemRed])

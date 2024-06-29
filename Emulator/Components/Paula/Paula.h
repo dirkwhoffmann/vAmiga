@@ -15,7 +15,7 @@
 #include "AudioStream.h"
 #include "ChangeRecorder.h"
 #include "DiskController.h"
-#include "Muxer.h"
+#include "AudioPort.h"
 #include "StateMachine.h"
 #include "UART.h"
 
@@ -52,8 +52,8 @@ public:
     StateMachine<2> channel2 = StateMachine<2>(amiga);
     StateMachine<3> channel3 = StateMachine<3>(amiga);
 
-    // Audio muxer
-    Muxer muxer = Muxer(amiga);
+    // Audio port
+    AudioPort audioPort = AudioPort(amiga);
 
     // Disk controller
     DiskController diskController = DiskController(amiga);

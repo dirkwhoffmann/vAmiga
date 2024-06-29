@@ -13,7 +13,7 @@
 #include "Buffer.h"
 #include "Chrono.h"
 #include "FFmpeg.h"
-#include "Muxer.h"
+#include "AudioPort.h"
 #include "NamedPipe.h"
 
 using util::Buffer;
@@ -38,8 +38,8 @@ class Recorder : public SubComponent {
     // Subcomponents
     //
     
-    // Audio muxer for synthesizing the audio track
-    Muxer muxer = Muxer(amiga, 1);
+    // Custom audio port for synthesizing the audio track
+    AudioPort audioPort = AudioPort(amiga, 1);
 
 
     //

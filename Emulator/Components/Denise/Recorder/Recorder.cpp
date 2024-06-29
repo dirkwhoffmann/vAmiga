@@ -17,7 +17,7 @@ Recorder::Recorder(Amiga& ref) : SubComponent(ref)
 {
     subComponents = std::vector<CoreComponent *> {
         
-        &muxer
+        &audioPort
     };
 }
 
@@ -358,23 +358,23 @@ void
 Recorder::recordAudio(Cycle target)
 {
     
-    // Clone Paula's muxer contents
-    muxer.sampler[0] = paula.muxer.sampler[0];
-    muxer.sampler[1] = paula.muxer.sampler[1];
-    muxer.sampler[2] = paula.muxer.sampler[2];
-    muxer.sampler[3] = paula.muxer.sampler[3];
-    assert(muxer.sampler[0].r == paula.muxer.sampler[0].r);
-    assert(muxer.sampler[0].w == paula.muxer.sampler[0].w);
-    
+    // Clone Paula's AudioPort contents
+    audioPort.sampler[0] = paula.audioPort.sampler[0];
+    audioPort.sampler[1] = paula.audioPort.sampler[1];
+    audioPort.sampler[2] = paula.audioPort.sampler[2];
+    audioPort.sampler[3] = paula.audioPort.sampler[3];
+    assert(audioPort.sampler[0].r == paula.audioPort.sampler[0].r);
+    assert(audioPort.sampler[0].w == paula.audioPort.sampler[0].w);
+
     // If this is the first frame to record, adjust the audio clock
     if (audioClock == 0) audioClock = target-1;
     
     // Synthesize audio samples
-    muxer.synthesize(audioClock, target, samplesPerFrame);
+    audioPort.synthesize(audioClock, target, samplesPerFrame);
     audioClock = target;
     
     // Copy samples to buffer
-    muxer.copy(audioData.ptr, samplesPerFrame);
+    audioPort.copy(audioData.ptr, samplesPerFrame);
     
     // Feed the audio pipe
     assert(audioPipe.isOpen());

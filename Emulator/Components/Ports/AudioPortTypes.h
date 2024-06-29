@@ -33,7 +33,7 @@ typedef struct
     // Performance booster
     bool idleFastPath;
 }
-MuxerConfig;
+AudioPortConfig;
 
 typedef struct
 {
@@ -43,4 +43,4 @@ typedef struct
     i64 consumedSamples;
     double fillLevel;
 }
-MuxerStats;
+AudioPortStats;

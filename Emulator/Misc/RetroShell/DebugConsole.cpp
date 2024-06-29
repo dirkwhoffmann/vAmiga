@@ -623,14 +623,14 @@ DebugConsole::initCommands(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    dump(paula.muxer, { Category::Config, Category::State } );
+                    dump(paula.audioPort, { Category::Config, Category::State } );
                 });
 
                 root.add({"i", "paula", "audio", "filter"},
                          "Inspect the internal filter state",
                          [this](Arguments& argv, long value) {
 
-                    dump(paula.muxer.filter, { Category::Config, Category::State } );
+                    dump(paula.audioPort.filter, { Category::Config, Category::State } );
                 });
 
                 root.add({"i", "paula", "dc", ""},

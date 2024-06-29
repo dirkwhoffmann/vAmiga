@@ -14,6 +14,7 @@
 #import "AgnusTypes.h"
 #import "AmigaTypes.h"
 #import "AmigaFileTypes.h"
+#import "AudioPortTypes.h"
 #import "BlitterTypes.h"
 #import "BootBlockImageTypes.h"
 #import "CmdQueueTypes.h"
@@ -34,7 +35,6 @@
 #import "KeyboardTypes.h"
 #import "MemoryTypes.h"
 #import "MsgQueueTypes.h"
-#import "MuxerTypes.h"
 #import "MouseTypes.h"
 #import "PaulaTypes.h"
 #import "PixelEngineTypes.h"
@@ -598,7 +598,7 @@
 @property (readonly) StateMachineInfo audioInfo3;
 @property (readonly) UARTInfo uartInfo;
 @property (readonly) UARTInfo cachedUartInfo;
-@property (readonly) MuxerStats muxerStats;
+@property (readonly) AudioPortStats audioPortStats;
 
 - (NSInteger)copyMono:(float *)target size:(NSInteger)n;
 - (NSInteger)copyStereo:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n;

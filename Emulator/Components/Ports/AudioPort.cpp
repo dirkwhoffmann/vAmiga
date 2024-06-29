@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Muxer.h"
+#include "AudioPort.h"
 #include "Emulator.h"
 #include "CIA.h"
 #include "IOUtils.h"
@@ -18,7 +18,7 @@
 
 namespace vamiga {
 
-Muxer::Muxer(Amiga& ref, isize id) : SubComponent(ref, id)
+AudioPort::AudioPort(Amiga& ref, isize id) : SubComponent(ref, id)
 {
     subComponents = std::vector<CoreComponent *> {
 
@@ -27,7 +27,7 @@ Muxer::Muxer(Amiga& ref, isize id) : SubComponent(ref, id)
 }
 
 void
-Muxer::_dump(Category category, std::ostream& os) const
+AudioPort::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
     
@@ -52,7 +52,7 @@ Muxer::_dump(Category category, std::ostream& os) const
 }
 
 void
-Muxer::_initialize()
+AudioPort::_initialize()
 {
     CoreComponent::_initialize();
 
@@ -60,7 +60,7 @@ Muxer::_initialize()
 }
 
 void
-Muxer::_didReset(bool hard)
+AudioPort::_didReset(bool hard)
 {
     stats = { };
     for (isize i = 0; i < 4; i++) sampler[i].reset();
@@ -68,21 +68,21 @@ Muxer::_didReset(bool hard)
 }
 
 void
-Muxer::_focus()
+AudioPort::_focus()
 {
     rampUpFromZero();
     // unmute(100000);
 }
 
 void
-Muxer::_unfocus()
+AudioPort::_unfocus()
 {
     rampDown();
     // mute(100000);
 }
 
 void
-Muxer::clear()
+AudioPort::clear()
 {
     debug(AUDBUF_DEBUG, "clear()\n");
     
@@ -97,7 +97,7 @@ Muxer::clear()
 }
 
 i64
-Muxer::getOption(Option option) const
+AudioPort::getOption(Option option) const
 {
     switch (option) {
             
@@ -121,7 +121,7 @@ Muxer::getOption(Option option) const
 }
 
 void
-Muxer::setOption(Option option, i64 value)
+AudioPort::setOption(Option option, i64 value)
 {
     bool wasMuted = isMuted();
     isize id = 0;
@@ -189,7 +189,7 @@ Muxer::setOption(Option option, i64 value)
 }
 
 void
-Muxer::setSampleRate(double hz)
+AudioPort::setSampleRate(double hz)
 {
     trace(AUD_DEBUG, "setSampleRate(%f)\n", hz);
 
@@ -197,13 +197,13 @@ Muxer::setSampleRate(double hz)
 }
 
 void
-Muxer::_didLoad()
+AudioPort::_didLoad()
 {
     for (isize i = 0; i < 4; i++) sampler[i].reset();
 }
 
 void
-Muxer::rampUp()
+AudioPort::rampUp()
 {    
     volume.target = 1.0;
     volume.delta = 3;
@@ -212,7 +212,7 @@ Muxer::rampUp()
 }
 
 void
-Muxer::rampUpFromZero()
+AudioPort::rampUpFromZero()
 {
     volume.current = 0.0;
     
@@ -220,7 +220,7 @@ Muxer::rampUpFromZero()
 }
 
 void
-Muxer::rampDown()
+AudioPort::rampDown()
 {
     volume.target = 0.0;
     volume.delta = 50;
@@ -229,7 +229,7 @@ Muxer::rampDown()
 }
 
 void
-Muxer::synthesize(Cycle clock, Cycle target, long count)
+AudioPort::synthesize(Cycle clock, Cycle target, long count)
 {
     assert(target > clock);
     assert(count > 0);
@@ -249,7 +249,7 @@ Muxer::synthesize(Cycle clock, Cycle target, long count)
 }
 
 void
-Muxer::synthesize(Cycle clock, Cycle target)
+AudioPort::synthesize(Cycle clock, Cycle target)
 {
     assert(target > clock);
 
@@ -275,7 +275,7 @@ Muxer::synthesize(Cycle clock, Cycle target)
 }
 
 template <SamplingMethod method> void
-Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
+AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
 {
     assert(count > 0);
 
@@ -346,7 +346,7 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
 }
 
 void
-Muxer::handleBufferUnderflow()
+AudioPort::handleBufferUnderflow()
 {
     // There are two common scenarios in which buffer underflows occur:
     //
@@ -376,7 +376,7 @@ Muxer::handleBufferUnderflow()
 }
 
 void
-Muxer::handleBufferOverflow()
+AudioPort::handleBufferOverflow()
 {
     // There are two common scenarios in which buffer overflows occur:
     //
@@ -406,13 +406,13 @@ Muxer::handleBufferOverflow()
 }
 
 void
-Muxer::ignoreNextUnderOrOverflow()
+AudioPort::ignoreNextUnderOrOverflow()
 {
     lastAlignment = util::Time::now();
 }
 
 isize
-Muxer::copy(void *buffer, isize n)
+AudioPort::copy(void *buffer, isize n)
 {
     stream.lock();
     
@@ -429,7 +429,7 @@ Muxer::copy(void *buffer, isize n)
 }
 
 isize
-Muxer::copy(void *buffer1, void *buffer2, isize n)
+AudioPort::copy(void *buffer1, void *buffer2, isize n)
 {
     stream.lock();
     
@@ -446,7 +446,7 @@ Muxer::copy(void *buffer1, void *buffer2, isize n)
 }
 
 SAMPLE_T *
-Muxer::nocopy(isize n)
+AudioPort::nocopy(isize n)
 {
     stream.lock();
     

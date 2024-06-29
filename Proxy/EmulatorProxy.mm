@@ -1052,39 +1052,39 @@ using namespace vamiga::moira;
     return [self paula]->paula->uart.getCachedInfo();
 }
 
-- (MuxerStats)muxerStats
+- (AudioPortStats)audioPortStats
 {
-    return [self paula]->paula->muxer.getStats();
+    return [self paula]->paula->audioPort.getStats();
 }
 
 - (NSInteger)copyMono:(float *)target size:(NSInteger)n
 {
-    return [self paula]->paula->muxer.copy(target, n);
+    return [self paula]->paula->audioPort.copy(target, n);
 }
 
 - (NSInteger)copyStereo:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n
 {
-    return [self paula]->paula->muxer.copy(target1, target2, n);
+    return [self paula]->paula->audioPort.copy(target1, target2, n);
 }
 
 - (void)rampUp
 {
-    [self paula]->paula->muxer.rampUp();
+    [self paula]->paula->audioPort.rampUp();
 }
 
 - (void)rampUpFromZero
 {
-    [self paula]->paula->muxer.rampUpFromZero();
+    [self paula]->paula->audioPort.rampUpFromZero();
 }
 
 - (void)rampDown
 {
-    [self paula]->paula->muxer.rampDown();
+    [self paula]->paula->audioPort.rampDown();
 }
 
 - (float)drawWaveformL:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c
 {
-    return [self paula]->paula->muxer.stream.draw(buffer, w, h, true, s, c);
+    return [self paula]->paula->audioPort.stream.draw(buffer, w, h, true, s, c);
 }
 
 - (float)drawWaveformL:(u32 *)buffer size:(NSSize)size scale:(float)s color:(u32)c
@@ -1098,7 +1098,7 @@ using namespace vamiga::moira;
 
 - (float)drawWaveformR:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c
 {
-    return [self paula]->paula->muxer.stream.draw(buffer, w, h, false, s, c);
+    return [self paula]->paula->audioPort.stream.draw(buffer, w, h, false, s, c);
 }
 
 - (float)drawWaveformR:(u32 *)buffer size:(NSSize)size scale:(float)s color:(u32)c

@@ -149,7 +149,7 @@ StateMachine<nr>::penhi()
 {
     if (!enablePenhi) return;
 
-    Sampler &sampler = paula.muxer.sampler[nr];
+    Sampler &sampler = paula.audioPort.sampler[nr];
 
     i8 sample = (i8)HI_BYTE(buffer);
     i16 scaled = (i16)(sample * audvol);
@@ -170,7 +170,7 @@ StateMachine<nr>::penlo()
 {
     if (!enablePenlo) return;
 
-    Sampler &sampler = paula.muxer.sampler[nr];
+    Sampler &sampler = paula.audioPort.sampler[nr];
     
     i8 sample = (i8)LO_BYTE(buffer);
     i16 scaled = (i16)(sample * audvol);
