@@ -299,6 +299,15 @@
 
 - (void)exportConfig:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
+- (void)put:(CmdType)cmd;
+- (void)put:(CmdType)type value:(NSInteger)value;
+- (void)put:(CmdType)type value:(NSInteger)value value2:(NSInteger)value2;
+/*
+- (void)put:(CmdType)type key:(KeyCmd)cmd;
+- (void)put:(CmdType)type coord:(CoordCmd)cmd;
+- (void)put:(CmdType)type action:(GamePadCmd)cmd;
+*/
+
 @end
 
 
@@ -591,8 +600,8 @@
 @property (readonly) UARTInfo cachedUartInfo;
 @property (readonly) MuxerStats muxerStats;
 
-- (void)readMonoSamples:(float *)target size:(NSInteger)n;
-- (void)readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n;
+- (NSInteger)copyMono:(float *)target size:(NSInteger)n;
+- (NSInteger)copyStereo:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n;
 
 - (void)rampUp;
 - (void)rampUpFromZero;

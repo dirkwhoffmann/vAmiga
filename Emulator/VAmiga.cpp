@@ -164,6 +164,24 @@ VAmiga::build()
     return Amiga::build();
 }
 
+const EmulatorInfo &
+VAmiga::getInfo() const
+{
+    return emu->getInfo();
+}
+
+const EmulatorInfo &
+VAmiga::getCachedInfo() const
+{
+    return emu->getCachedInfo();
+}
+
+const EmulatorStats &
+VAmiga::getStats() const
+{
+    return emu->getStats();
+}
+
 bool
 VAmiga::isPoweredOn()
 {
@@ -311,6 +329,12 @@ VAmiga::launch(const void *listener, Callback *func)
     emu->launch(listener, func);
 }
 
+bool
+VAmiga::isLaunched() const
+{
+    return emu->isLaunched();
+}
+
 i64
 VAmiga::get(Option option) const
 {
@@ -390,6 +414,245 @@ AmigaAPI::loadSnapshot(const Snapshot &snapshot)
 {
     amiga->loadSnapshot(snapshot);
 }
+
+
+//
+// DebuggerAPI
+//
+
+string
+DebuggerAPI::ascDump(Accessor acc, u32 addr, isize bytes) const
+{
+    assert(isUserThread());
+
+    switch (acc) {
+
+        case ACCESSOR_CPU:      return debugger->ascDump<ACCESSOR_CPU>(addr, bytes);
+        case ACCESSOR_AGNUS:    return debugger->ascDump<ACCESSOR_AGNUS>(addr, bytes);
+
+        default:
+            fatalError;
+    }
+}
+
+string
+DebuggerAPI::hexDump(Accessor acc, u32 addr, isize bytes, isize sz) const
+{
+    assert(isUserThread());
+
+    switch (acc) {
+
+        case ACCESSOR_CPU:      return debugger->hexDump<ACCESSOR_CPU>(addr, bytes, sz);
+        case ACCESSOR_AGNUS:    return debugger->hexDump<ACCESSOR_AGNUS>(addr, bytes, sz);
+
+        default:
+            fatalError;
+    }
+}
+
+string
+DebuggerAPI::memDump(Accessor acc, u32 addr, isize bytes, isize sz) const
+{
+    assert(isUserThread());
+
+    switch (acc) {
+
+        case ACCESSOR_CPU:      return debugger->memDump<ACCESSOR_CPU>(addr, bytes, sz);
+        case ACCESSOR_AGNUS:    return debugger->memDump<ACCESSOR_AGNUS>(addr, bytes, sz);
+
+        default:
+            fatalError;
+    }
+}
+
+
+//
+// DefaultsAPI
+//
+
+void
+DefaultsAPI::load(const fs::path &path)
+{
+    defaults->load(path);
+}
+
+void
+DefaultsAPI::load(std::ifstream &stream)
+{
+    defaults->load(stream);
+}
+
+void
+DefaultsAPI::load(std::stringstream &stream)
+{
+    defaults->load(stream);
+}
+
+void
+DefaultsAPI::save(const fs::path &path)
+{
+    defaults->save(path);
+}
+
+void
+DefaultsAPI::save(std::ofstream &stream)
+{
+    defaults->save(stream);
+}
+
+void
+DefaultsAPI::save(std::stringstream &stream)
+{
+    defaults->save(stream);
+}
+
+string
+DefaultsAPI::getRaw(const string &key) const
+{
+    return defaults->getRaw(key);
+}
+
+i64
+DefaultsAPI::get(const string &key) const
+{
+    return defaults->get(key);
+}
+
+i64
+DefaultsAPI::get(Option option, isize nr) const
+{
+    return defaults->get(option, nr);
+}
+
+string
+DefaultsAPI::getFallbackRaw(const string &key) const
+{
+    return defaults->getFallbackRaw(key);
+}
+
+i64
+DefaultsAPI::getFallback(const string &key) const
+{
+    return defaults->getFallback(key);
+}
+
+i64
+DefaultsAPI::getFallback(Option option, isize nr) const
+{
+    return defaults->getFallback(option, nr);
+}
+
+void
+DefaultsAPI::set(const string &key, const string &value)
+{
+    defaults->set(key, value);
+}
+
+void
+DefaultsAPI::set(Option opt, const string &value)
+{
+    defaults->set(opt, value);
+}
+
+void
+DefaultsAPI::set(Option opt, const string &value, std::vector<isize> objids)
+{
+    defaults->set(opt, value, objids);
+}
+
+void
+DefaultsAPI::set(Option opt, i64 value)
+{
+    defaults->set(opt, value);
+}
+
+void
+DefaultsAPI::set(Option opt, i64 value, std::vector<isize> objids)
+{
+    defaults->set(opt, value, objids);
+}
+
+void
+DefaultsAPI::setFallback(const string &key, const string &value)
+{
+    defaults->setFallback(key, value);
+}
+
+void
+DefaultsAPI::setFallback(Option opt, const string &value)
+{
+    defaults->setFallback(opt, value);
+}
+
+void
+DefaultsAPI::setFallback(Option opt, const string &value, std::vector<isize> objids)
+{
+    defaults->setFallback(opt, value, objids);
+}
+
+void
+DefaultsAPI::setFallback(Option opt, i64 value)
+{
+    defaults->setFallback(opt, value);
+}
+
+void
+DefaultsAPI::setFallback(Option opt, i64 value, std::vector<isize> objids)
+{
+    defaults->setFallback(opt, value, objids);
+}
+
+void
+DefaultsAPI::remove()
+{
+    defaults->remove();
+}
+
+void
+DefaultsAPI::remove(const string &key)
+{
+    defaults->remove(key);
+}
+
+void
+DefaultsAPI::remove(Option option)
+{
+    defaults->remove(option);
+}
+
+void
+DefaultsAPI::remove(Option option, std::vector <isize> objids)
+{
+    defaults->remove(option, objids);
+}
+
+
+//
+// MemoryAPI
+//
+
+const MemoryConfig &
+MemoryAPI::getConfig() const
+{
+    assert(isUserThread());
+    return mem->getConfig();
+}
+
+/*
+const MemInfo &
+MemoryAPI::getInfo() const
+{
+    assert(isUserThread());
+    return mem->getInfo();
+}
+
+const MemInfo &
+MemoryAPI::getCachedInfo() const
+{
+    assert(isUserThread());
+    return mem->getCachedInfo();
+}
+*/
 
 
 //

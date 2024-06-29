@@ -209,22 +209,12 @@ extension MyAppDelegate {
             
             if c.window == window {
                 
-                // Start playback
-                if !c.macAudio!.isRunning {
-                    c.macAudio!.startPlayback()
-                    if !c.amiga.isWarping { c.amiga.paula.rampUpFromZero() }
-                }
-                
-                // Update the visibility of all drive menus
+                c.amiga?.put(.FOCUS, value: 1)
                 c.hideOrShowDriveMenus()
 
             } else {
                 
-                // Stop playback
-                if c.macAudio!.isRunning {
-                    c.macAudio!.stopPlayback()
-                    c.amiga.paula.rampDown()
-                }
+                c.amiga?.put(.FOCUS, value: 0)
             }
         }
     }

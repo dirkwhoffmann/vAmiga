@@ -20,10 +20,19 @@ public class MacAudio: NSObject {
     }
     
     var parent: MyController!
-    var audiounit: AUAudioUnit!
-    var amiga: EmulatorProxy!
 
-    var prefs: Preferences { return parent.pref }
+    // Audio source
+    var emu: EmulatorProxy? { return parent.amiga }
+
+    // Component state
+    enum MacAudioState { case off, on, shutdown }
+    var state = MacAudioState.off
+
+    // Gateway to the host's audio unit
+    var audiounit: AUAudioUnit!
+
+    // Lock that is kept while the component is active
+    var lock = NSLock()
     
     // Indicates if the this emulator instance owns the audio unit
     var isRunning = false
@@ -42,9 +51,8 @@ public class MacAudio: NSObject {
     
         self.init()
         parent = controller
-        amiga = controller.amiga
-        
-        // Setup component description for AudioUnit
+
+        // Create AudioUnit
         let compDesc = AudioComponentDescription(
             componentType: kAudioUnitType_Output,
             componentSubType: kAudioUnitSubType_DefaultOutput,
@@ -52,10 +60,9 @@ public class MacAudio: NSObject {
             componentFlags: 0,
             componentFlagsMask: 0)
 
-        // Create AudioUnit
         do { try audiounit = AUAudioUnit(componentDescription: compDesc) } catch {
             
-            warn("Failed to create AUAudioUnit")
+            warn("Failed to create the audio unit.")
             return
         }
         
@@ -66,7 +73,7 @@ public class MacAudio: NSObject {
         let stereo = (channels > 1)
         
         // Pass some host parameters to the emulator
-        amiga.set(.HOST_SAMPLE_RATE, value: Int(sampleRate))
+        emu?.set(.HOST_SAMPLE_RATE, value: Int(sampleRate))
 
         // Make input bus compatible with output bus
         let renderFormat = AVAudioFormat(standardFormatWithSampleRate: sampleRate,
@@ -108,12 +115,23 @@ public class MacAudio: NSObject {
             warn("Failed to allocate RenderResources")
             return nil
         }
+        do { try audiounit.startHardware() } catch {
+
+            warn("Failed to start the audio hardware.")
+            return
+        }
 
         // Pre-allocate some audio players for playing sound effects
         initAudioPlayers(name: Sounds.insert)
         initAudioPlayers(name: Sounds.eject)
         initAudioPlayers(name: Sounds.step, count: 3)
         initAudioPlayers(name: Sounds.move, count: 3)
+
+        isRunning = true
+
+        // The audio unit is up and running. Switch to 'on' state
+        lock.lock()
+        state = .on
     }
 
     func initAudioPlayers(name: String, count: Int = 1) {
@@ -137,8 +155,16 @@ public class MacAudio: NSObject {
 
     func shutDown() {
 
-        stopPlayback()
-        amiga = nil
+        debug(.shutdown, "Initiating shutdown...")
+        state = .shutdown
+
+        debug(.shutdown, "Fading out...")
+        lock.lock()
+        precondition(state == .off)
+
+        debug(.shutdown, "Stopping audio hardware...")
+        audiounit.stopHardware()
+        audiounit.outputProvider = nil
     }
 
     private func renderMono(inputDataList: UnsafeMutablePointer<AudioBufferList>,
@@ -148,22 +174,71 @@ public class MacAudio: NSObject {
         assert(bufferList.count == 1)
         
         let ptr = bufferList[0].mData!.assumingMemoryBound(to: Float.self)
-        amiga.paula.readMonoSamples(ptr, size: Int(frameCount))
+        let n = Int(frameCount)
+        // emu.paula.readMonoSamples(ptr, size: Int(frameCount))
+
+        switch state {
+
+        case .on:
+
+            emu?.paula.copyMono(ptr, size: n)
+
+        case .shutdown:
+
+            if let cnt = emu?.paula.copyMono(ptr, size: n) {
+
+                debug(.shutdown, "Copied \(cnt) mono samples.")
+                if cnt == n { break }
+            }
+
+            debug(.shutdown, "Successfully faded out.")
+            state = .off
+            lock.unlock()
+
+        case .off:
+
+            memset(ptr, 0, 4 * n)
+        }
     }
 
     private func renderStereo(inputDataList: UnsafeMutablePointer<AudioBufferList>,
                               frameCount: UInt32) {
 
-        // track("\(frameCount)")
         let bufferList = UnsafeMutableAudioBufferListPointer(inputDataList)
         assert(bufferList.count > 1)
         
         let ptr1 = bufferList[0].mData!.assumingMemoryBound(to: Float.self)
         let ptr2 = bufferList[1].mData!.assumingMemoryBound(to: Float.self)
-        amiga.paula.readStereoSamples(ptr1, buffer2: ptr2, size: Int(frameCount))
+        let n = Int(frameCount)
+
+        // emu.paula.readStereoSamples(ptr1, buffer2: ptr2, size: Int(frameCount))
+        switch state {
+
+        case .on:
+
+            emu?.paula.copyStereo(ptr1, buffer2: ptr2, size: n)
+
+        case .shutdown:
+
+            if let cnt = emu?.paula.copyStereo(ptr1, buffer2: ptr2, size: n) {
+
+                debug(.shutdown, "Copied \(cnt) stereo samples.")
+                if cnt == n { break }
+            }
+
+            debug(.shutdown, "Successfully faded out.")
+            state = .off
+            lock.unlock()
+
+        case .off:
+
+            memset(ptr1, 0, 4 * n)
+            memset(ptr2, 0, 4 * n)
+        }
     }
     
     // Connects Paula to the audio backend
+    /*
     @discardableResult
     func startPlayback() -> Bool {
 
@@ -179,7 +254,7 @@ public class MacAudio: NSObject {
         isRunning = true
         return true
     }
-    
+
     // Disconnects Paula from the audio backend
     func stopPlayback() {
 
@@ -188,7 +263,8 @@ public class MacAudio: NSObject {
             isRunning = false
         }
     }
-    
+    */
+
     // Plays a sound file
     func playSound(_ name: String, volume: Int, pan: Int) {
         

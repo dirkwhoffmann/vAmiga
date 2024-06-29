@@ -29,3 +29,4 @@
 #include "RTCTypes.h"
 #include "SamplerTypes.h"
 #include "SerialPortTypes.h"
+#include "VideoPortTypes.h"

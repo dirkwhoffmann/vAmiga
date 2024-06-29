@@ -68,6 +68,20 @@ Muxer::_didReset(bool hard)
 }
 
 void
+Muxer::_focus()
+{
+    rampUpFromZero();
+    // unmute(100000);
+}
+
+void
+Muxer::_unfocus()
+{
+    rampDown();
+    // mute(100000);
+}
+
+void
 Muxer::clear()
 {
     debug(AUDBUF_DEBUG, "clear()\n");
@@ -397,7 +411,7 @@ Muxer::ignoreNextUnderOrOverflow()
     lastAlignment = util::Time::now();
 }
 
-void
+isize
 Muxer::copy(void *buffer, isize n)
 {
     stream.lock();
@@ -410,9 +424,11 @@ Muxer::copy(void *buffer, isize n)
     stats.consumedSamples += n;
     
     stream.unlock();
+
+    return n;
 }
 
-void
+isize
 Muxer::copy(void *buffer1, void *buffer2, isize n)
 {
     stream.lock();
@@ -425,6 +441,8 @@ Muxer::copy(void *buffer1, void *buffer2, isize n)
     stats.consumedSamples += n;
 
     stream.unlock();
+
+    return n;
 }
 
 SAMPLE_T *

@@ -125,7 +125,7 @@ public:
 
     
     //
-    // Initializing
+    // Methods
     //
     
 public:
@@ -135,24 +135,13 @@ public:
     // Resets the output buffer and the two audio filters
     void clear();
 
+    
+    //
+    // Methods from Serializable
+    //
+    
+private:
 
-    //
-    // Methods from CoreObject
-    //
-    
-private:
-    
-    void _dump(Category category, std::ostream& os) const override;
-    
-    
-    //
-    // Methods from CoreComponent
-    //
-    
-private:
-    
-    void _initialize() override;
-    
     template <class T>
     void serialize(T& worker)
     {
@@ -173,12 +162,23 @@ private:
 
     } SERIALIZERS(serialize);
 
-    void _didLoad() override;
+
+    //
+    // Methods from CoreComponent
+    //
 
 public:
 
-    void _didReset(bool hard) override;
     const Descriptions &getDescriptions() const override { return descriptions; }
+
+private:
+
+    void _dump(Category category, std::ostream& os) const override;
+    void _didLoad() override;
+    void _didReset(bool hard) override;
+    void _initialize() override;
+    void _focus() override;
+    void _unfocus() override;
 
 
     //
@@ -260,8 +260,8 @@ public:
 public:
     
     // Copies a certain amout of audio samples into a buffer
-    void copy(void *buffer, isize n);
-    void copy(void *buffer1, void *buffer2, isize n);
+    isize copy(void *buffer, isize n);
+    isize copy(void *buffer1, void *buffer2, isize n);
     
     /* Returns a pointer to a buffer holding a certain amount of audio samples
      * without copying data. This function has been implemented for speedup.

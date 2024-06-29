@@ -43,13 +43,6 @@ public:
 // Public APIs
 //
 
-struct DefaultsAPI : API {
-
-    class Defaults *defaults = nullptr;
-
-    DefaultsAPI(Defaults *defaults) : defaults(defaults) { }
-};
-
 struct AmigaAPI : API {
 
     class Amiga *amiga = nullptr;
@@ -102,6 +95,236 @@ struct CPUAPI : API {
 struct DebuggerAPI : API {
 
     class Debugger *debugger = nullptr;
+
+    /** @brief  Returns a string representations for a portion of memory.
+     */
+    string ascDump(Accessor acc, u32 addr, isize bytes) const;
+    string hexDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
+    string memDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
+};
+
+/** The user's defaults storage
+ *
+ *  The defaults storage manages all configuration settings that persist across
+ *  multiple application launches. It provides the following functionality:
+ *
+ *  - **Loading and saving the storage data**
+ *
+ *    You can persist the user's defaults storage in a file, a stream, or a
+ *    string stream.
+ *
+ *  - **Reading and writing key-value pairs**
+ *
+ *    The return value is read from the user's defaults storage for registered
+ *    keys. For unknown keys, an exception is thrown.
+ *
+ *  - **Registerung fallback values**
+ *
+ *    The fallback value is used for registered keys with no custom value set.
+ *
+ *    @note Setting a fallback value for an unknown key is permitted. In this
+ *    case, a new key is registered together with the provided default value.
+ *    The GUI utilizes this feature to register additional keys, such as keys
+ *    storing shader-relevant parameters that are irrelevant to the emulation
+ *    core.
+ */
+struct DefaultsAPI : API {
+
+    class Defaults *defaults = nullptr;
+
+    DefaultsAPI(Defaults *defaults) : defaults(defaults) { }
+
+    ///
+    /// @{
+    /// @name Loading and saving the key-value storage
+
+public:
+
+    /** @brief  Loads a storage file from disk
+     *  @throw  VC64Error (#ERROR_FILE_NOT_FOUND)
+     *  @throw  VC64Error (#ERROR_SYNTAX)
+     */
+    void load(const std::filesystem::path &path);
+
+    /** @brief  Loads a storage file from a stream
+     *  @throw  VC64Error (#ERROR_SYNTAX)
+     */
+    void load(std::ifstream &stream);
+
+    /** @brief  Loads a storage file from a string stream
+     *  @throw  VC64Error (#ERROR_SYNTAX)
+     */
+    void load(std::stringstream &stream);
+
+    /** @brief  Saves a storage file to disk
+     *  @throw  VC64Error (#ERROR_FILE_CANT_WRITE)
+     */
+    void save(const std::filesystem::path &path);
+
+    /** @brief  Saves a storage file to stream
+     */
+    void save(std::ofstream &stream);
+
+    /** @brief  Saves a storage file to a string stream
+     */
+    void save(std::stringstream &stream);
+
+
+    /// @}
+    /// @{
+    /// @name Reading key-value pairs
+
+public:
+
+    /** @brief  Queries a key-value pair.
+     *  @param  key     The key.
+     *  @result The value as a string.
+     *  @throw  VC64Error (#ERROR\_INVALID\_KEY)
+     */
+    string getRaw(const string &key) const;
+
+    /** @brief  Queries a key-value pair.
+     *  @param  key     The key.
+     *  @result The value as an integer. 0 if the value cannot not be parsed.
+     *  @throw  VC64Error (#ERROR\_INVALID\_KEY)
+     */
+    i64 get(const string &key) const;
+
+    /** @brief  Queries a key-value pair.
+     *  @param  option  A config option whose name is used as the prefix of the key.
+     *  @param  nr      Optional number that is appened to the key as suffix.
+     *  @result The value as an integer.
+     *  @throw  VC64Error (#ERROR\_INVALID\_KEY)
+     */
+    i64 get(Option option, isize nr = 0) const;
+
+    /** @brief  Queries a fallback key-value pair.
+     *  @param  key     The key.
+     *  @result The value as a string.
+     *  @throw  VC64Error (#ERROR\_INVALID\_KEY)
+     */
+    string getFallbackRaw(const string &key) const;
+
+    /** @brief  Queries a fallback key-value pair.
+     *  @param  key     The key.
+     *  @result The value as an integer. 0 if the value cannot not be parsed.
+     *  @throw  VC64Error (#ERROR\_INVALID\_KEY)
+     */
+    i64 getFallback(const string &key) const;
+
+    /** @brief  Queries a fallback key-value pair.
+     *  @param  option  A config option whose name is used as the key.
+     *  @param  nr      Optional number that is appened to the key as suffix.
+     *  @result The value as an integer.
+     *  @throw  VC64Error (#ERROR\_INVALID\_KEY)
+     */
+    i64 getFallback(Option option, isize nr = 0) const;
+
+
+    /// @}
+    /// @{
+    /// @name Writing key-value pairs
+
+    /** @brief  Writes a key-value pair into the user storage.
+     *  @param  key     The key, given as a string.
+     *  @param  value   The value, given as a string.
+     *  @throw  VC64Error (#ERROR_INVALID_KEY)
+     */
+    void set(const string &key, const string &value);
+
+    /** @brief  Writes a key-value pair into the user storage.
+     *  @param  opt     The option's name forms the prefix of the keys.
+     *  @param  value   The value, given as a string.
+     *  @throw  VC64Error (#ERROR_INVALID_KEY)
+     */
+    void set(Option opt, const string &value);
+
+    /** @brief  Writes multiple key-value pairs into the user storage.
+     *  @param  opt     The option's name forms the prefix of the keys.
+     *  @param  value   The value for all pairs, given as a string.
+     *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
+     *  @throw  VC64Error (#ERROR_INVALID_KEY)
+     */
+    void set(Option opt, const string &value, std::vector<isize> objids);
+
+    /** @brief  Writes a key-value pair into the user storage.
+     *  @param  opt     The option's name forms the prefix of the keys.
+     *  @param  value   The value, given as an integer.
+     *  @throw  VC64Error (#ERROR_INVALID_KEY)
+     */
+    void set(Option opt, i64 value);
+
+    /** @brief  Writes multiple key-value pairs into the user storage.
+     *  @param  opt     The option's name forms the prefix of the keys.
+     *  @param  value   The value for all pairs, given as an integer.
+     *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
+     *  @throw  VC64Error (#ERROR_INVALID_KEY)
+     */
+    void set(Option opt, i64 value, std::vector<isize> objids);
+
+    /** @brief  Writes a key-value pair into the fallback storage.
+     *  @param  key     The key, given as a string.
+     *  @param  value   The value, given as a string.
+     */
+    void setFallback(const string &key, const string &value);
+
+    /** @brief  Writes a key-value pair into the fallback storage.
+     *  @param  opt     The option's name forms the prefix of the keys.
+     *  @param  value   The value, given as an integer.
+     *  @throw  VC64Error (#ERROR_INVALID_KEY)
+     */
+    void setFallback(Option opt, const string &value);
+
+    /** @brief  Writes multiple key-value pairs into the fallback storage.
+     *  @param  opt     The option's name forms the prefix of the keys.
+     *  @param  value   The shared value for all pairs, given as a string.
+     *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
+     */
+    void setFallback(Option opt, const string &value, std::vector<isize> objids);
+
+    /** @brief  Writes a key-value pair into the fallback storage.
+     *  @param  opt     The option's name forms the prefix of the keys.
+     *  @param  value   The value, given as an integer.
+     *  @throw  VC64Error (#ERROR_INVALID_KEY)
+     */
+    void setFallback(Option opt, i64 value);
+
+    /** @brief  Writes multiple key-value pairs into the fallback storage.
+     *  @param  opt     The option's name forms the prefix of the keys.
+     *  @param  value   The shared value for all pairs, given as an integer.
+     *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
+     */
+    void setFallback(Option opt, i64 value, std::vector<isize> objids);
+
+
+    /// @}
+    /// @{
+    /// @name Deleting key-value pairs
+
+    /** @brief  Deletes all key-value pairs.
+     */
+    void remove();
+
+    /** @brief  Deletes a key-value pair
+     *  @param  key     The key of the key-value pair.
+     *  @throw  VC64Error (#ERROR_INVALID_KEY)
+     */
+    void remove(const string &key) throws;
+
+    /** @brief  Deletes a key-value pair
+     *  @param  option  The option's name forms the key.
+     *  @throw  VC64Error (#ERROR_INVALID_KEY)
+     */
+    void remove(Option option) throws;
+
+    /** @brief  Deletes multiple key-value pairs.
+     *  @param  option  The option's name forms the prefix of the keys.
+     *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
+     *  @throw  VC64Error (#ERROR_INVALID_KEY)
+     */
+    void remove(Option option, std::vector <isize> objids) throws;
+
+    /// @}
 };
 
 struct DeniseAPI : API {
@@ -152,6 +375,17 @@ struct KeyboardAPI : API {
 struct MemoryAPI : API {
 
     class Memory *mem = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const MemoryConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    /*
+    const MemoryInfo &getInfo() const;
+    const MemoryInfo &getCachedInfo() const;
+    */
 };
 
 struct MouseAPI : API {
@@ -342,6 +576,14 @@ public:
     VAmiga();
     ~VAmiga();
 
+    /** @brief  Returns the component's current state.
+     */
+    const EmulatorInfo &getInfo() const;
+    const EmulatorInfo &getCachedInfo() const;
+
+    /** @brief  Returns statistical information about the components.
+     */
+    const EmulatorStats &getStats() const;
 
     /// @}
     /// @name Querying the emulator state
@@ -383,12 +625,6 @@ public:
      *  The function checks if the necessary ROMs are installed to lauch the
      *  emulator. On success, the functions returns. Otherwise, an exception
      *  is thrown.
-     *
-     *  @throw  Error (ERROR_ROM_BASIC_MISSING)
-     *  @throw  Error (ERROR_ROM_CHAR_MISSING)
-     *  @throw  Error (ERROR_ROM_KERNAL_MISSING)
-     *  @throw  Error (ERROR_ROM_CHAR_MISSING)
-     *  @throw  Error (ERROR_ROM_MEGA65_MISMATCH)
      */
     void isReady();
 
@@ -538,6 +774,10 @@ public:
      *  @param  func        The callback function.
      */
     void launch(const void *listener, Callback *func);
+
+    /** @brief  Returns true if the emulator has been launched.
+     */
+    bool isLaunched() const;
 
     /** @brief  Queries a configuration option.
      *

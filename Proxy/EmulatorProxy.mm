@@ -1057,14 +1057,14 @@ using namespace vamiga::moira;
     return [self paula]->paula->muxer.getStats();
 }
 
-- (void)readMonoSamples:(float *)target size:(NSInteger)n
+- (NSInteger)copyMono:(float *)target size:(NSInteger)n
 {
-    [self paula]->paula->muxer.copy(target, n);
+    return [self paula]->paula->muxer.copy(target, n);
 }
 
-- (void)readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n
+- (NSInteger)copyStereo:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n
 {
-    [self paula]->paula->muxer.copy(target1, target2, n);
+    return [self paula]->paula->muxer.copy(target1, target2, n);
 }
 
 - (void)rampUp
@@ -3276,5 +3276,37 @@ using namespace vamiga::moira;
     try { [self emu]->exportConfig([url fileSystemRepresentation]); }
     catch (Error &error) { [ex save:error]; }
 }
+
+- (void)put:(CmdType)type
+{
+    [self emu]->put(type, 0);
+}
+
+- (void)put:(CmdType)type value:(NSInteger)value
+{
+    [self emu]->put(type, value);
+}
+
+- (void)put:(CmdType)type value:(NSInteger)value value2:(NSInteger)value2
+{
+    [self emu]->put(type, value, value2);
+}
+
+/*
+- (void)put:(CmdType)type key:(KeyCmd)cmd
+{
+    [self emu]->put(type, cmd);
+}
+
+- (void)put:(CmdType)type coord:(CoordCmd)cmd
+{
+    [self emu]->put(type, cmd);
+}
+
+- (void)put:(CmdType)type action:(GamePadCmd)cmd
+{
+    [self emu]->put(type, cmd);
+}
+*/
 
 @end
