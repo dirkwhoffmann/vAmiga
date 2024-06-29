@@ -96,7 +96,7 @@ static const char *script[] = {
     "# the compiled application. It runs several shell commands to check if ",
     "# anything breaks.",
     "# ",
-    "# Dirk W. Hoffmann, 2023",
+    "# Dirk W. Hoffmann, 2024",
 
     "",
     "help",

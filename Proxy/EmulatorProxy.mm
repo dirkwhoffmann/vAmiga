@@ -905,24 +905,6 @@ using namespace vamiga::moira;
     return [self denise]->denise->debugger.getSpriteColor(nr, reg);
 }
 
-/*
-- (u32 *)noise
-{
-    return (u32 *)([self denise]->denise->pixelEngine.getNoise());
-}
-
-- (void)getStableBuffer:(u32 **)ptr nr:(NSInteger *)nr lof:(bool *)lof prevlof:(bool *)prevlof
-{
-    auto &frameBuffer = [self denise]->denise->pixelEngine.getStableBuffer();
-    // auto &frameBuffer = [self denise]->denise->videoPort.getTexture();
-    *ptr = frameBuffer.pixels.ptr;
-    *nr = NSInteger(frameBuffer.nr);
-    *lof = frameBuffer.lof;
-    *prevlof = frameBuffer.prevlof;
-}
-*/
-
-
 @end
 
 

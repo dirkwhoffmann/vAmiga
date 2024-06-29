@@ -41,12 +41,6 @@ PixelEngine::_initialize()
 {
     CoreComponent::_initialize();
 
-    // Create a random noise pattern for the background
-    noise.alloc(2 * PIXELS);
-    for (isize i = 0; i < noise.size; i++) {
-        noise[i] = rand() % 2 ? FrameBuffer::black : FrameBuffer::white;
-    }
-
     // Setup ECS BRDRBLNK color
     palette[64] = TEXEL(GpuColor(0x00, 0x00, 0x00).rawValue);
     
@@ -303,12 +297,6 @@ PixelEngine::swapBuffers()
     emuTexture[newActiveBuffer].prevlof = emuTexture[oldActiveBuffer].lof;
 
     activeBuffer = newActiveBuffer;
-}
-
-Texel *
-PixelEngine::getNoise() const
-{
-    return noise.ptr + (rand() % PIXELS);
 }
 
 void
