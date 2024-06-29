@@ -230,52 +230,33 @@ class Canvas: Layer {
     }
 
     func updateTexture() {
-        
+
         precondition(lfTexture != nil)
         precondition(sfTexture != nil)
 
-        if amiga.poweredOff {
+        // Get the emulator texture
+        var buffer: UnsafeMutablePointer<u32>!
+        var nr = 0
+        amiga.videoPort.texture(&buffer, nr: &nr, lof: &currLOF, prevlof: &prevLOF)
 
-            // Get the noise texture
-            let buffer = amiga.denise.noise!
+        // Check for duplicated or dropped frames
+        if nr != prevNr + 1 {
 
-            // Ensure that the merge shader is used
-            prevLOF = currLOF
-            currLOF = !prevLOF
+            debug(.vsync, "Frame sync mismatch (\(prevNr) -> \(nr))")
 
-            // Update the GPU texture
-            if currLOF {
-                lfTexture.replace(w: Int(TPP) * HPIXELS, h: VPIXELS, buffer: buffer)
-            } else {
-                sfTexture.replace(w: Int(TPP) * HPIXELS, h: VPIXELS, buffer: buffer)
-            }
+            // Return immediately if we alredy have this texture
+            if nr == prevNr { return }
+        }
+        prevNr = nr
 
+        // Update the GPU texture
+        if currLOF {
+            lfTexture.replace(w: Int(TPP) * HPIXELS, h: VPIXELS, buffer: buffer)
         } else {
-
-            // Get the emulator texture
-            var buffer: UnsafeMutablePointer<u32>!
-            var nr = 0
-            amiga.denise.getStableBuffer(&buffer, nr: &nr, lof: &currLOF, prevlof: &prevLOF)
-
-            // Check for duplicate frames or frame drops
-            if nr != prevNr + 1 {
-
-                // debug(.vsync, "Frame sync mismatch (\(prevNr) -> \(nr))")
-
-                // Return immediately if we alredy have this texture
-                if nr == prevNr { return }
-            }
-            prevNr = nr
-
-            // Update the GPU texture
-            if currLOF {
-                lfTexture.replace(w: Int(TPP) * HPIXELS, h: VPIXELS, buffer: buffer)
-            } else {
-                sfTexture.replace(w: Int(TPP) * HPIXELS, h: VPIXELS, buffer: buffer)
-            }
-        }        
+            sfTexture.replace(w: Int(TPP) * HPIXELS, h: VPIXELS, buffer: buffer)
+        }
     }
-    
+
     //
     // Rendering
     //

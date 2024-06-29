@@ -94,6 +94,7 @@
 @class SerialPortProxy;
 @class SnapshotProxy;
 @class STFileProxy;
+@class VideoPortProxy;
 
 
 //
@@ -195,6 +196,7 @@
     RtcProxy *rtc;
     RecorderProxy *recorder;
     SerialPortProxy *serialPort;
+    VideoPortProxy *videoPort;
 }
 
 @property (readonly, strong) AgnusProxy *agnus;
@@ -229,6 +231,7 @@
 @property (readonly, strong) RtcProxy *rtc;
 @property (readonly, strong) RecorderProxy *recorder;
 @property (readonly, strong) SerialPortProxy *serialPort;
+@property (readonly, strong) VideoPortProxy *videoPort;
 
 @property (class, readonly, strong) DefaultsProxy *defaults;
 
@@ -543,8 +546,8 @@
 - (u64)sprData:(NSInteger)nr line:(NSInteger)line;
 - (u16)sprColor:(NSInteger)nr reg:(NSInteger)reg;
 
-@property (readonly) u32 *noise;
-- (void)getStableBuffer:(u32 **)ptr nr:(NSInteger *)nr lof:(bool *)lof prevlof:(bool *)prevlof;
+// @property (readonly) u32 *noise;
+// - (void)getStableBuffer:(u32 **)ptr nr:(NSInteger *)nr lof:(bool *)lof prevlof:(bool *)prevlof;
 
 @end
 
@@ -632,6 +635,17 @@
 
 @property (readonly) ControlPortInfo info;
 @property (readonly) ControlPortInfo cachedInfo;
+
+@end
+
+
+//
+// Video port
+//
+
+@interface VideoPortProxy : CoreComponentProxy { }
+
+- (void)texture:(u32 **)ptr nr:(NSInteger *)nr lof:(bool *)lof prevlof:(bool *)prevlof;
 
 @end
 

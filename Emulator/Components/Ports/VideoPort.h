@@ -1,0 +1,123 @@
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
+//
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the Mozilla Public License v2
+//
+// See https://mozilla.org/MPL/2.0 for license information
+// -----------------------------------------------------------------------------
+
+#pragma once
+
+#include "VideoPortTypes.h"
+#include "SubComponent.h"
+#include "FrameBuffer.h"
+
+namespace vamiga {
+
+class VideoPort final : public SubComponent {
+
+    Descriptions descriptions = {{
+
+        .name           = "Video",
+        .description    = "Video Port",
+        .shell          = "video"
+    }};
+
+    ConfigOptions options = {
+
+        OPT_VID_WHITE_NOISE
+    };
+
+    // Current configuration
+    VideoPortConfig config = { };
+
+    // Predefined frame buffers
+    mutable FrameBuffer whiteNoise;
+    FrameBuffer blank;
+
+    //  White noise data
+    Buffer <Texel> noise;
+
+
+    //
+    // Methods
+    //
+
+public:
+
+    VideoPort(Amiga &ref);
+    ~VideoPort();
+
+    const Descriptions &getDescriptions() const override { return descriptions; }
+
+    VideoPort& operator= (const VideoPort& other) {
+
+        CLONE(config)
+
+        return *this;
+    }
+
+
+    //
+    // Methods from Serializable
+    //
+
+public:
+
+    template <class T>
+    void serialize(T& worker)
+    {
+        if (isResetter(worker)) return;
+
+        worker
+
+        << config.whiteNoise;
+
+    } SERIALIZERS(serialize);
+
+
+    //
+    // Methods from CoreComponent
+    //
+
+private:
+
+    void _dump(Category category, std::ostream& os) const override;
+
+
+    //
+    // Methods from Configurable
+    //
+
+public:
+
+    const VideoPortConfig &getConfig() const { return config; }
+    const ConfigOptions &getOptions() const override { return options; }
+    i64 getOption(Option opt) const override;
+    void checkOption(Option opt, i64 value) override;
+    void setOption(Option opt, i64 value) override;
+
+
+    //
+    // Getting textures
+    //
+
+public:
+
+    // Returns a pointer to the stable emulator texture
+    const class FrameBuffer &getTexture() const;
+
+    // Returns a pointer to the stable DMA debugger texture
+    // u32 *getDmaTexture() const;
+
+private:
+
+    // Returns a pointer to a white-noise texture
+    // u32 *getNoiseTexture() const;
+
+    // Returns a pointer to a solid blank texture
+    // u32 *getBlankTexture() const;
+};
+
+}

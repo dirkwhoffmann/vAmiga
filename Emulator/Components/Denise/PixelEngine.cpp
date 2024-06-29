@@ -263,7 +263,7 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
 }
 
 const FrameBuffer &
-PixelEngine::getStableBuffer()
+PixelEngine::getStableBuffer() const
 {
     return emuTexture[!activeBuffer];
 }

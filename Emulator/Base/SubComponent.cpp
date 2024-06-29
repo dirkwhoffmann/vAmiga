@@ -54,6 +54,7 @@ retroShell(ref.retroShell),
 rtc(ref.rtc),
 serialPort(ref.serialPort),
 uart(ref.paula.uart),
+videoPort(ref.videoPort),
 zorro(ref.zorro)
 {
 };

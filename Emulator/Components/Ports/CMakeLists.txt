@@ -4,5 +4,6 @@ target_sources(vAmigaCore PRIVATE
 
 ControlPort.cpp
 SerialPort.cpp
+VideoPort.cpp
 
 )

@@ -266,6 +266,24 @@ struct ControlPortAPI : API {
     MouseAPI mouse;
 };
 
+struct VideoPortAPI : API {
+
+    class VideoPort *videoPort = nullptr;
+
+    /// @}
+    /// @name Retrieving video data
+    /// @{
+
+    /** @brief  Returns a pointer to the most recent stable texture
+     *
+     * The texture dimensions are given by constants vc64::Texture::width
+     * and vc64::Texture::height texels. Each texel is represented by a
+     * 32 bit color value.
+     */
+    const class FrameBuffer &getTexture() const;
+
+};
+
 class VAmiga : public API {
 
 public:
@@ -277,6 +295,7 @@ public:
     BlitterAPI blitter;
     GuardsAPI breakpoints;
     CIAAPI ciaA, ciaB;
+    VideoPortAPI videoPort;
     ControlPortAPI controlPort1;
     ControlPortAPI controlPort2;
     CopperAPI copper;

@@ -76,6 +76,10 @@ enum_long(OPT)
     OPT_DMA_DEBUG_COLOR6,
     OPT_DMA_DEBUG_COLOR7,
 
+    // Video port
+    OPT_VID_WHITE_NOISE,        ///< Generate white-noise when switched off
+    ///<
+    ///<
     // CPU
     OPT_CPU_REVISION,
     OPT_CPU_DASM_REVISION,
@@ -239,6 +243,8 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_DMA_DEBUG_COLOR6:          return "DMA.DEBUG_COLOR6";
             case OPT_DMA_DEBUG_COLOR7:          return "DMA.DEBUG_COLOR7";
 
+            case OPT_VID_WHITE_NOISE:           return "VID.WHITE_NOISE";
+
             case OPT_CPU_REVISION:              return "CPU.REVISION";
             case OPT_CPU_DASM_REVISION:         return "CPU.DASM_REVISION";
             case OPT_CPU_DASM_SYNTAX:           return "CPU.DASM_SYNTAX";
@@ -378,6 +384,8 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_DMA_DEBUG_COLOR5:          return "Bitplane color";
             case OPT_DMA_DEBUG_COLOR6:          return "CPU color";
             case OPT_DMA_DEBUG_COLOR7:          return "Memory refresh color";
+
+            case OPT_VID_WHITE_NOISE:           return "White noise";
 
             case OPT_CPU_REVISION:              return "Chip revision";
             case OPT_CPU_DASM_REVISION:         return "Chip revision (disassembler)";

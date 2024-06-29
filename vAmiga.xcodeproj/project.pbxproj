@@ -88,6 +88,8 @@
 		5056507C25459C8800A79D27 /* FSObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056507A25459C8800A79D27 /* FSObjects.cpp */; };
 		5057551025EAFF7900280977 /* Checksum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B3C44725EAFB5500651700 /* Checksum.cpp */; };
 		5057E4C5243DF10A004005EB /* Primitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5057E4C4243DF10A004005EB /* Primitives.swift */; };
+		505A13212C2FE27B00FF8D2C /* VideoPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A131F2C2FE27A00FF8D2C /* VideoPort.cpp */; };
+		505A13222C2FE27B00FF8D2C /* VideoPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A131F2C2FE27A00FF8D2C /* VideoPort.cpp */; };
 		505A215022869FF10016EA21 /* AudioFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A214E22869FF10016EA21 /* AudioFilter.cpp */; };
 		505B331F2B46D25700D3736F /* config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505B331E2B46D0CA00D3736F /* config.cpp */; };
 		505B33202B46D25700D3736F /* config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505B331E2B46D0CA00D3736F /* config.cpp */; };
@@ -601,6 +603,9 @@
 		5056507B25459C8800A79D27 /* FSObjects.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSObjects.h; sourceTree = "<group>"; };
 		5056719327D2377900ECAC0C /* FloppyDriveTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloppyDriveTypes.h; sourceTree = "<group>"; };
 		5057E4C4243DF10A004005EB /* Primitives.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Primitives.swift; sourceTree = "<group>"; };
+		505A131F2C2FE27A00FF8D2C /* VideoPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoPort.cpp; sourceTree = "<group>"; };
+		505A13202C2FE27A00FF8D2C /* VideoPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoPort.h; sourceTree = "<group>"; };
+		505A13232C2FE29600FF8D2C /* VideoPortTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoPortTypes.h; sourceTree = "<group>"; };
 		505A214E22869FF10016EA21 /* AudioFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFilter.cpp; sourceTree = "<group>"; };
 		505A214F22869FF10016EA21 /* AudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilter.h; sourceTree = "<group>"; };
 		505AD259224A67CD0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -1231,6 +1236,9 @@
 			isa = PBXGroup;
 			children = (
 				50CF46222620427600BB3B95 /* CMakeLists.txt */,
+				505A13232C2FE29600FF8D2C /* VideoPortTypes.h */,
+				505A13202C2FE27A00FF8D2C /* VideoPort.h */,
+				505A131F2C2FE27A00FF8D2C /* VideoPort.cpp */,
 				50A61445260CF23D00A01428 /* ControlPortTypes.h */,
 				50A2953E21FF12EF0046BAA0 /* ControlPort.h */,
 				50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */,
@@ -2311,6 +2319,7 @@
 				50F0BD2622AF883C001F4616 /* UART.cpp in Sources */,
 				501C36322C1C17B1000FA274 /* CmdQueue.cpp in Sources */,
 				50357BB6239123B2007E7563 /* Renderer.swift in Sources */,
+				505A13212C2FE27B00FF8D2C /* VideoPort.cpp in Sources */,
 				5078A5D52529E7FA00FCE384 /* Sampler.cpp in Sources */,
 				508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */,
 				5029C6E327CA2F66002F6CCC /* DiskInspector.swift in Sources */,
@@ -2567,6 +2576,7 @@
 				50FC047C27DA12AB00C3E566 /* Checksum.cpp in Sources */,
 				50FC04B127DA199C00C3E566 /* RTC.cpp in Sources */,
 				50FC048227DA190400C3E566 /* MsgQueue.cpp in Sources */,
+				505A13222C2FE27B00FF8D2C /* VideoPort.cpp in Sources */,
 				50FC04F027DA1A4500C3E566 /* RemoteServer.cpp in Sources */,
 				50FC04D427DA19F600C3E566 /* FSBlock.cpp in Sources */,
 				50FC04C127DA19DA00C3E566 /* Snapshot.cpp in Sources */,

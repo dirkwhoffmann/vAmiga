@@ -77,6 +77,8 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_DMA_DEBUG_COLOR6:          return numParser();
         case OPT_DMA_DEBUG_COLOR7:          return numParser();
 
+        case OPT_VID_WHITE_NOISE:           return boolParser();
+            
         case OPT_CPU_REVISION:              return enumParser.template operator()<CPURevisionEnum>();
         case OPT_CPU_DASM_REVISION:         return enumParser.template operator()<DasmRevisionEnum>();
         case OPT_CPU_DASM_SYNTAX:           return enumParser.template operator()<DasmSyntaxEnum>();

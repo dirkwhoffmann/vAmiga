@@ -139,6 +139,9 @@ VAmiga::VAmiga() {
     serialPort.emu = emu;
     serialPort.serialPort = &emu->main.serialPort;
 
+    videoPort.emu = emu;
+    videoPort.videoPort = &emu->main.videoPort;
+    
     watchpoints.emu = emu;
     watchpoints.guards = &emu->main.cpu.debugger.watchpoints;
 }
@@ -453,6 +456,17 @@ void
 RetroShellAPI::setStream(std::ostream &os)
 {
     retroShell->setStream(os);
+}
+
+
+//
+// VideoPortAPI
+//
+
+const class FrameBuffer &
+VideoPortAPI::getTexture() const
+{
+    return videoPort->getTexture();
 }
 
 }

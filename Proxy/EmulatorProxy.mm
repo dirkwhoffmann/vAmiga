@@ -905,6 +905,7 @@ using namespace vamiga::moira;
     return [self denise]->denise->debugger.getSpriteColor(nr, reg);
 }
 
+/*
 - (u32 *)noise
 {
     return (u32 *)([self denise]->denise->pixelEngine.getNoise());
@@ -913,11 +914,13 @@ using namespace vamiga::moira;
 - (void)getStableBuffer:(u32 **)ptr nr:(NSInteger *)nr lof:(bool *)lof prevlof:(bool *)prevlof
 {
     auto &frameBuffer = [self denise]->denise->pixelEngine.getStableBuffer();
+    // auto &frameBuffer = [self denise]->denise->videoPort.getTexture();
     *ptr = frameBuffer.pixels.ptr;
     *nr = NSInteger(frameBuffer.nr);
     *lof = frameBuffer.lof;
     *prevlof = frameBuffer.prevlof;
 }
+*/
 
 
 @end
@@ -1239,6 +1242,29 @@ using namespace vamiga::moira;
 - (ControlPortInfo)cachedInfo
 {
     return [self cp]->controlPort->getCachedInfo();
+}
+
+@end
+
+
+//
+// VideoPort proxy
+//
+
+@implementation VideoPortProxy
+
+- (VideoPortAPI *)port
+{
+    return (VideoPortAPI *)obj;
+}
+
+- (void)texture:(u32 **)ptr nr:(NSInteger *)nr lof:(bool *)lof prevlof:(bool *)prevlof
+{
+    auto &frameBuffer = [self port]->getTexture();
+    *ptr = frameBuffer.pixels.ptr;
+    *nr = NSInteger(frameBuffer.nr);
+    *lof = frameBuffer.lof;
+    *prevlof = frameBuffer.prevlof;
 }
 
 @end
@@ -2884,6 +2910,7 @@ using namespace vamiga::moira;
 @synthesize rtc;
 @synthesize serialPort;
 @synthesize recorder;
+@synthesize videoPort;
 @synthesize watchpoints;
 
 - (instancetype) init
@@ -2927,6 +2954,7 @@ using namespace vamiga::moira;
     recorder = [[RecorderProxy alloc] initWith:&vamiga->recorder];
     remoteManager = [[RemoteManagerProxy alloc] initWith:&vamiga->remoteManager];
     serialPort = [[SerialPortProxy alloc] initWith:&vamiga->serialPort];
+    videoPort = [[VideoPortProxy alloc] initWith:&vamiga->videoPort];
     watchpoints = [[GuardsProxy alloc] initWith:&vamiga->watchpoints];
 
     return self;

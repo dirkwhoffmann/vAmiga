@@ -38,7 +38,9 @@ Amiga::build()
 
 Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)
 {
-    /* The order of subcomponents is important here, because some components
+    /* UPDATE: THE ORDER SHOULD NO LONGER BE IMPORTANT. TODO: CHECK THIS!
+     *
+     * The order of subcomponents is important here, because some components
      * are dependend on others during initialization. I.e.,
      *
      * - The control ports, the serial Controller, the disk controller, and the
@@ -54,6 +56,7 @@ Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)
     subComponents = std::vector<CoreComponent *> {
 
         &agnus,
+        &videoPort,
         &rtc,
         &denise,
         &paula,

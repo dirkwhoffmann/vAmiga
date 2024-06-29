@@ -47,13 +47,16 @@ Defaults::Defaults()
 
     setFallback(OPT_AGNUS_REVISION,             AGNUS_ECS_1MB);
     setFallback(OPT_AGNUS_PTR_DROPS,            true);
+    
     setFallback(OPT_DENISE_REVISION,            DENISE_OCS);
     setFallback(OPT_DENISE_VIEWPORT_TRACKING,   true);
     setFallback(OPT_DENISE_FRAME_SKIPPING,      16);
+
     setFallback(OPT_MON_PALETTE,                PALETTE_COLOR);
     setFallback(OPT_MON_BRIGHTNESS,             50);
     setFallback(OPT_MON_CONTRAST,               100);
     setFallback(OPT_MON_SATURATION,             50);
+
     setFallback(OPT_DMA_DEBUG_ENABLE,           false);
     setFallback(OPT_DMA_DEBUG_MODE,             DMA_DISPLAY_MODE_FG_LAYER);
     setFallback(OPT_DMA_DEBUG_OPACITY,          50);
@@ -73,12 +76,17 @@ Defaults::Defaults()
     setFallback(OPT_DMA_DEBUG_COLOR5,           0x00FFFF00);
     setFallback(OPT_DMA_DEBUG_COLOR6,           0xFFFFFF00);
     setFallback(OPT_DMA_DEBUG_COLOR7,           0xFF000000);
+
+    setFallback(OPT_VID_WHITE_NOISE,            true);
+
     setFallback(OPT_CPU_REVISION,               CPU_68000);
     setFallback(OPT_CPU_DASM_REVISION,          CPU_68000);
     setFallback(OPT_CPU_DASM_SYNTAX,            DASM_SYNTAX_MOIRA);
     setFallback(OPT_CPU_OVERCLOCKING,           0);
     setFallback(OPT_CPU_RESET_VAL,              0);
+
     setFallback(OPT_RTC_MODEL,                  RTC_OKI);
+
     setFallback(OPT_MEM_CHIP_RAM,               512);
     setFallback(OPT_MEM_SLOW_RAM,               512);
     setFallback(OPT_MEM_FAST_RAM,               0);
@@ -89,9 +97,11 @@ Defaults::Defaults()
     setFallback(OPT_MEM_BANKMAP,                BANK_MAP_A500);
     setFallback(OPT_MEM_UNMAPPING_TYPE,         RAM_INIT_ALL_ZEROES);
     setFallback(OPT_MEM_RAM_INIT_PATTERN,       UNMAPPED_FLOATING);
+
     setFallback(OPT_DC_SPEED,                   1);
     setFallback(OPT_DC_LOCK_DSKSYNC,            false);
     setFallback(OPT_DC_AUTO_DSKSYNC,            false);
+
     setFallback(OPT_DRIVE_CONNECT,              true,                   { 0 });
     setFallback(OPT_DRIVE_CONNECT,              false,                  { 1, 2, 3 });
     setFallback(OPT_DRIVE_TYPE,                 DRIVE_DD_35,            { 0, 1, 2, 3 });
@@ -110,8 +120,10 @@ Defaults::Defaults()
     setFallback(OPT_HDR_PAN,                    300,                    { 0, 2 });
     setFallback(OPT_HDR_PAN,                    100,                    { 1, 3 });
     setFallback(OPT_HDR_STEP_VOLUME,            50,                     { 0, 1, 2, 3 });
+
     setFallback(OPT_SER_DEVICE,                 SPD_NONE);
     setFallback(OPT_SER_VERBOSE,                0);
+
     setFallback(OPT_DENISE_HIDDEN_BITPLANES,    0);
     setFallback(OPT_DENISE_HIDDEN_SPRITES,      0);
     setFallback(OPT_DENISE_HIDDEN_LAYERS,       0);
@@ -119,18 +131,24 @@ Defaults::Defaults()
     setFallback(OPT_DENISE_CLX_SPR_SPR,         false);
     setFallback(OPT_DENISE_CLX_SPR_PLF,         false);
     setFallback(OPT_DENISE_CLX_PLF_PLF,         false);
+
     setFallback(OPT_BLITTER_ACCURACY,           2);
+
     setFallback(OPT_CIA_REVISION,               CIA_MOS_8520_DIP,       { 0, 1} );
     setFallback(OPT_CIA_TODBUG,                 true,                   { 0, 1} );
     setFallback(OPT_CIA_ECLOCK_SYNCING,         true,                   { 0, 1} );
     setFallback(OPT_CIA_IDLE_SLEEP,             true,                   { 0, 1} );
+
     setFallback(OPT_KBD_ACCURACY,               true);
+
     setFallback(OPT_MOUSE_PULLUP_RESISTORS,     true,                   { 0, 1} );
     setFallback(OPT_MOUSE_SHAKE_DETECTION,      true,                   { 0, 1} );
     setFallback(OPT_MOUSE_VELOCITY,             100,                    { 0, 1} );
+
     setFallback(OPT_JOY_AUTOFIRE,               false,                  { 0, 1} );
     setFallback(OPT_JOY_AUTOFIRE_BULLETS,       -3,                     { 0, 1} );
     setFallback(OPT_JOY_AUTOFIRE_DELAY,         125,                    { 0, 1} );
+
     setFallback(OPT_AUD_SAMPLING_METHOD,        SMP_NONE,               { 0, 1} );
     setFallback(OPT_AUD_FILTER_TYPE,            FILTER_A500,            { 0, 1} );
     setFallback(OPT_AUD_PAN0,                   50,                     { 0, 1} );
@@ -144,7 +162,9 @@ Defaults::Defaults()
     setFallback(OPT_AUD_VOLL,                   50,                     { 0, 1} );
     setFallback(OPT_AUD_VOLR,                   50,                     { 0, 1} );
     setFallback(OPT_AUD_FASTPATH,               true,                   { 0, 1} );
+
     setFallback(OPT_DIAG_BOARD,                 false);
+
     setFallback(OPT_SRV_PORT,                   8080,                   { SERVER_SER });
     setFallback(OPT_SRV_PROTOCOL,               SRVPROT_DEFAULT,        { SERVER_SER });
     setFallback(OPT_SRV_AUTORUN,                false,                  { SERVER_SER });

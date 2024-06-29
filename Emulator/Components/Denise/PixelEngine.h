@@ -218,7 +218,7 @@ public:
 
     // Returns the working buffer or the stable buffer
     FrameBuffer &getWorkingBuffer();
-    const FrameBuffer &getStableBuffer();
+    const FrameBuffer &getStableBuffer() const;
 
     // Return a pointer into the pixel storage
     Texel *workingPtr(isize row = 0, isize col = 0);
