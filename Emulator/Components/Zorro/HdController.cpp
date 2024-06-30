@@ -18,7 +18,7 @@
 
 namespace vamiga {
 
-HdController::HdController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref), drive(hdr)
+HdController::HdController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref, hdr.objid), drive(hdr)
 {
 
 }

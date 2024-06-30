@@ -104,6 +104,8 @@ public:
 public: // private
 
     // Returns the target component for an option
+    Configurable *routeOption(Option opt, isize objid);
+    const Configurable *routeOption(Option opt, isize objid) const;
     std::vector<Configurable *> routeOption(Option opt);
     std::vector<const Configurable *> routeOption(Option opt) const;
 

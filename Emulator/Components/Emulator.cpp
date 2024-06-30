@@ -177,12 +177,9 @@ Emulator::put(const Cmd &cmd)
 i64
 Emulator::get(Option opt, isize id) const
 {
-    auto targets = routeOption(opt);
-    
-    if (usize(id) >= targets.size()) {
-        throw Error(ERROR_OPT_INV_ID, "0..." + std::to_string(targets.size() - 1));
-    }
-    return targets.at(id)->getOption(opt);
+    auto target = routeOption(opt, id);
+    if (target == nullptr) throw Error(ERROR_OPT_INV_ID);
+    return target->getOption(opt);
 }
 
 void
@@ -313,15 +310,24 @@ Emulator::set(ConfigScheme scheme)
     }
 }
 
-std::vector<const Configurable *>
-Emulator::routeOption(Option opt) const
+Configurable *
+Emulator::routeOption(Option opt, isize objid)
 {
-    std::vector<const Configurable *> result;
+    // Check global components
+    if (host.isValidOption(opt) && objid == host.objid) return &host;
 
-    for (const auto &target : const_cast<Emulator *>(this)->routeOption(opt)) {
-        result.push_back(const_cast<const Configurable *>(target));
-    }
+    // Check components of the main instance
+    Configurable *result = main.routeOption(opt, objid);
+
+    assert(result != nullptr);
     return result;
+}
+
+const Configurable *
+Emulator::routeOption(Option opt, isize objid) const
+{
+    auto result = const_cast<Emulator *>(this)->routeOption(opt, objid);
+    return const_cast<const Configurable *>(result);
 }
 
 std::vector<Configurable *>
@@ -336,6 +342,17 @@ Emulator::routeOption(Option opt)
     main.routeOption(opt, result);
 
     assert(!result.empty());
+    return result;
+}
+
+std::vector<const Configurable *>
+Emulator::routeOption(Option opt) const
+{
+    std::vector<const Configurable *> result;
+
+    for (const auto &target : const_cast<Emulator *>(this)->routeOption(opt)) {
+        result.push_back(const_cast<const Configurable *>(target));
+    }
     return result;
 }
 
