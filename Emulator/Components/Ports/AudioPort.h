@@ -15,6 +15,7 @@
 #include "AudioFilter.h"
 #include "Chrono.h"
 #include "Sampler.h"
+#include "Animated.h"
 
 namespace vamiga {
 
@@ -86,14 +87,16 @@ class AudioPort : public SubComponent {
     // Time stamp of the last write pointer alignment
     util::Time lastAlignment;
 
-    // Volume scaling factors
-    float vol[4];
-    float volL;
-    float volR;
+    // Channel volumes
+    float vol[4] = { };
 
     // Panning factors
-    float pan[4];
-    
+    float pan[4] ={ };
+
+    // Master volumes (fadable)
+    util::Animated<float> volL;
+    util::Animated<float> volR;
+
     
     //
     // Subcomponents
@@ -150,8 +153,8 @@ private:
         << config.volR
         << pan
         << vol
-        << volL
-        << volR;
+        << volL.maximum
+        << volR.maximum;
 
     } SERIALIZERS(serialize);
 

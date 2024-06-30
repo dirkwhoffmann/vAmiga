@@ -606,6 +606,7 @@
 		505A131F2C2FE27A00FF8D2C /* VideoPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VideoPort.cpp; sourceTree = "<group>"; };
 		505A13202C2FE27A00FF8D2C /* VideoPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoPort.h; sourceTree = "<group>"; };
 		505A13232C2FE29600FF8D2C /* VideoPortTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoPortTypes.h; sourceTree = "<group>"; };
+		505A13282C313BB700FF8D2C /* Animated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Animated.h; sourceTree = "<group>"; };
 		505A214E22869FF10016EA21 /* AudioFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFilter.cpp; sourceTree = "<group>"; };
 		505A214F22869FF10016EA21 /* AudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilter.h; sourceTree = "<group>"; };
 		505AD259224A67CD0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -1778,6 +1779,7 @@
 				50C8C42C2605D51A00F4E012 /* Types.h */,
 				50104E8525ECD0EF0047A9AA /* Macros.h */,
 				50CA602E260E02B700C4A22C /* Reflection.h */,
+				505A13282C313BB700FF8D2C /* Animated.h */,
 				50FC046727DA02FD00C3E566 /* Buffer.h */,
 				50FC046627DA02FD00C3E566 /* Buffer.cpp */,
 				507215A525EA9DD900787591 /* RingBuffer.h */,
