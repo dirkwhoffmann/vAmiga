@@ -13,6 +13,7 @@
 #include "CoreObject.h"
 #include "Concurrency.h"
 #include "RingBuffer.h"
+#include "Synchronizable.h"
 
 namespace vamiga {
 
@@ -42,18 +43,18 @@ struct FloatStereo
 // AudioStream
 //
 
-class AudioStream : public CoreObject, public util::RingBuffer <FloatStereo, 16384> {
+class AudioStream : public CoreObject, public Synchronizable, public util::RingBuffer <FloatStereo, 16384> {
 
     // Mutex for synchronizing read / write accesses
-    util::ReentrantMutex mutex;
+    // util::ReentrantMutex mutex;
 
 public:
     
     const char *objectName() const override { return "AudioStream"; }
 
     // Locks or unlocks the mutex
-    void lock() { mutex.lock(); }
-    void unlock() { mutex.unlock(); }
+    // void lock() { mutex.lock(); }
+    // void unlock() { mutex.unlock(); }
 
     // Initializes the ring buffer with zeroes
     void wipeOut();

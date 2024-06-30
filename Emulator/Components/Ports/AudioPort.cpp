@@ -119,7 +119,7 @@ AudioPort::clear()
     // Wipe out the ringbuffer
     stream.wipeOut();
     stream.alignWritePtr();
-    
+
     // Wipe out the filter buffers
     filter.clear();
 }
@@ -301,8 +301,8 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
     float vol3 = vol[3]; float pan3 = pan[3];
     bool fading = volL.isFading() || volR.isFading();
 
-    stream.lock();
-    
+    stream.mutex.lock();
+
     // Check for a buffer overflow
     if (stream.count() + count >= stream.cap()) handleBufferOverflow();
 
@@ -368,7 +368,7 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
 
     stats.producedSamples += count;
 
-    stream.unlock();
+    stream.mutex.unlock();
 }
 
 void

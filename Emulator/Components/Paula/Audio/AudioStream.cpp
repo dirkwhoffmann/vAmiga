@@ -16,115 +16,115 @@ namespace vamiga {
 void
 AudioStream::wipeOut()
 {
-    lock();
-    clear(FloatStereo(0,0));
-    unlock();
+    {   SYNCHRONIZED
+
+        clear(FloatStereo(0,0));
+    }
 }
 
 void
 AudioStream::fadeOut()
 {
-    lock();
+    {   SYNCHRONIZED
 
-    debug(AUDVOL_DEBUG, "Fading out (%ld samples)...\n", count());
+        debug(AUDVOL_DEBUG, "Fading out (%ld samples)...\n", count());
 
-    float scale = 1.0f;
-    float delta = 1.0f / count();
+        float scale = 1.0f;
+        float delta = 1.0f / count();
 
-    // Rescale the existing samples
-    for (isize i = begin(); i != end(); i = next(i)) {
+        // Rescale the existing samples
+        for (isize i = begin(); i != end(); i = next(i)) {
 
-        scale -= delta;
-        assert(scale >= -0.1 && scale < 1.0);
+            scale -= delta;
+            assert(scale >= -0.1 && scale < 1.0);
 
-        elements[i].l *= scale;
-        elements[i].r *= scale;
+            elements[i].l *= scale;
+            elements[i].r *= scale;
+        }
+
+        // Wipe out the rest of the buffer
+        for (isize i = end(); i != begin(); i = next(i)) {
+
+            elements[i] = { 0, 0 };
+        }
     }
-
-    // Wipe out the rest of the buffer
-    for (isize i = end(); i != begin(); i = next(i)) {
-
-        elements[i] = { 0, 0 };
-    }
-
-    unlock();
 }
 
 void
 AudioStream::alignWritePtr()
 {
-    lock();
-    align(cap() / 2);
-    unlock();
+    {   SYNCHRONIZED
+
+        align(cap() / 2);
+    }
 }
 
 isize
 AudioStream::copyMono(float *buffer, isize n)
 {
-    lock();
+    {   SYNCHRONIZED
 
-    // If a buffer underflow occurs ...
-    if (auto cnt = count(); cnt < n) {
+        // If a buffer underflow occurs ...
+        if (auto cnt = count(); cnt < n) {
 
-        // ... copy all we have while stepwise lowering the volume ...
-        for (isize i = 0; i < cnt; i++) {
+            // ... copy all we have while stepwise lowering the volume ...
+            for (isize i = 0; i < cnt; i++) {
 
-            auto pair = read();
-            *buffer++ = (pair.l + pair.r) * float(cnt - i) / float(cnt);
+                auto pair = read();
+                *buffer++ = (pair.l + pair.r) * float(cnt - i) / float(cnt);
+            }
+            assert(isEmpty());
+
+            // ... and fill the rest with zeroes.
+            for (isize i = cnt; i < n; i++) *buffer++ = 0;
+
+            return cnt;
         }
-        assert(isEmpty());
 
-        // ... and fill the rest with zeroes.
-        for (isize i = cnt; i < n; i++) *buffer++ = 0;
+        // The standard case: The buffer contains enough samples
+        for (isize i = 0; i < n; i++) {
 
-        unlock();
-        return cnt;
+            auto sample = read();
+            buffer[i] = 0.5f * (sample.l + sample.r);
+        }
+
+        return n;
     }
-
-    // The standard case: The buffer contains enough samples
-    for (isize i = 0; i < n; i++) {
-
-        auto sample = read();
-        buffer[i] = 0.5f * (sample.l + sample.r);
-    }
-    unlock();
-    return n;
 }
 
 isize
 AudioStream::copyStereo(float *left, float *right, isize n)
 {
-    lock();
+    {   SYNCHRONIZED
 
-    // If a buffer underflow occurs ...
-    if (auto cnt = count(); cnt < n) {
+        // If a buffer underflow occurs ...
+        if (auto cnt = count(); cnt < n) {
 
-        // ... copy all we have while stepwise lowering the volume ...
-        for (isize i = 0; i < cnt; i++) {
+            // ... copy all we have while stepwise lowering the volume ...
+            for (isize i = 0; i < cnt; i++) {
 
-            auto pair = read();
-            *left++ = pair.l * float(cnt - i) / float(cnt);
-            *right++ = pair.r * float(cnt - i) / float(cnt);
+                auto pair = read();
+                *left++ = pair.l * float(cnt - i) / float(cnt);
+                *right++ = pair.r * float(cnt - i) / float(cnt);
+            }
+            assert(isEmpty());
+
+            // ... and fill the rest with zeroes.
+            for (isize i = cnt; i < n; i++) *left++ = *right++ = 0;
+
+            return cnt;
         }
-        assert(isEmpty());
 
-        // ... and fill the rest with zeroes.
-        for (isize i = cnt; i < n; i++) *left++ = *right++ = 0;
+        // The standard case: The buffer contains enough samples
+        for (isize i = 0; i < n; i++) {
 
-        unlock();
-        return cnt;
+            auto sample = read();
+            left[i] = sample.l;
+            right[i] = sample.r;
+        }
+
+        return n;
     }
-
-    // The standard case: The buffer contains enough samples
-    for (isize i = 0; i < n; i++) {
-
-        auto sample = read();
-        left[i] = sample.l;
-        right[i] = sample.r;
-    }
-
-    unlock();
-    return n;
 }
 
 float
