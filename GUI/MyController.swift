@@ -65,7 +65,7 @@ class MyController: NSWindowController, MessageReceiver {
     // Speedometer to measure clock frequence and frames per second
     var speedometer: Speedometer!
 
-    // Remembers if audio is muted (master volume of both channels is 0)
+    // Remembers if audio is muted
     var muted = false
     
     // Indicates if a status bar is shown

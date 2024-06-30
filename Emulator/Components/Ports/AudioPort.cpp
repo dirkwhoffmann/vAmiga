@@ -173,7 +173,6 @@ AudioPort::getOption(Option option) const
 void
 AudioPort::setOption(Option option, i64 value)
 {
-    bool wasMuted = isMuted();
     isize channel = 0;
 
     switch (option) {
@@ -201,18 +200,12 @@ AudioPort::setOption(Option option, i64 value)
             
             config.volL = std::clamp(value, 0LL, 100LL);
             volL = float(pow(value / 50.0, 1.4));
-
-            if (wasMuted != isMuted())
-                msgQueue.put(MSG_MUTE, isMuted());
             return;
             
         case OPT_AUD_VOLR:
 
             config.volR = std::clamp(value, 0LL, 100LL);
             volR = float(pow(value / 50.0, 1.4));
-
-            if (wasMuted != isMuted())
-                msgQueue.put(MSG_MUTE, isMuted());
             return;
 
         case OPT_AUD_PAN3: channel++;
@@ -331,6 +324,22 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
 
     // Check for a buffer overflow
     if (stream.count() + count >= stream.cap()) handleBufferOverflow();
+
+    // Take a shortcut if the volume is zero
+    if (!fading && (volL + volR == 0.0 || vol0 + vol1 + vol2 + vol3 == 0.0)) {
+
+        for (isize i = 0; i < count; i++) {
+            stream.write( SamplePair { 0, 0 } );
+        }
+
+        if (!muted) { muted = true; msgQueue.put(MSG_MUTE, true); }
+        stream.mutex.unlock();
+        return;
+
+    } else {
+
+        if (muted) { muted = false; msgQueue.put(MSG_MUTE, false); }
+    }
 
     // Check if we need to interpolate samples (audio is playing)
     if (sampler[0].isActive() || sampler[1].isActive() ||

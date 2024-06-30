@@ -100,7 +100,10 @@ class AudioPort : public SubComponent {
     util::Animated<float> volL;
     util::Animated<float> volR;
 
-    
+    // Used to determine if a MSG_MUTE should be send
+    bool muted = false;
+
+
     //
     // Subcomponents
     //
