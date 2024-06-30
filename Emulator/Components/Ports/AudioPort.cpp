@@ -292,8 +292,11 @@ AudioPort::synthesize(Cycle clock, Cycle target)
                                 (float)volL, volL.maximum, (float)volR, volR.maximum);
     */
 
+    // Determine the current sample rate
+    double rate = double(emulator.host.getOption(OPT_HOST_SAMPLE_RATE)) + sampleRateCorrection;
+
     // Determine the number of elapsed cycles per audio sample
-    double cps = double(amiga.masterClockFrequency()) / double(emulator.host.getOption(OPT_HOST_SAMPLE_RATE));
+    double cps = double(amiga.masterClockFrequency()) / rate;
 
     // Determine how many samples we need to produce
     double exact = (double)(target - clock) / cps + fraction;
@@ -410,6 +413,7 @@ AudioPort::handleBufferUnderflow()
     debug(AUDBUF_DEBUG, "UNDERFLOW (r: %ld w: %ld)\n", stream.r, stream.w);
     
     // Reset the write pointer
+    stream.clear(SamplePair{0,0});
     stream.alignWritePtr();
 
     // Determine the elapsed seconds since the last pointer adjustment
@@ -419,13 +423,12 @@ AudioPort::handleBufferUnderflow()
     // Adjust the sample rate, if condition (1) holds
     if (elapsedTime.asSeconds() > 10.0) {
 
-        stats.bufferUnderflows++;
-        
         // Increase the sample rate based on what we've measured
-        /*
-        auto offPerSec = (stream.cap() / 2) / elapsedTime.asSeconds();
-        setSampleRate(host.getSampleRate() + (isize)offPerSec);
-        */
+        sampleRateCorrection += (stream.cap() / 2) / elapsedTime.asSeconds();
+
+        stats.bufferUnderflows++;
+        warn("Last underflow: %f seconds ago\n", elapsedTime.asSeconds());
+        warn("New sample rate correction: %f\n", sampleRateCorrection);
     }
 }
 
@@ -449,13 +452,12 @@ AudioPort::handleBufferOverflow()
     // Adjust the sample rate, if condition (1) holds
     if (elapsedTime.asSeconds() > 10.0) {
         
-        stats.bufferOverflows++;
-        
         // Decrease the sample rate based on what we've measured
-        /*
-        auto offPerSec = (stream.cap() / 2) / elapsedTime.asSeconds();
-        setSampleRate(host.getSampleRate() - (isize)offPerSec);
-        */
+        sampleRateCorrection -= (stream.cap() / 2) / elapsedTime.asSeconds();
+
+        stats.bufferOverflows++;
+        warn("Last overflow: %f seconds ago\n", elapsedTime.asSeconds());
+        warn("New sample rate correction: %f\n", sampleRateCorrection);
     }
 }
 
@@ -483,6 +485,19 @@ AudioPort::copyStereo(float *buffer1, float *buffer2, isize n)
 {
     // Copy sound samples
     auto cnt = stream.copyStereo(buffer1, buffer2, n);
+    stats.consumedSamples += cnt;
+
+    // Check for a buffer underflow
+    if (cnt < n) handleBufferUnderflow();
+
+    return n;
+}
+
+isize
+AudioPort::copyInterleaved(float *buffer, isize n)
+{
+    // Copy sound samples
+    auto cnt = stream.copyInterleaved(buffer, n);
     stats.consumedSamples += cnt;
 
     // Check for a buffer underflow

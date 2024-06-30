@@ -91,26 +91,6 @@ public:
     void setOption(Option opt, i64 value) override;
 
 
-
-
-
-    //
-    // Accessing properties
-    //
-
-    /*
-public:
-
-    double getSampleRate() const { return sampleRate; }
-    void setSampleRate(double hz);
-
-    double getHostRefreshRate() const { return refreshRate; }
-    void setHostRefreshRate(double fps);
-
-    std::pair<isize, isize> getFrameBufferSize() const;
-    void setFrameBufferSize(std::pair<isize, isize> size);
-    */
-
     //
     // Working with temporary files and folders
     //

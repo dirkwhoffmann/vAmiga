@@ -66,6 +66,7 @@ public:
      */
     isize copyMono(float *buffer, isize n);
     isize copyStereo(float *left, float *right, isize n);
+    isize copyInterleaved(float *buffer, isize n);
 
     
     //

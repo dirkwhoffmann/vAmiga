@@ -224,6 +224,9 @@ public:
     // Entry point for the core emulator
     void synthesize(Cycle clock, Cycle target);
 
+    // Returns the sample rate adjustment
+    double getSampleRateCorrection() { return sampleRateCorrection; }
+
 private:
 
     template <SamplingMethod method>
@@ -267,7 +270,8 @@ public:
      * returns the number of copied samples.
      */
     isize copyMono(float *buffer, isize n);
-    isize copyStereo(float *buffer1, float *buffer2, isize n);
+    isize copyStereo(float *left, float *right, isize n);
+    isize copyInterleaved(float *buffer, isize n);
 };
 
 }
