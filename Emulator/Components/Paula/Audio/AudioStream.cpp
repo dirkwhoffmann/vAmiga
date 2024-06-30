@@ -67,7 +67,7 @@ AudioStream::copy(float *buffer, isize n)
     for (isize i = 0; i < n; i++) {
 
         auto sample = read();
-        sample.copy(buffer, i);
+        buffer[i] = 0.5f * (sample.l + sample.r);
     }
     return;
 }
@@ -81,7 +81,8 @@ AudioStream::copy(float *buffer1, float *buffer2, isize n)
     for (isize i = 0; i < n; i++) {
 
         auto sample = read();
-        sample.copy(buffer1, buffer2, i);
+        buffer1[i] = sample.l;
+        buffer2[i] = sample.r;
     }
 }
 
@@ -102,7 +103,7 @@ AudioStream::draw(u32 *buffer, isize width, isize height,
         
         // Read samples from ringbuffer
         auto pair = current(w * dw);
-        float sample = pair.magnitude(left);
+        float sample = left ? std::abs(pair.l) : std::abs(pair.r);
         
         if (sample == 0) {
             

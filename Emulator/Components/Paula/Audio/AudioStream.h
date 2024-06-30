@@ -28,56 +28,6 @@ namespace vamiga {
  * to lock() and followed by a call to unlock().
 */
 
-//
-// Sample types
-//
-
-// Integer mono stream
-struct U16Mono
-{
-    i16 lr;
-    
-    U16Mono() : lr(0) { }
-    U16Mono(float l, float r) : lr ((i16)(l + r)) { }
-    
-    float magnitude(bool left) { return (float)abs(lr); }
-    
-    void modulate(float vol) { lr = (i16)(lr * vol); }
-    
-    void copy(void *buffer, isize offset) {
-        ((i16 *)buffer)[offset] = lr;
-    }
-    
-    void copy(void *left, void *right, isize offset) {
-        ((i16 *)left)[offset] = lr;
-        ((i16 *)right)[offset] = lr;
-    }
-};
-
-// Integer stereo stream
-struct U16Stereo
-{
-    i16 l;
-    i16 r;
-    
-    U16Stereo() : l(0), r(0) { }
-    U16Stereo(float l, float r) : l((i16)l), r((i16)r) { }
-    
-    float magnitude(bool left) { return left ? (float)abs(l) : (float)abs(r); }
-    
-    void modulate(float vol) { l = (i16)(l * vol); r = (i16)(r * vol); }
-    
-    void copy(void *buffer, isize offset) {
-        ((U16Stereo *)buffer)[offset] = *this;
-    }
-    
-    void copy(void *left, void *right, isize offset) {
-        ((i16 *)left)[offset] = l;
-        ((i16 *)right)[offset] = r;
-    }
-};
-
-// Floating-point stereo stream
 struct FloatStereo
 {
     float l;
@@ -85,19 +35,6 @@ struct FloatStereo
     
     FloatStereo() : l(0.0f), r(0.0f) { }
     FloatStereo(float l, float r) : l(l * AUD_SCALE), r(r * AUD_SCALE) { }
-    
-    float magnitude(bool left) { return left ? abs(l) : abs(r); }
-    
-    void modulate(float vol) { l *= vol; r *= vol; }
-    
-    void copy(void *buffer, isize offset) {
-        ((FloatStereo *)buffer)[offset] = *this;
-    }
-    
-    void copy(void *left, void *right, isize offset) {
-        ((float *)left)[offset] = l;
-        ((float *)right)[offset] = r;
-    }
 };
 
 
