@@ -105,7 +105,7 @@ struct FloatStereo
 // AudioStream
 //
 
-template <class T> class AudioStream : public CoreObject, public util::RingBuffer <T, 16384> {
+class AudioStream : public CoreObject, public util::RingBuffer <FloatStereo, 16384> {
 
     // Mutex for synchronizing read / write accesses
     util::ReentrantMutex mutex;
@@ -125,8 +125,8 @@ public:
     void fadeOut();
 
     // Adds a sample to the ring buffer
-    void add(const T &lr) { this->write(lr); }
-    void add(float l, float r) { this->write(T(l,r)); }
+    void add(const FloatStereo &lr) { this->write(lr); }
+    void add(float l, float r) { this->write(FloatStereo(l,r)); }
 
     // Puts the write pointer somewhat ahead of the read pointer
     void alignWritePtr();

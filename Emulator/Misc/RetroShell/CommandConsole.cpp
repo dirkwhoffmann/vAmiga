@@ -242,7 +242,7 @@ CommandConsole::initCommands(Command &root)
         }
     }
 
-    {   VAMIGA_GROUP("Controlling components")
+    {   VAMIGA_GROUP("Components")
 
         //
         // Amiga
@@ -454,6 +454,7 @@ CommandConsole::initCommands(Command &root)
 
         {   VAMIGA_GROUP("")
 
+            /*
             root.add({cmd, "audio"},
                      "Audio unit");
 
@@ -474,6 +475,7 @@ CommandConsole::initCommands(Command &root)
             });
 
             initSetters(root, paula.audioPort.filter);
+            */
 
             root.add({cmd, "dc"},
                      "Disk controller");
@@ -557,13 +559,56 @@ CommandConsole::initCommands(Command &root)
         }
     }
 
-    {   VAMIGA_GROUP("Controlling peripherals")
+    {   VAMIGA_GROUP("Ports")
+
+        //
+        // Audio port
+        //
+
+        auto cmd = paula.audioPort.shellName();
+        auto description = paula.audioPort.description();
+        root.add({cmd}, description);
+
+        {   VAMIGA_GROUP("")
+
+            root.add({cmd, ""},
+                     "Displays the current configuration",
+                     [this](Arguments& argv, long value) {
+
+                dump(paula.audioPort, Category::Config);
+            });
+
+            initSetters(root, paula.audioPort);
+        }
+
+        //
+        // Video port
+        //
+
+        cmd = videoPort.shellName();
+        description = videoPort.description();
+        root.add({cmd}, description);
+
+        {   VAMIGA_GROUP("")
+
+            root.add({cmd, ""},
+                     "Displays the current configuration",
+                     [this](Arguments& argv, long value) {
+
+                dump(videoPort, Category::Config);
+            });
+
+            initSetters(root, videoPort);
+        }
+    }
+
+    {   VAMIGA_GROUP("Peripherals")
 
         //
         // Monitor
         //
 
-        root.add({"monitor"},       "Amiga monitor");
+        root.add({"monitor"}, "Amiga monitor");
 
         {   VAMIGA_GROUP("")
 

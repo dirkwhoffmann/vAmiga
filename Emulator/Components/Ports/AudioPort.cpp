@@ -236,9 +236,8 @@ void
 AudioPort::fadeOut()
 {
     stream.fadeOut();
-
-    volL = 0;
-    volR = 0;
+    volL.current = 0;
+    volR.current = 0;
 }
 
 void
@@ -265,6 +264,12 @@ void
 AudioPort::synthesize(Cycle clock, Cycle target)
 {
     assert(target > clock);
+
+    /*
+    static int cnt = 0;
+    if (cnt++ % 15 == 0) printf("Volume: L: %f (%f) R:%f (%f)\n",
+                                (float)volL, volL.maximum, (float)volR, volR.maximum);
+    */
 
     // Determine the number of elapsed cycles per audio sample
     double cps = double(amiga.masterClockFrequency()) / double(emulator.host.getOption(OPT_HOST_SAMPLE_RATE));
@@ -357,7 +362,7 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
     } else {
 
         // Fast path: Repeat the most recent sample
-        auto latest = stream.isEmpty() ? SAMPLE_T() : stream.latest();
+        auto latest = stream.isEmpty() ? FloatStereo() : stream.latest();
         for (isize i = 0; i < count; i++) {
             stream.add(latest);
         }
@@ -468,13 +473,13 @@ AudioPort::copy(float *buffer1, float *buffer2, isize n)
     return n;
 }
 
-SAMPLE_T *
+FloatStereo *
 AudioPort::nocopy(isize n)
 {
     stream.lock();
     
     if (stream.count() < n) handleBufferUnderflow();
-    SAMPLE_T *addr = stream.currentAddr();
+    FloatStereo *addr = stream.currentAddr();
     stream.skip(n);
     stats.consumedSamples += n;
 

@@ -13,81 +13,83 @@
 
 namespace vamiga {
 
-template <class T> void
-AudioStream<T>::wipeOut()
+void
+AudioStream::wipeOut()
 {
     lock();
-    this->clear(T(0,0));
+    clear(FloatStereo(0,0));
     unlock();
 }
 
-template <class T> void
-AudioStream<T>::fadeOut()
+void
+AudioStream::fadeOut()
 {
     lock();
 
-    debug(AUDVOL_DEBUG, "Fading out (%ld samples)...\n", this->count());
+    debug(AUDVOL_DEBUG, "Fading out (%ld samples)...\n", count());
 
     float scale = 1.0f;
-    float delta = 1.0f / this->count();
+    float delta = 1.0f / count();
 
     // Rescale the existing samples
-    for (isize i = this->begin(); i != this->end(); i = this->next(i)) {
+    for (isize i = begin(); i != end(); i = next(i)) {
 
         scale -= delta;
         assert(scale >= -0.1 && scale < 1.0);
 
-        this->elements[i].l *= scale;
-        this->elements[i].r *= scale;
+        elements[i].l *= scale;
+        elements[i].r *= scale;
     }
 
     // Wipe out the rest of the buffer
-    for (isize i = this->end(); i != this->begin(); i = this->next(i)) {
+    for (isize i = end(); i != begin(); i = next(i)) {
 
-        this->elements[i] = { 0, 0 };
+        elements[i] = { 0, 0 };
     }
 
     unlock();
 }
 
-template <class T> void
-AudioStream<T>::alignWritePtr()
+void
+AudioStream::alignWritePtr()
 {
     lock();
-    this->align(this->cap() / 2);
+    align(cap() / 2);
     unlock();
 }
 
-template <class T> void
-AudioStream<T>::copy(float *buffer, isize n)
+void
+AudioStream::copy(float *buffer, isize n)
 {
     // The caller has to ensure that no buffer underflows occurs
-    assert(this->count() >= n);
+    assert(count() >= n);
 
     for (isize i = 0; i < n; i++) {
-        T sample = this->read();
+
+        auto sample = read();
         sample.copy(buffer, i);
     }
     return;
 }
 
-template <class T> void
-AudioStream<T>::copy(float *buffer1, float *buffer2, isize n)
+void
+AudioStream::copy(float *buffer1, float *buffer2, isize n)
 {
     // The caller has to ensure that no buffer underflows occurs
-    assert(this->count() >= n);
+    assert(count() >= n);
 
     for (isize i = 0; i < n; i++) {
-        T sample = this->read();
+
+        auto sample = read();
         sample.copy(buffer1, buffer2, i);
     }
 }
 
-template <class T> float
-AudioStream<T>::draw(u32 *buffer, isize width, isize height,
+float
+AudioStream::draw(u32 *buffer, isize width, isize height,
                      bool left, float highestAmplitude, u32 color) const
 {
-    isize dw = this->cap() / width;
+    isize dw = cap() / width;
     float newHighestAmplitude = 0.001f;
     
     // Clear buffer
@@ -99,7 +101,7 @@ AudioStream<T>::draw(u32 *buffer, isize width, isize height,
     for (isize w = 0; w < width; w++) {
         
         // Read samples from ringbuffer
-        T pair = this->current(w * dw);
+        auto pair = current(w * dw);
         float sample = pair.magnitude(left);
         
         if (sample == 0) {
@@ -126,16 +128,5 @@ AudioStream<T>::draw(u32 *buffer, isize width, isize height,
     }
     return newHighestAmplitude;
 }
-
-//
-// Instantiate template functions
-//
-
-template void AudioStream<SAMPLE_T>::wipeOut();
-template void AudioStream<SAMPLE_T>::fadeOut();
-template void AudioStream<SAMPLE_T>::alignWritePtr();
-template void AudioStream<SAMPLE_T>::copy(float *, isize);
-template void AudioStream<SAMPLE_T>::copy(float *, float *, isize);
-template float AudioStream<SAMPLE_T>::draw(u32 *, isize, isize, bool, float, u32) const;
 
 }

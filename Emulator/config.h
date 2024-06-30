@@ -110,10 +110,7 @@
 // Audio settings
 //
 
-// Type alias for the datatype used by the host machine's audio backend
-#define SAMPLE_T FloatStereo
-
-// Scaling factor used by the FloatStereo SampleType
+// Scaling factor (handle with care to protect your hearing)
 #define AUD_SCALE 0.00001f
 
 

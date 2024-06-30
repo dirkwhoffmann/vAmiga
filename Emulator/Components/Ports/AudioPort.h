@@ -47,7 +47,7 @@ class AudioPort : public SubComponent {
         {
             .name           = "AudioPort",
             .description    = "Audio Port",
-            .shell          = "paula audio"
+            .shell          = "audio"
         },
         {
             .name           = "AudioPort",
@@ -117,8 +117,8 @@ public:
     };
 
     // Output
-    AudioStream<SAMPLE_T> stream;
-    
+    AudioStream stream;
+
     // The audio filter pipeline
     AudioFilter filter = AudioFilter(amiga);
 
@@ -276,7 +276,7 @@ public:
      * the ring buffer's read pointer is not closer than n elements to the
      * buffer end.
      */
-    SAMPLE_T *nocopy(isize n);
+    FloatStereo *nocopy(isize n);
 };
 
 }
