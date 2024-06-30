@@ -101,7 +101,7 @@ class AudioPort : public SubComponent {
     util::Animated<float> volR;
 
     // Used to determine if a MSG_MUTE should be send
-    bool muted = false;
+    bool wasMuted = false;
 
 
     //
@@ -212,7 +212,7 @@ public:
     const AudioPortStats &getStats() const { return stats; }
 
     // Returns true if the output volume is zero
-    bool isMuted() const { return config.volL == 0 && config.volR == 0; }
+    bool isMuted() const;
 
 
     //
@@ -232,9 +232,10 @@ public:
 
 private:
 
+    void synthesize(Cycle clock, long count, double cyclesPerSample);
     template <SamplingMethod method>
     void synthesize(Cycle clock, long count, double cyclesPerSample);
-    
+
     // Handles a buffer underflow or overflow condition
     void handleBufferUnderflow();
     void handleBufferOverflow();

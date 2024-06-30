@@ -200,12 +200,14 @@ AudioPort::setOption(Option option, i64 value)
             
             config.volL = std::clamp(value, 0LL, 100LL);
             volL = float(pow(value / 50.0, 1.4));
+            printf("OPT_AUD_VOLL: %lld %f(%f)\n", config.volL, volL.current, volL.maximum);
             return;
-            
+
         case OPT_AUD_VOLR:
 
             config.volR = std::clamp(value, 0LL, 100LL);
             volR = float(pow(value / 50.0, 1.4));
+            printf("OPT_AUD_VOLR: %lld %f(%f)\n", config.volR, volR.current, volR.maximum);
             return;
 
         case OPT_AUD_PAN3: channel++;
@@ -254,6 +256,13 @@ AudioPort::fadeOut()
     volR.current = 0;
 }
 
+bool 
+AudioPort::isMuted() const
+{
+    if (volL.isFading() || volR.isFading()) return false;
+    return volL + volR == 0.0 || vol[0] + vol[1] + vol[2] + vol[3] == 0.0;
+}
+
 void
 AudioPort::synthesize(Cycle clock, Cycle target, long count)
 {
@@ -263,27 +272,14 @@ AudioPort::synthesize(Cycle clock, Cycle target, long count)
     // Determine the number of elapsed cycles per audio sample
     double cps = (double)(target - clock) / (double)count;
 
-    switch (config.samplingMethod) {
-            
-        case SMP_NONE:      synthesize<SMP_NONE>(clock, count, cps); break;
-        case SMP_NEAREST:   synthesize<SMP_NEAREST>(clock, count, cps); break;
-        case SMP_LINEAR:    synthesize<SMP_LINEAR>(clock, count, cps); break;
-            
-        default:
-            fatalError;
-    }
+    // Synthesize samples
+    synthesize(clock, count, cps);
 }
 
 void
 AudioPort::synthesize(Cycle clock, Cycle target)
 {
     assert(target > clock);
-
-    /*
-    static int cnt = 0;
-    if (cnt++ % 15 == 0) printf("Volume: L: %f (%f) R:%f (%f)\n",
-                                (float)volL, volL.maximum, (float)volR, volR.maximum);
-    */
 
     // Determine the current sample rate
     double rate = double(emulator.host.getOption(OPT_HOST_SAMPLE_RATE)) + sampleRateCorrection;
@@ -297,16 +293,58 @@ AudioPort::synthesize(Cycle clock, Cycle target)
     // Extract the integer part and remember the rest
     double count; fraction = std::modf(exact, &count);
 
+    // Synthesize samples
+    synthesize(clock, (long)count, cps);
+}
+
+void 
+AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
+{
+    bool muted = isMuted();
+
+    // Send the MUTE message if needed
+    if (muted != wasMuted) { msgQueue.put(MSG_MUTE, wasMuted = muted); }
+
+    stream.mutex.lock();
+
+    // Check for a buffer overflow
+    if (stream.count() + count >= stream.cap()) handleBufferOverflow();
+
+    // Check if we can take a fast path
+    if (config.idleFastPath) {
+
+        if (muted) {
+
+            // Fill with zeroes
+            for (isize i = 0; i < count; i++) stream.write( SamplePair { 0, 0 } );
+            stats.idleSamples += count;
+            stream.mutex.unlock();
+            return;
+        }
+        if (!sampler[0].isActive() && !sampler[1].isActive() &&
+            !sampler[2].isActive() && !sampler[3].isActive()) {
+
+            // Repeat the most recent sample
+            auto latest = stream.isEmpty() ? SamplePair() : stream.latest();
+            for (isize i = 0; i < count; i++) stream.write(latest);
+            stats.idleSamples += count;
+            stream.mutex.unlock();
+            return;
+        }
+    }
+
+    // Take the slow path
     switch (config.samplingMethod) {
 
-        case SMP_NONE:      synthesize<SMP_NONE>(clock, long(count), cps); break;
-        case SMP_NEAREST:   synthesize<SMP_NEAREST>(clock, long(count), cps); break;
-        case SMP_LINEAR:    synthesize<SMP_LINEAR>(clock, long(count), cps); break;
-            
+        case SMP_NONE:      synthesize<SMP_NONE>(clock, count, cyclesPerSample); break;
+        case SMP_NEAREST:   synthesize<SMP_NEAREST>(clock, count, cyclesPerSample); break;
+        case SMP_LINEAR:    synthesize<SMP_LINEAR>(clock, count, cyclesPerSample); break;
+
         default:
             fatalError;
-
     }
+
+    stream.mutex.unlock();
 }
 
 template <SamplingMethod method> void
@@ -320,95 +358,52 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
     float vol3 = vol[3]; float pan3 = pan[3];
     bool fading = volL.isFading() || volR.isFading();
 
-    stream.mutex.lock();
+    double cycle = (double)clock;
+    bool loEnabled = filter.loFilterEnabled();
+    bool ledEnabled = filter.ledFilterEnabled();
+    bool hiEnabled = filter.hiFilterEnabled();
+    bool legacyEnabled = filter.legacyFilterEnabled();
 
-    // Check for a buffer overflow
-    if (stream.count() + count >= stream.cap()) handleBufferOverflow();
+    for (isize i = 0; i < count; i++) {
 
-    // Take a shortcut if the volume is zero
-    if (!fading && (volL + volR == 0.0 || vol0 + vol1 + vol2 + vol3 == 0.0)) {
+        float ch0 = sampler[0].interpolate <method> ((Cycle)cycle) * vol0;
+        float ch1 = sampler[1].interpolate <method> ((Cycle)cycle) * vol1;
+        float ch2 = sampler[2].interpolate <method> ((Cycle)cycle) * vol2;
+        float ch3 = sampler[3].interpolate <method> ((Cycle)cycle) * vol3;
 
-        for (isize i = 0; i < count; i++) {
-            stream.write( SamplePair { 0, 0 } );
+        // Compute left and right channel output
+        double l = ch0 * (1 - pan0) + ch1 * (1 - pan1) + ch2 * (1 - pan2) + ch3 * (1 - pan3);
+        double r = ch0 * pan0 + ch1 * pan1 + ch2 * pan2 + ch3 * pan3;
+
+        // Run the audio filter pipeline
+        if (loEnabled) filter.loFilter.applyLP(l, r);
+        if (ledEnabled) filter.ledFilter.applyLP(l, r);
+        if (hiEnabled) filter.hiFilter.applyHP(l, r);
+
+        // Apply the legacy filter if applicable
+        if (legacyEnabled) {
+            l = filter.butterworthL.apply(float(l));
+            r = filter.butterworthR.apply(float(r));
         }
 
-        if (!muted) { muted = true; msgQueue.put(MSG_MUTE, true); }
-        stream.mutex.unlock();
-        return;
+        // Modulate the master volume
+        if (fading) { volL.shift(); volR.shift(); }
 
-    } else {
+        // Apply master volume
+        l *= volL;
+        r *= volR;
 
-        if (muted) { muted = false; msgQueue.put(MSG_MUTE, false); }
-    }
+        // Prevent hearing loss
+        assert(abs(l) < 1.0);
+        assert(abs(r) < 1.0);
 
-    // Check if we need to interpolate samples (audio is playing)
-    if (sampler[0].isActive() || sampler[1].isActive() ||
-        sampler[2].isActive() || sampler[3].isActive() || !config.idleFastPath) {
+        // Write sample into ringbuffer
+        stream.write( SamplePair { float(l), float(r) } );
 
-        double cycle = (double)clock;
-        bool loEnabled = filter.loFilterEnabled();
-        bool ledEnabled = filter.ledFilterEnabled();
-        bool hiEnabled = filter.hiFilterEnabled();
-        bool legacyEnabled = filter.legacyFilterEnabled();
-
-        for (isize i = 0; i < count; i++) {
-
-            float ch0 = sampler[0].interpolate <method> ((Cycle)cycle) * vol0;
-            float ch1 = sampler[1].interpolate <method> ((Cycle)cycle) * vol1;
-            float ch2 = sampler[2].interpolate <method> ((Cycle)cycle) * vol2;
-            float ch3 = sampler[3].interpolate <method> ((Cycle)cycle) * vol3;
-
-            // Compute left channel output
-            double l =
-            ch0 * (1 - pan0) + ch1 * (1 - pan1) +
-            ch2 * (1 - pan2) + ch3 * (1 - pan3);
-
-            // Compute right channel output
-            double r =
-            ch0 * pan0 + ch1 * pan1 +
-            ch2 * pan2 + ch3 * pan3;
-
-            // Run the audio filter pipeline
-            if (loEnabled) filter.loFilter.applyLP(l, r);
-            if (ledEnabled) filter.ledFilter.applyLP(l, r);
-            if (hiEnabled) filter.hiFilter.applyHP(l, r);
-
-            // Apply the legacy filter if applicable
-            if (legacyEnabled) {
-                l = filter.butterworthL.apply(float(l));
-                r = filter.butterworthR.apply(float(r));
-            }
-
-            // Modulate the master volume
-            if (fading) { volL.shift(); volR.shift(); }
-
-            // Apply master volume
-            l *= volL;
-            r *= volR;
-
-            // Prevent hearing loss
-            assert(abs(l) < 1.0);
-            assert(abs(r) < 1.0);
-
-            // Write sample into ringbuffer
-            stream.write( SamplePair { float(l), float(r) } );
-
-            cycle += cyclesPerSample;
-        }
-
-    } else {
-
-        // Fast path: Repeat the most recent sample
-        auto latest = stream.isEmpty() ? SamplePair() : stream.latest();
-        
-        for (isize i = 0; i < count; i++) {
-            stream.write(latest);
-        }
+        cycle += cyclesPerSample;
     }
 
     stats.producedSamples += count;
-
-    stream.mutex.unlock();
 }
 
 void
