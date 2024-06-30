@@ -117,10 +117,8 @@ AudioPort::clear()
     debug(AUDBUF_DEBUG, "clear()\n");
     
     // Wipe out the ringbuffer
-    stream.lock();
     stream.wipeOut();
     stream.alignWritePtr();
-    stream.unlock();
     
     // Wipe out the filter buffers
     filter.clear();
@@ -440,51 +438,29 @@ AudioPort::ignoreNextUnderOrOverflow()
 }
 
 isize
-AudioPort::copy(float *buffer, isize n)
+AudioPort::copyMono(float *buffer, isize n)
 {
-    stream.lock();
-    
-    // Check for a buffer underflow
-    if (stream.count() < n) handleBufferUnderflow();
-    
     // Copy sound samples
-    stream.copy(buffer, n);
-    stats.consumedSamples += n;
-    
-    stream.unlock();
+    auto cnt = stream.copyMono(buffer, n);
+    stats.consumedSamples += cnt;
+
+    // Check for a buffer underflow
+    if (cnt < n) handleBufferUnderflow();
 
     return n;
 }
 
 isize
-AudioPort::copy(float *buffer1, float *buffer2, isize n)
+AudioPort::copyStereo(float *buffer1, float *buffer2, isize n)
 {
-    stream.lock();
-    
-    // Check for a buffer underflow
-    if (stream.count() < n) handleBufferUnderflow();
-    
     // Copy sound samples
-    stream.copy(buffer1, buffer2, n);
-    stats.consumedSamples += n;
+    auto cnt = stream.copyStereo(buffer1, buffer2, n);
+    stats.consumedSamples += cnt;
 
-    stream.unlock();
+    // Check for a buffer underflow
+    if (cnt < n) handleBufferUnderflow();
 
     return n;
-}
-
-FloatStereo *
-AudioPort::nocopy(isize n)
-{
-    stream.lock();
-    
-    if (stream.count() < n) handleBufferUnderflow();
-    FloatStereo *addr = stream.currentAddr();
-    stream.skip(n);
-    stats.consumedSamples += n;
-
-    stream.unlock();
-    return addr;
 }
 
 }

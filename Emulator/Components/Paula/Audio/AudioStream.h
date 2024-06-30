@@ -79,8 +79,8 @@ public:
      * to copying, the volume is modulated if the music is supposed to fade
      * in or fade out.
      */
-    void copy(float *buffer, isize n);
-    void copy(float *buffer1, float *buffer2, isize n);
+    isize copyMono(float *buffer, isize n);
+    isize copyStereo(float *left, float *right, isize n);
 
     
     //

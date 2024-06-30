@@ -1059,12 +1059,12 @@ using namespace vamiga::moira;
 
 - (NSInteger)copyMono:(float *)target size:(NSInteger)n
 {
-    return [self paula]->paula->audioPort.copy(target, n);
+    return [self paula]->paula->audioPort.copyMono(target, n);
 }
 
 - (NSInteger)copyStereo:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n
 {
-    return [self paula]->paula->audioPort.copy(target1, target2, n);
+    return [self paula]->paula->audioPort.copyStereo(target1, target2, n);
 }
 
 - (float)drawWaveformL:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c

@@ -58,32 +58,73 @@ AudioStream::alignWritePtr()
     unlock();
 }
 
-void
-AudioStream::copy(float *buffer, isize n)
+isize
+AudioStream::copyMono(float *buffer, isize n)
 {
-    // The caller has to ensure that no buffer underflows occurs
-    assert(count() >= n);
+    lock();
 
+    // If a buffer underflow occurs ...
+    if (auto cnt = count(); cnt < n) {
+
+        // ... copy all we have while stepwise lowering the volume ...
+        for (isize i = 0; i < cnt; i++) {
+
+            auto pair = read();
+            *buffer++ = (pair.l + pair.r) * float(cnt - i) / float(cnt);
+        }
+        assert(isEmpty());
+
+        // ... and fill the rest with zeroes.
+        for (isize i = cnt; i < n; i++) *buffer++ = 0;
+
+        unlock();
+        return cnt;
+    }
+
+    // The standard case: The buffer contains enough samples
     for (isize i = 0; i < n; i++) {
 
         auto sample = read();
         buffer[i] = 0.5f * (sample.l + sample.r);
     }
-    return;
+    unlock();
+    return n;
 }
 
-void
-AudioStream::copy(float *buffer1, float *buffer2, isize n)
+isize
+AudioStream::copyStereo(float *left, float *right, isize n)
 {
-    // The caller has to ensure that no buffer underflows occurs
-    assert(count() >= n);
+    lock();
 
+    // If a buffer underflow occurs ...
+    if (auto cnt = count(); cnt < n) {
+
+        // ... copy all we have while stepwise lowering the volume ...
+        for (isize i = 0; i < cnt; i++) {
+
+            auto pair = read();
+            *left++ = pair.l * float(cnt - i) / float(cnt);
+            *right++ = pair.r * float(cnt - i) / float(cnt);
+        }
+        assert(isEmpty());
+
+        // ... and fill the rest with zeroes.
+        for (isize i = cnt; i < n; i++) *left++ = *right++ = 0;
+
+        unlock();
+        return cnt;
+    }
+
+    // The standard case: The buffer contains enough samples
     for (isize i = 0; i < n; i++) {
 
         auto sample = read();
-        buffer1[i] = sample.l;
-        buffer2[i] = sample.r;
+        left[i] = sample.l;
+        right[i] = sample.r;
     }
+
+    unlock();
+    return n;
 }
 
 float

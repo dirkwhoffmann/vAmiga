@@ -374,8 +374,8 @@ Recorder::recordAudio(Cycle target)
     audioClock = target;
     
     // Copy samples to buffer
-    audioPort.copy(audioData.ptr, samplesPerFrame);
-    
+    audioPort.copyMono(audioData.ptr, samplesPerFrame);
+
     // Feed the audio pipe
     assert(audioPipe.isOpen());
     isize length = 2 * sizeof(float) * samplesPerFrame;
