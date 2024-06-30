@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Aliases.h"
+#include "CoreObject.h"
 #include "Concurrency.h"
 #include "RingBuffer.h"
 
@@ -25,15 +26,7 @@ namespace vamiga {
  * and read asynchroneously. Since reading and writing is carried out in
  * different threads, accesses to the audio stream need to be preceded by a call
  * to lock() and followed by a call to unlock().
- *
- * The audio stream is designed to hold elements of a generic type to make
- * vAmiga compilable on different target platforms. E.g., the Mac version holds
- * elements of type FloatStereo, because the audio backend in macOS expects
- * sound samples in form of float values. In the SFML version, the audio stream
- * is instantiated with elements of type U16Stereo, because the frameworks
- * expects audio samples to be provided as an (interleaved) stream of short
- * integers.
- */
+*/
 
 //
 // Sample types
@@ -109,39 +102,18 @@ struct FloatStereo
 
 
 //
-// Volume
-//
-
-struct Volume {
-
-    // Current volume (will eventually reach the target volume)
-    float current = 1.0;
-
-    // Target volume
-    float target = 1.0;
-
-    // Delta steps (added to volume until the target volume is reached)
-    float delta = 0;
-
-    bool fading() { return current != target; }
-    bool silent() { return current == 0.0; }
-    
-    // Shifts the current volume towards the target volume
-    void shift();
-};
-
-
-//
 // AudioStream
 //
 
-template <class T> class AudioStream : public util::RingBuffer <T, 16384> {
+template <class T> class AudioStream : public CoreObject, public util::RingBuffer <T, 16384> {
 
     // Mutex for synchronizing read / write accesses
     util::ReentrantMutex mutex;
 
 public:
     
+    const char *objectName() const override { return "AudioStream"; }
+
     // Locks or unlocks the mutex
     void lock() { mutex.lock(); }
     void unlock() { mutex.unlock(); }
@@ -149,6 +121,9 @@ public:
     // Initializes the ring buffer with zeroes
     void wipeOut();
     
+    // Rescales the existing samples to gradually fade out (to avoid cracks)
+    void fadeOut();
+
     // Adds a sample to the ring buffer
     void add(const T &lr) { this->write(lr); }
     void add(float l, float r) { this->write(T(l,r)); }

@@ -13,21 +13,40 @@
 
 namespace vamiga {
 
-void
-Volume::shift()
-{
-    if (current < target) {
-        current += std::min(delta, target - current);
-    } else {
-        current -= std::min(delta, current - target);
-    }
-}
-
 template <class T> void
 AudioStream<T>::wipeOut()
 {
     lock();
     this->clear(T(0,0));
+    unlock();
+}
+
+template <class T> void
+AudioStream<T>::fadeOut()
+{
+    lock();
+
+    debug(AUDVOL_DEBUG, "Fading out (%ld samples)...\n", this->count());
+
+    float scale = 1.0f;
+    float delta = 1.0f / this->count();
+
+    // Rescale the existing samples
+    for (isize i = this->begin(); i != this->end(); i = this->next(i)) {
+
+        scale -= delta;
+        assert(scale >= -0.1 && scale < 1.0);
+
+        this->elements[i].l *= scale;
+        this->elements[i].r *= scale;
+    }
+
+    // Wipe out the rest of the buffer
+    for (isize i = this->end(); i != this->begin(); i = this->next(i)) {
+
+        this->elements[i] = { 0, 0 };
+    }
+
     unlock();
 }
 
@@ -113,6 +132,7 @@ AudioStream<T>::draw(u32 *buffer, isize width, isize height,
 //
 
 template void AudioStream<SAMPLE_T>::wipeOut();
+template void AudioStream<SAMPLE_T>::fadeOut();
 template void AudioStream<SAMPLE_T>::alignWritePtr();
 template void AudioStream<SAMPLE_T>::copy(float *, isize);
 template void AudioStream<SAMPLE_T>::copy(float *, float *, isize);

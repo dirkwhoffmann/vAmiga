@@ -53,7 +53,7 @@ template <typename T> struct Animated {
     bool isFading() const { return isFadingIn() || isFadingOut(); }
 
     // Gradually decrease the value to zero
-    void fadeOut(isize steps = 10000) {
+    void fadeOut(isize steps) {
 
         if (steps == 0) {
             current = delta = 0;
@@ -63,7 +63,7 @@ template <typename T> struct Animated {
     }
 
     // Gradually increase the volume to max
-    void fadeIn(isize steps = 10000) {
+    void fadeIn(isize steps) {
 
         if (steps == 0) {
             current = maximum; delta = 0;

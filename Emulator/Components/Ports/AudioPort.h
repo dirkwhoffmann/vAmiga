@@ -87,6 +87,9 @@ class AudioPort : public SubComponent {
     // Time stamp of the last write pointer alignment
     util::Time lastAlignment;
 
+    // Sample rate adjustment
+    double sampleRateCorrection = 0.0;
+    
     // Channel volumes
     float vol[4] = { };
 
@@ -126,7 +129,7 @@ public:
     
 public:
     
-    AudioPort(Amiga& ref, isize id = 0);
+    AudioPort(Amiga& ref, isize objid = 0);
 
     // Resets the output buffer and the two audio filters
     void clear();
@@ -173,6 +176,11 @@ private:
     void _didLoad() override;
     void _didReset(bool hard) override;
     void _initialize() override;
+    void _powerOn() override;
+    void _run() override;
+    void _pause() override;
+    void _warpOn() override;
+    void _warpOff() override;
     void _focus() override;
     void _unfocus() override;
 
@@ -237,29 +245,14 @@ public:
 
 public:
 
-    /* Starts to ramp up the volume. This function configures variables volume
-     * and targetVolume to simulate a smooth audio fade in.
-     */
-    // void rampUp(); // DEPRECATED
-    // void rampUpFromZero(); // DEPRECATED
-
-    /* Starts to ramp down the volume. This function configures variables
-     * volume and targetVolume to simulate a quick audio fade out.
-     */
-    // void rampDown(); // DEPRECATED
-
     // Rescale the existing samples to gradually fade out (to avoid cracks)
     void fadeOut();
 
     // Gradually decrease the master volume to zero
-    /*
-    void mute() { volL.mute(); volR.mute(); }
-    void mute(isize steps) { volL.mute(steps); volR.mute(steps); }
+    void mute(isize steps = 0) { volL.fadeOut(steps); volR.fadeOut(steps); }
 
     // Gradually inrease the master volume to max
-    void unmute() { volL.unmute(); volR.unmute(); }
-    void unmute(isize steps) { volL.unmute(steps); volR.unmute(steps); }
-    */
+    void unmute(isize steps = 0) { volL.fadeIn(steps); volR.fadeIn(steps); }
 
 
     //

@@ -18,7 +18,7 @@
 
 namespace vamiga {
 
-AudioPort::AudioPort(Amiga& ref, isize id) : SubComponent(ref, id)
+AudioPort::AudioPort(Amiga& ref, isize objid) : SubComponent(ref, objid)
 {
     subComponents = std::vector<CoreComponent *> {
 
@@ -68,15 +68,47 @@ AudioPort::_didReset(bool hard)
 }
 
 void
+AudioPort::_powerOn()
+{
+    sampleRateCorrection = 0.0;
+}
+
+void
+AudioPort::_run()
+{
+    unmute(10000);
+}
+
+void
+AudioPort::_pause()
+{
+    fadeOut();
+    mute();
+}
+
+void
+AudioPort::_warpOn()
+{
+    fadeOut();
+    mute();
+}
+
+void
+AudioPort::_warpOff()
+{
+    unmute(10000);
+}
+
+void
 AudioPort::_focus()
 {
-    // unmute(100000);
+    unmute(100000);
 }
 
 void
 AudioPort::_unfocus()
 {
-    // mute(100000);
+    mute(100000);
 }
 
 void
@@ -200,66 +232,13 @@ AudioPort::_didLoad()
     for (isize i = 0; i < 4; i++) sampler[i].reset();
 }
 
-/*
-void
-AudioPort::rampUp()
-{    
-    volume.target = 1.0;
-    volume.delta = 3;
-    
-    ignoreNextUnderOrOverflow();
-}
-
-void
-AudioPort::rampUpFromZero()
-{
-    volume.current = 0.0;
-    
-    rampUp();
-}
-
-void
-AudioPort::rampDown()
-{
-    volume.target = 0.0;
-    volume.delta = 50;
-    
-    ignoreNextUnderOrOverflow();
-}
-*/
-
 void
 AudioPort::fadeOut()
 {
-    stream.lock();
-
-    debug(AUDVOL_DEBUG, "Fading out (%ld samples)...\n", stream.count());
+    stream.fadeOut();
 
     volL = 0;
     volR = 0;
-    // volL.set(0.0);
-    // volR.set(0.0);
-
-    float scale = 1.0f;
-    float delta = 1.0f / stream.count();
-
-    // Rescale the existing samples
-    for (isize i = stream.begin(); i != stream.end(); i = stream.next(i)) {
-
-        scale -= delta;
-        assert(scale >= -0.1 && scale < 1.0);
-
-        stream.elements[i].l *= scale;
-        stream.elements[i].r *= scale;
-    }
-
-    // Wipe out the rest of the buffer
-    for (isize i = stream.end(); i != stream.begin(); i = stream.next(i)) {
-
-        stream.elements[i] = { 0, 0 };
-    }
-
-    stream.unlock();
 }
 
 void
@@ -313,14 +292,11 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
 {
     assert(count > 0);
 
-    /*
-    auto vol0 = vol[0]; auto pan0 = pan[0];
-    auto vol1 = vol[1]; auto pan1 = pan[1];
-    auto vol2 = vol[2]; auto pan2 = pan[2];
-    auto vol3 = vol[3]; auto pan3 = pan[3];
-    auto curL = volL.current;
-    auto curR = volR.current;
-    */
+    float vol0 = vol[0]; float pan0 = pan[0];
+    float vol1 = vol[1]; float pan1 = pan[1];
+    float vol2 = vol[2]; float pan2 = pan[2];
+    float vol3 = vol[3]; float pan3 = pan[3];
+    bool fading = volL.isFading() || volR.isFading();
 
     stream.lock();
     
@@ -339,20 +315,20 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
 
         for (isize i = 0; i < count; i++) {
 
-            float ch0 = sampler[0].interpolate <method> ((Cycle)cycle) * vol[0];
-            float ch1 = sampler[1].interpolate <method> ((Cycle)cycle) * vol[1];
-            float ch2 = sampler[2].interpolate <method> ((Cycle)cycle) * vol[2];
-            float ch3 = sampler[3].interpolate <method> ((Cycle)cycle) * vol[3];
+            float ch0 = sampler[0].interpolate <method> ((Cycle)cycle) * vol0;
+            float ch1 = sampler[1].interpolate <method> ((Cycle)cycle) * vol1;
+            float ch2 = sampler[2].interpolate <method> ((Cycle)cycle) * vol2;
+            float ch3 = sampler[3].interpolate <method> ((Cycle)cycle) * vol3;
 
             // Compute left channel output
             double l =
-            ch0 * (1 - pan[0]) + ch1 * (1 - pan[1]) +
-            ch2 * (1 - pan[2]) + ch3 * (1 - pan[3]);
+            ch0 * (1 - pan0) + ch1 * (1 - pan1) +
+            ch2 * (1 - pan2) + ch3 * (1 - pan3);
 
             // Compute right channel output
             double r =
-            ch0 * pan[0] + ch1 * pan[1] +
-            ch2 * pan[2] + ch3 * pan[3];
+            ch0 * pan0 + ch1 * pan1 +
+            ch2 * pan2 + ch3 * pan3;
 
             // Run the audio filter pipeline
             if (loEnabled) filter.loFilter.applyLP(l, r);
@@ -364,6 +340,9 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
                 l = filter.butterworthL.apply(float(l));
                 r = filter.butterworthR.apply(float(r));
             }
+
+            // Modulate the master volume
+            if (fading) { volL.shift(); volR.shift(); }
 
             // Apply master volume
             l *= volL;
